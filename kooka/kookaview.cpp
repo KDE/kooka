@@ -86,12 +86,6 @@ KookaView::KookaView(QWidget *parent)
    QStrListIterator  it( backends );
   
    // for( it = backends.first(); it != backends.last(); ++it );
-   while( it )
-   {
-      hrbackends.append( sane->getScannerName( it.current() ));
-      ++it;
-   }
-
    /* A dialog, which allows the user to select one of the scanner */
    kapp->config()->setGroup( GROUP_STARTUP );
    QString selDevice;
@@ -99,8 +93,30 @@ KookaView::KookaView(QWidget *parent)
    if( skipDialog )
    {
       selDevice = kapp->config()->readEntry( STARTUP_SCANDEV, "" );
+
+      // Check, if the selDevice is in the list of available devices.
+      
    }
-   
+
+   // Create pretty debug, retrieve human readable Scanner names, and:
+   // Check, if the scandevice in the config-file is in the list.
+   bool cfgDeviceInList = false;
+   while( it )
+   {
+      kdDebug( 28000 ) << "Found backend: " << it.current() << endl;
+      hrbackends.append( sane->getScannerName( it.current() ));
+
+      if( skipDialog && it.current() == selDevice )
+	 cfgDeviceInList = true;
+      
+      ++it;
+   }
+
+   if( skipDialog && cfgDeviceInList == false )
+   {
+      kdDebug( 28000 ) << "Bad: Wanted device <" << selDevice << "> not availabe" << endl;
+      skipDialog = false;
+   }
    
    if( ! skipDialog || selDevice.isEmpty())
    {
@@ -211,27 +227,35 @@ KookaView::KookaView(QWidget *parent)
    }
 #endif
 
-   /* Now set the configured stuff */
-   kapp->config()->setGroup(GROUP_STARTUP);
-   QString startup = kapp->config()->readEntry( STARTUP_IMG_SELECTION, "" );
-   kdDebug(28000) << "KookaView: Loading Startup-Image <" << startup << ">" << endl;
-   
-   if( !startup.isEmpty()) {
-      kdDebug(28000) << "Loading startup image !" << endl;
-      packager->slSelectImage( startup );
-   }
-   
-   
-   
 }
 
 
 KookaView::~KookaView()
 {
    saveProperties( kapp->config() );
-   if( preview_img ) delete( preview_img );
+   // if( preview_img ) delete( preview_img );
    
 }
+
+void KookaView::loadStartupImage( void )
+{
+   kdDebug( 28000) << "Starting to load startup image" << endl;
+   
+   /* Now set the configured stuff */
+   KConfig *konf = KGlobal::config ();
+   if( konf )
+   {     
+      konf->setGroup(GROUP_STARTUP);
+      QString startup = konf->readEntry( STARTUP_IMG_SELECTION, "" );
+
+      if( !startup.isEmpty())
+      {
+	 kdDebug(28000) << "Loading startup image !" << endl;
+	 packager->slSelectImage( startup );
+      }
+   }
+}
+
 
 void KookaView::print(QPainter *p, int height, int width)
 {

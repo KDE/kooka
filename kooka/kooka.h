@@ -57,6 +57,12 @@ public:
      */
     void load(const QString& url);
 
+   /**
+    * Startup, loads (at the moment) only the last displayed image
+    **/
+   void startup( void );
+   
+    
 protected:
     /**
      * Overridden virtuals for Qt drag 'n drop (XDND)
@@ -103,7 +109,7 @@ private slots:
    void slRotateClockWise( void );
    void slRotateCounterClockWise( void );
    void slRotate180( void );
-   
+
 private:
    void setupAccel();
    void setupActions();

@@ -94,6 +94,13 @@ void Kooka::load(const QString& url)
 
 }
 
+void Kooka::startup( void )
+{
+   kdDebug(29000) << "Starting startup !" << endl;
+   if( m_view ) m_view->loadStartupImage();
+}
+
+
 void Kooka::setupActions()
 {
 #if 0

@@ -69,6 +69,7 @@ public:
    void print(QPainter *, int height, int width);
 
    bool ToggleVisibility( int );
+   void loadStartupImage( void );
    
 public slots:
    void slShowPreview()  { tabw->showPage( preview_canvas ); }

@@ -88,11 +88,11 @@ int main( int argc, char ** argv )
 
 
       Kooka  *kooka = new Kooka();
-      // a.setMainWidget(ksanetest);
-      /* Ugly, but works for now... */
-      // ksanetest->resize( 900, 720 );
-      // ksanetest->setCaption( "Scanning with SANE" );
+      
       kooka->show();
+      app.processEvents();
+      kooka->startup();
+      
    }
    return app.exec();
 }
