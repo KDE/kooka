@@ -285,6 +285,12 @@ public slots:
 
 
    void slSetDirty( const QCString& name );
+
+   /**
+    * Closes the scan device and frees all related data, makes
+    * the system ready to open a new, other scanner.
+    */
+   void slCloseDevice( );
    
   signals:
   /**
@@ -328,6 +334,15 @@ public slots:
   void sigScanFinished( KScanStat );
 
 
+   /**
+    *  emitted to give all objects using this device to free all dependencies
+    *  on the scan device, because this signal means, that the scan device is
+    *  going to be closed. The can not be stopped. All receiving objects have
+    *  to free their stuff using the device and pray. While handling the signal,
+    *  the device is still open and valid.
+    */
+   void sigCloseDevice( );
+   
 private slots:
   /**
    *  Slot to acquire a whole image */
@@ -355,8 +370,6 @@ private:
   QStrList            dirtyList;     // option changes
    
   QPtrList<KScanOption>  gui_elements;
-  QAsciiDict<KScanOption>  gui_elem_names;
-
   QAsciiDict<SANE_Device>  scannerDevices;
 
   QSocketNotifier     *sn;

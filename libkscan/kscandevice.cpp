@@ -30,7 +30,7 @@
 #include "devselector.h"
 
 #define MIN_PREVIEW_DPI 75
-
+#define UNDEF_SCANNERNAME I18N_NOOP( "undefined" )
 
 /* ---------------------------------------------------------------------------
 
@@ -57,7 +57,12 @@ KScanOption *KScanDevice::getExistingGuiElement( const QCString& name )
     KScanOption *ret = 0L;
 
     QCString alias = aliasName( name );
-    ret = gui_elem_names[ alias ];
+
+    /* gui_elements is a QList<KScanOption> */
+    for( ret = gui_elements.first(); ret != 0; ret = gui_elements.next())
+    {
+       if( ret->getName() == alias ) break;
+    }
 
     return( ret );
 }
@@ -87,7 +92,6 @@ KScanOption *KScanDevice::getGuiElement( const QCString& name, QWidget *parent,
    {
       /** store new gui-elem in list of all gui-elements */
       gui_elements.append( so );
-      gui_elem_names.insert( alias, so );
 	 	
       w = so->createWidget( parent, desc, tooltip );
       if( w )
@@ -206,7 +210,7 @@ KScanStat KScanDevice::openDevice( const QCString& backend )
 	
       } else {
 	stat = KSCAN_ERR_OPEN_DEV;
-	scanner_name = "undefined";
+	scanner_name = UNDEF_SCANNERNAME;
       }
    }
 
@@ -214,6 +218,31 @@ KScanStat KScanDevice::openDevice( const QCString& backend )
       scanner_initialised = true;
 
    return( stat );
+}
+
+void KScanDevice::slCloseDevice( )
+{
+   /* First of all, send a signal to close down the scanner dev. */
+   emit( sigCloseDevice( ));
+
+   /* After return, delete all related stuff */
+   scanner_name = UNDEF_SCANNERNAME;
+   if( scanner_handle )
+   {
+      if( scanStatus != SSTAT_SILENT )
+      {
+         kdDebug(29000) << "Scanner is still active, calling cancel !" << endl;
+         sane_cancel( scanner_handle );
+      }
+      sane_close( scanner_handle );
+      scanner_handle = 0;
+   }
+
+   gui_elements.clear();
+
+   option_dic->clear();
+   scanner_initialised = false;
+
 }
 
 
