@@ -240,7 +240,9 @@ QScrollView *ScanParams::scannerParams( )
    
    QHBox *hb = new QHBox(pbox);
    
-   so = sane_device->getGuiElement( SANE_NAME_SCAN_MODE, hb );
+   so = sane_device->getGuiElement( SANE_NAME_SCAN_MODE, hb,
+				    SANE_TITLE_SCAN_MODE,
+				    SANE_DESC_SCAN_MODE );
    if ( so )
    {
       /* Pretty-Pixmap */
@@ -293,9 +295,33 @@ QScrollView *ScanParams::scannerParams( )
       }
    }
 
+   /* Halftoning */
+   if( sane_device->optionExists( SANE_NAME_HALFTONE ) )
+   {
+      so = sane_device->getGuiElement( SANE_NAME_HALFTONE, pbox,
+				       SANE_TITLE_HALFTONE,
+				       SANE_DESC_HALFTONE );
+   }
+   
+   if( sane_device->optionExists( SANE_NAME_HALFTONE_DIMENSION) )
+   {
+      so = sane_device->getGuiElement( SANE_NAME_HALFTONE_DIMENSION, pbox,
+				       SANE_TITLE_HALFTONE_DIMENSION,
+				       SANE_DESC_HALFTONE_DIMENSION );
+   }
+
+   if( sane_device->optionExists( SANE_NAME_HALFTONE_PATTERN) )
+   {
+      so = sane_device->getGuiElement( SANE_NAME_HALFTONE_PATTERN, pbox,
+				       SANE_TITLE_HALFTONE_PATTERN,
+				       SANE_DESC_HALFTONE_PATTERN );
+   }
+         
+   
    /* Resolution Setting -> X-Resolution Setting */
    so = sane_device->getGuiElement( SANE_NAME_SCAN_X_RESOLUTION, pbox /* this */,
-				    i18n("Resolution (dpi):").local8Bit() );
+				    i18n("Resolution"),
+				    SANE_DESC_SCAN_X_RESOLUTION );
    
    if ( so )
    {
@@ -313,7 +339,8 @@ QScrollView *ScanParams::scannerParams( )
 
       xy_resolution_bind =
 	 sane_device->getGuiElement(SANE_NAME_RESOLUTION_BIND, pbox,
-				    i18n( "Bind X- and Y-Resolution" ).local8Bit() );
+				    SANE_TITLE_RESOLUTION_BIND,
+				    SANE_DESC_RESOLUTION_BIND );
       if( xy_resolution_bind  )
       {
 	 initialise( xy_resolution_bind );
@@ -324,7 +351,9 @@ QScrollView *ScanParams::scannerParams( )
       }
 
       /* Resolution Setting -> Y-Resolution Setting */
-      so = sane_device->getGuiElement( SANE_NAME_SCAN_Y_RESOLUTION, pbox);
+      so = sane_device->getGuiElement( SANE_NAME_SCAN_Y_RESOLUTION, pbox,
+				       SANE_TITLE_SCAN_Y_RESOLUTION,
+				       SANE_DESC_SCAN_X_RESOLUTION );
       int y_res = x_y_res;
       if ( so )
       {
@@ -340,7 +369,8 @@ QScrollView *ScanParams::scannerParams( )
    {
       /* If the SCAN_X_RES does not exists, perhaps just SCAN_RES does */
       so = sane_device->getGuiElement( SANE_NAME_SCAN_RESOLUTION, pbox,
-				       i18n("Resolution (dpi):") );
+				       SANE_TITLE_SCAN_Y_RESOLUTION,
+				       SANE_DESC_SCAN_X_RESOLUTION );
       if( so )
       {
 	 initialise( so );
@@ -355,26 +385,36 @@ QScrollView *ScanParams::scannerParams( )
    (void) new KSeparator( KSeparator::HLine, pbox );
 
    /* Speed-Setting - show only if active */
-   KScanOption kso_speed( SANE_NAME_SCAN_SPEED );
-   if( kso_speed.valid() && kso_speed.softwareSetable() && kso_speed.active())
+   if( sane_device->optionExists( SANE_NAME_SCAN_SPEED ))
    {
-      so = sane_device->getGuiElement( SANE_NAME_SCAN_SPEED, pbox);
-      initialise( so );
+      KScanOption kso_speed( SANE_NAME_SCAN_SPEED );
+      if( kso_speed.valid() && kso_speed.softwareSetable() && kso_speed.active())
+      {
+	 so = sane_device->getGuiElement( SANE_NAME_SCAN_SPEED, pbox,
+					  SANE_TITLE_SCAN_SPEED,
+					  SANE_DESC_SCAN_SPEED );
+	 initialise( so );
+      }
    }
-
    /* Threshold-Setting */
-   so = sane_device->getGuiElement( SANE_NAME_THRESHOLD, pbox );
+   so = sane_device->getGuiElement( SANE_NAME_THRESHOLD, pbox,
+				    SANE_TITLE_THRESHOLD,
+				    SANE_DESC_THRESHOLD);
    if( so )
    {
       initialise( so );
    }
 
    /* Brightness-Setting */
-   so = sane_device->getGuiElement( SANE_NAME_BRIGHTNESS, pbox );
+   so = sane_device->getGuiElement( SANE_NAME_BRIGHTNESS, pbox,
+				    SANE_TITLE_BRIGHTNESS,
+				    SANE_DESC_THRESHOLD );
    if( so ) initialise( so );
    
    /* Contrast-Setting */
-   so = sane_device->getGuiElement( SANE_NAME_CONTRAST, pbox );
+   so = sane_device->getGuiElement( SANE_NAME_CONTRAST, pbox,
+				    SANE_TITLE_CONTRAST,
+				    SANE_DESC_CONTRAST );
    if( so ) initialise( so );
    /* Custom Gamma */
 
@@ -385,11 +425,12 @@ QScrollView *ScanParams::scannerParams( )
 
    /* The gamma table can be used - add  a button for editing */
    QHBox *hb1 = new QHBox(pbox);
-   (void) new QWidget( hb1 ); /* dummy widget to eat space */
    
    if( sane_device->optionExists( SANE_NAME_CUSTOM_GAMMA ) )
    {
-      so = sane_device->getGuiElement( SANE_NAME_CUSTOM_GAMMA, hb1);
+      so = sane_device->getGuiElement( SANE_NAME_CUSTOM_GAMMA, hb1,
+				       SANE_TITLE_CUSTOM_GAMMA,
+				       SANE_DESC_CUSTOM_GAMMA );
       initialise( so );
       connect( so,   SIGNAL(guiChange(KScanOption*)),
 	       this, SLOT(slReloadAllGui( KScanOption* )));
@@ -400,6 +441,7 @@ QScrollView *ScanParams::scannerParams( )
    }
 	 
    /* Connect a signal to refresh activity of the gamma tables */
+   (void) new QWidget( hb1 ); /* dummy widget to eat space */
 
    pb_edit_gtable = new QPushButton( i18n("Edit..."), hb1 );
    Q_CHECK_PTR(pb_edit_gtable);
@@ -421,14 +463,18 @@ QScrollView *ScanParams::scannerParams( )
       (void) new KSeparator( KSeparator::HLine, pbox );
    }
 
-   so = sane_device->getGuiElement( SANE_NAME_NEGATIVE, pbox  );
+   so = sane_device->getGuiElement( SANE_NAME_NEGATIVE, pbox,
+				    SANE_TITLE_NEGATIVE,
+				    SANE_DESC_NEGATIVE );
    initialise( so );
    
    /* PREVIEW-Switch */
    kdDebug(29000) << "Try to get Gray-Preview" << endl;
    if( sane_device->optionExists( SANE_NAME_GRAY_PREVIEW ))
    {
-     so = sane_device->getGuiElement( SANE_NAME_GRAY_PREVIEW, pbox );
+     so = sane_device->getGuiElement( SANE_NAME_GRAY_PREVIEW, pbox,
+				      SANE_TITLE_GRAY_PREVIEW,
+				      SANE_DESC_GRAY_PREVIEW );
      initialise( so );
      cb_gray_preview = (QCheckBox*) so->widget();
      QToolTip::add( cb_gray_preview, i18n("Acquire a gray preview even in color mode (faster)") );
@@ -613,7 +659,9 @@ void ScanParams::virtualScannerParams( void )
    top->addWidget( bg_virt_scan_mode, 1 );
 
    /* GUI-Element Filename */
-   virt_filename = sane_device->getGuiElement( SANE_NAME_FILE, this );
+   virt_filename = sane_device->getGuiElement( SANE_NAME_FILE, this,
+					       SANE_TITLE_FILE,
+					       SANE_DESC_FILE );
    if( virt_filename )
    {
       QHBoxLayout *hb = new QHBoxLayout();
@@ -634,7 +682,9 @@ void ScanParams::virtualScannerParams( void )
    }
 
    /* GUI-Element Brightness */
-   so = sane_device->getGuiElement( SANE_NAME_BRIGHTNESS, this );
+   so = sane_device->getGuiElement( SANE_NAME_BRIGHTNESS, this,
+				    SANE_TITLE_BRIGHTNESS,
+				    SANE_DESC_BRIGHTNESS );
    if( so )
    {
       top->addWidget( so->widget(), 1 );
@@ -643,7 +693,9 @@ void ScanParams::virtualScannerParams( void )
    }
 
    /* GUI-Element Contrast */
-   so = sane_device->getGuiElement( SANE_NAME_CONTRAST, this );
+   so = sane_device->getGuiElement( SANE_NAME_CONTRAST, this,
+				    SANE_TITLE_CONTRAST,
+				    SANE_DESC_CONTRAST );
    if ( so )
    {
       top->addWidget( so->widget(), 1 );
