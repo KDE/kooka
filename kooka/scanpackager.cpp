@@ -138,6 +138,7 @@ void ScanPackager::openRoots()
 
    /* select Incoming-Dir, TODO restore last selection ! */
    KFileTreeViewItem *startit = findItem( newbranch, i18n( "Incoming/" ) );
+   
    if( ! startit ) kdDebug(28000) << "No Start-Item found :(" << endl;
    setCurrentItem( startit );
 }
@@ -634,6 +635,7 @@ void ScanPackager::slAddImage( QImage *img )
    }
 
    /* find the directory above the current one */
+   
    KURL dir(itemDirectory( curr ));
 
    /* Path of curr sel item */
@@ -662,7 +664,18 @@ void ScanPackager::slAddImage( QImage *img )
    }
 
    /* Add the new image to the list of new images */
-   slotSetNextUrlToSelect( KURL( img_saver.lastFilename()) );
+   KURL lurl = img_saver.lastFileUrl();
+   
+   KFileTreeBranchList branchlist = branches();
+   KFileTreeBranch *kookaBranch = branchlist.at(0);
+
+   QString strdir = itemDirectory(curr);
+   if(strdir.endsWith(QString("/"))) strdir.truncate( strdir.length() - 1 );
+   kdDebug(28000) << "Updating directory with " << strdir << endl;
+   
+   if( kookaBranch ) kookaBranch->updateDirectory( KURL(strdir) );
+
+   slotSetNextUrlToSelect( lurl );
 
    QString s;
    /* Count amount of children of the father */
