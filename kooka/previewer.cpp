@@ -20,6 +20,7 @@
 
 #include "previewer.h"
 #include "resource.h"
+#include "img_canvas.h"
 
 #define ID_CUSTOM 0
 #define ID_A4     1

@@ -27,12 +27,17 @@
 #include <qbuttongroup.h>
 #include <qradiobutton.h>
 #include <qpoint.h>
+
+#if 0
 #include "img_canvas.h"
+#endif
+
 #include <sane/sane.h>
 
 /**
   *@author Klaas Freitag
   */
+class ImageCanvas;
 
 class Previewer : public QWidget  {
    Q_OBJECT
@@ -40,7 +45,7 @@ public:
 	Previewer(QWidget *parent=0, const char *name=0);
 	~Previewer();
 	
-	QObject *getImageCanvas( void ){ return( img_canvas ); }
+	ImageCanvas *getImageCanvas( void ){ return( img_canvas ); }
 	
 public slots:
         void newImage( QImage* );
