@@ -179,6 +179,10 @@ protected slots:
      */
     void slNewImageScanned(QImage*);
 
+    /**
+     * called if an viewer image was set to read only or back to read write state.
+     */
+    void slViewerReadOnly( bool ro );
 signals:
     /**
      * Use this signal to change the content of the statusbar
@@ -194,10 +198,6 @@ signals:
      * Use this signal to change the content of the caption
      */
     void signalChangeCaption(const QString& text);
-
-    /**
-     * This signal indicates that
-     */
 
 private:
     void loadPreviewImage( const QCString& scanner );
