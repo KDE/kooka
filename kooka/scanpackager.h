@@ -103,6 +103,7 @@ signals:
     void        deleteImage( QImage* );
     void        unloadImage( QImage* );
     void        galleryPathSelected( KFileTreeBranch* branch, const QString& relativPath );
+    void        directoryToRemove( KFileTreeBranch *branch, const QString& relativPath );
    
 private:
    QString     localFileName( KFileTreeViewItem* it ) const;

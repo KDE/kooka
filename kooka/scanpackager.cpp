@@ -902,10 +902,9 @@ void ScanPackager::slotDeleteItems( )
 
    int result = KMessageBox::Yes;
    
+   KFileItem *item = curr->fileItem();
    if( ask )
    {
-      KFileItem *item = curr->fileItem();
-      
       QString s;
       s = i18n("Do you really want to delete this image ?\nIt can't be restored !" );
       if( item->isDir() )
@@ -923,6 +922,11 @@ void ScanPackager::slotDeleteItems( )
 	 if( nextToSelect )
 	    setSelected( nextToSelect, true );
 	 /* TODO: remove the directory from the imageNameCombobox */
+	 if( curr && item->isDir() )
+	 {
+	    /* The directory needs to be removed from the name combo */
+	    emit(directoryToRemove( curr->branch(), itemDirectory( curr, true ) ));
+	 }
 	 
       }
       else
