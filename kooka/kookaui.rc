@@ -43,5 +43,5 @@
    <Action name="rotateClockwise"/>
    <Action name="rotateCounterClockwise"/>
    <Action name="upsitedown"/>
- </Toolbar>
+ </ToolBar>
 </kpartgui>
