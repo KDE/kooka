@@ -88,3 +88,15 @@ repository.
 Nov 2001:
 Moved preview image to a hidden directory under $KDEHOME/share/apps/ScanImages/.previews
 That makes the preview images invisible in the Packager.
+
+/* ================================================================================ */
+
+many bugfixes for KDE 3.0 -> Released Kooka 0.35 for KDE 3.0
+                            
+Released Kooka 0.36 for KDE 3.0.1
+                        
+Mai 2002:
+   Added Thumbnail View with Preference Dialog => Kooka Release 0.37
+   Completed About dialog and added the Webpage http://kooka.kde.org
+
+
