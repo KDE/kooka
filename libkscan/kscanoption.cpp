@@ -164,7 +164,7 @@ bool KScanOption::initOption( const QCString& new_name )
 	}
 	else
 	{
-	   kdDebug(29000) << "Is NOT older GammaTable!" << endl;
+	   // kdDebug(29000) << "Is NOT older GammaTable!" << endl;
 	}
     }
 
@@ -244,7 +244,7 @@ const KScanOption& KScanOption::operator= (const KScanOption& so )
     return( *this );
 }
 
-void KScanOption::slWidgetChange( QCString t )
+void KScanOption::slWidgetChange( const QCString& t )
 {
     kdDebug(29000) << "Received WidgetChange for " << getName() << "const char*" << endl;
     set( t );
@@ -1008,8 +1008,8 @@ QWidget *KScanOption::comboBox( QWidget *parent, const QString& text )
 
   KScanCombo *cb = new KScanCombo( parent, text, list);
 
-  connect( cb, SIGNAL( valueChanged( QCString )), this,
-	   SLOT( slWidgetChange( QCString )));
+  connect( cb, SIGNAL( valueChanged( const QCString& )), this,
+	   SLOT( slWidgetChange( const QCString& )));
 
   return( cb );
 }

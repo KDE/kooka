@@ -54,11 +54,6 @@ class KGammaTable;
  *  @author Klaas Freitag
  *  @version 0.1alpha
  *
- */
-
-/**
- *  KScanOption
- *
  *  is a help class for accessing the scanner options.
  **/
 
@@ -211,7 +206,7 @@ protected slots:
    *  This is an internal slot.
    **/
   void		  slWidgetChange( void );
-  void		  slWidgetChange( QCString );
+  void		  slWidgetChange( const QCString& );
   void		  slWidgetChange( int );
 	
   signals:
