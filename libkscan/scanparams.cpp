@@ -35,6 +35,7 @@
 #include <kdebug.h>
 #include <kbuttonbox.h>
 #include <kiconloader.h>
+#include <kled.h>
 #include <kseparator.h>
 
 #include "scanparams.h"
@@ -56,7 +57,8 @@ ScanParams::ScanParams( QWidget *parent, const char *name )
     pb_source_sel = 0;
     bg_virt_scan_mode = 0;
     xy_resolution_bind = 0;
-
+    progressDialog = 0;
+    
     /* Preload icons */
     pixMiniFloppy = SmallIcon( "3floppy_unmount" );
 
@@ -109,7 +111,7 @@ bool ScanParams::connectDevice( KScanDevice *newScanDevice )
 
    (void) new QLabel( cap, this );
 
-   KSeparator* niceline = new KSeparator( KSeparator::HLine, this);
+   (void) new KSeparator( KSeparator::HLine, this);
 
    /* Now create Widgets for the important scan settings */
    if( sane_device->optionExists( SANE_NAME_FILE ) )
@@ -163,6 +165,7 @@ bool ScanParams::connectDevice( KScanDevice *newScanDevice )
 
    return( true );
 }
+
 
 ScanParams::~ScanParams()
 {
@@ -222,8 +225,7 @@ void ScanParams::scannerParams( )
       /* Pretty-Pixmap */
 
       KScanCombo *cb = (KScanCombo*) so->widget();
-
-
+      CHECK_PTR(cb);
       cb->slSetIcon( pixLineArt, i18n("Lineart") );
       cb->slSetIcon( pixLineArt, i18n("Binary" ));
       cb->slSetIcon( pixGray, i18n("Gray") );
@@ -233,6 +235,8 @@ void ScanParams::scannerParams( )
       hb->setMargin( KDialog::marginHint() );
       hb->setSpacing( KDialog::spacingHint());
 
+      hb->setStretchFactor( cb, 5 );
+      
       connect( so, SIGNAL(guiChange(KScanOption*)),
 	       this, SLOT(slReloadAllGui( KScanOption* )));
 
@@ -243,16 +247,28 @@ void ScanParams::scannerParams( )
    if( sane_device->optionExists( SANE_NAME_SCAN_SOURCE ))
    {
       KScanOption source( SANE_NAME_SCAN_SOURCE );
+      QStrList l = source.getList();
 
-      pb_source_sel = new QPushButton( i18n("Source..."), hb );
-      connect( pb_source_sel, SIGNAL(clicked()), this, SLOT(slSourceSelect()));
-      initialise( &source );
+      QWidget *spacer = new QWidget(hb);
+      hb->setStretchFactor( spacer, 1 );
+
+      if( l.count() > 1 )
+      {
+	 pb_source_sel = new QPushButton( i18n("Source..."), hb );
+	 connect( pb_source_sel, SIGNAL(clicked()), this, SLOT(slSourceSelect()));
+	 initialise( &source );
+	 hb->setStretchFactor( pb_source_sel, 3 );
 
 #if 0 /* Testing !! TODO: remove */
       if( ! source.active() ) {
 	 pb_source_sel->setEnabled( false );
       }
 #endif
+      }
+      else
+      {
+	 kdDebug(29000) << "only one scan-source, do not show button." << endl;
+      }
    }
 
    /* Resolution Setting -> X-Resolution Setting */
@@ -313,7 +329,7 @@ void ScanParams::scannerParams( )
    }
 
    /* Insert another beautification line */
-   KSeparator *niceline = new KSeparator( KSeparator::HLine, this);
+   (void) new KSeparator( KSeparator::HLine, this);
 
    /* Speed-Setting - show only if active */
    KScanOption kso_speed( SANE_NAME_SCAN_SPEED );
@@ -378,7 +394,7 @@ void ScanParams::scannerParams( )
    /* my Epson Perfection backends offer a list of user defined gamma values */
    
    /* Insert another beautification line */
-   KSeparator *niceline1 = new KSeparator( KSeparator::HLine, this);
+   (void) new KSeparator( KSeparator::HLine, this);
 
    so = sane_device->getGuiElement( SANE_NAME_NEGATIVE, this  );
 
