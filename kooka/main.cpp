@@ -45,6 +45,7 @@ static const char *description =
 static KCmdLineOptions options[] =
 {
   { "d ", I18N_NOOP("the SANE compatible device specification (e.g. umax:/dev/sg0)"), "" },
+  { "g", I18N_NOOP("gallery Mode - no connect to scanner"), "" },
   { 0,0,0 }
 };
 
@@ -52,11 +53,12 @@ QDict<QPixmap> icons;
 
 void *dbg_ptr;
 
-int main( int argc, char ** argv )
+int main( int argc, char *argv[] )
 {
    KAboutData about("kooka", I18N_NOOP("Kooka"), KOOKA_VERSION, I18N_NOOP(description),
 		    KAboutData::License_GPL, "(C) 2000 Klaas Freitag");
    about.addAuthor( "Klaas Freitag", 0, "freitag@suse.de" );
+   
    KCmdLineArgs::init(argc, argv, &about);
    KCmdLineArgs::addCmdLineOptions( options ); // Add my own options.
    
@@ -86,6 +88,10 @@ int main( int argc, char ** argv )
 
    KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
    QCString  devToUse = args->getOption( "d" );
+   if( args->isSet("g") )
+   {
+      devToUse = "gallery";
+   }
    kdDebug( 29000) << "DevToUse is " << devToUse << endl;
 	    
    if (args->count() == 1)
@@ -95,7 +101,7 @@ int main( int argc, char ** argv )
    }
 
    
-   Kooka  *kooka = new Kooka();
+   Kooka  *kooka = new Kooka(devToUse);
    app.setMainWidget( kooka );
    kooka->show();
    app.processEvents();

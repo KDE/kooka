@@ -58,7 +58,7 @@ public:
    /**
     * Default constructor
     */
-   KookaView(QWidget *parent);
+   KookaView(QWidget *parent, const QCString& deviceToUse);
 
    /**
     * Destructor
@@ -116,7 +116,7 @@ public slots:
     * slot to select the scanner device. Does all the work with selection
     * of scanner, disconnection of the old device and connecting the new.
     */
-   bool slSelectDevice( );
+   bool slSelectDevice(const QCString& useDevice);
    
 protected slots:
    void  slCloseScanDevice();

@@ -45,7 +45,7 @@ public:
     /**
      * Default Constructor
      */
-    Kooka();
+    Kooka(const QCString& deviceToUse);
 
     /**
      * Default Destructor

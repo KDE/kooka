@@ -48,12 +48,12 @@
 #include <kaction.h>
 #include <kstdaction.h>
 
-Kooka::Kooka()
+Kooka::Kooka( const QCString& deviceToUse)
     : KMainWindow( 0, "Kooka" ),
       m_printer(0)
 {
     // accept dnd
-   m_view = new KookaView(this);
+   m_view = new KookaView(this, deviceToUse);
     setAcceptDrops(true);
 
     // tell the KMainWindow that this is indeed the main widget

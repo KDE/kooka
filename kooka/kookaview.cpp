@@ -38,7 +38,7 @@
 #define STARTUP_VIEWER_SIZES    "ViewerSplitterSizes"
 
 
-KookaView::KookaView(QWidget *parent)
+KookaView::KookaView(QWidget *parent, const QCString& deviceToUse)
     : QSplitter(parent)
 {
 
@@ -65,7 +65,7 @@ KookaView::KookaView(QWidget *parent)
    packager = new ScanPackager( tabw );
    {
    }
-   
+      
    /* build up the Preview/Packager-Tabview */
    tabw->insertTab( packager, i18n( "&Gallery"), PACKAGER_TAB );
 
@@ -113,7 +113,7 @@ KookaView::KookaView(QWidget *parent)
    }
    tabw->insertTab( preview_canvas, i18n("&Preview"), PREVIEWER_TAB );
 
-   if( slSelectDevice( ))
+   if( slSelectDevice(deviceToUse))
    {
       /* If a scanner exists */
 
@@ -128,13 +128,9 @@ KookaView::KookaView(QWidget *parent)
    }
    else
    {
-      /* If there is no scanner, no preview is neccessary. */
-#if 0
-      delete m_previewImg;
-      delete preview_canvas;
-      m_previewImg = 0;
-      preview_canvas = 0;
-#endif
+      /* If there is no scanner, disable the preview tab */
+      tabw->setTabEnabled( preview_canvas, false );
+      tabw->showPage( packager );
    }
 
    /* New image created after scanning */
@@ -166,14 +162,24 @@ KookaView::~KookaView()
 }
 
 
-bool KookaView::slSelectDevice( )
+bool KookaView::slSelectDevice( const QCString& useDevice )
 {
 
    kdDebug(28000) << "Kookaview: select a device!" << endl;
-   bool ret = false;
-   
-   QCString selDevice = userDeviceSelection();
+   bool haveConnection = false;
 
+   QCString selDevice;
+   /* in case useDevice is the term 'gallery', the user does not want to
+    * connect to a scanner, but only work in gallery mode. Otherwise, try
+    * to read the device to use from config or from a user dialog */
+   if( useDevice != "gallery" )
+   {
+      selDevice =  useDevice;
+      if( selDevice.isEmpty())
+      {
+	 selDevice = userDeviceSelection();
+      }
+   }
    
    if( !selDevice.isEmpty() )
    {
@@ -192,19 +198,19 @@ bool KookaView::slSelectDevice( )
       /* This connects to the selected scanner */
       scan_params = new ScanParams( paramSplitter );
       Q_CHECK_PTR(scan_params);
-      paramSplitter->setResizeMode( scan_params, QSplitter::FollowSizeHint );  // KeepSize );
+      paramSplitter->setResizeMode( scan_params, QSplitter::FollowSizeHint );
 
       if( sane->openDevice( selDevice ) == KSCAN_OK )
       {
-	 ret = true;
-	 connectedDevice = selDevice;
-
 	 if( ! scan_params->connectDevice( sane ) )
 	 {
 	    kdDebug(28000) << "Connecting to the scanner failed :( ->TODO" << endl;
 	 }
 	 else
 	 {
+	    haveConnection = true;
+	    connectedDevice = selDevice;
+
 	    /* New Rectangle selection in the preview, now scanimge exists */
 	    ImageCanvas *previewCanvas = preview_canvas->getImageCanvas();
 	    connect( previewCanvas , SIGNAL( newRect(QRect)),
@@ -222,38 +228,50 @@ bool KookaView::slSelectDevice( )
       }
 
       /* try to load the size from config */
-      if( ret )
-      {
-	 KConfig *konf = KGlobal::config ();
-	 konf->setGroup(sane->shortScannerName());
-	 QValueList<int> sizes = konf->readIntListEntry( STARTUP_SCANPARAM_SIZES );
-	 QValueList<int> vsizes = konf->readIntListEntry( STARTUP_VIEWER_SIZES );
-      
-	 if( sizes.count() == 0  )
-	 {
-	    kdDebug(28000) << "Setting default sizes" << endl;
-	 
-	    /* Shitty, nothing yet in the config */
-	    sizes << packager->height();
-	    sizes << scan_params->height();
-
-	    vsizes << (scan_params->sizeHint()).width();
-	 }
-	 setSizes( vsizes );
-	 paramSplitter->setSizes( sizes );
-
-	 scan_params->show();
-
-	 loadPreviewImage( selDevice );
-      }
    }
    else
    {
-      // no devices available
+      // no devices available or starting in gallery mode
       if( scan_params )
 	 scan_params->connectDevice( 0L );
    }
-   return( ret );
+
+   KConfig *konf = KGlobal::config ();
+   QString referToScanner( sane->shortScannerName());
+   if( !haveConnection ) referToScanner = "gallery";
+
+   konf->setGroup( referToScanner );
+   QValueList<int> sizes = konf->readIntListEntry( STARTUP_SCANPARAM_SIZES );
+   QValueList<int> vsizes = konf->readIntListEntry( STARTUP_VIEWER_SIZES );
+   
+   if( sizes.count() == 0  )
+   {
+      kdDebug(28000) << "Setting default sizes" << endl;
+	 
+      /* Shitty, nothing yet in the config */
+      if( haveConnection )
+      {
+	 sizes << packager->height();
+	 sizes << scan_params->height();
+	 vsizes << (scan_params->sizeHint()).width();
+      }
+      else
+      {
+	 /* only push one value to vsizes */
+	 vsizes << 150;
+      }
+   }
+   kdDebug(28000) << "Setting sizes !" << endl;
+   setSizes( vsizes );
+   if( haveConnection )
+   {
+      paramSplitter->setSizes( sizes );
+
+      scan_params->show();
+      loadPreviewImage( selDevice );
+   }
+
+   return( haveConnection );
 }
 
 QCString KookaView::userDeviceSelection( ) const
@@ -643,14 +661,16 @@ void KookaView::saveProperties(KConfig *config)
    if( sane && scan_params )
    {
       config->setGroup( sane->shortScannerName());
-
       QValueList<int> pssizes = paramSplitter->sizes();
       config->writeEntry( STARTUP_SCANPARAM_SIZES, pssizes );
-
-      /* Sizes of the vertical splitter */
-      QValueList<int> vsizes = sizes();
-      config->writeEntry(STARTUP_VIEWER_SIZES, vsizes );
    }
+   else
+   {
+      config->setGroup( "gallery" );
+   }
+   /* Sizes of the vertical splitter */
+   QValueList<int> vsizes = sizes();
+   config->writeEntry(STARTUP_VIEWER_SIZES, vsizes );
 }
 
 
@@ -669,7 +689,7 @@ void KookaView::slOpenCurrInGraphApp( void )
 	 
       urllist.append( ftvi->url());
 	 
-      KRun::displayOpenWithDialog( urllist );
+      // KRun::displayOpenWithDialog( urllist );
    }
 }
 
