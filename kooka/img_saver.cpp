@@ -1,6 +1,6 @@
 /***************************************************************************
                           img_saver.cpp  -  description
-                             ------------------- 
+                             -------------------
     begin                : Mon Dec 27 1999
     copyright            : (C) 1999 by Klaas Freitag
     email                : freitag@suse.de
@@ -60,7 +60,7 @@ FormatDialog::FormatDialog( QWidget *parent, const QString&, const char *name )
    page->setFrameStyle( QFrame::Box | QFrame::Sunken );
    Q_CHECK_PTR( page );
    setMainWidget( page );
-   
+
    QVBoxLayout *bigdad = new QVBoxLayout( page, marginHint(), spacingHint());
    Q_CHECK_PTR(bigdad);
 
@@ -72,7 +72,7 @@ FormatDialog::FormatDialog( QWidget *parent, const QString&, const char *name )
 
    KSeparator* sep = new KSeparator( KSeparator::HLine, page);
    bigdad->addWidget( sep );
-   
+
    // Layout-Boxes
    // QHBoxLayout *hl1= new QHBoxLayout( );  // Caption
    QHBoxLayout *lhBigMiddle = new QHBoxLayout( spacingHint() );  // Big middle
@@ -81,12 +81,12 @@ FormatDialog::FormatDialog( QWidget *parent, const QString&, const char *name )
    QVBoxLayout *lvFormatSel = new QVBoxLayout( spacingHint() );  // Selection List
    Q_CHECK_PTR(lvFormatSel);
    lhBigMiddle->addLayout( lvFormatSel );
-   
+
    // Insert Scrolled List for formats
    QLabel *l1 = new QLabel( page );
    Q_CHECK_PTR(l1);
    l1->setText( i18n( "Available image formats:" ));
-   
+
    lb_format = new QListBox( page, "ListBoxFormats" );
    Q_CHECK_PTR(lb_format);
 
@@ -99,7 +99,7 @@ FormatDialog::FormatDialog( QWidget *parent, const QString&, const char *name )
    lb_format->insertStringList( fo );
    connect( lb_format, SIGNAL( highlighted(const QString&)),
 	    SLOT( showHelp(const QString&)));
-   
+
    // Insert label for helptext
    l_help = new QLabel( page );
    Q_CHECK_PTR(l_help);
@@ -136,7 +136,7 @@ FormatDialog::FormatDialog( QWidget *parent, const QString&, const char *name )
    bigdad->addWidget( cbDontAsk , 2 );
 
    bigdad->activate();
-   
+
 }
 
 void FormatDialog::showHelp( const QString& item )
@@ -151,7 +151,7 @@ void FormatDialog::showHelp( const QString& item )
       check_subformat( helptxt );
    } else {
       l_help->setText( i18n("-no hint available-" ));
-   }      
+   }
 }
 
 void FormatDialog::check_subformat( const QString & format )
@@ -235,7 +235,7 @@ ImgSaver::ImgSaver(  QWidget *parent, const KURL dir_name )
 
    last_file = "";
    last_format ="";
-   
+
 }
 
 
@@ -249,7 +249,7 @@ ImgSaver::ImgSaver( QWidget *parent )
 
    last_file = "";
    last_format ="";
-   
+
 }
 
 
@@ -257,7 +257,7 @@ ImgSaver::ImgSaver( QWidget *parent )
 void ImgSaver::createDir( const QString& dir )
 {
    KURL url( dir );
- 	
+
    if( ! KIO::NetAccess::exists(url) )
    {
       kdDebug(28000) << "Wrn: Directory <" << dir << "> does not exist -> try to create  !" << endl;
@@ -285,7 +285,7 @@ ImgSaveStat ImgSaver::saveImage( QImage *image )
 {
    ImgSaveStat stat;
    picType imgType;
-   
+
    if( !image ) return( ISS_ERR_PARAM );
 
    /* Find out what kind of image it is  */
@@ -310,7 +310,7 @@ ImgSaveStat ImgSaver::saveImage( QImage *image )
       }
    }
 
-   
+
    QString format = findFormat( imgType );
    QString subformat = findSubFormat( format );
    // Call save-Function with this params
@@ -338,22 +338,22 @@ ImgSaveStat ImgSaver::saveImage( QImage *image )
  **/
 QString ImgSaver::createFilename( QString format )
 {
-   if( format.isNull() || format.isEmpty() ) return( 0 );
-   
-   QString s = "kscan_*." + format.lower();
-   QDir files( directory, s );
-   char name[20];
-   int c = 1;
-   
-   sprintf( name, "kscan_%04x.%s", c, (format.lower()).latin1() );
+    if( format.isNull() || format.isEmpty() ) return( 0 );
 
-   kdDebug(28000) << "CRASH WITH: " << name << endl;
+    QString s = "kscan_*." + format.lower();
+    QDir files( directory, s );
+    long c = 1;
 
-   while( files.exists( name, false ) ) {
-      sprintf( name, "kscan_%04x.%s", ++c, (format.lower()).latin1() );
-   }
-   
-   return( name );
+    QString num;
+    num.setNum(c, 16);
+    QString fname = "kscan_" + num.rightJustify(4, '0') + "." + format.lower();
+
+    while( files.exists( fname, false ) ) {
+        num.setNum( ++c, 16 );
+        fname = "kscan_" + num.rightJustify(4, '0') + "." + format.lower();
+    }
+
+    return( fname );
 }
 
 /**
@@ -362,7 +362,7 @@ QString ImgSaver::createFilename( QString format )
 ImgSaveStat ImgSaver::saveImage( QImage *image, const KURL& filename, const QString& imgFormat )
 {
     QString format = imgFormat;
-    
+
     /* Check if the filename is local */
     if( !filename.isLocalFile())
     {
@@ -372,9 +372,9 @@ ImgSaveStat ImgSaver::saveImage( QImage *image, const KURL& filename, const QStr
 
     QString localFilename;
     localFilename = filename.directory( false, true) + filename.fileName();
-    
+
     kdDebug(28000) << "saveImage: Saving "<< localFilename << " in format " << format << endl;
-    if( format == "" ) 
+    if( format == "" )
 	format = "BMP";
 
     return( save( image, localFilename, format, "" ) );
@@ -383,12 +383,12 @@ ImgSaveStat ImgSaver::saveImage( QImage *image, const KURL& filename, const QStr
 
 
 
- 
+
 ImgSaveStat ImgSaver::savePreview( QImage *image, const QCString& scannerName )
 {
    if( !image ||  image->isNull() )
       return( ISS_ERR_PARAM );
-   
+
    QString format = findFormat( PT_PREVIEW );
 
    ImgSaveStat stat = ISS_ERR_FORMAT_NO_WRITE;
@@ -399,7 +399,7 @@ ImgSaveStat ImgSaver::savePreview( QImage *image, const QCString& scannerName )
       // Previewfile always comes absolute
       stat = save( image, previewfile, format, "" );
    }
-   
+
    if( stat == ISS_OK )
    {
       KConfig *konf = KGlobal::config ();
@@ -426,7 +426,7 @@ QString ImgSaver::findFormat( picType type )
    {
       return( "BMP" );
    }
-   
+
    // real images
    switch( type )
    {
@@ -469,13 +469,13 @@ QString ImgSaver::findFormat( picType type )
       }
    }
    return( format );
-   
+
 }
 
 QString ImgSaver::picTypeAsString( picType type ) const
 {
    QString res;
-   
+
    switch( type )
    {
       case PT_COLOR_IMAGE:
@@ -500,9 +500,9 @@ QString ImgSaver::picTypeAsString( picType type ) const
 
 QString ImgSaver::startFormatDialog( picType type)
 {
-   
+
    FormatDialog fd( 0, picTypeAsString( type ), "FormatDialog" );
-      
+
    // set default values
    if( type != PT_PREVIEW )
    {
@@ -538,7 +538,7 @@ bool ImgSaver::isRememberedFormat( picType type, QString format ) const
    {
       return( false );
    }
-   
+
 }
 
 
@@ -551,7 +551,7 @@ QString ImgSaver::getFormatForType( picType type ) const
    konf->setGroup( OP_FILE_GROUP );
 
    QString f;
-   
+
    switch( type )
    {
       case PT_COLOR_IMAGE:
@@ -582,7 +582,7 @@ void ImgSaver::storeFormatForType( picType type, QString format, bool ask )
 
    konf->writeEntry( OP_FILE_ASK_FORMAT, ask );
    ask_for_format = ask;
-   
+
    switch( type )
    {
       case PT_COLOR_IMAGE:
@@ -609,7 +609,7 @@ QString ImgSaver::findSubFormat( QString format )
 {
    kdDebug(28000) << "Searching Subformat for " << format << endl;
    return( subformat );
-   
+
 }
 
 /**
@@ -628,14 +628,14 @@ ImgSaveStat ImgSaver::save( QImage *image, const QString &filename,
       kdDebug(28000) << "ImgSaver ERROR: Wrong parameter Format <" << format << "> or image" << endl;
       return( ISS_ERR_PARAM );
    }
-   
+
    if( image )
    {
       // remember the last processed file - only the filename - no path
       QFileInfo fi( filename );
       QString dirPath = fi.dirPath();
       QDir dir = QDir( dirPath );
-      
+
       if( ! dir.exists() )
       {
 	 /* The dir to save in always should exist, except in the first preview save */
@@ -645,7 +645,7 @@ ImgSaveStat ImgSaver::save( QImage *image, const QString &filename,
 	    kdDebug(28000) << "ERR: Could not create directory" << endl;
 	 }
       }
-      
+
       if( fi.exists() && !fi.isWritable() )
       {
 	 kdDebug(28000) << "Cant write to file <" << filename << ">, cant save !" << endl;
@@ -666,7 +666,7 @@ ImgSaveStat ImgSaver::save( QImage *image, const QString &filename,
 
       result = image->save( filename, format.latin1() );
 
-      
+
       last_file = fi.absFilePath();
       last_format = format.latin1();
    }
@@ -678,7 +678,7 @@ ImgSaveStat ImgSaver::save( QImage *image, const QString &filename,
       last_format = "";
       return( ISS_ERR_UNKNOWN );
    }
-	 
+
 }
 
 
@@ -700,7 +700,7 @@ void ImgSaver::readConfig( void )
 QString ImgSaver::errorString( ImgSaveStat stat )
 {
    QString re;
-   
+
    switch( stat ) {
       case ISS_OK:           re = i18n( " image save OK      " ); break;
       case ISS_ERR_PERM:     re = i18n( " permission error   " ); break;
@@ -711,17 +711,17 @@ QString ImgSaver::errorString( ImgSaveStat stat )
       case ISS_SAVE_CANCELED: re = i18n( " user canceled saving " ); break;
       case ISS_ERR_UNKNOWN:  re = i18n( " unknown error      " ); break;
       case ISS_ERR_PARAM:    re = i18n( " parameter wrong    " ); break;
-	 
+
       default: re = "";
    }
    return( re );
 
 }
 
-QString ImgSaver::extension( const KURL& url ) 
+QString ImgSaver::extension( const KURL& url )
 {
    QString extension = url.fileName();
-   
+
    int dotPos = extension.findRev( '.' );
    if( dotPos > 0 )
    {
@@ -754,7 +754,7 @@ bool ImgSaver::renameImage( const KURL& fromUrl, KURL& toUrl, bool askExt,  QWid
 	 fName += ".";
       }
       fName += extFrom;
-      
+
       if( askExt )
       {
 
@@ -781,9 +781,9 @@ bool ImgSaver::renameImage( const KURL& fromUrl, KURL& toUrl, bool askExt,  QWid
 			  i18n("Wrong extension found" ));
       return(false);
    }
-   
+
    bool success = false;
-   
+
    if( KIO::NetAccess::exists( targetUrl ) )
    {
       kdDebug(28000)<< "Target already exists - can not copy" << endl;
@@ -806,7 +806,7 @@ bool ImgSaver::exportImage( const KURL& fromUrl, const KURL& toUrl, QWidget *ove
    QString extTo = extension( toUrl );
    QString extFrom = extension( fromUrl );
    KURL targetUrl( toUrl );
-   
+
    if( extTo.isEmpty() && !extFrom.isEmpty())
    {
       /* Ask if the extension should be added */
@@ -836,7 +836,7 @@ bool ImgSaver::exportImage( const KURL& fromUrl, const KURL& toUrl, QWidget *ove
 			  i18n("Wrong extension found" ));
       return(false);
    }
-   
+
    KIO::Job *copyjob = KIO::copy( fromUrl, targetUrl, false );
 
    return( copyjob ? true : false );

@@ -287,7 +287,7 @@ void CRep::run() // KADMOS_ERROR CRep::Recognize()
 #ifdef QT_THREAD_SUPPORT
     m_mutex.lock();
 #endif
-    kdDebug() << "ooo Locked and ocr!" << endl;
+    kdDebug(28000) << "ooo Locked and ocr!" << endl;
     m_Error = rep_do(&m_RepData);
     CheckError();
 #ifdef QT_THREAD_SUPPORT
@@ -321,7 +321,7 @@ void CRep::analyseLine( short line, QPixmap* pix )
 
     if( ! repRes )
     {
-        kdDebug() << "repRes-Pointer is null" << endl;
+        kdDebug(28000) << "repRes-Pointer is null" << endl;
         return;
     }
 
@@ -329,13 +329,13 @@ void CRep::analyseLine( short line, QPixmap* pix )
     int resLen = m_RepData.rep_result->rel_result_len;
     if( line < 0 || line > resLen-1 )
     {
-        kdDebug() << "Line index is out of range" << endl;
+        kdDebug(28000) << "Line index is out of range" << endl;
         return;
     }
 
     /* Handle line box */
-    kdDebug() << "RepResult Box at " << repRes->left << ", " << repRes->top << endl;
-    kdDebug() << "Size is " << repRes->width << "x" << repRes->height << endl;
+    kdDebug(28000) << "RepResult Box at " << repRes->left << ", " << repRes->top << endl;
+    kdDebug(28000) << "Size is " << repRes->width << "x" << repRes->height << endl;
     drawLineBox( pix, QRect( repRes->left, repRes->top, repRes->width, repRes->height ));
 
     Kadmos::RelResult *relr = &(repRes->rel_result[0]);
@@ -345,17 +345,22 @@ void CRep::analyseLine( short line, QPixmap* pix )
     {
         relr = &(repRes->rel_result[0]) + relg->result_number[0];
 
-        if (!*relr->rec_char[0]) strcpy(relr->rec_char[0], "~ ");
-        // printf("\n   %2s  %d (%d,%d;%d,%d)", relr->rec_char[0], relr->rec_value[0],
-        //        (int)relr->left, (int)relr->top, (int)relr->width, (int)relr->height);
-        if (relg->leading_blanks) printf("  %d leading blanks", relg->leading_blanks);
+        if (!*relr->rec_char[0])
+        {
+            strcpy(relr->rec_char[0], "~ ");
+        }
+
+        if (relg->leading_blanks)
+        {
+            kdDebug(28000) << "Found leading blanks: " << relg->leading_blanks << endl;
+        }
 
         drawCharBox( pix, QRect(repRes->left+relr->left,
                                 repRes->top+relr->top,
                                 relr->width,
                                 relr->height ));
 
-        kdDebug() << "RelGraph->next is " << relg->next[0] << endl;
+        kdDebug(28000) << "RelGraph->next is " << relg->next[0] << endl;
         if (relg->next[0] == -1) break;
         relg = &(repRes->rel_graph[0]) + relg->next[0];
     }
@@ -385,11 +390,11 @@ void CRep::drawBox( QPixmap* pix, const QRect& r, const QColor& color )
 void CRep::analyseGraph()
 {
     Kadmos::RepResult *repRes = m_RepData.rep_result;
-    kdDebug() << "REP-Image: " << repRes->left << ", " << repRes->top << ", "
+    kdDebug(28000) << "REP-Image: " << repRes->left << ", " << repRes->top << ", "
               << repRes->width << ", " << repRes->height << endl;
 
-    kdDebug() << "Amount of resul items: " << repRes->rel_graph_len << endl;
-    kdDebug() << "Amount of graph items: " << repRes->rel_result_len << endl;
+    kdDebug(28000) << "Amount of resul items: " << repRes->rel_graph_len << endl;
+    kdDebug(28000) << "Amount of graph items: " << repRes->rel_result_len << endl;
 
     if( repRes )
     {
@@ -411,7 +416,7 @@ KADMOS_ERROR CRep::SetImage( const QString file )
     image_handle = re_readimage(file.latin1(), &m_RepData.image);
     if( ! image_handle )
     {
-        kdDebug() << "Can not load input file" << endl;
+        kdDebug(28000) << "Can not load input file" << endl;
     }
     CheckError();
     return RE_SUCCESS;
@@ -430,7 +435,7 @@ KADMOS_ERROR CRep::SetImage(QImage *Image)
 #endif
     if( !Image ) return RE_PARAMETERERROR;
 
-    kdDebug() << "Setting image manually." << endl;
+    kdDebug(28000) << "Setting image manually." << endl;
     m_RepData.image.data    = (void*)Image->bits();
     m_RepData.image.imgtype = IMGTYPE_PIXELARRAY;
     m_RepData.image.width   = Image->width();
@@ -442,14 +447,14 @@ KADMOS_ERROR CRep::SetImage(QImage *Image)
     if( Image->depth() == 1 || (Image->numColors()==2 && Image->depth() == 8) )
     {
         m_RepData.image.color=COLOR_BINARY;
-        kdDebug() << "Setting Binary" << endl;
+        kdDebug(28000) << "Setting Binary" << endl;
     } else if( Image->isGrayscale() ) {
         m_RepData.image.color = COLOR_GRAY;
-        kdDebug() << "Setting GRAY" << endl;
+        kdDebug(28000) << "Setting GRAY" << endl;
 
     } else {
         m_RepData.image.color = COLOR_RGB;
-        kdDebug() << "Setting Color RGB" << endl;
+        kdDebug(28000) << "Setting Color RGB" << endl;
     }
     // orientation
     m_RepData.image.orientation = ORIENTATION_TOPLEFT;
