@@ -107,6 +107,7 @@ FormatDialog::FormatDialog( QWidget *parent, const QString& imgFormat, const cha
    l_help->setFrameStyle( QFrame::Panel|QFrame::Sunken );
    l_help->setText( i18n("-No format selected-" ));
    l_help->setAlignment( AlignVCenter | AlignHCenter );
+   l_help->setMinimumWidth(230);
 
    // Insert Selbox for subformat
    l2 = new QLabel( page );
@@ -116,10 +117,6 @@ FormatDialog::FormatDialog( QWidget *parent, const QString& imgFormat, const cha
    Q_CHECK_PTR( cb_subf );
 
    // Checkbox to store setting
-   cbRemember = new QCheckBox(i18n("Remember this format for this image type %1").arg( imgFormat ),
-			      page );
-   Q_CHECK_PTR( cbRemember );
-
    cbDontAsk  = new QCheckBox(i18n("Don't ask again for the save format if it is defined."),
 			      page );
    Q_CHECK_PTR( cbDontAsk );
@@ -136,11 +133,9 @@ FormatDialog::FormatDialog( QWidget *parent, const QString& imgFormat, const cha
 
    lhBigMiddle->addWidget( l_help, 2 );
    //bigdad->addStretch(1);
-   bigdad->addWidget( cbRemember , 2 );
    bigdad->addWidget( hl, 1 );
    bigdad->addWidget( cbDontAsk , 2 );
 
-   // bigdad->addWidget( cbRemember,1 );
    bigdad->activate();
    
 }
@@ -169,7 +164,7 @@ void FormatDialog::check_subformat( const QString & format )
    l2->setEnabled( false );
 }
 
-void FormatDialog::setSelectedFormat( QString fo, bool isRemembered )
+void FormatDialog::setSelectedFormat( QString fo )
 {
    QListBoxItem *item = lb_format->findItem( fo );
 
@@ -177,8 +172,6 @@ void FormatDialog::setSelectedFormat( QString fo, bool isRemembered )
    {
       // Select it.
       lb_format->setSelected( lb_format->index(item), true );
-
-      cbRemember->setChecked( isRemembered );
    }
 }
 
@@ -210,19 +203,6 @@ void FormatDialog::buildHelp( void )
    format_help.insert( QString::fromLatin1("JPEG"), HELP_JPG );
    format_help.insert( QString::fromLatin1("JPG"), HELP_JPG );
    format_help.insert( QString::fromLatin1("EPS"), HELP_EPS );
-}
-
-
-bool FormatDialog::rememberFormat( ) const
-{
-   bool result = false;
-   
-   if( cbRemember )
-   {
-      return( cbRemember->isChecked());
-   }
-
-   return( result );
 }
 
 
@@ -525,7 +505,7 @@ QString ImgSaver::startFormatDialog( picType type)
    if( type != PT_PREVIEW )
    {
       QString defFormat = getFormatForType( type );
-      fd.setSelectedFormat( defFormat, isRememberedFormat(type, defFormat ) );
+      fd.setSelectedFormat( defFormat );
    }
 
    QString format;
@@ -533,15 +513,10 @@ QString ImgSaver::startFormatDialog( picType type)
    {
       format = fd.getFormat();
       kdDebug(28000) << "Storing to format <" << format << ">" << endl;
-      if( fd.rememberFormat() )
-      {
-	 kdDebug(28000)<< "Should remember format, storing!" << endl;
-	 bool ask = fd.askForFormat();
-	 kdDebug(28000)<< "Store askFor is " << ask << endl;
-	 storeFormatForType( type, format, ask );
-      }
+      bool ask = fd.askForFormat();
+      kdDebug(28000)<< "Store askFor is " << ask << endl;
+      storeFormatForType( type, format, ask );
       subformat = fd.getSubFormat();
-
    }
    return( format );
 }

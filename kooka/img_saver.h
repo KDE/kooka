@@ -99,12 +99,11 @@ public:
    QCString      getSubFormat( ) const;
    QString      errorString( ImgSaveStat stat );
 
-   bool         rememberFormat( ) const;
    bool         askForFormat( ) const
       { return( ! cbDontAsk->isChecked()); }
    
 public slots:
-    void        setSelectedFormat( QString, bool );
+    void        setSelectedFormat( QString );
 
 
 protected slots:
