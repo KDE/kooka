@@ -111,6 +111,9 @@ KookaView::KookaView( KParts::DockMainWindow *parent, const QCString& deviceToUs
    img_canvas  = new ImageCanvas( m_mainDock );
    img_canvas->setMinimumSize(100,200);
    img_canvas->enableContextMenu(true);
+   connect( img_canvas, SIGNAL( imageReadOnly(bool)),
+	    this, SLOT(slViewerReadOnly(bool)));
+   
    KPopupMenu *ctxtmenu = static_cast<KPopupMenu*>(img_canvas->contextMenu());
    if( ctxtmenu )
        ctxtmenu->insertTitle(i18n("Image View"));
@@ -291,6 +294,11 @@ KookaView::~KookaView()
    delete preview_canvas;
 
    kdDebug(28000)<< "Finished saving config data" << endl;
+}
+
+void KookaView::slViewerReadOnly( bool )
+{
+    /* retrieve actions that could change the image */
 }
 
 
@@ -612,6 +620,7 @@ void KookaView::slOCRResultImage( const QPixmap& pix )
     m_ocrResultImg = new QImage();
     *m_ocrResultImg = pix;
     img_canvas->newImage( m_ocrResultImg );
+    img_canvas->setReadOnly(true); // ocr result images should be read only.
 }
 
 void KookaView::slScanStart( )
@@ -836,6 +845,7 @@ void KookaView::slShowAImage( KookaImage *img )
    if( img_canvas )
    {
       img_canvas->newImage( img );
+      img_canvas->setReadOnly(false);
    }
 
    /* tell ocr about */
@@ -919,9 +929,17 @@ void KookaView::slStartLoading( const KURL& url )
 
 void KookaView::updateCurrImage( QImage& img )
 {
-   emit( signalChangeStatusbar( i18n("Storing image changes" )));
-   packager->slotCurrentImageChanged( &img );
-   emit( signalCleanStatusbar());
+    if( ! img_canvas->readOnly() )
+    {
+	emit( signalChangeStatusbar( i18n("Storing image changes" )));
+	packager->slotCurrentImageChanged( &img );
+	emit( signalCleanStatusbar());
+    }
+    else
+    {
+	emit( signalChangeStatusbar( i18n("Can not save image, it is write protected!")));
+	kdDebug(28000) << "Image is write protected, no saving!" << endl;
+    }
 }
 
 
