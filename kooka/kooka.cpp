@@ -82,6 +82,7 @@ Kooka::Kooka( const QCString& deviceToUse)
 
     createGUI(0L); // m_view->ocrResultPart());
     // and a status bar
+    statusBar()->insertItem( QString(), KookaView::StatusTemp );
     statusBar()->show();
 
     // allow the view to change the statusbar and caption
@@ -166,11 +167,17 @@ void Kooka::setupActions()
                       actionCollection(), "scaleOriginal" );
     m_view->connectViewerAction( act );
 
+#ifdef QICONSET_HONOUR_ON_OFF
+    /* The Toggleaction does not seem to handle the on/off icon from QIconSet */
     QIconSet lockSet;
     lockSet.setPixmap(BarIcon("lock")  , QIconSet::Automatic, QIconSet::Normal, QIconSet::On );
     lockSet.setPixmap(BarIcon("unlock"), QIconSet::Automatic, QIconSet::Normal, QIconSet::Off);
     act = new KToggleAction ( i18n("Keep &Zoom Setting"), lockSet, CTRL+Key_Z,
                               actionCollection(), "keepZoom" );
+#else
+    act = new KToggleAction( i18n("Keep &Zoom Setting"), BarIcon("lockzoom"), CTRL+Key_Z,
+                             actionCollection(), "keepZoom" );
+#endif
 
     connect( act, SIGNAL( toggled( bool ) ), m_view->getImageViewer(),
              SLOT(setKeepZoom(bool)));
@@ -442,7 +449,7 @@ void Kooka::optionsPreferences()
 void Kooka::changeStatusbar(const QString& text)
 {
     // display the text on the statusbar
-    statusBar()->message(text);
+    statusBar()->changeItem( text, KookaView::StatusTemp );
 }
 
 void Kooka::changeCaption(const QString& text)

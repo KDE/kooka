@@ -66,6 +66,7 @@ class KookaView : public QObject
     Q_OBJECT
 public:
     typedef enum { MirrorVertical, MirrorHorizontal, MirrorBoth } MirrorType;
+    typedef enum { StatusTemp, StatusImage } StatusBarIDs;
 
     /**
      * Default constructor
@@ -224,6 +225,8 @@ private:
     KDockWidget *m_dockRecent;
     KDockWidget *m_dockPreview;
     KDockWidget *m_dockOCRText;
+
+    KMainWindow *m_mainWindow;
 
     // KParts::ReadWritePart *m_textEdit;
     KTextEditor::Document *m_textEdit;

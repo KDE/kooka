@@ -46,6 +46,7 @@
 #include <kurl.h>
 #include <krun.h>
 #include <kapplication.h>
+#include <kstatusbar.h>
 #include <kconfig.h>
 #include <kdebug.h>
 #include <ktrader.h>
@@ -65,10 +66,10 @@
 
 #include <kparts/componentfactory.h>
 #include <qimage.h>
+#include <kpopupmenu.h>
 
 
 #define STARTUP_IMG_SELECTION   "SelectedImageOnStartup"
-
 
 
 KookaView::KookaView( KParts::DockMainWindow *parent, const QCString& deviceToUse)
@@ -81,6 +82,8 @@ KookaView::KookaView( KParts::DockMainWindow *parent, const QCString& deviceToUs
      m_dockPackager(0),
      m_dockRecent(0),
      m_dockPreview(0),
+     m_dockOCRText(0),
+     m_mainWindow(parent),
      m_textEdit(0),
      m_view(0)
 {
@@ -99,6 +102,9 @@ KookaView::KookaView( KParts::DockMainWindow *parent, const QCString& deviceToUs
    img_canvas  = new ImageCanvas( m_mainDock );
    img_canvas->setMinimumSize(100,200);
    img_canvas->enableContextMenu(true);
+   KPopupMenu *ctxtmenu = static_cast<KPopupMenu*>(img_canvas->contextMenu());
+   if( ctxtmenu )
+       ctxtmenu->insertTitle(i18n("Image View"));
    m_mainDock->setWidget( img_canvas );
 
    m_dockThumbs = parent->createDockWidget( "Thumbs",
@@ -254,6 +260,19 @@ KookaView::KookaView( KParts::DockMainWindow *parent, const QCString& deviceToUs
    m_mainDock->setDockSite( KDockWidget::DockFullSite );
 
    packager->openRoots();
+
+   /* Status Bar */
+   KStatusBar *statBar = m_mainWindow->statusBar();
+
+   // statBar->insertItem(QString("1"), SBAR_ZOOM,  0, true );
+   statBar->insertItem( QString("-"), StatusImage,  0, true );
+
+   /* Set a large enough size */
+   int w = statBar->fontMetrics().
+           width(img_canvas->imageInfoString(2000, 2000, 48));
+   kdDebug(28000) << "Fixed size for status bar: " << w << " from string " << img_canvas->imageInfoString(2000, 2000, 48) << endl;
+   statBar->setItemFixed( StatusImage, w );
+
 }
 
 
@@ -849,6 +868,11 @@ void KookaView::slShowAImage( KookaImage *img )
    {
        ocrFabric->slSetImage( img );
    }
+
+   /* Status Bar */
+   KStatusBar *statBar = m_mainWindow->statusBar();
+   if( img_canvas )
+       statBar->changeItem( img_canvas->imageInfoString(), StatusImage );
 }
 
 void KookaView::slUnloadAImage( KookaImage * )
