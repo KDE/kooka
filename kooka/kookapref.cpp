@@ -102,7 +102,7 @@ void KookaPreferences::setupOCRPage()
     m_urlReqGocr = binaryCheckBox( gp, "gocr" );
     connect( m_urlReqGocr, SIGNAL( textChanged( const QString& )),
              this, SLOT( slCheckOnGOCR( const QString& )));
-    QString cmdGocr = tryFindBinary( "gocr", CFG_OCRAD_BINARY );
+    QString cmdGocr = tryFindBinary( "gocr", CFG_GOCR_BINARY );
     kdDebug(28000) << "Found gocr command: " << cmdGocr << endl;
     m_gocrBut->setEnabled(false);
     if( !cmdGocr.isEmpty() )
