@@ -104,7 +104,7 @@ public:
     /**
      * @return the current spell config.
      */
-    KSpellConfig* ocrSpellConfig()
+    KSpellConfig* ocrSpellConfig() const
         { return m_spellInitialConfig; }
 
 

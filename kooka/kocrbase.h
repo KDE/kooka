@@ -77,10 +77,10 @@ public:
      */
     virtual QString ocrEngineDesc() const { return QString(); }
 
-    QVBox* ocrPage(){ return m_ocrPage; }
-    QVBox* imagePage(){ return m_imgPage; }
+    QVBox* ocrPage() const { return m_ocrPage; }
+    QVBox* imagePage() const { return m_imgPage; }
 
-    KSpellConfig* spellConfig()
+    KSpellConfig* spellConfig() const
         { return m_spellConfig; }
 
     bool wantSpellCheck();

@@ -80,11 +80,11 @@ public:
     virtual QString getImgName( QString name_on_disk );
 
     QString 	getCurrImageFileName( bool ) const;
-    KookaImage* getCurrImage();
+    KookaImage* getCurrImage() const;
 
     KFileTreeBranch* openRoot( const KURL&, bool open=false );
 
-   QPopupMenu *contextMenu() { return m_contextMenu; }
+   QPopupMenu *contextMenu() const { return m_contextMenu; }
    void         openRoots();
 
 public slots:

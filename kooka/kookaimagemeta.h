@@ -42,8 +42,8 @@ public:
     ~KookaImageMeta() { ;}
 
     void setScanResolution( int x, int y=-1);
-    int  getScanResolutionX();
-    int  getScanResolutionY();
+    int  getScanResolutionX() const;
+    int  getScanResolutionY() const;
 
 private:
     int 	m_scanResolution;

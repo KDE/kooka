@@ -641,7 +641,7 @@ void ScanPackager::slImageArrived( KFileTreeViewItem *item, KookaImage* image )
    }
 }
 
-KookaImage* ScanPackager::getCurrImage()
+KookaImage* ScanPackager::getCurrImage() const
 {
     KFileTreeViewItem *curr = currentKFileTreeViewItem();
     KookaImage *img = 0L;

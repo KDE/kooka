@@ -40,12 +40,12 @@ void KookaImageMeta::setScanResolution( int x, int y)
 
 }
 
-int  KookaImageMeta::getScanResolutionX()
+int  KookaImageMeta::getScanResolutionX() const
 {
     return m_scanResolution;
 }
 
-int  KookaImageMeta::getScanResolutionY()
+int  KookaImageMeta::getScanResolutionY() const
 {
     return m_scanResolutionY;
 }

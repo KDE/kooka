@@ -37,10 +37,10 @@
 #include <kstandarddirs.h>
 
 #include <qlayout.h>
-#include <qlabel.h>
 #include <qtooltip.h>
 #include <qvgroupbox.h>
 #include <qgrid.h>
+#include <qcheckbox.h>
 
 #include <devselector.h>
 #include "config.h"

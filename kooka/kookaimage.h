@@ -111,7 +111,7 @@ public:
      * checks if the image is file bound ie. was loaded from file. If this
      * method returns false, fileMetaInfo and FileItem are undefined.
      */
-    bool isFileBound() { return m_fileBound; }
+    bool isFileBound()const { return m_fileBound; }
 
 private:
     int 		m_subImages;

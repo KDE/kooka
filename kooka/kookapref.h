@@ -28,8 +28,6 @@
 
 #include <kdialogbase.h>
 #include <qframe.h>
-#include <qcheckbox.h>
-#include <qlabel.h>
 
 class KConfig;
 class QLabel;
@@ -39,6 +37,7 @@ class ImageSelectLine;
 class KScanEntry;
 class QRadioButton;
 class KURLRequester;
+class QCheckBox;
 
 #define STARTUP_READ_IMAGE "ReadImageOnStart"
 #define CFG_GROUP_OCR_DIA  "ocrDialog"
