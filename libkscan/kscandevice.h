@@ -42,6 +42,9 @@
 #include "kscanoption.h"
 #include "kscanoptset.h"
 
+#define DEFAULT_OPTIONSET "saveSet"
+
+
 extern "C" {
 #include <sane.h>
 #include <saneopts.h>
@@ -239,6 +242,12 @@ public:
     **/
    QSize getMaxScanSize( void ) const;
 
+   static bool        scanner_initialised;
+   static SANE_Handle scanner_handle;
+   static QAsciiDict<int>*  option_dic;
+   static SANE_Device const **dev_list;
+   static KScanOptSet *gammaTables;
+
 public slots:
   void slOptChanged( KScanOption* );
 	
@@ -273,6 +282,9 @@ public slots:
     * Save the current image set. Only changed options are saved.
     **/
    void slSaveScanConfigSet( const QString&, const QString& );
+
+
+   void slSetDirty( const QCString& name );
    
   signals:
   /**
@@ -333,7 +345,6 @@ private:
 
   KScanStat           createNewImage( SANE_Parameters *p );
 
-
 // not implemented
 //   QWidget	      *entryField( QWidget *parent, const QString& text,
 //                                    const QString& tooltip );
@@ -341,7 +352,8 @@ private:
   KScanStat           acquire_data( bool isPreview = false );
   QStrList 	      scanner_avail;  // list of names of all scan dev.
   QStrList	      option_list;    // list of names of all options
-
+  QStrList            dirtyList;     // option changes
+   
   QList<KScanOption>  gui_elements;
   QAsciiDict<KScanOption>  gui_elem_names;
 
