@@ -15,27 +15,26 @@ sane_libdir=""
 
 if test -n "$ac_sane_includes" && test -r "$ac_sane_includes/sane.h"; then
   AC_SUBST(sane_includes)
+  sane_libdirs="/usr/lib /usr/local/lib /usr/lib/sane /usr/local/lib/sane"
+  for dir in $sane_libdirs; do
+    try="ls -1 $dir/libsane.*"
+    if test -n "`$try 2> /dev/null`"; then sane_libdir=$dir; break; fi
+  done
+fi
 
-    sane_libdirs="/usr/lib /usr/local/lib /usr/lib/sane /usr/local/lib/sane"
-    for dir in $sane_libdirs; do
-      try="ls -1 $dir/libsane.*"
-      if test -n "`$try 2> /dev/null`"; then sane_libdir=$dir; break; fi
-    done
+if test -n "$sane_libdir"; then
+  SANE_LDFLAGS="-L$sane_libdir"
+  AC_SUBST(SANE_LDFLAGS)
+  LIB_SANE="-lsane"
+  AC_SUBST(LIB_SANE)      
+  LIB_KSCAN='$(top_builddir)/kscan/kscan/libkscan.la'
+  AC_SUBST(LIB_KSCAN)
+  KSCANDIR=kscan
+  AC_SUBST(KSCANDIR)
 
-    if test -n $sane_libdir; then
-      SANE_LDFLAGS="-L$sane_libdir"
-      AC_SUBST(SANE_LDFLAGS)
-      LIB_SANE="-lsane"
-      AC_SUBST(LIB_SANE)      
-      LIB_KSCAN='$(top_builddir)/kscan/kscan/libkscan.la'
-      AC_SUBST(LIB_KSCAN)
-
-      AC_MSG_RESULT([headers in $ac_sane_includes, library in $sane_libdir])
-      AC_DEFINE_UNQUOTED(HAVE_SANE, 1, [Defines if your system has the sane libraries]) 
-    fi
-
-  if test -z "sane_libdir"; then
-    AC_MSG_RESULT([not found -- kscan will NOT be built (check http://www.mostang.com/sane/ for sane)])
-    DO_NOT_COMPILE="$DO_NOT_COMPILE kscan ksanetest"
-  fi
+  AC_MSG_RESULT([headers in $ac_sane_includes, library in $sane_libdir])
+  AC_DEFINE_UNQUOTED(HAVE_SANE, 1, [Defines if your system has the sane libraries]) 
+else
+  AC_MSG_RESULT([not found -- kscan will NOT be built (check http://www.mostang.com/sane/ for sane)])
+  DO_NOT_COMPILE="$DO_NOT_COMPILE kscan ksanetest"
 fi
