@@ -743,7 +743,7 @@ QString ImgSaver::errorString( ImgSaveStat stat )
    switch( stat ) {
       case ISS_OK:           re = i18n( " image save OK      " ); break;
       case ISS_ERR_PERM:     re = i18n( " permission error   " ); break;
-      case ISS_ERR_FILENAME: re = i18n( " bad filename       " ); break;
+      case ISS_ERR_FILENAME: re = i18n( " bad file name      " ); break;
       case ISS_ERR_NO_SPACE: re = i18n( " no space on device " ); break;
       case ISS_ERR_FORMAT_NO_WRITE: re = i18n( " could not write image format " ); break;
       case ISS_ERR_PROTOCOL: re = i18n( " can not write file using that protocol "); break;
@@ -798,8 +798,8 @@ bool ImgSaver::renameImage( const KURL& fromUrl, KURL& toUrl, bool askExt,  QWid
       {
 
 	 QString s;
-	 s = i18n("The filename you supplied has no file extension.\nShould the correct one be added automatically? ");
-	 s += i18n( "That would result in the new filename: %1" ).arg( fName);
+	 s = i18n("The file name you supplied has no file extension.\nShould the correct one be added automatically? ");
+	 s += i18n( "That would result in the new file name: %1" ).arg( fName);
 
 	 result = KMessageBox::questionYesNo(overWidget, s, i18n( "Extension missing"),
 					     KStdGuiItem::yes(), KStdGuiItem::no(),
@@ -895,8 +895,8 @@ bool ImgSaver::copyImage( const KURL& fromUrl, const KURL& toUrl, QWidget *overW
       fName += extFrom;
 
       QString s;
-      s = i18n("The filename you supplied has no file extension.\nShould the correct one be added automatically? ");
-      s += i18n( "That would result in the new filename: %1" ).arg( fName);
+      s = i18n("The file name you supplied has no file extension.\nShould the correct one be added automatically? ");
+      s += i18n( "That would result in the new file name: %1" ).arg( fName);
 
       result = KMessageBox::questionYesNo(overWidget, s, i18n( "Extension missing"),
 					  KStdGuiItem::yes(), KStdGuiItem::no(),
