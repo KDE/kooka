@@ -30,11 +30,10 @@
 #include <kio/file.h>
 
 
-#include "img_saver.h"
-#include "packageritem.h"
 /**
   *@author Klaas Freitag
   */
+#include "packageritem.h"
 
 class KPopupMenu;
 

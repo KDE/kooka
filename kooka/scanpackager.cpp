@@ -21,6 +21,7 @@
 #include "packageritem.h"
 #include "miscwidgets.h"
 #include "resource.h"
+#include "img_saver.h"
 
 #include <qapplication.h>
 #include <qdir.h>
@@ -328,8 +329,7 @@ void ScanPackager::slAddImage( QImage *img )
    }
 
    /* Path of curr sel item */
-   QString dirName = curr->getDirectory();
-   ImgSaver img_saver( this, ImgSaver::relativeToImgRoot(dirName) );
+   ImgSaver img_saver( this, curr->getFilenameURL());
 
    is_stat = img_saver.saveImage( img );
    if( is_stat == ISS_ERR_FORMAT_NO_WRITE )
