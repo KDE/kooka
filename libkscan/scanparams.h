@@ -139,7 +139,7 @@ private:
 
    QProgressDialog *progressDialog;
 
-   QPixmap       pixLineArt, pixGray, pixColor, pixMiniFloppy;
+   QPixmap       pixLineArt, pixGray, pixColor, pixHalftone, pixMiniFloppy;
 };
 
 #endif
