@@ -248,7 +248,7 @@ QScrollView *ScanParams::scannerParams( )
       cb->slSetIcon( pixLineArt,  i18n("Lineart"));
       cb->slSetIcon( pixLineArt,  i18n("Binary" ));
       cb->slSetIcon( pixGray,     i18n("Gray") );
-      cb->slSetIcon( pixGray,     i18n("Grey") );
+      cb->slSetIcon( pixGray,     i18n("Gray") );
       cb->slSetIcon( pixColor,    i18n("Color") );
       cb->slSetIcon( pixHalftone, i18n("Halftone") );
 
