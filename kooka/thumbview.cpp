@@ -275,7 +275,7 @@ void ThumbView::slNewFileItems( const KFileItemList& items )
 			      mime );
 	    paint.flush();
 	 }
-	 kdDebug( 28000) << "Base image size " << m_basePix.size().width() << endl;
+         
 	 /* Create a new empty preview pixmap and store the pointer to it */
 	 ThumbViewItem *newIconViewIt = new ThumbViewItem( this,
 							   item->url().filename(),

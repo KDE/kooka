@@ -156,11 +156,6 @@ void Kooka::setupActions()
     m_view->connectViewerAction( act );
 
     /* thumbview and gallery actions */
-    act = new KAction(i18n("Show &Thumbview"), "up", CTRL+Key_T,
-		       m_view, SLOT( slShowThumbnails()),
-		       actionCollection(), "thumbView" );
-    m_view->connectViewerAction( act );
-    
     act = new KAction(i18n("Set Zoom..."), "viewmag", 0, 
 		       m_view, SLOT( slIVShowZoomDialog()),
 		       actionCollection(), "showZoomDialog" );

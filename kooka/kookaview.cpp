@@ -159,10 +159,8 @@ KookaView::KookaView( KDockMainWindow *parent, const QCString& deviceToUse)
 
    m_dockScanParam->setWidget( 0 ); // later
    sane = new KScanDevice( m_dockScanParam );
-					     
    Q_CHECK_PTR(sane);
 
-   // dockScanParam->setWidget( sane );
    m_dockScanParam->manualDock( m_dockRecent,              // dock target
    KDockWidget::DockBottom, // dock site
    20 );                  // relation target/this (in percent)
@@ -767,15 +765,10 @@ void KookaView::slShowThumbnails(KFileTreeViewItem *dirKfi, bool forceRedraw )
 	 dirKfi = kftvi;
 	 forceRedraw = true;
 	 packager->setSelected( static_cast<QListViewItem*>(dirKfi), true );
-	 
       }
-
-      return;
    }
-   
 
    kdDebug(28000) << "Showing thumbs for " << dirKfi->url().prettyURL() << endl;	   
-   // m_stack->raiseWidget( m_thumbview );
 
    /* Only do the new thumbview if the old is on another dir */
    if( m_thumbview && (forceRedraw || m_thumbview->currentDir() != dirKfi->url()) )
@@ -979,6 +972,7 @@ void KookaView::slFreshUpThumbView()
       /* readSettings returns true if something changes */
       if( m_thumbview->readSettings() )
       {
+	 kdDebug(28000) << "Thumbview-Settings changed, readraw thumbs" << endl;
 	 /* new settings */
 	 slShowThumbnails(0, true);
       }

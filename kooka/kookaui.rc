@@ -47,7 +47,5 @@
    <Action name="rotateClockwise"/>
    <Action name="rotateCounterClockwise"/>
    <Action name="upsitedown"/>
-   <Separator/>
-   <Action name="thumbView"/>
  </ToolBar>
 </kpartgui>
