@@ -119,7 +119,7 @@ void KScanSlider::slSetSlider( int value )
 
 void KScanSlider::slSliderChange( int v )
 {
-    kdDebug(29000) << "Got slider val: " << v << endl;
+   // kdDebug(29000) << "Got slider val: " << v << endl;
     // slider_val = v;
     int spin = m_spin->value();
     if( v != spin )
