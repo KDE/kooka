@@ -65,6 +65,7 @@ ScanPackager::ScanPackager( QWidget *parent ) : KFileTreeView( parent )
 {
    // TODO:
    setItemsRenameable (true );
+   setDefaultRenameAction( QListView::Reject );
    addColumn( i18n("Image Name" ));
    setColumnAlignment( 0, AlignLeft );
 
@@ -318,14 +319,25 @@ void ScanPackager::slFileRename( QListViewItem* it, const QString& newStr, int )
    KFileTreeViewItem *item = static_cast<KFileTreeViewItem*>(it);
 
    /* Free memory and imform everybody who is interested. */
-   slotUnloadItem( item );
    KURL urlFrom = item->url();
    KURL urlTo( urlFrom );
+
+   if( urlFrom == urlTo )
+   {
+      kdDebug(28000) << "Renaming to same url does not make sense!" << endl;
+      return;
+   }
+   /* clear selection, because the renamed image comes in through
+    * kdirlister again
+    */
+   slotUnloadItem( item );
 
    urlTo.setFileName("");
    urlTo.setFileName(newStr);
 
    kdDebug(28000) << "Renaming to " << urlTo.prettyURL() << endl;
+   
+   /* to urlTo the really used filename is written */
    if( ImgSaver::renameImage( urlFrom, urlTo, false, this ) )
    {      
       slotSetNextUrlToSelect( urlTo );
@@ -1159,6 +1171,28 @@ ScanPackager::~ScanPackager(){
 void ScanPackager::slotDeleteFromBranch( KFileItem* kfi )
 {
    emit fileDeleted( kfi );
+}
+
+void ScanPackager::contentsDragMoveEvent( QDragMoveEvent *e )
+{
+   if( !e || ! acceptDrag( e ) )
+   {
+      e->ignore();
+      return;
+   }
+
+   QListViewItem *item = 0;
+   QListViewItem *par = 0;
+
+   findDrop( e->pos(), par, item );
+
+   if( item )
+   {
+      bool isDir = static_cast<KFileTreeViewItem*> (item)->isDir();
+      if( isDir )
+	 KFileTreeView::contentsDragMoveEvent( e );
+   }
+
 }
 
 

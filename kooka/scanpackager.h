@@ -74,20 +74,23 @@ public:
     KFileTreeBranch* openRoot( const KURL&, bool open=false );
    
 public slots:
-    void         slSelectImage( const KURL& );
-    void 	 slAddImage( QImage *img );		
-    void 	 slSelectionChanged( QListViewItem *);
-    void         slShowContextMenue(QListViewItem *, const QPoint &, int );
+   void         slSelectImage( const KURL& );
+   void 	slAddImage( QImage *img );		
+   void 	slSelectionChanged( QListViewItem *);
+   void         slShowContextMenue(QListViewItem *, const QPoint &, int );
 
-    void         slotExportFile( );
+   void         slotExportFile( );
     
-    void         slotCanceled(KIO::Job*);
-    void         slotCurrentImageChanged( QImage* );
+   void         slotCanceled(KIO::Job*);
+   void         slotCurrentImageChanged( QImage* );
 
    void         slotDecorate( KFileTreeViewItem* );
    void         slotDecorate( KFileTreeBranch*, const KFileTreeViewItemList& );
    
    void         slotSelectDirectory( const QString& );
+
+protected:
+   virtual void contentsDragMoveEvent( QDragMoveEvent *e );
 
 protected slots:
    void         slFileRename( QListViewItem*, const QString&, int );
