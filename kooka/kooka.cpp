@@ -129,16 +129,6 @@ void Kooka::setupActions()
     KStdAction::print(this, SLOT(filePrint()), actionCollection());
     KStdAction::quit(this , SLOT(close()), actionCollection());
 
-    // createStandardStatusBarAction();
-    // setStandardToolBarMenuEnabled(true);
-
-    m_scanParamsAction = new KToggleAction(i18n("Show Scan &Parameters"),
-                                           KShortcut(), this,
-					   SLOT(optionsShowScanParams()),
-                                           actionCollection(),
-					   "dock_scanparams" );
-    m_scanParamsAction->setChecked( true );
-
     KStdAction::keyBindings(this, SLOT(optionsConfigureKeys()), actionCollection());
     KStdAction::configureToolbars(this, SLOT(optionsConfigureToolbars()),
 				  actionCollection());
