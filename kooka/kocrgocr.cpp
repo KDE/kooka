@@ -73,7 +73,7 @@ QString KGOCRDialog::ocrEngineLogo() const
 
 QString KGOCRDialog::ocrEngineName() const
 {
-    return i18n("GOCR - Optical Character Recognition" );
+    return i18n("GOCR" );
 }
 
 QString KGOCRDialog::ocrEngineDesc() const
