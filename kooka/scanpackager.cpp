@@ -22,7 +22,7 @@
 #include "resource.h"
 #include "img_saver.h"
 #include "kookaimage.h"
-
+#include "previewer.h"
 
 #include <qapplication.h>
 #include <qdir.h>
@@ -118,7 +118,7 @@ ScanPackager::ScanPackager( QWidget *parent ) : KFileTreeView( parent )
 void ScanPackager::openRoots()
 {
    /* First open the standard root */
-   QString localRoot = ImgSaver::kookaImgRoot();
+   QString localRoot = Previewer::galleryRoot();
    
    KURL rootUrl(localRoot);
 
