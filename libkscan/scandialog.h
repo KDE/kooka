@@ -22,12 +22,17 @@ public:
 
 private:
    void createOptionsTab( void );
-      
-private slots:
+
+protected slots:
    void slotFinalImage(QImage *);
    void slotNewPreview( QImage *);
+   void slotScanStart( );
+   void slotScanFinished( KScanStat status );
+
+private slots:
    void slotAskOnStartToggle(bool state);
    void slotNetworkToggle( bool state);
+
 
    void slotClose();
 private:

@@ -1,3 +1,25 @@
+/* This file is part of the KDE project
+   Copyright (C) 2001 Nikolas Zimmermann <wildfox@kde.org>
+   Klaas Freitag <freitag@suse.de>
+
+   This library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Library General Public
+   License as published by the Free Software Foundation; either
+   version 2 of the License, or (at your option) any later version.
+
+   This library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Library General Public License for more details.
+
+   You should have received a copy of the GNU Library General Public License
+   along with this library; see the file COPYING.LIB.  If not, write to
+   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.
+
+   $Id$
+*/
+
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qstringlist.h>
@@ -58,6 +80,9 @@ ScanDialog::ScanDialog( QWidget *parent, const char *name, bool modal )
     connect(m_device, SIGNAL(sigNewImage(QImage *)),
             this, SLOT(slotFinalImage(QImage *)));
 
+    connect( m_device, SIGNAL(sigScanStart()), this, SLOT(slotScanStart()));
+    connect( m_device, SIGNAL(sigScanFinished(KScanStat)),
+	     this, SLOT(slotScanFinished(KScanStat)));
     /* Create a preview widget to the right side of the splitter */
     m_previewer = new Previewer( splitter );
     Q_CHECK_PTR(m_previewer );
@@ -137,6 +162,23 @@ void ScanDialog::slotAskOnStartToggle(bool state)
    KConfig *c = KGlobal::config();
    c->setGroup(QString::fromLatin1(GROUP_STARTUP));
    c->writeEntry( STARTUP_SKIP_ASK, writestate, true, true );
+}
+
+void ScanDialog::slotScanStart( )
+{
+   if( m_scanParams )
+   {
+      m_scanParams->setEnabled( false );
+   }
+}
+
+void ScanDialog::slotScanFinished( KScanStat status )
+{
+   kdDebug(28000) << "Scan finished with status " << status << endl;
+   if( m_scanParams )
+   {
+      m_scanParams->setEnabled( true );
+   }
 }
 
 bool ScanDialog::setup()
