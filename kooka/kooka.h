@@ -63,7 +63,6 @@ protected:
     virtual void dragEnterEvent(QDragEnterEvent *event);
     virtual void dropEvent(QDropEvent *event);
 
-protected:
     /**
      * This function is called when it is time for the app to save its
      * properties for session management purposes.
@@ -80,7 +79,8 @@ protected:
 
 private slots:
    void filePrint();
-   void slStartOCR();
+   /* ImageViewer-Actions */
+   
    void optionsShowToolbar();
    void optionsShowStatusbar();
    void optionsShowScanParams();
@@ -90,9 +90,17 @@ private slots:
    void optionsPreferences();
 
    void changeStatusbar(const QString& text);
+   void cleanStatusbar(void) { changeStatusbar(""); }
    void changeCaption(const QString& text);
 
    void fileSaveAs();
+
+   void slMirrorVertical( void )
+      { m_view->slMirrorImage( KookaView::MirrorVertical ); }
+   void slMirrorHorizontal( void )
+      { m_view->slMirrorImage( KookaView::MirrorHorizontal ); }
+   void slMirrorBoth( void )
+      { m_view->slMirrorImage( KookaView::MirrorBoth ); }
 private:
    void setupAccel();
    void setupActions();

@@ -8,9 +8,10 @@
 #include <qlayout.h>
 #include <qsplitter.h>
 #include <qstrlist.h>
-
 #include <kurl.h>
 
+#include <kapp.h>
+#include <kconfig.h>
 #include <ktrader.h>
 #include <klibloader.h>
 #include <kmessagebox.h>
@@ -72,15 +73,40 @@ KookaView::KookaView(QWidget *parent)
    /* a list of backends the scan backend knows */
    QStrList backends = sane->getDevices();
 
-   /* A dialog, which allows the user to select one of the scanner */
-   DeviceSelector ds( this, backends );
-   
-   if( ds.exec() != QDialog::Accepted )
+   /* Human readable scanner descriptions */
+   QStringList hrbackends;
+   QStrListIterator  it( backends );
+  
+   // for( it = backends.first(); it != backends.last(); ++it );
+   while( it )
    {
-      debug( "Selecting a device cancelled" );
+      hrbackends.append( sane->getScannerName( it.current() ));
+      ++it;
    }
 
-   QString selDevice = ds.getSelectedDevice();
+   /* A dialog, which allows the user to select one of the scanner */
+   kapp->config()->setGroup( GROUP_STARTUP );
+   QString selDevice;
+   bool skipDialog = kapp->config()->readBoolEntry( STARTUP_SKIP_ASK, false );
+   if( skipDialog )
+   {
+      selDevice = kapp->config()->readEntry( STARTUP_SCANDEV, "" );
+   }
+   
+   
+   if( ! skipDialog || selDevice.isEmpty())
+   {
+      DeviceSelector ds( this, backends, hrbackends );
+   
+      if( ds.exec() == QDialog::Accepted )
+      {
+	 debug( "Selecting a device cancelled" );
+	 kapp->config()->writeEntry( STARTUP_SKIP_ASK,
+				     ds.getShouldSkip());
+      }
+
+      selDevice = ds.getSelectedDevice();
+   }
 
    if( selDevice.isEmpty() || selDevice.isNull() )
    {
@@ -247,11 +273,30 @@ bool KookaView::ToggleVisibility( int item )
 }
 
 
+void KookaView::doOCRonSelection( void )
+{
+   emit( signalChangeStatusbar( I18N("Starting OCR on selection" )));
+
+   QImage img;
+   
+   if( img_canvas->selectedImage(&img) )
+   {
+      startOCR( &img );
+   }
+   emit( signalCleanStatusbar() );
+}
+
 /* Does OCR on the entire picture */
 void KookaView::doOCR( void )
 {
+   emit( signalChangeStatusbar( I18N("Starting OCR on the entire image" )));
    const QImage *img = img_canvas->rootImage();
+   startOCR( img );
+   emit( signalCleanStatusbar( ));
+}
 
+void KookaView::startOCR( const QImage *img )
+{
    if( img && ! img->isNull() )
    {
       if( ocrFabric == 0L )
@@ -269,7 +314,92 @@ void KookaView::doOCR( void )
    }
 }
 
+void KookaView::slCreateNewImgFromSelection()
+{
+   if( img_canvas->rootImage() )
+   {
+      emit( signalChangeStatusbar( I18N("Create new image from selection" )));
+      QImage img;
+      if( img_canvas->selectedImage( &img ) )
+      {
+	 packager->slAddImage( &img );
+      }
+      emit( signalCleanStatusbar( ));
+   }
+   
+}
 
+
+void KookaView::slRotateImage(int angle)
+{
+   const QImage *img = img_canvas->rootImage();
+
+   if( img )
+   {
+      switch( angle )
+      {
+	 case 90:
+	    
+	    break;
+	 case 180:
+	    
+	    break;
+	 case 270:
+	 case -90:
+	    
+	    break;
+	 default:
+	    break;
+      }
+   }
+}
+
+void KookaView::slMirrorImage( MirrorType m )
+{
+   const QImage *img = img_canvas->rootImage();
+   bool doUpdate = true;
+   
+   if( img )
+   {
+      QImage resImg;
+
+      QApplication::setOverrideCursor(waitCursor);
+      switch( m )
+      {
+	 case MirrorVertical:
+	    emit( signalChangeStatusbar( I18N("Mirroring image vertically" )));
+	    resImg = img->mirror();
+	    break;
+	 case MirrorHorizontal:
+	    emit( signalChangeStatusbar( I18N("Mirroring image horizontally" )));
+	    resImg = img->mirror( true, false );
+	    break;
+	 case MirrorBoth:
+	    emit( signalChangeStatusbar( I18N("Mirroring image in both directions" )));
+	    resImg = img->mirror( true, true );
+	    break;
+	 default:
+	    debug( "Mirroring: no way ;)" );
+	    doUpdate = false;
+      }
+      QApplication::restoreOverrideCursor();
+      
+      /* updateCurrImage does the status-bar cleanup */
+      if( doUpdate )
+	 updateCurrImage( resImg );
+      else
+	 emit(signalCleanStatusbar());
+      
+      // img_canvas->newImage(  );
+   }
+}
+
+void KookaView::updateCurrImage( QImage& img ) 
+{
+   emit( signalChangeStatusbar( I18N("Storing image changes" )));
+   packager->slotImageChanged( &img );
+   emit( signalCleanStatusbar());
+}
 
 
 #include "kookaview.moc"

@@ -55,6 +55,8 @@ Kooka::Kooka()
     // allow the view to change the statusbar and caption
     connect(m_view, SIGNAL(signalChangeStatusbar(const QString&)),
             this,   SLOT(changeStatusbar(const QString&)));
+    connect(m_view, SIGNAL(signalCleanStatusbar(void)),
+	    this, SLOT(cleanStatusbar()));
     connect(m_view, SIGNAL(signalChangeCaption(const QString&)),
             this,   SLOT(changeCaption(const QString&)));
 
@@ -115,13 +117,50 @@ void Kooka::setupActions()
 					  "show_preview" );
 #endif
     KStdAction::keyBindings(this, SLOT(optionsConfigureKeys()), actionCollection());
-    KStdAction::configureToolbars(this, SLOT(optionsConfigureToolbars()), actionCollection());
+    KStdAction::configureToolbars(this, SLOT(optionsConfigureToolbars()),
+				  actionCollection());
     KStdAction::preferences(this, SLOT(optionsPreferences()), actionCollection());
 
-    (void) new KAction(I18N("&OCR"), "edit", CTRL+Key_O, this, SLOT(slStartOCR()),
-		       actionCollection(), "ocr" );
+
+    /* Image Viewer action Toolbar - OCR, Scaling etc. */
+    (void) new KAction(I18N("&OCR image..."), "ocr", CTRL+Key_O,
+		       m_view, SLOT(doOCR()),
+		       actionCollection(), "ocrImage" );
+
+    (void) new KAction(I18N("O&CR on selection..."), "ocr-select", CTRL+Key_C,
+		       m_view, SLOT(doOCRonSelection()),
+		       actionCollection(), "ocrImageSelect" );
+
+    (void) new KAction(I18N("Scale to &Width"), "scaletowidth", CTRL+Key_W,
+		       m_view, SLOT( slIVScaleToWidth()),
+		       actionCollection(), "scaleToWidth" );
+
+    (void) new KAction(I18N("Scale to &Height"), "scaletoheight", CTRL+Key_H,
+		       m_view, SLOT( slIVScaleToHeight()),
+		       actionCollection(), "scaleToHeight" );
     
+    (void) new KAction(I18N("Original &Size"), "scaleorig", CTRL+Key_S,
+		       m_view, SLOT( slIVScaleOriginal()),
+		       actionCollection(), "scaleOriginal" );
+
+    (void) new KAction(I18N("Create from selectio&n"), "newfromselect", CTRL+Key_N,
+		       m_view, SLOT( slCreateNewImgFromSelection() ),
+		       actionCollection(), "createFromSelection" );
+    
+    (void) new KAction(I18N("Mirror image &vertically"), "mirror-vert", CTRL+Key_V,
+		       this, SLOT( slMirrorVertical() ),
+		       actionCollection(), "mirrorVertical" );
+
+    (void) new KAction(I18N("&Mirror image horizontally"), "mirror-horiz", CTRL+Key_M,
+		       this, SLOT( slMirrorHorizontal() ),
+		       actionCollection(), "mirrorHorizontal" );
+
+    (void) new KAction(I18N("Mirror image &both directions"), "mirror-both", CTRL+Key_B,
+		       this, SLOT( slMirrorBoth() ),
+		       actionCollection(), "mirrorBoth" );
+
     createGUI("kookaui.rc");
+
 }
 
 void Kooka::saveProperties(KConfig *config)
@@ -209,13 +248,6 @@ void Kooka::fileSaveAs()
    FormatDialog fd( 0, "FormatDialog", &strlist );
    fd.exec();
    
-}
-
-
-void Kooka::slStartOCR()
-{
-   changeStatusbar( I18N( "Starting OCR" ));
-   m_view->doOCR();
 }
 
 
@@ -310,5 +342,7 @@ void Kooka::changeCaption(const QString& text)
     // display the text on the caption
     setCaption(text);
 }
+
+
 
 #include "kooka.moc"

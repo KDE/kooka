@@ -31,7 +31,7 @@
 #include "previewer.h"
 #include "scanpackager.h"
 #include "scanparams.h"
-
+#include "img_canvas.h"
 
 class QPainter;
 class KSANEOCR;
@@ -49,6 +49,8 @@ class KookaView : public QSplitter
 {
    Q_OBJECT
 public:
+   typedef enum { MirrorVertical, MirrorHorizontal, MirrorBoth } MirrorType;
+
    /**
     * Default constructor
     */
@@ -77,8 +79,27 @@ public slots:
       { if( v ) preview_canvas->show(); else preview_canvas->hide(); }
    
    void doOCR( void );	
+   void doOCRonSelection( void );
+   
    void slStartPreview() { if( scan_params ) scan_params->slAcquirePreview(); }
    void slStartFinalScan() { if( scan_params ) scan_params->slStartScan(); }
+
+   void slCreateNewImgFromSelection( void );
+
+   void slRotateImage( int );
+   void slMirrorImage( MirrorType );
+   
+   void slIVScaleToWidth( void )
+      { if( img_canvas ) img_canvas->handle_popup(ImageCanvas::ID_FIT_WIDTH );}
+   void slIVScaleToHeight( void )
+      { if( img_canvas ) img_canvas->handle_popup(ImageCanvas::ID_FIT_HEIGHT );}
+   void slIVScaleOriginal( void )
+      { if( img_canvas ) img_canvas->handle_popup(ImageCanvas::ID_ORIG_SIZE ); }
+
+   /**
+    * starts ocr on the image the parameter is pointing to
+    **/
+   void startOCR( const QImage *img );
 
    signals:
    /**
@@ -86,6 +107,11 @@ public slots:
     */
    void signalChangeStatusbar(const QString& text);
 
+   /**
+    * Use this signal to clean up the statusbar
+    */
+   void signalCleanStatusbar( void );
+   
    /**
     * Use this signal to change the content of the caption
     */
@@ -96,6 +122,9 @@ private:
 #if 0 
    KParts::ReadOnlyPart *m_html;
 #endif
+   void updateCurrImage( QImage& ) ;
+
+
    ImageCanvas  *img_canvas;
    Previewer    *preview_canvas;
    QImage       *preview_img;
