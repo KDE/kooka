@@ -33,8 +33,6 @@ PackagerItem::PackagerItem( QListViewItem *parent, bool is_dir )
    isdir = is_dir;
    image = 0;
    filename = "";
-   copyjob = 0L;
-
 }
 
 
