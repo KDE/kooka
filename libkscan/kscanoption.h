@@ -23,7 +23,6 @@
 
 #include <qwidget.h>
 #include <qdict.h>
-#include <qwidget.h>
 #include <qobject.h>
 #include <qstrlist.h>
 #include <qsocketnotifier.h>

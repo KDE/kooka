@@ -23,7 +23,6 @@
 #include <qstring.h>
 #include <kdialogbase.h>
 #include <qimage.h>
-#include <qstring.h>
 
 #include <keditcl.h>
 

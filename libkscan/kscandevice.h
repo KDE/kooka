@@ -33,7 +33,6 @@
 #include <qwidget.h>
 #include <qasciidict.h>
 #include <qsize.h>
-#include <qwidget.h>
 #include <qobject.h>
 #include <qstrlist.h>
 #include <qsocketnotifier.h>

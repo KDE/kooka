@@ -22,7 +22,7 @@
 #include <qwidget.h>
 #include <qsizepolicy.h>
 #include <qsize.h>
-#include <qarray.h>
+#include <qmemarray.h>
 
 extern "C"{
 #include <sane/sane.h>

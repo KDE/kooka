@@ -21,11 +21,10 @@
 #include <qobject.h>
 #include <qwidget.h>
 #include <qlabel.h>
-#include <qarray.h>
+#include <qmemarray.h>
 #include <qstring.h>
 #include <qimage.h>
 #include <stdlib.h>
-#include <qpushbutton.h>
 #include <qdialog.h>
 #include <qpushbutton.h>
 #include <qcombobox.h>

@@ -35,8 +35,6 @@
 #include <qprogressdialog.h>
 #include <qpixmap.h>
 
-#include "kscandevice.h"
-
 /**
   *@author Klaas Freitag
   */
