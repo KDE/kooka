@@ -45,7 +45,7 @@ static const char *description =
 static KCmdLineOptions options[] =
 {
   { "d ", I18N_NOOP("the SANE compatible device specification (e.g. umax:/dev/sg0)"), "" },
-  { "g", I18N_NOOP("gallery Mode - no connect to scanner"), "" },
+  { "g", I18N_NOOP("gallery mode - do not connect to scanner"), "" },
   { 0,0,0 }
 };
 
