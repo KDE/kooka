@@ -23,7 +23,6 @@
 #include <qhbox.h>
 #include <qtooltip.h>
 #include <qpopupmenu.h>
-#include <qregexp.h>
 #include <qfile.h>
 #include <qtextstream.h>
 #include <qcombobox.h>
@@ -304,9 +303,8 @@ bool Previewer::loadPreviewImage( const QString forScanner )
 QString Previewer::previewFile( const QString& scanner )
 {
    QString fname = galleryRoot() + QString::fromLatin1(".previews/");
-   QRegExp rx( "/" );
    QString sname( scanner );
-   sname.replace( rx, "_");
+   sname.replace( '/', "_");
 
    fname += sname;
 
@@ -318,7 +316,7 @@ QString Previewer::galleryRoot()
 {
    QString dir = (KGlobal::dirs())->saveLocation( "data", "ScanImages", true );
 
-   if( dir.right(1) != "/" )
+   if( !dir.endsWith('/') )
       dir += "/";
 
    return( dir );

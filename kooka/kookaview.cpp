@@ -29,6 +29,7 @@
 #include "kookaview.h"
 #include "resource.h"
 #include "kscandevice.h"
+#include "imgscaninfo.h"
 #include "devselector.h"
 #include "ksaneocr.h"
 #include "img_saver.h"
@@ -245,9 +246,9 @@ KookaView::KookaView( KParts::DockMainWindow *parent, const QCString& deviceToUs
    }
 
    /* New image created after scanning */
-   connect(sane, SIGNAL(sigNewImage(QImage*)), this, SLOT(slNewImageScanned(QImage*)));
+   connect(sane, SIGNAL(sigNewImage(QImage*,ImgScanInfo*)), this, SLOT(slNewImageScanned(QImage*,ImgScanInfo*)));
    /* New preview image */
-   connect(sane, SIGNAL(sigNewPreview(QImage*)), this, SLOT( slNewPreview(QImage*)));
+   connect(sane, SIGNAL(sigNewPreview(QImage*,ImgScanInfo *)), this, SLOT( slNewPreview(QImage*,ImgScanInfo *)));
 
    connect( sane, SIGNAL( sigScanStart() ), this, SLOT( slScanStart()));
    connect( sane, SIGNAL( sigScanFinished(KScanStat)), this, SLOT(slScanFinished(KScanStat)));
@@ -478,7 +479,7 @@ void KookaView::print()
     }
 }
 
-void KookaView::slNewPreview( QImage *new_img )
+void KookaView::slNewPreview( QImage *new_img, ImgScanInfo * )
 {
    if( new_img )
    {
@@ -656,15 +657,10 @@ void KookaView::slAcquireStart( )
    }
 }
 
-void KookaView::slNewImageScanned( QImage* img )
+void KookaView::slNewImageScanned( QImage* img, ImgScanInfo* si )
 {
     KookaImageMeta *meta = new KookaImageMeta;
-
-    KScanOption res ( SANE_NAME_SCAN_RESOLUTION );
-    int resX;
-    res.get(&resX);
-    meta->setScanResolution(resX);
-
+    meta->setScanResolution(si->getXResolution(), si->getYResolution());
     packager->slAddImage(img, meta);
 }
 

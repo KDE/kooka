@@ -102,7 +102,7 @@ public:
 public slots:
     void slShowPreview()  {  }
     void slShowPackager() {  }
-    void slNewPreview( QImage * );
+    void slNewPreview( QImage *, ImgScanInfo * );
 
     void slSetScanParamsVisible( bool v )
         { if( v ) scan_params->show(); else scan_params->hide(); }
@@ -177,7 +177,7 @@ protected slots:
      * called from the scandevice if a new Image was successfully scanned.
      * Needs to convert the one-page-QImage to a KookaImage
      */
-    void slNewImageScanned(QImage*);
+    void slNewImageScanned(QImage*, ImgScanInfo*);
 
     /**
      * called if an viewer image was set to read only or back to read write state.
