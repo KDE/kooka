@@ -115,7 +115,7 @@ void slSourceSelect( void );
     *  to apply. This is an internal slot.
     */
    void slApplyGamma( GammaDialog& );
-
+   
 private:
 	
 	

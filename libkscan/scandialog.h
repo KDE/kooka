@@ -2,6 +2,7 @@
 #define SCAN_H
 
 #include <kscan.h>
+#include <qimage.h>
 
 class ScanParams;
 class KScanDevice;
@@ -14,6 +15,9 @@ public:
     ScanDialog( QWidget *parent=0, const char *name=0, bool modal=false );
     ~ScanDialog();
 
+private slots:
+    void slCreateTempFile(QImage *img);
+    
 private:
     ScanParams  *m_scanParams;
     KScanDevice *m_device;

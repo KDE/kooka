@@ -131,7 +131,8 @@ bool ScanParams::connectDevice( KScanDevice *newScanDevice )
 					 i18n("Stop"), 1000, this,
 					 "SCAN_PROGRESS", true, 0  );
    connect( sane_device, SIGNAL(sigScanProgress(int)),
-	    progressDialog, SLOT( setProgress(int)));
+	    progressDialog, SLOT(setProgress(int)));
+	    
 
    /* Connect the Progress Dialogs cancel-Button */
    connect( progressDialog, SIGNAL( cancelled() ), sane_device,
