@@ -716,8 +716,8 @@ void  Previewer::findSelection( )
 
 
     if( ! d->m_doAutoSelection ) return;
-    long line;
-    long x;
+    int line;
+    int x;
     const QImage *img = img_canvas->rootImage();
     if( ! img ) return;
 
