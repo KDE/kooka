@@ -36,6 +36,18 @@
 #include <kurl.h>
 
 
+#define OP_FILE_ASK_FORMAT "AskForSaveFormat"
+#define OP_FORMAT_HICOLOR  "HiColorSaveFormat"
+#define OP_FORMAT_COLOR    "ColorSaveFormat"
+#define OP_FORMAT_GRAY     "GraySaveFormat"
+#define OP_FORMAT_BW       "BWSaveFormat"
+#define OP_PREVIEW_GROUP   "ScanPreview"
+#define OP_PREVIEW_FILE    "PreviewFile"
+#define OP_PREVIEW_FORMAT  "PreviewFormat"
+#define OP_FILE_GROUP      "Files"
+
+
+
 /**
  *  enum ImgSaveStat:
  *  Errorflags for the save. These enums are returned by the
@@ -81,24 +93,26 @@ class FormatDialog:public KDialogBase
 {
    Q_OBJECT
 public:
-   FormatDialog( QWidget *parent, const char * );
+   FormatDialog( QWidget *parent, const QString&, const char * );
 
 
-   QString      getFormat( void ) const;
-   QCString      getSubFormat( void ) const;
+   QString      getFormat( ) const;
+   QCString      getSubFormat( ) const;
    QString      errorString( ImgSaveStat stat );
 
-   bool         rememberFormat( void ) const;
-
+   bool         rememberFormat( ) const;
+   bool         askForFormat( ) const
+      { return( ! cbDontAsk->isChecked()); }
    
 public slots:
-    void        setSelectedFormat( QString );
+    void        setSelectedFormat( QString, bool );
 
 
 protected slots:
    void 	showHelp( const QString& item );
  
 private:
+
    void		check_subformat( const QString & format );
    void 	buildHelp( void );
    void 	readConfig( void );
@@ -108,9 +122,8 @@ private:
    QListBox    	*lb_format;
    QLabel      	*l_help;
    QLabel	*l2;
-   bool		ask_for_format;
    QCheckBox    *cbRemember;
-
+   QCheckBox    *cbDontAsk;
 };
 
 /**
@@ -146,8 +159,8 @@ public:
    QCString    lastSaveFormat( void ) const { return( last_format ); }
    
    QString     getFormatForType( picType ) const;
-   void        storeFormatForType( picType, QString );
-
+   void        storeFormatForType( picType, QString, bool );
+   bool        isRememberedFormat( picType type, QString format ) const;
 
    /**
     * Static function that returns the kooka base dir.
@@ -168,6 +181,7 @@ public slots:
    ImgSaveStat savePreview( QImage *image );
    
 private:
+   QString 	picTypeAsString( picType type ) const;
    QString      findFormat( picType type );
    QString      findSubFormat( QString format );
    void		createDir( const QString& );

@@ -44,3 +44,29 @@ scanned with about 150 dpi.
 
 * Proper error messages if a changed image cant be saved.
 
+* drag and drop support: Pull an image from konqueror on the scanpackager !
+  The image wil be importet.
+
+* print support (basic)
+
+* basic configuration support 
+
+  ... and losts of other, small bug fixes, unfortunately not mentionend very
+      well here. Sorry for that, I will try to do better.
+
+/* ================================================================================ */
+
+-> Released version 0.3 in kdegraphics/kooka for KDE 2.2
+The released version does actually not have too many new 
+
+- July 2001, Klaas Freitag <freitag@suse.de>
+
+* fixed the img_saver-bug that the 'Do not ask again' is not honored.
+  Now it should be, if it is checked, the format-Dialog will not be
+  displayed again.
+
+* added a new section Image saver to the properties dialog
+
+* some changes to the image saver to display the image type (Lineart etc. )
+
+* bugfixes in the image Saver

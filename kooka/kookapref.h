@@ -21,11 +21,13 @@
 #include <qframe.h>
 #include <qcheckbox.h>
 
-#define STARTUP_READ_IMAGE "ReadImageOnStart"
+class KConfig;
 
+#define STARTUP_READ_IMAGE "ReadImageOnStart"
 
 class KookaPrefPageOne;
 class KookaPrefPageTwo;
+
 
 class KookaPreferences : public KDialogBase
 {
@@ -39,10 +41,12 @@ public slots:
     void slotDefault( void );
     
 private:
-    void setupStartupPage(void);
-    
+    void setupStartupPage();
+   void setupSaveFormatPage();
     QCheckBox *cbNetQuery;
+    QCheckBox *cbSkipFormatAsk;
     QCheckBox *cbShowScannerSelection;
+    KConfig   *konf;
     QCheckBox *cbReadStartupImage;
     
 };

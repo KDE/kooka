@@ -48,17 +48,7 @@
 #include "img_saver.h"
 
 
-#define OP_FILE_ASK_FORMAT "AskForSaveFormat"
-#define OP_FORMAT_HICOLOR  "HiColorSaveFormat"
-#define OP_FORMAT_COLOR    "ColorSaveFormat"
-#define OP_FORMAT_GRAY     "GraySaveFormat"
-#define OP_FORMAT_BW       "BWSaveFormat"
-#define OP_PREVIEW_GROUP   "ScanPreview"
-#define OP_PREVIEW_FILE     "PreviewFile"
-#define OP_PREVIEW_FORMAT   "PreviewFormat"
-#define OP_FILE_GROUP      "Files"
-
-FormatDialog::FormatDialog( QWidget *parent, const char *name )
+FormatDialog::FormatDialog( QWidget *parent, const QString& imgFormat, const char *name )
    :KDialogBase( parent, "FormDialog", true,
                  /* Tabbed,*/ i18n( "Kooka save assistant" ),
 		 Ok|Cancel, Ok, parent,  name )
@@ -126,20 +116,18 @@ FormatDialog::FormatDialog( QWidget *parent, const char *name )
    CHECK_PTR( cb_subf );
 
    // Checkbox to store setting
-   
-#if 0 
-   QFrame *vf = new QFrame(page);
-   vf->setFrameStyle( QFrame::Panel|QFrame::Sunken );
-#endif
-   cbRemember = new QCheckBox(i18n("Remember this format for this image type"),
+   cbRemember = new QCheckBox(i18n("Remember this format for this image type %1").arg( imgFormat ),
 			      page );
-
-   QCheckBox *cbDontAsk  = new QCheckBox(i18n("Don't ask again for this format"),
-			      page );
-
-   // cbRemember->setFrameStyle( QFrame::Panel|QFrame::Sunken );
    CHECK_PTR( cbRemember );
-   
+
+   cbDontAsk  = new QCheckBox(i18n("Don't ask again for the save format if it is defined."),
+			      page );
+   CHECK_PTR( cbDontAsk );
+
+   QFrame *hl = new QFrame(page);
+   CHECK_PTR( hl );
+   hl->setFrameStyle( QFrame::HLine|QFrame::Sunken );
+
    // bigdad->addWidget( l_caption, 1 );
    lvFormatSel->addWidget( l1, 1 );
    lvFormatSel->addWidget( lb_format, 6 );
@@ -149,6 +137,7 @@ FormatDialog::FormatDialog( QWidget *parent, const char *name )
    lhBigMiddle->addWidget( l_help, 2 );
    //bigdad->addStretch(1);
    bigdad->addWidget( cbRemember , 2 );
+   bigdad->addWidget( hl, 1 );
    bigdad->addWidget( cbDontAsk , 2 );
 
    // bigdad->addWidget( cbRemember,1 );
@@ -180,7 +169,7 @@ void FormatDialog::check_subformat( const QString & format )
    l2->setEnabled( false );
 }
 
-void FormatDialog::setSelectedFormat( QString fo )
+void FormatDialog::setSelectedFormat( QString fo, bool isRemembered )
 {
    QListBoxItem *item = lb_format->findItem( fo );
 
@@ -188,11 +177,13 @@ void FormatDialog::setSelectedFormat( QString fo )
    {
       // Select it.
       lb_format->setSelected( lb_format->index(item), true );
+
+      cbRemember->setChecked( isRemembered );
    }
 }
 
 
-QString FormatDialog::getFormat( void ) const
+QString FormatDialog::getFormat( ) const
 {
    int item = lb_format->currentItem();
 
@@ -205,7 +196,7 @@ QString FormatDialog::getFormat( void ) const
 }
 
 
-QCString FormatDialog::getSubFormat( void ) const
+QCString FormatDialog::getSubFormat( ) const
 {
    // Not yet...
    return( "" );
@@ -222,7 +213,7 @@ void FormatDialog::buildHelp( void )
 }
 
 
-bool FormatDialog::rememberFormat( void ) const
+bool FormatDialog::rememberFormat( ) const
 {
    bool result = false;
    
@@ -327,8 +318,9 @@ ImgSaveStat ImgSaver::saveImage( QImage *image )
    }
    else
    {
-      if( image->depth() == 1 )
+      if( image->depth() == 1 || image->numColors() == 2 )
       {
+	 kdDebug(28000) << "This is black And White!" << endl;
 	 imgType = PT_BW_IMAGE;
       }
       else
@@ -438,6 +430,7 @@ ImgSaveStat ImgSaver::savePreview( QImage *image )
 
       konf->writeEntry( OP_PREVIEW_FILE,   previewfile );
       konf->writeEntry( OP_PREVIEW_FORMAT, format );
+      konf->sync();
    }
 
    return( stat );
@@ -449,11 +442,11 @@ ImgSaveStat ImgSaver::savePreview( QImage *image )
 QString ImgSaver::findFormat( picType type )
 {
    QString format;
-   // Preview always as bitmap
+   KConfig *konf = KGlobal::config ();
+   konf->setGroup( OP_FILE_GROUP );
+
    if( type == PT_PREVIEW )
    {
-      KConfig *konf = KGlobal::config ();
-      konf->setGroup( OP_FILE_GROUP );
       format = konf->readEntry( OP_PREVIEW_FORMAT, "nothing" );
 
       if( format == "nothing" )
@@ -467,8 +460,38 @@ QString ImgSaver::findFormat( picType type )
       return( "BMP" );
    }
    
-   // real images 
-   if( type != PT_PREVIEW && type != PT_THUMBNAIL && ask_for_format )
+   // real images
+   switch( type )
+   {
+      case PT_COLOR_IMAGE:
+	 format = konf->readEntry( OP_FORMAT_COLOR, "nothing" );
+	 kdDebug( 28000 ) <<  "Format for Color: " << format << endl;
+	 break;
+      case PT_GRAY_IMAGE:
+	 format = konf->readEntry( OP_FORMAT_GRAY, "nothing" );
+	 kdDebug( 28000 ) <<  "Format for Gray: " << format << endl;
+	 break;
+      case PT_BW_IMAGE:
+	 format = konf->readEntry( OP_FORMAT_BW, "nothing" );
+	 kdDebug( 28000 ) <<  "Format for BlackAndWhite: " << format << endl;
+	 break;
+      case PT_HICOLOR_IMAGE:
+	 format = konf->readEntry( OP_FORMAT_HICOLOR, "nothing" );
+	 kdDebug( 28000 ) <<  "Format for HiColorImage: " << format << endl;
+	 break;
+      default:
+	 format = "nothing";
+	 kdDebug( 28000 ) <<  "ERR: Could not find image type !" << endl;
+
+	 break;
+   }
+
+   if( format == "nothing" )
+   {
+      ask_for_format = true;
+   }
+
+   if( ask_for_format )
    {
       format = startFormatDialog( type );
    }
@@ -476,15 +499,42 @@ QString ImgSaver::findFormat( picType type )
    
 }
 
+QString ImgSaver::picTypeAsString( picType type ) const
+{
+   QString res;
+   
+   switch( type )
+   {
+      case PT_COLOR_IMAGE:
+	 res = i18n( "palleted color image (16 or 24 bit depth)" );
+	 break;
+      case PT_GRAY_IMAGE:
+	 res = i18n( "palleted gray scale image (16 bit depth)" );
+	 break;
+      case PT_BW_IMAGE:
+	 res = i18n( "lineart image (black and white, 1 bit depth)" );
+	 break;
+      case PT_HICOLOR_IMAGE:
+	 res = i18n( "high (or true-) color image, not palleted" );
+	 break;
+      default:
+	 res = i18n( "Unknown image type" );
+	 break;
+   }
+   return( res );
+}
+
+
 QString ImgSaver::startFormatDialog( picType type)
 {
-   FormatDialog fd( 0, "FormatDialog" );
+   
+   FormatDialog fd( 0, picTypeAsString( type ), "FormatDialog" );
       
    // set default values
    if( type != PT_PREVIEW )
    {
       QString defFormat = getFormatForType( type );
-      fd.setSelectedFormat( defFormat );
+      fd.setSelectedFormat( defFormat, isRememberedFormat(type, defFormat ) );
    }
       
    if( fd.exec() )
@@ -493,7 +543,10 @@ QString ImgSaver::startFormatDialog( picType type)
       kdDebug(28000) << "Storing to format <" << format << ">" << endl;
       if( fd.rememberFormat() )
       {
-	 storeFormatForType( type, format );
+	 kdDebug(28000)<< "Should remember format, storing!" << endl;
+	 bool ask = fd.askForFormat();
+	 kdDebug(28000)<< "Store askFor is " << ask << endl;
+	 storeFormatForType( type, format, ask );
       }
       subformat = fd.getSubFormat();
 
@@ -501,6 +554,27 @@ QString ImgSaver::startFormatDialog( picType type)
    }
    return( i18n("Skipped") );
 }
+
+
+/*
+ *  This method returns true if the image format given in format is remembered
+ *  for that image type.
+ */
+bool ImgSaver::isRememberedFormat( picType type, QString format ) const
+{
+   if( getFormatForType( type ) == format )
+   {
+      return( true );
+   }
+   else
+   {
+      return( false );
+   }
+   
+}
+
+
+
 
 QString ImgSaver::getFormatForType( picType type ) const
 {
@@ -532,12 +606,14 @@ QString ImgSaver::getFormatForType( picType type ) const
 }
 
 
-void ImgSaver::storeFormatForType( picType type, QString format )
+void ImgSaver::storeFormatForType( picType type, QString format, bool ask )
 {
    KConfig *konf = KGlobal::config ();
    CHECK_PTR( konf );
    konf->setGroup( OP_FILE_GROUP );
 
+   konf->writeEntry( OP_FILE_ASK_FORMAT, ask );
+   
    switch( type )
    {
       case PT_COLOR_IMAGE:
@@ -556,6 +632,7 @@ void ImgSaver::storeFormatForType( picType type, QString format )
 	 kdDebug(28000) << "Wrong Type  - cant store format setting" << endl;
 	 break;
    }
+   konf->sync();
 }
 
 
