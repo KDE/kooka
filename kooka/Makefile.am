@@ -29,7 +29,7 @@ KDE_ICON = kooka
 datadir       = $(kde_datadir)/kooka
 data_DATA     = kookaui.rc
 
-kdelnkdir   = $(kde_appsdir)/Utilities
+kdelnkdir   = $(kde_appsdir)/Graphics
 kdelnk_DATA = kooka.desktop
 
 messages: rc.cpp
