@@ -32,8 +32,11 @@
 #define PACKAGER_TAB 0
 #define PREVIEWER_TAB 1
 
-#define STARTUP_IMG_SELECTION "SelectedImageOnStartup"
-#define STARTUP_SELECTED_PAGE "TabWidgetPage"
+#define STARTUP_IMG_SELECTION   "SelectedImageOnStartup"
+#define STARTUP_SELECTED_PAGE   "TabWidgetPage"
+#define STARTUP_SCANPARAM_SIZES "ScanParamDialogSizes"
+#define STARTUP_VIEWER_SIZES    "ViewerSplitterSizes"
+
 
 KookaView::KookaView(QWidget *parent)
     : QSplitter(parent)
@@ -51,7 +54,7 @@ KookaView::KookaView(QWidget *parent)
    img_canvas  = new ImageCanvas( this );
    img_canvas->setMinimumSize(100,200);
    setResizeMode( img_canvas,    QSplitter::Stretch );
-   setResizeMode( paramSplitter, QSplitter::FollowSizeHint );
+   setResizeMode( paramSplitter, QSplitter::KeepSize);
 
    /* Create a vbox to take the tabwidget and the the combobox */
    QVBox *vbox = new QVBox( paramSplitter );
@@ -109,7 +112,8 @@ KookaView::KookaView(QWidget *parent)
    	
 	 preview_img = new QImage();
 
-	 QString previewfile = ImgSaver::kookaPreviewRoot()+ "preview.bmp";
+	 ImgSaver is( this );
+	 QString previewfile = is.kookaPreviewFile(sane->shortScannerName());
 	 
 	 if( preview_img->load( previewfile ))
 	 {
@@ -156,39 +160,6 @@ KookaView::KookaView(QWidget *parent)
             img_canvas, SLOT( deleteView( QImage*)));
 
 
-
-#if 0
-   KTrader::OfferList offers = KTrader::self()->query("text/html", "'KParts/ReadOnlyPart' in ServiceTypes");
-
-   KLibFactory *factory = 0;
-   // in theory, we only care about the first one.. but let's try all
-   // offers just in case the first can't be loaded for some reason
-   KTrader::OfferList::Iterator it(offers.begin());
-   for( ; it != offers.end(); ++it)
-   {
-      KService::Ptr ptr = (*it);
-
-      // we now know that our offer can handle HTML and is a part.
-      // since it is a part, it must also have a library... let's try to
-      // load that now
-      factory = KLibLoader::self()->factory( ptr->library() );
-      if (factory)
-      {
-	 m_html = static_cast<KParts::ReadOnlyPart *>(factory->create(this, ptr->name(),
-								      "KParts::ReadOnlyPart"));
-	 break;
-      }
-   }
-
-   // if our factory is invalid, then we never found our component
-   // and we might as well just exit now
-   if (!factory)
-   {
-      KMessageBox::error(this, i18n("Could not find a suitable HTML component"));
-      return;
-   }
-#endif
-
 }
 
 
@@ -229,6 +200,7 @@ bool KookaView::slSelectDevice( )
       /* This connects to the selected scanner */
       scan_params = new ScanParams( paramSplitter );
       Q_CHECK_PTR(scan_params);
+      paramSplitter->setResizeMode( scan_params, QSplitter::FollowSizeHint );  // KeepSize );
 
       if( sane->openDevice( selDevice ) == KSCAN_OK )
       {
@@ -245,7 +217,26 @@ bool KookaView::slSelectDevice( )
 	 kdDebug(28000) << "Could not open device <" << selDevice << ">" << endl;
 	 scan_params->connectDevice(0);
       }
-      scan_params->resize( scan_params->sizeHint() );
+
+      /* try to load the size from config */
+      KConfig *konf = KGlobal::config ();
+      konf->setGroup(sane->shortScannerName());
+      QValueList<int> sizes = konf->readIntListEntry( STARTUP_SCANPARAM_SIZES );
+      QValueList<int> vsizes = konf->readIntListEntry( STARTUP_VIEWER_SIZES );
+      
+      if( sizes.count() == 0  )
+      {
+	 kdDebug(28000) << "Setting default sizes" << endl;
+	 
+	 /* Shitty, nothing yet in the config */
+	 sizes << packager->height();
+	 sizes << scan_params->height();
+
+	 vsizes << (scan_params->sizeHint()).width();
+      }
+      setSizes( vsizes );
+      paramSplitter->setSizes( sizes );
+
       scan_params->show();
 
    }
@@ -392,7 +383,7 @@ void KookaView::slNewPreview( QImage *new_img )
 	 ImgSaveStat is_stat = ISS_OK;
 	 ImgSaver img_saver( this );
 
-	 is_stat = img_saver.savePreview( new_img );
+	 is_stat = img_saver.savePreview( new_img, sane->shortScannerName() );
 
 	 if( is_stat != ISS_OK )
 	 {
@@ -622,6 +613,19 @@ void KookaView::saveProperties(KConfig *config)
       tabwPre = "previewer";
 
    config->writeEntry( STARTUP_SELECTED_PAGE, tabwPre );
+
+   /* Save the scan parameters size in accordance to the selected scanner */
+   if( sane && scan_params )
+   {
+      config->setGroup( sane->shortScannerName());
+
+      QValueList<int> pssizes = paramSplitter->sizes();
+      config->writeEntry( STARTUP_SCANPARAM_SIZES, pssizes );
+
+      /* Sizes of the vertical splitter */
+      QValueList<int> vsizes = sizes();
+      config->writeEntry(STARTUP_VIEWER_SIZES, vsizes );
+   }
 }
 
 
@@ -629,18 +633,18 @@ void KookaView::slOpenCurrInGraphApp( void )
 {
    QString file;
    
-   if( packager ) {
-      file = packager->getCurrImageFileName( true );
+   if( packager )
+   {
+      KFileTreeViewItem *ftvi = packager->currentKFileTreeViewItem();
+
+      if( ! ftvi ) return;
       
-      kdDebug(28000) << "Trying to open <" << file << ">" << endl;
-      if( ! file.isEmpty() )
-      {
-	 KURL::List urllist;
+      kdDebug(28000) << "Trying to open <" << ftvi->url().prettyURL()<< ">" << endl;
+      KURL::List urllist;
 	 
-	 urllist.append( KURL(file) );
-	 KFileOpenWithHandler kfoh;
-	 kfoh.displayOpenWithDialog( urllist );
-      }
+      urllist.append( ftvi->url());
+	 
+      KRun::displayOpenWithDialog( urllist );
    }
 }
 
