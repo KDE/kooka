@@ -48,16 +48,16 @@ class KGammaTable;
 
 
 /**
- *  This is KSCANOption, a class which holds a single scanner option.
+ *  This is KScanOption, a class which holds a single scanner option.
  *
- *  @short KSCANOption
+ *  @short KScanOption
  *  @author Klaas Freitag
  *  @version 0.1alpha
  *
  */
 
 /**
- *  KSCANOption
+ *  KScanOption
  *
  *  is a help class for accessing the scanner options.
  **/
@@ -67,18 +67,62 @@ class KScanOption:public QObject
 {
   Q_OBJECT
 public:
+  /**
+   * creates a new option object for the named option. After that, the
+   * option is valid and contains the correct value retrieved from the
+   * scanner.
+   **/
   KScanOption( const char *new_name );
+  /**
+   * creates a KScanOption from another
+   **/
   KScanOption( const KScanOption& so );
   ~KScanOption();
 
+   /**
+    * tests if the option is initialised. It is initialised, if the value
+    * for the option was once read from the scanner
+    **/
   bool initialised( void ){ return( ! buffer_untouched );};
+
+   /**
+    * checks if the option is valid, means that the option is known by the scanner
+    **/
   bool valid( void ) const;
+
+   /**
+    * checks if the option is auto setable, what means, the scanner can cope
+    * with the option automatically.
+    **/
   bool autoSetable( void );
+
+   /**
+    * checks if the option is a so called common option. All frontends should
+    * provide gui elements to change them.
+    **/
   bool commonOption( void );
+
+   /**
+    * checks if the option is active at the moment. Note that this changes
+    * on runtime due to the settings of mode, resolutions etc.
+    **/
   bool active( void );
+
+   /**
+    * checks if the option is setable by software. Some scanner options can not
+    * be set by software.
+    **/
   bool softwareSetable();
+
+   /**
+    * returns the type the option is. Type is one of
+    * INVALID_TYPE, BOOL, SINGLE_VAL, RANGE, GAMMA_TABLE, STR_LIST, STRING
+    **/
   KSANE_Type type( void );
 
+   /**
+    * set the option depending on the type
+    **/
   bool set( int val );
   bool set( double val );
   bool set( int *p_val, int size );
@@ -86,11 +130,29 @@ public:
   bool set( bool b ){ if( b ) return(set( (int)(1==1) )); else return( set( (int) (1==0) )); }
   bool set( KGammaTable  *gt );
   bool set( const char* );
-	
+
+   /**
+    * retrieves the option value, depending on the type.
+    **/
   bool get( int* ) const;
   bool get( KGammaTable* ) const;
   const QString get( void ) const;
 
+   /**
+    * This function creates a widget for the scanner option depending
+    * on the type of the option.
+    *
+    * For boolean options, a checkbox is generated. For ranges, a KSaneSlider
+    * is generated.
+    *
+    * For a String list such as mode etc., a KScanCombo is generated.
+    *
+    * For option type string and gamma table, no widget is generated yet.
+    *
+    * The widget is maintained completely by the kscanoption object.
+    *
+    **/
+    
   QWidget *createWidget( QWidget *parent, const char *w_desc=0,
 			 const char *tooltip=0  );
 
@@ -98,12 +160,12 @@ public:
   const KScanOption& operator= (const KScanOption& so );
 
   // Possible Values
-  QStrList   getList() const;
-  bool       getRange( double*, double*, double* ) const;
+  QStrList    getList() const;
+  bool        getRange( double*, double*, double* ) const;
 
-  QString    getName() const { return( name ); }
-  void *     getBuffer() const { return( buffer ); }
-  QWidget   *widget( ) const { return( internal_widget ); }
+  QString     getName() const { return( name ); }
+  void *      getBuffer() const { return( buffer ); }
+  QWidget     *widget( ) const { return( internal_widget ); }
   /**
    *  returns the type of the selected option.
    *  This might be SINGLE_VAL, VAL_LIST, STR_LIST, GAMMA_TABLE,
