@@ -351,7 +351,7 @@ void KookaPreferences::setupSaveFormatPage( )
 {
    konf->setGroup( OP_FILE_GROUP );
    QFrame *page = addPage( i18n("Image Saving"), i18n("Configure Image Save Assistant" ),
-			    BarIcon("hdd_unmount", KIcon::SizeMedium ) );
+			    BarIcon("filesave", KIcon::SizeMedium ) );
    QVBoxLayout *top = new QVBoxLayout( page, 0, spacingHint() );
 
    /* Skip the format asking if a format entry  exists */
@@ -377,7 +377,7 @@ void KookaPreferences::setupThumbnailPage()
    konf->setGroup( THUMB_GROUP );
 
    QFrame *page = addPage( i18n("Thumbnail View"), i18n("Thumbnail Gallery View" ),
-			    BarIcon("appearance", KIcon::SizeMedium ) );
+			    BarIcon("thumbnail", KIcon::SizeMedium ) );
    QVBoxLayout *top = new QVBoxLayout( page, 0, spacingHint() );
 
    top->addWidget( new QLabel( i18n("Here you can configure the appearance of the thumbnail view of your scan picture gallery."),page ));
