@@ -41,7 +41,10 @@ public slots:
    void slotOk( void );
    void slotApply( void );
    void slotDefault( void );
-    
+
+signals:
+   void dataSaved();
+   
 private:
    void setupStartupPage();
    void setupSaveFormatPage();
@@ -52,7 +55,6 @@ private:
    QCheckBox *cbShowScannerSelection;
    KConfig   *konf;
    QCheckBox *cbReadStartupImage;
-   QLabel    *m_sample;
 
    KIntNumInput *m_thumbWidth;
    KIntNumInput *m_thumbHeight;

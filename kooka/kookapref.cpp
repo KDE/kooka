@@ -126,10 +126,14 @@ void KookaPreferences::setupThumbnailPage()
 
    /* Backgroundimage */
    KStandardDirs stdDir;
-   QString bgImg = stdDir.findResource( "data", STD_TILE_IMG );
-   
+   QString bgImg = konf->readEntry( BG_WALLPAPER, "" );
+   if( bgImg == "" )
+      bgImg = stdDir.findResource( "data", STD_TILE_IMG );
+
+   /* image file selector */
    QVGroupBox *hgb1 = new QVGroupBox( i18n("Thumbview Background" ), page );
    m_tileSelector = new ImageSelectLine( hgb1, i18n("Select Background Image:"));
+   kdDebug(29000) << "Setting tile url " << bgImg << endl;
    m_tileSelector->setURL( KURL(bgImg) );
    
    top->addWidget( hgb1 );
@@ -183,23 +187,7 @@ void KookaPreferences::setupThumbnailPage()
    layBBoxes->addWidget( hgb2, 10);
    layBBoxes->addWidget( hgb3, 10);
    layBBoxes->addStretch(10);
-   
-   QVBoxLayout *laySample = new QVBoxLayout( page, 0, spacingHint());
-   
-   
-   // laySample->addWidget( new QLabel( i18n("Sample Thumbnail:"), page), 0 );
-   m_sample = new QLabel( "sample Pixmap", page );
-   m_sample->setFixedSize( QSize( 200, 220 ) );
-   m_sample->setAlignment( Qt::AlignHCenter + Qt::AlignVCenter );
-   
-   QPixmap m_samplePix;
-   m_samplePix.resize( 100, 120 );
-   m_samplePix.fill( QColor( QPixmap::white ));
-   m_sample->setPixmap( m_samplePix );
-   
-   laySample->addWidget( m_sample, 10 );
-   
-   layMain->addLayout( laySample , 0 );
+
 }
 
 
@@ -240,9 +228,15 @@ void KookaPreferences::slotApply( void )
     konf->writeEntry( THUMB_MARGIN, m_frameWidth->value() );
     konf->writeEntry( MARGIN_COLOR1, m_colButt1->color());
     konf->writeEntry( MARGIN_COLOR2, m_colButt2->color());
-    konf->writeEntry( BG_WALLPAPER, m_tileSelector->selectedURL().url() );
+
+    KURL bgUrl = m_tileSelector->selectedURL().url();
+    bgUrl.setProtocol("");
+    kdDebug(28000) << "Writing tile-pixmap " << bgUrl.prettyURL() << endl;
+    konf->writeEntry( BG_WALLPAPER, bgUrl.url() );
     
     konf->sync();
+
+    emit dataSaved();
 }
 
 void KookaPreferences::slotDefault( void )
