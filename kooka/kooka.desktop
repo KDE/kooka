@@ -9,6 +9,7 @@ Terminal=0
 BinaryPattern=kooka
 DocPath=kooka/index.html
 GenericName=Scan & OCR Program
+GenericName[af]=skandeer & optiese karakter herkenning program
 GenericName[ar]=برنامج للمسح الضوئي
 GenericName[bg]=Scan & OCR Програма
 GenericName[bs]=Program za skeniranje i OCR
