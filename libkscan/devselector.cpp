@@ -64,7 +64,7 @@ DeviceSelector::DeviceSelector( QWidget *parent, QStrList& devList,
    topLayout->addWidget( selectBox );
    setScanSources( devList, hrdevList );
 
-   cbSkipDialog = new QCheckBox( i18n("&Do not ask on startup again, always use this device."),
+   cbSkipDialog = new QCheckBox( i18n("&Do not ask on startup again, always use this device"),
 				 page, "CBOX_SKIP_ON_START" );
 
    KConfig *gcfg = KGlobal::config();
