@@ -41,6 +41,29 @@ OCR:
   for optical character recognition. Kooka starts the OCR program and displays 
   its output. Best results with bw-images scanned with ~150 dpi
 
+
+Problems:
+=========
+
+* Kooka does not yet support all options SANE offers. That will
+improve in the future. However, I dont know if it makes sense to
+support all, even not very common options, some scanner offer. Lets
+see what is neccessary and makes sense for the purpose of kooka.
+
+* KDE2 seems to have problems running on other displays. Kooka suffers
+from that if you start kooka on your host and try to get a remote
+display. All of the Qt-Widgets are displayed properly, but the image
+appears completely black. On the terminal, a lot of errors like
+
+KDE detected X Error: BadShmSeg (invalid shared segment parameter) 155
+  Major opcode:  143
+
+appear. Dont know why.
+
+* Kooka does not yet have a strategy for very large images :(. It uses
+the Qt QImage/QPixmap as is. On some displays, that causes problems.
+
+
 ----------------------------------------------------------------------
 Klaas Freitag <freitag@suse.de>
 
