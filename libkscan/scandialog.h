@@ -17,14 +17,16 @@ public:
     ScanDialog( QWidget *parent=0, const char *name=0, bool modal=false );
     ~ScanDialog();
 
+    virtual bool setup();
+    
 private slots:
     void slotFinalImage(QImage *);
    void slotNewPreview( QImage *);
 private:
     ScanParams  *m_scanParams;
     KScanDevice *m_device;
-   Previewer    *m_previewer;
-   QImage m_previewImage;
+    Previewer    *m_previewer;
+    QImage m_previewImage;
 };
 
 class ScanDialogFactory : public KScanDialogFactory

@@ -62,6 +62,17 @@ ScanDialog::ScanDialog( QWidget *parent, const char *name, bool modal )
     connect( m_device, SIGNAL( sigNewPreview( QImage* )),
              this, SLOT( slotNewPreview( QImage* )));
 
+    resize(700, 500);
+    
+    m_previewer->setEnabled( false ); // will be enabled in setup()
+}
+
+bool ScanDialog::setup()
+{
+    // ### FIXME I think ScanDialog should release the scan-device after a 
+    // while, e.g. when the dialog is closed. setup() is going to get called,
+    // so we could re-open it again.
+    
     QStringList scannerNames;
     QStrList backends = m_device->getDevices();;
     QStrListIterator it( backends );
@@ -70,8 +81,6 @@ ScanDialog::ScanDialog( QWidget *parent, const char *name, bool modal )
         scannerNames.append( m_device->getScannerName( it.current() ));
         ++it;
     }
-
-    resize(700, 500);
 
     if( scannerNames.count() > 0 )
     {
@@ -84,10 +93,13 @@ ScanDialog::ScanDialog( QWidget *parent, const char *name, bool modal )
             if ( !m_scanParams->connectDevice( m_device ) )
             {
                 kdDebug(29000) << "ERR: Could not connect scan device" << endl;
+                // ### messagebox? return false?
             }	
         }
-        else // completely abort
-            setValid( false );
+        else {// completely abort
+            m_previewer->setEnabled( false );
+            return false;
+        }
     }
     else
     {
@@ -97,9 +109,12 @@ ScanDialog::ScanDialog( QWidget *parent, const char *name, bool modal )
         /* Making the previewer gray */
         /* disabling is much better than hiding for 'advertising' ;) */
         m_previewer->setEnabled( false );
+        return true;
     }
-}
 
+    m_previewer->setEnabled( true );
+    return true;
+}
 
 
 void ScanDialog::slotNewPreview( QImage *image )
