@@ -92,7 +92,7 @@ private:
     QRadioButton *m_gocrBut;
     QRadioButton *m_kadmosBut;
     QRadioButton *m_ocradBut;
-    bool          m_prevOCREngine;
+    QString       m_prevOCREngine;
 };
 
 

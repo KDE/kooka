@@ -110,7 +110,6 @@ void KookaPreferences::setupOCRPage()
         /* Found the command */
         m_urlReqGocr->setURL( cmdGocr );
         m_gocrBut->setEnabled(true);
-        m_prevOCREngine = "gocr";
         haveGocr = true;
     }
     top->addWidget( gp );
@@ -123,14 +122,13 @@ void KookaPreferences::setupOCRPage()
     connect( m_urlReqOcrad, SIGNAL( textChanged( const QString& )),
              this, SLOT( slCheckOnOCRAD( const QString& )));
     QString cmdOcrad = tryFindBinary( "ocrad", CFG_OCRAD_BINARY );
-    kdDebug(28000) << "Found ocrad command: " << cmdGocr << endl;
+    kdDebug(28000) << "Found ocrad command: " << cmdOcrad << endl;
     m_ocradBut->setEnabled(false);
     if( !cmdOcrad.isEmpty() )
     {
         /* Found the command */
         m_urlReqOcrad->setURL( cmdOcrad );
         m_ocradBut->setEnabled(true);
-        m_prevOCREngine = "ocrad";
         haveOcrad = true;
     }
     top->addWidget( gp );
@@ -142,8 +140,8 @@ void KookaPreferences::setupOCRPage()
 
 #ifdef HAVE_KADMOS
     (void) new QLabel( i18n("The KADMOS OCR engine is available"), kgp);
-    m_prevOCREngine = "kadmos";
     m_kadmosBut->setChecked(true);
+    m_kadmosBut->setEnabled(true);
     haveKadmos = true;
 #else
     (void) new QLabel( i18n("The KADMOS OCR engine is not available in this version of Kooka"), kgp );
@@ -161,11 +159,20 @@ void KookaPreferences::setupOCRPage()
     if( useEngine != "notFound" )
     {
         if( useEngine == "gocr" && haveGocr )
+	{
             m_gocrBut->setChecked(true);
+	    m_prevOCREngine = "gocr";
+	}
         else if( useEngine == "ocrad" && haveOcrad )
+	{
             m_ocradBut->setChecked(true);
+	    m_prevOCREngine = "ocrad";
+	}
         else if( useEngine == "kadmos" && haveKadmos )
+	{
             m_kadmosBut->setChecked(true);
+	    m_prevOCREngine = "kadmos";
+	}
     }
 }
 
@@ -478,20 +485,18 @@ void KookaPreferences::slotApply( void )
 
     if( m_ocradBut->isChecked() )
         eng = "ocrad";
-#ifdef HAVE_KADMOS
-    bool kadmosChecked = m_kadmosBut->isChecked();
+    
+    if( m_kadmosBut && m_kadmosBut->isChecked() )
+        eng = "kadmos";
 
-    if( kadmosChecked != m_prevOCREngine )
+    if( eng != m_prevOCREngine )
     {
         // selection of the ocr engine has changed. Popup button.
         KMessageBox::sorry( this, i18n( "The OCR engine settings were changed.\n"
                                         "Note that Kooka needs to be restarted to change the OCR engine."),
                             i18n("OCR Engine Change") );
-
     }
-#endif
-    if( m_kadmosBut->isChecked() )
-        eng = "kadmos";
+
     konf->writeEntry(CFG_OCR_ENGINE, eng );
 
     QString path = m_urlReqGocr->url();
