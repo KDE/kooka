@@ -176,10 +176,10 @@ KScanDevice::KScanDevice( QObject *parent )
     scanner_initialised = false;  /* stays false until openDevice. */
     scanStatus = SSTAT_SILENT;
 
-    data         = 0; /* temporar image data buffer while scanning */
-    sn           = 0; /* socket notifier for async scanning        */
-    img          = 0; /* temporar image to scan in                 */
-    storeOptions = 0; /* list of options to store during preview   */
+    data         = 0; /* temporary image data buffer while scanning */
+    sn           = 0; /* socket notifier for async scanning         */
+    img          = 0; /* temporary image to scan in                 */
+    storeOptions = 0; /* list of options to store during preview    */
     overall_bytes = 0;
     rest_bytes = 0;
     pixel_x = 0;
@@ -1047,7 +1047,7 @@ KScanStat KScanDevice::acquire_data( bool isPreview )
    if( stat == KSCAN_OK )
    {
       /* new buffer for scanning one line */
-      if(data) delete data;
+      if(data) delete [] data;
       data = new SANE_Byte[ sane_scan_param.bytes_per_line +4 ];
       if( ! data ) stat = KSCAN_ERR_MEMORY;
    }
@@ -1162,7 +1162,7 @@ void KScanDevice::slScanFinished( KScanStat status )
 
     if( data )
     {
-	delete data;
+	delete[] data;
 	data = 0;
     }
 
@@ -1214,7 +1214,7 @@ void KScanDevice::slScanFinished( KScanStat status )
  * to the qimage.
  * The function needs:
  * QImage img valid
- * the data-buffer  set to a approbiate size
+ * the data-buffer  set to a appropriate size
  **/
 
 void KScanDevice::doProcessABlock( void )
