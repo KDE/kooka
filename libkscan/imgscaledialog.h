@@ -38,19 +38,24 @@
  * allows the user to select a zoom factor in percent, either in steps
  * or as a custom value.
  */
-class ImgScaleDialog : public KDialogBase{
+class ImgScaleDialog : public KDialogBase
+{
    Q_OBJECT
+   Q_PROPERTY( int selected READ getSelected WRITE setSelValue )
+      
 public:
    ImgScaleDialog( QWidget *parent, int curr_sel = 100,
 		   const char *name = 0 );
 
 public slots:
-   void enableAndFocus( bool b ) {
-        leCust->setEnabled( b ); leCust->setFocus();
+   void enableAndFocus( bool b )
+   {
+      leCust->setEnabled( b ); leCust->setFocus();
    }
 
    void setSelValue( int val );
-   int  getSelected( void ){ return( selected ); }
+   int  getSelected() const;
+
 signals:
    void customScaleChange( int );
 public slots:
@@ -58,6 +63,9 @@ public slots:
 private:
    QLineEdit *leCust;
    int selected;
+
+   class ImgScaleDialogPrivate;
+   ImgScaleDialogPrivate *d;
 };
 
 #endif

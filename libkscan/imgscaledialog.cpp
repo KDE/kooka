@@ -176,6 +176,11 @@ void ImgScaleDialog::setSelValue( int val )
 }
 
 
+int ImgScaleDialog::getSelected() const 
+{
+   return( selected );
+}
+
 
 /* ############################################################################## */
 
