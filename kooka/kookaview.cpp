@@ -127,7 +127,7 @@ KookaView::KookaView(QWidget *parent)
    kdDebug() << "Opening device " << selDevice << endl;
 
    /* This connects to the selected scanner */
-   sane->openDevice( selDevice.local8Bit() );
+   sane->openDevice( selDevice.latin1() );
    if( ! scan_params->connectDevice( sane ) )
    {
       kdDebug() << "Connecting to the scanner failed :( ->TODO" << endl;

@@ -203,7 +203,7 @@ void KSANEOCR::cleanUpFiles( void )
    if( ! ocrResultImage.isEmpty())
    {
       kdDebug() << "Unlinking OCR Result image file!" << endl;
-      unlink(ocrResultImage.local8Bit());
+      unlink(ocrResultImage.latin1());
       ocrResultImage = "";
    }
 

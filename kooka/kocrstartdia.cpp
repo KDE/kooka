@@ -77,7 +77,7 @@ KOCRStartDialog::KOCRStartDialog( QWidget *parent )
    entryOcrBinary = new KScanEntry( page, I18N( "Path to gocr-binary:  " ));
    QString res = conf->readPathEntry( CFG_GOCR_BINARY, "/usr/bin/gocr" );
    topLayout->addWidget( entryOcrBinary, 1 );
-   entryOcrBinary->slSetEntry( res.local8Bit() );
+   entryOcrBinary->slSetEntry( res );
    
    QFrame *f2 = new QFrame( page );
    f2->setFrameStyle( QFrame::HLine | QFrame::Sunken );

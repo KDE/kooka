@@ -73,7 +73,7 @@ ScanPackager::ScanPackager( QWidget *parent ) : KListView( parent )
 		 SLOT( slShowContextMenue(QListViewItem *, const QPoint &, int )));
 	
 	img_counter = 1;
-	if( readDir( root, save_root.local8Bit() ) == 0 )
+	if( readDir( root, save_root.latin1() ) == 0 )
 	{
 		PackagerItem *incoming = new PackagerItem( root, true );
 		incoming->setText( 0, "incoming" );
@@ -195,7 +195,7 @@ void ScanPackager::slAddImage( QImage *img )
    /* Path of curr sel item */
    QDir d (curr->getFilename());
    
-   ImgSaver img_saver( this, d.absPath().local8Bit() );
+   ImgSaver img_saver( this, d.absPath().latin1() );
 	
    is_stat = img_saver.saveImage( img );
 	
@@ -560,7 +560,7 @@ int ScanPackager::readDir( QListViewItem *parent, const char *dir_to_read )
 	 new_folder->setFilename( fi->absFilePath() );
 	 /* recursive Call to readDir */
 	 amount_dirs++;
-	 amount_dirs += readDir( new_folder, fi->absFilePath().local8Bit() );
+	 amount_dirs += readDir( new_folder, fi->absFilePath().latin1() );
 	 new_folder->decorateFile();
       }
       else

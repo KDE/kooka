@@ -268,7 +268,7 @@ void ImgSaver::createDir( QString dir )
    if( ! fi.exists() )
    {
       kdDebug() << "Wrn: Directory does not exist -> try to create  !" << endl;
-      if( mkdir( dir.local8Bit(), S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH ) != 0 )
+      if( mkdir( QFile::encodeName( dir ), S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH ) != 0 )
       {
 	 QMessageBox::warning( 0,"Warning","The directory \n" + dir +
 			       "\nto save images does not exist\nand could not be created !\n"
@@ -330,7 +330,7 @@ ImgSaveStat ImgSaver::saveImage( QImage *image )
     	return( ISS_SAVE_CANCELED );
    }
    stat = save( image, directory + createFilename( format ),
-		format.local8Bit(), subformat.local8Bit() );
+		format, subformat );
 
    return( stat );
 
@@ -355,7 +355,7 @@ QString ImgSaver::createFilename( QString format )
    kdDebug() << "CRASH WITH: " << name << endl;
 
    while( files.exists( name, false ) ) {
-      sprintf( name, "kscan_%04x.%s", ++c, (format.lower()).local8Bit() );
+      sprintf( name, "kscan_%04x.%s", ++c, (format.lower()).latin1() );
    }
    
    return( name );
@@ -375,7 +375,7 @@ ImgSaveStat ImgSaver::saveImage( QImage *image, QString filename )
    if( fi.isRelative() )
       filename = directory + filename;
 
-   return( save( image, filename.local8Bit(), format.local8Bit(), "" ) );
+   return( save( image, filename, format, "" ) );
 }
 
 
@@ -390,7 +390,7 @@ ImgSaveStat ImgSaver::savePreview( QImage *image )
 
    // Previewfile always comes absolute
       
-   ImgSaveStat stat = save( image, previewfile, format.local8Bit(), "" );
+   ImgSaveStat stat = save( image, previewfile, format, "" );
 
    if( stat == ISS_OK )
    {
@@ -530,9 +530,9 @@ QString ImgSaver::findSubFormat( QString format )
 /**
    private save() does the work to save the image.
 **/
-ImgSaveStat ImgSaver::save( QImage *image, QString filename,
-			    const char *format,
-			    const char *subformat )
+ImgSaveStat ImgSaver::save( QImage *image, const QString &filename,
+			    const QString &format,
+			    const QString &subformat )
 {
 
    bool result = false;
@@ -562,7 +562,7 @@ ImgSaveStat ImgSaver::save( QImage *image, QString filename,
 #endif
       kdDebug() << "ImgSaver: saving image to <" << filename << "> as <" << format << "/" << subformat <<">" << endl;
 
-      result = image->save( filename, format );
+      result = image->save( filename, format.latin1() );
 
       
       last_file = fi.fileName();

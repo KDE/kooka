@@ -154,8 +154,8 @@ private:
    QString      findFormat( picType type );
    QString      findSubFormat( QString format );
    void		createDir( QString );
-   ImgSaveStat  save( QImage *image, QString filename, const char *format,
-		     const char *subformat );
+   ImgSaveStat  save( QImage *image, const QString &filename, const QString &format,
+		     const QString &subformat );
    QString      createFilename( QString format );
    void	        readConfig( void );
    QString      startFormatDialog( picType );

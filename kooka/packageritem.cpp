@@ -101,11 +101,11 @@ bool PackagerItem::deleteFolder( void )
 {
    QDir direc;
    direc.setFilter( QDir::Files | QDir::Hidden | QDir::NoSymLinks );
-   direc.setPath(filename.local8Bit());
+   direc.setPath(filename.latin1());
  	
    if( direc.exists() )
    {
-      return( direc.rmdir(filename.local8Bit()));
+      return( direc.rmdir(filename.latin1()));
    }
    return( true );
 }
@@ -130,9 +130,9 @@ bool PackagerItem::deleteFile( void )
  	
    QDir direc;
    direc.setFilter( QDir::Files | QDir::Hidden | QDir::NoSymLinks );
-   direc.setPath(filename.local8Bit());
+   direc.setPath(filename.latin1());
  	
-   return( direc.remove(filename.local8Bit()));
+   return( direc.remove(filename.latin1()));
 }
 
 bool PackagerItem::createFolder( void )
@@ -142,10 +142,10 @@ bool PackagerItem::createFolder( void )
 
    QDir direc;
    direc.setFilter( QDir::Files | QDir::Hidden | QDir::NoSymLinks );
-   direc.setPath(filename.local8Bit());
+   direc.setPath(filename.latin1());
  	
    if( !direc.exists() )
-      return( direc.mkdir(filename.local8Bit()) );
+      return( direc.mkdir(filename.latin1()) );
  		
    return( true );
 }
