@@ -94,7 +94,7 @@ private slots:
    void cleanStatusbar(void) { changeStatusbar(""); }
    void changeCaption(const QString& text);
 
-   void fileSaveAs();
+   // void fileSaveAs();
 
    void slMirrorVertical( void );
    void slMirrorHorizontal( void );

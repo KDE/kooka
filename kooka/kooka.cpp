@@ -8,8 +8,6 @@
 #include "resource.h"
 
 #include "kookapref.h"
-#include "img_saver.h"
-
 
 #include <qdragobject.h>
 #include <qlineedit.h>
@@ -259,7 +257,7 @@ void Kooka::fileSave()
     // save the current file
 }
 
-#endif
+
 void Kooka::fileSaveAs()
 {
     // this slot is called whenever the File->Save As menu is selected,
@@ -270,7 +268,7 @@ void Kooka::fileSaveAs()
    fd.exec();
    
 }
-
+#endif
 
 void Kooka::filePrint()
 {
