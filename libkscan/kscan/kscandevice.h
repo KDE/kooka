@@ -12,6 +12,7 @@
 
 
 #include "kscanoption.h"
+#include "kscanoptset.h"
 
 extern "C" {
 #include <sane.h>
@@ -203,7 +204,11 @@ public slots:
    *   to stop the scanning
    */
   void slStopScanning( void );
-	
+
+   /**
+   *  Image ready-slot in asynchronous scanning */
+  void                slScanFinished( KScanStat );
+   
   signals:
   /**
    *  emitted, if an option change was applied, which made other
@@ -242,14 +247,12 @@ public slots:
 
   void sigScanFinished( KScanStat );
 
+
 private slots:
   /**
    *  Slot to acquire a whole image */
   void                doProcessABlock( void );
 
-  /**
-   *  Image ready-slot in asynchronous scanning */
-  void                slScanFinished( KScanStat );
 
 private:
   /**
@@ -259,7 +262,7 @@ private:
    *  to autmatic adjust.
    **/
   void                prepareScan( void );
-
+  
   KScanStat           createNewImage( SANE_Parameters *p );
 
 
@@ -289,6 +292,8 @@ private:
   int                 rest_bytes;
   int                 pixel_x, pixel_y;
   bool 		      scanningPreview;
+
+  KScanOptSet         *storeOptions;
 };
 
 #endif
