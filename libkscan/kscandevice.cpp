@@ -943,8 +943,6 @@ KScanStat KScanDevice::acquire_data( bool isPreview )
 	 kdDebug(29000) << "sane-start-Error: " << sane_strstatus( sane_stat ) << endl;
    }
 
-   /* Signal for a progress dialog */
-   emit( sigScanProgress( 0 ) );
 
    if( sane_scan_param.pixels_per_line == 0 || sane_scan_param.lines < 1 )
    {
@@ -966,6 +964,10 @@ KScanStat KScanDevice::acquire_data( bool isPreview )
       if( ! data ) stat = KSCAN_ERR_MEMORY;
    }
 
+   /* Signal for a progress dialog */
+   emit( sigScanProgress( 0 ) );
+   emit( sigAcquireStart() );
+   
    if( stat == KSCAN_OK )
    {	
       /* initiates Redraw of the Progress-Window */

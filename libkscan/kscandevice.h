@@ -340,6 +340,15 @@ public slots:
     */
   void sigScanStart();
    
+   /**
+    * signal to indicate the start of acquireing data. It is equal
+    * to @see sigScanProgress emitted with value 0 and thus it is sent
+    * after sigScanStart.
+    * The time between sigScanStart and sigAcquireStart differs very much
+    * from scanner to scanner.
+    */
+  void sigAcquireStart();
+   
   /**
    *  emitted to tell the application the progress of the scanning
    *  of one page. The final value is always 1000. The signal is
