@@ -232,7 +232,7 @@ Previewer::Previewer(QWidget *parent, const char *name )
     l1->setBuddy(d->m_sliderThresh);
 
 #if 0  /** Dustsize-Slider: No deep impact on result **/
-    (void) new QLabel( i18n("Dust Size:"), grBox );
+    (void) new QLabel( i18n("Dust size:"), grBox );
     d->m_sliderDust = new QSlider( 0, 50, 5, d->m_dustsize,  Qt::Horizontal, grBox );
     connect( d->m_sliderDust, SIGNAL(valueChanged(int)), SLOT(slSetAutoSelDustsize(int)));
 #endif

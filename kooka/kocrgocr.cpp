@@ -109,7 +109,7 @@ EngineError KGOCRDialog::setupGui()
             /* Popup here telling that the config needs to be called */
             KMessageBox::sorry( this, i18n( "The path to the gocr binary is not configured yet.\n"
                                             "Please go to the Kooka configuration and enter the path manually."),
-                                i18n("OCR Software not Found") );
+                                i18n("OCR Software Not Found") );
         }
     }
 

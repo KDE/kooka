@@ -114,11 +114,11 @@ ImgPrintDialog::ImgPrintDialog( KookaImage *img, QWidget *parent, const char* na
     hbox->addWidget( group );
 
     m_sizeW = new KIntNumInput( group );
-    m_sizeW->setLabel( i18n("Image Width:"), AlignVCenter );
+    m_sizeW->setLabel( i18n("Image width:"), AlignVCenter );
     m_sizeW->setSuffix( i18n(" mm"));
     connect( m_sizeW, SIGNAL(valueChanged(int)), SLOT(slCustomWidthChanged(int)));
     m_sizeH = new KIntNumInput( m_sizeW, AlignVCenter, group  );
-    m_sizeH->setLabel( i18n("Image Height:"), AlignVCenter);
+    m_sizeH->setLabel( i18n("Image height:"), AlignVCenter);
     m_sizeH->setSuffix( i18n(" mm"));
     connect( m_sizeH, SIGNAL(valueChanged(int)), SLOT(slCustomHeightChanged(int)));
 

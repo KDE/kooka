@@ -791,7 +791,7 @@ bool ImgSaver::renameImage( const KURL& fromUrl, KURL& toUrl, bool askExt,  QWid
 	   /* extensions differ -> TODO */
 	   KMessageBox::error( overWidget,
 			       i18n("Format changes of images are currently not supported."),
-			       i18n("Wrong extension found" ));
+			       i18n("Wrong Extension Found" ));
 	   return(false);
        }
    }
@@ -885,7 +885,7 @@ bool ImgSaver::copyImage( const KURL& fromUrl, const KURL& toUrl, QWidget *overW
 	      (extFrom.lower() == "jpg"  && extTo.lower() == "jpeg" )))
        {
 	   KMessageBox::error( overWidget, i18n("Format changes of images are currently not supported."),
-			       i18n("Wrong extension found" ));
+			       i18n("Wrong Extension Found" ));
        }
       return(false);
    }

@@ -281,7 +281,7 @@ bool KookaPreferences::checkOCRBinIntern( const QString& cmd, const QString& too
       if( show_msg )
       KMessageBox::sorry( this, i18n( "The path does not lead to a valid binary.\n"
 				      "Please check your installation and/or install the program."),
-			  i18n("OCR Software not Found") );
+			  i18n("OCR Software Not Found") );
       ret = false;
    }
    else
@@ -292,7 +292,7 @@ bool KookaPreferences::checkOCRBinIntern( const QString& cmd, const QString& too
 	 if( show_msg )
 	    KMessageBox::sorry( this, i18n( "The program exists, but is not executable.\n"
 					    "Please check your installation and/or install the binary properly."),
-				i18n("OCR Software not Executable") );
+				i18n("OCR Software Not Executable") );
 	 ret = false;
       }
    }
