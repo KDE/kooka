@@ -619,21 +619,6 @@ KScanStat KScanDevice::acquirePreview( bool forceGray, int dpi )
 
    (void) forceGray;
 
-
-#if 0
-   QAsciiDictIterator<KScanOption> it(*standardOptions);
-
-   while( it.current() )
-   {
-      so = it.current();
-      if( so && so->active() && so->initialised())
-      {
-	 qDebug( "apply <%s>", (const char*) it.currentKey() );
-	 apply( so );
-      }
-      ++it;
-   }
-#endif
    if( storeOptions )
       storeOptions->clear();
    else
