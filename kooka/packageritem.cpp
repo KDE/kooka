@@ -20,7 +20,7 @@
 #include <qdir.h>
 #include <qfile.h>
 
-
+#include "resource.h"
 #include "packageritem.h"
 
 
@@ -33,6 +33,8 @@ PackagerItem::PackagerItem( QListViewItem *parent, bool is_dir )
    isdir = is_dir;
    image = 0;
    filename = "";
+   copyjob = 0L;
+
 }
 
 
@@ -49,7 +51,7 @@ PackagerItem::~PackagerItem()
    delete( image );
 }
 
-QString PackagerItem::getFilename( bool withPath  )
+QString PackagerItem::getFilename( bool withPath  ) const 
 {
    QString ret = filename;
    
@@ -176,6 +178,7 @@ void PackagerItem::decorateFile( void )
       if( isDir() )
       {
 	 setPixmap( 0, *icons["mini-folder"] );
+
 	 int cc = childCount();
 	 s.sprintf("%d item%s", cc, cc == 1 ? "":"s");
 	 setText( 1, s );
@@ -185,6 +188,8 @@ void PackagerItem::decorateFile( void )
  		
    }
 }
+
+
 
 FileOpStat  PackagerItem::copy_file( QString to )
 {
@@ -221,3 +226,4 @@ FileOpStat  PackagerItem::copy_file( QString to )
    from.close();
    return( res );
 }
+

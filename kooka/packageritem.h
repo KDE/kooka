@@ -18,9 +18,12 @@
 
 #ifndef PACKAGERITEM_H
 #define PACKAGERITEM_H
+#include <kurl.h>
 
 #include <qlistview.h>
 #include <qimage.h>
+
+
 
 /**
   *@author Klaas Freitag
@@ -29,7 +32,7 @@ typedef enum{ FILE_OP_ERR, FILE_OP_OK, FILE_OP_NO_MEM,
               FILE_OP_NO_TARGET, FILE_OP_PERM } FileOpStat;
 
 class PackagerItem : public QListViewItem  {
-
+   
 public: 
     PackagerItem( QListViewItem *parent, bool is_dir = false );
     PackagerItem( QListView *parent, bool is_dir = false );
@@ -41,7 +44,7 @@ public:
     QImage *getImage( void );
     bool    isDir( void ) { return ( isdir ); }
     bool    isLoaded( void ) { return( !( image == 0 ) ); }
-    QString getFilename( bool withPath=true );
+    QString getFilename( bool withPath=true ) const;
     bool    createFolder( void );
     bool    unload();
     bool    deleteFile();
@@ -49,16 +52,16 @@ public:
 
     void    decorateFile();
     QString getImgFormat();
+   
     FileOpStat     duplicate( QString to ) { return( copy_file(to)); }
     FileOpStat     move( QString to ){ return( copy_file(to)); };
-    	
+
 private:
     QImage *image;
     QString filename;
 
     FileOpStat    copy_file( QString );
     bool    isdir;
-
 
 };
 
