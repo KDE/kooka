@@ -44,8 +44,8 @@
 
 
 
-ScanParams::ScanParams( QWidget *parent ):
-   QVBox( parent)
+ScanParams::ScanParams( QWidget *parent, const char *name ):
+   QVBox( parent, name )
 {
    /* first some initialisation and debug messages */
     sane_device = 0; virt_filename = 0;
@@ -58,7 +58,7 @@ ScanParams::ScanParams( QWidget *parent ):
     pixColor = kil.loadIcon( "color", KIcon::Small );
     pixGray = kil.loadIcon( "gray", KIcon::Small );
     pixLineArt = kil.loadIcon( "lineart", KIcon::Small );
-    
+
 }
 
 bool ScanParams::connectDevice( KScanDevice *newScanDevice )
@@ -158,14 +158,14 @@ void ScanParams::scannerParams( void ) // QVBoxLayout *top )
    if ( so )
    {
       /* Pretty-Pixmap */
-      
+
       KScanCombo *cb = (KScanCombo*) so->widget();
 
 
       cb->slSetIcon( pixLineArt, i18n("Lineart") );
       cb->slSetIcon( pixGray, i18n("Gray") );
       cb->slSetIcon( pixColor, i18n("Color") );
-      
+
       hb->setMargin( KDialog::marginHint() );
       hb->setSpacing( KDialog::spacingHint());
 
@@ -271,17 +271,17 @@ void ScanParams::scannerParams( void ) // QVBoxLayout *top )
       {
 	 int isOn;
 	 so->get( &isOn );
-	 
+	
 	 kdDebug() << "Custom Gamma Table is <" << (isOn ? "on" : "off") << ">" << endl;
-	 
+	
 	 /* Connect a signal to refresh activity of the gamma tables */
 	 connect( so, SIGNAL(guiChange(KScanOption*)),
 	       this, SLOT(slReloadAllGui( KScanOption* )));
-      
+
 	 pb_edit_gtable = new QPushButton( i18n("edit..."), hb1 );
 	 CHECK_PTR(pb_edit_gtable);
 	 pb_edit_gtable->setEnabled( isOn );
-	 
+	
 	 connect( pb_edit_gtable, SIGNAL( clicked () ),
 		  this, SLOT( slEditCustGamma () ) );
 
@@ -348,11 +348,11 @@ void ScanParams::slSourceSelect( void )
 #ifdef CHEAT_FOR_DEBUGGING
       if( sources.find( "Automatic Document Feeder" ) == -1)
           sources.append( "Automatic Document Feeder" );
-#endif                                                                                         
+#endif
 
       ScanSourceDialog d( this, sources, adf );
       d.slSetSource( currSource );
-      
+
       if( d.exec() == QDialog::Accepted  )
       {
 	 QString sel_source = d.getText();
@@ -584,7 +584,7 @@ void ScanParams::slStartScan( void )
 
 	 } else {
 	    kdDebug() << "Not yet implemented :-/" << endl;
-	       
+	
 	    // stat = performADFScan();
 	 }
       } else {
@@ -603,7 +603,7 @@ void ScanParams::slEditCustGamma( void )
 
     KScanOption redGt( SANE_NAME_GAMMA_VECTOR_R );
     if( redGt.active()) kdDebug() << "RED-GT is active now !" << endl;
-    
+
     KScanOption blueGt( SANE_NAME_GAMMA_VECTOR_B );
     if( blueGt.active()) kdDebug() << "blue-GT is active now !" << endl;
 
@@ -615,11 +615,11 @@ void ScanParams::slEditCustGamma( void )
     grayGt.get( &old_gt );
 
     kdDebug() << "Old gamma table: " << old_gt.getGamma() << ", " << old_gt.getBrightness() << ", " << old_gt.getContrast() << endl;
-    
+
     GammaDialog gdiag( this );
     connect( &gdiag, SIGNAL( gammaToApply(GammaDialog&) ),
 	     this, SLOT( slApplyGamma(GammaDialog&) ) );
-    
+
     gdiag.setGt( old_gt );
 
     if( gdiag.exec() == QDialog::Accepted  )
@@ -665,7 +665,7 @@ void ScanParams::slApplyGamma( GammaDialog& gdiag )
       sane_device->apply( &bGt, true );
    }
    kdDebug() << "Fine !" << endl;
-   
+
 }
 
 /* Slot calls if a widget changes. Things to do:

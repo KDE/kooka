@@ -12,9 +12,13 @@ include_HEADERS = kscandevice.h kscanslider.h kgammatable.h \
 libkscan_la_SOURCES = kscandevice.cpp kscanslider.cpp kgammatable.cpp\
         kscanoption.cpp kscanoptset.cpp \
 	gammadialog.cpp dispgamma.cpp \
-	scansourcedialog.cpp scanparams.cpp massscandialog.cpp devselector.cpp
+	scansourcedialog.cpp scanparams.cpp massscandialog.cpp \
+        devselector.cpp scandialog.cpp
 
-libkscan_la_LDFLAGS = $(SANE_LDFLAGS) $(all_libraries) -no-undefined -version-info 1:0
-libkscan_la_LIBADD = $(LIB_KDEUI) $(LIB_SANE)
+
+libkscan_la_LDFLAGS = $(SANE_LDFLAGS) $(all_libraries) -no-undefined -version-info 1:0 -module
+libkscan_la_LIBADD = $(LIB_KFILE) $(LIB_SANE)
+
+kde_services_DATA = scanservice.desktop
 
 METASOURCES = AUTO

@@ -1,8 +1,8 @@
 /***************************************************************************
-                          devselector.cpp  -  description                              
-                             -------------------                                         
-    begin                : Fri Now 10 2000                                           
-    copyright            : (C) 2000 by Klaas Freitag                         
+                          devselector.cpp  -  description
+                             -------------------
+    begin                : Fri Now 10 2000
+    copyright            : (C) 2000 by Klaas Freitag
     email                : freitag@suse.de
  ***************************************************************************/
 
@@ -11,7 +11,7 @@
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
  *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   * 
+ *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
 
@@ -25,9 +25,10 @@
 #include <qcstring.h>
 #include <kapp.h>
 #include <kconfig.h>
-#include <kmessagebox.h>
-#include <klocale.h>
 #include <kdebug.h>
+#include <kglobal.h>
+#include <klocale.h>
+#include <kmessagebox.h>
 
 #include "devselector.h"
 #include <kdebug.h>
@@ -37,7 +38,7 @@
 
 
 DeviceSelector::DeviceSelector( QWidget *parent, QStrList& devList, QStringList& hrdevList )
-   :KDialogBase( parent,  "DeviceSel", true, i18n("Wellcome to Kooka"),
+   :KDialogBase( parent,  "DeviceSel", true, i18n("Welcome to Kooka"),
 		 Ok|Cancel, Ok, true )
 {
    kdDebug() << "Starting DevSelector!" << endl;
@@ -63,7 +64,7 @@ DeviceSelector::DeviceSelector( QWidget *parent, QStrList& devList, QStringList&
    cbSkipDialog = new QCheckBox( i18n("&Do not ask on startup again, always use this device."),
 				 page, "CBOX_SKIP_ON_START" );
    topLayout->addWidget(cbSkipDialog);
-   
+
 }
 
 
@@ -77,24 +78,26 @@ QString DeviceSelector::getSelectedDevice( void ) const
    CHECK_PTR( selectBox );
 
    unsigned int selID = selectBox->id( selectBox->selected());
+
    int c = devices.count();
    kdDebug() << "The Selected ID is <" << selID << ">/" << c << endl;
-   
-   kapp->config()->setGroup( GROUP_STARTUP );
-   const char *i = devices[ selID ].local8Bit();
-   kdDebug() << "The selected device: <" << i << ">" << endl;
-   kapp->config()->writeEntry( STARTUP_SCANDEV, i );
 
-   return( QString(i) );
-}
- 
+   QString dev = devices[ selID ];
    
+   kdDebug() << "The selected device: <" << dev << ">" << endl;
+   KGlobal::config()->setGroup( GROUP_STARTUP );
+   KGlobal::config()->writeEntry( STARTUP_SCANDEV, dev );
+
+   return dev;
+}
+
+
 void DeviceSelector::setScanSources( QStrList& sources, QStringList& hrSources )
 {
    bool default_ok = false;
-     
-   kapp->config()->setGroup( GROUP_STARTUP );
-   QString defstr = kapp->config()->readEntry( STARTUP_SCANDEV, "" );
+
+   KGlobal::config()->setGroup( GROUP_STARTUP );
+   QString defstr = KGlobal::config()->readEntry( STARTUP_SCANDEV, "" );
    uint c = sources.count();
 
    /* Popup if no scanner exists */
@@ -107,7 +110,7 @@ void DeviceSelector::setScanSources( QStrList& sources, QStringList& hrSources )
       msg += i18n( "\nCheck the SANE installation !\n\n" );
       msg += i18n( "Do you want to continue?");
       int result = KMessageBox::questionYesNo(this, msg, i18n("SANE Installation Problem"));
-      
+
       if( result == KMessageBox::No ) {
 	 exit(0);
       }
@@ -116,7 +119,7 @@ void DeviceSelector::setScanSources( QStrList& sources, QStringList& hrSources )
    /* Selector-Stuff*/
    uint nr = 0;
    int  checkDefNo = 0;
-   
+
    for ( const char* s = sources.first(); selectBox && s; s=sources.next() )
    {
       QString css( s );
@@ -127,7 +130,7 @@ void DeviceSelector::setScanSources( QStrList& sources, QStringList& hrSources )
       QRadioButton *rb = new QRadioButton( num+css +"\n"+hr, selectBox );
 
       devices.append(css);
-      
+
       if( css == defstr )
       {
 	 checkDefNo = nr;
@@ -144,12 +147,12 @@ void DeviceSelector::setScanSources( QStrList& sources, QStringList& hrSources )
       CHECK_PTR( rb );
       rb->setChecked( true );
    }
-      
+
 }
 
 DeviceSelector::~DeviceSelector()
 {
-   
+
 }
 
 /* The End ;) */

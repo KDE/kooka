@@ -1,8 +1,8 @@
 /***************************************************************************
-                          scanparams.h  -  description                              
-                             -------------------                                         
-    begin                : Fri Dec 17 1999                                           
-    copyright            : (C) 1999 by Klaas Freitag                         
+                          scanparams.h  -  description
+                             -------------------
+    begin                : Fri Dec 17 1999
+    copyright            : (C) 1999 by Klaas Freitag
     email                : freitag@suse.de
  ***************************************************************************/
 
@@ -11,7 +11,7 @@
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
  *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   * 
+ *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
 
@@ -48,8 +48,8 @@ typedef enum { ID_SANE_DEBUG, ID_QT_IMGIO, ID_SCAN } ScanMode;
 class ScanParams : public QVBox
 {
    Q_OBJECT
-public: 
-   ScanParams( QWidget *parent);
+public:
+   ScanParams( QWidget *parent, const char *name = 0);
    ~ScanParams();
 #if 0
    QSize sizeHint( );
@@ -115,7 +115,7 @@ void slSourceSelect( void );
     *  to apply. This is an internal slot.
     */
    void slApplyGamma( GammaDialog& );
-   
+
 private:
 	
 	
