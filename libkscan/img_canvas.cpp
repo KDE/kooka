@@ -77,7 +77,8 @@ ImageCanvas::ImageCanvas(QWidget *parent,
   pmScaled         = 0;
 
   image            = start_image;
-
+  moving 	   = MOVE_NONE;
+  
   QSize img_size;
 
   if( image && ! image->isNull() )
@@ -106,6 +107,7 @@ ImageCanvas::ImageCanvas(QWidget *parent,
   //zoomOut();scrollview/scrollview
   viewport()->setCursor( crossCursor );
   cr1 = 0;
+  cr2 = 0;
   viewport()->setMouseTracking(TRUE);
   viewport()->setBackgroundMode(PaletteBackground);
   show();
