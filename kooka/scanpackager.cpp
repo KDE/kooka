@@ -151,19 +151,19 @@ void ScanPackager::createMenus()
       popup = new KPopupMenu();
       // popup->insertTitle( i18n( "Gallery" ));
       
-      KAction *newAct = new KAction(i18n("&create directory"), "folder_new",0 ,
+      KAction *newAct = new KAction(i18n("&Create Directory"), "folder_new",0 ,
 				    this, SLOT(slotCreateFolder()), this);
       newAct->plug( popup );	
       
-      newAct = new KAction(i18n("&save Image"), "filesave",0 ,
+      newAct = new KAction(i18n("&Save Image"), "filesave",0 ,
 			   this, SLOT(slotExportFile()), this);
       newAct->plug( popup );	
 
-      newAct = new KAction(i18n("&delete Image"), "edittrash",0 ,
+      newAct = new KAction(i18n("&Delete Image"), "edittrash",0 ,
 			   this, SLOT(slotDeleteItems()), this);
       newAct->plug( popup );	
 
-      newAct = new KAction(i18n("&unload Image"), "fileclose", 0,
+      newAct = new KAction(i18n("&Unload Image"), "fileclose", 0,
 			   this, SLOT(slotUnloadItems()), this );
       newAct->plug( popup );
       popup->setCheckable( true );
@@ -215,7 +215,7 @@ void ScanPackager::slotDecorate( KFileTreeViewItem* item )
 	 /* set image size in pixels */
 	 QString t = i18n( "%1 x %2" ).arg( img->width()).arg(img->height());
 	 item->setText( 1, t );
-	 kdDebug( 28000) << "Image laoded and decorated!" << endl;
+	 kdDebug( 28000) << "Image loaded and decorated!" << endl;
       }
       else
       {
@@ -937,10 +937,10 @@ void ScanPackager::slotDeleteItems( )
    if( ask )
    {
       QString s;
-      s = i18n("Do you really want to delete this image ?\nIt can't be restored !" );
+      s = i18n("Do you really want to delete this image?\nIt cannot be restored!" );
       if( item->isDir() )
       {
-	 s = i18n("Do you really want to delete the folder %1\nand all the images inside ?").arg("");
+	 s = i18n("Do you really want to delete the folder %1\nand all the images inside?").arg("");
       }
       result = KMessageBox::questionYesNo(this, s, i18n( "Delete collection item") );
    }
