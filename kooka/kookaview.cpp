@@ -724,7 +724,7 @@ void KookaView::slOpenCurrInGraphApp( void )
 	 
       urllist.append( ftvi->url());
 	 
-      // KRun::displayOpenWithDialog( urllist );
+      KRun::displayOpenWithDialog( urllist );
    }
 }
 
