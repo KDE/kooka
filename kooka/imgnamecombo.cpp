@@ -19,8 +19,6 @@
 #include <qlabel.h>
 #include <qlistview.h>
 
-#include <packageritem.h>
-
 #include <kcombobox.h>
 
 #include <kdebug.h>
