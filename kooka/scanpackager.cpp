@@ -822,10 +822,17 @@ void ScanPackager::slAddImage( QImage *img )
    
    QString s;
    /* Count amount of children of the father */
-   int childcount = curr->childCount();
-   s = i18n("%1 images").arg(childcount);
-   curr->setText( 1, s);
-   setOpen( curr, true );
+   QListViewItem *paps = curr->parent();
+   if( curr->isDir() ) /* take only father if the is no directory */
+      paps = curr;
+   
+   if( paps )
+   {
+      int childcount = paps->childCount();
+      s = i18n("%1 images").arg(childcount);
+      paps->setText( 1, s);
+      setOpen( paps, true );
+   }
 
 }
 
