@@ -142,3 +142,17 @@ For Kooka 0.40:
 
 * image information in status bar.
 
+/* ================================================================================ */
+
+For Kooka 0.41:
+
+* Added support for ocrad OCR software. 
+
+* Added image printing tab to the tab dialog, good printing support.
+
+* fixed some bugs with OCR result image handling.
+
+* libkscan: Fixed a cast bug with scan source selection
+
+* Improved support for tiff images, handle images with different x- and y resolution
+  correctly.
