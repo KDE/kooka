@@ -130,9 +130,11 @@ void Kooka::setupActions()
 					      actionCollection());
     m_statusbarAction = KStdAction::showStatusbar(this, SLOT(optionsShowStatusbar()),
 						  actionCollection());
-    m_scanParamsAction = new KToggleAction(i18n("Show Scan &Parameter"), 0, this,
-					   SLOT(optionsShowScanParams()), actionCollection(),
-					   "show_scanparams" );
+    m_scanParamsAction = new KToggleAction(i18n("Show Scan &Parameters"),
+                                           KShortcut(), this,
+					   SLOT(optionsShowScanParams()),
+                                           actionCollection(),
+					   "dock_scanparams" );
     m_scanParamsAction->setChecked( true );
 
     KStdAction::keyBindings(this, SLOT(optionsConfigureKeys()), actionCollection());
