@@ -37,6 +37,7 @@
 class QPainter;
 class KSANEOCR;
 class KConfig;
+class KPrinter;
 
 /**
  * This is the main view class for Kooka.  Most of the non-menu,
@@ -66,7 +67,7 @@ public:
    /**
     * Print this view to any medium -- paper or not
     */
-   void print(QPainter *, int height, int width);
+   void print(QPainter *, KPrinter*, QPaintDeviceMetrics& );
 
    bool ToggleVisibility( int );
    void loadStartupImage( void );
@@ -102,6 +103,7 @@ public slots:
 
    void slOpenCurrInGraphApp( void );
 
+   void slSaveScanParams( void );
     /**
     * starts ocr on the image the parameter is pointing to
     **/

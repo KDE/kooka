@@ -180,11 +180,15 @@ void Kooka::setupActions()
     (void) new KAction(i18n("Rotate image counter-clock&wise"), "rotate_ccw", CTRL+Key_W,
 		       this, SLOT( slRotateCounterClockWise() ),
 		       actionCollection(), "rotateCounterClockwise" );
-
-    (void) new KAction(i18n("Rotate image 180 &degrees"), "rotate_ccw", CTRL+Key_D,
+    (void) new KAction(i18n("Rotate image 180 &degrees"), "rotate_usd", CTRL+Key_D,
 		       this, SLOT( slRotate180() ),
 		       actionCollection(), "upsitedown" );
-
+#if 0
+    (void) new KAction(i18n("Save Scanparameters"), "savedefaultparams", CTRL+Key_S,
+		       m_view, SLOT(slSaveScanParams()),
+		       actionCollection(), "savescanparam" );
+#endif
+    
     createGUI("kookaui.rc");
 
 }
@@ -287,18 +291,17 @@ void Kooka::filePrint()
     if (!m_printer) m_printer = new KPrinter;
     if (m_printer->setup(this))
     {
-        // setup the printer.  with Qt, you always "print" to a
-        // QPainter.. whether the output medium is a pixmap, a screen,
-        // or paper
-        QPainter p;
-        p.begin(m_printer);
+       // setup the printer.  with Qt, you always "print" to a
+       // QPainter.. whether the output medium is a pixmap, a screen,
+       // or paper
+       QPainter p;
+       QPaintDeviceMetrics metrics( m_printer );
+       p.begin( m_printer);
+       // we let our view do the actual printing
+       m_view->print(&p, m_printer, metrics );
 
-        // we let our view do the actual printing
-        QPaintDeviceMetrics metrics(m_printer);
-        m_view->print(&p, metrics.height(), metrics.width());
-
-        // and send the result to the printer
-        p.end();
+       // and send the result to the printer
+       p.end();
     }
 }
 

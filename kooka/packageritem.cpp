@@ -208,7 +208,7 @@ bool PackagerItem::deleteFile( void )
    direc.setFilter( QDir::Files | QDir::Hidden | QDir::NoSymLinks );
    direc.setPath(getFilename());
 
-   return( direc.remove(getFilename()));
+   return( direc.remove(getLocalFilename()));
 }
 
 bool PackagerItem::createFolder( void )

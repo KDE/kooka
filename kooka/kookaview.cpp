@@ -9,6 +9,10 @@
 #include <qlayout.h>
 #include <qsplitter.h>
 #include <qstrlist.h>
+#include <qpaintdevice.h>
+#include <qpaintdevicemetrics.h>
+
+
 
 #include <kurl.h>
 #include <krun.h>
@@ -151,9 +155,7 @@ KookaView::KookaView(QWidget *parent)
    /* Image canvas should show a new document */
    connect( packager, SIGNAL( showImage( QImage* )),
             img_canvas, SLOT( newImage( QImage*)));
-   /* Packager deletes the image */
-   connect( packager, SIGNAL( deleteImage( QImage* )),
-            img_canvas, SLOT( deleteView( QImage*)));
+
    /* Packager unloads the image */
    connect( packager, SIGNAL( unloadImage( QImage* )),
             img_canvas, SLOT( deleteView( QImage*)));
@@ -203,6 +205,7 @@ KookaView::KookaView(QWidget *parent)
 KookaView::~KookaView()
 {
    saveProperties( KGlobal::config () );
+   kdDebug(28000)<< "Finished saving config data" << endl;
    // if( preview_img ) delete( preview_img );
 
 }
@@ -227,11 +230,35 @@ void KookaView::loadStartupImage( void )
 }
 
 
-void KookaView::print(QPainter *p, int height, int width)
+void KookaView::print(QPainter *p, KPrinter* printer, QPaintDeviceMetrics& metrics )
 {
-   (void) p;
-   (void) height;
-   (void) width;
+
+   
+   int pheight = metrics.height();
+   int pwidth  = metrics.width();
+   (void) printer;
+
+   const QImage *img = img_canvas->rootImage();
+
+   if( img )
+   {
+      int w = img->width();
+      int h = img->height();
+
+      kdDebug(28000) << "printing image size " << w << " x " << h << endl;
+      if( pwidth < w && pheight < h )
+      {
+         // Phys. image is larger than print area.
+
+         p->drawImage( QPoint( 50,50 ), img->smoothScale( pwidth-100, pheight-100 ));
+      }
+      else
+      {
+         // Phys. image fits on the page
+         p->drawImage( QPoint( int((pwidth-w)/2), int((pheight-h)/2) ), *img );
+
+      }
+   }
    // do the actual printing, here
    // p->drawText(etc..)
 }
@@ -437,6 +464,14 @@ void KookaView::slMirrorImage( MirrorType m )
       // img_canvas->newImage(  );
    }
 }
+
+void KookaView::slSaveScanParams( void )
+{
+   if( !sane ) return;
+
+   sane->slSaveScanConfigSet( "sysmtem-default", "default configuration" );
+}
+
 
 void KookaView::updateCurrImage( QImage& img )
 {

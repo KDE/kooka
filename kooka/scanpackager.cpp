@@ -203,7 +203,8 @@ void ScanPackager::slSelectionChanged( QListViewItem *newItem )
 	
    if( pi->isDir())
    {
-      kdDebug(28000) << "selectionChanged: Is a father" << endl;
+      kdDebug(28000) << "selectionChanged: Is a directory !" << endl;
+      emit( showImage( 0L ));
       pi->decorateFile();
       /* no action, because its a dir */
    }
@@ -502,6 +503,7 @@ void ScanPackager::slHandlePopup( int menu_id )
 
    /* need to set a new item as actual item ? */
    if( setnew ) {
+      emit( unloadImage( 0L ));
       setCurrentItem( newitem );
       setSelected( newitem, true );
       slSelectionChanged( newitem );
