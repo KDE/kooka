@@ -480,17 +480,26 @@ KSANE_Type KScanOption::type( void ) const
 	 case SANE_TYPE_INT:
 	 case SANE_TYPE_FIXED:
 	    if( desc->constraint_type == SANE_CONSTRAINT_RANGE )
+	    {
 	       /* FIXME ! Dies scheint nicht wirklich so zu sein */
 	       if( desc->size == sizeof( SANE_Word ))
 		  ret = RANGE;
 	       else
 		  ret = GAMMA_TABLE;
+	    }
 	    else if( desc->constraint_type == SANE_CONSTRAINT_NONE )
+	    {
 	       ret = SINGLE_VAL;
+	    }
 	    else if( desc->constraint_type == SANE_CONSTRAINT_WORD_LIST )
-	       ret = GAMMA_TABLE;
+	    {
+		ret = STR_LIST;
+		// ret = GAMMA_TABLE;
+	    }
 	    else
+	    {
 	       ret = INVALID_TYPE;
+	    }
 	    break;
 	 case SANE_TYPE_STRING:
 	    if( desc->constraint_type == SANE_CONSTRAINT_STRING_LIST )
@@ -642,79 +651,115 @@ bool KScanOption::set( double val )
 
 bool KScanOption::set( int *val, int size )
 {
-  if( ! desc || ! val ) return( false );
-  bool ret = false;
+    if( ! desc || ! val ) return( false );
+    bool   ret    = false;
+    int    offset = 0;
 
-  int word_size = desc->size / sizeof( SANE_Word );
-  QArray<SANE_Word> qa( word_size );
-
-  switch( desc->type )
+    int word_size = desc->size / sizeof( SANE_Word ); /* add 1 in case offset is needed */
+    QArray<SANE_Word> qa( 1+word_size );
+#if 0
+    if( desc->constraint_type == SANE_CONSTRAINT_WORD_LIST )
     {
-    case SANE_TYPE_INT:
-      for( int i = 0; i < word_size; i++ ){
-	if( i < size )
-	  qa[i] = (SANE_Word) *(val++);
-	else
-	  qa[i] = (SANE_Word) *val;
-      }
-      break;
+	/* That means that the first entry must contain the size */
+	kdDebug(29000) << "Size: " << size << ", word_size: " << word_size << ", descr-size: "<< desc->size << endl;
+	qa[0] = (SANE_Word) 1+size;
+	kdDebug(29000) << "set length field to " << qa[0] <<endl;
+	offset = 1;
+    }
+#endif
 
-      // Type fixed: Fill the whole buffer with that value
-    case SANE_TYPE_FIXED:
-      for( int i = 0; i < word_size; i++ ){
-	if( i < size )
-	  qa[i] = SANE_FIX((double)*(val++));
-	else
-	  qa[i] = SANE_FIX((double) *val );
-      }
-      break;
-    default:
-      kdDebug(29000) << "Cant set " << name << " with type int*" << endl;
+    switch( desc->type )
+    {
+	case SANE_TYPE_INT:
+	    for( int i = 0; i < word_size; i++ )
+	    {
+		if( i < size )
+		    qa[offset+i] = (SANE_Word) *(val++);
+		else
+		    qa[offset+i] = (SANE_Word) *val;
+	    }
+	    ret = true;
+	    break;
+
+	    // Type fixed: Fill the whole buffer with that value
+	case SANE_TYPE_FIXED:
+	    for( int i = 0; i < word_size; i++ )
+	    {
+		if( i < size )
+		    qa[offset+i] = SANE_FIX((double)*(val++));
+		else
+		    qa[offset+i] = SANE_FIX((double) *val );
+	    }
+	    ret = true;
+	    break;
+	default:
+	    kdDebug(29000) << "Cant set " << name << " with type int*" << endl;
 	
     }
 
-  if( ret && buffer ) {
-    memcpy( buffer, qa.data(), desc->size );
-    ret = true;
-  }
+    if( ret && buffer ) {
+	int copybyte = desc->size;
+	
+	if( offset )
+	    copybyte += sizeof( SANE_Word );
 
-  if( ret )
+	kdDebug(29000) << "Copying " << copybyte << " byte to options buffer" << endl;
+	
+	memcpy( buffer, qa.data(), copybyte );
+    }
+
+    if( ret )
     {
-      buffer_untouched = false;
+	buffer_untouched = false;
 #ifdef APPLY_IN_SITU
-      applyVal();
+	applyVal();
 #endif
 #if 0
-      emit( optionChanged( this ));
+	emit( optionChanged( this ));
 #endif
     }
 
-  return( ret );
+    return( ret );
 }
 
 bool KScanOption::set( const QCString& c_string )
 {
    bool ret = false;
-
+   int  val = 0;
+   
    if( ! desc ) return( false );
 
    /* On String-type the buffer gets malloced in Constructor */
-   if( desc->type == SANE_TYPE_STRING )
+   switch( desc->type )
    {
-      kdDebug(29000) << "Setting " << c_string << " as String" << endl;
+       case SANE_TYPE_STRING:
+	   kdDebug(29000) << "Setting " << c_string << " as String" << endl;
    	
-      if( buffer_size >= c_string.length() )
-      {
-	 memset( buffer, 0, buffer_size );
-	 qstrncpy( (char*) buffer, (const char*) c_string, buffer_size );
-	 ret = true;
-      }
-      else
-      {
-	 kdDebug(29000) << "ERROR: Buffer for String " << c_string << " too small: " << buffer_size << "  < " << c_string.length() << endl;
-      }
-   } else {
-      kdDebug(29000) << "Cant set " << name << " with type string" << endl;
+	   if( buffer_size >= c_string.length() )
+	   {
+	       memset( buffer, 0, buffer_size );
+	       qstrncpy( (char*) buffer, (const char*) c_string, buffer_size );
+	       ret = true;
+	   }
+	   else
+	   {
+	       kdDebug(29000) << "ERROR: Buffer for String " << c_string << " too small: " << buffer_size << "  < " << c_string.length() << endl;
+	   }
+	   break;
+       case SANE_TYPE_INT:
+       case SANE_TYPE_FIXED:
+	   kdDebug(29000) << "Type is INT or FIXED, try to set value <" << c_string << ">" << endl;
+	   val = c_string.toInt( &ret );
+	   if( ret ) 
+	       set( &val, 1 );
+	   else
+	       kdDebug(29000) << "Conversion of string value failed!" << endl;
+	   
+	   break;
+       default:
+	   kdDebug(29000) << "Type of " << name << " is " << desc->type << endl;
+	   kdDebug(29000) << "Cant set " << name << " with type string" << endl;
+	   break;
    }
 
    if( ret )
@@ -727,7 +772,7 @@ bool KScanOption::set( const QCString& c_string )
       emit( optionChanged( this ));
 #endif
    }
-
+   kdDebug(29000) << "Returning " << ret << endl;
    return( ret );
 }
 
