@@ -248,7 +248,8 @@ private:
     KookaImage      *m_img;
     QString         m_ocrResultText;
     QString         m_ocrResultImage;
-    QString         m_tmpFileName;
+    QString         m_tmpOrfName;
+
 
     OCREngines      m_ocrEngine;
     QPixmap         m_resPixmap;
