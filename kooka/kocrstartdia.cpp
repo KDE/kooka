@@ -58,7 +58,7 @@ KOCRStartDialog::KOCRStartDialog( QWidget *parent )
    QLabel *label = new QLabel( i18n( "<B>Starting Optical Character Recognition</B><P>"
 				     "Kooka uses <I>gocr</I> for optical character recognition, "
 				     "an Open Source Project<P>"
-				     "Author of gocr is <B>Jörg Schulenburg</B><BR>"
+				     "Author of gocr is <B>Joerg Schulenburg</B><BR>"
 				     "For more information about gocr see "
 				     "<A HREF=http://jocr.sourceforge.net>"
 				     "http://jocr.sourceforge.net</A>"),
