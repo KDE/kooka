@@ -39,7 +39,7 @@
 #include "devselector.h"
 
 
-DeviceSelector::DeviceSelector( QWidget *parent, const QStrList& devList,
+DeviceSelector::DeviceSelector( QWidget *parent, QStrList& devList,
 				const QStringList& hrdevList )
     : KDialogBase( parent,  "DeviceSel", true, i18n("Welcome to Kooka"),
 		   Ok|Cancel, Ok, true )
@@ -68,6 +68,18 @@ DeviceSelector::DeviceSelector( QWidget *parent, const QStrList& devList,
 				 page, "CBOX_SKIP_ON_START" );
    topLayout->addWidget(cbSkipDialog);
 
+   QCString configDev = getDeviceFromConfig();
+
+   configDevValid = false;
+   for( QCString l=devList.first(); l != 0 && ! configDevValid; l = devList.next())
+   {
+      if( configDev == l )
+      {
+	 kdDebug(29000) << "scanner found in list of available scanners" << endl;
+	 configDevValid = true;
+      }
+   }
+
 }
 
 QCString DeviceSelector::getDeviceFromConfig( void ) const
@@ -78,7 +90,7 @@ QCString DeviceSelector::getDeviceFromConfig( void ) const
    
    QCString result;
    
-   if( skipDialog )
+   if( skipDialog && configDevValid )
    {
       /* in this case, the user has checked 'Do not ask me again' and does not
        * want to be bothered any more.

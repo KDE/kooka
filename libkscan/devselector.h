@@ -60,7 +60,7 @@ public:
     *  @param QStrList backends - a list of device names retrieved from the scan device
     *  @param QStrList scannerNames - a list of corresponding human readable sanner names.
     */
-   DeviceSelector( QWidget *parent, const QStrList&, const QStringList& );
+   DeviceSelector( QWidget *parent, QStrList&, const QStringList& );
    ~DeviceSelector();
 
    /**
@@ -93,9 +93,11 @@ private:
    QButtonGroup *selectBox;
    mutable QStrList devices;
    QCheckBox   *cbSkipDialog;
-
+   bool        configDevValid;
+   
    class DeviceSelectorPrivate;
    DeviceSelectorPrivate *d;
+   
 };
 
 #endif
