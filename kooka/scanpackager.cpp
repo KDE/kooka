@@ -789,7 +789,8 @@ void ScanPackager::slAddImage( QImage *img )
    kdDebug(28000) << "Updating directory with " << strdir << endl;
    
    if( kookaBranch ) kookaBranch->updateDirectory( KURL(strdir) );
-
+   slotSetNextUrlToSelect( lurl );
+   
    QString s;
    /* Count amount of children of the father */
    int childcount = curr->childCount();
