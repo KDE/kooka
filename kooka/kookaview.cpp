@@ -26,8 +26,9 @@
 #include "kookapref.h"
 #include "imgnamecombo.h"
 #include "thumbview.h"
+#if 0
 #include "paramsetdialogs.h"
-
+#endif
 #include <qlabel.h>
 #include <qpainter.h>
 #include <qlayout.h>
