@@ -65,7 +65,7 @@ ImgPrintDialog::ImgPrintDialog( KookaImage *img, QWidget *parent, const char* na
 
     m_scaleRadios->insert( m_rbScreen, ID_SCREEN );
 
-    m_rbOrigSize = new QRadioButton( i18n("Original size (calc. from scan resolution)"),
+    m_rbOrigSize = new QRadioButton( i18n("Original size (calculate from scan resolution)"),
                                      m_scaleRadios );
     m_scaleRadios->insert( m_rbOrigSize, ID_ORIG );
 
@@ -91,14 +91,14 @@ ImgPrintDialog::ImgPrintDialog( KookaImage *img, QWidget *parent, const char* na
     m_sizeH->setSuffix( i18n(" mm"));
     connect( m_sizeH, SIGNAL(valueChanged(int)), SLOT(slCustomHeightChanged(int)));
 
-    m_ratio = new QCheckBox( i18n("Maintain aspect ration"), group, "cbAspectRatio" );
+    m_ratio = new QCheckBox( i18n("Maintain aspect ratio"), group, "cbAspectRatio" );
     m_ratio->setChecked(true);
 
     QVGroupBox *group1 = new QVGroupBox( i18n("Resolutions"), this );
     hbox->addWidget( group1 );
 
     /* Postscript generation resolution  */
-    m_psDraft = new QCheckBox( i18n("Generate low resolution Postscript (fast draft print)"),
+    m_psDraft = new QCheckBox( i18n("Generate low resolution PostScript (fast draft print)"),
 				      group1, "cbPostScriptRes" );
     m_psDraft->setChecked( false );
 
