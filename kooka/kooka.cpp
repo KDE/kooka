@@ -129,8 +129,8 @@ void Kooka::setupActions()
     KStdAction::print(this, SLOT(filePrint()), actionCollection());
     KStdAction::quit(this , SLOT(close()), actionCollection());
 
-    createStandardStatusBarAction();
-    setStandardToolBarMenuEnabled(true);
+    // createStandardStatusBarAction();
+    // setStandardToolBarMenuEnabled(true);
 
     m_scanParamsAction = new KToggleAction(i18n("Show Scan &Parameters"),
                                            KShortcut(), this,
@@ -238,6 +238,11 @@ void Kooka::setupActions()
     act = new KAction(i18n("&Save Image"), "filesave", 0,
 		      m_view->gallery(), SLOT( slotExportFile() ),
 		       actionCollection(), "saveImage" );
+    m_view->connectGalleryAction( act );
+
+    act = new KAction(i18n("&Import Image"), "inline_image", 0,
+		      m_view->gallery(), SLOT( slotImportFile() ),
+		       actionCollection(), "importImage" );
     m_view->connectGalleryAction( act );
 
     act = new KAction(i18n("&Delete Image"), "edittrash", 0,
@@ -374,7 +379,7 @@ void Kooka::filePrint()
     // the Print shortcut is pressed (usually CTRL+P) or the Print toolbar
     // button is clicked
     m_view->print();
-    
+
 }
 
 void Kooka::optionsShowScanParams()
