@@ -31,6 +31,8 @@
 typedef enum{ FILE_OP_ERR, FILE_OP_OK, FILE_OP_NO_MEM,
               FILE_OP_NO_TARGET, FILE_OP_PERM } FileOpStat;
 
+typedef enum{ Dummy, NameSearch } SearchType;
+
 class PackagerItem : public QListViewItem  {
    
 public: 
