@@ -44,11 +44,11 @@
 #include "version.h"
 
 static const char description[] =
-          "<B>Kooka</B> is a KDE application which provides access to scanner hardware "
-	      "using the SANE library.<P>"
-	      "Kooka helps you scan, save your image in the correct "
-	      "image format and perform <B>O</B>ptical <B>C</B>haracter <B>R</B>ecognition on it,"
-"using <I>gocr</I>, Joerg Schulenburg's and friends' Open Source ocr program.<P>";
+          "Kooka is a KDE application which provides access to scanner hardware\n"
+	      "using the SANE library.\n"
+	      "Kooka helps you scan, save your image in the correct image format\n"
+	      "and perform Optical Character Recognition on it, using gocr, Joerg\n"
+	      "Schulenburg's and friends' Open Source ocr program.";
 
 static const char license[] =
 "This program is distributed under the terms of the GPL v2 as publishec by\n"
@@ -64,8 +64,8 @@ static const char license[] =
 
 static KCmdLineOptions options[] =
 {
-  { "d ", I18N_NOOP("the SANE compatible device specification (e.g. umax:/dev/sg0)"), "" },
-  { "g", I18N_NOOP("gallery mode - do not connect to scanner"), "" },
+  { "d ", I18N_NOOP("The SANE compatible device specification (e.g. umax:/dev/sg0)"), "" },
+  { "g", I18N_NOOP("Gallery mode - do not connect to scanner"), "" },
   KCmdLineLastOption
 };
 

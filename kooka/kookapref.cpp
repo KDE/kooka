@@ -350,7 +350,7 @@ void KookaPreferences::setupStartupPage()
 void KookaPreferences::setupSaveFormatPage( )
 {
    konf->setGroup( OP_FILE_GROUP );
-   QFrame *page = addPage( i18n("Image Saving"), i18n("Configure the Image Save Assistant" ),
+   QFrame *page = addPage( i18n("Image Saving"), i18n("Configure Image Save Assistant" ),
 			    BarIcon("hdd_unmount", KIcon::SizeMedium ) );
    QVBoxLayout *top = new QVBoxLayout( page, 0, spacingHint() );
 
@@ -368,7 +368,7 @@ void KookaPreferences::setupSaveFormatPage( )
    top->addWidget( cbFilenameAsk );
 
 
-   
+
    top->addStretch(10);
 }
 
@@ -494,7 +494,7 @@ void KookaPreferences::slotApply( void )
 
     if( m_ocradBut->isChecked() )
         eng = "ocrad";
-    
+
     if( m_kadmosBut && m_kadmosBut->isChecked() )
         eng = "kadmos";
 
