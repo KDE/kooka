@@ -47,19 +47,24 @@ KADMOS needs classifier files for the ocr process which come with
 the KADMOS developers pack. The classifier files need to be installed
 in the KDE application data directory for Kooka in a subdirectory named
 classifiers. If your KDE installation goes to /opt/kde3/, this is for
-example /opt/kde3/share/apps/kooka/classifiers. 
+example /opt/kde3/share/apps/kooka/classifiers. Kooka picks the 
+available classifiers up automatically.
 
-In this version Kooka is not yet able to scan the available classifiers.
-The following classifier files need to exist in the classifier directory:
+The classifiers follow a naming scheme that contains the kind of
+font and the country the classifier applies to.  
+
+Fontkinds are:
+ttf  -> machine print font
+hand -> hand writing.
+norm -> ocr norm font
+
+This is followed by a two character country specification like de
+for germany.
+
+For example this classifier might exist:
 
 ttfus.rec      US machineprint classifiers
-ttfeu.rec      European languages classifiers
-ttfee.rec      East European languages classifiers
-
 handus.rec     US handwriting classifiers
-handeu.rec     European languages handwriting classifiers
-handee.rec     East European languages handwriting
-
 norm.rec       Special OCR character set, no charset difference
 
 
