@@ -872,6 +872,7 @@ KScanStat KScanDevice::createNewImage( SANE_Parameters *p )
       img->setNumColors( 2 );
       img->setColor( 0, qRgb( 0,0,0));
       img->setColor( 1, qRgb( 255,255,255) );
+      img->fill( 0xFFFF );
     }
   }	
   else if( p->depth == 8 )
@@ -887,6 +888,8 @@ KScanStat KScanDevice::createNewImage( SANE_Parameters *p )
 	
 	for(int i = 0; i<256; i++)
 	  img->setColor(i, qRgb(i,i,i));
+	img->fill( 0xFFFF ); 
+
       }
     }
     else
@@ -894,7 +897,11 @@ KScanStat KScanDevice::createNewImage( SANE_Parameters *p )
       /* true color image */
       img =  new QImage( p->pixels_per_line, p->lines, 32 );
       if( img )
+      {
 	img->setAlphaBuffer( false );
+	img->fill( 0xFFFF );
+      }
+
     }
   }
   else
@@ -924,12 +931,15 @@ KScanStat KScanDevice::acquire_data( bool isPreview )
 
       if( sane_stat == SANE_STATUS_GOOD )
       {
+	 kdDebug(29000) << "=== non blocking IO supported ===" << endl;
 	 kdDebug(29000) << "format : " << sane_scan_param.format << endl;
 	 kdDebug(29000) << "last_frame : " << sane_scan_param.last_frame << endl;
 	 kdDebug(29000) << "lines : " << sane_scan_param.lines << endl;
 	 kdDebug(29000) << "depth : " << sane_scan_param.depth << endl;
 	 kdDebug(29000) << "pixels_per_line : " << sane_scan_param.pixels_per_line << endl;
 	 kdDebug(29000) << "bytes_per_line : " << sane_scan_param.bytes_per_line << endl;
+	 if( sane_scan_param.depth == 1 )
+	    kdDebug(29000) << "padding value: " << sane_scan_param.pixels_per_line % 8 << endl;
       }
       else
       {
@@ -1005,7 +1015,7 @@ KScanStat KScanDevice::acquire_data( bool isPreview )
 	    if( scanStatus != SSTAT_SILENT )
 	    {
 	       sane_stat = sane_get_parameters( scanner_handle, &sane_scan_param );
-
+	       kdDebug(29000) << "=== Non blocking does not work ===" << endl;
 	       kdDebug(29000) << "format : " << sane_scan_param.format << endl;
 	       kdDebug(29000) << "last_frame : " << sane_scan_param.last_frame << endl;
 	       kdDebug(29000) << "lines : " << sane_scan_param.lines << endl;
@@ -1148,7 +1158,7 @@ void KScanDevice::doProcessABlock( void )
      if( goOn )
      {
 	overall_bytes += bytes_written;
-	// qDebug( "Bytes read: %d, bytes written: %d", bytes_written, rest_bytes );
+	// kdDebug(29000) <<  "Bytes read: " << bytes_written << ", bytes written: " << rest_bytes << endl;
 
 	rptr = data; // + rest_bytes;
 
@@ -1196,7 +1206,6 @@ void KScanDevice::doProcessABlock( void )
 		    eight_pix = *rptr++;
 		    for( i = 0; i < 8; i++ )
 		    {
-		       if( pixel_x  >= sane_scan_param.pixels_per_line ) { pixel_x = 0; pixel_y++; }
 		       if( pixel_y < sane_scan_param.lines )
 		       {
 			  chan = (eight_pix & 0x80)> 0 ? 0:1;
@@ -1204,6 +1213,11 @@ void KScanDevice::doProcessABlock( void )
 			    	//qDebug( "Setting on %d, %d: %d", pixel_x, pixel_y, chan );
 			  img->setPixel( pixel_x, pixel_y, chan );
 			  pixel_x++;
+			  if( pixel_x  >= sane_scan_param.pixels_per_line )
+			  {
+			     pixel_x = 0; pixel_y++; break;
+			  }
+			  
 		       }
 		    }
 		 }
