@@ -24,7 +24,7 @@
 #include "kscanoption.h"
 #include "kscanoptset.h"
 
-s
+
 KScanOptSet::KScanOptSet( const QString setName )
 {
   
