@@ -297,18 +297,20 @@ void ScanPackager::slFileRename( QListViewItem* it, const QString& newStr, int )
    KURL urlFrom = item->url();
    KURL urlTo( urlFrom );
 
+   /* clean filename and apply new name */
+   urlTo.setFileName("");
+   urlTo.setFileName(newStr);
+
    if( urlFrom == urlTo )
    {
       kdDebug(28000) << "Renaming to same url does not make sense!" << endl;
       return;
    }
+
    /* clear selection, because the renamed image comes in through
     * kdirlister again
     */
    slotUnloadItem( item );
-
-   urlTo.setFileName("");
-   urlTo.setFileName(newStr);
 
    kdDebug(28000) << "Renaming to " << urlTo.prettyURL() << endl;
    
