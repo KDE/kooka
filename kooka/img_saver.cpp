@@ -526,7 +526,7 @@ ImgSaveStat ImgSaver::save( QImage *image, QString filename,
       // remember the last processed file - only the filename - no path
       QFileInfo fi( filename );
 
-      if( !fi.isWritable() )
+      if( fi.exists() && !fi.isWritable() )
       {
 	 debug( "Cant write to file <%s>, cant save !", (const char*) filename );
 	 result = false;
