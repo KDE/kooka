@@ -49,11 +49,11 @@ MassScanDialog::MassScanDialog( QWidget *parent )
    QVBoxLayout *l_main = new QVBoxLayout( f1, f1->frameWidth()+3, 3 );
  	bigdad->addWidget( f1, 6 );
  	
-   scanopts = "Scanning <B>%s</B> with <B>%d</B> dpi";
+   scanopts = i18n("Scanning <B>%s</B> with <B>%d</B> dpi");
  	l_scanopts = new QLabel( scanopts, f1 );
  	l_main->addWidget( l_scanopts );
- 	
-   tofolder = "Storing new images in folder <B>%s</B>";
+
+   tofolder = i18n("Storing new images in folder <B>%s</B>");
  	l_tofolder = new QLabel( tofolder, f1 );
  	l_main->addWidget( l_tofolder );
  	
@@ -67,7 +67,7 @@ MassScanDialog::MassScanDialog( QWidget *parent )
 
  	QHBoxLayout *l_scanp = new QHBoxLayout( );
  	l_pro->addLayout( l_scanp, 5 );
-   progress = "Scanning page %d";
+   progress = i18n("Scanning page %1");
    l_progress = new QLabel( progress, f2 );
    l_scanp->addWidget( l_progress, 3 );
  	l_scanp->addStretch( 1 );

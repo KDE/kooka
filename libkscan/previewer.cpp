@@ -58,7 +58,7 @@ Previewer::Previewer(QWidget *parent, const char *name )
    left->addWidget( new QLabel( i18n("<B>Preview</B>"), this ), 1);
 
    pre_format_combo = new QComboBox( this, "PREVIEWFORMATCOMBO" );
-   pre_format_combo->insertItem( i18n( "custom" ), ID_CUSTOM);
+   pre_format_combo->insertItem( i18n( "Custom" ), ID_CUSTOM);
    pre_format_combo->insertItem( i18n( "DIN A4" ), ID_A4);
    pre_format_combo->insertItem( i18n( "DIN A5" ), ID_A5);
    pre_format_combo->insertItem( i18n( "DIN A6" ), ID_A6);

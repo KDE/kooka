@@ -27,3 +27,6 @@ METASOURCES = AUTO
 
 SUBDIRS = pics
 
+messages:
+	$(XGETTEXT) *.cpp -o $(podir)/libkscan.pot
+

@@ -108,7 +108,7 @@ ImgScaleDialog::ImgScaleDialog( QWidget *parent, int curr_sel,
    }
    
    // Custom Scaler at the bottom
-   QRadioButton *rbCust = new QRadioButton (i18n ("Custom Scalefactor:"),
+   QRadioButton *rbCust = new QRadioButton (i18n ("Custom Scale Factor:"),
 					    radios);
    if( ! one_is_selected )
       rbCust->setChecked( true );

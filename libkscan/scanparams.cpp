@@ -298,7 +298,7 @@ void ScanParams::scannerParams( void ) // QVBoxLayout *top )
 	 connect( so, SIGNAL(guiChange(KScanOption*)),
 	       this, SLOT(slReloadAllGui( KScanOption* )));
 
-	 pb_edit_gtable = new QPushButton( i18n("edit..."), hb1 );
+	 pb_edit_gtable = new QPushButton( i18n("Edit..."), hb1 );
 	 CHECK_PTR(pb_edit_gtable);
 	 pb_edit_gtable->setEnabled( isOn );
 	
