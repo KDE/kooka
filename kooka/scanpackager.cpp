@@ -52,7 +52,7 @@
 #include <kurldrag.h>
 #include <kpopupmenu.h>
 #include <kaction.h>
-#include <kinputDialog.h>
+#include <kinputdialog.h>
 #include <kiconloader.h>
 #include <kfiledialog.h>
 #include <kurl.h>
