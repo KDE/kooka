@@ -72,7 +72,7 @@ public:
   ~KScanOption();
 
   bool initialised( void ){ return( ! buffer_untouched );};
-  bool valid( void );
+  bool valid( void ) const;
   bool autoSetable( void );
   bool commonOption( void );
   bool active( void );
@@ -87,9 +87,9 @@ public:
   bool set( KGammaTable  *gt );
   bool set( const char* );
 	
-  bool get( int* );
-  bool get( KGammaTable* );
-  const QString get( void );
+  bool get( int* ) const;
+  bool get( KGammaTable* ) const;
+  const QString get( void ) const;
 
   QWidget *createWidget( QWidget *parent, const char *w_desc=0,
 			 const char *tooltip=0  );
@@ -98,12 +98,12 @@ public:
   const KScanOption& operator= (const KScanOption& so );
 
   // Possible Values
-  QStrList   getList();
-  bool       getRange( double*, double*, double* );
+  QStrList   getList() const;
+  bool       getRange( double*, double*, double* ) const;
 
-  QString    getName() { return( name ); }
-  void *     getBuffer(){ return( buffer ); }
-  QWidget   *widget( ) { return( internal_widget ); }
+  QString    getName() const { return( name ); }
+  void *     getBuffer() const { return( buffer ); }
+  QWidget   *widget( ) const { return( internal_widget ); }
   /**
    *  returns the type of the selected option.
    *  This might be SINGLE_VAL, VAL_LIST, STR_LIST, GAMMA_TABLE,
@@ -167,8 +167,9 @@ protected slots:
   void      guiChange( KScanOption* );
 
 private:
-  void       initOption( const char *new_name );
-
+   bool       applyVal( void );
+  bool       initOption( const char *new_name );
+  void       *allocBuffer( long );
 
   QWidget    *entryField ( QWidget *parent, const char *text );
   QWidget    *KSaneSlider( QWidget *parent, const char *text );
