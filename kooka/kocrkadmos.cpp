@@ -59,58 +59,54 @@ KadmosDialog::KadmosDialog( QWidget *parent )
    m_classifierTranslate["numplus.rec"]= i18n("Alphanumeric characters");
 }
 
+QString KadmosDialog::ocrEngineLogo() const
+{
+    return "kadmoslogo.png";
+}
+
+QString KadmosDialog::ocrEngineName() const
+{
+    return i18n("KADMOS OCR Engine");
+}
+
+QString KadmosDialog::ocrEngineDesc() const
+{
+    return i18n("<B>Starting Optical Character Recognition</B><P>"
+                "Kooka uses <I>the KADMOS OCR engine</I>, a "
+                "commercial engine for optical character recognition.<P>"
+                "Kadmos is a product of <B>re Recognition AG</B><BR>"
+                "For more information about Kadmos OCR see "
+                "<A HREF=http://www.rerecognition.com>"
+                "http://www.rerecognition.com</A>");
+}
+
 void KadmosDialog::setupGui()
 {
-   QVBox *page = addVBoxPage( i18n("OCR") );
 
-   setupPreprocessing( addVBoxPage(   i18n("Preprocessing")));
-   setupSegmentation( addVBoxPage(   i18n("Segmentation")));
-   setupClassification( addVBoxPage( i18n("Classification")));
+    KOCRBase::setupGui();
+    setupPreprocessing( addVBoxPage(   i18n("Preprocessing")));
+    setupSegmentation( addVBoxPage(   i18n("Segmentation")));
+    setupClassification( addVBoxPage( i18n("Classification")));
 
-   KConfig *conf = KGlobal::config ();
-   conf->setGroup( CFG_GROUP_KADMOS );
+    /* continue page setup on the first page */
+    QVBox *page = ocrPage();
 
-   // Caption - Label and image
-   QHBox *hb_cap = new QHBox( page );
-   hb_cap->setSpacing( KDialog::spacingHint());
+    // Horizontal line
+    (void) new KSeparator( KSeparator::HLine, page);
 
-   // Find the kadmos logo and display if available
-   KStandardDirs stdDir;
-   QString kadmosLogo = stdDir.findResource( "data", "kooka/pics/kadmoslogo.png" );
+    KConfig *conf = KGlobal::config ();
+    conf->setGroup( CFG_GROUP_KADMOS );
 
-   kdDebug(28000)<< "Reading kadmos logo " << kadmosLogo << endl;
-   QPixmap pix;
-   if( pix.load( kadmosLogo ))
-   {
-       QLabel *imgLab = new QLabel( hb_cap );
-       imgLab->setPixmap( pix );
-   }
+    // Combo to select the classifiers
+    addClassifierCombo( page, conf );
 
-   QLabel *label = new QLabel( i18n( "<B>Starting Optical Character Recognition</B><P>"
-				     "Kooka uses <I>the kadmos OCR engine</I>, a "
-				     "commercial engine for optical character recognition.<P>"
-				     "Kadmos is a product of <B>re Recognition AG</B><BR>"
-				     "For more information about Kadmos OCR see "
-				     "<A HREF=http://www.rerecognition.com>"
-				     "http://www.rerecognition.com</A>"),
-				     hb_cap, "captionImage" );
-   Q_CHECK_PTR( label );
+    QButtonGroup *cbGroup = new QButtonGroup( 1, Qt::Horizontal, i18n("OCR Modifier"), page );
+    Q_CHECK_PTR(cbGroup);
 
+    m_cbNoise = new QCheckBox( i18n( "Enable Automatic Noise Reduction" ), cbGroup );
+    m_cbAutoscale = new QCheckBox( i18n( "Enable Automatic Scaling"), cbGroup );
 
-   // Horizontal line
-   // KSeparator* f1 = new KSeparator( KSeparator::HLine, page);
-   (void) new KSeparator( KSeparator::HLine, page);
-
-   // Combo to select the classifiers
-   addClassifierCombo( page, conf );
-
-   QButtonGroup *cbGroup = new QButtonGroup( 1, Qt::Horizontal, i18n("OCR Modifier"), page );
-   Q_CHECK_PTR(cbGroup);
-
-   m_cbNoise = new QCheckBox( i18n( "Enable Automatic Noise Reduction" ), cbGroup );
-   m_cbAutoscale = new QCheckBox( i18n( "Enable Automatic Scaling"), cbGroup );
-
-   // (void) new QWidget ( page );
+    // (void) new QWidget ( page );
 }
 
 /*
@@ -130,6 +126,7 @@ void KadmosDialog::addClassifierCombo( QWidget *addTo, KConfig *conf)
    {
        // TODO
        kdDebug(28000) << "Classifierpath not yet set !" << endl;
+
    }
 
    QDir dir( m_classifierPath );

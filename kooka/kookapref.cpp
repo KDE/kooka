@@ -36,6 +36,8 @@
 #include <devselector.h>
 #include "thumbview.h"
 #include "imageselectline.h"
+#include "kscanslider.h"
+#include <kmessagebox.h>
 
 KookaPreferences::KookaPreferences()
     : KDialogBase(IconList, i18n("Preferences"),
@@ -49,7 +51,119 @@ KookaPreferences::KookaPreferences()
     setupStartupPage();
     setupSaveFormatPage();
     setupThumbnailPage();
+    setupOCRPage();
 }
+
+void KookaPreferences::setupOCRPage()
+{
+    konf->setGroup( CFG_GROUP_OCR_DIA );
+
+    QFrame *page = addPage( i18n("OCR"), i18n("Optical Character Recognition" ),
+			    BarIcon("ocrImage", KIcon::SizeMedium ) );
+
+    QVBoxLayout *top = new QVBoxLayout( page, 0, spacingHint() );
+
+    /* Description-Label */
+    QVGroupBox *gp = new QVGroupBox( i18n("GOCR"), page );
+
+    // Entry-Field.
+    KScanEntry *m_entryOCRBin = new KScanEntry( gp, i18n( "Path to 'gocr' binary: " ));
+
+    QString res = konf->readPathEntry( CFG_GOCR_BINARY, "notFound" );
+    if( res == "notFound" )
+    {
+        res = tryFindGocr();
+
+        if( res == "" )
+        {
+            /* Still not found */
+            KMessageBox::sorry( this, i18n( "Could not find the gocr binary.\n"
+                                            "Please check your installation and/or install gocr or adjust teh path to gocr manually."),
+                                i18n("OCR Software not Found") );
+
+        }
+    }
+    m_entryOCRBin->slSetEntry( res );
+
+    connect( m_entryOCRBin, SIGNAL(valueChanged( const QCString& )),
+             this, SLOT( checkOCRBinaryShort( const QCString& )));
+    connect( m_entryOCRBin, SIGNAL(returnPressed( const QCString& )),
+             this, SLOT( checkOCRBinary( const QCString& )));
+
+    QToolTip::add( m_entryOCRBin,
+                   i18n( "Enter the path to gocr, the optical-character-recognition command line tool."));
+
+
+    top->addWidget( gp );
+
+}
+
+
+QCString KookaPreferences::tryFindGocr( void )
+{
+   QStrList locations;
+   QCString res = "";
+
+   locations.append( "/usr/bin/gocr" );
+   locations.append( "/bin/gocr" );
+   locations.append( "/usr/X11R6/bin/gocr" );
+   locations.append( "/usr/local/bin/gocr" );
+
+   for( QCString loc = locations.first(); loc != 0; loc=locations.next())
+   {
+      QFileInfo fi( loc );
+      if( fi.exists() && fi.isExecutable() && !fi.isDir())
+      {
+	 res = loc;
+	 break;
+      }
+   }
+
+   return( res );
+}
+
+
+void KookaPreferences::checkOCRBinary( const QCString& cmd )
+{
+   checkOCRBinIntern( cmd, true );
+   m_entryOCRBin->setFocus();
+}
+
+void KookaPreferences::checkOCRBinaryShort( const QCString& cmd )
+{
+   checkOCRBinIntern( cmd, false);
+}
+
+void KookaPreferences::checkOCRBinIntern( const QCString& cmd, bool show_msg )
+{
+   bool ret = true;
+
+   QFileInfo fi( cmd );
+
+   if( ! fi.exists() )
+   {
+      if( show_msg )
+      KMessageBox::sorry( this, i18n( "The path does not lead to the gocr-binary.\n"
+				      "Please check your installation and/or install gocr."),
+			  i18n("OCR Software not Found") );
+      ret = false;
+   }
+   else
+   {
+      /* File exists, check if not dir and executable */
+      if( fi.isDir() || (! fi.isExecutable()) )
+      {
+	 if( show_msg )
+	    KMessageBox::sorry( this, i18n( "gocr exists, but is not executable.\n"
+					    "Please check your installation and/or install gocr properly."),
+				i18n("OCR Software not Executable") );
+	 ret = false;
+      }
+   }
+
+   enableButton( User1, ret );
+}
+
 
 
 void KookaPreferences::setupStartupPage()

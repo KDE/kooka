@@ -35,41 +35,43 @@
 
 class KGOCRDialog: public KOCRBase
 {
-   Q_OBJECT
+    Q_OBJECT
 public:
-   KGOCRDialog( QWidget *);
-   ~KGOCRDialog();
+    KGOCRDialog( QWidget *);
+    ~KGOCRDialog();
 
-   QCString getOCRCmd( void ) const
-      { return( (entryOcrBinary->text()).latin1());}
+    QString getOCRCmd( void ) const
+        { return m_ocrCmd;}
 
-   int getGraylevel( void ) const
-      { return( sliderGrayLevel->value());}
-   int getDustsize( void ) const
-      { return( sliderDustSize->value());}
-   int getSpaceWidth( void ) const
-      { return( sliderSpace->value());}
+    int getGraylevel( void ) const
+        { return( sliderGrayLevel->value());}
+    int getDustsize( void ) const
+        { return( sliderDustSize->value());}
+    int getSpaceWidth( void ) const
+        { return( sliderSpace->value());}
 
-   void setupGui();
+    void setupGui();
+
+    QString ocrEngineName() const;
+    QString ocrEngineDesc() const;
+    QString ocrEngineLogo() const;
+
 public slots:
-   void checkOCRBinary( const QCString& );
-   void checkOCRBinaryShort( const QCString& );
-   void enableFields(bool);
+    void enableFields(bool);
     void introduceImage( KookaImage* );
 
 protected:
-   void writeConfig();
+    void writeConfig();
 
-private slots:
-   void checkOCRBinIntern( const QCString&, bool );
 
 private:
-   QCString tryFindGocr( void ) const;
 
-   KScanSlider *sliderGrayLevel;
-   KScanSlider *sliderDustSize;
-   KScanSlider *sliderSpace;
-   KScanEntry  *entryOcrBinary;
+
+    KScanSlider *sliderGrayLevel;
+    KScanSlider *sliderDustSize;
+    KScanSlider *sliderSpace;
+
+    QString      m_ocrCmd;
 };
 
 #endif

@@ -64,6 +64,7 @@
 #include <qobject.h>
 
 #include <kparts/componentfactory.h>
+#include <qimage.h>
 
 
 #define STARTUP_IMG_SELECTION   "SelectedImageOnStartup"
@@ -72,6 +73,7 @@
 
 KookaView::KookaView( KParts::DockMainWindow *parent, const QCString& deviceToUse)
    : QObject(),
+     m_ocrResultImg(0),
      ocrFabric(0),
      m_mainDock(0),
      m_dockScanParam(0),
@@ -185,6 +187,7 @@ KookaView::KookaView( KParts::DockMainWindow *parent, const QCString& deviceToUs
    preview_canvas = new Previewer( m_dockPreview );
    {
       preview_canvas->setMinimumSize( 100,100);
+      preview_canvas->slConnectScanner( sane );
 
       /* since the scan_params will be created in slSelectDevice, do the
        * connections later
@@ -203,7 +206,7 @@ KookaView::KookaView( KParts::DockMainWindow *parent, const QCString& deviceToUs
    // m_textEdit
    m_textEdit  = KParts::ComponentFactory::createPartInstanceFromQuery<KTextEditor::Document>
                  ("KTextEditor/Document", QString::null,
-                  0L /* m_dockOCRText */, 0L, this, 0L );
+                  m_dockOCRText, 0L, parent, 0L );
 
    m_view = m_textEdit->createView(m_dockOCRText, 0L);
 
@@ -565,14 +568,17 @@ void KookaView::startOCR( KookaImage *img )
 
           connect( ocrFabric, SIGNAL( newOCRResultText( const QString& )),
                    this, SLOT(slOCRResultText( const QString& )));
+          connect( ocrFabric, SIGNAL( newOCRResultPixmap( const QPixmap& )),
+                   this, SLOT(slOCRResultImage( const QPixmap& )));
 	  connect( ocrFabric, SIGNAL( clearOCRResultText()),
 		   this, SLOT(slClearOCRResult()));
+
       }
 
       Q_CHECK_PTR( ocrFabric );
       ocrFabric->slSetImage( img );
 
-      if( !ocrFabric->startExternOcrVisible(m_mainDock) )
+      if( !ocrFabric->startOCRVisible(m_mainDock) )
       {
 	 KMessageBox::sorry(0, i18n("Could not start OCR-Process.\n"
 				    "Probably there is already one running." ));
@@ -605,6 +611,21 @@ void KookaView::slOCRResultText( const QString& str)
 }
 
 
+void KookaView::slOCRResultImage( const QPixmap& pix )
+{
+    kdDebug(28000) << "Showing OCR Result Image" << endl;
+    if( ! img_canvas ) return;
+
+    if( m_ocrResultImg )
+    {
+        img_canvas->newImage(0L);
+        delete m_ocrResultImg;
+    }
+
+    m_ocrResultImg = new QImage();
+    *m_ocrResultImg = pix;
+    img_canvas->newImage( m_ocrResultImg );
+}
 
 void KookaView::slScanStart( )
 {
@@ -821,6 +842,12 @@ void KookaView::slShowAImage( KookaImage *img )
    if( img_canvas )
    {
       img_canvas->newImage( img );
+   }
+
+   /* tell ocr about */
+   if( ocrFabric )
+   {
+       ocrFabric->slSetImage( img );
    }
 }
 

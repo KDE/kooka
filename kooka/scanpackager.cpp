@@ -561,35 +561,38 @@ void ScanPackager::loadImageForItem( KFileTreeViewItem *item )
       }
       else
       {
-	 /* care for subimages, create items for them */
-	 kdDebug(28000) << "subImage-count: " << img->subImagesCount() << endl;
-	 if( img->subImagesCount() > 1 )
-	 {
-	    KIconLoader *loader = KGlobal::iconLoader();
-	    kdDebug(28000) << "SubImages existing!" << endl;
+          /* store the fileitem */
+          img->setFileItem( kfi );
 
-	    /* Start at the image with index 1, that makes  one less than are actually in the
-	     * image. But image 0 was already created above. */
-	    KFileTreeViewItem *prevItem=0;
-	    for( int i = 1; i < img->subImagesCount(); i++ )
-	    {
-	       kdDebug(28000) << "Creating subimage no " << i << endl;
-	       KFileItem *newKfi = new KFileItem( *kfi );
-	       KFileTreeViewItem *subImgItem = new KFileTreeViewItem( item, newKfi, item->branch());
+          /* care for subimages, create items for them */
+          kdDebug(28000) << "subImage-count: " << img->subImagesCount() << endl;
+          if( img->subImagesCount() > 1 )
+          {
+              KIconLoader *loader = KGlobal::iconLoader();
+              kdDebug(28000) << "SubImages existing!" << endl;
 
-	       if( prevItem )
-	       {
-		  subImgItem->moveItem( prevItem );
-	       }
-	       prevItem = subImgItem;
+              /* Start at the image with index 1, that makes  one less than are actually in the
+               * image. But image 0 was already created above. */
+              KFileTreeViewItem *prevItem=0;
+              for( int i = 1; i < img->subImagesCount(); i++ )
+              {
+                  kdDebug(28000) << "Creating subimage no " << i << endl;
+                  KFileItem *newKfi = new KFileItem( *kfi );
+                  KFileTreeViewItem *subImgItem = new KFileTreeViewItem( item, newKfi, item->branch());
 
-	       subImgItem->setPixmap( 0, loader->loadIcon( "editcopy", KIcon::Small ));
-	       subImgItem->setText( 0, i18n("Sub-image %1").arg( i ) );
-	       KookaImage  *subImgImg = new KookaImage( i, img );
+                  if( prevItem )
+                  {
+                      subImgItem->moveItem( prevItem );
+                  }
+                  prevItem = subImgItem;
 
-	       newKfi->setExtraData( (void*) this, (void*) subImgImg );
-	    }
-	 }
+                  subImgItem->setPixmap( 0, loader->loadIcon( "editcopy", KIcon::Small ));
+                  subImgItem->setText( 0, i18n("Sub-image %1").arg( i ) );
+                  KookaImage  *subImgImg = new KookaImage( i, img );
+                  subImgImg->setFileItem( newKfi );
+                  newKfi->setExtraData( (void*) this, (void*) subImgImg );
+              }
+          }
       }
    }
 
@@ -767,7 +770,7 @@ void ScanPackager::slotCurrentImageChanged( QImage *img )
 /* This slot takes a new scanned Picture and saves it.
  * It urgently needs to make a deep copy of the image !
  */
-void ScanPackager::slAddImage( QImage *img, KookaImageMeta* meta )
+void ScanPackager::slAddImage( QImage *img, KookaImageMeta* )
 {
    ImgSaveStat is_stat = ISS_OK;
    /* Save the image with the help of the ImgSaver */

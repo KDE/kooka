@@ -1,9 +1,9 @@
 /***************************************************************************
                           kookapref.h  - Preferences
-                             -------------------                                         
-    begin                : Sun Jan 16 2000                                           
-    copyright            : (C) 2000 by Klaas Freitag                         
-    email                : freitag@suse.de            
+                             -------------------
+    begin                : Sun Jan 16 2000
+    copyright            : (C) 2000 by Klaas Freitag
+    email                : freitag@suse.de
  ***************************************************************************/
 
 /***************************************************************************
@@ -11,7 +11,7 @@
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
  *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   * 
+ *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
 #ifndef KOOKAPREF_H
@@ -27,41 +27,54 @@ class QLabel;
 class KIntNumInput;
 class KColorButton;
 class ImageSelectLine;
+class KScanEntry;
 
 #define STARTUP_READ_IMAGE "ReadImageOnStart"
-
+#define CFG_GROUP_OCR_DIA  "ocrDialog"
+#define CFG_GOCR_BINARY    "gocrBinary"
 
 class KookaPreferences : public KDialogBase
 {
-   Q_OBJECT
+    Q_OBJECT
 public:
-   KookaPreferences();
+    KookaPreferences();
+    static QCString tryFindGocr( void );
 
 public slots:
-   void slotOk( void );
-   void slotApply( void );
-   void slotDefault( void );
+    void slotOk( void );
+    void slotApply( void );
+    void slotDefault( void );
+
+    void checkOCRBinary( const QCString& );
+    void checkOCRBinaryShort( const QCString& );
+
+private slots:
+    void checkOCRBinIntern( const QCString&, bool );
 
 signals:
-   void dataSaved();
-   
-private:
-   void setupStartupPage();
-   void setupSaveFormatPage();
-   void setupThumbnailPage();
-   
-   QCheckBox *cbNetQuery;
-   QCheckBox *cbSkipFormatAsk;
-   QCheckBox *cbShowScannerSelection;
-   KConfig   *konf;
-   QCheckBox *cbReadStartupImage;
+    void dataSaved();
 
-   KIntNumInput *m_thumbWidth;
-   KIntNumInput *m_thumbHeight;
-   KIntNumInput *m_frameWidth;
-   ImageSelectLine *m_tileSelector;
-   KColorButton *m_colButt1;
-   KColorButton *m_colButt2;
+private:
+    void setupStartupPage();
+    void setupSaveFormatPage();
+    void setupThumbnailPage();
+    void setupOCRPage();
+
+
+    QCheckBox *cbNetQuery;
+    QCheckBox *cbSkipFormatAsk;
+    QCheckBox *cbShowScannerSelection;
+    KConfig   *konf;
+    QCheckBox *cbReadStartupImage;
+
+    KIntNumInput *m_thumbWidth;
+    KIntNumInput *m_thumbHeight;
+    KIntNumInput *m_frameWidth;
+    ImageSelectLine *m_tileSelector;
+    KColorButton *m_colButt1;
+    KColorButton *m_colButt2;
+
+    KScanEntry   *m_entryOCRBin;
 };
 
 

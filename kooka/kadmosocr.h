@@ -24,13 +24,18 @@
 #include <qthread.h>
 #include <qobject.h>
 
+#include "config.h"
+
 #undef QT_THREAD_SUPPORT
 
 #ifdef HAVE_KADMOS
 /* class declarations */
 class QImage;
+class QPixmap;
+class QColor;
 class QString;
 class QMutex;
+class QRect;
 
 namespace Kadmos {
 
@@ -169,11 +174,6 @@ private:
 //! Maximum number of lines in a paragraph
 const int LINE_MAX_LEN  = 100;
 
-#ifndef _WIN32_WCE
-/*!
-Paragraph recognition engine interface class
-*/
-
 class CRep
 #ifdef QT_THREAD_SUPPORT
     : public QThread
@@ -216,8 +216,8 @@ public:
     const char* RepTextLine(int Line, unsigned char RejectLevel=128,
                             int RejectChar='~', long Format=TEXT_FORMAT_ANSI);
 
-    void analyseGraph();
-    void analyseLine(short);
+    // void analyseGraph();
+    void analyseLine(short, QPixmap* );
     /*! Enable/disable noise reduction
       \param TRUE(enable)/FALSE(disable) noise reduction
     */
@@ -228,14 +228,16 @@ public:
     */
     void SetScaling(bool bScaling);
 
+    virtual void drawLineBox( QPixmap*, const QRect& );
+    virtual void drawCharBox( QPixmap*, const QRect& );
+    virtual void drawBox( QPixmap*, const QRect&, const QColor& );
+
 private:
     void CheckError();
     void ReportError(const char* ErrText, const char* Program);
 };
-#endif
-
-
 
 } /* End of Kadmos namespace */
-#endif
-#endif
+#endif  /*  HAVE KADMOS */
+
+#endif /* header tagging */

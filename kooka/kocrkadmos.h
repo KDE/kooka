@@ -55,6 +55,11 @@ public:
     bool getNoiseReduction();
     QString getSelClassifier() const;
     QString getSelClassifierName() const;
+
+    QString ocrEngineName() const;
+    QString ocrEngineDesc() const;
+    QString ocrEngineLogo() const;
+
 public slots:
     void enableFields(bool);
 

@@ -59,8 +59,17 @@ Kooka::Kooka( const QCString& deviceToUse)
       m_prefDialogIndex(0)
 {
     /* Start to create the main view framework */
+    KParts::PartManager *manager;
+    manager = new KParts::PartManager(this);
+    manager->setAllowNestedParts(true);
+
+    connect( manager, SIGNAL(activePartChanged(KParts::Part*)),
+             this,    SLOT(createMyGUI(KParts::Part*)));
     m_view = new KookaView( this, deviceToUse);
+
+    manager->addPart(m_view->ocrResultPart(), false);
     /* Call createGUI on the ocr-result view */
+    setXMLFile( "kookaui.rc", true );
 
     setAcceptDrops(true);
     KConfig *konf = KGlobal::config ();
@@ -68,14 +77,7 @@ Kooka::Kooka( const QCString& deviceToUse)
 
     // then, setup our actions
     setupActions();
-    createGUI(0L);
-    KParts::PartManager *manager;
 
-    manager = new KParts::PartManager(this);
-
-    manager->addPart(m_view->ocrResultPart(), false);
-    connect( manager, SIGNAL( activePartChanged(KParts::Part*)),
-             this, SLOT(createMyGUI(KParts::Part*)));
 
     createGUI(0L); // m_view->ocrResultPart());
     // and a status bar
@@ -97,7 +99,7 @@ Kooka::Kooka( const QCString& deviceToUse)
 
 void Kooka::createMyGUI( KParts::Part *part )
 {
-    kdDebug(28000) << "Creating gui" << endl;
+    kdDebug(28000) << "Part changed, Creating gui" << endl;
     createGUI(part);
 
 }
@@ -159,9 +161,19 @@ void Kooka::setupActions()
     m_view->connectViewerAction( act );
 
     act = new KAction(i18n("Original &Size"), "scaleorig", CTRL+Key_S,
-		       m_view, SLOT( slIVScaleOriginal()),
-		       actionCollection(), "scaleOriginal" );
+                      m_view, SLOT( slIVScaleOriginal()),
+                      actionCollection(), "scaleOriginal" );
     m_view->connectViewerAction( act );
+
+#if 0
+    act = new KToggleAction ( i18n("Keep &Zoom Setting"), "stop_hand", CTRL+Key_Z,
+                              actionCollection(), "keepZoom" );
+
+    connect( act, SIGNAL( toggled( bool ) ), m_view->getImageViewer(),
+             SLOT(setKeepZoom(bool)));
+
+    m_view->connectViewerAction( act );
+#endif
 
     /* thumbview and gallery actions */
     act = new KAction(i18n("Set Zoom..."), "viewmag", 0,

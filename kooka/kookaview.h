@@ -49,6 +49,9 @@ class KAction;
 class KActionCollection;
 class ThumbView;
 class KookaImage;
+class QPixmap;
+
+
 /**
  * This is the main view class for Kooka.  Most of the non-menu,
  * non-toolbar, and non-statusbar (e.g., non frame) GUI code should go
@@ -89,6 +92,7 @@ public:
 
     KParts::Part* ocrResultPart() { return m_textEdit; }
 
+    ImageCanvas *getImageViewer() { return img_canvas; }
 public slots:
     void slShowPreview()  {  }
     void slShowPackager() {  }
@@ -126,6 +130,7 @@ public slots:
     void slSaveScanParams( );
 
     void slOCRResultText( const QString& );
+    void slOCRResultImage( const QPixmap& );
     void slClearOCRResult();
 
     void slShowThumbnails( KFileTreeViewItem *dirKfi = 0, bool forceRedraw=false);
@@ -206,6 +211,7 @@ private:
 
     QCString     connectedDevice;
 
+    QImage       *m_ocrResultImg;
     int 		image_pool_id;
     int 		preview_id;
 

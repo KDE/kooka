@@ -1,5 +1,5 @@
 /***************************************************************************
-                          ksaneocr.cpp  -  description
+                          ksaneocr.cpp  -  generic ocr
                              -------------------
     begin                : Fri Jun 30 2000
     copyright            : (C) 2000 by Klaas Freitag
@@ -35,11 +35,17 @@
 #include "ksaneocr.h"
 #include "kocrgocr.h"
 #include "kookaimage.h"
+#include "kookapref.h"
 #include <qtimer.h>
+#include <qregexp.h>
 
-
+/*
+ * Thread support is disabled here because the kadmos lib seems not to be
+ * thread save unfortunately. See slotKadmosResult-comments for more information
+ */
+#ifdef HAVE_KADMOS
 #undef QT_THREAD_SUPPORT
-
+#endif
 
 KSANEOCR::KSANEOCR( QWidget* ):
    m_ocrProcessDia(0),
@@ -49,6 +55,7 @@ KSANEOCR::KSANEOCR( QWidget* ):
    KConfig *konf = KGlobal::config ();
    m_ocrEngine = GOCR;
    m_img = 0L;
+   m_tmpFile = 0L;
 
    if( konf )
    {
@@ -66,27 +73,49 @@ KSANEOCR::~KSANEOCR()
       delete( daemon );
       daemon = 0;
    }
-   if ( ktmpFile )
+   if ( m_tmpFile )
    {
-       ktmpFile->setAutoDelete( true );
-       delete ktmpFile;
+       m_tmpFile->setAutoDelete( true );
+       delete m_tmpFile;
    }
 
    if( m_img ) delete m_img;
 }
 
+/*
+ * This slot is called to introduce a new image, usually if the user clicks on a
+ * new image either in the gallery or on the thumbnailview.
+ */
 void KSANEOCR::slSetImage(KookaImage *img )
 {
    if( ! img ) return           ;
-    // create temporar name for the saved file
+
    if( m_img )
        delete m_img;
 
+   // FIXME: copy all the image is bad.
    m_img = new KookaImage(*img);
 
+   if( m_ocrProcessDia )
+   {
+       m_ocrProcessDia->introduceImage( m_img );
+   }
 }
 
-bool KSANEOCR::startExternOcrVisible( QWidget *parent )
+/*
+ * Request to visualise a line-box in the source image, KADMOS Engine
+ */
+void KSANEOCR::slLineBox( const QRect& )
+{
+    if( ! m_img ) return;
+}
+
+
+/*
+ * starts visual ocr process. Depending on the ocr engine, this function creates
+ * a new dialog, and shows it.
+ */
+bool KSANEOCR::startOCRVisible( QWidget *parent )
 {
    if( visibleOCRRunning ) return( false );
    bool res = true;
@@ -101,7 +130,7 @@ bool KSANEOCR::startExternOcrVisible( QWidget *parent )
 /*** Kadmos Engine OCR ***/
        m_ocrProcessDia = new KadmosDialog( parent );
 #else
-       kdDebug(28000) << "Have no kadmos support compiled in" << endl;
+       kdDebug(28000) << "Sorry, this version of Kooka has no KADMOS support" << endl;
 #endif /* HAVE_KADMOS */
    }
    else
@@ -109,6 +138,9 @@ bool KSANEOCR::startExternOcrVisible( QWidget *parent )
       kdDebug(28000) << "ERR Unknown OCR engine requested!" << endl;
    }
 
+   /*
+    * this part is independant from the engine again
+    */
    if( m_ocrProcessDia )
    {
        m_ocrProcessDia->setupGui();
@@ -116,19 +148,43 @@ bool KSANEOCR::startExternOcrVisible( QWidget *parent )
        visibleOCRRunning = true;
 
       connect( m_ocrProcessDia, SIGNAL( user1Clicked()), this, SLOT( startOCRProcess() ));
-      connect( m_ocrProcessDia, SIGNAL( cancelClicked()), this, SLOT( userCancel() ));
-      connect( m_ocrProcessDia, SIGNAL( cancelClicked()),
-	       m_ocrProcessDia, SLOT( stopAnimation() ));
+      connect( m_ocrProcessDia, SIGNAL( closeClicked()), this, SLOT( slotClose() ));
       m_ocrProcessDia->show();
    }
    return( res );
 }
 
+/**
+ * This method should be called by the engine specific finish slots.
+ * It does the not engine dependant cleanups like re-enabling buttons etc.
+ */
+
+void KSANEOCR::finishedOCRVisible( bool success )
+{
+   visibleOCRRunning =  false;
+   cleanUpFiles();
+
+   if( m_ocrProcessDia )
+   {
+       m_ocrProcessDia->stopAnimation();
+       m_ocrProcessDia->enableFields(true);
+   }
+
+   if( success )
+   {
+       emit newOCRResultText( m_ocrResultText );
+       emit newOCRResultPixmap( m_resPixmap );
+   }
+
+   kdDebug(28000) << "# ocr finished #" << endl;
+
+}
+
 /* User Cancel is called when the user does not really start the
  * ocr but uses the cancel-Button to come out of the Dialog */
-void KSANEOCR::userCancel( void )
+void KSANEOCR::slotClose()
 {
-   kdDebug(28000) << "+++++++++++++++++++ *************************" << endl;
+    kdDebug(28000) << "closing ocr Dialog" << endl;
    if( daemon && daemon->isRunning() )
    {
       kdDebug(28000) << "Killing daemon with Sig. 9" << endl;
@@ -136,11 +192,14 @@ void KSANEOCR::userCancel( void )
       // that leads to the process being destroyed.
       KMessageBox::error(0, "The OCR-Process was killed !" );
    }
-   visibleOCRRunning =  false;
-   cleanUpFiles();
+   finishedOCRVisible(false);
 }
 
 
+/*
+ * This slot is fired if the user clicks on the 'Start' button of the GUI, no
+ * difference which engine is active.
+ */
 void KSANEOCR::startOCRProcess( void )
 {
    if( ! m_ocrProcessDia ) return;
@@ -149,18 +208,22 @@ void KSANEOCR::startOCRProcess( void )
    kapp->processEvents();
    if( m_ocrEngine == GOCR )
    {
+       /*
+        * Starting a gocr process
+        */
+
        KGOCRDialog *gocrDia = static_cast<KGOCRDialog*>(m_ocrProcessDia);
 
-       const QCString cmd = gocrDia->getOCRCmd();
+       const QString cmd = gocrDia->getOCRCmd();
 
        /* Save the image to a temp file */
-       ktmpFile = new KTempFile( QString(), QString(".bmp"));
-       ktmpFile->setAutoDelete( false );
-       ktmpFile->close();
-       QString tmpFile = ktmpFile->name();
+       m_tmpFile = new KTempFile( QString(), QString(".ppm"));
+       m_tmpFile->setAutoDelete( false );
+       m_tmpFile->close();
+       QString tmpFile = m_tmpFile->name();
 
        kdDebug(28000) <<  "Starting GOCR-Command: " << cmd << " " << tmpFile << endl;
-       m_img->save( tmpFile, "BMP" );
+       m_img->save( tmpFile, "PPM" );
 
        if( daemon ) {
            delete( daemon );
@@ -172,14 +235,16 @@ void KSANEOCR::startOCRProcess( void )
        m_ocrResultText = "";
 
        connect(daemon, SIGNAL(processExited(KProcess *)),
-               this, SLOT(daemonExited(KProcess*)));
+               this,   SLOT(  gocrExited(KProcess*)));
        connect(daemon, SIGNAL(receivedStdout(KProcess *, char*, int)),
-               this, SLOT(msgRcvd(KProcess*, char*, int)));
+               this,   SLOT(  gocrStdIn(KProcess*, char*, int)));
        connect(daemon, SIGNAL(receivedStderr(KProcess *, char*, int)),
-               this, SLOT(errMsgRcvd(KProcess*, char*, int)));
+               this,   SLOT(  gocrStdErr(KProcess*, char*, int)));
 
        QString opt;
        *daemon << QFile::encodeName(cmd);
+       *daemon << "-x";
+       *daemon << "-";
        if( !( m_img->numColors() > 0 && m_img->numColors() <3 ))   /* not a bw-image */
        {
            *daemon << "-l";
@@ -199,6 +264,7 @@ void KSANEOCR::startOCRProcess( void )
 
        // Unfortunately this is fixed by gocr.
        m_ocrResultImage = "out30.bmp";
+
 
        *daemon << QFile::encodeName(tmpFile);
 
@@ -239,10 +305,10 @@ void KSANEOCR::startOCRProcess( void )
        kdDebug(28000) << "Image depth " << m_img->depth() << ", colors: " << m_img->numColors() << endl;
 #define USE_KADMOS_FILEOP /* use a save-file for OCR instead of filling the reImage struct manually */
 #ifdef USE_KADMOS_FILEOP
-       KTempFile *ktmpFile = new KTempFile( QString(), QString("bmp"));
-       ktmpFile->setAutoDelete( false );
-       ktmpFile->close();
-       QString tmpFile = ktmpFile->name();
+       m_tmpFile = new KTempFile( QString(), QString("bmp"));
+       m_tmpFile->setAutoDelete( false );
+       m_tmpFile->close();
+       QString tmpFile = m_tmpFile->name();
        kdDebug() << "Saving to file " << tmpFile << endl;
        m_img->save( tmpFile, "BMP" );
        m_rep.SetImage(tmpFile);
@@ -267,8 +333,6 @@ void KSANEOCR::startOCRProcess( void )
         * Hope that works ...
         */
 
-       if( ktmpFile )
-           delete ktmpFile;
 #ifdef QT_THREAD_SUPPORT
        /* start a timer and wait until it fires. */
        QTimer::singleShot( 500, this, SLOT( slotKadmosResult() ));
@@ -279,13 +343,24 @@ void KSANEOCR::startOCRProcess( void )
    }
 #endif /* HAVE_KADMOS */
 }
+
+/*
+ * This method is called to check if the kadmos process was already finished, if
+ * thread support is enabled (check for preprocessor variable QT_THREAD_SUPPORT)
+ * The problem is that the kadmos library seems not to be thread stable so thread
+ * support should not be enabled by default. In case threads are enabled, this slot
+ * checks if the KADMOS engine is finished already and if not it fires a timer.
+ */
+
 void KSANEOCR::slotKadmosResult()
 {
 #ifdef HAVE_KADMOS
     kdDebug(28000) << "check for Recognition finished" << endl;
 
+
     if( m_rep.finished() )
     {
+        m_resPixmap.convertFromImage( *m_img );
         /* The recognition thread is finished. */
         kdDebug(28000) << "YEAH - its finished" << endl;
 
@@ -295,7 +370,7 @@ void KSANEOCR::slotKadmosResult()
         {
             QString l = QString::fromLocal8Bit( m_rep.RepTextLine( i, 256, '_', TEXT_FORMAT_ANSI ));
             kdDebug(28000) << "| " << l << endl;
-            m_rep.analyseLine(i);
+            m_rep.analyseLine( i, &m_resPixmap );
             m_ocrResultText += l+"\n";
         }
 
@@ -303,8 +378,6 @@ void KSANEOCR::slotKadmosResult()
         // m_rep.analyseGraph();
 
         m_rep.End();
-        m_ocrProcessDia->enableFields(true);
-        emit newOCRResultText( m_ocrResultText );
     }
     else
     {
@@ -315,44 +388,28 @@ void KSANEOCR::slotKadmosResult()
 #endif /* HAVE_KADMOS */
 }
 
-
-
-void KSANEOCR::daemonExited(KProcess* d)
+/*
+ *
+ */
+void KSANEOCR::gocrExited(KProcess* d)
 {
    kdDebug(28000) << "daemonExited start !" << endl;
 
-
-   if( d->normalExit() )
+   /* set the result pixmap to the result pix of gocr */
+   if( ! m_resPixmap.load( m_ocrResultImage ) )
    {
-      /* Only on normal Exit, bcause it is destroyed on
-       * nonregular exit by itself or whomever... */
-      if( m_ocrProcessDia )
-      {
-	 m_ocrProcessDia->stopAnimation();
-	 delete m_ocrProcessDia;
-	 m_ocrProcessDia = 0L;
-      }
-
-
-      /* Now ocr is finished, open the result */
-      emit newOCRResultText( m_ocrResultText );
+       kdDebug(28000) << "Can not load result image!" << endl;
    }
-
-   /* Clean up */
-
-   visibleOCRRunning = false;
-   cleanUpFiles();
-
-   kdDebug(28000) << "# ocr exited #" << endl;
+   finishedOCRVisible( d->normalExit() );
 }
 
 
 void KSANEOCR::cleanUpFiles( void )
 {
-    if( ktmpFile )
+    if( m_tmpFile )
     {
-        delete ktmpFile;
-        ktmpFile = 0L;
+        delete m_tmpFile;
+        m_tmpFile = 0L;
     }
 
    if( ! m_ocrResultImage.isEmpty())
@@ -367,7 +424,7 @@ void KSANEOCR::cleanUpFiles( void )
 }
 
 
-void KSANEOCR::errMsgRcvd(KProcess*, char* buffer, int buflen)
+void KSANEOCR::gocrStdErr(KProcess*, char* buffer, int buflen)
 {
    QString errorBuffer = QString::fromLocal8Bit(buffer, buflen);
    kdDebug(28000) << "gocr says: " << errorBuffer << endl;
@@ -375,12 +432,25 @@ void KSANEOCR::errMsgRcvd(KProcess*, char* buffer, int buflen)
 }
 
 
-void KSANEOCR::msgRcvd(KProcess*, char* buffer, int buflen)
+void KSANEOCR::gocrStdIn(KProcess*, char* buffer, int buflen)
 {
-   QString aux = QString::fromLocal8Bit(buffer, buflen);
-   m_ocrResultText += aux;
+    QString aux = QString::fromLocal8Bit(buffer, buflen);
 
-   // kdDebug(28000) << aux << endl;
+    QRegExp rx( "^\\s*\\d+\\s+\\d+$");
+    if( m_ocrEngine == GOCR && rx.search( aux ) > -1 )
+    {
+        /* calculate ocr progress for gocr */
+        int progress = rx.capturedTexts()[0].toInt();
+        int subProgress = rx.capturedTexts()[1].toInt();
+        kdDebug(28000) << "Emitting progress: " << progress << endl;
+        emit ocrProgress( progress, subProgress );
+    }
+    else
+    {
+        m_ocrResultText += aux;
+    }
+
+    // kdDebug(28000) << aux << endl;
 
 }
 

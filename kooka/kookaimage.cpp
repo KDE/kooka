@@ -1,9 +1,9 @@
 /***************************************************************************
-                          kookaimage.cpp  - Kooka's Image 
-                             -------------------                                         
+                          kookaimage.cpp  - Kooka's Image
+                             -------------------
     begin                : Thu Nov 20 2001
-    copyright            : (C) 1999 by Klaas Freitag                         
-    email                : freitag@suse.de                                     
+    copyright            : (C) 1999 by Klaas Freitag
+    email                : freitag@suse.de
  ***************************************************************************/
 
 /***************************************************************************
@@ -11,12 +11,13 @@
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
  *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   * 
+ *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
 
 #include <kdebug.h>
 #include <kurl.h>
+#include <kfileitem.h>
 
 #include "kookaimage.h"
 #include <tiffio.h>
@@ -33,7 +34,7 @@ KookaImage::KookaImage( )
      m_subNo(0),
      m_parent(0)
 {
-   
+
 }
 
 /* constructor for subimages */
@@ -41,9 +42,28 @@ KookaImage::KookaImage( int subNo, KookaImage *p )
    : QImage(),
      m_subImages(-1),
      m_subNo(subNo),
-     m_parent( p )
+     m_parent( p ),
+     m_fileItem(0L)
 {
    kdDebug(28000) << "Setting subimageNo to " << subNo << endl;
+}
+
+KFileItem* KookaImage::fileItem() const
+{
+    return m_fileItem;
+}
+
+void KookaImage::setFileItem( KFileItem* it )
+{
+    m_fileItem = it;
+}
+
+const KFileMetaInfo KookaImage::fileMetaInfo( )
+{
+    QString filename = localFileName( );
+    kdDebug(28000) << "Fetching metainfo for " << filename << endl;
+    const KFileMetaInfo info( filename );
+    return info;
 }
 
 QString KookaImage::localFileName( ) const
@@ -69,7 +89,7 @@ bool KookaImage::loadFromUrl( const KURL& url )
 	 kdDebug(28000) << "Setting format to tif by extension" << endl;
       }
    }
-   
+
    kdDebug(28000) << "Image format to load: <" << format << "> from file <" << filename << ">" << endl;
    bool haveTiff = false;
 
@@ -78,11 +98,11 @@ bool KookaImage::loadFromUrl( const KURL& url )
       kdDebug(28000)<<"ERROR: Can not laod non-local images -> not yet implemented!" << endl;
       return false;
    }
-   
+
 #ifdef HAVE_LIBTIFF
    TIFF* tif = 0;
    m_subImages = 0;
-   
+
    if( format == "tif" ||
        format == "TIF" ||
        format == "TIFF" ||
@@ -97,7 +117,7 @@ bool KookaImage::loadFromUrl( const KURL& url )
 	    m_subImages++;
 	 } while (TIFFReadDirectory(tif));
 	 kdDebug(28000) << m_subImages << " TIFF-directories found" << endl;
-	 
+
 	 haveTiff = true;
       }
    }
@@ -129,7 +149,7 @@ KookaImage::KookaImage( const QImage& img )
    /* m_subImages( 1 ) */
 {
    m_subImages = 0;
-   
+
    /* Load one QImage, can not be Tiff yet. */
    kdDebug(28000) << "constructor from other image here " << endl;
 }
@@ -187,7 +207,7 @@ bool KookaImage::loadTiffDir( const QString& filename, int no )
       // reverse red and blue
       uint32 *data;
       data = (uint32 *)bits();
-      for( unsigned i = 0; i < width * height; ++i )
+      for( unsigned i = 0; i < unsigned(width * height); ++i )
       {
 	 uint32 red = ( 0x00FF0000 & data[i] ) >> 16;
 	 uint32 blue = ( 0x000000FF & data[i] ) << 16;
@@ -225,7 +245,7 @@ int KookaImage::subImagesCount() const
 
 KookaImage::~KookaImage()
 {
-   
+
 }
 
 KookaImage* KookaImage::parentImage() const

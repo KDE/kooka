@@ -22,6 +22,8 @@
 /* Kadmos CPP object oriented interface */
 
 #include <qimage.h>
+#include <qpainter.h>
+
 #include <assert.h>
 
 #include <string.h>
@@ -41,6 +43,7 @@ namespace Kadmos {
 #include <qstring.h>
 #include <qthread.h>
 #include <qmutex.h>
+#include <qrect.h>
 
 
 #undef  QT_THREAD_SUPPORT
@@ -312,35 +315,85 @@ const char* CRep::RepTextLine(int nLine, unsigned char RejectLevel, int RejectCh
   return m_Line;
 }
 
-void CRep::analyseLine( short line )
+void CRep::analyseLine( short line, QPixmap* pix )
 {
-    Kadmos::RepResult *repRes = m_RepData.rep_result;
+    Kadmos::RepResult *repRes = &(m_RepData.rep_result[line]);
 
-    if( repRes && line >= 0 && line < repRes->rel_result_len )
+    if( ! repRes )
     {
-            kdDebug() << "######## Line number " << line << endl;
-            Kadmos::RelResult *lineRes = &(repRes->rel_result[line]);
-            if( lineRes )
-            {
-                kdDebug() << "Left: " << lineRes->left << ", "
-                          << "Top:  " << lineRes->top << ", "
-                          << "Width:" << lineRes->width << ", "
-                          << "Heigh:" << lineRes->height << ", "
-                          << "Image: " << ((lineRes->result_image)?"T":"F") << ", "
-                          << "ReIH: " << lineRes->result_width << ", "
-                          << "ReIW: " << lineRes->result_height << endl;
-            }
+        kdDebug() << "repRes-Pointer is null" << endl;
+        return;
     }
+
+    /* check if index is in range */
+    int resLen = m_RepData.rep_result->rel_result_len;
+    if( line < 0 || line > resLen-1 )
+    {
+        kdDebug() << "Line index is out of range" << endl;
+        return;
+    }
+
+    /* Handle line box */
+    kdDebug() << "RepResult Box at " << repRes->left << ", " << repRes->top << endl;
+    kdDebug() << "Size is " << repRes->width << "x" << repRes->height << endl;
+    drawLineBox( pix, QRect( repRes->left, repRes->top, repRes->width, repRes->height ));
+
+    Kadmos::RelResult *relr = &(repRes->rel_result[0]);
+    Kadmos::RelGraph  *relg = &(repRes->rel_graph[0] );
+
+    for (;relr && relg;)
+    {
+        relr = &(repRes->rel_result[0]) + relg->result_number[0];
+
+        if (!*relr->rec_char[0]) strcpy(relr->rec_char[0], "~ ");
+        // printf("\n   %2s  %d (%d,%d;%d,%d)", relr->rec_char[0], relr->rec_value[0],
+        //        (int)relr->left, (int)relr->top, (int)relr->width, (int)relr->height);
+        if (relg->leading_blanks) printf("  %d leading blanks", relg->leading_blanks);
+
+        drawCharBox( pix, QRect(repRes->left+relr->left,
+                                repRes->top+relr->top,
+                                relr->width,
+                                relr->height ));
+
+        kdDebug() << "RelGraph->next is " << relg->next[0] << endl;
+        if (relg->next[0] == -1) break;
+        relg = &(repRes->rel_graph[0]) + relg->next[0];
+    }
+
+}
+void CRep::drawCharBox( QPixmap *pix, const QRect& r )
+{
+    drawBox( pix, r, QColor( Qt::red ));
 }
 
+void CRep::drawLineBox( QPixmap* pix, const QRect& r )
+{
+    drawBox( pix, r, QColor( Qt::blue ));
+}
+
+void CRep::drawBox( QPixmap* pix, const QRect& r, const QColor& color )
+{
+    QPainter p;
+    p.begin(pix);
+
+    p.setPen( color );
+    p.drawRect(r);
+}
+
+
+#if 0
 void CRep::analyseGraph()
 {
     Kadmos::RepResult *repRes = m_RepData.rep_result;
     kdDebug() << "REP-Image: " << repRes->left << ", " << repRes->top << ", "
               << repRes->width << ", " << repRes->height << endl;
+
+    kdDebug() << "Amount of resul items: " << repRes->rel_graph_len << endl;
+    kdDebug() << "Amount of graph items: " << repRes->rel_result_len << endl;
+
     if( repRes )
     {
-        for( short line = 0; line < repRes->rel_result_len; line ++ )
+        for( short line = 0; line < repRes->rel_result_len-1; line ++ )
         {
             analyseLine( line );
         }
@@ -350,7 +403,7 @@ void CRep::analyseGraph()
         /* undefined result -> hmmm  :-( */
     }
 }
-
+#endif
 
 KADMOS_ERROR CRep::SetImage( const QString file )
 {
