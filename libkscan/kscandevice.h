@@ -188,6 +188,12 @@ public:
     */
    void getCurrentOptions( KScanOptSet *optSet );
 
+   /**
+    * load scanner parameter sets. All options stored in @param optSet
+    * are loaded into the scan device.
+    */
+   void loadOptionSet( KScanOptSet *optSet );
+   
   /**
    *  applys the values in an scan-option object. The value to
    *  set must be set in the KScanOption object prior. However,
@@ -284,7 +290,7 @@ public slots:
   void slScanFinished( KScanStat );
 
    /**
-    * Save the current image set. Only changed options are saved.
+    * Save the current configuration parameter set. Only changed options are saved.
     **/
    void slSaveScanConfigSet( const QString&, const QString& );
 

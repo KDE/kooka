@@ -1026,6 +1026,37 @@ KScanStat KScanDevice::acquire_data( bool isPreview )
    return( stat );
 }
 
+void KScanDevice::loadOptionSet( KScanOptSet *optSet )
+{
+   if( !optSet )
+   {
+      return;
+   }
+
+   kdDebug(29000) << "Loading Option set: " << optSet->optSetName() << endl;
+   QAsciiDictIterator<KScanOption> it(*optSet);
+
+   kdDebug(29000) << "Postinstalling " << optSet->count() << " options" << endl;
+   while( it.current() )
+   {
+      KScanOption *so = it.current();
+      if( ! so->initialised() )
+	 kdDebug(29000) << so->getName() << " is not initialised" << endl;
+      
+      if( ! so->active() )
+	 kdDebug(29000) << so->getName() << " is not active" << endl;
+
+      if( so && so->active() && so->initialised())
+      {
+	 const QString qq = so->get();	
+	
+	 kdDebug(29000) << "Post-Scan-apply <" << it.currentKey() << ">: " << qq << endl;
+	 apply( so );
+      }
+      ++it;
+   }
+
+}
 
 
 void KScanDevice::slScanFinished( KScanStat status )
@@ -1059,24 +1090,7 @@ void KScanDevice::slScanFinished( KScanStat status )
 	 emit( sigNewPreview( img ));
 
 	 /* The old settings need to be redefined */
-	 QAsciiDictIterator<KScanOption> it(*storeOptions);
-
-	 kdDebug(29000) << "Postinstalling " << storeOptions->count() << " options" << endl;
-	 while( it.current() )
-	 {
-	    KScanOption *so = it.current();
-	    if( ! so->initialised() ) kdDebug(29000) << so->getName() << " is not initialised" << endl;
-	    if( ! so->active() ) kdDebug(29000) << so->getName() << " is not active" << endl;
-
-	    if( so && so->active() && so->initialised())
-	    {
-	       const QString qq = so->get();	
-	
-	       kdDebug(29000) << "Post-Scan-apply <" << it.currentKey() << ">: " << qq << endl;
-	       apply( so );
-	    }
-	    ++it;
-	 }
+	 loadOptionSet( storeOptions );
       }
       else
       {
