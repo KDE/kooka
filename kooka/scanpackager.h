@@ -96,6 +96,7 @@ protected slots:
    void 	slotDeleteItems( );
    void         slotUnloadItems( );
    void         slotUnloadItem( KFileTreeViewItem *curr );
+   void         slotSetChildCount( KFileTreeViewItem *parent );
    
 signals:
     void 	showImage( QImage* );

@@ -124,10 +124,14 @@ void ScanPackager::openRoots()
 
    KFileTreeBranch *newbranch = addBranch( rootUrl, i18n("Kooka Gallery"), false /* do not showHidden */ );
    setDirOnlyMode( newbranch, false );
+   newbranch->setShowExtensions( false );
 
    connect( newbranch, SIGNAL(newTreeViewItems( KFileTreeBranch*, const KFileTreeViewItemList& )),
 	    this, SLOT( slotDecorate(KFileTreeBranch*, const KFileTreeViewItemList& )));
 
+   connect( newbranch, SIGNAL(populateFinished( KFileTreeViewItem* )),
+	    this, SLOT( slotSetChildCount( KFileTreeViewItem* )));
+   
    populateBranch( newbranch );
    
    /* open more configurable image repositories TODO */
@@ -240,6 +244,8 @@ void ScanPackager::slotDecorate( KFileTreeViewItem* item )
 }
 
 
+
+
 void ScanPackager::slotDecorate( KFileTreeBranch* branch, const KFileTreeViewItemList& list )
 {
    (void) branch;
@@ -255,7 +261,14 @@ void ScanPackager::slotDecorate( KFileTreeBranch* branch, const KFileTreeViewIte
    }
 }
 
-
+void ScanPackager::slotSetChildCount( KFileTreeViewItem *parent )
+{
+   if( parent )
+   {
+      QString cc = i18n( "%1 items").arg( parent->childCount());
+      parent->setText( 1, cc );
+   }
+}
 
 
 void ScanPackager::slFileRename( QListViewItem* it, const QString& newStr, int col )
