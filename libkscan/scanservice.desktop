@@ -1,0 +1,6 @@
+[Desktop Entry]
+Type=Service
+Name=KDE Scan Service
+X-KDE-Library=libkscan
+InitialPreference=2
+ServiceTypes=KScan/KScanDialog
