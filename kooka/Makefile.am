@@ -12,7 +12,7 @@ kooka_SOURCES =	main.cpp kooka.cpp kookaview.cpp kookapref.cpp \
 			previewer.cpp scanpackager.cpp   \
 			kocrstartdia.cpp kocrfindia.cpp
 
-kooka_LDADD   = $(LIB_KFILE) -L$(top_srcdir)/libkscan -lkscan
+kooka_LDADD   = $(LIB_KFILE) -L../libkscan -lkscan
 kooka_LDFLAGS = $(KDE_RPATH) $(all_libraries)
 
 sane_includes=-I/usr/include/sane
