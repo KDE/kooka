@@ -108,7 +108,7 @@ bool ScanParams::connectDevice( KScanDevice *newScanDevice )
 
    /* A top layout box */
    // QVBoxLayout *top = new QVBoxLayout(this, 6);
-   QString cap = i18n("<B>Scanner Settings</B><BR>");
+   QString cap = i18n("<B>Scanner Settings</B> ");
    cap += sane_device->getScannerName();
 
    (void ) new QLabel( cap, this );
@@ -399,6 +399,8 @@ QScrollView *ScanParams::scannerParams( )
 	 initialise( so );
 	 so->get( &isOn );
 	
+	 (void) new QWidget( hb1 ); /* dummy widget to eat space */
+	 
 	 kdDebug(29000) << "Custom Gamma Table is <" << (isOn ? "on" : "off") << ">" << endl;
 	
 	 /* Connect a signal to refresh activity of the gamma tables */
