@@ -12,15 +12,19 @@ class KGammaTable: public QObject
 {
    Q_OBJECT
 
+   Q_PROPERTY( int g READ getGamma WRITE setGamma )
+   Q_PROPERTY( int c READ getContrast WRITE setContrast )
+   Q_PROPERTY( int b READ getBrightness WRITE setBrightness )
+      
 public:
    KGammaTable ( int gamma = 100, int brightness = 0,
 		 int contrast = 0 );
    void setAll ( int gamma, int brightness, int contrast );
    QArray<SANE_Word> *getArrayPtr( void ) { return &gt; }
 
-   int  getGamma( void )      { return g; }
-   int  getBrightness( void ) { return b; }
-   int  getContrast( void )   { return c; }
+   int  getGamma( ) const      { return g; }
+   int  getBrightness( ) const { return b; }
+   int  getContrast( ) const   { return c; }
 
    const KGammaTable& operator=(const KGammaTable&);
 
@@ -40,6 +44,9 @@ private:
    int        g, b, c;
    bool       dirty;
    QArray<SANE_Word> gt;
+
+   class KGammaTablePrivate;
+   KGammaTablePrivate *d;
 };
 
 #endif // KGAMMATABLE_H
