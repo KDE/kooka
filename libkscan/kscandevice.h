@@ -188,6 +188,14 @@ public:
    */
   QStrList getAdvancedOptions();
 
+   /**
+    * retrieves a set of the current scan options and writes them
+    * to the object pointed to by parameter optSet
+    * @see KScanOptSet
+    * @param optSet, a pointer to the option set object
+    */
+   void getCurrentOptions( KScanOptSet *optSet );
+
   /**
    *  applys the values in an scan-option object. The value to
    *  set must be set in the KScanOption object prior. However,

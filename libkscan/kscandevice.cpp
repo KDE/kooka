@@ -1312,11 +1312,25 @@ void KScanDevice::slSaveScanConfigSet( const QString& setName, const QString& de
    kdDebug(29000) << "Saving Scan Configuration" << setName << endl;
    
    KScanOptSet optSet( DEFAULT_OPTIONSET );
+   getCurrentOptions( &optSet );
 
+   optSet.saveConfig( scanner_name , setName, descr );
+
+}
+
+
+void  KScanDevice::getCurrentOptions( KScanOptSet *optSet )
+{
+   if( ! optSet ) return;
+   
    for( KScanOption *so = gui_elements.first(); so; so = gui_elements.next())
    {
       kdDebug(29000) << "Storing <" << so->getName() << ">" << endl;
-      optSet.backupOption( *so );
+      if( so && so->active())
+      {
+	 apply(so);
+	 optSet->backupOption( *so );
+      }
 
       /* drop the thing from the dirty-list */
       dirtyList.removeRef( so->getName());
@@ -1326,13 +1340,13 @@ void KScanDevice::slSaveScanConfigSet( const QString& setName, const QString& de
    while( it.current())
    {
       KScanOption so( it.current() );
-      optSet.backupOption( so );
+      optSet->backupOption( so );
       ++it;
    }
-   
-   optSet.saveConfig( scanner_name , setName, descr );
-
 }
+   
+
+
 
 bool KScanDevice::scanner_initialised = false;
 SANE_Handle KScanDevice::scanner_handle = 0L;
