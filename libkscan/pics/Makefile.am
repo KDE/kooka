@@ -1,2 +1,2 @@
-KDE_ICON=colormarker graymarker lineartmarker halftonemarker
-
+libkscanicondir = $(kde_datadir)/libkscan/icons
+libkscanicon_ICON = AUTO
