@@ -313,15 +313,7 @@ void KookaPreferences::setupThumbnailPage()
 
    top->addWidget( hgb1 );
 
-   QHBoxLayout *layMain = new QHBoxLayout( page, 0, spacingHint());
-   top->addLayout( layMain, 0 );
-
-   QVBoxLayout *layBBoxes = new QVBoxLayout( page, 0, spacingHint());
-   layMain->addLayout( layBBoxes, 0 );
-
    /* Add the Boxes to configure size, framestyle and background */
-
-
    QVGroupBox *hgb2 = new QVGroupBox( i18n("Thumbnail Size" ), page );
    QVGroupBox *hgb3 = new QVGroupBox( i18n("Thumbnail Frame" ), page );
 
@@ -362,9 +354,9 @@ void KookaPreferences::setupThumbnailPage()
    l1->setBuddy( m_colButt2 );
    /* TODO: Gradient type */
 
-   layBBoxes->addWidget( hgb2, 10);
-   layBBoxes->addWidget( hgb3, 10);
-   layBBoxes->addStretch(10);
+   top->addWidget( hgb2, 10);
+   top->addWidget( hgb3, 10);
+   top->addStretch(10);
 
 }
 
