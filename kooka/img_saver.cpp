@@ -350,7 +350,9 @@ QString ImgSaver::createFilename( QString format )
    char name[20];
    int c = 1;
    
-   sprintf( name, "kscan_%04x.%s", c, (format.lower()).local8Bit() );
+   sprintf( name, "kscan_%04x.%s", c, (format.lower()).latin1() );
+
+   kdDebug() << "CRASH WITH: " << name << endl;
 
    while( files.exists( name, false ) ) {
       sprintf( name, "kscan_%04x.%s", ++c, (format.lower()).local8Bit() );
