@@ -97,7 +97,7 @@ void GammaDialog::setGt(KGammaTable& ngt)
 
 void GammaDialog::slotApply()
 {
-   kdDebug() << "Applying !" << endl;
+   kdDebug(29000) << "Applying !" << endl;
 
    /* Do some calculation here */
 

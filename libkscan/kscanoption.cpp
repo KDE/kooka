@@ -76,7 +76,7 @@ inline const SANE_Option_Descriptor *getOptionDesc( const QCString& name )
    }
    else
    {
-      kdDebug() << "no option descriptor for <" << name << ">" << endl;
+      kdDebug(29000) << "no option descriptor for <" << name << ">" << endl;
       // debug( "Name survived !" );
    }
    // debug( "<< leaving option %s >>", name );
@@ -109,7 +109,7 @@ KScanOption::KScanOption( const QCString& new_name ) :
    }
    else
    {
-      kdDebug() << "Had problems to create KScanOption - initOption failed !" << endl;
+      kdDebug(29000) << "Had problems to create KScanOption - initOption failed !" << endl;
    }
 }
 
@@ -154,7 +154,7 @@ bool KScanOption::initOption( const QCString& new_name )
 	KScanOption *gtOption = gammaTables[ new_name ];
 	if( gtOption )
 	{
-	   kdDebug() << "Is older GammaTable!" << endl;
+	   kdDebug(29000) << "Is older GammaTable!" << endl;
 	   KGammaTable gt;
 	   gtOption->get( &gt );
 	
@@ -164,7 +164,7 @@ bool KScanOption::initOption( const QCString& new_name )
 	}
 	else
 	{
-	   kdDebug() << "Is NOT older GammaTable!" << endl;
+	   kdDebug(29000) << "Is NOT older GammaTable!" << endl;
 	}
     }
 
@@ -182,7 +182,7 @@ KScanOption::KScanOption( const KScanOption &so ) :
    brightness = so.brightness;
    contrast = so.contrast;
 
-   if( so.buffer_untouched ) kdDebug() << "Buffer of source is untouched!" << endl;
+   if( so.buffer_untouched ) kdDebug(29000) << "Buffer of source is untouched!" << endl;
    // debug("Here Duplication for %s, reserving %d bytes", (const char*)  name, desc->size );
 
    /* the widget si not copied ! */
@@ -246,7 +246,7 @@ const KScanOption& KScanOption::operator= (const KScanOption& so )
 
 void KScanOption::slWidgetChange( QCString t )
 {
-    kdDebug() << "Received WidgetChange for " << getName() << "const char*" << endl;
+    kdDebug(29000) << "Received WidgetChange for " << getName() << "const char*" << endl;
     set( t );
     emit( guiChange( this ) );
     // emit( optionChanged( this ));
@@ -254,12 +254,12 @@ void KScanOption::slWidgetChange( QCString t )
 
 void KScanOption::slWidgetChange( void )
 {
-    kdDebug() << "Received WidgetChange for " << getName() << " (void)" << endl;
+    kdDebug(29000) << "Received WidgetChange for " << getName() << " (void)" << endl;
     /* If Type is bool, the widget is a checkbox. */
     if( type() == BOOL )
     {
 	bool b = ((QCheckBox*) internal_widget)->isChecked();
-	kdDebug() << "Setting bool: " << b << endl;
+	kdDebug(29000) << "Setting bool: " << b << endl;
 	set( b );
     }
     emit( guiChange( this ) );
@@ -269,7 +269,7 @@ void KScanOption::slWidgetChange( void )
 
 void KScanOption::slWidgetChange( int i )
 {
-    kdDebug() << "Received WidgetChange for " << getName() << " (int)" << endl;
+    kdDebug(29000) << "Received WidgetChange for " << getName() << " (int)" << endl;
     set( i );
     emit( guiChange( this ) );
     // emit( optionChanged( this ));
@@ -339,16 +339,16 @@ void KScanOption::slReload( void )
 		
    if( widget() )
    {
-      kdDebug() << "constraint is " << desc->cap << endl;
+      kdDebug(29000) << "constraint is " << desc->cap << endl;
       if( !active() )
-	 kdDebug() << desc->name << " is not active now" << endl;
+	 kdDebug(29000) << desc->name << " is not active now" << endl;
 
       if( !softwareSetable() )
-	 kdDebug() << desc->name << " is not software setable" << endl;
+	 kdDebug(29000) << desc->name << " is not software setable" << endl;
 
       if( !active() || !softwareSetable() )
       {
-	 kdDebug() << "Disabling widget " << getName() << " !" << endl;
+	 kdDebug(29000) << "Disabling widget " << getName() << " !" << endl;
 	 widget()->setEnabled( false );
       }
       else
@@ -358,7 +358,7 @@ void KScanOption::slReload( void )
    /* first get mem if nothing is approbiate */
    if( !buffer )
    {
-      kdDebug() << " *********** getting without space **********" << endl;
+      kdDebug(29000) << " *********** getting without space **********" << endl;
       // allocate memory
       switch( desc->type )
       {
@@ -391,12 +391,12 @@ void KScanOption::slReload( void )
 
       if( sane_stat != SANE_STATUS_GOOD )
       {
-	 kdDebug() << "ERROR: Cant get value for " << getName() << ": " << sane_strstatus( sane_stat ) << endl;
+	 kdDebug(29000) << "ERROR: Cant get value for " << getName() << ": " << sane_strstatus( sane_stat ) << endl;
       }
       else
       {
 	 buffer_untouched = false;
-	 kdDebug() << "Setting buffer untouched to FALSE" << endl;
+	 kdDebug(29000) << "Setting buffer untouched to FALSE" << endl;
       }
    }
 #endif
@@ -546,7 +546,7 @@ bool KScanOption::set( int val )
 	 }
 	 break;
        default:
-	 kdDebug() << "Cant set " << name << "  with type int" << endl;
+	 kdDebug(29000) << "Cant set " << name << "  with type int" << endl;
    }
    if( ret )
    {
@@ -612,7 +612,7 @@ bool KScanOption::set( double val )
 	 }
 	 break;
       default:
-	 kdDebug() << "Cant set " << name << " with type double" << endl;
+	 kdDebug(29000) << "Cant set " << name << " with type double" << endl;
    }
 
    if( ret )
@@ -660,7 +660,7 @@ bool KScanOption::set( int *val, int size )
       }
       break;
     default:
-      kdDebug() << "Cant set " << name << " with type int*" << endl;
+      kdDebug(29000) << "Cant set " << name << " with type int*" << endl;
 	
     }
 
@@ -692,7 +692,7 @@ bool KScanOption::set( const QCString& c_string )
    /* On String-type the buffer gets malloced in Constructor */
    if( desc->type == SANE_TYPE_STRING )
    {
-      kdDebug() << "Setting " << c_string << " as String" << endl;
+      kdDebug(29000) << "Setting " << c_string << " as String" << endl;
    	
       if( buffer_size >= c_string.length() )
       {
@@ -702,10 +702,10 @@ bool KScanOption::set( const QCString& c_string )
       }
       else
       {
-	 kdDebug() << "ERROR: Buffer for String " << c_string << " too small: " << buffer_size << "  < " << c_string.length() << endl;
+	 kdDebug(29000) << "ERROR: Buffer for String " << c_string << " too small: " << buffer_size << "  < " << c_string.length() << endl;
       }
    } else {
-      kdDebug() << "Cant set " << name << " with type string" << endl;
+      kdDebug(29000) << "Cant set " << name << " with type string" << endl;
    }
 
    if( ret )
@@ -754,7 +754,7 @@ bool KScanOption::set( KGammaTable *gt )
 	 }
 	 break;
       default:
-	 kdDebug() << "Cant set " << name << " with type GammaTable" << endl;
+	 kdDebug(29000) << "Cant set " << name << " with type GammaTable" << endl;
 	 ret = false;
 	
    }
@@ -809,7 +809,7 @@ bool KScanOption::get( int *val ) const
       *val = (int)d;
       break;
     default:
-      kdDebug() << "Cant get " << name << " to type int" << endl;
+      kdDebug(29000) << "Cant get " << name << " to type int" << endl;
       return( false );
     }
 
@@ -852,10 +852,10 @@ QCString KScanOption::get( void ) const
 	 break;
 	
       default:
-	 kdDebug() << "Cant get " << getName() << " to type String !" << endl;
+	 kdDebug(29000) << "Cant get " << getName() << " to type String !" << endl;
 	 retstr = "unknown";
    }
-   kdDebug() << "option::get returns " << retstr << endl;
+   kdDebug(29000) << "option::get returns " << retstr << endl;
    return( retstr );
 }
 
@@ -925,7 +925,7 @@ bool KScanOption::getRange( double *min, double *max, double *q ) const
 	  *q   = r->quant ;
       }
    } else {
-      kdDebug() << "getRange: No range type " << desc->name << endl;
+      kdDebug(29000) << "getRange: No range type " << desc->name << endl;
       ret = false;
    }
    return( ret );
@@ -1073,12 +1073,12 @@ bool KScanOption::applyVal( void )
 					    0 );
    if( stat != SANE_STATUS_GOOD )
    {
-      kdDebug() << "Error in in situ appliance " << getName() << ": " << sane_strstatus( stat ) << endl;
+      kdDebug(29000) << "Error in in situ appliance " << getName() << ": " << sane_strstatus( stat ) << endl;
       res = false;
    }
    else
    {
-      kdDebug() << "IN SITU appliance " << getName() << ": OK" << endl;
+      kdDebug(29000) << "IN SITU appliance " << getName() << ": OK" << endl;
 
    }
    return( res );

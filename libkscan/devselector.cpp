@@ -42,7 +42,7 @@ DeviceSelector::DeviceSelector( QWidget *parent, const QStrList& devList,
     : KDialogBase( parent,  "DeviceSel", true, i18n("Welcome to Kooka"),
 		   Ok|Cancel, Ok, true )
 {
-   kdDebug() << "Starting DevSelector!" << endl;
+   kdDebug(29000) << "Starting DevSelector!" << endl;
    // Layout-Boxes
    QWidget *page = new QWidget( this );
    CHECK_PTR( page );
@@ -79,11 +79,11 @@ QCString DeviceSelector::getSelectedDevice( void ) const
    unsigned int selID = selectBox->id( selectBox->selected() );
 
    int c = devices.count();
-   kdDebug() << "The Selected ID is <" << selID << ">/" << c << endl;
+   kdDebug(29000) << "The Selected ID is <" << selID << ">/" << c << endl;
 
    const char * dev = devices.at( selID );
 
-   kdDebug() << "The selected device: <" << dev << ">" << endl;
+   kdDebug(29000) << "The selected device: <" << dev << ">" << endl;
    KGlobal::config()->setGroup( GROUP_STARTUP );
    KGlobal::config()->writeEntry( STARTUP_SCANDEV, dev );
 

@@ -76,7 +76,7 @@ bool KScanOptSet::backupOption( const KScanOption& opt )
      else
      {
 	const QCString& qq = opt.get();
-	kdDebug() << "Value is now: <" << qq << ">" << endl;
+	kdDebug(29000) << "Value is now: <" << qq << ">" << endl;
 	const KScanOption *newopt = new KScanOption( opt );
 
 	strayCatsList.append( newopt );

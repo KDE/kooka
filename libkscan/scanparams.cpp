@@ -71,14 +71,14 @@ bool ScanParams::connectDevice( KScanDevice *newScanDevice )
 
    if( ! newScanDevice )
    {
-      kdDebug() << "ERROR: No scan device !" << endl;
+      kdDebug(29000) << "ERROR: No scan device !" << endl;
    }
    sane_device = newScanDevice;
 
    QStrList strl = sane_device->getCommonOptions();
    QString emp;
    for ( emp=strl.first(); strl.current(); emp=strl.next() )
-      kdDebug() << "Common: " << strl.current() << endl;
+      kdDebug(29000) << "Common: " << strl.current() << endl;
 
    /* Start path for virual scanner */
    last_virt_scan_path = QDir::home();
@@ -234,7 +234,7 @@ void ScanParams::scannerParams( void ) // QVBoxLayout *top )
       }
       else
       {
-	 kdDebug() << "SERIOUS: No Resolution setting possible !" << endl;
+	 kdDebug(29000) << "SERIOUS: No Resolution setting possible !" << endl;
       }
    }
 
@@ -272,7 +272,7 @@ void ScanParams::scannerParams( void ) // QVBoxLayout *top )
 	 int isOn;
 	 so->get( &isOn );
 	
-	 kdDebug() << "Custom Gamma Table is <" << (isOn ? "on" : "off") << ">" << endl;
+	 kdDebug(29000) << "Custom Gamma Table is <" << (isOn ? "on" : "off") << ">" << endl;
 	
 	 /* Connect a signal to refresh activity of the gamma tables */
 	 connect( so, SIGNAL(guiChange(KScanOption*)),
@@ -299,7 +299,7 @@ void ScanParams::scannerParams( void ) // QVBoxLayout *top )
    so = sane_device->getGuiElement( SANE_NAME_NEGATIVE, this  );
 
    /* PREVIEW-Switch */
-   kdDebug() << "Try to get Gray-Preview" << endl;
+   kdDebug(29000) << "Try to get Gray-Preview" << endl;
    if( sane_device->optionExists( SANE_NAME_GRAY_PREVIEW ))
    {
      so = sane_device->getGuiElement( SANE_NAME_GRAY_PREVIEW, this );
@@ -317,7 +317,7 @@ void ScanParams::slOptionNotify( KScanOption *kso )
 {
    if( !kso || !kso->valid()) return;
 
-   kdDebug() << "slOptionNotify called !" << endl;
+   kdDebug(29000) << "slOptionNotify called !" << endl;
    if( kso->getName() == SANE_NAME_CUSTOM_GAMMA )
    {
       int state;
@@ -333,12 +333,12 @@ void ScanParams::slOptionNotify( KScanOption *kso )
 
 void ScanParams::slSourceSelect( void )
 {
-   kdDebug() << "Open Window for source selection !" << endl;
+   kdDebug(29000) << "Open Window for source selection !" << endl;
    KScanOption so( SANE_NAME_SCAN_SOURCE );
    ADF_BEHAVE adf = ADF_OFF;
 
    const QCString& currSource = so.get();
-   kdDebug() << "Current Source is <" << currSource << ">" << endl;
+   kdDebug(29000) << "Current Source is <" << currSource << ">" << endl;
    QStrList sources;
 
    if( so.valid() )
@@ -365,7 +365,7 @@ void ScanParams::slSourceSelect( void )
 	 so.set( sel_source.latin1() ); // FIX in ScanSourceDialog, then here
 	 sane_device->apply( &so );
 
-	 kdDebug() << "Dialog finished OK: " << sel_source << ", " << adf << endl;
+	 kdDebug(29000) << "Dialog finished OK: " << sel_source << ", " << adf << endl;
 
       }
    }
@@ -381,7 +381,7 @@ void ScanParams::slSourceSelect( void )
  */
 void ScanParams::slFileSelect( void )
 {
-   kdDebug() << "File Selector" << endl;
+   kdDebug(29000) << "File Selector" << endl;
    QString filter;
    QCString prefix = "\n*.";
 
@@ -416,7 +416,7 @@ void ScanParams::slFileSelect( void )
    }
 
    if ( !fileName.isNull() && virt_filename ) { // got a file name
-      kdDebug() << "Got fileName: " << fileName << endl;
+      kdDebug(29000) << "Got fileName: " << fileName << endl;
       // write Value to SANEOption, it updates itself.
       virt_filename->set( QFile::encodeName( fileName ) );
    }
@@ -437,7 +437,7 @@ void ScanParams::slVirtScanModeSelect( int id )
       /* Check if the entered filename to delete */
       if( virt_filename ) {
 	 QString vf = virt_filename->get();
-	 kdDebug() << "Found File in Filename-Option: " << vf << endl;
+	 kdDebug(29000) << "Found File in Filename-Option: " << vf << endl;
 
 	 QFileInfo fi( vf );
 	 if( fi.extension() != QString::fromLatin1("pnm") )
@@ -559,7 +559,7 @@ void ScanParams::slStartScan( void )
 {
    KScanStat stat = KSCAN_OK;
 
-   kdDebug() << "Called start-scan-Slot!" << endl;
+   kdDebug(29000) << "Called start-scan-Slot!" << endl;
    QString q;
 
    if( scan_mode == ID_SANE_DEBUG || scan_mode == ID_QT_IMGIO )
@@ -586,12 +586,12 @@ void ScanParams::slStartScan( void )
 	    stat = sane_device->acquire( );
 
 	 } else {
-	    kdDebug() << "Not yet implemented :-/" << endl;
+	    kdDebug(29000) << "Not yet implemented :-/" << endl;
 	
 	    // stat = performADFScan();
 	 }
       } else {
-	 kdDebug() << "Reading dir by Qt-internal imagereading file " << q << endl;
+	 kdDebug(29000) << "Reading dir by Qt-internal imagereading file " << q << endl;
 	 sane_device->acquire( q );
       }
    }
@@ -601,23 +601,23 @@ void ScanParams::slStartScan( void )
 
 void ScanParams::slEditCustGamma( void )
 {
-    kdDebug() << "Called EditCustGamma ;)" << endl;
+    kdDebug(29000) << "Called EditCustGamma ;)" << endl;
     KGammaTable old_gt;
 
     KScanOption redGt( SANE_NAME_GAMMA_VECTOR_R );
-    if( redGt.active()) kdDebug() << "RED-GT is active now !" << endl;
+    if( redGt.active()) kdDebug(29000) << "RED-GT is active now !" << endl;
 
     KScanOption blueGt( SANE_NAME_GAMMA_VECTOR_B );
-    if( blueGt.active()) kdDebug() << "blue-GT is active now !" << endl;
+    if( blueGt.active()) kdDebug(29000) << "blue-GT is active now !" << endl;
 
     KScanOption greenGt( SANE_NAME_GAMMA_VECTOR_G );
-    if( greenGt.active()) kdDebug() << "green-GT is active now !" << endl;
+    if( greenGt.active()) kdDebug(29000) << "green-GT is active now !" << endl;
 
     KScanOption grayGt( SANE_NAME_GAMMA_VECTOR );
-    if( grayGt.active()) kdDebug() << "Gray-GT is active now !" << endl;
+    if( grayGt.active()) kdDebug(29000) << "Gray-GT is active now !" << endl;
     grayGt.get( &old_gt );
 
-    kdDebug() << "Old gamma table: " << old_gt.getGamma() << ", " << old_gt.getBrightness() << ", " << old_gt.getContrast() << endl;
+    kdDebug(29000) << "Old gamma table: " << old_gt.getGamma() << ", " << old_gt.getBrightness() << ", " << old_gt.getContrast() << endl;
 
     GammaDialog gdiag( this );
     connect( &gdiag, SIGNAL( gammaToApply(GammaDialog&) ),
@@ -667,7 +667,7 @@ void ScanParams::slApplyGamma( GammaDialog& gdiag )
       bGt.set( gt );
       sane_device->apply( &bGt, true );
    }
-   kdDebug() << "Fine !" << endl;
+   kdDebug(29000) << "Fine !" << endl;
 
 }
 
@@ -678,7 +678,7 @@ void ScanParams::slApplyGamma( GammaDialog& gdiag )
 void ScanParams::slReloadAllGui( KScanOption* t)
 {
     if( !t || ! sane_device ) return;
-    kdDebug() << "This is slReloadAllGui for widget " << t->getName() << endl;
+    kdDebug(29000) << "This is slReloadAllGui for widget " << t->getName() << endl;
     /* Need to reload all _except_ the one which was actually changed */
 
     sane_device->slReloadAllBut( t );
@@ -698,7 +698,7 @@ void ScanParams::slReloadAllGui( KScanOption* t)
 /* Slot called to start acquirering a preview */
 void ScanParams::slAcquirePreview( void )
 {
-    kdDebug() << "Called acquirePreview-Slot!" << endl;
+    kdDebug(29000) << "Called acquirePreview-Slot!" << endl;
     bool gray_preview = false;
     if( cb_gray_preview )
         gray_preview  = cb_gray_preview->isChecked();
@@ -707,13 +707,13 @@ void ScanParams::slAcquirePreview( void )
     /* Maximal preview size */
     slMaximalScanSize();
 
-    if( ! sane_device ) kdDebug() << "Aeetsch: sane_device is 0 !" << endl;
+    if( ! sane_device ) kdDebug(29000) << "Aeetsch: sane_device is 0 !" << endl;
     CHECK_PTR( sane_device );
     KScanStat stat = sane_device->acquirePreview( gray_preview );
 
     if( stat != KSCAN_OK )
     {
-	kdDebug() << "Error in scanning !" << endl;
+	kdDebug(29000) << "Error in scanning !" << endl;
     }
 }
 
@@ -723,7 +723,7 @@ void ScanParams::slAcquirePreview( void )
  */
 void ScanParams::slCustomScanSize( QRect sel)
 {
-   kdDebug() << "Custom-Size: " << sel.x() << ", " << sel.y() << " - " << sel.width() << "x" << sel.height() << endl;
+   kdDebug(29000) << "Custom-Size: " << sel.x() << ", " << sel.y() << " - " << sel.width() << "x" << sel.height() << endl;
 
    KScanOption tl_x( SANE_NAME_SCAN_TL_X );
    KScanOption tl_y( SANE_NAME_SCAN_TL_Y );
@@ -742,8 +742,8 @@ void ScanParams::slCustomScanSize( QRect sel)
    br_x.set( w );
 
 
-   kdDebug() << "set tl_x: " << min1 + double(range * (double(sel.x()) / 1000.0) ) << endl;
-   kdDebug() << "set br_x: " << min1 + double(range * (double(sel.x() + sel.width())/1000.0)) << endl;
+   kdDebug(29000) << "set tl_x: " << min1 + double(range * (double(sel.x()) / 1000.0) ) << endl;
+   kdDebug(29000) << "set br_x: " << min1 + double(range * (double(sel.x() + sel.width())/1000.0)) << endl;
 
    /** Y-Value setting */
    tl_y.getRange( &min1, &max1, &dummy1 );
@@ -757,8 +757,8 @@ void ScanParams::slCustomScanSize( QRect sel)
    br_y.set( w );
 
 
-   kdDebug() << "set tl_y: " << min1 + double(range * (double(sel.y()) / 1000.0) ) << endl;
-   kdDebug() << "set br_y: " << min1 + double(range * (double(sel.y() + sel.height())/1000.0)) << endl;
+   kdDebug(29000) << "set tl_y: " << min1 + double(range * (double(sel.y()) / 1000.0) ) << endl;
+   kdDebug(29000) << "set br_y: " << min1 + double(range * (double(sel.y() + sel.height())/1000.0)) << endl;
 
 
    sane_device->apply( &tl_x );
@@ -773,7 +773,7 @@ void ScanParams::slCustomScanSize( QRect sel)
 	 */
 void ScanParams::slMaximalScanSize( void )
 {
-   kdDebug() << "Setting to default" << endl;
+   kdDebug(29000) << "Setting to default" << endl;
    slCustomScanSize(QRect( 0,0,1000,1000));
 }
 

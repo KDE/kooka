@@ -64,11 +64,11 @@ void KScanSlider::slSetSlider( int value )
 {
     /* Important to check value to avoid recursive signals ;) */
     // debug( "Slider val: %d -> %d", value, slider_val );
-    kdDebug() << "Setting Slider with " << value << endl;
+    kdDebug(29000) << "Setting Slider with " << value << endl;
 
     if( value == slider_val )
     {
-      kdDebug() << "Returning because slider value is already == " << value << endl;
+      kdDebug(29000) << "Returning because slider value is already == " << value << endl;
       return;
     }
     slider->setValue( value );
@@ -78,7 +78,7 @@ void KScanSlider::slSetSlider( int value )
 
 void KScanSlider::slSliderChange( int v )
 {
-    kdDebug() << "Got slider val: " << v << endl;
+    kdDebug(29000) << "Got slider val: " << v << endl;
     slider_val = v;
     numdisp->setNum(v);
     emit( valueChanged( v ));
@@ -152,13 +152,13 @@ void KScanCombo::slSetEntry( const QString &t )
     if( i > -1 )
 	combo->setCurrentItem( i );
     else
-	kdDebug() << "Combo item not in list !" << endl;
+	kdDebug(29000) << "Combo item not in list !" << endl;
 }
 
 void KScanCombo::slComboChange( const QString &t )
 {
     emit valueChanged( QCString( t.latin1() ) );
-    kdDebug() << "Combo: valueChanged emitted!" << endl;
+    kdDebug(29000) << "Combo: valueChanged emitted!" << endl;
 }
 
 void KScanCombo::slSetIcon( const QPixmap& pix, const QString& str)
