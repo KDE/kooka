@@ -331,29 +331,6 @@ void CRep::drawBox( QPixmap* pix, const QRect& r, const QColor& color )
 }
 
 
-#if 0
-void CRep::analyseGraph()
-{
-    Kadmos::RepResult *repRes = m_RepData.rep_result;
-    kdDebug(28000) << "REP-Image: " << repRes->left << ", " << repRes->top << ", "
-              << repRes->width << ", " << repRes->height << endl;
-
-    kdDebug(28000) << "Amount of resul items: " << repRes->rel_graph_len << endl;
-    kdDebug(28000) << "Amount of graph items: " << repRes->rel_result_len << endl;
-
-    if( repRes )
-    {
-        for( short line = 0; line < repRes->rel_result_len-1; line ++ )
-        {
-            analyseLine( line );
-        }
-    }
-    else
-    {
-        /* undefined result -> hmmm  :-( */
-    }
-}
-#endif
 
 KADMOS_ERROR CRep::SetImage( const QString file )
 {
@@ -371,13 +348,6 @@ KADMOS_ERROR CRep::SetImage( const QString file )
 KADMOS_ERROR CRep::SetImage(QImage *Image)
 {
     // memcpy(&m_RepData.image, Image.bits(), Image.numBytes());
-#if 0
-    /*  does not compile because too few parameters, second param is not
-     *  yet documented.
-     */
-    ReImageHandle h = re_bmp2image( (void*) Image.bits(), 0L,
-                                    &m_RepData.image );
-#endif
     if( !Image ) return RE_PARAMETERERROR;
 
     kdDebug(28000) << "Setting image manually." << endl;
@@ -408,12 +378,6 @@ KADMOS_ERROR CRep::SetImage(QImage *Image)
     m_RepData.image.xresolution = 200;
     m_RepData.image.yresolution = 200;
 
-#if 0
-    m_RepData.image.subimage.left  = 0;
-    m_RepData.image.subimage.top   = 0;
-    m_RepData.image.subimage.width = Image->width();
-    m_RepData.image.subimage.height  = Image->height();
-#endif
     CheckError();
 
     return RE_SUCCESS;
