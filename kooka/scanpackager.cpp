@@ -120,35 +120,48 @@ void ScanPackager::openRoots()
    /* First open the standard root */
    QString localRoot = Previewer::galleryRoot();
    
-   KURL rootUrl(localRoot);
-
    /* standard root always exists, ImgRoot creates it */
+   KURL rootUrl(localRoot);
    kdDebug(28000) << "Open standard root " << rootUrl.url() << endl;
-   KIconLoader *loader = KGlobal::iconLoader();
-   
-   KFileTreeBranch *newbranch = addBranch( rootUrl, i18n("Kooka Gallery"),
-					   loader->loadIcon( "folder_image", KIcon::Small ),
-					   false /* do not showHidden */ );
-   setDirOnlyMode( newbranch, false );
-   newbranch->setShowExtensions( false );
 
-   newbranch->setOpenPixmap( loader->loadIcon( "folder_blue_open", KIcon::Small ));
-			 
-   connect( newbranch, SIGNAL(newTreeViewItems( KFileTreeBranch*, const KFileTreeViewItemList& )),
-	    this, SLOT( slotDecorate(KFileTreeBranch*, const KFileTreeViewItemList& )));
-
-   connect( newbranch, SIGNAL( directoryChildCount( KFileTreeViewItem* , int )),
-	    this, SLOT( slotDirCount( KFileTreeViewItem *, int )));
-   
-   newbranch->setOpen(true);
-   
-   /* open more configurable image repositories TODO */
-
+   KFileTreeBranch *branch = openRoot( rootUrl, true );
    /* select Incoming-Dir, TODO restore last selection ! */
-   KFileTreeViewItem *startit = findItem( newbranch, i18n( "Incoming/" ) );
+   KFileTreeViewItem *startit = findItem( branch, i18n( "Incoming/" ) );
    
    if( ! startit ) kdDebug(28000) << "No Start-Item found :(" << endl;
    setCurrentItem( startit );
+
+   /* open more configurable image repositories TODO */
+}
+
+
+KFileTreeBranch* ScanPackager::openRoot( const KURL& root, bool open )
+{
+   KIconLoader *loader = KGlobal::iconLoader();
+   
+   KFileTreeBranch *newbranch = addBranch( root, i18n("Kooka Gallery"),
+					   loader->loadIcon( "folder_image", KIcon::Small ),
+					   false /* do not showHidden */ );
+   if( newbranch )
+   {
+      setDirOnlyMode( newbranch, false );
+      newbranch->setShowExtensions( false );
+
+      newbranch->setOpenPixmap( loader->loadIcon( "folder_blue_open", KIcon::Small ));
+			 
+      connect( newbranch, SIGNAL(newTreeViewItems( KFileTreeBranch*, const KFileTreeViewItemList& )),
+	       this, SLOT( slotDecorate(KFileTreeBranch*, const KFileTreeViewItemList& )));
+
+      connect( newbranch, SIGNAL( directoryChildCount( KFileTreeViewItem* , int )),
+	       this, SLOT( slotDirCount( KFileTreeViewItem *, int )));
+
+      connect( newbranch, SIGNAL( deleteItem( KFileItem* )),
+	       this, SLOT( slotDeleteFromBranch(KFileItem*)));
+
+      newbranch->setOpen(open);
+   
+   }
+   return( newbranch );
 }
 
 void ScanPackager::createMenus()
@@ -565,7 +578,7 @@ QString ScanPackager::localFileName( KFileTreeViewItem *it ) const
 }
 
 /* Called if the image exists but was changed by image manipulation func   */
-void ScanPackager::slotImageChanged( QImage *img )
+void ScanPackager::slotCurrentImageChanged( QImage *img )
 {
    KFileTreeViewItem *curr = currentKFileTreeViewItem();
    if( ! curr )
@@ -611,6 +624,7 @@ void ScanPackager::slotImageChanged( QImage *img )
 
    if( img && !img->isNull())
    {
+      emit( imageChanged( curr->url()));
       KookaImage *newImage = new KookaImage(*img);
       slImageArrived( curr, newImage );
    }
@@ -1015,4 +1029,12 @@ ScanPackager::~ScanPackager(){
       kdDebug(29000) << "Destructor of ScanPackager" << endl;
 
 }
+
+/* called whenever one branch detects a deleted file */
+void ScanPackager::slotDeleteFromBranch( KFileItem* kfi )
+{
+   emit fileDeleted( kfi );
+}
+
+
 #include "scanpackager.moc"

@@ -154,7 +154,10 @@ signals:
     */
    void signalChangeCaption(const QString& text);
 
-
+   /**
+    * This signal indicates that 
+    */
+   
 private:
    void loadPreviewImage( const QCString& scanner );
    QImage rotateRight( QImage* );

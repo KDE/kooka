@@ -33,9 +33,11 @@
 #include <kdebug.h>
 #include <kfileitem.h>
 #include <kfileiconview.h>
+#include <kfiletreeviewitem.h>
 #include <kimageeffect.h>
 
 #include "thumbview.h"
+#include "thumbviewitem.h"
 
 ThumbView::ThumbView( QWidget *parent, const char *name )
    : KIconView( parent, name ),
@@ -51,12 +53,69 @@ ThumbView::ThumbView( QWidget *parent, const char *name )
    m_basePix.convertFromImage( ires );
 
    setItemsMovable( false );
+
+   connect( this, SIGNAL( executed( QIconViewItem* )),
+	    this, SLOT( slDoubleClicked( QIconViewItem* )));
 }
 
 ThumbView::~ThumbView()
 {
    
 }
+
+
+void ThumbView::slDoubleClicked( QIconViewItem *qIt )
+{
+   ThumbViewItem *it = static_cast<ThumbViewItem*>( qIt );
+
+   if( it )
+   {
+      const KURL url = it->itemUrl();
+      
+      emit( selectFromThumbnail( url ));
+   }
+}
+
+void ThumbView::slImageChanged( KFileItem *kfit )
+{
+   if( ! kfit ) return;
+   
+   if( deleteImage( kfit ))
+   {
+      /* Trigger a new reading */
+      KFileItemList li;
+      li.append( kfit );
+      slNewFileItems( li );
+   }
+}
+
+bool ThumbView::deleteImage( KFileItem *kfit )
+{
+   if( ! kfit ) return false;
+
+   kdDebug(28000) << "Deleting image from thumbview!" << endl;
+   
+   KURL searchUrl = kfit->url();
+   bool haveItem = false;
+
+   /* iterate over all icon items and compare urls.
+    * TODO: Check the parent url to avoid iteration over all */
+   for ( QIconViewItem *item = firstItem(); item && !haveItem; item = item->nextItem() )
+   {
+      if( searchUrl == static_cast<ThumbViewItem*>(item)->itemUrl() )
+      {
+	 takeItem( item );
+	 haveItem = true;
+      }
+   }
+   return( haveItem );
+}
+
+void ThumbView::slImageDeleted( KFileItem *kfit )
+{
+   deleteImage( kfit );
+}
+
 
 void ThumbView::slNewFileItems( const KFileItemList& items )
 {
@@ -78,12 +137,16 @@ void ThumbView::slNewFileItems( const KFileItemList& items )
       {
 	 QPixmap p(m_basePix) ;
 	 /* Create a new empty preview pixmap and store the pointer to it */
-	 KFileIconViewItem *newIconViewIt = new KFileIconViewItem( this,
-								   item->url().filename(),
-								   createPixmap(p),
-								   item );
+	 ThumbViewItem *newIconViewIt = new ThumbViewItem( this,
+							   item->url().filename(),
+							   createPixmap(p),
+							   item );
 
+	 newIconViewIt->setItemUrl( item->url() );
+	 
+	 /* tell the file item about the iconView-representation */
 	 item->setExtraData( this, newIconViewIt );
+	 
 	 startJobOn.append( item );
       }
    }

@@ -83,6 +83,8 @@ KookaView::KookaView(QWidget *parent, const QCString& deviceToUse)
    /* thumbnail viewer widget */
    m_thumbview = new ThumbView( m_stack );
    m_stack->addWidget( m_thumbview );
+
+   
    
    setResizeMode( m_stack /* img_canvas */,    QSplitter::Stretch );
    setResizeMode( paramSplitter, QSplitter::KeepSize);
@@ -99,6 +101,9 @@ KookaView::KookaView(QWidget *parent, const QCString& deviceToUse)
    }
    connect( packager, SIGNAL(showThumbnails( KFileTreeViewItem* )),
 	    this, SLOT( slShowThumbnails( KFileTreeViewItem* )));
+   connect( m_thumbview, SIGNAL( selectFromThumbnail( const KURL& )),
+	    packager, SLOT( slSelectImage(const KURL&)));
+   
    /* build up the Preview/Packager-Tabview */
    tabw->insertTab( packager, i18n( "&Gallery"), PACKAGER_TAB );
 
@@ -183,7 +188,13 @@ KookaView::KookaView(QWidget *parent, const QCString& deviceToUse)
    connect( packager, SIGNAL( unloadImage( QImage* )),
             img_canvas, SLOT( deleteView( QImage*)));
 
+   /* a image changed mostly through a image manipulation method like rotate */
+   connect( packager, SIGNAL( imageChanged( const KURL& )),
+	    m_thumbview, SLOT( slImageChanged( const KURL& )));
 
+   connect( packager, SIGNAL( fileDeleted( KFileItem* )),
+	    m_thumbview, SLOT( slImageDeleted( KFileItem* )));
+   
 }
 
 
@@ -743,7 +754,7 @@ void KookaView::slStartLoading( const KURL& url )
 void KookaView::updateCurrImage( QImage& img )
 {
    emit( signalChangeStatusbar( i18n("Storing image changes" )));
-   packager->slotImageChanged( &img );
+   packager->slotCurrentImageChanged( &img );
    emit( signalCleanStatusbar());
 }
 

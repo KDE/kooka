@@ -40,6 +40,7 @@ class KURL;
 class KPopupMenu;
 class KFileTreeViewItem;
 class KookaImage;
+class KFileTreeBranch;
 
 
 typedef enum{ Dummy, NameSearch, UrlSearch } SearchType;
@@ -70,22 +71,25 @@ public:
     virtual QString getImgName( QString name_on_disk );
 
     QString 	getCurrImageFileName( bool ) const;
+
+    KFileTreeBranch* openRoot( const KURL&, bool open=false );
+   
 public slots:
     void         slSelectImage( const KURL& );
     void 	 slAddImage( QImage *img );		
     void 	 slSelectionChanged( QListViewItem *);
     void         slShowContextMenue(QListViewItem *, const QPoint &, int );
 
-   void         slotExportFile( );
+    void         slotExportFile( );
     
     void         slotCanceled(KIO::Job*);
-    void         slotImageChanged( QImage* );
+    void         slotCurrentImageChanged( QImage* );
 
    void         slotDecorate( KFileTreeViewItem* );
    void         slotDecorate( KFileTreeBranch*, const KFileTreeViewItemList& );
    
    void         slotSelectDirectory( const QString& );
-   
+
 protected slots:
    void         slFileRename( QListViewItem*, const QString&, int );
    // void         slFilenameChanged( KFileTreeViewItem*, const KURL & );
@@ -98,15 +102,20 @@ protected slots:
    void         slotUnloadItem( KFileTreeViewItem *curr );
    void         slotDirCount( KFileTreeViewItem *item, int cnt );
    void 	slotUrlsDropped( KURL::List& urls, KURL& copyTo );
-
+   void         slotDeleteFromBranch( KFileItem* );
 signals:
-    void 	showImage( QImage* );
-    void        deleteImage( QImage* );
-    void        unloadImage( QImage* );
-    void        galleryPathSelected( KFileTreeBranch* branch, const QString& relativPath );
-    void        directoryToRemove( KFileTreeBranch *branch, const QString& relativPath );
-    void        showThumbnails( KFileTreeViewItem* );
-    void        aboutToShowImage( const KURL& ); /* starting to load image */
+   void 	showImage( QImage* );
+   void         deleteImage( QImage* );
+   void         unloadImage( QImage* );
+   void         galleryPathSelected( KFileTreeBranch* branch, const QString& relativPath );
+   void         directoryToRemove( KFileTreeBranch *branch, const QString& relativPath );
+   void         showThumbnails( KFileTreeViewItem* );
+   
+   void         aboutToShowImage( const KURL& ); /* starting to load image */
+   void         imageChanged( const KURL& );     /* the image has changed  */
+
+   void         fileDeleted( KFileItem* );
+   void         fileChanged( KFileItem* );
    
 private:
    QString     localFileName( KFileTreeViewItem* it ) const;

@@ -41,7 +41,7 @@
 #include <kfileiconview.h>
 
 class QPixmap;
-
+class QListViewItem;
    
 class ThumbView: public KIconView
 {
@@ -86,9 +86,31 @@ public slots:
    void slNewFileItems( const KFileItemList& ); 
    void slGotPreview( const KFileItem*, const QPixmap& );
    void slPreviewResult( KIO::Job* );
+
+   /**
+    *  This connects to the IconView's executed signal and tells the packager
+    *  to select the image
+    */
+   void slDoubleClicked( QIconViewItem* );
+
+   /**
+    *  indication that a image changed, needs to be reloaded.
+    */
+   void slImageChanged( KFileItem * );
+   void slImageDeleted( KFileItem * );
+   
+signals:
+   /**
+    * selects a QListViewItem from the thumbnail. This signal makes only
+    * sense when connected to a ScanPackager.
+    */ 
+   void selectFromThumbnail( const KURL& );
+   
 private:
    QPixmap createPixmap( const QPixmap& ) const;
 
+   bool    deleteImage( KFileItem* );
+   
    KURL    m_currentDir;
    QPixmap m_basePix;
    int     m_pixWidth;
