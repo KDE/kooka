@@ -43,7 +43,7 @@ MassScanDialog::MassScanDialog( QWidget *parent )
    QHBoxLayout *l_but  = new QHBoxLayout( 10 );  // Buttons
  	
  	/* Caption */
- 	QLabel *l1 = new QLabel( QString( i18n( "<B>Mass Scanning</B>" )), this);
+ 	QLabel *l1 = new QLabel( i18n( "<B>Mass Scanning</B>" ), this);
    bigdad->addWidget( l1, 1);
  	
  	/* Scan parameter information */
