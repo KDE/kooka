@@ -89,6 +89,12 @@ bool KookaPrint::printImage( KookaImage *img )
         kdDebug(28000) << "Custom resolution: " << reso << endl;
 
     }
+    else if( scale == "fitpage" )
+    {
+	kdDebug(28000) << "Printing using maximum space on page" << endl;
+	printFittingToPage( img );
+	reso = 0;  // to skip the printing on this page.
+    }
 
     /* Scale the image for printing */
     kdDebug(28000) << "Printer-Resolution: " << printerRes << " and scale-Reso: " << reso << endl;
@@ -139,9 +145,44 @@ bool KookaPrint::printImage( KookaImage *img )
         }
     }
 
-    m_painter = 0;
+    m_painter = 0;  // no, this is not a memory leak. 
     return result;
 }
+
+void KookaPrint::printFittingToPage(KookaImage *img)
+{
+    if( ! img || ! m_painter ) return;
+
+    KookaImage   tmpImg;
+
+    QString psMode = m_printer->option( OPT_RATIO );
+    bool maintainAspect = (psMode == "1");
+
+    QSize s = maxPageSize();
+
+    double wAspect = double(s.width())  / double(img->width());
+    double hAspect = double(s.height()) / double(img->height());
+
+    // take the smaller one.
+    double aspect = wAspect;
+    if( hAspect < wAspect ) aspect = hAspect;
+
+    // default: maintain aspect ratio.
+    int newWidth  = int( double( img->width() ) * aspect );
+    int newHeight = int( double( img->height()) * aspect );
+
+    if( ! maintainAspect )
+    {
+	newWidth  = int( double( img->width() )  * wAspect );
+	newHeight = int( double( img->height() ) * hAspect );
+    }
+    
+    tmpImg = img->smoothScale(newWidth, newHeight, QImage::ScaleFree);
+
+    m_painter->drawImage( 0,0, tmpImg );
+    
+}
+
 
 void KookaPrint::drawMarkerAroundPoint( const QPoint& p )
 {
@@ -303,13 +344,19 @@ void KookaPrint::drawCornerMarker( const QSize& imgSize, int row, int col, int m
     drawMarkerAroundPoint( p ); /* at bottom left */
 }
 
-QSize KookaPrint::maxPageSize( ) const
+QSize KookaPrint::maxPageSize( int extraShrinkPercent ) const
 {
     if( ! m_painter ) return QSize();
     QPaintDeviceMetrics printermetrics( m_painter->device() );
 
-    return QSize( int(double(printermetrics.width())*0.9),
-                  int(double(printermetrics.height())*0.9) );
+    double extraShrink = double(100-extraShrinkPercent)/100.0;
+    
+    QSize retSize( printermetrics.width(), printermetrics.height() );
+    
+    if( extraShrinkPercent > 0 )
+	retSize = QSize( int(double(printermetrics.width())* extraShrink) ,
+			 int(double(printermetrics.height())* extraShrink ));
+    return retSize;
 }
 
 int KookaPrint::extraMarginPix() const

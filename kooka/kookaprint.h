@@ -73,12 +73,12 @@ public:
      * The maximum pixel size of the image (or imagepart) on
      * the current page
      */
-    virtual QSize maxPageSize() const;
+    virtual QSize maxPageSize( int extraShrinkPercent = 0 ) const;
 
 public slots:
 
     bool printImage( KookaImage* );
-
+    void printFittingToPage(KookaImage *img);
 protected:
     typedef enum { SW, NW, NO, SO } MarkerDirection;
     

@@ -40,7 +40,7 @@
 #define OPT_HEIGHT   "kde-kooka-height"
 #define OPT_PSGEN_DRAFT  "kde-kooka-psdraft"
 #define OPT_RATIO    "kde-kooka-ratio"
-
+#define OPT_FITPAGE  "kde-kooka-fitpage"
 class QWidget;
 class QString;
 class QLabel;
@@ -68,11 +68,12 @@ protected slots:
     void slCustomHeightChanged(int);
 
 private:
-    QVButtonGroup *m_scaleRadios;
+    QButtonGroup  *m_scaleRadios;
     QRadioButton  *m_rbOrigSize;
     QRadioButton  *m_rbScale;
     QRadioButton  *m_rbScreen;
-
+    QRadioButton  *m_rbFitPage;
+    
     KIntNumInput *m_sizeW;
     KIntNumInput *m_sizeH;
     KIntNumInput *m_dpi;

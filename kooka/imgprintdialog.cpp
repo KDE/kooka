@@ -39,12 +39,13 @@
 #include <qvgroupbox.h>
 #include <qpaintdevicemetrics.h>
 #include <qlabel.h>
+#include <qtooltip.h>
 #include <kdebug.h>
 
 #define ID_SCREEN 0
 #define ID_ORIG   1
 #define ID_CUSTOM 2
-
+#define ID_FIT_PAGE 3
 
 ImgPrintDialog::ImgPrintDialog( KookaImage *img, QWidget *parent, const char* name )
     : KPrintDialogPage( parent, name ),
@@ -56,22 +57,32 @@ ImgPrintDialog::ImgPrintDialog( KookaImage *img, QWidget *parent, const char* na
     // layout->setMargin( KDialog::marginHint() );
     // layout->setSpacing( KDialog::spacingHint() );
 
-    m_scaleRadios = new QVButtonGroup( i18n("Image Print Size"), this );
+    m_scaleRadios = new QButtonGroup( 2, Qt::Vertical, i18n("Image Print Size"), this );
     m_scaleRadios->setRadioButtonExclusive(true);
     connect( m_scaleRadios, SIGNAL(clicked(int)), SLOT(slScaleChanged(int)));
 
     m_rbScreen = new QRadioButton( i18n("Scale to same size as on screen"),
                                        m_scaleRadios );
+    QToolTip::add( m_rbScreen, i18n("Screen scaling. That prints according to the screen resolution."));
 
     m_scaleRadios->insert( m_rbScreen, ID_SCREEN );
 
     m_rbOrigSize = new QRadioButton( i18n("Original size (calculate from scan resolution)"),
                                      m_scaleRadios );
+    QToolTip::add( m_rbOrigSize,
+		   i18n("Calculates the print size from the scan resolution. Enter the scan resolution in the dialog field below." ));
     m_scaleRadios->insert( m_rbOrigSize, ID_ORIG );
 
 
     m_rbScale    = new QRadioButton( i18n("Scale image to custom dimension"), m_scaleRadios );
+    QToolTip::add( m_rbScale,
+		   i18n("Set the print size yourself in the dialog below. The image is centered on the paper."));
+    
     m_scaleRadios->insert( m_rbScale, ID_CUSTOM );
+
+    m_rbFitPage = new QRadioButton( i18n("Scale image to fit to page"), m_scaleRadios );
+    QToolTip::add( m_rbFitPage, i18n("Printout uses maximum space on the selected pager. Aspect ratio is maintained."));
+    m_scaleRadios->insert( m_rbFitPage, ID_FIT_PAGE );
 
     layout->addWidget( m_scaleRadios );
 
@@ -79,21 +90,7 @@ ImgPrintDialog::ImgPrintDialog( KookaImage *img, QWidget *parent, const char* na
     QHBoxLayout *hbox = new QHBoxLayout( this );
     layout->addLayout( hbox );
 
-    QVGroupBox *group = new QVGroupBox( i18n("Image Print Size"), this );
-    hbox->addWidget( group );
-
-    m_sizeW = new KIntNumInput( group );
-    m_sizeW->setLabel( i18n("Image Width:"), AlignVCenter );
-    m_sizeW->setSuffix( i18n(" mm"));
-    connect( m_sizeW, SIGNAL(valueChanged(int)), SLOT(slCustomWidthChanged(int)));
-    m_sizeH = new KIntNumInput( m_sizeW, AlignVCenter, group  );
-    m_sizeH->setLabel( i18n("Image Height:"), AlignVCenter);
-    m_sizeH->setSuffix( i18n(" mm"));
-    connect( m_sizeH, SIGNAL(valueChanged(int)), SLOT(slCustomHeightChanged(int)));
-
-    m_ratio = new QCheckBox( i18n("Maintain aspect ratio"), group, "cbAspectRatio" );
-    m_ratio->setChecked(true);
-
+    /** Box for Image Resolutions **/
     QVGroupBox *group1 = new QVGroupBox( i18n("Resolutions"), this );
     hbox->addWidget( group1 );
 
@@ -111,6 +108,23 @@ ImgPrintDialog::ImgPrintDialog( KookaImage *img, QWidget *parent, const char* na
 
     /* Label for displaying the screen Resolution */
     m_screenRes = new QLabel( group1 );
+
+    /** Box for Image Print Size **/
+    QVGroupBox *group = new QVGroupBox( i18n("Image Print Size"), this );
+    hbox->addWidget( group );
+
+    m_sizeW = new KIntNumInput( group );
+    m_sizeW->setLabel( i18n("Image Width:"), AlignVCenter );
+    m_sizeW->setSuffix( i18n(" mm"));
+    connect( m_sizeW, SIGNAL(valueChanged(int)), SLOT(slCustomWidthChanged(int)));
+    m_sizeH = new KIntNumInput( m_sizeW, AlignVCenter, group  );
+    m_sizeH->setLabel( i18n("Image Height:"), AlignVCenter);
+    m_sizeH->setSuffix( i18n(" mm"));
+    connect( m_sizeH, SIGNAL(valueChanged(int)), SLOT(slCustomHeightChanged(int)));
+
+    m_ratio = new QCheckBox( i18n("Maintain aspect ratio"), group, "cbAspectRatio" );
+    m_ratio->setChecked(true);
+
 
     QWidget *spaceEater = new QWidget( this );
     spaceEater->setSizePolicy( QSizePolicy( QSizePolicy::Ignored, QSizePolicy::Ignored ));
@@ -174,6 +188,8 @@ void ImgPrintDialog::getOptions(QMap<QString,QString>& opts, bool )
         scale = "scan";
     else if( m_rbScale->isChecked() )
         scale = "custom";
+    else if( m_rbFitPage->isChecked() )
+	scale = "fitpage";
 
     opts[OPT_SCALING] = scale;
 
@@ -213,7 +229,6 @@ void ImgPrintDialog::slScaleChanged( int id )
     {
 	/* disalbe size, scan res. */
 	m_dpi->setEnabled(false);
-
         m_ratio->setEnabled(false);
         m_sizeW->setEnabled(false);
         m_sizeH->setEnabled(false);
@@ -232,6 +247,13 @@ void ImgPrintDialog::slScaleChanged( int id )
         m_ratio->setEnabled(true);
         m_sizeW->setEnabled(true);
         m_sizeH->setEnabled(true);
+    }
+    else if( id == ID_FIT_PAGE )
+    {
+	m_dpi->setEnabled(false);
+        m_ratio->setEnabled(true);
+        m_sizeW->setEnabled(false);
+        m_sizeH->setEnabled(false);	
     }
 }
 
