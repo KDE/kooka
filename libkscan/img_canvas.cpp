@@ -116,8 +116,8 @@ ImageCanvas::ImageCanvas(QWidget *parent,
 
 ImageCanvas::~ImageCanvas()
 {
-    delete selected;
-    delete pmScaled;
+    if( selected ) delete selected;
+    if( pmScaled ) delete pmScaled;
     // if( contextMenu ) delete contextMenu;
     noRectSlot();  /* Switches timer off */
  	
@@ -125,8 +125,16 @@ ImageCanvas::~ImageCanvas()
 
 void ImageCanvas::deleteView( QImage *delimage )
 {
-    if( delimage == image )
-        newImage( 0 );
+   const QImage *img = rootImage();
+   kdDebug(28000) << "ImageCanvas -> " << delimage << " - " << img << endl;
+   
+   if( delimage == img )
+   {
+      kdDebug(28000) << "ImageCanvas -> emiting newImage(0L)" << endl;
+      newImage( 0L );
+      noRectSlot();
+   }
+	 
 }
 
 void ImageCanvas::newImage( QImage *new_image )
@@ -143,15 +151,11 @@ void ImageCanvas::newImage( QImage *new_image )
    if( pmScaled )
    {
       delete pmScaled;
-      pmScaled = 0;
+      pmScaled = 0L;
    }
 
    if( selected )
    {
-      selected->setLeft( 0 );
-      selected->setRight( 0 );
-      selected->setTop( 0 );
-      selected->setBottom( 0 );
       noRectSlot();
    }
 
@@ -180,8 +184,8 @@ void ImageCanvas::newImage( QImage *new_image )
       setContentsPos(0,0);
    } else {
       kdDebug(29000) << "New image called without image => deleting!" << endl;
-      image = 0L;
       acquired = false;
+      resizeContents( 0,0 );
    }
 
 
@@ -435,6 +439,9 @@ void ImageCanvas::noRectSlot( void )
       killTimer( timer_id );
       timer_id = 0;
    }
+
+   if( selected )
+      selected->setCoords( 0,0,0,0 );
 }
 
 void ImageCanvas::viewportMousePressEvent(QMouseEvent *ev)
