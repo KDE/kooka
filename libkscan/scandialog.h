@@ -16,8 +16,8 @@ public:
     ~ScanDialog();
 
 private slots:
-    void slCreateTempFile(QImage *img);
-    
+    void slotFinalImage(QImage *image);
+
 private:
     ScanParams  *m_scanParams;
     KScanDevice *m_device;

@@ -5,8 +5,6 @@
 
 #include <kglobal.h>
 #include <klocale.h>
-#include <ktempfile.h>
-#include <kstddirs.h>
 
 // libkscan stuff
 #include "scanparams.h"
@@ -45,7 +43,7 @@ ScanDialog::ScanDialog( QWidget *parent, const char *name, bool modal )
     
     m_scanParams = new ScanParams( splitter );
     m_device = new KScanDevice( this );
-    connect(m_device, SIGNAL(sigNewImage(QImage *)), this, SLOT(slCreateTempFile(QImage *)));
+    connect(m_device, SIGNAL(sigNewImage(QImage *)), this, SLOT(slotFinalImage(QImage *)));
 
     QLabel *label = new QLabel( splitter );
     label->setBackgroundMode( PaletteBase );
@@ -74,15 +72,9 @@ ScanDialog::~ScanDialog()
 {
 }
 
-void ScanDialog::slCreateTempFile(QImage *img)
+void ScanDialog::slotFinalImage(QImage *image)
 {
-    if(!img)
-	return;
-
-    KTempFile temp(locateLocal("tmp", "scandialog"), ".PNG");
-    img->save(temp.name(), "PNG");
-	
-    emit finalImage(temp.name());		
+    emit finalImage(*image);
 }
 
 #include "scandialog.moc"
