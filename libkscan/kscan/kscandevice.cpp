@@ -205,19 +205,46 @@ KScanStat KScanDevice::openDevice( const char* backend )
 }
 
 
-QString KScanDevice::getScannerName()
+QString KScanDevice::getScannerName(QString name) const
 {
   QString ret = "No scanner selected";
+  SANE_Device *scanner = 0L;
+  
+  if( scanner_initialised && name.isEmpty())
+  {
+     scanner = scannerDevices[ scanner_name ];
+  }
+  else
+  {
+     scanner = scannerDevices[ name ];
+     ret = "";
+  }
+     
+  if( scanner ) {
+     ret.sprintf( "%s %s %s", scanner->vendor, scanner->model, scanner->type );
+  }		
 
-  if( scanner_initialised )
-    {
-      SANE_Device *scanner = scannerDevices[ scanner_name ];
-
-      if( scanner ) {
-	ret.sprintf( "%s %s %s", scanner->vendor, scanner->model, scanner->type );
-      }	
-    }
+  debug( "getScannerName returns <%s>", (const char*) ret );
   return ( ret );
+}
+
+
+QSize KScanDevice::getMaxScanSize( void ) const
+{
+   QSize s;
+   double min, max, q;
+   
+   KScanOption so_w( SANE_NAME_SCAN_BR_X );
+   so_w.getRange( &min, &max, &q );
+
+   s.setWidth( (int) max );
+   
+   KScanOption so_h( SANE_NAME_SCAN_BR_Y );
+   so_h.getRange( &min, &max, &q );
+   
+   s.setHeight( (int) max );
+
+   return( s );
 }
 
 

@@ -5,6 +5,7 @@
 
 #include <qwidget.h>
 #include <qdict.h>
+#include <qsize.h>
 #include <qwidget.h>
 #include <qobject.h>
 #include <qstrlist.h>
@@ -46,15 +47,9 @@ class KScanDevice : public QObject
 public:
   /**
    *  KScanDevice - the KDE Scanner Device
+   *  constructor. Does not much.
    *
-   *  @param backend Name of the backend to open initially.
-   *
-   *  the parameter backend may be zero. In that case, no backend is opend
-   *  until a call to openDevice happens.
-   *
-   *  If backend is given, the device will be opened and the options will
-   *  be read.
-   *	@see openDevice
+   *   @see openDevice
    *
    */
 
@@ -70,7 +65,7 @@ public:
   /**
    *  opens the device named backend.
    *   @return the state of the operation
-   *	@param backend: the name of the backend to open
+   *   @param backend: the name of the backend to open
    */
   KScanStat openDevice( const char* backend );
 
@@ -80,10 +75,21 @@ public:
    *  @return a QStrList of available Scanners in the system
    *  @see KScanDevice
    */
-  QStrList getDevices( )
+  QStrList getDevices( ) const
   { return( scanner_avail ); }
 
-  QString getScannerName( void );
+  /**
+   *  returns a long, human readable name of the scanner, like
+   * 'Mustek SP1200 Flatbed scanner'. The parameter name takes
+   * the name of a backend, what means something like "/dev/scanner".
+   * If the name of the backend is skipped, the selected backend is
+   * returned.
+   *
+   * @param a QString with a backend string
+   * @return a QString containing a human readable scanner name
+   **/
+   QString getScannerName( QString name = "") const;
+   
   /*
    *  ========= Preview Functions ==========
    */
@@ -177,10 +183,18 @@ public:
 			      const char *desc =0, const char *tooltip=0 );
 
   /**
-   *  sets an widget of the named option enabled/disable
+   *  sets an widget of the named option enabled/disabled
    **/
   bool guiSetEnabled( QString name, bool state );
-	
+
+   /**
+    *  returns the maximum scan size. This is interesting e.g. for the
+    *  preview widget etc.
+    *  The unit of the return value is millimeter, if the sane backend
+    *  returns millimeter. (TODO)
+    **/
+   QSize getMaxScanSize( void ) const;
+      
 public slots:
   void slOptChanged( KScanOption* );
 	
@@ -206,8 +220,9 @@ public slots:
    */
   void slStopScanning( void );
 
-   /**
-   *  Image ready-slot in asynchronous scanning */
+  /**
+   *  Image ready-slot in asynchronous scanning
+   */
   void                slScanFinished( KScanStat );
    
   signals:
@@ -245,7 +260,10 @@ public slots:
    **/
   void sigScanProgress( int );	
 
-
+  /**
+   *  emitted to show that a scan finished and provides a status how
+   *  the scan finished.
+   */
   void sigScanFinished( KScanStat );
 
 
