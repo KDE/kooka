@@ -255,7 +255,9 @@ QScrollView *ScanParams::scannerParams( )
       cb->slSetIcon( pixColor,    i18n("Color") );
       cb->slSetIcon( pixHalftone, i18n("Halftone") );
 
-      hb->setMargin( KDialog::marginHint() );
+      // hb->setMargin( KDialog::marginHint() );
+      // hb->setSpacing( KDialog::spacingHint());
+      hb->setMargin( 0 ); /// KDialog::marginHint() );
       hb->setSpacing( KDialog::spacingHint());
 
       hb->setStretchFactor( cb, 5 );
