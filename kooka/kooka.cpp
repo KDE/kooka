@@ -28,6 +28,7 @@
 #include "resource.h"
 
 #include "kookapref.h"
+#include "imgprintdialog.h"
 
 #include <qlineedit.h>
 #include <qprinter.h>
@@ -302,13 +303,13 @@ void Kooka::readProperties(KConfig *config)
 
 }
 
-#if 0
 void Kooka::dragEnterEvent(QDragEnterEvent *event)
 {
     // accept uri drops only
     event->accept(KURLDrag::canDecode(event));
 }
 
+#if 0
 void Kooka::dropEvent(QDropEvent *event)
 {
     // this is a very simplistic implementation of a drop event.  we
@@ -321,7 +322,8 @@ void Kooka::dropEvent(QDropEvent *event)
     {
         // okay, we have a URI.. process it
         const KURL &url = uri.first();
-        
+	kdDebug(29000) << "Importing URI " << url.url() << endl;
+
         // TODO: Do something with url
         // Waba: See also setAcceptDrops() above
     }
@@ -371,11 +373,8 @@ void Kooka::filePrint()
     // this slot is called whenever the File->Print menu is selected,
     // the Print shortcut is pressed (usually CTRL+P) or the Print toolbar
     // button is clicked
-    if (!m_printer) m_printer = new KPrinter;
-    if (m_printer->setup(this))
-    {
-       m_view->print( m_printer );
-    }
+    m_view->print();
+    
 }
 
 void Kooka::optionsShowScanParams()
