@@ -56,59 +56,71 @@ inline void debug_rect( const char *name, QRect *r )
 }
 
 
+class ImageCanvas::ImageCanvasPrivate
+{
+public:
+    ImageCanvasPrivate()
+        : keepZoom(false),
+          scaleKind( FIT_ORIG )
+        {}
+
+    bool         keepZoom;  /* keep the zoom settings if images change */
+    ScaleKinds   scaleKind;
+};
 
 ImageCanvas::ImageCanvas(QWidget *parent,
 			 const QImage *start_image,
 			 const char *name 	):
    QScrollView( parent, name ),
    m_contextMenu(0)
-
 {
-  scale_factor     = 100; // means orignal size
-  maintain_aspect  = true;
-  selected         = new QRect;
-  selected->setWidth(0);
-  selected->setHeight(0);
+    d = new ImageCanvasPrivate();
 
-  timer_id         = 0;
-  pmScaled         = 0;
+    scale_factor     = 100; // means orignal size
+    maintain_aspect  = true;
+    selected         = new QRect;
+    selected->setWidth(0);
+    selected->setHeight(0);
 
-  image            = start_image;
-  moving 	   = MOVE_NONE;
+    timer_id         = 0;
+    pmScaled         = 0;
 
-  QSize img_size;
+    image            = start_image;
+    moving 	   = MOVE_NONE;
 
-  if( image && ! image->isNull() )
-  {
-    img_size = image->size();
-    pmScaled = new QPixmap( img_size );
+    QSize img_size;
+
+    if( image && ! image->isNull() )
+    {
+        img_size = image->size();
+        pmScaled = new QPixmap( img_size );
 
 #ifdef USE_KPIXMAPIO
-    *pmScaled = pixIO.convertToPixmap(*image);
+        *pmScaled = pixIO.convertToPixmap(*image);
 #else
-    pmScaled->convertFromImage( *image );
+        pmScaled->convertFromImage( *image );
 #endif
 
-    acquired = true;
-  } else {
-    img_size = size();
-  }
+        acquired = true;
+    } else {
+        img_size = size();
+    }
 
 
-  // createContextMenu();
-  update_scaled_pixmap();
+    // createContextMenu();
+    update_scaled_pixmap();
 
-  // timer-Start and stop
-  connect( this, SIGNAL( newRect()), SLOT( newRectSlot()));
-  connect( this, SIGNAL( noRect()),  SLOT( noRectSlot()));
+    // timer-Start and stop
+    connect( this, SIGNAL( newRect()), SLOT( newRectSlot()));
+    connect( this, SIGNAL( noRect()),  SLOT( noRectSlot()));
 
-  //zoomOut();scrollview/scrollview
-  viewport()->setCursor( crossCursor );
-  cr1 = 0;
-  cr2 = 0;
-  viewport()->setMouseTracking(TRUE);
-  viewport()->setBackgroundMode(PaletteBackground);
-  show();
+    //zoomOut();scrollview/scrollview
+    viewport()->setCursor( crossCursor );
+    cr1 = 0;
+    cr2 = 0;
+    viewport()->setMouseTracking(TRUE);
+    viewport()->setBackgroundMode(PaletteBackground);
+    show();
 
 }
 
@@ -120,6 +132,7 @@ ImageCanvas::~ImageCanvas()
     selected = 0;
     if( pmScaled ) delete pmScaled;
     pmScaled = 0;
+    delete d;
 }
 
 void ImageCanvas::deleteView( QImage *delimage )
@@ -176,8 +189,17 @@ void ImageCanvas::newImage( QImage *new_image )
 #endif
 
       acquired = true;
-      if( scale_factor != 0 )
-	 scale_factor = 100;
+
+      if( d->keepZoom )
+      {
+          kdDebug(29000) << "Preserving Zoom settings!" << endl;
+      }
+      else
+      {
+          kdDebug(29000) << "Resetting Zoom to original size!" << endl;
+          setScaleKind( FIT_ORIG );
+      }
+
       update_scaled_pixmap();
       setContentsPos(0,0);
    } else {
@@ -222,14 +244,9 @@ void ImageCanvas::enableContextMenu( bool wantContextMenu )
 void ImageCanvas::handle_popup( int item )
 {
    if( item < ID_POP_ZOOM || item > ID_ORIG_SIZE ) return;
-   double scale;
 
    if( ! image ) return;
    ImgScaleDialog *zoomDia  = 0;
-   const int sbWidth = kapp->style().pixelMetric( QStyle::PM_ScrollBarExtent );
-   const QSize noSBSize = size(); /* Size of complete scrollbar */
-
-   kdDebug(29000)<< "Size of viewport: " << noSBSize.width() << " and " << noSBSize.height() << endl;
 
    switch( item )
    {
@@ -239,55 +256,20 @@ void ImageCanvas::handle_popup( int item )
           if( zoomDia->exec() )
           {
               int sf = zoomDia->getSelected();
-	      QApplication::setOverrideCursor(waitCursor);
               setScaleFactor( sf );
-              repaint( true);
           }
           delete zoomDia;
 	  zoomDia = 0;
-	  QApplication::restoreOverrideCursor();
-
+          setScaleKind(ZOOM);
 	 break;
       case ID_ORIG_SIZE:
-	 QApplication::setOverrideCursor(waitCursor);
-	 setScaleFactor(100);
-	 QApplication::restoreOverrideCursor();
-      break;
+	 setScaleKind( FIT_ORIG );
+         break;
       case ID_FIT_WIDTH:
-	 QApplication::setOverrideCursor(waitCursor);
-
-	 scale = 100.0 * noSBSize.width() / image->width();
-	 kdDebug(29000) << "Scale ist " << scale << endl;
-
-	 if( (scale/100.0 * image->height()) >= noSBSize.height() )
-	 {
-	    /* substract for scrollbar */
-	    scale = 100 * (noSBSize.width() - sbWidth) / image->width();
-	    kdDebug(29000) << "FIT WIDTH scrollbar to substract: " << sbWidth << endl;
-	 }
-
-	 kdDebug(29000)<< "Sale Factor double: " << scale << endl;
-	 setScaleFactor( static_cast<int>(scale-0.5) );
-	 repaint( true );
-	 QApplication::restoreOverrideCursor();
-      break;
+          setScaleKind( FIT_WIDTH );
+          break;
       case ID_FIT_HEIGHT:
-	 QApplication::setOverrideCursor(waitCursor);
-
-	 scale = 100.0 * noSBSize.height() / image->height();
-	 kdDebug(29000) << "Scale ist " << scale << endl;
-
-	 if( (scale/100.0 * image->width()) >= width() )
-	 {
-	    /* substract for scrollbar */
-	    kdDebug(29000) << "FIT HEIGHT scrollbar to substract: " << sbWidth << endl;
-	    scale = 100.0*(noSBSize.height() -sbWidth) / image->height();
-	 }
-
-	 kdDebug(29000)<< "Sale Factor double: " << scale << endl;
-	 setScaleFactor( static_cast<int>(scale-0.5) );
-	 repaint( true );
-	 QApplication::restoreOverrideCursor();
+          setScaleKind( FIT_HEIGHT );
 	 break;
       case ID_POP_CLOSE:
 	 emit( closingRequested());
@@ -295,7 +277,8 @@ void ImageCanvas::handle_popup( int item )
 
       default: break;
    }
-
+   update_scaled_pixmap();
+   repaint();
 }
 
 
@@ -657,64 +640,98 @@ void ImageCanvas::resizeEvent( QResizeEvent * event )
 
 void ImageCanvas::update_scaled_pixmap( void )
 {
-
-  if( !pmScaled || !image)
-  { 	// debug( "Pixmap px is null in Update_scaled" );
+    resizeContents( 0,0 );
+    updateScrollBars();
+    if( !pmScaled || !image)
+    { 	// debug( "Pixmap px is null in Update_scaled" );
 	return;
-  }
-  kdDebug(28000) << "Updating scaled_pixmap" << endl;
-  int scale = scale_factor;
-  // debug( "Rescaling with Factor %d", scale );
-  if( scale == 0 )
-  {
-     // do scaling to window-size
-     used_yscaler = ((float)viewport()-> height()) / ((float)image->height());
-     used_xscaler = ((float)viewport()-> width())  / ((float)image->width());
-  }
-  else
-  {
-     // scale as in scale in percent given (eg 100 = original size )
-     used_xscaler = (double) scale / 100;
-     used_yscaler = (double) scale / 100;
-  }
+    }
+    kdDebug(28000) << "Updating scaled_pixmap" << endl;
+    QSize noSBSize( visibleWidth(), visibleHeight());
+    const int sbWidth = kapp->style().pixelMetric( QStyle::PM_ScrollBarExtent );
 
-  // reconvert the selection to orig size
-  if( selected ) {
-     *selected = inv_scale_matrix.map( (const QRect) *selected );
-  }
+    // if( verticalScrollBar()->visible() ) noSBSize.width()+=sbWidth;
+    // if( horizontalScrollBar()->visible() ) noSBSize.height()+=sbWidth;
 
-  scale_matrix.reset();                         // transformation matrix
-  inv_scale_matrix.reset();
+    switch( scaleKind() )
+    {
+    case DYNAMIC:
+        // do scaling to window-size
+        used_yscaler = ((float)viewport()-> height()) / ((float)image->height());
+        used_xscaler = ((float)viewport()-> width())  / ((float)image->width());
+        break;
+    case FIT_ORIG:
+        used_yscaler = used_xscaler = 1.0;
+        break;
+    case FIT_WIDTH:
+        used_xscaler = used_yscaler = double(noSBSize.width()) / double(image->width());
+        if( used_xscaler * image->height() >= noSBSize.height() )
+        {
+            /* substract for scrollbar */
+            used_xscaler = used_yscaler = double(noSBSize.width() - sbWidth) /
+                           double(image->width());
+            kdDebug(29000) << "FIT WIDTH scrollbar to substract: " << sbWidth << endl;
+        }
+
+        break;
+    case FIT_HEIGHT:
+        used_yscaler = used_xscaler = double(noSBSize.height())/double(image->height());
+
+        // scale = int(100.0 * noSBSize.height() / image->height());
+        if( used_xscaler * image->width() >= noSBSize.width() )
+        {
+            /* substract for scrollbar */
+            used_xscaler = used_yscaler = double(noSBSize.height() - sbWidth) /
+                           double(image->height());
+
+            kdDebug(29000) << "FIT HEIGHT scrollbar to substract: " << sbWidth << endl;
+            // scale = int(100.0*(noSBSize.height() -sbWidth) / image->height());
+        }
+
+        break;
+    case ZOOM:
+        used_xscaler = used_yscaler = double(getScaleFactor())/100.0;
+        break;
+    default:
+        break;
+    }
+
+    // reconvert the selection to orig size
+    if( selected ) {
+        *selected = inv_scale_matrix.map( (const QRect) *selected );
+    }
+
+    scale_matrix.reset();                         // transformation matrix
+    inv_scale_matrix.reset();
 
 
-  if( !scale && maintain_aspect  ) {
-     // printf( "Skaler: x: %f, y: %f\n", x_scaler, y_scaler );
-     used_xscaler = used_yscaler <  used_xscaler ?
-		used_yscaler : used_xscaler;
-     used_yscaler = used_xscaler;
-  }
+    if( scaleKind() == DYNAMIC && maintain_aspect  ) {
+        // printf( "Skaler: x: %f, y: %f\n", x_scaler, y_scaler );
+        used_xscaler = used_yscaler <  used_xscaler ?
+                       used_yscaler : used_xscaler;
+        used_yscaler = used_xscaler;
+    }
 
-  scale_matrix.scale( used_xscaler, used_yscaler );  // define scale factors
-  inv_scale_matrix = scale_matrix.invert();	// for redraw of selection
+    scale_matrix.scale( used_xscaler, used_yscaler );  // define scale factors
+    inv_scale_matrix = scale_matrix.invert();	// for redraw of selection
 
-  if( selected ) {
-     *selected = scale_matrix.map( (const QRect )*selected );
-  }
+    if( selected ) {
+        *selected = scale_matrix.map( (const QRect )*selected );
+    }
 
 #ifdef USE_KPIXMAPIO
-  *pmScaled = pixIO.convertToPixmap(*image);
+    *pmScaled = pixIO.convertToPixmap(*image);
 #else
-  pmScaled->convertFromImage( *image );
+    pmScaled->convertFromImage( *image );
 #endif
 
-  *pmScaled = pmScaled->xForm( scale_matrix );  // create scaled pixmap
+    *pmScaled = pmScaled->xForm( scale_matrix );  // create scaled pixmap
 
-  /* Resizing to 0,0 never may be dropped, otherwise there are problems
-   * with redrawing of new images.
-   */
-  resizeContents( 0,0 );
-  resizeContents( static_cast<int>(image->width() * used_xscaler),
-                  static_cast<int>(image->height() * used_yscaler ) );
+    /* Resizing to 0,0 never may be dropped, otherwise there are problems
+     * with redrawing of new images.
+     */
+    resizeContents( static_cast<int>(image->width() * used_xscaler),
+                    static_cast<int>(image->height() * used_yscaler ) );
 
 }
 
@@ -920,6 +937,19 @@ void ImageCanvas::setGamma(int c)
    gamma = c;
 }
 
+ImageCanvas::ScaleKinds ImageCanvas::scaleKind()
+{
+    return d->scaleKind;
+}
 
+void ImageCanvas::setKeepZoom( bool k )
+{
+    d->keepZoom = k;
+}
+
+void ImageCanvas::setScaleKind( ScaleKinds k )
+{
+    d->scaleKind = k;
+}
 
 #include "img_canvas.moc"
