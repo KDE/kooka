@@ -37,17 +37,20 @@
 class KScanSlider;
 class KGammaTable;
 
-class GammaDialog : public KDialogBase{
-    Q_OBJECT
+class GammaDialog : public KDialogBase
+{
+   Q_OBJECT
+   Q_PROPERTY( KGammaTable *gt READ getGt WRITE setGt )
+      
 public:
-    GammaDialog ( QWidget *parent );
-    ~GammaDialog( );
+   GammaDialog ( QWidget *parent );
+   ~GammaDialog( );
 
-    KGammaTable *getGt( void ) { return gt; }
-    void         setGt( KGammaTable& ngt);
+   KGammaTable *getGt( ) const { return gt; }
+   void         setGt( KGammaTable& ngt);
 
 public slots:
-    virtual void slotApply();
+   virtual void slotApply();
 
 signals:
    void gammaToApply( GammaDialog& );
@@ -62,6 +65,9 @@ private:
    KScanSlider *wGamma;
    KScanSlider *wBright;
    KScanSlider *wContrast;
+
+   class GammaDialogPrivate;
+   GammaDialogPrivate *d;
 };
 
 #endif
