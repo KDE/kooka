@@ -11,7 +11,7 @@ KScan-library which is a KDE2 module for scanner access.
 
 
 KScan and Kooka are under construction. Don't expect everything to work
-fine. If you want to help, send patches to kooka@suse.de.
+fine. If you want to help, send patches to freitag@suse.de.
 
 Features:
 =========
@@ -42,6 +42,6 @@ OCR:
   its output. Best results with bw-images scanned with ~150 dpi
 
 ----------------------------------------------------------------------
-Klaas Freitag <kooka@suse.de>
+Klaas Freitag <freitag@suse.de>
 
 

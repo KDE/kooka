@@ -1,7 +1,7 @@
--> Nov. 2000, Klaas Freitag <kooka@suse.de>:
+-> Nov. 2000, Klaas Freitag <freitag@suse.de>:
 initial version
 
-- December 2000, Klaas Freitag <kooka@suse.de>:
+- December 2000, Klaas Freitag <freitag@suse.de>:
 
 Added support for calling the external ocr program gocr of Joerg
 Schulenburg and friends.  See http://jocr.sourceforge.net for
