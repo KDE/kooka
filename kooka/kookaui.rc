@@ -1,0 +1,10 @@
+<!DOCTYPE kookagui>
+<kookagui name="Kooka" version="1">
+<MenuBar>
+ <Menu name="view"><text>&amp;View</text>
+   <Action name="show_scanparams"/>
+   <Action name="show_preview"/>
+ </Menu>
+</MenuBar>
+<StatusBar/>
+</kookagui>
