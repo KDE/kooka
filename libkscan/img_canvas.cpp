@@ -45,8 +45,14 @@
 #include <kpixmapio.h>
 #include <kdebug.h>
 
+#include <kcmenumngr.h>
+
 #define __IMG_CANVAS_CPP__
+
+#include "imgscaledialog.h"
 #include "img_canvas.h"
+
+
 
 #define MIN(x,y) (x<y?x:y)
 
@@ -110,7 +116,7 @@ ImageCanvas::~ImageCanvas()
 {
     if( selected )    delete selected;
     if( pmScaled )    delete pmScaled;
-    if( contextMenu ) delete contextMenu;
+    // if( contextMenu ) delete contextMenu;
     noRectSlot();  /* Switches timer off */
  	
 }
@@ -173,21 +179,23 @@ void ImageCanvas::newImage( QImage *new_image )
 
    kdDebug(29000) << "going to repaint!" << endl;
    repaint( true );
+   kdDebug(29000) << "repaint ok" << endl;
 }
 
 
 void ImageCanvas::createContextMenu( void )
 {
-#if 0
+
    contextMenu = new QPopupMenu();
 
-   contextMenu->insertItem( *icons["mini-fitwidth"], i18n("fit to width"),  ID_FIT_WIDTH );
-   contextMenu->insertItem( *icons["mini-fitheight"], i18n("fit to height"), ID_FIT_HEIGHT );
+   contextMenu->insertItem( i18n("fit to width"),  ID_FIT_WIDTH );
+   contextMenu->insertItem( i18n("fit to height"), ID_FIT_HEIGHT );
    contextMenu->insertItem( i18n("set zoom..."),   ID_POP_ZOOM );
    contextMenu->insertItem( i18n("original size"), ID_ORIG_SIZE );
    contextMenu->setCheckable( true );
    connect( contextMenu, SIGNAL( activated(int)), this, SLOT(handle_popup(int)));
-#endif
+
+   KContextMenuManager::insert( this, contextMenu );
 
 }
 
@@ -214,12 +222,12 @@ void ImageCanvas::handle_popup( int item )
    double scale;
 
    if( ! image ) return;
-
+   ImgScaleDialog *zoomDia  = 0;
 
    switch( item )
    {
       case ID_POP_ZOOM:
-#if 0
+
           zoomDia = new ImgScaleDialog( this, getScaleFactor() );
           if( zoomDia->exec() )
           {
@@ -231,7 +239,7 @@ void ImageCanvas::handle_popup( int item )
           delete zoomDia;
 	  QApplication::restoreOverrideCursor();
 	 // emit( scalingRequested());
-#endif
+
 	 break;
       case ID_ORIG_SIZE:
 	 QApplication::setOverrideCursor(waitCursor);

@@ -169,7 +169,8 @@ private:
    int 		 cr1,cr2;
    int 		 lx,ly;
    bool 	 acquired;
-
+   
+   
    /* private functions for the running ant */
    void drawHAreaBorder(QPainter &p,int x1,int x2,int y,int r = FALSE);
    void drawVAreaBorder(QPainter &p,int x,int y1,int y2,int r = FALSE);
