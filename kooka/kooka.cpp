@@ -153,7 +153,7 @@ void Kooka::setupActions()
 		       m_view, SLOT( slIVScaleOriginal()),
 		       actionCollection(), "scaleOriginal" );
 
-    (void) new KAction(i18n("Create from selectio&n"), "newfromselect", CTRL+Key_N,
+    (void) new KAction(i18n("Create from selectio&n"), "crop", CTRL+Key_N,
 		       m_view, SLOT( slCreateNewImgFromSelection() ),
 		       actionCollection(), "createFromSelection" );
     
@@ -180,7 +180,7 @@ void Kooka::setupActions()
     (void) new KAction(i18n("Rotate image counter-clock&wise"), "rotate_ccw", CTRL+Key_W,
 		       this, SLOT( slRotateCounterClockWise() ),
 		       actionCollection(), "rotateCounterClockwise" );
-    (void) new KAction(i18n("Rotate image 180 &degrees"), CTRL+Key_D,
+    (void) new KAction(i18n("Rotate image 180 &degrees"), "rotate", CTRL+Key_D,
 		       this, SLOT( slRotate180() ),
 		       actionCollection(), "upsitedown" );
 #if 0
