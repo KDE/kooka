@@ -84,10 +84,12 @@ Previewer::Previewer(QWidget *parent, const char *name )
     m_dustsize        = cfg->readNumEntry(  CFG_AUTOSEL_DUSTSIZE, 5 );
 
     int autoselThreshDefault = 240;
+#if 0 // who will set m_bgIsWhite before this is called?
     if( ! m_bgIsWhite )
     {
         autoselThreshDefault = 12;
     }
+#endif
     m_autoSelThresh = cfg->readNumEntry( CFG_AUTOSEL_THRESH, autoselThreshDefault );
 
     /* Units etc. TODO: get from Config */
