@@ -235,12 +235,12 @@ void Kooka::setupActions()
 		       actionCollection(), "foldernew" );
     m_view->connectGalleryAction( act );
 
-    act = new KAction(i18n("&Save Image"), "filesave", 0,
+    act = new KAction(i18n("&Save Image..."), "filesave", 0,
 		      m_view->gallery(), SLOT( slotExportFile() ),
 		       actionCollection(), "saveImage" );
     m_view->connectGalleryAction( act );
 
-    act = new KAction(i18n("&Import Image"), "inline_image", 0,
+    act = new KAction(i18n("&Import Image..."), "inline_image", 0,
 		      m_view->gallery(), SLOT( slotImportFile() ),
 		       actionCollection(), "importImage" );
     m_view->connectGalleryAction( act );
