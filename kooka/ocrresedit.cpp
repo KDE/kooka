@@ -28,6 +28,11 @@
 #include "ocrresedit.h"
 #include "ocrword.h"
 #include <kdebug.h>
+#include <kfiledialog.h>
+#include <klocale.h>
+
+#include <qfile.h>
+#include <qtextstream.h>
 
 /* -------------------- ocrResEdit -------------------- */
 
@@ -71,7 +76,7 @@ void ocrResEdit::slSelectWord( int line, const ocrWord& word )
    {
       QString editLine = text(line);
       int cnt = editLine.contains( word);
-   
+
       if( cnt > 0 )
       {
 	 int pos = editLine.find(word);
@@ -122,7 +127,20 @@ void ocrResEdit::slReplaceWord( int line, const QString& wordFrom,
 }
 
 
-
+void ocrResEdit::slSaveText()
+{
+    QString fileName = KFileDialog::getSaveFileName( (QDir::home()).path(),
+                                                 "*.txt",
+                                                 this,
+                                                 i18n("Save OCR Result Text") );
+    QFile file( fileName );
+    if ( file.open( IO_WriteOnly ) )
+    {
+        QTextStream stream( &file );
+        stream << text();
+        file.close();
+    }
+}
 
 #include "ocrresedit.moc"
 /*   */

@@ -48,7 +48,9 @@ public slots:
     void slIgnoreWrongWord( int line, const ocrWord& word );
 
     void slSelectWord( int line, const ocrWord& word );
-   
+
+    void slSaveText();
+
 protected slots:
     void slReplaceWord( int line, const QString& wordFrom,
                         const QString& wordTo, const QColor& color );
