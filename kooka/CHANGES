@@ -137,3 +137,8 @@ For Kooka 0.40:
 * OCR: Result  not longer in a separat dialog, but in a editor part.
 
 * Scanpackager uses KookaImage more consequently. That provides meta data where needed
+
+* Improved image viewer from libkscan: Holds zoom settings over images
+
+* image information in status bar.
+
