@@ -62,9 +62,10 @@ ScanParams::ScanParams( QWidget *parent, const char *name )
     /* Preload icons */
     pixMiniFloppy = SmallIcon( "3floppy_unmount" );
 
-    pixColor = SmallIcon( "color" );
-    pixGray  = SmallIcon( "gray" );
-    pixLineArt = SmallIcon( "lineart" );
+    pixColor = SmallIcon( "colormarker" );
+    pixGray  = SmallIcon( "graymarker" );
+    pixLineArt = SmallIcon( "lineartmarker" );
+    pixHalftone = SmallIcon( "halftonemarker" );
 
     
 }
@@ -137,6 +138,9 @@ bool ScanParams::connectDevice( KScanDevice *newScanDevice )
    progressDialog = new QProgressDialog( i18n("Scanning in progress"),
 					 i18n("Stop"), 1000, this,
 					 "SCAN_PROGRESS", true, 0  );
+   progressDialog->setAutoClose( true );
+   progressDialog->setAutoReset( true );
+
    connect( sane_device, SIGNAL(sigScanProgress(int)),
 	    progressDialog, SLOT(setProgress(int)));
 	
@@ -170,8 +174,10 @@ void ScanParams::scannerParams( void ) // QVBoxLayout *top )
 
 
       cb->slSetIcon( pixLineArt, i18n("Lineart") );
+      cb->slSetIcon( pixLineArt, i18n("Binary" ));
       cb->slSetIcon( pixGray, i18n("Gray") );
       cb->slSetIcon( pixColor, i18n("Color") );
+      cb->slSetIcon( pixHalftone, i18n("Halftone") );
 
       hb->setMargin( KDialog::marginHint() );
       hb->setSpacing( KDialog::spacingHint());
@@ -603,7 +609,10 @@ void ScanParams::slStartScan( void )
 	 if( adf == ADF_OFF )
 	 {
 	    /* Progress-Dialog */
-	    progressDialog->show();
+	    progressDialog->setProgress(0);
+	    if( progressDialog->isHidden())
+	       progressDialog->show();
+	    kdDebug(29000) << "* slStartScan: Start to acquire an image!" << endl;
 	    stat = sane_device->acquire( );
 
 	 } else {
