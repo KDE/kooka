@@ -577,7 +577,7 @@ void KSANEOCR::startOCRProcess( void )
        if( ! kadDia->getSelClassifier( clasPath ) )
        {
            KMessageBox::error( m_parent,
-                               i18n("The classifier file necessary for OCR cannot be loaded: %1\n"
+                               i18n("The classifier file necessary for OCR cannot be loaded: %1;\n"
                                    "OCR with the KADMOS engine is not possible." ).
                                arg(clasPath), i18n("KADMOS Installation Problem"));
            finishedOCRVisible(false);

@@ -275,14 +275,14 @@ void ImgSaver::createDir( const QString& dir )
       // if( mkdir( QFile::encodeName( dir ), S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH ) != 0 )
       if( KIO::mkdir( KURL(dir)))
       {
-        KMessageBox::sorry(0, i18n("The folder\n%1\n does not exist and could not be created!\n"
-                        "Please check the permissions.").arg(dir));
+        KMessageBox::sorry(0, i18n("The folder\n%1\n does not exist and could not be created;\n"
+                        "please check the permissions.").arg(dir));
       }
    }
 #if 0
    if( ! fi.isWritable() )
    {
-        KMessageBox::sorry(0, i18n("The directory\n%1\n is not writeable.\nPlease check the permissions.")
+        KMessageBox::sorry(0, i18n("The directory\n%1\n is not writeable;\nplease check the permissions.")
                 .arg(dir));
    }
 #endif
