@@ -36,6 +36,7 @@
 #define DEFAULT_OPTIONSET "saveSet"
 #define SCANNER_DB_FILE "scannerrc"
 
+class ImgScanInfo;
 
 extern "C" {
 #include <sane/sane.h>
@@ -338,13 +339,15 @@ signals:
      *  copied in the signal handler.
      */
     void sigNewImage( QImage* );
+    void sigNewImage( QImage*, ImgScanInfo* );
 
     /**
      *  emitted if a new preview was acquired. The image has to be
      *  copied in the signal handler.
      */
     void sigNewPreview( QImage*);
-
+    void sigNewPreview( QImage*, ImgScanInfo* );
+    
     /**
      * emitted to tell the application the start of scanning. That is
      * before the enquiry of the scanner starts. Between this signal

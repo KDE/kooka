@@ -45,11 +45,31 @@
 #include "kscanoption.h"
 #include "kscanoptset.h"
 #include "devselector.h"
+#include "imgscaninfo.h"
+
 #include <ksimpleconfig.h>
 
 #define MIN_PREVIEW_DPI 75
 #define UNDEF_SCANNERNAME I18N_NOOP( "undefined" )
 #define MAX_PROGRESS 100
+
+/* ---------------------------------------------------------------------------
+   Private class for KScanDevice
+   ------------------------------------------------------------------------- */
+class KScanDevice::KScanDevicePrivate
+
+{
+public:
+    KScanDevicePrivate()
+	: currScanResolution(0)
+	{
+	    
+	}
+
+    int currScanResolution;
+    
+};
+
 
 /* ---------------------------------------------------------------------------
 
@@ -148,6 +168,8 @@ KScanDevice::KScanDevice( QObject *parent )
 {
     SANE_Status sane_stat = sane_init(NULL, NULL );
 
+    d = new KScanDevicePrivate();
+    
     option_dic = new QAsciiDict<int>;
     option_dic->setAutoDelete( true );
     gui_elements.setAutoDelete( true );
@@ -752,6 +774,9 @@ KScanStat KScanDevice::acquirePreview( bool forceGray, int dpi )
    res.set( set_dpi );
    apply( &res );
 
+   /* Store the resulting preview for additional image information */
+   res.get( &d->currScanResolution );
+
 
    /* Start scanning */
    KScanStat stat = acquire_data( true );
@@ -1084,58 +1109,62 @@ void KScanDevice::loadOptionSet( KScanOptSet *optSet )
 
 void KScanDevice::slScanFinished( KScanStat status )
 {
-   // clean up
-   if( sn ) {
-      sn->setEnabled( false );
-      delete sn;
-      sn = 0;
-   }
+    // clean up
+    if( sn ) {
+	sn->setEnabled( false );
+	delete sn;
+	sn = 0;
+    }
 
-   emit( sigScanProgress( MAX_PROGRESS ));
+    emit( sigScanProgress( MAX_PROGRESS ));
 
-   kdDebug(29000) << "Slot ScanFinished hit with status " <<  status << endl;
+    kdDebug(29000) << "Slot ScanFinished hit with status " <<  status << endl;
 
-   if( data )
-   {
-      delete data;
-      data = 0;
-   }
+    if( data )
+    {
+	delete data;
+	data = 0;
+    }
 
-   const QString qq;
-   KScanOption *so;
-   (void) so;
+    if( status == KSCAN_OK )
+    {
+	ImgScanInfo info;
+	/* FIXME: Both resolutions are equal here but should be
+	 *        x and y different
+	 */
+	info.setXResolution(d->currScanResolution);
+	info.setYResolution(d->currScanResolution);
+	info.setScannerName(shortScannerName());
 
-   if( status == KSCAN_OK )
-   {
-      if( scanningPreview )
-      {
-	 kdDebug(29000) << "Scanning a preview !" << endl;
-	 emit( sigNewPreview( img ));
+	if( scanningPreview )
+	{
+	    kdDebug(29000) << "Scanning a preview !" << endl;
+	    emit( sigNewPreview( img, &info ));
 
-	 /* The old settings need to be redefined */
-	 loadOptionSet( storeOptions );
-      }
-      else
-      {
-	 emit( sigNewImage( img ));
-      }
-   }
+	    /* The old settings need to be redefined */
+	    loadOptionSet( storeOptions );
+	}
+	else
+	{
+	    emit( sigNewImage( img, &info ));
+	}
+    }
 
 
-   sane_cancel(scanner_handle);
+    sane_cancel(scanner_handle);
 
-   /* This follows after sending the signal */
-   if( img )
-   {
-      delete img;
-      img = 0;
-   }
+    /* This follows after sending the signal */
+    if( img )
+    {
+	delete img;
+	img = 0;
+    }
 
-   /* delete the socket notifier */
-   if( sn ) {
-      delete( sn );
-      sn = 0;
-   }
+    /* delete the socket notifier */
+    if( sn ) {
+	delete( sn );
+	sn = 0;
+    }
 
 }
 

@@ -437,7 +437,6 @@ void Previewer::slFormatChange( int id )
       bgroup->setButton( portrait_id );
       format_id = portrait_id;
    }
-
    /* Convert the new dimension to a new QRect and call slot in canvas */
    if( setSelection )
    {
