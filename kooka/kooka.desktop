@@ -4,7 +4,7 @@ Type=Application
 Exec=kooka %i %m %U
 Icon=scanner
 Path=
-Terminal=0
+Terminal=false
 DocPath=kooka/index.html
 GenericName=Scan & OCR Program
 GenericName[af]=Skandeer & Optiese karakter herkenning Program
@@ -67,4 +67,3 @@ Name[ta]=கூக்கா
 Name[xx]=xxKookaxx
 
 X-DCOP-ServiceType=Multi
-Categories=Qt;KDE;Graphics;
