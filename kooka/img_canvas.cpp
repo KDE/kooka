@@ -3,7 +3,7 @@
                              -------------------                                         
     begin                : Sun Dec 12 1999                                           
     copyright            : (C) 1999 by Klaas Freitag                         
-    email                : kooka@suse.de
+    email                : freitag@suse.de
  ***************************************************************************/
 
 /***************************************************************************
@@ -38,6 +38,9 @@
 #include <qpopupmenu.h>
 #include <qlabel.h>
 #include <qdict.h>
+
+#include <kpixmapio.h>
+
 #define __IMG_CANVAS_CPP__
 #include "img_canvas.h"
 #include "miscwidgets.h"
@@ -83,9 +86,11 @@ ImageCanvas::ImageCanvas(QWidget *parent,
   if( image && ! image->isNull() )
   {
     img_size = image->size();
-
     pmScaled = new QPixmap( img_size );
-    pmScaled->convertFromImage( *image );
+
+    KPixmapIO io;
+    *pmScaled = io.convertToPixmap(*image);
+
     acquired = true;
   } else {
     img_size = size();
@@ -150,8 +155,11 @@ void ImageCanvas::newImage( QImage *new_image )
 		int i = QPixmap::defaultDepth();
 		pmScaled = new QPixmap( image->size(), i);
 	}
-	
-    	pmScaled->convertFromImage( *image );
+
+	KPixmapIO io;
+	*pmScaled = io.convertToPixmap(*image);
+
+    	
     	acquired = true;
     	if( scale_factor != 0 )
             scale_factor = 100;
@@ -643,7 +651,9 @@ void ImageCanvas::update_scaled_pixmap( void )
      *selected = scale_matrix.map( (const QRect )*selected );
   }
   // px->convertFromImage( *image );
-  pmScaled->convertFromImage(*image);  // Back to original size
+  KPixmapIO io;
+  *pmScaled = io.convertToPixmap(*image);
+
   *pmScaled = pmScaled->xForm( scale_matrix );  // create scaled pixmap
 
   /* Resizing to 0,0 never may be dropped, otherwise there are problems
