@@ -46,7 +46,8 @@
 
 ThumbView::ThumbView( QWidget *parent, const char *name )
    : QVBox( parent ),
-     m_iconView(0)
+     m_iconView(0),
+     m_job(0)
 {
    setMargin(3);
    m_iconView = new KIconView( this, name );
