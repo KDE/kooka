@@ -658,7 +658,7 @@ QString ImgSaver::errorString( ImgSaveStat stat )
       case ISS_ERR_FILENAME: re = i18n( " bad filename       " ); break;
       case ISS_ERR_NO_SPACE: re = i18n( " no space on device " ); break;
       case ISS_ERR_FORMAT_NO_WRITE: re = i18n( " could not write image format " ); break;
-      case ISS_ERR_PROTOCOL: re = i18n( " can not write file using that protocoll "); break;
+      case ISS_ERR_PROTOCOL: re = i18n( " can not write file using that protocol "); break;
       case ISS_SAVE_CANCELED: re = i18n( " user canceled saving " ); break;
       case ISS_ERR_UNKNOWN:  re = i18n( " unknown error      " ); break;
       case ISS_ERR_PARAM:    re = i18n( " parameter wrong    " ); break;
