@@ -112,6 +112,10 @@ public slots:
 
    void saveProperties( KConfig* );
 
+   /**
+    * slot to select the scanner device. Does all the work with selection
+    * of scanner, disconnection of the old device and connecting the new.
+    */
    bool slSelectDevice( );
    
 protected slots:
@@ -135,6 +139,7 @@ signals:
 
 
 private:
+   void loadPreviewImage( const QCString& scanner );
    QImage rotateRight( QImage* );
    QImage rotateLeft ( QImage* );
    QCString userDeviceSelection( ) const;
@@ -147,7 +152,7 @@ private:
 
    ImageCanvas  *img_canvas;
    Previewer    *preview_canvas;
-   QImage       *preview_img;
+   QImage       *m_previewImg;
    QSplitter *	paramSplitter;	
    ScanPackager *packager;
    ScanParams   *scan_params;

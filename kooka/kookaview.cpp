@@ -98,45 +98,26 @@ KookaView::KookaView(QWidget *parent)
    /* select the scan device, either user or from config, this creates and assembles
     * the complete scanner options dialog
     * scan_params must be zero for that */
-   preview_img = 0L;
+   m_previewImg = 0L;
    scan_params = 0L;
    preview_canvas = 0L;
    
-   if( slSelectDevice( ) )
+   preview_canvas = new Previewer( tabw );
+   {
+      preview_canvas->setMinimumSize( 100,100);
+   	
+      m_previewImg = new QImage();
+      /* since the scan_params will be created in slSelectDevice, do the
+       * connections later
+       */
+   }
+   tabw->insertTab( preview_canvas, i18n("&Preview"), PREVIEWER_TAB );
+
+   if( slSelectDevice( ))
    {
       /* If a scanner exists */
-      /* Image Canvas for the preview image, same object as the large image canvas */
-      preview_canvas = new Previewer( tabw );
-      {
-	 preview_canvas->setMinimumSize( 100,100);
-   	
-	 preview_img = new QImage();
 
-	 ImgSaver is( this );
-	 QString previewfile = is.kookaPreviewFile(sane->shortScannerName());
-	 
-	 if( preview_img->load( previewfile ))
-	 {
-	    preview_canvas->newImage( preview_img );
-	 }
-	 else
-	 {
-	    preview_canvas->newImage( 0L );
-
-	    kdDebug(28000) << "WRN: Could not load preview from " << previewfile << endl;
-	 }
-
-	 /* New Rectangle selection in the preview */
-	 connect( preview_canvas->getImageCanvas(), SIGNAL( newRect(QRect)),
-		  scan_params, SLOT(slCustomScanSize(QRect)));
-	 connect( preview_canvas->getImageCanvas(), SIGNAL( noRect()),
-		  scan_params, SLOT(slMaximalScanSize()));
-	 connect( scan_params,    SIGNAL( scanResolutionChanged( int, int )),
-		  preview_canvas, SLOT( slNewScanResolutions( int, int )));
-      }
-
-      tabw->insertTab( preview_canvas, i18n("&Preview"), PREVIEWER_TAB );
-
+      /* Load from config which tab page was selected last time */
       KConfig *konf = KGlobal::config ();
       konf->setGroup(GROUP_STARTUP);
       QString startup = konf->readEntry( STARTUP_SELECTED_PAGE, "nothing" );
@@ -144,6 +125,16 @@ KookaView::KookaView(QWidget *parent)
 	 tabw->showPage(preview_canvas);
       else
 	 tabw->showPage(packager);
+   }
+   else
+   {
+      /* If there is no scanner, no preview is neccessary. */
+#if 0
+      delete m_previewImg;
+      delete preview_canvas;
+      m_previewImg = 0;
+      preview_canvas = 0;
+#endif
    }
 
    /* New image created after scanning */
@@ -167,12 +158,13 @@ KookaView::~KookaView()
 {
    saveProperties( KGlobal::config () );
    kdDebug(28000)<< "Finished saving config data" << endl;
-   if( preview_img ) {
-      delete( preview_img );
-      preview_img = 0;
+   if( m_previewImg ) {
+      delete( m_previewImg );
+      m_previewImg = 0;
    }
    kdDebug(29000) << "Destructor of KookaView" << endl;
 }
+
 
 bool KookaView::slSelectDevice( )
 {
@@ -211,6 +203,17 @@ bool KookaView::slSelectDevice( )
 	 {
 	    kdDebug(28000) << "Connecting to the scanner failed :( ->TODO" << endl;
 	 }
+	 else
+	 {
+	    /* New Rectangle selection in the preview, now scanimge exists */
+	    ImageCanvas *previewCanvas = preview_canvas->getImageCanvas();
+	    connect( previewCanvas , SIGNAL( newRect(QRect)),
+		     scan_params, SLOT(slCustomScanSize(QRect)));
+	    connect( previewCanvas, SIGNAL( noRect()),
+		     scan_params, SLOT(slMaximalScanSize()));
+	    connect( scan_params,    SIGNAL( scanResolutionChanged( int, int )),
+		     preview_canvas, SLOT( slNewScanResolutions( int, int )));
+	 }
       }
       else
       {
@@ -219,26 +222,30 @@ bool KookaView::slSelectDevice( )
       }
 
       /* try to load the size from config */
-      KConfig *konf = KGlobal::config ();
-      konf->setGroup(sane->shortScannerName());
-      QValueList<int> sizes = konf->readIntListEntry( STARTUP_SCANPARAM_SIZES );
-      QValueList<int> vsizes = konf->readIntListEntry( STARTUP_VIEWER_SIZES );
-      
-      if( sizes.count() == 0  )
+      if( ret )
       {
-	 kdDebug(28000) << "Setting default sizes" << endl;
+	 KConfig *konf = KGlobal::config ();
+	 konf->setGroup(sane->shortScannerName());
+	 QValueList<int> sizes = konf->readIntListEntry( STARTUP_SCANPARAM_SIZES );
+	 QValueList<int> vsizes = konf->readIntListEntry( STARTUP_VIEWER_SIZES );
+      
+	 if( sizes.count() == 0  )
+	 {
+	    kdDebug(28000) << "Setting default sizes" << endl;
 	 
-	 /* Shitty, nothing yet in the config */
-	 sizes << packager->height();
-	 sizes << scan_params->height();
+	    /* Shitty, nothing yet in the config */
+	    sizes << packager->height();
+	    sizes << scan_params->height();
 
-	 vsizes << (scan_params->sizeHint()).width();
+	    vsizes << (scan_params->sizeHint()).width();
+	 }
+	 setSizes( vsizes );
+	 paramSplitter->setSizes( sizes );
+
+	 scan_params->show();
+
+	 loadPreviewImage( selDevice );
       }
-      setSizes( vsizes );
-      paramSplitter->setSizes( sizes );
-
-      scan_params->show();
-
    }
    else
    {
@@ -284,6 +291,25 @@ QCString KookaView::userDeviceSelection( ) const
    return( selDevice );
 }
 
+void KookaView::loadPreviewImage( const QCString& scanner )
+{
+   ImgSaver is( this );
+   QString previewfile = is.kookaPreviewFile(scanner);
+
+   kdDebug(28000) << "Loading preview <" << previewfile << "> for " << scanner << endl;
+   
+   if( m_previewImg->load( previewfile ))
+   {
+      preview_canvas->newImage( m_previewImg );
+   }
+   else
+   {
+      preview_canvas->newImage( 0L );
+
+      kdDebug(28000) << "WRN: Could not load preview from " << previewfile << endl;
+   }
+
+}
 
 
 void KookaView::loadStartupImage( void )
@@ -374,9 +400,8 @@ void KookaView::slNewPreview( QImage *new_img )
 {
    if( new_img )
    {
-      if( preview_img )
-	 delete( preview_img );
-      preview_img = new QImage( *new_img );
+      if( m_previewImg )
+	 *(m_previewImg) = *new_img;
 
       if( ! new_img->isNull() )
       {
@@ -390,7 +415,7 @@ void KookaView::slNewPreview( QImage *new_img )
 	    kdDebug(28000) << "ERROR in saving preview !" << endl;
 	 }
       }
-      preview_canvas->newImage( preview_img );
+      preview_canvas->newImage( m_previewImg );
    }
 }
 
