@@ -65,7 +65,7 @@ public:
    *
    *  releases internal allocated memory.
    */
-  ~KScanDevice( ){ };
+  ~KScanDevice( );
 
   /**
    *  opens the device named backend.
@@ -151,10 +151,11 @@ public:
    *  it takes effect after being applied with this function.
    *  @see KScanOption
    *  @return the status of the operation
-   *  @param  a scan-option object with the value to set.
+   *  @param  a scan-option object with the scanner option to set and
+   *  an optional boolean parameter if it is a gamma table.
    **/
 
-  KScanStat apply( KScanOption *opt );
+  KScanStat apply( KScanOption *opt, bool=false );
 
   /**
    *  returns true if the option exists in that device.
@@ -293,7 +294,8 @@ private:
   int                 pixel_x, pixel_y;
   bool 		      scanningPreview;
 
-  KScanOptSet         *storeOptions;
+   KScanOptSet         *storeOptions;
+   
 };
 
 #endif
