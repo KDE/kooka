@@ -161,13 +161,10 @@ public:
    void        storeFormatForType( picType, QString, bool );
    bool        isRememberedFormat( picType type, QString format ) const;
 
-   
-#if 0
-   /**
-    * Static function that returns the relative path to the kooka imgage root
-    */
-   static QString relativeToImgRoot( QString );
-#endif
+   /* static function that exports a file */
+   static bool    exportImage( const KURL& fromUrl, const KURL& toUrl, QWidget *overWidget=0 );
+   /* static function that returns the extension of an url */
+   static QString extension( const KURL& );
    
 public slots:
    ImgSaveStat saveImage( QImage *image );
@@ -180,6 +177,7 @@ private:
    QString      findFormat( picType type );
    QString      findSubFormat( QString format );
    void		createDir( const QString& );
+   
    ImgSaveStat  save( QImage *image, const QString &filename, const QString &format,
 		     const QString &subformat );
    QString      createFilename( QString format );
