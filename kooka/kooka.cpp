@@ -266,7 +266,7 @@ void Kooka::setupActions()
 		       actionCollection(), "savescanparam" );
 #endif
 
-    (void) new KAction(i18n("Select Scan Device"), "scanner", CTRL+Key_Q,
+    (void) new KAction(i18n("Select Scan Device"), "scanner", 0,
 		       m_view, SLOT( slSelectDevice()),
 		       actionCollection(), "selectsource" );
 
