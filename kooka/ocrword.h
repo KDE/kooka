@@ -86,12 +86,26 @@ public:
     bool findFuzzyIndex( const QString& word, ocrWord& resWord );
 
     QRect wordListRect( );
+
+    void setBlock( int b );
+    int block() const { return m_block; }
+
+private:
+    int m_block;
 };
 
 /**
- * All lines of a page: A value vector containing as much as entries
- * as lines are available. Needs to be resized acordingly.
+ * All lines of a block: A value vector containing as much as entries
+ * as lines are available in a block. Needs to be resized acordingly.
  */
-typedef QValueVector<ocrWordList> ocrPage;
+typedef QValueVector<ocrWordList> ocrBlock;
+
+/**
+ * Blocks taken together form the page.
+ * Attention: Needs to be resized to the amount of blocks !!
+ */
+typedef QValueVector<ocrBlock> ocrBlockPage;
+
+typedef QValueVector<QRect> rectList;
 
 #endif

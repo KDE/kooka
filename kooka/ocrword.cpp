@@ -51,9 +51,11 @@ QRect ocrWord::boundingRect()
     return r;
 }
 #endif
+
 /* -------------------- CocrWordList ------------------ */
 ocrWordList::ocrWordList()
-    :QValueList<ocrWord>()
+    :QValueList<ocrWord>(),
+     m_block(0)
 {
     // setAutoDelete( true );
 }
