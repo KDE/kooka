@@ -350,48 +350,48 @@ KScanStat KScanDevice::apply( KScanOption *opt, bool isGammaTable )
 {
    KScanStat   stat = KSCAN_OK;
    if( !opt ) return( KSCAN_ERR_PARAM );
-
+   int sane_result = 0;
+   
    int         *num = option_dic[ opt->getName() ];
-   SANE_Int    result = 0;
    SANE_Status sane_stat = SANE_STATUS_GOOD;
    const QCString& oname = opt->getName();
 
    if ( oname == "preview" || oname == "mode" ) {
       sane_stat = sane_control_option( scanner_handle, *num,
 				       SANE_ACTION_SET_AUTO, 0,
-				       &result );
- return stat;
+				       &sane_result );
       /* No return here, please ! Carsten, does it still work than for you ? */
    }
 
 
    if( ! opt->initialised() || opt->getBuffer() == 0 )
    {
-     kdDebug(29000) << "Attempt to set Zero buffer of " << oname << " -> skipping !" << endl;
+      kdDebug(29000) << "Attempt to set Zero buffer of " << oname << " -> skipping !" << endl;
    	
       if( opt->autoSetable() )
       {
 	 kdDebug(29000) << "Setting option automatic !" << endl;
 	 sane_stat = sane_control_option( scanner_handle, *num,
 					  SANE_ACTION_SET_AUTO, 0,
-					  &result );
+					  &sane_result );
       }
       else
       {
 	 sane_stat = SANE_STATUS_INVAL;
       }
+      stat = KSCAN_ERR_PARAM;
    }
    else
    {	
       if( ! opt->active() )
       {
 	 kdDebug(29000) << "Option " << oname << " is not active now!" << endl;
-	 result = 0;
+	 stat = KSCAN_OPT_NOT_ACTIVE;
       }
       else if( ! opt->softwareSetable() )
       {
 	 kdDebug(29000) << "Option " << oname << " is not software Setable!" << endl;
-	 result = 0;
+	 stat = KSCAN_OPT_NOT_ACTIVE;
       }
       else
       {
@@ -399,45 +399,51 @@ KScanStat KScanDevice::apply( KScanOption *opt, bool isGammaTable )
 	 sane_stat = sane_control_option( scanner_handle, *num,
 					  SANE_ACTION_SET_VALUE,
 					  opt->getBuffer(),
-					  &result );
+					  &sane_result );
       }
    }		
 
-   if( sane_stat == SANE_STATUS_GOOD )
+   if( stat == KSCAN_OK )
    {
-     kdDebug(29000) << "Applied <" << oname << "> successfully" << endl;
-
-      if( result & SANE_INFO_RELOAD_OPTIONS )
+      if( sane_stat == SANE_STATUS_GOOD )
       {
-	 kdDebug(29000) << "* Setting status to reload options" << endl;
-	 stat = KSCAN_RELOAD;
+	 kdDebug(29000) << "Applied <" << oname << "> successfully" << endl;
+
+	 if( sane_result & SANE_INFO_RELOAD_OPTIONS )
+	 {
+	    kdDebug(29000) << "* Setting status to reload options" << endl;
+	    stat = KSCAN_RELOAD;
 #if 0
-	 qDebug( "Emitting sigOptionChanged()" );
-	 emit( sigOptionsChanged() );
+	    qDebug( "Emitting sigOptionChanged()" );
+	    emit( sigOptionsChanged() );
 #endif
-      }
+	 }
 
 #if 0
-      if( result & SANE_INFO_RELOAD_PARAMS )
-	 emit( sigScanParamsChanged() );
+	 if( sane_result & SANE_INFO_RELOAD_PARAMS )
+	    emit( sigScanParamsChanged() );
 #endif
-      if( result & SANE_INFO_INEXACT )
-      {
-	kdDebug(29000) << "Option <" << oname << "> was set inexact !" << endl;
-		
-      }
+	 if( sane_result & SANE_INFO_INEXACT )
+	 {
+	    kdDebug(29000) << "Option <" << oname << "> was set inexact !" << endl;
+	 }
 
-      /* if it is a gamma table, the gamma values must be stored */
-      if( isGammaTable )
+	 /* if it is a gamma table, the gamma values must be stored */
+	 if( isGammaTable )
+	 {
+	    gammaTables.backupOption( *opt );
+	    kdDebug(29000) << "GammaTable stored: " << opt->getName() << endl;
+	 }
+      }
+      else
       {
-	 gammaTables.backupOption( *opt );
-	 kdDebug(29000) << "GammaTable stored: " << opt->getName() << endl;
+	 kdDebug(29000) << "Status of sane is bad: " << sane_strstatus( sane_stat ) << endl;
+
       }
    }
    else
    {
-     kdDebug(29000) << "Setting of <" << oname << "> failed: " << sane_strstatus( sane_stat ) << endl;
-      stat = KSCAN_ERR_CONTROL;
+      kdDebug(29000) << "Setting of <" << oname << "> failed -> kscanerror." << endl;
    }
    return( stat );
 }
