@@ -879,6 +879,7 @@ bool ScanPackager::deleteItem( PackagerItem *curr, bool ask )
       emit( deleteImage( curr->getImage() ));
       ok = curr->deleteFile();
       delete curr;
+      curr = 0;
    }
 
    if( ! ok )
@@ -981,5 +982,7 @@ QString ScanPackager::getImgName( QString name_on_disk )
 
 /* ----------------------------------------------------------------------- */
 ScanPackager::~ScanPackager(){
+      kdDebug(29000) << "Destructor of ScanPackager" << endl;
+
 }
 #include "scanpackager.moc"

@@ -211,9 +211,15 @@ KookaView::~KookaView()
 {
    saveProperties( KGlobal::config () );
    kdDebug(28000)<< "Finished saving config data" << endl;
-   // if( preview_img ) delete( preview_img );
+   if( preview_img ) {
+      delete( preview_img );
+      preview_img = 0;
+   }
+   kdDebug(29000) << "Destructor of KookaView" << endl;
 
 }
+
+
 
 void KookaView::loadStartupImage( void )
 {

@@ -107,6 +107,7 @@ void  KOCRFinalDialog::fillText( QString str )
 KOCRFinalDialog::~KOCRFinalDialog()
 {
    delete ( resultImg );
+   resultImg = 0;
 }
 
 void KOCRFinalDialog::writeConfig( void )

@@ -42,7 +42,10 @@ KSANEOCR::KSANEOCR( QWidget *pa )
 
 KSANEOCR::~KSANEOCR()
 {
-   if( daemon  ) delete( daemon );
+   if( daemon  ) {
+      delete( daemon );
+      daemon = 0;
+   }
 }
 
 void KSANEOCR::setImage( const QImage *img )
@@ -108,7 +111,10 @@ void KSANEOCR::startOCRProcess( void )
    const QCString cmd = ocrProcessDia->getOCRCmd();
    kdDebug(28000) <<  "Starting OCR-Command: " << cmd << " " << tmpFile << endl;
 
-   if( daemon ) delete( daemon );
+   if( daemon ) {
+      delete( daemon );
+      daemon = 0;
+   }
    
    daemon = new KProcess;
    CHECK_PTR(daemon);

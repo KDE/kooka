@@ -54,7 +54,10 @@ PackagerItem::PackagerItem( QListView *parent, bool is_dir )
 
 PackagerItem::~PackagerItem()
 {
-   if( image ) delete( image );
+   if( image ) {
+      delete( image );
+      image = 0;
+   }
 }
 
 QString PackagerItem::getLocalFilename( void ) const
@@ -111,7 +114,10 @@ QImage *PackagerItem::getImage( void )
    
    if( filename.isLocalFile() )
    {
-      if( image ) delete image;
+      if( image ) {
+	 delete image;
+	 image = 0;
+      }
 
       /* Bummer ! This is terrible. If the PackagerItem is a KURL and may
 	 reside on a remote server, how to open this image here ? Seems not
@@ -163,7 +169,10 @@ void PackagerItem::setFilename( QString fi )
 
 void PackagerItem::setImage( QImage *img, const QCString& newFormat )
 {
-   if( image ) delete image;
+   if( image ) {
+      delete image;
+      image = 0;
+   }
    
    image = new QImage( *img );
    format = newFormat;

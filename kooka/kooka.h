@@ -50,7 +50,7 @@ public:
     /**
      * Default Destructor
      */
-    virtual ~Kooka();
+    ~Kooka();
 
     /**
      * Use this method to load whatever file/URL you have
