@@ -41,6 +41,7 @@ class QCheckBox;
 
 #define STARTUP_READ_IMAGE "ReadImageOnStart"
 #define CFG_GROUP_OCR_DIA  "ocrDialog"
+#define CFG_OCRAD_BINARY   "ocradBinary"
 #define CFG_GOCR_BINARY    "gocrBinary"
 
 class KookaPreferences : public KDialogBase
@@ -48,18 +49,19 @@ class KookaPreferences : public KDialogBase
     Q_OBJECT
 public:
     KookaPreferences();
-    static QCString tryFindGocr( void );
+    static QString tryFindGocr( void );
+    static QString tryFindBinary( const QString&, const QString& );
 
 public slots:
     void slotOk( void );
     void slotApply( void );
     void slotDefault( void );
 
-    void checkOCRBinary( const QString& );
-    void checkOCRBinaryShort( const QString& );
-
 private slots:
-    void checkOCRBinIntern( const QString&, bool );
+    bool checkOCRBinIntern( const QString&, const QString&, bool );
+
+    void slCheckOnGOCR( const QString& );
+    void slCheckOnOCRAD( const QString& );
 
 signals:
     void dataSaved();
@@ -69,7 +71,7 @@ private:
     void setupSaveFormatPage();
     void setupThumbnailPage();
     void setupOCRPage();
-
+    KURLRequester* binaryCheckBox( QWidget *, const QString& );
 
     QCheckBox *cbNetQuery;
     QCheckBox *cbSkipFormatAsk;
@@ -84,11 +86,13 @@ private:
     KColorButton *m_colButt1;
     KColorButton *m_colButt2;
 
-    KURLRequester *m_urlReq;
+    KURLRequester *m_urlReqGocr;
+    KURLRequester *m_urlReqOcrad;
 
     QRadioButton *m_gocrBut;
     QRadioButton *m_kadmosBut;
-    bool          m_useKadmos;
+    QRadioButton *m_ocradBut;
+    bool          m_prevOCREngine;
 };
 
 
