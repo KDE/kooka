@@ -27,7 +27,7 @@
 #include <assert.h>
 
 #include <string.h>
-#include <malloc.h>
+#include <stdlib.h>
 #include <memory.h>
 
 #include "kadmosocr.h"
