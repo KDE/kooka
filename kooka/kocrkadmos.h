@@ -44,11 +44,27 @@
 
 class KScanCombo;
 class QWidget;
+class QButtonGroup;
 class KConfig;
 class QCheckBox;
 class KSpellConfig;
 
 
+class KadmosClassifier
+{
+public:
+   KadmosClassifier( QString lang, QString filename );
+   QString getCmplFilename() const { return path+filename; }
+   QString getFilename()     const { return filename; }
+   QString language()        const { return languagesName; }
+
+   void setPath( const QString& p ) { path=p; }
+private:
+
+   QString filename;
+   QString path;
+   QString languagesName;
+};
 
 
 class KadmosDialog: public KOCRBase
@@ -80,8 +96,6 @@ protected:
     void setupSegmentation(  QVBox *box );
     void setupClassification( QVBox *box );
 
-    void addClassifierCombo( QWidget *addTo, KConfig *conf);
-
 private slots:
 
 private:
@@ -92,6 +106,10 @@ private:
     QCheckBox             *m_cbNoise;
     QCheckBox             *m_cbAutoscale;
     QString                m_classifierPath;
+
+   QButtonGroup	 	  *m_bbFont;
+   QButtonGroup  	  *m_bbRegion;
+
 };
 
 #endif
