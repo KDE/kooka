@@ -567,53 +567,52 @@ void KSANEOCR::startOCRProcess( void )
 
        kdDebug(28000) << "Using classifier " << c << endl;
        m_rep.Init( c );
-       m_rep.SetNoiseReduction( kadDia->getNoiseReduction() );
-       m_rep.SetScaling( kadDia->getAutoScale() );
-#if 0
-       KookaImage img;
-       img.load( tmpFile );
-
-       kdDebug(28000) << "Filename of tmp: " << tmpFile << endl;
-       if( img.depth() > 8 ) {
-           QImage tmpImg( img.convertDepth(8));
-           img = tmpImg;
-           if( img.numColors() == 2 )
-               img = tmpImg.convertDepth(1);
+       if( m_rep.kadmosError() ) /* check if kadmos initialised OK */
+       {
+	   KMessageBox::error( m_parent,
+			       i18n("The KADMOS OCR system could not be started:\n") +
+			       m_rep.getErrorText()+
+			       i18n("\nPlease check the configuration" ),
+			       i18n("KADMOS failure") ); 
        }
-#endif
-       kdDebug(28000) << "Image size " << m_img->width() << " x " << m_img->height() << endl;
-       kdDebug(28000) << "Image depth " << m_img->depth() << ", colors: " << m_img->numColors() << endl;
+       else
+       {
+	   /** Since initialising succeeded, we start the ocr here **/
+	   m_rep.SetNoiseReduction( kadDia->getNoiseReduction() );
+	   m_rep.SetScaling( kadDia->getAutoScale() );
+	   kdDebug(28000) << "Image size " << m_img->width() << " x " << m_img->height() << endl;
+	   kdDebug(28000) << "Image depth " << m_img->depth() << ", colors: " << m_img->numColors() << endl;
 #define USE_KADMOS_FILEOP /* use a save-file for OCR instead of filling the reImage struct manually */
 #ifdef USE_KADMOS_FILEOP
-       m_tmpFile = new KTempFile( QString(), QString("bmp"));
-       m_tmpFile->setAutoDelete( false );
-       m_tmpFile->close();
-       QString tmpFile = m_tmpFile->name();
-       kdDebug() << "Saving to file " << tmpFile << endl;
-       m_img->save( tmpFile, "BMP" );
-       m_rep.SetImage(tmpFile);
+	   m_tmpFile = new KTempFile( QString(), QString("bmp"));
+	   m_tmpFile->setAutoDelete( false );
+	   m_tmpFile->close();
+	   QString tmpFile = m_tmpFile->name();
+	   kdDebug() << "Saving to file " << tmpFile << endl;
+	   m_img->save( tmpFile, "BMP" );
+	   m_rep.SetImage(tmpFile);
 #else
-       m_rep.SetImage(m_img);
+	   m_rep.SetImage(m_img);
 #endif
-       // rep.Recognize();
-       m_rep.run();
+	   // rep.Recognize();
+	   m_rep.run();
 
-       /* Dealing with threads or no threads (using QT_THREAD_SUPPORT to distinguish)
-        * If threads are here, the recognition task is started in its own thread. The gui thread
-        * needs to wait until the recognition thread is finished. Therefore, a timer is fired once
-        * that calls slotKadmosResult and checks if the recognition task is finished. If it is not,
-        * a new one-shot-timer is fired in slotKadmosResult. If it is, the OCR result can be
-        * processed.
-        * In case the system has no threads, the method start of the recognition engine does not
-        * return until it is ready, the user has to live with a non responsive gui while
-        * recognition is performed. The start()-method is implemented as a wrapper to the run()
-        * method of CRep, which does the recognition job. Instead of pulling up a timer, simply
-        * the result slot is called if start()=run() has finished. In the result slot, finished()
-        * is only a dummy always returning true to avoid more preprocessor tags here.
-        * Hope that works ...
-        * It does not :( That is why it is not used here. Maybe some day...
-        */
-
+	   /* Dealing with threads or no threads (using QT_THREAD_SUPPORT to distinguish)
+	    * If threads are here, the recognition task is started in its own thread. The gui thread
+	    * needs to wait until the recognition thread is finished. Therefore, a timer is fired once
+	    * that calls slotKadmosResult and checks if the recognition task is finished. If it is not,
+	    * a new one-shot-timer is fired in slotKadmosResult. If it is, the OCR result can be
+	    * processed.
+	    * In case the system has no threads, the method start of the recognition engine does not
+	    * return until it is ready, the user has to live with a non responsive gui while
+	    * recognition is performed. The start()-method is implemented as a wrapper to the run()
+	    * method of CRep, which does the recognition job. Instead of pulling up a timer, simply
+	    * the result slot is called if start()=run() has finished. In the result slot, finished()
+	    * is only a dummy always returning true to avoid more preprocessor tags here.
+	    * Hope that works ...
+	    * It does not :( That is why it is not used here. Maybe some day...
+	    */
+       }
 #ifdef QT_THREAD_SUPPORT
        /* start a timer and wait until it fires. */
        QTimer::singleShot( 500, this, SLOT( slotKadmosResult() ));
@@ -645,24 +644,27 @@ void KSANEOCR::slotKadmosResult()
         kdDebug(28000) << "kadmos is finished." << endl;
 
         m_ocrResultText = "";
-        int lines = m_rep.GetMaxLine();
-        kdDebug(28000) << "Count lines: " << lines << endl;
-        m_ocrPage.clear();
-        m_ocrPage.resize( lines );
+	if( ! m_rep.kadmosError() )
+	{
+	    int lines = m_rep.GetMaxLine();
+	    kdDebug(28000) << "Count lines: " << lines << endl;
+	    m_ocrPage.clear();
+	    m_ocrPage.resize( lines );
 
-        for( int line = 0; line < m_rep.GetMaxLine(); line++ )
-        {
-            // ocrWordList wordList = m_rep.getLineWords(line);
-            /* call an ocr engine independent method to use the spellbook */
-            ocrWordList words = m_rep.getLineWords(line);
-            kdDebug(28000) << "Have " << words.count() << " entries in list" << endl;
-            m_ocrPage[line]=words;
-        }
+	    for( int line = 0; line < m_rep.GetMaxLine(); line++ )
+	    {
+		// ocrWordList wordList = m_rep.getLineWords(line);
+		/* call an ocr engine independent method to use the spellbook */
+		ocrWordList words = m_rep.getLineWords(line);
+		kdDebug(28000) << "Have " << words.count() << " entries in list" << endl;
+		m_ocrPage[line]=words;
+	    }
 
-        /* show results of ocr */
-        finishedOCRVisible(true);
+	    /* show results of ocr */
+	    m_rep.End();
+	}
+	finishedOCRVisible( !m_rep.kadmosError() );
 
-        m_rep.End();
     }
     else
     {
