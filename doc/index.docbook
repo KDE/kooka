@@ -126,7 +126,7 @@ which format to save the image whether to make this your standard
 format (without being prompted to confirm your selection in the
 future).</para>
 
-<note><para>If you checked that you do not want to asked about the
+<note><para>If you checked that you do not want to be asked about the
 save format, the memory assistant will no longer appear. To change the
 format some time in the future, select <menuchoice>
 <guimenu>Settings</guimenu> <guimenuitem>Configure
@@ -145,14 +145,100 @@ scan.</para>
 
 </chapter>
 
-<chapter id="prefs">
-<title>Settings</title>
+<chapter id="commands">
+<title>Command References</title>
 
-<para>The icons in the panel have been returned to the menu panel,
-except for the printer icon, under <guilabel>Image
-settings</guilabel>. The print option can be found under
-<guilabel>File</guilabel>. Each menu item in the image settings is
-briefly described below.</para>
+<sect1 id="kooka-toolbar">
+<title>The main &kooka; Toolbar</title>
+
+
+<sect2>
+<title>The <guimenu>File</guimenu> Menu</title>
+
+<variablelist> 
+<varlistentry> 
+<term>
+<menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>P</keycap></keycombo>
+</shortcut>
+<guimenu>File</guimenu>
+<guimenuitem>Print</guimenuitem>
+</menuchoice></term> 
+<listitem>
+<para>Prints the displayed image.</para>
+</listitem> 
+</varlistentry>
+
+<varlistentry> 
+<term>
+<menuchoice>
+<guimenu>File</guimenu>
+<guimenuitem>Create Directory...</guimenuitem>
+</menuchoice></term> 
+<listitem>
+<para>Create a directory to hold your images.</para>
+</listitem> 
+</varlistentry>
+
+<varlistentry> 
+<term>
+<menuchoice>
+<guimenu>File</guimenu>
+<guimenuitem>Save Image</guimenuitem>
+</menuchoice></term> 
+<listitem>
+<para>Save the image selected underneath the 
+<guilabel>Kooka Gallery</guilabel>.</para>
+<para>See the <link linkend="save"> Save</link> 
+section for details.</para>
+</listitem> 
+</varlistentry>
+
+<varlistentry> 
+<term>
+<menuchoice>
+<guimenu>File</guimenu>
+<guimenuitem>Delete Image</guimenuitem>
+</menuchoice></term> 
+<listitem>
+<para>Delete the image selected underneath the 
+<guilabel>Kooka Gallery</guilabel>.</para>
+</listitem> 
+</varlistentry>
+
+<varlistentry> 
+<term>
+<menuchoice>
+<guimenu>File</guimenu>
+<guimenuitem>Unload Image</guimenuitem>
+</menuchoice></term> 
+<listitem>
+<para>Remove the image displayed in the <guilabel>Image
+Viewer</guilabel>.
+</para>
+</listitem> 
+</varlistentry>
+
+<varlistentry> 
+<term>
+<menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>Q</keycap></keycombo>
+</shortcut>
+<guimenu>File</guimenu>
+<guimenuitem>Quit</guimenuitem>
+</menuchoice></term> 
+<listitem>
+<para>Quit &kooka;.</para>
+</listitem> 
+</varlistentry>
+
+</variablelist>
+</sect2>
+
+<sect2>
+<title>The <guimenu>Image</guimenu> Menu</title>
 
 <variablelist> 
 <varlistentry> 
@@ -161,7 +247,7 @@ briefly described below.</para>
 <shortcut>
 <keycombo action="simul">&Ctrl;<keycap>G</keycap></keycombo>
 </shortcut>
-<guimenu>ImageCanvas</guimenu>
+<guimenu>Image</guimenu>
 <guimenuitem>Open image in graphic application</guimenuitem>
 </menuchoice></term> 
 <listitem>
@@ -176,7 +262,7 @@ GIMP</application>.</para>
 <menuchoice><shortcut>
 <keycombo action="simul">&Ctrl;<keycap>O</keycap></keycombo>
 </shortcut>
-<guimenu>ImageCanvas</guimenu>
+<guimenu>Image</guimenu>
 <guimenuitem>OCR image...</guimenuitem>
 </menuchoice></term>
 <listitem>
@@ -193,7 +279,7 @@ highlighted area.</para>
 <menuchoice><shortcut>
 <keycombo action="simul">&Ctrl;<keycap>C</keycap></keycombo>
 </shortcut>
-<guimenu>ImageCanvas</guimenu>
+<guimenu>Image</guimenu>
 <guimenuitem>OCR on selection...</guimenuitem>
 </menuchoice></term> 
 <listitem>
@@ -209,7 +295,7 @@ the final scan.</para>
 <menuchoice><shortcut>
 <keycombo action="simul">&Ctrl;<keycap>I</keycap></keycombo>
 </shortcut>
-<guimenu>ImageCanvas</guimenu>
+<guimenu>Image</guimenu>
 <guimenuitem>Scale to Width</guimenuitem>
 </menuchoice></term> 
 <listitem >
@@ -223,7 +309,7 @@ width of the display.</para>
 <menuchoice><shortcut>
 <keycombo action="simul">&Ctrl;<keycap>H</keycap></keycombo>
 </shortcut>
-<guimenu>ImageCanvas</guimenu>
+<guimenu>Image</guimenu>
 <guimenuitem>Scale to Height</guimenuitem>
 </menuchoice></term> 
 <listitem>
@@ -237,7 +323,7 @@ display.</para>
 <menuchoice><shortcut>
 <keycombo action="simul">&Ctrl;<keycap>S</keycap></keycombo>
 </shortcut>
-<guimenu>ImageCanvas</guimenu>
+<guimenu>Image</guimenu>
 <guimenuitem>Original Size</guimenuitem>
 </menuchoice></term> 
 <listitem>
@@ -256,7 +342,7 @@ done in the <guilabel>Preview</guilabel> window.</para>
 <menuchoice><shortcut>
 <keycombo action="simul">&Ctrl;<keycap>N</keycap></keycombo>
 </shortcut>
-<guimenu>ImageCanvas</guimenu>
+<guimenu>Image</guimenu>
 <guimenuitem>Create from selection</guimenuitem>
 </menuchoice></term> 
 <listitem>
@@ -274,7 +360,7 @@ crop tool.</para>
 <menuchoice><shortcut>
 <keycombo action="simul">&Ctrl;<keycap>V</keycap></keycombo>
 </shortcut>
-<guimenu>ImageScan</guimenu>
+<guimenu>Image</guimenu>
 <guimenuitem>Mirror image vertically</guimenuitem>
 </menuchoice></term> 
 <listitem>
@@ -286,7 +372,7 @@ crop tool.</para>
 <term><menuchoice><shortcut>
 <keycombo action="simul">&Ctrl;<keycap>M</keycap></keycombo>
 </shortcut>
-<guimenu>ImageScan</guimenu>
+<guimenu>Image</guimenu>
 <guimenuitem>Mirror image horizontally</guimenuitem>
 </menuchoice>
 </term> 
@@ -299,7 +385,7 @@ crop tool.</para>
 <term><menuchoice><shortcut>
 <keycombo action="simul">&Ctrl;<keycap>B</keycap></keycombo>
 </shortcut>
-<guimenu>ImageScan</guimenu>
+<guimenu>Image</guimenu>
 <guimenuitem>Mirror both directions</guimenuitem>
 </menuchoice></term> 
 <listitem>
@@ -312,7 +398,7 @@ crop tool.</para>
 <menuchoice><shortcut>
 <keycombo action="simul">&Ctrl;<keycap>R</keycap></keycombo>
 </shortcut>
-<guimenu>ImageScan</guimenu>
+<guimenu>Image</guimenu>
 <guimenuitem>Rotate image clockwise</guimenuitem>
 </menuchoice></term> 
 <listitem>
@@ -325,7 +411,7 @@ crop tool.</para>
 <menuchoice><shortcut>
 <keycombo action="simul">&Ctrl;<keycap>W</keycap></keycombo>
 </shortcut>
-<guimenu>ImageScan</guimenu>
+<guimenu>Image</guimenu>
 <guimenuitem>Rotate image counter-clockwise</guimenuitem>
 </menuchoice>
 </term> 
@@ -339,7 +425,7 @@ crop tool.</para>
 <menuchoice><shortcut>
 <keycombo action="simul">&Ctrl;<keycap>D</keycap></keycombo>
 </shortcut>
-<guimenu>ImageScan</guimenu>
+<guimenu>Image</guimenu>
 <guimenuitem>Rotate image 180 degrees</guimenuitem>
 </menuchoice>
 </term> 
@@ -348,11 +434,202 @@ crop tool.</para>
 </listitem> 
 </varlistentry> 
 </variablelist>
+</sect2>
 
+<sect2>
+<title>The <guimenu>Settings</guimenu> Menu</title>
+
+<variablelist>
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Settings</guimenu>
+<guimenuitem>Show Toolbar</guimenuitem>
+</menuchoice>
+</term> 
+<listitem>
+<para>Removes the top toolbar to give additional viewing area. </para>
+</listitem> 
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Settings</guimenu>
+<guimenuitem>Show Statusbar</guimenuitem>
+</menuchoice>
+</term> 
+<listitem>
+<para>Removes the bottom statusbar to give additional viewing area.</para>
+</listitem> 
+</varlistentry>
+ </variablelist>
+</sect2>
+
+<sect2>
+<title>Configuring Shortcuts</title>
+
+<para>The <menuchoice>
+<guimenu>Settings</guimenu><guimenuitem>Configure Shortcuts...</guimenuitem></menuchoice>
+allows you to specify key bindings</para>
+
+
+<para>Below is an example of how to configure a short cut for deleting
+an image.</para>
+
+<screenshot>
+<screeninfo>Picture of shortcut dialog</screeninfo>
+	<mediaobject>
+	  <imageobject>
+	    <imagedata fileref="shortcut0.png" format="PNG"/>
+	  </imageobject>
+	</mediaobject>
+</screenshot>
+
+<itemizedlist>
+<listitem><para>
+Click on the custom button.
+</para></listitem>
+
+<listitem><para>
+Next click on the primary button.
+</para></listitem>
+
+<listitem><para>
+Do <userinput><keycombo
+action="seq"><keycap>CTRL</keycap><keycap>X</keycap></keycombo></userinput>
+and the dialog should disappear. The keybinding is now entered. 
+</para></listitem>
+</itemizedlist>
+
+<screenshot>
+<screeninfo>Picture of keybinding  dialog</screeninfo>
+	<mediaobject>
+	  <imageobject>
+	    <imagedata fileref="shortcut1.png" format="PNG"/>
+	  </imageobject>
+	</mediaobject>
+</screenshot>
+
+<para>Pressing the keys <userinput><keycombo
+action="seq"><keycap>CTRL</keycap><keycap>X</keycap></keycombo></userinput>
+now deletes the image selected underneath <guilabel>Kooka Gallery</guilabel>.
+</para>
+</sect2>
+
+<sect2>
+<title>Configuring Toolbars</title>
+<para>The <menuchoice>
+<guimenu>Settings</guimenu><guimenuitem>Configure Toolbars...</guimenuitem></menuchoice>
+Is used to add additional buttons to the toolbars.</para>
+
+<screenshot>
+<screeninfo>Picture of toolbars dialog</screeninfo>
+	<mediaobject>
+	  <imageobject>
+	    <imagedata fileref="toolbar.png" format="PNG"/>
+	  </imageobject>
+	</mediaobject>
+</screenshot>
+
+
+<itemizedlist>
+
+<listitem>
+<para>To add a button to the File toolbar, 
+</para>
+
+<screenshot>
+<screeninfo>Picture of toolbars dialog</screeninfo>
+	<mediaobject>
+	  <imageobject>
+	    <imagedata fileref="toolbar1.png" format="PNG"/>
+	  </imageobject>
+	</mediaobject>
+</screenshot>
+
+<para>  make sure <guilabel>Main Toolbar</guilabel> is displayed in
+the top combo box.
+</para></listitem>
+
+<listitem><para>
+Click on one of the items in the left hand pane. This item will now have a
+blue background showing that it has been selected.
+</para></listitem>
+
+<listitem><para>
+Next click on the <keysym>Right arrow</keysym> button to place it in
+the right pane.
+</para></listitem>
+
+<listitem><para>
+Click on <userinput><guilabel>Apply</guilabel></userinput> and then
+click on <userinput><guilabel>OK</guilabel></userinput>
+</para></listitem>
+</itemizedlist>
+
+
+<para>The new Item should be in the toolbar. 
+<screenshot>
+<screeninfo>Picture of toolbars dialog</screeninfo>
+	<mediaobject>
+	  <imageobject>
+	    <imagedata fileref="toolbar2.png" format="PNG"/>
+	  </imageobject>
+	</mediaobject>
+</screenshot>
+</para>
+</sect2>
+
+<sect2>
+<title>Configuring Kooka</title>
+<para>The <menuchoice>
+<guimenu>Settings</guimenu><guimenuitem>Configure Kooka...</guimenuitem>
+</menuchoice>
+</para>
+
+
+<variablelist>
+<varlistentry>
+<term>
+<menuchoice>
+<guilabel>Kooka Startup Preferences</guilabel> 
+</menuchoice>
+</term> 
+<listitem>
+<para>You may want to uncheck <guilabel>Show the scanner selection box
+on next startup</guilabel>, if you have only one scanner. If you 
+have only one computer you may also want to uncheck
+<guilabel>Query network for available scanners</guilabel>. 
+</para>
+</listitem> 
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guilabel>Thumbnail View</guilabel> 
+</menuchoice>
+</term> 
+<listitem>
+<para>Here the size and the shading of the thumbnails can be adjusted;
+as well as the background. For example, you might want to reduce the
+size of the thumbnails if you are scanning many pages from a book.
+</para>
+</listitem> 
+</varlistentry>
+
+</variablelist>
+
+</sect2>
+
+
+</sect1>
 </chapter>
 
 <chapter id="save">
 <title>Save</title>
+<subtitle>More on Saving Images</subtitle>
 
 <para>The method for saving an image is somewhat different in &kooka;
 than in many other applications. Click the
@@ -398,13 +675,17 @@ gallery by dragging them and dropping them into the gallery.</para>
 <para>As already mentioned, the <application>gocr</application> must
 be installed. Scan a preview of your document in grayscale or
 color. You can only scan in binary mode if you have a pure white sheet
-of paper with black print. Next, highlight the text to have recognized
+of paper with black print. Next, highlight the text to be recognized
 in the preview window. Then, do your final scan in binary mode with
 <guibutton>Scan</guibutton>.</para>
 
-<para>Now click the second icon from the left in the icon panel,
-<guilabel>Character recognition for image...</guilabel>, or select
-this item in the <guilabel>Image settings</guilabel> menu.  For your
+<para>Now click the second icon from the left, 
+<inlinemediaobject><imageobject>
+	    <imagedata fileref="ocr-select.png" format="PNG"/>
+	  </imageobject></inlinemediaobject>,   
+  in the icon panel,
+<guilabel>OCR on Selection...</guilabel>, or select
+this item in the <guilabel>Image</guilabel> menu.  For your
 first try, do not change the default settings shown in the emerging
 <acronym>OCR</acronym> window. These are usually appropriate and meet
 most needs.  Now click <guimenuitem>Start character
