@@ -232,35 +232,57 @@ void KookaView::loadStartupImage( void )
 
 void KookaView::print(QPainter *p, KPrinter* printer, QPaintDeviceMetrics& metrics )
 {
-
-   
    int pheight = metrics.height();
    int pwidth  = metrics.width();
+
+   /* Check the device */
+   if( pheight == 0 || pwidth == 0 ) return;
+   
    (void) printer;
 
    const QImage *img = img_canvas->rootImage();
 
+   kdDebug(28000) << "Printing canvas size: "<< pwidth << "x" << pheight << endl;
    if( img )
    {
       int w = img->width();
       int h = img->height();
-
+      bool scaled = false;
+      double ratio = 1.0;
+      
       kdDebug(28000) << "printing image size " << w << " x " << h << endl;
-      if( pwidth < w && pheight < h )
+      if( w > pwidth || h > pheight )
       {
-         // Phys. image is larger than print area.
+	 /* scaling is neccessary */
+	 double wratio = double(w) / double(pwidth);
+	 double hratio = double(h) / double(pheight);
 
-         p->drawImage( QPoint( 50,50 ), img->smoothScale( pwidth-100, pheight-100 ));
+	 /* take the larger one */
+	 ratio = wratio > hratio ? wratio : hratio;
+	 if( ratio > 0.0 )
+	 {
+	    w = (int) (double(w) / ratio);
+	    h = (int) (double(h) / ratio);
+	 }
+	 scaled = true;
+	 kdDebug(28000) << "image ratio: " << ratio << " leads to new height " << h << endl;
+      }
+
+      QPoint poin ( 1+int(( pwidth-w)/2), 1+int((pheight-h)/2) );
+      kdDebug(28000) << "Printing on point " << poin.x() << "/" << poin.y() << endl;
+      if( scaled )
+      {
+         // Phys. image is larger than print area, needs  to scale
+         p->drawImage( poin, img->smoothScale( w, h ));
+	 kdDebug(28000) <<  "Needed to scale new size is " << w << "x" << h << endl;
       }
       else
       {
          // Phys. image fits on the page
-         p->drawImage( QPoint( int((pwidth-w)/2), int((pheight-h)/2) ), *img );
-
+         p->drawImage( poin, *img );
+	 kdDebug(28000) <<  "Needed to scale new size is " << w << "x" << h << endl;
       }
    }
-   // do the actual printing, here
-   // p->drawText(etc..)
 }
 
 void KookaView::slNewPreview( QImage *new_img )
