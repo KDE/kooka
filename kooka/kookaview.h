@@ -42,6 +42,7 @@ class KConfig;
 class KPrinter;
 class KComboBox;
 class KAction;
+class KActionCollection;
 class ThumbView;
 
 /**
@@ -76,7 +77,9 @@ public:
 
    bool ToggleVisibility( int );
    void loadStartupImage( void );
-   KDockWidget *mainDockWidget( ) { return mainDock; }
+   KDockWidget *mainDockWidget( ) { return m_mainDock; }
+
+   void createDockMenu( KActionCollection*, KDockMainWindow *, const char *);
    
 public slots:
    void slShowPreview()  {  }
@@ -188,8 +191,14 @@ private:
    int 		preview_id;
 
    KSANEOCR *ocrFabric;
-   KDockWidget *mainDock;
-   KDockWidget *dockScanParam;
+
+   KDockWidget *m_mainDock;
+   KDockWidget *m_dockScanParam;
+   KDockWidget *m_dockThumbs;
+   KDockWidget *m_dockPackager;
+   KDockWidget *m_dockRecent;
+   KDockWidget *m_dockPreview;
+
    
 };
 

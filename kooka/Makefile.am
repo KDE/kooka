@@ -9,7 +9,8 @@ kooka_SOURCES =	main.cpp kooka.cpp kookaview.cpp kookapref.cpp 		\
 		img_saver.cpp ksaneocr.cpp miscwidgets.cpp 		\
 		kookaimage.cpp scanpackager.cpp 	\
 		kocrstartdia.cpp kocrfindia.cpp imgnamecombo.cpp        \
-		thumbview.cpp thumbviewitem.cpp
+		thumbview.cpp thumbviewitem.cpp                         \
+		dwmenuaction.cpp
 
 kooka_LDADD   = $(LIB_KFILE) -lkdeprint $(top_builddir)/libkscan/libkscan.la
 kooka_LDFLAGS = $(KDE_RPATH) $(all_libraries)

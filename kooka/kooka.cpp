@@ -91,11 +91,6 @@ Kooka::Kooka( const QCString& deviceToUse)
 
    setAutoSaveSettings(  QString::fromLatin1("General Options"),
 			 true );
-
-   /* add the Dockwindow-show-hide stuff to the menu bar */
-   /* This is buggy ! FIXME ! */
-   QMenuBar *menu= menuBar();
-   menu->insertItem( i18n( "Docking"), dockHideShowMenu () );
 }
 
 
@@ -133,7 +128,8 @@ void Kooka::setupActions()
 				  actionCollection());
     KStdAction::preferences(this, SLOT(optionsPreferences()), actionCollection());
 
-
+    m_view->createDockMenu(actionCollection(), this, "settings_show_docks" );
+    
     /* Image Viewer action Toolbar - OCR, Scaling etc. */
     (void) new KAction(i18n("&OCR Image..."), "ocr", CTRL+Key_O,
 		       m_view, SLOT(doOCR()),

@@ -26,6 +26,7 @@
 #include "kookapref.h"
 #include "imgnamecombo.h"
 #include "thumbview.h"
+#include "dwmenuaction.h"
 #if 0
 #include "paramsetdialogs.h"
 #endif
@@ -53,6 +54,7 @@
 #include <kcombobox.h>
 #include <kaction.h>
 #include <kiconloader.h>
+#include <kshortcut.h>
 #include <kdockwidget.h>
 #include <qobject.h>
 
@@ -66,48 +68,48 @@
 
 
 KookaView::KookaView( KDockMainWindow *parent, const QCString& deviceToUse)
-   : QObject()
+   : QObject(),
+     ocrFabric(0),
+     m_mainDock(0),
+     m_dockScanParam(0),
+     m_dockThumbs(0),
+     m_dockPackager(0),
+     m_dockRecent(0),
+     m_dockPreview(0)
 {
-
-   /* Another splitter for splitting the Packager Tree from the Scan Parameter */
-   ocrFabric = 0L;
-   
-   /* An image canvas for the large image, right side */
-
    KIconLoader *loader = KGlobal::iconLoader();
-   mainDock = parent->createDockWidget( "Kookas MainDock",
+   m_mainDock = parent->createDockWidget( "Kookas MainDock",
 			       loader->loadIcon( "folder_image", KIcon::Small ),
 			       0L, i18n("Image Viewer"));
-   mainDock->setEnableDocking(KDockWidget::DockNone );
-   mainDock->setDockSite(KDockWidget::DockCorner);
-   parent->setView( mainDock);
-   parent->setMainDockWidget( mainDock);
+   m_mainDock->setEnableDocking(KDockWidget::DockNone );
+   m_mainDock->setDockSite(KDockWidget::DockCorner);
+   parent->setView( m_mainDock);
+   parent->setMainDockWidget( m_mainDock);
    
-   img_canvas  = new ImageCanvas( mainDock );
+   img_canvas  = new ImageCanvas( m_mainDock );
    img_canvas->setMinimumSize(100,200);
    img_canvas->enableContextMenu(true);
-   mainDock->setWidget( img_canvas );
+   m_mainDock->setWidget( img_canvas );
 
-   KDockWidget *dockThumbs = parent->createDockWidget( "Thumbs",
-						      loader->loadIcon( "thumbnail", KIcon::Small ),
-						      0L,  i18n("Thumbnails"));
-   dockThumbs->setDockSite(KDockWidget::DockFullSite );
+   m_dockThumbs = parent->createDockWidget( "Thumbs",
+					    loader->loadIcon( "thumbnail", KIcon::Small ),
+					    0L,  i18n("Thumbnails"));
+   m_dockThumbs->setDockSite(KDockWidget::DockFullSite );
    
    /* thumbnail viewer widget */
-   m_thumbview = new ThumbView( mainDock );
-   dockThumbs->setWidget( m_thumbview );
-   dockThumbs->manualDock( mainDock, KDockWidget::DockLeft, 30 );
+   m_thumbview = new ThumbView( m_mainDock );
+   m_dockThumbs->setWidget( m_thumbview );
+   m_dockThumbs->manualDock( m_mainDock, KDockWidget::DockLeft, 30 );
 
    /* make the main dock widget */
    /* A new packager to contain the already scanned images */
-   KDockWidget* dockLeft;
-   dockLeft = parent->createDockWidget( "Scanpackager",
-				loader->loadIcon( "palette_color", KIcon::Small ),
-				0L, i18n("Gallery"));
-   dockLeft->setDockSite(KDockWidget::DockFullSite);
-   packager = new ScanPackager( dockLeft );
-   dockLeft->setWidget( packager );
-   dockLeft->manualDock( mainDock,              // dock target
+   m_dockPackager = parent->createDockWidget( "Scanpackager",
+					    loader->loadIcon( "palette_color", KIcon::Small ),
+					    0L, i18n("Gallery"));
+   m_dockPackager->setDockSite(KDockWidget::DockFullSite);
+   packager = new ScanPackager( m_dockPackager );
+   m_dockPackager->setWidget( packager );
+   m_dockPackager->manualDock( m_mainDock,              // dock target
                          KDockWidget::DockLeft, // dock site
                          30 );                  // relation target/this (in percent)
 
@@ -119,22 +121,21 @@ KookaView::KookaView( KDockMainWindow *parent, const QCString& deviceToUse)
    /*
     * Create a Kombobox that holds the last folders visible even on the preview page
     */
-   KDockWidget* dockRecent=0L;
-   dockRecent  = parent->createDockWidget( "Recent",
+   m_dockRecent  = parent->createDockWidget( "Recent",
 				loader->loadIcon( "image", KIcon::Small ),
 				0L, i18n("Gallery Directories"));
    
-   dockRecent->setDockSite(KDockWidget::DockFullSite);
+   m_dockRecent->setDockSite(KDockWidget::DockFullSite);
 
    
-   QHBox *recentBox = new QHBox( dockLeft );
+   QHBox *recentBox = new QHBox( m_dockRecent );
    recentBox->setMargin(KDialog::marginHint());
    QLabel *lab = new QLabel( i18n("Gallery:"), recentBox );
    lab->setSizePolicy( QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed) );
    recentFolder = new ImageNameCombo( recentBox );
 
-   dockRecent->setWidget( recentBox );
-   dockRecent->manualDock( dockLeft,              // dock target
+   m_dockRecent->setWidget( recentBox );
+   m_dockRecent->manualDock( m_dockPackager,              // dock target
                          KDockWidget::DockBottom, // dock site
                          5 );                  // relation target/this (in percent)
 
@@ -150,22 +151,22 @@ KookaView::KookaView( KDockMainWindow *parent, const QCString& deviceToUse)
 	    packager, SLOT(slotSelectDirectory( const QString& )));
    
    /* the object from the kscan lib to handle low level scanning */
-   dockScanParam = parent->createDockWidget( "Scan Parameter",
+   m_dockScanParam = parent->createDockWidget( "Scan Parameter",
  					     loader->loadIcon( "folder", KIcon::Small ),
  					     0L, i18n("Scan Parameter"));
    //
-   dockScanParam->setDockSite(KDockWidget::DockFullSite);
+   m_dockScanParam->setDockSite(KDockWidget::DockFullSite);
 
-   dockScanParam->setWidget( 0 ); // later
-   sane = new KScanDevice( dockScanParam );
+   m_dockScanParam->setWidget( 0 ); // later
+   sane = new KScanDevice( m_dockScanParam );
 					     
    Q_CHECK_PTR(sane);
 
    // dockScanParam->setWidget( sane );
-   dockScanParam->manualDock( dockRecent,              // dock target
+   m_dockScanParam->manualDock( m_dockRecent,              // dock target
    KDockWidget::DockBottom, // dock site
    20 );                  // relation target/this (in percent)
-   dockScanParam->hide();
+   m_dockScanParam->hide();
    
    
    /* select the scan device, either user or from config, this creates and assembles
@@ -174,12 +175,11 @@ KookaView::KookaView( KDockMainWindow *parent, const QCString& deviceToUse)
    scan_params = 0L;
    preview_canvas = 0L;
 
-   KDockWidget* dockPreview;
-   dockPreview = parent->createDockWidget( "Preview ",
+   m_dockPreview = parent->createDockWidget( "Preview ",
 					   loader->loadIcon( "viewmag", KIcon::Small ),
 					   0L, i18n("Scan Preview"));
 
-   preview_canvas = new Previewer( dockPreview );
+   preview_canvas = new Previewer( m_dockPreview );
    {
       preview_canvas->setMinimumSize( 100,100);
    	
@@ -187,8 +187,8 @@ KookaView::KookaView( KDockMainWindow *parent, const QCString& deviceToUse)
        * connections later
        */
    }
-   dockPreview->setWidget( preview_canvas );
-   dockPreview->manualDock( dockLeft,              // dock target
+   m_dockPreview->setWidget( preview_canvas );
+   m_dockPreview->manualDock( m_dockPackager,              // dock target
 			    KDockWidget::DockCenter, // dock site
 			    100 );                  // relation target/this (in percent)
    
@@ -225,7 +225,7 @@ KookaView::KookaView( KDockMainWindow *parent, const QCString& deviceToUse)
    connect( packager, SIGNAL( fileDeleted( KFileItem* )),
 	    m_thumbview, SLOT( slImageDeleted( KFileItem* )));
    
-   mainDock->setDockSite( KDockWidget::DockFullSite );
+   m_mainDock->setDockSite( KDockWidget::DockFullSite );
 }
 
 
@@ -270,10 +270,10 @@ bool KookaView::slSelectDevice( const QCString& useDevice )
 	 slCloseScanDevice();
       }
       /* This connects to the selected scanner */
-      scan_params = new ScanParams( dockScanParam );
+      scan_params = new ScanParams( m_dockScanParam );
       Q_CHECK_PTR(scan_params);
-      dockScanParam->setWidget( scan_params );
-      dockScanParam->show();
+      m_dockScanParam->setWidget( scan_params );
+      m_dockScanParam->show();
       
       if( sane->openDevice( selDevice ) == KSCAN_OK )
       {
@@ -470,7 +470,7 @@ void KookaView::slNewPreview( QImage *new_img )
       if( ! new_img->isNull() )
       {
 	 ImgSaveStat is_stat = ISS_OK;
-	 ImgSaver img_saver( mainDock );
+	 ImgSaver img_saver( m_mainDock );
 
 	 is_stat = img_saver.savePreview( new_img, sane->shortScannerName() );
 
@@ -545,7 +545,7 @@ void KookaView::startOCR( const QImage *img )
    if( img && ! img->isNull() )
    {
       if( ocrFabric == 0L )
-	 ocrFabric = new KSANEOCR( mainDock );
+	 ocrFabric = new KSANEOCR( m_mainDock );
 
       Q_CHECK_PTR( ocrFabric );
       ocrFabric->setImage( img );
@@ -611,8 +611,8 @@ void KookaView::slCloseScanDevice( )
    if( scan_params ) {
       delete scan_params;
       scan_params = 0;
-      dockScanParam->setWidget(0L);
-      dockScanParam->hide();
+      m_dockScanParam->setWidget(0L);
+      m_dockScanParam->hide();
    }
    sane->slCloseDevice();
 }
@@ -726,7 +726,7 @@ void KookaView::slLoadScanParams( )
 
    /* not yet cooked */
 #if 0
-   LoadSetDialog loadDialog( mainDock, sane->shortScannerName() );
+   LoadSetDialog loadDialog( m_mainDock, sane->shortScannerName() );
    if( loadDialog.exec())
    {
       kdDebug(28000)<< "Executed successfully" << endl;
@@ -985,7 +985,37 @@ void KookaView::slFreshUpThumbView()
    }
 }
 
+void KookaView::createDockMenu( KActionCollection *col, KDockMainWindow *mainWin, const char * name )
+{
+   KActionMenu *actionMenu = new KActionMenu( i18n("Tool Views"), "view_icon", col, name );
 
+   actionMenu->insert( new dwMenuAction( i18n("Show Image Viewer"),
+					 KShortcut(), m_mainDock, col,
+					 mainWin, "dock_viewer" ));
+
+   actionMenu->insert( new dwMenuAction( i18n("Show Preview"),
+					 KShortcut(), m_dockPreview, col,
+					 mainWin, "dock_preview" ));
+
+   actionMenu->insert( new dwMenuAction( i18n("Show Recent Gallery Folders"),
+					 KShortcut(), m_dockRecent, col,
+					 mainWin, "dock_recent" ));
+   actionMenu->insert( new dwMenuAction( i18n("Show Gallery"),
+					 KShortcut(), m_dockPackager, col,
+					 mainWin, "dock_gallery" ));
+
+   actionMenu->insert( new dwMenuAction( i18n("Show Thumbnail Window"),
+					 KShortcut(), m_dockThumbs, col,
+					 mainWin, "dock_thumbs" ));
+#if 0
+   /* FIXME: Scan parameter is zero at startup */
+   actionMenu->insert( new dwMenuAction( i18n("Show Scan Parameters"),
+					 KShortcut(), m_dockScanParam, col,
+					 mainWin, "dock_scanparams" ));
+#endif
+   
+   
+}
 
 
 #include "kookaview.moc"

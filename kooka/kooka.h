@@ -30,6 +30,7 @@
 
 class KPrinter;
 class KToggleAction;
+class KActionMenu;
 class KookaView;
 
 /**
@@ -121,7 +122,7 @@ private:
    KToggleAction *m_statusbarAction;
    KToggleAction *m_scanParamsAction;
    KToggleAction *m_previewerAction;
-
+   KActionMenu   *m_settingsShowDocks;
    int m_prefDialogIndex;
 };
 
