@@ -36,7 +36,6 @@
 #include "ksaneocr.h"  // TODO: Really needed?
 #include "kocrkadmos.h"
 #include <kscanslider.h>
-#include <kscanslider.h>
 #include <qcheckbox.h>
 #include <qbuttongroup.h>
 #include <kstandarddirs.h>

@@ -36,7 +36,6 @@
 #include "kocrgocr.h"
 #include "kookaimage.h"
 #include <qtimer.h>
-#include <ktempfile.h>
 
 
 #undef QT_THREAD_SUPPORT

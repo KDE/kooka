@@ -18,7 +18,6 @@
 #define KOOKAVIEW_H
 
 #include <qwidget.h>
-#include <kparts/part.h>
 #include <kopenwith.h>
 #include <kookaiface.h>
 #include <kdockwidget.h>
