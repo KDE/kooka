@@ -214,7 +214,7 @@ QString KadmosDialog::getSelClassifierName() const
 	else if( regID == 1 )
 	   rType = "eu";      //
 	else if( regID == 2 )
-	   rType = "cz";
+	   rType = "ee";
 	else
 	   kdDebug(28000) << "ERR: Wrong Region Type ID" << endl;
      }
