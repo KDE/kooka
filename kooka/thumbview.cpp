@@ -210,6 +210,10 @@ void ThumbView::slImageRenamed( KFileItem *kfit, const KURL& newUrl )
 {
     const KURL url = kfit->url();
 
+    if( kfit->isDir() ) {
+	clear();
+    }
+    
     for ( QIconViewItem *item = m_iconView->firstItem(); item; item = item->nextItem() )
     {
         ThumbViewItem *it=static_cast<ThumbViewItem*>( item );
