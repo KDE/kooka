@@ -146,7 +146,7 @@ void Kooka::setupActions()
     m_view->connectViewerAction( act );
 
     (void) new KAction(i18n("Create From Selectio&n"), "crop", CTRL+Key_N,
-		       m_view, SLOT( slIVShowZoomDialog() ),
+		       m_view, SLOT( slCreateNewImgFromSelection() ),
 		       actionCollection(), "createFromSelection" );
     
     (void) new KAction(i18n("Mirror Image &Vertically"), "mirror-vert", CTRL+Key_V,
