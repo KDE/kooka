@@ -35,6 +35,8 @@
 #include "resource.h"
 #include "ksaneocr.h"  // TODO: Really needed?
 #include "kocrkadmos.h"
+#include "kocrkadmos.moc"
+
 #include <kscanslider.h>
 #include <qcheckbox.h>
 #include <qbuttongroup.h>

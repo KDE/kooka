@@ -32,6 +32,7 @@
 #include "resource.h"
 #include "ksaneocr.h"  // TODO: Really needed?
 #include "kocrgocr.h"
+#include "kocrgocr.moc"
 #include <kscanslider.h>
 #include "kookaimage.h"
 
