@@ -43,7 +43,15 @@ public:
    ~Previewer();
 	
    ImageCanvas *getImageCanvas( void ){ return( img_canvas ); }
-	
+
+   bool loadPreviewImage( const QString forScanner );
+
+   /**
+    * Static function that returns the image gallery base dir.
+    */
+   static QString galleryRoot();
+   static QString previewFile( const QString& scanner );
+      
 public slots:
    void newImage( QImage* );
    void slFormatChange( int id );
@@ -54,6 +62,11 @@ public slots:
    void slNewDimen(QRect r);
    void slNewScanResolutions( int, int );
    void recalcFileSize( void );
+
+protected slots:
+   void slScaleToWidth();
+   void slScaleToHeight();
+   
 signals:
    void newRect( QRect );
    void noRect( void );
@@ -71,7 +84,8 @@ private:
    QButtonGroup * bgroup;
    QRadioButton * rb1;
    QRadioButton * rb2;	
-	
+   QImage       m_previewImage;
+   
    int landscape_id, portrait_id;
    double overallWidth, overallHeight;
    KRuler::MetricStyle sizeUnit;

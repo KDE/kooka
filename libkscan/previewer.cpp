@@ -18,10 +18,14 @@
 #include <qfontmetrics.h>
 #include <qhbox.h>
 #include <qtooltip.h>
+#include <qpopupmenu.h>
+#include <qregexp.h>
 
 #include <kdebug.h>
 #include <klocale.h>
 #include <kcombobox.h>
+#include <kaction.h>
+#include <kstandarddirs.h>
 
 #include "previewer.h"
 #include "img_canvas.h"
@@ -34,6 +38,7 @@
 #define ID_9_13   4
 #define ID_10_15  5
 #define ID_LETTER 6
+
 
 
 Previewer::Previewer(QWidget *parent, const char *name )
@@ -53,9 +58,22 @@ Previewer::Previewer(QWidget *parent, const char *name )
    overallWidth = 210;
    kdDebug(29000) << "Previewer: got Overallsize: " << overallWidth << " x " << overallHeight << endl;
    img_canvas  = new ImageCanvas( this );
+   
    img_canvas->setScaleFactor( 0 );
+   img_canvas->enableContextMenu(true);
+   
    layout->addWidget( img_canvas, 6 );
-	
+
+   /* Actions for the previewer zoom */
+    KAction *act;
+    act =  new KAction(i18n("Scale to W&idth"), "scaletowidth", CTRL+Key_I,
+		       this, SLOT( slScaleToWidth()), this );
+    act->plug( img_canvas->contextMenu());
+    
+    act = new KAction(i18n("Scale to &Height"), "scaletoheight", CTRL+Key_H,
+		      this, SLOT( slScaleToHeight()), this );
+    act->plug( img_canvas->contextMenu());
+   
    /*Signals: Control the custom-field and show size of selection */
    connect( img_canvas, SIGNAL(newRect()), this, SLOT(slCustomChange()));
    connect( img_canvas, SIGNAL(newRect(QRect)), this, SLOT(slNewDimen(QRect)));
@@ -143,7 +161,7 @@ Previewer::Previewer(QWidget *parent, const char *name )
 
    selectionWidthMm = 0.0;
    selectionHeightMm = 0.0;
-
+   recalcFileSize();
 }
 
 Previewer::~Previewer()
@@ -151,10 +169,46 @@ Previewer::~Previewer()
 
 }
 
+bool Previewer::loadPreviewImage( const QString forScanner )
+{
+   const QString prevFile = previewFile( forScanner );
+   
+   if( m_previewImage.load( prevFile ))
+   {
+      img_canvas->newImage( &m_previewImage );
+   }
+}
+
+/* extension needs to be added */
+QString Previewer::previewFile( const QString& scanner )
+{
+   QString fname = galleryRoot() + QString::fromLatin1(".previews/");
+   QRegExp rx( "/" );
+   QString sname( scanner );
+   sname.replace( rx, "_");
+ 
+   fname += sname;
+
+   kdDebug(28000) << "ImgSaver: returning preview file without extension: " << fname << endl;
+   return( fname );
+}
+
+QString Previewer::galleryRoot() 
+{
+   QString dir = (KGlobal::dirs())->saveLocation( "data", "ScanImages", true );
+
+   if( dir.right(1) != "/" )
+      dir += "/";
+   
+   return( dir );
+
+}
 
 void Previewer::newImage( QImage *ni )
 {
-   img_canvas->newImage( ni );
+   /* image canvas does not copy the image, so we hold a copy here */
+   m_previewImage = *ni;
+   img_canvas->newImage( &m_previewImage );
 }
 
 void Previewer::setScanSize( int w, int h, KRuler::MetricStyle unit )
@@ -322,6 +376,7 @@ void Previewer::slNewDimen(QRect r)
 void Previewer::recalcFileSize( void )
 {
    /* Calculate file size */
+   long size_in_byte = 0;
    if( scanResY > -1 && scanResX > -1 )
    {
       double w_inch = ((double) selectionWidthMm) / 25.4;
@@ -330,10 +385,10 @@ void Previewer::recalcFileSize( void )
       int pix_w = int( w_inch * double( scanResX ));
       int pix_h = int( h_inch * double( scanResY ));
 
-      long size_in_byte = pix_w * pix_h / pix_per_byte;
-
-      emit( setSelectionSize( size_in_byte ));
+      size_in_byte = pix_w * pix_h / pix_per_byte;
    }
+
+   emit( setSelectionSize( size_in_byte ));
 }
 
 
@@ -351,4 +406,21 @@ QPoint Previewer::calcPercent( int w_mm, int h_mm )
  	return( p );
 
 }
+
+void Previewer::slScaleToWidth()
+{
+   if( img_canvas )
+   {
+      img_canvas->handle_popup( ImageCanvas::ID_FIT_WIDTH );
+   }
+}
+
+void Previewer::slScaleToHeight()
+{
+   if( img_canvas )
+   {
+      img_canvas->handle_popup( ImageCanvas::ID_FIT_HEIGHT);
+   }
+}
+
 #include "previewer.moc"
