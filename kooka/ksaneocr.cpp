@@ -245,6 +245,7 @@ void KSANEOCR::finishedOCRVisible( bool success )
        {
            /* The image canvas is non-zero. Set it to our image */
            m_imgCanvas->newImageHoldZoom( m_img );
+	   m_imgCanvas->setReadOnly(true);
 
            /* now handle double clicks to jump to the word */
            m_applyFilter=true;
