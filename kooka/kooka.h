@@ -24,10 +24,11 @@
 #include <kapp.h>
 #include <kmainwindow.h>
  
-#include "kookaview.h"
+
 
 class QPrinter;
 class KToggleAction;
+class KookaView;
 
 /**
  * This class serves as the main window for Kooka.  It handles the
@@ -95,12 +96,14 @@ private slots:
 
    void fileSaveAs();
 
-   void slMirrorVertical( void )
-      { m_view->slMirrorImage( KookaView::MirrorVertical ); }
-   void slMirrorHorizontal( void )
-      { m_view->slMirrorImage( KookaView::MirrorHorizontal ); }
-   void slMirrorBoth( void )
-      { m_view->slMirrorImage( KookaView::MirrorBoth ); }
+   void slMirrorVertical( void );
+   void slMirrorHorizontal( void );
+   void slMirrorBoth( void );
+
+   void slRotateClockWise( void );
+   void slRotateCounterClockWise( void );
+   void slRotate180( void );
+   
 private:
    void setupAccel();
    void setupActions();
