@@ -26,6 +26,7 @@
 #include "kookapref.h"
 #include "imgnamecombo.h"
 #include "thumbview.h"
+#include "paramsetdialogs.h"
 
 #include <qlabel.h>
 #include <qpainter.h>
@@ -50,6 +51,9 @@
 #include <kled.h>
 #include <kcombobox.h>
 #include <kaction.h>
+#include <kiconloader.h>
+#include <kdockwidget.h>
+#include <qobject.h>
 
 #define PACKAGER_TAB 0
 #define PREVIEWER_TAB 1
@@ -60,63 +64,79 @@
 #define STARTUP_VIEWER_SIZES    "ViewerSplitterSizes"
 
 
-KookaView::KookaView(QWidget *parent, const QCString& deviceToUse)
-    : QSplitter(parent)
+KookaView::KookaView( KDockMainWindow *parent, const QCString& deviceToUse)
+   : QObject()
 {
 
    /* Another splitter for splitting the Packager Tree from the Scan Parameter */
    ocrFabric = 0L;
    
-   paramSplitter = new QSplitter( QSplitter::Vertical, this );
-   setOpaqueResize( false );
-   paramSplitter->setOpaqueResize( false );
-
    /* An image canvas for the large image, right side */
-   m_stack = new QWidgetStack( this );
+
+   KIconLoader *loader = KGlobal::iconLoader();
+   mainDock = parent->createDockWidget( "Kookas MainDock",
+			       loader->loadIcon( "folder_image", KIcon::Small ),
+			       0L, i18n("Image Viewer"));
+   mainDock->setEnableDocking(KDockWidget::DockNone );
+   mainDock->setDockSite(KDockWidget::DockCorner);
+   parent->setView( mainDock);
+   parent->setMainDockWidget( mainDock);
    
-   img_canvas  = new ImageCanvas( m_stack );
-   m_stack->addWidget( img_canvas );
-   m_stack->raiseWidget( img_canvas );
+   img_canvas  = new ImageCanvas( mainDock );
    img_canvas->setMinimumSize(100,200);
    img_canvas->enableContextMenu(true);
+   mainDock->setWidget( img_canvas );
 
+   KDockWidget *dockThumbs = parent->createDockWidget( "Thumbs",
+						      loader->loadIcon( "thumbnail", KIcon::Small ),
+						      0L,  i18n("Thumbnails"));
+   dockThumbs->setDockSite(KDockWidget::DockFullSite );
+   
    /* thumbnail viewer widget */
-   m_thumbview = new ThumbView( m_stack );
-   m_stack->addWidget( m_thumbview );
+   m_thumbview = new ThumbView( mainDock );
+   dockThumbs->setWidget( m_thumbview );
+   dockThumbs->manualDock( mainDock, KDockWidget::DockLeft, 30 );
 
-   
-   
-   setResizeMode( m_stack /* img_canvas */,    QSplitter::Stretch );
-   setResizeMode( paramSplitter, QSplitter::KeepSize);
-
-   /* Create a vbox to take the tabwidget and the the combobox */
-   QVBox *vbox = new QVBox( paramSplitter );
-   /* The Tabwidget to contain the preview and the packager */
-   tabw  = new QTabWidget( vbox, "TABWidget" );
-
+   /* make the main dock widget */
    /* A new packager to contain the already scanned images */
-   packager = new ScanPackager( tabw );
-   {
-      
-   }
+   KDockWidget* dockLeft;
+   dockLeft = parent->createDockWidget( "Scanpackager",
+				loader->loadIcon( "palette_color", KIcon::Small ),
+				0L, i18n("Gallery"));
+   dockLeft->setDockSite(KDockWidget::DockFullSite);
+   packager = new ScanPackager( dockLeft );
+   dockLeft->setWidget( packager );
+   dockLeft->manualDock( mainDock,              // dock target
+                         KDockWidget::DockLeft, // dock site
+                         30 );                  // relation target/this (in percent)
+
    connect( packager, SIGNAL(showThumbnails( KFileTreeViewItem* )),
 	    this, SLOT( slShowThumbnails( KFileTreeViewItem* )));
    connect( m_thumbview, SIGNAL( selectFromThumbnail( const KURL& )),
 	    packager, SLOT( slSelectImage(const KURL&)));
    
-   /* build up the Preview/Packager-Tabview */
-   tabw->insertTab( packager, i18n( "&Gallery"), PACKAGER_TAB );
-
-   tabw->setMinimumSize(100, 100);
-
    /*
     * Create a Kombobox that holds the last folders visible even on the preview page
     */
-   QHBox *recentBox = new QHBox( vbox );
+   KDockWidget* dockRecent=0L;
+   dockRecent  = parent->createDockWidget( "Recent",
+				loader->loadIcon( "image", KIcon::Small ),
+				0L, i18n("Gallery Dirs"));
+   
+   dockRecent->setDockSite(KDockWidget::DockFullSite);
+
+   
+   QHBox *recentBox = new QHBox( dockLeft );
    recentBox->setMargin(KDialog::marginHint());
    QLabel *lab = new QLabel( i18n("Gallery:"), recentBox );
    lab->setSizePolicy( QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed) );
    recentFolder = new ImageNameCombo( recentBox );
+
+   dockRecent->setWidget( recentBox );
+   dockRecent->manualDock( dockLeft,              // dock target
+                         KDockWidget::DockBottom, // dock site
+                         5 );                  // relation target/this (in percent)
+
 
    
    connect( packager,  SIGNAL( galleryPathSelected( KFileTreeBranch*, const QString&)),
@@ -129,17 +149,36 @@ KookaView::KookaView(QWidget *parent, const QCString& deviceToUse)
 	    packager, SLOT(slotSelectDirectory( const QString& )));
    
    /* the object from the kscan lib to handle low level scanning */
-   sane = new KScanDevice( this );
-   Q_CHECK_PTR(sane);
-   // connect( sane, SIGNAL( sigCloseDevice()), this, SLOT( slCloseScanDevice()));
+   dockScanParam = parent->createDockWidget( "Scan Parameter",
+ 					     loader->loadIcon( "folder", KIcon::Small ),
+ 					     0L, i18n("Scan Parameter"));
+   //
+   dockScanParam->setDockSite(KDockWidget::DockFullSite);
 
+   dockScanParam->setWidget( 0 ); // later
+   sane = new KScanDevice( dockScanParam );
+					     
+   Q_CHECK_PTR(sane);
+
+   // dockScanParam->setWidget( sane );
+   dockScanParam->manualDock( dockRecent,              // dock target
+   KDockWidget::DockBottom, // dock site
+   20 );                  // relation target/this (in percent)
+   dockScanParam->hide();
+   
+   
    /* select the scan device, either user or from config, this creates and assembles
     * the complete scanner options dialog
     * scan_params must be zero for that */
    scan_params = 0L;
    preview_canvas = 0L;
-   
-   preview_canvas = new Previewer( tabw );
+
+   KDockWidget* dockPreview;
+   dockPreview = parent->createDockWidget( "Preview ",
+					   loader->loadIcon( "viewmag", KIcon::Small ),
+					   0L, i18n("Scan Preview"));
+
+   preview_canvas = new Previewer( dockPreview );
    {
       preview_canvas->setMinimumSize( 100,100);
    	
@@ -147,26 +186,16 @@ KookaView::KookaView(QWidget *parent, const QCString& deviceToUse)
        * connections later
        */
    }
-   tabw->insertTab( preview_canvas, i18n("&Preview"), PREVIEWER_TAB );
-
+   dockPreview->setWidget( preview_canvas );
+   dockPreview->manualDock( dockLeft,              // dock target
+			    KDockWidget::DockCenter, // dock site
+			    100 );                  // relation target/this (in percent)
+   
+   
+   
    if( slSelectDevice(deviceToUse))
    {
-      /* If a scanner exists */
-
       /* Load from config which tab page was selected last time */
-      KConfig *konf = KGlobal::config ();
-      konf->setGroup(GROUP_STARTUP);
-      QString startup = konf->readEntry( STARTUP_SELECTED_PAGE, "nothing" );
-      if( startup == "previewer" )
-	 tabw->showPage(preview_canvas);
-      else
-	 tabw->showPage(packager);
-   }
-   else
-   {
-      /* If there is no scanner, disable the preview tab */
-      tabw->setTabEnabled( preview_canvas, false );
-      tabw->showPage( packager );
    }
 
    /* New image created after scanning */
@@ -195,6 +224,7 @@ KookaView::KookaView(QWidget *parent, const QCString& deviceToUse)
    connect( packager, SIGNAL( fileDeleted( KFileItem* )),
 	    m_thumbview, SLOT( slImageDeleted( KFileItem* )));
    
+   mainDock->setDockSite( KDockWidget::DockFullSite );
 }
 
 
@@ -239,10 +269,11 @@ bool KookaView::slSelectDevice( const QCString& useDevice )
 	 slCloseScanDevice();
       }
       /* This connects to the selected scanner */
-      scan_params = new ScanParams( paramSplitter );
+      scan_params = new ScanParams( dockScanParam );
       Q_CHECK_PTR(scan_params);
-      paramSplitter->setResizeMode( scan_params, QSplitter::FollowSizeHint );
-
+      dockScanParam->setWidget( scan_params );
+      dockScanParam->show();
+      
       if( sane->openDevice( selDevice ) == KSCAN_OK )
       {
          connect( scan_params,    SIGNAL( scanResolutionChanged( int, int )),
@@ -306,15 +337,6 @@ bool KookaView::slSelectDevice( const QCString& useDevice )
 	 /* only push one value to vsizes */
 	 vsizes << 150;
       }
-   }
-   kdDebug(28000) << "Setting sizes !" << endl;
-   setSizes( vsizes );
-   if( haveConnection )
-   {
-      paramSplitter->setSizes( sizes );
-
-      scan_params->show();
-      preview_canvas->loadPreviewImage( selDevice );
    }
 
    return( haveConnection );
@@ -447,7 +469,7 @@ void KookaView::slNewPreview( QImage *new_img )
       if( ! new_img->isNull() )
       {
 	 ImgSaveStat is_stat = ISS_OK;
-	 ImgSaver img_saver( this );
+	 ImgSaver img_saver( mainDock );
 
 	 is_stat = img_saver.savePreview( new_img, sane->shortScannerName() );
 
@@ -522,7 +544,7 @@ void KookaView::startOCR( const QImage *img )
    if( img && ! img->isNull() )
    {
       if( ocrFabric == 0L )
-	 ocrFabric = new KSANEOCR(this );
+	 ocrFabric = new KSANEOCR( mainDock );
 
       Q_CHECK_PTR( ocrFabric );
       ocrFabric->setImage( img );
@@ -588,6 +610,8 @@ void KookaView::slCloseScanDevice( )
    if( scan_params ) {
       delete scan_params;
       scan_params = 0;
+      dockScanParam->setWidget(0L);
+      dockScanParam->hide();
    }
    sane->slCloseDevice();
 }
@@ -694,14 +718,31 @@ void KookaView::slMirrorImage( MirrorType m )
    }
 }
 
-void KookaView::slSaveScanParams( void )
+
+void KookaView::slLoadScanParams( )
+{
+   if( ! sane ) return;
+
+   /* not yet cooked */
+#if 0
+   LoadSetDialog loadDialog( mainDock, sane->shortScannerName() );
+   if( loadDialog.exec())
+   {
+      kdDebug(28000)<< "Executed successfully" << endl;
+   }
+#endif
+}
+
+void KookaView::slSaveScanParams( )
 {
    if( !sane ) return;
+
+   /* not yet cooked */
+#if 0
 
    KScanOptSet optSet( "SaveSet" );
    
    sane->getCurrentOptions( &optSet );
-#if 0
    SaveSetDialog dialog( this, &optSet );
    if( dialog.exec())
    {
@@ -733,7 +774,7 @@ void KookaView::slShowThumbnails(KFileTreeViewItem *dirKfi, bool forceRedraw )
    
 
    kdDebug(28000) << "Showing thumbs for " << dirKfi->url().prettyURL() << endl;	   
-   m_stack->raiseWidget( m_thumbview );
+   // m_stack->raiseWidget( m_thumbview );
 
    /* Only do the new thumbview if the old is on another dir */
    if( m_thumbview && (forceRedraw || m_thumbview->currentDir() != dirKfi->url()) )
@@ -765,10 +806,10 @@ void KookaView::slStartLoading( const KURL& url )
 {
    emit( signalChangeStatusbar( i18n("Loading " ) + url.prettyURL()));
 
-   if( m_stack->visibleWidget() != img_canvas )
-   {
-      m_stack->raiseWidget( img_canvas );
-   }
+   // if( m_stack->visibleWidget() != img_canvas )
+   // {
+   //    m_stack->raiseWidget( img_canvas );
+   // }
 
 }
 
@@ -789,27 +830,11 @@ void KookaView::saveProperties(KConfig *config)
    config->writeEntry( STARTUP_IMG_SELECTION, packager->getCurrImageFileName(true));
 
    QString tabwPre = "packager";
-   int idx = tabw->currentPageIndex();
+   int idx = PREVIEWER_TAB; // FIXME !!
    kdDebug(28000) << "Idx ist" << idx << endl;
    if( idx == PREVIEWER_TAB )
       tabwPre = "previewer";
 
-   config->writeEntry( STARTUP_SELECTED_PAGE, tabwPre );
-
-   /* Save the scan parameters size in accordance to the selected scanner */
-   if( sane && scan_params )
-   {
-      config->setGroup( sane->shortScannerName());
-      QValueList<int> pssizes = paramSplitter->sizes();
-      config->writeEntry( STARTUP_SCANPARAM_SIZES, pssizes );
-   }
-   else
-   {
-      config->setGroup( "gallery" );
-   }
-   /* Sizes of the vertical splitter */
-   QValueList<int> vsizes = sizes();
-   config->writeEntry(STARTUP_VIEWER_SIZES, vsizes );
 }
 
 

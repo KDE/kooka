@@ -44,47 +44,65 @@
 #include <qstrlist.h>
 #include <kedittoolbar.h>
 #include <kmessagebox.h>
+#include <kdockwidget.h>
 
 #include <kstdaccel.h>
 #include <kaction.h>
 #include <kstdaction.h>
 
+#define DOCK_SIZES "DockSizes"
+
+
 Kooka::Kooka( const QCString& deviceToUse)
-    : KMainWindow( 0, "Kooka" ),
+   : KDockMainWindow( 0, "Kooka" ),
       m_printer(0),
       m_prefDialogIndex(0)
 {
-    // accept dnd
-   m_view = new KookaView(this, deviceToUse);
-    setAcceptDrops(true);
+   // accept dnd
+   // m_view = new KookaView(this, deviceToUse);
 
-    // tell the KMainWindow that this is indeed the main widget
-    setCentralWidget(m_view);
+   
+   m_view = new KookaView( this, deviceToUse);
+   // setView( m_view->mainDockWidget() ); // central widget in a KDE mainwindow
+   // setMainDockWidget( m_view->mainDockWidget() );
+   setAcceptDrops(true);
+   KConfig *konf = KGlobal::config ();
+   readDockConfig ( konf, DOCK_SIZES );
 
-    // then, setup our actions
-    setupActions();
 
-    // and a status bar
-    statusBar()->show();
+   // tell the KMainWindow that this is indeed the main widget
+   // setCentralWidget(m_view->mainDockWidget());
 
-    // allow the view to change the statusbar and caption
-    connect(m_view, SIGNAL(signalChangeStatusbar(const QString&)),
-            this,   SLOT(changeStatusbar(const QString&)));
-    connect(m_view, SIGNAL(signalCleanStatusbar(void)),
-	    this, SLOT(cleanStatusbar()));
-    connect(m_view, SIGNAL(signalChangeCaption(const QString&)),
-            this,   SLOT(changeCaption(const QString&)));
+   // then, setup our actions
+   setupActions();
 
-    changeCaption( i18n( "KDE Scanning" ));
+   // and a status bar
+   statusBar()->show();
 
-    setAutoSaveSettings(  QString::fromLatin1("General Options"),
-			  true );
-    
+   // allow the view to change the statusbar and caption
+   connect(m_view, SIGNAL(signalChangeStatusbar(const QString&)),
+	   this,   SLOT(changeStatusbar(const QString&)));
+   connect(m_view, SIGNAL(signalCleanStatusbar(void)),
+	   this, SLOT(cleanStatusbar()));
+   connect(m_view, SIGNAL(signalChangeCaption(const QString&)),
+	   this,   SLOT(changeCaption(const QString&)));
+
+   changeCaption( i18n( "KDE Scanning" ));
+
+   setAutoSaveSettings(  QString::fromLatin1("General Options"),
+			 true );
+
+   /* add the Dockwindow-show-hide stuff to the menu bar */
+   /* This is buggy ! FIXME ! */
+   QMenuBar *menu= menuBar();
+   menu->insertItem( i18n( "Docking"), dockHideShowMenu () );
 }
 
 
 Kooka::~Kooka()
 {
+   KConfig *konf = KGlobal::config ();
+   writeDockConfig ( konf, DOCK_SIZES );
 
 }
 
@@ -187,7 +205,11 @@ void Kooka::setupActions()
 		       actionCollection(), "upsitedown" );
     m_view->connectViewerAction( act );
 
-    (void) new KAction(i18n("Save Scan Parameters"), "bookmark_add", CTRL+Key_S,
+    (void) new KAction(i18n("&Load scan parameters"), "bookmark_add", CTRL+Key_L,
+                       m_view, SLOT(slLoadScanParams()),
+                       actionCollection(), "loadscanparam" );
+
+    (void) new KAction(i18n("Save &Scan Parameters"), "bookmark_add", CTRL+Key_S,
 		       m_view, SLOT(slSaveScanParams()),
 		       actionCollection(), "savescanparam" );
 

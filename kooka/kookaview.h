@@ -21,6 +21,7 @@
 #include <kparts/part.h>
 #include <kopenwith.h>
 #include <kookaiface.h>
+#include <kdockwidget.h>
 #include <qtabwidget.h>
 #include <qlayout.h>
 #include <qimage.h>
@@ -34,6 +35,7 @@
 #include "scanparams.h"
 #include "img_canvas.h"
 
+class KDockWidget;
 class QPainter;
 class KSANEOCR;
 class KConfig;
@@ -51,7 +53,7 @@ class ThumbView;
  * @author Klaas Freitag <freitag@suse.de>
  * @version 0.1
  */
-class KookaView : public QSplitter
+class KookaView : public QObject
 {
    Q_OBJECT
 public:
@@ -60,7 +62,7 @@ public:
    /**
     * Default constructor
     */
-   KookaView(QWidget *parent, const QCString& deviceToUse);
+   KookaView(KDockMainWindow *parent, const QCString& deviceToUse);
 
    /**
     * Destructor
@@ -74,10 +76,11 @@ public:
 
    bool ToggleVisibility( int );
    void loadStartupImage( void );
+   KDockWidget *mainDockWidget( ) { return mainDock; }
    
 public slots:
-   void slShowPreview()  { tabw->showPage( preview_canvas ); }
-   void slShowPackager() { tabw->showPage( packager ); }
+   void slShowPreview()  {  }
+   void slShowPackager() {  }
    void slNewPreview( QImage * );
 
    void slSetScanParamsVisible( bool v )
@@ -108,7 +111,8 @@ public slots:
 	 
    void slOpenCurrInGraphApp( void );
 
-   void slSaveScanParams( void );
+   void slLoadScanParams( );
+   void slSaveScanParams( );
 
    
    void slShowThumbnails( KFileTreeViewItem *dirKfi = 0, bool forceRedraw=false);
@@ -169,26 +173,23 @@ private:
    void updateCurrImage( QImage& ) ;
 
    ImageCanvas  *img_canvas;
-   QWidgetStack *m_stack;
    ThumbView    *m_thumbview;
    
    Previewer    *preview_canvas;
-   QSplitter *	paramSplitter;	
    ScanPackager *packager;
    ScanParams   *scan_params;
 
    KScanDevice  *sane;
    KComboBox    *recentFolder;
    
-   QVBoxLayout  *vlay_left;
-   QHBoxLayout  *hlay_bigdad;
-   QTabWidget   *tabw;
    QCString     connectedDevice;
    
    int 		image_pool_id;
    int 		preview_id;
 
    KSANEOCR *ocrFabric;
+   KDockWidget *mainDock;
+   KDockWidget *dockScanParam;
    
 };
 

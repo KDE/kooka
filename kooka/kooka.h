@@ -23,7 +23,8 @@
 
 #include <kapplication.h>
 #include <kmainwindow.h>
- 
+#include <kdockwidget.h>
+
 #define KOOKA_STATE_GROUP "State"
 #define PREFERENCE_DIA_TAB "PreferencesTab"
 
@@ -39,7 +40,7 @@ class KookaView;
  * @author Klaas Freitag <freitag@suse.de>
  * @version 0.1
  */
-class Kooka : public KMainWindow
+class Kooka : public KDockMainWindow
 {
     Q_OBJECT
 public:
@@ -57,7 +58,7 @@ public:
     * Startup, loads (at the moment) only the last displayed image
     **/
    void startup( void );
-   
+
     
 protected:
     /**
