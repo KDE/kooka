@@ -25,6 +25,7 @@
 #include <kcmdlineargs.h>
 #include <klocale.h>
 #include <kimageio.h>
+#include <kiconloader.h>
 
 #include "kooka.h"
 #include "icons.h"
@@ -51,7 +52,8 @@ int main( int argc, char ** argv )
    KCmdLineArgs::init(argc, argv, &about);
    KApplication app;
    KImageIO::registerFormats();
-    
+   KIconLoader *loader = KGlobal::iconLoader();
+   
    icons.insert("mini-color", new QPixmap( mini_color ));
    icons.insert("mini-gray", new QPixmap( mini_gray )); 	
    icons.insert("mini-lineart", new QPixmap( mini_lineart ));
@@ -67,6 +69,9 @@ int main( int argc, char ** argv )
    icons.insert("mini-fitwidth", new QPixmap( mini_fitwidth ));
    icons.insert("mini-fitheight", new QPixmap( mini_fitheight ));
 
+
+   icons.insert("mini-folder", new QPixmap( loader->loadIcon( "folder",KIcon::Small ))); 
+   icons.insert("mini-folder-open", new QPixmap( loader->loadIcon( "folder_open",KIcon::Small )));
 
    // register ourselves as a dcop client
    app.dcopClient()->registerAs(app.name(), false);

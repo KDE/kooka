@@ -33,6 +33,8 @@
 #include <qlistbox.h>
 #include <qmap.h>
 #include <kdialogbase.h>
+#include <kurl.h>
+
 
 /**
  *  enum ImgSaveStat:
@@ -73,7 +75,6 @@ typedef enum {
  *  Asks the user for the image-Format and gives help for
  *  selecting it.
  **/
-class KURL;
 
 class FormatDialog:public KDialogBase
 {
@@ -83,7 +84,7 @@ public:
 
 
    QString      getFormat( void ) const;
-   QString      getSubFormat( void ) const;
+   QCString      getSubFormat( void ) const;
    QString      errorString( ImgSaveStat stat );
 
    bool         rememberFormat( void ) const;
@@ -130,10 +131,18 @@ public:
 	 *  @param dir  Name of the save root directory
 	 *  @param name Name of a subdirectory in the saveroot.
 	 **/
-   ImgSaver( QWidget *parent, const QString dir_name = 0L );
+   ImgSaver( QWidget *parent, const QString& = 0 );
 
    QString     errorString( ImgSaveStat );
-   QString     lastFilename(void) { return( last_file ); };
+   /**
+    *  returns the name of the last file that was saved by ImgSaver.
+    */
+   QString     lastFilename(void) const { return( last_file ); }
+   /**
+    *  returns the image format of the last saved image.
+    */
+   QCString    lastSaveFormat( void ) const { return( last_format ); }
+   
    QString     getFormatForType( picType ) const;
    void        storeFormatForType( picType, QString );
 
@@ -143,6 +152,10 @@ public:
     */
    static QString kookaImgRoot( void );
 
+   /**
+    * Static function that returns the relative path to the kooka imgage root
+    */
+   static QString relativeToImgRoot( QString );
    
 public slots:
    ImgSaveStat saveImage( QImage *image );
@@ -153,7 +166,7 @@ public slots:
 private:
    QString      findFormat( picType type );
    QString      findSubFormat( QString format );
-   void		createDir( QString );
+   void		createDir( const QString& );
    ImgSaveStat  save( QImage *image, const QString &filename, const QString &format,
 		     const QString &subformat );
    QString      createFilename( QString format );
@@ -161,11 +174,12 @@ private:
    QString      startFormatDialog( picType );
    
    // QStrList    all_formats;
-   QString     previewfile;
-   QString     subformat;     
-   QString     directory;    // dir where the image should be saved
-   QString     last_file;
-   bool	       ask_for_format;
+   QString      previewfile;
+   QString     	directory;    // dir where the image should be saved
+   QString     	last_file;
+   QCString   	subformat;     
+   QCString    	last_format;
+   bool	       	ask_for_format;
 
    // QDict<QString> formats;
 };

@@ -35,6 +35,8 @@
   *@author Klaas Freitag
   */
 
+class KPopupMenu;
+
 class ScanPackager : public KListView
 {
 	Q_OBJECT
@@ -53,14 +55,21 @@ public slots:
    void         slShowContextMenue(QListViewItem *, const QPoint &, int );
    void 	slHandlePopup( int item );
 
-   void         exportFile( PackagerItem *curr );	
+   void         exportFile( PackagerItem *);
+   void         slotRename( PackagerItem* , const KURL& );
 
    void         slotCanceled(KIO::Job*);
    void         slotResult( KIO::Job*);
 
    
    void         slotImageChanged( QImage * );
-     
+
+protected slots:
+   void         slCollapsed( QListViewItem *);
+   void         slExpanded( QListViewItem *);
+   void         slFileRename( QListViewItem*, const QString&, int );
+   void         slFilenameChanged( const KURL &, const KURL & );
+
 signals:
    void 	showImage( QImage* );
    void         deleteImage( QImage* );
@@ -68,8 +77,8 @@ signals:
 	
 private:
 
-   
-   PackagerItem * spFindItem( SearchType type, const QString name );
+   QString 	buildNewFilename( QString cmplFilename, QString currFormat ) const;   
+   PackagerItem *spFindItem( SearchType type, const QString name );
    
    int 	        readDir( QListViewItem *parent, QString dir_to_read );
    void         showContextMenu( QPoint p, bool show_folder = true );
@@ -81,7 +90,7 @@ private:
    QDir         curr_copy_dir;
    QString      save_root;
    KIO::Job     *copyjob;
-   
+   KPopupMenu   *popup;   
    int 		img_counter;
 };
 

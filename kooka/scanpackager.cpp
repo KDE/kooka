@@ -40,6 +40,7 @@
 #include <kio/file.h>
 #include <kio/job.h>
 #include <kio/jobclasses.h>
+#include <kmessagebox.h>
 
 extern QDict<QPixmap> icons;
 enum { ID_POP_RESCAN,
@@ -53,12 +54,23 @@ enum { ID_POP_RESCAN,
 ScanPackager::ScanPackager( QWidget *parent ) : KListView( parent )
 {
 	setFrameStyle( QFrame::Sunken | QFrame::Box);
+	setDragEnabled( true );
+	setDropVisualizer(true);
+	setItemsRenameable (true );
+	setRenameable ( 0, true );
+	setRenameable ( 1, false );
+	setRenameable ( 2, false );
+	setRenameable ( 3, false );
+
 	addColumn( i18n("Scan packages") );
 	addColumn( i18n("Size") );   setColumnAlignment( 1, AlignRight );
 	addColumn( i18n("Colors") );	setColumnAlignment( 2, AlignRight );
+	addColumn( i18n("Format" )); setColumnAlignment( 3, AlignRight );
 	
 	QDir home = QDir::home();
-	save_root = home.absPath() + "/.kscan/";
+	save_root = ImgSaver::kookaImgRoot(); 
+
+	kdDebug(28000) << "This is StdRootDir: " << save_root << endl;
 	
 	setRootIsDecorated( true );
 	root = new PackagerItem( this, true );
@@ -73,10 +85,26 @@ ScanPackager::ScanPackager( QWidget *parent ) : KListView( parent )
 	connect( this, SIGNAL( rightButtonPressed( QListViewItem *, const QPoint &, int )),
 		 SLOT( slShowContextMenue(QListViewItem *, const QPoint &, int )));
 	
+	connect( this, SIGNAL( expanded( QListViewItem* )), this,
+		 SLOT( slExpanded( QListViewItem* )));
+	
+	connect( this, SIGNAL( collapsed( QListViewItem* )), this,
+		 SLOT( slCollapsed( QListViewItem* )));
+	
+	connect( this, SIGNAL(itemRenamed (QListViewItem*, const QString &, int ) ), this,
+		 SLOT(slFileRename( QListViewItem*, const QString&, int)));
+
+	
 	img_counter = 1;
 	if( readDir( root, save_root ) == 0 )
 	{
 		PackagerItem *incoming = new PackagerItem( root, true );
+		if( incoming ) {
+		   incoming->setFilename( save_root + "Incoming" );
+		   // 	incoming->setText( 0, "incoming" );
+		   incoming->createFolder();
+		}
+
 		incoming->setText( 0, i18n("incoming") );
 	}
 	setOpen( root, true );
@@ -84,31 +112,123 @@ ScanPackager::ScanPackager( QWidget *parent ) : KListView( parent )
 	
 	/* Set the current export dir to home */
 	curr_copy_dir = QDir::home();
+
+	popup =0L;
 }
+
+
+void ScanPackager::slFileRename( QListViewItem* it, const QString& newStr, int col )
+{
+   if( col != 0 ) return;
+
+   if( ! it ) return;
+   
+   if( newStr.isNull() || newStr.isEmpty() ) return;
+
+   // newStr is only the filename.
+   PackagerItem *curr = ( PackagerItem *) it;
+   QString str = curr->getLocalFilename();
+
+   if( ! str.isNull())
+   {
+      kdDebug(28000) << "## Got filename " << str << endl;
+   
+      QFileInfo fi ( str );
+
+      QString pathstr = fi.dirPath(true) + "/";
+      kdDebug(28000) << "## Pathstr " << pathstr << endl;
+
+      KURL target( pathstr + newStr );
+      if( !curr->isDir())
+	 target = pathstr + buildNewFilename( newStr, fi.extension(false));
+      
+   
+      kdDebug(28000) << "renaming to <" << target.url() << ">" << endl;
+      slotRename( (PackagerItem*) it, target );
+   }
+}
+
+QString ScanPackager::buildNewFilename( QString cmplFilename, QString currFormat ) const
+{
+   /* cmplFilename = new name the user wishes.
+    * currFormat   = the current format of the image.
+    * if the new filename has a valid extension, which is the same as the
+    * format of the current, fine. A ''-String has to be returned.
+    */
+   QFileInfo fiNew( cmplFilename );
+   QString base = fiNew.baseName();
+   QString newExt = fiNew.extension( false ).lower();
+   QString nowExt = currFormat.lower();
+   QString ext = "";
+
+   kdDebug(28000) << "Filename wanted: "<< cmplFilename << " <"<<newExt<<"> <" << nowExt<<">" <<endl;
+   
+   if( newExt == "" )
+   {
+      /* ok, fine -> return the currFormat-Extension */
+      ext = base + "." + currFormat;
+   }
+   else if( newExt == nowExt )
+   {
+      /* also good, no reason to put another extension */
+      ext = cmplFilename;
+   }
+   else
+   {
+      /* new Ext. differs from the current extension. Later. */
+      KMessageBox::sorry( 0L, i18n( "You entered a file extension that differs from the existing one.\nThat is not yet possible, converting 'on the fly' is planned for a future release.\n\n"
+				      "Kooka corrects the extension."),
+			  i18n("On the fly conversion"));
+      ext = base + "." + currFormat;
+   }
+   return( ext );
+}
+
 
 /* ----------------------------------------------------------------------- */
 /* This slot is called if the selection changes. */
 void ScanPackager::slSelectionChanged( QListViewItem *newItem )
 {
-	if( ! newItem ) return;
-	QString s;
-	PackagerItem *pi = (PackagerItem*) newItem;
+   if( ! newItem ) return;
+   QString s;
+   PackagerItem *pi = (PackagerItem*) newItem;
 	
-	if( pi->isDir())
-	{
-		kdDebug(28000) << "selectionChanged: Is a father" << endl;
-	 	/* no action, because its a dir */
-	}
-	else
-	{
-		kdDebug(28000) << "selectionChanged: Is loaded image !" << endl;
-		QApplication::setOverrideCursor(waitCursor);
-		emit( showImage( pi->getImage() ));
-		QApplication::restoreOverrideCursor();
+   if( pi->isDir())
+   {
+      kdDebug(28000) << "selectionChanged: Is a father" << endl;
+      pi->decorateFile();
+      /* no action, because its a dir */
+   }
+   else
+   {
+      QApplication::setOverrideCursor(waitCursor);
+      emit( showImage( pi->getImage() ));
+      QApplication::restoreOverrideCursor();
   			
- 	}
+   }
 }
 
+/* ----------------------------------------------------------------------- */
+void ScanPackager::slExpanded( QListViewItem *it )
+{
+   if( !it ) return;
+
+   PackagerItem *pi = (PackagerItem*) it;
+
+   if( pi->isDir())
+      pi->decorateFile();
+}
+
+/* ----------------------------------------------------------------------- */
+void ScanPackager::slCollapsed( QListViewItem *it )
+{
+   if( !it ) return;
+
+   PackagerItem *pi = (PackagerItem*) it;
+
+   if( pi->isDir())
+      pi->decorateFile();
+}
 
 
 QString ScanPackager::getCurrImageFileName( bool withPath = true ) const
@@ -142,8 +262,8 @@ void ScanPackager::slotImageChanged( QImage *img )
    if( curr->isDir() ) return;
    
    /* find the directory above */
-   const QString filename = curr->getFilename( );
-
+   const QString filename = curr->getFilename();
+   const QCString format = curr->getImgFormat();
    ImgSaver saver( this );
    ImgSaveStat is_stat = ISS_OK;
    is_stat = saver.saveImage( img, filename );
@@ -166,7 +286,7 @@ void ScanPackager::slotImageChanged( QImage *img )
 
    if( img && !img->isNull())
    {
-      curr->setImage( img );
+      curr->setImage( img, format );
       emit( showImage( curr->getImage()));
    }
 }
@@ -194,13 +314,22 @@ void ScanPackager::slAddImage( QImage *img )
    }
 
    /* Path of curr sel item */
-   QDir d (curr->getFilename());
-
-   ImgSaver img_saver( this, d.absPath() );
+   QString dirName = curr->getDirectory();
+   ImgSaver img_saver( this, ImgSaver::relativeToImgRoot(dirName) );
 
    is_stat = img_saver.saveImage( img );
+   if( is_stat == ISS_ERR_FORMAT_NO_WRITE )
+   {
+      KMessageBox::error( this, i18n( "Cannot write this image format.\nImage will not be saved!"),
+			    i18n("Save error") );
+   }
+   else if( is_stat == ISS_ERR_PERM )
+   {
+      KMessageBox::error( this, i18n( "Image file is write protected.\nImage will not be saved!"),
+			    i18n("Save error") );
 
-   if( is_stat != ISS_OK )
+   }
+   else if( is_stat != ISS_OK )
    {
       if( is_stat == ISS_SAVE_CANCELED )
       {
@@ -214,7 +343,7 @@ void ScanPackager::slAddImage( QImage *img )
 
    setSelected( curr, true );
    PackagerItem *item = new PackagerItem( curr, false );
-   item->setFilename( d.absPath() + "/" + img_saver.lastFilename());
+   item->setFilename( img_saver.lastFilename());
    QString s;
 
    /* Count amount of children of the father */
@@ -231,7 +360,7 @@ void ScanPackager::slAddImage( QImage *img )
     * All actions depending on the *pointer* to the qimage need to be done
     * after this call.
     */
-   item->setImage( img );
+   item->setImage( img, img_saver.lastSaveFormat() );
 
    /* makes the new item the current, which shows it */
    setSelected( item, true );
@@ -399,6 +528,64 @@ void ScanPackager::exportFile( PackagerItem *curr )
    }
 }
 
+
+
+void ScanPackager::slotRename( PackagerItem* curr, const KURL& newName )
+{
+   if( ! curr ) return;
+
+   KURL src( curr->getFilename() );
+
+   kdDebug( 28000) <<  "Renaming file " << src.url() << endl;
+   kdDebug(28000) << "target File: "  << newName.url() <<endl;
+
+   if( src == newName ) {
+      kdDebug(28000) <<  "Target and Source are equal -> exit" << endl;
+      return;
+   }
+
+   copyjob = KIO::file_move( src, newName );
+
+   // kdDebug(28000) << "ProgressID = " << copyjob->progressId () << endl;
+   
+   connect( copyjob,
+	    SIGNAL(result(KIO::Job*)), this,
+	    SLOT(slotResult( KIO::Job* )));
+
+
+}
+
+void ScanPackager::slFilenameChanged( const KURL &from, const KURL &to  )
+{
+   QString old_name = from.url();
+   QString new_name = to.url();
+
+   kdDebug(28000) << "the filename changed for " << old_name << endl;
+
+   kdDebug(28000) << "File was renamed to " << new_name << endl;
+   PackagerItem *curr = spFindItem( NameSearch, old_name );
+
+   if( curr )
+   {
+      kdDebug(28000) << "Item was found !" << endl;
+      curr->setFilename( new_name );
+
+      if( curr->isDir())
+      {
+	 /* if it is a directory, it is much more complicated. The children must
+	  *  be reread to get the correct name.
+	  */
+	 kdDebug(28000) << "slFilenameChanged for directory !" << endl;
+      }
+   }
+   else
+   {
+      kdDebug(28000) << "Item was NOT found !" <<endl ;
+   }
+}
+
+
+
 void ScanPackager::slotCanceled( KIO::Job* )
 {
   kdDebug(28000) << i18n("Canceled by user") << endl;
@@ -408,7 +595,8 @@ void ScanPackager::slotCanceled( KIO::Job* )
 void ScanPackager::slotResult( KIO::Job *job )
 {
    if( ! job ) return;
-
+   kdDebug(28000) << "slotResult !" << endl;
+   
    if ( job->error() )
    {
       job->showErrorDialog ( );
@@ -416,6 +604,14 @@ void ScanPackager::slotResult( KIO::Job *job )
       QString msg = job->errorString();
       // int errid = job->error();
       kdDebug(28000) << "ERROR in Exporting an image: <" << msg << ">" << endl;
+   }
+   else
+   {
+      /* went good. */
+      KIO::FileCopyJob *fc = (KIO::FileCopyJob*) job;
+      KURL src = fc->srcURL();
+      KURL target = fc->destURL();
+      slFilenameChanged( src, target );
    }
    copyjob = 0L;
 }

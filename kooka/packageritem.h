@@ -28,43 +28,82 @@
 /**
   *@author Klaas Freitag
   */
-typedef enum{ FILE_OP_ERR, FILE_OP_OK, FILE_OP_NO_MEM,
-              FILE_OP_NO_TARGET, FILE_OP_PERM } FileOpStat;
+// typedef enum{ FILE_OP_ERR, FILE_OP_OK, FILE_OP_NO_MEM,
+//              FILE_OP_NO_TARGET, FILE_OP_PERM } FileOpStat;
 
 typedef enum{ Dummy, NameSearch } SearchType;
 
-class PackagerItem : public QListViewItem  {
+class PackagerItem : public QListViewItem
+{
    
 public: 
-    PackagerItem( QListViewItem *parent, bool is_dir = false );
-    PackagerItem( QListView *parent, bool is_dir = false );
+   PackagerItem( QListViewItem *parent, bool is_dir = false );
+   PackagerItem( QListView *parent, bool is_dir = false );
 	
-    ~PackagerItem();
+   ~PackagerItem();
 	
-    void setImage( QImage *img );
-    void setFilename( QString fi );
-    QImage *getImage( void );
-    bool    isDir( void ) { return ( isdir ); }
-    bool    isLoaded( void ) { return( !( image == 0 ) ); }
-    QString getFilename( bool withPath=true ) const;
-    bool    createFolder( void );
-    bool    unload();
-    bool    deleteFile();
-    bool    deleteFolder();
+   void    setImage( QImage *img, const QCString& );
+   void    setFilename( QString fi );
+   QImage  *getImage( void );
 
-    void    decorateFile();
-    QString getImgFormat();
+   /**
+    *  test if the item is a directory.
+    *
+    * @result true, if it is a directory.
+    */
    
-    FileOpStat     duplicate( QString to ) { return( copy_file(to)); }
-    FileOpStat     move( QString to ){ return( copy_file(to)); };
+   bool    isDir( void ) { return ( isdir ); }
+
+   /**
+    *  queries if an image is loaded, e.g. needs memory.
+    *
+    * @return true if the image is in the memory.
+    */
+   bool    isLoaded( void ) { return( !( image == 0 ) ); }
+
+   /**
+    *  Returns the filename of the item as QString. If the parameter withPath
+    *  is false, only the filename without path is returned, otherwise the complete
+    *  absolute path including filename.
+    *
+    * @param withPath flag to indicate if the path is wanted
+    *
+    * @return the path- or filename.
+    */
+   QString getFilename( bool withPath=true ) const;
+   QString getLocalFilename( void ) const;
+
+   /**
+    *  Returns the directory of the item.
+    */
+   QString getDirectory( void ) const;
+   
+   KURL    getFilenameURL( void ) const;
+#if 0
+   /**
+    *  Retrieves the compete path where the item is stored.
+    *
+    * @return the directory name.
+    */
+   QString getStorageDir( void ) const;
+#endif
+   
+   bool    createFolder( void );
+   bool    unload();
+   bool    deleteFile();
+   bool    deleteFolder();
+
+   void    decorateFile();
+   QCString getImgFormat() const;
+   
+   // FileOpStat     duplicate( QString to ) { return( copy_file(KURL(to))); }
+   // FileOpStat     move( QString to ){ return( copy_file(KURL(to))); };
 
 private:
-    QImage *image;
-    QString filename;
-
-    FileOpStat    copy_file( QString );
-    bool    isdir;
-
+   QImage 		*image;
+   KURL                 filename;
+   bool    		isdir;
+   QCString             format; // Image format 
 };
 
 #endif

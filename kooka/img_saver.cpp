@@ -29,6 +29,11 @@
 #include <kstddirs.h>
 #include <kmessagebox.h>
 #include <kdebug.h>
+#include <kio/jobclasses.h>
+#include <kio/file.h>
+#include <kio/job.h>
+#include <kio/jobclasses.h>
+#include <kio/netaccess.h>
 
 #include <qdir.h>
 #include <qlayout.h>
@@ -200,7 +205,7 @@ QString FormatDialog::getFormat( void ) const
 }
 
 
-QString FormatDialog::getSubFormat( void ) const
+QCString FormatDialog::getSubFormat( void ) const
 {
    // Not yet...
    return( "" );
@@ -232,7 +237,7 @@ bool FormatDialog::rememberFormat( void ) const
 
 /* ********************************************************************** */
 
-ImgSaver::ImgSaver(  QWidget *parent, const QString dir_name )
+ImgSaver::ImgSaver(  QWidget *parent, const QString& dir_name )
    : QObject( parent )
 {
 
@@ -251,35 +256,38 @@ ImgSaver::ImgSaver(  QWidget *parent, const QString dir_name )
       directory = kookaImgRoot();
    }
 
-   // all_formats = QImage::outputFormats();
-   if( directory.right( 1 ) != "/" )
-      directory += "/";
    createDir( directory );
 
    readConfig();
+
+   last_file = "";
+   last_format ="";
    
 }
 
 
 /* Needs a full qualified directory name */
-void ImgSaver::createDir( QString dir )
+void ImgSaver::createDir( const QString& dir )
 {
-   QFileInfo fi( dir );
+   KURL url( dir );
  	
-   if( ! fi.exists() )
+   if( ! KIO::NetAccess::exists(url) )
    {
-      kdDebug(28000) << "Wrn: Directory does not exist -> try to create  !" << endl;
-      if( mkdir( QFile::encodeName( dir ), S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH ) != 0 )
+      kdDebug(28000) << "Wrn: Directory <" << dir << "> does not exist -> try to create  !" << endl;
+      // if( mkdir( QFile::encodeName( dir ), S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH ) != 0 )
+      if( KIO::mkdir( KURL(dir)))
       {
         KMessageBox::sorry(0, i18n("The directory\n%1\n does not exist and could not be created !\n"
                         "Please check the permissions.").arg(dir));
       }
    }
+#if 0
    if( ! fi.isWritable() )
    {
         KMessageBox::sorry(0, i18n("The directory\n%1\n is not writeable.\nPlease check the permissions.")
                 .arg(dir));
    }
+#endif
 }
 
 /**
@@ -294,7 +302,7 @@ ImgSaveStat ImgSaver::saveImage( QImage *image )
    if( !image ) return( ISS_ERR_PARAM );
 
    /* Find out what kind of image it is  */
-   if( image->depth() > 8 )
+   if( image->depth() > 8 )
    {
       imgType = PT_HICOLOR_IMAGE;
    }
@@ -319,12 +327,16 @@ ImgSaveStat ImgSaver::saveImage( QImage *image )
    QString subformat = findSubFormat( format );
    // Call save-Function with this params
 
-   if( format.isEmpty() )
+   if( format.isEmpty() || format == "Skipped"  )
    {
     	kdDebug(28000) << "Save canceled by user -> no save !" << endl;
     	return( ISS_SAVE_CANCELED );
    }
-   stat = save( image, directory + createFilename( format ),
+
+   kdDebug(28000) << "saveImage: Directory is " << directory << endl;
+   QString fi = directory + "/" + createFilename( format );
+   kdDebug(28000) << "saveImage: saving file <" << fi << ">" << endl;
+   stat = save( image, fi,
 		format, subformat );
 
    return( stat );
@@ -362,13 +374,14 @@ QString ImgSaver::createFilename( QString format )
 ImgSaveStat ImgSaver::saveImage( QImage *image, QString filename )
 {
    QString format = QImage::imageFormat( filename );
+   kdDebug(28000) << "saveImage: Saving "<< filename << " in format " << format << endl;
    if( format == "" ) 
       format = "BMP";
    
    QFileInfo fi( filename );
 
    if( fi.isRelative() )
-      filename = directory + filename;
+      filename = directory +"/"+ filename;
 
    return( save( image, filename, format, "" ) );
 }
@@ -560,13 +573,15 @@ ImgSaveStat ImgSaver::save( QImage *image, const QString &filename,
       result = image->save( filename, format.latin1() );
 
       
-      last_file = fi.fileName();
+      last_file = fi.absFilePath();
+      last_format = format.latin1();
    }
 
    if( result )
       return( ISS_OK );
    else {
       last_file = "";
+      last_format = "";
       return( ISS_ERR_UNKNOWN );
    }
 	 
@@ -623,6 +638,26 @@ QString ImgSaver::kookaImgRoot( void )
    
    return( dir );
 
+}
+
+
+/* Returns the path relativ to the kookaImgRoot. */
+QString ImgSaver::relativeToImgRoot( QString path )
+{
+   QString dir = kookaImgRoot(); /* Always with trailing / */
+   QString res = path;
+   
+   int idx = path.find( dir, 0 ); /* Search if dir is in path */
+   if( idx > -1 )
+   {
+      /* was found */
+      int dirlen = dir.length();
+      int rightlen = path.length() - dirlen - idx;
+      res = path.right(rightlen);
+      kdDebug(28000) << "relativToImgRoot returns " << res << endl;
+      
+   }
+   return( res );
 }
 
 #include "img_saver.moc"

@@ -22,6 +22,11 @@
 
 #include <kdebug.h>
 #include <klocale.h>
+#include <kio/jobclasses.h>
+#include <kio/file.h>
+#include <kio/job.h>
+#include <kio/jobclasses.h>
+#include <kio/netaccess.h>
 
 #include "resource.h"
 #include "packageritem.h"
@@ -43,57 +48,122 @@ PackagerItem::PackagerItem( QListView *parent, bool is_dir )
 	: QListViewItem( parent )
 {
    isdir = is_dir;
-   image = 0;
+   image = 0L;
 }
 
 
 PackagerItem::~PackagerItem()
 {
-   delete( image );
+   if( image ) delete( image );
+}
+
+QString PackagerItem::getLocalFilename( void ) const
+{
+   QString f = getFilename( true );
+
+   /* Now the string contains file:/bla.
+      The local filename does not need the 'file:' stuff.
+   */
+   if( f.left(5) == "file:" )
+   {
+      return( f.remove( 0,5 ));
+   }	
+   else
+   {
+      return( QString::null );
+   }
+}
+
+
+/* Should return directory relative to save root. */
+QString PackagerItem::getDirectory( void ) const
+{
+   QString str = filename.path(0);
+   
+   kdDebug(28000) << "GetDirectory returns " << str << endl;
+
+   return(str );
 }
 
 QString PackagerItem::getFilename( bool withPath  ) const 
 {
-   QString ret = filename;
-   
+   QString ret = filename.url();
+   // or: ret = filename.url(); ?
    if( ! withPath )
    {
-      QFileInfo fi( ret );
-      ret = fi.fileName();
+      ret = filename.fileName();
    }
+   kdDebug( 28000) << "Packageritem getFilename return " << ret << endl;
    return( ret );
+}
+
+KURL PackagerItem::getFilenameURL( void ) const
+{
+   return( filename );
 }
 
 QImage *PackagerItem::getImage( void )
 {
-   if( ! image )
+   
+   
+   if( filename.isLocalFile() )
    {
-      image = new QImage( filename );
+      if( image ) delete image;
+
+      /* Bummer ! This is terrible. If the PackagerItem is a KURL and may
+	 reside on a remote server, how to open this image here ? Seems not
+	 to be a good concept at all ;(
+      */
+      QString str = filename.path();
+      kdDebug(28000) << "getImage: Loading <" << str << ">" << endl;
+
+      image = new QImage( );
+      if( image->load( str ) ) {
+	 format = QImage::imageFormat(str);
+	 kdDebug(28000) << "getImage: Loaded image successfull" << endl;
+      } else {
+	 kdDebug(28000) << "getImage: Could not load image " << str << endl;
+      }
       decorateFile();
+   }
+   else
+   {
+      kdDebug( 28000) << "getImage: is not a local file -> Cant load image !!" << endl;
    }
 		
    return( image );
 }
 
-QString PackagerItem::getImgFormat( void )
+QCString PackagerItem::getImgFormat( void ) const
 {
-   if( filename.isNull() ) return( "" );
-   QFileInfo fi( filename );
-   return( fi.extension());
+#if 0
+   QString str = getFilename( );
+   
+   if( str.isNull() ) return( "" );
+   QFileInfo fi(str);
+   QString exten = fi.extension();
+   
+   kdDebug( 28000) << "Returning extension: " << exten << endl;
+#endif
+   return( format );
 }
 
 
 void PackagerItem::setFilename( QString fi )
 {
    filename = fi;
+   
+   // filename.setFileName( fi );
    decorateFile();
 }
 
-void PackagerItem::setImage( QImage *img )
+void PackagerItem::setImage( QImage *img, const QCString& newFormat )
 {
    if( image ) delete image;
- 	
+   
    image = new QImage( *img );
+   format = newFormat;
+   
    decorateFile();
  	
 }
@@ -102,11 +172,11 @@ bool PackagerItem::deleteFolder( void )
 {
    QDir direc;
    direc.setFilter( QDir::Files | QDir::Hidden | QDir::NoSymLinks );
-   direc.setPath(filename);
+   direc.setPath( getFilename());
  	
    if( direc.exists() )
    {
-      return( direc.rmdir(filename));
+      return( direc.rmdir(getFilename()));
    }
    return( true );
 }
@@ -116,7 +186,8 @@ bool PackagerItem::unload( void )
    if( image )
    {
       delete( image );
-      image = 0;
+      image = 0L;
+      format = "";
       decorateFile();
    }
 
@@ -131,9 +202,9 @@ bool PackagerItem::deleteFile( void )
  	
    QDir direc;
    direc.setFilter( QDir::Files | QDir::Hidden | QDir::NoSymLinks );
-   direc.setPath(filename);
+   direc.setPath(getFilename());
 
-   return( direc.remove(filename));
+   return( direc.remove(getFilename()));
 }
 
 bool PackagerItem::createFolder( void )
@@ -141,12 +212,10 @@ bool PackagerItem::createFolder( void )
    if( ! isDir()) return( false );  /* can only create Dirs */
    if( filename.isEmpty()) return( false ); /* no empty files */
 
-   QDir direc;
-   direc.setFilter( QDir::Files | QDir::Hidden | QDir::NoSymLinks );
-   direc.setPath(filename);
-
-   if( !direc.exists() )
-      return( direc.mkdir(filename) );
+   if( ! KIO::NetAccess::exists( getFilename())) {
+      kdDebug(28000) << "WRN Creating directory <" << getFilename() << ">" << endl;
+      KIO::mkdir( getFilename());
+   }
  		
    return( true );
 }
@@ -171,61 +240,36 @@ void PackagerItem::decorateFile( void )
 	    setPixmap( 0, *icons["mini-color"] );
       else
 	 setPixmap( 0, *icons["mini-lineart"] );
+
+      /* image format */
+      setText( 3, format );
    }
    else
    {
-      QFileInfo fi( filename);
-      setText( 0, fi.baseName() );
+      QString bName = getFilename(false ); // get without path
+      kdDebug(28000) << "Stating Basename <"<< bName << ">" << endl;
+      
+      setText( 0, bName );
       if( isDir() )
       {
-	 setPixmap( 0, *icons["mini-folder"] );
-
+	 if( isOpen() ) {
+	    setPixmap( 0, *icons["mini-folder-open"] );
+	 }
+	 else {
+	    setPixmap( 0, *icons["mini-folder"] );
+	 }
 	 int cc = childCount();
          if (cc==1)
-                s = i18n("1 item");
+	    s = i18n("1 item");
          else
-                s = i18n("%1 items").arg(cc);
+	    s = i18n("%1 items").arg(cc);
 	 setText( 1, s );
       }
       else
-	 setPixmap( 0, *icons["mini-floppy"] );
-
-   }
-}
-
-FileOpStat  PackagerItem::copy_file( QString to )
-{
-   QFile from( filename );
-   FileOpStat res = FILE_OP_OK;
-
-   if( ! from.open( IO_ReadOnly ) )
-   {
-      kdDebug(28000) << "Cant open source-file!" << endl;
-      return( FILE_OP_ERR );
-   }
-   QFile tofile( to );
-   if( ! tofile.open( IO_WriteOnly ) )
-   {
-      kdDebug(28000) << "Cant open target-file" << endl;
-      return( FILE_OP_ERR );
-   }
-
-   int bsize = 4*1024;
-   char *data;
-   data = new char[bsize];
-   if( data )
-   {
-      int c = from.readBlock( data, bsize );
-      while ( c  > 0 )
       {
-	 tofile.writeBlock( data, c );
-	 c = from.readBlock( data, bsize );
+	 setPixmap( 0, *icons["mini-floppy"] );
       }
-      delete( data );
-   } else { res = FILE_OP_ERR; }
 
-   tofile.flush(); tofile.close();
-   from.close();
-   return( res );
+   }
 }
 
