@@ -31,7 +31,6 @@
 #include <kwin.h>
 
 #include "kooka.h"
-#include "icons.h"
 #include "version.h"
 
 static const char *description =
@@ -39,8 +38,7 @@ static const char *description =
 	      "using the SANE library.<P>"
 	      "Kooka helps you scan, save your image in the correct "
 	      "image format and perform <B>O</B>ptical <B>C</B>haracter <B>R</B>ecognition on it,"
-	      "using <I>gocr</I>, Joerg Schulenburg's and friends' Open Source ocr program.<P>"
-	      "For information on Kooka see <A HREF=http://>The kooka page</A><P>";
+"using <I>gocr</I>, Joerg Schulenburg's and friends' Open Source ocr program.<P>";
 
 
 static KCmdLineOptions options[] =
@@ -57,8 +55,11 @@ void *dbg_ptr;
 int main( int argc, char *argv[] )
 {
    KAboutData about("kooka", I18N_NOOP("Kooka"), KOOKA_VERSION, I18N_NOOP(description),
-		    KAboutData::License_GPL, "(C) 2000 Klaas Freitag");
-   about.addAuthor( "Klaas Freitag", 0, "freitag@suse.de" );
+		    KAboutData::License_GPL, "(C) 2000 Klaas Freitag", 0,
+		    I18N_NOOP("http://kooka.kde.org"));
+   
+   about.addAuthor( "Klaas Freitag", I18N_NOOP("developer"), "freitag@suse.de" );
+   about.addAuthor( "Mat Colton", I18N_NOOP("graphics, web"), "mat@colton.de" );
    
    KCmdLineArgs::init(argc, argv, &about);
    KCmdLineArgs::addCmdLineOptions( options ); // Add my own options.
@@ -68,25 +69,6 @@ int main( int argc, char *argv[] )
    KImageIO::registerFormats();
    KIconLoader *loader = KGlobal::iconLoader();
    
-   icons.insert("mini-color", new QPixmap( mini_color ));
-   icons.insert("mini-gray", new QPixmap( mini_gray )); 	
-   icons.insert("mini-lineart", new QPixmap( mini_lineart ));
-   icons.insert("mini-folder", new QPixmap( mini_folder ));
-   icons.insert("mini-floppy", new QPixmap( mini_floppy ));	
-   icons.insert("mini-ray", new QPixmap( mini_ray ));	
-   icons.insert("mini-folder_new", new QPixmap( mini_folder_new ));	
-   icons.insert("mini-trash", new QPixmap( mini_trash ));
-   icons.insert("mini-scan", new QPixmap( mini_scan ));
-   icons.insert("mini-ocr", new QPixmap( mini_ocr ));
-   icons.insert("mini-colorlock", new QPixmap( mini_colorlock ));
-   icons.insert("mini-preview", new QPixmap( mini_preview ));
-   icons.insert("mini-fitwidth", new QPixmap( mini_fitwidth ));
-   icons.insert("mini-fitheight", new QPixmap( mini_fitheight ));
-
-
-   icons.insert("mini-folder", new QPixmap( loader->loadIcon( "folder",KIcon::Small ))); 
-   icons.insert("mini-folder-open", new QPixmap( loader->loadIcon( "folder_open",KIcon::Small )));
-
    KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
    QCString  devToUse = args->getOption( "d" );
    if( args->isSet("g") )
