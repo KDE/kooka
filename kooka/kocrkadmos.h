@@ -29,11 +29,7 @@
 #define KOCRKADMOS_H
 
 #include <kdialogbase.h>
-#include <qimage.h>
-#include <qstring.h>
 #include <qmap.h>
-#include <kscanslider.h>
-#include <kanimwidget.h>
 
 #include "kocrbase.h"
 /**
@@ -48,7 +44,7 @@ class QButtonGroup;
 class KConfig;
 class QCheckBox;
 class KSpellConfig;
-
+class QRadioButton;
 
 class KadmosClassifier   /* Not yet used FIXME */
 {
@@ -96,18 +92,37 @@ protected:
     void setupSegmentation(  QVBox *box );
     void setupClassification( QVBox *box );
 
+    EngineError findClassifiers();
+    EngineError findClassifierPath();
 private slots:
+
+    void slFontChanged( int id );
 
 private:
     StrMap                m_classifierTranslate;
 
     QCheckBox             *m_cbNoise;
     QCheckBox             *m_cbAutoscale;
-    QString                m_classifierPath;
+    QString                m_customClassifierPath;
 
-   QButtonGroup	 	  *m_bbFont;
-   QButtonGroup  	  *m_bbRegion;
+    QButtonGroup	  *m_bbFont;
 
+    QRadioButton          *m_rbMachine;
+    QRadioButton          *m_rbHand;
+    QRadioButton          *m_rbNorm;
+
+    QGroupBox      	  *m_gbLang;
+
+    QComboBox             *m_cbLang;
+
+    QStringList            m_ttfClassifier;
+    QStringList            m_handClassifier;
+    QStringList            m_classifierPath;
+
+    bool                   m_haveNorm;
+
+    typedef QMap<QString, QString> StringMap;
+    StringMap m_longCountry2short;
 };
 
 #endif
