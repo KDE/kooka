@@ -221,6 +221,8 @@ KookaView::KookaView( KDockMainWindow *parent, const QCString& deviceToUse)
 	    m_thumbview, SLOT( slImageDeleted( KFileItem* )));
    
    m_mainDock->setDockSite( KDockWidget::DockFullSite );
+
+   packager->openRoots();
 }
 
 

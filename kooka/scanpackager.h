@@ -74,6 +74,7 @@ public:
     KFileTreeBranch* openRoot( const KURL&, bool open=false );
 
    QPopupMenu *contextMenu() { return m_contextMenu; }
+   void         openRoots();
    
 public slots:
    void         slSelectImage( const KURL& );
@@ -125,7 +126,6 @@ signals:
 private:
    QString     localFileName( KFileTreeViewItem* it ) const;
    void 	loadImageForItem( KFileTreeViewItem* item );
-   void         openRoots();
    QCString     getImgFormat( KFileTreeViewItem* item ) const;
    
     QString 	 buildNewFilename( QString cmplFilename, QString currFormat ) const;   

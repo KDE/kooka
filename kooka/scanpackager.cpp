@@ -118,8 +118,6 @@ ScanPackager::ScanPackager( QWidget *parent ) : KFileTreeView( parent )
    m_contextMenu = new KPopupMenu();
    static_cast<KPopupMenu*>(m_contextMenu)->insertTitle( i18n( "Gallery" ));
 
-   /* open the image galleries */
-   openRoots();
 }
 
 void ScanPackager::openRoots()
@@ -290,7 +288,12 @@ void ScanPackager::slotDecorate( KFileTreeBranch* branch, const KFileTreeViewIte
 void ScanPackager::slFileRename( QListViewItem* it, const QString& newStr, int )
 {
 
-   if( !it || newStr.isEmpty() )  return;
+   bool success = true;
+   if( !it ) return;
+
+   if( newStr.isEmpty() )
+      success = false;
+   
    KFileTreeViewItem *item = static_cast<KFileTreeViewItem*>(it);
 
    /* Free memory and imform everybody who is interested. */
@@ -301,28 +304,44 @@ void ScanPackager::slFileRename( QListViewItem* it, const QString& newStr, int )
    urlTo.setFileName("");
    urlTo.setFileName(newStr);
 
-   if( urlFrom == urlTo )
+   if( success )
    {
-      kdDebug(28000) << "Renaming to same url does not make sense!" << endl;
-      return;
-   }
+      if( urlFrom == urlTo )
+      {
+	 kdDebug(28000) << "Renaming to same url does not make sense!" << endl;
+	 success = false;
+      }
+      else
+      {
+	 /* clear selection, because the renamed image comes in through
+	  * kdirlister again
+	  */
+	 slotUnloadItem( item );
 
-   /* clear selection, because the renamed image comes in through
-    * kdirlister again
-    */
-   slotUnloadItem( item );
-
-   kdDebug(28000) << "Renaming to " << urlTo.prettyURL() << endl;
+	 kdDebug(28000) << "Renaming to " << urlTo.prettyURL() <<
+	    " from " << urlFrom.prettyURL() << endl;
    
-   /* to urlTo the really used filename is written */
-   if( ImgSaver::renameImage( urlFrom, urlTo, false, this ) )
-   {      
-      slotSetNextUrlToSelect( urlTo );
-      kdDebug(28000) << "renaming OK" << endl;
+	 /* to urlTo the really used filename is written */
+	 setSelected( item, false );
+	 if( ImgSaver::renameImage( urlFrom, urlTo, false, this ) )
+	 {      
+	    kdDebug(28000) << "renaming OK" << endl;
+	    success=true;
+	 }
+	 else
+	 {
+	    success = false;
+	 }
+      }
    }
-   else
+
+   if( ! success )
    {      
       kdDebug(28000) << "renaming failed" << endl;
+      /* restore the name */
+      item->setText(0, urlFrom.fileName() );
+      setSelected( item, true );
+
    }
       
 }

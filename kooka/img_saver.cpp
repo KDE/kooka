@@ -776,31 +776,25 @@ bool ImgSaver::renameImage( const KURL& fromUrl, KURL& toUrl, bool askExt,  QWid
    else if( !extFrom.isEmpty() && extFrom != extTo )
    {
       /* extensions differ -> TODO */
-      KMessageBox::error( overWidget, i18n("Format changes of images are currently not supported."),
+      KMessageBox::error( overWidget,
+			  i18n("Format changes of images are currently not supported."),
 			  i18n("Wrong extension found" ));
       return(false);
    }
    
    bool success = false;
+   
    if( KIO::NetAccess::exists( targetUrl ) )
    {
       kdDebug(28000)<< "Target already exists - can not copy" << endl;
    }
    else
    {
-      if( KIO::NetAccess::copy( fromUrl, targetUrl ))
+      if( KIO::file_move(fromUrl, targetUrl) )
       {
-	 kdDebug(28000) << "Copy success, removing " << fromUrl.prettyURL() << endl;
-	 KIO::NetAccess::del( fromUrl );
-	 toUrl = targetUrl;
-	 success  = true;
-      }
-      else
-      {
-	 kdDebug(28000) << "Could not copy:" << KIO::NetAccess::lastErrorString() << endl;
+	 success = true;
       }
    }
-
    return( success );
 }
 
