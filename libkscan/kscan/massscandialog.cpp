@@ -23,6 +23,7 @@
 #include <qpushbutton.h>
 
 #include <klocale.h>
+#include <kdebug.h>
 
 #include "massscandialog.h"
 
@@ -30,7 +31,7 @@ MassScanDialog::MassScanDialog( QWidget *parent )
    :QSemiModal( parent, "MASS_SCAN", true )
 {
    setCaption( i18n( "ADF Scanning" ));
-   debug( "Starting MassScanDialog!" );
+   kdDebug() << "Starting MassScanDialog!" << endl;
    // Layout-Boxes
    QVBoxLayout *bigdad = new QVBoxLayout( this, 5 );
    // QHBoxLayout *hl1= new QHBoxLayout( );      // Caption

@@ -27,6 +27,7 @@
 #include <kconfig.h>
 #include <kmessagebox.h>
 #include <klocale.h>
+#include <kdebug.h>
 
 #include "devselector.h"
 #include <kdebug.h>
@@ -39,7 +40,7 @@ DeviceSelector::DeviceSelector( QWidget *parent, QStrList& devList, QStringList&
    :KDialogBase( parent,  "DeviceSel", true, i18n("Wellcome to Kooka"),
 		 Ok|Cancel, Ok, true )
 {
-   debug( "Starting DevSelector!" );
+   kdDebug() << "Starting DevSelector!" << endl;
    // Layout-Boxes
    QWidget *page = new QWidget( this );
    CHECK_PTR( page );
@@ -77,11 +78,11 @@ QString DeviceSelector::getSelectedDevice( void ) const
 
    unsigned int selID = selectBox->id( selectBox->selected());
    int c = devices.count();
-   debug( "The Selected ID is <%d>/%d", selID, c );
+   kdDebug() << "The Selected ID is <" << selID << ">/" << c << endl;
    
    kapp->config()->setGroup( GROUP_STARTUP );
-   const char *i = devices[ selID ];
-   debug( "The selected device: <%s>", i );
+   const char *i = devices[ selID ].local8Bit();
+   kdDebug() << "The selected device: <" << i << ">" << endl;
    kapp->config()->writeEntry( STARTUP_SCANDEV, i );
 
    return( QString(i) );

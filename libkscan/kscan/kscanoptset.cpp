@@ -20,6 +20,7 @@
 
 #include <qstring.h>
 #include <qasciidict.h>
+#include <kdebug.h>
 #include "kscandevice.h"
 #include "kscanoption.h"
 #include "kscanoptset.h"
@@ -59,7 +60,7 @@ bool KScanOptSet::backupOption( const KScanOption& opt )
   bool retval = true;
   
   /** Allocate a new option and store it **/
-  const char *optName = (const char*) (opt.getName());
+  const char *optName = opt.getName().local8Bit();
   if( !optName )
     retval = false;
   
@@ -76,7 +77,7 @@ bool KScanOptSet::backupOption( const KScanOption& opt )
      else
      {
 	const QString qq = opt.get();
-	debug( "Value is now: <%s>", (const char*) qq );
+	kdDebug() << "Value is now: <" << qq << ">" << endl;
 	const KScanOption *newopt = new KScanOption( opt );
 
 	strayCatsList.append( newopt );

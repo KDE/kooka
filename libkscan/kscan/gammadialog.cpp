@@ -20,6 +20,7 @@
 
 #include <kscanslider.h>
 #include <klocale.h>
+#include <kdebug.h>
 
 #include "gammadialog.h"
 
@@ -58,17 +59,17 @@ GammaDialog::GammaDialog( QWidget *parent ) :
     lhMiddle->addWidget( gtDisp, 2 );
 
     /* Slider Widgets for gamma, brightness, contrast */
-    wBright   = new KScanSlider ( page, i18n("Brightness"), -50.0, 50.0 );
+    wBright   = new KScanSlider ( page, i18n("Brightness").local8Bit(), -50.0, 50.0 );
     CHECK_PTR(wBright);
     wBright->slSetSlider( 0 );
     connect( wBright, SIGNAL(valueChanged(int)), gt, SLOT(setBrightness(int)));
 
-    wContrast = new KScanSlider ( page, i18n("Constrast") , -50.0, 50.0 );
+    wContrast = new KScanSlider ( page, i18n("Constrast").local8Bit() , -50.0, 50.0 );
     CHECK_PTR(wContrast);
     wContrast->slSetSlider( 0 );
     connect( wContrast, SIGNAL(valueChanged(int)), gt, SLOT(setContrast(int)));
 
-    wGamma    = new KScanSlider ( page, i18n("Gamma"),  30.0, 300.0 );
+    wGamma    = new KScanSlider ( page, i18n("Gamma").local8Bit(),  30.0, 300.0 );
     CHECK_PTR(wGamma);
     wGamma->slSetSlider(100);
     connect( wGamma, SIGNAL(valueChanged(int)), gt, SLOT(setGamma(int)));
@@ -96,7 +97,7 @@ void GammaDialog::setGt(KGammaTable& ngt)
 
 void GammaDialog::slotApply()
 {
-   debug ( "Applying !" );
+   kdDebug() << "Applying !" << endl;
 
    /* Do some calculation here */
 

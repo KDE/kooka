@@ -1,5 +1,6 @@
 #include <math.h>
 
+#include <kdebug.h>
 #include "kgammatable.h"
 
 KGammaTable::KGammaTable( int gamma, int brightness, int contrast  ) 
@@ -45,7 +46,7 @@ void KGammaTable::calcTable( )
 
    if( gr == 0 )
    {
-      debug( "Cant calc table -> would raise div. by zero !" );
+      kdDebug() << "Cant calc table -> would raise div. by zero !" << endl;
       return;
    }
    

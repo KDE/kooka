@@ -20,6 +20,7 @@
 #include "kscanslider.h"
 
 #include <klocale.h>
+#include <kdebug.h>
 
 #include <qlabel.h>
 #include <qpushbutton.h>
@@ -90,7 +91,7 @@ ScanSourceDialog::ScanSourceDialog( QWidget *parent, const QStrList list, ADF_BE
 	    adf = ADF_SCAN_ALONG;
 	    break;
 	 default:
-	    debug("Undefined Source !" );
+	    kdDebug() << "Undefined Source !" << endl;
 	    // Hmmm.
 	    break;
       }
@@ -164,7 +165,7 @@ int ScanSourceDialog::sourceAdfEntry( void ) const
 void ScanSourceDialog::slSetSource( const QString source )
 {
    if( !sources  ) return;
-   debug( "Setting <%s> as source", (const char*) source );
+   kdDebug() << "Setting <" << source << "> as source" << endl;
 
    if( bgroup )
       bgroup->setEnabled( false );
@@ -176,7 +177,7 @@ void ScanSourceDialog::slSetSource( const QString source )
       if( sources->text( i ) == source )
       {
          sources->setCurrentItem( i );
-         if( source == sourceAdfEntry() )
+         if( source == QString::number(sourceAdfEntry()) )
          {
 	    if( bgroup )
 	       bgroup->setEnabled( true );

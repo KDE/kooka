@@ -16,15 +16,16 @@
  ***************************************************************************/
 
 #include <qlayout.h>
+#include <kdebug.h>
 #include "kscanslider.h"
 
 KScanSlider::KScanSlider( QWidget *parent, const char *text, double min, double max )
  : QFrame( parent )
 {
     QHBoxLayout *hb = new QHBoxLayout( this );
-    l1 = new QLabel( text, this, "AUTO_SLIDER_LABEL" + QString(text) );
+    l1 = new QLabel( QString(text), this, QString(QString("AUTO_SLIDER_LABEL") + QString(text)).local8Bit() );
     hb->addWidget( l1,20 );
-    numdisp = new QLabel( "MMM", this, "AUTO_SLIDER_NUMDISP" + QString(text) );
+    numdisp = new QLabel( "MMM", this, QString(QString("AUTO_SLIDER_NUMDISP") + QString(text)).local8Bit() );
     numdisp->setAlignment( AlignRight );
     numdisp->setMinimumHeight( numdisp->sizeHint().height());
     numdisp->setMaximumHeight( numdisp->sizeHint().height());
@@ -65,11 +66,11 @@ void KScanSlider::slSetSlider( int value )
 {
     /* Important to check value to avoid recursive signals ;) */
     // debug( "Slider val: %d -> %d", value, slider_val );
-    debug("Setting Slider with %d", value );
+    kdDebug() << "Setting Slider with " << value << endl;
 
     if( value == slider_val )
     {
-      debug( "Returning because slider value is already == %d", value );
+      kdDebug() << "Returning because slider value is already == " << value << endl;
       return;
     }
     slider->setValue( value );
@@ -79,7 +80,7 @@ void KScanSlider::slSetSlider( int value )
 
 void KScanSlider::slSliderChange( int v )
 {
-    debug( "Got slider val: %d",v );
+    kdDebug() << "Got slider val: " << v << endl;
     slider_val = v;
     numdisp->setNum(v);
     emit( valueChanged( v ));
@@ -116,7 +117,7 @@ void KScanEntry::slSetEntry( const char *t )
 
 void KScanEntry::slEntryChange( const QString& t )
 {
-    emit( valueChanged( t ));
+    emit( valueChanged( t.local8Bit() ));
 }
 
 
@@ -143,7 +144,7 @@ KScanCombo::KScanCombo( QWidget *parent, const QString text, const QStrList& lis
 void KScanCombo::slSetEntry( const QString &t )
 {
     if( t.isNull() ) 	return;
-    int i = combolist.find( t );
+    int i = combolist.find( t.local8Bit() );
 
     /* Important to check value to avoid recursive signals ;) */
     if( i == combo->currentItem() )
@@ -152,13 +153,13 @@ void KScanCombo::slSetEntry( const QString &t )
     if( i > -1 )
 	combo->setCurrentItem( i );
     else
-	debug( "Combo item not in list !");
+	kdDebug() << "Combo item not in list !" << endl;
 }
 
 void KScanCombo::slComboChange( const QString &t )
 {
-    emit( valueChanged( t ));
-    debug( "Combo: valueChanged emitted!" );
+    emit( valueChanged( t.local8Bit() ));
+    kdDebug() << "Combo: valueChanged emitted!" << endl;
 }
 
 void KScanCombo::slSetIcon( const QPixmap& pix, const QString str)
