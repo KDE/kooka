@@ -1,6 +1,3 @@
-*** THIS IS EARLY WORK IN PROGRESS ***
-Do not expect this to compile on every platform, nor to run.
-
 KScan is KDE's Scanner Library.
 It's used by kooka and by koffice.
 It provides an easy-to-use library, which
