@@ -34,7 +34,14 @@
 #include <qpixmap.h>
 
 #include <kiconview.h>
+#include <kurl.h>
+#include <kio/previewjob.h>
+#include <kfileitem.h>
+#include <kfileiconview.h>
 
+class QPixmap;
+
+   
 class ThumbView: public KIconView
 {
    Q_OBJECT
@@ -43,7 +50,24 @@ public:
 
    ThumbView( QWidget *parent, const char *name=0 );
    ~ThumbView();
+
+   void setCurrentDir( const KURL& s)
+      { m_currentDir = s; }
+   KURL currentDir( ) const
+      { return m_currentDir; }
    
+public slots:
+
+   void slNewFileItems( const KFileItemList& ); 
+   void slGotPreview( const KFileItem*, const QPixmap& );
+   void slPreviewResult( KIO::Job* );
+private:
+   QPixmap createPixmap( const QPixmap& ) const;
+
+   KURL    m_currentDir;
+   QPixmap m_basePix;
+   int     m_pixWidth;
+   int     m_pixHeight;
 };
 
 #endif

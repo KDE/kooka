@@ -110,7 +110,7 @@ public slots:
 
    void slSaveScanParams( void );
 
-   void slShowThumbnails( const KURL& url );
+   void slShowThumbnails( KFileTreeViewItem *);
 
    /**
     * slot that show the image viewer

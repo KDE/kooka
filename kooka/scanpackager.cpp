@@ -181,7 +181,6 @@ void ScanPackager::slotDirCount( KFileTreeViewItem* item, int cnt )
 {
    if( item && item->isDir() )
    {
-      kdDebug(28000)<< "  ############## count " << cnt << " for " << item->url().prettyURL() << endl;
       QString cc = i18n( "%1 items").arg( cnt );
       item->setText( 1, cc );
    }
@@ -429,7 +428,7 @@ void ScanPackager::slSelectionChanged( QListViewItem *newItem )
 	 kdDebug(28000) << "selectionChanged: Is a directory !" << endl;
 	 emit( showImage( 0L ));
 	 kdDebug(28000) << "emitting showThumbnails" << endl;
-	 emit( showThumbnails( item->url() ));
+	 emit( showThumbnails( item ));
       }
       else
       {

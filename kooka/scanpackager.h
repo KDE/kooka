@@ -105,8 +105,8 @@ signals:
     void        unloadImage( QImage* );
     void        galleryPathSelected( KFileTreeBranch* branch, const QString& relativPath );
     void        directoryToRemove( KFileTreeBranch *branch, const QString& relativPath );
-    void        showThumbnails( const KURL& );
-   void         aboutToShowImage( const KURL& ); /* starting to load image */
+    void        showThumbnails( KFileTreeViewItem* );
+    void        aboutToShowImage( const KURL& ); /* starting to load image */
    
 private:
    QString     localFileName( KFileTreeViewItem* it ) const;

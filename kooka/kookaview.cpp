@@ -97,8 +97,8 @@ KookaView::KookaView(QWidget *parent, const QCString& deviceToUse)
    {
       
    }
-   connect( packager, SIGNAL(showThumbnails( const KURL& )),
-	    this, SLOT( slShowThumbnails( const KURL& )));
+   connect( packager, SIGNAL(showThumbnails( KFileTreeViewItem* )),
+	    this, SLOT( slShowThumbnails( KFileTreeViewItem* )));
    /* build up the Preview/Packager-Tabview */
    tabw->insertTab( packager, i18n( "&Gallery"), PACKAGER_TAB );
 
@@ -700,10 +700,31 @@ void KookaView::slSaveScanParams( void )
 #endif
 }
 
-void KookaView::slShowThumbnails( const KURL& url )
+void KookaView::slShowThumbnails(KFileTreeViewItem *dirKfi )
 {
-   kdDebug(28000) << "Showing thumbs for " << url.prettyURL() << endl;
+   if( ! dirKfi ) return;
+   kdDebug(28000) << "Showing thumbs for " << dirKfi->url().prettyURL() << endl;	   
    m_stack->raiseWidget( m_thumbview );
+
+   /* Only do the new thumbview if the old is on another dir */
+
+   if( m_thumbview && m_thumbview->currentDir() != dirKfi->url() )
+   {
+      m_thumbview->clear();
+      /* Find a list of child KFileItems */
+      KFileItemList fileItemsList;
+
+      QListViewItem * myChild = dirKfi->firstChild();
+      while( myChild )
+      {
+         fileItemsList.append( static_cast<KFileTreeViewItem*>(myChild)->fileItem());
+         myChild = myChild->nextSibling();
+      }
+
+      m_thumbview->slNewFileItems( fileItemsList );
+      m_thumbview->setCurrentDir( dirKfi->url());
+   }
+
 }
 
 /* this slot is called when the user clicks on an image in the packager

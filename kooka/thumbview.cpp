@@ -1,5 +1,5 @@
 /***************************************************************************
-               thumbview.h  - Class to display thumbnailed images
+               thumbview.cpp  - Class to display thumbnailed images
                              -------------------                                         
     begin                : Tue Apr 18 2002
     copyright            : (C) 2002 by Klaas Freitag                         
@@ -26,15 +26,119 @@
  *
  */
 
+#include <qpixmap.h>
+#include <qpainter.h>
+
+#include <kio/previewjob.h>
+#include <kdebug.h>
+#include <kfileitem.h>
+#include <kfileiconview.h>
+#include <kimageeffect.h>
+
 #include "thumbview.h"
 
 ThumbView::ThumbView( QWidget *parent, const char *name )
-   : KIconView( parent )
+   : KIconView( parent, name ),
+     m_pixWidth(100),
+     m_pixHeight(140)
 {
-   
+   QImage ires = KImageEffect::unbalancedGradient( QSize( m_pixWidth, m_pixHeight ),
+					 Qt::white, Qt::blue, KImageEffect::DiagonalGradient );
+   m_basePix.convertFromImage( ires );
+
+   setItemsMovable( false );
 }
 
 ThumbView::~ThumbView()
 {
+   
+}
+
+void ThumbView::slNewFileItems( const KFileItemList& items )
+{
+   kdDebug(28000) << "Creating thumbnails for fileItemList" << endl;
+
+   
+   QPixmap p;
+   KFileItemList startJobOn;
+   
+   KFileItemListIterator it( items );
+   KFileItem *item = 0;
+   for ( ; (item = it.current()); ++it )
+   {
+      QString filename = item->url().prettyURL();
+      if( item->isDir() )
+      {
+	 /* create a dir pixmap */
+      }
+      else
+      {
+	 QPixmap p;
+#if 0
+	 if ( !QPixmapCache::find( filename, p) )
+	 {
+	    /* image is not in cache yet, needs to go for a job */
+	    startJobOn.append( item );
+	 }
+#endif
+	 /* Create a new empty preview pixmap and store the pointer to it */
+	 KFileIconViewItem *newIconViewIt = new KFileIconViewItem( this,
+								   item->url().filename(),
+								   createPixmap(p),
+								   item );
+	 item->setExtraData( this, newIconViewIt );
+	 startJobOn.append( item );
+      }
+   }
+	  
+   if( startJobOn.count() > 0 )
+   {
+      /* start a preview-job */
+      KIO::PreviewJob *job;
+      job = KIO::filePreview(startJobOn, m_pixWidth, m_pixHeight );
+
+      if( job )
+      {
+	 connect( job, SIGNAL( result( KIO::Job * )),
+		  this, SLOT( slPreviewResult( KIO::Job * )));
+	 connect( job, SIGNAL( gotPreview( const KFileItem*, const QPixmap& )),
+		  SLOT( slGotPreview( const KFileItem*, const QPixmap& ) ));
+        // connect( job, SIGNAL( failed( const KFileItem* )),
+        //          this, SLOT( slotFailed( const KFileItem* ) ));
+
+
+      }
+   }
+}
+
+
+      
+void ThumbView::slGotPreview( const KFileItem* newFileItem, const QPixmap& newPix )
+{
+   if( ! newFileItem ) return;
+   
+   KFileIconViewItem *item = static_cast<KFileIconViewItem*>(newFileItem->extraData( this ));
+
+   if( ! item ) return;
+
+   item->setPixmap( newPix );
+   
+}
+
+void ThumbView::slPreviewResult( KIO::Job * )
+{
+   
+}
+
+
+QPixmap ThumbView::createPixmap( const QPixmap& preview ) const
+{
+   QPixmap pixRet( m_basePix );
+
+   QPainter p( &pixRet );
+
+   // draw on pixmap
+
+   return( pixRet );
    
 }
