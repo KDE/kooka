@@ -29,7 +29,7 @@
 #include <kprinter.h>
 #include <qpainter.h>
 #include <qpaintdevicemetrics.h>
-
+#include <qfontmetrics.h>
 #include "imgprintdialog.h"
 #include <kdebug.h>
 #include <klocale.h>
@@ -131,7 +131,7 @@ bool KookaPrint::printImage( KookaImage *img )
                 QImage tileImg = tmpImg.copy( part );
 
                 m_painter->drawImage( printPosTopLeft(imgSize), tileImg );
-                drawCornerMarker( imgSize );
+                drawCornerMarker( imgSize, row, col, maxRows, maxCols );
                 cnt++;
                 if( cnt < subpagesCnt )
                     m_printer->newPage();
@@ -146,64 +146,162 @@ bool KookaPrint::printImage( KookaImage *img )
 void KookaPrint::drawMarkerAroundPoint( const QPoint& p )
 {
     if( ! m_painter ) return;
-
-    m_painter->drawLine( p-QPoint(5,0), p+QPoint(5,0));
-    m_painter->drawLine( p-QPoint(0,5), p+QPoint(0,5));
+    const int len = 10;
+    
+    m_painter->drawLine( p-QPoint(len,0), p+QPoint(len,0));
+    m_painter->drawLine( p-QPoint(0,len), p+QPoint(0,len));
 
 }
 
-void KookaPrint::drawCornerMarker( const QSize& imgSize )
+
+void KookaPrint::drawCutSign( const QPoint& p, int num, MarkerDirection dir )
 {
-    QPoint p;
+    QBrush saveB = m_painter->brush();
+    int start = 0;
+    const int radius=20;
 
-    p = printPosTopLeft( imgSize );
-    // p += QPoint( -1, -1 );
-    drawMarkerAroundPoint( p );
+    QColor brushColor( Qt::red );
+    int toffX=0;
+    int toffY=0;
+    QString numStr = QString::number(num);
 
-    p = printPosTopRight( imgSize );
-    // p += QPoint( 1, -1 );
-    drawMarkerAroundPoint( p );
+    QFontMetrics fm = m_painter->fontMetrics();
+    int textWidth = fm.width( numStr )/2;
+    int textHeight = fm.width( numStr )/2;
+    int textYOff = 0;
+    int textXOff = 0;
+    switch( dir )
+    {
+	case SW:
+	    start = -90;
+	    brushColor = Qt::green;
+	    toffX =-1;
+	    toffY = 1;
+	    textXOff = -1*textWidth;
+	    textYOff = textHeight;
+	    break;
+	case NW:
+	    start = -180;
+	    brushColor = Qt::blue;
+	    toffX =-1;
+	    toffY =-1;
+	    textXOff = -1*textWidth;
+	    textYOff = textHeight;
+	    break;
+	case NO:
+	    start = -270;
+	    brushColor = Qt::yellow;
+	    toffX = 1;
+	    toffY = -1;
+	    textXOff = -1*textWidth;
+	    textYOff = textHeight;
 
-    p = printPosBottomRight( imgSize );
-    // p += QPoint( 1, 1 );
-    drawMarkerAroundPoint( p );
+	    break;
+	case SO:
+	    start = 0;
+	    brushColor = Qt::magenta;
+	    toffX = 1;
+	    toffY = 1;
+	    textXOff = -1*textWidth;
+	    textYOff = textHeight;
+	    break;
+	default:
+	    start = 0;
+    }
 
-    p = printPosBottomLeft( imgSize );
-    // p += QPoint( -1, 1 );
-    drawMarkerAroundPoint( p );
+    /* to draw around the point p, subtraction of the half radius is needed */
+    int x = p.x()-radius/2;
+    int y = p.y()-radius/2;
+
+    // m_painter->drawRect( x, y, radius, radius );  /* debug !!! */
+    const int tAway = radius*3/4;   
+    
+    QRect bRect = fm.boundingRect( QString::number(num));
+    int textX = p.x()+ tAway * toffX + textXOff;
+    int textY = p.y()+ tAway * toffY + textYOff;
+    
+    // m_painter->drawRect( textX, textY, bRect.width(), bRect.height() );
+    kdDebug(28000) << "Drawing to position " << textX << "/" << textY << endl;
+    m_painter->drawText( textX,
+			 textY,
+			 QString::number(num));
+    QBrush b( brushColor, NoBrush /* remove this to get debug color*/ );
+    
+    
+    m_painter->setBrush( b );
+    m_painter->drawPie( x, y, radius, radius, 16*start, -16*90 );
+
+    m_painter->setBrush( saveB );
 }
 
 
 /*
- * This sub is called with the row and col of the current page.
- * It is only called if there definetely is a next page.
+ * draws the circle and the numbers that indicate the pages to glue to the side
  */
-void KookaPrint::drawCutMarker( const QSize& imgSize, int row, int col )
+void KookaPrint::drawCornerMarker( const QSize& imgSize, int row, int col, int maxRows, int maxCols )
 {
-    if( col+row > 0 )
+    QPoint p;
+
+    kdDebug(28000) << "Marker: Row: " << row << " and col " << col <<" from max "
+		   << maxRows << "x" << maxCols << endl;
+    
+    // Top left.
+    p = printPosTopLeft( imgSize );
+    drawMarkerAroundPoint( p );
+    int indx = maxCols*row+col+1;
+    if( maxRows > 1 || maxCols > 1 )
     {
-        /* draw a 'this is page x' marker */
+	if( col > 0 )
+	    drawCutSign( p, indx-1, SW );
+	if( row > 0 )
+	    drawCutSign( p, indx-maxCols, NO );
+
+	if( row > 0 && col > 0 )
+	    drawCutSign( p, indx-maxCols-1, NW );
     }
-    if( row > 0 ) /* Top-Marker required */
+    
+    // Top Right
+    p = printPosTopRight( imgSize );
+    drawMarkerAroundPoint( p );
+    if( maxRows > 1 || maxCols > 1 )
     {
-
+	if( col < maxCols-1 )
+	    drawCutSign( p, indx+1, SO );
+	if( row > 0 )
+	    drawCutSign( p, indx-maxCols, NW );
+	if( row > 0 && col < maxCols-1 )
+	    drawCutSign( p, indx-maxCols+1, NO );
     }
 
-    if( col > 0 ) /* draw a marker on the right side */
+    // Bottom Right
+    p = printPosBottomRight( imgSize );
+    if( maxRows > 1 || maxCols > 1 )
     {
-        QPoint startP = printPosTopRight(imgSize) + QPoint(1, 15);
-
-        /* A little vertical line at the image border */
-        m_painter->drawLine( startP-QPoint(0,5), startP+QPoint(0,5));
-
-        /* a line horizontal from here */
-        m_painter->drawLine( startP, startP+QPoint(20,0));
-
-        m_painter->drawText( startP+QPoint(2,3), i18n("Page %1 here").arg( row+1));
+	if( col < maxCols-1 )
+	    drawCutSign( p, indx+1, NO );
+	if( row < maxRows-1 )
+	    drawCutSign( p, indx+maxCols, SW );
+	if( row < maxRows -1 && col < maxCols-1 )
+	    drawCutSign( p, indx+maxCols, SO );
     }
 
+    // p += QPoint( 1, 1 );
+    drawMarkerAroundPoint( p ); /* at bottom right */
+
+    /* Bottom left */
+    p = printPosBottomLeft( imgSize );
+    // p += QPoint( -1, 1 );
+    if( maxRows > 1 || maxCols > 1 )
+    {
+	if( col > 0 )
+	    drawCutSign( p, indx-1, NW );
+	if( row < maxRows-1 )
+	    drawCutSign( p, indx+maxCols, SO );
+	if( row < maxRows -1 && col > 0 )
+	    drawCutSign( p, indx+maxCols-1, SW );
+    }
+    drawMarkerAroundPoint( p ); /* at bottom left */
 }
-
 
 QSize KookaPrint::maxPageSize( ) const
 {

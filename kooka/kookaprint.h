@@ -68,14 +68,7 @@ public:
     virtual QPoint printPosBottomRight(const QSize&) const;
 
     virtual int extraMarginPix() const;
-    virtual void drawCutMarker( const QSize&, int, int );
 
-#if 0
-    /**
-     *
-     */
-    virtual QSize imageSizeOnPage() const;
-#endif
     /**
      * The maximum pixel size of the image (or imagepart) on
      * the current page
@@ -86,9 +79,14 @@ public slots:
 
     bool printImage( KookaImage* );
 
-private:
+protected:
+    typedef enum { SW, NW, NO, SO } MarkerDirection;
+    
     virtual void drawMarkerAroundPoint( const QPoint& );
-    void drawCornerMarker( const QSize& );
+    virtual void drawCutSign( const QPoint&, int, MarkerDirection );
+    virtual void drawCornerMarker( const QSize&, int, int, int, int );
+    
+private:
 
     KPrinter 	*m_printer;
     QPainter    *m_painter;
