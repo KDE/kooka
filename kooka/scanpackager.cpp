@@ -74,8 +74,10 @@ ScanPackager::ScanPackager( QWidget *parent ) : KFileTreeView( parent )
 	setDragEnabled( true );
 	setDropVisualizer(true);
 	setAcceptDrops(true);
+#if 0
 	connect( this, SIGNAL(dropped(QDropEvent*, QListViewItem*)),
 		 this, SLOT( slDropped(QDropEvent*, QListViewItem*)));
+#endif
 	kdDebug(28000) << "connected Drop-Signal" << endl;
 	setRenameable ( 0, true );
 	setRenameable ( 1, false );
@@ -540,7 +542,6 @@ QString ScanPackager::localFileName( KFileTreeViewItem *it ) const
    if( ! it ) return( QString::null );
 
    KURL url = it->url();
-   kdDebug(28000)<< "localFilename: URL is " << url.prettyURL() << endl;
 
    QString res;
 
