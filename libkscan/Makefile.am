@@ -1,4 +1,4 @@
-INCLUDES = $(LIBSANE_INCLUDES) $(all_includes)
+INCLUDES = -I$(top_srcdir)/libkscan $(all_includes) $(LIBSANE_INCLUDES)
 
 lib_LTLIBRARIES = libkscan.la
 
