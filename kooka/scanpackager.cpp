@@ -18,10 +18,11 @@
  ***************************************************************************/
 
 #include "scanpackager.h"
-#include "packageritem.h"
 #include "miscwidgets.h"
 #include "resource.h"
 #include "img_saver.h"
+#include "kookaimage.h"
+
 
 #include <qapplication.h>
 #include <qdir.h>
@@ -32,7 +33,13 @@
 #include <kmessagebox.h>
 #include <qfiledialog.h>
 #include <qstringlist.h>
+#include <qheader.h>
 
+#include <kfiletreeview.h>
+#include <kfiletreeviewitem.h>
+#include <kfiletreebranch.h>
+
+#include <kiconloader.h>
 #include <kfiledialog.h>
 #include <kurl.h>
 #include <kdebug.h>
@@ -52,9 +59,9 @@ enum { ID_POP_RESCAN,
 
 /* ----------------------------------------------------------------------- */
 /* Constructor Scan Packager */
-ScanPackager::ScanPackager( QWidget *parent ) : KListView( parent )
+ScanPackager::ScanPackager( QWidget *parent ) : KFileTreeView( parent )
 {
-	setFrameStyle( QFrame::Sunken | QFrame::Box);
+   // setFrameStyle( QFrame::Sunken | QFrame::Box);
 	setItemsRenameable (true );
 
 	/* Drag and Drop */
@@ -70,21 +77,19 @@ ScanPackager::ScanPackager( QWidget *parent ) : KListView( parent )
 	setRenameable ( 3, false );
 
 	addColumn( i18n("Scan packages") );
+	QHeader *h = header();
+	if( h )
+	{
+	   kdDebug(28000) << "h is defined !" << endl;
+	   // h->addLabel( i18n("Size"));
+	}
 	addColumn( i18n("Size") );   setColumnAlignment( 1, AlignRight );
+	setColumnText( 1, "Size" );
 	addColumn( i18n("Colors") );	setColumnAlignment( 2, AlignRight );
 	addColumn( i18n("Format" )); setColumnAlignment( 3, AlignRight );
-	
-	QDir home = QDir::home();
-	save_root = ImgSaver::kookaImgRoot(); 
 
-	kdDebug(28000) << "This is StdRootDir: " << save_root << endl;
+	setRootIsDecorated( false );
 	
-	setRootIsDecorated( true );
-	root = new PackagerItem( this, true );
-	root->setFilename( save_root );
-	root->createFolder();
-	
-	root->setText( 0, i18n("Image collection") );
 	
 	connect( this, SIGNAL( selectionChanged( QListViewItem*)),
 		 SLOT( slSelectionChanged(QListViewItem*)));
@@ -92,67 +97,66 @@ ScanPackager::ScanPackager( QWidget *parent ) : KListView( parent )
 	connect( this, SIGNAL( rightButtonPressed( QListViewItem *, const QPoint &, int )),
 		 SLOT( slShowContextMenue(QListViewItem *, const QPoint &, int )));
 	
-	connect( this, SIGNAL( expanded( QListViewItem* )), this,
-		 SLOT( slExpanded( QListViewItem* )));
-	
-	connect( this, SIGNAL( collapsed( QListViewItem* )), this,
-		 SLOT( slCollapsed( QListViewItem* )));
-	
 	connect( this, SIGNAL(itemRenamed (QListViewItem*, const QString &, int ) ), this,
 		 SLOT(slFileRename( QListViewItem*, const QString&, int)));
-
 	
 	img_counter = 1;
-	if( readDir( root, save_root ) == 0 )
-	{
-		PackagerItem *incoming = new PackagerItem( root, true );
-		if( incoming ) {
-		   incoming->setFilename( save_root + "Incoming" );
-		   // 	incoming->setText( 0, "incoming" );
-		   incoming->createFolder();
-		}
-
-		incoming->setText( 0, i18n("incoming") );
-	}
-	setOpen( root, true );
-	setSelected( root->firstChild(), true );
-	
 	/* Set the current export dir to home */
 	curr_copy_dir = QDir::home();
 
+	KIconLoader *loader = KGlobal::iconLoader();
+	floppyPixmap = loader->loadIcon( "3floppy_unmount", KIcon::Small );
+	
+	   
 	popup =0L;
+	/* open the image galleries */
+	openRoots();
+
 }
+
+void ScanPackager::openRoots()
+{
+   /* First open the standard root */
+   QString localRoot = ImgSaver::kookaImgRoot();
+   
+   KURL rootUrl(localRoot);
+
+   /* standard root always exists, ImgRoot creates it */
+   kdDebug(28000) << "Open standard root " << rootUrl.url();
+
+   int stdbranch = addBranch( rootUrl, i18n("Kooka Gallery"), false /* do not showHidden */ );
+   setDirOnlyMode( stdbranch, false );
+
+   KFileTreeBranch *newbranch = branch( stdbranch );
+   
+   connect( newbranch, SIGNAL(newItem(KFileTreeBranch*, KFileTreeViewItem*)),
+	    this, SLOT( slotDecorate( KFileTreeBranch*, KFileTreeViewItem* )));
+   
+   populateBranch( stdbranch );
+   
+   /* open more configurable image repositories TODO */
+
+   /* select Incoming-Dir, TODO restore last selection ! */
+   KFileTreeViewItem *startit = findItem( stdbranch, i18n( "Incoming" ) );
+   if( ! startit ) kdDebug(28000) << "No Start-Item found :(" << endl;
+   setCurrentItem( startit );
+}
+
+
+void ScanPackager::slotDecorate( KFileTreeBranch* branch, KFileTreeViewItem* item )
+{
+   kdDebug(28000) << "decorating slot !" << endl;
+   if( item && ! item->isDir() )
+   {
+      item->setPixmap( 0, floppyPixmap );
+   }
+   
+}
+
 
 
 void ScanPackager::slFileRename( QListViewItem* it, const QString& newStr, int col )
 {
-   if( col != 0 ) return;
-
-   if( ! it ) return;
-   
-   if( newStr.isNull() || newStr.isEmpty() ) return;
-
-   // newStr is only the filename.
-   PackagerItem *curr = ( PackagerItem *) it;
-   QString str = curr->getLocalFilename();
-
-   if( ! str.isNull())
-   {
-      kdDebug(28000) << "## Got filename " << str << endl;
-   
-      QFileInfo fi ( str );
-
-      QString pathstr = fi.dirPath(true) + "/";
-      kdDebug(28000) << "## Pathstr " << pathstr << endl;
-
-      KURL target( pathstr + newStr );
-      if( !curr->isDir())
-	 target = pathstr + buildNewFilename( newStr, fi.extension(false));
-      
-   
-      kdDebug(28000) << "renaming to <" << target.url() << ">" << endl;
-      slotRename( (PackagerItem*) it, target );
-   }
 }
 
 QString ScanPackager::buildNewFilename( QString cmplFilename, QString currFormat ) const
@@ -192,86 +196,250 @@ QString ScanPackager::buildNewFilename( QString cmplFilename, QString currFormat
 }
 
 
-/* ----------------------------------------------------------------------- */
-/* This slot is called if the selection changes. */
-void ScanPackager::slSelectionChanged( QListViewItem *newItem )
+QString ScanPackager::itemDirectory( const KFileTreeViewItem* item, bool relativ = false ) const
 {
-   if( ! newItem ) return;
-   QString s;
-   PackagerItem *pi = (PackagerItem*) newItem;
-	
-   if( pi->isDir())
+   QString relativUrl= (item->url()).prettyURL();
+   
+   if( ! item->isDir() )
    {
-      kdDebug(28000) << "selectionChanged: Is a directory !" << endl;
-      emit( showImage( 0L ));
-      pi->decorateFile();
-      /* no action, because its a dir */
+      // Cut off the filename in case it is not a dir
+      relativUrl.truncate( relativUrl.findRev( '/' )+1);
    }
    else
    {
-      QApplication::setOverrideCursor(waitCursor);
-      emit( showImage( pi->getImage() ));
-      QApplication::restoreOverrideCursor();
-  			
+      /* add a "/" to the directory if not there */
+      if( ! relativUrl.endsWith( "/" ) )
+	 relativUrl.append( "/" );
+   }
+      
+   if( relativ )
+   {
+      KFileTreeBranch *branch = item->branch();
+      if( branch )
+      {
+	 kdDebug(28000) << "Relativ URL of the file " << relativUrl << endl;
+	 QString rootUrl = (branch->rootUrl()).prettyURL();  // directory of branch root
+      
+	 if( relativUrl.startsWith( rootUrl ))
+	 {
+	    relativUrl.remove( 0, rootUrl.length() );
+
+	    if( relativUrl == "" ) relativUrl = "/"; // The root
+	 }
+	 else
+	 {
+	    kdDebug(28000) << "ERR: Item-URL does not start with root url " << rootUrl << endl;
+	 }
+      }
+   }
+   return( relativUrl );
+}
+/* ----------------------------------------------------------------------- */
+/* This slot receives a string from the gallery-path combobox shown under the
+ * image gallery. The form of the string coming in here is <branch-name> - <
+ * relativ directory under the branch. Now it is to assemble a complete path
+ * from the data, find out which KFileTreeViewITem is associated with it and
+ * call slSelectionChanged with it.
+ */
+ 
+void ScanPackager::slotSelectDirectory( const QString & dirString )
+{
+   kdDebug(28000) << "Trying to decode directory string " << dirString << endl;
+
+   QString searchFor = QString::fromLatin1(" - ");
+   int pos = dirString.find( searchFor );
+
+   if( pos > -1 )
+   {
+      /* Splitting up the string coming in */
+      QString branchName = dirString.left( pos );
+      QString relPath( dirString );
+      
+      relPath = relPath.remove( 0, pos + searchFor.length());
+
+      kdDebug(28000) << "Splitted up to branch <" << branchName << "> and <" << relPath << endl;
+      
+      KFileTreeViewItem *kfi = findItem( branchName, relPath );
+      
+      if( kfi )
+      {
+	 kdDebug(28000) << "got a new item to select !" << endl;
+	 ensureItemVisible(kfi);
+	 setCurrentItem(kfi);
+      }
    }
 }
 
 /* ----------------------------------------------------------------------- */
-void ScanPackager::slExpanded( QListViewItem *it )
+/* This slot is called if the selection changes.                           */
+void ScanPackager::slSelectionChanged( QListViewItem *newItem )
 {
-   if( !it ) return;
+   KFileTreeViewItem *item = static_cast<KFileTreeViewItem*>(newItem);
 
-   PackagerItem *pi = (PackagerItem*) it;
+   if( item )
+   {
+      kdDebug(28000) << "SelectionChanged - newItem !" << endl;
+      /* Check if directory, hide image for now, later show a thumb view */
+      if( item->isDir())
+      {
+	 kdDebug(28000) << "selectionChanged: Is a directory !" << endl;
+	 emit( showImage( 0L ));
+      }
+      else
+      {
+	 /* if not a dir, load the image if neccessary. This is done by loadImageForItem,
+	  * which is async( TODO ). The image finally arrives in slotImageArrived */
+	 QApplication::setOverrideCursor(waitCursor);
+	 loadImageForItem( item );
+	 QApplication::restoreOverrideCursor();
+      }
 
-   if( pi->isDir())
-      pi->decorateFile();
+      /* emit a signal indicating the new directory if there is a new one */
+	 /* Emit the signal with branch and the relative path */
+      QString wholeDir = itemDirectory( item, false ); /* not relativ to root */
+      
+      if( currSelectedDir != wholeDir )
+      {
+	 currSelectedDir = wholeDir;
+	 QString relativUrl = itemDirectory( item, true );
+	 kdDebug(28000) << "Emitting " << relativUrl << " as new relative Url" << endl;
+	 emit( galleryPathSelected( item->branch(), relativUrl ));
+      }
+      else
+      {
+	 kdDebug(28000) << "directroy is not new: " << currSelectedDir << endl;
+      }
+   }
+   else
+   {
+      kdDebug(28000) << "ERR: Failed to get a valid treeviewitem" << endl;
+   }
 }
 
-/* ----------------------------------------------------------------------- */
-void ScanPackager::slCollapsed( QListViewItem *it )
+void ScanPackager::loadImageForItem( KFileTreeViewItem *item )
 {
-   if( !it ) return;
 
-   PackagerItem *pi = (PackagerItem*) it;
-
-   if( pi->isDir())
-      pi->decorateFile();
+   if( ! item ) return;
+   
+   KURL url = item->url();
+   
+   if( url.isLocalFile() )
+   {
+      KookaImage *img = new KookaImage( ); 
+      if( img->load( localFilename(item) ) )
+      {
+	 slImageArrived( item, img );
+      }
+   }
+   else
+   {
+      // TODO : non-local images.
+      kdDebug(28000) << "Non-local images: Not yet implemented!" << endl;
+   }
 }
+
+/* Hit this slot with a file for a kfiletreeviewitem. */
+void ScanPackager::slImageArrived( KFileTreeViewItem *item, KookaImage* image )
+{
+   if( item && image )
+   {
+      /* Associate the image for the Scanpackager-Object. */
+      KFileItem *kfi = item->fileItem();
+      if( kfi )
+      {
+	 kfi->setExtraData( (void*) this, (void*) image );
+      }
+      emit( showImage( image ));
+   }
+}
+
 
 
 QString ScanPackager::getCurrImageFileName( bool withPath = true ) const
 {
    QString result = "";
    
-   PackagerItem *curr = (PackagerItem*) currentItem();
+   KFileTreeViewItem *curr = currentKFileTreeViewItem();
    if( ! curr )
    {
-      curr = root;
+      kdDebug( 28000) << "getCurrImageFileName: nothing selected !"<< endl;
    }
-
-   if( curr )
+   else
    {
-      result = curr->getFilename( withPath );
+      if( withPath )
+      {
+	 result = localFilename(curr);
+      }
+      else
+      {
+	 KURL url( localFilename(curr));
+	 url = curr->url();
+	 result = url.filename();
+      }
    }
    return( result );
 }
 
 /* ----------------------------------------------------------------------- */
+QCString ScanPackager::getImgFormat( KFileTreeViewItem* item ) const 
+{
+
+   QCString cstr;
+   
+   if( !item ) return( cstr );
+   
+   KFileItem *kfi = item->fileItem();
+   
+   QString mime = kfi->mimetype();
+
+   
+   kdDebug(28000) << "Mimetype found: "<< mime << endl;
+
+   // TODO find the real extension for use with the filename !
+   // temporarely:
+   QString f = localFilename( item );
+
+   return( QImage::imageFormat( f ));
+   
+}
+
+QString ScanPackager::localFilename( KFileTreeViewItem *it ) const
+{
+   if( ! it ) return( QString::null );
+
+   KURL url = it->url();
+
+   QString u = url.url();
+
+   if( u.left(5) == "file:" )
+   {
+      return( u.remove( 0, 5 ));
+   }
+   else
+   {
+      kdDebug(28000)<< "localFilename not possible, file is not local !" << endl;
+      return( QString::null );
+   }
+    
+}
+
 /* Called if the image exists but was changed by image manipulation func   */
 void ScanPackager::slotImageChanged( QImage *img )
 {
-   PackagerItem *curr = (PackagerItem*) currentItem();
+   KFileTreeViewItem *curr = currentKFileTreeViewItem();
    if( ! curr )
    {
-      curr = root;
+      kdDebug(28000) << "ImageChanged: nothing selected !" << endl;
+      return;
    }
 
    /* Do not save directories */
    if( curr->isDir() ) return;
    
    /* find the directory above */
-   const QString filename = curr->getFilename();
-   const QCString format = curr->getImgFormat();
+   
+   const QString filename = localFilename( curr );
+   const QCString format = getImgFormat( curr );
    ImgSaver saver( this );
    ImgSaveStat is_stat = ISS_OK;
    is_stat = saver.saveImage( img, filename, format );
@@ -289,7 +457,7 @@ void ScanPackager::slotImageChanged( QImage *img )
    }
    else if( is_stat == ISS_ERR_PROTOCOL )
    {
-      KMessageBox::sorry( this, i18n( "Cannot save the image, because the file is not local.\n"
+      KMessageBox::sorry( this, i18n( "Cannot save the image, because the file is local.\n"
 				      "Kooka will support other protocols later."),
 			    i18n("Save error") );
 
@@ -301,8 +469,7 @@ void ScanPackager::slotImageChanged( QImage *img )
 
    if( img && !img->isNull())
    {
-      curr->setImage( img, format );
-      emit( showImage( curr->getImage()));
+      emit( showImage( img ));
    }
 }
 
@@ -317,7 +484,7 @@ void ScanPackager::slAddImage( QImage *img )
    /* Save the image with the help of the ImgSaver */
    if( ! img ) return;
    /* currently selected item */
-   PackagerItem *curr = (PackagerItem*) currentItem();
+   KFileTreeViewItem *curr = currentKFileTreeViewItem();
    if( ! curr )
    {
       curr = root;
@@ -325,11 +492,11 @@ void ScanPackager::slAddImage( QImage *img )
    /* find the directory above */
    while( ! curr->isDir())
    {
-      curr = (PackagerItem*) curr->parent();
+      curr = (KFileTreeViewItem*) curr->parent();
    }
 
    /* Path of curr sel item */
-   ImgSaver img_saver( this, curr->getFilenameURL());
+   ImgSaver img_saver( this, curr->url());
 
    is_stat = img_saver.saveImage( img );
    if( is_stat == ISS_ERR_FORMAT_NO_WRITE )
@@ -356,16 +523,12 @@ void ScanPackager::slAddImage( QImage *img )
    /* Add the new image to the list of new images */
 
    setSelected( curr, true );
-   PackagerItem *item = new PackagerItem( curr, false );
-   item->setFilename( img_saver.lastFilename());
    QString s;
 
    /* Count amount of children of the father */
    int childcount = curr->childCount();
    s = i18n("%1 images").arg(childcount);
    curr->setText( 1, s);
-   s = i18n("image %1").arg(childcount);
-   item->setText( 0, s);
    setOpen( curr, true );
 
    /* This call to set image allocs a new object qimage, which lives longer
@@ -374,10 +537,10 @@ void ScanPackager::slAddImage( QImage *img )
     * All actions depending on the *pointer* to the qimage need to be done
     * after this call.
     */
-   item->setImage( img, img_saver.lastSaveFormat() );
+   // item->setImage( img, img_saver.lastSaveFormat() );
 
    /* makes the new item the current, which shows it */
-   setSelected( item, true );
+   // setSelected( item, true );
 
 }
 
@@ -385,7 +548,8 @@ void ScanPackager::slAddImage( QImage *img )
 /* selects and opens the file with the given name */
 void ScanPackager::slSelectImage( const QString name )
 {
-   QListViewItem *found = spFindItem( NameSearch, name );
+
+   KFileTreeViewItem *found = spFindItem( NameSearch, name );
 
    if( found )
    {
@@ -394,30 +558,21 @@ void ScanPackager::slSelectImage( const QString name )
       setCurrentItem( found );
       slSelectionChanged( found );
    }
+
 }
 
 
-PackagerItem *ScanPackager::spFindItem( SearchType type, const QString name )
+KFileTreeViewItem *ScanPackager::spFindItem( SearchType type, const QString name )
 {
-   PackagerItem *foundItem = 0L;
-   bool searchError = false;
-
-   QListViewItemIterator it( root );
-   for ( ; it.current() && !foundItem && !searchError; ++it )
+   KFileTreeViewItem *foundItem = 0;
+   
+   switch( type )
    {
-      switch( type )
-      {
-	 case NameSearch:
-	    if( ((PackagerItem*) it.current())->getFilename( true ) == name )
-	    {
-	       foundItem = (PackagerItem*)(it.current());
-	    }
+      case NameSearch:
 
-	    break;
-	 default:
-	    kdDebug(28000) << "Scanpackager: Wrong search type !" << endl;
-	    searchError = true;
-      }
+	 break;
+      default:
+	 kdDebug(28000) << "Scanpackager: Wrong search type !" << endl;
    }
    return( foundItem );
 }
@@ -428,11 +583,11 @@ void ScanPackager::slShowContextMenue(QListViewItem *lvi, const QPoint &p, int c
    kdDebug(28000) << "Showing Context Menue" << endl;
    (void) col;
 
-   PackagerItem *curr = 0;
+   KFileTreeViewItem *curr = 0;
 
    if( lvi )
    {
-      curr = (PackagerItem*) lvi;
+      curr = static_cast<KFileTreeViewItem*>( lvi );
       if( curr->isDir() )
 	 setSelected( curr, true );
    }
@@ -465,9 +620,9 @@ void ScanPackager::slHandlePopup( int menu_id )
 {
    kdDebug(28000) << "Popup to handle ID: " << menu_id << endl;
 
-   PackagerItem *curr = (PackagerItem*) currentItem();
+   KFileTreeViewItem *curr = currentKFileTreeViewItem();
    if( ! curr ) return;
-   PackagerItem *newitem = (PackagerItem*) curr->itemAbove();
+   KFileTreeViewItem *newitem = static_cast<KFileTreeViewItem*>( curr->itemAbove());
    bool setnew = false;
 
    switch( menu_id )
@@ -488,8 +643,7 @@ void ScanPackager::slHandlePopup( int menu_id )
 	 if( curr )
 	    unloadItem( curr );
 	 kdDebug(28000) << "unloading finished!"<< endl;
-	 if( !curr->isLoaded() )
-	    emit( showImage( 0L ));
+	 emit( showImage( 0L ));
 	 setnew = true;
 	 break;
       case ID_POP_SAVE_IMG:
@@ -511,42 +665,9 @@ void ScanPackager::slHandlePopup( int menu_id )
 }
 /* ----------------------------------------------------------------------- */
 
-void ScanPackager::exportFile( PackagerItem *curr )
+void ScanPackager::exportFile( KFileTreeViewItem *curr )
 {
 
-   if( curr->isDir() )
-   {
-      kdDebug(28000) << "Not yet implemented!" << endl;
-   }
-   else
-   {
-      QString from_file = curr->getFilename();
-
-      QString filter = "*." + curr->getImgFormat();
-      QString initial = curr_copy_dir.absPath() + "/";
-      initial += curr->getFilename(false);
-      KURL fileName = KFileDialog::getSaveURL ( initial,
-						filter,
-						this, "COPY_SAVE_DIA" );
-
-      if ( fileName.isValid() )                  // got a file name
-      {
-	 /* remember the filename for the next export */
-	 curr_copy_dir = fileName.path( );
-	 KURL kfrom( from_file );
-
-	 if( kfrom == fileName ) return;
-	 copyjob = KIO::copy( kfrom, fileName, false );
-	 if( copyjob )
-	 {
-	    storeJob( copyjob, curr, JobDescription::ExportJob);
-
-	    connect( copyjob, SIGNAL(result(KIO::Job*)),
-		     this, SLOT(slotExportFinished( KIO::Job* )));
-	 }
-
-      }
-   }
 }
 
 void ScanPackager::slotExportFinished( KIO::Job *job )
@@ -556,206 +677,10 @@ void ScanPackager::slotExportFinished( KIO::Job *job )
    jobMap.remove(job);
 }
 
-void ScanPackager::slotImportFiles( PackagerItem* dir, const QStringList list )
-{
-    if( ! dir ) dir = root;
-    
-    KURL dest;
-    dest = dir->getFilename();
-    
-    /* create a packageritem for every requested file */
-    for( unsigned int idx=0; idx < list.count(); idx++ )
-    {
-	QString file = list[idx];
-    }
-
-    kdDebug(28000) << "Importing to <" << dest.url() << ">" << endl;
-    
-    copyjob = KIO::copy(KURL::List(list), dest, false);
-    if( copyjob )
-    {
-       storeJob( copyjob, dir, JobDescription::ImportJob);
-
-       connect(copyjob, SIGNAL(result(KIO::Job *)), this,
-	       SLOT(slotImportFinished(KIO::Job *)));
-    }
-
-}
-
-void ScanPackager::slotImportFinished( KIO::Job *job )
-{
-   if ( job->error() )
-   {
-      job->showErrorDialog ( );
-      // get formated error message
-      QString msg = job->errorString();
-      // int errid = job->error();
-      kdDebug(28000) << "ERROR in Importing an image: <" << msg << ">" << endl;
-   }
-   else
-   {
-      /* went good. */
-      KIO::CopyJob *fc = (KIO::CopyJob*) job;
-      if( fc )
-      {
-	  KURL::List srcList = fc->srcURLs();
-	  /* the descriptors item points to the dest-directory */
-	  JobDescription jobDesc = jobMap[job];
-	  PackagerItem *dir= jobDesc.item();
-	  if( dir )
-	  {
-	     QString targetDir = dir->getFilename();
-	  
-	     kdDebug(28000) << "Received importet file, goes to <" << targetDir << ">" << endl;
-	     KURL::List::Iterator it;
-	  
-	     for( it = srcList.begin(); it != srcList.end(); ++it )
-	     {
-		QString filename = (*it).fileName();
-		QString completeName = targetDir + filename;
-		PackagerItem *p = new PackagerItem( dir );
-		kdDebug(28000) << "creating new item for " << completeName << endl;
-		p->setFilename( completeName );
-	     }
-	  }
-	  else
-	  {
-	     kdDebug(28000) << "ERROR: Not a registered Job !" << endl;
-	  }
-      } else {
-	  kdDebug(28000) << "Copyjob not defined !" << endl;
-      }
-   }
-   jobMap.remove( job );
-}
-
-
-void ScanPackager::slotRename( PackagerItem* curr, const KURL& newName )
-{
-   if( ! curr ) return;
-
-   KURL src( curr->getFilename() );
-
-   kdDebug( 28000) <<  "Renaming file " << src.url() << endl;
-   kdDebug(28000) << "target File: "  << newName.url() <<endl;
-
-   if( src == newName ) {
-      kdDebug(28000) <<  "Target and Source are equal -> exit" << endl;
-      return;
-   }
-
-   copyjob = KIO::file_move( src, newName );
-   if( copyjob )
-   {
-      storeJob( copyjob, curr, JobDescription::RenameJob);
-      connect( copyjob,
-	       SIGNAL(result(KIO::Job*)), this,
-	       SLOT(slotRenameResult( KIO::Job* )));
-   }
-
-
-}
-
-void ScanPackager::storeJob( KIO::Job *job, PackagerItem *item, JobDescription::JobType jType )
-{
-   JobDescription newJob ( job, item, jType );
-
-   // KURL itemFile( item->getFilenameURL());
-   jobMap.insert( job, newJob );
-}
-
-void ScanPackager::slFilenameChanged( PackagerItem *curr, const KURL &to  )
-{
-   QString old_name = curr->getFilename();
-   QString new_name = to.url();
-
-   kdDebug(28000) << "the filename changed for " << old_name << endl;
-
-   kdDebug(28000) << "File was renamed to " << new_name << endl;
-
-   if( curr )
-   {
-      kdDebug(28000) << "Item was found !" << endl;
-      KURL targeturl = to;
-
-      /* check the target filename. If none is present, the one of the source
-       * is to use. 
-       */
-      QString targetfname = to.filename(false);
-      kdDebug(28000) << "Target-Filename is " << targetfname << endl;
-      
-      if( targetfname.isEmpty() || targetfname.isNull() )
-      {
-	 targeturl.setFileName( old_name );
-      }
-      
-      curr->setFilename( targeturl.url());
-      kdDebug(28000) << "Setting the current filename " << targeturl.url() << endl;
-      if( curr->isDir())
-      {
-	 /* if it is a directory, it is much more complicated. The children must
-	  *  be reread to get the correct name.
-	  * TODO !
-	  */
-	 kdDebug(28000) << "slFilenameChanged for directory !" << endl;
-	 PackagerItem *fc = (PackagerItem*) curr->firstChild();
-	 while( fc )
-	 {
-	    fc->changedParentsPath( targeturl );
-	    fc = (PackagerItem*) fc->nextSibling();
-	 }
-      }
-   }
-   else
-   {
-      kdDebug(28000) << "Item was NOT found !" <<endl ;
-   }
-}
 
 
 
-bool ScanPackager::acceptDrag(QDropEvent *ev) const
-{
-    // kdDebug(28000) << "This is the source: " << ev->source() << endl;
-#if 0
-    if( ev->source() == (QWidget*)viewport() ) {
-	kdDebug(28000) << "Dropp-Event by myself !" << endl;
-	return( true );
-    }
-#endif
-    
-    return(QUriDrag::canDecode(ev));
-}
 
-void ScanPackager::slDropped( QDropEvent * e, QListViewItem *after)
-{
-    kdDebug( 28000 ) << "Dropp Event !" << endl;
-    QStringList filelist;
-
-    
-    if( !QUriDrag::decodeToUnicodeUris( e, filelist ))
-    {
-	kdDebug(28000) << "ERROR: Cant decode uris" << endl;
-	return;
-    }
-
-    if( filelist.count() == 0 )
-    {
-	kdDebug(28000) << "ERROR: Confusion ! Nothing dropped !" << endl;
-	return;
-    }
-
-    PackagerItem *droppedOn = (PackagerItem*) after;
-    if( droppedOn == 0L ) droppedOn = root;
-    
-    if( ! droppedOn->isDir())
-    {
-       droppedOn = (PackagerItem*) (after->parent());
-    } 
-    slotImportFiles( droppedOn, filelist );
-    
-    
-}
 
 
 void ScanPackager::slotCanceled( KIO::Job* )
@@ -764,69 +689,44 @@ void ScanPackager::slotCanceled( KIO::Job* )
 }
 
 
-void ScanPackager::slotRenameResult( KIO::Job *job )
-{
-   if( ! job ) return;
-   kdDebug(28000) << "slotResult !" << endl;
-
-   JobDescription jobDesc = jobMap[job];
-   PackagerItem *item = jobDesc.item();
-
-   if ( job->error() )
-   {
-      job->showErrorDialog ( );
-      // get formated error message
-      QString msg = job->errorString();
-      // int errid = job->error();
-      kdDebug(28000) << "ERROR in Renaming an image: <" << msg << ">" << endl;
-   }
-   else
-   {
-      /* went good. */
-      KIO::FileCopyJob *fc = (KIO::FileCopyJob*) job;
-      KURL target = fc->destURL();
-
-      slFilenameChanged( item, target );
-   }
-   item->decorateFile();
-   jobMap.remove( job );
-   copyjob = 0L;
-}
-
 
 
 
 
 /* ----------------------------------------------------------------------- */
-void ScanPackager::unloadItem( PackagerItem *curr )
+void ScanPackager::unloadItem( KFileTreeViewItem *curr )
 {
    if( curr->isDir())
    {
-      PackagerItem  *child = (PackagerItem*) curr->firstChild();
+      KFileTreeViewItem *child = currentKFileTreeViewItem();
       while( child )
       {
 	 unloadItem( child );
-	 child = (PackagerItem*) child->nextSibling();
+	 child = static_cast<KFileTreeViewItem*> (child->nextSibling());
       }
    }
    else
    {
-      emit( unloadImage( curr->getImage() ));
-      curr->unload();
+      KFileItem *kfi = curr->fileItem();
+      KookaImage *image = static_cast<KookaImage*>(kfi->extraData( this ));
+      emit( unloadImage( image ));
+      delete image;
+      kfi->removeExtraData( this );
    }
 }
 
 /* ----------------------------------------------------------------------- */
-bool ScanPackager::deleteItem( PackagerItem *curr, bool ask )
+bool ScanPackager::deleteItem( KFileTreeViewItem *curr, bool ask )
 {
    bool ok = false;
    if( ! curr ) return( ok );
-   kdDebug(28000) << "Deleting: " << curr->getFilename() << endl;
+   kdDebug(28000) << "Deleting: " << localFilename(curr) << endl;
    if( curr->isDir() )
    {
+#if 0
       /* Remove all files and the dir */
-      PackagerItem  *child = (PackagerItem*) curr->firstChild();
-      PackagerItem *new_child;
+      KFileTreeViewItem  *child = (KFileTreeViewItem*) curr->firstChild();
+      KFileTreeViewItem *new_child;
 
       QFileInfo d( curr->getFilename());
 
@@ -844,7 +744,7 @@ bool ScanPackager::deleteItem( PackagerItem *curr, bool ask )
       while( child && ok )
       {
 	 kdDebug(28000) << "deleting " << child->getFilename() << endl;
-	 new_child = (PackagerItem*) child->nextSibling();
+	 new_child = (KFileTreeViewItem*) child->nextSibling();
 	 ok = deleteItem( child, false );
 
 	 child = new_child;
@@ -860,9 +760,11 @@ bool ScanPackager::deleteItem( PackagerItem *curr, bool ask )
 	 delete curr;
 	 curr = 0;
       }
+#endif
    }
    else
    {
+#if 0 
       if( ask )
       {
 	 QString s;
@@ -879,6 +781,7 @@ bool ScanPackager::deleteItem( PackagerItem *curr, bool ask )
       ok = curr->deleteFile();
       delete curr;
       curr = 0;
+#endif
    }
 
    if( ! ok )
@@ -897,75 +800,10 @@ void ScanPackager::createFolder( void )
       QString folder = d.getText();
       if( folder.length() > 0 )
       {
-	 PackagerItem *curr = (PackagerItem*)currentItem();
-	 if( curr )
-	 {
-	    PackagerItem *new_item = new PackagerItem( curr, true );
-	    Q_CHECK_PTR( new_item );
-	    new_item->setFilename( curr->getFilename() + "/" + folder );
-	  	 		
-	    new_item->createFolder();
-	    setCurrentItem( new_item );
-	    ensureItemVisible( new_item );
-	 }
+	 /* KIO create folder goes here */
+	 
       }
    }
-}
-
-/* ----------------------------------------------------------------------- */
-int ScanPackager::readDir( QListViewItem *parent, QString dir_to_read )
-{
-   if ( !dir_to_read ) return( 0 );
-   QString s;	
-   int amount_dirs = 0;
-   QDir  dir( dir_to_read );
-
-   dir.setFilter( QDir::Files | QDir::Dirs | QDir::NoSymLinks );
-
-   const QFileInfoList *list = dir.entryInfoList();
-   QFileInfoListIterator it( *list );      // create list iterator
-   QFileInfo *fi;                          // pointer for traversing
-	
-
-   ++it;  ++it;  /* Skip the current and parent-dir */
-   while ( (fi=it.current()) )
-   {           // for each file...
-      if( fi->isDir() )
-      {
-	 PackagerItem *new_folder = new PackagerItem( parent, true );
-	 new_folder->setFilename( fi->absFilePath() );
-	 /* recursive Call to readDir */
-	 amount_dirs++;
-	 amount_dirs += readDir( new_folder, fi->absFilePath() );
-	 new_folder->decorateFile();
-      }
-      else
-      {
-	 /* its a file */
-	 PackagerItem *item = new PackagerItem( parent, false );
-	 item->setFilename( fi->absFilePath() );
-		 	
-	 uint si = fi->size();
-	 s = "";
-
-	 if( si > 1024*1024 )
-	 {  /* Size is MegaByte */
-            s = i18n("%1 MB").arg(KGlobal::locale()->formatNumber(si/1024/1024));
-	 }
-	 else if( si > 1024 )
-	 {
-            s = i18n("%1 kB").arg(KGlobal::locale()->formatNumber(si/1024, 0));
-	 }
-	 else
-	 {
-            s = i18n("%1 bytes").arg(si);
-	 }
-	 item->setText( 1, s );
-      }
-
-      ++it;                               // goto next list element
-   }
-   return( amount_dirs );
 }
 
 
