@@ -35,6 +35,6 @@ if test -n "$sane_libdir"; then
   AC_MSG_RESULT([headers in $ac_sane_includes, library in $sane_libdir])
   AC_DEFINE_UNQUOTED(HAVE_SANE, 1, [Defines if your system has the sane libraries]) 
 else
-  AC_MSG_RESULT([not found -- kscan will NOT be built (check http://www.mostang.com/sane/ for sane)])
-  DO_NOT_COMPILE="$DO_NOT_COMPILE kscan ksanetest"
+  AC_MSG_RESULT([not found -- kscan/kooka will NOT be built (check http://www.mostang.com/sane/ for sane)])
+  DO_NOT_COMPILE="$DO_NOT_COMPILE kscan ksanetest kooka"
 fi
