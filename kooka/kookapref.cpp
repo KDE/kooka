@@ -71,7 +71,7 @@ void KookaPreferences::setupStartupPage()
 		   i18n( "Check this if you want a network query for available scanners.\nNote that this does not mean a query over the entire network but only the stations configured for SANE!" ));
     cbNetQuery->setChecked( ! (konf->readBoolEntry( STARTUP_ONLY_LOCAL, false )) );
 
-    
+
     /* Show scanner selection box on startup (Checkbox) */
     cbShowScannerSelection = new QCheckBox( i18n("Show the scanner selection box on next startup"),
 					    page,  "CB_SHOW_SELECTION" );
@@ -87,19 +87,19 @@ void KookaPreferences::setupStartupPage()
 		   i18n( "Check this if you want Kooka to load the last selected image into the viewer on startup.\nIf your images are large, that might slow down Kooka's start." ));
     cbReadStartupImage->setChecked( konf->readBoolEntry( STARTUP_READ_IMAGE, true));
 
-    /* -- */ 
+    /* -- */
 
     top->addWidget( cbNetQuery );
     top->addWidget( cbShowScannerSelection );
     top->addWidget( cbReadStartupImage );
-   
+
     top->addStretch(10);
 
 }
 
 void KookaPreferences::setupSaveFormatPage( )
 {
-   konf->setGroup( OP_FILE_GROUP );    
+   konf->setGroup( OP_FILE_GROUP );
    QFrame *page = addPage( i18n("Image Saving"), i18n("Configure the Image Save Assistant" ),
 			    BarIcon("hdd_unmount", KIcon::SizeMedium ) );
    QVBoxLayout *top = new QVBoxLayout( page, 0, spacingHint() );
@@ -135,7 +135,7 @@ void KookaPreferences::setupThumbnailPage()
    m_tileSelector = new ImageSelectLine( hgb1, i18n("Select background image:"));
    kdDebug(29000) << "Setting tile url " << bgImg << endl;
    m_tileSelector->setURL( KURL(bgImg) );
-   
+
    top->addWidget( hgb1 );
 
    QHBoxLayout *layMain = new QHBoxLayout( page, 0, spacingHint());
@@ -146,7 +146,7 @@ void KookaPreferences::setupThumbnailPage()
 
    /* Add the Boxes to configure size, framestyle and background */
 
-   
+
    QVGroupBox *hgb2 = new QVGroupBox( i18n("Thumbnail Size" ), page );
    QVGroupBox *hgb3 = new QVGroupBox( i18n("Thumbnail Frame" ), page );
 
@@ -163,7 +163,7 @@ void KookaPreferences::setupThumbnailPage()
    l1 = new QLabel( i18n("Thumbnail maximum &height:"), lGrid );
    m_thumbHeight = new KIntNumInput( m_thumbWidth, h, lGrid );
    l1->setBuddy( m_thumbHeight );
-   
+
    /* Frame Stuff */
    int frameWidth = konf->readNumEntry( THUMB_MARGIN, 3 );
    QColor col1    = konf->readColorEntry( MARGIN_COLOR1, &(colorGroup().base()));
@@ -183,7 +183,7 @@ void KookaPreferences::setupThumbnailPage()
    m_colButt2 = new KColorButton( col2, fGrid );
    l1->setBuddy( m_colButt2 );
    /* TODO: Gradient type */
-   
+
    layBBoxes->addWidget( hgb2, 10);
    layBBoxes->addWidget( hgb3, 10);
    layBBoxes->addStretch(10);
@@ -195,7 +195,7 @@ void KookaPreferences::slotOk( void )
 {
   slotApply();
   accept();
-    
+
 }
 
 
@@ -214,7 +214,7 @@ void KookaPreferences::slotApply( void )
 
    /* Should kooka open the last displayed image in the viewer ? */
    if( cbReadStartupImage )
-      konf->writeEntry( STARTUP_READ_IMAGE, cbReadStartupImage->isChecked()); 
+      konf->writeEntry( STARTUP_READ_IMAGE, cbReadStartupImage->isChecked());
 
     /* ** Image saver option(s) ** */
     konf->setGroup( OP_FILE_GROUP );
@@ -233,7 +233,7 @@ void KookaPreferences::slotApply( void )
     bgUrl.setProtocol("");
     kdDebug(28000) << "Writing tile-pixmap " << bgUrl.prettyURL() << endl;
     konf->writeEntry( BG_WALLPAPER, bgUrl.url() );
-    
+
     konf->sync();
 
     emit dataSaved();
@@ -241,7 +241,21 @@ void KookaPreferences::slotApply( void )
 
 void KookaPreferences::slotDefault( void )
 {
-    
+    cbNetQuery->setChecked( true );
+    cbShowScannerSelection->setChecked( true);
+    cbReadStartupImage->setChecked( true);
+    cbSkipFormatAsk->setChecked( true  );
+    KStandardDirs stdDir;
+    QString bgImg = stdDir.findResource( "data", STD_TILE_IMG );
+    m_tileSelector->setURL( KURL(bgImg) );
+    m_thumbWidth->setValue( 100 );
+    m_thumbHeight->setValue( 120 );
+    QColor col1    = QColor( colorGroup().base());
+    QColor col2    = QColor( colorGroup().foreground());
+
+    m_frameWidth->setValue( 3 );
+    m_colButt1->setColor( col1 );
+    m_colButt2->setColor( col2 );
 }
 
 
