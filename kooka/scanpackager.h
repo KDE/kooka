@@ -75,9 +75,8 @@ public slots:
     void 	 slAddImage( QImage *img );		
     void 	 slSelectionChanged( QListViewItem *);
     void         slShowContextMenue(QListViewItem *, const QPoint &, int );
-    void 	 slHandlePopup( int item );
 
-    void         exportFile( KFileTreeViewItem *);
+   void         slotExportFile( );
     
     void         slotCanceled(KIO::Job*);
     void         slotImageChanged( QImage* );
@@ -86,11 +85,15 @@ public slots:
    void         slotSelectDirectory( const QString& );
    
 protected slots:
-    void         slFileRename( QListViewItem*, const QString&, int );
+   void         slFileRename( QListViewItem*, const QString&, int );
    // void         slFilenameChanged( KFileTreeViewItem*, const KURL & );
    // void 	 slDropped(QDropEvent * e, QListViewItem *after);
-    void         slImageArrived( KFileTreeViewItem *item, KookaImage* image );
+   void         slImageArrived( KFileTreeViewItem *item, KookaImage* image );
    void         slotExportFinished( KIO::Job *job );
+   void 	slotCreateFolder( );
+   void 	slotDeleteItems( );
+   void         slotUnloadItems( );
+   void         slotUnloadItem( KFileTreeViewItem *curr );
    
 signals:
     void 	showImage( QImage* );
@@ -101,7 +104,7 @@ signals:
 private:
    QString     localFilename( KFileTreeViewItem* it ) const;
    void 	loadImageForItem( KFileTreeViewItem* item );
-   
+   void         createMenus();
    void         openRoots();
    QCString     getImgFormat( KFileTreeViewItem* item ) const;
    
@@ -112,9 +115,6 @@ private:
    
    // int 	        readDir( QListViewItem *parent, QString dir_to_read );
     void         showContextMenu( QPoint p, bool show_folder = true );
-    void 			 createFolder( void );
-    bool         deleteItem( KFileTreeViewItem*, bool );
-    void         unloadItem( KFileTreeViewItem *curr );
 
     KFileTreeViewItem *root;
     QDir         curr_copy_dir;

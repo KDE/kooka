@@ -39,6 +39,8 @@
 #include <kfiletreeviewitem.h>
 #include <kfiletreebranch.h>
 
+#include <kpopupmenu.h>
+#include <kaction.h>
 #include <kiconloader.h>
 #include <kfiledialog.h>
 #include <kurl.h>
@@ -46,6 +48,7 @@
 #include <klocale.h>
 #include <kglobal.h>
 #include <kio/progressbase.h>
+#include <kio/netaccess.h>
 #include <kio/jobclasses.h>
 #include <kio/file.h>
 #include <kio/job.h>
@@ -112,6 +115,7 @@ ScanPackager::ScanPackager( QWidget *parent ) : KFileTreeView( parent )
 	/* open the image galleries */
 	openRoots();
 
+	createMenus();
 }
 
 void ScanPackager::openRoots()
@@ -126,10 +130,10 @@ void ScanPackager::openRoots()
 
    KFileTreeBranch *newbranch = addBranch( rootUrl, i18n("Kooka Gallery"), false /* do not showHidden */ );
    setDirOnlyMode( newbranch, false );
-
+#if 0
    connect( newbranch, SIGNAL(newItem(KFileTreeBranch*, KFileTreeViewItem*)),
 	    this, SLOT( slotDecorate( KFileTreeBranch*, KFileTreeViewItem* )));
-   
+#endif
    populateBranch( newbranch );
    
    /* open more configurable image repositories TODO */
@@ -138,6 +142,30 @@ void ScanPackager::openRoots()
    KFileTreeViewItem *startit = findItem( newbranch, i18n( "Incoming" ) );
    if( ! startit ) kdDebug(28000) << "No Start-Item found :(" << endl;
    setCurrentItem( startit );
+}
+
+void ScanPackager::createMenus()
+{
+   if( ! popup )
+   {
+      popup = new KPopupMenu();
+      // popup->insertTitle( i18n( "Gallery" ));
+      
+      KAction *newAct = new KAction(i18n("&create directory"), "folder",0 ,
+				    this, SLOT(slotCreateFolder()), this);
+      newAct->plug( popup );	
+      
+      newAct = new KAction(i18n("&save Image"), "filesave",0 ,
+				    this, SLOT(slotExportFile()), this);
+      newAct->plug( popup );	
+
+      newAct = new KAction(i18n("&delete Image"), "edittrash",0 ,
+				    this, SLOT(slotDeleteItems()), this);
+      newAct->plug( popup );	
+
+
+      popup->setCheckable( true );
+   }
 }
 
 
@@ -585,35 +613,21 @@ void ScanPackager::slShowContextMenue(QListViewItem *lvi, const QPoint &p, int c
 
    if( lvi )
    {
-      curr = static_cast<KFileTreeViewItem*>( lvi );
+      curr = currentKFileTreeViewItem();
       if( curr->isDir() )
 	 setSelected( curr, true );
    }
 
-   QPopupMenu *popup = new QPopupMenu();
-   popup->setCheckable( true );
-
-   // debug ( "opening popup!" );
-   if( curr )
+   if( popup )
    {
-      popup->insertItem( *icons["mini-ray"], i18n("Unload image"), ID_POP_UNLOAD_IMG );
-      popup->insertItem( *icons["mini-floppy"], i18n("Export image"), ID_POP_SAVE_IMG );
-      popup->setItemEnabled ( ID_POP_CREATE_NEW, ! curr->isDir() );
-      popup->insertSeparator();
-      popup->insertItem( *icons["mini-trash"], i18n("Delete image"), ID_POP_DELETE );
-      popup->insertSeparator();
+      popup->move( p );
+      popup->show();
    }
-
-   popup->insertItem( *icons["mini-folder_new"], i18n("Create new folder"), ID_POP_CREATE_NEW );
-   popup->setItemEnabled ( ID_POP_CREATE_NEW, curr->isDir() );
-
-   connect( popup, SIGNAL( activated(int)), this, SLOT(slHandlePopup(int)));
-   popup->move( p );
-   popup->show();
 
 }
 
 /* ----------------------------------------------------------------------- */
+#if 0
 void ScanPackager::slHandlePopup( int menu_id )
 {
    kdDebug(28000) << "Popup to handle ID: " << menu_id << endl;
@@ -630,22 +644,16 @@ void ScanPackager::slHandlePopup( int menu_id )
 	 break;
       case ID_POP_DELETE:
 	 if( curr && curr != root ) {
-	    if( deleteItem( curr, true ))
-	       setnew = true;
 	 }
 	 break;
       case ID_POP_CREATE_NEW:
-	 createFolder();
+	 slotCreateFolder();
 	 break;
       case ID_POP_UNLOAD_IMG:
-	 if( curr )
-	    unloadItem( curr );
-	 kdDebug(28000) << "unloading finished!"<< endl;
-	 emit( showImage( 0L ));
 	 setnew = true;
 	 break;
       case ID_POP_SAVE_IMG:
-	 if( curr ) exportFile( curr );
+	 
 
 	 break;
       default:
@@ -661,9 +669,10 @@ void ScanPackager::slHandlePopup( int menu_id )
    }
 
 }
+#endif
 /* ----------------------------------------------------------------------- */
 
-void ScanPackager::exportFile( KFileTreeViewItem *curr )
+void ScanPackager::slotExportFile( )
 {
 
 }
@@ -692,14 +701,22 @@ void ScanPackager::slotCanceled( KIO::Job* )
 
 
 /* ----------------------------------------------------------------------- */
-void ScanPackager::unloadItem( KFileTreeViewItem *curr )
+void ScanPackager::slotUnloadItems( )
 {
+   KFileTreeViewItem *curr = currentKFileTreeViewItem();
+   emit( showImage( 0L ));
+   slotUnloadItem( curr );
+}
+
+void ScanPackager::slotUnloadItem( KFileTreeViewItem *curr )
+{
+   
    if( curr->isDir())
    {
       KFileTreeViewItem *child = currentKFileTreeViewItem();
       while( child )
       {
-	 unloadItem( child );
+	 slotUnloadItem( child );
 	 child = static_cast<KFileTreeViewItem*> (child->nextSibling());
       }
    }
@@ -714,10 +731,11 @@ void ScanPackager::unloadItem( KFileTreeViewItem *curr )
 }
 
 /* ----------------------------------------------------------------------- */
-bool ScanPackager::deleteItem( KFileTreeViewItem *curr, bool ask )
+void ScanPackager::slotDeleteItems( )
 {
    bool ok = false;
-   if( ! curr ) return( ok );
+   KFileTreeViewItem *curr = currentKFileTreeViewItem();
+   if( ! curr ) return;
    kdDebug(28000) << "Deleting: " << localFilename(curr) << endl;
    if( curr->isDir() )
    {
@@ -785,11 +803,11 @@ bool ScanPackager::deleteItem( KFileTreeViewItem *curr, bool ask )
    if( ! ok )
       kdDebug(28000) << "Deleting Item failed !" << endl;
 
-   return( ok );
+   return;
 }
 
 /* ----------------------------------------------------------------------- */
-void ScanPackager::createFolder( void )
+void ScanPackager::slotCreateFolder( )
 {
    EntryDialog d( this, i18n("New Folder"), i18n("<B>Please enter a name for the new folder:</B>"));
 		  
@@ -799,7 +817,36 @@ void ScanPackager::createFolder( void )
       if( folder.length() > 0 )
       {
 	 /* KIO create folder goes here */
-	 
+
+	 KFileTreeViewItem *it = currentKFileTreeViewItem();
+	 if( it )
+	 {
+	    KURL url = it->url();
+
+	    /* If a directory is selected, the filename needs not to be deleted */
+	    if( ! it->isDir())
+	       url.setFileName( "" );
+	    /* add the folder name from user input */
+	    url.addPath( folder );
+	    kdDebug(28000) << "Creating folder " << url.prettyURL() << endl;
+
+	    /* Since the new directory arrives in the packager in the newItems-slot, we set a
+	     * variable urlToSelectOnArrive here. The newItems-slot will honor it and select
+	     * the treeviewitem with that url.
+	     */  
+	    slotSetNextUrlToSelect( url );
+	       
+	    if( ! KIO::NetAccess::mkdir( url ))
+	    {
+	       kdDebug(28000) << "ERR: creation of " << url.prettyURL() << " failed !" << endl;
+	    }
+	    else
+	    {
+	       /* created successfully */
+	       /* open the branch if neccessary and select the new folder */
+	       
+	    }
+	 }
       }
    }
 }
