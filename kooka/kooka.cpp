@@ -395,7 +395,7 @@ void Kooka::optionsShowPreviewer()
 
 void Kooka::optionsConfigureKeys()
 {
-    KKeyDialog::configureKeys(actionCollection(), "kookaui.rc");
+    KKeyDialog::configure(actionCollection());
 }
 
 void Kooka::optionsConfigureToolbars()
