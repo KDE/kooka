@@ -155,7 +155,7 @@ bool ScanParams::connectDevice( KScanDevice *newScanDevice )
 
    /* Initialise the progress dialog */
    progressDialog = new QProgressDialog( i18n("Scanning in progress"),
-					 i18n("Stop"), 1000, 0L,
+					 i18n("Stop"), 100, 0L,
 					 "SCAN_PROGRESS", true, 0  );
    progressDialog->setAutoClose( true );
    progressDialog->setAutoReset( true );
