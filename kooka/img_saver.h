@@ -164,8 +164,8 @@ public:
    /**
     * Static function that returns the kooka base dir.
     */
-   static QString kookaImgRoot( void );
-
+   static QString kookaImgRoot();
+   static QString kookaPreviewRoot();
 #if 0
    /**
     * Static function that returns the relative path to the kooka imgage root

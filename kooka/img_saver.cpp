@@ -711,7 +711,7 @@ void ImgSaver::readConfig( void )
    /* The save root is defined to $HOME/.kscan in scanpackager, this should be
     * handled in at a central point. TODO ! */
    QDir home = QDir::home();
-   previewfile = kookaImgRoot() + "preview.bmp";
+   previewfile = kookaPreviewRoot() + "preview.bmp";
    
    previewfile = konf->readPathEntry( OP_PREVIEW_FILE, previewfile );
 
@@ -742,7 +742,12 @@ QString ImgSaver::errorString( ImgSaveStat stat )
 
 }
 
-QString ImgSaver::kookaImgRoot( void )
+QString ImgSaver::kookaPreviewRoot() 
+{
+   return( kookaImgRoot() + ".previews/" );
+}
+
+QString ImgSaver::kookaImgRoot() 
 {
    QString dir = (KGlobal::dirs())->saveLocation( "data", "ScanImages", true );
 
