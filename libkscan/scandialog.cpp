@@ -109,7 +109,7 @@ void ScanDialog::createOptionsTab( void )
    setMainWidget(page);	   
 
    QGroupBox *gb = new QGroupBox( 1, Qt::Horizontal, i18n("Startup Options"), page, "GB_STARTUP" );
-   QLabel *label = new QLabel( i18n( "Note: changing this options will affect the scan plugin on next start." ),
+   QLabel *label = new QLabel( i18n( "Note: changing these options will affect the scan plugin on next start." ),
 			       gb );
    label->setSizePolicy( QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed ) );
    

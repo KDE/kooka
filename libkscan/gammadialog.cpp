@@ -64,7 +64,7 @@ GammaDialog::GammaDialog( QWidget *parent ) :
     wBright->slSetSlider( 0 );
     connect( wBright, SIGNAL(valueChanged(int)), gt, SLOT(setBrightness(int)));
 
-    wContrast = new KScanSlider ( page, i18n("Constrast") , -50.0, 50.0 );
+    wContrast = new KScanSlider ( page, i18n("Contrast") , -50.0, 50.0 );
     Q_CHECK_PTR(wContrast);
     wContrast->slSetSlider( 0 );
     connect( wContrast, SIGNAL(valueChanged(int)), gt, SLOT(setContrast(int)));

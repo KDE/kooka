@@ -256,7 +256,7 @@ QScrollView *ScanParams::scannerParams( )
 
       KScanCombo *cb = (KScanCombo*) so->widget();
       Q_CHECK_PTR(cb);
-      cb->slSetIcon( pixLineArt, i18n("Lineart") );
+      cb->slSetIcon( pixLineArt, i18n("Line art") );
       cb->slSetIcon( pixLineArt, i18n("Binary" ));
       cb->slSetIcon( pixGray, i18n("Gray") );
       cb->slSetIcon( pixColor, i18n("Color") );
@@ -689,7 +689,7 @@ void ScanParams::virtualScannerParams( void )
    }
 
    /* GUI-Element three pass simulation */
-   so = sane_device->getGuiElement( "three-pass", this, i18n("Simulate three pass acquirering"), 0 );
+   so = sane_device->getGuiElement( "three-pass", this, i18n("Simulate three-pass acquiring"), 0 );
    if ( so )
    {
       top->addWidget( so->widget(), 1 );

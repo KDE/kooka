@@ -46,7 +46,7 @@ ScanSourceDialog::ScanSourceDialog( QWidget *parent, const QStrList list, ADF_BE
    QVBox *vbox = makeVBoxMainWidget();
 
    (void) new QLabel( i18n("<B>Source selection</B><P>"
-			   "Mind that you might see more sources than really exist"), vbox );
+			   "Note that you may see more sources than actually exist"), vbox );
 
    /* Combo Box for sources */
    const QStrList xx = list;
