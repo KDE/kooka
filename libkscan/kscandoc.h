@@ -20,7 +20,7 @@
 /**
 \mainpage The KScan Library.
 
-   The KScan Library provides an interface for the SANE-lib (see http://www.mostang.com/sane for more information) for KDE2 applications.
+   The KScan Library provides an interface for the SANE-lib (see http://www.sane-project.org for more information) for KDE2 applications.
 
 \section intro Introduction
 

@@ -504,7 +504,7 @@ void ScanParams::createNoScannerMsg( void )
 {
    /* Mode setting */
    QString cap;
-   cap = i18n( "<B>Problem: No Scanner was found</B><P>Your system does not provide a SANE <I>(Scanner Access Now Easy)</I> installation, which is required by the KDE scan support.<P>Please install and configure SANE correctly on your system.<P>Visit the SANE homepage under http://wwww.mostang.com/sane to find out more about SANE installation and configuration. " );
+   cap = i18n( "<B>Problem: No Scanner was found</B><P>Your system does not provide a SANE <I>(Scanner Access Now Easy)</I> installation, which is required by the KDE scan support.<P>Please install and configure SANE correctly on your system.<P>Visit the SANE homepage under http://www.sane-project.org to find out more about SANE installation and configuration. " );
 
    (void) new QLabel( cap, this );
 

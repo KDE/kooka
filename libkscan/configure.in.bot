@@ -3,7 +3,7 @@ if test -z "$SANE_CONFIG"; then
   echo "You're missing development files for libsane - "
   echo "libkscan/kooka won't be compiled without libsane."
   echo "You can download it from"
-  echo "http://www.mostang.com/sane/"
+  echo "http://www.sane-project.org/"
   echo ""
   all_tests=bad
 fi

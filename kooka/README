@@ -5,7 +5,7 @@ Kooka is a raster image scan program for the KDE system.
      
    PLEASE READ THE FILE "WARNING" FIRST !
 
-It uses the SANE-lib (http://www.mostang.com/sane/) and the the
+It uses the SANE-lib (http://www.sane-project.org/) and the the
 KScan-library which is a KDE module for scanner access.
 
 KScan and Kooka are under construction. Don't expect everything to work
