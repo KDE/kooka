@@ -295,6 +295,11 @@ bool KookaView::slSelectDevice( const QCString& useDevice )
 		     scan_params, SLOT(slMaximalScanSize()));
 	    // connect( scan_params,    SIGNAL( scanResolutionChanged( int, int )),
             // 		     preview_canvas, SLOT( slNewScanResolutions( int, int )));
+	    /* load the preview image */
+	    if( preview_canvas )
+	    {
+	       preview_canvas->loadPreviewImage( selDevice );
+	    }
 	 }
       }
       else
