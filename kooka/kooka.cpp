@@ -41,7 +41,6 @@
 #include <kdebug.h>
 #include <kiconloader.h>
 #include <kmenubar.h>
-#include <kkeydialog.h>
 #include <kaccel.h>
 #include <kio/netaccess.h>
 #include <kfiledialog.h>
@@ -129,7 +128,8 @@ void Kooka::setupActions()
     KStdAction::print(this, SLOT(filePrint()), actionCollection());
     KStdAction::quit(this , SLOT(close()), actionCollection());
 
-    KStdAction::keyBindings(this, SLOT(optionsConfigureKeys()), actionCollection());
+    KStdAction::keyBindings(guiFactory(), SLOT(configureShortcuts()), 
+actionCollection());
     KStdAction::configureToolbars(this, SLOT(optionsConfigureToolbars()),
 				  actionCollection());
     KStdAction::preferences(this, SLOT(optionsPreferences()), actionCollection());
@@ -380,12 +380,6 @@ void Kooka::optionsShowScanParams()
 void Kooka::optionsShowPreviewer()
 {
    m_view->slSetTabWVisible( m_previewerAction->isChecked());
-}
-
-
-void Kooka::optionsConfigureKeys()
-{
-    KKeyDialog::configure(actionCollection());
 }
 
 void Kooka::optionsConfigureToolbars()

@@ -102,7 +102,6 @@ private slots:
 
    void optionsShowScanParams();
    void optionsShowPreviewer();
-   void optionsConfigureKeys();
    void optionsConfigureToolbars();
    void optionsPreferences();
 
