@@ -26,7 +26,7 @@
  
 
 
-class QPrinter;
+class KPrinter;
 class KToggleAction;
 class KookaView;
 
@@ -111,7 +111,7 @@ private:
 private:
    KookaView *m_view;
 
-   QPrinter   *m_printer;
+   KPrinter   *m_printer;
    KToggleAction *m_toolbarAction;
    KToggleAction *m_statusbarAction;
    KToggleAction *m_scanParamsAction;
