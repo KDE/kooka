@@ -1033,7 +1033,7 @@ void KScanDevice::loadOptionSet( KScanOptSet *optSet )
       return;
    }
 
-   kdDebug(29000) << "Loading Option set: " << optSet->optSetName() << endl;
+   // kdDebug(29000) << "Loading Option set: " << optSet->optSetName() << endl;
    QAsciiDictIterator<KScanOption> it(*optSet);
 
    kdDebug(29000) << "Postinstalling " << optSet->count() << " options" << endl;
