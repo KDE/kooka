@@ -1,3 +1,19 @@
+/***************************************************************************
+                          kookaview.h  -  Main view
+                             -------------------                                         
+    begin                : Sun Jan 16 2000                                           
+    copyright            : (C) 2000 by Klaas Freitag                         
+    email                : kooka@suse.de
+ ***************************************************************************/
+
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   * 
+ *                                                                         *
+ ***************************************************************************/
 #ifndef KOOKAVIEW_H
 #define KOOKAVIEW_H
 
@@ -18,7 +34,7 @@
 
 
 class QPainter;
-
+class KSANEOCR;
 
 /**
  * This is the main view class for Kooka.  Most of the non-menu,
@@ -26,10 +42,10 @@ class QPainter;
  * here.
  *
  * @short Main view
- * @author Klaas Freitag <freitag@suse.de>
+ * @author Klaas Freitag <kooka@suse.de>
  * @version 0.1
  */
-class KookaView : public QSplitter, virtual public KookaIface
+class KookaView : public QSplitter
 {
    Q_OBJECT
 public:
@@ -96,6 +112,8 @@ private:
    int 		image_pool_id;
    int 		preview_id;
 
+   KSANEOCR *ocrFabric;
+   
 };
 
 #endif // KOOKAVIEW_H

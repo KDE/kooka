@@ -1,3 +1,19 @@
+/**************************************************************************
+			kooka.h  -  Main program class
+                             -------------------                                         
+    begin                : Sun Jan 16 2000                                           
+    copyright            : (C) 2000 by Klaas Freitag                         
+    email                : kooka@suse.de          
+ ***************************************************************************/
+
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   * 
+ *                                                                         *
+ ***************************************************************************/
 #ifndef KOOKA_H
 #define KOOKA_H
 
@@ -18,7 +34,7 @@ class KToggleAction;
  * menus, toolbars, and status bars.
  *
  * @short Main window class
- * @author Klaas Freitag <freitag@suse.de>
+ * @author Klaas Freitag <kooka@suse.de>
  * @version 0.1
  */
 class Kooka : public KMainWindow
@@ -64,6 +80,7 @@ protected:
 
 private slots:
    void filePrint();
+   void slStartOCR();
    void optionsShowToolbar();
    void optionsShowStatusbar();
    void optionsShowScanParams();
@@ -75,6 +92,7 @@ private slots:
    void changeStatusbar(const QString& text);
    void changeCaption(const QString& text);
 
+   void fileSaveAs();
 private:
    void setupAccel();
    void setupActions();

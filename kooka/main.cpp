@@ -4,7 +4,7 @@
     begin                : Thu Dec  9 20:16:54 MET 1999
                                            
     copyright            : (C) 1999 by Klaas Freitag                         
-    email                : Klaas.Freitag@gmx.de                                     
+    email                : kooka@suse.de                                     
  ***************************************************************************/
 
 /***************************************************************************
@@ -29,6 +29,7 @@
 #include <kaboutdata.h>
 #include <kcmdlineargs.h>
 #include <klocale.h>
+#include <kimageio.h>
 
 #include "kooka.h"
 #include "icons.h"
@@ -46,10 +47,11 @@ int main( int argc, char ** argv )
 {
    KAboutData about("kooka", I18N_NOOP("Kooka"), version, description,
 		    KAboutData::License_GPL, "(C) 2000 Klaas Freitag");
-   about.addAuthor( "Klaas Freitag", 0, "Freitag@SuSE.de" );
+   about.addAuthor( "Klaas Freitag", 0, "kooka@SuSE.de" );
     KCmdLineArgs::init(argc, argv, &about);
     KApplication app;
-
+    KImageIO::registerFormats();
+    
     icons.insert("mini-color", new QPixmap( mini_color ));
     icons.insert("mini-gray", new QPixmap( mini_gray )); 	
     icons.insert("mini-lineart", new QPixmap( mini_lineart ));

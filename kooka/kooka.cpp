@@ -1,12 +1,14 @@
 /*
  * kooka.cpp
  *
- * Copyright (C) 2000 Klaas Freitag <freitag@suse.de>
+ * Copyright (C) 2000 Klaas Freitag <kooka@suse.de>
  */
 #include "kooka.h"
 #include "resource.h"
 
 #include "kookapref.h"
+#include "img_saver.h"
+
 
 #include <qdragobject.h>
 #include <qlineedit.h>
@@ -26,7 +28,7 @@
 #include <kconfig.h>
 #include <kurl.h>
 #include <kurlrequesterdlg.h>
-
+#include <qstrlist.h>
 #include <kedittoolbar.h>
 
 #include <kstdaccel.h>
@@ -93,8 +95,9 @@ void Kooka::setupActions()
     KStdAction::openNew(this, SLOT(fileNew()), actionCollection());
     KStdAction::open(this, SLOT(fileOpen()), actionCollection());
     KStdAction::save(this, SLOT(fileSave()), actionCollection());
-    KStdAction::saveAs(this, SLOT(fileSaveAs()), actionCollection());
 #endif
+
+    KStdAction::saveAs(this, SLOT(fileSaveAs()), actionCollection());
     KStdAction::print(this, SLOT(filePrint()), actionCollection());
     KStdAction::quit(kapp, SLOT(quit()), actionCollection());
 
@@ -114,8 +117,11 @@ void Kooka::setupActions()
     KStdAction::keyBindings(this, SLOT(optionsConfigureKeys()), actionCollection());
     KStdAction::configureToolbars(this, SLOT(optionsConfigureToolbars()), actionCollection());
     KStdAction::preferences(this, SLOT(optionsPreferences()), actionCollection());
- 
-    createGUI();
+
+    (void) new KAction(I18N("&OCR"), "edit", CTRL+Key_O, this, SLOT(slStartOCR()),
+		       actionCollection(), "ocr" );
+    
+    createGUI("kookaui.rc");
 }
 
 void Kooka::saveProperties(KConfig *config)
@@ -193,16 +199,24 @@ void Kooka::fileSave()
     // save the current file
 }
 
+#endif
 void Kooka::fileSaveAs()
 {
     // this slot is called whenever the File->Save As menu is selected,
-    KURL file_url = KFileDialog::getSaveURL();
-    if (!file_url.isEmpty() && !file_url.isMalformed())
-    {
-        // save your info, here
-    }
+   QStrList strlist;
+   strlist.append( "BMP" );
+   strlist.append( "JPEG" );
+   FormatDialog fd( 0, "FormatDialog", &strlist );
+   fd.exec();
+   
 }
-#endif
+
+
+void Kooka::slStartOCR()
+{
+   changeStatusbar( I18N( "Starting OCR" ));
+   m_view->doOCR();
+}
 
 
 void Kooka::filePrint()

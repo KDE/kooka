@@ -2,6 +2,7 @@
 #include "resource.h"
 #include "kscandevice.h"
 #include "devselector.h"
+#include "ksaneocr.h"
 
 #include <qpainter.h>
 #include <qlayout.h>
@@ -14,36 +15,23 @@
 #include <klibloader.h>
 #include <kmessagebox.h>
 #include <krun.h>
+#include <keditcl.h>
 
 KookaView::KookaView(QWidget *parent)
-    : QSplitter(parent),
-      DCOPObject("KookaIface")
+    : QSplitter(parent)
 {
-   // setup our layout manager to automatically add our widgets
-   // QHBoxLayout *top_layout = new QHBoxLayout(this);
-   // top_layout->setAutoAdd(true);
-
-   // we want to look for all components that satisfy our needs.
-   // trader will actually search through *all* registered KDE
-   // applications and components -- not just KParts.  So we have to
-   // specify two things: a service type and a constraint
-   //
-   // the service type is like a mime type.  we say that we want all
-   // applications and components that can handle HTML -- 'text/html'
-   // 
-   // however, by itself, this will return such things as Netscape..
-   // not what we wanted.  so we constrain it by saying that the
-   // string 'KParts/ReadOnlyPart' must be found in the ServiceTypes
-   // field.  with this, only components of the type we want will be
-   // returned.
 
    /* Another splitter for splitting the Packager Tree from the Scan Parameter */
+   ocrFabric = 0;
+   
    QSplitter *left_splitter = new QSplitter( QSplitter::Vertical, this );
    setOpaqueResize( false );
    left_splitter->setOpaqueResize( false );
 
    /* An image canvas for the large image, right side */
+   
    img_canvas  = new ImageCanvas( this );
+   
    setResizeMode( img_canvas,    QSplitter::Stretch );
    setResizeMode( left_splitter, QSplitter::KeepSize );
 
@@ -264,6 +252,14 @@ void KookaView::doOCR( void )
 #ifdef HAVE_LIBPGM2ASC
    KSANEOCR ocr( img_canvas->rootImage());
 #endif
+   const QImage *img = img_canvas->rootImage();
+
+   if( img && ! img->isNull() )
+   {
+      ocrFabric = new KSANEOCR( img );
+      ocrFabric->startExternOcr();
+   }
+   
 }
 
 

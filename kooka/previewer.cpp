@@ -3,7 +3,7 @@
                              -------------------                                         
     begin                : Thu Jun 22 2000                                           
     copyright            : (C) 2000 by Klaas Freitag                         
-    email                : Klaas.Freitag@gmx.de                                     
+    email                : kooka@suse.de                                     
  ***************************************************************************/
 
 /***************************************************************************
@@ -19,7 +19,6 @@
 
 
 #include "previewer.h"
-#include "kscandevice.h"
 #include "resource.h"
 
 #define ID_CUSTOM 0
@@ -39,17 +38,11 @@ Previewer::Previewer(QWidget *parent, const char *name )
 	layout->addLayout( left, 2 );
 	
 	
-	KScanOption so( SANE_NAME_SCAN_BR_X );
-	double min, max, p;
-	so.getRange( &min, &max, &p );
-	overallWidth = max;
-	
 	sizeUnit = SANE_UNIT_MM; // so.unitOf( SANE_NAME_SCAN_BR_X );
 	displayUnit = sizeUnit;
 	
-	KScanOption so1( SANE_NAME_SCAN_BR_Y );
-	so1.getRange( &min, &max, &p );
-	overallHeight = max;
+	overallHeight = 295;  /* Default DIN A4 */
+	overallWidth = 210;
 	debug( "Previewer: got Overallsize: %f x %f", overallWidth, overallHeight );
 	img_canvas  = new ImageCanvas( this );
 	img_canvas->setScaleFactor( 0 );
@@ -151,6 +144,7 @@ void Previewer::slSetDisplayUnit( SANE_Unit unit )
 
 void Previewer::slOrientChange( int id )
 {
+   (void) id;
         /* Gets either portrait or landscape-id */
         /* Just read the format-selection and call slFormatChange */
         slFormatChange( pre_format_combo->currentItem() );

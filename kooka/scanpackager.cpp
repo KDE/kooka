@@ -3,7 +3,7 @@
                              -------------------                                         
     begin                : Fri Dec 17 1999                                           
     copyright            : (C) 1999 by Klaas Freitag                         
-    email                : Klaas.Freitag@gmx.de
+    email                : kooka@suse.de
  ***************************************************************************/
 
 /***************************************************************************
@@ -111,61 +111,61 @@ void ScanPackager::slSelectionChanged( QListViewItem *newItem )
  */
 void ScanPackager::slAddImage( QImage *img )
 {
-	ImgSaveStat is_stat = ISS_OK;
-	/* Save the image with the help of the ImgSaver */
-	if( ! img ) return;
-	/* currently selected item */
-	PackagerItem *curr = (PackagerItem*) currentItem();
-	if( ! curr )
-	{
-		curr = root;
-	}
-	/* find the directory above */
-	while( ! curr->isDir())
-	{
-	 	curr = (PackagerItem*) curr->parent();
-	}
+   ImgSaveStat is_stat = ISS_OK;
+   /* Save the image with the help of the ImgSaver */
+   if( ! img ) return;
+   /* currently selected item */
+   PackagerItem *curr = (PackagerItem*) currentItem();
+   if( ! curr )
+   {
+      curr = root;
+   }
+   /* find the directory above */
+   while( ! curr->isDir())
+   {
+      curr = (PackagerItem*) curr->parent();
+   }
 	
-	/* Path of curr sel item */
-        QDir d (curr->getFilename());
+   /* Path of curr sel item */
+   QDir d (curr->getFilename());
+   
+   ImgSaver img_saver( this, d.absPath() );
 	
-	ImgSaver img_saver( this, d.absPath() );
+   is_stat = img_saver.saveImage( img );
 	
-	is_stat = img_saver.saveImage( img );
+   if( is_stat != ISS_OK )
+   {
+      if( is_stat == ISS_SAVE_CANCELED )
+      {
+	 return;
+      }
+      debug( "ERROR: Saving failed: %s", (const char*) img_saver.errorString( is_stat ));
+      /* And now ?? */
+   }
 	
-	if( is_stat != ISS_OK )
-	{
-		if( is_stat == ISS_SAVE_CANCELED )
-		{
-		 	return;
-		}
-	 	debug( "ERROR: Saving failed: %s", (const char*) img_saver.errorString( is_stat ));
-		/* And now ?? */
-	}
-	
-	/* Add the new image to the list of new images */
+   /* Add the new image to the list of new images */
  	
- 	setSelected( curr, true );
- 	PackagerItem *item = new PackagerItem( curr, false );
- 	item->setFilename( d.absPath() + "/" + img_saver.lastFilename());
-	QString s;
+   setSelected( curr, true );
+   PackagerItem *item = new PackagerItem( curr, false );
+   item->setFilename( d.absPath() + "/" + img_saver.lastFilename());
+   QString s;
 
- 	/* Count amount of children of the father */
+   /* Count amount of children of the father */
    int childcount = curr->childCount();
- 	curr->setText( 1, s.sprintf( "%d images", childcount ));
- 	item->setText( 0, s.sprintf( "image %d", childcount ));
- 	setOpen( curr, true );
+   curr->setText( 1, s.sprintf( "%d images", childcount ));
+   item->setText( 0, s.sprintf( "image %d", childcount ));
+   setOpen( curr, true );
  		
- 	/* This call to set image allocs a new object qimage, which lives longer
- 	 * than the one from the scanner, which will be destroyed after leaving
- 	 * this callback.
- 	 * All actions depending on the *pointer* to the qimage need to be done
- 	 * after this call.
- 	 */
- 	item->setImage( img );
+   /* This call to set image allocs a new object qimage, which lives longer
+    * than the one from the scanner, which will be destroyed after leaving
+    * this callback.
+    * All actions depending on the *pointer* to the qimage need to be done
+    * after this call.
+    */
+   item->setImage( img );
 	 	
- 	/* makes the new item the current, which shows it */
- 	setSelected( item, true );
+   /* makes the new item the current, which shows it */
+   setSelected( item, true );
  	
 }
 

@@ -1,9 +1,9 @@
 /***************************************************************************
-                          ksaneocr.h  -  description                              
+                          ksaneocr.h  - ocr-engine class
                              -------------------                                         
     begin                : Fri Jun 30 2000                                           
     copyright            : (C) 2000 by Klaas Freitag                         
-    email                :                                      
+    email                : kooka@suse.de                                     
  ***************************************************************************/
 
 /***************************************************************************
@@ -22,14 +22,36 @@
 #include <qobject.h>
 #include <qimage.h>
 
+#include <kprocess.h>
+
 /**
   *@author Klaas Freitag
   */
 
+class KOCRStartDialog;
+
+
 class KSANEOCR : public QObject  {
+   Q_OBJECT
 public: 
-	KSANEOCR(const QImage *image);
-	~KSANEOCR();
+   KSANEOCR(const QImage *image);
+   ~KSANEOCR();
+
+   void startExternOcr( void );
+private slots:
+   void startOCRProcess( void );
+   
+   void msgRcvd(KProcess*, char* buffer, int buflen);
+   void errMsgRcvd(KProcess*, char* buffer, int buflen);
+   void daemonExited(KProcess*);
+   void userCancel( void );
+private:
+   KOCRStartDialog *ocrProcessDia;
+   KProcess *daemon;
+   QString  tmpFile;
+   QImage   *bw_img;
+   QString  ocrResultText;
+   QString  ocrResultImage;
 };
 
 #endif

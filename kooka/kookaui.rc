@@ -5,5 +5,9 @@
    <Action name="show_scanparams"/>
  </Menu>
 </MenuBar>
+ <Toolbar  name="buttons" fullWidth="true">
+   <text>Main Toolbar</text>
+   <Action name="ocr"/>
+ </Toolbar>
 <StatusBar/>
 </kookagui>

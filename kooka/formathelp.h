@@ -3,7 +3,7 @@
                              -------------------                                         
     begin                : Mon Dec 27 1999                                           
     copyright            : (C) 1999 by Klaas Freitag                         
-    email                :                                      
+    email                : kooka@suse.de
  ***************************************************************************/
 
 /***************************************************************************
@@ -16,19 +16,19 @@
  ***************************************************************************/
 
 
-#define HELP_BMP i18n("The <big>bitmap-format</big> is a wellknown format,\n" \
+#define HELP_BMP I18N("The <big>bitmap-format</big> is a wellknown format,\n" \
                       "often used for 256 color-images under "  \
                       "M$ Windows.\n Suitable for color and " \
 		                "<bold>lineart-pictures</bold>\n" )
-#define HELP_PNM i18n("Portable Bitmap\n"                     \
+#define HELP_PNM I18N("Portable Bitmap\n"                     \
 				   ""			      \
 				   "" )
-#define HELP_JPG i18n("Jpeg is a high compression,\nquality " \
+#define HELP_JPG I18N("Jpeg is a high compression,\nquality " \
                       "loosing format for color\n pictures "  \
                       "with many different colors."	      \
                       "" )
 
-#define HELP_EPS i18n("EPS is Encapsulated Postscript.\n "	\
+#define HELP_EPS I18N("EPS is Encapsulated Postscript.\n "	\
 		      "Initially its a printer definition\n "	\
 		      "language. Use this format if you\n"	\
 		      "want to print the image or use\n"	\

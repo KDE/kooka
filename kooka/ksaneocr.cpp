@@ -3,7 +3,7 @@
                              -------------------                                         
     begin                : Fri Jun 30 2000                                           
     copyright            : (C) 2000 by Klaas Freitag                         
-    email                : Klaas.Freitag@gmx.de
+    email                : kooka@suse.de
  ***************************************************************************/
 
 /***************************************************************************
@@ -14,7 +14,14 @@
  *   (at your option) any later version.                                   * 
  *                                                                         *
  ***************************************************************************/
+#include <kdebug.h>
+#include <kmessagebox.h>
+#include <stdlib.h>
 #include <qcolor.h>
+
+
+#include "kocrstartdia.h"
+#include "kocrfindia.h"
 #include "config.h"
 
 #ifdef HAVE_LIBPGM2ASC
@@ -30,71 +37,141 @@
 KSANEOCR::KSANEOCR( const QImage *img)
 {
     if( !img ) return;
-
-#ifdef HAVE_LIBPGM2ASC
-    int cs=0,spc=0,mo=0,dust_size=10;
-    int verbose=0;
-
-    QImage bw_img;
+    ocrProcessDia = 0;
+       
+    bw_img = new QImage();
 
     if( img->depth()==32 )
-        bw_img = img->convertDepth( 8, MonoOnly );
+        *bw_img = img->convertDepth( 8, MonoOnly );
     else if (img->depth() == 1)
-        bw_img = img->convertDepth( 8, MonoOnly );
+        *bw_img = img->convertDepth( 8, MonoOnly );
     else
-        bw_img = *img;
+        *bw_img = *img;
 
-    /* Palette stretch - no idea if this is ok */
-    QArray<uchar> imgBuf(bw_img.height()*bw_img.width());
-    int x, y, count;
-    count = 0;
-
-    for( y = 0; y < bw_img.height(); y++ )
-    {
-        for( x = 0; x < bw_img.width(); x++)
-        {
-            if( bw_img.numColors() == 2 )
-            {
-
-                if( bw_img.pixelIndex(x,y) == 0 )
-                    imgBuf[count] = 255;
-                else
-                    imgBuf[count] = 0;
-            }
-            else
-            {
-                imgBuf[count] = bw_img.pixelIndex(x,y);
-            }
-            count++;
-        }
-    }
-
-    if( ! bw_img.isNull() )
-    {
-        debug( "Conversion worked");
-
-
-        pix pixmap;
-
-        pixmap.x = bw_img.width();
-        pixmap.y = bw_img.height();
-        pixmap.bpp = 1;
-        pixmap.p = imgBuf.data();
-
-        pgm2asc(&pixmap, mo, cs, spc, dust_size, "_", verbose);
-
-        int linecounter = 0;
-        const char *line = getTextLine( linecounter++ );
-        while( line )
-        {
-            debug( "%s", line );
-            line = getTextLine( linecounter++ );
-        }
-        free_textlines();
-    }
-#endif
+    daemon = 0L;
+    // Sorry, very early construction...
+    tmpFile = "/tmp/img.pnm";
+    bw_img->save( tmpFile, "PBM" );
+    
+    
 }
 
 KSANEOCR::~KSANEOCR()
 {
+   delete bw_img;
 }
+
+void KSANEOCR::startExternOcr( void )
+{
+   ocrProcessDia = new KOCRStartDialog ( 0L, bw_img );
+   CHECK_PTR( ocrProcessDia );
+   connect( ocrProcessDia, SIGNAL( user1Clicked()), this, SLOT( startOCRProcess() ));
+   connect( ocrProcessDia, SIGNAL( cancelClicked()), this, SLOT( userCancel() ));
+
+   ocrProcessDia->exec();
+}
+
+
+void KSANEOCR::userCancel( void )
+{
+   debug( "+++++++++++++++++++ *************************" );
+   if( daemon && daemon->isRunning() )
+   {
+      daemon->normalExit();
+      // that leads to the process being destroyed.
+      KMessageBox::error(0, "The OCR-Process was killed !" );
+   }
+}
+
+
+void KSANEOCR::startOCRProcess( void )
+{
+   if( ! ocrProcessDia ) return;
+
+   const QString cmd = ocrProcessDia->getOCRCmd();
+   kdDebug () <<  "Starting OCR-Command: " << cmd.latin1() << " " << tmpFile.latin1()  << endl;
+
+   daemon = new KProcess;
+   CHECK_PTR(daemon);
+   ocrResultText = "";
+   
+   connect(daemon, SIGNAL(processExited(KProcess *)),
+	   this, SLOT(daemonExited(KProcess*)));
+   connect(daemon, SIGNAL(receivedStdout(KProcess *, char*, int)),
+	   this, SLOT(msgRcvd(KProcess*, char*, int)));
+   connect(daemon, SIGNAL(receivedStderr(KProcess *, char*, int)),
+	   this, SLOT(errMsgRcvd(KProcess*, char*, int)));
+
+   QString opt;
+   *daemon << cmd.latin1();
+   *daemon << "-l";
+   opt.setNum(ocrProcessDia->getGraylevel());
+   *daemon << opt;
+   *daemon << "-s";
+   opt.setNum(ocrProcessDia->getSpaceWidth());
+   *daemon << opt;
+   *daemon << "-d";
+   opt.setNum(ocrProcessDia->getDustsize());
+   *daemon << opt;
+
+   // Write an result image 
+   *daemon << "-v";
+   *daemon << "32";
+   ocrResultImage = "out30.bmp";
+   
+   *daemon << tmpFile.latin1();
+   
+   if (!daemon->start(KProcess::NotifyOnExit, KProcess::All))
+   {
+      kdDebug() <<  "Error starting daemon!" << endl;
+   }
+   else
+   {
+      kdDebug () << "Start OK" << endl;
+   }
+}
+
+
+
+void KSANEOCR::daemonExited(KProcess* d)
+{
+   if( d )
+   {
+      delete d;
+   }
+
+   if( ocrProcessDia )
+   {
+      delete( ocrProcessDia );
+      ocrProcessDia = 0L;
+   }
+
+   KOCRFinalDialog fin( 0L, ocrResultImage );
+
+   fin.fillText( ocrResultText );
+   fin.exec();
+   /* Now ocr is finished, open the result */
+   
+   kdDebug () << "ocr exited" << endl;
+}
+
+
+void KSANEOCR::errMsgRcvd(KProcess*, char* buffer, int buflen)
+{
+   QString errorBuffer = QString::fromLocal8Bit(buffer, buflen);
+   kdDebug () << "ERR: " << errorBuffer << endl;
+
+   // KMessageBox::error(0, "Kooka detected an error after starting ocr!" );
+}
+
+
+void KSANEOCR::msgRcvd(KProcess*, char* buffer, int buflen)
+{
+   QString aux = QString::fromLocal8Bit(buffer, buflen);
+   ocrResultText += aux;
+   
+   kdDebug()  << aux;
+
+}
+
+/* -- */
