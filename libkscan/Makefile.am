@@ -24,3 +24,6 @@ libkscan_la_LIBADD = $(LIB_SANE) $(LIB_KFILE)
 kde_services_DATA = scanservice.desktop
 
 METASOURCES = AUTO
+
+SUBDIRS = pics
+
