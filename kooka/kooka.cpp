@@ -177,7 +177,7 @@ void Kooka::setupActions()
 		       this, SLOT( slMirrorBoth() ),
 		       actionCollection(), "mirrorBoth" );
 
-    (void) new KAction(i18n("Open Image in &Graphic Application"), "fileopen", CTRL+Key_G,
+    (void) new KAction(i18n("Open Image in &Graphic Application..."), "fileopen", CTRL+Key_G,
 		       m_view, SLOT( slOpenCurrInGraphApp() ),
 		       actionCollection(), "openInGraphApp" );
 
@@ -208,7 +208,7 @@ void Kooka::setupActions()
 		       m_view, SLOT( slSelectDevice()),
 		       actionCollection(), "selectsource" );
 
-    (void) new KAction( i18n("Enable All Warnings and Messages"), 0,
+    (void) new KAction( i18n("Enable All Warnings && Messages"), 0,
 			this,  SLOT(slEnableWarnings()),
 			actionCollection(), "enable_msgs");
 

@@ -100,7 +100,7 @@ void KookaPreferences::setupStartupPage()
 void KookaPreferences::setupSaveFormatPage( )
 {
    konf->setGroup( OP_FILE_GROUP );    
-   QFrame *page = addPage( i18n("Image Saving"), i18n("configure the image save assistant" ),
+   QFrame *page = addPage( i18n("Image Saving"), i18n("Configure the image save assistant" ),
 			    BarIcon("hdd_unmount", KIcon::SizeMedium ) );
    QVBoxLayout *top = new QVBoxLayout( page, 0, spacingHint() );
 
