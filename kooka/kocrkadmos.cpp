@@ -278,14 +278,14 @@ EngineError KadmosDialog::setupGui()
 
     // FIXME: dynamic classifier reading.
 
-    (void) new QLabel( i18n("Please classify the Font Type and Language of the text on the image:"),
+    (void) new QLabel( i18n("Please classify the font type and language of the text on the image:"),
 		       page );
     QHBox *locBox = new QHBox( page );
     m_bbFont = new QButtonGroup(1, Qt::Horizontal, i18n("Font Type Selection"), locBox);
 
-    m_rbMachine = new QRadioButton( i18n("Machine Print"), m_bbFont );
-    m_rbHand    = new QRadioButton( i18n("Hand Writing"),  m_bbFont );
-    m_rbNorm    = new QRadioButton( i18n("Norm Font"),     m_bbFont );
+    m_rbMachine = new QRadioButton( i18n("Machine print"), m_bbFont );
+    m_rbHand    = new QRadioButton( i18n("Hand writing"),  m_bbFont );
+    m_rbNorm    = new QRadioButton( i18n("Norm font"),     m_bbFont );
 
     m_gbLang = new QGroupBox(1, Qt::Horizontal, i18n("Country"), locBox);
 
@@ -303,8 +303,8 @@ EngineError KadmosDialog::setupGui()
     QButtonGroup *cbGroup = new QButtonGroup( 1, Qt::Horizontal, i18n("OCR Modifier"), innerBox );
     Q_CHECK_PTR(cbGroup);
 
-    m_cbNoise = new QCheckBox( i18n( "Enable Automatic Noise Reduction" ), cbGroup );
-    m_cbAutoscale = new QCheckBox( i18n( "Enable Automatic Scaling"), cbGroup );
+    m_cbNoise = new QCheckBox( i18n( "Enable automatic noise reduction" ), cbGroup );
+    m_cbAutoscale = new QCheckBox( i18n( "Enable automatic scaling"), cbGroup );
 
     getAnimation(innerBox);
     // (void) new QWidget ( page );

@@ -251,7 +251,7 @@ void Kooka::setupActions()
 
 #if 0
     /* not yet supported actions - coming post 3.1 */
-    (void) new KAction(i18n("&Load scan parameters"), "bookmark_add", CTRL+Key_L,
+    (void) new KAction(i18n("&Load Scan Parameters"), "bookmark_add", CTRL+Key_L,
                        m_view, SLOT(slLoadScanParams()),
                        actionCollection(), "loadscanparam" );
 

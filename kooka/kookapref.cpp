@@ -82,8 +82,8 @@ void KookaPreferences::setupOCRPage()
      * Switch ocr engines
      */
     QButtonGroup *engGroup = new QButtonGroup( 1, Qt::Horizontal, i18n("OCR Engine to Use"), page );
-    m_gocrBut   = new QRadioButton( i18n("GOCR Engine")  , engGroup );
-    m_kadmosBut = new QRadioButton( i18n("KADMOS Engine"), engGroup );
+    m_gocrBut   = new QRadioButton( i18n("GOCR engine")  , engGroup );
+    m_kadmosBut = new QRadioButton( i18n("KADMOS engine"), engGroup );
 
     top->addWidget( engGroup );
 

@@ -179,7 +179,7 @@ void KOCRBase::spellCheckIntro()
 
     /* Want the spell checking at all? Checkbox here */
     QGroupBox *gb1 = new QGroupBox( 1, Qt::Horizontal, i18n("OCR Post Processing"), m_spellchkPage );
-    m_cbWantCheck = new QCheckBox( i18n("Enable Spell-checking for validation of the OCR result"),
+    m_cbWantCheck = new QCheckBox( i18n("Enable spell-checking for validation of the OCR result"),
                                    gb1 );
     /* Spellcheck options */
     m_gbSpellOpts = new QGroupBox( 1, Qt::Horizontal, i18n("Spell-Check Options"),
