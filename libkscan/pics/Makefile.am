@@ -1,2 +1,1 @@
-libkscanicondir = $(kde_datadir)/libkscan/icons
-libkscanicon_ICON = AUTO
+KDE_ICON=AUTO
