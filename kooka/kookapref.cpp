@@ -8,10 +8,19 @@
 
 /***************************************************************************
  *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
+ *  This file may be distributed and/or modified under the terms of the    *
+ *  GNU General Public License version 2 as published by the Free Software *
+ *  Foundation and appearing in the file COPYING included in the           *
+ *  packaging of this file.                                                *
+ *
+ *  As a special exception, permission is given to link this program       *
+ *  with any version of the KADMOS ocr/icr engine of reRecognition GmbH,   *
+ *  Kreuzlingen and distribute the resulting executable without            *
+ *  including the source code for KADMOS in the source distribution.       *
+ *
+ *  As a special exception, permission is given to link this program       *
+ *  with any edition of Qt, and distribute the resulting executable,       *
+ *  without including the source code for Qt in the source distribution.   *
  *                                                                         *
  ***************************************************************************/
 
@@ -34,10 +43,16 @@
 #include <qgrid.h>
 
 #include <devselector.h>
+#include "config.h"
 #include "thumbview.h"
 #include "imageselectline.h"
 #include "kscanslider.h"
+#include "ksaneocr.h"
+
 #include <kmessagebox.h>
+#include <qbuttongroup.h>
+#include <qradiobutton.h>
+#include <kurlrequester.h>
 
 KookaPreferences::KookaPreferences()
     : KDialogBase(IconList, i18n("Preferences"),
@@ -63,11 +78,32 @@ void KookaPreferences::setupOCRPage()
 
     QVBoxLayout *top = new QVBoxLayout( page, 0, spacingHint() );
 
-    /* Description-Label */
-    QVGroupBox *gp = new QVGroupBox( i18n("GOCR"), page );
+    /*
+     * Switch ocr engines
+     */
+    QButtonGroup *engGroup = new QButtonGroup( 1, Qt::Horizontal, i18n("OCR Engine to Use"), page );
+    m_gocrBut   = new QRadioButton( i18n("GOCR Engine")  , engGroup );
+    m_kadmosBut = new QRadioButton( i18n("KADMOS Engine"), engGroup );
 
-    // Entry-Field.
-    KScanEntry *m_entryOCRBin = new KScanEntry( gp, i18n( "Path to 'gocr' binary: " ));
+    top->addWidget( engGroup );
+
+     QString eng = konf->readEntry(CFG_OCR_ENGINE);
+#ifdef HAVE_KADMOS
+     if( eng == QString("kadmos") )
+         m_kadmosBut->setChecked( true );
+     else
+#endif
+         m_gocrBut->setChecked( true );
+
+    /*
+     * GOCR Option Box
+     */
+    QVGroupBox *gp = new QVGroupBox( i18n("GOCR OCR"), page );
+
+    QHBox *hbox = new QHBox( gp );
+    (void) new QLabel( i18n("Select the gocr binary to use:"), hbox );
+    m_urlReq = new KURLRequester( hbox );
+    m_urlReq->setMode( KFile::File | KFile::ExistingOnly | KFile::LocalOnly );
 
     QString res = konf->readPathEntry( CFG_GOCR_BINARY, "notFound" );
     if( res == "notFound" )
@@ -78,23 +114,46 @@ void KookaPreferences::setupOCRPage()
         {
             /* Still not found */
             KMessageBox::sorry( this, i18n( "Could not find the gocr binary.\n"
-                                            "Please check your installation and/or install gocr or adjust teh path to gocr manually."),
+                                            "Please check your installation and/or "
+                                            "install gocr or adjust teh path to "
+                                            "gocr manually."),
                                 i18n("OCR Software not Found") );
-
+            m_gocrBut->setEnabled(false);
         }
     }
-    m_entryOCRBin->slSetEntry( res );
+    m_urlReq->setURL( res );
 
+    connect( m_urlReq, SIGNAL( textChanged( const QString& )),
+             this, SLOT( checkOCRBinaryShort( const QString& )));
+    connect( m_urlReq, SIGNAL( returnPressed( const QString& )),
+             this, SLOT( checkOCRBinary( const QString& )));
+
+#if 0
     connect( m_entryOCRBin, SIGNAL(valueChanged( const QCString& )),
              this, SLOT( checkOCRBinaryShort( const QCString& )));
     connect( m_entryOCRBin, SIGNAL(returnPressed( const QCString& )),
              this, SLOT( checkOCRBinary( const QCString& )));
-
-    QToolTip::add( m_entryOCRBin,
+#endif
+    QToolTip::add( m_urlReq,
                    i18n( "Enter the path to gocr, the optical-character-recognition command line tool."));
-
-
     top->addWidget( gp );
+
+    /*
+     * Global Kadmos Options
+     */
+    QVGroupBox *kgp = new QVGroupBox( i18n("KADMOS OCR"), page );
+
+#ifdef HAVE_KADMOS
+    (void) new QLabel( i18n("The KADMOS OCR engine is available"), kgp);
+#else
+    (void) new QLabel( i18n("The KADMOS OCR engine is not available in this version of Kooka"), kgp );
+    m_kadmosBut->setChecked(false);
+    m_kadmosBut->setEnabled(false);
+#endif
+    top->addWidget( kgp );
+    QWidget *spaceEater = new QWidget( page );
+    spaceEater->setSizePolicy( QSizePolicy( QSizePolicy::Ignored, QSizePolicy::Ignored ));
+    top->addWidget( spaceEater );
 
 }
 
@@ -123,18 +182,18 @@ QCString KookaPreferences::tryFindGocr( void )
 }
 
 
-void KookaPreferences::checkOCRBinary( const QCString& cmd )
+void KookaPreferences::checkOCRBinary( const QString& cmd )
 {
    checkOCRBinIntern( cmd, true );
-   m_entryOCRBin->setFocus();
+   m_urlReq->setFocus();
 }
 
-void KookaPreferences::checkOCRBinaryShort( const QCString& cmd )
+void KookaPreferences::checkOCRBinaryShort( const QString& cmd )
 {
    checkOCRBinIntern( cmd, false);
 }
 
-void KookaPreferences::checkOCRBinIntern( const QCString& cmd, bool show_msg )
+void KookaPreferences::checkOCRBinIntern( const QString& cmd, bool show_msg )
 {
    bool ret = true;
 
@@ -160,6 +219,8 @@ void KookaPreferences::checkOCRBinIntern( const QCString& cmd, bool show_msg )
 	 ret = false;
       }
    }
+
+   m_gocrBut->setEnabled( ret );
 
    enableButton( User1, ret );
 }
@@ -350,6 +411,13 @@ void KookaPreferences::slotApply( void )
     bgUrl.setProtocol("");
     kdDebug(28000) << "Writing tile-pixmap " << bgUrl.prettyURL() << endl;
     konf->writeEntry( BG_WALLPAPER, bgUrl.url() );
+
+    /* ** OCR Options ** */
+    konf->setGroup( CFG_GROUP_OCR_DIA );
+    QString eng( "gocr" );
+    if( m_kadmosBut->isChecked() )
+        eng = "kadmos";
+    konf->writeEntry(CFG_OCR_ENGINE, eng );
 
     konf->sync();
 

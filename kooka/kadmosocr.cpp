@@ -8,14 +8,25 @@
     Website: www.reRecognition.com         E-mail: info@reRecognition.com
 
     Author: Tamas Nagy (nagy@rerecognition.com)
+            Klaas Freitag <freitag@suse.de>
+            Heike Stuerzenhofecker <heike@freisturz.de>
  ***************************************************************************/
 
 /***************************************************************************
  *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
+ *  This file may be distributed and/or modified under the terms of the    *
+ *  GNU General Public License version 2 as published by the Free Software *
+ *  Foundation and appearing in the file COPYING included in the           *
+ *  packaging of this file.                                                *
+ *
+ *  As a special exception, permission is given to link this program       *
+ *  with any version of the KADMOS ocr/icr engine of reRecognition GmbH,   *
+ *  Kreuzlingen and distribute the resulting executable without            *
+ *  including the source code for KADMOS in the source distribution.       *
+ *
+ *  As a special exception, permission is given to link this program       *
+ *  with any edition of Qt, and distribute the resulting executable,       *
+ *  without including the source code for Qt in the source distribution.   *
  *                                                                         *
  ***************************************************************************/
 
@@ -23,244 +34,62 @@
 
 #include <qimage.h>
 #include <qpainter.h>
+#include <qimage.h>
+#include <qstring.h>
+#include <qrect.h>
+#include <qstringlist.h>
 
 #include <assert.h>
 
 #include <string.h>
 #include <stdlib.h>
 #include <memory.h>
-
-#include "kadmosocr.h"
-
 #include <kdebug.h>
 
-
-
-namespace Kadmos {
+#include "kadmosocr.h"
+#include "ocrword.h"
 
 #ifdef HAVE_KADMOS
-#include <qimage.h>
-#include <qstring.h>
-#include <qthread.h>
-#include <qmutex.h>
-#include <qrect.h>
 
+using namespace Kadmos;
 
-#undef  QT_THREAD_SUPPORT
-
-/* CRec */
-CRec::CRec()
-{
-  memset(&m_RecData, 0, sizeof(m_RecData));
-  m_Error = RE_SUCCESS;
-}
-
-CRec::~CRec()
-{
-}
-
-KADMOS_ERROR CRec::Init(const char* ClassifierFilename)
-{
-  strcpy(m_RecData.init.version, INC_KADMOS);
-  m_Error = rec_init(&m_RecData, (char*)ClassifierFilename);
-  CheckError();
-  return m_Error;
-}
-
-KADMOS_ERROR CRec::Recognize()
-{
-  m_Error = rec_do(&m_RecData);
-  CheckError();
-  return m_Error;
-}
-
-KADMOS_ERROR CRec::End()
-{
-  m_Error = rec_end(&m_RecData);
-  CheckError();
-  return m_Error;
-}
-
-int CRec::GetAlternatives()
-{
-  int res=0;
-
-  for (int i=0; i<REC_ALT; i++)
-  {
-    if (m_RecData.rec_char[i][0] != 0) res++;
-    else break;
-  }
-
-  return res;
-}
-
-char CRec::GetResult(int n, int c)
-{
-  return m_RecData.rec_char[n][c];
-}
-
-unsigned int CRec::GetConfidenceValue(int n)
-{
-  return m_RecData.rec_value[n];
-}
-
-KADMOS_ERROR CRec::SetImage(QImage& Image)
-{
-  memcpy(&m_RecData.image, Image.bits(), Image.numBytes() );
-
-  return RE_SUCCESS;
-}
-
-void CRec::LoadParameter(const char* paramfile, const char* section)
-{
-  unsigned char reject;
-
-  m_Error = re_readparm(&m_RecData.parm, &reject, (char*)paramfile, section);
-  CheckError();
-}
-
-void CRec::SetNoiseReduction(bool bNoiseReduction)
-{
-  if (bNoiseReduction) {
-    m_RecData.parm.prep |= PREP_AUTO_NOISEREDUCTION;
-  }
-  else {
-    m_RecData.parm.prep &= !PREP_AUTO_NOISEREDUCTION;
-  }
-}
-
-void CRec::SetScaling(bool bScaling)
-{
-  if (bScaling) {
-    m_RecData.parm.prep |= PREP_SCALING;
-  }
-  else {
-    m_RecData.parm.prep &= !PREP_SCALING;
-  }
-}
-
-void CRec::CheckError()
-{
-  if (m_Error!=RE_SUCCESS) {
-    re_ErrorText Err;
-    re_GetErrorText(&Err);
-  }
-}
-
-void CRec::ReportError(const char* ErrText, const char* Program)
-{
-  re_ErrorText Err;
-  strcpy(Err.text, ErrText);
-  strcpy(Err.program, Program);
-}
-
-
-/* CRel */
-CRel::CRel()
-{
-  memset(&m_RelData, 0, sizeof(m_RelData));
-  memset(&m_Result, 0, sizeof(m_Result));
-  m_Error = RE_SUCCESS;
-}
-
-CRel::~CRel()
-{
-}
-
-KADMOS_ERROR CRel::Init(const char* ClassifierFilename)
-{
-  m_RelData.init.rel_grid_maxlen   = GRID_MAX_LEN;
-  m_RelData.init.rel_graph_maxlen  = GRAPH_MAX_LEN;
-  m_RelData.init.rel_result_maxlen = CHAR_MAX_LEN;
-  strcpy(m_RelData.init.version, INC_KADMOS);
-
-  m_Error = rel_init(&m_RelData, (char*)ClassifierFilename);
-
-  m_RelData.rel_grid   = relgrid;
-  m_RelData.rel_graph  = relgraph;
-  m_RelData.rel_result = relresult;
-
-  CheckError();
-  return m_Error;
-}
-
-KADMOS_ERROR CRel::Recognize()
-{
-  m_Error = rel_do(&m_RelData);
-  CheckError();
-  return m_Error;
-}
-
-KADMOS_ERROR CRel::End()
-{
-  m_Error = rel_end(&m_RelData);
-  CheckError();
-  return m_Error;
-}
-
-const char* CRel::RelTextLine(unsigned char RejectLevel, int RejectChar, long Format)
-{
-  m_Error = rel_textline(&m_RelData, m_Result, 2*CHAR_MAX_LEN, RejectLevel, RejectChar, Format);
-  CheckError();
-  return m_Result;
-}
-
-
-KADMOS_ERROR CRel::SetImage(QImage& Image)
-{
-  memcpy(&m_RelData.image, Image.bits(), Image.numBytes());
-
-  return RE_SUCCESS;
-}
-
-void CRel::SetNoiseReduction(bool bNoiseReduction)
-{
-  if (bNoiseReduction) {
-    m_RelData.parm.prep |= PREP_AUTO_NOISEREDUCTION;
-  }
-  else {
-    m_RelData.parm.prep &= !PREP_AUTO_NOISEREDUCTION;
-  }
-}
-
-void CRel::SetScaling(bool bScaling)
-{
-  if (bScaling) {
-    m_RelData.parm.prep |= PREP_SCALING;
-  }
-  else {
-    m_RelData.parm.prep &= !PREP_SCALING;
-  }
-}
-
-void CRel::CheckError()
-{
-  if (m_Error!=RE_SUCCESS) {
-    re_ErrorText Err;
-    re_GetErrorText(&Err);
-  }
-}
-
-void CRel::ReportError(const char* ErrText, const char* Program)
-{
-  re_ErrorText Err;
-  strcpy(Err.text, ErrText);
-  strcpy(Err.program, Program);
-}
-
-/* CRep */
+/* -------------------- CRep -------------------- */
 CRep::CRep()
-#ifdef QT_THREAD_SUPPORT
-    :QThread()
-#endif
+    :QObject()
 {
   memset(&m_RepData, 0, sizeof(m_RepData));
   m_Error = RE_SUCCESS;
+  m_undetectChar = QChar('_');
 }
 
 CRep::~CRep()
 {
 }
+
+RelGraph* CRep::getGraphKnode(int line, int offset )
+{
+    Kadmos::RepResult *res = getRepResult(line);
+    if( res )
+        return ( &(getRepResult(line)->rel_graph[0])+offset);
+    else
+        return 0L;
+
+}
+
+
+RepResult* CRep::getRepResult(int line)
+{
+    if( line<0 || line >= m_RepData.rep_result_len ) return 0L;
+    return &(m_RepData.rep_result[line]);
+}
+
+RelResult* CRep::getRelResult(int line, RelGraph* graph, int alternative)
+{
+    if( ! ( graph && getRepResult(line))) return 0L;
+    int offset = graph->result_number[alternative];
+    return( &(getRepResult(line)->rel_result[0]) + offset );
+}
+
 
 KADMOS_ERROR CRep::Init(const char* ClassifierFilename)
 {
@@ -284,16 +113,9 @@ KADMOS_ERROR CRep::Init(const char* ClassifierFilename)
 
 void CRep::run() // KADMOS_ERROR CRep::Recognize()
 {
-#ifdef QT_THREAD_SUPPORT
-    m_mutex.lock();
-#endif
     kdDebug(28000) << "ooo Locked and ocr!" << endl;
     m_Error = rep_do(&m_RepData);
     CheckError();
-#ifdef QT_THREAD_SUPPORT
-    m_mutex.unlock();
-#endif
-  // return m_Error;
 }
 
 KADMOS_ERROR CRep::End()
@@ -310,64 +132,185 @@ int CRep::GetMaxLine()
 
 const char* CRep::RepTextLine(int nLine, unsigned char RejectLevel, int RejectChar, long Format)
 {
-  m_Error = rep_textline(&m_RepData, nLine, m_Line, 2*CHAR_MAX_LEN, RejectLevel, RejectChar, Format);
-  CheckError();
-  return m_Line;
+    m_Error = rep_textline(&m_RepData, nLine, m_Line,
+                           2*CHAR_MAX_LEN, RejectLevel, RejectChar, Format);
+    CheckError();
+    return m_Line;
 }
 
-void CRep::analyseLine( short line, QPixmap* pix )
+/**
+ * This method handles the given line. It takes repRes and goes through the
+ * kadmos result tree structures recursivly.
+ */
+ocrWordList CRep::getLineWords( int line )
 {
-    Kadmos::RepResult *repRes = &(m_RepData.rep_result[line]);
+    ocrWordList repWords;
+    bool ok = true;
+
+    Kadmos::RepResult *repRes = getRepResult(line);
 
     if( ! repRes )
     {
         kdDebug(28000) << "repRes-Pointer is null" << endl;
-        return;
+        ok = false;
     }
 
-    /* check if index is in range */
-    int resLen = m_RepData.rep_result->rel_result_len;
-    if( line < 0 || line > resLen-1 )
+    if( ok )
     {
-        kdDebug(28000) << "Line index is out of range" << endl;
-        return;
-    }
+        int nextKnode=0;
 
-    /* Handle line box */
-    kdDebug(28000) << "RepResult Box at " << repRes->left << ", " << repRes->top << endl;
-    kdDebug(28000) << "Size is " << repRes->width << "x" << repRes->height << endl;
-    drawLineBox( pix, QRect( repRes->left, repRes->top, repRes->width, repRes->height ));
-
-    Kadmos::RelResult *relr = &(repRes->rel_result[0]);
-    Kadmos::RelGraph  *relg = &(repRes->rel_graph[0] );
-
-    for (;relr && relg;)
-    {
-        relr = &(repRes->rel_result[0]) + relg->result_number[0];
-
-        if (!*relr->rec_char[0])
+        do
         {
-            strcpy(relr->rec_char[0], "~ ");
+            QString resultWord;
+            QRect boundingRect;
+
+            int newNextKnode = nextBestWord( line, nextKnode, resultWord, boundingRect );
+            boundingRect.moveBy( repRes->left, repRes->top );
+
+            ocrWord newWord;
+            newWord = resultWord;
+            newWord.setKnode(nextKnode);
+            newWord.setLine(line);
+            newWord.setRect(boundingRect);
+            repWords.push_back(newWord);
+
+            /* set nextKnode to the next Knode */
+            nextKnode = newNextKnode;
+
+
+            // Alternativen:
+            // partStrings( line, nextKnode, QString());   // fills m_parts - list with alternative words
+            // nextKnode = newNextKnode;
+            // kdDebug(28000) << "NextKnodeWord: " << resultWord << endl;
         }
-
-        if (relg->leading_blanks)
-        {
-            kdDebug(28000) << "Found leading blanks: " << relg->leading_blanks << endl;
-        }
-
-        drawCharBox( pix, QRect(repRes->left+relr->left,
-                                repRes->top+relr->top,
-                                relr->width,
-                                relr->height ));
-
-        if( relg->next[0] == -1 )
-            kdDebug() << "RelGraph->next is " << relg->next[0] << endl;
-
-        if (relg->next[0] == -1) break;
-        relg = &(repRes->rel_graph[0]) + relg->next[0];
+        while( nextKnode > 0 );
     }
-
+    return repWords;
 }
+
+
+/* This fills theWord with the next best word and returns the
+ * next knode or 0 if there is no next node
+ */
+int CRep::nextBestWord( int line, int knode, QString& theWord, QRect& brect )
+{
+
+    Kadmos::RelGraph  *relg = getGraphKnode( line, knode );
+    // kdDebug(28000) << "GraphKnode is " << knode << endl;
+    int nextKnode = knode;
+
+    while( relg )
+    {
+        Kadmos::RelResult *relr = getRelResult( line, relg, 0 ); // best alternative
+        if( relr )
+        {
+            // kdDebug(28000) << "Leading Blanks: " << relg->leading_blanks <<
+            //    " und Knode " << knode << endl;
+            char c = relr->rec_char[0][0];
+            QChar newChar = c;
+            if( c == 0 )
+            {
+                kdDebug(28000) << "Undetected char found !" << endl;
+                newChar = m_undetectChar;
+            }
+
+            if ( (nextKnode != knode) && (relg->leading_blanks > 0))
+            {
+                /* this means the word ends here. */
+                // kdDebug(28000) << "----" << theWord << endl;
+                relg = 0L; /* Leave the loop. */
+            }
+            else
+            {
+                /* append the character */
+                theWord.append(newChar);
+
+                /* save the bounding rect */
+                // kdDebug(28000) << "LEFT: " << relr->left << " TOP: " << relr->top << endl;
+                QRect r( relr->left, relr->top, relr->width, relr->height );
+
+                if( brect.isNull() )
+                {
+                    brect = r;
+                }
+                else
+                {
+                    brect = brect.unite( r );
+                }
+
+                /* next knode */
+                if( relg->next[0] > 0 )
+                {
+                    nextKnode = relg->next[0];
+                    relg = getGraphKnode( line, nextKnode );
+                }
+                else
+                {
+                    /* end of the line */
+                    nextKnode = 0;
+                    relg = 0L;
+                }
+            }
+        }
+    }
+    return( nextKnode );
+}
+
+
+
+void CRep::partStrings( int line, int graphKnode, QString soFar )
+{
+    /* The following knodes after a word break */
+    Kadmos::RelGraph  *relg = getGraphKnode( line, graphKnode );
+    // kdDebug(28000) << "GraphKnode is " << graphKnode << endl;
+
+    QString theWord="";
+    for( int resNo=0; resNo < SEG_ALT; resNo++ )
+    {
+        // kdDebug(28000) << "Alternative " << resNo << " is " << relg->result_number[resNo] << endl;
+        if( relg->result_number[resNo] == -1 )
+        {
+            /* This means that there is no other alternative. Go out here. */
+            break;
+        }
+
+        Kadmos::RelResult *relr = getRelResult( line, relg, resNo );
+        theWord = QChar(relr->rec_char[0][0]);
+
+        if ( !soFar.isEmpty() && relg->leading_blanks )
+        {
+            /* this means the previous words end. */
+            // TODO: This forgets the alternatives of _this_ first character of the new word.
+
+            kdDebug(28000) << "---- " << soFar << endl;
+            m_parts << soFar;
+            break;
+        }
+        else
+        {
+            /* make a QString from this single char and append it. */
+            soFar += theWord;
+        }
+
+        if( relg->next[resNo] > 0 )
+        {
+            /* There is a follower to this knode. Combine the result list from a recursive call
+             * to this function with the follower knode.
+             */
+            partStrings( line, relg->next[resNo], soFar );
+        }
+        else
+        {
+            /* There is no follower */
+            kdDebug(28000) << "No followers - theWord is " << soFar << endl;
+            m_parts<<soFar;
+            break;
+        }
+    }
+}
+
+
+
 void CRep::drawCharBox( QPixmap *pix, const QRect& r )
 {
     drawBox( pix, r, QColor( Qt::red ));
@@ -512,6 +455,9 @@ void CRep::ReportError(const char* ErrText, const char* Program)
   strcpy(Err.program, Program);
 }
 
+#include "kadmosocr.moc"
+
 #endif /* HAVE_KADMOS */
 
-} /* End of Kadmos namespace */
+
+// } /* End of Kadmos namespace */

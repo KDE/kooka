@@ -10,10 +10,19 @@
 
 /***************************************************************************
  *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
+ *  This file may be distributed and/or modified under the terms of the    *
+ *  GNU General Public License version 2 as published by the Free Software *
+ *  Foundation and appearing in the file COPYING included in the           *
+ *  packaging of this file.                                                *
+ *
+ *  As a special exception, permission is given to link this program       *
+ *  with any version of the KADMOS ocr/icr engine of reRecognition GmbH,   *
+ *  Kreuzlingen and distribute the resulting executable without            *
+ *  including the source code for KADMOS in the source distribution.       *
+ *
+ *  As a special exception, permission is given to link this program       *
+ *  with any edition of Qt, and distribute the resulting executable,       *
+ *  without including the source code for Qt in the source distribution.   *
  *                                                                         *
  ***************************************************************************/
 
@@ -29,7 +38,7 @@
 #include "dwmenuaction.h"
 #include "kookaimage.h"
 #include "kookaimagemeta.h"
-
+#include "ocrresedit.h"
 #if 0
 #include "paramsetdialogs.h"
 #endif
@@ -60,8 +69,6 @@
 #include <kiconloader.h>
 #include <kshortcut.h>
 #include <kdockwidget.h>
-#include <ktexteditor/document.h>
-#include <ktexteditor/editinterface.h>
 #include <qobject.h>
 
 #include <kparts/componentfactory.h>
@@ -84,8 +91,7 @@ KookaView::KookaView( KParts::DockMainWindow *parent, const QCString& deviceToUs
      m_dockPreview(0),
      m_dockOCRText(0),
      m_mainWindow(parent),
-     m_textEdit(0),
-     m_view(0)
+     m_ocrResEdit(0)
 {
    KIconLoader *loader = KGlobal::iconLoader();
    scan_params = 0L;
@@ -193,7 +199,6 @@ KookaView::KookaView( KParts::DockMainWindow *parent, const QCString& deviceToUs
    preview_canvas = new Previewer( m_dockPreview );
    {
       preview_canvas->setMinimumSize( 100,100);
-      preview_canvas->slConnectScanner( sane );
 
       /* since the scan_params will be created in slSelectDevice, do the
        * connections later
@@ -210,19 +215,18 @@ KookaView::KookaView( KParts::DockMainWindow *parent, const QCString& deviceToUs
                                              loader->loadIcon("edit", KIcon::Small ),
                                              0L, i18n("OCR Result Text"));
    // m_textEdit
-   m_textEdit  = KParts::ComponentFactory::createPartInstanceFromQuery<KTextEditor::Document>
-                 ("KTextEditor/Document", QString::null,
-                  m_dockOCRText, 0L, parent, 0L );
+   m_ocrResEdit  = new ocrResEdit( m_dockOCRText );
 
-   m_view = m_textEdit->createView(m_dockOCRText, 0L);
-
-   if( m_textEdit )
+   if( m_ocrResEdit )
    {
-       m_dockOCRText->setWidget( m_view ); // m_textEdit->widget() );
+       m_dockOCRText->setWidget( m_ocrResEdit ); // m_textEdit->widget() );
        // parent->createGUI( m_textEdit );
        m_dockOCRText->manualDock( m_mainDock,              // dock target
                                   KDockWidget::DockBottom, // dock site
                                   20 );                  // relation target/this (in percent)
+
+       m_ocrResEdit->setTextFormat( Qt::PlainText );
+       m_ocrResEdit->setWordWrap( QTextEdit::NoWrap );
        // m_dockOCRText->hide();
    }
 
@@ -351,6 +355,9 @@ bool KookaView::slSelectDevice( const QCString& useDevice )
 	    if( preview_canvas )
 	    {
 	       preview_canvas->loadPreviewImage( selDevice );
+
+               /* Call this after the devic is actually open */
+               preview_canvas->slConnectScanner( sane );
 	    }
 	 }
       }
@@ -583,15 +590,29 @@ void KookaView::startOCR( KookaImage *img )
    {
       if( ocrFabric == 0L )
       {
-          ocrFabric = new KSANEOCR( m_mainDock );
+          ocrFabric = new KSANEOCR( m_mainDock, KGlobal::config() );
+          ocrFabric->setImageCanvas( img_canvas );
 
           connect( ocrFabric, SIGNAL( newOCRResultText( const QString& )),
-                   this, SLOT(slOCRResultText( const QString& )));
-          connect( ocrFabric, SIGNAL( newOCRResultPixmap( const QPixmap& )),
-                   this, SLOT(slOCRResultImage( const QPixmap& )));
-	  connect( ocrFabric, SIGNAL( clearOCRResultText()),
-		   this, SLOT(slClearOCRResult()));
+                   m_ocrResEdit, SLOT(setText( const QString& )));
 
+          connect( ocrFabric, SIGNAL( repaintOCRResImage( )),
+                   img_canvas, SLOT(repaint()));
+
+	  connect( ocrFabric, SIGNAL( clearOCRResultText()),
+		   m_ocrResEdit, SLOT(clear()));
+
+          connect( ocrFabric,    SIGNAL( updateWord(int, const QString&, const QString& )),
+                   m_ocrResEdit, SLOT( slUpdateOCRResult( int, const QString&, const QString& )));
+
+          connect( ocrFabric,    SIGNAL( ignoreWord(int, const ocrWord&)),
+                   m_ocrResEdit, SLOT( slIgnoreWrongWord( int, const ocrWord& )));
+
+          connect( ocrFabric, SIGNAL( markWordWrong(int, const ocrWord& )),
+                   m_ocrResEdit, SLOT( slMarkWordWrong( int, const ocrWord& )));
+
+          connect( ocrFabric,    SIGNAL( readOnlyEditor( bool )),
+                   m_ocrResEdit, SLOT( setReadOnly( bool )));
       }
 
       Q_CHECK_PTR( ocrFabric );
@@ -604,29 +625,6 @@ void KookaView::startOCR( KookaImage *img )
 
       }
    }
-}
-
-
-void KookaView::slClearOCRResult()
-{
-    if( ocrFabric )
-    {
-        KTextEditor::EditInterface *editIFace = 0;
-        editIFace = dynamic_cast<KTextEditor::EditInterface *>(m_textEdit);
-
-        editIFace->clear( );
-    }
-}
-
-void KookaView::slOCRResultText( const QString& str)
-{
-    if( ocrFabric )
-    {
-        KTextEditor::EditInterface *editIFace = 0;
-        editIFace = dynamic_cast<KTextEditor::EditInterface *>(m_textEdit);
-
-        editIFace->setText( str );
-    }
 }
 
 

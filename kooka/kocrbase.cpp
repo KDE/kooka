@@ -8,10 +8,19 @@
 
 /***************************************************************************
  *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
+ *  This file may be distributed and/or modified under the terms of the    *
+ *  GNU General Public License version 2 as published by the Free Software *
+ *  Foundation and appearing in the file COPYING included in the           *
+ *  packaging of this file.                                                *
+ *
+ *  As a special exception, permission is given to link this program       *
+ *  with any version of the KADMOS ocr/icr engine of reRecognition GmbH,   *
+ *  Kreuzlingen and distribute the resulting executable without            *
+ *  including the source code for KADMOS in the source distribution.       *
+ *
+ *  As a special exception, permission is given to link this program       *
+ *  with any edition of Qt, and distribute the resulting executable,       *
+ *  without including the source code for Qt in the source distribution.   *
  *                                                                         *
  ***************************************************************************/
 
@@ -41,12 +50,14 @@
 #include <kscanslider.h>
 #include <kstandarddirs.h>
 #include <kfilemetainfo.h>
+#include <ksconfig.h>
 #include <qstringlist.h>
 #include <qcolor.h>
 #include <qgrid.h>
 #include <qsizepolicy.h>
 
-KOCRBase::KOCRBase( QWidget *parent, KDialogBase::DialogType face )
+KOCRBase::KOCRBase( QWidget *parent, KSpellConfig *spellConfig,
+                    KDialogBase::DialogType face )
    :KDialogBase( face, i18n("Optical Character Recognition"),
 		 User2|Close|User1, User1, parent,0, false, true,
 		 KGuiItem( i18n("Start OCR" ), "launch",
@@ -57,7 +68,9 @@ KOCRBase::KOCRBase( QWidget *parent, KDialogBase::DialogType face )
     m_metaBox(0L),
     m_imgHBox(0L),
     m_previewPix(0L),
-    m_currImg(0L)
+    m_currImg(0L),
+    m_spellConfig(spellConfig),
+    m_wantSpellCfg(true)
 {
     kdDebug(28000) << "OCR Base Dialog!" << endl;
     // Layout-Boxes
@@ -88,6 +101,7 @@ void KOCRBase::setupGui()
 {
     ocrIntro();
     imgIntro();
+    if( m_wantSpellCfg ) spellCheckIntro();
 }
 
 void KOCRBase::imgIntro()
@@ -145,6 +159,27 @@ void KOCRBase::ocrIntro( )
     (void) new QLabel( ocrEngineDesc(), pa );
 }
 
+
+void KOCRBase::spellCheckIntro()
+{
+    m_spellchkPage = addVBoxPage( i18n("Spellchecking") );
+
+    KSpellConfig *sCfg = new KSpellConfig(m_spellchkPage, "SPELLCHK",
+                                          m_spellConfig, false );
+
+    m_spellConfig = sCfg;
+
+    connect( sCfg, SIGNAL(configChanged()),
+            this, SLOT(slSpellConfigChanged()));
+}
+
+void KOCRBase::slSpellConfigChanged()
+{
+    kdDebug(28000) << "Spellcheck config changed" << endl;
+}
+
+
+
 void KOCRBase::stopAnimation()
 {
    if( m_animation )
@@ -164,6 +199,7 @@ KOCRBase::~KOCRBase()
 
 void KOCRBase::introduceImage( KookaImage* img)
 {
+    if( ! (img && img->isFileBound()) ) return;
     KFileMetaInfo info = img->fileMetaInfo();
     QStringList groups;
     if ( info.isValid() )

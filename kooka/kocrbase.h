@@ -8,13 +8,21 @@
 
 /***************************************************************************
  *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
+ *  This file may be distributed and/or modified under the terms of the    *
+ *  GNU General Public License version 2 as published by the Free Software *
+ *  Foundation and appearing in the file COPYING included in the           *
+ *  packaging of this file.                                                *
+ *
+ *  As a special exception, permission is given to link this program       *
+ *  with any version of the KADMOS ocr/icr engine of reRecognition GmbH,   *
+ *  Kreuzlingen and distribute the resulting executable without            *
+ *  including the source code for KADMOS in the source distribution.       *
+ *
+ *  As a special exception, permission is given to link this program       *
+ *  with any edition of Qt, and distribute the resulting executable,       *
+ *  without including the source code for Qt in the source distribution.   *
  *                                                                         *
  ***************************************************************************/
-
 
 #ifndef KOCRBASE_H
 #define KOCRBASE_H
@@ -26,6 +34,7 @@
 
 #include <kscanslider.h>
 #include <kanimwidget.h>
+#include <ksconfig.h>
 /**
   *@author Klaas Freitag
   */
@@ -36,12 +45,14 @@ class QHBox;
 class QVBox;
 class QLabel;
 class QSize;
+class KSpellConfig;
 
 class KOCRBase: public KDialogBase
 {
     Q_OBJECT
 public:
-    KOCRBase( QWidget *, KDialogBase::DialogType face = KDialogBase::Plain );
+    KOCRBase( QWidget *, KSpellConfig *spellConfig,
+              KDialogBase::DialogType face = KDialogBase::Plain );
     ~KOCRBase();
 
     virtual void setupGui();
@@ -64,6 +75,9 @@ public:
 
     QVBox* ocrPage(){ return m_ocrPage; }
     QVBox* imagePage(){ return m_imgPage; }
+
+    KSpellConfig* spellConfig()
+        { return m_spellConfig; }
 
 public slots:
     virtual void stopAnimation();
@@ -90,9 +104,16 @@ protected:
      */
     virtual void imgIntro();
 
+    /**
+     * This sets up the spellchecking configuration
+     */
+    virtual void spellCheckIntro();
+
+
 protected slots:
     virtual KAnimWidget* getAnimation(QWidget*);
     virtual void writeConfig();
+    virtual void slSpellConfigChanged();
 
 private slots:
     virtual void slPreviewResult( KIO::Job* );
@@ -102,10 +123,15 @@ private:
     KAnimWidget  *m_animation;
     QVBox        *m_ocrPage;
     QVBox        *m_imgPage;
+    QVBox        *m_spellchkPage;
     QVBox        *m_metaBox;
     QHBox        *m_imgHBox;
     QLabel       *m_previewPix;
     KookaImage   *m_currImg;
+
+    KSpellConfig *m_spellConfig;
+    bool          m_wantSpellCfg;
+
     QSize         m_previewSize;
 };
 

@@ -8,10 +8,19 @@
 
 /***************************************************************************
  *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
+ *  This file may be distributed and/or modified under the terms of the    *
+ *  GNU General Public License version 2 as published by the Free Software *
+ *  Foundation and appearing in the file COPYING included in the           *
+ *  packaging of this file.                                                *
+ *
+ *  As a special exception, permission is given to link this program       *
+ *  with any version of the KADMOS ocr/icr engine of reRecognition GmbH,   *
+ *  Kreuzlingen and distribute the resulting executable without            *
+ *  including the source code for KADMOS in the source distribution.       *
+ *
+ *  As a special exception, permission is given to link this program       *
+ *  with any edition of Qt, and distribute the resulting executable,       *
+ *  without including the source code for Qt in the source distribution.   *
  *                                                                         *
  ***************************************************************************/
 #ifndef KOOKAVIEW_H
@@ -29,9 +38,6 @@
 #include <kparts/dockmainwindow.h>
 #include <kparts/part.h>
 
-#include <ktexteditor/view.h>
-#include <ktexteditor/document.h>
-#include <ktexteditor/editinterface.h>
 // application specific includes
 #include "kscandevice.h"
 #include "previewer.h"
@@ -50,8 +56,7 @@ class KActionCollection;
 class ThumbView;
 class KookaImage;
 class QPixmap;
-
-
+class ocrResEdit;
 /**
  * This is the main view class for Kooka.  Most of the non-menu,
  * non-toolbar, and non-statusbar (e.g., non frame) GUI code should go
@@ -91,7 +96,7 @@ public:
 
     ScanPackager *gallery() { return packager; }
 
-    KParts::Part* ocrResultPart() { return m_textEdit; }
+    // KParts::Part* ocrResultPart() { return m_textEdit; }
 
     ImageCanvas *getImageViewer() { return img_canvas; }
 public slots:
@@ -130,9 +135,7 @@ public slots:
     void slLoadScanParams( );
     void slSaveScanParams( );
 
-    void slOCRResultText( const QString& );
     void slOCRResultImage( const QPixmap& );
-    void slClearOCRResult();
 
     void slShowThumbnails( KFileTreeViewItem *dirKfi = 0, bool forceRedraw=false);
      void slFreshUpThumbView();
@@ -161,6 +164,7 @@ public slots:
     void slScanFinished( KScanStat stat );
     void slAcquireStart();
 
+
 protected slots:
     void  slCloseScanDevice();
 
@@ -172,6 +176,7 @@ protected slots:
      * Needs to convert the one-page-QImage to a KookaImage
      */
     void slNewImageScanned(QImage*);
+
 signals:
     /**
      * Use this signal to change the content of the statusbar
@@ -213,8 +218,8 @@ private:
     QCString     connectedDevice;
 
     QImage       *m_ocrResultImg;
-    int 		image_pool_id;
-    int 		preview_id;
+    int          image_pool_id;
+    int 	 preview_id;
 
     KSANEOCR *ocrFabric;
 
@@ -228,10 +233,7 @@ private:
 
     KMainWindow *m_mainWindow;
 
-    // KParts::ReadWritePart *m_textEdit;
-    KTextEditor::Document *m_textEdit;
-    // KTextEditor::Document *m_
-    KTextEditor::View *m_view;
+    ocrResEdit  *m_ocrResEdit;
 };
 
 #endif // KOOKAVIEW_H

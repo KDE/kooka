@@ -11,10 +11,11 @@ kooka_SOURCES =	main.cpp kooka.cpp kookaview.cpp kookapref.cpp 		\
 		imgnamecombo.cpp imageselectline.cpp      \
 		thumbview.cpp thumbviewitem.cpp                         \
 		dwmenuaction.cpp kocrbase.cpp           \
-		kocrgocr.cpp kocrkadmos.cpp kadmosocr.cpp 
-# 		pagesetup.cpp
+		kocrgocr.cpp kocrkadmos.cpp kadmosocr.cpp ocrword.cpp   \
+		ocrresedit.cpp
+# 		pagesetup.cpp 
 
-kooka_LDADD   = $(LIB_KFILE) -lkdeprint -lktexteditor $(LIBTIFF) $(top_builddir)/libkscan/libkscan.la $(KADMOS_LIB)
+kooka_LDADD   = $(LIB_KFILE) -lkdeprint -lktexteditor $(LIBTIFF) $(top_builddir)/libkscan/libkscan.la $(KADMOS_LIB) $(LIB_KSPELL)
 kooka_LDFLAGS = $(KDE_RPATH) $(all_libraries)
 
 INCLUDES         = -I$(top_srcdir)/libkscan $(all_includes) $(LIBSANE_INCLUDES) $(KADMOS_INC)
@@ -27,7 +28,8 @@ kookaiface.h  thumbview.h thumbviewitem.h \
 kookapref.h   resource.h \
 imgnamecombo.h imageselectline.h kookaimage.h kookaimagemeta.h \
 kocrbase.h kocrgocr.h kocrkadmos.h \
-kadmosocr.h 
+kadmosocr.h ocrword.h ocrresedit.h
+
 # pagesetup.h
 
 KDE_ICON = kooka

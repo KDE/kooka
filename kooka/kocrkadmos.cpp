@@ -8,10 +8,19 @@
 
 /***************************************************************************
  *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
+ *  This file may be distributed and/or modified under the terms of the    *
+ *  GNU General Public License version 2 as published by the Free Software *
+ *  Foundation and appearing in the file COPYING included in the           *
+ *  packaging of this file.                                                *
+ *
+ *  As a special exception, permission is given to link this program       *
+ *  with any version of the KADMOS ocr/icr engine of reRecognition GmbH,   *
+ *  Kreuzlingen and distribute the resulting executable without            *
+ *  including the source code for KADMOS in the source distribution.       *
+ *
+ *  As a special exception, permission is given to link this program       *
+ *  with any edition of Qt, and distribute the resulting executable,       *
+ *  without including the source code for Qt in the source distribution.   *
  *                                                                         *
  ***************************************************************************/
 
@@ -47,8 +56,8 @@
 #define CFG_KADMOS_CLASSIFIER_PATH "classifierPath"
 #define CFG_KADMOS_CLASSIFIER      "classifier"
 
-KadmosDialog::KadmosDialog( QWidget *parent )
-    :KOCRBase( parent, KDialogBase::Tabbed ),
+KadmosDialog::KadmosDialog( QWidget *parent, KSpellConfig *spellConfig )
+    :KOCRBase( parent, spellConfig, KDialogBase::Tabbed ),
      m_classifierCombo(0),
      m_cbNoise(0),
      m_cbAutoscale(0)
@@ -85,7 +94,7 @@ void KadmosDialog::setupGui()
 
     KOCRBase::setupGui();
     setupPreprocessing( addVBoxPage(   i18n("Preprocessing")));
-    setupSegmentation( addVBoxPage(   i18n("Segmentation")));
+    setupSegmentation(  addVBoxPage(   i18n("Segmentation")));
     setupClassification( addVBoxPage( i18n("Classification")));
 
     /* continue page setup on the first page */

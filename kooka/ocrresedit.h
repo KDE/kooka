@@ -1,8 +1,8 @@
 /***************************************************************************
-                     kocrgocr.h - ocr dialog for GOCR
+                  ocrresedit.h  - ocr-result edit widget
                              -------------------
-    begin                : Sun Jun 11 2000
-    copyright            : (C) 2000 by Klaas Freitag
+    begin                : Fri 12 Feb 2003
+    copyright            : (C) 2003 by Klaas Freitag
     email                : freitag@suse.de
  ***************************************************************************/
 
@@ -24,63 +24,38 @@
  *                                                                         *
  ***************************************************************************/
 
+#ifndef _OCR_RESEDIT_
+#define _OCR_RESEDIT_
 
-#ifndef KOCRGOCR_H
-#define KOCRGOCR_H
+#include <qtextedit.h>
 
-#include <kdialogbase.h>
-#include <qimage.h>
-#include <qstring.h>
+class QString;
+class QColor;
+class ocrWord;
 
-#include <kscanslider.h>
-#include <kanimwidget.h>
-
-#include "kocrbase.h"
-/**
-  *@author Klaas Freitag
-  */
-
-class KSpellConfig;
-
-class KGOCRDialog: public KOCRBase
+class ocrResEdit : public QTextEdit
 {
     Q_OBJECT
 public:
-    KGOCRDialog( QWidget*, KSpellConfig* );
-    ~KGOCRDialog();
-
-    QString getOCRCmd( void ) const
-        { return m_ocrCmd;}
-
-    int getGraylevel( void ) const
-        { return( sliderGrayLevel->value());}
-    int getDustsize( void ) const
-        { return( sliderDustSize->value());}
-    int getSpaceWidth( void ) const
-        { return( sliderSpace->value());}
-
-    void setupGui();
-
-    QString ocrEngineName() const;
-    QString ocrEngineDesc() const;
-    QString ocrEngineLogo() const;
+    ocrResEdit( QWidget  *parent );
 
 public slots:
-    void enableFields(bool);
-    void introduceImage( KookaImage* );
+    void slUpdateOCRResult( int line, const QString& wordFrom,
+                            const QString& wordTo );
 
-protected:
-    void writeConfig();
+    void slMarkWordWrong( int line, const ocrWord& word );
 
+    void slIgnoreWrongWord( int line, const ocrWord& word );
+
+protected slots:
+    void slReplaceWord( int line, const QString& wordFrom,
+                        const QString& wordTo, const QColor& color );
 
 private:
+    QColor      m_updateColor;
+    QColor      m_ignoreColor;
+    QColor      m_wrnColor;
 
-
-    KScanSlider *sliderGrayLevel;
-    KScanSlider *sliderDustSize;
-    KScanSlider *sliderSpace;
-
-    QString      m_ocrCmd;
 };
 
 #endif
