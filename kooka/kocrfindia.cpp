@@ -52,7 +52,7 @@ KOCRFinalDialog::KOCRFinalDialog( QWidget *parent, QString resultimg )
    kdDebug(28000) << "Finished KOCR!" << endl;
    // Layout-Boxes
    QWidget *page = new QWidget( this );
-   CHECK_PTR( page );
+   Q_CHECK_PTR( page );
    setMainWidget( page );
    
    // Caption - Label
@@ -60,7 +60,7 @@ KOCRFinalDialog::KOCRFinalDialog( QWidget *parent, QString resultimg )
    
    QLabel *label = new QLabel( i18n( "<B>Optical Character Recognition Results</B>"),
 				     page, "captionImage" );
-   CHECK_PTR( label );
+   Q_CHECK_PTR( label );
    topLayout->addWidget( label);
 
    QSplitter *splitpage = new QSplitter( QSplitter::Vertical , page );
@@ -69,12 +69,12 @@ KOCRFinalDialog::KOCRFinalDialog( QWidget *parent, QString resultimg )
    resultImg = new QImage( resultimg );
    ImageCanvas *imgCanvas = new ImageCanvas( splitpage, resultImg, "RESIMG" );
    
-   CHECK_PTR( imgCanvas );
+   Q_CHECK_PTR( imgCanvas );
    // topLayout->addWidget( imgCanvas);
 
    // textEdit
    textEdit = new KEdit( splitpage, "OCRResultEditor" );
-   CHECK_PTR( textEdit );
+   Q_CHECK_PTR( textEdit );
    // topLayout->addWidget( textEdit );
 
    splitpage->setResizeMode( imgCanvas, QSplitter::FollowSizeHint );

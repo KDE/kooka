@@ -74,7 +74,7 @@ bool KSANEOCR::startExternOcrVisible( void )
    if( visibleOCRRunning ) return( false );
    
    ocrProcessDia = new KOCRStartDialog ( parent );
-   CHECK_PTR( ocrProcessDia );
+   Q_CHECK_PTR( ocrProcessDia );
    visibleOCRRunning = true;
    
    connect( ocrProcessDia, SIGNAL( user1Clicked()), this, SLOT( startOCRProcess() ));
@@ -117,7 +117,7 @@ void KSANEOCR::startOCRProcess( void )
    }
    
    daemon = new KProcess;
-   CHECK_PTR(daemon);
+   Q_CHECK_PTR(daemon);
    ocrResultText = "";
    
    connect(daemon, SIGNAL(processExited(KProcess *)),

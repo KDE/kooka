@@ -89,14 +89,14 @@ KookaView::KookaView(QWidget *parent)
     *   the current scanner provides.
     */
    scan_params = new ScanParams( left_splitter);
-   CHECK_PTR(scan_params);
+   Q_CHECK_PTR(scan_params);
 
    connect( scan_params,    SIGNAL( scanResolutionChanged( int, int )),
 	    preview_canvas, SLOT( slNewScanResolutions( int, int )));
 
    /* the object from the kscan lib to handle low level scanning */
    sane = new KScanDevice( this );
-   CHECK_PTR(sane);
+   Q_CHECK_PTR(sane);
 
    /* a list of backends the scan backend knows */
    QStrList backends = sane->getDevices();
@@ -393,7 +393,7 @@ void KookaView::startOCR( const QImage *img )
       if( ocrFabric == 0L )
 	 ocrFabric = new KSANEOCR(this );
 
-      CHECK_PTR( ocrFabric );
+      Q_CHECK_PTR( ocrFabric );
       ocrFabric->setImage( img );
 
       if( !ocrFabric->startExternOcrVisible() )

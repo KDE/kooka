@@ -902,7 +902,7 @@ void ScanPackager::createFolder( void )
 	 if( curr )
 	 {
 	    PackagerItem *new_item = new PackagerItem( curr, true );
-	    CHECK_PTR( new_item );
+	    Q_CHECK_PTR( new_item );
 	    new_item->setFilename( curr->getFilename() + "/" + folder );
 	  	 		
 	    new_item->createFolder();

@@ -47,19 +47,19 @@ DeviceSelector::DeviceSelector( QWidget *parent, const QStrList& devList,
    kdDebug(29000) << "Starting DevSelector!" << endl;
    // Layout-Boxes
    QWidget *page = new QWidget( this );
-   CHECK_PTR( page );
+   Q_CHECK_PTR( page );
    setMainWidget( page );
 
    QVBoxLayout *topLayout = new QVBoxLayout( page, marginHint(), spacingHint() );
    QLabel *label = new QLabel( page, "captionImage" );
-   CHECK_PTR( label );
+   Q_CHECK_PTR( label );
    label->setPixmap( QPixmap( "kookalogo.png" ));
    label->resize( 100, 350 );
    topLayout->addWidget( label );
 
    selectBox = new QButtonGroup( 1, Horizontal, i18n( "Select a scan device" ),
 				 page, "ButtonBox");
-   CHECK_PTR( selectBox );
+   Q_CHECK_PTR( selectBox );
    selectBox->setExclusive( true );
    topLayout->addWidget( selectBox );
    setScanSources( devList, hrdevList );

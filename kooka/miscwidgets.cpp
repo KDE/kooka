@@ -90,7 +90,7 @@ ImgScaleDialog::ImgScaleDialog( QWidget *parent, int curr_sel,
    // (void) new QLabel( , main, "Page");
    //
    QButtonGroup *radios = new QButtonGroup ( 2, Qt::Horizontal, main );
-   CHECK_PTR(radios);
+   Q_CHECK_PTR(radios);
    radios->setTitle( i18n("Select image zoom:") );
 
    connect( radios, SIGNAL( clicked( int )),

@@ -31,7 +31,7 @@ GammaDialog::GammaDialog( QWidget *parent ) :
     gt = new KGammaTable();
     QWidget *page = new QWidget( this );
 
-    CHECK_PTR( page );
+    Q_CHECK_PTR( page );
     setMainWidget( page );
 
     /* This connect is for recalculating the table everytimes a new
@@ -60,17 +60,17 @@ GammaDialog::GammaDialog( QWidget *parent ) :
 
     /* Slider Widgets for gamma, brightness, contrast */
     wBright   = new KScanSlider ( page, i18n("Brightness"), -50.0, 50.0 );
-    CHECK_PTR(wBright);
+    Q_CHECK_PTR(wBright);
     wBright->slSetSlider( 0 );
     connect( wBright, SIGNAL(valueChanged(int)), gt, SLOT(setBrightness(int)));
 
     wContrast = new KScanSlider ( page, i18n("Constrast") , -50.0, 50.0 );
-    CHECK_PTR(wContrast);
+    Q_CHECK_PTR(wContrast);
     wContrast->slSetSlider( 0 );
     connect( wContrast, SIGNAL(valueChanged(int)), gt, SLOT(setContrast(int)));
 
     wGamma    = new KScanSlider ( page, i18n("Gamma"),  30.0, 300.0 );
-    CHECK_PTR(wGamma);
+    Q_CHECK_PTR(wGamma);
     wGamma->slSetSlider(100);
     connect( wGamma, SIGNAL(valueChanged(int)), gt, SLOT(setGamma(int)));
 

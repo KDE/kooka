@@ -50,7 +50,7 @@ KOCRStartDialog::KOCRStartDialog( QWidget *parent )
    kdDebug(28000) << "Starting KOCR-Start-Dialog!" << endl;
    // Layout-Boxes
    QWidget *page = new QWidget( this );
-   CHECK_PTR( page );
+   Q_CHECK_PTR( page );
    setMainWidget( page );
 
    KConfig *conf = KGlobal::config ();
@@ -66,7 +66,7 @@ KOCRStartDialog::KOCRStartDialog( QWidget *parent )
 				     "<A HREF=http://jocr.sourceforge.net>"
 				     "http://jocr.sourceforge.net</A>"),
 				     page, "captionImage" );
-   CHECK_PTR( label );
+   Q_CHECK_PTR( label );
    topLayout->addWidget( label,1 );
 
    // Horizontal line

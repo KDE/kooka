@@ -124,7 +124,7 @@ bool ScanParams::connectDevice( KScanDevice *newScanDevice )
 
       /* load the startup scanoptions */
       startupOptset = new KScanOptSet( DEFAULT_OPTIONSET );
-      CHECK_PTR( startupOptset );
+      Q_CHECK_PTR( startupOptset );
       
       if( !startupOptset->load( "Startup" ) )
       { 
@@ -358,7 +358,7 @@ void ScanParams::scannerParams( )
 	       this, SLOT(slReloadAllGui( KScanOption* )));
 
 	 pb_edit_gtable = new QPushButton( i18n("Edit..."), hb1 );
-	 CHECK_PTR(pb_edit_gtable);
+	 Q_CHECK_PTR(pb_edit_gtable);
 	 pb_edit_gtable->setEnabled( isOn );
 	
 	 connect( pb_edit_gtable, SIGNAL( clicked () ),
@@ -801,7 +801,7 @@ void ScanParams::slAcquirePreview( void )
     slMaximalScanSize();
 
     if( ! sane_device ) kdDebug(29000) << "Aeetsch: sane_device is 0 !" << endl;
-    CHECK_PTR( sane_device );
+    Q_CHECK_PTR( sane_device );
     KScanStat stat = sane_device->acquirePreview( gray_preview );
 
     if( stat != KSCAN_OK )

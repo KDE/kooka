@@ -59,15 +59,15 @@ FormatDialog::FormatDialog( QWidget *parent, const QString& imgFormat, const cha
    // QFrame *page = addPage( QString( "Save the image") );
    QFrame *page = new QFrame( this );
    page->setFrameStyle( QFrame::Box | QFrame::Sunken );
-   CHECK_PTR( page );
+   Q_CHECK_PTR( page );
    setMainWidget( page );
    
    QVBoxLayout *bigdad = new QVBoxLayout( page, marginHint(), spacingHint());
-   CHECK_PTR(bigdad);
+   Q_CHECK_PTR(bigdad);
 
    // some nice words
    QLabel *l0 = new QLabel( page );
-   CHECK_PTR(l0);
+   Q_CHECK_PTR(l0);
    l0->setText( i18n( "<B>Save Assistant</B><P>Select an image format to save the scanned image." ));
    bigdad->addWidget( l0 );
 
@@ -77,19 +77,19 @@ FormatDialog::FormatDialog( QWidget *parent, const QString& imgFormat, const cha
    // Layout-Boxes
    // QHBoxLayout *hl1= new QHBoxLayout( );  // Caption
    QHBoxLayout *lhBigMiddle = new QHBoxLayout( spacingHint() );  // Big middle
-   CHECK_PTR(lhBigMiddle);
+   Q_CHECK_PTR(lhBigMiddle);
    bigdad->addLayout( lhBigMiddle );
    QVBoxLayout *lvFormatSel = new QVBoxLayout( spacingHint() );  // Selection List
-   CHECK_PTR(lvFormatSel);
+   Q_CHECK_PTR(lvFormatSel);
    lhBigMiddle->addLayout( lvFormatSel );
    
    // Insert Scrolled List for formats
    QLabel *l1 = new QLabel( page );
-   CHECK_PTR(l1);
+   Q_CHECK_PTR(l1);
    l1->setText( i18n( "Available image formats:" ));
    
    lb_format = new QListBox( page, "ListBoxFormats" );
-   CHECK_PTR(lb_format);
+   Q_CHECK_PTR(lb_format);
 
 #ifdef USE_KIMAGEIO
    QStringList fo = KImageIO::types();
@@ -103,29 +103,29 @@ FormatDialog::FormatDialog( QWidget *parent, const QString& imgFormat, const cha
    
    // Insert label for helptext
    l_help = new QLabel( page );
-   CHECK_PTR(l_help);
+   Q_CHECK_PTR(l_help);
    l_help->setFrameStyle( QFrame::Panel|QFrame::Sunken );
    l_help->setText( i18n("-No format selected-" ));
    l_help->setAlignment( AlignVCenter | AlignHCenter );
 
    // Insert Selbox for subformat
    l2 = new QLabel( page );
-   CHECK_PTR(l2);
+   Q_CHECK_PTR(l2);
    l2->setText( i18n( "Select the image sub-format" ));
    cb_subf = new QComboBox( page, "ComboSubFormat" );
-   CHECK_PTR( cb_subf );
+   Q_CHECK_PTR( cb_subf );
 
    // Checkbox to store setting
    cbRemember = new QCheckBox(i18n("Remember this format for this image type %1").arg( imgFormat ),
 			      page );
-   CHECK_PTR( cbRemember );
+   Q_CHECK_PTR( cbRemember );
 
    cbDontAsk  = new QCheckBox(i18n("Don't ask again for the save format if it is defined."),
 			      page );
-   CHECK_PTR( cbDontAsk );
+   Q_CHECK_PTR( cbDontAsk );
 
    QFrame *hl = new QFrame(page);
-   CHECK_PTR( hl );
+   Q_CHECK_PTR( hl );
    hl->setFrameStyle( QFrame::HLine|QFrame::Sunken );
 
    // bigdad->addWidget( l_caption, 1 );
@@ -579,7 +579,7 @@ bool ImgSaver::isRememberedFormat( picType type, QString format ) const
 QString ImgSaver::getFormatForType( picType type ) const
 {
    KConfig *konf = KGlobal::config ();
-   CHECK_PTR( konf );
+   Q_CHECK_PTR( konf );
    konf->setGroup( OP_FILE_GROUP );
 
    QString f;
@@ -609,7 +609,7 @@ QString ImgSaver::getFormatForType( picType type ) const
 void ImgSaver::storeFormatForType( picType type, QString format, bool ask )
 {
    KConfig *konf = KGlobal::config ();
-   CHECK_PTR( konf );
+   Q_CHECK_PTR( konf );
    konf->setGroup( OP_FILE_GROUP );
 
    konf->writeEntry( OP_FILE_ASK_FORMAT, ask );
@@ -705,7 +705,7 @@ void ImgSaver::readConfig( void )
 {
 
    KConfig *konf = KGlobal::config ();
-   CHECK_PTR( konf );
+   Q_CHECK_PTR( konf );
    konf->setGroup( OP_FILE_GROUP );
    ask_for_format = konf->readBoolEntry( OP_FILE_ASK_FORMAT, true );
 
