@@ -412,6 +412,8 @@ private:
     QStrList	      option_list;    // list of names of all options
     QStrList            dirtyList;     // option changes
 
+    inline  QString optionNotifyString(int) const;
+    
     QPtrList<KScanOption>  gui_elements;
     QAsciiDict<SANE_Device>  scannerDevices;
 

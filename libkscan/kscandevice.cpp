@@ -763,7 +763,19 @@ KScanStat KScanDevice::acquirePreview( bool forceGray, int dpi )
  * prepareScan tries to set as much as parameters as possible.
  *
  **/
-#define NOTIFIER(X) ( X == 0  ? ' ' : 'X' )
+#define NOTIFIER(X) optionNotifyString(X)
+
+QString KScanDevice::optionNotifyString( int i ) const
+{
+    const QString sOff = "        |";
+    const QString sOn  = "   X    |";   
+    if( i > 0 )
+    {
+	return sOn;
+    }
+    return sOff;
+}
+
 
 void KScanDevice::prepareScan( void )
 {
@@ -772,9 +784,9 @@ void KScanDevice::prepareScan( void )
     kdDebug(29000) << "########################################################################################################" << endl;
     kdDebug(29000) << "Scanner: " << scanner_name << endl;
     kdDebug(29000) << "         " << getScannerName() << endl;
-    kdDebug(29000) << "----------------------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+" << endl;
-    kdDebug(29000) << " Option-Name          | SOFT_SEL  | HARD_SEL  | SOFT_DET  | EMULATED  | AUTOMATIC | INACTIVE  | ADVANCED  |" << endl;
-    kdDebug(29000) << "----------------------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+" << endl;
+    kdDebug(29000) << "----------------------------------+--------+--------+--------+--------+--------+--------+--------+" << endl;
+    kdDebug(29000) << " Option-Name                      |SOFT_SEL|HARD_SEL|SOFT_DET|EMULATED|AUTOMATI|INACTIVE|ADVANCED|" << endl;
+    kdDebug(29000) << "----------------------------------+--------+--------+--------+--------+--------+--------+--------+" << endl;
 
     while ( it.current() )
     {
@@ -786,20 +798,21 @@ void KScanDevice::prepareScan( void )
        if( d )
        {
 	  int cap = d->cap;
-
-	  kdDebug(29000) << " " << it.currentKey() << " |     " <<
-		 NOTIFIER( ((cap) & SANE_CAP_SOFT_SELECT) ) << " |     " <<
-		 NOTIFIER( ((cap) & SANE_CAP_HARD_SELECT) ) << " |     " <<
-		 NOTIFIER( ((cap) & SANE_CAP_SOFT_DETECT) ) << " |     " <<
-		 NOTIFIER( ((cap) & SANE_CAP_EMULATED) ) << " |     " <<
-		 NOTIFIER( ((cap) & SANE_CAP_AUTOMATIC) ) << " |     " <<
-		 NOTIFIER( ((cap) & SANE_CAP_INACTIVE) ) << " |     " <<
-		 NOTIFIER( ((cap) & SANE_CAP_ADVANCED ) ) << " |" << endl;
+	  
+	  QString s = QString(it.currentKey()).leftJustify(32, ' ');
+	  kdDebug(29000) << " " << s << " |" <<
+		 NOTIFIER( ((cap) & SANE_CAP_SOFT_SELECT)) << 
+		 NOTIFIER( ((cap) & SANE_CAP_HARD_SELECT)) << 
+		 NOTIFIER( ((cap) & SANE_CAP_SOFT_DETECT)) << 
+		 NOTIFIER( ((cap) & SANE_CAP_EMULATED)   ) << 
+		 NOTIFIER( ((cap) & SANE_CAP_AUTOMATIC)  ) << 
+		 NOTIFIER( ((cap) & SANE_CAP_INACTIVE)   ) << 
+		 NOTIFIER( ((cap) & SANE_CAP_ADVANCED )  )    << endl;
 
        }
        ++it;
     }
-    kdDebug(29000) << "----------------------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+" << endl;
+    kdDebug(29000) << "----------------------------------+--------+--------+--------+--------+--------+--------+--------+" << endl;
 
     KScanOption pso( SANE_NAME_PREVIEW );
     const QString q = pso.get();
