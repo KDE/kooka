@@ -86,7 +86,7 @@ KookaView::KookaView(QWidget *parent)
    
    /* the object from the kscan lib to handle low level scanning */
    sane = new KScanDevice( this );
-   CHECK_PTR(sane);
+   Q_CHECK_PTR(sane);
    // connect( sane, SIGNAL( sigCloseDevice()), this, SLOT( slCloseScanDevice()));
 
    /* select the scan device, either user or from config, this creates and assembles
@@ -226,7 +226,7 @@ bool KookaView::slSelectDevice( )
       }
       /* This connects to the selected scanner */
       scan_params = new ScanParams( paramSplitter );
-      CHECK_PTR(scan_params);
+      Q_CHECK_PTR(scan_params);
 
       if( sane->openDevice( selDevice ) == KSCAN_OK )
       {
@@ -465,7 +465,7 @@ void KookaView::startOCR( const QImage *img )
       if( ocrFabric == 0L )
 	 ocrFabric = new KSANEOCR(this );
 
-      CHECK_PTR( ocrFabric );
+      Q_CHECK_PTR( ocrFabric );
       ocrFabric->setImage( img );
 
       if( !ocrFabric->startExternOcrVisible() )

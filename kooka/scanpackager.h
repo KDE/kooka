@@ -105,7 +105,7 @@ signals:
     void        galleryPathSelected( KFileTreeBranch* branch, const QString& relativPath );
    
 private:
-   QString     localFilename( KFileTreeViewItem* it ) const;
+   QString     localFileName( KFileTreeViewItem* it ) const;
    void 	loadImageForItem( KFileTreeViewItem* item );
    void         createMenus();
    void         openRoots();

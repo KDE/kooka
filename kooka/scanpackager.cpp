@@ -453,7 +453,7 @@ void ScanPackager::loadImageForItem( KFileTreeViewItem *item )
    if( url.isLocalFile() )
    {
       KookaImage *img = new KookaImage( ); 
-      if( img->load( localFilename(item) ) )
+      if( img->load( localFileName(item) ) )
       {
 	 slImageArrived( item, img );
       }
@@ -496,13 +496,13 @@ QString ScanPackager::getCurrImageFileName( bool withPath = true ) const
    {
       if( withPath )
       {
-	 result = localFilename(curr);
+	 result = localFileName(curr);
       }
       else
       {
-	 KURL url( localFilename(curr));
+	 KURL url( localFileName(curr));
 	 url = curr->url();
-	 result = url.filename();
+	 result = url.fileName();
       }
    }
    return( result );
@@ -525,13 +525,13 @@ QCString ScanPackager::getImgFormat( KFileTreeViewItem* item ) const
 
    // TODO find the real extension for use with the filename !
    // temporarely:
-   QString f = localFilename( item );
+   QString f = localFileName( item );
 
    return( QImage::imageFormat( f ));
    
 }
 
-QString ScanPackager::localFilename( KFileTreeViewItem *it ) const
+QString ScanPackager::localFileName( KFileTreeViewItem *it ) const
 {
    if( ! it ) return( QString::null );
 
@@ -546,7 +546,6 @@ QString ScanPackager::localFilename( KFileTreeViewItem *it ) const
    }
 
    return( res );
-    
 }
 
 /* Called if the image exists but was changed by image manipulation func   */
@@ -565,7 +564,7 @@ void ScanPackager::slotImageChanged( QImage *img )
    /* unload image and free memory */
    slotUnloadItem( curr );
    
-   const QString filename = localFilename( curr );
+   const QString filename = localFileName( curr );
    const QCString format = getImgFormat( curr );
    ImgSaver saver( this );
    ImgSaveStat is_stat = ISS_OK;
