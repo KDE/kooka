@@ -27,7 +27,6 @@
 #include <kimageio.h>
 #include <kseparator.h>
 #include <klocale.h>
-#include <kstandarddirs.h>
 #include <kmessagebox.h>
 #include <kdebug.h>
 #include <kio/jobclasses.h>
@@ -42,10 +41,10 @@
 #include <qmessagebox.h>
 #include <qvbox.h>
 #include <qbuttongroup.h>
-#include <qregexp.h>
 
 #include "resource.h"
 #include "img_saver.h"
+#include "previewer.h"
 
 
 FormatDialog::FormatDialog( QWidget *parent, const QString& imgFormat, const char *name )
@@ -215,7 +214,7 @@ ImgSaver::ImgSaver(  QWidget *parent, const KURL dir_name )
    if( dir_name.isEmpty() || dir_name.protocol() != "file" )
    {
       kdDebug(28000) << "ImageServer initialised with wrong dir " << dir_name.url() << endl;
-      directory = kookaImgRoot();
+      directory = Previewer::galleryRoot();
    }
    else
    {
@@ -243,7 +242,7 @@ ImgSaver::ImgSaver(  QWidget *parent, const KURL dir_name )
 ImgSaver::ImgSaver( QWidget *parent )
    :QObject( parent )
 {
-   directory = kookaImgRoot();
+   directory = Previewer::galleryRoot();
    createDir( directory );
 
    readConfig();
@@ -394,7 +393,7 @@ ImgSaveStat ImgSaver::savePreview( QImage *image, const QCString& scannerName )
 
    ImgSaveStat stat = ISS_ERR_FORMAT_NO_WRITE;
 
-   QString previewfile = kookaPreviewFile( scannerName );
+   QString previewfile = Previewer::previewFile( scannerName );
    if( ! format.isEmpty() )
    {
       // Previewfile always comes absolute
@@ -720,49 +719,5 @@ QString ImgSaver::errorString( ImgSaveStat stat )
 }
 
 /* extension needs to be added */
-QString ImgSaver::kookaPreviewFile( const QCString& scanner )
-{
-   QString fname = kookaImgRoot() + QString::fromLatin1(".previews/");
-   QRegExp rx( "/" );
-   QString sname( scanner );
-   sname.replace( rx, "_");
- 
-   fname += sname;
 
-   kdDebug(28000) << "ImgSaver: returning preview file without extension: " << fname << endl;
-   return( fname );
-}
-
-QString ImgSaver::kookaImgRoot() 
-{
-   QString dir = (KGlobal::dirs())->saveLocation( "data", "ScanImages", true );
-
-   if( dir.right(1) != "/" )
-      dir += "/";
-   
-   return( dir );
-
-}
-
-
-#if 0
-/* Returns the path relativ to the kookaImgRoot. */
-QString ImgSaver::relativeToImgRoot( QString path )
-{
-   QString dir = kookaImgRoot(); /* Always with trailing / */
-   QString res = path;
-   
-   int idx = path.find( dir, 0 ); /* Search if dir is in path */
-   if( idx > -1 )
-   {
-      /* was found */
-      int dirlen = dir.length();
-      int rightlen = path.length() - dirlen - idx -1;
-      res = path.right(rightlen);
-      kdDebug(28000) << "relativToImgRoot returns " << res << endl;
-      
-   }
-   return( res );
-}
-#endif
 #include "img_saver.moc"

@@ -161,12 +161,7 @@ public:
    void        storeFormatForType( picType, QString, bool );
    bool        isRememberedFormat( picType type, QString format ) const;
 
-   QString     kookaPreviewFile( const QCString& scanner );
    
-   /**
-    * Static function that returns the kooka base dir.
-    */
-   static QString kookaImgRoot();
 #if 0
    /**
     * Static function that returns the relative path to the kooka imgage root
