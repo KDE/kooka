@@ -175,7 +175,7 @@ public:
    
 public slots:
    ImgSaveStat saveImage( QImage *image );
-   ImgSaveStat saveImage( QImage *image, QString filename, QString imgFormat );
+   ImgSaveStat saveImage( QImage *image, const KURL& filename, const QString& imgFormat );
    
    ImgSaveStat savePreview( QImage *image );
    

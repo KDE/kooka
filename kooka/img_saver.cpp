@@ -245,9 +245,7 @@ ImgSaver::ImgSaver(  QWidget *parent, const KURL dir_name )
       }
       else
       {
-	 QString filename = dir_name.url();
-	 directory  = filename.remove(0, 5);  // remove file: from beginning
-	 if( directory.right(1) != "/" ) directory += "/";
+	 directory = dir_name.directory(true, false);
       }
    }
 
@@ -379,32 +377,27 @@ QString ImgSaver::createFilename( QString format )
 }
 
 /**
- *   This function gets a filename from the parent.
+ *   This function gets a filename from the parent. The filename must not be relative.
  **/
-ImgSaveStat ImgSaver::saveImage( QImage *image, QString filename, QString imgFormat )
+ImgSaveStat ImgSaver::saveImage( QImage *image, const KURL& filename, const QString& imgFormat )
 {
     QString format = imgFormat;
     
-    if( imgFormat.isNull() || imgFormat.isEmpty())
-	QImage::imageFormat( filename );
     /* Check if the filename is local */
-    KURL url( filename );
-    if( url.protocol() != "file" )
+    if( !filename.isLocalFile())
     {
 	kdDebug(29000) << "ImgSaver: Can only save local image, sorry !" << endl;
 	return( ISS_ERR_PROTOCOL );
     }
-    QString fname = filename.remove(0, 5);  // remove file: from beginning
 
-    QFileInfo fi( fname );
-    if( fi.isRelative() )
-	filename = directory +"/"+ filename;
+    QString localFilename;
+    localFilename = filename.directory( false, true) + filename.fileName();
     
-    kdDebug(28000) << "saveImage: Saving "<< filename << " in format " << format << endl;
+    kdDebug(28000) << "saveImage: Saving "<< localFilename << " in format " << format << endl;
     if( format == "" ) 
 	format = "BMP";
 
-    return( save( image, filename, format, "" ) );
+    return( save( image, localFilename, format, "" ) );
 }
 
 
