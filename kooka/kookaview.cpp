@@ -488,7 +488,7 @@ void KookaView::startOCR( const QImage *img )
 
       if( !ocrFabric->startExternOcrVisible() )
       {
-	 KMessageBox::error(0, i18n("Could not start OCR-Process,\n"
+	 KMessageBox::sorry(0, i18n("Could not start OCR-Process.\n"
 				    "Probably there is already one running." ));
 
       }

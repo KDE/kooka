@@ -314,7 +314,7 @@ QString ScanPackager::buildNewFilename( QString cmplFilename, QString currFormat
    else
    {
       /* new Ext. differs from the current extension. Later. */
-      KMessageBox::sorry( 0L, i18n( "You entered a file extension that differs from the existing one.\nThat is not yet possible. Converting 'on the fly' is planned for a future release.\n\n"
+      KMessageBox::sorry( 0L, i18n( "You entered a file extension that differs from the existing one. That is not yet possible. Converting 'on the fly' is planned for a future release.\n"
 				      "Kooka corrects the extension."),
 			  i18n("On the fly conversion"));
       ext = base + "." + currFormat;
