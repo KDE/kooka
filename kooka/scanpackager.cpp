@@ -289,7 +289,7 @@ void ScanPackager::slotImageChanged( QImage *img )
    }
    else if( is_stat == ISS_ERR_PROTOCOL )
    {
-      KMessageBox::sorry( this, i18n( "Cannot save the image, because the file is local.\n"
+      KMessageBox::sorry( this, i18n( "Cannot save the image, because the file is not local.\n"
 				      "Kooka will support other protocols later."),
 			    i18n("Save error") );
 
