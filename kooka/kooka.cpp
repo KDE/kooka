@@ -372,17 +372,7 @@ void Kooka::filePrint()
     if (!m_printer) m_printer = new KPrinter;
     if (m_printer->setup(this))
     {
-       // setup the printer.  with Qt, you always "print" to a
-       // QPainter.. whether the output medium is a pixmap, a screen,
-       // or paper
-       QPainter p;
-       QPaintDeviceMetrics metrics( m_printer );
-       p.begin( m_printer);
-       // we let our view do the actual printing
-       m_view->print(&p, m_printer, metrics );
-
-       // and send the result to the printer
-       p.end();
+       m_view->print( m_printer );
     }
 }
 

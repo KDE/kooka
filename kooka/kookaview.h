@@ -86,7 +86,7 @@ public:
     /**
      * Print this view to any medium -- paper or not
      */
-    void print(QPainter *, KPrinter*, QPaintDeviceMetrics& );
+    void print( KPrinter* );
 
     bool ToggleVisibility( int );
     void loadStartupImage( void );

@@ -39,6 +39,7 @@
 #include "kookaimage.h"
 #include "kookaimagemeta.h"
 #include "ocrresedit.h"
+#include "kookaprint.h"
 #if 0
 #include "paramsetdialogs.h"
 #endif
@@ -450,59 +451,13 @@ void KookaView::loadStartupImage( void )
 }
 
 
-void KookaView::print(QPainter *p, KPrinter* printer, QPaintDeviceMetrics& metrics )
+void KookaView::print(KPrinter* printer)
 {
-   int pheight = metrics.height();
-   int pwidth  = metrics.width();
+    /* For now, print a single file. Later, print multiple images to one page */
+    KookaImage *img = packager->getCurrImage();
+    KookaPrint kookaprint( printer );
 
-   /* Check the device */
-   if( pheight == 0 || pwidth == 0 ) return;
-
-   (void) printer;
-
-   const KookaImage *img = packager->getCurrImage();
-
-   kdDebug(28000) << "Printing canvas size: "<< pwidth << "x" << pheight << endl;
-   if( img )
-   {
-      int w = img->width();
-      int h = img->height();
-      bool scaled = false;
-      double ratio = 1.0;
-
-      kdDebug(28000) << "printing image size " << w << " x " << h << endl;
-      if( w > pwidth || h > pheight )
-      {
-	 /* scaling is neccessary */
-	 double wratio = double(w) / double(pwidth);
-	 double hratio = double(h) / double(pheight);
-
-	 /* take the larger one */
-	 ratio = wratio > hratio ? wratio : hratio;
-	 if( ratio > 0.0 )
-	 {
-	    w = (int) (double(w) / ratio);
-	    h = (int) (double(h) / ratio);
-	 }
-	 scaled = true;
-	 kdDebug(28000) << "image ratio: " << ratio << " leads to new height " << h << endl;
-      }
-
-      QPoint poin ( 1+int(( pwidth-w)/2), 1+int((pheight-h)/2) );
-      kdDebug(28000) << "Printing on point " << poin.x() << "/" << poin.y() << endl;
-      if( scaled )
-      {
-         // Phys. image is larger than print area, needs  to scale
-         p->drawImage( poin, img->smoothScale( w, h ));
-	 kdDebug(28000) <<  "Needed to scale new size is " << w << "x" << h << endl;
-      }
-      else
-      {
-         // Phys. image fits on the page
-         p->drawImage( poin, *img );
-	 kdDebug(28000) <<  "Needed to scale new size is " << w << "x" << h << endl;
-      }
-   }
+    kookaprint.printImage(img);
 }
 
 void KookaView::slNewPreview( QImage *new_img )
