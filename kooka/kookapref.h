@@ -89,6 +89,7 @@ private:
 
     QRadioButton *m_gocrBut;
     QRadioButton *m_kadmosBut;
+    bool          m_useKadmos;
 };
 
 

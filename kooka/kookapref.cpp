@@ -90,11 +90,16 @@ void KookaPreferences::setupOCRPage()
      QString eng = konf->readEntry(CFG_OCR_ENGINE);
 #ifdef HAVE_KADMOS
      if( eng == QString("kadmos") )
+     {
          m_kadmosBut->setChecked( true );
+         m_useKadmos = true;
+     }
      else
 #endif
+     {
          m_gocrBut->setChecked( true );
-
+         m_useKadmos = false;
+     }
     /*
      * GOCR Option Box
      */
@@ -407,6 +412,19 @@ void KookaPreferences::slotApply( void )
     /* ** OCR Options ** */
     konf->setGroup( CFG_GROUP_OCR_DIA );
     QString eng( "gocr" );
+
+#ifdef HAVE_KADMOS
+    bool kadmosChecked = m_kadmosBut->isChecked();
+
+    if( kadmosChecked != m_useKadmos )
+    {
+        // selection of the ocr engine has changed. Popup button.
+        KMessageBox::sorry( this, i18n( "The OCR engine settings were changed.\n"
+                                        "Note that Kooka needs to be restarted to change the OCR engine."),
+                            i18n("OCR Engine Change") );
+
+    }
+#endif
     if( m_kadmosBut->isChecked() )
         eng = "kadmos";
     konf->writeEntry(CFG_OCR_ENGINE, eng );
@@ -433,6 +451,7 @@ void KookaPreferences::slotDefault( void )
     m_frameWidth->setValue( 3 );
     m_colButt1->setColor( col1 );
     m_colButt2->setColor( col2 );
+    m_gocrBut->setChecked(true);
 }
 
 
