@@ -82,7 +82,6 @@ private:
    int  pix_per_byte;
    double selectionWidthMm;
    double selectionHeightMm;
-
    
    class PreviewerPrivate;
    PreviewerPrivate *d;

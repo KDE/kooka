@@ -21,6 +21,7 @@
 
 #include <kdebug.h>
 #include <klocale.h>
+#include <kcombobox.h>
 
 #include "previewer.h"
 #include "img_canvas.h"
@@ -38,7 +39,9 @@
 Previewer::Previewer(QWidget *parent, const char *name )
    : QWidget(parent,name)
 {
-   layout = new QHBoxLayout( this, 2 );
+   QVBoxLayout *top = new QVBoxLayout( this, 10 );
+   layout = new QHBoxLayout( 2 );
+   top->addLayout( layout, 9 );
    QVBoxLayout *left = new QVBoxLayout( 3 );
    layout->addLayout( left, 2 );
 	
@@ -128,7 +131,7 @@ Previewer::Previewer(QWidget *parent, const char *name )
 
    left->addStretch( 6 );
 
-   layout->activate();
+   top->activate();
 
    /* Preset custom Cutting */
    pre_format_combo->setCurrentItem( ID_CUSTOM );
