@@ -52,6 +52,9 @@ ThumbView::ThumbView( QWidget *parent, const char *name )
      m_job(0)
 {
    setMargin(3);
+   m_pixWidth = 0;
+   m_pixHeight = 0;
+   m_thumbMargin = 5;
    m_iconView = new KIconView( this, name );
    m_progress = new KProgress( this );
    m_progress->hide();
