@@ -578,7 +578,7 @@ void Previewer::slConnectScanner( KScanDevice *scan )
         d->m_dustsize = h.toInt();
 
         QString  thresh = DEF_THRESH_BLACK; /* for black */
-        if( isWhite == "yes" )
+        if( isWhite.lower() == "yes" )
             thresh = DEF_THRESH_WHITE;
 
         h = scan->getConfig( CFG_AUTOSEL_THRESH, thresh );
@@ -630,7 +630,7 @@ void Previewer::checkForScannerBg()
         }
         else
         {
-            if( isWhite == "yes" )
+            if( isWhite.lower() == "yes" )
                 goWhite = true;
         }
 
