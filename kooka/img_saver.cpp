@@ -785,11 +785,15 @@ bool ImgSaver::renameImage( const KURL& fromUrl, KURL& toUrl, bool askExt,  QWid
    }
    else if( !extFrom.isEmpty() && extFrom != extTo )
    {
-      /* extensions differ -> TODO */
-      KMessageBox::error( overWidget,
-			  i18n("Format changes of images are currently not supported."),
-			  i18n("Wrong extension found" ));
-      return(false);
+       if( ! ((extFrom.lower() == "jpeg" && extTo.lower() == "jpg") ||
+	      (extFrom.lower() == "jpg"  && extTo.lower() == "jpeg" )))
+       {
+	   /* extensions differ -> TODO */
+	   KMessageBox::error( overWidget,
+			       i18n("Format changes of images are currently not supported."),
+			       i18n("Wrong extension found" ));
+	   return(false);
+       }
    }
 
    bool success = false;
@@ -877,8 +881,12 @@ bool ImgSaver::copyImage( const KURL& fromUrl, const KURL& toUrl, QWidget *overW
    else if( !extFrom.isEmpty() && extFrom != extTo )
    {
       /* extensions differ -> TODO */
-      KMessageBox::error( overWidget, i18n("Format changes of images are currently not supported."),
-			  i18n("Wrong extension found" ));
+       if( ! ((extFrom.lower() == "jpeg" && extTo.lower() == "jpg") ||
+	      (extFrom.lower() == "jpg"  && extTo.lower() == "jpeg" )))
+       {
+	   KMessageBox::error( overWidget, i18n("Format changes of images are currently not supported."),
+			       i18n("Wrong extension found" ));
+       }
       return(false);
    }
 
