@@ -551,7 +551,7 @@ void ScanParams::slSourceSelect( void )
 	 adf = d.getAdfBehave();
 
 	 /* set the selected Document source, the behavior is stored in a membervar */
-	 so.set( sel_source.latin1() ); // FIX in ScanSourceDialog, then here
+	 so.set( QCString(sel_source.latin1()) ); // FIX in ScanSourceDialog, then here
 	 sane_device->apply( &so );
 
 	 kdDebug(29000) << "Dialog finished OK: " << sel_source << ", " << adf << endl;
