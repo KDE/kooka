@@ -42,7 +42,7 @@ class KFileTreeViewItem;
 class KookaImage;
 
 
-typedef enum{ Dummy, NameSearch } SearchType;
+typedef enum{ Dummy, NameSearch, UrlSearch } SearchType;
 
 class JobDescription
 {
@@ -71,7 +71,7 @@ public:
 
     QString 	getCurrImageFileName( bool ) const;
 public slots:
-    void         slSelectImage( const QString );
+    void         slSelectImage( const KURL& );
     void 	 slAddImage( QImage *img );		
     void 	 slSelectionChanged( QListViewItem *);
     void         slShowContextMenue(QListViewItem *, const QPoint &, int );
@@ -81,7 +81,9 @@ public slots:
     void         slotCanceled(KIO::Job*);
     void         slotImageChanged( QImage* );
 
-   void         slotDecorate( KFileTreeBranch*, KFileTreeViewItem* );
+   void         slotDecorate( KFileTreeViewItem* );
+   void         slotDecorate( KFileTreeBranch*, const KFileTreeViewItemList& );
+   
    void         slotSelectDirectory( const QString& );
    
 protected slots:
@@ -97,9 +99,9 @@ protected slots:
    
 signals:
     void 	showImage( QImage* );
-    void         deleteImage( QImage* );
-    void         unloadImage( QImage* );
-   void         galleryPathSelected( KFileTreeBranch* branch, const QString& relativPath );
+    void        deleteImage( QImage* );
+    void        unloadImage( QImage* );
+    void        galleryPathSelected( KFileTreeBranch* branch, const QString& relativPath );
    
 private:
    QString     localFilename( KFileTreeViewItem* it ) const;
@@ -109,7 +111,7 @@ private:
    QCString     getImgFormat( KFileTreeViewItem* item ) const;
    
     QString 	 buildNewFilename( QString cmplFilename, QString currFormat ) const;   
-   KFileTreeViewItem *spFindItem( SearchType type, const QString name );
+   KFileTreeViewItem *spFindItem( SearchType type, const QString name, const KFileTreeBranch* branch = 0 );
     void         storeJob( KIO::Job*, KFileTreeViewItem *, JobDescription::JobType );
    QString       itemDirectory( const KFileTreeViewItem*, bool relativ = false ) const;
    
@@ -118,11 +120,11 @@ private:
 
     KFileTreeViewItem *root;
     QDir         curr_copy_dir;
-   QString      currSelectedDir;
+    QString      currSelectedDir;
     KIO::Job     *copyjob;
     KPopupMenu   *popup;   
     int          img_counter;
-
+   
    QMap<KIO::Job*, JobDescription> jobMap;
 
    QPixmap       floppyPixmap;

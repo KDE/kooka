@@ -54,18 +54,20 @@
 #include <kio/job.h>
 
 extern QDict<QPixmap> icons;
-enum { ID_POP_RESCAN,
-       ID_POP_DELETE,
-       ID_POP_CREATE_NEW,
-       ID_POP_UNLOAD_IMG,
-       ID_POP_SAVE_IMG  };
 
 /* ----------------------------------------------------------------------- */
 /* Constructor Scan Packager */
 ScanPackager::ScanPackager( QWidget *parent ) : KFileTreeView( parent )
 {
-   // setFrameStyle( QFrame::Sunken | QFrame::Box);
-	setItemsRenameable (true );
+   // TODO: setItemsRenameable (true );
+	addColumn( i18n("Image Name" ));
+	setColumnAlignment( 0, AlignLeft );
+	
+	addColumn( i18n("Size") );
+	setColumnAlignment( 1, AlignRight );
+	setColumnAlignment( 2, AlignRight );
+
+	addColumn( i18n("Format" )); setColumnAlignment( 3, AlignRight );
 
 	/* Drag and Drop */
 	setDragEnabled( true );
@@ -78,18 +80,6 @@ ScanPackager::ScanPackager( QWidget *parent ) : KFileTreeView( parent )
 	setRenameable ( 1, false );
 	setRenameable ( 2, false );
 	setRenameable ( 3, false );
-
-	addColumn( i18n("Scan packages") );
-	QHeader *h = header();
-	if( h )
-	{
-	   kdDebug(28000) << "h is defined !" << endl;
-	   // h->addLabel( i18n("Size"));
-	}
-	addColumn( i18n("Size") );   setColumnAlignment( 1, AlignRight );
-	setColumnText( 1, "Size" );
-	addColumn( i18n("Colors") );	setColumnAlignment( 2, AlignRight );
-	addColumn( i18n("Format" )); setColumnAlignment( 3, AlignRight );
 
 	setRootIsDecorated( false );
 	
@@ -130,10 +120,10 @@ void ScanPackager::openRoots()
 
    KFileTreeBranch *newbranch = addBranch( rootUrl, i18n("Kooka Gallery"), false /* do not showHidden */ );
    setDirOnlyMode( newbranch, false );
-#if 0
-   connect( newbranch, SIGNAL(newItem(KFileTreeBranch*, KFileTreeViewItem*)),
-	    this, SLOT( slotDecorate( KFileTreeBranch*, KFileTreeViewItem* )));
-#endif
+
+   connect( newbranch, SIGNAL(newTreeViewItems( KFileTreeBranch*, const KFileTreeViewItemList& )),
+	    this, SLOT( slotDecorate(KFileTreeBranch*, const KFileTreeViewItemList& )));
+
    populateBranch( newbranch );
    
    /* open more configurable image repositories TODO */
@@ -156,35 +146,112 @@ void ScanPackager::createMenus()
       newAct->plug( popup );	
       
       newAct = new KAction(i18n("&save Image"), "filesave",0 ,
-				    this, SLOT(slotExportFile()), this);
+			   this, SLOT(slotExportFile()), this);
       newAct->plug( popup );	
 
       newAct = new KAction(i18n("&delete Image"), "edittrash",0 ,
-				    this, SLOT(slotDeleteItems()), this);
+			   this, SLOT(slotDeleteItems()), this);
       newAct->plug( popup );	
 
-
+      newAct = new KAction(i18n("&unload Image"), "unload", 0,
+			   this, SLOT(slotUnloadItems()), this );
+      newAct->plug( popup );
       popup->setCheckable( true );
    }
 }
 
 
-void ScanPackager::slotDecorate( KFileTreeBranch* branch, KFileTreeViewItem* item )
+void ScanPackager::slotDecorate( KFileTreeViewItem* item )
 {
    kdDebug(28000) << "decorating slot !" << endl;
-   if( item && ! item->isDir() )
+   if( !item ) return;
+
+   if( item->isDir())
    {
-      item->setPixmap( 0, floppyPixmap );
+      QString cc = i18n( "%1 items").arg( item->childCount());
+      item->setText( 1, cc );
    }
-   
+   else
+   {
+      KFileItem *kfi = item->fileItem();
+
+      KookaImage *img = 0L;
+      
+      if( kfi )
+      {
+	 img = static_cast<KookaImage*>(kfi->extraData( this ));
+      }
+      kdDebug(28000) << "KookaImage: " << img << endl;
+
+      if( img )
+      {
+	 /* The image appears to be loaded to memory. */
+
+	 /* set image size in pixels */
+	 QString t = i18n( "%1 x %2" ).arg( img->width()).arg(img->height());
+	 kdDebug(28000) << "Setting column text: " << t << endl;
+	 item->setText( 1, t );
+	 kdDebug( 28000) << "Image laoded !" << endl;
+	 item->setPixmap( 0, kfi->pixmap(16) );
+      }
+      else
+      {
+	 /* Item is not yet loaded. Display file information */
+	 item->setPixmap( 0, floppyPixmap );
+	 KIO::filesize_t s = kfi->size();
+	 double dsize = s / 1024.0;  /* calc kilobytes */
+
+	 QString sizeStr;
+	 if( dsize > 999.99 )
+	 {
+	    dsize = dsize / 1024.0;
+	    sizeStr = i18n( "%1 MB").arg( dsize, 0, 'f', 2 );
+	 }
+	 else
+	 {
+	    sizeStr = i18n( "%1 kB").arg( dsize, 0,'f', 1 );
+	 }
+	 item->setText(1, sizeStr );
+      }
+
+      /* Image format */
+      QString format = getImgFormat( item );
+      item->setText( 2, format );
+   }
 }
+
+
+void ScanPackager::slotDecorate( KFileTreeBranch* branch, const KFileTreeViewItemList& list )
+{
+   (void) branch;
+   kdDebug(28000) << "decorating slot for list !" << endl;
+
+   KFileTreeViewItemListIterator it( list );
+
+   bool end = false;
+   for( ; !end && it.current(); ++it )
+   {
+      KFileTreeViewItem *kftvi = *it;
+      slotDecorate( kftvi );
+   }
+}
+
 
 
 
 void ScanPackager::slFileRename( QListViewItem* it, const QString& newStr, int col )
 {
+   (void) it;
+   (void) newStr;
+   (void) col;
 }
 
+
+/* ----------------------------------------------------------------------- */
+/*
+ * Method that checks if the new filename a user enters while renaming an image is valid.
+ * It checks for a proper extension.
+ */
 QString ScanPackager::buildNewFilename( QString cmplFilename, QString currFormat ) const
 {
    /* cmplFilename = new name the user wishes.
@@ -221,8 +288,10 @@ QString ScanPackager::buildNewFilename( QString cmplFilename, QString currFormat
    return( ext );
 }
 
-
-QString ScanPackager::itemDirectory( const KFileTreeViewItem* item, bool relativ = false ) const
+/* ----------------------------------------------------------------------- */
+/* This method returns the directory of an image or directory.
+ */
+QString ScanPackager::itemDirectory( const KFileTreeViewItem* item, bool relativ ) const
 {
    QString relativUrl= (item->url()).prettyURL();
    
@@ -321,7 +390,6 @@ void ScanPackager::slSelectionChanged( QListViewItem *newItem )
       }
 
       /* emit a signal indicating the new directory if there is a new one */
-	 /* Emit the signal with branch and the relative path */
       QString wholeDir = itemDirectory( item, false ); /* not relativ to root */
       
       if( currSelectedDir != wholeDir )
@@ -329,11 +397,12 @@ void ScanPackager::slSelectionChanged( QListViewItem *newItem )
 	 currSelectedDir = wholeDir;
 	 QString relativUrl = itemDirectory( item, true );
 	 kdDebug(28000) << "Emitting " << relativUrl << " as new relative Url" << endl;
+	 /* Emit the signal with branch and the relative path */
 	 emit( galleryPathSelected( item->branch(), relativUrl ));
       }
       else
       {
-	 kdDebug(28000) << "directroy is not new: " << currSelectedDir << endl;
+	 // kdDebug(28000) << "directroy is not new: " << currSelectedDir << endl;
       }
    }
    else
@@ -375,6 +444,7 @@ void ScanPackager::slImageArrived( KFileTreeViewItem *item, KookaImage* image )
       {
 	 kfi->setExtraData( (void*) this, (void*) image );
       }
+      slotDecorate( item );
       emit( showImage( image ));
    }
 }
@@ -509,20 +579,21 @@ void ScanPackager::slAddImage( QImage *img )
    ImgSaveStat is_stat = ISS_OK;
    /* Save the image with the help of the ImgSaver */
    if( ! img ) return;
-   /* currently selected item */
+
+   /* currently selected item is the directory or a file item */
    KFileTreeViewItem *curr = currentKFileTreeViewItem();
+
+   /* Use root if nothing is selected */
    if( ! curr )
    {
       curr = root;
    }
-   /* find the directory above */
-   while( ! curr->isDir())
-   {
-      curr = (KFileTreeViewItem*) curr->parent();
-   }
+
+   /* find the directory above the current one */
+   KURL dir(itemDirectory( curr ));
 
    /* Path of curr sel item */
-   ImgSaver img_saver( this, curr->url());
+   ImgSaver img_saver( this, dir );
 
    is_stat = img_saver.saveImage( img );
    if( is_stat == ISS_ERR_FORMAT_NO_WRITE )
@@ -547,35 +618,25 @@ void ScanPackager::slAddImage( QImage *img )
    }
 
    /* Add the new image to the list of new images */
+   slotSetNextUrlToSelect( KURL( img_saver.lastFilename()) );
 
-   setSelected( curr, true );
    QString s;
-
    /* Count amount of children of the father */
    int childcount = curr->childCount();
    s = i18n("%1 images").arg(childcount);
    curr->setText( 1, s);
    setOpen( curr, true );
 
-   /* This call to set image allocs a new object qimage, which lives longer
-    * than the one from the scanner, which will be destroyed after leaving
-    * this callback.
-    * All actions depending on the *pointer* to the qimage need to be done
-    * after this call.
-    */
-   // item->setImage( img, img_saver.lastSaveFormat() );
-
-   /* makes the new item the current, which shows it */
-   // setSelected( item, true );
-
 }
 
 /* ----------------------------------------------------------------------- */
-/* selects and opens the file with the given name */
-void ScanPackager::slSelectImage( const QString name )
+/* selects and opens the file with the given name. This is used to restore the
+ * last displayed image by its name.
+ */
+void ScanPackager::slSelectImage( const KURL& name )
 {
 
-   KFileTreeViewItem *found = spFindItem( NameSearch, name );
+   KFileTreeViewItem *found = spFindItem( UrlSearch, name.url() );
 
    if( found )
    {
@@ -588,17 +649,57 @@ void ScanPackager::slSelectImage( const QString name )
 }
 
 
-KFileTreeViewItem *ScanPackager::spFindItem( SearchType type, const QString name )
+KFileTreeViewItem *ScanPackager::spFindItem( SearchType type, const QString name, const KFileTreeBranch *branch )
 {
-   KFileTreeViewItem *foundItem = 0;
-   
-   switch( type )
-   {
-      case NameSearch:
+   /* Prepare a list of branches to go through. If the parameter branch is set, search
+    * only in the parameter branch. If it is zero, search all branches returned by
+    * kfiletreeview.branches()
+    */
+   KFileTreeBranchList branchList;
 
-	 break;
+   if( branch )
+   {
+      branchList.append( branch );
+   }
+   else
+   {
+      branchList = branches();
+   }
+ 
+   
+   KFileTreeBranchIterator it( branchList );
+   KFileItem *kfi = 0L;
+   KFileTreeViewItem *foundItem = 0L;
+
+   /* Leave the loop in case kfi is defined */
+   KFileTreeBranch *branchloop = 0L;
+   for( ; !kfi && it.current(); ++it )
+   {
+      branchloop = *it;
+      KURL url(name);
+      switch( type )
+      {
+	 case Dummy:
+	    kdDebug(28000) << "Dummy search skipped !" << endl;
+	    break;
+	 case NameSearch:
+	    kdDebug(28000) << "ScanPackager: searching for " << name << endl;
+	    kfi = branchloop->findByName( name );
+	    break;
+	 case UrlSearch:
+	    kdDebug(28000) << "ScanPackager: URL search for " << name << endl;
+	    kfi = branchloop->find( url );
+	    break;	
       default:
 	 kdDebug(28000) << "Scanpackager: Wrong search type !" << endl;
+	 break;
+      }
+	 
+   }
+   if( kfi )
+   {
+      foundItem = static_cast<KFileTreeViewItem*>(kfi->extraData(branchloop));
+      kdDebug(28000) << "spFindItem: Success !" << foundItem << endl;
    }
    return( foundItem );
 }
@@ -626,50 +727,6 @@ void ScanPackager::slShowContextMenue(QListViewItem *lvi, const QPoint &p, int c
 
 }
 
-/* ----------------------------------------------------------------------- */
-#if 0
-void ScanPackager::slHandlePopup( int menu_id )
-{
-   kdDebug(28000) << "Popup to handle ID: " << menu_id << endl;
-
-   KFileTreeViewItem *curr = currentKFileTreeViewItem();
-   if( ! curr ) return;
-   KFileTreeViewItem *newitem = static_cast<KFileTreeViewItem*>( curr->itemAbove());
-   bool setnew = false;
-
-   switch( menu_id )
-   {
-      case ID_POP_RESCAN:
-	 kdDebug(28000) << "Not yet implemented !" << endl;
-	 break;
-      case ID_POP_DELETE:
-	 if( curr && curr != root ) {
-	 }
-	 break;
-      case ID_POP_CREATE_NEW:
-	 slotCreateFolder();
-	 break;
-      case ID_POP_UNLOAD_IMG:
-	 setnew = true;
-	 break;
-      case ID_POP_SAVE_IMG:
-	 
-
-	 break;
-      default:
-	 break;
-   }
-
-   /* need to set a new item as actual item ? */
-   if( setnew ) {
-      emit( unloadImage( 0L ));
-      setCurrentItem( newitem );
-      setSelected( newitem, true );
-      slSelectionChanged( newitem );
-   }
-
-}
-#endif
 /* ----------------------------------------------------------------------- */
 
 void ScanPackager::slotExportFile( )
@@ -710,12 +767,14 @@ void ScanPackager::slotUnloadItems( )
 
 void ScanPackager::slotUnloadItem( KFileTreeViewItem *curr )
 {
+   if( ! curr ) return;
    
    if( curr->isDir())
    {
-      KFileTreeViewItem *child = currentKFileTreeViewItem();
+      KFileTreeViewItem *child = static_cast<KFileTreeViewItem*>(curr->firstChild());
       while( child )
       {
+	 kdDebug(28000) << "Unloading item " << child << endl;
 	 slotUnloadItem( child );
 	 child = static_cast<KFileTreeViewItem*> (child->nextSibling());
       }
@@ -727,6 +786,7 @@ void ScanPackager::slotUnloadItem( KFileTreeViewItem *curr )
       emit( unloadImage( image ));
       delete image;
       kfi->removeExtraData( this );
+      slotDecorate( curr );
    }
 }
 
