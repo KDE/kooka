@@ -1,0 +1,13 @@
+-> Nov. 2000, Klaas Freitag <kooka@suse.de>:
+initial version
+
+- December 2000, Klaas Freitag <kooka@suse.de>:
+
+Added support for calling the external ocr program gocr of Joerg
+Schulenburg and friends.  See http://jocr.sourceforge.net for
+details. Mind that still everything is under construction, even if
+there could be some interesting screen hots around.
+
+OCR works best with smaller parts of text scanned black-and-white 
+scanned with about 150 dpi.
+ 

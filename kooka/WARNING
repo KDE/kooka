@@ -1,0 +1,21 @@
+
+Kooka Warning !
+==============
+
+Kooka and KScan is software in very early state. It is not error free. 
+Kooka may damage your Scanner hardware.
+
+KScan was tested with SANE 1.0.3 and the Umax and Mustek backends. It is not 
+reported to work error-free on even these two !! 
+
+PLEASE BE EXTREMELY CAREFULL if you try to run kooka ! It may shredder your 
+scanner. Be sure to sit next to your scanner having your hand on the power-off
+switch whenever you start scanning with kooka. Switch off if you hear unexpected
+noises or if something strange happens.
+
+If you find errors, please dont ask the SANE-people without having made sure
+that your error is _really_ a SANE error. Most probably, you found an KScan
+or Kooka-Error !
+
+- Klaas Freitag <kooka@suse.de>
+

@@ -1,19 +1,47 @@
 Kooka
+=====
  
-Kooka is a raster image scan program for the kde2 system.  
+Kooka is a raster image scan program for the KDE2 system.  
+     
+   PLEASE READ THE FILE "WARNING" FIRST !
+   Using kooka may damage your hardware !
 
-It uses the SANE-lib for which you find more information under
-http://www.mostang.com/sane/
-It also uses a related activity kscan, which will be a kde2 module for
-scanner access. Kooka is the first program using the kscan module.
-
-KScan and especially the 'walking ants' in Kookas image-canvas are based
-on the 1997 work of Ivan Shvedunov <ivan_iv@rf-hp.npi.msu.su>, his homepage
-can be found at http://rf-hp.npi.msu.su.
-
-KScan and Kooka are under construction. Dont expect everything to work
-fine.
+It uses the SANE-lib (http://www.mostang.com/sane/) and the the
+KScan-library which is a KDE2 module for scanner access.
 
 
-Nov. 2000, Klaas Freitag <freitag@suse.de>
+KScan and Kooka are under construction. Don't expect everything to work
+fine. If you want to help, send patches to kooka@suse.de.
+
+Features:
+=========
+
+Kookas main features are:
+
+SANE:
+- Scanner support using SANE. Kooka _DOES_NOT_ support all features that SANE
+  and its backends offer. It takes a small subset of the available options.
+- Kooka offers a gui to change the most important scanner options like resolution,
+  mode, threshold etc. These options are generated on the fly,  depending on the 
+  scanner capabilities.
+- Kooka offers a preview-function and the user can select the scan area interactively.
+
+Image storage:
+- Kooka provides an assitant to save your acquired images.
+- Filenames are generated automatically to support multiple scans.
+- Kooka manages the scanned images in a tree view where the user can delete and
+  export images. 
+
+Image Viewing:
+- Scanned images can be viewed by clicking them in the tree view.
+- The viewer has a zoom function.
+
+OCR:
+- Kooka supports Joerg Schulenburg's gocr, an open source program
+  for optical character recognition. Kooka starts the OCR program and displays 
+  its output. Best results with bw-images scanned with ~150 dpi
+
 ----------------------------------------------------------------------
+Klaas Freitag <kooka@suse.de>
+
+

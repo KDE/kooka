@@ -1,0 +1,8 @@
+To be continued:
+
+Object ScanParams:
+- Resizing. On startup, the object comes up in a nearly fixed size, suiting the
+  mustek-backend very well ;) - thats the one I use at home. The cool solution
+  would be if the object 'knows' and tells what size (especially height) it wants
+  to have. 
+  
