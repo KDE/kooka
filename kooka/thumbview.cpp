@@ -308,16 +308,17 @@ void ThumbView::slNewFileItems( const KFileItemList& items )
       m_cntJobsStarted = 0;
       
       /* start a preview-job */
-      KIO::PreviewJob *job;
-      job = KIO::filePreview(startJobOn, m_pixWidth, m_pixHeight );
+      m_job = KIO::filePreview(startJobOn, m_pixWidth, m_pixHeight );
 
-      if( job )
+      if( m_job )
       {
-	 connect( job, SIGNAL( result( KIO::Job * )),
+	 connect( m_job, SIGNAL( result( KIO::Job * )),
 		  this, SLOT( slPreviewResult( KIO::Job * )));
-	 connect( job, SIGNAL( gotPreview( const KFileItem*, const QPixmap& )),
+	 connect( m_job, SIGNAL( gotPreview( const KFileItem*, const QPixmap& )),
 		  SLOT( slGotPreview( const KFileItem*, const QPixmap& ) ));
-	 
+	 /* KIO::Jo result is called in any way: Success, Failed, Error,
+	  * thus connecting the failed is not really neccessary.
+	  */
         // connect( job, SIGNAL( failed( const KFileItem* )),
         //          this, SLOT( slotFailed( const KFileItem* ) ));
 
@@ -339,7 +340,7 @@ void ThumbView::slGotPreview( const KFileItem* newFileItem, const QPixmap& newPi
    
    m_progress->setProgress(m_cntJobsStarted);
    
-   kdDebug(28000)<< "jobs-Counter: " << m_cntJobsStarted << endl;
+   // kdDebug(28000)<< "jobs-Counter: " << m_cntJobsStarted << endl;
    
 }
 
@@ -350,14 +351,17 @@ void ThumbView::slPreviewResult( KIO::Job *job )
       kdDebug(28000) << "Thumbnail Creation ERROR: " << job->errorString() << endl;
       job->showErrorDialog( 0 );
    }
-   else
+
+   if( job != m_job )
    {
-      /* finished */
-      m_cntJobsStarted = 0;
-      m_progress->reset();
-      m_progress->hide();
+      kdDebug(28000) << "Very obscure: Job finished is not mine!"  << endl;
    }
-   
+   /* finished */
+   kdDebug(28000) << "Thumbnail job finished." << endl;
+   m_cntJobsStarted = 0;
+   m_progress->reset();
+   m_progress->hide();
+   m_job = 0L;
 }
 
 
@@ -378,6 +382,14 @@ QPixmap ThumbView::createPixmap( const QPixmap& preview ) const
    // draw on pixmap
 
    return( pixRet );
+}
+
+
+void ThumbView::clear()
+{
+   if( m_job )
+      m_job->kill( false /* not silently to get result-signal */ );
+   m_iconView->clear(); 
 }
 
 

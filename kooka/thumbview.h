@@ -54,6 +54,7 @@
 class QPixmap;
 class QListViewItem;
 class KProgress;
+class KIO::PreviewJob;
 
 class ThumbView: public QVBox /* KIconView */
 {
@@ -113,7 +114,7 @@ public slots:
    void slSetBackGround( );
    void slCheckForUpdate( KFileItem* );
    bool readSettings();
-   void clear() { m_iconView->clear(); }
+   void clear();
 protected:
    
    void saveConfig();
@@ -141,6 +142,7 @@ private:
    QColor  m_marginColor2;
    QString m_bgImg;
    int     m_cntJobsStarted;
+   KIO::PreviewJob *m_job;
 };
 
 #endif
