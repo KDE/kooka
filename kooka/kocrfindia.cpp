@@ -28,6 +28,7 @@
 #include <krun.h>
 #include <kurl.h>
 #include <ktempfile.h>
+#include <kdebug.h>
 #include <qtextstream.h>
 #include <qsplitter.h>
 
@@ -51,7 +52,7 @@ KOCRFinalDialog::KOCRFinalDialog( QWidget *parent, QString resultimg )
    :KDialogBase( parent,  "OCRFinish", true, I18N("Optical Character Recognition finished"),
 		 Close|User1, Close, true, I18N("Open in kwrite" ) )
 {
-   debug( "Finished KOCR!" );
+   kdDebug() << "Finished KOCR!" << endl;
    // Layout-Boxes
    QWidget *page = new QWidget( this );
    CHECK_PTR( page );
@@ -84,7 +85,7 @@ KOCRFinalDialog::KOCRFinalDialog( QWidget *parent, QString resultimg )
 
 void  KOCRFinalDialog::openTextResult( void )
 {
-   debug( "Opening text file <%s>", (const char*) ocrTextFile );
+   kdDebug() << "Opening text file <" << ocrTextFile << ">" << endl;
    new KRun( KURL( ocrTextFile ));
 }
 
@@ -95,7 +96,7 @@ void  KOCRFinalDialog::fillText( QString str )
    /* ... and save to temp file to open with kwrite */
    KTempFile textFile( QString::null, ".txt" );
    ocrTextFile = textFile.name();
-   debug(" Sending ocr-Result-Text to file <%s>", (const char*) textFile.name() );
+   kdDebug() << " Sending ocr-Result-Text to file <" << textFile.name() << ">" << endl;
 
    QTextStream *ts = textFile.textStream();
    (*ts) << str;

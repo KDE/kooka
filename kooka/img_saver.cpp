@@ -26,6 +26,7 @@
 #include <kdialog.h>
 #include <kimageio.h>
 #include <kstddirs.h>
+#include <kdebug.h>
 
 #include <qdir.h>
 #include <qlayout.h>
@@ -98,7 +99,7 @@ FormatDialog::FormatDialog( QWidget *parent, const char *name )
 #else
    QStringList fo = QImage::outputFormatList();
 #endif
-   qDebug( "#### have %d image types", fo.count());
+   kdDebug() << "#### have " << fo.count() << " image types" << endl;
    lb_format->insertStringList( fo );
    connect( lb_format, SIGNAL( highlighted(const QString&)),
 	    SLOT( showHelp(const QString&)));
@@ -166,7 +167,7 @@ void FormatDialog::showHelp( const QString& item )
 void FormatDialog::check_subformat( const char *format )
 {
    // not yet implemented
-   debug( "This is format in check_subformat: %s", format );
+   kdDebug() << "This is format in check_subformat: " << format << endl;
    cb_subf->setEnabled( false );
    // l2 = Label "select subformat" ->bad name :-|
    l2->setEnabled( false );
@@ -266,8 +267,8 @@ void ImgSaver::createDir( QString dir )
  	
    if( ! fi.exists() )
    {
-      debug( "Wrn: Directory does not exist -> try to create  !" );
-      if( mkdir( dir, S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH ) != 0 )
+      kdDebug() << "Wrn: Directory does not exist -> try to create  !" << endl;
+      if( mkdir( dir.local8Bit(), S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH ) != 0 )
       {
 	 QMessageBox::warning( 0,"Warning","The directory \n" + dir +
 			       "\nto save images does not exist\nand could not be created !\n"
@@ -325,11 +326,11 @@ ImgSaveStat ImgSaver::saveImage( QImage *image )
 
    if( format.isEmpty() )
    {
-    	debug( "Save canceled by user -> no save !" );
+    	kdDebug() << "Save canceled by user -> no save !" << endl;
     	return( ISS_SAVE_CANCELED );
    }
    stat = save( image, directory + createFilename( format ),
-		format, subformat );
+		format.local8Bit(), subformat.local8Bit() );
 
    return( stat );
 
@@ -349,10 +350,10 @@ QString ImgSaver::createFilename( QString format )
    char name[20];
    int c = 1;
    
-   sprintf( name, "kscan_%04x.%s", c, (const char*) format.lower() );
+   sprintf( name, "kscan_%04x.%s", c, (format.lower()).local8Bit() );
 
    while( files.exists( name, false ) ) {
-      sprintf( name, "kscan_%04x.%s", ++c,  (const char*)format.lower() );
+      sprintf( name, "kscan_%04x.%s", ++c, (format.lower()).local8Bit() );
    }
    
    return( name );
@@ -372,7 +373,7 @@ ImgSaveStat ImgSaver::saveImage( QImage *image, QString filename )
    if( fi.isRelative() )
       filename = directory + filename;
 
-   return( save( image, filename, format, "" ) );
+   return( save( image, filename.local8Bit(), format.local8Bit(), "" ) );
 }
 
 
@@ -387,7 +388,7 @@ ImgSaveStat ImgSaver::savePreview( QImage *image )
 
    // Previewfile always comes absolute
       
-   ImgSaveStat stat = save( image, previewfile, format, "" );
+   ImgSaveStat stat = save( image, previewfile, format.local8Bit(), "" );
 
    if( stat == ISS_OK )
    {
@@ -448,7 +449,7 @@ QString ImgSaver::startFormatDialog( picType type)
    if( fd.exec() )
    {
       QString format = fd.getFormat();
-      debug( "Storing to format <%s>", (const char*) format );
+      kdDebug() << "Storing to format <" << format << ">" << endl;
       if( fd.rememberFormat() )
       {
 	 storeFormatForType( type, format );
@@ -511,7 +512,7 @@ void ImgSaver::storeFormatForType( picType type, QString format )
 	 konf->writeEntry( OP_FORMAT_HICOLOR, format );
 	 break;
       default:
-	 debug( "Wrong Type  - cant store format setting" );
+	 kdDebug() << "Wrong Type  - cant store format setting" << endl;
 	 break;
    }
 }
@@ -519,7 +520,7 @@ void ImgSaver::storeFormatForType( picType type, QString format )
 
 QString ImgSaver::findSubFormat( QString format )
 {
-   debug( "Searching Subformat for %s", (const char*) format );
+   kdDebug() << "Searching Subformat for " << format << endl;
    return( subformat );
    
 }
@@ -543,7 +544,7 @@ ImgSaveStat ImgSaver::save( QImage *image, QString filename,
 
       if( fi.exists() && !fi.isWritable() )
       {
-	 debug( "Cant write to file <%s>, cant save !", (const char*) filename );
+	 kdDebug() << "Cant write to file <" << filename << ">, cant save !" << endl;
 	 result = false;
 	 return( ISS_ERR_PERM );
       }
@@ -552,13 +553,12 @@ ImgSaveStat ImgSaver::save( QImage *image, QString filename,
 #ifdef USE_KIMAGEIO
       if( ! KImageIO::canWrite( format ) )
       {
-	 debug( "Cant write format <%s>", (const char*) format );
+	 kdDebug() << "Cant write format <" << format << ">" << endl;
 	 result = false;
 	 return( ISS_ERR_FORMAT_NO_WRITE );
       }
 #endif
-      debug( "ImgSaver: saving image to <%s> as <%s/%s>", (const char*) filename,
-	     format, subformat );
+      kdDebug() << "ImgSaver: saving image to <" << filename << "> as <" << format << "/" << subformat <<">" << endl;
 
       result = image->save( filename, format );
 

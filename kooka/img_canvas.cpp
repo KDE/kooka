@@ -40,6 +40,7 @@
 #include <qdict.h>
 
 #include <kpixmapio.h>
+#include <kdebug.h>
 
 #define __IMG_CANVAS_CPP__
 #include "img_canvas.h"
@@ -54,8 +55,7 @@ extern QDict<QPixmap> icons;
 
 inline void debug_rect( const char *name, QRect *r )
 {
-	debug( "%s: %d, %d %dx%d", name?name:"NONAME", r->x(), r->y(),
- 	        r->width(), r->height());
+	kdDebug() << (name ? name: "NONAME") << ": " << r->x() << ", " << r->y() << ", " << r->width() << ", " << r->height() << endl;
 }
 
 
@@ -163,13 +163,13 @@ void ImageCanvas::newImage( QImage *new_image )
     	update_scaled_pixmap();
     	setContentsPos(0,0);
    } else {
-  	debug( "New image called without image => deleting!" );
+  	kdDebug() << "New image called without image => deleting!" << endl;
   	image = 0;
 	acquired = false;
    }
 
 
-   debug( "going to repaint!" );
+   kdDebug() << "going to repaint!" << endl;
    repaint( true );
 }
 
@@ -237,7 +237,7 @@ void ImageCanvas::handle_popup( int item )
       case ID_FIT_WIDTH:
 	 QApplication::setOverrideCursor(waitCursor);
 	 scale = 100*(width()-2) / image->width();
-	 debug( "Scale ist %f", scale );
+	 kdDebug() << "Scale ist " << scale << endl;
 	 if( (scale/100 * image->height()) > height() )
 	 {
 	    /* substract for scrollbar */
@@ -251,7 +251,7 @@ void ImageCanvas::handle_popup( int item )
 	 QApplication::setOverrideCursor(waitCursor);
 
 	 scale = 100*(height()-2) / image->height();
-	 debug( "Scale ist %f", scale );
+	 kdDebug() << "Scale ist " << scale << endl;
 	 if( (scale/100 * image->width()) > width() )
 	 {
 	    /* substract for scrollbar */
@@ -378,7 +378,7 @@ void ImageCanvas::newRectSlot( QRect newSel )
    selected->setHeight(0);
    emit( noRect() );
    int h = image->width();
-   debug( "ImageCanvas got selection Rect: W=%d, H=%d", newSel.width(), newSel.height());
+   kdDebug() << "ImageCanvas got selection Rect: W=" << newSel.width() << ", H=" << newSel.height() << endl;
    to_map.setWidth(h * newSel.width() / 1000.0);
    to_map.setX( h * newSel.x() / 1000.0 );
 
@@ -572,12 +572,12 @@ void ImageCanvas::viewportMouseMoveEvent(QMouseEvent *ev)
     		if( selected->x()+ selected->width()+mx >= ix-cx )
     		{
     			mx =  ix -cx - selected->width() - selected->x();
-    			debug( "runs out !" );
+    			kdDebug() << "runs out !" << endl;
     		}
     		if( selected->y()+ selected->height()+my >= iy-cy )
     		{
     			my =  iy -cy - selected->height() - selected->y();
-    			debug( "runs out !" );
+    			kdDebug() << "runs out !" << endl;
     		}
 
     		/* Check if rectangle would run out of the image on left and top */    			    			

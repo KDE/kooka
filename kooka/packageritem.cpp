@@ -20,6 +20,8 @@
 #include <qdir.h>
 #include <qfile.h>
 
+#include <kdebug.h>
+
 #include "resource.h"
 #include "packageritem.h"
 
@@ -99,11 +101,11 @@ bool PackagerItem::deleteFolder( void )
 {
    QDir direc;
    direc.setFilter( QDir::Files | QDir::Hidden | QDir::NoSymLinks );
-   direc.setPath((const char*) filename );
+   direc.setPath(filename.local8Bit());
  	
    if( direc.exists() )
    {
-      return( direc.rmdir( (const char*) filename ));
+      return( direc.rmdir(filename.local8Bit()));
    }
    return( true );
 }
@@ -128,9 +130,9 @@ bool PackagerItem::deleteFile( void )
  	
    QDir direc;
    direc.setFilter( QDir::Files | QDir::Hidden | QDir::NoSymLinks );
-   direc.setPath((const char*) filename );
+   direc.setPath(filename.local8Bit());
  	
-   return( direc.remove( (const char*) filename));
+   return( direc.remove(filename.local8Bit()));
 }
 
 bool PackagerItem::createFolder( void )
@@ -140,10 +142,10 @@ bool PackagerItem::createFolder( void )
 
    QDir direc;
    direc.setFilter( QDir::Files | QDir::Hidden | QDir::NoSymLinks );
-   direc.setPath((const char*) filename );
+   direc.setPath(filename.local8Bit());
  	
    if( !direc.exists() )
-      return( direc.mkdir( (const char*) filename ) );
+      return( direc.mkdir(filename.local8Bit()) );
  		
    return( true );
 }
@@ -171,7 +173,7 @@ void PackagerItem::decorateFile( void )
    }
    else
    {
-      QFileInfo fi( filename.data());
+      QFileInfo fi( filename);
       setText( 0, fi.baseName() );
       if( isDir() )
       {
@@ -196,13 +198,13 @@ FileOpStat  PackagerItem::copy_file( QString to )
 
    if( ! from.open( IO_ReadOnly ) )
    {
-      debug( "Cant open source-file!");
+      kdDebug() << "Cant open source-file!" << endl;
       return( FILE_OP_ERR );
    }
    QFile tofile( to );
    if( ! tofile.open( IO_WriteOnly ) )
    {
-      debug( "Cant open target-file" );
+      kdDebug() << "Cant open target-file" << endl;
       return( FILE_OP_ERR );
    }
 

@@ -18,6 +18,7 @@
 
 #include <kglobal.h>
 #include <klocale.h>
+#include <kdebug.h>
 #include <kiconloader.h>
 #include <kmenubar.h>
 #include <kkeydialog.h>
@@ -189,7 +190,7 @@ void Kooka::saveProperties(KConfig *config)
     
    //if (m_view->currentURL() != QString::null)
    //     config->writeEntry("lastURL", m_view->currentURL());
-   debug( "In kooka's saveProperties !" );
+   kdDebug() << "In kooka's saveProperties !" << endl;
    m_view->saveProperties( config );
 }
 

@@ -33,6 +33,7 @@
 
 #include <kfiledialog.h>
 #include <kurl.h>
+#include <kdebug.h>
 #include <progressbase.h>
 #include <kio/jobclasses.h>
 #include <kio/file.h>
@@ -72,7 +73,7 @@ ScanPackager::ScanPackager( QWidget *parent ) : KListView( parent )
 		 SLOT( slShowContextMenue(QListViewItem *, const QPoint &, int )));
 	
 	img_counter = 1;
-	if( readDir( root, save_root ) == 0 )
+	if( readDir( root, save_root.local8Bit() ) == 0 )
 	{
 		PackagerItem *incoming = new PackagerItem( root, true );
 		incoming->setText( 0, "incoming" );
@@ -94,12 +95,12 @@ void ScanPackager::slSelectionChanged( QListViewItem *newItem )
 	
 	if( pi->isDir())
 	{
-		debug( "selectionChanged: Is a father" );
+		kdDebug() << "selectionChanged: Is a father" << endl;
 	 	/* no action, because its a dir */
 	}
 	else
 	{
-		debug( "selectionChanged: Is loaded image !" );
+		kdDebug() << "selectionChanged: Is loaded image !" << endl;
 		QApplication::setOverrideCursor(waitCursor);
 		emit( showImage( pi->getImage() ));
 		QApplication::restoreOverrideCursor();
@@ -159,7 +160,7 @@ void ScanPackager::slotImageChanged( QImage *img )
    }
    else if( is_stat != ISS_OK )
    {
-      debug( "Error while saving existing image !" );
+      kdDebug() << "Error while saving existing image !" << endl;
    }
 
    if( img && !img->isNull())
@@ -194,7 +195,7 @@ void ScanPackager::slAddImage( QImage *img )
    /* Path of curr sel item */
    QDir d (curr->getFilename());
    
-   ImgSaver img_saver( this, d.absPath() );
+   ImgSaver img_saver( this, d.absPath().local8Bit() );
 	
    is_stat = img_saver.saveImage( img );
 	
@@ -204,7 +205,7 @@ void ScanPackager::slAddImage( QImage *img )
       {
 	 return;
       }
-      debug( "ERROR: Saving failed: %s", (const char*) img_saver.errorString( is_stat ));
+      kdDebug() << "ERROR: Saving failed: " << img_saver.errorString( is_stat ) << endl;
       /* And now ?? */
    }
 	
@@ -242,7 +243,7 @@ void ScanPackager::slSelectImage( const QString name )
    
    if( found )
    {
-      debug( "slSelectImage: Found an item !" );
+      kdDebug() << "slSelectImage: Found an item !" << endl;
       ensureItemVisible( found );
       setCurrentItem( found );
       slSelectionChanged( found );
@@ -268,7 +269,7 @@ PackagerItem *ScanPackager::spFindItem( SearchType type, const QString name )
 	    
 	    break;
 	 default:
-	    debug( "Scanpackager: Wrong search type !" );
+	    kdDebug() << "Scanpackager: Wrong search type !" << endl;
 	    searchError = true;
       }
    }
@@ -278,7 +279,7 @@ PackagerItem *ScanPackager::spFindItem( SearchType type, const QString name )
 /* ----------------------------------------------------------------------- */
 void ScanPackager::slShowContextMenue(QListViewItem *lvi, const QPoint &p, int col )
 {
-   debug( "Showing Context Menue" );
+   kdDebug() << "Showing Context Menue" << endl;
    (void) col;
 	
    PackagerItem *curr = 0;
@@ -316,7 +317,7 @@ void ScanPackager::slShowContextMenue(QListViewItem *lvi, const QPoint &p, int c
 /* ----------------------------------------------------------------------- */
 void ScanPackager::slHandlePopup( int menu_id )
 {
-   debug( "Popup to handle ID: %d", menu_id );
+   kdDebug() << "Popup to handle ID: " << menu_id << endl;
  	
    PackagerItem *curr = (PackagerItem*) currentItem();
    if( ! curr ) return;
@@ -326,7 +327,7 @@ void ScanPackager::slHandlePopup( int menu_id )
    switch( menu_id )
    {
       case ID_POP_RESCAN:
-	 debug( "Not yet implemented !" );
+	 kdDebug() << "Not yet implemented !" << endl;
 	 break;
       case ID_POP_DELETE:
 	 if( curr && curr != root ) {
@@ -367,7 +368,7 @@ void ScanPackager::exportFile( PackagerItem *curr )
 
    if( curr->isDir() )
    {
-      debug( "Not yet implemented!" );
+      kdDebug() << "Not yet implemented!" << endl;
    }
    else
    {
@@ -397,7 +398,7 @@ void ScanPackager::exportFile( PackagerItem *curr )
 
 void ScanPackager::slotCanceled( KIO::Job* )
 {
-   debug( I18N("Canceled by user"));
+  kdDebug() << I18N("Canceled by user") << endl;
 }
 
 
@@ -411,7 +412,7 @@ void ScanPackager::slotResult( KIO::Job *job )
       // get formated error message
       QString msg = job->errorString();
       // int errid = job->error();
-      debug( "ERROR in Exporting an image: <%s>", (const char*) msg );
+      kdDebug() << "ERROR in Exporting an image: <" << msg << ">" << endl;
    }
    copyjob = 0L;
 }
@@ -444,7 +445,7 @@ bool ScanPackager::deleteItem( PackagerItem *curr, bool ask )
 {
    bool ok = false;
    if( ! curr ) return( ok );
-   debug( "Deleting: %s", (const char*) curr->getFilename());
+   kdDebug() << "Deleting: " << curr->getFilename() << endl;
    if( curr->isDir() )
    {
       /* Remove all files and the dir */
@@ -467,7 +468,7 @@ bool ScanPackager::deleteItem( PackagerItem *curr, bool ask )
       ok = true;
       while( child && ok )
       {
-	 debug( "deleting %s", (const char*) child->getFilename());
+	 kdDebug() << "deleting " << child->getFilename() << endl;
 	 new_child = (PackagerItem*) child->nextSibling();
 	 ok = deleteItem( child, false );
      		
@@ -505,7 +506,7 @@ bool ScanPackager::deleteItem( PackagerItem *curr, bool ask )
    }
  	
    if( ! ok )
-      debug( "Deleting Item failed !" );
+      kdDebug() << "Deleting Item failed !" << endl;
  	
    return( ok );
 }
@@ -559,7 +560,7 @@ int ScanPackager::readDir( QListViewItem *parent, const char *dir_to_read )
 	 new_folder->setFilename( fi->absFilePath() );
 	 /* recursive Call to readDir */
 	 amount_dirs++;
-	 amount_dirs += readDir( new_folder, fi->absFilePath() );
+	 amount_dirs += readDir( new_folder, fi->absFilePath().local8Bit() );
 	 new_folder->decorateFile();
       }
       else

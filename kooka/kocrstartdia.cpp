@@ -25,6 +25,7 @@
 #include <kapp.h>
 #include <kconfig.h>
 #include <kglobal.h>
+#include <kdebug.h>
 #include <kanimwidget.h>
 
 #include "resource.h"
@@ -45,7 +46,7 @@ KOCRStartDialog::KOCRStartDialog( QWidget *parent )
    :KDialogBase( parent,  "OCRStart", false, I18N("Optical Character Recognition"),
 		 Cancel|User1, User1, true, I18N("Start OCR" ) )
 {
-   debug( "Starting KOCR-Start-Dialog!" );
+   kdDebug() << "Starting KOCR-Start-Dialog!" << endl;
    // Layout-Boxes
    QWidget *page = new QWidget( this );
    CHECK_PTR( page );
@@ -76,7 +77,7 @@ KOCRStartDialog::KOCRStartDialog( QWidget *parent )
    entryOcrBinary = new KScanEntry( page, I18N( "Path to gocr-binary:  " ));
    QString res = conf->readPathEntry( CFG_GOCR_BINARY, "/usr/bin/gocr" );
    topLayout->addWidget( entryOcrBinary, 1 );
-   entryOcrBinary->slSetEntry( (const char*) res );
+   entryOcrBinary->slSetEntry( res.local8Bit() );
    
    QFrame *f2 = new QFrame( page );
    f2->setFrameStyle( QFrame::HLine | QFrame::Sunken );
@@ -137,7 +138,7 @@ void KOCRStartDialog::writeConfig( void )
 
 void KOCRStartDialog::disableFields( void )
 {
-   debug("About to disable the entry fields" );
+   kdDebug() << "About to disable the entry fields" << endl;
    sliderGrayLevel->setEnabled( false );
    sliderDustSize->setEnabled( false );
    sliderSpace->setEnabled( false );

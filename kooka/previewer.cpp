@@ -17,6 +17,7 @@
 #include <qlabel.h>
 #include <qfontmetrics.h>
 
+#include <kdebug.h>
 
 #include "previewer.h"
 #include "resource.h"
@@ -44,7 +45,7 @@ Previewer::Previewer(QWidget *parent, const char *name )
 	
 	overallHeight = 295;  /* Default DIN A4 */
 	overallWidth = 210;
-	debug( "Previewer: got Overallsize: %f x %f", overallWidth, overallHeight );
+	kdDebug() << "Previewer: got Overallsize: " << overallWidth << " x " << overallHeight << endl;
 	img_canvas  = new ImageCanvas( this );
 	img_canvas->setScaleFactor( 0 );
 	layout->addWidget( img_canvas, 6 );
@@ -233,7 +234,7 @@ void Previewer::slFormatChange( int id )
 	    if( format_id == portrait_id )
 	    {   /* Portrait Mode */
 	        p = calcPercent( s_short, s_long );
-	        debug( "Now is portrait-mode" );
+	        kdDebug() << "Now is portrait-mode" << endl;
 	    }
 	    else
 	    {   /* Landscape-Mode */
@@ -274,7 +275,7 @@ void Previewer::slNewDimen(QRect r)
    QString s;
    s.sprintf( I18N("width %d mm"), w_mm );
    emit(setScanWidth(s));
-   debug("Setting new Dimension " + s);
+   kdDebug() << "Setting new Dimension " << s << endl;
    s.sprintf( I18N("height %d mm"), h_mm );
    emit(setScanHeight(s));
 
@@ -290,7 +291,7 @@ QPoint Previewer::calcPercent( int w_mm, int h_mm )
  		p.setX( 1000.0*w_mm / overallWidth );
  		p.setY( 1000.0*h_mm / overallHeight );
  	} else {
- 		debug( "ERROR: Only mm supported yet !" );
+ 		kdDebug() << "ERROR: Only mm supported yet !" << endl;
  	}
  	return( p );
 

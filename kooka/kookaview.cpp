@@ -13,6 +13,7 @@
 #include <krun.h>
 #include <kapp.h>
 #include <kconfig.h>
+#include <kdebug.h>
 #include <ktrader.h>
 #include <klibloader.h>
 #include <kmessagebox.h>
@@ -120,16 +121,16 @@ KookaView::KookaView(QWidget *parent)
 
    if( selDevice.isEmpty() || selDevice.isNull() )
    {
-      debug( "Damned, no selected device-> TODO !" );
+      kdDebug() << "Damned, no selected device-> TODO !" << endl;
    }
 
-   debug( "Opening device %s", (const char*) selDevice );
+   kdDebug() << "Opening device " << selDevice << endl;
 
    /* This connects to the selected scanner */
-   sane->openDevice( selDevice );
+   sane->openDevice( selDevice.local8Bit() );
    if( ! scan_params->connectDevice( sane ) )
    {
-      debug( "Connecting to the scanner failed :( ->TODO" );
+      kdDebug() << "Connecting to the scanner failed :( ->TODO" << endl;
    }
 #if 0
    /* Try to set the left splitter to the requested width of the scan params */
@@ -213,10 +214,10 @@ KookaView::KookaView(QWidget *parent)
    /* Now set the configured stuff */
    kapp->config()->setGroup(GROUP_STARTUP);
    QString startup = kapp->config()->readEntry( STARTUP_IMG_SELECTION, "" );
-   debug( "KookaView: Loading Startup-Image <%s>", (const char*) startup );
+   kdDebug() << "KookaView: Loading Startup-Image <" << startup << ">" << endl;
    
    if( !startup.isEmpty()) {
-      debug( "Loading startup image !" );
+      kdDebug() << "Loading startup image !" << endl;
       packager->slSelectImage( startup );
    }
    
@@ -258,7 +259,7 @@ void KookaView::slNewPreview( QImage *new_img )
 			
 	 if( is_stat != ISS_OK )
 	 {
-	    debug("ERROR in saving preview !" );
+	    kdDebug() << "ERROR in saving preview !" << endl;
 	 }
       }
       preview_canvas->newImage( preview_img );
@@ -385,7 +386,7 @@ void KookaView::slRotateImage(int angle)
 	    
 	    break;
 	 default:
-	    debug( "Not supported yet !" );
+	    kdDebug() << "Not supported yet !" << endl;
 	    doUpdate = false;
 	    
 	    break;
@@ -428,7 +429,7 @@ void KookaView::slMirrorImage( MirrorType m )
 	    resImg = img->mirror( true, true );
 	    break;
 	 default:
-	    debug( "Mirroring: no way ;)" );
+	    kdDebug() << "Mirroring: no way ;)" << endl;
 	    doUpdate = false;
       }
       QApplication::restoreOverrideCursor();
@@ -453,7 +454,7 @@ void KookaView::updateCurrImage( QImage& img )
 
 void KookaView::saveProperties(KConfig *config)
 {
-   debug( "Saving Properties for KookaView !" );
+   kdDebug() << "Saving Properties for KookaView !" << endl;
    config->setGroup( GROUP_STARTUP );
    /* Get with path */
    config->writeEntry( STARTUP_IMG_SELECTION, packager->getCurrImageFileName(true));
@@ -467,7 +468,7 @@ void KookaView::slOpenCurrInGraphApp( void )
    if( packager ) {
       file = packager->getCurrImageFileName( true );
       
-      debug( "Trying to open <%s>", (const char*) file );
+      kdDebug() << "Trying to open <" << file << ">" << endl;
       if( ! file.isEmpty() )
       {
 	 KURL::List urllist;

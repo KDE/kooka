@@ -24,6 +24,7 @@
 #include <qbutton.h>
 #include <qradiobutton.h>
 #include <qlabel.h>
+#include <kdebug.h>
 
 #include "miscwidgets.h"
 #include "resource.h"
@@ -171,7 +172,7 @@ void ImgScaleDialog::customChanged( const QString& s )
       selected = okval;
       emit( customScaleChange( okval ));
    } else {
-      debug( "ERR: To large, to smale, or whatever shitty !" );
+      kdDebug() << "ERR: To large, to smale, or whatever shitty !" << endl;
    }
 }
 
@@ -205,7 +206,7 @@ void ImgScaleDialog::setSelValue( int val )
 	 }
       } // Selection is not custom
    } else {
-      debug( "ERR: Invalid size selected !" );
+      kdDebug() << "ERR: Invalid size selected !" << endl;
    }
    // debug( "SetValue: Selected Scale is %d", selected );
 }
