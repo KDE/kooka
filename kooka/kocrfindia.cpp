@@ -18,7 +18,7 @@
 #include <qlayout.h>
 #include <qlabel.h>
 
-#include <kapp.h>
+#include <kapplication.h>
 #include <kconfig.h>
 #include <kglobal.h>
 #include <klocale.h>

@@ -25,7 +25,6 @@
 #include <kio/jobclasses.h>
 #include <kio/file.h>
 #include <kio/job.h>
-#include <kio/jobclasses.h>
 #include <kio/netaccess.h>
 
 #include "resource.h"

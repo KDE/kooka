@@ -18,14 +18,13 @@
 
 #include <kurl.h>
 #include <krun.h>
-#include <kapp.h>
+#include <kapplication.h>
 #include <kconfig.h>
 #include <kdebug.h>
 #include <ktrader.h>
 #include <klibloader.h>
 #include <klocale.h>
 #include <kmessagebox.h>
-#include <krun.h>
 #include <keditcl.h>
 
 #define PACKAGER_TAB 0

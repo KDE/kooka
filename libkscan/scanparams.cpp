@@ -28,7 +28,6 @@
 #include <qmessagebox.h>
 #include <qlayout.h>
 #include <qdict.h>
-#include <qfile.h>
 #include <qprogressdialog.h>
 
 #include <kfiledialog.h>

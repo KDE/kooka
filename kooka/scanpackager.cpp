@@ -41,8 +41,6 @@
 #include <kio/jobclasses.h>
 #include <kio/file.h>
 #include <kio/job.h>
-#include <kio/jobclasses.h>
-#include <kmessagebox.h>
 
 extern QDict<QPixmap> icons;
 enum { ID_POP_RESCAN,

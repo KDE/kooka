@@ -20,7 +20,7 @@
 #include <qfileinfo.h>
 #include <qtooltip.h>
 
-#include <kapp.h>
+#include <kapplication.h>
 #include <kconfig.h>
 #include <kglobal.h>
 #include <kdebug.h>

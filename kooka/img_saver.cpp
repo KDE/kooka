@@ -27,13 +27,12 @@
 #include <kimageio.h>
 #include <kseparator.h>
 #include <klocale.h>
-#include <kstddirs.h>
+#include <kstandarddirs.h>
 #include <kmessagebox.h>
 #include <kdebug.h>
 #include <kio/jobclasses.h>
 #include <kio/file.h>
 #include <kio/job.h>
-#include <kio/jobclasses.h>
 #include <kio/netaccess.h>
 
 #include <qdir.h>
