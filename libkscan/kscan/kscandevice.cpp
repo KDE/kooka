@@ -116,11 +116,17 @@ KScanDevice::KScanDevice( QObject *parent )
 
     scanner_initialised = false;  /* stays false until openDevice. */
     scanStatus = SSTAT_SILENT;
+
     data         = 0; /* temporar image data buffer while scanning */
     sn           = 0; /* socket notifier for async scanning        */
     img          = 0; /* temporar image to scan in                 */
     storeOptions = 0; /* list of options to store during preview   */
+    overall_bytes = 0;
+    rest_bytes = 0;
+    pixel_x = 0;
+    pixel_y = 0;
     
+
     if( sane_stat == SANE_STATUS_GOOD )
     {
         sane_stat = sane_get_devices( &dev_list, SANE_TRUE );
@@ -446,10 +452,13 @@ void KScanDevice::slReloadAllBut( KScanOption *not_opt )
 	{
 	    if( so != not_opt )
 	    {
+	       debug( "Reloading <%s>", (const char*) so->getName());
 	 	so->slReload();
 	 	so->slRedrawWidget(so);
 	    }
 	}
+	debug( "*** Reload of all finished ! ***" );
+		       
 }
 
 

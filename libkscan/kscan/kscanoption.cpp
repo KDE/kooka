@@ -337,6 +337,13 @@ void KScanOption::slReload( void )
 		
    if( widget() )
    {
+      debug( "constraint is %d", desc->cap );
+      if( !active() )
+	 debug( "%s is not active now", desc->name );
+      
+      if( !softwareSetable() )
+	 debug( "%s is not software setable", desc->name );
+
       if( !active() || !softwareSetable() )
       {
 	 debug( "Disabling widget %s!", (const char*) getName());
@@ -440,8 +447,14 @@ bool KScanOption::softwareSetable( void )
 {
   /* Refresh description */
   desc = getOptionDesc( name );
-  return( desc && ( SANE_OPTION_IS_SETTABLE(desc->cap ) == SANE_TRUE ) );
+  if( desc )
+  {
+     if( SANE_OPTION_IS_SETTABLE(desc->cap) == SANE_TRUE )
+	return( true );
+  }
+  return( false );
 }
+
 
 KSANE_Type KScanOption::type( void )
 {
