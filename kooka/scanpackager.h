@@ -109,7 +109,6 @@ protected:
 protected slots:
    void         slFileRename( QListViewItem*, const QString&, int );
    // void         slFilenameChanged( KFileTreeViewItem*, const KURL & );
-   // void 	 slDropped(QDropEvent * e, QListViewItem *after);
    void         slImageArrived( KFileTreeViewItem *item, KookaImage* image );
    void         slotExportFinished( KIO::Job *job );
    void 	slotCreateFolder( );
@@ -117,7 +116,7 @@ protected slots:
    void         slotUnloadItems( );
    void         slotUnloadItem( KFileTreeViewItem *curr );
    void         slotDirCount( KFileTreeViewItem *item, int cnt );
-   void 	slotUrlsDropped( KURL::List& urls, KURL& copyTo );
+   void         slotUrlsDropped( QWidget*, QDropEvent*, KURL::List& urls, KURL& copyTo );
    void         slotDeleteFromBranch( KFileItem* );
    void         slotStartupFinished( KFileTreeViewItem * );
 signals:

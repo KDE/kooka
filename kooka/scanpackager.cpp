@@ -89,8 +89,8 @@ ScanPackager::ScanPackager( QWidget *parent ) : KFileTreeView( parent )
    setDropVisualizer(true);
    setAcceptDrops(true);
 
-   connect( this, SIGNAL(dropped( KURL::List&, KURL& )),
-	    this, SLOT( slotUrlsDropped( KURL::List&, KURL& )));
+   connect( this, SIGNAL(dropped( QWidget*, QDropEvent*, KURL::List&, KURL& )),
+	    this, SLOT( slotUrlsDropped( QWidget*, QDropEvent*, KURL::List&, KURL& )));
 
    kdDebug(28000) << "connected Drop-Signal" << endl;
    setRenameable ( 0, true );
@@ -1013,13 +1013,16 @@ void ScanPackager::slotExportFinished( KIO::Job *job )
 }
 
 
-void ScanPackager::slotUrlsDropped( KURL::List& urls, KURL& copyTo )
+void ScanPackager::slotUrlsDropped( QWidget*, QDropEvent* ev, KURL::List& urls, KURL& copyTo )
 {
    kdDebug(28000) << "Kooka drop event" << endl;
 
-   if( urls.count() > 0 )
+   if( !urls.isEmpty() )
    {
-      copyjob = KIO::copy( urls, copyTo, true );
+      if ( ev->action() == QDropEvent::Move )
+        copyjob = KIO::move( urls, copyTo, true );
+      else
+        copyjob = KIO::copy( urls, copyTo, true );
       KFileTreeViewItem *curr = currentKFileTreeViewItem();
       storeJob( copyjob, curr, JobDescription::ImportJob );
       connect( copyjob, SIGNAL(result(KIO::Job*)),
