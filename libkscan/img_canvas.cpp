@@ -125,7 +125,6 @@ ImageCanvas::~ImageCanvas()
 void ImageCanvas::deleteView( QImage *delimage )
 {
    const QImage *img = rootImage();
-   kdDebug(28000) << "ImageCanvas -> " << delimage << " - " << img << endl;
    
    if( delimage == img )
    {
