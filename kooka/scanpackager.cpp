@@ -485,23 +485,87 @@ void ScanPackager::slSelectionChanged( QListViewItem *newItem )
 
 void ScanPackager::loadImageForItem( KFileTreeViewItem *item )
 {
-
+   
    if( ! item ) return;
+   bool result = true;
    
-   KURL url = item->url();
+   KFileItem *kfi = item->fileItem();
+   if( ! kfi ) return;
    
-   if( url.isLocalFile() )
+   KookaImage *img = static_cast<KookaImage*>( kfi->extraData(this));
+
+   if( img )
    {
-      KookaImage *img = new KookaImage( ); 
-      if( img->load( localFileName(item) ) )
-      {
-	 slImageArrived( item, img );
-      }
+      kdDebug(28000) << "Image already loaded." << endl;
+      /* result is still true, image must be shown. */
    }
    else
    {
-      // TODO : non-local images.
-      kdDebug(28000) << "Non-local images: Not yet implemented!" << endl;
+      /* The image needs to be loaded. Possibly it is a multi-page image.
+       * If it is, the kookaImage has a subImageCount larger than one. We
+       * create an subimage-item for every subimage, but do not yet load
+       * them.
+       */
+      KURL url = item->url();
+   
+      img = new KookaImage( ); 
+      if( !img || !img->loadFromUrl( url ) )
+      {
+	 kdDebug(28000) << "Loading KookaImage from File failed!" << endl;
+	 result = false;
+      }
+      else
+      {
+	 /* care for subimages, create items for them */
+	 kdDebug(28000) << "subImage-count: " << img->subImagesCount() << endl;
+	 if( img->subImagesCount() > 1 )
+	 {
+	    KIconLoader *loader = KGlobal::iconLoader();
+	    kdDebug(28000) << "SubImages existing!" << endl;
+
+	    /* Start at the image with index 1, that makes  one less than are actually in the
+	     * image. But image 0 was already created above. */
+	    KFileTreeViewItem *prevItem=0;
+	    for( int i = 1; i < img->subImagesCount(); i++ )
+	    {
+	       kdDebug(28000) << "Creating subimage no " << i << endl;
+	       KFileItem *newKfi = new KFileItem( *kfi );
+	       KFileTreeViewItem *subImgItem = new KFileTreeViewItem( item, newKfi, item->branch());
+
+	       if( prevItem )
+	       {
+		  subImgItem->moveItem( prevItem );
+	       }
+	       prevItem = subImgItem;
+
+	       subImgItem->setPixmap( 0, loader->loadIcon( "editcopy", KIcon::Small ));
+	       subImgItem->setText( 0, i18n("Subimage %1").arg( i ) );
+	       KookaImage  *subImgImg = new KookaImage( i, img );
+	    
+	       newKfi->setExtraData( (void*) this, (void*) subImgImg );
+	    }
+	 }
+      }
+   }
+
+   
+   if( result && img )
+   {
+      if( img->isSubImage() )
+      {
+	 kdDebug(28000) << "it _is_ a subimage" << endl;
+	 /* load if not loaded */
+	 if( img->isNull())
+	 {
+	    kdDebug(28000) << "extracting subimage" << endl;
+	    img->extractNow();
+	 }
+	 else
+	 {
+	    kdDebug(28000) << "Is not a null image" << endl;
+	 }
+      }
+      slImageArrived( item, img );
    }
 }
 
@@ -916,10 +980,30 @@ void ScanPackager::slotUnloadItem( KFileTreeViewItem *curr )
    {
       KFileItem *kfi = curr->fileItem();
       KookaImage *image = static_cast<KookaImage*>(kfi->extraData( this ));
-      emit( unloadImage( image ));
-      delete image;
-      kfi->removeExtraData( this );
-      slotDecorate( curr );
+
+      /* If image is zero, ok, than there is nothing to unload :) */
+      if( image )
+      {
+	 if( image->subImagesCount() > 0 )
+	 {
+	    KFileTreeViewItem *child = static_cast<KFileTreeViewItem*>(curr->firstChild());
+	 
+	    while( child )
+	    {
+	       KFileTreeViewItem *nextChild = 0;
+	       kdDebug(28000) << "Unloading subimage item " << child << endl;
+	       slotUnloadItem( child );
+	       nextChild = static_cast<KFileTreeViewItem*> (child->nextSibling());
+	       delete child;
+	       child = nextChild;
+	    }
+	 }
+      
+	 emit( unloadImage( image ));
+	 delete image;
+	 kfi->removeExtraData( this );
+	 slotDecorate( curr );
+      }
    }
 }
 

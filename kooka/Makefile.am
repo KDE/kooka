@@ -12,7 +12,7 @@ kooka_SOURCES =	main.cpp kooka.cpp kookaview.cpp kookapref.cpp 		\
 		thumbview.cpp thumbviewitem.cpp                         \
 		dwmenuaction.cpp
 
-kooka_LDADD   = $(LIB_KFILE) -lkdeprint $(top_builddir)/libkscan/libkscan.la
+kooka_LDADD   = $(LIB_KFILE) -lkdeprint $(LIBTIFF) $(top_builddir)/libkscan/libkscan.la
 kooka_LDFLAGS = $(KDE_RPATH) $(all_libraries)
 
 INCLUDES         = -I$(top_srcdir)/libkscan $(all_includes) $(LIBSANE_INCLUDES)
