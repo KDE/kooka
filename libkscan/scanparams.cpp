@@ -183,12 +183,6 @@ bool ScanParams::connectDevice( KScanDevice *newScanDevice )
 
 ScanParams::~ScanParams()
 {
-   if( sane_device )
-   {
-      kdDebug(29000) << "Saving scan settings" << endl;
-      sane_device->slSaveScanConfigSet( DEFAULT_OPTIONSET, i18n("the default startup setup") );
-   }
-
    if( startupOptset )
    {
       delete startupOptset;
