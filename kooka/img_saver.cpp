@@ -271,13 +271,13 @@ void ImgSaver::createDir( QString dir )
       kdDebug(28000) << "Wrn: Directory does not exist -> try to create  !" << endl;
       if( mkdir( QFile::encodeName( dir ), S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH ) != 0 )
       {
-        KMessageBox::sorry(0, i18n("The directory\n%1\nto save images does not exist and could not be created !\n"
+        KMessageBox::sorry(0, i18n("The directory\n%1\n does not exist and could not be created !\n"
                         "Please check the permissions.").arg(dir));
       }
    }
    if( ! fi.isWritable() )
    {
-        KMessageBox::sorry(0, i18n("The directory\n%1\nto save images is not writeable.\nPlease check the permissions.")
+        KMessageBox::sorry(0, i18n("The directory\n%1\n is not writeable.\nPlease check the permissions.")
                 .arg(dir));
    }
 }
@@ -533,7 +533,7 @@ ImgSaveStat ImgSaver::save( QImage *image, const QString &filename,
    bool result = false;
    
    if( ! format || !image ) return( ISS_ERR_PARAM );
-   
+
    if( image )
    {
       // remember the last processed file - only the filename - no path
@@ -602,12 +602,12 @@ QString ImgSaver::errorString( ImgSaveStat stat )
    QString re;
    
    switch( stat ) {
-      case ISS_OK:           re = i18n( " Image save OK      " ); break;
-      case ISS_ERR_PERM:     re = i18n( " permission Error   " ); break;
+      case ISS_OK:           re = i18n( " image save OK      " ); break;
+      case ISS_ERR_PERM:     re = i18n( " permission error   " ); break;
       case ISS_ERR_FILENAME: re = i18n( " bad filename       " ); break;
       case ISS_ERR_NO_SPACE: re = i18n( " no space on device " ); break;
       case ISS_ERR_UNKNOWN:  re = i18n( " unknown error      " ); break;
-      case ISS_ERR_PARAM:    re = i18n( " Parameter wrong    " ); break;
+      case ISS_ERR_PARAM:    re = i18n( " parameter wrong    " ); break;
       default: re = "";
    }
    return( re );

@@ -30,11 +30,11 @@
 #include "icons.h"
 
 static const char *description =
-    I18N_NOOP("<B>Kooka</B> is a KDE2 application which provides access to scanner hardware"
+    I18N_NOOP("<B>Kooka</B> is a KDE2 application which provides access to scanner hardware "
 	      "using the SANE library.<P>"
-	      "Kooka help you scanning, saving your image in the correct"
-	      "image format and performing <B>O</B>ptical <B>C</B>haracter <B>R</B>ecognition on it,"
-	      "using <I>gocr</I>, Joerg Schulenburgs and friends Open Source ocr program.<P>"
+	      "Kooka helps you scan, save your image in the correct "
+	      "image format and perform <B>O</B>ptical <B>C</B>haracter <B>R</B>ecognition on it,"
+	      "using <I>gocr</I>, Joerg Schulenburg's and friends' Open Source ocr program.<P>"
 	      "For information on Kooka see <A HREF=http://>The kooka page</A><P>");
 
 static const char *version = "v0.2";
