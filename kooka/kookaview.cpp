@@ -27,6 +27,7 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <keditcl.h>
+#include <kled.h>
 #include <kcombobox.h>
 #include <kaction.h>
 
@@ -139,6 +140,9 @@ KookaView::KookaView(QWidget *parent, const QCString& deviceToUse)
    /* New preview image */
    connect(sane, SIGNAL(sigNewPreview(QImage*)), this, SLOT( slNewPreview(QImage*)));
 
+   connect( sane, SIGNAL( sigScanStart() ), this, SLOT( slScanStart()));
+   connect( sane, SIGNAL( sigScanFinished(KScanStat)), this, SLOT(slScanFinished(KScanStat)));
+   connect( sane, SIGNAL( sigAcquireStart()), this, SLOT( slAcquireStart()));
    /* Image canvas should show a new document */
    connect( packager, SIGNAL( showImage( QImage* )),
             img_canvas, SLOT( newImage( QImage*)));
@@ -198,6 +202,9 @@ bool KookaView::slSelectDevice( const QCString& useDevice )
 
       if( sane->openDevice( selDevice ) == KSCAN_OK )
       {
+         connect( scan_params,    SIGNAL( scanResolutionChanged( int, int )),
+                  preview_canvas, SLOT( slNewScanResolutions( int, int )));
+
 	 if( ! scan_params->connectDevice( sane ) )
 	 {
 	    kdDebug(28000) << "Connecting to the scanner failed :( ->TODO" << endl;
@@ -213,8 +220,8 @@ bool KookaView::slSelectDevice( const QCString& useDevice )
 		     scan_params, SLOT(slCustomScanSize(QRect)));
 	    connect( previewCanvas, SIGNAL( noRect()),
 		     scan_params, SLOT(slMaximalScanSize()));
-	    connect( scan_params,    SIGNAL( scanResolutionChanged( int, int )),
-		     preview_canvas, SLOT( slNewScanResolutions( int, int )));
+	    // connect( scan_params,    SIGNAL( scanResolutionChanged( int, int )),
+            // 		     preview_canvas, SLOT( slNewScanResolutions( int, int )));
 	 }
       }
       else
@@ -482,6 +489,51 @@ void KookaView::startOCR( const QImage *img )
 	 KMessageBox::sorry(0, i18n("Could not start OCR-Process.\n"
 				    "Probably there is already one running." ));
 
+      }
+   }
+}
+
+void KookaView::slScanStart( )
+{
+   kdDebug(28000) << "Scan starts " << endl;
+   if( scan_params )
+   {
+      scan_params->setEnabled( false );
+      KLed *led = scan_params->operationLED();
+      if( led )
+      {
+	 led->setColor( Qt::red );
+	 led->setState( KLed::On );
+      }
+   }
+}
+
+void KookaView::slAcquireStart( )
+{
+   kdDebug(28000) << "Acquire starts " << endl;
+   if( scan_params )
+   {
+      KLed *led = scan_params->operationLED();
+      if( led )
+      {
+	 led->setColor( Qt::green );
+      }
+   }
+}
+
+
+
+void KookaView::slScanFinished( KScanStat stat )
+{
+   kdDebug(28000) << "Scan finished with status " << stat << endl;
+   if( scan_params )
+   {
+      scan_params->setEnabled( true );
+      KLed *led = scan_params->operationLED();
+      if( led )
+      {
+	 led->setColor( Qt::green );
+	 led->setState( KLed::Off );
       }
    }
 }

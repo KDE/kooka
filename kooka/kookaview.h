@@ -123,7 +123,10 @@ public slots:
 
    void connectViewerAction( KAction *action );
    
-
+   void slScanStart();
+   void slScanFinished( KScanStat stat );
+   void slAcquireStart();
+   
 protected slots:
    void  slCloseScanDevice();
    

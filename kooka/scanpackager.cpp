@@ -86,7 +86,6 @@ ScanPackager::ScanPackager( QWidget *parent ) : KFileTreeView( parent )
 
 	setRootIsDecorated( false );
 	
-	
 	connect( this, SIGNAL( selectionChanged( QListViewItem*)),
 		 SLOT( slSelectionChanged(QListViewItem*)));
 
@@ -95,6 +94,7 @@ ScanPackager::ScanPackager( QWidget *parent ) : KFileTreeView( parent )
 	
 	connect( this, SIGNAL(itemRenamed (QListViewItem*, const QString &, int ) ), this,
 		 SLOT(slFileRename( QListViewItem*, const QString&, int)));
+
 	
 	img_counter = 1;
 	/* Set the current export dir to home */
@@ -123,7 +123,7 @@ void ScanPackager::openRoots()
    KURL rootUrl(localRoot);
 
    /* standard root always exists, ImgRoot creates it */
-   kdDebug(28000) << "Open standard root " << rootUrl.url();
+   kdDebug(28000) << "Open standard root " << rootUrl.url() << endl;
 
    KFileTreeBranch *newbranch = addBranch( rootUrl, i18n("Kooka Gallery"), false /* do not showHidden */ );
    setDirOnlyMode( newbranch, false );
@@ -132,10 +132,10 @@ void ScanPackager::openRoots()
    connect( newbranch, SIGNAL(newTreeViewItems( KFileTreeBranch*, const KFileTreeViewItemList& )),
 	    this, SLOT( slotDecorate(KFileTreeBranch*, const KFileTreeViewItemList& )));
 
-   connect( newbranch, SIGNAL(populateFinished( KFileTreeViewItem* )),
-	    this, SLOT( slotSetChildCount( KFileTreeViewItem* )));
+   connect( newbranch, SIGNAL( directoryChildCount( KFileTreeViewItem* , int )),
+	    this, SLOT( slotDirCount( KFileTreeViewItem *, int )));
    
-   populateBranch( newbranch );
+   newbranch->setOpen(true);
    
    /* open more configurable image repositories TODO */
 
@@ -151,7 +151,7 @@ void ScanPackager::createMenus()
    if( ! popup )
    {
       popup = new KPopupMenu();
-      // popup->insertTitle( i18n( "Gallery" ));
+      popup->insertTitle( i18n( "Gallery" ));
       
       KAction *newAct = new KAction(i18n("&Create Directory"), "folder_new",0 ,
 				    this, SLOT(slotCreateFolder()), this);
@@ -172,17 +172,29 @@ void ScanPackager::createMenus()
    }
 }
 
+void ScanPackager::slotDirCount( KFileTreeViewItem* item, int cnt )
+{
+   if( item && item->isDir() )
+   {
+      kdDebug(28000)<< "  ############## count " << cnt << " for " << item->url().prettyURL() << endl;
+      QString cc = i18n( "%1 items").arg( cnt );
+      item->setText( 1, cc );
+   }
+   else
+   {
+      kdDebug(28000) << "Item is NOT directory - do not set child count!" << endl;
+   }
+}
 
 void ScanPackager::slotDecorate( KFileTreeViewItem* item )
 {
    if( !item ) return;
-
    if( item->isDir())
    {
-      QString cc = i18n( "%1 items").arg( item->childCount());
-      item->setText( 1, cc );
+      // done in extra slot.
    }
    else
+
    {
       KFileItem *kfi = item->fileItem();
 
@@ -263,14 +275,6 @@ void ScanPackager::slotDecorate( KFileTreeBranch* branch, const KFileTreeViewIte
    }
 }
 
-void ScanPackager::slotSetChildCount( KFileTreeViewItem *parent )
-{
-   if( parent )
-   {
-      QString cc = i18n( "%1 items").arg( parent->childCount());
-      parent->setText( 1, cc );
-   }
-}
 
 
 void ScanPackager::slFileRename( QListViewItem* it, const QString& newStr, int col )
@@ -848,8 +852,10 @@ void ScanPackager::contentsDropEvent( QDropEvent *e )
 
    if( ! curr ) return;
    KURL targetUrl = curr->url();
-   targetUrl.setFileName( "" ); /* in case its a file */
    
+   targetUrl.setFileName( "" ); /* in case its a file */
+   kdDebug(28000) << "DropEvent: Copying to " << targetUrl.prettyURL() << endl;
+#if 0
    if ( KURLDrag::decode( e, urls ) )
    {
       copyjob = KIO::copy( urls, targetUrl, true );
@@ -857,6 +863,7 @@ void ScanPackager::contentsDropEvent( QDropEvent *e )
       connect( copyjob, SIGNAL(result(KIO::Job*)),
 	       this, SLOT(slotExportFinished( KIO::Job* )));
    }
+#endif
 }
 
 
@@ -868,7 +875,7 @@ QDragObject* ScanPackager::dragObject()
    KFileTreeViewItem *curr = currentKFileTreeViewItem();
    QDragObject *drag = 0L;
 
-   if( !curr->isDir())
+   if( curr && !curr->isDir())
    {
       urls.append( curr->url());
    
@@ -876,6 +883,10 @@ QDragObject* ScanPackager::dragObject()
 	 drag = new KURLDrag( urls, viewport(), "url drag" );
 
       kdDebug(28000) << " Scanpackager Dragobject: " << drag << endl;
+   }
+   else
+   {
+      kdDebug(28000) << "Can not Drag a Directory " << endl;
    }
    return drag;
 
@@ -943,7 +954,9 @@ void ScanPackager::slotDeleteItems( )
       {
 	 s = i18n("Do you really want to delete the folder %1\nand all the images inside?").arg("");
       }
-      result = KMessageBox::questionYesNo(this, s, i18n( "Delete collection item") );
+      result = KMessageBox::questionYesNo(this, s, i18n( "Delete collection item"),
+					  KStdGuiItem::yes(), KStdGuiItem::no(),
+					  "AskForDeleteFiles" );
    }
 
    /* Since we are currently talking about local files here, NetAccess is OK */
