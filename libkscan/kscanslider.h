@@ -183,6 +183,7 @@ public:
     * @param list a stringlist with values the list should contain.
     */
    KScanCombo( QWidget *parent, const QString& text, const QStrList& list );
+   KScanCombo( QWidget *parent, const QString& text, const QStringList& list );
    // ~KScanCombo();
 
    /**
@@ -234,6 +235,7 @@ signals:
    void         activated(int);
 
 private:
+    void createCombo( const QString& text );
    QComboBox	*combo;
    QStrList	combolist;
 

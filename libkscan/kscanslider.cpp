@@ -60,16 +60,16 @@ KScanSlider::KScanSlider( QWidget *parent, const QString& text,
        hb->addSpacing( 4 );
     }
 
-    slider = new QSlider( min, max, 1, min, QSlider::Horizontal, this, "AUTO_SLIDER_" );
+    slider = new QSlider( (int) min, (int)max, 1, (int)min, QSlider::Horizontal, this, "AUTO_SLIDER_" );
     slider->setTickmarks( QSlider::Below );
-    slider->setTickInterval( QMAX( (max-min) / 10, 1 ) );
-    slider->setSteps( QMAX( (max-min)/20, 1 ), QMAX( (max-min)/10, 1 ) );
+    slider->setTickInterval( int(QMAX( (max-min)/10, 1 )) );
+    slider->setSteps( int(QMAX( (max-min)/20, 1) ), int(QMAX( (max-min)/10, 1) ) );
     slider->setMinimumWidth( 140 );
     /* set a buddy */
     l1->setBuddy( slider );
 
     /* create a spinbox for displaying the values */
-    m_spin = new QSpinBox( min, max,
+    m_spin = new QSpinBox( (int) min, (int) max,
 			   1, // step
 			   this );
 
@@ -217,23 +217,47 @@ void KScanEntry::slReturnPressed( void )
 
 KScanCombo::KScanCombo( QWidget *parent, const QString& text,
 			const QStrList& list )
-   : QHBox( parent )
+    : QHBox( parent ),
+      combo(0)
 {
-   setSpacing( 12 );
-   setMargin( 2 );
+    createCombo( text );
+    if( combo )
+        combo->insertStrList( list);
+    combolist = list;
+}
 
-   combolist = list;
+KScanCombo::KScanCombo( QWidget *parent, const QString& text,
+			const QStringList& list )
+    : QHBox( parent ),
+      combo(0)
+{
+    createCombo( text );
+    if( combo )
+        combo->insertStringList( list );
 
-   (void) new QLabel( text, this, "AUTO_COMBOLABEL" );
+    for ( QStringList::ConstIterator it = list.begin(); it != list.end(); ++it ) {
+        combolist.append( (*it).local8Bit() );
+    }
+}
+
+
+void KScanCombo::createCombo( const QString& text )
+{
+    setSpacing( 12 );
+    setMargin( 2 );
+
+
+    (void) new QLabel( text, this, "AUTO_COMBOLABEL" );
 
     combo = new QComboBox( this, "AUTO_COMBO" );
-    combo->insertStrList( &combolist);
 
     connect( combo, SIGNAL(activated( const QString &)), this,
-		    SLOT( slComboChange( const QString &)));
+             SLOT( slComboChange( const QString &)));
     connect( combo, SIGNAL(activated( int )),
 	     this,  SLOT(slFireActivated(int)));
+
 }
+
 
 void KScanCombo::slSetEntry( const QString &t )
 {
