@@ -8,7 +8,8 @@ METASOURCES = AUTO
 kooka_SOURCES =	main.cpp kooka.cpp kookaview.cpp kookapref.cpp 		\
 		img_saver.cpp ksaneocr.cpp miscwidgets.cpp 		\
 		packageritem.cpp scanpackager.cpp 	\
-		kocrstartdia.cpp kocrfindia.cpp
+		kocrstartdia.cpp kocrfindia.cpp imgnamecombo.cpp        \
+		kookaimage.cpp
 
 kooka_LDADD   = $(LIB_KFILE) -lkdeprint $(top_builddir)/libkscan/libkscan.la
 kooka_LDFLAGS = $(KDE_RPATH) $(all_libraries)
@@ -20,7 +21,8 @@ kookaview.h     scanpackager.h \
 img_saver.h    ksaneocr.h       miscwidgets.h \
 formathelp.h   kooka.h       packageritem.h   \
 kookaiface.h  \
-icons.h        kookapref.h   resource.h kocrfindia.h kocrstartdia.h
+icons.h        kookapref.h   resource.h kocrfindia.h \
+imgnamecombo.h kocrstartdia.h kookaimage.h
 
 # kocrstartdia.h kocrfindia.h \
 
