@@ -1,5 +1,5 @@
-<!DOCTYPE kookagui>
-<kookagui name="Kooka" version="1">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<kpartgui name="Kooka" version="2">
 <MenuBar>
  <Menu name="imgCanvas"><text>&amp;ImageCanvas</text>
    <Action name="openInGraphApp"/>
@@ -44,5 +44,4 @@
    <Action name="rotateCounterClockwise"/>
    <Action name="upsitedown"/>
  </Toolbar>
-<StatusBar/>
-</kookagui>
+</kpartgui>
