@@ -176,7 +176,7 @@ void Kooka::setupActions()
 		       this, SLOT( slRotate180() ),
 		       actionCollection(), "upsitedown" );
 #if 0
-    (void) new KAction(i18n("Save Scanparameters"), "savedefaultparams", CTRL+Key_S,
+    (void) new KAction(i18n("Save scan parameters"), "savedefaultparams", CTRL+Key_S,
 		       m_view, SLOT(slSaveScanParams()),
 		       actionCollection(), "savescanparam" );
 #endif
@@ -184,7 +184,7 @@ void Kooka::setupActions()
     (void) new KAction(i18n("Select scan device"), "scanner", CTRL+Key_Q,
 		       m_view, SLOT( slSelectDevice()),
 		       actionCollection(), "selectsource" );
-    
+
     createGUI("kookaui.rc");
 
 }
@@ -195,7 +195,7 @@ void Kooka::saveProperties(KConfig *config)
     // the 'config' object points to the session managed
     // config file.  anything you write here will be available
     // later when this app is restored
-    
+
    //if (m_view->currentURL() != QString::null)
    //     config->writeEntry("lastURL", m_view->currentURL());
    kdDebug(28000) << "In kooka's saveProperties !" << endl;
@@ -271,7 +271,7 @@ void Kooka::fileSaveAs()
 {
     // this slot is called whenever the File->Save As menu is selected,
    QStrList strlist;
-   strlist.append( "BMP" );
+   strlist.append( "BMP" );
    strlist.append( "JPEG" );
    FormatDialog fd( 0, "FormatDialog", &strlist );
    fd.exec();

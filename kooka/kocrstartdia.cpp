@@ -59,9 +59,9 @@ KOCRStartDialog::KOCRStartDialog( QWidget *parent )
    // Caption - Label
    QVBoxLayout *topLayout = new QVBoxLayout( page, marginHint(), spacingHint() );
    QLabel *label = new QLabel( i18n( "<B>Starting Optical Character Recognition</B><P>"
-				     "Kooka uses <I>gocr</I> for optical character recognition, "
-				     "an Open Source Project<P>"
-				     "Author of gocr is <B>Joerg Schulenburg</B><BR>"
+				     "Kooka uses <I>gocr</I>, an Open Source project, "
+				     "for optical character recognition.<P>"
+				     "The author of gocr is <B>Joerg Schulenburg</B><BR>"
 				     "For more information about gocr see "
 				     "<A HREF=http://jocr.sourceforge.net>"
 				     "http://jocr.sourceforge.net</A>"),
@@ -110,14 +110,14 @@ KOCRStartDialog::KOCRStartDialog( QWidget *parent )
    sliderGrayLevel->slSetSlider( numdefault );
    QToolTip::add( sliderGrayLevel,
 		  i18n( "The numeric value gray pixels are \nconsidered to be black.\n\nDefault is 160"));
-		 
+
    sliderDustSize = new KScanSlider( page, i18n("Dust size" ), 0, 60 );
    numdefault = conf->readNumEntry( CFG_GOCR_DUSTSIZE, 10 );
    sliderLayout->addWidget( sliderDustSize,1 );
    sliderDustSize->slSetSlider( numdefault );
    QToolTip::add( sliderDustSize,
-		  i18n( "Clusters smaller than this values\nwill be considered to be dust and \nremoved from the image.\n\nDefault is 10")); 
-		 
+		  i18n( "Clusters smaller than this value\nwill be considered to be dust and \nremoved from the image.\n\nDefault is 10"));
+
    sliderSpace = new KScanSlider( page, i18n( "Space width" ), 0, 60 );
    numdefault = conf->readNumEntry( CFG_GOCR_SPACEWIDTH, 0 );
    sliderLayout->addWidget( sliderSpace,1 );
@@ -180,7 +180,7 @@ void KOCRStartDialog::checkOCRBinIntern( const QCString& cmd, bool show_msg )
       if( fi.isDir() || (! fi.isExecutable()) )
       {
 	 if( show_msg )
-	    KMessageBox::sorry( this, i18n( "The gocr exists, but is not executable.\n"
+	    KMessageBox::sorry( this, i18n( "gocr exists, but is not executable.\n"
 					    "Please check your installation and/or install gocr properly."),
 				i18n("OCR software not executable") );
 	 ret = false;

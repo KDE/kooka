@@ -38,9 +38,9 @@ KookaPreferences::KookaPreferences()
     // a Treelist dialog.. but there are a number of other
     // possibilities (including Tab, Swallow, and just Plain)
     konf = KGlobal::config ();
-    
+
     setupStartupPage();
-    setupSaveFormatPage();    
+    setupSaveFormatPage();
 }
 
 
@@ -49,18 +49,18 @@ void KookaPreferences::setupStartupPage()
 
     /* startup options */
     konf->setGroup( GROUP_STARTUP );
-    
+
     QFrame *page = addPage( i18n("Startup"), i18n("Kooka Startup Preferences" ),
 			    BarIcon("gear", KIcon::SizeMedium ) );
     QVBoxLayout *top = new QVBoxLayout( page, 0, spacingHint() );
     /* Description-Label */
-    top->addWidget( new QLabel( i18n("Note that changing this options will affect Kooka's next start!"), page ));
+    top->addWidget( new QLabel( i18n("Note that changing these options will affect Kooka's next start!"), page ));
 
     /* Query for network scanner (Checkbox) */
     cbNetQuery = new QCheckBox( i18n("Query network for available scanners"),
 				page,  "CB_NET_QUERY" );
     QToolTip::add( cbNetQuery,
-		   i18n( "Check this if you want a network query for available scanners.\nMind that does not mean a query over the entire network but only the stations configured for SANE" ));
+		   i18n( "Check this if you want a network query for available scanners.\nNote that this does not mean a query over the entire network but only the stations configured for SANE!" ));
     cbNetQuery->setChecked( ! konf->readBoolEntry( "QueryLocalOnly", false ) );
 
     kdDebug() << "###### fine 1 " << endl;
@@ -69,7 +69,7 @@ void KookaPreferences::setupStartupPage()
     cbShowScannerSelection = new QCheckBox( i18n("Show the scanner selection box on next startup"),
 					    page,  "CB_SHOW_SELECTION" );
     QToolTip::add( cbShowScannerSelection,
-		   i18n( "Check this if you once checked 'do not show the scanner selection on startup',\nbut you want to see it again" ));
+		   i18n( "Check this if you once checked 'do not show the scanner selection on startup',\nbut you want to see it again." ));
 
     cbShowScannerSelection->setChecked( !konf->readBoolEntry( "SkipStartupAsk", false ));
     kdDebug() << "###### fine 2 " << endl;

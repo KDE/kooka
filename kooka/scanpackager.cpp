@@ -183,7 +183,7 @@ QString ScanPackager::buildNewFilename( QString cmplFilename, QString currFormat
    else
    {
       /* new Ext. differs from the current extension. Later. */
-      KMessageBox::sorry( 0L, i18n( "You entered a file extension that differs from the existing one.\nThat is not yet possible, converting 'on the fly' is planned for a future release.\n\n"
+      KMessageBox::sorry( 0L, i18n( "You entered a file extension that differs from the existing one.\nThat is not yet possible. Converting 'on the fly' is planned for a future release.\n\n"
 				      "Kooka corrects the extension."),
 			  i18n("On the fly conversion"));
       ext = base + "." + currFormat;
@@ -289,10 +289,10 @@ void ScanPackager::slotImageChanged( QImage *img )
    }
    else if( is_stat == ISS_ERR_PROTOCOL )
    {
-      KMessageBox::sorry( this, i18n( "Can not save the image, because the file is local.\n"
+      KMessageBox::sorry( this, i18n( "Cannot save the image, because the file is local.\n"
 				      "Kooka will support other protocols later."),
 			    i18n("Save error") );
-       
+
    }
    else if( is_stat != ISS_OK )
    {
@@ -425,7 +425,7 @@ PackagerItem *ScanPackager::spFindItem( SearchType type, const QString name )
 /* ----------------------------------------------------------------------- */
 void ScanPackager::slShowContextMenue(QListViewItem *lvi, const QPoint &p, int col )
 {
-   kdDebug(28000) << "Showing Context Menue" << endl;
+   kdDebug(28000) << "Showing Context Menue" << endl;
    (void) col;
 
    PackagerItem *curr = 0;
