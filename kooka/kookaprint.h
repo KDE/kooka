@@ -28,9 +28,29 @@
 #define __KOOKA_PRINT_H__
 
 #include <qobject.h>
+#include <qmap.h>
+#include <qstring.h>
+#include <kprinter.h>
+#include <kdeprint/kprintdialog.h>
+#include <kdeprint/kprintdialogpage.h>
 
 class KookaImage;
 class KPrinter;
+class KLineEdit;
+
+
+class ImageSettings : public KPrintDialogPage
+{
+public:
+    void setOptions( const QMap<QString, QString>& opts );
+    void getOptions( QMap<QString, QString>& opts, bool include_def = false );
+    bool isValid( QString& msg );
+
+private:
+    KLineEdit *m_width, *m_height;
+
+};
+
 
 class KookaPrint:public QObject
 {

@@ -30,11 +30,14 @@
 #include <qpainter.h>
 #include <qpaintdevicemetrics.h>
 
+#include "imgprintdialog.h"
+#include <kdebug.h>
+
 KookaPrint::KookaPrint( KPrinter *printer )
     :QObject(),
      m_printer(printer)
 {
-    
+
 }
 
 bool KookaPrint::printImage( KookaImage *img )
@@ -42,36 +45,70 @@ bool KookaPrint::printImage( KookaImage *img )
     bool result = true;
     if( ! m_printer || !img) return false;
 
-    QPainter        painter(m_printer);
+    QString psMode = m_printer->option( OPT_PSGEN_DRAFT );
+    kdDebug(28000) << "User setting for resolution: " << psMode << endl;
+
+    if( psMode == "1" )
+	m_printer->setResolution( 75 );
+    else
+	m_printer->setResolution( 600 );
+
+    /* Create painter _after_ setting Resolution */
+    QPainter painter(m_printer);
     QPainter *p = &painter;
-    QImage tmpImg = *img;
-    QPoint  pt(0, 0);               // the top-left corner (image will be centered)
-        
+    QImage   tmpImg = *img;
+    QPoint   pt(0, 0);               // the top-left corner (image will be centered)
+
     // We use a QPaintDeviceMetrics to know the actual page size in pixel,
     // this gives the real painting area
-    QPaintDeviceMetrics     metrics(p->device());
+    QPaintDeviceMetrics printermetrics( p->device() );
 
-    tmpImg = img->smoothScale(metrics.width(), metrics.height(), QImage::ScaleMin);
-#if 0
-        // scale the image if needed
-    switch (autofit)
+    int screenRes  = m_printer->option( OPT_SCREEN_RES ).toInt();
+    int printerRes = printermetrics.logicalDpiX();
+
+    QString scale = m_printer->option( OPT_SCALING );
+
+    int reso = screenRes;
+
+    if( scale == "scan" )
     {
-	...
-	case 1:
-	    // always fit to page
-	    img = m_image.smoothScale(metrics.width(), metrics.height(), QImage::ScaleMin);
-	    break;
-	    ...
-		}
-#endif
-    // center the image on the paint device
-    QSize   sz = tmpImg.size();        // the current image size
-    pt.setX((metrics.width()-sz.width())/2);
-    pt.setY((metrics.height()-sz.height())/2);
+	/* Scale to original size */
+	reso = m_printer->option( OPT_SCAN_RES ).toInt();
+    }
+    else if( scale == "custom" )
+    {
+	// kdDebug(28000) << "Not yet implemented: Custom scale" << endl;
+        double userWidthInch = (m_printer->option( OPT_WIDTH ).toDouble() / 25.4 );
+	reso = int( double(img->width()) / userWidthInch );
 
-    // draw the image
-    p->drawImage(pt, tmpImg);
+        kdDebug(28000) << "Custom resolution: " << reso << endl;
 
+    }
+
+    /* Scale the image for printing */
+    kdDebug(28000) << "Printer-Resolution: " << printerRes << " and scale-Reso: " << reso << endl;
+    if( reso > 0)
+    {
+	double sizeInch = double(img->width()) / double(reso);
+	int newWidth = int(sizeInch * printerRes);
+
+	printerRes = printermetrics.logicalDpiY();
+	sizeInch = double(img->height()) / double(reso);
+	int newHeight = int(sizeInch * printerRes );
+
+	kdDebug(28000) << "Scaling to printer size " << newWidth << " x " << newHeight << endl;
+
+	tmpImg = img->smoothScale(newWidth, newHeight, QImage::ScaleFree);
+
+	// center the image on the paint device
+	QSize   sz = tmpImg.size();        // the current image size
+	// TODO: check if too large
+	pt.setX((printermetrics.width()-sz.width())/2);
+	pt.setY((printermetrics.height()-sz.height())/2);
+
+	// draw the image
+	p->drawImage(pt, tmpImg);
+    }
     return result;
 }
 
