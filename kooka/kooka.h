@@ -73,11 +73,13 @@ public:
 
 
 protected:
+#if 0
     /**
      * Overridden virtuals for Qt drag 'n drop (XDND)
      */
     virtual void dragEnterEvent(QDragEnterEvent *event);
     virtual void dropEvent(QDropEvent *event);
+#endif
 
     /**
      * This function is called when it is time for the app to save its

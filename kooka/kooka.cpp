@@ -29,7 +29,6 @@
 
 #include "kookapref.h"
 
-#include <qdragobject.h>
 #include <qlineedit.h>
 #include <qprinter.h>
 #include <qprintdialog.h>
@@ -59,6 +58,7 @@
 #include <kaction.h>
 #include <kstdaction.h>
 #include <qiconset.h>
+#include <kurldrag.h>
 
 #define DOCK_SIZES "DockSizes"
 
@@ -74,7 +74,7 @@ Kooka::Kooka( const QCString& deviceToUse)
     /* Call createGUI on the ocr-result view */
     setXMLFile( "kookaui.rc", true );
 
-    setAcceptDrops(true);
+    setAcceptDrops(false); // Waba: Not (yet?) supported
     KConfig *konf = KGlobal::config ();
     readDockConfig ( konf, DOCK_SIZES );
 
@@ -302,10 +302,11 @@ void Kooka::readProperties(KConfig *config)
 
 }
 
+#if 0
 void Kooka::dragEnterEvent(QDragEnterEvent *event)
 {
     // accept uri drops only
-    event->accept(QUriDrag::canDecode(event));
+    event->accept(KURLDrag::canDecode(event));
 }
 
 void Kooka::dropEvent(QDropEvent *event)
@@ -313,18 +314,19 @@ void Kooka::dropEvent(QDropEvent *event)
     // this is a very simplistic implementation of a drop event.  we
     // will only accept a dropped URL.  the Qt dnd code can do *much*
     // much more, so please read the docs there
-    QStrList uri;
+    KURL::List uri;
 
     // see if we can decode a URI.. if not, just ignore it
-    if (QUriDrag::decode(event, uri))
+    if (KURLDrag::decode(event, uri) && !uri.isEmpty())
     {
         // okay, we have a URI.. process it
-        QString url, target;
-        url = uri.first();
+        const KURL &url = uri.first();
+        
+        // TODO: Do something with url
+        // Waba: See also setAcceptDrops() above
     }
 }
 
-#if 0
 void Kooka::fileNew()
 {
     // this slot is called whenever the File->New menu is selected,
