@@ -246,7 +246,7 @@ const KScanOption& KScanOption::operator= (const KScanOption& so )
 
 void KScanOption::slWidgetChange( const QCString& t )
 {
-    kdDebug(29000) << "Received WidgetChange for " << getName() << "const char*" << endl;
+    kdDebug(29000) << "Received WidgetChange for " << getName() << " (const QCString&)" << endl;
     set( t );
     emit( guiChange( this ) );
     // emit( optionChanged( this ));
