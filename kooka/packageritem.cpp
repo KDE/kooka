@@ -88,7 +88,10 @@ QString PackagerItem::getDirectory( void ) const
 QString PackagerItem::getFilename( bool withPath  ) const 
 {
    QString ret = filename.url();
-   // or: ret = filename.url(); ?
+
+   if( isDir() && ret.right(1) != "/" )
+       ret += "/";
+       
    if( ! withPath )
    {
       ret = filename.fileName();

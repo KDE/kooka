@@ -52,7 +52,7 @@ public:
     * @result true, if it is a directory.
     */
    
-   bool    isDir( void ) { return ( isdir ); }
+   bool    isDir( void ) const { return ( isdir ); }
 
    /**
     *  queries if an image is loaded, e.g. needs memory.
