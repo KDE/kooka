@@ -31,6 +31,8 @@
 #include <kurl.h>
 #include <qimage.h>
 #include <qptrlist.h>
+#include <qvaluevector.h>
+#include <qrect.h>
 
 #include <kfilemetainfo.h>
 
@@ -43,6 +45,7 @@ class KFileItem;
   * multiple pages.
   */
 
+typedef enum { MaxCut, MediumCut } TileMode;
 
 class KookaImage: public QImage
 {
@@ -113,20 +116,39 @@ public:
      */
     bool isFileBound()const { return m_fileBound; }
 
+    /**
+     * Create tiles on the given image. That is just cut the image in parts
+     * while non of the parts is larger than maxSize and store the rect list.
+     * The parameters rows and cols contain the number of rows and cols after
+     * tiling. If both are one, the image is smaller than maxSize, thus the
+     * left-top tile is index 1,1.
+     * Use getTile() to read the QRect list.
+     */
+    int cutToTiles( const QSize maxSize, int& rows, int& cols, TileMode mode = MaxCut );
+
+    /**
+     * read tiles from the tile list. The image needs to be tiled by method
+     * cutToTiles before.
+     */
+    QRect getTileRect( int rowPos, int colPos ) const;
+
 private:
     int 		m_subImages;
-    bool         loadTiffDir( const QString&, int );
+    bool                loadTiffDir( const QString&, int );
 
     /* if subNo is 0, the image is the one and only. If it is larger than 0, the
      * parent contains the filename */
-    int          m_subNo;
+    int                 m_subNo;
 
     /* In case being a subimage */
-    KookaImage   *m_parent;
-    KURL          m_url;
+    KookaImage          *m_parent;
+    KURL                m_url;
     /* Fileitem if available */
-    KFileItem    *m_fileItem;
-    bool          m_fileBound;
+    KFileItem           *m_fileItem;
+    bool                m_fileBound;
+
+    QValueVector<QRect> m_tileVector;
+    int                 m_tileCols;  /* number of tile columns  */
 };
 
 

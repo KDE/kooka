@@ -42,7 +42,8 @@ KookaImage::KookaImage( )
      m_subImages(-1),
      m_subNo(0),
      m_parent(0),
-     m_fileBound(false)
+     m_fileBound(false),
+     m_tileCols(0)
 {
 
 }
@@ -53,7 +54,9 @@ KookaImage::KookaImage( int subNo, KookaImage *p )
      m_subImages(-1),
      m_subNo(subNo),
      m_parent( p ),
-     m_fileItem(0L)
+     m_fileItem(0L),
+     m_fileBound(false),
+     m_tileCols(0)
 {
    kdDebug(28000) << "Setting subimageNo to " << subNo << endl;
 }
@@ -281,6 +284,76 @@ bool KookaImage::isSubImage() const
    return( subImagesCount() );
 }
 
+/*
+ * tiling
+ */
+int KookaImage::cutToTiles( const QSize maxSize, int& rows, int& cols, TileMode  )
+{
+    QSize imgSize = size();
+
+    int w = imgSize.width();
+    if( w > maxSize.width() )
+    {
+        // image is wider than paper
+        w = maxSize.width();
+    }
+    int h = imgSize.height();
+    if( h > maxSize.height() )
+    {
+        // image is wider than paper
+        h = maxSize.height();
+    }
+
+    int absX = 0;  // absolute x position from where to start print
+    int absY = 0;  // on the image, left top corner of the part to print
+    rows = 0;
+
+    while( h )  // Loop over height, cut in vertical direction
+    {
+        rows++;
+        cols = 0;
+        while( w ) // Loop over width, cut in horizontal direction
+        {
+            cols++;
+            m_tileVector.append( QRect( absX, absY, w, h ));
+
+            absX += w+1;
+            w = imgSize.width() - absX;
+
+            // if w < 0, this was the last loop, set w to zero to stop loop
+            if( w < 0 ) w = 0;
+
+            // if > 0 here, a new page is required
+            if( w > 0 )
+            {
+                if( w > maxSize.width() ) w = maxSize.width();
+            }
+        }
+        // Reset the X-values to start on the left border again
+        absX = 0;
+        // start with full width again
+        w = imgSize.width();
+        if( w > maxSize.width() )
+            w = maxSize.width();
+
+        absY += h+1;
+        h = imgSize.height() - absY;
+
+        if( h < 0 ) h = 0;  // be sure to meet the break condition
+        if( h > maxSize.height()) h = maxSize.height();  // limit to page height
+    }
+    m_tileCols = cols;
+
+    return m_tileVector.count();
+}
 
 
-		       
+
+QRect KookaImage::getTileRect( int rowPos, int colPos ) const
+{
+    int indx = rowPos*m_tileCols+colPos;
+    kdDebug(28000) << "Tile Index: " << indx << endl;
+    const QRect r = m_tileVector[(rowPos)*m_tileCols + colPos];
+
+    return r;
+}
