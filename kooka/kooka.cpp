@@ -169,7 +169,7 @@ void Kooka::setupActions()
 		       this, SLOT( slMirrorBoth() ),
 		       actionCollection(), "mirrorBoth" );
 
-    (void) new KAction(i18n("Open image in &graphic application"), CTRL+Key_G,
+    (void) new KAction(i18n("Open image in &graphic application"), "fileopen", CTRL+Key_G,
 		       m_view, SLOT( slOpenCurrInGraphApp() ),
 		       actionCollection(), "openInGraphApp" );
 
