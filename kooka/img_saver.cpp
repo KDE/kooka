@@ -842,7 +842,7 @@ QString ImgSaver::tempSaveImage( KookaImage *img, const QString& format, int col
     {
 	name = tmpFile->name();
 
-	img->save( name, format.latin1() );
+	if( ! img->save( name, format.latin1() ) ) name = QString();
     }
     delete tmpFile;
     return name;
