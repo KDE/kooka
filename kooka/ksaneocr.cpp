@@ -59,15 +59,11 @@ void KSANEOCR::setImage( const QImage *img )
    ktmpFile->close();
    tmpFile = ktmpFile->name();
    
-    kdDebug(28000) << "save the image to " << tmpFile << endl;
+   kdDebug(28000) << "save the image to " << tmpFile << ", depth is " << img->depth() << endl;
 
     // converting the incoming image
-    if( img->depth()==32 )
-       img->convertDepth( 8, MonoOnly ).save( tmpFile, "PBM" );
-    else if (img->depth() == 1)
-        img->convertDepth( 8, MonoOnly ).save( tmpFile, "PBM");
-    else
-       img->save( tmpFile, "PBM" );
+   img->convertDepth(8, MonoOnly).save( tmpFile, "PPM" );
+
 }
 
 bool KSANEOCR::startExternOcrVisible( void )
@@ -201,6 +197,7 @@ void KSANEOCR::cleanUpFiles( void )
    if( ! tmpFile.isEmpty())
    {
       kdDebug(28000) << "Unlinking file to OCR!" << endl;
+
       if( ktmpFile ) {
 	 ktmpFile->unlink();
 	 delete ktmpFile;
