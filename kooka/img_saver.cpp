@@ -354,11 +354,11 @@ QString ImgSaver::createFilename( QString format )
     long c = 1;
 
     QString num;
-    num.setNum(c, 16);
+    num.setNum(c);
     QString fname = "kscan_" + num.rightJustify(4, '0') + "." + format.lower();
 
     while( files.exists( fname ) ) {
-        num.setNum( ++c, 16 );
+        num.setNum(++c);
         fname = "kscan_" + num.rightJustify(4, '0') + "." + format.lower();
     }
 
