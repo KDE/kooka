@@ -26,7 +26,6 @@
 #include <qasciidict.h>
 
 
-#include "kscanoptset.h"
 #include "kscanoption.h"
 
 /**
