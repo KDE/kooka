@@ -146,6 +146,8 @@ private:
    QString m_bgImg;
    int     m_cntJobsStarted;
    KIO::PreviewJob *m_job;
+
+    KFileItemList m_pendingJobs;
 };
 
 #endif

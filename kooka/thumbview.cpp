@@ -75,6 +75,8 @@ ThumbView::ThumbView( QWidget *parent, const char *name )
 
    connect( m_iconView, SIGNAL( executed( QIconViewItem* )),
 	    this, SLOT( slDoubleClicked( QIconViewItem* )));
+
+   m_pendingJobs.setAutoDelete(false);
 }
 
 ThumbView::~ThumbView()
@@ -279,6 +281,32 @@ bool ThumbView::deleteImage( KFileItem *kfit )
 void ThumbView::slImageDeleted( KFileItem *kfit )
 {
    deleteImage( kfit );
+
+
+   /*
+    From a mail from Waldo pointing out two probs in Thumbview:
+
+    1) KDirLister is the owner of the KFileItems it emits, this means
+       that you must watch it's deleteItem() signal vigourously,
+       otherwise you may end up with KFileItems that are already
+       deleted. This burden is propagated to classes that use
+       KDirLister, such as KFileIconView.
+
+       This has a tendency to go wrong in combination with PreviewJob,
+       because it stores a list of KFileItems while running. This has
+       the potential to crash if the fileitems are being deleted
+       during this time. The remedy is to make sure to remove
+       fileitems that get deleted from the PreviewJob with
+       PreviewJob::removeItem.
+
+   */
+   if( m_job )  /* is a job running? Remove the item from it if existing. */
+   {
+       m_job->removeItem( kfit );
+   }
+
+   /* check if it is in the pending list */
+   m_pendingJobs.removeRef(kfit);
 }
 
 
@@ -286,9 +314,7 @@ void ThumbView::slNewFileItems( const KFileItemList& items )
 {
    kdDebug(28000) << "Creating thumbnails for fileItemList" << endl;
 
-
-   KFileItemList startJobOn;
-
+   /* Fill the pending jobs list. */
    KFileItemListIterator it( items );
    KFileItem *item = 0;
    for ( ; (item = it.current()); ++it )
@@ -323,19 +349,39 @@ void ThumbView::slNewFileItems( const KFileItemList& items )
 	 /* tell the file item about the iconView-representation */
 	 item->setExtraData( this, newIconViewIt );
 
-	 startJobOn.append( item );
+	 m_pendingJobs.append( item );
       }
    }
 
-   if( startJobOn.count() > 0 )
+   /*
+     From a mail from Waldo Bastian pointing out problems with thumbview:
+
+     2) I think you may end up creating two PreviewJob's in parallel
+        when the slNewFileItems() function is called two times in
+        quick succession. The current code doesn't seem to expect
+        that, given the comment in slPreviewResult(). In the light of
+        1) it might become fatal since you will not be able to call
+        PreviewJob::removeItem on the proper job. I suggest to queue
+        new items when a job is already running and start a new job
+        once the first one is finished when there are any items left
+        in the queue. Don't forget to delete items from the queue if
+        they get deleted in the mean time.
+
+        The strategy is as follows: In the global list m_pendingJobs
+        the jobs to start are appended. Only if m_job is zero (no job
+        is running) a job is started on the current m_pendingJobs list.
+        The m_pendingJobs list is clear afterwords.
+   */
+
+   if( ! m_job && m_pendingJobs.count() > 0 )
    {
       /* Progress-Bar */
       m_progress->show();
-      m_progress->setTotalSteps(startJobOn.count());
+      m_progress->setTotalSteps(m_pendingJobs.count());
       m_cntJobsStarted = 0;
 
       /* start a preview-job */
-      m_job = KIO::filePreview(startJobOn, m_pixWidth, m_pixHeight );
+      m_job = KIO::filePreview(m_pendingJobs, m_pixWidth, m_pixHeight );
 
       if( m_job )
       {
@@ -343,7 +389,10 @@ void ThumbView::slNewFileItems( const KFileItemList& items )
 		  this, SLOT( slPreviewResult( KIO::Job * )));
 	 connect( m_job, SIGNAL( gotPreview( const KFileItem*, const QPixmap& )),
 		  SLOT( slGotPreview( const KFileItem*, const QPixmap& ) ));
-	 /* KIO::Jo result is called in any way: Success, Failed, Error,
+
+         m_pendingJobs.clear();
+
+         /* KIO::Jo result is called in any way: Success, Failed, Error,
 	  * thus connecting the failed is not really necessary.
 	  */
         // connect( job, SIGNAL( failed( const KFileItem* )),
@@ -389,6 +438,12 @@ void ThumbView::slPreviewResult( KIO::Job *job )
    m_progress->reset();
    m_progress->hide();
    m_job = 0L;
+
+   /* maybe there is a new job to start because of pending items? */
+   if( m_pendingJobs.count() > 0 )
+   {
+       slNewFileItems( KFileItemList() );  /* Call with an empty list */
+   }
 }
 
 
