@@ -35,7 +35,7 @@
 
 KookaPreferences::KookaPreferences()
     : KDialogBase(IconList, i18n("Preferences"),
-                  Help|Default|Ok|Apply|Cancel, Ok, true)
+                  Help|Default|Ok|Apply|Cancel, Ok )
 {
     // this is the base class for your preferences dialog.  it is now
     // a Treelist dialog.. but there are a number of other
