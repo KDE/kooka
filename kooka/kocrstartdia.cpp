@@ -171,7 +171,7 @@ void KOCRStartDialog::checkOCRBinIntern( const QCString& cmd, bool show_msg )
       if( show_msg )
       KMessageBox::sorry( this, i18n( "The path does not lead to the gocr-binary.\n"
 				      "Please check your installation and/or install gocr."),
-			  i18n("OCR software not found") );
+			  i18n("OCR Software not Found") );
       ret = false;
    }
    else
@@ -182,7 +182,7 @@ void KOCRStartDialog::checkOCRBinIntern( const QCString& cmd, bool show_msg )
 	 if( show_msg )
 	    KMessageBox::sorry( this, i18n( "gocr exists, but is not executable.\n"
 					    "Please check your installation and/or install gocr properly."),
-				i18n("OCR software not executable") );
+				i18n("OCR Software not Executable") );
 	 ret = false;
       }
    }

@@ -589,19 +589,19 @@ void ScanPackager::slotImageChanged( QImage *img )
    if( is_stat == ISS_ERR_FORMAT_NO_WRITE )
    {
       KMessageBox::error( this, i18n( "Cannot write this image format.\nImage will not be saved!"),
-			    i18n("Save error") );
+			    i18n("Save Error") );
    }
    else if( is_stat == ISS_ERR_PERM )
    {
       KMessageBox::error( this, i18n( "Image file is write protected.\nImage will not be saved!"),
-			    i18n("Save error") );
+			    i18n("Save Error") );
 
    }
    else if( is_stat == ISS_ERR_PROTOCOL )
    {
       KMessageBox::sorry( this, i18n( "Cannot save the image, because the file is local.\n"
 				      "Kooka will support other protocols later."),
-			    i18n("Save error") );
+			    i18n("Save Error") );
 
    }
    else if( is_stat != ISS_OK )
