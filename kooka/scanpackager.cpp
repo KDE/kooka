@@ -18,7 +18,6 @@
  ***************************************************************************/
 
 #include "scanpackager.h"
-#include "miscwidgets.h"
 #include "resource.h"
 #include "img_saver.h"
 #include "kookaimage.h"

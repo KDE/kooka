@@ -6,9 +6,9 @@ bin_PROGRAMS = kooka
 METASOURCES = AUTO
 
 kooka_SOURCES =	main.cpp kooka.cpp kookaview.cpp kookapref.cpp 		\
-		img_saver.cpp ksaneocr.cpp miscwidgets.cpp 		\
+		img_saver.cpp ksaneocr.cpp \
 		kookaimage.cpp kookaimagemeta.cpp scanpackager.cpp 	\
-		imgnamecombo.cpp        \
+		imgnamecombo.cpp imageselectline.cpp      \
 		thumbview.cpp thumbviewitem.cpp                         \
 		dwmenuaction.cpp kocrbase.cpp           \
 		kocrgocr.cpp kocrkadmos.cpp kadmosocr.cpp 
@@ -21,11 +21,11 @@ INCLUDES         = -I$(top_srcdir)/libkscan $(all_includes) $(LIBSANE_INCLUDES) 
 
 noinst_HEADERS   = \
 kookaview.h     scanpackager.h \
-img_saver.h    ksaneocr.h       miscwidgets.h \
+img_saver.h    ksaneocr.h      \
 formathelp.h   kooka.h  \
 kookaiface.h  thumbview.h thumbviewitem.h \
 kookapref.h   resource.h \
-imgnamecombo.h kookaimage.h kookaimagemeta.h \
+imgnamecombo.h imageselectline.h kookaimage.h kookaimagemeta.h \
 kocrbase.h kocrgocr.h kocrkadmos.h \
 kadmosocr.h 
 # pagesetup.h

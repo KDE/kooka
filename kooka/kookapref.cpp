@@ -35,7 +35,7 @@
 
 #include <devselector.h>
 #include "thumbview.h"
-#include "miscwidgets.h"
+#include "imageselectline.h"
 
 KookaPreferences::KookaPreferences()
     : KDialogBase(IconList, i18n("Preferences"),
