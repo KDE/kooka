@@ -22,6 +22,7 @@
 #include <qcstring.h>
 #include <qlayout.h>
 #include <qlabel.h>
+#include <qfile.h>
 #include <qpushbutton.h>
 #include <qradiobutton.h>
 #include <qstrlist.h>
@@ -71,9 +72,9 @@ DeviceSelector::DeviceSelector( QWidget *parent, const QStrList& devList,
 
 QCString DeviceSelector::getDeviceFromConfig( void ) const
 {
-   KSimpleConfig *c = new KSimpleConfig(QString::fromLatin1("kdeglobals"), true );
-   c->setGroup(QString::fromLatin1(GROUP_STARTUP));
-   bool skipDialog = c->readBoolEntry( STARTUP_SKIP_ASK, false );
+   KConfig *gcfg = KGlobal::config();
+   gcfg->setGroup(QString::fromLatin1(GROUP_STARTUP));
+   bool skipDialog = gcfg->readBoolEntry( STARTUP_SKIP_ASK, false );
    
    QCString result;
    
@@ -83,7 +84,7 @@ QCString DeviceSelector::getDeviceFromConfig( void ) const
        * want to be bothered any more.
        */
       kdDebug(29000) << "Got scanner from config file to use: " << result << endl;
-      result = c->readEntry( STARTUP_SCANDEV, "" ).latin1();
+      result = QFile::encodeName(gcfg->readEntry( STARTUP_SCANDEV, "" ));
       
       /* Now check if the scanner read from the config file is available !
        * if not, ask the user !
@@ -99,7 +100,6 @@ QCString DeviceSelector::getDeviceFromConfig( void ) const
       }
    }
 
-   delete c;
    return( result );
 }
 
@@ -134,9 +134,9 @@ void DeviceSelector::setScanSources( const QStrList& sources,
 				     const QStringList& hrSources )
 {
    bool default_ok = false;
-   KSimpleConfig *c = new KSimpleConfig(QString::fromLatin1("kdeglobals"), true );
-   c->setGroup(QString::fromLatin1(GROUP_STARTUP));
-   QCString defstr = c->readEntry( STARTUP_SCANDEV, "" ).local8Bit();
+   KConfig *gcfg = KGlobal::config();
+   gcfg->setGroup(QString::fromLatin1(GROUP_STARTUP));
+   QCString defstr = gcfg->readEntry( STARTUP_SCANDEV, "" ).local8Bit();
 
    /* Selector-Stuff*/
    uint nr = 0;
@@ -166,7 +166,6 @@ void DeviceSelector::setScanSources( const QStrList& sources,
       if ( rb )
 	  rb->setChecked( true );
    }
-   delete c;
 }
 
 DeviceSelector::~DeviceSelector()
