@@ -48,9 +48,7 @@ static KCmdLineOptions options[] =
   { 0,0,0 }
 };
 
-QDict<QPixmap> icons;
 
-void *dbg_ptr;
 
 int main( int argc, char *argv[] )
 {

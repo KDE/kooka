@@ -19,9 +19,9 @@ INCLUDES         = -I$(top_srcdir)/libkscan $(all_includes) $(LIBSANE_INCLUDES)
 noinst_HEADERS   = \
 kookaview.h     scanpackager.h \
 img_saver.h    ksaneocr.h       miscwidgets.h \
-formathelp.h   kooka.h       packageritem.h   \
+formathelp.h   kooka.h  \
 kookaiface.h  thumbview.h thumbviewitem.h \
-icons.h        kookapref.h   resource.h kocrfindia.h \
+kookapref.h   resource.h kocrfindia.h \
 imgnamecombo.h kocrstartdia.h kookaimage.h
 
 # kocrstartdia.h kocrfindia.h 
