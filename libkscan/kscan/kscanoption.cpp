@@ -37,13 +37,13 @@
 #include "kgammatable.h"
 #include "kscandevice.h"
 #include "kscanslider.h"
-
+#include "kscanoptset.h"
 
 
 #define MIN_PREVIEW_DPI 20
 
 /* switch to show some from time to time usefull alloc-messages */
-#define MEM_DEBUG
+#undef MEM_DEBUG
 
 #undef APPLY_IN_SITU
 
@@ -58,6 +58,7 @@ bool        scanner_initialised = false;
 SANE_Handle scanner_handle      = 0;
 QDict<int>  option_dic;
 
+extern KScanOptSet gammaTables;
 
 /** inline-access to the option descriptor, object to changes with global vars. **/
 inline const SANE_Option_Descriptor *getOptionDesc( const char *name )
@@ -147,6 +148,22 @@ bool KScanOption::initOption( const char *new_name )
     		buffer_size = 0;
 	        buffer = 0;
   	}
+
+	KScanOption *gtOption = gammaTables[ new_name ];
+	if( gtOption )
+	{
+	   debug( "Is older GammaTable!" );
+	   KGammaTable gt;
+	   gtOption->get( &gt );
+	   
+	   gamma = gt.getGamma();
+	   contrast = gt.getContrast();
+	   brightness = gt.getBrightness();
+	}
+	else
+	{
+	   debug( "Is NOT older GammaTable!" );
+	}
     }
    
    return( desc > 0 );
@@ -240,6 +257,7 @@ void KScanOption::slWidgetChange( void )
     if( type() == BOOL )
     {
 	bool b = ((QCheckBox*) internal_widget)->isChecked();
+	debug( "Setting bool: %d", b );
 	set( b );
     }
     emit( guiChange( this ) );
@@ -350,7 +368,7 @@ void KScanOption::slReload( void )
 	    }
       }
    }
-	
+#if 0	
    if( active())
    {
       if( (size_t) desc->size > buffer_size )
@@ -373,6 +391,7 @@ void KScanOption::slReload( void )
 	 debug( "Setting buffer untouched to FALSE" );
       }
    }
+#endif   
 }
 
 
@@ -973,12 +992,9 @@ QWidget *KScanOption::createWidget( QWidget *parent, const char *w_desc,
 	QToolTip::add( internal_widget, tt );
     }
  	
-  /* Check if option is active */
-  if( ! active() || !softwareSetable())
-    {
-      debug( "createWidget: Option <%s> is not active !", desc->name );
-      w->setEnabled( false );
-    }
+  /* Check if option is active, setEnabled etc. */
+  slReload();
+  if( w ) slRedrawWidget( this );
   return( w );
 }
 
