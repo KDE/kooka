@@ -36,28 +36,32 @@ void ImageHistogram::count()
 {
    if( ! img ) return;
 
-   bzero(hits,256*sizeof(int));
+   int i=0;
+   
+   for( i=0; i < 256; i++ ) hits[i]=0;
+   
    for(int y = 0; y<img->height(); y++)
-      for(int x = 0; x<img->width(); x++) {
+      for(int x = 0; x<img->width(); x++)
+      {
 	 QColor c = img->pixel(x,y);
-	 int I;
+	 
 	 switch(color) {
 	    case 0:
-	       I = (c.red()+c.green()+c.blue())/3;
+	       i = (c.red()+c.green()+c.blue())/3;
 	       break;
 	    case 1:
-	       I = c.red();
+	       i = c.red();
 	       break;
 	    case 2:
-	       I = c.green();
+	       i = c.green();
 	       break;
 	    default:
-	       I = c.blue();
+	       i = c.blue();
 	 }
-	 hits[I]++;
+	 hits[i]++;
       }
    maxhits = hits[1];
-   for(int i = 2; i<255; i++)
+   for(i = 2; i<255; i++)
       if(hits[i]>maxhits) maxhits = hits[i];
 }
 
