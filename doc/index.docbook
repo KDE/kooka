@@ -26,6 +26,9 @@
 </affiliation>
 <contrib>Developer</contrib>
 </othercredit>
+
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
+
 </authorgroup>
 
 <copyright>
@@ -348,6 +351,7 @@ the previous section.</para
 ></para
 >
 
+<!-- TRANS:CREDIT_FOR_TRANSLATORS -->
 
 &underFDL;
 &underGPL;
