@@ -35,6 +35,7 @@
 #include <kconfig.h>
 #include <ksimpleconfig.h>
 #include <kled.h>
+#include <kglobalsettings.h>
 #include <kscandevice.h>
 
 // libkscan stuff
@@ -311,18 +312,7 @@ bool ScanDialog::setup()
     KConfig *kfg = KGlobal::config();
     if( kfg )
     {
-       QRect r;
-       KConfig gc("kdeglobals", false, false);
-       gc.setGroup("Windows");
-
-       if (QApplication::desktop()->isVirtualDesktop() &&
-           gc.readBoolEntry("XineramaEnabled", true) &&
-           gc.readBoolEntry("XineramaPlacementEnabled", true)) {
-          int screen = QApplication::desktop()->screenNumber(this);
-          r = QApplication::desktop()->screenGeometry(screen);
-       } else {
-          r = QApplication::desktop()->geometry();
-       }
+       QRect r = KGlobalSettings::desktopGeometry(this);
 
        kfg->setGroup( GROUP_STARTUP );
        /* Since this is a vertical splitter, only the width is important */
