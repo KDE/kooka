@@ -113,6 +113,7 @@ ScanPackager::ScanPackager( QWidget *parent ) : KFileTreeView( parent )
    img_counter = 1;
    /* Set the current export dir to home */
    m_currCopyDir = QDir::home().absPath();
+   m_currImportDir = m_currCopyDir;
 
    /* Preload frequently used icons */
    KIconLoader *loader = KGlobal::iconLoader();
@@ -1001,13 +1002,39 @@ void ScanPackager::slotExportFile( )
          if( fromUrl == fileName ) return;
 
 	 /* Since it is asynchron, we will never get if it succeeded. */
-	 ImgSaver::exportImage( fromUrl, fileName );
+	 ImgSaver::copyImage( fromUrl, fileName );
 
          /* remember the filename for the next export */
 	 fileName.setFileName( QString());
 	 m_currCopyDir = fileName.url( );
       }
    }
+}
+
+
+void ScanPackager::slotImportFile()
+{
+    KFileTreeViewItem *curr = currentKFileTreeViewItem();
+    if( ! curr ) return;
+
+    KURL impTarget = curr->url();
+
+    if( ! curr->isDir() )
+    {
+        KFileTreeViewItem *pa = static_cast<KFileTreeViewItem*>(curr->parent());
+        impTarget = pa->url();
+    }
+    kdDebug(28000) << "Importing to " << impTarget.url() << endl;
+
+    KURL impUrl = KFileDialog::getImageOpenURL ( m_currImportDir, this, i18n("Import Image File to Gallery"));
+
+    if( ! impUrl.isEmpty() )
+    {
+        m_currImportDir = impUrl.url();
+        impTarget.addPath( impUrl.fileName());  // append the name of the sourcefile to the path
+        m_nextUrlToShow = impTarget;
+        ImgSaver::copyImage( impUrl, impTarget );
+    }
 }
 
 

@@ -93,7 +93,7 @@ public slots:
    void         slShowContextMenue(QListViewItem *, const QPoint &, int );
 
    void         slotExportFile( );
-
+    void        slotImportFile();
    void         slotCanceled(KIO::Job*);
    void         slotCurrentImageChanged( QImage* );
 
@@ -145,6 +145,7 @@ private:
    // int 	        readDir( QListViewItem *parent, QString dir_to_read );
     void         showContextMenu( QPoint p, bool show_folder = true );
 
+    QString      m_currImportDir;
     QString      m_currCopyDir;
     QString      currSelectedDir;
     KIO::Job     *copyjob;
