@@ -90,6 +90,7 @@ typedef enum {
 } picType;
 
 
+class KookaImage;
 /**
  *  Class FormatDialog:
  *  Asks the user for the image-Format and gives help for
@@ -170,8 +171,10 @@ public:
    bool        isRememberedFormat( picType type, QString format ) const;
 
    /* static function that exports a file */
-   static bool    exportImage( const KURL& fromUrl, const KURL& toUrl, QWidget *overWidget=0 );
+   static bool    copyImage( const KURL& fromUrl, const KURL& toUrl, QWidget *overWidget=0 );
    static bool    renameImage( const KURL& fromUrl, KURL& toUrl, bool askExt=false, QWidget *overWidget=0 );
+   static QString tempSaveImage( KookaImage *img, const QString& format, int colors = -1 );
+
    /* static function that returns the extension of an url */
    static QString extension( const KURL& );
 

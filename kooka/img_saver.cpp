@@ -42,7 +42,7 @@
 #include <kio/file.h>
 #include <kio/job.h>
 #include <kio/netaccess.h>
-
+#include <ktempfile.h>
 #include <qdir.h>
 #include <qlayout.h>
 #include <qfileinfo.h>
@@ -54,7 +54,7 @@
 #include "resource.h"
 #include "img_saver.h"
 #include "previewer.h"
-
+#include "kookaimage.h"
 
 FormatDialog::FormatDialog( QWidget *parent, const QString&, const char *name )
    :KDialogBase( parent, name, true,
@@ -408,7 +408,7 @@ ImgSaveStat ImgSaver::savePreview( QImage *image, const QCString& scannerName )
       // Previewfile always comes absolute
       stat = save( image, previewfile, format, "" );
    }
-
+#if 0  /* preview file name is not longer needed in config file */
    if( stat == ISS_OK )
    {
       KConfig *konf = KGlobal::config ();
@@ -418,6 +418,7 @@ ImgSaveStat ImgSaver::savePreview( QImage *image, const QCString& scannerName )
       konf->writeEntry( OP_PREVIEW_FORMAT, format );
       konf->sync();
    }
+#endif
 
    return( stat );
 }
@@ -808,7 +809,42 @@ bool ImgSaver::renameImage( const KURL& fromUrl, KURL& toUrl, bool askExt,  QWid
 }
 
 
-bool ImgSaver::exportImage( const KURL& fromUrl, const KURL& toUrl, QWidget *overWidget )
+QString ImgSaver::tempSaveImage( KookaImage *img, const QString& format, int colors )
+{
+
+    KTempFile *tmpFile = new KTempFile( QString(), "."+format.lower());
+    tmpFile->setAutoDelete( false );
+    tmpFile->close();
+
+    KookaImage tmpImg;
+
+    if( colors != -1 && img->numColors() != colors )
+    {
+	// Need to convert image
+	if( colors == 1 || colors == 8 || colors == 24 || colors == 32 )
+	{
+	    tmpImg = img->convertDepth( colors );
+	    img = &tmpImg;
+	}
+	else
+	{
+	    kdDebug(29000) << "ERROR: Wrong color depth requested: " << colors << endl;
+	    img = 0;
+	}
+    }
+
+    QString name;
+    if( img )
+    {
+	name = tmpFile->name();
+
+	img->save( name, format.latin1() );
+    }
+    delete tmpFile;
+    return name;
+}
+
+bool ImgSaver::copyImage( const KURL& fromUrl, const KURL& toUrl, QWidget *overWidget )
 {
 
    /* Check if the provided filename has a extension */
