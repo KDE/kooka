@@ -93,6 +93,9 @@ private:
    QButtonGroup *selectBox;
    mutable QStrList devices;
    QCheckBox   *cbSkipDialog;
+
+   class DeviceSelectorPrivate;
+   DeviceSelectorPrivate *d;
 };
 
 #endif

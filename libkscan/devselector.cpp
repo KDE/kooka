@@ -33,6 +33,7 @@
 #include <kglobal.h>
 #include <klocale.h>
 #include <kmessagebox.h>
+#include <ksimpleconfig.h>
 
 #include "devselector.h"
 
@@ -70,9 +71,10 @@ DeviceSelector::DeviceSelector( QWidget *parent, const QStrList& devList,
 
 QCString DeviceSelector::getDeviceFromConfig( void ) const
 {
-   KGlobal::config()->setGroup( GROUP_STARTUP );
-   bool skipDialog = KGlobal::config()->readBoolEntry( STARTUP_SKIP_ASK, false );
-
+   KSimpleConfig *c = new KSimpleConfig(QString::fromLatin1("kdeglobals"), true );
+   c->setGroup(QString::fromLatin1(GROUP_STARTUP));
+   bool skipDialog = c->readBoolEntry( STARTUP_SKIP_ASK, false );
+   
    QCString result;
    
    if( skipDialog )
@@ -80,9 +82,9 @@ QCString DeviceSelector::getDeviceFromConfig( void ) const
       /* in this case, the user has checked 'Do not ask me again' and does not
        * want to be bothered any more.
        */
-      result = KGlobal::config()->readEntry( STARTUP_SCANDEV, "" ).latin1();
       kdDebug(29000) << "Got scanner from config file to use: " << result << endl;
-     
+      result = c->readEntry( STARTUP_SCANDEV, "" ).latin1();
+      
       /* Now check if the scanner read from the config file is available !
        * if not, ask the user !
        */
@@ -97,6 +99,7 @@ QCString DeviceSelector::getDeviceFromConfig( void ) const
       }
    }
 
+   delete c;
    return( result );
 }
 
@@ -109,18 +112,20 @@ QCString DeviceSelector::getSelectedDevice( void ) const
 {
    unsigned int selID = selectBox->id( selectBox->selected() );
 
-   int c = devices.count();
-   kdDebug(29000) << "The Selected ID is <" << selID << ">/" << c << endl;
+   int dcount = devices.count();
+   kdDebug(29000) << "The Selected ID is <" << selID << ">/" << dcount << endl;
 
    const char * dev = devices.at( selID );
 
    kdDebug(29000) << "The selected device: <" << dev << ">" << endl;
 
    /* Store scanner selection settings */
-   KGlobal::config()->setGroup( GROUP_STARTUP );
-   KGlobal::config()->writeEntry( STARTUP_SCANDEV, dev );
-   KGlobal::config()->writeEntry( STARTUP_SKIP_ASK, getShouldSkip() );
-
+   KSimpleConfig *c = new KSimpleConfig(QString::fromLatin1("kdeglobals"), false);
+   c->setGroup(QString::fromLatin1(GROUP_STARTUP));
+   c->writeEntry( STARTUP_SCANDEV, dev );
+   c->writeEntry( STARTUP_SKIP_ASK, getShouldSkip() );
+   
+   delete c;
    return dev;
 }
 
@@ -129,9 +134,9 @@ void DeviceSelector::setScanSources( const QStrList& sources,
 				     const QStringList& hrSources )
 {
    bool default_ok = false;
-
-   KGlobal::config()->setGroup( GROUP_STARTUP );
-   QCString defstr = KGlobal::config()->readEntry( STARTUP_SCANDEV, "" ).local8Bit();
+   KSimpleConfig *c = new KSimpleConfig(QString::fromLatin1("kdeglobals"), true );
+   c->setGroup(QString::fromLatin1(GROUP_STARTUP));
+   QCString defstr = c->readEntry( STARTUP_SCANDEV, "" ).local8Bit();
 
    /* Selector-Stuff*/
    uint nr = 0;
@@ -161,6 +166,7 @@ void DeviceSelector::setScanSources( const QStrList& sources,
       if ( rb )
 	  rb->setChecked( true );
    }
+   delete c;
 }
 
 DeviceSelector::~DeviceSelector()
