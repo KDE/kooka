@@ -57,6 +57,8 @@ ScanDialog::ScanDialog( QWidget *parent, const char *name, bool modal )
 	++it;
     }
 
+    resize(600, 500);
+
     DeviceSelector ds( this, backends, scannerNames );
     if ( ds.exec() == QDialog::Accepted ) {
 	QString device = ds.getSelectedDevice();
