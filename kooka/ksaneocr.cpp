@@ -20,6 +20,7 @@
 #include <kdebug.h>
 #include <kmessagebox.h>
 #include <stdlib.h>
+#include <qfile.h>
 #include <qcolor.h>
 #include <stdio.h>
 #include <unistd.h>

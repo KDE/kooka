@@ -37,7 +37,8 @@
 #include <kurl.h>
 #include <kdebug.h>
 #include <klocale.h>
-#include <progressbase.h>
+#include <kglobal.h>
+#include <kio/progressbase.h>
 #include <kio/jobclasses.h>
 #include <kio/file.h>
 #include <kio/job.h>

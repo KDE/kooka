@@ -27,6 +27,7 @@
 #include <kfiledialog.h>
 #include <kconfig.h>
 #include <kprinter.h>
+#include <kstatusbar.h>
 #include <kurl.h>
 #include <kurlrequesterdlg.h>
 #include <qstrlist.h>
