@@ -144,11 +144,11 @@ Previewer::Previewer(QWidget *parent, const char *name )
     /* Actions for the previewer zoom */
     KAction *act;
     act =  new KAction(i18n("Scale to W&idth"), "scaletowidth", CTRL+Key_I,
-		       this, SLOT( slScaleToWidth()), this );
+		       this, SLOT( slScaleToWidth()), this, "preview_scaletowidth" );
     act->plug( img_canvas->contextMenu());
 
     act = new KAction(i18n("Scale to &Height"), "scaletoheight", CTRL+Key_H,
-		      this, SLOT( slScaleToHeight()), this );
+		      this, SLOT( slScaleToHeight()), this, "preview_scaletoheight" );
     act->plug( img_canvas->contextMenu());
 
     /*Signals: Control the custom-field and show size of selection */
