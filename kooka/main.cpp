@@ -1,10 +1,10 @@
 /***************************************************************************
-                          main.cpp  -  description                              
-                             -------------------                                         
+                          main.cpp  -  description
+                             -------------------
     begin                : Thu Dec  9 20:16:54 MET 1999
-                                           
-    copyright            : (C) 1999 by Klaas Freitag                         
-    email                : freitag@suse.de                                     
+
+    copyright            : (C) 1999 by Klaas Freitag
+    email                : freitag@suse.de
  ***************************************************************************/
 
 
@@ -50,6 +50,17 @@ static const char *description =
 	      "image format and perform <B>O</B>ptical <B>C</B>haracter <B>R</B>ecognition on it,"
 "using <I>gocr</I>, Joerg Schulenburg's and friends' Open Source ocr program.<P>";
 
+static const char *license =
+"This program is distributed under the terms of the GPL v2 as publishec by\n"
+"the Free Software Foundation\n\n"
+"As a special exception, permission is given to link this program\n"
+"with any version of the KADMOS ocr/icr engine of reRecognition GmbH,\n"
+"Kreuzlingen and distribute the resulting executable without\n"
+"including the source code for KADMOS in the source distribution.\n\n"
+"As a special exception, permission is given to link this program\n"
+"with any edition of Qt, and distribute the resulting executable,\n"
+"without including the source code for Qt in the source distribution.\n";
+
 
 static KCmdLineOptions options[] =
 {
@@ -63,20 +74,21 @@ static KCmdLineOptions options[] =
 int main( int argc, char *argv[] )
 {
    KAboutData about("kooka", I18N_NOOP("Kooka"), KOOKA_VERSION, I18N_NOOP(description),
-		    KAboutData::License_GPL, "(C) 2000 Klaas Freitag", 0,
+		    KAboutData::License_GPL_V2, "(C) 2000 Klaas Freitag", 0,
 		    I18N_NOOP("http://kooka.kde.org"));
-   
+
    about.addAuthor( "Klaas Freitag", I18N_NOOP("developer"), "freitag@suse.de" );
    about.addAuthor( "Mat Colton", I18N_NOOP("graphics, web"), "mat@colton.de" );
-   
+   about.setLicenseText( license );
+
    KCmdLineArgs::init(argc, argv, &about);
    KCmdLineArgs::addCmdLineOptions( options ); // Add my own options.
-   
+
    KApplication app;
    KGlobal::locale()->insertCatalogue("libkscan");
    KImageIO::registerFormats();
    KIconLoader *loader = KGlobal::iconLoader();
-   
+
    KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
    QCString  devToUse = args->getOption( "d" );
    if( args->isSet("g") )
@@ -84,26 +96,26 @@ int main( int argc, char *argv[] )
       devToUse = "gallery";
    }
    kdDebug( 29000) << "DevToUse is " << devToUse << endl;
-	    
+
    if (args->count() == 1)
    {
       args->usage();
       // exit(-1);
    }
 
-   
+
    Kooka  *kooka = new Kooka(devToUse);
    app.setMainWidget( kooka );
 
    KWin::setIcons(kooka->winId(), loader->loadIcon( "scanner", KIcon::Desktop ),
 		  loader->loadIcon("scanner", KIcon::Small) );
-   
+
    kooka->show();
    app.processEvents();
    kooka->startup();
-      
+
    int ret = app.exec();
 
    return ret;
-   
+
 }
