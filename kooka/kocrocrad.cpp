@@ -134,9 +134,9 @@ EngineError ocradDialog::setupGui()
     hb1->setSpacing( KDialog::spacingHint() );
     (void) new QLabel( i18n("OCRAD layout analysis mode: "), hb1);
     m_layoutMode = new QComboBox(hb1);
-    m_layoutMode->insertItem(i18n("No layout detection"), 0 );
-    m_layoutMode->insertItem(i18n("Column detection"), 1 );
-    m_layoutMode->insertItem(i18n("Full layout detection"), 2);
+    m_layoutMode->insertItem(i18n("No Layout Detection"), 0 );
+    m_layoutMode->insertItem(i18n("Column Detection"), 1 );
+    m_layoutMode->insertItem(i18n("Full Layout Detection"), 2);
     m_layoutMode->setCurrentItem(layoutDetect);
     
     /** stating the ocrad binary **/
