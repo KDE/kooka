@@ -207,6 +207,11 @@ void ImageCanvas::createContextMenu( void )
 
 }
 
+QSize ImageCanvas::sizeHint() const
+{
+   return( QSize( 2, 2 ));
+}
+
 
 void ImageCanvas::showContextMenu( QPoint p )
 {

@@ -123,16 +123,17 @@ public slots:
 	 maintain_aspect = aspect_in_mind;
 	 repaint();
       }	
+   QSize sizeHint() const;
+
    void newImage( QImage* );
    void deleteView( QImage *);
    void newRectSlot();
    void newRectSlot( QRect newSel );
    void noRectSlot( void );
    void setScaleFactor( int i );
-
    void handle_popup(int item );
 
-signals:
+   signals:
    void noRect( void );
    void newRect( void );
    void newRect( QRect );
