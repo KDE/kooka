@@ -312,7 +312,7 @@ QScrollView *ScanParams::scannerParams( )
    
    if( sane_device->optionExists( SANE_NAME_HALFTONE_DIMENSION) )
    {
-      kdDebug(28000) << "Halftone-Dimen exists" << endl;
+      kdDebug(29000) << "Halftone-Dimen exists" << endl;
       so = sane_device->getGuiElement( SANE_NAME_HALFTONE_DIMENSION, pbox,
 				       SANE_TITLE_HALFTONE_DIMENSION,
 				       SANE_DESC_HALFTONE_DIMENSION );
@@ -326,7 +326,7 @@ QScrollView *ScanParams::scannerParams( )
 
    if( sane_device->optionExists( SANE_NAME_HALFTONE_PATTERN) )
    {
-      kdDebug(28000) << "Halftone-Pattern exists" << endl;
+      kdDebug(29000) << "Halftone-Pattern exists" << endl;
       so = sane_device->getGuiElement( SANE_NAME_HALFTONE_PATTERN, pbox,
 				       SANE_TITLE_HALFTONE_PATTERN,
 				       SANE_DESC_HALFTONE_PATTERN );

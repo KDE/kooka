@@ -1,6 +1,6 @@
 /* This file is part of the KDE Project
    Copyright (C) 2001 Nikolas Zimmermann <wildfox@kde.org>
-                      Klaas Freitag <freitag@suse.de>  
+                      Klaas Freitag <freitag@suse.de>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -25,7 +25,7 @@
 #include <qstringlist.h>
 #include <qstrlist.h>
 #include <qtooltip.h>
-#include <qsizepolicy.h> 
+#include <qsizepolicy.h>
 #include <qapplication.h>
 
 #include <kglobal.h>
@@ -72,11 +72,11 @@ ScanDialog::ScanDialog( QWidget *parent, const char *name, bool modal )
      good_scan_connect(false)
 {
     QVBox *page = addVBoxPage( i18n("&Scanning") );
-    
+
     splitter = new QSplitter( Horizontal, page, "splitter" );
     Q_CHECK_PTR( splitter );
-    
-    m_scanParams = 0; 
+
+    m_scanParams = 0;
     m_device = new KScanDevice( this );
     connect(m_device, SIGNAL(sigNewImage(QImage *)),
             this, SLOT(slotFinalImage(QImage *)));
@@ -88,6 +88,8 @@ ScanDialog::ScanDialog( QWidget *parent, const char *name, bool modal )
     /* Create a preview widget to the right side of the splitter */
     m_previewer = new Previewer( splitter );
     Q_CHECK_PTR(m_previewer );
+    m_previewer->slConnectScanner( m_device );
+
     /* ... and connect to the selector-slots. They communicate user's
      * selection to the scanner parameter engine */
     /* a new preview signal */
@@ -106,13 +108,13 @@ void ScanDialog::createOptionsTab( void )
 {
 
    QVBox *page = addVBoxPage( i18n("&Options"));
-   setMainWidget(page);	   
+   setMainWidget(page);
 
    QGroupBox *gb = new QGroupBox( 1, Qt::Horizontal, i18n("Startup Options"), page, "GB_STARTUP" );
    QLabel *label = new QLabel( i18n( "Note: changing these options will affect the scan plugin on next start." ),
 			       gb );
    label->setSizePolicy( QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed ) );
-   
+
    /* Checkbox for asking for scanner on startup */
    cb_askOnStart = new QCheckBox( i18n( "&Ask for the scan device on plugin startup"), gb );
    QToolTip::add( cb_askOnStart,
@@ -127,19 +129,19 @@ void ScanDialog::createOptionsTab( void )
 
 
    /* Read settings for startup behavior */
-   KConfig *gcfg = KGlobal::config(); 
+   KConfig *gcfg = KGlobal::config();
    gcfg->setGroup(QString::fromLatin1(GROUP_STARTUP));
-   bool skipDialog  = gcfg->readBoolEntry( STARTUP_SKIP_ASK, false );	
+   bool skipDialog  = gcfg->readBoolEntry( STARTUP_SKIP_ASK, false );
    bool onlyLocal   = gcfg->readBoolEntry( STARTUP_ONLY_LOCAL, false );
-   
+
    /* Note: flag must be inverted because of question is 'the other way round' */
    cb_askOnStart->setChecked( !skipDialog );
    connect( cb_askOnStart, SIGNAL(toggled(bool)), this, SLOT(slotAskOnStartToggle(bool)));
 
    cb_network->setChecked( !onlyLocal );
    connect( cb_network, SIGNAL(toggled(bool)), this, SLOT(slotNetworkToggle(bool)));
-   
-   
+
+
    QWidget *spaceEater = new QWidget( page );
    Q_CHECK_PTR( spaceEater );
    spaceEater->setSizePolicy( QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding) );
@@ -159,7 +161,7 @@ void ScanDialog::slotNetworkToggle( bool state)
 void ScanDialog::slotAskOnStartToggle(bool state)
 {
    bool writestate = !state;
-   
+
    kdDebug(29000) << "slotAskOnStartToggle: Writing state " << writestate << endl;
    KConfig *c = KGlobal::config();
    c->setGroup(QString::fromLatin1(GROUP_STARTUP));
@@ -196,7 +198,7 @@ void ScanDialog::slotAcquireStart( )
 
 void ScanDialog::slotScanFinished( KScanStat status )
 {
-   kdDebug(28000) << "Scan finished with status " << status << endl;
+   kdDebug(29000) << "Scan finished with status " << status << endl;
    if( m_scanParams )
    {
       m_scanParams->setEnabled( true );
@@ -206,7 +208,7 @@ void ScanDialog::slotScanFinished( KScanStat status )
 	 led->setColor( Qt::green );
 	 led->setState( KLed::Off );
       }
-      
+
    }
 }
 
@@ -226,12 +228,12 @@ bool ScanDialog::setup()
       /* if m_scanParams exist it means, that the dialog is already open */
       return true;
    }
-   
+
    m_scanParams = new ScanParams( splitter );
    connect( m_previewer->getImageCanvas(), SIGNAL( newRect(QRect)),
 	    m_scanParams, SLOT(slCustomScanSize(QRect)));
    connect( m_previewer->getImageCanvas(), SIGNAL( noRect()),
-	    m_scanParams, SLOT(slMaximalScanSize()));	
+	    m_scanParams, SLOT(slMaximalScanSize()));
 
    connect( m_scanParams, SIGNAL( scanResolutionChanged( int, int )),
 	    m_previewer, SLOT( slNewScanResolutions( int, int )));
@@ -242,7 +244,7 @@ bool ScanDialog::setup()
    QStringList scannerNames;
    QStrList backends = m_device->getDevices();;
    QStrListIterator it( backends );
-   
+
    while ( it.current() ) {
       scannerNames.append( m_device->getScannerName( it.current() ));
       ++it;
@@ -316,7 +318,7 @@ bool ScanDialog::setup()
        kdDebug(29000) << "Read Splitter-Sizes " << key  << endl;
        splitter->setSizes( kfg->readIntListEntry( key ));
     }
-   
+
    return true;
 }
 

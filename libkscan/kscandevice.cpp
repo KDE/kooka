@@ -1,5 +1,5 @@
 /* This file is part of the KDE Project
-   Copyright (C) 1999 Klaas Freitag <freitag@suse.de>  
+   Copyright (C) 1999 Klaas Freitag <freitag@suse.de>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -49,6 +49,7 @@
 #define MIN_PREVIEW_DPI 75
 #define UNDEF_SCANNERNAME I18N_NOOP( "undefined" )
 #define MAX_PROGRESS 100
+#define SCANNER_DB_FILE "scannerrc"
 
 /* ---------------------------------------------------------------------------
 
@@ -110,7 +111,7 @@ KScanOption *KScanDevice::getGuiElement( const QCString& name, QWidget *parent,
    {
       /** store new gui-elem in list of all gui-elements */
       gui_elements.append( so );
-	 	
+
       w = so->createWidget( parent, desc, tooltip );
       if( w )
       {
@@ -134,7 +135,7 @@ KScanOption *KScanDevice::getGuiElement( const QCString& name, QWidget *parent,
       delete so;
       so = 0;
    }
-	
+
    return( so );
 }
 // ---------------------------------------------------------------------------
@@ -203,7 +204,7 @@ KScanDevice::KScanDevice( QObject *parent )
 KScanDevice::~KScanDevice()
 {
   if( storeOptions )  delete (storeOptions );
- 
+
 }
 
 
@@ -232,7 +233,7 @@ KScanStat KScanDevice::openDevice( const QCString& backend )
 	     // fill description dic with names and numbers
 	stat = find_options();
 	scanner_name = backend;
-	
+
       } else {
 	stat = KSCAN_ERR_OPEN_DEV;
 	scanner_name = UNDEF_SCANNERNAME;
@@ -289,7 +290,7 @@ QString KScanDevice::getScannerName(const QCString& name) const
   if( scanner ) {
      // ret.sprintf( "%s %s %s", scanner->vendor, scanner->model, scanner->type );
      ret.sprintf( "%s %s", scanner->vendor, scanner->model );
-  }		
+  }
 
   kdDebug(29000) << "getScannerName returns <" << ret << ">" << endl;
   return ( ret );
@@ -361,7 +362,7 @@ KScanStat KScanDevice::find_options()
 		 const QString qq = newOpt->get();
 		 qDebug( "INIT: <%s> = <%s>", d->name, qq );
 		 allOptionSet->insert( d->name, newOpt );
-#endif		
+#endif
 	      }
 	      else if( d->type == SANE_TYPE_GROUP )
 	      {
@@ -435,7 +436,7 @@ KScanStat KScanDevice::apply( KScanOption *opt, bool isGammaTable )
    if( ! opt->initialised() || opt->getBuffer() == 0 )
    {
       kdDebug(29000) << "Attempt to set Zero buffer of " << oname << " -> skipping !" << endl;
-   	
+
       if( opt->autoSetable() )
       {
 	 kdDebug(29000) << "Setting option automatic !" << endl;
@@ -450,7 +451,7 @@ KScanStat KScanDevice::apply( KScanOption *opt, bool isGammaTable )
       stat = KSCAN_ERR_PARAM;
    }
    else
-   {	
+   {
       if( ! opt->active() )
       {
 	 kdDebug(29000) << "Option " << oname << " is not active now!" << endl;
@@ -463,13 +464,13 @@ KScanStat KScanDevice::apply( KScanOption *opt, bool isGammaTable )
       }
       else
       {
-	
+
 	 sane_stat = sane_control_option( scanner_handle, *num,
 					  SANE_ACTION_SET_VALUE,
 					  opt->getBuffer(),
 					  &sane_result );
       }
-   }		
+   }
 
    if( stat == KSCAN_OK )
    {
@@ -569,7 +570,7 @@ QCString KScanDevice::aliasName( const QCString& name )
     {
 	if((*option_dic)["gamma-correction"])
 	    ret = "gamma-correction";
-	
+
     }
 
     if( ret != name )
@@ -594,13 +595,13 @@ void KScanDevice::slReloadAllBut( KScanOption *not_opt )
         {
             kdDebug(29000) << "ReloadAllBut called with invalid argument" << endl;
             return;
-        }        	
+        }
 
         /* Make sure its applied */
 	apply( not_opt );
 
 	kdDebug(29000) << "*** Reload of all except <" << not_opt->getName() << "> forced ! ***" << endl;
-	
+
 	for( KScanOption *so = gui_elements.first(); so; so = gui_elements.next())
 	{
 	    if( so != not_opt )
@@ -611,7 +612,7 @@ void KScanDevice::slReloadAllBut( KScanOption *not_opt )
 	    }
 	}
 	kdDebug(29000) << "*** Reload of all finished ! ***" << endl;
-		
+
 }
 
 
@@ -619,7 +620,7 @@ void KScanDevice::slReloadAllBut( KScanOption *not_opt )
 void KScanDevice::slReloadAll( )
 {
 	kdDebug(29000) << "*** Reload of all forced ! ***" << endl;
-	
+
 	for( KScanOption *so = gui_elements.first(); so; so = gui_elements.next())
 	{
 	 	so->slReload();
@@ -711,8 +712,8 @@ KScanStat KScanDevice::acquirePreview( bool forceGray, int dpi )
       if( ! res.getRange( &min, &max, &q ) )
       {
 	 kdDebug(29000) << "Could not retrieve resolution range!" << endl;
-	 min = 75.0; // Hope that every scanner can 75 
-      }      
+	 min = 75.0; // Hope that every scanner can 75
+      }
       if( min > MIN_PREVIEW_DPI )
 	 set_dpi = (int) min;
       else
@@ -812,12 +813,12 @@ void KScanDevice::prepareScan( void )
 KScanStat KScanDevice::acquire( const QString& filename )
 {
     KScanOption *so = 0;
- 	
+
     if( filename.isEmpty() )
     {
  	/* *real* scanning - apply all Options and go for it */
  	prepareScan();
- 	
+
  	for( so = gui_elements.first(); so; so = gui_elements.next() )
  	{
  	    if( so->active() )
@@ -830,7 +831,7 @@ KScanStat KScanDevice::acquire( const QString& filename )
  	        kdDebug(29000) << "Option <" << so->getName() << "> is not active !" << endl;
  	    }
  	}
-	return( acquire_data( false ));	
+	return( acquire_data( false ));
     }
     else
     {
@@ -872,7 +873,7 @@ KScanStat KScanDevice::createNewImage( SANE_Parameters *p )
       img->setColor( 0, qRgb( 0,0,0));
       img->setColor( 1, qRgb( 255,255,255) );
     }
-  }	
+  }
   else if( p->depth == 8 )
   {
     // 8 bit rgb-Picture
@@ -883,7 +884,7 @@ KScanStat KScanDevice::createNewImage( SANE_Parameters *p )
       if( img )
       {
 	img->setNumColors( 256 );
-	
+
 	for(int i = 0; i<256; i++)
 	  img->setColor(i, qRgb(i,i,i));
       }
@@ -915,7 +916,7 @@ KScanStat KScanDevice::acquire_data( bool isPreview )
    scanningPreview = isPreview;
 
    emit sigScanStart();
-   
+
    sane_stat = sane_start( scanner_handle );
    if( sane_stat == SANE_STATUS_GOOD )
    {
@@ -967,12 +968,12 @@ KScanStat KScanDevice::acquire_data( bool isPreview )
    /* Signal for a progress dialog */
    emit( sigScanProgress( 0 ) );
    emit( sigAcquireStart() );
-   
+
    if( stat == KSCAN_OK )
-   {	
+   {
       /* initiates Redraw of the Progress-Window */
       qApp->processEvents();
-   }	
+   }
 
    if( stat == KSCAN_OK )
    {
@@ -987,14 +988,14 @@ KScanStat KScanDevice::acquire_data( bool isPreview )
        *  this status might be changed by pressing Stop on a GUI-Dialog displayed during scan */
       if( sane_set_io_mode( scanner_handle, SANE_TRUE ) == SANE_STATUS_GOOD )
       {
-	
+
 	 int fd = 0;
 	 if( sane_get_select_fd( scanner_handle, &fd ) == SANE_STATUS_GOOD )
 	 {
 	    sn = new QSocketNotifier( fd, QSocketNotifier::Read, this );
 	    QObject::connect( sn, SIGNAL(activated(int)),
 			      this, SLOT( doProcessABlock() ) );
-	
+
 	 }
       }
       else
@@ -1042,14 +1043,14 @@ void KScanDevice::loadOptionSet( KScanOptSet *optSet )
       KScanOption *so = it.current();
       if( ! so->initialised() )
 	 kdDebug(29000) << so->getName() << " is not initialised" << endl;
-      
+
       if( ! so->active() )
 	 kdDebug(29000) << so->getName() << " is not active" << endl;
 
       if( so && so->active() && so->initialised())
       {
-	 const QString qq = so->get();	
-	
+	 const QString qq = so->get();
+
 	 kdDebug(29000) << "Post-Scan-apply <" << it.currentKey() << ">: " << qq << endl;
 	 apply( so );
       }
@@ -1096,7 +1097,7 @@ void KScanDevice::slScanFinished( KScanStat status )
       {
 	 emit( sigNewImage( img ));
       }
-   }	
+   }
 
 
    sane_cancel(scanner_handle);
@@ -1172,7 +1173,7 @@ void KScanDevice::doProcessABlock( void )
 	      if( sane_scan_param.lines < 1 ) break;
 	      bytes_written += rest_bytes; // die übergebliebenen Bytes dazu
 	      rest_bytes = bytes_written % 3;
-	
+
 	      for( val = 0; val < ((bytes_written-rest_bytes) / 3); val++ )
 	      {
 		 red   = *rptr++;
@@ -1192,7 +1193,7 @@ void KScanDevice::doProcessABlock( void )
 	      {
 		 *(data+val) = *rptr++;
 	      }
-	
+
 	      break;
 	   case SANE_FRAME_GRAY:
 	      for( val = 0; val < bytes_written ; val++ )
@@ -1225,8 +1226,8 @@ void KScanDevice::doProcessABlock( void )
 		       }
 		    }
 		 }
-	      }	
-	
+	      }
+
 	      break;
 	   case SANE_FRAME_RED:
 	   case SANE_FRAME_GREEN:
@@ -1238,17 +1239,17 @@ void KScanDevice::doProcessABlock( void )
 		 {
 		    pixel_y++; pixel_x = 0;
 		 }
-	
+
 		 if( pixel_y < sane_scan_param.lines )
 		 {
-		
+
 		    col = img->pixel( pixel_x, pixel_y );
-		
+
 		    red   = qRed( col );
 		    green = qGreen( col );
 		    blue  = qBlue( col );
 		    chan  = *rptr++;
-		
+
 		    switch( sane_scan_param.format )
 		    {
 		       case SANE_FRAME_RED :
@@ -1275,7 +1276,7 @@ void KScanDevice::doProcessABlock( void )
 	      break;
 	} /* switch */
 
-	
+
 	if( (sane_scan_param.lines > 0) && (sane_scan_param.lines * pixel_y> 0) )
 	{
 	   int progress =  (int)((double)MAX_PROGRESS / (double) sane_scan_param.lines *
@@ -1318,7 +1319,7 @@ void KScanDevice::doProcessABlock( void )
 	kdDebug(29000) << "last frame reached - scan successfull" << endl;
 	scanStatus = SSTAT_SILENT;
 	emit( sigScanFinished( KSCAN_OK ));
-     }	
+     }
      else
      {
 	/** EOF und nicht letzter Frame -> Parameter neu belegen und neu starten **/
@@ -1329,7 +1330,7 @@ void KScanDevice::doProcessABlock( void )
   }
 
   if( sane_stat == SANE_STATUS_CANCELLED )
-  {	
+  {
      scanStatus = SSTAT_STOP_NOW;
      kdDebug(29000) << "Scan was cancelled" << endl;
 
@@ -1346,7 +1347,7 @@ void KScanDevice::slSaveScanConfigSet( const QString& setName, const QString& de
    if( setName.isEmpty() || setName.isNull()) return;
 
    kdDebug(29000) << "Saving Scan Configuration" << setName << endl;
-   
+
    KScanOptSet optSet( DEFAULT_OPTIONSET );
    getCurrentOptions( &optSet );
 
@@ -1358,7 +1359,7 @@ void KScanDevice::slSaveScanConfigSet( const QString& setName, const QString& de
 void  KScanDevice::getCurrentOptions( KScanOptSet *optSet )
 {
    if( ! optSet ) return;
-   
+
    for( KScanOption *so = gui_elements.first(); so; so = gui_elements.next())
    {
       kdDebug(29000) << "Storing <" << so->getName() << ">" << endl;
@@ -1380,8 +1381,25 @@ void  KScanDevice::getCurrentOptions( KScanOptSet *optSet )
       ++it;
    }
 }
-   
 
+QString KScanDevice::getConfig( const QString& key, const QString& def ) const
+{
+    QString confFile = SCANNER_DB_FILE;
+
+    KConfig scanConfig( confFile, true );
+    scanConfig.setGroup( shortScannerName() );
+
+    return scanConfig.readEntry( key, def );
+}
+
+void KScanDevice::slStoreConfig( const QString& key, const QString& val )
+{
+    QString confFile = SCANNER_DB_FILE;
+
+    KConfig scanConfig( confFile );
+    scanConfig.setGroup( shortScannerName() );
+    scanConfig.writeEntry( key, val );
+}
 
 
 bool KScanDevice::scanner_initialised = false;
