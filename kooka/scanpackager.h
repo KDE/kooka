@@ -119,7 +119,6 @@ private:
    // int 	        readDir( QListViewItem *parent, QString dir_to_read );
     void         showContextMenu( QPoint p, bool show_folder = true );
 
-    KFileTreeViewItem *root;
     QDir         curr_copy_dir;
     QString      currSelectedDir;
     KIO::Job     *copyjob;
