@@ -1,11 +1,13 @@
 #ifndef SCAN_H
 #define SCAN_H
 
-#include <kscan.h>
+#include <kscandevice.h>
 #include <qimage.h>
+#include <kscan.h>
 
 class ScanParams;
 class KScanDevice;
+class Previewer;
 
 class ScanDialog : public KScanDialog
 {
@@ -16,12 +18,13 @@ public:
     ~ScanDialog();
 
 private slots:
-    void slotFinalImage(QImage *image);
-
+    void slotFinalImage(QImage *);
+   void slotNewPreview( QImage *);
 private:
     ScanParams  *m_scanParams;
     KScanDevice *m_device;
-    
+   Previewer    *m_previewer;
+   QImage m_previewImage;
 };
 
 class ScanDialogFactory : public KScanDialogFactory

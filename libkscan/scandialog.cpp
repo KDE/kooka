@@ -9,7 +9,8 @@
 // libkscan stuff
 #include "scanparams.h"
 #include "devselector.h"
-
+#include "img_canvas.h"
+#include "previewer.h"
 #include "scandialog.h"
 
 extern "C" {
@@ -46,8 +47,22 @@ ScanDialog::ScanDialog( QWidget *parent, const char *name, bool modal )
     connect(m_device, SIGNAL(sigNewImage(QImage *)),
 	    this, SLOT(slotFinalImage(QImage *)));
 
-    QLabel *label = new QLabel( splitter );
-    label->setBackgroundMode( PaletteBase );
+    /* Create a preview widget to the right side of the splitter */
+    m_previewer = new Previewer( splitter );
+    CHECK_PTR(m_previewer );
+    /* ... and connect to the selector-slots. They communicate user's
+     * selection to the scanner parameter engine */
+    connect( m_previewer->getImageCanvas(), SIGNAL( newRect(QRect)),
+	     m_scanParams, SLOT(slCustomScanSize(QRect)));
+    connect( m_previewer->getImageCanvas(), SIGNAL( noRect()),
+	     m_scanParams, SLOT(slMaximalScanSize()));	
+    
+    /* a new preview signal */
+    connect( m_device, SIGNAL( sigNewPreview( QImage* )),
+	     this, SLOT( slotNewPreview( QImage* )));
+    
+    // QLabel *label = new QLabel( splitter );
+    // label->setBackgroundMode( PaletteBase );
 
     QStringList scannerNames;
     QStrList backends = m_device->getDevices();;
@@ -58,7 +73,7 @@ ScanDialog::ScanDialog( QWidget *parent, const char *name, bool modal )
 	++it;
     }
 
-    resize(600, 500);
+    resize(700, 500);
 
     DeviceSelector ds( this, backends, scannerNames );
     if ( ds.exec() == QDialog::Accepted ) {
@@ -68,6 +83,20 @@ ScanDialog::ScanDialog( QWidget *parent, const char *name, bool modal )
 	    qWarning("*** connecting to device failed!");
 	}
     }
+}
+
+void ScanDialog::slotNewPreview( QImage *image )
+{
+   if( image )
+   {
+      m_previewImage = *image;
+      // hmmm - dont know, if conversion of the bit-depth is neccessary.
+      // m_previewImage.convertDepth(32);
+
+      /* The previewer does not copy the image data ! */
+      m_previewer->newImage( &m_previewImage );
+   }
+   
 }
 
 ScanDialog::~ScanDialog()
