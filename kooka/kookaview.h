@@ -110,6 +110,11 @@ public slots:
    void startOCR( const QImage* );
 
    void saveProperties( KConfig* );
+
+   bool slSelectDevice( );
+   
+protected slots:
+   void  slCloseScanDevice();
    
 signals:
    /**
@@ -131,6 +136,7 @@ signals:
 private:
    QImage rotateRight( QImage* );
    QImage rotateLeft ( QImage* );
+   QCString userDeviceSelection( ) const;
    
 #if 0 
    KParts::ReadOnlyPart *m_html;
@@ -141,7 +147,7 @@ private:
    ImageCanvas  *img_canvas;
    Previewer    *preview_canvas;
    QImage       *preview_img;
-	
+   QSplitter *	paramSplitter;	
    ScanPackager *packager;
    ScanParams   *scan_params;
 
@@ -150,7 +156,8 @@ private:
    QVBoxLayout  *vlay_left;
    QHBoxLayout  *hlay_bigdad;
    QTabWidget   *tabw;
-
+   QCString     connectedDevice;
+   
    int 		image_pool_id;
    int 		preview_id;
 

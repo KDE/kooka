@@ -41,116 +41,74 @@ KookaView::KookaView(QWidget *parent)
    /* Another splitter for splitting the Packager Tree from the Scan Parameter */
    ocrFabric = 0L;
    
-   QSplitter *left_splitter = new QSplitter( QSplitter::Vertical, this );
+   paramSplitter = new QSplitter( QSplitter::Vertical, this );
    setOpaqueResize( false );
-   left_splitter->setOpaqueResize( false );
+   paramSplitter->setOpaqueResize( false );
 
    /* An image canvas for the large image, right side */
    
    img_canvas  = new ImageCanvas( this );
    
    setResizeMode( img_canvas,    QSplitter::Stretch );
-   setResizeMode( left_splitter, QSplitter::FollowSizeHint );
+   setResizeMode( paramSplitter, QSplitter::FollowSizeHint );
 
    /* The Tabwidget to contain the preview and the packager */
-   tabw  = new QTabWidget( left_splitter, "TABWidget" );
+   tabw  = new QTabWidget( paramSplitter, "TABWidget" );
 
    /* A new packager to contain the already scanned images */
    packager = new ScanPackager( tabw );
    {
    }
    
-   /* Image Canvas for the preview image, same object as the large image canvas */
-   preview_img = 0L;
-   preview_canvas = new Previewer( tabw );
-   {
-      preview_canvas->setMinimumSize( 100,100);
-   	
-      preview_img = new QImage();
-      preview_img->load( packager->getSaveRoot() + "preview.bmp" );
-      preview_canvas->newImage( preview_img );
-   }
-
    /* build up the Preview/Packager-Tabview */
    tabw->insertTab( packager, i18n( "&Images"), PACKAGER_TAB );
-   tabw->insertTab( preview_canvas, i18n("&Preview"), PREVIEWER_TAB );
 
    tabw->setMinimumSize(100, 100);
 
-   KConfig *konf = KGlobal::config ();
-   konf->setGroup(GROUP_STARTUP);
-   QString startup = konf->readEntry( STARTUP_SELECTED_PAGE, "nothing" );
-   if( startup == "previewer" )
-      tabw->showPage(preview_canvas);
-   else
-      tabw->showPage(packager);
-
-   /* ..and create the Scanner parameter object, which displays the parameter
-    *   the current scanner provides.
-    */
-   scan_params = new ScanParams( left_splitter);
-   Q_CHECK_PTR(scan_params);
-
-   connect( scan_params,    SIGNAL( scanResolutionChanged( int, int )),
-	    preview_canvas, SLOT( slNewScanResolutions( int, int )));
 
    /* the object from the kscan lib to handle low level scanning */
    sane = new KScanDevice( this );
-   Q_CHECK_PTR(sane);
+   CHECK_PTR(sane);
+   // connect( sane, SIGNAL( sigCloseDevice()), this, SLOT( slCloseScanDevice()));
 
-   /* a list of backends the scan backend knows */
-   QStrList backends = sane->getDevices();
+   /* select the scan device, either user or from config, this creates and assembles
+    * the complete scanner options dialog
+    * scan_params must be zero for that */
+   preview_img = 0L;
+   scan_params = 0L;
+   preview_canvas = 0L;
    
-   /* Human readable scanner descriptions */
-   QStringList hrbackends;
-   QStrListIterator  it( backends );
-
-   QCString selDevice;
-   if( backends.count() > 0 )
+   if( slSelectDevice( ) )
    {
-      while( it )
+      /* If a scanner exists */
+      /* Image Canvas for the preview image, same object as the large image canvas */
+      preview_canvas = new Previewer( tabw );
       {
-	 kdDebug( 28000 ) << "Found backend: " << it.current() << endl;
-	 hrbackends.append( sane->getScannerName( it.current() ));
-	 ++it;
+	 preview_canvas->setMinimumSize( 100,100);
+   	
+	 preview_img = new QImage();
+	 preview_img->load( packager->getSaveRoot() + "preview.bmp" );
+	 preview_canvas->newImage( preview_img );
+
+	 /* New Rectangle selection in the preview */
+	 connect( preview_canvas->getImageCanvas(), SIGNAL( newRect(QRect)),
+		  scan_params, SLOT(slCustomScanSize(QRect)));
+	 connect( preview_canvas->getImageCanvas(), SIGNAL( noRect()),
+		  scan_params, SLOT(slMaximalScanSize()));
+	 connect( scan_params,    SIGNAL( scanResolutionChanged( int, int )),
+		  preview_canvas, SLOT( slNewScanResolutions( int, int )));
       }
 
-      /* allow the user to select one */
-       DeviceSelector ds( this, backends, hrbackends );
-       selDevice = ds.getDeviceFromConfig( );
+      tabw->insertTab( preview_canvas, i18n("&Preview"), PREVIEWER_TAB );
 
-       if( selDevice.isEmpty() || selDevice.isNull() )
-       {
-	  kdDebug(29000) << "selDevice not found - starting selector!" << selDevice << endl;
-	  if ( ds.exec() == QDialog::Accepted )
-	  {
-	     selDevice = ds.getSelectedDevice();
-	  }
-       }
+      KConfig *konf = KGlobal::config ();
+      konf->setGroup(GROUP_STARTUP);
+      QString startup = konf->readEntry( STARTUP_SELECTED_PAGE, "nothing" );
+      if( startup == "previewer" )
+	 tabw->showPage(preview_canvas);
+      else
+	 tabw->showPage(packager);
    }
-       
-   if( ! selDevice.isNull() )
-   {
-      kdDebug(28000) << "Opening device " << selDevice << endl;
-
-      /* This connects to the selected scanner */
-      sane->openDevice( selDevice );
-      if( ! scan_params->connectDevice( sane ) )
-      {
-	 kdDebug(28000) << "Connecting to the scanner failed :( ->TODO" << endl;
-      }
-   }
-   else
-   {
-      // no devices available
-      scan_params->connectDevice( 0L );
-      preview_canvas->setEnabled( false );
-      
-   }
-   
-   scan_params->resize( scan_params->sizeHint() );
-   scan_params->show();
-
 
    /* New image created after scanning */
    connect(sane, SIGNAL(sigNewImage(QImage*)), packager, SLOT(slAddImage(QImage*)));
@@ -165,11 +123,6 @@ KookaView::KookaView(QWidget *parent)
    connect( packager, SIGNAL( unloadImage( QImage* )),
             img_canvas, SLOT( deleteView( QImage*)));
 
-   /* New Rectangle selection in the preview */
-   connect( preview_canvas->getImageCanvas(), SIGNAL( newRect(QRect)),
-            scan_params, SLOT(slCustomScanSize(QRect)));
-   connect( preview_canvas->getImageCanvas(), SIGNAL( noRect()),
-            scan_params, SLOT(slMaximalScanSize()));
 
 
 #if 0
@@ -216,9 +169,98 @@ KookaView::~KookaView()
       preview_img = 0;
    }
    kdDebug(29000) << "Destructor of KookaView" << endl;
-
 }
 
+bool KookaView::slSelectDevice( )
+{
+
+   kdDebug(28000) << "Kookaview: select a device!" << endl;
+   bool isStartup = ! scan_params;
+   bool ret = false;
+   
+   QCString selDevice = userDeviceSelection();
+
+   
+   if( !selDevice.isEmpty() )
+   {
+      kdDebug(28000) << "Opening device " << selDevice << endl;
+
+      if( connectedDevice == selDevice ) {
+	 kdDebug( 28000) << "Device " << selDevice << " is already selected!" << endl;
+	 return( true );
+      }
+      
+      if( scan_params )
+      {
+	 /* This deletes the existing scan_params-object */
+	 slCloseScanDevice();
+      }
+      /* This connects to the selected scanner */
+      scan_params = new ScanParams( paramSplitter );
+      CHECK_PTR(scan_params);
+
+      if( sane->openDevice( selDevice ) == KSCAN_OK )
+      {
+	 ret = true;
+	 connectedDevice = selDevice;
+
+	 if( ! scan_params->connectDevice( sane ) )
+	 {
+	    kdDebug(28000) << "Connecting to the scanner failed :( ->TODO" << endl;
+	 }
+      }
+      else
+      {
+	 kdDebug(28000) << "Could not open device <" << selDevice << ">" << endl;
+	 scan_params->connectDevice(0);
+      }
+      scan_params->resize( scan_params->sizeHint() );
+      scan_params->show();
+
+   }
+   else
+   {
+      // no devices available
+      if( scan_params )
+	 scan_params->connectDevice( 0L );
+   }
+   return( ret );
+}
+
+QCString KookaView::userDeviceSelection( ) const
+{
+   /* Human readable scanner descriptions */
+   QStringList hrbackends;
+
+   /* a list of backends the scan backend knows */
+   QStrList backends = sane->getDevices();
+   QStrListIterator  it( backends );
+   
+   QCString selDevice;
+   if( backends.count() > 0 )
+   {
+      while( it )
+      {
+	 kdDebug( 28000 ) << "Found backend: " << it.current() << endl;
+	 hrbackends.append( sane->getScannerName( it.current() ));
+	 ++it;
+      }
+
+      /* allow the user to select one */
+       DeviceSelector ds( 0, backends, hrbackends );
+       selDevice = ds.getDeviceFromConfig( );
+
+       if( selDevice.isEmpty() || selDevice.isNull() )
+       {
+	  kdDebug(29000) << "selDevice not found - starting selector!" << selDevice << endl;
+	  if ( ds.exec() == QDialog::Accepted )
+	  {
+	     selDevice = ds.getSelectedDevice();
+	  }
+       }
+   }
+   return( selDevice );
+}
 
 
 void KookaView::loadStartupImage( void )
@@ -393,7 +435,7 @@ void KookaView::startOCR( const QImage *img )
       if( ocrFabric == 0L )
 	 ocrFabric = new KSANEOCR(this );
 
-      Q_CHECK_PTR( ocrFabric );
+      CHECK_PTR( ocrFabric );
       ocrFabric->setImage( img );
 
       if( !ocrFabric->startExternOcrVisible() )
@@ -403,6 +445,17 @@ void KookaView::startOCR( const QImage *img )
 
       }
    }
+}
+
+
+void KookaView::slCloseScanDevice( )
+{
+   kdDebug(28000) << "Scanner Device closes down !" << endl;
+   if( scan_params ) {
+      delete scan_params;
+      scan_params = 0;
+   }
+   sane->slCloseDevice();
 }
 
 void KookaView::slCreateNewImgFromSelection()
