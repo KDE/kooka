@@ -71,7 +71,7 @@ MassScanDialog::MassScanDialog( QWidget *parent )
    l_progress = new QLabel( progress, f2 );
    l_scanp->addWidget( l_progress, 3 );
  	l_scanp->addStretch( 1 );
-   QPushButton *pb_cancel_scan = new QPushButton( i18n("Cancel scan"), f2);
+   QPushButton *pb_cancel_scan = new QPushButton( i18n("Cancel Scan"), f2);
    l_scanp->addWidget( pb_cancel_scan,3 );
 
    progressbar = new QProgressBar( 1000, f2 );
