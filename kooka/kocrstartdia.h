@@ -39,8 +39,8 @@ public:
    KOCRStartDialog( QWidget *);
    ~KOCRStartDialog();
 
-   QString getOCRCmd( void ) const
-      { return( entryOcrBinary->text());}
+   QCString getOCRCmd( void ) const
+      { return( (entryOcrBinary->text()).latin1());}
 
    int getGraylevel( void ) const
       { return( sliderGrayLevel->value());}
@@ -51,14 +51,18 @@ public:
 
 public slots:
    void stopAnimation( void ){ ani->stop(); }
-   
+   /* displaying a popup if not ok */
+   void checkOCRBinary( const QCString& );
+   void checkOCRBinaryShort( const QCString& );
 protected:
 
 private slots:
    void disableFields( void );
    void writeConfig( void );
+   void checkOCRBinIntern( const QCString&, bool );
    
 private:
+   QCString tryFindGocr( void ) const;
    
    KScanSlider *sliderGrayLevel;
    KScanSlider *sliderDustSize;
