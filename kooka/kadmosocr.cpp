@@ -360,7 +360,9 @@ void CRep::analyseLine( short line, QPixmap* pix )
                                 relr->width,
                                 relr->height ));
 
-        kdDebug(28000) << "RelGraph->next is " << relg->next[0] << endl;
+        if( relg->next[0] == -1 )
+            kdDebug() << "RelGraph->next is " << relg->next[0] << endl;
+
         if (relg->next[0] == -1) break;
         relg = &(repRes->rel_graph[0]) + relg->next[0];
     }

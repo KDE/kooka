@@ -61,7 +61,9 @@ KSANEOCR::KSANEOCR( QWidget* ):
    {
       konf->setGroup( CFG_GROUP_OCR_DIA );
       QString eng = konf->readEntry(CFG_OCR_ENGINE);
+#ifdef HAVE_KADMOS
       if( eng == QString("kadmos") ) m_ocrEngine = KADMOS;
+#endif
    }
    kdDebug(28000) << "OCR engine is " << ((m_ocrEngine==KADMOS)?"KADMOS":"GOCR") << endl;
 }
@@ -130,6 +132,8 @@ bool KSANEOCR::startOCRVisible( QWidget *parent )
 /*** Kadmos Engine OCR ***/
        m_ocrProcessDia = new KadmosDialog( parent );
 #else
+       KMessageBox::sorry(0, "This version of Kooka was not compiled with KADMOS support.\n"
+           "Please select another OCR engine in Kookas options dialog");
        kdDebug(28000) << "Sorry, this version of Kooka has no KADMOS support" << endl;
 #endif /* HAVE_KADMOS */
    }
@@ -149,6 +153,7 @@ bool KSANEOCR::startOCRVisible( QWidget *parent )
 
       connect( m_ocrProcessDia, SIGNAL( user1Clicked()), this, SLOT( startOCRProcess() ));
       connect( m_ocrProcessDia, SIGNAL( closeClicked()), this, SLOT( slotClose() ));
+      connect( m_ocrProcessDia, SIGNAL( user2Clicked()), this, SLOT( slotStopOCR() ));
       m_ocrProcessDia->show();
    }
    return( res );
@@ -166,8 +171,7 @@ void KSANEOCR::finishedOCRVisible( bool success )
 
    if( m_ocrProcessDia )
    {
-       m_ocrProcessDia->stopAnimation();
-       m_ocrProcessDia->enableFields(true);
+       m_ocrProcessDia->stopOCR();
    }
 
    if( success )
@@ -187,12 +191,23 @@ void KSANEOCR::slotClose()
     kdDebug(28000) << "closing ocr Dialog" << endl;
    if( daemon && daemon->isRunning() )
    {
-      kdDebug(28000) << "Killing daemon with Sig. 9" << endl;
+      kdDebug(28000) << "Still running - Killing daemon with Sig. 9" << endl;
       daemon->kill(9);
-      // that leads to the process being destroyed.
-      KMessageBox::error(0, "The OCR-Process was killed !" );
    }
    finishedOCRVisible(false);
+}
+
+void KSANEOCR::slotStopOCR()
+{
+    kdDebug(28000) << "closing ocr Dialog" << endl;
+    if( daemon && daemon->isRunning() )
+    {
+        kdDebug(28000) << "Killing daemon with Sig. 9" << endl;
+        daemon->kill(9);
+        // that leads to the process being destroyed.
+        KMessageBox::error(0, "The OCR-Process was stopped !" );
+    }
+
 }
 
 
@@ -204,7 +219,9 @@ void KSANEOCR::startOCRProcess( void )
 {
    if( ! m_ocrProcessDia ) return;
 
-   m_ocrProcessDia->enableFields(false);
+   /* starting the animation, setting fields disabled */
+   m_ocrProcessDia->startOCR();
+
    kapp->processEvents();
    if( m_ocrEngine == GOCR )
    {
@@ -362,7 +379,7 @@ void KSANEOCR::slotKadmosResult()
     {
         m_resPixmap.convertFromImage( *m_img );
         /* The recognition thread is finished. */
-        kdDebug(28000) << "YEAH - its finished" << endl;
+        kdDebug(28000) << "kadmos is finished." << endl;
 
         m_ocrResultText = "";
 
@@ -374,8 +391,8 @@ void KSANEOCR::slotKadmosResult()
             m_ocrResultText += l+"\n";
         }
 
-        /* Text analyse */
-        // m_rep.analyseGraph();
+        /* show results of ocr */
+        finishedOCRVisible(true);
 
         m_rep.End();
     }

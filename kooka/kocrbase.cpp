@@ -48,24 +48,30 @@
 
 KOCRBase::KOCRBase( QWidget *parent, KDialogBase::DialogType face )
    :KDialogBase( face, i18n("Optical Character Recognition"),
-		 Close|User1, User1, parent,0, false, true,
+		 User2|Close|User1, User1, parent,0, false, true,
 		 KGuiItem( i18n("Start OCR" ), "launch",
-			   i18n("Start the Optical Character Recognition process" )) ),
-    m_animation(0),
+			   i18n("Start the Optical Character Recognition process" )),
+                 KGuiItem( i18n("Cancel" ), "stopocr",
+			   i18n("Stop the OCR Process" ))),
+    m_animation(0L),
     m_metaBox(0L),
     m_imgHBox(0L),
     m_previewPix(0L),
     m_currImg(0L)
 {
-   kdDebug(28000) << "OCR Base Dialog!" << endl;
-   // Layout-Boxes
+    kdDebug(28000) << "OCR Base Dialog!" << endl;
+    // Layout-Boxes
 
-   /* Connect signals which disable the fields and store the configuration */
-   connect( this, SIGNAL( user1Clicked()), this, SLOT( writeConfig()));
-   connect( this, SIGNAL( user1Clicked()), this, SLOT( startOCR() ));
+    /* Connect signals which disable the fields and store the configuration */
+    connect( this, SIGNAL( user1Clicked()), this, SLOT( writeConfig()));
+    connect( this, SIGNAL( user1Clicked()), this, SLOT( startOCR() ));
+    connect( this, SIGNAL( user2Clicked()), this, SLOT( stopOCR() ));
+    m_previewSize.setWidth(200);
+    m_previewSize.setHeight(300);
 
-   m_previewSize.setWidth(200);
-   m_previewSize.setHeight(300);
+    enableButton( User1, true );   /* start ocr */
+    enableButton( User2, false );  /* Cancel    */
+    enableButton( Close, true );
 }
 
 
@@ -156,11 +162,6 @@ KOCRBase::~KOCRBase()
 
 }
 
-void KOCRBase::enableFields(bool b)
-{
-    enableButton( User1, b );
-}
-
 void KOCRBase::introduceImage( KookaImage* img)
 {
     KFileMetaInfo info = img->fileMetaInfo();
@@ -233,7 +234,7 @@ void KOCRBase::slPreviewResult(KIO::Job *job )
    }
 }
 
-void KOCRBase::slGotPreview( const KFileItem* newFileItem, const QPixmap& newPix )
+void KOCRBase::slGotPreview( const KFileItem*, const QPixmap& newPix )
 {
     kdDebug(28000) << "Got the preview" << endl;
     m_previewPix->setPixmap(newPix);
@@ -253,6 +254,22 @@ void KOCRBase::writeConfig()
 
 void KOCRBase::startOCR()
 {
+    /* en- and disable the buttons */
+    kdDebug(28000) << "Base: Starting OCR" << endl;
+    enableButton( User1, false );   /* Start OCR */
+    enableButton( User2, true );    /* Stop OCR */
+    enableButton( Close, true );
+
+    startAnimation();
+}
+
+void KOCRBase::stopOCR()
+{
+    enableButton( User1, true );   /* start ocr */
+    enableButton( User2, false );  /* Cancel    */
+    enableButton( Close, true );
+
+    stopAnimation();
 
 }
 

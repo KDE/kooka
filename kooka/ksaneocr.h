@@ -79,6 +79,7 @@ public slots:
 
 protected slots:
     void slotClose ();
+    void slotStopOCR();
 
 private slots:
 

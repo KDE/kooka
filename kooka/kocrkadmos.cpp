@@ -100,12 +100,16 @@ void KadmosDialog::setupGui()
     // Combo to select the classifiers
     addClassifierCombo( page, conf );
 
-    QButtonGroup *cbGroup = new QButtonGroup( 1, Qt::Horizontal, i18n("OCR Modifier"), page );
+    QHBox *innerBox = new QHBox( page );
+    innerBox->setSpacing( KDialog::spacingHint());
+
+    QButtonGroup *cbGroup = new QButtonGroup( 1, Qt::Horizontal, i18n("OCR Modifier"), innerBox );
     Q_CHECK_PTR(cbGroup);
 
     m_cbNoise = new QCheckBox( i18n( "Enable Automatic Noise Reduction" ), cbGroup );
     m_cbAutoscale = new QCheckBox( i18n( "Enable Automatic Scaling"), cbGroup );
 
+    getAnimation(innerBox);
     // (void) new QWidget ( page );
 }
 
@@ -214,15 +218,9 @@ void KadmosDialog::writeConfig( void )
 }
 
 
-void KadmosDialog::enableFields( bool b )
+void KadmosDialog::enableFields( bool )
 {
    kdDebug(28000) << "About to disable the entry fields" << endl;
-   KOCRBase::enableFields(b);
-
-   if( b )
-       stopAnimation();
-   else
-       startAnimation();
 }
 
 

@@ -181,17 +181,10 @@ void KGOCRDialog::writeConfig( void )
 
 void KGOCRDialog::enableFields(bool b)
 {
-    KOCRBase::enableFields(b);
-
     kdDebug(28000) << "About to disable the entry fields" << endl;
     sliderGrayLevel->setEnabled( b );
     sliderDustSize->setEnabled( b );
     sliderSpace->setEnabled( b );
-
-    if( b )
-        stopAnimation();
-    else
-        startAnimation();
 }
 
 /* The End ;) */

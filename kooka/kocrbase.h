@@ -68,9 +68,11 @@ public:
 public slots:
     virtual void stopAnimation();
     virtual void startAnimation();
-    virtual void enableFields(bool);
 
     virtual void introduceImage( KookaImage* );
+
+    virtual void startOCR();
+    virtual void stopOCR();
 
 protected:
     /**
@@ -91,7 +93,6 @@ protected:
 protected slots:
     virtual KAnimWidget* getAnimation(QWidget*);
     virtual void writeConfig();
-    virtual void startOCR();
 
 private slots:
     virtual void slPreviewResult( KIO::Job* );
