@@ -60,12 +60,12 @@ ImgPrintDialog::ImgPrintDialog( KookaImage *img, QWidget *parent, const char* na
     m_scaleRadios->setRadioButtonExclusive(true);
     connect( m_scaleRadios, SIGNAL(clicked(int)), SLOT(slScaleChanged(int)));
 
-    m_rbScreen = new QRadioButton( i18n("Scale to same Size as on Screen"),
+    m_rbScreen = new QRadioButton( i18n("Scale to same size as on screen"),
                                        m_scaleRadios );
 
     m_scaleRadios->insert( m_rbScreen, ID_SCREEN );
 
-    m_rbOrigSize = new QRadioButton( i18n("Original Size (calc. from scan resolution)"),
+    m_rbOrigSize = new QRadioButton( i18n("Original size (calc. from scan resolution)"),
                                      m_scaleRadios );
     m_scaleRadios->insert( m_rbOrigSize, ID_ORIG );
 
