@@ -40,13 +40,16 @@
 #define CFG_GROUP_OCRAD "ocrad"
 #define CFG_OCRAD_LAYOUT_DETECTION "layoutDetection"
 #define CFG_OCRAD_EXTRA_ARGUMENTS  "extraArguments"
-
+#define CFG_OCRAD_FORMAT "format"
+#define CFG_OCRAD_CHARSET "charset"
 /**
   *@author Klaas Freitag
   */
 
 class KSpellConfig;
 class KURLRequester;
+class KProcess;
+class QLabel;
 class QComboBox;
 
 class ocradDialog: public KOCRBase
@@ -68,7 +71,14 @@ public:
     QString orfUrl() const;
 
     int layoutDetectionMode() const;
-    
+
+    /**
+     * returns the numeric version of the ocrad program.
+     *
+     * Attention: This method returns 10 for ocrad v. 0.10 and 8 for ocrad-0.8
+     */
+    int getNumVersion();
+
 public slots:
     void enableFields(bool);
     void introduceImage( KookaImage* );
@@ -78,9 +88,19 @@ protected:
 
 
 private:
+    void version( const QString& exe );
+
+private slots:
+    void slReceiveStdIn( KProcess *proc, char *buffer, int buflen);
+
+private:
+
     QString      m_ocrCmd;
     KURLRequester *m_orfUrlRequester;
     QComboBox      *m_layoutMode;
+    QLabel         *m_binaryLabel;
+    KProcess       *m_proc;
+    int             m_version;
 };
 
 #endif

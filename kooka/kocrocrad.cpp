@@ -30,6 +30,7 @@
 #include <qlabel.h>
 #include <qfileinfo.h>
 #include <qtooltip.h>
+#include <qregexp.h>
 
 #include <kapplication.h>
 #include <kconfig.h>
@@ -40,6 +41,7 @@
 #include <kseparator.h>
 #include <kmessagebox.h>
 #include <kurlrequester.h>
+#include <kprocess.h>
 
 #include "resource.h"
 #include "kocrocrad.h"
@@ -56,7 +58,10 @@ ocradDialog::ocradDialog( QWidget *parent, KSpellConfig *spellConfig )
     :KOCRBase( parent, spellConfig, KDialogBase::Tabbed ),
      m_ocrCmd( QString()),
      m_orfUrlRequester(0L),
-     m_layoutMode(0)
+     m_layoutMode(0),
+     m_binaryLabel(0),
+     m_proc(0),
+     m_version(0)
 {
    kdDebug(28000) << "Starting ocrad-Start-Dialog!" << endl;
    // Layout-Boxes
@@ -128,7 +133,7 @@ EngineError ocradDialog::setupGui()
     conf->setGroup( CFG_GROUP_OCRAD );
     int layoutDetect = conf->readNumEntry( CFG_OCRAD_LAYOUT_DETECTION, 0 );
     kdDebug(28000) << "Layout detection from config: " << layoutDetect << endl;
-    
+
     (void) new KSeparator( KSeparator::HLine, page);
     QHBox *hb1 = new QHBox(page);
     hb1->setSpacing( KDialog::spacingHint() );
@@ -138,12 +143,17 @@ EngineError ocradDialog::setupGui()
     m_layoutMode->insertItem(i18n("Column Detection"), 1 );
     m_layoutMode->insertItem(i18n("Full Layout Detection"), 2);
     m_layoutMode->setCurrentItem(layoutDetect);
-    
+
     /** stating the ocrad binary **/
     (void) new KSeparator( KSeparator::HLine, page);
     QHBox *hb = new QHBox(page);
     hb->setSpacing( KDialog::spacingHint());
-    (void) new QLabel( i18n("Using ocrad binary: ") + res, hb );
+
+    m_binaryLabel = new QLabel( i18n("Using ocrad binary: ") + res, hb );
+
+    // retrieve Program version and display
+    version(res);
+
     getAnimation(hb);
 
     /* This is for a 'work-in-progress'-Animation */
@@ -161,7 +171,8 @@ void ocradDialog::introduceImage( KookaImage *img )
 
 ocradDialog::~ocradDialog()
 {
-
+    if( m_proc )
+        delete m_proc;
 }
 
 void ocradDialog::writeConfig( void )
@@ -190,6 +201,60 @@ QString ocradDialog::orfUrl() const
 	return m_orfUrlRequester->url();
     else
 	return QString();
+}
+
+void ocradDialog::version( const QString& exe )
+{
+    if( m_proc ) delete m_proc;
+
+    m_proc = new KProcess;
+
+    kdDebug(28000) << "Using " << exe << " as command" << endl;
+    *m_proc << exe;
+    *m_proc << QString("-V");
+
+    connect( m_proc, SIGNAL(receivedStdout(KProcess *, char *, int )),
+             this,     SLOT(slReceiveStdIn(KProcess *, char *, int )));
+
+    if( ! m_proc->start( KProcess::NotifyOnExit, KProcess::Stdout ) )
+    {
+        slReceiveStdIn( 0, (char*) "unknown", 7 );
+    }
+}
+
+void ocradDialog::slReceiveStdIn( KProcess*, char *buffer, int buflen)
+{
+    QString vstr = QString::fromUtf8(buffer, buflen);
+
+    kdDebug(28000) << "Got input: "<< buffer << endl;
+
+    QRegExp rx;
+    rx.setPattern("GNU Ocrad version ([\\d\\.]+)");
+    if( rx.search( vstr ) > -1 )
+    {
+        QString vStr = rx.cap(1);
+        vStr.remove(0,2);
+
+        m_version = vStr.toInt();
+        QString v = i18n("Version: ") + rx.cap(1);
+
+        if( m_binaryLabel )
+        {
+            m_binaryLabel->setText(m_binaryLabel->text() + "\n" + v );
+            m_binaryLabel->update();
+        }
+    }
+}
+
+/*
+ * returns the numeric version of the ocrad program. It is queried in the slot
+ * slReceiveStdIn, which parses the output of the ocrad -V call.
+ *
+ * Attention: This method returns 10 for ocrad v. 0.10 and 8 for ocrad-0.8
+ */
+int ocradDialog::getNumVersion()
+{
+    return m_version;
 }
 
 #include "kocrocrad.moc"
