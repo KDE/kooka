@@ -160,7 +160,6 @@ bool ScanParams::connectDevice( KScanDevice *newScanDevice )
    connect( pb, SIGNAL(clicked()), this, SLOT(slAcquirePreview()) );
    kbb->layout();
 
-
    /* Initialise the progress dialog */
    progressDialog = new QProgressDialog( i18n("Scanning in progress"),
 					 i18n("Stop"), 100, 0L,
@@ -171,7 +170,6 @@ bool ScanParams::connectDevice( KScanDevice *newScanDevice )
    connect( sane_device, SIGNAL(sigScanProgress(int)),
 	    progressDialog, SLOT(setProgress(int)));
 	
-
    /* Connect the Progress Dialogs cancel-Button */
    connect( progressDialog, SIGNAL( cancelled() ), sane_device,
 	    SLOT( slStopScanning() ) );
@@ -229,7 +227,6 @@ QScrollView *ScanParams::scannerParams( )
    KScanOption *so = 0;
 
    /* Its a real scanner */
-   /* Mode setting */
    QScrollView *sv = new QScrollView( this );
    sv->setHScrollBarMode( QScrollView::AlwaysOff );
    sv->setResizePolicy( QScrollView::AutoOneFit );
@@ -240,6 +237,7 @@ QScrollView *ScanParams::scannerParams( )
    
    QHBox *hb = new QHBox(pbox);
    
+   /* Mode setting */
    so = sane_device->getGuiElement( SANE_NAME_SCAN_MODE, hb,
 				    SANE_TITLE_SCAN_MODE,
 				    SANE_DESC_SCAN_MODE );
@@ -249,21 +247,22 @@ QScrollView *ScanParams::scannerParams( )
 
       KScanCombo *cb = (KScanCombo*) so->widget();
       Q_CHECK_PTR(cb);
-      cb->slSetIcon( pixLineArt, i18n("Line art") );
-      cb->slSetIcon( pixLineArt, i18n("Binary" ));
-      cb->slSetIcon( pixGray, i18n("Gray") );
-      cb->slSetIcon( pixColor, i18n("Color") );
+      cb->slSetIcon( pixLineArt,  i18n("Line art") );
+      cb->slSetIcon( pixLineArt,  i18n("Lineart"));
+      cb->slSetIcon( pixLineArt,  i18n("Binary" ));
+      cb->slSetIcon( pixGray,     i18n("Gray") );
+      cb->slSetIcon( pixGray,     i18n("Grey") );
+      cb->slSetIcon( pixColor,    i18n("Color") );
       cb->slSetIcon( pixHalftone, i18n("Halftone") );
 
       hb->setMargin( KDialog::marginHint() );
       hb->setSpacing( KDialog::spacingHint());
 
       hb->setStretchFactor( cb, 5 );
-      
-      connect( so, SIGNAL(guiChange(KScanOption*)),
-	       this, SLOT(slReloadAllGui( KScanOption* )));
 
       initialise( so );
+      connect( so, SIGNAL(guiChange(KScanOption*)),
+	       this, SLOT(slReloadAllGui( KScanOption* )));
    }
 
    /* Add a button for Source-Selection */
@@ -301,20 +300,40 @@ QScrollView *ScanParams::scannerParams( )
       so = sane_device->getGuiElement( SANE_NAME_HALFTONE, pbox,
 				       SANE_TITLE_HALFTONE,
 				       SANE_DESC_HALFTONE );
+      if( so )
+      {
+	 initialise(so);
+	 connect( so,   SIGNAL(guiChange(KScanOption*)),
+		  this, SLOT(slReloadAllGui( KScanOption* )));
+      }
    }
    
    if( sane_device->optionExists( SANE_NAME_HALFTONE_DIMENSION) )
    {
+      kdDebug(28000) << "Halftone-Dimen exists" << endl;
       so = sane_device->getGuiElement( SANE_NAME_HALFTONE_DIMENSION, pbox,
 				       SANE_TITLE_HALFTONE_DIMENSION,
 				       SANE_DESC_HALFTONE_DIMENSION );
+      if( so )
+      {
+	 initialise(so);
+	 connect( so,   SIGNAL(guiChange(KScanOption*)),
+		  this, SLOT(slReloadAllGui( KScanOption* )));
+      }
    }
 
    if( sane_device->optionExists( SANE_NAME_HALFTONE_PATTERN) )
    {
+      kdDebug(28000) << "Halftone-Pattern exists" << endl;
       so = sane_device->getGuiElement( SANE_NAME_HALFTONE_PATTERN, pbox,
 				       SANE_TITLE_HALFTONE_PATTERN,
 				       SANE_DESC_HALFTONE_PATTERN );
+      if( so )
+      {
+	 initialise(so);
+	 connect( so,   SIGNAL(guiChange(KScanOption*)),
+		  this, SLOT(slReloadAllGui( KScanOption* )));
+      }
    }
          
    
@@ -353,7 +372,7 @@ QScrollView *ScanParams::scannerParams( )
       /* Resolution Setting -> Y-Resolution Setting */
       so = sane_device->getGuiElement( SANE_NAME_SCAN_Y_RESOLUTION, pbox,
 				       SANE_TITLE_SCAN_Y_RESOLUTION,
-				       SANE_DESC_SCAN_X_RESOLUTION );
+				       SANE_DESC_SCAN_Y_RESOLUTION );
       int y_res = x_y_res;
       if ( so )
       {

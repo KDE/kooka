@@ -178,7 +178,6 @@ private:
 
    QPixmap       pixLineArt, pixGray, pixColor, pixHalftone, pixMiniFloppy;
    KLed          *m_led;
-   
    bool          m_firstGTEdit;
    
    class ScanParamsPrivate;

@@ -118,6 +118,10 @@ KScanOption *KScanDevice::getGuiElement( const QCString& name, QWidget *parent,
 		  this, SLOT(   slOptChanged( KScanOption* )));
 	 w->setEnabled( so->active() );
       }
+      else
+      {
+	 kdDebug(29000) << "ERROR: No widget created for " << name << endl;
+      }
    }
    else
    {

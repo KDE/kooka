@@ -388,29 +388,27 @@ void KScanOption::slReload( void )
 	    }
       }
    }
-#if 0	
+
    if( active())
    {
       if( (size_t) desc->size > buffer_size )
       {
-	 qDebug( "SERIOUS ERROR: Buffer to small: %d (required) - %d %s !",
-		desc->size, buffer_size, (const char*) name );
-      }
-  			
-      SANE_Status sane_stat = sane_control_option( KScanDevice::scanner_handle, *num,
-						   SANE_ACTION_GET_VALUE, buffer, 0 );
-
-      if( sane_stat != SANE_STATUS_GOOD )
-      {
-	 kdDebug(29000) << "ERROR: Cant get value for " << getName() << ": " << sane_strstatus( sane_stat ) << endl;
+	 kdDebug(29000) << "ERROR: Buffer to small" << endl;
       }
       else
       {
-	 buffer_untouched = false;
-	 kdDebug(29000) << "Setting buffer untouched to FALSE" << endl;
+	 SANE_Status sane_stat = sane_control_option( KScanDevice::scanner_handle, *num,
+						      SANE_ACTION_GET_VALUE, buffer, 0 );
+
+	 if( sane_stat != SANE_STATUS_GOOD )
+	 {
+	    kdDebug(29000) << "ERROR: Cant get value for " << getName() << ": " << sane_strstatus( sane_stat ) << endl;
+	 } else {
+	    buffer_untouched = false;
+	    kdDebug(29000) << "Setting buffer untouched to FALSE" << endl;
+	 }
       }
    }
-#endif
 }
 
 
@@ -1026,7 +1024,11 @@ QWidget *KScanOption::createWidget( QWidget *parent, const QString& w_desc,
                                     const QString& tooltip )
 {
   QStrList list;
-  if( ! valid() ) return( 0 );
+  if( ! valid() )
+  {
+     kdDebug(29000) << "The option is not valid!" << endl;
+     return( 0 );
+  }
   QWidget *w = 0;
   /* free the old widget */
   delete internal_widget;
@@ -1050,6 +1052,7 @@ QWidget *KScanOption::createWidget( QWidget *parent, const QString& w_desc,
     case SINGLE_VAL:
       /* Widget Type is Entry-Field */
       w = 0; // new QEntryField(
+      kdDebug(29000) << "can not create widget for SINGLE_VAL!" << endl;
       break;
     case RANGE:
       /* Widget Type is Slider */
@@ -1058,6 +1061,7 @@ QWidget *KScanOption::createWidget( QWidget *parent, const QString& w_desc,
     case GAMMA_TABLE:
       /* Widget Type is Slider */
       // w = KSaneSlider( parent, text );
+      kdDebug(29000) << "can not create widget for GAMMA_TABLE!" << endl;
       w = 0; // No widget, needs to be a set !
       break;
     case STR_LIST:	 		
@@ -1069,6 +1073,7 @@ QWidget *KScanOption::createWidget( QWidget *parent, const QString& w_desc,
       /* Widget Type is Selection Box */
       break;
     default:
+       kdDebug(29000) << "returning zero for default widget creation!" << endl;
       w  = 0;
       break;
     }
