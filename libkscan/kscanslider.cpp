@@ -97,8 +97,10 @@ KScanEntry::KScanEntry( QWidget *parent, const QString& text )
     hb->addWidget( l1,1 );
  	
     entry = new QLineEdit( this, "AUTO_ENTRYFIELD_E" );
-    connect( entry, SIGNAL( textChanged(const QString& )), this,
-		    SLOT( slEntryChange(const QString&)));
+    connect( entry, SIGNAL( textChanged(const QString& )), 
+	     this, SLOT( slEntryChange(const QString&)));
+    connect( entry, SIGNAL( returnPressed()),
+	     this,  SLOT( slReturnPressed()));
  			
     hb->addWidget( entry,3 );
     hb->activate();
@@ -139,6 +141,12 @@ void KScanEntry::slSetEntry( const QString& t )
 void KScanEntry::slEntryChange( const QString& t )
 {
     emit valueChanged( QCString( t.latin1() ) );
+}
+
+void KScanEntry::slReturnPressed( void )
+{
+   QString t = text();
+   emit returnPressed( QCString( t.latin1()));
 }
 
 

@@ -55,23 +55,27 @@ private:
 };
 
 
-class KScanEntry : public QFrame {
-	Q_OBJECT
+class KScanEntry : public QFrame
+{
+   Q_OBJECT
 public:
-	KScanEntry( QWidget *parent, const QString& text );
-	// ~KScanEntry();
+   KScanEntry( QWidget *parent, const QString& text );
+   // ~KScanEntry();
 
 public slots:
-	void		slSetEntry( const QString& );
-	void		slEntryChange( const QString& );
-	void		setEnabled( bool b ){ if( entry) entry->setEnabled( b ); }
+   void		slSetEntry( const QString& );
+   void		setEnabled( bool b ){ if( entry) entry->setEnabled( b ); }
    
    QString text( void ) const;
+   
+protected slots:
+   void		slEntryChange( const QString& );
+   void         slReturnPressed( void );
 signals:
-	void		valueChanged( const QCString& );
-		
+   void		valueChanged( const QCString& );
+   void         returnPressed( const QCString& );
 private:
-	QLineEdit 	*entry;
+   QLineEdit 	*entry;
 	
 };
 
