@@ -4,7 +4,7 @@
 #define _KSCANDEV_H_
 
 #include <qwidget.h>
-#include <qdict.h>
+#include <qasciidict.h>
 #include <qsize.h>
 #include <qwidget.h>
 #include <qobject.h>
@@ -88,8 +88,8 @@ public:
    * @param a QString with a backend string
    * @return a QString containing a human readable scanner name
    **/
-   QString getScannerName( QString name = "") const;
-   
+   QString getScannerName( const QCString& name = 0 ) const;
+
   /*
    *  ========= Preview Functions ==========
    */
@@ -119,7 +119,7 @@ public:
    *  @param QImage *image - Pointer to a reserved image
    *  @return the state of the operation in KScanStat
    */
-  KScanStat acquire( QString filename = 0);
+  KScanStat acquire( const QString& filename = QString::null );
 
   /*
    *  ========= List Functions ==========
@@ -179,13 +179,14 @@ public:
    *  @param desc: pointer to the text appearing as widget text
    *  @param tooltip: tooltip text. If zero, the SANE text will be used.
    **/
-  KScanOption *getGuiElement( const char *name, QWidget *parent,
-			      const char *desc =0, const char *tooltip=0 );
+  KScanOption *getGuiElement( const QCString& name, QWidget *parent,
+			      const QString& desc = QString::null,
+			      const QString& tooltip = QString::null );
 
   /**
    *  sets an widget of the named option enabled/disabled
    **/
-  bool guiSetEnabled( QString name, bool state );
+  void guiSetEnabled( const QCString& name, bool state );
 
    /**
     *  returns the maximum scan size. This is interesting e.g. for the
@@ -194,7 +195,7 @@ public:
     *  returns millimeter. (TODO)
     **/
    QSize getMaxScanSize( void ) const;
-      
+
 public slots:
   void slOptChanged( KScanOption* );
 	
@@ -224,7 +225,7 @@ public slots:
    *  Image ready-slot in asynchronous scanning
    */
   void                slScanFinished( KScanStat );
-   
+
   signals:
   /**
    *  emitted, if an option change was applied, which made other
@@ -281,7 +282,7 @@ private:
    *  to autmatic adjust.
    **/
   void                prepareScan( void );
-  
+
   KScanStat           createNewImage( SANE_Parameters *p );
 
 
@@ -293,9 +294,9 @@ private:
   QStrList	      option_list;    // list of names of all options
 
   QList<KScanOption>  gui_elements;
-  QDict<KScanOption>  gui_elem_names;
+  QAsciiDict<KScanOption>  gui_elem_names;
 
-  QDict<SANE_Device>  scannerDevices;
+  QAsciiDict<SANE_Device>  scannerDevices;
 
   QSocketNotifier     *sn;
 
@@ -303,7 +304,7 @@ private:
 
   /* Data for the scan process */
   /* This could/should go to  a small help object */
-  QString             scanner_name;
+  QCString             scanner_name;
   SANE_Byte           *data;
   QImage              *img;
   SANE_Parameters      sane_scan_param;
@@ -313,7 +314,7 @@ private:
   bool 		      scanningPreview;
 
    KScanOptSet         *storeOptions;
-   
+
 };
 
 #endif

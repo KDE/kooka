@@ -7,7 +7,7 @@
 
     $Id$
 ***************************************************************************/
- 
+
 /***************************************************************************
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -26,9 +26,8 @@
 #include "kscanoptset.h"
 
 
-KScanOptSet::KScanOptSet( const QString setName )
+KScanOptSet::KScanOptSet( const QCString& setName )
 {
-  
   name = setName;
 
   setAutoDelete( false );
@@ -58,16 +57,16 @@ KScanOption *KScanOptSet::get( const char *name ) const
 bool KScanOptSet::backupOption( const KScanOption& opt )
 {
   bool retval = true;
-  
+
   /** Allocate a new option and store it **/
-  const char *optName = opt.getName().local8Bit();
+  const QCString& optName = opt.getName();
   if( !optName )
     retval = false;
-  
+
   if( retval )
   {
      KScanOption *newopt = find( optName );
-    
+
      if( newopt )
      {
 	/** The option already exists **/
@@ -76,7 +75,7 @@ bool KScanOptSet::backupOption( const KScanOption& opt )
      }
      else
      {
-	const QString qq = opt.get();
+	const QCString& qq = opt.get();
 	kdDebug() << "Value is now: <" << qq << ">" << endl;
 	const KScanOption *newopt = new KScanOption( opt );
 
@@ -90,9 +89,9 @@ bool KScanOptSet::backupOption( const KScanOption& opt )
 	}
      }
   }
-  
+
   return( retval );
-  
+
 }
 
 /* END */

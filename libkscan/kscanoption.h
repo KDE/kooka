@@ -7,7 +7,7 @@
 
     $Id$
  ***************************************************************************/
- 
+
 /***************************************************************************
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -63,7 +63,7 @@ class KGammaTable;
  **/
 
 
-class KScanOption:public QObject
+class KScanOption : public QObject
 {
   Q_OBJECT
 public:
@@ -72,7 +72,8 @@ public:
    * option is valid and contains the correct value retrieved from the
    * scanner.
    **/
-  KScanOption( const char *new_name );
+  KScanOption( const QCString& new_name );
+
   /**
    * creates a KScanOption from another
    **/
@@ -83,7 +84,7 @@ public:
     * tests if the option is initialised. It is initialised, if the value
     * for the option was once read from the scanner
     **/
-  bool initialised( void ){ return( ! buffer_untouched );};
+  bool initialised( void ){ return( ! buffer_untouched );}
 
    /**
     * checks if the option is valid, means that the option is known by the scanner
@@ -126,17 +127,16 @@ public:
   bool set( int val );
   bool set( double val );
   bool set( int *p_val, int size );
-  bool set( QString );
+  bool set( const QCString& );
   bool set( bool b ){ if( b ) return(set( (int)(1==1) )); else return( set( (int) (1==0) )); }
   bool set( KGammaTable  *gt );
-  bool set( const char* );
 
    /**
     * retrieves the option value, depending on the type.
     **/
   bool get( int* ) const;
   bool get( KGammaTable* ) const;
-  const QString get( void ) const;
+  QCString get( void ) const;
 
    /**
     * This function creates a widget for the scanner option depending
@@ -152,9 +152,10 @@ public:
     * The widget is maintained completely by the kscanoption object.
     *
     **/
-    
-  QWidget *createWidget( QWidget *parent, const char *w_desc=0,
-			 const char *tooltip=0  );
+
+  QWidget *createWidget( QWidget *parent,
+			 const QString& w_desc = QString::null,
+			 const QString& tooltip = QString::null );
 
   /* Operators */
   const KScanOption& operator= (const KScanOption& so );
@@ -163,7 +164,7 @@ public:
   QStrList    getList() const;
   bool        getRange( double*, double*, double* ) const;
 
-  QString     getName() const { return( name ); }
+  QCString    getName() const { return( name ); }
   void *      getBuffer() const { return( buffer ); }
   QWidget     *widget( ) const { return( internal_widget ); }
   /**
@@ -182,15 +183,19 @@ public:
    *  how many numbers you have to
    *  @param name: the name of a option from a returned option-List
    *  return a option type.
+
+   ### not implemented at all?
    **/
-  KSANE_Type typeToSet( const char* name );
+  KSANE_Type typeToSet( const QCString& name );
 
   /**
    *  returns a string describing the unit of given the option.
    *  @return the unit description, e.g. mm
    *  @param name: the name of a option from a returned option-List
+
+   ###  not implemented at all?
    **/
-  QString unitOf( const char *name );
+  QString unitOf( const QCString& name );
 
 public slots:
   void       slRedrawWidget( KScanOption *so );
@@ -206,7 +211,7 @@ protected slots:
    *  This is an internal slot.
    **/
   void		  slWidgetChange( void );
-  void		  slWidgetChange( const char* );
+  void		  slWidgetChange( QCString );
   void		  slWidgetChange( int );
 	
   signals:
@@ -229,16 +234,16 @@ protected slots:
   void      guiChange( KScanOption* );
 
 private:
-   bool       applyVal( void );
-  bool       initOption( const char *new_name );
+  bool       applyVal( void );
+  bool       initOption( const QCString& new_name );
   void       *allocBuffer( long );
 
-  QWidget    *entryField ( QWidget *parent, const char *text );
-  QWidget    *KSaneSlider( QWidget *parent, const char *text );
-  QWidget    *comboBox   ( QWidget *parent, const char *text );
+  QWidget    *entryField ( QWidget *parent, const QString& text );
+  QWidget    *KSaneSlider( QWidget *parent, const QString& text );
+  QWidget    *comboBox   ( QWidget *parent, const QString& text );
 	
   const      SANE_Option_Descriptor *desc;
-  QString    name;
+  QCString    name;
   void       *buffer;
   QWidget    *internal_widget;
   bool       buffer_untouched;

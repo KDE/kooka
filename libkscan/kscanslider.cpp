@@ -19,25 +19,23 @@
 #include <kdebug.h>
 #include "kscanslider.h"
 
-KScanSlider::KScanSlider( QWidget *parent, const char *text, double min, double max )
+KScanSlider::KScanSlider( QWidget *parent, const QString& text,
+			  double min, double max )
  : QFrame( parent )
 {
     QHBoxLayout *hb = new QHBoxLayout( this );
-    l1 = new QLabel( QString(text), this, QString(QString("AUTO_SLIDER_LABEL") + QString(text)).local8Bit() );
+    l1 = new QLabel( text, this, "AUTO_SLIDER_LABEL" );
     hb->addWidget( l1,20 );
-    numdisp = new QLabel( "MMM", this, QString(QString("AUTO_SLIDER_NUMDISP") + QString(text)).local8Bit() );
+    numdisp = new QLabel( QString::fromLatin1("MMM"), this,
+			  "AUTO_SLIDER_NUMDISP" );
     numdisp->setAlignment( AlignRight );
-    numdisp->setMinimumHeight( numdisp->sizeHint().height());
-    numdisp->setMaximumHeight( numdisp->sizeHint().height());
     hb->addWidget( numdisp, 8 );
     hb->addStretch( 1);
-    
+
     slider = new QSlider( min, max, 1, min, QSlider::Horizontal, this, "AUTO_SLIDER_" );
     slider->setTickmarks( QSlider::Below );
     slider->setTickInterval( (max-min) / 10 );
     slider->setSteps( (max-min)/20, (max-min)/10 );
-    slider->setMinimumHeight( slider->sizeHint().height());
-    slider->setMaximumHeight( slider->sizeHint().height());
 
     /* Handle internal number display */
     // connect(slider, SIGNAL(valueChanged(int)), numdisp, SLOT( setNum(int) ));
@@ -90,11 +88,11 @@ KScanSlider::~KScanSlider()
 {
 }
 
-KScanEntry::KScanEntry( QWidget *parent, const char *text )
+KScanEntry::KScanEntry( QWidget *parent, const QString& text )
  : QFrame( parent )
 {
     QHBoxLayout *hb = new QHBoxLayout( this );
-    
+
     QLabel *l1 = new QLabel( text, this, "AUTO_ENTRYFIELD" );
     hb->addWidget( l1,1 );
  	
@@ -103,13 +101,13 @@ KScanEntry::KScanEntry( QWidget *parent, const char *text )
 		    SLOT( slEntryChange(const QString&)));
  			
     hb->addWidget( entry,3 );
-    entry->setMinimumHeight( entry->sizeHint().height() );
     hb->activate();
 }
 
-void KScanEntry::slSetEntry( const char *t )
+void KScanEntry::slSetEntry( const QString& t )
 {
-    if( ! t || QString(t) == entry->text()) 	return;
+    if( t == entry->text() )
+	return;
     /* Important to check value to avoid recursive signals ;) */
 		
     entry->setText( t );
@@ -117,19 +115,20 @@ void KScanEntry::slSetEntry( const char *t )
 
 void KScanEntry::slEntryChange( const QString& t )
 {
-    emit( valueChanged( t.local8Bit() ));
+    emit valueChanged( QCString( t.latin1() ) );
 }
 
 
 
-KScanCombo::KScanCombo( QWidget *parent, const QString text, const QStrList& list )
+KScanCombo::KScanCombo( QWidget *parent, const QString& text,
+			const QStrList& list )
    : QHBox( parent )
 {
    setSpacing( 12 );
    setMargin( 2 );
 
    combolist = list;
- 
+
    (void) new QLabel( text, this, "AUTO_COMBOLABEL" );
  	
     combo = new QComboBox( this, "AUTO_COMBO" );
@@ -158,11 +157,11 @@ void KScanCombo::slSetEntry( const QString &t )
 
 void KScanCombo::slComboChange( const QString &t )
 {
-    emit( valueChanged( t.local8Bit() ));
+    emit valueChanged( QCString( t.latin1() ) );
     kdDebug() << "Combo: valueChanged emitted!" << endl;
 }
 
-void KScanCombo::slSetIcon( const QPixmap& pix, const QString str)
+void KScanCombo::slSetIcon( const QPixmap& pix, const QString& str)
 {
    for( int i=0; i < combo->count(); i++ )
    {
@@ -176,7 +175,7 @@ void KScanCombo::slSetIcon( const QPixmap& pix, const QString str)
 
 QString KScanCombo::currentText( void ) const
 {
-   return( combo->currentText() ); 
+   return( combo->currentText() );
 }
 
 

@@ -1,9 +1,9 @@
 /***************************************************************************
-                          kscanslider.h  -  description                              
-                             -------------------                                         
-    begin                : Wed Jan 5 2000                                           
-    copyright            : (C) 2000 by Klaas Freitag                         
-    email                :                                      
+                          kscanslider.h  -  description
+                             -------------------
+    begin                : Wed Jan 5 2000
+    copyright            : (C) 2000 by Klaas Freitag
+    email                :
  ***************************************************************************/
 
 /***************************************************************************
@@ -11,7 +11,7 @@
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
  *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   * 
+ *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
 
@@ -33,8 +33,9 @@
 
 class KScanSlider : public QFrame  {
 	Q_OBJECT
-public: 
-	KScanSlider( QWidget *parent, const char *text, double min, double max );
+public:
+	KScanSlider( QWidget *parent, const QString& text,
+		     double min, double max );
 	~KScanSlider();
 
 public slots:
@@ -57,21 +58,21 @@ private:
 class KScanEntry : public QFrame {
 	Q_OBJECT
 public:
-	KScanEntry( QWidget *parent, const char *text );
+	KScanEntry( QWidget *parent, const QString& text );
 	// ~KScanEntry();
 
 public slots:
-	void		slSetEntry( const char* );
+	void		slSetEntry( const QString& );
 	void		slEntryChange( const QString& );
 	void		setEnabled( bool b ){ if( entry) entry->setEnabled( b ); }
 
    QString text( void ) const
       { return ( entry->text() ); }
 signals:
-	void		valueChanged( const char* );
+	void		valueChanged( const QCString& );
 		
 private:
-	QLineEdit 		*entry;
+	QLineEdit 	*entry;
 	
 };
 
@@ -80,7 +81,7 @@ class KScanCombo : public QHBox
 {
    Q_OBJECT
 public:
-   KScanCombo( QWidget *parent, const QString text, const QStrList& list );
+   KScanCombo( QWidget *parent, const QString& text, const QStrList& list );
    // ~KScanCombo();
 
    QString      currentText( void ) const;
@@ -91,16 +92,16 @@ public slots:
    void		slSetEntry( const QString &);
    void		slComboChange( const QString & );
    void		setEnabled( bool b){ if(combo) combo->setEnabled( b ); };
-   void         slSetIcon( const QPixmap&, const QString );
+   void         slSetIcon( const QPixmap&, const QString& );
    void         setCurrentItem( int i );
 
 private slots:
    void         slFireActivated( int);
-  
+
 signals:
-   void		valueChanged( const char* );
+   void		valueChanged( const QCString& );
    void         activated(int);
-   
+
 private:
    QComboBox	*combo;
    QStrList	combolist;

@@ -17,6 +17,8 @@
 
 
 #include <sane/saneopts.h>
+#include <qcstring.h>
+#include <qfile.h>
 #include <qframe.h>
 #include <qlabel.h>
 #include <qpushbutton.h>
@@ -26,10 +28,10 @@
 #include <qmessagebox.h>
 #include <qlayout.h>
 #include <qdict.h>
-#include <qfiledialog.h>
 #include <qfile.h>
 #include <qprogressdialog.h>
 
+#include <kfiledialog.h>
 #include <klocale.h>
 #include <kdebug.h>
 #include <kbuttonbox.h>
@@ -44,21 +46,19 @@
 
 
 
-ScanParams::ScanParams( QWidget *parent, const char *name ):
-   QVBox( parent, name )
+ScanParams::ScanParams( QWidget *parent, const char *name )
+    : QVBox( parent, name ),
+      progressDialog( 0L )
 {
    /* first some initialisation and debug messages */
     sane_device = 0; virt_filename = 0;
 
     /* Preload icons */
-    KIconLoader kil;
+    pixMiniFloppy = SmallIcon( "3floppy_unmount" );
 
-    pixMiniFloppy = kil.loadIcon( "3floppy_unmount", KIcon::Small );
-
-    pixColor = kil.loadIcon( "color", KIcon::Small );
-    pixGray = kil.loadIcon( "gray", KIcon::Small );
-    pixLineArt = kil.loadIcon( "lineart", KIcon::Small );
-
+    pixColor = SmallIcon( "color" );
+    pixGray  = SmallIcon( "gray" );
+    pixLineArt = SmallIcon( "lineart" );
 }
 
 bool ScanParams::connectDevice( KScanDevice *newScanDevice )
@@ -94,7 +94,7 @@ bool ScanParams::connectDevice( KScanDevice *newScanDevice )
 
    /* A top layout box */
    // QVBoxLayout *top = new QVBoxLayout(this, 6);
-   QString cap( "<B>" + i18n("Scanner Settings") + "</B><BR>" );
+   QString cap = i18n("<B>Scanner Settings</B><BR>");
    cap += sane_device->getScannerName();
 
    (void) new QLabel( cap, this );
@@ -132,7 +132,7 @@ bool ScanParams::connectDevice( KScanDevice *newScanDevice )
 					 "SCAN_PROGRESS", true, 0  );
    connect( sane_device, SIGNAL(sigScanProgress(int)),
 	    progressDialog, SLOT(setProgress(int)));
-	    
+	
 
    /* Connect the Progress Dialogs cancel-Button */
    connect( progressDialog, SIGNAL( cancelled() ), sane_device,
@@ -143,8 +143,7 @@ bool ScanParams::connectDevice( KScanDevice *newScanDevice )
 
 ScanParams::~ScanParams()
 {
-	/* Empty up till now */
-  delete progressDialog;
+    delete progressDialog;
 }
 
 void ScanParams::scannerParams( void ) // QVBoxLayout *top )
@@ -227,7 +226,7 @@ void ScanParams::scannerParams( void ) // QVBoxLayout *top )
    {
       /* If the SCAN_X_RES does not exists, perhaps just SCAN_RES does */
       so = sane_device->getGuiElement( SANE_NAME_SCAN_RESOLUTION, this,
-				       "Resolution (dpi):" );
+				       i18n("Resolution (dpi):") );
       if( so )
       {
 	 so->set( 100 );
@@ -338,7 +337,7 @@ void ScanParams::slSourceSelect( void )
    KScanOption so( SANE_NAME_SCAN_SOURCE );
    ADF_BEHAVE adf = ADF_OFF;
 
-   QString currSource = so.get();
+   const QCString& currSource = so.get();
    kdDebug() << "Current Source is <" << currSource << ">" << endl;
    QStrList sources;
 
@@ -356,11 +355,14 @@ void ScanParams::slSourceSelect( void )
 
       if( d.exec() == QDialog::Accepted  )
       {
+#ifdef __GNUC__
+#warning and here is the rest
+#endif
 	 QString sel_source = d.getText();
 	 adf = d.getAdfBehave();
 
 	 /* set the selected Document source, the behavior is stored in a membervar */
-	 so.set( sel_source );
+	 so.set( sel_source.latin1() ); // FIX in ScanSourceDialog, then here
 	 sane_device->apply( &so );
 
 	 kdDebug() << "Dialog finished OK: " << sel_source << ", " << adf << endl;
@@ -380,28 +382,28 @@ void ScanParams::slSourceSelect( void )
 void ScanParams::slFileSelect( void )
 {
    kdDebug() << "File Selector" << endl;
-   QStringList filter;
+   QString filter;
+   QCString prefix = "\n*.";
 
    if( scan_mode == ID_QT_IMGIO )
    {
       QStrList filterList = QImage::inputFormats();
-      filter << i18n( "All Files (*.*)");
-      for( QString fi_item = filterList.first();
-	   !fi_item.isNull(); fi_item = filterList.next() )
+      filter = i18n( "*.*|All Files (*.*)");
+      for( QCString fi_item = filterList.first(); !fi_item.isEmpty();
+	   fi_item = filterList.next() )
       {
-	 filter << QString("*." + fi_item.lower());
+	  
+	 filter.append( QString::fromLatin1( prefix + fi_item.lower()) );
       }
    }
    else
    {
-      filter << i18n( "PNM image files (*.pnm)");
+      filter.append( i18n( "*.pnm|PNM image files (*.pnm)") );
    }
 
 
 
-   QFileDialog fd( this, i18n("FileDialogRead").local8Bit(), true);
-   fd.setDir( last_virt_scan_path );
-   fd.setFilters( filter );
+   KFileDialog fd(last_virt_scan_path.path(), filter, this, "FileDialog",true);
    fd.setCaption( i18n("Select the inputfile") );
    /* Read the filename and remind it */
    QString fileName;
@@ -416,7 +418,7 @@ void ScanParams::slFileSelect( void )
    if ( !fileName.isNull() && virt_filename ) { // got a file name
       kdDebug() << "Got fileName: " << fileName << endl;
       // write Value to SANEOption, it updates itself.
-      virt_filename->set( fileName );
+      virt_filename->set( QFile::encodeName( fileName ) );
    }
 }
 
@@ -438,8 +440,8 @@ void ScanParams::slVirtScanModeSelect( int id )
 	 kdDebug() << "Found File in Filename-Option: " << vf << endl;
 
 	 QFileInfo fi( vf );
-	 if( fi.extension() != "pnm" )
-	    virt_filename->set("");
+	 if( fi.extension() != QString::fromLatin1("pnm") )
+	    virt_filename->set(QCString(""));
       }
    } else {
       scan_mode = ID_QT_IMGIO;

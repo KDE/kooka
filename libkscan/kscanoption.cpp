@@ -7,7 +7,7 @@
 
     $Id$
  ***************************************************************************/
- 
+
 /***************************************************************************
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -21,7 +21,7 @@
 #include <stdlib.h>
 #include <qwidget.h>
 #include <qobject.h>
-#include <qdict.h>
+#include <qasciidict.h>
 #include <qcombobox.h>
 #include <qslider.h>
 #include <qcheckbox.h>
@@ -54,18 +54,17 @@
 
 /**  Not really pretty to have these global variables in a lib.
  *   Should be solved by KScanOption being a friend to KScanDevice ?
- *   TODO 
+ *   TODO
  **/
 bool        scanner_initialised = false;
 SANE_Handle scanner_handle      = 0;
-QDict<int>  option_dic;
+QAsciiDict<int>  option_dic;
 
 extern KScanOptSet gammaTables;
 
 /** inline-access to the option descriptor, object to changes with global vars. **/
-inline const SANE_Option_Descriptor *getOptionDesc( const char *name )
+inline const SANE_Option_Descriptor *getOptionDesc( const QCString& name )
 {
-   
    int *idx = option_dic[ name ];
    const SANE_Option_Descriptor *d = 0;
    // debug( "<< for option %s >>", name );
@@ -80,7 +79,7 @@ inline const SANE_Option_Descriptor *getOptionDesc( const char *name )
       // debug( "Name survived !" );
    }
    // debug( "<< leaving option %s >>", name );
-   
+
    return( d );
 }
 
@@ -89,10 +88,9 @@ inline const SANE_Option_Descriptor *getOptionDesc( const char *name )
 /* ************************************************************************ */
 /* KScan Option                                                             */
 /* ************************************************************************ */
-KScanOption::KScanOption( const char *new_name ) :
+KScanOption::KScanOption( const QCString& new_name ) :
    QObject()
 {
-
    if( initOption( new_name ) )
    {
       int  *num = option_dic[ getName() ];	
@@ -100,7 +98,8 @@ KScanOption::KScanOption( const char *new_name ) :
 	 return;
 
       SANE_Status sane_stat = sane_control_option( scanner_handle, *num,
-						   SANE_ACTION_GET_VALUE, buffer, 0 );
+						   SANE_ACTION_GET_VALUE,
+						   buffer, 0 );
 
       if( sane_stat == SANE_STATUS_GOOD )
       {
@@ -114,18 +113,18 @@ KScanOption::KScanOption( const char *new_name ) :
 }
 
 
-bool KScanOption::initOption( const char *new_name )
+bool KScanOption::initOption( const QCString& new_name )
 {
    desc = 0;
-   if( ! new_name ) return( false );
+   if( new_name.isEmpty() ) return( false );
 
    name = new_name;
-   desc = getOptionDesc( name.local8Bit() );
+   desc = getOptionDesc( name );
    buffer = 0;
    internal_widget = 0;
    buffer_untouched = true;
    buffer_size = 0;
-   
+
    if( desc )
    {
   		
@@ -157,7 +156,7 @@ bool KScanOption::initOption( const char *new_name )
 	   kdDebug() << "Is older GammaTable!" << endl;
 	   KGammaTable gt;
 	   gtOption->get( &gt );
-	   
+	
 	   gamma = gt.getGamma();
 	   contrast = gt.getContrast();
 	   brightness = gt.getBrightness();
@@ -167,7 +166,7 @@ bool KScanOption::initOption( const char *new_name )
 	   kdDebug() << "Is NOT older GammaTable!" << endl;
 	}
     }
-   
+
    return( desc > 0 );
 }
 
@@ -184,7 +183,7 @@ KScanOption::KScanOption( const KScanOption &so ) :
 
    if( so.buffer_untouched ) kdDebug() << "Buffer of source is untouched!" << endl;
    // debug("Here Duplication for %s, reserving %d bytes", (const char*)  name, desc->size );
-   
+
    /* the widget si not copied ! */
    internal_widget = 0;
 
@@ -220,7 +219,7 @@ const KScanOption& KScanOption::operator= (const KScanOption& so )
    brightness = so.brightness;
    contrast = so.contrast;
 
-   if( internal_widget ) delete internal_widget;
+   delete internal_widget;
    internal_widget = so.internal_widget;
 
    if( buffer ) delete( (char*)buffer);
@@ -244,10 +243,10 @@ const KScanOption& KScanOption::operator= (const KScanOption& so )
     return( *this );
 }
 
-void KScanOption::slWidgetChange( const char *t )
+void KScanOption::slWidgetChange( QCString t )
 {
     kdDebug() << "Received WidgetChange for " << getName() << "const char*" << endl;
-    set( QString(t) );
+    set( t );
     emit( guiChange( this ) );
     // emit( optionChanged( this ));
 }
@@ -317,7 +316,7 @@ void KScanOption::slRedrawWidget( KScanOption *so )
 	  break;
 	case STRING:
 	  // w = entryField( parent, text );
-	  ((KScanEntry*)w)->slSetEntry( so->get().local8Bit() ); 	  	 	
+	  ((KScanEntry*)w)->slSetEntry( so->get() ); 	  	 	
  	  	 		/* Widget Type is Selection Box */
 	  break;
 	default:
@@ -332,7 +331,7 @@ void KScanOption::slRedrawWidget( KScanOption *so )
 void KScanOption::slReload( void )
 {
    int  *num = option_dic[ getName() ];	
-   desc = getOptionDesc( getName().local8Bit());	
+   desc = getOptionDesc( getName() );	
 	
    if( !desc || !num  )
       return;
@@ -342,7 +341,7 @@ void KScanOption::slReload( void )
       kdDebug() << "constraint is " << desc->cap << endl;
       if( !active() )
 	 kdDebug() << desc->name << " is not active now" << endl;
-      
+
       if( !softwareSetable() )
 	 kdDebug() << desc->name << " is not software setable" << endl;
 
@@ -399,7 +398,7 @@ void KScanOption::slReload( void )
 	 kdDebug() << "Setting buffer untouched to FALSE" << endl;
       }
    }
-#endif   
+#endif
 }
 
 
@@ -419,7 +418,7 @@ bool KScanOption::valid( void ) const
 bool KScanOption::autoSetable( void )
 {
   /* Refresh description */
-  desc = getOptionDesc( name.local8Bit() );
+  desc = getOptionDesc( name );
 
   return( desc && ((desc->cap & SANE_CAP_AUTOMATIC) > 0 ) );
 }
@@ -427,7 +426,7 @@ bool KScanOption::autoSetable( void )
 bool KScanOption::commonOption( void )
 {
   /* Refresh description */
-  desc = getOptionDesc( name.local8Bit() );
+  desc = getOptionDesc( name );
 
   return( desc && ((desc->cap & SANE_CAP_ADVANCED) == 0) );
 }
@@ -437,7 +436,7 @@ bool KScanOption::active( void )
 {
   bool ret = false;
   /* Refresh description */
-  desc = getOptionDesc( name.local8Bit() );
+  desc = getOptionDesc( name );
   if( desc )
     ret = SANE_OPTION_IS_ACTIVE( desc->cap );
  			
@@ -447,7 +446,7 @@ bool KScanOption::active( void )
 bool KScanOption::softwareSetable( void )
 {
   /* Refresh description */
-  desc = getOptionDesc( name.local8Bit() );
+  desc = getOptionDesc( name );
   if( desc )
   {
      if( SANE_OPTION_IS_SETTABLE(desc->cap) == SANE_TRUE )
@@ -554,7 +553,7 @@ bool KScanOption::set( int val )
 #ifdef APPLY_IN_SITU
       applyVal();
 #endif
-      
+
 #if 0
       emit( optionChanged( this ));
 #endif
@@ -683,15 +682,9 @@ bool KScanOption::set( int *val, int size )
   return( ret );
 }
 
-bool KScanOption::set( const char *val )
-{
-  return( set( QString(val) ));
-}
-
-bool KScanOption::set( QString strval )
+bool KScanOption::set( const QCString& c_string )
 {
    bool ret = false;
-   QCString c_string( strval.local8Bit() );
 
    if( ! desc ) return( false );
 
@@ -825,14 +818,13 @@ bool KScanOption::get( int *val ) const
 
 
 
-const QString KScanOption::get( void ) const 
+QCString KScanOption::get( void ) const
 {
-
    QCString retstr;
 
    SANE_Word sane_word;
 
-   
+
    if( !valid() || !getBuffer())
       return( "parametererror" );
 			
@@ -857,7 +849,7 @@ const QString KScanOption::get( void ) const
 	 sane_word = (SANE_Word) SANE_UNFIX(*(SANE_Word*)buffer);
 	 retstr.setNum( sane_word );
 	 break;
-	 
+	
       default:
 	 kdDebug() << "Cant get " << getName() << " to type String !" << endl;
 	 retstr = "unknown";
@@ -868,7 +860,7 @@ const QString KScanOption::get( void ) const
 
 
 /* Caller needs to have the space ;) */
-bool KScanOption::get( KGammaTable *gt ) const 
+bool KScanOption::get( KGammaTable *gt ) const
 {
     if( gt )
     {
@@ -938,22 +930,20 @@ bool KScanOption::getRange( double *min, double *max, double *q ) const
    return( ret );
 }
 
-QWidget *KScanOption::createWidget( QWidget *parent, const char *w_desc,
-                                    const char *tooltip )
+QWidget *KScanOption::createWidget( QWidget *parent, const QString& w_desc,
+                                    const QString& tooltip )
 {
-  const char *text = 0;
-	
   QStrList list;
   if( ! valid() ) return( 0 );
   QWidget *w = 0;
   /* free the old widget */
-  if( internal_widget ) delete internal_widget;
+  delete internal_widget;
   internal_widget = 0;
  	
   /* check for text */
-  text = w_desc;
-  if( ! text && desc) {
-    text = (const char*) desc->title; 	
+  QString text = w_desc;
+  if( text.isEmpty() && desc ) {
+    text = QString::fromLocal8Bit( desc->title );
   }
  	
  	
@@ -996,11 +986,11 @@ QWidget *KScanOption::createWidget( QWidget *parent, const char *w_desc,
       internal_widget = w;
       connect( this, SIGNAL( optionChanged( KScanOption*)),
 	       SLOT( slRedrawWidget( KScanOption* )));
-      const char *tt = tooltip;
-      if( ! tt && desc )
-	tt = desc->desc;
+      QString tt = tooltip;
+      if( tt.isEmpty() && desc )
+	tt = QString::fromLocal8Bit( desc->desc );
  			
-      if( tt )
+      if( !tt.isEmpty() )
 	QToolTip::add( internal_widget, tt );
     }
  	
@@ -1011,30 +1001,30 @@ QWidget *KScanOption::createWidget( QWidget *parent, const char *w_desc,
 }
 
 
-QWidget *KScanOption::comboBox( QWidget *parent, const char *text )
+QWidget *KScanOption::comboBox( QWidget *parent, const QString& text )
 {
   QStrList list = getList();
-  
+
   KScanCombo *cb = new KScanCombo( parent, text, list);
 
-  connect( cb, SIGNAL( valueChanged(const char*)), this,
-	   SLOT( slWidgetChange(const char*)));
+  connect( cb, SIGNAL( valueChanged( QCString )), this,
+	   SLOT( slWidgetChange( QCString )));
 
   return( cb );
 }
 
 
-QWidget *KScanOption::entryField( QWidget *parent, const char *text )
+QWidget *KScanOption::entryField( QWidget *parent, const QString& text )
 {
   KScanEntry *ent = new KScanEntry( parent, text );
-  connect( ent, SIGNAL( valueChanged(const char*)), this,
-	   SLOT( slWidgetChange(const char*)));
+  connect( ent, SIGNAL( valueChanged( QCString )), this,
+	   SLOT( slWidgetChange( QCString )));
 	
   return( ent );
 }
 
 
-QWidget *KScanOption::KSaneSlider( QWidget *parent, const char *text )
+QWidget *KScanOption::KSaneSlider( QWidget *parent, const QString& text )
 {
   double min, max, quant;
   getRange( &min, &max, &quant );
@@ -1057,14 +1047,14 @@ void *KScanOption::allocBuffer( long size )
 #ifdef MEM_DEBUG
   qDebug( "M: Reserving %ld bytes of mem for <%s>", size, (const char*) getName() );
 #endif
-  
+
   void *r = new char[ size ];
   buffer_size = size;
-  
+
   if( r ) memset( r, 0, size );
 
   return( r );
-  
+
 }
 
 

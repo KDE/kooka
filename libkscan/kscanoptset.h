@@ -7,7 +7,7 @@
 
     $Id$
 ***************************************************************************/
- 
+
 /***************************************************************************
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -16,7 +16,7 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
- 
+
 
 #ifndef KSCANOPTSET_H
 #define KSCANOPTSET_H
@@ -56,13 +56,13 @@ public:
     *  Constructor to create  a new Container. Takes a string as a name, which
     *  has no special meaning yet ;)
     */
-   KScanOptSet( const QString );
+   KScanOptSet( const QCString& );
    ~KScanOptSet();
 
    /**
     *  function to store a deep copy of an option. Note that this class is inherited
     *  from QAsciiDict and thus does no deep copies.  This method does.
-    *  @see insert 
+    *  @see insert
     */
    bool backupOption( const KScanOption& );
 
@@ -70,13 +70,13 @@ public:
     *  returns a pointer to a stored option given by name.
     */
    KScanOption *get( const char *name ) const;
-  
+
 private:
-   QString name;
+   QCString name;
 
    /* List to collect objects for which memory was allocated and must be freed */
    QList<KScanOption> strayCatsList;
-   
+
 };
 
 #endif // KScanOptSet

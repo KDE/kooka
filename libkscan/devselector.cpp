@@ -83,7 +83,7 @@ QString DeviceSelector::getSelectedDevice( void ) const
    kdDebug() << "The Selected ID is <" << selID << ">/" << c << endl;
 
    QString dev = devices[ selID ];
-   
+
    kdDebug() << "The selected device: <" << dev << ">" << endl;
    KGlobal::config()->setGroup( GROUP_STARTUP );
    KGlobal::config()->writeEntry( STARTUP_SCANDEV, dev );
@@ -122,7 +122,7 @@ void DeviceSelector::setScanSources( QStrList& sources, QStringList& hrSources )
 
    for ( const char* s = sources.first(); selectBox && s; s=sources.next() )
    {
-      QString css( s );
+      QString css = QString::fromLocal8Bit( s );
       QString hr( hrSources[nr]);
       QString num;
       num.sprintf( "&%d. ", 1+nr );

@@ -17,6 +17,7 @@
 #include <qfileinfo.h>
 #include <qapplication.h>
 #include <kdebug.h>
+#include <klocale.h>
 
 #include <unistd.h>
 #include "kgammatable.h"
@@ -43,16 +44,13 @@ KScanOptSet gammaTables("GammaTables");
 /* ---------------------------------------------------------------------------
 
    ------------------------------------------------------------------------- */
-bool KScanDevice::guiSetEnabled( QString name, bool state )
+void KScanDevice::guiSetEnabled( const QCString& name, bool state )
 {
- 	
-  KScanOption *so;
-  
    if( gui_elem_names[ name ] )
-    {
-      so = gui_elem_names[name];
+   {
+      KScanOption *so = gui_elem_names[name];
       QWidget *w = so->widget();
-      
+
       if( w )
 	w->setEnabled( state );
     }
@@ -62,10 +60,11 @@ bool KScanDevice::guiSetEnabled( QString name, bool state )
 
    ------------------------------------------------------------------------- */
 
-KScanOption *KScanDevice::getGuiElement( const char *name, QWidget *parent,
-					 const char *desc, const char *tooltip )
+KScanOption *KScanDevice::getGuiElement( const QCString& name, QWidget *parent,
+					 const QString& desc, 
+					 const QString& tooltip )
 {
-   if( ! name ) return(0);
+   if( name.isEmpty() ) return(0);
    QWidget *w = 0;
    KScanOption *so = 0;
 
@@ -111,6 +110,7 @@ KScanDevice::KScanDevice( QObject *parent )
    : QObject( parent )
 {
     SANE_Status sane_stat = sane_init(NULL, NULL );
+
     option_dic.setAutoDelete( true );
     gui_elements.setAutoDelete( true );
 
@@ -125,7 +125,7 @@ KScanDevice::KScanDevice( QObject *parent )
     rest_bytes = 0;
     pixel_x = 0;
     pixel_y = 0;
-    
+
 
     if( sane_stat == SANE_STATUS_GOOD )
     {
@@ -174,9 +174,7 @@ KScanStat KScanDevice::openDevice( const char* backend )
    // search for scanner
    int indx = scanner_avail.find( backend );
 
-   if( indx > -1 ) {
-      QString scanner = scanner_avail.at( indx );
-   } else {
+   if( indx < 0 ) {
       stat = KSCAN_ERR_NO_DEVICE;
    }
 
@@ -205,11 +203,11 @@ KScanStat KScanDevice::openDevice( const char* backend )
 }
 
 
-QString KScanDevice::getScannerName(QString name) const
+QString KScanDevice::getScannerName(const QCString& name) const
 {
-  QString ret = "No scanner selected";
+  QString ret = i18n("No scanner selected");
   SANE_Device *scanner = 0L;
-  
+
   if( scanner_initialised && name.isEmpty())
   {
      scanner = scannerDevices[ scanner_name ];
@@ -219,7 +217,7 @@ QString KScanDevice::getScannerName(QString name) const
      scanner = scannerDevices[ name ];
      ret = "";
   }
-     
+
   if( scanner ) {
      ret.sprintf( "%s %s %s", scanner->vendor, scanner->model, scanner->type );
   }		
@@ -233,15 +231,15 @@ QSize KScanDevice::getMaxScanSize( void ) const
 {
    QSize s;
    double min, max, q;
-   
+
    KScanOption so_w( SANE_NAME_SCAN_BR_X );
    so_w.getRange( &min, &max, &q );
 
    s.setWidth( (int) max );
-   
+
    KScanOption so_h( SANE_NAME_SCAN_BR_Y );
    so_h.getRange( &min, &max, &q );
-   
+
    s.setHeight( (int) max );
 
    return( s );
@@ -268,7 +266,7 @@ KScanStat KScanDevice::find_options()
   {
 
      option_dic.clear();
-     
+
      for(int i = 1; i<n; i++)
      {
 	d = (SANE_Option_Descriptor*)
@@ -287,14 +285,15 @@ KScanStat KScanDevice::find_options()
 		 *new_opt = i;
 		 kdDebug() << "Inserting <" << d->name << "> as " << *new_opt << endl;
 		 /* create a new option in the set. */
-		 option_dic.insert ( (const char*) d->name, new_opt );
+		 option_dic.insert ( QString::fromLatin1((const char*)d->name),
+				     new_opt );
 		 option_list.append( (const char*) d->name );
 #if 0
 		 KScanOption *newOpt = new KScanOption( d->name );
 		 const QString qq = newOpt->get();
 		 qDebug( "INIT: <%s> = <%s>", d->name, qq );
 		 allOptionSet->insert( d->name, newOpt );
-#endif		 
+#endif		
 	      }
 	      else if( d->type == SANE_TYPE_GROUP )
 	      {
@@ -319,13 +318,13 @@ QStrList KScanDevice::getCommonOptions()
 {
    QStrList com_opt;
 
-   QString s = option_list.first();
+   QCString s = option_list.first();
 
-   while( !(s.isEmpty() || s.isNull()) )
+   while( !s.isEmpty() )
    {
-      KScanOption opt( s.local8Bit() );
+      KScanOption opt( s );
       if( opt.commonOption() )
-	 com_opt.append( s.local8Bit() );
+	 com_opt.append( s );
       s = option_list.next();
    }
    return( com_opt );
@@ -335,13 +334,13 @@ QStrList KScanDevice::getAdvancedOptions()
 {
    QStrList com_opt;
 
-   QString s = option_list.first();
+   QCString s = option_list.first();
 
-   while( !(s.isEmpty() || s.isNull()) )
+   while( !s.isEmpty() )
    {
-     KScanOption opt( s.local8Bit() );
+     KScanOption opt( s );
      if( !opt.commonOption() )
-       com_opt.append( s.local8Bit() );
+       com_opt.append( s );
      s = option_list.next();
    }
    return( com_opt );
@@ -355,12 +354,13 @@ KScanStat KScanDevice::apply( KScanOption *opt, bool isGammaTable )
    int         *num = option_dic[ opt->getName() ];
    SANE_Int    result = 0;
    SANE_Status sane_stat = SANE_STATUS_GOOD;
-   const char  *oname = opt->getName().local8Bit();
-   
-   if ( opt->getName() == "preview" || opt->getName() == "mode" ) {
+   const QCString& oname = opt->getName();
+
+   if ( oname == "preview" || oname == "mode" ) {
       sane_stat = sane_control_option( scanner_handle, *num,
 				       SANE_ACTION_SET_AUTO, 0,
 				       &result );
+// return stat;
       /* No return here, please ! Carsten, does it still work than for you ? */
    }
 
@@ -395,7 +395,7 @@ KScanStat KScanDevice::apply( KScanOption *opt, bool isGammaTable )
       }
       else
       {
-	 
+	
 	 sane_stat = sane_control_option( scanner_handle, *num,
 					  SANE_ACTION_SET_VALUE,
 					  opt->getBuffer(),
@@ -406,7 +406,7 @@ KScanStat KScanDevice::apply( KScanOption *opt, bool isGammaTable )
    if( sane_stat == SANE_STATUS_GOOD )
    {
      kdDebug() << "Applied <" << oname << "> successfully" << endl;
-     
+
       if( result & SANE_INFO_RELOAD_OPTIONS )
       {
 	 kdDebug() << "* Setting status to reload options" << endl;
@@ -428,7 +428,7 @@ KScanStat KScanDevice::apply( KScanOption *opt, bool isGammaTable )
       }
 
       /* if it is a gamma table, the gamma values must be stored */
-      if( isGammaTable ) 
+      if( isGammaTable )
       {
 	 gammaTables.backupOption( *opt );
 	 kdDebug() << "GammaTable stored: " << opt->getName() << endl;
@@ -444,11 +444,11 @@ KScanStat KScanDevice::apply( KScanOption *opt, bool isGammaTable )
 
 bool KScanDevice::optionExists( const char *name )
 {
-   if( ! name ) return( 0 );
-   int *i = option_dic[name];
+   if( ! name ) return false;
+   int *i = option_dic[ QString::fromLatin1(name) ];
 
    if( !i ) return( false );
-   return( *i > -1 ? true : false );
+   return( *i > -1 );
 }
 
 
@@ -484,7 +484,7 @@ void KScanDevice::slReloadAllBut( KScanOption *not_opt )
 	    }
 	}
 	kdDebug() << "*** Reload of all finished ! ***" << endl;
-		       
+		
 }
 
 
@@ -516,8 +516,8 @@ KScanStat KScanDevice::acquirePreview( bool forceGray, int dpi )
    double min, max, q;
 
    (void) forceGray;
-         
-   
+
+
 #if 0
    QAsciiDictIterator<KScanOption> it(*standardOptions);
 
@@ -542,7 +542,7 @@ KScanStat KScanDevice::acquirePreview( bool forceGray, int dpi )
    if( optionExists( SANE_NAME_PREVIEW ) )
    {
       KScanOption prev( SANE_NAME_PREVIEW );
-      
+
       prev.set( true );
       apply( &prev );
 
@@ -558,7 +558,7 @@ KScanStat KScanDevice::acquirePreview( bool forceGray, int dpi )
      KScanOption *so = gui_elem_names[ SANE_NAME_GRAY_PREVIEW ];
      if( so )
      {
-       if( so->get() == QString("true") )
+       if( so->get() == "true" )
        {
 	 /* Gray preview on */
 	 so->set( true );
@@ -573,7 +573,7 @@ KScanStat KScanDevice::acquirePreview( bool forceGray, int dpi )
      apply( so );
    }
 
-     
+
    if( optionExists( SANE_NAME_SCAN_MODE ) )
    {
       KScanOption mode( SANE_NAME_SCAN_MODE );
@@ -583,16 +583,16 @@ KScanStat KScanDevice::acquirePreview( bool forceGray, int dpi )
       /* apply if it has a widget, or apply always ? */
       if( mode.widget() ) apply( &mode );
    }
-  
+
    /** Scan Resolution should always exist. **/
    KScanOption res ( SANE_NAME_SCAN_RESOLUTION );
    const QString p = res.get();
-   
+
    kdDebug() << "Scan Resolution pre Preview is " << p << endl;
    storeOptions->backupOption( res );
 
    int set_dpi = dpi;
-  
+
    if( dpi == 0 )
    {
       /* No resolution argument */
@@ -611,7 +611,7 @@ KScanStat KScanDevice::acquirePreview( bool forceGray, int dpi )
       storeOptions->backupOption( yres );
       yres.set( set_dpi );
       apply( &yres );
-    
+
       /* Resolution bind switch ? */
       if( optionExists( SANE_NAME_RESOLUTION_BIND ) )
       {
@@ -626,7 +626,7 @@ KScanStat KScanDevice::acquirePreview( bool forceGray, int dpi )
    res.set( set_dpi );
    apply( &res );
 
-     
+
    /* Start scanning */
    KScanStat stat = acquire_data( true );
 
@@ -685,24 +685,24 @@ void KScanDevice::prepareScan( void )
     const QString q = pso.get();
 
     kdDebug() << "Preview-Switch is at the moment: " << q << endl;
-    
-    
+
+
 }
 
 /** Starts scanning
  *  depending on if a filename is given or not, the function tries to open
  *  the file using the Qt-Image-IO or really scans the image.
  **/
-KScanStat KScanDevice::acquire( QString filename )
+KScanStat KScanDevice::acquire( const QString& filename )
 {
     KScanOption *so = 0;
  	
     if( filename.isEmpty() )
     {
  	/* *real* scanning - apply all Options and go for it */
- 	prepareScan( );
+ 	prepareScan();
  	
- 	for( so = gui_elements.first(); so; so = gui_elements.next())
+ 	for( so = gui_elements.first(); so; so = gui_elements.next() )
  	{
  	    if( so->active() )
  	    {
@@ -719,9 +719,12 @@ KScanStat KScanDevice::acquire( QString filename )
     else
     {
    	/* a filename is in the parameter */
-	QFileInfo *file = new QFileInfo( filename );
-	if( file->exists() )
+	QFileInfo file( filename );
+	if( file.exists() )
 	{
+#ifdef __GNUC__
+#warning possible leak ahead, design decision?
+#endif
 	     QImage *i = new QImage();
 	     if( i->load( filename ))
 	     {
@@ -729,6 +732,8 @@ KScanStat KScanDevice::acquire( QString filename )
 	     }
 	}
     }
+    
+    return KSCAN_OK;
 }
 
 
@@ -854,7 +859,7 @@ KScanStat KScanDevice::acquire_data( bool isPreview )
        *  this status might be changed by pressing Stop on a GUI-Dialog displayed during scan */
       if( sane_set_io_mode( scanner_handle, SANE_TRUE ) == SANE_STATUS_GOOD )
       {
-	 
+	
 	 int fd = 0;
 	 if( sane_get_select_fd( scanner_handle, &fd ) == SANE_STATUS_GOOD )
 	 {
@@ -896,7 +901,7 @@ void KScanDevice::slScanFinished( KScanStat status )
       delete sn;
       sn = 0;
    }
-   
+
    emit( sigScanProgress( 1000 ));
 
    kdDebug() << "Slot ScanFinished hit with status " <<  status << endl;
@@ -910,7 +915,7 @@ void KScanDevice::slScanFinished( KScanStat status )
    const QString qq;
    KScanOption *so;
    (void) so;
-   
+
    if( status == KSCAN_OK )
    {
       if( scanningPreview )
@@ -931,7 +936,7 @@ void KScanDevice::slScanFinished( KScanStat status )
 	    if( so && so->active() && so->initialised())
 	    {
 	       const QString qq = so->get();	
-	       
+	
 	       kdDebug() << "Post-Scan-apply <" << it.currentKey() << ">: " << qq << endl;
 	       apply( so );
 	    }
@@ -944,7 +949,7 @@ void KScanDevice::slScanFinished( KScanStat status )
       }
    }	
 
-   
+
    sane_cancel(scanner_handle);
 
    /* This follows after sending the signal */
@@ -981,7 +986,7 @@ void KScanDevice::doProcessABlock( void )
   SANE_Status     sane_stat     = SANE_STATUS_GOOD;
   uchar	          eight_pix     = 0;
   bool 	  goOn = true;
-   
+
   // int 	rest_bytes = 0;
   while( goOn && data )
   {
@@ -991,7 +996,7 @@ void KScanDevice::doProcessABlock( void )
      int       green = 0;
      int       blue = 0;
 
-     
+
      if( sane_stat != SANE_STATUS_GOOD )
      {
 	/** any other error **/
@@ -1122,14 +1127,14 @@ void KScanDevice::doProcessABlock( void )
 	   emit( sigScanProgress( (int)(1000.0 / (double) sane_scan_param.lines *
 					(double)pixel_y) ));
 	}
-      
+
 	if( bytes_written == 0 || sane_stat == SANE_STATUS_EOF )
 	{
 	   kdDebug() << "Down under sane_stat not OK" << endl;
 	   goOn = false;
 	}
      }
-       
+
      if( goOn && scanStatus == SSTAT_STOP_NOW )
      {
 	/* scanStatus is set to SSTAT_STOP_NOW due to hitting slStopScanning   */
@@ -1137,7 +1142,7 @@ void KScanDevice::doProcessABlock( void )
 
 	/* This is also hit after the normal finish of the scan. Most probably,
 	 * the QSocketnotifier fires for a few times after the scan has been
-	 * cancelled.  Does it matter ? To see it, just uncomment the qDebug msg. 
+	 * cancelled.  Does it matter ? To see it, just uncomment the qDebug msg.
 	 */
 	// qDebug( "Stopping the scan progress !" );
 	goOn = false;
@@ -1164,7 +1169,7 @@ void KScanDevice::doProcessABlock( void )
 
      }
   }
-           
+
   if( sane_stat == SANE_STATUS_CANCELLED )
   {	
      scanStatus = SSTAT_STOP_NOW;

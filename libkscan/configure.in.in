@@ -1,5 +1,9 @@
 dnl #MIN_CONFIG
- 
+
+dnl ## temporary disabled until completely fixed (kooka too)
+DO_NOT_COMPILE="$DO_NOT_COMPILE libkscan kooka"
+
+
 dnl These are common macros that you might or might not want to use
 
 dnl Image readers/writers
