@@ -62,10 +62,10 @@ ScanParams::ScanParams( QWidget *parent, const char *name )
     /* Preload icons */
     pixMiniFloppy = SmallIcon( "3floppy_unmount" );
 
-    pixColor = SmallIcon( "colormarker" );
-    pixGray  = SmallIcon( "graymarker" );
-    pixLineArt = SmallIcon( "lineartmarker" );
-    pixHalftone = SmallIcon( "halftonemarker" );
+    pixColor = SmallIcon( "palette_color" );
+    pixGray  = SmallIcon( "palette_gray" );
+    pixLineArt = SmallIcon( "palette_lineart" );
+    pixHalftone = SmallIcon( "palette_halftone" );
 
     
 }
