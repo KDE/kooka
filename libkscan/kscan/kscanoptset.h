@@ -20,33 +20,60 @@
 
 #ifndef KSCANOPTSET_H
 #define KSCANOPTSET_H
+
 #include <qobject.h>
 #include <qstring.h>
 #include <qlist.h>
+#include <qasciidict.h>
 
-/**
- *  KScanOptSet - Store a set of scan option.
- *
- *  KScanOptSet stores a set of scan options, which can be saved and restored
- *  later
- **/
 
-#include "kscandevice.h"
+#include "kscanoptset.h"
 #include "kscanoption.h"
 
+/**
+  * This is a container class for KScanOption-objects, which contain information
+  * about single scanner dependant options. It allows you to store a bunch
+  * of options and accessing them via a iterator.
+  *
+  * The class which is inherited from QAsciiDict does no deep copy of the options
+  * to store by with the standard method insert.
+  * @see backupOption to get a deep copy.
+  *
+  * Note that the destructor of the KScanOptSet only clears the options created
+  * by backupOption.
+  *
+  * @author  Klaas Freitag@SuSE.de
+  * @version 0.1
+  */
 
-class KScanOptSet: QObject
+
+
+class KScanOptSet: public QAsciiDict<KScanOption>
 {
-  Q_OBJECT
 
 public:
-   KScanOptSet( QString , const KScanDevice* );
-  ~KScanOptSet() {};
+   /**
+    *  Constructor to create  a new Container. Takes a string as a name, which
+    *  has no special meaning yet ;)
+    */
+   KScanOptSet( const QString );
+   ~KScanOptSet();
 
+   /**
+    *  function to store a deep copy of an option. Note that this class is inherited
+    *  from QAsciiDict and thus does no deep copies.  This method does.
+    *  @see insert 
+    */
+   bool backupOption( const KScanOption& );
+
+   KScanOption *get( const char *name ) const;
+  
 private:
-  QString name;
+   QString name;
 
-  QList <KScanOption> optionList;
+   /* List to collect objects for which memory was allocated and must be freed */
+   QList<KScanOption> strayCatsList;
+   
 };
 
 #endif // KScanOptSet
