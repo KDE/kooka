@@ -72,6 +72,8 @@ int max_dpi = 600;
 extern int max_dpi;
 #endif
 
+
+
 class ImageCanvas: public QScrollView
 {
    Q_OBJECT
@@ -80,25 +82,22 @@ public:
 		const QImage *start_image = 0,
 		const char *name = 0);
    ~ImageCanvas( );
-
-   void save(int dpi);
-   void setType( const char *mode ) {
-      if( ! mode ) return;
-      type = mode;
-   }
-	
-   int getBrightness() 	{ return brightness; }
-   int getContrast() 	{ return contrast; }
+   int getBrightness() 	        { return brightness; }
+   int getContrast() 	        { return contrast; }
    int getGamma() 		{ return gamma; }
-   double xtomms(double x);
-   double ytomms(double y);
+
    bool hasImage( void ) 	{ return acquired; }
    QRect sel( void );
    int getScaleFactor()         { return( scale_factor ); }
    
    const QImage *rootImage( void )
-      { return( image );}  
+                                { return( image );}  
+
+   enum{ ID_POP_ZOOM, ID_POP_CLOSE, ID_FIT_WIDTH,
+	    ID_FIT_HEIGHT, ID_ORIG_SIZE } PopupIDs;
 				    
+   bool selectedImage( QImage* );
+   
 public slots:
    void setBrightness(int b)
       { brightness = b; }
@@ -112,11 +111,13 @@ public slots:
 	 repaint();
       }	
    void newImage( QImage *new_image );
-	void deleteView( QImage *);
+   void deleteView( QImage *);
    void newRectSlot();
    void newRectSlot( QRect newSel );
    void noRectSlot( void );
    void setScaleFactor( int i );
+
+   void handle_popup(int item );
 
 signals:
    void noRect( void );
@@ -125,15 +126,9 @@ signals:
    void scalingRequested();
    void closingRequested();
 
- protected slots:
- void handle_popup(int item );
- protected:
+protected:
    void drawContents( QPainter * p, int clipx, int clipy, int clipw, int cliph );
-#if 0
-   void drawContentsOffset(QPainter *paint,
-			   int offsetx, int offsety,
-			   int clipx, int clipy, int clipw, int cliph);
-#endif 			
+
    void timerEvent(QTimerEvent *);
    void viewportMousePressEvent(QMouseEvent *);
    void viewportMouseReleaseEvent(QMouseEvent *);
@@ -142,9 +137,6 @@ signals:
    void resizeEvent( QResizeEvent * event );
 	
 private:
-   enum{ ID_POP_ZOOM, ID_POP_CLOSE, ID_FIT_WIDTH, ID_FIT_HEIGHT, ID_ORIG_SIZE } PopupIDs;
-   // ID_POP_CLOSE needs urgently to be the last !
-
    QStrList      urls;
 
    void          createContextMenu( void );
@@ -157,8 +149,6 @@ private:
    QPixmap       *pmScaled;
    float	 used_yscaler;
    float	 used_xscaler;
-   float	 former_used_yscaler;
-   float	 former_used_xscaler;
    QPopupMenu    *contextMenu;
    bool		 maintain_aspect;
 
@@ -169,16 +159,13 @@ private:
    preview_state moving;
    int 		 cr1,cr2;
    int 		 lx,ly;
-   int		 read_on_startup;
-   QString  	 type;
-   bool 	 zoomed,acquired;
-   double 	 xmms,ymms,xmms_cur,ymms_cur,x_offs,y_offs;
+   bool 	 acquired;
 
+   /* private functions for the running ant */
    void drawHAreaBorder(QPainter &p,int x1,int x2,int y,int r = FALSE);
    void drawVAreaBorder(QPainter &p,int x,int y1,int y2,int r = FALSE);
    void drawAreaBorder(QPainter *p,int r = FALSE);
    void update_scaled_pixmap( void );
-
 	
    preview_state classifyPoint(int x,int y);
 };

@@ -67,11 +67,8 @@ ImageCanvas::ImageCanvas(QWidget *parent,
 
 {
   brightness       = 0;
-  read_on_startup  = 1;
   scale_factor     = 100; // means orignal size
-  zoomed           = FALSE;
   contrast         = 0;
-  type             = "Color";
   moving           = MOVE_NONE;
   gamma            = 100;
   maintain_aspect  = true;
@@ -214,7 +211,8 @@ void ImageCanvas::handle_popup( int item )
    double scale;
 
    ImgScaleDialog *zoomDia;
-   QApplication::setOverrideCursor(waitCursor);
+   if( ! image ) return;
+
 
    switch( item )
    {
@@ -223,44 +221,52 @@ void ImageCanvas::handle_popup( int item )
           if( zoomDia->exec() )
           {
               int sf = zoomDia->getSelected();
+	      QApplication::setOverrideCursor(waitCursor);
               setScaleFactor( sf );
               repaint( true);
           }
           delete zoomDia;
+	  QApplication::restoreOverrideCursor();
 	 // emit( scalingRequested());
 	 break;
       case ID_ORIG_SIZE:
-          setScaleFactor(100);
+	 QApplication::setOverrideCursor(waitCursor);
+	 setScaleFactor(100);
+	 QApplication::restoreOverrideCursor();
       break;
       case ID_FIT_WIDTH:
-          scale = 100*(width()-2) / image->width();
-          debug( "Scale ist %f", scale );
-          if( (scale/100 * image->height()) > height() )
-          {
-              /* substract for scrollbar */
-              scale = 100*(width() -25)/image->width();
-          }
-          setScaleFactor( scale );
-          repaint( true );
+	 QApplication::setOverrideCursor(waitCursor);
+	 scale = 100*(width()-2) / image->width();
+	 debug( "Scale ist %f", scale );
+	 if( (scale/100 * image->height()) > height() )
+	 {
+	    /* substract for scrollbar */
+	    scale = 100*(width() -25)/image->width();
+	 }
+	 setScaleFactor( scale );
+	 repaint( true );
+	 QApplication::restoreOverrideCursor();
       break;
       case ID_FIT_HEIGHT:
-          scale = 100*(height()-2) / image->height();
-          debug( "Scale ist %f", scale );
-          if( (scale/100 * image->width()) > width() )
-          {
-              /* substract for scrollbar */
-              scale = 100*(height() -25)/image->height();
-          }
-          setScaleFactor( scale );
-          repaint( true );
-      break;
+	 QApplication::setOverrideCursor(waitCursor);
+
+	 scale = 100*(height()-2) / image->height();
+	 debug( "Scale ist %f", scale );
+	 if( (scale/100 * image->width()) > width() )
+	 {
+	    /* substract for scrollbar */
+	    scale = 100*(height() -25)/image->height();
+	 }
+	 setScaleFactor( scale );
+	 repaint( true );
+	 QApplication::restoreOverrideCursor();
+	 break;
       case ID_POP_CLOSE:
 	 emit( closingRequested());
 	 break;
 
       default: break;
    }
-   QApplication::restoreOverrideCursor();
 
 }
 
@@ -298,26 +304,29 @@ QRect ImageCanvas::sel( void )
    
 }
 
-
-double ImageCanvas::xtomms(double x)
+bool ImageCanvas::selectedImage( QImage *retImg )
 {
-    return (zoomed?xmms_cur:xmms)*x/(double)width();
-}
+   QRect r = sel();
+   bool  result  = false;
+   
+   const QImage* entireImg = this->rootImage();
 
-double ImageCanvas::ytomms(double y)
-{
-    return (zoomed?ymms_cur:ymms)*y/(double)height();
-}
+   if( entireImg )
+   {
+      QSize s = entireImg->size();
 
-void ImageCanvas::save(int dpi)
-{
-  
-  if(selected->isEmpty()) {
-    QMessageBox::warning(NULL,"Warning","Nothing to scan!");
-    return;
-  }
-  QString fname = QFileDialog::getSaveFileName(NULL,"*.bmp");
-  if(fname.isNull()) return;
+      int x = (s.width()  * r.x())/1000;
+      int y = (s.height() * r.y())/1000;
+      int w = (s.width()  * r.width())/1000;
+      int h = (s.height() * r.height())/1000;
+
+      if( w > 0 && h > 0 ) {
+	 *retImg = entireImg->copy( x, y, w, h );
+	 result = true;
+      }
+   }
+   return(result);
+   
 }
 
 
