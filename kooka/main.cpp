@@ -35,9 +35,14 @@
 #include "icons.h"
 
 static const char *description =
-    I18N_NOOP("A KDE Application");
+    I18N_NOOP("<B>Kooka</B> is a KDE2 application which provides access to scanner hardware"
+	      "using the SANE library.<P>"
+	      "Kooka help you scanning, saving your image in the correct"
+	      "image format and performing <B>O</B>ptical <B>C</B>haracter <B>R</B>ecognition on it,"
+	      "using <I>gocr</I>, Joerg Schulenburgs and friends Open Source ocr program.<P>"
+	      "For information on Kooka see <A HREF=http://>The kooka page</A><P>");
 
-static const char *version = "v0.1";
+static const char *version = "v0.2";
 
 QDict<QPixmap> icons;
 
@@ -48,46 +53,46 @@ int main( int argc, char ** argv )
    KAboutData about("kooka", I18N_NOOP("Kooka"), version, description,
 		    KAboutData::License_GPL, "(C) 2000 Klaas Freitag");
    about.addAuthor( "Klaas Freitag", 0, "freitag@suse.de" );
-    KCmdLineArgs::init(argc, argv, &about);
-    KApplication app;
-    KImageIO::registerFormats();
+   KCmdLineArgs::init(argc, argv, &about);
+   KApplication app;
+   KImageIO::registerFormats();
     
-    icons.insert("mini-color", new QPixmap( mini_color ));
-    icons.insert("mini-gray", new QPixmap( mini_gray )); 	
-    icons.insert("mini-lineart", new QPixmap( mini_lineart ));
-    icons.insert("mini-folder", new QPixmap( mini_folder ));
-    icons.insert("mini-floppy", new QPixmap( mini_floppy ));	
-    icons.insert("mini-ray", new QPixmap( mini_ray ));	
-    icons.insert("mini-folder_new", new QPixmap( mini_folder_new ));	
-    icons.insert("mini-trash", new QPixmap( mini_trash ));
-    icons.insert("mini-scan", new QPixmap( mini_scan ));
-    icons.insert("mini-ocr", new QPixmap( mini_ocr ));
-    icons.insert("mini-colorlock", new QPixmap( mini_colorlock ));
-    icons.insert("mini-preview", new QPixmap( mini_preview ));
-    icons.insert("mini-fitwidth", new QPixmap( mini_fitwidth ));
-    icons.insert("mini-fitheight", new QPixmap( mini_fitheight ));
+   icons.insert("mini-color", new QPixmap( mini_color ));
+   icons.insert("mini-gray", new QPixmap( mini_gray )); 	
+   icons.insert("mini-lineart", new QPixmap( mini_lineart ));
+   icons.insert("mini-folder", new QPixmap( mini_folder ));
+   icons.insert("mini-floppy", new QPixmap( mini_floppy ));	
+   icons.insert("mini-ray", new QPixmap( mini_ray ));	
+   icons.insert("mini-folder_new", new QPixmap( mini_folder_new ));	
+   icons.insert("mini-trash", new QPixmap( mini_trash ));
+   icons.insert("mini-scan", new QPixmap( mini_scan ));
+   icons.insert("mini-ocr", new QPixmap( mini_ocr ));
+   icons.insert("mini-colorlock", new QPixmap( mini_colorlock ));
+   icons.insert("mini-preview", new QPixmap( mini_preview ));
+   icons.insert("mini-fitwidth", new QPixmap( mini_fitwidth ));
+   icons.insert("mini-fitheight", new QPixmap( mini_fitheight ));
 
 
-    // register ourselves as a dcop client
-    app.dcopClient()->registerAs(app.name(), false);
-    if (app.isRestored()) {
-       // RESTORE( )
+   // register ourselves as a dcop client
+   app.dcopClient()->registerAs(app.name(), false);
+   if (app.isRestored()) {
+      RESTORE(Kooka);
 
-    }
-    else
-    {
-        // no session.. just start up normally
+   }
+   else
+   {
+      // no session.. just start up normally
        
-       // a.setFont(QFont("helvetica",12));
-       // a.setStyle( new QWindowsStyle() );
+      // a.setFont(QFont("helvetica",12));
+      // a.setStyle( new QWindowsStyle() );
 
 
-       Kooka  *kooka = new Kooka();
-       // a.setMainWidget(ksanetest);
-       /* Ugly, but works for now... */
-       // ksanetest->resize( 900, 720 );
-       // ksanetest->setCaption( "Scanning with SANE" );
-       kooka->show();
-    }
-    return app.exec();
+      Kooka  *kooka = new Kooka();
+      // a.setMainWidget(ksanetest);
+      /* Ugly, but works for now... */
+      // ksanetest->resize( 900, 720 );
+      // ksanetest->setCaption( "Scanning with SANE" );
+      kooka->show();
+   }
+   return app.exec();
 }
