@@ -47,7 +47,7 @@
 #define PIXMAP_HEIGHT "pixmapHeight"
 #define THUMB_MARGIN  "thumbnailMargin"
 #define THUMB_GROUP   "thumbnailView"
-#define BG_WALLPAPER  "BackGroundWallpaper"
+#define BG_WALLPAPER  "BackGroundTile"
 #define STD_TILE_IMG  "kooka/pics/thumbviewtile.png"
 
 class QPixmap;
@@ -108,9 +108,9 @@ public slots:
     */
    void slImageChanged( KFileItem * );
    void slImageDeleted( KFileItem * );
-   void slSetBackGround( const QString& file = QString());
+   void slSetBackGround( );
    void slCheckForUpdate( KFileItem* );
-   void readSettings();
+   bool readSettings();
    
 protected:
    
@@ -135,6 +135,7 @@ private:
    int     m_thumbMargin;
    QColor  m_marginColor1;
    QColor  m_marginColor2;
+   QString m_bgImg;
 };
 
 #endif

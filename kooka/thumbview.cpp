@@ -56,11 +56,7 @@ ThumbView::ThumbView( QWidget *parent, const char *name )
 
    setItemsMovable( false );
 
-   KStandardDirs stdDir;
-   QString bgImg = stdDir.findResource( "data", STD_TILE_IMG );
-   
-   kdDebug(28000) << "Background-Image: " << bgImg << endl;
-   slSetBackGround( bgImg );
+   slSetBackGround();
    
    connect( this, SIGNAL( executed( QIconViewItem* )),
 	    this, SLOT( slDoubleClicked( QIconViewItem* )));
@@ -71,18 +67,71 @@ ThumbView::~ThumbView()
    saveConfig();
 }
 
-void ThumbView::readSettings()
+bool ThumbView::readSettings()
 {
    KConfig *cfg = KGlobal::config();
    cfg->setGroup( THUMB_GROUP );
+   bool dirty = false;
    
-   m_marginColor1 = cfg->readColorEntry( MARGIN_COLOR1, &(colorGroup().base()));
-   m_marginColor2 = cfg->readColorEntry( MARGIN_COLOR2, &(colorGroup().foreground()));
-   m_pixWidth     = cfg->readNumEntry( PIXMAP_WIDTH, 100 );
-   m_pixHeight    = cfg->readNumEntry( PIXMAP_HEIGHT, 120 );
-   m_thumbMargin  = cfg->readNumEntry( THUMB_MARGIN, 5 );
+   QColor color;
+   color = cfg->readColorEntry( MARGIN_COLOR1, &(colorGroup().base()));
+   if( color != m_marginColor1 )
+   {
+      dirty = true;
+      m_marginColor1 = color;
+   }
 
+   color = cfg->readColorEntry( MARGIN_COLOR2, &(colorGroup().foreground()));
+   if( color != m_marginColor2 )
+   {
+      dirty = true;
+      m_marginColor2 = color;
+   }
+
+   int value;
+   bool sizeDirty = false;
+   value = cfg->readNumEntry( THUMB_MARGIN, 5 );
+   if( value != m_thumbMargin )
+   {
+      sizeDirty = true;
+      m_thumbMargin = value;
+   }
+
+   value = cfg->readNumEntry( PIXMAP_WIDTH, 100 );
+   if( value != m_pixWidth )
+   {
+      sizeDirty  = true;
+      m_pixWidth = value;
+   }
+   
+   value = cfg->readNumEntry( PIXMAP_HEIGHT, 120 );
+   if( value != m_pixHeight)
+   {
+      sizeDirty  = true;
+      m_pixHeight = value;
+   }
+
+   if( sizeDirty )
+   {
+      int gX = 2*m_thumbMargin+m_pixWidth+10;
+      int gY = 2*m_thumbMargin+m_pixHeight+10;
+      setGridX(gX);
+      setGridY(gY);
+      kdDebug(28000) << "Setting Grid " << gX << " - " << gY << endl;
+   }
+
+   KStandardDirs stdDir;
+   QString newBgImg = cfg->readEntry( BG_WALLPAPER, stdDir.findResource( "data", STD_TILE_IMG ) );
+   
+   if( m_bgImg != newBgImg )
+   {
+      m_bgImg = newBgImg;
+      slSetBackGround();
+   }
+
+   return (sizeDirty || dirty);
 }
+
 void ThumbView::slDoubleClicked( QIconViewItem *qIt )
 {
    ThumbViewItem *it = static_cast<ThumbViewItem*>( qIt );
@@ -95,18 +144,19 @@ void ThumbView::slDoubleClicked( QIconViewItem *qIt )
    }
 }
 
-void ThumbView::slSetBackGround( const QString& file )
+void ThumbView::slSetBackGround( )
 {
-   QPixmap bgPix( QSize(16, 16));
-   if( file.isEmpty())
+   QPixmap bgPix;
+   if( m_bgImg.isEmpty())
    {
+      bgPix.resize( QSize(16, 16));
       bgPix.fill( QPixmap::blue );
    }
    else
    {
-      bgPix.load( file );
+      bgPix.load( m_bgImg );
    }
-     
+   
    setPaletteBackgroundPixmap ( bgPix ); 
 
 }
