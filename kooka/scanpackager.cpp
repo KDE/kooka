@@ -332,9 +332,11 @@ void ScanPackager::slFileRename( QListViewItem* it, const QString& newStr, int )
 
 	 /* to urlTo the really used filename is written */
 	 setSelected( item, false );
+
 	 if( ImgSaver::renameImage( urlFrom, urlTo, false, this ) )
 	 {
 	    kdDebug(28000) << "renaming OK" << endl;
+            emit fileRenamed( item->fileItem(), urlTo );
 	    success=true;
 	 }
 	 else
@@ -344,7 +346,7 @@ void ScanPackager::slFileRename( QListViewItem* it, const QString& newStr, int )
       }
    }
 
-   if( ! success )
+   if( !success )
    {
       kdDebug(28000) << "renaming failed" << endl;
       /* restore the name */

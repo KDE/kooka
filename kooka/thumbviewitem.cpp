@@ -26,10 +26,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <kfiletreeviewitem.h>
 #include <kfileitem.h>
 #include <kfileiconview.h>
-#include <kimageeffect.h>
 
 #include "thumbview.h"
 #include "thumbviewitem.h"
@@ -40,6 +38,12 @@ ThumbViewItem::ThumbViewItem(QIconView *parent, const QString &text,
    :KFileIconViewItem( parent, text, pixmap,fi )
 {
 
+}
+
+void ThumbViewItem:: setItemUrl( const KURL& u )
+{
+    m_url = u;
+    setText( m_url.fileName());
 }
 
 

@@ -46,9 +46,9 @@ public:
 		  const QPixmap &pixmap,
 		  KFileItem *fi );
 
-   void setItemUrl( const KURL& u )
-      { m_url = u; }
-   KURL itemUrl() const
+    void setItemUrl( const KURL& u );
+
+    KURL itemUrl() const
       { return m_url; }
 
 private:

@@ -258,6 +258,9 @@ KookaView::KookaView( KParts::DockMainWindow *parent, const QCString& deviceToUs
    connect( packager,  SIGNAL( fileChanged( KFileItem* )),
 	    m_thumbview, SLOT( slImageChanged( KFileItem* )));
 
+   connect( packager, SIGNAL( fileRenamed( KFileItem*, const KURL& )),
+            m_thumbview, SLOT( slImageRenamed( KFileItem*, const KURL& )));
+
    connect( packager,  SIGNAL( fileDeleted( KFileItem* )),
 	    m_thumbview, SLOT( slImageDeleted( KFileItem* )));
 

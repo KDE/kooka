@@ -204,6 +204,23 @@ void ThumbView::slImageChanged( KFileItem *kfit )
    slNewFileItems( li );
 }
 
+void ThumbView::slImageRenamed( KFileItem *kfit, const KURL& newUrl )
+{
+    const KURL url = kfit->url();
+
+    for ( QIconViewItem *item = m_iconView->firstItem(); item; item = item->nextItem() )
+    {
+        ThumbViewItem *it=static_cast<ThumbViewItem*>( item );
+
+        if( url == it->itemUrl() )
+        {
+            it->setItemUrl( newUrl );
+
+            break;
+        }
+   }
+}
+
 
 void  ThumbView::slCheckForUpdate( KFileItem *kfit )
 {

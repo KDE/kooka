@@ -131,8 +131,9 @@ signals:
    void         aboutToShowImage( const KURL& ); /* starting to load image */
    void         imageChanged( KFileItem* );     /* the image has changed  */
 
-   void         fileDeleted( KFileItem* );
-   void         fileChanged( KFileItem* );
+    void         fileDeleted( KFileItem* );
+    void         fileChanged( KFileItem* );
+    void         fileRenamed( KFileItem*, const KURL& );
 
 private:
    QString     localFileName( KFileTreeViewItem* it ) const;

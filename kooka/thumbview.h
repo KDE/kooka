@@ -115,6 +115,9 @@ public slots:
    void slCheckForUpdate( KFileItem* );
    bool readSettings();
    void clear();
+
+    void slImageRenamed( KFileItem*, const KURL& );
+
 protected:
 
    void saveConfig();
