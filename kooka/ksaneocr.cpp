@@ -42,9 +42,11 @@
 
 #include <img_canvas.h>
 
+#include "img_saver.h"
 #include "kadmosocr.h"
 #include "kocrbase.h"
 #include "kocrkadmos.h"
+#include "kocrocrad.h"
 #include "config.h"
 #include "ksaneocr.h"
 #include "kocrgocr.h"
@@ -59,7 +61,7 @@
 #include <qpainter.h>
 #include <qpen.h>
 #include <qbrush.h>
-
+#include <qfileinfo.h>
 
 /*
  * Thread support is disabled here because the kadmos lib seems not to be
@@ -119,11 +121,20 @@ KSANEOCR::KSANEOCR( QWidget*, KConfig *cfg ):
         /* -- ocr dialog information -- */
         konf->setGroup( CFG_GROUP_OCR_DIA );
         QString eng = konf->readPathEntry(CFG_OCR_ENGINE);
+
+	if( eng == "ocrad" )
+	{
+	    m_ocrEngine = OCRAD;
+	}
+
 #ifdef HAVE_KADMOS
-        if( eng == QString("kadmos") ) m_ocrEngine = KADMOS;
+        else if( eng == QString("kadmos") ) m_ocrEngine = KADMOS;
 #endif
     }
     kdDebug(28000) << "OCR engine is " << ((m_ocrEngine==KADMOS)?"KADMOS":"GOCR") << endl;
+
+    /* resize m_blocks to size 1 since there is at least one block */
+    m_blocks.resize(1);
 }
 
 
@@ -189,6 +200,10 @@ bool KSANEOCR::startOCRVisible( QWidget *parent )
    {
        m_ocrProcessDia = new KGOCRDialog ( parent, m_spellInitialConfig );
    }
+   else if( m_ocrEngine == OCRAD )
+   {
+       m_ocrProcessDia = new ocradDialog( parent, m_spellInitialConfig );
+   }
    else if( m_ocrEngine == KADMOS )
    {
 #ifdef HAVE_KADMOS
@@ -247,12 +262,10 @@ void KSANEOCR::finishedOCRVisible( bool success )
 
        emit newOCRResultText(goof);
 
-       // emit newOCRResultPixmap( m_resPixmap );
-
        if( m_imgCanvas )
        {
            /* The image canvas is non-zero. Set it to our image */
-           m_imgCanvas->newImage( m_img );
+           m_imgCanvas->newImageHoldZoom( m_img );
 
            /* now handle double clicks to jump to the word */
            m_applyFilter=true;
@@ -344,6 +357,92 @@ void KSANEOCR::slotStopOCR()
 
 }
 
+void KSANEOCR::startOCRAD( )
+{
+    ocradDialog *ocrDia = static_cast<ocradDialog*>(m_ocrProcessDia);
+
+    QString orfUrl = ocrDia->orfUrl();
+    const QString cmd = ocrDia->getOCRCmd();
+
+    if( orfUrl.isEmpty() )
+    {
+	/* The url is empty. Start the program to fill up a temp file */
+	orfUrl = ImgSaver::tempSaveImage( m_img, "PBM", 1 ); // m_tmpFile->name();
+    }
+
+    /* temporar file for orf result */
+    KTempFile *tmpOrf = new KTempFile( QString(), ".orf" );
+    tmpOrf->setAutoDelete( false );
+    tmpOrf->close();
+    m_tmpFileName = QFile::encodeName(tmpOrf->name());
+
+
+    if( daemon ) {
+	delete( daemon );
+	daemon = 0;
+    }
+
+    daemon = new KProcess;
+    Q_CHECK_PTR(daemon);
+
+    *daemon << cmd;
+    *daemon << QString("-x");
+    *daemon <<  m_tmpFileName;                   // the orf result file
+    *daemon << QFile::encodeName( orfUrl );      // The name of the image
+    m_ocrResultText = "";
+
+    connect(daemon, SIGNAL(processExited(KProcess *)),
+	    this,   SLOT(  ocradExited(KProcess*)));
+    connect(daemon, SIGNAL(receivedStdout(KProcess *, char*, int)),
+	    this,   SLOT(  ocradStdIn(KProcess*, char*, int)));
+    connect(daemon, SIGNAL(receivedStderr(KProcess *, char*, int)),
+	    this,   SLOT(  ocradStdErr(KProcess*, char*, int)));
+
+    if (!daemon->start(KProcess::NotifyOnExit, KProcess::All))
+    {
+	kdDebug(28000) <<  "Error starting ocrad-daemon!" << endl;
+    }
+    else
+    {
+	kdDebug(28000) << "Start OK" << endl;
+
+    }
+    delete tmpOrf;
+}
+
+
+void KSANEOCR::ocradExited(KProcess* )
+{
+    kdDebug(28000) << "ocrad exit " << endl;
+    QString err;
+    bool parseRes = true;
+
+    if( ! readORF(m_tmpFileName, err) )
+    {
+        KMessageBox::error( m_parent,
+                            i18n("Parsing of the OCR Result File failed:") + err,
+                            i18n("Parse Problem"));
+        parseRes = false;
+    }
+    finishedOCRVisible( parseRes );
+
+}
+
+void KSANEOCR::ocradStdErr(KProcess*, char* buffer, int buflen)
+{
+   QString errorBuffer = QString::fromLocal8Bit(buffer, buflen);
+   kdDebug(28000) << "ocrad says on stderr: " << errorBuffer << endl;
+
+}
+
+void KSANEOCR::ocradStdIn(KProcess*, char* buffer, int buflen)
+{
+   QString errorBuffer = QString::fromLocal8Bit(buffer, buflen);
+   kdDebug(28000) << "ocrad says on stdin: " << errorBuffer << endl;
+}
+
+
+
 
 /*
  * This slot is fired if the user clicks on the 'Start' button of the GUI, no
@@ -357,6 +456,11 @@ void KSANEOCR::startOCRProcess( void )
    m_ocrProcessDia->startOCR();
 
    kapp->processEvents();
+   if( m_ocrEngine == OCRAD )
+   {
+       startOCRAD();
+   }
+
    if( m_ocrEngine == GOCR )
    {
        /*
@@ -383,15 +487,10 @@ void KSANEOCR::startOCRProcess( void )
        else
            format = "PPM";
 
-       m_tmpFile = new KTempFile( QString(), "."+format.lower());
-       m_tmpFile->setAutoDelete( false );
-       m_tmpFile->close();
+       QString tmpFile = ImgSaver::tempSaveImage( m_img, format ); // m_tmpFile->name();
 
-       QString tmpFile = m_tmpFile->name();
-
-       m_img->save( tmpFile, format.latin1() );
-
-       kdDebug(28000) <<  "Starting GOCR-Command: " << cmd << " on file " << tmpFile << ", format " << format << endl;
+       kdDebug(28000) <<  "Starting GOCR-Command: " << cmd << " on file " << tmpFile
+		      << ", format " << format << endl;
 
        if( daemon ) {
            delete( daemon );
@@ -448,7 +547,7 @@ void KSANEOCR::startOCRProcess( void )
        }
    }
 #ifdef HAVE_KADMOS
-   else
+   if( m_ocrEngine == KADMOS )
    {
        KadmosDialog *kadDia = static_cast<KadmosDialog*>(m_ocrProcessDia);
 
@@ -512,6 +611,7 @@ void KSANEOCR::startOCRProcess( void )
         * the result slot is called if start()=run() has finished. In the result slot, finished()
         * is only a dummy always returning true to avoid more preprocessor tags here.
         * Hope that works ...
+        * It does not :( That is why it is not used here. Maybe some day...
         */
 
 #ifdef QT_THREAD_SUPPORT
@@ -624,6 +724,218 @@ void KSANEOCR::gocrExited(KProcess* d)
    m_img->load( "out30.bmp" );
 
    finishedOCRVisible( d->normalExit() );
+}
+
+/*
+ *  A sample orf snippet:
+ *
+ *  # Ocr Results File. Created by GNU ocrad version 0.3pre1
+ *  total blocks 2
+ *  block 1 0 0 560 344
+ *  lines 5
+ *  line 1 chars 10 height 26
+ *  71 109 17 26;2,'0'1,'o'0
+ *  93 109 15 26;2,'1'1,'l'0
+ *  110 109 18 26;1,'2'0
+ *  131 109 18 26;1,'3'0
+ *  151 109 19 26;1,'4'0
+ *  172 109 17 26;1,'5'0
+ *  193 109 17 26;1,'6'0
+ *  213 108 17 27;1,'7'0
+ *  232 109 18 26;1,'8'0
+ *  253 109 17 26;1,'9'0
+ *  line 2 chars 14 height 27
+ *
+ */
+
+bool KSANEOCR::readORF( const QString& fileName, QString& errStr )
+{
+    QFile file( fileName );
+    QRegExp rx;
+    bool error = false;
+
+    /* use a global line number counter here, not the one from the orf. The orf one
+     * starts at 0 for every block, but we want line-no counting page global here.
+     */
+    unsigned int lineNo = 0;
+    int	blockCnt = 0;
+    int currBlock = -1;
+
+    /* clear the ocr result page */
+    m_ocrPage.clear();
+    kdDebug(28000) << "***** starting to analyse orf at " << fileName << " *****" << endl;
+
+    /* some  checks on the orf */
+    QFileInfo fi( fileName );
+    if( ! fi.exists() ) {
+        error = true;
+        errStr = i18n("The orf %1 does not exist").arg(fileName);
+    }
+    if( ! error && ! fi.isReadable() ) {
+        error = true;
+        errStr = i18n("Permission denied on file %1").arg(fileName);
+    }
+
+
+    if ( !error && file.open( IO_ReadOnly ) )
+    {
+        QTextStream stream( &file );
+        QString line;
+	QString recLine; // recognised line
+
+        while ( !stream.atEnd() )
+	{
+            line = stream.readLine(); // line of text excluding '\n'
+	    int len = line.length();
+
+	    if( ! line.startsWith( "#" ))  // Comments
+	    {
+		kdDebug(28000) << "# Line check |" << line << "|" << endl;
+		if( line.startsWith( "total blocks " ) )  // total count fo blocks, must be first line
+		{
+		    blockCnt = line.right( len - 13 /* QString("total blocks ").length() */ ).toInt();
+		    kdDebug(28000) << "Amount of blocks: " << blockCnt << endl;
+		    m_blocks.resize(blockCnt);
+		}
+		else if( line.startsWith( "block "))
+		{
+		    rx.setPattern("^block (\\d+) (\\d+) (\\d+) (\\d+) (\\d+)");
+		    if( rx.search( line ) > -1)
+		    {
+			currBlock = (rx.cap(1).toInt())-1;
+			kdDebug(28000) << "Setting current block " << currBlock << endl;
+			QRect r( rx.cap(2).toInt(), rx.cap(3).toInt(), rx.cap(4).toInt(), rx.cap(5).toInt());
+			m_blocks[currBlock] = r;
+		    }
+		    else
+		    {
+			kdDebug(28000) << "WRN: Unknown block line: " << line << endl;
+                        // Not a killing bug
+		    }
+		}
+		else if( line.startsWith( "lines " ))
+		{
+		    int lineCnt = line.right( len - 6 /* QString("lines ").length() */).toInt();
+		    m_ocrPage.resize(m_ocrPage.size()+lineCnt);
+		    kdDebug(28000) << "Resized ocrPage to linecount " << lineCnt << endl;
+		}
+		else if( line.startsWith( "line" ))
+		{
+		    // line 5 chars 13 height 20
+		    rx.setPattern("^line (\\d+) chars (\\d+) height \\d+" );
+		    if( rx.search( line )>-1 )
+		    {
+			kdDebug(28000) << "RegExp-Result: " << rx.cap(1) << " : " << rx.cap(2) << endl;
+			int charCount = rx.cap(2).toInt();
+			ocrWord word;
+			QRect   brect;
+			ocrWordList ocrLine;
+
+			/* Loop over all characters in the line. Every char has it's own line
+			 * defined in the orf file */
+			kdDebug(28000) << "Found " << charCount << " chars for line " << lineNo << endl;
+			QRect wordRect;
+			for( int c=0; c < charCount && !stream.atEnd(); c++ )
+			{
+			    /* Read one line per character */
+			    QString charLine = stream.readLine();
+			    int semiPos = charLine.find(';');
+			    if( semiPos == -1 )
+			    {
+				kdDebug(28000) << "invalid line: " << charLine << endl;
+			    }
+			    else
+			    {
+ 				QString rectStr = charLine.left( semiPos );
+				QString results = charLine.remove(0, semiPos+1 );
+                                bool lineErr = false;
+
+				// rectStr contains the rectangle info of for the character
+				// results contains the real result caracter
+
+                                // find the amount of alternatives.
+                                int altCount = 0;
+                                int h = results.find(',');  // search the first comma
+                                if( h > -1 ) {
+                                    // kdDebug(28000) << "Results of count search: " << results.left(h) << endl;
+                                    altCount = results.left(h).toInt();
+                                    results = results.remove( 0, h+1 );
+                                } else {
+                                    lineErr = true;
+                                }
+                                // kdDebug(28000) << "Results-line after cutting the alter: " << results << endl;
+                                QChar detectedChar = UndetectedChar;
+                                if( !lineErr )
+                                {
+                                    /* take the first alternative only FIXME */
+                                    if( altCount > 0 )
+                                        detectedChar = results[1];
+                                    // kdDebug(28000) << "Found " << altCount << " alternatives for "
+                                    //	       << QString(detectedChar) << endl;
+                                }
+
+                                /* Analyse the rectangle */
+                                if( ! lineErr )
+                                {
+                                    rx.setPattern( "(\\d+) (\\d+) (\\d+) (\\d+)");
+                                    if( rx.search( rectStr ) != -1 )
+                                    {
+                                        /* unite the rectangles */
+                                        QRect privRect( rx.cap(1).toInt(), rx.cap(2).toInt(),
+                                                        rx.cap(3).toInt(), rx.cap(4).toInt() );
+                                        word.setRect( word.rect() | privRect );
+                                    }
+                                    else
+                                    {
+                                        kdDebug(28000) << "ERR: Unable to read rect info for char!" << endl;
+                                        lineErr = true;
+                                    }
+                                }
+
+                                if( ! lineErr )
+                                {
+                                    /* store word if finished by a space */
+                                    if( detectedChar == ' ' )
+                                    {
+                                        ocrLine.append( word );
+                                        word = ocrWord();
+                                    }
+                                    else
+                                    {
+                                        word.append( detectedChar );
+                                    }
+                                }
+			    }
+			}
+			if( !word.isEmpty() )
+			    ocrLine.append( word );
+			if( lineNo < m_ocrPage.size() )
+			{
+			    kdDebug(29000) << "Store result line no " << lineNo << "=\"" <<
+                                ocrLine.first() << "..." << endl;
+			    m_ocrPage[lineNo] = ocrLine;
+			    lineNo++;
+			}
+			else
+			{
+			    kdDebug(28000) << "ERR: line index overflow: " << lineNo << endl;
+			}
+		    }
+                    else
+                    {
+                        kdDebug(28000) << "ERR: Unknown line found: " << line << endl;
+                    }
+		}
+		else
+		{
+		    kdDebug(29000) << "Unknown line: " << line << endl;
+		}
+	    }  /* is a comment? */
+
+        }
+        file.close();
+    }
+    return !error;
 }
 
 
@@ -1079,6 +1391,7 @@ void KSANEOCR::slSaveSpellCfg( )
 
 }
 
+char KSANEOCR::UndetectedChar = '_';
 
 /* -- */
 #include "ksaneocr.moc"

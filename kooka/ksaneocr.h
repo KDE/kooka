@@ -32,8 +32,6 @@
 #include "ocrword.h"
 
 #define CFG_OCR_ENGINE    "ocrEngine"
-#define CFG_OCRE_GOCR     "gocr"
-#define CFG_OCRE_KADMOS   "kadmos"
 
 #define CFG_OCR_KSPELL    "ocrSpellSettings"
 #define CFG_WANT_KSPELL   "ocrKSpellEnabled"
@@ -77,7 +75,7 @@ class KSANEOCR : public QObject
 {
     Q_OBJECT
 public:
-    enum OCREngines{ GOCR, KADMOS };
+    enum OCREngines{ GOCR, OCRAD, KADMOS };
 
     KSANEOCR( QWidget*, KConfig *);
     ~KSANEOCR();
@@ -190,6 +188,7 @@ protected:
      */
     bool eventFilter( QObject *object, QEvent *event );
 
+    void startOCRAD();
 protected slots:
     void slotClose ();
     void slotStopOCR();
@@ -227,6 +226,15 @@ private slots:
     void gocrStdErr(KProcess*, char* buffer, int buflen);
     void gocrExited(KProcess*);
 
+    void ocradStdIn(KProcess*, char* buffer, int buflen);
+    void ocradStdErr(KProcess*, char* buffer, int buflen);
+    void ocradExited(KProcess*);
+
+    /*
+     * reads orf files from a file and fills the result structures
+     * accordingly.
+     */
+    bool readORF( const QString&, QString& );
 
 private:
     void     cleanUpFiles( void );
@@ -240,6 +248,7 @@ private:
     KookaImage      *m_img;
     QString         m_ocrResultText;
     QString         m_ocrResultImage;
+    QString         m_tmpFileName;
 
     OCREngines      m_ocrEngine;
     QPixmap         m_resPixmap;
@@ -254,7 +263,7 @@ private:
     KSpellConfig    *m_spellInitialConfig;
 
     /* ValueVector of wordLists for every line of ocr results */
-    ocrPage          m_ocrPage;
+    ocrBlock         m_ocrPage; /* one block contains all lines of the page */
     QWidget          *m_parent;
     /* current processed line to speed kspell correction */
     unsigned         m_ocrCurrLine;
@@ -263,6 +272,9 @@ private:
     int              m_currHighlight;
     bool             m_applyFilter;
 
+    rectList         m_blocks;   // dimensions of blocks
+
+    static char UndetectedChar;
 #ifdef HAVE_KADMOS
     Kadmos::CRep   m_rep;
 #endif
