@@ -1,0 +1,3 @@
+dnl AC_SEARCH_LIBS(pgm2asc,Pgm2asc)
+dnl AC_CHECK_LIB(Pgm2asc,pgm2asc)
+dnl should define HAVE_LIBPGM2ASC if available

@@ -1,0 +1,19 @@
+Kooka
+ 
+Kooka is a raster image scan program for the kde2 system.  
+
+It uses the SANE-lib for which you find more information under
+http://www.mostang.com/sane/
+It also uses a related activity kscan, which will be a kde2 module for
+scanner access. Kooka is the first program using the kscan module.
+
+KScan and especially the 'walking ants' in Kookas image-canvas are based
+on the 1997 work of Ivan Shvedunov <ivan_iv@rf-hp.npi.msu.su>, his homepage
+can be found at http://rf-hp.npi.msu.su.
+
+KScan and Kooka are under construction. Dont expect everything to work
+fine.
+
+
+Nov. 2000, Klaas Freitag <freitag@suse.de>
+----------------------------------------------------------------------
