@@ -52,7 +52,7 @@
 #include <kurldrag.h>
 #include <kpopupmenu.h>
 #include <kaction.h>
-#include <klineeditdlg.h>
+#include <kinputDialog.h>
 #include <kiconloader.h>
 #include <kfiledialog.h>
 #include <kurl.h>
@@ -1176,14 +1176,13 @@ void ScanPackager::slotDeleteItems( )
 /* ----------------------------------------------------------------------- */
 void ScanPackager::slotCreateFolder( )
 {
-   KLineEditDlg d(i18n("Please enter a name for the new folder:"), QString::null, this);
-   d.setCaption(i18n("New Folder"));
+   bool ok;
+   QString folder = KInputDialog::getText( i18n( "New Folder" ),
+         i18n( "Please enter a name for the new folder:" ), QString::null,
+         &ok, this );
 
-   if( d.exec() )
+   if( ok )
    {
-      QString folder = d.text();
-      if( folder.length() > 0 )
-      {
 	 /* KIO create folder goes here */
 
 	 KFileTreeViewItem *it = currentKFileTreeViewItem();
@@ -1215,7 +1214,6 @@ void ScanPackager::slotCreateFolder( )
 
 	    }
 	 }
-      }
    }
 }
 
