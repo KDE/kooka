@@ -1,9 +1,9 @@
 /***************************************************************************
-                          img_saver.cpp  -  description                              
-                             -------------------                                         
-    begin                : Mon Dec 27 1999                                           
-    copyright            : (C) 1999 by Klaas Freitag                         
-    email                : Klaas.Freitag@gmx.de                                     
+                          img_saver.cpp  -  description
+                             ------------------- 
+    begin                : Mon Dec 27 1999
+    copyright            : (C) 1999 by Klaas Freitag
+    email                : Klaas.Freitag@gmx.de
  ***************************************************************************/
 
 /***************************************************************************
@@ -11,7 +11,7 @@
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
  *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   * 
+ *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
 
@@ -21,108 +21,125 @@
 #include <unistd.h>
 
 
-#ifdef HAVE_KDE
+#include <kglobal.h>
 #include <kconfig.h>
-#include <kscan.h>
-#endif
+#include <kdialog.h>
+
 #include <qdir.h>
 #include <qlayout.h>
 #include <qfileinfo.h>
 #include <qmessagebox.h>
+#include <qvbox.h>
+#include <qbuttongroup.h>
 
+#include "resource.h"
 #include "img_saver.h"
 
-#ifndef HAVE_KDE
-#define i18n(x) (x)
-#endif
+
+#define OP_FILE_ASK_FORMAT "AskForSaveFormat"
+#define OP_FORMAT_HICOLOR  "HiColorSaveFormat"
+#define OP_FORMAT_COLOR    "ColorSaveFormat"
+#define OP_FORMAT_GRAY     "GraySaveFormat"
+#define OP_FORMAT_BW       "BWSaveFormat"
+#define OP_PREVIEW_GROUP   "ScanPreview"
+#define OP_PREVIEW_FILE     "PreviewFile"
+#define OP_FILE_GROUP      "Files"
 
 FormatDialog::FormatDialog( QWidget *parent, const char *name,  
 			    QStrList *formats = 0)
-   : QDialog( parent, name, true )
+   :KDialogBase( parent, "FormDialog", true,
+                 /* Tabbed,*/ I18N( "Kooka save Assistant" ),
+		 Ok|Cancel, Ok, parent,  name )
+
 {
-   if( ! formats ) {
+   if( ! formats )
+   {
       // BIG ERROR - something wrong with ImageIO
       return;
    }
    buildHelp();
    // readConfig();
-   setCaption( i18n( "Save Assistent" ));
-   // Layout-Boxes
-   QVBoxLayout *bigdad = new QVBoxLayout( this, 2 );
-   // QHBoxLayout *hl1= new QHBoxLayout( );  // Caption
-   QHBoxLayout *hl2= new QHBoxLayout( 10 );  // Big middle
-   QHBoxLayout *hl3= new QHBoxLayout( 10 );  // Buttons
-   QVBoxLayout *vl1= new QVBoxLayout( 10 );  // Selection List
-   QVBoxLayout *vl2= new QVBoxLayout( 10 );  // Help and subformat
+   // QFrame *page = addPage( QString( "Save the image") );
+   QFrame *page = new QFrame( this );
+   page->setFrameStyle( QFrame::Box | QFrame::Sunken );
+   CHECK_PTR( page );
+   setMainWidget( page );
+   
+   QVBoxLayout *bigdad = new QVBoxLayout( page, marginHint(), spacingHint());
+   CHECK_PTR(bigdad);
 
+   // some nice words
+   QLabel *l0 = new QLabel( page );
+   CHECK_PTR(l0);
+   l0->setText( I18N( "<B>Save Assistant</B><P>Select an image format to save the scanned image." ));
+   bigdad->addWidget( l0 );
+
+   QFrame *f1 = new QFrame( page );
+   f1->setFrameStyle( QFrame::HLine | QFrame::Sunken );
+   bigdad->addWidget( f1 );
+   
+   // Layout-Boxes
+   // QHBoxLayout *hl1= new QHBoxLayout( );  // Caption
+   QHBoxLayout *lhBigMiddle = new QHBoxLayout( spacingHint() );  // Big middle
+   CHECK_PTR(lhBigMiddle);
+   bigdad->addLayout( lhBigMiddle );
+   QVBoxLayout *lvFormatSel = new QVBoxLayout( spacingHint() );  // Selection List
+   CHECK_PTR(lvFormatSel);
+   lhBigMiddle->addLayout( lvFormatSel );
    
    // Insert Scrolled List for formats
-   QLabel *l1 = new QLabel( this );
-   l1->setText( i18n( "Available image formats:" ));
-   // QSize s = l1->sizeHint();
-   // l1->setFixedHeight( s.height());
-
-   lb_format = new QListBox( this, "ListBoxFormats" );
+   QLabel *l1 = new QLabel( page );
+   CHECK_PTR(l1);
+   l1->setText( I18N( "Available image formats:" ));
+   
+   lb_format = new QListBox( page, "ListBoxFormats" );
+   CHECK_PTR(lb_format);
    lb_format->insertStrList( formats );
    connect( lb_format, SIGNAL( highlighted(const QString&)),
 	    SLOT( showHelp(const QString&)));
    
    // Insert label for helptext
-   l_help = new QLabel( this );
-   l_help->setFrameStyle( QFrame::Panel ); //| QFrame::Sunken | WordBreak);
-   l_help->setText( i18n("-No format selected-" ));
-   l_help->setAlignment( AlignTop | AlignCenter );
+   l_help = new QLabel( page );
+   CHECK_PTR(l_help);
+   l_help->setFrameStyle( QFrame::Panel|QFrame::Sunken );
+   l_help->setText( I18N("-No format selected-" ));
+   l_help->setAlignment( AlignVCenter | AlignHCenter );
 
    // Insert Selbox for subformat
-   l2 = new QLabel( this );
-   l2->setText( i18n( "Select the image-sub-format" ));
-   // s = l2->sizeHint();
-   // l2->setFixedHeight( s.height());
-   cb_subf = new QComboBox( this, "ComboSubFormat" );
+   l2 = new QLabel( page );
+   CHECK_PTR(l2);
+   l2->setText( I18N( "Select the image-sub-format" ));
+   cb_subf = new QComboBox( page, "ComboSubFormat" );
+   CHECK_PTR( cb_subf );
 
-   // OK- and Cancelbutton
-   b_ok     = new QPushButton( i18n("OK"), this, "ButtOK" );
-   connect( b_ok, SIGNAL(clicked()), SLOT(accept()) );
-   // b_ok->setDefault( true );
-   b_cancel = new QPushButton( i18n("Cancel"), this, "ButtCancel" );
-   connect( b_cancel, SIGNAL(clicked()), SLOT(reject()) );
-   // Connect Doubleclick on List to OK
-   // connect( lb_format, SIGNAL(
-   // Layout-Hirarchie
-   // QLabel *l_caption = new QLabel( i18n("Save Assistent"), this );
-   // l_caption->setFrameStyle( QFrame::Panel  | QFrame::Sunken );
+   // Checkbox to store setting
+   
+#if 0 
+   QFrame *vf = new QFrame(page);
+   vf->setFrameStyle( QFrame::Panel|QFrame::Sunken );
+#endif
+   cbRemember = new QCheckBox(I18N("Remember this format for this image type"),
+			      page );
 
+   QCheckBox *cbDontAsk  = new QCheckBox(I18N("Dont ask again for that format"),
+			      page );
+
+   // cbRemember->setFrameStyle( QFrame::Panel|QFrame::Sunken );
+   CHECK_PTR( cbRemember );
+   
    // bigdad->addWidget( l_caption, 1 );
-   bigdad->addLayout( hl2, 6 );
-   bigdad->addLayout( hl3, 1 );
+   lvFormatSel->addWidget( l1, 1 );
+   lvFormatSel->addWidget( lb_format, 6 );
+   lvFormatSel->addWidget( l2, 1 );
+   lvFormatSel->addWidget( cb_subf, 1 );
 
-   hl2->addLayout( vl1,4 ); // Layout for Selection List
-   hl2->addLayout( vl2,6 ); // Layout for Help and Subformat
+   lhBigMiddle->addWidget( l_help, 2 );
+   //bigdad->addStretch(1);
+   bigdad->addWidget( cbRemember , 2 );
+   bigdad->addWidget( cbDontAsk , 2 );
 
-   // s = cb_subf->sizeHint();
-   // cb_subf->setFixedHeight( s.height());
-   // vl1->addStretch( 1 );
-   vl1->addWidget( l1, 1 );
-   vl1->addWidget( lb_format, 10  );
-   vl1->addStretch( 1 );
-
-   // Right gap: Help and subformat
-   vl2->addStretch( 1 );
-   vl2->addWidget( l_help ,8);
-   vl2->addStretch( 1 );
-   vl2->addWidget( l2 );
-   vl2->addWidget( cb_subf, 3 );
-   vl2->addStretch( 2 );
-
-   hl3->addStretch( 1 );
-   hl3->addWidget( b_cancel,5 );
-   hl3->addStretch( 1 );
-   hl3->addWidget( b_ok, 5);
-   hl3->addStretch( 1 );
-
-   // activate Layouts
+   // bigdad->addWidget( cbRemember,1 );
    bigdad->activate();
-   // resize( QSize( 394, 292 ));
    
 }
 
@@ -137,32 +154,45 @@ void FormatDialog::showHelp( const QString& item )
       // and check subformats
       check_subformat( helptxt );
    } else {
-      l_help->setText( i18n("-no hint available-" ));
+      l_help->setText( I18N("-no hint available-" ));
    }      
 }
 
 void FormatDialog::check_subformat( const char *format )
 {
    // not yet implemented
+   debug( "This is format in check_subformat: %s", format );
    cb_subf->setEnabled( false );
    // l2 = Label "select subformat" ->bad name :-|
    l2->setEnabled( false );
 }
 
-QString FormatDialog::getFormat( void )
+void FormatDialog::setSelectedFormat( QString fo )
+{
+   QListBoxItem *item = lb_format->findItem( fo );
+
+   if( item )
+   {
+      // Select it.
+      lb_format->setSelected( lb_format->index(item), true );
+   }
+}
+
+
+QString FormatDialog::getFormat( void ) const
 {
    int item = lb_format->currentItem();
 
-   if( item > -1 ){
-      const char *f = lb_format->text( item );
-      if( f )
-	 return( f );
+   if( item > -1 )
+   {
+      const QString f = lb_format->text( item );
+      return( f );
    }
    return( "BMP" );
 }
 
 
-QString FormatDialog::getSubFormat( void )
+QString FormatDialog::getSubFormat( void ) const
 {
    // Not yet...
    return( "" );
@@ -180,10 +210,22 @@ void FormatDialog::buildHelp( void )
 }
 
 
+bool FormatDialog::rememberFormat( void ) const
+{
+   bool result = false;
+   
+   if( cbRemember )
+   {
+      return( cbRemember->isChecked());
+   }
+
+   return( result );
+}
+
 
 /* ********************************************************************** */
 
-ImgSaver::ImgSaver(  QWidget *parent, const char *name=0, const char *dir=0 )
+ImgSaver::ImgSaver(  QWidget *parent, const char *name, const char *dir )
    : QObject( parent, name )
 {
 
@@ -194,56 +236,56 @@ ImgSaver::ImgSaver(  QWidget *parent, const char *name=0, const char *dir=0 )
    all_formats = QImage::outputFormats();
    if( ! dir )
    {
-   	if( path.isRelative() )
-      	directory = home.absPath()+ "/.kscan/";
-    	else
-    	 	directory = "";  /* absolute Path given in name  ! */
+      if( path.isRelative() )
+	 directory = home.absPath()+ "/.kscan/";
+      else
+	 directory = "";  /* absolute Path given in name  ! */
    }
    else
    {
       directory = dir;
-	   if( directory.right( 1 ) != "/" )
- 			directory += "/";
- 		createDir( directory );
+      if( directory.right( 1 ) != "/" )
+	 directory += "/";
+      createDir( directory );
    }
 
    /* Check directories */
-	if( name )
-	{
-		directory += QString( name );
-		createDir( directory );
+   if( name )
+   {
+      directory += QString( name );
+      createDir( directory );
 
       if( directory.right( 1 ) != "/" )
-	 		directory += "/";
-	}		
+	 directory += "/";
+   }		
 	
-	readConfig();
+   readConfig();
    
 }
 
 /* Needs a full qualified directory name */
 void ImgSaver::createDir( QString dir )
 {
- 	QFileInfo fi( dir );
+   QFileInfo fi( dir );
  	
- 	if( ! fi.exists() )
- 	{
-		debug( "Wrn: Directory does not exist -> try to create  !" );
+   if( ! fi.exists() )
+   {
+      debug( "Wrn: Directory does not exist -> try to create  !" );
       if( mkdir( dir, S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH ) != 0 )
       {
-       	QMessageBox::warning( 0,"Warning","The directory \n" + dir +
-				  "\nto save images does not exist\nand could not be created !\n"
-				  "Please check the permissions.", QMessageBox::Warning,
-				  QMessageBox::Ok | QMessageBox::Default );
+	 QMessageBox::warning( 0,"Warning","The directory \n" + dir +
+			       "\nto save images does not exist\nand could not be created !\n"
+			       "Please check the permissions.", QMessageBox::Warning,
+			       QMessageBox::Ok | QMessageBox::Default );
 				
       }
-	}
-	if( ! fi.isWritable() )
+   }
+   if( ! fi.isWritable() )
    {
-     	QMessageBox::warning( 0,"Warning","The directory \n" + dir +
-				  "\nto save images is not writeable.\n"
-				  "Please check the permissions.", QMessageBox::Warning,
-				  QMessageBox::Ok | QMessageBox::Default );
+      QMessageBox::warning( 0,"Warning","The directory \n" + dir +
+			    "\nto save images is not writeable.\n"
+			    "Please check the permissions.", QMessageBox::Warning,
+			    QMessageBox::Ok | QMessageBox::Default );
 				
    }
 }
@@ -255,8 +297,33 @@ void ImgSaver::createDir( QString dir )
 ImgSaveStat ImgSaver::saveImage( QImage *image )
 {
    ImgSaveStat stat;
+   picType imgType;
    
-   QString format = findFormat( PT_IMAGE );
+   if( !image ) return( ISS_ERR_PARAM );
+
+   /* Find out what kind of image it is  */
+   if( image->depth() > 8 )
+   {
+      imgType = PT_HICOLOR_IMAGE;
+   }
+   else
+   {
+      if( image->depth() == 1 )
+      {
+	 imgType = PT_BW_IMAGE;
+      }
+      else
+      {
+	 imgType  = PT_COLOR_IMAGE;
+	 if( image->allGray() )
+	 {
+	    imgType = PT_GRAY_IMAGE;
+	 }
+      }
+   }
+
+   
+   QString format = findFormat( imgType );
    QString subformat = findSubFormat( format );
    // Call save-Function with this params
 
@@ -324,7 +391,7 @@ ImgSaveStat ImgSaver::savePreview( QImage *image )
 
    // Previewfile always comes absolute
 
-	ImgSaveStat stat = save( image, previewfile, format, "" );
+   ImgSaveStat stat = save( image, previewfile, format, "" );
 
 #ifdef HAVE_KDE
    if( stat == ISS_OK )
@@ -339,6 +406,9 @@ ImgSaveStat ImgSaver::savePreview( QImage *image )
    return( stat );
 }
 
+/*
+ * findFormat does all the stuff with the dialog.
+ */
 QString ImgSaver::findFormat( picType type )
 {
    // Preview always as bitmap
@@ -349,24 +419,91 @@ QString ImgSaver::findFormat( picType type )
       return( "BMP" );
    
    // real images 
-   if( ask_for_format ) {
-
+   if( ask_for_format )
+   {
       FormatDialog fd( 0, "FormatDialog", &all_formats );
 
-      if( fd.exec() ) {
-	 		QString format = fd.getFormat();
-	 		subformat = fd.getSubFormat();
+      // set default values
+      QString defFormat = getFormatForType( type );
+      fd.setSelectedFormat( defFormat );
+      
+      if( fd.exec() )
+      {
+	 QString format = fd.getFormat();
+	 debug( "Storing to format <%s>", (const char*) format );
+	 if( fd.rememberFormat() )
+	 {
+	    storeFormatForType( type, format );
+	 }
+	 subformat = fd.getSubFormat();
 
-	 		return( format );
+	 return( format );
       }
    }
    return( "" );
    
 }
 
+QString ImgSaver::getFormatForType( picType type ) const
+{
+   KConfig *konf = KGlobal::config ();
+   CHECK_PTR( konf );
+   konf->setGroup( OP_FILE_GROUP );
+
+   QString f;
+   
+   switch( type )
+   {
+      case PT_COLOR_IMAGE:
+	 f = konf->readEntry( OP_FORMAT_COLOR, "BMP" );
+	 break;
+      case PT_GRAY_IMAGE:
+	 f = konf->readEntry( OP_FORMAT_GRAY, "BMP" );
+	 break;
+      case PT_BW_IMAGE:
+	 f = konf->readEntry( OP_FORMAT_BW, "BMP" );
+	 break;
+      case PT_HICOLOR_IMAGE:
+	 f = konf->readEntry( OP_FORMAT_HICOLOR, "BMP" );
+	 break;
+      default:
+	 f = "BMP";
+	 break;
+   }
+   return( f );
+}
+
+
+void ImgSaver::storeFormatForType( picType type, QString format )
+{
+   KConfig *konf = KGlobal::config ();
+   CHECK_PTR( konf );
+   konf->setGroup( OP_FILE_GROUP );
+
+   switch( type )
+   {
+      case PT_COLOR_IMAGE:
+	 konf->writeEntry( OP_FORMAT_COLOR, format );
+	 break;
+      case PT_GRAY_IMAGE:
+	 konf->writeEntry( OP_FORMAT_GRAY, format  );
+	 break;
+      case PT_BW_IMAGE:
+	 konf->writeEntry( OP_FORMAT_BW, format );
+	 break;
+      case PT_HICOLOR_IMAGE:
+	 konf->writeEntry( OP_FORMAT_HICOLOR, format );
+	 break;
+      default:
+	 debug( "Wrong Type  - cant store format setting" );
+	 break;
+   }
+}
+
 
 QString ImgSaver::findSubFormat( QString format )
 {
+   debug( "Searching Subformat for %s", (const char*) format );
    return( subformat );
    
 }
@@ -378,13 +515,14 @@ ImgSaveStat ImgSaver::save( QImage *image, QString filename,
 			    const char *format,
 			    const char *subformat )
 {
+
    bool result = false;
    
    if( ! format || !image ) return( ISS_ERR_PARAM );
    
    if( image ) {
-      debug( "ImgSaver: saving image to <%s> as <%s>", (const char*) filename,
-	     (const char*) format );
+      debug( "ImgSaver: saving image to <%s> as <%s/%s>", (const char*) filename,
+	     format, subformat );
       result = image->save( filename, format );
 
       // remember the last processed file - only the filename - no path
@@ -405,32 +543,38 @@ ImgSaveStat ImgSaver::save( QImage *image, QString filename,
 void ImgSaver::readConfig( void )
 {
 
-#ifdef HAVE_KDE
-   KConfig *konf = kapp->getConfig();
+   KConfig *konf = KGlobal::config ();
+   CHECK_PTR( konf );
    konf->setGroup( OP_FILE_GROUP );
-
    ask_for_format = konf->readBoolEntry( OP_FILE_ASK_FORMAT, true );
 
    konf->setGroup( OP_PREVIEW_GROUP );
-   previewfile = konf->readEntry( OP_PREVIEW_FILE, "~/.ksane_preview" );
-#else
-	previewfile = directory + "preview.bmp";
 
-	ask_for_format = true;
-#endif	
+   /* This is a bit ugly, but will be fixed later */
+   /* The save root is defined to $HOME/.kscan in scanpackager, this should be
+    * handled in at a central point. TODO ! */
+   QDir home = QDir::home();
+   QString previewfile = home.absPath() + "/.kscan/preview.bmp";
+   
+   previewfile = konf->readPathEntry( OP_PREVIEW_FILE, previewfile );
+
 }
+
+
+
+
 
 QString ImgSaver::errorString( ImgSaveStat stat )
 {
    QString re;
    
    switch( stat ) {
-      case ISS_OK:           re = i18n( " Image save OK      " ); break;
-      case ISS_ERR_PERM:     re = i18n( " permission Error   " ); break;
-      case ISS_ERR_FILENAME: re = i18n( " bad filename       " ); break;
-      case ISS_ERR_NO_SPACE: re = i18n( " no space on device " ); break;
-      case ISS_ERR_UNKNOWN:  re = i18n( " unknown error      " ); break;
-      case ISS_ERR_PARAM:    re = i18n( " Parameter wrong    " ); break;
+      case ISS_OK:           re = I18N( " Image save OK      " ); break;
+      case ISS_ERR_PERM:     re = I18N( " permission Error   " ); break;
+      case ISS_ERR_FILENAME: re = I18N( " bad filename       " ); break;
+      case ISS_ERR_NO_SPACE: re = I18N( " no space on device " ); break;
+      case ISS_ERR_UNKNOWN:  re = I18N( " unknown error      " ); break;
+      case ISS_ERR_PARAM:    re = I18N( " Parameter wrong    " ); break;
       default: re = "";
    }
    return( re );

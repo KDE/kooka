@@ -1,9 +1,9 @@
 /***************************************************************************
-                          img_saver.h  -  description                              
-                             -------------------                                         
-    begin                : Mon Dec 27 1999                                           
-    copyright            : (C) 1999 by Klaas Freitag                         
-    email                :                                      
+                          img_saver.h  -  description                      
+                             -------------------           
+    begin                : Mon Dec 27 1999                               
+    copyright            : (C) 1999 by Klaas Freitag                     
+    email                :                                     
  ***************************************************************************/
 
 /***************************************************************************
@@ -21,14 +21,18 @@
 #include <qobject.h>
 #include <qwidget.h>
 #include <qlabel.h>
+#include <qarray.h>
+#include <qstring.h>
 #include <qimage.h>
 #include <stdlib.h>
 #include <qpushbutton.h>
 #include <qdialog.h>
 #include <qpushbutton.h>
 #include <qcombobox.h>
+#include <qcheckbox.h>
 #include <qlistbox.h>
 #include <qdict.h>
+#include <kdialogbase.h>
 
 /**
  *  enum ImgSaveStat:
@@ -54,7 +58,11 @@ typedef enum {
 typedef enum {
    PT_PREVIEW,
    PT_THUMBNAIL,
-   PT_IMAGE
+   PT_HICOLOR_IMAGE,
+   PT_COLOR_IMAGE,
+   PT_GRAY_IMAGE,
+   PT_BW_IMAGE,
+   PT_FINISHED
 } picType;
 
 
@@ -63,37 +71,45 @@ typedef enum {
  *  Asks the user for the image-Format and gives help for
  *  selecting it.
  **/
-class FormatDialog:public QDialog {
+class FormatDialog:public KDialogBase
+{
    Q_OBJECT
 public:
    FormatDialog( QWidget *parent, const char *name, QStrList *formats );
 
 
-   QString      	getFormat( void );
-   QString      	getSubFormat( void );
-   QString      	errorString( ImgSaveStat stat );
- protected slots:
-   void 			 	showHelp( const QString& item );
+   QString      getFormat( void ) const;
+   QString      getSubFormat( void ) const;
+   QString      errorString( ImgSaveStat stat );
+
+   bool         rememberFormat( void ) const;
+   
+public slots:
+    void        setSelectedFormat( QString );
+
+
+protected slots:
+   void 	showHelp( const QString& item );
  
 private:
-   void			 	check_subformat( const char *format );
-   void 				buildHelp( void );
-   void 			 	readConfig( void );
+   void		check_subformat( const char *format );
+   void 	buildHelp( void );
+   void 	readConfig( void );
 
    QDict<char> 	format_help;
    QComboBox   	*cb_subf;
    QListBox    	*lb_format;
    QLabel      	*l_help;
-   QLabel			*l2;
-   QButton			*b_ok, *b_cancel;
-   bool				ask_for_format;
+   QLabel	*l2;
+   bool		ask_for_format;
+   QCheckBox    *cbRemember;
 
 };
 
 /**
  *  Class ImgSaver:
  *  The main class of this module. It manages all saving of images
- *  in kgallery.
+ *  in kooka
  *  It asks the user for the img-format if desired, creates thumbnails
  *  and cares for database entries (later ;)
  **/
@@ -113,7 +129,9 @@ public:
 
    QString     errorString( ImgSaveStat );
    QString     lastFilename(void) { return( last_file ); };
-
+   QString     getFormatForType( picType ) const;
+   void        storeFormatForType( picType, QString );
+   
 public slots:
    ImgSaveStat saveImage( QImage *image );
    ImgSaveStat saveImage( QImage *image, QString filename );
@@ -135,7 +153,8 @@ private:
    QString     directory;    // dir where the image should be saved
    QString     last_file;
    bool	       ask_for_format;
-   
+
+   QDict<QString> formats;
 };
 
 #endif
