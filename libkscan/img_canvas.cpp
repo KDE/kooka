@@ -37,14 +37,14 @@
 #include <qstring.h>
 #include <qmessagebox.h>
 #include <qscrollview.h>
-#include <qpopupmenu.h>
+#include <kpopupmenu.h>
 #include <qlabel.h>
 #include <qdict.h>
 #include <klocale.h>
 
 #include <kpixmapio.h>
 #include <kdebug.h>
-
+#include <kiconloader.h>
 #include <kcmenumngr.h>
 
 #define __IMG_CANVAS_CPP__
@@ -200,12 +200,18 @@ void ImageCanvas::newImage( QImage *new_image )
 void ImageCanvas::createContextMenu( void )
 {
 
-   contextMenu = new QPopupMenu();
+   contextMenu = new KPopupMenu();
+   KIconLoader *loader = KGlobal::iconLoader();
 
-   contextMenu->insertItem( i18n("fit to width"),  ID_FIT_WIDTH );
-   contextMenu->insertItem( i18n("fit to height"), ID_FIT_HEIGHT );
-   contextMenu->insertItem( i18n("set zoom..."),   ID_POP_ZOOM );
-   contextMenu->insertItem( i18n("original size"), ID_ORIG_SIZE );
+   // contextMenu->insertTitle( i18n("Image Canvas" )); enable after kde3
+   contextMenu->insertItem( *(new QPixmap( loader->loadIcon( "scaletowidth",KIcon::Small ))),
+			    i18n("fit to width"),  ID_FIT_WIDTH );
+   contextMenu->insertItem( *(new QPixmap( loader->loadIcon( "scaletoheight",KIcon::Small ))),
+			    i18n("fit to height"), ID_FIT_HEIGHT );
+   contextMenu->insertItem( *(new QPixmap( loader->loadIcon( "viewmag",KIcon::Small ))),
+			    i18n("set zoom..."),   ID_POP_ZOOM );
+   contextMenu->insertItem( *(new QPixmap( loader->loadIcon( "scaleorig",KIcon::Small ))),
+			    i18n("original size"), ID_ORIG_SIZE );
    contextMenu->setCheckable( true );
    connect( contextMenu, SIGNAL( activated(int)), this, SLOT(handle_popup(int)));
 
