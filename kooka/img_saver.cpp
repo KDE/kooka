@@ -390,10 +390,10 @@ ImgSaveStat ImgSaver::savePreview( QImage *image )
    QString format = findFormat( PT_PREVIEW );
 
    // Previewfile always comes absolute
-
+      
    ImgSaveStat stat = save( image, previewfile, format, "" );
 
-#ifdef HAVE_KDE
+#if 0
    if( stat == ISS_OK )
    {
       KConfig *konf = kapp->getConfig();
@@ -520,7 +520,8 @@ ImgSaveStat ImgSaver::save( QImage *image, QString filename,
    
    if( ! format || !image ) return( ISS_ERR_PARAM );
    
-   if( image ) {
+   if( image )
+   {
       debug( "ImgSaver: saving image to <%s> as <%s/%s>", (const char*) filename,
 	     format, subformat );
       result = image->save( filename, format );
@@ -554,7 +555,7 @@ void ImgSaver::readConfig( void )
    /* The save root is defined to $HOME/.kscan in scanpackager, this should be
     * handled in at a central point. TODO ! */
    QDir home = QDir::home();
-   QString previewfile = home.absPath() + "/.kscan/preview.bmp";
+   previewfile = home.absPath() + "/.kscan/preview.bmp";
    
    previewfile = konf->readPathEntry( OP_PREVIEW_FILE, previewfile );
 
