@@ -19,7 +19,7 @@
 
 #include <qwidget.h>
 #include <kopenwith.h>
-#include <kookaiface.h>
+#include "kookaiface.h"
 #include <kdockwidget.h>
 #include <qtabwidget.h>
 #include <qlayout.h>

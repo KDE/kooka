@@ -45,7 +45,6 @@
 #include "devselector.h" /* for definition of config key :( */
 #include "kscandevice.h"
 #include <qslider.h>
-#include <qgroupbox.h>
 #include <qcheckbox.h>
 #include <kconfig.h>
 #include <qbuttongroup.h>
