@@ -4,6 +4,7 @@
 #include <qstrlist.h>
 #include <qtooltip.h>
 #include <qsizepolicy.h> 
+#include <qapplication.h>
 
 #include <kglobal.h>
 #include <klocale.h>
@@ -17,6 +18,8 @@
 #include "img_canvas.h"
 #include "previewer.h"
 #include "scandialog.h"
+
+#define SCANDIA_SPLITTER_SIZES "ScanDialogSplitter %1"
 
 extern "C" {
     void * init_libkscan() {
@@ -42,7 +45,8 @@ KScanDialog * ScanDialogFactory::createDialog( QWidget *parent,
 
 
 ScanDialog::ScanDialog( QWidget *parent, const char *name, bool modal )
-    : KScanDialog( Tabbed, Close|Help, parent, name, modal )
+   : KScanDialog( Tabbed, Close|Help, parent, name, modal ),
+     good_scan_connect(false)
 {
     QVBox *page = addVBoxPage( i18n("&Scanning") );
     
@@ -63,12 +67,11 @@ ScanDialog::ScanDialog( QWidget *parent, const char *name, bool modal )
     connect( m_device, SIGNAL( sigNewPreview( QImage* )),
              this, SLOT( slotNewPreview( QImage* )));
 
-    resize(700, 500);
-    
     m_previewer->setEnabled( false ); // will be enabled in setup()
 
     /* Options-page */
     createOptionsTab( );
+
 }
 
 
@@ -147,6 +150,12 @@ bool ScanDialog::setup()
    // that more work to open it needs to be done in the setup slot like opening
    // the selector if neccessary etc.
 
+   if( m_scanParams )
+   {
+      /* if m_scanParams exist it means, that the dialog is already open */
+      return true;
+   }
+   
    m_scanParams = new ScanParams( splitter );
    connect( m_previewer->getImageCanvas(), SIGNAL( newRect(QRect)),
 	    m_scanParams, SLOT(slCustomScanSize(QRect)));
@@ -155,7 +164,7 @@ bool ScanDialog::setup()
 
    connect( m_scanParams, SIGNAL( scanResolutionChanged( int, int )),
 	    m_previewer, SLOT( slNewScanResolutions( int, int )));
-    
+
 
    /* continue to attach a real scanner */
    /* first, get the list of available devices from libkscan */
@@ -215,13 +224,49 @@ bool ScanDialog::setup()
    if( splitter && m_scanParams )
       splitter->moveToFirst( m_scanParams );
 
-   if( good_scan_connect )   
+   if( good_scan_connect )
+   {
       m_previewer->setEnabled( true );
+      m_previewer->loadPreviewImage( configDevice );
+   }
+
+    /* set initial sizes */
+    setInitialSize( configDialogSize( GROUP_STARTUP ));
+
+    KConfig *kfg = KGlobal::config();
+    if( kfg )
+    {
+       QWidget *desk = QApplication::desktop();
+
+       kfg->setGroup( GROUP_STARTUP );
+       /* Since this is a vertical splitter, only the width is important */
+       QString key = QString::fromLatin1( SCANDIA_SPLITTER_SIZES ).arg( desk->width());
+       kdDebug(29000) << "Read Splitter-Sizes " << key  << endl;
+       splitter->setSizes( kfg->readIntListEntry( key ));
+    }
+   
    return true;
 }
 
 void ScanDialog::slotClose()
 {
+   /* Save the dialog start size to global configuration */
+   saveDialogSize( GROUP_STARTUP, true );
+
+   if( splitter )
+   {
+      KConfig *kfg = KGlobal::config();
+      if( kfg )
+      {
+	 QWidget *desk = QApplication::desktop();
+
+	 kfg->setGroup( GROUP_STARTUP );
+	 /* Since this is a vertical splitter, only the width is important */
+	 QString key = QString::fromLatin1( SCANDIA_SPLITTER_SIZES ).arg( desk->width());
+	 kfg->writeEntry( key, splitter->sizes(), true, true);
+      }
+   }
+
    if( m_scanParams )
    {
       delete m_scanParams;
