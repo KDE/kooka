@@ -464,7 +464,8 @@ void KookaView::print()
 {
     /* For now, print a single file. Later, print multiple images to one page */
     KookaImage *img = packager->getCurrImage();
-
+    if ( !img )
+        return;
     KPrinter printer; // ( true, pMode );
     printer.setUsePrinterResolution(true);
     printer.addDialogPage( new ImgPrintDialog( img ));
