@@ -241,7 +241,7 @@ EngineError KadmosDialog::findClassifierPath()
     KConfig *conf = KGlobal::config ();
     KConfigGroupSaver gs( conf, CFG_GROUP_KADMOS );
 
-    m_customClassifierPath = conf->readEntry( CFG_KADMOS_CLASSIFIER_PATH );
+    m_customClassifierPath = conf->readPathEntry( CFG_KADMOS_CLASSIFIER_PATH );
 #if 0
     if( m_customClassifierPath == "NotFound" )
     {
@@ -348,7 +348,7 @@ void KadmosDialog::slFontChanged( int id )
 
 
 
-    m_customClassifierPath = conf->readEntry( CFG_KADMOS_CLASSIFIER_PATH );
+    m_customClassifierPath = conf->readPathEntry( CFG_KADMOS_CLASSIFIER_PATH );
 
     bool enable = true;
 

@@ -283,7 +283,7 @@ void Kooka::saveProperties(KConfig *config)
     // later when this app is restored
 
    //if (!m_view->currentURL().isNull())
-   //     config->writeEntry("lastURL", m_view->currentURL());
+   //     config->writePathEntry("lastURL", m_view->currentURL());
    kdDebug(28000) << "In kooka's saveProperties !" << endl;
    config->setGroup( KOOKA_STATE_GROUP );
    config->writeEntry( PREFERENCE_DIA_TAB, m_prefDialogIndex );
@@ -299,7 +299,7 @@ void Kooka::readProperties(KConfig *config)
     // in 'saveProperties'
    config->setGroup( KOOKA_STATE_GROUP );
    m_prefDialogIndex = config->readNumEntry( PREFERENCE_DIA_TAB, 0 );
-   // QString url = config->readEntry("lastURL");
+   // QString url = config->readPathEntry("lastURL");
 
 }
 

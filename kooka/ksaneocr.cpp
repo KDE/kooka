@@ -118,7 +118,7 @@ KSANEOCR::KSANEOCR( QWidget*, KConfig *cfg ):
 
         /* -- ocr dialog information -- */
         konf->setGroup( CFG_GROUP_OCR_DIA );
-        QString eng = konf->readEntry(CFG_OCR_ENGINE);
+        QString eng = konf->readPathEntry(CFG_OCR_ENGINE);
 #ifdef HAVE_KADMOS
         if( eng == QString("kadmos") ) m_ocrEngine = KADMOS;
 #endif

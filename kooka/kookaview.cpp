@@ -436,7 +436,7 @@ void KookaView::loadStartupImage( void )
 
       if( wantReadOnStart )
       {
-	 QString startup = konf->readEntry( STARTUP_IMG_SELECTION, "" );
+	 QString startup = konf->readPathEntry( STARTUP_IMG_SELECTION );
 
 	 if( !startup.isEmpty() )
 	 {
@@ -931,7 +931,7 @@ void KookaView::saveProperties(KConfig *config)
    kdDebug(28000) << "Saving Properties for KookaView !" << endl;
    config->setGroup( GROUP_STARTUP );
    /* Get with path */
-   config->writeEntry( STARTUP_IMG_SELECTION, packager->getCurrImageFileName(true));
+   config->writePathEntry( STARTUP_IMG_SELECTION, packager->getCurrImageFileName(true));
 
 }
 

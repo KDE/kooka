@@ -306,7 +306,7 @@ void KookaPreferences::setupThumbnailPage()
 
    /* Backgroundimage */
    KStandardDirs stdDir;
-   QString bgImg = konf->readEntry( BG_WALLPAPER, "" );
+   QString bgImg = konf->readPathEntry( BG_WALLPAPER );
    if( bgImg.isEmpty() )
       bgImg = stdDir.findResource( "data", STD_TILE_IMG );
 
@@ -407,7 +407,7 @@ void KookaPreferences::slotApply( void )
     KURL bgUrl = m_tileSelector->selectedURL().url();
     bgUrl.setProtocol("");
     kdDebug(28000) << "Writing tile-pixmap " << bgUrl.prettyURL() << endl;
-    konf->writeEntry( BG_WALLPAPER, bgUrl.url() );
+    konf->writePathEntry( BG_WALLPAPER, bgUrl.url() );
 
     /* ** OCR Options ** */
     konf->setGroup( CFG_GROUP_OCR_DIA );
