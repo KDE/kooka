@@ -16,7 +16,7 @@ INCLUDES         = $(all_includes) $(sane_includes) -I$(top_srcdir)/kscan/kscan
 kooka_LDFLAGS = $(KDE_RPATH) $(all_libraries)
 
 # the libraries to link against.
-kooka_LDADD   = $(LIB_KFILE) -L$(top_srcdir)/kscan/kscan -lkscan
+kooka_LDADD   = $(LIB_KFILE) -L$(top_srcdir)/libkscan -lkscan
 
 # $(LIB_KSCAN)
 
