@@ -197,7 +197,7 @@ Previewer::Previewer(QWidget *parent, const char *name )
 
 
     /** Autoselection Box **/
-    d->m_autoSelGroup = new QGroupBox( 1, Horizontal, i18n("Autoselection"), this);
+    d->m_autoSelGroup = new QGroupBox( 1, Horizontal, i18n("Auto-Selection"), this);
 
     QHBox *hbox       = new QHBox(d->m_autoSelGroup);
     d->m_cbAutoSel    = new QCheckBox( i18n("active on"), hbox );
@@ -213,7 +213,7 @@ Previewer::Previewer(QWidget *parent, const char *name )
 
 
     QToolTip::add( d->m_cbBackground,
-                   i18n("Select if the a scan of the empty\n"
+                   i18n("Select whether a scan of the empty\n"
                         "scanner glass results in a\n"
                         "black or a white image."));
     connect( d->m_cbAutoSel, SIGNAL(toggled(bool) ), SLOT(slAutoSelToggled(bool)));
@@ -232,7 +232,7 @@ Previewer::Previewer(QWidget *parent, const char *name )
     l1->setBuddy(d->m_sliderThresh);
 
 #if 0  /** Dustsize-Slider: No deep impact on result **/
-    (void) new QLabel( i18n("Dustsize:"), grBox );
+    (void) new QLabel( i18n("Dust Size:"), grBox );
     d->m_sliderDust = new QSlider( 0, 50, 5, d->m_dustsize,  Qt::Horizontal, grBox );
     connect( d->m_sliderDust, SIGNAL(valueChanged(int)), SLOT(slSetAutoSelDustsize(int)));
 #endif
@@ -622,7 +622,7 @@ void Previewer::checkForScannerBg()
             kdDebug(29000) << "Dont know the scanner background yet!" << endl;
 
             goWhite = ( KMessageBox::questionYesNo( this,
-                                                    i18n("The Autodection of images on the preview depends on the background color of the preview image (Think of a preview of an empty scanner).\nPlease select if the background of the preview image is black or white"),
+                                                    i18n("The autodetection of images on the preview depends on the background color of the preview image (Think of a preview of an empty scanner).\nPlease select whether the background of the preview image is black or white"),
                                                     i18n("Image Autodetection"),
                                                     i18n("White"), i18n("Black") ) == KMessageBox::Yes );
             kdDebug(29000) << "User said " << isWhite << endl;
