@@ -1,17 +1,15 @@
 <?xml version="1.0" ?>
 <!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.1-Based Variant V1.0//EN" "dtd/kdex.dtd" [
-  <!ENTITY % kappname "<application>kooka</application>">
+  <!ENTITY kappname "&kooka;">
+  <!ENTITY package "kdegraphics">
   <!ENTITY % addindex "IGNORE">
-  <!ENTITY % English "INCLUDE" 
-> <!-- change language only here --> 
-
+  <!ENTITY % English "INCLUDE"> <!-- change language only here --> 
 ]>
 
 <book lang="&language;">
 
 <bookinfo>
-<title
->The <application>Kooka</application> Manual</title>
+<title>The &kooka; Manual</title>
 
 <authorgroup>
 <author> <firstname>Martin</firstname> 
@@ -40,10 +38,11 @@
 >&FDLNotice;</legalnotice>
 
 <date>2002-02-04</date>
-<releaseinfo>0.10</releaseinfo>
+<releaseinfo>0.33.00</releaseinfo>
 
-<abstract><para><application>Kooka</application> is a very useful KDE
-	scanning application.</para></abstract> 
+<abstract><para>&kooka; is a very useful &kde; scanning
+application.</para></abstract> 
+
 
 <keywordset>
 <keyword>KDE</keyword>
@@ -55,376 +54,413 @@
 <chapter id="introduction">
 <title>Introduction</title>
 
-<para><application>Kooka</application> is a KDE application that enables easy
-scanning using SANE libraries. Therefore, the SANE
-package must be installed to use
-<application>Kooka</application>. Clear and concise use 
+<para>&kooka; is a &kde; application that enables easy scanning using
+<acronym>SANE</acronym> libraries. Therefore,<acronym>SANE</acronym>
+the package must be installed to use &kooka;. Clear and concise use
 was the focus of its development.</para>
-<para>Character recognition is also provided by the built-in text recognition
-program gocr. Install <application>gocr</application> 
-to use this functionality. After character recognition
-is complete, the recognized material can be opened in the text editor
-<application>Kate</application>
-with just one click, where you can edit the contents.
-</para>
+
+<para>Character recognition is also provided by the built-in text
+recognition program gocr. Install <application>gocr</application> to
+use this functionality. After character recognition is complete, the
+recognized material can be opened in the text editor &kate; with just
+one click, where you can edit the contents.</para>
 
 </chapter>
 
 <chapter id="how-to-use">
-<title
->Application Instructions</title>
+<title>Application Instructions</title>
 
-<para>
-The web site 
-<ulink url="http://www.mostang.com/sane">http://www.mostang.com/sane</ulink> 
-has information about supported
-scanners. Refer to it before purchasing a scanner, if possible.</para>
-
+<para>The web site <ulink
+url="http://www.mostang.com/sane">http://www.mostang.com/sane</ulink>
+has information about supported scanners. Refer to it before
+purchasing a scanner, if possible.</para>
 
 <sect1 id="screen">
-<title>The <application>Kooka</application> Main Window</title>
+<title>The &kooka; Main Window</title>
 
-<screenshot> <screeninfo>The 
-<application>Kooka</application> Main Window </screeninfo> 
-<mediaobject> <imageobject>
+<screenshot> 
+<screeninfo>The &kooka; Main Window </screeninfo> 
+<mediaobject> 
+<imageobject>
 <imagedata fileref="common/kooka_mainctrl.png" format="PNG"/></imageobject> 
-</mediaobject> </screenshot>  
-<note>
-<para
->Start <application>Kooka</application> from a console by simply entering
-<prompt>%</prompt> <userinput>kooka</userinput>.
-Create a link on the &kde; desktop, which uses a
-scanner icon, if desired.</para></note> 
+</mediaobject> 
 
-<para>The main window in <application>Kooka</application> consists of three
-frames. At the top, see both icon and a menu panels.  Use the mouse to
-enlarge or reduce the windows as needed.</para>
+</screenshot>  
+
+<para>Start &kooka; from a console by simply entering
+<userinput><command>kooka</command></userinput>.  Create a link on the
+&kde; desktop, which uses a scanner icon, if desired.</para>
+
+<para>The main window in &kooka; consists of three frames. At the top,
+see both icon and a menu panels.  Use the mouse to enlarge or reduce
+the windows as needed.</para>
 
 <itemizedlist> 
-<listitem><para>The window to the upper left consists of two tabs, which allow you to switch
-between the preview and the integrated  file browser called the
-gallery.  The working directory is displayed in the lower part of the window
-along with the directory where the scan will be saved.</para></listitem> 
-<listitem><para>
-Make your scanner-dependent settings which are dependent on the scanner you have
-connected in the lower left window.  Usually, these are settings for
-resolution, brightness and contrast, scanning mode (e.g., color, gray, or
-binary), and for gamma values.</para>
+<listitem>
+<para>The navigation window consists of two tabs, which allow you to
+switch between the <guilabel>Preview</guilabel> and the integrated
+file browser called the <guilabel>Gallery</guilabel>.  The working
+directory is displayed in the lower part of the window along with the
+directory where the scan will be saved.</para> 
+</listitem>
 
-<para>
-Configure your settings here first. Afterwards, initiate the preview scan with
-<guimenuitem>Preview</guimenuitem>. If the <guilabel>Preview</guilabel> tab
-in the upper window is selected, see the results there.</para>
+<listitem>
+<para>Make your scanner-dependent settings, which are dependent on the
+scanner you have connected, in the lower left window.  Usually, these
+are settings for resolution, brightness and contrast, scanning mode
+(&eg;, color, gray, or binary), and for gamma values.</para>
 
-<para>Select the various formats in the preview image itself to define the
-final dimensions. The <guilabel>User</guilabel> setting is recommended for
-this, so you select the area to scan in the preview display with the mouse.
-</para>
+<para>Configure your settings here first. Afterwards, initiate the
+preview scan with <guimenuitem>Preview</guimenuitem>. If the
+<guilabel>Preview</guilabel> tab in the upper window is selected, see
+the results there.</para>
 
-<para>After this is done, click <guimenuitem>Scan</guimenuitem> to
-scan the selection made in the preview. After scanning, you will be
-asked in which format to save the image
-whether to make this your standard format 
-(without being prompted to confirm your selection in the future).</para>
+<para>Select the various formats in the preview image itself to define
+the final dimensions. The <guilabel>User</guilabel> setting is
+recommended for this, so you select the area to scan in the preview
+display with the mouse.</para>
 
-<note><para>
-If you checked that you do not want to asked about the save format, the memory
- assistant will no longer appear. To
-change the format some time in the future, select <menuchoice> 
-<guimenu>Settings</guimenu> 
-<guimenuitem>Configure Kooka...</guimenuitem> 
-<guimenuitem>Save Image</guimenuitem> 
-<guimenuitem>Always show memory assistant</guimenuitem> 
-</menuchoice></para></note>
+<para>After this is done, click <guimenu>Scan</guimenu> to scan the
+selection made in the preview. After scanning, you will be asked in
+which format to save the image whether to make this your standard
+format (without being prompted to confirm your selection in the
+future).</para>
+
+<note><para>If you checked that you do not want to asked about the
+save format, the memory assistant will no longer appear. To change the
+format some time in the future, select <menuchoice>
+<guimenu>Settings</guimenu> <guimenuitem>Configure
+Kooka...</guimenuitem> <guimenuitem>Save Image</guimenuitem>
+<guimenuitem>Always show memory assistant</guimenuitem>
+</menuchoice></para></note> 
+
 </listitem> 
-<listitem><para>
-The large window to the right shows how the image appears after a
-final scan.
-</para></listitem></itemizedlist></sect1></chapter>
+<listitem>
+<para>The large window shows how the image appears after a final
+scan.</para>
+</listitem>
+</itemizedlist>
 
-<chapter id="prefs"><title>Settings</title>
-<para>The icons in the panel have been returned to the menu panel, except for the
-printer icon, under <guilabel>Image settings</guilabel>. The print option can
-be found under <guilabel>File</guilabel>. Each menu item in the image settings
-is briefly described below.
-</para> <variablelist> <varlistentry> 
-<term>Open image in graphics application</term> 
-<listitem><para>
-Enter a graphics application for opening your scanned image
-directly. Recommended applications include <application>The GIMP</application>.
-</para></listitem> </varlistentry> <varlistentry> 
-<term>Character recognition (OCR) for image...</term> 
-<listitem><para>
-Start the window for optical character recognition (OCR). If you have
-<application>gocr</application> installed, <filename>/usr/bin/gocr</filename>
-should be in the path line. This starts the character recognition for the
-preview image or for the highlighted area.</para></listitem> 
-</varlistentry> <varlistentry> <term>
-Character recognition for selection...</term> <listitem><para>
-A window will reappear for the character recognition. Here, however, the
-character recognition is only for the area highlighted in the
-final scan.</para></listitem> </varlistentry> <varlistentry> 
-<term>Scale to width</term> <listitem
-><para>This proportionally scales the image in the large canvas to the right
-to the width of the display.</para></listitem> </varlistentry> 
-<varlistentry> <term>Scale to height</term> <listitem
-><para>Proportionately scales the image to the height of the display.</para
-></listitem
-> </varlistentry
-> <varlistentry
-> <term
->Original size</term
-> <listitem
-><para
->Restores the original scan size by reducing or enlarging the image 
-in the display.</para>
-<note><para>There are additional methods of scaling an image: 
-right-click the image display. Redefine the three named options and set
-the enlargement itself. This can also be done in the preview
-window.</para>
-</note></listitem> </varlistentry> 
-<varlistentry> <term>Create from selection</term> 
-<listitem><para>If the scanned image includes more than you want to
-appear in the final image, use this tool to crop your image by marking your
-selection in the larger image display to the right then selecting this
-tool. The image is cropped according to your selection. You may already be
-familiar with this function from <application>The GIMP</application></para
-> crop tool.</listitem
-> </varlistentry
-> <varlistentry
-> <term
->Mirror image vertically</term
-> <listitem
-><para
->Flip image vertically.</para
-></listitem
-> </varlistentry
-> <varlistentry
-> <term
->Mirror image horizontally</term
-> <listitem
-><para
->Flip image horizontally.</para
-></listitem
-> </varlistentry
-> <varlistentry
-> <term
->Mirror both directions</term
-> <listitem
-><para>Flip image both horizontally and vertically.
-</para></listitem> 
-</varlistentry
-> <varlistentry
-> <term
->Rotate clockwise</term
-> <listitem
-><para
->Rotate the image ninety degrees clockwise.</para
-></listitem
-> </varlistentry
-> <varlistentry
-> <term
->Rotate counterclockwise</term
-> <listitem
-><para
->Rotate the image ninety degrees counterclockwise.</para
-></listitem
-> </varlistentry
-> <varlistentry
-> <term
->Rotate 180 degrees</term
-> <listitem
-><para
->Rotates image 180 degrees.</para
-></listitem
-> </varlistentry
-> </variablelist
-></chapter>
+</sect1>
 
-<chapter id="save"
-><title
->Save</title
-><para
->The method for saving an image is somewhat different in
-<application>Kooka</application> than in many other applications. Click the
-<guilabel>Gallery</guilabel> tab to open
-a small file browser. This is the directory
-
-<filename>~/.kde/share/apps/ScanImages/</filename>
-
-In the lower portion of the window, your current subdirectory in the gallery
-is shown. This is where all scanned images are first
-saved as files. When  starting <application>Kooka</application> for the first
-time, you will only see the <filename>ScanImages</filename>.  Create
-subdirectories by right-clicking this folder. The selected folder,
-highlighted in blue, is the first save location of the scanned images. The
-scans are labeled in ascending numerical order as in
-<filename>kscan_0001</filename> and
-<filename>kscan_0002</filename>.</para>
-<para>
-To save an image permanently, left-click the name. Next, give
-a new name and the appropriate ending for the image format chosen when scanning. 
-If you enter a different extension, you will get a message that it does
-not correspond to the scanned format. Although you can still save the image
-under this name,  it will retain its original format. At present,
-&quot;On-the-fly&quot; conversion is not offered.</para
-><para>
-If you do not want to use this method of managing your images in
-<filename>~/.kde/share/apps/ScanImages/</filename>, you can, of course, save
-them to another location. To do this, right-click the image name and select
-<guilabel>Save</guilabel>. 
-Choose any path here. In addition, close or permanently delete
-images here.</para
-><para>
-To incorporate other images in the gallery, add them in Konqueror by
-      dragging and dropping.  Open Konqueror to the directory
-      containing the desired images.  Then add them to the Kooka
-      gallery by dragging them and dropping them into the
-      gallery.</para>
 </chapter>
 
+<chapter id="prefs">
+<title>Settings</title>
 
-<chapter id="ocr"><title>Character Recognition</title>
-<para>
-As already mentioned, the <application>gocr</application> 
-must be installed. Scan a preview of your document
-in grayscale or color. You can only scan in binary mode if you have a pure
-white sheet of paper with black print. Next, highlight the text to
-have recognized in the preview window. Then, do
-your final scan in binary mode with <guibutton>Scan</guibutton>.</para
-><para>
-Now click the second icon from the left in the icon panel,
-<guilabel>Character recognition for image...</guilabel>, or select this item in
-the <guilabel>Image settings</guilabel> menu. 
-For your first try, do not change the default settings shown in the
-emerging OCR window. These are usually appropriate and meet most
-      needs. 
-Now click <guimenuitem>Start character
-recognition</guimenuitem>. You will now see a window containing the OCR
-results. The quality depends heavily on that of the document itself. </para
->
+<para>The icons in the panel have been returned to the menu panel,
+except for the printer icon, under <guilabel>Image
+settings</guilabel>. The print option can be found under
+<guilabel>File</guilabel>. Each menu item in the image settings is
+briefly described below.</para>
 
-<screenshot
-> <screeninfo
->The gocr Window</screeninfo
-> <mediaobject
-> <imageobject
-><imagedata fileref="common/kooka_gocr.png" format="PNG"/></imageobject
-> </mediaobject
-> </screenshot
->
+<variablelist> 
+<varlistentry> 
+<term>
+<menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>G</keycap></keycombo>
+</shortcut>
+<guimenu>ImageCanvas</guimenu>
+<guimenuitem>Open image in graphic application</guimenuitem>
+</menuchoice></term> 
+<listitem>
+<para>Enter a graphics application for opening your scanned image
+directly. Recommended applications include <application>The
+GIMP</application>.</para>
+</listitem> 
+</varlistentry> 
 
-<para
->The text can now be opened by clicking the  button with the
-<application>Kate</application> editor. After the final scan, mark a selection in the
-image display to the right to load just a part of the text or image to the OCR.
-Next, in the icon panel, click the third button from the right or click in
-the menu on <guimenuitem>OCR for selection</guimenuitem>. Now proceed as described in
-the previous section.</para
->
+<varlistentry>
+<term>
+<menuchoice><shortcut>
+<keycombo action="simul">&Ctrl;<keycap>O</keycap></keycombo>
+</shortcut>
+<guimenu>ImageCanvas</guimenu>
+<guimenuitem>OCR image...</guimenuitem>
+</menuchoice></term>
+<listitem>
+<para>Start the window for optical character recognition
+(<acronym>OCR</acronym>). If you have <application>gocr</application>
+installed, then the path to it should be in the path line. This
+starts the character recognition for the preview image or for the
+highlighted area.</para>
+</listitem> 
+</varlistentry> 
 
-<screenshot
-> <screeninfo
->The Results of the OCR</screeninfo
-> <mediaobject
-> <imageobject
-><imagedata fileref="common/kooka_gocr_result.png" format="PNG"/></imageobject
-> </mediaobject
-> </screenshot
->
+<varlistentry>
+<term> 
+<menuchoice><shortcut>
+<keycombo action="simul">&Ctrl;<keycap>C</keycap></keycombo>
+</shortcut>
+<guimenu>ImageCanvas</guimenu>
+<guimenuitem>OCR on selection...</guimenuitem>
+</menuchoice></term> 
+<listitem>
+<para>A window will reappear for the character recognition. Here,
+however, the character recognition is only for the area highlighted in
+the final scan.</para>
+</listitem> 
+</varlistentry> 
 
-</chapter
->
-<chapter id="credits"
-><title
->Collaborators and License</title>
+
+<varlistentry>
+<term>
+<menuchoice><shortcut>
+<keycombo action="simul">&Ctrl;<keycap>I</keycap></keycombo>
+</shortcut>
+<guimenu>ImageCanvas</guimenu>
+<guimenuitem>Scale to Width</guimenuitem>
+</menuchoice></term> 
+<listitem >
+<para>This proportionally scales the image in the large canvas to the
+width of the display.</para>
+</listitem> 
+</varlistentry>
+
+<varlistentry> 
+<term>
+<menuchoice><shortcut>
+<keycombo action="simul">&Ctrl;<keycap>H</keycap></keycombo>
+</shortcut>
+<guimenu>ImageCanvas</guimenu>
+<guimenuitem>Scale to Height</guimenuitem>
+</menuchoice></term> 
+<listitem>
+<para>Proportionately scales the image to the height of the
+display.</para> 
+</listitem > 
+</varlistentry>
+
+<varlistentry> 
+<term >
+<menuchoice><shortcut>
+<keycombo action="simul">&Ctrl;<keycap>S</keycap></keycombo>
+</shortcut>
+<guimenu>ImageCanvas</guimenu>
+<guimenuitem>Original Size</guimenuitem>
+</menuchoice></term> 
+<listitem>
+<para>Restores the original scan size by reducing or enlarging the
+image in  the display.</para> 
+
+<para>There are additional methods of scaling an image:
+<mousebutton>right</mousebutton> click the image display. Redefine the
+three named options and set the enlargement itself. This can also be
+done in the <guilabel>Preview</guilabel> window.</para>
+</listitem> 
+</varlistentry>
+
+<varlistentry> 
+<term>
+<menuchoice><shortcut>
+<keycombo action="simul">&Ctrl;<keycap>N</keycap></keycombo>
+</shortcut>
+<guimenu>ImageCanvas</guimenu>
+<guimenuitem>Create from selection</guimenuitem>
+</menuchoice></term> 
+<listitem>
+<para>If the scanned image includes more than you want to appear in the final
+image, use this tool to crop your image by marking your selection in
+the larger image display to the right then selecting this tool. The
+image is cropped according to your selection. You may already be
+familiar with this function from <application>The GIMP</application>
+crop tool.</para>
+</listitem> 
+</varlistentry> 
+
+<varlistentry> 
+<term>
+<menuchoice><shortcut>
+<keycombo action="simul">&Ctrl;<keycap>V</keycap></keycombo>
+</shortcut>
+<guimenu>ImageScan</guimenu>
+<guimenuitem>Mirror image vertically</guimenuitem>
+</menuchoice></term> 
+<listitem>
+<para>Flip image vertically.</para>
+</listitem> 
+</varlistentry> 
+
+<varlistentry> 
+<term><menuchoice><shortcut>
+<keycombo action="simul">&Ctrl;<keycap>M</keycap></keycombo>
+</shortcut>
+<guimenu>ImageScan</guimenu>
+<guimenuitem>Mirror image horizontally</guimenuitem>
+</menuchoice>
+</term> 
+<listitem>
+<para>Flip image horizontally.</para>
+</listitem> 
+</varlistentry> 
+
+<varlistentry>
+<term><menuchoice><shortcut>
+<keycombo action="simul">&Ctrl;<keycap>B</keycap></keycombo>
+</shortcut>
+<guimenu>ImageScan</guimenu>
+<guimenuitem>Mirror both directions</guimenuitem>
+</menuchoice></term> 
+<listitem>
+<para>Flip image both horizontally and vertically.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry> 
+<term>
+<menuchoice><shortcut>
+<keycombo action="simul">&Ctrl;<keycap>R</keycap></keycombo>
+</shortcut>
+<guimenu>ImageScan</guimenu>
+<guimenuitem>Rotate image clockwise</guimenuitem>
+</menuchoice></term> 
+<listitem>
+<para>Rotate the image ninety degrees clockwise.</para>
+</listitem>
+</varlistentry> 
+
+<varlistentry> 
+<term>
+<menuchoice><shortcut>
+<keycombo action="simul">&Ctrl;<keycap>W</keycap></keycombo>
+</shortcut>
+<guimenu>ImageScan</guimenu>
+<guimenuitem>Rotate image counter-clockwise</guimenuitem>
+</menuchoice>
+</term> 
+<listitem>
+<para>Rotate the image ninety degrees counterclockwise.</para>
+</listitem> 
+</varlistentry> 
+
+<varlistentry>
+<term>
+<menuchoice><shortcut>
+<keycombo action="simul">&Ctrl;<keycap>D</keycap></keycombo>
+</shortcut>
+<guimenu>ImageScan</guimenu>
+<guimenuitem>Rotate image 180 degrees</guimenuitem>
+</menuchoice>
+</term> 
+<listitem>
+<para>Rotates image 180 degrees.</para>
+</listitem> 
+</varlistentry> 
+</variablelist>
+
+</chapter>
+
+<chapter id="save">
+<title>Save</title>
+
+<para>The method for saving an image is somewhat different in &kooka;
+than in many other applications. Click the
+<guilabel>Gallery</guilabel> tab to open a small file browser. This is
+the directory <filename
+class="directory">~/.kde/share/apps/ScanImages/</filename> In the
+lower portion of the window, your current subdirectory in the gallery
+is shown. This is where all scanned images are first saved as
+files. When starting &kooka; for the first time, you will only see the
+<filename class="directory">ScanImages</filename>.  Create
+subdirectories by <mousebutton>right</mousebutton> clicking this
+folder. The selected folder, highlighted in blue, is the first save
+location of the scanned images. The scans are labeled in ascending
+numerical order as in <filename>kscan_0001</filename> and
+<filename>kscan_0002</filename>.</para>
+
+<para>To save an image permanently, <mousebutton>left</mousebutton>
+click the name. Next, give a new name and the appropriate ending for
+the image format chosen when scanning.  If you enter a different
+extension, you will get a message that it does not correspond to the
+scanned format. Although you can still save the image under this name,
+it will retain its original format. At present,
+<quote>On-the-fly</quote> conversion is not offered.</para
+
+><para>If you do not want to use this method of managing your images
+in <filename
+class="directory">~/.kde/share/apps/ScanImages/</filename>, you can,
+of course, save them to another location. To do this,
+<mousebutton>right</mousebutton> click the
+image name and select <guilabel>Save</guilabel>.  Choose any path
+here. In addition, close or permanently delete images here.</para>
+
+<para>To incorporate other images in the gallery, add them in
+&konqueror; by dragging and dropping.  Open &konqueror; to the
+directory containing the desired images.  Then add them to the &kooka;
+gallery by dragging them and dropping them into the gallery.</para>
+
+</chapter>
+
+<chapter id="ocr">
+<title>Character Recognition</title>
+
+<para>As already mentioned, the <application>gocr</application> must
+be installed. Scan a preview of your document in grayscale or
+color. You can only scan in binary mode if you have a pure white sheet
+of paper with black print. Next, highlight the text to have recognized
+in the preview window. Then, do your final scan in binary mode with
+<guibutton>Scan</guibutton>.</para>
+
+<para>Now click the second icon from the left in the icon panel,
+<guilabel>Character recognition for image...</guilabel>, or select
+this item in the <guilabel>Image settings</guilabel> menu.  For your
+first try, do not change the default settings shown in the emerging
+<acronym>OCR</acronym> window. These are usually appropriate and meet
+most needs.  Now click <guimenuitem>Start character
+recognition</guimenuitem>. You will now see a window containing the
+<acronym>OCR</acronym> results. The quality depends heavily on that of
+the document itself. </para>
+
+<screenshot> <screeninfo>The gocr Window</screeninfo> <mediaobject>
+<imageobject><imagedata fileref="common/kooka_gocr.png"
+format="PNG"/></imageobject> </mediaobject> </screenshot>
+
+<para>The text can now be opened by clicking the button with the
+&kate; editor. After the final scan, mark a selection in the image
+display to the right to load just a part of the text or image to the
+<acronym>OCR</acronym>.  Next, in the icon panel, click the third
+button from the right or click in the menu on
+<guimenuitem>OCR on selection</guimenuitem>. Now
+proceed as described in the previous section.</para >
+
+<screenshot> 
+<screeninfo>The Results of the <acronym>OCR</acronym></screeninfo> 
+<mediaobject> 
+<imageobject>
+<imagedata fileref="common/kooka_gocr_result.png"
+format="PNG"/></imageobject> 
+</mediaobject> 
+</screenshot>
+
+</chapter>
+
+<chapter id="credits">
+<title>Credits and License</title>
  
-<para
-> <application>Kooka</application> </para
-><para
-> Copyright for the application 2001-2002 Klaas Freitag <email
->freitag@suse.de</email
-></para
-><para
->Copyright for the documentation 2002 Martin Sommer <email
->msommer@suse.de</email
-></para
->
+<para>&kooka;</para>
+
+<para> Copyright for the application 2001-2002 Klaas Freitag
+<email>freitag@suse.de</email></para>
+
+<para>Copyright for the documentation 2002 Martin Sommer
+<email>msommer@suse.de</email></para>
 
 <!-- TRANS:CREDIT_FOR_TRANSLATORS -->
 
 &underFDL;
 &underGPL;
 
-</chapter
->                  
-</book>
+</chapter>  
 
-<!--
 <appendix id="installation">
-<title
->Installation</title>
- 
-<sect1 id="getting-kapp">
-<title
->Where can I get &kmines;?</title>
- 
-<para
->&kmines; is a contribution of the KDE project <ulink url="http://www.kde.org"
->http://www.kde.org</ulink
->. &kmines; is located in the kdegames packages at <ulink url="ftp://ftp.kde.org/pub/kde/"
->ftp://ftp.kde.org/pub/kde/</ulink
->, the main KDE FTP site. </para>
-</sect1>
+<title>Installation</title>
 
-<sect1 id="compilation">
-<title
->Compilation and Installation</title>
- 
-<para
->To compile and install &kmines; on your system, write the following to the
-main kdegames distribution directory: </para>
+&install.intro.documentation;
 
-<screen width="40">
-<prompt
->%</prompt
-> <userinput
->cd kdegames</userinput>
-<prompt
->%</prompt
-> <userinput
->./configure</userinput>
-<prompt
->%</prompt
-> <userinput
->make</userinput>
-<prompt
->%</prompt
-> <userinput
->make install</userinput>
-</screen>
-
-<para
->Since &kmines; uses <application
->autoconf</application
-> and <application
->automake</application
->, compiling it should not be a problem. If you do encounter any difficulties,
-please write to the &kde; mailing list.</para>
- 
-</sect1
->         
+&install.compile.documentation;
+                
 </appendix>
 
-
-
-
-
-Local Variables:
-mode: sgml
-sgml-omittag: nil
-sgml-shorttag: t
-End:
--->
-
+</book>
 
