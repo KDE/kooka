@@ -25,6 +25,10 @@
 #include <kapp.h>
 #include <kconfig.h>
 #include <kglobal.h>
+#include <krun.h>
+#include <kurl.h>
+#include <ktempfile.h>
+#include <qtextstream.h>
 #include <qsplitter.h>
 
 #include "img_canvas.h"
@@ -74,13 +78,29 @@ KOCRFinalDialog::KOCRFinalDialog( QWidget *parent, QString resultimg )
    textEdit = new KEdit( splitpage, "OCRResultEditor" );
    CHECK_PTR( textEdit );
    // topLayout->addWidget( textEdit );
-   
+
+   connect( this, SIGNAL(user1Clicked()), this, SLOT(openTextResult()));
 }
 
+void  KOCRFinalDialog::openTextResult( void )
+{
+   debug( "Opening text file <%s>", (const char*) ocrTextFile );
+   new KRun( KURL( ocrTextFile ));
+}
 
 void  KOCRFinalDialog::fillText( QString str )
 {
    textEdit->setText( str );
+
+   /* ... and save to temp file to open with kwrite */
+   KTempFile textFile( QString::null, ".txt" );
+   ocrTextFile = textFile.name();
+   debug(" Sending ocr-Result-Text to file <%s>", (const char*) textFile.name() );
+
+   QTextStream *ts = textFile.textStream();
+   (*ts) << str;
+   textFile.close();
+   
 }
 
 KOCRFinalDialog::~KOCRFinalDialog()

@@ -48,7 +48,8 @@ public:
    ~KOCRFinalDialog();
 
 public slots:
-void fillText( QString );
+   void fillText( QString );
+   void openTextResult( void );
    
 protected:
 
@@ -58,6 +59,7 @@ private slots:
 private:
    KEdit *textEdit;
    QImage *resultImg;
+   QString ocrTextFile;
 };
 
 #endif
