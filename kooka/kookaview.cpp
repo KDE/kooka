@@ -724,12 +724,14 @@ void KookaView::slShowThumbnails(KFileTreeViewItem *dirKfi, bool forceRedraw )
       {
 	 dirKfi = kftvi;
 	 forceRedraw = true;
+	 packager->setSelected( static_cast<QListViewItem*>(dirKfi), true );
+	 
       }
-      else
-	 return;
+
+      return;
    }
    
-   
+
    kdDebug(28000) << "Showing thumbs for " << dirKfi->url().prettyURL() << endl;	   
    m_stack->raiseWidget( m_thumbview );
 
