@@ -1,11 +1,11 @@
 /***************************************************************************
-                          scanpackager.cpp  -  description                              
-                             -------------------                                         
-    begin                : Fri Dec 17 1999                                           
-    copyright            : (C) 1999 by Klaas Freitag                         
+                          scanpackager.cpp  -  description
+                             -------------------
+    begin                : Fri Dec 17 1999
+    copyright            : (C) 1999 by Klaas Freitag
     email                : freitag@suse.de
 
-    $Id$   
+    $Id$
  ***************************************************************************/
 
 /***************************************************************************
@@ -13,7 +13,7 @@
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
  *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   * 
+ *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
 
@@ -42,6 +42,7 @@
 #include <kurldrag.h>
 #include <kpopupmenu.h>
 #include <kaction.h>
+#include <klineeditdlg.h>
 #include <kiconloader.h>
 #include <kfiledialog.h>
 #include <kurl.h>
@@ -61,7 +62,7 @@ ScanPackager::ScanPackager( QWidget *parent ) : KFileTreeView( parent )
    // TODO: setItemsRenameable (true );
    addColumn( i18n("Image Name" ));
    setColumnAlignment( 0, AlignLeft );
-	
+
    addColumn( i18n("Size") );
    setColumnAlignment( 1, AlignRight );
    setColumnAlignment( 2, AlignRight );
@@ -966,11 +967,12 @@ void ScanPackager::slotDeleteItems( )
 /* ----------------------------------------------------------------------- */
 void ScanPackager::slotCreateFolder( )
 {
-   EntryDialog d( this, i18n("New Folder"), i18n("<B>Please enter a name for the new folder:</B>"));
-		  
-   if( d.exec() == QDialog::Accepted )
+   KLineEditDlg d(i18n("Please enter a name for the new folder:"), QString::null, this);
+   d.setCaption(i18n("New Folder"));
+
+   if( d.exec() )
    {
-      QString folder = d.getText();
+      QString folder = d.text();
       if( folder.length() > 0 )
       {
 	 /* KIO create folder goes here */
@@ -990,9 +992,9 @@ void ScanPackager::slotCreateFolder( )
 	    /* Since the new directory arrives in the packager in the newItems-slot, we set a
 	     * variable urlToSelectOnArrive here. The newItems-slot will honor it and select
 	     * the treeviewitem with that url.
-	     */  
+	     */
 	    slotSetNextUrlToSelect( url );
-	       
+
 	    if( ! KIO::NetAccess::mkdir( url ))
 	    {
 	       kdDebug(28000) << "ERR: creation of " << url.prettyURL() << " failed !" << endl;
@@ -1001,7 +1003,7 @@ void ScanPackager::slotCreateFolder( )
 	    {
 	       /* created successfully */
 	       /* open the branch if neccessary and select the new folder */
-	       
+
 	    }
 	 }
       }

@@ -224,33 +224,6 @@ void ImgScaleDialog::setSelValue( int val )
 
 /* ############################################################################## */
 
-EntryDialog::EntryDialog( QWidget *parent, QString caption, const QString text)
-: KDialogBase( parent, "ENTRY_DIALOG", true, caption, Ok|Cancel, Ok, true )
-{
-   
-   QVBox *vbox = makeVBoxMainWidget();
-   (void) new  QLabel( text, vbox, "LABEL" );
-
-   entry = new QLineEdit( vbox );
-
-   entry->setFocus();
-}
-
-QString EntryDialog::getText ( void )
-{
-   if( entry )
-      return( entry->text());
-
-   return( "" );
-}
-
-EntryDialog::~EntryDialog()
-{
-}
-
-
-/* ############################################################################## */
-
 
 ImageSelectLine::ImageSelectLine( QWidget *parent, const QString& text )
    : QHBox( parent )

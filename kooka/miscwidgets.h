@@ -94,22 +94,6 @@ private:
 
 
 /**
- *  A small dialog that allows the user to enter a string. Currently
- *  used to ask the user for a new directory name for the packager.
- */
-class EntryDialog : public KDialogBase {
-public: 
-   EntryDialog( QWidget *parent, QString caption, const QString text );
-	~EntryDialog();
-	
-	QString getText( void );
-	
-private:
-	QLineEdit *entry;
-};
-
-
-/**
  *
  */
 
