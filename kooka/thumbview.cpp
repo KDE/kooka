@@ -111,7 +111,7 @@ void ThumbView::slNewFileItems( const KFileItemList& items )
 void ThumbView::slGotPreview( const KFileItem* newFileItem, const QPixmap& newPix )
 {
    if( ! newFileItem ) return;
-   KFileIconViewItem *item = static_cast<KFileIconViewItem*>(newFileItem->extraData( this ));
+   KFileIconViewItem *item = static_cast<KFileIconViewItem*>(const_cast<void*>(newFileItem->extraData( this )));
 
    if( ! item ) return;
 
