@@ -100,8 +100,8 @@ ScanPackager::ScanPackager( QWidget *parent ) : KFileTreeView( parent )
 
    setRootIsDecorated( false );
 
-   connect( this, SIGNAL( selectionChanged( QListViewItem*)),
-	    SLOT( slSelectionChanged(QListViewItem*)));
+   connect( this, SIGNAL( clicked( QListViewItem*)),
+	    SLOT( slClicked(QListViewItem*)));
 
    connect( this, SIGNAL( rightButtonPressed( QListViewItem *, const QPoint &, int )),
 	    SLOT( slShowContextMenue(QListViewItem *, const QPoint &, int )));
@@ -450,8 +450,8 @@ QString ScanPackager::itemDirectory( const KFileTreeViewItem* item, bool relativ
 /* This slot receives a string from the gallery-path combobox shown under the
  * image gallery. The form of the string coming in here is <branch-name> - <
  * relativ directory under the branch. Now it is to assemble a complete path
- * from the data, find out which KFileTreeViewITem is associated with it and
- * call slSelectionChanged with it.
+ * from the data, find out which KFileTreeViewItem is associated with it and
+ * call slClicked with it.
  */
 
 void ScanPackager::slotSelectDirectory( const QString & dirString )
@@ -478,23 +478,24 @@ void ScanPackager::slotSelectDirectory( const QString & dirString )
 	 kdDebug(28000) << "got a new item to select !" << endl;
 	 ensureItemVisible(kfi);
 	 setCurrentItem(kfi);
+         slClicked(kfi); // load thumbnails for this dir etc.
       }
    }
 }
 
 /* ----------------------------------------------------------------------- */
-/* This slot is called if the selection changes.                           */
-void ScanPackager::slSelectionChanged( QListViewItem *newItem )
+/* This slot is called when clicking on an item.                           */
+void ScanPackager::slClicked( QListViewItem *newItem )
 {
    KFileTreeViewItem *item = static_cast<KFileTreeViewItem*>(newItem);
 
-   if( item )
+   if( item ) // can be 0, when clicking where no item is present
    {
-      kdDebug(28000) << "SelectionChanged - newItem !" << endl;
+      kdDebug(28000) << "Clicked - newItem !" << endl;
       /* Check if directory, hide image for now, later show a thumb view */
       if( item->isDir())
       {
-	 kdDebug(28000) << "selectionChanged: Is a directory !" << endl;
+	 kdDebug(28000) << "clicked: Is a directory !" << endl;
 	 emit( showImage( 0L ));
 	 kdDebug(28000) << "emitting showThumbnails" << endl;
       }
@@ -530,12 +531,8 @@ void ScanPackager::slSelectionChanged( QListViewItem *newItem )
       }
       else
       {
-	 // kdDebug(28000) << "directroy is not new: " << currSelectedDir << endl;
+	 // kdDebug(28000) << "directory is not new: " << currSelectedDir << endl;
       }
-   }
-   else
-   {
-      kdDebug(28000) << "ERR: Failed to get a valid treeviewitem" << endl;
    }
 }
 
@@ -879,7 +876,7 @@ void ScanPackager::slSelectImage( const KURL& name )
       kdDebug(28000) << "slSelectImage: Found an item !" << endl;
       ensureItemVisible( found );
       setCurrentItem( found );
-      slSelectionChanged( found );
+      slClicked( found );
    }
 
 }
@@ -1015,14 +1012,16 @@ void ScanPackager::slotExportFinished( KIO::Job *job )
 
 void ScanPackager::slotUrlsDropped( QWidget*, QDropEvent* ev, KURL::List& urls, KURL& copyTo )
 {
-   kdDebug(28000) << "Kooka drop event" << endl;
-
    if( !urls.isEmpty() )
    {
+       kdDebug(28000) << "Kooka drop event. First src url=" << urls.first() << " copyTo=" << copyTo
+           << " move=" << ( ev->action() == QDropEvent::Move ) << endl;
+
       if ( ev->action() == QDropEvent::Move )
         copyjob = KIO::move( urls, copyTo, true );
       else
         copyjob = KIO::copy( urls, copyTo, true );
+      // ### this looks wrong, but since the item isn't used at all...
       KFileTreeViewItem *curr = currentKFileTreeViewItem();
       storeJob( copyjob, curr, JobDescription::ImportJob );
       connect( copyjob, SIGNAL(result(KIO::Job*)),

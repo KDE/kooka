@@ -90,7 +90,6 @@ public:
 public slots:
    void         slSelectImage( const KURL& );
    void 	slAddImage( QImage *img, KookaImageMeta* meta = 0 );
-   void 	slSelectionChanged( QListViewItem *);
    void         slShowContextMenue(QListViewItem *, const QPoint &, int );
 
    void         slotExportFile( );
@@ -107,12 +106,13 @@ protected:
    virtual void contentsDragMoveEvent( QDragMoveEvent *e );
 
 protected slots:
+   void         slClicked( QListViewItem * );
    void         slFileRename( QListViewItem*, const QString&, int );
    // void         slFilenameChanged( KFileTreeViewItem*, const KURL & );
    void         slImageArrived( KFileTreeViewItem *item, KookaImage* image );
    void         slotExportFinished( KIO::Job *job );
-   void 	slotCreateFolder( );
-   void 	slotDeleteItems( );
+   void         slotCreateFolder( );
+   void         slotDeleteItems( );
    void         slotUnloadItems( );
    void         slotUnloadItem( KFileTreeViewItem *curr );
    void         slotDirCount( KFileTreeViewItem *item, int cnt );
@@ -120,7 +120,7 @@ protected slots:
    void         slotDeleteFromBranch( KFileItem* );
    void         slotStartupFinished( KFileTreeViewItem * );
 signals:
-   void 	showImage  ( KookaImage* );
+   void         showImage  ( KookaImage* );
    void         deleteImage( KookaImage* );
    void         unloadImage( KookaImage* );
    void         galleryPathSelected( KFileTreeBranch* branch, const QString& relativPath );
