@@ -355,11 +355,8 @@ QString ImgSaver::createFilename( QString format )
    
    sprintf( name, "kscan_%04x.%s", c, (const char*) format.lower() );
 
-   debug( "Checking for file %s", name );
-   
    while( files.exists( name, false ) ) {
       sprintf( name, "kscan_%04x.%s", ++c,  (const char*)format.lower() );
-      debug( "Checking for file %s", name );
    }
    
    return( name );
@@ -370,7 +367,10 @@ QString ImgSaver::createFilename( QString format )
  **/
 ImgSaveStat ImgSaver::saveImage( QImage *image, QString filename )
 {
-   const char *format = "BMP";
+   QString format = QImage::imageFormat( filename );
+   if( format == "" ) 
+      format = "BMP";
+   
    QFileInfo fi( filename );
 
    if( fi.isRelative() )
