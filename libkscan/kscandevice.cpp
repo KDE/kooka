@@ -45,6 +45,7 @@
 #include "kscanoption.h"
 #include "kscanoptset.h"
 #include "devselector.h"
+#include <ksimpleconfig.h>
 
 #define MIN_PREVIEW_DPI 75
 #define UNDEF_SCANNERNAME I18N_NOOP( "undefined" )
@@ -1386,7 +1387,7 @@ QString KScanDevice::getConfig( const QString& key, const QString& def ) const
 {
     QString confFile = SCANNER_DB_FILE;
 
-    KConfig scanConfig( confFile, true );
+    KSimpleConfig scanConfig( confFile, true );
     scanConfig.setGroup( shortScannerName() );
 
     return scanConfig.readEntry( key, def );
@@ -1395,10 +1396,21 @@ QString KScanDevice::getConfig( const QString& key, const QString& def ) const
 void KScanDevice::slStoreConfig( const QString& key, const QString& val )
 {
     QString confFile = SCANNER_DB_FILE;
+    QString scannerName = shortScannerName();
 
-    KConfig scanConfig( confFile );
-    scanConfig.setGroup( shortScannerName() );
-    scanConfig.writeEntry( key, val );
+    if( scannerName.isEmpty() || scannerName == UNDEF_SCANNERNAME )
+    {
+        kdDebug(29000) << "Skipping config write, scanner name is empty!" << endl;
+    }
+    else
+    {
+        kdDebug(29000) << "Storing config " << key << " in Group " << scannerName << endl;
+
+        KSimpleConfig scanConfig( confFile );
+        scanConfig.setGroup( scannerName );
+        scanConfig.writeEntry( key, val );
+        scanConfig.sync();
+    }
 }
 
 
