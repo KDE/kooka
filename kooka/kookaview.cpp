@@ -5,8 +5,9 @@
 #include "ksaneocr.h"
 #include "img_saver.h"
 #include "kookapref.h"
+#include "imgnamecombo.h"
 
-
+#include <qlabel.h>
 #include <qpainter.h>
 #include <qlayout.h>
 #include <qsplitter.h>
@@ -26,6 +27,7 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <keditcl.h>
+#include <kcombobox.h>
 
 #define PACKAGER_TAB 0
 #define PREVIEWER_TAB 1
@@ -51,8 +53,10 @@ KookaView::KookaView(QWidget *parent)
    setResizeMode( img_canvas,    QSplitter::Stretch );
    setResizeMode( paramSplitter, QSplitter::FollowSizeHint );
 
+   /* Create a vbox to take the tabwidget and the the combobox */
+   QVBox *vbox = new QVBox( paramSplitter );
    /* The Tabwidget to contain the preview and the packager */
-   tabw  = new QTabWidget( paramSplitter, "TABWidget" );
+   tabw  = new QTabWidget( vbox, "TABWidget" );
 
    /* A new packager to contain the already scanned images */
    packager = new ScanPackager( tabw );
@@ -60,11 +64,26 @@ KookaView::KookaView(QWidget *parent)
    }
    
    /* build up the Preview/Packager-Tabview */
-   tabw->insertTab( packager, i18n( "&Images"), PACKAGER_TAB );
+   tabw->insertTab( packager, i18n( "&Gallery"), PACKAGER_TAB );
 
    tabw->setMinimumSize(100, 100);
 
+   /*
+    * Create a Kombobox that holds the last folders visible even on the preview page
+    */
+   QHBox *recentBox = new QHBox( vbox );
+   recentBox->setMargin(KDialog::marginHint());
+   QLabel *lab = new QLabel( i18n("gallery dir: "), recentBox );
+   lab->setSizePolicy( QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed) );
+   recentFolder = new ImageNameCombo( recentBox );
 
+   
+   connect( packager,  SIGNAL( galleryPathSelected( KFileTreeBranch*, const QString&)),
+	    recentFolder, SLOT( slotGalleryPathChanged( KFileTreeBranch*, const QString& )));
+
+   connect( recentFolder, SIGNAL(activated( const QString& )),
+	    packager, SLOT(slotSelectDirectory( const QString& )));
+   
    /* the object from the kscan lib to handle low level scanning */
    sane = new KScanDevice( this );
    CHECK_PTR(sane);

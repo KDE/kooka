@@ -38,6 +38,7 @@ class QPainter;
 class KSANEOCR;
 class KConfig;
 class KPrinter;
+class KComboBox;
 
 /**
  * This is the main view class for Kooka.  Most of the non-menu,
@@ -152,6 +153,7 @@ private:
    ScanParams   *scan_params;
 
    KScanDevice  *sane;
+   KComboBox    *recentFolder;
    
    QVBoxLayout  *vlay_left;
    QHBoxLayout  *hlay_bigdad;
