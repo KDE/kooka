@@ -1,13 +1,38 @@
 <!DOCTYPE kookagui>
 <kookagui name="Kooka" version="1">
 <MenuBar>
+ <Menu name="imgCanvas"><text>&amp;ImageCanvas</text>
+   <Action name="ocrImage"/>
+   <Action name="ocrImageSelect"/>
+   <Separator/>
+   <Action name="scaleToWidth"/>
+   <Action name="scaleToHeight"/>
+   <Action name="scaleOriginal"/>
+   <Separator/>
+   <Action name="createFromSelection"/>
+   <Separator/>
+   <Action name="mirrorVertical"/>
+   <Action name="mirrorHorizontal"/>
+   <Action name="mirrorBoth"/>
+ </Menu>
  <Menu name="settings"><text>&amp;Settings</text>
    <Action name="show_scanparams"/>
  </Menu>
 </MenuBar>
  <Toolbar  name="buttons" fullWidth="true">
-   <text>Main Toolbar</text>
-   <Action name="ocr"/>
+   <text>Image Viewer Toolbar</text>
+   <Action name="ocrImage"/>
+   <Action name="ocrImageSelect"/>
+   <Separator/>
+   <Action name="scaleToWidth"/>
+   <Action name="scaleToHeight"/>
+   <Action name="scaleOriginal"/>
+   <Separator/>
+   <Action name="createFromSelection"/>
+   <Separator/>
+   <Action name="mirrorVertical"/>
+   <Action name="mirrorHorizontal"/>
+   <Action name="mirrorBoth"/>
  </Toolbar>
 <StatusBar/>
 </kookagui>
