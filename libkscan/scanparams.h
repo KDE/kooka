@@ -41,6 +41,7 @@
 
 class GammaDialog;
 class KScanOptSet;
+class QScrollView;
 
 typedef enum { ID_SANE_DEBUG, ID_QT_IMGIO, ID_SCAN } ScanMode;
 
@@ -144,7 +145,7 @@ void slSourceSelect( void );
 private:
 	
 	
-   void          scannerParams( );
+   QScrollView*  scannerParams( );
    void          virtualScannerParams( void );
    void          createNoScannerMsg( void );
    void          initialise( KScanOption* );

@@ -29,6 +29,7 @@
 #include <qlayout.h>
 #include <qdict.h>
 #include <qprogressdialog.h>
+#include <qscrollview.h>
 
 #include <kfiledialog.h>
 #include <klocale.h>
@@ -109,11 +110,13 @@ bool ScanParams::connectDevice( KScanDevice *newScanDevice )
    QString cap = i18n("<B>Scanner Settings</B><BR>");
    cap += sane_device->getScannerName();
 
-   (void) new QLabel( cap, this );
+   QLabel *toplabel = new QLabel( cap, this );
 
    (void) new KSeparator( KSeparator::HLine, this);
 
    /* Now create Widgets for the important scan settings */
+   QScrollView *sv = 0;
+   
    if( sane_device->optionExists( SANE_NAME_FILE ) )
    {
       /* Its a virtual scanner */
@@ -133,13 +136,14 @@ bool ScanParams::connectDevice( KScanDevice *newScanDevice )
 	 delete startupOptset;
 	 startupOptset = 0;
       }
-      scannerParams( );
+      sv = scannerParams( );
    }
 
    /* Reload all options to care for inactive options */
    sane_device->slReloadAll();
 
    /* Create a Start-Scan-Button */
+   (void) new KSeparator( KSeparator::HLine, this);
    KButtonBox *kbb = new KButtonBox( this );
    QPushButton* pb = kbb->addButton( i18n( "&Final Scan" ));
    connect( pb, SIGNAL(clicked()), this, SLOT(slStartScan()) );
@@ -163,6 +167,18 @@ bool ScanParams::connectDevice( KScanDevice *newScanDevice )
    connect( progressDialog, SIGNAL( cancelled() ), sane_device,
 	    SLOT( slStopScanning() ) );
 
+#if 0  /* hmm. Calculating the min height does not work in that way */
+   int min1 = toplabel->minimumHeight();
+   int min2 = kbb->minimumHeight();
+   int min3 = sv->minimumHeight();
+   kdDebug(29000) << "Three minheights: " << min1 << " " << min2 <<" " << min3 << endl;
+   int minH = toplabel->minimumHeight() + kbb->minimumHeight() + sv->minimumHeight();
+   kdDebug(29000) << "setting minimumHeight for scanparams: " << minH << endl;
+#endif
+   int minH = 220;
+   if( sv )
+      setMinimumHeight( minH );
+   
    return( true );
 }
 
@@ -211,14 +227,22 @@ void ScanParams::initialise( KScanOption *so )
    }
 }
 
-void ScanParams::scannerParams( )
+QScrollView *ScanParams::scannerParams( )
 {
    KScanOption *so = 0;
 
    /* Its a real scanner */
    /* Mode setting */
-   QHBox *hb = new QHBox(this);
+   QScrollView *sv = new QScrollView( this );
+   sv->setHScrollBarMode( QScrollView::AlwaysOff );
+   sv->setResizePolicy( QScrollView::AutoOneFit );
+   QVBox *pbox = new QVBox( sv->viewport());
+   sv->setFrameStyle( QFrame::NoFrame );
 
+   sv->addChild( pbox );
+   
+   QHBox *hb = new QHBox(pbox);
+   
    so = sane_device->getGuiElement( SANE_NAME_SCAN_MODE, hb );
    if ( so )
    {
@@ -251,7 +275,8 @@ void ScanParams::scannerParams( )
 
       QWidget *spacer = new QWidget(hb);
       hb->setStretchFactor( spacer, 1 );
-
+      kdDebug(29000) << "Source list size: " << l.count() << endl;
+      
       if( l.count() > 1 )
       {
 	 pb_source_sel = new QPushButton( i18n("Source..."), hb );
@@ -272,7 +297,7 @@ void ScanParams::scannerParams( )
    }
 
    /* Resolution Setting -> X-Resolution Setting */
-   so = sane_device->getGuiElement( SANE_NAME_SCAN_X_RESOLUTION, this,
+   so = sane_device->getGuiElement( SANE_NAME_SCAN_X_RESOLUTION, pbox /* this */,
 				    i18n("Resolution (dpi):").local8Bit() );
    
    if ( so )
@@ -290,7 +315,7 @@ void ScanParams::scannerParams( )
 	       this, SLOT(slReloadAllGui( KScanOption* )));
 
       xy_resolution_bind =
-	 sane_device->getGuiElement(SANE_NAME_RESOLUTION_BIND, this,
+	 sane_device->getGuiElement(SANE_NAME_RESOLUTION_BIND, pbox,
 				    i18n( "Bind X- and Y-Resolution" ).local8Bit() );
       if( xy_resolution_bind  )
       {
@@ -302,7 +327,7 @@ void ScanParams::scannerParams( )
       }
 
       /* Resolution Setting -> Y-Resolution Setting */
-      so = sane_device->getGuiElement( SANE_NAME_SCAN_Y_RESOLUTION, this );
+      so = sane_device->getGuiElement( SANE_NAME_SCAN_Y_RESOLUTION, pbox);
       int y_res = x_y_res;
       if ( so )
       {
@@ -316,7 +341,7 @@ void ScanParams::scannerParams( )
    else
    {
       /* If the SCAN_X_RES does not exists, perhaps just SCAN_RES does */
-      so = sane_device->getGuiElement( SANE_NAME_SCAN_RESOLUTION, this,
+      so = sane_device->getGuiElement( SANE_NAME_SCAN_RESOLUTION, pbox,
 				       i18n("Resolution (dpi):") );
       if( so )
       {
@@ -329,41 +354,41 @@ void ScanParams::scannerParams( )
    }
 
    /* Insert another beautification line */
-   (void) new KSeparator( KSeparator::HLine, this);
+   (void) new KSeparator( KSeparator::HLine, pbox );
 
    /* Speed-Setting - show only if active */
    KScanOption kso_speed( SANE_NAME_SCAN_SPEED );
    if( kso_speed.valid() && kso_speed.softwareSetable() && kso_speed.active())
    {
-      so = sane_device->getGuiElement( SANE_NAME_SCAN_SPEED, this );
+      so = sane_device->getGuiElement( SANE_NAME_SCAN_SPEED, pbox);
       initialise( so );
    }
 
    /* Threshold-Setting */
-   so = sane_device->getGuiElement( SANE_NAME_THRESHOLD, this );
+   so = sane_device->getGuiElement( SANE_NAME_THRESHOLD, pbox );
    if( so )
    {
       initialise( so );
    }
 
    /* Brightness-Setting */
-   so = sane_device->getGuiElement( SANE_NAME_BRIGHTNESS, this );
+   so = sane_device->getGuiElement( SANE_NAME_BRIGHTNESS, pbox );
    if( so ) initialise( so );
    
    /* Contrast-Setting */
-   so = sane_device->getGuiElement( SANE_NAME_CONTRAST, this );
+   so = sane_device->getGuiElement( SANE_NAME_CONTRAST, pbox );
    if( so ) initialise( so );
 /* Custom Gamma */
 
    /* Sharpness */
-   so = sane_device->getGuiElement( "sharpness", this );
+   so = sane_device->getGuiElement( "sharpness", pbox );
    if( so ) initialise( so );
 
 
    /* The gamma table can be used - add  a button for editing */
    if( sane_device->optionExists( SANE_NAME_CUSTOM_GAMMA ) )
    {
-      QHBox *hb1 = new QHBox(this);
+      QHBox *hb1 = new QHBox(pbox);
 
       so = sane_device->getGuiElement( SANE_NAME_CUSTOM_GAMMA, hb1);
 
@@ -394,19 +419,23 @@ void ScanParams::scannerParams( )
    /* my Epson Perfection backends offer a list of user defined gamma values */
    
    /* Insert another beautification line */
-   (void) new KSeparator( KSeparator::HLine, this);
+   if( sane_device->optionExists( SANE_NAME_GRAY_PREVIEW ) ||
+       sane_device->optionExists( SANE_NAME_NEGATIVE ) )
+   {
+      (void) new KSeparator( KSeparator::HLine, pbox );
+   }
 
-   so = sane_device->getGuiElement( SANE_NAME_NEGATIVE, this  );
+   so = sane_device->getGuiElement( SANE_NAME_NEGATIVE, pbox  );
 
    /* PREVIEW-Switch */
    kdDebug(29000) << "Try to get Gray-Preview" << endl;
    if( sane_device->optionExists( SANE_NAME_GRAY_PREVIEW ))
    {
-     so = sane_device->getGuiElement( SANE_NAME_GRAY_PREVIEW, this );
+     so = sane_device->getGuiElement( SANE_NAME_GRAY_PREVIEW, pbox );
      cb_gray_preview = (QCheckBox*) so->widget();
      QToolTip::add( cb_gray_preview, i18n("Acquire a gray preview even in color mode (faster)") );
    }
-   // top->addStretch( 1 );
+   return( sv );
 }
 
 
