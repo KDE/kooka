@@ -203,6 +203,7 @@ private:
     void loadPreviewImage( const QCString& scanner );
     QImage rotateRight( QImage* );
     QImage rotateLeft ( QImage* );
+    QImage rotate180  ( QImage* );
     QCString userDeviceSelection( ) const;
 
     void updateCurrImage( QImage& ) ;
