@@ -151,7 +151,7 @@ bool ScanParams::connectDevice( KScanDevice *newScanDevice )
    /* Create a Start-Scan-Button */
    (void) new KSeparator( KSeparator::HLine, this);
    KButtonBox *kbb = new KButtonBox( this );
-   QPushButton* pb = kbb->addButton( i18n( "&Final Scan" ));
+   QPushButton* pb = kbb->addButton( i18n( "Final S&can" ));
    connect( pb, SIGNAL(clicked()), this, SLOT(slStartScan()) );
    pb = kbb->addButton( i18n( "&Preview Scan" ));
    connect( pb, SIGNAL(clicked()), this, SLOT(slAcquirePreview()) );
@@ -173,18 +173,6 @@ bool ScanParams::connectDevice( KScanDevice *newScanDevice )
    connect( progressDialog, SIGNAL( cancelled() ), sane_device,
 	    SLOT( slStopScanning() ) );
 
-#if 0  /* hmm. Calculating the min height does not work in that way */
-   int min1 = toplabel->minimumHeight();
-   int min2 = kbb->minimumHeight();
-   int min3 = sv->minimumHeight();
-   kdDebug(29000) << "Three minheights: " << min1 << " " << min2 <<" " << min3 << endl;
-   int minH = toplabel->minimumHeight() + kbb->minimumHeight() + sv->minimumHeight();
-   kdDebug(29000) << "setting minimumHeight for scanparams: " << minH << endl;
-#endif
-   int minH = 220;
-   if( sv )
-      setMinimumHeight( minH );
-   
    return( true );
 }
 

@@ -172,6 +172,7 @@ Previewer::~Previewer()
 bool Previewer::loadPreviewImage( const QString forScanner )
 {
    const QString prevFile = previewFile( forScanner );
+   kdDebug(28000) << "Loading preview for " << forScanner << " from file " << prevFile << endl;
    
    if( m_previewImage.load( prevFile ))
    {

@@ -637,9 +637,9 @@ void KScanDevice::slStopScanning( void )
     kdDebug(29000) << "Attempt to stop scanning" << endl;
     if( scanStatus == SSTAT_IN_PROGRESS )
     {
-    	scanStatus = SSTAT_STOP_NOW;
 	emit( sigScanFinished( KSCAN_CANCELLED ));
     }
+    scanStatus = SSTAT_STOP_NOW;
 }
 
 KScanStat KScanDevice::acquirePreview( bool forceGray, int dpi )
@@ -927,6 +927,7 @@ KScanStat KScanDevice::acquire_data( bool isPreview )
 
       if( sane_stat == SANE_STATUS_GOOD )
       {
+	 kdDebug(29000) << "--Pre-Loop" << endl;
 	 kdDebug(29000) << "format : " << sane_scan_param.format << endl;
 	 kdDebug(29000) << "last_frame : " << sane_scan_param.last_frame << endl;
 	 kdDebug(29000) << "lines : " << sane_scan_param.lines << endl;
@@ -1008,7 +1009,7 @@ KScanStat KScanDevice::acquire_data( bool isPreview )
 	    if( scanStatus != SSTAT_SILENT )
 	    {
 	       sane_stat = sane_get_parameters( scanner_handle, &sane_scan_param );
-
+	       kdDebug(29000) << "--ProcessABlock-Loop" << endl;
 	       kdDebug(29000) << "format : " << sane_scan_param.format << endl;
 	       kdDebug(29000) << "last_frame : " << sane_scan_param.last_frame << endl;
 	       kdDebug(29000) << "lines : " << sane_scan_param.lines << endl;
@@ -1289,8 +1290,10 @@ void KScanDevice::doProcessABlock( void )
 	 * the QSocketnotifier fires for a few times after the scan has been
 	 * cancelled.  Does it matter ? To see it, just uncomment the qDebug msg.
 	 */
-	// qDebug( "Stopping the scan progress !" );
+	kdDebug(29000) << "Stopping the scan progress !" << endl;
 	goOn = false;
+	scanStatus = SSTAT_SILENT;
+	emit( sigScanFinished( KSCAN_OK ));
      }
 
   } /* while( 1 ) */
