@@ -204,7 +204,8 @@ KScanDevice::KScanDevice( QObject *parent )
 KScanDevice::~KScanDevice()
 {
   if( storeOptions )  delete (storeOptions );
-
+  kdDebug(29000) << "Calling sane_exit to finish sane!" << endl;
+  sane_exit();
 }
 
 
