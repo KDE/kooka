@@ -176,6 +176,7 @@ void KSANEOCR::daemonExited(KProcess* d)
       KOCRFinalDialog fin( parent, ocrResultImage );
 
       fin.fillText( ocrResultText );
+      fin.resize( 600, 400 );
       fin.exec();
    }
 
