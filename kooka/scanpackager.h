@@ -127,8 +127,11 @@ private:
    
    QMap<KIO::Job*, JobDescription> jobMap;
 
-   QPixmap       floppyPixmap;
-   
+   QPixmap       m_floppyPixmap;
+   QPixmap       m_grayPixmap;
+   QPixmap       m_bwPixmap;
+   QPixmap       m_colorPixmap;
+
    QMap<KURL, QImage*> imageMap;
 };
 

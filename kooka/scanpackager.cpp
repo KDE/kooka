@@ -97,9 +97,13 @@ ScanPackager::ScanPackager( QWidget *parent ) : KFileTreeView( parent )
 	/* Set the current export dir to home */
 	curr_copy_dir = QDir::home();
 
+	/* Preload frequently used icons */
 	KIconLoader *loader = KGlobal::iconLoader();
-	floppyPixmap = loader->loadIcon( "3floppy_unmount", KIcon::Small );
-	
+	m_floppyPixmap = loader->loadIcon( "3floppy_unmount", KIcon::Small );
+	m_grayPixmap = loader->loadIcon( "palette_gray", KIcon::Small );
+	m_bwPixmap = loader->loadIcon( "palette_lineart", KIcon::Small );
+	m_colorPixmap = loader->loadIcon( "palette_color", KIcon::Small );
+
 	   
 	popup =0L;
 	/* open the image galleries */
@@ -185,19 +189,34 @@ void ScanPackager::slotDecorate( KFileTreeViewItem* item )
 
       if( img )
       {
-	 /* The image appears to be loaded to memory. */
 
+	 /* The image appears to be loaded to memory. */
+	 if( img->depth() == 1 )
+	 {
+	    /* a bw-image */
+	    item->setPixmap( 0, m_bwPixmap );
+	 }
+	 else
+	 {
+	    if( img->isGrayscale() )
+	    {
+	       item->setPixmap( 0, m_grayPixmap );
+	    }
+	    else
+	    {
+	       item->setPixmap( 0, m_colorPixmap );
+	    }
+	 }
+	 
 	 /* set image size in pixels */
 	 QString t = i18n( "%1 x %2" ).arg( img->width()).arg(img->height());
-	 kdDebug(28000) << "Setting column text: " << t << endl;
 	 item->setText( 1, t );
-	 kdDebug( 28000) << "Image laoded !" << endl;
-	 item->setPixmap( 0, kfi->pixmap(16) );
+	 kdDebug( 28000) << "Image laoded and decorated!" << endl;
       }
       else
       {
 	 /* Item is not yet loaded. Display file information */
-	 item->setPixmap( 0, floppyPixmap );
+	 item->setPixmap( 0, m_floppyPixmap );
 	 KIO::filesize_t s = kfi->size();
 	 double dsize = s / 1024.0;  /* calc kilobytes */
 
