@@ -187,7 +187,7 @@ void ThumbView::slImageChanged( KFileItem *kfit )
 
    /* delete filename */
    itemUrl.setFileName( QString());
-   if( !itemUrl.cmp( thumbDir, true ))
+   if( !itemUrl.equals( thumbDir, true ))
    {
       // kdDebug(28000) << "returning, because directory does not match: " << itemUrl.prettyURL() << endl;
       // kdDebug(28000) << "and my URL: " << thumbDir.prettyURL() << endl;

@@ -278,7 +278,7 @@ void ScanPackager::slotDecorate( KFileTreeViewItem* item )
    // and then we have the KFileTreeViewItem that we need to display the image.
    if ( ! m_nextUrlToShow.isEmpty() )
    {
-       if( m_nextUrlToShow.cmp(item->url(), true ))
+       if( m_nextUrlToShow.equals(item->url(), true ))
        {
            m_nextUrlToShow = KURL(); // do this first to prevent recursion
            slClicked( item );
