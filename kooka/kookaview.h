@@ -86,7 +86,7 @@ public:
     /**
      * Print this view to any medium -- paper or not
      */
-    void print( KPrinter* );
+    void print( );
 
     bool ToggleVisibility( int );
     void loadStartupImage( void );
