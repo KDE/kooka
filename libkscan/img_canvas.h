@@ -142,7 +142,7 @@ public slots:
      * and pen.
      * The function returns a id that needs to be given to the remove method.
      */
-    int highlight( const QRect&, const QPen&, const QBrush& );
+    int highlight( const QRect&, const QPen&, const QBrush&, bool ensureVis=false );
 
     /**
      * reverts the highlighted region back to normal view.

@@ -1025,7 +1025,7 @@ const QString ImageCanvas::scaleKindString()
 }
 
 
-int ImageCanvas::highlight( const QRect& rect, const QPen& pen, const QBrush&  )
+int ImageCanvas::highlight( const QRect& rect, const QPen& pen, const QBrush&, bool ensureVis  )
 {
     QRect saveRect;
     saveRect.setRect( rect.x()-2, rect.y()-2, rect.width()+4, rect.height()+4 );
@@ -1044,27 +1044,40 @@ int ImageCanvas::highlight( const QRect& rect, const QPen& pen, const QBrush&  )
     p.flush();
     updateContents(targetRect.x()-1, targetRect.y()-1,
                    targetRect.width()+2, targetRect.height()+2 );
+
+    if( ensureVis )
+    {
+        QPoint p = targetRect.center();
+        ensureVisible( p.x(), p.y(), 10+targetRect.width()/2, 10+targetRect.height()/2 );
+    }
+
     return idx;
 }
 
 void ImageCanvas::removeHighlight( int idx )
 {
-    if( ! idx < d->highlightRects.count() )
+    if( (unsigned) idx >= d->highlightRects.count() )
+    {
+        kdDebug(28000) << "removeHighlight: Not a valid index" << endl;
         return;
+    }
 
+    /* take the rectangle from the stored highlight rects and map it to the viewer scaling */
     QRect r = d->highlightRects[idx];
     d->highlightRects.remove(r);
     QRect targetRect = scale_matrix.map( r );
 
+    /* create a small pixmap with a copy of the region in question of the original image */
     QPixmap origPix;
     origPix.convertFromImage( image->copy(r) );
-
+    /* and scale it */
     QPixmap scaledPix = origPix.xForm( scale_matrix );
-
+    /* and finally draw it */
     QPainter p( pmScaled );
     p.drawPixmap( targetRect, scaledPix );
     p.flush();
 
+    /* update the viewers contents */
     updateContents(targetRect.x()-1, targetRect.y()-1,
                    targetRect.width()+2, targetRect.height()+2 );
 
