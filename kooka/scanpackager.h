@@ -153,6 +153,9 @@ private:
     int          img_counter;
     QPopupMenu    *m_contextMenu;
 
+    // like m_nextUrlToSelect in KFileTreeView but for our own purposes (showing the image)
+    KURL         m_nextUrlToShow;
+
     QMap<KIO::Job*, JobDescription> jobMap;
 
    QPixmap       m_floppyPixmap;

@@ -271,6 +271,18 @@ void ScanPackager::slotDecorate( KFileTreeViewItem* item )
       QString format = getImgFormat( item );
       item->setText( 2, format );
    }
+
+   // This code is quite similar to m_nextUrlToSelect in KFileTreeView::slotNewTreeViewItems
+   // When scanning a new image, we wait for the KDirLister to notice the new file,
+   // and then we have the KFileTreeViewItem that we need to display the image.
+   if ( ! m_nextUrlToShow.isEmpty() )
+   {
+       if( m_nextUrlToShow.cmp(item->url(), true ))
+       {
+           m_nextUrlToShow = KURL(); // do this first to prevent recursion
+           slClicked( item );
+       }
+   }
 }
 
 
@@ -845,6 +857,7 @@ void ScanPackager::slAddImage( QImage *img, KookaImageMeta* )
 
    if( kookaBranch ) kookaBranch->updateDirectory( KURL(strdir) );
    slotSetNextUrlToSelect( lurl );
+   m_nextUrlToShow = lurl;
 
    QString s;
    /* Count amount of children of the father */
