@@ -42,7 +42,7 @@ KScanSlider::KScanSlider( QWidget *parent, const QString& text,
     connect(slider, SIGNAL(valueChanged(int)), this, SLOT( slSliderChange(int) ));
 		
     /* set Value 0 to the widget */
-    slider_val = (int)min - 1;
+    slider->setValue( (int) min -1 );
 
     /* Add to layout widget and activate */
     hb->addWidget( slider, 36 );
@@ -66,7 +66,7 @@ void KScanSlider::slSetSlider( int value )
     // debug( "Slider val: %d -> %d", value, slider_val );
     kdDebug(29000) << "Setting Slider with " << value << endl;
 
-    if( value == slider_val )
+    if( value == slider->value() ) 
     {
       kdDebug(29000) << "Returning because slider value is already == " << value << endl;
       return;
@@ -79,7 +79,7 @@ void KScanSlider::slSetSlider( int value )
 void KScanSlider::slSliderChange( int v )
 {
     kdDebug(29000) << "Got slider val: " << v << endl;
-    slider_val = v;
+    // slider_val = v;
     numdisp->setNum(v);
     emit( valueChanged( v ));
 }
@@ -230,5 +230,4 @@ void KScanCombo::slFireActivated( int i )
    emit( activated( i ));
 }
 
-#include "kscanslider.h"
 #include "kscanslider.moc"

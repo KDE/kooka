@@ -26,56 +26,70 @@
 #include <qcombobox.h>
 #include <qlabel.h>
 #include <qhbox.h>
-
 /**
   *@author Klaas Freitag
   */
 
-class KScanSlider : public QFrame  {
-	Q_OBJECT
+class KScanSlider : public QFrame
+{
+   Q_OBJECT
+   Q_PROPERTY( int slider_val READ value WRITE slSetSlider )
+      
 public:
-	KScanSlider( QWidget *parent, const QString& text,
-		     double min, double max );
-	~KScanSlider();
+   KScanSlider( QWidget *parent, const QString& text,
+		double min, double max );
+   ~KScanSlider();
 
-public slots:
-	void		slSetSlider( int );
-	void		slSliderChange( int );
-	void		setEnabled( bool b );
 
-   int value( void ) const
+   int value( ) const
       { return( slider->value()); }
-signals:
-	void		valueChanged( int );
+   
+public slots:
+   void		slSetSlider( int );
+   void		slSliderChange( int );
+   void		setEnabled( bool b );
+
+   signals:
+   void		valueChanged( int );
 		
 private:
-	int		slider_val;
-	QSlider		*slider;
-	QLabel		*l1, *numdisp;	
+   QSlider	*slider;
+   QLabel	*l1, *numdisp;
+
+   class KScanSliderPrivate;
+   KScanSliderPrivate *d;
+   
 };
 
 
 class KScanEntry : public QFrame
 {
    Q_OBJECT
+   Q_PROPERTY( QString text READ text WRITE slEntryChange )
+      
 public:
    KScanEntry( QWidget *parent, const QString& text );
    // ~KScanEntry();
 
+   QString text( ) const;
+
 public slots:
    void		slSetEntry( const QString& );
    void		setEnabled( bool b ){ if( entry) entry->setEnabled( b ); }
-   
-   QString text( void ) const;
-   
-protected slots:
    void		slEntryChange( const QString& );
+      
+protected slots:
    void         slReturnPressed( void );
+
 signals:
    void		valueChanged( const QCString& );
    void         returnPressed( const QCString& );
+   
 private:
    QLineEdit 	*entry;
+
+   class KScanEntryPrivate;
+   KScanEntryPrivate *d;
 	
 };
 
@@ -83,13 +97,15 @@ private:
 class KScanCombo : public QHBox
 {
    Q_OBJECT
+   Q_PROPERTY( QString cbEntry READ currentText WRITE slSetEntry )
+      
 public:
    KScanCombo( QWidget *parent, const QString& text, const QStrList& list );
    // ~KScanCombo();
 
-   QString      currentText( void ) const;
+   QString      currentText( ) const;
    QString      text( int i ) const;
-   int  	count( void ) const;
+   int  	count( ) const;
 
 public slots:
    void		slSetEntry( const QString &);
@@ -108,6 +124,9 @@ signals:
 private:
    QComboBox	*combo;
    QStrList	combolist;
+
+   class KScanComboPrivate;
+   KScanComboPrivate *d;
 };
 
 #endif
