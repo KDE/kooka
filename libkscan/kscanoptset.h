@@ -78,6 +78,8 @@ private:
    /* List to collect objects for which memory was allocated and must be freed */
    QList<KScanOption> strayCatsList;
 
+   class KScanOptSetPrivate;
+   KScanOptSetPrivate *d;
 };
 
 #endif // KScanOptSet

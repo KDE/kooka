@@ -62,6 +62,7 @@ class KGammaTable;
 class KScanOption : public QObject
 {
   Q_OBJECT
+
 public:
   /**
    * creates a new option object for the named option. After that, the
@@ -250,6 +251,9 @@ private:
 
   /* For gamma-Tables remeber gamma, brightness, contrast */
   int        gamma, brightness, contrast;
+
+   class KScanOptionPrivate;
+   KScanOptionPrivate *d;
 };
 
 
