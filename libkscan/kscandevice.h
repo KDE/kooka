@@ -171,6 +171,14 @@ public:
   bool optionExists( const QCString& name );
 
   /**
+   *  checks if the backend knows the option with the required name under
+   *  a different name, like some backends do. If it does, the known name
+   *  is returned, otherwise a null QCString.
+   */
+    
+   QCString aliasName( const QCString& name );
+    
+  /**
    *  returns a Widget suitable for the selected Option and creates the
    *  KScanOption. It is internally connected to the scan device, every
    *  change to the widget is automaticly considered by the scan device.
@@ -183,6 +191,12 @@ public:
 			      const QString& desc = QString::null,
 			      const QString& tooltip = QString::null );
 
+    /**
+     *  returns the pointer to an already created Scanoption from the
+     *  gui element list. Cares for option name aliases.
+     */
+    KScanOption *getExistingGuiElement( const QCString& name );
+    
   /**
    *  sets an widget of the named option enabled/disabled
    **/

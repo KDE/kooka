@@ -18,6 +18,8 @@
 #include <qapplication.h>
 #include <kdebug.h>
 #include <klocale.h>
+#include <kglobal.h>
+#include <kconfig.h>
 
 #include <unistd.h>
 #include "kgammatable.h"
@@ -46,16 +48,30 @@ KScanOptSet gammaTables("GammaTables");
    ------------------------------------------------------------------------- */
 void KScanDevice::guiSetEnabled( const QCString& name, bool state )
 {
-   if( gui_elem_names[ name ] )
-   {
-      KScanOption *so = gui_elem_names[name];
-      QWidget *w = so->widget();
+    KScanOption *so = getExistingGuiElement( name );
+    
+    if( so )
+    {
+	QWidget *w = so->widget();
 
-      if( w )
-	w->setEnabled( state );
+	if( w )
+	    w->setEnabled( state );
     }
 }
 
+
+/* ---------------------------------------------------------------------------
+
+   ------------------------------------------------------------------------- */
+KScanOption *KScanDevice::getExistingGuiElement( const QCString& name )
+{
+    KScanOption *ret = 0L;
+
+    QCString alias = aliasName( name );
+    ret = gui_elem_names[ alias ];
+    
+    return( ret );
+}
 /* ---------------------------------------------------------------------------
 
    ------------------------------------------------------------------------- */
@@ -68,19 +84,21 @@ KScanOption *KScanDevice::getGuiElement( const QCString& name, QWidget *parent,
    QWidget *w = 0;
    KScanOption *so = 0;
 
+   QCString alias = aliasName( name );
+   
    /* Check if already exists */
-   so = gui_elem_names[ name ];
+   so = getExistingGuiElement( name );
 
    if( so ) return( so );
 
    /* ...else create a new one */
-   so = new KScanOption( name );
+   so = new KScanOption( alias );
 
    if( so->valid() && so->softwareSetable())
    {
       /** store new gui-elem in list of all gui-elements */
       gui_elements.append( so );
-      gui_elem_names.insert( name, so );
+      gui_elem_names.insert( alias, so );
 	 	
       w = so->createWidget( parent, desc, tooltip );
       if( w )
@@ -90,10 +108,10 @@ KScanOption *KScanDevice::getGuiElement( const QCString& name, QWidget *parent,
    else
    {
       if( !so->valid())
-	 kdDebug(29000) << "getGuiElem: no option <" << name << ">" << endl;
+	 kdDebug(29000) << "getGuiElem: no option <" << alias << ">" << endl;
       else
       if( !so->softwareSetable())
-	 kdDebug(29000) << "getGuiElem: option <" << name << "> is not software Setable" << endl;
+	 kdDebug(29000) << "getGuiElem: option <" << alias << "> is not software Setable" << endl;
 
       delete so;
       so = 0;
@@ -127,10 +145,13 @@ KScanDevice::KScanDevice( QObject *parent )
     pixel_y = 0;
     scanner_name = 0L;
        
-
+    KConfig *konf = KGlobal::config ();
+    konf->setGroup( "Startup" );
+    bool netaccess = konf->readBoolEntry( "QueryLocalOnly", false );
+    kdDebug(29000) << "Query for network scanners " << (netaccess ? "Not enabled" : "Enabled") << endl;
     if( sane_stat == SANE_STATUS_GOOD )
     {
-        sane_stat = sane_get_devices( &dev_list, SANE_FALSE );
+        sane_stat = sane_get_devices( &dev_list, netaccess ? SANE_TRUE : SANE_FALSE );
 
         // NO network devices yet
 
@@ -437,7 +458,8 @@ KScanStat KScanDevice::apply( KScanOption *opt, bool isGammaTable )
       }
       else
       {
-	 kdDebug(29000) << "Status of sane is bad: " << sane_strstatus( sane_stat ) << endl;
+	 kdDebug(29000) << "Status of sane is bad: " << sane_strstatus( sane_stat )
+			<< " for option " << oname << endl;
 
       }
    }
@@ -451,10 +473,42 @@ KScanStat KScanDevice::apply( KScanOption *opt, bool isGammaTable )
 bool KScanDevice::optionExists( const QCString& name )
 {
    if( name.isEmpty() ) return false;
-   int *i = option_dic[ name ];
+   int *i = 0L;
+   
+   QCString altname = aliasName( name );
 
-   if( !i ) return( false );
+   if( ! altname.isNull() )
+       i = option_dic[ altname ];
+
+   if( !i )
+       return( false );
    return( *i > -1 );
+}
+
+/* This function tries to find name aliases which appear from backend to backend.
+ *  Example: Custom-Gamma is for epson backends 'gamma-correction' - not a really
+ *  cool thing :-|
+ *  Maybe this helps us out ?
+ */
+QCString KScanDevice::aliasName( const QCString& name )
+{
+    int *i = option_dic[ name ];
+    QCString ret;
+    
+    if( i ) return( name );
+    ret = name;
+    
+    if( name == SANE_NAME_CUSTOM_GAMMA )
+    {
+	if(option_dic["gamma-correction"])
+	    ret = "gamma-correction";
+	
+    }
+
+    if( ret != name )
+	kdDebug( 29000) << "Found alias for <" << name << "> which is <" << ret << ">" << endl;
+    
+    return( ret );
 }
 
 
@@ -547,7 +601,7 @@ KScanStat KScanDevice::acquirePreview( bool forceGray, int dpi )
    /* set Preview = ON if exists */
    if( optionExists( SANE_NAME_PREVIEW ) )
    {
-      KScanOption prev( SANE_NAME_PREVIEW );
+      KScanOption prev( aliasName(SANE_NAME_PREVIEW) );
 
       prev.set( true );
       apply( &prev );
@@ -561,7 +615,7 @@ KScanStat KScanDevice::acquirePreview( bool forceGray, int dpi )
    /* Gray-Preview only  done by widget ? */
    if( optionExists( SANE_NAME_GRAY_PREVIEW ))
    {
-     KScanOption *so = gui_elem_names[ SANE_NAME_GRAY_PREVIEW ];
+     KScanOption *so = getExistingGuiElement( SANE_NAME_GRAY_PREVIEW );
      if( so )
      {
        if( so->get() == "true" )
