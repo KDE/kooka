@@ -31,7 +31,6 @@
 #include <qmap.h>
 #include <qstring.h>
 #include <kprinter.h>
-#include <kdeprint/kprintdialog.h>
 #include <kdeprint/kprintdialogpage.h>
 
 class KookaImage;
@@ -81,11 +80,11 @@ public slots:
     void printFittingToPage(KookaImage *img);
 protected:
     typedef enum { SW, NW, NO, SO } MarkerDirection;
-    
+
     virtual void drawMarkerAroundPoint( const QPoint& );
     virtual void drawCutSign( const QPoint&, int, MarkerDirection );
     virtual void drawCornerMarker( const QSize&, int, int, int, int );
-    
+
 private:
 
     KPrinter 	*m_printer;
