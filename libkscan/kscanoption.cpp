@@ -30,8 +30,7 @@
 #include <qlayout.h>
 #include <qtooltip.h>
 #include <qimage.h>
-#include <qfileinfo.h>
-#include <qapplication.h>
+#include <qregexp.h>
 
 #include <kdebug.h>
 
@@ -730,6 +729,28 @@ bool KScanOption::set( const QCString& c_string )
    
    if( ! desc ) return( false );
 
+   /* Check if it is a gammatable. If it is, convert to KGammaTable and call
+    *  the approbiate set method.
+    */
+   QRegExp re( "\\d+, \\d+, \\d+" );
+   re.setMinimal(true);
+   
+   if( QString(c_string).contains( re ))
+   {
+      QStringList relist = QStringList::split( ", ", QString(c_string) );
+      
+      int brig = (relist[0]).toInt();
+      int contr = (relist[1]).toInt();
+      int gamm = (relist[2]).toInt();
+
+      KGammaTable gt( brig, contr, gamm );
+      ret = set( &gt );
+      kdDebug(29000) << "Setting GammaTable with int vals " << brig << "|" << contr << "|" << gamm << endl;
+      
+      return( ret );
+   }
+
+   
    /* On String-type the buffer gets malloced in Constructor */
    switch( desc->type )
    {
@@ -757,6 +778,12 @@ bool KScanOption::set( const QCString& c_string )
 	       kdDebug(29000) << "Conversion of string value failed!" << endl;
 	   
 	   break;
+      case SANE_TYPE_BOOL:
+	 kdDebug(29000) << "Type is BOOL, setting value <" << c_string << ">" << endl;
+	 val = 0;
+	 if( c_string == "true" ) val = 1;
+	 set( val );
+	 break;
        default:
 	   kdDebug(29000) << "Type of " << name << " is " << desc->type << endl;
 	   kdDebug(29000) << "Cant set " << name << " with type string" << endl;
@@ -787,7 +814,7 @@ bool KScanOption::set( KGammaTable *gt )
 
    int word_size = desc->size / sizeof( SANE_Word );
    QMemArray<SANE_Word> qa( word_size );
-
+   kdDebug(29000) << "KScanOption::set for Gammatable !" << endl;
    switch( desc->type )
    {
       case SANE_TYPE_INT:

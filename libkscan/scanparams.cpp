@@ -49,7 +49,8 @@
 
 
 ScanParams::ScanParams( QWidget *parent, const char *name )
-    : QVBox( parent, name )
+   : QVBox( parent, name ),
+     m_firstGTEdit( true )
 {
    /* first some initialisation and debug messages */
     sane_device = 0; virt_filename = 0;
@@ -110,7 +111,7 @@ bool ScanParams::connectDevice( KScanDevice *newScanDevice )
    QString cap = i18n("<B>Scanner Settings</B><BR>");
    cap += sane_device->getScannerName();
 
-   QLabel *toplabel = new QLabel( cap, this );
+   (void ) new QLabel( cap, this );
 
    (void) new KSeparator( KSeparator::HLine, this);
 
@@ -395,6 +396,7 @@ QScrollView *ScanParams::scannerParams( )
       if( so )
       {
 	 int isOn;
+	 initialise( so );
 	 so->get( &isOn );
 	
 	 kdDebug(29000) << "Custom Gamma Table is <" << (isOn ? "on" : "off") << ">" << endl;
@@ -426,12 +428,14 @@ QScrollView *ScanParams::scannerParams( )
    }
 
    so = sane_device->getGuiElement( SANE_NAME_NEGATIVE, pbox  );
-
+   initialise( so );
+   
    /* PREVIEW-Switch */
    kdDebug(29000) << "Try to get Gray-Preview" << endl;
    if( sane_device->optionExists( SANE_NAME_GRAY_PREVIEW ))
    {
      so = sane_device->getGuiElement( SANE_NAME_GRAY_PREVIEW, pbox );
+     initialise( so );
      cb_gray_preview = (QCheckBox*) so->widget();
      QToolTip::add( cb_gray_preview, i18n("Acquire a gray preview even in color mode (faster)") );
    }
@@ -747,18 +751,53 @@ void ScanParams::slEditCustGamma( void )
     kdDebug(29000) << "Called EditCustGamma ;)" << endl;
     KGammaTable old_gt;
 
-    KScanOption redGt( SANE_NAME_GAMMA_VECTOR_R );
-    if( redGt.active()) kdDebug(29000) << "RED-GT is active now !" << endl;
-
-    KScanOption blueGt( SANE_NAME_GAMMA_VECTOR_B );
-    if( blueGt.active()) kdDebug(29000) << "blue-GT is active now !" << endl;
-
-    KScanOption greenGt( SANE_NAME_GAMMA_VECTOR_G );
-    if( greenGt.active()) kdDebug(29000) << "green-GT is active now !" << endl;
-
     KScanOption grayGt( SANE_NAME_GAMMA_VECTOR );
-    if( grayGt.active()) kdDebug(29000) << "Gray-GT is active now !" << endl;
-    grayGt.get( &old_gt );
+    KScanOption redGt( SANE_NAME_GAMMA_VECTOR_R );
+
+    /* Since gammatable options are not set in the default gui, it must be
+     * checked if it is the first edit. If it is, take from loaded default
+     * set if available there */
+    if( m_firstGTEdit && startupOptset )
+    {
+       m_firstGTEdit = false;
+       KScanOption *gt = startupOptset->get(SANE_NAME_GAMMA_VECTOR);
+       if( !gt )
+       {
+	  /* If it  not gray, it should be one color. */
+	  gt = startupOptset->get( SANE_NAME_GAMMA_VECTOR_R );
+       }
+
+       if( gt )
+	  gt->get( &old_gt );
+    }
+    else
+    {
+       /* it is not the first edit, use older values */
+       if( grayGt.active())
+       {
+	  /* This will be fine for all color gt's. */
+	  grayGt.get( &old_gt );
+	  kdDebug(29000) << "Gray Gamma Table is active " << endl;
+       }
+       else
+       {
+	  /* Gray is not active, but at the current implementation without
+	   * red/green/blue gammatables, but one for all, all gammatables
+	   * are equally. So taking the red one should be fine. TODO
+	   */
+	  if( redGt.active())
+	  {
+	     redGt.get( &old_gt );
+	     kdDebug(29000) << "Getting old gamma table from Red channel" << endl;
+	  }
+	  else
+	  {
+	     /* uh ! No current gammatable could be retrieved. Use the 100/0/0 gt
+	      * created by KGammaTable's constructor. Nothing to do for that.
+	      */
+	  }
+       }
+    }
 
     kdDebug(29000) << "Old gamma table: " << old_gt.getGamma() << ", " << old_gt.getBrightness() << ", " << old_gt.getContrast() << endl;
 
@@ -826,7 +865,7 @@ void ScanParams::slReloadAllGui( KScanOption* t)
 
     sane_device->slReloadAllBut( t );
 
-    /* Custom Gamma */
+    /* Custom Gamma <- What happens if that does not exist for some scanner ? TODO */
     KScanOption kso( SANE_NAME_CUSTOM_GAMMA );
 
     if( pb_edit_gtable )

@@ -170,6 +170,8 @@ private:
 
    QPixmap       pixLineArt, pixGray, pixColor, pixHalftone, pixMiniFloppy;
 
+   bool          m_firstGTEdit;
+   
    class ScanParamsPrivate;
    ScanParamsPrivate *d;
 };
