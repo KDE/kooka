@@ -31,7 +31,7 @@ SizeIndicator::SizeIndicator( QWidget *parent, long  thres, long crit )
 {
    sizeInByte = -1;
    setFrameStyle( QFrame::Box | QFrame::Sunken );
-
+   setMinimumWidth( fontMetrics().width( QString::fromLatin1("MMM.MM MB") ));
    setCritical( crit );
    threshold = thres;
    
