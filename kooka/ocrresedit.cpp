@@ -133,6 +133,8 @@ void ocrResEdit::slSaveText()
                                                  "*.txt",
                                                  this,
                                                  i18n("Save OCR Result Text") );
+    if( fileName.isEmpty() )
+      return;
     QFile file( fileName );
     if ( file.open( IO_WriteOnly ) )
     {
