@@ -43,14 +43,14 @@
 #include "kooka.h"
 #include "version.h"
 
-static const char *description =
+static const char description[] =
           "<B>Kooka</B> is a KDE application which provides access to scanner hardware "
 	      "using the SANE library.<P>"
 	      "Kooka helps you scan, save your image in the correct "
 	      "image format and perform <B>O</B>ptical <B>C</B>haracter <B>R</B>ecognition on it,"
 "using <I>gocr</I>, Joerg Schulenburg's and friends' Open Source ocr program.<P>";
 
-static const char *license =
+static const char license[] =
 "This program is distributed under the terms of the GPL v2 as publishec by\n"
 "the Free Software Foundation\n\n"
 "As a special exception, permission is given to link this program\n"
