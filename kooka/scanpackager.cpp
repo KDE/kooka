@@ -56,7 +56,6 @@
 #include <kio/file.h>
 #include <kio/job.h>
 
-#define INCOMING_PATH i18n("Incoming")
 #define STARTUP_FIRST_START "firstStart"
 
 
@@ -107,99 +106,76 @@ ScanPackager::ScanPackager( QWidget *parent ) : KFileTreeView( parent )
    /* Preload frequently used icons */
    KIconLoader *loader = KGlobal::iconLoader();
    m_floppyPixmap = loader->loadIcon( "3floppy_unmount", KIcon::Small );
-   m_grayPixmap = loader->loadIcon( "palette_gray", KIcon::Small );
-   m_bwPixmap = loader->loadIcon( "palette_lineart", KIcon::Small );
-   m_colorPixmap = loader->loadIcon( "palette_color", KIcon::Small );
+   m_grayPixmap   = loader->loadIcon( "palette_gray", KIcon::Small );
+   m_bwPixmap     = loader->loadIcon( "palette_lineart", KIcon::Small );
+   m_colorPixmap  = loader->loadIcon( "palette_color", KIcon::Small );
 
 	   
    popup =0L;
+   m_startup = true;
+   
    /* open the image galleries */
    openRoots();
-
    createMenus();
 }
 
 void ScanPackager::openRoots()
 {
-   /* First open the standard root */
-   QString localRoot = Previewer::galleryRoot();
-   
    /* standard root always exists, ImgRoot creates it */
-   KURL rootUrl(localRoot);
+   KURL rootUrl(Previewer::galleryRoot());
    kdDebug(28000) << "Open standard root " << rootUrl.url() << endl;
 
-   m_defaultBranch = openRoot( rootUrl, true );
+   openRoot( rootUrl, true );
+   m_defaultBranch->setOpen(true);
 
-   connect( m_defaultBranch, SIGNAL(populateFinished( KFileTreeViewItem * )),
-	    this, SLOT( slotPopulateFinished( KFileTreeViewItem * )));
-   
    /* open more configurable image repositories TODO */
-}
-
-void ScanPackager::slotPopulateFinished( KFileTreeViewItem *it )
-{
-   if( it == m_defaultBranch->root() )
-   {
-      kdDebug(28000) << "Slot population finished hit!" << endl;
-      /* Incoming should be in the first hirarchie */
-      KFileTreeViewItem *startit = findItem( m_defaultBranch, INCOMING_PATH );
-
-      if( startit )
-      {
-	 KConfig *konf = KGlobal::config ();
-	 if( konf )
-	 {
-	    konf->setGroup(GROUP_STARTUP);
-
-	    bool firstStart = konf->readBoolEntry( STARTUP_FIRST_START, true );
-	    if( firstStart )
-	    {
-	       /* create incoming */
-	       KURL lurl( m_defaultBranch->rootUrl() );
-	       lurl.addPath( INCOMING_PATH );
-	       slotSetNextUrlToSelect( lurl );
-	       if( ! KIO::NetAccess::mkdir( lurl ))
-	       {
-		  kdDebug(28000) << "ERR: creation of incoming dir " << lurl.prettyURL()
-				 << " failed !" << endl;
-	       }	
-	    }
-	 }	
-	 else
-	 {
-	    /* Incoming does not yet exist */
-	 }
-      }
-   }
 }
 
 KFileTreeBranch* ScanPackager::openRoot( const KURL& root, bool open )
 {
    KIconLoader *loader = KGlobal::iconLoader();
+
+   /* working on the global branch. FIXME */
+   m_defaultBranch = addBranch( root, i18n("Kooka Gallery"),
+				loader->loadIcon( "folder_image", KIcon::Small ),
+				false /* do not showHidden */ );
    
-   KFileTreeBranch *newbranch = addBranch( root, i18n("Kooka Gallery"),
-					   loader->loadIcon( "folder_image", KIcon::Small ),
-					   false /* do not showHidden */ );
-   if( newbranch )
+   // Q_CHECK_PTR( m_defaultBranch );
+   m_defaultBranch->setOpenPixmap( loader->loadIcon( "folder_blue_open", KIcon::Small ));
+   
+   setDirOnlyMode( m_defaultBranch, false );
+   m_defaultBranch->setShowExtensions( false );
+   
+   connect( m_defaultBranch, SIGNAL( newTreeViewItems( KFileTreeBranch*, const KFileTreeViewItemList& )),
+	    this, SLOT( slotDecorate(KFileTreeBranch*, const KFileTreeViewItemList& )));
+
+   connect( m_defaultBranch, SIGNAL( directoryChildCount( KFileTreeViewItem* , int )),
+	    this, SLOT( slotDirCount( KFileTreeViewItem *, int )));
+   
+   connect( m_defaultBranch, SIGNAL( deleteItem( KFileItem* )),
+	    this, SLOT( slotDeleteFromBranch(KFileItem*)));
+
+   connect( m_defaultBranch, SIGNAL( populateFinished( KFileTreeViewItem * )),
+	    this, SLOT( slotStartupFinished( KFileTreeViewItem * )));
+
+
+   return( m_defaultBranch );
+}
+
+void ScanPackager::slotStartupFinished( KFileTreeViewItem *it )
+{
+   if( m_startup && (it == m_defaultBranch->root()) )
    {
-      setDirOnlyMode( newbranch, false );
-      newbranch->setShowExtensions( false );
+      kdDebug(28000) << "Slot population finished hit!" << endl;
 
-      newbranch->setOpenPixmap( loader->loadIcon( "folder_blue_open", KIcon::Small ));
-			 
-      connect( newbranch, SIGNAL(newTreeViewItems( KFileTreeBranch*, const KFileTreeViewItemList& )),
-	       this, SLOT( slotDecorate(KFileTreeBranch*, const KFileTreeViewItemList& )));
+      /* If nothing is selected, select the root. */
+      if( ! currentKFileTreeViewItem() )
+      {
+	 (m_defaultBranch->root())->setSelected( true );
+      }
 
-      connect( newbranch, SIGNAL( directoryChildCount( KFileTreeViewItem* , int )),
-	       this, SLOT( slotDirCount( KFileTreeViewItem *, int )));
-
-      connect( newbranch, SIGNAL( deleteItem( KFileItem* )),
-	       this, SLOT( slotDeleteFromBranch(KFileItem*)));
-
-      newbranch->setOpen(open);
-   
+      m_startup = false;
    }
-   return( newbranch );
 }
 
 void ScanPackager::createMenus()
@@ -247,6 +223,7 @@ void ScanPackager::slotDecorate( KFileTreeViewItem* item )
    if( item->isDir())
    {
       // done in extra slot.
+      kdDebug(28000) << "Decorating directory!" << endl;
    }
    else
 
