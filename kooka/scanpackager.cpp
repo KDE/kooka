@@ -26,7 +26,7 @@
 #include <qpopupmenu.h>
 #include <qdict.h>
 #include <qpixmap.h>
-#include <qmessagebox.h>
+#include <kmessagebox.h>
 #include <qfiledialog.h>
 
 #include <kfiledialog.h>
@@ -64,10 +64,10 @@ ScanPackager::ScanPackager( QWidget *parent ) : KListView( parent )
 	root->setText( 0, "Image collection" );
 	
 	connect( this, SIGNAL( selectionChanged( QListViewItem*)),
-					   SLOT( slSelectionChanged(QListViewItem*)));
+		 SLOT( slSelectionChanged(QListViewItem*)));
 
 	connect( this, SIGNAL( rightButtonPressed( QListViewItem *, const QPoint &, int )),
-	               SLOT( slShowContextMenue(QListViewItem *, const QPoint &, int )));
+		 SLOT( slShowContextMenue(QListViewItem *, const QPoint &, int )));
 	
 	img_counter = 1;
 	if( readDir( root, save_root ) == 0 )
@@ -105,6 +105,25 @@ void ScanPackager::slSelectionChanged( QListViewItem *newItem )
  	}
 }
 
+
+
+QString ScanPackager::getCurrImageFileName( bool withPath = true ) const
+{
+   QString result = "";
+   
+   PackagerItem *curr = (PackagerItem*) currentItem();
+   if( ! curr )
+   {
+      curr = root;
+   }
+
+   if( curr )
+   {
+      result = curr->getFilename( withPath );
+   }
+   return( result );
+}
+
 /* ----------------------------------------------------------------------- */
 /* Called if the image exists but was changed by image manipulation func   */
 void ScanPackager::slotImageChanged( QImage *img )
@@ -124,14 +143,25 @@ void ScanPackager::slotImageChanged( QImage *img )
    ImgSaver saver( this );
    ImgSaveStat is_stat = ISS_OK;
    is_stat = saver.saveImage( img, filename );
-   
-   if( is_stat != ISS_OK )
+
+   if( is_stat == ISS_ERR_FORMAT_NO_WRITE )
+   {
+      KMessageBox::error( this, I18N( "Cant write this image format\nImage will not be saved!"),
+			    I18N("Save error") );
+   }
+   else if( is_stat == ISS_ERR_PERM )
+   {
+      KMessageBox::error( this, I18N( "Image file is write protected.\nImage will not be saved!"),
+			    I18N("Save error") );
+
+   }
+   else if( is_stat != ISS_OK )
    {
       debug( "Error while saving existing image !" );
    }
-   else
+
+   if( img && !img->isNull())
    {
-      debug( "Existing image save OK" );
       curr->setImage( img );
       emit( showImage( curr->getImage()));
    }
@@ -203,6 +233,47 @@ void ScanPackager::slAddImage( QImage *img )
 }
 
 /* ----------------------------------------------------------------------- */
+/* selects and opens the file with the given name */
+void ScanPackager::slSelectImage( const QString name )
+{
+   QListViewItem *found = spFindItem( NameSearch, name );
+   
+   if( found )
+   {
+      debug( "slSelectImage: Found an item !" );
+      ensureItemVisible( found );
+      setCurrentItem( found );
+      slSelectionChanged( found );
+   }
+}
+
+
+PackagerItem *ScanPackager::spFindItem( SearchType type, const QString name )
+{
+   PackagerItem *foundItem = 0L;
+   bool searchError = false;
+      
+   QListViewItemIterator it( root );
+   for ( ; it.current() && !foundItem && !searchError; ++it )
+   {
+      switch( type )
+      {
+	 case NameSearch:
+	    if( ((PackagerItem*) it.current())->getFilename( true ) == name )
+	    {
+	       foundItem = (PackagerItem*)(it.current());
+	    }
+	    
+	    break;
+	 default:
+	    debug( "Scanpackager: Wrong search type !" );
+	    searchError = true;
+      }
+   }
+   return( foundItem );
+}
+
+/* ----------------------------------------------------------------------- */
 void ScanPackager::slShowContextMenue(QListViewItem *lvi, const QPoint &p, int col )
 {
    debug( "Showing Context Menue" );
@@ -257,8 +328,8 @@ void ScanPackager::slHandlePopup( int menu_id )
 	 break;
       case ID_POP_DELETE:
 	 if( curr && curr != root ) {
-	    deleteItem( curr, true );
-	    setnew = true;
+	    if( deleteItem( curr, true ))
+	       setnew = true;
 	 }
 	 break;
       case ID_POP_CREATE_NEW:
@@ -383,12 +454,10 @@ bool ScanPackager::deleteItem( PackagerItem *curr, bool ask )
       if( ask )
       {
 	 QString s;
-	 s = "Do you really want to delete the folder " + d.baseName();
-	 s += "\nand all the images inside ?";
-	 int result = QMessageBox::warning(this, "Delete collection item", (const char*) s,
-					   QMessageBox::Ok, QMessageBox::Cancel);
-	 debug( "This is result: %d", result );	   			   								
-	 if( result == 2 )	   			   								
+	 s = I18N("Do you really want to delete the folder ") + d.baseName();
+	 s += I18N("\nand all the images inside ?");
+	 int result = KMessageBox::questionYesNo(this, s, I18N( "Delete collection item") );
+	 if( result == KMessageBox::No )
 	    return( false );
      		
       }
@@ -419,12 +488,10 @@ bool ScanPackager::deleteItem( PackagerItem *curr, bool ask )
       if( ask )
       {
 	 QString s;
-	 s = "Do you really want to delete this image ?";
-	 s += "\nIt cant be restored !";
-	 int result = QMessageBox::warning(this, "Delete image", (const char*) s,
-					   QMessageBox::Ok, QMessageBox::Cancel);
-	 // debug( "This is result: %d", result );	   			   								
-	 if( result == 2 )	   			   								
+	 s = I18N("Do you really want to delete this image ?\nIt cant be restored !" );
+	 int result = KMessageBox::questionYesNo(this, s, I18N("Delete image") );
+
+	 if( result == KMessageBox::No )
 	    return( false );
      		
       }

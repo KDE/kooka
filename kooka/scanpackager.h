@@ -43,8 +43,11 @@ public:
    ~ScanPackager();
    virtual QString getImgName( QString name_on_disk );
    virtual QString getSaveRoot(){ return( save_root ); }
-	
+
+   QString 	getCurrImageFileName( bool ) const;
+   
 public slots:
+   void         slSelectImage( const QString );
    void 	slAddImage( QImage *img );		
    void 	slSelectionChanged( QListViewItem *);
    void         slShowContextMenue(QListViewItem *, const QPoint &, int );
@@ -64,6 +67,10 @@ signals:
    void         unloadImage( QImage* );
 	
 private:
+
+   
+   PackagerItem * spFindItem( SearchType type, const QString name );
+   
    int 	        readDir( QListViewItem *parent, const char *dir_to_read );
    void         showContextMenu( QPoint p, bool show_folder = true );
    void 			 createFolder( void );
