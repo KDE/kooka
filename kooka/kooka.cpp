@@ -74,7 +74,7 @@ Kooka::Kooka( const QCString& deviceToUse)
     connect(m_view, SIGNAL(signalChangeCaption(const QString&)),
             this,   SLOT(changeCaption(const QString&)));
 
-    changeCaption( i18n( "KDE2 Scanning" ));
+    changeCaption( i18n( "KDE Scanning" ));
 
     setAutoSaveSettings(  QString::fromLatin1("General Options"),
 			  true );

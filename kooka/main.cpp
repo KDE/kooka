@@ -35,7 +35,7 @@
 #include "version.h"
 
 static const char *description =
-          "<B>Kooka</B> is a KDE2 application which provides access to scanner hardware "
+          "<B>Kooka</B> is a KDE application which provides access to scanner hardware "
 	      "using the SANE library.<P>"
 	      "Kooka helps you scan, save your image in the correct "
 	      "image format and perform <B>O</B>ptical <B>C</B>haracter <B>R</B>ecognition on it,"
