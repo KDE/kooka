@@ -261,6 +261,8 @@ ImageSelectLine::ImageSelectLine( QWidget *parent, const QString& text )
    m_urlCombo       = new KURLComboBox( KURLComboBox::Files, this );
    m_buttFileSelect = new QPushButton( this );
    m_buttFileSelect->setPixmap( SmallIcon( "fileopen" ) );
+
+   m_urlCombo->setMaxItems(5);
    
    connect( m_urlCombo, SIGNAL( urlActivated( const KURL& )),
 	    this, SLOT( slUrlActivated( const KURL& )));
@@ -274,13 +276,19 @@ void ImageSelectLine::slSelectFile()
    KURL newUrl;
    newUrl = KFileDialog::getImageOpenURL();
 
-   if( ! newUrl.isEmpty())
-      m_urlCombo->setURL( newUrl );
+   QStringList l = m_urlCombo->urls();
    
+   if( ! newUrl.isEmpty())
+   {
+      l.prepend( newUrl.url() );
+      m_urlCombo->setURLs( l );
+      m_currUrl = newUrl;
+   }
 }
 
 void ImageSelectLine::slUrlActivated( const KURL& url )
 {
+   kdDebug(28000) << "Activating url: " << url.url() << endl;
    m_currUrl = url;
 }
 
@@ -292,6 +300,7 @@ KURL ImageSelectLine::selectedURL() const
 void ImageSelectLine::setURL( const KURL& url )
 {
    if( m_urlCombo ) m_urlCombo->setURL( url );
+   m_currUrl = url;
 }
 
 void ImageSelectLine::setURLs( const QStringList& list )
