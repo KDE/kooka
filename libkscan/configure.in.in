@@ -27,7 +27,7 @@ if test -n "$sane_libdir"; then
   AC_SUBST(SANE_LDFLAGS)
   LIB_SANE="-lsane"
   AC_SUBST(LIB_SANE)      
-  LIB_KSCAN='$(top_builddir)/kscan/kscan/libkscan.la'
+  LIB_KSCAN='$(top_builddir)/libkscan/libkscan.la'
   AC_SUBST(LIB_KSCAN)
   KSCANDIR=libkscan
   AC_SUBST(KSCANDIR)
