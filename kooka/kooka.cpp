@@ -105,15 +105,17 @@ void Kooka::setupActions()
     m_scanParamsAction = new KToggleAction(I18N("Show scan &parameter"), 0, this,
 					   SLOT(optionsShowScanParams()), actionCollection(),
 					   "show_scanparams" );
+    m_scanParamsAction->setChecked( true );
+#if 0 
     m_previewerAction = new KToggleAction(I18N("Show scan pre&view"), 0, this,
 					   SLOT(optionsShowPreviewer()), actionCollection(),
 					  "show_preview" );
-
+#endif
     KStdAction::keyBindings(this, SLOT(optionsConfigureKeys()), actionCollection());
     KStdAction::configureToolbars(this, SLOT(optionsConfigureToolbars()), actionCollection());
     KStdAction::preferences(this, SLOT(optionsPreferences()), actionCollection());
-
-    createGUI("kookaui.rc");
+ 
+    createGUI();
 }
 
 void Kooka::saveProperties(KConfig *config)
