@@ -237,25 +237,44 @@ bool FormatDialog::rememberFormat( void ) const
 
 /* ********************************************************************** */
 
-ImgSaver::ImgSaver(  QWidget *parent, const QString& dir_name )
+ImgSaver::ImgSaver(  QWidget *parent, const KURL dir_name )
    : QObject( parent )
 {
 
-   if( !dir_name.isEmpty() )
+   if( dir_name.isEmpty() || dir_name.protocol() != "file" )
    {
-      /* A path was given */
-      QDir path( dir_name );
-      if( path.isRelative() )
-	 directory = kookaImgRoot() + dir_name;
-      else
-	 directory = dir_name;  /* absolute Path given in name  ! */
+      kdDebug(28000) << "ImageServer initialised with wrong dir " << dir_name.url() << endl;
+      directory = kookaImgRoot();
    }
    else
    {
-      /* Use the std.-directory */
-      directory = kookaImgRoot();
+      /* A path was given */
+      if( dir_name.protocol() != "file"  )
+      {
+	 kdDebug(28000) << "ImgSaver: Can only save local image, sorry !" << endl;
+      }
+      else
+      {
+	 QString filename = dir_name.url();
+	 directory  = filename.remove(0, 5);  // remove file: from beginning
+	 if( directory.right(1) != "/" ) directory += "/";
+      }
    }
 
+   kdDebug(28000) << "ImageSaver uses dir <" << directory << endl;
+   createDir( directory );
+   readConfig();
+
+   last_file = "";
+   last_format ="";
+   
+}
+
+
+ImgSaver::ImgSaver( QWidget *parent )
+   :QObject( parent )
+{
+   directory = kookaImgRoot();
    createDir( directory );
 
    readConfig();
@@ -654,6 +673,7 @@ QString ImgSaver::kookaImgRoot( void )
 }
 
 
+#if 0
 /* Returns the path relativ to the kookaImgRoot. */
 QString ImgSaver::relativeToImgRoot( QString path )
 {
@@ -665,12 +685,12 @@ QString ImgSaver::relativeToImgRoot( QString path )
    {
       /* was found */
       int dirlen = dir.length();
-      int rightlen = path.length() - dirlen - idx;
+      int rightlen = path.length() - dirlen - idx -1;
       res = path.right(rightlen);
       kdDebug(28000) << "relativToImgRoot returns " << res << endl;
       
    }
    return( res );
 }
-
+#endif
 #include "img_saver.moc"

@@ -132,8 +132,9 @@ public:
 	 *  @param dir  Name of the save root directory
 	 *  @param name Name of a subdirectory in the saveroot.
 	 **/
-   ImgSaver( QWidget *parent, const QString& = 0 );
-
+   ImgSaver( QWidget *parent, const KURL );
+   ImgSaver( QWidget *parent );
+   
    QString     errorString( ImgSaveStat );
    /**
     *  returns the name of the last file that was saved by ImgSaver.
@@ -153,10 +154,12 @@ public:
     */
    static QString kookaImgRoot( void );
 
+#if 0
    /**
     * Static function that returns the relative path to the kooka imgage root
     */
    static QString relativeToImgRoot( QString );
+#endif
    
 public slots:
    ImgSaveStat saveImage( QImage *image );
