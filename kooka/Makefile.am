@@ -34,5 +34,6 @@ data_DATA     = kookaui.rc
 kdelnkdir   = $(kde_appsdir)/Utilities
 kdelnk_DATA = kooka.desktop
 
-messages:
+messages: rc.cpp
 	$(XGETTEXT) *.cpp -o $(podir)/kooka.pot
+
