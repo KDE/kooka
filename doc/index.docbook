@@ -82,7 +82,7 @@ purchasing a scanner, if possible.</para>
 <screeninfo>The &kooka; Main Window </screeninfo> 
 <mediaobject> 
 <imageobject>
-<imagedata fileref="common/kooka_mainctrl.png" format="PNG"/></imageobject> 
+<imagedata fileref="kooka_mainctrl.png" format="PNG"/></imageobject> 
 </mediaobject> 
 
 </screenshot>  
@@ -413,7 +413,7 @@ recognition</guimenuitem>. You will now see a window containing the
 the document itself. </para>
 
 <screenshot> <screeninfo>The gocr Window</screeninfo> <mediaobject>
-<imageobject><imagedata fileref="common/kooka_gocr.png"
+<imageobject><imagedata fileref="kooka_gocr.png"
 format="PNG"/></imageobject> </mediaobject> </screenshot>
 
 <para>The text can now be opened by clicking the button with the
@@ -428,7 +428,7 @@ proceed as described in the previous section.</para >
 <screeninfo>The Results of the <acronym>OCR</acronym></screeninfo> 
 <mediaobject> 
 <imageobject>
-<imagedata fileref="common/kooka_gocr_result.png"
+<imagedata fileref="kooka_gocr_result.png"
 format="PNG"/></imageobject> 
 </mediaobject> 
 </screenshot>
