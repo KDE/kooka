@@ -110,7 +110,6 @@ protected slots:
    void         slFileRename( QListViewItem*, const QString&, int );
    // void         slFilenameChanged( KFileTreeViewItem*, const KURL & );
    void         slImageArrived( KFileTreeViewItem *item, KookaImage* image );
-   void         slotExportFinished( KIO::Job *job );
    void         slotCreateFolder( );
    void         slotDeleteItems( );
    void         slotUnloadItems( );
@@ -141,7 +140,6 @@ private:
 
     QString 	 buildNewFilename( QString cmplFilename, QString currFormat ) const;
    KFileTreeViewItem *spFindItem( SearchType type, const QString name, const KFileTreeBranch* branch = 0 );
-    void         storeJob( KIO::Job*, KFileTreeViewItem *, JobDescription::JobType );
    QString       itemDirectory( const KFileTreeViewItem*, bool relativ = false ) const;
 
    // int 	        readDir( QListViewItem *parent, QString dir_to_read );
@@ -155,8 +153,6 @@ private:
 
     // like m_nextUrlToSelect in KFileTreeView but for our own purposes (showing the image)
     KURL         m_nextUrlToShow;
-
-    QMap<KIO::Job*, JobDescription> jobMap;
 
    QPixmap       m_floppyPixmap;
    QPixmap       m_grayPixmap;

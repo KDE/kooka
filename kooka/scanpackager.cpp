@@ -281,6 +281,7 @@ void ScanPackager::slotDecorate( KFileTreeViewItem* item )
        {
            m_nextUrlToShow = KURL(); // do this first to prevent recursion
            slClicked( item );
+           setCurrentItem(item);     // neccessary in case of new file from D&D
        }
    }
 }
@@ -1009,36 +1010,31 @@ void ScanPackager::slotExportFile( )
    }
 }
 
-void ScanPackager::storeJob( KIO::Job *job, KFileTreeViewItem *item, JobDescription::JobType jType )
-{
-   JobDescription newJob ( job, item, jType );
-   jobMap.insert( job, newJob );
-}
-
-void ScanPackager::slotExportFinished( KIO::Job *job )
-{
-   // nothing yet to do.
-   kdDebug(28000) << "Export Finished" << endl;
-   jobMap.remove(job);
-}
 
 
 void ScanPackager::slotUrlsDropped( QWidget*, QDropEvent* ev, KURL::List& urls, KURL& copyTo )
 {
    if( !urls.isEmpty() )
    {
-       kdDebug(28000) << "Kooka drop event. First src url=" << urls.first() << " copyTo=" << copyTo
-           << " move=" << ( ev->action() == QDropEvent::Move ) << endl;
+       kdDebug(28000) << "Kooka drop event!" << endl;
+       // kdDebug(28000) << "Kooka drop event. First src url=" << urls.first() << " copyTo=" << copyTo
+       //    << " move=" << ( ev->action() == QDropEvent::Move ) << endl;
+
+       /* first make the last url to copy to the one to select next */
+       if( ! urls.empty() )
+       {
+           KURL nextSel = copyTo;
+           nextSel.addPath( urls.back().fileName(false));
+
+           kdDebug(28000) << "Selecting next url: " << nextSel.url() << endl;
+           m_nextUrlToShow = nextSel;
+           // slotSetNextUrlToSelect( nextSel );
+       }
 
       if ( ev->action() == QDropEvent::Move )
         copyjob = KIO::move( urls, copyTo, true );
       else
         copyjob = KIO::copy( urls, copyTo, true );
-      // ### this looks wrong, but since the item isn't used at all...
-      KFileTreeViewItem *curr = currentKFileTreeViewItem();
-      storeJob( copyjob, curr, JobDescription::ImportJob );
-      connect( copyjob, SIGNAL(result(KIO::Job*)),
-	       this, SLOT(slotExportFinished( KIO::Job* )));
    }
 }
 
