@@ -8,8 +8,9 @@
 #include <qlayout.h>
 #include <qsplitter.h>
 #include <qstrlist.h>
-#include <kurl.h>
 
+#include <kurl.h>
+#include <krun.h>
 #include <kapp.h>
 #include <kconfig.h>
 #include <ktrader.h>
@@ -17,6 +18,10 @@
 #include <kmessagebox.h>
 #include <krun.h>
 #include <keditcl.h>
+
+
+#define STARTUP_IMG_SELECTION "SelectedImageOnStartup"
+
 
 KookaView::KookaView(QWidget *parent)
     : QSplitter(parent)
@@ -41,7 +46,9 @@ KookaView::KookaView(QWidget *parent)
 
    /* A new packager to contain the already scanned images */
    packager = new ScanPackager( tabw );
-  	
+   {
+   }
+   
    /* Image Canvas for the preview image, same object as the large image canvas */
    preview_img = 0L;
    preview_canvas = new Previewer( tabw );
@@ -100,9 +107,12 @@ KookaView::KookaView(QWidget *parent)
    
       if( ds.exec() == QDialog::Accepted )
       {
-	 debug( "Selecting a device cancelled" );
 	 kapp->config()->writeEntry( STARTUP_SKIP_ASK,
 				     ds.getShouldSkip());
+      }
+      else
+      {
+	 exit(0);
       }
 
       selDevice = ds.getSelectedDevice();
@@ -198,11 +208,27 @@ KookaView::KookaView(QWidget *parent)
       return;
    }
 #endif
+
+   /* Now set the configured stuff */
+   kapp->config()->setGroup(GROUP_STARTUP);
+   QString startup = kapp->config()->readEntry( STARTUP_IMG_SELECTION, "" );
+   debug( "KookaView: Loading Startup-Image <%s>", (const char*) startup );
+   
+   if( !startup.isEmpty()) {
+      debug( "Loading startup image !" );
+      packager->slSelectImage( startup );
+   }
+   
+   
+   
 }
+
 
 KookaView::~KookaView()
 {
+   saveProperties( kapp->config() );
    if( preview_img ) delete( preview_img );
+   
 }
 
 void KookaView::print(QPainter *p, int height, int width)
@@ -332,27 +358,49 @@ void KookaView::slCreateNewImgFromSelection()
 
 void KookaView::slRotateImage(int angle)
 {
-   const QImage *img = img_canvas->rootImage();
+   QImage *img = (QImage*) img_canvas->rootImage();
+   bool doUpdate = true;
 
    if( img )
    {
+      QImage resImg;
+
+      QApplication::setOverrideCursor(waitCursor);
       switch( angle )
       {
 	 case 90:
-	    
+	    emit( signalChangeStatusbar( I18N("rotate image 90 degree" )));
+	    resImg = rotateRight( img );
 	    break;
 	 case 180:
-	    
+	    emit( signalChangeStatusbar( I18N("rotate image 180 degree" )));
+	    resImg = rotateRight( img );
+	    resImg = rotateRight( &resImg );
 	    break;
 	 case 270:
 	 case -90:
+	    emit( signalChangeStatusbar( I18N("rotate image -90 degree" )));
+	    resImg = rotateLeft( img );
 	    
 	    break;
 	 default:
+	    debug( "Not supported yet !" );
+	    doUpdate = false;
+	    
 	    break;
       }
+      QApplication::restoreOverrideCursor();
+
+      /* updateCurrImage does the status-bar cleanup */
+      if( doUpdate )
+	 updateCurrImage( resImg );
+      else
+	 emit(signalCleanStatusbar());
    }
+      
 }
+
+
 
 void KookaView::slMirrorImage( MirrorType m )
 {
@@ -401,5 +449,136 @@ void KookaView::updateCurrImage( QImage& img )
    emit( signalCleanStatusbar());
 }
 
+
+void KookaView::saveProperties(KConfig *config)
+{
+   debug( "Saving Properties for KookaView !" );
+   config->setGroup( GROUP_STARTUP );
+   /* Get with path */
+   config->writeEntry( STARTUP_IMG_SELECTION, packager->getCurrImageFileName(true));
+}
+
+
+void KookaView::slOpenCurrInGraphApp( void )
+{
+   QString file;
+   
+   if( packager ) {
+      file = packager->getCurrImageFileName( true );
+      
+      debug( "Trying to open <%s>", (const char*) file );
+      if( ! file.isEmpty() )
+      {
+	 KURL::List urllist;
+	 
+	 urllist.append( KURL(file) );
+	 KFileOpenWithHandler kfoh;
+	 kfoh.displayOpenWithDialog( urllist );
+      }
+   }
+}
+
+
+QImage KookaView::rotateLeft( QImage *m_img )
+{
+   QImage rot;
+   
+   if( m_img )
+   {
+      if ( m_img->depth() == 8)
+      {
+	 rot.create( m_img->height(), m_img->width(), 
+		     m_img->depth(), m_img->numColors() );
+	 for (int i=0; i<m_img->numColors(); i++)
+	 {
+	    rot.setColor( i, m_img->color(i) );
+	 }
+    
+	 unsigned char **ssl = m_img->jumpTable();
+    
+	 for (int y=0; y<m_img->height(); y++)
+	 {
+	    unsigned char *p = *ssl++;
+	    unsigned char **dsl = rot.jumpTable();
+	    dsl += m_img->width()-1;
+            
+	    for (int x=0; x<m_img->width(); x++)
+	    {
+	       *((*dsl--) + y ) = *p++;
+	    }
+	 }
+      }
+      else
+      {
+	 rot.create( m_img->height(), m_img->width(), 
+		     m_img->depth() );
+    
+	 QRgb **ssl = (QRgb **)m_img->jumpTable();
+    
+	 for (int y=0; y<m_img->height(); y++)
+	 {
+	    QRgb *p = *ssl++;
+	    QRgb **dsl = (QRgb **)rot.jumpTable();
+	    dsl += m_img->width()-1;
+      
+	    for (int x=0; x<m_img->width(); x++)
+	    {
+	       *((*dsl--) + y ) = *p++;
+	    }
+	 }
+      }
+   }
+   return( rot );
+}
+
+QImage KookaView::rotateRight( QImage *m_img )
+{
+   QImage rot;
+
+   if (m_img )
+   {
+      if (m_img->depth() == 8)
+      {
+	 rot.create( m_img->height(), m_img->width(), 
+		     m_img->depth(), m_img->numColors() );
+	 for (int i=0; i<m_img->numColors(); i++)
+	 {
+	    rot.setColor( i, m_img->color(i) );
+	 }
+    
+	 unsigned char **ssl = m_img->jumpTable();
+    
+	 for (int y=0; y<m_img->height(); y++)
+	 {
+	    unsigned char *p = *ssl++;
+	    unsigned char **dsl = rot.jumpTable();
+            
+	    for (int x=0; x<m_img->width(); x++)
+	    {
+	       *((*dsl++) + m_img->height() - y - 1 ) = *p++;
+	    }
+	 }
+      }
+      else
+      {
+	 rot.create( m_img->height(), m_img->width(), 
+		     m_img->depth() );
+    
+	 QRgb **ssl = (QRgb **)m_img->jumpTable();
+    
+	 for (int y=0; y<m_img->height(); y++)
+	 {
+	    QRgb *p = *ssl++;
+	    QRgb **dsl = (QRgb **)rot.jumpTable();
+      
+	    for (int x=0; x<m_img->width(); x++)
+	    {
+	       *((*dsl++) + m_img->height() - y - 1 ) = *p++;
+	    }
+	 }
+      }
+   }
+   return( rot );
+}
 
 #include "kookaview.moc"

@@ -19,6 +19,7 @@
 
 #include <qwidget.h>
 #include <kparts/part.h>
+#include <kopenwith.h>
 #include <kookaiface.h>
 #include <qtabwidget.h>
 #include <qlayout.h>
@@ -35,6 +36,7 @@
 
 class QPainter;
 class KSANEOCR;
+class KConfig;
 
 /**
  * This is the main view class for Kooka.  Most of the non-menu,
@@ -87,8 +89,9 @@ public slots:
    void slCreateNewImgFromSelection( void );
 
    void slRotateImage( int );
+
    void slMirrorImage( MirrorType );
-   
+
    void slIVScaleToWidth( void )
       { if( img_canvas ) img_canvas->handle_popup(ImageCanvas::ID_FIT_WIDTH );}
    void slIVScaleToHeight( void )
@@ -96,12 +99,16 @@ public slots:
    void slIVScaleOriginal( void )
       { if( img_canvas ) img_canvas->handle_popup(ImageCanvas::ID_ORIG_SIZE ); }
 
-   /**
+   void slOpenCurrInGraphApp( void );
+
+    /**
     * starts ocr on the image the parameter is pointing to
     **/
-   void startOCR( const QImage *img );
+   void startOCR( const QImage* );
 
-   signals:
+   void saveProperties( KConfig* );
+   
+signals:
    /**
     * Use this signal to change the content of the statusbar
     */
@@ -119,6 +126,9 @@ public slots:
 
 
 private:
+   QImage rotateRight( QImage* );
+   QImage rotateLeft ( QImage* );
+   
 #if 0 
    KParts::ReadOnlyPart *m_html;
 #endif
