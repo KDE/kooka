@@ -43,6 +43,8 @@
 #include <kio/job.h>
 #include <kio/netaccess.h>
 #include <ktempfile.h>
+#include <kinputdialog.h>
+
 #include <qdir.h>
 #include <qlayout.h>
 #include <qfileinfo.h>
@@ -331,10 +333,37 @@ ImgSaveStat ImgSaver::saveImage( QImage *image )
    }
 
    kdDebug(28000) << "saveImage: Directory is " << directory << endl;
-   QString fi = directory + "/" + createFilename( format );
+   QString filename = createFilename( format );
+
+   KConfig *konf = KGlobal::config ();
+   konf->setGroup( OP_FILE_GROUP );
+
+   if( konf->readBoolEntry( OP_ASK_FILENAME, false ) )
+   {
+       bool ok;
+       QString text = KInputDialog::getText( i18n( "Filename" ), i18n("Enter filename:"),
+					     filename, &ok );
+
+       if(ok)
+       {
+	   filename = text;
+       }
+   }
+       
+   QString fi = directory + "/" + filename;
+
+   if( extension(fi).isEmpty() )
+   {
+       if( ! fi.endsWith( "." )  )
+       {
+	   fi+= ".";
+       }
+       fi+=format.lower();
+   }
+
+
    kdDebug(28000) << "saveImage: saving file <" << fi << ">" << endl;
-   stat = save( image, fi,
-		format, subformat );
+   stat = save( image, fi, format, subformat );
 
    return( stat );
 

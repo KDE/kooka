@@ -361,6 +361,14 @@ void KookaPreferences::setupSaveFormatPage( )
    QToolTip::add( cbSkipFormatAsk, i18n("Check this if you want to see the image save assistant even if there is a default format for the image type." ));
    top->addWidget( cbSkipFormatAsk );
 
+   cbFilenameAsk = new QCheckBox( i18n("Ask for filename when saving file"),
+                    page,  "CB_ASK_FILENAME" );
+   cbFilenameAsk->setChecked( konf->readBoolEntry( OP_ASK_FILENAME, false));
+   QToolTip::add( cbFilenameAsk, i18n("Check this if you want to enter a filename when an image has been scanned." ));
+   top->addWidget( cbFilenameAsk );
+
+
+   
    top->addStretch(10);
 }
 
@@ -465,6 +473,7 @@ void KookaPreferences::slotApply( void )
     konf->setGroup( OP_FILE_GROUP );
     bool showFormatAssist = cbSkipFormatAsk->isChecked();
     konf->writeEntry( OP_FILE_ASK_FORMAT, showFormatAssist );
+    konf->writeEntry( OP_ASK_FILENAME, cbFilenameAsk->isChecked() );
 
     /* ** Thumbnail options ** */
     konf->setGroup( THUMB_GROUP );

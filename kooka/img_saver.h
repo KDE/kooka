@@ -44,6 +44,7 @@
 
 
 #define OP_FILE_ASK_FORMAT "AskForSaveFormat"
+#define OP_ASK_FILENAME    "AskForFilename"
 #define OP_FORMAT_HICOLOR  "HiColorSaveFormat"
 #define OP_FORMAT_COLOR    "ColorSaveFormat"
 #define OP_FORMAT_GRAY     "GraySaveFormat"

@@ -75,6 +75,7 @@ private:
 
     QCheckBox *cbNetQuery;
     QCheckBox *cbSkipFormatAsk;
+    QCheckBox *cbFilenameAsk;
     QCheckBox *cbShowScannerSelection;
     KConfig   *konf;
     QCheckBox *cbReadStartupImage;
