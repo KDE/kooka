@@ -40,6 +40,7 @@ class KConfig;
 class KPrinter;
 class KComboBox;
 class KAction;
+class ThumbView;
 
 /**
  * This is the main view class for Kooka.  Most of the non-menu,
@@ -108,7 +109,14 @@ public slots:
    void slOpenCurrInGraphApp( void );
 
    void slSaveScanParams( void );
-    /**
+
+   void slShowThumbnails( const KURL& url );
+
+   /**
+    * slot that show the image viewer
+    */
+   void slStartLoading( const KURL& url );
+   /**
     * starts ocr on the image the parameter is pointing to
     **/
    void startOCR( const QImage* );
@@ -156,6 +164,9 @@ private:
    void updateCurrImage( QImage& ) ;
 
    ImageCanvas  *img_canvas;
+   QWidgetStack *m_stack;
+   ThumbView    *m_thumbview;
+   
    Previewer    *preview_canvas;
    QSplitter *	paramSplitter;	
    ScanPackager *packager;

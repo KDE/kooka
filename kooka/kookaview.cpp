@@ -1,3 +1,22 @@
+/***************************************************************************
+              kookaview.cpp  -  kookas visible stuff
+                             -------------------                                         
+    begin                : ?
+    copyright            : (C) 1999 by Klaas Freitag                         
+    email                : freitag@suse.de
+
+    $Id$
+ ***************************************************************************/
+
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   * 
+ *                                                                         *
+ ***************************************************************************/
+
 #include "kookaview.h"
 #include "resource.h"
 #include "kscandevice.h"
@@ -6,6 +25,7 @@
 #include "img_saver.h"
 #include "kookapref.h"
 #include "imgnamecombo.h"
+#include "thumbview.h"
 
 #include <qlabel.h>
 #include <qpainter.h>
@@ -15,7 +35,7 @@
 #include <qpaintdevice.h>
 #include <qpaintdevicemetrics.h>
 #include <qpopupmenu.h>
-
+#include <qwidgetstack.h>
 
 #include <kurl.h>
 #include <krun.h>
@@ -52,12 +72,19 @@ KookaView::KookaView(QWidget *parent, const QCString& deviceToUse)
    paramSplitter->setOpaqueResize( false );
 
    /* An image canvas for the large image, right side */
+   m_stack = new QWidgetStack( this );
    
-   img_canvas  = new ImageCanvas( this );
+   img_canvas  = new ImageCanvas( m_stack );
+   m_stack->addWidget( img_canvas );
+   m_stack->raiseWidget( img_canvas );
    img_canvas->setMinimumSize(100,200);
    img_canvas->enableContextMenu(true);
+
+   /* thumbnail viewer widget */
+   m_thumbview = new ThumbView( m_stack );
+   m_stack->addWidget( m_thumbview );
    
-   setResizeMode( img_canvas,    QSplitter::Stretch );
+   setResizeMode( m_stack /* img_canvas */,    QSplitter::Stretch );
    setResizeMode( paramSplitter, QSplitter::KeepSize);
 
    /* Create a vbox to take the tabwidget and the the combobox */
@@ -68,8 +95,10 @@ KookaView::KookaView(QWidget *parent, const QCString& deviceToUse)
    /* A new packager to contain the already scanned images */
    packager = new ScanPackager( tabw );
    {
-   }
       
+   }
+   connect( packager, SIGNAL(showThumbnails( const KURL& )),
+	    this, SLOT( slShowThumbnails( const KURL& )));
    /* build up the Preview/Packager-Tabview */
    tabw->insertTab( packager, i18n( "&Gallery"), PACKAGER_TAB );
 
@@ -147,6 +176,9 @@ KookaView::KookaView(QWidget *parent, const QCString& deviceToUse)
    connect( packager, SIGNAL( showImage( QImage* )),
             img_canvas, SLOT( newImage( QImage*)));
 
+   connect( packager, SIGNAL( aboutToShowImage(const KURL&)),
+	    this, SLOT( slStartLoading( const KURL& )));
+   
    /* Packager unloads the image */
    connect( packager, SIGNAL( unloadImage( QImage* )),
             img_canvas, SLOT( deleteView( QImage*)));
@@ -666,6 +698,24 @@ void KookaView::slSaveScanParams( void )
    }
    sane->slSaveScanConfigSet( "sysmtem-default", "default configuration" );
 #endif
+}
+
+void KookaView::slShowThumbnails( const KURL& url )
+{
+   kdDebug(28000) << "Showing thumbs for " << url.prettyURL() << endl;
+   m_stack->raiseWidget( m_thumbview );
+}
+
+/* this slot is called when the user clicks on an image in the packager
+ * and loading of the image starts
+ */
+void KookaView::slStartLoading( const KURL& url )
+{
+   emit( signalChangeStatusbar( i18n("Loading " ) + url.prettyURL()));
+
+   if( m_stack->visibleWidget() != img_canvas )
+      m_stack->raiseWidget( img_canvas );
+
 }
 
 

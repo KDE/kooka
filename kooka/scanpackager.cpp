@@ -428,12 +428,15 @@ void ScanPackager::slSelectionChanged( QListViewItem *newItem )
       {
 	 kdDebug(28000) << "selectionChanged: Is a directory !" << endl;
 	 emit( showImage( 0L ));
+	 kdDebug(28000) << "emitting showThumbnails" << endl;
+	 emit( showThumbnails( item->url() ));
       }
       else
       {
 	 /* if not a dir, load the image if neccessary. This is done by loadImageForItem,
 	  * which is async( TODO ). The image finally arrives in slotImageArrived */
 	 QApplication::setOverrideCursor(waitCursor);
+	 emit( aboutToShowImage( item->url()));
 	 loadImageForItem( item );
 	 QApplication::restoreOverrideCursor();
       }
