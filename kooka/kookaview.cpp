@@ -39,7 +39,7 @@ KookaView::KookaView(QWidget *parent)
    img_canvas  = new ImageCanvas( this );
    
    setResizeMode( img_canvas,    QSplitter::Stretch );
-   setResizeMode( left_splitter, QSplitter::KeepSize );
+   setResizeMode( left_splitter, QSplitter::FollowSizeHint );
 
    /* The Tabwidget to contain the preview and the packager */
    tabw  = new QTabWidget( left_splitter, "TABWidget" );
@@ -131,7 +131,7 @@ KookaView::KookaView(QWidget *parent)
    {
       debug( "Connecting to the scanner failed :( ->TODO" );
    }
-   
+#if 0
    /* Try to set the left splitter to the requested width of the scan params */
    QSize s = scan_params->sizeHint();
    QValueList<int> sizelist;
@@ -151,6 +151,7 @@ KookaView::KookaView(QWidget *parent)
    left_splitter->setResizeMode( tabw,        QSplitter::Stretch );
 
    debug( "Have size found: %d x %d", s.width(), s.height());
+#endif
    scan_params->resize( scan_params->sizeHint() );
    scan_params->show();	
 
