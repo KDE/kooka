@@ -16,7 +16,7 @@ kooka_LDADD   = $(LIB_KFILE) -L$(top_srcdir)/libkscan -lkscan
 kooka_LDFLAGS = $(KDE_RPATH) $(all_libraries)
 
 sane_includes=-I/usr/include/sane
-INCLUDES         = $(all_includes) $(sane_includes) -I$(top_srcdir)/kscan/kscan
+INCLUDES         = $(all_includes) $(sane_includes) -I$(top_srcdir)/libkscan
 
 noinst_HEADERS   = \
 img_canvas.h   kookaview.h     scanpackager.h \
