@@ -216,8 +216,6 @@ protected slots:
                         const QString& origWord,
                         const QString& newWord );
 
-    void slSaveSpellCfg();
-
 private slots:
 
     void slotKadmosResult();

@@ -98,26 +98,6 @@ KSANEOCR::KSANEOCR( QWidget*, KConfig *cfg ):
 
     if( konf )
     {
-        konf->setGroup( CFG_OCR_KSPELL );
-
-        int helpi = konf->readNumEntry(CFG_KS_NOROOTAFFIX, -256);
-        if( helpi != -256 ) m_spellInitialConfig->setNoRootAffix( (bool) helpi );
-
-        helpi = konf->readNumEntry(CFG_KS_RUNTOGETHER, -256 );
-        if( helpi != -256 ) m_spellInitialConfig->setRunTogether( (bool) helpi );
-
-        QString helps = konf->readEntry(CFG_KS_DICTIONARY, "noGlue" );
-        if( helps != QString("noGlue") ) m_spellInitialConfig->setDictionary( helps );
-
-        helpi = konf->readNumEntry(CFG_KS_DICTFROMLIST,  -256 );
-        if( helpi != -256 ) m_spellInitialConfig->setDictFromList( helpi );
-
-        helpi = konf->readNumEntry(CFG_KS_ENCODING, -256 );
-        if( helpi != -256 ) m_spellInitialConfig->setEncoding( helpi );
-
-        helpi = konf->readNumEntry(CFG_KS_CLIENT, -256 );
-        if( helpi != 256 ) m_spellInitialConfig->setClient( helpi );
-
         /* -- ocr dialog information -- */
         konf->setGroup( CFG_GROUP_OCR_DIA );
         QString eng = konf->readPathEntry(CFG_OCR_ENGINE);
@@ -1320,7 +1300,6 @@ void KSANEOCR::slSpellDead()
         }
 
         /* save the current config */
-        slSaveSpellCfg();
         delete m_spell;
         m_spell = 0L;
 
@@ -1394,26 +1373,6 @@ bool KSANEOCR::slUpdateWord( int line, int /* spellWordIndx */, const QString& o
     return result;
 }
 
-
-void KSANEOCR::slSaveSpellCfg( )
-{
-    if( ! m_spell ) return;
-
-    KSpellConfig ksCfg = m_spell->ksConfig();
-
-    KConfig *konf = KGlobal::config ();
-    KConfigGroupSaver gs( konf, CFG_OCR_KSPELL );
-
-    konf->writeEntry (CFG_KS_NOROOTAFFIX,   (int) ksCfg.noRootAffix (), true, false);
-    konf->writeEntry (CFG_KS_RUNTOGETHER,   (int) ksCfg.runTogether (), true, false);
-    konf->writeEntry (CFG_KS_DICTIONARY,          ksCfg.dictionary (),  true, false);
-    konf->writeEntry (CFG_KS_DICTFROMLIST,  (int) ksCfg.dictFromList(), true, false);
-    konf->writeEntry (CFG_KS_ENCODING,      (int) ksCfg.encoding(),     true, false);
-    konf->writeEntry (CFG_KS_CLIENT,              ksCfg.client(),       true, false);
-    konf->sync();
-
-
-}
 
 char KSANEOCR::UndetectedChar = '_';
 
