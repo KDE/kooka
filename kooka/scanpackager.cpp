@@ -957,8 +957,7 @@ void ScanPackager::slShowContextMenue(QListViewItem *lvi, const QPoint &p, int c
 
    if( m_contextMenu )
    {
-      m_contextMenu->move( p );
-      m_contextMenu->exec();
+      m_contextMenu->exec( p );
    }
 
 }
