@@ -175,14 +175,14 @@ void KOCRBase::ocrIntro( )
 
 void KOCRBase::spellCheckIntro()
 {
-    m_spellchkPage = addVBoxPage( i18n("Spellchecking") );
+    m_spellchkPage = addVBoxPage( i18n("Spell-checking") );
 
     /* Want the spell checking at all? Checkbox here */
     QGroupBox *gb1 = new QGroupBox( 1, Qt::Horizontal, i18n("OCR Post Processing"), m_spellchkPage );
-    m_cbWantCheck = new QCheckBox( i18n("Enable Spellchecking for validation of the OCR result"),
+    m_cbWantCheck = new QCheckBox( i18n("Enable Spell-checking for validation of the OCR result"),
                                    gb1 );
     /* Spellcheck options */
-    m_gbSpellOpts = new QGroupBox( 1, Qt::Horizontal, i18n("Spellcheck Options"),
+    m_gbSpellOpts = new QGroupBox( 1, Qt::Horizontal, i18n("Spell-Check Options"),
                                    m_spellchkPage );
 
     KSpellConfig *sCfg = new KSpellConfig( m_gbSpellOpts, "SPELLCHK", m_spellConfig, false );

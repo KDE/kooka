@@ -120,7 +120,7 @@ void KookaPreferences::setupOCRPage()
             /* Still not found */
             KMessageBox::sorry( this, i18n( "Could not find the gocr binary.\n"
                                             "Please check your installation and/or "
-                                            "install gocr or adjust teh path to "
+                                            "install gocr or adjust the path to "
                                             "gocr manually."),
                                 i18n("OCR Software not Found") );
             m_gocrBut->setEnabled(false);

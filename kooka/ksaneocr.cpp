@@ -196,7 +196,7 @@ bool KSANEOCR::startOCRVisible( QWidget *parent )
        m_ocrProcessDia = new KadmosDialog( parent, m_spellInitialConfig );
 #else
        KMessageBox::sorry(0, i18n("This version of Kooka was not compiled with KADMOS support.\n"
-           "Please select another OCR engine in Kookas options dialog"));
+           "Please select another OCR engine in Kooka's options dialog"));
        kdDebug(28000) << "Sorry, this version of Kooka has no KADMOS support" << endl;
 #endif /* HAVE_KADMOS */
    }
@@ -339,7 +339,7 @@ void KSANEOCR::slotStopOCR()
         kdDebug(28000) << "Killing daemon with Sig. 9" << endl;
         daemon->kill(9);
         // that leads to the process being destroyed.
-        KMessageBox::error(0, i18n("The OCR-Process was stopped !") );
+        KMessageBox::error(0, i18n("The OCR-Process was stopped.") );
     }
 
 }
@@ -458,7 +458,7 @@ void KSANEOCR::startOCRProcess( void )
        if( ! kadDia->getSelClassifier( clasPath ) )
        {
            KMessageBox::error( m_parent,
-                               i18n("The classifier file neccessary for OCR is can not be loaded: %1\n"
+                               i18n("The classifier file necessary for OCR cannot be loaded: %1\n"
                                    "OCR with the KADMOS engine is not possible" ).
                                arg(clasPath), i18n("KADMOS Installation Problem"));
            finishedOCRVisible(false);
@@ -955,9 +955,9 @@ void KSANEOCR::slSpellDead()
          * spellcheck on this system.
          */
         KMessageBox::error( m_parent,
-                            i18n("Spellchecking can not be started on this system.\n"
+                            i18n("Spell-checking cannot be started on this system.\n"
                                  "Please check the configuration" ),
-                            i18n("Spellcheck") );
+                            i18n("Spell-Check") );
 
     }
     else
