@@ -338,7 +338,7 @@ ImgSaveStat ImgSaver::saveImage( QImage *image )
    QString subformat = findSubFormat( format );
    // Call save-Function with this params
 
-   if( format.isEmpty() || format == "Skipped"  )
+   if( format.isEmpty() )
    {
     	kdDebug(28000) << "Save canceled by user -> no save !" << endl;
     	return( ISS_SAVE_CANCELED );
@@ -419,10 +419,14 @@ ImgSaveStat ImgSaver::savePreview( QImage *image )
    
    QString format = findFormat( PT_PREVIEW );
 
-   // Previewfile always comes absolute
-      
-   ImgSaveStat stat = save( image, previewfile, format, "" );
-
+   ImgSaveStat stat = ISS_ERR_FORMAT_NO_WRITE;
+   
+   if( ! format.isEmpty() )
+   {
+      // Previewfile always comes absolute
+      stat = save( image, previewfile, format, "" );
+   }
+   
    if( stat == ISS_OK )
    {
       KConfig *konf = KGlobal::config ();
@@ -445,16 +449,6 @@ QString ImgSaver::findFormat( picType type )
    KConfig *konf = KGlobal::config ();
    konf->setGroup( OP_FILE_GROUP );
 
-   if( type == PT_PREVIEW )
-   {
-      format = konf->readEntry( OP_PREVIEW_FORMAT, "nothing" );
-
-      if( format == "nothing" )
-      {
-	 format = startFormatDialog( type );
-      }
-   }
-
    if( type == PT_THUMBNAIL )
    {
       return( "BMP" );
@@ -463,6 +457,14 @@ QString ImgSaver::findFormat( picType type )
    // real images
    switch( type )
    {
+      case PT_THUMBNAIL:
+	 format = konf->readEntry( OP_FORMAT_THUMBNAIL, "BMP" );
+	 kdDebug( 28000) << "Format for Thumbnails: " << format << endl;
+	 break;
+      case PT_PREVIEW:
+	 format = konf->readEntry( OP_PREVIEW_FORMAT, "BMP" );
+	 kdDebug( 28000) << "Format for Preview: " << format << endl;
+	 break;
       case PT_COLOR_IMAGE:
 	 format = konf->readEntry( OP_FORMAT_COLOR, "nothing" );
 	 kdDebug( 28000 ) <<  "Format for Color: " << format << endl;
@@ -487,11 +489,6 @@ QString ImgSaver::findFormat( picType type )
    }
 
    if( format == "nothing" )
-   {
-      ask_for_format = true;
-   }
-
-   if( ask_for_format )
    {
       format = startFormatDialog( type );
    }
@@ -536,10 +533,11 @@ QString ImgSaver::startFormatDialog( picType type)
       QString defFormat = getFormatForType( type );
       fd.setSelectedFormat( defFormat, isRememberedFormat(type, defFormat ) );
    }
-      
+
+   QString format;
    if( fd.exec() )
    {
-      QString format = fd.getFormat();
+      format = fd.getFormat();
       kdDebug(28000) << "Storing to format <" << format << ">" << endl;
       if( fd.rememberFormat() )
       {
@@ -550,9 +548,8 @@ QString ImgSaver::startFormatDialog( picType type)
       }
       subformat = fd.getSubFormat();
 
-      return( format );
    }
-   return( i18n("Skipped") );
+   return( format );
 }
 
 

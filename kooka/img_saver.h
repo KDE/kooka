@@ -41,11 +41,11 @@
 #define OP_FORMAT_COLOR    "ColorSaveFormat"
 #define OP_FORMAT_GRAY     "GraySaveFormat"
 #define OP_FORMAT_BW       "BWSaveFormat"
+#define OP_FORMAT_THUMBNAIL "ThumbnailFormat"
 #define OP_PREVIEW_GROUP   "ScanPreview"
 #define OP_PREVIEW_FILE    "PreviewFile"
 #define OP_PREVIEW_FORMAT  "PreviewFormat"
 #define OP_FILE_GROUP      "Files"
-
 
 
 /**
