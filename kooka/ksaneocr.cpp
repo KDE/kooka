@@ -72,6 +72,7 @@ KSANEOCR::KSANEOCR( QWidget*, KConfig *cfg ):
     m_ocrProcessDia(0L),
     daemon(0L),
     visibleOCRRunning(false),
+    m_resultImage(0),
     m_imgCanvas(0L),
     m_spell(0L),
     m_wantKSpell(true),
@@ -134,6 +135,12 @@ KSANEOCR::~KSANEOCR()
        delete m_tmpFile;
    }
 
+   if( m_resultImage )
+   {
+       delete m_resultImage;
+       m_resultImage = 0;
+   }
+	   
    if( m_img ) delete m_img;
    if( m_spellInitialConfig ) delete m_spellInitialConfig;
 }
@@ -246,8 +253,12 @@ void KSANEOCR::finishedOCRVisible( bool success )
 
        if( m_imgCanvas )
        {
+	   if( m_resultImage != 0 ) delete m_resultImage;
+	   kdDebug(28000) << "Result image name: " << m_ocrResultImage << endl;
+	   m_resultImage = new QImage( m_ocrResultImage, "BMP" );
+	   kdDebug(28000) << "New result image has dimensions: " << m_resultImage->width() << "x" << m_resultImage->height()<< endl;
            /* The image canvas is non-zero. Set it to our image */
-           m_imgCanvas->newImageHoldZoom( m_img );
+           m_imgCanvas->newImageHoldZoom( m_resultImage );
 	   m_imgCanvas->setReadOnly(true);
 
            /* now handle double clicks to jump to the word */
@@ -295,13 +306,14 @@ void KSANEOCR::startLineSpellCheck()
         if( m_checkStrings.count() == 0 )
         {
             slCheckListDone(false);
+	    return;
         }
 
         kdDebug(28000)<< "Wortliste: "<< m_checkStrings.join(", ") << endl;
 
         // if( list.count() > 0 )
-        m_spell->checkList( &m_checkStrings, m_kspellVisible );
 
+        m_spell->checkList( &m_checkStrings, m_kspellVisible );
         /**
          * This call ends in three slots:
          * 1. slMisspelling:    Hit _before_ the dialog (if any) appears. Time to
@@ -354,11 +366,10 @@ void KSANEOCR::startOCRAD( )
     m_ocrResultImage = ocrDia->orfUrl();
     const QString cmd = ocrDia->getOCRCmd();
 
-    if( m_ocrResultImage.isEmpty() )
-    {
-	/* The url is empty. Start the program to fill up a temp file */
-	m_ocrResultImage = ImgSaver::tempSaveImage( m_img, "PBM", 1 ); // m_tmpFile->name();
-    }
+    m_ocrResultImage = ImgSaver::tempSaveImage( m_img, "BMP", 8 );
+    kdDebug(28000) << "The new image name is <" << m_ocrResultImage << ">" << endl;
+
+    m_ocrImagePBM = ImgSaver::tempSaveImage( m_img, "PBM", 1 );
 
     /* temporar file for orf result */
     KTempFile *tmpOrf = new KTempFile( QString(), ".orf" );
@@ -379,7 +390,11 @@ void KSANEOCR::startOCRAD( )
     *daemon << cmd;
     *daemon << QString("-x");
     *daemon <<  m_tmpOrfName;                   // the orf result file
-    *daemon << QFile::encodeName( m_ocrResultImage );      // The name of the image
+    *daemon << QFile::encodeName( m_ocrImagePBM );      // The name of the image
+    *daemon << QString("-l");
+    *daemon << QString( "2" ); // Full layout detection
+
+    
     m_ocrResultText = "";
 
     connect(daemon, SIGNAL(processExited(KProcess *)),
@@ -823,11 +838,11 @@ bool KSANEOCR::readORF( const QString& fileName, QString& errStr )
 			ocrWord word;
 			QRect   brect;
 			ocrWordList ocrLine;
-
+			ocrLine.setBlock(currBlock);
 			/* Loop over all characters in the line. Every char has it's own line
 			 * defined in the orf file */
 			kdDebug(28000) << "Found " << charCount << " chars for line " << lineNo << endl;
-			QRect wordRect;
+			
 			for( int c=0; c < charCount && !stream.atEnd(); c++ )
 			{
 			    /* Read one line per character */
@@ -868,7 +883,7 @@ bool KSANEOCR::readORF( const QString& fileName, QString& errStr )
                                 }
 
                                 /* Analyse the rectangle */
-                                if( ! lineErr )
+                                if( ! lineErr && detectedChar != ' ' )
                                 {
                                     // kdDebug(28000) << "STRING: " << rectStr << "<" << endl;
                                     rx.setPattern( "(\\d+)\\s+(\\d+)\\s+(\\d+)\\s+(\\d+)");
@@ -891,6 +906,12 @@ bool KSANEOCR::readORF( const QString& fileName, QString& errStr )
                                     /* store word if finished by a space */
                                     if( detectedChar == ' ' )
                                     {
+					/* add the block offset to the rect of the word */
+					QRect r = word.rect();
+					QRect blockRect = m_blocks[currBlock];
+					r.moveBy( blockRect.x(), blockRect.y());
+					
+					word.setRect( r );
                                         ocrLine.append( word );
                                         word = ocrWord();
                                     }
@@ -902,7 +923,15 @@ bool KSANEOCR::readORF( const QString& fileName, QString& errStr )
 			    }
 			}
 			if( !word.isEmpty() )
+			{
+			    /* add the block offset to the rect of the word */
+			    QRect r = word.rect();
+			    QRect blockRect = m_blocks[currBlock];
+			    r.moveBy( blockRect.x(), blockRect.y());					
+			    word.setRect( r );
+			    
 			    ocrLine.append( word );
+			}
 			if( lineNo < m_ocrPage.size() )
 			{
 			    kdDebug(29000) << "Store result line no " << lineNo << "=\"" <<
@@ -948,6 +977,13 @@ void KSANEOCR::cleanUpFiles( void )
       m_ocrResultImage = QString();
    }
 
+   if( ! m_ocrImagePBM.isEmpty())
+   {
+       kdDebug(28000) << "Unlinking OCR PBM file!" << endl;
+       unlink( QFile::encodeName(m_ocrImagePBM));
+       m_ocrImagePBM = QString();
+   }
+   
    if( ! m_tmpOrfName.isEmpty() )
    {
        if( m_unlinkORF )
@@ -1227,7 +1263,8 @@ void KSANEOCR::slMisspelling( const QString& originalword, const QStringList& su
         if( m_applyFilter )
             m_currHighlight = m_imgCanvas->highlight( r, pen, brush, true );
 
-        kdDebug(28000) << "Position ist " << r.x() << ", " << r.y() << ", width: " << r.width() << ", height: " << r.height() << endl;
+        kdDebug(28000) << "Position ist " << r.x() << ", " << r.y() << ", width: "
+		       << r.width() << ", height: " << r.height() << endl;
 
         /* draw a line under the word to check */
 
@@ -1350,6 +1387,7 @@ void KSANEOCR::slCheckListDone(bool)
     else
     {
         m_ocrCurrLine++;
+	kdDebug(28000) << "Starting spellcheck from CheckListDone" << endl;
         startLineSpellCheck();
     }
 }
