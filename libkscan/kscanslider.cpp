@@ -34,8 +34,8 @@ KScanSlider::KScanSlider( QWidget *parent, const QString& text,
 
     slider = new QSlider( min, max, 1, min, QSlider::Horizontal, this, "AUTO_SLIDER_" );
     slider->setTickmarks( QSlider::Below );
-    slider->setTickInterval( (max-min) / 10 );
-    slider->setSteps( (max-min)/20, (max-min)/10 );
+    slider->setTickInterval( QMAX( (max-min) / 10, 1 ) );
+    slider->setSteps( QMAX( (max-min)/20, 1 ), QMAX( (max-min)/10, 1 ) );
 
     /* Handle internal number display */
     // connect(slider, SIGNAL(valueChanged(int)), numdisp, SLOT( setNum(int) ));

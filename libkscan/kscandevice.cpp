@@ -359,7 +359,7 @@ KScanStat KScanDevice::apply( KScanOption *opt, bool isGammaTable )
       sane_stat = sane_control_option( scanner_handle, *num,
 				       SANE_ACTION_SET_AUTO, 0,
 				       &result );
-// return stat;
+ return stat;
       /* No return here, please ! Carsten, does it still work than for you ? */
    }
 
