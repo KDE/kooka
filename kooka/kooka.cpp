@@ -140,12 +140,13 @@ void Kooka::setupActions()
 		       m_view, SLOT( slIVScaleOriginal()),
 		       actionCollection(), "scaleOriginal" );
     m_view->connectViewerAction( act );
-    
+
+    /* thumbview and gallery actions */
     act = new KAction(i18n("Show &Thumbview"), "up", CTRL+Key_T,
 		       m_view, SLOT( slShowThumbnails()),
 		       actionCollection(), "thumbView" );
     m_view->connectViewerAction( act );
-
+    
     act = new KAction(i18n("Set Zoom..."), "viewmag", 0, 
 		       m_view, SLOT( slIVShowZoomDialog()),
 		       actionCollection(), "showZoomDialog" );
@@ -385,8 +386,6 @@ void Kooka::changeStatusbar(const QString& text)
 void Kooka::changeCaption(const QString& text)
 {
     // display the text on the caption
-   kdDebug(28000) << "Setting GALLERY caption #####" << text << endl;
-
     setCaption(text);
 }
 

@@ -129,7 +129,7 @@ public slots:
     * slot to select the scanner device. Does all the work with selection
     * of scanner, disconnection of the old device and connecting the new.
     */
-   bool slSelectDevice(const QCString& useDevice);
+   bool slSelectDevice(const QCString& useDevice=QCString());
 
    void connectViewerAction( KAction *action );
    

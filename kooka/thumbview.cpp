@@ -164,7 +164,7 @@ void ThumbView::slSetBackGround( )
 void ThumbView::slImageChanged( KFileItem *kfit )
 {
    if( ! kfit ) return;
-   kdDebug(28000) << "changes to one thumbnail!" << endl;
+   // kdDebug(28000) << "changes to one thumbnail!" << endl;
 
    KURL thumbDir = currentDir();
    KURL itemUrl = kfit->url();
@@ -173,8 +173,8 @@ void ThumbView::slImageChanged( KFileItem *kfit )
    itemUrl.setFileName( QString());
    if( !itemUrl.cmp( thumbDir, true ))
    {
-      kdDebug(28000) << "returning, because directory does not match: " << itemUrl.prettyURL() << endl;
-      kdDebug(28000) << "and my URL: " << thumbDir.prettyURL() << endl;
+      // kdDebug(28000) << "returning, because directory does not match: " << itemUrl.prettyURL() << endl;
+      // kdDebug(28000) << "and my URL: " << thumbDir.prettyURL() << endl;
       return;
    }
       
