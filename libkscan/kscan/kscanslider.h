@@ -41,6 +41,9 @@ public slots:
 	void		slSetSlider( int );
 	void		slSliderChange( int );
 	void		setEnabled( bool b );
+
+   int value( void ) const
+      { return( slider->value()); }
 signals:
 	void		valueChanged( int );
 		
@@ -61,6 +64,9 @@ public slots:
 	void		slSetEntry( const char* );
 	void		slEntryChange( const QString& );
 	void		setEnabled( bool b ){ if( entry) entry->setEnabled( b ); }
+
+   QString text( void ) const
+      { return ( entry->text() ); }
 signals:
 	void		valueChanged( const char* );
 		
