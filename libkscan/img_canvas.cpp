@@ -116,11 +116,10 @@ ImageCanvas::ImageCanvas(QWidget *parent,
 
 ImageCanvas::~ImageCanvas()
 {
+    noRectSlot();
     if( selected ) delete selected;
     if( pmScaled ) delete pmScaled;
-    // if( contextMenu ) delete contextMenu;
-    noRectSlot();  /* Switches timer off */
- 	
+    if( contextMenu ) delete contextMenu;
 }
 
 void ImageCanvas::deleteView( QImage *delimage )
