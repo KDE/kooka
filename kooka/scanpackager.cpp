@@ -63,7 +63,8 @@
 /* Constructor Scan Packager */
 ScanPackager::ScanPackager( QWidget *parent ) : KFileTreeView( parent )
 {
-   // TODO: setItemsRenameable (true );
+   // TODO:
+   setItemsRenameable (true );
    addColumn( i18n("Image Name" ));
    setColumnAlignment( 0, AlignLeft );
 
@@ -131,7 +132,7 @@ void ScanPackager::openRoots()
    /* open more configurable image repositories TODO */
 }
 
-KFileTreeBranch* ScanPackager::openRoot( const KURL& root, bool open )
+KFileTreeBranch* ScanPackager::openRoot( const KURL& root, bool  )
 {
    KIconLoader *loader = KGlobal::iconLoader();
 
@@ -144,7 +145,7 @@ KFileTreeBranch* ScanPackager::openRoot( const KURL& root, bool open )
    m_defaultBranch->setOpenPixmap( loader->loadIcon( "folder_blue_open", KIcon::Small ));
    
    setDirOnlyMode( m_defaultBranch, false );
-   m_defaultBranch->setShowExtensions( false );
+   m_defaultBranch->setShowExtensions( true ); // false );
    
    connect( m_defaultBranch, SIGNAL( newTreeViewItems( KFileTreeBranch*, const KFileTreeViewItemList& )),
 	    this, SLOT( slotDecorate(KFileTreeBranch*, const KFileTreeViewItemList& )));
@@ -310,11 +311,31 @@ void ScanPackager::slotDecorate( KFileTreeBranch* branch, const KFileTreeViewIte
 
 
 
-void ScanPackager::slFileRename( QListViewItem* it, const QString& newStr, int col )
+void ScanPackager::slFileRename( QListViewItem* it, const QString& newStr, int )
 {
-   (void) it;
-   (void) newStr;
-   (void) col;
+
+   if( !it || newStr.isEmpty() )  return;
+   KFileTreeViewItem *item = static_cast<KFileTreeViewItem*>(it);
+
+   /* Free memory and imform everybody who is interested. */
+   slotUnloadItem( item );
+   KURL urlFrom = item->url();
+   KURL urlTo( urlFrom );
+
+   urlTo.setFileName("");
+   urlTo.setFileName(newStr);
+
+   kdDebug(28000) << "Renaming to " << urlTo.prettyURL() << endl;
+   if( ImgSaver::renameImage( urlFrom, urlTo, false, this ) )
+   {      
+      slotSetNextUrlToSelect( urlTo );
+      kdDebug(28000) << "renaming OK" << endl;
+   }
+   else
+   {      
+      kdDebug(28000) << "renaming failed" << endl;
+   }
+      
 }
 
 
