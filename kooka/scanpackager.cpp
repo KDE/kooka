@@ -124,20 +124,18 @@ void ScanPackager::openRoots()
    /* standard root always exists, ImgRoot creates it */
    kdDebug(28000) << "Open standard root " << rootUrl.url();
 
-   int stdbranch = addBranch( rootUrl, i18n("Kooka Gallery"), false /* do not showHidden */ );
-   setDirOnlyMode( stdbranch, false );
+   KFileTreeBranch *newbranch = addBranch( rootUrl, i18n("Kooka Gallery"), false /* do not showHidden */ );
+   setDirOnlyMode( newbranch, false );
 
-   KFileTreeBranch *newbranch = branch( stdbranch );
-   
    connect( newbranch, SIGNAL(newItem(KFileTreeBranch*, KFileTreeViewItem*)),
 	    this, SLOT( slotDecorate( KFileTreeBranch*, KFileTreeViewItem* )));
    
-   populateBranch( stdbranch );
+   populateBranch( newbranch );
    
    /* open more configurable image repositories TODO */
 
    /* select Incoming-Dir, TODO restore last selection ! */
-   KFileTreeViewItem *startit = findItem( stdbranch, i18n( "Incoming" ) );
+   KFileTreeViewItem *startit = findItem( newbranch, i18n( "Incoming" ) );
    if( ! startit ) kdDebug(28000) << "No Start-Item found :(" << endl;
    setCurrentItem( startit );
 }
