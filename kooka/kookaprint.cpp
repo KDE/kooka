@@ -74,3 +74,5 @@ bool KookaPrint::printImage( KookaImage *img )
 
     return result;
 }
+
+#include "kookaprint.moc"
