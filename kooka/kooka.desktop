@@ -1,0 +1,14 @@
+[Desktop Entry]
+Type=Application
+Exec=kooka %i %m %U
+Icon=scanner
+TerminalOptions=
+Path=
+Terminal=0
+BinaryPattern=kooka
+DocPath=kooka/kooka.html
+Comment=A scan program
+Comment[de]=Ein Scanprogramm
+Name=Kooka
+Name[de]=Kooka
+
