@@ -46,6 +46,8 @@ class QVBox;
 class QLabel;
 class QSize;
 class KSpellConfig;
+class QCheckBox;
+class QGroupBox;
 
 class KOCRBase: public KDialogBase
 {
@@ -79,6 +81,8 @@ public:
     KSpellConfig* spellConfig()
         { return m_spellConfig; }
 
+    bool wantSpellCheck();
+
 public slots:
     virtual void stopAnimation();
     virtual void startAnimation();
@@ -87,6 +91,12 @@ public slots:
 
     virtual void startOCR();
     virtual void stopOCR();
+    /**
+     * enable or disable dialog fields. This slot is called when the ocr process starts
+     * with parameter state=false and called again if the gui should accept user input
+     * again after ocr finished with parameter true.
+     */
+    virtual void enableFields(bool state);
 
 protected:
     /**
@@ -115,6 +125,11 @@ protected slots:
     virtual void writeConfig();
     virtual void slSpellConfigChanged();
 
+    /**
+     * hit if the user toggles the want-spellcheck checkbox
+     */
+    virtual void slWantSpellcheck( bool wantIt );
+
 private slots:
     virtual void slPreviewResult( KIO::Job* );
     virtual void slGotPreview( const KFileItem*, const QPixmap& );
@@ -130,9 +145,12 @@ private:
     KookaImage   *m_currImg;
 
     KSpellConfig *m_spellConfig;
-    bool          m_wantSpellCfg;
-
+    bool          m_wantSpellCfg;         /* show the spellcheck options? */
+    bool          m_userWantsSpellCheck;  /* user has enabled/disabled spellcheck */
     QSize         m_previewSize;
+
+    QCheckBox     *m_cbWantCheck;
+    QGroupBox     *m_gbSpellOpts;
 };
 
 #endif

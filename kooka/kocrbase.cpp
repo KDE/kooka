@@ -56,6 +56,8 @@
 #include <qcolor.h>
 #include <qgrid.h>
 #include <qsizepolicy.h>
+#include <qgroupbox.h>
+#include <qcheckbox.h>
 
 KOCRBase::KOCRBase( QWidget *parent, KSpellConfig *spellConfig,
                     KDialogBase::DialogType face )
@@ -71,10 +73,17 @@ KOCRBase::KOCRBase( QWidget *parent, KSpellConfig *spellConfig,
     m_previewPix(0L),
     m_currImg(0L),
     m_spellConfig(spellConfig),
-    m_wantSpellCfg(true)
+    m_wantSpellCfg(true),
+    m_userWantsSpellCheck(true),
+    m_cbWantCheck(0L),
+    m_gbSpellOpts(0L)
 {
     kdDebug(28000) << "OCR Base Dialog!" << endl;
     // Layout-Boxes
+
+    KConfig *konf = KGlobal::config ();
+    KConfigGroupSaver gs( konf, CFG_OCR_KSPELL );
+    m_userWantsSpellCheck = konf->readBoolEntry(CFG_WANT_KSPELL, true);
 
     /* Connect signals which disable the fields and store the configuration */
     connect( this, SIGNAL( user1Clicked()), this, SLOT( writeConfig()));
@@ -137,7 +146,8 @@ void KOCRBase::ocrIntro( )
 
     // Caption - Label and image
     /* labelstring */
-    (void) new QLabel( ocrEngineName(), m_ocrPage );
+    (void) new QLabel( i18n("<b>Starting Optical Character Recognition with %1</b><p>").
+                       arg( ocrEngineName() ), m_ocrPage );
     // Find the kadmos logo and display if available
     KStandardDirs stdDir;
     QString logo = stdDir.findResource( "data", "kooka/pics/" + ocrEngineLogo() );
@@ -165,9 +175,23 @@ void KOCRBase::spellCheckIntro()
 {
     m_spellchkPage = addVBoxPage( i18n("Spellchecking") );
 
-    KSpellConfig *sCfg = new KSpellConfig(m_spellchkPage, "SPELLCHK",
-                                          m_spellConfig, false );
+    /* Want the spell checking at all? Checkbox here */
+    QGroupBox *gb1 = new QGroupBox( 1, Qt::Horizontal, i18n("OCR Post Processing"), m_spellchkPage );
+    m_cbWantCheck = new QCheckBox( i18n("Enable KDE Spellchecking for validation of the OCR result"),
+                                   gb1 );
+    /* Spellcheck options */
+    m_gbSpellOpts = new QGroupBox( 1, Qt::Horizontal, i18n("Spellcheck Options"),
+                                   m_spellchkPage );
 
+    KSpellConfig *sCfg = new KSpellConfig( m_gbSpellOpts, "SPELLCHK", m_spellConfig, false );
+    /* A space eater */
+    QWidget *spaceEater = new QWidget(m_spellchkPage);
+    spaceEater->setSizePolicy( QSizePolicy( QSizePolicy::Ignored, QSizePolicy::Ignored ));
+
+    /* connect toggle button */
+    connect( m_cbWantCheck, SIGNAL(toggled(bool)), this, SLOT(slWantSpellcheck(bool)));
+    m_cbWantCheck->setChecked( m_userWantsSpellCheck );
+    m_gbSpellOpts->setEnabled( m_userWantsSpellCheck );
     m_spellConfig = sCfg;
 
     connect( sCfg, SIGNAL(configChanged()),
@@ -290,11 +314,17 @@ void KOCRBase::writeConfig()
 
 }
 
+bool KOCRBase::wantSpellCheck()
+{
+    return m_userWantsSpellCheck;
+}
 
 void KOCRBase::startOCR()
 {
     /* en- and disable the buttons */
     kdDebug(28000) << "Base: Starting OCR" << endl;
+
+    enableFields(false);
     enableButton( User1, false );   /* Start OCR */
     enableButton( User2, true );    /* Stop OCR */
     enableButton( Close, true );
@@ -304,12 +334,32 @@ void KOCRBase::startOCR()
 
 void KOCRBase::stopOCR()
 {
+    enableFields(true);
+
     enableButton( User1, true );   /* start ocr */
     enableButton( User2, false );  /* Cancel    */
     enableButton( Close, true );
 
     stopAnimation();
 
+}
+
+void KOCRBase::enableFields(bool)
+{
+
+}
+
+void KOCRBase::slWantSpellcheck( bool wantIt )
+{
+    if( m_gbSpellOpts )
+    {
+        m_gbSpellOpts->setEnabled( wantIt );
+    }
+    m_userWantsSpellCheck = wantIt;
+
+    KConfig *konf = KGlobal::config ();
+    KConfigGroupSaver gs( konf, CFG_OCR_KSPELL );
+    konf->writeEntry( CFG_WANT_KSPELL, wantIt );
 }
 
 /* The End ;) */
