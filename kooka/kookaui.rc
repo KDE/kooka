@@ -4,6 +4,7 @@
  <Menu name="file"><text>&amp;File</text>
    <Action name="foldernew"/>
    <Action name="saveImage"/>
+   <Action name="importImage"/>
    <Action name="deleteImage"/>
    <Action name="unloadImage"/>
    <Action name="saveOCRResult"/>
