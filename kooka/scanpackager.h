@@ -23,6 +23,7 @@
 #include <qimage.h>
 #include <qpixmap.h>
 #include <qdir.h>
+#include <qdragobject.h>
 #include <klistview.h>
 #include <kio/job.h>
 #include <kio/global.h>
@@ -39,59 +40,62 @@ class KPopupMenu;
 
 class ScanPackager : public KListView
 {
-	Q_OBJECT
+    Q_OBJECT
 public: 
-   ScanPackager( QWidget *parent);
-   ~ScanPackager();
-   virtual QString getImgName( QString name_on_disk );
-   virtual QString getSaveRoot(){ return( save_root ); }
+    ScanPackager( QWidget *parent);
+    ~ScanPackager();
+    virtual QString getImgName( QString name_on_disk );
+    virtual QString getSaveRoot(){ return( save_root ); }
 
-   QString 	getCurrImageFileName( bool ) const;
+    QString 	getCurrImageFileName( bool ) const;
    
 public slots:
-   void         slSelectImage( const QString );
-   void 	slAddImage( QImage *img );		
-   void 	slSelectionChanged( QListViewItem *);
-   void         slShowContextMenue(QListViewItem *, const QPoint &, int );
-   void 	slHandlePopup( int item );
+    void         slSelectImage( const QString );
+    void 	 slAddImage( QImage *img );		
+    void 	 slSelectionChanged( QListViewItem *);
+    void         slShowContextMenue(QListViewItem *, const QPoint &, int );
+    void 	 slHandlePopup( int item );
 
-   void         exportFile( PackagerItem *);
-   void         slotRename( PackagerItem* , const KURL& );
-
-   void         slotCanceled(KIO::Job*);
-   void         slotResult( KIO::Job*);
-
+    void         exportFile( PackagerItem *);
+    void         slotRename( PackagerItem* , const KURL& );
+    void         slotImportFiles( PackagerItem*, const QStringList );
+    
+    void         slotCanceled(KIO::Job*);
+    void         slotRenameResult( KIO::Job*);
+    void         slotImportFinished( KIO::Job*);
+    void         slotExportFinished( KIO::Job *job );
    
-   void         slotImageChanged( QImage * );
+    void         slotImageChanged( QImage * );
 
 protected slots:
-   void         slCollapsed( QListViewItem *);
-   void         slExpanded( QListViewItem *);
-   void         slFileRename( QListViewItem*, const QString&, int );
-   void         slFilenameChanged( const KURL &, const KURL & );
-
-signals:
-   void 	showImage( QImage* );
-   void         deleteImage( QImage* );
-   void         unloadImage( QImage* );
+    void         slCollapsed( QListViewItem *);
+    void         slExpanded( QListViewItem *);
+    void         slFileRename( QListViewItem*, const QString&, int );
+    void         slFilenameChanged( const KURL &, const KURL & );
+    void 	 slDropped(QDropEvent * e, QListViewItem *after);
+    bool         acceptDrag(QDropEvent *ev) const;
+    signals:
+    void 	showImage( QImage* );
+    void         deleteImage( QImage* );
+    void         unloadImage( QImage* );
 	
 private:
 
-   QString 	buildNewFilename( QString cmplFilename, QString currFormat ) const;   
-   PackagerItem *spFindItem( SearchType type, const QString name );
+    QString 	buildNewFilename( QString cmplFilename, QString currFormat ) const;   
+    PackagerItem *spFindItem( SearchType type, const QString name );
    
-   int 	        readDir( QListViewItem *parent, QString dir_to_read );
-   void         showContextMenu( QPoint p, bool show_folder = true );
-   void 			 createFolder( void );
-   bool         deleteItem( PackagerItem*, bool );
-   void         unloadItem( PackagerItem *curr );
+    int 	        readDir( QListViewItem *parent, QString dir_to_read );
+    void         showContextMenu( QPoint p, bool show_folder = true );
+    void 			 createFolder( void );
+    bool         deleteItem( PackagerItem*, bool );
+    void         unloadItem( PackagerItem *curr );
 
-   PackagerItem *root;
-   QDir         curr_copy_dir;
-   QString      save_root;
-   KIO::Job     *copyjob;
-   KPopupMenu   *popup;   
-   int 		img_counter;
+    PackagerItem *root;
+    QDir         curr_copy_dir;
+    QString      save_root;
+    KIO::Job     *copyjob;
+    KPopupMenu   *popup;   
+    int 		img_counter;
 };
 
 #endif
