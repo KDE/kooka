@@ -25,7 +25,7 @@
    <Action name="show_scanparams"/>
  </Menu>
 </MenuBar>
- <Toolbar  name="buttons" fullWidth="true">
+ <ToolBar  name="mainToolBar" fullWidth="true">
    <text>Image Viewer Toolbar</text>
    <Action name="ocrImage"/>
    <Action name="ocrImageSelect"/>
