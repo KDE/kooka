@@ -121,10 +121,9 @@ void ScanDialog::slotNetworkToggle( bool state)
    bool writestate = !state;
 
    kdDebug(29000) << "slotNetworkToggle: Writing state " << writestate << endl;
-   KSimpleConfig *c = new KSimpleConfig(QString::fromLatin1("kdeglobals"), false);
+   KConfig *c = KGlobal::config();
    c->setGroup(QString::fromLatin1(GROUP_STARTUP));
-   c->writeEntry( STARTUP_ONLY_LOCAL, writestate );
-   delete c;
+   c->writeEntry( STARTUP_ONLY_LOCAL, writestate, true, true );
 }
 
 void ScanDialog::slotAskOnStartToggle(bool state)
@@ -132,10 +131,9 @@ void ScanDialog::slotAskOnStartToggle(bool state)
    bool writestate = !state;
    
    kdDebug(29000) << "slotAskOnStartToggle: Writing state " << writestate << endl;
-   KSimpleConfig *c = new KSimpleConfig(QString::fromLatin1("kdeglobals"), false);
+   KConfig *c = KGlobal::config();
    c->setGroup(QString::fromLatin1(GROUP_STARTUP));
-   c->writeEntry( STARTUP_SKIP_ASK, writestate );
-   delete c;
+   c->writeEntry( STARTUP_SKIP_ASK, writestate, true, true );
 }
 
 bool ScanDialog::setup()

@@ -216,6 +216,8 @@ bool KScanOptSet::load( const QString& scannerName )
 	 backupOption( optset );
       }
    }
+   delete( scanConfig );
+   
    return( ret );
 }
 

@@ -73,20 +73,7 @@ DeviceSelector::DeviceSelector( QWidget *parent, QStrList& devList,
    cbSkipDialog->setChecked( skipDialog );
 
    topLayout->addWidget(cbSkipDialog);
-
-#if 0
-   QCString configDev = getDeviceFromConfig();
-
-   configDevValid = false;
-   for( QCString l=devList.first(); l != 0 && ! configDevValid; l = devList.next())
-   {
-      if( configDev == l )
-      {
-	 kdDebug(29000) << "scanner found in list of available scanners" << endl;
-	 configDevValid = true;
-      }
-   }
-#endif
+   
 }
 
 QCString DeviceSelector::getDeviceFromConfig( void ) const
@@ -136,13 +123,13 @@ QCString DeviceSelector::getSelectedDevice( void ) const
    kdDebug(29000) << "The selected device: <" << dev << ">" << endl;
 
    /* Store scanner selection settings */
-   KSimpleConfig *c = new KSimpleConfig(QString::fromLatin1("kdeglobals"), false);
+   KConfig *c = KGlobal::config();
    c->setGroup(QString::fromLatin1(GROUP_STARTUP));
-   c->writeEntry( STARTUP_SCANDEV, dev );
-   c->writeEntry( STARTUP_SKIP_ASK, getShouldSkip() );
+   /* Write both the scan device and the skip-start-dialog flag global. */
+   c->writeEntry( STARTUP_SCANDEV, dev, true, true );
+   c->writeEntry( STARTUP_SKIP_ASK, getShouldSkip(), true, true );
    c->sync();
-   delete c;
-   c = 0;
+   
    return dev;
 }
 
