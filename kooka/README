@@ -22,7 +22,8 @@ Sacnner Support using SANE:
 - Kooka offers a gui to change the most important scanner options like resolution,
   mode, threshold etc. These options are generated on the fly,  depending on the 
   scanner capabilities.
-- Kooka offers a preview-function and the user can select the scan area interactively.
+- Kooka offers a preview-function and the user can select the scan area interactively
+  or automatically.
 
 Image Storage:
 - Kooka provides an assitant to save your acquired images.
@@ -42,7 +43,8 @@ OCR:
 - Kooka supports Joerg Schulenburg's gocr, an open source program
   for optical character recognition. Kooka starts the OCR program and displays 
   its output. Best results with bw-images scanned with ~150 dpi
-
+- Support for the commercial OCR/ICR package KADMOS of the reRecognition
+  GmbH Kreuzlingen. Please read README.KADMOS for more information.
 
 Problems:
 =========
@@ -55,9 +57,7 @@ see what is neccessary and makes sense for the purpose of kooka.
 * Kooka does not yet have a strategy for very large images :(. It uses
 the Qt QImage/QPixmap as is. On some displays, that causes problems.
 
-* Crambled scans where reported using HP scanners in lineart mode
-while color and grayscale work properly.  Since I do not have a HP
-scanner, I could not reproduce and fix that yet.
+* ADF support is not yet working correctly.
 
 ----------------------------------------------------------------------
 Klaas Freitag <freitag@suse.de>
