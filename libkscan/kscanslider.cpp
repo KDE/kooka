@@ -40,7 +40,7 @@ KScanSlider::KScanSlider( QWidget *parent, const QString& text,
     {
        KIconLoader *loader = KGlobal::iconLoader();
        m_stdButt = new QPushButton( this );
-       m_stdButt->setPixmap( loader->loadIcon( "locationbar_erase",KIcon::Small ));
+       m_stdButt->setPixmap( loader->loadIcon( "undo",KIcon::Small ));
 
        /* connect the button click to setting the value */
        connect( m_stdButt, SIGNAL(clicked()),
@@ -56,7 +56,7 @@ KScanSlider::KScanSlider( QWidget *parent, const QString& text,
     slider->setTickmarks( QSlider::Below );
     slider->setTickInterval( QMAX( (max-min) / 10, 1 ) );
     slider->setSteps( QMAX( (max-min)/20, 1 ), QMAX( (max-min)/10, 1 ) );
-
+    slider->setMinimumWidth( 140 );
     /* set a buddy */
     l1->setBuddy( slider );
     
@@ -93,6 +93,8 @@ void KScanSlider::setEnabled( bool b )
 	l1->setEnabled( b );
     if( m_spin )
 	m_spin->setEnabled( b );
+    if( m_stdButt )
+       m_stdButt->setEnabled( b );
 }
 
 void KScanSlider::slSetSlider( int value )
