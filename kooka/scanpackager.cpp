@@ -536,9 +536,13 @@ void ScanPackager::exportFile( PackagerItem *curr )
 
 	 if( kfrom == fileName ) return;
 	 copyjob = KIO::copy( kfrom, fileName, false );
+	 if( copyjob )
+	 {
+	    storeJob( copyjob, curr, JobDescription::ExportJob);
 
-	 connect( copyjob, SIGNAL(result(KIO::Job*)),
-		  this, SLOT(slotExportFinished( KIO::Job* )));
+	    connect( copyjob, SIGNAL(result(KIO::Job*)),
+		     this, SLOT(slotExportFinished( KIO::Job* )));
+	 }
 
       }
    }
@@ -548,6 +552,7 @@ void ScanPackager::slotExportFinished( KIO::Job *job )
 {
    // nothing yet to do.
    kdDebug(28000) << "Export Finished" << endl;
+   jobMap.remove(job);
 }
 
 void ScanPackager::slotImportFiles( PackagerItem* dir, const QStringList list )
@@ -561,16 +566,18 @@ void ScanPackager::slotImportFiles( PackagerItem* dir, const QStringList list )
     for( int idx=0; idx < list.count(); idx++ )
     {
 	QString file = list[idx];
-	PackagerItem *p = new PackagerItem( dir );
-	kdDebug(28000) << "creating new item for " << file << endl;
-	p->setFilename( file );
     }
 
     kdDebug(28000) << "Importing to <" << dest.url() << ">" << endl;
     
     copyjob = KIO::copy(KURL::List(list), dest, false);
-    connect(copyjob, SIGNAL(result(KIO::Job *)), this,
-	    SLOT(slotImportFinished(KIO::Job *)));
+    if( copyjob )
+    {
+       storeJob( copyjob, dir, JobDescription::ImportJob);
+
+       connect(copyjob, SIGNAL(result(KIO::Job *)), this,
+	       SLOT(slotImportFinished(KIO::Job *)));
+    }
 
 }
 
@@ -588,26 +595,37 @@ void ScanPackager::slotImportFinished( KIO::Job *job )
    {
       /* went good. */
       KIO::CopyJob *fc = (KIO::CopyJob*) job;
-      if( fc ) {
+      if( fc )
+      {
 	  KURL::List srcList = fc->srcURLs();
+	  /* the descriptors item points to the dest-directory */
+	  JobDescription jobDesc = jobMap[job];
+	  PackagerItem *dir= jobDesc.item();
+	  if( dir )
+	  {
+	     QString targetDir = dir->getFilename();
 	  
-	  KURL target = fc->destURL();
-	  kdDebug(28000) << "Hier bin ich !" << endl;
-
-
-	  // EmployeeList::Iterator it;
-	  // printf( "%s earns %d\n", (*it).name().latin1(), (*it).salary().latin1() );
+	     kdDebug(28000) << "Received importet file, goes to <" << targetDir << ">" << endl;
+	     KURL::List::Iterator it;
 	  
-	  kdDebug(28000) << "Received importet file <" << target.url() << ">" << endl;
-	  KURL::List::Iterator it;
-	  for( it = srcList.begin(); it != srcList.end(); ++it )
-	     slFilenameChanged( *it, target );
-	  
+	     for( it = srcList.begin(); it != srcList.end(); ++it )
+	     {
+		QString filename = (*it).fileName();
+		QString completeName = targetDir + filename;
+		PackagerItem *p = new PackagerItem( dir );
+		kdDebug(28000) << "creating new item for " << completeName << endl;
+		p->setFilename( completeName );
+	     }
+	  }
+	  else
+	  {
+	     kdDebug(28000) << "ERROR: Not a registered Job !" << endl;
+	  }
       } else {
 	  kdDebug(28000) << "Copyjob not defined !" << endl;
       }
    }
-    
+   jobMap.remove( job );
 }
 
 
@@ -626,25 +644,33 @@ void ScanPackager::slotRename( PackagerItem* curr, const KURL& newName )
    }
 
    copyjob = KIO::file_move( src, newName );
-
-   // kdDebug(28000) << "ProgressID = " << copyjob->progressId () << endl;
-   
-   connect( copyjob,
-	    SIGNAL(result(KIO::Job*)), this,
-	    SLOT(slotRenameResult( KIO::Job* )));
+   if( copyjob )
+   {
+      storeJob( copyjob, curr, JobDescription::RenameJob);
+      connect( copyjob,
+	       SIGNAL(result(KIO::Job*)), this,
+	       SLOT(slotRenameResult( KIO::Job* )));
+   }
 
 
 }
 
-void ScanPackager::slFilenameChanged( const KURL &from, const KURL &to  )
+void ScanPackager::storeJob( KIO::Job *job, PackagerItem *item, JobDescription::JobType jType )
 {
-   QString old_name = from.url();
+   JobDescription newJob ( job, item, jType );
+
+   // KURL itemFile( item->getFilenameURL());
+   jobMap.insert( job, newJob );
+}
+
+void ScanPackager::slFilenameChanged( PackagerItem *curr, const KURL &to  )
+{
+   QString old_name = curr->getFilename();
    QString new_name = to.url();
 
    kdDebug(28000) << "the filename changed for " << old_name << endl;
 
    kdDebug(28000) << "File was renamed to " << new_name << endl;
-   PackagerItem *curr = spFindItem( NameSearch, old_name );
 
    if( curr )
    {
@@ -652,18 +678,18 @@ void ScanPackager::slFilenameChanged( const KURL &from, const KURL &to  )
       KURL targeturl = to;
 
       /* check the target filename. If none is present, the one of the source
-       * is to use. TODO: What about overwriting etc.
+       * is to use. 
        */
       QString targetfname = to.filename(false);
       kdDebug(28000) << "Target-Filename is " << targetfname << endl;
       
       if( targetfname.isEmpty() || targetfname.isNull() )
       {
-	 targeturl.setFileName( from.filename());
+	 targeturl.setFileName( old_name );
       }
       
       curr->setFilename( targeturl.url());
-
+      kdDebug(28000) << "Setting the current filename " << targeturl.url() << endl;
       if( curr->isDir())
       {
 	 /* if it is a directory, it is much more complicated. The children must
@@ -671,6 +697,12 @@ void ScanPackager::slFilenameChanged( const KURL &from, const KURL &to  )
 	  * TODO !
 	  */
 	 kdDebug(28000) << "slFilenameChanged for directory !" << endl;
+	 PackagerItem *fc = (PackagerItem*) curr->firstChild();
+	 while( fc )
+	 {
+	    fc->changedParentsPath( targeturl );
+	    fc = (PackagerItem*) fc->nextSibling();
+	 }
       }
    }
    else
@@ -678,6 +710,7 @@ void ScanPackager::slFilenameChanged( const KURL &from, const KURL &to  )
       kdDebug(28000) << "Item was NOT found !" <<endl ;
    }
 }
+
 
 
 bool ScanPackager::acceptDrag(QDropEvent *ev) const
@@ -734,7 +767,10 @@ void ScanPackager::slotRenameResult( KIO::Job *job )
 {
    if( ! job ) return;
    kdDebug(28000) << "slotResult !" << endl;
-   
+
+   JobDescription jobDesc = jobMap[job];
+   PackagerItem *item = jobDesc.item();
+
    if ( job->error() )
    {
       job->showErrorDialog ( );
@@ -747,11 +783,12 @@ void ScanPackager::slotRenameResult( KIO::Job *job )
    {
       /* went good. */
       KIO::FileCopyJob *fc = (KIO::FileCopyJob*) job;
-      KURL src = fc->srcURL();
       KURL target = fc->destURL();
 
-      slFilenameChanged( src, target );
+      slFilenameChanged( item, target );
    }
+   item->decorateFile();
+   jobMap.remove( job );
    copyjob = 0L;
 }
 

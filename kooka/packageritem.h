@@ -79,6 +79,7 @@ public:
    QString getDirectory( void ) const;
    
    KURL    getFilenameURL( void ) const;
+   void    changedParentsPath( KURL );
 #if 0
    /**
     *  Retrieves the compete path where the item is stored.

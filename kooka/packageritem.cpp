@@ -154,6 +154,7 @@ QCString PackagerItem::getImgFormat( void ) const
 
 void PackagerItem::setFilename( QString fi )
 {
+
    filename = fi;
    
    // filename.setFileName( fi );
@@ -276,3 +277,32 @@ void PackagerItem::decorateFile( void )
    }
 }
 
+
+void PackagerItem::changedParentsPath( KURL newParentPath )
+{
+
+   if( (newParentPath.url()).right(1) != "/" )
+   {
+      newParentPath.addPath( "/" );
+   }
+   QString me = filename.filename(true);
+   kdDebug(28000) << "Got parentpath: " << newParentPath.url() << endl;
+   filename = newParentPath;
+
+   if( isDir() )
+   {
+      filename.addPath( me );
+
+      PackagerItem *child = (PackagerItem*) firstChild();
+      while( child )
+      {
+	    child->changedParentsPath( filename );
+	    child = (PackagerItem*) child->nextSibling();
+      }
+   }
+   else
+   {
+      filename.setFileName( me );
+   }
+   kdDebug(28000) << "refreshPath created new filename " << filename.url() << endl;
+}

@@ -24,6 +24,7 @@
 #include <qpixmap.h>
 #include <qdir.h>
 #include <qdragobject.h>
+#include <qmap.h>
 #include <klistview.h>
 #include <kio/job.h>
 #include <kio/global.h>
@@ -34,8 +35,26 @@
   *@author Klaas Freitag
   */
 #include "packageritem.h"
-
+class KURL;
 class KPopupMenu;
+class PackagerItem;
+
+class JobDescription
+{
+public:
+   enum JobType { NoJob, ImportJob, RenameJob, ExportJob };
+   JobDescription():jobType( NoJob ), kioJob(0L), pitem(0L) {}
+   JobDescription( KIO::Job* kiojob, PackagerItem *new_item, JobType type ) :
+      kioJob(kiojob), pitem(new_item), jobType(type) {}
+
+   JobType type( void ) { return( jobType ); }
+   PackagerItem *item( void ) { return( pitem ); }
+   KIO::Job* job( void ){ return( kioJob ); }
+private:
+   JobType       jobType;
+   KIO::Job*     kioJob;
+   PackagerItem* pitem;
+};
 
 class ScanPackager : public KListView
 {
@@ -70,7 +89,7 @@ protected slots:
     void         slCollapsed( QListViewItem *);
     void         slExpanded( QListViewItem *);
     void         slFileRename( QListViewItem*, const QString&, int );
-    void         slFilenameChanged( const KURL &, const KURL & );
+    void         slFilenameChanged( PackagerItem*, const KURL & );
     void 	 slDropped(QDropEvent * e, QListViewItem *after);
     bool         acceptDrag(QDropEvent *ev) const;
     signals:
@@ -80,8 +99,9 @@ protected slots:
 	
 private:
 
-    QString 	buildNewFilename( QString cmplFilename, QString currFormat ) const;   
+    QString 	 buildNewFilename( QString cmplFilename, QString currFormat ) const;   
     PackagerItem *spFindItem( SearchType type, const QString name );
+    void         storeJob( KIO::Job*, PackagerItem *, JobDescription::JobType );
    
     int 	        readDir( QListViewItem *parent, QString dir_to_read );
     void         showContextMenu( QPoint p, bool show_folder = true );
@@ -95,6 +115,8 @@ private:
     KIO::Job     *copyjob;
     KPopupMenu   *popup;   
     int 		img_counter;
+
+   QMap<KIO::Job*, JobDescription> jobMap;
 };
 
 #endif
