@@ -104,6 +104,29 @@ KScanEntry::KScanEntry( QWidget *parent, const QString& text )
     hb->activate();
 }
 
+QString  KScanEntry::text( void ) const
+{
+   QString str = QString::null;
+   // kdDebug(29000) << "entry is "<< entry << endl;
+   if(entry)
+   {
+       str = entry->text();
+      if( ! str.isNull() && ! str.isEmpty())
+      {
+	 kdDebug(29000) << "KScanEntry returns <" << str << ">" << endl;
+      }
+      else
+      {
+	 kdDebug(29000) << "KScanEntry:  nothing entered !" << endl;
+      }
+   }
+   else
+   {
+      kdDebug(29000) << "KScanEntry ERR: member var entry not defined!" << endl;
+   }
+   return ( str );
+}
+
 void KScanEntry::slSetEntry( const QString& t )
 {
     if( t == entry->text() )

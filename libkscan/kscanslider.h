@@ -65,9 +65,8 @@ public slots:
 	void		slSetEntry( const QString& );
 	void		slEntryChange( const QString& );
 	void		setEnabled( bool b ){ if( entry) entry->setEnabled( b ); }
-
-   QString text( void ) const
-      { return ( entry->text() ); }
+   
+   QString text( void ) const;
 signals:
 	void		valueChanged( const QCString& );
 		
