@@ -658,6 +658,9 @@ void ImageCanvas::update_scaled_pixmap( void )
     { 	// debug( "Pixmap px is null in Update_scaled" );
 	return;
     }
+
+    QApplication::setOverrideCursor(waitCursor);
+
     kdDebug(28000) << "Updating scaled_pixmap" << endl;
     if( scaleKind() == DYNAMIC )
         kdDebug(28000) << "Scaling DYNAMIC" << endl;
@@ -747,9 +750,8 @@ void ImageCanvas::update_scaled_pixmap( void )
     resizeContents( static_cast<int>(image->width() * used_xscaler),
                     static_cast<int>(image->height() * used_yscaler ) );
 
+    QApplication::restoreOverrideCursor();
 }
-
-
 
 
 void ImageCanvas::drawHAreaBorder(QPainter &p,int x1,int x2,int y,int r)
