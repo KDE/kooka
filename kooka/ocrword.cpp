@@ -140,4 +140,9 @@ bool ocrWordList::findFuzzyIndex( const QString& word, ocrWord& resWord )
 
 }
 
+void ocrWordList::setBlock( int b )
+{
+    m_block = b;
+}
+
 /*   */

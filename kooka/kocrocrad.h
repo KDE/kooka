@@ -36,12 +36,18 @@
 #include <kanimwidget.h>
 
 #include "kocrbase.h"
+
+#define CFG_GROUP_OCRAD "ocrad"
+#define CFG_OCRAD_LAYOUT_DETECTION "layoutDetection"
+#define CFG_OCRAD_EXTRA_ARGUMENTS  "extraArguments"
+
 /**
   *@author Klaas Freitag
   */
 
 class KSpellConfig;
 class KURLRequester;
+class QComboBox;
 
 class ocradDialog: public KOCRBase
 {
@@ -60,6 +66,9 @@ public:
     QString ocrEngineLogo() const;
 
     QString orfUrl() const;
+
+    int layoutDetectionMode() const;
+    
 public slots:
     void enableFields(bool);
     void introduceImage( KookaImage* );
@@ -71,6 +80,7 @@ protected:
 private:
     QString      m_ocrCmd;
     KURLRequester *m_orfUrlRequester;
+    QComboBox      *m_layoutMode;
 };
 
 #endif

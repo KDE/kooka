@@ -48,12 +48,15 @@
 #include "kookapref.h"
 #include <qvbox.h>
 #include <qhbox.h>
+#include <qcombobox.h>
+
 
 
 ocradDialog::ocradDialog( QWidget *parent, KSpellConfig *spellConfig )
     :KOCRBase( parent, spellConfig, KDialogBase::Tabbed ),
      m_ocrCmd( QString()),
-     m_orfUrlRequester(0L)
+     m_orfUrlRequester(0L),
+     m_layoutMode(0)
 {
    kdDebug(28000) << "Starting ocrad-Start-Dialog!" << endl;
    // Layout-Boxes
@@ -81,6 +84,12 @@ QString ocradDialog::ocrEngineDesc() const
         "Best results are achieved if the characters are at least 20 pixels high.<p>"
         "Problems arise, as usual, with very bold or very light or broken characters, "
         "the same with merged character groups.");
+}
+
+
+int ocradDialog::layoutDetectionMode() const
+{
+    return m_layoutMode->currentItem();
 }
 
 EngineError ocradDialog::setupGui()
@@ -115,6 +124,22 @@ EngineError ocradDialog::setupGui()
     else
         m_ocrCmd = res;
 
+    /** layout detection button **/
+    conf->setGroup( CFG_GROUP_OCRAD );
+    int layoutDetect = conf->readNumEntry( CFG_OCRAD_LAYOUT_DETECTION, 0 );
+    kdDebug(28000) << "Layout detection from config: " << layoutDetect << endl;
+    
+    (void) new KSeparator( KSeparator::HLine, page);
+    QHBox *hb1 = new QHBox(page);
+    hb1->setSpacing( KDialog::spacingHint() );
+    (void) new QLabel( i18n("OCRAD layout analysis mode: "), hb1);
+    m_layoutMode = new QComboBox(hb1);
+    m_layoutMode->insertItem(i18n("No layout detection"), 0 );
+    m_layoutMode->insertItem(i18n("Column detection"), 1 );
+    m_layoutMode->insertItem(i18n("Full layout detection"), 2);
+    m_layoutMode->setCurrentItem(layoutDetect);
+    
+    /** stating the ocrad binary **/
     (void) new KSeparator( KSeparator::HLine, page);
     QHBox *hb = new QHBox(page);
     hb->setSpacing( KDialog::spacingHint());
@@ -145,6 +170,9 @@ void ocradDialog::writeConfig( void )
    conf->setGroup( CFG_GROUP_OCR_DIA );
 
    conf->writeEntry( CFG_OCRAD_BINARY, QString(getOCRCmd()));
+
+   conf->setGroup( CFG_GROUP_OCRAD );
+   conf->writeEntry( CFG_OCRAD_LAYOUT_DETECTION, m_layoutMode->currentItem());
 }
 
 
