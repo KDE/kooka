@@ -14,7 +14,7 @@ AC_FIND_FILE(sane/sane.h, $sane_incdirs, ac_sane_includes)
 sane_includes="-I$ac_sane_includes"
 sane_libdir=""
 
-if test -n "$ac_sane_includes" && test -r "$ac_sane_includes/sane.h"; then
+if test -n "$ac_sane_includes" && test -r "$ac_sane_includes/sane/sane.h"; then
   AC_SUBST(sane_includes)
   sane_libdirs="/usr/lib /usr/local/lib /usr/lib/sane /usr/local/lib/sane"
   for dir in $sane_libdirs; do
