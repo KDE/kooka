@@ -862,6 +862,45 @@ preview_state ImageCanvas::classifyPoint(int x,int y)
 }
 
 
+int ImageCanvas::getBrightness() const
+{
+   return brightness;
+}
+
+int ImageCanvas::getContrast() const
+{
+   return contrast;
+}
+
+int ImageCanvas::getGamma() const
+{
+   return gamma;
+}
+
+int ImageCanvas::getScaleFactor() const
+{
+   return( scale_factor );
+}
+
+const QImage *ImageCanvas::rootImage( )
+{
+   return( image );
+}
+
+void ImageCanvas::setBrightness(int b)
+{
+   brightness = b;
+}
+
+void ImageCanvas::setContrast(int c)
+{
+   contrast = c;
+}
+
+void ImageCanvas::setGamma(int c)
+{
+   gamma = c;
+}
 
 
 

@@ -83,21 +83,30 @@ extern int max_dpi;
 class ImageCanvas: public QScrollView
 {
    Q_OBJECT
+   Q_ENUMS( PopupIDs )
+   Q_PROPERTY( int brightness READ getBrightness WRITE setBrightness )
+   Q_PROPERTY( int contrast READ getContrast WRITE setContrast )
+   Q_PROPERTY( int gamma READ getGamma WRITE setGamma )
+   Q_PROPERTY( int scale_factor READ getScaleFactor WRITE setScaleFactor )
+    
 public:
    ImageCanvas( QWidget *parent = 0,
 		const QImage *start_image = 0,
 		const char *name = 0);
    ~ImageCanvas( );
-   int getBrightness() 	        { return brightness; }
-   int getContrast() 	        { return contrast; }
-   int getGamma() 		{ return gamma; }
+
+   int getBrightness() const;
+   int getContrast() const;
+   int getGamma() const;
+
+   int getScaleFactor() const;
+   
+   const QImage *rootImage();
 
    bool hasImage( void ) 	{ return acquired; }
+
    QRect sel( void );
-   int getScaleFactor()         { return( scale_factor ); }
    
-   const QImage *rootImage( void )
-                                { return( image );}  
 
    enum{ ID_POP_ZOOM, ID_POP_CLOSE, ID_FIT_WIDTH,
 	    ID_FIT_HEIGHT, ID_ORIG_SIZE } PopupIDs;
@@ -105,18 +114,16 @@ public:
    bool selectedImage( QImage* );
    
 public slots:
-   void setBrightness(int b)
-      { brightness = b; }
-   void setContrast(int c)
-      { contrast = c; }
-   void setGamma(int c)
-      { gamma = c;  }
+   void setBrightness(int);
+   void setContrast(int );
+   void setGamma(int );
+
    void toggleAspect( int aspect_in_mind )
       {
 	 maintain_aspect = aspect_in_mind;
 	 repaint();
       }	
-   void newImage( QImage *new_image );
+   void newImage( QImage* );
    void deleteView( QImage *);
    void newRectSlot();
    void newRectSlot( QRect newSel );
@@ -145,14 +152,17 @@ protected:
 private:
    QStrList      urls;
 
+   int           scale_factor;
+   const QImage        *image;
+   int           brightness, contrast, gamma;
+
+   
 #ifdef USE_KPIXMAPIO
    KPixmapIO	 pixIO;
 #endif
    void          createContextMenu( void );
    void          showContextMenu( QPoint p );
    
-   const QImage	*image;
-
    QWMatrix	 scale_matrix;
    QWMatrix	 inv_scale_matrix;
    QPixmap       *pmScaled;
@@ -162,9 +172,7 @@ private:
    bool		 maintain_aspect;
 
    int	         timer_id;
-   int	         scale_factor;
    QRect 	 *selected;
-   int 		 gamma,brightness,contrast;
    preview_state moving;
    int 		 cr1,cr2;
    int 		 lx,ly;
@@ -178,6 +186,9 @@ private:
    void update_scaled_pixmap( void );
 	
    preview_state classifyPoint(int x,int y);
+
+   class ImageCanvasPrivate;
+   ImageCanvasPrivate *d;
 };
 
 #endif
