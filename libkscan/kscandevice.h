@@ -109,6 +109,12 @@ public:
   QStrList getDevices( ) const
   { return( scanner_avail ); }
 
+   /**
+    * returns the short, technical name of the currently attached backend.
+    * It is in the form 'umax:/dev/sg1'.
+    */
+   QCString shortScannerName() const { return scanner_name; }
+
   /**
    *  returns a long, human readable name of the scanner, like
    * 'Mustek SP1200 Flatbed scanner'. The parameter name takes
@@ -246,7 +252,7 @@ public:
    static QAsciiDict<int>*  option_dic;
    static SANE_Device const **dev_list;
    static KScanOptSet *gammaTables;
-
+   
 public slots:
   void slOptChanged( KScanOption* );
 	
