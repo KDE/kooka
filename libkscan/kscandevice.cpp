@@ -712,12 +712,17 @@ KScanStat KScanDevice::acquirePreview( bool forceGray, int dpi )
 
    if( dpi == 0 )
    {
-      /* No resolution argument */
-      if( ! res.getRange( &min, &max, &q ) )
-      {
-	 kdDebug(29000) << "Could not retrieve resolution range!" << endl;
-	 min = 75.0; // Hope that every scanner can 75
-      }
+       /* No resolution argument */
+       if( ! res.getRange( &min, &max, &q ) )
+       {
+	   if( ! res.getRangeFromList ( &min, &max, &q ) )
+	   {
+	       kdDebug(29000) << "Could not retrieve resolution range!" << endl;
+	       min = 75.0; // Hope that every scanner can 75
+	   }
+       }
+       kdDebug(29000) << "Minimum Range: " << min << ", Maximum Range: " << max << endl;
+
       if( min > MIN_PREVIEW_DPI )
 	 set_dpi = (int) min;
       else

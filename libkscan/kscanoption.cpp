@@ -996,12 +996,53 @@ QStrList KScanOption::getList( ) const
 }
 
 
+
+bool KScanOption::getRangeFromList( double *min, double *max, double *q ) const
+{
+   if( !desc ) return( false );
+   bool ret = true;
+
+   if ( desc->constraint_type == SANE_CONSTRAINT_WORD_LIST ) {
+	    // Try to read resolutions from word list
+	    kdDebug(29000) << "Resolutions are in a word list" << endl;
+            const SANE_Int *sint =  desc->constraint.word_list;
+            int amount_vals = *sint; sint ++;
+	    double value;
+	    *min = 0;
+	    *max = 0;
+	    *q = -1; // What is q?
+
+            for( int i=0; i < amount_vals; i++ ) {
+		if( desc->type == SANE_TYPE_FIXED ) {
+		    value = (double) SANE_UNFIX( *sint );
+		} else {
+		    value = *sint;
+		}
+		if ((*min > value) || (*min == 0)) *min = value;
+		if ((*max < value) || (*max == 0)) *max = value;
+		
+		if( min != 0 && max != 0 && max > min ) {
+		    double newq = max - min;
+		    *q = newq;
+		}
+		sint++;
+            }
+   } else {
+      kdDebug(29000) << "getRangeFromList: No list type " << desc->name << endl;
+      ret = false;
+    }
+    return( ret );
+}
+
+
+
 bool KScanOption::getRange( double *min, double *max, double *q ) const
 {
    if( !desc ) return( false );
    bool ret = true;
 
-   if( desc->constraint_type == SANE_CONSTRAINT_RANGE) {
+   if( desc->constraint_type == SANE_CONSTRAINT_RANGE ||
+	   desc->constraint_type == SANE_CONSTRAINT_WORD_LIST ) {
       const SANE_Range *r = desc->constraint.range;
 
       if( desc->type == SANE_TYPE_FIXED ) {

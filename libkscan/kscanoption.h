@@ -162,6 +162,7 @@ public:
    
   // Possible Values
   QStrList    getList() const;
+  bool        getRangeFromList( double*, double*, double* ) const;
   bool        getRange( double*, double*, double* ) const;
 
   QCString    getName() const { return( name ); }
