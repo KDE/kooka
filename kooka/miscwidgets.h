@@ -76,7 +76,7 @@ public slots:
 signals:
    void customScaleChange( int );
 public slots:
-   void customChanged( const char* t );
+   void customChanged( const QString& );
  private:
    QLineEdit *leCust;
    int selected;

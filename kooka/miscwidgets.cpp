@@ -162,8 +162,8 @@ ImgScaleDialog::ImgScaleDialog( QWidget *parent, int curr_sel,
    QString sn;
    sn.setNum( last_custom );
    leCust->setText(sn );
-   connect( leCust, SIGNAL( textChanged( const char*)),
-	    this, SLOT( customChanged( const char *)));
+   connect( leCust, SIGNAL( textChanged( const QString& )),
+	    this, SLOT( customChanged( const QString& )));
    connect( rbCust, SIGNAL( toggled( bool )),
 	    this, SLOT(enableAndFocus(bool)));
    leCust->setEnabled( rbCust->isChecked());
@@ -178,24 +178,19 @@ ImgScaleDialog::ImgScaleDialog( QWidget *parent, int curr_sel,
    cancel->setGeometry( 130, 200+s1.height()/2, 85,30 );
    connect( cancel, SIGNAL(clicked()), SLOT(reject()) );
 
-   connect( this, SIGNAL( customScaleChange( int )),
-	    parent, SLOT( slotCustomScale(int)));
    // no show - done by exec()
    setFixedSize( 230, 250 );
 }
 
-void ImgScaleDialog::customChanged( const char *t )
+void ImgScaleDialog::customChanged( const QString& s )
 {
-   if( t ) {
-      QString s( t );
-      bool ok;
-      int  okval = s.toInt( &ok );
-      if( ok && okval > 5 && okval < 1000 ) {
-	 selected = okval;
-	 emit( customScaleChange( okval ));
-      } else {
-	 debug( "ERR: To large, to smale, or whatever shitty !" );
-      }
+   bool ok;
+   int  okval = s.toInt( &ok );
+   if( ok && okval > 5 && okval < 1000 ) {
+      selected = okval;
+      emit( customScaleChange( okval ));
+   } else {
+      debug( "ERR: To large, to smale, or whatever shitty !" );
    }
 }
 
