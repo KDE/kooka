@@ -371,20 +371,32 @@ QString ImgSaver::createFilename( QString format )
 /**
  *   This function gets a filename from the parent.
  **/
-ImgSaveStat ImgSaver::saveImage( QImage *image, QString filename )
+ImgSaveStat ImgSaver::saveImage( QImage *image, QString filename, QString imgFormat )
 {
-   QString format = QImage::imageFormat( filename );
-   kdDebug(28000) << "saveImage: Saving "<< filename << " in format " << format << endl;
-   if( format == "" ) 
-      format = "BMP";
-   
-   QFileInfo fi( filename );
+    QString format = imgFormat;
+    
+    if( imgFormat.isNull() || imgFormat.isEmpty())
+	QImage::imageFormat( filename );
+    /* Check if the filename is local */
+    KURL url( filename );
+    if( url.protocol() != "file" )
+    {
+	kdDebug(29000) << "ImgSaver: Can only save local image, sorry !" << endl;
+	return( ISS_ERR_PROTOCOL );
+    }
+    QString fname = filename.remove(0, 5);  // remove file: from beginning
 
-   if( fi.isRelative() )
-      filename = directory +"/"+ filename;
+    QFileInfo fi( fname );
+    if( fi.isRelative() )
+	filename = directory +"/"+ filename;
+    
+    kdDebug(28000) << "saveImage: Saving "<< filename << " in format " << format << endl;
+    if( format == "" ) 
+	format = "BMP";
 
-   return( save( image, filename, format, "" ) );
+    return( save( image, filename, format, "" ) );
 }
+
 
 
 
@@ -537,6 +549,7 @@ QString ImgSaver::findSubFormat( QString format )
 
 /**
    private save() does the work to save the image.
+   the filename must be complete and local.
 **/
 ImgSaveStat ImgSaver::save( QImage *image, const QString &filename,
 			    const QString &format,

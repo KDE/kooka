@@ -50,6 +50,7 @@ typedef enum {
    ISS_ERR_FORMAT_NO_WRITE, /* Image format can not be written */
    ISS_ERR_UNKNOWN,    
    ISS_ERR_PARAM,       /* Parameter wrong */
+   ISS_ERR_PROTOCOL,
    ISS_SAVE_CANCELED
    
 } ImgSaveStat;
@@ -159,7 +160,7 @@ public:
    
 public slots:
    ImgSaveStat saveImage( QImage *image );
-   ImgSaveStat saveImage( QImage *image, QString filename );
+   ImgSaveStat saveImage( QImage *image, QString filename, QString imgFormat );
    
    ImgSaveStat savePreview( QImage *image );
    
