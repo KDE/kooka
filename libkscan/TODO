@@ -96,3 +96,11 @@ Our TODO List:
     KScanCombo : 
 
     ... much more.
+
+3. Moving some kooka files to the kscan lib.
+
+   - scanparams loads icons using the icon loader. The icons need to be installed
+     correctly in the makefile and need to be painted. The names of the icons are
+     lineart, gray and color.
+
+
