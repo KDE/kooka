@@ -27,6 +27,7 @@ private:
     KScanDevice *m_device;
     Previewer    *m_previewer;
     QImage m_previewImage;
+   bool good_scan_connect;
 };
 
 class ScanDialogFactory : public KScanDialogFactory

@@ -148,7 +148,7 @@ KScanDevice::KScanDevice( QObject *parent )
 
     KConfig *konf = KGlobal::config ();
     konf->setGroup( GROUP_STARTUP );
-    bool netaccess = konf->readBoolEntry( "QueryLocalOnly", false );
+    bool netaccess = konf->readBoolEntry( STARTUP_ONLY_LOCAL, false );
     kdDebug(29000) << "Query for network scanners " << (netaccess ? "Not enabled" : "Enabled") << endl;
     if( sane_stat == SANE_STATUS_GOOD )
     {
