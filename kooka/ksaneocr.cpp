@@ -73,7 +73,7 @@ KSANEOCR::KSANEOCR( QWidget*, KConfig *cfg ):
     m_imgCanvas(0L),
     m_spell(0L),
     m_wantKSpell(true),
-    m_kspellVisible(false),
+    m_kspellVisible(true),
     m_hideDiaWhileSpellcheck(true),
     m_spellInitialConfig(0L),
     m_parent(0L),
@@ -208,7 +208,7 @@ bool KSANEOCR::startOCRVisible( QWidget *parent )
    if( m_ocrProcessDia )
    {
        m_ocrProcessDia->setupGui();
-       
+
        m_ocrProcessDia->introduceImage( m_img );
        visibleOCRRunning = true;
 
@@ -659,7 +659,7 @@ void KSANEOCR::gocrStdIn(KProcess*, char* buffer, int buflen)
         /* calculate ocr progress for gocr */
         int progress = rx.capturedTexts()[0].toInt();
         int subProgress = rx.capturedTexts()[1].toInt();
-        kdDebug(28000) << "Emitting progress: " << progress << endl;
+        // kdDebug(28000) << "Emitting progress: " << progress << endl;
         emit ocrProgress( progress, subProgress );
     }
     else
@@ -731,7 +731,7 @@ bool KSANEOCR::eventFilter( QObject *object, QEvent *event )
 	    int line = 0;
 	    bool valid = false;
 	    ocrWord wordToFind;
-	    
+
             for( pageIt = m_ocrPage.begin(); pageIt != m_ocrPage.end(); ++pageIt )
             {
                 QRect r = (*pageIt).wordListRect();
@@ -766,7 +766,7 @@ bool KSANEOCR::eventFilter( QObject *object, QEvent *event )
 		     valid = true;
 		  }
 	       }
-	       
+
 	    }
 
 	    /*
@@ -777,7 +777,7 @@ bool KSANEOCR::eventFilter( QObject *object, QEvent *event )
 	       kdDebug(28000) << "Found the clicked word " << wordToFind << endl;
 	       emit selectWord( line, wordToFind );
 	    }
-	    
+
             return true;
         }
     }
