@@ -1007,14 +1007,10 @@ void KookaView::createDockMenu( KActionCollection *col, KDockMainWindow *mainWin
    actionMenu->insert( new dwMenuAction( i18n("Show Thumbnail Window"),
 					 KShortcut(), m_dockThumbs, col,
 					 mainWin, "dock_thumbs" ));
-#if 0
-   /* FIXME: Scan parameter is zero at startup */
+
    actionMenu->insert( new dwMenuAction( i18n("Show Scan Parameters"),
 					 KShortcut(), m_dockScanParam, col,
 					 mainWin, "dock_scanparams" ));
-#endif
-   
-   
 }
 
 

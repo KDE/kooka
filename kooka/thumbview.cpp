@@ -47,13 +47,11 @@ ThumbView::ThumbView( QWidget *parent, const char *name )
    : KIconView( parent, name )
 {
    readSettings();
-   
-   QImage ires = KImageEffect::unbalancedGradient( QSize( 2*m_thumbMargin+m_pixWidth,
-							  2*m_thumbMargin+m_pixHeight ),
-						   m_marginColor1, m_marginColor2,
-						   KImageEffect::DiagonalGradient );
-   m_basePix.convertFromImage( ires );
 
+   m_basePix.resize( QSize( m_pixWidth, m_pixHeight ) );
+   m_basePix.fill();  // fills white per default TODO
+
+   
    setItemsMovable( false );
 
    slSetBackGround();
@@ -98,14 +96,14 @@ bool ThumbView::readSettings()
    }
 
    value = cfg->readNumEntry( PIXMAP_WIDTH, 100 );
-   if( value != m_pixWidth )
+   if( value != m_pixWidth || m_pixWidth == 0 )
    {
       sizeDirty  = true;
       m_pixWidth = value;
    }
    
    value = cfg->readNumEntry( PIXMAP_HEIGHT, 120 );
-   if( value != m_pixHeight)
+   if( value != m_pixHeight || m_pixHeight == 0 )
    {
       sizeDirty  = true;
       m_pixHeight = value;
@@ -267,10 +265,21 @@ void ThumbView::slNewFileItems( const KFileItemList& items )
       else
       {
 	 QPixmap p(m_basePix) ;
+	 QPixmap mime( item->pixmap(0) );
+
+	 if( p.width() > mime.width() && p.height() > mime.height() )
+	 {
+	    QPainter paint( &p );
+	    paint.drawPixmap( (p.width()-mime.width())/2,
+			      (p.height()-mime.height())/2,
+			      mime );
+	    paint.flush();
+	 }
+	 kdDebug( 28000) << "Base image size " << m_basePix.size().width() << endl;
 	 /* Create a new empty preview pixmap and store the pointer to it */
 	 ThumbViewItem *newIconViewIt = new ThumbViewItem( this,
 							   item->url().filename(),
-							   createPixmap(p),
+							   createPixmap( p ),
 							   item );
 
 	 newIconViewIt->setItemUrl( item->url() );
@@ -310,14 +319,17 @@ void ThumbView::slGotPreview( const KFileItem* newFileItem, const QPixmap& newPi
 
    if( ! item ) return;
 
-   const QPixmap px = createPixmap(newPix);
    item->setPixmap( createPixmap(newPix) );
    
 }
 
-void ThumbView::slPreviewResult( KIO::Job * )
+void ThumbView::slPreviewResult( KIO::Job *job )
 {
-   
+   if( job && job->error() > 0 )
+   {
+      kdDebug(28000) << "Thumbnail Creation ERROR: " << job->errorString() << endl;
+      job->showErrorDialog( 0 );
+   }
 }
 
 
@@ -329,7 +341,6 @@ QPixmap ThumbView::createPixmap( const QPixmap& preview ) const
 						   KImageEffect::DiagonalGradient );
 
 
-   // QPixmap pixRet( m_basePix );
    QPixmap pixRet;
    pixRet.convertFromImage( ires );
    QPainter p( &pixRet );

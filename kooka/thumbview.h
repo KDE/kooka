@@ -136,6 +136,7 @@ private:
    QColor  m_marginColor1;
    QColor  m_marginColor2;
    QString m_bgImg;
+   
 };
 
 #endif
