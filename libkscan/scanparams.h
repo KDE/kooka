@@ -121,7 +121,7 @@ void slSourceSelect( void );
     *  Slot called when the Edit Custom Gamma-Dialog has a new gamma table
     *  to apply. This is an internal slot.
     */
-   void slApplyGamma( GammaDialog& );
+   void slApplyGamma( KGammaTable* );
 
    /**
     *  internal slot called when the slider for x resolution changes.
@@ -156,6 +156,7 @@ private:
    void          virtualScannerParams( void );
    void          createNoScannerMsg( void );
    void          initialise( KScanOption* );
+   void          setEditCustomGammaTableState();
    
    KScanStat     performADFScan( void );	
 	

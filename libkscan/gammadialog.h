@@ -57,7 +57,7 @@ public slots:
    virtual void slotApply();
 
 signals:
-   void gammaToApply( GammaDialog& );
+void gammaToApply( KGammaTable* );
    
 private:
    KGammaTable *gt;

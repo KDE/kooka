@@ -384,38 +384,33 @@ QScrollView *ScanParams::scannerParams( )
 
 
    /* The gamma table can be used - add  a button for editing */
+   QHBox *hb1 = new QHBox(pbox);
+   (void) new QWidget( hb1 ); /* dummy widget to eat space */
+   
    if( sane_device->optionExists( SANE_NAME_CUSTOM_GAMMA ) )
    {
-      QHBox *hb1 = new QHBox(pbox);
-
       so = sane_device->getGuiElement( SANE_NAME_CUSTOM_GAMMA, hb1);
-
-      if( so )
-      {
-	 int isOn;
-	 initialise( so );
-	 so->get( &isOn );
-	
-	 (void) new QWidget( hb1 ); /* dummy widget to eat space */
-	 
-	 kdDebug(29000) << "Custom Gamma Table is <" << (isOn ? "on" : "off") << ">" << endl;
-	
-	 /* Connect a signal to refresh activity of the gamma tables */
-	 connect( so, SIGNAL(guiChange(KScanOption*)),
+      initialise( so );
+      connect( so,   SIGNAL(guiChange(KScanOption*)),
 	       this, SLOT(slReloadAllGui( KScanOption* )));
-
-	 pb_edit_gtable = new QPushButton( i18n("Edit..."), hb1 );
-	 Q_CHECK_PTR(pb_edit_gtable);
-	 pb_edit_gtable->setEnabled( isOn );
-	
-	 connect( pb_edit_gtable, SIGNAL( clicked () ),
-		  this, SLOT( slEditCustGamma () ) );
-
-	 /* This connection cares for enabling/disabling the edit-Button */
-	 connect( so, SIGNAL(guiChange(KScanOption*)),
-		  this, SLOT(slOptionNotify(KScanOption*)));
-      }
    }
+   else
+   {
+      (void) new QLabel( i18n("Custom Gamma Table"), hb1 );
+   }
+	 
+   /* Connect a signal to refresh activity of the gamma tables */
+
+   pb_edit_gtable = new QPushButton( i18n("Edit..."), hb1 );
+   Q_CHECK_PTR(pb_edit_gtable);
+
+   connect( pb_edit_gtable, SIGNAL( clicked () ),
+	    this, SLOT( slEditCustGamma () ) );
+   setEditCustomGammaTableState();
+   
+   /* This connection cares for enabling/disabling the edit-Button */
+   connect( so,   SIGNAL(guiChange(KScanOption*)),
+	    this, SLOT(slOptionNotify(KScanOption*)));
 
    /* my Epson Perfection backends offer a list of user defined gamma values */
    
@@ -459,18 +454,7 @@ void ScanParams::createNoScannerMsg( void )
 void ScanParams::slOptionNotify( KScanOption *kso )
 {
    if( !kso || !kso->valid()) return;
-
-   kdDebug(29000) << "slOptionNotify called !" << endl;
-   if( kso->getName() == SANE_NAME_CUSTOM_GAMMA )
-   {
-      int state;
-      kso->get( &state );
-
-      if( pb_edit_gtable )
-      {
-	 pb_edit_gtable->setEnabled( state );
-      }
-   }
+   setEditCustomGammaTableState	();
 }
 
 
@@ -747,8 +731,6 @@ void ScanParams::slEditCustGamma( void )
     kdDebug(29000) << "Called EditCustGamma ;)" << endl;
     KGammaTable old_gt;
 
-    KScanOption grayGt( SANE_NAME_GAMMA_VECTOR );
-    KScanOption redGt( SANE_NAME_GAMMA_VECTOR_R );
 
     /* Since gammatable options are not set in the default gui, it must be
      * checked if it is the first edit. If it is, take from loaded default
@@ -769,8 +751,9 @@ void ScanParams::slEditCustGamma( void )
     else
     {
        /* it is not the first edit, use older values */
-       if( grayGt.active())
+       if( sane_device->optionExists( SANE_NAME_GAMMA_VECTOR ) )
        {
+	  KScanOption grayGt( SANE_NAME_GAMMA_VECTOR );
 	  /* This will be fine for all color gt's. */
 	  grayGt.get( &old_gt );
 	  kdDebug(29000) << "Gray Gamma Table is active " << endl;
@@ -781,8 +764,9 @@ void ScanParams::slEditCustGamma( void )
 	   * red/green/blue gammatables, but one for all, all gammatables
 	   * are equally. So taking the red one should be fine. TODO
 	   */
-	  if( redGt.active())
+	  if( sane_device->optionExists( SANE_NAME_GAMMA_VECTOR_R ))
 	  {
+	     KScanOption redGt( SANE_NAME_GAMMA_VECTOR_R );
 	     redGt.get( &old_gt );
 	     kdDebug(29000) << "Getting old gamma table from Red channel" << endl;
 	  }
@@ -791,6 +775,7 @@ void ScanParams::slEditCustGamma( void )
 	     /* uh ! No current gammatable could be retrieved. Use the 100/0/0 gt
 	      * created by KGammaTable's constructor. Nothing to do for that.
 	      */
+	     kdDebug(29000) << "WRN: Could not retrieve a gamma table" << endl;
 	  }
        }
     }
@@ -798,55 +783,72 @@ void ScanParams::slEditCustGamma( void )
     kdDebug(29000) << "Old gamma table: " << old_gt.getGamma() << ", " << old_gt.getBrightness() << ", " << old_gt.getContrast() << endl;
 
     GammaDialog gdiag( this );
-    connect( &gdiag, SIGNAL( gammaToApply(GammaDialog&) ),
-	     this, SLOT( slApplyGamma(GammaDialog&) ) );
+    connect( &gdiag, SIGNAL( gammaToApply(KGammaTable*) ),
+	     this,     SLOT( slApplyGamma(KGammaTable*) ) );
 
     gdiag.setGt( old_gt );
 
     if( gdiag.exec() == QDialog::Accepted  )
     {
-       slApplyGamma( gdiag );
+       slApplyGamma( gdiag.getGt() );
+       kdDebug(29000) << "Fine, applied new Gamma Table !" << endl;
     }
-
+    else
+    {
+       /* reset to old values */
+       slApplyGamma( &old_gt );
+       kdDebug(29000) << "Cancel, reverted to old Gamma Table !" << endl;
+    }
+    
 }
 
 
-void ScanParams::slApplyGamma( GammaDialog& gdiag )
+void ScanParams::slApplyGamma( KGammaTable* gt )
 {
-   KGammaTable *gt = gdiag.getGt();
    if( ! gt ) return;
-   KGammaTable old_gt;
 
-   KScanOption grayGt( SANE_NAME_GAMMA_VECTOR );
-   grayGt.get( &old_gt );
-
-   /* Now find out, which gamma-Tables are active. */
-   if( grayGt.active() )
+   kdDebug(29000) << "Applying gamma table: " << gt->getGamma() <<
+      ", " << gt->getBrightness() << ", " << gt->getContrast() << endl;
+   
+   
+   if( sane_device->optionExists( SANE_NAME_GAMMA_VECTOR ) )
    {
-      grayGt.set( gt );
-      sane_device->apply( &grayGt, true );
+      KScanOption grayGt( SANE_NAME_GAMMA_VECTOR );
+
+      /* Now find out, which gamma-Tables are active. */
+      if( grayGt.active() )
+      {
+	 grayGt.set( gt );
+	 sane_device->apply( &grayGt, true );
+      }
+   }
+   
+   if( sane_device->optionExists( SANE_NAME_GAMMA_VECTOR_R )) {
+      KScanOption rGt( SANE_NAME_GAMMA_VECTOR_R );
+      if( rGt.active() )
+      {
+	 rGt.set( gt );
+	 sane_device->apply( &rGt, true );
+      }
    }
 
-   KScanOption rGt( SANE_NAME_GAMMA_VECTOR_R );
-   KScanOption gGt( SANE_NAME_GAMMA_VECTOR_G );
-   KScanOption bGt( SANE_NAME_GAMMA_VECTOR_B );
-
-   if( rGt.active() ) {
-      rGt.set( gt );
-      sane_device->apply( &rGt, true );
+   if( sane_device->optionExists( SANE_NAME_GAMMA_VECTOR_G )) {
+      KScanOption gGt( SANE_NAME_GAMMA_VECTOR_G );
+      if( gGt.active() )
+      {
+	 gGt.set( gt );
+	 sane_device->apply( &gGt, true );
+      }
    }
 
-   if( gGt.active() ) {
-      gGt.set( gt );
-      sane_device->apply( &gGt, true );
+   if( sane_device->optionExists( SANE_NAME_GAMMA_VECTOR_B )) {
+      KScanOption bGt( SANE_NAME_GAMMA_VECTOR_B );
+      if( bGt.active() )
+      {
+	 bGt.set( gt );
+	 sane_device->apply( &bGt, true );
+      }
    }
-
-   if( bGt.active() ) {
-      bGt.set( gt );
-      sane_device->apply( &bGt, true );
-   }
-   kdDebug(29000) << "Fine !" << endl;
-
 }
 
 /* Slot calls if a widget changes. Things to do:
@@ -862,14 +864,49 @@ void ScanParams::slReloadAllGui( KScanOption* t)
     sane_device->slReloadAllBut( t );
 
     /* Custom Gamma <- What happens if that does not exist for some scanner ? TODO */
-    KScanOption kso( SANE_NAME_CUSTOM_GAMMA );
+    setEditCustomGammaTableState();
+}
 
-    if( pb_edit_gtable )
-    {
-        int state;
-        kso.get( &state );
-	pb_edit_gtable->setEnabled( state );
-    }
+/*
+ * enable editing of the gamma tables if one of the gamma tables
+ * exists and is active at the moment
+ */
+void ScanParams::setEditCustomGammaTableState()
+{
+   if( !(sane_device && pb_edit_gtable) )
+      return;
+   
+   bool butState = false;
+   kdDebug(29000) << "Checking state of edit custom gamma button !" << endl;
+   
+   if( sane_device->optionExists( SANE_NAME_CUSTOM_GAMMA ) )
+   {
+      KScanOption kso( SANE_NAME_CUSTOM_GAMMA );
+      butState = kso.active();
+      // kdDebug(29000) << "CustomGamma is active: " << butState << endl;
+   }
+
+   if( !butState && sane_device->optionExists( SANE_NAME_GAMMA_VECTOR_R ) )
+   {
+      KScanOption kso( SANE_NAME_GAMMA_VECTOR_R );
+      butState = kso.active();
+      // kdDebug(29000) << "CustomGamma Red is active: " << butState << endl;
+   }
+
+   if( !butState && sane_device->optionExists( SANE_NAME_GAMMA_VECTOR_G ) )
+   {
+      KScanOption kso( SANE_NAME_GAMMA_VECTOR_G );
+      butState = kso.active();
+      // kdDebug(29000) << "CustomGamma Green is active: " << butState << endl;
+   }
+
+   if( !butState && sane_device->optionExists( SANE_NAME_GAMMA_VECTOR_B ) )
+   {
+      KScanOption kso( SANE_NAME_GAMMA_VECTOR_B );
+      butState = kso.active();
+      // kdDebug(29000) << "CustomGamma blue is active: " << butState << endl;
+   }
+   pb_edit_gtable->setEnabled( butState );
 }
 
 

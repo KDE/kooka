@@ -101,12 +101,9 @@ void GammaDialog::setGt(KGammaTable& ngt)
 
 void GammaDialog::slotApply()
 {
-   kdDebug(29000) << "Applying !" << endl;
-
-   /* Do some calculation here */
-
    /* and call a signal */
-   emit( gammaToApply( *this ));
+   KGammaTable *myTable = getGt();
+   emit( gammaToApply( myTable ));
 }
 
 GammaDialog::~GammaDialog()
