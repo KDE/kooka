@@ -66,6 +66,7 @@ extern KScanOptSet gammaTables;
 inline const SANE_Option_Descriptor *getOptionDesc( const QCString& name )
 {
    int *idx = option_dic[ name ];
+   
    const SANE_Option_Descriptor *d = 0;
    // debug( "<< for option %s >>", name );
    if ( idx && *idx > 0 )

@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <qwidget.h>
 #include <qobject.h>
-#include <qdict.h>
+#include <qasciidict.h>
 #include <qcombobox.h>
 #include <qslider.h>
 #include <qcheckbox.h>
@@ -34,7 +34,7 @@
 /** These variables are defined in ksaneoption.cpp **/
 extern bool        scanner_initialised;
 extern SANE_Handle scanner_handle;
-extern QDict<int>  option_dic;
+extern QAsciiDict<int>  option_dic;
 
 extern SANE_Device const **dev_list          = 0;
 
@@ -285,8 +285,7 @@ KScanStat KScanDevice::find_options()
 		 *new_opt = i;
 		 kdDebug() << "Inserting <" << d->name << "> as " << *new_opt << endl;
 		 /* create a new option in the set. */
-		 option_dic.insert ( QString::fromLatin1((const char*)d->name),
-				     new_opt );
+		 option_dic.insert ( (const char*)d->name, new_opt );
 		 option_list.append( (const char*) d->name );
 #if 0
 		 KScanOption *newOpt = new KScanOption( d->name );
@@ -445,7 +444,7 @@ KScanStat KScanDevice::apply( KScanOption *opt, bool isGammaTable )
 bool KScanDevice::optionExists( const char *name )
 {
    if( ! name ) return false;
-   int *i = option_dic[ QString::fromLatin1(name) ];
+   int *i = option_dic[ name ];
 
    if( !i ) return( false );
    return( *i > -1 );
@@ -647,7 +646,7 @@ KScanStat KScanDevice::acquirePreview( bool forceGray, int dpi )
 
 void KScanDevice::prepareScan( void )
 {
-    QDictIterator<int> it( option_dic ); // iterator for dict
+    QAsciiDictIterator<int> it( option_dic ); // iterator for dict
 
     kdDebug() << "########################################################################################################" << endl;
     kdDebug() << "Scanner: " << scanner_name << endl;
@@ -667,7 +666,7 @@ void KScanDevice::prepareScan( void )
        {
 	  int cap = d->cap;
 
-	  kdDebug() << " " << it.currentKey().latin1() << " |     " <<
+	  kdDebug() << " " << it.currentKey() << " |     " <<
 		 NOTIFIER( ((cap) & SANE_CAP_SOFT_SELECT) ) << " |     " <<
 		 NOTIFIER( ((cap) & SANE_CAP_HARD_SELECT) ) << " |     " <<
 		 NOTIFIER( ((cap) & SANE_CAP_SOFT_DETECT) ) << " |     " <<
