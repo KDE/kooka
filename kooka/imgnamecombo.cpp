@@ -75,14 +75,8 @@ void ImageNameCombo::slotGalleryPathChanged( KFileTreeBranch* branch, const QStr
    newPath = branch->name() + QString::fromLatin1(" - ") + relativPath;
 
    kdDebug( 28000) << "Inserting " << newPath << " to combobox" << endl;
-   
-   if( ! items.contains( newPath ) )
-   {
-      // insert sorted
-      items.append( newPath );
-      items.sort();
-      rewriteList( branch, newPath );
-   }
+
+   setCurrentItem( newPath, true /* insert if missing */ );
 }
 
 /* The End */

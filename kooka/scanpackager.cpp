@@ -441,7 +441,6 @@ void ScanPackager::slSelectionChanged( QListViewItem *newItem )
 	 kdDebug(28000) << "selectionChanged: Is a directory !" << endl;
 	 emit( showImage( 0L ));
 	 kdDebug(28000) << "emitting showThumbnails" << endl;
-	 emit( showThumbnails( item ));
       }
       else
       {
@@ -463,6 +462,15 @@ void ScanPackager::slSelectionChanged( QListViewItem *newItem )
 	 kdDebug(28000) << "Emitting " << relativUrl << " as new relative Url" << endl;
 	 /* Emit the signal with branch and the relative path */
 	 emit( galleryPathSelected( item->branch(), relativUrl ));
+
+	 if( item->isDir() )
+	 {
+	    emit( showThumbnails( item ));
+	 }
+	 else
+	 {
+	    emit( showThumbnails(  static_cast<KFileTreeViewItem*>(item->parent())));
+	 }
       }
       else
       {
