@@ -3,7 +3,7 @@
                              -------------------                                         
     begin                : Sun Jan 16 2000                                           
     copyright            : (C) 2000 by Klaas Freitag                         
-    email                : kooka@suse.de
+    email                : freitag@suse.de
  ***************************************************************************/
 
 /***************************************************************************
@@ -42,7 +42,7 @@ class KSANEOCR;
  * here.
  *
  * @short Main view
- * @author Klaas Freitag <kooka@suse.de>
+ * @author Klaas Freitag <freitag@suse.de>
  * @version 0.1
  */
 class KookaView : public QSplitter

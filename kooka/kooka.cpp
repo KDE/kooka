@@ -1,7 +1,7 @@
 /*
  * kooka.cpp
  *
- * Copyright (C) 2000 Klaas Freitag <kooka@suse.de>
+ * Copyright (C) 2000 Klaas Freitag <freitag@suse.de>
  */
 #include "kooka.h"
 #include "resource.h"

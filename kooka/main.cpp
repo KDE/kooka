@@ -4,7 +4,7 @@
     begin                : Thu Dec  9 20:16:54 MET 1999
                                            
     copyright            : (C) 1999 by Klaas Freitag                         
-    email                : kooka@suse.de                                     
+    email                : freitag@suse.de                                     
  ***************************************************************************/
 
 /***************************************************************************
@@ -47,7 +47,7 @@ int main( int argc, char ** argv )
 {
    KAboutData about("kooka", I18N_NOOP("Kooka"), version, description,
 		    KAboutData::License_GPL, "(C) 2000 Klaas Freitag");
-   about.addAuthor( "Klaas Freitag", 0, "kooka@SuSE.de" );
+   about.addAuthor( "Klaas Freitag", 0, "freitag@suse.de" );
     KCmdLineArgs::init(argc, argv, &about);
     KApplication app;
     KImageIO::registerFormats();
