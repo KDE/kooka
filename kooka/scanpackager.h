@@ -22,7 +22,6 @@
 #include <qlistview.h>
 #include <qimage.h>
 #include <qpixmap.h>
-#include <qdir.h>
 #include <qdragobject.h>
 #include <qmap.h>
 #include <klistview.h>
@@ -132,7 +131,7 @@ private:
    // int 	        readDir( QListViewItem *parent, QString dir_to_read );
     void         showContextMenu( QPoint p, bool show_folder = true );
 
-    QDir         curr_copy_dir;
+    QString      m_currCopyDir;
     QString      currSelectedDir;
     KIO::Job     *copyjob;
     KPopupMenu   *popup;   
