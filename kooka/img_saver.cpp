@@ -49,7 +49,7 @@
 
 FormatDialog::FormatDialog( QWidget *parent, const QString& imgFormat, const char *name )
    :KDialogBase( parent, name, true,
-                 /* Tabbed,*/ i18n( "Kooka save assistant" ),
+                 /* Tabbed,*/ i18n( "Kooka Save Assistant" ),
 		 Ok|Cancel, Ok )
 
 {

@@ -325,7 +325,7 @@ QString ScanPackager::buildNewFilename( QString cmplFilename, QString currFormat
       /* new Ext. differs from the current extension. Later. */
       KMessageBox::sorry( 0L, i18n( "You entered a file extension that differs from the existing one. That is not yet possible. Converting 'on the fly' is planned for a future release.\n"
 				      "Kooka corrects the extension."),
-			  i18n("On the fly conversion"));
+			  i18n("On the Fly Conversion"));
       ext = base + "." + currFormat;
    }
    return( ext );
@@ -659,12 +659,12 @@ void ScanPackager::slAddImage( QImage *img )
    if( is_stat == ISS_ERR_FORMAT_NO_WRITE )
    {
       KMessageBox::error( this, i18n( "Cannot write this image format.\nImage will not be saved!"),
-			    i18n("Save error") );
+			    i18n("Save Error") );
    }
    else if( is_stat == ISS_ERR_PERM )
    {
       KMessageBox::error( this, i18n( "Image file is write protected.\nImage will not be saved!"),
-			    i18n("Save error") );
+			    i18n("Save Error") );
 
    }
    else if( is_stat != ISS_OK )
@@ -929,7 +929,7 @@ void ScanPackager::slotDeleteItems( )
       {
 	 s = i18n("Do you really want to delete the folder %1\nand all the images inside?").arg("");
       }
-      result = KMessageBox::questionYesNo(this, s, i18n( "Delete collection item"),
+      result = KMessageBox::questionYesNo(this, s, i18n( "Delete Collection Item"),
 					  KStdGuiItem::yes(), KStdGuiItem::no(),
 					  "AskForDeleteFiles" );
    }

@@ -610,17 +610,17 @@ void KookaView::slRotateImage(int angle)
       switch( angle )
       {
 	 case 90:
-	    emit( signalChangeStatusbar( i18n("rotate image 90 degrees" )));
+	    emit( signalChangeStatusbar( i18n("Rotate image 90 degrees" )));
 	    resImg = rotateRight( img );
 	    break;
 	 case 180:
-	    emit( signalChangeStatusbar( i18n("rotate image 180 degrees" )));
+	    emit( signalChangeStatusbar( i18n("Rotate image 180 degrees" )));
 	    resImg = rotateRight( img );
 	    resImg = rotateRight( &resImg );
 	    break;
 	 case 270:
 	 case -90:
-	    emit( signalChangeStatusbar( i18n("rotate image -90 degrees" )));
+	    emit( signalChangeStatusbar( i18n("Rotate image -90 degrees" )));
 	    resImg = rotateLeft( img );
 
 	    break;

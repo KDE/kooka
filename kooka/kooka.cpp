@@ -104,7 +104,7 @@ void Kooka::setupActions()
 					      actionCollection());
     m_statusbarAction = KStdAction::showStatusbar(this, SLOT(optionsShowStatusbar()),
 						  actionCollection());
-    m_scanParamsAction = new KToggleAction(i18n("Show scan &parameter"), 0, this,
+    m_scanParamsAction = new KToggleAction(i18n("Show Scan &Parameter"), 0, this,
 					   SLOT(optionsShowScanParams()), actionCollection(),
 					   "show_scanparams" );
     m_scanParamsAction->setChecked( true );
@@ -116,11 +116,11 @@ void Kooka::setupActions()
 
 
     /* Image Viewer action Toolbar - OCR, Scaling etc. */
-    (void) new KAction(i18n("&OCR image..."), "ocr", CTRL+Key_O,
+    (void) new KAction(i18n("&OCR Image..."), "ocr", CTRL+Key_O,
 		       m_view, SLOT(doOCR()),
 		       actionCollection(), "ocrImage" );
 
-    (void) new KAction(i18n("O&CR on selection..."), "ocr-select", CTRL+Key_C,
+    (void) new KAction(i18n("O&CR on Selection..."), "ocr-select", CTRL+Key_C,
 		       m_view, SLOT(doOCRonSelection()),
 		       actionCollection(), "ocrImageSelect" );
 
@@ -140,51 +140,51 @@ void Kooka::setupActions()
 		       actionCollection(), "scaleOriginal" );
     m_view->connectViewerAction( act );
     
-    act = new KAction(i18n("set zoom..."), "viewmag", 0, 
+    act = new KAction(i18n("Set Zoom..."), "viewmag", 0, 
 		       m_view, SLOT( slIVShowZoomDialog()),
 		       actionCollection(), "showZoomDialog" );
     m_view->connectViewerAction( act );
 
-    (void) new KAction(i18n("Create from selectio&n"), "crop", CTRL+Key_N,
+    (void) new KAction(i18n("Create From Selectio&n"), "crop", CTRL+Key_N,
 		       m_view, SLOT( slIVShowZoomDialog() ),
 		       actionCollection(), "createFromSelection" );
     
-    (void) new KAction(i18n("Mirror image &vertically"), "mirror-vert", CTRL+Key_V,
+    (void) new KAction(i18n("Mirror Image &Vertically"), "mirror-vert", CTRL+Key_V,
 		       this, SLOT( slMirrorVertical() ),
 		       actionCollection(), "mirrorVertical" );
 
-    (void) new KAction(i18n("&Mirror image horizontally"), "mirror-horiz", CTRL+Key_M,
+    (void) new KAction(i18n("&Mirror Image Horizontally"), "mirror-horiz", CTRL+Key_M,
 		       this, SLOT( slMirrorHorizontal() ),
 		       actionCollection(), "mirrorHorizontal" );
 
-    (void) new KAction(i18n("Mirror image &both directions"), "mirror-both", CTRL+Key_B,
+    (void) new KAction(i18n("Mirror Image &Both Directions"), "mirror-both", CTRL+Key_B,
 		       this, SLOT( slMirrorBoth() ),
 		       actionCollection(), "mirrorBoth" );
 
-    (void) new KAction(i18n("Open image in &graphic application"), "fileopen", CTRL+Key_G,
+    (void) new KAction(i18n("Open Image in &Graphic Application"), "fileopen", CTRL+Key_G,
 		       m_view, SLOT( slOpenCurrInGraphApp() ),
 		       actionCollection(), "openInGraphApp" );
 
-    act = new KAction(i18n("&Rotate image clockwise"), "rotate_cw", CTRL+Key_R,
+    act = new KAction(i18n("&Rotate Image Clockwise"), "rotate_cw", CTRL+Key_R,
 		      this, SLOT( slRotateClockWise() ),
 		       actionCollection(), "rotateClockwise" );
     m_view->connectViewerAction( act );
 
-    act = new KAction(i18n("Rotate image counter-clock&wise"), "rotate_ccw", CTRL+Key_W,
+    act = new KAction(i18n("Rotate Image Counter-Clock&wise"), "rotate_ccw", CTRL+Key_W,
 		       this, SLOT( slRotateCounterClockWise() ),
 		       actionCollection(), "rotateCounterClockwise" );
     m_view->connectViewerAction( act );
 
-    act = new KAction(i18n("Rotate image 180 &degrees"), "rotate", CTRL+Key_D,
+    act = new KAction(i18n("Rotate Image 180 &Degrees"), "rotate", CTRL+Key_D,
 		       this, SLOT( slRotate180() ),
 		       actionCollection(), "upsitedown" );
     m_view->connectViewerAction( act );
 
-    (void) new KAction(i18n("Save scan parameters"), "bookmark_add", CTRL+Key_S,
+    (void) new KAction(i18n("Save Scan Parameters"), "bookmark_add", CTRL+Key_S,
 		       m_view, SLOT(slSaveScanParams()),
 		       actionCollection(), "savescanparam" );
 
-    (void) new KAction(i18n("Select scan device"), "scanner", CTRL+Key_Q,
+    (void) new KAction(i18n("Select Scan Device"), "scanner", CTRL+Key_Q,
 		       m_view, SLOT( slSelectDevice()),
 		       actionCollection(), "selectsource" );
 
