@@ -111,6 +111,7 @@ void Kooka::createMyGUI( KParts::Part *part )
 Kooka::~Kooka()
 {
    KConfig *konf = KGlobal::config ();
+   m_view->slCloseScanDevice();
    writeDockConfig ( konf, DOCK_SIZES );
    delete m_printer;
 }
@@ -270,6 +271,9 @@ void Kooka::setupActions()
 			actionCollection(), "enable_msgs");
 
 
+    m_saveOCRTextAction = new KAction( i18n("Save OCR Res&ult Text"), "filesaveas", CTRL+Key_U,
+                                       m_view, SLOT(slSaveOCRResult()),
+                                       actionCollection(), "saveOCRResult");
 }
 
 

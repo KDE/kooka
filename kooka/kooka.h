@@ -138,6 +138,8 @@ private:
    KToggleAction *m_scanParamsAction;
    KToggleAction *m_previewerAction;
    KActionMenu   *m_settingsShowDocks;
+
+    KAction      *m_saveOCRTextAction;
    int m_prefDialogIndex;
 };
 
