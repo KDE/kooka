@@ -29,7 +29,7 @@
 #include "kscanoptset.h"
 #include "devselector.h"
 
-#define MIN_PREVIEW_DPI 20
+#define MIN_PREVIEW_DPI 75
 
 
 // global device list
@@ -657,7 +657,11 @@ KScanStat KScanDevice::acquirePreview( bool forceGray, int dpi )
    if( dpi == 0 )
    {
       /* No resolution argument */
-      res.getRange( &min, &max, &q );
+      if( ! res.getRange( &min, &max, &q ) )
+      {
+	 kdDebug(29000) << "Could not retrieve resolution range!" << endl;
+	 min = 75.0; // Hope that every scanner can 75 
+      }      
       if( min > MIN_PREVIEW_DPI )
 	 set_dpi = (int) min;
       else
@@ -775,7 +779,7 @@ KScanStat KScanDevice::acquire( const QString& filename )
  	        kdDebug(29000) << "Option <" << so->getName() << "> is not active !" << endl;
  	    }
  	}
-   	return( acquire_data( false ));
+	return( acquire_data( false ));	
     }
     else
     {
@@ -873,8 +877,17 @@ KScanStat KScanDevice::acquire_data( bool isPreview )
       else
       {
 	 stat = KSCAN_ERR_OPEN_DEV;
+	 kdDebug(29000) << "sane-get-parameters-Error: " << sane_strstatus( sane_stat ) << endl;
       }
    }
+   else
+   {
+	 stat = KSCAN_ERR_OPEN_DEV;
+	 kdDebug(29000) << "sane-start-Error: " << sane_strstatus( sane_stat ) << endl;
+   }
+
+   /* Signal for a progress dialog */
+   emit( sigScanProgress( 0 ) );
 
    if( sane_scan_param.pixels_per_line == 0 || sane_scan_param.lines < 1 )
    {
@@ -896,10 +909,8 @@ KScanStat KScanDevice::acquire_data( bool isPreview )
       if( ! data ) stat = KSCAN_ERR_MEMORY;
    }
 
-   /* Signal for a progress dialog */
    if( stat == KSCAN_OK )
    {	
-      emit( sigScanProgress( 0 ) );
       /* initiates Redraw of the Progress-Window */
       qApp->processEvents();
    }	
@@ -945,6 +956,13 @@ KScanStat KScanDevice::acquire_data( bool isPreview )
 	    }
 	 } while ( scanStatus != SSTAT_SILENT );
       }
+   }
+
+   if( stat != KSCAN_OK )
+   {
+      /* Scanning was disturbed in any way - end it */
+      kdDebug(29000) << "Scanning was disturbed - clean up" << endl;
+      emit( sigScanFinished( stat ));
    }
    return( stat );
 }
@@ -1088,10 +1106,11 @@ void KScanDevice::doProcessABlock( void )
 		 green = *rptr++;
 		 blue  = *rptr++;
 
-		 // qDebug( "RGB: %d, %d, %d\n", red, green, blue );
+		 // kdDebug(29000) <<  "RGB: %d, %d, %d\n", red, green, blue" << endl;
 		 if( pixel_x  == sane_scan_param.pixels_per_line )
 		 { pixel_x = 0; pixel_y++; }
-		 img->setPixel( pixel_x, pixel_y, qRgb( red, green,blue ));
+		 if( pixel_y < img->height())
+		    img->setPixel( pixel_x, pixel_y, qRgb( red, green,blue ));
 
 		 pixel_x++;
 	      }
@@ -1182,8 +1201,10 @@ void KScanDevice::doProcessABlock( void )
 	
 	if( (sane_scan_param.lines > 0) && (sane_scan_param.lines * pixel_y> 0) )
 	{
-	   emit( sigScanProgress( (int)(1000.0 / (double) sane_scan_param.lines *
-					(double)pixel_y) ));
+	   int progress =  (int)(1000.0 / (double) sane_scan_param.lines *
+				 (double)pixel_y);
+	   if( progress < 1000 )
+	      emit( sigScanProgress( progress));
 	}
 
 	if( bytes_written == 0 || sane_stat == SANE_STATUS_EOF )
