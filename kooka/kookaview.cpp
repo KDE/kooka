@@ -122,7 +122,7 @@ KookaView::KookaView( KDockMainWindow *parent, const QCString& deviceToUse)
    KDockWidget* dockRecent=0L;
    dockRecent  = parent->createDockWidget( "Recent",
 				loader->loadIcon( "image", KIcon::Small ),
-				0L, i18n("Gallery Dirs"));
+				0L, i18n("Gallery Directories"));
    
    dockRecent->setDockSite(KDockWidget::DockFullSite);
 
