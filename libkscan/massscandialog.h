@@ -29,22 +29,23 @@
   *@author Klaas Freitag
   */
 
-class MassScanDialog : public QSemiModal  {
-	Q_OBJECT
+class MassScanDialog : public QSemiModal
+{
+   Q_OBJECT
 public: 
-	MassScanDialog( QWidget *parent);
-	~MassScanDialog();
+   MassScanDialog( QWidget *parent);
+   ~MassScanDialog();
 	
 public slots:
 
-	void slStartScan( void );
-	void slStopScan( void );
-	void slFinished( void );	
+   void slStartScan( void );
+   void slStopScan( void );
+   void slFinished( void );	
 
-	void setPageProgress( int p )
-	{
-		progressbar->setProgress( p );
-	}
+   void setPageProgress( int p )
+      {
+	 progressbar->setProgress( p );
+      }
 		
 private:
    QString     scanopts;
@@ -58,6 +59,8 @@ private:
 
    QProgressBar *progressbar;
 
+   class MassScanDialogPrivate;
+   MassScanDialogPrivate *d;
 };
 
 #endif
