@@ -619,6 +619,7 @@ void KookaView::startOCR( KookaImage *img )
 
           connect( ocrFabric,    SIGNAL( selectWord( int, const ocrWord& )),
                    m_ocrResEdit, SLOT( slSelectWord( int, const ocrWord& )));
+
       }
 
       Q_CHECK_PTR( ocrFabric );
@@ -823,6 +824,14 @@ void KookaView::slMirrorImage( MirrorType m )
 
       // img_canvas->newImage(  );
    }
+}
+
+
+void KookaView::slSaveOCRResult()
+{
+    if( ! m_ocrResEdit ) return;
+    m_ocrResEdit->slSaveText();
+
 }
 
 

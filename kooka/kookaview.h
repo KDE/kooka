@@ -132,6 +132,8 @@ public slots:
 
     void slOpenCurrInGraphApp( void );
 
+    void slSaveOCRResult();
+
     void slLoadScanParams( );
     void slSaveScanParams( );
 
