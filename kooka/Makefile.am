@@ -13,7 +13,7 @@ kooka_SOURCES =	main.cpp kooka.cpp kookaview.cpp kookapref.cpp 		\
 kooka_LDADD   = $(LIB_KFILE) -lkdeprint $(top_builddir)/libkscan/libkscan.la
 kooka_LDFLAGS = $(KDE_RPATH) $(all_libraries)
 
-INCLUDES         = $(sane_includes) -I$(top_srcdir)/libkscan $(all_includes)
+INCLUDES         = $(LIBSANE_INCLUDES) -I$(top_srcdir)/libkscan $(all_includes)
 
 noinst_HEADERS   = \
 kookaview.h     scanpackager.h \

@@ -1,4 +1,4 @@
-INCLUDES = $(sane_includes) $(all_includes)
+INCLUDES = $(LIBSANE_INCLUDES) $(all_includes)
 
 lib_LTLIBRARIES = libkscan.la
 
@@ -18,8 +18,8 @@ libkscan_la_SOURCES = kscandevice.cpp kscanslider.cpp kgammatable.cpp\
 	img_canvas.cpp previewer.cpp imgscaledialog.cpp sizeindicator.cpp
 
 
-libkscan_la_LDFLAGS = $(all_libraries) $(SANE_LDFLAGS) -no-undefined -version-info 1:0 -module
-libkscan_la_LIBADD = $(LIB_SANE) $(LIB_KFILE)
+libkscan_la_LDFLAGS = $(LIBSANE_LDFLAGS) $(all_libraries) -no-undefined -version-info 1:0
+libkscan_la_LIBADD = $(LIBSANE_LIBS) $(LIB_KFILE)
 
 kde_services_DATA = scanservice.desktop
 

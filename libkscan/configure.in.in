@@ -1,41 +1,26 @@
-dnl #MIN_CONFIG
 
+KDE_FIND_PATH( sane-config, SANE_CONFIG, [ ${prefix}/bin, ${exec_prefix}/bin, 
+                                           /usr/local/bin, /opt/local/bin,
+                                           /usr/bin ] )
+if test -n "$SANE_CONFIG"; then
+    dnl ### version check. Klaas, which version is minimum?
 
-dnl These are common macros that you might or might not want to use
+    LIBSANE_LIBS="`$SANE_CONFIG --libs`" 
+    LIBSANE_LDFLAGS="`$SANE_CONFIG --ldflags`"
+    dnl Bah, --cflags is -I lines only (according to the sane-config.in source
+    dnl and _INCLUDES looks nicer  :)
+    LIBSANE_INCLUDES="`$SANE_CONFIG --cflags`"
 
-dnl Image readers/writers
-KDE_CHECK_KIMGIO
- 
-dnl ############ search for sane stuff
+    KSCANDIR=libkscan
 
-AC_MSG_CHECKING(for sane)
-sane_incdirs="/usr/include /usr/local/include"
-AC_FIND_FILE(sane/sane.h, $sane_incdirs, ac_sane_includes)
-sane_includes="-I$ac_sane_includes"
-sane_libdir=""
+    AC_SUBST(LIBSANE_LIBS)
+    AC_SUBST(LIBSANE_LDFLAGS)
+    AC_SUBST(LIBSANE_INCLUDES)
 
-if test -n "$ac_sane_includes" && test -r "$ac_sane_includes/sane/sane.h"; then
-  AC_SUBST(sane_includes)
-  sane_libdirs="/usr/lib /usr/local/lib /usr/lib/sane /usr/local/lib/sane"
-  for dir in $sane_libdirs; do
-    try="ls -1 $dir/libsane.*"
-    if test -n "`$try 2> /dev/null`"; then sane_libdir=$dir; break; fi
-  done
-fi
+    AC_SUBST(KSCANDIR)
 
-if test -n "$sane_libdir"; then
-  SANE_LDFLAGS="-L$sane_libdir"
-  AC_SUBST(SANE_LDFLAGS)
-  LIB_SANE="-lsane"
-  AC_SUBST(LIB_SANE)      
-  LIB_KSCAN='$(top_builddir)/libkscan/libkscan.la'
-  AC_SUBST(LIB_KSCAN)
-  KSCANDIR=libkscan
-  AC_SUBST(KSCANDIR)
-
-  AC_MSG_RESULT([headers in $ac_sane_includes, library in $sane_libdir])
-  AC_DEFINE_UNQUOTED(HAVE_SANE, 1, [Defines if your system has the sane libraries]) 
+    AC_DEFINE_UNQUOTED(HAVE_SANE, 1, [Defines if your system has the sane libraries]) 
 else
-  AC_MSG_RESULT([not found -- libkscan/kooka will NOT be built (check http://www.mostang.com/sane/ for sane)])
-  DO_NOT_COMPILE="$DO_NOT_COMPILE libkscan kooka"
+    DO_NOT_COMPILE="$DO_NOT_COMPILE libkscan kooka"
 fi
+
