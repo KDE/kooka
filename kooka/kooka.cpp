@@ -1,9 +1,9 @@
 /**************************************************************************
 			kooka.cpp  -  Main program class
-                             -------------------                                         
-    begin                : Sun Jan 16 2000                                           
-    copyright            : (C) 2000 by Klaas Freitag                         
-    email                : freitag@suse.de          
+                             -------------------
+    begin                : Sun Jan 16 2000
+    copyright            : (C) 2000 by Klaas Freitag
+    email                : freitag@suse.de
  ***************************************************************************/
 
 /***************************************************************************
@@ -11,7 +11,7 @@
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
  *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   * 
+ *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
 #include "kooka.h"
@@ -61,7 +61,7 @@ Kooka::Kooka( const QCString& deviceToUse)
    // accept dnd
    // m_view = new KookaView(this, deviceToUse);
 
-   
+
    m_view = new KookaView( this, deviceToUse);
    // setView( m_view->mainDockWidget() ); // central widget in a KDE mainwindow
    // setMainDockWidget( m_view->mainDockWidget() );
@@ -98,7 +98,7 @@ Kooka::~Kooka()
 {
    KConfig *konf = KGlobal::config ();
    writeDockConfig ( konf, DOCK_SIZES );
-
+   delete m_printer;
 }
 
 void Kooka::startup( void )
@@ -129,7 +129,7 @@ void Kooka::setupActions()
     KStdAction::preferences(this, SLOT(optionsPreferences()), actionCollection());
 
     m_view->createDockMenu(actionCollection(), this, "settings_show_docks" );
-    
+
     /* Image Viewer action Toolbar - OCR, Scaling etc. */
     (void) new KAction(i18n("&OCR Image..."), "ocr", CTRL+Key_O,
 		       m_view, SLOT(doOCR()),
@@ -144,19 +144,19 @@ void Kooka::setupActions()
 		       m_view, SLOT( slIVScaleToWidth()),
 		       actionCollection(), "scaleToWidth" );
     m_view->connectViewerAction( act );
-    
+
     act = new KAction(i18n("Scale to &Height"), "scaletoheight", CTRL+Key_H,
 		       m_view, SLOT( slIVScaleToHeight()),
 		       actionCollection(), "scaleToHeight" );
     m_view->connectViewerAction( act );
-    
+
     act = new KAction(i18n("Original &Size"), "scaleorig", CTRL+Key_S,
 		       m_view, SLOT( slIVScaleOriginal()),
 		       actionCollection(), "scaleOriginal" );
     m_view->connectViewerAction( act );
 
     /* thumbview and gallery actions */
-    act = new KAction(i18n("Set Zoom..."), "viewmag", 0, 
+    act = new KAction(i18n("Set Zoom..."), "viewmag", 0,
 		       m_view, SLOT( slIVShowZoomDialog()),
 		       actionCollection(), "showZoomDialog" );
     m_view->connectViewerAction( act );
@@ -164,7 +164,7 @@ void Kooka::setupActions()
     (void) new KAction(i18n("Create From Selectio&n"), "crop", CTRL+Key_N,
 		       m_view, SLOT( slCreateNewImgFromSelection() ),
 		       actionCollection(), "createFromSelection" );
-    
+
     (void) new KAction(i18n("Mirror Image &Vertically"), "mirror-vert", CTRL+Key_V,
 		       this, SLOT( slMirrorVertical() ),
 		       actionCollection(), "mirrorVertical" );
@@ -240,7 +240,7 @@ void Kooka::readProperties(KConfig *config)
     // in 'saveProperties'
    config->setGroup( KOOKA_STATE_GROUP );
    m_prefDialogIndex = config->readNumEntry( PREFERENCE_DIA_TAB, 0 );
-   // QString url = config->readEntry("lastURL"); 
+   // QString url = config->readEntry("lastURL");
 
 }
 
@@ -302,7 +302,7 @@ void Kooka::fileSaveAs()
    strlist.append( "JPEG" );
    FormatDialog fd( 0, "FormatDialog", &strlist );
    fd.exec();
-   
+
 }
 #endif
 
@@ -372,7 +372,7 @@ void Kooka::optionsConfigureToolbars()
     {
         // recreate our GUI
         createGUI( "kookaui.rc");
-    } 
+    }
 }
 
 void Kooka::optionsPreferences()
@@ -381,7 +381,7 @@ void Kooka::optionsPreferences()
     KookaPreferences dlg;
     dlg.showPage( m_prefDialogIndex );
     connect( &dlg, SIGNAL( dataSaved() ), m_view, SLOT(slFreshUpThumbView()));
-    
+
     if (dlg.exec())
     {
         // redo your settings
@@ -409,7 +409,7 @@ void Kooka::slMirrorVertical( void )
 
 void Kooka::slMirrorHorizontal( void )
 {
-    m_view->slMirrorImage( KookaView::MirrorHorizontal ); 	
+    m_view->slMirrorImage( KookaView::MirrorHorizontal );
 }
 
 void Kooka::slMirrorBoth( void )
@@ -425,7 +425,7 @@ void Kooka::slRotateClockWise( void )
 void Kooka::slRotateCounterClockWise( void )
 {
    m_view->slRotateImage( -90 );
-   
+
 }
 
 void Kooka::slRotate180( void )
