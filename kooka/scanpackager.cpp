@@ -54,8 +54,6 @@
 #include <kio/file.h>
 #include <kio/job.h>
 
-extern QDict<QPixmap> icons;
-
 /* ----------------------------------------------------------------------- */
 /* Constructor Scan Packager */
 ScanPackager::ScanPackager( QWidget *parent ) : KFileTreeView( parent )
