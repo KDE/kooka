@@ -101,7 +101,8 @@ KookaView::KookaView( KParts::DockMainWindow *parent, const QCString& deviceToUs
                                           loader->loadIcon( "folder_image", KIcon::Small ),
                                           0L, i18n("Image Viewer"));
    m_mainDock->setEnableDocking(KDockWidget::DockNone );
-   m_mainDock->setDockSite(KDockWidget::DockCorner);
+   m_mainDock->setDockSite( KDockWidget::DockFullSite );
+
    parent->setView( m_mainDock);
    parent->setMainDockWidget( m_mainDock);
 
@@ -121,7 +122,6 @@ KookaView::KookaView( KParts::DockMainWindow *parent, const QCString& deviceToUs
    /* thumbnail viewer widget */
    m_thumbview = new ThumbView( m_mainDock );
    m_dockThumbs->setWidget( m_thumbview );
-   m_dockThumbs->manualDock( m_mainDock, KDockWidget::DockLeft, 30 );
 
    /* make the main dock widget */
    /* A new packager to contain the already scanned images */
@@ -134,6 +134,8 @@ KookaView::KookaView( KParts::DockMainWindow *parent, const QCString& deviceToUs
    m_dockPackager->manualDock( m_mainDock,              // dock target
                          KDockWidget::DockLeft, // dock site
                          30 );                  // relation target/this (in percent)
+
+   m_dockThumbs->manualDock( m_mainDock, KDockWidget::DockBottom, 5 );
 
    connect( packager, SIGNAL(showThumbnails( KFileTreeViewItem* )),
 	    this, SLOT( slShowThumbnails( KFileTreeViewItem* )));
@@ -205,9 +207,9 @@ KookaView::KookaView( KParts::DockMainWindow *parent, const QCString& deviceToUs
        */
    }
    m_dockPreview->setWidget( preview_canvas );
-   m_dockPreview->manualDock( m_dockPackager,              // dock target
-			    KDockWidget::DockCenter, // dock site
-			    100 );                  // relation target/this (in percent)
+   m_dockPreview->manualDock( m_mainDock,              // dock target
+			      KDockWidget::DockCenter, // dock site
+			      100 );                  // relation target/this (in percent)
 
    /* Create a text editor part for ocr results */
 
@@ -220,10 +222,9 @@ KookaView::KookaView( KParts::DockMainWindow *parent, const QCString& deviceToUs
    if( m_ocrResEdit )
    {
        m_dockOCRText->setWidget( m_ocrResEdit ); // m_textEdit->widget() );
-       // parent->createGUI( m_textEdit );
-       m_dockOCRText->manualDock( m_mainDock,              // dock target
-                                  KDockWidget::DockBottom, // dock site
-                                  20 );                  // relation target/this (in percent)
+       m_dockOCRText->manualDock( m_dockThumbs,              // dock target
+                                  KDockWidget::DockCenter, // dock site
+                                  100 );                  // relation target/this (in percent)
 
        m_ocrResEdit->setTextFormat( Qt::PlainText );
        m_ocrResEdit->setWordWrap( QTextEdit::NoWrap );
@@ -264,7 +265,6 @@ KookaView::KookaView( KParts::DockMainWindow *parent, const QCString& deviceToUs
    connect( packager,  SIGNAL( fileDeleted( KFileItem* )),
 	    m_thumbview, SLOT( slImageDeleted( KFileItem* )));
 
-   m_mainDock->setDockSite( KDockWidget::DockFullSite );
 
    packager->openRoots();
 
