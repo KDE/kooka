@@ -73,7 +73,7 @@ QString ocradDialog::ocrEngineDesc() const
 {
     return i18n("ocrad is an Open Source project "
                 "for optical character recognition.<p>"
-                "The author of gocr is <b>Antonio Diaz</b><br>"
+                "The author of ocrad is <b>Antonio Diaz</b><br>"
                 "For more information about ocrad see "
                 "<A HREF=\"http://savannah.gnu.org/projects/ocrad\">"
                 "http://savannah.gnu.org/projects/ocrad</A><p>"
