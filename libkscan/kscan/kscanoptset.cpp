@@ -19,19 +19,78 @@
 
 
 #include <qstring.h>
-#include <qlist.h>
-
+#include <qasciidict.h>
 #include "kscandevice.h"
+#include "kscanoption.h"
 #include "kscanoptset.h"
 
-KScanOptSet::KScanOptSet( const QString setName, const KScanDevice *device ) :
-  QObject()
+s
+KScanOptSet::KScanOptSet( const QString setName )
 {
   
   name = setName;
 
-   if( device )
-     {
-       
-     }	
+  setAutoDelete( false );
+
+  strayCatsList.setAutoDelete( true );
 }
+
+
+
+KScanOptSet::~KScanOptSet()
+{
+   /* removes all deep copies from backupOption */
+   strayCatsList.clear();
+}
+
+
+
+KScanOption *KScanOptSet::get( const char *name ) const
+{
+  KScanOption *ret = 0;
+
+  ret = (*this) [name];
+
+  return( ret );
+}
+
+bool KScanOptSet::backupOption( const KScanOption& opt )
+{
+  bool retval = true;
+  
+  /** Allocate a new option and store it **/
+  const char *optName = (const char*) (opt.getName());
+  if( !optName )
+    retval = false;
+  
+  if( retval )
+  {
+     KScanOption *newopt = find( optName );
+    
+     if( newopt )
+     {
+	/** The option already exists **/
+	*newopt = opt;
+     }
+     else
+     {
+	const QString qq = opt.get();
+	debug( "Value is now: <%s>", (const char*) qq );
+	const KScanOption *newopt = new KScanOption( opt );
+
+	strayCatsList.append( newopt );
+	
+	if( newopt )
+	{
+	   insert( optName, newopt );
+	} else {
+	   retval = false;
+	}
+     }
+  }
+  
+  return( retval );
+  
+}
+
+/* END */
