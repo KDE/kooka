@@ -189,8 +189,8 @@ KookaView::KookaView(QWidget *parent, const QCString& deviceToUse)
             img_canvas, SLOT( deleteView( QImage*)));
 
    /* a image changed mostly through a image manipulation method like rotate */
-   connect( packager, SIGNAL( imageChanged( const KURL& )),
-	    m_thumbview, SLOT( slImageChanged( const KURL& )));
+   connect( packager, SIGNAL( fileChanged( KFileItem* )),
+	    m_thumbview, SLOT( slImageChanged( KFileItem* )));
 
    connect( packager, SIGNAL( fileDeleted( KFileItem* )),
 	    m_thumbview, SLOT( slImageDeleted( KFileItem* )));
@@ -713,13 +713,30 @@ void KookaView::slSaveScanParams( void )
 
 void KookaView::slShowThumbnails(KFileTreeViewItem *dirKfi )
 {
-   if( ! dirKfi ) return;
+   bool forceRedraw = false;
+
+   /* If no item is specified, use the current one */
+   if( ! dirKfi )
+   {
+      /* do on the current visible dir */
+      KFileTreeViewItem *kftvi = packager->currentKFileTreeViewItem();
+      if( ! kftvi->isDir())
+	 kftvi = static_cast<KFileTreeViewItem*>(static_cast<QListViewItem*>(kftvi)->parent());
+      if( kftvi )
+      {
+	 dirKfi = kftvi;
+	 forceRedraw = true;
+      }
+      else
+	 return;
+   }
+   
+   
    kdDebug(28000) << "Showing thumbs for " << dirKfi->url().prettyURL() << endl;	   
    m_stack->raiseWidget( m_thumbview );
 
    /* Only do the new thumbview if the old is on another dir */
-
-   if( m_thumbview && m_thumbview->currentDir() != dirKfi->url() )
+   if( m_thumbview && (forceRedraw || m_thumbview->currentDir() != dirKfi->url()) )
    {
       m_thumbview->clear();
       /* Find a list of child KFileItems */
@@ -746,7 +763,9 @@ void KookaView::slStartLoading( const KURL& url )
    emit( signalChangeStatusbar( i18n("Loading " ) + url.prettyURL()));
 
    if( m_stack->visibleWidget() != img_canvas )
+   {
       m_stack->raiseWidget( img_canvas );
+   }
 
 }
 
@@ -922,6 +941,18 @@ void KookaView::connectViewerAction( KAction *action )
       action->plug( popup );
    }
 }
+
+
+void KookaView::slFreshUpThumbView()
+{
+   if( m_thumbview )
+   {
+      m_thumbview->readSettings();
+      slShowThumbnails();
+   }
+}
+
+
 
 
 #include "kookaview.moc"

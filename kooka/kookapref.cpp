@@ -23,12 +23,19 @@
 #include <kiconloader.h>
 #include <kconfig.h>
 #include <kdebug.h>
+#include <knuminput.h>
+#include <kcolorbutton.h>
+#include <kstandarddirs.h>
 
 #include <qlayout.h>
 #include <qlabel.h>
 #include <qtooltip.h>
+#include <qvgroupbox.h>
+#include <qgrid.h>
 
 #include <devselector.h>
+#include "thumbview.h"
+#include "miscwidgets.h"
 
 KookaPreferences::KookaPreferences()
     : KDialogBase(IconList, i18n("Preferences"),
@@ -41,6 +48,7 @@ KookaPreferences::KookaPreferences()
 
     setupStartupPage();
     setupSaveFormatPage();
+    setupThumbnailPage();
 }
 
 
@@ -106,6 +114,94 @@ void KookaPreferences::setupSaveFormatPage( )
    top->addStretch(10);
 }
 
+void KookaPreferences::setupThumbnailPage()
+{
+   konf->setGroup( THUMB_GROUP );
+
+   QFrame *page = addPage( i18n("Thumbnail View"), i18n("Thumbnail Gallery View" ),
+			    BarIcon("appearance", KIcon::SizeMedium ) );
+   QVBoxLayout *top = new QVBoxLayout( page, 0, spacingHint() );
+
+   top->addWidget( new QLabel( i18n("Here you can configure the appearance of the tumbnail view of your scan picture gallery."),page ));
+
+   /* Backgroundimage */
+   KStandardDirs stdDir;
+   QString bgImg = stdDir.findResource( "data", STD_TILE_IMG );
+   
+   QVGroupBox *hgb1 = new QVGroupBox( i18n("Thumbview Background" ), page );
+   m_tileSelector = new ImageSelectLine( hgb1, i18n("Select Background Image:"));
+   m_tileSelector->setURL( KURL(bgImg) );
+   
+   top->addWidget( hgb1 );
+
+   QHBoxLayout *layMain = new QHBoxLayout( page, 0, spacingHint());
+   top->addLayout( layMain, 0 );
+
+   QVBoxLayout *layBBoxes = new QVBoxLayout( page, 0, spacingHint());
+   layMain->addLayout( layBBoxes, 0 );
+
+   /* Add the Boxes to configure size, framestyle and background */
+
+   
+   QVGroupBox *hgb2 = new QVGroupBox( i18n("Thumbnail Size" ), page );
+   QVGroupBox *hgb3 = new QVGroupBox( i18n("Thumbnail Frame" ), page );
+
+   /* Thumbnail size */
+   int w = konf->readNumEntry( PIXMAP_WIDTH, 100);
+   int h = konf->readNumEntry( PIXMAP_HEIGHT, 120 );
+   QGrid *lGrid = new QGrid( 2, hgb2 );
+   lGrid->setSpacing( 2 );
+   QLabel *l1 = new QLabel( i18n("Thumbnail Maximum &Width:"), lGrid );
+   m_thumbWidth = new KIntNumInput( w, lGrid );
+   l1->setBuddy( m_thumbWidth );
+   
+   lGrid->setSpacing( 4 );
+   l1 = new QLabel( i18n("Thumbnail Maximum &Height:"), lGrid );
+   m_thumbHeight = new KIntNumInput( m_thumbWidth, h, lGrid );
+   l1->setBuddy( m_thumbHeight );
+   
+   /* Frame Stuff */
+   int frameWidth = konf->readNumEntry( THUMB_MARGIN, 3 );
+   QColor col1    = konf->readColorEntry( MARGIN_COLOR1, &(colorGroup().base()));
+   QColor col2    = konf->readColorEntry( MARGIN_COLOR2, &(colorGroup().foreground()));
+
+   QGrid *fGrid = new QGrid( 2, hgb3 );
+   fGrid->setSpacing( 2 );
+   l1 = new QLabel(i18n("Thumbnail &Frame Width:"), fGrid );
+   m_frameWidth = new KIntNumInput( frameWidth, fGrid );
+   l1->setBuddy( m_frameWidth );
+
+   l1 = new QLabel(i18n("Framecolor &1: "), fGrid );
+   m_colButt1 = new KColorButton( col1, fGrid );
+   l1->setBuddy( m_colButt1 );
+   
+   l1 = new QLabel(i18n("Framecolor &2: "), fGrid );
+   m_colButt2 = new KColorButton( col2, fGrid );
+   l1->setBuddy( m_colButt2 );
+   /* TODO: Gradient type */
+   
+   layBBoxes->addWidget( hgb2, 10);
+   layBBoxes->addWidget( hgb3, 10);
+   layBBoxes->addStretch(10);
+   
+   QVBoxLayout *laySample = new QVBoxLayout( page, 0, spacingHint());
+   
+   
+   // laySample->addWidget( new QLabel( i18n("Sample Thumbnail:"), page), 0 );
+   m_sample = new QLabel( "sample Pixmap", page );
+   m_sample->setFixedSize( QSize( 200, 220 ) );
+   m_sample->setAlignment( Qt::AlignHCenter + Qt::AlignVCenter );
+   
+   QPixmap m_samplePix;
+   m_samplePix.resize( 100, 120 );
+   m_samplePix.fill( QColor( QPixmap::white ));
+   m_sample->setPixmap( m_samplePix );
+   
+   laySample->addWidget( m_sample, 10 );
+   
+   layMain->addLayout( laySample , 0 );
+}
+
 
 void KookaPreferences::slotOk( void )
 {
@@ -137,6 +233,15 @@ void KookaPreferences::slotApply( void )
     bool showFormatAssist = cbSkipFormatAsk->isChecked();
     konf->writeEntry( OP_FILE_ASK_FORMAT, showFormatAssist );
 
+    /* ** Thumbnail options ** */
+    konf->setGroup( THUMB_GROUP );
+    konf->writeEntry( PIXMAP_WIDTH, m_thumbWidth->value() );
+    konf->writeEntry( PIXMAP_HEIGHT, m_thumbHeight->value() );
+    konf->writeEntry( THUMB_MARGIN, m_frameWidth->value() );
+    konf->writeEntry( MARGIN_COLOR1, m_colButt1->color());
+    konf->writeEntry( MARGIN_COLOR2, m_colButt2->color());
+    konf->writeEntry( BG_WALLPAPER, m_tileSelector->selectedURL().url() );
+    
     konf->sync();
 }
 

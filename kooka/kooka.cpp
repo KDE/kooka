@@ -359,6 +359,7 @@ void Kooka::optionsPreferences()
     if (dlg.exec())
     {
         // redo your settings
+       m_view->slFreshUpThumbView();
     }
 }
 

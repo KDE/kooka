@@ -111,7 +111,7 @@ signals:
    void         showThumbnails( KFileTreeViewItem* );
    
    void         aboutToShowImage( const KURL& ); /* starting to load image */
-   void         imageChanged( const KURL& );     /* the image has changed  */
+   void         imageChanged( KFileItem* );     /* the image has changed  */
 
    void         fileDeleted( KFileItem* );
    void         fileChanged( KFileItem* );

@@ -110,8 +110,10 @@ public slots:
 
    void slSaveScanParams( void );
 
-   void slShowThumbnails( KFileTreeViewItem *);
-
+   
+   void slShowThumbnails( KFileTreeViewItem *dirKfi = 0);
+   void slFreshUpThumbView();
+   
    /**
     * slot that show the image viewer
     */

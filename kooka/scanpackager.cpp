@@ -289,6 +289,7 @@ void ScanPackager::slotDecorate( KFileTreeBranch* branch, const KFileTreeViewIte
    {
       KFileTreeViewItem *kftvi = *it;
       slotDecorate( kftvi );
+      emit fileChanged( kftvi->fileItem() );
    }
 }
 
@@ -624,7 +625,7 @@ void ScanPackager::slotCurrentImageChanged( QImage *img )
 
    if( img && !img->isNull())
    {
-      emit( imageChanged( curr->url()));
+      emit( imageChanged( curr->fileItem()));
       KookaImage *newImage = new KookaImage(*img);
       slImageArrived( curr, newImage );
    }

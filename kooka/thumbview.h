@@ -40,6 +40,16 @@
 #include <kfileitem.h>
 #include <kfileiconview.h>
 
+/* KConfig group definitions */
+#define MARGIN_COLOR1 "MarginColor1"
+#define MARGIN_COLOR2 "MarginColor2"
+#define PIXMAP_WIDTH  "pixmapWidth"
+#define PIXMAP_HEIGHT "pixmapHeight"
+#define THUMB_MARGIN  "thumbnailMargin"
+#define THUMB_GROUP   "thumbnailView"
+#define BG_WALLPAPER  "BackGroundWallpaper"
+#define STD_TILE_IMG  "kooka/pics/thumbviewtile.png"
+
 class QPixmap;
 class QListViewItem;
    
@@ -98,11 +108,18 @@ public slots:
     */
    void slImageChanged( KFileItem * );
    void slImageDeleted( KFileItem * );
+   void slSetBackGround( const QString& file = QString());
+   void slCheckForUpdate( KFileItem* );
+   void readSettings();
+   
+protected:
+   
+   void saveConfig();
    
 signals:
    /**
-    * selects a QListViewItem from the thumbnail. This signal makes only
-    * sense when connected to a ScanPackager.
+    * selects a QListViewItem from the thumbnail. This signal only makes
+    * sense if connected to a ScanPackager.
     */ 
    void selectFromThumbnail( const KURL& );
    

@@ -20,35 +20,46 @@
 #include <kdialogbase.h>
 #include <qframe.h>
 #include <qcheckbox.h>
+#include <qlabel.h>
 
 class KConfig;
+class QLabel;
+class KIntNumInput;
+class KColorButton;
+class ImageSelectLine;
 
 #define STARTUP_READ_IMAGE "ReadImageOnStart"
-
-class KookaPrefPageOne;
-class KookaPrefPageTwo;
 
 
 class KookaPreferences : public KDialogBase
 {
-    Q_OBJECT
+   Q_OBJECT
 public:
-    KookaPreferences();
+   KookaPreferences();
 
 public slots:
-    void slotOk( void );
-    void slotApply( void );
-    void slotDefault( void );
+   void slotOk( void );
+   void slotApply( void );
+   void slotDefault( void );
     
 private:
-    void setupStartupPage();
+   void setupStartupPage();
    void setupSaveFormatPage();
-    QCheckBox *cbNetQuery;
-    QCheckBox *cbSkipFormatAsk;
-    QCheckBox *cbShowScannerSelection;
-    KConfig   *konf;
-    QCheckBox *cbReadStartupImage;
-    
+   void setupThumbnailPage();
+   
+   QCheckBox *cbNetQuery;
+   QCheckBox *cbSkipFormatAsk;
+   QCheckBox *cbShowScannerSelection;
+   KConfig   *konf;
+   QCheckBox *cbReadStartupImage;
+   QLabel    *m_sample;
+
+   KIntNumInput *m_thumbWidth;
+   KIntNumInput *m_thumbHeight;
+   KIntNumInput *m_frameWidth;
+   ImageSelectLine *m_tileSelector;
+   KColorButton *m_colButt1;
+   KColorButton *m_colButt2;
 };
 
 
