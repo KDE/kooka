@@ -413,6 +413,7 @@ bool KadmosDialog::getSelClassifier( QString& path ) const
     if( cmplPath.isEmpty() )
     {
         /* hm, no path was found */
+	kdDebug(28000) << "ERR; The entire path is empty, joking?" << endl;
         res = false;
     }
     else
@@ -462,7 +463,7 @@ QString KadmosDialog::getSelClassifierName() const
      /* Get the long text from the combo box */
      QString selLang = m_cbLang->currentText();
      QString trans;
-     if( m_longCountry2short.contains( selLang ))
+     if( fType != "norm" && m_longCountry2short.contains( selLang ))
      {
          QString langType = m_longCountry2short[selLang];
          trans = fType+langType+".rec";
@@ -474,10 +475,14 @@ QString KadmosDialog::getSelClassifierName() const
              /* can be a undetected */
              trans = selLang;
          }
+	 else if( fType == "norm" )
+	 {
+	     trans = "norm.rec";
+	 }
          else
              kdDebug(28000) << "ERROR: Not a valid classifier" << endl;
      }
-
+     kdDebug(28000) << "Returning trans. "<< trans << endl;
      return( trans );
 }
 
