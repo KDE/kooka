@@ -53,6 +53,9 @@ private:
 
     QArray<SANE_Word> *vals;
     int margin;
+
+   class DispGammaPrivate;
+   DispGammaPrivate *d;
 };
 
 #endif
