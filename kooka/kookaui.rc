@@ -1,7 +1,7 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
 <kpartgui name="Kooka" version="2">
 <MenuBar>
- <Menu name="imgCanvas"><text>&amp;ImageCanvas</text>
+ <Menu name="imgCanvas"><text>&amp;Image</text>
    <Action name="openInGraphApp"/>
    <Separator/>
    <Action name="ocrImage"/>
