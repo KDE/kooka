@@ -1,8 +1,19 @@
-/*
- * kooka.cpp
- *
- * Copyright (C) 2000 Klaas Freitag <freitag@suse.de>
- */
+/**************************************************************************
+			kooka.cpp  -  Main program class
+                             -------------------                                         
+    begin                : Sun Jan 16 2000                                           
+    copyright            : (C) 2000 by Klaas Freitag                         
+    email                : freitag@suse.de          
+ ***************************************************************************/
+
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   * 
+ *                                                                         *
+ ***************************************************************************/
 #include "kooka.h"
 #include "kookaview.h"
 #include "resource.h"
@@ -63,36 +74,15 @@ Kooka::Kooka()
             this,   SLOT(changeCaption(const QString&)));
 
     changeCaption( i18n( "KDE2 Scanning" ));
+
+    setAutoSaveSettings(  QString::fromLatin1("General Options"),
+			  true );
+    
 }
 
 
 Kooka::~Kooka()
 {
-
-}
-
-void Kooka::load(const QString& url)
-{
-    QString target;
-    (void) url;
-    // the below code is what you should normally do.  in this
-    // example case, we want the url to our own.  you probably
-    // want to use this code instead for your app
-
-#if 0
-    // download the contents
-    if (KIONetAccess::download(url, target))
-    {
-        // set our caption
-        setCaption(url);
-
-        // load in the file (target is always local)
-        loadFile(target);
-
-        // and remove the temp file
-        KIONetAccess::removeTempFile(target);
-    }
-#endif
 
 }
 
@@ -233,9 +223,6 @@ void Kooka::dropEvent(QDropEvent *event)
         // okay, we have a URI.. process it
         QString url, target;
         url = uri.first();
-
-        // load in the file
-        load(url);
     }
 }
 
@@ -400,5 +387,6 @@ void Kooka::slRotate180( void )
 {
    m_view->slRotateImage( 180 );
 }
+
 
 #include "kooka.moc"

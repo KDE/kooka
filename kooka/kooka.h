@@ -52,11 +52,6 @@ public:
      */
     ~Kooka();
 
-    /**
-     * Use this method to load whatever file/URL you have
-     */
-    void load(const QString& url);
-
    /**
     * Startup, loads (at the moment) only the last displayed image
     **/
