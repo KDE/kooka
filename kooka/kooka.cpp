@@ -4,6 +4,7 @@
  * Copyright (C) 2000 Klaas Freitag <freitag@suse.de>
  */
 #include "kooka.h"
+#include "kookaview.h"
 #include "resource.h"
 
 #include "kookapref.h"
@@ -60,10 +61,12 @@ Kooka::Kooka()
     connect(m_view, SIGNAL(signalChangeCaption(const QString&)),
             this,   SLOT(changeCaption(const QString&)));
 
+    changeCaption( I18N( "KDE2 Scanning" ));
 }
 
 Kooka::~Kooka()
 {
+   delete( m_view );
 }
 
 void Kooka::load(const QString& url)
@@ -97,9 +100,9 @@ void Kooka::setupActions()
     KStdAction::openNew(this, SLOT(fileNew()), actionCollection());
     KStdAction::open(this, SLOT(fileOpen()), actionCollection());
     KStdAction::save(this, SLOT(fileSave()), actionCollection());
+    KStdAction::saveAs(this, SLOT(fileSaveAs()), actionCollection());
 #endif
 
-    KStdAction::saveAs(this, SLOT(fileSaveAs()), actionCollection());
     KStdAction::print(this, SLOT(filePrint()), actionCollection());
     KStdAction::quit(kapp, SLOT(quit()), actionCollection());
 
@@ -131,7 +134,7 @@ void Kooka::setupActions()
 		       m_view, SLOT(doOCRonSelection()),
 		       actionCollection(), "ocrImageSelect" );
 
-    (void) new KAction(I18N("Scale to &Width"), "scaletowidth", CTRL+Key_W,
+    (void) new KAction(I18N("Scale to W&idth"), "scaletowidth", CTRL+Key_I,
 		       m_view, SLOT( slIVScaleToWidth()),
 		       actionCollection(), "scaleToWidth" );
 
@@ -159,19 +162,37 @@ void Kooka::setupActions()
 		       this, SLOT( slMirrorBoth() ),
 		       actionCollection(), "mirrorBoth" );
 
+    (void) new KAction(I18N("Open image in &graphic application"), "kpixmap", CTRL+Key_G,
+		       m_view, SLOT( slOpenCurrInGraphApp() ),
+		       actionCollection(), "openInGraphApp" );
+
+    (void) new KAction(I18N("&Rotate image clockwise"), "rotate_cw", CTRL+Key_R,
+		      this, SLOT( slRotateClockWise() ),
+		       actionCollection(), "rotateClockwise" );
+    
+    (void) new KAction(I18N("Rotate image counter-clock&wise"), "rotate_ccw", CTRL+Key_W,
+		       this, SLOT( slRotateCounterClockWise() ),
+		       actionCollection(), "rotateCounterClockwise" );
+
+    (void) new KAction(I18N("Rotate image 180 &degree"), "rotate_ccw", CTRL+Key_D,
+		       this, SLOT( slRotate180() ),
+		       actionCollection(), "upsitedown" );
+
     createGUI("kookaui.rc");
 
 }
 
+
 void Kooka::saveProperties(KConfig *config)
 {
-   (void) config;
     // the 'config' object points to the session managed
     // config file.  anything you write here will be available
     // later when this app is restored
     
    //if (m_view->currentURL() != QString::null)
-   //     config->writeEntry("lastURL", m_view->currentURL()); 
+   //     config->writeEntry("lastURL", m_view->currentURL());
+   debug( "In kooka's saveProperties !" );
+   m_view->saveProperties( config );
 }
 
 void Kooka::readProperties(KConfig *config)
@@ -343,6 +364,35 @@ void Kooka::changeCaption(const QString& text)
     setCaption(text);
 }
 
+void Kooka::slMirrorVertical( void )
+{
+   m_view->slMirrorImage( KookaView::MirrorVertical );
+}
 
+void Kooka::slMirrorHorizontal( void )
+{
+    m_view->slMirrorImage( KookaView::MirrorHorizontal ); 	
+}
+
+void Kooka::slMirrorBoth( void )
+{
+    m_view->slMirrorImage( KookaView::MirrorBoth );
+}
+
+void Kooka::slRotateClockWise( void )
+{
+   m_view->slRotateImage( 90 );
+}
+
+void Kooka::slRotateCounterClockWise( void )
+{
+   m_view->slRotateImage( -90 );
+   
+}
+
+void Kooka::slRotate180( void )
+{
+   m_view->slRotateImage( 180 );
+}
 
 #include "kooka.moc"
