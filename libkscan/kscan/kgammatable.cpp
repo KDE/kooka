@@ -64,3 +64,4 @@ SANE_Word* KGammaTable::getTable()
     if( dirty ) calcTable();
     return( gt.data());
 }
+#include "kgammatable.moc"

@@ -1121,3 +1121,4 @@ void KScanDevice::doProcessABlock( void )
      /* hmmm - how could this happen ? */
   }
 } /* end of fkt */
+#include "kscandevice.moc"

@@ -1065,3 +1065,4 @@ bool KScanOption::applyVal( void )
    }
    return( res );
 }	
+#include "kscanoption.moc"

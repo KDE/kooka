@@ -159,3 +159,4 @@ void KScanCombo::slComboChange( const QString &t )
 }
 
 #include "kscanslider.h"
+#include "kscanslider.moc"
