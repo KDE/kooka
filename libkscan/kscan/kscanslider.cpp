@@ -39,11 +39,11 @@ KScanSlider::KScanSlider( QWidget *parent, const char *text, double min, double 
     slider->setMaximumHeight( slider->sizeHint().height());
 
     /* Handle internal number display */
-    connect(slider, SIGNAL(valueChanged(int)), numdisp, SLOT( setNum(int) ));
-    connect(slider, SIGNAL( valueChanged(int)), this, SLOT( slSliderChange(int) ));
+    // connect(slider, SIGNAL(valueChanged(int)), numdisp, SLOT( setNum(int) ));
+    connect(slider, SIGNAL(valueChanged(int)), this, SLOT( slSliderChange(int) ));
 		
     /* set Value 0 to the widget */
-    slider_val = min - 1;
+    slider_val = (int)min - 1;
 
     /* Add to layout widget and activate */
     hb->addWidget( slider, 36 );
@@ -66,16 +66,22 @@ void KScanSlider::slSetSlider( int value )
     /* Important to check value to avoid recursive signals ;) */
     // debug( "Slider val: %d -> %d", value, slider_val );
     debug("Setting Slider with %d", value );
+
     if( value == slider_val )
-	return;
-		
+    {
+      debug( "Returning because slider value is already == %d", value );
+      return;
+    }
     slider->setValue( value );
+    slSliderChange( value );
+
 }
 
 void KScanSlider::slSliderChange( int v )
 {
-    // debug( "Got slider val: %d",v );
+    debug( "Got slider val: %d",v );
     slider_val = v;
+    numdisp->setNum(v);
     emit( valueChanged( v ));
 }
 
@@ -113,28 +119,25 @@ void KScanEntry::slEntryChange( const QString& t )
     emit( valueChanged( t ));
 }
 
-KScanCombo::KScanCombo( QWidget *parent, const char *text, QStrList list )
- : QFrame( parent )
+
+
+KScanCombo::KScanCombo( QWidget *parent, const QString text, const QStrList& list )
+   : QHBox( parent )
 {
-    QHBoxLayout *hb = new QHBoxLayout( this );
-    combolist = list;
+   setSpacing( 12 );
+   setMargin( 2 );
+
+   combolist = list;
  
-    QLabel *l1 = new QLabel( text, this, "AUTO_COMBOLABEL" );
-    hb->addWidget( l1,1 );
+   (void) new QLabel( text, this, "AUTO_COMBOLABEL" );
  	
     combo = new QComboBox( this, "AUTO_COMBO" );
     combo->insertStrList( &combolist);
 
-    hb->addWidget( combo, 2 );
-    combo->setMinimumHeight( combo->sizeHint().height() );
-    combo->setMaximumHeight( combo->sizeHint().height() );
-    l1->setMinimumHeight( combo->sizeHint().height() );
-    l1->setMaximumHeight( combo->sizeHint().height() );
-
-    hb->activate();
- 	
     connect( combo, SIGNAL(activated( const QString &)), this,
 		    SLOT( slComboChange( const QString &)));
+    connect( combo, SIGNAL(activated( int )),
+	     this,  SLOT(slFireActivated(int)));
 }
 
 void KScanCombo::slSetEntry( const QString &t )
@@ -156,6 +159,44 @@ void KScanCombo::slComboChange( const QString &t )
 {
     emit( valueChanged( t ));
     debug( "Combo: valueChanged emitted!" );
+}
+
+void KScanCombo::slSetIcon( const QPixmap& pix, const QString str)
+{
+   for( int i=0; i < combo->count(); i++ )
+   {
+      if( combo->text(i) == str )
+      {
+	 combo->changeItem( pix, str, i );
+	 break;
+      }
+   }
+}
+
+QString KScanCombo::currentText( void ) const
+{
+   return( combo->currentText() ); 
+}
+
+
+QString KScanCombo::text( int i ) const
+{
+   return( combo->text(i) );
+}
+
+void    KScanCombo::setCurrentItem( int i )
+{
+   combo->setCurrentItem( i );
+}
+
+int KScanCombo::count( void ) const
+{
+   return( combo->count() );
+}
+
+void KScanCombo::slFireActivated( int i )
+{
+   emit( activated( i ));
 }
 
 #include "kscanslider.h"
