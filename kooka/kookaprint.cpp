@@ -32,10 +32,12 @@
 
 #include "imgprintdialog.h"
 #include <kdebug.h>
+#include <klocale.h>
 
 KookaPrint::KookaPrint( KPrinter *printer )
     :QObject(),
-     m_printer(printer)
+     m_printer(printer),
+     m_extraMarginPercent(10)
 {
 
 }
@@ -46,25 +48,28 @@ bool KookaPrint::printImage( KookaImage *img )
     if( ! m_printer || !img) return false;
 
     QString psMode = m_printer->option( OPT_PSGEN_DRAFT );
-    kdDebug(28000) << "User setting for resolution: " << psMode << endl;
+    kdDebug(28000) << "User setting for quality: " << psMode << endl;
 
+#if 0
     if( psMode == "1" )
 	m_printer->setResolution( 75 );
     else
 	m_printer->setResolution( 600 );
+#endif
 
     /* Create painter _after_ setting Resolution */
     QPainter painter(m_printer);
-    QPainter *p = &painter;
-    QImage   tmpImg = *img;
+    m_painter = &painter;
+    KookaImage   tmpImg;
     QPoint   pt(0, 0);               // the top-left corner (image will be centered)
 
     // We use a QPaintDeviceMetrics to know the actual page size in pixel,
     // this gives the real painting area
-    QPaintDeviceMetrics printermetrics( p->device() );
+    QPaintDeviceMetrics printermetrics( m_painter->device() );
 
     int screenRes  = m_printer->option( OPT_SCREEN_RES ).toInt();
-    int printerRes = printermetrics.logicalDpiX();
+    // int printerRes = printermetrics.logicalDpiX();
+    int printerRes = m_printer->resolution();
 
     QString scale = m_printer->option( OPT_SCALING );
 
@@ -87,6 +92,9 @@ bool KookaPrint::printImage( KookaImage *img )
 
     /* Scale the image for printing */
     kdDebug(28000) << "Printer-Resolution: " << printerRes << " and scale-Reso: " << reso << endl;
+    QSize margins = m_printer->margins();
+    kdDebug(28000) << "Printer-Margins left: " << margins.width() << " and top " << margins.height()
+                   << endl;
     if( reso > 0)
     {
 	double sizeInch = double(img->width()) / double(reso);
@@ -100,16 +108,158 @@ bool KookaPrint::printImage( KookaImage *img )
 
 	tmpImg = img->smoothScale(newWidth, newHeight, QImage::ScaleFree);
 
-	// center the image on the paint device
-	QSize   sz = tmpImg.size();        // the current image size
-	// TODO: check if too large
-	pt.setX((printermetrics.width()-sz.width())/2);
-	pt.setY((printermetrics.height()-sz.height())/2);
+        QSize   sz = tmpImg.size();        // the current image size
+        QSize   maxOnPage = maxPageSize(); // the maximum space on one side
 
-	// draw the image
-	p->drawImage(pt, tmpImg);
+        int maxRows, maxCols;
+        int subpagesCnt = tmpImg.cutToTiles( maxOnPage, maxRows, maxCols );
+
+        kdDebug(28000) << "Subpages count: " << subpagesCnt <<
+            " Columns:" << maxCols << " Rows:" << maxRows << endl;
+
+        int cnt = 0;
+
+        for( int row = 0; row < maxRows; row++ )
+        {
+            for( int col = 0; col < maxCols; col++ )
+            {
+                const QRect part = tmpImg.getTileRect( row, col );
+                const QSize imgSize = part.size();
+
+                kdDebug(28000) << "Printing part from " << part.x() << "/" << part.y()
+                               << " width:"<< part.width() << " and height " << part.height() << endl;
+                QImage tileImg = tmpImg.copy( part );
+
+                m_painter->drawImage( printPosTopLeft(imgSize), tileImg );
+                drawCornerMarker( imgSize );
+                cnt++;
+                if( cnt < subpagesCnt )
+                    m_printer->newPage();
+            }
+        }
     }
+
+    m_painter = 0;
     return result;
 }
+
+void KookaPrint::drawMarkerAroundPoint( const QPoint& p )
+{
+    if( ! m_painter ) return;
+
+    m_painter->drawLine( p-QPoint(5,0), p+QPoint(5,0));
+    m_painter->drawLine( p-QPoint(0,5), p+QPoint(0,5));
+
+}
+
+void KookaPrint::drawCornerMarker( const QSize& imgSize )
+{
+    QPoint p;
+
+    p = printPosTopLeft( imgSize );
+    // p += QPoint( -1, -1 );
+    drawMarkerAroundPoint( p );
+
+    p = printPosTopRight( imgSize );
+    // p += QPoint( 1, -1 );
+    drawMarkerAroundPoint( p );
+
+    p = printPosBottomRight( imgSize );
+    // p += QPoint( 1, 1 );
+    drawMarkerAroundPoint( p );
+
+    p = printPosBottomLeft( imgSize );
+    // p += QPoint( -1, 1 );
+    drawMarkerAroundPoint( p );
+}
+
+
+/*
+ * This sub is called with the row and col of the current page.
+ * It is only called if there definetely is a next page.
+ */
+void KookaPrint::drawCutMarker( const QSize& imgSize, int row, int col )
+{
+    if( col+row > 0 )
+    {
+        /* draw a 'this is page x' marker */
+    }
+    if( row > 0 ) /* Top-Marker required */
+    {
+
+    }
+
+    if( col > 0 ) /* draw a marker on the right side */
+    {
+        QPoint startP = printPosTopRight(imgSize) + QPoint(1, 15);
+
+        /* A little vertical line at the image border */
+        m_painter->drawLine( startP-QPoint(0,5), startP+QPoint(0,5));
+
+        /* a line horizontal from here */
+        m_painter->drawLine( startP, startP+QPoint(20,0));
+
+        m_painter->drawText( startP+QPoint(2,3), i18n("Page %1 here").arg( row+1));
+    }
+
+}
+
+
+QSize KookaPrint::maxPageSize( ) const
+{
+    if( ! m_painter ) return QSize();
+    QPaintDeviceMetrics printermetrics( m_painter->device() );
+
+    return QSize( int(double(printermetrics.width())*0.9),
+                  int(double(printermetrics.height())*0.9) );
+}
+
+int KookaPrint::extraMarginPix() const
+{
+    QSize max = maxPageSize();
+    /* take the half extra margin */
+    return int(double(max.width())*double(m_extraMarginPercent) / 100.0 / 2.0);
+}
+
+QPoint KookaPrint::printPosTopLeft( const QSize& imgSize ) const
+{
+    QSize max = maxPageSize();
+    /* take the half extra margin */
+    int eMargin = extraMarginPix();
+
+    return QPoint( eMargin + (max.width()  - imgSize.width())/2,
+                   eMargin + (max.height() - imgSize.height())/2 );
+}
+
+QPoint KookaPrint::printPosTopRight(const QSize& imgSize) const
+{
+    QSize max = maxPageSize();
+    /* take the half extra margin */
+    int eMargin = extraMarginPix();
+
+    return QPoint( eMargin + (max.width()  - imgSize.width())/2+imgSize.width(),
+                   eMargin + (max.height() - imgSize.height())/2 );
+}
+
+QPoint KookaPrint::printPosBottomLeft(const QSize& imgSize) const
+{
+    QSize max = maxPageSize();
+    int eMargin = extraMarginPix();
+    /* take the half extra margin */
+    return QPoint( eMargin+(max.width()  - imgSize.width())/2,
+                   eMargin+(max.height() - imgSize.height())/2 + imgSize.height() );
+}
+
+QPoint KookaPrint::printPosBottomRight(const QSize& imgSize) const
+{
+    QSize max = maxPageSize();
+    /* take the half extra margin */
+    int eMargin = extraMarginPix();
+
+    return QPoint( eMargin+(max.width()  - imgSize.width())/2 + imgSize.width(),
+                   eMargin+(max.height() - imgSize.height())/2 + imgSize.height() );
+}
+
+
 
 #include "kookaprint.moc"

@@ -36,6 +36,7 @@
 
 class KookaImage;
 class KPrinter;
+class QPainter;
 class KLineEdit;
 
 
@@ -58,12 +59,40 @@ class KookaPrint:public QObject
 public:
     KookaPrint(KPrinter*);
 
+    /**
+     * The top left edge of the required print position
+     */
+    virtual QPoint printPosTopLeft(const QSize&) const;
+    virtual QPoint printPosTopRight(const QSize&) const;
+    virtual QPoint printPosBottomLeft(const QSize&) const;
+    virtual QPoint printPosBottomRight(const QSize&) const;
+
+    virtual int extraMarginPix() const;
+    virtual void drawCutMarker( const QSize&, int, int );
+
+#if 0
+    /**
+     *
+     */
+    virtual QSize imageSizeOnPage() const;
+#endif
+    /**
+     * The maximum pixel size of the image (or imagepart) on
+     * the current page
+     */
+    virtual QSize maxPageSize() const;
+
 public slots:
 
     bool printImage( KookaImage* );
 
 private:
+    virtual void drawMarkerAroundPoint( const QPoint& );
+    void drawCornerMarker( const QSize& );
+
     KPrinter 	*m_printer;
+    QPainter    *m_painter;
+    int          m_extraMarginPercent;
 };
 
 #endif
