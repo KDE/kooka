@@ -21,6 +21,9 @@
    <Action name="rotateCounterClockwise"/>
    <Action name="upsitedown"/>
  </Menu>
+ <Menu name="scan"><text>S&amp;can</text>
+    <Action name="selectsource"/>
+ </Menu>
  <Menu name="settings"><text>&amp;Settings</text>
    <Action name="show_scanparams"/>
  </Menu>

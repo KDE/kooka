@@ -180,6 +180,10 @@ void Kooka::setupActions()
 		       actionCollection(), "savescanparam" );
 #endif
 
+    (void) new KAction(i18n("Select scan device"), "scanner", CTRL+Key_Q,
+		       m_view, SLOT( slSelectDevice()),
+		       actionCollection(), "selectsource" );
+    
     createGUI("kookaui.rc");
 
 }
