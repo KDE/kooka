@@ -1,0 +1,7 @@
+if test -z "$SANE_CONFIG"; then
+  echo ""
+  echo "You're missing libsane. libkscan/kooka won't be compiled without libsane."
+  echo "You can download it from"
+  echo "http://www.mostang.com/sane/"
+  echo ""
+fi
