@@ -523,7 +523,7 @@ bool KScanOption::set( int val )
    bool ret = false;
 
    int word_size       = 0;
-   QArray<SANE_Word> qa;
+   QMemArray<SANE_Word> qa;
    SANE_Word sw        = SANE_TRUE;
    const SANE_Word sw1 = val;
    const SANE_Word sw2 = SANE_FIX( (double) val );
@@ -589,7 +589,7 @@ bool KScanOption::set( double val )
    if( ! desc ) return( false );
    bool ret = false;
    int  word_size = 0;
-   QArray<SANE_Word> qa;
+   QMemArray<SANE_Word> qa;
    SANE_Word sw = SANE_FALSE;
 
    switch( desc->type )
@@ -657,7 +657,7 @@ bool KScanOption::set( int *val, int size )
     int    offset = 0;
 
     int word_size = desc->size / sizeof( SANE_Word ); /* add 1 in case offset is needed */
-    QArray<SANE_Word> qa( 1+word_size );
+    QMemArray<SANE_Word> qa( 1+word_size );
 #if 0
     if( desc->constraint_type == SANE_CONSTRAINT_WORD_LIST )
     {
@@ -786,7 +786,7 @@ bool KScanOption::set( KGammaTable *gt )
    SANE_Word *run = gt->getTable();
 
    int word_size = desc->size / sizeof( SANE_Word );
-   QArray<SANE_Word> qa( word_size );
+   QMemArray<SANE_Word> qa( word_size );
 
    switch( desc->type )
    {

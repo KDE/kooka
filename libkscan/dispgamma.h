@@ -41,7 +41,7 @@ public:
     QSize sizeHint( void );
     QSizePolicy sizePolicy( void );
 
-    void setValueRef( QArray<SANE_Word> *newVals )
+    void setValueRef( QMemArray<SANE_Word> *newVals )
     {
         vals = newVals;
     }
@@ -51,7 +51,7 @@ protected:
 
 private:
 
-    QArray<SANE_Word> *vals;
+    QMemArray<SANE_Word> *vals;
     int margin;
 
    class DispGammaPrivate;

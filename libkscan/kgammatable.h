@@ -1,7 +1,7 @@
 #ifndef KGAMMATABLE_H
 #define KGAMMATABLE_H
 
-#include <qarray.h>
+#include <qmemarray.h>
 #include <qobject.h>
 
 extern "C" {
@@ -20,7 +20,7 @@ public:
    KGammaTable ( int gamma = 100, int brightness = 0,
 		 int contrast = 0 );
    void setAll ( int gamma, int brightness, int contrast );
-   QArray<SANE_Word> *getArrayPtr( void ) { return &gt; }
+   QMemArray<SANE_Word> *getArrayPtr( void ) { return &gt; }
 
    int  getGamma( ) const      { return g; }
    int  getBrightness( ) const { return b; }
@@ -43,7 +43,7 @@ private:
    void       calcTable( );
    int        g, b, c;
    bool       dirty;
-   QArray<SANE_Word> gt;
+   QMemArray<SANE_Word> gt;
 
    class KGammaTablePrivate;
    KGammaTablePrivate *d;

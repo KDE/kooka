@@ -23,7 +23,7 @@
 
 #include <qobject.h>
 #include <qstring.h>
-#include <qlist.h>
+#include <qptrlist.h>
 #include <qasciidict.h>
 
 
@@ -104,7 +104,7 @@ private:
    QCString name;
 
    /* List to collect objects for which memory was allocated and must be freed */
-   QList<KScanOption> strayCatsList;
+   QPtrList<KScanOption> strayCatsList;
 
    class KScanOptSetPrivate;
    KScanOptSetPrivate *d;

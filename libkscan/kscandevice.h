@@ -354,7 +354,7 @@ private:
   QStrList	      option_list;    // list of names of all options
   QStrList            dirtyList;     // option changes
    
-  QList<KScanOption>  gui_elements;
+  QPtrList<KScanOption>  gui_elements;
   QAsciiDict<KScanOption>  gui_elem_names;
 
   QAsciiDict<SANE_Device>  scannerDevices;

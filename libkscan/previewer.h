@@ -67,7 +67,7 @@ private:
    QHBoxLayout *layout;
    ImageCanvas *img_canvas;
    QComboBox   *pre_format_combo;
-   QArray<QCString> format_ids;
+   QMemArray<QCString> format_ids;
    QButtonGroup * bgroup;
    QRadioButton * rb1;
    QRadioButton * rb2;	
