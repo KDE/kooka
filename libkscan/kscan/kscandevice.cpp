@@ -37,7 +37,7 @@ extern QDict<int>  option_dic;
 
 extern SANE_Device const **dev_list          = 0;
 
-
+KScanOptSet gammaTables("GammaTables");
 
 
 /* ---------------------------------------------------------------------------
@@ -92,7 +92,7 @@ KScanOption *KScanDevice::getGuiElement( const char *name, QWidget *parent,
    {
       if( !so->valid())
 	 debug( "getGuiElem: no option <%s>", name );
-		 	
+      else
       if( !so->softwareSetable())
 	 debug( "getGuiElem: option <%s> is not software Setable", name );
 
@@ -114,12 +114,13 @@ KScanDevice::KScanDevice( QObject *parent )
     option_dic.setAutoDelete( true );
     gui_elements.setAutoDelete( true );
 
-    scanner_initialised = false;  // stays false until openDevice.
+    scanner_initialised = false;  /* stays false until openDevice. */
     scanStatus = SSTAT_SILENT;
-    data = 0;
-    sn = 0;
-    img = 0;
-
+    data         = 0; /* temporar image data buffer while scanning */
+    sn           = 0; /* socket notifier for async scanning        */
+    img          = 0; /* temporar image to scan in                 */
+    storeOptions = 0; /* list of options to store during preview   */
+    
     if( sane_stat == SANE_STATUS_GOOD )
     {
         sane_stat = sane_get_devices( &dev_list, SANE_TRUE );
@@ -148,6 +149,12 @@ KScanDevice::KScanDevice( QObject *parent )
 
     connect( this, SIGNAL( sigScanFinished( KScanStat )), SLOT( slScanFinished( KScanStat )));
 
+}
+
+
+KScanDevice::~KScanDevice()
+{
+  if( storeOptions )  delete (storeOptions );
 }
 
 
@@ -228,7 +235,7 @@ KScanStat KScanDevice::find_options()
   {
 
      option_dic.clear();
-
+     
      for(int i = 1; i<n; i++)
      {
 	d = (SANE_Option_Descriptor*)
@@ -246,9 +253,15 @@ KScanStat KScanDevice::find_options()
 		 new_opt = new int;
 		 *new_opt = i;
 		 debug( "Inserting <%s> as %d", d->name, *new_opt );
+		 /* create a new option in the set. */
 		 option_dic.insert ( (const char*) d->name, new_opt );
-
 		 option_list.append( (const char*) d->name );
+#if 0
+		 KScanOption *newOpt = new KScanOption( d->name );
+		 const QString qq = newOpt->get();
+		 debug( "INIT: <%s> = <%s>", d->name, (const char*) qq );
+		 allOptionSet->insert( d->name, newOpt );
+#endif		 
 	      }
 	      else if( d->type == SANE_TYPE_GROUP )
 	      {
@@ -301,7 +314,7 @@ QStrList KScanDevice::getAdvancedOptions()
    return( com_opt );
 }
 
-KScanStat KScanDevice::apply( KScanOption *opt )
+KScanStat KScanDevice::apply( KScanOption *opt, bool isGammaTable )
 {
    KScanStat   stat = KSCAN_OK;
    if( !opt ) return( KSCAN_ERR_PARAM );
@@ -379,6 +392,13 @@ KScanStat KScanDevice::apply( KScanOption *opt )
       {
 	debug( "Option <%s> was set inexact !", oname );
 		
+      }
+
+      /* if it is a gamma table, the gamma values must be stored */
+      if( isGammaTable ) 
+      {
+	 gammaTables.backupOption( *opt );
+	 debug( "GammaTable stored: %s", (const char*) opt->getName());
       }
    }
    else
@@ -623,7 +643,6 @@ void KScanDevice::prepareScan( void )
 		 NOTIFIER( ((cap) & SANE_CAP_ADVANCED )));
 
        }
-
        ++it;
     }
     debug("----------------------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+");
