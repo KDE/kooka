@@ -16,8 +16,6 @@
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
-
-   $Id$
 */
 
 #include <qlabel.h>
@@ -81,8 +79,8 @@ ScanDialog::ScanDialog( QWidget *parent, const char *name, bool modal )
 
     m_scanParams = 0;
     m_device = new KScanDevice( this );
-    connect(m_device, SIGNAL(sigNewImage(QImage *)),
-            this, SLOT(slotFinalImage(QImage *)));
+    connect(m_device, SIGNAL(sigNewImage(QImage *, ImgScanInfo*)),
+            this, SLOT(slotFinalImage(QImage *, ImgScanInfo *)));
 
     connect( m_device, SIGNAL(sigScanStart()), this, SLOT(slotScanStart()));
     connect( m_device, SIGNAL(sigScanFinished(KScanStat)),
@@ -95,7 +93,7 @@ ScanDialog::ScanDialog( QWidget *parent, const char *name, bool modal )
     /* ... and connect to the selector-slots. They communicate user's
      * selection to the scanner parameter engine */
     /* a new preview signal */
-    connect( m_device, SIGNAL( sigNewPreview( QImage* )),
+    connect( m_device, SIGNAL( sigNewPreview( QImage*, ImgScanInfo* )),
              this, SLOT( slotNewPreview( QImage* )));
 
     m_previewer->setEnabled( false ); // will be enabled in setup()
@@ -374,7 +372,7 @@ ScanDialog::~ScanDialog()
 {
 }
 
-void ScanDialog::slotFinalImage(QImage *image)
+void ScanDialog::slotFinalImage(QImage *image, ImgScanInfo *)
 {
     emit finalImage(*image, nextId());
 }

@@ -15,8 +15,6 @@
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
-
-   $Id$
 */
 
 #include <qstring.h>
@@ -176,9 +174,9 @@ void KScanOptSet::saveConfig( const QString& scannerName, const QString& configN
     delete( scanConfig );
 }
 
-bool KScanOptSet::load( const QString& scannerName )
+bool KScanOptSet::load( const QString& /*scannerName*/ )
 {
-    QString confFile = SCANNER_DB_FILE;
+   QString confFile = SCANNER_DB_FILE;
    kdDebug( 29000) << "** Reading from scan configuration file <" << confFile << ">" << endl;
    bool ret = true;
 

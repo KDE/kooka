@@ -2,14 +2,12 @@ INCLUDES = -I$(top_srcdir)/libkscan $(all_includes) $(LIBSANE_INCLUDES)
 
 lib_LTLIBRARIES = libkscan.la
 
-include_HEADERS = kscandevice.h kscanslider.h kgammatable.h \
+noinst_HEADERS = kscandevice.h kscanslider.h kgammatable.h \
 	kscanoption.h kscanoptset.h \
 	gammadialog.h dispgamma.h \
 	scansourcedialog.h scanparams.h massscandialog.h devselector.h \
         img_canvas.h previewer.h imgscaledialog.h sizeindicator.h \
 	imgscaninfo.h
-
-# noinst_HEADERS = 
 
 libkscan_la_SOURCES = kscandevice.cpp kscanslider.cpp kgammatable.cpp\
         kscanoption.cpp kscanoptset.cpp \

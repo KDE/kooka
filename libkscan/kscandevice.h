@@ -15,8 +15,6 @@
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
-
-   $Id$
 */
 
 #ifndef _KSCANDEV_H_
@@ -338,14 +336,12 @@ signals:
      *  emitted if a new image was acquired. The image has to be
      *  copied in the signal handler.
      */
-    void sigNewImage( QImage* );
     void sigNewImage( QImage*, ImgScanInfo* );
 
     /**
      *  emitted if a new preview was acquired. The image has to be
      *  copied in the signal handler.
      */
-    void sigNewPreview( QImage*);
     void sigNewPreview( QImage*, ImgScanInfo* );
     
     /**

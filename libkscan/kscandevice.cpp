@@ -15,8 +15,6 @@
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
-
-   $Id$
 */
 
 #include <stdlib.h>
@@ -887,9 +885,13 @@ KScanStat KScanDevice::acquire( const QString& filename )
 	if( file.exists() )
 	{
 	     QImage i;
+	     ImgScanInfo info;
 	     if( i.load( filename ))
 	     {
-                  emit( sigNewImage( &i ));
+		info.setXResolution(i.dotsPerMeterX()); // TODO: *2.54/100
+		info.setYResolution(i.dotsPerMeterY()); // TODO: *2.54/100
+		info.setScannerName(filename);
+		emit( sigNewImage( &i, &info ));
 	     }
 	}
     }
@@ -1197,7 +1199,6 @@ void KScanDevice::doProcessABlock( void )
      int       green = 0;
      int       blue = 0;
 
-
      if( sane_stat != SANE_STATUS_GOOD )
      {
 	/** any other error **/
@@ -1330,8 +1331,8 @@ void KScanDevice::doProcessABlock( void )
 
 	if( (sane_scan_param.lines > 0) && (sane_scan_param.lines * pixel_y> 0) )
 	{
-	   int progress =  (int)((double)MAX_PROGRESS / (double) sane_scan_param.lines *
-				 (double)pixel_y);
+	   int progress =  (int)(((double)MAX_PROGRESS) / sane_scan_param.lines *
+				  pixel_y);
 	   if( progress < MAX_PROGRESS)
 	      emit( sigScanProgress( progress));
 	}
