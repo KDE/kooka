@@ -70,14 +70,15 @@ public slots:
     void slNewDimen(QRect r);
     void slNewScanResolutions( int, int );
     void recalcFileSize( void );
-    void slAutoSelThresh(int);
-    void slAutoSelDustsize(int);
+    void slSetAutoSelThresh(int);
+    void slSetAutoSelDustsize(int);
     void slSetScannerBgIsWhite(bool b);
-    void slConnectScanner( KScanDevice *scan ) { m_scanner = scan; }
+    void slConnectScanner( KScanDevice *scan );
 protected slots:
     void slScaleToWidth();
     void slScaleToHeight();
     void slAutoSelToggled(bool);
+    void slScanBackgroundChanged(int);
 
 signals:
     void newRect( QRect );
@@ -100,23 +101,11 @@ private:
     QRadioButton * rb2;
     QImage       m_previewImage;
 
-    QCheckBox    *m_cbAutoSel;
-
     bool imagePiece( QMemArray<long> src,
                      int& start,
                      int& end );
 
     int landscape_id, portrait_id;
-
-    /** Autoselection: try to find a selection after a preview scan **/
-    bool m_doAutoSelection;  /* switch auto-selection on and off */
-    int  m_autoSelThresh;    /* threshold for auto selection     */
-    int  m_dustsize;         /* dustsize for auto selection      */
-
-    bool m_bgIsWhite;        /* indicates if a scan without paper results in black or white */
-    QSlider *m_sliderThresh;
-    QSlider  *m_sliderDust;
-
 
     double overallWidth, overallHeight;
     KRuler::MetricStyle sizeUnit;
@@ -128,7 +117,6 @@ private:
     double selectionWidthMm;
     double selectionHeightMm;
 
-    KScanDevice *m_scanner;
     class PreviewerPrivate;
     PreviewerPrivate *d;
 };
