@@ -62,6 +62,10 @@
 #define CFG_KADMOS_CLASSIFIER_PATH "classifierPath"
 #define CFG_KADMOS_CLASSIFIER      "classifier"
 
+
+#define CNTRY_CZ i18n( "Czech Republic, Slovakia")
+#define CNTRY_GB i18n( "Great Britain, USA" )
+
 KadmosDialog::KadmosDialog( QWidget *parent, KSpellConfig *spellConfig )
     :KOCRBase( parent, spellConfig, KDialogBase::Tabbed ),
      m_cbNoise(0),
@@ -106,6 +110,8 @@ EngineError KadmosDialog::findClassifiers()
         m_longCountry2short[locale->twoAlphaToCountryName(*it)] = *it;
     }
     m_longCountry2short[i18n("European Countries")] = "eu";
+    m_longCountry2short[ CNTRY_CZ ] = "cz";
+    m_longCountry2short[ CNTRY_GB ] = "us";
 
     QStringList lst;
 
@@ -167,8 +173,19 @@ EngineError KadmosDialog::findClassifiers()
                 m_ttfClassifier << lngCountry;
                 kdDebug(28000) << "ttf: Insert country " << lngCountry << endl;
             }
+            else if( lang == "cz" )
+            {
+                m_ttfClassifier << CNTRY_CZ;
+            }
+            else if( lang == "us" )
+            {
+                m_ttfClassifier << CNTRY_GB;
+            }
             else
+            {
+                m_ttfClassifier << name;
                 kdDebug(28000) << "ttf: Unknown country" << endl;
+            }
         }
         else if( name.startsWith( "hand" ) )
         {
@@ -180,8 +197,19 @@ EngineError KadmosDialog::findClassifiers()
                     lngCountry = name;
                 m_handClassifier << lngCountry;
             }
+            else if( lang == "cz" )
+            {
+                m_handClassifier << i18n( "Czech Republic, Slovakia");
+            }
+            else if( lang == "us" )
+            {
+                m_handClassifier << i18n( "Great Britain, USA" );
+            }
             else
+            {
                 kdDebug(28000) << "Hand: Unknown country " << lang << endl;
+                m_handClassifier << name;
+            }
         }
         else if( name.startsWith( "norm" ))
         {
