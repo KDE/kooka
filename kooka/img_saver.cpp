@@ -24,6 +24,7 @@
 #include <kglobal.h>
 #include <kconfig.h>
 #include <kdialog.h>
+#include <kimageio.h>
 
 #include <qdir.h>
 #include <qlayout.h>
@@ -522,12 +523,30 @@ ImgSaveStat ImgSaver::save( QImage *image, QString filename,
    
    if( image )
    {
-      debug( "ImgSaver: saving image to <%s> as <%s/%s>", (const char*) filename,
-	     format, subformat );
-      result = image->save( filename, format );
-
       // remember the last processed file - only the filename - no path
       QFileInfo fi( filename );
+
+      if( !fi.isWritable() )
+      {
+	 debug( "Cant write to file <%s>, cant save !", (const char*) filename );
+	 result = false;
+	 return( ISS_ERR_PERM );
+      }
+
+      /* Check the format, is it writable ? */
+      if( ! KImageIO::canWrite( format ) )
+      {
+	 debug( "Cant write format <%s>", (const char*) format );
+	 result = false;
+	 return( ISS_ERR_FORMAT_NO_WRITE );
+      }
+      
+      debug( "ImgSaver: saving image to <%s> as <%s/%s>", (const char*) filename,
+	     format, subformat );
+
+      result = image->save( filename, format );
+
+      
       last_file = fi.fileName();
    }
 

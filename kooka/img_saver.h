@@ -45,9 +45,11 @@ typedef enum {
    ISS_ERR_PERM,   /* permission Error   */
    ISS_ERR_FILENAME,   /* bad filename       */
    ISS_ERR_NO_SPACE,   /* no space on device */
+   ISS_ERR_FORMAT_NO_WRITE, /* Image format can not be written */
    ISS_ERR_UNKNOWN,    
    ISS_ERR_PARAM,       /* Parameter wrong */
    ISS_SAVE_CANCELED
+   
 } ImgSaveStat;
 
 /**
