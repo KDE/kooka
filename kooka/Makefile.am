@@ -34,15 +34,12 @@ kadmosocr.h ocrword.h ocrresedit.h
 
 KDE_ICON = kooka
 
-datadir       = $(kde_datadir)/kooka
-data_DATA     = kookaui.rc
+appdatadir       = $(kde_datadir)/kooka
+appdata_DATA     = kookaui.rc
 
 kde_conf_DATA = kookarc
 
-kdelnkdir   = $(kde_appsdir)/Graphics
-kdelnk_DATA = kooka.desktop
-
-
+xdg_apps_DATA = kooka.desktop
 
 messages: rc.cpp
 	$(XGETTEXT) *.cpp -o $(podir)/kooka.pot
