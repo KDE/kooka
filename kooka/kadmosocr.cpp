@@ -93,22 +93,23 @@ RelResult* CRep::getRelResult(int line, RelGraph* graph, int alternative)
 
 KADMOS_ERROR CRep::Init(const char* ClassifierFilename)
 {
-  /* prepare RepData structure */
-  m_RepData.init.rel_grid_maxlen   = GRID_MAX_LEN;
-  m_RepData.init.rel_graph_maxlen  = GRAPH_MAX_LEN;
-  m_RepData.init.rel_result_maxlen = CHAR_MAX_LEN;
-  m_RepData.init.rep_memory_size   = LINE_MAX_LEN * sizeof(RepResult) +
-                                     (long)LINE_MAX_LEN * CHAR_MAX_LEN * (sizeof(RelGraph)+
-                                     sizeof(RelResult));
-  m_RepData.init.rep_memory = malloc( m_RepData.init.rep_memory_size );
-  if (!m_RepData.init.rep_memory) {
-    ReportError("Out of memory", CPP_ERROR);
-  }
-  strcpy(m_RepData.init.version, INC_KADMOS);
+    /* prepare RepData structure */
+    m_RepData.init.rel_grid_maxlen   = GRID_MAX_LEN;
+    m_RepData.init.rel_graph_maxlen  = GRAPH_MAX_LEN;
+    m_RepData.init.rel_result_maxlen = CHAR_MAX_LEN;
+    m_RepData.init.rep_memory_size   = LINE_MAX_LEN * sizeof(RepResult) +
+	(long)LINE_MAX_LEN * CHAR_MAX_LEN * (sizeof(RelGraph)+
+					     sizeof(RelResult));
+    m_RepData.init.rep_memory = malloc( m_RepData.init.rep_memory_size );
+    if (!m_RepData.init.rep_memory) {
+	CheckError();
+	return m_Error;
+    }
+    strcpy(m_RepData.init.version, INC_KADMOS);
 
-  m_Error = rep_init(&m_RepData, (char*)ClassifierFilename);
-  CheckError();
-  return m_Error;
+    m_Error = rep_init(&m_RepData, (char*)ClassifierFilename);
+    CheckError();
+    return m_Error;
 }
 
 void CRep::run() // KADMOS_ERROR CRep::Recognize()
@@ -405,18 +406,23 @@ void CRep::SetScaling(bool bScaling)
 
 void CRep::CheckError()
 {
-  if (m_Error!=RE_SUCCESS) {
-    re_ErrorText Err;
-    re_GetErrorText(&Err);
-    kdDebug(28000) << "ERROR: " << Err.text << endl;
-  }
+    if ( kadmosError() )
+    {
+	kdDebug(28000) << "KADMOS ERROR: " << getErrorText() << endl;
+    }
 }
 
-void CRep::ReportError(const char* ErrText, const char* Program)
+/* returns a QString containing the string describing the kadmos error */
+QString CRep::getErrorText() const
 {
-  re_ErrorText Err;
-  strcpy(Err.text, ErrText);
-  strcpy(Err.program, Program);
+    re_ErrorText Err;
+    re_GetErrorText(&Err);
+    return QString::fromLocal8Bit( Err.text );
+}
+
+bool CRep::kadmosError()
+{
+    return m_Error != RE_SUCCESS;
 }
 
 #include "kadmosocr.moc"

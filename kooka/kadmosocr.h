@@ -82,7 +82,7 @@ namespace Kadmos {
            @param ClassifierFilename is a name of a classifier file (*.rec)
         */
         KADMOS_ERROR Init(const char* ClassifierFile);
-
+	
         virtual void run();
         virtual bool finished() { return true; }
         // KADMOS_ERROR Recognize();
@@ -118,10 +118,13 @@ namespace Kadmos {
 
         int nextBestWord( int line, int knode, QString& theWord, QRect& brect );
 
+	/* Error text in QString */
+	QString getErrorText() const;
+	bool    kadmosError();
     private:
         void partStrings( int line, int graphKnode, QString soFar );
         void CheckError();
-        void ReportError(const char* ErrText, const char* Program);
+        
         RepData       m_RepData;
         KADMOS_ERROR  m_Error;
         char m_Line[2*CHAR_MAX_LEN];
