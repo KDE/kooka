@@ -19,3 +19,8 @@ OCR:
 
 - The ocr result window does not appear properly on very large result images
   provided by gocr. Kooka should resize the result image to a reasonable size.
+
+Scan Packager:
+
+- The scan packager needs major rework. Enhancements like metadata in XML etc
+  should be included.

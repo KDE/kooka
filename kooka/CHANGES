@@ -35,3 +35,12 @@ scanned with about 150 dpi.
   saved images.
 
 * Creation of new images from the selection on the image canvas.
+
+- Jan 2001, Klaas Freitag <freitag@suse.de>:
+
+* Rotating of images. 
+
+* Opening images in a kde graphic app.
+
+* Proper error messages if a changed image cant be saved.
+
