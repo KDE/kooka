@@ -30,9 +30,6 @@
 
 #include <devselector.h>
 
-#include <ksimpleconfig.h>
-
-
 KookaPreferences::KookaPreferences()
     : KDialogBase(IconList, i18n("Preferences"),
                   Help|Default|Ok|Apply|Cancel, Ok )
