@@ -36,11 +36,11 @@ KScanDialog * ScanDialogFactory::createDialog( QWidget *parent,
 
 
 ScanDialog::ScanDialog( QWidget *parent, const char *name, bool modal )
-    : KScanDialog( parent, name, modal )
+    : KScanDialog( Tabbed, Close|Help, parent, name, modal )
 {
     QVBox *page = addVBoxPage( i18n("Scanning") );
     QSplitter *splitter = new QSplitter( Horizontal, page, "splitter" );
-    
+
     m_scanParams = new ScanParams( splitter );
     m_device = new KScanDevice( this );
     connect(m_device, SIGNAL(sigNewImage(QImage *)), this, SLOT(slotFinalImage(QImage *)));
@@ -74,7 +74,7 @@ ScanDialog::~ScanDialog()
 
 void ScanDialog::slotFinalImage(QImage *image)
 {
-    emit finalImage(*image);
+    emit finalImage(*image, nextId());
 }
 
 #include "scandialog.moc"
