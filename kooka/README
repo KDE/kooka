@@ -14,19 +14,19 @@ fine. If you want to help, please send patches to freitag@suse.de.
 Features:
 =========
 
-Kookas main features are:
+Kooka's main features are:
 
-Sacnner Support using SANE:
+Scanner Support using SANE:
 - Scanner support using SANE. Kooka _DOES_NOT_ support all features that SANE
   and its backends offer. It takes a small subset of the available options.
-- Kooka offers a gui to change the most important scanner options like resolution,
+- Kooka offers a GUI to change the most important scanner options like resolution,
   mode, threshold etc. These options are generated on the fly,  depending on the 
   scanner capabilities.
 - Kooka offers a preview-function and the user can select the scan area interactively
   or automatically.
 
 Image Storage:
-- Kooka provides an assitant to save your acquired images.
+- Kooka provides an assistant to save your acquired images.
 - Filenames are generated automatically to support multiple scans.
 - Kooka manages the scanned images in a tree view where the user can delete and
   export images.
@@ -41,8 +41,8 @@ Image Viewing:
 
 OCR:
 - Kooka supports Joerg Schulenburg's gocr, an open source program
-  for optical character recognition. Kooka starts the OCR program and displays 
-  its output. Best results with bw-images scanned with ~150 dpi
+  for optical character recognition (OCR). Kooka starts the OCR program
+  and displays its output. Best results with bw-images scanned with ~150 DPI
 - Support for the commercial OCR/ICR package KADMOS of the reRecognition
   GmbH Kreuzlingen. Please read README.KADMOS for more information.
 
@@ -50,14 +50,14 @@ Problems:
 =========
 
 * Kooka does not yet support all options SANE offers. That will
-improve in the future. However, I dont know if it makes sense to
+improve in the future. However, I don't know if it makes sense to
 support all, even not very common options, some scanners offer. Lets
-see what is neccessary and makes sense for the purpose of kooka.
+see what is necessary and makes sense for the purpose of Kooka.
 
 * Kooka does not yet have a strategy for very large images :(. It uses
 the Qt QImage/QPixmap as is. On some displays, that causes problems.
 
-* ADF support is not yet working correctly.
+* Automatic document feeder (ADF) support is not yet working correctly.
 
 ----------------------------------------------------------------------
 Klaas Freitag <freitag@suse.de>
