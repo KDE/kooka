@@ -916,7 +916,7 @@ void KookaView::slShowThumbnails(KFileTreeViewItem *dirKfi, bool forceRedraw )
  */
 void KookaView::slStartLoading( const KURL& url )
 {
-   emit( signalChangeStatusbar( i18n("Loading " ) + url.prettyURL()));
+   emit( signalChangeStatusbar( i18n("Loading %1" ).arg( url.prettyURL() ) ));
 
    // if( m_stack->visibleWidget() != img_canvas )
    // {
