@@ -16,80 +16,15 @@
 #include <qimage.h>
 #include <qfileinfo.h>
 #include <qapplication.h>
+
 #include <unistd.h>
+#include "kgammatable.h"
 #include "ksanedev.h"
 #include "ksaneslider.h"
 
 
 
 #define MIN_PREVIEW_DPI 20
-
-
-KGammaTable::KGammaTable( int gamma = 100, int brightness = 0,
-			  int contrast = 0 ) :
-   QObject()
-{
-   g = gamma < 1 ? 1 : gamma;
-   b = brightness;
-   c = contrast;
-   gt.resize(256);
-   calcTable( );
-}
-
-const KGammaTable& KGammaTable::operator=(const KGammaTable& gt)
-{
-     if( this != &gt )
-     {
-        g = gt.g;
-        b = gt.b;
-        c = gt.c;
-
-        calcTable();
-     }
-
-     return( *this );
-}
-
-inline SANE_Word adjust( SANE_Word x, int gl,int bl,int cl)
-{
-  //printf("x : %d, x/256 : %lg, g : %d, 100/g : %lg",
-  //       x,(double)x/256.0,g,100.0/(double)g);
-  x = ( SANE_Int )(256*pow((double)x/256.0,100.0/(double)gl));
-  x = ((65536/(128-cl)-256)*(x-128)>>8)+128+bl;
-  if(x<0) x = 0; else if(x>255) x = 255;
-  //printf(" -> %d\n",x);
-  return x;
-}
-
-void KGammaTable::calcTable( )
-{
-  int br = (b<<8)/(128-c);
-  int gr = g;
-  int cr = c;
-
-  for( SANE_Word i = 0; i<256; i++)
-    gt[i] = adjust(i, gr, br, cr );
-
-  dirty = false;
-}
-
-void KGammaTable::setAll( int gamma, int brightness, int contrast )
-{
-   g = gamma < 1 ? 1 : gamma;
-   b = brightness;
-   c = contrast;
-
-   dirty = true;
-}
-
-
-SANE_Word* KGammaTable::getTable()
-{
-   if( dirty ) calcTable();
-   return( gt.data());
-}
-
-
 
 
 // global device list
@@ -118,6 +53,8 @@ inline const SANE_Option_Descriptor *getOptionDesc( const char *name )
    } else { debug( "no option descriptor for %s", name ); }
    return( d );
 }
+
+
 
 /* ************************************************************************ */
 /* KSANE Option                                                             */
@@ -891,8 +828,8 @@ bool KSANEOption::getRange( double *min, double *max, double *q )
    return( ret );
 }
 
-QWidget *KSANEOption::createWidget( QWidget *parent, const char *w_desc=0,
-                                    const char *tooltip=0 )
+QWidget *KSANEOption::createWidget( QWidget *parent, const char *w_desc,
+                                    const char *tooltip )
 {
 	const char *text = 0;
 	
@@ -1027,7 +964,7 @@ bool KSANEDev::guiSetEnabled( QString name, bool state )
    ------------------------------------------------------------------------- */
 
 KSANEOption *KSANEDev::getGuiElement( const char *name, QWidget *parent,
-                                  const char *desc =0, const char *tooltip=0 )
+				      const char *desc, const char *tooltip )
 {
     if( ! name ) return(0);
     QWidget *w = 0;
@@ -1069,7 +1006,7 @@ KSANEOption *KSANEDev::getGuiElement( const char *name, QWidget *parent,
 // ---------------------------------------------------------------------------
 
 
-KSANEDev::KSANEDev( QObject *parent=0 )
+KSANEDev::KSANEDev( QObject *parent )
    : QObject( parent )
 {
     SANE_Status sane_stat = sane_init(NULL, NULL );
@@ -1269,6 +1206,14 @@ KSANEStat KSANEDev::apply( KSANEOption *opt )
    SANE_Int    result = 0;
    SANE_Status sane_stat = SANE_STATUS_GOOD;
 
+   if ( opt->getName() == "preview" || opt->getName() == "mode" ) {
+       sane_stat = sane_control_option( scanner_handle, *num,
+					SANE_ACTION_SET_AUTO, 0,
+					&result );
+       return KSANE_OK;
+   }
+
+
    if( ! opt->initialised() || opt->getBuffer() == 0 )
    {
       debug( "Attempt to set Zero buffer of %s -> skipping !",
@@ -1395,7 +1340,7 @@ void KSANEDev::slStopScanning( void )
     }
 }
 
-KSANEStat KSANEDev::acquirePreview( bool forceGray = false, int dpi = 0 )
+KSANEStat KSANEDev::acquirePreview( bool forceGray, int dpi )
 {
 	KSANEOption *so = 0;
  	double min, max, q;
@@ -1416,7 +1361,7 @@ KSANEStat KSANEDev::acquirePreview( bool forceGray = false, int dpi = 0 )
  	
  	KSANEOption f_gray( SANE_NAME_GRAY_PREVIEW );
    	f_gray.set( forceGray );
- 	apply( &f_gray );
+	// apply( &f_gray );
 
  	/* Set scan resolution for preview. */	
  	KSANEOption res( SANE_NAME_SCAN_RESOLUTION );
@@ -1595,7 +1540,7 @@ KSANEStat KSANEDev::createNewImage( SANE_Parameters *p )
 }
 
 
-KSANEStat KSANEDev::acquire_data( bool isPreview = false )
+KSANEStat KSANEDev::acquire_data( bool isPreview )
 {
   SANE_Status	  sane_stat = SANE_STATUS_GOOD;
   KSANEStat       stat = KSANE_OK;
@@ -1927,5 +1872,3 @@ void KSANEDev::doProcessABlock( void )
       /* hmmm - how could this happen ? */
     }
 } /* end of fkt */
-
-#include "ksanedev.moc"
