@@ -32,7 +32,7 @@ class QCheckBox;
   */
 
 /* Configuration-file definitions */
-#define GROUP_STARTUP    "Startup"
+#define GROUP_STARTUP    "Scan Settings"
 #define STARTUP_SCANDEV  "ScanDevice"
 #define STARTUP_SKIP_ASK "SkipStartupAsk"
 

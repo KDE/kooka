@@ -1,8 +1,8 @@
 /***************************************************************************
            img_canvas.cpp  - Class to display a scrollable image
-                             -------------------                                         
-    begin                : Sun Dec 12 1999                                           
-    copyright            : (C) 1999 by Klaas Freitag                         
+                             -------------------
+    begin                : Sun Dec 12 1999
+    copyright            : (C) 1999 by Klaas Freitag
     email                : freitag@suse.de
 
     $Id$
@@ -13,7 +13,7 @@
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
  *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   * 
+ *   (at your option) any later version.                                   *
  *                                                                         *
  *   This program is distributed in the hope that it will be useful,
  *   but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -64,7 +64,7 @@ inline void debug_rect( const char *name, QRect *r )
 
 
 
-ImageCanvas::ImageCanvas(QWidget *parent, 
+ImageCanvas::ImageCanvas(QWidget *parent,
 			 const QImage *start_image,
 			 const char *name 	):
   QScrollView( parent, name )
@@ -78,7 +78,7 @@ ImageCanvas::ImageCanvas(QWidget *parent,
 
   image            = start_image;
   moving 	   = MOVE_NONE;
-  
+
   QSize img_size;
 
   if( image && ! image->isNull() )
@@ -91,7 +91,7 @@ ImageCanvas::ImageCanvas(QWidget *parent,
 #else
     pmScaled->convertFromImage( *image );
 #endif
-    
+
     acquired = true;
   } else {
     img_size = size();
@@ -99,7 +99,7 @@ ImageCanvas::ImageCanvas(QWidget *parent,
 
   createContextMenu();
   update_scaled_pixmap();
-  
+
   // timer-Start and stop
   connect( this, SIGNAL( newRect()), SLOT( newRectSlot()));
   connect( this, SIGNAL( noRect()),  SLOT( noRectSlot()));
@@ -116,8 +116,8 @@ ImageCanvas::ImageCanvas(QWidget *parent,
 
 ImageCanvas::~ImageCanvas()
 {
-    if( selected )    delete selected;
-    if( pmScaled )    delete pmScaled;
+    delete selected;
+    delete pmScaled;
     // if( contextMenu ) delete contextMenu;
     noRectSlot();  /* Switches timer off */
  	
@@ -139,7 +139,7 @@ void ImageCanvas::newImage( QImage *new_image )
    {
       kdDebug(29000) << "newImage: Got Empty image !" << endl;
    }
-   
+
    if( pmScaled )
    {
       delete pmScaled;
@@ -299,7 +299,7 @@ QRect ImageCanvas::sel( void )
 {
     QRect retval;
 	
-    if( selected )
+    if( selected && image )
     {
 	/* Get the size in real image pixels */
 		
@@ -321,14 +321,14 @@ QRect ImageCanvas::sel( void )
      }   	
    	// debug_rect( "sel() return", &retval );
      return( retval );
-   
+
 }
 
 bool ImageCanvas::selectedImage( QImage *retImg )
 {
    QRect r = sel();
    bool  result  = false;
-   
+
    const QImage* entireImg = this->rootImage();
 
    if( entireImg )
@@ -346,7 +346,7 @@ bool ImageCanvas::selectedImage( QImage *retImg )
       }
    }
    return(result);
-   
+
 }
 
 
@@ -390,25 +390,28 @@ void ImageCanvas::newRectSlot( QRect newSel )
 {
    if( ! selected ) selected = new QRect;
    QRect to_map;
-
    QPainter p(viewport());
    drawAreaBorder(&p,TRUE);
 
    selected->setWidth(0);
    selected->setHeight(0);
    emit( noRect() );
-   int h = image->width();
-   kdDebug(29000) << "ImageCanvas got selection Rect: W=" << newSel.width() << ", H=" << newSel.height() << endl;
-   to_map.setWidth(h * newSel.width() / 1000.0);
-   to_map.setX( h * newSel.x() / 1000.0 );
 
-   h = image->height();
-   to_map.setHeight( h * newSel.height() / 1000.0 );
-   to_map.setY( h * newSel.y() / 1000.0 );
+   if ( image ) 
+   {
+       int h = image->width();
+       //kdDebug(29000) << "ImageCanvas got selection Rect: W=" << newSel.width() << ", H=" << newSel.height() << endl;
+       to_map.setWidth(h * newSel.width() / 1000.0);
+       to_map.setX( h * newSel.x() / 1000.0 );
 
-   *selected = scale_matrix.map( to_map );
-   emit( newRect( sel() ));
-   newRectSlot();
+       h = image->height();
+       to_map.setHeight( h * newSel.height() / 1000.0 );
+       to_map.setY( h * newSel.y() / 1000.0 );
+
+       *selected = scale_matrix.map( to_map );
+       emit( newRect( sel() ));
+       newRectSlot();
+   }
 }
 
 
@@ -448,7 +451,7 @@ void ImageCanvas::viewportMousePressEvent(QMouseEvent *ev)
 		QPainter p( viewport());
 		drawAreaBorder(&p,TRUE);
 		moving = classifyPoint( x+cx ,y+cy);
-    
+
 		if(moving == MOVE_NONE)
 		{ //Create new area
 	   	    selected->setCoords( x+cx, y+cy, x+cx, y+cy );
@@ -482,18 +485,18 @@ void ImageCanvas::viewportMouseReleaseEvent(QMouseEvent *ev)
        emit noRect();
        return;
     }
-    
+
     drawAreaBorder(&p);
     emit newRect( sel() );
     emit newRect( );
   } else printf("mousePressEvent() missed\n");
-}      
+}
 
 
 void ImageCanvas::viewportMouseMoveEvent(QMouseEvent *ev)
 {
    if( ! acquired || !image) return;
-   
+
    static cursor_type ps = HREN;
    int x = ev->x(), y = ev->y();
    int cx = contentsX(), cy = contentsY();
@@ -660,15 +663,15 @@ void ImageCanvas::update_scaled_pixmap( void )
   // reconvert the selection to orig size
   if( selected ) {
      *selected = inv_scale_matrix.map( (const QRect) *selected );
-  }  
+  }
 
   scale_matrix.reset();                         // transformation matrix
   inv_scale_matrix.reset();
 
-  
+
   if( !scale && maintain_aspect  ) {
      // printf( "Skaler: x: %f, y: %f\n", x_scaler, y_scaler );
-     used_xscaler = used_yscaler <  used_xscaler ? 
+     used_xscaler = used_yscaler <  used_xscaler ?
 		used_yscaler : used_xscaler;
      used_yscaler = used_xscaler;
   }
@@ -685,7 +688,7 @@ void ImageCanvas::update_scaled_pixmap( void )
 #else
   pmScaled->convertFromImage( *image );
 #endif
-  
+
   *pmScaled = pmScaled->xForm( scale_matrix );  // create scaled pixmap
 
   /* Resizing to 0,0 never may be dropped, otherwise there are problems
@@ -752,11 +755,11 @@ void ImageCanvas::drawVAreaBorder(QPainter &p, int x, int y1, int y2, int r )
 
   if( !r ) {
     if( cr2 & 4 ) p.setPen(black);
-    else 
+    else
       p.setPen(white);
-  } else 
+  } else
     if( !acquired ) p.setPen( QPen( QColor(150,150,150) ) );
-  
+
   for(;;) {
     if(rect().contains( QPoint(x,y1) )) {
       if( r && acquired ) {

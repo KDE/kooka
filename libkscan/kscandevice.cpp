@@ -27,6 +27,7 @@
 #include "kscanslider.h"
 #include "kscanoption.h"
 #include "kscanoptset.h"
+#include "devselector.h"
 
 #define MIN_PREVIEW_DPI 20
 
@@ -49,7 +50,7 @@ KScanOptSet gammaTables("GammaTables");
 void KScanDevice::guiSetEnabled( const QCString& name, bool state )
 {
     KScanOption *so = getExistingGuiElement( name );
-    
+
     if( so )
     {
 	QWidget *w = so->widget();
@@ -69,7 +70,7 @@ KScanOption *KScanDevice::getExistingGuiElement( const QCString& name )
 
     QCString alias = aliasName( name );
     ret = gui_elem_names[ alias ];
-    
+
     return( ret );
 }
 /* ---------------------------------------------------------------------------
@@ -85,7 +86,7 @@ KScanOption *KScanDevice::getGuiElement( const QCString& name, QWidget *parent,
    KScanOption *so = 0;
 
    QCString alias = aliasName( name );
-   
+
    /* Check if already exists */
    so = getExistingGuiElement( name );
 
@@ -144,9 +145,9 @@ KScanDevice::KScanDevice( QObject *parent )
     pixel_x = 0;
     pixel_y = 0;
     scanner_name = 0L;
-       
+
     KConfig *konf = KGlobal::config ();
-    konf->setGroup( "Startup" );
+    konf->setGroup( GROUP_STARTUP );
     bool netaccess = konf->readBoolEntry( "QueryLocalOnly", false );
     kdDebug(29000) << "Query for network scanners " << (netaccess ? "Not enabled" : "Enabled") << endl;
     if( sane_stat == SANE_STATUS_GOOD )
@@ -229,7 +230,7 @@ QString KScanDevice::getScannerName(const QCString& name) const
 {
   QString ret = i18n("No scanner selected");
   SANE_Device *scanner = 0L;
-  
+
   if( scanner_name && scanner_initialised && name.isEmpty())
   {
      scanner = scannerDevices[ scanner_name ];
@@ -372,7 +373,7 @@ KScanStat KScanDevice::apply( KScanOption *opt, bool isGammaTable )
    KScanStat   stat = KSCAN_OK;
    if( !opt ) return( KSCAN_ERR_PARAM );
    int sane_result = 0;
-   
+
    int         *num = option_dic[ opt->getName() ];
    SANE_Status sane_stat = SANE_STATUS_GOOD;
    const QCString& oname = opt->getName();
@@ -474,7 +475,7 @@ bool KScanDevice::optionExists( const QCString& name )
 {
    if( name.isEmpty() ) return false;
    int *i = 0L;
-   
+
    QCString altname = aliasName( name );
 
    if( ! altname.isNull() )
@@ -494,10 +495,10 @@ QCString KScanDevice::aliasName( const QCString& name )
 {
     int *i = option_dic[ name ];
     QCString ret;
-    
+
     if( i ) return( name );
     ret = name;
-    
+
     if( name == SANE_NAME_CUSTOM_GAMMA )
     {
 	if(option_dic["gamma-correction"])
@@ -507,7 +508,7 @@ QCString KScanDevice::aliasName( const QCString& name )
 
     if( ret != name )
 	kdDebug( 29000) << "Found alias for <" << name << "> which is <" << ret << ">" << endl;
-    
+
     return( ret );
 }
 
@@ -1245,14 +1246,14 @@ void KScanDevice::slSaveScanConfigSet( const QString& setName, const QString& de
    if( setName.isEmpty() || setName.isNull()) return;
 
    KScanOptSet optSet( "saveSet" );
-   
+
    for( KScanOption *so = gui_elements.first(); so; so = gui_elements.next())
    {
       kdDebug(29000) << "Storing <" << so->getName() << ">" << endl;
       optSet.backupOption( *so );
    }
    optSet.saveConfig( "default" , setName, descr );
-   
+
 }
 
 
