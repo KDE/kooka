@@ -763,7 +763,48 @@ void ScanPackager::slShowContextMenue(QListViewItem *lvi, const QPoint &p, int c
 
 void ScanPackager::slotExportFile( )
 {
+   KFileTreeViewItem *curr = currentKFileTreeViewItem();
+   if( ! curr ) return;
+   
+   if( curr->isDir() )
+   {
+      kdDebug(28000) << "Not yet implemented!" << endl;
+   }
+   else
+   {
+      KURL fromUrl( curr->url());
+      QString filter = "*." + getImgFormat(curr);
+      QString initial = curr_copy_dir.absPath() + "/";
+      initial += fromUrl.filename(false);
+      KURL fileName = KFileDialog::getSaveURL ( initial,
+                                                filter,
+                                                this, "COPY_SAVE_DIA" );
 
+      if ( fileName.isValid() )                  // got a file name
+      {
+         /* remember the filename for the next export */
+         curr_copy_dir = fileName.path( );
+	 
+         if( fromUrl == fileName ) return;
+         copyjob = KIO::copy( curr->url(), fileName, false );
+         if( copyjob )
+         {
+	    
+             storeJob( copyjob, curr, JobDescription::ExportJob );
+
+            connect( copyjob, SIGNAL(result(KIO::Job*)),
+                     this, SLOT(slotExportFinished( KIO::Job* )));
+         }
+
+      }
+   }
+
+}
+
+void ScanPackager::storeJob( KIO::Job *job, KFileTreeViewItem *item, JobDescription::JobType jType )
+{
+   JobDescription newJob ( job, item, jType );
+   jobMap.insert( job, newJob );
 }
 
 void ScanPackager::slotExportFinished( KIO::Job *job )
