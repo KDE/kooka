@@ -22,7 +22,7 @@ KookaView::KookaView(QWidget *parent)
 {
 
    /* Another splitter for splitting the Packager Tree from the Scan Parameter */
-   ocrFabric = 0;
+   ocrFabric = 0L;
    
    QSplitter *left_splitter = new QSplitter( QSplitter::Vertical, this );
    setOpaqueResize( false );
@@ -42,7 +42,7 @@ KookaView::KookaView(QWidget *parent)
    packager = new ScanPackager( tabw );
   	
    /* Image Canvas for the preview image, same object as the large image canvas */
-   preview_img = 0;
+   preview_img = 0L;
    preview_canvas = new Previewer( tabw );
    {
       preview_canvas->setMinimumSize( 100,100);
@@ -247,19 +247,26 @@ bool KookaView::ToggleVisibility( int item )
 }
 
 
+/* Does OCR on the entire picture */
 void KookaView::doOCR( void )
 {
-#ifdef HAVE_LIBPGM2ASC
-   KSANEOCR ocr( img_canvas->rootImage());
-#endif
    const QImage *img = img_canvas->rootImage();
 
    if( img && ! img->isNull() )
    {
-      ocrFabric = new KSANEOCR( img );
-      ocrFabric->startExternOcr();
+      if( ocrFabric == 0L )
+	 ocrFabric = new KSANEOCR(this );
+
+      CHECK_PTR( ocrFabric );
+      ocrFabric->setImage( img );
+
+      if( !ocrFabric->startExternOcrVisible() )
+      {
+	 KMessageBox::error(0, I18N("Could not start OCR-Process,\n"
+				    "Probably there is already one running." ));
+	 
+      }
    }
-   
 }
 
 
