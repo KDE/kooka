@@ -49,7 +49,12 @@ void KSANEOCR::setImage( const QImage *img )
 {
    if( ! img ) return;
     // create temporar name for the saved file
-    tmpFile = QString( tmpnam( 0L ));
+
+   ktmpFile = new KTempFile();
+   ktmpFile->setAutoDelete( false );
+   ktmpFile->close();
+   tmpFile = ktmpFile->name();
+   
     debug( "save the image to %s", (const char*) tmpFile );
 
     // converting the incoming image
@@ -187,7 +192,11 @@ void KSANEOCR::cleanUpFiles( void )
    if( ! tmpFile.isEmpty())
    {
       debug("Unlinking file to OCR!");
-      unlink( (const char*) tmpFile );
+      if( ktmpFile ) {
+	 ktmpFile->unlink();
+	 delete ktmpFile;
+	 ktmpFile = 0L;
+      }
       tmpFile = "";
    }
 
