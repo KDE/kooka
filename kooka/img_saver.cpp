@@ -882,8 +882,8 @@ bool ImgSaver::copyImage( const KURL& fromUrl, const KURL& toUrl, QWidget *overW
        {
 	   KMessageBox::error( overWidget, i18n("Format changes of images are currently not supported."),
 			       i18n("Wrong Extension Found" ));
+	   return(false);
        }
-      return(false);
    }
 
    KIO::Job *copyjob = KIO::copy( fromUrl, targetUrl, false );
