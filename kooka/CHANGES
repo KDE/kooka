@@ -11,3 +11,27 @@ there could be some interesting screen hots around.
 OCR works best with smaller parts of text scanned black-and-white 
 scanned with about 150 dpi.
  
+-> Released version 0.2 on kde.org
+
+- December 2000, Klaas Freitag <freitag@suse.de>:
+
+* Reworked the ocr integration: Nice start- and finish-dialog,
+  animated status image, opening a text editor with the result text
+  via mime mechanism of KDE (KRun). OCR-Parameter get stored via KConfig.
+  OCR may be performed on the entire image or the selection.
+
+* Reworked the save assistant: New layout and fully KDE2-Compliant.
+  Still no new Image format help texts.
+
+* Reworked the startup dialog: Allows to select the scan device from a
+  list of available devices, possible to set the startup scan device
+  'forever'.
+
+* Resizing of the scan parameters. The scan parameters shell should
+  take as much as space as it needs. It is not longer fix sized now.
+
+* Mirroring in three kinds of the displayed image with toolbar and menubar
+  entries. That needed that the packager is able to handle changes on already
+  saved images.
+
+* Creation of new images from the selection on the image canvas.
