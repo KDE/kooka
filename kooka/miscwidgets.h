@@ -41,7 +41,7 @@
 #include <kdialogbase.h>
 #include <qpushbutton.h>
 #include <qbuttongroup.h>
-
+#include <qhbox.h>
 
 class ImageHistogram: public QFrame {
 	Q_OBJECT
@@ -108,6 +108,37 @@ private:
 	QLineEdit *entry;
 };
 
+
+/**
+ *
+ */
+
+class KURL;
+class KURLComboBox;
+class QPushButton;
+class QStringList;
+
+class ImageSelectLine:public QHBox
+{
+   Q_OBJECT
+public:
+   ImageSelectLine( QWidget *parent, const QString& text );
+
+   KURL selectedURL() const;
+   void setURL( const KURL& );
+   void setURLs( const QStringList& );
+   
+protected slots:
+   void slSelectFile();
+   void slUrlActivated( const KURL& );
+   
+private:
+
+   KURL m_currUrl;
+   KURLComboBox *m_urlCombo;
+   QPushButton  *m_buttFileSelect;
+   
+};
 
 
 #endif
