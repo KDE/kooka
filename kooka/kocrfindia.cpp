@@ -123,3 +123,4 @@ void KOCRFinalDialog::writeConfig( void )
 
 
 /* The End ;) */
+#include "kocrfindia.moc"

@@ -147,3 +147,4 @@ void KOCRStartDialog::disableFields( void )
 }
 
 /* The End ;) */
+#include "kocrstartdia.moc"

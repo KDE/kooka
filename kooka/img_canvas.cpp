@@ -839,3 +839,4 @@ preview_state ImageCanvas::classifyPoint(int x,int y)
 
 
 
+#include "img_canvas.moc"

@@ -601,3 +601,4 @@ QString ImgSaver::errorString( ImgSaveStat stat )
 
 }
 
+#include "img_saver.moc"

@@ -208,3 +208,4 @@ void ImgScaleDialog::setSelValue( int val )
    // debug( "SetValue: Selected Scale is %d", selected );
 }
 
+#include "miscwidgets.moc"

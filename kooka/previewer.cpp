@@ -295,3 +295,4 @@ QPoint Previewer::calcPercent( int w_mm, int h_mm )
  	return( p );
 
 }
+#include "previewer.moc"

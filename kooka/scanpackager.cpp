@@ -602,3 +602,4 @@ QString ScanPackager::getImgName( QString name_on_disk )
 /* ----------------------------------------------------------------------- */
 ScanPackager::~ScanPackager(){
 }
+#include "scanpackager.moc"

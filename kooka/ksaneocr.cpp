@@ -221,3 +221,4 @@ void KSANEOCR::msgRcvd(KProcess*, char* buffer, int buflen)
 }
 
 /* -- */
+#include "ksaneocr.moc"
