@@ -1,9 +1,9 @@
 /**************************************************************************
 			kooka.h  -  Main program class
-                             -------------------                                         
-    begin                : Sun Jan 16 2000                                           
-    copyright            : (C) 2000 by Klaas Freitag                         
-    email                : freitag@suse.de          
+                             -------------------
+    begin                : Sun Jan 16 2000
+    copyright            : (C) 2000 by Klaas Freitag
+    email                : freitag@suse.de
  ***************************************************************************/
 
 /***************************************************************************
@@ -11,7 +11,7 @@
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
  *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   * 
+ *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
 #ifndef KOOKA_H
@@ -19,11 +19,12 @@
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
-#endif 
+#endif
 
 #include <kapplication.h>
 #include <kmainwindow.h>
 #include <kdockwidget.h>
+#include <kparts/dockmainwindow.h>
 
 #define KOOKA_STATE_GROUP "State"
 #define PREFERENCE_DIA_TAB "PreferencesTab"
@@ -41,7 +42,7 @@ class KookaView;
  * @author Klaas Freitag <freitag@suse.de>
  * @version 0.1
  */
-class Kooka : public KDockMainWindow
+class Kooka : public KParts::DockMainWindow
 {
     Q_OBJECT
 public:
@@ -60,7 +61,7 @@ public:
     **/
    void startup( void );
 
-    
+
 protected:
     /**
      * Overridden virtuals for Qt drag 'n drop (XDND)
@@ -83,9 +84,12 @@ protected:
 
 
 private slots:
+
+    void createMyGUI( KParts::Part* );
+
    void filePrint();
    /* ImageViewer-Actions */
-   
+
    void optionsShowToolbar();
    void optionsShowStatusbar();
    void optionsShowScanParams();
@@ -109,7 +113,7 @@ private slots:
    void slRotate180( void );
 
    void slEnableWarnings();
-   
+
 private:
    void setupAccel();
    void setupActions();

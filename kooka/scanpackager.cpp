@@ -22,6 +22,7 @@
 #include "resource.h"
 #include "img_saver.h"
 #include "kookaimage.h"
+#include "kookaimagemeta.h"
 #include "previewer.h"
 #include "devselector.h"
 
@@ -90,17 +91,17 @@ ScanPackager::ScanPackager( QWidget *parent ) : KFileTreeView( parent )
    setRenameable ( 3, false );
 
    setRootIsDecorated( false );
-	
+
    connect( this, SIGNAL( selectionChanged( QListViewItem*)),
 	    SLOT( slSelectionChanged(QListViewItem*)));
 
    connect( this, SIGNAL( rightButtonPressed( QListViewItem *, const QPoint &, int )),
 	    SLOT( slShowContextMenue(QListViewItem *, const QPoint &, int )));
-	
+
    connect( this, SIGNAL(itemRenamed (QListViewItem*, const QString &, int ) ), this,
 	    SLOT(slFileRename( QListViewItem*, const QString&, int)));
 
-	
+
    img_counter = 1;
    /* Set the current export dir to home */
    m_currCopyDir = QDir::home().absPath();
@@ -113,7 +114,7 @@ ScanPackager::ScanPackager( QWidget *parent ) : KFileTreeView( parent )
    m_colorPixmap  = loader->loadIcon( "palette_color", KIcon::Small );
 
    m_startup = true;
-   
+
    /* create a context menu and set the title */
    m_contextMenu = new KPopupMenu();
    static_cast<KPopupMenu*>(m_contextMenu)->insertTitle( i18n( "Gallery" ));
@@ -140,19 +141,19 @@ KFileTreeBranch* ScanPackager::openRoot( const KURL& root, bool  )
    m_defaultBranch = addBranch( root, i18n("Kooka Gallery"),
 				loader->loadIcon( "folder_image", KIcon::Small ),
 				false /* do not showHidden */ );
-   
+
    // Q_CHECK_PTR( m_defaultBranch );
    m_defaultBranch->setOpenPixmap( loader->loadIcon( "folder_blue_open", KIcon::Small ));
-   
+
    setDirOnlyMode( m_defaultBranch, false );
    m_defaultBranch->setShowExtensions( true ); // false );
-   
+
    connect( m_defaultBranch, SIGNAL( newTreeViewItems( KFileTreeBranch*, const KFileTreeViewItemList& )),
 	    this, SLOT( slotDecorate(KFileTreeBranch*, const KFileTreeViewItemList& )));
 
    connect( m_defaultBranch, SIGNAL( directoryChildCount( KFileTreeViewItem* , int )),
 	    this, SLOT( slotDirCount( KFileTreeViewItem *, int )));
-   
+
    connect( m_defaultBranch, SIGNAL( deleteItem( KFileItem* )),
 	    this, SLOT( slotDeleteFromBranch(KFileItem*)));
 
@@ -206,12 +207,12 @@ void ScanPackager::slotDecorate( KFileTreeViewItem* item )
       KFileItem *kfi = item->fileItem();
 
       KookaImage *img = 0L;
-      
+
       if( kfi )
       {
 	 img = static_cast<KookaImage*>(kfi->extraData( this ));
       }
-      
+
       if( img )
       {
 
@@ -232,7 +233,7 @@ void ScanPackager::slotDecorate( KFileTreeViewItem* item )
 	       item->setPixmap( 0, m_colorPixmap );
 	    }
 	 }
-	 
+
 	 /* set image size in pixels */
 	 QString t = i18n( "%1 x %2" ).arg( img->width()).arg(img->height());
 	 item->setText( 1, t );
@@ -293,7 +294,7 @@ void ScanPackager::slFileRename( QListViewItem* it, const QString& newStr, int )
 
    if( newStr.isEmpty() )
       success = false;
-   
+
    KFileTreeViewItem *item = static_cast<KFileTreeViewItem*>(it);
 
    /* Free memory and imform everybody who is interested. */
@@ -320,11 +321,11 @@ void ScanPackager::slFileRename( QListViewItem* it, const QString& newStr, int )
 
 	 kdDebug(28000) << "Renaming to " << urlTo.prettyURL() <<
 	    " from " << urlFrom.prettyURL() << endl;
-   
+
 	 /* to urlTo the really used filename is written */
 	 setSelected( item, false );
 	 if( ImgSaver::renameImage( urlFrom, urlTo, false, this ) )
-	 {      
+	 {
 	    kdDebug(28000) << "renaming OK" << endl;
 	    success=true;
 	 }
@@ -336,14 +337,14 @@ void ScanPackager::slFileRename( QListViewItem* it, const QString& newStr, int )
    }
 
    if( ! success )
-   {      
+   {
       kdDebug(28000) << "renaming failed" << endl;
       /* restore the name */
       item->setText(0, urlFrom.fileName() );
       setSelected( item, true );
 
    }
-      
+
 }
 
 
@@ -366,7 +367,7 @@ QString ScanPackager::buildNewFilename( QString cmplFilename, QString currFormat
    QString ext = "";
 
    kdDebug(28000) << "Filename wanted: "<< cmplFilename << " <"<<newExt<<"> <" << nowExt<<">" <<endl;
-   
+
    if( newExt == "" )
    {
       /* ok, fine -> return the currFormat-Extension */
@@ -396,11 +397,11 @@ QString ScanPackager::itemDirectory( const KFileTreeViewItem* item, bool relativ
    if( ! item )
    {
       kdDebug(28000) << "ERR: itemDirectory without item" << endl;
-      
+
    }
 
    QString relativUrl= (item->url()).prettyURL();
-   
+
    if( ! item->isDir() )
    {
       // Cut off the filename in case it is not a dir
@@ -412,7 +413,7 @@ QString ScanPackager::itemDirectory( const KFileTreeViewItem* item, bool relativ
       if( ! relativUrl.endsWith( "/" ) )
 	 relativUrl.append( "/" );
    }
-      
+
    if( relativ )
    {
       KFileTreeBranch *branch = item->branch();
@@ -420,7 +421,7 @@ QString ScanPackager::itemDirectory( const KFileTreeViewItem* item, bool relativ
       {
 	 kdDebug(28000) << "Relativ URL of the file " << relativUrl << endl;
 	 QString rootUrl = (branch->rootUrl()).prettyURL();  // directory of branch root
-      
+
 	 if( relativUrl.startsWith( rootUrl ))
 	 {
 	    relativUrl.remove( 0, rootUrl.length() );
@@ -442,7 +443,7 @@ QString ScanPackager::itemDirectory( const KFileTreeViewItem* item, bool relativ
  * from the data, find out which KFileTreeViewITem is associated with it and
  * call slSelectionChanged with it.
  */
- 
+
 void ScanPackager::slotSelectDirectory( const QString & dirString )
 {
    kdDebug(28000) << "Trying to decode directory string " << dirString << endl;
@@ -455,13 +456,13 @@ void ScanPackager::slotSelectDirectory( const QString & dirString )
       /* Splitting up the string coming in */
       QString branchName = dirString.left( pos );
       QString relPath( dirString );
-      
+
       relPath = relPath.remove( 0, pos + searchFor.length());
 
       kdDebug(28000) << "Splitted up to branch <" << branchName << "> and <" << relPath << endl;
-      
+
       KFileTreeViewItem *kfi = findItem( branchName, relPath );
-      
+
       if( kfi )
       {
 	 kdDebug(28000) << "got a new item to select !" << endl;
@@ -499,7 +500,7 @@ void ScanPackager::slSelectionChanged( QListViewItem *newItem )
 
       /* emit a signal indicating the new directory if there is a new one */
       QString wholeDir = itemDirectory( item, false ); /* not relativ to root */
-      
+
       if( currSelectedDir != wholeDir )
       {
 	 currSelectedDir = wholeDir;
@@ -530,13 +531,13 @@ void ScanPackager::slSelectionChanged( QListViewItem *newItem )
 
 void ScanPackager::loadImageForItem( KFileTreeViewItem *item )
 {
-   
+
    if( ! item ) return;
    bool result = true;
-   
+
    KFileItem *kfi = item->fileItem();
    if( ! kfi ) return;
-   
+
    KookaImage *img = static_cast<KookaImage*>( kfi->extraData(this));
 
    if( img )
@@ -552,8 +553,8 @@ void ScanPackager::loadImageForItem( KFileTreeViewItem *item )
        * them.
        */
       KURL url = item->url();
-   
-      img = new KookaImage( ); 
+
+      img = new KookaImage( );
       if( !img || !img->loadFromUrl( url ) )
       {
 	 kdDebug(28000) << "Loading KookaImage from File failed!" << endl;
@@ -586,14 +587,14 @@ void ScanPackager::loadImageForItem( KFileTreeViewItem *item )
 	       subImgItem->setPixmap( 0, loader->loadIcon( "editcopy", KIcon::Small ));
 	       subImgItem->setText( 0, i18n("Sub-image %1").arg( i ) );
 	       KookaImage  *subImgImg = new KookaImage( i, img );
-	    
+
 	       newKfi->setExtraData( (void*) this, (void*) subImgImg );
 	    }
 	 }
       }
    }
 
-   
+
    if( result && img )
    {
       if( img->isSubImage() )
@@ -630,12 +631,27 @@ void ScanPackager::slImageArrived( KFileTreeViewItem *item, KookaImage* image )
    }
 }
 
+KookaImage* ScanPackager::getCurrImage()
+{
+    KFileTreeViewItem *curr = currentKFileTreeViewItem();
+    KookaImage *img = 0L;
+
+    if( curr )
+    {
+        KFileItem *kfi = curr->fileItem();
+        if( kfi )
+        {
+          img = static_cast<KookaImage*>(kfi->extraData( this ));
+        }
+    }
+    return(img);
+}
 
 
 QString ScanPackager::getCurrImageFileName( bool withPath = true ) const
 {
    QString result = "";
-   
+
    KFileTreeViewItem *curr = currentKFileTreeViewItem();
    if( ! curr )
    {
@@ -658,24 +674,24 @@ QString ScanPackager::getCurrImageFileName( bool withPath = true ) const
 }
 
 /* ----------------------------------------------------------------------- */
-QCString ScanPackager::getImgFormat( KFileTreeViewItem* item ) const 
+QCString ScanPackager::getImgFormat( KFileTreeViewItem* item ) const
 {
 
    QCString cstr;
-   
+
    if( !item ) return( cstr );
 #if 0
    KFileItem *kfi = item->fileItem();
-   
+
    QString mime = kfi->mimetype();
 #endif
-   
+
    // TODO find the real extension for use with the filename !
    // temporarely:
    QString f = localFileName( item );
 
    return( QImage::imageFormat( f ));
-   
+
 }
 
 QString ScanPackager::localFileName( KFileTreeViewItem *it ) const
@@ -706,10 +722,10 @@ void ScanPackager::slotCurrentImageChanged( QImage *img )
 
    /* Do not save directories */
    if( curr->isDir() ) return;
-   
+
    /* unload image and free memory */
    slotUnloadItem( curr );
-   
+
    const QString filename = localFileName( curr );
    const QCString format = getImgFormat( curr );
    ImgSaver saver( this );
@@ -752,7 +768,7 @@ void ScanPackager::slotCurrentImageChanged( QImage *img )
 /* This slot takes a new scanned Picture and saves it.
  * It urgently needs to make a deep copy of the image !
  */
-void ScanPackager::slAddImage( QImage *img )
+void ScanPackager::slAddImage( QImage *img, KookaImageMeta* meta )
 {
    ImgSaveStat is_stat = ISS_OK;
    /* Save the image with the help of the ImgSaver */
@@ -765,7 +781,7 @@ void ScanPackager::slAddImage( QImage *img )
    if( ! curr )
    {
       KFileTreeBranch *b = branches().at(0); /* There should be at least one */
-      
+
       if( b )
       {
 	 curr = findItem( b, i18n( "Incoming/" ) );
@@ -779,7 +795,7 @@ void ScanPackager::slAddImage( QImage *img )
    }
 
    /* find the directory above the current one */
-   
+
    KURL dir(itemDirectory( curr ));
 
    /* Path of curr sel item */
@@ -809,23 +825,23 @@ void ScanPackager::slAddImage( QImage *img )
 
    /* Add the new image to the list of new images */
    KURL lurl = img_saver.lastFileUrl();
-   
+
    KFileTreeBranchList branchlist = branches();
    KFileTreeBranch *kookaBranch = branchlist.at(0);
 
    QString strdir = itemDirectory(curr);
    if(strdir.endsWith(QString("/"))) strdir.truncate( strdir.length() - 1 );
    kdDebug(28000) << "Updating directory with " << strdir << endl;
-   
+
    if( kookaBranch ) kookaBranch->updateDirectory( KURL(strdir) );
    slotSetNextUrlToSelect( lurl );
-   
+
    QString s;
    /* Count amount of children of the father */
    QListViewItem *paps = curr->parent();
    if( curr->isDir() ) /* take only father if the is no directory */
       paps = curr;
-   
+
    if( paps )
    {
       int childcount = paps->childCount();
@@ -872,8 +888,8 @@ KFileTreeViewItem *ScanPackager::spFindItem( SearchType type, const QString name
    {
       branchList = branches();
    }
- 
-   
+
+
    KFileTreeBranchIterator it( branchList );
    KFileItem *kfi = 0L;
    KFileTreeViewItem *foundItem = 0L;
@@ -896,12 +912,12 @@ KFileTreeViewItem *ScanPackager::spFindItem( SearchType type, const QString name
 	 case UrlSearch:
 	    kdDebug(28000) << "ScanPackager: URL search for " << name << endl;
 	    kfi = branchloop->find( url );
-	    break;	
+	    break;
       default:
 	 kdDebug(28000) << "Scanpackager: Wrong search type !" << endl;
 	 break;
       }
-	 
+
    }
    if( kfi )
    {
@@ -940,7 +956,7 @@ void ScanPackager::slotExportFile( )
 {
    KFileTreeViewItem *curr = currentKFileTreeViewItem();
    if( ! curr ) return;
-   
+
    if( curr->isDir() )
    {
       kdDebug(28000) << "Not yet implemented!" << endl;
@@ -950,7 +966,7 @@ void ScanPackager::slotExportFile( )
       KURL fromUrl( curr->url());
       QString filter = "*." + getImgFormat(curr).lower();
       filter += "\n*|" + i18n( "All Files" );
-      
+
       // initial += fromUrl.filename(false);
       QString initial = m_currCopyDir + "/";
       initial += fromUrl.filename(false);
@@ -963,7 +979,7 @@ void ScanPackager::slotExportFile( )
 
 	 /* Since it is asynchron, we will never get if it succeeded. */
 	 ImgSaver::exportImage( fromUrl, fileName );
-	 
+
          /* remember the filename for the next export */
 	 fileName.setFileName( QString());
 	 m_currCopyDir = fileName.url( );
@@ -1016,7 +1032,7 @@ void ScanPackager::slotUnloadItems( )
 void ScanPackager::slotUnloadItem( KFileTreeViewItem *curr )
 {
    if( ! curr ) return;
-   
+
    if( curr->isDir())
    {
       KFileTreeViewItem *child = static_cast<KFileTreeViewItem*>(curr->firstChild());
@@ -1038,7 +1054,7 @@ void ScanPackager::slotUnloadItem( KFileTreeViewItem *curr )
 	 if( image->subImagesCount() > 0 )
 	 {
 	    KFileTreeViewItem *child = static_cast<KFileTreeViewItem*>(curr->firstChild());
-	 
+
 	    while( child )
 	    {
 	       KFileTreeViewItem *nextChild = 0;
@@ -1049,7 +1065,7 @@ void ScanPackager::slotUnloadItem( KFileTreeViewItem *curr )
 	       child = nextChild;
 	    }
 	 }
-      
+
 	 emit( unloadImage( image ));
 	 delete image;
 	 kfi->removeExtraData( this );
@@ -1066,12 +1082,12 @@ void ScanPackager::slotDeleteItems( )
 
    KURL urlToDel = curr->url();
    QListViewItem *nextToSelect = curr->nextSibling();
-   
+
    kdDebug(28000) << "Deleting: " << urlToDel.prettyURL() << endl;
    bool ask = true; /* for later use */
 
    int result = KMessageBox::Yes;
-   
+
    KFileItem *item = curr->fileItem();
    if( ask )
    {
@@ -1099,11 +1115,11 @@ void ScanPackager::slotDeleteItems( )
 	    /* The directory needs to be removed from the name combo */
 	    emit(directoryToRemove( curr->branch(), itemDirectory( curr, true ) ));
 	 }
-	 
+
       }
       else
 	 kdDebug(28000) << "Deleting files failed" << endl;
-	 
+
    }
 }
 
@@ -1161,7 +1177,7 @@ QString ScanPackager::getImgName( QString name_on_disk )
    (void) name_on_disk;
 
    s = i18n("image %1").arg(img_counter++);
-   return( s );     	
+   return( s );
 }
 
 /* ----------------------------------------------------------------------- */

@@ -1,8 +1,8 @@
 /***************************************************************************
-                          scanpackager.h  -  description                              
-                             -------------------                                         
-    begin                : Fri Dec 17 1999                                           
-    copyright            : (C) 1999 by Klaas Freitag                         
+                          scanpackager.h  -  description
+                             -------------------
+    begin                : Fri Dec 17 1999
+    copyright            : (C) 1999 by Klaas Freitag
     email                : freitag@suse.de
  ***************************************************************************/
 
@@ -11,7 +11,7 @@
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
  *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   * 
+ *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
 
@@ -39,6 +39,7 @@ class KURL;
 class QPopupMenu;
 class KFileTreeViewItem;
 class KookaImage;
+class KookaImageMeta;
 class KFileTreeBranch;
 
 
@@ -64,32 +65,33 @@ private:
 class ScanPackager : public KFileTreeView
 {
     Q_OBJECT
-public: 
+public:
     ScanPackager( QWidget *parent);
     ~ScanPackager();
     virtual QString getImgName( QString name_on_disk );
 
     QString 	getCurrImageFileName( bool ) const;
+    KookaImage* getCurrImage();
 
     KFileTreeBranch* openRoot( const KURL&, bool open=false );
 
    QPopupMenu *contextMenu() { return m_contextMenu; }
    void         openRoots();
-   
+
 public slots:
    void         slSelectImage( const KURL& );
-   void 	slAddImage( QImage *img );		
+   void 	slAddImage( QImage *img, KookaImageMeta* meta = 0 );
    void 	slSelectionChanged( QListViewItem *);
    void         slShowContextMenue(QListViewItem *, const QPoint &, int );
 
    void         slotExportFile( );
-    
+
    void         slotCanceled(KIO::Job*);
    void         slotCurrentImageChanged( QImage* );
 
    void         slotDecorate( KFileTreeViewItem* );
    void         slotDecorate( KFileTreeBranch*, const KFileTreeViewItemList& );
-   
+
    void         slotSelectDirectory( const QString& );
 
 protected:
@@ -110,29 +112,29 @@ protected slots:
    void         slotDeleteFromBranch( KFileItem* );
    void         slotStartupFinished( KFileTreeViewItem * );
 signals:
-   void 	showImage( QImage* );
-   void         deleteImage( QImage* );
-   void         unloadImage( QImage* );
+   void 	showImage  ( KookaImage* );
+   void         deleteImage( KookaImage* );
+   void         unloadImage( KookaImage* );
    void         galleryPathSelected( KFileTreeBranch* branch, const QString& relativPath );
    void         directoryToRemove( KFileTreeBranch *branch, const QString& relativPath );
    void         showThumbnails( KFileTreeViewItem* );
-   
+
    void         aboutToShowImage( const KURL& ); /* starting to load image */
    void         imageChanged( KFileItem* );     /* the image has changed  */
 
    void         fileDeleted( KFileItem* );
    void         fileChanged( KFileItem* );
-   
+
 private:
    QString     localFileName( KFileTreeViewItem* it ) const;
    void 	loadImageForItem( KFileTreeViewItem* item );
    QCString     getImgFormat( KFileTreeViewItem* item ) const;
-   
-    QString 	 buildNewFilename( QString cmplFilename, QString currFormat ) const;   
+
+    QString 	 buildNewFilename( QString cmplFilename, QString currFormat ) const;
    KFileTreeViewItem *spFindItem( SearchType type, const QString name, const KFileTreeBranch* branch = 0 );
     void         storeJob( KIO::Job*, KFileTreeViewItem *, JobDescription::JobType );
    QString       itemDirectory( const KFileTreeViewItem*, bool relativ = false ) const;
-   
+
    // int 	        readDir( QListViewItem *parent, QString dir_to_read );
     void         showContextMenu( QPoint p, bool show_folder = true );
 
@@ -141,7 +143,7 @@ private:
     KIO::Job     *copyjob;
     int          img_counter;
     QPopupMenu    *m_contextMenu;
-   
+
     QMap<KIO::Job*, JobDescription> jobMap;
 
    QPixmap       m_floppyPixmap;

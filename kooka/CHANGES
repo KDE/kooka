@@ -121,3 +121,19 @@ For Kooka 0.39:
 * added halftoning to the scanservice and thus kooka
 
 * fixed bugs in the resolving of dependencies of scanner parameters.
+
+/* ================================================================================ */
+
+For Kooka 0.40:
+
+* Added Kadmos-Check to configure.in.in
+
+* Changed the Mainwindow to be KParts-Mainwindow,neccessary for using Parts in Kooka
+
+* OCR: Code massive reorganised. More ability to use different ocr engines.
+ 
+* OCR: Preparation to use Kadmos OCR engine.
+
+* OCR: Result  not longer in a separat dialog, but in a editor part.
+
+* Scanpackager uses KookaImage more consequently. That provides meta data where needed

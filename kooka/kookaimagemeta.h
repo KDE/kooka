@@ -1,8 +1,8 @@
 /***************************************************************************
-                          kocrfindia.h  -  Dialogclass after scanning
-                             -------------------                                         
-    begin                : Sun Jun 11 2000                                           
-    copyright            : (C) 2000 by Klaas Freitag                         
+                kookaimagemeta.h  - Kooka's Image Meta Data
+                             -------------------
+    begin                : Thu Nov 20 2001
+    copyright            : (C) 1999 by Klaas Freitag
     email                : freitag@suse.de
  ***************************************************************************/
 
@@ -16,40 +16,31 @@
  ***************************************************************************/
 
 
-#ifndef KOCRFINDIA_H
-#define KOCRFINDIA_H
+#ifndef KOOKAIMAGEMETA_H
+#define KOOKAIMAGEMETA_H
 
-
-#include <qstring.h>
-#include <kdialogbase.h>
-#include <qimage.h>
-
-#include <keditcl.h>
 
 /**
-  *@author Klaas Freitag
-*/
+  * @author Klaas Freitag
+  *
+  */
 
-class KOCRFinalDialog: public KDialogBase
+
+class KookaImageMeta
 {
-   Q_OBJECT
-public: 
-   KOCRFinalDialog( QWidget *, QString );
-   ~KOCRFinalDialog();
+public:
 
-public slots:
-   void fillText( QString );
-   void openTextResult( void );
-   
-protected:
+    KookaImageMeta( );
+    ~KookaImageMeta() { ;}
 
-private slots:
-   void writeConfig( void );
-   
+    void setScanResolution( int x, int y=-1);
+    int  getScanResolutionX();
+    int  getScanResolutionY();
+
 private:
-   KEdit *textEdit;
-   QImage *resultImg;
-   QString ocrTextFile;
+    int 	m_scanResolution;
+    int         m_scanResolutionY;
+
 };
 
 #endif

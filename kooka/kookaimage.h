@@ -18,11 +18,9 @@
 
 #ifndef KOOKAIMAGE_H
 #define KOOKAIMAGE_H
-
+#include <kurl.h>
 #include <qimage.h>
 
-
-class KURL;
 
 /**
   * @author Klaas Freitag

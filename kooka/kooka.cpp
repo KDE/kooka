@@ -45,7 +45,7 @@
 #include <kedittoolbar.h>
 #include <kmessagebox.h>
 #include <kdockwidget.h>
-
+#include <kparts/partmanager.h>
 #include <kstdaccel.h>
 #include <kaction.h>
 #include <kstdaction.h>
@@ -54,45 +54,53 @@
 
 
 Kooka::Kooka( const QCString& deviceToUse)
-   : KDockMainWindow( 0, "Kooka" ),
+   : KParts::DockMainWindow( 0, "Kooka" ),
       m_printer(0),
       m_prefDialogIndex(0)
 {
-   // accept dnd
-   // m_view = new KookaView(this, deviceToUse);
+    /* Start to create the main view framework */
+    m_view = new KookaView( this, deviceToUse);
+    /* Call createGUI on the ocr-result view */
 
+    setAcceptDrops(true);
+    KConfig *konf = KGlobal::config ();
+    readDockConfig ( konf, DOCK_SIZES );
 
-   m_view = new KookaView( this, deviceToUse);
-   // setView( m_view->mainDockWidget() ); // central widget in a KDE mainwindow
-   // setMainDockWidget( m_view->mainDockWidget() );
-   setAcceptDrops(true);
-   KConfig *konf = KGlobal::config ();
-   readDockConfig ( konf, DOCK_SIZES );
+    // then, setup our actions
+    setupActions();
+    createGUI(0L);
+    KParts::PartManager *manager;
 
+    manager = new KParts::PartManager(this);
 
-   // tell the KMainWindow that this is indeed the main widget
-   // setCentralWidget(m_view->mainDockWidget());
+    manager->addPart(m_view->ocrResultPart(), false);
+    connect( manager, SIGNAL( activePartChanged(KParts::Part*)),
+             this, SLOT(createMyGUI(KParts::Part*)));
 
-   // then, setup our actions
-   setupActions();
+    createGUI(0L); // m_view->ocrResultPart());
+    // and a status bar
+    statusBar()->show();
 
-   // and a status bar
-   statusBar()->show();
+    // allow the view to change the statusbar and caption
+    connect(m_view, SIGNAL(signalChangeStatusbar(const QString&)),
+            this,   SLOT(changeStatusbar(const QString&)));
+    connect(m_view, SIGNAL(signalCleanStatusbar(void)),
+            this, SLOT(cleanStatusbar()));
+    connect(m_view, SIGNAL(signalChangeCaption(const QString&)),
+            this,   SLOT(changeCaption(const QString&)));
 
-   // allow the view to change the statusbar and caption
-   connect(m_view, SIGNAL(signalChangeStatusbar(const QString&)),
-	   this,   SLOT(changeStatusbar(const QString&)));
-   connect(m_view, SIGNAL(signalCleanStatusbar(void)),
-	   this, SLOT(cleanStatusbar()));
-   connect(m_view, SIGNAL(signalChangeCaption(const QString&)),
-	   this,   SLOT(changeCaption(const QString&)));
+    changeCaption( i18n( "KDE Scanning" ));
 
-   changeCaption( i18n( "KDE Scanning" ));
-
-   setAutoSaveSettings(  QString::fromLatin1("General Options"),
-			 true );
+    setAutoSaveSettings(  QString::fromLatin1("General Options"),
+                          true );
 }
 
+void Kooka::createMyGUI( KParts::Part *part )
+{
+    kdDebug(28000) << "Creating gui" << endl;
+    createGUI(part);
+
+}
 
 Kooka::~Kooka()
 {
@@ -227,7 +235,7 @@ void Kooka::setupActions()
 		       m_view, SLOT(slSaveScanParams()),
 		       actionCollection(), "savescanparam" );
 #endif
-    
+
     (void) new KAction(i18n("Select Scan Device"), "scanner", CTRL+Key_Q,
 		       m_view, SLOT( slSelectDevice()),
 		       actionCollection(), "selectsource" );
@@ -236,7 +244,6 @@ void Kooka::setupActions()
 			this,  SLOT(slEnableWarnings()),
 			actionCollection(), "enable_msgs");
 
-    createGUI("kookaui.rc");
 
 }
 
@@ -395,7 +402,7 @@ void Kooka::optionsConfigureToolbars()
     if (dlg.exec())
     {
         // recreate our GUI
-        createGUI( "kookaui.rc");
+        // createGUI( "kookaui.rc");
     }
 }
 
