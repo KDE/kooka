@@ -1,20 +1,23 @@
-/***************************************************************************
-                          scansourcedialog.cpp  -  description
-                             -------------------
-    begin                : Sun Jan 16 2000
-    copyright            : (C) 2000 by Klaas Freitag
-    email                : freitag@suse.de
- ***************************************************************************/
+/* This file is part of the KDE Project
+   Copyright (C) 2000 Klaas Freitag <freitag@suse.de>  
 
-/***************************************************************************
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- *                                                                         *
- ***************************************************************************/
+   This library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Library General Public
+   License as published by the Free Software Foundation; either
+   version 2 of the License, or (at your option) any later version.
 
+   This library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Library General Public License for more details.
+
+   You should have received a copy of the GNU Library General Public License
+   along with this library; see the file COPYING.LIB.  If not, write to
+   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.
+
+   $Id$
+*/
 
 #include "scansourcedialog.h"
 #include "kscanslider.h"
@@ -105,10 +108,9 @@ QString  ScanSourceDialog::getText( void ) const
 
 void ScanSourceDialog::slNotifyADF( int adf_group )
 {
-  // debug( "reported adf-select %d", adf_group );
-#ifdef __GNUC__
-#warning this seems to be broken, adf_text is a visible string?
-#endif
+   // debug( "reported adf-select %d", adf_group );
+   /* this seems to be broken, adf_text is a visible string?
+   *  needs rework if SANE 2 comes up which supports i18n */
 #if 0    
   QString adf_text = getText();
 	
@@ -157,10 +159,6 @@ int ScanSourceDialog::sourceAdfEntry( void ) const
    for( int i = 0; i < cou; i++ )
    {
       QString q = sources->text( i );
-
-#ifdef __GNUC__
-#warning same here
-#endif
 
 #if 0
       if( q == "ADF" || q == SANE_NAME_DOCUMENT_FEEDER )

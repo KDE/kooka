@@ -1,6 +1,6 @@
-/* This file is part of the KDE project
+/* This file is part of the KDE Project
    Copyright (C) 2001 Nikolas Zimmermann <wildfox@kde.org>
-   Klaas Freitag <freitag@suse.de>
+                      Klaas Freitag <freitag@suse.de>  
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
