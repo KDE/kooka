@@ -1,8 +1,8 @@
 /***************************************************************************
-                          ksaneocr.cpp  -  description                              
-                             -------------------                                         
-    begin                : Fri Jun 30 2000                                           
-    copyright            : (C) 2000 by Klaas Freitag                         
+                          ksaneocr.cpp  -  description
+                             -------------------
+    begin                : Fri Jun 30 2000
+    copyright            : (C) 2000 by Klaas Freitag
     email                : freitag@suse.de
  ***************************************************************************/
 
@@ -11,7 +11,7 @@
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
  *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   * 
+ *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
 
@@ -47,6 +47,11 @@ KSANEOCR::~KSANEOCR()
       delete( daemon );
       daemon = 0;
    }
+   if ( ktmpFile )
+   {
+       ktmpFile->setAutoDelete( true );
+       delete ktmpFile;
+   }
 }
 
 void KSANEOCR::setImage( const QImage *img )
@@ -58,7 +63,7 @@ void KSANEOCR::setImage( const QImage *img )
    ktmpFile->setAutoDelete( false );
    ktmpFile->close();
    tmpFile = ktmpFile->name();
-   
+
    kdDebug(28000) << "save the image to " << tmpFile << ", depth is " << img->depth() << endl;
 
     // converting the incoming image
@@ -69,16 +74,16 @@ void KSANEOCR::setImage( const QImage *img )
 bool KSANEOCR::startExternOcrVisible( void )
 {
    if( visibleOCRRunning ) return( false );
-   
+
    ocrProcessDia = new KOCRStartDialog ( parent );
    Q_CHECK_PTR( ocrProcessDia );
    visibleOCRRunning = true;
-   
+
    connect( ocrProcessDia, SIGNAL( user1Clicked()), this, SLOT( startOCRProcess() ));
    connect( ocrProcessDia, SIGNAL( cancelClicked()), this, SLOT( userCancel() ));
    connect( ocrProcessDia, SIGNAL( cancelClicked()),
 	    ocrProcessDia, SLOT( stopAnimation() ));
-   
+
    ocrProcessDia->show();
    ocrProcessDia->checkOCRBinary( ocrProcessDia->getOCRCmd());
    return( true );
@@ -112,11 +117,11 @@ void KSANEOCR::startOCRProcess( void )
       delete( daemon );
       daemon = 0;
    }
-   
+
    daemon = new KProcess;
    Q_CHECK_PTR(daemon);
    ocrResultText = "";
-   
+
    connect(daemon, SIGNAL(processExited(KProcess *)),
 	   this, SLOT(daemonExited(KProcess*)));
    connect(daemon, SIGNAL(receivedStdout(KProcess *, char*, int)),
@@ -137,15 +142,15 @@ void KSANEOCR::startOCRProcess( void )
    opt.setNum(ocrProcessDia->getDustsize());
    *daemon << opt;
 
-   // Write an result image 
+   // Write an result image
    *daemon << "-v";
    *daemon << "32";
 
    // Unfortunately this is fixed by gocr.
    ocrResultImage = "out30.bmp";
-   
+
    *daemon << QFile::encodeName(tmpFile);
-   
+
    if (!daemon->start(KProcess::NotifyOnExit, KProcess::All))
    {
       kdDebug(28000) <<  "Error starting daemon!" << endl;
@@ -173,7 +178,7 @@ void KSANEOCR::daemonExited(KProcess* d)
 	 delete ocrProcessDia;
 	 ocrProcessDia = 0L;
       }
-   
+
 
       /* Now ocr is finished, open the result */
       KOCRFinalDialog fin( parent, ocrResultImage );
@@ -184,10 +189,10 @@ void KSANEOCR::daemonExited(KProcess* d)
    }
 
    /* Clean up */
-   
+
    visibleOCRRunning = false;
    cleanUpFiles();
-   
+
    kdDebug(28000) << "# ocr exited #" << endl;
 }
 
@@ -230,7 +235,7 @@ void KSANEOCR::msgRcvd(KProcess*, char* buffer, int buflen)
 {
    QString aux = QString::fromLocal8Bit(buffer, buflen);
    ocrResultText += aux;
-   
+
    kdDebug(28000) << aux;
 
 }
