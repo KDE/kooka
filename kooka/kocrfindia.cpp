@@ -46,7 +46,7 @@
 
 
 KOCRFinalDialog::KOCRFinalDialog( QWidget *parent, QString resultimg )
-   :KDialogBase( parent,  "OCRFinish", true, i18n("Optical Character Recognition finished"),
+   :KDialogBase( parent,  "OCRFinish", true, i18n("Optical Character Recognition Finished"),
 		 Close|User1, Close, true, i18n("Open in Kate" ) )
 {
    kdDebug(28000) << "Finished KOCR!" << endl;
