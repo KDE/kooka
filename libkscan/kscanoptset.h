@@ -69,9 +69,37 @@ public:
    /**
     *  returns a pointer to a stored option given by name.
     */
-   KScanOption *get( const char *name ) const;
+   KScanOption *get( const QCString name ) const;
+   QCString      getValue( const QCString name ) const;
 
+   void backupOptionDict( const QAsciiDict<KScanOption>& ); 
+
+   /**
+    * saves a configuration set to the configuration file 'ScanSettings'
+    * in the default dir config (@see KDir). It uses the group given
+    * in configName and stores the entire option set in that group.
+    * additionally, a description  is also saved.
+    *
+    * @param scannerName : the name of the scanner
+    * @param configName: The name of the config, e.g. Black and White
+    * @param descr : A description for the config.
+    */
    void saveConfig( const QString&, const QString&, const QString&);
+
+   /**
+    * allows to load a configuration. Simple create a optionSet with the
+    * approbiate name the config was called ( @see saveConfig ) and call
+    * load for the scanner you want.
+    * @param scannerName: A scanner's name
+    */
+   bool load( const QString& scannerName );
+
+   QString  getDescription() const;
+   
+public slots:
+ 
+    void slSetDescription( const QString& );
+   
 private:
    QCString name;
 
@@ -80,6 +108,8 @@ private:
 
    class KScanOptSetPrivate;
    KScanOptSetPrivate *d;
+
+   QString description;
 };
 
 #endif // KScanOptSet

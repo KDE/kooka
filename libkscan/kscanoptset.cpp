@@ -20,6 +20,7 @@
 
 #include <qstring.h>
 #include <qasciidict.h>
+#include <qmap.h>
 #include <qdict.h>
 #include <kdebug.h>
 #include <kconfig.h>
@@ -28,6 +29,7 @@
 #include "kscanoption.h"
 #include "kscanoptset.h"
 
+#define SCANNER_CONFIG_FILE "ScanSettings"
 
 KScanOptSet::KScanOptSet( const QCString& setName )
 {
@@ -35,6 +37,8 @@ KScanOptSet::KScanOptSet( const QCString& setName )
 
   setAutoDelete( false );
 
+  description = "";
+  
   strayCatsList.setAutoDelete( true );
 }
 
@@ -48,7 +52,7 @@ KScanOptSet::~KScanOptSet()
 
 
 
-KScanOption *KScanOptSet::get( const char *name ) const
+KScanOption *KScanOptSet::get( const QCString name ) const
 {
   KScanOption *ret = 0;
 
@@ -56,6 +60,23 @@ KScanOption *KScanOptSet::get( const char *name ) const
 
   return( ret );
 }
+
+QCString KScanOptSet::getValue( const QCString name ) const
+{
+   KScanOption *re = get( name );
+   QCString retStr = "";
+   
+   if( re )
+   {
+      retStr = re->get();
+   }
+   else
+   {
+      kdDebug(29000) << "option " << name << " from OptionSet is not available" << endl;
+   }
+   return( retStr );
+}
+
 
 bool KScanOptSet::backupOption( const KScanOption& opt )
 {
@@ -97,31 +118,105 @@ bool KScanOptSet::backupOption( const KScanOption& opt )
 
 }
 
+QString KScanOptSet::getDescription() const
+{
+   return description;
+}
+
+void KScanOptSet::slSetDescription( const QString& str )
+{
+   description = str;
+}
+
+void KScanOptSet::backupOptionDict( const QAsciiDict<KScanOption>& optDict )
+{
+   QAsciiDictIterator<KScanOption> it( optDict );
+
+   while ( it.current() )
+   {
+      kdDebug(29000) << "Dict-Backup of Option <" << it.currentKey() << ">" << endl;
+      backupOption( *(it.current()));
+      ++it;
+   }
+
+   
+}
+
 /* */
 void KScanOptSet::saveConfig( const QString& scannerName, const QString& configName,
 			      const QString& descr )
 {
-   KConfig scanConfig( QString( "ScanSettings-" ) + scannerName );
+   QString confFile = SCANNER_CONFIG_FILE;
+   kdDebug( 29000) << "Creating scan configuration file <" << confFile << ">" << endl;
+   
+   KConfig *scanConfig = new KConfig( confFile );
    QString cfgName = configName;
    
    if( configName.isNull() || configName.isEmpty() )
       cfgName = "default";
    
-   scanConfig.setGroup( cfgName );
+   scanConfig->setGroup( cfgName );
 
-   scanConfig.writeEntry( "description", descr );
+   scanConfig->writeEntry( "description", descr );
+   scanConfig->writeEntry( "scannerName", scannerName );
    QAsciiDictIterator<KScanOption> it( *this);
  
-    while ( it.current() ) {
+    while ( it.current() )
+    {
        const QString line = it.current() -> configLine();
-       kdDebug(29000) << "writing <" << line << ">" << endl;
+       const QString name = it.current()->getName();
+       
+       kdDebug(29000) << "writing " << name << " = <" << line << ">" << endl;
 
-       scanConfig.writeEntry( QString(it.current()->getName()), line );
+       scanConfig->writeEntry( name, line );
        
        ++it;
     }
-    
+
+    scanConfig->sync();
+    delete( scanConfig );
 }
 
+bool KScanOptSet::load( const QString& scannerName )
+{
+   QString confFile = SCANNER_CONFIG_FILE;
+   kdDebug( 29000) << "** Reading from scan configuration file <" << confFile << ">" << endl;
+   bool ret = true;
+   
+   KConfig *scanConfig = new KConfig( confFile, true );
+   QString cfgName = name; /* of the KScanOptSet, given in constructor */
+   
+   if( cfgName.isNull() || cfgName.isEmpty() )
+      cfgName = "default";
+
+   if( ! scanConfig->hasGroup( name ) )
+   {
+      kdDebug(29000) << "Group " << name << " does not exist in configuration !" << endl;
+      ret = false;
+   }
+   else
+   {
+      scanConfig->setGroup( name );
+
+      typedef QMap<QString, QString> StringMap;
+      
+      StringMap strMap = scanConfig->entryMap( name );
+
+      StringMap::Iterator it;
+      for( it = strMap.begin(); it != strMap.end(); ++it )
+      {
+	 QCString optName = it.key().latin1();
+	 KScanOption optset( optName );
+
+	 QCString val = it.data().latin1();
+	 kdDebug(29000) << "Reading for " << optName << " value " << val << endl;
+	 
+	 optset.set( val );
+
+	 backupOption( optset );
+      }
+   }
+   return( ret );
+}
 
 /* END */
