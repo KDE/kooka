@@ -3,7 +3,7 @@
                              -------------------                                         
     begin                : Fri Jun 30 2000                                           
     copyright            : (C) 2000 by Klaas Freitag                         
-    email                : kooka@suse.de                                     
+    email                : freitag@suse.de                                     
  ***************************************************************************/
 
 /***************************************************************************
@@ -18,7 +18,7 @@
 
 #ifndef KSANEOCR_H
 #define KSANEOCR_H
-
+#include <qwidget.h>
 #include <qobject.h>
 #include <qimage.h>
 
@@ -34,10 +34,12 @@ class KOCRStartDialog;
 class KSANEOCR : public QObject  {
    Q_OBJECT
 public: 
-   KSANEOCR(const QImage *image);
+   KSANEOCR( QWidget* );
    ~KSANEOCR();
 
-   void startExternOcr( void );
+   bool startExternOcrVisible( void );
+   void setImage( const QImage* );
+
 private slots:
    void startOCRProcess( void );
    
@@ -45,13 +47,18 @@ private slots:
    void errMsgRcvd(KProcess*, char* buffer, int buflen);
    void daemonExited(KProcess*);
    void userCancel( void );
+
 private:
+   void     cleanUpFiles( void );
+   
+   bool     visibleOCRRunning;
    KOCRStartDialog *ocrProcessDia;
    KProcess *daemon;
    QString  tmpFile;
    QImage   *bw_img;
    QString  ocrResultText;
    QString  ocrResultImage;
+   QWidget  *parent;
 };
 
 #endif

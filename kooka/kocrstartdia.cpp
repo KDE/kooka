@@ -3,7 +3,7 @@
                              -------------------                                         
     begin                : Fri Now 10 2000                                           
     copyright            : (C) 2000 by Klaas Freitag                         
-    email                : kooka@SuSE.de
+    email                : freitag@suse.de
  ***************************************************************************/
 
 /***************************************************************************
@@ -41,8 +41,8 @@
 
 
 
-KOCRStartDialog::KOCRStartDialog( QWidget *parent, QImage *img )
-   :KDialogBase( parent,  "OCRStart", true, I18N("Optical Character Recognition"),
+KOCRStartDialog::KOCRStartDialog( QWidget *parent )
+   :KDialogBase( parent,  "OCRStart", false, I18N("Optical Character Recognition"),
 		 Cancel|User1, User1, true, I18N("Start OCR" ) )
 {
    debug( "Starting KOCR-Start-Dialog!" );
@@ -51,7 +51,6 @@ KOCRStartDialog::KOCRStartDialog( QWidget *parent, QImage *img )
    CHECK_PTR( page );
    setMainWidget( page );
 
-   (void) img;
    KConfig *conf = KGlobal::config ();
    conf->setGroup( CFG_GROUP_OCR_DIA );
 
@@ -90,9 +89,9 @@ KOCRStartDialog::KOCRStartDialog( QWidget *parent, QImage *img )
    middle->addLayout( sliderLayout );
 
    /* This is for a 'work-in-progress'-Animation */
-   KAnimWidget *ani = new KAnimWidget( (const QString) "kde", 48, page);
+   ani = new KAnimWidget( (const QString) "kde", 48, page, "ANIMATION");
    middle->addWidget( ani );
-   ani->start();
+
    /* Slider for OCR-Options */
    sliderGrayLevel = new KScanSlider( page , I18N("Gray Level"), 0, 254 );
    sliderLayout->addWidget( sliderGrayLevel,1 );
@@ -113,7 +112,6 @@ KOCRStartDialog::KOCRStartDialog( QWidget *parent, QImage *img )
 
    /* Connect signals which disable the fields and store the configuration */
    connect( this, SIGNAL( user1Clicked()), this, SLOT( disableFields()));
-   connect( this, SIGNAL( user1Clicked()), ani, SLOT(start()));
    connect( this, SIGNAL( user1Clicked()), this, SLOT( writeConfig()));
 
 }
@@ -144,6 +142,8 @@ void KOCRStartDialog::disableFields( void )
    sliderDustSize->setEnabled( false );
    sliderSpace->setEnabled( false );
    entryOcrBinary->setEnabled( false );
+
+   ani->start();
 }
 
 /* The End ;) */

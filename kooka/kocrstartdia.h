@@ -3,7 +3,7 @@
                              -------------------                                         
     begin                : Sun Jun 11 2000                                           
     copyright            : (C) 2000 by Klaas Freitag                         
-    email                : kooka@suse.de                        
+    email                : freitag@suse.de                        
  ***************************************************************************/
 
 /***************************************************************************
@@ -32,6 +32,7 @@
 #include <qcstring.h>
 
 #include <kscanslider.h>
+#include <kanimwidget.h>
 /**
   *@author Klaas Freitag
   */
@@ -43,7 +44,7 @@ class KOCRStartDialog: public KDialogBase
 {
    Q_OBJECT
 public: 
-   KOCRStartDialog( QWidget *, QImage* );
+   KOCRStartDialog( QWidget *);
    ~KOCRStartDialog();
 
    QString getOCRCmd( void ) const
@@ -55,6 +56,10 @@ public:
       { return( sliderDustSize->value());}
    int getSpaceWidth( void ) const
       { return( sliderSpace->value());}
+
+public slots:
+   void stopAnimation( void ){ ani->stop(); }
+   
 protected:
 
 private slots:
@@ -67,7 +72,7 @@ private:
    KScanSlider *sliderDustSize;
    KScanSlider *sliderSpace;
    KScanEntry  *entryOcrBinary;
-
+   KAnimWidget *ani;
 };
 
 #endif
