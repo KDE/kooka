@@ -721,13 +721,10 @@ KScanStat KScanDevice::acquire( const QString& filename )
 	QFileInfo file( filename );
 	if( file.exists() )
 	{
-#ifdef __GNUC__
-#warning possible leak ahead, design decision?
-#endif
-	     QImage *i = new QImage();
-	     if( i->load( filename ))
+	     QImage i;
+	     if( i.load( filename ))
 	     {
-                  emit( sigNewImage( i ));
+                  emit( sigNewImage( &i ));
 	     }
 	}
     }
