@@ -50,29 +50,18 @@
 
 #undef APPLY_IN_SITU
 
-// global device list
 
-
-/**  Not really pretty to have these global variables in a lib.
- *   Should be solved by KScanOption being a friend to KScanDevice ?
- *   TODO
- **/
-bool        scanner_initialised = false;
-SANE_Handle scanner_handle      = 0;
-QAsciiDict<int>  option_dic;
-
-extern KScanOptSet gammaTables;
 
 /** inline-access to the option descriptor, object to changes with global vars. **/
 inline const SANE_Option_Descriptor *getOptionDesc( const QCString& name )
 {
-   int *idx = option_dic[ name ];
+   int *idx = (*KScanDevice::option_dic)[ name ];
    
    const SANE_Option_Descriptor *d = 0;
    // debug( "<< for option %s >>", name );
    if ( idx && *idx > 0 )
    {
-      d = sane_get_option_descriptor( scanner_handle, *idx );
+      d = sane_get_option_descriptor( KScanDevice::scanner_handle, *idx );
       // debug( "retrieving Option %s", d->name );
    }
    else
@@ -95,11 +84,11 @@ KScanOption::KScanOption( const QCString& new_name ) :
 {
    if( initOption( new_name ) )
    {
-      int  *num = option_dic[ getName() ];	
+      int  *num = (*KScanDevice::option_dic)[ getName() ];	
       if( !num || !buffer )
 	 return;
 
-      SANE_Status sane_stat = sane_control_option( scanner_handle, *num,
+      SANE_Status sane_stat = sane_control_option( KScanDevice::scanner_handle, *num,
 						   SANE_ACTION_GET_VALUE,
 						   buffer, 0 );
 
@@ -152,7 +141,7 @@ bool KScanOption::initOption( const QCString& new_name )
 	        buffer = 0;
   	}
 
-	KScanOption *gtOption = gammaTables[ new_name ];
+	KScanOption *gtOption = (*KScanDevice::gammaTables)[ new_name ];
 	if( gtOption )
 	{
 	   kdDebug(29000) << "Is older GammaTable!" << endl;
@@ -183,11 +172,21 @@ KScanOption::KScanOption( const KScanOption &so ) :
    brightness = so.brightness;
    contrast = so.contrast;
 
-   if( so.buffer_untouched ) kdDebug(29000) << "Buffer of source is untouched!" << endl;
-   // debug("Here Duplication for %s, reserving %d bytes", (const char*)  name, desc->size );
+   /* intialise */
+   buffer = 0;
+   buffer_size = 0;
 
-   /* the widget si not copied ! */
+   /* the widget is not copied ! */
    internal_widget = 0;
+   
+   if( ! ( desc && name ) )
+   {
+      kdWarning( 29000) << "Trying to copy a not healty option" << endl;
+      return;
+   }
+   
+   if( so.buffer_untouched )
+      kdDebug(29000) << "Buffer of source is untouched!" << endl;
 
    switch( desc->type )
    {
@@ -203,9 +202,8 @@ KScanOption::KScanOption( const KScanOption &so ) :
  	    memcpy( buffer, so.buffer,  buffer_size );
        break;
        default:
-            buffer = 0;
-            buffer_size = 0;
-
+	  kdWarning( 29000 ) << "unknown option type in copy constructor" << endl;
+	  break;
     }
 }
 
@@ -233,7 +231,10 @@ const KScanOption& KScanOption::operator= (const KScanOption& so )
    delete internal_widget;
    internal_widget = so.internal_widget;
 
-   if( buffer ) delete( (char*)buffer);
+   if( buffer ) {
+      delete( (char*)buffer);
+      buffer = 0;
+   }
 
    switch( desc->type )
    {
@@ -341,7 +342,7 @@ void KScanOption::slRedrawWidget( KScanOption *so )
 
 void KScanOption::slReload( void )
 {
-   int  *num = option_dic[ getName() ];	
+   int  *num = (*KScanDevice::option_dic)[ getName() ];	
    desc = getOptionDesc( getName() );	
 	
    if( !desc || !num  )
@@ -396,7 +397,7 @@ void KScanOption::slReload( void )
 		desc->size, buffer_size, (const char*) name );
       }
   			
-      SANE_Status sane_stat = sane_control_option( scanner_handle, *num,
+      SANE_Status sane_stat = sane_control_option( KScanDevice::scanner_handle, *num,
 						   SANE_ACTION_GET_VALUE, buffer, 0 );
 
       if( sane_stat != SANE_STATUS_GOOD )
@@ -418,7 +419,6 @@ KScanOption::~KScanOption()
 #ifdef MEM_DEBUG
    qDebug( "M: FREEing %d byte of option <%s>", buffer_size, (const char*) getName());
 #endif
-   if( buffer ) delete ( (char*) buffer );
 }
 
 bool KScanOption::valid( void ) const
@@ -1126,12 +1126,12 @@ void *KScanOption::allocBuffer( long size )
 bool KScanOption::applyVal( void )
 {
    bool res = true;
-   int *idx = option_dic[ name ];
+   int *idx = (*KScanDevice::option_dic)[ name ];
 
    if( *idx == 0 ) return( false );
    if( ! buffer )  return( false );
 
-   SANE_Status stat = sane_control_option ( scanner_handle, *idx,
+   SANE_Status stat = sane_control_option ( KScanDevice::scanner_handle, *idx,
 					    SANE_ACTION_SET_VALUE, buffer,
 					    0 );
    if( stat != SANE_STATUS_GOOD )
