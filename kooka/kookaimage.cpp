@@ -61,6 +61,25 @@ KookaImage::KookaImage( int subNo, KookaImage *p )
    kdDebug(28000) << "Setting subimageNo to " << subNo << endl;
 }
 
+KookaImage& KookaImage::operator=(const KookaImage& img)
+{
+    QImage::operator=(img);
+
+    m_subImages = img.subImagesCount();
+    m_subNo     = img.m_subNo;
+    m_parent    = img.m_parent;
+    m_url       = img.m_url;
+    m_fileItem  = img.m_fileItem;
+    
+    return *this;
+}
+
+KookaImage& KookaImage::operator=(const QImage& img)
+{
+    QImage::operator=(img);
+    return *this;
+}
+
 KFileItem* KookaImage::fileItem() const
 {
     return m_fileItem;
@@ -204,7 +223,7 @@ KURL KookaImage::url() const
 bool KookaImage::loadTiffDir( const QString& filename, int no )
 {
 #ifdef HAVE_LIBTIFF
-   int width, height;
+   int imgWidth, imgHeight;
    TIFF* tif = 0;
    /* if it is tiff, check with Tifflib if it is multiple sided */
    kdDebug(28000) << "Trying to load TIFF, subimage number "<< no  << endl;
@@ -218,20 +237,21 @@ bool KookaImage::loadTiffDir( const QString& filename, int no )
       TIFFClose(tif);
       return false;
    }
+   
+   TIFFGetField(tif, TIFFTAG_IMAGEWIDTH,  &imgWidth);
+   TIFFGetField(tif, TIFFTAG_IMAGELENGTH, &imgHeight);
 
-   TIFFGetField(tif, TIFFTAG_IMAGEWIDTH, &width);
-   TIFFGetField(tif, TIFFTAG_IMAGELENGTH, &height);
-
+   
    /* TODO: load bw-image correctly only 2 bit */
-   KookaImage tmpImg;
-   create( width, height, 32 );
-   if (TIFFReadRGBAImage(tif, width, height, (uint32*) bits(),0))
+   // KookaImage tmpImg;
+   create( imgWidth, imgHeight, 32 );
+   if (TIFFReadRGBAImage(tif, imgWidth, imgHeight, (uint32*) bits(),0))
    {
       // successfully read. now convert.
       // reverse red and blue
       uint32 *data;
       data = (uint32 *)bits();
-      for( unsigned i = 0; i < unsigned(width * height); ++i )
+      for( unsigned i = 0; i < unsigned(imgWidth * imgHeight); ++i )
       {
 	 uint32 red = ( 0x00FF0000 & data[i] ) >> 16;
 	 uint32 blue = ( 0x000000FF & data[i] ) << 16;
@@ -240,14 +260,14 @@ bool KookaImage::loadTiffDir( const QString& filename, int no )
       }
 
       // reverse image (it's upside down)
-      unsigned h = unsigned(height);
+      unsigned h = unsigned(imgHeight);
       for( unsigned ctr = 0; ctr < h>>1; )
       {
 	 unsigned *line1 = (unsigned *)scanLine( ctr );
-	 unsigned *line2 = (unsigned *)scanLine( height
+	 unsigned *line2 = (unsigned *)scanLine( imgHeight
 						       - ( ++ctr ) );
 
-	 unsigned w = unsigned(width);
+	 unsigned w = unsigned(imgWidth);
 	 for( unsigned x = 0; x < w; x++ )
 	 {
 	    int temp = *line1;
@@ -258,9 +278,41 @@ bool KookaImage::loadTiffDir( const QString& filename, int no )
 	 }
       }
    }
+
+   /* fetch the x- and y-resolutions to adjust images */
+   float xReso, yReso;
+   bool resosFound;
+   resosFound  = TIFFGetField(tif, TIFFTAG_XRESOLUTION, &xReso );
+   resosFound &= TIFFGetField(tif, TIFFTAG_YRESOLUTION, &yReso );
+   kdDebug(28000)<< "Tiff image: X-Resol.: " << xReso << " and Y-Resol.: " << yReso << endl;
+
    TIFFClose(tif);
-   return true;
+
+   /* Check now if resolution in x- and y-direction differ. If so, stretch the image
+    * accordingly.
+    */
+   if( resosFound && xReso != yReso )
+   {
+       if( xReso > yReso )
+       {
+	   float yScalefactor = xReso / yReso;
+	   kdDebug(28000) << "Different resolution x/y, rescaling with factor " << yScalefactor << endl;
+	   /* rescale the image */
+	   *this = smoothScale( imgWidth, int(imgHeight*yScalefactor), QImage::ScaleFree );
+       }
+       else
+       {
+	   /* yReso > xReso */
+	   float scalefactor = yReso / xReso;
+	   kdDebug(28000) << "Different resolution x/y, rescaling x with factor " << scalefactor << endl;
+	   /* rescale the image */
+	   *this = smoothScale( int(imgWidth*scalefactor), imgHeight, QImage::ScaleFree );
+	   
+       }
+   }
+   
 #endif
+   return true;
 }
 
 

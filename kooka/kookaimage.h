@@ -60,6 +60,8 @@ public:
     KookaImage(  int subNo, KookaImage *p );
     KookaImage( 	const QImage& img );
 
+    KookaImage& operator=(const KookaImage& );
+    KookaImage& operator=(const QImage& );
     /**
      * load an image from a KURL. This method reads the entire file and sets
      * the values for subimage count.
@@ -131,6 +133,11 @@ public:
      * cutToTiles before.
      */
     QRect getTileRect( int rowPos, int colPos ) const;
+
+    /**
+     * retrieve the sub number of this image.
+     */
+    int subNumber() const { return m_subNo; }
 
 private:
     int 		m_subImages;
