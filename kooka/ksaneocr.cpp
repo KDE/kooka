@@ -578,7 +578,7 @@ void KSANEOCR::startOCRProcess( void )
        {
            KMessageBox::error( m_parent,
                                i18n("The classifier file necessary for OCR cannot be loaded: %1\n"
-                                   "OCR with the KADMOS engine is not possible" ).
+                                   "OCR with the KADMOS engine is not possible." ).
                                arg(clasPath), i18n("KADMOS Installation Problem"));
            finishedOCRVisible(false);
            return;
@@ -592,8 +592,8 @@ void KSANEOCR::startOCRProcess( void )
 	   KMessageBox::error( m_parent,
 			       i18n("The KADMOS OCR system could not be started:\n") +
 			       m_rep.getErrorText()+
-			       i18n("\nPlease check the configuration" ),
-			       i18n("KADMOS failure") );
+			       i18n("\nPlease check the configuration." ),
+			       i18n("KADMOS Failure") );
        }
        else
        {
@@ -791,11 +791,11 @@ bool KSANEOCR::readORF( const QString& fileName, QString& errStr )
     QFileInfo fi( fileName );
     if( ! fi.exists() ) {
         error = true;
-        errStr = i18n("The orf %1 does not exist").arg(fileName);
+        errStr = i18n("The orf %1 does not exist.").arg(fileName);
     }
     if( ! error && ! fi.isReadable() ) {
         error = true;
-        errStr = i18n("Permission denied on file %1").arg(fileName);
+        errStr = i18n("Permission denied on file %1.").arg(fileName);
     }
 
 

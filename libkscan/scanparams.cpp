@@ -587,7 +587,7 @@ void ScanParams::slFileSelect( void )
    }
    else
    {
-      filter.append( i18n( "*.pnm|PNM image files (*.pnm)") );
+      filter.append( i18n( "*.pnm|PNM Image Files (*.pnm)") );
    }
 
 

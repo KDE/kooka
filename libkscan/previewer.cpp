@@ -206,8 +206,8 @@ Previewer::Previewer(QWidget *parent, const char *name )
 
     /* combobox to select if black or white background */
     d->m_cbBackground = new QComboBox( hbox );
-    d->m_cbBackground->insertItem(i18n("black"), BG_ITEM_BLACK );
-    d->m_cbBackground->insertItem(i18n("white"), BG_ITEM_WHITE );
+    d->m_cbBackground->insertItem(i18n("Black"), BG_ITEM_BLACK );
+    d->m_cbBackground->insertItem(i18n("White"), BG_ITEM_WHITE );
     connect( d->m_cbBackground, SIGNAL(activated(int) ),
              this, SLOT( slScanBackgroundChanged( int )));
 
