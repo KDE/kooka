@@ -80,8 +80,6 @@
 
 #define IDS_DEFAULT                 "Ready."
 
-//#define I18N(X) 							X
-
 #endif // RESOURCE_H
 
 

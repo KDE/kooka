@@ -24,6 +24,7 @@
 #include <kaboutdata.h>
 #include <kcmdlineargs.h>
 #include <klocale.h>
+#include <kglobal.h>
 #include <kimageio.h>
 #include <kiconloader.h>
 
@@ -31,12 +32,12 @@
 #include "icons.h"
 
 static const char *description =
-    I18N_NOOP("<B>Kooka</B> is a KDE2 application which provides access to scanner hardware "
+          "<B>Kooka</B> is a KDE2 application which provides access to scanner hardware "
 	      "using the SANE library.<P>"
 	      "Kooka helps you scan, save your image in the correct "
 	      "image format and perform <B>O</B>ptical <B>C</B>haracter <B>R</B>ecognition on it,"
 	      "using <I>gocr</I>, Joerg Schulenburg's and friends' Open Source ocr program.<P>"
-	      "For information on Kooka see <A HREF=http://>The kooka page</A><P>");
+	      "For information on Kooka see <A HREF=http://>The kooka page</A><P>";
 
 static const char *version = "v0.2";
 
@@ -46,11 +47,12 @@ void *dbg_ptr;
 
 int main( int argc, char ** argv )
 {
-   KAboutData about("kooka", I18N_NOOP("Kooka"), version, description,
+   KAboutData about("kooka", I18N_NOOP("Kooka"), version, I18N_NOOP(description),
 		    KAboutData::License_GPL, "(C) 2000 Klaas Freitag");
    about.addAuthor( "Klaas Freitag", 0, "freitag@suse.de" );
    KCmdLineArgs::init(argc, argv, &about);
    KApplication app;
+   KGlobal::locale()->insertCatalogue("libkscan");
    KImageIO::registerFormats();
    KIconLoader *loader = KGlobal::iconLoader();
    

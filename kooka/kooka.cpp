@@ -169,7 +169,7 @@ void Kooka::setupActions()
 		       this, SLOT( slMirrorBoth() ),
 		       actionCollection(), "mirrorBoth" );
 
-    (void) new KAction(i18n("Open image in &graphic application"), "kpixmap", CTRL+Key_G,
+    (void) new KAction(i18n("Open image in &graphic application"), CTRL+Key_G,
 		       m_view, SLOT( slOpenCurrInGraphApp() ),
 		       actionCollection(), "openInGraphApp" );
 
@@ -180,7 +180,7 @@ void Kooka::setupActions()
     (void) new KAction(i18n("Rotate image counter-clock&wise"), "rotate_ccw", CTRL+Key_W,
 		       this, SLOT( slRotateCounterClockWise() ),
 		       actionCollection(), "rotateCounterClockwise" );
-    (void) new KAction(i18n("Rotate image 180 &degrees"), "rotate_usd", CTRL+Key_D,
+    (void) new KAction(i18n("Rotate image 180 &degrees"), CTRL+Key_D,
 		       this, SLOT( slRotate180() ),
 		       actionCollection(), "upsitedown" );
 #if 0
@@ -188,7 +188,7 @@ void Kooka::setupActions()
 		       m_view, SLOT(slSaveScanParams()),
 		       actionCollection(), "savescanparam" );
 #endif
-    
+
     createGUI("kookaui.rc");
 
 }

@@ -452,7 +452,7 @@ void ScanPackager::slShowContextMenue(QListViewItem *lvi, const QPoint &p, int c
       popup->insertSeparator();
    }
 
-   popup->insertItem( *icons["mini-folder_new"], "Create new folder", ID_POP_CREATE_NEW );
+   popup->insertItem( *icons["mini-folder_new"], i18n("Create new folder"), ID_POP_CREATE_NEW );
    popup->setItemEnabled ( ID_POP_CREATE_NEW, curr->isDir() );
 
    connect( popup, SIGNAL( activated(int)), this, SLOT(slHandlePopup(int)));
