@@ -51,10 +51,8 @@
 
 #include <kscanslider.h>
 #include <qcheckbox.h>
-#include <qbuttongroup.h>
 #include <kstandarddirs.h>
 #include <qstringlist.h>
-#include <qmap.h>
 
 
 /* defines for konfig-reading */

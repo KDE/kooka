@@ -34,7 +34,6 @@
 
 #include <qimage.h>
 #include <qpainter.h>
-#include <qimage.h>
 #include <qstring.h>
 #include <qrect.h>
 #include <qstringlist.h>
