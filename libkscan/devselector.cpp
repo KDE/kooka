@@ -83,8 +83,8 @@ QCString DeviceSelector::getDeviceFromConfig( void ) const
       /* in this case, the user has checked 'Do not ask me again' and does not
        * want to be bothered any more.
        */
-      kdDebug(29000) << "Got scanner from config file to use: " << result << endl;
       result = QFile::encodeName(gcfg->readEntry( STARTUP_SCANDEV, "" ));
+      kdDebug(29000) << "Got scanner from config file to use: " << result << endl;
       
       /* Now check if the scanner read from the config file is available !
        * if not, ask the user !
@@ -124,7 +124,7 @@ QCString DeviceSelector::getSelectedDevice( void ) const
    c->setGroup(QString::fromLatin1(GROUP_STARTUP));
    c->writeEntry( STARTUP_SCANDEV, dev );
    c->writeEntry( STARTUP_SKIP_ASK, getShouldSkip() );
-   
+   c->sync();
    delete c;
    c = 0;
    return dev;
