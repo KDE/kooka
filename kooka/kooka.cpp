@@ -81,7 +81,6 @@ Kooka::Kooka( const QCString& deviceToUse)
     // then, setup our actions
     setupActions();
 
-
     createGUI(0L); // m_view->ocrResultPart());
     // and a status bar
     statusBar()->insertItem( QString(), KookaView::StatusTemp );
@@ -129,10 +128,9 @@ void Kooka::setupActions()
     KStdAction::print(this, SLOT(filePrint()), actionCollection());
     KStdAction::quit(this , SLOT(close()), actionCollection());
 
-    m_toolbarAction = KStdAction::showToolbar(this, SLOT(optionsShowToolbar()),
-					      actionCollection());
-    m_statusbarAction = KStdAction::showStatusbar(this, SLOT(optionsShowStatusbar()),
-						  actionCollection());
+    createStandardStatusBarAction();
+    setStandardToolBarMenuEnabled(true);
+
     m_scanParamsAction = new KToggleAction(i18n("Show Scan &Parameters"),
                                            KShortcut(), this,
 					   SLOT(optionsShowScanParams()),
@@ -386,26 +384,6 @@ void Kooka::filePrint()
        // and send the result to the printer
        p.end();
     }
-}
-
-void Kooka::optionsShowToolbar()
-{
-    // this is all very cut and paste code for showing/hiding the
-    // toolbar
-    if (m_toolbarAction->isChecked())
-        toolBar("mainToolBar")->show();
-    else
-        toolBar("mainToolBar")->hide();
-}
-
-void Kooka::optionsShowStatusbar()
-{
-    // this is all very cut and paste code for showing/hiding the
-    // statusbar
-    if (m_statusbarAction->isChecked())
-        statusBar()->show();
-    else
-        statusBar()->hide();
 }
 
 void Kooka::optionsShowScanParams()

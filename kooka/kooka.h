@@ -133,8 +133,6 @@ private:
    KookaView *m_view;
 
    KPrinter   *m_printer;
-   KToggleAction *m_toolbarAction;
-   KToggleAction *m_statusbarAction;
    KToggleAction *m_scanParamsAction;
    KToggleAction *m_previewerAction;
    KActionMenu   *m_settingsShowDocks;
