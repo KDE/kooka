@@ -28,6 +28,7 @@
 #include <kimageio.h>
 #include <kiconloader.h>
 #include <kdebug.h>
+#include <kwin.h>
 
 #include "kooka.h"
 #include "icons.h"
@@ -103,6 +104,10 @@ int main( int argc, char *argv[] )
    
    Kooka  *kooka = new Kooka(devToUse);
    app.setMainWidget( kooka );
+
+   KWin::setIcons(kooka->winId(), loader->loadIcon( "scanner", KIcon::Desktop ),
+		  loader->loadIcon("scanner", KIcon::Small) );
+   
    kooka->show();
    app.processEvents();
    kooka->startup();
