@@ -127,9 +127,9 @@ bool ScanParams::connectDevice( KScanDevice *newScanDevice )
 
    /* Create a Start-Scan-Button */
    KButtonBox *kbb = new KButtonBox( this );
-   QPushButton* pb = kbb->addButton( i18n( "Final Scan" ));
+   QPushButton* pb = kbb->addButton( i18n( "&Final Scan" ));
    connect( pb, SIGNAL(clicked()), this, SLOT(slStartScan()) );
-   pb = kbb->addButton( i18n( "Preview Scan" ));
+   pb = kbb->addButton( i18n( "&Preview Scan" ));
    connect( pb, SIGNAL(clicked()), this, SLOT(slAcquirePreview()) );
    kbb->layout();
 
@@ -266,6 +266,10 @@ void ScanParams::scannerParams( void ) // QVBoxLayout *top )
 
    /* Threshold-Setting */
    so = sane_device->getGuiElement( SANE_NAME_THRESHOLD, this );
+   if( so )
+   {
+      so->set(50);
+   }
 
    /* Brightness-Setting */
    so = sane_device->getGuiElement( SANE_NAME_BRIGHTNESS, this );

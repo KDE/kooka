@@ -140,6 +140,9 @@ private:
    QProgressDialog *progressDialog;
 
    QPixmap       pixLineArt, pixGray, pixColor, pixHalftone, pixMiniFloppy;
+
+   class ScanParamsPrivate;
+   ScanParamsPrivate *d;
 };
 
 #endif

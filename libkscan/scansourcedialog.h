@@ -61,6 +61,9 @@ private:
    QRadioButton  *rb0, *rb1;
    ADF_BEHAVE    adf;
    bool          adf_enabled;
+
+   class ScanSourceDialogPrivate;
+   ScanSourceDialogPrivate *d;
 };
 
 #endif
