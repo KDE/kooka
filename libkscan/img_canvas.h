@@ -40,11 +40,12 @@
 #include <qwmatrix.h>
 #include <qscrollview.h>
 #include <qstrlist.h>
-#include <qpopupmenu.h>
 
 #ifdef USE_KPIXMAPIO
 #include <kpixmapio.h>
 #endif
+
+class KPopupMenu;
 
 enum preview_state {
 	MOVE_NONE,
@@ -169,7 +170,7 @@ private:
    QPixmap       *pmScaled;
    float	 used_yscaler;
    float	 used_xscaler;
-   QPopupMenu    *contextMenu;
+   KPopupMenu    *contextMenu;
    bool		 maintain_aspect;
 
    int	         timer_id;
