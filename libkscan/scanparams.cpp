@@ -1,5 +1,5 @@
 /* This file is part of the KDE Project
-   Copyright (C) 1999 Klaas Freitag <freitag@suse.de>  
+   Copyright (C) 1999 Klaas Freitag <freitag@suse.de>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -34,6 +34,9 @@
 #include <qprogressdialog.h>
 #include <qscrollview.h>
 #include <qsizepolicy.h>
+#include <qcheckbox.h>
+#include <qbuttongroup.h>
+
 
 #include <kfiledialog.h>
 #include <klocale.h>
@@ -64,7 +67,7 @@ ScanParams::ScanParams( QWidget *parent, const char *name )
     bg_virt_scan_mode = 0;
     xy_resolution_bind = 0;
     progressDialog = 0;
-    
+
     /* Preload icons */
     pixMiniFloppy = SmallIcon( "3floppy_unmount" );
 
@@ -75,7 +78,7 @@ ScanParams::ScanParams( QWidget *parent, const char *name )
 
     /* intialise the default last save warnings */
     startupOptset = 0;
-    
+
 }
 
 bool ScanParams::connectDevice( KScanDevice *newScanDevice )
@@ -115,17 +118,17 @@ bool ScanParams::connectDevice( KScanDevice *newScanDevice )
    QHBox *hb = new QHBox( this );
    QString cap = i18n("<B>Scanner Settings</B> ");
    cap += sane_device->getScannerName();
-   (void ) new QLabel( cap, hb ); 
+   (void ) new QLabel( cap, hb );
    m_led = new KLed( hb );
    m_led->setState( KLed::Off );
    m_led->setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed ));
-   
+
 
    (void) new KSeparator( KSeparator::HLine, this);
 
    /* Now create Widgets for the important scan settings */
    QScrollView *sv = 0;
-   
+
    if( sane_device->optionExists( SANE_NAME_FILE ) )
    {
       /* Its a virtual scanner */
@@ -138,9 +141,9 @@ bool ScanParams::connectDevice( KScanDevice *newScanDevice )
       /* load the startup scanoptions */
       startupOptset = new KScanOptSet( DEFAULT_OPTIONSET );
       Q_CHECK_PTR( startupOptset );
-      
+
       if( !startupOptset->load( "Startup" ) )
-      { 
+      {
 	 kdDebug(29000) << "Could not load Startup-Options" << endl;
 	 delete startupOptset;
 	 startupOptset = 0;
@@ -169,7 +172,7 @@ bool ScanParams::connectDevice( KScanDevice *newScanDevice )
 
    connect( sane_device, SIGNAL(sigScanProgress(int)),
 	    progressDialog, SLOT(setProgress(int)));
-	
+
    /* Connect the Progress Dialogs cancel-Button */
    connect( progressDialog, SIGNAL( cancelled() ), sane_device,
 	    SLOT( slStopScanning() ) );
@@ -185,7 +188,7 @@ ScanParams::~ScanParams()
       kdDebug(29000) << "Saving scan settings" << endl;
       sane_device->slSaveScanConfigSet( DEFAULT_OPTIONSET, i18n("the default startup setup") );
    }
-   
+
    if( startupOptset )
    {
       delete startupOptset;
@@ -203,7 +206,7 @@ void ScanParams::initialise( KScanOption *so )
 {
    if( ! so ) return;
    bool initialised = false;
-   
+
    if( startupOptset )
    {
       QCString name = so->getName();
@@ -218,7 +221,7 @@ void ScanParams::initialise( KScanOption *so )
 
    if( ! initialised )
    {
-      
+
    }
 }
 
@@ -234,9 +237,9 @@ QScrollView *ScanParams::scannerParams( )
    sv->setFrameStyle( QFrame::NoFrame );
 
    sv->addChild( pbox );
-   
+
    QHBox *hb = new QHBox(pbox);
-   
+
    /* Mode setting */
    so = sane_device->getGuiElement( SANE_NAME_SCAN_MODE, hb,
 				    SANE_TITLE_SCAN_MODE,
@@ -276,7 +279,7 @@ QScrollView *ScanParams::scannerParams( )
       QWidget *spacer = new QWidget(hb);
       hb->setStretchFactor( spacer, 1 );
       kdDebug(29000) << "Source list size: " << l.count() << endl;
-      
+
       if( l.count() > 1 )
       {
 	 pb_source_sel = new QPushButton( i18n("Source..."), hb );
@@ -309,7 +312,7 @@ QScrollView *ScanParams::scannerParams( )
 		  this, SLOT(slReloadAllGui( KScanOption* )));
       }
    }
-   
+
    if( sane_device->optionExists( SANE_NAME_HALFTONE_DIMENSION) )
    {
       kdDebug(29000) << "Halftone-Dimen exists" << endl;
@@ -337,13 +340,13 @@ QScrollView *ScanParams::scannerParams( )
 		  this, SLOT(slReloadAllGui( KScanOption* )));
       }
    }
-         
-   
+
+
    /* Resolution Setting -> X-Resolution Setting */
    so = sane_device->getGuiElement( SANE_NAME_SCAN_X_RESOLUTION, pbox /* this */,
 				    i18n("Resolution"),
 				    SANE_DESC_SCAN_X_RESOLUTION );
-   
+
    if ( so )
    {
       initialise( so );
@@ -354,7 +357,7 @@ QScrollView *ScanParams::scannerParams( )
       /* connect to slot that passes the resolution to the previewer */
       connect( so, SIGNAL(guiChange(KScanOption*)),
 	       this, SLOT( slNewXResolution(KScanOption*)));
-      
+
       connect( so, SIGNAL(guiChange(KScanOption*)),
 	       this, SLOT(slReloadAllGui( KScanOption* )));
 
@@ -417,7 +420,7 @@ QScrollView *ScanParams::scannerParams( )
 	 initialise( so );
       }
    }
-   
+
    /* Threshold-Setting */
    so = sane_device->getGuiElement( SANE_NAME_THRESHOLD, pbox,
 				    SANE_TITLE_THRESHOLD,
@@ -432,7 +435,7 @@ QScrollView *ScanParams::scannerParams( )
 				    SANE_TITLE_BRIGHTNESS,
 				    SANE_DESC_BRIGHTNESS);
    if( so ) initialise( so );
-   
+
    /* Contrast-Setting */
    so = sane_device->getGuiElement( SANE_NAME_CONTRAST, pbox,
 				    SANE_TITLE_CONTRAST,
@@ -447,7 +450,7 @@ QScrollView *ScanParams::scannerParams( )
 
    /* The gamma table can be used - add  a button for editing */
    QHBox *hb1 = new QHBox(pbox);
-   
+
    if( sane_device->optionExists( SANE_NAME_CUSTOM_GAMMA ) )
    {
       so = sane_device->getGuiElement( SANE_NAME_CUSTOM_GAMMA, hb1,
@@ -461,7 +464,7 @@ QScrollView *ScanParams::scannerParams( )
    {
       (void) new QLabel( i18n("Custom Gamma Table"), hb1 );
    }
-	 
+
    /* Connect a signal to refresh activity of the gamma tables */
    (void) new QWidget( hb1 ); /* dummy widget to eat space */
 
@@ -471,13 +474,13 @@ QScrollView *ScanParams::scannerParams( )
    connect( pb_edit_gtable, SIGNAL( clicked () ),
 	    this, SLOT( slEditCustGamma () ) );
    setEditCustomGammaTableState();
-   
+
    /* This connection cares for enabling/disabling the edit-Button */
    connect( so,   SIGNAL(guiChange(KScanOption*)),
 	    this, SLOT(slOptionNotify(KScanOption*)));
 
    /* my Epson Perfection backends offer a list of user defined gamma values */
-   
+
    /* Insert another beautification line */
    if( sane_device->optionExists( SANE_NAME_GRAY_PREVIEW ) ||
        sane_device->optionExists( SANE_NAME_NEGATIVE ) )
@@ -489,7 +492,7 @@ QScrollView *ScanParams::scannerParams( )
 				    SANE_TITLE_NEGATIVE,
 				    SANE_DESC_NEGATIVE );
    initialise( so );
-   
+
    /* PREVIEW-Switch */
    kdDebug(29000) << "Try to get Gray-Preview" << endl;
    if( sane_device->optionExists( SANE_NAME_GRAY_PREVIEW ))
@@ -510,9 +513,9 @@ void ScanParams::createNoScannerMsg( void )
    /* Mode setting */
    QString cap;
    cap = i18n( "<B>Problem: No Scanner was found</B><P>Your system does not provide a SANE <I>(Scanner Access Now Easy)</I> installation, which is required by the KDE scan support.<P>Please install and configure SANE correctly on your system.<P>Visit the SANE homepage under http://wwww.mostang.com/sane to find out more about SANE installation and configuration. " );
-   
+
    (void) new QLabel( cap, this );
-   
+
 }
 
 /* This slot will be called if something changes with the option given as a param.
@@ -584,7 +587,7 @@ void ScanParams::slFileSelect( void )
       for( QCString fi_item = filterList.first(); !fi_item.isEmpty();
 	   fi_item = filterList.next() )
       {
-	
+
 	 filter.append( QString::fromLatin1( prefix + fi_item.lower()) );
       }
    }
@@ -788,7 +791,7 @@ void ScanParams::slStartScan( void )
 
 	 } else {
 	    kdDebug(29000) << "Not yet implemented :-/" << endl;
-	
+
 	    // stat = performADFScan();
 	 }
       } else {
@@ -873,7 +876,7 @@ void ScanParams::slEditCustGamma( void )
        slApplyGamma( &old_gt );
        kdDebug(29000) << "Cancel, reverted to old Gamma Table !" << endl;
     }
-    
+
 }
 
 
@@ -883,8 +886,8 @@ void ScanParams::slApplyGamma( KGammaTable* gt )
 
    kdDebug(29000) << "Applying gamma table: " << gt->getGamma() <<
       ", " << gt->getBrightness() << ", " << gt->getContrast() << endl;
-   
-   
+
+
    if( sane_device->optionExists( SANE_NAME_GAMMA_VECTOR ) )
    {
       KScanOption grayGt( SANE_NAME_GAMMA_VECTOR );
@@ -896,7 +899,7 @@ void ScanParams::slApplyGamma( KGammaTable* gt )
 	 sane_device->apply( &grayGt, true );
       }
    }
-   
+
    if( sane_device->optionExists( SANE_NAME_GAMMA_VECTOR_R )) {
       KScanOption rGt( SANE_NAME_GAMMA_VECTOR_R );
       if( rGt.active() )
@@ -949,10 +952,10 @@ void ScanParams::setEditCustomGammaTableState()
 {
    if( !(sane_device && pb_edit_gtable) )
       return;
-   
+
    bool butState = false;
    kdDebug(29000) << "Checking state of edit custom gamma button !" << endl;
-   
+
    if( sane_device->optionExists( SANE_NAME_CUSTOM_GAMMA ) )
    {
       KScanOption kso( SANE_NAME_CUSTOM_GAMMA );
@@ -1077,7 +1080,7 @@ void ScanParams::slNewXResolution(KScanOption *opt)
    opt->get( &x_res );
 
    int y_res = x_res;
-   
+
    if( xy_resolution_bind && xy_resolution_bind->active() )
    {
       /* That means, that x and y may be different */
@@ -1099,7 +1102,7 @@ void ScanParams::slNewYResolution(KScanOption *opt)
    opt->get( &y_res );
 
    int x_res = y_res;
-   
+
    if( xy_resolution_bind && xy_resolution_bind->active())
    {
       /* That means, that x and y may be different */
@@ -1111,7 +1114,7 @@ void ScanParams::slNewYResolution(KScanOption *opt)
    }
 
    emit( scanResolutionChanged( x_res, y_res ) );
-   
+
 }
 
 
@@ -1119,7 +1122,7 @@ KScanStat ScanParams::performADFScan( void )
 {
    KScanStat stat = KSCAN_OK;
    bool 		 scan_on = true;
-	
+
    MassScanDialog *msd = new MassScanDialog( this );
    msd->show();
 

@@ -1,5 +1,5 @@
 /* This file is part of the KDE Project
-   Copyright (C) 2000 Klaas Freitag <freitag@suse.de>  
+   Copyright (C) 2000 Klaas Freitag <freitag@suse.de>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -21,6 +21,9 @@
 
 #include <qlabel.h>
 #include <qpushbutton.h>
+#include <qslider.h>
+#include <qlineedit.h>
+#include <qcombobox.h>
 
 #include <kscanslider.h>
 #include <klocale.h>

@@ -1,5 +1,5 @@
 /* This file is part of the KDE Project
-   Copyright (C) 2000 Klaas Freitag <freitag@suse.de>  
+   Copyright (C) 2000 Klaas Freitag <freitag@suse.de>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -23,18 +23,18 @@
 #define KSCANSLIDER_H
 
 #include <qframe.h>
+#include <qstrlist.h>
+#include <qhbox.h>
+#include <qcombobox.h>
 #include <qslider.h>
 #include <qlineedit.h>
-#include <qstrlist.h>
-#include <qcombobox.h>
-#include <qlabel.h>
-#include <qhbox.h>
 /**
   *@author Klaas Freitag
   */
 
 class QPushButton;
 class QSpinBox;
+class QLabel;
 
 /**
  * a kind of extended slider which has a spinbox beside the slider offering
@@ -48,7 +48,7 @@ class KScanSlider : public QFrame
 {
    Q_OBJECT
    Q_PROPERTY( int slider_val READ value WRITE slSetSlider )
-   
+
 public:
    /**
     * Create the slider.
@@ -75,7 +75,7 @@ public:
     */
    int value( ) const
       { return( slider->value()); }
-   
+
 public slots:
   /**
    * sets the slider value
@@ -91,14 +91,14 @@ protected slots:
     /**
      * reverts the slider back to the standard value given in the constructor
      */
-     void         slRevertValue(); 
+     void         slRevertValue();
 
    signals:
     /**
      * emitted if the slider value changes
      */
      void	  valueChanged( int );
-		
+
 private slots:
    void		slSliderChange( int );
 
@@ -110,7 +110,7 @@ private:
    QPushButton  *m_stdButt;
    class KScanSliderPrivate;
    KScanSliderPrivate *d;
-   
+
 };
 
 /**
@@ -120,7 +120,7 @@ class KScanEntry : public QFrame
 {
    Q_OBJECT
    Q_PROPERTY( QString text READ text WRITE slSetEntry )
-      
+
 public:
    /**
     * create a new entry field prepended by text.
@@ -146,7 +146,7 @@ public slots:
     * @param b set enabled if true, else disabled.
     */
    void		setEnabled( bool b ){ if( entry) entry->setEnabled( b ); }
-      
+
 protected slots:
    void         slReturnPressed( void );
 
@@ -156,13 +156,13 @@ signals:
 
 private slots:
    void		slEntryChange( const QString& );
- 
+
 private:
    QLineEdit 	*entry;
 
    class KScanEntryPrivate;
    KScanEntryPrivate *d;
-	
+
 };
 
 
@@ -173,7 +173,7 @@ class KScanCombo : public QHBox
 {
    Q_OBJECT
    Q_PROPERTY( QString cbEntry READ currentText WRITE slSetEntry )
-      
+
 public:
    /**
     * create a combobox with prepended text.

@@ -28,6 +28,10 @@
 #include <qregexp.h>
 #include <qfile.h>
 #include <qtextstream.h>
+#include <qcombobox.h>
+#include <qradiobutton.h>
+#include <qgroupbox.h>
+#include <qlayout.h>
 
 #include <kdebug.h>
 #include <klocale.h>

@@ -1,5 +1,5 @@
 /* This file is part of the KDE Project
-   Copyright (C) 1999 Klaas Freitag <freitag@suse.de>  
+   Copyright (C) 1999 Klaas Freitag <freitag@suse.de>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -25,17 +25,10 @@
 #include "kscandevice.h"
 #include "scansourcedialog.h"
 
-#include <qlayout.h>
 #include <qvbox.h>
 #include <qhbox.h>
 
-#include <qframe.h>
-#include <qcheckbox.h>
-#include <qpushbutton.h>
-#include <qbuttongroup.h>
-#include <qradiobutton.h>
 #include <qdir.h>
-#include <qprogressdialog.h>
 #include <qpixmap.h>
 
 /**
@@ -46,6 +39,10 @@ class GammaDialog;
 class KScanOptSet;
 class QScrollView;
 class KLed;
+class QProgressDialog;
+class QPushButton;
+class QCheckBox;
+class QButtonGroup;
 
 typedef enum { ID_SANE_DEBUG, ID_QT_IMGIO, ID_SCAN } ScanMode;
 
@@ -61,7 +58,7 @@ public:
    bool connectDevice( KScanDevice* );
 
    KLed *operationLED() { return m_led; }
-   
+
 public slots:
 /**
  * In this slot, a custom scan window can be set, e.g. through a preview
@@ -70,26 +67,26 @@ public slots:
  * whole image dimensions.
  **/
 void slCustomScanSize( QRect );
-	
+
    /**
     * sets the scan area to the default, which is the whole area.
-    */	
-   void slMaximalScanSize( void );	
-	
+    */
+   void slMaximalScanSize( void );
+
    /**
     * starts acquireing a preview image.
     * This ends up in a preview-signal of the scan-device object
     */
    void slAcquirePreview( void );
    void slStartScan( void );
-	
+
    /**
     * connect this slot to KScanOptions Signal optionChanged to be informed
     * on a options change.
     */
    void slOptionNotify( KScanOption *kso );
 
-protected slots:		
+protected slots:
 /**
  * connected to the button which opens the source selection dialog
  */
@@ -103,13 +100,13 @@ void slSourceSelect( void );
     *  Slot to call if the virtual scanner mode is changed
     */
    void slVirtScanModeSelect( int id );
-	
+
    /**
     *  Slot for result on an edit-Custom Gamma Table request.
     *  Starts a dialog.
     */
    void slEditCustGamma( void );
-	
+
    /**
     *  Slot called if a Gui-Option changed due to user action, eg. the
     *  user selects another entry in a List.
@@ -138,9 +135,9 @@ void slSourceSelect( void );
     */
    void slNewYResolution( KScanOption* );
 
-   
+
    signals:
-   
+
    /**
     *  emitted if the resolution to scan changes. This signal may be connected
     *  to slots calculating the size of the image size etc.
@@ -148,38 +145,38 @@ void slSourceSelect( void );
     *  As parameters the resolutions in x- and y-direction are coming.
     */
    void scanResolutionChanged( int, int );
-   
+
 private:
-	
-	
+
+
    QScrollView*  scannerParams( );
    void          virtualScannerParams( void );
    void          createNoScannerMsg( void );
    void          initialise( KScanOption* );
    void          setEditCustomGammaTableState();
-   
-   KScanStat     performADFScan( void );	
-	
+
+   KScanStat     performADFScan( void );
+
    KScanDevice      *sane_device;
    KScanOption   *virt_filename;
    QCheckBox     *cb_gray_preview;
    QPushButton   *pb_edit_gtable;
-   QPushButton   *pb_source_sel;	
+   QPushButton   *pb_source_sel;
    ADF_BEHAVE	  adf;
    QButtonGroup  *bg_virt_scan_mode;
    ScanMode  	  scan_mode;
    QDir          last_virt_scan_path;
-	
+
    KScanOption   *xy_resolution_bind;
 
    KScanOptSet   *startupOptset;
-   
+
    QProgressDialog *progressDialog;
 
    QPixmap       pixLineArt, pixGray, pixColor, pixHalftone, pixMiniFloppy;
    KLed          *m_led;
    bool          m_firstGTEdit;
-   
+
    class ScanParamsPrivate;
    ScanParamsPrivate *d;
 };

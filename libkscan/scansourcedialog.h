@@ -1,5 +1,5 @@
 /* This file is part of the KDE Project
-   Copyright (C) 2000 Klaas Freitag <freitag@suse.de>  
+   Copyright (C) 2000 Klaas Freitag <freitag@suse.de>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -25,9 +25,6 @@
 #include <kdialogbase.h>
 #include <qstrlist.h>
 #include <qstring.h>
-#include <qcombobox.h>
-#include <qbuttongroup.h>
-#include <qradiobutton.h>
 
 /**
   *@author Klaas Freitag
@@ -36,27 +33,29 @@
 typedef enum { ADF_OFF, ADF_SCAN_ALONG, ADF_SCAN_ONCE } ADF_BEHAVE;
 
 class KScanCombo;
+class QRadioButton;
+class QButtonGroup;
 
 class ScanSourceDialog : public KDialogBase
 {
    Q_OBJECT
-public: 
+public:
    ScanSourceDialog( QWidget *parent, const QStrList, ADF_BEHAVE );
    ~ScanSourceDialog();
 
-   // void 	fillWithSources( QStrList *list );	
+   // void 	fillWithSources( QStrList *list );
    QString 	getText( void ) const;
 
    ADF_BEHAVE 	getAdfBehave( void ) const
       { return( adf ); }
-	
-	
+
+
 public slots:
-   void        	slNotifyADF( int );	
+   void        	slNotifyADF( int );
    void    	slChangeSource( int );
    int          sourceAdfEntry( void ) const;
    void         slSetSource( const QString source );
-   
+
 private:
 
    KScanCombo    *sources;

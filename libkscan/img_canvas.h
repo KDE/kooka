@@ -1,5 +1,5 @@
 /* This file is part of the KDE Project
-   Copyright (C) 1999 Klaas Freitag <freitag@suse.de>  
+   Copyright (C) 1999 Klaas Freitag <freitag@suse.de>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -23,10 +23,6 @@
 #define __IMG_CANVAS_H__
 
 #include <qwidget.h>
-#include <qimage.h>
-#include <qpixmap.h>
-#include <qpainter.h>
-#include <qcursor.h>
 #include <qrect.h>
 #include <stdlib.h>
 #include <qsize.h>
@@ -39,6 +35,9 @@
 #endif
 
 class QPopupMenu;
+class QPixmap;
+class QImage;
+class QPainter;
 
 enum preview_state {
 	MOVE_NONE,
@@ -82,7 +81,7 @@ class ImageCanvas: public QScrollView
    Q_PROPERTY( int contrast READ getContrast WRITE setContrast )
    Q_PROPERTY( int gamma READ getGamma WRITE setGamma )
    Q_PROPERTY( int scale_factor READ getScaleFactor WRITE setScaleFactor )
-    
+
 public:
    ImageCanvas( QWidget *parent = 0,
 		const QImage *start_image = 0,
@@ -94,19 +93,19 @@ public:
    int getGamma() const;
 
    int getScaleFactor() const;
-   
+
    const QImage *rootImage();
 
    bool hasImage( void ) 	{ return acquired; }
    QPopupMenu* contextMenu() { return m_contextMenu; }
    QRect sel( void );
-   
+
 
    enum{ ID_POP_ZOOM, ID_POP_CLOSE, ID_FIT_WIDTH,
 	    ID_FIT_HEIGHT, ID_ORIG_SIZE } PopupIDs;
-				    
+
    bool selectedImage( QImage* );
-   
+
 public slots:
    void setBrightness(int);
    void setContrast(int );
@@ -126,7 +125,7 @@ public slots:
    void setScaleFactor( int i );
    void handle_popup(int item );
    void enableContextMenu( bool wantContextMenu );
-   
+
    signals:
    void noRect( void );
    void newRect( void );
@@ -141,9 +140,9 @@ protected:
    void viewportMousePressEvent(QMouseEvent *);
    void viewportMouseReleaseEvent(QMouseEvent *);
    void viewportMouseMoveEvent(QMouseEvent *);
-	
+
    void resizeEvent( QResizeEvent * event );
-	
+
 private:
    QStrList      urls;
 
@@ -151,7 +150,7 @@ private:
    const QImage        *image;
    int           brightness, contrast, gamma;
 
-   
+
 #ifdef USE_KPIXMAPIO
    KPixmapIO	 pixIO;
 #endif
@@ -170,14 +169,14 @@ private:
    int 		 cr1,cr2;
    int 		 lx,ly;
    bool 	 acquired;
-   
-   
+
+
    /* private functions for the running ant */
    void drawHAreaBorder(QPainter &p,int x1,int x2,int y,int r = FALSE);
    void drawVAreaBorder(QPainter &p,int x,int y1,int y2,int r = FALSE);
    void drawAreaBorder(QPainter *p,int r = FALSE);
    void update_scaled_pixmap( void );
-	
+
    preview_state classifyPoint(int x,int y);
 
    class ImageCanvasPrivate;

@@ -27,6 +27,7 @@
 #include <qtooltip.h>
 #include <qsizepolicy.h>
 #include <qapplication.h>
+#include <qcheckbox.h>
 
 #include <kglobal.h>
 #include <klocale.h>
@@ -34,6 +35,7 @@
 #include <kconfig.h>
 #include <ksimpleconfig.h>
 #include <kled.h>
+#include <kscandevice.h>
 
 // libkscan stuff
 #include "scanparams.h"

@@ -27,6 +27,9 @@
 #include <kpopupmenu.h>
 #include <qlabel.h>
 #include <qdict.h>
+#include <qimage.h>
+#include <qpainter.h>
+
 #include <klocale.h>
 #include <kstyle.h>
 #include <kapplication.h>
@@ -35,6 +38,7 @@
 #include <kdebug.h>
 #include <kiconloader.h>
 #include <kcmenumngr.h>
+#include <qpixmap.h>
 
 #define __IMG_CANVAS_CPP__
 

@@ -1,5 +1,5 @@
 /* This file is part of the KDE Project
-   Copyright (C) 2000 Klaas Freitag <freitag@suse.de>  
+   Copyright (C) 2000 Klaas Freitag <freitag@suse.de>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -30,8 +30,13 @@
 #include <qlayout.h>
 #include <qvbox.h>
 #include <qhbox.h>
+#include <qradiobutton.h>
+#include <qslider.h>
+#include <qlineedit.h>
+#include <qcombobox.h>
 
 #include <qvbuttongroup.h>
+#include <qbuttongroup.h>
 
 
 extern "C"{
@@ -111,11 +116,11 @@ void ScanSourceDialog::slNotifyADF( int adf_group )
    // debug( "reported adf-select %d", adf_group );
    /* this seems to be broken, adf_text is a visible string?
    *  needs rework if SANE 2 comes up which supports i18n */
-#if 0    
+#if 0
   QString adf_text = getText();
-	
+
   adf = ADF_OFF;
-	
+
   if( adf_text == "Automatic Document Feeder" ||
       adf_text == "ADF" )
     {
@@ -164,7 +169,7 @@ int ScanSourceDialog::sourceAdfEntry( void ) const
       if( q == "ADF" || q == SANE_NAME_DOCUMENT_FEEDER )
          return( i );
 #endif
-      
+
    }
    return( -1 );
 }

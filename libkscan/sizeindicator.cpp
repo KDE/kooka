@@ -1,5 +1,5 @@
 /* This file is part of the KDE Project
-   Copyright (C) 2000 Klaas Freitag <freitag@suse.de>  
+   Copyright (C) 2000 Klaas Freitag <freitag@suse.de>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -27,6 +27,7 @@
 #include <kimageeffect.h>
 #include <klocale.h>
 #include <kdebug.h>
+#include <qpainter.h>
 
 
 
@@ -38,7 +39,7 @@ SizeIndicator::SizeIndicator( QWidget *parent, long  thres, long crit )
    setMinimumWidth( fontMetrics().width( QString::fromLatin1("MMM.MM MB") ));
    setCritical( crit );
    threshold = thres;
-   
+
 }
 
 
@@ -57,7 +58,7 @@ void SizeIndicator::setThreshold( long thres )
 
 SizeIndicator::~SizeIndicator()
 {
-   
+
 }
 
 void SizeIndicator::setSizeInByte( long newSize )
@@ -71,7 +72,7 @@ void SizeIndicator::setSizeInByte( long newSize )
    double sizer = double(sizeInByte)/1024.0; // produces kiloBytes
    int precision = 1;
    int fwidth = 3;
-   
+
    if( sizer > 999.9999999 )
    {
       unit = i18n( "%1 MB" );
@@ -79,10 +80,10 @@ void SizeIndicator::setSizeInByte( long newSize )
       precision = 2;
       fwidth = 2;
    }
-   
+
    t = unit.arg( sizer, fwidth, 'f', precision);
    setText(t);
-   
+
 }
 
 
@@ -97,9 +98,9 @@ void SizeIndicator::drawContents( QPainter *p )
    {
       int c = int( double(sizeInByte) * devider );
       if( c > 255 ) c = 255;
-   
+
       warnColor.setHsv( 0, c, c );
-   
+
       p->drawImage( 0,0,
 		    KImageEffect::unbalancedGradient( s, colorGroup().background(),
 						      warnColor, KImageEffect::CrossDiagonalGradient, 200,200 ));
@@ -108,7 +109,7 @@ void SizeIndicator::drawContents( QPainter *p )
    QString t = text();
    p->drawText( 0, 0, s.width(), s.height(),
 		AlignHCenter | AlignVCenter, t);
-   
+
 }
 
 #include "sizeindicator.moc"

@@ -23,12 +23,9 @@
 #define PREVIEWER_H
 
 #include <qwidget.h>
-#include <qlayout.h>
 #include <qimage.h>
 #include <qrect.h>
-#include <qcombobox.h>
 #include <qbuttongroup.h>
-#include <qradiobutton.h>
 #include <qpoint.h>
 
 #include <kruler.h>
@@ -41,6 +38,9 @@ class ImageCanvas;
 class QCheckBox;
 class QSlider;
 class KScanDevice;
+class QComboBox;
+class QRadioButton;
+class QHBoxLayout;
 
 class Previewer : public QWidget
 {

@@ -1,5 +1,5 @@
 /* This file is part of the KDE Project
-   Copyright (C) 2000 Klaas Freitag <freitag@suse.de>  
+   Copyright (C) 2000 Klaas Freitag <freitag@suse.de>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -25,8 +25,8 @@
 #define DEFAULT_CRITICAL (3*1024*1024)
 #define DEFAULT_THRESHOLD (1*1024*1024)
 
+class QPainter;
 #include <qlabel.h>
-#include <qpainter.h>
 
 /**
  *  @short  small size indication widget for file sizes
@@ -43,7 +43,7 @@ class SizeIndicator: public QLabel
 {
    Q_OBJECT
    // Q_PROPERTY( KGammaTable *gt READ getGt WRITE setGt )
-      
+
 public:
    /**
     *  Creates a size indicator widget.
@@ -78,8 +78,8 @@ public slots:
     * @param thres: the threshold bytesize
     */
    void setThreshold( long );
-   
-    
+
+
 protected:
    /**
     *  reimplemented to display the color

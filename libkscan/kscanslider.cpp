@@ -1,5 +1,5 @@
 /* This file is part of the KDE Project
-   Copyright (C) 2000 Klaas Freitag <freitag@suse.de>  
+   Copyright (C) 2000 Klaas Freitag <freitag@suse.de>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -23,6 +23,10 @@
 #include <qpushbutton.h>
 #include <qspinbox.h>
 #include <qtooltip.h>
+#include <qcombobox.h>
+#include <qlabel.h>
+#include <qslider.h>
+#include <qlineedit.h>
 
 #include <kiconloader.h>
 #include <klocale.h>
@@ -49,7 +53,7 @@ KScanSlider::KScanSlider( QWidget *parent, const QString& text,
        /* connect the button click to setting the value */
        connect( m_stdButt, SIGNAL(clicked()),
 		this, SLOT(slRevertValue()));
-       
+
        QToolTip::add( m_stdButt,
 		      i18n( "Revert value back to its standard value %1" ).arg( stdValue ));
        hb->addWidget( m_stdButt, 0 );
@@ -63,20 +67,20 @@ KScanSlider::KScanSlider( QWidget *parent, const QString& text,
     slider->setMinimumWidth( 140 );
     /* set a buddy */
     l1->setBuddy( slider );
-    
+
     /* create a spinbox for displaying the values */
     m_spin = new QSpinBox( min, max,
 			   1, // step
 			   this );
 
-    
+
     /* make spin box changes change the slider */
     connect( m_spin, SIGNAL(valueChanged(int)), this, SLOT(slSliderChange(int)));
-    
+
     /* Handle internal number display */
     // connect(slider, SIGNAL(valueChanged(int)), numdisp, SLOT( setNum(int) ));
     connect(slider, SIGNAL(valueChanged(int)), this, SLOT( slSliderChange(int) ));
-		
+
     /* set Value 0 to the widget */
     slider->setValue( (int) min -1 );
 
@@ -84,7 +88,7 @@ KScanSlider::KScanSlider( QWidget *parent, const QString& text,
     hb->addWidget( slider, 36 );
     hb->addSpacing( 4 );
     hb->addWidget( m_spin, 0 );
-    
+
     hb->activate();
 
 }
@@ -107,7 +111,7 @@ void KScanSlider::slSetSlider( int value )
     // debug( "Slider val: %d -> %d", value, slider_val );
     kdDebug(29000) << "Setting Slider with " << value << endl;
 
-    if( value == slider->value() ) 
+    if( value == slider->value() )
     {
       kdDebug(29000) << "Returning because slider value is already == " << value << endl;
       return;
@@ -127,7 +131,7 @@ void KScanSlider::slSliderChange( int v )
     int slid = slider->value();
     if( v != slid )
        slider->setValue(v);
-    
+
     emit( valueChanged( v ));
 }
 
@@ -157,11 +161,11 @@ KScanEntry::KScanEntry( QWidget *parent, const QString& text )
 
     entry = new QLineEdit( this, "AUTO_ENTRYFIELD_E" );
     l1->setBuddy( entry );
-    connect( entry, SIGNAL( textChanged(const QString& )), 
+    connect( entry, SIGNAL( textChanged(const QString& )),
 	     this, SLOT( slEntryChange(const QString&)));
     connect( entry, SIGNAL( returnPressed()),
 	     this,  SLOT( slReturnPressed()));
- 			
+
     hb->addWidget( entry,3 );
     hb->activate();
 }
@@ -194,7 +198,7 @@ void KScanEntry::slSetEntry( const QString& t )
     if( t == entry->text() )
 	return;
     /* Important to check value to avoid recursive signals ;) */
-		
+
     entry->setText( t );
 }
 
@@ -221,7 +225,7 @@ KScanCombo::KScanCombo( QWidget *parent, const QString& text,
    combolist = list;
 
    (void) new QLabel( text, this, "AUTO_COMBOLABEL" );
- 	
+
     combo = new QComboBox( this, "AUTO_COMBO" );
     combo->insertStrList( &combolist);
 
@@ -239,7 +243,7 @@ void KScanCombo::slSetEntry( const QString &t )
     /* Important to check value to avoid recursive signals ;) */
     if( i == combo->currentItem() )
 	return;
-		
+
     if( i > -1 )
 	combo->setCurrentItem( i );
     else
