@@ -149,7 +149,7 @@ void ScanPackager::createMenus()
       popup = new KPopupMenu();
       // popup->insertTitle( i18n( "Gallery" ));
       
-      KAction *newAct = new KAction(i18n("&create directory"), "folder",0 ,
+      KAction *newAct = new KAction(i18n("&create directory"), "folder_new",0 ,
 				    this, SLOT(slotCreateFolder()), this);
       newAct->plug( popup );	
       
@@ -161,7 +161,7 @@ void ScanPackager::createMenus()
 			   this, SLOT(slotDeleteItems()), this);
       newAct->plug( popup );	
 
-      newAct = new KAction(i18n("&unload Image"), "unload", 0,
+      newAct = new KAction(i18n("&unload Image"), "fileclose", 0,
 			   this, SLOT(slotUnloadItems()), this );
       newAct->plug( popup );
       popup->setCheckable( true );
@@ -825,77 +825,44 @@ void ScanPackager::slotUnloadItem( KFileTreeViewItem *curr )
 /* ----------------------------------------------------------------------- */
 void ScanPackager::slotDeleteItems( )
 {
-   bool ok = false;
    KFileTreeViewItem *curr = currentKFileTreeViewItem();
    if( ! curr ) return;
-   kdDebug(28000) << "Deleting: " << localFilename(curr) << endl;
-   if( curr->isDir() )
+
+   KURL urlToDel = curr->url();
+   QListViewItem *nextToSelect = curr->nextSibling();
+   
+   kdDebug(28000) << "Deleting: " << urlToDel.prettyURL() << endl;
+   bool ask = true; /* for later use */
+
+   int result = KMessageBox::Yes;
+   
+   if( ask )
    {
-#if 0
-      /* Remove all files and the dir */
-      KFileTreeViewItem  *child = (KFileTreeViewItem*) curr->firstChild();
-      KFileTreeViewItem *new_child;
-
-      QFileInfo d( curr->getFilename());
-
-      if( ask )
+      KFileItem *item = curr->fileItem();
+      
+      QString s;
+      s = i18n("Do you really want to delete this image ?\nIt can't be restored !" );
+      if( item->isDir() )
       {
-	 QString s;
-	 s = i18n("Do you really want to delete the folder %1\nand all the images inside ?").arg(d.baseName());
-	 int result = KMessageBox::questionYesNo(this, s, i18n( "Delete collection item") );
-	 if( result == KMessageBox::No )
-	    return( false );
-
+	 s = i18n("Do you really want to delete the folder %1\nand all the images inside ?").arg("");
       }
-
-      ok = true;
-      while( child && ok )
-      {
-	 kdDebug(28000) << "deleting " << child->getFilename() << endl;
-	 new_child = (KFileTreeViewItem*) child->nextSibling();
-	 ok = deleteItem( child, false );
-
-	 child = new_child;
-      }
-
-      if( ok )
-	 ok = curr->deleteFolder();
-
-      if( ok )
-      {
-	 if( curr->parent())
-	    setSelected( curr->parent(), true);
-	 delete curr;
-	 curr = 0;
-      }
-#endif
-   }
-   else
-   {
-#if 0 
-      if( ask )
-      {
-	 QString s;
-	 s = i18n("Do you really want to delete this image ?\nIt can't be restored !" );
-	 int result = KMessageBox::questionYesNo(this, s, i18n("Delete image") );
-
-	 if( result == KMessageBox::No )
-	    return( false );
-
-      }
-
-      /* delete a normal file */
-      emit( deleteImage( curr->getImage() ));
-      ok = curr->deleteFile();
-      delete curr;
-      curr = 0;
-#endif
+      result = KMessageBox::questionYesNo(this, s, i18n( "Delete collection item") );
    }
 
-   if( ! ok )
-      kdDebug(28000) << "Deleting Item failed !" << endl;
-
-   return;
+   /* Since we are currently talking about local files here, NetAccess is OK */
+   if( result == KMessageBox::Yes )
+   {
+      if( KIO::NetAccess::del( urlToDel ))
+      {
+	 if( nextToSelect )
+	    setSelected( nextToSelect, true );
+	 /* TODO: remove the directory from the imageNameCombobox */
+	 
+      }
+      else
+	 kdDebug(28000) << "Deleting files failed" << endl;
+	 
+   }
 }
 
 /* ----------------------------------------------------------------------- */
