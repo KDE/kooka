@@ -106,6 +106,39 @@ void ScanPackager::slSelectionChanged( QListViewItem *newItem )
 }
 
 /* ----------------------------------------------------------------------- */
+/* Called if the image exists but was changed by image manipulation func   */
+void ScanPackager::slotImageChanged( QImage *img )
+{
+   PackagerItem *curr = (PackagerItem*) currentItem();
+   if( ! curr )
+   {
+      curr = root;
+   }
+
+   /* Do not save directories */
+   if( curr->isDir() ) return;
+   
+   /* find the directory above */
+   const QString filename = curr->getFilename( );
+
+   ImgSaver saver( this );
+   ImgSaveStat is_stat = ISS_OK;
+   is_stat = saver.saveImage( img, filename );
+   
+   if( is_stat != ISS_OK )
+   {
+      debug( "Error while saving existing image !" );
+   }
+   else
+   {
+      debug( "Existing image save OK" );
+      curr->setImage( img );
+      emit( showImage( curr->getImage()));
+   }
+}
+
+
+/* ----------------------------------------------------------------------- */
 /* This slot takes a new scanned Picture and saves it.
  * It urgently needs to make a deep copy of the image !
  */
@@ -172,86 +205,86 @@ void ScanPackager::slAddImage( QImage *img )
 /* ----------------------------------------------------------------------- */
 void ScanPackager::slShowContextMenue(QListViewItem *lvi, const QPoint &p, int col )
 {
- 	debug( "Showing Context Menue" );
- 	(void) col;
+   debug( "Showing Context Menue" );
+   (void) col;
 	
- 	PackagerItem *curr = 0;
+   PackagerItem *curr = 0;
  	
- 	if( lvi )
- 	{
- 	    curr = (PackagerItem*) lvi;
- 	    if( curr->isDir() )
-	 	setSelected( curr, true );
- 	}
+   if( lvi )
+   {
+      curr = (PackagerItem*) lvi;
+      if( curr->isDir() )
+	 setSelected( curr, true );
+   }
  	
-  	QPopupMenu *popup = new QPopupMenu();
-  	popup->setCheckable( true );
+   QPopupMenu *popup = new QPopupMenu();
+   popup->setCheckable( true );
 
-   	// debug ( "opening popup!" );
- 	if( curr )
-	{
-            popup->insertItem( *icons["mini-ray"], I18N("unload image"), ID_POP_UNLOAD_IMG );
-            popup->insertItem( *icons["mini-floppy"], I18N("export image"), ID_POP_SAVE_IMG );
-            popup->setItemEnabled ( ID_POP_CREATE_NEW, ! curr->isDir() );
-            popup->insertSeparator();
-            popup->insertItem( *icons["mini-trash"], I18N("delete image"), ID_POP_DELETE );
-            popup->insertSeparator();
-  	}
+   // debug ( "opening popup!" );
+   if( curr )
+   {
+      popup->insertItem( *icons["mini-ray"], I18N("unload image"), ID_POP_UNLOAD_IMG );
+      popup->insertItem( *icons["mini-floppy"], I18N("export image"), ID_POP_SAVE_IMG );
+      popup->setItemEnabled ( ID_POP_CREATE_NEW, ! curr->isDir() );
+      popup->insertSeparator();
+      popup->insertItem( *icons["mini-trash"], I18N("delete image"), ID_POP_DELETE );
+      popup->insertSeparator();
+   }
   	
-        popup->insertItem( *icons["mini-folder_new"], "create new folder", ID_POP_CREATE_NEW );
-        popup->setItemEnabled ( ID_POP_CREATE_NEW, curr->isDir() );
+   popup->insertItem( *icons["mini-folder_new"], "create new folder", ID_POP_CREATE_NEW );
+   popup->setItemEnabled ( ID_POP_CREATE_NEW, curr->isDir() );
 
-  	connect( popup, SIGNAL( activated(int)), this, SLOT(slHandlePopup(int)));
- 	popup->move( p );
-  	popup->show();
+   connect( popup, SIGNAL( activated(int)), this, SLOT(slHandlePopup(int)));
+   popup->move( p );
+   popup->show();
 
 }
 
 /* ----------------------------------------------------------------------- */
 void ScanPackager::slHandlePopup( int menu_id )
 {
- 	debug( "Popup to handle ID: %d", menu_id );
+   debug( "Popup to handle ID: %d", menu_id );
  	
- 	PackagerItem *curr = (PackagerItem*) currentItem();
- 	if( ! curr ) return;
- 	PackagerItem *newitem = (PackagerItem*) curr->itemAbove();
- 	bool setnew = false;
+   PackagerItem *curr = (PackagerItem*) currentItem();
+   if( ! curr ) return;
+   PackagerItem *newitem = (PackagerItem*) curr->itemAbove();
+   bool setnew = false;
  	
- 	switch( menu_id )
- 	{
- 		case ID_POP_RESCAN:
- 			debug( "Not yet implemented !" );
- 		break;
- 		case ID_POP_DELETE:
- 			if( curr && curr != root ) {
- 				deleteItem( curr, true );
- 				setnew = true;
- 			}
- 		break;
- 		case ID_POP_CREATE_NEW:
- 			createFolder();
- 		break;
- 		case ID_POP_UNLOAD_IMG:
- 			if( curr )
- 				unloadItem( curr );
- 			if( !curr->isLoaded() )	
- 				emit( showImage( 0 ));
- 			setnew = true;
- 		break;
- 		case ID_POP_SAVE_IMG:
- 		     if( curr ) exportFile( curr );
+   switch( menu_id )
+   {
+      case ID_POP_RESCAN:
+	 debug( "Not yet implemented !" );
+	 break;
+      case ID_POP_DELETE:
+	 if( curr && curr != root ) {
+	    deleteItem( curr, true );
+	    setnew = true;
+	 }
+	 break;
+      case ID_POP_CREATE_NEW:
+	 createFolder();
+	 break;
+      case ID_POP_UNLOAD_IMG:
+	 if( curr )
+	    unloadItem( curr );
+	 if( !curr->isLoaded() )	
+	    emit( showImage( 0 ));
+	 setnew = true;
+	 break;
+      case ID_POP_SAVE_IMG:
+	 if( curr ) exportFile( curr );
  		
- 		break;
- 		default:
- 		break;
- 	}
+	 break;
+      default:
+	 break;
+   }
  	
- 	/* need to set a new item as actual item ? */
- 	if( setnew ) {
- 	        setCurrentItem( newitem );
- 	        setSelected( newitem, true );
- 	        slSelectionChanged( newitem );
- 	}
+   /* need to set a new item as actual item ? */
+   if( setnew ) {
+      setCurrentItem( newitem );
+      setSelected( newitem, true );
+      slSelectionChanged( newitem );
+   }
  	
 }
 /* ----------------------------------------------------------------------- */
@@ -336,98 +369,98 @@ void ScanPackager::unloadItem( PackagerItem *curr )
 /* ----------------------------------------------------------------------- */
 bool ScanPackager::deleteItem( PackagerItem *curr, bool ask )
 {
-	bool ok = false;
-	if( ! curr ) return( ok );
-	debug( "Deleting: %s", (const char*) curr->getFilename());
-	if( curr->isDir() )
-	{
-     	/* Remove all files and the dir */
-     	PackagerItem  *child = (PackagerItem*) curr->firstChild();
-     	PackagerItem *new_child;
+   bool ok = false;
+   if( ! curr ) return( ok );
+   debug( "Deleting: %s", (const char*) curr->getFilename());
+   if( curr->isDir() )
+   {
+      /* Remove all files and the dir */
+      PackagerItem  *child = (PackagerItem*) curr->firstChild();
+      PackagerItem *new_child;
 
-     	QFileInfo d( curr->getFilename());
+      QFileInfo d( curr->getFilename());
      	
-     	if( ask )
-     	{
-     		QString s;
-     		s = "Do you really want to delete the folder " + d.baseName();
-     		s += "\nand all the images inside ?";
-     	   int result = QMessageBox::warning(this, "Delete collection item", (const char*) s,
-	   			   								 QMessageBox::Ok, QMessageBox::Cancel);
-			debug( "This is result: %d", result );	   			   								
-			if( result == 2 )	   			   								
-      		return( false );
+      if( ask )
+      {
+	 QString s;
+	 s = "Do you really want to delete the folder " + d.baseName();
+	 s += "\nand all the images inside ?";
+	 int result = QMessageBox::warning(this, "Delete collection item", (const char*) s,
+					   QMessageBox::Ok, QMessageBox::Cancel);
+	 debug( "This is result: %d", result );	   			   								
+	 if( result == 2 )	   			   								
+	    return( false );
      		
       }
      	     	
-     	ok = true;
-     	while( child && ok )
-     	{
-     		debug( "deleting %s", (const char*) child->getFilename());
-     		new_child = (PackagerItem*) child->nextSibling();
-  			ok = deleteItem( child, false );
+      ok = true;
+      while( child && ok )
+      {
+	 debug( "deleting %s", (const char*) child->getFilename());
+	 new_child = (PackagerItem*) child->nextSibling();
+	 ok = deleteItem( child, false );
      		
-     		child = new_child;
-     	}
+	 child = new_child;
+      }
      	
-     	if( ok )
-     		ok = curr->deleteFolder();
+      if( ok )
+	 ok = curr->deleteFolder();
      		
-     	if( ok )
-     	{
-     		if( curr->parent())
-     	 		setSelected( curr->parent(), true);
-     		delete curr;
-     		curr = 0;
-     	}
- 	}
- 	else
- 	{
- 	  	if( ask )
-	  	{
-     		QString s;
-     		s = "Do you really want to delete this image ?";
-     		s += "\nIt cant be restored !";
-     	   int result = QMessageBox::warning(this, "Delete image", (const char*) s,
-	   			   								 QMessageBox::Ok, QMessageBox::Cancel);
-			// debug( "This is result: %d", result );	   			   								
-			if( result == 2 )	   			   								
-      		return( false );
+      if( ok )
+      {
+	 if( curr->parent())
+	    setSelected( curr->parent(), true);
+	 delete curr;
+	 curr = 0;
+      }
+   }
+   else
+   {
+      if( ask )
+      {
+	 QString s;
+	 s = "Do you really want to delete this image ?";
+	 s += "\nIt cant be restored !";
+	 int result = QMessageBox::warning(this, "Delete image", (const char*) s,
+					   QMessageBox::Ok, QMessageBox::Cancel);
+	 // debug( "This is result: %d", result );	   			   								
+	 if( result == 2 )	   			   								
+	    return( false );
      		
       }
 
- 		/* delete a normal file */
- 		emit( deleteImage( curr->getImage() ));
- 		ok = curr->deleteFile();
- 		delete curr;	 	
- 	}
+      /* delete a normal file */
+      emit( deleteImage( curr->getImage() ));
+      ok = curr->deleteFile();
+      delete curr;	 	
+   }
  	
- 	if( ! ok )
- 		debug( "Deleting Item failed !" );
+   if( ! ok )
+      debug( "Deleting Item failed !" );
  	
- 	return( ok );
+   return( ok );
 }
 
 /* ----------------------------------------------------------------------- */
 void ScanPackager::createFolder( void )
 {
- 	EntryDialog d( this, "New Folder ", "Please enter a new folder name.\n"
- 								"This name will be displayed in the List" );
-	if( d.exec() == QDialog::Accepted )
-	{
-	  	QString folder = d.getText();
-	  	if( folder.length() > 0 )
-	  	{
-	  		PackagerItem *curr = (PackagerItem*)currentItem();
-	  		if( curr )
-	  		{
-	  	 		PackagerItem *new_item = new PackagerItem( curr, true );
-	  	 		new_item->setFilename( curr->getFilename() + "/" + folder );
+   EntryDialog d( this, "New Folder ", "Please enter a new folder name.\n"
+		  "This name will be displayed in the List" );
+   if( d.exec() == QDialog::Accepted )
+   {
+      QString folder = d.getText();
+      if( folder.length() > 0 )
+      {
+	 PackagerItem *curr = (PackagerItem*)currentItem();
+	 if( curr )
+	 {
+	    PackagerItem *new_item = new PackagerItem( curr, true );
+	    new_item->setFilename( curr->getFilename() + "/" + folder );
 	  	 		
-	  	 		new_item->createFolder();
-	  		}
-	  	}
-	}
+	    new_item->createFolder();
+	 }
+      }
+   }
 }
 
 /* ----------------------------------------------------------------------- */
@@ -448,55 +481,55 @@ int ScanPackager::readDir( QListViewItem *parent, const char *dir_to_read )
    ++it;  ++it;  /* Skip the current and parent-dir */
    while ( (fi=it.current()) )
    {           // for each file...
-	if( fi->isDir() )
-	{
-	    PackagerItem *new_folder = new PackagerItem( parent, true );
-	    new_folder->setFilename( fi->absFilePath() );
-	    /* recursive Call to readDir */
-	    amount_dirs++;
-	    amount_dirs += readDir( new_folder, fi->absFilePath() );
-            new_folder->decorateFile();
-	}
-	else
-	{
-	    /* its a file */
-	    PackagerItem *item = new PackagerItem( parent, false );
-	    item->setFilename( fi->absFilePath() );
+      if( fi->isDir() )
+      {
+	 PackagerItem *new_folder = new PackagerItem( parent, true );
+	 new_folder->setFilename( fi->absFilePath() );
+	 /* recursive Call to readDir */
+	 amount_dirs++;
+	 amount_dirs += readDir( new_folder, fi->absFilePath() );
+	 new_folder->decorateFile();
+      }
+      else
+      {
+	 /* its a file */
+	 PackagerItem *item = new PackagerItem( parent, false );
+	 item->setFilename( fi->absFilePath() );
 		 	
-	    uint si = fi->size();
-            s = "";
+	 uint si = fi->size();
+	 s = "";
 
-	    if( si > 1024*1024 )
-	    {  /* Size is MegaByte */
-		s.sprintf("%.2f Mb", double( si/1024/1024 ) );
-	    }
-	    else if( si > 1024 )
-	    {
-		s.sprintf("%.0f kb", double(si /1024) );		 	
-		// s.setNum( double(si/1024), 'f', 1 );
-		// s += " kb";
-	    }
-	    else
-	    {
-		s.sprintf("%d byte", si );		 	
-	    }
-	    item->setText( 1, s );
-	}
+	 if( si > 1024*1024 )
+	 {  /* Size is MegaByte */
+	    s.sprintf("%.2f Mb", double( si/1024/1024 ) );
+	 }
+	 else if( si > 1024 )
+	 {
+	    s.sprintf("%.0f kb", double(si /1024) );		 	
+	    // s.setNum( double(si/1024), 'f', 1 );
+	    // s += " kb";
+	 }
+	 else
+	 {
+	    s.sprintf("%d byte", si );		 	
+	 }
+	 item->setText( 1, s );
+      }
 		
-	++it;                               // goto next list element
-    }
-    return( amount_dirs );
+      ++it;                               // goto next list element
+   }
+   return( amount_dirs );
 }
 
 
 /* ----------------------------------------------------------------------- */
 QString ScanPackager::getImgName( QString name_on_disk )
 {
-	QString s;
-	(void) name_on_disk;
+   QString s;
+   (void) name_on_disk;
 	
-	s.sprintf( "image %d", img_counter++ );
-	return( s );     	
+   s.sprintf( "image %d", img_counter++ );
+   return( s );     	
 }
 
 /* ----------------------------------------------------------------------- */

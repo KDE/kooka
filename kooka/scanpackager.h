@@ -54,6 +54,10 @@ public slots:
 
    void         slotCanceled(KIO::Job*);
    void         slotResult( KIO::Job*);
+
+   
+   void         slotImageChanged( QImage * );
+     
 signals:
    void 	showImage( QImage* );
    void         deleteImage( QImage* );
