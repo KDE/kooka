@@ -111,7 +111,7 @@ QString  ScanSourceDialog::getText( void ) const
    return( sources->currentText() );
 }
 
-void ScanSourceDialog::slNotifyADF( int adf_group )
+void ScanSourceDialog::slNotifyADF( int )
 {
    // debug( "reported adf-select %d", adf_group );
    /* this seems to be broken, adf_text is a visible string?
