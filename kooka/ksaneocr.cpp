@@ -47,6 +47,11 @@ KSANEOCR::~KSANEOCR()
       delete( daemon );
       daemon = 0;
    }
+   if( ktmpFile )
+     {
+       ktmpFile->setAutoDelete( false );
+       delete ktmpFile;
+     }
 }
 
 void KSANEOCR::setImage( const QImage *img )

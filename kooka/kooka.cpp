@@ -84,7 +84,7 @@ Kooka::Kooka( const QCString& deviceToUse)
 
 Kooka::~Kooka()
 {
-
+  delete m_printer;
 }
 
 void Kooka::startup( void )
