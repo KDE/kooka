@@ -1,4 +1,3 @@
-
 /***************************************************************************
                           kocrstartdia.cpp  -  description
                              -------------------
@@ -62,7 +61,6 @@
 
 KadmosDialog::KadmosDialog( QWidget *parent, KSpellConfig *spellConfig )
     :KOCRBase( parent, spellConfig, KDialogBase::Tabbed ),
-     m_classifierCombo(0),
      m_cbNoise(0),
      m_cbAutoscale(0)
 {
@@ -79,13 +77,12 @@ QString KadmosDialog::ocrEngineLogo() const
 
 QString KadmosDialog::ocrEngineName() const
 {
-    return i18n("KADMOS OCR Engine");
+    return i18n("KADMOS OCR/ICR");
 }
 
 QString KadmosDialog::ocrEngineDesc() const
 {
-    return i18n("<B>Starting Optical Character Recognition</B><P>"
-                "Kooka uses <I>the KADMOS OCR/ICR engine</I>, a "
+    return i18n("This version of Kooka was linked with the <I>KADMOS OCR/ICR engine</I>, a "
                 "commercial engine for optical character recognition.<P>"
                 "Kadmos is a product of <B>re Recognition AG</B><BR>"
                 "For more information about Kadmos OCR see "
@@ -110,12 +107,15 @@ void KadmosDialog::setupGui()
     KConfig *conf = KGlobal::config ();
     conf->setGroup( CFG_GROUP_KADMOS );
 
-    const QString stdPath = locate( "appdata", "ttfus.rec" );
-    
+    // FIXME: dynamic classifier reading.
+    KStandardDirs stdDir;
+    const QString stdPath = stdDir.findResourceDir( "data", "kooka/classifiers/ttfus.rec" );
+    kdDebug(28000) << "Standard-Classifier-Path: " << stdPath << endl;
+
     m_classifierPath = conf->readEntry( CFG_KADMOS_CLASSIFIER_PATH, stdPath );
 
-    (void) new QLabel( i18n("Please classify the font type and region of the text on the image:"),
-		       page ); 
+    (void) new QLabel( i18n("Please classify the Font Type and Language of the text on the image:"),
+		       page );
     QHBox *locBox = new QHBox( page );
     m_bbFont = new QButtonGroup(1, Qt::Horizontal, i18n("Font Type Selection"), locBox);
     (void) (new QRadioButton( i18n("Machine Print"), m_bbFont ))->setChecked(true);
@@ -123,12 +123,12 @@ void KadmosDialog::setupGui()
     (void) new QRadioButton( i18n("Norm Font"), m_bbFont );
 
     m_bbRegion= new QButtonGroup(1, Qt::Horizontal, i18n("Language"), locBox);
-    
+
     (void) new QRadioButton( i18n("US English"), m_bbRegion );
     (new QRadioButton( i18n("West European Languages"), m_bbRegion ))->setChecked(true);
     (void) new QRadioButton( i18n("East European Languages"), m_bbRegion );
 
-    
+
     QHBox *innerBox = new QHBox( page );
     innerBox->setSpacing( KDialog::spacingHint());
 
@@ -158,25 +158,36 @@ void KadmosDialog::setupClassification( QVBox* )
 
 }
 
-QString KadmosDialog::getSelClassifier() const
+bool KadmosDialog::getSelClassifier( QString& path ) const
 {
-    return m_classifierPath + "/" + getSelClassifierName();
+    QString classifier = getSelClassifierName();
+    QString cmplPath = m_classifierPath + "kooka/classifiers/" + classifier;
+    bool res = true;
+    /* Check if the classifier exists on the HD. If not, return an empty string */
+    QFileInfo fi(cmplPath);
+
+    if( res && ! fi.exists() )
+    {
+        kdDebug(28000) << "Classifier file does not exist" << endl;
+        path = i18n("Classifier file %1 does not exist").arg(classifier);
+        res = false;
+    }
+
+    if( res && ! fi.isReadable() )
+    {
+        kdDebug(28000) << "Classifier file could not be read" << endl;
+        path = i18n("Classifier file %1 is not readable").arg(classifier);
+        res = false;
+    }
+
+    if( res )
+        path = cmplPath;
+
+    return res;
 }
 
 QString KadmosDialog::getSelClassifierName() const
 {
-#if 0
-    QString res;
-    if( ! m_classifierCombo ) return QString();
-    QString trans = m_classifierCombo->currentText();
-
-     StrMap::ConstIterator it;
-     for ( it = m_classifierTranslate.begin(); it != m_classifierTranslate.end(); ++it )
-     {
-         if( it.data() == trans )
-             return( it.key() );
-     }
-#endif
      QButton *butt = m_bbFont->selected();
 
      QString fType, rType;
@@ -193,7 +204,7 @@ QString KadmosDialog::getSelClassifierName() const
 	else
 	   kdDebug(28000) << "ERR: Wrong Font Type ID" << endl;
      }
-     
+
      butt = m_bbRegion->selected();
      if( butt)
      {
@@ -229,17 +240,18 @@ KadmosDialog::~KadmosDialog()
 
 void KadmosDialog::writeConfig( void )
 {
-   KConfig *conf = KGlobal::config ();
-   conf->setGroup( CFG_GROUP_KADMOS );
-
-   conf->writeEntry( CFG_KADMOS_CLASSIFIER, getSelClassifierName());
 
 }
 
 
-void KadmosDialog::enableFields( bool )
+void KadmosDialog::enableFields( bool state )
 {
    kdDebug(28000) << "About to disable the entry fields" << endl;
+   m_cbNoise->setEnabled( state );
+   m_cbAutoscale->setEnabled( state );
+
+   m_bbFont->setEnabled( state );
+   m_bbRegion->setEnabled( state );
 }
 
 

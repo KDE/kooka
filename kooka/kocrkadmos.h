@@ -50,7 +50,7 @@ class QCheckBox;
 class KSpellConfig;
 
 
-class KadmosClassifier
+class KadmosClassifier   /* Not yet used FIXME */
 {
 public:
    KadmosClassifier( QString lang, QString filename );
@@ -79,7 +79,7 @@ public:
     void setupGui();
     bool getAutoScale();
     bool getNoiseReduction();
-    QString getSelClassifier() const;
+    bool getSelClassifier(QString&) const;
     QString getSelClassifierName() const;
 
     QString ocrEngineName() const;
@@ -100,8 +100,6 @@ private slots:
 
 private:
     StrMap                m_classifierTranslate;
-
-    KScanCombo            *m_classifierCombo;
 
     QCheckBox             *m_cbNoise;
     QCheckBox             *m_cbAutoscale;
