@@ -462,7 +462,7 @@ void KookaView::print()
     KPrinter printer( true, pMode );
     printer.addDialogPage( new ImgPrintDialog( img ));
 
-    if( printer.setup( m_mainWindow ))
+    if( printer.setup( m_mainWindow, i18n("Print %1").arg(img->localFileName().section('/', -1)) ))
     {
 	KookaPrint kookaprint( &printer );
 	kookaprint.printImage(img);
