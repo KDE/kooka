@@ -61,7 +61,7 @@ ocradDialog::ocradDialog( QWidget *parent, KSpellConfig *spellConfig )
 
 QString ocradDialog::ocrEngineLogo() const
 {
-    return "";  // TODO
+    return "ocrad.png";
 }
 
 QString ocradDialog::ocrEngineName() const
@@ -71,12 +71,12 @@ QString ocradDialog::ocrEngineName() const
 
 QString ocradDialog::ocrEngineDesc() const
 {
-    return i18n("ocrad is an Open Source project "
+    return i18n("ocrad is a Free Software project "
                 "for optical character recognition.<p>"
                 "The author of ocrad is <b>Antonio Diaz</b><br>"
                 "For more information about ocrad see "
-                "<A HREF=\"http://savannah.gnu.org/projects/ocrad\">"
-                "http://savannah.gnu.org/projects/ocrad</A><p>"
+                "<A HREF=\"http://www.gnu.org/software/ocrad/ocrad.html\">"
+                "http://www.gnu.org/software/ocrad/ocrad.html</A><p>"
         "Images should be scanned in black/white mode for ocrad.<br>"
         "Best results are achieved if the characters are at least 20 pixels high.<p>"
         "Problems arise, as usual, with very bold or very light or broken characters, "
