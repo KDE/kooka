@@ -116,10 +116,14 @@ ImageCanvas::ImageCanvas(QWidget *parent,
 
 ImageCanvas::~ImageCanvas()
 {
+   kdDebug(28000) << "Destructor of ImageCanvas" << endl;
     noRectSlot();
     if( selected ) delete selected;
+    selected = 0;
     if( pmScaled ) delete pmScaled;
+    pmScaled = 0;
     if( contextMenu ) delete contextMenu;
+    contextMenu = 0;
 }
 
 void ImageCanvas::deleteView( QImage *delimage )
@@ -252,6 +256,7 @@ void ImageCanvas::handle_popup( int item )
               repaint( true);
           }
           delete zoomDia;
+	  zoomDia = 0;
 	  QApplication::restoreOverrideCursor();
 	 // emit( scalingRequested());
 

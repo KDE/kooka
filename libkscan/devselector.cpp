@@ -126,6 +126,7 @@ QCString DeviceSelector::getSelectedDevice( void ) const
    c->writeEntry( STARTUP_SKIP_ASK, getShouldSkip() );
    
    delete c;
+   c = 0;
    return dev;
 }
 

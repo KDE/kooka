@@ -107,9 +107,6 @@ void GammaDialog::slotApply()
 
 GammaDialog::~GammaDialog()
 {
-#if 0
-   delete lhMiddle;
-   delete lvSliders;
-#endif
+
 }
 #include "gammadialog.moc"
