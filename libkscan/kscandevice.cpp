@@ -262,7 +262,8 @@ QString KScanDevice::getScannerName(const QCString& name) const
   }
 
   if( scanner ) {
-     ret.sprintf( "%s %s %s", scanner->vendor, scanner->model, scanner->type );
+     // ret.sprintf( "%s %s %s", scanner->vendor, scanner->model, scanner->type );
+     ret.sprintf( "%s %s", scanner->vendor, scanner->model );
   }		
 
   kdDebug(29000) << "getScannerName returns <" << ret << ">" << endl;
