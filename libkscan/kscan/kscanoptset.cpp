@@ -70,6 +70,7 @@ bool KScanOptSet::backupOption( const KScanOption& opt )
      if( newopt )
      {
 	/** The option already exists **/
+	/* Copy the new one into the old one. TODO: checken Zuweisungoperatoren OK ? */
 	*newopt = opt;
      }
      else
