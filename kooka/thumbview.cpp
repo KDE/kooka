@@ -1,8 +1,8 @@
 /***************************************************************************
                thumbview.cpp  - Class to display thumbnailed images
-                             -------------------                                         
+                             -------------------
     begin                : Tue Apr 18 2002
-    copyright            : (C) 2002 by Klaas Freitag                         
+    copyright            : (C) 2002 by Klaas Freitag
     email                : freitag@suse.de
 
     $Id$
@@ -13,7 +13,7 @@
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
  *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   * 
+ *   (at your option) any later version.                                   *
  *                                                                         *
  *   This program is distributed in the hope that it will be useful,
  *   but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -40,6 +40,8 @@
 #include <kprogress.h>
 
 #include "thumbview.h"
+#include "thumbview.moc"
+
 #include "thumbviewitem.h"
 
 
@@ -53,17 +55,17 @@ ThumbView::ThumbView( QWidget *parent, const char *name )
    m_iconView = new KIconView( this, name );
    m_progress = new KProgress( this );
    m_progress->hide();
-   
+
    readSettings();
-   
+
    m_basePix.resize( QSize( m_pixWidth, m_pixHeight ) );
    m_basePix.fill();  // fills white per default TODO
 
-   
+
    m_iconView->setItemsMovable( false );
 
    slSetBackGround();
-   
+
    connect( m_iconView, SIGNAL( executed( QIconViewItem* )),
 	    this, SLOT( slDoubleClicked( QIconViewItem* )));
 }
@@ -78,7 +80,7 @@ bool ThumbView::readSettings()
    KConfig *cfg = KGlobal::config();
    cfg->setGroup( THUMB_GROUP );
    bool dirty = false;
-   
+
    QColor color;
    color = cfg->readColorEntry( MARGIN_COLOR1, &(colorGroup().base()));
    if( color != m_marginColor1 )
@@ -109,7 +111,7 @@ bool ThumbView::readSettings()
       sizeDirty  = true;
       m_pixWidth = value;
    }
-   
+
    value = cfg->readNumEntry( PIXMAP_HEIGHT, 120 );
    if( value != m_pixHeight || m_pixHeight == 0 )
    {
@@ -128,7 +130,7 @@ bool ThumbView::readSettings()
 
    KStandardDirs stdDir;
    QString newBgImg = cfg->readEntry( BG_WALLPAPER, stdDir.findResource( "data", STD_TILE_IMG ) );
-   
+
    if( m_bgImg != newBgImg )
    {
       m_bgImg = newBgImg;
@@ -145,7 +147,7 @@ void ThumbView::slDoubleClicked( QIconViewItem *qIt )
    if( it )
    {
       const KURL url = it->itemUrl();
-      
+
       emit( selectFromThumbnail( url ));
    }
 }
@@ -162,9 +164,9 @@ void ThumbView::slSetBackGround( )
    {
       bgPix.load( m_bgImg );
    }
-   
+
    m_iconView->setPaletteBackgroundPixmap ( bgPix );
-   setPaletteBackgroundPixmap ( bgPix ); 
+   setPaletteBackgroundPixmap ( bgPix );
 
 }
 
@@ -184,7 +186,7 @@ void ThumbView::slImageChanged( KFileItem *kfit )
       // kdDebug(28000) << "and my URL: " << thumbDir.prettyURL() << endl;
       return;
    }
-      
+
    if( deleteImage( kfit ))
    {
       kdDebug(28000) << "was changed, deleted first!" << endl;
@@ -201,7 +203,7 @@ void  ThumbView::slCheckForUpdate( KFileItem *kfit )
    if( ! kfit ) return;
 
    kdDebug(28000) << "Checking for update of thumbview!" << endl;
-   
+
    KURL searchUrl = kfit->url();
    bool haveItem = false;
 
@@ -224,7 +226,7 @@ void  ThumbView::slCheckForUpdate( KFileItem *kfit )
       kfiList.append( kfit );
       slNewFileItems( kfiList );
    }
-   
+
 }
 
 
@@ -232,7 +234,7 @@ bool ThumbView::deleteImage( KFileItem *kfit )
 {
    if( ! kfit ) return false;
 
-   
+
    KURL searchUrl = kfit->url();
    bool haveItem = false;
 
@@ -260,9 +262,9 @@ void ThumbView::slNewFileItems( const KFileItemList& items )
 {
    kdDebug(28000) << "Creating thumbnails for fileItemList" << endl;
 
-   
+
    KFileItemList startJobOn;
-   
+
    KFileItemListIterator it( items );
    KFileItem *item = 0;
    for ( ; (item = it.current()); ++it )
@@ -285,7 +287,7 @@ void ThumbView::slNewFileItems( const KFileItemList& items )
 			      mime );
 	    paint.flush();
 	 }
-         
+
 	 /* Create a new empty preview pixmap and store the pointer to it */
 	 ThumbViewItem *newIconViewIt = new ThumbViewItem( m_iconView,
 							   item->url().filename(),
@@ -293,21 +295,21 @@ void ThumbView::slNewFileItems( const KFileItemList& items )
 							   item );
 
 	 newIconViewIt->setItemUrl( item->url() );
-	 
+
 	 /* tell the file item about the iconView-representation */
 	 item->setExtraData( this, newIconViewIt );
-	 
+
 	 startJobOn.append( item );
       }
    }
-	  
+
    if( startJobOn.count() > 0 )
    {
       /* Progress-Bar */
       m_progress->show();
       m_progress->setTotalSteps(startJobOn.count());
       m_cntJobsStarted = 0;
-      
+
       /* start a preview-job */
       m_job = KIO::filePreview(startJobOn, m_pixWidth, m_pixHeight );
 
@@ -328,7 +330,7 @@ void ThumbView::slNewFileItems( const KFileItemList& items )
 }
 
 
-      
+
 void ThumbView::slGotPreview( const KFileItem* newFileItem, const QPixmap& newPix )
 {
    if( ! newFileItem ) return;
@@ -338,11 +340,11 @@ void ThumbView::slGotPreview( const KFileItem* newFileItem, const QPixmap& newPi
 
    item->setPixmap( createPixmap(newPix) );
    m_cntJobsStarted+=1;
-   
+
    m_progress->setProgress(m_cntJobsStarted);
-   
+
    // kdDebug(28000)<< "jobs-Counter: " << m_cntJobsStarted << endl;
-   
+
 }
 
 void ThumbView::slPreviewResult( KIO::Job *job )
@@ -390,7 +392,7 @@ void ThumbView::clear()
 {
    if( m_job )
       m_job->kill( false /* not silently to get result-signal */ );
-   m_iconView->clear(); 
+   m_iconView->clear();
 }
 
 
