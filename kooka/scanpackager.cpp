@@ -1147,13 +1147,12 @@ void ScanPackager::slotDeleteItems( )
       {
 	 s = i18n("Do you really want to delete the folder %1\nand all the images inside?").arg("");
       }
-      result = KMessageBox::questionYesNo(this, s, i18n( "Delete Collection Item"),
-					  KStdGuiItem::yes(), KStdGuiItem::no(),
-					  "AskForDeleteFiles" );
+      result = KMessageBox::warningContinueCancel(this, s, i18n( "Delete Collection Item"),
+					  KStdGuiItem::del(), "AskForDeleteFiles" );
    }
 
    /* Since we are currently talking about local files here, NetAccess is OK */
-   if( result == KMessageBox::Yes )
+   if( result == KMessageBox::Continue )
    {
       if( KIO::NetAccess::del( urlToDel, 0 ))
       {
