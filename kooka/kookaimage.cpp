@@ -237,13 +237,15 @@ bool KookaImage::loadTiffDir( const QString& filename, int no )
       }
 
       // reverse image (it's upside down)
-      for( unsigned ctr = 0; ctr < (height>>1); )
+      unsigned h = unsigned(height);
+      for( unsigned ctr = 0; ctr < h>>1; )
       {
 	 unsigned *line1 = (unsigned *)scanLine( ctr );
 	 unsigned *line2 = (unsigned *)scanLine( height
 						       - ( ++ctr ) );
 
-	 for( unsigned x = 0; x < width; x++ )
+	 unsigned w = unsigned(width);
+	 for( unsigned x = 0; x < w; x++ )
 	 {
 	    int temp = *line1;
 	    *line1 = *line2;
@@ -278,3 +280,7 @@ bool KookaImage::isSubImage() const
 {
    return( subImagesCount() );
 }
+
+
+
+		       

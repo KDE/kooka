@@ -30,6 +30,8 @@
 #define KOOKAIMAGE_H
 #include <kurl.h>
 #include <qimage.h>
+#include <qptrlist.h>
+
 #include <kfilemetainfo.h>
 
 class KFileItem;
@@ -126,5 +128,14 @@ private:
     KFileItem    *m_fileItem;
     bool          m_fileBound;
 };
+
+
+class KookaImageList: public QPtrList<KookaImage>
+{
+public:
+   KookaImageList() {}
+   ~KookaImageList() {}
+};
+
 
 #endif
