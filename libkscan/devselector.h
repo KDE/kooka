@@ -1,9 +1,9 @@
 /***************************************************************************
-                          devselector.h  -  description                              
-                             -------------------                                         
-    begin                : Sun Jun 11 2000                                           
-    copyright            : (C) 2000 by Klaas Freitag                         
-    email                : freitag@suse.de                                     
+                          devselector.h  -  description
+                             -------------------
+    begin                : Sun Jun 11 2000
+    copyright            : (C) 2000 by Klaas Freitag
+    email                : freitag@suse.de
  ***************************************************************************/
 
 /***************************************************************************
@@ -11,7 +11,7 @@
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
  *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   * 
+ *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
 
@@ -19,17 +19,14 @@
 #ifndef DEVSELECTOR_H
 #define DEVSELECTOR_H
 
-#include <qlabel.h>
-#include <qstring.h>
-#include <qstrlist.h>
-#include <qstringlist.h>
-#include <qcheckbox.h>
 
-#include <qsemimodal.h>
-#include <qprogressbar.h>
 #include <kdialogbase.h>
-#include <qradiobutton.h>
-#include <qgroupbox.h>
+
+class QButtonGroup;
+class QStrList;
+class QStringList;
+class QCheckBox;
+
 /**
   *@author Klaas Freitag
   */
@@ -44,20 +41,20 @@
 class DeviceSelector: public KDialogBase
 {
    Q_OBJECT
-public: 
-   DeviceSelector( QWidget *parent, QStrList&, QStringList& );
+public:
+   DeviceSelector( QWidget *parent, const QStrList&, const QStringList& );
    ~DeviceSelector();
 
-   QString getSelectedDevice( void ) const;
+   QCString getSelectedDevice( void ) const;
    bool    getShouldSkip( void ) const;
-   
+
 public slots:
 
-   void setScanSources( QStrList&, QStringList& );
-   
+   void setScanSources( const QStrList&, const QStringList& );
+
 private:
    QButtonGroup *selectBox;
-   QStringList devices;
+   mutable QStrList devices;
    QCheckBox   *cbSkipDialog;
 };
 

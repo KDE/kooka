@@ -16,13 +16,17 @@
  ***************************************************************************/
 
 #include <stdlib.h>
+
+#include <qbuttongroup.h>
+#include <qcheckbox.h>
+#include <qcstring.h>
 #include <qlayout.h>
 #include <qlabel.h>
-#include <qgroupbox.h>
-#include <qframe.h>
 #include <qpushbutton.h>
-#include <qbuttongroup.h>
-#include <qcstring.h>
+#include <qradiobutton.h>
+#include <qstrlist.h>
+#include <qstringlist.h>
+
 #include <kapp.h>
 #include <kconfig.h>
 #include <kdebug.h>
@@ -31,15 +35,12 @@
 #include <kmessagebox.h>
 
 #include "devselector.h"
-#include <kdebug.h>
 
 
-/* Definitions for the kapplication Config object */
-
-
-DeviceSelector::DeviceSelector( QWidget *parent, QStrList& devList, QStringList& hrdevList )
-   :KDialogBase( parent,  "DeviceSel", true, i18n("Welcome to Kooka"),
-		 Ok|Cancel, Ok, true )
+DeviceSelector::DeviceSelector( QWidget *parent, const QStrList& devList,
+				const QStringList& hrdevList )
+    : KDialogBase( parent,  "DeviceSel", true, i18n("Welcome to Kooka"),
+		   Ok|Cancel, Ok, true )
 {
    kdDebug() << "Starting DevSelector!" << endl;
    // Layout-Boxes
@@ -50,7 +51,7 @@ DeviceSelector::DeviceSelector( QWidget *parent, QStrList& devList, QStringList&
    QVBoxLayout *topLayout = new QVBoxLayout( page, marginHint(), spacingHint() );
    QLabel *label = new QLabel( page, "captionImage" );
    CHECK_PTR( label );
-   label->setPixmap( *(new QPixmap( "kookalogo.png" )));
+   label->setPixmap( QPixmap( "kookalogo.png" ));
    label->resize( 100, 350 );
    topLayout->addWidget( label );
 
@@ -73,16 +74,14 @@ bool DeviceSelector::getShouldSkip( void ) const
    return( cbSkipDialog->isChecked());
 }
 
-QString DeviceSelector::getSelectedDevice( void ) const
+QCString DeviceSelector::getSelectedDevice( void ) const
 {
-   CHECK_PTR( selectBox );
-
-   unsigned int selID = selectBox->id( selectBox->selected());
+   unsigned int selID = selectBox->id( selectBox->selected() );
 
    int c = devices.count();
    kdDebug() << "The Selected ID is <" << selID << ">/" << c << endl;
 
-   QString dev = devices[ selID ];
+   const char * dev = devices.at( selID );
 
    kdDebug() << "The selected device: <" << dev << ">" << endl;
    KGlobal::config()->setGroup( GROUP_STARTUP );
@@ -92,26 +91,29 @@ QString DeviceSelector::getSelectedDevice( void ) const
 }
 
 
-void DeviceSelector::setScanSources( QStrList& sources, QStringList& hrSources )
+void DeviceSelector::setScanSources( const QStrList& sources,
+				     const QStringList& hrSources )
 {
    bool default_ok = false;
 
    KGlobal::config()->setGroup( GROUP_STARTUP );
-   QString defstr = KGlobal::config()->readEntry( STARTUP_SCANDEV, "" );
-   uint c = sources.count();
+   QCString defstr = KGlobal::config()->readEntry( STARTUP_SCANDEV, "" ).local8Bit();
 
    /* Popup if no scanner exists */
-   if( c == 0 )
+   if( sources.isEmpty() )
    {
       // No device found -> seems to be no scanner installed
       QString msg;
-      msg = i18n("There is a problem in your scanner configuration.");
-      msg += i18n("\nNo scanner was found on your system.");
-      msg += i18n( "\nCheck the SANE installation !\n\n" );
-      msg += i18n( "Do you want to continue?");
+      msg = i18n("There is a problem in your scanner configuration."
+		 "\nNo scanner was found on your system."
+		 "\nCheck the SANE installation!\n\n"
+		 "Do you want to continue?");
       int result = KMessageBox::questionYesNo(this, msg, i18n("SANE Installation Problem"));
 
       if( result == KMessageBox::No ) {
+#ifdef __GNUC__
+#warning Needs some change, we cannot exit() here...
+#endif
 	 exit(0);
       }
    }
@@ -120,34 +122,30 @@ void DeviceSelector::setScanSources( QStrList& sources, QStringList& hrSources )
    uint nr = 0;
    int  checkDefNo = 0;
 
-   for ( const char* s = sources.first(); selectBox && s; s=sources.next() )
+   QStrListIterator it( sources );
+   QStringList::ConstIterator it2 = hrSources.begin();
+   for ( ; it.current(); ++it, ++it2 )
    {
-      QString css = QString::fromLocal8Bit( s );
-      QString hr( hrSources[nr]);
-      QString num;
-      num.sprintf( "&%d. ", 1+nr );
-      kdDebug() << num << hr << endl;
-      QRadioButton *rb = new QRadioButton( num+css +"\n"+hr, selectBox );
-
-      devices.append(css);
-
-      if( css == defstr )
-      {
-	 checkDefNo = nr;
-      }
+      QString text = QString::fromLatin1("&%1. %2\n%3").arg(1+nr).arg( QString::fromLocal8Bit(*it) ).arg( *it2 );
+      QRadioButton *rb = new QRadioButton( text, selectBox );
       selectBox->insert( rb );
+
+      devices.append( *it );
+
+      if( *it == defstr )
+	 checkDefNo = nr;
+
       nr++;
    }
 
    /* Default still needs to be set */
-   if( selectBox && ! default_ok )
+   if( ! default_ok )
    {
       /* if no default found, set the first */
       QRadioButton *rb = (QRadioButton*) selectBox->find( checkDefNo );
-      CHECK_PTR( rb );
-      rb->setChecked( true );
+      if ( rb )
+	  rb->setChecked( true );
    }
-
 }
 
 DeviceSelector::~DeviceSelector()

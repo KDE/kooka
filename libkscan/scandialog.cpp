@@ -43,7 +43,7 @@ ScanDialog::ScanDialog( QWidget *parent, const char *name, bool modal )
 
     m_scanParams = new ScanParams( splitter );
     m_device = new KScanDevice( this );
-    connect(m_device, SIGNAL(sigNewImage(QImage *)), 
+    connect(m_device, SIGNAL(sigNewImage(QImage *)),
 	    this, SLOT(slotFinalImage(QImage *)));
 
     QLabel *label = new QLabel( splitter );
@@ -62,8 +62,7 @@ ScanDialog::ScanDialog( QWidget *parent, const char *name, bool modal )
 
     DeviceSelector ds( this, backends, scannerNames );
     if ( ds.exec() == QDialog::Accepted ) {
-	QString device = ds.getSelectedDevice();
-	m_device->openDevice( device.local8Bit() );
+	m_device->openDevice( ds.getSelectedDevice() );
 	
 	if ( !m_scanParams->connectDevice( m_device ) ) {
 	    qWarning("*** connecting to device failed!");

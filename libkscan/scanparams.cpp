@@ -392,7 +392,7 @@ void ScanParams::slFileSelect( void )
       for( QCString fi_item = filterList.first(); !fi_item.isEmpty();
 	   fi_item = filterList.next() )
       {
-	  
+	
 	 filter.append( QString::fromLatin1( prefix + fi_item.lower()) );
       }
    }

@@ -61,7 +61,7 @@ void KScanDevice::guiSetEnabled( const QCString& name, bool state )
    ------------------------------------------------------------------------- */
 
 KScanOption *KScanDevice::getGuiElement( const QCString& name, QWidget *parent,
-					 const QString& desc, 
+					 const QString& desc,
 					 const QString& tooltip )
 {
    if( name.isEmpty() ) return(0);
@@ -164,12 +164,12 @@ KScanDevice::~KScanDevice()
 }
 
 
-KScanStat KScanDevice::openDevice( const char* backend )
+KScanStat KScanDevice::openDevice( const QCString& backend )
 {
    KScanStat    stat      = KSCAN_OK;
    SANE_Status 	sane_stat = SANE_STATUS_GOOD;
 
-   if( ! backend ) return KSCAN_ERR_PARAM;
+   if( backend.isEmpty() ) return KSCAN_ERR_PARAM;
 
    // search for scanner
    int indx = scanner_avail.find( backend );
@@ -441,9 +441,9 @@ KScanStat KScanDevice::apply( KScanOption *opt, bool isGammaTable )
    return( stat );
 }
 
-bool KScanDevice::optionExists( const char *name )
+bool KScanDevice::optionExists( const QCString& name )
 {
-   if( ! name ) return false;
+   if( name.isEmpty() ) return false;
    int *i = option_dic[ name ];
 
    if( !i ) return( false );
@@ -731,7 +731,7 @@ KScanStat KScanDevice::acquire( const QString& filename )
 	     }
 	}
     }
-    
+
     return KSCAN_OK;
 }
 

@@ -67,7 +67,7 @@ public:
    *   @return the state of the operation
    *   @param backend: the name of the backend to open
    */
-  KScanStat openDevice( const char* backend );
+  KScanStat openDevice( const QCString& backend );
 
   /**
    *  returns the names of all existing Scan Devices in the system.
@@ -168,7 +168,7 @@ public:
    *  @param name: the name of a option from a returned option-List
    *  @return true, if the option exists
    */
-  bool optionExists( const char* name );
+  bool optionExists( const QCString& name );
 
   /**
    *  returns a Widget suitable for the selected Option and creates the
@@ -286,8 +286,9 @@ private:
   KScanStat           createNewImage( SANE_Parameters *p );
 
 
-  QWidget	      *entryField( QWidget *parent, const char *text,
-                                   const char *tooltip );
+// not implemented
+//   QWidget	      *entryField( QWidget *parent, const QString& text,
+//                                    const QString& tooltip );
   KScanStat           find_options(); // help fct. to process options
   KScanStat           acquire_data( bool isPreview = false );
   QStrList 	      scanner_avail;  // list of names of all scan dev.
