@@ -43,6 +43,7 @@
 #include <kurlrequesterdlg.h>
 #include <qstrlist.h>
 #include <kedittoolbar.h>
+#include <kmessagebox.h>
 
 #include <kstdaccel.h>
 #include <kaction.h>
@@ -123,20 +124,29 @@ void Kooka::setupActions()
 		       m_view, SLOT(doOCRonSelection()),
 		       actionCollection(), "ocrImageSelect" );
 
-    (void) new KAction(i18n("Scale to W&idth"), "scaletowidth", CTRL+Key_I,
+    KAction *act;
+    act =  new KAction(i18n("Scale to W&idth"), "scaletowidth", CTRL+Key_I,
 		       m_view, SLOT( slIVScaleToWidth()),
 		       actionCollection(), "scaleToWidth" );
-
-    (void) new KAction(i18n("Scale to &Height"), "scaletoheight", CTRL+Key_H,
+    m_view->connectViewerAction( act );
+    
+    act = new KAction(i18n("Scale to &Height"), "scaletoheight", CTRL+Key_H,
 		       m_view, SLOT( slIVScaleToHeight()),
 		       actionCollection(), "scaleToHeight" );
+    m_view->connectViewerAction( act );
     
-    (void) new KAction(i18n("Original &Size"), "scaleorig", CTRL+Key_S,
+    act = new KAction(i18n("Original &Size"), "scaleorig", CTRL+Key_S,
 		       m_view, SLOT( slIVScaleOriginal()),
 		       actionCollection(), "scaleOriginal" );
+    m_view->connectViewerAction( act );
+    
+    act = new KAction(i18n("set zoom..."), "viewmag", 0, 
+		       m_view, SLOT( slIVShowZoomDialog()),
+		       actionCollection(), "showZoomDialog" );
+    m_view->connectViewerAction( act );
 
     (void) new KAction(i18n("Create from selectio&n"), "crop", CTRL+Key_N,
-		       m_view, SLOT( slCreateNewImgFromSelection() ),
+		       m_view, SLOT( slIVShowZoomDialog() ),
 		       actionCollection(), "createFromSelection" );
     
     (void) new KAction(i18n("Mirror image &vertically"), "mirror-vert", CTRL+Key_V,
@@ -155,25 +165,32 @@ void Kooka::setupActions()
 		       m_view, SLOT( slOpenCurrInGraphApp() ),
 		       actionCollection(), "openInGraphApp" );
 
-    (void) new KAction(i18n("&Rotate image clockwise"), "rotate_cw", CTRL+Key_R,
+    act = new KAction(i18n("&Rotate image clockwise"), "rotate_cw", CTRL+Key_R,
 		      this, SLOT( slRotateClockWise() ),
 		       actionCollection(), "rotateClockwise" );
+    m_view->connectViewerAction( act );
 
-    (void) new KAction(i18n("Rotate image counter-clock&wise"), "rotate_ccw", CTRL+Key_W,
+    act = new KAction(i18n("Rotate image counter-clock&wise"), "rotate_ccw", CTRL+Key_W,
 		       this, SLOT( slRotateCounterClockWise() ),
 		       actionCollection(), "rotateCounterClockwise" );
-    (void) new KAction(i18n("Rotate image 180 &degrees"), "rotate", CTRL+Key_D,
+    m_view->connectViewerAction( act );
+
+    act = new KAction(i18n("Rotate image 180 &degrees"), "rotate", CTRL+Key_D,
 		       this, SLOT( slRotate180() ),
 		       actionCollection(), "upsitedown" );
-#if 0
-    (void) new KAction(i18n("Save scan parameters"), "savedefaultparams", CTRL+Key_S,
+    m_view->connectViewerAction( act );
+
+    (void) new KAction(i18n("Save scan parameters"), "bookmark_add", CTRL+Key_S,
 		       m_view, SLOT(slSaveScanParams()),
 		       actionCollection(), "savescanparam" );
-#endif
 
     (void) new KAction(i18n("Select scan device"), "scanner", CTRL+Key_Q,
 		       m_view, SLOT( slSelectDevice()),
 		       actionCollection(), "selectsource" );
+
+    (void) new KAction( i18n("Enable All Warnings and Messages"), 0,
+			this,  SLOT(slEnableWarnings()),
+			actionCollection(), "enable_msgs");
 
     createGUI("kookaui.rc");
 
@@ -354,6 +371,8 @@ void Kooka::changeStatusbar(const QString& text)
 void Kooka::changeCaption(const QString& text)
 {
     // display the text on the caption
+   kdDebug(28000) << "Setting GALLERY caption #####" << text << endl;
+
     setCaption(text);
 }
 
@@ -388,5 +407,11 @@ void Kooka::slRotate180( void )
    m_view->slRotateImage( 180 );
 }
 
+void Kooka::slEnableWarnings( )
+{
+   KMessageBox::information (this, i18n("All messages and warnings will now be shown."));
+   KMessageBox::enableAllMessages();
+   kapp->config()->reparseConfiguration();
+}
 
 #include "kooka.moc"

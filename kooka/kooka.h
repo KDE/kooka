@@ -105,6 +105,8 @@ private slots:
    void slRotateCounterClockWise( void );
    void slRotate180( void );
 
+   void slEnableWarnings();
+   
 private:
    void setupAccel();
    void setupActions();
