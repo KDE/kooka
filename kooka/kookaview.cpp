@@ -310,7 +310,7 @@ void KookaView::slNewPreview( QImage *new_img )
 }
 
 
-bool KookaView::ToggleVisibility( int item )
+bool KookaView::ToggleVisibility( int item )
 {
    QWidget *w = 0;
    bool    ret = false;
