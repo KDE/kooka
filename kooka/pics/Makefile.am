@@ -4,5 +4,3 @@ data_DATA = mirror-both.png mirror-horiz.png mirror-vert.png scaletoheight.png \
 
 # This is where it will all be installed
 datadir = $(kde_datadir)/kooka/pics
-
-KDE_ICON = 
