@@ -2,7 +2,8 @@ dnl AC_SEARCH_LIBS(pgm2asc,Pgm2asc)
 dnl AC_CHECK_LIB(Pgm2asc,pgm2asc)
 dnl should define HAVE_LIBPGM2ASC if available
 
-AC_ARG_WITH(kadmos-dir, [  --with-kadmos-dir       sets the path to the kadmos engine],
+AC_ARG_WITH(kadmos-dir,
+AC_HELP_STRING([--with-kadmos-dir],[sets the path to the kadmos engine]),
 	[ac_kadmos_value=$withval], [ac_kadmos_value=NONE])
 
 KADMOS_INC=
