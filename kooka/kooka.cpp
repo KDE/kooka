@@ -398,12 +398,16 @@ void Kooka::optionsConfigureKeys()
 void Kooka::optionsConfigureToolbars()
 {
     // use the standard toolbar editor
-    KEditToolbar dlg(actionCollection());
-    if (dlg.exec())
-    {
-        // recreate our GUI
-        // createGUI( "kookaui.rc");
-    }
+    saveMainWindowSettings(KGlobal::config(), autoSaveGroup());
+    KEditToolbar dlg(factory());
+    connect(&dlg, SIGNAL(newToolbarConfig()), SLOT(newToolbarConfig()));
+    dlg.exec();
+}
+
+void Kooka::newToolbarConfig()
+{
+    // OK/Apply pressed in the toolbar editor
+    applyMainWindowSettings(KGlobal::config(), autoSaveGroup());
 }
 
 void Kooka::optionsPreferences()

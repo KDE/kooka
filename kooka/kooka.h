@@ -101,6 +101,7 @@ private slots:
    void changeStatusbar(const QString& text);
    void cleanStatusbar(void) { changeStatusbar(""); }
    void changeCaption(const QString& text);
+   void newToolbarConfig();
 
    // void fileSaveAs();
 
