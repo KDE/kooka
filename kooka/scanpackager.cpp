@@ -169,15 +169,15 @@ void ScanPackager::createMenus()
       popup = new KPopupMenu();
       popup->insertTitle( i18n( "Gallery" ));
       
-      KAction *newAct = new KAction(i18n("&Create Directory"), "folder_new",0 ,
+      KAction *newAct = new KAction(i18n("&Create Directory..."), "folder_new",0 ,
 				    this, SLOT(slotCreateFolder()), this);
-      newAct->plug( popup );	
-      
+      newAct->plug( popup );
+
       newAct = new KAction(i18n("&Save Image"), "filesave",0 ,
 			   this, SLOT(slotExportFile()), this);
-      newAct->plug( popup );	
+      newAct->plug( popup );
 
-      newAct = new KAction(i18n("&Delete Image"), "edittrash",0 ,
+      newAct = new KAction(i18n("&Delete Image..."), "edittrash",0 ,
 			   this, SLOT(slotDeleteItems()), this);
       newAct->plug( popup );	
 

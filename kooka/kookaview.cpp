@@ -114,7 +114,7 @@ KookaView::KookaView(QWidget *parent, const QCString& deviceToUse)
     */
    QHBox *recentBox = new QHBox( vbox );
    recentBox->setMargin(KDialog::marginHint());
-   QLabel *lab = new QLabel( i18n("Gallery"), recentBox );
+   QLabel *lab = new QLabel( i18n("Gallery:"), recentBox );
    lab->setSizePolicy( QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed) );
    recentFolder = new ImageNameCombo( recentBox );
 

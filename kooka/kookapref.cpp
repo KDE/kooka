@@ -132,7 +132,7 @@ void KookaPreferences::setupThumbnailPage()
 
    /* image file selector */
    QVGroupBox *hgb1 = new QVGroupBox( i18n("Thumbview Background" ), page );
-   m_tileSelector = new ImageSelectLine( hgb1, i18n("Select Background Image:"));
+   m_tileSelector = new ImageSelectLine( hgb1, i18n("Select background image:"));
    kdDebug(29000) << "Setting tile url " << bgImg << endl;
    m_tileSelector->setURL( KURL(bgImg) );
    
@@ -175,11 +175,11 @@ void KookaPreferences::setupThumbnailPage()
    m_frameWidth = new KIntNumInput( frameWidth, fGrid );
    l1->setBuddy( m_frameWidth );
 
-   l1 = new QLabel(i18n("Frame Color &1: "), fGrid );
+   l1 = new QLabel(i18n("Frame color &1: "), fGrid );
    m_colButt1 = new KColorButton( col1, fGrid );
    l1->setBuddy( m_colButt1 );
-   
-   l1 = new QLabel(i18n("Frame Color &2: "), fGrid );
+
+   l1 = new QLabel(i18n("Frame color &2: "), fGrid );
    m_colButt2 = new KColorButton( col2, fGrid );
    l1->setBuddy( m_colButt2 );
    /* TODO: Gradient type */
