@@ -3,6 +3,7 @@
 #include "kscandevice.h"
 #include "devselector.h"
 #include "ksaneocr.h"
+#include "img_saver.h"
 
 #include <qpainter.h>
 #include <qlayout.h>
@@ -21,9 +22,11 @@
 #include <krun.h>
 #include <keditcl.h>
 
+#define PACKAGER_TAB 0
+#define PREVIEWER_TAB 1
 
 #define STARTUP_IMG_SELECTION "SelectedImageOnStartup"
-
+#define STARTUP_SELECTED_PAGE "TabWidgetPage"
 
 KookaView::KookaView(QWidget *parent)
     : QSplitter(parent)
@@ -63,11 +66,18 @@ KookaView::KookaView(QWidget *parent)
    }
 
    /* build up the Preview/Packager-Tabview */
-   tabw->addTab( packager, i18n( "&Images") );
-   tabw->addTab( preview_canvas, i18n("&Preview") );
+   tabw->insertTab( packager, i18n( "&Images"), PACKAGER_TAB );
+   tabw->insertTab( preview_canvas, i18n("&Preview"), PREVIEWER_TAB );
 
    tabw->setMinimumSize(100, 100);
-   tabw->showPage(preview_canvas);
+
+   KConfig *konf = KGlobal::config ();
+   konf->setGroup(GROUP_STARTUP);
+   QString startup = konf->readEntry( STARTUP_SELECTED_PAGE, "nothing" );
+   if( startup == "previewer" )
+      tabw->showPage(preview_canvas);
+   else
+      tabw->showPage(packager);
 
    /* ..and create the Scanner parameter object, which displays the parameter
     *   the current scanner provides.
@@ -229,7 +239,7 @@ KookaView::KookaView(QWidget *parent)
 
 KookaView::~KookaView()
 {
-   saveProperties( kapp->config() );
+   saveProperties( KGlobal::config () );
    // if( preview_img ) delete( preview_img );
 
 }
@@ -479,6 +489,14 @@ void KookaView::saveProperties(KConfig *config)
    config->setGroup( GROUP_STARTUP );
    /* Get with path */
    config->writeEntry( STARTUP_IMG_SELECTION, packager->getCurrImageFileName(true));
+
+   QString tabwPre = "packager";
+   int idx = tabw->currentPageIndex();
+   kdDebug(28000) << "Idx ist" << idx << endl;
+   if( idx == PREVIEWER_TAB )
+      tabwPre = "previewer";
+
+   config->writeEntry( STARTUP_SELECTED_PAGE, tabwPre );
 }
 
 
