@@ -80,7 +80,7 @@ ImageCanvas::ImageCanvas(QWidget *parent,
 {
     d = new ImageCanvasPrivate();
 
-    scale_factor     = 100; // means orignal size
+    scale_factor     = 100; // means original size
     maintain_aspect  = true;
     selected         = new QRect;
     selected->setWidth(0);

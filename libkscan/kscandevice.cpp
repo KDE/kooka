@@ -1319,7 +1319,7 @@ void KScanDevice::doProcessABlock( void )
      if ( sane_scan_param.last_frame)
      {
 	/** Everythings okay, the picture is ready **/
-	kdDebug(29000) << "last frame reached - scan successfull" << endl;
+	kdDebug(29000) << "last frame reached - scan successful" << endl;
 	scanStatus = SSTAT_SILENT;
 	emit( sigScanFinished( KSCAN_OK ));
      }

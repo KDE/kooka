@@ -249,7 +249,7 @@ private:
   bool       buffer_untouched;
   size_t     buffer_size;
 
-  /* For gamma-Tables remeber gamma, brightness, contrast */
+  /* For gamma-Tables remember gamma, brightness, contrast */
   int        gamma, brightness, contrast;
 
    class KScanOptionPrivate;

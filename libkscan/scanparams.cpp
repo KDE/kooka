@@ -513,7 +513,7 @@ void ScanParams::createNoScannerMsg( void )
 }
 
 /* This slot will be called if something changes with the option given as a param.
- * This is usefull if the parameter - Gui has widgets in his own space, which depend
+ * This is useful if the parameter - Gui has widgets in his own space, which depend
  * on widget controlled by the KScanOption.
  */
 void ScanParams::slOptionNotify( KScanOption *kso )

@@ -45,7 +45,7 @@
 // #define MIN_PREVIEW_DPI 20
 // this is nowhere used!? Additionally, it's defined to 75 in kscandevice.cpp
 
-/* switch to show some from time to time usefull alloc-messages */
+/* switch to show some from time to time useful alloc-messages */
 #undef MEM_DEBUG
 
 #undef APPLY_IN_SITU

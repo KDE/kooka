@@ -121,7 +121,7 @@ private:
      * parent contains the filename */
     int          m_subNo;
 
-    /* In case beeing a subimage */
+    /* In case being a subimage */
     KookaImage   *m_parent;
     KURL          m_url;
     /* Fileitem if available */

@@ -67,7 +67,7 @@
 /* tag if a scan of the empty scanner results in black or white image */
 #define CFG_SCANNER_EMPTY_BG  "scannerBackgroundWhite"
 
-/* Defaultvalues for the threshhold for the autodetection */
+/* Defaultvalues for the threshold for the autodetection */
 #define DEF_THRESH_BLACK "45"
 #define DEF_THRESH_WHITE "240"
 

@@ -278,7 +278,7 @@ public slots:
 
     /**
      *  This slot does the same as ReloadAll, but it does not reload
-     *  the scanner option given as parameter. This is usefull to make
+     *  the scanner option given as parameter. This is useful to make
      *  sure that no recursion takes places during reload of options.
      **/
     void slReloadAllBut( KScanOption*);

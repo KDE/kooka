@@ -223,7 +223,7 @@ bool ScanDialog::setup()
    }
    // The scan device is now closed on closing the scan dialog. That means
    // that more work to open it needs to be done in the setup slot like opening
-   // the selector if neccessary etc.
+   // the selector if necessary etc.
 
    if( m_scanParams )
    {
@@ -361,7 +361,7 @@ void ScanDialog::slotNewPreview( QImage *image )
     if( image )
     {
         m_previewImage = *image;
-        // hmmm - dont know, if conversion of the bit-depth is neccessary.
+        // hmmm - dont know, if conversion of the bit-depth is necessary.
         // m_previewImage.convertDepth(32);
 
         /* The previewer does not copy the image data ! */

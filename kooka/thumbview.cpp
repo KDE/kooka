@@ -344,7 +344,7 @@ void ThumbView::slNewFileItems( const KFileItemList& items )
 	 connect( m_job, SIGNAL( gotPreview( const KFileItem*, const QPixmap& )),
 		  SLOT( slGotPreview( const KFileItem*, const QPixmap& ) ));
 	 /* KIO::Jo result is called in any way: Success, Failed, Error,
-	  * thus connecting the failed is not really neccessary.
+	  * thus connecting the failed is not really necessary.
 	  */
         // connect( job, SIGNAL( failed( const KFileItem* )),
         //          this, SLOT( slotFailed( const KFileItem* ) ));

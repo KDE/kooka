@@ -126,7 +126,7 @@ void slSourceSelect( void );
     *  is visible outside the scanparam-object to notify that the resolutions
     *  changed.
     *
-    *  That is e.g. usefull for size calculations
+    *  That is e.g. useful for size calculations
     */
    void slNewXResolution( KScanOption* );
 

@@ -41,7 +41,7 @@ GammaDialog::GammaDialog( QWidget *parent ) :
     Q_CHECK_PTR( page );
     setMainWidget( page );
 
-    /* This connect is for recalculating the table everytimes a new
+    /* This connect is for recalculating the table every time a new
      * Bright., Contrast or Gamma-Value is set */
     connect( gt, SIGNAL(tableChanged()), gt, SLOT(getTable()));
 

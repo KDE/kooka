@@ -513,7 +513,7 @@ void ScanPackager::slClicked( QListViewItem *newItem )
       }
       else
       {
-	 /* if not a dir, load the image if neccessary. This is done by loadImageForItem,
+	 /* if not a dir, load the image if necessary. This is done by loadImageForItem,
 	  * which is async( TODO ). The image finally arrives in slotImageArrived */
 	 QApplication::setOverrideCursor(waitCursor);
 	 emit( aboutToShowImage( item->url()));
@@ -1188,7 +1188,7 @@ void ScanPackager::slotCreateFolder( )
 	    else
 	    {
 	       /* created successfully */
-	       /* open the branch if neccessary and select the new folder */
+	       /* open the branch if necessary and select the new folder */
 
 	    }
 	 }
