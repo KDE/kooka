@@ -133,7 +133,9 @@ void ocrResEdit::slSaveText()
                                                  "*.txt",
                                                  this,
                                                  i18n("Save OCR Result Text") );
-    QFile file( fileName );
+	if( fileName.isEmpty() )
+		return;
+	QFile file( fileName );
     if ( file.open( IO_WriteOnly ) )
     {
         QTextStream stream( &file );
