@@ -6,6 +6,7 @@
    <Action name="saveImage"/>
    <Action name="deleteImage"/>
    <Action name="unloadImage"/>
+   <Action name="saveOCRResult"/>
  </Menu>
  <Menu name="imgCanvas"><text>&amp;Image</text>
    <Action name="openInGraphApp"/>
