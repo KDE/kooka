@@ -64,7 +64,7 @@ KOCRFinalDialog::KOCRFinalDialog( QWidget *parent, QString resultimg )
    topLayout->addWidget( label);
 
    QSplitter *splitpage = new QSplitter( QSplitter::Vertical , page );
-   topLayout->addWidget( splitpage );
+   topLayout->addWidget( splitpage, 10 );
    
    resultImg = new QImage( resultimg );
    ImageCanvas *imgCanvas = new ImageCanvas( splitpage, resultImg, "RESIMG" );
@@ -76,6 +76,9 @@ KOCRFinalDialog::KOCRFinalDialog( QWidget *parent, QString resultimg )
    textEdit = new KEdit( splitpage, "OCRResultEditor" );
    CHECK_PTR( textEdit );
    // topLayout->addWidget( textEdit );
+
+   splitpage->setResizeMode( imgCanvas, QSplitter::FollowSizeHint );
+   splitpage->setResizeMode( textEdit, QSplitter::FollowSizeHint );
 
    connect( this, SIGNAL(user1Clicked()), this, SLOT(openTextResult()));
 }
