@@ -1,5 +1,5 @@
 /* This file is part of the KDE Project
-   Copyright (C) 2000 Klaas Freitag <freitag@suse.de>  
+   Copyright (C) 2000 Klaas Freitag <freitag@suse.de>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -25,10 +25,10 @@
 #include <qgroupbox.h>
 #include <qframe.h>
 
-#include <qpushbutton.h>
-
 #include <klocale.h>
 #include <kdebug.h>
+#include <kpushbutton.h>
+#include <kstdguiitem.h>
 
 #include "massscandialog.h"
 
@@ -41,11 +41,11 @@ MassScanDialog::MassScanDialog( QWidget *parent )
    QVBoxLayout *bigdad = new QVBoxLayout( this, 5 );
    // QHBoxLayout *hl1= new QHBoxLayout( );      // Caption
    QHBoxLayout *l_but  = new QHBoxLayout( 10 );  // Buttons
- 	
+
  	/* Caption */
  	QLabel *l1 = new QLabel( i18n( "<B>Mass Scanning</B>" ), this);
    bigdad->addWidget( l1, 1);
- 	
+
  	/* Scan parameter information */
  	QGroupBox *f1 = new QGroupBox( i18n("Scan Parameter"), this );
  	f1->setFrameStyle( QFrame::Box | QFrame::Sunken );
@@ -53,7 +53,7 @@ MassScanDialog::MassScanDialog( QWidget *parent )
  	f1->setLineWidth( 1 );
    QVBoxLayout *l_main = new QVBoxLayout( f1, f1->frameWidth()+3, 3 );
  	bigdad->addWidget( f1, 6 );
- 	
+
    scanopts = i18n("Scanning <B>%s</B> with <B>%d</B> dpi");
  	l_scanopts = new QLabel( scanopts, f1 );
  	l_main->addWidget( l_scanopts );
@@ -61,7 +61,7 @@ MassScanDialog::MassScanDialog( QWidget *parent )
    tofolder = i18n("Storing new images in folder <B>%s</B>");
  	l_tofolder = new QLabel( tofolder, f1 );
  	l_main->addWidget( l_tofolder );
- 	
+
  	/* Scan Progress information */
  	QGroupBox *f2 = new QGroupBox( i18n("Scan Progress"), this );
  	f2->setFrameStyle( QFrame::Box | QFrame::Sunken );
@@ -91,7 +91,7 @@ MassScanDialog::MassScanDialog( QWidget *parent )
    QPushButton *b_cancel = new QPushButton( i18n("Stop"), this, "ButtCancel" );
    connect( b_cancel, SIGNAL(clicked()), this, SLOT(slStopScan()) );
 
-   QPushButton *b_finish = new QPushButton( i18n("Close"), this, "ButtFinish" );
+   QPushButton *b_finish = new KPushButton( KStdGuiItem::close(), this, "ButtFinish" );
    connect( b_finish, SIGNAL(clicked()), this, SLOT(slFinished()) );
 
    l_but->addWidget( b_start );
