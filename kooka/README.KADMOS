@@ -1,0 +1,68 @@
+Kooka and KADMOS integration
+============================
+
+This file describes how to make Kooka working with the KADMOS OCR/ICR
+engine. 
+
+KAMDOS is professional OCR/ICR software component of the company
+ 
+ reRecognition GmbH
+ Hafenstr. 50B 
+ 8280 Kreuzlingen, Switzerland 
+ Tel.: +41 71 6780000
+ Fax: +41 71 6780099
+ www.reRecognition.com
+
+and Kooka can be build using the linux version of the component in
+order to achive very good ocr results.
+
+Please contact reRecognition directly if you like to obtain or test
+KADMOS. Note that if you are linking against KADMOS, you loose the
+permission to use the GPL Qt version, so you need a commercial Qt
+version as well.
+
+Configuration
+-------------
+
+Since Kooka does not require KADMOS, it is neccessary to configure
+Kooka to use the KADMOS library. This is done by calling the configure
+script of Kooka's source distribution with parameter:
+./configure --with-kadmos-dir=/where/kadmos.h/resides/
+
+The configure script tries to locate the file kadmos.h in the
+directory that was specified. The KAMDOS library is expected in the
+same directory.  Build the source after configuring with KADOS. Kooka
+enables the code to work with KADMOS in the source and links the
+library.
+
+Installation
+------------
+
+KADMOS is linked statically and thus there is no need for special 
+installation of the KADMOS library. 
+
+Installation of the Classifier Files:
+
+KADMOS needs classifier files for the ocr process which come with
+the KADMOS developers pack. The classifier files need to be installed
+in the KDE application data directory for Kooka in a subdirectory named
+classifiers. If your KDE installation goes to /opt/kde3/, this is for
+example /opt/kde3/share/apps/kooka/classifiers. 
+
+In this version Kooka is not yet able to scan the available classifiers.
+The following classifier files need to exist in the classifier directory:
+
+ttfus.rec      US machineprint classifiers
+ttfeu.rec      European languages classifiers
+ttfee.rec      East European languages classifiers
+
+handus.rec     US handwriting classifiers
+handeu.rec     European languages handwriting classifiers
+handee.rec     East European languages handwriting
+
+norm.rec       Special OCR character set, no charset difference
+
+
+----------------------------------------------------------------------
+Klaas Freitag <freitag@suse.de>
+$Id$
