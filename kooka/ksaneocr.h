@@ -22,6 +22,7 @@
 #include <qobject.h>
 #include <qimage.h>
 
+#include <ktempfile.h>
 #include <kprocess.h>
 
 /**
@@ -31,7 +32,8 @@
 class KOCRStartDialog;
 
 
-class KSANEOCR : public QObject  {
+class KSANEOCR : public QObject
+{
    Q_OBJECT
 public: 
    KSANEOCR( QWidget* );
@@ -55,6 +57,8 @@ private:
    KOCRStartDialog *ocrProcessDia;
    KProcess *daemon;
    QString  tmpFile;
+   KTempFile *ktmpFile;
+   
    QImage   *bw_img;
    QString  ocrResultText;
    QString  ocrResultImage;
