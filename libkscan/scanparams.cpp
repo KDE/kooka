@@ -528,7 +528,7 @@ void ScanParams::slFileSelect( void )
    if( scan_mode == ID_QT_IMGIO )
    {
       QStrList filterList = QImage::inputFormats();
-      filter = i18n( "*.*|All Files (*.*)");
+      filter = i18n( "*|All Files (*)");
       for( QCString fi_item = filterList.first(); !fi_item.isEmpty();
 	   fi_item = filterList.next() )
       {
