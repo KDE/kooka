@@ -49,6 +49,7 @@ GenericName[sr]=Програм за скенирање и препознавањ
 GenericName[sr@Latn]=Program za skeniranje i prepoznavanje teksta
 GenericName[sv]=Bildläsar- och OCR-program
 GenericName[ta]=வருடு & OCR நிரலி
+GenericName[tg]=Барномаи Сканер ва OCR
 GenericName[th]=โปรแกรมสแกนภาพและ OCR
 GenericName[tr]=Tarayıcı ve karakter tanıma programı
 GenericName[uk]=Програма сканування та розпізнавання символів
@@ -66,6 +67,7 @@ Name[hi]=कूका
 Name[is]=Skanni
 Name[ko]=쿠카
 Name[ta]=கூக்கா
+Name[tg]=Кука
 Name[xx]=xxKookaxx
 
 X-DCOP-ServiceType=Multi
