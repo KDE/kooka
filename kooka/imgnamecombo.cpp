@@ -31,7 +31,7 @@
 ImageNameCombo::ImageNameCombo( QWidget *parent )
    : KComboBox( parent )
 {
-
+   setInsertionPolicy( QComboBox::AtTop );
 }
 
 ImageNameCombo::~ImageNameCombo()
@@ -39,6 +39,34 @@ ImageNameCombo::~ImageNameCombo()
    
 }
 
+void ImageNameCombo::slotPathRemove( KFileTreeBranch *branch, const QString& relPath )
+{
+   QString path = branch->name() + QString::fromLatin1(" - ") + relPath;
+
+   kdDebug(28000) << "ImageNameCombo: Removing " << path << endl;
+   QString select = currentText();
+   
+   if( items.contains( path ))
+   {
+      kdDebug(28000) << "ImageNameCombo: Item exists-> deleting" << endl;
+      items.remove( path );
+   }
+
+   /* */
+   rewriteList( branch, select );
+}
+
+void ImageNameCombo::rewriteList( KFileTreeBranch *branch, const QString& selText )
+{
+   clear();
+   for ( QStringList::Iterator it = items.begin(); it != items.end(); ++it )
+   {
+      insertItem( branch->pixmap(), *it );
+   }
+
+   int index = items.findIndex( selText );
+   setCurrentItem( index );
+}
 
 void ImageNameCombo::slotGalleryPathChanged( KFileTreeBranch* branch, const QString& relativPath )
 {
@@ -53,18 +81,8 @@ void ImageNameCombo::slotGalleryPathChanged( KFileTreeBranch* branch, const QStr
       // insert sorted
       items.append( newPath );
       items.sort();
-
-      clear();
-      for ( QStringList::Iterator it = items.begin(); it != items.end(); ++it )
-      {
-	 insertItem( branch->pixmap(), *it );
-      }
+      rewriteList( branch, newPath );
    }
-   int index = items.findIndex( newPath );
-   kdDebug(28000) << "Having this index " << index << endl;
-   
-   setCurrentItem( index );
-       
 }
 
 /* The End */

@@ -39,8 +39,9 @@ public:
 public slots:
 
    void slotGalleryPathChanged( KFileTreeBranch* branch, const QString& relativPath );
-
+   void slotPathRemove( KFileTreeBranch *branch, const QString& relPath );
 private:
+   void rewriteList( KFileTreeBranch *, const QString& selText );
    QStringList items;
 };
 
