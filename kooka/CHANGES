@@ -70,3 +70,21 @@ The released version does actually not have too many new
 * some changes to the image saver to display the image type (Lineart etc. )
 
 * bugfixes in the image Saver
+
+/* ================================================================================ */
+Nov 2001:
+Added a combo box below kooka's gallery widget. Since the gallery and the
+the preview window are in a tabwidget together, user complained that they
+do not see the directory they are scanning to while working on the preview
+page. The combobox shows the currently selected directory and is always
+visible. The user can use the combo to change the target dir without leaving
+the preview page.
+
+Nov 2001:
+Replaced the old ScanPackager object by a new one based on the new KFileTreeView
+Widget in kdelibs/kfile. Hopefully soon full KURL support and more than one image
+repository.
+
+Nov 2001:
+Moved preview image to a hidden directory under $KDEHOME/share/apps/ScanImages/.previews
+That makes the preview images invisible in the Packager.
