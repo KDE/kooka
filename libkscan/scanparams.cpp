@@ -396,6 +396,7 @@ QScrollView *ScanParams::scannerParams( )
 	 initialise( so );
       }
    }
+   
    /* Threshold-Setting */
    so = sane_device->getGuiElement( SANE_NAME_THRESHOLD, pbox,
 				    SANE_TITLE_THRESHOLD,
@@ -408,7 +409,7 @@ QScrollView *ScanParams::scannerParams( )
    /* Brightness-Setting */
    so = sane_device->getGuiElement( SANE_NAME_BRIGHTNESS, pbox,
 				    SANE_TITLE_BRIGHTNESS,
-				    SANE_DESC_THRESHOLD );
+				    SANE_DESC_BRIGHTNESS);
    if( so ) initialise( so );
    
    /* Contrast-Setting */
