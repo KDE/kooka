@@ -29,7 +29,13 @@
 #include <qmessagebox.h>
 #include <qfiledialog.h>
 
-
+#include <kfiledialog.h>
+#include <kurl.h>
+#include <progressbase.h>
+#include <kio/jobclasses.h>
+#include <kio/file.h>
+#include <kio/job.h>
+#include <kio/jobclasses.h>
 
 extern QDict<QPixmap> icons;
 enum { ID_POP_RESCAN,
@@ -74,7 +80,6 @@ ScanPackager::ScanPackager( QWidget *parent ) : KListView( parent )
 	
 	/* Set the current export dir to home */
 	curr_copy_dir = QDir::home();
-
 }
 
 /* ----------------------------------------------------------------------- */
@@ -254,51 +259,78 @@ void ScanPackager::slHandlePopup( int menu_id )
 void ScanPackager::exportFile( PackagerItem *curr )
 {
 
- 	if( curr->isDir() )
- 	{
- 	    debug( "Not yet implemented!" );
- 	}
- 	else
- 	{
-            QString from_file = curr->getFilename();
-            QString filter = "*." + curr->getImgFormat();
-            QString initial = curr_copy_dir.absPath() + "/";
-            initial += curr->getFilename(false);
-            QString fileName = QFileDialog::getSaveFileName (
-                                        initial,
- 	                                filter,
- 	                                this, "COPY_SAVE_DIA" );
- 	
-            if ( !fileName.isNull() )                  // got a file name
-            {
-                QFileInfo fi(fileName);
-                curr_copy_dir = fi.dirPath( true );
+   if( curr->isDir() )
+   {
+      debug( "Not yet implemented!" );
+   }
+   else
+   {
+      QString from_file = curr->getFilename();
+      
+      QString filter = "*." + curr->getImgFormat();
+      QString initial = curr_copy_dir.absPath() + "/";
+      initial += curr->getFilename(false);
+      KURL fileName = KFileDialog::getSaveURL ( initial,
+						filter,
+						this, "COPY_SAVE_DIA" );
+      
+      if ( fileName.isValid() )                  // got a file name
+      {
+	 /* remember the filename for the next export */
+	 curr_copy_dir = fileName.path( );
+	 KURL kfrom( from_file );
+	 
+	 if( kfrom == fileName ) return;
+	 copyjob = KIO::copy( kfrom, fileName, false );
 
-                if( from_file == fileName ) return;
-                if( curr->duplicate( fileName ) != FILE_OP_OK )
-                {
-                    debug( "Copy failed !" );
-                }
-            }
-	}
+	 connect( copyjob, SIGNAL(result(KIO::Job*)), this, SLOT(slotCanceled( KIO::Job* )));
+
+      }
+   }
 }
+
+void ScanPackager::slotCanceled( KIO::Job* )
+{
+   debug( I18N("Canceled by user"));
+}
+
+
+void ScanPackager::slotResult( KIO::Job *job )
+{
+   if( ! job ) return;
+   
+   if ( job->error() )
+   {
+      job->showErrorDialog ( );
+      // get formated error message
+      QString msg = job->errorString();
+      // int errid = job->error();
+      debug( "ERROR in Exporting an image: <%s>", (const char*) msg );
+   }
+   copyjob = 0L;
+}
+
+
+
+
+
 /* ----------------------------------------------------------------------- */
 void ScanPackager::unloadItem( PackagerItem *curr )
 {
- 	if( curr->isDir())
- 	{
-     	PackagerItem  *child = (PackagerItem*) curr->firstChild();
-		while( child )
-		{
-			unloadItem( child );
-			child = (PackagerItem*) child->nextSibling(); 	 	
-		}
- 	}
- 	else
- 	{
- 		emit( unloadImage( curr->getImage() ));
- 		curr->unload();
- 	}
+   if( curr->isDir())
+   {
+      PackagerItem  *child = (PackagerItem*) curr->firstChild();
+      while( child )
+      {
+	 unloadItem( child );
+	 child = (PackagerItem*) child->nextSibling(); 	 	
+      }
+   }
+   else
+   {
+      emit( unloadImage( curr->getImage() ));
+      curr->unload();
+   }
 }
 
 /* ----------------------------------------------------------------------- */

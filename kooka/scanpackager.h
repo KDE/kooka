@@ -24,6 +24,10 @@
 #include <qpixmap.h>
 #include <qdir.h>
 #include <klistview.h>
+#include <kio/job.h>
+#include <kio/global.h>
+#include <kio/file.h>
+
 
 #include "img_saver.h"
 #include "packageritem.h"
@@ -31,7 +35,8 @@
   *@author Klaas Freitag
   */
 
-class ScanPackager : public KListView  {
+class ScanPackager : public KListView
+{
 	Q_OBJECT
 public: 
    ScanPackager( QWidget *parent);
@@ -47,6 +52,8 @@ public slots:
 
    void         exportFile( PackagerItem *curr );	
 
+   void         slotCanceled(KIO::Job*);
+   void         slotResult( KIO::Job*);
 signals:
    void 	showImage( QImage* );
    void         deleteImage( QImage* );
@@ -62,7 +69,8 @@ private:
    PackagerItem *root;
    QDir         curr_copy_dir;
    QString      save_root;
-
+   KIO::Job     *copyjob;
+   
    int 		img_counter;
 };
 
