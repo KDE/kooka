@@ -129,13 +129,19 @@ void ImageCanvas::deleteView( QImage *delimage )
 
 void ImageCanvas::newImage( QImage *new_image )
 {
-  // dont free old image -> not yours
+   // dont free old image -> not yours
+
    image = new_image;
 
+   if( ! image || image->isNull())
+   {
+      kdDebug(29000) << "newImage: Got Empty image !" << endl;
+   }
+   
    if( pmScaled )
    {
-        delete pmScaled;
-        pmScaled = 0;
+      delete pmScaled;
+      pmScaled = 0;
    }
 
    if( selected )
@@ -149,31 +155,31 @@ void ImageCanvas::newImage( QImage *new_image )
 
    if( image )
    {						
-	if( image->depth() == 1 ) {
-		pmScaled = new QPixmap( image->size(), 1 );
-	} else {
-		int i = QPixmap::defaultDepth();
-		pmScaled = new QPixmap( image->size(), i);
-	}
+      if( image->depth() == 1 ) {
+	 pmScaled = new QPixmap( image->size(), 1 );
+      } else {
+	 int i = QPixmap::defaultDepth();
+	 pmScaled = new QPixmap( image->size(), i);
+      }
 	
-	image->convertDepth(32);
+      image->convertDepth(32);
 #ifdef USE_KPIXMAPIO
 	
-	*pmScaled = pixIO.convertToPixmap(*image);x
+      *pmScaled = pixIO.convertToPixmap(*image);
 #else
-	pmScaled->convertFromImage( *image );
-	// *pmScaled = image->convertToPixmap( );
+      pmScaled->convertFromImage( *image );
+      // *pmScaled = image->convertToPixmap( );
 #endif
     	
-    	acquired = true;
-    	if( scale_factor != 0 )
-            scale_factor = 100;
-    	update_scaled_pixmap();
-    	setContentsPos(0,0);
+      acquired = true;
+      if( scale_factor != 0 )
+	 scale_factor = 100;
+      update_scaled_pixmap();
+      setContentsPos(0,0);
    } else {
-  	kdDebug(29000) << "New image called without image => deleting!" << endl;
-  	image = 0;
-	acquired = false;
+      kdDebug(29000) << "New image called without image => deleting!" << endl;
+      image = 0L;
+      acquired = false;
    }
 
 
