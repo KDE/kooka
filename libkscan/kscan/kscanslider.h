@@ -25,6 +25,8 @@
 #include <qstrlist.h>
 #include <qcombobox.h>
 #include <qlabel.h>
+#include <qhbox.h>
+
 /**
   *@author Klaas Freitag
   */
@@ -68,24 +70,34 @@ private:
 };
 
 	
-class KScanCombo : public QFrame {
-	Q_OBJECT
+class KScanCombo : public QHBox
+{
+   Q_OBJECT
 public:
-	KScanCombo( QWidget *parent, const char *text, QStrList list );
-	// ~KScanCombo();
+   KScanCombo( QWidget *parent, const QString text, const QStrList& list );
+   // ~KScanCombo();
+
+   QString      currentText( void ) const;
+   QString      text( int i ) const;
+   int  	count( void ) const;
 
 public slots:
-	void		slSetEntry( const QString &);
-	void		slComboChange( const QString & );
-	void		setEnabled( bool b){ if(combo) combo->setEnabled( b ); };
-	
+   void		slSetEntry( const QString &);
+   void		slComboChange( const QString & );
+   void		setEnabled( bool b){ if(combo) combo->setEnabled( b ); };
+   void         slSetIcon( const QPixmap&, const QString );
+   void         setCurrentItem( int i );
+
+private slots:
+   void         slFireActivated( int);
+  
 signals:
-	void		valueChanged( const char* );
-		
+   void		valueChanged( const char* );
+   void         activated(int);
+   
 private:
-	QComboBox	*combo;
-	QStrList	combolist;
-	
+   QComboBox	*combo;
+   QStrList	combolist;
 };
 
 #endif
