@@ -86,7 +86,7 @@ KSANEOCR::KSANEOCR( QWidget*, KConfig *cfg ):
     m_unlinkORF(true)
 {
     KConfig *konf = KGlobal::config ();
-    m_ocrEngine = GOCR;
+    m_ocrEngine = OCRAD;
     m_img = 0L;
     m_tmpFile = 0L;
 
@@ -102,7 +102,7 @@ KSANEOCR::KSANEOCR( QWidget*, KConfig *cfg ):
     {
         /* -- ocr dialog information -- */
         konf->setGroup( CFG_GROUP_OCR_DIA );
-        QString eng = konf->readPathEntry(CFG_OCR_ENGINE);
+        QString eng = konf->readEntry(CFG_OCR_ENGINE, "ocrad");
 
 	if( eng == "ocrad" )
 	{

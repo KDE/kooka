@@ -155,7 +155,7 @@ void KookaPreferences::setupOCRPage()
     /*
      *  Now read the config value CFG_OCR_ENGINE and set the radios to the value if available
      */
-    QString useEngine = konf->readEntry( CFG_OCR_ENGINE, "notFound" );
+    QString useEngine = konf->readEntry( CFG_OCR_ENGINE, "ocrad" );
     if( useEngine != "notFound" )
     {
         if( useEngine == "gocr" && haveGocr )
