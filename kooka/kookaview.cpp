@@ -156,7 +156,6 @@ KookaView::KookaView( KParts::DockMainWindow *parent, const QCString& deviceToUs
 
    m_dockRecent->setDockSite(KDockWidget::DockFullSite);
 
-
    QHBox *recentBox = new QHBox( m_dockRecent );
    recentBox->setMargin(KDialog::marginHint());
    QLabel *lab = new QLabel( i18n("Gallery:"), recentBox );
@@ -730,8 +729,7 @@ void KookaView::slRotateImage(int angle)
 	    break;
 	 case 180:
 	    emit( signalChangeStatusbar( i18n("Rotate image 180 degrees" )));
-	    resImg = rotateRight( img );
-	    resImg = rotateRight( &resImg );
+	    resImg = rotate180( img );
 	    break;
 	 case 270:
 	 case -90:
@@ -977,51 +975,13 @@ void KookaView::slOpenCurrInGraphApp( void )
 QImage KookaView::rotateLeft( QImage *m_img )
 {
    QImage rot;
-
+   
    if( m_img )
    {
-      if ( m_img->depth() == 8)
-      {
-	 rot.create( m_img->height(), m_img->width(),
-		     m_img->depth(), m_img->numColors() );
-	 for (int i=0; i<m_img->numColors(); i++)
-	 {
-	    rot.setColor( i, m_img->color(i) );
-	 }
+       QWMatrix m;
 
-	 unsigned char **ssl = m_img->jumpTable();
-
-	 for (int y=0; y<m_img->height(); y++)
-	 {
-	    unsigned char *p = *ssl++;
-	    unsigned char **dsl = rot.jumpTable();
-	    dsl += m_img->width()-1;
-
-	    for (int x=0; x<m_img->width(); x++)
-	    {
-	       *((*dsl--) + y ) = *p++;
-	    }
-	 }
-      }
-      else
-      {
-	 rot.create( m_img->height(), m_img->width(),
-		     m_img->depth() );
-
-	 QRgb **ssl = (QRgb **)m_img->jumpTable();
-
-	 for (int y=0; y<m_img->height(); y++)
-	 {
-	    QRgb *p = *ssl++;
-	    QRgb **dsl = (QRgb **)rot.jumpTable();
-	    dsl += m_img->width()-1;
-
-	    for (int x=0; x<m_img->width(); x++)
-	    {
-	       *((*dsl--) + y ) = *p++;
-	    }
-	 }
-      }
+       m.rotate(-90);
+       rot = m_img->xForm(m);
    }
    return( rot );
 }
@@ -1029,52 +989,32 @@ QImage KookaView::rotateLeft( QImage *m_img )
 QImage KookaView::rotateRight( QImage *m_img )
 {
    QImage rot;
-
-   if (m_img )
+   
+   if( m_img )
    {
-      if (m_img->depth() == 8)
-      {
-	 rot.create( m_img->height(), m_img->width(),
-		     m_img->depth(), m_img->numColors() );
-	 for (int i=0; i<m_img->numColors(); i++)
-	 {
-	    rot.setColor( i, m_img->color(i) );
-	 }
+       QWMatrix m;
 
-	 unsigned char **ssl = m_img->jumpTable();
-
-	 for (int y=0; y<m_img->height(); y++)
-	 {
-	    unsigned char *p = *ssl++;
-	    unsigned char **dsl = rot.jumpTable();
-
-	    for (int x=0; x<m_img->width(); x++)
-	    {
-	       *((*dsl++) + m_img->height() - y - 1 ) = *p++;
-	    }
-	 }
-      }
-      else
-      {
-	 rot.create( m_img->height(), m_img->width(),
-		     m_img->depth() );
-
-	 QRgb **ssl = (QRgb **)m_img->jumpTable();
-
-	 for (int y=0; y<m_img->height(); y++)
-	 {
-	    QRgb *p = *ssl++;
-	    QRgb **dsl = (QRgb **)rot.jumpTable();
-
-	    for (int x=0; x<m_img->width(); x++)
-	    {
-	       *((*dsl++) + m_img->height() - y - 1 ) = *p++;
-	    }
-	 }
-      }
+       m.rotate(+90);
+       rot = m_img->xForm(m);
    }
    return( rot );
 }
+
+QImage KookaView::rotate180( QImage *m_img )
+{
+   QImage rot;
+   
+   if( m_img )
+   {
+       QWMatrix m;
+
+       m.rotate(+180);
+       rot = m_img->xForm(m);
+   }
+   return( rot );
+}
+
+
 
 void KookaView::connectViewerAction( KAction *action )
 {
