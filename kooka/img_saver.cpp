@@ -25,6 +25,7 @@
 #include <kconfig.h>
 #include <kdialog.h>
 #include <kimageio.h>
+#include <kseparator.h>
 #include <klocale.h>
 #include <kstddirs.h>
 #include <kmessagebox.h>
@@ -80,9 +81,8 @@ FormatDialog::FormatDialog( QWidget *parent, const char *name )
    l0->setText( i18n( "<B>Save Assistant</B><P>Select an image format to save the scanned image." ));
    bigdad->addWidget( l0 );
 
-   QFrame *f1 = new QFrame( page );
-   f1->setFrameStyle( QFrame::HLine | QFrame::Sunken );
-   bigdad->addWidget( f1 );
+   KSeparator* sep = new KSeparator( KSeparator::HLine, page);
+   bigdad->addWidget( sep );
    
    // Layout-Boxes
    // QHBoxLayout *hl1= new QHBoxLayout( );  // Caption

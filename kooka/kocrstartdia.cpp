@@ -17,7 +17,6 @@
 
 #include <qlayout.h>
 #include <qlabel.h>
-#include <qframe.h>
 
 #include <kapp.h>
 #include <kconfig.h>
@@ -25,6 +24,7 @@
 #include <kdebug.h>
 #include <klocale.h>
 #include <kanimwidget.h>
+#include <kseparator.h>
 
 #include "resource.h"
 #include "kocrstartdia.h"
@@ -66,9 +66,8 @@ KOCRStartDialog::KOCRStartDialog( QWidget *parent )
    CHECK_PTR( label );
    topLayout->addWidget( label,1 );
 
-   // Frame as a horizontal line
-   QFrame *f1 = new QFrame( page );
-   f1->setFrameStyle( QFrame::HLine | QFrame::Sunken );
+   // Horizontal line
+   KSeparator* f1 = new KSeparator( KSeparator::HLine, page);
    topLayout->addWidget( f1 );
 
    // Entry-Field.
@@ -77,8 +76,7 @@ KOCRStartDialog::KOCRStartDialog( QWidget *parent )
    topLayout->addWidget( entryOcrBinary, 1 );
    entryOcrBinary->slSetEntry( res );
    
-   QFrame *f2 = new QFrame( page );
-   f2->setFrameStyle( QFrame::HLine | QFrame::Sunken );
+   KSeparator* f2 = new KSeparator( KSeparator::HLine, page);
    topLayout->addWidget( f2 );
 
    /* Second Layout */
