@@ -46,6 +46,7 @@
    <Action name="scaleToWidth"/>
    <Action name="scaleToHeight"/>
    <Action name="scaleOriginal"/>
+   <Action name="keepZoom"/>
    <Separator/>
    <Action name="createFromSelection"/>
    <Separator/>

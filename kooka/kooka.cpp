@@ -49,6 +49,7 @@
 #include <kstdaccel.h>
 #include <kaction.h>
 #include <kstdaction.h>
+#include <qiconset.h>
 
 #define DOCK_SIZES "DockSizes"
 
@@ -165,15 +166,16 @@ void Kooka::setupActions()
                       actionCollection(), "scaleOriginal" );
     m_view->connectViewerAction( act );
 
-#if 0
-    act = new KToggleAction ( i18n("Keep &Zoom Setting"), "stop_hand", CTRL+Key_Z,
+    QIconSet lockSet;
+    lockSet.setPixmap(BarIcon("lock")  , QIconSet::Automatic, QIconSet::Normal, QIconSet::On );
+    lockSet.setPixmap(BarIcon("unlock"), QIconSet::Automatic, QIconSet::Normal, QIconSet::Off);
+    act = new KToggleAction ( i18n("Keep &Zoom Setting"), lockSet, CTRL+Key_Z,
                               actionCollection(), "keepZoom" );
 
     connect( act, SIGNAL( toggled( bool ) ), m_view->getImageViewer(),
              SLOT(setKeepZoom(bool)));
 
     m_view->connectViewerAction( act );
-#endif
 
     /* thumbview and gallery actions */
     act = new KAction(i18n("Set Zoom..."), "viewmag", 0,
