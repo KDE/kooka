@@ -25,10 +25,12 @@
 #include <kconfig.h>
 #include <kdialog.h>
 #include <kimageio.h>
+#include <kstddirs.h>
 
 #include <qdir.h>
 #include <qlayout.h>
 #include <qfileinfo.h>
+#include <qimage.h>
 #include <qmessagebox.h>
 #include <qvbox.h>
 #include <qbuttongroup.h>
@@ -44,20 +46,15 @@
 #define OP_FORMAT_BW       "BWSaveFormat"
 #define OP_PREVIEW_GROUP   "ScanPreview"
 #define OP_PREVIEW_FILE     "PreviewFile"
+#define OP_PREVIEW_FORMAT   "PreviewFormat"
 #define OP_FILE_GROUP      "Files"
 
-FormatDialog::FormatDialog( QWidget *parent, const char *name,  
-			    QStrList *formats = 0)
+FormatDialog::FormatDialog( QWidget *parent, const char *name )
    :KDialogBase( parent, "FormDialog", true,
                  /* Tabbed,*/ I18N( "Kooka save Assistant" ),
 		 Ok|Cancel, Ok, parent,  name )
 
 {
-   if( ! formats )
-   {
-      // BIG ERROR - something wrong with ImageIO
-      return;
-   }
    buildHelp();
    // readConfig();
    // QFrame *page = addPage( QString( "Save the image") );
@@ -95,7 +92,14 @@ FormatDialog::FormatDialog( QWidget *parent, const char *name,
    
    lb_format = new QListBox( page, "ListBoxFormats" );
    CHECK_PTR(lb_format);
-   lb_format->insertStrList( formats );
+
+#ifdef USE_KIMAGEIO
+   QStringList fo = KImageIO::types();
+#else
+   QStringList fo = QImage::outputFormatList();
+#endif
+   qDebug( "#### have %d image types", fo.count());
+   lb_format->insertStringList( fo );
    connect( lb_format, SIGNAL( highlighted(const QString&)),
 	    SLOT( showHelp(const QString&)));
    
@@ -226,43 +230,34 @@ bool FormatDialog::rememberFormat( void ) const
 
 /* ********************************************************************** */
 
-ImgSaver::ImgSaver(  QWidget *parent, const char *name, const char *dir )
-   : QObject( parent, name )
+ImgSaver::ImgSaver(  QWidget *parent, const char *dir_name )
+   : QObject( parent )
 {
 
-   QDir home = QDir::home();
-
-   QDir path( name );
-
-   all_formats = QImage::outputFormats();
-   if( ! dir )
+   if( dir_name )
    {
+      /* A path was given */
+      QDir path( dir_name );
       if( path.isRelative() )
-	 directory = home.absPath()+ "/.kscan/";
+	 directory = kookaImgRoot() + dir_name;
       else
-	 directory = "";  /* absolute Path given in name  ! */
+	 directory = dir_name;  /* absolute Path given in name  ! */
    }
    else
    {
-      directory = dir;
-      if( directory.right( 1 ) != "/" )
-	 directory += "/";
-      createDir( directory );
+      /* Use the std.-directory */
+      directory = kookaImgRoot();
    }
 
-   /* Check directories */
-   if( name )
-   {
-      directory += QString( name );
-      createDir( directory );
+   // all_formats = QImage::outputFormats();
+   if( directory.right( 1 ) != "/" )
+      directory += "/";
+   createDir( directory );
 
-      if( directory.right( 1 ) != "/" )
-	 directory += "/";
-   }		
-	
    readConfig();
    
 }
+
 
 /* Needs a full qualified directory name */
 void ImgSaver::createDir( QString dir )
@@ -394,16 +389,15 @@ ImgSaveStat ImgSaver::savePreview( QImage *image )
       
    ImgSaveStat stat = save( image, previewfile, format, "" );
 
-#if 0
    if( stat == ISS_OK )
    {
-      KConfig *konf = kapp->getConfig();
+      KConfig *konf = KGlobal::config ();
       konf->setGroup( OP_FILE_GROUP );
 
       konf->writeEntry( OP_PREVIEW_FILE,   previewfile );
       konf->writeEntry( OP_PREVIEW_FORMAT, format );
    }
-#endif
+
    return( stat );
 }
 
@@ -412,37 +406,58 @@ ImgSaveStat ImgSaver::savePreview( QImage *image )
  */
 QString ImgSaver::findFormat( picType type )
 {
+   QString format;
    // Preview always as bitmap
    if( type == PT_PREVIEW )
-      return( "BMP" );
-
-   if( type == PT_THUMBNAIL )
-      return( "BMP" );
-   
-   // real images 
-   if( ask_for_format )
    {
-      FormatDialog fd( 0, "FormatDialog", &all_formats );
+      KConfig *konf = KGlobal::config ();
+      konf->setGroup( OP_FILE_GROUP );
+      format = konf->readEntry( OP_PREVIEW_FORMAT, "nothing" );
 
-      // set default values
-      QString defFormat = getFormatForType( type );
-      fd.setSelectedFormat( defFormat );
-      
-      if( fd.exec() )
+      if( format == "nothing" )
       {
-	 QString format = fd.getFormat();
-	 debug( "Storing to format <%s>", (const char*) format );
-	 if( fd.rememberFormat() )
-	 {
-	    storeFormatForType( type, format );
-	 }
-	 subformat = fd.getSubFormat();
-
-	 return( format );
+	 format = startFormatDialog( type );
       }
    }
-   return( "" );
+
+   if( type == PT_THUMBNAIL )
+   {
+      return( "BMP" );
+   }
    
+   // real images 
+   if( type != PT_PREVIEW && type != PT_THUMBNAIL && ask_for_format )
+   {
+      format = startFormatDialog( type );
+   }
+   return( format );
+   
+}
+
+QString ImgSaver::startFormatDialog( picType type)
+{
+   FormatDialog fd( 0, "FormatDialog" );
+      
+   // set default values
+   if( type != PT_PREVIEW )
+   {
+      QString defFormat = getFormatForType( type );
+      fd.setSelectedFormat( defFormat );
+   }
+      
+   if( fd.exec() )
+   {
+      QString format = fd.getFormat();
+      debug( "Storing to format <%s>", (const char*) format );
+      if( fd.rememberFormat() )
+      {
+	 storeFormatForType( type, format );
+      }
+      subformat = fd.getSubFormat();
+
+      return( format );
+   }
+   return( "Skipped" );
 }
 
 QString ImgSaver::getFormatForType( picType type ) const
@@ -534,13 +549,14 @@ ImgSaveStat ImgSaver::save( QImage *image, QString filename,
       }
 
       /* Check the format, is it writable ? */
+#ifdef USE_KIMAGEIO
       if( ! KImageIO::canWrite( format ) )
       {
 	 debug( "Cant write format <%s>", (const char*) format );
 	 result = false;
 	 return( ISS_ERR_FORMAT_NO_WRITE );
       }
-      
+#endif
       debug( "ImgSaver: saving image to <%s> as <%s/%s>", (const char*) filename,
 	     format, subformat );
 
@@ -574,7 +590,7 @@ void ImgSaver::readConfig( void )
    /* The save root is defined to $HOME/.kscan in scanpackager, this should be
     * handled in at a central point. TODO ! */
    QDir home = QDir::home();
-   previewfile = home.absPath() + "/.kscan/preview.bmp";
+   previewfile = kookaImgRoot() + "preview.bmp";
    
    previewfile = konf->readPathEntry( OP_PREVIEW_FILE, previewfile );
 
@@ -598,6 +614,17 @@ QString ImgSaver::errorString( ImgSaveStat stat )
       default: re = "";
    }
    return( re );
+
+}
+
+QString ImgSaver::kookaImgRoot( void )
+{
+   QString dir = (KGlobal::dirs())->saveLocation( "data", "ScanImages", true );
+
+   if( dir.right(1) != "/" )
+      dir += "/";
+   
+   return( dir );
 
 }
 

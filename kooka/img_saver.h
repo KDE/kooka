@@ -73,11 +73,13 @@ typedef enum {
  *  Asks the user for the image-Format and gives help for
  *  selecting it.
  **/
+class KURL;
+
 class FormatDialog:public KDialogBase
 {
    Q_OBJECT
 public:
-   FormatDialog( QWidget *parent, const char *name, QStrList *formats );
+   FormatDialog( QWidget *parent, const char * );
 
 
    QString      getFormat( void ) const;
@@ -85,6 +87,7 @@ public:
    QString      errorString( ImgSaveStat stat );
 
    bool         rememberFormat( void ) const;
+
    
 public slots:
     void        setSelectedFormat( QString );
@@ -122,17 +125,24 @@ public:
 	/**
 	 *  constructor of the image-saver object.
 	 *  name is the name of a subdirectory of the save directory,
-	 *  which can be given in dir. If no dir is given, a unvisible
+	 *  which can be given in dir. If no dir is given, an 
 	 *  dir ~/.ksane is created.
 	 *  @param dir  Name of the save root directory
 	 *  @param name Name of a subdirectory in the saveroot.
 	 **/
-   ImgSaver( QWidget *parent, const char *name=0, const char *dir=0 );
+   ImgSaver( QWidget *parent, const char *dir_name = 0L );
 
    QString     errorString( ImgSaveStat );
    QString     lastFilename(void) { return( last_file ); };
    QString     getFormatForType( picType ) const;
    void        storeFormatForType( picType, QString );
+
+
+   /**
+    * Static function that returns the kooka base dir.
+    */
+   static QString kookaImgRoot( void );
+
    
 public slots:
    ImgSaveStat saveImage( QImage *image );
@@ -141,22 +151,23 @@ public slots:
    ImgSaveStat savePreview( QImage *image );
    
 private:
-   QString     findFormat( picType type );
-   QString     findSubFormat( QString format );
-   void		   createDir( QString );
-   ImgSaveStat save( QImage *image, QString filename, const char *format,
+   QString      findFormat( picType type );
+   QString      findSubFormat( QString format );
+   void		createDir( QString );
+   ImgSaveStat  save( QImage *image, QString filename, const char *format,
 		     const char *subformat );
-   QString     createFilename( QString format );
-   void	       readConfig( void );
+   QString      createFilename( QString format );
+   void	        readConfig( void );
+   QString      startFormatDialog( picType );
    
-   QStrList    all_formats;
+   // QStrList    all_formats;
    QString     previewfile;
    QString     subformat;     
    QString     directory;    // dir where the image should be saved
    QString     last_file;
    bool	       ask_for_format;
 
-   QDict<QString> formats;
+   // QDict<QString> formats;
 };
 
 #endif
