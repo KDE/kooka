@@ -1,6 +1,12 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
 <kpartgui name="Kooka" version="2">
 <MenuBar>
+ <Menu name="file"><text>&amp;File</text>
+   <Action name="foldernew"/>
+   <Action name="saveImage"/>
+   <Action name="deleteImage"/>
+   <Action name="unloadImage"/>
+ </Menu>
  <Menu name="imgCanvas"><text>&amp;Image</text>
    <Action name="openInGraphApp"/>
    <Separator/>

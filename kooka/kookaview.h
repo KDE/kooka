@@ -80,6 +80,8 @@ public:
    KDockWidget *mainDockWidget( ) { return m_mainDock; }
 
    void createDockMenu( KActionCollection*, KDockMainWindow *, const char *);
+
+   ScanPackager *gallery() { return packager; }
    
 public slots:
    void slShowPreview()  {  }
@@ -139,6 +141,7 @@ public slots:
    bool slSelectDevice(const QCString& useDevice=QCString());
 
    void connectViewerAction( KAction *action );
+   void connectGalleryAction( KAction *action );
    
    void slScanStart();
    void slScanFinished( KScanStat stat );

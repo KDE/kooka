@@ -99,4 +99,25 @@ Mai 2002:
    Added Thumbnail View with Preference Dialog => Kooka Release 0.37
    Completed About dialog and added the Webpage http://kooka.kde.org
 
+/* ================================================================================ */
 
+For Kooka 0.38: Introduced KDockWidgets to make the GUI configurable to everybodies
+needs.
+
+/* ================================================================================ */
+
+For Kooka 0.39: 
+
+* Fixed problem with gocr: gocr always resulted in (PICTURE) - fixed
+  it by changing the save format for images to gocr. This bug happens
+  only with gocr 0.3.5 (and probably higher).
+
+* Renaming images inline reimplemented again.
+
+* exported Gallery Actions to appear in the menu bar again.
+
+* added a progress bar and bugfixes to the thumbview
+
+* added halftoning to the scanservice and thus kooka
+
+* fixed bugs in the resolving of dependencies of scanner parameters.

@@ -944,6 +944,15 @@ void KookaView::connectViewerAction( KAction *action )
    }
 }
 
+void KookaView::connectGalleryAction( KAction *action )
+{
+   QPopupMenu *popup = packager->contextMenu();
+
+   if( popup && action )
+   {
+      action->plug( popup );
+   }
+}
 
 void KookaView::slFreshUpThumbView()
 {

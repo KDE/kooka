@@ -196,6 +196,29 @@ void Kooka::setupActions()
 		       actionCollection(), "upsitedown" );
     m_view->connectViewerAction( act );
 
+    /* Gallery actions */
+    act = new KAction(i18n("&Create Directory..."), "folder_new", 0,
+		      m_view->gallery(), SLOT( slotCreateFolder() ),
+		       actionCollection(), "foldernew" );
+    m_view->connectGalleryAction( act );
+
+    act = new KAction(i18n("&Save Image"), "filesave", 0,
+		      m_view->gallery(), SLOT( slotExportFile() ),
+		       actionCollection(), "saveImage" );
+    m_view->connectGalleryAction( act );
+
+    act = new KAction(i18n("&Delete Image"), "edittrash", 0,
+		      m_view->gallery(), SLOT( slotDeleteItems() ),
+		       actionCollection(), "deleteImage" );
+    m_view->connectGalleryAction( act );
+
+    act = new KAction(i18n("&Unload Image"), "fileclose", 0,
+		      m_view->gallery(), SLOT( slotUnloadItems() ),
+		       actionCollection(), "unloadImage" );
+    m_view->connectGalleryAction( act );
+
+#if 0
+    /* not yet supported actions - coming post 3.1 */
     (void) new KAction(i18n("&Load scan parameters"), "bookmark_add", CTRL+Key_L,
                        m_view, SLOT(slLoadScanParams()),
                        actionCollection(), "loadscanparam" );
@@ -203,7 +226,8 @@ void Kooka::setupActions()
     (void) new KAction(i18n("Save &Scan Parameters"), "bookmark_add", CTRL+Key_S,
 		       m_view, SLOT(slSaveScanParams()),
 		       actionCollection(), "savescanparam" );
-
+#endif
+    
     (void) new KAction(i18n("Select Scan Device"), "scanner", CTRL+Key_Q,
 		       m_view, SLOT( slSelectDevice()),
 		       actionCollection(), "selectsource" );

@@ -36,7 +36,7 @@
   */
 
 class KURL;
-class KPopupMenu;
+class QPopupMenu;
 class KFileTreeViewItem;
 class KookaImage;
 class KFileTreeBranch;
@@ -72,6 +72,8 @@ public:
     QString 	getCurrImageFileName( bool ) const;
 
     KFileTreeBranch* openRoot( const KURL&, bool open=false );
+
+   QPopupMenu *contextMenu() { return m_contextMenu; }
    
 public slots:
    void         slSelectImage( const KURL& );
@@ -123,7 +125,6 @@ signals:
 private:
    QString     localFileName( KFileTreeViewItem* it ) const;
    void 	loadImageForItem( KFileTreeViewItem* item );
-   void         createMenus();
    void         openRoots();
    QCString     getImgFormat( KFileTreeViewItem* item ) const;
    
@@ -138,10 +139,10 @@ private:
     QString      m_currCopyDir;
     QString      currSelectedDir;
     KIO::Job     *copyjob;
-    KPopupMenu   *popup;   
     int          img_counter;
+    QPopupMenu    *m_contextMenu;
    
-   QMap<KIO::Job*, JobDescription> jobMap;
+    QMap<KIO::Job*, JobDescription> jobMap;
 
    QPixmap       m_floppyPixmap;
    QPixmap       m_grayPixmap;

@@ -112,13 +112,14 @@ ScanPackager::ScanPackager( QWidget *parent ) : KFileTreeView( parent )
    m_bwPixmap     = loader->loadIcon( "palette_lineart", KIcon::Small );
    m_colorPixmap  = loader->loadIcon( "palette_color", KIcon::Small );
 
-	   
-   popup =0L;
    m_startup = true;
    
+   /* create a context menu and set the title */
+   m_contextMenu = new KPopupMenu();
+   static_cast<KPopupMenu*>(m_contextMenu)->insertTitle( i18n( "Gallery" ));
+
    /* open the image galleries */
    openRoots();
-   createMenus();
 }
 
 void ScanPackager::openRoots()
@@ -177,32 +178,6 @@ void ScanPackager::slotStartupFinished( KFileTreeViewItem *it )
       }
 
       m_startup = false;
-   }
-}
-
-void ScanPackager::createMenus()
-{
-   if( ! popup )
-   {
-      popup = new KPopupMenu();
-      popup->insertTitle( i18n( "Gallery" ));
-      
-      KAction *newAct = new KAction(i18n("&Create Directory..."), "folder_new",0 ,
-				    this, SLOT(slotCreateFolder()), this);
-      newAct->plug( popup );
-
-      newAct = new KAction(i18n("&Save Image"), "filesave",0 ,
-			   this, SLOT(slotExportFile()), this);
-      newAct->plug( popup );
-
-      newAct = new KAction(i18n("&Delete Image"), "edittrash",0 ,
-			   this, SLOT(slotDeleteItems()), this);
-      newAct->plug( popup );	
-
-      newAct = new KAction(i18n("&Unload Image"), "fileclose", 0,
-			   this, SLOT(slotUnloadItems()), this );
-      newAct->plug( popup );
-      popup->setCheckable( true );
    }
 }
 
@@ -923,10 +898,10 @@ void ScanPackager::slShowContextMenue(QListViewItem *lvi, const QPoint &p, int c
 	 setSelected( curr, true );
    }
 
-   if( popup )
+   if( m_contextMenu )
    {
-      popup->move( p );
-      popup->show();
+      m_contextMenu->move( p );
+      m_contextMenu->show();
    }
 
 }
