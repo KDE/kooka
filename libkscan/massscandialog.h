@@ -19,17 +19,17 @@
 #ifndef MASSSCANDIALOG_H
 #define MASSSCANDIALOG_H
 
-#include <qlabel.h>
 #include <qstring.h>
-#include <qsemimodal.h>
-#include <qprogressbar.h>
+#include <qdialog.h>
 
+class QProgressBar;
+class QLabel;
 
 /**
   *@author Klaas Freitag
   */
 
-class MassScanDialog : public QSemiModal
+class MassScanDialog : public QDialog
 {
    Q_OBJECT
 public: 

@@ -275,7 +275,7 @@ void ImageCanvas::handle_popup( int item )
 	    /* substract for scrollbar */
 	    scale = 100*(width() -25)/image->width();
 	 }
-	 setScaleFactor( scale );
+	 setScaleFactor( static_cast<int>(scale) );
 	 repaint( true );
 	 QApplication::restoreOverrideCursor();
       break;
@@ -289,7 +289,7 @@ void ImageCanvas::handle_popup( int item )
 	    /* substract for scrollbar */
 	    scale = 100*(height() -25)/image->height();
 	 }
-	 setScaleFactor( scale );
+	 setScaleFactor( static_cast<int>(scale) );
 	 repaint( true );
 	 QApplication::restoreOverrideCursor();
 	 break;
@@ -413,12 +413,12 @@ void ImageCanvas::newRectSlot( QRect newSel )
    {
        int h = image->width();
        //kdDebug(29000) << "ImageCanvas got selection Rect: W=" << newSel.width() << ", H=" << newSel.height() << endl;
-       to_map.setWidth(h * newSel.width() / 1000.0);
-       to_map.setX( h * newSel.x() / 1000.0 );
+       to_map.setWidth(static_cast<int>(h * newSel.width() / 1000.0));
+       to_map.setX( static_cast<int>(h * newSel.x() / 1000.0 ));
 
        h = image->height();
-       to_map.setHeight( h * newSel.height() / 1000.0 );
-       to_map.setY( h * newSel.y() / 1000.0 );
+       to_map.setHeight( static_cast<int>(h * newSel.height() / 1000.0 ));
+       to_map.setY( static_cast<int>(h * newSel.y() / 1000.0 ));
 
        *selected = scale_matrix.map( to_map );
        emit( newRect( sel() ));
@@ -710,8 +710,8 @@ void ImageCanvas::update_scaled_pixmap( void )
    * with redrawing of new images.
    */
   resizeContents( 0,0 );
-  resizeContents( image->width() * used_xscaler,
-                  image->height() * used_yscaler );
+  resizeContents( static_cast<int>(image->width() * used_xscaler),
+                  static_cast<int>(image->height() * used_yscaler ) );
 
 }
 

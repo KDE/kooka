@@ -343,8 +343,8 @@ QPoint Previewer::calcPercent( int w_mm, int h_mm )
 	if( overallWidth < 1.0 || overallHeight < 1.0 ) return( p );
 
  	if( sizeUnit == KRuler::Millimetres ) {
- 		p.setX( 1000.0*w_mm / overallWidth );
- 		p.setY( 1000.0*h_mm / overallHeight );
+ 		p.setX( static_cast<int>(1000.0*w_mm / overallWidth) );
+ 		p.setY( static_cast<int>(1000.0*h_mm / overallHeight) );
  	} else {
  		kdDebug(29000) << "ERROR: Only mm supported yet !" << endl;
  	}

@@ -17,6 +17,7 @@
 
 #include <qlayout.h>
 #include <qlabel.h>
+#include <qprogressbar.h>
 #include <qgroupbox.h>
 #include <qframe.h>
 
@@ -28,7 +29,7 @@
 #include "massscandialog.h"
 
 MassScanDialog::MassScanDialog( QWidget *parent )
-   :QSemiModal( parent, "MASS_SCAN", true )
+   :QDialog( parent, "MASS_SCAN", true )
 {
    setCaption( i18n( "ADF Scanning" ));
    kdDebug(29000) << "Starting MassScanDialog!" << endl;

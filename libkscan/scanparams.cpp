@@ -249,7 +249,7 @@ QScrollView *ScanParams::scannerParams( )
       /* Pretty-Pixmap */
 
       KScanCombo *cb = (KScanCombo*) so->widget();
-      CHECK_PTR(cb);
+      Q_CHECK_PTR(cb);
       cb->slSetIcon( pixLineArt, i18n("Lineart") );
       cb->slSetIcon( pixLineArt, i18n("Binary" ));
       cb->slSetIcon( pixGray, i18n("Gray") );

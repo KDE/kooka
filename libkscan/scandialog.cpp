@@ -47,7 +47,7 @@ ScanDialog::ScanDialog( QWidget *parent, const char *name, bool modal )
     QVBox *page = addVBoxPage( i18n("&Scanning") );
     
     splitter = new QSplitter( Horizontal, page, "splitter" );
-    CHECK_PTR( splitter );
+    Q_CHECK_PTR( splitter );
     
     m_scanParams = 0; 
     m_device = new KScanDevice( this );
@@ -56,7 +56,7 @@ ScanDialog::ScanDialog( QWidget *parent, const char *name, bool modal )
 
     /* Create a preview widget to the right side of the splitter */
     m_previewer = new Previewer( splitter );
-    CHECK_PTR(m_previewer );
+    Q_CHECK_PTR(m_previewer );
     /* ... and connect to the selector-slots. They communicate user's
      * selection to the scanner parameter engine */
     /* a new preview signal */
@@ -87,13 +87,13 @@ void ScanDialog::createOptionsTab( void )
    cb_askOnStart = new QCheckBox( i18n( "&Ask for the scan device on plugin startup"), gb );
    QToolTip::add( cb_askOnStart,
 		  i18n("You can uncheck this if you do not want to be asked which scanner to use on startup."));
-   CHECK_PTR( cb_askOnStart );
+   Q_CHECK_PTR( cb_askOnStart );
 
    /* Checkbox for network access */
    cb_network = new QCheckBox( i18n( "&Query the network for scan devices"), gb );
    QToolTip::add( cb_network,
 		  i18n("Check this if you want to query for configured network scan stations."));
-   CHECK_PTR( cb_network );
+   Q_CHECK_PTR( cb_network );
 
 
    /* Read settings for startup behavior */
@@ -111,7 +111,7 @@ void ScanDialog::createOptionsTab( void )
    
    
    QWidget *spaceEater = new QWidget( page );
-   CHECK_PTR( spaceEater );
+   Q_CHECK_PTR( spaceEater );
    spaceEater->setSizePolicy( QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding) );
 
 }
