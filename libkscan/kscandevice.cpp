@@ -32,18 +32,6 @@
 #define MIN_PREVIEW_DPI 75
 
 
-// global device list
-
-/** These variables are defined in ksaneoption.cpp **/
-extern bool        scanner_initialised;
-extern SANE_Handle scanner_handle;
-extern QAsciiDict<int>  option_dic;
-
-extern SANE_Device const **dev_list          = 0;
-
-KScanOptSet gammaTables("GammaTables");
-
-
 /* ---------------------------------------------------------------------------
 
    ------------------------------------------------------------------------- */
@@ -130,7 +118,8 @@ KScanDevice::KScanDevice( QObject *parent )
 {
     SANE_Status sane_stat = sane_init(NULL, NULL );
 
-    option_dic.setAutoDelete( true );
+    option_dic = new QAsciiDict<int>;
+    option_dic->setAutoDelete( true );
     gui_elements.setAutoDelete( true );
 
     scanner_initialised = false;  /* stays false until openDevice. */
@@ -170,6 +159,7 @@ KScanDevice::KScanDevice( QObject *parent )
 #if 0
         connect( this, SIGNAL(sigOptionsChanged()), SLOT(slReloadAll()));
 #endif
+	gammaTables = new KScanOptSet( "GammaTables" );
      }
      else
      {
@@ -184,6 +174,7 @@ KScanDevice::KScanDevice( QObject *parent )
 KScanDevice::~KScanDevice()
 {
   if( storeOptions )  delete (storeOptions );
+ 
 }
 
 
@@ -288,7 +279,7 @@ KScanStat KScanDevice::find_options()
   if( stat == KSCAN_OK )
   {
 
-     option_dic.clear();
+     option_dic->clear();
 
      for(int i = 1; i<n; i++)
      {
@@ -308,7 +299,7 @@ KScanStat KScanDevice::find_options()
 		 *new_opt = i;
 		 kdDebug(29000) << "Inserting <" << d->name << "> as " << *new_opt << endl;
 		 /* create a new option in the set. */
-		 option_dic.insert ( (const char*)d->name, new_opt );
+		 option_dic->insert ( (const char*)d->name, new_opt );
 		 option_list.append( (const char*) d->name );
 #if 0
 		 KScanOption *newOpt = new KScanOption( d->name );
@@ -374,7 +365,7 @@ KScanStat KScanDevice::apply( KScanOption *opt, bool isGammaTable )
    if( !opt ) return( KSCAN_ERR_PARAM );
    int sane_result = 0;
 
-   int         *num = option_dic[ opt->getName() ];
+   int         *num = (*option_dic)[ opt->getName() ];
    SANE_Status sane_stat = SANE_STATUS_GOOD;
    const QCString& oname = opt->getName();
 
@@ -453,7 +444,7 @@ KScanStat KScanDevice::apply( KScanOption *opt, bool isGammaTable )
 	 /* if it is a gamma table, the gamma values must be stored */
 	 if( isGammaTable )
 	 {
-	    gammaTables.backupOption( *opt );
+	    gammaTables->backupOption( *opt );
 	    kdDebug(29000) << "GammaTable stored: " << opt->getName() << endl;
 	 }
       }
@@ -468,6 +459,12 @@ KScanStat KScanDevice::apply( KScanOption *opt, bool isGammaTable )
    {
       kdDebug(29000) << "Setting of <" << oname << "> failed -> kscanerror." << endl;
    }
+
+   if( stat == KSCAN_OK )
+   {
+      slSetDirty( oname );
+   }
+
    return( stat );
 }
 
@@ -479,12 +476,26 @@ bool KScanDevice::optionExists( const QCString& name )
    QCString altname = aliasName( name );
 
    if( ! altname.isNull() )
-       i = option_dic[ altname ];
+       i = (*option_dic)[ altname ];
 
    if( !i )
        return( false );
    return( *i > -1 );
 }
+
+void KScanDevice::slSetDirty( const QCString& name )
+{
+   if( optionExists( name ) )
+   {
+      if( dirtyList.find( name ) == -1 )
+      {
+	 kdDebug(29000)<< "Setting dirty <" << name << ">" << endl;
+	 /* item not found */
+	 dirtyList.append( name );
+      }
+   }
+}
+
 
 /* This function tries to find name aliases which appear from backend to backend.
  *  Example: Custom-Gamma is for epson backends 'gamma-correction' - not a really
@@ -493,7 +504,7 @@ bool KScanDevice::optionExists( const QCString& name )
  */
 QCString KScanDevice::aliasName( const QCString& name )
 {
-    int *i = option_dic[ name ];
+    int *i = (*option_dic)[ name ];
     QCString ret;
 
     if( i ) return( name );
@@ -501,7 +512,7 @@ QCString KScanDevice::aliasName( const QCString& name )
 
     if( name == SANE_NAME_CUSTOM_GAMMA )
     {
-	if(option_dic["gamma-correction"])
+	if((*option_dic)["gamma-correction"])
 	    ret = "gamma-correction";
 	
     }
@@ -712,7 +723,7 @@ KScanStat KScanDevice::acquirePreview( bool forceGray, int dpi )
 
 void KScanDevice::prepareScan( void )
 {
-    QAsciiDictIterator<int> it( option_dic ); // iterator for dict
+    QAsciiDictIterator<int> it( *option_dic ); // iterator for dict
 
     kdDebug(29000) << "########################################################################################################" << endl;
     kdDebug(29000) << "Scanner: " << scanner_name << endl;
@@ -807,7 +818,10 @@ KScanStat KScanDevice::createNewImage( SANE_Parameters *p )
   if( !p ) return( KSCAN_ERR_PARAM );
   KScanStat       stat = KSCAN_OK;
 
-  if( img ) delete( img );
+  if( img ) {
+     delete( img );
+     img = 0;
+  }
 
   if( p->depth == 1 )  //  Lineart !!
   {
@@ -1266,16 +1280,36 @@ void KScanDevice::slSaveScanConfigSet( const QString& setName, const QString& de
 {
    if( setName.isEmpty() || setName.isNull()) return;
 
-   KScanOptSet optSet( "saveSet" );
+   kdDebug(29000) << "Saving Scan Configuration" << setName << endl;
+   
+   KScanOptSet optSet( DEFAULT_OPTIONSET );
 
    for( KScanOption *so = gui_elements.first(); so; so = gui_elements.next())
    {
       kdDebug(29000) << "Storing <" << so->getName() << ">" << endl;
       optSet.backupOption( *so );
+
+      /* drop the thing from the dirty-list */
+      dirtyList.removeRef( so->getName());
    }
-   optSet.saveConfig( "default" , setName, descr );
+
+   QStrListIterator it( dirtyList );
+   while( it.current())
+   {
+      KScanOption so( it.current() );
+      optSet.backupOption( so );
+      ++it;
+   }
+   
+   optSet.saveConfig( scanner_name , setName, descr );
 
 }
+
+bool KScanDevice::scanner_initialised = false;
+SANE_Handle KScanDevice::scanner_handle = 0L;
+SANE_Device const **KScanDevice::dev_list = 0L;
+QAsciiDict<int> *KScanDevice::option_dic = 0L;
+KScanOptSet *KScanDevice::gammaTables = 0L;
 
 
 #include "kscandevice.moc"
