@@ -36,7 +36,7 @@
 #define CFG_OCRE_KADMOS   "kadmos"
 
 #define CFG_OCR_KSPELL    "ocrSpellSettings"
-
+#define CFG_WANT_KSPELL   "ocrKSpellEnabled"
 #define CFG_KS_NOROOTAFFIX  "KSpell_NoRootAffix"
 #define CFG_KS_RUNTOGETHER  "KSpell_RunTogether"
 #define CFG_KS_DICTIONARY   "KSpell_Dictionary"

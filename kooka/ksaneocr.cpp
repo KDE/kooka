@@ -230,10 +230,12 @@ void KSANEOCR::finishedOCRVisible( bool success )
 {
    visibleOCRRunning =  false;
    cleanUpFiles();
+   bool doSpellcheck = m_wantKSpell;
 
    if( m_ocrProcessDia )
    {
        m_ocrProcessDia->stopOCR();
+       doSpellcheck = m_ocrProcessDia->wantSpellCheck();
    }
 
    if( success )
@@ -253,7 +255,7 @@ void KSANEOCR::finishedOCRVisible( bool success )
        /** now it is time to invoke the dictionary if required **/
        emit readOnlyEditor( false );
 
-       if( m_wantKSpell )
+       if( doSpellcheck )
        {
            m_ocrCurrLine = 0;
            /*
@@ -446,7 +448,18 @@ void KSANEOCR::startOCRProcess( void )
 
        kdDebug(28000)  << "Starting Kadmos OCR Engine" << endl;
 
-       QCString c = kadDia->getSelClassifier().latin1();
+       QString clasPath;  /* target where the clasPath is written in */
+       if( ! kadDia->getSelClassifier( clasPath ) )
+       {
+           KMessageBox::error( m_parent,
+                               i18n("The classifier file neccessary for OCR is can not be loaded: %1\n"
+                                   "OCR with the KADMOS engine is not possible" ).
+                               arg(clasPath), i18n("KADMOS Installation Problem"));
+           finishedOCRVisible(false);
+           return;
+       }
+       QCString c = clasPath.latin1();
+
        kdDebug(28000) << "Using classifier " << c << endl;
        m_rep.Init( c );
        m_rep.SetNoiseReduction( kadDia->getNoiseReduction() );
