@@ -45,7 +45,7 @@
 #include <kpixmapio.h>
 #endif
 
-class KPopupMenu;
+class QPopupMenu;
 
 enum preview_state {
 	MOVE_NONE,
@@ -105,7 +105,7 @@ public:
    const QImage *rootImage();
 
    bool hasImage( void ) 	{ return acquired; }
-
+   QPopupMenu* contextMenu() { return m_contextMenu; }
    QRect sel( void );
    
 
@@ -123,9 +123,7 @@ public slots:
       {
 	 maintain_aspect = aspect_in_mind;
 	 repaint();
-      }	
-   QSize sizeHint() const;
-
+      }
    void newImage( QImage* );
    void deleteView( QImage *);
    void newRectSlot();
@@ -133,7 +131,8 @@ public slots:
    void noRectSlot( void );
    void setScaleFactor( int i );
    void handle_popup(int item );
-
+   void enableContextMenu( bool wantContextMenu );
+   
    signals:
    void noRect( void );
    void newRect( void );
@@ -162,15 +161,14 @@ private:
 #ifdef USE_KPIXMAPIO
    KPixmapIO	 pixIO;
 #endif
-   void          createContextMenu( void );
-   void          showContextMenu( QPoint p );
-   
+   // void          createContextMenu( void );
+
    QWMatrix	 scale_matrix;
    QWMatrix	 inv_scale_matrix;
    QPixmap       *pmScaled;
    float	 used_yscaler;
    float	 used_xscaler;
-   KPopupMenu    *contextMenu;
+   QPopupMenu    *m_contextMenu;
    bool		 maintain_aspect;
 
    int	         timer_id;

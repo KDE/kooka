@@ -41,6 +41,8 @@
 #include <qlabel.h>
 #include <qdict.h>
 #include <klocale.h>
+#include <kstyle.h>
+#include <kapplication.h>
 
 #include <kpixmapio.h>
 #include <kdebug.h>
@@ -67,7 +69,8 @@ inline void debug_rect( const char *name, QRect *r )
 ImageCanvas::ImageCanvas(QWidget *parent,
 			 const QImage *start_image,
 			 const char *name 	):
-  QScrollView( parent, name )
+   QScrollView( parent, name ),
+   m_contextMenu(0)
 
 {
   scale_factor     = 100; // means orignal size
@@ -97,7 +100,8 @@ ImageCanvas::ImageCanvas(QWidget *parent,
     img_size = size();
   }
 
-  createContextMenu();
+  
+  // createContextMenu();
   update_scaled_pixmap();
 
   // timer-Start and stop
@@ -122,8 +126,6 @@ ImageCanvas::~ImageCanvas()
     selected = 0;
     if( pmScaled ) delete pmScaled;
     pmScaled = 0;
-    if( contextMenu ) delete contextMenu;
-    contextMenu = 0;
 }
 
 void ImageCanvas::deleteView( QImage *delimage )
@@ -196,59 +198,40 @@ void ImageCanvas::newImage( QImage *new_image )
    kdDebug(29000) << "repaint ok" << endl;
 }
 
-
-void ImageCanvas::createContextMenu( void )
+void ImageCanvas::enableContextMenu( bool wantContextMenu )
 {
+   if( wantContextMenu )
+   {
+      if( ! m_contextMenu )
+      {
+	 m_contextMenu = new KPopupMenu( this );
 
-   contextMenu = new KPopupMenu();
-   KIconLoader *loader = KGlobal::iconLoader();
-
-   // contextMenu->insertTitle( i18n("Image Canvas" )); enable after kde3
-   contextMenu->insertItem( *(new QPixmap( loader->loadIcon( "scaletowidth",KIcon::Small ))),
-			    i18n("fit to width"),  ID_FIT_WIDTH );
-   contextMenu->insertItem( *(new QPixmap( loader->loadIcon( "scaletoheight",KIcon::Small ))),
-			    i18n("fit to height"), ID_FIT_HEIGHT );
-   contextMenu->insertItem( *(new QPixmap( loader->loadIcon( "viewmag",KIcon::Small ))),
-			    i18n("set zoom..."),   ID_POP_ZOOM );
-   contextMenu->insertItem( *(new QPixmap( loader->loadIcon( "scaleorig",KIcon::Small ))),
-			    i18n("original size"), ID_ORIG_SIZE );
-   contextMenu->setCheckable( true );
-   connect( contextMenu, SIGNAL( activated(int)), this, SLOT(handle_popup(int)));
-
-   KContextMenuManager::insert( this, contextMenu );
-
+	 KContextMenuManager::insert( this, m_contextMenu );
+      }
+   }
+   else
+   {
+      /* remove all items */
+      if( m_contextMenu ) m_contextMenu->clear();
+      /* contextMenu is not deleted because there is no way to remove
+       * it from the contextMenuManager
+       */
+   }
+   
 }
-
-QSize ImageCanvas::sizeHint() const
-{
-   return( QSize( 2, 2 ));
-}
-
-
-void ImageCanvas::showContextMenu( QPoint p )
-{
-    if( ! contextMenu ) return;
-
-    QSize is;
-    if( image ) is = image->size();
-
-    if( is.width() > 0 && is.height() > 0 )
-    {
-        // debug ( "opening popup!" );
-        contextMenu->move( p );
-        contextMenu->show();
-    }
-}
-
 
 void ImageCanvas::handle_popup( int item )
 {
    if( item < ID_POP_ZOOM || item > ID_ORIG_SIZE ) return;
    double scale;
-
+   
    if( ! image ) return;
    ImgScaleDialog *zoomDia  = 0;
-
+   const int sbWidth = kapp->style().pixelMetric( QStyle::PM_ScrollBarExtent );
+   const QSize noSBSize = size(); /* Size of complete scrollbar */
+   
+   kdDebug(29000)<< "Size of viewport: " << noSBSize.width() << " and " << noSBSize.height() << endl;
+   
    switch( item )
    {
       case ID_POP_ZOOM:
@@ -264,7 +247,6 @@ void ImageCanvas::handle_popup( int item )
           delete zoomDia;
 	  zoomDia = 0;
 	  QApplication::restoreOverrideCursor();
-	 // emit( scalingRequested());
 
 	 break;
       case ID_ORIG_SIZE:
@@ -274,28 +256,37 @@ void ImageCanvas::handle_popup( int item )
       break;
       case ID_FIT_WIDTH:
 	 QApplication::setOverrideCursor(waitCursor);
-	 scale = 100*(width()-2) / image->width();
+	 
+	 scale = 100.0 * noSBSize.width() / image->width();
 	 kdDebug(29000) << "Scale ist " << scale << endl;
-	 if( (scale/100 * image->height()) > height() )
+
+	 if( (scale/100.0 * image->height()) >= noSBSize.height() )
 	 {
 	    /* substract for scrollbar */
-	    scale = 100*(width() -25)/image->width();
+	    scale = 100 * (noSBSize.width() - sbWidth) / image->width();
+	    kdDebug(29000) << "FIT WIDTH scrollbar to substract: " << sbWidth << endl;
 	 }
-	 setScaleFactor( static_cast<int>(scale) );
+
+	 kdDebug(29000)<< "Sale Factor double: " << scale << endl;
+	 setScaleFactor( static_cast<int>(scale-0.5) );
 	 repaint( true );
 	 QApplication::restoreOverrideCursor();
       break;
       case ID_FIT_HEIGHT:
 	 QApplication::setOverrideCursor(waitCursor);
 
-	 scale = 100*(height()-2) / image->height();
+	 scale = 100.0 * noSBSize.height() / image->height();
 	 kdDebug(29000) << "Scale ist " << scale << endl;
-	 if( (scale/100 * image->width()) > width() )
+
+	 if( (scale/100.0 * image->width()) >= width() )
 	 {
 	    /* substract for scrollbar */
-	    scale = 100*(height() -25)/image->height();
+	    kdDebug(29000) << "FIT HEIGHT scrollbar to substract: " << sbWidth << endl;
+	    scale = 100.0*(noSBSize.height() -sbWidth) / image->height();
 	 }
-	 setScaleFactor( static_cast<int>(scale) );
+
+	 kdDebug(29000)<< "Sale Factor double: " << scale << endl;
+	 setScaleFactor( static_cast<int>(scale-0.5) );
 	 repaint( true );
 	 QApplication::restoreOverrideCursor();
 	 break;
@@ -307,6 +298,7 @@ void ImageCanvas::handle_popup( int item )
    }
 
 }
+
 
 /**
  *   Returns the selected rect in tenth of percent, not in absolute
@@ -482,8 +474,10 @@ void ImageCanvas::viewportMousePressEvent(QMouseEvent *ev)
          }
          else printf("MouseReleaseEvent() missed\n");
     }
+#if 0
     else if( ev->button() == RightButton )
           showContextMenu( mapToGlobal(QPoint( ev->x(), ev->y())));
+#endif
 }
 
 
@@ -645,9 +639,9 @@ void ImageCanvas::viewportMouseMoveEvent(QMouseEvent *ev)
 
 void ImageCanvas::setScaleFactor( int i )
 {
-  // debug( "Setting Scalefactor to %d", i );
-  scale_factor = i;
-  update_scaled_pixmap();
+   kdDebug(29000) <<  "Setting Scalefactor to " << i << endl;
+   scale_factor = i;
+   update_scaled_pixmap();
 }
 
 
