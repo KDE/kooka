@@ -104,21 +104,21 @@ KOCRStartDialog::KOCRStartDialog( QWidget *parent )
    middle->addWidget( ani );
 
    /* Slider for OCR-Options */
-   sliderGrayLevel = new KScanSlider( page , i18n("Gray level"), 0, 254 );
+   sliderGrayLevel = new KScanSlider( page , i18n("&Gray level"), 0, 254, true, 160 );
    sliderLayout->addWidget( sliderGrayLevel,1 );
    int numdefault = conf->readNumEntry( CFG_GOCR_GRAYLEVEL, 160 );
    sliderGrayLevel->slSetSlider( numdefault );
    QToolTip::add( sliderGrayLevel,
 		  i18n( "The numeric value gray pixels are \nconsidered to be black.\n\nDefault is 160"));
 
-   sliderDustSize = new KScanSlider( page, i18n("Dust size" ), 0, 60 );
+   sliderDustSize = new KScanSlider( page, i18n("&Dust size" ), 0, 60, true, 10 );
    numdefault = conf->readNumEntry( CFG_GOCR_DUSTSIZE, 10 );
    sliderLayout->addWidget( sliderDustSize,1 );
    sliderDustSize->slSetSlider( numdefault );
    QToolTip::add( sliderDustSize,
 		  i18n( "Clusters smaller than this value\nwill be considered to be dust and \nremoved from the image.\n\nDefault is 10"));
 
-   sliderSpace = new KScanSlider( page, i18n( "Space width" ), 0, 60 );
+   sliderSpace = new KScanSlider( page, i18n( "&Space width" ), 0, 60, true, 0 );
    numdefault = conf->readNumEntry( CFG_GOCR_SPACEWIDTH, 0 );
    sliderLayout->addWidget( sliderSpace,1 );
    sliderSpace->slSetSlider( numdefault );
@@ -198,6 +198,7 @@ void KOCRStartDialog::disableFields( void )
    sliderDustSize->setEnabled( false );
    sliderSpace->setEnabled( false );
    entryOcrBinary->setEnabled( false );
+   enableButton( User1, false );
 
    ani->start();
 }
