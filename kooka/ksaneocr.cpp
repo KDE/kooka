@@ -130,11 +130,12 @@ KSANEOCR::KSANEOCR( QWidget*, KConfig *cfg ):
 #ifdef HAVE_KADMOS
         else if( eng == QString("kadmos") ) m_ocrEngine = KADMOS;
 #endif
+        kdDebug(28000) << "OCR engine is " << eng << endl;
     }
-    kdDebug(28000) << "OCR engine is " << ((m_ocrEngine==KADMOS)?"KADMOS":"GOCR") << endl;
 
     /* resize m_blocks to size 1 since there is at least one block */
     m_blocks.resize(1);
+
 }
 
 
@@ -246,8 +247,6 @@ bool KSANEOCR::startOCRVisible( QWidget *parent )
 
 void KSANEOCR::finishedOCRVisible( bool success )
 {
-   visibleOCRRunning =  false;
-   cleanUpFiles();
    bool doSpellcheck = m_wantKSpell;
 
    if( m_ocrProcessDia )
@@ -286,7 +285,14 @@ void KSANEOCR::finishedOCRVisible( bool success )
                                 m_ocrProcessDia->spellConfig() ),
                     SIGNAL( death()), this, SLOT(slSpellDead()));
        }
+
+       delete m_ocrProcessDia;
+       m_ocrProcessDia = 0L;
+
    }
+
+   visibleOCRRunning =  false;
+   cleanUpFiles();
 
    kdDebug(28000) << "# ocr finished #" << endl;
 }
@@ -361,23 +367,24 @@ void KSANEOCR::startOCRAD( )
 {
     ocradDialog *ocrDia = static_cast<ocradDialog*>(m_ocrProcessDia);
 
-    QString orfUrl = ocrDia->orfUrl();
+    m_ocrResultImage = ocrDia->orfUrl();
     const QString cmd = ocrDia->getOCRCmd();
 
-    if( orfUrl.isEmpty() )
+    if( m_ocrResultImage.isEmpty() )
     {
 	/* The url is empty. Start the program to fill up a temp file */
-	orfUrl = ImgSaver::tempSaveImage( m_img, "PBM", 1 ); // m_tmpFile->name();
+	m_ocrResultImage = ImgSaver::tempSaveImage( m_img, "PBM", 1 ); // m_tmpFile->name();
     }
 
     /* temporar file for orf result */
     KTempFile *tmpOrf = new KTempFile( QString(), ".orf" );
     tmpOrf->setAutoDelete( false );
     tmpOrf->close();
-    m_tmpFileName = QFile::encodeName(tmpOrf->name());
+    m_tmpOrfName = QFile::encodeName(tmpOrf->name());
 
 
-    if( daemon ) {
+    if( daemon )
+    {
 	delete( daemon );
 	daemon = 0;
     }
@@ -387,8 +394,8 @@ void KSANEOCR::startOCRAD( )
 
     *daemon << cmd;
     *daemon << QString("-x");
-    *daemon <<  m_tmpFileName;                   // the orf result file
-    *daemon << QFile::encodeName( orfUrl );      // The name of the image
+    *daemon <<  m_tmpOrfName;                   // the orf result file
+    *daemon << QFile::encodeName( m_ocrResultImage );      // The name of the image
     m_ocrResultText = "";
 
     connect(daemon, SIGNAL(processExited(KProcess *)),
@@ -417,7 +424,7 @@ void KSANEOCR::ocradExited(KProcess* )
     QString err;
     bool parseRes = true;
 
-    if( ! readORF(m_tmpFileName, err) )
+    if( ! readORF(m_tmpOrfName, err) )
     {
         KMessageBox::error( m_parent,
                             i18n("Parsing of the OCR Result File failed:") + err,
@@ -573,7 +580,7 @@ void KSANEOCR::startOCRProcess( void )
 			       i18n("The KADMOS OCR system could not be started:\n") +
 			       m_rep.getErrorText()+
 			       i18n("\nPlease check the configuration" ),
-			       i18n("KADMOS failure") ); 
+			       i18n("KADMOS failure") );
        }
        else
        {
@@ -953,7 +960,13 @@ void KSANEOCR::cleanUpFiles( void )
    {
       kdDebug(28000) << "Unlinking OCR Result image file!" << endl;
       unlink(QFile::encodeName(m_ocrResultImage));
-      m_ocrResultImage = "";
+      m_ocrResultImage = QString();
+   }
+
+   if( ! m_tmpOrfName.isEmpty())
+   {
+      unlink(QFile::encodeName(m_tmpOrfName));
+      m_tmpOrfName = QString();
    }
 
    /* Delete the debug images of gocr ;) */
@@ -1041,10 +1054,19 @@ bool KSANEOCR::eventFilter( QObject *object, QEvent *event )
 
             int x = mev->x();
             int y = mev->y();
+            int scale = m_imgCanvas->getScaleFactor();
+
 	    m_imgCanvas->viewportToContents( mev->x(), mev->y(),
 					     x, y );
 
-            kdDebug(28000) << "Clicked to " << x << "/" << y << endl;
+            kdDebug(28000) << "Clicked to " << x << "/" << y << ", scale " << scale << endl;
+            if( scale != 100 )
+            {
+                // Scale is e.g. 50 that means tha the image is only half of size.
+                // thus the clicked coords must be multiplied with 2
+                y = int(double(y)*100/scale);
+                x = int(double(x)*100/scale);
+            }
             /* now search the word that was clicked on */
             QValueVector<ocrWordList>::iterator pageIt;
 
