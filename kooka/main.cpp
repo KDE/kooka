@@ -30,6 +30,7 @@
 
 #include "kooka.h"
 #include "icons.h"
+#include "version.h"
 
 static const char *description =
           "<B>Kooka</B> is a KDE2 application which provides access to scanner hardware "
@@ -39,7 +40,6 @@ static const char *description =
 	      "using <I>gocr</I>, Joerg Schulenburg's and friends' Open Source ocr program.<P>"
 	      "For information on Kooka see <A HREF=http://>The kooka page</A><P>";
 
-static const char *version = "v0.2";
 
 QDict<QPixmap> icons;
 
@@ -47,7 +47,7 @@ void *dbg_ptr;
 
 int main( int argc, char ** argv )
 {
-   KAboutData about("kooka", I18N_NOOP("Kooka"), version, I18N_NOOP(description),
+   KAboutData about("kooka", I18N_NOOP("Kooka"), KOOKA_VERSION, I18N_NOOP(description),
 		    KAboutData::License_GPL, "(C) 2000 Klaas Freitag");
    about.addAuthor( "Klaas Freitag", 0, "freitag@suse.de" );
    KCmdLineArgs::init(argc, argv, &about);
