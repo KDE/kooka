@@ -24,7 +24,7 @@ kookaiface.h  thumbview.h \
 icons.h        kookapref.h   resource.h kocrfindia.h \
 imgnamecombo.h kocrstartdia.h kookaimage.h
 
-# kocrstartdia.h kocrfindia.h \
+# kocrstartdia.h kocrfindia.h 
 
 KDE_ICON = kooka
 
