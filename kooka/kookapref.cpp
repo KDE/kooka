@@ -122,7 +122,7 @@ void KookaPreferences::setupThumbnailPage()
 			    BarIcon("appearance", KIcon::SizeMedium ) );
    QVBoxLayout *top = new QVBoxLayout( page, 0, spacingHint() );
 
-   top->addWidget( new QLabel( i18n("Here you can configure the appearance of the tumbnail view of your scan picture gallery."),page ));
+   top->addWidget( new QLabel( i18n("Here you can configure the appearance of the thumbnail view of your scan picture gallery."),page ));
 
    /* Backgroundimage */
    KStandardDirs stdDir;
@@ -175,11 +175,11 @@ void KookaPreferences::setupThumbnailPage()
    m_frameWidth = new KIntNumInput( frameWidth, fGrid );
    l1->setBuddy( m_frameWidth );
 
-   l1 = new QLabel(i18n("Framecolor &1: "), fGrid );
+   l1 = new QLabel(i18n("Frame Color &1: "), fGrid );
    m_colButt1 = new KColorButton( col1, fGrid );
    l1->setBuddy( m_colButt1 );
    
-   l1 = new QLabel(i18n("Framecolor &2: "), fGrid );
+   l1 = new QLabel(i18n("Frame Color &2: "), fGrid );
    m_colButt2 = new KColorButton( col2, fGrid );
    l1->setBuddy( m_colButt2 );
    /* TODO: Gradient type */
