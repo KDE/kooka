@@ -25,10 +25,10 @@
 #include <qgroupbox.h>
 #include <qframe.h>
 
-#include <qpushbutton.h>
-
 #include <klocale.h>
 #include <kdebug.h>
+#include <kpushbutton.h>
+#include <kstdguiitem.h>
 
 #include "massscandialog.h"
 
@@ -91,7 +91,7 @@ MassScanDialog::MassScanDialog( QWidget *parent )
    QPushButton *b_cancel = new QPushButton( i18n("Stop"), this, "ButtCancel" );
    connect( b_cancel, SIGNAL(clicked()), this, SLOT(slStopScan()) );
 
-   QPushButton *b_finish = new QPushButton( i18n("Close"), this, "ButtFinish" );
+   QPushButton *b_finish = new KPushButton( KStdGuiItem::close(), this, "ButtFinish" );
    connect( b_finish, SIGNAL(clicked()), this, SLOT(slFinished()) );
 
    l_but->addWidget( b_start );
