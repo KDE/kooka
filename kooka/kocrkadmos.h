@@ -76,7 +76,7 @@ public:
 
     typedef QMap<QString, QString> StrMap;
 
-    void setupGui();
+    EngineError setupGui();
     bool getAutoScale();
     bool getNoiseReduction();
     bool getSelClassifier(QString&) const;

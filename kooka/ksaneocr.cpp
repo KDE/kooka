@@ -191,7 +191,6 @@ bool KSANEOCR::startOCRVisible( QWidget *parent )
 #ifdef HAVE_KADMOS
 /*** Kadmos Engine OCR ***/
        m_ocrProcessDia = new KadmosDialog( parent, m_spellInitialConfig );
-
 #else
        KMessageBox::sorry(0, i18n("This version of Kooka was not compiled with KADMOS support.\n"
            "Please select another OCR engine in Kookas options dialog"));
@@ -209,6 +208,7 @@ bool KSANEOCR::startOCRVisible( QWidget *parent )
    if( m_ocrProcessDia )
    {
        m_ocrProcessDia->setupGui();
+       
        m_ocrProcessDia->introduceImage( m_img );
        visibleOCRRunning = true;
 
@@ -333,7 +333,7 @@ void KSANEOCR::slotStopOCR()
         kdDebug(28000) << "Killing daemon with Sig. 9" << endl;
         daemon->kill(9);
         // that leads to the process being destroyed.
-        KMessageBox::error(0, "The OCR-Process was stopped !" );
+        KMessageBox::error(0, i18n("The OCR-Process was stopped !") );
     }
 
 }

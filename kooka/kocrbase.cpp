@@ -107,11 +107,13 @@ KAnimWidget* KOCRBase::getAnimation(QWidget *parent)
    return( m_animation );
 }
 
-void KOCRBase::setupGui()
+EngineError KOCRBase::setupGui()
 {
     ocrIntro();
     imgIntro();
     if( m_wantSpellCfg ) spellCheckIntro();
+
+    return ENG_OK;
 }
 
 void KOCRBase::imgIntro()
@@ -177,7 +179,7 @@ void KOCRBase::spellCheckIntro()
 
     /* Want the spell checking at all? Checkbox here */
     QGroupBox *gb1 = new QGroupBox( 1, Qt::Horizontal, i18n("OCR Post Processing"), m_spellchkPage );
-    m_cbWantCheck = new QCheckBox( i18n("Enable KDE Spellchecking for validation of the OCR result"),
+    m_cbWantCheck = new QCheckBox( i18n("Enable Spellchecking for validation of the OCR result"),
                                    gb1 );
     /* Spellcheck options */
     m_gbSpellOpts = new QGroupBox( 1, Qt::Horizontal, i18n("Spellcheck Options"),

@@ -35,6 +35,8 @@
 #include <kscanslider.h>
 #include <kanimwidget.h>
 #include <ksconfig.h>
+
+#include "ksaneocr.h"
 /**
   *@author Klaas Freitag
   */
@@ -57,7 +59,7 @@ public:
               KDialogBase::DialogType face = KDialogBase::Plain );
     ~KOCRBase();
 
-    virtual void setupGui();
+    virtual EngineError setupGui();
 
     /**
      * @return the name of the ocr engine

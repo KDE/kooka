@@ -86,7 +86,7 @@ QString KGOCRDialog::ocrEngineDesc() const
                 "http://jocr.sourceforge.net</A>");
 }
 
-void KGOCRDialog::setupGui()
+EngineError KGOCRDialog::setupGui()
 {
     KOCRBase::setupGui();
 
@@ -146,6 +146,7 @@ void KGOCRDialog::setupGui()
     sliderSpace->slSetSlider( numdefault );
     QToolTip::add( sliderSpace, i18n("Spacing between characters.\n\nDefault is 0 what means autodetection"));
 
+    return ENG_OK;
 }
 
 void KGOCRDialog::introduceImage( KookaImage *img )

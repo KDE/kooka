@@ -68,6 +68,11 @@ class KConfig;
 #include "kadmosocr.h"
 #endif
 
+/*
+ * Error Classifier the report errors on bad engine setup
+ */
+typedef enum{ ENG_ERROR, ENG_OK, ENG_DATA_MISSING, ENG_BAD_SETUP } EngineError;
+
 class KSANEOCR : public QObject
 {
     Q_OBJECT

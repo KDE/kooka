@@ -90,10 +90,11 @@ QString KadmosDialog::ocrEngineDesc() const
                 "http://www.rerecognition.com</A>");
 }
 
-void KadmosDialog::setupGui()
+EngineError KadmosDialog::setupGui()
 {
 
-    KOCRBase::setupGui();
+    EngineError err = KOCRBase::setupGui();
+    
     // setupPreprocessing( addVBoxPage(   i18n("Preprocessing")));
     // setupSegmentation(  addVBoxPage(   i18n("Segmentation")));
     // setupClassification( addVBoxPage( i18n("Classification")));
@@ -114,6 +115,15 @@ void KadmosDialog::setupGui()
 
     m_classifierPath = conf->readEntry( CFG_KADMOS_CLASSIFIER_PATH, stdPath );
 
+    if( m_classifierPath.isEmpty() )
+    {
+       KMessageBox::error(0, i18n("The classifier files for KADMOS could not be found.\n"
+				  "OCR with KADMOS will not be possible!\n\n"
+				  "Change the OCR engine in the preferences dialog."),
+			  i18n("Installation Error") );
+       err = ENG_DATA_MISSING;
+    }
+    
     (void) new QLabel( i18n("Please classify the Font Type and Language of the text on the image:"),
 		       page );
     QHBox *locBox = new QHBox( page );
@@ -140,6 +150,13 @@ void KadmosDialog::setupGui()
 
     getAnimation(innerBox);
     // (void) new QWidget ( page );
+
+    if( err != ENG_OK )
+    {
+       enableFields(false);
+       enableButton(User1, false );
+    }
+       
 }
 
 

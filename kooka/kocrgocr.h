@@ -59,7 +59,7 @@ public:
     int getSpaceWidth( void ) const
         { return( sliderSpace->value());}
 
-    void setupGui();
+    EngineError setupGui();
 
     QString ocrEngineName() const;
     QString ocrEngineDesc() const;
