@@ -23,6 +23,7 @@
 #include <qcheckbox.h>
 #include <qbutton.h>
 #include <qradiobutton.h>
+#include <qlabel.h>
 
 #include "miscwidgets.h"
 #include "resource.h"
@@ -69,6 +70,7 @@ void ImageHistogram::drawContents(QPainter *p)
 
 
 
+/* ############################################################################## */
 
 
 ImgScaleDialog::ImgScaleDialog( QWidget *parent, int curr_sel,
@@ -207,5 +209,34 @@ void ImgScaleDialog::setSelValue( int val )
    }
    // debug( "SetValue: Selected Scale is %d", selected );
 }
+
+
+
+/* ############################################################################## */
+
+EntryDialog::EntryDialog( QWidget *parent, QString caption, const QString text)
+: KDialogBase( parent, "ENTRY_DIALOG", true, caption, Ok|Cancel, Ok, true )
+{
+   
+   QVBox *vbox = makeVBoxMainWidget();
+   (void) new  QLabel( text, vbox, "LABEL" );
+
+   entry = new QLineEdit( vbox );
+
+   entry->setFocus();
+}
+
+QString EntryDialog::getText ( void )
+{
+   if( entry )
+      return( entry->text());
+
+   return( "" );
+}
+
+EntryDialog::~EntryDialog()
+{
+}
+
 
 #include "miscwidgets.moc"
