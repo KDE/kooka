@@ -20,7 +20,10 @@
 
 #include <qstring.h>
 #include <qasciidict.h>
+#include <qdict.h>
 #include <kdebug.h>
+#include <kconfig.h>
+
 #include "kscandevice.h"
 #include "kscanoption.h"
 #include "kscanoptset.h"
@@ -93,5 +96,32 @@ bool KScanOptSet::backupOption( const KScanOption& opt )
   return( retval );
 
 }
+
+/* */
+void KScanOptSet::saveConfig( const QString& scannerName, const QString& configName,
+			      const QString& descr )
+{
+   KConfig scanConfig( QString( "ScanSettings-" ) + scannerName );
+   QString cfgName = configName;
+   
+   if( configName.isNull() || configName.isEmpty() )
+      cfgName = "default";
+   
+   scanConfig.setGroup( cfgName );
+
+   scanConfig.writeEntry( "description", descr );
+   QAsciiDictIterator<KScanOption> it( *this);
+ 
+    while ( it.current() ) {
+       const QString line = it.current() -> configLine();
+       kdDebug(29000) << "writing <" << line << ">" << endl;
+
+       scanConfig.writeEntry( QString(it.current()->getName()), line );
+       
+       ++it;
+    }
+    
+}
+
 
 /* END */

@@ -1,12 +1,13 @@
 /*
   A dummy source file for documenting the library.
-  Copied from dcop
+  Klaas Freitag <freitag@suse.de>
+  $Id$
 */
 
 /**
 \mainpage Die KScan Bibliothek.
 
-   Die kscan Bibliothek bietet ein Interface zur SANE-lib (siehe http://www.mostang.com
+   Die kscan Bibliothek bietet ein Interface zur SANE-lib (siehe http://www.mostang.com/sane
 zur weiteren Information) für KDE2 Programme.
 
 \section intro Einführung
@@ -15,9 +16,9 @@ Die KScan Bibliothek bietet jedem KDE2 Programm ein Objekt an, dass zu einem übe
 SANE angeschlossenen Scanner Verbindung aufbauen, dessen Parameter auslesen und
 verwalten kann. Die Problematik dabei ist, dass SANE Scanner nicht über einen
 einheitlichen Satz von Optionen verfügen. Die Scanner unterstützen verschiedene
-Scanoptionen, und eine Oberfläche zum Ansprechen des Scanners muss dynamisch
+Scanoptionen. Eine Oberfläche zum Ansprechen des Scanners muss dynamisch
 aufgebaut werden, nachdem die Entscheidung gefallen ist, welches im System
-vorhandene Gerät verwendet werden soll.
+vorhandene Gerät verwendet werden soll (dynamische GUI).
 
 \section objectOverview Abstrakte KScan Objekte
 
@@ -39,13 +40,15 @@ Das Objekt KScanDevice bildet die vorhandenen Scanner im System ab. Über dieses 
 kann ermittelt werden, welche Geräte erreichbar sind und welche Optionen sie unterstützen.
 \n
 Wenn sich für ein Gerät entschieden und dieses geöffnet wurde, repräsentiert das KScanDevice
-das Scangerät.
+das Scangerät. Über diese Klasse werden Optionen (KScanOption) tatsächlich auf die Hardware
+angewendet. Ferner werden gescannte Bilddaten von von KScanDevice geliefert.
 
 - KScanOptSet\n
 Das Objekt KScanOptSet stellt einen Container für Optionen KScanOption dar, unabhängig
 von einem bestimmten Gerät. Bisher ermöglicht es das Sichern von mehreren Optionen während der
 Programausführung, z. B. die vorher eingestellten Scanparameter, wenn ein Previewscan
-durchgeführt werden soll, um diese nach dem Previewscan wieder zu restaurieren.
+durchgeführt werden soll, um diese nach dem Previewscan wieder zu restaurieren.\n
+Weiterhin können Sets von Optionen auf Platte abgelegt werden.
 
 \section helpers Hilfsklassen
 

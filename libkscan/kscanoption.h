@@ -27,6 +27,7 @@
 #include <qobject.h>
 #include <qstrlist.h>
 #include <qsocketnotifier.h>
+#include <qdatastream.h>
 
 extern "C" {
 #include <sane.h>
@@ -114,7 +115,7 @@ public:
     * returns the type the option is. Type is one of
     * INVALID_TYPE, BOOL, SINGLE_VAL, RANGE, GAMMA_TABLE, STR_LIST, STRING
     **/
-  KSANE_Type type( void );
+  KSANE_Type type( void ) const;
 
    /**
     * set the option depending on the type
@@ -155,6 +156,9 @@ public:
   /* Operators */
   const KScanOption& operator= (const KScanOption& so );
 
+   const QString configLine( void );
+
+   
   // Possible Values
   QStrList    getList() const;
   bool        getRange( double*, double*, double* ) const;

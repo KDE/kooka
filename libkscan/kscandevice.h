@@ -22,7 +22,7 @@ extern "C" {
 
 /**
  *  This is KScanDevice, a class for accessing the SANE scanning functions
- *  under Linux.
+ *  under KDE2
  *
  *  @short KScanDevice
  *  @author Klaas Freitag
@@ -224,8 +224,13 @@ public slots:
   /**
    *  Image ready-slot in asynchronous scanning
    */
-  void                slScanFinished( KScanStat );
+  void slScanFinished( KScanStat );
 
+   /**
+    * Save the current image set. Only changed options are saved.
+    **/
+   void slSaveScanConfigSet( const QString&, const QString& );
+   
   signals:
   /**
    *  emitted, if an option change was applied, which made other

@@ -1184,4 +1184,22 @@ void KScanDevice::doProcessABlock( void )
      /* hmmm - how could this happen ? */
   }
 } /* end of fkt */
+
+
+void KScanDevice::slSaveScanConfigSet( const QString& setName, const QString& descr )
+{
+   if( setName.isEmpty() || setName.isNull()) return;
+
+   KScanOptSet optSet( "saveSet" );
+   
+   for( KScanOption *so = gui_elements.first(); so; so = gui_elements.next())
+   {
+      kdDebug(29000) << "Storing <" << so->getName() << ">" << endl;
+      optSet.backupOption( *so );
+   }
+   optSet.saveConfig( "default" , setName, descr );
+   
+}
+
+
 #include "kscandevice.moc"

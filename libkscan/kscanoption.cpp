@@ -208,6 +208,15 @@ KScanOption::KScanOption( const KScanOption &so ) :
     }
 }
 
+
+const QString KScanOption::configLine( void )
+{
+   QCString strval = this->get();
+   kdDebug(29000) << "configLine returns <" << strval << ">" << endl;
+   return( strval );
+}
+
+
 const KScanOption& KScanOption::operator= (const KScanOption& so )
 {
    /* desc is stored by sane-lib and may be copied */
@@ -457,7 +466,7 @@ bool KScanOption::softwareSetable( void )
 }
 
 
-KSANE_Type KScanOption::type( void )
+KSANE_Type KScanOption::type( void ) const
 {
    KSANE_Type ret = INVALID_TYPE;
 	
@@ -855,6 +864,14 @@ QCString KScanOption::get( void ) const
 	 kdDebug(29000) << "Cant get " << getName() << " to type String !" << endl;
 	 retstr = "unknown";
    }
+
+   /* Handle gamma-table correctly */
+   ;
+   if( type() == GAMMA_TABLE )
+   {
+      retstr.sprintf( "%d, %d, %d", gamma, brightness, contrast );
+   }
+
    kdDebug(29000) << "option::get returns " << retstr << endl;
    return( retstr );
 }

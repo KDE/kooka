@@ -71,6 +71,7 @@ public:
     */
    KScanOption *get( const char *name ) const;
 
+   void saveConfig( const QString&, const QString&, const QString&);
 private:
    QCString name;
 
