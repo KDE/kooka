@@ -1,4 +1,4 @@
-INCLUDES = $(all_includes) $(sane_includes)
+INCLUDES = $(sane_includes) $(all_includes) 
 
 lib_LTLIBRARIES = libkscan.la
 
