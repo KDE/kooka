@@ -30,8 +30,8 @@ script of Kooka's source distribution with parameter:
 ./configure --with-kadmos-dir=/where/kadmos.h/resides/
 
 The configure script tries to locate the file kadmos.h in the
-directory that was specified. The KAMDOS library is expected in the
-same directory.  Build the source after configuring with KADOS. Kooka
+directory that was specified. The KADMOS library is expected in the
+same directory.  Build the source after configuring with KADMOS. Kooka
 enables the code to work with KADMOS in the source and links the
 library.
 
