@@ -23,6 +23,7 @@
 #include "img_saver.h"
 #include "kookaimage.h"
 #include "previewer.h"
+#include "devselector.h"
 
 #include <qapplication.h>
 #include <qdir.h>
@@ -54,6 +55,10 @@
 #include <kio/jobclasses.h>
 #include <kio/file.h>
 #include <kio/job.h>
+
+#define INCOMING_PATH i18n("Incoming")
+#define STARTUP_FIRST_START "firstStart"
+
 
 /* ----------------------------------------------------------------------- */
 /* Constructor Scan Packager */
@@ -123,16 +128,50 @@ void ScanPackager::openRoots()
    KURL rootUrl(localRoot);
    kdDebug(28000) << "Open standard root " << rootUrl.url() << endl;
 
-   KFileTreeBranch *branch = openRoot( rootUrl, true );
-   /* select Incoming-Dir, TODO restore last selection ! */
-   KFileTreeViewItem *startit = findItem( branch, i18n( "Incoming/" ) );
-   
-   if( ! startit ) kdDebug(28000) << "No Start-Item found :(" << endl;
-   setCurrentItem( startit );
+   m_defaultBranch = openRoot( rootUrl, true );
 
+   connect( m_defaultBranch, SIGNAL(populateFinished( KFileTreeViewItem * )),
+	    this, SLOT( slotPopulateFinished( KFileTreeViewItem * )));
+   
    /* open more configurable image repositories TODO */
 }
 
+void ScanPackager::slotPopulateFinished( KFileTreeViewItem *it )
+{
+   if( it == m_defaultBranch->root() )
+   {
+      kdDebug(28000) << "Slot population finished hit!" << endl;
+      /* Incoming should be in the first hirarchie */
+      KFileTreeViewItem *startit = findItem( m_defaultBranch, INCOMING_PATH );
+
+      if( startit )
+      {
+	 KConfig *konf = KGlobal::config ();
+	 if( konf )
+	 {
+	    konf->setGroup(GROUP_STARTUP);
+
+	    bool firstStart = konf->readBoolEntry( STARTUP_FIRST_START, true );
+	    if( firstStart )
+	    {
+	       /* create incoming */
+	       KURL lurl( m_defaultBranch->rootUrl() );
+	       lurl.addPath( INCOMING_PATH );
+	       slotSetNextUrlToSelect( lurl );
+	       if( ! KIO::NetAccess::mkdir( lurl ))
+	       {
+		  kdDebug(28000) << "ERR: creation of incoming dir " << lurl.prettyURL()
+				 << " failed !" << endl;
+	       }	
+	    }
+	 }	
+	 else
+	 {
+	    /* Incoming does not yet exist */
+	 }
+      }
+   }
+}
 
 KFileTreeBranch* ScanPackager::openRoot( const KURL& root, bool open )
 {
@@ -773,8 +812,6 @@ void ScanPackager::slAddImage( QImage *img )
    kdDebug(28000) << "Updating directory with " << strdir << endl;
    
    if( kookaBranch ) kookaBranch->updateDirectory( KURL(strdir) );
-
-   slotSetNextUrlToSelect( lurl );
 
    QString s;
    /* Count amount of children of the father */

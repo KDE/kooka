@@ -32,8 +32,12 @@ KDE_ICON = kooka
 datadir       = $(kde_datadir)/kooka
 data_DATA     = kookaui.rc
 
+kde_conf_DATA = kookarc
+
 kdelnkdir   = $(kde_appsdir)/Graphics
 kdelnk_DATA = kooka.desktop
+
+
 
 messages: rc.cpp
 	$(XGETTEXT) *.cpp -o $(podir)/kooka.pot

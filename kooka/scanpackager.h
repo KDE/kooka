@@ -102,6 +102,7 @@ protected slots:
    void         slotDirCount( KFileTreeViewItem *item, int cnt );
    void 	slotUrlsDropped( KURL::List& urls, KURL& copyTo );
    void         slotDeleteFromBranch( KFileItem* );
+   void         slotPopulateFinished( KFileTreeViewItem * );
 signals:
    void 	showImage( QImage* );
    void         deleteImage( QImage* );
@@ -143,6 +144,8 @@ private:
    QPixmap       m_grayPixmap;
    QPixmap       m_bwPixmap;
    QPixmap       m_colorPixmap;
+
+   KFileTreeBranch *m_defaultBranch;
 
 };
 

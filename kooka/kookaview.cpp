@@ -62,9 +62,6 @@
 #define PREVIEWER_TAB 1
 
 #define STARTUP_IMG_SELECTION   "SelectedImageOnStartup"
-#define STARTUP_SELECTED_PAGE   "TabWidgetPage"
-#define STARTUP_SCANPARAM_SIZES "ScanParamDialogSizes"
-#define STARTUP_VIEWER_SIZES    "ViewerSplitterSizes"
 
 
 KookaView::KookaView( KDockMainWindow *parent, const QCString& deviceToUse)
@@ -316,33 +313,6 @@ bool KookaView::slSelectDevice( const QCString& useDevice )
       if( scan_params )
 	 scan_params->connectDevice( 0L );
    }
-
-   KConfig *konf = KGlobal::config ();
-   QString referToScanner( sane->shortScannerName());
-   if( !haveConnection ) referToScanner = "gallery";
-
-   konf->setGroup( referToScanner );
-   QValueList<int> sizes = konf->readIntListEntry( STARTUP_SCANPARAM_SIZES );
-   QValueList<int> vsizes = konf->readIntListEntry( STARTUP_VIEWER_SIZES );
-   
-   if( sizes.count() == 0  )
-   {
-      kdDebug(28000) << "Setting default sizes" << endl;
-	 
-      /* Shitty, nothing yet in the config */
-      if( haveConnection )
-      {
-	 sizes << packager->height();
-	 sizes << scan_params->height();
-	 vsizes << (scan_params->sizeHint()).width();
-      }
-      else
-      {
-	 /* only push one value to vsizes */
-	 vsizes << 150;
-      }
-   }
-
    return( haveConnection );
 }
 
@@ -480,6 +450,11 @@ void KookaView::slNewPreview( QImage *new_img )
 	 if( is_stat != ISS_OK )
 	 {
 	    kdDebug(28000) << "ERROR in saving preview !" << endl;
+	 }
+	 else
+	 {
+	    /* flip preview to front */
+	    m_dockPreview->makeDockVisible();
 	 }
       }
       preview_canvas->newImage( new_img ); 
