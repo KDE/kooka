@@ -119,16 +119,21 @@ KookaView::KookaView( KParts::DockMainWindow *parent, const QCString& deviceToUs
        ctxtmenu->insertTitle(i18n("Image View"));
    m_mainDock->setWidget( img_canvas );
 
+   /** Thumbview **/
    m_dockThumbs = parent->createDockWidget( "Thumbs",
 					    loader->loadIcon( "thumbnail", KIcon::Small ),
 					    0L,  i18n("Thumbnails"));
    m_dockThumbs->setDockSite(KDockWidget::DockFullSite );
 
    /* thumbnail viewer widget */
-   m_thumbview = new ThumbView( m_mainDock );
+   m_thumbview = new ThumbView( m_dockThumbs);
    m_dockThumbs->setWidget( m_thumbview );
 
-   /* make the main dock widget */
+   m_dockThumbs->manualDock( m_mainDock,              // dock target
+			     KDockWidget::DockBottom, // dock site
+			     20 );                  // relation target/this (in percent)
+
+   /** Packager Dock **/
    /* A new packager to contain the already scanned images */
    m_dockPackager = parent->createDockWidget( "Scanpackager",
 					    loader->loadIcon( "palette_color", KIcon::Small ),
@@ -140,7 +145,6 @@ KookaView::KookaView( KParts::DockMainWindow *parent, const QCString& deviceToUs
                          KDockWidget::DockLeft, // dock site
                          30 );                  // relation target/this (in percent)
 
-   m_dockThumbs->manualDock( m_mainDock, KDockWidget::DockBottom, 5 );
 
    connect( packager, SIGNAL(showThumbnails( KFileTreeViewItem* )),
 	    this, SLOT( slShowThumbnails( KFileTreeViewItem* )));
@@ -151,8 +155,8 @@ KookaView::KookaView( KParts::DockMainWindow *parent, const QCString& deviceToUs
     * Create a Kombobox that holds the last folders visible even on the preview page
     */
    m_dockRecent  = parent->createDockWidget( "Recent",
-				loader->loadIcon( "image", KIcon::Small ),
-				0L, i18n("Gallery Folders"));
+					     loader->loadIcon( "image", KIcon::Small ),
+					     0L, i18n("Gallery Folders"));
 
    m_dockRecent->setDockSite(KDockWidget::DockFullSite);
 
@@ -190,8 +194,8 @@ KookaView::KookaView( KParts::DockMainWindow *parent, const QCString& deviceToUs
    Q_CHECK_PTR(sane);
 
    m_dockScanParam->manualDock( m_dockRecent,              // dock target
-   KDockWidget::DockBottom, // dock site
-   20 );                  // relation target/this (in percent)
+				KDockWidget::DockBottom, // dock site
+				20 );                  // relation target/this (in percent)
    m_dockScanParam->hide();
 
    /* select the scan device, either user or from config, this creates and assembles
@@ -204,7 +208,7 @@ KookaView::KookaView( KParts::DockMainWindow *parent, const QCString& deviceToUs
 
    preview_canvas = new Previewer( m_dockPreview );
    {
-      preview_canvas->setMinimumSize( 100,100);
+       preview_canvas->setMinimumSize( 100,100);
 
       /* since the scan_params will be created in slSelectDevice, do the
        * connections later
@@ -338,8 +342,6 @@ bool KookaView::slSelectDevice( const QCString& useDevice )
       /* This connects to the selected scanner */
       scan_params = new ScanParams( m_dockScanParam );
       Q_CHECK_PTR(scan_params);
-      // m_dockScanParam->setWidget( scan_params );
-      // m_dockScanParam->show();
 
       if( sane->openDevice( selDevice ) == KSCAN_OK )
       {
