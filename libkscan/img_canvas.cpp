@@ -685,9 +685,11 @@ void ImageCanvas::update_scaled_pixmap( void )
         // do scaling to window-size
         used_yscaler = ((double)viewport()-> height()) / ((double)image->height());
         used_xscaler = ((double)viewport()-> width())  / ((double)image->width());
+        scale_factor = 0;
         break;
     case FIT_ORIG:
         used_yscaler = used_xscaler = 1.0;
+        scale_factor = 100;
         break;
     case FIT_WIDTH:
         used_xscaler = used_yscaler = double(noSBSize.width()) / double(image->width());
@@ -698,7 +700,7 @@ void ImageCanvas::update_scaled_pixmap( void )
                            double(image->width());
             kdDebug(29000) << "FIT WIDTH scrollbar to substract: " << sbWidth << endl;
         }
-
+        scale_factor = 100*used_xscaler;
         break;
     case FIT_HEIGHT:
         used_yscaler = used_xscaler = double(noSBSize.height())/double(image->height());
@@ -713,10 +715,12 @@ void ImageCanvas::update_scaled_pixmap( void )
             kdDebug(29000) << "FIT HEIGHT scrollbar to substract: " << sbWidth << endl;
             // scale = int(100.0*(noSBSize.height() -sbWidth) / image->height());
         }
+        scale_factor = 100*used_xscaler;
 
         break;
     case ZOOM:
         used_xscaler = used_yscaler = double(getScaleFactor())/100.0;
+        scale_factor = 100*used_xscaler;
         break;
     default:
         break;
