@@ -33,6 +33,7 @@
 #include <kdebug.h>
 #include <kconfig.h>
 #include <ksimpleconfig.h>
+#include <kled.h>
 
 // libkscan stuff
 #include "scanparams.h"
@@ -83,6 +84,7 @@ ScanDialog::ScanDialog( QWidget *parent, const char *name, bool modal )
     connect( m_device, SIGNAL(sigScanStart()), this, SLOT(slotScanStart()));
     connect( m_device, SIGNAL(sigScanFinished(KScanStat)),
 	     this, SLOT(slotScanFinished(KScanStat)));
+    connect( m_device, SIGNAL(sigAcquireStart()), this, SLOT(slotAcquireStart()));
     /* Create a preview widget to the right side of the splitter */
     m_previewer = new Previewer( splitter );
     Q_CHECK_PTR(m_previewer );
@@ -169,6 +171,26 @@ void ScanDialog::slotScanStart( )
    if( m_scanParams )
    {
       m_scanParams->setEnabled( false );
+      KLed *led = m_scanParams->operationLED();
+      if( led )
+      {
+	 led->setColor( Qt::red );
+	 led->setState( KLed::On );
+      }
+
+   }
+}
+
+void ScanDialog::slotAcquireStart( )
+{
+   if( m_scanParams )
+   {
+      KLed *led = m_scanParams->operationLED();
+      if( led )
+      {
+	 led->setColor( Qt::green );
+      }
+
    }
 }
 
@@ -178,6 +200,13 @@ void ScanDialog::slotScanFinished( KScanStat status )
    if( m_scanParams )
    {
       m_scanParams->setEnabled( true );
+      KLed *led = m_scanParams->operationLED();
+      if( led )
+      {
+	 led->setColor( Qt::green );
+	 led->setState( KLed::Off );
+      }
+      
    }
 }
 

@@ -28,7 +28,8 @@ protected slots:
    void slotNewPreview( QImage *);
    void slotScanStart( );
    void slotScanFinished( KScanStat status );
-
+   void slotAcquireStart();
+   
 private slots:
    void slotAskOnStartToggle(bool state);
    void slotNetworkToggle( bool state);
