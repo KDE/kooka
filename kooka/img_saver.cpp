@@ -267,7 +267,7 @@ void ImgSaver::createDir( const QString& dir )
 {
    KURL url( dir );
 
-   if( ! KIO::NetAccess::exists(url) )
+   if( ! KIO::NetAccess::exists(url, false, 0) )
    {
       kdDebug(28000) << "Wrn: Directory <" << dir << "> does not exist -> try to create  !" << endl;
       // if( mkdir( QFile::encodeName( dir ), S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH ) != 0 )
@@ -357,7 +357,7 @@ QString ImgSaver::createFilename( QString format )
     num.setNum(c, 16);
     QString fname = "kscan_" + num.rightJustify(4, '0') + "." + format.lower();
 
-    while( files.exists( fname, false ) ) {
+    while( files.exists( fname ) ) {
         num.setNum( ++c, 16 );
         fname = "kscan_" + num.rightJustify(4, '0') + "." + format.lower();
     }
@@ -798,7 +798,7 @@ bool ImgSaver::renameImage( const KURL& fromUrl, KURL& toUrl, bool askExt,  QWid
 
    bool success = false;
 
-   if( KIO::NetAccess::exists( targetUrl ) )
+   if( KIO::NetAccess::exists( targetUrl, false,0 ) )
    {
       kdDebug(28000)<< "Target already exists - can not copy" << endl;
    }

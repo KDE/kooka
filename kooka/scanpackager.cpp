@@ -1155,7 +1155,7 @@ void ScanPackager::slotDeleteItems( )
    /* Since we are currently talking about local files here, NetAccess is OK */
    if( result == KMessageBox::Yes )
    {
-      if( KIO::NetAccess::del( urlToDel ))
+      if( KIO::NetAccess::del( urlToDel, 0 ))
       {
 	 if( nextToSelect )
 	    setSelected( nextToSelect, true );
@@ -1203,7 +1203,7 @@ void ScanPackager::slotCreateFolder( )
 	     */
 	    slotSetNextUrlToSelect( url );
 
-	    if( ! KIO::NetAccess::mkdir( url ))
+	    if( ! KIO::NetAccess::mkdir( url, 0, -1 ))
 	    {
 	       kdDebug(28000) << "ERR: creation of " << url.prettyURL() << " failed !" << endl;
 	    }
