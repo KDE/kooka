@@ -30,6 +30,7 @@
 #include <qpixmap.h>
 #include <kmessagebox.h>
 #include <qfiledialog.h>
+#include <qstringlist.h>
 
 #include <kfiledialog.h>
 #include <kurl.h>
@@ -54,9 +55,15 @@ enum { ID_POP_RESCAN,
 ScanPackager::ScanPackager( QWidget *parent ) : KListView( parent )
 {
 	setFrameStyle( QFrame::Sunken | QFrame::Box);
+	setItemsRenameable (true );
+
+	/* Drag and Drop */
 	setDragEnabled( true );
 	setDropVisualizer(true);
-	setItemsRenameable (true );
+	setAcceptDrops(true);
+	connect( this, SIGNAL(dropped(QDropEvent*, QListViewItem*)),
+		 this, SLOT( slDropped(QDropEvent*, QListViewItem*)));
+	kdDebug(28000) << "connected Drop-Signal" << endl;
 	setRenameable ( 0, true );
 	setRenameable ( 1, false );
 	setRenameable ( 2, false );
@@ -266,7 +273,7 @@ void ScanPackager::slotImageChanged( QImage *img )
    const QCString format = curr->getImgFormat();
    ImgSaver saver( this );
    ImgSaveStat is_stat = ISS_OK;
-   is_stat = saver.saveImage( img, filename );
+   is_stat = saver.saveImage( img, filename, format );
 
    if( is_stat == ISS_ERR_FORMAT_NO_WRITE )
    {
@@ -278,6 +285,13 @@ void ScanPackager::slotImageChanged( QImage *img )
       KMessageBox::error( this, i18n( "Image file is write protected.\nImage will not be saved!"),
 			    i18n("Save error") );
 
+   }
+   else if( is_stat == ISS_ERR_PROTOCOL )
+   {
+      KMessageBox::sorry( this, i18n( "Can not save the image, because the file is local.\n"
+				      "Kooka will support other protocols later."),
+			    i18n("Save error") );
+       
    }
    else if( is_stat != ISS_OK )
    {
@@ -473,8 +487,9 @@ void ScanPackager::slHandlePopup( int menu_id )
       case ID_POP_UNLOAD_IMG:
 	 if( curr )
 	    unloadItem( curr );
+	 kdDebug(28000) << "unloading finished!"<< endl;
 	 if( !curr->isLoaded() )
-	    emit( showImage( 0 ));
+	    emit( showImage( 0L ));
 	 setnew = true;
 	 break;
       case ID_POP_SAVE_IMG:
@@ -522,12 +537,78 @@ void ScanPackager::exportFile( PackagerItem *curr )
 	 if( kfrom == fileName ) return;
 	 copyjob = KIO::copy( kfrom, fileName, false );
 
-	 connect( copyjob, SIGNAL(result(KIO::Job*)), this, SLOT(slotCanceled( KIO::Job* )));
+	 connect( copyjob, SIGNAL(result(KIO::Job*)),
+		  this, SLOT(slotExportFinished( KIO::Job* )));
 
       }
    }
 }
 
+void ScanPackager::slotExportFinished( KIO::Job *job )
+{
+   // nothing yet to do.
+   kdDebug(28000) << "Export Finished" << endl;
+}
+
+void ScanPackager::slotImportFiles( PackagerItem* dir, const QStringList list )
+{
+    if( ! dir ) dir = root;
+    
+    KURL dest;
+    dest = dir->getFilename();
+    
+    /* create a packageritem for every requested file */
+    for( int idx=0; idx < list.count(); idx++ )
+    {
+	QString file = list[idx];
+	PackagerItem *p = new PackagerItem( dir );
+	kdDebug(28000) << "creating new item for " << file << endl;
+	p->setFilename( file );
+    }
+
+    kdDebug(28000) << "Importing to <" << dest.url() << ">" << endl;
+    
+    copyjob = KIO::copy(KURL::List(list), dest, false);
+    connect(copyjob, SIGNAL(result(KIO::Job *)), this,
+	    SLOT(slotImportFinished(KIO::Job *)));
+
+}
+
+void ScanPackager::slotImportFinished( KIO::Job *job )
+{
+   if ( job->error() )
+   {
+      job->showErrorDialog ( );
+      // get formated error message
+      QString msg = job->errorString();
+      // int errid = job->error();
+      kdDebug(28000) << "ERROR in Importing an image: <" << msg << ">" << endl;
+   }
+   else
+   {
+      /* went good. */
+      KIO::CopyJob *fc = (KIO::CopyJob*) job;
+      if( fc ) {
+	  KURL::List srcList = fc->srcURLs();
+	  
+	  KURL target = fc->destURL();
+	  kdDebug(28000) << "Hier bin ich !" << endl;
+
+
+	  // EmployeeList::Iterator it;
+	  // printf( "%s earns %d\n", (*it).name().latin1(), (*it).salary().latin1() );
+	  
+	  kdDebug(28000) << "Received importet file <" << target.url() << ">" << endl;
+	  KURL::List::Iterator it;
+	  for( it = srcList.begin(); it != srcList.end(); ++it )
+	     slFilenameChanged( *it, target );
+	  
+      } else {
+	  kdDebug(28000) << "Copyjob not defined !" << endl;
+      }
+   }
+    
+}
 
 
 void ScanPackager::slotRename( PackagerItem* curr, const KURL& newName )
@@ -550,7 +631,7 @@ void ScanPackager::slotRename( PackagerItem* curr, const KURL& newName )
    
    connect( copyjob,
 	    SIGNAL(result(KIO::Job*)), this,
-	    SLOT(slotResult( KIO::Job* )));
+	    SLOT(slotRenameResult( KIO::Job* )));
 
 
 }
@@ -568,12 +649,26 @@ void ScanPackager::slFilenameChanged( const KURL &from, const KURL &to  )
    if( curr )
    {
       kdDebug(28000) << "Item was found !" << endl;
-      curr->setFilename( new_name );
+      KURL targeturl = to;
+
+      /* check the target filename. If none is present, the one of the source
+       * is to use. TODO: What about overwriting etc.
+       */
+      QString targetfname = to.filename(false);
+      kdDebug(28000) << "Target-Filename is " << targetfname << endl;
+      
+      if( targetfname.isEmpty() || targetfname.isNull() )
+      {
+	 targeturl.setFileName( from.filename());
+      }
+      
+      curr->setFilename( targeturl.url());
 
       if( curr->isDir())
       {
 	 /* if it is a directory, it is much more complicated. The children must
 	  *  be reread to get the correct name.
+	  * TODO !
 	  */
 	 kdDebug(28000) << "slFilenameChanged for directory !" << endl;
       }
@@ -585,6 +680,49 @@ void ScanPackager::slFilenameChanged( const KURL &from, const KURL &to  )
 }
 
 
+bool ScanPackager::acceptDrag(QDropEvent *ev) const
+{
+    // kdDebug(28000) << "This is the source: " << ev->source() << endl;
+#if 0
+    if( ev->source() == (QWidget*)viewport() ) {
+	kdDebug(28000) << "Dropp-Event by myself !" << endl;
+	return( true );
+    }
+#endif
+    
+    return(QUriDrag::canDecode(ev));
+}
+
+void ScanPackager::slDropped( QDropEvent * e, QListViewItem *after)
+{
+    kdDebug( 28000 ) << "Dropp Event !" << endl;
+    QStringList filelist;
+
+    
+    if( !QUriDrag::decodeToUnicodeUris( e, filelist ))
+    {
+	kdDebug(28000) << "ERROR: Cant decode uris" << endl;
+	return;
+    }
+
+    if( filelist.count() == 0 )
+    {
+	kdDebug(28000) << "ERROR: Confusion ! Nothing dropped !" << endl;
+	return;
+    }
+
+    PackagerItem *droppedOn = (PackagerItem*) after;
+    if( droppedOn == 0L ) droppedOn = root;
+    
+    if( ! droppedOn->isDir())
+    {
+       droppedOn = (PackagerItem*) (after->parent());
+    } 
+    slotImportFiles( droppedOn, filelist );
+    
+    
+}
+
 
 void ScanPackager::slotCanceled( KIO::Job* )
 {
@@ -592,7 +730,7 @@ void ScanPackager::slotCanceled( KIO::Job* )
 }
 
 
-void ScanPackager::slotResult( KIO::Job *job )
+void ScanPackager::slotRenameResult( KIO::Job *job )
 {
    if( ! job ) return;
    kdDebug(28000) << "slotResult !" << endl;
@@ -603,7 +741,7 @@ void ScanPackager::slotResult( KIO::Job *job )
       // get formated error message
       QString msg = job->errorString();
       // int errid = job->error();
-      kdDebug(28000) << "ERROR in Exporting an image: <" << msg << ">" << endl;
+      kdDebug(28000) << "ERROR in Renaming an image: <" << msg << ">" << endl;
    }
    else
    {
@@ -611,6 +749,7 @@ void ScanPackager::slotResult( KIO::Job *job )
       KIO::FileCopyJob *fc = (KIO::FileCopyJob*) job;
       KURL src = fc->srcURL();
       KURL target = fc->destURL();
+
       slFilenameChanged( src, target );
    }
    copyjob = 0L;
