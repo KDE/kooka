@@ -1,5 +1,5 @@
 /***************************************************************************
-                          kscanslider.cpp  -  description
+                        kscanslider.cpp - helper widgets
                              -------------------
     begin                : Wed Jan 5 2000
     copyright            : (C) 2000 by Klaas Freitag
@@ -16,27 +16,59 @@
  ***************************************************************************/
 
 #include <qlayout.h>
+#include <qpushbutton.h>
+#include <qspinbox.h>
+#include <qtooltip.h>
+
+#include <kiconloader.h>
+#include <klocale.h>
 #include <kdebug.h>
 #include "kscanslider.h"
 
 KScanSlider::KScanSlider( QWidget *parent, const QString& text,
-			  double min, double max )
- : QFrame( parent )
+			  double min, double max, bool haveStdButt,
+			  int stdValue )
+   : QFrame( parent ),
+     m_stdValue( stdValue ),
+     m_stdButt(0)
 {
     QHBoxLayout *hb = new QHBoxLayout( this );
     l1 = new QLabel( text, this, "AUTO_SLIDER_LABEL" );
     hb->addWidget( l1,20 );
-    numdisp = new QLabel( QString::fromLatin1("MMM"), this,
-			  "AUTO_SLIDER_NUMDISP" );
-    numdisp->setAlignment( AlignRight );
-    hb->addWidget( numdisp, 8 );
-    hb->addStretch( 1);
+
+    if( haveStdButt )
+    {
+       KIconLoader *loader = KGlobal::iconLoader();
+       m_stdButt = new QPushButton( this );
+       m_stdButt->setPixmap( loader->loadIcon( "locationbar_erase",KIcon::Small ));
+
+       /* connect the button click to setting the value */
+       connect( m_stdButt, SIGNAL(clicked()),
+		this, SLOT(slRevertValue()));
+       
+       QToolTip::add( m_stdButt,
+		      i18n( "revert value back to it's standard value %1" ).arg( stdValue ));
+       hb->addWidget( m_stdButt, 0 );
+       hb->addSpacing( 4 );
+    }
 
     slider = new QSlider( min, max, 1, min, QSlider::Horizontal, this, "AUTO_SLIDER_" );
     slider->setTickmarks( QSlider::Below );
     slider->setTickInterval( QMAX( (max-min) / 10, 1 ) );
     slider->setSteps( QMAX( (max-min)/20, 1 ), QMAX( (max-min)/10, 1 ) );
 
+    /* set a buddy */
+    l1->setBuddy( slider );
+    
+    /* create a spinbox for displaying the values */
+    m_spin = new QSpinBox( min, max,
+			   1, // step
+			   this );
+
+    
+    /* make spin box changes change the slider */
+    connect( m_spin, SIGNAL(valueChanged(int)), this, SLOT(slSliderChange(int)));
+    
     /* Handle internal number display */
     // connect(slider, SIGNAL(valueChanged(int)), numdisp, SLOT( setNum(int) ));
     connect(slider, SIGNAL(valueChanged(int)), this, SLOT( slSliderChange(int) ));
@@ -46,6 +78,9 @@ KScanSlider::KScanSlider( QWidget *parent, const QString& text,
 
     /* Add to layout widget and activate */
     hb->addWidget( slider, 36 );
+    hb->addSpacing( 4 );
+    hb->addWidget( m_spin, 0 );
+    
     hb->activate();
 
 }
@@ -56,8 +91,8 @@ void KScanSlider::setEnabled( bool b )
 	slider->setEnabled( b );
     if( l1 )
 	l1->setEnabled( b );
-    if( numdisp )
-	numdisp->setEnabled( b );
+    if( m_spin )
+	m_spin->setEnabled( b );
 }
 
 void KScanSlider::slSetSlider( int value )
@@ -80,13 +115,31 @@ void KScanSlider::slSliderChange( int v )
 {
     kdDebug(29000) << "Got slider val: " << v << endl;
     // slider_val = v;
-    numdisp->setNum(v);
+    int spin = m_spin->value();
+    if( v != spin )
+       m_spin->setValue(v);
+    int slid = slider->value();
+    if( v != slid )
+       slider->setValue(v);
+    
     emit( valueChanged( v ));
 }
+
+void KScanSlider::slRevertValue()
+{
+   if( m_stdButt )
+   {
+      /* Only if stdButt is non-zero, the default value is valid */
+      slSetSlider( m_stdValue );
+   }
+}
+
 
 KScanSlider::~KScanSlider()
 {
 }
+
+/* ====================================================================== */
 
 KScanEntry::KScanEntry( QWidget *parent, const QString& text )
  : QFrame( parent )
@@ -95,8 +148,9 @@ KScanEntry::KScanEntry( QWidget *parent, const QString& text )
 
     QLabel *l1 = new QLabel( text, this, "AUTO_ENTRYFIELD" );
     hb->addWidget( l1,1 );
- 	
+
     entry = new QLineEdit( this, "AUTO_ENTRYFIELD_E" );
+    l1->setBuddy( entry );
     connect( entry, SIGNAL( textChanged(const QString& )), 
 	     this, SLOT( slEntryChange(const QString&)));
     connect( entry, SIGNAL( returnPressed()),
