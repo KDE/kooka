@@ -49,7 +49,7 @@ KookaView::KookaView(QWidget *parent)
    /* An image canvas for the large image, right side */
    
    img_canvas  = new ImageCanvas( this );
-   
+   img_canvas->setMinimumSize(400,200);
    setResizeMode( img_canvas,    QSplitter::Stretch );
    setResizeMode( paramSplitter, QSplitter::FollowSizeHint );
 
@@ -105,8 +105,19 @@ KookaView::KookaView(QWidget *parent)
 	 preview_canvas->setMinimumSize( 100,100);
    	
 	 preview_img = new QImage();
-	 preview_img->load( packager->getSaveRoot() + "preview.bmp" );
-	 preview_canvas->newImage( preview_img );
+
+	 QString previewfile = ImgSaver::kookaPreviewRoot()+ "preview.bmp";
+	 
+	 if( preview_img->load( previewfile ))
+	 {
+	    preview_canvas->newImage( preview_img );
+	 }
+	 else
+	 {
+	    preview_canvas->newImage( 0L );
+
+	    kdDebug(28000) << "WRN: Could not load preview from " << previewfile << endl;
+	 }
 
 	 /* New Rectangle selection in the preview */
 	 connect( preview_canvas->getImageCanvas(), SIGNAL( newRect(QRect)),
@@ -279,6 +290,7 @@ QCString KookaView::userDeviceSelection( ) const
    }
    return( selDevice );
 }
+
 
 
 void KookaView::loadStartupImage( void )
