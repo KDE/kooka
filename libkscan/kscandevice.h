@@ -332,6 +332,14 @@ public slots:
    */
   void sigNewPreview( QImage*);
 
+   /**
+    * emitted to tell the application the start of scanning. That is
+    * before the enquiry of the scanner starts. Between this signal
+    * and @see sigScanProgress(0) can be some time consumed by a scanner
+    * warming up etc.
+    */
+  void sigScanStart();
+   
   /**
    *  emitted to tell the application the progress of the scanning
    *  of one page. The final value is always 1000. The signal is

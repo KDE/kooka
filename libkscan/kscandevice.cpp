@@ -1,6 +1,31 @@
+/***************************************************************************
+                   kscandevice.h - kde2 scanner object
+                             -------------------                                         
+    begin                : ?
+    copyright            : (C) 1999 by Klaas Freitag
+                               based on work of Ivan Shvedunov          
+    email                : freitag@suse.de
 
-/** HEADER **/
+    $Id$
+ ***************************************************************************/
 
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   * 
+ *                                                                         *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with this program; if not, write to the Free Software
+ *   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ *
+ */
 
 #include <stdlib.h>
 #include <qwidget.h>
@@ -31,6 +56,7 @@
 
 #define MIN_PREVIEW_DPI 75
 #define UNDEF_SCANNERNAME I18N_NOOP( "undefined" )
+#define MAX_PROGRESS 100
 
 /* ---------------------------------------------------------------------------
 
@@ -889,6 +915,8 @@ KScanStat KScanDevice::acquire_data( bool isPreview )
 
    scanningPreview = isPreview;
 
+   emit sigScanStart();
+   
    sane_stat = sane_start( scanner_handle );
    if( sane_stat == SANE_STATUS_GOOD )
    {
@@ -1007,7 +1035,7 @@ void KScanDevice::slScanFinished( KScanStat status )
       sn = 0;
    }
 
-   emit( sigScanProgress( 1000 ));
+   emit( sigScanProgress( MAX_PROGRESS ));
 
    kdDebug(29000) << "Slot ScanFinished hit with status " <<  status << endl;
 
@@ -1230,9 +1258,9 @@ void KScanDevice::doProcessABlock( void )
 	
 	if( (sane_scan_param.lines > 0) && (sane_scan_param.lines * pixel_y> 0) )
 	{
-	   int progress =  (int)(1000.0 / (double) sane_scan_param.lines *
+	   int progress =  (int)((double)MAX_PROGRESS / (double) sane_scan_param.lines *
 				 (double)pixel_y);
-	   if( progress < 1000 )
+	   if( progress < MAX_PROGRESS)
 	      emit( sigScanProgress( progress));
 	}
 
