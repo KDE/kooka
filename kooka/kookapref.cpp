@@ -25,6 +25,8 @@
 #include <qlayout.h>
 #include <qlabel.h>
 
+#include <devselector.h>
+
 KookaPreferences::KookaPreferences()
     : KDialogBase(IconList, i18n("Preferences"),
                   Help|Default|Ok|Apply|Cancel, Ok)
@@ -42,7 +44,7 @@ void KookaPreferences::setupStartupPage(void)
     KConfig *konf = KGlobal::config ();
 
     /* startup options */
-    konf->setGroup("Startup" );
+    konf->setGroup( GROUP_STARTUP );
     
     QFrame *page = addPage( i18n("Startup"), i18n("Kooka Startup Preferences" ),
 			    BarIcon("gear", KIcon::SizeMedium ) );
