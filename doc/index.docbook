@@ -100,8 +100,8 @@ the windows as needed.</para>
 <para>The navigation window consists of two tabs, which allow you to
 switch between the <guilabel>Preview</guilabel> and the integrated
 file browser called the <guilabel>Gallery</guilabel>.  The working
-directory is displayed in the lower part of the window along with the
-directory where the scan will be saved.</para> 
+folder is displayed in the lower part of the window along with the
+folder where the scan will be saved.</para> 
 </listitem>
 
 <listitem>
@@ -174,10 +174,10 @@ scan.</para>
 <term>
 <menuchoice>
 <guimenu>File</guimenu>
-<guimenuitem>Create Directory...</guimenuitem>
+<guimenuitem>Create Folder...</guimenuitem>
 </menuchoice></term> 
 <listitem>
-<para>Create a directory to hold your images.</para>
+<para>Create a folder to hold your images.</para>
 </listitem> 
 </varlistentry>
 
@@ -634,13 +634,13 @@ size of the thumbnails if you are scanning many pages from a book.
 <para>The method for saving an image is somewhat different in &kooka;
 than in many other applications. Click the
 <guilabel>Gallery</guilabel> tab to open a small file browser. This is
-the directory <filename
+the folder <filename
 class="directory">~/.kde/share/apps/ScanImages/</filename> In the
-lower portion of the window, your current subdirectory in the gallery
+lower portion of the window, your current subfolder in the gallery
 is shown. This is where all scanned images are first saved as
 files. When starting &kooka; for the first time, you will only see the
 <filename class="directory">ScanImages</filename>.  Create
-subdirectories by <mousebutton>right</mousebutton> clicking this
+subfolders by <mousebutton>right</mousebutton> clicking this
 folder. The selected folder, highlighted in blue, is the first save
 location of the scanned images. The scans are labeled in ascending
 numerical order as in <filename>kscan_0001</filename> and
@@ -664,7 +664,7 @@ here. In addition, close or permanently delete images here.</para>
 
 <para>To incorporate other images in the gallery, add them in
 &konqueror; by dragging and dropping.  Open &konqueror; to the
-directory containing the desired images.  Then add them to the &kooka;
+folder containing the desired images.  Then add them to the &kooka;
 gallery by dragging them and dropping them into the gallery.</para>
 
 </chapter>
