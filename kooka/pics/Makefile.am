@@ -1,8 +1,8 @@
 # Add all of your pixmaps here
-data_DATA = mirror-both.png mirror-horiz.png mirror-vert.png scaletoheight.png \
+pics_DATA = mirror-both.png mirror-horiz.png mirror-vert.png scaletoheight.png \
 	scaletowidth.png scaleorig.png ocr.png ocr-select.png newfromselect.png \
 	thumbviewtile.png gocr.png lockzoom.png
 
 
 # This is where it will all be installed
-datadir = $(kde_datadir)/kooka/pics
+picsdir = $(kde_datadir)/kooka/pics
