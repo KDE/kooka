@@ -75,22 +75,14 @@ int main( int argc, char ** argv )
    icons.insert("mini-folder", new QPixmap( loader->loadIcon( "folder",KIcon::Small ))); 
    icons.insert("mini-folder-open", new QPixmap( loader->loadIcon( "folder_open",KIcon::Small )));
 
-   // register ourselves as a dcop client
-   app.dcopClient()->registerAs(app.name(), false);
-   if (app.isRestored()) {
-      RESTORE(Kooka);
-
-   }
-   else
-   {
-      // no session.. just start up normally
-
-      Kooka  *kooka = new Kooka();
+   Kooka  *kooka = new Kooka();
+   app.setMainWidget( kooka );
+   kooka->show();
+   app.processEvents();
+   kooka->startup();
       
-      kooka->show();
-      app.processEvents();
-      kooka->startup();
-      
-   }
-   return app.exec();
+   int ret = app.exec();
+
+   return ret;
+   
 }

@@ -38,10 +38,10 @@
 
 Kooka::Kooka()
     : KMainWindow( 0, "Kooka" ),
-      m_view(new KookaView(this)),
       m_printer(0)
 {
     // accept dnd
+   m_view = new KookaView(this);
     setAcceptDrops(true);
 
     // tell the KMainWindow that this is indeed the main widget
@@ -64,9 +64,10 @@ Kooka::Kooka()
     changeCaption( i18n( "KDE2 Scanning" ));
 }
 
+
 Kooka::~Kooka()
 {
-   delete( m_view );
+
 }
 
 void Kooka::load(const QString& url)
@@ -103,15 +104,9 @@ void Kooka::startup( void )
 
 void Kooka::setupActions()
 {
-#if 0
-    KStdAction::openNew(this, SLOT(fileNew()), actionCollection());
-    KStdAction::open(this, SLOT(fileOpen()), actionCollection());
-    KStdAction::save(this, SLOT(fileSave()), actionCollection());
-    KStdAction::saveAs(this, SLOT(fileSaveAs()), actionCollection());
-#endif
 
     KStdAction::print(this, SLOT(filePrint()), actionCollection());
-    KStdAction::quit(kapp, SLOT(quit()), actionCollection());
+    KStdAction::quit(this , SLOT(close()), actionCollection());
 
     m_toolbarAction = KStdAction::showToolbar(this, SLOT(optionsShowToolbar()),
 					      actionCollection());
@@ -121,11 +116,7 @@ void Kooka::setupActions()
 					   SLOT(optionsShowScanParams()), actionCollection(),
 					   "show_scanparams" );
     m_scanParamsAction->setChecked( true );
-#if 0 
-    m_previewerAction = new KToggleAction(i18n("Show scan pre&view"), 0, this,
-					   SLOT(optionsShowPreviewer()), actionCollection(),
-					  "show_preview" );
-#endif
+
     KStdAction::keyBindings(this, SLOT(optionsConfigureKeys()), actionCollection());
     KStdAction::configureToolbars(this, SLOT(optionsConfigureToolbars()),
 				  actionCollection());
