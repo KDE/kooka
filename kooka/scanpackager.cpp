@@ -61,58 +61,58 @@ extern QDict<QPixmap> icons;
 ScanPackager::ScanPackager( QWidget *parent ) : KFileTreeView( parent )
 {
    // TODO: setItemsRenameable (true );
-	addColumn( i18n("Image Name" ));
-	setColumnAlignment( 0, AlignLeft );
+   addColumn( i18n("Image Name" ));
+   setColumnAlignment( 0, AlignLeft );
 	
-	addColumn( i18n("Size") );
-	setColumnAlignment( 1, AlignRight );
-	setColumnAlignment( 2, AlignRight );
+   addColumn( i18n("Size") );
+   setColumnAlignment( 1, AlignRight );
+   setColumnAlignment( 2, AlignRight );
 
-	addColumn( i18n("Format" )); setColumnAlignment( 3, AlignRight );
+   addColumn( i18n("Format" )); setColumnAlignment( 3, AlignRight );
 
-	/* Drag and Drop */
-	setDragEnabled( true );
-	setDropVisualizer(true);
-	setAcceptDrops(true);
-#if 0
-	connect( this, SIGNAL(dropped(QDropEvent*, QListViewItem*)),
-		 this, SLOT( slDropped(QDropEvent*, QListViewItem*)));
-#endif
-	kdDebug(28000) << "connected Drop-Signal" << endl;
-	setRenameable ( 0, true );
-	setRenameable ( 1, false );
-	setRenameable ( 2, false );
-	setRenameable ( 3, false );
+   /* Drag and Drop */
+   setDragEnabled( true );
+   setDropVisualizer(true);
+   setAcceptDrops(true);
 
-	setRootIsDecorated( false );
+   connect( this, SIGNAL(dropped( KURL::List&, KURL& )),
+	    this, SLOT( slotUrlsDropped( KURL::List&, KURL& )));
+
+   kdDebug(28000) << "connected Drop-Signal" << endl;
+   setRenameable ( 0, true );
+   setRenameable ( 1, false );
+   setRenameable ( 2, false );
+   setRenameable ( 3, false );
+
+   setRootIsDecorated( false );
 	
-	connect( this, SIGNAL( selectionChanged( QListViewItem*)),
-		 SLOT( slSelectionChanged(QListViewItem*)));
+   connect( this, SIGNAL( selectionChanged( QListViewItem*)),
+	    SLOT( slSelectionChanged(QListViewItem*)));
 
-	connect( this, SIGNAL( rightButtonPressed( QListViewItem *, const QPoint &, int )),
-		 SLOT( slShowContextMenue(QListViewItem *, const QPoint &, int )));
+   connect( this, SIGNAL( rightButtonPressed( QListViewItem *, const QPoint &, int )),
+	    SLOT( slShowContextMenue(QListViewItem *, const QPoint &, int )));
 	
-	connect( this, SIGNAL(itemRenamed (QListViewItem*, const QString &, int ) ), this,
-		 SLOT(slFileRename( QListViewItem*, const QString&, int)));
+   connect( this, SIGNAL(itemRenamed (QListViewItem*, const QString &, int ) ), this,
+	    SLOT(slFileRename( QListViewItem*, const QString&, int)));
 
 	
-	img_counter = 1;
-	/* Set the current export dir to home */
-	curr_copy_dir = QDir::home();
+   img_counter = 1;
+   /* Set the current export dir to home */
+   curr_copy_dir = QDir::home();
 
-	/* Preload frequently used icons */
-	KIconLoader *loader = KGlobal::iconLoader();
-	m_floppyPixmap = loader->loadIcon( "3floppy_unmount", KIcon::Small );
-	m_grayPixmap = loader->loadIcon( "palette_gray", KIcon::Small );
-	m_bwPixmap = loader->loadIcon( "palette_lineart", KIcon::Small );
-	m_colorPixmap = loader->loadIcon( "palette_color", KIcon::Small );
+   /* Preload frequently used icons */
+   KIconLoader *loader = KGlobal::iconLoader();
+   m_floppyPixmap = loader->loadIcon( "3floppy_unmount", KIcon::Small );
+   m_grayPixmap = loader->loadIcon( "palette_gray", KIcon::Small );
+   m_bwPixmap = loader->loadIcon( "palette_lineart", KIcon::Small );
+   m_colorPixmap = loader->loadIcon( "palette_color", KIcon::Small );
 
 	   
-	popup =0L;
-	/* open the image galleries */
-	openRoots();
+   popup =0L;
+   /* open the image galleries */
+   openRoots();
 
-	createMenus();
+   createMenus();
 }
 
 void ScanPackager::openRoots()
@@ -124,11 +124,16 @@ void ScanPackager::openRoots()
 
    /* standard root always exists, ImgRoot creates it */
    kdDebug(28000) << "Open standard root " << rootUrl.url() << endl;
-
-   KFileTreeBranch *newbranch = addBranch( rootUrl, i18n("Kooka Gallery"), false /* do not showHidden */ );
+   KIconLoader *loader = KGlobal::iconLoader();
+   
+   KFileTreeBranch *newbranch = addBranch( rootUrl, i18n("Kooka Gallery"),
+					   loader->loadIcon( "folder_image", KIcon::Small ),
+					   false /* do not showHidden */ );
    setDirOnlyMode( newbranch, false );
    newbranch->setShowExtensions( false );
 
+   newbranch->setOpenPixmap( loader->loadIcon( "folder_blue_open", KIcon::Small ));
+			 
    connect( newbranch, SIGNAL(newTreeViewItems( KFileTreeBranch*, const KFileTreeViewItemList& )),
 	    this, SLOT( slotDecorate(KFileTreeBranch*, const KFileTreeViewItemList& )));
 
@@ -845,51 +850,18 @@ void ScanPackager::slotExportFinished( KIO::Job *job )
 }
 
 
-void ScanPackager::contentsDropEvent( QDropEvent *e )
+void ScanPackager::slotUrlsDropped( KURL::List& urls, KURL& copyTo )
 {
-   KURL::List urls;
-   KFileTreeViewItem *curr = currentKFileTreeViewItem();
+   kdDebug(28000) << "Kooka drop event" << endl;
 
-   if( ! curr ) return;
-   KURL targetUrl = curr->url();
-   
-   targetUrl.setFileName( "" ); /* in case its a file */
-   kdDebug(28000) << "DropEvent: Copying to " << targetUrl.prettyURL() << endl;
-#if 0
-   if ( KURLDrag::decode( e, urls ) )
+   if( urls.count() > 0 )
    {
-      copyjob = KIO::copy( urls, targetUrl, true );
+      copyjob = KIO::copy( urls, copyTo, true );
+      KFileTreeViewItem *curr = currentKFileTreeViewItem();
       storeJob( copyjob, curr, JobDescription::ImportJob );
       connect( copyjob, SIGNAL(result(KIO::Job*)),
 	       this, SLOT(slotExportFinished( KIO::Job* )));
    }
-#endif
-}
-
-
-QDragObject* ScanPackager::dragObject()
-{
-   kdDebug(28000) << "my new dragObject !" << endl;
-   KURL::List urls;
-
-   KFileTreeViewItem *curr = currentKFileTreeViewItem();
-   QDragObject *drag = 0L;
-
-   if( curr && !curr->isDir())
-   {
-      urls.append( curr->url());
-   
-      if ( !urls.isEmpty() )
-	 drag = new KURLDrag( urls, viewport(), "url drag" );
-
-      kdDebug(28000) << " Scanpackager Dragobject: " << drag << endl;
-   }
-   else
-   {
-      kdDebug(28000) << "Can not Drag a Directory " << endl;
-   }
-   return drag;
-
 }
 
 void ScanPackager::slotCanceled( KIO::Job* )

@@ -86,10 +86,6 @@ public slots:
    
    void         slotSelectDirectory( const QString& );
    
-protected:
-   virtual void contentsDropEvent( QDropEvent *ev );
-   virtual QDragObject * dragObject();
-   
 protected slots:
    void         slFileRename( QListViewItem*, const QString&, int );
    // void         slFilenameChanged( KFileTreeViewItem*, const KURL & );
@@ -101,6 +97,8 @@ protected slots:
    void         slotUnloadItems( );
    void         slotUnloadItem( KFileTreeViewItem *curr );
    void         slotDirCount( KFileTreeViewItem *item, int cnt );
+   void 	slotUrlsDropped( KURL::List& urls, KURL& copyTo );
+
 signals:
     void 	showImage( QImage* );
     void        deleteImage( QImage* );
