@@ -555,7 +555,7 @@ void ScanPackager::loadImageForItem( KFileTreeViewItem *item )
 	       prevItem = subImgItem;
 
 	       subImgItem->setPixmap( 0, loader->loadIcon( "editcopy", KIcon::Small ));
-	       subImgItem->setText( 0, i18n("Subimage %1").arg( i ) );
+	       subImgItem->setText( 0, i18n("Sub-image %1").arg( i ) );
 	       KookaImage  *subImgImg = new KookaImage( i, img );
 	    
 	       newKfi->setExtraData( (void*) this, (void*) subImgImg );
