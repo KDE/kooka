@@ -47,7 +47,7 @@
 #include "previewer.h"
 
 
-FormatDialog::FormatDialog( QWidget *parent, const QString& imgFormat, const char *name )
+FormatDialog::FormatDialog( QWidget *parent, const QString&, const char *name )
    :KDialogBase( parent, name, true,
                  /* Tabbed,*/ i18n( "Kooka Save Assistant" ),
 		 Ok|Cancel, Ok )
@@ -737,6 +737,74 @@ QString ImgSaver::extension( const KURL& url )
 }
 
 
+bool ImgSaver::renameImage( const KURL& fromUrl, KURL& toUrl, bool askExt,  QWidget *overWidget )
+{
+   /* Check if the provided filename has a extension */
+   QString extTo = extension( toUrl );
+   QString extFrom = extension( fromUrl );
+   KURL targetUrl( toUrl );
+
+   if( extTo.isEmpty() && !extFrom.isEmpty() )
+   {
+      /* Ask if the extension should be added */
+      int result = KMessageBox::Yes;
+      QString fName = toUrl.fileName();
+      if( ! fName.endsWith( "." )  )
+      {
+	 fName += ".";
+      }
+      fName += extFrom;
+      
+      if( askExt )
+      {
+
+	 QString s;
+	 s = i18n("The filename you supplied has no file extension.\nShould the correct one be added automatically? ");
+	 s += i18n( "That would result in the new filename: %1" ).arg( fName);
+
+	 result = KMessageBox::questionYesNo(overWidget, s, i18n( "Extension missing"),
+					     KStdGuiItem::yes(), KStdGuiItem::no(),
+					     "AutoAddExtensions" );
+      }
+
+      if( result == KMessageBox::Yes )
+      {
+	 targetUrl.setFileName( fName );
+	 kdDebug(28000) << "Rename file to " << targetUrl.prettyURL() << endl;
+      }
+   }
+   else if( !extFrom.isEmpty() && extFrom != extTo )
+   {
+      /* extensions differ -> TODO */
+      KMessageBox::error( overWidget, i18n("Format changes of images are currently not supported."),
+			  i18n("Wrong extension found" ));
+      return(false);
+   }
+   
+   bool success = false;
+   if( KIO::NetAccess::exists( targetUrl ) )
+   {
+      kdDebug(28000)<< "Target already exists - can not copy" << endl;
+   }
+   else
+   {
+      if( KIO::NetAccess::copy( fromUrl, targetUrl ))
+      {
+	 kdDebug(28000) << "Copy success, removing " << fromUrl.prettyURL() << endl;
+	 KIO::NetAccess::del( fromUrl );
+	 toUrl = targetUrl;
+	 success  = true;
+      }
+      else
+      {
+	 kdDebug(28000) << "Could not copy:" << KIO::NetAccess::lastErrorString() << endl;
+      }
+   }
+
+   return( success );
+}
+
+
 bool ImgSaver::exportImage( const KURL& fromUrl, const KURL& toUrl, QWidget *overWidget )
 {
 
@@ -745,7 +813,7 @@ bool ImgSaver::exportImage( const KURL& fromUrl, const KURL& toUrl, QWidget *ove
    QString extFrom = extension( fromUrl );
    KURL targetUrl( toUrl );
    
-   if( extTo.isEmpty() )
+   if( extTo.isEmpty() && !extFrom.isEmpty())
    {
       /* Ask if the extension should be added */
       int result = KMessageBox::Yes;
@@ -767,7 +835,7 @@ bool ImgSaver::exportImage( const KURL& fromUrl, const KURL& toUrl, QWidget *ove
 	 targetUrl.setFileName( fName );
       }
    }
-   else if( extFrom != extTo )
+   else if( !extFrom.isEmpty() && extFrom != extTo )
    {
       /* extensions differ -> TODO */
       KMessageBox::error( overWidget, i18n("Format changes of images are currently not supported."),
