@@ -111,7 +111,7 @@ public slots:
    void slSaveScanParams( void );
 
    
-   void slShowThumbnails( KFileTreeViewItem *dirKfi = 0);
+   void slShowThumbnails( KFileTreeViewItem *dirKfi = 0, bool forceRedraw=false);
    void slFreshUpThumbView();
    
    /**

@@ -711,10 +711,8 @@ void KookaView::slSaveScanParams( void )
 #endif
 }
 
-void KookaView::slShowThumbnails(KFileTreeViewItem *dirKfi )
+void KookaView::slShowThumbnails(KFileTreeViewItem *dirKfi, bool forceRedraw )
 {
-   bool forceRedraw = false;
-
    /* If no item is specified, use the current one */
    if( ! dirKfi )
    {
@@ -740,6 +738,8 @@ void KookaView::slShowThumbnails(KFileTreeViewItem *dirKfi )
    {
       m_thumbview->clear();
       /* Find a list of child KFileItems */
+      if( forceRedraw ) m_thumbview->readSettings();
+      
       KFileItemList fileItemsList;
 
       QListViewItem * myChild = dirKfi->firstChild();
@@ -751,6 +751,7 @@ void KookaView::slShowThumbnails(KFileTreeViewItem *dirKfi )
 
       m_thumbview->slNewFileItems( fileItemsList );
       m_thumbview->setCurrentDir( dirKfi->url());
+      // m_thumbview->arrangeItemsInGrid();
    }
 
 }
@@ -947,8 +948,12 @@ void KookaView::slFreshUpThumbView()
 {
    if( m_thumbview )
    {
-      m_thumbview->readSettings();
-      slShowThumbnails();
+      /* readSettings returns true if something changes */
+      if( m_thumbview->readSettings() )
+      {
+	 /* new settings */
+	 slShowThumbnails(0, true);
+      }
    }
 }
 
