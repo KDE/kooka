@@ -68,9 +68,18 @@ QStringList ocrWordList::stringList()
 
     for ( it = begin(); it != end(); ++it )
     {
+#if 0
+        /* Uncommented this to prevent an error that occurs if the lenght of the
+         * spellchecked stringlist and the ocr_page wordlist are not the same length.
+         * For the ocrpage words connected with a dash are one word while the code
+         * below parts them into two. That confuses the replacement code if the user
+         * decided. Solution:  KSpell should treat dash-linked words correctly.
+         * We live with the problem here that dashes bring confusion ;-)
+         */
         if( (*it).contains( rx ) )
             res += QStringList::split( rx, (*it) );
         else
+#endif
             res << *it;
     }
     return res;
@@ -129,7 +138,7 @@ bool ocrWordList::findFuzzyIndex( const QString& word, ocrWord& resWord )
         fuzzyword.remove( '_' );
 
         // kdDebug(28000) <<  "findFuzzy: Comparing word " << fuzzyword << " which was "
-        //               << (*it) << " with " <<  word << endl;
+        //                << (*it) << " with " <<  word << endl;
         if( fuzzyword == word )
         {
             resWord = *it;

@@ -140,7 +140,7 @@ KSANEOCR::~KSANEOCR()
        delete m_resultImage;
        m_resultImage = 0;
    }
-	   
+
    if( m_img ) delete m_img;
    if( m_spellInitialConfig ) delete m_spellInitialConfig;
 }
@@ -289,6 +289,7 @@ void KSANEOCR::finishedOCRVisible( bool success )
    visibleOCRRunning =  false;
    cleanUpFiles();
 
+
    kdDebug(28000) << "# ocr finished #" << endl;
 }
 
@@ -309,10 +310,10 @@ void KSANEOCR::startLineSpellCheck()
 	    return;
         }
 
-        kdDebug(28000)<< "Wortliste: "<< m_checkStrings.join(", ") << endl;
+        kdDebug(28000)<< "Wordlist (size " << m_ocrPage[m_ocrCurrLine].count() << ", line " << m_ocrCurrLine << "):" << m_checkStrings.join(", ") << endl;
 
         // if( list.count() > 0 )
-	
+
         m_spell->checkList( &m_checkStrings, m_kspellVisible );
 	kdDebug(28000)<< "Started!" << endl;
         /**
@@ -401,6 +402,16 @@ void KSANEOCR::startOCRAD( )
 
     KConfig *konf = KGlobal::config ();
     KConfigGroupSaver( konf, CFG_GROUP_OCRAD );
+
+    QString format = konf->readEntry( CFG_OCRAD_FORMAT, "utf8");
+    *daemon << QString("-F");
+    *daemon << format;
+
+    QString charset = konf->readEntry( CFG_OCRAD_CHARSET, "iso-8859-15");
+    *daemon << QString("-c");
+    *daemon << charset;
+
+
     QString addArgs = konf->readEntry( CFG_OCRAD_EXTRA_ARGUMENTS, QString() );
 
     if( !addArgs.isEmpty() )
@@ -408,7 +419,7 @@ void KSANEOCR::startOCRAD( )
 	kdDebug(28000) << "Setting additional args from config for ocrad: " << addArgs << endl;
 	*daemon << addArgs;
     }
-    
+
     m_ocrResultText = "";
 
     connect(daemon, SIGNAL(processExited(KProcess *)),
@@ -783,6 +794,15 @@ bool KSANEOCR::readORF( const QString& fileName, QString& errStr )
     int	blockCnt = 0;
     int currBlock = -1;
 
+
+    /* Fetch the numeric version of ocrad */
+    ocradDialog *ocrDia = static_cast<ocradDialog*>(m_ocrProcessDia);
+    int ocradVersion = 0;
+    if( ocrDia )
+    {
+        ocradVersion = ocrDia->getNumVersion();
+    }
+
     /* clear the ocr result page */
     m_ocrPage.clear();
     kdDebug(28000) << "***** starting to analyse orf at " << fileName << " *****" << endl;
@@ -807,7 +827,7 @@ bool KSANEOCR::readORF( const QString& fileName, QString& errStr )
 
         while ( !stream.atEnd() )
 	{
-            line = stream.readLine(); // line of text excluding '\n'
+            line = stream.readLine().stripWhiteSpace(); // line of text excluding '\n'
 	    int len = line.length();
 
 	    if( ! line.startsWith( "#" ))  // Comments
@@ -819,9 +839,15 @@ bool KSANEOCR::readORF( const QString& fileName, QString& errStr )
 		    kdDebug(28000) << "Amount of blocks: " << blockCnt << endl;
 		    m_blocks.resize(blockCnt);
 		}
-		else if( line.startsWith( "block "))
+                else if( line.startsWith( "total text blocks " ))
+                {
+		    blockCnt = line.right( len - 18 /* QString("total text blocks ").length() */ ).toInt();
+		    kdDebug(28000) << "Amount of blocks (V. 10): " << blockCnt << endl;
+		    m_blocks.resize(blockCnt);
+                }
+		else if( line.startsWith( "block ") || line.startsWith( "text block ") )
 		{
-		    rx.setPattern("^block\\s+(\\d+)\\s+(\\d+)\\s+(\\d+)\\s+(\\d+)\\s+(\\d+)");
+		    rx.setPattern("^.*block\\s+(\\d+)\\s+(\\d+)\\s+(\\d+)\\s+(\\d+)\\s+(\\d+)");
 		    if( rx.search( line ) > -1)
 		    {
 			currBlock = (rx.cap(1).toInt())-1;
@@ -852,11 +878,11 @@ bool KSANEOCR::readORF( const QString& fileName, QString& errStr )
 			ocrWord word;
 			QRect   brect;
 			ocrWordList ocrLine;
-			ocrLine.setBlock(currBlock);
+                        ocrLine.setBlock(currBlock);
 			/* Loop over all characters in the line. Every char has it's own line
 			 * defined in the orf file */
 			kdDebug(28000) << "Found " << charCount << " chars for line " << lineNo << endl;
-			
+
 			for( int c=0; c < charCount && !stream.atEnd(); c++ )
 			{
 			    /* Read one line per character */
@@ -922,9 +948,12 @@ bool KSANEOCR::readORF( const QString& fileName, QString& errStr )
                                     {
 					/* add the block offset to the rect of the word */
 					QRect r = word.rect();
-					QRect blockRect = m_blocks[currBlock];
-					r.moveBy( blockRect.x(), blockRect.y());
-					
+                                        if( ocradVersion < 10 )
+                                        {
+                                            QRect blockRect = m_blocks[currBlock];
+                                            r.moveBy( blockRect.x(), blockRect.y());
+                                        }
+
 					word.setRect( r );
                                         ocrLine.append( word );
                                         word = ocrWord();
@@ -940,10 +969,13 @@ bool KSANEOCR::readORF( const QString& fileName, QString& errStr )
 			{
 			    /* add the block offset to the rect of the word */
 			    QRect r = word.rect();
-			    QRect blockRect = m_blocks[currBlock];
-			    r.moveBy( blockRect.x(), blockRect.y());					
+                            if( ocradVersion < 10 )
+                            {
+                                QRect blockRect = m_blocks[currBlock];
+                                r.moveBy( blockRect.x(), blockRect.y());
+                            }
 			    word.setRect( r );
-			    
+
 			    ocrLine.append( word );
 			}
 			if( lineNo < m_ocrPage.size() )
@@ -997,7 +1029,7 @@ void KSANEOCR::cleanUpFiles( void )
        unlink( QFile::encodeName(m_ocrImagePBM));
        m_ocrImagePBM = QString();
    }
-   
+
    if( ! m_tmpOrfName.isEmpty() )
    {
        if( m_unlinkORF )
@@ -1264,14 +1296,23 @@ void KSANEOCR::slMisspelling( const QString& originalword, const QStringList& su
     int line = m_ocrCurrLine;
     m_currHighlight = -1;
 
-    ocrWord resWord = ocrWordFromKSpellWord( line, originalword );
+    // ocrWord resWord = ocrWordFromKSpellWord( line, originalword );
+    ocrWordList words = m_ocrPage[line];
+    ocrWord resWord;
+    kdDebug(28000) << "Size of wordlist (line " << line << "): " << words.count() << endl;
+
+    if( pos < words.count() )
+    {
+        resWord = words[pos];
+    }
+
     if( ! resWord.isEmpty() )
     {
         QBrush brush;
         brush.setColor( QColor(red)); // , "Dense4Pattern" );
         brush.setStyle( Qt::Dense4Pattern );
         QPen pen( red, 2 );
-        QRect r = resWord.rect(); 
+        QRect r = resWord.rect();
 
         r.moveBy(0,2);  // a bit offset to the top
 
@@ -1285,6 +1326,10 @@ void KSANEOCR::slMisspelling( const QString& originalword, const QStringList& su
 
         /* copy the source */
         emit repaintOCRResImage();
+    }
+    else
+    {
+        kdDebug(28000) << "Could not find the ocrword for " << originalword << endl;
     }
 
     emit markWordWrong( line, resWord );
@@ -1412,7 +1457,7 @@ void KSANEOCR::slCheckListDone(bool)
  * The original word was origWord. This slot is called from slSpellCorrected
  *
  */
-bool KSANEOCR::slUpdateWord( int line, int /* spellWordIndx */, const QString& origWord,
+bool KSANEOCR::slUpdateWord( int line, int spellWordIndx, const QString& origWord,
                              const QString& newWord )
 {
     bool result = false;
@@ -1422,7 +1467,7 @@ bool KSANEOCR::slUpdateWord( int line, int /* spellWordIndx */, const QString& o
         ocrWordList words = m_ocrPage[line];
         kdDebug(28000) << "Updating word " << origWord << " to " << newWord << endl;
 
-        if( words.updateOCRWord( origWord, newWord ) )  // searches for the word and updates
+        if( words.updateOCRWord( words[spellWordIndx] /* origWord */, newWord ) )  // searches for the word and updates
         {
             result = true;
             emit updateWord( line, origWord, newWord );
