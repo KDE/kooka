@@ -755,8 +755,8 @@ bool ImgSaver::exportImage( const KURL& fromUrl, const KURL& toUrl, QWidget *ove
       fName += extFrom;
 
       QString s;
-      s = i18n("The filename you supplied has no file extension.\nShould the correct one added automatically? ");
-      s += i18n( "That would result in the new filename %1" ).arg( fName);
+      s = i18n("The filename you supplied has no file extension.\nShould the correct one be added automatically? ");
+      s += i18n( "That would result in the new filename: %1" ).arg( fName);
 
       result = KMessageBox::questionYesNo(overWidget, s, i18n( "Extension missing"),
 					  KStdGuiItem::yes(), KStdGuiItem::no(),
@@ -770,7 +770,7 @@ bool ImgSaver::exportImage( const KURL& fromUrl, const KURL& toUrl, QWidget *ove
    else if( extFrom != extTo )
    {
       /* extensions differ -> TODO */
-      KMessageBox::error( overWidget, i18n("Format changes of images are currently not supported"),
+      KMessageBox::error( overWidget, i18n("Format changes of images are currently not supported."),
 			  i18n("Wrong extension found" ));
       return(false);
    }
