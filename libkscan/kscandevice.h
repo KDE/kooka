@@ -34,6 +34,7 @@
 #include "kscanoptset.h"
 
 #define DEFAULT_OPTIONSET "saveSet"
+#define SCANNER_DB_FILE "scannerrc"
 
 
 extern "C" {

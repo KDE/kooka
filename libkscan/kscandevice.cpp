@@ -50,7 +50,6 @@
 #define MIN_PREVIEW_DPI 75
 #define UNDEF_SCANNERNAME I18N_NOOP( "undefined" )
 #define MAX_PROGRESS 100
-#define SCANNER_DB_FILE "scannerrc"
 
 /* ---------------------------------------------------------------------------
 
@@ -251,6 +250,9 @@ void KScanDevice::slCloseDevice( )
 {
    /* First of all, send a signal to close down the scanner dev. */
    emit( sigCloseDevice( ));
+
+   kdDebug(29000) << "Saving scan settings" << endl;
+   slSaveScanConfigSet( DEFAULT_OPTIONSET, i18n("the default startup setup"));
 
    /* After return, delete all related stuff */
    scanner_name = UNDEF_SCANNERNAME;
