@@ -307,11 +307,12 @@ bool ScanDialog::setup()
     KConfig *kfg = KGlobal::config();
     if( kfg )
     {
-       QWidget *desk = QApplication::desktop();
+       int scnum = QApplication::desktop()->screenNumber(this);
+       QRect desk = QApplication::desktop()->screenGeometry(scnum);
 
        kfg->setGroup( GROUP_STARTUP );
        /* Since this is a vertical splitter, only the width is important */
-       QString key = QString::fromLatin1( SCANDIA_SPLITTER_SIZES ).arg( desk->width());
+       QString key = QString::fromLatin1( SCANDIA_SPLITTER_SIZES ).arg( desk.width());
        kdDebug(29000) << "Read Splitter-Sizes " << key  << endl;
        splitter->setSizes( kfg->readIntListEntry( key ));
     }
@@ -329,11 +330,12 @@ void ScanDialog::slotClose()
       KConfig *kfg = KGlobal::config();
       if( kfg )
       {
-	 QWidget *desk = QApplication::desktop();
+         int scnum = QApplication::desktop()->screenNumber(this);
+	 QRect desk = QApplication::desktop()->screenGeometry(scnum);
 
 	 kfg->setGroup( GROUP_STARTUP );
 	 /* Since this is a vertical splitter, only the width is important */
-	 QString key = QString::fromLatin1( SCANDIA_SPLITTER_SIZES ).arg( desk->width());
+	 QString key = QString::fromLatin1( SCANDIA_SPLITTER_SIZES ).arg( desk.width());
 	 kfg->writeEntry( key, splitter->sizes(), true, true);
       }
    }
