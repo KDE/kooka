@@ -112,14 +112,7 @@ KOCRFinalDialog::~KOCRFinalDialog()
 
 void KOCRFinalDialog::writeConfig( void )
 {
-#if 0
-   KConfig *conf = KGlobal::config ();
-   conf->setGroup( CFG_GROUP_OCR_DIA );
-   conf->writeEntry( CFG_GOCR_BINARY, getOCRCmd());
-   conf->writeEntry( CFG_GOCR_GRAYLEVEL, getGraylevel());
-   conf->writeEntry( CFG_GOCR_DUSTSIZE, getDustsize());
-   conf->writeEntry( CFG_GOCR_SPACEWIDTH, getSpaceWidth());
-#endif
+
 }
 
 
