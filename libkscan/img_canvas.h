@@ -124,6 +124,7 @@ public slots:
 	 maintain_aspect = aspect_in_mind;
 	 repaint();
       }
+   virtual QSize sizeHint() const;
    void newImage( QImage* );
    void deleteView( QImage *);
    void newRectSlot();
@@ -161,7 +162,6 @@ private:
 #ifdef USE_KPIXMAPIO
    KPixmapIO	 pixIO;
 #endif
-   // void          createContextMenu( void );
 
    QWMatrix	 scale_matrix;
    QWMatrix	 inv_scale_matrix;

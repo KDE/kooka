@@ -198,6 +198,11 @@ void ImageCanvas::newImage( QImage *new_image )
    kdDebug(29000) << "repaint ok" << endl;
 }
 
+QSize ImageCanvas::sizeHint() const
+{
+   return( QSize( 2, 2 ));
+}
+
 void ImageCanvas::enableContextMenu( bool wantContextMenu )
 {
    if( wantContextMenu )
@@ -472,12 +477,7 @@ void ImageCanvas::viewportMousePressEvent(QMouseEvent *ev)
 		}
 		drawAreaBorder(&p);
          }
-         else printf("MouseReleaseEvent() missed\n");
     }
-#if 0
-    else if( ev->button() == RightButton )
-          showContextMenu( mapToGlobal(QPoint( ev->x(), ev->y())));
-#endif
 }
 
 
@@ -504,7 +504,7 @@ void ImageCanvas::viewportMouseReleaseEvent(QMouseEvent *ev)
     drawAreaBorder(&p);
     emit newRect( sel() );
     emit newRect( );
-  } else printf("mousePressEvent() missed\n");
+  } 
 }
 
 
