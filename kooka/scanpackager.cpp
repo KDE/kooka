@@ -39,6 +39,7 @@
 #include <kfiletreeviewitem.h>
 #include <kfiletreebranch.h>
 
+#include <kurldrag.h>
 #include <kpopupmenu.h>
 #include <kaction.h>
 #include <kiconloader.h>
@@ -823,7 +824,6 @@ void ScanPackager::slotExportFile( )
 
       }
    }
-
 }
 
 void ScanPackager::storeJob( KIO::Job *job, KFileTreeViewItem *item, JobDescription::JobType jType )
@@ -840,19 +840,50 @@ void ScanPackager::slotExportFinished( KIO::Job *job )
 }
 
 
+void ScanPackager::contentsDropEvent( QDropEvent *e )
+{
+   KURL::List urls;
+   KFileTreeViewItem *curr = currentKFileTreeViewItem();
+
+   if( ! curr ) return;
+   KURL targetUrl = curr->url();
+   targetUrl.setFileName( "" ); /* in case its a file */
+   
+   if ( KURLDrag::decode( e, urls ) )
+   {
+      copyjob = KIO::copy( urls, targetUrl, true );
+      storeJob( copyjob, curr, JobDescription::ImportJob );
+      connect( copyjob, SIGNAL(result(KIO::Job*)),
+	       this, SLOT(slotExportFinished( KIO::Job* )));
+   }
+}
 
 
+QDragObject* ScanPackager::dragObject()
+{
+   kdDebug(28000) << "my new dragObject !" << endl;
+   KURL::List urls;
 
+   KFileTreeViewItem *curr = currentKFileTreeViewItem();
+   QDragObject *drag = 0L;
 
+   if( !curr->isDir())
+   {
+      urls.append( curr->url());
+   
+      if ( !urls.isEmpty() )
+	 drag = new KURLDrag( urls, viewport(), "url drag" );
+
+      kdDebug(28000) << " Scanpackager Dragobject: " << drag << endl;
+   }
+   return drag;
+
+}
 
 void ScanPackager::slotCanceled( KIO::Job* )
 {
   kdDebug(28000) << i18n("Canceled by user") << endl;
 }
-
-
-
-
 
 
 /* ----------------------------------------------------------------------- */
