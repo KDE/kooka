@@ -149,6 +149,7 @@ public slots:
      **/
     void startOCR( KookaImage* );
 
+    void  slCloseScanDevice();
     void saveProperties( KConfig* );
 
     /**
@@ -166,7 +167,6 @@ public slots:
 
 
 protected slots:
-    void  slCloseScanDevice();
 
     void  slShowAImage( KookaImage* );
     void  slUnloadAImage( KookaImage* );
