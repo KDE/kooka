@@ -101,9 +101,9 @@ Previewer::Previewer(QWidget *parent, const char *name )
         overallWidth << " x " << overallHeight << endl;
     img_canvas  = new ImageCanvas( this );
 
-    img_canvas->setScaleFactor( 0 );
+    img_canvas->setDefaultScaleKind( ImageCanvas::DYNAMIC );
     img_canvas->enableContextMenu(true);
-
+    img_canvas->repaint();
     layout->addWidget( img_canvas, 6 );
 
     /* Actions for the previewer zoom */

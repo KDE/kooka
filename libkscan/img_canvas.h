@@ -100,7 +100,7 @@ public:
     QPopupMenu* contextMenu() { return m_contextMenu; }
     QRect sel( void );
 
-    enum ScaleKinds { DYNAMIC, FIT_ORIG, FIT_WIDTH, FIT_HEIGHT, ZOOM };
+    enum ScaleKinds { UNSPEC, DYNAMIC, FIT_ORIG, FIT_WIDTH, FIT_HEIGHT, ZOOM };
 
     enum PopupIDs { ID_POP_ZOOM, ID_POP_CLOSE, ID_FIT_WIDTH,
                     ID_FIT_HEIGHT, ID_ORIG_SIZE };
@@ -108,6 +108,11 @@ public:
     bool selectedImage( QImage* );
 
     ScaleKinds scaleKind();
+    const QString scaleKindString();
+
+    ScaleKinds defaultScaleKind();
+
+    const QString imageInfoString( int w=0, int h=0, int d=0 );
 
 public slots:
     void setBrightness(int);
@@ -130,6 +135,7 @@ public slots:
     void enableContextMenu( bool wantContextMenu );
     void setKeepZoom( bool k );
     void setScaleKind( ScaleKinds k );
+    void setDefaultScaleKind( ScaleKinds k );
 
 signals:
     void noRect( void );
@@ -137,6 +143,7 @@ signals:
     void newRect( QRect );
     void scalingRequested();
     void closingRequested();
+    void scalingChanged( const QString& );
 
 protected:
     void drawContents( QPainter * p, int clipx, int clipy, int clipw, int cliph );

@@ -61,11 +61,13 @@ class ImageCanvas::ImageCanvasPrivate
 public:
     ImageCanvasPrivate()
         : keepZoom(false),
-          scaleKind( FIT_ORIG )
+          scaleKind( UNSPEC ),
+          defaultScaleKind( FIT_ORIG )
         {}
 
     bool         keepZoom;  /* keep the zoom settings if images change */
     ScaleKinds   scaleKind;
+    ScaleKinds   defaultScaleKind;
 };
 
 ImageCanvas::ImageCanvas(QWidget *parent,
@@ -107,7 +109,6 @@ ImageCanvas::ImageCanvas(QWidget *parent,
     }
 
 
-    // createContextMenu();
     update_scaled_pixmap();
 
     // timer-Start and stop
@@ -179,7 +180,7 @@ void ImageCanvas::newImage( QImage *new_image )
 	 pmScaled = new QPixmap( image->size(), i);
       }
 
-      image->convertDepth(32);
+      // image->convertDepth(32);
 #ifdef USE_KPIXMAPIO
 
       *pmScaled = pixIO.convertToPixmap(*image);
@@ -197,7 +198,7 @@ void ImageCanvas::newImage( QImage *new_image )
       else
       {
           kdDebug(29000) << "Resetting Zoom to original size!" << endl;
-          setScaleKind( FIT_ORIG );
+          setScaleKind( defaultScaleKind() );
       }
 
       update_scaled_pixmap();
@@ -627,6 +628,10 @@ void ImageCanvas::setScaleFactor( int i )
 {
    kdDebug(29000) <<  "Setting Scalefactor to " << i << endl;
    scale_factor = i;
+   if( i == 0 ){
+       kdDebug(29000) << "Setting Dynamic Scaling!" << endl;
+       setScaleKind(DYNAMIC);
+   }
    update_scaled_pixmap();
 }
 
@@ -647,6 +652,8 @@ void ImageCanvas::update_scaled_pixmap( void )
 	return;
     }
     kdDebug(28000) << "Updating scaled_pixmap" << endl;
+    if( scaleKind() == DYNAMIC )
+        kdDebug(28000) << "Scaling DYNAMIC" << endl;
     QSize noSBSize( visibleWidth(), visibleHeight());
     const int sbWidth = kapp->style().pixelMetric( QStyle::PM_ScrollBarExtent );
 
@@ -657,8 +664,8 @@ void ImageCanvas::update_scaled_pixmap( void )
     {
     case DYNAMIC:
         // do scaling to window-size
-        used_yscaler = ((float)viewport()-> height()) / ((float)image->height());
-        used_xscaler = ((float)viewport()-> width())  / ((float)image->width());
+        used_yscaler = ((double)viewport()-> height()) / ((double)image->height());
+        used_xscaler = ((double)viewport()-> width())  / ((double)image->width());
         break;
     case FIT_ORIG:
         used_yscaler = used_xscaler = 1.0;
@@ -937,19 +944,77 @@ void ImageCanvas::setGamma(int c)
    gamma = c;
 }
 
-ImageCanvas::ScaleKinds ImageCanvas::scaleKind()
-{
-    return d->scaleKind;
-}
-
 void ImageCanvas::setKeepZoom( bool k )
 {
     d->keepZoom = k;
 }
 
+ImageCanvas::ScaleKinds ImageCanvas::scaleKind()
+{
+    if( d->scaleKind == UNSPEC )
+        return defaultScaleKind();
+    else
+        return d->scaleKind;
+}
+
+ImageCanvas::ScaleKinds ImageCanvas::defaultScaleKind()
+{
+    return d->defaultScaleKind;
+}
+
 void ImageCanvas::setScaleKind( ScaleKinds k )
 {
+    if( k == d->scaleKind ) return; // no change, return
     d->scaleKind = k;
+
+    emit scalingChanged(scaleKindString());
+}
+
+void ImageCanvas::setDefaultScaleKind( ScaleKinds k )
+{
+    d->defaultScaleKind = k;
+}
+
+const QString ImageCanvas::imageInfoString( int w, int h, int d )
+{
+    if( w == 0 && h == 0 && d == 0 )
+    {
+        if( image )
+        {
+            w = image->width();
+            h = image->height();
+            d = image->depth();
+        }
+        else
+            return QString("-");
+    }
+    return i18n("%1x%2 pixel, %3 bit").arg(w).arg(h).arg(d);
+}
+
+
+const QString ImageCanvas::scaleKindString()
+{
+    switch( scaleKind() )
+    {
+    case DYNAMIC:
+        return i18n("Fit window best");
+        break;
+    case FIT_ORIG:
+        return i18n("Original size");
+        break;
+    case FIT_WIDTH:
+        return i18n("Fit Width");
+        break;
+    case FIT_HEIGHT:
+        return i18n("Fit Height");
+        break;
+    case ZOOM:
+        return i18n("Zoom to %1 %%").arg( QString::number(getScaleFactor()));
+        break;
+    default:
+        return i18n("Huh - unknown scaling!");
+        break;
+    }
 }
 
 #include "img_canvas.moc"
