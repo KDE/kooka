@@ -64,9 +64,8 @@ void KookaPreferences::setupStartupPage()
 				page,  "CB_NET_QUERY" );
     QToolTip::add( cbNetQuery,
 		   i18n( "Check this if you want a network query for available scanners.\nNote that this does not mean a query over the entire network but only the stations configured for SANE!" ));
-    cbNetQuery->setChecked( ! konf->readBoolEntry( "QueryLocalOnly", false ) );
+    cbNetQuery->setChecked( ! (konf->readBoolEntry( STARTUP_ONLY_LOCAL, false )) );
 
-    kdDebug() << "###### fine 1 " << endl;
     
     /* Show scanner selection box on startup (Checkbox) */
     cbShowScannerSelection = new QCheckBox( i18n("Show the scanner selection box on next startup"),
@@ -74,8 +73,7 @@ void KookaPreferences::setupStartupPage()
     QToolTip::add( cbShowScannerSelection,
 		   i18n( "Check this if you once checked 'do not show the scanner selection on startup',\nbut you want to see it again." ));
 
-    cbShowScannerSelection->setChecked( !konf->readBoolEntry( "SkipStartupAsk", false ));
-    kdDebug() << "###### fine 2 " << endl;
+    cbShowScannerSelection->setChecked( !konf->readBoolEntry( STARTUP_SKIP_ASK, false ));
 
     /* Read startup image on startup (Checkbox) */
     cbReadStartupImage = new QCheckBox( i18n("Load the last image into the viewer on startup"),
@@ -83,7 +81,6 @@ void KookaPreferences::setupStartupPage()
     QToolTip::add( cbReadStartupImage,
 		   i18n( "Check this if you want Kooka to load the last selected image into the viewer on startup.\nIf your images are large, that might slow down Kooka's start." ));
     cbReadStartupImage->setChecked( konf->readBoolEntry( STARTUP_READ_IMAGE, true));
-    kdDebug() << "###### fine 3 " << endl;
 
     /* -- */ 
 
@@ -126,20 +123,17 @@ void KookaPreferences::slotApply( void )
     /* ** startup options ** */
 
    /** write the global one, to read from libkscan also */
-   KSimpleConfig *c = new KSimpleConfig(QString::fromLatin1("kdeglobals"), false);
-   if( c )
-   {
-      c->setGroup(QString::fromLatin1(GROUP_STARTUP));
-      c->writeEntry( STARTUP_SKIP_ASK, false );
+   konf->setGroup(QString::fromLatin1(GROUP_STARTUP));
+   bool cbVal = !(cbShowScannerSelection->isChecked());
+   kdDebug(29000) << "Writing for " << STARTUP_SKIP_ASK << ": " << cbVal << endl;
+   konf->writeEntry( STARTUP_SKIP_ASK, cbVal, true, true ); /* global flag goes to kdeglobals */
 
-      delete c;
-   }
+   /* only search for local (=non-net) scanners ? */
+   konf->writeEntry( STARTUP_ONLY_LOCAL,  !cbNetQuery->isChecked(), true, true ); /* global */
 
-   /** write the local, only Kooka ones **/
-    konf->setGroup( GROUP_STARTUP );
-    konf->writeEntry( STARTUP_ONLY_LOCAL,  !cbNetQuery->isChecked() );
-    if( cbReadStartupImage )
-       konf->writeEntry( STARTUP_READ_IMAGE, cbReadStartupImage->isChecked());
+   /* Should kooka open the last displayed image in the viewer ? */
+   if( cbReadStartupImage )
+      konf->writeEntry( STARTUP_READ_IMAGE, cbReadStartupImage->isChecked()); 
 
     /* ** Image saver option(s) ** */
     konf->setGroup( OP_FILE_GROUP );
