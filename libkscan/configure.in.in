@@ -9,8 +9,8 @@ KDE_CHECK_KIMGIO
 dnl ############ search for sane stuff
 
 AC_MSG_CHECKING(for sane)
-sane_incdirs="/usr/include/sane /usr/local/include/sane /usr/include"
-AC_FIND_FILE(sane.h, $sane_incdirs, ac_sane_includes)
+sane_incdirs="/usr/include /usr/local/include"
+AC_FIND_FILE(sane/sane.h, $sane_incdirs, ac_sane_includes)
 sane_includes="-I$ac_sane_includes"
 sane_libdir=""
 
