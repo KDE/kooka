@@ -17,14 +17,11 @@
 
 #include <qlayout.h>
 #include <qlabel.h>
-#include <qgroupbox.h>
-#include <qframe.h>
-#include <qpushbutton.h>
-#include <qbuttongroup.h>
-#include <qcstring.h>
+
 #include <kapp.h>
 #include <kconfig.h>
 #include <kglobal.h>
+#include <klocale.h>
 #include <krun.h>
 #include <kurl.h>
 #include <ktempfile.h>
@@ -49,8 +46,8 @@
 
 
 KOCRFinalDialog::KOCRFinalDialog( QWidget *parent, QString resultimg )
-   :KDialogBase( parent,  "OCRFinish", true, I18N("Optical Character Recognition finished"),
-		 Close|User1, Close, true, I18N("Open in kwrite" ) )
+   :KDialogBase( parent,  "OCRFinish", true, i18n("Optical Character Recognition finished"),
+		 Close|User1, Close, true, i18n("Open in Kate" ) )
 {
    kdDebug(28000) << "Finished KOCR!" << endl;
    // Layout-Boxes
@@ -61,7 +58,7 @@ KOCRFinalDialog::KOCRFinalDialog( QWidget *parent, QString resultimg )
    // Caption - Label
    QVBoxLayout *topLayout = new QVBoxLayout( page, marginHint(), spacingHint() );
    
-   QLabel *label = new QLabel( I18N( "<B>Optical Character Recognition Results</B>"),
+   QLabel *label = new QLabel( i18n( "<B>Optical Character Recognition Results</B>"),
 				     page, "captionImage" );
    CHECK_PTR( label );
    topLayout->addWidget( label);

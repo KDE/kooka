@@ -21,6 +21,7 @@
 #include <qfile.h>
 
 #include <kdebug.h>
+#include <klocale.h>
 
 #include "resource.h"
 #include "packageritem.h"
@@ -101,11 +102,11 @@ bool PackagerItem::deleteFolder( void )
 {
    QDir direc;
    direc.setFilter( QDir::Files | QDir::Hidden | QDir::NoSymLinks );
-   direc.setPath(filename.latin1());
+   direc.setPath(filename);
  	
    if( direc.exists() )
    {
-      return( direc.rmdir(filename.latin1()));
+      return( direc.rmdir(filename));
    }
    return( true );
 }
@@ -130,9 +131,9 @@ bool PackagerItem::deleteFile( void )
  	
    QDir direc;
    direc.setFilter( QDir::Files | QDir::Hidden | QDir::NoSymLinks );
-   direc.setPath(filename.latin1());
- 	
-   return( direc.remove(filename.latin1()));
+   direc.setPath(filename);
+
+   return( direc.remove(filename));
 }
 
 bool PackagerItem::createFolder( void )
@@ -142,10 +143,10 @@ bool PackagerItem::createFolder( void )
 
    QDir direc;
    direc.setFilter( QDir::Files | QDir::Hidden | QDir::NoSymLinks );
-   direc.setPath(filename.latin1());
- 	
+   direc.setPath(filename);
+
    if( !direc.exists() )
-      return( direc.mkdir(filename.latin1()) );
+      return( direc.mkdir(filename) );
  		
    return( true );
 }
@@ -180,16 +181,17 @@ void PackagerItem::decorateFile( void )
 	 setPixmap( 0, *icons["mini-folder"] );
 
 	 int cc = childCount();
-	 s.sprintf("%d item%s", cc, cc == 1 ? "":"s");
+         if (cc==1)
+                s = i18n("1 item");
+         else
+                s = i18n("%1 items").arg(cc);
 	 setText( 1, s );
       }
       else
 	 setPixmap( 0, *icons["mini-floppy"] );
- 		
+
    }
 }
-
-
 
 FileOpStat  PackagerItem::copy_file( QString to )
 {

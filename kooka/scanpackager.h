@@ -71,7 +71,7 @@ private:
    
    PackagerItem * spFindItem( SearchType type, const QString name );
    
-   int 	        readDir( QListViewItem *parent, const char *dir_to_read );
+   int 	        readDir( QListViewItem *parent, QString dir_to_read );
    void         showContextMenu( QPoint p, bool show_folder = true );
    void 			 createFolder( void );
    bool         deleteItem( PackagerItem*, bool );

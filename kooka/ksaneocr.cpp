@@ -122,7 +122,7 @@ void KSANEOCR::startOCRProcess( void )
 	   this, SLOT(errMsgRcvd(KProcess*, char*, int)));
 #endif
    QString opt;
-   *daemon << cmd.latin1();
+   *daemon << QFile::encodeName(cmd);
    *daemon << "-l";
    opt.setNum(ocrProcessDia->getGraylevel());
    *daemon << opt;
@@ -140,7 +140,7 @@ void KSANEOCR::startOCRProcess( void )
    // Unfortunately this is fixed by gocr.
    ocrResultImage = "out30.bmp";
    
-   *daemon << tmpFile.latin1();
+   *daemon << QFile::encodeName(tmpFile);
    
    if (!daemon->start(KProcess::NotifyOnExit, KProcess::All))
    {
@@ -203,7 +203,7 @@ void KSANEOCR::cleanUpFiles( void )
    if( ! ocrResultImage.isEmpty())
    {
       kdDebug(28000) << "Unlinking OCR Result image file!" << endl;
-      unlink(ocrResultImage.latin1());
+      unlink(QFile::encodeName(ocrResultImage));
       ocrResultImage = "";
    }
 

@@ -16,11 +16,6 @@
  *                                                                         *
  ***************************************************************************/
 
-
-
-#include <qapplication.h>
-#include <qwindowsstyle.h>
-#include <qfont.h>
 #include <qdict.h>
 #include <qpixmap.h>
 
@@ -82,10 +77,6 @@ int main( int argc, char ** argv )
    else
    {
       // no session.. just start up normally
-       
-      // a.setFont(QFont("helvetica",12));
-      // a.setStyle( new QWindowsStyle() );
-
 
       Kooka  *kooka = new Kooka();
       

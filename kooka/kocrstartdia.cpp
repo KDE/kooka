@@ -1,8 +1,8 @@
 /***************************************************************************
-                          kocrstartdia.cpp  -  description                              
-                             -------------------                                         
-    begin                : Fri Now 10 2000                                           
-    copyright            : (C) 2000 by Klaas Freitag                         
+                          kocrstartdia.cpp  -  description
+                             -------------------
+    begin                : Fri Now 10 2000
+    copyright            : (C) 2000 by Klaas Freitag
     email                : freitag@suse.de
  ***************************************************************************/
 
@@ -11,21 +11,19 @@
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
  *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   * 
+ *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
 
 #include <qlayout.h>
 #include <qlabel.h>
-#include <qgroupbox.h>
 #include <qframe.h>
-#include <qpushbutton.h>
-#include <qbuttongroup.h>
-#include <qcstring.h>
+
 #include <kapp.h>
 #include <kconfig.h>
 #include <kglobal.h>
 #include <kdebug.h>
+#include <klocale.h>
 #include <kanimwidget.h>
 
 #include "resource.h"
@@ -43,8 +41,8 @@
 
 
 KOCRStartDialog::KOCRStartDialog( QWidget *parent )
-   :KDialogBase( parent,  "OCRStart", false, I18N("Optical Character Recognition"),
-		 Cancel|User1, User1, true, I18N("Start OCR" ) )
+   :KDialogBase( parent,  "OCRStart", false, i18n("Optical Character Recognition"),
+		 Cancel|User1, User1, true, i18n("Start OCR" ) )
 {
    kdDebug(28000) << "Starting KOCR-Start-Dialog!" << endl;
    // Layout-Boxes
@@ -57,7 +55,7 @@ KOCRStartDialog::KOCRStartDialog( QWidget *parent )
 
    // Caption - Label
    QVBoxLayout *topLayout = new QVBoxLayout( page, marginHint(), spacingHint() );
-   QLabel *label = new QLabel( I18N( "<B>Starting Optical Character Recognition</B><P>"
+   QLabel *label = new QLabel( i18n( "<B>Starting Optical Character Recognition</B><P>"
 				     "Kooka uses <I>gocr</I> for optical character recognition, "
 				     "an Open Source Project<P>"
 				     "Author of gocr is <B>Jörg Schulenburg</B><BR>"
@@ -74,7 +72,7 @@ KOCRStartDialog::KOCRStartDialog( QWidget *parent )
    topLayout->addWidget( f1 );
 
    // Entry-Field.
-   entryOcrBinary = new KScanEntry( page, I18N( "Path to gocr-binary:  " ));
+   entryOcrBinary = new KScanEntry( page, i18n( "Path to 'gocr' binary: " ));
    QString res = conf->readPathEntry( CFG_GOCR_BINARY, "/usr/bin/gocr" );
    topLayout->addWidget( entryOcrBinary, 1 );
    entryOcrBinary->slSetEntry( res );
@@ -94,17 +92,17 @@ KOCRStartDialog::KOCRStartDialog( QWidget *parent )
    middle->addWidget( ani );
 
    /* Slider for OCR-Options */
-   sliderGrayLevel = new KScanSlider( page , I18N("Gray Level"), 0, 254 );
+   sliderGrayLevel = new KScanSlider( page , i18n("Gray level"), 0, 254 );
    sliderLayout->addWidget( sliderGrayLevel,1 );
    int numdefault = conf->readNumEntry( CFG_GOCR_GRAYLEVEL, 160 );
    sliderGrayLevel->slSetSlider( numdefault );
-   
-   sliderDustSize = new KScanSlider( page, I18N("Dustsize" ), 0, 60 );
+
+   sliderDustSize = new KScanSlider( page, i18n("Dust size" ), 0, 60 );
    numdefault = conf->readNumEntry( CFG_GOCR_DUSTSIZE, 60 );
    sliderLayout->addWidget( sliderDustSize,1 );
    sliderDustSize->slSetSlider( numdefault );
-   
-   sliderSpace = new KScanSlider( page, I18N( "Spacewidth" ), 0, 60 );
+
+   sliderSpace = new KScanSlider( page, i18n( "Space width" ), 0, 60 );
    numdefault = conf->readNumEntry( CFG_GOCR_SPACEWIDTH, 0 );
    sliderLayout->addWidget( sliderSpace,1 );
    sliderSpace->slSetSlider( numdefault );
@@ -121,7 +119,7 @@ KOCRStartDialog::KOCRStartDialog( QWidget *parent )
 
 KOCRStartDialog::~KOCRStartDialog()
 {
-   
+
 }
 
 void KOCRStartDialog::writeConfig( void )

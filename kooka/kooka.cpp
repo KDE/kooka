@@ -61,7 +61,7 @@ Kooka::Kooka()
     connect(m_view, SIGNAL(signalChangeCaption(const QString&)),
             this,   SLOT(changeCaption(const QString&)));
 
-    changeCaption( I18N( "KDE2 Scanning" ));
+    changeCaption( i18n( "KDE2 Scanning" ));
 }
 
 Kooka::~Kooka()
@@ -77,7 +77,7 @@ void Kooka::load(const QString& url)
     // example case, we want the url to our own.  you probably
     // want to use this code instead for your app
 
-    #if 0
+#if 0
     // download the contents
     if (KIONetAccess::download(url, target))
     {
@@ -90,7 +90,7 @@ void Kooka::load(const QString& url)
         // and remove the temp file
         KIONetAccess::removeTempFile(target);
     }
-    #endif
+#endif
 
 }
 
@@ -117,12 +117,12 @@ void Kooka::setupActions()
 					      actionCollection());
     m_statusbarAction = KStdAction::showStatusbar(this, SLOT(optionsShowStatusbar()),
 						  actionCollection());
-    m_scanParamsAction = new KToggleAction(I18N("Show scan &parameter"), 0, this,
+    m_scanParamsAction = new KToggleAction(i18n("Show scan &parameter"), 0, this,
 					   SLOT(optionsShowScanParams()), actionCollection(),
 					   "show_scanparams" );
     m_scanParamsAction->setChecked( true );
 #if 0 
-    m_previewerAction = new KToggleAction(I18N("Show scan pre&view"), 0, this,
+    m_previewerAction = new KToggleAction(i18n("Show scan pre&view"), 0, this,
 					   SLOT(optionsShowPreviewer()), actionCollection(),
 					  "show_preview" );
 #endif
@@ -133,55 +133,55 @@ void Kooka::setupActions()
 
 
     /* Image Viewer action Toolbar - OCR, Scaling etc. */
-    (void) new KAction(I18N("&OCR image..."), "ocr", CTRL+Key_O,
+    (void) new KAction(i18n("&OCR image..."), "ocr", CTRL+Key_O,
 		       m_view, SLOT(doOCR()),
 		       actionCollection(), "ocrImage" );
 
-    (void) new KAction(I18N("O&CR on selection..."), "ocr-select", CTRL+Key_C,
+    (void) new KAction(i18n("O&CR on selection..."), "ocr-select", CTRL+Key_C,
 		       m_view, SLOT(doOCRonSelection()),
 		       actionCollection(), "ocrImageSelect" );
 
-    (void) new KAction(I18N("Scale to W&idth"), "scaletowidth", CTRL+Key_I,
+    (void) new KAction(i18n("Scale to W&idth"), "scaletowidth", CTRL+Key_I,
 		       m_view, SLOT( slIVScaleToWidth()),
 		       actionCollection(), "scaleToWidth" );
 
-    (void) new KAction(I18N("Scale to &Height"), "scaletoheight", CTRL+Key_H,
+    (void) new KAction(i18n("Scale to &Height"), "scaletoheight", CTRL+Key_H,
 		       m_view, SLOT( slIVScaleToHeight()),
 		       actionCollection(), "scaleToHeight" );
     
-    (void) new KAction(I18N("Original &Size"), "scaleorig", CTRL+Key_S,
+    (void) new KAction(i18n("Original &Size"), "scaleorig", CTRL+Key_S,
 		       m_view, SLOT( slIVScaleOriginal()),
 		       actionCollection(), "scaleOriginal" );
 
-    (void) new KAction(I18N("Create from selectio&n"), "newfromselect", CTRL+Key_N,
+    (void) new KAction(i18n("Create from selectio&n"), "newfromselect", CTRL+Key_N,
 		       m_view, SLOT( slCreateNewImgFromSelection() ),
 		       actionCollection(), "createFromSelection" );
     
-    (void) new KAction(I18N("Mirror image &vertically"), "mirror-vert", CTRL+Key_V,
+    (void) new KAction(i18n("Mirror image &vertically"), "mirror-vert", CTRL+Key_V,
 		       this, SLOT( slMirrorVertical() ),
 		       actionCollection(), "mirrorVertical" );
 
-    (void) new KAction(I18N("&Mirror image horizontally"), "mirror-horiz", CTRL+Key_M,
+    (void) new KAction(i18n("&Mirror image horizontally"), "mirror-horiz", CTRL+Key_M,
 		       this, SLOT( slMirrorHorizontal() ),
 		       actionCollection(), "mirrorHorizontal" );
 
-    (void) new KAction(I18N("Mirror image &both directions"), "mirror-both", CTRL+Key_B,
+    (void) new KAction(i18n("Mirror image &both directions"), "mirror-both", CTRL+Key_B,
 		       this, SLOT( slMirrorBoth() ),
 		       actionCollection(), "mirrorBoth" );
 
-    (void) new KAction(I18N("Open image in &graphic application"), "kpixmap", CTRL+Key_G,
+    (void) new KAction(i18n("Open image in &graphic application"), "kpixmap", CTRL+Key_G,
 		       m_view, SLOT( slOpenCurrInGraphApp() ),
 		       actionCollection(), "openInGraphApp" );
 
-    (void) new KAction(I18N("&Rotate image clockwise"), "rotate_cw", CTRL+Key_R,
+    (void) new KAction(i18n("&Rotate image clockwise"), "rotate_cw", CTRL+Key_R,
 		      this, SLOT( slRotateClockWise() ),
 		       actionCollection(), "rotateClockwise" );
-    
-    (void) new KAction(I18N("Rotate image counter-clock&wise"), "rotate_ccw", CTRL+Key_W,
+
+    (void) new KAction(i18n("Rotate image counter-clock&wise"), "rotate_ccw", CTRL+Key_W,
 		       this, SLOT( slRotateCounterClockWise() ),
 		       actionCollection(), "rotateCounterClockwise" );
 
-    (void) new KAction(I18N("Rotate image 180 &degree"), "rotate_ccw", CTRL+Key_D,
+    (void) new KAction(i18n("Rotate image 180 &degrees"), "rotate_ccw", CTRL+Key_D,
 		       this, SLOT( slRotate180() ),
 		       actionCollection(), "upsitedown" );
 
@@ -271,7 +271,7 @@ void Kooka::fileSaveAs()
 {
     // this slot is called whenever the File->Save As menu is selected,
    QStrList strlist;
-   strlist.append( "BMP" );
+   strlist.append( "BMP" );
    strlist.append( "JPEG" );
    FormatDialog fd( 0, "FormatDialog", &strlist );
    fd.exec();

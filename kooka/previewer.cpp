@@ -18,6 +18,7 @@
 #include <qfontmetrics.h>
 
 #include <kdebug.h>
+#include <klocale.h>
 
 #include "previewer.h"
 #include "resource.h"
@@ -55,73 +56,73 @@ Previewer::Previewer(QWidget *parent, const char *name )
 	connect( img_canvas, SIGNAL(newRect(QRect)), this, SLOT(slNewDimen(QRect)));
 	
 	/* Stuff for the preview-Notification */
-	left->addWidget( new QLabel( I18N("<B>Preview</B>"), this ), 1);
-	
+	left->addWidget( new QLabel( i18n("<B>Preview</B>"), this ), 1);
+
 	pre_format_combo = new QComboBox( this, "PREVIEWFORMATCOMBO" );
-	pre_format_combo->insertItem( I18N( "custom" ), ID_CUSTOM);
-	pre_format_combo->insertItem( I18N( "DIN A4" ), ID_A4);
-	pre_format_combo->insertItem( I18N( "DIN A5" ), ID_A5);
-	pre_format_combo->insertItem( I18N( "DIN A6" ), ID_A6);
-	pre_format_combo->insertItem( I18N( "9x13 cm" ), ID_9_13 );
-	pre_format_combo->insertItem( I18N( "10x15 cm" ), ID_10_15 );
-	pre_format_combo->insertItem( I18N( "Letter" ), ID_LETTER);
-	
-	
+	pre_format_combo->insertItem( i18n( "custom" ), ID_CUSTOM);
+	pre_format_combo->insertItem( i18n( "DIN A4" ), ID_A4);
+	pre_format_combo->insertItem( i18n( "DIN A5" ), ID_A5);
+	pre_format_combo->insertItem( i18n( "DIN A6" ), ID_A6);
+	pre_format_combo->insertItem( i18n( "9x13 cm" ), ID_9_13 );
+	pre_format_combo->insertItem( i18n( "10x15 cm" ), ID_10_15 );
+	pre_format_combo->insertItem( i18n( "Letter" ), ID_LETTER);
+
+
 	connect( pre_format_combo, SIGNAL(activated (int)),
 	         this, SLOT( slFormatChange(int)));
-	
-	QLabel *l1 = new QLabel( I18N( "Select S&canSize:" ), this );
+
+	QLabel *l1 = new QLabel( i18n( "Select s&can size:" ), this );
 	l1->setBuddy( pre_format_combo );
 	left->addWidget( l1, 1 );
 	left->addWidget( pre_format_combo, 1 );
 
-	
+
 	// Create a button group to contain buttons for Portrait/Landscape
 	bgroup = new QButtonGroup( this );
-	
+
 	QFontMetrics fm = bgroup->fontMetrics();
-	int w = fm.width( (const QString)I18N(" Landscape " ) );
+	int w = fm.width( (const QString)i18n(" Landscape " ) );
 	int h = fm.height( );
-	
+
         bgroup->setFixedHeight( 10+h/2+2*h );
-	rb1 = new QRadioButton( I18N("&Landscape"), bgroup );
+	rb1 = new QRadioButton( i18n("&Landscape"), bgroup );
 	landscape_id = bgroup->id( rb1 );
-	rb2 = new QRadioButton( I18N("P&ortrait"),  bgroup );
+	rb2 = new QRadioButton( i18n("P&ortrait"),  bgroup );
 	portrait_id = bgroup->id( rb2 );
 	bgroup->setButton( portrait_id );
-	
+
 	connect(bgroup, SIGNAL(clicked(int)), this, SLOT(slOrientChange(int)));
-	
+
 	int rblen = 5+w+12;  // 12 for the button?
 	rb1->setGeometry( 5, 6, rblen, h );
 	rb2->setGeometry( 5, 1+h/2+h, rblen, h );
-	
+
 	left->addWidget( bgroup, 2 );
-	
-	
+
+
 	/* Labels for the dimension */
-	QLabel *l2 = new QLabel( I18N("width - mm" ), this );
-	QLabel *l3 = new QLabel( I18N("height - mm" ), this );
-	
+	QLabel *l2 = new QLabel( i18n("width - mm" ), this );
+	QLabel *l3 = new QLabel( i18n("height - mm" ), this );
+
 	connect( this, SIGNAL(setScanWidth(const QString&)),
 	         l2, SLOT(setText(const QString&)));
 	connect( this, SIGNAL(setScanHeight(const QString&)),
 	         l3, SLOT(setText(const QString&)));
 	left->addWidget( l2, 1 );
-	left->addWidget( l3, 1 );	
-	
+	left->addWidget( l3, 1 );
+
 	left->addStretch( 6 );
-	
+
 	layout->activate();
-	
-	/* Preset custom Cutting */	
+
+	/* Preset custom Cutting */
 	pre_format_combo->setCurrentItem( ID_CUSTOM );
 	slFormatChange( ID_CUSTOM);
 }
 
 Previewer::~Previewer()
 {
-	
+
 }
 
 
@@ -161,14 +162,14 @@ void Previewer::slFormatChange( int id )
  	bool setSelection = true;
  	int s_long = 0;
  	int s_short= 0;
- 	
+
  	isCustom = false;
- 	
+
  	switch( id )
  	{
  	    case ID_LETTER:
  	        s_long = 294;
- 	        s_short = 210;   	
+ 	        s_short = 210;
          	lands_allowed = false;
 	        portr_allowed = true;
  	    break;
@@ -214,23 +215,23 @@ void Previewer::slFormatChange( int id )
 	       setSelection = false;
 	    break;
 	}
-	
+
 	rb1->setEnabled( lands_allowed );
- 	rb2->setEnabled( portr_allowed ); 	
+ 	rb2->setEnabled( portr_allowed );
 
  	int format_id = bgroup->id( bgroup->selected() );
  	if( !lands_allowed && format_id == landscape_id )
  	{
  	     bgroup->setButton( portrait_id );
-             format_id = portrait_id; 	
+             format_id = portrait_id;
  	}
- 	 	
- 	/* Convert the new dimension to a new QRect and call slot in canvas */ 	
+
+ 	/* Convert the new dimension to a new QRect and call slot in canvas */
  	if( setSelection )
  	{
  	    QRect newrect;
  	    newrect.setRect( 0,0, p.y(), p.x() );
- 	
+
 	    if( format_id == portrait_id )
 	    {   /* Portrait Mode */
 	        p = calcPercent( s_short, s_long );
@@ -239,11 +240,11 @@ void Previewer::slFormatChange( int id )
 	    else
 	    {   /* Landscape-Mode */
 	        p = calcPercent( s_long, s_short );
-	    }	
-	
+	    }
+
             newrect.setWidth( p.x() );
             newrect.setHeight( p.y() );
-	
+
 	    img_canvas->newRectSlot( newrect );
 	 }
 }
@@ -273,20 +274,19 @@ void Previewer::slNewDimen(QRect r)
         h_mm = (int) (overallHeight / 1000 * r.height());
 
    QString s;
-   s.sprintf( I18N("width %d mm"), w_mm );
+   s = i18n("width %1 mm").arg(w_mm);
    emit(setScanWidth(s));
    kdDebug(28000) << "Setting new Dimension " << s << endl;
-   s.sprintf( I18N("height %d mm"), h_mm );
+   s = i18n("height %1 mm").arg(h_mm);
    emit(setScanHeight(s));
-
 }
 
 
 QPoint Previewer::calcPercent( int w_mm, int h_mm )
 {
 	QPoint p(0,0);
-	if( overallWidth < 1.0 || overallHeight < 1.0 ) return( p );
-	
+	if( overallWidth < 1.0 || overallHeight < 1.0 ) return( p );
+
  	if( sizeUnit == SANE_UNIT_MM ) {
  		p.setX( 1000.0*w_mm / overallWidth );
  		p.setY( 1000.0*h_mm / overallHeight );

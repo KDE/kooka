@@ -25,7 +25,9 @@
 #include <kconfig.h>
 #include <kdialog.h>
 #include <kimageio.h>
+#include <klocale.h>
 #include <kstddirs.h>
+#include <kmessagebox.h>
 #include <kdebug.h>
 
 #include <qdir.h>
@@ -52,7 +54,7 @@
 
 FormatDialog::FormatDialog( QWidget *parent, const char *name )
    :KDialogBase( parent, "FormDialog", true,
-                 /* Tabbed,*/ I18N( "Kooka save Assistant" ),
+                 /* Tabbed,*/ i18n( "Kooka save assistant" ),
 		 Ok|Cancel, Ok, parent,  name )
 
 {
@@ -70,7 +72,7 @@ FormatDialog::FormatDialog( QWidget *parent, const char *name )
    // some nice words
    QLabel *l0 = new QLabel( page );
    CHECK_PTR(l0);
-   l0->setText( I18N( "<B>Save Assistant</B><P>Select an image format to save the scanned image." ));
+   l0->setText( i18n( "<B>Save Assistant</B><P>Select an image format to save the scanned image." ));
    bigdad->addWidget( l0 );
 
    QFrame *f1 = new QFrame( page );
@@ -89,7 +91,7 @@ FormatDialog::FormatDialog( QWidget *parent, const char *name )
    // Insert Scrolled List for formats
    QLabel *l1 = new QLabel( page );
    CHECK_PTR(l1);
-   l1->setText( I18N( "Available image formats:" ));
+   l1->setText( i18n( "Available image formats:" ));
    
    lb_format = new QListBox( page, "ListBoxFormats" );
    CHECK_PTR(lb_format);
@@ -108,13 +110,13 @@ FormatDialog::FormatDialog( QWidget *parent, const char *name )
    l_help = new QLabel( page );
    CHECK_PTR(l_help);
    l_help->setFrameStyle( QFrame::Panel|QFrame::Sunken );
-   l_help->setText( I18N("-No format selected-" ));
+   l_help->setText( i18n("-No format selected-" ));
    l_help->setAlignment( AlignVCenter | AlignHCenter );
 
    // Insert Selbox for subformat
    l2 = new QLabel( page );
    CHECK_PTR(l2);
-   l2->setText( I18N( "Select the image-sub-format" ));
+   l2->setText( i18n( "Select the image sub-format" ));
    cb_subf = new QComboBox( page, "ComboSubFormat" );
    CHECK_PTR( cb_subf );
 
@@ -124,10 +126,10 @@ FormatDialog::FormatDialog( QWidget *parent, const char *name )
    QFrame *vf = new QFrame(page);
    vf->setFrameStyle( QFrame::Panel|QFrame::Sunken );
 #endif
-   cbRemember = new QCheckBox(I18N("Remember this format for this image type"),
+   cbRemember = new QCheckBox(i18n("Remember this format for this image type"),
 			      page );
 
-   QCheckBox *cbDontAsk  = new QCheckBox(I18N("Dont ask again for that format"),
+   QCheckBox *cbDontAsk  = new QCheckBox(i18n("Don't ask again for this format"),
 			      page );
 
    // cbRemember->setFrameStyle( QFrame::Panel|QFrame::Sunken );
@@ -151,20 +153,20 @@ FormatDialog::FormatDialog( QWidget *parent, const char *name )
 
 void FormatDialog::showHelp( const QString& item )
 {
-   const char *helptxt = format_help[ item ];
+   QString helptxt = format_help[ item ];
 
-   if( helptxt ) {
-      // Set the hint 
+   if( !helptxt.isEmpty() ) {
+      // Set the hint
       l_help->setText( helptxt );
 
       // and check subformats
       check_subformat( helptxt );
    } else {
-      l_help->setText( I18N("-no hint available-" ));
+      l_help->setText( i18n("-no hint available-" ));
    }      
 }
 
-void FormatDialog::check_subformat( const char *format )
+void FormatDialog::check_subformat( const QString & format )
 {
    // not yet implemented
    kdDebug(28000) << "This is format in check_subformat: " << format << endl;
@@ -207,12 +209,11 @@ QString FormatDialog::getSubFormat( void ) const
 #include "formathelp.h"
 void FormatDialog::buildHelp( void )
 {
-   format_help.insert( "BMP", HELP_BMP );
-   format_help.insert( "PNM", HELP_PNM );
-   format_help.insert( "JPEG", HELP_JPG );
-   format_help.insert( "JPG", HELP_JPG );
-
-   format_help.insert( "EPS", HELP_EPS );
+   format_help.insert( QString::fromLatin1("BMP"), HELP_BMP );
+   format_help.insert( QString::fromLatin1("PNM"), HELP_PNM );
+   format_help.insert( QString::fromLatin1("JPEG"), HELP_JPG );
+   format_help.insert( QString::fromLatin1("JPG"), HELP_JPG );
+   format_help.insert( QString::fromLatin1("EPS"), HELP_EPS );
 }
 
 
@@ -231,11 +232,11 @@ bool FormatDialog::rememberFormat( void ) const
 
 /* ********************************************************************** */
 
-ImgSaver::ImgSaver(  QWidget *parent, const char *dir_name )
+ImgSaver::ImgSaver(  QWidget *parent, const QString dir_name )
    : QObject( parent )
 {
 
-   if( dir_name )
+   if( !dir_name.isEmpty() )
    {
       /* A path was given */
       QDir path( dir_name );
@@ -270,20 +271,14 @@ void ImgSaver::createDir( QString dir )
       kdDebug(28000) << "Wrn: Directory does not exist -> try to create  !" << endl;
       if( mkdir( QFile::encodeName( dir ), S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH ) != 0 )
       {
-	 QMessageBox::warning( 0,"Warning","The directory \n" + dir +
-			       "\nto save images does not exist\nand could not be created !\n"
-			       "Please check the permissions.", QMessageBox::Warning,
-			       QMessageBox::Ok | QMessageBox::Default );
-				
+        KMessageBox::sorry(0, i18n("The directory\n%1\nto save images does not exist and could not be created !\n"
+                        "Please check the permissions.").arg(dir));
       }
    }
    if( ! fi.isWritable() )
    {
-      QMessageBox::warning( 0,"Warning","The directory \n" + dir +
-			    "\nto save images is not writeable.\n"
-			    "Please check the permissions.", QMessageBox::Warning,
-			    QMessageBox::Ok | QMessageBox::Default );
-				
+        KMessageBox::sorry(0, i18n("The directory\n%1\nto save images is not writeable.\nPlease check the permissions.")
+                .arg(dir));
    }
 }
 
@@ -298,8 +293,8 @@ ImgSaveStat ImgSaver::saveImage( QImage *image )
    
    if( !image ) return( ISS_ERR_PARAM );
 
-   /* Find out what kind of image it is  */
-   if( image->depth() > 8 )
+   /* Find out what kind of image it is  */
+   if( image->depth() > 8 )
    {
       imgType = PT_HICOLOR_IMAGE;
    }
@@ -460,7 +455,7 @@ QString ImgSaver::startFormatDialog( picType type)
 
       return( format );
    }
-   return( "Skipped" );
+   return( i18n("Skipped") );
 }
 
 QString ImgSaver::getFormatForType( picType type ) const
@@ -607,12 +602,12 @@ QString ImgSaver::errorString( ImgSaveStat stat )
    QString re;
    
    switch( stat ) {
-      case ISS_OK:           re = I18N( " Image save OK      " ); break;
-      case ISS_ERR_PERM:     re = I18N( " permission Error   " ); break;
-      case ISS_ERR_FILENAME: re = I18N( " bad filename       " ); break;
-      case ISS_ERR_NO_SPACE: re = I18N( " no space on device " ); break;
-      case ISS_ERR_UNKNOWN:  re = I18N( " unknown error      " ); break;
-      case ISS_ERR_PARAM:    re = I18N( " Parameter wrong    " ); break;
+      case ISS_OK:           re = i18n( " Image save OK      " ); break;
+      case ISS_ERR_PERM:     re = i18n( " permission Error   " ); break;
+      case ISS_ERR_FILENAME: re = i18n( " bad filename       " ); break;
+      case ISS_ERR_NO_SPACE: re = i18n( " no space on device " ); break;
+      case ISS_ERR_UNKNOWN:  re = i18n( " unknown error      " ); break;
+      case ISS_ERR_PARAM:    re = i18n( " Parameter wrong    " ); break;
       default: re = "";
    }
    return( re );

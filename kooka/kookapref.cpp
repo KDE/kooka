@@ -6,7 +6,7 @@
 #include <qlabel.h>
 
 KookaPreferences::KookaPreferences()
-    : KDialogBase(TreeList, "Kooka Preferences",
+    : KDialogBase(TreeList, i18n("Kooka Preferences"),
                   Help|Default|Ok|Apply|Cancel, Ok)
 {
     // this is the base class for your preferences dialog.  it is now

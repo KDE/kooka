@@ -31,7 +31,7 @@
 #include <qcombobox.h>
 #include <qcheckbox.h>
 #include <qlistbox.h>
-#include <qdict.h>
+#include <qmap.h>
 #include <kdialogbase.h>
 
 /**
@@ -97,11 +97,11 @@ protected slots:
    void 	showHelp( const QString& item );
  
 private:
-   void		check_subformat( const char *format );
+   void		check_subformat( const QString & format );
    void 	buildHelp( void );
    void 	readConfig( void );
 
-   QDict<char> 	format_help;
+   QMap<QString, QString> 	format_help;
    QComboBox   	*cb_subf;
    QListBox    	*lb_format;
    QLabel      	*l_help;
@@ -130,7 +130,7 @@ public:
 	 *  @param dir  Name of the save root directory
 	 *  @param name Name of a subdirectory in the saveroot.
 	 **/
-   ImgSaver( QWidget *parent, const char *dir_name = 0L );
+   ImgSaver( QWidget *parent, const QString dir_name = 0L );
 
    QString     errorString( ImgSaveStat );
    QString     lastFilename(void) { return( last_file ); };

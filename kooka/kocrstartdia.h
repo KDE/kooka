@@ -19,17 +19,9 @@
 #ifndef KOCRSTARTDIA_H
 #define KOCRSTARTDIA_H
 
-#include <qlabel.h>
-#include <qstring.h>
-#include <qstrlist.h>
-#include <qsemimodal.h>
-#include <qprogressbar.h>
 #include <kdialogbase.h>
-#include <qradiobutton.h>
-#include <qgroupbox.h>
 #include <qimage.h>
 #include <qstring.h>
-#include <qcstring.h>
 
 #include <kscanslider.h>
 #include <kanimwidget.h>

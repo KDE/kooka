@@ -16,6 +16,7 @@
 #include <kdebug.h>
 #include <ktrader.h>
 #include <klibloader.h>
+#include <klocale.h>
 #include <kmessagebox.h>
 #include <krun.h>
 #include <keditcl.h>
@@ -62,11 +63,11 @@ KookaView::KookaView(QWidget *parent)
    }
 
    /* build up the Preview/Packager-Tabview */
-   tabw->addTab( packager, I18N( "&Images") );
-   tabw->addTab( preview_canvas, I18N("&Preview") );
+   tabw->addTab( packager, i18n( "&Images") );
+   tabw->addTab( preview_canvas, i18n("&Preview") );
 
    tabw->setMinimumSize(100, 100);
-   tabw->showPage(preview_canvas);	
+   tabw->showPage(preview_canvas);
 
    /* ..and create the Scanner parameter object, which displays the parameter
     *   the current scanner provides.
@@ -77,14 +78,14 @@ KookaView::KookaView(QWidget *parent)
    /* the object from the kscan lib to handle low level scanning */
    sane = new KScanDevice( this );
    CHECK_PTR(sane);
-   
+
    /* a list of backends the scan backend knows */
    QStrList backends = sane->getDevices();
 
    /* Human readable scanner descriptions */
    QStringList hrbackends;
    QStrListIterator  it( backends );
-  
+
    // for( it = backends.first(); it != backends.last(); ++it );
    /* A dialog, which allows the user to select one of the scanner */
    kapp->config()->setGroup( GROUP_STARTUP );
@@ -95,7 +96,7 @@ KookaView::KookaView(QWidget *parent)
       selDevice = kapp->config()->readEntry( STARTUP_SCANDEV, "" );
 
       // Check, if the selDevice is in the list of available devices.
-      
+
    }
 
    // Create pretty debug, retrieve human readable Scanner names, and:
@@ -108,7 +109,7 @@ KookaView::KookaView(QWidget *parent)
 
       if( skipDialog && it.current() == selDevice )
 	 cfgDeviceInList = true;
-      
+
       ++it;
    }
 
@@ -117,11 +118,11 @@ KookaView::KookaView(QWidget *parent)
       kdDebug( 28000 ) << "Bad: Wanted device <" << selDevice << "> not availabe" << endl;
       skipDialog = false;
    }
-   
+
    if( ! skipDialog || selDevice.isEmpty())
    {
       DeviceSelector ds( this, backends, hrbackends );
-   
+
       if( ds.exec() == QDialog::Accepted )
       {
 	 kapp->config()->writeEntry( STARTUP_SKIP_ASK,
@@ -157,7 +158,7 @@ KookaView::KookaView(QWidget *parent)
    debug( "Setting splitter width to %d", s.width() );
    setSizes( sizelist );
 
-   /* children of leftsplitter: tabwidget, scanparams */	
+   /* children of leftsplitter: tabwidget, scanparams */
    QValueList<int> sizel2;
    sizel2.append( 400 );
    sizel2.append( s.height() );
@@ -170,29 +171,29 @@ KookaView::KookaView(QWidget *parent)
    debug( "Have size found: %d x %d", s.width(), s.height());
 #endif
    scan_params->resize( scan_params->sizeHint() );
-   scan_params->show();	
+   scan_params->show();
 
 
    /* New image created after scanning */
-   connect(sane, SIGNAL(sigNewImage(QImage*)), packager, SLOT(slAddImage(QImage*)));	
+   connect(sane, SIGNAL(sigNewImage(QImage*)), packager, SLOT(slAddImage(QImage*)));
    /* New preview image */
    connect(sane, SIGNAL(sigNewPreview(QImage*)), this, SLOT( slNewPreview(QImage*)));
-	
+
    /* Image canvas should show a new document */
    connect( packager, SIGNAL( showImage( QImage* )),
             img_canvas, SLOT( newImage( QImage*)));
-   /* Packager deletes the image */	
+   /* Packager deletes the image */
    connect( packager, SIGNAL( deleteImage( QImage* )),
             img_canvas, SLOT( deleteView( QImage*)));
    /* Packager unloads the image */
    connect( packager, SIGNAL( unloadImage( QImage* )),
             img_canvas, SLOT( deleteView( QImage*)));
-	
+
    /* New Rectangle selection in the preview */
    connect( preview_canvas->getImageCanvas(), SIGNAL( newRect(QRect)),
             scan_params, SLOT(slCustomScanSize(QRect)));
    connect( preview_canvas->getImageCanvas(), SIGNAL( noRect()),
-            scan_params, SLOT(slMaximalScanSize()));	
+            scan_params, SLOT(slMaximalScanSize()));
 
 
 #if 0
@@ -222,7 +223,7 @@ KookaView::KookaView(QWidget *parent)
    // and we might as well just exit now
    if (!factory)
    {
-      KMessageBox::error(this, "Could not find a suitable HTML component");
+      KMessageBox::error(this, i18n("Could not find a suitable HTML component"));
       return;
    }
 #endif
@@ -234,17 +235,17 @@ KookaView::~KookaView()
 {
    saveProperties( kapp->config() );
    // if( preview_img ) delete( preview_img );
-   
+
 }
 
 void KookaView::loadStartupImage( void )
 {
    kdDebug( 28000) << "Starting to load startup image" << endl;
-   
+
    /* Now set the configured stuff */
    KConfig *konf = KGlobal::config ();
    if( konf )
-   {     
+   {
       konf->setGroup(GROUP_STARTUP);
       QString startup = konf->readEntry( STARTUP_IMG_SELECTION, "" );
 
@@ -273,14 +274,14 @@ void KookaView::slNewPreview( QImage *new_img )
       if( preview_img )
 	 delete( preview_img );
       preview_img = new QImage( *new_img );
-	
+
       if( ! new_img->isNull() )
       {
 	 ImgSaveStat is_stat = ISS_OK;
 	 ImgSaver img_saver( this );
-			
+
 	 is_stat = img_saver.savePreview( new_img );
-			
+
 	 if( is_stat != ISS_OK )
 	 {
 	    kdDebug(28000) << "ERROR in saving preview !" << endl;
@@ -291,7 +292,7 @@ void KookaView::slNewPreview( QImage *new_img )
 }
 
 
-bool KookaView::ToggleVisibility( int item )
+bool KookaView::ToggleVisibility( int item )
 {
    QWidget *w = 0;
    bool    ret = false;
@@ -327,10 +328,10 @@ bool KookaView::ToggleVisibility( int item )
 
 void KookaView::doOCRonSelection( void )
 {
-   emit( signalChangeStatusbar( I18N("Starting OCR on selection" )));
+   emit( signalChangeStatusbar( i18n("Starting OCR on selection" )));
 
    QImage img;
-   
+
    if( img_canvas->selectedImage(&img) )
    {
       startOCR( &img );
@@ -341,7 +342,7 @@ void KookaView::doOCRonSelection( void )
 /* Does OCR on the entire picture */
 void KookaView::doOCR( void )
 {
-   emit( signalChangeStatusbar( I18N("Starting OCR on the entire image" )));
+   emit( signalChangeStatusbar( i18n("Starting OCR on the entire image" )));
    const QImage *img = img_canvas->rootImage();
    startOCR( img );
    emit( signalCleanStatusbar( ));
@@ -359,9 +360,9 @@ void KookaView::startOCR( const QImage *img )
 
       if( !ocrFabric->startExternOcrVisible() )
       {
-	 KMessageBox::error(0, I18N("Could not start OCR-Process,\n"
+	 KMessageBox::error(0, i18n("Could not start OCR-Process,\n"
 				    "Probably there is already one running." ));
-	 
+
       }
    }
 }
@@ -370,7 +371,7 @@ void KookaView::slCreateNewImgFromSelection()
 {
    if( img_canvas->rootImage() )
    {
-      emit( signalChangeStatusbar( I18N("Create new image from selection" )));
+      emit( signalChangeStatusbar( i18n("Create new image from selection" )));
       QImage img;
       if( img_canvas->selectedImage( &img ) )
       {
@@ -378,7 +379,7 @@ void KookaView::slCreateNewImgFromSelection()
       }
       emit( signalCleanStatusbar( ));
    }
-   
+
 }
 
 
@@ -395,24 +396,24 @@ void KookaView::slRotateImage(int angle)
       switch( angle )
       {
 	 case 90:
-	    emit( signalChangeStatusbar( I18N("rotate image 90 degree" )));
+	    emit( signalChangeStatusbar( i18n("rotate image 90 degrees" )));
 	    resImg = rotateRight( img );
 	    break;
 	 case 180:
-	    emit( signalChangeStatusbar( I18N("rotate image 180 degree" )));
+	    emit( signalChangeStatusbar( i18n("rotate image 180 degrees" )));
 	    resImg = rotateRight( img );
 	    resImg = rotateRight( &resImg );
 	    break;
 	 case 270:
 	 case -90:
-	    emit( signalChangeStatusbar( I18N("rotate image -90 degree" )));
+	    emit( signalChangeStatusbar( i18n("rotate image -90 degrees" )));
 	    resImg = rotateLeft( img );
-	    
+
 	    break;
 	 default:
 	    kdDebug(28000) << "Not supported yet !" << endl;
 	    doUpdate = false;
-	    
+
 	    break;
       }
       QApplication::restoreOverrideCursor();
@@ -423,7 +424,7 @@ void KookaView::slRotateImage(int angle)
       else
 	 emit(signalCleanStatusbar());
    }
-      
+
 }
 
 
@@ -432,7 +433,7 @@ void KookaView::slMirrorImage( MirrorType m )
 {
    const QImage *img = img_canvas->rootImage();
    bool doUpdate = true;
-   
+
    if( img )
    {
       QImage resImg;
@@ -441,15 +442,15 @@ void KookaView::slMirrorImage( MirrorType m )
       switch( m )
       {
 	 case MirrorVertical:
-	    emit( signalChangeStatusbar( I18N("Mirroring image vertically" )));
+	    emit( signalChangeStatusbar( i18n("Mirroring image vertically" )));
 	    resImg = img->mirror();
 	    break;
 	 case MirrorHorizontal:
-	    emit( signalChangeStatusbar( I18N("Mirroring image horizontally" )));
+	    emit( signalChangeStatusbar( i18n("Mirroring image horizontally" )));
 	    resImg = img->mirror( true, false );
 	    break;
 	 case MirrorBoth:
-	    emit( signalChangeStatusbar( I18N("Mirroring image in both directions" )));
+	    emit( signalChangeStatusbar( i18n("Mirroring image in both directions" )));
 	    resImg = img->mirror( true, true );
 	    break;
 	 default:
@@ -457,20 +458,20 @@ void KookaView::slMirrorImage( MirrorType m )
 	    doUpdate = false;
       }
       QApplication::restoreOverrideCursor();
-      
+
       /* updateCurrImage does the status-bar cleanup */
       if( doUpdate )
 	 updateCurrImage( resImg );
       else
 	 emit(signalCleanStatusbar());
-      
+
       // img_canvas->newImage(  );
    }
 }
 
-void KookaView::updateCurrImage( QImage& img ) 
+void KookaView::updateCurrImage( QImage& img )
 {
-   emit( signalChangeStatusbar( I18N("Storing image changes" )));
+   emit( signalChangeStatusbar( i18n("Storing image changes" )));
    packager->slotImageChanged( &img );
    emit( signalCleanStatusbar());
 }

@@ -34,6 +34,7 @@
 #include <kfiledialog.h>
 #include <kurl.h>
 #include <kdebug.h>
+#include <klocale.h>
 #include <progressbase.h>
 #include <kio/jobclasses.h>
 #include <kio/file.h>
@@ -52,9 +53,9 @@ enum { ID_POP_RESCAN,
 ScanPackager::ScanPackager( QWidget *parent ) : KListView( parent )
 {
 	setFrameStyle( QFrame::Sunken | QFrame::Box);
-	addColumn( "Scan-Pakets" );
-	addColumn( "size" );   setColumnAlignment( 1, AlignRight );
-	addColumn( "Colors" );	setColumnAlignment( 2, AlignRight );
+	addColumn( i18n("Scan packages") );
+	addColumn( i18n("Size") );   setColumnAlignment( 1, AlignRight );
+	addColumn( i18n("Colors") );	setColumnAlignment( 2, AlignRight );
 	
 	QDir home = QDir::home();
 	save_root = home.absPath() + "/.kscan/";
@@ -64,7 +65,7 @@ ScanPackager::ScanPackager( QWidget *parent ) : KListView( parent )
 	root->setFilename( save_root );
 	root->createFolder();
 	
-	root->setText( 0, "Image collection" );
+	root->setText( 0, i18n("Image collection") );
 	
 	connect( this, SIGNAL( selectionChanged( QListViewItem*)),
 		 SLOT( slSelectionChanged(QListViewItem*)));
@@ -73,10 +74,10 @@ ScanPackager::ScanPackager( QWidget *parent ) : KListView( parent )
 		 SLOT( slShowContextMenue(QListViewItem *, const QPoint &, int )));
 	
 	img_counter = 1;
-	if( readDir( root, save_root.latin1() ) == 0 )
+	if( readDir( root, save_root ) == 0 )
 	{
 		PackagerItem *incoming = new PackagerItem( root, true );
-		incoming->setText( 0, "incoming" );
+		incoming->setText( 0, i18n("incoming") );
 	}
 	setOpen( root, true );
 	setSelected( root->firstChild(), true );
@@ -149,13 +150,13 @@ void ScanPackager::slotImageChanged( QImage *img )
 
    if( is_stat == ISS_ERR_FORMAT_NO_WRITE )
    {
-      KMessageBox::error( this, I18N( "Cant write this image format\nImage will not be saved!"),
-			    I18N("Save error") );
+      KMessageBox::error( this, i18n( "Cannot write this image format.\nImage will not be saved!"),
+			    i18n("Save error") );
    }
    else if( is_stat == ISS_ERR_PERM )
    {
-      KMessageBox::error( this, I18N( "Image file is write protected.\nImage will not be saved!"),
-			    I18N("Save error") );
+      KMessageBox::error( this, i18n( "Image file is write protected.\nImage will not be saved!"),
+			    i18n("Save error") );
 
    }
    else if( is_stat != ISS_OK )
@@ -191,14 +192,14 @@ void ScanPackager::slAddImage( QImage *img )
    {
       curr = (PackagerItem*) curr->parent();
    }
-	
+
    /* Path of curr sel item */
    QDir d (curr->getFilename());
-   
-   ImgSaver img_saver( this, d.absPath().latin1() );
-	
+
+   ImgSaver img_saver( this, d.absPath() );
+
    is_stat = img_saver.saveImage( img );
-	
+
    if( is_stat != ISS_OK )
    {
       if( is_stat == ISS_SAVE_CANCELED )
@@ -208,9 +209,9 @@ void ScanPackager::slAddImage( QImage *img )
       kdDebug(28000) << "ERROR: Saving failed: " << img_saver.errorString( is_stat ) << endl;
       /* And now ?? */
    }
-	
+
    /* Add the new image to the list of new images */
- 	
+
    setSelected( curr, true );
    PackagerItem *item = new PackagerItem( curr, false );
    item->setFilename( d.absPath() + "/" + img_saver.lastFilename());
@@ -218,10 +219,12 @@ void ScanPackager::slAddImage( QImage *img )
 
    /* Count amount of children of the father */
    int childcount = curr->childCount();
-   curr->setText( 1, s.sprintf( "%d images", childcount ));
-   item->setText( 0, s.sprintf( "image %d", childcount ));
+   s = i18n("%1 images").arg(childcount);
+   curr->setText( 1, s);
+   s = i18n("image %1").arg(childcount);
+   item->setText( 0, s);
    setOpen( curr, true );
- 		
+
    /* This call to set image allocs a new object qimage, which lives longer
     * than the one from the scanner, which will be destroyed after leaving
     * this callback.
@@ -229,10 +232,10 @@ void ScanPackager::slAddImage( QImage *img )
     * after this call.
     */
    item->setImage( img );
-	 	
+
    /* makes the new item the current, which shows it */
    setSelected( item, true );
- 	
+
 }
 
 /* ----------------------------------------------------------------------- */
@@ -240,7 +243,7 @@ void ScanPackager::slAddImage( QImage *img )
 void ScanPackager::slSelectImage( const QString name )
 {
    QListViewItem *found = spFindItem( NameSearch, name );
-   
+
    if( found )
    {
       kdDebug(28000) << "slSelectImage: Found an item !" << endl;
@@ -255,7 +258,7 @@ PackagerItem *ScanPackager::spFindItem( SearchType type, const QString name )
 {
    PackagerItem *foundItem = 0L;
    bool searchError = false;
-      
+
    QListViewItemIterator it( root );
    for ( ; it.current() && !foundItem && !searchError; ++it )
    {
@@ -266,7 +269,7 @@ PackagerItem *ScanPackager::spFindItem( SearchType type, const QString name )
 	    {
 	       foundItem = (PackagerItem*)(it.current());
 	    }
-	    
+
 	    break;
 	 default:
 	    kdDebug(28000) << "Scanpackager: Wrong search type !" << endl;
@@ -279,33 +282,33 @@ PackagerItem *ScanPackager::spFindItem( SearchType type, const QString name )
 /* ----------------------------------------------------------------------- */
 void ScanPackager::slShowContextMenue(QListViewItem *lvi, const QPoint &p, int col )
 {
-   kdDebug(28000) << "Showing Context Menue" << endl;
+   kdDebug(28000) << "Showing Context Menue" << endl;
    (void) col;
-	
+
    PackagerItem *curr = 0;
- 	
+
    if( lvi )
    {
       curr = (PackagerItem*) lvi;
       if( curr->isDir() )
 	 setSelected( curr, true );
    }
- 	
+
    QPopupMenu *popup = new QPopupMenu();
    popup->setCheckable( true );
 
    // debug ( "opening popup!" );
    if( curr )
    {
-      popup->insertItem( *icons["mini-ray"], I18N("unload image"), ID_POP_UNLOAD_IMG );
-      popup->insertItem( *icons["mini-floppy"], I18N("export image"), ID_POP_SAVE_IMG );
+      popup->insertItem( *icons["mini-ray"], i18n("Unload image"), ID_POP_UNLOAD_IMG );
+      popup->insertItem( *icons["mini-floppy"], i18n("Export image"), ID_POP_SAVE_IMG );
       popup->setItemEnabled ( ID_POP_CREATE_NEW, ! curr->isDir() );
       popup->insertSeparator();
-      popup->insertItem( *icons["mini-trash"], I18N("delete image"), ID_POP_DELETE );
+      popup->insertItem( *icons["mini-trash"], i18n("Delete image"), ID_POP_DELETE );
       popup->insertSeparator();
    }
-  	
-   popup->insertItem( *icons["mini-folder_new"], "create new folder", ID_POP_CREATE_NEW );
+
+   popup->insertItem( *icons["mini-folder_new"], "Create new folder", ID_POP_CREATE_NEW );
    popup->setItemEnabled ( ID_POP_CREATE_NEW, curr->isDir() );
 
    connect( popup, SIGNAL( activated(int)), this, SLOT(slHandlePopup(int)));
@@ -318,12 +321,12 @@ void ScanPackager::slShowContextMenue(QListViewItem *lvi, const QPoint &p, int c
 void ScanPackager::slHandlePopup( int menu_id )
 {
    kdDebug(28000) << "Popup to handle ID: " << menu_id << endl;
- 	
+
    PackagerItem *curr = (PackagerItem*) currentItem();
    if( ! curr ) return;
    PackagerItem *newitem = (PackagerItem*) curr->itemAbove();
    bool setnew = false;
- 	
+
    switch( menu_id )
    {
       case ID_POP_RESCAN:
@@ -341,25 +344,25 @@ void ScanPackager::slHandlePopup( int menu_id )
       case ID_POP_UNLOAD_IMG:
 	 if( curr )
 	    unloadItem( curr );
-	 if( !curr->isLoaded() )	
+	 if( !curr->isLoaded() )
 	    emit( showImage( 0 ));
 	 setnew = true;
 	 break;
       case ID_POP_SAVE_IMG:
 	 if( curr ) exportFile( curr );
- 		
+
 	 break;
       default:
 	 break;
    }
- 	
+
    /* need to set a new item as actual item ? */
    if( setnew ) {
       setCurrentItem( newitem );
       setSelected( newitem, true );
       slSelectionChanged( newitem );
    }
- 	
+
 }
 /* ----------------------------------------------------------------------- */
 
@@ -373,20 +376,20 @@ void ScanPackager::exportFile( PackagerItem *curr )
    else
    {
       QString from_file = curr->getFilename();
-      
+
       QString filter = "*." + curr->getImgFormat();
       QString initial = curr_copy_dir.absPath() + "/";
       initial += curr->getFilename(false);
       KURL fileName = KFileDialog::getSaveURL ( initial,
 						filter,
 						this, "COPY_SAVE_DIA" );
-      
+
       if ( fileName.isValid() )                  // got a file name
       {
 	 /* remember the filename for the next export */
 	 curr_copy_dir = fileName.path( );
 	 KURL kfrom( from_file );
-	 
+
 	 if( kfrom == fileName ) return;
 	 copyjob = KIO::copy( kfrom, fileName, false );
 
@@ -398,14 +401,14 @@ void ScanPackager::exportFile( PackagerItem *curr )
 
 void ScanPackager::slotCanceled( KIO::Job* )
 {
-  kdDebug(28000) << I18N("Canceled by user") << endl;
+  kdDebug(28000) << i18n("Canceled by user") << endl;
 }
 
 
 void ScanPackager::slotResult( KIO::Job *job )
 {
    if( ! job ) return;
-   
+
    if ( job->error() )
    {
       job->showErrorDialog ( );
@@ -430,7 +433,7 @@ void ScanPackager::unloadItem( PackagerItem *curr )
       while( child )
       {
 	 unloadItem( child );
-	 child = (PackagerItem*) child->nextSibling(); 	 	
+	 child = (PackagerItem*) child->nextSibling();
       }
    }
    else
@@ -453,31 +456,30 @@ bool ScanPackager::deleteItem( PackagerItem *curr, bool ask )
       PackagerItem *new_child;
 
       QFileInfo d( curr->getFilename());
-     	
+
       if( ask )
       {
 	 QString s;
-	 s = I18N("Do you really want to delete the folder ") + d.baseName();
-	 s += I18N("\nand all the images inside ?");
-	 int result = KMessageBox::questionYesNo(this, s, I18N( "Delete collection item") );
+	 s = i18n("Do you really want to delete the folder %1\nand all the images inside ?").arg(d.baseName());
+	 int result = KMessageBox::questionYesNo(this, s, i18n( "Delete collection item") );
 	 if( result == KMessageBox::No )
 	    return( false );
-     		
+
       }
-     	     	
+
       ok = true;
       while( child && ok )
       {
 	 kdDebug(28000) << "deleting " << child->getFilename() << endl;
 	 new_child = (PackagerItem*) child->nextSibling();
 	 ok = deleteItem( child, false );
-     		
+
 	 child = new_child;
       }
-     	
+
       if( ok )
 	 ok = curr->deleteFolder();
-     		
+
       if( ok )
       {
 	 if( curr->parent())
@@ -491,30 +493,30 @@ bool ScanPackager::deleteItem( PackagerItem *curr, bool ask )
       if( ask )
       {
 	 QString s;
-	 s = I18N("Do you really want to delete this image ?\nIt cant be restored !" );
-	 int result = KMessageBox::questionYesNo(this, s, I18N("Delete image") );
+	 s = i18n("Do you really want to delete this image ?\nIt can't be restored !" );
+	 int result = KMessageBox::questionYesNo(this, s, i18n("Delete image") );
 
 	 if( result == KMessageBox::No )
 	    return( false );
-     		
+
       }
 
       /* delete a normal file */
       emit( deleteImage( curr->getImage() ));
       ok = curr->deleteFile();
-      delete curr;	 	
+      delete curr;
    }
- 	
+
    if( ! ok )
       kdDebug(28000) << "Deleting Item failed !" << endl;
- 	
+
    return( ok );
 }
 
 /* ----------------------------------------------------------------------- */
 void ScanPackager::createFolder( void )
 {
-   EntryDialog d( this, I18N("New Folder"), I18N("<B>Please enter a name for the new folder:</B>"));
+   EntryDialog d( this, i18n("New Folder"), i18n("<B>Please enter a name for the new folder:</B>"));
 		  
    if( d.exec() == QDialog::Accepted )
    {
@@ -537,7 +539,7 @@ void ScanPackager::createFolder( void )
 }
 
 /* ----------------------------------------------------------------------- */
-int ScanPackager::readDir( QListViewItem *parent, const char *dir_to_read )
+int ScanPackager::readDir( QListViewItem *parent, QString dir_to_read )
 {
    if ( !dir_to_read ) return( 0 );
    QString s;	
@@ -560,7 +562,7 @@ int ScanPackager::readDir( QListViewItem *parent, const char *dir_to_read )
 	 new_folder->setFilename( fi->absFilePath() );
 	 /* recursive Call to readDir */
 	 amount_dirs++;
-	 amount_dirs += readDir( new_folder, fi->absFilePath().latin1() );
+	 amount_dirs += readDir( new_folder, fi->absFilePath() );
 	 new_folder->decorateFile();
       }
       else
@@ -574,21 +576,19 @@ int ScanPackager::readDir( QListViewItem *parent, const char *dir_to_read )
 
 	 if( si > 1024*1024 )
 	 {  /* Size is MegaByte */
-	    s.sprintf("%.2f Mb", double( si/1024/1024 ) );
+            s = i18n("%1 MB").arg(KGlobal::locale()->formatNumber(si/1024/1024));
 	 }
 	 else if( si > 1024 )
 	 {
-	    s.sprintf("%.0f kb", double(si /1024) );		 	
-	    // s.setNum( double(si/1024), 'f', 1 );
-	    // s += " kb";
+            s = i18n("%1 kB").arg(KGlobal::locale()->formatNumber(si/1024, 0));
 	 }
 	 else
 	 {
-	    s.sprintf("%d byte", si );		 	
+            s = i18n("%1 bytes").arg(si);
 	 }
 	 item->setText( 1, s );
       }
-		
+
       ++it;                               // goto next list element
    }
    return( amount_dirs );
@@ -600,8 +600,8 @@ QString ScanPackager::getImgName( QString name_on_disk )
 {
    QString s;
    (void) name_on_disk;
-	
-   s.sprintf( "image %d", img_counter++ );
+
+   s = i18n("image %1").arg(img_counter++);
    return( s );     	
 }
 

@@ -24,7 +24,9 @@
 #include <qbutton.h>
 #include <qradiobutton.h>
 #include <qlabel.h>
+
 #include <kdebug.h>
+#include <klocale.h>
 
 #include "miscwidgets.h"
 #include "resource.h"
@@ -76,75 +78,75 @@ void ImageHistogram::drawContents(QPainter *p)
 
 ImgScaleDialog::ImgScaleDialog( QWidget *parent, int curr_sel,
 				const char *name )
-   :KDialogBase( parent,  name , true, I18N("Zoom"),
+   :KDialogBase( parent,  name , true, i18n("Zoom"),
                  Ok|Cancel, Ok, true )
 {
-   // setCaption (I18N ("Image Zoom"));
-   selected = curr_sel;   
+   // setCaption (i18n ("Image Zoom"));
+   selected = curr_sel;
    int        one_is_selected = false;
    enableButtonSeparator( false );
    QVBox *main = makeVBoxMainWidget( );
-   
+
    // (void) new QLabel( , main, "Page");
-   // 
+   //
    QButtonGroup *radios = new QButtonGroup ( 2, Qt::Horizontal, main );
    CHECK_PTR(radios);
-   radios->setTitle( I18N("Select image zoom:") );
-   
+   radios->setTitle( i18n("Select image zoom:") );
+
    connect( radios, SIGNAL( clicked( int )),
 	    this, SLOT( setSelValue( int )));
-   
+
    // left gap: smaller Image
-   QRadioButton *rb25 = new QRadioButton (I18N ("25 %"), radios);
+   QRadioButton *rb25 = new QRadioButton (i18n ("25 %"), radios);
    if( curr_sel == 25 ){
       rb25->setChecked( true );
       one_is_selected = true;
    }
 
-   QRadioButton *rb50 = new QRadioButton (I18N ("50 %"), radios );
+   QRadioButton *rb50 = new QRadioButton (i18n ("50 %"), radios );
    if( curr_sel == 50 ){
       rb50->setChecked( true );
       one_is_selected = true;
    }
 
-   QRadioButton *rb75 = new QRadioButton (I18N ("75 %"), radios );
+   QRadioButton *rb75 = new QRadioButton (i18n ("75 %"), radios );
    if( curr_sel == 75 ) {
       rb75->setChecked( true );
       one_is_selected = true;
    }
-   
-   QRadioButton *rb100 = new QRadioButton (I18N ("100 %"), radios);
+
+   QRadioButton *rb100 = new QRadioButton (i18n ("100 %"), radios);
    if( curr_sel == 100 ) {
       rb100->setChecked( true );
       one_is_selected = true;
    }
-   
-   QRadioButton *rb150 = new QRadioButton (I18N ("150 %"), radios);
+
+   QRadioButton *rb150 = new QRadioButton (i18n ("150 %"), radios);
    if( curr_sel == 150 ) {
       rb150->setChecked( true );
       one_is_selected = true;
    }
-   
-   QRadioButton *rb200 = new QRadioButton (I18N ("200 %"), radios );
+
+   QRadioButton *rb200 = new QRadioButton (i18n ("200 %"), radios );
    if( curr_sel == 200 ) {
       rb200->setChecked( true );
       one_is_selected = true;
    }
-   
-   QRadioButton *rb300 = new QRadioButton (I18N ("300 %"), radios );
+
+   QRadioButton *rb300 = new QRadioButton (i18n ("300 %"), radios );
    if( curr_sel == 300 ) {
       rb300->setChecked( true );
       one_is_selected = true;
    }
-   
-   QRadioButton *rb400 = new QRadioButton (I18N ("400 %"), radios);
+
+   QRadioButton *rb400 = new QRadioButton (i18n ("400 %"), radios);
    if( curr_sel == 400 ) {
       rb400->setChecked( true );
       one_is_selected = true;
    }
-   
+
    // Custom Scaler at the bottom
-   QRadioButton *rbCust = new QRadioButton (I18N ("Custom Scalefactor:"),
+   QRadioButton *rbCust = new QRadioButton (i18n ("Custom scale factor:"),
 					    radios);
    if( ! one_is_selected )
       rbCust->setChecked( true );
