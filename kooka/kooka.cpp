@@ -51,7 +51,8 @@
 
 Kooka::Kooka( const QCString& deviceToUse)
     : KMainWindow( 0, "Kooka" ),
-      m_printer(0)
+      m_printer(0),
+      m_prefDialogIndex(0)
 {
     // accept dnd
    m_view = new KookaView(this, deviceToUse);
@@ -140,6 +141,11 @@ void Kooka::setupActions()
 		       actionCollection(), "scaleOriginal" );
     m_view->connectViewerAction( act );
     
+    act = new KAction(i18n("Show &Thumbview"), "up", CTRL+Key_T,
+		       m_view, SLOT( slShowThumbnails()),
+		       actionCollection(), "thumbView" );
+    m_view->connectViewerAction( act );
+
     act = new KAction(i18n("Set Zoom..."), "viewmag", 0, 
 		       m_view, SLOT( slIVShowZoomDialog()),
 		       actionCollection(), "showZoomDialog" );
@@ -206,6 +212,8 @@ void Kooka::saveProperties(KConfig *config)
    //if (m_view->currentURL() != QString::null)
    //     config->writeEntry("lastURL", m_view->currentURL());
    kdDebug(28000) << "In kooka's saveProperties !" << endl;
+   config->setGroup( KOOKA_STATE_GROUP );
+   config->writeEntry( PREFERENCE_DIA_TAB, m_prefDialogIndex );
    m_view->saveProperties( config );
 }
 
@@ -216,7 +224,8 @@ void Kooka::readProperties(KConfig *config)
     // config file.  this function is automatically called whenever
     // the app is being restored.  read in here whatever you wrote
     // in 'saveProperties'
-
+   config->setGroup( KOOKA_STATE_GROUP );
+   m_prefDialogIndex = config->readNumEntry( PREFERENCE_DIA_TAB, 0 );
    // QString url = config->readEntry("lastURL"); 
 
 }
@@ -356,10 +365,14 @@ void Kooka::optionsPreferences()
 {
     // popup some sort of preference dialog, here
     KookaPreferences dlg;
+    dlg.showPage( m_prefDialogIndex );
+    connect( &dlg, SIGNAL( dataSaved() ), m_view, SLOT(slFreshUpThumbView()));
+    
     if (dlg.exec())
     {
         // redo your settings
-       m_view->slFreshUpThumbView();
+       m_prefDialogIndex = dlg.activePageIndex();
+       // m_view->slFreshUpThumbView();
     }
 }
 

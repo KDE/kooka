@@ -24,7 +24,8 @@
 #include <kapplication.h>
 #include <kmainwindow.h>
  
-
+#define KOOKA_STATE_GROUP "State"
+#define PREFERENCE_DIA_TAB "PreferencesTab"
 
 class KPrinter;
 class KToggleAction;
@@ -119,6 +120,8 @@ private:
    KToggleAction *m_statusbarAction;
    KToggleAction *m_scanParamsAction;
    KToggleAction *m_previewerAction;
+
+   int m_prefDialogIndex;
 };
 
 #endif // KOOKA_H
