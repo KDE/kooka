@@ -50,7 +50,7 @@
 FormatDialog::FormatDialog( QWidget *parent, const QString& imgFormat, const char *name )
    :KDialogBase( parent, "FormDialog", true,
                  /* Tabbed,*/ i18n( "Kooka save assistant" ),
-		 Ok|Cancel, Ok, parent,  name )
+		 Ok|Cancel, Ok )
 
 {
    buildHelp();
