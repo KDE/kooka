@@ -45,7 +45,7 @@ public:
    enum JobType { NoJob, ImportJob, RenameJob, ExportJob };
    JobDescription():jobType( NoJob ), kioJob(0L), pitem(0L) {}
    JobDescription( KIO::Job* kiojob, PackagerItem *new_item, JobType type ) :
-      kioJob(kiojob), pitem(new_item), jobType(type) {}
+      jobType(type), kioJob(kiojob), pitem(new_item) {}
 
    JobType type( void ) { return( jobType ); }
    PackagerItem *item( void ) { return( pitem ); }

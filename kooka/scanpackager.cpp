@@ -565,7 +565,7 @@ void ScanPackager::slotImportFiles( PackagerItem* dir, const QStringList list )
     dest = dir->getFilename();
     
     /* create a packageritem for every requested file */
-    for( int idx=0; idx < list.count(); idx++ )
+    for( unsigned int idx=0; idx < list.count(); idx++ )
     {
 	QString file = list[idx];
     }
