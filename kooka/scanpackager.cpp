@@ -376,7 +376,7 @@ QString ScanPackager::buildNewFilename( QString cmplFilename, QString currFormat
 
    kdDebug(28000) << "Filename wanted: "<< cmplFilename << " <"<<newExt<<"> <" << nowExt<<">" <<endl;
 
-   if( newExt == "" )
+   if( newExt.isEmpty() )
    {
       /* ok, fine -> return the currFormat-Extension */
       ext = base + "." + currFormat;
@@ -434,7 +434,7 @@ QString ScanPackager::itemDirectory( const KFileTreeViewItem* item, bool relativ
 	 {
 	    relativUrl.remove( 0, rootUrl.length() );
 
-	    if( relativUrl == "" ) relativUrl = "/"; // The root
+	    if( relativUrl.isEmpty() ) relativUrl = "/"; // The root
 	 }
 	 else
 	 {

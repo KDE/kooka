@@ -104,7 +104,7 @@ void KGOCRDialog::setupGui()
     if( res == "notFound" )
     {
         res = KookaPreferences::tryFindGocr();
-        if( res == "" )
+        if( res.isEmpty() )
         {
             /* Popup here telling that the config needs to be called */
             KMessageBox::sorry( this, i18n( "The path to the gocr binary is not configured yet.\n"
@@ -113,7 +113,7 @@ void KGOCRDialog::setupGui()
         }
     }
 
-    if( res == "" )
+    if( res.isEmpty() )
         res = i18n("Not found");
     else
         m_ocrCmd = res;

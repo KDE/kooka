@@ -110,7 +110,7 @@ void KookaPreferences::setupOCRPage()
     {
         res = tryFindGocr();
 
-        if( res == "" )
+        if( res.isEmpty() )
         {
             /* Still not found */
             KMessageBox::sorry( this, i18n( "Could not find the gocr binary.\n"
@@ -302,7 +302,7 @@ void KookaPreferences::setupThumbnailPage()
    /* Backgroundimage */
    KStandardDirs stdDir;
    QString bgImg = konf->readEntry( BG_WALLPAPER, "" );
-   if( bgImg == "" )
+   if( bgImg.isEmpty() )
       bgImg = stdDir.findResource( "data", STD_TILE_IMG );
 
    /* image file selector */

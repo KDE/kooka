@@ -383,7 +383,7 @@ ImgSaveStat ImgSaver::saveImage( QImage *image, const KURL& filename, const QStr
     localFilename = filename.directory( false, true) + filename.fileName();
 
     kdDebug(28000) << "saveImage: Saving "<< localFilename << " in format " << format << endl;
-    if( format == "" )
+    if( format.isEmpty() )
 	format = "BMP";
 
     return( save( image, localFilename, format, "" ) );
