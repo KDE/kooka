@@ -132,6 +132,11 @@ signals:
     void ocrProgress(int, int);
 
     /**
+     * select a word in the editor in line line.
+     */
+     void selectWord( int line, const ocrWord& word );
+
+    /**
      * signal to indicate that a ocr text must be updated due to better results
      * retrieved from spell check. The internal ocr data structure is already
      * updated when this signal is fired.

@@ -64,6 +64,23 @@ void ocrResEdit::slIgnoreWrongWord( int line, const ocrWord& word )
     slReplaceWord( line, word, word, m_ignoreColor );
 }
 
+
+void ocrResEdit::slSelectWord( int line, const ocrWord& word )
+{
+   if( line < paragraphs() )
+   {
+      QString editLine = text(line);
+      int cnt = editLine.contains( word);
+   
+      if( cnt > 0 )
+      {
+	 int pos = editLine.find(word);
+	 setCursorPosition( line, pos );
+	 setSelection( line, pos, line, pos + word.length());
+      }
+   }
+}
+
 void ocrResEdit::slReplaceWord( int line, const QString& wordFrom,
                                const QString& wordTo, const QColor& color )
 {

@@ -613,6 +613,9 @@ void KookaView::startOCR( KookaImage *img )
 
           connect( ocrFabric,    SIGNAL( readOnlyEditor( bool )),
                    m_ocrResEdit, SLOT( setReadOnly( bool )));
+
+          connect( ocrFabric,    SIGNAL( selectWord( int, const ocrWord& )),
+                   m_ocrResEdit, SLOT( slSelectWord( int, const ocrWord& )));
       }
 
       Q_CHECK_PTR( ocrFabric );

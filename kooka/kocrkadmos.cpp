@@ -156,7 +156,7 @@ EngineError KadmosDialog::setupGui()
        enableFields(false);
        enableButton(User1, false );
     }
-       
+    return err;
 }
 
 

@@ -713,29 +713,71 @@ bool KSANEOCR::eventFilter( QObject *object, QEvent *event )
 {
     QWidget *w = (QWidget*) object;
 
-    // if( m_imgCanvas && w == m_imgCanvas )
+    if( m_imgCanvas && w == m_imgCanvas )
     {
         if( event->type() == QEvent::MouseButtonDblClick )
         {
             QMouseEvent *mev = static_cast<QMouseEvent*>(event);
+
             int x = mev->x();
             int y = mev->y();
+	    m_imgCanvas->viewportToContents( mev->x(), mev->y(),
+					     x, y );
 
-            // kdDebug(28000) << "Clicked to " << x << "/" << y << endl;
+            kdDebug(28000) << "Clicked to " << x << "/" << y << endl;
             /* now search the word that was clicked on */
             QValueVector<ocrWordList>::iterator pageIt;
 
+	    int line = 0;
+	    bool valid = false;
+	    ocrWord wordToFind;
+	    
             for( pageIt = m_ocrPage.begin(); pageIt != m_ocrPage.end(); ++pageIt )
             {
                 QRect r = (*pageIt).wordListRect();
-                int line = 0;
 
                 if( y > r.top() && y < r.bottom() )
                 {
-                    kdDebug(28000)<< "It is in between, line " << line << endl;
-                    line++;
+		   kdDebug(28000)<< "It is in between " << r.top() << "/" << r.bottom()
+				 << ", line " << line << endl;
+		   valid = true;
+		   break;
                 }
+		line++;
             }
+
+	    /*
+	     * If valid, we have the line into which the user clicked. Now we
+	     * have to find out the actual word
+	     */
+	    if( valid )
+	    {
+	       valid = false;
+	       /* find the word in the line and mark it */
+	       ocrWordList words = *pageIt;
+	       ocrWordList::iterator wordIt;
+
+	       for( wordIt = words.begin(); wordIt != words.end() && !valid; ++wordIt )
+	       {
+		  QRect r = (*wordIt).rect();
+		  if( x > r.left() && x < r.right() )
+		  {
+		     wordToFind = *wordIt;
+		     valid = true;
+		  }
+	       }
+	       
+	    }
+
+	    /*
+	     * if valid, the wordToFind contains the correct word now.
+	     */
+	    if( valid )
+	    {
+	       kdDebug(28000) << "Found the clicked word " << wordToFind << endl;
+	       emit selectWord( line, wordToFind );
+	    }
+	    
             return true;
         }
     }
