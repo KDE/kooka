@@ -43,7 +43,7 @@ MassScanDialog::MassScanDialog( QWidget *parent )
    bigdad->addWidget( l1, 1);
  	
  	/* Scan parameter information */
- 	QGroupBox *f1 = new QGroupBox( i18n("Scan Parameter:"), this );
+ 	QGroupBox *f1 = new QGroupBox( i18n("Scan Parameter"), this );
  	f1->setFrameStyle( QFrame::Box | QFrame::Sunken );
  	f1->setMargin(5);
  	f1->setLineWidth( 1 );
@@ -59,7 +59,7 @@ MassScanDialog::MassScanDialog( QWidget *parent )
  	l_main->addWidget( l_tofolder );
  	
  	/* Scan Progress information */
- 	QGroupBox *f2 = new QGroupBox( i18n("Scan Progress:"), this );
+ 	QGroupBox *f2 = new QGroupBox( i18n("Scan Progress"), this );
  	f2->setFrameStyle( QFrame::Box | QFrame::Sunken );
  	f2->setMargin(15);
  	f2->setLineWidth( 1 );

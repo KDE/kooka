@@ -62,7 +62,7 @@ ScanSourceDialog::ScanSourceDialog( QWidget *parent, const QStrList list, ADF_BE
 
    if( sourceAdfEntry() > -1 )
    {
-      bgroup = new QVButtonGroup( i18n("Advanced ADF-Options:"), vbox, "ADF_BGROUP" );
+      bgroup = new QVButtonGroup( i18n("Advanced ADF-Options"), vbox, "ADF_BGROUP" );
 
       connect( bgroup, SIGNAL(clicked(int)), this, SLOT( slNotifyADF(int)));
 

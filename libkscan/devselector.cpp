@@ -57,7 +57,7 @@ DeviceSelector::DeviceSelector( QWidget *parent, QStrList& devList,
    label->resize( 100, 350 );
    topLayout->addWidget( label );
 
-   selectBox = new QButtonGroup( 1, Horizontal, i18n( "Select a scan device" ),
+   selectBox = new QButtonGroup( 1, Horizontal, i18n( "Select a Scan Device" ),
 				 page, "ButtonBox");
    Q_CHECK_PTR( selectBox );
    selectBox->setExclusive( true );
