@@ -100,8 +100,6 @@ private slots:
    void filePrint();
    /* ImageViewer-Actions */
 
-   void optionsShowToolbar();
-   void optionsShowStatusbar();
    void optionsShowScanParams();
    void optionsShowPreviewer();
    void optionsConfigureKeys();
