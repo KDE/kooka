@@ -136,7 +136,6 @@ private:
    QPixmap       m_bwPixmap;
    QPixmap       m_colorPixmap;
 
-   QMap<KURL, QImage*> imageMap;
 };
 
 #endif

@@ -55,7 +55,22 @@ public:
       { m_currentDir = s; }
    KURL currentDir( ) const
       { return m_currentDir; }
-   
+
+   void setThumbSize( int w, int h )
+      {
+	 m_pixWidth  = w;
+	 m_pixHeight = h;
+      }
+   void setThumbSize( const QSize& s )
+      {
+	 m_pixWidth  = s.width();
+	 m_pixHeight = s.height();
+      }
+   QSize tumbSize( ) const
+      {
+	 return( QSize( m_pixWidth, m_pixHeight ));
+      }
+
 public slots:
 
    void slNewFileItems( const KFileItemList& ); 
@@ -68,6 +83,7 @@ private:
    QPixmap m_basePix;
    int     m_pixWidth;
    int     m_pixHeight;
+   int     m_thumbMargin;
 };
 
 #endif

@@ -40,9 +40,11 @@
 ThumbView::ThumbView( QWidget *parent, const char *name )
    : KIconView( parent, name ),
      m_pixWidth(100),
-     m_pixHeight(140)
+     m_pixHeight(140),
+     m_thumbMargin(5)
 {
-   QImage ires = KImageEffect::unbalancedGradient( QSize( m_pixWidth, m_pixHeight ),
+   QImage ires = KImageEffect::unbalancedGradient( QSize( 2*m_thumbMargin+m_pixWidth,
+							  2*m_thumbMargin+m_pixHeight ),
 					 Qt::white, Qt::blue, KImageEffect::DiagonalGradient );
    m_basePix.convertFromImage( ires );
 
@@ -74,18 +76,12 @@ void ThumbView::slNewFileItems( const KFileItemList& items )
       else
       {
 	 QPixmap p;
-#if 0
-	 if ( !QPixmapCache::find( filename, p) )
-	 {
-	    /* image is not in cache yet, needs to go for a job */
-	    startJobOn.append( item );
-	 }
-#endif
 	 /* Create a new empty preview pixmap and store the pointer to it */
 	 KFileIconViewItem *newIconViewIt = new KFileIconViewItem( this,
 								   item->url().filename(),
 								   createPixmap(p),
 								   item );
+
 	 item->setExtraData( this, newIconViewIt );
 	 startJobOn.append( item );
       }
@@ -106,7 +102,6 @@ void ThumbView::slNewFileItems( const KFileItemList& items )
         // connect( job, SIGNAL( failed( const KFileItem* )),
         //          this, SLOT( slotFailed( const KFileItem* ) ));
 
-
       }
    }
 }
@@ -116,12 +111,11 @@ void ThumbView::slNewFileItems( const KFileItemList& items )
 void ThumbView::slGotPreview( const KFileItem* newFileItem, const QPixmap& newPix )
 {
    if( ! newFileItem ) return;
-   
    KFileIconViewItem *item = static_cast<KFileIconViewItem*>(newFileItem->extraData( this ));
 
    if( ! item ) return;
 
-   item->setPixmap( newPix );
+   item->setPixmap( createPixmap(newPix) );
    
 }
 
@@ -137,6 +131,8 @@ QPixmap ThumbView::createPixmap( const QPixmap& preview ) const
 
    QPainter p( &pixRet );
 
+   p.drawPixmap( m_thumbMargin, m_thumbMargin, preview );
+   p.flush();
    // draw on pixmap
 
    return( pixRet );
