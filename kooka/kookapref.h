@@ -21,6 +21,9 @@
 #include <qframe.h>
 #include <qcheckbox.h>
 
+#define STARTUP_READ_IMAGE "ReadImageOnStart"
+
+
 class KookaPrefPageOne;
 class KookaPrefPageTwo;
 
@@ -40,6 +43,7 @@ private:
     
     QCheckBox *cbNetQuery;
     QCheckBox *cbShowScannerSelection;
+    QCheckBox *cbReadStartupImage;
     
 };
 

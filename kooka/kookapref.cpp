@@ -24,6 +24,7 @@
 
 #include <qlayout.h>
 #include <qlabel.h>
+#include <qtooltip.h>
 
 #include <devselector.h>
 
@@ -53,15 +54,28 @@ void KookaPreferences::setupStartupPage(void)
     
     cbNetQuery = new QCheckBox( i18n("Query network for available scanners"),
 				page,  "CB_NET_QUERY" );
+    QToolTip::add( cbNetQuery,
+		   i18n( "Check this if you want a network query for available scanners.\nMind that does not mean a query over the entire network but only the stations configured for SANE" ));
     cbNetQuery->setChecked( ! konf->readBoolEntry( "QueryLocalOnly" ) );
     
     cbShowScannerSelection = new QCheckBox( i18n("Show the scanner selection box on next startup"),
 					    page,  "CB_SHOW_SELECTION" );
+    QToolTip::add( cbShowScannerSelection,
+		   i18n( "Check this if you once checked 'do not show the scanner selection on startup',\nbut you want to see it again" ));
+
     cbShowScannerSelection->setChecked( !konf->readBoolEntry( "SkipStartupAsk" ));
+
+    cbReadStartupImage = new QCheckBox( i18n("Load the last image into the viewer on startup"),
+					    page,  "CB_LOAD_ON_START" );
+    QToolTip::add( cbReadStartupImage,
+		   i18n( "Check this if you want Kooka to load the last selected image into the viewer on startup.\nIf your images are large, that might slow down Kooka's start." ));
+    cbReadStartupImage->setChecked( konf->readBoolEntry( STARTUP_READ_IMAGE, true));
     
+
     top->addWidget( cbNetQuery );
     top->addWidget( cbShowScannerSelection );
-
+    top->addWidget( cbReadStartupImage );
+   
     top->addStretch(10);
 }
 
@@ -85,6 +99,9 @@ void KookaPreferences::slotApply( void )
     {
 	konf->writeEntry( STARTUP_SKIP_ASK, false );
     }
+
+    if( cbReadStartupImage )
+       konf->writeEntry( STARTUP_READ_IMAGE, cbReadStartupImage->isChecked());
 
 }
 

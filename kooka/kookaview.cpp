@@ -4,6 +4,8 @@
 #include "devselector.h"
 #include "ksaneocr.h"
 #include "img_saver.h"
+#include "kookapref.h"
+
 
 #include <qpainter.h>
 #include <qlayout.h>
@@ -219,12 +221,21 @@ void KookaView::loadStartupImage( void )
    if( konf )
    {
       konf->setGroup(GROUP_STARTUP);
-      QString startup = konf->readEntry( STARTUP_IMG_SELECTION, "" );
+      bool wantReadOnStart = konf->readBoolEntry( STARTUP_READ_IMAGE, true );
 
-      if( !startup.isEmpty())
+      if( wantReadOnStart )
       {
-	 kdDebug(28000) << "Loading startup image !" << endl;
-	 packager->slSelectImage( startup );
+	 QString startup = konf->readEntry( STARTUP_IMG_SELECTION, "" );
+
+	 if( !startup.isEmpty() )
+	 {
+	    kdDebug(28000) << "Loading startup image !" << endl;
+	    packager->slSelectImage( startup );
+	 }
+      }
+      else
+      {
+	 kdDebug(28000) << "Do not load startup image due to config value" << endl;
       }
    }
 }
