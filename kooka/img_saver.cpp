@@ -42,6 +42,7 @@
 #include <qmessagebox.h>
 #include <qvbox.h>
 #include <qbuttongroup.h>
+#include <qregexp.h>
 
 #include "resource.h"
 #include "img_saver.h"
@@ -404,7 +405,7 @@ ImgSaveStat ImgSaver::saveImage( QImage *image, const KURL& filename, const QStr
 
 
  
-ImgSaveStat ImgSaver::savePreview( QImage *image )
+ImgSaveStat ImgSaver::savePreview( QImage *image, const QCString& scannerName )
 {
    if( !image ||  image->isNull() )
       return( ISS_ERR_PARAM );
@@ -412,7 +413,8 @@ ImgSaveStat ImgSaver::savePreview( QImage *image )
    QString format = findFormat( PT_PREVIEW );
 
    ImgSaveStat stat = ISS_ERR_FORMAT_NO_WRITE;
-   
+
+   QString previewfile = kookaPreviewFile( scannerName );
    if( ! format.isEmpty() )
    {
       // Previewfile always comes absolute
@@ -422,7 +424,7 @@ ImgSaveStat ImgSaver::savePreview( QImage *image )
    if( stat == ISS_OK )
    {
       KConfig *konf = KGlobal::config ();
-      konf->setGroup( OP_FILE_GROUP );
+      konf->setGroup( scannerName );
 
       konf->writeEntry( OP_PREVIEW_FILE,   previewfile );
       konf->writeEntry( OP_PREVIEW_FORMAT, format );
@@ -711,16 +713,7 @@ void ImgSaver::readConfig( void )
    konf->setGroup( OP_FILE_GROUP );
    ask_for_format = konf->readBoolEntry( OP_FILE_ASK_FORMAT, true );
 
-   konf->setGroup( OP_PREVIEW_GROUP );
-
-   /* This is a bit ugly, but will be fixed later */
-   /* The save root is defined to $HOME/.kscan in scanpackager, this should be
-    * handled in at a central point. TODO ! */
    QDir home = QDir::home();
-   previewfile = kookaPreviewRoot() + "preview.bmp";
-   
-   previewfile = konf->readPathEntry( OP_PREVIEW_FILE, previewfile );
-
 }
 
 
@@ -748,9 +741,18 @@ QString ImgSaver::errorString( ImgSaveStat stat )
 
 }
 
-QString ImgSaver::kookaPreviewRoot() 
+/* extension needs to be added */
+QString ImgSaver::kookaPreviewFile( const QCString& scanner )
 {
-   return( kookaImgRoot() + ".previews/" );
+   QString fname = kookaImgRoot() + QString::fromLatin1(".previews/");
+   QRegExp rx( "/" );
+   QString sname( scanner );
+   sname.replace( rx, "_");
+ 
+   fname += sname;
+
+   kdDebug(28000) << "ImgSaver: returning preview file without extension: " << fname << endl;
+   return( fname );
 }
 
 QString ImgSaver::kookaImgRoot() 

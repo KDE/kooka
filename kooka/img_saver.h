@@ -162,11 +162,12 @@ public:
    void        storeFormatForType( picType, QString, bool );
    bool        isRememberedFormat( picType type, QString format ) const;
 
+   QString     kookaPreviewFile( const QCString& scanner );
+   
    /**
     * Static function that returns the kooka base dir.
     */
    static QString kookaImgRoot();
-   static QString kookaPreviewRoot();
 #if 0
    /**
     * Static function that returns the relative path to the kooka imgage root
@@ -178,7 +179,7 @@ public slots:
    ImgSaveStat saveImage( QImage *image );
    ImgSaveStat saveImage( QImage *image, const KURL& filename, const QString& imgFormat );
    
-   ImgSaveStat savePreview( QImage *image );
+   ImgSaveStat savePreview( QImage *image, const QCString& );
    
 private:
    QString 	picTypeAsString( picType type ) const;
@@ -192,7 +193,6 @@ private:
    QString      startFormatDialog( picType );
    
    // QStrList    all_formats;
-   QString      previewfile;
    QString     	directory;    // dir where the image should be saved
    QString     	last_file;
    QCString   	subformat;     
