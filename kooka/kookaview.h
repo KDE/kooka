@@ -39,6 +39,7 @@ class KSANEOCR;
 class KConfig;
 class KPrinter;
 class KComboBox;
+class KAction;
 
 /**
  * This is the main view class for Kooka.  Most of the non-menu,
@@ -101,7 +102,9 @@ public slots:
       { if( img_canvas ) img_canvas->handle_popup(ImageCanvas::ID_FIT_HEIGHT );}
    void slIVScaleOriginal( void )
       { if( img_canvas ) img_canvas->handle_popup(ImageCanvas::ID_ORIG_SIZE ); }
-
+   void slIVShowZoomDialog( )
+      { if( img_canvas ) img_canvas->handle_popup(ImageCanvas::ID_POP_ZOOM ); }
+	 
    void slOpenCurrInGraphApp( void );
 
    void slSaveScanParams( void );
@@ -117,7 +120,10 @@ public slots:
     * of scanner, disconnection of the old device and connecting the new.
     */
    bool slSelectDevice(const QCString& useDevice);
+
+   void connectViewerAction( KAction *action );
    
+
 protected slots:
    void  slCloseScanDevice();
    
@@ -144,15 +150,10 @@ private:
    QImage rotateLeft ( QImage* );
    QCString userDeviceSelection( ) const;
    
-#if 0 
-   KParts::ReadOnlyPart *m_html;
-#endif
    void updateCurrImage( QImage& ) ;
-
 
    ImageCanvas  *img_canvas;
    Previewer    *preview_canvas;
-   QImage       *m_previewImg;
    QSplitter *	paramSplitter;	
    ScanPackager *packager;
    ScanParams   *scan_params;

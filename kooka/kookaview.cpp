@@ -14,7 +14,7 @@
 #include <qstrlist.h>
 #include <qpaintdevice.h>
 #include <qpaintdevicemetrics.h>
-
+#include <qpopupmenu.h>
 
 
 #include <kurl.h>
@@ -28,6 +28,7 @@
 #include <kmessagebox.h>
 #include <keditcl.h>
 #include <kcombobox.h>
+#include <kaction.h>
 
 #define PACKAGER_TAB 0
 #define PREVIEWER_TAB 1
@@ -53,6 +54,8 @@ KookaView::KookaView(QWidget *parent, const QCString& deviceToUse)
    
    img_canvas  = new ImageCanvas( this );
    img_canvas->setMinimumSize(100,200);
+   img_canvas->enableContextMenu(true);
+   
    setResizeMode( img_canvas,    QSplitter::Stretch );
    setResizeMode( paramSplitter, QSplitter::KeepSize);
 
@@ -76,7 +79,7 @@ KookaView::KookaView(QWidget *parent, const QCString& deviceToUse)
     */
    QHBox *recentBox = new QHBox( vbox );
    recentBox->setMargin(KDialog::marginHint());
-   QLabel *lab = new QLabel( i18n("gallery dir: "), recentBox );
+   QLabel *lab = new QLabel( i18n("Gallery"), recentBox );
    lab->setSizePolicy( QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed) );
    recentFolder = new ImageNameCombo( recentBox );
 
@@ -98,7 +101,6 @@ KookaView::KookaView(QWidget *parent, const QCString& deviceToUse)
    /* select the scan device, either user or from config, this creates and assembles
     * the complete scanner options dialog
     * scan_params must be zero for that */
-   m_previewImg = 0L;
    scan_params = 0L;
    preview_canvas = 0L;
    
@@ -106,7 +108,6 @@ KookaView::KookaView(QWidget *parent, const QCString& deviceToUse)
    {
       preview_canvas->setMinimumSize( 100,100);
    	
-      m_previewImg = new QImage();
       /* since the scan_params will be created in slSelectDevice, do the
        * connections later
        */
@@ -154,11 +155,6 @@ KookaView::~KookaView()
 {
    saveProperties( KGlobal::config () );
    kdDebug(28000)<< "Finished saving config data" << endl;
-   if( m_previewImg ) {
-      delete( m_previewImg );
-      m_previewImg = 0;
-   }
-   kdDebug(29000) << "Destructor of KookaView" << endl;
 }
 
 
@@ -268,7 +264,7 @@ bool KookaView::slSelectDevice( const QCString& useDevice )
       paramSplitter->setSizes( sizes );
 
       scan_params->show();
-      loadPreviewImage( selDevice );
+      preview_canvas->loadPreviewImage( selDevice );
    }
 
    return( haveConnection );
@@ -307,26 +303,6 @@ QCString KookaView::userDeviceSelection( ) const
        }
    }
    return( selDevice );
-}
-
-void KookaView::loadPreviewImage( const QCString& scanner )
-{
-   ImgSaver is( this );
-   QString previewfile = is.kookaPreviewFile(scanner);
-
-   kdDebug(28000) << "Loading preview <" << previewfile << "> for " << scanner << endl;
-   
-   if( m_previewImg->load( previewfile ))
-   {
-      preview_canvas->newImage( m_previewImg );
-   }
-   else
-   {
-      preview_canvas->newImage( 0L );
-
-      kdDebug(28000) << "WRN: Could not load preview from " << previewfile << endl;
-   }
-
 }
 
 
@@ -418,9 +394,6 @@ void KookaView::slNewPreview( QImage *new_img )
 {
    if( new_img )
    {
-      if( m_previewImg )
-	 *(m_previewImg) = *new_img;
-
       if( ! new_img->isNull() )
       {
 	 ImgSaveStat is_stat = ISS_OK;
@@ -433,7 +406,7 @@ void KookaView::slNewPreview( QImage *new_img )
 	    kdDebug(28000) << "ERROR in saving preview !" << endl;
 	 }
       }
-      preview_canvas->newImage( m_previewImg );
+      preview_canvas->newImage( new_img ); 
    }
 }
 
@@ -630,7 +603,17 @@ void KookaView::slSaveScanParams( void )
 {
    if( !sane ) return;
 
+   KScanOptSet optSet( "SaveSet" );
+   
+   sane->getCurrentOptions( &optSet );
+#if 0
+   SaveSetDialog dialog( this, &optSet );
+   if( dialog.exec())
+   {
+      kdDebug(28000)<< "Executed successfully" << endl;
+   }
    sane->slSaveScanConfigSet( "sysmtem-default", "default configuration" );
+#endif
 }
 
 
@@ -795,5 +778,16 @@ QImage KookaView::rotateRight( QImage *m_img )
    }
    return( rot );
 }
+
+void KookaView::connectViewerAction( KAction *action )
+{
+   QPopupMenu *popup = img_canvas->contextMenu();
+
+   if( popup && action )
+   {
+      action->plug( popup );
+   }
+}
+
 
 #include "kookaview.moc"
