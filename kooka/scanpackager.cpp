@@ -137,7 +137,7 @@ void ScanPackager::openRoots()
    /* open more configurable image repositories TODO */
 
    /* select Incoming-Dir, TODO restore last selection ! */
-   KFileTreeViewItem *startit = findItem( newbranch, i18n( "Incoming" ) );
+   KFileTreeViewItem *startit = findItem( newbranch, i18n( "Incoming/" ) );
    if( ! startit ) kdDebug(28000) << "No Start-Item found :(" << endl;
    setCurrentItem( startit );
 }
@@ -171,7 +171,6 @@ void ScanPackager::createMenus()
 
 void ScanPackager::slotDecorate( KFileTreeViewItem* item )
 {
-   kdDebug(28000) << "decorating slot !" << endl;
    if( !item ) return;
 
    if( item->isDir())
@@ -189,8 +188,7 @@ void ScanPackager::slotDecorate( KFileTreeViewItem* item )
       {
 	 img = static_cast<KookaImage*>(kfi->extraData( this ));
       }
-      kdDebug(28000) << "KookaImage: " << img << endl;
-
+      
       if( img )
       {
 
@@ -325,6 +323,12 @@ QString ScanPackager::buildNewFilename( QString cmplFilename, QString currFormat
  */
 QString ScanPackager::itemDirectory( const KFileTreeViewItem* item, bool relativ ) const
 {
+   if( ! item )
+   {
+      kdDebug(28000) << "ERR: itemDirectory without item" << endl;
+      
+   }
+
    QString relativUrl= (item->url()).prettyURL();
    
    if( ! item->isDir() )
@@ -515,14 +519,12 @@ QCString ScanPackager::getImgFormat( KFileTreeViewItem* item ) const
    QCString cstr;
    
    if( !item ) return( cstr );
-   
+#if 0
    KFileItem *kfi = item->fileItem();
    
    QString mime = kfi->mimetype();
-
+#endif
    
-   kdDebug(28000) << "Mimetype found: "<< mime << endl;
-
    // TODO find the real extension for use with the filename !
    // temporarely:
    QString f = localFileName( item );
@@ -617,7 +619,18 @@ void ScanPackager::slAddImage( QImage *img )
    /* Use root if nothing is selected */
    if( ! curr )
    {
-      curr = root;
+      KFileTreeBranch *b = branches().at(0); /* There should be at least one */
+      
+      if( b )
+      {
+	 curr = findItem( b, i18n( "Incoming/" ) );
+	 if( ! curr ) curr = b->root();
+      }
+
+      /* If curr is still undefined, something very tough has happend. Go away here */
+      if( !curr ) return;
+
+      setSelected( curr, true );
    }
 
    /* find the directory above the current one */
