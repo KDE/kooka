@@ -66,8 +66,15 @@ DeviceSelector::DeviceSelector( QWidget *parent, QStrList& devList,
 
    cbSkipDialog = new QCheckBox( i18n("&Do not ask on startup again, always use this device."),
 				 page, "CBOX_SKIP_ON_START" );
+
+   KConfig *gcfg = KGlobal::config();
+   gcfg->setGroup(QString::fromLatin1(GROUP_STARTUP));
+   bool skipDialog = gcfg->readBoolEntry( STARTUP_SKIP_ASK, false );
+   cbSkipDialog->setChecked( skipDialog );
+
    topLayout->addWidget(cbSkipDialog);
 
+#if 0
    QCString configDev = getDeviceFromConfig();
 
    configDevValid = false;
@@ -79,7 +86,7 @@ DeviceSelector::DeviceSelector( QWidget *parent, QStrList& devList,
 	 configDevValid = true;
       }
    }
-
+#endif
 }
 
 QCString DeviceSelector::getDeviceFromConfig( void ) const
@@ -89,29 +96,26 @@ QCString DeviceSelector::getDeviceFromConfig( void ) const
    bool skipDialog = gcfg->readBoolEntry( STARTUP_SKIP_ASK, false );
    
    QCString result;
-   
-   if( skipDialog && configDevValid )
-   {
-      /* in this case, the user has checked 'Do not ask me again' and does not
-       * want to be bothered any more.
-       */
-      result = QFile::encodeName(gcfg->readEntry( STARTUP_SCANDEV, "" ));
-      kdDebug(29000) << "Got scanner from config file to use: " << result << endl;
-      
-      /* Now check if the scanner read from the config file is available !
-       * if not, ask the user !
-       */
-      if( devices.find( result ) > -1 )
-      {
-	 kdDebug(29000) << "Scanner from Config file is available - fine." << endl;
-      }
-      else
-      {
-	 kdDebug(29000) << "Scanner from Config file is _not_ available" << endl;
-	 result = (const char*) 0L;
-      }
-   }
 
+   /* in this case, the user has checked 'Do not ask me again' and does not
+    * want to be bothered any more.
+    */
+   result = QFile::encodeName(gcfg->readEntry( STARTUP_SCANDEV, "" ));
+   kdDebug(29000) << "Got scanner from config file to use: " << result << endl;
+   
+   /* Now check if the scanner read from the config file is available !
+    * if not, ask the user !
+    */
+   if( skipDialog && devices.find( result ) > -1 )
+   {
+      kdDebug(29000) << "Scanner from Config file is available - fine." << endl;
+   }
+   else
+   {
+      kdDebug(29000) << "Scanner from Config file is _not_ available" << endl;
+      result = QCString();
+   }
+   
    return( result );
 }
 
