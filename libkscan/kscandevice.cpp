@@ -1196,7 +1196,6 @@ void KScanDevice::doProcessABlock( void )
 		    eight_pix = *rptr++;
 		    for( i = 0; i < 8; i++ )
 		    {
-		       if( pixel_x  >= sane_scan_param.pixels_per_line ) { pixel_x = 0; pixel_y++; }
 		       if( pixel_y < sane_scan_param.lines )
 		       {
 			  chan = (eight_pix & 0x80)> 0 ? 0:1;
@@ -1204,6 +1203,11 @@ void KScanDevice::doProcessABlock( void )
 			    	//qDebug( "Setting on %d, %d: %d", pixel_x, pixel_y, chan );
 			  img->setPixel( pixel_x, pixel_y, chan );
 			  pixel_x++;
+			  if( pixel_x  >= sane_scan_param.pixels_per_line )
+			  {
+			     pixel_x = 0; pixel_y++;
+			     break;
+			  }
 		       }
 		    }
 		 }
