@@ -79,7 +79,8 @@ bool KSANEOCR::startExternOcrVisible( void )
    connect( ocrProcessDia, SIGNAL( cancelClicked()),
 	    ocrProcessDia, SLOT( stopAnimation() ));
    
-   ocrProcessDia->exec();
+   ocrProcessDia->show();
+   ocrProcessDia->checkOCRBinary( ocrProcessDia->getOCRCmd());
    return( true );
 }
 
@@ -104,7 +105,7 @@ void KSANEOCR::startOCRProcess( void )
 {
    if( ! ocrProcessDia ) return;
 
-   const QString cmd = ocrProcessDia->getOCRCmd();
+   const QCString cmd = ocrProcessDia->getOCRCmd();
    kdDebug(28000) <<  "Starting OCR-Command: " << cmd << " " << tmpFile << endl;
 
    if( daemon ) delete( daemon );
