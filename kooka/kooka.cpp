@@ -275,7 +275,7 @@ void Kooka::saveProperties(KConfig *config)
     // config file.  anything you write here will be available
     // later when this app is restored
 
-   //if (m_view->currentURL() != QString::null)
+   //if (!m_view->currentURL().isNull())
    //     config->writeEntry("lastURL", m_view->currentURL());
    kdDebug(28000) << "In kooka's saveProperties !" << endl;
    config->setGroup( KOOKA_STATE_GROUP );
