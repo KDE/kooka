@@ -230,7 +230,7 @@ void Kooka::setupActions()
     m_view->connectViewerAction( act );
 
     /* Gallery actions */
-    act = new KAction(i18n("&Create Directory..."), "folder_new", 0,
+    act = new KAction(i18n("&Create Folder..."), "folder_new", 0,
 		      m_view->gallery(), SLOT( slotCreateFolder() ),
 		       actionCollection(), "foldernew" );
     m_view->connectGalleryAction( act );
