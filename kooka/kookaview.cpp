@@ -40,6 +40,7 @@
 #include "kookaimagemeta.h"
 #include "ocrresedit.h"
 #include "kookaprint.h"
+#include "imgprintdialog.h"
 #if 0
 #include "paramsetdialogs.h"
 #endif
@@ -451,13 +452,21 @@ void KookaView::loadStartupImage( void )
 }
 
 
-void KookaView::print(KPrinter* printer)
+void KookaView::print()
 {
     /* For now, print a single file. Later, print multiple images to one page */
     KookaImage *img = packager->getCurrImage();
-    KookaPrint kookaprint( printer );
 
-    kookaprint.printImage(img);
+    QPrinter::PrinterMode pMode = QPrinter::HighResolution;  // TODO: Configurable
+
+    KPrinter printer( true, pMode );
+    printer.addDialogPage( new ImgPrintDialog( img ));
+
+    if( printer.setup( m_mainWindow ))
+    {
+	KookaPrint kookaprint( &printer );
+	kookaprint.printImage(img);
+    }
 }
 
 void KookaView::slNewPreview( QImage *new_img )
@@ -641,8 +650,7 @@ void KookaView::slNewImageScanned( QImage* img )
     KScanOption res ( SANE_NAME_SCAN_RESOLUTION );
     int resX;
     res.get(&resX);
-
-
+    meta->setScanResolution(resX);
 
     packager->slAddImage(img, meta);
 }
@@ -793,10 +801,9 @@ void KookaView::slSaveOCRResult()
 void KookaView::slLoadScanParams( )
 {
    if( ! sane ) return;
-
-   /* not yet cooked */
 #if 0
-   LoadSetDialog loadDialog( m_mainDock, sane->shortScannerName() );
+   /* not yet cooked */
+   LoadSetDialog loadDialog( m_mainDock, sane->shortScannerName(), sane );
    if( loadDialog.exec())
    {
       kdDebug(28000)<< "Executed successfully" << endl;
@@ -810,16 +817,17 @@ void KookaView::slSaveScanParams( )
 
    /* not yet cooked */
 #if 0
-
    KScanOptSet optSet( "SaveSet" );
 
    sane->getCurrentOptions( &optSet );
-   SaveSetDialog dialog( this, &optSet );
+   SaveSetDialog dialog( m_mainDock /* this */ , &optSet );
    if( dialog.exec())
    {
       kdDebug(28000)<< "Executed successfully" << endl;
+      QString name = dialog.paramSetName();
+      QString desc = dialog.paramSetDescription();
+      sane->slSaveScanConfigSet( name, desc );
    }
-   sane->slSaveScanConfigSet( "sysmtem-default", "default configuration" );
 #endif
 }
 
@@ -1053,7 +1061,7 @@ QImage KookaView::rotateRight( QImage *m_img )
 void KookaView::connectViewerAction( KAction *action )
 {
    QPopupMenu *popup = img_canvas->contextMenu();
-
+   kdDebug(29000) << "This is the popup: " << popup << endl;
    if( popup && action )
    {
       action->plug( popup );
