@@ -16,6 +16,7 @@
 #include <qimage.h>
 #include <qfileinfo.h>
 #include <qapplication.h>
+#include <kdebug.h>
 
 #include <unistd.h>
 #include "kgammatable.h"
@@ -251,7 +252,8 @@ void KScanOption::slRedrawWidget( KScanOption *so )
  	 		case RANGE:
  	 	  		/* Widget Type is Slider */
  	 	  		if( so->get( &help ))
- 	 	  		((KScanSlider*)w)->slSetSlider( help );
+				kdDebug() << "HELP: " << help;
+	 	 	  	((KScanSlider*)w)->slSetSlider( help );
 				 	 	  		
  	 		break;
  	 		case GAMMA_TABLE:
@@ -861,7 +863,7 @@ QWidget *KScanOption::createWidget( QWidget *parent, const char *w_desc,
  	 	break;
  	 	case RANGE:
  	 	   /* Widget Type is Slider */
- 	 	    w = KScanSlider( parent, text );
+ 	 	    w = sliderWidg( parent, text );
  	 	break;
  	 	case GAMMA_TABLE:
  	 	   /* Widget Type is Slider */
@@ -927,7 +929,7 @@ QWidget *KScanOption::entryField( QWidget *parent, const char *text )
 }
 
 
-QWidget *KScanOption::KScanSlider( QWidget *parent, const char *text )
+QWidget *KScanOption::sliderWidg( QWidget *parent, const char *text )
 {
  	double min, max, quant;
  	getRange( &min, &max, &quant );
@@ -937,7 +939,7 @@ QWidget *KScanOption::KScanSlider( QWidget *parent, const char *text )
   	connect( slider, SIGNAL( valueChanged(int)), this,
 		 SLOT( slWidgetChange(int)));
 
-   return( slider );
+	return( slider );
 }
 
 

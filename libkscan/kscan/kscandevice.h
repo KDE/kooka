@@ -157,7 +157,7 @@ private:
 
 
   QWidget    *entryField ( QWidget *parent, const char *text );
-  QWidget    *KScanSlider( QWidget *parent, const char *text );
+  QWidget    *sliderWidg( QWidget *parent, const char *text );
   QWidget    *comboBox   ( QWidget *parent, const char *text );
 	
   const      SANE_Option_Descriptor *desc;
