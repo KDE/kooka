@@ -311,12 +311,22 @@ bool ScanDialog::setup()
     KConfig *kfg = KGlobal::config();
     if( kfg )
     {
-       int scnum = QApplication::desktop()->screenNumber(this);
-       QRect desk = QApplication::desktop()->screenGeometry(scnum);
+       QRect r;
+       KConfig gc("kdeglobals", false, false);
+       gc.setGroup("Windows");
+
+       if (QApplication::desktop()->isVirtualDesktop() &&
+           gc.readBoolEntry("XineramaEnabled", true) &&
+           gc.readBoolEntry("XineramaPlacementEnabled", true)) {
+          int screen = QApplication::desktop()->screenNumber(this);
+          r = QApplication::desktop()->screenGeometry(screen);
+       } else {
+          r = QApplication::desktop()->geometry();
+       }
 
        kfg->setGroup( GROUP_STARTUP );
        /* Since this is a vertical splitter, only the width is important */
-       QString key = QString::fromLatin1( SCANDIA_SPLITTER_SIZES ).arg( desk.width());
+       QString key = QString::fromLatin1( SCANDIA_SPLITTER_SIZES ).arg( r.width());
        kdDebug(29000) << "Read Splitter-Sizes " << key  << endl;
        splitter->setSizes( kfg->readIntListEntry( key ));
     }
@@ -334,12 +344,22 @@ void ScanDialog::slotClose()
       KConfig *kfg = KGlobal::config();
       if( kfg )
       {
-         int scnum = QApplication::desktop()->screenNumber(this);
-	 QRect desk = QApplication::desktop()->screenGeometry(scnum);
+         QRect r;
+         KConfig gc("kdeglobals", false, false);
+         gc.setGroup("Windows");
+
+         if (QApplication::desktop()->isVirtualDesktop() &&
+             gc.readBoolEntry("XineramaEnabled", true) &&
+             gc.readBoolEntry("XineramaPlacementEnabled", true)) {
+            int screen = QApplication::desktop()->screenNumber(this);
+            r = QApplication::desktop()->screenGeometry(screen);
+         } else {
+            r = QApplication::desktop()->geometry();
+         }
 
 	 kfg->setGroup( GROUP_STARTUP );
 	 /* Since this is a vertical splitter, only the width is important */
-	 QString key = QString::fromLatin1( SCANDIA_SPLITTER_SIZES ).arg( desk.width());
+	 QString key = QString::fromLatin1( SCANDIA_SPLITTER_SIZES ).arg( r.width());
 	 kfg->writeEntry( key, splitter->sizes(), true, true);
       }
    }
