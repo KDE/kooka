@@ -121,18 +121,6 @@ EngineError ocradDialog::setupGui()
     (void) new QLabel( i18n("Using ocrad binary: ") + res, hb );
     getAnimation(hb);
 
-#if 0
-    QVBox *innerBox = new QVBox( hb );
-    innerBox->setSpacing( KDialog::spacingHint());
-    QHBox *hbox = new QHBox( innerBox );
-
-    (void) new QLabel( i18n("Select an orf:"), hbox );
-    m_orfUrlRequester = new KURLRequester( hbox );
-    m_orfUrlRequester->setMode( KFile::File | KFile::ExistingOnly | KFile::LocalOnly );
-
-    QToolTip::add( m_orfUrlRequester,
-                   i18n( "Select an OCR Result File to analyse" ));
-#endif
     /* This is for a 'work-in-progress'-Animation */
 
     return ENG_OK;
@@ -165,6 +153,9 @@ void ocradDialog::enableFields(bool )
     kdDebug(28000) << "About to disable the entry fields" << endl;
 }
 
+/* Later: Allow interactive loading of orf files
+ *  for now, return emty string
+ */
 QString ocradDialog::orfUrl() const
 {
     if( m_orfUrlRequester )
