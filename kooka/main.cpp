@@ -27,6 +27,7 @@
 #include <kglobal.h>
 #include <kimageio.h>
 #include <kiconloader.h>
+#include <kdebug.h>
 
 #include "kooka.h"
 #include "icons.h"
@@ -41,6 +42,12 @@ static const char *description =
 	      "For information on Kooka see <A HREF=http://>The kooka page</A><P>";
 
 
+static KCmdLineOptions options[] =
+{
+  { "d ", I18N_NOOP("the SANE compatible device specification (e.g. umax:/dev/sg0)"), "" },
+  { 0,0,0 }
+};
+
 QDict<QPixmap> icons;
 
 void *dbg_ptr;
@@ -51,6 +58,8 @@ int main( int argc, char ** argv )
 		    KAboutData::License_GPL, "(C) 2000 Klaas Freitag");
    about.addAuthor( "Klaas Freitag", 0, "freitag@suse.de" );
    KCmdLineArgs::init(argc, argv, &about);
+   KCmdLineArgs::addCmdLineOptions( options ); // Add my own options.
+   
    KApplication app;
    KGlobal::locale()->insertCatalogue("libkscan");
    KImageIO::registerFormats();
@@ -75,6 +84,17 @@ int main( int argc, char ** argv )
    icons.insert("mini-folder", new QPixmap( loader->loadIcon( "folder",KIcon::Small ))); 
    icons.insert("mini-folder-open", new QPixmap( loader->loadIcon( "folder_open",KIcon::Small )));
 
+   KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
+   QCString  devToUse = args->getOption( "d" );
+   kdDebug( 29000) << "DevToUse is " << devToUse << endl;
+	    
+   if (args->count() == 1)
+   {
+      args->usage();
+      // exit(-1);
+   }
+
+   
    Kooka  *kooka = new Kooka();
    app.setMainWidget( kooka );
    kooka->show();
