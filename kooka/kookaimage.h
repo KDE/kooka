@@ -30,10 +30,9 @@ class KookaImage: public QImage
 {
 public:
    KookaImage( );
-
+   KookaImage( const QImage& img );
    ~KookaImage();
 
-   
 };
 
 #endif

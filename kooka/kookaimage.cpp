@@ -29,6 +29,12 @@ KookaImage::KookaImage( )
    
 }
 
+KookaImage::KookaImage( const QImage& img )
+   : QImage( img )
+{
+   
+}
+
 KookaImage::~KookaImage()
 {
    

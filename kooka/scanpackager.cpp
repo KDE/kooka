@@ -536,18 +536,16 @@ QString ScanPackager::localFilename( KFileTreeViewItem *it ) const
    if( ! it ) return( QString::null );
 
    KURL url = it->url();
+   kdDebug(28000)<< "localFilename: URL is " << url.prettyURL() << endl;
 
-   QString u = url.url();
+   QString res;
 
-   if( u.left(5) == "file:" )
+   if( url.isLocalFile())
    {
-      return( u.remove( 0, 5 ));
+      res = url.directory( false, true ) + url.fileName();
    }
-   else
-   {
-      kdDebug(28000)<< "localFilename not possible, file is not local !" << endl;
-      return( QString::null );
-   }
+
+   return( res );
     
 }
 
@@ -564,7 +562,8 @@ void ScanPackager::slotImageChanged( QImage *img )
    /* Do not save directories */
    if( curr->isDir() ) return;
    
-   /* find the directory above */
+   /* unload image and free memory */
+   slotUnloadItem( curr );
    
    const QString filename = localFilename( curr );
    const QCString format = getImgFormat( curr );
@@ -597,7 +596,8 @@ void ScanPackager::slotImageChanged( QImage *img )
 
    if( img && !img->isNull())
    {
-      emit( showImage( img ));
+      KookaImage *newImage = new KookaImage(*img);
+      slImageArrived( curr, newImage );
    }
 }
 
