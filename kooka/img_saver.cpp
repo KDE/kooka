@@ -48,7 +48,7 @@
 
 
 FormatDialog::FormatDialog( QWidget *parent, const QString& imgFormat, const char *name )
-   :KDialogBase( parent, "FormDialog", true,
+   :KDialogBase( parent, name, true,
                  /* Tabbed,*/ i18n( "Kooka save assistant" ),
 		 Ok|Cancel, Ok )
 
@@ -480,7 +480,7 @@ QString ImgSaver::findFormat( picType type )
 	 break;
    }
 
-   if( format == "nothing" )
+   if( format == "nothing" || ask_for_format )
    {
       format = startFormatDialog( type );
    }
@@ -602,6 +602,7 @@ void ImgSaver::storeFormatForType( picType type, QString format, bool ask )
    konf->setGroup( OP_FILE_GROUP );
 
    konf->writeEntry( OP_FILE_ASK_FORMAT, ask );
+   ask_for_format = ask;
    
    switch( type )
    {
