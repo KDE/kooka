@@ -30,6 +30,9 @@
 
 #include <devselector.h>
 
+#include <ksimpleconfig.h>
+
+
 KookaPreferences::KookaPreferences()
     : KDialogBase(IconList, i18n("Preferences"),
                   Help|Default|Ok|Apply|Cancel, Ok)
@@ -121,14 +124,20 @@ void KookaPreferences::slotOk( void )
 void KookaPreferences::slotApply( void )
 {
     /* ** startup options ** */
-    konf->setGroup( GROUP_STARTUP );
-    
-    konf->writeEntry( STARTUP_ONLY_LOCAL,  !cbNetQuery->isChecked() );
-    if( cbShowScannerSelection->isChecked() )
-    {
-	konf->writeEntry( STARTUP_SKIP_ASK, false );
-    }
 
+   /** write the global one, to read from libkscan also */
+   KSimpleConfig *c = new KSimpleConfig(QString::fromLatin1("kdeglobals"), false);
+   if( c )
+   {
+      c->setGroup(QString::fromLatin1(GROUP_STARTUP));
+      c->writeEntry( STARTUP_SKIP_ASK, false );
+
+      delete c;
+   }
+
+   /** write the local, only Kooka ones **/
+    konf->setGroup( GROUP_STARTUP );
+    konf->writeEntry( STARTUP_ONLY_LOCAL,  !cbNetQuery->isChecked() );
     if( cbReadStartupImage )
        konf->writeEntry( STARTUP_READ_IMAGE, cbReadStartupImage->isChecked());
 
