@@ -155,12 +155,12 @@ void KookaPreferences::setupThumbnailPage()
    int h = konf->readNumEntry( PIXMAP_HEIGHT, 120 );
    QGrid *lGrid = new QGrid( 2, hgb2 );
    lGrid->setSpacing( 2 );
-   QLabel *l1 = new QLabel( i18n("Thumbnail Maximum &Width:"), lGrid );
+   QLabel *l1 = new QLabel( i18n("Thumbnail maximum &width:"), lGrid );
    m_thumbWidth = new KIntNumInput( w, lGrid );
    l1->setBuddy( m_thumbWidth );
-   
+
    lGrid->setSpacing( 4 );
-   l1 = new QLabel( i18n("Thumbnail Maximum &Height:"), lGrid );
+   l1 = new QLabel( i18n("Thumbnail maximum &height:"), lGrid );
    m_thumbHeight = new KIntNumInput( m_thumbWidth, h, lGrid );
    l1->setBuddy( m_thumbHeight );
    
@@ -171,7 +171,7 @@ void KookaPreferences::setupThumbnailPage()
 
    QGrid *fGrid = new QGrid( 2, hgb3 );
    fGrid->setSpacing( 2 );
-   l1 = new QLabel(i18n("Thumbnail &Frame Width:"), fGrid );
+   l1 = new QLabel(i18n("Thumbnail &frame width:"), fGrid );
    m_frameWidth = new KIntNumInput( frameWidth, fGrid );
    l1->setBuddy( m_frameWidth );
 
