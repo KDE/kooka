@@ -718,6 +718,69 @@ QString ImgSaver::errorString( ImgSaveStat stat )
 
 }
 
+QString ImgSaver::extension( const KURL& url ) 
+{
+   QString extension = url.fileName();
+   
+   int dotPos = extension.findRev( '.' );
+   if( dotPos > 0 )
+   {
+      int len = extension.length();
+      extension = extension.right( len - dotPos -1 );
+   }
+   else
+   {
+      /* No extension was supplied */
+      extension = QString();
+   }
+   return extension;
+}
+
+
+bool ImgSaver::exportImage( const KURL& fromUrl, const KURL& toUrl, QWidget *overWidget )
+{
+
+   /* Check if the provided filename has a extension */
+   QString extTo = extension( toUrl );
+   QString extFrom = extension( fromUrl );
+   KURL targetUrl( toUrl );
+   
+   if( extTo.isEmpty() )
+   {
+      /* Ask if the extension should be added */
+      int result = KMessageBox::Yes;
+      QString fName = toUrl.fileName();
+      if( ! fName.endsWith( "." ))
+	 fName += ".";
+      fName += extFrom;
+
+      QString s;
+      s = i18n("The filename you supplied has no file extension.\nShould the correct one added automatically? ");
+      s += i18n( "That would result in the new filename %1" ).arg( fName);
+
+      result = KMessageBox::questionYesNo(overWidget, s, i18n( "Extension missing"),
+					  KStdGuiItem::yes(), KStdGuiItem::no(),
+					  "AutoAddExtensions" );
+
+      if( result == KMessageBox::Yes )
+      {
+	 targetUrl.setFileName( fName );
+      }
+   }
+   else if( extFrom != extTo )
+   {
+      /* extensions differ -> TODO */
+      KMessageBox::error( overWidget, i18n("Format changes of images are currently not supported"),
+			  i18n("Wrong extension found" ));
+      return(false);
+   }
+   
+   KIO::Job *copyjob = KIO::copy( fromUrl, targetUrl, false );
+
+   return( copyjob ? true : false );
+}
+
+
 /* extension needs to be added */
 
 #include "img_saver.moc"
