@@ -32,6 +32,7 @@
 #include "ocrword.h"
 
 #define CFG_OCR_ENGINE    "ocrEngine"
+#define CFG_OCR_CLEANUP   "unlinkORF"  /* delete orf file? */
 
 #define CFG_OCR_KSPELL    "ocrSpellSettings"
 #define CFG_WANT_KSPELL   "ocrKSpellEnabled"
@@ -271,6 +272,7 @@ private:
     int              m_currHighlight;
     bool             m_applyFilter;
 
+    bool             m_unlinkORF;
     rectList         m_blocks;   // dimensions of blocks
 
     static char UndetectedChar;

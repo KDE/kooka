@@ -81,7 +81,8 @@ KSANEOCR::KSANEOCR( QWidget*, KConfig *cfg ):
     m_parent(0L),
     m_ocrCurrLine(0),
     m_currHighlight(-1),
-    m_applyFilter(false)
+    m_applyFilter(false),
+    m_unlinkORF(true)
 {
     KConfig *konf = KGlobal::config ();
     m_ocrEngine = GOCR;
@@ -111,6 +112,8 @@ KSANEOCR::KSANEOCR( QWidget*, KConfig *cfg ):
         else if( eng == QString("kadmos") ) m_ocrEngine = KADMOS;
 #endif
         kdDebug(28000) << "OCR engine is " << eng << endl;
+
+        m_unlinkORF = konf->readBoolEntry( CFG_OCR_CLEANUP, true );
     }
 
     /* resize m_blocks to size 1 since there is at least one block */
@@ -789,7 +792,7 @@ bool KSANEOCR::readORF( const QString& fileName, QString& errStr )
 		}
 		else if( line.startsWith( "block "))
 		{
-		    rx.setPattern("^block (\\d+) (\\d+) (\\d+) (\\d+) (\\d+)");
+		    rx.setPattern("^block\\s+(\\d+)\\s+(\\d+)\\s+(\\d+)\\s+(\\d+)\\s+(\\d+)");
 		    if( rx.search( line ) > -1)
 		    {
 			currBlock = (rx.cap(1).toInt())-1;
@@ -812,7 +815,7 @@ bool KSANEOCR::readORF( const QString& fileName, QString& errStr )
 		else if( line.startsWith( "line" ))
 		{
 		    // line 5 chars 13 height 20
-		    rx.setPattern("^line (\\d+) chars (\\d+) height \\d+" );
+		    rx.setPattern("^line\\s+(\\d+)\\s+chars\\s+(\\d+)\\s+height\\s+\\d+" );
 		    if( rx.search( line )>-1 )
 		    {
 			kdDebug(28000) << "RegExp-Result: " << rx.cap(1) << " : " << rx.cap(2) << endl;
@@ -849,7 +852,7 @@ bool KSANEOCR::readORF( const QString& fileName, QString& errStr )
                                 if( h > -1 ) {
                                     // kdDebug(28000) << "Results of count search: " << results.left(h) << endl;
                                     altCount = results.left(h).toInt();
-                                    results = results.remove( 0, h+1 );
+                                    results = results.remove( 0, h+1 ).stripWhiteSpace();
                                 } else {
                                     lineErr = true;
                                 }
@@ -867,7 +870,8 @@ bool KSANEOCR::readORF( const QString& fileName, QString& errStr )
                                 /* Analyse the rectangle */
                                 if( ! lineErr )
                                 {
-                                    rx.setPattern( "(\\d+) (\\d+) (\\d+) (\\d+)");
+                                    // kdDebug(28000) << "STRING: " << rectStr << "<" << endl;
+                                    rx.setPattern( "(\\d+)\\s+(\\d+)\\s+(\\d+)\\s+(\\d+)");
                                     if( rx.search( rectStr ) != -1 )
                                     {
                                         /* unite the rectangles */
@@ -944,10 +948,17 @@ void KSANEOCR::cleanUpFiles( void )
       m_ocrResultImage = QString();
    }
 
-   if( ! m_tmpOrfName.isEmpty())
+   if( ! m_tmpOrfName.isEmpty() )
+   {
+       if( m_unlinkORF )
    {
       unlink(QFile::encodeName(m_tmpOrfName));
       m_tmpOrfName = QString();
+   }
+       else
+       {
+           kdDebug(28000)  << "Do NOT unlink temp orf file " << m_tmpOrfName << endl;
+       }
    }
 
    /* Delete the debug images of gocr ;) */
