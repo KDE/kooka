@@ -53,6 +53,11 @@ ScanParams::ScanParams( QWidget *parent, const char *name )
 {
    /* first some initialisation and debug messages */
     sane_device = 0; virt_filename = 0;
+    pb_edit_gtable = 0;
+    cb_gray_preview = 0;
+    pb_source_sel = 0;
+    bg_virt_scan_mode = 0;
+    xy_resolution_bind = 0;
 
     /* Preload icons */
     pixMiniFloppy = SmallIcon( "3floppy_unmount" );
@@ -60,6 +65,8 @@ ScanParams::ScanParams( QWidget *parent, const char *name )
     pixColor = SmallIcon( "color" );
     pixGray  = SmallIcon( "gray" );
     pixLineArt = SmallIcon( "lineart" );
+
+    
 }
 
 bool ScanParams::connectDevice( KScanDevice *newScanDevice )
@@ -199,6 +206,9 @@ void ScanParams::scannerParams( void ) // QVBoxLayout *top )
       sane_device->apply( so );
       so->slRedrawWidget( so );
 
+      connect( so, SIGNAL(guiChange(KScanOption*)),
+	       this, SLOT(slReloadAllGui( KScanOption* )));
+
       xy_resolution_bind =
 	 sane_device->getGuiElement(SANE_NAME_RESOLUTION_BIND, this,
 				    i18n( "Bind X- and Y-Resolution" ).local8Bit() );
@@ -258,8 +268,10 @@ void ScanParams::scannerParams( void ) // QVBoxLayout *top )
    so = sane_device->getGuiElement( SANE_NAME_CONTRAST, this );
    /* Custom Gamma */
 
+   /* Sharpness */
+   so = sane_device->getGuiElement( "sharpness", this );
    /* The gamma table can be used - add  a button for editing */
-   if( sane_device->optionExists( SANE_NAME_CUSTOM_GAMMA ))
+   if( sane_device->optionExists( SANE_NAME_CUSTOM_GAMMA ) )
    {
       QHBox *hb1 = new QHBox(this);
 
@@ -289,6 +301,8 @@ void ScanParams::scannerParams( void ) // QVBoxLayout *top )
       }
    }
 
+   /* my Epson Perfection backends offer a list of user defined gamma values */
+   
    /* Insert another beautification line */
    KSeparator *niceline1 = new KSeparator( KSeparator::HLine, this);
 
