@@ -419,39 +419,6 @@ ImgSaveStat ImgSaver::saveImage( QImage *image, const KURL& filename, const QStr
 }
 
 
-
-
-
-ImgSaveStat ImgSaver::savePreview( QImage *image, const QCString& scannerName )
-{
-   if( !image ||  image->isNull() )
-      return( ISS_ERR_PARAM );
-
-   QString format = findFormat( PT_PREVIEW );
-
-   ImgSaveStat stat = ISS_ERR_FORMAT_NO_WRITE;
-
-   QString previewfile = Previewer::previewFile( scannerName );
-   if( ! format.isEmpty() )
-   {
-      // Previewfile always comes absolute
-      stat = save( image, previewfile, format, "" );
-   }
-#if 0  /* preview file name is not longer needed in config file */
-   if( stat == ISS_OK )
-   {
-      KConfig *konf = KGlobal::config ();
-      konf->setGroup( scannerName );
-
-      konf->writeEntry( OP_PREVIEW_FILE,   previewfile );
-      konf->writeEntry( OP_PREVIEW_FORMAT, format );
-      konf->sync();
-   }
-#endif
-
-   return( stat );
-}
-
 /*
  * findFormat does all the stuff with the dialog.
  */

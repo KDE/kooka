@@ -49,14 +49,12 @@ public:
 
     ImageCanvas *getImageCanvas( void ){ return( img_canvas ); }
 
-    bool loadPreviewImage( const QString forScanner );
-
     /**
      * Static function that returns the image gallery base dir.
      */
     static QString galleryRoot();
-    static QString previewFile( const QString& scanner );
-    void   findSelection( );
+    bool setPreviewImage( const QImage &image );
+    void findSelection();
 
 public slots:
     void newImage( QImage* );

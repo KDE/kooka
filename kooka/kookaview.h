@@ -200,7 +200,6 @@ signals:
     void signalChangeCaption(const QString& text);
 
 private:
-    void loadPreviewImage( const QCString& scanner );
     QImage rotateRight( QImage* );
     QImage rotateLeft ( QImage* );
     QImage rotate180  ( QImage* );

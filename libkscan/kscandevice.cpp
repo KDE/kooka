@@ -35,6 +35,7 @@
 #include <klocale.h>
 #include <kglobal.h>
 #include <kconfig.h>
+#include <kstandarddirs.h>
 
 #include <unistd.h>
 #include "kgammatable.h"
@@ -308,7 +309,7 @@ QString KScanDevice::getScannerName(const QCString& name) const
   else
   {
      scanner = scannerDevices[ name ];
-     ret = "";
+     ret = QString::null;
   }
 
   if( scanner ) {
@@ -662,6 +663,43 @@ void KScanDevice::slStopScanning( void )
     }
     scanStatus = SSTAT_STOP_NOW;
 }
+
+
+const QString KScanDevice::previewFile()
+{
+   QString dir = (KGlobal::dirs())->saveLocation( "data", "ScanImages", true );
+   if( !dir.endsWith("/") )
+      dir += "/";
+
+   QString fname = dir + QString::fromLatin1(".previews/");
+   QString sname( getScannerName(shortScannerName()) );
+   sname.replace( '/', "_");
+
+   return fname+sname;
+}
+
+QImage KScanDevice::loadPreviewImage()
+{
+   const QString prevFile = previewFile();
+   kdDebug(29000) << "Loading preview from file " << prevFile << endl;
+
+   QImage image;
+   image.load( prevFile );
+
+   return image;
+}
+
+bool KScanDevice::savePreviewImage( const QImage &image )
+{
+   if( image.isNull() )
+	return false;
+
+   const QString prevFile = previewFile();
+   kdDebug(29000) << "Saving preview to file " << prevFile << endl;
+
+   return image.save( prevFile, "BMP" );
+}
+
 
 KScanStat KScanDevice::acquirePreview( bool forceGray, int dpi )
 {
@@ -1141,6 +1179,7 @@ void KScanDevice::slScanFinished( KScanStat status )
 	if( scanningPreview )
 	{
 	    kdDebug(29000) << "Scanning a preview !" << endl;
+	    savePreviewImage(*img);
 	    emit( sigNewPreview( img, &info ));
 
 	    /* The old settings need to be redefined */

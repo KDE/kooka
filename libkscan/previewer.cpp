@@ -286,37 +286,22 @@ Previewer::~Previewer()
     delete d;
 }
 
-bool Previewer::loadPreviewImage( const QString forScanner )
+bool Previewer::setPreviewImage( const QImage &image )
 {
-   const QString prevFile = previewFile( forScanner );
-   kdDebug(29000) << "Loading preview for " << forScanner << " from file " << prevFile << endl;
+   if ( image.isNull() )
+	return false;
 
-   bool re = m_previewImage.load( prevFile );
-   if( re )
-   {
-      img_canvas->newImage( &m_previewImage );
-   }
-   return re;
-}
+   m_previewImage = image;
+   img_canvas->newImage( &m_previewImage );
 
-/* extension needs to be added */
-QString Previewer::previewFile( const QString& scanner )
-{
-   QString fname = galleryRoot() + QString::fromLatin1(".previews/");
-   QString sname( scanner );
-   sname.replace( '/', "_");
-
-   fname += sname;
-
-   kdDebug(29000) << "ImgSaver: returning preview file without extension: " << fname << endl;
-   return( fname );
+   return true;
 }
 
 QString Previewer::galleryRoot()
 {
    QString dir = (KGlobal::dirs())->saveLocation( "data", "ScanImages", true );
 
-   if( !dir.endsWith('/') )
+   if( !dir.endsWith("/") )
       dir += "/";
 
    return( dir );

@@ -42,8 +42,7 @@ extern "C" {
 }
 
 /**
- *  This is KScanDevice, a class for accessing the SANE scanning functions
- *  under KDE2
+ *  This is KScanDevice, a class for accessing the SANE scanning functions under KDE
  *
  *  @short KScanDevice
  *  @author Klaas Freitag
@@ -149,6 +148,26 @@ public:
      *  @return the state of the operation in KScanStat
      */
     KScanStat acquire( const QString& filename = QString::null );
+
+    /**
+     *  returns the default filename of the preview image of this scanner.
+     *	@return default filename
+     **/
+    const QString previewFile();
+
+    /**
+     *  loads the last saved previewed image on this device from the default file
+     *	@return a bitmap as QImage
+     **/
+    QImage loadPreviewImage();
+
+    /**
+     *  saves current previewed image from this device to the default file
+     *  @param image	current preview image which should be saved
+     *	@return true if the saving was sucessful
+     **/
+    bool   savePreviewImage( const QImage& image );
+
 
     /*
      *  ========= List Functions ==========

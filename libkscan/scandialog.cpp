@@ -300,7 +300,7 @@ bool ScanDialog::setup()
    if( good_scan_connect )
    {
       m_previewer->setEnabled( true );
-      m_previewer->loadPreviewImage( configDevice );
+      m_previewer->setPreviewImage( m_device->loadPreviewImage() );
       m_previewer->slConnectScanner( m_device );
    }
 

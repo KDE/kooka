@@ -183,8 +183,6 @@ public slots:
    ImgSaveStat saveImage( QImage *image );
    ImgSaveStat saveImage( QImage *image, const KURL& filename, const QString& imgFormat );
 
-   ImgSaveStat savePreview( QImage *image, const QCString& );
-
 private:
    QString 	picTypeAsString( picType type ) const;
    QString      findFormat( picType type );

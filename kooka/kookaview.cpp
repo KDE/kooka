@@ -369,7 +369,7 @@ bool KookaView::slSelectDevice( const QCString& useDevice )
 	    /* load the preview image */
 	    if( preview_canvas )
 	    {
-	       preview_canvas->loadPreviewImage( selDevice );
+	       preview_canvas->setPreviewImage( sane->loadPreviewImage() );
 
                /* Call this after the devic is actually open */
                preview_canvas->slConnectScanner( sane );
@@ -485,20 +485,8 @@ void KookaView::slNewPreview( QImage *new_img, ImgScanInfo * )
    {
       if( ! new_img->isNull() )
       {
-	 ImgSaveStat is_stat = ISS_OK;
-	 ImgSaver img_saver( m_mainDock );
-
-	 is_stat = img_saver.savePreview( new_img, sane->shortScannerName() );
-
-	 if( is_stat != ISS_OK )
-	 {
-	    kdDebug(28000) << "ERROR in saving preview !" << endl;
-	 }
-	 else
-	 {
-	    /* flip preview to front */
-	    m_dockPreview->makeDockVisible();
-	 }
+	 /* flip preview to front */
+	 m_dockPreview->makeDockVisible();
       }
       preview_canvas->newImage( new_img );
    }
