@@ -983,7 +983,7 @@ void KScanDevice::doProcessABlock( void )
   bool 	  goOn = true;
    
   // int 	rest_bytes = 0;
-  while( goOn )
+  while( goOn && data )
   {
      sane_stat =
 	sane_read( scanner_handle, data + rest_bytes, sane_scan_param.bytes_per_line, &bytes_written);
@@ -991,6 +991,7 @@ void KScanDevice::doProcessABlock( void )
      int       green = 0;
      int       blue = 0;
 
+     
      if( sane_stat != SANE_STATUS_GOOD )
      {
 	/** any other error **/
