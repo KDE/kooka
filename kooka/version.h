@@ -1,4 +1,4 @@
 #ifndef KOOKA_VERSION 
-#define KOOKA_VERSION "0.40"
+#define KOOKA_VERSION "0.41"
 #endif
 
