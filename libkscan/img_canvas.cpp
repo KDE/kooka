@@ -273,11 +273,11 @@ void ImageCanvas::handle_popup( int item )
           if( zoomDia->exec() )
           {
               int sf = zoomDia->getSelected();
+	      setScaleKind(ZOOM);
               setScaleFactor( sf );
           }
           delete zoomDia;
 	  zoomDia = 0;
-          setScaleKind(ZOOM);
 	 break;
       case ID_ORIG_SIZE:
 	 setScaleKind( FIT_ORIG );
