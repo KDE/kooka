@@ -5,114 +5,82 @@
 */
 
 /**
-\mainpage Die KScan Bibliothek.
+\mainpage The KScan Library.
 
-   Die kscan Bibliothek bietet ein Interface zur SANE-lib (siehe http://www.mostang.com/sane
-zur weiteren Information) für KDE2 Programme.
+   The KScan Library provides an interface for the SANE-lib (see http://www.mostang.com/sane for more information) for KDE2 applications.
 
-\section intro Einführung
+\section intro Introduction
 
-Die KScan Bibliothek bietet jedem KDE2 Programm ein Objekt an, dass zu einem über
-SANE angeschlossenen Scanner Verbindung aufbauen, dessen Parameter auslesen und
-verwalten kann. Die Problematik dabei ist, dass SANE Scanner nicht über einen
-einheitlichen Satz von Optionen verfügen. Die Scanner unterstützen verschiedene
-Scanoptionen. Eine Oberfläche zum Ansprechen des Scanners muss dynamisch
-aufgebaut werden, nachdem die Entscheidung gefallen ist, welches im System
-vorhandene Gerät verwendet werden soll (dynamische GUI).
+The KScan Library furnishes each KDE2 application with an object which can connect to a scanner set up by SANE, as well as read out and manage the scanner's parameters. The difficulty with this is that SANE scanners do not have a uniform set of  options. The scanners support various scan options. An interface for establishing contact to the scanners has to be set up  dynamically after the decision is made as to which available device in the system should be used (dynamic GUI).
 
-\section objectOverview Abstrakte KScan Objekte
+\section objectOverview Abstract KScan Objects
 
-Die KScan Bibliothek definiert folgende Klassen, die sich um die Verwaltung
-der Parameter, die ein Scanner bietet, kümmern:
+The KScan Library defines the following classes which are responsible for managing the scanner's parameters:
 
 - KGammaTable\n
-Dies ist eine Basisklasse, die einen Gammatable implementiert und dessen Berechnung
-etc. intern durchführt.
+This is a base class which implements a gamma table and carries out the calculations etc. internally.
 
 - KScanOption\n
-Das Objekt KScanOption implementiert genau eine Scanoption, wie z. B. die Scanauflösung.
-Ein Scanner unterstützt verschiedene Optionen, die zum Teil abhängig voneinander sind.
-Das bedeutet, dass sich im Falle einer Änderung von Option A die Option B mitändern kann.
-Die KScanLib unterstützt die Behandlung dieser Abhängigkeiten.
+The object KScanOption implements exactly one scanning option, such as the scanning resolution. A scanner supports several options which are, in part, independent of one another. This means that if option A is modified, option B could be modified along with it. The KScanLib supports the handling of these dependencies.
 
 - KScanDevice\n
-Das Objekt KScanDevice bildet die vorhandenen Scanner im System ab. Über dieses Objekt
-kann ermittelt werden, welche Geräte erreichbar sind und welche Optionen sie unterstützen.
+The object KScanDevice maps the scanners available in the system. This object assists the detection of reachable devices and the options they support.
 \n
-Wenn sich für ein Gerät entschieden und dieses geöffnet wurde, repräsentiert das KScanDevice
-das Scangerät. Über diese Klasse werden Optionen (KScanOption) tatsächlich auf die Hardware
-angewendet. Ferner werden gescannte Bilddaten von von KScanDevice geliefert.
+Once a device is decided upon and this has been opened, the KScanDevice will represent the scanning device. By way of this class,  the hardware will actually utilize the options (KScanOption). Furthermore, scanned image data is supplied by KScanDevice.
 
 - KScanOptSet\n
-Das Objekt KScanOptSet stellt einen Container für Optionen KScanOption dar, unabhängig
-von einem bestimmten Gerät. Bisher ermöglicht es das Sichern von mehreren Optionen während der
-Programausführung, z. B. die vorher eingestellten Scanparameter, wenn ein Previewscan
-durchgeführt werden soll, um diese nach dem Previewscan wieder zu restaurieren.\n
-Weiterhin können Sets von Optionen auf Platte abgelegt werden.
+The object KScanOptSet represents a container for the KScanOption options, apart from a specific device. Up until now, this was made possible by saving several options during the course of the program, e.g. previously configured scanning parameters if a  preview scan were to be carried out so that this can be restored following the preview scan.\n
+Furthermore, option sets can be saved to disk.
 
-\section helpers Hilfsklassen
+\section helpers Helper Classes
 
-Es existieren einige Hilfswidgets, die den dynamischen Aufbau der Scan-Oberfläche
-vereinfachen. Diese Objekte bieten einfache Kombinationen von Grundwidgets, die einfacher
-verwendet werden können.
+There are some helper widgets which simplify the dynamic setup of the scanning interface. These objects provide simple combinations of base widgets to make their usage easier.
 
-Im einzelnen sind dies:
+Itemized, these are:
 
-- KScanEntry\n(definiert in kscanslider.h)\n
-bietet ein Eingabefeld mit vorangestelltem Text.
+- KScanEntry\n(defined in kscanslider.h)\n
+Provides an entry field preceded by text.
 
-- KScanSlider \n(definiert in kscanslider.h)\n
-Slider mit vorangestelltem Text. Bereichswerte werden mit Datentyp double übergeben.
+- KScanSlider \n(defined in kscanslider.h)\n
+Slider preceded by text. Range values are transferred with the data type double.
 
-- KScanCombo \n(definiert in kscanslider.h)\n
-Combobox-Widget, das einen beschreibenden Text voranstellt und Icons darstellen kann. 
+- KScanCombo \n(defined in kscanslider.h)\n
+Combobox widget which precedes description text and can represent icons. 
 
-- DispGamma \n(definiert in dispgamma.h)\n
-Widget zur Anzeige von Gammatables.
+- DispGamma \n(defined in dispgamma.h)\n
+Widget for displaying gamma tables.
 
-\section guiElements Oberflächenobjekte
+\section guiElements Interface Objects
 
-Die KScanbibliothek bietet einige fertige Objekte, die in Programmen im Stile eines
-vorgefertigten Dialoges verwendet werden können, um Scanfunktionalität in ein Programm
-zu integrieren. Das führt dazu, dass die Scanfunktionalität in allen Programmen durch
-die selbe Oberfläche angeboten wird.
+The KScan Library offers some ready-made objects which can be used as a sort of pre-fabricated dialog in order to integrate the scanning functionality into an application. This results in the availability of scanning functionality in all applications over the same interface.
 
-Bis jetzt existieren folgende Oberflächenelemente:
+Currently, there are the following interface elements:
 
 - DeviceSelector\n
-ist eine Klasse, die einen Dialog zur Auswahl eines Scanners darstellt.
+is a class which represents a dialog for scanner selection.
 
 - GammaDialog\n
-ist ein Dialog, in dem ein Gammatable editiert werden kann. Der Gammadialog
-verwendet KGammaTable intern zur Darstellung der Gammatables. Diesse Klasse
-wird bei Beendigung des Dialoges zurückgeliefert, sodass die entsprechenden
-Optionen des Scanners damit direkt gesetzt werden können.
+is a dialog where a gamma table can be edited. To represent the gamma tables, the gamma dialog uses KGammaTable internally. This class is returned in such as way that it can set the relevant scanner options directly, once the dialog has been completed.
 
 - MassScanDialog\n
-ist ein Massen-Scan-Dialog, der Benutzer über den Fortschritt des Scanvorganges
-bei Benutzung des Automatischen Dokumenteinzuges informiert. \e very \e beta \e !
+is a mass scanning dialog which informs the user about how the scanning is progressing when the automatic document feeder is used. \e very \e beta \e !
 
 - ScanSourceDialog\n
-einfacher Dialog, der die Auswahl der Scanquelle ermöglicht, z. B. Flachbett,
-Durchlichteinheit etc.
+Small dialog which enables scanning source selection, e.g. Flatbed, automatic document feeder...
 
 - ScanParams\n
-Die ScanParams-Klasse ist das eigentliche Herzstück der
- KScan-Bibliothek aus Sicht der Oberflächengestaltung.
- Die Klasse ScanParams stellt eine Ready-To-Use Oberfläche für den ausgewählten
- Scanner zur Verfügung.\n
+The ScanParams class is the actual core of the
+ KScan Library in terms of interface layout. The ScanParams class provides a ready-to-use interface for the selected scanner.\n
 \n
- In der Klasse wird das Scannerdevice analysiert und entsprechend
- seiner Eigenschaften dynamisch eine Oberfläche generiert, die die
- wichtigsten Bedienelemente enthält. Das sind bisher
+ The scanner device is analyzed in this class and dynamically generates an interface, according to the device's properties, containing the most important operational elements. These are currently
 
  <ul>
-    <li> Einstellungsmöglichkeiten für die Scanauflösung.
-    <li> Scanquelle auswählen
-    <li> Scanmodus
-    <li> Helligkeit und Kontrasteinstellungen
-    <li> Gammatable
-    <li> Previewsannen
+    <li> Setting options for scanning resolution
+    <li> Scanning source selection
+    <li> Scanning mode
+    <li> Brightness and contrast settings
+    <li> Gamma table
+    <li> Preview scanning
  </ul>
  
 
