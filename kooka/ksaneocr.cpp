@@ -78,7 +78,8 @@ KSANEOCR::KSANEOCR( QWidget*, KConfig *cfg ):
     m_spellInitialConfig(0L),
     m_parent(0L),
     m_ocrCurrLine(0),
-    m_currHighlight(-1)
+    m_currHighlight(-1),
+    m_applyFilter(false)
 {
     KConfig *konf = KGlobal::config ();
     m_ocrEngine = GOCR;
@@ -160,6 +161,8 @@ void KSANEOCR::slSetImage(KookaImage *img )
    {
        m_ocrProcessDia->introduceImage( m_img );
    }
+
+   m_applyFilter = false;
 }
 
 /*
@@ -250,6 +253,9 @@ void KSANEOCR::finishedOCRVisible( bool success )
        {
            /* The image canvas is non-zero. Set it to our image */
            m_imgCanvas->newImage( m_img );
+
+           /* now handle double clicks to jump to the word */
+           m_applyFilter=true;
        }
 
        /** now it is time to invoke the dictionary if required **/
@@ -713,7 +719,7 @@ bool KSANEOCR::eventFilter( QObject *object, QEvent *event )
 {
     QWidget *w = (QWidget*) object;
 
-    if( m_imgCanvas && w == m_imgCanvas )
+    if( m_applyFilter && m_imgCanvas && w == m_imgCanvas )
     {
         if( event->type() == QEvent::MouseButtonDblClick )
         {
@@ -809,7 +815,8 @@ void KSANEOCR::slSpellCorrected( const QString& originalword,
     {
         if( m_imgCanvas && m_currHighlight > -1 )
         {
-            m_imgCanvas->removeHighlight( m_currHighlight );
+            if( m_applyFilter )
+                m_imgCanvas->removeHighlight( m_currHighlight );
         }
         else
         {
@@ -838,7 +845,9 @@ void KSANEOCR::slSpellIgnoreWord( const QString& word )
             QPen pen( gray, 1 );
             QRect r = ignoreOCRWord.rect();
             r.moveBy(0,2);  // a bit offset to the top
-            m_imgCanvas->highlight( r, pen, brush );
+
+            if( m_applyFilter )
+                m_imgCanvas->highlight( r, pen, brush );
         }
     }
 }
@@ -886,7 +895,9 @@ void KSANEOCR::slMisspelling( const QString& originalword, const QStringList& su
         QPen pen( red, 2 );
         QRect r = resWord.rect();
         r.moveBy(0,2);  // a bit offset to the top
-        m_currHighlight = m_imgCanvas->highlight( r, pen, brush, true );
+
+        if( m_applyFilter )
+            m_currHighlight = m_imgCanvas->highlight( r, pen, brush, true );
 
         kdDebug(28000) << "Position ist " << r.x() << ", " << r.y() << ", width: " << r.width() << ", height: " << r.height() << endl;
 

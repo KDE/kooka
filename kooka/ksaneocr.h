@@ -261,6 +261,8 @@ private:
     QStringList      m_checkStrings;
 
     int              m_currHighlight;
+    bool             m_applyFilter;
+
 #ifdef HAVE_KADMOS
     Kadmos::CRep   m_rep;
 #endif
