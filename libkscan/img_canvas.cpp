@@ -61,11 +61,13 @@ class ImageCanvas::ImageCanvasPrivate
 public:
     ImageCanvasPrivate()
         : keepZoom(false),
+	  readOnly(false),
           scaleKind( UNSPEC ),
           defaultScaleKind( FIT_ORIG )
         {}
 
     bool         keepZoom;  /* keep the zoom settings if images change */
+    bool         readOnly;
     ScaleKinds   scaleKind;
     ScaleKinds   defaultScaleKind;
 
@@ -949,6 +951,17 @@ int ImageCanvas::getScaleFactor() const
 const QImage *ImageCanvas::rootImage( )
 {
    return( image );
+}
+
+void ImageCanvas::setReadOnly( bool ro )
+{
+    d->readOnly = ro;
+    emit( imageReadOnly(ro) );
+}
+
+bool ImageCanvas::readOnly()
+{
+    return d->readOnly;
 }
 
 void ImageCanvas::setBrightness(int b)

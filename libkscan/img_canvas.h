@@ -150,6 +150,13 @@ public slots:
      */
     void removeHighlight( int idx = -1 );
 
+    /**
+     * permit to do changes to the image that are saved back to the file
+     */
+    void setReadOnly( bool );
+
+    bool readOnly();
+	
 signals:
     void noRect( void );
     void newRect( void );
@@ -157,7 +164,13 @@ signals:
     void scalingRequested();
     void closingRequested();
     void scalingChanged( const QString& );
-
+    /**
+     * signal emitted if the permission of the currently displayed image changed,
+     * ie. if it goes from writeable to readable.
+     * @param shows if the image is now read only (true) or not.
+     */
+    void imageReadOnly( bool isRO );
+    
 protected:
     void drawContents( QPainter * p, int clipx, int clipy, int clipw, int cliph );
 
