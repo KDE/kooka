@@ -42,6 +42,10 @@
 
 #define MIN_PREVIEW_DPI 20
 
+/* switch to show some from time to time usefull alloc-messages */
+#define MEM_DEBUG
+
+#undef APPLY_IN_SITU
 
 // global device list
 
@@ -58,13 +62,22 @@ QDict<int>  option_dic;
 /** inline-access to the option descriptor, object to changes with global vars. **/
 inline const SANE_Option_Descriptor *getOptionDesc( const char *name )
 {
+   
    int *idx = option_dic[ name ];
    const SANE_Option_Descriptor *d = 0;
+   // debug( "<< for option %s >>", name );
    if ( idx && *idx > 0 )
    {
       d = sane_get_option_descriptor( scanner_handle, *idx );
       // debug( "retrieving Option %s", d->name );
-   } else { debug( "no option descriptor for %s", name ); }
+   }
+   else
+   {
+      debug( "no option descriptor for <%s>", name );
+      // debug( "Name survived !" );
+   }
+   // debug( "<< leaving option %s >>", name );
+   
    return( d );
 }
 
@@ -76,62 +89,67 @@ inline const SANE_Option_Descriptor *getOptionDesc( const char *name )
 KScanOption::KScanOption( const char *new_name ) :
    QObject()
 {
-	initOption( new_name );
 
-	int  *num = option_dic[ getName() ];	
-	if( !num || !buffer )
-			return;
+   if( initOption( new_name ) )
+   {
+      int  *num = option_dic[ getName() ];	
+      if( !num || !buffer )
+	 return;
 
-	sane_control_option( scanner_handle, *num,
-	                     SANE_ACTION_GET_VALUE, buffer, 0 );
+      SANE_Status sane_stat = sane_control_option( scanner_handle, *num,
+						   SANE_ACTION_GET_VALUE, buffer, 0 );
+
+      if( sane_stat == SANE_STATUS_GOOD )
+      {
+	 buffer_untouched = false;
+      }
+   }
+   else
+   {
+      debug( "Had problems to create KScanOption - initOption failed !" );
+   }
 }
 
 
-void KScanOption::initOption( const char *new_name )
+bool KScanOption::initOption( const char *new_name )
 {
    desc = 0;
-   if( ! new_name ) return;
+   if( ! new_name ) return( false );
 
    name = new_name;
    desc = getOptionDesc( name );
    buffer = 0;
    internal_widget = 0;
    buffer_untouched = true;
-
+   buffer_size = 0;
+   
    if( desc )
    {
   		
 	/* Gamma-Table - initial values */
 	gamma = 0; /* marks as unvalid */	
-	if( type() == GAMMA_TABLE ) gamma = 100;
 	brightness = 0;
 	contrast = 0;
-  	
-	if( type() == GAMMA_TABLE )
-	{
-	    /* Set to neutral table */
-	    gamma = 100;
-	}	
+	gamma = 100;
+	
   	// allocate memory
   	switch( desc->type )
   	{
   	    case SANE_TYPE_INT:
   	    case SANE_TYPE_FIXED:
 	    case SANE_TYPE_STRING:  		
-  		buffer_size = desc->size;
- 		buffer = (void*) malloc ( buffer_size );
- 		memset( buffer, 0, buffer_size );
+ 		buffer = allocBuffer( desc->size );
 	    break;
     	    case SANE_TYPE_BOOL:
-    		buffer_size = sizeof( SANE_Word );
-	 	buffer = (void*) malloc ( buffer_size );
-	 	memset( buffer, 0, buffer_size );
+	 	buffer = allocBuffer( sizeof( SANE_Word ) );
 	    break;
             default:
     		buffer_size = 0;
 	        buffer = 0;
   	}
     }
+   
+   return( desc > 0 );
 }
 
 KScanOption::KScanOption( const KScanOption &so ) :
@@ -145,6 +163,9 @@ KScanOption::KScanOption( const KScanOption &so ) :
    brightness = so.brightness;
    contrast = so.contrast;
 
+   if( so.buffer_untouched ) debug( "Buffer of source is untouched!" );
+   // debug("Here Duplication for %s, reserving %d bytes", (const char*)  name, desc->size );
+   
    /* the widget si not copied ! */
    internal_widget = 0;
 
@@ -153,18 +174,18 @@ KScanOption::KScanOption( const KScanOption &so ) :
        case SANE_TYPE_INT:
        case SANE_TYPE_FIXED:
        case SANE_TYPE_STRING:  		
-	    buffer_size = desc->size;
-	    buffer = malloc( buffer_size );
-	    memcpy( buffer, so.buffer, desc->size / sizeof( SANE_Word ));
+	    buffer = allocBuffer( desc->size );
+	    // desc->size / sizeof( SANE_Word )
+	    memcpy( buffer, so.buffer, buffer_size  );
        break;
        case SANE_TYPE_BOOL:
-	    buffer_size = sizeof( SANE_Word );
-	    buffer = malloc( buffer_size );
- 	    memcpy( buffer, so.buffer,  sizeof( SANE_Word ));
+	    buffer = allocBuffer( sizeof( SANE_Word ) );
+ 	    memcpy( buffer, so.buffer,  buffer_size );
        break;
        default:
             buffer = 0;
             buffer_size = 0;
+
     }
 }
 
@@ -183,22 +204,19 @@ const KScanOption& KScanOption::operator= (const KScanOption& so )
    if( internal_widget ) delete internal_widget;
    internal_widget = so.internal_widget;
 
-   if( buffer ) free (buffer);
-
+   if( buffer ) delete( (char*)buffer);
 
    switch( desc->type )
    {
        case SANE_TYPE_INT:
        case SANE_TYPE_FIXED:
        case SANE_TYPE_STRING:  		
-	    buffer_size = desc->size;
-	    buffer = malloc( buffer_size );
-	    memcpy( buffer, so.buffer, desc->size / sizeof( SANE_Word ));
+	    buffer = allocBuffer( desc->size );
+	    memcpy( buffer, so.buffer, buffer_size );
        break;
        case SANE_TYPE_BOOL:
-	    buffer_size = sizeof( SANE_Word );
-	    buffer = malloc( buffer_size );
- 	    memcpy( buffer, so.buffer,  sizeof( SANE_Word ));
+	    buffer = allocBuffer( sizeof( SANE_Word ) );
+ 	    memcpy( buffer, so.buffer,  buffer_size );
        break;
        default:
             buffer = 0;
@@ -209,7 +227,7 @@ const KScanOption& KScanOption::operator= (const KScanOption& so )
 
 void KScanOption::slWidgetChange( const char *t )
 {
-    debug( "Received WidgetChange (const char*)" );
+    debug( "Received WidgetChange for %s (const char*)", (const char*) getName() );
     set( QString(t) );
     emit( guiChange( this ) );
     // emit( optionChanged( this ));
@@ -217,7 +235,7 @@ void KScanOption::slWidgetChange( const char *t )
 
 void KScanOption::slWidgetChange( void )
 {
-    debug( "Received WidgetChange (void)" );
+    debug( "Received WidgetChange for %s (void)", (const char*) getName() );
     /* If Type is bool, the widget is a checkbox. */
     if( type() == BOOL )
     {
@@ -231,7 +249,7 @@ void KScanOption::slWidgetChange( void )
 
 void KScanOption::slWidgetChange( int i )
 {
-    debug( "Received WidgetChange (int)" );
+    debug( "Received WidgetChange for %s (int)", (const char*) getName() );
     set( i );
     emit( guiChange( this ) );
     // emit( optionChanged( this ));
@@ -293,80 +311,80 @@ void KScanOption::slRedrawWidget( KScanOption *so )
 
 void KScanOption::slReload( void )
 {
-  int  *num = option_dic[ getName() ];	
-  desc = getOptionDesc( getName() );	
+   int  *num = option_dic[ getName() ];	
+   desc = getOptionDesc( getName() );	
 	
-  if( !desc || !num  )
-    return;
+   if( !desc || !num  )
+      return;
 		
-  if( widget() )
-    {
+   if( widget() )
+   {
       if( !active() || !softwareSetable() )
-	{
-	  debug( "Disabling widget %s!", (const char*) getName());
-	  widget()->setEnabled( false );
-	}
+      {
+	 debug( "Disabling widget %s!", (const char*) getName());
+	 widget()->setEnabled( false );
+      }
       else
-	widget()->setEnabled( true );
-    }
+	 widget()->setEnabled( true );
+   }
 	
-  /* first get mem if nothing is approbiate */
-  if( !buffer )
-    {
+   /* first get mem if nothing is approbiate */
+   if( !buffer )
+   {
       debug(" *********** getting without space **********" );
       // allocate memory
       switch( desc->type )
-	{
-	case SANE_TYPE_INT:
-	case SANE_TYPE_FIXED:
-	case SANE_TYPE_STRING:  		
-	  buffer_size = desc->size;
-	  buffer = (void*) malloc ( buffer_size );
-	  break;
-	case SANE_TYPE_BOOL:
-	  buffer_size = sizeof( SANE_Word );
-	  buffer = (void*) malloc ( buffer_size );
-	  break;
-	default:
-	  if( desc->size > 0 )
+      {
+	 case SANE_TYPE_INT:
+	 case SANE_TYPE_FIXED:
+	 case SANE_TYPE_STRING:  		
+	    buffer = allocBuffer( desc->size );
+	    break;
+	 case SANE_TYPE_BOOL:
+	    buffer = allocBuffer( sizeof( SANE_Word ) );
+	    break;
+	 default:
+	    if( desc->size > 0 )
 	    {
-	      buffer = (void*) malloc ( desc->size );
-	      buffer_size = desc->size;
-	      ((char*) buffer)[desc->size -1] = 0;
+	       buffer = allocBuffer( desc->size );
 	    }
-	}
-    }
+      }
+   }
 	
-  if( active())
-    {
+   if( active())
+   {
       if( (size_t) desc->size > buffer_size )
-	{
-	  debug( "SERIOUS ERROR: Buffer to small: %d (required) - %d %s !",
-		 desc->size, buffer_size, (const char*) name );
-	}
+      {
+	 debug( "SERIOUS ERROR: Buffer to small: %d (required) - %d %s !",
+		desc->size, buffer_size, (const char*) name );
+      }
   			
       SANE_Status sane_stat = sane_control_option( scanner_handle, *num,
 						   SANE_ACTION_GET_VALUE, buffer, 0 );
 
       if( sane_stat != SANE_STATUS_GOOD )
-	{
-	  debug( "ERROR: Cant get value for %s: %s", (const char*) getName(),
-		 sane_strstatus( sane_stat ));
-	}
+      {
+	 debug( "ERROR: Cant get value for %s: %s", (const char*) getName(),
+		sane_strstatus( sane_stat ));
+      }
       else
-	{
-	  buffer_untouched = false;
-	}
-    }
+      {
+	 buffer_untouched = false;
+	 debug( "Setting buffer untouched to FALSE" );
+      }
+   }
 }
 
 
 KScanOption::~KScanOption()
 {
-   if( buffer ) free( buffer );
+#ifdef MEM_DEBUG
+   debug( "M: FREEing %d byte of option <%s>", buffer_size, (const char*) getName());
+#endif
+   if( buffer ) delete ( (char*) buffer );
 }
 
-bool KScanOption::valid( void )
+bool KScanOption::valid( void ) const
 {
   return( desc && 1 );
 }
@@ -408,167 +426,174 @@ bool KScanOption::softwareSetable( void )
 
 KSANE_Type KScanOption::type( void )
 {
-  KSANE_Type ret = INVALID_TYPE;
+   KSANE_Type ret = INVALID_TYPE;
 	
-  if( valid() )
-    {
+   if( valid() )
+   {
       switch( desc->type )
-   	{	
-	case SANE_TYPE_BOOL:
-	  ret = BOOL;
-	  break;
-	case SANE_TYPE_INT:
-	case SANE_TYPE_FIXED:
-	  if( desc->constraint_type == SANE_CONSTRAINT_RANGE )
-	    /* FIXME ! Dies scheint nicht wirklich so zu sein */
-	    if( desc->size == sizeof( SANE_Word ))
-	      ret = RANGE;
+      {	
+	 case SANE_TYPE_BOOL:
+	    ret = BOOL;
+	    break;
+	 case SANE_TYPE_INT:
+	 case SANE_TYPE_FIXED:
+	    if( desc->constraint_type == SANE_CONSTRAINT_RANGE )
+	       /* FIXME ! Dies scheint nicht wirklich so zu sein */
+	       if( desc->size == sizeof( SANE_Word ))
+		  ret = RANGE;
+	       else
+		  ret = GAMMA_TABLE;
+	    else if( desc->constraint_type == SANE_CONSTRAINT_NONE )
+	       ret = SINGLE_VAL;
+	    else if( desc->constraint_type == SANE_CONSTRAINT_WORD_LIST )
+	       ret = GAMMA_TABLE;
 	    else
-	      ret = GAMMA_TABLE;
-	  else if( desc->constraint_type == SANE_CONSTRAINT_NONE )
-	    ret = SINGLE_VAL;
-	  else if( desc->constraint_type == SANE_CONSTRAINT_WORD_LIST )
-	    ret = GAMMA_TABLE;
-	  else
+	       ret = INVALID_TYPE;
+	    break;
+	 case SANE_TYPE_STRING:
+	    if( desc->constraint_type == SANE_CONSTRAINT_STRING_LIST )
+	       ret = STR_LIST;
+	    else
+	       ret = STRING;
+	    break;
+	 default:
 	    ret = INVALID_TYPE;
-	  break;
-	case SANE_TYPE_STRING:
-	  if( desc->constraint_type == SANE_CONSTRAINT_STRING_LIST )
-	    ret = STR_LIST;
-	  else
-	    ret = STRING;
-	  break;
-	default:
-	  ret = INVALID_TYPE;
-	  break;
-   	}
-    }
-  return( ret ); 	
+	    break;
+      }
+   }
+   return( ret ); 	
 }
 
 
 bool KScanOption::set( int val )
 {
-  if( ! desc ) return( false );
-  bool ret = false;
+   if( ! desc ) return( false );
+   bool ret = false;
 
-  int word_size       = 0;
-  QArray<SANE_Word> qa;
-  SANE_Word sw        = SANE_TRUE;
-  const SANE_Word sw1 = val;
-  const SANE_Word sw2 = SANE_FIX( (double) val );
+   int word_size       = 0;
+   QArray<SANE_Word> qa;
+   SANE_Word sw        = SANE_TRUE;
+   const SANE_Word sw1 = val;
+   const SANE_Word sw2 = SANE_FIX( (double) val );
 
-  switch( desc->type )
-    {
-    case SANE_TYPE_BOOL:
+   switch( desc->type )
+   {
+      case SANE_TYPE_BOOL:
 	
-      if( ! val )
-	sw = SANE_FALSE;
-      if( buffer ) {
-	memcpy( buffer, &sw, sizeof( SANE_Word ));
-	ret = true;
-      }
-      break;
-      // Type int: Fill the whole buffer with that value
-    case SANE_TYPE_INT:
-      word_size = desc->size / sizeof( SANE_Word );
+	 if( ! val )
+	    sw = SANE_FALSE;
+	 if( buffer ) {
+	    memcpy( buffer, &sw, sizeof( SANE_Word ));
+	    ret = true;
+	 }
+	 break;
+	 // Type int: Fill the whole buffer with that value
+      case SANE_TYPE_INT:
+	 word_size = desc->size / sizeof( SANE_Word );
 
-      qa.resize( word_size );
-      qa.fill( sw1 );
+	 qa.resize( word_size );
+	 qa.fill( sw1 );
 	
-      if( buffer ) {
-	memcpy( buffer, qa.data(), desc->size );
-	ret = true;
-      }
-      break;
+	 if( buffer ) {
+	    memcpy( buffer, qa.data(), desc->size );
+	    ret = true;
+	 }
+	 break;
 
-      // Type fixed: Fill the whole buffer with that value
-    case SANE_TYPE_FIXED:
-      word_size = desc->size / sizeof( SANE_Word );
+	 // Type fixed: Fill the whole buffer with that value
+      case SANE_TYPE_FIXED:
+	 word_size = desc->size / sizeof( SANE_Word );
 
-      qa.resize( word_size );
-      qa.fill( sw2 );
+	 qa.resize( word_size );
+	 qa.fill( sw2 );
 	
-      if( buffer ) {
-	memcpy( buffer, qa.data(), desc->size );
-	ret = true;
-      }
-      break;
-    default:
-      debug( "Cant set %s with type int", (const char*) name );
-    }
-  if( ret )
-    {
+	 if( buffer ) {
+	    memcpy( buffer, qa.data(), desc->size );
+	    ret = true;
+	 }
+	 break;
+      default:
+	 debug( "Cant set %s with type int", (const char*) name );
+   }
+   if( ret )
+   {
       buffer_untouched = false;
+#ifdef APPLY_IN_SITU
+      applyVal();
+#endif
+      
 #if 0
       emit( optionChanged( this ));
 #endif
-    }
+   }
 
-  return( ret );
+   return( ret );
 }
 
 
 
 bool KScanOption::set( double val )
 {
-  if( ! desc ) return( false );
-  bool ret = false;
-  int  word_size = 0;
-  QArray<SANE_Word> qa;
-  SANE_Word sw = SANE_FALSE;
+   if( ! desc ) return( false );
+   bool ret = false;
+   int  word_size = 0;
+   QArray<SANE_Word> qa;
+   SANE_Word sw = SANE_FALSE;
 
-  switch( desc->type )
-    {
-    case SANE_TYPE_BOOL:
+   switch( desc->type )
+   {
+      case SANE_TYPE_BOOL:
 	
-      if( val > 0 )
-	sw = SANE_TRUE;
-      if( buffer ) {
-	memcpy( buffer, &sw, sizeof( SANE_Word ));
-	ret = true;
-      }
-      break;
-      // Type int: Fill the whole buffer with that value
-    case SANE_TYPE_INT:
-      sw = (SANE_Word) val;
-      word_size = desc->size / sizeof( SANE_Word );
+	 if( val > 0 )
+	    sw = SANE_TRUE;
+	 if( buffer ) {
+	    memcpy( buffer, &sw, sizeof( SANE_Word ));
+	    ret = true;
+	 }
+	 break;
+	 // Type int: Fill the whole buffer with that value
+      case SANE_TYPE_INT:
+	 sw = (SANE_Word) val;
+	 word_size = desc->size / sizeof( SANE_Word );
 
-      qa.resize( word_size );
-      qa.fill( sw );
+	 qa.resize( word_size );
+	 qa.fill( sw );
 	
-      if( buffer ) {
-	memcpy( buffer, qa.data(), desc->size );
-	ret = true;
-      }
-      break;
+	 if( buffer ) {
+	    memcpy( buffer, qa.data(), desc->size );
+	    ret = true;
+	 }
+	 break;
 
-      // Type fixed: Fill the whole buffer with that value
-    case SANE_TYPE_FIXED:
-      sw = SANE_FIX( val );
-      word_size = desc->size / sizeof( SANE_Word );
+	 // Type fixed: Fill the whole buffer with that value
+      case SANE_TYPE_FIXED:
+	 sw = SANE_FIX( val );
+	 word_size = desc->size / sizeof( SANE_Word );
 
-      qa.resize( word_size );
-      qa.fill( sw );
+	 qa.resize( word_size );
+	 qa.fill( sw );
 	
-      if( buffer ) {
-	memcpy( buffer, qa.data(), desc->size );
-	ret = true;
-      }
-      break;
-    default:
-      debug( "Cant set %s with type double", (const char*) name );
-    }
+	 if( buffer ) {
+	    memcpy( buffer, qa.data(), desc->size );
+	    ret = true;
+	 }
+	 break;
+      default:
+	 debug( "Cant set %s with type double", (const char*) name );
+   }
 
-  if( ret )
-    {
+   if( ret )
+   {
       buffer_untouched = false;
+#ifdef APPLY_IN_SITU
+      applyVal();
+#endif
 #if 0
       emit( optionChanged( this ));
 #endif
-    }
+   }
 
-  return( ret );
+   return( ret );
 }
 
 
@@ -614,6 +639,9 @@ bool KScanOption::set( int *val, int size )
   if( ret )
     {
       buffer_untouched = false;
+#ifdef APPLY_IN_SITU
+      applyVal();
+#endif
 #if 0
       emit( optionChanged( this ));
 #endif
@@ -629,41 +657,44 @@ bool KScanOption::set( const char *val )
 
 bool KScanOption::set( QString strval )
 {
-  bool ret = false;
-  QCString c_string( strval );
+   bool ret = false;
+   QCString c_string( strval );
 
-  if( ! desc ) return( false );
+   if( ! desc ) return( false );
 
-  /* On String-type the buffer gets malloced in Constructor */
-  if( desc->type == SANE_TYPE_STRING )
-    {
+   /* On String-type the buffer gets malloced in Constructor */
+   if( desc->type == SANE_TYPE_STRING )
+   {
       debug("Setting %s as String", (const char*) c_string );
    	
       if( buffer_size >= c_string.length() )
-   	{
-	  memset( buffer, 0, buffer_size );
-	  qstrncpy( (char*) buffer, (const char*) c_string, buffer_size );
-	  ret = true;
-        }
+      {
+	 memset( buffer, 0, buffer_size );
+	 qstrncpy( (char*) buffer, (const char*) c_string, buffer_size );
+	 ret = true;
+      }
       else
-        {
-	  debug( "ERROR: Buffer for String %s too small: %d < %d",
-		 (const char*)c_string,
-		 buffer_size, c_string.length() );
-        }
-    } else {
+      {
+	 debug( "ERROR: Buffer for String %s too small: %d < %d",
+		(const char*)c_string,
+		buffer_size, c_string.length() );
+      }
+   } else {
       debug( "Cant set %s with type string", (const char*) name );
-    }
+   }
 
-  if( ret )
-    {
+   if( ret )
+   {
       buffer_untouched = false;
+#ifdef APPLY_IN_SITU
+      applyVal();
+#endif
 #if 0
       emit( optionChanged( this ));
 #endif
-    }
+   }
 
-  return( ret );
+   return( ret );
 }
 
 
@@ -712,6 +743,9 @@ bool KScanOption::set( KGammaTable *gt )
 
       memcpy( buffer, qa.data(), desc->size );
       buffer_untouched = false;
+#ifdef APPLY_IN_SITU
+      applyVal();
+#endif
 #if 0
       emit( optionChanged( this ));
 #endif
@@ -720,7 +754,7 @@ bool KScanOption::set( KGammaTable *gt )
    return( ret );
 }
 
-bool KScanOption::get( int *val )
+bool KScanOption::get( int *val ) const
 {
   SANE_Word sane_word;
   double d;
@@ -760,20 +794,42 @@ bool KScanOption::get( int *val )
 
 
 
-const QString KScanOption::get( void )
+const QString KScanOption::get( void ) const 
 {
 
    QCString retstr;
-	
-   if( desc->type == SANE_TYPE_STRING && valid() && getBuffer() )
+
+   SANE_Word sane_word;
+
+   
+   if( !valid() || !getBuffer())
+      return( "parametererror" );
+			
+   switch( desc->type )
    {
-   	const char *cc = (const char*) getBuffer();
-   	retstr = cc;
-	   // retstr.sprintf( "%s", cc );
-   }
-   else
-   {
-    	debug( "Cant get %s to type String !", (const char*)getName());
+      case SANE_TYPE_BOOL:
+	 sane_word = *((SANE_Word*)buffer);
+	 if( sane_word == SANE_TRUE )
+	    retstr = "true";
+	 else	
+	    retstr = "false";
+	 break;
+      case SANE_TYPE_STRING:
+	 retstr = (const char*) getBuffer();
+	 // retstr.sprintf( "%s", cc );
+	 break;
+      case SANE_TYPE_INT:
+	 sane_word = *((SANE_Word*)buffer);
+	 retstr.setNum( sane_word );
+	 break;
+      case SANE_TYPE_FIXED:
+	 sane_word = (SANE_Word) SANE_UNFIX(*(SANE_Word*)buffer);
+	 retstr.setNum( sane_word );
+	 break;
+	 
+      default:
+	 debug( "Cant get %s to type String !", (const char*)getName());
+	 retstr = "unknown";
    }
    debug( "option::get returns " + retstr );
    return( retstr );
@@ -781,7 +837,7 @@ const QString KScanOption::get( void )
 
 
 /* Caller needs to have the space ;) */
-bool KScanOption::get( KGammaTable *gt )
+bool KScanOption::get( KGammaTable *gt ) const 
 {
     if( gt )
     {
@@ -793,7 +849,7 @@ bool KScanOption::get( KGammaTable *gt )
 }
 
 
-QStrList KScanOption::getList( )
+QStrList KScanOption::getList( ) const
 {
    if( ! desc ) return( false );
    const char	**sstring = 0;
@@ -802,10 +858,11 @@ QStrList KScanOption::getList( )
    if( desc->constraint_type == SANE_CONSTRAINT_STRING_LIST ) {
       sstring =  (const char**) desc->constraint.string_list;
 
-      while( *sstring ) {
-	 		debug( "This is in the stringlist: %s\n", *sstring );
-			strList.append( *sstring );
-	 		sstring++;
+      while( *sstring )
+      {
+	 // debug( "This is in the stringlist: %s", *sstring );
+	 strList.append( *sstring );
+	 sstring++;
       }
    }
    if( desc->constraint_type == SANE_CONSTRAINT_WORD_LIST ) {
@@ -826,7 +883,7 @@ QStrList KScanOption::getList( )
 }
 
 
-bool KScanOption::getRange( double *min, double *max, double *q )
+bool KScanOption::getRange( double *min, double *max, double *q ) const
 {
    if( !desc ) return( false );
    bool ret = true;
@@ -919,7 +976,7 @@ QWidget *KScanOption::createWidget( QWidget *parent, const char *w_desc,
   /* Check if option is active */
   if( ! active() || !softwareSetable())
     {
-      debug( "Option is not active !" );
+      debug( "createWidget: Option <%s> is not active !", desc->name );
       w->setEnabled( false );
     }
   return( w );
@@ -965,3 +1022,46 @@ QWidget *KScanOption::KSaneSlider( QWidget *parent, const char *text )
 
 
 
+void *KScanOption::allocBuffer( long size )
+{
+  if( size < 1 ) return( 0 );
+
+#ifdef MEM_DEBUG
+  debug( "M: Reserving %ld bytes of mem for <%s>", size, (const char*) getName() );
+#endif
+  
+  void *r = new char[ size ];
+  buffer_size = size;
+  
+  if( r ) memset( r, 0, size );
+
+  return( r );
+  
+}
+
+
+
+bool KScanOption::applyVal( void )
+{
+   bool res = true;
+   int *idx = option_dic[ name ];
+
+   if( *idx == 0 ) return( false );
+   if( ! buffer )  return( false );
+
+   SANE_Status stat = sane_control_option ( scanner_handle, *idx,
+					    SANE_ACTION_SET_VALUE, buffer,
+					    0 );
+   if( stat != SANE_STATUS_GOOD )
+   {
+      debug( "Error in in situ appliance %s: %s", (const char*) getName(),
+	     sane_strstatus( stat ));
+      res = false;
+   }
+   else
+   {
+      debug( "IN SITU appliance %s: %s", (const char*) getName(), "OK" );
+
+   }
+   return( res );
+}	
