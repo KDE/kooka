@@ -8,6 +8,7 @@
 class ScanParams;
 class KScanDevice;
 class Previewer;
+class QSplitter;
 
 class ScanDialog : public KScanDialog
 {
@@ -27,6 +28,8 @@ private slots:
    void slotNewPreview( QImage *);
    void slotAskOnStartToggle(bool state);
    void slotNetworkToggle( bool state);
+
+   void slotClose();
 private:
    ScanParams   *m_scanParams;
    KScanDevice  *m_device;
@@ -35,6 +38,7 @@ private:
    bool         good_scan_connect;
    QCheckBox    *cb_askOnStart;
    QCheckBox    *cb_network;
+   QSplitter    *splitter;
    class ScanDialogPrivate;
    ScanDialogPrivate *d;
 };
