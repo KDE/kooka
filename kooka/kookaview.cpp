@@ -91,6 +91,9 @@ KookaView::KookaView(QWidget *parent)
    scan_params = new ScanParams( left_splitter);
    CHECK_PTR(scan_params);
 
+   connect( scan_params,    SIGNAL( scanResolutionChanged( int, int )),
+	    preview_canvas, SLOT( slNewScanResolutions( int, int )));
+
    /* the object from the kscan lib to handle low level scanning */
    sane = new KScanDevice( this );
    CHECK_PTR(sane);
