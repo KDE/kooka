@@ -45,8 +45,8 @@
 
 
 extern "C" {
-#include <sane.h>
-#include <saneopts.h>
+#include <sane/sane.h>
+#include <sane/saneopts.h>
 }
 
 /**

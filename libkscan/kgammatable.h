@@ -5,7 +5,7 @@
 #include <qobject.h>
 
 extern "C" {
-#include <sane.h>
+#include <sane/sane.h>
 }
 
 class KGammaTable: public QObject
