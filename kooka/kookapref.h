@@ -19,6 +19,7 @@
 
 #include <kdialogbase.h>
 #include <qframe.h>
+#include <qcheckbox.h>
 
 class KookaPrefPageOne;
 class KookaPrefPageTwo;
@@ -29,23 +30,18 @@ class KookaPreferences : public KDialogBase
 public:
     KookaPreferences();
 
+public slots:
+    void slotOk( void );
+    void slotApply( void );
+    void slotDefault( void );
+    
 private:
-    KookaPrefPageOne *m_pageOne;
-    KookaPrefPageTwo *m_pageTwo;
+    void setupStartupPage(void);
+    
+    QCheckBox *cbNetQuery;
+    QCheckBox *cbShowScannerSelection;
+    
 };
 
-class KookaPrefPageOne : public QFrame
-{
-    Q_OBJECT
-public:
-    KookaPrefPageOne(QWidget *parent = 0);
-};
-
-class KookaPrefPageTwo : public QFrame
-{
-    Q_OBJECT
-public:
-    KookaPrefPageTwo(QWidget *parent = 0);
-};
 
 #endif // KOOKAPREF_H
