@@ -34,8 +34,6 @@ kocrocrad.h
 
 # pagesetup.h
 
-KDE_ICON = kooka
-
 appdatadir       = $(kde_datadir)/kooka
 appdata_DATA     = kookaui.rc
 
