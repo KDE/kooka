@@ -126,6 +126,7 @@ public slots:
         }
     virtual QSize sizeHint() const;
     void newImage( QImage* );
+    void newImageHoldZoom( QImage* );
     void deleteView( QImage *);
     void newRectSlot();
     void newRectSlot( QRect newSel );

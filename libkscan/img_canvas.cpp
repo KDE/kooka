@@ -151,6 +151,15 @@ void ImageCanvas::deleteView( QImage *delimage )
 
 }
 
+void ImageCanvas::newImageHoldZoom( QImage *new_image )
+{
+    bool holdZ = d->keepZoom;
+
+    d->keepZoom = true;
+    newImage( new_image );
+    d->keepZoom = holdZ;
+}
+
 void ImageCanvas::newImage( QImage *new_image )
 {
 
