@@ -68,6 +68,8 @@ public:
     bool         keepZoom;  /* keep the zoom settings if images change */
     ScaleKinds   scaleKind;
     ScaleKinds   defaultScaleKind;
+
+    QValueList<QRect> highlightRects;
 };
 
 ImageCanvas::ImageCanvas(QWidget *parent,
@@ -151,8 +153,9 @@ void ImageCanvas::deleteView( QImage *delimage )
 
 void ImageCanvas::newImage( QImage *new_image )
 {
-   // dont free old image -> not yours
 
+    /** do cleanups **/
+   // dont free old image -> not yours
    image = new_image;
 
    if( ! image || image->isNull())
@@ -171,6 +174,10 @@ void ImageCanvas::newImage( QImage *new_image )
       noRectSlot();
    }
 
+   /* throw away all highlights */
+   d->highlightRects.clear();
+
+   /** handle the new image **/
    if( image )
    {
       if( image->depth() == 1 ) {
@@ -1016,5 +1023,53 @@ const QString ImageCanvas::scaleKindString()
         break;
     }
 }
+
+
+int ImageCanvas::highlight( const QRect& rect, const QPen& pen, const QBrush&  )
+{
+    QRect saveRect;
+    saveRect.setRect( rect.x()-2, rect.y()-2, rect.width()+4, rect.height()+4 );
+    d->highlightRects.append( saveRect );
+
+    int idx = d->highlightRects.findIndex(saveRect);
+
+    QRect targetRect = scale_matrix.map( rect );
+
+    QPainter p( pmScaled );
+
+    p.setPen(pen);
+    p.drawLine( targetRect.x(), targetRect.y()+targetRect.height(),
+                targetRect.x()+targetRect.width(), targetRect.y()+targetRect.height() );
+
+    p.flush();
+    updateContents(targetRect.x()-1, targetRect.y()-1,
+                   targetRect.width()+2, targetRect.height()+2 );
+    return idx;
+}
+
+void ImageCanvas::removeHighlight( int idx )
+{
+    if( ! idx < d->highlightRects.count() )
+        return;
+
+    QRect r = d->highlightRects[idx];
+    d->highlightRects.remove(r);
+    QRect targetRect = scale_matrix.map( r );
+
+    QPixmap origPix;
+    origPix.convertFromImage( image->copy(r) );
+
+    QPixmap scaledPix = origPix.xForm( scale_matrix );
+
+    QPainter p( pmScaled );
+    p.drawPixmap( targetRect, scaledPix );
+    p.flush();
+
+    updateContents(targetRect.x()-1, targetRect.y()-1,
+                   targetRect.width()+2, targetRect.height()+2 );
+
+
+}
+
 
 #include "img_canvas.moc"

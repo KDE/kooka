@@ -137,6 +137,18 @@ public slots:
     void setScaleKind( ScaleKinds k );
     void setDefaultScaleKind( ScaleKinds k );
 
+    /**
+     * Highlight a rectangular area on the current image using the given brush
+     * and pen.
+     * The function returns a id that needs to be given to the remove method.
+     */
+    int highlight( const QRect&, const QPen&, const QBrush& );
+
+    /**
+     * reverts the highlighted region back to normal view.
+     */
+    void removeHighlight( int idx = -1 );
+
 signals:
     void noRect( void );
     void newRect( void );
