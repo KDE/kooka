@@ -4,6 +4,8 @@
     begin                : Fri Dec 17 1999                                           
     copyright            : (C) 1999 by Klaas Freitag                         
     email                : freitag@suse.de
+
+    $Id$   
  ***************************************************************************/
 
 /***************************************************************************
@@ -17,7 +19,7 @@
 
 #include "scanpackager.h"
 #include "packageritem.h"
-#include "entrydialog.h"
+#include "miscwidgets.h"
 #include "resource.h"
 
 #include <qapplication.h>
@@ -511,8 +513,8 @@ bool ScanPackager::deleteItem( PackagerItem *curr, bool ask )
 /* ----------------------------------------------------------------------- */
 void ScanPackager::createFolder( void )
 {
-   EntryDialog d( this, "New Folder ", "Please enter a new folder name.\n"
-		  "This name will be displayed in the List" );
+   EntryDialog d( this, I18N("New Folder"), I18N("<B>Please enter a name for the new folder:</B>"));
+		  
    if( d.exec() == QDialog::Accepted )
    {
       QString folder = d.getText();
@@ -522,9 +524,12 @@ void ScanPackager::createFolder( void )
 	 if( curr )
 	 {
 	    PackagerItem *new_item = new PackagerItem( curr, true );
+	    CHECK_PTR( new_item );
 	    new_item->setFilename( curr->getFilename() + "/" + folder );
 	  	 		
 	    new_item->createFolder();
+	    setCurrentItem( new_item );
+	    ensureItemVisible( new_item );
 	 }
       }
    }
