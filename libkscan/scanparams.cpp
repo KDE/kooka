@@ -338,7 +338,8 @@ QScrollView *ScanParams::scannerParams( )
       if ( so )
       {
 	 initialise( so );
-	 so->get( &y_res );
+	 if( so->active() )
+	    so->get( &y_res );
 	 so->slRedrawWidget( so );
       }
 

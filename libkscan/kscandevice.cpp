@@ -121,8 +121,11 @@ KScanOption *KScanDevice::getGuiElement( const QCString& name, QWidget *parent,
 	 	
       w = so->createWidget( parent, desc, tooltip );
       if( w )
+      {
 	 connect( so,   SIGNAL( optionChanged( KScanOption* ) ),
-		  this, SLOT(   slOptChanged( KScanOption* )));	
+		  this, SLOT(   slOptChanged( KScanOption* )));
+	 w->setEnabled( so->active() );
+      }
    }
    else
    {
