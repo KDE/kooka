@@ -55,7 +55,7 @@ void KSANEOCR::setImage( const QImage *img )
    ktmpFile->close();
    tmpFile = ktmpFile->name();
    
-    kdDebug() << "save the image to " << tmpFile << endl;
+    kdDebug(28000) << "save the image to " << tmpFile << endl;
 
     // converting the incoming image
     if( img->depth()==32 )
@@ -87,10 +87,10 @@ bool KSANEOCR::startExternOcrVisible( void )
  * ocr but uses the cancel-Button to come out of the Dialog */
 void KSANEOCR::userCancel( void )
 {
-   kdDebug() << "+++++++++++++++++++ *************************" << endl;
+   kdDebug(28000) << "+++++++++++++++++++ *************************" << endl;
    if( daemon && daemon->isRunning() )
    {
-      kdDebug() << "Killing daemon with Sig. 9" << endl;
+      kdDebug(28000) << "Killing daemon with Sig. 9" << endl;
       daemon->kill(9);
       // that leads to the process being destroyed.
       KMessageBox::error(0, "The OCR-Process was killed !" );
@@ -105,7 +105,7 @@ void KSANEOCR::startOCRProcess( void )
    if( ! ocrProcessDia ) return;
 
    const QString cmd = ocrProcessDia->getOCRCmd();
-   kdDebug () <<  "Starting OCR-Command: " << cmd << " " << tmpFile << endl;
+   kdDebug(28000) <<  "Starting OCR-Command: " << cmd << " " << tmpFile << endl;
 
    if( daemon ) delete( daemon );
    
@@ -144,11 +144,11 @@ void KSANEOCR::startOCRProcess( void )
    
    if (!daemon->start(KProcess::NotifyOnExit, KProcess::All))
    {
-      kdDebug() <<  "Error starting daemon!" << endl;
+      kdDebug(28000) <<  "Error starting daemon!" << endl;
    }
    else
    {
-      kdDebug () << "Start OK" << endl;
+      kdDebug(28000) << "Start OK" << endl;
    }
 }
 
@@ -156,7 +156,7 @@ void KSANEOCR::startOCRProcess( void )
 
 void KSANEOCR::daemonExited(KProcess* d)
 {
-   kdDebug() << "daemonExited start !" << endl;
+   kdDebug(28000) << "daemonExited start !" << endl;
 
 
    if( d->normalExit() )
@@ -183,7 +183,7 @@ void KSANEOCR::daemonExited(KProcess* d)
    visibleOCRRunning = false;
    cleanUpFiles();
    
-   kdDebug () << "# ocr exited #" << endl;
+   kdDebug(28000) << "# ocr exited #" << endl;
 }
 
 
@@ -191,7 +191,7 @@ void KSANEOCR::cleanUpFiles( void )
 {
    if( ! tmpFile.isEmpty())
    {
-      kdDebug() << "Unlinking file to OCR!" << endl;
+      kdDebug(28000) << "Unlinking file to OCR!" << endl;
       if( ktmpFile ) {
 	 ktmpFile->unlink();
 	 delete ktmpFile;
@@ -202,7 +202,7 @@ void KSANEOCR::cleanUpFiles( void )
 
    if( ! ocrResultImage.isEmpty())
    {
-      kdDebug() << "Unlinking OCR Result image file!" << endl;
+      kdDebug(28000) << "Unlinking OCR Result image file!" << endl;
       unlink(ocrResultImage.latin1());
       ocrResultImage = "";
    }
@@ -215,7 +215,7 @@ void KSANEOCR::cleanUpFiles( void )
 void KSANEOCR::errMsgRcvd(KProcess*, char* buffer, int buflen)
 {
    QString errorBuffer = QString::fromLocal8Bit(buffer, buflen);
-   kdDebug() << "ERR: " << errorBuffer << endl;
+   kdDebug(28000) << "ERR: " << errorBuffer << endl;
 
 }
 
@@ -225,7 +225,7 @@ void KSANEOCR::msgRcvd(KProcess*, char* buffer, int buflen)
    QString aux = QString::fromLocal8Bit(buffer, buflen);
    ocrResultText += aux;
    
-   kdDebug() << aux;
+   kdDebug(28000) << aux;
 
 }
 

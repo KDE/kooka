@@ -95,12 +95,12 @@ void ScanPackager::slSelectionChanged( QListViewItem *newItem )
 	
 	if( pi->isDir())
 	{
-		kdDebug() << "selectionChanged: Is a father" << endl;
+		kdDebug(28000) << "selectionChanged: Is a father" << endl;
 	 	/* no action, because its a dir */
 	}
 	else
 	{
-		kdDebug() << "selectionChanged: Is loaded image !" << endl;
+		kdDebug(28000) << "selectionChanged: Is loaded image !" << endl;
 		QApplication::setOverrideCursor(waitCursor);
 		emit( showImage( pi->getImage() ));
 		QApplication::restoreOverrideCursor();
@@ -160,7 +160,7 @@ void ScanPackager::slotImageChanged( QImage *img )
    }
    else if( is_stat != ISS_OK )
    {
-      kdDebug() << "Error while saving existing image !" << endl;
+      kdDebug(28000) << "Error while saving existing image !" << endl;
    }
 
    if( img && !img->isNull())
@@ -205,7 +205,7 @@ void ScanPackager::slAddImage( QImage *img )
       {
 	 return;
       }
-      kdDebug() << "ERROR: Saving failed: " << img_saver.errorString( is_stat ) << endl;
+      kdDebug(28000) << "ERROR: Saving failed: " << img_saver.errorString( is_stat ) << endl;
       /* And now ?? */
    }
 	
@@ -243,7 +243,7 @@ void ScanPackager::slSelectImage( const QString name )
    
    if( found )
    {
-      kdDebug() << "slSelectImage: Found an item !" << endl;
+      kdDebug(28000) << "slSelectImage: Found an item !" << endl;
       ensureItemVisible( found );
       setCurrentItem( found );
       slSelectionChanged( found );
@@ -269,7 +269,7 @@ PackagerItem *ScanPackager::spFindItem( SearchType type, const QString name )
 	    
 	    break;
 	 default:
-	    kdDebug() << "Scanpackager: Wrong search type !" << endl;
+	    kdDebug(28000) << "Scanpackager: Wrong search type !" << endl;
 	    searchError = true;
       }
    }
@@ -279,7 +279,7 @@ PackagerItem *ScanPackager::spFindItem( SearchType type, const QString name )
 /* ----------------------------------------------------------------------- */
 void ScanPackager::slShowContextMenue(QListViewItem *lvi, const QPoint &p, int col )
 {
-   kdDebug() << "Showing Context Menue" << endl;
+   kdDebug(28000) << "Showing Context Menue" << endl;
    (void) col;
 	
    PackagerItem *curr = 0;
@@ -317,7 +317,7 @@ void ScanPackager::slShowContextMenue(QListViewItem *lvi, const QPoint &p, int c
 /* ----------------------------------------------------------------------- */
 void ScanPackager::slHandlePopup( int menu_id )
 {
-   kdDebug() << "Popup to handle ID: " << menu_id << endl;
+   kdDebug(28000) << "Popup to handle ID: " << menu_id << endl;
  	
    PackagerItem *curr = (PackagerItem*) currentItem();
    if( ! curr ) return;
@@ -327,7 +327,7 @@ void ScanPackager::slHandlePopup( int menu_id )
    switch( menu_id )
    {
       case ID_POP_RESCAN:
-	 kdDebug() << "Not yet implemented !" << endl;
+	 kdDebug(28000) << "Not yet implemented !" << endl;
 	 break;
       case ID_POP_DELETE:
 	 if( curr && curr != root ) {
@@ -368,7 +368,7 @@ void ScanPackager::exportFile( PackagerItem *curr )
 
    if( curr->isDir() )
    {
-      kdDebug() << "Not yet implemented!" << endl;
+      kdDebug(28000) << "Not yet implemented!" << endl;
    }
    else
    {
@@ -398,7 +398,7 @@ void ScanPackager::exportFile( PackagerItem *curr )
 
 void ScanPackager::slotCanceled( KIO::Job* )
 {
-  kdDebug() << I18N("Canceled by user") << endl;
+  kdDebug(28000) << I18N("Canceled by user") << endl;
 }
 
 
@@ -412,7 +412,7 @@ void ScanPackager::slotResult( KIO::Job *job )
       // get formated error message
       QString msg = job->errorString();
       // int errid = job->error();
-      kdDebug() << "ERROR in Exporting an image: <" << msg << ">" << endl;
+      kdDebug(28000) << "ERROR in Exporting an image: <" << msg << ">" << endl;
    }
    copyjob = 0L;
 }
@@ -445,7 +445,7 @@ bool ScanPackager::deleteItem( PackagerItem *curr, bool ask )
 {
    bool ok = false;
    if( ! curr ) return( ok );
-   kdDebug() << "Deleting: " << curr->getFilename() << endl;
+   kdDebug(28000) << "Deleting: " << curr->getFilename() << endl;
    if( curr->isDir() )
    {
       /* Remove all files and the dir */
@@ -468,7 +468,7 @@ bool ScanPackager::deleteItem( PackagerItem *curr, bool ask )
       ok = true;
       while( child && ok )
       {
-	 kdDebug() << "deleting " << child->getFilename() << endl;
+	 kdDebug(28000) << "deleting " << child->getFilename() << endl;
 	 new_child = (PackagerItem*) child->nextSibling();
 	 ok = deleteItem( child, false );
      		
@@ -506,7 +506,7 @@ bool ScanPackager::deleteItem( PackagerItem *curr, bool ask )
    }
  	
    if( ! ok )
-      kdDebug() << "Deleting Item failed !" << endl;
+      kdDebug(28000) << "Deleting Item failed !" << endl;
  	
    return( ok );
 }

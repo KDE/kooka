@@ -46,7 +46,7 @@ KOCRStartDialog::KOCRStartDialog( QWidget *parent )
    :KDialogBase( parent,  "OCRStart", false, I18N("Optical Character Recognition"),
 		 Cancel|User1, User1, true, I18N("Start OCR" ) )
 {
-   kdDebug() << "Starting KOCR-Start-Dialog!" << endl;
+   kdDebug(28000) << "Starting KOCR-Start-Dialog!" << endl;
    // Layout-Boxes
    QWidget *page = new QWidget( this );
    CHECK_PTR( page );
@@ -138,7 +138,7 @@ void KOCRStartDialog::writeConfig( void )
 
 void KOCRStartDialog::disableFields( void )
 {
-   kdDebug() << "About to disable the entry fields" << endl;
+   kdDebug(28000) << "About to disable the entry fields" << endl;
    sliderGrayLevel->setEnabled( false );
    sliderDustSize->setEnabled( false );
    sliderSpace->setEnabled( false );

@@ -190,7 +190,7 @@ void Kooka::saveProperties(KConfig *config)
     
    //if (m_view->currentURL() != QString::null)
    //     config->writeEntry("lastURL", m_view->currentURL());
-   kdDebug() << "In kooka's saveProperties !" << endl;
+   kdDebug(28000) << "In kooka's saveProperties !" << endl;
    m_view->saveProperties( config );
 }
 

@@ -99,7 +99,7 @@ FormatDialog::FormatDialog( QWidget *parent, const char *name )
 #else
    QStringList fo = QImage::outputFormatList();
 #endif
-   kdDebug() << "#### have " << fo.count() << " image types" << endl;
+   kdDebug(28000) << "#### have " << fo.count() << " image types" << endl;
    lb_format->insertStringList( fo );
    connect( lb_format, SIGNAL( highlighted(const QString&)),
 	    SLOT( showHelp(const QString&)));
@@ -167,7 +167,7 @@ void FormatDialog::showHelp( const QString& item )
 void FormatDialog::check_subformat( const char *format )
 {
    // not yet implemented
-   kdDebug() << "This is format in check_subformat: " << format << endl;
+   kdDebug(28000) << "This is format in check_subformat: " << format << endl;
    cb_subf->setEnabled( false );
    // l2 = Label "select subformat" ->bad name :-|
    l2->setEnabled( false );
@@ -267,7 +267,7 @@ void ImgSaver::createDir( QString dir )
  	
    if( ! fi.exists() )
    {
-      kdDebug() << "Wrn: Directory does not exist -> try to create  !" << endl;
+      kdDebug(28000) << "Wrn: Directory does not exist -> try to create  !" << endl;
       if( mkdir( QFile::encodeName( dir ), S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH ) != 0 )
       {
 	 QMessageBox::warning( 0,"Warning","The directory \n" + dir +
@@ -326,7 +326,7 @@ ImgSaveStat ImgSaver::saveImage( QImage *image )
 
    if( format.isEmpty() )
    {
-    	kdDebug() << "Save canceled by user -> no save !" << endl;
+    	kdDebug(28000) << "Save canceled by user -> no save !" << endl;
     	return( ISS_SAVE_CANCELED );
    }
    stat = save( image, directory + createFilename( format ),
@@ -352,7 +352,7 @@ QString ImgSaver::createFilename( QString format )
    
    sprintf( name, "kscan_%04x.%s", c, (format.lower()).latin1() );
 
-   kdDebug() << "CRASH WITH: " << name << endl;
+   kdDebug(28000) << "CRASH WITH: " << name << endl;
 
    while( files.exists( name, false ) ) {
       sprintf( name, "kscan_%04x.%s", ++c, (format.lower()).latin1() );
@@ -451,7 +451,7 @@ QString ImgSaver::startFormatDialog( picType type)
    if( fd.exec() )
    {
       QString format = fd.getFormat();
-      kdDebug() << "Storing to format <" << format << ">" << endl;
+      kdDebug(28000) << "Storing to format <" << format << ">" << endl;
       if( fd.rememberFormat() )
       {
 	 storeFormatForType( type, format );
@@ -514,7 +514,7 @@ void ImgSaver::storeFormatForType( picType type, QString format )
 	 konf->writeEntry( OP_FORMAT_HICOLOR, format );
 	 break;
       default:
-	 kdDebug() << "Wrong Type  - cant store format setting" << endl;
+	 kdDebug(28000) << "Wrong Type  - cant store format setting" << endl;
 	 break;
    }
 }
@@ -522,7 +522,7 @@ void ImgSaver::storeFormatForType( picType type, QString format )
 
 QString ImgSaver::findSubFormat( QString format )
 {
-   kdDebug() << "Searching Subformat for " << format << endl;
+   kdDebug(28000) << "Searching Subformat for " << format << endl;
    return( subformat );
    
 }
@@ -546,7 +546,7 @@ ImgSaveStat ImgSaver::save( QImage *image, const QString &filename,
 
       if( fi.exists() && !fi.isWritable() )
       {
-	 kdDebug() << "Cant write to file <" << filename << ">, cant save !" << endl;
+	 kdDebug(28000) << "Cant write to file <" << filename << ">, cant save !" << endl;
 	 result = false;
 	 return( ISS_ERR_PERM );
       }
@@ -555,12 +555,12 @@ ImgSaveStat ImgSaver::save( QImage *image, const QString &filename,
 #ifdef USE_KIMAGEIO
       if( ! KImageIO::canWrite( format ) )
       {
-	 kdDebug() << "Cant write format <" << format << ">" << endl;
+	 kdDebug(28000) << "Cant write format <" << format << ">" << endl;
 	 result = false;
 	 return( ISS_ERR_FORMAT_NO_WRITE );
       }
 #endif
-      kdDebug() << "ImgSaver: saving image to <" << filename << "> as <" << format << "/" << subformat <<">" << endl;
+      kdDebug(28000) << "ImgSaver: saving image to <" << filename << "> as <" << format << "/" << subformat <<">" << endl;
 
       result = image->save( filename, format.latin1() );
 

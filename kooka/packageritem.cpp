@@ -198,13 +198,13 @@ FileOpStat  PackagerItem::copy_file( QString to )
 
    if( ! from.open( IO_ReadOnly ) )
    {
-      kdDebug() << "Cant open source-file!" << endl;
+      kdDebug(28000) << "Cant open source-file!" << endl;
       return( FILE_OP_ERR );
    }
    QFile tofile( to );
    if( ! tofile.open( IO_WriteOnly ) )
    {
-      kdDebug() << "Cant open target-file" << endl;
+      kdDebug(28000) << "Cant open target-file" << endl;
       return( FILE_OP_ERR );
    }
 
