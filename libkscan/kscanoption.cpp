@@ -181,7 +181,7 @@ KScanOption::KScanOption( const KScanOption &so ) :
    
    if( ! ( desc && name ) )
    {
-      kdWarning( 29000) << "Trying to copy a not healty option" << endl;
+      kdWarning( 29000) << "Trying to copy a not healthy option (no name nor desc)" << endl;
       return;
    }
    
