@@ -1,44 +1,5 @@
 
 Our TODO List:
-1. Fri Oct 13 14:09:15 CEST 2000 - Nikolas Zimmermann
-  
-   *** Part 1 - Class Design ***
-   
-    We'll need two main-classes called "KScanDevice" and "KScanDialog" 
-    which include the following sub-classes:
-    
-    "KScanDevice" - low level hardware access (SANE Controlling)
-	o "KScanOption" - setting/getting SANE States/Values
-	o "KGammaTable" - calculating gamma, brightness and contrast
-	o "KScanSlider" - our slider-widget
-	o "KScanCombo" - our combo-widget
-	o "KScanEntry" - our label-widget
-
-    "KScanDialog" - a nice-looking standard dialog for scanning
-    
-   *** Part 2 - libkscan in YOUR app ***
-   
-    You'll have to start the function "launchScanDialog" in KScanDialog,
-    which provides you the complete Scanning Dialog.
-    ie. ( _not_ working sample)
-    void do_something_with_the_final_image( QImage final )
-    {
-     // foo
-    }
-    void scan()
-    {
-     KScanDialog *foo = new KScanDialog( this );
-     connect( foo, SIGNAL( finalScanFinished( QImage ) ), SLOT( do_something_with_the_final_image( QImage ) ); 
-     foo->show(); 
-    }
-    
-    Any simpler ideas ? :)
-    
-    Klaas Freitag <freitag@suse.de>:
-    No, that sounds quite good to me. Could it be simpler ?
-    One thing to remember: Scanning is a time consuming task, is KScanDialog modal for the app?
-
-    
 2. Tue Oct 31 18:12:25 CET 2000  - Klaas Freitag <freitag@suse.de>
 
     OK, trying to find smaller portions of work to do ;)
@@ -96,11 +57,3 @@ Our TODO List:
     KScanCombo : 
 
     ... much more.
-
-3. Moving some kooka files to the kscan lib.
-
-   - scanparams loads icons using the icon loader. The icons need to be installed
-     correctly in the makefile and need to be painted. The names of the icons are
-     lineart, gray and color.
-
-
