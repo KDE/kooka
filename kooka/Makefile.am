@@ -7,7 +7,7 @@ METASOURCES = AUTO
 
 kooka_SOURCES =	main.cpp kooka.cpp kookaview.cpp kookapref.cpp 		\
 		img_saver.cpp ksaneocr.cpp miscwidgets.cpp 		\
-		packageritem.cpp previewer.cpp scanpackager.cpp 	\
+		packageritem.cpp scanpackager.cpp 	\
 		kocrstartdia.cpp kocrfindia.cpp
 
 kooka_LDADD   = $(LIB_KFILE) -lkdeprint $(top_builddir)/libkscan/libkscan.la
@@ -19,7 +19,7 @@ noinst_HEADERS   = \
 kookaview.h     scanpackager.h \
 img_saver.h    ksaneocr.h       miscwidgets.h \
 formathelp.h   kooka.h       packageritem.h   \
-kookaiface.h  previewer.h  \
+kookaiface.h  \
 icons.h        kookapref.h   resource.h kocrfindia.h kocrstartdia.h
 
 # kocrstartdia.h kocrfindia.h \
