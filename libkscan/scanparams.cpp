@@ -63,15 +63,16 @@ ScanParams::ScanParams( QWidget *parent, const char *name )
 
 bool ScanParams::connectDevice( KScanDevice *newScanDevice )
 {
-   CHECK_PTR(newScanDevice);
-
    setMargin( KDialog::marginHint() );
    setSpacing( KDialog::spacingHint() );
    /* Debug: dump common Options */
 
    if( ! newScanDevice )
    {
-      kdDebug(29000) << "ERROR: No scan device !" << endl;
+      kdDebug(29000) << "No scan device found !" << endl;
+      sane_device = 0L;
+      createNoScannerMsg();
+      return( true );
    }
    sane_device = newScanDevice;
 
@@ -307,6 +308,17 @@ void ScanParams::scannerParams( void ) // QVBoxLayout *top )
      QToolTip::add( cb_gray_preview, i18n("Acquire a gray preview even in color mode (faster)") );
    }
    // top->addStretch( 1 );
+}
+
+
+void ScanParams::createNoScannerMsg( void )
+{
+   /* Mode setting */
+   QString cap;
+   cap = i18n( "<B>Problem: No Scanner was found</B><P>Your system does not provide a SANE <I>(Scanner Access Now Easy)</I> installation, which is required by the KDE scan support.<P>Please install and configure SANE correctly on your system.<P>Visit the SANE homepage under http://wwww.mostang.com/sane to find out more about SANE installation and configuration. " );
+   
+   (void) new QLabel( cap, this );
+   
 }
 
 /* This slot will be called if something changes with the option given as a param.
@@ -678,7 +690,7 @@ void ScanParams::slApplyGamma( GammaDialog& gdiag )
 void ScanParams::slReloadAllGui( KScanOption* t)
 {
     if( !t || ! sane_device ) return;
-    kdDebug(29000) << "This is slReloadAllGui for widget " << t->getName() << endl;
+    kdDebug(29000) << "This is slReloadAllGui for widget <" << t->getName() << ">" << endl;
     /* Need to reload all _except_ the one which was actually changed */
 
     sane_device->slReloadAllBut( t );

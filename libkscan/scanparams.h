@@ -121,6 +121,8 @@ private:
 	
    void          scannerParams( void ); // QVBoxLayout *top );
    void          virtualScannerParams( void );
+   void          createNoScannerMsg( void );
+   
    KScanStat     performADFScan( void );	
 	
    KScanDevice      *sane_device;

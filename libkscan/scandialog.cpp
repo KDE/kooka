@@ -5,6 +5,7 @@
 
 #include <kglobal.h>
 #include <klocale.h>
+#include <kdebug.h>
 
 // libkscan stuff
 #include "scanparams.h"
@@ -75,15 +76,36 @@ ScanDialog::ScanDialog( QWidget *parent, const char *name, bool modal )
 
     resize(700, 500);
 
-    DeviceSelector ds( this, backends, scannerNames );
-    if ( ds.exec() == QDialog::Accepted ) {
-	m_device->openDevice( ds.getSelectedDevice() );
-	
-	if ( !m_scanParams->connectDevice( m_device ) ) {
-	    qWarning("*** connecting to device failed!");
-	}
+    if( scannerNames.count() > 0 )
+    {
+       DeviceSelector ds( this, backends, scannerNames );
+       if ( ds.exec() == QDialog::Accepted )
+       {
+	  m_device->openDevice( ds.getSelectedDevice() );
+
+	  /* ConnectDevice does the gui for scanParams. */
+	  if ( !m_scanParams->connectDevice( m_device ) )
+	  {
+	     kdDebug(29000) << "ERR: Could not connect scan device" << endl;
+	  }	
+       }
+       else
+       {
+	  /** TODO: hmmm - this one should skip the entire action **/
+       }
+    }
+    else
+    {
+       /* No scanner found, open with information */
+       m_scanParams->connectDevice( 0L );
+
+       /* Making the previewer gray */
+       /* disabling is much better than hiding for 'advertising' ;) */
+       m_previewer->setEnabled( false );
     }
 }
+
+
 
 void ScanDialog::slotNewPreview( QImage *image )
 {

@@ -99,25 +99,6 @@ void DeviceSelector::setScanSources( const QStrList& sources,
    KGlobal::config()->setGroup( GROUP_STARTUP );
    QCString defstr = KGlobal::config()->readEntry( STARTUP_SCANDEV, "" ).local8Bit();
 
-   /* Popup if no scanner exists */
-   if( sources.isEmpty() )
-   {
-      // No device found -> seems to be no scanner installed
-      QString msg;
-      msg = i18n("There is a problem in your scanner configuration."
-		 "\nNo scanner was found on your system."
-		 "\nCheck the SANE installation!\n\n"
-		 "Do you want to continue?");
-      int result = KMessageBox::questionYesNo(this, msg, i18n("SANE Installation Problem"));
-
-      if( result == KMessageBox::No ) {
-#ifdef __GNUC__
-#warning Needs some change, we cannot exit() here...
-#endif
-	 exit(0);
-      }
-   }
-
    /* Selector-Stuff*/
    uint nr = 0;
    int  checkDefNo = 0;
