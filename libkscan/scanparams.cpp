@@ -30,6 +30,7 @@
 #include <qdict.h>
 #include <qprogressdialog.h>
 #include <qscrollview.h>
+#include <qsizepolicy.h>
 
 #include <kfiledialog.h>
 #include <klocale.h>
@@ -108,10 +109,14 @@ bool ScanParams::connectDevice( KScanDevice *newScanDevice )
 
    /* A top layout box */
    // QVBoxLayout *top = new QVBoxLayout(this, 6);
+   QHBox *hb = new QHBox( this );
    QString cap = i18n("<B>Scanner Settings</B> ");
    cap += sane_device->getScannerName();
-
-   (void ) new QLabel( cap, this );
+   (void ) new QLabel( cap, hb ); 
+   m_led = new KLed( hb );
+   m_led->setState( KLed::Off );
+   m_led->setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed ));
+   
 
    (void) new KSeparator( KSeparator::HLine, this);
 
@@ -379,7 +384,7 @@ QScrollView *ScanParams::scannerParams( )
    /* Contrast-Setting */
    so = sane_device->getGuiElement( SANE_NAME_CONTRAST, pbox );
    if( so ) initialise( so );
-/* Custom Gamma */
+   /* Custom Gamma */
 
    /* Sharpness */
    so = sane_device->getGuiElement( "sharpness", pbox );

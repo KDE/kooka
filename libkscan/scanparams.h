@@ -42,6 +42,7 @@
 class GammaDialog;
 class KScanOptSet;
 class QScrollView;
+class KLed;
 
 typedef enum { ID_SANE_DEBUG, ID_QT_IMGIO, ID_SCAN } ScanMode;
 
@@ -55,6 +56,9 @@ public:
    QSize sizeHint( );
 #endif
    bool connectDevice( KScanDevice* );
+
+   KLed *operationLED() { return m_led; }
+   
 public slots:
 /**
  * In this slot, a custom scan window can be set, e.g. through a preview
@@ -169,7 +173,8 @@ private:
    QProgressDialog *progressDialog;
 
    QPixmap       pixLineArt, pixGray, pixColor, pixHalftone, pixMiniFloppy;
-
+   KLed          *m_led;
+   
    bool          m_firstGTEdit;
    
    class ScanParamsPrivate;
