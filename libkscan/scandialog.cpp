@@ -90,7 +90,6 @@ ScanDialog::ScanDialog( QWidget *parent, const char *name, bool modal )
     /* Create a preview widget to the right side of the splitter */
     m_previewer = new Previewer( splitter );
     Q_CHECK_PTR(m_previewer );
-    m_previewer->slConnectScanner( m_device );
 
     /* ... and connect to the selector-slots. They communicate user's
      * selection to the scanner parameter engine */
@@ -303,6 +302,7 @@ bool ScanDialog::setup()
    {
       m_previewer->setEnabled( true );
       m_previewer->loadPreviewImage( configDevice );
+      m_previewer->slConnectScanner( m_device );
    }
 
     /* set initial sizes */
