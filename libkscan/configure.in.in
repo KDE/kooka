@@ -11,16 +11,13 @@ if test -n "$SANE_CONFIG"; then
     dnl and _INCLUDES looks nicer  :)
     LIBSANE_INCLUDES="`$SANE_CONFIG --cflags`"
 
-    KSCANDIR=libkscan
-
-    AC_SUBST(LIBSANE_LIBS)
-    AC_SUBST(LIBSANE_LDFLAGS)
-    AC_SUBST(LIBSANE_INCLUDES)
-
-    AC_SUBST(KSCANDIR)
-
     AC_DEFINE_UNQUOTED(HAVE_SANE, 1, [Defines if your system has the sane libraries]) 
 else
     DO_NOT_COMPILE="$DO_NOT_COMPILE libkscan kooka"
 fi
+
+AM_CONDITIONAL(include_kooka, test -n "$SANE_CONFIG")
+AC_SUBST(LIBSANE_LIBS)
+AC_SUBST(LIBSANE_LDFLAGS)
+AC_SUBST(LIBSANE_INCLUDES)
 
