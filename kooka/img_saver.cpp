@@ -462,9 +462,12 @@ QString ImgSaver::findFormat( picType type )
 	 break;
    }
 
-   if( format == "nothing" || ask_for_format )
+   if( type != PT_PREVIEW ) /* Use always bmp-Default for preview scans */
    {
-      format = startFormatDialog( type );
+      if( format == "nothing" || ask_for_format )
+      {
+	 format = startFormatDialog( type );
+      }
    }
    return( format );
    
