@@ -119,57 +119,53 @@ KookaView::KookaView(QWidget *parent)
       skipDialog = false;
    }
 
-   if( ! skipDialog || selDevice.isEmpty())
+   if( backends.count() > 0 )
    {
-      DeviceSelector ds( this, backends, hrbackends );
-
-      if( ds.exec() == QDialog::Accepted )
+      if( ! skipDialog || selDevice.isEmpty())
       {
-	 kapp->config()->writeEntry( STARTUP_SKIP_ASK,
-				     ds.getShouldSkip());
+	 DeviceSelector ds( this, backends, hrbackends );
+
+	 if( ds.exec() == QDialog::Accepted )
+	 {
+	    kapp->config()->writeEntry( STARTUP_SKIP_ASK,
+					ds.getShouldSkip());
+	 }
+	 else
+	 {
+	    exit(0);
+	 }
+
+	 selDevice = ds.getSelectedDevice();
       }
-      else
+
+      if( selDevice.isEmpty() || selDevice.isNull() )
       {
-	 exit(0);
+	 kdDebug(28000) << "Damned, no selected device-> TODO !" << endl;
       }
 
-      selDevice = ds.getSelectedDevice();
-   }
+      kdDebug(28000) << "Opening device " << selDevice << endl;
 
-   if( selDevice.isEmpty() || selDevice.isNull() )
+      /* This connects to the selected scanner */
+      sane->openDevice( selDevice.latin1() );
+      if( ! scan_params->connectDevice( sane ) )
+      {
+	 kdDebug(28000) << "Connecting to the scanner failed :( ->TODO" << endl;
+      }
+   }
+   else
    {
-      kdDebug(28000) << "Damned, no selected device-> TODO !" << endl;
+      // no devices available
+      int res = KMessageBox::warningContinueCancel( this,
+					      i18n( "No scanner was found!\nDo you want to continue Kooka?" ),
+					      i18n( "SANE not found"), i18n("Continue") );
+      if( res  == KMessageBox::Cancel )
+	 KApplication::exit();
+      // else -> continue without params.
+      scan_params->connectDevice( 0L );
+      preview_canvas->setEnabled( false );
+      
    }
-
-   kdDebug(28000) << "Opening device " << selDevice << endl;
-
-   /* This connects to the selected scanner */
-   sane->openDevice( selDevice.latin1() );
-   if( ! scan_params->connectDevice( sane ) )
-   {
-      kdDebug(28000) << "Connecting to the scanner failed :( ->TODO" << endl;
-   }
-#if 0
-   /* Try to set the left splitter to the requested width of the scan params */
-   QSize s = scan_params->sizeHint();
-   QValueList<int> sizelist;
-   /* children of this: leftsplitter, canvas */
-   sizelist.append( s.width() );
-   debug( "Setting splitter width to %d", s.width() );
-   setSizes( sizelist );
-
-   /* children of leftsplitter: tabwidget, scanparams */
-   QValueList<int> sizel2;
-   sizel2.append( 400 );
-   sizel2.append( s.height() );
-
-   left_splitter->setSizes( sizel2 );
-
-   left_splitter->setResizeMode( scan_params, QSplitter::KeepSize );
-   left_splitter->setResizeMode( tabw,        QSplitter::Stretch );
-
-   debug( "Have size found: %d x %d", s.width(), s.height());
-#endif
+   
    scan_params->resize( scan_params->sizeHint() );
    scan_params->show();
 
