@@ -49,7 +49,7 @@ KookaView::KookaView(QWidget *parent)
    /* An image canvas for the large image, right side */
    
    img_canvas  = new ImageCanvas( this );
-   img_canvas->setMinimumSize(400,200);
+   img_canvas->setMinimumSize(100,200);
    setResizeMode( img_canvas,    QSplitter::Stretch );
    setResizeMode( paramSplitter, QSplitter::FollowSizeHint );
 
@@ -80,6 +80,9 @@ KookaView::KookaView(QWidget *parent)
    
    connect( packager,  SIGNAL( galleryPathSelected( KFileTreeBranch*, const QString&)),
 	    recentFolder, SLOT( slotGalleryPathChanged( KFileTreeBranch*, const QString& )));
+
+   connect( packager,  SIGNAL( directoryToRemove( KFileTreeBranch*, const QString&)),
+	    recentFolder, SLOT(   slotPathRemove( KFileTreeBranch*, const QString& )));
 
    connect( recentFolder, SIGNAL(activated( const QString& )),
 	    packager, SLOT(slotSelectDirectory( const QString& )));
@@ -204,7 +207,6 @@ bool KookaView::slSelectDevice( )
 {
 
    kdDebug(28000) << "Kookaview: select a device!" << endl;
-   bool isStartup = ! scan_params;
    bool ret = false;
    
    QCString selDevice = userDeviceSelection();
