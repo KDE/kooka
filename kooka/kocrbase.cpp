@@ -165,7 +165,9 @@ KOCRBase::~KOCRBase()
 void KOCRBase::introduceImage( KookaImage* img)
 {
     KFileMetaInfo info = img->fileMetaInfo();
-    QStringList groups = info.preferredGroups();
+    QStringList groups;
+    if ( info.isValid() )
+         groups = info.preferredGroups();
 
     delete m_metaBox;
     m_metaBox = new QVBox( m_imgHBox );
