@@ -78,12 +78,12 @@ void KookaPreferences::slotApply( void )
     KConfig *konf = KGlobal::config ();
 
     /* startup options */
-    konf->setGroup("Startup" );
+    konf->setGroup( GROUP_STARTUP );
     
-    konf->writeEntry( "QueryLocalOnly",  !cbNetQuery->isChecked() );
+    konf->writeEntry( STARTUP_ONLY_LOCAL,  !cbNetQuery->isChecked() );
     if( cbShowScannerSelection->isChecked() )
     {
-	konf->writeEntry( "SkipStartupAsk", false );
+	konf->writeEntry( STARTUP_SKIP_ASK, false );
     }
 
 }

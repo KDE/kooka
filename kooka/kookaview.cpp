@@ -91,72 +91,41 @@ KookaView::KookaView(QWidget *parent)
 
    /* a list of backends the scan backend knows */
    QStrList backends = sane->getDevices();
-
+   
    /* Human readable scanner descriptions */
    QStringList hrbackends;
    QStrListIterator  it( backends );
 
-   // for( it = backends.first(); it != backends.last(); ++it );
-   /* A dialog, which allows the user to select one of the scanner */
-   kapp->config()->setGroup( GROUP_STARTUP );
-   QString selDevice;
-   bool skipDialog = kapp->config()->readBoolEntry( STARTUP_SKIP_ASK, false );
-   if( skipDialog )
-   {
-      selDevice = kapp->config()->readEntry( STARTUP_SCANDEV, "" );
-
-      // Check, if the selDevice is in the list of available devices.
-
-   }
-
-   // Create pretty debug, retrieve human readable Scanner names, and:
-   // Check, if the scandevice in the config-file is in the list.
-   bool cfgDeviceInList = false;
-   while( it )
-   {
-      kdDebug( 28000 ) << "Found backend: " << it.current() << endl;
-      hrbackends.append( sane->getScannerName( it.current() ));
-
-      if( skipDialog && it.current() == selDevice )
-	 cfgDeviceInList = true;
-
-      ++it;
-   }
-
-   if( skipDialog && cfgDeviceInList == false )
-   {
-      kdDebug( 28000 ) << "Bad: Wanted device <" << selDevice << "> not availabe" << endl;
-      skipDialog = false;
-   }
-
+   QCString selDevice;
    if( backends.count() > 0 )
    {
-      if( ! skipDialog || selDevice.isEmpty())
+      while( it )
       {
-	 DeviceSelector ds( this, backends, hrbackends );
-
-	 if( ds.exec() == QDialog::Accepted )
-	 {
-	    kapp->config()->writeEntry( STARTUP_SKIP_ASK,
-					ds.getShouldSkip());
-	 }
-	 else
-	 {
-	    exit(0);
-	 }
-
-	 selDevice = ds.getSelectedDevice();
+	 kdDebug( 28000 ) << "Found backend: " << it.current() << endl;
+	 hrbackends.append( sane->getScannerName( it.current() ));
+	 ++it;
       }
 
-      if( selDevice.isEmpty() || selDevice.isNull() )
-      {
-	 kdDebug(28000) << "Damned, no selected device-> TODO !" << endl;
-      }
+      /* allow the user to select one */
+       DeviceSelector ds( this, backends, hrbackends );
+       selDevice = ds.getDeviceFromConfig( );
 
+       if( selDevice.isEmpty() || selDevice.isNull() )
+       {
+	  kdDebug(29000) << "selDevice not found - starting selector!" << selDevice << endl;
+	  if ( ds.exec() == QDialog::Accepted )
+	  {
+	     selDevice = ds.getSelectedDevice();
+	  }
+       }
+   }
+       
+   if( ! selDevice.isNull() )
+   {
       kdDebug(28000) << "Opening device " << selDevice << endl;
 
       /* This connects to the selected scanner */
-      sane->openDevice( selDevice.latin1() );
+      sane->openDevice( selDevice );
       if( ! scan_params->connectDevice( sane ) )
       {
 	 kdDebug(28000) << "Connecting to the scanner failed :( ->TODO" << endl;
@@ -165,12 +134,6 @@ KookaView::KookaView(QWidget *parent)
    else
    {
       // no devices available
-      int res = KMessageBox::warningContinueCancel( this,
-					      i18n( "No scanner was found!\nDo you want to continue Kooka?" ),
-					      i18n( "SANE not found"), i18n("Continue") );
-      if( res  == KMessageBox::Cancel )
-	 KApplication::exit();
-      // else -> continue without params.
       scan_params->connectDevice( 0L );
       preview_canvas->setEnabled( false );
       
