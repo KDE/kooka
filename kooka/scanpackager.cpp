@@ -1214,18 +1214,23 @@ void ScanPackager::contentsDragMoveEvent( QDragMoveEvent *e )
       return;
    }
 
-   QListViewItem *item = 0;
-   QListViewItem *par = 0;
+   QListViewItem *afterme = 0;
+   QListViewItem *parent = 0;
 
-   findDrop( e->pos(), par, item );
+   findDrop( e->pos(), parent, afterme );
+
+   // "afterme" is 0 when aiming at a directory itself
+   QListViewItem *item = afterme ? afterme : parent;
 
    if( item )
    {
       bool isDir = static_cast<KFileTreeViewItem*> (item)->isDir();
-      if( isDir )
-	 KFileTreeView::contentsDragMoveEvent( e );
+      if( isDir ) {
+         KFileTreeView::contentsDragMoveEvent( e ); // for the autoopen code
+         return;
+      }
    }
-
+   e->acceptAction();
 }
 
 
