@@ -2,43 +2,49 @@
 Do not expect this to compile on every platform, nor to run.
 
 
+Dies ist das KScan ReadMe file.
 
-Dies ist das KSANETest ReadMe file.
-
-KSANETest ist ein Programm, dass mit Hilfe der Scanner-Ansteuerungsbibliothek
-den Zugriff auf rasterorientierte Bilderfassungsgeräte ermöglicht.
-Das sind in erster Linie Scanner. Für den effizienten Gebrauch von Scannern
-wurde KSANETest entwickelt. Dabei stand nicht nur im Mittelpunkt, ein Programm
-zu kriegen, mit dem einfach bzw. komfortabel gescannt werden kann, denn dafür
-gibt es in der SANE-Distribution bereits sehr gute Tools. Vielmehr soll auch
-eine Art Verwaltung mit angeboten werden.
-Ein weiterer Anspruch ist es, die Möglichkeit zu haben, KSANETest so erweitern
-zu können, dass es später auch professionellen Ansprüchen des Scannens
-gegenügt, etwas im massenhaften Erfassen von Belegen, Bestellungen etc.
+KScan und Kooka sind Programme, die über eine Ansteuerungsbibliothek
+den Zugriff auf rasterorientierte Bilderfassungsgeräte unter KDE2
+ermöglichen sollen.  Das sind in erster Linie Scanner. Für den
+effizienten Gebrauch von Scannern wurde Kooka entwickelt. Dabei stand
+nicht nur im Mittelpunkt, ein Programm zu kriegen, mit dem einfach
+bzw. komfortabel gescannt werden kann, denn dafür gibt es in der
+SANE-Distribution bereits sehr gute Tools. Vielmehr soll auch eine Art
+Verwaltung mit angeboten werden.  Ein weiterer Anspruch ist es, die
+Möglichkeit zu haben, Kooka so erweitern zu können, dass es später
+auch professionellen Ansprüchen des Scannens gegenügt, etwas im
+massenhaften Erfassen von Belegen, Bestellungen etc.
 
 Der Name
 ========
-Der Name des Programmes ist KSANETest und damit ein bisschen albern für ein
-nützliches Programm. Der Name stammt daher, dass ich die Klasse KSANEDev
-mit ihren Unterklassen testen wollte, entsprechend habe ich den Namen
-gewählt. Aus dem Testprogramm ist dann ein Scannerprogramm entstanden.
-Einmal den Namen festgelegt, ist es mühsam, ihn zu ändern.
+
+Der Name des Programmes ist Kooka, der der kde2-Lib KScan. Kooka hiess
+frueher KSANETest. Dieser Name ist jedoch ein bisschen albern für ein
+nützliches Programm. Der Name stammt daher, dass ich die Klasse
+KSANEDev (die heute KScanDevice heisst ;) mit ihren Unterklassen
+testen wollte, entsprechend habe ich den Namen gewählt. Aus dem
+Testprogramm ist dann ein Scannerprogramm entstanden.
 
 Entwicklungsumgebung
 ====================
 KSANETest wurde unter Linux mit Hilfe von KDevelop entwickelt.
+Es wird immer die aktuellste zur Verfügung stehende SANE-lib
+verwendet, siehe http://www.mostang.com/sane.
 
 SANE
 ====
-SANE ist eine unter Unix und seinen Derivaten verbreitete Bibliothek, die
-es ermöglicht, Programme zu schreiben, die Zugriff auf verschiedene
-Hardware von Scannern und anderen Rastergrafikgeräten haben. Die Betonung
-liegt dabei auf _verschiedene_, denn gerade bei dieser Art von Peripherie
-ist es verbreitet, dass verschiedene Firmen sehr stark voneinander abweichende
-Protokolle zur Kommunikation mit den Geräten implementieren. Das macht es
-schwierig bis unmöglich, Programme zu erstellen, die mit mehreren
-Geräten verschiedener Hersteller zusammen arbeiten.
-Diesen Missstand versucht SANE zu beheben, indem es eine abstrakte Schicht
-über konkrete Hardware legt und es so ermöglicht,
+
+SANE ist eine unter Unix und seinen Derivaten verbreitete Bibliothek,
+die es ermöglicht, Programme zu schreiben, die Zugriff auf
+verschiedene Hardware von Scannern und anderen Rastergrafikgeräten
+haben. Die Betonung liegt dabei auf _verschiedene_, denn gerade bei
+dieser Art von Peripherie ist es verbreitet, dass verschiedene Firmen
+sehr stark voneinander abweichende Protokolle zur Kommunikation mit
+den Geräten implementieren. Das macht es schwierig bis unmöglich,
+Programme zu erstellen, die mit mehreren Geräten verschiedener
+Hersteller zusammen arbeiten.  Diesen Missstand versucht SANE zu
+beheben, indem es eine abstrakte Schicht über konkrete Hardware legt
+und es so ermöglicht,
 
 
