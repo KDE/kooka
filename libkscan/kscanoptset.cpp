@@ -1,5 +1,5 @@
 /* This file is part of the KDE Project
-   Copyright (C) 2000 Klaas Freitag <freitag@suse.de>  
+   Copyright (C) 2000 Klaas Freitag <freitag@suse.de>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -30,8 +30,6 @@
 #include "kscanoption.h"
 #include "kscanoptset.h"
 
-#define SCANNER_CONFIG_FILE "ScanSettings"
-
 KScanOptSet::KScanOptSet( const QCString& setName )
 {
   name = setName;
@@ -39,7 +37,7 @@ KScanOptSet::KScanOptSet( const QCString& setName )
   setAutoDelete( false );
 
   description = "";
-  
+
   strayCatsList.setAutoDelete( true );
 }
 
@@ -66,7 +64,7 @@ QCString KScanOptSet::getValue( const QCString name ) const
 {
    KScanOption *re = get( name );
    QCString retStr = "";
-   
+
    if( re )
    {
       retStr = re->get();
@@ -105,7 +103,7 @@ bool KScanOptSet::backupOption( const KScanOption& opt )
 	const KScanOption *newopt = new KScanOption( opt );
 
 	strayCatsList.append( newopt );
-	
+
 	if( newopt )
 	{
 	   insert( optName, newopt );
@@ -140,37 +138,37 @@ void KScanOptSet::backupOptionDict( const QAsciiDict<KScanOption>& optDict )
       ++it;
    }
 
-   
+
 }
 
 /* */
 void KScanOptSet::saveConfig( const QString& scannerName, const QString& configName,
 			      const QString& descr )
 {
-   QString confFile = SCANNER_CONFIG_FILE;
+   QString confFile = SCANNER_DB_FILE;
    kdDebug( 29000) << "Creating scan configuration file <" << confFile << ">" << endl;
-   
+
    KConfig *scanConfig = new KConfig( confFile );
    QString cfgName = configName;
-   
+
    if( configName.isNull() || configName.isEmpty() )
       cfgName = "default";
-   
+
    scanConfig->setGroup( cfgName );
 
    scanConfig->writeEntry( "description", descr );
    scanConfig->writeEntry( "scannerName", scannerName );
    QAsciiDictIterator<KScanOption> it( *this);
- 
+
     while ( it.current() )
     {
        const QString line = it.current() -> configLine();
        const QString name = it.current()->getName();
-       
+
        kdDebug(29000) << "writing " << name << " = <" << line << ">" << endl;
 
        scanConfig->writeEntry( name, line );
-       
+
        ++it;
     }
 
@@ -180,13 +178,13 @@ void KScanOptSet::saveConfig( const QString& scannerName, const QString& configN
 
 bool KScanOptSet::load( const QString& scannerName )
 {
-   QString confFile = SCANNER_CONFIG_FILE;
+    QString confFile = SCANNER_DB_FILE;
    kdDebug( 29000) << "** Reading from scan configuration file <" << confFile << ">" << endl;
    bool ret = true;
-   
+
    KConfig *scanConfig = new KConfig( confFile, true );
    QString cfgName = name; /* of the KScanOptSet, given in constructor */
-   
+
    if( cfgName.isNull() || cfgName.isEmpty() )
       cfgName = "default";
 
@@ -200,7 +198,7 @@ bool KScanOptSet::load( const QString& scannerName )
       scanConfig->setGroup( name );
 
       typedef QMap<QString, QString> StringMap;
-      
+
       StringMap strMap = scanConfig->entryMap( name );
 
       StringMap::Iterator it;
@@ -211,14 +209,14 @@ bool KScanOptSet::load( const QString& scannerName )
 
 	 QCString val = it.data().latin1();
 	 kdDebug(29000) << "Reading for " << optName << " value " << val << endl;
-	 
+
 	 optset.set( val );
 
 	 backupOption( optset );
       }
    }
    delete( scanConfig );
-   
+
    return( ret );
 }
 
