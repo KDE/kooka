@@ -660,7 +660,19 @@ ImgSaveStat ImgSaver::save( QImage *image, const QString &filename,
    {
       // remember the last processed file - only the filename - no path
       QFileInfo fi( filename );
-
+      QString dirPath = fi.dirPath();
+      QDir dir = QDir( dirPath );
+      
+      if( ! dir.exists() )
+      {
+	 /* The dir to save in always should exist, except in the first preview save */
+	 kdDebug(28000) << "Creating dir " << dirPath << endl;
+	 if( !dir.mkdir( dirPath ) )
+	 {
+	    kdDebug(28000) << "ERR: Could not create directory" << endl;
+	 }
+      }
+      
       if( fi.exists() && !fi.isWritable() )
       {
 	 kdDebug(28000) << "Cant write to file <" << filename << ">, cant save !" << endl;
