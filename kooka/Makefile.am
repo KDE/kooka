@@ -1,6 +1,6 @@
 ## Makefile.am for kooka
 
-SUBDIRS = pics doc
+SUBDIRS = pics
 
 bin_PROGRAMS = kooka
 METASOURCES = AUTO
