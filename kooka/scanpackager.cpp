@@ -98,7 +98,7 @@ ScanPackager::ScanPackager( QWidget *parent ) : KFileTreeView( parent )
 	
    img_counter = 1;
    /* Set the current export dir to home */
-   curr_copy_dir = QDir::home();
+   m_currCopyDir = QDir::home().absPath();
 
    /* Preload frequently used icons */
    KIconLoader *loader = KGlobal::iconLoader();
@@ -809,29 +809,31 @@ void ScanPackager::slotExportFile( )
    else
    {
       KURL fromUrl( curr->url());
-      QString filter = "*." + getImgFormat(curr);
-      QString initial = curr_copy_dir.absPath() + "/";
+      QString filter = "*." + getImgFormat(curr).lower();
+      filter += "\n*|All Files";
+      
+      QString initial = m_currCopyDir + "/";
       initial += fromUrl.filename(false);
       KURL fileName = KFileDialog::getSaveURL ( initial,
-                                                filter,
-                                                this, "COPY_SAVE_DIA" );
+                                                filter, this );
 
       if ( fileName.isValid() )                  // got a file name
       {
-         /* remember the filename for the next export */
-         curr_copy_dir = fileName.path( );
 	 
          if( fromUrl == fileName ) return;
          copyjob = KIO::copy( curr->url(), fileName, false );
          if( copyjob )
          {
 	    
-             storeJob( copyjob, curr, JobDescription::ExportJob );
+	    storeJob( copyjob, curr, JobDescription::ExportJob );
 
             connect( copyjob, SIGNAL(result(KIO::Job*)),
                      this, SLOT(slotExportFinished( KIO::Job* )));
          }
 
+         /* remember the filename for the next export */
+	 fileName.setFileName( QString());
+	 m_currCopyDir = fileName.url( );
       }
    }
 }
