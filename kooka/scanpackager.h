@@ -68,7 +68,6 @@ public:
     ScanPackager( QWidget *parent);
     ~ScanPackager();
     virtual QString getImgName( QString name_on_disk );
-    virtual QString getSaveRoot(){ return( save_root ); }
 
     QString 	getCurrImageFileName( bool ) const;
 public slots:
@@ -119,7 +118,6 @@ private:
 
     KFileTreeViewItem *root;
     QDir         curr_copy_dir;
-    QString      save_root;
    QString      currSelectedDir;
     KIO::Job     *copyjob;
     KPopupMenu   *popup;   
