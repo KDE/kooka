@@ -125,11 +125,12 @@ KScanDevice::KScanDevice( QObject *parent )
     rest_bytes = 0;
     pixel_x = 0;
     pixel_y = 0;
-
+    scanner_name = 0L;
+       
 
     if( sane_stat == SANE_STATUS_GOOD )
     {
-        sane_stat = sane_get_devices( &dev_list, SANE_TRUE );
+        sane_stat = sane_get_devices( &dev_list, SANE_FALSE );
 
         // NO network devices yet
 
@@ -207,8 +208,8 @@ QString KScanDevice::getScannerName(const QCString& name) const
 {
   QString ret = i18n("No scanner selected");
   SANE_Device *scanner = 0L;
-
-  if( scanner_initialised && name.isEmpty())
+  
+  if( scanner_name && scanner_initialised && name.isEmpty())
   {
      scanner = scannerDevices[ scanner_name ];
   }
