@@ -36,6 +36,7 @@
 #include <kdebug.h>
 #include <kbuttonbox.h>
 #include <kiconloader.h>
+#include <kseparator.h>
 
 #include "scanparams.h"
 #include <scansourcedialog.h>
@@ -100,9 +101,7 @@ bool ScanParams::connectDevice( KScanDevice *newScanDevice )
 
    (void) new QLabel( cap, this );
 
-   QFrame *niceline = new  QFrame( this );
-   niceline->setFrameStyle( QFrame::HLine | QFrame::Raised );
-   niceline->setLineWidth( 1 );
+   KSeparator* niceline = new KSeparator( KSeparator::HLine, this);
 
    /* Now create Widgets for the important scan settings */
    if( sane_device->optionExists( SANE_NAME_FILE ) )
@@ -240,9 +239,7 @@ void ScanParams::scannerParams( void ) // QVBoxLayout *top )
    }
 
    /* Insert another beautification line */
-   QFrame *niceline = new  QFrame( this );
-   niceline->setFrameStyle( QFrame::HLine | QFrame::Raised );
-   niceline->setLineWidth( 1 );
+   KSeparator *niceline = new KSeparator( KSeparator::HLine, this);
 
    /* Speed-Setting - show only if active */
    KScanOption kso_speed( SANE_NAME_SCAN_SPEED );
@@ -293,9 +290,7 @@ void ScanParams::scannerParams( void ) // QVBoxLayout *top )
    }
 
    /* Insert another beautification line */
-   QFrame *niceline1 = new  QFrame( this );
-   niceline1->setFrameStyle( QFrame::HLine | QFrame::Raised );
-   niceline1->setLineWidth( 1 );
+   KSeparator *niceline1 = new KSeparator( KSeparator::HLine, this);
 
    so = sane_device->getGuiElement( SANE_NAME_NEGATIVE, this  );
 
