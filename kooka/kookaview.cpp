@@ -457,9 +457,8 @@ void KookaView::print()
     /* For now, print a single file. Later, print multiple images to one page */
     KookaImage *img = packager->getCurrImage();
 
-    QPrinter::PrinterMode pMode = QPrinter::HighResolution;  // TODO: Configurable
-
-    KPrinter printer( true, pMode );
+    KPrinter printer; // ( true, pMode );
+    printer.setUsePrinterResolution(true);
     printer.addDialogPage( new ImgPrintDialog( img ));
 
     if( printer.setup( m_mainWindow, i18n("Print %1").arg(img->localFileName().section('/', -1)) ))
