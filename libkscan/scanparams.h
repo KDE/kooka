@@ -42,6 +42,7 @@
   */
 
 class GammaDialog;
+class KScanOptSet;
 
 typedef enum { ID_SANE_DEBUG, ID_QT_IMGIO, ID_SCAN } ScanMode;
 
@@ -116,19 +117,39 @@ void slSourceSelect( void );
     */
    void slApplyGamma( GammaDialog& );
 
+   /**
+    *  internal slot called when the slider for x resolution changes.
+    *  In the slot, the signal scanResolutionChanged will be emitted, which
+    *  is visible outside the scanparam-object to notify that the resolutions
+    *  changed.
+    *
+    *  That is e.g. usefull for size calculations
+    */
    void slNewXResolution( KScanOption* );
+
+   /**
+    *  the same slot as @see slNewXResolution but for y resolution changes.
+    */
    void slNewYResolution( KScanOption* );
 
+   
    signals:
    
+   /**
+    *  emitted if the resolution to scan changes. This signal may be connected
+    *  to slots calculating the size of the image size etc.
+    *
+    *  As parameters the resolutions in x- and y-direction are coming.
+    */
    void scanResolutionChanged( int, int );
    
 private:
 	
 	
-   void          scannerParams( void ); // QVBoxLayout *top );
+   void          scannerParams( );
    void          virtualScannerParams( void );
    void          createNoScannerMsg( void );
+   void          initialise( KScanOption* );
    
    KScanStat     performADFScan( void );	
 	
@@ -144,6 +165,8 @@ private:
 	
    KScanOption   *xy_resolution_bind;
 
+   KScanOptSet   *startupOptset;
+   
    QProgressDialog *progressDialog;
 
    QPixmap       pixLineArt, pixGray, pixColor, pixHalftone, pixMiniFloppy;

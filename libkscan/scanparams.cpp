@@ -48,8 +48,7 @@
 
 
 ScanParams::ScanParams( QWidget *parent, const char *name )
-    : QVBox( parent, name ),
-      progressDialog( 0L )
+    : QVBox( parent, name )
 {
    /* first some initialisation and debug messages */
     sane_device = 0; virt_filename = 0;
@@ -67,6 +66,8 @@ ScanParams::ScanParams( QWidget *parent, const char *name )
     pixLineArt = SmallIcon( "palette_lineart" );
     pixHalftone = SmallIcon( "palette_halftone" );
 
+    /* intialise the default last save warnings */
+    startupOptset = 0;
     
 }
 
@@ -120,8 +121,20 @@ bool ScanParams::connectDevice( KScanDevice *newScanDevice )
 
    } else {
       scan_mode = ID_SCAN;
+
+      /* load the startup scanoptions */
+      startupOptset = new KScanOptSet( DEFAULT_OPTIONSET );
+      CHECK_PTR( startupOptset );
+      
+      if( !startupOptset->load( "Startup" ) )
+      { 
+	 kdDebug(29000) << "Could not load Startup-Options" << endl;
+	 delete startupOptset;
+	 startupOptset = 0;
+      }
       scannerParams( );
    }
+
    /* Reload all options to care for inactive options */
    sane_device->slReloadAll();
 
@@ -136,7 +149,7 @@ bool ScanParams::connectDevice( KScanDevice *newScanDevice )
 
    /* Initialise the progress dialog */
    progressDialog = new QProgressDialog( i18n("Scanning in progress"),
-					 i18n("Stop"), 1000, this,
+					 i18n("Stop"), 1000, 0L,
 					 "SCAN_PROGRESS", true, 0  );
    progressDialog->setAutoClose( true );
    progressDialog->setAutoReset( true );
@@ -154,10 +167,43 @@ bool ScanParams::connectDevice( KScanDevice *newScanDevice )
 
 ScanParams::~ScanParams()
 {
-    delete progressDialog;
+   if( sane_device )
+   {
+      kdDebug(29000) << "Saving scan settings" << endl;
+      sane_device->slSaveScanConfigSet( DEFAULT_OPTIONSET, i18n("the default startup setup") );
+   }
+   
+   if( startupOptset )
+   {
+      delete startupOptset;
+      startupOptset = 0;
+   }
 }
 
-void ScanParams::scannerParams( void ) // QVBoxLayout *top )
+void ScanParams::initialise( KScanOption *so )
+{
+   if( ! so ) return;
+   bool initialised = false;
+   
+   if( startupOptset )
+   {
+      QCString name = so->getName();
+      if( ! name.isEmpty() ){
+	 QCString val = startupOptset->getValue( name );
+	 kdDebug( 29000) << "Initialising <" << name << "> with value <" << val << ">" << endl;
+	 so->set( val );
+	 sane_device->apply(so);
+	 initialised = true;
+      }
+   }
+
+   if( ! initialised )
+   {
+      
+   }
+}
+
+void ScanParams::scannerParams( )
 {
    KScanOption *so = 0;
 
@@ -184,6 +230,8 @@ void ScanParams::scannerParams( void ) // QVBoxLayout *top )
 
       connect( so, SIGNAL(guiChange(KScanOption*)),
 	       this, SLOT(slReloadAllGui( KScanOption* )));
+
+      initialise( so );
    }
 
    /* Add a button for Source-Selection */
@@ -193,6 +241,7 @@ void ScanParams::scannerParams( void ) // QVBoxLayout *top )
 
       pb_source_sel = new QPushButton( i18n("Source..."), hb );
       connect( pb_source_sel, SIGNAL(clicked()), this, SLOT(slSourceSelect()));
+      initialise( &source );
 
 #if 0 /* Testing !! TODO: remove */
       if( ! source.active() ) {
@@ -207,10 +256,9 @@ void ScanParams::scannerParams( void ) // QVBoxLayout *top )
    
    if ( so )
    {
-      int x_y_res = 100;
-
-      so->set( x_y_res );
-      sane_device->apply( so );
+      initialise( so );
+      int x_y_res;
+      so->get( &x_y_res );
       so->slRedrawWidget( so );
 
       /* connect to slot that passes the resolution to the previewer */
@@ -225,9 +273,7 @@ void ScanParams::scannerParams( void ) // QVBoxLayout *top )
 				    i18n( "Bind X- and Y-Resolution" ).local8Bit() );
       if( xy_resolution_bind  )
       {
-	 xy_resolution_bind->set( 0 );
-	 sane_device->apply( xy_resolution_bind );
-
+	 initialise( xy_resolution_bind );
 	 xy_resolution_bind->slRedrawWidget( xy_resolution_bind );
 	 /* Connect to Gui-change-Slot */
 	 connect( xy_resolution_bind, SIGNAL(guiChange(KScanOption*)),
@@ -236,14 +282,15 @@ void ScanParams::scannerParams( void ) // QVBoxLayout *top )
 
       /* Resolution Setting -> Y-Resolution Setting */
       so = sane_device->getGuiElement( SANE_NAME_SCAN_Y_RESOLUTION, this );
+      int y_res = x_y_res;
       if ( so )
       {
-	 so->set( x_y_res );
-	 sane_device->apply( so );
+	 initialise( so );
+	 so->get( &y_res );
 	 so->slRedrawWidget( so );
       }
 
-      emit( scanResolutionChanged( x_y_res, x_y_res ));
+      emit( scanResolutionChanged( x_y_res, y_res ));
    }
    else
    {
@@ -252,8 +299,7 @@ void ScanParams::scannerParams( void ) // QVBoxLayout *top )
 				       i18n("Resolution (dpi):") );
       if( so )
       {
-	 so->set( 100 );
-	 sane_device->apply( so );
+	 initialise( so );
       }
       else
       {
@@ -269,24 +315,30 @@ void ScanParams::scannerParams( void ) // QVBoxLayout *top )
    if( kso_speed.valid() && kso_speed.softwareSetable() && kso_speed.active())
    {
       so = sane_device->getGuiElement( SANE_NAME_SCAN_SPEED, this );
+      initialise( so );
    }
 
    /* Threshold-Setting */
    so = sane_device->getGuiElement( SANE_NAME_THRESHOLD, this );
    if( so )
    {
-      so->set(50);
+      initialise( so );
    }
 
    /* Brightness-Setting */
    so = sane_device->getGuiElement( SANE_NAME_BRIGHTNESS, this );
-
+   if( so ) initialise( so );
+   
    /* Contrast-Setting */
    so = sane_device->getGuiElement( SANE_NAME_CONTRAST, this );
-   /* Custom Gamma */
+   if( so ) initialise( so );
+/* Custom Gamma */
 
    /* Sharpness */
    so = sane_device->getGuiElement( "sharpness", this );
+   if( so ) initialise( so );
+
+
    /* The gamma table can be used - add  a button for editing */
    if( sane_device->optionExists( SANE_NAME_CUSTOM_GAMMA ) )
    {
@@ -632,7 +684,7 @@ void ScanParams::slStartScan( void )
 	    // stat = performADFScan();
 	 }
       } else {
-	 kdDebug(29000) << "Reading dir by Qt-internal imagereading file " << q << endl;
+	 kdDebug(29000) << "Reading 	dir by Qt-internal imagereading file " << q << endl;
 	 sane_device->acquire( q );
       }
    }
@@ -809,9 +861,9 @@ void ScanParams::slCustomScanSize( QRect sel)
 }
 
 
-	/**
-	 * sets the scan area to the default, which is the whole area.
-	 */
+/**
+ * sets the scan area to the default, which is the whole area.
+ */
 void ScanParams::slMaximalScanSize( void )
 {
    kdDebug(29000) << "Setting to default" << endl;
