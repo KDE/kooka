@@ -16,12 +16,15 @@
  ***************************************************************************/
 #include <qlabel.h>
 #include <qfontmetrics.h>
+#include <qhbox.h>
+#include <qtooltip.h>
 
 #include <kdebug.h>
 #include <klocale.h>
 
 #include "previewer.h"
 #include "img_canvas.h"
+#include "sizeindicator.h"
 
 #define ID_CUSTOM 0
 #define ID_A4     1
@@ -108,6 +111,19 @@ Previewer::Previewer(QWidget *parent, const char *name )
 	    l2, SLOT(setText(const QString&)));
    connect( this, SIGNAL(setScanHeight(const QString&)),
 	    l3, SLOT(setText(const QString&)));
+
+   /* size indicator */
+   QHBox *hb = new QHBox( gbox );
+   (void) new QLabel( i18n( "Size:"), hb );
+   SizeIndicator *indi = new SizeIndicator( hb );
+   QToolTip::add( indi, i18n( "This size field shows how large the uncompressed image will be.\n"
+			     "It tries to warn you, if you try to produce huge images by \n"
+			     "changing its background color." ));
+   indi->setText( i18n("-") );
+  
+   connect( this, SIGNAL( setSelectionSize(long)),
+	    indi, SLOT(   setSizeInByte   (long)) );
+   
    left->addWidget( gbox, 1 );
 
    left->addStretch( 6 );
@@ -117,6 +133,14 @@ Previewer::Previewer(QWidget *parent, const char *name )
    /* Preset custom Cutting */
    pre_format_combo->setCurrentItem( ID_CUSTOM );
    slFormatChange( ID_CUSTOM);
+
+   scanResX = -1;
+   scanResY = -1;
+   pix_per_byte = 1;
+
+   selectionWidthMm = 0.0;
+   selectionHeightMm = 0.0;
+
 }
 
 Previewer::~Previewer()
@@ -258,26 +282,55 @@ void Previewer::slCustomChange( void )
    slFormatChange( ID_CUSTOM );
 }
 
+
+void Previewer::slNewScanResolutions( int x, int y )
+{
+   kdDebug(29000) << "got new Scan Resolutions: " << x << "|" << y << endl;
+   scanResX = x;
+   scanResY = y;
+
+   recalcFileSize();
+}
+
+
 /* This slot is called with the new dimension for the selection
  * in values between 0..1000. It emits signals, that redraw the
  * size labels.
  */
 void Previewer::slNewDimen(QRect r)
 {
-   int w_mm = 0;
-   int h_mm = 0;
-
    if( r.height() > 0)
-        w_mm = (int) (overallWidth / 1000 * r.width());
+        selectionWidthMm = (overallWidth / 1000 * r.width());
    if( r.width() > 0)
-        h_mm = (int) (overallHeight / 1000 * r.height());
+        selectionHeightMm = (overallHeight / 1000 * r.height());
 
    QString s;
-   s = i18n("width %1 mm").arg(w_mm);
+   s = i18n("width %1 mm").arg( int(selectionWidthMm));
    emit(setScanWidth(s));
+   
    kdDebug(29000) << "Setting new Dimension " << s << endl;
-   s = i18n("height %1 mm").arg(h_mm);
+   s = i18n("height %1 mm").arg(int(selectionHeightMm));
    emit(setScanHeight(s));
+
+   recalcFileSize( );
+      
+}
+
+void Previewer::recalcFileSize( void )
+{
+   /* Calculate file size */
+   if( scanResY > -1 && scanResX > -1 )
+   {
+      double w_inch = ((double) selectionWidthMm) / 25.4;
+      double h_inch = ((double) selectionHeightMm) / 25.4;
+
+      int pix_w = int( w_inch * double( scanResX ));
+      int pix_h = int( h_inch * double( scanResY ));
+
+      long size_in_byte = pix_w * pix_h / pix_per_byte;
+
+      emit( setSelectionSize( size_in_byte ));
+   }
 }
 
 

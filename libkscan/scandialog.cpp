@@ -63,6 +63,9 @@ ScanDialog::ScanDialog( QWidget *parent, const char *name, bool modal )
     connect( m_previewer->getImageCanvas(), SIGNAL( noRect()),
              m_scanParams, SLOT(slMaximalScanSize()));	
 
+    connect( m_scanParams, SIGNAL( scanResolutionChanged( int, int )),
+	     m_previewer, SLOT( slNewScanResolutions( int, int )));
+    
     /* a new preview signal */
     connect( m_device, SIGNAL( sigNewPreview( QImage* )),
              this, SLOT( slotNewPreview( QImage* )));

@@ -52,20 +52,21 @@ public slots:
    void setScanSize( int w, int h, KRuler::MetricStyle unit );
    void slCustomChange( void );
    void slNewDimen(QRect r);
-
+   void slNewScanResolutions( int, int );
+   void recalcFileSize( void );
 signals:
    void newRect( QRect );
    void noRect( void );
    void setScanWidth(const QString&);
    void setScanHeight(const QString&);
-
+   void setSelectionSize( long );
+   
 private:
    QPoint calcPercent( int, int );
 	
    QHBoxLayout *layout;
    ImageCanvas *img_canvas;
    QComboBox   *pre_format_combo;
-   QRect       last_custom;
    QArray<QCString> format_ids;
    QButtonGroup * bgroup;
    QRadioButton * rb1;
@@ -77,6 +78,12 @@ private:
    KRuler::MetricStyle displayUnit;
    bool isCustom;
 
+   int  scanResX, scanResY;
+   int  pix_per_byte;
+   double selectionWidthMm;
+   double selectionHeightMm;
+
+   
    class PreviewerPrivate;
    PreviewerPrivate *d;
 };

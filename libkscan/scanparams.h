@@ -115,6 +115,13 @@ void slSourceSelect( void );
     *  to apply. This is an internal slot.
     */
    void slApplyGamma( GammaDialog& );
+
+   void slNewXResolution( KScanOption* );
+   void slNewYResolution( KScanOption* );
+
+   signals:
+   
+   void scanResolutionChanged( int, int );
    
 private:
 	

@@ -204,6 +204,7 @@ void ScanParams::scannerParams( void ) // QVBoxLayout *top )
    /* Resolution Setting -> X-Resolution Setting */
    so = sane_device->getGuiElement( SANE_NAME_SCAN_X_RESOLUTION, this,
 				    i18n("Resolution (dpi):").local8Bit() );
+   
    if ( so )
    {
       int x_y_res = 100;
@@ -212,6 +213,10 @@ void ScanParams::scannerParams( void ) // QVBoxLayout *top )
       sane_device->apply( so );
       so->slRedrawWidget( so );
 
+      /* connect to slot that passes the resolution to the previewer */
+      connect( so, SIGNAL(guiChange(KScanOption*)),
+	       this, SLOT( slNewXResolution(KScanOption*)));
+      
       connect( so, SIGNAL(guiChange(KScanOption*)),
 	       this, SLOT(slReloadAllGui( KScanOption* )));
 
@@ -237,6 +242,8 @@ void ScanParams::scannerParams( void ) // QVBoxLayout *top )
 	 sane_device->apply( so );
 	 so->slRedrawWidget( so );
       }
+
+      emit( scanResolutionChanged( x_y_res, x_y_res ));
    }
    else
    {
@@ -811,19 +818,55 @@ void ScanParams::slMaximalScanSize( void )
    slCustomScanSize(QRect( 0,0,1000,1000));
 }
 
-#if 0
-QSize  ScanParams::sizeHint( )
+
+void ScanParams::slNewXResolution(KScanOption *opt)
 {
-   QPushButton pb_example( i18n("Preview Scan"), this );
-   // int w = pb_example.width();
+   if(! opt ) return;
 
-   /** Hmm - not really clean  TODO ! */
-   return( QSize( 360, 360 ) );
+   kdDebug(29000) << "Got new X-Resolution !" << endl;
 
-   // return( QSize( 2.2*w, 2.2*w) );
+   int x_res = 0;
+   opt->get( &x_res );
 
+   int y_res = x_res;
+   
+   if( xy_resolution_bind && xy_resolution_bind->active() )
+   {
+      /* That means, that x and y may be different */
+      KScanOption opt_y( SANE_NAME_SCAN_Y_RESOLUTION );
+      if( opt_y.valid () )
+      {
+	 opt_y.get( &y_res );
+      }
+   }
+
+   emit( scanResolutionChanged( x_res, y_res ) );
 }
-#endif
+
+void ScanParams::slNewYResolution(KScanOption *opt)
+{
+   if( ! opt ) return;
+
+   int y_res = 0;
+   opt->get( &y_res );
+
+   int x_res = y_res;
+   
+   if( xy_resolution_bind && xy_resolution_bind->active())
+   {
+      /* That means, that x and y may be different */
+      KScanOption opt_x( SANE_NAME_SCAN_X_RESOLUTION );
+      if( opt_x.valid () )
+      {
+	 opt_x.get( &x_res );
+      }
+   }
+
+   emit( scanResolutionChanged( x_res, y_res ) );
+   
+}
+
+
 KScanStat ScanParams::performADFScan( void )
 {
    KScanStat stat = KSCAN_OK;
