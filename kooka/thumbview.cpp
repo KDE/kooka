@@ -40,12 +40,14 @@
 ThumbView::ThumbView( QWidget *parent, const char *name )
    : KIconView( parent, name ),
      m_pixWidth(100),
-     m_pixHeight(140),
+     m_pixHeight(120),
      m_thumbMargin(5)
 {
+   m_marginColor1 = colorGroup().base();
+   m_marginColor2 = colorGroup().foreground();
    QImage ires = KImageEffect::unbalancedGradient( QSize( 2*m_thumbMargin+m_pixWidth,
 							  2*m_thumbMargin+m_pixHeight ),
-					 Qt::white, Qt::blue, KImageEffect::DiagonalGradient );
+					 m_marginColor1, m_marginColor2, KImageEffect::DiagonalGradient );
    m_basePix.convertFromImage( ires );
 
    setItemsMovable( false );
@@ -61,7 +63,6 @@ void ThumbView::slNewFileItems( const KFileItemList& items )
    kdDebug(28000) << "Creating thumbnails for fileItemList" << endl;
 
    
-   QPixmap p;
    KFileItemList startJobOn;
    
    KFileItemListIterator it( items );
@@ -75,7 +76,7 @@ void ThumbView::slNewFileItems( const KFileItemList& items )
       }
       else
       {
-	 QPixmap p;
+	 QPixmap p(m_basePix) ;
 	 /* Create a new empty preview pixmap and store the pointer to it */
 	 KFileIconViewItem *newIconViewIt = new KFileIconViewItem( this,
 								   item->url().filename(),
@@ -115,6 +116,7 @@ void ThumbView::slGotPreview( const KFileItem* newFileItem, const QPixmap& newPi
 
    if( ! item ) return;
 
+   const QPixmap px = createPixmap(newPix);
    item->setPixmap( createPixmap(newPix) );
    
 }
@@ -127,8 +129,15 @@ void ThumbView::slPreviewResult( KIO::Job * )
 
 QPixmap ThumbView::createPixmap( const QPixmap& preview ) const
 {
-   QPixmap pixRet( m_basePix );
+   QImage ires = KImageEffect::unbalancedGradient( QSize( 2*m_thumbMargin+ preview.width(),
+							  2*m_thumbMargin+ preview.height()),
+						   m_marginColor1, m_marginColor2,
+						   KImageEffect::DiagonalGradient );
 
+
+   // QPixmap pixRet( m_basePix );
+   QPixmap pixRet;
+   pixRet.convertFromImage( ires );
    QPainter p( &pixRet );
 
    p.drawPixmap( m_thumbMargin, m_thumbMargin, preview );

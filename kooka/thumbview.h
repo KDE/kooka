@@ -32,6 +32,7 @@
 #include <qwidget.h>
 #include <qimage.h>
 #include <qpixmap.h>
+#include <qcolor.h>
 
 #include <kiconview.h>
 #include <kurl.h>
@@ -56,23 +57,32 @@ public:
    KURL currentDir( ) const
       { return m_currentDir; }
 
-   void setThumbSize( int w, int h )
-      {
-	 m_pixWidth  = w;
-	 m_pixHeight = h;
-      }
-   void setThumbSize( const QSize& s )
-      {
-	 m_pixWidth  = s.width();
-	 m_pixHeight = s.height();
-      }
    QSize tumbSize( ) const
       {
 	 return( QSize( m_pixWidth, m_pixHeight ));
       }
 
+   int thumbMargin() const
+      {
+	 return m_thumbMargin;
+      }
 public slots:
+   void slSetThumbSize( int w, int h )
+      {
+	 m_pixWidth  = w;
+	 m_pixHeight = h;
+      }
+   void slSetThumbSize( const QSize& s )
+      {
+	 m_pixWidth  = s.width();
+	 m_pixHeight = s.height();
+      }
 
+   void slSetThumbMargin( int m )
+      {
+	 m_thumbMargin = m;
+      }
+   
    void slNewFileItems( const KFileItemList& ); 
    void slGotPreview( const KFileItem*, const QPixmap& );
    void slPreviewResult( KIO::Job* );
@@ -84,6 +94,8 @@ private:
    int     m_pixWidth;
    int     m_pixHeight;
    int     m_thumbMargin;
+   QColor  m_marginColor1;
+   QColor  m_marginColor2;
 };
 
 #endif
