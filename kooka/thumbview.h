@@ -33,6 +33,7 @@
 #include <qimage.h>
 #include <qpixmap.h>
 #include <qcolor.h>
+#include <qvbox.h>
 
 #include <kiconview.h>
 #include <kurl.h>
@@ -52,8 +53,9 @@
 
 class QPixmap;
 class QListViewItem;
-   
-class ThumbView: public KIconView
+class KProgress;
+
+class ThumbView: public QVBox /* KIconView */
 {
    Q_OBJECT
 
@@ -111,11 +113,11 @@ public slots:
    void slSetBackGround( );
    void slCheckForUpdate( KFileItem* );
    bool readSettings();
-   
+   void clear() { m_iconView->clear(); }
 protected:
    
    void saveConfig();
-   
+
 signals:
    /**
     * selects a QListViewItem from the thumbnail. This signal only makes
@@ -127,6 +129,8 @@ private:
    QPixmap createPixmap( const QPixmap& ) const;
 
    bool    deleteImage( KFileItem* );
+   KIconView *m_iconView;
+   KProgress *m_progress;
    
    KURL    m_currentDir;
    QPixmap m_basePix;
@@ -136,7 +140,7 @@ private:
    QColor  m_marginColor1;
    QColor  m_marginColor2;
    QString m_bgImg;
-   
+   int     m_cntJobsStarted;
 };
 
 #endif

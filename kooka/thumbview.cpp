@@ -37,6 +37,7 @@
 #include <kimageeffect.h>
 #include <kglobal.h>
 #include <kstandarddirs.h>
+#include <kprogress.h>
 
 #include "thumbview.h"
 #include "thumbviewitem.h"
@@ -44,19 +45,25 @@
 
 
 ThumbView::ThumbView( QWidget *parent, const char *name )
-   : KIconView( parent, name )
+   : QVBox( parent ),
+     m_iconView(0)
 {
+   setMargin(3);
+   m_iconView = new KIconView( this, name );
+   m_progress = new KProgress( this );
+   m_progress->hide();
+   
    readSettings();
-
+   
    m_basePix.resize( QSize( m_pixWidth, m_pixHeight ) );
    m_basePix.fill();  // fills white per default TODO
 
    
-   setItemsMovable( false );
+   m_iconView->setItemsMovable( false );
 
    slSetBackGround();
    
-   connect( this, SIGNAL( executed( QIconViewItem* )),
+   connect( m_iconView, SIGNAL( executed( QIconViewItem* )),
 	    this, SLOT( slDoubleClicked( QIconViewItem* )));
 }
 
@@ -113,8 +120,8 @@ bool ThumbView::readSettings()
    {
       int gX = 2*m_thumbMargin+m_pixWidth+10;
       int gY = 2*m_thumbMargin+m_pixHeight+10;
-      setGridX(gX);
-      setGridY(gY);
+      m_iconView->setGridX(gX);
+      m_iconView->setGridY(gY);
       kdDebug(28000) << "Setting Grid " << gX << " - " << gY << endl;
    }
 
@@ -155,6 +162,7 @@ void ThumbView::slSetBackGround( )
       bgPix.load( m_bgImg );
    }
    
+   m_iconView->setPaletteBackgroundPixmap ( bgPix );
    setPaletteBackgroundPixmap ( bgPix ); 
 
 }
@@ -198,7 +206,8 @@ void  ThumbView::slCheckForUpdate( KFileItem *kfit )
 
    /* iterate over all icon items and compare urls.
     * TODO: Check the parent url to avoid iteration over all */
-   for ( QIconViewItem *item = firstItem(); item && !haveItem; item = item->nextItem() )
+   for ( QIconViewItem *item = m_iconView->firstItem(); item && !haveItem;
+	 item = item->nextItem() )
    {
       if( searchUrl == static_cast<ThumbViewItem*>(item)->itemUrl() )
       {
@@ -228,11 +237,11 @@ bool ThumbView::deleteImage( KFileItem *kfit )
 
    /* iterate over all icon items and compare urls.
     * TODO: Check the parent url to avoid iteration over all */
-   for ( QIconViewItem *item = firstItem(); item && !haveItem; item = item->nextItem() )
+   for ( QIconViewItem *item = m_iconView->firstItem(); item && !haveItem; item = item->nextItem() )
    {
       if( searchUrl == static_cast<ThumbViewItem*>(item)->itemUrl() )
       {
-	 takeItem( item );
+	 m_iconView->takeItem( item );
 	 haveItem = true;
       }
    }
@@ -277,7 +286,7 @@ void ThumbView::slNewFileItems( const KFileItemList& items )
 	 }
          
 	 /* Create a new empty preview pixmap and store the pointer to it */
-	 ThumbViewItem *newIconViewIt = new ThumbViewItem( this,
+	 ThumbViewItem *newIconViewIt = new ThumbViewItem( m_iconView,
 							   item->url().filename(),
 							   createPixmap( p ),
 							   item );
@@ -293,6 +302,11 @@ void ThumbView::slNewFileItems( const KFileItemList& items )
 	  
    if( startJobOn.count() > 0 )
    {
+      /* Progress-Bar */
+      m_progress->show();
+      m_progress->setTotalSteps(startJobOn.count());
+      m_cntJobsStarted = 0;
+      
       /* start a preview-job */
       KIO::PreviewJob *job;
       job = KIO::filePreview(startJobOn, m_pixWidth, m_pixHeight );
@@ -303,6 +317,7 @@ void ThumbView::slNewFileItems( const KFileItemList& items )
 		  this, SLOT( slPreviewResult( KIO::Job * )));
 	 connect( job, SIGNAL( gotPreview( const KFileItem*, const QPixmap& )),
 		  SLOT( slGotPreview( const KFileItem*, const QPixmap& ) ));
+	 
         // connect( job, SIGNAL( failed( const KFileItem* )),
         //          this, SLOT( slotFailed( const KFileItem* ) ));
 
@@ -320,6 +335,11 @@ void ThumbView::slGotPreview( const KFileItem* newFileItem, const QPixmap& newPi
    if( ! item ) return;
 
    item->setPixmap( createPixmap(newPix) );
+   m_cntJobsStarted+=1;
+   
+   m_progress->setProgress(m_cntJobsStarted);
+   
+   kdDebug(28000)<< "jobs-Counter: " << m_cntJobsStarted << endl;
    
 }
 
@@ -330,6 +350,14 @@ void ThumbView::slPreviewResult( KIO::Job *job )
       kdDebug(28000) << "Thumbnail Creation ERROR: " << job->errorString() << endl;
       job->showErrorDialog( 0 );
    }
+   else
+   {
+      /* finished */
+      m_cntJobsStarted = 0;
+      m_progress->reset();
+      m_progress->hide();
+   }
+   
 }
 
 
