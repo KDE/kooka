@@ -100,10 +100,10 @@ void KookaPreferences::setupSaveFormatPage( )
    QVBoxLayout *top = new QVBoxLayout( page, 0, spacingHint() );
 
    /* Skip the format asking if a format entry  exists */
-   cbSkipFormatAsk = new QCheckBox( i18n("always display image save assistent"),
+   cbSkipFormatAsk = new QCheckBox( i18n("always display image save assistant"),
 				     page,  "CB_IMGASSIST_QUERY" );
    cbSkipFormatAsk->setChecked( konf->readBoolEntry( OP_FILE_ASK_FORMAT, true  ));
-   QToolTip::add( cbSkipFormatAsk, i18n("Check this if you want to see the image save asstistent even if there is a default format for the image type. " ));
+   QToolTip::add( cbSkipFormatAsk, i18n("Check this if you want to see the image save assistant even if there is a default format for the image type." ));
    top->addWidget( cbSkipFormatAsk );
 
    top->addStretch(10);
