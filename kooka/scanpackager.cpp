@@ -193,7 +193,7 @@ void ScanPackager::createMenus()
 			   this, SLOT(slotExportFile()), this);
       newAct->plug( popup );
 
-      newAct = new KAction(i18n("&Delete Image..."), "edittrash",0 ,
+      newAct = new KAction(i18n("&Delete Image"), "edittrash",0 ,
 			   this, SLOT(slotDeleteItems()), this);
       newAct->plug( popup );	
 
