@@ -1,0 +1,168 @@
+/***************************************************************************
+                          ksaneslider.cpp  -  description
+                             -------------------
+    begin                : Wed Jan 5 2000
+    copyright            : (C) 2000 by Klaas Freitag
+    email                : Klaas.Freitag@gmx.de
+ ***************************************************************************/
+
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
+
+#include <qlayout.h>
+#include "ksaneslider.h"
+
+KSANESlider::KSANESlider( QWidget *parent, const char *text, double min, double max )
+ : QFrame( parent )
+{
+ 	QHBoxLayout *hb = new QHBoxLayout( this );
+ 	 	
+ 	l1 = new QLabel( text, this, "AUTO_SLIDER_LABEL" + QString(text) );
+ 	hb->addWidget( l1,20 );
+ 	numdisp = new QLabel( "MMM", this, "AUTO_SLIDER_NUMDISP" + QString(text) );
+ 	numdisp->setAlignment( AlignRight );
+	numdisp->setMinimumHeight( numdisp->sizeHint().height());
+   numdisp->setMaximumHeight( numdisp->sizeHint().height());
+ 	hb->addWidget( numdisp, 8 );
+ 	hb->addStretch( 1);
+ 	
+ 	slider = new QSlider( min, max, 1, min, QSlider::Horizontal, this,
+ 										"AUTO_SLIDER_" );
+
+   slider->setTickmarks( QSlider::Below );
+   slider->setTickInterval( (max-min) / 10 );
+   slider->setSteps( (max-min)/20, (max-min)/10 );
+   slider->setMinimumHeight( slider->sizeHint().height());
+   slider->setMaximumHeight( slider->sizeHint().height());
+
+   /* Handle internal number display */
+	connect(slider, SIGNAL(valueChanged(int)), numdisp, SLOT( setNum(int) ));
+	connect(slider, SIGNAL( valueChanged(int)), this, SLOT( slSliderChange(int) ));
+		
+	/* set Value 0 to the widget */
+	slider_val = min - 1;
+	
+	/* Add to layout widget and activate */
+   hb->addWidget( slider, 36 );
+   hb->activate();
+
+}
+
+void KSANESlider::setEnabled( bool b )
+{
+	if( slider )
+		slider->setEnabled( b );
+	if( l1 )
+		l1->setEnabled( b );
+	if( numdisp )
+		numdisp->setEnabled( b );
+}
+
+void KSANESlider::slSetSlider( int value )
+{
+	/* Important to check value to avoid recursive signals ;) */
+	// debug( "Slider val: %d -> %d", value, slider_val );
+	debug("Setting Slider with %d", value );
+	if( value == slider_val )
+		return;
+		
+ 	slider->setValue( value );
+}
+
+void KSANESlider::slSliderChange( int v )
+{
+	// debug( "Got slider val: %d",v );
+	slider_val = v;
+ 	emit( valueChanged( v ));
+}
+
+KSANESlider::~KSANESlider()
+{
+}
+
+
+KSANEEntry::KSANEEntry( QWidget *parent, const char *text )
+ : QFrame( parent )
+{
+ 	QHBoxLayout *hb = new QHBoxLayout( this );
+ 	
+ 	QLabel *l1 = new QLabel( text, this, "AUTO_ENTRYFIELD" );
+ 	hb->addWidget( l1,1 );
+ 	
+ 	entry = new QLineEdit( this, "AUTO_ENTRYFIELD_E" );
+ 	connect( entry, SIGNAL( textChanged(const QString& )), this,
+ 			 	SLOT( slEntryChange(const QString&)));
+ 			
+ 	hb->addWidget( entry,3 );
+ 	entry->setMinimumHeight( entry->sizeHint().height() );
+ 	hb->activate();
+}
+
+void KSANEEntry::slSetEntry( const char *t )
+{
+	if( ! t || QString(t) == entry->text()) 	return;
+	/* Important to check value to avoid recursive signals ;) */
+		
+	entry->setText( t );
+}
+
+void KSANEEntry::slEntryChange( const QString& t )
+{
+ 	emit( valueChanged( t ));
+}
+
+KSANECombo::KSANECombo( QWidget *parent, const char *text, QStrList list )
+ : QFrame( parent )
+{
+ 	QHBoxLayout *hb = new QHBoxLayout( this );
+ 	combolist = list;
+ 	
+ 	QLabel *l1 = new QLabel( text, this, "AUTO_COMBOLABEL" );
+ 	hb->addWidget( l1,1 );
+ 	
+ 	combo = new QComboBox( this, "AUTO_COMBO" );
+ 	combo->insertStrList( &combolist);
+
+	hb->addWidget( combo, 2 );
+ 	combo->setMinimumHeight( combo->sizeHint().height() );
+ 	combo->setMaximumHeight( combo->sizeHint().height() );
+ 	l1->setMinimumHeight( combo->sizeHint().height() );
+ 	l1->setMaximumHeight( combo->sizeHint().height() );
+	
+ 	hb->activate();
+ 	
+ 	connect( combo, SIGNAL(activated( const QString &)),
+ 			   this,  SLOT( slComboChange( const QString &)));
+
+
+}
+
+void KSANECombo::slSetEntry( const QString &t )
+{
+	if( t.isNull() ) 	return;
+	int i = combolist.find( t );
+	
+	
+	/* Important to check value to avoid recursive signals ;) */
+	if( i == combo->currentItem() )
+		return;
+		
+	if( i > -1 )
+		combo->setCurrentItem( i );
+	else
+		debug( "Combo item not in list !");
+}
+
+void KSANECombo::slComboChange( const QString &t )
+{
+ 	emit( valueChanged( t ));
+ 	debug( "Combo: valueChanged emitted!" );
+}
+
+#include "ksaneslider.h"
