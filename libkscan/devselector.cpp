@@ -68,6 +68,37 @@ DeviceSelector::DeviceSelector( QWidget *parent, const QStrList& devList,
 
 }
 
+QCString DeviceSelector::getDeviceFromConfig( void ) const
+{
+   KGlobal::config()->setGroup( GROUP_STARTUP );
+   bool skipDialog = KGlobal::config()->readBoolEntry( STARTUP_SKIP_ASK, false );
+
+   QCString result;
+   
+   if( skipDialog )
+   {
+      /* in this case, the user has checked 'Do not ask me again' and does not
+       * want to be bothered any more.
+       */
+      result = KGlobal::config()->readEntry( STARTUP_SCANDEV, "" ).latin1();
+      kdDebug(29000) << "Got scanner from config file to use: " << result << endl;
+     
+      /* Now check if the scanner read from the config file is available !
+       * if not, ask the user !
+       */
+      if( devices.find( result ) > -1 )
+      {
+	 kdDebug(29000) << "Scanner from Config file is available - fine." << endl;
+      }
+      else
+      {
+	 kdDebug(29000) << "Scanner from Config file is _not_ available" << endl;
+	 result = (const char*) 0L;
+      }
+   }
+
+   return( result );
+}
 
 bool DeviceSelector::getShouldSkip( void ) const
 {
@@ -84,8 +115,11 @@ QCString DeviceSelector::getSelectedDevice( void ) const
    const char * dev = devices.at( selID );
 
    kdDebug(29000) << "The selected device: <" << dev << ">" << endl;
+
+   /* Store scanner selection settings */
    KGlobal::config()->setGroup( GROUP_STARTUP );
    KGlobal::config()->writeEntry( STARTUP_SCANDEV, dev );
+   KGlobal::config()->writeEntry( STARTUP_SKIP_ASK, getShouldSkip() );
 
    return dev;
 }
