@@ -178,6 +178,12 @@ ScanParams::~ScanParams()
       delete startupOptset;
       startupOptset = 0;
    }
+
+   if( progressDialog )
+   {
+      delete( progressDialog );
+      progressDialog = 0;
+   }
 }
 
 void ScanParams::initialise( KScanOption *so )
