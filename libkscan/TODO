@@ -1,1 +1,38 @@
 
+Our TODO List:
+1. Fri Oct 13 14:09:15 CEST 2000 - Nikolas Zimmermann
+  
+   *** Part 1 - Class Design ***
+   
+    We'll need two main-classes called "KScanDevice" and "KScanDialog" 
+    which include the following sub-classes:
+    
+    "KScanDevice" - low level hardware access (SANE Controlling)
+	o "KScanOption" - setting/getting SANE States/Values
+	o "KGammaTable" - calculating gamma, brightness and contrast
+	o "KScanSlider" - our slider-widget
+	o "KScanCombo" - our combo-widget
+	o "KScanEntry" - our label-widget
+
+    "KScanDialog" - a nice-looking standard dialog for scanning
+    
+   *** Part 2 - libkscan in YOUR app ***
+   
+    You'll have to start the function "launchScanDialog" in KScanDialog,
+    which provides you the complete Scanning Dialog.
+    ie. ( _not_ working sample)
+    void do_something_with_the_final_image( QImage final )
+    {
+     // foo
+    }
+    void scan()
+    {
+     KScanDialog *foo = new KScanDialog( this );
+     connect( foo, SIGNAL( finalScanFinished( QImage ) ), SLOT( do_something_with_the_final_image( QImage ) ); 
+     foo->show(); 
+    }
+    
+    Any simpler ideas ? :)
+    
+    
+ 
