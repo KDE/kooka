@@ -66,6 +66,9 @@ public:
     */
    bool backupOption( const KScanOption& );
 
+   /**
+    *  returns a pointer to a stored option given by name.
+    */
    KScanOption *get( const char *name ) const;
   
 private:
