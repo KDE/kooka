@@ -510,11 +510,11 @@ void KookaPreferences::slotApply( void )
 
     QString path = m_urlReqGocr->url();
     if( ! path.isEmpty() )
-        konf->writeEntry( CFG_GOCR_BINARY, path );
+        konf->writePathEntry( CFG_GOCR_BINARY, path );
 
     path = m_urlReqOcrad->url();
     if( ! path.isEmpty() )
-        konf->writeEntry( CFG_OCRAD_BINARY, path );
+        konf->writePathEntry( CFG_OCRAD_BINARY, path );
 
     konf->sync();
 
