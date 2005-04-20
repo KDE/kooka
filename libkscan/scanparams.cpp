@@ -114,7 +114,8 @@ bool ScanParams::connectDevice( KScanDevice *newScanDevice )
    /* A top layout box */
    // QVBoxLayout *top = new QVBoxLayout(this, 6);
    QHBox *hb = new QHBox( this );
-   QString cap = i18n("<B>Scanner Settings</B> ");
+   hb->layout()->setSpacing( KDialog::spacingHint() );
+   QString cap = i18n("<B>Scanner Settings</B>");
    cap += sane_device->getScannerName();
    (void ) new QLabel( cap, hb );
    m_led = new KLed( hb );
@@ -242,13 +243,15 @@ QScrollView *ScanParams::scannerParams( )
 
       KScanCombo *cb = (KScanCombo*) so->widget();
       Q_CHECK_PTR(cb);
-      cb->slSetIcon( pixLineArt,  i18n("Line art") );
-      cb->slSetIcon( pixLineArt,  i18n("Lineart"));
-      cb->slSetIcon( pixLineArt,  i18n("Binary" ));
-      cb->slSetIcon( pixGray,     i18n("Gray") );
-      cb->slSetIcon( pixGray,     i18n("Gray") );
-      cb->slSetIcon( pixColor,    i18n("Color") );
-      cb->slSetIcon( pixHalftone, i18n("Halftone") );
+            // the following strings are not translatable since the sane library does not translate them.
+            // so, if we want icons, we have to keep them non-translated for now.
+      cb->slSetIcon( pixLineArt, "Line art" );
+      cb->slSetIcon( pixLineArt, "Lineart" );
+      cb->slSetIcon( pixLineArt, "Binary" );
+      cb->slSetIcon( pixGray, "Gray" );
+      cb->slSetIcon( pixGray, "Gray" );
+      cb->slSetIcon( pixColor, "Color" );
+      cb->slSetIcon( pixHalftone, "Halftone" );
 
       // hb->setMargin( KDialog::marginHint() );
       // hb->setSpacing( KDialog::spacingHint());
