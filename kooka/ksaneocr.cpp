@@ -104,11 +104,14 @@ KSANEOCR::KSANEOCR( QWidget*, KConfig *cfg ):
         konf->setGroup( CFG_GROUP_OCR_DIA );
         QString eng = konf->readEntry(CFG_OCR_ENGINE, "ocrad");
 
-	if( eng == "ocrad" )
-	{
-	    m_ocrEngine = OCRAD;
-	}
-
+        if( eng == "ocrad" )
+        {
+            m_ocrEngine = OCRAD;
+        }
+        else if( eng == "gocr" )
+        {
+            m_ocrEngine = GOCR;
+        }
 #ifdef HAVE_KADMOS
         else if( eng == QString("kadmos") ) m_ocrEngine = KADMOS;
 #endif
