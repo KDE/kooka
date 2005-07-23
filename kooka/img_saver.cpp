@@ -769,7 +769,7 @@ bool ImgSaver::renameImage( const KURL& fromUrl, KURL& toUrl, bool askExt,  QWid
 	 s += i18n( "That would result in the new filename: %1" ).arg( fName);
 
 	 result = KMessageBox::questionYesNo(overWidget, s, i18n( "Extension Missing"),
-					     KStdGuiItem::yes(), KStdGuiItem::no(),
+					     i18n("Add Extension"), i18n("Do Not Add"),
 					     "AutoAddExtensions" );
       }
 
@@ -866,7 +866,7 @@ bool ImgSaver::copyImage( const KURL& fromUrl, const KURL& toUrl, QWidget *overW
       s += i18n( "That would result in the new filename: %1" ).arg( fName);
 
       result = KMessageBox::questionYesNo(overWidget, s, i18n( "Extension Missing"),
-					  KStdGuiItem::yes(), KStdGuiItem::no(),
+					  i18n("Add Extension"), i18n("Do Not Add"),
 					  "AutoAddExtensions" );
 
       if( result == KMessageBox::Yes )
