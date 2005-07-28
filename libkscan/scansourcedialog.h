@@ -21,7 +21,7 @@
 #define SCANSOURCEDIALOG_H
 #include <qwidget.h>
 #include <kdialogbase.h>
-#include <qstrlist.h>
+#include <q3strlist.h>
 #include <qstring.h>
 
 /**
@@ -32,13 +32,13 @@ typedef enum { ADF_OFF, ADF_SCAN_ALONG, ADF_SCAN_ONCE } ADF_BEHAVE;
 
 class KScanCombo;
 class QRadioButton;
-class QButtonGroup;
+class Q3ButtonGroup;
 
 class ScanSourceDialog : public KDialogBase
 {
    Q_OBJECT
 public:
-   ScanSourceDialog( QWidget *parent, const QStrList, ADF_BEHAVE );
+   ScanSourceDialog( QWidget *parent, const Q3StrList, ADF_BEHAVE );
    ~ScanSourceDialog();
 
    // void 	fillWithSources( QStrList *list );
@@ -57,7 +57,7 @@ public slots:
 private:
 
    KScanCombo    *sources;
-   QButtonGroup  *bgroup;
+   Q3ButtonGroup  *bgroup;
    QRadioButton  *rb0, *rb1;
    ADF_BEHAVE    adf;
    bool          adf_enabled;

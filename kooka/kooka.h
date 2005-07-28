@@ -35,6 +35,9 @@
 #include <kmainwindow.h>
 #include <kdockwidget.h>
 #include <kparts/dockmainwindow.h>
+//Added by qt3to4:
+#include <QDragEnterEvent>
+#include <Q3CString>
 
 #define KOOKA_STATE_GROUP "State"
 #define PREFERENCE_DIA_TAB "PreferencesTab"
@@ -59,7 +62,7 @@ public:
     /**
      * Default Constructor
      */
-    Kooka(const QCString& deviceToUse);
+    Kooka(const Q3CString& deviceToUse);
 
     /**
      * Default Destructor

@@ -25,9 +25,11 @@
  ***************************************************************************/
 
 #include <qstring.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 #include "ocrword.h"
 #include <qrect.h>
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 #include <kdebug.h>
 #include <qregexp.h>
 
@@ -54,7 +56,7 @@ QRect ocrWord::boundingRect()
 
 /* -------------------- CocrWordList ------------------ */
 ocrWordList::ocrWordList()
-    :QValueList<ocrWord>(),
+    :Q3ValueList<ocrWord>(),
      m_block(0)
 {
     // setAutoDelete( true );

@@ -33,7 +33,7 @@
 #include <qimage.h>
 #include <qpixmap.h>
 #include <qcolor.h>
-#include <qvbox.h>
+#include <q3vbox.h>
 
 #include <kiconview.h>
 #include <kurl.h>
@@ -52,11 +52,11 @@
 #define STD_TILE_IMG  "kooka/pics/thumbviewtile.png"
 
 class QPixmap;
-class QListViewItem;
+class Q3ListViewItem;
 class KProgress;
 class KIO::PreviewJob;
 
-class ThumbView: public QVBox /* KIconView */
+class ThumbView: public Q3VBox /* KIconView */
 {
    Q_OBJECT
 
@@ -104,7 +104,7 @@ public slots:
     *  This connects to the IconView's executed signal and tells the packager
     *  to select the image
     */
-   void slDoubleClicked( QIconViewItem* );
+   void slDoubleClicked( Q3IconViewItem* );
 
    /**
     *  indication that a image changed, needs to be reloaded.

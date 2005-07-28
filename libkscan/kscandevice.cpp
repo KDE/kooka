@@ -20,7 +20,7 @@
 #include <stdlib.h>
 #include <qwidget.h>
 #include <qobject.h>
-#include <qasciidict.h>
+#include <q3asciidict.h>
 #include <qcombobox.h>
 #include <qslider.h>
 #include <qcheckbox.h>
@@ -31,6 +31,9 @@
 #include <qimage.h>
 #include <qfileinfo.h>
 #include <qapplication.h>
+//Added by qt3to4:
+#include <Q3StrList>
+#include <Q3CString>
 #include <kdebug.h>
 #include <klocale.h>
 #include <kglobal.h>
@@ -73,7 +76,7 @@ public:
 /* ---------------------------------------------------------------------------
 
    ------------------------------------------------------------------------- */
-void KScanDevice::guiSetEnabled( const QCString& name, bool state )
+void KScanDevice::guiSetEnabled( const Q3CString& name, bool state )
 {
     KScanOption *so = getExistingGuiElement( name );
 
@@ -90,11 +93,11 @@ void KScanDevice::guiSetEnabled( const QCString& name, bool state )
 /* ---------------------------------------------------------------------------
 
    ------------------------------------------------------------------------- */
-KScanOption *KScanDevice::getExistingGuiElement( const QCString& name )
+KScanOption *KScanDevice::getExistingGuiElement( const Q3CString& name )
 {
     KScanOption *ret = 0L;
 
-    QCString alias = aliasName( name );
+    Q3CString alias = aliasName( name );
 
     /* gui_elements is a QList<KScanOption> */
     for( ret = gui_elements.first(); ret != 0; ret = gui_elements.next())
@@ -108,7 +111,7 @@ KScanOption *KScanDevice::getExistingGuiElement( const QCString& name )
 
    ------------------------------------------------------------------------- */
 
-KScanOption *KScanDevice::getGuiElement( const QCString& name, QWidget *parent,
+KScanOption *KScanDevice::getGuiElement( const Q3CString& name, QWidget *parent,
 					 const QString& desc,
 					 const QString& tooltip )
 {
@@ -116,7 +119,7 @@ KScanOption *KScanDevice::getGuiElement( const QCString& name, QWidget *parent,
    QWidget *w = 0;
    KScanOption *so = 0;
 
-   QCString alias = aliasName( name );
+   Q3CString alias = aliasName( name );
 
    /* Check if already exists */
    so = getExistingGuiElement( name );
@@ -169,7 +172,7 @@ KScanDevice::KScanDevice( QObject *parent )
 
     d = new KScanDevicePrivate();
     
-    option_dic = new QAsciiDict<int>;
+    option_dic = new Q3AsciiDict<int>;
     option_dic->setAutoDelete( true );
     gui_elements.setAutoDelete( true );
 
@@ -230,7 +233,7 @@ KScanDevice::~KScanDevice()
 }
 
 
-KScanStat KScanDevice::openDevice( const QCString& backend )
+KScanStat KScanDevice::openDevice( const Q3CString& backend )
 {
    KScanStat    stat      = KSCAN_OK;
    SANE_Status 	sane_stat = SANE_STATUS_GOOD;
@@ -297,12 +300,12 @@ void KScanDevice::slCloseDevice( )
 }
 
 
-QString KScanDevice::getScannerName(const QCString& name) const
+QString KScanDevice::getScannerName(const Q3CString& name) const
 {
   QString ret = i18n("No scanner selected");
   SANE_Device *scanner = 0L;
 
-  if( scanner_name && scanner_initialised && name.isEmpty())
+  if( !scanner_name.isEmpty() && scanner_initialised && name.isEmpty())
   {
      scanner = scannerDevices[ scanner_name ];
   }
@@ -403,16 +406,16 @@ KScanStat KScanDevice::find_options()
 }
 
 
-QStrList KScanDevice::getAllOptions()
+Q3StrList KScanDevice::getAllOptions()
 {
    return( option_list );
 }
 
-QStrList KScanDevice::getCommonOptions()
+Q3StrList KScanDevice::getCommonOptions()
 {
-   QStrList com_opt;
+   Q3StrList com_opt;
 
-   QCString s = option_list.first();
+   Q3CString s = option_list.first();
 
    while( !s.isEmpty() )
    {
@@ -424,11 +427,11 @@ QStrList KScanDevice::getCommonOptions()
    return( com_opt );
 }
 
-QStrList KScanDevice::getAdvancedOptions()
+Q3StrList KScanDevice::getAdvancedOptions()
 {
-   QStrList com_opt;
+   Q3StrList com_opt;
 
-   QCString s = option_list.first();
+   Q3CString s = option_list.first();
 
    while( !s.isEmpty() )
    {
@@ -448,7 +451,7 @@ KScanStat KScanDevice::apply( KScanOption *opt, bool isGammaTable )
 
    int         *num = (*option_dic)[ opt->getName() ];
    SANE_Status sane_stat = SANE_STATUS_GOOD;
-   const QCString& oname = opt->getName();
+   const Q3CString& oname = opt->getName();
 
    if ( oname == "preview" || oname == "mode" ) {
       sane_stat = sane_control_option( scanner_handle, *num,
@@ -549,12 +552,12 @@ KScanStat KScanDevice::apply( KScanOption *opt, bool isGammaTable )
    return( stat );
 }
 
-bool KScanDevice::optionExists( const QCString& name )
+bool KScanDevice::optionExists( const Q3CString& name )
 {
    if( name.isEmpty() ) return false;
    int *i = 0L;
 
-   QCString altname = aliasName( name );
+   Q3CString altname = aliasName( name );
 
    if( ! altname.isNull() )
        i = (*option_dic)[ altname ];
@@ -564,7 +567,7 @@ bool KScanDevice::optionExists( const QCString& name )
    return( *i > -1 );
 }
 
-void KScanDevice::slSetDirty( const QCString& name )
+void KScanDevice::slSetDirty( const Q3CString& name )
 {
    if( optionExists( name ) )
    {
@@ -583,10 +586,10 @@ void KScanDevice::slSetDirty( const QCString& name )
  *  cool thing :-|
  *  Maybe this helps us out ?
  */
-QCString KScanDevice::aliasName( const QCString& name )
+Q3CString KScanDevice::aliasName( const Q3CString& name )
 {
     int *i = (*option_dic)[ name ];
-    QCString ret;
+    Q3CString ret;
 
     if( i ) return( name );
     ret = name;
@@ -846,7 +849,7 @@ QString KScanDevice::optionNotifyString( int i ) const
 
 void KScanDevice::prepareScan( void )
 {
-    QAsciiDictIterator<int> it( *option_dic ); // iterator for dict
+    Q3AsciiDictIterator<int> it( *option_dic ); // iterator for dict
 
     kdDebug(29000) << "########################################################################################################" << endl;
     kdDebug(29000) << "Scanner: " << scanner_name << endl;
@@ -1122,7 +1125,7 @@ void KScanDevice::loadOptionSet( KScanOptSet *optSet )
    }
 
    // kdDebug(29000) << "Loading Option set: " << optSet->optSetName() << endl;
-   QAsciiDictIterator<KScanOption> it(*optSet);
+   Q3AsciiDictIterator<KScanOption> it(*optSet);
 
    kdDebug(29000) << "Postinstalling " << optSet->count() << " options" << endl;
    while( it.current() )
@@ -1464,7 +1467,7 @@ void  KScanDevice::getCurrentOptions( KScanOptSet *optSet )
       dirtyList.removeRef( so->getName());
    }
 
-   QStrListIterator it( dirtyList );
+   Q3StrListIterator it( dirtyList );
    while( it.current())
    {
       KScanOption so( it.current() );
@@ -1507,7 +1510,7 @@ void KScanDevice::slStoreConfig( const QString& key, const QString& val )
 bool KScanDevice::scanner_initialised = false;
 SANE_Handle KScanDevice::scanner_handle = 0L;
 SANE_Device const **KScanDevice::dev_list = 0L;
-QAsciiDict<int> *KScanDevice::option_dic = 0L;
+Q3AsciiDict<int> *KScanDevice::option_dic = 0L;
 KScanOptSet *KScanDevice::gammaTables = 0L;
 
 

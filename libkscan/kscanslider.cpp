@@ -25,6 +25,12 @@
 #include <qlabel.h>
 #include <qslider.h>
 #include <qlineedit.h>
+//Added by qt3to4:
+#include <QPixmap>
+#include <Q3CString>
+#include <Q3StrList>
+#include <Q3Frame>
+#include <QHBoxLayout>
 
 #include <kiconloader.h>
 #include <klocale.h>
@@ -34,7 +40,7 @@
 KScanSlider::KScanSlider( QWidget *parent, const QString& text,
 			  double min, double max, bool haveStdButt,
 			  int stdValue )
-   : QFrame( parent ),
+   : Q3Frame( parent ),
      m_stdValue( stdValue ),
      m_stdButt(0)
 {
@@ -58,7 +64,7 @@ KScanSlider::KScanSlider( QWidget *parent, const QString& text,
        hb->addSpacing( 4 );
     }
 
-    slider = new QSlider( (int) min, (int)max, 1, (int)min, QSlider::Horizontal, this, "AUTO_SLIDER_" );
+    slider = new QSlider( (int) min, (int)max, 1, (int)min, Qt::Horizontal, this, "AUTO_SLIDER_" );
     slider->setTickmarks( QSlider::Below );
     slider->setTickInterval( int(QMAX( (max-min)/10, 1 )) );
     slider->setSteps( int(QMAX( (max-min)/20, 1) ), int(QMAX( (max-min)/10, 1) ) );
@@ -150,7 +156,7 @@ KScanSlider::~KScanSlider()
 /* ====================================================================== */
 
 KScanEntry::KScanEntry( QWidget *parent, const QString& text )
- : QFrame( parent )
+ : Q3Frame( parent )
 {
     QHBoxLayout *hb = new QHBoxLayout( this );
 
@@ -202,20 +208,20 @@ void KScanEntry::slSetEntry( const QString& t )
 
 void KScanEntry::slEntryChange( const QString& t )
 {
-    emit valueChanged( QCString( t.latin1() ) );
+    emit valueChanged( Q3CString( t.latin1() ) );
 }
 
 void KScanEntry::slReturnPressed( void )
 {
    QString t = text();
-   emit returnPressed( QCString( t.latin1()));
+   emit returnPressed( Q3CString( t.latin1()));
 }
 
 
 
 KScanCombo::KScanCombo( QWidget *parent, const QString& text,
-			const QStrList& list )
-    : QHBox( parent ),
+			const Q3StrList& list )
+    : Q3HBox( parent ),
       combo(0)
 {
     createCombo( text );
@@ -226,7 +232,7 @@ KScanCombo::KScanCombo( QWidget *parent, const QString& text,
 
 KScanCombo::KScanCombo( QWidget *parent, const QString& text,
 			const QStringList& list )
-    : QHBox( parent ),
+    : Q3HBox( parent ),
       combo(0)
 {
     createCombo( text );
@@ -247,7 +253,7 @@ void KScanCombo::createCombo( const QString& text )
 
     (void) new QLabel( text, this, "AUTO_COMBOLABEL" );
 
-    combo = new QComboBox( this, "AUTO_COMBO" );
+    combo = new Q3ComboBox( this, "AUTO_COMBO" );
 
     connect( combo, SIGNAL(activated( const QString &)), this,
              SLOT( slComboChange( const QString &)));
@@ -274,7 +280,7 @@ void KScanCombo::slSetEntry( const QString &t )
 
 void KScanCombo::slComboChange( const QString &t )
 {
-    emit valueChanged( QCString( t.latin1() ) );
+    emit valueChanged( Q3CString( t.latin1() ) );
     kdDebug(29000) << "Combo: valueChanged emitted!" << endl;
 }
 

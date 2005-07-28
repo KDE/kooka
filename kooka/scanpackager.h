@@ -28,11 +28,16 @@
 #ifndef SCANPACKAGER_H
 #define SCANPACKAGER_H
 
-#include <qlistview.h>
+#include <q3listview.h>
 #include <qimage.h>
 #include <qpixmap.h>
-#include <qdragobject.h>
+#include <q3dragobject.h>
 #include <qmap.h>
+//Added by qt3to4:
+#include <QDragMoveEvent>
+#include <Q3PopupMenu>
+#include <Q3CString>
+#include <QDropEvent>
 #include <klistview.h>
 #include <kio/job.h>
 #include <kio/global.h>
@@ -45,7 +50,7 @@
   */
 
 class KURL;
-class QPopupMenu;
+class Q3PopupMenu;
 class KFileTreeViewItem;
 class KookaImage;
 class KookaImageMeta;
@@ -84,13 +89,13 @@ public:
 
     KFileTreeBranch* openRoot( const KURL&, bool open=false );
 
-   QPopupMenu *contextMenu() const { return m_contextMenu; }
+   Q3PopupMenu *contextMenu() const { return m_contextMenu; }
    void         openRoots();
 
 public slots:
    void         slSelectImage( const KURL& );
    void 	slAddImage( QImage *img, KookaImageMeta* meta = 0 );
-   void         slShowContextMenue(QListViewItem *, const QPoint &, int );
+   void         slShowContextMenue(Q3ListViewItem *, const QPoint &, int );
 
    void         slotExportFile( );
     void        slotImportFile();
@@ -106,8 +111,8 @@ protected:
    virtual void contentsDragMoveEvent( QDragMoveEvent *e );
 
 protected slots:
-   void         slClicked( QListViewItem * );
-   void         slFileRename( QListViewItem*, const QString&, int );
+   void         slClicked( Q3ListViewItem * );
+   void         slFileRename( Q3ListViewItem*, const QString&, int );
    // void         slFilenameChanged( KFileTreeViewItem*, const KURL & );
    void         slImageArrived( KFileTreeViewItem *item, KookaImage* image );
    void         slotCreateFolder( );
@@ -136,7 +141,7 @@ signals:
 private:
    QString     localFileName( KFileTreeViewItem* it ) const;
    void 	loadImageForItem( KFileTreeViewItem* item );
-   QCString     getImgFormat( KFileTreeViewItem* item ) const;
+   Q3CString     getImgFormat( KFileTreeViewItem* item ) const;
 
     QString 	 buildNewFilename( QString cmplFilename, QString currFormat ) const;
    KFileTreeViewItem *spFindItem( SearchType type, const QString name, const KFileTreeBranch* branch = 0 );
@@ -150,7 +155,7 @@ private:
     QString      currSelectedDir;
     KIO::Job     *copyjob;
     int          img_counter;
-    QPopupMenu    *m_contextMenu;
+    Q3PopupMenu    *m_contextMenu;
 
     // like m_nextUrlToSelect in KFileTreeView but for our own purposes (showing the image)
     KURL         m_nextUrlToShow;

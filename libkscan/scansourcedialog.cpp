@@ -26,15 +26,17 @@
 #include <qlabel.h>
 #include <qpushbutton.h>
 #include <qlayout.h>
-#include <qvbox.h>
-#include <qhbox.h>
+#include <q3vbox.h>
+#include <q3hbox.h>
 #include <qradiobutton.h>
 #include <qslider.h>
 #include <qlineedit.h>
 #include <qcombobox.h>
 
-#include <qvbuttongroup.h>
-#include <qbuttongroup.h>
+
+#include <q3buttongroup.h>
+//Added by qt3to4:
+#include <Q3StrList>
 
 
 extern "C"{
@@ -45,17 +47,17 @@ extern "C"{
 #endif
 
 
-ScanSourceDialog::ScanSourceDialog( QWidget *parent, const QStrList list, ADF_BEHAVE adfBehave )
+ScanSourceDialog::ScanSourceDialog( QWidget *parent, const Q3StrList list, ADF_BEHAVE adfBehave )
  : KDialogBase( parent, "SOURCE_DIALOG", true, i18n("Scan Source Selection"),
 		Ok|Cancel,Ok, true)
 {
-   QVBox *vbox = makeVBoxMainWidget();
+   Q3VBox *vbox = makeVBoxMainWidget();
 
    (void) new QLabel( i18n("<B>Source selection</B><P>"
 			   "Note that you may see more sources than actually exist"), vbox );
 
    /* Combo Box for sources */
-   const QStrList xx = list;
+   const Q3StrList xx = list;
    sources = new KScanCombo( vbox,
 			     i18n("Select the Scanner document source:"),
 			     xx);
@@ -68,7 +70,7 @@ ScanSourceDialog::ScanSourceDialog( QWidget *parent, const QStrList list, ADF_BE
 
    if( sourceAdfEntry() > -1 )
    {
-      bgroup = new QVButtonGroup( i18n("Advanced ADF-Options"), vbox, "ADF_BGROUP" );
+      bgroup = new Q3VButtonGroup( i18n("Advanced ADF-Options"), vbox, "ADF_BGROUP" );
 
       connect( bgroup, SIGNAL(clicked(int)), this, SLOT( slNotifyADF(int)));
 

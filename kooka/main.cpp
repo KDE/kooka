@@ -26,8 +26,10 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <qdict.h>
+#include <q3dict.h>
 #include <qpixmap.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 #include <kapplication.h>
 #include <dcopclient.h>
@@ -90,7 +92,7 @@ int main( int argc, char *argv[] )
    KIconLoader *loader = KGlobal::iconLoader();
 
    KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
-   QCString  devToUse = args->getOption( "d" );
+   Q3CString  devToUse = args->getOption( "d" );
    if( args->isSet("g") )
    {
       devToUse = "gallery";

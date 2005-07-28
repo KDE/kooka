@@ -30,8 +30,8 @@
 #define KOOKAIMAGE_H
 #include <kurl.h>
 #include <qimage.h>
-#include <qptrlist.h>
-#include <qvaluevector.h>
+#include <q3ptrlist.h>
+#include <q3valuevector.h>
 #include <qrect.h>
 
 #include <kfilemetainfo.h>
@@ -154,12 +154,12 @@ private:
     KFileItem           *m_fileItem;
     bool                m_fileBound;
 
-    QValueVector<QRect> m_tileVector;
+    Q3ValueVector<QRect> m_tileVector;
     int                 m_tileCols;  /* number of tile columns  */
 };
 
 
-class KookaImageList: public QPtrList<KookaImage>
+class KookaImageList: public Q3PtrList<KookaImage>
 {
 public:
    KookaImageList() {}

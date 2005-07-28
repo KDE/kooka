@@ -37,6 +37,8 @@
 #include <qstring.h>
 #include <qrect.h>
 #include <qstringlist.h>
+//Added by qt3to4:
+#include <QPixmap>
 
 #include <assert.h>
 

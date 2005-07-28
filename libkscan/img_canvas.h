@@ -22,17 +22,23 @@
 
 #include <qwidget.h>
 #include <qrect.h>
+//Added by qt3to4:
+#include <QPixmap>
+#include <QTimerEvent>
+#include <QResizeEvent>
+#include <Q3PopupMenu>
+#include <QMouseEvent>
 #include <stdlib.h>
 #include <qsize.h>
-#include <qwmatrix.h>
-#include <qscrollview.h>
-#include <qstrlist.h>
+#include <qmatrix.h>
+#include <q3scrollview.h>
+#include <q3strlist.h>
 
 #ifdef USE_KPIXMAPIO
 #include <kpixmapio.h>
 #endif
 
-class QPopupMenu;
+class Q3PopupMenu;
 class QPixmap;
 class QImage;
 class QPainter;
@@ -71,7 +77,7 @@ extern int max_dpi;
 
 
 
-class ImageCanvas: public QScrollView
+class ImageCanvas: public Q3ScrollView
 {
     Q_OBJECT
     Q_ENUMS( PopupIDs )
@@ -95,7 +101,7 @@ public:
     const QImage *rootImage();
 
     bool hasImage( void ) 	{ return acquired; }
-    QPopupMenu* contextMenu() { return m_contextMenu; }
+    Q3PopupMenu* contextMenu() { return m_contextMenu; }
     QRect sel( void );
 
     enum ScaleKinds { UNSPEC, DYNAMIC, FIT_ORIG, FIT_WIDTH, FIT_HEIGHT, ZOOM };
@@ -180,7 +186,7 @@ protected:
     void resizeEvent( QResizeEvent * event );
 
 private:
-    QStrList      urls;
+    Q3StrList      urls;
 
     int           scale_factor;
     const QImage        *image;
@@ -191,12 +197,12 @@ private:
     KPixmapIO	 pixIO;
 #endif
 
-    QWMatrix	 scale_matrix;
-    QWMatrix	 inv_scale_matrix;
+    QMatrix	 scale_matrix;
+    QMatrix	 inv_scale_matrix;
     QPixmap       *pmScaled;
     float	 used_yscaler;
     float	 used_xscaler;
-    QPopupMenu    *m_contextMenu;
+    Q3PopupMenu    *m_contextMenu;
     bool		 maintain_aspect;
 
     int	         timer_id;

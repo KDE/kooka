@@ -20,12 +20,17 @@
 #ifndef KSCANSLIDER_H
 #define KSCANSLIDER_H
 
-#include <qframe.h>
-#include <qstrlist.h>
-#include <qhbox.h>
+#include <q3frame.h>
+#include <q3strlist.h>
+#include <q3hbox.h>
 #include <qcombobox.h>
 #include <qslider.h>
 #include <qlineedit.h>
+//Added by qt3to4:
+#include <QPixmap>
+#include <QLabel>
+#include <Q3CString>
+#include <Q3ComboBox>
 /**
   *@author Klaas Freitag
   */
@@ -42,7 +47,7 @@ class QLabel;
  *
  * @author Klaas Freitag <freitag@suse.de>
  */
-class KScanSlider : public QFrame
+class KScanSlider : public Q3Frame
 {
    Q_OBJECT
    Q_PROPERTY( int slider_val READ value WRITE slSetSlider )
@@ -114,7 +119,7 @@ private:
 /**
  * a entry field with a prefix text for description.
  */
-class KScanEntry : public QFrame
+class KScanEntry : public Q3Frame
 {
    Q_OBJECT
    Q_PROPERTY( QString text READ text WRITE slSetEntry )
@@ -149,8 +154,8 @@ protected slots:
    void         slReturnPressed( void );
 
 signals:
-   void		valueChanged( const QCString& );
-   void         returnPressed( const QCString& );
+   void		valueChanged( const Q3CString& );
+   void         returnPressed( const Q3CString& );
 
 private slots:
    void		slEntryChange( const QString& );
@@ -167,7 +172,7 @@ private:
 /**
  * a combobox filled with a decriptional text.
  */
-class KScanCombo : public QHBox
+class KScanCombo : public Q3HBox
 {
    Q_OBJECT
    Q_PROPERTY( QString cbEntry READ currentText WRITE slSetEntry )
@@ -180,7 +185,7 @@ public:
     * @param text the text the combobox is prepended by
     * @param list a stringlist with values the list should contain.
     */
-   KScanCombo( QWidget *parent, const QString& text, const QStrList& list );
+   KScanCombo( QWidget *parent, const QString& text, const Q3StrList& list );
    KScanCombo( QWidget *parent, const QString& text, const QStringList& list );
    // ~KScanCombo();
 
@@ -229,13 +234,13 @@ private slots:
    void		slComboChange( const QString & );
 
 signals:
-   void		valueChanged( const QCString& );
+   void		valueChanged( const Q3CString& );
    void         activated(int);
 
 private:
     void createCombo( const QString& text );
-   QComboBox	*combo;
-   QStrList	combolist;
+   Q3ComboBox	*combo;
+   Q3StrList	combolist;
 
    class KScanComboPrivate;
    KScanComboPrivate *d;

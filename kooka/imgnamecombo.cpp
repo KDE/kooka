@@ -27,7 +27,7 @@
 
 #include <qlayout.h>
 #include <qlabel.h>
-#include <qlistview.h>
+#include <q3listview.h>
 
 #include <kcombobox.h>
 

@@ -40,7 +40,7 @@
 
 class KScanCombo;
 class QWidget;
-class QButtonGroup;
+class Q3ButtonGroup;
 class KConfig;
 class QCheckBox;
 class KSpellConfig;
@@ -88,9 +88,9 @@ public slots:
 protected:
     void writeConfig();
 
-    void setupPreprocessing( QVBox *box );
-    void setupSegmentation(  QVBox *box );
-    void setupClassification( QVBox *box );
+    void setupPreprocessing( Q3VBox *box );
+    void setupSegmentation(  Q3VBox *box );
+    void setupClassification( Q3VBox *box );
 
     EngineError findClassifiers();
     EngineError findClassifierPath();
@@ -105,13 +105,13 @@ private:
     QCheckBox             *m_cbAutoscale;
     QString                m_customClassifierPath;
 
-    QButtonGroup	  *m_bbFont;
+    Q3ButtonGroup	  *m_bbFont;
 
     QRadioButton          *m_rbMachine;
     QRadioButton          *m_rbHand;
     QRadioButton          *m_rbNorm;
 
-    QGroupBox      	  *m_gbLang;
+    Q3GroupBox      	  *m_gbLang;
 
     QComboBox             *m_cbLang;
 

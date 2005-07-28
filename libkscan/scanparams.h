@@ -23,8 +23,8 @@
 #include "kscandevice.h"
 #include "scansourcedialog.h"
 
-#include <qvbox.h>
-#include <qhbox.h>
+#include <q3vbox.h>
+#include <q3hbox.h>
 
 #include <qdir.h>
 #include <qpixmap.h>
@@ -35,16 +35,16 @@
 
 class GammaDialog;
 class KScanOptSet;
-class QScrollView;
+class Q3ScrollView;
 class KLed;
-class QProgressDialog;
+class Q3ProgressDialog;
 class QPushButton;
 class QCheckBox;
-class QButtonGroup;
+class Q3ButtonGroup;
 
 typedef enum { ID_SANE_DEBUG, ID_QT_IMGIO, ID_SCAN } ScanMode;
 
-class ScanParams : public QVBox
+class ScanParams : public Q3VBox
 {
    Q_OBJECT
 public:
@@ -147,7 +147,7 @@ void slSourceSelect( void );
 private:
 
 
-   QScrollView*  scannerParams( );
+   Q3ScrollView*  scannerParams( );
    void          virtualScannerParams( void );
    void          createNoScannerMsg( void );
    void          initialise( KScanOption* );
@@ -161,7 +161,7 @@ private:
    QPushButton   *pb_edit_gtable;
    QPushButton   *pb_source_sel;
    ADF_BEHAVE	  adf;
-   QButtonGroup  *bg_virt_scan_mode;
+   Q3ButtonGroup  *bg_virt_scan_mode;
    ScanMode  	  scan_mode;
    QDir          last_virt_scan_path;
 
@@ -169,7 +169,7 @@ private:
 
    KScanOptSet   *startupOptset;
 
-   QProgressDialog *progressDialog;
+   Q3ProgressDialog *progressDialog;
 
    QPixmap       pixLineArt, pixGray, pixColor, pixHalftone, pixMiniFloppy;
    KLed          *m_led;

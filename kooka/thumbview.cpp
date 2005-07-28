@@ -48,7 +48,7 @@
 
 
 ThumbView::ThumbView( QWidget *parent, const char *name )
-   : QVBox( parent ),
+   : Q3VBox( parent ),
      m_iconView(0),
      m_job(0)
 {
@@ -73,8 +73,8 @@ ThumbView::ThumbView( QWidget *parent, const char *name )
 
    slSetBackGround();
 
-   connect( m_iconView, SIGNAL( executed( QIconViewItem* )),
-	    this, SLOT( slDoubleClicked( QIconViewItem* )));
+   connect( m_iconView, SIGNAL( executed( Q3IconViewItem* )),
+	    this, SLOT( slDoubleClicked( Q3IconViewItem* )));
 
    m_pendingJobs.setAutoDelete(false);
 }
@@ -149,7 +149,7 @@ bool ThumbView::readSettings()
    return (sizeDirty || dirty);
 }
 
-void ThumbView::slDoubleClicked( QIconViewItem *qIt )
+void ThumbView::slDoubleClicked( Q3IconViewItem *qIt )
 {
    ThumbViewItem *it = static_cast<ThumbViewItem*>( qIt );
 
@@ -214,7 +214,7 @@ void ThumbView::slImageRenamed( KFileItem *kfit, const KURL& newUrl )
 	clear();
     }
     
-    for ( QIconViewItem *item = m_iconView->firstItem(); item; item = item->nextItem() )
+    for ( Q3IconViewItem *item = m_iconView->firstItem(); item; item = item->nextItem() )
     {
         ThumbViewItem *it=static_cast<ThumbViewItem*>( item );
 
@@ -239,7 +239,7 @@ void  ThumbView::slCheckForUpdate( KFileItem *kfit )
 
    /* iterate over all icon items and compare urls.
     * TODO: Check the parent url to avoid iteration over all */
-   for ( QIconViewItem *item = m_iconView->firstItem(); item && !haveItem;
+   for ( Q3IconViewItem *item = m_iconView->firstItem(); item && !haveItem;
 	 item = item->nextItem() )
    {
       if( searchUrl == static_cast<ThumbViewItem*>(item)->itemUrl() )
@@ -270,7 +270,7 @@ bool ThumbView::deleteImage( KFileItem *kfit )
 
    /* iterate over all icon items and compare urls.
     * TODO: Check the parent url to avoid iteration over all */
-   for ( QIconViewItem *item = m_iconView->firstItem(); item && !haveItem; item = item->nextItem() )
+   for ( Q3IconViewItem *item = m_iconView->firstItem(); item && !haveItem; item = item->nextItem() )
    {
       if( searchUrl == static_cast<ThumbViewItem*>(item)->itemUrl() )
       {

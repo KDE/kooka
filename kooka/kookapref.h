@@ -27,7 +27,9 @@
 #define KOOKAPREF_H
 
 #include <kdialogbase.h>
-#include <qframe.h>
+#include <q3frame.h>
+//Added by qt3to4:
+#include <QLabel>
 
 class KConfig;
 class QLabel;

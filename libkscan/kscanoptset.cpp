@@ -18,9 +18,11 @@
 */
 
 #include <qstring.h>
-#include <qasciidict.h>
+#include <q3asciidict.h>
 #include <qmap.h>
-#include <qdict.h>
+#include <q3dict.h>
+//Added by qt3to4:
+#include <Q3CString>
 #include <kdebug.h>
 #include <kconfig.h>
 
@@ -28,7 +30,7 @@
 #include "kscanoption.h"
 #include "kscanoptset.h"
 
-KScanOptSet::KScanOptSet( const QCString& setName )
+KScanOptSet::KScanOptSet( const Q3CString& setName )
 {
   name = setName;
 
@@ -49,7 +51,7 @@ KScanOptSet::~KScanOptSet()
 
 
 
-KScanOption *KScanOptSet::get( const QCString name ) const
+KScanOption *KScanOptSet::get( const Q3CString name ) const
 {
   KScanOption *ret = 0;
 
@@ -58,10 +60,10 @@ KScanOption *KScanOptSet::get( const QCString name ) const
   return( ret );
 }
 
-QCString KScanOptSet::getValue( const QCString name ) const
+Q3CString KScanOptSet::getValue( const Q3CString name ) const
 {
    KScanOption *re = get( name );
-   QCString retStr = "";
+   Q3CString retStr = "";
 
    if( re )
    {
@@ -80,8 +82,8 @@ bool KScanOptSet::backupOption( const KScanOption& opt )
   bool retval = true;
 
   /** Allocate a new option and store it **/
-  const QCString& optName = opt.getName();
-  if( !optName )
+  const Q3CString& optName = opt.getName();
+  if( !optName.isEmpty() )
     retval = false;
 
   if( retval )
@@ -96,7 +98,7 @@ bool KScanOptSet::backupOption( const KScanOption& opt )
      }
      else
      {
-	const QCString& qq = opt.get();
+	const Q3CString& qq = opt.get();
 	kdDebug(29000) << "Value is now: <" << qq << ">" << endl;
 	const KScanOption *newopt = new KScanOption( opt );
 
@@ -125,9 +127,9 @@ void KScanOptSet::slSetDescription( const QString& str )
    description = str;
 }
 
-void KScanOptSet::backupOptionDict( const QAsciiDict<KScanOption>& optDict )
+void KScanOptSet::backupOptionDict( const Q3AsciiDict<KScanOption>& optDict )
 {
-   QAsciiDictIterator<KScanOption> it( optDict );
+   Q3AsciiDictIterator<KScanOption> it( optDict );
 
    while ( it.current() )
    {
@@ -156,7 +158,7 @@ void KScanOptSet::saveConfig( const QString& scannerName, const QString& configN
 
    scanConfig->writeEntry( "description", descr );
    scanConfig->writeEntry( "scannerName", scannerName );
-   QAsciiDictIterator<KScanOption> it( *this);
+   Q3AsciiDictIterator<KScanOption> it( *this);
 
     while ( it.current() )
     {
@@ -202,10 +204,10 @@ bool KScanOptSet::load( const QString& /*scannerName*/ )
       StringMap::Iterator it;
       for( it = strMap.begin(); it != strMap.end(); ++it )
       {
-	 QCString optName = it.key().latin1();
+	 Q3CString optName = it.key().latin1();
 	 KScanOption optset( optName );
 
-	 QCString val = it.data().latin1();
+	 Q3CString val = it.data().latin1();
 	 kdDebug(29000) << "Reading for " << optName << " value " << val << endl;
 
 	 optset.set( val );

@@ -29,15 +29,17 @@
 #include <qobject.h>
 #include <qwidget.h>
 #include <qlabel.h>
-#include <qmemarray.h>
+#include <q3memarray.h>
 #include <qstring.h>
 #include <qimage.h>
+//Added by qt3to4:
+#include <Q3CString>
 #include <stdlib.h>
 #include <qdialog.h>
 #include <qpushbutton.h>
 #include <qcombobox.h>
 #include <qcheckbox.h>
-#include <qlistbox.h>
+#include <q3listbox.h>
 #include <qmap.h>
 #include <kdialogbase.h>
 #include <kurl.h>
@@ -106,7 +108,7 @@ public:
 
 
    QString      getFormat( ) const;
-   QCString      getSubFormat( ) const;
+   Q3CString      getSubFormat( ) const;
    QString      errorString( ImgSaveStat stat );
 
    bool         askForFormat( ) const
@@ -127,7 +129,7 @@ private:
 
    QMap<QString, QString> 	format_help;
    QComboBox   	*cb_subf;
-   QListBox    	*lb_format;
+   Q3ListBox    	*lb_format;
    QLabel      	*l_help;
    QLabel	*l2;
    QCheckBox    *cbRemember;
@@ -165,7 +167,7 @@ public:
    /**
     *  returns the image format of the last saved image.
     */
-   QCString    lastSaveFormat( void ) const { return( last_format ); }
+   Q3CString    lastSaveFormat( void ) const { return( last_format ); }
 
    QString     getFormatForType( picType ) const;
    void        storeFormatForType( picType, QString, bool );
@@ -198,8 +200,8 @@ private:
    // QStrList    all_formats;
    QString     	directory;    // dir where the image should be saved
    QString     	last_file;
-   QCString   	subformat;
-   QCString    	last_format;
+   Q3CString   	subformat;
+   Q3CString    	last_format;
    bool	       	ask_for_format;
 
    // QDict<QString> formats;

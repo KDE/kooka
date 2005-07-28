@@ -37,13 +37,17 @@
 #include <qapplication.h>
 #include <qdir.h>
 #include <qfile.h>
-#include <qpopupmenu.h>
-#include <qdict.h>
+#include <q3popupmenu.h>
+#include <q3dict.h>
 #include <qpixmap.h>
+//Added by qt3to4:
+#include <QDragMoveEvent>
+#include <Q3CString>
+#include <QDropEvent>
 #include <kmessagebox.h>
-#include <qfiledialog.h>
+#include <q3filedialog.h>
 #include <qstringlist.h>
-#include <qheader.h>
+#include <q3header.h>
 
 #include <kfiletreeview.h>
 #include <kfiletreeviewitem.h>
@@ -74,15 +78,15 @@ ScanPackager::ScanPackager( QWidget *parent ) : KFileTreeView( parent )
 {
    // TODO:
    setItemsRenameable (true );
-   setDefaultRenameAction( QListView::Reject );
+   setDefaultRenameAction( Q3ListView::Reject );
    addColumn( i18n("Image Name" ));
-   setColumnAlignment( 0, AlignLeft );
+   setColumnAlignment( 0, Qt::AlignLeft );
 
    addColumn( i18n("Size") );
-   setColumnAlignment( 1, AlignRight );
-   setColumnAlignment( 2, AlignRight );
+   setColumnAlignment( 1, Qt::AlignRight );
+   setColumnAlignment( 2, Qt::AlignRight );
 
-   addColumn( i18n("Format" )); setColumnAlignment( 3, AlignRight );
+   addColumn( i18n("Format" )); setColumnAlignment( 3, Qt::AlignRight );
 
    /* Drag and Drop */
    setDragEnabled( true );
@@ -100,14 +104,14 @@ ScanPackager::ScanPackager( QWidget *parent ) : KFileTreeView( parent )
 
    setRootIsDecorated( false );
 
-   connect( this, SIGNAL( clicked( QListViewItem*)),
-	    SLOT( slClicked(QListViewItem*)));
+   connect( this, SIGNAL( clicked( Q3ListViewItem*)),
+	    SLOT( slClicked(Q3ListViewItem*)));
 
-   connect( this, SIGNAL( rightButtonPressed( QListViewItem *, const QPoint &, int )),
-	    SLOT( slShowContextMenue(QListViewItem *, const QPoint &, int )));
+   connect( this, SIGNAL( rightButtonPressed( Q3ListViewItem *, const QPoint &, int )),
+	    SLOT( slShowContextMenue(Q3ListViewItem *, const QPoint &, int )));
 
-   connect( this, SIGNAL(itemRenamed (QListViewItem*, const QString &, int ) ), this,
-	    SLOT(slFileRename( QListViewItem*, const QString&, int)));
+   connect( this, SIGNAL(itemRenamed (Q3ListViewItem*, const QString &, int ) ), this,
+	    SLOT(slFileRename( Q3ListViewItem*, const QString&, int)));
 
 
    img_counter = 1;
@@ -308,7 +312,7 @@ void ScanPackager::slotDecorate( KFileTreeBranch* branch, const KFileTreeViewIte
 
 
 
-void ScanPackager::slFileRename( QListViewItem* it, const QString& newStr, int )
+void ScanPackager::slFileRename( Q3ListViewItem* it, const QString& newStr, int )
 {
 
    bool success = true;
@@ -499,7 +503,7 @@ void ScanPackager::slotSelectDirectory( const QString & dirString )
 
 /* ----------------------------------------------------------------------- */
 /* This slot is called when clicking on an item.                           */
-void ScanPackager::slClicked( QListViewItem *newItem )
+void ScanPackager::slClicked( Q3ListViewItem *newItem )
 {
    KFileTreeViewItem *item = static_cast<KFileTreeViewItem*>(newItem);
 
@@ -517,7 +521,7 @@ void ScanPackager::slClicked( QListViewItem *newItem )
       {
 	 /* if not a dir, load the image if necessary. This is done by loadImageForItem,
 	  * which is async( TODO ). The image finally arrives in slotImageArrived */
-	 QApplication::setOverrideCursor(waitCursor);
+	 QApplication::setOverrideCursor(Qt::waitCursor);
 	 emit( aboutToShowImage( item->url()));
 	 loadImageForItem( item );
 	 QApplication::restoreOverrideCursor();
@@ -698,10 +702,10 @@ QString ScanPackager::getCurrImageFileName( bool withPath = true ) const
 }
 
 /* ----------------------------------------------------------------------- */
-QCString ScanPackager::getImgFormat( KFileTreeViewItem* item ) const
+Q3CString ScanPackager::getImgFormat( KFileTreeViewItem* item ) const
 {
 
-   QCString cstr;
+   Q3CString cstr;
 
    if( !item ) return( cstr );
 #if 0
@@ -751,7 +755,7 @@ void ScanPackager::slotCurrentImageChanged( QImage *img )
    slotUnloadItem( curr );
 
    const QString filename = localFileName( curr );
-   const QCString format = getImgFormat( curr );
+   const Q3CString format = getImgFormat( curr );
    ImgSaver saver( this );
    ImgSaveStat is_stat = ISS_OK;
    is_stat = saver.saveImage( img, filename, format );
@@ -863,7 +867,7 @@ void ScanPackager::slAddImage( QImage *img, KookaImageMeta* )
 
    QString s;
    /* Count amount of children of the father */
-   QListViewItem *paps = curr->parent();
+   Q3ListViewItem *paps = curr->parent();
    if( curr->isDir() ) /* take only father if the is no directory */
       paps = curr;
 
@@ -953,7 +957,7 @@ KFileTreeViewItem *ScanPackager::spFindItem( SearchType type, const QString name
 }
 
 /* ----------------------------------------------------------------------- */
-void ScanPackager::slShowContextMenue(QListViewItem *lvi, const QPoint &p, int col )
+void ScanPackager::slShowContextMenue(Q3ListViewItem *lvi, const QPoint &p, int col )
 {
    kdDebug(28000) << "Showing Context Menue" << endl;
    (void) col;
@@ -1131,7 +1135,7 @@ void ScanPackager::slotDeleteItems( )
    if( ! curr ) return;
 
    KURL urlToDel = curr->url();
-   QListViewItem *nextToSelect = curr->nextSibling();
+   Q3ListViewItem *nextToSelect = curr->nextSibling();
 
    kdDebug(28000) << "Deleting: " << urlToDel.prettyURL() << endl;
    bool ask = true; /* for later use */
@@ -1247,13 +1251,13 @@ void ScanPackager::contentsDragMoveEvent( QDragMoveEvent *e )
       return;
    }
 
-   QListViewItem *afterme = 0;
-   QListViewItem *parent = 0;
+   Q3ListViewItem *afterme = 0;
+   Q3ListViewItem *parent = 0;
 
    findDrop( e->pos(), parent, afterme );
 
    // "afterme" is 0 when aiming at a directory itself
-   QListViewItem *item = afterme ? afterme : parent;
+   Q3ListViewItem *item = afterme ? afterme : parent;
 
    if( item )
    {

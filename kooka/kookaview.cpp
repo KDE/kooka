@@ -49,11 +49,14 @@
 #include <qpainter.h>
 #include <qlayout.h>
 #include <qsplitter.h>
-#include <qstrlist.h>
+#include <q3strlist.h>
 #include <qpaintdevice.h>
-#include <qpaintdevicemetrics.h>
-#include <qpopupmenu.h>
-#include <qwidgetstack.h>
+#include <q3paintdevicemetrics.h>
+#include <q3popupmenu.h>
+#include <q3widgetstack.h>
+//Added by qt3to4:
+#include <QPixmap>
+#include <Q3CString>
 
 #include <kurl.h>
 #include <krun.h>
@@ -82,7 +85,7 @@
 #define STARTUP_IMG_SELECTION   "SelectedImageOnStartup"
 
 
-KookaView::KookaView( KParts::DockMainWindow *parent, const QCString& deviceToUse)
+KookaView::KookaView( KParts::DockMainWindow *parent, const Q3CString& deviceToUse)
    : QObject(),
      m_ocrResultImg(0),
      ocrFabric(0),
@@ -161,7 +164,7 @@ KookaView::KookaView( KParts::DockMainWindow *parent, const QCString& deviceToUs
 
    m_dockRecent->setDockSite(KDockWidget::DockFullSite);
 
-   QHBox *recentBox = new QHBox( m_dockRecent );
+   Q3HBox *recentBox = new Q3HBox( m_dockRecent );
    recentBox->setMargin(KDialog::marginHint());
    QLabel *lab = new QLabel( i18n("Gallery:"), recentBox );
    lab->setSizePolicy( QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed) );
@@ -236,7 +239,7 @@ KookaView::KookaView( KParts::DockMainWindow *parent, const QCString& deviceToUs
                                   100 );                  // relation target/this (in percent)
 
        m_ocrResEdit->setTextFormat( Qt::PlainText );
-       m_ocrResEdit->setWordWrap( QTextEdit::NoWrap );
+       m_ocrResEdit->setWordWrap( Q3TextEdit::NoWrap );
        // m_dockOCRText->hide();
    }
 
@@ -306,13 +309,13 @@ void KookaView::slViewerReadOnly( bool )
 }
 
 
-bool KookaView::slSelectDevice( const QCString& useDevice )
+bool KookaView::slSelectDevice( const Q3CString& useDevice )
 {
 
    kdDebug(28000) << "Kookaview: select a device!" << endl;
    bool haveConnection = false;
 
-   QCString selDevice;
+   Q3CString selDevice;
    /* in case useDevice is the term 'gallery', the user does not want to
     * connect to a scanner, but only work in gallery mode. Otherwise, try
     * to read the device to use from config or from a user dialog */
@@ -397,16 +400,16 @@ bool KookaView::slSelectDevice( const QCString& useDevice )
    return( haveConnection );
 }
 
-QCString KookaView::userDeviceSelection( ) const
+Q3CString KookaView::userDeviceSelection( ) const
 {
    /* Human readable scanner descriptions */
    QStringList hrbackends;
 
    /* a list of backends the scan backend knows */
-   QStrList backends = sane->getDevices();
+   Q3StrList backends = sane->getDevices();
    QStrListIterator  it( backends );
 
-   QCString selDevice;
+   Q3CString selDevice;
    if( backends.count() > 0 )
    {
       while( it )
@@ -709,7 +712,7 @@ void KookaView::slRotateImage(int angle)
    {
       QImage resImg;
 
-      QApplication::setOverrideCursor(waitCursor);
+      QApplication::setOverrideCursor(Qt::waitCursor);
       switch( angle )
       {
 	 case 90:
@@ -754,7 +757,7 @@ void KookaView::slMirrorImage( MirrorType m )
    {
       QImage resImg;
 
-      QApplication::setOverrideCursor(waitCursor);
+      QApplication::setOverrideCursor(Qt::waitCursor);
       switch( m )
       {
 	 case MirrorVertical:
@@ -866,12 +869,12 @@ void KookaView::slShowThumbnails(KFileTreeViewItem *dirKfi, bool forceRedraw )
       /* do on the current visible dir */
       KFileTreeViewItem *kftvi = packager->currentKFileTreeViewItem();
       if( ! kftvi->isDir())
-	 kftvi = static_cast<KFileTreeViewItem*>(static_cast<QListViewItem*>(kftvi)->parent());
+	 kftvi = static_cast<KFileTreeViewItem*>(static_cast<Q3ListViewItem*>(kftvi)->parent());
       if( kftvi )
       {
 	 dirKfi = kftvi;
 	 forceRedraw = true;
-	 packager->setSelected( static_cast<QListViewItem*>(dirKfi), true );
+	 packager->setSelected( static_cast<Q3ListViewItem*>(dirKfi), true );
       }
    }
 
@@ -886,7 +889,7 @@ void KookaView::slShowThumbnails(KFileTreeViewItem *dirKfi, bool forceRedraw )
 
       KFileItemList fileItemsList;
 
-      QListViewItem * myChild = dirKfi->firstChild();
+      Q3ListViewItem * myChild = dirKfi->firstChild();
       while( myChild )
       {
          fileItemsList.append( static_cast<KFileTreeViewItem*>(myChild)->fileItem());
@@ -967,7 +970,7 @@ QImage KookaView::rotateLeft( QImage *m_img )
    
    if( m_img )
    {
-       QWMatrix m;
+       QMatrix m;
 
        m.rotate(-90);
        rot = m_img->xForm(m);
@@ -981,7 +984,7 @@ QImage KookaView::rotateRight( QImage *m_img )
    
    if( m_img )
    {
-       QWMatrix m;
+       QMatrix m;
 
        m.rotate(+90);
        rot = m_img->xForm(m);
@@ -995,7 +998,7 @@ QImage KookaView::rotate180( QImage *m_img )
    
    if( m_img )
    {
-       QWMatrix m;
+       QMatrix m;
 
        m.rotate(+180);
        rot = m_img->xForm(m);
@@ -1007,7 +1010,7 @@ QImage KookaView::rotate180( QImage *m_img )
 
 void KookaView::connectViewerAction( KAction *action )
 {
-   QPopupMenu *popup = img_canvas->contextMenu();
+   Q3PopupMenu *popup = img_canvas->contextMenu();
    kdDebug(29000) << "This is the popup: " << popup << endl;
    if( popup && action )
    {
@@ -1017,7 +1020,7 @@ void KookaView::connectViewerAction( KAction *action )
 
 void KookaView::connectGalleryAction( KAction *action )
 {
-   QPopupMenu *popup = packager->contextMenu();
+   Q3PopupMenu *popup = packager->contextMenu();
 
    if( popup && action )
    {

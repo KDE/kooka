@@ -34,6 +34,8 @@
 #include <kio/previewjob.h>
 #include <kfileitem.h>
 #include <kfileiconview.h>
+//Added by qt3to4:
+#include <QPixmap>
 
 class KFileTreeViewItem;
 
@@ -41,7 +43,7 @@ class KFileTreeViewItem;
 class ThumbViewItem: public KFileIconViewItem
 {
 public:
-   ThumbViewItem( QIconView *parent,
+   ThumbViewItem( Q3IconView *parent,
 		  const QString &text,
 		  const QPixmap &pixmap,
 		  KFileItem *fi );

@@ -27,13 +27,13 @@
 #ifndef _OCR_RESEDIT_
 #define _OCR_RESEDIT_
 
-#include <qtextedit.h>
+#include <q3textedit.h>
 
 class QString;
 class QColor;
 class ocrWord;
 
-class ocrResEdit : public QTextEdit
+class ocrResEdit : public Q3TextEdit
 {
     Q_OBJECT
 public:

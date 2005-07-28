@@ -22,6 +22,9 @@
 #include <qslider.h>
 #include <qlineedit.h>
 #include <qcombobox.h>
+//Added by qt3to4:
+#include <QVBoxLayout>
+#include <QHBoxLayout>
 
 #include <kscanslider.h>
 #include <klocale.h>

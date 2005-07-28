@@ -28,8 +28,8 @@
 #define _OCR_WORD_
 
 #include <qstringlist.h>
-#include <qvaluevector.h>
-#include <qvaluelist.h>
+#include <q3valuevector.h>
+#include <q3valuelist.h>
 #include <qrect.h>
 
 class QString;
@@ -75,7 +75,7 @@ private:
 /**
  * This represents a line of words in an ocr'ed document
  */
-class ocrWordList : public QValueList<ocrWord>
+class ocrWordList : public Q3ValueList<ocrWord>
 {
 public:
     ocrWordList();
@@ -98,14 +98,14 @@ private:
  * All lines of a block: A value vector containing as much as entries
  * as lines are available in a block. Needs to be resized acordingly.
  */
-typedef QValueVector<ocrWordList> ocrBlock;
+typedef Q3ValueVector<ocrWordList> ocrBlock;
 
 /**
  * Blocks taken together form the page.
  * Attention: Needs to be resized to the amount of blocks !!
  */
-typedef QValueVector<ocrBlock> ocrBlockPage;
+typedef Q3ValueVector<ocrBlock> ocrBlockPage;
 
-typedef QValueVector<QRect> rectList;
+typedef Q3ValueVector<QRect> rectList;
 
 #endif

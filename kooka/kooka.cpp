@@ -34,7 +34,11 @@
 #include <qprinter.h>
 #include <qprintdialog.h>
 #include <qpainter.h>
-#include <qpaintdevicemetrics.h>
+#include <q3paintdevicemetrics.h>
+//Added by qt3to4:
+#include <QDragEnterEvent>
+#include <Q3CString>
+#include <QDropEvent>
 
 #include <kglobal.h>
 #include <klocale.h>
@@ -49,7 +53,7 @@
 #include <kstatusbar.h>
 #include <kurl.h>
 #include <kurlrequesterdlg.h>
-#include <qstrlist.h>
+#include <q3strlist.h>
 #include <kedittoolbar.h>
 #include <kmessagebox.h>
 #include <kdockwidget.h>
@@ -57,13 +61,13 @@
 #include <kstdaccel.h>
 #include <kaction.h>
 #include <kstdaction.h>
-#include <qiconset.h>
+#include <qicon.h>
 #include <kurldrag.h>
 
 #define DOCK_SIZES "DockSizes"
 
 
-Kooka::Kooka( const QCString& deviceToUse)
+Kooka::Kooka( const Q3CString& deviceToUse)
    : KParts::DockMainWindow( 0, "Kooka" ),
       m_printer(0),
       m_prefDialogIndex(0)
@@ -137,39 +141,39 @@ actionCollection());
     m_view->createDockMenu(actionCollection(), this, "settings_show_docks" );
 
     /* Image Viewer action Toolbar - OCR, Scaling etc. */
-    (void) new KAction(i18n("&OCR Image..."), "ocr", CTRL+Key_O,
+    (void) new KAction(i18n("&OCR Image..."), "ocr", Qt::CTRL+Qt::Key_O,
 		       m_view, SLOT(doOCR()),
 		       actionCollection(), "ocrImage" );
 
-    (void) new KAction(i18n("O&CR on Selection..."), "ocr-select", CTRL+Key_C,
+    (void) new KAction(i18n("O&CR on Selection..."), "ocr-select", Qt::CTRL+Qt::Key_C,
 		       m_view, SLOT(doOCRonSelection()),
 		       actionCollection(), "ocrImageSelect" );
 
     KAction *act;
-    act =  new KAction(i18n("Scale to W&idth"), "scaletowidth", CTRL+Key_I,
+    act =  new KAction(i18n("Scale to W&idth"), "scaletowidth", Qt::CTRL+Qt::Key_I,
 		       m_view, SLOT( slIVScaleToWidth()),
 		       actionCollection(), "scaleToWidth" );
     m_view->connectViewerAction( act );
 
-    act = new KAction(i18n("Scale to &Height"), "scaletoheight", CTRL+Key_H,
+    act = new KAction(i18n("Scale to &Height"), "scaletoheight", Qt::CTRL+Qt::Key_H,
 		       m_view, SLOT( slIVScaleToHeight()),
 		       actionCollection(), "scaleToHeight" );
     m_view->connectViewerAction( act );
 
-    act = new KAction(i18n("Original &Size"), "scaleorig", CTRL+Key_S,
+    act = new KAction(i18n("Original &Size"), "scaleorig", Qt::CTRL+Qt::Key_S,
                       m_view, SLOT( slIVScaleOriginal()),
                       actionCollection(), "scaleOriginal" );
     m_view->connectViewerAction( act );
 
 #ifdef QICONSET_HONOUR_ON_OFF
     /* The Toggleaction does not seem to handle the on/off icon from QIconSet */
-    QIconSet lockSet;
-    lockSet.setPixmap(BarIcon("lock")  , QIconSet::Automatic, QIconSet::Normal, QIconSet::On );
-    lockSet.setPixmap(BarIcon("unlock"), QIconSet::Automatic, QIconSet::Normal, QIconSet::Off);
-    act = new KToggleAction ( i18n("Keep &Zoom Setting"), lockSet, CTRL+Key_Z,
+    QIcon lockSet;
+    lockSet.setPixmap(BarIcon("lock")  , QIcon::Automatic, QIcon::Normal, QIcon::On );
+    lockSet.setPixmap(BarIcon("unlock"), QIcon::Automatic, QIcon::Normal, QIcon::Off);
+    act = new KToggleAction ( i18n("Keep &Zoom Setting"), lockSet, Qt::CTRL+Qt::Key_Z,
                               actionCollection(), "keepZoom" );
 #else
-    act = new KToggleAction( i18n("Keep &Zoom Setting"), BarIcon("lockzoom"), CTRL+Key_Z,
+    act = new KToggleAction( i18n("Keep &Zoom Setting"), BarIcon("lockzoom"), Qt::CTRL+Qt::Key_Z,
                              actionCollection(), "keepZoom" );
 #endif
 
@@ -184,37 +188,37 @@ actionCollection());
 		       actionCollection(), "showZoomDialog" );
     m_view->connectViewerAction( act );
 
-    (void) new KAction(i18n("Create From Selectio&n"), "crop", CTRL+Key_N,
+    (void) new KAction(i18n("Create From Selectio&n"), "crop", Qt::CTRL+Qt::Key_N,
 		       m_view, SLOT( slCreateNewImgFromSelection() ),
 		       actionCollection(), "createFromSelection" );
 
-    (void) new KAction(i18n("Mirror Image &Vertically"), "mirror-vert", CTRL+Key_V,
+    (void) new KAction(i18n("Mirror Image &Vertically"), "mirror-vert", Qt::CTRL+Qt::Key_V,
 		       this, SLOT( slMirrorVertical() ),
 		       actionCollection(), "mirrorVertical" );
 
-    (void) new KAction(i18n("&Mirror Image Horizontally"), "mirror-horiz", CTRL+Key_M,
+    (void) new KAction(i18n("&Mirror Image Horizontally"), "mirror-horiz", Qt::CTRL+Qt::Key_M,
 		       this, SLOT( slMirrorHorizontal() ),
 		       actionCollection(), "mirrorHorizontal" );
 
-    (void) new KAction(i18n("Mirror Image &Both Directions"), "mirror-both", CTRL+Key_B,
+    (void) new KAction(i18n("Mirror Image &Both Directions"), "mirror-both", Qt::CTRL+Qt::Key_B,
 		       this, SLOT( slMirrorBoth() ),
 		       actionCollection(), "mirrorBoth" );
 
-    (void) new KAction(i18n("Open Image in &Graphic Application..."), "fileopen", CTRL+Key_G,
+    (void) new KAction(i18n("Open Image in &Graphic Application..."), "fileopen", Qt::CTRL+Qt::Key_G,
 		       m_view, SLOT( slOpenCurrInGraphApp() ),
 		       actionCollection(), "openInGraphApp" );
 
-    act = new KAction(i18n("&Rotate Image Clockwise"), "rotate_cw", CTRL+Key_R,
+    act = new KAction(i18n("&Rotate Image Clockwise"), "rotate_cw", Qt::CTRL+Qt::Key_R,
 		      this, SLOT( slRotateClockWise() ),
 		       actionCollection(), "rotateClockwise" );
     m_view->connectViewerAction( act );
 
-    act = new KAction(i18n("Rotate Image Counter-Clock&wise"), "rotate_ccw", CTRL+Key_W,
+    act = new KAction(i18n("Rotate Image Counter-Clock&wise"), "rotate_ccw", Qt::CTRL+Qt::Key_W,
 		       this, SLOT( slRotateCounterClockWise() ),
 		       actionCollection(), "rotateCounterClockwise" );
     m_view->connectViewerAction( act );
 
-    act = new KAction(i18n("Rotate Image 180 &Degrees"), "rotate", CTRL+Key_D,
+    act = new KAction(i18n("Rotate Image 180 &Degrees"), "rotate", Qt::CTRL+Qt::Key_D,
 		       this, SLOT( slRotate180() ),
 		       actionCollection(), "upsitedown" );
     m_view->connectViewerAction( act );
@@ -247,11 +251,11 @@ actionCollection());
 
 #if 0
     /* not yet supported actions - coming post 3.1 */
-    (void) new KAction(i18n("&Load Scan Parameters"), "bookmark_add", CTRL+Key_L,
+    (void) new KAction(i18n("&Load Scan Parameters"), "bookmark_add", Qt::CTRL+Qt::Key_L,
                        m_view, SLOT(slLoadScanParams()),
                        actionCollection(), "loadscanparam" );
 
-    (void) new KAction(i18n("Save &Scan Parameters"), "bookmark_add", CTRL+Key_S,
+    (void) new KAction(i18n("Save &Scan Parameters"), "bookmark_add", Qt::CTRL+Qt::Key_S,
 		       m_view, SLOT(slSaveScanParams()),
 		       actionCollection(), "savescanparam" );
 #endif
@@ -265,7 +269,7 @@ actionCollection());
 			actionCollection(), "enable_msgs");
 
 
-    m_saveOCRTextAction = new KAction( i18n("Save OCR Res&ult Text"), "filesaveas", CTRL+Key_U,
+    m_saveOCRTextAction = new KAction( i18n("Save OCR Res&ult Text"), "filesaveas", Qt::CTRL+Qt::Key_U,
                                        m_view, SLOT(slSaveOCRResult()),
                                        actionCollection(), "saveOCRResult");
 }
@@ -327,7 +331,7 @@ void Kooka::dropEvent(QDropEvent *event)
 void Kooka::fileNew()
 {
     // this slot is called whenever the File->New menu is selected,
-    // the New shortcut is pressed (usually CTRL+N) or the New toolbar
+    // the New shortcut is pressed (usually Qt::CTRL+N) or the New toolbar
     // button is clicked
 
     // create a new window
@@ -337,14 +341,14 @@ void Kooka::fileNew()
 void Kooka::fileOpen()
 {
     // this slot is called whenever the File->Open menu is selected,
-    // the Open shortcut is pressed (usually CTRL+O) or the Open toolbar
+    // the Open shortcut is pressed (usually Qt::CTRL+O) or the Open toolbar
     // button is clicked
 }
 
 void Kooka::fileSave()
 {
     // this slot is called whenever the File->Save menu is selected,
-    // the Save shortcut is pressed (usually CTRL+S) or the Save toolbar
+    // the Save shortcut is pressed (usually Qt::CTRL+S) or the Save toolbar
     // button is clicked
 
     // save the current file
@@ -354,7 +358,7 @@ void Kooka::fileSave()
 void Kooka::fileSaveAs()
 {
     // this slot is called whenever the File->Save As menu is selected,
-   QStrList strlist;
+   Q3StrList strlist;
    strlist.append( "BMP" );
    strlist.append( "JPEG" );
    FormatDialog fd( 0, "FormatDialog", &strlist );
@@ -366,7 +370,7 @@ void Kooka::fileSaveAs()
 void Kooka::filePrint()
 {
     // this slot is called whenever the File->Print menu is selected,
-    // the Print shortcut is pressed (usually CTRL+P) or the Print toolbar
+    // the Print shortcut is pressed (usually Qt::CTRL+P) or the Print toolbar
     // button is clicked
     m_view->print();
 

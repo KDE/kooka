@@ -18,13 +18,18 @@
 */
 
 #include <qapplication.h>
-#include <qfiledialog.h>
+#include <q3filedialog.h>
 #include <qstring.h>
 #include <qmessagebox.h>
-#include <qscrollview.h>
+#include <q3scrollview.h>
+//Added by qt3to4:
+#include <Q3ValueList>
+#include <QTimerEvent>
+#include <QResizeEvent>
+#include <QMouseEvent>
 #include <kpopupmenu.h>
 #include <qlabel.h>
-#include <qdict.h>
+#include <q3dict.h>
 #include <qimage.h>
 #include <qpainter.h>
 
@@ -69,13 +74,13 @@ public:
     ScaleKinds   scaleKind;
     ScaleKinds   defaultScaleKind;
 
-    QValueList<QRect> highlightRects;
+    Q3ValueList<QRect> highlightRects;
 };
 
 ImageCanvas::ImageCanvas(QWidget *parent,
 			 const QImage *start_image,
 			 const char *name 	):
-   QScrollView( parent, name ),
+   Q3ScrollView( parent, name ),
    m_contextMenu(0)
 {
     d = new ImageCanvasPrivate();
@@ -118,7 +123,7 @@ ImageCanvas::ImageCanvas(QWidget *parent,
     connect( this, SIGNAL( noRect()),  SLOT( noRectSlot()));
 
     //zoomOut();scrollview/scrollview
-    viewport()->setCursor( crossCursor );
+    viewport()->setCursor( Qt::crossCursor );
     cr1 = 0;
     cr2 = 0;
     viewport()->setMouseTracking(TRUE);
@@ -539,41 +544,41 @@ void ImageCanvas::viewportMouseMoveEvent(QMouseEvent *ev)
   switch( moving!=MOVE_NONE ? moving:classifyPoint(x+cx,y+cy) ) {
   case MOVE_NONE:
     if(ps!=CROSS) {
-      viewport()->setCursor(crossCursor);
+      viewport()->setCursor(Qt::crossCursor);
       ps = CROSS;
     }
     break;
   case MOVE_LEFT:
   case MOVE_RIGHT:
     if(ps!=HSIZE) {
-      viewport()->setCursor(sizeHorCursor);
+      viewport()->setCursor(Qt::sizeHorCursor);
       ps = HSIZE;
     }
     break;
   case MOVE_TOP:
   case MOVE_BOTTOM:
     if(ps!=VSIZE) {
-      viewport()->setCursor(sizeVerCursor);
+      viewport()->setCursor(Qt::sizeVerCursor);
       ps = VSIZE;
     }
     break;
   case MOVE_TOP_LEFT:
   case MOVE_BOTTOM_RIGHT:
     if(ps!=FDIAG) {
-      viewport()->setCursor(sizeFDiagCursor);
+      viewport()->setCursor(Qt::sizeFDiagCursor);
       ps = FDIAG;
     }
     break;
   case MOVE_TOP_RIGHT:
   case MOVE_BOTTOM_LEFT:
     if(ps!=BDIAG) {
-      viewport()->setCursor(sizeBDiagCursor);
+      viewport()->setCursor(Qt::sizeBDiagCursor);
       ps = BDIAG;
     }
     break;
   case MOVE_WHOLE:
     if(ps!=ALL) {
-      viewport()->setCursor(sizeAllCursor);
+      viewport()->setCursor(Qt::sizeAllCursor);
       ps = ALL;
     }
   }
@@ -654,7 +659,7 @@ void ImageCanvas::setScaleFactor( int i )
 
 void ImageCanvas::resizeEvent( QResizeEvent * event )
 {
-	QScrollView::resizeEvent( event );
+	Q3ScrollView::resizeEvent( event );
 	update_scaled_pixmap();
 
 }
@@ -668,7 +673,7 @@ void ImageCanvas::update_scaled_pixmap( void )
 	return;
     }
 
-    QApplication::setOverrideCursor(waitCursor);
+    QApplication::setOverrideCursor(Qt::waitCursor);
 
     kdDebug(28000) << "Updating scaled_pixmap" << endl;
     if( scaleKind() == DYNAMIC )
@@ -777,8 +782,8 @@ void ImageCanvas::drawHAreaBorder(QPainter &p,int x1,int x2,int y,int r)
   if(x2 < x1) inc = -1;
 
   if(!r) {
-    if(cr2 & 4) p.setPen(black);
-    else p.setPen(white);
+    if(cr2 & 4) p.setPen(Qt::black);
+    else p.setPen(Qt::white);
   } else if(!acquired) p.setPen(QPen(QColor(150,150,150)));
 
   for(;;) {
@@ -797,8 +802,8 @@ void ImageCanvas::drawHAreaBorder(QPainter &p,int x1,int x2,int y,int r)
       cr2++;
       cr2 &= 7;
       if(!(cr2&3)) {
-			if(cr2&4) p.setPen(black);
-			else p.setPen(white);
+			if(cr2&4) p.setPen(Qt::black);
+			else p.setPen(Qt::white);
       }
     }
     if(x1==x2) break;
@@ -818,9 +823,9 @@ void ImageCanvas::drawVAreaBorder(QPainter &p, int x, int y1, int y2, int r )
 
 
   if( !r ) {
-    if( cr2 & 4 ) p.setPen(black);
+    if( cr2 & 4 ) p.setPen(Qt::black);
     else
-      p.setPen(white);
+      p.setPen(Qt::white);
   } else
     if( !acquired ) p.setPen( QPen( QColor(150,150,150) ) );
 
@@ -841,8 +846,8 @@ void ImageCanvas::drawVAreaBorder(QPainter &p, int x, int y1, int y2, int r )
       cr2++;
       cr2 &= 7;
       if(!(cr2&3)) {
-			if(cr2&4) p.setPen(black);
-			else p.setPen(white);
+			if(cr2&4) p.setPen(Qt::black);
+			else p.setPen(Qt::white);
       }
     }
     if(y1==y2) break;

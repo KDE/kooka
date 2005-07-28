@@ -22,8 +22,10 @@
 
 #include <qstring.h>
 #include <qdialog.h>
+//Added by qt3to4:
+#include <QLabel>
 
-class QProgressBar;
+class Q3ProgressBar;
 class QLabel;
 
 /**
@@ -58,7 +60,7 @@ private:
    QString     progress;
    QLabel      *l_progress;	
 
-   QProgressBar *progressbar;
+   Q3ProgressBar *progressbar;
 
    class MassScanDialogPrivate;
    MassScanDialogPrivate *d;

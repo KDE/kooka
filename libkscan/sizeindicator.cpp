@@ -21,6 +21,9 @@
 
 #include <qpalette.h>
 #include <qimage.h>
+//Added by qt3to4:
+#include <QLabel>
+#include <Q3Frame>
 
 #include <kimageeffect.h>
 #include <klocale.h>
@@ -33,7 +36,7 @@ SizeIndicator::SizeIndicator( QWidget *parent, long  thres, long crit )
    :QLabel( parent )
 {
    sizeInByte = -1;
-   setFrameStyle( QFrame::Box | QFrame::Sunken );
+   setFrameStyle( Q3Frame::Box | Q3Frame::Sunken );
    setMinimumWidth( fontMetrics().width( QString::fromLatin1("MMM.MM MB") ));
    setCritical( crit );
    threshold = thres;

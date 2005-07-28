@@ -31,8 +31,10 @@
 
 #include "thumbview.h"
 #include "thumbviewitem.h"
+//Added by qt3to4:
+#include <QPixmap>
 
-ThumbViewItem::ThumbViewItem(QIconView *parent, const QString &text,
+ThumbViewItem::ThumbViewItem(Q3IconView *parent, const QString &text,
 			     const QPixmap &pixmap,
 			     KFileItem *fi )
    :KFileIconViewItem( parent, text, pixmap,fi )

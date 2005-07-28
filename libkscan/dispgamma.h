@@ -23,7 +23,10 @@
 #include <qwidget.h>
 #include <qsizepolicy.h>
 #include <qsize.h>
-#include <qmemarray.h>
+#include <q3memarray.h>
+//Added by qt3to4:
+#include <QResizeEvent>
+#include <QPaintEvent>
 
 extern "C"{
 #include <sane/sane.h>
@@ -42,7 +45,7 @@ public:
     QSize sizeHint( void );
     QSizePolicy sizePolicy( void );
 
-    void setValueRef( QMemArray<SANE_Word> *newVals )
+    void setValueRef( Q3MemArray<SANE_Word> *newVals )
     {
         vals = newVals;
     }
@@ -52,7 +55,7 @@ protected:
 
 private:
 
-    QMemArray<SANE_Word> *vals;
+    Q3MemArray<SANE_Word> *vals;
     int margin;
 
    class DispGammaPrivate;

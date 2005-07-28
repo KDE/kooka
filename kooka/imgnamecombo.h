@@ -35,7 +35,7 @@
   *@author Klaas Freitag
 */
 
-class QListViewItem;
+class Q3ListViewItem;
 class KFileBranch;
 
 class ImageNameCombo: public KComboBox

@@ -28,11 +28,11 @@
 #include <qlabel.h>
 #include <qfileinfo.h>
 #include <qtooltip.h>
-#include <qvbox.h>
-#include <qdict.h>
+#include <q3vbox.h>
+#include <q3dict.h>
 #include <qdir.h>
 #include <qmap.h>
-#include <qbuttongroup.h>
+#include <q3buttongroup.h>
 #include <qradiobutton.h>
 
 #include <kapplication.h>
@@ -269,7 +269,7 @@ EngineError KadmosDialog::setupGui()
     // setupClassification( addVBoxPage( i18n("Classification")));
 
     /* continue page setup on the first page */
-    QVBox *page = ocrPage();
+    Q3VBox *page = ocrPage();
 
     // Horizontal line
     (void) new KSeparator( KSeparator::HLine, page);
@@ -278,14 +278,14 @@ EngineError KadmosDialog::setupGui()
 
     (void) new QLabel( i18n("Please classify the font type and language of the text on the image:"),
 		       page );
-    QHBox *locBox = new QHBox( page );
-    m_bbFont = new QButtonGroup(1, Qt::Horizontal, i18n("Font Type Selection"), locBox);
+    Q3HBox *locBox = new Q3HBox( page );
+    m_bbFont = new Q3ButtonGroup(1, Qt::Horizontal, i18n("Font Type Selection"), locBox);
 
     m_rbMachine = new QRadioButton( i18n("Machine print"), m_bbFont );
     m_rbHand    = new QRadioButton( i18n("Hand writing"),  m_bbFont );
     m_rbNorm    = new QRadioButton( i18n("Norm font"),     m_bbFont );
 
-    m_gbLang = new QGroupBox(1, Qt::Horizontal, i18n("Country"), locBox);
+    m_gbLang = new Q3GroupBox(1, Qt::Horizontal, i18n("Country"), locBox);
 
 
     m_cbLang = new QComboBox( m_gbLang );
@@ -295,10 +295,10 @@ EngineError KadmosDialog::setupGui()
     m_rbMachine->setChecked(true);
 
     /* --- */
-    QHBox *innerBox = new QHBox( page );
+    Q3HBox *innerBox = new Q3HBox( page );
     innerBox->setSpacing( KDialog::spacingHint());
 
-    QButtonGroup *cbGroup = new QButtonGroup( 1, Qt::Horizontal, i18n("OCR Modifier"), innerBox );
+    Q3ButtonGroup *cbGroup = new Q3ButtonGroup( 1, Qt::Horizontal, i18n("OCR Modifier"), innerBox );
     Q_CHECK_PTR(cbGroup);
 
     m_cbNoise = new QCheckBox( i18n( "Enable automatic noise reduction" ), cbGroup );
@@ -366,17 +366,17 @@ void KadmosDialog::slFontChanged( int id )
 }
 
 
-void KadmosDialog::setupPreprocessing( QVBox*  )
+void KadmosDialog::setupPreprocessing( Q3VBox*  )
 {
 
 }
 
-void KadmosDialog::setupSegmentation(  QVBox* )
+void KadmosDialog::setupSegmentation(  Q3VBox* )
 {
 
 }
 
-void KadmosDialog::setupClassification( QVBox* )
+void KadmosDialog::setupClassification( Q3VBox* )
 {
 
 }
@@ -441,7 +441,7 @@ bool KadmosDialog::getSelClassifier( QString& path ) const
 
 QString KadmosDialog::getSelClassifierName() const
 {
-     QButton *butt = m_bbFont->selected();
+     Q3Button *butt = m_bbFont->selected();
 
      QString fType, rType;
 

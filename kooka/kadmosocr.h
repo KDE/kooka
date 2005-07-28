@@ -33,6 +33,8 @@
 
 #include <qobject.h>
 #include <qstring.h>
+//Added by qt3to4:
+#include <QPixmap>
 
 #include "config.h"
 
@@ -53,7 +55,7 @@ namespace Kadmos {
 /* include files */
 
 #include "kadmos.h"
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 
 /* ---------------------------------------- REP ---------------------------------------- */
 //! Maximum number of lines in a paragraph

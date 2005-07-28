@@ -27,6 +27,9 @@
 #define KOOKAVIEW_H
 
 #include <qwidget.h>
+//Added by qt3to4:
+#include <QPixmap>
+#include <Q3CString>
 #include <kopenwith.h>
 #include "kookaiface.h"
 #include <kdockwidget.h>
@@ -76,7 +79,7 @@ public:
     /**
      * Default constructor
      */
-    KookaView(KParts::DockMainWindow *parent, const QCString& deviceToUse);
+    KookaView(KParts::DockMainWindow *parent, const Q3CString& deviceToUse);
 
     /**
      * Destructor
@@ -158,7 +161,7 @@ public slots:
      * slot to select the scanner device. Does all the work with selection
      * of scanner, disconnection of the old device and connecting the new.
      */
-    bool slSelectDevice(const QCString& useDevice=QCString());
+    bool slSelectDevice(const Q3CString& useDevice=Q3CString());
 
     void connectViewerAction( KAction *action );
     void connectGalleryAction( KAction *action );
@@ -203,7 +206,7 @@ private:
     QImage rotateRight( QImage* );
     QImage rotateLeft ( QImage* );
     QImage rotate180  ( QImage* );
-    QCString userDeviceSelection( ) const;
+    Q3CString userDeviceSelection( ) const;
 
     void updateCurrImage( QImage& ) ;
 
@@ -217,7 +220,7 @@ private:
     KScanDevice  *sane;
     KComboBox    *recentFolder;
 
-    QCString     connectedDevice;
+    Q3CString     connectedDevice;
 
     QImage       *m_ocrResultImg;
     int          image_pool_id;

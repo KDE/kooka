@@ -37,7 +37,7 @@
 /* -------------------- ocrResEdit -------------------- */
 
 ocrResEdit::ocrResEdit( QWidget *parent )
-    : QTextEdit(parent)
+    : Q3TextEdit(parent)
 {
     m_updateColor.setNamedColor( "SeaGreen");
     m_ignoreColor.setNamedColor( "CadetBlue4" );
@@ -136,7 +136,7 @@ void ocrResEdit::slSaveText()
     if( fileName.isEmpty() )
       return;
     QFile file( fileName );
-    if ( file.open( IO_WriteOnly ) )
+    if ( file.open( QIODevice::WriteOnly ) )
     {
         QTextStream stream( &file );
         stream << text();

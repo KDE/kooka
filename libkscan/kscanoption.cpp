@@ -20,7 +20,7 @@
 #include <stdlib.h>
 #include <qwidget.h>
 #include <qobject.h>
-#include <qasciidict.h>
+#include <q3asciidict.h>
 #include <qcombobox.h>
 #include <qslider.h>
 #include <qcheckbox.h>
@@ -30,6 +30,10 @@
 #include <qtooltip.h>
 #include <qimage.h>
 #include <qregexp.h>
+//Added by qt3to4:
+#include <Q3StrList>
+#include <Q3CString>
+#include <Q3MemArray>
 
 #include <kdebug.h>
 
@@ -51,7 +55,7 @@
 
 
 /** inline-access to the option descriptor, object to changes with global vars. **/
-inline const SANE_Option_Descriptor *getOptionDesc( const QCString& name )
+inline const SANE_Option_Descriptor *getOptionDesc( const Q3CString& name )
 {
    int *idx = (*KScanDevice::option_dic)[ name ];
    
@@ -77,7 +81,7 @@ inline const SANE_Option_Descriptor *getOptionDesc( const QCString& name )
 /* ************************************************************************ */
 /* KScan Option                                                             */
 /* ************************************************************************ */
-KScanOption::KScanOption( const QCString& new_name ) :
+KScanOption::KScanOption( const Q3CString& new_name ) :
    QObject()
 {
    if( initOption( new_name ) )
@@ -102,7 +106,7 @@ KScanOption::KScanOption( const QCString& new_name ) :
 }
 
 
-bool KScanOption::initOption( const QCString& new_name )
+bool KScanOption::initOption( const Q3CString& new_name )
 {
    desc = 0;
    if( new_name.isEmpty() ) return( false );
@@ -208,7 +212,7 @@ KScanOption::KScanOption( const KScanOption &so ) :
 
 const QString KScanOption::configLine( void )
 {
-   QCString strval = this->get();
+   Q3CString strval = this->get();
    kdDebug(29000) << "configLine returns <" << strval << ">" << endl;
    return( strval );
 }
@@ -253,7 +257,7 @@ const KScanOption& KScanOption::operator= (const KScanOption& so )
     return( *this );
 }
 
-void KScanOption::slWidgetChange( const QCString& t )
+void KScanOption::slWidgetChange( const Q3CString& t )
 {
     kdDebug(29000) << "Received WidgetChange for " << getName() << " (const QCString&)" << endl;
     set( t );
@@ -519,7 +523,7 @@ bool KScanOption::set( int val )
    bool ret = false;
 
    int word_size       = 0;
-   QMemArray<SANE_Word> qa;
+   Q3MemArray<SANE_Word> qa;
    SANE_Word sw        = SANE_TRUE;
    const SANE_Word sw1 = val;
    const SANE_Word sw2 = SANE_FIX( (double) val );
@@ -585,7 +589,7 @@ bool KScanOption::set( double val )
    if( ! desc ) return( false );
    bool ret = false;
    int  word_size = 0;
-   QMemArray<SANE_Word> qa;
+   Q3MemArray<SANE_Word> qa;
    SANE_Word sw = SANE_FALSE;
 
    switch( desc->type )
@@ -653,7 +657,7 @@ bool KScanOption::set( int *val, int size )
     int    offset = 0;
 
     int word_size = desc->size / sizeof( SANE_Word ); /* add 1 in case offset is needed */
-    QMemArray<SANE_Word> qa( 1+word_size );
+    Q3MemArray<SANE_Word> qa( 1+word_size );
 #if 0
     if( desc->constraint_type == SANE_CONSTRAINT_WORD_LIST )
     {
@@ -719,7 +723,7 @@ bool KScanOption::set( int *val, int size )
     return( ret );
 }
 
-bool KScanOption::set( const QCString& c_string )
+bool KScanOption::set( const Q3CString& c_string )
 {
    bool ret = false;
    int  val = 0;
@@ -810,7 +814,7 @@ bool KScanOption::set( KGammaTable *gt )
    SANE_Word *run = gt->getTable();
 
    int word_size = desc->size / sizeof( SANE_Word );
-   QMemArray<SANE_Word> qa( word_size );
+   Q3MemArray<SANE_Word> qa( word_size );
    kdDebug(29000) << "KScanOption::set for Gammatable !" << endl;
    switch( desc->type )
    {
@@ -898,9 +902,9 @@ bool KScanOption::get( int *val ) const
 
 
 
-QCString KScanOption::get( void ) const
+Q3CString KScanOption::get( void ) const
 {
-   QCString retstr;
+   Q3CString retstr;
 
    SANE_Word sane_word;
 
@@ -960,11 +964,11 @@ bool KScanOption::get( KGammaTable *gt ) const
 }
 
 
-QStrList KScanOption::getList( ) const
+Q3StrList KScanOption::getList( ) const
 {
    if( ! desc ) return( false );
    const char	**sstring = 0;
-   QStrList strList;
+   Q3StrList strList;
 
    if( desc->constraint_type == SANE_CONSTRAINT_STRING_LIST ) {
       sstring =  (const char**) desc->constraint.string_list;
@@ -1062,7 +1066,7 @@ bool KScanOption::getRange( double *min, double *max, double *q ) const
 QWidget *KScanOption::createWidget( QWidget *parent, const QString& w_desc,
                                     const QString& tooltip )
 {
-  QStrList list;
+  Q3StrList list;
   if( ! valid() )
   {
      kdDebug(29000) << "The option is not valid!" << endl;
@@ -1139,12 +1143,12 @@ QWidget *KScanOption::createWidget( QWidget *parent, const QString& w_desc,
 
 QWidget *KScanOption::comboBox( QWidget *parent, const QString& text )
 {
-  QStrList list = getList();
+  Q3StrList list = getList();
 
   KScanCombo *cb = new KScanCombo( parent, text, list);
 
-  connect( cb, SIGNAL( valueChanged( const QCString& )), this,
-	   SLOT( slWidgetChange( const QCString& )));
+  connect( cb, SIGNAL( valueChanged( const Q3CString& )), this,
+	   SLOT( slWidgetChange( const Q3CString& )));
 
   return( cb );
 }
@@ -1153,8 +1157,8 @@ QWidget *KScanOption::comboBox( QWidget *parent, const QString& text )
 QWidget *KScanOption::entryField( QWidget *parent, const QString& text )
 {
   KScanEntry *ent = new KScanEntry( parent, text );
-  connect( ent, SIGNAL( valueChanged( QCString )), this,
-	   SLOT( slWidgetChange( QCString )));
+  connect( ent, SIGNAL( valueChanged( Q3CString )), this,
+	   SLOT( slWidgetChange( Q3CString )));
 	
   return( ent );
 }

@@ -37,6 +37,12 @@
 #include <kspelldlg.h>
 #include <qfile.h>
 #include <qcolor.h>
+//Added by qt3to4:
+#include <Q3CString>
+#include <QTextStream>
+#include <QEvent>
+#include <Q3ValueList>
+#include <QMouseEvent>
 #include <stdio.h>
 #include <unistd.h>
 
@@ -597,7 +603,7 @@ void KSANEOCR::startOCRProcess( void )
            finishedOCRVisible(false);
            return;
        }
-       QCString c = clasPath.latin1();
+       Q3CString c = clasPath.latin1();
 
        kdDebug(28000) << "Using classifier " << c << endl;
        m_rep.Init( c );
@@ -822,7 +828,7 @@ bool KSANEOCR::readORF( const QString& fileName, QString& errStr )
     }
 
 
-    if ( !error && file.open( IO_ReadOnly ) )
+    if ( !error && file.open( QIODevice::ReadOnly ) )
     {
         QTextStream stream( &file );
         QString line;
@@ -1090,12 +1096,12 @@ QString KSANEOCR::ocrResultText()
     const QString space(" ");
 
     /* start from the back and search the original word to replace it */
-    QValueVector<ocrWordList>::iterator pageIt;
+    Q3ValueVector<ocrWordList>::iterator pageIt;
 
     for( pageIt = m_ocrPage.begin(); pageIt != m_ocrPage.end(); ++pageIt )
     {
         /* thats goes over all lines */
-        QValueList<ocrWord>::iterator lineIt;
+        Q3ValueList<ocrWord>::iterator lineIt;
         for( lineIt = (*pageIt).begin(); lineIt != (*pageIt).end(); ++lineIt )
         {
             res += space + *lineIt;
@@ -1145,7 +1151,7 @@ bool KSANEOCR::eventFilter( QObject *object, QEvent *event )
                 x = int(double(x)*100/scale);
             }
             /* now search the word that was clicked on */
-            QValueVector<ocrWordList>::iterator pageIt;
+            Q3ValueVector<ocrWordList>::iterator pageIt;
 
 	    int line = 0;
 	    bool valid = false;
@@ -1255,7 +1261,7 @@ void KSANEOCR::slSpellIgnoreWord( const QString& word )
 
             /* create a new highlight. That will never be removed */
             QBrush brush;
-            QPen pen( gray, 1 );
+            QPen pen( Qt::gray, 1 );
             QRect r = ignoreOCRWord.rect();
             r.moveBy(0,2);  // a bit offset to the top
 
@@ -1312,9 +1318,9 @@ void KSANEOCR::slMisspelling( const QString& originalword, const QStringList& su
     if( ! resWord.isEmpty() )
     {
         QBrush brush;
-        brush.setColor( QColor(red)); // , "Dense4Pattern" );
+        brush.setColor( QColor(Qt::red)); // , "Dense4Pattern" );
         brush.setStyle( Qt::Dense4Pattern );
-        QPen pen( red, 2 );
+        QPen pen( Qt::red, 2 );
         QRect r = resWord.rect();
 
         r.moveBy(0,2);  // a bit offset to the top

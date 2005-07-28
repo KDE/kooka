@@ -50,8 +50,14 @@
 #include <qfileinfo.h>
 #include <qimage.h>
 #include <qmessagebox.h>
-#include <qvbox.h>
-#include <qbuttongroup.h>
+#include <q3vbox.h>
+#include <q3buttongroup.h>
+//Added by qt3to4:
+#include <Q3CString>
+#include <Q3Frame>
+#include <QHBoxLayout>
+#include <QLabel>
+#include <QVBoxLayout>
 
 #include "resource.h"
 #include "img_saver.h"
@@ -67,8 +73,8 @@ FormatDialog::FormatDialog( QWidget *parent, const QString&, const char *name )
    buildHelp();
    // readConfig();
    // QFrame *page = addPage( QString( "Save the image") );
-   QFrame *page = new QFrame( this );
-   page->setFrameStyle( QFrame::Box | QFrame::Sunken );
+   Q3Frame *page = new Q3Frame( this );
+   page->setFrameStyle( Q3Frame::Box | Q3Frame::Sunken );
    Q_CHECK_PTR( page );
    setMainWidget( page );
 
@@ -98,7 +104,7 @@ FormatDialog::FormatDialog( QWidget *parent, const QString&, const char *name )
    Q_CHECK_PTR(l1);
    l1->setText( i18n( "Available image formats:" ));
 
-   lb_format = new QListBox( page, "ListBoxFormats" );
+   lb_format = new Q3ListBox( page, "ListBoxFormats" );
    Q_CHECK_PTR(lb_format);
 
 #ifdef USE_KIMAGEIO
@@ -114,9 +120,9 @@ FormatDialog::FormatDialog( QWidget *parent, const QString&, const char *name )
    // Insert label for helptext
    l_help = new QLabel( page );
    Q_CHECK_PTR(l_help);
-   l_help->setFrameStyle( QFrame::Panel|QFrame::Sunken );
+   l_help->setFrameStyle( Q3Frame::Panel|Q3Frame::Sunken );
    l_help->setText( i18n("-No format selected-" ));
-   l_help->setAlignment( AlignVCenter | AlignHCenter );
+   l_help->setAlignment( Qt::AlignVCenter | Qt::AlignHCenter );
    l_help->setMinimumWidth(230);
 
    // Insert Selbox for subformat
@@ -131,9 +137,9 @@ FormatDialog::FormatDialog( QWidget *parent, const QString&, const char *name )
 			      page );
    Q_CHECK_PTR( cbDontAsk );
 
-   QFrame *hl = new QFrame(page);
+   Q3Frame *hl = new Q3Frame(page);
    Q_CHECK_PTR( hl );
-   hl->setFrameStyle( QFrame::HLine|QFrame::Sunken );
+   hl->setFrameStyle( Q3Frame::HLine|Q3Frame::Sunken );
 
    // bigdad->addWidget( l_caption, 1 );
    lvFormatSel->addWidget( l1, 1 );
@@ -176,7 +182,7 @@ void FormatDialog::check_subformat( const QString & format )
 
 void FormatDialog::setSelectedFormat( QString fo )
 {
-   QListBoxItem *item = lb_format->findItem( fo );
+   Q3ListBoxItem *item = lb_format->findItem( fo );
 
    if( item )
    {
@@ -199,7 +205,7 @@ QString FormatDialog::getFormat( ) const
 }
 
 
-QCString FormatDialog::getSubFormat( ) const
+Q3CString FormatDialog::getSubFormat( ) const
 {
    // Not yet...
    return( "" );
@@ -629,7 +635,7 @@ ImgSaveStat ImgSaver::save( QImage *image, const QString &filename,
 
    bool result = false;
    kdDebug(28000) << "in ImgSaver::save: saving " << filename << endl;
-   if( ! format || !image )
+   if( format.isNull() || !image )
    {
       kdDebug(28000) << "ImgSaver ERROR: Wrong parameter Format <" << format << "> or image" << endl;
       return( ISS_ERR_PARAM );

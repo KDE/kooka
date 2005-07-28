@@ -28,6 +28,9 @@
 #include <qlabel.h>
 #include <qfileinfo.h>
 #include <qtooltip.h>
+//Added by qt3to4:
+#include <QPixmap>
+#include <Q3Frame>
 #include <kio/job.h>
 #include <kio/previewjob.h>
 
@@ -40,8 +43,8 @@
 #include <kseparator.h>
 #include <kmessagebox.h>
 #include <kactivelabel.h>
-#include <qhbox.h>
-#include <qvbox.h>
+#include <q3hbox.h>
+#include <q3vbox.h>
 
 #include "resource.h"
 #include "kocrbase.h"
@@ -54,9 +57,9 @@
 #include <ksconfig.h>
 #include <qstringlist.h>
 #include <qcolor.h>
-#include <qgrid.h>
+#include <q3grid.h>
 #include <qsizepolicy.h>
-#include <qgroupbox.h>
+#include <q3groupbox.h>
 #include <qcheckbox.h>
 
 KOCRBase::KOCRBase( QWidget *parent, KSpellConfig *spellConfig,
@@ -122,7 +125,7 @@ void KOCRBase::imgIntro()
     (void) new QLabel( i18n("Image Information"), m_imgPage );
 
     // Caption - Label and image
-    m_imgHBox = new QHBox( m_imgPage );
+    m_imgHBox = new Q3HBox( m_imgPage );
 
     m_imgHBox->setSpacing( KDialog::spacingHint());
 
@@ -130,13 +133,13 @@ void KOCRBase::imgIntro()
     m_previewPix->setPixmap(QPixmap());
     m_previewPix->setFixedSize(m_previewSize);
     m_previewPix->setAlignment( Qt::AlignCenter );
-    m_previewPix->setFrameStyle( QFrame::Panel | QFrame::Sunken );
+    m_previewPix->setFrameStyle( Q3Frame::Panel | Q3Frame::Sunken );
     // m_previewPix->resize(m_previewSize);
 
     /* See introduceImage where the meta box is filled with data from the
      * incoming widget.
      */
-    m_metaBox = new QVBox( m_imgHBox );
+    m_metaBox = new Q3VBox( m_imgHBox );
 }
 
 /*
@@ -160,7 +163,7 @@ void KOCRBase::ocrIntro( )
 
     if( pix.load( logo ))
     {
-        QHBox *hb_cap = new QHBox( m_ocrPage );
+        Q3HBox *hb_cap = new Q3HBox( m_ocrPage );
         hb_cap->setSpacing( KDialog::spacingHint());
 
         QLabel *imgLab = new QLabel( hb_cap );
@@ -178,11 +181,11 @@ void KOCRBase::spellCheckIntro()
     m_spellchkPage = addVBoxPage( i18n("Spell-checking") );
 
     /* Want the spell checking at all? Checkbox here */
-    QGroupBox *gb1 = new QGroupBox( 1, Qt::Horizontal, i18n("OCR Post Processing"), m_spellchkPage );
+    Q3GroupBox *gb1 = new Q3GroupBox( 1, Qt::Horizontal, i18n("OCR Post Processing"), m_spellchkPage );
     m_cbWantCheck = new QCheckBox( i18n("Enable spell-checking for validation of the OCR result"),
                                    gb1 );
     /* Spellcheck options */
-    m_gbSpellOpts = new QGroupBox( 1, Qt::Horizontal, i18n("Spell-Check Options"),
+    m_gbSpellOpts = new Q3GroupBox( 1, Qt::Horizontal, i18n("Spell-Check Options"),
                                    m_spellchkPage );
 
     KSpellConfig *sCfg = new KSpellConfig( m_gbSpellOpts, "SPELLCHK", m_spellConfig, false );
@@ -233,7 +236,7 @@ void KOCRBase::introduceImage( KookaImage* img)
          groups = info.preferredGroups();
 
     delete m_metaBox;
-    m_metaBox = new QVBox( m_imgHBox );
+    m_metaBox = new Q3VBox( m_imgHBox );
 
     /* Start to create a preview job for the thumb */
     KURL::List li(img->url());
@@ -267,7 +270,7 @@ void KOCRBase::introduceImage( KookaImage* img)
             lGroup->setBackgroundColor( QColor(gray));
             lGroup->setMargin( KDialog::spacingHint());
 
-            QGrid *nGrid = new QGrid( 2,  m_metaBox );
+            Q3Grid *nGrid = new Q3Grid( 2,  m_metaBox );
             nGrid->setSpacing( KDialog::spacingHint());
             for ( QStringList::Iterator keyIt = keys.begin(); keyIt != keys.end(); ++keyIt )
             {

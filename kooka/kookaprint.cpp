@@ -28,7 +28,7 @@
 #include "kookaimage.h"
 #include <kprinter.h>
 #include <qpainter.h>
-#include <qpaintdevicemetrics.h>
+#include <q3paintdevicemetrics.h>
 #include <qfontmetrics.h>
 #include "imgprintdialog.h"
 #include <kdebug.h>
@@ -65,7 +65,7 @@ bool KookaPrint::printImage( KookaImage *img )
 
     // We use a QPaintDeviceMetrics to know the actual page size in pixel,
     // this gives the real painting area
-    QPaintDeviceMetrics printermetrics( m_painter->device() );
+    Q3PaintDeviceMetrics printermetrics( m_painter->device() );
 
     int screenRes  = m_printer->option( OPT_SCREEN_RES ).toInt();
     // int printerRes = printermetrics.logicalDpiX();
@@ -266,7 +266,7 @@ void KookaPrint::drawCutSign( const QPoint& p, int num, MarkerDirection dir )
     m_painter->drawText( textX,
 			 textY,
 			 QString::number(num));
-    QBrush b( brushColor, NoBrush /* remove this to get debug color*/ );
+    QBrush b( brushColor, Qt::NoBrush /* remove this to get debug color*/ );
     
     
     m_painter->setBrush( b );
@@ -347,7 +347,7 @@ void KookaPrint::drawCornerMarker( const QSize& imgSize, int row, int col, int m
 QSize KookaPrint::maxPageSize( int extraShrinkPercent ) const
 {
     if( ! m_painter ) return QSize();
-    QPaintDeviceMetrics printermetrics( m_painter->device() );
+    Q3PaintDeviceMetrics printermetrics( m_painter->device() );
 
     double extraShrink = double(100-extraShrinkPercent)/100.0;
     

@@ -23,11 +23,14 @@
 #include <qwidget.h>
 #include <qimage.h>
 #include <qrect.h>
-#include <qbuttongroup.h>
+#include <q3buttongroup.h>
 #include <qpoint.h>
+//Added by qt3to4:
+#include <QHBoxLayout>
+#include <Q3CString>
 
 #include <kruler.h>
-#include <qmemarray.h>
+#include <q3memarray.h>
 
 /**
   *@author Klaas Freitag
@@ -91,13 +94,13 @@ private:
     QHBoxLayout *layout;
     ImageCanvas *img_canvas;
     QComboBox   *pre_format_combo;
-    QMemArray<QCString> format_ids;
-    QButtonGroup * bgroup;
+    Q3MemArray<Q3CString> format_ids;
+    Q3ButtonGroup * bgroup;
     QRadioButton * rb1;
     QRadioButton * rb2;
     QImage       m_previewImage;
 
-    bool imagePiece( QMemArray<long> src,
+    bool imagePiece( Q3MemArray<long> src,
                      int& start,
                      int& end );
 

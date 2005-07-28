@@ -18,9 +18,9 @@
 */
 
 #include <sane/saneopts.h>
-#include <qcstring.h>
+#include <q3cstring.h>
 #include <qfile.h>
-#include <qframe.h>
+#include <q3frame.h>
 #include <qlabel.h>
 #include <qpushbutton.h>
 #include <qcombobox.h>
@@ -28,12 +28,15 @@
 #include <qtooltip.h>
 #include <qmessagebox.h>
 #include <qlayout.h>
-#include <qdict.h>
-#include <qprogressdialog.h>
-#include <qscrollview.h>
+#include <q3dict.h>
+#include <q3progressdialog.h>
+#include <q3scrollview.h>
 #include <qsizepolicy.h>
 #include <qcheckbox.h>
-#include <qbuttongroup.h>
+#include <q3buttongroup.h>
+//Added by qt3to4:
+#include <Q3StrList>
+#include <QHBoxLayout>
 
 
 #include <kfiledialog.h>
@@ -54,7 +57,7 @@
 
 
 ScanParams::ScanParams( QWidget *parent, const char *name )
-   : QVBox( parent, name ),
+   : Q3VBox( parent, name ),
      m_firstGTEdit( true )
 {
    /* first some initialisation and debug messages */
@@ -94,7 +97,7 @@ bool ScanParams::connectDevice( KScanDevice *newScanDevice )
    }
    sane_device = newScanDevice;
 
-   QStrList strl = sane_device->getCommonOptions();
+   Q3StrList strl = sane_device->getCommonOptions();
    QString emp;
    for ( emp=strl.first(); strl.current(); emp=strl.next() )
       kdDebug(29000) << "Common: " << strl.current() << endl;
@@ -104,7 +107,7 @@ bool ScanParams::connectDevice( KScanDevice *newScanDevice )
    adf = ADF_OFF;
 
    /* Frame stuff for toplevel of scanparams - beautification */
-   setFrameStyle( QFrame::Panel | QFrame::Raised );
+   setFrameStyle( Q3Frame::Panel | Q3Frame::Raised );
    setLineWidth( 1 );
 
 
@@ -113,7 +116,7 @@ bool ScanParams::connectDevice( KScanDevice *newScanDevice )
 
    /* A top layout box */
    // QVBoxLayout *top = new QVBoxLayout(this, 6);
-   QHBox *hb = new QHBox( this );
+   Q3HBox *hb = new Q3HBox( this );
    hb->layout()->setSpacing( KDialog::spacingHint() );
    QString cap = i18n("<B>Scanner Settings</B>");
    cap += sane_device->getScannerName();
@@ -126,7 +129,7 @@ bool ScanParams::connectDevice( KScanDevice *newScanDevice )
    (void) new KSeparator( KSeparator::HLine, this);
 
    /* Now create Widgets for the important scan settings */
-   QScrollView *sv = 0;
+   Q3ScrollView *sv = 0;
 
    if( sane_device->optionExists( SANE_NAME_FILE ) )
    {
@@ -163,7 +166,7 @@ bool ScanParams::connectDevice( KScanDevice *newScanDevice )
    kbb->layout();
 
    /* Initialise the progress dialog */
-   progressDialog = new QProgressDialog( i18n("Scanning in progress"),
+   progressDialog = new Q3ProgressDialog( i18n("Scanning in progress"),
 					 i18n("Stop"), 100, 0L,
 					 "SCAN_PROGRESS", true, 0  );
    progressDialog->setAutoClose( true );
@@ -202,9 +205,9 @@ void ScanParams::initialise( KScanOption *so )
 
    if( startupOptset )
    {
-      QCString name = so->getName();
+      Q3CString name = so->getName();
       if( ! name.isEmpty() ){
-	 QCString val = startupOptset->getValue( name );
+	 Q3CString val = startupOptset->getValue( name );
 	 kdDebug( 29000) << "Initialising <" << name << "> with value <" << val << ">" << endl;
 	 so->set( val );
 	 sane_device->apply(so);
@@ -218,20 +221,20 @@ void ScanParams::initialise( KScanOption *so )
    }
 }
 
-QScrollView *ScanParams::scannerParams( )
+Q3ScrollView *ScanParams::scannerParams( )
 {
    KScanOption *so = 0;
 
    /* Its a real scanner */
-   QScrollView *sv = new QScrollView( this );
-   sv->setHScrollBarMode( QScrollView::AlwaysOff );
-   sv->setResizePolicy( QScrollView::AutoOneFit );
-   QVBox *pbox = new QVBox( sv->viewport());
-   sv->setFrameStyle( QFrame::NoFrame );
+   Q3ScrollView *sv = new Q3ScrollView( this );
+   sv->setHScrollBarMode( Q3ScrollView::AlwaysOff );
+   sv->setResizePolicy( Q3ScrollView::AutoOneFit );
+   Q3VBox *pbox = new Q3VBox( sv->viewport());
+   sv->setFrameStyle( Q3Frame::NoFrame );
 
    sv->addChild( pbox );
 
-   QHBox *hb = new QHBox(pbox);
+   Q3HBox *hb = new Q3HBox(pbox);
 
    /* Mode setting */
    so = sane_device->getGuiElement( SANE_NAME_SCAN_MODE, hb,
@@ -269,7 +272,7 @@ QScrollView *ScanParams::scannerParams( )
    if( sane_device->optionExists( SANE_NAME_SCAN_SOURCE ))
    {
       KScanOption source( SANE_NAME_SCAN_SOURCE );
-      QStrList l = source.getList();
+      Q3StrList l = source.getList();
 
       QWidget *spacer = new QWidget(hb);
       hb->setStretchFactor( spacer, 1 );
@@ -444,7 +447,7 @@ QScrollView *ScanParams::scannerParams( )
 
 
    /* The gamma table can be used - add  a button for editing */
-   QHBox *hb1 = new QHBox(pbox);
+   Q3HBox *hb1 = new Q3HBox(pbox);
 
    if( sane_device->optionExists( SANE_NAME_CUSTOM_GAMMA ) )
    {
@@ -530,9 +533,9 @@ void ScanParams::slSourceSelect( void )
    KScanOption so( SANE_NAME_SCAN_SOURCE );
    ADF_BEHAVE adf = ADF_OFF;
 
-   const QCString& currSource = so.get();
+   const Q3CString& currSource = so.get();
    kdDebug(29000) << "Current Source is <" << currSource << ">" << endl;
-   QStrList sources;
+   Q3StrList sources;
 
    if( so.valid() )
    {
@@ -552,7 +555,7 @@ void ScanParams::slSourceSelect( void )
 	 adf = d.getAdfBehave();
 
 	 /* set the selected Document source, the behavior is stored in a membervar */
-	 so.set( QCString(sel_source.latin1()) ); // FIX in ScanSourceDialog, then here
+	 so.set( Q3CString(sel_source.latin1()) ); // FIX in ScanSourceDialog, then here
 	 sane_device->apply( &so );
 
 	 kdDebug(29000) << "Dialog finished OK: " << sel_source << ", " << adf << endl;
@@ -573,13 +576,13 @@ void ScanParams::slFileSelect( void )
 {
    kdDebug(29000) << "File Selector" << endl;
    QString filter;
-   QCString prefix = "\n*.";
+   Q3CString prefix = "\n*.";
 
    if( scan_mode == ID_QT_IMGIO )
    {
-      QStrList filterList = QImage::inputFormats();
+      Q3StrList filterList = QImage::inputFormats();
       filter = i18n( "*|All Files (*)");
-      for( QCString fi_item = filterList.first(); !fi_item.isEmpty();
+      for( Q3CString fi_item = filterList.first(); !fi_item.isEmpty();
 	   fi_item = filterList.next() )
       {
 
@@ -631,7 +634,7 @@ void ScanParams::slVirtScanModeSelect( int id )
 
 	 QFileInfo fi( vf );
 	 if( fi.extension() != QString::fromLatin1("pnm") )
-	    virt_filename->set(QCString(""));
+	    virt_filename->set(Q3CString(""));
       }
    } else {
       scan_mode = ID_QT_IMGIO;
@@ -654,7 +657,7 @@ void ScanParams::virtualScannerParams( void )
    QWidget     *w = 0;
 
    /* Selection if virt. Scanner or SANE Debug */
-   bg_virt_scan_mode = new QButtonGroup( 2, Qt::Horizontal,
+   bg_virt_scan_mode = new Q3ButtonGroup( 2, Qt::Horizontal,
 					 this, "GroupBoxVirtScanner" );
    connect( bg_virt_scan_mode, SIGNAL(clicked(int)),
 	    this, SLOT( slVirtScanModeSelect(int)));

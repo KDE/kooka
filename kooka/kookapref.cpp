@@ -39,9 +39,13 @@
 #include <qlayout.h>
 #include <qtooltip.h>
 #include <qvgroupbox.h>
-#include <qgrid.h>
+#include <q3grid.h>
 #include <qcheckbox.h>
 #include <qstringlist.h>
+//Added by qt3to4:
+#include <Q3Frame>
+#include <QLabel>
+#include <QVBoxLayout>
 
 #include <devselector.h>
 #include "config.h"
@@ -51,7 +55,7 @@
 #include "ksaneocr.h"
 
 #include <kmessagebox.h>
-#include <qbuttongroup.h>
+#include <q3buttongroup.h>
 #include <qradiobutton.h>
 #include <kurlrequester.h>
 
@@ -74,7 +78,7 @@ void KookaPreferences::setupOCRPage()
 {
     konf->setGroup( CFG_GROUP_OCR_DIA );
 
-    QFrame *page = addPage( i18n("OCR"), i18n("Optical Character Recognition" ),
+    Q3Frame *page = addPage( i18n("OCR"), i18n("Optical Character Recognition" ),
 			    BarIcon("ocrImage", KIcon::SizeMedium ) );
 
     QVBoxLayout *top = new QVBoxLayout( page, 0, spacingHint() );
@@ -86,7 +90,7 @@ void KookaPreferences::setupOCRPage()
     /*
      * Switch ocr engines
      */
-    QButtonGroup *engGroup = new QButtonGroup( 1, Qt::Horizontal, i18n("OCR Engine to Use"), page );
+    Q3ButtonGroup *engGroup = new Q3ButtonGroup( 1, Qt::Horizontal, i18n("OCR Engine to Use"), page );
     m_gocrBut   = new QRadioButton( i18n("GOCR engine")  , engGroup );
     m_kadmosBut = new QRadioButton( i18n("KADMOS engine"), engGroup );
     m_ocradBut  = new QRadioButton( i18n("OCRAD engine"), engGroup );
@@ -178,7 +182,7 @@ void KookaPreferences::setupOCRPage()
 
 KURLRequester* KookaPreferences::binaryCheckBox( QWidget *parent, const QString& program )
 {
-    QHBox *hbox = new QHBox( parent );
+    Q3HBox *hbox = new Q3HBox( parent );
 
     (void) new QLabel( i18n("Select the %1 binary to use:").arg( program ), hbox );
     KURLRequester* urlRequester = new KURLRequester( parent );
@@ -308,7 +312,7 @@ void KookaPreferences::setupStartupPage()
     /* startup options */
     konf->setGroup( GROUP_STARTUP );
 
-    QFrame *page = addPage( i18n("Startup"), i18n("Kooka Startup Preferences" ),
+    Q3Frame *page = addPage( i18n("Startup"), i18n("Kooka Startup Preferences" ),
 			    BarIcon("gear", KIcon::SizeMedium ) );
     QVBoxLayout *top = new QVBoxLayout( page, 0, spacingHint() );
     /* Description-Label */
@@ -350,7 +354,7 @@ void KookaPreferences::setupStartupPage()
 void KookaPreferences::setupSaveFormatPage( )
 {
    konf->setGroup( OP_FILE_GROUP );
-   QFrame *page = addPage( i18n("Image Saving"), i18n("Configure Image Save Assistant" ),
+   Q3Frame *page = addPage( i18n("Image Saving"), i18n("Configure Image Save Assistant" ),
 			    BarIcon("filesave", KIcon::SizeMedium ) );
    QVBoxLayout *top = new QVBoxLayout( page, 0, spacingHint() );
 
@@ -376,7 +380,7 @@ void KookaPreferences::setupThumbnailPage()
 {
    konf->setGroup( THUMB_GROUP );
 
-   QFrame *page = addPage( i18n("Thumbnail View"), i18n("Thumbnail Gallery View" ),
+   Q3Frame *page = addPage( i18n("Thumbnail View"), i18n("Thumbnail Gallery View" ),
 			    BarIcon("thumbnail", KIcon::SizeMedium ) );
    QVBoxLayout *top = new QVBoxLayout( page, 0, spacingHint() );
 
@@ -403,7 +407,7 @@ void KookaPreferences::setupThumbnailPage()
    /* Thumbnail size */
    int w = konf->readNumEntry( PIXMAP_WIDTH, 100);
    int h = konf->readNumEntry( PIXMAP_HEIGHT, 120 );
-   QGrid *lGrid = new QGrid( 2, hgb2 );
+   Q3Grid *lGrid = new Q3Grid( 2, hgb2 );
    lGrid->setSpacing( 2 );
    QLabel *l1 = new QLabel( i18n("Thumbnail maximum &width:"), lGrid );
    m_thumbWidth = new KIntNumInput( w, lGrid );
@@ -421,7 +425,7 @@ void KookaPreferences::setupThumbnailPage()
    QColor col1    = konf->readColorEntry( MARGIN_COLOR1, &(colorGroup().base()));
    QColor col2    = konf->readColorEntry( MARGIN_COLOR2, &(colorGroup().foreground()));
 
-   QGrid *fGrid = new QGrid( 2, hgb3 );
+   Q3Grid *fGrid = new Q3Grid( 2, hgb3 );
    fGrid->setSpacing( 2 );
    l1 = new QLabel(i18n("Thumbnail &frame width:"), fGrid );
    m_frameWidth = new KIntNumInput( frameWidth, fGrid );

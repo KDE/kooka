@@ -21,11 +21,13 @@
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qstringlist.h>
-#include <qstrlist.h>
+#include <q3strlist.h>
 #include <qtooltip.h>
 #include <qsizepolicy.h>
 #include <qapplication.h>
 #include <qcheckbox.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 #include <kglobal.h>
 #include <klocale.h>
@@ -72,9 +74,9 @@ ScanDialog::ScanDialog( QWidget *parent, const char *name, bool modal )
    : KScanDialog( Tabbed, Close|Help, parent, name, modal ),
      good_scan_connect(false)
 {
-    QVBox *page = addVBoxPage( i18n("&Scanning") );
+    Q3VBox *page = addVBoxPage( i18n("&Scanning") );
 
-    splitter = new QSplitter( Horizontal, page, "splitter" );
+    splitter = new QSplitter( Qt::Horizontal, page, "splitter" );
     Q_CHECK_PTR( splitter );
 
     m_scanParams = 0;
@@ -107,10 +109,10 @@ ScanDialog::ScanDialog( QWidget *parent, const char *name, bool modal )
 void ScanDialog::createOptionsTab( void )
 {
 
-   QVBox *page = addVBoxPage( i18n("&Options"));
+   Q3VBox *page = addVBoxPage( i18n("&Options"));
    setMainWidget(page);
 
-   QGroupBox *gb = new QGroupBox( 1, Qt::Horizontal, i18n("Startup Options"), page, "GB_STARTUP" );
+   Q3GroupBox *gb = new Q3GroupBox( 1, Qt::Horizontal, i18n("Startup Options"), page, "GB_STARTUP" );
    QLabel *label = new QLabel( i18n( "Note: changing these options will affect the scan plugin on next start." ),
 			       gb );
    label->setSizePolicy( QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed ) );
@@ -242,7 +244,7 @@ bool ScanDialog::setup()
    /* continue to attach a real scanner */
    /* first, get the list of available devices from libkscan */
    QStringList scannerNames;
-   QStrList backends = m_device->getDevices();;
+   Q3StrList backends = m_device->getDevices();;
    QStrListIterator it( backends );
 
    while ( it.current() ) {
@@ -251,7 +253,7 @@ bool ScanDialog::setup()
    }
 
    /* ..if there are devices.. */
-   QCString configDevice;
+   Q3CString configDevice;
    good_scan_connect = true;
    if( scannerNames.count() > 0 )
    {

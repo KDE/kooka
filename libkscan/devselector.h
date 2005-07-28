@@ -22,9 +22,12 @@
 
 
 #include <kdialogbase.h>
+//Added by qt3to4:
+#include <Q3StrList>
+#include <Q3CString>
 
-class QButtonGroup;
-class QStrList;
+class Q3ButtonGroup;
+class Q3StrList;
 class QStringList;
 class QCheckBox;
 
@@ -61,7 +64,7 @@ public:
     *  @param QStrList backends - a list of device names retrieved from the scan device
     *  @param QStrList scannerNames - a list of corresponding human readable sanner names.
     */
-   DeviceSelector( QWidget *parent, QStrList&, const QStringList& );
+   DeviceSelector( QWidget *parent, Q3StrList&, const QStringList& );
    ~DeviceSelector();
 
    /**
@@ -69,7 +72,7 @@ public:
     *  @return a CString containing the technical name of the selected device (taken from
     *          the backends-list from the constructor)
     */
-   QCString getSelectedDevice( void ) const;
+   Q3CString getSelectedDevice( void ) const;
 
    /**
     *  returns the users selection if the dialog should be skipped in future.
@@ -85,14 +88,14 @@ public:
     *  @return a string containing the device to open or null if no device is specified or the
     *  one specified is not valid.
     */
-   QCString getDeviceFromConfig( void ) const;
+   Q3CString getDeviceFromConfig( void ) const;
 
 public slots:
-   void setScanSources( const QStrList&, const QStringList& );
+   void setScanSources( const Q3StrList&, const QStringList& );
 
 private:
-   QButtonGroup *selectBox;
-   mutable QStrList devices;
+   Q3ButtonGroup *selectBox;
+   mutable Q3StrList devices;
    QCheckBox   *cbSkipDialog;
    bool        configDevValid;
    

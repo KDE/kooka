@@ -20,15 +20,19 @@
 
 #include <qlabel.h>
 #include <qfontmetrics.h>
-#include <qhbox.h>
+#include <q3hbox.h>
 #include <qtooltip.h>
-#include <qpopupmenu.h>
+#include <q3popupmenu.h>
 #include <qfile.h>
 #include <qtextstream.h>
 #include <qcombobox.h>
 #include <qradiobutton.h>
-#include <qgroupbox.h>
+#include <q3groupbox.h>
 #include <qlayout.h>
+//Added by qt3to4:
+#include <Q3MemArray>
+#include <QHBoxLayout>
+#include <QVBoxLayout>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -44,10 +48,9 @@
 #include <qslider.h>
 #include <qcheckbox.h>
 #include <kconfig.h>
-#include <qbuttongroup.h>
-#include <qvbuttongroup.h>
+#include <q3buttongroup.h>
 #include <kmessagebox.h>
-#include <qvaluevector.h>
+#include <q3valuevector.h>
 
 #define ID_CUSTOM 0
 #define ID_A4     1
@@ -99,11 +102,11 @@ public:
     QSlider     *m_sliderDust;
     QCheckBox   *m_cbAutoSel;
     QComboBox   *m_cbBackground;
-    QGroupBox   *m_autoSelGroup;
+    Q3GroupBox   *m_autoSelGroup;
     KScanDevice *m_scanner;
 
-    QMemArray<long> m_heightSum;
-    QMemArray<long> m_widthSum;
+    Q3MemArray<long> m_heightSum;
+    Q3MemArray<long> m_widthSum;
 };
 
 
@@ -140,11 +143,11 @@ Previewer::Previewer(QWidget *parent, const char *name )
 
     /* Actions for the previewer zoom */
     KAction *act;
-    act =  new KAction(i18n("Scale to W&idth"), "scaletowidth", CTRL+Key_I,
+    act =  new KAction(i18n("Scale to W&idth"), "scaletowidth", Qt::CTRL+Qt::Key_I,
 		       this, SLOT( slScaleToWidth()), this, "preview_scaletowidth" );
     act->plug( img_canvas->contextMenu());
 
-    act = new KAction(i18n("Scale to &Height"), "scaletoheight", CTRL+Key_H,
+    act = new KAction(i18n("Scale to &Height"), "scaletoheight", Qt::CTRL+Qt::Key_H,
 		      this, SLOT( slScaleToHeight()), this, "preview_scaletoheight" );
     act->plug( img_canvas->contextMenu());
 
@@ -156,7 +159,7 @@ Previewer::Previewer(QWidget *parent, const char *name )
     left->addWidget( new QLabel( i18n("<B>Preview</B>"), this ), 1);
 
     // Create a button group to contain buttons for Portrait/Landscape
-    bgroup = new QVButtonGroup( i18n("Scan Size"), this );
+    bgroup = new Q3VButtonGroup( i18n("Scan Size"), this );
 
     // -----
     pre_format_combo = new QComboBox( bgroup, "PREVIEWFORMATCOMBO" );
@@ -194,9 +197,9 @@ Previewer::Previewer(QWidget *parent, const char *name )
 
 
     /** Autoselection Box **/
-    d->m_autoSelGroup = new QGroupBox( 1, Horizontal, i18n("Auto-Selection"), this);
+    d->m_autoSelGroup = new Q3GroupBox( 1, Qt::Horizontal, i18n("Auto-Selection"), this);
 
-    QHBox *hbox       = new QHBox(d->m_autoSelGroup);
+    Q3HBox *hbox       = new Q3HBox(d->m_autoSelGroup);
     d->m_cbAutoSel    = new QCheckBox( i18n("active on"), hbox );
     QToolTip::add( d->m_cbAutoSel, i18n("Check here if you want autodetection\n"
                                         "of the document on the preview."));
@@ -240,7 +243,7 @@ Previewer::Previewer(QWidget *parent, const char *name )
     left->addWidget(d->m_autoSelGroup);
 
     /* Labels for the dimension */
-    QGroupBox *gbox = new QGroupBox( 1, Horizontal, i18n("Selection"), this, "GROUPBOX" );
+    Q3GroupBox *gbox = new Q3GroupBox( 1, Qt::Horizontal, i18n("Selection"), this, "GROUPBOX" );
 
     QLabel *l2 = new QLabel( i18n("width - mm" ), gbox );
     QLabel *l3 = new QLabel( i18n("height - mm" ), gbox );
@@ -251,7 +254,7 @@ Previewer::Previewer(QWidget *parent, const char *name )
              l3, SLOT(setText(const QString&)));
 
     /* size indicator */
-    QHBox *hb = new QHBox( gbox );
+    Q3HBox *hb = new Q3HBox( gbox );
     (void) new QLabel( i18n( "Size:"), hb );
     SizeIndicator *indi = new SizeIndicator( hb );
     QToolTip::add( indi, i18n( "This size field shows how large the uncompressed image will be.\n"
@@ -704,16 +707,16 @@ void  Previewer::findSelection( )
     long iWidth  = img->width();
     long iHeight = img->height();
 
-    QMemArray<long> heightSum;
-    QMemArray<long> widthSum;
+    Q3MemArray<long> heightSum;
+    Q3MemArray<long> widthSum;
 
     kdDebug(29000)<< "Preview size is " << iWidth << "x" << iHeight << endl;
 
     if( (d->m_heightSum).size() == 0 && (iHeight>0) )
     {
         kdDebug(29000) << "Starting to fill Array " << endl;
-        QMemArray<long> heightSum(iHeight);
-        QMemArray<long> widthSum(iWidth);
+        Q3MemArray<long> heightSum(iHeight);
+        Q3MemArray<long> widthSum(iWidth);
         heightSum.fill(0);
         widthSum.fill(0);
 
@@ -751,7 +754,7 @@ void  Previewer::findSelection( )
     /* debug output */
     {
         QFile fi( "/tmp/thheight.dat");
-        if( fi.open( IO_ReadWrite ) ) {
+        if( fi.open( QIODevice::ReadWrite ) ) {
             QTextStream str( &fi );
 
             str << "# height ##################" << endl;
@@ -761,7 +764,7 @@ void  Previewer::findSelection( )
         }
     }
     QFile fi1( "/tmp/thwidth.dat");
-    if( fi1.open( IO_ReadWrite ))
+    if( fi1.open( QIODevice::ReadWrite ))
     {
         QTextStream str( &fi1 );
         str << "# width ##################" << endl;
@@ -810,7 +813,7 @@ void  Previewer::findSelection( )
 /*
  * returns an Array containing the
  */
-bool Previewer::imagePiece( QMemArray<long> src, int& start, int& end )
+bool Previewer::imagePiece( Q3MemArray<long> src, int& start, int& end )
 {
     for( uint x = 0; x < src.size(); x++ )
     {

@@ -25,9 +25,9 @@
  *  without including the source code for Qt in the source distribution.   *
  *                                                                         *
  ***************************************************************************/
-#include <qhbox.h>
-#include <qvbox.h>
-#include <qbutton.h>
+#include <q3hbox.h>
+#include <q3vbox.h>
+#include <q3button.h>
 #include <qpushbutton.h>
 #include <qlabel.h>
 
@@ -48,7 +48,7 @@
  */
 
 ImageSelectLine::ImageSelectLine( QWidget *parent, const QString& text )
-   : QHBox( parent )
+   : Q3HBox( parent )
 {
    setSpacing( 5 );
    (void) new QLabel( text, this );

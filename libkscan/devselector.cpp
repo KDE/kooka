@@ -19,16 +19,19 @@
 
 #include <stdlib.h>
 
-#include <qbuttongroup.h>
+#include <q3buttongroup.h>
 #include <qcheckbox.h>
-#include <qcstring.h>
+#include <q3cstring.h>
 #include <qlayout.h>
 #include <qlabel.h>
 #include <qfile.h>
 #include <qpushbutton.h>
 #include <qradiobutton.h>
-#include <qstrlist.h>
+#include <q3strlist.h>
 #include <qstringlist.h>
+//Added by qt3to4:
+#include <QPixmap>
+#include <QVBoxLayout>
 
 #include <kapplication.h>
 #include <kconfig.h>
@@ -41,7 +44,7 @@
 #include "devselector.h"
 
 
-DeviceSelector::DeviceSelector( QWidget *parent, QStrList& devList,
+DeviceSelector::DeviceSelector( QWidget *parent, Q3StrList& devList,
 				const QStringList& hrdevList )
     : KDialogBase( parent,  "DeviceSel", true, i18n("Welcome to Kooka"),
 		   Ok|Cancel, Ok, true )
@@ -59,7 +62,7 @@ DeviceSelector::DeviceSelector( QWidget *parent, QStrList& devList,
    label->resize( 100, 350 );
    topLayout->addWidget( label );
 
-   selectBox = new QButtonGroup( 1, Horizontal, i18n( "Select Scan Device" ),
+   selectBox = new Q3ButtonGroup( 1, Qt::Horizontal, i18n( "Select Scan Device" ),
 				 page, "ButtonBox");
    Q_CHECK_PTR( selectBox );
    selectBox->setExclusive( true );
@@ -78,13 +81,13 @@ DeviceSelector::DeviceSelector( QWidget *parent, QStrList& devList,
    
 }
 
-QCString DeviceSelector::getDeviceFromConfig( void ) const
+Q3CString DeviceSelector::getDeviceFromConfig( void ) const
 {
    KConfig *gcfg = KGlobal::config();
    gcfg->setGroup(QString::fromLatin1(GROUP_STARTUP));
    bool skipDialog = gcfg->readBoolEntry( STARTUP_SKIP_ASK, false );
    
-   QCString result;
+   Q3CString result;
 
    /* in this case, the user has checked 'Do not ask me again' and does not
     * want to be bothered any more.
@@ -102,7 +105,7 @@ QCString DeviceSelector::getDeviceFromConfig( void ) const
    else
    {
       kdDebug(29000) << "Scanner from Config file is _not_ available" << endl;
-      result = QCString();
+      result = Q3CString();
    }
    
    return( result );
@@ -113,7 +116,7 @@ bool DeviceSelector::getShouldSkip( void ) const
    return( cbSkipDialog->isChecked());
 }
 
-QCString DeviceSelector::getSelectedDevice( void ) const
+Q3CString DeviceSelector::getSelectedDevice( void ) const
 {
    unsigned int selID = selectBox->id( selectBox->selected() );
 
@@ -136,13 +139,13 @@ QCString DeviceSelector::getSelectedDevice( void ) const
 }
 
 
-void DeviceSelector::setScanSources( const QStrList& sources,
+void DeviceSelector::setScanSources( const Q3StrList& sources,
 				     const QStringList& hrSources )
 {
    bool default_ok = false;
    KConfig *gcfg = KGlobal::config();
    gcfg->setGroup(QString::fromLatin1(GROUP_STARTUP));
-   QCString defstr = gcfg->readEntry( STARTUP_SCANDEV, "" ).local8Bit();
+   Q3CString defstr = gcfg->readEntry( STARTUP_SCANDEV, "" ).local8Bit();
 
    /* Selector-Stuff*/
    uint nr = 0;

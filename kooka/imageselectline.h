@@ -29,7 +29,7 @@
 #ifndef __IMGSELECTLINE_H__
 #define __IMGSELECTLINE_H__
 
-#include <qhbox.h>
+#include <q3hbox.h>
 
 /**
  *
@@ -40,7 +40,7 @@ class KURLComboBox;
 class QPushButton;
 class QStringList;
 
-class ImageSelectLine:public QHBox
+class ImageSelectLine:public Q3HBox
 {
    Q_OBJECT
 public:

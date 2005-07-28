@@ -29,6 +29,8 @@
 
 #include <qmap.h>
 #include <qcheckbox.h>
+//Added by qt3to4:
+#include <QLabel>
 #include <kdeprint/kprintdialogpage.h>
 
 #include "kookaimage.h"
@@ -46,7 +48,7 @@ class QString;
 class QLabel;
 class KIntNumInput;
 class KookaImage;
-class QVButtonGroup;
+class Q3VButtonGroup;
 class QRadioButton;
 class QCheckBox;
 
@@ -68,7 +70,7 @@ protected slots:
     void slCustomHeightChanged(int);
 
 private:
-    QButtonGroup  *m_scaleRadios;
+    Q3ButtonGroup  *m_scaleRadios;
     QRadioButton  *m_rbOrigSize;
     QRadioButton  *m_rbScale;
     QRadioButton  *m_rbScreen;

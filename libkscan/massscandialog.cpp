@@ -19,9 +19,12 @@
 
 #include <qlayout.h>
 #include <qlabel.h>
-#include <qprogressbar.h>
-#include <qgroupbox.h>
-#include <qframe.h>
+#include <q3progressbar.h>
+#include <q3groupbox.h>
+#include <q3frame.h>
+//Added by qt3to4:
+#include <QVBoxLayout>
+#include <QHBoxLayout>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -45,8 +48,8 @@ MassScanDialog::MassScanDialog( QWidget *parent )
    bigdad->addWidget( l1, 1);
  	
  	/* Scan parameter information */
- 	QGroupBox *f1 = new QGroupBox( i18n("Scan Parameter"), this );
- 	f1->setFrameStyle( QFrame::Box | QFrame::Sunken );
+ 	Q3GroupBox *f1 = new Q3GroupBox( i18n("Scan Parameter"), this );
+ 	f1->setFrameStyle( Q3Frame::Box | Q3Frame::Sunken );
  	f1->setMargin(5);
  	f1->setLineWidth( 1 );
    QVBoxLayout *l_main = new QVBoxLayout( f1, f1->frameWidth()+3, 3 );
@@ -61,8 +64,8 @@ MassScanDialog::MassScanDialog( QWidget *parent )
  	l_main->addWidget( l_tofolder );
  	
  	/* Scan Progress information */
- 	QGroupBox *f2 = new QGroupBox( i18n("Scan Progress"), this );
- 	f2->setFrameStyle( QFrame::Box | QFrame::Sunken );
+ 	Q3GroupBox *f2 = new Q3GroupBox( i18n("Scan Progress"), this );
+ 	f2->setFrameStyle( Q3Frame::Box | Q3Frame::Sunken );
  	f2->setMargin(15);
  	f2->setLineWidth( 1 );
    QVBoxLayout *l_pro = new QVBoxLayout( f2, f2->frameWidth()+3, 3 );
@@ -77,7 +80,7 @@ MassScanDialog::MassScanDialog( QWidget *parent )
    QPushButton *pb_cancel_scan = new QPushButton( i18n("Cancel Scan"), f2);
    l_scanp->addWidget( pb_cancel_scan,3 );
 
-   progressbar = new QProgressBar( 1000, f2 );
+   progressbar = new Q3ProgressBar( 1000, f2 );
    l_pro->addWidget( progressbar, 3 );
 
  	/* Buttons to start scanning and close the Window */

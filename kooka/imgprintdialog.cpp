@@ -32,12 +32,15 @@
 #include <qstring.h>
 #include <qmap.h>
 #include <qlayout.h>
-#include <qvbuttongroup.h>
+
 #include <qcheckbox.h>
 #include <qradiobutton.h>
+//Added by qt3to4:
+#include <QVBoxLayout>
+#include <QHBoxLayout>
 #include "kookaimage.h"
 #include <qvgroupbox.h>
-#include <qpaintdevicemetrics.h>
+#include <q3paintdevicemetrics.h>
 #include <qlabel.h>
 #include <qtooltip.h>
 #include <kdebug.h>
@@ -57,7 +60,7 @@ ImgPrintDialog::ImgPrintDialog( KookaImage *img, QWidget *parent, const char* na
     // layout->setMargin( KDialog::marginHint() );
     // layout->setSpacing( KDialog::spacingHint() );
 
-    m_scaleRadios = new QButtonGroup( 2, Qt::Vertical, i18n("Image Print Size"), this );
+    m_scaleRadios = new Q3ButtonGroup( 2, Qt::Vertical, i18n("Image Print Size"), this );
     m_scaleRadios->setRadioButtonExclusive(true);
     connect( m_scaleRadios, SIGNAL(clicked(int)), SLOT(slScaleChanged(int)));
 
@@ -200,7 +203,7 @@ void ImgPrintDialog::getOptions(QMap<QString,QString>& opts, bool )
     opts[OPT_RATIO]       = QString::number( m_ratio->isChecked()   );
 
     {
-	QPaintDeviceMetrics metric( this );
+	Q3PaintDeviceMetrics metric( this );
 	opts[OPT_SCREEN_RES] = QString::number( metric.logicalDpiX());
     }
 }

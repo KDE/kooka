@@ -19,7 +19,7 @@
 
 #include <klocale.h>
 #include <kdebug.h>
-#include <qbuttongroup.h>
+#include <q3buttongroup.h>
 #include <qradiobutton.h>
 #include <knumvalidator.h>
 #include "imgscaledialog.h"
@@ -40,7 +40,7 @@ ImgScaleDialog::ImgScaleDialog( QWidget *parent, int curr_sel,
    // (void) new QLabel( , main, "Page");
    //
    // makeMainWidget();
-   QButtonGroup *radios = new QButtonGroup ( 2, Qt::Horizontal, this );
+   Q3ButtonGroup *radios = new Q3ButtonGroup ( 2, Qt::Horizontal, this );
    setMainWidget(radios);
    Q_CHECK_PTR(radios);
    radios->setTitle( i18n("Select Image Zoom") );

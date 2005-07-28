@@ -31,6 +31,9 @@
 #include <kio/previewjob.h>
 #include <qimage.h>
 #include <qstring.h>
+//Added by qt3to4:
+#include <QPixmap>
+#include <QLabel>
 
 #include <kscanslider.h>
 #include <kanimwidget.h>
@@ -43,13 +46,13 @@
 
 
 class KookaImage;
-class QHBox;
-class QVBox;
+class Q3HBox;
+class Q3VBox;
 class QLabel;
 class QSize;
 class KSpellConfig;
 class QCheckBox;
-class QGroupBox;
+class Q3GroupBox;
 
 class KOCRBase: public KDialogBase
 {
@@ -77,8 +80,8 @@ public:
      */
     virtual QString ocrEngineDesc() const { return QString(); }
 
-    QVBox* ocrPage() const { return m_ocrPage; }
-    QVBox* imagePage() const { return m_imgPage; }
+    Q3VBox* ocrPage() const { return m_ocrPage; }
+    Q3VBox* imagePage() const { return m_imgPage; }
 
     KSpellConfig* spellConfig() const
         { return m_spellConfig; }
@@ -138,11 +141,11 @@ private slots:
 
 private:
     KAnimWidget  *m_animation;
-    QVBox        *m_ocrPage;
-    QVBox        *m_imgPage;
-    QVBox        *m_spellchkPage;
-    QVBox        *m_metaBox;
-    QHBox        *m_imgHBox;
+    Q3VBox        *m_ocrPage;
+    Q3VBox        *m_imgPage;
+    Q3VBox        *m_spellchkPage;
+    Q3VBox        *m_metaBox;
+    Q3HBox        *m_imgHBox;
     QLabel       *m_previewPix;
     KookaImage   *m_currImg;
 
@@ -152,7 +155,7 @@ private:
     QSize         m_previewSize;
 
     QCheckBox     *m_cbWantCheck;
-    QGroupBox     *m_gbSpellOpts;
+    Q3GroupBox     *m_gbSpellOpts;
 };
 
 #endif

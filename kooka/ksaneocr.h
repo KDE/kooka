@@ -28,6 +28,9 @@
 #define KSANEOCR_H
 #include <qwidget.h>
 #include <qobject.h>
+//Added by qt3to4:
+#include <QPixmap>
+#include <QEvent>
 
 #include "ocrword.h"
 

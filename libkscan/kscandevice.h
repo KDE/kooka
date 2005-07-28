@@ -21,11 +21,14 @@
 #define _KSCANDEV_H_
 
 #include <qwidget.h>
-#include <qasciidict.h>
+#include <q3asciidict.h>
 #include <qsize.h>
 #include <qobject.h>
-#include <qstrlist.h>
+#include <q3strlist.h>
 #include <qsocketnotifier.h>
+//Added by qt3to4:
+#include <Q3CString>
+#include <Q3PtrList>
 
 
 #include "kscanoption.h"
@@ -89,7 +92,7 @@ public:
      *   @return the state of the operation
      *   @param backend: the name of the backend to open
      */
-    KScanStat openDevice( const QCString& backend );
+    KScanStat openDevice( const Q3CString& backend );
 
     /**
      *  returns the names of all existing Scan Devices in the system.
@@ -97,14 +100,14 @@ public:
      *  @return a QStrList of available Scanners in the system
      *  @see KScanDevice
      */
-    QStrList getDevices( ) const
+    Q3StrList getDevices( ) const
         { return( scanner_avail ); }
 
     /**
      * returns the short, technical name of the currently attached backend.
      * It is in the form 'umax:/dev/sg1'.
      */
-    QCString shortScannerName() const { return scanner_name; }
+    Q3CString shortScannerName() const { return scanner_name; }
 
     /**
      *  returns a long, human readable name of the scanner, like
@@ -116,7 +119,7 @@ public:
      * @param a QString with a backend string
      * @return a QString containing a human readable scanner name
      **/
-    QString getScannerName( const QCString& name = 0 ) const;
+    QString getScannerName( const Q3CString& name = 0 ) const;
 
     /*
      *  ========= Preview Functions ==========
@@ -178,7 +181,7 @@ public:
      *  @see openDevice
      *	@return a QStrList with the names of all options
      **/
-    QStrList getAllOptions();
+    Q3StrList getAllOptions();
 
     /**
      *  returns the common options of the device. A frontend should
@@ -188,7 +191,7 @@ public:
      *  @see getAdvancedOptions
      *  @return a QStrList with with names of the common options.
      */
-    QStrList getCommonOptions();
+    Q3StrList getCommonOptions();
 
     /**
      *  returns a list of advanced scan options. A frontend should
@@ -197,7 +200,7 @@ public:
      *  @see getCommonOptions
      *  @return a QStrList with names of advanced scan options.
      */
-    QStrList getAdvancedOptions();
+    Q3StrList getAdvancedOptions();
 
     /**
      * retrieves a set of the current scan options and writes them
@@ -230,7 +233,7 @@ public:
      *  @param name: the name of a option from a returned option-List
      *  @return true, if the option exists
      */
-    bool optionExists( const QCString& name );
+    bool optionExists( const Q3CString& name );
 
     /**
      *  checks if the backend knows the option with the required name under
@@ -238,7 +241,7 @@ public:
      *  is returned, otherwise a null QCString.
      */
 
-    QCString aliasName( const QCString& name );
+    Q3CString aliasName( const Q3CString& name );
 
     /**
      *  returns a Widget suitable for the selected Option and creates the
@@ -249,7 +252,7 @@ public:
      *  @param desc: pointer to the text appearing as widget text
      *  @param tooltip: tooltip text. If zero, the SANE text will be used.
      **/
-    KScanOption *getGuiElement( const QCString& name, QWidget *parent,
+    KScanOption *getGuiElement( const Q3CString& name, QWidget *parent,
                                 const QString& desc = QString::null,
                                 const QString& tooltip = QString::null );
 
@@ -257,12 +260,12 @@ public:
      *  returns the pointer to an already created Scanoption from the
      *  gui element list. Cares for option name aliases.
      */
-    KScanOption *getExistingGuiElement( const QCString& name );
+    KScanOption *getExistingGuiElement( const Q3CString& name );
 
     /**
      *  sets an widget of the named option enabled/disabled
      **/
-    void guiSetEnabled( const QCString& name, bool state );
+    void guiSetEnabled( const Q3CString& name, bool state );
 
     /**
      *  returns the maximum scan size. This is interesting e.g. for the
@@ -280,7 +283,7 @@ public:
 
     static bool        scanner_initialised;
     static SANE_Handle scanner_handle;
-    static QAsciiDict<int>*  option_dic;
+    static Q3AsciiDict<int>*  option_dic;
     static SANE_Device const **dev_list;
     static KScanOptSet *gammaTables;
 
@@ -320,7 +323,7 @@ public slots:
     void slSaveScanConfigSet( const QString&, const QString& );
 
 
-    void slSetDirty( const QCString& name );
+    void slSetDirty( const Q3CString& name );
 
     /**
      * Closes the scan device and frees all related data, makes
@@ -426,14 +429,14 @@ private:
 //                                    const QString& tooltip );
     KScanStat           find_options(); // help fct. to process options
     KScanStat           acquire_data( bool isPreview = false );
-    QStrList 	      scanner_avail;  // list of names of all scan dev.
-    QStrList	      option_list;    // list of names of all options
-    QStrList            dirtyList;     // option changes
+    Q3StrList 	      scanner_avail;  // list of names of all scan dev.
+    Q3StrList	      option_list;    // list of names of all options
+    Q3StrList            dirtyList;     // option changes
 
     inline  QString optionNotifyString(int) const;
     
-    QPtrList<KScanOption>  gui_elements;
-    QAsciiDict<SANE_Device>  scannerDevices;
+    Q3PtrList<KScanOption>  gui_elements;
+    Q3AsciiDict<SANE_Device>  scannerDevices;
 
     QSocketNotifier     *sn;
 
@@ -441,7 +444,7 @@ private:
 
     /* Data for the scan process */
     /* This could/should go to  a small help object */
-    QCString             scanner_name;
+    Q3CString             scanner_name;
     SANE_Byte           *data;
     QImage              *img;
     SANE_Parameters      sane_scan_param;

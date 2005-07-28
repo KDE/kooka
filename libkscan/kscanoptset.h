@@ -22,8 +22,10 @@
 
 #include <qobject.h>
 #include <qstring.h>
-#include <qptrlist.h>
-#include <qasciidict.h>
+#include <q3ptrlist.h>
+#include <q3asciidict.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 
 #include "kscanoption.h"
@@ -46,7 +48,7 @@
 
 
 
-class KScanOptSet: public QAsciiDict<KScanOption>
+class KScanOptSet: public Q3AsciiDict<KScanOption>
 {
 
 public:
@@ -54,7 +56,7 @@ public:
     *  Constructor to create  a new Container. Takes a string as a name, which
     *  has no special meaning yet ;)
     */
-   KScanOptSet( const QCString& );
+   KScanOptSet( const Q3CString& );
    ~KScanOptSet();
 
    /**
@@ -67,10 +69,10 @@ public:
    /**
     *  returns a pointer to a stored option given by name.
     */
-   KScanOption *get( const QCString name ) const;
-   QCString      getValue( const QCString name ) const;
+   KScanOption *get( const Q3CString name ) const;
+   Q3CString      getValue( const Q3CString name ) const;
 
-   void backupOptionDict( const QAsciiDict<KScanOption>& ); 
+   void backupOptionDict( const Q3AsciiDict<KScanOption>& ); 
 
    /**
     * saves a configuration set to the configuration file 'ScanSettings'
@@ -99,10 +101,10 @@ public slots:
     void slSetDescription( const QString& );
    
 private:
-   QCString name;
+   Q3CString name;
 
    /* List to collect objects for which memory was allocated and must be freed */
-   QPtrList<KScanOption> strayCatsList;
+   Q3PtrList<KScanOption> strayCatsList;
 
    class KScanOptSetPrivate;
    KScanOptSetPrivate *d;

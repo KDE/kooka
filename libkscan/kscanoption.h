@@ -21,11 +21,13 @@
 #define _KSCANOPTION_H_
 
 #include <qwidget.h>
-#include <qdict.h>
+#include <q3dict.h>
 #include <qobject.h>
-#include <qstrlist.h>
+#include <q3strlist.h>
 #include <qsocketnotifier.h>
 #include <qdatastream.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 extern "C" {
 #include <sane/sane.h>
@@ -67,7 +69,7 @@ public:
    * option is valid and contains the correct value retrieved from the
    * scanner.
    **/
-  KScanOption( const QCString& new_name );
+  KScanOption( const Q3CString& new_name );
 
   /**
    * creates a KScanOption from another
@@ -122,7 +124,7 @@ public:
   bool set( int val );
   bool set( double val );
   bool set( int *p_val, int size );
-  bool set( const QCString& );
+  bool set( const Q3CString& );
   bool set( bool b ){ if( b ) return(set( (int)(1==1) )); else return( set( (int) (1==0) )); }
   bool set( KGammaTable  *gt );
 
@@ -131,7 +133,7 @@ public:
     **/
   bool get( int* ) const;
   bool get( KGammaTable* ) const;
-  QCString get( void ) const;
+  Q3CString get( void ) const;
 
    /**
     * This function creates a widget for the scanner option depending
@@ -159,11 +161,11 @@ public:
 
    
   // Possible Values
-  QStrList    getList() const;
+  Q3StrList    getList() const;
   bool        getRangeFromList( double*, double*, double* ) const;
   bool        getRange( double*, double*, double* ) const;
 
-  QCString    getName() const { return( name ); }
+  Q3CString    getName() const { return( name ); }
   void *      getBuffer() const { return( buffer ); }
   QWidget     *widget( ) const { return( internal_widget ); }
   /**
@@ -185,7 +187,7 @@ public:
 
    ### not implemented at all?
    **/
-  KSANE_Type typeToSet( const QCString& name );
+  KSANE_Type typeToSet( const Q3CString& name );
 
   /**
    *  returns a string describing the unit of given the option.
@@ -194,7 +196,7 @@ public:
 
    ###  not implemented at all?
    **/
-  QString unitOf( const QCString& name );
+  QString unitOf( const Q3CString& name );
 
 public slots:
   void       slRedrawWidget( KScanOption *so );
@@ -210,7 +212,7 @@ protected slots:
    *  This is an internal slot.
    **/
   void		  slWidgetChange( void );
-  void		  slWidgetChange( const QCString& );
+  void		  slWidgetChange( const Q3CString& );
   void		  slWidgetChange( int );
 	
   signals:
@@ -234,7 +236,7 @@ protected slots:
 
 private:
   bool       applyVal( void );
-  bool       initOption( const QCString& new_name );
+  bool       initOption( const Q3CString& new_name );
   void       *allocBuffer( long );
 
   QWidget    *entryField ( QWidget *parent, const QString& text );
@@ -242,7 +244,7 @@ private:
   QWidget    *comboBox   ( QWidget *parent, const QString& text );
 	
   const      SANE_Option_Descriptor *desc;
-  QCString    name;
+  Q3CString    name;
   void       *buffer;
   QWidget    *internal_widget;
   bool       buffer_untouched;
