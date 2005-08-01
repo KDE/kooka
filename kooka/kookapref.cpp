@@ -78,7 +78,7 @@ void KookaPreferences::setupOCRPage()
 {
     konf->setGroup( CFG_GROUP_OCR_DIA );
 
-    Q3Frame *page = addPage( i18n("OCR"), i18n("Optical Character Recognition" ),
+    QFrame *page = addPage( i18n("OCR"), i18n("Optical Character Recognition" ),
 			    BarIcon("ocrImage", KIcon::SizeMedium ) );
 
     QVBoxLayout *top = new QVBoxLayout( page, 0, spacingHint() );
@@ -312,7 +312,7 @@ void KookaPreferences::setupStartupPage()
     /* startup options */
     konf->setGroup( GROUP_STARTUP );
 
-    Q3Frame *page = addPage( i18n("Startup"), i18n("Kooka Startup Preferences" ),
+    QFrame *page = addPage( i18n("Startup"), i18n("Kooka Startup Preferences" ),
 			    BarIcon("gear", KIcon::SizeMedium ) );
     QVBoxLayout *top = new QVBoxLayout( page, 0, spacingHint() );
     /* Description-Label */
@@ -354,7 +354,7 @@ void KookaPreferences::setupStartupPage()
 void KookaPreferences::setupSaveFormatPage( )
 {
    konf->setGroup( OP_FILE_GROUP );
-   Q3Frame *page = addPage( i18n("Image Saving"), i18n("Configure Image Save Assistant" ),
+   QFrame *page = addPage( i18n("Image Saving"), i18n("Configure Image Save Assistant" ),
 			    BarIcon("filesave", KIcon::SizeMedium ) );
    QVBoxLayout *top = new QVBoxLayout( page, 0, spacingHint() );
 
@@ -380,7 +380,7 @@ void KookaPreferences::setupThumbnailPage()
 {
    konf->setGroup( THUMB_GROUP );
 
-   Q3Frame *page = addPage( i18n("Thumbnail View"), i18n("Thumbnail Gallery View" ),
+   QFrame *page = addPage( i18n("Thumbnail View"), i18n("Thumbnail Gallery View" ),
 			    BarIcon("thumbnail", KIcon::SizeMedium ) );
    QVBoxLayout *top = new QVBoxLayout( page, 0, spacingHint() );
 
