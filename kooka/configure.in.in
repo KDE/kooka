@@ -3,7 +3,7 @@ dnl AC_CHECK_LIB(Pgm2asc,pgm2asc)
 dnl should define HAVE_LIBPGM2ASC if available
 
 AC_ARG_WITH([kadmos],
-  [AS_HELP_STRING([--with-kadmos],
+  [AC_HELP_STRING([--with-kadmos],
     [Enable the kadmos OCR engine @<:@default=check@:>@])],
   [], with_kadmos=check)
 
