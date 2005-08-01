@@ -197,7 +197,7 @@ Previewer::Previewer(QWidget *parent, const char *name )
     d->m_autoSelGroup = new QGroupBox( 1, Horizontal, i18n("Auto-Selection"), this);
 
     QHBox *hbox       = new QHBox(d->m_autoSelGroup);
-    d->m_cbAutoSel    = new QCheckBox( i18n("active on"), hbox );
+    d->m_cbAutoSel    = new QCheckBox( i18n("Active on"), hbox );
     QToolTip::add( d->m_cbAutoSel, i18n("Check here if you want autodetection\n"
                                         "of the document on the preview."));
 
