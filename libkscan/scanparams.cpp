@@ -474,8 +474,9 @@ Q3ScrollView *ScanParams::scannerParams( )
    setEditCustomGammaTableState();
 
    /* This connection cares for enabling/disabling the edit-Button */
-   connect( so,   SIGNAL(guiChange(KScanOption*)),
-	    this, SLOT(slOptionNotify(KScanOption*)));
+   if(so )
+	   connect( so,   SIGNAL(guiChange(KScanOption*)),
+		    this, SLOT(slOptionNotify(KScanOption*)));
 
    /* my Epson Perfection backends offer a list of user defined gamma values */
 
