@@ -8,7 +8,7 @@ AC_ARG_WITH([kadmos],
   [], with_kadmos=check)
 
 AC_ARG_WITH([kadmos-dir],
-  AS_HELP_STRING([--with-kadmos-dir],
+  AC_HELP_STRING([--with-kadmos-dir],
     [sets the path to the kadmos engine @<:@default=/usr/local@:>@]),
   [ac_kadmos_value=$withval], [ac_kadmos_value=/usr/local])
 
