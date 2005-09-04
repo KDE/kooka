@@ -162,7 +162,7 @@ Previewer::Previewer(QWidget *parent, const char *name )
     bgroup = new Q3VButtonGroup( i18n("Scan Size"), this );
 
     // -----
-    pre_format_combo = new QComboBox( bgroup, "PREVIEWFORMATCOMBO" );
+    pre_format_combo = new QComboBox( this, "PREVIEWFORMATCOMBO" );
     pre_format_combo->insertItem( i18n( "Custom" ), ID_CUSTOM);
     pre_format_combo->insertItem( i18n( "DIN A4" ), ID_A4);
     pre_format_combo->insertItem( i18n( "DIN A5" ), ID_A5);
