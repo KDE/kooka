@@ -56,7 +56,7 @@
 #include <q3strlist.h>
 #include <kedittoolbar.h>
 #include <kmessagebox.h>
-#include <kdockwidget.h>
+#include <k3dockwidget.h>
 #include <kparts/partmanager.h>
 #include <kstdaccel.h>
 #include <kaction.h>

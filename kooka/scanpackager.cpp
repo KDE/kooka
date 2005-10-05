@@ -54,7 +54,7 @@
 #include <kfiletreebranch.h>
 
 #include <kurldrag.h>
-#include <kpopupmenu.h>
+#include <kmenu.h>
 #include <kaction.h>
 #include <kinputdialog.h>
 #include <kiconloader.h>
@@ -129,8 +129,8 @@ ScanPackager::ScanPackager( QWidget *parent ) : KFileTreeView( parent )
    m_startup = true;
 
    /* create a context menu and set the title */
-   m_contextMenu = new KPopupMenu();
-   static_cast<KPopupMenu*>(m_contextMenu)->insertTitle( i18n( "Gallery" ));
+   m_contextMenu = new KMenu();
+   static_cast<KMenu*>(m_contextMenu)->insertTitle( i18n( "Gallery" ));
 
 }
 

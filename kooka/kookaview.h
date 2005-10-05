@@ -32,7 +32,7 @@
 #include <Q3CString>
 #include <kopenwith.h>
 #include "kookaiface.h"
-#include <kdockwidget.h>
+#include <k3dockwidget.h>
 #include <qtabwidget.h>
 #include <qlayout.h>
 #include <qimage.h>

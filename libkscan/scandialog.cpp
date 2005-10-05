@@ -57,7 +57,7 @@ ScanDialogFactory::ScanDialogFactory( QObject *parent, const char *name )
     : KScanDialogFactory( parent, name )
 {
     setName( "ScanDialogFactory" );
-    KGlobal::locale()->insertCatalogue( QString::fromLatin1("libkscan") );
+    KGlobal::locale()->insertCatalog( QString::fromLatin1("libkscan") );
 }
 
 KScanDialog * ScanDialogFactory::createDialog( QWidget *parent,
@@ -74,7 +74,7 @@ ScanDialog::ScanDialog( QWidget *parent, const char *name, bool modal )
    : KScanDialog( Tabbed, Close|Help, parent, name, modal ),
      good_scan_connect(false)
 {
-    Q3VBox *page = addVBoxPage( i18n("&Scanning") );
+    KVBox *page = addVBoxPage( i18n("&Scanning") );
 
     splitter = new QSplitter( Qt::Horizontal, page, "splitter" );
     Q_CHECK_PTR( splitter );
@@ -109,7 +109,7 @@ ScanDialog::ScanDialog( QWidget *parent, const char *name, bool modal )
 void ScanDialog::createOptionsTab( void )
 {
 
-   Q3VBox *page = addVBoxPage( i18n("&Options"));
+   KVBox *page = addVBoxPage( i18n("&Options"));
    setMainWidget(page);
 
    Q3GroupBox *gb = new Q3GroupBox( 1, Qt::Horizontal, i18n("Startup Options"), page, "GB_STARTUP" );

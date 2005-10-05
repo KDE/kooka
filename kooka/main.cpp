@@ -87,7 +87,7 @@ int main( int argc, char *argv[] )
    KCmdLineArgs::addCmdLineOptions( options ); // Add my own options.
 
    KApplication app;
-   KGlobal::locale()->insertCatalogue("libkscan");
+   KGlobal::locale()->insertCatalog("libkscan");
    KImageIO::registerFormats();
    KIconLoader *loader = KGlobal::iconLoader();
 

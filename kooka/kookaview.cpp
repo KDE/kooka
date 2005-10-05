@@ -74,12 +74,12 @@
 #include <kaction.h>
 #include <kiconloader.h>
 #include <kshortcut.h>
-#include <kdockwidget.h>
+#include <k3dockwidget.h>
 #include <qobject.h>
 
 #include <kparts/componentfactory.h>
 #include <qimage.h>
-#include <kpopupmenu.h>
+#include <kmenu.h>
 
 
 #define STARTUP_IMG_SELECTION   "SelectedImageOnStartup"
@@ -118,7 +118,7 @@ KookaView::KookaView( KParts::DockMainWindow *parent, const Q3CString& deviceToU
    connect( img_canvas, SIGNAL( imageReadOnly(bool)),
 	    this, SLOT(slViewerReadOnly(bool)));
    
-   KPopupMenu *ctxtmenu = static_cast<KPopupMenu*>(img_canvas->contextMenu());
+   KMenu *ctxtmenu = static_cast<KMenu*>(img_canvas->contextMenu());
    if( ctxtmenu )
        ctxtmenu->insertTitle(i18n("Image View"));
    m_mainDock->setWidget( img_canvas );

@@ -51,7 +51,7 @@ ScanSourceDialog::ScanSourceDialog( QWidget *parent, const Q3StrList list, ADF_B
  : KDialogBase( parent, "SOURCE_DIALOG", true, i18n("Scan Source Selection"),
 		Ok|Cancel,Ok, true)
 {
-   Q3VBox *vbox = makeVBoxMainWidget();
+   KVBox *vbox = makeVBoxMainWidget();
 
    (void) new QLabel( i18n("<B>Source selection</B><P>"
 			   "Note that you may see more sources than actually exist"), vbox );

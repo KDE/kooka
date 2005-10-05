@@ -33,7 +33,7 @@
 
 #include <kapplication.h>
 #include <kmainwindow.h>
-#include <kdockwidget.h>
+#include <k3dockwidget.h>
 #include <kparts/dockmainwindow.h>
 //Added by qt3to4:
 #include <QDragEnterEvent>

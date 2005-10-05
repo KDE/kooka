@@ -27,7 +27,7 @@
 #include <QTimerEvent>
 #include <QResizeEvent>
 #include <QMouseEvent>
-#include <kpopupmenu.h>
+#include <kmenu.h>
 #include <qlabel.h>
 #include <q3dict.h>
 #include <qimage.h>
@@ -247,7 +247,7 @@ void ImageCanvas::enableContextMenu( bool wantContextMenu )
    {
       if( ! m_contextMenu )
       {
-	 m_contextMenu = new KPopupMenu(this, "IMG_CANVAS");
+	 m_contextMenu = new KMenu(this, "IMG_CANVAS");
 
 	 KContextMenuManager::insert( viewport(), m_contextMenu );
       }

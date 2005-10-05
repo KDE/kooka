@@ -29,7 +29,7 @@
 
 #ifndef __DW_MENU_ACTION
 #define __DW_MENU_ACTION
-#include <kdockwidget.h>
+#include <k3dockwidget.h>
 #include <qstring.h>
 #include <kaction.h>
 
