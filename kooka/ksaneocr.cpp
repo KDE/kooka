@@ -1201,7 +1201,7 @@ bool KSANEOCR::eventFilter( QObject *object, QEvent *event )
         }
     }
     return false;
-};
+}
 
 
 
