@@ -81,12 +81,12 @@ public:
         m_autoSelThresh(0),
         m_dustsize(5),
         m_bgIsWhite(false),
-        m_sliderThresh(0L),
-        m_sliderDust(0L),
-        m_cbAutoSel(0L),
-        m_cbBackground(0L),
-        m_autoSelGroup(0L),
-        m_scanner(0L)
+        m_sliderThresh(0),
+        m_sliderDust(0),
+        m_cbAutoSel(0),
+        m_cbBackground(0),
+        m_autoSelGroup(0),
+        m_scanner(0)
         {
         }
     bool         m_doAutoSelection;  /* switch auto-selection on and off */
@@ -314,11 +314,8 @@ void Previewer::newImage( QImage *ni )
    m_previewImage = *ni;
 
    /* clear the auto detection arrays */
-   delete d->m_heightSum;
-   d->m_heightSum = 0;
-
-   delete d->m_widthSum;
-   d->m_widthSum = 0;
+   d->m_heightSum.resize( 0 );
+   d->m_widthSum.resize( 0 );
 
    img_canvas->newImage( &m_previewImage );
    findSelection( );
