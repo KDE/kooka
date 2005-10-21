@@ -29,9 +29,11 @@
 #include <kfileitem.h>
 
 #include "kookaimage.h"
+#include "config.h"
+#ifdef HAVE_TIFF
 #include <tiffio.h>
 #include <tiff.h>
-#include "config.h"
+#endif
 /**
   *@author Klaas Freitag
   */
