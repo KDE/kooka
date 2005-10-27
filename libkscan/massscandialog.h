@@ -24,8 +24,7 @@
 #include <qdialog.h>
 //Added by qt3to4:
 #include <QLabel>
-
-class Q3ProgressBar;
+#include <Q3ProgressBar>
 class QLabel;
 
 /**

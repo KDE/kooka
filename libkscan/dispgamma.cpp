@@ -56,7 +56,7 @@ void DispGamma::paintEvent( QPaintEvent *ev )
     p.setBrush( colorGroup().base() );
     // Backgrond
     p.drawRect( 0,0, w, 256 );
-    p.setPen( QPen(colorGroup().midlight(), 1, DotLine));
+    p.setPen( QPen(colorGroup().midlight(), 1, Qt::DotLine));
     // horizontal Grid
     for( int l = 1; l < 5; l++ )
             p.drawLine( 1, l*51, 255, l*51 );
@@ -67,12 +67,14 @@ void DispGamma::paintEvent( QPaintEvent *ev )
 
     // draw gamma-Line
     p.setPen( colorGroup().highlight() );
-    p.moveTo( 1, vals->at(1) );
+	int x = 1;
+	int y = vals->at(1);
     for( int i = 2; i < w-1; i++ )
     {
-        p.lineTo( i, vals->at(i) );
+		p.drawLine(x,y, i ,vals->at(i));
     }
-    p.flush();
+#warning " kde 4 ? flush necessary now ?";	
+    //p.flush();
 }
 
 

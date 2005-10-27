@@ -272,7 +272,7 @@ Q3ScrollView *ScanParams::scannerParams( )
    if( sane_device->optionExists( SANE_NAME_SCAN_SOURCE ))
    {
       KScanOption source( SANE_NAME_SCAN_SOURCE );
-      Q3StrList l = source.getList();
+      QStringList l = source.getList();
 
       QWidget *spacer = new QWidget(hb);
       hb->setStretchFactor( spacer, 1 );
@@ -536,7 +536,7 @@ void ScanParams::slSourceSelect( void )
 
    const Q3CString& currSource = so.get();
    kdDebug(29000) << "Current Source is <" << currSource << ">" << endl;
-   Q3StrList sources;
+   QStringList sources;
 
    if( so.valid() )
    {

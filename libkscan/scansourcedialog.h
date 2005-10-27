@@ -38,7 +38,7 @@ class ScanSourceDialog : public KDialogBase
 {
    Q_OBJECT
 public:
-   ScanSourceDialog( QWidget *parent, const Q3StrList, ADF_BEHAVE );
+   ScanSourceDialog( QWidget *parent, const QStringList, ADF_BEHAVE );
    ~ScanSourceDialog();
 
    // void 	fillWithSources( QStrList *list );

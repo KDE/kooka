@@ -28,6 +28,8 @@
 #include <qlayout.h>
 #include <q3vbox.h>
 #include <q3hbox.h>
+#include <khbox.h>
+#include <kvbox.h>
 #include <qradiobutton.h>
 #include <qslider.h>
 #include <qlineedit.h>
@@ -47,7 +49,7 @@ extern "C"{
 #endif
 
 
-ScanSourceDialog::ScanSourceDialog( QWidget *parent, const Q3StrList list, ADF_BEHAVE adfBehave )
+ScanSourceDialog::ScanSourceDialog( QWidget *parent, const QStringList list, ADF_BEHAVE adfBehave )
  : KDialogBase( parent, "SOURCE_DIALOG", true, i18n("Scan Source Selection"),
 		Ok|Cancel,Ok, true)
 {
@@ -57,7 +59,7 @@ ScanSourceDialog::ScanSourceDialog( QWidget *parent, const Q3StrList list, ADF_B
 			   "Note that you may see more sources than actually exist"), vbox );
 
    /* Combo Box for sources */
-   const Q3StrList xx = list;
+   const QStringList xx = list;
    sources = new KScanCombo( vbox,
 			     i18n("Select the Scanner document source:"),
 			     xx);
