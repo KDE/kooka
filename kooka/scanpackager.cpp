@@ -521,7 +521,7 @@ void ScanPackager::slClicked( Q3ListViewItem *newItem )
       {
 	 /* if not a dir, load the image if necessary. This is done by loadImageForItem,
 	  * which is async( TODO ). The image finally arrives in slotImageArrived */
-	 QApplication::setOverrideCursor(Qt::waitCursor);
+	 QApplication::setOverrideCursor(Qt::WaitCursor);
 	 emit( aboutToShowImage( item->url()));
 	 loadImageForItem( item );
 	 QApplication::restoreOverrideCursor();

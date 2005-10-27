@@ -123,7 +123,7 @@ ImageCanvas::ImageCanvas(QWidget *parent,
     connect( this, SIGNAL( noRect()),  SLOT( noRectSlot()));
 
     //zoomOut();scrollview/scrollview
-    viewport()->setCursor( Qt::crossCursor );
+    viewport()->setCursor( Qt::CrossCursor );
     cr1 = 0;
     cr2 = 0;
     viewport()->setMouseTracking(TRUE);
@@ -544,41 +544,41 @@ void ImageCanvas::viewportMouseMoveEvent(QMouseEvent *ev)
   switch( moving!=MOVE_NONE ? moving:classifyPoint(x+cx,y+cy) ) {
   case MOVE_NONE:
     if(ps!=CROSS) {
-      viewport()->setCursor(Qt::crossCursor);
+      viewport()->setCursor(Qt::CrossCursor);
       ps = CROSS;
     }
     break;
   case MOVE_LEFT:
   case MOVE_RIGHT:
     if(ps!=HSIZE) {
-      viewport()->setCursor(Qt::sizeHorCursor);
+      viewport()->setCursor(Qt::SizeHorCursor);
       ps = HSIZE;
     }
     break;
   case MOVE_TOP:
   case MOVE_BOTTOM:
     if(ps!=VSIZE) {
-      viewport()->setCursor(Qt::sizeVerCursor);
+      viewport()->setCursor(Qt::SizeHorCursor);
       ps = VSIZE;
     }
     break;
   case MOVE_TOP_LEFT:
   case MOVE_BOTTOM_RIGHT:
     if(ps!=FDIAG) {
-      viewport()->setCursor(Qt::sizeFDiagCursor);
+      viewport()->setCursor(Qt::SizeFDiagCursor);
       ps = FDIAG;
     }
     break;
   case MOVE_TOP_RIGHT:
   case MOVE_BOTTOM_LEFT:
     if(ps!=BDIAG) {
-      viewport()->setCursor(Qt::sizeBDiagCursor);
+      viewport()->setCursor(Qt::SizeBDiagCursor);
       ps = BDIAG;
     }
     break;
   case MOVE_WHOLE:
     if(ps!=ALL) {
-      viewport()->setCursor(Qt::sizeAllCursor);
+      viewport()->setCursor(Qt::SizeAllCursor);
       ps = ALL;
     }
   }
@@ -673,7 +673,7 @@ void ImageCanvas::update_scaled_pixmap( void )
 	return;
     }
 
-    QApplication::setOverrideCursor(Qt::waitCursor);
+    QApplication::setOverrideCursor(Qt::WaitCursor);
 
     kdDebug(28000) << "Updating scaled_pixmap" << endl;
     if( scaleKind() == DYNAMIC )

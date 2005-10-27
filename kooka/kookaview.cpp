@@ -712,7 +712,7 @@ void KookaView::slRotateImage(int angle)
    {
       QImage resImg;
 
-      QApplication::setOverrideCursor(Qt::waitCursor);
+      QApplication::setOverrideCursor(Qt::WaitCursor);
       switch( angle )
       {
 	 case 90:
@@ -757,7 +757,7 @@ void KookaView::slMirrorImage( MirrorType m )
    {
       QImage resImg;
 
-      QApplication::setOverrideCursor(Qt::waitCursor);
+      QApplication::setOverrideCursor(Qt::WaitCursor);
       switch( m )
       {
 	 case MirrorVertical:
