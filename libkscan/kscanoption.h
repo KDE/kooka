@@ -161,7 +161,7 @@ public:
 
    
   // Possible Values
-  Q3StrList    getList() const;
+  QStringList    getList() const;
   bool        getRangeFromList( double*, double*, double* ) const;
   bool        getRange( double*, double*, double* ) const;
 

@@ -30,7 +30,6 @@
 #include <QPixmap>
 #include <QLabel>
 #include <Q3CString>
-#include <Q3ComboBox>
 /**
   *@author Klaas Freitag
   */
@@ -185,7 +184,6 @@ public:
     * @param text the text the combobox is prepended by
     * @param list a stringlist with values the list should contain.
     */
-   KScanCombo( QWidget *parent, const QString& text, const Q3StrList& list );
    KScanCombo( QWidget *parent, const QString& text, const QStringList& list );
    // ~KScanCombo();
 
@@ -239,7 +237,7 @@ signals:
 
 private:
     void createCombo( const QString& text );
-   Q3ComboBox	*combo;
+   QComboBox	*combo;
    Q3StrList	combolist;
 
    class KScanComboPrivate;

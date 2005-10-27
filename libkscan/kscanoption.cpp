@@ -181,7 +181,7 @@ KScanOption::KScanOption( const KScanOption &so ) :
    /* the widget is not copied ! */
    internal_widget = 0;
    
-   if( ! ( desc && name ) )
+   if( ! ( desc && !name.isEmpty() ) )
    {
       kdWarning( 29000) << "Trying to copy a not healthy option (no name nor desc)" << endl;
       return;
@@ -964,11 +964,12 @@ bool KScanOption::get( KGammaTable *gt ) const
 }
 
 
-Q3StrList KScanOption::getList( ) const
+QStringList KScanOption::getList( ) const
 {
-   if( ! desc ) return( false );
+   if( desc==0L ) 
+		   return QStringList();
    const char	**sstring = 0;
-   Q3StrList strList;
+   QStringList strList;
 
    if( desc->constraint_type == SANE_CONSTRAINT_STRING_LIST ) {
       sstring =  (const char**) desc->constraint.string_list;
@@ -1143,7 +1144,7 @@ QWidget *KScanOption::createWidget( QWidget *parent, const QString& w_desc,
 
 QWidget *KScanOption::comboBox( QWidget *parent, const QString& text )
 {
-  Q3StrList list = getList();
+  QStringList list = getList();
 
   KScanCombo *cb = new KScanCombo( parent, text, list);
 

@@ -65,9 +65,9 @@ KScanSlider::KScanSlider( QWidget *parent, const QString& text,
     }
 
     slider = new QSlider( (int) min, (int)max, 1, (int)min, Qt::Horizontal, this, "AUTO_SLIDER_" );
-    slider->setTickmarks( QSlider::Below );
-    slider->setTickInterval( int(QMAX( (max-min)/10, 1 )) );
-    slider->setSteps( int(QMAX( (max-min)/20, 1) ), int(QMAX( (max-min)/10, 1) ) );
+    slider->setTickmarks( QSlider::TicksBelow );
+    slider->setTickInterval( int(QMAX( (max-min)/10, 1.0 )) );
+    slider->setSteps( int(QMAX( (max-min)/20, 1.0) ), int(QMAX( (max-min)/10, 1.0) ) );
     slider->setMinimumWidth( 140 );
     /* set a buddy */
     l1->setBuddy( slider );
@@ -219,16 +219,6 @@ void KScanEntry::slReturnPressed( void )
 
 
 
-KScanCombo::KScanCombo( QWidget *parent, const QString& text,
-			const Q3StrList& list )
-    : Q3HBox( parent ),
-      combo(0)
-{
-    createCombo( text );
-    if( combo )
-        combo->insertStrList( list);
-    combolist = list;
-}
 
 KScanCombo::KScanCombo( QWidget *parent, const QString& text,
 			const QStringList& list )
@@ -253,7 +243,7 @@ void KScanCombo::createCombo( const QString& text )
 
     (void) new QLabel( text, this, "AUTO_COMBOLABEL" );
 
-    combo = new Q3ComboBox( this, "AUTO_COMBO" );
+    combo = new QComboBox( this, "AUTO_COMBO" );
 
     connect( combo, SIGNAL(activated( const QString &)), this,
              SLOT( slComboChange( const QString &)));
