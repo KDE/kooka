@@ -87,7 +87,7 @@ FormatDialog::FormatDialog( QWidget *parent, const QString&, const char *name )
    l0->setText( i18n( "<B>Save Assistant</B><P>Select an image format to save the scanned image." ));
    bigdad->addWidget( l0 );
 
-   KSeparator* sep = new KSeparator( KSeparator::HLine, page);
+   KSeparator* sep = new KSeparator( Qt::Horizontal, page);
    bigdad->addWidget( sep );
 
    // Layout-Boxes

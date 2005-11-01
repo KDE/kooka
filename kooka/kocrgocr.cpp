@@ -97,7 +97,7 @@ EngineError KGOCRDialog::setupGui()
     conf->setGroup( CFG_GROUP_OCR_DIA );
 
     // Horizontal line
-    // (void) new  KSeparator( KSeparator::HLine, page);
+    // (void) new  KSeparator( Qt::Horizontal, page);
 
     // Entry-Field.
     QString res = conf->readPathEntry( CFG_GOCR_BINARY, "notFound" );
@@ -119,7 +119,7 @@ EngineError KGOCRDialog::setupGui()
         m_ocrCmd = res;
 
     (void) new QLabel( i18n("Using GOCR binary: ") + res, page );
-    (void) new KSeparator( KSeparator::HLine, page);
+    (void) new KSeparator( Qt::Horizontal, page);
 
     Q3HBox *hb = new Q3HBox(page);
     hb->setSpacing( KDialog::spacingHint());

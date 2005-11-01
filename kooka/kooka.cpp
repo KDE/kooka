@@ -463,7 +463,7 @@ void Kooka::slEnableWarnings( )
 {
    KMessageBox::information (this, i18n("All messages and warnings will now be shown."));
    KMessageBox::enableAllMessages();
-   kapp->config()->reparseConfiguration();
+   KGlobal::config()->reparseConfiguration();
 }
 
 #include "kooka.moc"

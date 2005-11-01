@@ -126,7 +126,7 @@ bool ScanParams::connectDevice( KScanDevice *newScanDevice )
    m_led->setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed ));
 
 
-   (void) new KSeparator( KSeparator::HLine, this);
+   (void) new KSeparator( Qt::Horizontal, this);
 
    /* Now create Widgets for the important scan settings */
    Q3ScrollView *sv = 0;
@@ -157,7 +157,7 @@ bool ScanParams::connectDevice( KScanDevice *newScanDevice )
    sane_device->slReloadAll();
 
    /* Create a Start-Scan-Button */
-   (void) new KSeparator( KSeparator::HLine, this);
+   (void) new KSeparator( Qt::Horizontal, this);
    KButtonBox *kbb = new KButtonBox( this );
    QPushButton* pb = kbb->addButton( i18n( "Final S&can" ));
    connect( pb, SIGNAL(clicked()), this, SLOT(slStartScan()) );
@@ -404,7 +404,7 @@ Q3ScrollView *ScanParams::scannerParams( )
    }
 
    /* Insert another beautification line */
-   (void) new KSeparator( KSeparator::HLine, pbox );
+   (void) new KSeparator( Qt::Horizontal, pbox );
 
    /* Speed-Setting - show only if active */
    if( sane_device->optionExists( SANE_NAME_SCAN_SPEED ))
@@ -484,7 +484,7 @@ Q3ScrollView *ScanParams::scannerParams( )
    if( sane_device->optionExists( SANE_NAME_GRAY_PREVIEW ) ||
        sane_device->optionExists( SANE_NAME_NEGATIVE ) )
    {
-      (void) new KSeparator( KSeparator::HLine, pbox );
+      (void) new KSeparator( Qt::Horizontal, pbox );
    }
 
    so = sane_device->getGuiElement( SANE_NAME_NEGATIVE, pbox,

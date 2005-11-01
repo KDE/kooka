@@ -108,7 +108,7 @@ EngineError ocradDialog::setupGui()
     conf->setGroup( CFG_GROUP_OCR_DIA );
 
     // Horizontal line
-    // (void) new  KSeparator( KSeparator::HLine, page);
+    // (void) new  KSeparator( Qt::Horizontal, page);
 
     // Entry-Field.
     QString res = conf->readPathEntry( CFG_OCRAD_BINARY, "notFound" );
@@ -134,7 +134,7 @@ EngineError ocradDialog::setupGui()
     int layoutDetect = conf->readNumEntry( CFG_OCRAD_LAYOUT_DETECTION, 0 );
     kdDebug(28000) << "Layout detection from config: " << layoutDetect << endl;
 
-    (void) new KSeparator( KSeparator::HLine, page);
+    (void) new KSeparator( Qt::Horizontal, page);
     Q3HBox *hb1 = new Q3HBox(page);
     hb1->setSpacing( KDialog::spacingHint() );
     (void) new QLabel( i18n("OCRAD layout analysis mode: "), hb1);
@@ -145,7 +145,7 @@ EngineError ocradDialog::setupGui()
     m_layoutMode->setCurrentItem(layoutDetect);
 
     /** stating the ocrad binary **/
-    (void) new KSeparator( KSeparator::HLine, page);
+    (void) new KSeparator( Qt::Horizontal, page);
     Q3HBox *hb = new Q3HBox(page);
     hb->setSpacing( KDialog::spacingHint());
 
