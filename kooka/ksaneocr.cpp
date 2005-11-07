@@ -836,7 +836,7 @@ bool KSANEOCR::readORF( const QString& fileName, QString& errStr )
 
         while ( !stream.atEnd() )
 	{
-            line = stream.readLine().stripWhiteSpace(); // line of text excluding '\n'
+            line = stream.readLine().trimmed(); // line of text excluding '\n'
 	    int len = line.length();
 
 	    if( ! line.startsWith( "#" ))  // Comments
@@ -916,7 +916,7 @@ bool KSANEOCR::readORF( const QString& fileName, QString& errStr )
                                 if( h > -1 ) {
                                     // kdDebug(28000) << "Results of count search: " << results.left(h) << endl;
                                     altCount = results.left(h).toInt();
-                                    results = results.remove( 0, h+1 ).stripWhiteSpace();
+                                    results = results.remove( 0, h+1 ).trimmed();
                                 } else {
                                     lineErr = true;
                                 }

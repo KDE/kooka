@@ -390,11 +390,11 @@ QString ImgSaver::createFilename( QString format )
 
     QString num;
     num.setNum(c);
-    QString fname = "kscan_" + num.rightJustify(4, '0') + "." + format.lower();
+    QString fname = "kscan_" + num.rightJustified(4, '0') + "." + format.lower();
 
     while( files.exists( fname ) ) {
         num.setNum(++c);
-        fname = "kscan_" + num.rightJustify(4, '0') + "." + format.lower();
+        fname = "kscan_" + num.rightJustified(4, '0') + "." + format.lower();
     }
 
     return( fname );
@@ -679,7 +679,7 @@ ImgSaveStat ImgSaver::save( QImage *image, const QString &filename,
       result = image->save( filename, format.latin1() );
 
 
-      last_file = fi.absFilePath();
+      last_file = fi.absoluteFilePath();
       last_format = format.latin1();
    }
 

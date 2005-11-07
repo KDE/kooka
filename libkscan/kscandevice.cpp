@@ -869,7 +869,7 @@ void KScanDevice::prepareScan( void )
        {
 	  int cap = d->cap;
 	  
-	  QString s = QString(it.currentKey()).leftJustify(32, ' ');
+	  QString s = QString(it.currentKey()).leftJustified(32, ' ');
 	  kdDebug(29000) << " " << s << " |" <<
 		 NOTIFIER( ((cap) & SANE_CAP_SOFT_SELECT)) << 
 		 NOTIFIER( ((cap) & SANE_CAP_HARD_SELECT)) << 
