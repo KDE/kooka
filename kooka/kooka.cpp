@@ -166,7 +166,7 @@ actionCollection());
     m_view->connectViewerAction( act );
 
 #ifdef QICONSET_HONOUR_ON_OFF
-    /* The Toggleaction does not seem to handle the on/off icon from QIconSet */
+    /* The Toggleaction does not seem to handle the on/off icon from QIcon */
     QIcon lockSet;
     lockSet.setPixmap(BarIcon("lock")  , QIcon::Automatic, QIcon::Normal, QIcon::On );
     lockSet.setPixmap(BarIcon("unlock"), QIcon::Automatic, QIcon::Normal, QIcon::Off);
