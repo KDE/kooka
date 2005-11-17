@@ -49,10 +49,10 @@ MassScanDialog::MassScanDialog( QWidget *parent )
  	
  	/* Scan parameter information */
  	Q3GroupBox *f1 = new Q3GroupBox( i18n("Scan Parameter"), this );
- 	f1->setFrameStyle( Q3Frame::Box | Q3Frame::Sunken );
- 	f1->setMargin(5);
- 	f1->setLineWidth( 1 );
-   QVBoxLayout *l_main = new QVBoxLayout( f1, f1->frameWidth()+3, 3 );
+ 	//f1->setFrameStyle( Q3Frame::Box | Q3Frame::Sunken );
+ 	//f1->setMargin(5);
+ 	//f1->setLineWidth( 1 );
+   QVBoxLayout *l_main = new QVBoxLayout( f1,/*f1->frameWidth()+*/3, 3 );
  	bigdad->addWidget( f1, 6 );
  	
    scanopts = i18n("Scanning <B>%s</B> with <B>%d</B> dpi");
@@ -65,10 +65,10 @@ MassScanDialog::MassScanDialog( QWidget *parent )
  	
  	/* Scan Progress information */
  	Q3GroupBox *f2 = new Q3GroupBox( i18n("Scan Progress"), this );
- 	f2->setFrameStyle( Q3Frame::Box | Q3Frame::Sunken );
- 	f2->setMargin(15);
- 	f2->setLineWidth( 1 );
-   QVBoxLayout *l_pro = new QVBoxLayout( f2, f2->frameWidth()+3, 3 );
+ 	//f2->setFrameStyle( Q3Frame::Box | Q3Frame::Sunken );
+ 	//f2->setMargin(15);
+ 	//f2->setLineWidth( 1 );
+   QVBoxLayout *l_pro = new QVBoxLayout( f2, /*f2->frameWidth()+*/3, 3 );
  	bigdad->addWidget( f2, 6 );
 
  	QHBoxLayout *l_scanp = new QHBoxLayout( );
@@ -86,13 +86,13 @@ MassScanDialog::MassScanDialog( QWidget *parent )
  	/* Buttons to start scanning and close the Window */
   	bigdad->addLayout( l_but );
 
-   QPushButton *b_start = new QPushButton( i18n("Start Scan"), this, "ButtOK" );
+   QPushButton *b_start = new QPushButton( i18n("Start Scan"), this);
    connect( b_start, SIGNAL(clicked()), this, SLOT( slStartScan()) );
 
-   QPushButton *b_cancel = new QPushButton( i18n("Stop"), this, "ButtCancel" );
+   QPushButton *b_cancel = new QPushButton( i18n("Stop"), this );
    connect( b_cancel, SIGNAL(clicked()), this, SLOT(slStopScan()) );
 
-   QPushButton *b_finish = new KPushButton( KStdGuiItem::close(), this, "ButtFinish" );
+   QPushButton *b_finish = new KPushButton( KStdGuiItem::close(), this);
    connect( b_finish, SIGNAL(clicked()), this, SLOT(slFinished()) );
 
    l_but->addWidget( b_start );

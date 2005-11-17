@@ -124,7 +124,7 @@ public:
   bool set( int val );
   bool set( double val );
   bool set( int *p_val, int size );
-  bool set( const Q3CString& );
+  bool set( const QByteArray& );
   bool set( bool b ){ if( b ) return(set( (int)(1==1) )); else return( set( (int) (1==0) )); }
   bool set( KGammaTable  *gt );
 

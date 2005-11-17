@@ -581,7 +581,8 @@ void ScanParams::slFileSelect( void )
 
    if( scan_mode == ID_QT_IMGIO )
    {
-      Q3StrList filterList = QImage::inputFormats();
+#warning "kde4: How to port QImage::inputFormats ? "
+	   Q3StrList filterList;// = QImage::inputFormats();
       filter = i18n( "*|All Files (*)");
       for( Q3CString fi_item = filterList.first(); !fi_item.isEmpty();
 	   fi_item = filterList.next() )

@@ -723,7 +723,7 @@ bool KScanOption::set( int *val, int size )
     return( ret );
 }
 
-bool KScanOption::set( const Q3CString& c_string )
+bool KScanOption::set( const QByteArray& c_string )
 {
    bool ret = false;
    int  val = 0;

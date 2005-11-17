@@ -247,7 +247,8 @@ void ImageCanvas::enableContextMenu( bool wantContextMenu )
    {
       if( ! m_contextMenu )
       {
-	 m_contextMenu = new KMenu(this, "IMG_CANVAS");
+	 m_contextMenu = new KMenu(this);
+	 m_contextMenu->setObjectName("IMG_CANVAS");
 
 	 KContextMenuManager::insert( viewport(), m_contextMenu );
       }
@@ -1087,7 +1088,7 @@ int ImageCanvas::highlight( const QRect& rect, const QPen& pen, const QBrush&, b
 
 void ImageCanvas::removeHighlight( int idx )
 {
-    if( (unsigned) idx >= d->highlightRects.count() )
+    if( idx >= d->highlightRects.count() )
     {
         kdDebug(28000) << "removeHighlight: Not a valid index" << endl;
         return;

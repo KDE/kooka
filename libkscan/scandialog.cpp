@@ -28,7 +28,7 @@
 #include <qcheckbox.h>
 //Added by qt3to4:
 #include <Q3CString>
-
+#include <QSplitter>
 #include <kglobal.h>
 #include <klocale.h>
 #include <kdebug.h>
@@ -37,7 +37,7 @@
 #include <kled.h>
 #include <kglobalsettings.h>
 #include <kscandevice.h>
-
+#include <kvbox.h>
 // libkscan stuff
 #include "scanparams.h"
 #include "devselector.h"
@@ -54,7 +54,7 @@ extern "C" {
 }
 
 ScanDialogFactory::ScanDialogFactory( QObject *parent, const char *name )
-    : KScanDialogFactory( parent, name )
+    : KScanDialogFactory( parent )
 {
     setName( "ScanDialogFactory" );
     KGlobal::locale()->insertCatalog( QString::fromLatin1("libkscan") );
@@ -245,7 +245,7 @@ bool ScanDialog::setup()
    /* first, get the list of available devices from libkscan */
    QStringList scannerNames;
    Q3StrList backends = m_device->getDevices();;
-   QStrListIterator it( backends );
+   Q3StrListIterator it( backends );
 
    while ( it.current() ) {
       scannerNames.append( m_device->getScannerName( it.current() ));

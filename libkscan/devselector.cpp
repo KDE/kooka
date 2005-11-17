@@ -151,7 +151,7 @@ void DeviceSelector::setScanSources( const Q3StrList& sources,
    uint nr = 0;
    int  checkDefNo = 0;
 
-   QStrListIterator it( sources );
+   Q3StrListIterator it( sources );
    QStringList::ConstIterator it2 = hrSources.begin();
    for ( ; it.current(); ++it, ++it2 )
    {
