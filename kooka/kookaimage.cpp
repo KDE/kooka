@@ -30,7 +30,7 @@
 
 #include "kookaimage.h"
 #include "config.h"
-#ifdef HAVE_TIFF
+#ifdef HAVE_LIBTIFF
 #include <tiffio.h>
 #include <tiff.h>
 #endif
