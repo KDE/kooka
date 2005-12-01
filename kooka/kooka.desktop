@@ -54,7 +54,6 @@ GenericName[uk]=Програма сканування та розпізнава�
 GenericName[ven]=U nanga & Mbekanyamushumo ya OCR
 GenericName[wa]=Programe di scanaedje eyet di ricnoxhance di tecse
 GenericName[xh]=Udweliso Lwenkqubo Yemita Yovavanyo
-GenericName[xx]=xxScan & OCR Programxx
 GenericName[zh_CN]=扫描和文字识别程序
 GenericName[zh_TW]=掃描和文字辦識程式
 GenericName[zu]=Scan & OCR Iprogremu
@@ -66,7 +65,6 @@ Name[is]=Skanni
 Name[ko]=쿠카
 Name[pa]=ਕੋਕਾ
 Name[ta]=கூக்கா
-Name[xx]=xxKookaxx
 
 X-DCOP-ServiceType=Multi
 Categories=Qt;KDE;Graphics;
