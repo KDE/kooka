@@ -1265,7 +1265,7 @@ void KScanDevice::doProcessABlock( void )
 	{
 	   case SANE_FRAME_RGB:
 	      if( sane_scan_param.lines < 1 ) break;
-	      bytes_written += rest_bytes; // die übergebliebenen Bytes dazu
+	      bytes_written += rest_bytes; // die Ã¼bergebliebenen Bytes dazu
 	      rest_bytes = bytes_written % 3;
 
 	      for( val = 0; val < ((bytes_written-rest_bytes) / 3); val++ )

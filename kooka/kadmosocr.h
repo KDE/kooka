@@ -109,7 +109,7 @@ namespace Kadmos {
         void SetNoiseReduction(bool bNoiseReduction);
 
         /** Enable/disable scaling (size normalization)
-             @param TRUE(enable)/FALSE(disable) scaling (size normalization)
+            Â @param TRUE(enable)/FALSE(disable) scaling (size normalization)
         */
         void SetScaling(bool bScaling);
 
