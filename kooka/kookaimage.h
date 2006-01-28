@@ -66,7 +66,7 @@ public:
      * load an image from a KURL. This method reads the entire file and sets
      * the values for subimage count.
      */
-    bool         loadFromUrl( const KURL& );
+    bool         loadFromUrl( const KUrl& );
 
     ~KookaImage();
 
@@ -90,7 +90,7 @@ public:
      */
     void         extractNow();
 
-    KURL         url() const;
+    KUrl         url() const;
     QString      localFileName( ) const;
 
     /**
@@ -109,7 +109,7 @@ public:
      * set the url of the kooka image. Note that loadFromUrl sets this
      * url automatically.
      */
-    void setUrl( const KURL& url )
+    void setUrl( const KUrl& url )
         { m_url = url; }
 
     /**
@@ -149,7 +149,7 @@ private:
 
     /* In case being a subimage */
     KookaImage          *m_parent;
-    KURL                m_url;
+    KUrl                m_url;
     /* Fileitem if available */
     KFileItem           *m_fileItem;
     bool                m_fileBound;

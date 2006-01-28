@@ -224,7 +224,7 @@ void FormatDialog::buildHelp( void )
 
 /* ********************************************************************** */
 
-ImgSaver::ImgSaver(  QWidget *parent, const KURL dir_name )
+ImgSaver::ImgSaver(  QWidget *parent, const KUrl dir_name )
    : QObject( parent )
 {
 
@@ -273,7 +273,7 @@ ImgSaver::ImgSaver( QWidget *parent )
 /* Needs a full qualified directory name */
 void ImgSaver::createDir( const QString& dir )
 {
-   KURL url( dir );
+   KUrl url( dir );
 
    if( ! KIO::NetAccess::exists(url, false, 0) )
    {
@@ -403,7 +403,7 @@ QString ImgSaver::createFilename( QString format )
 /**
  *   This function gets a filename from the parent. The filename must not be relative.
  **/
-ImgSaveStat ImgSaver::saveImage( QImage *image, const KURL& filename, const QString& imgFormat )
+ImgSaveStat ImgSaver::saveImage( QImage *image, const KUrl& filename, const QString& imgFormat )
 {
     QString format = imgFormat;
 
@@ -730,7 +730,7 @@ QString ImgSaver::errorString( ImgSaveStat stat )
 
 }
 
-QString ImgSaver::extension( const KURL& url )
+QString ImgSaver::extension( const KUrl& url )
 {
    QString extension = url.fileName();
 
@@ -749,12 +749,12 @@ QString ImgSaver::extension( const KURL& url )
 }
 
 
-bool ImgSaver::renameImage( const KURL& fromUrl, KURL& toUrl, bool askExt,  QWidget *overWidget )
+bool ImgSaver::renameImage( const KUrl& fromUrl, KUrl& toUrl, bool askExt,  QWidget *overWidget )
 {
    /* Check if the provided filename has a extension */
    QString extTo = extension( toUrl );
    QString extFrom = extension( fromUrl );
-   KURL targetUrl( toUrl );
+   KUrl targetUrl( toUrl );
 
    if( extTo.isEmpty() && !extFrom.isEmpty() )
    {
@@ -850,13 +850,13 @@ QString ImgSaver::tempSaveImage( KookaImage *img, const QString& format, int col
     return name;
 }
 
-bool ImgSaver::copyImage( const KURL& fromUrl, const KURL& toUrl, QWidget *overWidget )
+bool ImgSaver::copyImage( const KUrl& fromUrl, const KUrl& toUrl, QWidget *overWidget )
 {
 
    /* Check if the provided filename has a extension */
    QString extTo = extension( toUrl );
    QString extFrom = extension( fromUrl );
-   KURL targetUrl( toUrl );
+   KUrl targetUrl( toUrl );
 
    if( extTo.isEmpty() && !extFrom.isEmpty())
    {

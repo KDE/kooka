@@ -112,7 +112,7 @@ QString KookaImage::localFileName( ) const
         return QString();
 }
 
-bool KookaImage::loadFromUrl( const KURL& url )
+bool KookaImage::loadFromUrl( const KUrl& url )
 {
    bool ret = true;
    m_url = url;
@@ -215,7 +215,7 @@ void KookaImage::extractNow()
    }
 }
 
-KURL KookaImage::url() const
+KUrl KookaImage::url() const
 {
    return m_url;
 }

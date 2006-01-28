@@ -152,8 +152,8 @@ KookaView::KookaView( KParts::DockMainWindow *parent, const Q3CString& deviceToU
 
    connect( packager, SIGNAL(showThumbnails( KFileTreeViewItem* )),
 	    this, SLOT( slShowThumbnails( KFileTreeViewItem* )));
-   connect( m_thumbview, SIGNAL( selectFromThumbnail( const KURL& )),
-	    packager, SLOT( slSelectImage(const KURL&)));
+   connect( m_thumbview, SIGNAL( selectFromThumbnail( const KUrl& )),
+	    packager, SLOT( slSelectImage(const KUrl&)));
 
    /*
     * Create a Kombobox that holds the last folders visible even on the preview page
@@ -260,8 +260,8 @@ KookaView::KookaView( KParts::DockMainWindow *parent, const Q3CString& deviceToU
    connect( packager, SIGNAL( showImage( KookaImage* )),
             this,       SLOT( slShowAImage( KookaImage*)));
 
-   connect( packager, SIGNAL( aboutToShowImage(const KURL&)),
-	    this,       SLOT( slStartLoading( const KURL& )));
+   connect( packager, SIGNAL( aboutToShowImage(const KUrl&)),
+	    this,       SLOT( slStartLoading( const KUrl& )));
 
    /* Packager unloads the image */
    connect( packager, SIGNAL( unloadImage( KookaImage* )),
@@ -271,8 +271,8 @@ KookaView::KookaView( KParts::DockMainWindow *parent, const Q3CString& deviceToU
    connect( packager,  SIGNAL( fileChanged( KFileItem* )),
 	    m_thumbview, SLOT( slImageChanged( KFileItem* )));
 
-   connect( packager, SIGNAL( fileRenamed( KFileItem*, const KURL& )),
-            m_thumbview, SLOT( slImageRenamed( KFileItem*, const KURL& )));
+   connect( packager, SIGNAL( fileRenamed( KFileItem*, const KUrl& )),
+            m_thumbview, SLOT( slImageRenamed( KFileItem*, const KUrl& )));
 
    connect( packager,  SIGNAL( fileDeleted( KFileItem* )),
 	    m_thumbview, SLOT( slImageDeleted( KFileItem* )));
@@ -906,7 +906,7 @@ void KookaView::slShowThumbnails(KFileTreeViewItem *dirKfi, bool forceRedraw )
 /* this slot is called when the user clicks on an image in the packager
  * and loading of the image starts
  */
-void KookaView::slStartLoading( const KURL& url )
+void KookaView::slStartLoading( const KUrl& url )
 {
    emit( signalChangeStatusbar( i18n("Loading %1" ).arg( url.prettyURL() ) ));
 
@@ -955,7 +955,7 @@ void KookaView::slOpenCurrInGraphApp( void )
       if( ! ftvi ) return;
 
       kdDebug(28000) << "Trying to open <" << ftvi->url().prettyURL()<< ">" << endl;
-      KURL::List urllist;
+      KUrl::List urllist;
 
       urllist.append( ftvi->url());
 

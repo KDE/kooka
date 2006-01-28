@@ -93,8 +93,8 @@ ScanPackager::ScanPackager( QWidget *parent ) : KFileTreeView( parent )
    setDropVisualizer(true);
    setAcceptDrops(true);
 
-   connect( this, SIGNAL(dropped( QWidget*, QDropEvent*, KURL::List&, KURL& )),
-	    this, SLOT( slotUrlsDropped( QWidget*, QDropEvent*, KURL::List&, KURL& )));
+   connect( this, SIGNAL(dropped( QWidget*, QDropEvent*, KUrl::List&, KUrl& )),
+	    this, SLOT( slotUrlsDropped( QWidget*, QDropEvent*, KUrl::List&, KUrl& )));
 
    kdDebug(28000) << "connected Drop-Signal" << endl;
    setRenameable ( 0, true );
@@ -137,7 +137,7 @@ ScanPackager::ScanPackager( QWidget *parent ) : KFileTreeView( parent )
 void ScanPackager::openRoots()
 {
    /* standard root always exists, ImgRoot creates it */
-   KURL rootUrl(Previewer::galleryRoot());
+   KUrl rootUrl(Previewer::galleryRoot());
    kdDebug(28000) << "Open standard root " << rootUrl.url() << endl;
 
    openRoot( rootUrl, true );
@@ -146,7 +146,7 @@ void ScanPackager::openRoots()
    /* open more configurable image repositories TODO */
 }
 
-KFileTreeBranch* ScanPackager::openRoot( const KURL& root, bool  )
+KFileTreeBranch* ScanPackager::openRoot( const KUrl& root, bool  )
 {
    KIconLoader *loader = KGlobal::iconLoader();
 
@@ -324,8 +324,8 @@ void ScanPackager::slFileRename( Q3ListViewItem* it, const QString& newStr, int 
    KFileTreeViewItem *item = static_cast<KFileTreeViewItem*>(it);
 
    /* Free memory and imform everybody who is interested. */
-   KURL urlFrom = item->url();
-   KURL urlTo( urlFrom );
+   KUrl urlFrom = item->url();
+   KUrl urlTo( urlFrom );
 
    /* clean filename and apply new name */
    urlTo.setFileName("");
@@ -577,7 +577,7 @@ void ScanPackager::loadImageForItem( KFileTreeViewItem *item )
        * create an subimage-item for every subimage, but do not yet load
        * them.
        */
-      KURL url = item->url();
+      KUrl url = item->url();
 
       img = new KookaImage( );
       if( !img || !img->loadFromUrl( url ) )
@@ -693,7 +693,7 @@ QString ScanPackager::getCurrImageFileName( bool withPath = true ) const
       }
       else
       {
-	 KURL url( localFileName(curr));
+	 KUrl url( localFileName(curr));
 	 url = curr->url();
 	 result = url.fileName();
       }
@@ -726,7 +726,7 @@ QString ScanPackager::localFileName( KFileTreeViewItem *it ) const
 {
    if( ! it ) return( QString::null );
 
-   KURL url = it->url();
+   KUrl url = it->url();
 
    QString res;
 
@@ -824,7 +824,7 @@ void ScanPackager::slAddImage( QImage *img, KookaImageMeta* )
 
    /* find the directory above the current one */
 
-   KURL dir(itemDirectory( curr ));
+   KUrl dir(itemDirectory( curr ));
 
    /* Path of curr sel item */
    ImgSaver img_saver( this, dir );
@@ -852,7 +852,7 @@ void ScanPackager::slAddImage( QImage *img, KookaImageMeta* )
    }
 
    /* Add the new image to the list of new images */
-   KURL lurl = img_saver.lastFileUrl();
+   KUrl lurl = img_saver.lastFileUrl();
 
    KFileTreeBranchList branchlist = branches();
    KFileTreeBranch *kookaBranch = branchlist.at(0);
@@ -885,7 +885,7 @@ void ScanPackager::slAddImage( QImage *img, KookaImageMeta* )
 /* selects and opens the file with the given name. This is used to restore the
  * last displayed image by its name.
  */
-void ScanPackager::slSelectImage( const KURL& name )
+void ScanPackager::slSelectImage( const KUrl& name )
 {
 
    KFileTreeViewItem *found = spFindItem( UrlSearch, name.url() );
@@ -928,7 +928,7 @@ KFileTreeViewItem *ScanPackager::spFindItem( SearchType type, const QString name
    for( ; !kfi && it.current(); ++it )
    {
       branchloop = *it;
-      KURL url(name);
+      KUrl url(name);
       switch( type )
       {
 	 case Dummy:
@@ -991,14 +991,14 @@ void ScanPackager::slotExportFile( )
    }
    else
    {
-      KURL fromUrl( curr->url());
+      KUrl fromUrl( curr->url());
       QString filter = "*." + getImgFormat(curr).lower();
       filter += "\n*|" + i18n( "All Files" );
 
       // initial += fromUrl.filename(false);
       QString initial = m_currCopyDir + "/";
       initial += fromUrl.filename(false);
-      KURL fileName = KFileDialog::getSaveURL ( initial,
+      KUrl fileName = KFileDialog::getSaveURL ( initial,
 						filter, this );
 
       if ( fileName.isValid() )                  // got a file name
@@ -1021,7 +1021,7 @@ void ScanPackager::slotImportFile()
     KFileTreeViewItem *curr = currentKFileTreeViewItem();
     if( ! curr ) return;
 
-    KURL impTarget = curr->url();
+    KUrl impTarget = curr->url();
 
     if( ! curr->isDir() )
     {
@@ -1030,7 +1030,7 @@ void ScanPackager::slotImportFile()
     }
     kdDebug(28000) << "Importing to " << impTarget.url() << endl;
 
-    KURL impUrl = KFileDialog::getImageOpenURL ( m_currImportDir, this, i18n("Import Image File to Gallery"));
+    KUrl impUrl = KFileDialog::getImageOpenURL ( m_currImportDir, this, i18n("Import Image File to Gallery"));
 
     if( ! impUrl.isEmpty() )
     {
@@ -1043,7 +1043,7 @@ void ScanPackager::slotImportFile()
 
 
 
-void ScanPackager::slotUrlsDropped( QWidget*, QDropEvent* ev, KURL::List& urls, KURL& copyTo )
+void ScanPackager::slotUrlsDropped( QWidget*, QDropEvent* ev, KUrl::List& urls, KUrl& copyTo )
 {
    if( !urls.isEmpty() )
    {
@@ -1054,7 +1054,7 @@ void ScanPackager::slotUrlsDropped( QWidget*, QDropEvent* ev, KURL::List& urls, 
        /* first make the last url to copy to the one to select next */
        if( ! urls.empty() )
        {
-           KURL nextSel = copyTo;
+           KUrl nextSel = copyTo;
            nextSel.addPath( urls.back().fileName(false));
 
            kdDebug(28000) << "Selecting next url: " << nextSel.url() << endl;
@@ -1134,7 +1134,7 @@ void ScanPackager::slotDeleteItems( )
    KFileTreeViewItem *curr = currentKFileTreeViewItem();
    if( ! curr ) return;
 
-   KURL urlToDel = curr->url();
+   KUrl urlToDel = curr->url();
    Q3ListViewItem *nextToSelect = curr->nextSibling();
 
    kdDebug(28000) << "Deleting: " << urlToDel.prettyURL() << endl;
@@ -1191,7 +1191,7 @@ void ScanPackager::slotCreateFolder( )
 	 KFileTreeViewItem *it = currentKFileTreeViewItem();
 	 if( it )
 	 {
-	    KURL url = it->url();
+	    KUrl url = it->url();
 
 	    /* If a directory is selected, the filename needs not to be deleted */
 	    if( ! it->isDir())

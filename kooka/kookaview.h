@@ -148,7 +148,7 @@ public slots:
     /**
      * slot that show the image viewer
      */
-    void slStartLoading( const KURL& url );
+    void slStartLoading( const KUrl& url );
     /**
      * starts ocr on the image the parameter is pointing to
      **/

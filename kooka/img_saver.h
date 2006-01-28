@@ -155,7 +155,7 @@ public:
 	 *  @param dir  Name of the save root directory
 	 *  @param name Name of a subdirectory in the saveroot.
 	 **/
-   ImgSaver( QWidget *parent, const KURL );
+   ImgSaver( QWidget *parent, const KUrl );
    ImgSaver( QWidget *parent );
 
    QString     errorString( ImgSaveStat );
@@ -163,7 +163,7 @@ public:
     *  returns the name of the last file that was saved by ImgSaver.
     */
    QString     lastFilename() const { return( last_file ); }
-   KURL        lastFileUrl() const { return( KURL(last_file )); }
+   KUrl        lastFileUrl() const { return( KURL(last_file )); }
    /**
     *  returns the image format of the last saved image.
     */
@@ -174,16 +174,16 @@ public:
    bool        isRememberedFormat( picType type, QString format ) const;
 
    /* static function that exports a file */
-   static bool    copyImage( const KURL& fromUrl, const KURL& toUrl, QWidget *overWidget=0 );
-   static bool    renameImage( const KURL& fromUrl, KURL& toUrl, bool askExt=false, QWidget *overWidget=0 );
+   static bool    copyImage( const KUrl& fromUrl, const KUrl& toUrl, QWidget *overWidget=0 );
+   static bool    renameImage( const KUrl& fromUrl, KUrl& toUrl, bool askExt=false, QWidget *overWidget=0 );
    static QString tempSaveImage( KookaImage *img, const QString& format, int colors = -1 );
 
    /* static function that returns the extension of an url */
-   static QString extension( const KURL& );
+   static QString extension( const KUrl& );
 
 public slots:
    ImgSaveStat saveImage( QImage *image );
-   ImgSaveStat saveImage( QImage *image, const KURL& filename, const QString& imgFormat );
+   ImgSaveStat saveImage( QImage *image, const KUrl& filename, const QString& imgFormat );
 
 private:
    QString 	picTypeAsString( picType type ) const;

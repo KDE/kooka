@@ -65,9 +65,9 @@ public:
    ThumbView( QWidget *parent, const char *name=0 );
    ~ThumbView();
 
-   void setCurrentDir( const KURL& s)
+   void setCurrentDir( const KUrl& s)
       { m_currentDir = s; }
-   KURL currentDir( ) const
+   KUrl currentDir( ) const
       { return m_currentDir; }
 
    QSize tumbSize( ) const
@@ -116,7 +116,7 @@ public slots:
    bool readSettings();
    void clear();
 
-    void slImageRenamed( KFileItem*, const KURL& );
+    void slImageRenamed( KFileItem*, const KUrl& );
 
 protected:
 
@@ -127,7 +127,7 @@ signals:
     * selects a QListViewItem from the thumbnail. This signal only makes
     * sense if connected to a ScanPackager.
     */
-   void selectFromThumbnail( const KURL& );
+   void selectFromThumbnail( const KUrl& );
 
 private:
    QPixmap createPixmap( const QPixmap& ) const;
@@ -136,7 +136,7 @@ private:
    KIconView *m_iconView;
    KProgress *m_progress;
 
-   KURL    m_currentDir;
+   KUrl    m_currentDir;
    QPixmap m_basePix;
    int     m_pixWidth;
    int     m_pixHeight;

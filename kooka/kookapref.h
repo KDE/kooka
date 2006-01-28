@@ -38,7 +38,7 @@ class KColorButton;
 class ImageSelectLine;
 class KScanEntry;
 class QRadioButton;
-class KURLRequester;
+class KUrlRequester;
 class QCheckBox;
 
 #define STARTUP_READ_IMAGE "ReadImageOnStart"
@@ -73,7 +73,7 @@ private:
     void setupSaveFormatPage();
     void setupThumbnailPage();
     void setupOCRPage();
-    KURLRequester* binaryCheckBox( QWidget *, const QString& );
+    KUrlRequester* binaryCheckBox( QWidget *, const QString& );
 
     QCheckBox *cbNetQuery;
     QCheckBox *cbSkipFormatAsk;
@@ -89,8 +89,8 @@ private:
     KColorButton *m_colButt1;
     KColorButton *m_colButt2;
 
-    KURLRequester *m_urlReqGocr;
-    KURLRequester *m_urlReqOcrad;
+    KUrlRequester *m_urlReqGocr;
+    KUrlRequester *m_urlReqOcrad;
 
     QRadioButton *m_gocrBut;
     QRadioButton *m_kadmosBut;

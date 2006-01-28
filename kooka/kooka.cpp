@@ -314,13 +314,13 @@ void Kooka::dropEvent(QDropEvent *event)
     // this is a very simplistic implementation of a drop event.  we
     // will only accept a dropped URL.  the Qt dnd code can do *much*
     // much more, so please read the docs there
-    KURL::List uri;
+    KUrl::List uri;
 
     // see if we can decode a URI.. if not, just ignore it
     if (KURLDrag::decode(event, uri) && !uri.isEmpty())
     {
         // okay, we have a URI.. process it
-        const KURL &url = uri.first();
+        const KUrl &url = uri.first();
 	kdDebug(29000) << "Importing URI " << url.url() << endl;
 
         // TODO: Do something with url

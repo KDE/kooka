@@ -180,12 +180,12 @@ void KookaPreferences::setupOCRPage()
     }
 }
 
-KURLRequester* KookaPreferences::binaryCheckBox( QWidget *parent, const QString& program )
+KUrlRequester* KookaPreferences::binaryCheckBox( QWidget *parent, const QString& program )
 {
     Q3HBox *hbox = new Q3HBox( parent );
 
     (void) new QLabel( i18n("Select the %1 binary to use:").arg( program ), hbox );
-    KURLRequester* urlRequester = new KURLRequester( parent );
+    KUrlRequester* urlRequester = new KUrlRequester( parent );
     urlRequester->setMode( KFile::File | KFile::ExistingOnly | KFile::LocalOnly );
 
     QToolTip::add( urlRequester,
@@ -487,7 +487,7 @@ void KookaPreferences::slotApply( void )
     konf->writeEntry( MARGIN_COLOR1, m_colButt1->color());
     konf->writeEntry( MARGIN_COLOR2, m_colButt2->color());
 
-    KURL bgUrl = m_tileSelector->selectedURL().url();
+    KUrl bgUrl = m_tileSelector->selectedURL().url();
     bgUrl.setProtocol("");
     kdDebug(28000) << "Writing tile-pixmap " << bgUrl.prettyURL() << endl;
     konf->writePathEntry( BG_WALLPAPER, bgUrl.url() );

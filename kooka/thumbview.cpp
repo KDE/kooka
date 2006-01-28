@@ -38,7 +38,7 @@
 #include <kimageeffect.h>
 #include <kglobal.h>
 #include <kstandarddirs.h>
-#include <kprogress.h>
+#include <kprogressbar.h>
 
 #include "thumbview.h"
 #include "thumbview.moc"
@@ -155,7 +155,7 @@ void ThumbView::slDoubleClicked( Q3IconViewItem *qIt )
 
    if( it )
    {
-      const KURL url = it->itemUrl();
+      const KUrl url = it->itemUrl();
 
       emit( selectFromThumbnail( url ));
    }
@@ -184,8 +184,8 @@ void ThumbView::slImageChanged( KFileItem *kfit )
    if( ! kfit ) return;
    // kdDebug(28000) << "changes to one thumbnail!" << endl;
 
-   KURL thumbDir = currentDir();
-   KURL itemUrl = kfit->url();
+   KUrl thumbDir = currentDir();
+   KUrl itemUrl = kfit->url();
 
    /* delete filename */
    itemUrl.setFileName( QString());
@@ -206,9 +206,9 @@ void ThumbView::slImageChanged( KFileItem *kfit )
    slNewFileItems( li );
 }
 
-void ThumbView::slImageRenamed( KFileItem *kfit, const KURL& newUrl )
+void ThumbView::slImageRenamed( KFileItem *kfit, const KUrl& newUrl )
 {
-    const KURL url = kfit->url();
+    const KUrl url = kfit->url();
 
     if( kfit->isDir() ) {
 	clear();
@@ -234,7 +234,7 @@ void  ThumbView::slCheckForUpdate( KFileItem *kfit )
 
    kdDebug(28000) << "Checking for update of thumbview!" << endl;
 
-   KURL searchUrl = kfit->url();
+   KUrl searchUrl = kfit->url();
    bool haveItem = false;
 
    /* iterate over all icon items and compare urls.
@@ -265,7 +265,7 @@ bool ThumbView::deleteImage( KFileItem *kfit )
    if( ! kfit ) return false;
 
 
-   KURL searchUrl = kfit->url();
+   KUrl searchUrl = kfit->url();
    bool haveItem = false;
 
    /* iterate over all icon items and compare urls.

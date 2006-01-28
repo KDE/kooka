@@ -35,8 +35,8 @@
  *
  */
 
-class KURL;
-class KURLComboBox;
+class KUrl;
+class KUrlComboBox;
 class QPushButton;
 class QStringList;
 
@@ -46,18 +46,18 @@ class ImageSelectLine:public Q3HBox
 public:
    ImageSelectLine( QWidget *parent, const QString& text );
 
-   KURL selectedURL() const;
-   void setURL( const KURL& );
+   KUrl selectedURL() const;
+   void setURL( const KUrl& );
    void setURLs( const QStringList& );
 
 protected slots:
    void slSelectFile();
-   void slUrlActivated( const KURL& );
+   void slUrlActivated( const KUrl& );
 
 private:
 
-   KURL m_currUrl;
-   KURLComboBox *m_urlCombo;
+   KUrl m_currUrl;
+   KUrlComboBox *m_urlCombo;
    QPushButton  *m_buttFileSelect;
 
 };

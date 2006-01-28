@@ -49,7 +49,7 @@
   */
 
 class KSpellConfig;
-class KURLRequester;
+class KUrlRequester;
 class KProcess;
 class QLabel;
 class QComboBox;
@@ -98,7 +98,7 @@ private slots:
 private:
 
     QString      m_ocrCmd;
-    KURLRequester *m_orfUrlRequester;
+    KUrlRequester *m_orfUrlRequester;
     QComboBox      *m_layoutMode;
     QLabel         *m_binaryLabel;
     KProcess       *m_proc;

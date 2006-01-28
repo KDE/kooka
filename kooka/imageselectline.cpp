@@ -52,14 +52,14 @@ ImageSelectLine::ImageSelectLine( QWidget *parent, const QString& text )
 {
    setSpacing( 5 );
    (void) new QLabel( text, this );
-   m_urlCombo       = new KURLComboBox( KURLComboBox::Files, this );
+   m_urlCombo       = new KUrlComboBox( KUrlComboBox::Files, this );
    m_buttFileSelect = new QPushButton( this );
    m_buttFileSelect->setPixmap( SmallIcon( "fileopen" ) );
 
    m_urlCombo->setMaxItems(5);
 
-   connect( m_urlCombo, SIGNAL( urlActivated( const KURL& )),
-	    this, SLOT( slUrlActivated( const KURL& )));
+   connect( m_urlCombo, SIGNAL( urlActivated( const KUrl& )),
+	    this, SLOT( slUrlActivated( const KUrl& )));
 
    connect( m_buttFileSelect, SIGNAL( clicked() ),
 	    this, SLOT( slSelectFile()));
@@ -67,7 +67,7 @@ ImageSelectLine::ImageSelectLine( QWidget *parent, const QString& text )
 
 void ImageSelectLine::slSelectFile()
 {
-   KURL newUrl;
+   KUrl newUrl;
    newUrl = KFileDialog::getImageOpenURL();
 
    QStringList l = m_urlCombo->urls();
@@ -80,18 +80,18 @@ void ImageSelectLine::slSelectFile()
    }
 }
 
-void ImageSelectLine::slUrlActivated( const KURL& url )
+void ImageSelectLine::slUrlActivated( const KUrl& url )
 {
    kdDebug(28000) << "Activating url: " << url.url() << endl;
    m_currUrl = url;
 }
 
-KURL ImageSelectLine::selectedURL() const
+KUrl ImageSelectLine::selectedURL() const
 {
    return m_currUrl;
 }
 
-void ImageSelectLine::setURL( const KURL& url )
+void ImageSelectLine::setURL( const KUrl& url )
 {
    if( m_urlCombo ) m_urlCombo->setURL( url );
    m_currUrl = url;

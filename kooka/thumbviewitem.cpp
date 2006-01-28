@@ -42,7 +42,7 @@ ThumbViewItem::ThumbViewItem(Q3IconView *parent, const QString &text,
 
 }
 
-void ThumbViewItem:: setItemUrl( const KURL& u )
+void ThumbViewItem:: setItemUrl( const KUrl& u )
 {
     m_url = u;
     setText( m_url.fileName());

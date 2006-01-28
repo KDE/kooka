@@ -239,7 +239,7 @@ void KOCRBase::introduceImage( KookaImage* img)
     m_metaBox = new Q3VBox( m_imgHBox );
 
     /* Start to create a preview job for the thumb */
-    KURL::List li(img->url());
+    KUrl::List li(img->url());
     KIO::Job *m_job = KIO::filePreview(li, m_previewSize.width(),
                                        m_previewSize.height());
 

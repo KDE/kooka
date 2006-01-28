@@ -82,7 +82,7 @@ the preview page.
 
 Nov 2001:
 Replaced the old ScanPackager object by a new one based on the new KFileTreeView
-Widget in kdelibs/kfile. Hopefully soon full KURL support and more than one image
+Widget in kdelibs/kfile. Hopefully soon full KUrl support and more than one image
 repository.
 
 Nov 2001:

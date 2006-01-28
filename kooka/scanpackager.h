@@ -49,7 +49,7 @@
   *@author Klaas Freitag
   */
 
-class KURL;
+class KUrl;
 class Q3PopupMenu;
 class KFileTreeViewItem;
 class KookaImage;
@@ -87,13 +87,13 @@ public:
     QString 	getCurrImageFileName( bool ) const;
     KookaImage* getCurrImage() const;
 
-    KFileTreeBranch* openRoot( const KURL&, bool open=false );
+    KFileTreeBranch* openRoot( const KUrl&, bool open=false );
 
    Q3PopupMenu *contextMenu() const { return m_contextMenu; }
    void         openRoots();
 
 public slots:
-   void         slSelectImage( const KURL& );
+   void         slSelectImage( const KUrl& );
    void 	slAddImage( QImage *img, KookaImageMeta* meta = 0 );
    void         slShowContextMenue(Q3ListViewItem *, const QPoint &, int );
 
@@ -113,14 +113,14 @@ protected:
 protected slots:
    void         slClicked( Q3ListViewItem * );
    void         slFileRename( Q3ListViewItem*, const QString&, int );
-   // void         slFilenameChanged( KFileTreeViewItem*, const KURL & );
+   // void         slFilenameChanged( KFileTreeViewItem*, const KUrl & );
    void         slImageArrived( KFileTreeViewItem *item, KookaImage* image );
    void         slotCreateFolder( );
    void         slotDeleteItems( );
    void         slotUnloadItems( );
    void         slotUnloadItem( KFileTreeViewItem *curr );
    void         slotDirCount( KFileTreeViewItem *item, int cnt );
-   void         slotUrlsDropped( QWidget*, QDropEvent*, KURL::List& urls, KURL& copyTo );
+   void         slotUrlsDropped( QWidget*, QDropEvent*, KUrl::List& urls, KUrl& copyTo );
    void         slotDeleteFromBranch( KFileItem* );
    void         slotStartupFinished( KFileTreeViewItem * );
 signals:
@@ -131,12 +131,12 @@ signals:
    void         directoryToRemove( KFileTreeBranch *branch, const QString& relativPath );
    void         showThumbnails( KFileTreeViewItem* );
 
-   void         aboutToShowImage( const KURL& ); /* starting to load image */
+   void         aboutToShowImage( const KUrl& ); /* starting to load image */
    void         imageChanged( KFileItem* );     /* the image has changed  */
 
     void         fileDeleted( KFileItem* );
     void         fileChanged( KFileItem* );
-    void         fileRenamed( KFileItem*, const KURL& );
+    void         fileRenamed( KFileItem*, const KUrl& );
 
 private:
    QString     localFileName( KFileTreeViewItem* it ) const;
@@ -158,7 +158,7 @@ private:
     Q3PopupMenu    *m_contextMenu;
 
     // like m_nextUrlToSelect in KFileTreeView but for our own purposes (showing the image)
-    KURL         m_nextUrlToShow;
+    KUrl         m_nextUrlToShow;
 
    QPixmap       m_floppyPixmap;
    QPixmap       m_grayPixmap;
