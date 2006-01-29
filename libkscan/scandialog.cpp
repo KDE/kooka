@@ -133,8 +133,8 @@ void ScanDialog::createOptionsTab( void )
    /* Read settings for startup behavior */
    KConfig *gcfg = KGlobal::config();
    gcfg->setGroup(QString::fromLatin1(GROUP_STARTUP));
-   bool skipDialog  = gcfg->readBoolEntry( STARTUP_SKIP_ASK, false );
-   bool onlyLocal   = gcfg->readBoolEntry( STARTUP_ONLY_LOCAL, false );
+   bool skipDialog  = gcfg->readEntry( STARTUP_SKIP_ASK, false );
+   bool onlyLocal   = gcfg->readEntry( STARTUP_ONLY_LOCAL, false );
 
    /* Note: flag must be inverted because of question is 'the other way round' */
    cb_askOnStart->setChecked( !skipDialog );
@@ -157,7 +157,7 @@ void ScanDialog::slotNetworkToggle( bool state)
    kdDebug(29000) << "slotNetworkToggle: Writing state " << writestate << endl;
    KConfig *c = KGlobal::config();
    c->setGroup(QString::fromLatin1(GROUP_STARTUP));
-   c->writeEntry( STARTUP_ONLY_LOCAL, writestate, true, true );
+   c->writeEntry( STARTUP_ONLY_LOCAL, writestate, KConfigBase::Normal|KConfigBase::Global);
 }
 
 void ScanDialog::slotAskOnStartToggle(bool state)
@@ -167,7 +167,7 @@ void ScanDialog::slotAskOnStartToggle(bool state)
    kdDebug(29000) << "slotAskOnStartToggle: Writing state " << writestate << endl;
    KConfig *c = KGlobal::config();
    c->setGroup(QString::fromLatin1(GROUP_STARTUP));
-   c->writeEntry( STARTUP_SKIP_ASK, writestate, true, true );
+   c->writeEntry( STARTUP_SKIP_ASK, writestate, KConfigBase::Normal|KConfigBase::Global);
 }
 
 void ScanDialog::slotScanStart( )
@@ -339,7 +339,7 @@ void ScanDialog::slotClose()
 	 kfg->setGroup( GROUP_STARTUP );
 	 /* Since this is a vertical splitter, only the width is important */
 	 QString key = QString::fromLatin1( SCANDIA_SPLITTER_SIZES ).arg( r.width());
-	 kfg->writeEntry( key, splitter->sizes(), true, true);
+	 kfg->writeEntry( key, splitter->sizes(), KConfigBase::Normal|KConfigBase::Global);
       }
    }
 

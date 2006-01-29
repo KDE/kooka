@@ -127,7 +127,7 @@ ImageCanvas::ImageCanvas(QWidget *parent,
     cr1 = 0;
     cr2 = 0;
     viewport()->setMouseTracking(TRUE);
-    viewport()->setBackgroundMode(PaletteBackground);
+    viewport()->setBackgroundMode(Qt::PaletteBackground);
     show();
 
 }
@@ -136,9 +136,9 @@ ImageCanvas::~ImageCanvas()
 {
    kdDebug(29000) << "Destructor of ImageCanvas" << endl;
     noRectSlot();
-    if( selected ) delete selected;
+    delete selected;
     selected = 0;
-    if( pmScaled ) delete pmScaled;
+    delete pmScaled;
     pmScaled = 0;
     delete d;
 }
@@ -463,7 +463,7 @@ void ImageCanvas::viewportMousePressEvent(QMouseEvent *ev)
 {
    if( ! acquired || ! image ) return;
 
-   if(ev->button()==LeftButton )
+   if(ev->button()==Qt::LeftButton )
    {
 
         int cx = contentsX(), cy = contentsY();
@@ -492,7 +492,7 @@ void ImageCanvas::viewportMousePressEvent(QMouseEvent *ev)
 
 void ImageCanvas::viewportMouseReleaseEvent(QMouseEvent *ev)
 {
-  if(ev->button()!=LeftButton || !acquired ) return;
+  if(ev->button()!=Qt::LeftButton || !acquired ) return;
 
   //// debug( "Mouse Release at %d/%d", ev->x(), ev->y());
   if(moving!=MOVE_NONE) {

@@ -74,7 +74,7 @@ DeviceSelector::DeviceSelector( QWidget *parent, Q3StrList& devList,
 
    KConfig *gcfg = KGlobal::config();
    gcfg->setGroup(QString::fromLatin1(GROUP_STARTUP));
-   bool skipDialog = gcfg->readBoolEntry( STARTUP_SKIP_ASK, false );
+   bool skipDialog = gcfg->readEntry( STARTUP_SKIP_ASK, false );
    cbSkipDialog->setChecked( skipDialog );
 
    topLayout->addWidget(cbSkipDialog);
@@ -85,7 +85,7 @@ Q3CString DeviceSelector::getDeviceFromConfig( void ) const
 {
    KConfig *gcfg = KGlobal::config();
    gcfg->setGroup(QString::fromLatin1(GROUP_STARTUP));
-   bool skipDialog = gcfg->readBoolEntry( STARTUP_SKIP_ASK, false );
+   bool skipDialog = gcfg->readEntry( STARTUP_SKIP_ASK, false );
    
    Q3CString result;
 
@@ -131,8 +131,8 @@ Q3CString DeviceSelector::getSelectedDevice( void ) const
    KConfig *c = KGlobal::config();
    c->setGroup(QString::fromLatin1(GROUP_STARTUP));
    /* Write both the scan device and the skip-start-dialog flag global. */
-   c->writeEntry( STARTUP_SCANDEV, dev, true, true );
-   c->writeEntry( STARTUP_SKIP_ASK, getShouldSkip(), true, true );
+   c->writeEntry( STARTUP_SCANDEV, dev, KConfigBase::Normal|KConfigBase::Global);
+   c->writeEntry( STARTUP_SKIP_ASK, getShouldSkip(), KConfigBase::Normal|KConfigBase::Global);
    c->sync();
    
    return dev;
