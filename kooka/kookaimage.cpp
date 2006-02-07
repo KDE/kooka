@@ -58,7 +58,7 @@ KookaImage::KookaImage( int subNo, KookaImage *p )
      m_fileBound(false),
      m_tileCols(0)
 {
-   kdDebug(28000) << "Setting subimageNo to " << subNo << endl;
+   kDebug(28000) << "Setting subimageNo to " << subNo << endl;
 }
 
 KookaImage& KookaImage::operator=(const KookaImage& img)
@@ -95,7 +95,7 @@ const KFileMetaInfo KookaImage::fileMetaInfo( )
     QString filename = localFileName( );
     if( ! filename.isEmpty() )
     {
-        kdDebug(28000) << "Fetching metainfo for " << filename << endl;
+        kDebug(28000) << "Fetching metainfo for " << filename << endl;
         const KFileMetaInfo info( filename );
         return info;
     }
@@ -127,16 +127,16 @@ bool KookaImage::loadFromUrl( const KUrl& url )
 	  filename.endsWith( "TIF" ) || filename.endsWith( "TIFF" ) )
       {
 	 format = "tif";
-	 kdDebug(28000) << "Setting format to tif by extension" << endl;
+	 kDebug(28000) << "Setting format to tif by extension" << endl;
       }
    }
 
-   kdDebug(28000) << "Image format to load: <" << format << "> from file <" << filename << ">" << endl;
+   kDebug(28000) << "Image format to load: <" << format << "> from file <" << filename << ">" << endl;
    bool haveTiff = false;
 
    if( !m_url.isLocalFile() )
    {
-      kdDebug(28000)<<"ERROR: Can not laod non-local images -> not yet implemented!" << endl;
+      kDebug(28000)<<"ERROR: Can not laod non-local images -> not yet implemented!" << endl;
       return false;
    }
 
@@ -150,14 +150,14 @@ bool KookaImage::loadFromUrl( const KUrl& url )
        format == "tiff" )
    {
       /* if it is tiff, check with Tifflib if it is multiple sided */
-      kdDebug(28000) << "Trying to load TIFF!" << endl;
+      kDebug(28000) << "Trying to load TIFF!" << endl;
       tif = TIFFOpen(filename.latin1(), "r");
       if (tif)
       {
 	 do {
 	    m_subImages++;
 	 } while (TIFFReadDirectory(tif));
-	 kdDebug(28000) << m_subImages << " TIFF-directories found" << endl;
+	 kDebug(28000) << m_subImages << " TIFF-directories found" << endl;
 
 	 haveTiff = true;
       }
@@ -194,14 +194,14 @@ KookaImage::KookaImage( const QImage& img )
    m_subImages = 0;
 
    /* Load one QImage, can not be Tiff yet. */
-   kdDebug(28000) << "constructor from other image here " << endl;
+   kDebug(28000) << "constructor from other image here " << endl;
 }
 
 
 /* loads the number stored in m_subNo */
 void KookaImage::extractNow()
 {
-   kdDebug(28000) << "extracting a subimage number " << m_subNo << endl;
+   kDebug(28000) << "extracting a subimage number " << m_subNo << endl;
 
    KookaImage *parent = parentImage();
 
@@ -211,7 +211,7 @@ void KookaImage::extractNow()
    }
    else
    {
-      kdDebug(28000) << "ERR: No parent defined - can not laod subimage" << endl;
+      kDebug(28000) << "ERR: No parent defined - can not laod subimage" << endl;
    }
 }
 
@@ -226,14 +226,14 @@ bool KookaImage::loadTiffDir( const QString& filename, int no )
    int imgWidth, imgHeight;
    TIFF* tif = 0;
    /* if it is tiff, check with Tifflib if it is multiple sided */
-   kdDebug(28000) << "Trying to load TIFF, subimage number "<< no  << endl;
+   kDebug(28000) << "Trying to load TIFF, subimage number "<< no  << endl;
    tif = TIFFOpen(filename.latin1(), "r");
    if (!tif)
       return false;
 
    if( ! TIFFSetDirectory( tif, no ) )
    {
-      kdDebug(28000) << "ERR: could not set Directory " << no << endl;
+      kDebug(28000) << "ERR: could not set Directory " << no << endl;
       TIFFClose(tif);
       return false;
    }
@@ -284,7 +284,7 @@ bool KookaImage::loadTiffDir( const QString& filename, int no )
    bool resosFound;
    resosFound  = TIFFGetField(tif, TIFFTAG_XRESOLUTION, &xReso );
    resosFound &= TIFFGetField(tif, TIFFTAG_YRESOLUTION, &yReso );
-   kdDebug(28000)<< "Tiff image: X-Resol.: " << xReso << " and Y-Resol.: " << yReso << endl;
+   kDebug(28000)<< "Tiff image: X-Resol.: " << xReso << " and Y-Resol.: " << yReso << endl;
 
    TIFFClose(tif);
 
@@ -296,7 +296,7 @@ bool KookaImage::loadTiffDir( const QString& filename, int no )
        if( xReso > yReso )
        {
 	   float yScalefactor = xReso / yReso;
-	   kdDebug(28000) << "Different resolution x/y, rescaling with factor " << yScalefactor << endl;
+	   kDebug(28000) << "Different resolution x/y, rescaling with factor " << yScalefactor << endl;
 	   /* rescale the image */
 	   *this = smoothScale( imgWidth, int(imgHeight*yScalefactor), Qt::IgnoreAspectRatio );
        }
@@ -304,7 +304,7 @@ bool KookaImage::loadTiffDir( const QString& filename, int no )
        {
 	   /* yReso > xReso */
 	   float scalefactor = yReso / xReso;
-	   kdDebug(28000) << "Different resolution x/y, rescaling x with factor " << scalefactor << endl;
+	   kDebug(28000) << "Different resolution x/y, rescaling x with factor " << scalefactor << endl;
 	   /* rescale the image */
 	   *this = smoothScale( int(imgWidth*scalefactor), imgHeight, Qt::IgnoreAspectRatio );
 	   
@@ -404,7 +404,7 @@ int KookaImage::cutToTiles( const QSize maxSize, int& rows, int& cols, TileMode 
 QRect KookaImage::getTileRect( int rowPos, int colPos ) const
 {
     int indx = rowPos*m_tileCols+colPos;
-    kdDebug(28000) << "Tile Index: " << indx << endl;
+    kDebug(28000) << "Tile Index: " << indx << endl;
     const QRect r = m_tileVector[(rowPos)*m_tileCols + colPos];
 
     return r;

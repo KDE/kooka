@@ -49,7 +49,7 @@ DeviceSelector::DeviceSelector( QWidget *parent, Q3StrList& devList,
     : KDialogBase( parent,  "DeviceSel", true, i18n("Welcome to Kooka"),
 		   Ok|Cancel, Ok, true )
 {
-   kdDebug(29000) << "Starting DevSelector!" << endl;
+   kDebug(29000) << "Starting DevSelector!" << endl;
    // Layout-Boxes
    QWidget *page = new QWidget( this );
    Q_CHECK_PTR( page );
@@ -93,18 +93,18 @@ Q3CString DeviceSelector::getDeviceFromConfig( void ) const
     * want to be bothered any more.
     */
    result = QFile::encodeName(gcfg->readEntry( STARTUP_SCANDEV, "" ));
-   kdDebug(29000) << "Got scanner from config file to use: " << result << endl;
+   kDebug(29000) << "Got scanner from config file to use: " << result << endl;
    
    /* Now check if the scanner read from the config file is available !
     * if not, ask the user !
     */
    if( skipDialog && devices.find( result ) > -1 )
    {
-      kdDebug(29000) << "Scanner from Config file is available - fine." << endl;
+      kDebug(29000) << "Scanner from Config file is available - fine." << endl;
    }
    else
    {
-      kdDebug(29000) << "Scanner from Config file is _not_ available" << endl;
+      kDebug(29000) << "Scanner from Config file is _not_ available" << endl;
       result = Q3CString();
    }
    
@@ -121,11 +121,11 @@ Q3CString DeviceSelector::getSelectedDevice( void ) const
    unsigned int selID = selectBox->id( selectBox->selected() );
 
    int dcount = devices.count();
-   kdDebug(29000) << "The Selected ID is <" << selID << ">/" << dcount << endl;
+   kDebug(29000) << "The Selected ID is <" << selID << ">/" << dcount << endl;
 
    const char * dev = devices.at( selID );
 
-   kdDebug(29000) << "The selected device: <" << dev << ">" << endl;
+   kDebug(29000) << "The selected device: <" << dev << ">" << endl;
 
    /* Store scanner selection settings */
    KConfig *c = KGlobal::config();

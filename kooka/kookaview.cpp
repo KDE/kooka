@@ -289,7 +289,7 @@ KookaView::KookaView( KParts::DockMainWindow *parent, const Q3CString& deviceToU
    /* Set a large enough size */
    int w = statBar->fontMetrics().
            width(img_canvas->imageInfoString(2000, 2000, 48));
-   kdDebug(28000) << "Fixed size for status bar: " << w << " from string " << img_canvas->imageInfoString(2000, 2000, 48) << endl;
+   kDebug(28000) << "Fixed size for status bar: " << w << " from string " << img_canvas->imageInfoString(2000, 2000, 48) << endl;
    statBar->setItemFixed( StatusImage, w );
 
 }
@@ -300,7 +300,7 @@ KookaView::~KookaView()
    saveProperties( KGlobal::config () );
    delete preview_canvas;
 
-   kdDebug(28000)<< "Finished saving config data" << endl;
+   kDebug(28000)<< "Finished saving config data" << endl;
 }
 
 void KookaView::slViewerReadOnly( bool )
@@ -312,7 +312,7 @@ void KookaView::slViewerReadOnly( bool )
 bool KookaView::slSelectDevice( const Q3CString& useDevice )
 {
 
-   kdDebug(28000) << "Kookaview: select a device!" << endl;
+   kDebug(28000) << "Kookaview: select a device!" << endl;
    bool haveConnection = false;
 
    Q3CString selDevice;
@@ -330,10 +330,10 @@ bool KookaView::slSelectDevice( const Q3CString& useDevice )
 
    if( !selDevice.isEmpty() )
    {
-      kdDebug(28000) << "Opening device " << selDevice << endl;
+      kDebug(28000) << "Opening device " << selDevice << endl;
 
       if( connectedDevice == selDevice ) {
-	 kdDebug( 28000) << "Device " << selDevice << " is already selected!" << endl;
+	 kDebug( 28000) << "Device " << selDevice << " is already selected!" << endl;
 	 return( true );
       }
 
@@ -354,7 +354,7 @@ bool KookaView::slSelectDevice( const Q3CString& useDevice )
 
 	 if( ! scan_params->connectDevice( sane ) )
 	 {
-	    kdDebug(28000) << "Connecting to the scanner failed :( ->TODO" << endl;
+	    kDebug(28000) << "Connecting to the scanner failed :( ->TODO" << endl;
 	 }
 	 else
 	 {
@@ -381,7 +381,7 @@ bool KookaView::slSelectDevice( const Q3CString& useDevice )
       }
       else
       {
-	 kdDebug(28000) << "Could not open device <" << selDevice << ">" << endl;
+	 kDebug(28000) << "Could not open device <" << selDevice << ">" << endl;
 	 scan_params->connectDevice(0);
       }
 
@@ -414,7 +414,7 @@ Q3CString KookaView::userDeviceSelection( ) const
    {
       while( it )
       {
-	 kdDebug( 28000 ) << "Found backend: " << it.current() << endl;
+	 kDebug( 28000 ) << "Found backend: " << it.current() << endl;
 	 hrbackends.append( sane->getScannerName( it.current() ));
 	 ++it;
       }
@@ -425,7 +425,7 @@ Q3CString KookaView::userDeviceSelection( ) const
 
        if( selDevice.isEmpty() || selDevice.isNull() )
        {
-	  kdDebug(29000) << "selDevice not found - starting selector!" << selDevice << endl;
+	  kDebug(29000) << "selDevice not found - starting selector!" << selDevice << endl;
 	  if ( ds.exec() == QDialog::Accepted )
 	  {
 	     selDevice = ds.getSelectedDevice();
@@ -438,7 +438,7 @@ Q3CString KookaView::userDeviceSelection( ) const
 
 void KookaView::loadStartupImage( void )
 {
-   kdDebug( 28000) << "Starting to load startup image" << endl;
+   kDebug( 28000) << "Starting to load startup image" << endl;
 
    /* Now set the configured stuff */
    KConfig *konf = KGlobal::config ();
@@ -453,13 +453,13 @@ void KookaView::loadStartupImage( void )
 
 	 if( !startup.isEmpty() )
 	 {
-	    kdDebug(28000) << "Loading startup image !" << endl;
+	    kDebug(28000) << "Loading startup image !" << endl;
 	    packager->slSelectImage( KURL(startup) );
 	 }
       }
       else
       {
-	 kdDebug(28000) << "Do not load startup image due to config value" << endl;
+	 kDebug(28000) << "Do not load startup image due to config value" << endl;
       }
    }
 }
@@ -605,7 +605,7 @@ void KookaView::startOCR( KookaImage *img )
 
 void KookaView::slOCRResultImage( const QPixmap& pix )
 {
-    kdDebug(28000) << "Showing OCR Result Image" << endl;
+    kDebug(28000) << "Showing OCR Result Image" << endl;
     if( ! img_canvas ) return;
 
     if( m_ocrResultImg )
@@ -622,7 +622,7 @@ void KookaView::slOCRResultImage( const QPixmap& pix )
 
 void KookaView::slScanStart( )
 {
-   kdDebug(28000) << "Scan starts " << endl;
+   kDebug(28000) << "Scan starts " << endl;
    if( scan_params )
    {
       scan_params->setEnabled( false );
@@ -637,7 +637,7 @@ void KookaView::slScanStart( )
 
 void KookaView::slAcquireStart( )
 {
-   kdDebug(28000) << "Acquire starts " << endl;
+   kDebug(28000) << "Acquire starts " << endl;
    if( scan_params )
    {
       KLed *led = scan_params->operationLED();
@@ -659,7 +659,7 @@ void KookaView::slNewImageScanned( QImage* img, ImgScanInfo* si )
 
 void KookaView::slScanFinished( KScanStat stat )
 {
-   kdDebug(28000) << "Scan finished with status " << stat << endl;
+   kDebug(28000) << "Scan finished with status " << stat << endl;
    if( scan_params )
    {
       scan_params->setEnabled( true );
@@ -675,7 +675,7 @@ void KookaView::slScanFinished( KScanStat stat )
 
 void KookaView::slCloseScanDevice( )
 {
-   kdDebug(28000) << "Scanner Device closes down !" << endl;
+   kDebug(28000) << "Scanner Device closes down !" << endl;
    if( scan_params ) {
       delete scan_params;
       scan_params = 0;
@@ -730,7 +730,7 @@ void KookaView::slRotateImage(int angle)
 
 	    break;
 	 default:
-	    kdDebug(28000) << "Not supported yet !" << endl;
+	    kDebug(28000) << "Not supported yet !" << endl;
 	    doUpdate = false;
 
 	    break;
@@ -773,7 +773,7 @@ void KookaView::slMirrorImage( MirrorType m )
 	    resImg = img->mirror( true, true );
 	    break;
 	 default:
-	    kdDebug(28000) << "Mirroring: no way ;)" << endl;
+	    kDebug(28000) << "Mirroring: no way ;)" << endl;
 	    doUpdate = false;
       }
       QApplication::restoreOverrideCursor();
@@ -805,7 +805,7 @@ void KookaView::slLoadScanParams( )
    LoadSetDialog loadDialog( m_mainDock, sane->shortScannerName(), sane );
    if( loadDialog.exec())
    {
-      kdDebug(28000)<< "Executed successfully" << endl;
+      kDebug(28000)<< "Executed successfully" << endl;
    }
 #endif
 }
@@ -822,7 +822,7 @@ void KookaView::slSaveScanParams( )
    SaveSetDialog dialog( m_mainDock /* this */ , &optSet );
    if( dialog.exec())
    {
-      kdDebug(28000)<< "Executed successfully" << endl;
+      kDebug(28000)<< "Executed successfully" << endl;
       QString name = dialog.paramSetName();
       QString desc = dialog.paramSetDescription();
       sane->slSaveScanConfigSet( name, desc );
@@ -832,7 +832,7 @@ void KookaView::slSaveScanParams( )
 
 void KookaView::slShowAImage( KookaImage *img )
 {
-   kdDebug(28000) << "Show new Image" << endl;
+   kDebug(28000) << "Show new Image" << endl;
    if( img_canvas )
    {
       img_canvas->newImage( img );
@@ -853,7 +853,7 @@ void KookaView::slShowAImage( KookaImage *img )
 
 void KookaView::slUnloadAImage( KookaImage * )
 {
-   kdDebug(28000) << "Unloading Image" << endl;
+   kDebug(28000) << "Unloading Image" << endl;
    if( img_canvas )
    {
       img_canvas->newImage( 0L );
@@ -878,7 +878,7 @@ void KookaView::slShowThumbnails(KFileTreeViewItem *dirKfi, bool forceRedraw )
       }
    }
 
-   kdDebug(28000) << "Showing thumbs for " << dirKfi->url().prettyURL() << endl;
+   kDebug(28000) << "Showing thumbs for " << dirKfi->url().prettyURL() << endl;
 
    /* Only do the new thumbview if the old is on another dir */
    if( m_thumbview && (forceRedraw || m_thumbview->currentDir() != dirKfi->url()) )
@@ -929,14 +929,14 @@ void KookaView::updateCurrImage( QImage& img )
     else
     {
 	emit( signalChangeStatusbar( i18n("Can not save image, it is write protected!")));
-	kdDebug(28000) << "Image is write protected, no saving!" << endl;
+	kDebug(28000) << "Image is write protected, no saving!" << endl;
     }
 }
 
 
 void KookaView::saveProperties(KConfig *config)
 {
-   kdDebug(28000) << "Saving Properties for KookaView !" << endl;
+   kDebug(28000) << "Saving Properties for KookaView !" << endl;
    config->setGroup( GROUP_STARTUP );
    /* Get with path */
    config->writePathEntry( STARTUP_IMG_SELECTION, packager->getCurrImageFileName(true));
@@ -954,7 +954,7 @@ void KookaView::slOpenCurrInGraphApp( void )
 
       if( ! ftvi ) return;
 
-      kdDebug(28000) << "Trying to open <" << ftvi->url().prettyURL()<< ">" << endl;
+      kDebug(28000) << "Trying to open <" << ftvi->url().prettyURL()<< ">" << endl;
       KUrl::List urllist;
 
       urllist.append( ftvi->url());
@@ -1011,7 +1011,7 @@ QImage KookaView::rotate180( QImage *m_img )
 void KookaView::connectViewerAction( KAction *action )
 {
    Q3PopupMenu *popup = img_canvas->contextMenu();
-   kdDebug(29000) << "This is the popup: " << popup << endl;
+   kDebug(29000) << "This is the popup: " << popup << endl;
    if( popup && action )
    {
       action->plug( popup );
@@ -1035,7 +1035,7 @@ void KookaView::slFreshUpThumbView()
       /* readSettings returns true if something changes */
       if( m_thumbview->readSettings() )
       {
-	 kdDebug(28000) << "Thumbview-Settings changed, readraw thumbs" << endl;
+	 kDebug(28000) << "Thumbview-Settings changed, readraw thumbs" << endl;
 	 /* new settings */
 	 slShowThumbnails(0, true);
       }

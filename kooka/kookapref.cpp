@@ -107,7 +107,7 @@ void KookaPreferences::setupOCRPage()
     connect( m_urlReqGocr, SIGNAL( textChanged( const QString& )),
              this, SLOT( slCheckOnGOCR( const QString& )));
     QString cmdGocr = tryFindBinary( "gocr", CFG_GOCR_BINARY );
-    kdDebug(28000) << "Found gocr command: " << cmdGocr << endl;
+    kDebug(28000) << "Found gocr command: " << cmdGocr << endl;
     m_gocrBut->setEnabled(false);
     if( !cmdGocr.isEmpty() )
     {
@@ -126,7 +126,7 @@ void KookaPreferences::setupOCRPage()
     connect( m_urlReqOcrad, SIGNAL( textChanged( const QString& )),
              this, SLOT( slCheckOnOCRAD( const QString& )));
     QString cmdOcrad = tryFindBinary( "ocrad", CFG_OCRAD_BINARY );
-    kdDebug(28000) << "Found ocrad command: " << cmdOcrad << endl;
+    kDebug(28000) << "Found ocrad command: " << cmdOcrad << endl;
     m_ocradBut->setEnabled(false);
     if( !cmdOcrad.isEmpty() )
     {
@@ -228,12 +228,12 @@ QString KookaPreferences::tryFindBinary( const QString& bin, const QString& conf
     for ( QStringList::Iterator it = locations.begin(); it != locations.end(); ++it )
     {
         QString cmd = *it;
-        kdDebug(28000) << "checking command " << cmd << endl;
+        kDebug(28000) << "checking command " << cmd << endl;
         QFileInfo fi( cmd );
         if( fi.exists() && fi.isExecutable() && !fi.isDir())
         {
             res  = cmd;
-            kdDebug(28000) << "found  command " << res << endl;
+            kDebug(28000) << "found  command " << res << endl;
             break;
         }
     }
@@ -395,7 +395,7 @@ void KookaPreferences::setupThumbnailPage()
    /* image file selector */
    QVGroupBox *hgb1 = new QVGroupBox( i18n("Thumbview Background" ), page );
    m_tileSelector = new ImageSelectLine( hgb1, i18n("Select background image:"));
-   kdDebug(28000) << "Setting tile url " << bgImg << endl;
+   kDebug(28000) << "Setting tile url " << bgImg << endl;
    m_tileSelector->setURL( KURL(bgImg) );
 
    top->addWidget( hgb1 );
@@ -463,7 +463,7 @@ void KookaPreferences::slotApply( void )
    /** write the global one, to read from libkscan also */
    konf->setGroup(QString::fromLatin1(GROUP_STARTUP));
    bool cbVal = !(cbShowScannerSelection->isChecked());
-   kdDebug(28000) << "Writing for " << STARTUP_SKIP_ASK << ": " << cbVal << endl;
+   kDebug(28000) << "Writing for " << STARTUP_SKIP_ASK << ": " << cbVal << endl;
    konf->writeEntry( STARTUP_SKIP_ASK, cbVal, true, true ); /* global flag goes to kdeglobals */
 
    /* only search for local (=non-net) scanners ? */
@@ -489,7 +489,7 @@ void KookaPreferences::slotApply( void )
 
     KUrl bgUrl = m_tileSelector->selectedURL().url();
     bgUrl.setProtocol("");
-    kdDebug(28000) << "Writing tile-pixmap " << bgUrl.prettyURL() << endl;
+    kDebug(28000) << "Writing tile-pixmap " << bgUrl.prettyURL() << endl;
     konf->writePathEntry( BG_WALLPAPER, bgUrl.url() );
 
     /* ** OCR Options ** */

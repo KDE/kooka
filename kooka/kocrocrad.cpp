@@ -63,7 +63,7 @@ ocradDialog::ocradDialog( QWidget *parent, KSpellConfig *spellConfig )
      m_proc(0),
      m_version(0)
 {
-   kdDebug(28000) << "Starting ocrad-Start-Dialog!" << endl;
+   kDebug(28000) << "Starting ocrad-Start-Dialog!" << endl;
    // Layout-Boxes
 }
 
@@ -132,7 +132,7 @@ EngineError ocradDialog::setupGui()
     /** layout detection button **/
     conf->setGroup( CFG_GROUP_OCRAD );
     int layoutDetect = conf->readNumEntry( CFG_OCRAD_LAYOUT_DETECTION, 0 );
-    kdDebug(28000) << "Layout detection from config: " << layoutDetect << endl;
+    kDebug(28000) << "Layout detection from config: " << layoutDetect << endl;
 
     (void) new KSeparator( Qt::Horizontal, page);
     Q3HBox *hb1 = new Q3HBox(page);
@@ -189,7 +189,7 @@ void ocradDialog::writeConfig( void )
 
 void ocradDialog::enableFields(bool )
 {
-    kdDebug(28000) << "About to disable the entry fields" << endl;
+    kDebug(28000) << "About to disable the entry fields" << endl;
 }
 
 /* Later: Allow interactive loading of orf files
@@ -209,7 +209,7 @@ void ocradDialog::version( const QString& exe )
 
     m_proc = new KProcess;
 
-    kdDebug(28000) << "Using " << exe << " as command" << endl;
+    kDebug(28000) << "Using " << exe << " as command" << endl;
     *m_proc << exe;
     *m_proc << QString("-V");
 
@@ -226,7 +226,7 @@ void ocradDialog::slReceiveStdIn( KProcess*, char *buffer, int buflen)
 {
     QString vstr = QString::fromUtf8(buffer, buflen);
 
-    kdDebug(28000) << "Got input: "<< buffer << endl;
+    kDebug(28000) << "Got input: "<< buffer << endl;
 
     QRegExp rx;
     rx.setPattern("GNU Ocrad version ([\\d\\.]+)");

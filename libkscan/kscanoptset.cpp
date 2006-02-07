@@ -71,7 +71,7 @@ Q3CString KScanOptSet::getValue( const Q3CString name ) const
    }
    else
    {
-      kdDebug(29000) << "option " << name << " from OptionSet is not available" << endl;
+      kDebug(29000) << "option " << name << " from OptionSet is not available" << endl;
    }
    return( retStr );
 }
@@ -99,7 +99,7 @@ bool KScanOptSet::backupOption( const KScanOption& opt )
      else
      {
 	const Q3CString& qq = opt.get();
-	kdDebug(29000) << "Value is now: <" << qq << ">" << endl;
+	kDebug(29000) << "Value is now: <" << qq << ">" << endl;
 	const KScanOption *newopt = new KScanOption( opt );
 
 	strayCatsList.append( newopt );
@@ -133,7 +133,7 @@ void KScanOptSet::backupOptionDict( const Q3AsciiDict<KScanOption>& optDict )
 
    while ( it.current() )
    {
-      kdDebug(29000) << "Dict-Backup of Option <" << it.currentKey() << ">" << endl;
+      kDebug(29000) << "Dict-Backup of Option <" << it.currentKey() << ">" << endl;
       backupOption( *(it.current()));
       ++it;
    }
@@ -146,7 +146,7 @@ void KScanOptSet::saveConfig( const QString& scannerName, const QString& configN
 			      const QString& descr )
 {
    QString confFile = SCANNER_DB_FILE;
-   kdDebug( 29000) << "Creating scan configuration file <" << confFile << ">" << endl;
+   kDebug( 29000) << "Creating scan configuration file <" << confFile << ">" << endl;
 
    KConfig *scanConfig = new KConfig( confFile );
    QString cfgName = configName;
@@ -165,7 +165,7 @@ void KScanOptSet::saveConfig( const QString& scannerName, const QString& configN
        const QString line = it.current() -> configLine();
        const QString name = it.current()->getName();
 
-       kdDebug(29000) << "writing " << name << " = <" << line << ">" << endl;
+       kDebug(29000) << "writing " << name << " = <" << line << ">" << endl;
 
        scanConfig->writeEntry( name, line );
 
@@ -179,7 +179,7 @@ void KScanOptSet::saveConfig( const QString& scannerName, const QString& configN
 bool KScanOptSet::load( const QString& /*scannerName*/ )
 {
    QString confFile = SCANNER_DB_FILE;
-   kdDebug( 29000) << "** Reading from scan configuration file <" << confFile << ">" << endl;
+   kDebug( 29000) << "** Reading from scan configuration file <" << confFile << ">" << endl;
    bool ret = true;
 
    KConfig *scanConfig = new KConfig( confFile, true );
@@ -190,7 +190,7 @@ bool KScanOptSet::load( const QString& /*scannerName*/ )
 
    if( ! scanConfig->hasGroup( name ) )
    {
-      kdDebug(29000) << "Group " << name << " does not exist in configuration !" << endl;
+      kDebug(29000) << "Group " << name << " does not exist in configuration !" << endl;
       ret = false;
    }
    else
@@ -208,7 +208,7 @@ bool KScanOptSet::load( const QString& /*scannerName*/ )
 	 KScanOption optset( optName );
 
 	 Q3CString val = it.data().latin1();
-	 kdDebug(29000) << "Reading for " << optName << " value " << val << endl;
+	 kDebug(29000) << "Reading for " << optName << " value " << val << endl;
 
 	 optset.set( val );
 

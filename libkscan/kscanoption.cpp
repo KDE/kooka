@@ -68,7 +68,7 @@ inline const SANE_Option_Descriptor *getOptionDesc( const Q3CString& name )
    }
    else
    {
-      kdDebug(29000) << "no option descriptor for <" << name << ">" << endl;
+      kDebug(29000) << "no option descriptor for <" << name << ">" << endl;
       // debug( "Name survived !" );
    }
    // debug( "<< leaving option %s >>", name );
@@ -101,7 +101,7 @@ KScanOption::KScanOption( const Q3CString& new_name ) :
    }
    else
    {
-      kdDebug(29000) << "Had problems to create KScanOption - initOption failed !" << endl;
+      kDebug(29000) << "Had problems to create KScanOption - initOption failed !" << endl;
    }
 }
 
@@ -146,7 +146,7 @@ bool KScanOption::initOption( const Q3CString& new_name )
 	KScanOption *gtOption = (*KScanDevice::gammaTables)[ new_name ];
 	if( gtOption )
 	{
-	   kdDebug(29000) << "Is older GammaTable!" << endl;
+	   kDebug(29000) << "Is older GammaTable!" << endl;
 	   KGammaTable gt;
 	   gtOption->get( &gt );
 	
@@ -156,7 +156,7 @@ bool KScanOption::initOption( const Q3CString& new_name )
 	}
 	else
 	{
-	   // kdDebug(29000) << "Is NOT older GammaTable!" << endl;
+	   // kDebug(29000) << "Is NOT older GammaTable!" << endl;
 	}
     }
 
@@ -183,12 +183,12 @@ KScanOption::KScanOption( const KScanOption &so ) :
    
    if( ! ( desc && !name.isEmpty() ) )
    {
-      kdWarning( 29000) << "Trying to copy a not healthy option (no name nor desc)" << endl;
+      kWarning( 29000) << "Trying to copy a not healthy option (no name nor desc)" << endl;
       return;
    }
    
    if( so.buffer_untouched )
-      kdDebug(29000) << "Buffer of source is untouched!" << endl;
+      kDebug(29000) << "Buffer of source is untouched!" << endl;
 
    switch( desc->type )
    {
@@ -204,7 +204,7 @@ KScanOption::KScanOption( const KScanOption &so ) :
  	    memcpy( buffer, so.buffer,  buffer_size );
        break;
        default:
-	  kdWarning( 29000 ) << "unknown option type in copy constructor" << endl;
+	  kWarning( 29000 ) << "unknown option type in copy constructor" << endl;
 	  break;
     }
 }
@@ -213,7 +213,7 @@ KScanOption::KScanOption( const KScanOption &so ) :
 const QString KScanOption::configLine( void )
 {
    Q3CString strval = this->get();
-   kdDebug(29000) << "configLine returns <" << strval << ">" << endl;
+   kDebug(29000) << "configLine returns <" << strval << ">" << endl;
    return( strval );
 }
 
@@ -259,7 +259,7 @@ const KScanOption& KScanOption::operator= (const KScanOption& so )
 
 void KScanOption::slWidgetChange( const Q3CString& t )
 {
-    kdDebug(29000) << "Received WidgetChange for " << getName() << " (const QCString&)" << endl;
+    kDebug(29000) << "Received WidgetChange for " << getName() << " (const QCString&)" << endl;
     set( t );
     emit( guiChange( this ) );
     // emit( optionChanged( this ));
@@ -267,12 +267,12 @@ void KScanOption::slWidgetChange( const Q3CString& t )
 
 void KScanOption::slWidgetChange( void )
 {
-    kdDebug(29000) << "Received WidgetChange for " << getName() << " (void)" << endl;
+    kDebug(29000) << "Received WidgetChange for " << getName() << " (void)" << endl;
     /* If Type is bool, the widget is a checkbox. */
     if( type() == BOOL )
     {
 	bool b = ((QCheckBox*) internal_widget)->isChecked();
-	kdDebug(29000) << "Setting bool: " << b << endl;
+	kDebug(29000) << "Setting bool: " << b << endl;
 	set( b );
     }
     emit( guiChange( this ) );
@@ -282,7 +282,7 @@ void KScanOption::slWidgetChange( void )
 
 void KScanOption::slWidgetChange( int i )
 {
-    kdDebug(29000) << "Received WidgetChange for " << getName() << " (int)" << endl;
+    kDebug(29000) << "Received WidgetChange for " << getName() << " (int)" << endl;
     set( i );
     emit( guiChange( this ) );
     // emit( optionChanged( this ));
@@ -352,16 +352,16 @@ void KScanOption::slReload( void )
 		
    if( widget() )
    {
-      kdDebug(29000) << "constraint is " << desc->cap << endl;
+      kDebug(29000) << "constraint is " << desc->cap << endl;
       if( !active() )
-	 kdDebug(29000) << desc->name << " is not active now" << endl;
+	 kDebug(29000) << desc->name << " is not active now" << endl;
 
       if( !softwareSetable() )
-	 kdDebug(29000) << desc->name << " is not software setable" << endl;
+	 kDebug(29000) << desc->name << " is not software setable" << endl;
 
       if( !active() || !softwareSetable() )
       {
-	 kdDebug(29000) << "Disabling widget " << getName() << " !" << endl;
+	 kDebug(29000) << "Disabling widget " << getName() << " !" << endl;
 	 widget()->setEnabled( false );
       }
       else
@@ -371,7 +371,7 @@ void KScanOption::slReload( void )
    /* first get mem if nothing is approbiate */
    if( !buffer )
    {
-      kdDebug(29000) << " *********** getting without space **********" << endl;
+      kDebug(29000) << " *********** getting without space **********" << endl;
       // allocate memory
       switch( desc->type )
       {
@@ -395,7 +395,7 @@ void KScanOption::slReload( void )
    {
       if( (size_t) desc->size > buffer_size )
       {
-	 kdDebug(29000) << "ERROR: Buffer to small" << endl;
+	 kDebug(29000) << "ERROR: Buffer to small" << endl;
       }
       else
       {
@@ -404,10 +404,10 @@ void KScanOption::slReload( void )
 
 	 if( sane_stat != SANE_STATUS_GOOD )
 	 {
-	    kdDebug(29000) << "ERROR: Cant get value for " << getName() << ": " << sane_strstatus( sane_stat ) << endl;
+	    kDebug(29000) << "ERROR: Cant get value for " << getName() << ": " << sane_strstatus( sane_stat ) << endl;
 	 } else {
 	    buffer_untouched = false;
-	    kdDebug(29000) << "Setting buffer untouched to FALSE" << endl;
+	    kDebug(29000) << "Setting buffer untouched to FALSE" << endl;
 	 }
       }
    }
@@ -565,7 +565,7 @@ bool KScanOption::set( int val )
 	 }
 	 break;
        default:
-	 kdDebug(29000) << "Cant set " << name << "  with type int" << endl;
+	 kDebug(29000) << "Cant set " << name << "  with type int" << endl;
    }
    if( ret )
    {
@@ -631,7 +631,7 @@ bool KScanOption::set( double val )
 	 }
 	 break;
       default:
-	 kdDebug(29000) << "Cant set " << name << " with type double" << endl;
+	 kDebug(29000) << "Cant set " << name << " with type double" << endl;
    }
 
    if( ret )
@@ -662,9 +662,9 @@ bool KScanOption::set( int *val, int size )
     if( desc->constraint_type == SANE_CONSTRAINT_WORD_LIST )
     {
 	/* That means that the first entry must contain the size */
-	kdDebug(29000) << "Size: " << size << ", word_size: " << word_size << ", descr-size: "<< desc->size << endl;
+	kDebug(29000) << "Size: " << size << ", word_size: " << word_size << ", descr-size: "<< desc->size << endl;
 	qa[0] = (SANE_Word) 1+size;
-	kdDebug(29000) << "set length field to " << qa[0] <<endl;
+	kDebug(29000) << "set length field to " << qa[0] <<endl;
 	offset = 1;
     }
 #endif
@@ -694,7 +694,7 @@ bool KScanOption::set( int *val, int size )
 	    ret = true;
 	    break;
 	default:
-	    kdDebug(29000) << "Cant set " << name << " with type int*" << endl;
+	    kDebug(29000) << "Cant set " << name << " with type int*" << endl;
 	
     }
 
@@ -704,7 +704,7 @@ bool KScanOption::set( int *val, int size )
 	if( offset )
 	    copybyte += sizeof( SANE_Word );
 
-	kdDebug(29000) << "Copying " << copybyte << " byte to options buffer" << endl;
+	kDebug(29000) << "Copying " << copybyte << " byte to options buffer" << endl;
 	
 	memcpy( buffer, qa.data(), copybyte );
     }
@@ -746,7 +746,7 @@ bool KScanOption::set( const QByteArray& c_string )
 
       KGammaTable gt( brig, contr, gamm );
       ret = set( &gt );
-      kdDebug(29000) << "Setting GammaTable with int vals " << brig << "|" << contr << "|" << gamm << endl;
+      kDebug(29000) << "Setting GammaTable with int vals " << brig << "|" << contr << "|" << gamm << endl;
       
       return( ret );
    }
@@ -756,7 +756,7 @@ bool KScanOption::set( const QByteArray& c_string )
    switch( desc->type )
    {
        case SANE_TYPE_STRING:
-	   kdDebug(29000) << "Setting " << c_string << " as String" << endl;
+	   kDebug(29000) << "Setting " << c_string << " as String" << endl;
    	
 	   if( buffer_size >= c_string.length() )
 	   {
@@ -766,28 +766,28 @@ bool KScanOption::set( const QByteArray& c_string )
 	   }
 	   else
 	   {
-	       kdDebug(29000) << "ERROR: Buffer for String " << c_string << " too small: " << buffer_size << "  < " << c_string.length() << endl;
+	       kDebug(29000) << "ERROR: Buffer for String " << c_string << " too small: " << buffer_size << "  < " << c_string.length() << endl;
 	   }
 	   break;
        case SANE_TYPE_INT:
        case SANE_TYPE_FIXED:
-	   kdDebug(29000) << "Type is INT or FIXED, try to set value <" << c_string << ">" << endl;
+	   kDebug(29000) << "Type is INT or FIXED, try to set value <" << c_string << ">" << endl;
 	   val = c_string.toInt( &ret );
 	   if( ret ) 
 	       set( &val, 1 );
 	   else
-	       kdDebug(29000) << "Conversion of string value failed!" << endl;
+	       kDebug(29000) << "Conversion of string value failed!" << endl;
 	   
 	   break;
       case SANE_TYPE_BOOL:
-	 kdDebug(29000) << "Type is BOOL, setting value <" << c_string << ">" << endl;
+	 kDebug(29000) << "Type is BOOL, setting value <" << c_string << ">" << endl;
 	 val = 0;
 	 if( c_string == "true" ) val = 1;
 	 set( val );
 	 break;
        default:
-	   kdDebug(29000) << "Type of " << name << " is " << desc->type << endl;
-	   kdDebug(29000) << "Cant set " << name << " with type string" << endl;
+	   kDebug(29000) << "Type of " << name << " is " << desc->type << endl;
+	   kDebug(29000) << "Cant set " << name << " with type string" << endl;
 	   break;
    }
 
@@ -801,7 +801,7 @@ bool KScanOption::set( const QByteArray& c_string )
       emit( optionChanged( this ));
 #endif
    }
-   kdDebug(29000) << "Returning " << ret << endl;
+   kDebug(29000) << "Returning " << ret << endl;
    return( ret );
 }
 
@@ -815,7 +815,7 @@ bool KScanOption::set( KGammaTable *gt )
 
    int word_size = desc->size / sizeof( SANE_Word );
    Q3MemArray<SANE_Word> qa( word_size );
-   kdDebug(29000) << "KScanOption::set for Gammatable !" << endl;
+   kDebug(29000) << "KScanOption::set for Gammatable !" << endl;
    switch( desc->type )
    {
       case SANE_TYPE_INT:
@@ -837,7 +837,7 @@ bool KScanOption::set( KGammaTable *gt )
 	 }
 	 break;
       default:
-	 kdDebug(29000) << "Cant set " << name << " with type GammaTable" << endl;
+	 kDebug(29000) << "Cant set " << name << " with type GammaTable" << endl;
 	 ret = false;
 	
    }
@@ -892,7 +892,7 @@ bool KScanOption::get( int *val ) const
       *val = (int)d;
       break;
     default:
-      kdDebug(29000) << "Cant get " << name << " to type int" << endl;
+      kDebug(29000) << "Cant get " << name << " to type int" << endl;
       return( false );
     }
 
@@ -935,7 +935,7 @@ Q3CString KScanOption::get( void ) const
 	 break;
 	
       default:
-	 kdDebug(29000) << "Cant get " << getName() << " to type String !" << endl;
+	 kDebug(29000) << "Cant get " << getName() << " to type String !" << endl;
 	 retstr = "unknown";
    }
 
@@ -946,7 +946,7 @@ Q3CString KScanOption::get( void ) const
       retstr.sprintf( "%d, %d, %d", gamma, brightness, contrast );
    }
 
-   kdDebug(29000) << "option::get returns " << retstr << endl;
+   kDebug(29000) << "option::get returns " << retstr << endl;
    return( retstr );
 }
 
@@ -1007,7 +1007,7 @@ bool KScanOption::getRangeFromList( double *min, double *max, double *q ) const
 
    if ( desc->constraint_type == SANE_CONSTRAINT_WORD_LIST ) {
 	    // Try to read resolutions from word list
-	    kdDebug(29000) << "Resolutions are in a word list" << endl;
+	    kDebug(29000) << "Resolutions are in a word list" << endl;
             const SANE_Int *sint =  desc->constraint.word_list;
             int amount_vals = *sint; sint ++;
 	    double value;
@@ -1031,7 +1031,7 @@ bool KScanOption::getRangeFromList( double *min, double *max, double *q ) const
 		sint++;
             }
    } else {
-      kdDebug(29000) << "getRangeFromList: No list type " << desc->name << endl;
+      kDebug(29000) << "getRangeFromList: No list type " << desc->name << endl;
       ret = false;
     }
     return( ret );
@@ -1058,7 +1058,7 @@ bool KScanOption::getRange( double *min, double *max, double *q ) const
 	  *q   = r->quant ;
       }
    } else {
-      kdDebug(29000) << "getRange: No range type " << desc->name << endl;
+      kDebug(29000) << "getRange: No range type " << desc->name << endl;
       ret = false;
    }
    return( ret );
@@ -1070,7 +1070,7 @@ QWidget *KScanOption::createWidget( QWidget *parent, const QString& w_desc,
   Q3StrList list;
   if( ! valid() )
   {
-     kdDebug(29000) << "The option is not valid!" << endl;
+     kDebug(29000) << "The option is not valid!" << endl;
      return( 0 );
   }
   QWidget *w = 0;
@@ -1096,7 +1096,7 @@ QWidget *KScanOption::createWidget( QWidget *parent, const QString& w_desc,
     case SINGLE_VAL:
       /* Widget Type is Entry-Field */
       w = 0; // new QEntryField(
-      kdDebug(29000) << "can not create widget for SINGLE_VAL!" << endl;
+      kDebug(29000) << "can not create widget for SINGLE_VAL!" << endl;
       break;
     case RANGE:
       /* Widget Type is Slider */
@@ -1105,7 +1105,7 @@ QWidget *KScanOption::createWidget( QWidget *parent, const QString& w_desc,
     case GAMMA_TABLE:
       /* Widget Type is Slider */
       // w = KSaneSlider( parent, text );
-      kdDebug(29000) << "can not create widget for GAMMA_TABLE!" << endl;
+      kDebug(29000) << "can not create widget for GAMMA_TABLE!" << endl;
       w = 0; // No widget, needs to be a set !
       break;
     case STR_LIST:	 		
@@ -1117,7 +1117,7 @@ QWidget *KScanOption::createWidget( QWidget *parent, const QString& w_desc,
       /* Widget Type is Selection Box */
       break;
     default:
-       kdDebug(29000) << "returning zero for default widget creation!" << endl;
+       kDebug(29000) << "returning zero for default widget creation!" << endl;
       w  = 0;
       break;
     }
@@ -1213,12 +1213,12 @@ bool KScanOption::applyVal( void )
 					    0 );
    if( stat != SANE_STATUS_GOOD )
    {
-      kdDebug(29000) << "Error in in situ appliance " << getName() << ": " << sane_strstatus( stat ) << endl;
+      kDebug(29000) << "Error in in situ appliance " << getName() << ": " << sane_strstatus( stat ) << endl;
       res = false;
    }
    else
    {
-      kdDebug(29000) << "IN SITU appliance " << getName() << ": OK" << endl;
+      kDebug(29000) << "IN SITU appliance " << getName() << ": OK" << endl;
 
    }
    return( res );

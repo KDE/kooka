@@ -81,7 +81,7 @@ KOCRBase::KOCRBase( QWidget *parent, KSpellConfig *spellConfig,
     m_cbWantCheck(0L),
     m_gbSpellOpts(0L)
 {
-    kdDebug(28000) << "OCR Base Dialog!" << endl;
+    kDebug(28000) << "OCR Base Dialog!" << endl;
     // Layout-Boxes
 
     KConfig *konf = KGlobal::config ();
@@ -157,7 +157,7 @@ void KOCRBase::ocrIntro( )
     KStandardDirs stdDir;
     QString logo = stdDir.findResource( "data", "kooka/pics/" + ocrEngineLogo() );
 
-    kdDebug(28000)<< "Reading logo " << logo << endl;
+    kDebug(28000)<< "Reading logo " << logo << endl;
     QPixmap pix;
     QWidget *pa = m_ocrPage;
 
@@ -205,7 +205,7 @@ void KOCRBase::spellCheckIntro()
 
 void KOCRBase::slSpellConfigChanged()
 {
-    kdDebug(28000) << "Spellcheck config changed" << endl;
+    kDebug(28000) << "Spellcheck config changed" << endl;
 }
 
 
@@ -258,7 +258,7 @@ void KOCRBase::introduceImage( KookaImage* img)
     {
         QString theGroup(*it);
 
-        kdDebug(29000) << "handling the group " << theGroup << endl;
+        kDebug(29000) << "handling the group " << theGroup << endl;
 
         QStringList keys = info.group(theGroup).supportedKeys();
 
@@ -282,7 +282,7 @@ void KOCRBase::introduceImage( KookaImage* img)
                 {
                     (void) new QLabel( item.translatedKey() + ": ", nGrid );
                     (void) new QLabel( item.string(), nGrid );
-                    kdDebug(29000) << "hasKey " << *keyIt << endl;
+                    kDebug(29000) << "hasKey " << *keyIt << endl;
                 }
             }
         }
@@ -297,14 +297,14 @@ void KOCRBase::slPreviewResult(KIO::Job *job )
     // nothing
     if( job && job->error() > 0 )
    {
-      kdDebug(28000) << "Thumbnail Creation ERROR: " << job->errorString() << endl;
+      kDebug(28000) << "Thumbnail Creation ERROR: " << job->errorString() << endl;
       job->showErrorDialog( 0 );
    }
 }
 
 void KOCRBase::slGotPreview( const KFileItem*, const QPixmap& newPix )
 {
-    kdDebug(28000) << "Got the preview" << endl;
+    kDebug(28000) << "Got the preview" << endl;
     m_previewPix->setPixmap(newPix);
 
     if( m_previewPix && m_currImg )
@@ -327,7 +327,7 @@ bool KOCRBase::wantSpellCheck()
 void KOCRBase::startOCR()
 {
     /* en- and disable the buttons */
-    kdDebug(28000) << "Base: Starting OCR" << endl;
+    kDebug(28000) << "Base: Starting OCR" << endl;
 
     enableFields(false);
     enableButton( User1, false );   /* Start OCR */

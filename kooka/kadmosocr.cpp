@@ -115,7 +115,7 @@ KADMOS_ERROR CRep::Init(const char* ClassifierFilename)
 
 void CRep::run() // KADMOS_ERROR CRep::Recognize()
 {
-    kdDebug(28000) << "ooo Locked and ocr!" << endl;
+    kDebug(28000) << "ooo Locked and ocr!" << endl;
     m_Error = rep_do(&m_RepData);
     CheckError();
 }
@@ -153,7 +153,7 @@ ocrWordList CRep::getLineWords( int line )
 
     if( ! repRes )
     {
-        kdDebug(28000) << "repRes-Pointer is null" << endl;
+        kDebug(28000) << "repRes-Pointer is null" << endl;
         ok = false;
     }
 
@@ -183,7 +183,7 @@ ocrWordList CRep::getLineWords( int line )
             // Alternativen:
             // partStrings( line, nextKnode, QString());   // fills m_parts - list with alternative words
             // nextKnode = newNextKnode;
-            // kdDebug(28000) << "NextKnodeWord: " << resultWord << endl;
+            // kDebug(28000) << "NextKnodeWord: " << resultWord << endl;
         }
         while( nextKnode > 0 );
     }
@@ -198,7 +198,7 @@ int CRep::nextBestWord( int line, int knode, QString& theWord, QRect& brect )
 {
 
     Kadmos::RelGraph  *relg = getGraphKnode( line, knode );
-    // kdDebug(28000) << "GraphKnode is " << knode << endl;
+    // kDebug(28000) << "GraphKnode is " << knode << endl;
     int nextKnode = knode;
 
     while( relg )
@@ -206,20 +206,20 @@ int CRep::nextBestWord( int line, int knode, QString& theWord, QRect& brect )
         Kadmos::RelResult *relr = getRelResult( line, relg, 0 ); // best alternative
         if( relr )
         {
-            // kdDebug(28000) << "Leading Blanks: " << relg->leading_blanks <<
+            // kDebug(28000) << "Leading Blanks: " << relg->leading_blanks <<
             //    " und Knode " << knode << endl;
             char c = relr->rec_char[0][0];
             QChar newChar = c;
             if( c == 0 )
             {
-                kdDebug(28000) << "Undetected char found !" << endl;
+                kDebug(28000) << "Undetected char found !" << endl;
                 newChar = m_undetectChar;
             }
 
             if ( (nextKnode != knode) && (relg->leading_blanks > 0))
             {
                 /* this means the word ends here. */
-                // kdDebug(28000) << "----" << theWord << endl;
+                // kDebug(28000) << "----" << theWord << endl;
                 relg = 0L; /* Leave the loop. */
             }
             else
@@ -228,7 +228,7 @@ int CRep::nextBestWord( int line, int knode, QString& theWord, QRect& brect )
                 theWord.append(newChar);
 
                 /* save the bounding rect */
-                // kdDebug(28000) << "LEFT: " << relr->left << " TOP: " << relr->top << endl;
+                // kDebug(28000) << "LEFT: " << relr->left << " TOP: " << relr->top << endl;
                 QRect r( relr->left, relr->top, relr->width, relr->height );
 
                 if( brect.isNull() )
@@ -264,12 +264,12 @@ void CRep::partStrings( int line, int graphKnode, QString soFar )
 {
     /* The following knodes after a word break */
     Kadmos::RelGraph  *relg = getGraphKnode( line, graphKnode );
-    // kdDebug(28000) << "GraphKnode is " << graphKnode << endl;
+    // kDebug(28000) << "GraphKnode is " << graphKnode << endl;
 
     QString theWord="";
     for( int resNo=0; resNo < SEG_ALT; resNo++ )
     {
-        // kdDebug(28000) << "Alternative " << resNo << " is " << relg->result_number[resNo] << endl;
+        // kDebug(28000) << "Alternative " << resNo << " is " << relg->result_number[resNo] << endl;
         if( relg->result_number[resNo] == -1 )
         {
             /* This means that there is no other alternative. Go out here. */
@@ -284,7 +284,7 @@ void CRep::partStrings( int line, int graphKnode, QString soFar )
             /* this means the previous words end. */
             // TODO: This forgets the alternatives of _this_ first character of the new word.
 
-            kdDebug(28000) << "---- " << soFar << endl;
+            kDebug(28000) << "---- " << soFar << endl;
             m_parts << soFar;
             break;
         }
@@ -304,7 +304,7 @@ void CRep::partStrings( int line, int graphKnode, QString soFar )
         else
         {
             /* There is no follower */
-            kdDebug(28000) << "No followers - theWord is " << soFar << endl;
+            kDebug(28000) << "No followers - theWord is " << soFar << endl;
             m_parts<<soFar;
             break;
         }
@@ -340,7 +340,7 @@ KADMOS_ERROR CRep::SetImage( const QString file )
     image_handle = re_readimage(file.latin1(), &m_RepData.image);
     if( ! image_handle )
     {
-        kdDebug(28000) << "Can not load input file" << endl;
+        kDebug(28000) << "Can not load input file" << endl;
     }
     CheckError();
     return RE_SUCCESS;
@@ -352,7 +352,7 @@ KADMOS_ERROR CRep::SetImage(QImage *Image)
     // memcpy(&m_RepData.image, Image.bits(), Image.numBytes());
     if( !Image ) return RE_PARAMETERERROR;
 
-    kdDebug(28000) << "Setting image manually." << endl;
+    kDebug(28000) << "Setting image manually." << endl;
     m_RepData.image.data    = (void*)Image->bits();
     m_RepData.image.imgtype = IMGTYPE_PIXELARRAY;
     m_RepData.image.width   = Image->width();
@@ -364,14 +364,14 @@ KADMOS_ERROR CRep::SetImage(QImage *Image)
     if( Image->depth() == 1 || (Image->numColors()==2 && Image->depth() == 8) )
     {
         m_RepData.image.color=COLOR_BINARY;
-        kdDebug(28000) << "Setting Binary" << endl;
+        kDebug(28000) << "Setting Binary" << endl;
     } else if( Image->isGrayscale() ) {
         m_RepData.image.color = COLOR_GRAY;
-        kdDebug(28000) << "Setting GRAY" << endl;
+        kDebug(28000) << "Setting GRAY" << endl;
 
     } else {
         m_RepData.image.color = COLOR_RGB;
-        kdDebug(28000) << "Setting Color RGB" << endl;
+        kDebug(28000) << "Setting Color RGB" << endl;
     }
     // orientation
     m_RepData.image.orientation = ORIENTATION_TOPLEFT;
@@ -409,7 +409,7 @@ void CRep::CheckError()
 {
     if ( kadmosError() )
     {
-	kdDebug(28000) << "KADMOS ERROR: " << getErrorText() << endl;
+	kDebug(28000) << "KADMOS ERROR: " << getErrorText() << endl;
     }
 }
 

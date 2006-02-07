@@ -70,7 +70,7 @@ KadmosDialog::KadmosDialog( QWidget *parent, KSpellConfig *spellConfig )
      m_cbAutoscale(0),
      m_haveNorm(false)
 {
-   kdDebug(28000) << "Starting KOCR-Start-Dialog!" << endl;
+   kDebug(28000) << "Starting KOCR-Start-Dialog!" << endl;
    // Layout-Boxes
    findClassifiers();
 }
@@ -143,7 +143,7 @@ EngineError KadmosDialog::findClassifiers()
     {
         /* standard location */
         KStandardDirs stdDir;
-        kdDebug(28000) << "Starting to read resource" << endl;
+        kDebug(28000) << "Starting to read resource" << endl;
 
         lst = stdDir.findAllResources( "data",
                                        "kooka/classifiers/*.rec",
@@ -158,7 +158,7 @@ EngineError KadmosDialog::findClassifiers()
         QFileInfo fi( *it);
         QString name = fi.fileName().lower();
 
-        kdDebug(28000) << "Checking file " << *it << endl;
+        kDebug(28000) << "Checking file " << *it << endl;
 
         if( name.startsWith( "ttf" ) )
         {
@@ -169,7 +169,7 @@ EngineError KadmosDialog::findClassifiers()
                 if( lngCountry.isEmpty() )
                     lngCountry = name;
                 m_ttfClassifier << lngCountry;
-                kdDebug(28000) << "ttf: Insert country " << lngCountry << endl;
+                kDebug(28000) << "ttf: Insert country " << lngCountry << endl;
             }
             else if( lang == "cz" )
             {
@@ -182,7 +182,7 @@ EngineError KadmosDialog::findClassifiers()
             else
             {
                 m_ttfClassifier << name;
-                kdDebug(28000) << "ttf: Unknown country" << endl;
+                kDebug(28000) << "ttf: Unknown country" << endl;
             }
         }
         else if( name.startsWith( "hand" ) )
@@ -205,7 +205,7 @@ EngineError KadmosDialog::findClassifiers()
             }
             else
             {
-                kdDebug(28000) << "Hand: Unknown country " << lang << endl;
+                kDebug(28000) << "Hand: Unknown country " << lang << endl;
                 m_handClassifier << name;
             }
         }
@@ -214,7 +214,7 @@ EngineError KadmosDialog::findClassifiers()
             m_haveNorm = true;
         }
 
-        kdDebug(28000) << "Found classifier: " << *it << endl;
+        kDebug(28000) << "Found classifier: " << *it << endl;
         m_classifierPath << *it;
     }
 
@@ -411,7 +411,7 @@ bool KadmosDialog::getSelClassifier( QString& path ) const
     if( cmplPath.isEmpty() )
     {
         /* hm, no path was found */
-	kdDebug(28000) << "ERR; The entire path is empty, joking?" << endl;
+	kDebug(28000) << "ERR; The entire path is empty, joking?" << endl;
         res = false;
     }
     else
@@ -421,14 +421,14 @@ bool KadmosDialog::getSelClassifier( QString& path ) const
 
         if( res && ! fi.exists() )
         {
-            kdDebug(28000) << "Classifier file does not exist" << endl;
+            kDebug(28000) << "Classifier file does not exist" << endl;
             path = i18n("Classifier file %1 does not exist").arg(classifier);
             res = false;
         }
 
         if( res && ! fi.isReadable() )
         {
-            kdDebug(28000) << "Classifier file could not be read" << endl;
+            kDebug(28000) << "Classifier file could not be read" << endl;
             path = i18n("Classifier file %1 is not readable").arg(classifier);
             res = false;
         }
@@ -455,7 +455,7 @@ QString KadmosDialog::getSelClassifierName() const
 	else if( fontTypeID == 2 )
 	   fType = "norm";
 	else
-	   kdDebug(28000) << "ERR: Wrong Font Type ID" << endl;
+	   kDebug(28000) << "ERR: Wrong Font Type ID" << endl;
      }
 
      /* Get the long text from the combo box */
@@ -478,9 +478,9 @@ QString KadmosDialog::getSelClassifierName() const
 	     trans = "norm.rec";
 	 }
          else
-             kdDebug(28000) << "ERROR: Not a valid classifier" << endl;
+             kDebug(28000) << "ERROR: Not a valid classifier" << endl;
      }
-     kdDebug(28000) << "Returning trans. "<< trans << endl;
+     kDebug(28000) << "Returning trans. "<< trans << endl;
      return( trans );
 }
 
@@ -508,7 +508,7 @@ void KadmosDialog::writeConfig( void )
 
 void KadmosDialog::enableFields( bool state )
 {
-   kdDebug(28000) << "About to disable the entry fields" << endl;
+   kDebug(28000) << "About to disable the entry fields" << endl;
    m_cbNoise->setEnabled( state );
    m_cbAutoscale->setEnabled( state );
 

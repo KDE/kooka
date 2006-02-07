@@ -82,7 +82,7 @@ void ImageSelectLine::slSelectFile()
 
 void ImageSelectLine::slUrlActivated( const KUrl& url )
 {
-   kdDebug(28000) << "Activating url: " << url.url() << endl;
+   kDebug(28000) << "Activating url: " << url.url() << endl;
    m_currUrl = url;
 }
 

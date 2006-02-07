@@ -65,7 +65,7 @@ SizeIndicator::~SizeIndicator()
 void SizeIndicator::setSizeInByte( long newSize )
 {
    sizeInByte = newSize;
-   kdDebug(29000) << "New size in byte: " << newSize << endl ;
+   kDebug(29000) << "New size in byte: " << newSize << endl ;
 
    QString t;
 

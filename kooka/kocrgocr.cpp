@@ -62,7 +62,7 @@ KGOCRDialog::KGOCRDialog( QWidget *parent, KSpellConfig *spellConfig )
     :KOCRBase( parent, spellConfig, KDialogBase::Tabbed ),
      m_ocrCmd( QString())
 {
-   kdDebug(28000) << "Starting KOCR-Start-Dialog!" << endl;
+   kDebug(28000) << "Starting KOCR-Start-Dialog!" << endl;
    // Layout-Boxes
 }
 
@@ -160,7 +160,7 @@ void KGOCRDialog::introduceImage( KookaImage *img )
 
     if( img->numColors() > 0 && img->numColors() <3 )
     {
-        kdDebug(29000) << "introduceImage: Have " << img->numColors() << " colors on depth " << img->depth() << endl;
+        kDebug(29000) << "introduceImage: Have " << img->numColors() << " colors on depth " << img->depth() << endl;
 
         /* that means it is a black-and-white image. Thus we do not need the GrayLevel slider */
         isOn = false;
@@ -191,7 +191,7 @@ void KGOCRDialog::writeConfig( void )
 
 void KGOCRDialog::enableFields(bool b)
 {
-    kdDebug(28000) << "About to disable the entry fields" << endl;
+    kDebug(28000) << "About to disable the entry fields" << endl;
     sliderGrayLevel->setEnabled( b );
     sliderDustSize->setEnabled( b );
     sliderSpace->setEnabled( b );

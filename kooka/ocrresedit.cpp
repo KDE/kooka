@@ -89,7 +89,7 @@ void ocrResEdit::slSelectWord( int line, const ocrWord& word )
 void ocrResEdit::slReplaceWord( int line, const QString& wordFrom,
                                const QString& wordTo, const QColor& color )
 {
-    kdDebug(28000) << "Updating word " << wordFrom << " in line " << line << endl;
+    kDebug(28000) << "Updating word " << wordFrom << " in line " << line << endl;
 
     bool isRO = isReadOnly();
 
@@ -116,13 +116,13 @@ void ocrResEdit::slReplaceWord( int line, const QString& wordFrom,
         }
         else
         {
-            kdDebug(28000) << "WRN: Paragraph does not contain word " << wordFrom << endl;
+            kDebug(28000) << "WRN: Paragraph does not contain word " << wordFrom << endl;
         }
 
     }
     else
     {
-        kdDebug(28000) << "WRN: editor does not have line " << line << endl;
+        kDebug(28000) << "WRN: editor does not have line " << line << endl;
     }
 }
 

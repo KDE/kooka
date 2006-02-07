@@ -53,12 +53,12 @@ void ImageNameCombo::slotPathRemove( KFileTreeBranch *branch, const QString& rel
 {
    QString path = branch->name() + QString::fromLatin1(" - ") + relPath;
 
-   kdDebug(28000) << "ImageNameCombo: Removing " << path << endl;
+   kDebug(28000) << "ImageNameCombo: Removing " << path << endl;
    QString select = currentText();
    
    if( items.contains( path ))
    {
-      kdDebug(28000) << "ImageNameCombo: Item exists-> deleting" << endl;
+      kDebug(28000) << "ImageNameCombo: Item exists-> deleting" << endl;
       items.remove( path );
    }
 
@@ -84,7 +84,7 @@ void ImageNameCombo::slotGalleryPathChanged( KFileTreeBranch* branch, const QStr
 
    newPath = branch->name() + QString::fromLatin1(" - ") + relativPath;
 
-   kdDebug( 28000) << "Inserting " << newPath << " to combobox" << endl;
+   kDebug( 28000) << "Inserting " << newPath << " to combobox" << endl;
 
    setCurrentItem( newPath, true /* insert if missing */ );
 }

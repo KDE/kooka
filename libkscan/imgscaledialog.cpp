@@ -126,7 +126,7 @@ void ImgScaleDialog::customChanged( const QString& s )
       selected = okval;
       emit( customScaleChange( okval ));
    } else {
-      kdDebug(29000) << "ERR: To large, to smale, or whatever shitty !" << endl;
+      kDebug(29000) << "ERR: To large, to smale, or whatever shitty !" << endl;
    }
 }
 
@@ -160,7 +160,7 @@ void ImgScaleDialog::setSelValue( int val )
 	 }
       } // Selection is not custom
    } else {
-      kdDebug(29000) << "ERR: Invalid size selected !" << endl;
+      kDebug(29000) << "ERR: Invalid size selected !" << endl;
    }
    // debug( "SetValue: Selected Scale is %d", selected );
 }

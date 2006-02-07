@@ -65,7 +65,7 @@ void KGammaTable::calcTable( )
 
    if( gr == 0 )
    {
-      kdDebug(29000) << "Cant calc table -> would raise div. by zero !" << endl;
+      kDebug(29000) << "Cant calc table -> would raise div. by zero !" << endl;
       return;
    }
    

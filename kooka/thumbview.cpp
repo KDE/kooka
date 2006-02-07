@@ -134,7 +134,7 @@ bool ThumbView::readSettings()
       int gY = 2*m_thumbMargin+m_pixHeight+10;
       m_iconView->setGridX(gX);
       m_iconView->setGridY(gY);
-      kdDebug(28000) << "Setting Grid " << gX << " - " << gY << endl;
+      kDebug(28000) << "Setting Grid " << gX << " - " << gY << endl;
    }
 
    KStandardDirs stdDir;
@@ -182,7 +182,7 @@ void ThumbView::slSetBackGround( )
 void ThumbView::slImageChanged( KFileItem *kfit )
 {
    if( ! kfit ) return;
-   // kdDebug(28000) << "changes to one thumbnail!" << endl;
+   // kDebug(28000) << "changes to one thumbnail!" << endl;
 
    KUrl thumbDir = currentDir();
    KUrl itemUrl = kfit->url();
@@ -191,14 +191,14 @@ void ThumbView::slImageChanged( KFileItem *kfit )
    itemUrl.setFileName( QString());
    if( !itemUrl.equals( thumbDir, true ))
    {
-      // kdDebug(28000) << "returning, because directory does not match: " << itemUrl.prettyURL() << endl;
-      // kdDebug(28000) << "and my URL: " << thumbDir.prettyURL() << endl;
+      // kDebug(28000) << "returning, because directory does not match: " << itemUrl.prettyURL() << endl;
+      // kDebug(28000) << "and my URL: " << thumbDir.prettyURL() << endl;
       return;
    }
 
    if( deleteImage( kfit ))
    {
-      kdDebug(28000) << "was changed, deleted first!" << endl;
+      kDebug(28000) << "was changed, deleted first!" << endl;
    }
    /* Trigger a new reading */
    KFileItemList li;
@@ -232,7 +232,7 @@ void  ThumbView::slCheckForUpdate( KFileItem *kfit )
 {
    if( ! kfit ) return;
 
-   kdDebug(28000) << "Checking for update of thumbview!" << endl;
+   kDebug(28000) << "Checking for update of thumbview!" << endl;
 
    KUrl searchUrl = kfit->url();
    bool haveItem = false;
@@ -278,7 +278,7 @@ bool ThumbView::deleteImage( KFileItem *kfit )
 	 haveItem = true;
       }
    }
-   kdDebug(28000) << "Deleting image from thumbview, result is " << haveItem << endl;
+   kDebug(28000) << "Deleting image from thumbview, result is " << haveItem << endl;
    return( haveItem );
 }
 
@@ -316,7 +316,7 @@ void ThumbView::slImageDeleted( KFileItem *kfit )
 
 void ThumbView::slNewFileItems( const KFileItemList& items )
 {
-   kdDebug(28000) << "Creating thumbnails for fileItemList" << endl;
+   kDebug(28000) << "Creating thumbnails for fileItemList" << endl;
 
    /* Fill the pending jobs list. */
    KFileItemListIterator it( items );
@@ -420,7 +420,7 @@ void ThumbView::slGotPreview( const KFileItem* newFileItem, const QPixmap& newPi
 
    m_progress->setProgress(m_cntJobsStarted);
 
-   // kdDebug(28000)<< "jobs-Counter: " << m_cntJobsStarted << endl;
+   // kDebug(28000)<< "jobs-Counter: " << m_cntJobsStarted << endl;
 
 }
 
@@ -428,16 +428,16 @@ void ThumbView::slPreviewResult( KIO::Job *job )
 {
    if( job && job->error() > 0 )
    {
-      kdDebug(28000) << "Thumbnail Creation ERROR: " << job->errorString() << endl;
+      kDebug(28000) << "Thumbnail Creation ERROR: " << job->errorString() << endl;
       job->showErrorDialog( 0 );
    }
 
    if( job != m_job )
    {
-      kdDebug(28000) << "Very obscure: Job finished is not mine!"  << endl;
+      kDebug(28000) << "Very obscure: Job finished is not mine!"  << endl;
    }
    /* finished */
-   kdDebug(28000) << "Thumbnail job finished." << endl;
+   kDebug(28000) << "Thumbnail job finished." << endl;
    m_cntJobsStarted = 0;
    m_progress->reset();
    m_progress->hide();

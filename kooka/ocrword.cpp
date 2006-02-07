@@ -96,7 +96,7 @@ bool ocrWordList::updateOCRWord( const QString& from, const QString& to )
     for( it = begin(); it != end(); ++it )
     {
         QString word = (*it);
-        kdDebug(28000) <<  "updateOCRWord in list: Comparing word " << word << endl;
+        kDebug(28000) <<  "updateOCRWord in list: Comparing word " << word << endl;
         if( word.contains( from, true ) ) // case sensitive search
         {
             word.replace( from, to );
@@ -139,7 +139,7 @@ bool ocrWordList::findFuzzyIndex( const QString& word, ocrWord& resWord )
         fuzzyword.remove( QRegExp( "\\W" ));  // Remove all non-word characters.
         fuzzyword.remove( '_' );
 
-        // kdDebug(28000) <<  "findFuzzy: Comparing word " << fuzzyword << " which was "
+        // kDebug(28000) <<  "findFuzzy: Comparing word " << fuzzyword << " which was "
         //                << (*it) << " with " <<  word << endl;
         if( fuzzyword == word )
         {

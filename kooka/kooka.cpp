@@ -106,7 +106,7 @@ Kooka::Kooka( const Q3CString& deviceToUse)
 
 void Kooka::createMyGUI( KParts::Part *part )
 {
-    kdDebug(28000) << "Part changed, Creating gui" << endl;
+    kDebug(28000) << "Part changed, Creating gui" << endl;
     createGUI(part);
 
 }
@@ -121,7 +121,7 @@ Kooka::~Kooka()
 
 void Kooka::startup( void )
 {
-   kdDebug(29000) << "Starting startup !" << endl;
+   kDebug(29000) << "Starting startup !" << endl;
    if( m_view ) m_view->loadStartupImage();
 }
 
@@ -283,7 +283,7 @@ void Kooka::saveProperties(KConfig *config)
 
    //if (!m_view->currentURL().isNull())
    //     config->writePathEntry("lastURL", m_view->currentURL());
-   kdDebug(28000) << "In kooka's saveProperties !" << endl;
+   kDebug(28000) << "In kooka's saveProperties !" << endl;
    config->setGroup( KOOKA_STATE_GROUP );
    config->writeEntry( PREFERENCE_DIA_TAB, m_prefDialogIndex );
    m_view->saveProperties( config );
@@ -321,7 +321,7 @@ void Kooka::dropEvent(QDropEvent *event)
     {
         // okay, we have a URI.. process it
         const KUrl &url = uri.first();
-	kdDebug(29000) << "Importing URI " << url.url() << endl;
+	kDebug(29000) << "Importing URI " << url.url() << endl;
 
         // TODO: Do something with url
         // Waba: See also setAcceptDrops() above

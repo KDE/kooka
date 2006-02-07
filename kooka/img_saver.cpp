@@ -112,7 +112,7 @@ FormatDialog::FormatDialog( QWidget *parent, const QString&, const char *name )
 #else
    QStringList fo = QImage::outputFormatList();
 #endif
-   kdDebug(28000) << "#### have " << fo.count() << " image types" << endl;
+   kDebug(28000) << "#### have " << fo.count() << " image types" << endl;
    lb_format->insertStringList( fo );
    connect( lb_format, SIGNAL( highlighted(const QString&)),
 	    SLOT( showHelp(const QString&)));
@@ -174,7 +174,7 @@ void FormatDialog::showHelp( const QString& item )
 void FormatDialog::check_subformat( const QString & format )
 {
    // not yet implemented
-   kdDebug(28000) << "This is format in check_subformat: " << format << endl;
+   kDebug(28000) << "This is format in check_subformat: " << format << endl;
    cb_subf->setEnabled( false );
    // l2 = Label "select subformat" ->bad name :-|
    l2->setEnabled( false );
@@ -230,7 +230,7 @@ ImgSaver::ImgSaver(  QWidget *parent, const KUrl dir_name )
 
    if( dir_name.isEmpty() || dir_name.protocol() != "file" )
    {
-      kdDebug(28000) << "ImageServer initialised with wrong dir " << dir_name.url() << endl;
+      kDebug(28000) << "ImageServer initialised with wrong dir " << dir_name.url() << endl;
       directory = Previewer::galleryRoot();
    }
    else
@@ -238,7 +238,7 @@ ImgSaver::ImgSaver(  QWidget *parent, const KUrl dir_name )
       /* A path was given */
       if( dir_name.protocol() != "file"  )
       {
-	 kdDebug(28000) << "ImgSaver: Can only save local image, sorry !" << endl;
+	 kDebug(28000) << "ImgSaver: Can only save local image, sorry !" << endl;
       }
       else
       {
@@ -246,7 +246,7 @@ ImgSaver::ImgSaver(  QWidget *parent, const KUrl dir_name )
       }
    }
 
-   kdDebug(28000) << "ImageSaver uses dir <" << directory << endl;
+   kDebug(28000) << "ImageSaver uses dir <" << directory << endl;
    createDir( directory );
    readConfig();
 
@@ -277,7 +277,7 @@ void ImgSaver::createDir( const QString& dir )
 
    if( ! KIO::NetAccess::exists(url, false, 0) )
    {
-      kdDebug(28000) << "Wrn: Directory <" << dir << "> does not exist -> try to create  !" << endl;
+      kDebug(28000) << "Wrn: Directory <" << dir << "> does not exist -> try to create  !" << endl;
       // if( mkdir( QFile::encodeName( dir ), S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH ) != 0 )
       if( KIO::mkdir( KURL(dir)))
       {
@@ -314,7 +314,7 @@ ImgSaveStat ImgSaver::saveImage( QImage *image )
    {
       if( image->depth() == 1 || image->numColors() == 2 )
       {
-	 kdDebug(28000) << "This is black And White!" << endl;
+	 kDebug(28000) << "This is black And White!" << endl;
 	 imgType = PT_BW_IMAGE;
       }
       else
@@ -334,11 +334,11 @@ ImgSaveStat ImgSaver::saveImage( QImage *image )
 
    if( format.isEmpty() )
    {
-    	kdDebug(28000) << "Save canceled by user -> no save !" << endl;
+    	kDebug(28000) << "Save canceled by user -> no save !" << endl;
     	return( ISS_SAVE_CANCELED );
    }
 
-   kdDebug(28000) << "saveImage: Directory is " << directory << endl;
+   kDebug(28000) << "saveImage: Directory is " << directory << endl;
    QString filename = createFilename( format );
 
    KConfig *konf = KGlobal::config ();
@@ -368,7 +368,7 @@ ImgSaveStat ImgSaver::saveImage( QImage *image )
    }
 
 
-   kdDebug(28000) << "saveImage: saving file <" << fi << ">" << endl;
+   kDebug(28000) << "saveImage: saving file <" << fi << ">" << endl;
    stat = save( image, fi, format, subformat );
 
    return( stat );
@@ -410,14 +410,14 @@ ImgSaveStat ImgSaver::saveImage( QImage *image, const KUrl& filename, const QStr
     /* Check if the filename is local */
     if( !filename.isLocalFile())
     {
-	kdDebug(29000) << "ImgSaver: Can only save local image, sorry !" << endl;
+	kDebug(29000) << "ImgSaver: Can only save local image, sorry !" << endl;
 	return( ISS_ERR_PROTOCOL );
     }
 
     QString localFilename;
     localFilename = filename.directory( false, true) + filename.fileName();
 
-    kdDebug(28000) << "saveImage: Saving "<< localFilename << " in format " << format << endl;
+    kDebug(28000) << "saveImage: Saving "<< localFilename << " in format " << format << endl;
     if( format.isEmpty() )
 	format = "BMP";
 
@@ -444,31 +444,31 @@ QString ImgSaver::findFormat( picType type )
    {
       case PT_THUMBNAIL:
 	 format = konf->readEntry( OP_FORMAT_THUMBNAIL, "BMP" );
-	 kdDebug( 28000) << "Format for Thumbnails: " << format << endl;
+	 kDebug( 28000) << "Format for Thumbnails: " << format << endl;
 	 break;
       case PT_PREVIEW:
 	 format = konf->readEntry( OP_PREVIEW_FORMAT, "BMP" );
-	 kdDebug( 28000) << "Format for Preview: " << format << endl;
+	 kDebug( 28000) << "Format for Preview: " << format << endl;
 	 break;
       case PT_COLOR_IMAGE:
 	 format = konf->readEntry( OP_FORMAT_COLOR, "nothing" );
-	 kdDebug( 28000 ) <<  "Format for Color: " << format << endl;
+	 kDebug( 28000 ) <<  "Format for Color: " << format << endl;
 	 break;
       case PT_GRAY_IMAGE:
 	 format = konf->readEntry( OP_FORMAT_GRAY, "nothing" );
-	 kdDebug( 28000 ) <<  "Format for Gray: " << format << endl;
+	 kDebug( 28000 ) <<  "Format for Gray: " << format << endl;
 	 break;
       case PT_BW_IMAGE:
 	 format = konf->readEntry( OP_FORMAT_BW, "nothing" );
-	 kdDebug( 28000 ) <<  "Format for BlackAndWhite: " << format << endl;
+	 kDebug( 28000 ) <<  "Format for BlackAndWhite: " << format << endl;
 	 break;
       case PT_HICOLOR_IMAGE:
 	 format = konf->readEntry( OP_FORMAT_HICOLOR, "nothing" );
-	 kdDebug( 28000 ) <<  "Format for HiColorImage: " << format << endl;
+	 kDebug( 28000 ) <<  "Format for HiColorImage: " << format << endl;
 	 break;
       default:
 	 format = "nothing";
-	 kdDebug( 28000 ) <<  "ERR: Could not find image type !" << endl;
+	 kDebug( 28000 ) <<  "ERR: Could not find image type !" << endl;
 
 	 break;
    }
@@ -526,9 +526,9 @@ QString ImgSaver::startFormatDialog( picType type)
    if( fd.exec() )
    {
       format = fd.getFormat();
-      kdDebug(28000) << "Storing to format <" << format << ">" << endl;
+      kDebug(28000) << "Storing to format <" << format << ">" << endl;
       bool ask = fd.askForFormat();
-      kdDebug(28000)<< "Store askFor is " << ask << endl;
+      kDebug(28000)<< "Store askFor is " << ask << endl;
       storeFormatForType( type, format, ask );
       subformat = fd.getSubFormat();
    }
@@ -610,7 +610,7 @@ void ImgSaver::storeFormatForType( picType type, QString format, bool ask )
 	 konf->writeEntry( OP_FORMAT_HICOLOR, format );
 	 break;
       default:
-	 kdDebug(28000) << "Wrong Type  - cant store format setting" << endl;
+	 kDebug(28000) << "Wrong Type  - cant store format setting" << endl;
 	 break;
    }
    konf->sync();
@@ -619,7 +619,7 @@ void ImgSaver::storeFormatForType( picType type, QString format, bool ask )
 
 QString ImgSaver::findSubFormat( QString format )
 {
-   kdDebug(28000) << "Searching Subformat for " << format << endl;
+   kDebug(28000) << "Searching Subformat for " << format << endl;
    return( subformat );
 
 }
@@ -634,10 +634,10 @@ ImgSaveStat ImgSaver::save( QImage *image, const QString &filename,
 {
 
    bool result = false;
-   kdDebug(28000) << "in ImgSaver::save: saving " << filename << endl;
+   kDebug(28000) << "in ImgSaver::save: saving " << filename << endl;
    if( format.isNull() || !image )
    {
-      kdDebug(28000) << "ImgSaver ERROR: Wrong parameter Format <" << format << "> or image" << endl;
+      kDebug(28000) << "ImgSaver ERROR: Wrong parameter Format <" << format << "> or image" << endl;
       return( ISS_ERR_PARAM );
    }
 
@@ -651,16 +651,16 @@ ImgSaveStat ImgSaver::save( QImage *image, const QString &filename,
       if( ! dir.exists() )
       {
 	 /* The dir to save in always should exist, except in the first preview save */
-	 kdDebug(28000) << "Creating dir " << dirPath << endl;
+	 kDebug(28000) << "Creating dir " << dirPath << endl;
 	 if( !dir.mkdir( dirPath ) )
 	 {
-	    kdDebug(28000) << "ERR: Could not create directory" << endl;
+	    kDebug(28000) << "ERR: Could not create directory" << endl;
 	 }
       }
 
       if( fi.exists() && !fi.isWritable() )
       {
-	 kdDebug(28000) << "Cant write to file <" << filename << ">, cant save !" << endl;
+	 kDebug(28000) << "Cant write to file <" << filename << ">, cant save !" << endl;
 	 result = false;
 	 return( ISS_ERR_PERM );
       }
@@ -669,12 +669,12 @@ ImgSaveStat ImgSaver::save( QImage *image, const QString &filename,
 #ifdef USE_KIMAGEIO
       if( ! KImageIO::canWrite( format ) )
       {
-	 kdDebug(28000) << "Cant write format <" << format << ">" << endl;
+	 kDebug(28000) << "Cant write format <" << format << ">" << endl;
 	 result = false;
 	 return( ISS_ERR_FORMAT_NO_WRITE );
       }
 #endif
-      kdDebug(28000) << "ImgSaver: saving image to <" << filename << "> as <" << format << "/" << subformat <<">" << endl;
+      kDebug(28000) << "ImgSaver: saving image to <" << filename << "> as <" << format << "/" << subformat <<">" << endl;
 
       result = image->save( filename, format.latin1() );
 
@@ -782,7 +782,7 @@ bool ImgSaver::renameImage( const KUrl& fromUrl, KUrl& toUrl, bool askExt,  QWid
       if( result == KMessageBox::Yes )
       {
 	 targetUrl.setFileName( fName );
-	 kdDebug(28000) << "Rename file to " << targetUrl.prettyURL() << endl;
+	 kDebug(28000) << "Rename file to " << targetUrl.prettyURL() << endl;
       }
    }
    else if( !extFrom.isEmpty() && extFrom != extTo )
@@ -802,7 +802,7 @@ bool ImgSaver::renameImage( const KUrl& fromUrl, KUrl& toUrl, bool askExt,  QWid
 
    if( KIO::NetAccess::exists( targetUrl, false,0 ) )
    {
-      kdDebug(28000)<< "Target already exists - can not copy" << endl;
+      kDebug(28000)<< "Target already exists - can not copy" << endl;
    }
    else
    {
@@ -834,7 +834,7 @@ QString ImgSaver::tempSaveImage( KookaImage *img, const QString& format, int col
 	}
 	else
 	{
-	    kdDebug(29000) << "ERROR: Wrong color depth requested: " << colors << endl;
+	    kDebug(29000) << "ERROR: Wrong color depth requested: " << colors << endl;
 	    img = 0;
 	}
     }

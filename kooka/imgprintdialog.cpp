@@ -151,7 +151,7 @@ void ImgPrintDialog::setOptions(const QMap<QString,QString>& opts)
     // m_autofit->setChecked(opts["app-img-autofit"] == "1");
     QString scale = opts[OPT_SCALING];
 
-    kdDebug(28000) << "In setOption" << endl;
+    kDebug(28000) << "In setOption" << endl;
 
     if( scale == "scan" )
         m_rbOrigSize->setChecked(true);
@@ -184,7 +184,7 @@ void ImgPrintDialog::setOptions(const QMap<QString,QString>& opts)
 void ImgPrintDialog::getOptions(QMap<QString,QString>& opts, bool )
 {
     // TODO: Check for meaning of include_def !
-    // kdDebug(28000) << "In getOption with include_def: "  << include_def << endl;
+    // kDebug(28000) << "In getOption with include_def: "  << include_def << endl;
 
     QString scale = "screen";
     if( m_rbOrigSize->isChecked() )
@@ -275,7 +275,7 @@ void ImgPrintDialog::slCustomWidthChanged( int val )
     if( ! m_ratio->isChecked() ) return;
 
     m_ignoreSignal = true;
-    kdDebug(28000) << "Setting value to horizontal size" << endl;
+    kDebug(28000) << "Setting value to horizontal size" << endl;
     m_sizeH->setValue( int( double(val) *
                             double(m_image->height())/double(m_image->width()) ) );
 
@@ -296,7 +296,7 @@ void ImgPrintDialog::slCustomHeightChanged( int val )
     if( ! m_ratio->isChecked() ) return;
 
     m_ignoreSignal = true;
-    kdDebug(28000) << "Setting value to vertical size" << endl;
+    kDebug(28000) << "Setting value to vertical size" << endl;
     m_sizeW->setValue( int( double(val) *
                             double(m_image->width())/double(m_image->height()) ) );
 
