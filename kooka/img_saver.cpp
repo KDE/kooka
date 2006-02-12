@@ -279,7 +279,7 @@ void ImgSaver::createDir( const QString& dir )
    {
       kDebug(28000) << "Wrn: Directory <" << dir << "> does not exist -> try to create  !" << endl;
       // if( mkdir( QFile::encodeName( dir ), S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH ) != 0 )
-      if( KIO::mkdir( KURL(dir)))
+      if( KIO::mkdir( KUrl(dir)))
       {
         KMessageBox::sorry(0, i18n("The folder\n%1\n does not exist and could not be created;\n"
                         "please check the permissions.").arg(dir));

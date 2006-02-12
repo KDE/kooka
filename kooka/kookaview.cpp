@@ -454,7 +454,7 @@ void KookaView::loadStartupImage( void )
 	 if( !startup.isEmpty() )
 	 {
 	    kDebug(28000) << "Loading startup image !" << endl;
-	    packager->slSelectImage( KURL(startup) );
+	    packager->slSelectImage( KUrl(startup) );
 	 }
       }
       else

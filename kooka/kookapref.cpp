@@ -396,7 +396,7 @@ void KookaPreferences::setupThumbnailPage()
    QVGroupBox *hgb1 = new QVGroupBox( i18n("Thumbview Background" ), page );
    m_tileSelector = new ImageSelectLine( hgb1, i18n("Select background image:"));
    kDebug(28000) << "Setting tile url " << bgImg << endl;
-   m_tileSelector->setURL( KURL(bgImg) );
+   m_tileSelector->setURL( KUrl(bgImg) );
 
    top->addWidget( hgb1 );
 
@@ -533,7 +533,7 @@ void KookaPreferences::slotDefault( void )
     cbSkipFormatAsk->setChecked( true  );
     KStandardDirs stdDir;
     QString bgImg = stdDir.findResource( "data", STD_TILE_IMG );
-    m_tileSelector->setURL( KURL(bgImg) );
+    m_tileSelector->setURL( KUrl(bgImg) );
     m_thumbWidth->setValue( 100 );
     m_thumbHeight->setValue( 120 );
     QColor col1    = QColor( colorGroup().base());

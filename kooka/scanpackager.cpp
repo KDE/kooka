@@ -284,7 +284,7 @@ void ScanPackager::slotDecorate( KFileTreeViewItem* item )
    {
        if( m_nextUrlToShow.equals(item->url(), true ))
        {
-           m_nextUrlToShow = KURL(); // do this first to prevent recursion
+           m_nextUrlToShow = KUrl(); // do this first to prevent recursion
            slClicked( item );
            setCurrentItem(item);     // neccessary in case of new file from D&D
        }
@@ -861,7 +861,7 @@ void ScanPackager::slAddImage( QImage *img, KookaImageMeta* )
    if(strdir.endsWith(QString("/"))) strdir.truncate( strdir.length() - 1 );
    kDebug(28000) << "Updating directory with " << strdir << endl;
 
-   if( kookaBranch ) kookaBranch->updateDirectory( KURL(strdir) );
+   if( kookaBranch ) kookaBranch->updateDirectory( KUrl(strdir) );
    slotSetNextUrlToSelect( lurl );
    m_nextUrlToShow = lurl;
 

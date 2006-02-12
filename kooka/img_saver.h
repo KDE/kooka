@@ -163,7 +163,7 @@ public:
     *  returns the name of the last file that was saved by ImgSaver.
     */
    QString     lastFilename() const { return( last_file ); }
-   KUrl        lastFileUrl() const { return( KURL(last_file )); }
+   KUrl        lastFileUrl() const { return( KUrl(last_file )); }
    /**
     *  returns the image format of the last saved image.
     */
