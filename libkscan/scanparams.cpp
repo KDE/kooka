@@ -598,7 +598,7 @@ void ScanParams::slFileSelect( void )
 
 
 
-   KFileDialog fd(last_virt_scan_path.path(), filter, this, "FileDialog",true);
+   KFileDialog fd(last_virt_scan_path.path(), filter, this);
    fd.setCaption( i18n("Select Input File") );
    /* Read the filename and remind it */
    QString fileName;
