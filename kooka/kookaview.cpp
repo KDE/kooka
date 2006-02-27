@@ -284,7 +284,7 @@ KookaView::KookaView( KParts::DockMainWindow *parent, const Q3CString& deviceToU
    KStatusBar *statBar = m_mainWindow->statusBar();
 
    // statBar->insertItem(QString("1"), SBAR_ZOOM,  0, true );
-   statBar->insertItem( QString("-"), StatusImage,  0, true );
+   statBar->insertPermanentItem( QString("-"), StatusImage,  0);
 
    /* Set a large enough size */
    int w = statBar->fontMetrics().
