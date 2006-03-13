@@ -29,7 +29,7 @@
 #ifndef __THUMBVIEWITEM_H__
 #define __THUMBVIEWITEM_H__
 
-#include <kiconview.h>
+#include <k3iconview.h>
 #include <kurl.h>
 #include <kio/previewjob.h>
 #include <kfileitem.h>

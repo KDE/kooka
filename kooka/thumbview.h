@@ -35,7 +35,7 @@
 #include <qcolor.h>
 #include <q3vbox.h>
 
-#include <kiconview.h>
+#include <k3iconview.h>
 #include <kurl.h>
 #include <kio/previewjob.h>
 #include <kfileitem.h>
@@ -56,7 +56,7 @@ class Q3ListViewItem;
 class KProgress;
 class KIO::PreviewJob;
 
-class ThumbView: public Q3VBox /* KIconView */
+class ThumbView: public Q3VBox /* K3IconView */
 {
    Q_OBJECT
 
@@ -133,7 +133,7 @@ private:
    QPixmap createPixmap( const QPixmap& ) const;
 
    bool    deleteImage( KFileItem* );
-   KIconView *m_iconView;
+   K3IconView *m_iconView;
    KProgress *m_progress;
 
    KUrl    m_currentDir;

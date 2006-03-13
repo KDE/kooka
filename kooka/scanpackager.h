@@ -38,7 +38,7 @@
 #include <Q3PopupMenu>
 #include <Q3CString>
 #include <QDropEvent>
-#include <klistview.h>
+#include <k3listview.h>
 #include <kio/job.h>
 #include <kio/global.h>
 #include <kio/file.h>
