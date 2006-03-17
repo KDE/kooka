@@ -1,4 +1,5 @@
 kde4_header()
+project(kooka)
 
 add_subdirectory( pics ) 
 
