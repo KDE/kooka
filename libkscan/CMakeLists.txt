@@ -30,7 +30,7 @@ kde4_automoc(${kscan_LIB_SRCS})
 
 kde4_add_library(kscan SHARED ${kscan_LIB_SRCS})
 
-target_link_libraries(kscan  ${QT_AND_KDECORE_LIBS} )
+target_link_libraries(kscan  ${KDE4_KDECORE_LIBS} )
 
 set_target_properties(kscan PROPERTIES VERSION 1.0.0 SOVERSION 1 )
 install_targets(${LIB_INSTALL_DIR} kscan )

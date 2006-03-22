@@ -37,7 +37,7 @@ kde4_automoc(${kooka_SRCS})
 
 kde4_add_executable(kooka ${kooka_SRCS})
 
-target_link_libraries(kooka  ${QT_AND_KDECORE_LIBS} kdeprint ktexteditor kscan )
+target_link_libraries(kooka  ${KDE4_KDECORE_LIBS} kdeprint ktexteditor kscan )
 
 install_targets(/bin kooka )
 
