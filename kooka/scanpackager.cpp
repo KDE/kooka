@@ -121,10 +121,10 @@ ScanPackager::ScanPackager( QWidget *parent ) : KFileTreeView( parent )
 
    /* Preload frequently used icons */
    KIconLoader *loader = KGlobal::iconLoader();
-   m_floppyPixmap = loader->loadIcon( "3floppy_unmount", KIcon::Small );
-   m_grayPixmap   = loader->loadIcon( "palette_gray", KIcon::Small );
-   m_bwPixmap     = loader->loadIcon( "palette_lineart", KIcon::Small );
-   m_colorPixmap  = loader->loadIcon( "palette_color", KIcon::Small );
+   m_floppyPixmap = loader->loadIcon( "3floppy_unmount", K3Icon::Small );
+   m_grayPixmap   = loader->loadIcon( "palette_gray", K3Icon::Small );
+   m_bwPixmap     = loader->loadIcon( "palette_lineart", K3Icon::Small );
+   m_colorPixmap  = loader->loadIcon( "palette_color", K3Icon::Small );
 
    m_startup = true;
 
@@ -152,11 +152,11 @@ KFileTreeBranch* ScanPackager::openRoot( const KUrl& root, bool  )
 
    /* working on the global branch. FIXME */
    m_defaultBranch = addBranch( root, i18n("Kooka Gallery"),
-				loader->loadIcon( "folder_image", KIcon::Small ),
+				loader->loadIcon( "folder_image", K3Icon::Small ),
 				false /* do not showHidden */ );
 
    // Q_CHECK_PTR( m_defaultBranch );
-   m_defaultBranch->setOpenPixmap( loader->loadIcon( "folder_blue_open", KIcon::Small ));
+   m_defaultBranch->setOpenPixmap( loader->loadIcon( "folder_blue_open", K3Icon::Small ));
 
    setDirOnlyMode( m_defaultBranch, false );
    m_defaultBranch->setShowExtensions( true ); // false );
@@ -612,7 +612,7 @@ void ScanPackager::loadImageForItem( KFileTreeViewItem *item )
                   }
                   prevItem = subImgItem;
 
-                  subImgItem->setPixmap( 0, loader->loadIcon( "editcopy", KIcon::Small ));
+                  subImgItem->setPixmap( 0, loader->loadIcon( "editcopy", K3Icon::Small ));
                   subImgItem->setText( 0, i18n("Sub-image %1").arg( i ) );
                   KookaImage  *subImgImg = new KookaImage( i, img );
                   subImgImg->setFileItem( newKfi );
