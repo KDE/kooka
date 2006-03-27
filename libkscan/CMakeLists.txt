@@ -2,7 +2,7 @@ kde4_header()
 
 add_subdirectory( pics ) 
 
-include_directories( ${CMAKE_SOURCE_DIR}/libkscan ${KDE4_INCLUDE_DIR} ${QT_INCLUDES} ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR}  )
+include_directories( ${CMAKE_SOURCE_DIR}/libkscan ${SANE_INCLUDE_DIR} ${KDE4_INCLUDE_DIR} ${QT_INCLUDES} ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR}  )
 
 
 ########### next target ###############
@@ -30,7 +30,7 @@ kde4_automoc(${kscan_LIB_SRCS})
 
 kde4_add_library(kscan SHARED ${kscan_LIB_SRCS})
 
-target_link_libraries(kscan  ${KDE4_KDECORE_LIBS} )
+target_link_libraries(kscan  ${KDE4_KDECORE_LIBS} ${SANE_LIBRARIES})
 
 set_target_properties(kscan PROPERTIES VERSION 1.0.0 SOVERSION 1 )
 install_targets(${LIB_INSTALL_DIR} kscan )
