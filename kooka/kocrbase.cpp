@@ -151,8 +151,8 @@ void KOCRBase::ocrIntro( )
 
     // Caption - Label and image
     /* labelstring */
-    (void) new QLabel( i18n("<b>Starting Optical Character Recognition with %1</b><p>").
-                       arg( ocrEngineName() ), m_ocrPage );
+    (void) new QLabel( i18n("<b>Starting Optical Character Recognition with %1</b><p>", 
+                        ocrEngineName() ), m_ocrPage );
     // Find the kadmos logo and display if available
     KStandardDirs stdDir;
     QString logo = stdDir.findResource( "data", "kooka/pics/" + ocrEngineLogo() );

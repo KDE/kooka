@@ -67,23 +67,20 @@ void SizeIndicator::setSizeInByte( long newSize )
    sizeInByte = newSize;
    kDebug(29000) << "New size in byte: " << newSize << endl ;
 
-   QString t;
-
-   QString unit = i18n( "%1 kB" );
+   KLocalizedString unit = ki18n( "%1 kB" );
    double sizer = double(sizeInByte)/1024.0; // produces kiloBytes
    int precision = 1;
    int fwidth = 3;
 
    if( sizer > 999.9999999 )
    {
-      unit = i18n( "%1 MB" );
+      unit = ki18n( "%1 MB" );
       sizer = sizer / 1024.0;
       precision = 2;
       fwidth = 2;
    }
 
-   t = unit.arg( sizer, fwidth, 'f', precision);
-   setText(t);
+   setText(unit.subs( sizer, fwidth, 'f', precision ).toString() );
 
 }
 

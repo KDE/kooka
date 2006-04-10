@@ -477,11 +477,11 @@ void Previewer::slNewDimen(QRect r)
         selectionHeightMm = (overallHeight / 1000 * r.height());
 
    QString s;
-   s = i18n("width %1 mm").arg( int(selectionWidthMm));
+   s = i18n("width %1 mm", int(selectionWidthMm));
    emit(setScanWidth(s));
 
    kDebug(29000) << "Setting new Dimension " << s << endl;
-   s = i18n("height %1 mm").arg(int(selectionHeightMm));
+   s = i18n("height %1 mm", int(selectionHeightMm));
    emit(setScanHeight(s));
 
    recalcFileSize( );

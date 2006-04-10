@@ -422,14 +422,14 @@ bool KadmosDialog::getSelClassifier( QString& path ) const
         if( res && ! fi.exists() )
         {
             kDebug(28000) << "Classifier file does not exist" << endl;
-            path = i18n("Classifier file %1 does not exist").arg(classifier);
+            path = i18n("Classifier file %1 does not exist", classifier);
             res = false;
         }
 
         if( res && ! fi.isReadable() )
         {
             kDebug(28000) << "Classifier file could not be read" << endl;
-            path = i18n("Classifier file %1 is not readable").arg(classifier);
+            path = i18n("Classifier file %1 is not readable", classifier);
             res = false;
         }
 

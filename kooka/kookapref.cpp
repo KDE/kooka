@@ -184,13 +184,13 @@ KUrlRequester* KookaPreferences::binaryCheckBox( QWidget *parent, const QString&
 {
     Q3HBox *hbox = new Q3HBox( parent );
 
-    (void) new QLabel( i18n("Select the %1 binary to use:").arg( program ), hbox );
+    (void) new QLabel( i18n("Select the %1 binary to use:", program ), hbox );
     KUrlRequester* urlRequester = new KUrlRequester( parent );
     urlRequester->setMode( KFile::File | KFile::ExistingOnly | KFile::LocalOnly );
 
     QToolTip::add( urlRequester,
                    i18n( "Enter the path to %1, the optical-character-recognition "
-			 "command line tool.").arg(program));
+			 "command line tool.", program));
     return urlRequester;
 }
 

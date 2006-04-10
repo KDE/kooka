@@ -475,7 +475,7 @@ void KookaView::print()
     printer.setUsePrinterResolution(true);
     printer.addDialogPage( new ImgPrintDialog( img ));
 
-    if( printer.setup( m_mainWindow, i18n("Print %1").arg(img->localFileName().section('/', -1)) ))
+    if( printer.setup( m_mainWindow, i18n("Print %1", img->localFileName().section('/', -1)) ))
     {
 	KookaPrint kookaprint( &printer );
 	kookaprint.printImage(img);
@@ -908,7 +908,7 @@ void KookaView::slShowThumbnails(KFileTreeViewItem *dirKfi, bool forceRedraw )
  */
 void KookaView::slStartLoading( const KUrl& url )
 {
-   emit( signalChangeStatusbar( i18n("Loading %1" ).arg( url.prettyURL() ) ));
+   emit( signalChangeStatusbar( i18n("Loading %1", url.prettyURL() ) ));
 
    // if( m_stack->visibleWidget() != img_canvas )
    // {

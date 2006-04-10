@@ -59,7 +59,7 @@ KScanSlider::KScanSlider( QWidget *parent, const QString& text,
 		this, SLOT(slRevertValue()));
 
        QToolTip::add( m_stdButt,
-		      i18n( "Revert value back to its standard value %1" ).arg( stdValue ));
+		      i18n( "Revert value back to its standard value %1", stdValue ));
        hb->addWidget( m_stdButt, 0 );
        hb->addSpacing( 4 );
     }

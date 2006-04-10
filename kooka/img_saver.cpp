@@ -282,14 +282,14 @@ void ImgSaver::createDir( const QString& dir )
       if( KIO::mkdir( KUrl(dir)))
       {
         KMessageBox::sorry(0, i18n("The folder\n%1\n does not exist and could not be created;\n"
-                        "please check the permissions.").arg(dir));
+                        "please check the permissions.", dir));
       }
    }
 #if 0
    if( ! fi.isWritable() )
    {
-        KMessageBox::sorry(0, i18n("The directory\n%1\n is not writeable;\nplease check the permissions.")
-                .arg(dir));
+        KMessageBox::sorry(0, i18n("The directory\n%1\n is not writeable;\nplease check the permissions.",
+                 dir));
    }
 #endif
 }
@@ -772,7 +772,7 @@ bool ImgSaver::renameImage( const KUrl& fromUrl, KUrl& toUrl, bool askExt,  QWid
 
 	 QString s;
 	 s = i18n("The filename you supplied has no file extension.\nShould the correct one be added automatically? ");
-	 s += i18n( "That would result in the new filename: %1" ).arg( fName);
+	 s += i18n( "That would result in the new filename: %1", fName);
 
 	 result = KMessageBox::questionYesNo(overWidget, s, i18n( "Extension Missing"),
 					     i18n("Add Extension"), i18n("Do Not Add"),
@@ -869,7 +869,7 @@ bool ImgSaver::copyImage( const KUrl& fromUrl, const KUrl& toUrl, QWidget *overW
 
       QString s;
       s = i18n("The filename you supplied has no file extension.\nShould the correct one be added automatically? ");
-      s += i18n( "That would result in the new filename: %1" ).arg( fName);
+      s += i18n( "That would result in the new filename: %1", fName);
 
       result = KMessageBox::questionYesNo(overWidget, s, i18n( "Extension Missing"),
 					  i18n("Add Extension"), i18n("Do Not Add"),

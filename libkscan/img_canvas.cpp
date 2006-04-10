@@ -1027,7 +1027,7 @@ const QString ImageCanvas::imageInfoString( int w, int h, int d )
         else
             return QString("-");
     }
-    return i18n("%1x%2 pixel, %3 bit").arg(w).arg(h).arg(d);
+    return i18n("%1x%2 pixel, %3 bit", w, h, d);
 }
 
 
@@ -1048,7 +1048,7 @@ const QString ImageCanvas::scaleKindString()
         return i18n("Fit Height");
         break;
     case ZOOM:
-        return i18n("Zoom to %1 %%").arg( QString::number(getScaleFactor()));
+        return i18n("Zoom to %1%", getScaleFactor());
         break;
     default:
         return i18n("Unknown scaling!");
