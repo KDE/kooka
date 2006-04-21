@@ -654,11 +654,11 @@ bool KScanOption::set( int *val, int size )
 {
     if( ! desc || ! val ) return( false );
     bool   ret    = false;
-    int    offset = 0;
 
     int word_size = desc->size / sizeof( SANE_Word ); /* add 1 in case offset is needed */
     Q3MemArray<SANE_Word> qa( 1+word_size );
 #if 0
+    int    offset = 0;
     if( desc->constraint_type == SANE_CONSTRAINT_WORD_LIST )
     {
 	/* That means that the first entry must contain the size */
@@ -701,8 +701,10 @@ bool KScanOption::set( int *val, int size )
     if( ret && buffer ) {
 	int copybyte = desc->size;
 	
+#if 0
 	if( offset )
 	    copybyte += sizeof( SANE_Word );
+#endif
 
 	kDebug(29000) << "Copying " << copybyte << " byte to options buffer" << endl;
 	
