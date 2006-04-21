@@ -1137,7 +1137,7 @@ void KScanDevice::loadOptionSet( KScanOptSet *optSet )
       if( ! so->active() )
 	 kDebug(29000) << so->getName() << " is not active" << endl;
 
-      if( so && so->active() && so->initialised())
+      if( so->active() && so->initialised() )
       {
 	 const QString qq = so->get();
 
