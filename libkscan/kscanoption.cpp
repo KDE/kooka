@@ -1026,7 +1026,7 @@ bool KScanOption::getRangeFromList( double *min, double *max, double *q ) const
 		if ((*min > value) || (*min == 0)) *min = value;
 		if ((*max < value) || (*max == 0)) *max = value;
 		
-		if( min != 0 && max != 0 && max > min ) {
+		if( *min != 0 && *max != 0 && *max > *min ) {
 		    double newq = max - min;
 		    *q = newq;
 		}
