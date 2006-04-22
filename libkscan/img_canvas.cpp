@@ -590,24 +590,25 @@ void ImageCanvas::viewportMouseMoveEvent(QMouseEvent *ev)
     drawAreaBorder(&p,TRUE);
     switch(moving) {
     case MOVE_NONE: //Just to make compiler happy
+      break;
     case MOVE_TOP_LEFT:
       selected->setLeft( x + cx );
-    case MOVE_TOP:
+    case MOVE_TOP: // fall through
       selected->setTop( y + cy );
       break;
     case MOVE_TOP_RIGHT:
       selected->setTop( y + cy );
-    case MOVE_RIGHT:
+    case MOVE_RIGHT: // fall through
       selected->setRight( x + cx );
       break;
     case MOVE_BOTTOM_LEFT:
       selected->setBottom( y + cy );
-    case MOVE_LEFT:
+    case MOVE_LEFT: // fall through
       selected->setLeft( x + cx );
       break;
     case MOVE_BOTTOM_RIGHT:
       selected->setRight( x + cx );
-    case MOVE_BOTTOM:
+    case MOVE_BOTTOM: // fall through
       selected->setBottom( y + cy );
       break;
     case MOVE_WHOLE:
