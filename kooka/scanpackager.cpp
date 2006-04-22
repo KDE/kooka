@@ -59,6 +59,7 @@
 #include <kdebug.h>
 #include <klocale.h>
 #include <kglobal.h>
+#include <kio/global.h>
 #include <kio/progressbase.h>
 #include <kio/netaccess.h>
 #include <kio/jobclasses.h>
@@ -252,20 +253,10 @@ void ScanPackager::slotDecorate( KFileTreeViewItem* item )
       {
 	 /* Item is not yet loaded. Display file information */
 	 item->setPixmap( 0, m_floppyPixmap );
-	 KIO::filesize_t s = kfi->size();
-	 double dsize = s / 1024.0;  /* calc kilobytes */
-
-	 QString sizeStr;
-	 if( dsize > 999.99 )
+	 if ( kfi )
 	 {
-	    dsize = dsize / 1024.0;
-	    sizeStr = i18n( "%1 MB").arg( dsize, 0, 'f', 2 );
+	    item->setText(1, KIO::convertSize( kfi->size() ));
 	 }
-	 else
-	 {
-	    sizeStr = i18n( "%1 kB").arg( dsize, 0,'f', 1 );
-	 }
-	 item->setText(1, sizeStr );
       }
 
       /* Image format */
@@ -421,7 +412,7 @@ QString ScanPackager::itemDirectory( const KFileTreeViewItem* item, bool relativ
    if( ! item )
    {
       kdDebug(28000) << "ERR: itemDirectory without item" << endl;
-
+      return QString::null;
    }
 
    QString relativUrl= (item->url()).prettyURL();
