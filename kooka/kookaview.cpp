@@ -865,10 +865,18 @@ void KookaView::slShowThumbnails(KFileTreeViewItem *dirKfi, bool forceRedraw )
    {
       /* do on the current visible dir */
       KFileTreeViewItem *kftvi = packager->currentKFileTreeViewItem();
-      if( ! kftvi->isDir())
-	 kftvi = static_cast<KFileTreeViewItem*>(static_cast<QListViewItem*>(kftvi)->parent());
-      if( kftvi )
+      if ( !kftvi )
       {
+          return;
+      }
+      
+      if( kftvi->isDir())
+      {
+          dirKfi = kftvi;
+      }
+      else
+      {
+	 kftvi = static_cast<KFileTreeViewItem*>(static_cast<QListViewItem*>(kftvi)->parent());
 	 dirKfi = kftvi;
 	 forceRedraw = true;
 	 packager->setSelected( static_cast<QListViewItem*>(dirKfi), true );
