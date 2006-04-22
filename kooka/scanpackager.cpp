@@ -256,20 +256,10 @@ void ScanPackager::slotDecorate( KFileTreeViewItem* item )
       {
 	 /* Item is not yet loaded. Display file information */
 	 item->setPixmap( 0, m_floppyPixmap );
-	 KIO::filesize_t s = kfi->size();
-	 double dsize = s / 1024.0;  /* calc kilobytes */
-
-	 QString sizeStr;
-	 if( dsize > 999.99 )
+	 if ( kfi )
 	 {
-	    dsize = dsize / 1024.0;
-	    sizeStr = ki18n( "%1 MB").subs( dsize, 0, 'f', 2 ).toString();
+	    item->setText(1, KIO::convertSize( kfi->size() ));
 	 }
-	 else
-	 {
-	    sizeStr = ki18n( "%1 kB").subs( dsize, 0,'f', 1 ).toString();
-	 }
-	 item->setText(1, sizeStr );
       }
 
       /* Image format */
@@ -425,7 +415,7 @@ QString ScanPackager::itemDirectory( const KFileTreeViewItem* item, bool relativ
    if( ! item )
    {
       kDebug(28000) << "ERR: itemDirectory without item" << endl;
-
+      return QString();
    }
 
    QString relativUrl= (item->url()).prettyURL();
@@ -1246,7 +1236,7 @@ void ScanPackager::slotDeleteFromBranch( KFileItem* kfi )
 
 void ScanPackager::contentsDragMoveEvent( QDragMoveEvent *e )
 {
-   if( !e || ! acceptDrag( e ) )
+   if( ! acceptDrag( e ) )
    {
       e->ignore();
       return;
