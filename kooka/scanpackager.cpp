@@ -1241,7 +1241,7 @@ void ScanPackager::slotDeleteFromBranch( KFileItem* kfi )
 
 void ScanPackager::contentsDragMoveEvent( QDragMoveEvent *e )
 {
-   if( !e || ! acceptDrag( e ) )
+   if( ! acceptDrag( e ) )
    {
       e->ignore();
       return;
