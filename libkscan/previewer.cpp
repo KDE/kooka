@@ -142,14 +142,19 @@ Previewer::Previewer(QWidget *parent, const char *name )
     layout->addWidget( img_canvas, 6 );
 
     /* Actions for the previewer zoom */
+#warning PORTME
+#if 0
     KAction *act;
-    act =  new KAction(i18n("Scale to W&idth"), "scaletowidth", Qt::CTRL+Qt::Key_I,
+    act =  new KAction(i18n("Scale to W&idth"), KShortcut( Qt::CTRL+Qt::Key_I),
 		       this, SLOT( slScaleToWidth()), this, "preview_scaletowidth" );
-    act->plug( img_canvas->contextMenu());
+    act->setShortcut ( Qt::CTRL+Qt::Key_I);
+    img_canvas->addAction(act);
 
-    act = new KAction(i18n("Scale to &Height"), "scaletoheight", Qt::CTRL+Qt::Key_H,
+    act = new KAction(i18n("Scale to &Height"), QString("scaletoheight"), KShortcut(Qt::CTRL+Qt::Key_H),
 		      this, SLOT( slScaleToHeight()), this, "preview_scaletoheight" );
+    act->setShortcut ( Qt::CTRL+Qt::Key_H);
     act->plug( img_canvas->contextMenu());
+#endif
 
     /*Signals: Control the custom-field and show size of selection */
     connect( img_canvas, SIGNAL(newRect()),      this, SLOT(slCustomChange()));

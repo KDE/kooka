@@ -189,16 +189,9 @@ void ImageCanvas::newImage( QImage *new_image )
    /** handle the new image **/
    if( image )
    {
-      if( image->depth() == 1 ) {
-	 pmScaled = new QPixmap( image->size(), 1 );
-      } else {
-	 int i = QPixmap::defaultDepth();
-	 pmScaled = new QPixmap( image->size(), i);
-      }
+      pmScaled = new QPixmap( image->size() );
 
-      // image->convertDepth(32);
-      pmScaled->convertFromImage( *image );
-      // *pmScaled = image->convertToPixmap( );
+      pmScaled->convertFromImage( *image, image->depth() == 1 ? Qt::MonoOnly : Qt::AutoColor );
 
       acquired = true;
 
@@ -237,7 +230,7 @@ void ImageCanvas::enableContextMenu( bool wantContextMenu )
    {
       if( ! m_contextMenu )
       {
-	 m_contextMenu = new KMenu(this);
+	 m_contextMenu = new Q3PopupMenu(this);
 	 m_contextMenu->setObjectName("IMG_CANVAS");
 
 	 KContextMenuManager::insert( viewport(), m_contextMenu );
@@ -375,7 +368,7 @@ void ImageCanvas::drawContents( QPainter * p, int clipx, int clipy, int clipw, i
     // p->scale( used_xscaler, used_yscaler );
     // p->scale( used_xscaler, used_yscaler );
     if ( x2 >= x1 && y2 >= y1 ) {
-    	p->drawPixmap( x1, y1, *pmScaled, x1, y1 ); //, clipw, cliph);
+    	p->drawPixmap( x1, y1, *pmScaled ); //, clipw, cliph);
         // p->setBrush( red );
         // p->drawRect( x1, y1, clipw, cliph );
     }
@@ -671,7 +664,6 @@ void ImageCanvas::update_scaled_pixmap( void )
     if( scaleKind() == DYNAMIC )
         kDebug(28000) << "Scaling DYNAMIC" << endl;
     QSize noSBSize( visibleWidth(), visibleHeight());
-    const int sbWidth = kapp->style().pixelMetric( QStyle::PM_ScrollBarExtent );
 
     // if( verticalScrollBar()->visible() ) noSBSize.width()+=sbWidth;
     // if( horizontalScrollBar()->visible() ) noSBSize.height()+=sbWidth;
@@ -693,9 +685,8 @@ void ImageCanvas::update_scaled_pixmap( void )
         if( used_xscaler * image->height() >= noSBSize.height() )
         {
             /* substract for scrollbar */
-            used_xscaler = used_yscaler = double(noSBSize.width() - sbWidth) /
+            used_xscaler = used_yscaler = double(noSBSize.width()) /
                            double(image->width());
-            kDebug(29000) << "FIT WIDTH scrollbar to substract: " << sbWidth << endl;
         }
         scale_factor = 100*used_xscaler;
         break;
@@ -706,11 +697,9 @@ void ImageCanvas::update_scaled_pixmap( void )
         if( used_xscaler * image->width() >= noSBSize.width() )
         {
             /* substract for scrollbar */
-            used_xscaler = used_yscaler = double(noSBSize.height() - sbWidth) /
+            used_xscaler = used_yscaler = double(noSBSize.height()) /
                            double(image->height());
 
-            kDebug(29000) << "FIT HEIGHT scrollbar to substract: " << sbWidth << endl;
-            // scale = int(100.0*(noSBSize.height() -sbWidth) / image->height());
         }
         scale_factor = 100*used_xscaler;
 
@@ -1054,13 +1043,6 @@ int ImageCanvas::highlight( const QRect& rect, const QPen& pen, const QBrush&, b
 
     QRect targetRect = scale_matrix.map( rect );
 
-    QPainter p( pmScaled );
-
-    p.setPen(pen);
-    p.drawLine( targetRect.x(), targetRect.y()+targetRect.height(),
-                targetRect.x()+targetRect.width(), targetRect.y()+targetRect.height() );
-
-    p.flush();
     updateContents(targetRect.x()-1, targetRect.y()-1,
                    targetRect.width()+2, targetRect.height()+2 );
 
