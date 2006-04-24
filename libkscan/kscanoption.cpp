@@ -657,8 +657,8 @@ bool KScanOption::set( int *val, int size )
 
     int word_size = desc->size / sizeof( SANE_Word ); /* add 1 in case offset is needed */
     Q3MemArray<SANE_Word> qa( 1+word_size );
-#if 0
     int    offset = 0;
+#if 0
     if( desc->constraint_type == SANE_CONSTRAINT_WORD_LIST )
     {
 	/* That means that the first entry must contain the size */

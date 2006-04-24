@@ -34,10 +34,6 @@
 #include <q3scrollview.h>
 #include <q3strlist.h>
 
-#ifdef USE_KPIXMAPIO
-#include <kpixmapio.h>
-#endif
-
 class Q3PopupMenu;
 class QPixmap;
 class QImage;
@@ -192,10 +188,6 @@ private:
     const QImage        *image;
     int           brightness, contrast, gamma;
 
-
-#ifdef USE_KPIXMAPIO
-    KPixmapIO	 pixIO;
-#endif
 
     QMatrix	 scale_matrix;
     QMatrix	 inv_scale_matrix;

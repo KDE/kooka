@@ -122,7 +122,7 @@ Q3CString DeviceSelector::getSelectedDevice( void ) const
 
    int dcount = devices.count();
    kDebug(29000) << "The Selected ID is <" << selID << ">/" << dcount << endl;
-   if (selId < 0)
+   if (selID < 0)
 	return 0;
 
    const char * dev = devices.at( selID );

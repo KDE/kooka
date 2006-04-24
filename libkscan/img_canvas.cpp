@@ -37,7 +37,6 @@
 #include <kstyle.h>
 #include <kapplication.h>
 
-#include <kpixmapio.h>
 #include <kdebug.h>
 #include <kiconloader.h>
 #include <kcmenumngr.h>
@@ -104,11 +103,7 @@ ImageCanvas::ImageCanvas(QWidget *parent,
         img_size = image->size();
         pmScaled = new QPixmap( img_size );
 
-#ifdef USE_KPIXMAPIO
-        *pmScaled = pixIO.convertToPixmap(*image);
-#else
         pmScaled->convertFromImage( *image );
-#endif
 
         acquired = true;
     } else {
@@ -202,13 +197,8 @@ void ImageCanvas::newImage( QImage *new_image )
       }
 
       // image->convertDepth(32);
-#ifdef USE_KPIXMAPIO
-
-      *pmScaled = pixIO.convertToPixmap(*image);
-#else
       pmScaled->convertFromImage( *image );
       // *pmScaled = image->convertToPixmap( );
-#endif
 
       acquired = true;
 
@@ -756,11 +746,7 @@ void ImageCanvas::update_scaled_pixmap( void )
         *selected = scale_matrix.map( (const QRect )*selected );
     }
 
-#ifdef USE_KPIXMAPIO
-    *pmScaled = pixIO.convertToPixmap(*image);
-#else
     pmScaled->convertFromImage( *image );
-#endif
 
     *pmScaled = pmScaled->xForm( scale_matrix );  // create scaled pixmap
 
@@ -1100,6 +1086,7 @@ void ImageCanvas::removeHighlight( int idx )
     d->highlightRects.remove(r);
     QRect targetRect = scale_matrix.map( r );
 
+#if 0
     /* create a small pixmap with a copy of the region in question of the original image */
     QPixmap origPix;
     origPix.convertFromImage( image->copy(r) );
@@ -1108,7 +1095,7 @@ void ImageCanvas::removeHighlight( int idx )
     /* and finally draw it */
     QPainter p( pmScaled );
     p.drawPixmap( targetRect, scaledPix );
-    p.flush();
+#endif
 
     /* update the viewers contents */
     updateContents(targetRect.x()-1, targetRect.y()-1,
