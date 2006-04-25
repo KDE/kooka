@@ -1134,7 +1134,7 @@ QWidget *KScanOption::createWidget( QWidget *parent, const QString& w_desc,
 	tt = QString::fromLocal8Bit( desc->desc );
  			
       if( !tt.isEmpty() )
-	QToolTip::add( internal_widget, tt );
+	internal_widget->setToolTip( tt );
     }
  	
   /* Check if option is active, setEnabled etc. */

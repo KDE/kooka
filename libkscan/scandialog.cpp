@@ -119,13 +119,13 @@ void ScanDialog::createOptionsTab( void )
 
    /* Checkbox for asking for scanner on startup */
    cb_askOnStart = new QCheckBox( i18n( "&Ask for the scan device on plugin startup"), gb );
-   QToolTip::add( cb_askOnStart,
+   cb_askOnStart->setToolTip(
 		  i18n("You can uncheck this if you do not want to be asked which scanner to use on startup."));
    Q_CHECK_PTR( cb_askOnStart );
 
    /* Checkbox for network access */
    cb_network = new QCheckBox( i18n( "&Query the network for scan devices"), gb );
-   QToolTip::add( cb_network,
+   cb_network->setToolTip(
 		  i18n("Check this if you want to query for configured network scan stations."));
    Q_CHECK_PTR( cb_network );
 

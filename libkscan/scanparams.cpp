@@ -501,7 +501,7 @@ Q3ScrollView *ScanParams::scannerParams( )
 				      SANE_DESC_GRAY_PREVIEW );
      initialise( so );
      cb_gray_preview = (QCheckBox*) so->widget();
-     QToolTip::add( cb_gray_preview, i18n("Acquire a gray preview even in color mode (faster)") );
+     cb_gray_preview->setToolTip( i18n("Acquire a gray preview even in color mode (faster)") );
    }
    return( sv );
 }

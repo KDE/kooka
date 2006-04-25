@@ -206,7 +206,7 @@ Previewer::Previewer(QWidget *parent, const char *name )
 
     Q3HBox *hbox       = new Q3HBox(d->m_autoSelGroup);
     d->m_cbAutoSel    = new QCheckBox( i18n("Active on"), hbox );
-    QToolTip::add( d->m_cbAutoSel, i18n("Check here if you want autodetection\n"
+    d->m_cbAutoSel->setToolTip( i18n("Check here if you want autodetection\n"
                                         "of the document on the preview."));
 
     /* combobox to select if black or white background */
@@ -217,7 +217,7 @@ Previewer::Previewer(QWidget *parent, const char *name )
              this, SLOT( slScanBackgroundChanged( int )));
 
 
-    QToolTip::add( d->m_cbBackground,
+    d->m_cbBackground->setToolTip(
                    i18n("Select whether a scan of the empty\n"
                         "scanner glass results in a\n"
                         "black or a white image."));
@@ -229,7 +229,7 @@ Previewer::Previewer(QWidget *parent, const char *name )
     d->m_sliderThresh = new QSlider( 0, 254, 10, d->m_autoSelThresh,  Qt::Horizontal,
                                      d->m_autoSelGroup );
     connect( d->m_sliderThresh, SIGNAL(valueChanged(int)), SLOT(slSetAutoSelThresh(int)));
-    QToolTip::add( d->m_sliderThresh,
+    d->m_sliderThresh->setToolTip(
                    i18n("Threshold for autodetection.\n"
                         "All pixels higher (on black background)\n"
                         "or smaller (on white background)\n"
@@ -262,7 +262,7 @@ Previewer::Previewer(QWidget *parent, const char *name )
     Q3HBox *hb = new Q3HBox( gbox );
     (void) new QLabel( i18n( "Size:"), hb );
     SizeIndicator *indi = new SizeIndicator( hb );
-    QToolTip::add( indi, i18n( "This size field shows how large the uncompressed image will be.\n"
+    indi->setToolTip( i18n( "This size field shows how large the uncompressed image will be.\n"
                                "It tries to warn you, if you try to produce huge images by \n"
                                "changing its background color." ));
     indi->setText( i18n("-") );

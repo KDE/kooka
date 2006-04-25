@@ -39,7 +39,7 @@
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include "kookaimage.h"
-#include <qvgroupbox.h>
+
 #include <q3paintdevicemetrics.h>
 #include <qlabel.h>
 #include <qtooltip.h>
@@ -66,25 +66,25 @@ ImgPrintDialog::ImgPrintDialog( KookaImage *img, QWidget *parent, const char* na
 
     m_rbScreen = new QRadioButton( i18n("Scale to same size as on screen"),
                                        m_scaleRadios );
-    QToolTip::add( m_rbScreen, i18n("Screen scaling. That prints according to the screen resolution."));
+    m_rbScreen->setToolTip( i18n("Screen scaling. That prints according to the screen resolution."));
 
     m_scaleRadios->insert( m_rbScreen, ID_SCREEN );
 
     m_rbOrigSize = new QRadioButton( i18n("Original size (calculate from scan resolution)"),
                                      m_scaleRadios );
-    QToolTip::add( m_rbOrigSize,
+    m_rbOrigSize->setToolTip(
 		   i18n("Calculates the print size from the scan resolution. Enter the scan resolution in the dialog field below." ));
     m_scaleRadios->insert( m_rbOrigSize, ID_ORIG );
 
 
     m_rbScale    = new QRadioButton( i18n("Scale image to custom dimension"), m_scaleRadios );
-    QToolTip::add( m_rbScale,
+    m_rbScale->setToolTip(
 		   i18n("Set the print size yourself in the dialog below. The image is centered on the paper."));
     
     m_scaleRadios->insert( m_rbScale, ID_CUSTOM );
 
     m_rbFitPage = new QRadioButton( i18n("Scale image to fit to page"), m_scaleRadios );
-    QToolTip::add( m_rbFitPage, i18n("Printout uses maximum space on the selected pager. Aspect ratio is maintained."));
+    m_rbFitPage->setToolTip( i18n("Printout uses maximum space on the selected pager. Aspect ratio is maintained."));
     m_scaleRadios->insert( m_rbFitPage, ID_FIT_PAGE );
 
     layout->addWidget( m_scaleRadios );
@@ -94,7 +94,7 @@ ImgPrintDialog::ImgPrintDialog( KookaImage *img, QWidget *parent, const char* na
     layout->addLayout( hbox );
 
     /** Box for Image Resolutions **/
-    QVGroupBox *group1 = new QVGroupBox( i18n("Resolutions"), this );
+    Q3GroupBox *group1 = new Q3GroupBox(1, Qt::Horizontal, i18n("Resolutions"), this );
     hbox->addWidget( group1 );
 
     /* Postscript generation resolution  */
@@ -113,7 +113,7 @@ ImgPrintDialog::ImgPrintDialog( KookaImage *img, QWidget *parent, const char* na
     m_screenRes = new QLabel( group1 );
 
     /** Box for Image Print Size **/
-    QVGroupBox *group = new QVGroupBox( i18n("Image Print Size"), this );
+    Q3GroupBox *group = new Q3GroupBox(1, Qt::Horizontal, i18n("Image Print Size"), this );
     hbox->addWidget( group );
 
     m_sizeW = new KIntNumInput( group );

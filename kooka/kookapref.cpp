@@ -38,7 +38,7 @@
 
 #include <qlayout.h>
 #include <qtooltip.h>
-#include <qvgroupbox.h>
+
 #include <q3grid.h>
 #include <qcheckbox.h>
 #include <qstringlist.h>
@@ -102,7 +102,7 @@ void KookaPreferences::setupOCRPage()
     /*
      * GOCR Option Box
      */
-    QVGroupBox *gp = new QVGroupBox( i18n("GOCR OCR"), page );
+    Q3GroupBox *gp = new Q3GroupBox(1, Qt::Horizontal, i18n("GOCR OCR"), page );
     m_urlReqGocr = binaryCheckBox( gp, "gocr" );
     connect( m_urlReqGocr, SIGNAL( textChanged( const QString& )),
              this, SLOT( slCheckOnGOCR( const QString& )));
@@ -121,7 +121,7 @@ void KookaPreferences::setupOCRPage()
     /*
      * OCRAD Option Box
      */
-    gp = new QVGroupBox( i18n("OCRAD OCR"), page );
+    gp = new Q3GroupBox(1, Qt::Horizontal, i18n("OCRAD OCR"), page );
     m_urlReqOcrad = binaryCheckBox( gp, "ocrad" );
     connect( m_urlReqOcrad, SIGNAL( textChanged( const QString& )),
              this, SLOT( slCheckOnOCRAD( const QString& )));
@@ -140,7 +140,7 @@ void KookaPreferences::setupOCRPage()
     /*
      * Global Kadmos Options
      */
-    QVGroupBox *kgp = new QVGroupBox( i18n("KADMOS OCR"), page );
+    Q3GroupBox *kgp = new Q3GroupBox(1, Qt::Horizontal, i18n("KADMOS OCR"), page );
 
 #ifdef HAVE_KADMOS
     (void) new QLabel( i18n("The KADMOS OCR engine is available"), kgp);
@@ -188,7 +188,7 @@ KUrlRequester* KookaPreferences::binaryCheckBox( QWidget *parent, const QString&
     KUrlRequester* urlRequester = new KUrlRequester( parent );
     urlRequester->setMode( KFile::File | KFile::ExistingOnly | KFile::LocalOnly );
 
-    QToolTip::add( urlRequester,
+    urlRequester->setToolTip(
                    i18n( "Enter the path to %1, the optical-character-recognition "
 			 "command line tool.", program));
     return urlRequester;
@@ -321,7 +321,7 @@ void KookaPreferences::setupStartupPage()
     /* Query for network scanner (Checkbox) */
     cbNetQuery = new QCheckBox( i18n("Query network for available scanners"),
 				page,  "CB_NET_QUERY" );
-    QToolTip::add( cbNetQuery,
+    cbNetQuery->setToolTip(
 		   i18n( "Check this if you want a network query for available scanners.\nNote that this does not mean a query over the entire network but only the stations configured for SANE!" ));
     cbNetQuery->setChecked( ! (konf->readBoolEntry( STARTUP_ONLY_LOCAL, false )) );
 
@@ -329,7 +329,7 @@ void KookaPreferences::setupStartupPage()
     /* Show scanner selection box on startup (Checkbox) */
     cbShowScannerSelection = new QCheckBox( i18n("Show the scanner selection box on next startup"),
 					    page,  "CB_SHOW_SELECTION" );
-    QToolTip::add( cbShowScannerSelection,
+    cbShowScannerSelection->setToolTip(
 		   i18n( "Check this if you once checked 'do not show the scanner selection on startup',\nbut you want to see it again." ));
 
     cbShowScannerSelection->setChecked( !konf->readBoolEntry( STARTUP_SKIP_ASK, false ));
@@ -337,7 +337,7 @@ void KookaPreferences::setupStartupPage()
     /* Read startup image on startup (Checkbox) */
     cbReadStartupImage = new QCheckBox( i18n("Load the last image into the viewer on startup"),
 					    page,  "CB_LOAD_ON_START" );
-    QToolTip::add( cbReadStartupImage,
+    cbReadStartupImage->setToolTip(
 		   i18n( "Check this if you want Kooka to load the last selected image into the viewer on startup.\nIf your images are large, that might slow down Kooka's start." ));
     cbReadStartupImage->setChecked( konf->readBoolEntry( STARTUP_READ_IMAGE, true));
 
@@ -362,13 +362,13 @@ void KookaPreferences::setupSaveFormatPage( )
    cbSkipFormatAsk = new QCheckBox( i18n("Always display image save assistant"),
 				     page,  "CB_IMGASSIST_QUERY" );
    cbSkipFormatAsk->setChecked( konf->readBoolEntry( OP_FILE_ASK_FORMAT, true  ));
-   QToolTip::add( cbSkipFormatAsk, i18n("Check this if you want to see the image save assistant even if there is a default format for the image type." ));
+   cbSkipFormatAsk->setToolTip( i18n("Check this if you want to see the image save assistant even if there is a default format for the image type." ));
    top->addWidget( cbSkipFormatAsk );
 
    cbFilenameAsk = new QCheckBox( i18n("Ask for filename when saving file"),
                     page,  "CB_ASK_FILENAME" );
    cbFilenameAsk->setChecked( konf->readBoolEntry( OP_ASK_FILENAME, false));
-   QToolTip::add( cbFilenameAsk, i18n("Check this if you want to enter a filename when an image has been scanned." ));
+   cbFilenameAsk->setToolTip( i18n("Check this if you want to enter a filename when an image has been scanned." ));
    top->addWidget( cbFilenameAsk );
 
 
@@ -393,7 +393,7 @@ void KookaPreferences::setupThumbnailPage()
       bgImg = stdDir.findResource( "data", STD_TILE_IMG );
 
    /* image file selector */
-   QVGroupBox *hgb1 = new QVGroupBox( i18n("Thumbview Background" ), page );
+   Q3GroupBox *hgb1 = new Q3GroupBox(1, Qt::Horizontal, i18n("Thumbview Background" ), page );
    m_tileSelector = new ImageSelectLine( hgb1, i18n("Select background image:"));
    kDebug(28000) << "Setting tile url " << bgImg << endl;
    m_tileSelector->setURL( KUrl(bgImg) );
@@ -401,8 +401,8 @@ void KookaPreferences::setupThumbnailPage()
    top->addWidget( hgb1 );
 
    /* Add the Boxes to configure size, framestyle and background */
-   QVGroupBox *hgb2 = new QVGroupBox( i18n("Thumbnail Size" ), page );
-   QVGroupBox *hgb3 = new QVGroupBox( i18n("Thumbnail Frame" ), page );
+   Q3GroupBox *hgb2 = new Q3GroupBox(1, Qt::Horizontal, i18n("Thumbnail Size" ), page );
+   Q3GroupBox *hgb3 = new Q3GroupBox(1, Qt::Horizontal, i18n("Thumbnail Frame" ), page );
 
    /* Thumbnail size */
    int w = konf->readNumEntry( PIXMAP_WIDTH, 100);
