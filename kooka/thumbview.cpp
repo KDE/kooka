@@ -389,8 +389,8 @@ void ThumbView::slNewFileItems( const KFileItemList& items )
 
       if( m_job )
       {
-	 connect( m_job, SIGNAL( result( KIO::Job * )),
-		  this, SLOT( slPreviewResult( KIO::Job * )));
+	 connect( m_job, SIGNAL( result( KJob * )),
+		  this, SLOT( slPreviewResult( KJob * )));
 	 connect( m_job, SIGNAL( gotPreview( const KFileItem*, const QPixmap& )),
 		  SLOT( slGotPreview( const KFileItem*, const QPixmap& ) ));
 
@@ -424,7 +424,7 @@ void ThumbView::slGotPreview( const KFileItem* newFileItem, const QPixmap& newPi
 
 }
 
-void ThumbView::slPreviewResult( KIO::Job *job )
+void ThumbView::slPreviewResult( KJob *job )
 {
    if( job && job->error() > 0 )
    {

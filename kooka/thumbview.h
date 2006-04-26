@@ -98,7 +98,7 @@ public slots:
 
    void slNewFileItems( const KFileItemList& );
    void slGotPreview( const KFileItem*, const QPixmap& );
-   void slPreviewResult( KIO::Job* );
+   void slPreviewResult( KJob* );
 
    /**
     *  This connects to the IconView's executed signal and tells the packager
