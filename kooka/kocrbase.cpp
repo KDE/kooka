@@ -245,8 +245,8 @@ void KOCRBase::introduceImage( KookaImage* img)
 
     if( m_job )
     {
-        connect( m_job, SIGNAL( result( KIO::Job * )),
-                 this, SLOT( slPreviewResult( KIO::Job * )));
+        connect( m_job, SIGNAL( result( KJob * )),
+                 this, SLOT( slPreviewResult( KJob * )));
         connect( m_job, SIGNAL( gotPreview( const KFileItem*, const QPixmap& )),
                  SLOT( slGotPreview( const KFileItem*, const QPixmap& ) ));
          /* KIO::Jo result is called in any way: Success, Failed, Error,
@@ -292,7 +292,7 @@ void KOCRBase::introduceImage( KookaImage* img)
     m_metaBox->show();
 }
 
-void KOCRBase::slPreviewResult(KIO::Job *job )
+void KOCRBase::slPreviewResult(KJob *job )
 {
     // nothing
     if( job && job->error() > 0 )
