@@ -78,7 +78,7 @@ void DispGamma::paintEvent( QPaintEvent *ev )
 }
 
 
-QSize DispGamma::sizeHint( void )
+QSize DispGamma::sizeHint( void ) const
 {
     return QSize( 256 + 2*margin,256 + 2 * margin );
 }

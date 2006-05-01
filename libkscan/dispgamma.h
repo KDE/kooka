@@ -42,7 +42,7 @@ public:
     DispGamma( QWidget *parent );
     ~DispGamma();
 
-    QSize sizeHint( void );
+    QSize sizeHint( void ) const;
     QSizePolicy sizePolicy( void );
 
     void setValueRef( Q3MemArray<SANE_Word> *newVals )
