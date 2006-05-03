@@ -81,7 +81,9 @@ void KookaPreferences::setupOCRPage()
     QFrame *page = addPage( i18n("OCR"), i18n("Optical Character Recognition" ),
 			    BarIcon("ocrImage", K3Icon::SizeMedium ) );
 
-    QVBoxLayout *top = new QVBoxLayout( page, 0, spacingHint() );
+    QVBoxLayout *top = new QVBoxLayout( page );
+    top->setSpacing( spacingHint() );
+    top->setMargin( 0 );
 
     bool haveGocr = false;
     bool haveOcrad = false;
@@ -314,7 +316,9 @@ void KookaPreferences::setupStartupPage()
 
     QFrame *page = addPage( i18n("Startup"), i18n("Kooka Startup Preferences" ),
 			    BarIcon("gear", K3Icon::SizeMedium ) );
-    QVBoxLayout *top = new QVBoxLayout( page, 0, spacingHint() );
+    QVBoxLayout *top = new QVBoxLayout( page );
+    top->setSpacing( spacingHint() );
+    top->setMargin( 0 );
     /* Description-Label */
     top->addWidget( new QLabel( i18n("Note that changing these options will affect Kooka's next start!"), page ));
 
@@ -356,7 +360,9 @@ void KookaPreferences::setupSaveFormatPage( )
    konf->setGroup( OP_FILE_GROUP );
    QFrame *page = addPage( i18n("Image Saving"), i18n("Configure Image Save Assistant" ),
 			    BarIcon("filesave", K3Icon::SizeMedium ) );
-   QVBoxLayout *top = new QVBoxLayout( page, 0, spacingHint() );
+   QVBoxLayout *top = new QVBoxLayout( page );
+   top->setSpacing( spacingHint() );
+   top->setMargin( 0 );
 
    /* Skip the format asking if a format entry  exists */
    cbSkipFormatAsk = new QCheckBox( i18n("Always display image save assistant"),
@@ -382,7 +388,9 @@ void KookaPreferences::setupThumbnailPage()
 
    QFrame *page = addPage( i18n("Thumbnail View"), i18n("Thumbnail Gallery View" ),
 			    BarIcon("thumbnail", K3Icon::SizeMedium ) );
-   QVBoxLayout *top = new QVBoxLayout( page, 0, spacingHint() );
+   QVBoxLayout *top = new QVBoxLayout( page );
+   top->setSpacing( spacingHint() );
+   top->setMargin( 0 );
 
    top->addWidget( new QLabel( i18n("Here you can configure the appearance of the thumbnail view of your scan picture gallery."),page ));
 

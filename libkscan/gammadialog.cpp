@@ -55,7 +55,8 @@ GammaDialog::GammaDialog( QWidget *parent ) :
     // setCaption( i18n( "Gamma Table" ));
 
     // Layout-Boxes
-    QVBoxLayout *bigdad    = new QVBoxLayout( page, 10 );
+    QVBoxLayout *bigdad    = new QVBoxLayout( page );
+    bigdad->setSpacing( 10 );
     QHBoxLayout *lhMiddle  = new QHBoxLayout( 5 );
     QVBoxLayout *lvSliders = new QVBoxLayout( 10 );
 

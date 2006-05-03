@@ -39,7 +39,8 @@ MassScanDialog::MassScanDialog( QWidget *parent )
    setCaption( i18n( "ADF Scanning" ));
    kDebug(29000) << "Starting MassScanDialog!" << endl;
    // Layout-Boxes
-   QVBoxLayout *bigdad = new QVBoxLayout( this, 5 );
+   QVBoxLayout *bigdad = new QVBoxLayout( this );
+   bigdad->setSpacing( 5 );
    // QHBoxLayout *hl1= new QHBoxLayout( );      // Caption
    QHBoxLayout *l_but  = new QHBoxLayout( 10 );  // Buttons
  	

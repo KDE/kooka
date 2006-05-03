@@ -115,7 +115,8 @@ Previewer::Previewer(QWidget *parent, const char *name )
 {
     d = new PreviewerPrivate();
 
-    QVBoxLayout *top = new QVBoxLayout( this, 10 );
+    QVBoxLayout *top = new QVBoxLayout( this );
+    top->setSpacing( 10 );
     layout = new QHBoxLayout( 2 );
     top->addLayout( layout, 9 );
     QVBoxLayout *left = new QVBoxLayout( 3 );

@@ -78,7 +78,9 @@ FormatDialog::FormatDialog( QWidget *parent, const QString&, const char *name )
    Q_CHECK_PTR( page );
    setMainWidget( page );
 
-   QVBoxLayout *bigdad = new QVBoxLayout( page, marginHint(), spacingHint());
+   QVBoxLayout *bigdad = new QVBoxLayout( page );
+   bigdad->setSpacing( spacingHint() );
+   bigdad->setMargin( marginHint() );
    Q_CHECK_PTR(bigdad);
 
    // some nice words

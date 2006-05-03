@@ -55,7 +55,9 @@ DeviceSelector::DeviceSelector( QWidget *parent, Q3StrList& devList,
    Q_CHECK_PTR( page );
    setMainWidget( page );
 
-   QVBoxLayout *topLayout = new QVBoxLayout( page, marginHint(), spacingHint() );
+   QVBoxLayout *topLayout = new QVBoxLayout( page );
+   topLayout->setSpacing( spacingHint() );
+   topLayout->setMargin( marginHint() );
    QLabel *label = new QLabel( page, "captionImage" );
    Q_CHECK_PTR( label );
    label->setPixmap( QPixmap( "kookalogo.png" ));
