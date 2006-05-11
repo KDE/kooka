@@ -39,7 +39,6 @@
 
 #include <kdebug.h>
 #include <kiconloader.h>
-#include <kcmenumngr.h>
 #include <qpixmap.h>
 
 #define __IMG_CANVAS_CPP__

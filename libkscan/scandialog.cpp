@@ -53,25 +53,24 @@ extern "C" {
     }
 }
 
-ScanDialogFactory::ScanDialogFactory( QObject *parent, const char *name )
+ScanDialogFactory::ScanDialogFactory( QObject *parent )
     : KScanDialogFactory( parent )
 {
     setName( "ScanDialogFactory" );
     KGlobal::locale()->insertCatalog( QString::fromLatin1("libkscan") );
 }
 
-KScanDialog * ScanDialogFactory::createDialog( QWidget *parent,
-					       const char *name, bool modal)
+KScanDialog * ScanDialogFactory::createDialog( QWidget *parent)
 {
-    return new ScanDialog( parent, name, modal );
+    return new ScanDialog( parent );
 }
 
 
 ///////////////////////////////////////////////////////////////////
 
 
-ScanDialog::ScanDialog( QWidget *parent, const char *name, bool modal )
-   : KScanDialog( Tabbed, Close|Help, parent, name, modal ),
+ScanDialog::ScanDialog( QWidget *parent )
+   : KScanDialog( Tabbed, Close|Help, parent ),
      good_scan_connect(false)
 {
     KVBox *page = addVBoxPage( i18n("&Scanning") );

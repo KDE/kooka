@@ -116,7 +116,7 @@ bool ScanParams::connectDevice( KScanDevice *newScanDevice )
 
    /* A top layout box */
    // QVBoxLayout *top = new QVBoxLayout(this);
-   top->setSpacing(6);
+   //top->setSpacing(6);
    Q3HBox *hb = new Q3HBox( this );
    hb->layout()->setSpacing( KDialog::spacingHint() );
    QString cap = i18n("<B>Scanner Settings</B>");

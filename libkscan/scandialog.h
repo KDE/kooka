@@ -34,7 +34,7 @@ class ScanDialog : public KScanDialog
    Q_OBJECT
 
 public:
-   ScanDialog( QWidget *parent=0, const char *name=0, bool modal=false );
+   ScanDialog( QWidget *parent=0 );
    ~ScanDialog();
 
    virtual bool setup();
@@ -71,11 +71,10 @@ private:
 class ScanDialogFactory : public KScanDialogFactory
 {
 public:
-   ScanDialogFactory( QObject *parent=0, const char *name=0 );
+   ScanDialogFactory( QObject *parent=0 );
 
 protected:
-   virtual KScanDialog * createDialog( QWidget *parent=0, const char *name=0,
-				       bool modal=false );
+   virtual KScanDialog * createDialog( QWidget *parent=0 );
 
 
 };
