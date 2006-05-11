@@ -232,7 +232,8 @@ void ImageCanvas::enableContextMenu( bool wantContextMenu )
 	 m_contextMenu = new Q3PopupMenu(this);
 	 m_contextMenu->setObjectName("IMG_CANVAS");
 
-	 KContextMenuManager::insert( viewport(), m_contextMenu );
+	 viewport()->setContextMenuPolicy(Qt::ActionsContextMenu);
+	 viewport()->addActions(m_contextMenu->actions());
       }
    }
    else

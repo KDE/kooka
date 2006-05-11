@@ -106,7 +106,7 @@ void SizeIndicator::drawContents( QPainter *p )
    /* Displaying the text */
    QString t = text();
    p->drawText( 0, 0, s.width(), s.height(),
-		AlignHCenter | AlignVCenter, t);
+		Qt::AlignHCenter | Qt::AlignVCenter, t);
 
 }
 
