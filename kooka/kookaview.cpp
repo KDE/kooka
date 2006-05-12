@@ -54,6 +54,7 @@
 #include <q3paintdevicemetrics.h>
 #include <q3popupmenu.h>
 #include <q3widgetstack.h>
+#include <q3hbox.h>
 
 //Added by qt3to4:
 #include <QPixmap>
