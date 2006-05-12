@@ -1,4 +1,3 @@
-kde4_header()
 
 
 
@@ -7,7 +6,6 @@ kde4_header()
 
 install_files( ${DATA_INSTALL_DIR}/kooka/pics FILES mirror-both.png mirror-horiz.png mirror-vert.png scaletoheight.png  	scaletowidth.png scaleorig.png ocr.png ocr-select.png newfromselect.png  	thumbviewtile.png gocr.png ocrad.png lockzoom.png )
 
-kde4_footer()
 
 
 

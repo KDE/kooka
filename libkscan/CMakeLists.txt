@@ -1,4 +1,3 @@
-kde4_header()
 
 add_subdirectory( pics ) 
 
@@ -40,7 +39,6 @@ install_targets(${LIB_INSTALL_DIR} kscan )
 
 install_files( ${SERVICES_INSTALL_DIR} FILES scanservice.desktop )
 
-kde4_footer()
 
 
 

@@ -1,4 +1,3 @@
-kde4_header()
 project(kooka)
 
 add_subdirectory( pics ) 
@@ -48,7 +47,6 @@ install_files( ${XDG_APPS_DIR} FILES kooka.desktop )
 install_files( ${DATA_INSTALL_DIR}/kooka FILES kookaui.rc )
 install_files( ${CONFIG_INSTALL_DIR} FILES kookarc )
 
-kde4_footer()
 
 
 
