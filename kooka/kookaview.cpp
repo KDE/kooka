@@ -54,6 +54,7 @@
 #include <q3paintdevicemetrics.h>
 #include <q3popupmenu.h>
 #include <q3widgetstack.h>
+
 //Added by qt3to4:
 #include <QPixmap>
 #include <Q3CString>
@@ -76,6 +77,8 @@
 #include <kshortcut.h>
 #include <k3dockwidget.h>
 #include <qobject.h>
+#include <kxmlguifactory.h>
+#include <kactionmenu.h>
 
 #include <kparts/componentfactory.h>
 #include <qimage.h>
@@ -85,7 +88,7 @@
 #define STARTUP_IMG_SELECTION   "SelectedImageOnStartup"
 
 
-KookaView::KookaView( KParts::DockMainWindow *parent, const Q3CString& deviceToUse)
+KookaView::KookaView( KParts::DockMainWindow3 *parent, const Q3CString& deviceToUse)
    : QObject(),
      m_ocrResultImg(0),
      ocrFabric(0),
@@ -1048,7 +1051,7 @@ void KookaView::slFreshUpThumbView()
    }
 }
 
-void KookaView::createDockMenu( KActionCollection *col, KDockMainWindow *mainWin, const char * name )
+void KookaView::createDockMenu( KActionCollection *col, K3DockMainWindow *mainWin, const char * name )
 {
    KActionMenu *actionMenu = new KActionMenu( i18n("Tool Views"), "view_icon", col, name );
 

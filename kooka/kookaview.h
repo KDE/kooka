@@ -95,7 +95,7 @@ public:
     void loadStartupImage( void );
     KDockWidget *mainDockWidget( ) { return m_mainDock; }
 
-    void createDockMenu( KActionCollection*, KDockMainWindow *, const char *);
+    void createDockMenu( KActionCollection*, K3DockMainWindow *, const char *);
 
     ScanPackager *gallery() { return packager; }
 

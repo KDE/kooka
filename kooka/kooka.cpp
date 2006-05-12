@@ -132,7 +132,7 @@ void Kooka::setupActions()
     KStdAction::print(this, SLOT(filePrint()), actionCollection());
     KStdAction::quit(this , SLOT(close()), actionCollection());
 
-    KStdAction::keyBindings(guiFactory(), SLOT(configureShortcuts()), 
+    KStdAction::keyBindings(this, SLOT(configureShortcuts()), 
 actionCollection());
     KStdAction::configureToolbars(this, SLOT(optionsConfigureToolbars()),
 				  actionCollection());
