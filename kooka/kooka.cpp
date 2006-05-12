@@ -62,13 +62,13 @@
 #include <kaction.h>
 #include <kstdaction.h>
 #include <qicon.h>
-#include <kurldrag.h>
-
+#include <k3urldrag.h>
+#include <ktoggleaction.h>
 #define DOCK_SIZES "DockSizes"
 
 
 Kooka::Kooka( const Q3CString& deviceToUse)
-   : KParts::DockMainWindow( 0, "Kooka" ),
+   : KParts::DockMainWindow3( 0, "Kooka" ),
       m_printer(0),
       m_prefDialogIndex(0)
 {
@@ -305,7 +305,7 @@ void Kooka::readProperties(KConfig *config)
 void Kooka::dragEnterEvent(QDragEnterEvent *event)
 {
     // accept uri drops only
-    event->accept(KURLDrag::canDecode(event));
+    event->accept(K3URLDrag::canDecode(event));
 }
 
 #if 0

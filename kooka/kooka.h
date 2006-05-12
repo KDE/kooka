@@ -34,7 +34,7 @@
 #include <kapplication.h>
 #include <kmainwindow.h>
 #include <k3dockwidget.h>
-#include <kparts/dockmainwindow.h>
+#include <dockmainwindow3.h>
 //Added by qt3to4:
 #include <QDragEnterEvent>
 #include <Q3CString>
@@ -55,7 +55,7 @@ class KookaView;
  * @author Klaas Freitag <freitag@suse.de>
  * @version 0.1
  */
-class Kooka : public KParts::DockMainWindow
+class Kooka : public KParts::DockMainWindow3
 {
     Q_OBJECT
 public:

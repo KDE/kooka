@@ -38,7 +38,7 @@
 #include <qimage.h>
 #include <qsplitter.h>
 
-#include <kparts/dockmainwindow.h>
+#include <dockmainwindow3.h>
 #include <kparts/part.h>
 
 // application specific includes
@@ -79,7 +79,7 @@ public:
     /**
      * Default constructor
      */
-    KookaView(KParts::DockMainWindow *parent, const Q3CString& deviceToUse);
+    KookaView(KParts::DockMainWindow3 *parent, const Q3CString& deviceToUse);
 
     /**
      * Destructor
