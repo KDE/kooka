@@ -622,8 +622,8 @@ void ImageCanvas::viewportMouseMoveEvent(QMouseEvent *ev)
     		selected->moveBy( mx, my );
 
     	}
+    	drawAreaBorder(&p);
     }
-    drawAreaBorder(&p);
     lx = x;
     ly = y;
   }
