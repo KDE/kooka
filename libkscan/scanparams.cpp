@@ -1000,7 +1000,6 @@ void ScanParams::slAcquirePreview( void )
     /* Maximal preview size */
     slMaximalScanSize();
 
-    if( ! sane_device ) kDebug(29000) << "Aeetsch: sane_device is 0 !" << endl;
     Q_CHECK_PTR( sane_device );
     KScanStat stat = sane_device->acquirePreview( gray_preview );
 
