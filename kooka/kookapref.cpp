@@ -320,13 +320,13 @@ void KookaPreferences::setupStartupPage()
     top->setSpacing( spacingHint() );
     top->setMargin( 0 );
     /* Description-Label */
-    top->addWidget( new QLabel( i18n("Note that changing these options will affect Kooka's next start!"), page ));
+    top->addWidget( new QLabel( i18n("Kooka must be restarted for changes in these options to take effect."), page ));
 
     /* Query for network scanner (Checkbox) */
     cbNetQuery = new QCheckBox( i18n("Query network for available scanners"),
 				page,  "CB_NET_QUERY" );
     cbNetQuery->setToolTip(
-		   i18n( "Check this if you want a network query for available scanners.\nNote that this does not mean a query over the entire network but only the stations configured for SANE!" ));
+		   i18n( "Check this if you want a network query for available scanners.\nNote that this does not mean a query over the entire network but only the stations configured for SANE." ));
     cbNetQuery->setChecked( ! (konf->readBoolEntry( STARTUP_ONLY_LOCAL, false )) );
 
 

@@ -938,7 +938,7 @@ void KookaView::updateCurrImage( QImage& img )
     }
     else
     {
-	emit( signalChangeStatusbar( i18n("Can not save image, it is write protected!")));
+	emit( signalChangeStatusbar( i18n("Can not save image, it is write protected")));
 	kDebug(28000) << "Image is write protected, no saving!" << endl;
     }
 }

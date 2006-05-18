@@ -1027,7 +1027,7 @@ const QString ImageCanvas::scaleKindString()
         return i18n("Zoom to %1%", getScaleFactor());
         break;
     default:
-        return i18n("Unknown scaling!");
+        return i18n("Unknown scaling");
         break;
     }
 }

@@ -752,12 +752,12 @@ void ScanPackager::slotCurrentImageChanged( QImage *img )
 
    if( is_stat == ISS_ERR_FORMAT_NO_WRITE )
    {
-      KMessageBox::error( this, i18n( "Cannot write this image format.\nImage will not be saved!"),
+      KMessageBox::error( this, i18n( "Cannot write this image format.\nImage will not be saved."),
 			    i18n("Save Error") );
    }
    else if( is_stat == ISS_ERR_PERM )
    {
-      KMessageBox::error( this, i18n( "Image file is write protected.\nImage will not be saved!"),
+      KMessageBox::error( this, i18n( "Image file is write protected.\nImage will not be saved."),
 			    i18n("Save Error") );
 
    }
@@ -822,12 +822,12 @@ void ScanPackager::slAddImage( QImage *img, KookaImageMeta* )
    is_stat = img_saver.saveImage( img );
    if( is_stat == ISS_ERR_FORMAT_NO_WRITE )
    {
-      KMessageBox::error( this, i18n( "Cannot write this image format.\nImage will not be saved!"),
+      KMessageBox::error( this, i18n( "Cannot write this image format.\nImage will not be saved."),
 			    i18n("Save Error") );
    }
    else if( is_stat == ISS_ERR_PERM )
    {
-      KMessageBox::error( this, i18n( "Image file is write protected.\nImage will not be saved!"),
+      KMessageBox::error( this, i18n( "Image file is write protected.\nImage will not be saved."),
 			    i18n("Save Error") );
 
    }
@@ -1136,7 +1136,7 @@ void ScanPackager::slotDeleteItems( )
    if( ask )
    {
       QString s;
-      s = i18n("Do you really want to delete this image?\nIt cannot be restored!" );
+      s = i18n("Do you really want to delete this image?\nIt cannot be restored." );
       if( item->isDir() )
       {
          #warning i18n: What is this empty name for a folder in the message?
