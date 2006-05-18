@@ -53,7 +53,7 @@
 #include <kfiletreeviewitem.h>
 #include <kfiletreebranch.h>
 
-#include <kurldrag.h>
+#include <k3urldrag.h>
 #include <kmenu.h>
 #include <kaction.h>
 #include <kinputdialog.h>

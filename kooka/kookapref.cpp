@@ -419,13 +419,13 @@ void KookaPreferences::setupThumbnailPage()
    lGrid->setSpacing( 2 );
    QLabel *l1 = new QLabel( i18n("Thumbnail maximum &width:"), lGrid );
    m_thumbWidth = new KIntNumInput( w, lGrid );
-   m_thumbWidth->setMinValue(1);
+   m_thumbWidth->setMinimum(1);
    l1->setBuddy( m_thumbWidth );
 
    lGrid->setSpacing( 4 );
    l1 = new QLabel( i18n("Thumbnail maximum &height:"), lGrid );
    m_thumbHeight = new KIntNumInput( m_thumbWidth, h, lGrid );
-   m_thumbHeight->setMinValue(1);
+   m_thumbHeight->setMinimum(1);
    l1->setBuddy( m_thumbHeight );
 
    /* Frame Stuff */
@@ -437,7 +437,7 @@ void KookaPreferences::setupThumbnailPage()
    fGrid->setSpacing( 2 );
    l1 = new QLabel(i18n("Thumbnail &frame width:"), fGrid );
    m_frameWidth = new KIntNumInput( frameWidth, fGrid );
-   m_frameWidth->setMinValue(0);
+   m_frameWidth->setMinimum(0);
    l1->setBuddy( m_frameWidth );
 
    l1 = new QLabel(i18n("Frame color &1: "), fGrid );

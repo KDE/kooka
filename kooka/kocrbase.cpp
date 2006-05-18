@@ -267,7 +267,7 @@ void KOCRBase::introduceImage( KookaImage* img)
             // info.groupInfo( theGroup )->translatedName()
             // FIXME: howto get the translated group name?
             QLabel *lGroup = new QLabel( theGroup, m_metaBox );
-            lGroup->setBackgroundColor( QColor(gray));
+            lGroup->setBackgroundColor( QColor(Qt::gray));
             lGroup->setMargin( KDialog::spacingHint());
 
             Q3Grid *nGrid = new Q3Grid( 2,  m_metaBox );

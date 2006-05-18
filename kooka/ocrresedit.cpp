@@ -75,7 +75,7 @@ void ocrResEdit::slSelectWord( int line, const ocrWord& word )
    if( line < paragraphs() )
    {
       QString editLine = text(line);
-      int cnt = editLine.contains( word);
+      int cnt = editLine.count( word);
 
       if( cnt > 0 )
       {
@@ -96,7 +96,7 @@ void ocrResEdit::slReplaceWord( int line, const QString& wordFrom,
     if( line < paragraphs() )
     {
         QString editLine = text(line);
-        int cnt = editLine.contains( wordFrom );
+        int cnt = editLine.count( wordFrom );
 
         if( cnt > 0 )
         {
