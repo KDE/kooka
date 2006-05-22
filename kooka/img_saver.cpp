@@ -784,7 +784,7 @@ bool ImgSaver::renameImage( const KUrl& fromUrl, KUrl& toUrl, bool askExt,  QWid
       if( result == KMessageBox::Yes )
       {
 	 targetUrl.setFileName( fName );
-	 kDebug(28000) << "Rename file to " << targetUrl.prettyURL() << endl;
+	 kDebug(28000) << "Rename file to " << targetUrl.prettyUrl() << endl;
       }
    }
    else if( !extFrom.isEmpty() && extFrom != extTo )

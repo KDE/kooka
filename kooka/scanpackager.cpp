@@ -335,8 +335,8 @@ void ScanPackager::slFileRename( Q3ListViewItem* it, const QString& newStr, int 
 	  */
 	 slotUnloadItem( item );
 
-	 kDebug(28000) << "Renaming to " << urlTo.prettyURL() <<
-	    " from " << urlFrom.prettyURL() << endl;
+	 kDebug(28000) << "Renaming to " << urlTo.prettyUrl() <<
+	    " from " << urlFrom.prettyUrl() << endl;
 
 	 /* to urlTo the really used filename is written */
 	 setSelected( item, false );
@@ -418,7 +418,7 @@ QString ScanPackager::itemDirectory( const KFileTreeViewItem* item, bool relativ
       return QString();
    }
 
-   QString relativUrl= (item->url()).prettyURL();
+   QString relativUrl= (item->url()).prettyUrl();
 
    if( ! item->isDir() )
    {
@@ -438,7 +438,7 @@ QString ScanPackager::itemDirectory( const KFileTreeViewItem* item, bool relativ
       if( branch )
       {
 	 kDebug(28000) << "Relativ URL of the file " << relativUrl << endl;
-	 QString rootUrl = (branch->rootUrl()).prettyURL();  // directory of branch root
+	 QString rootUrl = (branch->rootUrl()).prettyUrl();  // directory of branch root
 
 	 if( relativUrl.startsWith( rootUrl ))
 	 {
@@ -1127,7 +1127,7 @@ void ScanPackager::slotDeleteItems( )
    KUrl urlToDel = curr->url();
    Q3ListViewItem *nextToSelect = curr->nextSibling();
 
-   kDebug(28000) << "Deleting: " << urlToDel.prettyURL() << endl;
+   kDebug(28000) << "Deleting: " << urlToDel.prettyUrl() << endl;
    bool ask = true; /* for later use */
 
    int result = KMessageBox::Yes;
@@ -1189,7 +1189,7 @@ void ScanPackager::slotCreateFolder( )
 	       url.setFileName( "" );
 	    /* add the folder name from user input */
 	    url.addPath( folder );
-	    kDebug(28000) << "Creating folder " << url.prettyURL() << endl;
+	    kDebug(28000) << "Creating folder " << url.prettyUrl() << endl;
 
 	    /* Since the new directory arrives in the packager in the newItems-slot, we set a
 	     * variable urlToSelectOnArrive here. The newItems-slot will honor it and select
@@ -1199,7 +1199,7 @@ void ScanPackager::slotCreateFolder( )
 
 	    if( ! KIO::NetAccess::mkdir( url, 0, -1 ))
 	    {
-	       kDebug(28000) << "ERR: creation of " << url.prettyURL() << " failed !" << endl;
+	       kDebug(28000) << "ERR: creation of " << url.prettyUrl() << " failed !" << endl;
 	    }
 	    else
 	    {

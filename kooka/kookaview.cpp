@@ -888,7 +888,7 @@ void KookaView::slShowThumbnails(KFileTreeViewItem *dirKfi, bool forceRedraw )
       }
    }
 
-   kDebug(28000) << "Showing thumbs for " << dirKfi->url().prettyURL() << endl;
+   kDebug(28000) << "Showing thumbs for " << dirKfi->url().prettyUrl() << endl;
 
    /* Only do the new thumbview if the old is on another dir */
    if( m_thumbview && (forceRedraw || m_thumbview->currentDir() != dirKfi->url()) )
@@ -918,7 +918,7 @@ void KookaView::slShowThumbnails(KFileTreeViewItem *dirKfi, bool forceRedraw )
  */
 void KookaView::slStartLoading( const KUrl& url )
 {
-   emit( signalChangeStatusbar( i18n("Loading %1", url.prettyURL() ) ));
+   emit( signalChangeStatusbar( i18n("Loading %1", url.prettyUrl() ) ));
 
    // if( m_stack->visibleWidget() != img_canvas )
    // {
@@ -964,7 +964,7 @@ void KookaView::slOpenCurrInGraphApp( void )
 
       if( ! ftvi ) return;
 
-      kDebug(28000) << "Trying to open <" << ftvi->url().prettyURL()<< ">" << endl;
+      kDebug(28000) << "Trying to open <" << ftvi->url().prettyUrl()<< ">" << endl;
       KUrl::List urllist;
 
       urllist.append( ftvi->url());

@@ -497,7 +497,7 @@ void KookaPreferences::slotApply( void )
 
     KUrl bgUrl = m_tileSelector->selectedURL().url();
     bgUrl.setProtocol("");
-    kDebug(28000) << "Writing tile-pixmap " << bgUrl.prettyURL() << endl;
+    kDebug(28000) << "Writing tile-pixmap " << bgUrl.prettyUrl() << endl;
     konf->writePathEntry( BG_WALLPAPER, bgUrl.url() );
 
     /* ** OCR Options ** */

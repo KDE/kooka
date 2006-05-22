@@ -191,8 +191,8 @@ void ThumbView::slImageChanged( KFileItem *kfit )
    itemUrl.setFileName( QString());
    if( !itemUrl.equals( thumbDir, true ))
    {
-      // kDebug(28000) << "returning, because directory does not match: " << itemUrl.prettyURL() << endl;
-      // kDebug(28000) << "and my URL: " << thumbDir.prettyURL() << endl;
+      // kDebug(28000) << "returning, because directory does not match: " << itemUrl.prettyUrl() << endl;
+      // kDebug(28000) << "and my URL: " << thumbDir.prettyUrl() << endl;
       return;
    }
 
@@ -323,7 +323,7 @@ void ThumbView::slNewFileItems( const KFileItemList& items )
    KFileItem *item = 0;
    for ( ; (item = it.current()); ++it )
    {
-      QString filename = item->url().prettyURL();
+      QString filename = item->url().prettyUrl();
       if( item->isDir() )
       {
 	 /* create a dir pixmap */

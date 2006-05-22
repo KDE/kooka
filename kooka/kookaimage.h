@@ -63,7 +63,7 @@ public:
     KookaImage& operator=(const KookaImage& );
     KookaImage& operator=(const QImage& );
     /**
-     * load an image from a KURL. This method reads the entire file and sets
+     * load an image from a KUrl. This method reads the entire file and sets
      * the values for subimage count.
      */
     bool         loadFromUrl( const KUrl& );
