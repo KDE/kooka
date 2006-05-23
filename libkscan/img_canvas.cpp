@@ -835,7 +835,7 @@ void ImageCanvas::drawVAreaBorder(QPainter &p, int x, int y1, int y2, int r )
 
 void ImageCanvas::drawAreaBorder(QPainter *p,int r )
 {
-   if(selected->isNull()) return;
+   if(!selected || selected->isNull()) return;
 
    cr2 = cr1;
    int xinc = 1;
