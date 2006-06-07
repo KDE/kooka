@@ -31,7 +31,6 @@
 #include <QPixmap>
 #include <Q3CString>
 #include <kopenwith.h>
-#include "kookaiface.h"
 #include <k3dockwidget.h>
 #include <qtabwidget.h>
 #include <qlayout.h>
