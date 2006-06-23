@@ -27,7 +27,7 @@
 #include <QHBoxLayout>
 
 #include <kgammatable.h>
-#include <kdialogbase.h>
+#include <kdialog.h>
 
 
 
@@ -41,7 +41,7 @@
 class KScanSlider;
 class KGammaTable;
 
-class GammaDialog : public KDialogBase
+class GammaDialog : public KDialog
 {
    Q_OBJECT
 // FIXME: Doesn't compile with Qt 3 (malte)

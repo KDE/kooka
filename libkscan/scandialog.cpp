@@ -73,7 +73,9 @@ ScanDialog::ScanDialog( QWidget *parent )
    : KScanDialog( Tabbed, Close|Help, parent ),
      good_scan_connect(false)
 {
-    KVBox *page = addVBoxPage( i18n("&Scanning") );
+    KVBox *page = new KVBox();
+    addPage( page, i18n("&Scanning") );
+
 
     splitter = new QSplitter( Qt::Horizontal, page, "splitter" );
     Q_CHECK_PTR( splitter );
@@ -108,7 +110,10 @@ ScanDialog::ScanDialog( QWidget *parent )
 void ScanDialog::createOptionsTab( void )
 {
 
-   KVBox *page = addVBoxPage( i18n("&Options"));
+   KVBox *page = new KVBox();
+   KPageWidgetItem *pageItem = new KPageWidgetItem( page, i18n("&Options"));
+   addPage( pageItem );
+   //Necessary ?
    setMainWidget(page);
 
    Q3GroupBox *gb = new Q3GroupBox( 1, Qt::Horizontal, i18n("Startup Options"), page, "GB_STARTUP" );
@@ -306,7 +311,8 @@ bool ScanDialog::setup()
    }
 
     /* set initial sizes */
-    setInitialSize( configDialogSize( GROUP_STARTUP ));
+#warning "kde4: port it"
+   //setInitialSize( configDialogSize( GROUP_STARTUP ));
 
     KConfig *kfg = KGlobal::config();
     if( kfg )
@@ -326,7 +332,8 @@ bool ScanDialog::setup()
 void ScanDialog::slotClose()
 {
    /* Save the dialog start size to global configuration */
-   saveDialogSize( GROUP_STARTUP, true );
+#warning "kde4: port it"
+    //saveDialogSize( GROUP_STARTUP, true );
 
    if( splitter )
    {

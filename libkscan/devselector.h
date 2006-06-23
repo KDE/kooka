@@ -21,7 +21,7 @@
 #define DEVSELECTOR_H
 
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 //Added by qt3to4:
 #include <Q3StrList>
 #include <Q3CString>
@@ -54,7 +54,7 @@ class QCheckBox;
  *
  */
 
-class DeviceSelector: public KDialogBase
+class DeviceSelector: public KDialog
 {
    Q_OBJECT
 public:

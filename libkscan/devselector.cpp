@@ -1,5 +1,5 @@
 /* This file is part of the KDE Project
-   Copyright (C) 2000 Klaas Freitag <freitag@suse.de>  
+   Copyright (C) 2000 Klaas Freitag <freitag@suse.de>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -46,9 +46,13 @@
 
 DeviceSelector::DeviceSelector( QWidget *parent, Q3StrList& devList,
 				const QStringList& hrdevList )
-    : KDialogBase( parent,  "DeviceSel", true, i18n("Welcome to Kooka"),
-		   Ok|Cancel, Ok, true )
+    : KDialog( parent )
 {
+    setCaption( i18n("Welcome to Kooka") );
+    setButtons( Ok|Cancel );
+    setDefaultButton( Ok );
+    setModal( true );
+    enableButtonSeparator( true );
    kDebug(29000) << "Starting DevSelector!" << endl;
    // Layout-Boxes
    QWidget *page = new QWidget( this );
@@ -80,7 +84,7 @@ DeviceSelector::DeviceSelector( QWidget *parent, Q3StrList& devList,
    cbSkipDialog->setChecked( skipDialog );
 
    topLayout->addWidget(cbSkipDialog);
-   
+
 }
 
 Q3CString DeviceSelector::getDeviceFromConfig( void ) const
@@ -88,7 +92,7 @@ Q3CString DeviceSelector::getDeviceFromConfig( void ) const
    KConfig *gcfg = KGlobal::config();
    gcfg->setGroup(QString::fromLatin1(GROUP_STARTUP));
    bool skipDialog = gcfg->readEntry( STARTUP_SKIP_ASK, false );
-   
+
    Q3CString result;
 
    /* in this case, the user has checked 'Do not ask me again' and does not
@@ -96,7 +100,7 @@ Q3CString DeviceSelector::getDeviceFromConfig( void ) const
     */
    result = QFile::encodeName(gcfg->readEntry( STARTUP_SCANDEV, "" ));
    kDebug(29000) << "Got scanner from config file to use: " << result << endl;
-   
+
    /* Now check if the scanner read from the config file is available !
     * if not, ask the user !
     */
@@ -109,7 +113,7 @@ Q3CString DeviceSelector::getDeviceFromConfig( void ) const
       kDebug(29000) << "Scanner from Config file is _not_ available" << endl;
       result = Q3CString();
    }
-   
+
    return( result );
 }
 
@@ -138,7 +142,7 @@ Q3CString DeviceSelector::getSelectedDevice( void ) const
    c->writeEntry( STARTUP_SCANDEV, dev, KConfigBase::Normal|KConfigBase::Global);
    c->writeEntry( STARTUP_SKIP_ASK, getShouldSkip(), KConfigBase::Normal|KConfigBase::Global);
    c->sync();
-   
+
    return dev;
 }
 

@@ -33,9 +33,13 @@
 #include "gammadialog.h"
 
 GammaDialog::GammaDialog( QWidget *parent ) :
-   KDialogBase( parent,  "GammaDialog", true, i18n("Custom Gamma Tables"),
-		 Ok|Cancel|Apply, Ok, true )
+   KDialog( parent )
 {
+    setCaption( i18n("Custom Gamma Tables") );
+    setButtons( Ok|Cancel|Apply );
+    setDefaultButton( Ok );
+    enableButtonSeparator( true );
+    setModal( true );
     gt = new KGammaTable();
     QWidget *page = new QWidget( this );
 

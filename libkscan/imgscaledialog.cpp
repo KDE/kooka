@@ -29,9 +29,13 @@
 
 ImgScaleDialog::ImgScaleDialog( QWidget *parent, int curr_sel,
 				const char *name )
-   :KDialogBase( parent,  name , true, i18n("Zoom"),
-                 Ok|Cancel, Ok, true )
+   :KDialog( parent)
 {
+    setCaption( i18n("Zoom") );
+    setButtons( Ok|Cancel );
+    setDefaultButton( Ok );
+    setModal( true );
+    enableButtonSeparator( true );
    // setCaption (i18n ("Image Zoom"));
    selected = curr_sel;
    int        one_is_selected = false;

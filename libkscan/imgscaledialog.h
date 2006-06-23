@@ -21,7 +21,7 @@
 #define __IMGSCALEDIALOG_H__
 
 #include <qlineedit.h>
-#include <kdialogbase.h>
+#include <kdialog.h>
 
 
 /* ----------------------------------------------------------------------
@@ -29,7 +29,7 @@
  * allows the user to select a zoom factor in percent, either in steps
  * or as a custom value.
  */
-class ImgScaleDialog : public KDialogBase
+class ImgScaleDialog : public KDialog
 {
    Q_OBJECT
    Q_PROPERTY( int selected READ getSelected WRITE setSelValue )

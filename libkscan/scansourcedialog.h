@@ -20,7 +20,7 @@
 #ifndef SCANSOURCEDIALOG_H
 #define SCANSOURCEDIALOG_H
 #include <qwidget.h>
-#include <kdialogbase.h>
+#include <kdialog.h>
 #include <q3strlist.h>
 #include <qstring.h>
 
@@ -34,8 +34,7 @@ class KScanCombo;
 class QRadioButton;
 class Q3ButtonGroup;
 
-class ScanSourceDialog : public KDialogBase
-{
+class ScanSourceDialog : public KDialog{
    Q_OBJECT
 public:
    ScanSourceDialog( QWidget *parent, const QStringList, ADF_BEHAVE );

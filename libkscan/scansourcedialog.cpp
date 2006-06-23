@@ -50,10 +50,15 @@ extern "C"{
 
 
 ScanSourceDialog::ScanSourceDialog( QWidget *parent, const QStringList list, ADF_BEHAVE adfBehave )
- : KDialogBase( parent, "SOURCE_DIALOG", true, i18n("Scan Source Selection"),
-		Ok|Cancel,Ok, true)
+ : KDialog( parent)
 {
-   KVBox *vbox = makeVBoxMainWidget();
+    setCaption( i18n("Scan Source Selection") );
+    setButtons( Ok|Cancel );
+    setDefaultButton( Ok );
+    setModal( true );
+    enableButtonSeparator( true );
+   KVBox *vbox = new KVBox( this );
+   setMainWidget( vbox );
 
    (void) new QLabel( i18n("<B>Source selection</B><P>"
 			   "Note that you may see more sources than actually exist"), vbox );
