@@ -30,7 +30,7 @@
 #include <kdebug.h>
 #include <kpushbutton.h>
 #include <kstdguiitem.h>
-
+#include <kguiitem.h>
 #include "massscandialog.h"
 
 MassScanDialog::MassScanDialog( QWidget *parent )
