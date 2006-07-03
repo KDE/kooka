@@ -52,7 +52,7 @@ DeviceSelector::DeviceSelector( QWidget *parent, Q3StrList& devList,
     setButtons( Ok|Cancel );
     setDefaultButton( Ok );
     setModal( true );
-    enableButtonSeparator( true );
+    showButtonSeparator( true );
    kDebug(29000) << "Starting DevSelector!" << endl;
    // Layout-Boxes
    QWidget *page = new QWidget( this );

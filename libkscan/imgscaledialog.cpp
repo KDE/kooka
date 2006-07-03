@@ -35,11 +35,11 @@ ImgScaleDialog::ImgScaleDialog( QWidget *parent, int curr_sel,
     setButtons( Ok|Cancel );
     setDefaultButton( Ok );
     setModal( true );
-    enableButtonSeparator( true );
+    showButtonSeparator( true );
    // setCaption (i18n ("Image Zoom"));
    selected = curr_sel;
    int        one_is_selected = false;
-   enableButtonSeparator( false );
+   showButtonSeparator( false );
 
    // (void) new QLabel( , main, "Page");
    //

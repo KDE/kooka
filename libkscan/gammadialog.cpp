@@ -38,7 +38,7 @@ GammaDialog::GammaDialog( QWidget *parent ) :
     setCaption( i18n("Custom Gamma Tables") );
     setButtons( Ok|Cancel|Apply );
     setDefaultButton( Ok );
-    enableButtonSeparator( true );
+    showButtonSeparator( true );
     setModal( true );
     gt = new KGammaTable();
     QWidget *page = new QWidget( this );

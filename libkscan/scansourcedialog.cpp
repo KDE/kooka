@@ -56,7 +56,7 @@ ScanSourceDialog::ScanSourceDialog( QWidget *parent, const QStringList list, ADF
     setButtons( Ok|Cancel );
     setDefaultButton( Ok );
     setModal( true );
-    enableButtonSeparator( true );
+    showButtonSeparator( true );
    KVBox *vbox = new KVBox( this );
    setMainWidget( vbox );
 
