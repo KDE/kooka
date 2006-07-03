@@ -37,6 +37,7 @@
 #include <kled.h>
 #include <kglobalsettings.h>
 #include <kscandevice.h>
+#include <kpagewidgetmodel.h>
 #include <kvbox.h>
 // libkscan stuff
 #include "scanparams.h"
