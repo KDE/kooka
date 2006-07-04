@@ -43,9 +43,9 @@ install_targets(/bin kooka )
 
 ########### install files ###############
 
-install_files( ${XDG_APPS_DIR} FILES kooka.desktop )
-install_files( ${DATA_INSTALL_DIR}/kooka FILES kookaui.rc )
-install_files( ${CONFIG_INSTALL_DIR} FILES kookarc )
+install( FILES kooka.desktop  DESTINATION  ${XDG_APPS_DIR} )
+install( FILES kookaui.rc  DESTINATION  ${DATA_INSTALL_DIR}/kooka )
+install( FILES kookarc  DESTINATION  ${CONFIG_INSTALL_DIR} )
 
 
 

@@ -4,7 +4,7 @@
 
 ########### install files ###############
 
-install_files( ${DATA_INSTALL_DIR}/kooka/pics FILES mirror-both.png mirror-horiz.png mirror-vert.png scaletoheight.png  	scaletowidth.png scaleorig.png ocr.png ocr-select.png newfromselect.png  	thumbviewtile.png gocr.png ocrad.png lockzoom.png )
+install( FILES mirror-both.png mirror-horiz.png mirror-vert.png scaletoheight.png  	scaletowidth.png scaleorig.png ocr.png ocr-select.png newfromselect.png  	thumbviewtile.png gocr.png ocrad.png lockzoom.png  DESTINATION  ${DATA_INSTALL_DIR}/kooka/pics )
 
 
 

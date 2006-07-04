@@ -32,12 +32,12 @@ kde4_add_library(kscan SHARED ${kscan_LIB_SRCS})
 target_link_libraries(kscan  ${KDE4_KIO_LIBS} ${SANE_LIBRARIES})
 
 set_target_properties(kscan PROPERTIES VERSION 1.0.0 SOVERSION 1 )
-install_targets(${LIB_INSTALL_DIR} kscan )
+install(TARGETS kscan  DESTINATION ${LIB_INSTALL_DIR} )
 
 
 ########### install files ###############
 
-install_files( ${SERVICES_INSTALL_DIR} FILES scanservice.desktop )
+install( FILES scanservice.desktop  DESTINATION  ${SERVICES_INSTALL_DIR} )
 
 
 
