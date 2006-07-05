@@ -68,7 +68,7 @@ ImageSelectLine::ImageSelectLine( QWidget *parent, const QString& text )
 void ImageSelectLine::slSelectFile()
 {
    KUrl newUrl;
-   newUrl = KFileDialog::getImageOpenURL();
+   newUrl = KFileDialog::getImageOpenUrl();
 
    QStringList l = m_urlCombo->urls();
 
@@ -86,7 +86,7 @@ void ImageSelectLine::slUrlActivated( const KUrl& url )
    m_currUrl = url;
 }
 
-KUrl ImageSelectLine::selectedURL() const
+KUrl ImageSelectLine::selectedUrl() const
 {
    return m_currUrl;
 }

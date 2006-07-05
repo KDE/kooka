@@ -1020,7 +1020,7 @@ void ScanPackager::slotImportFile()
     }
     kDebug(28000) << "Importing to " << impTarget.url() << endl;
 
-    KUrl impUrl = KFileDialog::getImageOpenURL ( m_currImportDir, this, i18n("Import Image File to Gallery"));
+    KUrl impUrl = KFileDialog::getImageOpenUrl ( m_currImportDir, this, i18n("Import Image File to Gallery"));
 
     if( ! impUrl.isEmpty() )
     {

@@ -46,7 +46,7 @@ class ImageSelectLine:public Q3HBox
 public:
    ImageSelectLine( QWidget *parent, const QString& text );
 
-   KUrl selectedURL() const;
+   KUrl selectedUrl() const;
    void setURL( const KUrl& );
    void setURLs( const QStringList& );
 

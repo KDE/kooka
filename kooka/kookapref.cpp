@@ -495,7 +495,7 @@ void KookaPreferences::slotApply( void )
     konf->writeEntry( MARGIN_COLOR1, m_colButt1->color());
     konf->writeEntry( MARGIN_COLOR2, m_colButt2->color());
 
-    KUrl bgUrl = m_tileSelector->selectedURL().url();
+    KUrl bgUrl = m_tileSelector->selectedUrl().url();
     bgUrl.setProtocol("");
     kDebug(28000) << "Writing tile-pixmap " << bgUrl.prettyUrl() << endl;
     konf->writePathEntry( BG_WALLPAPER, bgUrl.url() );
