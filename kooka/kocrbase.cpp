@@ -42,7 +42,7 @@
 #include <kanimwidget.h>
 #include <kseparator.h>
 #include <kmessagebox.h>
-#include <kactivelabel.h>
+#include <qlabel.h>
 #include <q3hbox.h>
 #include <q3vbox.h>
 
@@ -172,7 +172,8 @@ void KOCRBase::ocrIntro( )
         pa = hb_cap;
     }
 
-    (void) new KActiveLabel( ocrEngineDesc(), pa );
+    QLabel *label = new QLabel( ocrEngineDesc(), pa );
+    label->setOpenExternalLinks(true);
 }
 
 
