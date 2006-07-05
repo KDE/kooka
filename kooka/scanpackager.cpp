@@ -988,7 +988,7 @@ void ScanPackager::slotExportFile( )
       // initial += fromUrl.filename(false);
       QString initial = m_currCopyDir + "/";
       initial += fromUrl.filename(false);
-      KUrl fileName = KFileDialog::getSaveURL ( initial,
+      KUrl fileName = KFileDialog::getSaveUrl ( initial,
 						filter, this );
 
       if ( fileName.isValid() )                  // got a file name
