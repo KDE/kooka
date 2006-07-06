@@ -38,7 +38,7 @@ kde4_add_executable(kooka ${kooka_SRCS})
 
 target_link_libraries(kooka  ${KDE4_KDECORE_LIBS} kdeprint ktexteditor kscan )
 
-install_targets(/bin kooka )
+install(TARGETS kooka  DESTINATION ${BIN_INSTALL_DIR} )
 
 
 ########### install files ###############
