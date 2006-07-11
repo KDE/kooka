@@ -542,7 +542,7 @@ void ImageCanvas::viewportMouseMoveEvent(QMouseEvent *ev)
   case MOVE_TOP:
   case MOVE_BOTTOM:
     if(ps!=VSIZE) {
-      viewport()->setCursor(Qt::SizeHorCursor);
+      viewport()->setCursor(Qt::SizeVerCursor);
       ps = VSIZE;
     }
     break;
