@@ -66,7 +66,6 @@
 #include <kstatusbar.h>
 #include <kconfig.h>
 #include <kdebug.h>
-#include <ktrader.h>
 #include <klibloader.h>
 #include <klocale.h>
 #include <kmessagebox.h>
@@ -121,7 +120,7 @@ KookaView::KookaView( KParts::DockMainWindow3 *parent, const Q3CString& deviceTo
    img_canvas->enableContextMenu(true);
    connect( img_canvas, SIGNAL( imageReadOnly(bool)),
 	    this, SLOT(slViewerReadOnly(bool)));
-   
+
    KMenu *ctxtmenu = static_cast<KMenu*>(img_canvas->contextMenu());
    if( ctxtmenu )
        ctxtmenu->insertTitle(i18n("Image View"));
@@ -570,7 +569,7 @@ void KookaView::startOCR( KookaImage *img )
 
 	  connect( ocrFabric, SIGNAL( newOCRResultText( const QString& )),
 		   m_dockOCRText, SLOT( show() ));
-	  
+
           connect( ocrFabric, SIGNAL( repaintOCRResImage( )),
                    img_canvas, SLOT(repaint()));
 
@@ -874,7 +873,7 @@ void KookaView::slShowThumbnails(KFileTreeViewItem *dirKfi, bool forceRedraw )
       KFileTreeViewItem *kftvi = packager->currentKFileTreeViewItem();
       if ( !kftvi )
           return;
-      
+
       if( kftvi->isDir())
       {
           dirKfi = kftvi;
@@ -977,7 +976,7 @@ void KookaView::slOpenCurrInGraphApp( void )
 QImage KookaView::rotateLeft( QImage *m_img )
 {
    QImage rot;
-   
+
    if( m_img )
    {
        QMatrix m;
@@ -991,7 +990,7 @@ QImage KookaView::rotateLeft( QImage *m_img )
 QImage KookaView::rotateRight( QImage *m_img )
 {
    QImage rot;
-   
+
    if( m_img )
    {
        QMatrix m;
@@ -1005,7 +1004,7 @@ QImage KookaView::rotateRight( QImage *m_img )
 QImage KookaView::rotate180( QImage *m_img )
 {
    QImage rot;
-   
+
    if( m_img )
    {
        QMatrix m;

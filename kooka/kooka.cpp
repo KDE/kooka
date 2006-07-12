@@ -132,7 +132,7 @@ void Kooka::setupActions()
     KStdAction::print(this, SLOT(filePrint()), actionCollection());
     KStdAction::quit(this , SLOT(close()), actionCollection());
 
-    KStdAction::keyBindings(this, SLOT(configureShortcuts()), 
+    KStdAction::keyBindings(this, SLOT(configureShortcuts()),
 actionCollection());
     KStdAction::configureToolbars(this, SLOT(optionsConfigureToolbars()),
 				  actionCollection());
@@ -405,13 +405,15 @@ void Kooka::optionsPreferences()
 {
     // popup some sort of preference dialog, here
     KookaPreferences dlg;
-    dlg.showPage( m_prefDialogIndex );
+#warning "kde4: port it"
+    //dlg.showPage( m_prefDialogIndex );
     connect( &dlg, SIGNAL( dataSaved() ), m_view, SLOT(slFreshUpThumbView()));
 
     if (dlg.exec())
     {
         // redo your settings
-       m_prefDialogIndex = dlg.activePageIndex();
+#warning "kde4: port it"
+        //m_prefDialogIndex = dlg.activePageIndex();
        // m_view->slFreshUpThumbView();
     }
 }

@@ -41,7 +41,7 @@
 #include <qcheckbox.h>
 #include <q3listbox.h>
 #include <qmap.h>
-#include <kdialogbase.h>
+#include <kdialog.h>
 #include <kurl.h>
 
 
@@ -100,7 +100,7 @@ class KookaImage;
  *  selecting it.
  **/
 
-class FormatDialog:public KDialogBase
+class FormatDialog:public KDialog
 {
    Q_OBJECT
 public:

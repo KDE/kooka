@@ -60,12 +60,15 @@
 #include <kurlrequester.h>
 
 KookaPreferences::KookaPreferences()
-    : KDialogBase(IconList, i18n("Preferences"),
-                  Help|Default|Ok|Apply|Cancel, Ok )
+    : KPageDialog()
 {
     // this is the base class for your preferences dialog.  it is now
     // a Treelist dialog.. but there are a number of other
     // possibilities (including Tab, Swallow, and just Plain)
+    setCaption(i18n("Preferences"));
+    setButtons(Help|Default|Ok|Apply|Cancel);
+    setDefaultButton(Ok);
+    setFaceType(List);
     konf = KGlobal::config ();
 
     setupStartupPage();
@@ -78,8 +81,11 @@ void KookaPreferences::setupOCRPage()
 {
     konf->setGroup( CFG_GROUP_OCR_DIA );
 
-    QFrame *page = addPage( i18n("OCR"), i18n("Optical Character Recognition" ),
-			    BarIcon("ocrImage", K3Icon::SizeMedium ) );
+    QFrame *page = new QFrame();
+    KPageWidgetItem *pageItem = new KPageWidgetItem( page, i18n("OCR") );
+    pageItem->setHeader(  i18n("Optical Character Recognition" ) );
+    pageItem->setIcon( BarIcon("ocrImage", K3Icon::SizeMedium ) );
+    addPage( pageItem );
 
     QVBoxLayout *top = new QVBoxLayout( page );
     top->setSpacing( spacingHint() );
@@ -184,7 +190,7 @@ void KookaPreferences::setupOCRPage()
 
 KUrlRequester* KookaPreferences::binaryCheckBox( QWidget *parent, const QString& program )
 {
-    Q3HBox *hbox = new Q3HBox( parent );
+    KHBox *hbox = new KHBox( parent );
 
     (void) new QLabel( i18n("Select the %1 binary to use:", program ), hbox );
     KUrlRequester* urlRequester = new KUrlRequester( parent );
@@ -313,9 +319,12 @@ void KookaPreferences::setupStartupPage()
 
     /* startup options */
     konf->setGroup( GROUP_STARTUP );
+    QFrame *page = new QFrame();
+    KPageWidgetItem *pageItem = new KPageWidgetItem( page, i18n("Startup") );
+    pageItem->setHeader(i18n("Kooka Startup Preferences" ) );
+    pageItem->setIcon( BarIcon("gear", K3Icon::SizeMedium ) );
+    addPage( pageItem );
 
-    QFrame *page = addPage( i18n("Startup"), i18n("Kooka Startup Preferences" ),
-			    BarIcon("gear", K3Icon::SizeMedium ) );
     QVBoxLayout *top = new QVBoxLayout( page );
     top->setSpacing( spacingHint() );
     top->setMargin( 0 );
@@ -358,8 +367,12 @@ void KookaPreferences::setupStartupPage()
 void KookaPreferences::setupSaveFormatPage( )
 {
    konf->setGroup( OP_FILE_GROUP );
-   QFrame *page = addPage( i18n("Image Saving"), i18n("Configure Image Save Assistant" ),
-			    BarIcon("filesave", K3Icon::SizeMedium ) );
+   QFrame *page = new QFrame();
+   KPageWidgetItem *pageItem = new KPageWidgetItem( page, i18n("Image Saving") );
+   pageItem->setHeader(i18n("Configure Image Save Assistant" ) );
+   pageItem->setIcon( BarIcon("filesave", K3Icon::SizeMedium ) );
+   addPage( pageItem );
+
    QVBoxLayout *top = new QVBoxLayout( page );
    top->setSpacing( spacingHint() );
    top->setMargin( 0 );
@@ -385,9 +398,12 @@ void KookaPreferences::setupSaveFormatPage( )
 void KookaPreferences::setupThumbnailPage()
 {
    konf->setGroup( THUMB_GROUP );
+   QFrame *page = new QFrame();
+   KPageWidgetItem *pageItem = new KPageWidgetItem( page, i18n("Thumbnail View") );
+   pageItem->setHeader(i18n("Thumbnail Gallery View" ) );
+   pageItem->setIcon( BarIcon("thumbnail", K3Icon::SizeMedium ) );
+   addPage( pageItem );
 
-   QFrame *page = addPage( i18n("Thumbnail View"), i18n("Thumbnail Gallery View" ),
-			    BarIcon("thumbnail", K3Icon::SizeMedium ) );
    QVBoxLayout *top = new QVBoxLayout( page );
    top->setSpacing( spacingHint() );
    top->setMargin( 0 );

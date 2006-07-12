@@ -26,7 +26,7 @@
 #ifndef KOOKAPREF_H
 #define KOOKAPREF_H
 
-#include <kdialogbase.h>
+#include <kpagedialog.h>
 #include <q3frame.h>
 //Added by qt3to4:
 #include <QLabel>
@@ -46,7 +46,7 @@ class QCheckBox;
 #define CFG_OCRAD_BINARY   "ocradBinary"
 #define CFG_GOCR_BINARY    "gocrBinary"
 
-class KookaPreferences : public KDialogBase
+class KookaPreferences : public KPageDialog
 {
     Q_OBJECT
 public:

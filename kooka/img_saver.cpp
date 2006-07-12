@@ -65,11 +65,13 @@
 #include "kookaimage.h"
 
 FormatDialog::FormatDialog( QWidget *parent, const QString&, const char *name )
-   :KDialogBase( parent, name, true,
-                 /* Tabbed,*/ i18n( "Kooka Save Assistant" ),
-		 Ok|Cancel, Ok )
+   :KDialog( parent)
 
 {
+    setCaption( i18n( "Kooka Save Assistant" ) );
+    setButtons( Ok|Cancel );
+    setDefaultButton( Ok );
+    setModal( true );
    buildHelp();
    // readConfig();
    // QFrame *page = addPage( QString( "Save the image") );
@@ -357,7 +359,7 @@ ImgSaveStat ImgSaver::saveImage( QImage *image )
 	   filename = text;
        }
    }
-       
+
    QString fi = directory + "/" + filename;
 
    if( extension(fi).isEmpty() )
