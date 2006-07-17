@@ -227,7 +227,7 @@ KScanCombo::KScanCombo( QWidget *parent, const QString& text,
 {
     createCombo( text );
     if( combo )
-        combo->insertStringList( list );
+        combo->addItems( list );
 
     for ( QStringList::ConstIterator it = list.begin(); it != list.end(); ++it ) {
         combolist.append( (*it).local8Bit() );

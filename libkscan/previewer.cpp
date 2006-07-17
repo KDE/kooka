@@ -169,13 +169,13 @@ Previewer::Previewer(QWidget *parent, const char *name )
 
     // -----
     pre_format_combo = new QComboBox( this, "PREVIEWFORMATCOMBO" );
-    pre_format_combo->insertItem( i18n( "Custom" ), ID_CUSTOM);
-    pre_format_combo->insertItem( i18n( "DIN A4" ), ID_A4);
-    pre_format_combo->insertItem( i18n( "DIN A5" ), ID_A5);
-    pre_format_combo->insertItem( i18n( "DIN A6" ), ID_A6);
-    pre_format_combo->insertItem( i18n( "9x13 cm" ), ID_9_13 );
-    pre_format_combo->insertItem( i18n( "10x15 cm" ), ID_10_15 );
-    pre_format_combo->insertItem( i18n( "Letter" ), ID_LETTER);
+    pre_format_combo->insertItem( ID_CUSTOM, i18n( "Custom" ));
+    pre_format_combo->insertItem( ID_A4, i18n( "DIN A4" ));
+    pre_format_combo->insertItem( ID_A5, i18n( "DIN A5" ));
+    pre_format_combo->insertItem( ID_A6, i18n( "DIN A6" ));
+    pre_format_combo->insertItem( ID_9_13, i18n( "9x13 cm" ) );
+    pre_format_combo->insertItem( ID_10_15, i18n( "10x15 cm" ));
+    pre_format_combo->insertItem( ID_LETTER, i18n( "Letter" ));
 
     connect( pre_format_combo, SIGNAL(activated (int)),
              this, SLOT( slFormatChange(int)));
@@ -212,8 +212,8 @@ Previewer::Previewer(QWidget *parent, const char *name )
 
     /* combobox to select if black or white background */
     d->m_cbBackground = new QComboBox( hbox );
-    d->m_cbBackground->insertItem(i18n("Black"), BG_ITEM_BLACK );
-    d->m_cbBackground->insertItem(i18n("White"), BG_ITEM_WHITE );
+    d->m_cbBackground->insertItem(BG_ITEM_BLACK, i18n("Black") );
+    d->m_cbBackground->insertItem(BG_ITEM_WHITE, i18n("White") );
     connect( d->m_cbBackground, SIGNAL(activated(int) ),
              this, SLOT( slScanBackgroundChanged( int )));
 
