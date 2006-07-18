@@ -259,11 +259,11 @@ void KScanCombo::slSetEntry( const QString &t )
     int i = combolist.find( t.local8Bit() );
 
     /* Important to check value to avoid recursive signals ;) */
-    if( i == combo->currentItem() )
+    if( i == combo->currentIndex() )
 	return;
 
     if( i > -1 )
-	combo->setCurrentItem( i );
+	combo->setCurrentIndex( i );
     else
 	kDebug(29000) << "Combo item not in list !" << endl;
 }
@@ -299,7 +299,7 @@ QString KScanCombo::text( int i ) const
 
 void    KScanCombo::setCurrentItem( int i )
 {
-   combo->setCurrentItem( i );
+   combo->setCurrentIndex( i );
 }
 
 int KScanCombo::count( void ) const

@@ -278,7 +278,7 @@ Previewer::Previewer(QWidget *parent, const char *name )
     top->activate();
 
     /* Preset custom Cutting */
-    pre_format_combo->setCurrentItem( ID_CUSTOM );
+    pre_format_combo->setCurrentIndex( ID_CUSTOM );
     slFormatChange( ID_CUSTOM);
 
     scanResX = -1;
@@ -352,7 +352,7 @@ void Previewer::slOrientChange( int id )
    (void) id;
    /* Gets either portrait or landscape-id */
    /* Just read the format-selection and call slFormatChange */
-   slFormatChange( pre_format_combo->currentItem() );
+   slFormatChange( pre_format_combo->currentIndex() );
 }
 
 /** Slot called whenever the format selection combo changes. **/
@@ -456,7 +456,7 @@ void Previewer::slFormatChange( int id )
 void Previewer::slCustomChange( void )
 {
    if( isCustom )return;
-   pre_format_combo->setCurrentItem(ID_CUSTOM);
+   pre_format_combo->setCurrentIndex(ID_CUSTOM);
    slFormatChange( ID_CUSTOM );
 }
 
@@ -583,11 +583,11 @@ void Previewer::slSetScannerBgIsWhite( bool b )
     {
         if( b )  // The background _is_ white
         {
-            d->m_cbBackground->setCurrentItem( BG_ITEM_WHITE );
+            d->m_cbBackground->setCurrentIndex( BG_ITEM_WHITE );
         }
         else
         {
-            d->m_cbBackground->setCurrentItem( BG_ITEM_BLACK );
+            d->m_cbBackground->setCurrentIndex( BG_ITEM_BLACK );
         }
 
         d->m_scanner->slStoreConfig( CFG_SCANNER_EMPTY_BG, b ? QString("Yes") : QString("No"));
