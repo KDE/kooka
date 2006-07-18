@@ -241,9 +241,11 @@ void KScanCombo::createCombo( const QString& text )
     setMargin( 2 );
 
 
-    (void) new QLabel( text, this, "AUTO_COMBOLABEL" );
+    QLabel *dummy = new QLabel( text, this );
+    dummy->setObjectName( "AUTO_COMBOLABEL" );
 
-    combo = new QComboBox( this, "AUTO_COMBO" );
+    combo = new QComboBox( this );
+    combo->setObjectName("AUTO_COMBO");
 
     connect( combo, SIGNAL(activated( const QString &)), this,
              SLOT( slComboChange( const QString &)));
