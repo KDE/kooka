@@ -35,6 +35,7 @@
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kdebug.h>
+#include <kvbox.h>
 #include "kscanslider.h"
 
 KScanSlider::KScanSlider( QWidget *parent, const QString& text,
@@ -208,13 +209,13 @@ void KScanEntry::slSetEntry( const QString& t )
 
 void KScanEntry::slEntryChange( const QString& t )
 {
-    emit valueChanged( QByteArray( t.latin1() ) );
+    emit valueChanged( QByteArray( t.toLatin1() ) );
 }
 
 void KScanEntry::slReturnPressed( void )
 {
    QString t = text();
-   emit returnPressed( QByteArray( t.latin1()));
+   emit returnPressed( QByteArray( t.toLatin1()));
 }
 
 
@@ -222,7 +223,7 @@ void KScanEntry::slReturnPressed( void )
 
 KScanCombo::KScanCombo( QWidget *parent, const QString& text,
 			const QStringList& list )
-    : Q3HBox( parent ),
+    : KHBox( parent ),
       combo(0)
 {
     createCombo( text );
@@ -272,7 +273,7 @@ void KScanCombo::slSetEntry( const QString &t )
 
 void KScanCombo::slComboChange( const QString &t )
 {
-    emit valueChanged( QByteArray( t.latin1() ) );
+    emit valueChanged( QByteArray( t.toLatin1() ) );
     kDebug(29000) << "Combo: valueChanged emitted!" << endl;
 }
 

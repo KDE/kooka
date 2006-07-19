@@ -23,11 +23,12 @@
 #include "kscandevice.h"
 #include "scansourcedialog.h"
 
-#include <q3vbox.h>
-#include <q3hbox.h>
+
+
 
 #include <qdir.h>
 #include <qpixmap.h>
+#include <kvbox.h>
 
 /**
   *@author Klaas Freitag
@@ -44,7 +45,7 @@ class Q3ButtonGroup;
 
 typedef enum { ID_SANE_DEBUG, ID_QT_IMGIO, ID_SCAN } ScanMode;
 
-class ScanParams : public Q3VBox
+class ScanParams : public KVBox
 {
    Q_OBJECT
 public:

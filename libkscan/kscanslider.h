@@ -22,7 +22,7 @@
 
 #include <q3frame.h>
 #include <q3strlist.h>
-#include <q3hbox.h>
+
 #include <qcombobox.h>
 #include <qslider.h>
 #include <qlineedit.h>
@@ -30,6 +30,7 @@
 #include <QPixmap>
 #include <QLabel>
 #include <QByteArray>
+#include <kvbox.h>
 /**
   *@author Klaas Freitag
   */
@@ -171,7 +172,7 @@ private:
 /**
  * a combobox filled with a decriptional text.
  */
-class KScanCombo : public Q3HBox
+class KScanCombo : public KHBox
 {
    Q_OBJECT
    Q_PROPERTY( QString cbEntry READ currentText WRITE slSetEntry )

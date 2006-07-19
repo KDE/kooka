@@ -20,7 +20,7 @@
 
 #include <qlabel.h>
 #include <qfontmetrics.h>
-#include <q3hbox.h>
+
 #include <qtooltip.h>
 #include <q3popupmenu.h>
 #include <qfile.h>
@@ -51,6 +51,7 @@
 #include <q3buttongroup.h>
 #include <kmessagebox.h>
 #include <q3valuevector.h>
+#include <kvbox.h>
 
 #define ID_CUSTOM 0
 #define ID_A4     1
@@ -206,7 +207,7 @@ Previewer::Previewer(QWidget *parent, const char *name )
     /** Autoselection Box **/
     d->m_autoSelGroup = new Q3GroupBox( 1, Qt::Horizontal, i18n("Auto-Selection"), this);
 
-    Q3HBox *hbox       = new Q3HBox(d->m_autoSelGroup);
+    KHBox *hbox       = new KHBox(d->m_autoSelGroup);
     d->m_cbAutoSel    = new QCheckBox( i18n("Active on"), hbox );
     d->m_cbAutoSel->setToolTip( i18n("Check here if you want autodetection\n"
                                         "of the document on the preview."));
@@ -261,7 +262,7 @@ Previewer::Previewer(QWidget *parent, const char *name )
              l3, SLOT(setText(const QString&)));
 
     /* size indicator */
-    Q3HBox *hb = new Q3HBox( gbox );
+    KHBox *hb = new KHBox( gbox );
     (void) new QLabel( i18n( "Size:"), hb );
     SizeIndicator *indi = new SizeIndicator( hb );
     indi->setToolTip( i18n( "This size field shows how large the uncompressed image will be.\n"
@@ -568,7 +569,7 @@ void Previewer::slConnectScanner( KScanDevice *scan )
         d->m_dustsize = h.toInt();
 
         QString  thresh = DEF_THRESH_BLACK; /* for black */
-        if( isWhite.lower() == "yes" )
+        if( isWhite.toLower() == "yes" )
             thresh = DEF_THRESH_WHITE;
 
         h = scan->getConfig( CFG_AUTOSEL_THRESH, thresh );
@@ -620,7 +621,7 @@ void Previewer::checkForScannerBg()
         }
         else
         {
-            if( isWhite.lower() == "yes" )
+            if( isWhite.toLower() == "yes" )
                 goWhite = true;
         }
 
@@ -755,7 +756,7 @@ void  Previewer::findSelection( )
         d->m_widthSum  = widthSum;
         d->m_heightSum = heightSum;
     }
-    /* Now try to find values in arrays that have grayAdds higher or lower
+    /* Now try to find values in arrays that have grayAdds higher or toLower
      * than threshold */
 #if 0
     /* debug output */
@@ -850,7 +851,7 @@ bool Previewer::imagePiece( Q3MemArray<long> src, int& start, int& end )
         }
         else
         {
-            /* pixelvalue needs to be lower than threshold, black background */
+            /* pixelvalue needs to be toLower than threshold, black background */
             if( src[x] < d->m_autoSelThresh )
             {
                 int iStart = x;

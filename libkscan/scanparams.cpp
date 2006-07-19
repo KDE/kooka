@@ -50,15 +50,17 @@
 #include <scansourcedialog.h>
 #include "massscandialog.h"
 #include <gammadialog.h>
+#include <kvbox.h>
 #include "kscanslider.h"
 
 
 
 
 ScanParams::ScanParams( QWidget *parent, const char *name )
-   : Q3VBox( parent, name ),
+   : KVBox( parent ),
      m_firstGTEdit( true )
 {
+   setObjectName(name);
    /* first some initialisation and debug messages */
     sane_device = 0; virt_filename = 0;
     pb_edit_gtable = 0;
@@ -116,7 +118,7 @@ bool ScanParams::connectDevice( KScanDevice *newScanDevice )
    /* A top layout box */
    // QVBoxLayout *top = new QVBoxLayout(this);
    //top->setSpacing(6);
-   Q3HBox *hb = new Q3HBox( this );
+   KHBox *hb = new KHBox( this );
    hb->layout()->setSpacing( KDialog::spacingHint() );
    QString cap = i18n("<B>Scanner Settings</B>");
    cap += sane_device->getScannerName();
@@ -229,12 +231,12 @@ Q3ScrollView *ScanParams::scannerParams( )
    Q3ScrollView *sv = new Q3ScrollView( this );
    sv->setHScrollBarMode( Q3ScrollView::AlwaysOff );
    sv->setResizePolicy( Q3ScrollView::AutoOneFit );
-   Q3VBox *pbox = new Q3VBox( sv->viewport());
+   KVBox *pbox = new KVBox( sv->viewport());
    sv->setFrameStyle( Q3Frame::NoFrame );
 
    sv->addChild( pbox );
 
-   Q3HBox *hb = new Q3HBox(pbox);
+   KHBox *hb = new KHBox(pbox);
 
    /* Mode setting */
    so = sane_device->getGuiElement( SANE_NAME_SCAN_MODE, hb,
@@ -447,7 +449,7 @@ Q3ScrollView *ScanParams::scannerParams( )
 
 
    /* The gamma table can be used - add  a button for editing */
-   Q3HBox *hb1 = new Q3HBox(pbox);
+   KHBox *hb1 = new KHBox(pbox);
 
    if( sane_device->optionExists( SANE_NAME_CUSTOM_GAMMA ) )
    {
@@ -556,7 +558,7 @@ void ScanParams::slSourceSelect( void )
 	 adf = d.getAdfBehave();
 
 	 /* set the selected Document source, the behavior is stored in a membervar */
-	 so.set( QByteArray(sel_source.latin1()) ); // FIX in ScanSourceDialog, then here
+	 so.set( QByteArray(sel_source.toLatin1()) ); // FIX in ScanSourceDialog, then here
 	 sane_device->apply( &so );
 
 	 kDebug(29000) << "Dialog finished OK: " << sel_source << ", " << adf << endl;
@@ -588,7 +590,7 @@ void ScanParams::slFileSelect( void )
 	   fi_item = filterList.next() )
       {
 
-	 filter.append( QString::fromLatin1( prefix + fi_item.lower()) );
+	 filter.append( QString::fromLatin1( prefix + fi_item.toLower()) );
       }
    }
    else

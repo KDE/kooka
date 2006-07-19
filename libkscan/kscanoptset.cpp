@@ -204,10 +204,10 @@ bool KScanOptSet::load( const QString& /*scannerName*/ )
       StringMap::Iterator it;
       for( it = strMap.begin(); it != strMap.end(); ++it )
       {
-	 QByteArray optName = it.key().latin1();
+	 QByteArray optName = it.key().toLatin1();
 	 KScanOption optset( optName );
 
-	 QByteArray val = it.data().latin1();
+	 QByteArray val = it.data().toLatin1();
 	 kDebug(29000) << "Reading for " << optName << " value " << val << endl;
 
 	 optset.set( val );

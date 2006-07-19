@@ -860,7 +860,7 @@ void KScanDevice::prepareScan( void )
 
     while ( it.current() )
     {
-       // qDebug( "%s -> %d", it.currentKey().latin1(), *it.current() );
+       // qDebug( "%s -> %d", it.currentKey().toLatin1(), *it.current() );
        int descriptor = *it.current();
 
        const SANE_Option_Descriptor *d = sane_get_option_descriptor( scanner_handle, descriptor );
