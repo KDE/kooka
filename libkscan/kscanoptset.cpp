@@ -22,7 +22,7 @@
 #include <qmap.h>
 #include <q3dict.h>
 //Added by qt3to4:
-#include <Q3CString>
+#include <QByteArray>
 #include <kdebug.h>
 #include <kconfig.h>
 
@@ -30,7 +30,7 @@
 #include "kscanoption.h"
 #include "kscanoptset.h"
 
-KScanOptSet::KScanOptSet( const Q3CString& setName )
+KScanOptSet::KScanOptSet( const QByteArray& setName )
 {
   name = setName;
 
@@ -51,7 +51,7 @@ KScanOptSet::~KScanOptSet()
 
 
 
-KScanOption *KScanOptSet::get( const Q3CString name ) const
+KScanOption *KScanOptSet::get( const QByteArray name ) const
 {
   KScanOption *ret = 0;
 
@@ -60,10 +60,10 @@ KScanOption *KScanOptSet::get( const Q3CString name ) const
   return( ret );
 }
 
-Q3CString KScanOptSet::getValue( const Q3CString name ) const
+QByteArray KScanOptSet::getValue( const QByteArray name ) const
 {
    KScanOption *re = get( name );
-   Q3CString retStr = "";
+   QByteArray retStr = "";
 
    if( re )
    {
@@ -82,7 +82,7 @@ bool KScanOptSet::backupOption( const KScanOption& opt )
   bool retval = true;
 
   /** Allocate a new option and store it **/
-  const Q3CString& optName = opt.getName();
+  const QByteArray& optName = opt.getName();
   if( !optName.isEmpty() )
     retval = false;
 
@@ -98,7 +98,7 @@ bool KScanOptSet::backupOption( const KScanOption& opt )
      }
      else
      {
-	const Q3CString& qq = opt.get();
+	const QByteArray& qq = opt.get();
 	kDebug(29000) << "Value is now: <" << qq << ">" << endl;
 	const KScanOption *newopt = new KScanOption( opt );
 
@@ -204,10 +204,10 @@ bool KScanOptSet::load( const QString& /*scannerName*/ )
       StringMap::Iterator it;
       for( it = strMap.begin(); it != strMap.end(); ++it )
       {
-	 Q3CString optName = it.key().latin1();
+	 QByteArray optName = it.key().latin1();
 	 KScanOption optset( optName );
 
-	 Q3CString val = it.data().latin1();
+	 QByteArray val = it.data().latin1();
 	 kDebug(29000) << "Reading for " << optName << " value " << val << endl;
 
 	 optset.set( val );

@@ -24,7 +24,7 @@
 #include <kdialog.h>
 //Added by qt3to4:
 #include <Q3StrList>
-#include <Q3CString>
+#include <QByteArray>
 
 class Q3ButtonGroup;
 class Q3StrList;
@@ -72,7 +72,7 @@ public:
     *  @return a CString containing the technical name of the selected device (taken from
     *          the backends-list from the constructor)
     */
-   Q3CString getSelectedDevice( void ) const;
+   QByteArray getSelectedDevice( void ) const;
 
    /**
     *  returns the users selection if the dialog should be skipped in future.
@@ -88,7 +88,7 @@ public:
     *  @return a string containing the device to open or null if no device is specified or the
     *  one specified is not valid.
     */
-   Q3CString getDeviceFromConfig( void ) const;
+   QByteArray getDeviceFromConfig( void ) const;
 
 public slots:
    void setScanSources( const Q3StrList&, const QStringList& );

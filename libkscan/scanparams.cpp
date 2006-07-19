@@ -18,7 +18,6 @@
 */
 
 #include <sane/saneopts.h>
-#include <q3cstring.h>
 #include <qfile.h>
 #include <q3frame.h>
 #include <qlabel.h>
@@ -206,9 +205,9 @@ void ScanParams::initialise( KScanOption *so )
 
    if( startupOptset )
    {
-      Q3CString name = so->getName();
+      QByteArray name = so->getName();
       if( ! name.isEmpty() ){
-	 Q3CString val = startupOptset->getValue( name );
+	 QByteArray val = startupOptset->getValue( name );
 	 kDebug( 29000) << "Initialising <" << name << "> with value <" << val << ">" << endl;
 	 so->set( val );
 	 sane_device->apply(so);
@@ -535,7 +534,7 @@ void ScanParams::slSourceSelect( void )
    KScanOption so( SANE_NAME_SCAN_SOURCE );
    ADF_BEHAVE adf = ADF_OFF;
 
-   const Q3CString& currSource = so.get();
+   const QByteArray& currSource = so.get();
    kDebug(29000) << "Current Source is <" << currSource << ">" << endl;
    QStringList sources;
 
@@ -557,7 +556,7 @@ void ScanParams::slSourceSelect( void )
 	 adf = d.getAdfBehave();
 
 	 /* set the selected Document source, the behavior is stored in a membervar */
-	 so.set( Q3CString(sel_source.latin1()) ); // FIX in ScanSourceDialog, then here
+	 so.set( QByteArray(sel_source.latin1()) ); // FIX in ScanSourceDialog, then here
 	 sane_device->apply( &so );
 
 	 kDebug(29000) << "Dialog finished OK: " << sel_source << ", " << adf << endl;
@@ -578,14 +577,14 @@ void ScanParams::slFileSelect( void )
 {
    kDebug(29000) << "File Selector" << endl;
    QString filter;
-   Q3CString prefix = "\n*.";
+   QByteArray prefix = "\n*.";
 
    if( scan_mode == ID_QT_IMGIO )
    {
 #warning "kde4: How to port QImage::inputFormats ? "
 	   Q3StrList filterList;// = QImage::inputFormats();
       filter = i18n( "*|All Files (*)");
-      for( Q3CString fi_item = filterList.first(); !fi_item.isEmpty();
+      for( QByteArray fi_item = filterList.first(); !fi_item.isEmpty();
 	   fi_item = filterList.next() )
       {
 
@@ -637,7 +636,7 @@ void ScanParams::slVirtScanModeSelect( int id )
 
 	 QFileInfo fi( vf );
 	 if( fi.extension() != QString::fromLatin1("pnm") )
-	    virt_filename->set(Q3CString(""));
+	    virt_filename->set(QByteArray(""));
       }
    } else {
       scan_mode = ID_QT_IMGIO;

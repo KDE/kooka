@@ -27,7 +27,7 @@
 #include <qlineedit.h>
 //Added by qt3to4:
 #include <QPixmap>
-#include <Q3CString>
+#include <QByteArray>
 #include <Q3StrList>
 #include <Q3Frame>
 #include <QHBoxLayout>
@@ -208,13 +208,13 @@ void KScanEntry::slSetEntry( const QString& t )
 
 void KScanEntry::slEntryChange( const QString& t )
 {
-    emit valueChanged( Q3CString( t.latin1() ) );
+    emit valueChanged( QByteArray( t.latin1() ) );
 }
 
 void KScanEntry::slReturnPressed( void )
 {
    QString t = text();
-   emit returnPressed( Q3CString( t.latin1()));
+   emit returnPressed( QByteArray( t.latin1()));
 }
 
 
@@ -272,7 +272,7 @@ void KScanCombo::slSetEntry( const QString &t )
 
 void KScanCombo::slComboChange( const QString &t )
 {
-    emit valueChanged( Q3CString( t.latin1() ) );
+    emit valueChanged( QByteArray( t.latin1() ) );
     kDebug(29000) << "Combo: valueChanged emitted!" << endl;
 }
 

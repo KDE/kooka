@@ -29,7 +29,7 @@
 //Added by qt3to4:
 #include <QPixmap>
 #include <QLabel>
-#include <Q3CString>
+#include <QByteArray>
 /**
   *@author Klaas Freitag
   */
@@ -153,8 +153,8 @@ protected slots:
    void         slReturnPressed( void );
 
 signals:
-   void		valueChanged( const Q3CString& );
-   void         returnPressed( const Q3CString& );
+   void		valueChanged( const QByteArray& );
+   void         returnPressed( const QByteArray& );
 
 private slots:
    void		slEntryChange( const QString& );
@@ -232,7 +232,7 @@ private slots:
    void		slComboChange( const QString & );
 
 signals:
-   void		valueChanged( const Q3CString& );
+   void		valueChanged( const QByteArray& );
    void         activated(int);
 
 private:

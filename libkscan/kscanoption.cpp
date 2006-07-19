@@ -32,7 +32,7 @@
 #include <qregexp.h>
 //Added by qt3to4:
 #include <Q3StrList>
-#include <Q3CString>
+#include <QByteArray>
 #include <Q3MemArray>
 
 #include <kdebug.h>
@@ -55,7 +55,7 @@
 
 
 /** inline-access to the option descriptor, object to changes with global vars. **/
-inline const SANE_Option_Descriptor *getOptionDesc( const Q3CString& name )
+inline const SANE_Option_Descriptor *getOptionDesc( const QByteArray& name )
 {
    int *idx = (*KScanDevice::option_dic)[ name ];
    
@@ -81,7 +81,7 @@ inline const SANE_Option_Descriptor *getOptionDesc( const Q3CString& name )
 /* ************************************************************************ */
 /* KScan Option                                                             */
 /* ************************************************************************ */
-KScanOption::KScanOption( const Q3CString& new_name ) :
+KScanOption::KScanOption( const QByteArray& new_name ) :
    QObject()
 {
    if( initOption( new_name ) )
@@ -106,7 +106,7 @@ KScanOption::KScanOption( const Q3CString& new_name ) :
 }
 
 
-bool KScanOption::initOption( const Q3CString& new_name )
+bool KScanOption::initOption( const QByteArray& new_name )
 {
    desc = 0;
    if( new_name.isEmpty() ) return( false );
@@ -212,7 +212,7 @@ KScanOption::KScanOption( const KScanOption &so ) :
 
 const QString KScanOption::configLine( void )
 {
-   Q3CString strval = this->get();
+   QByteArray strval = this->get();
    kDebug(29000) << "configLine returns <" << strval << ">" << endl;
    return( strval );
 }
@@ -257,7 +257,7 @@ const KScanOption& KScanOption::operator= (const KScanOption& so )
     return( *this );
 }
 
-void KScanOption::slWidgetChange( const Q3CString& t )
+void KScanOption::slWidgetChange( const QByteArray& t )
 {
     kDebug(29000) << "Received WidgetChange for " << getName() << " (const QCString&)" << endl;
     set( t );
@@ -904,9 +904,9 @@ bool KScanOption::get( int *val ) const
 
 
 
-Q3CString KScanOption::get( void ) const
+QByteArray KScanOption::get( void ) const
 {
-   Q3CString retstr;
+   QByteArray retstr;
 
    SANE_Word sane_word;
 
@@ -945,7 +945,7 @@ Q3CString KScanOption::get( void ) const
    ;
    if( type() == GAMMA_TABLE )
    {
-      retstr.sprintf( "%d, %d, %d", gamma, brightness, contrast );
+      retstr= QByteArray::number(gamma) +", " + QByteArray::number(brightness) + ", "+ QByteArray::number(contrast);
    }
 
    kDebug(29000) << "option::get returns " << retstr << endl;
@@ -1150,8 +1150,8 @@ QWidget *KScanOption::comboBox( QWidget *parent, const QString& text )
 
   KScanCombo *cb = new KScanCombo( parent, text, list);
 
-  connect( cb, SIGNAL( valueChanged( const Q3CString& )), this,
-	   SLOT( slWidgetChange( const Q3CString& )));
+  connect( cb, SIGNAL( valueChanged( const QByteArray& )), this,
+	   SLOT( slWidgetChange( const QByteArray& )));
 
   return( cb );
 }
@@ -1160,8 +1160,8 @@ QWidget *KScanOption::comboBox( QWidget *parent, const QString& text )
 QWidget *KScanOption::entryField( QWidget *parent, const QString& text )
 {
   KScanEntry *ent = new KScanEntry( parent, text );
-  connect( ent, SIGNAL( valueChanged( Q3CString )), this,
-	   SLOT( slWidgetChange( Q3CString )));
+  connect( ent, SIGNAL( valueChanged( QByteArray )), this,
+	   SLOT( slWidgetChange( QByteArray )));
 	
   return( ent );
 }

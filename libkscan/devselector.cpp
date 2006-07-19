@@ -21,7 +21,6 @@
 
 #include <q3buttongroup.h>
 #include <qcheckbox.h>
-#include <q3cstring.h>
 #include <qlayout.h>
 #include <qlabel.h>
 #include <qfile.h>
@@ -88,13 +87,13 @@ DeviceSelector::DeviceSelector( QWidget *parent, Q3StrList& devList,
 
 }
 
-Q3CString DeviceSelector::getDeviceFromConfig( void ) const
+QByteArray DeviceSelector::getDeviceFromConfig( void ) const
 {
    KConfig *gcfg = KGlobal::config();
    gcfg->setGroup(QString::fromLatin1(GROUP_STARTUP));
    bool skipDialog = gcfg->readEntry( STARTUP_SKIP_ASK, false );
 
-   Q3CString result;
+   QByteArray result;
 
    /* in this case, the user has checked 'Do not ask me again' and does not
     * want to be bothered any more.
@@ -112,7 +111,7 @@ Q3CString DeviceSelector::getDeviceFromConfig( void ) const
    else
    {
       kDebug(29000) << "Scanner from Config file is _not_ available" << endl;
-      result = Q3CString();
+      result = QByteArray();
    }
 
    return( result );
@@ -123,7 +122,7 @@ bool DeviceSelector::getShouldSkip( void ) const
    return( cbSkipDialog->isChecked());
 }
 
-Q3CString DeviceSelector::getSelectedDevice( void ) const
+QByteArray DeviceSelector::getSelectedDevice( void ) const
 {
    unsigned int selID = selectBox->id( selectBox->selected() );
 
@@ -154,7 +153,7 @@ void DeviceSelector::setScanSources( const Q3StrList& sources,
    bool default_ok = false;
    KConfig *gcfg = KGlobal::config();
    gcfg->setGroup(QString::fromLatin1(GROUP_STARTUP));
-   Q3CString defstr = gcfg->readEntry( STARTUP_SCANDEV, "" ).local8Bit();
+   QByteArray defstr = gcfg->readEntry( STARTUP_SCANDEV, "" ).local8Bit();
 
    /* Selector-Stuff*/
    uint nr = 0;

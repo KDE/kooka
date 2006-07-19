@@ -33,7 +33,7 @@
 #include <qapplication.h>
 //Added by qt3to4:
 #include <Q3StrList>
-#include <Q3CString>
+#include <QByteArray>
 #include <kdebug.h>
 #include <klocale.h>
 #include <kglobal.h>
@@ -76,7 +76,7 @@ public:
 /* ---------------------------------------------------------------------------
 
    ------------------------------------------------------------------------- */
-void KScanDevice::guiSetEnabled( const Q3CString& name, bool state )
+void KScanDevice::guiSetEnabled( const QByteArray& name, bool state )
 {
     KScanOption *so = getExistingGuiElement( name );
 
@@ -93,11 +93,11 @@ void KScanDevice::guiSetEnabled( const Q3CString& name, bool state )
 /* ---------------------------------------------------------------------------
 
    ------------------------------------------------------------------------- */
-KScanOption *KScanDevice::getExistingGuiElement( const Q3CString& name )
+KScanOption *KScanDevice::getExistingGuiElement( const QByteArray& name )
 {
     KScanOption *ret = 0L;
 
-    Q3CString alias = aliasName( name );
+    QByteArray alias = aliasName( name );
 
     /* gui_elements is a QList<KScanOption> */
     for( ret = gui_elements.first(); ret != 0; ret = gui_elements.next())
@@ -111,7 +111,7 @@ KScanOption *KScanDevice::getExistingGuiElement( const Q3CString& name )
 
    ------------------------------------------------------------------------- */
 
-KScanOption *KScanDevice::getGuiElement( const Q3CString& name, QWidget *parent,
+KScanOption *KScanDevice::getGuiElement( const QByteArray& name, QWidget *parent,
 					 const QString& desc,
 					 const QString& tooltip )
 {
@@ -119,7 +119,7 @@ KScanOption *KScanDevice::getGuiElement( const Q3CString& name, QWidget *parent,
    QWidget *w = 0;
    KScanOption *so = 0;
 
-   Q3CString alias = aliasName( name );
+   QByteArray alias = aliasName( name );
 
    /* Check if already exists */
    so = getExistingGuiElement( name );
@@ -233,7 +233,7 @@ KScanDevice::~KScanDevice()
 }
 
 
-KScanStat KScanDevice::openDevice( const Q3CString& backend )
+KScanStat KScanDevice::openDevice( const QByteArray& backend )
 {
    KScanStat    stat      = KSCAN_OK;
    SANE_Status 	sane_stat = SANE_STATUS_GOOD;
@@ -300,7 +300,7 @@ void KScanDevice::slCloseDevice( )
 }
 
 
-QString KScanDevice::getScannerName(const Q3CString& name) const
+QString KScanDevice::getScannerName(const QByteArray& name) const
 {
   QString ret = i18n("No scanner selected");
   SANE_Device *scanner = 0L;
@@ -415,7 +415,7 @@ Q3StrList KScanDevice::getCommonOptions()
 {
    Q3StrList com_opt;
 
-   Q3CString s = option_list.first();
+   QByteArray s = option_list.first();
 
    while( !s.isEmpty() )
    {
@@ -431,7 +431,7 @@ Q3StrList KScanDevice::getAdvancedOptions()
 {
    Q3StrList com_opt;
 
-   Q3CString s = option_list.first();
+   QByteArray s = option_list.first();
 
    while( !s.isEmpty() )
    {
@@ -451,7 +451,7 @@ KScanStat KScanDevice::apply( KScanOption *opt, bool isGammaTable )
 
    int         *num = (*option_dic)[ opt->getName() ];
    SANE_Status sane_stat = SANE_STATUS_GOOD;
-   const Q3CString& oname = opt->getName();
+   const QByteArray& oname = opt->getName();
 
    if ( oname == "preview" || oname == "mode" ) {
       sane_stat = sane_control_option( scanner_handle, *num,
@@ -552,12 +552,12 @@ KScanStat KScanDevice::apply( KScanOption *opt, bool isGammaTable )
    return( stat );
 }
 
-bool KScanDevice::optionExists( const Q3CString& name )
+bool KScanDevice::optionExists( const QByteArray& name )
 {
    if( name.isEmpty() ) return false;
    int *i = 0L;
 
-   Q3CString altname = aliasName( name );
+   QByteArray altname = aliasName( name );
 
    if( ! altname.isNull() )
        i = (*option_dic)[ altname ];
@@ -567,7 +567,7 @@ bool KScanDevice::optionExists( const Q3CString& name )
    return( *i > -1 );
 }
 
-void KScanDevice::slSetDirty( const Q3CString& name )
+void KScanDevice::slSetDirty( const QByteArray& name )
 {
    if( optionExists( name ) )
    {
@@ -586,10 +586,10 @@ void KScanDevice::slSetDirty( const Q3CString& name )
  *  cool thing :-|
  *  Maybe this helps us out ?
  */
-Q3CString KScanDevice::aliasName( const Q3CString& name )
+QByteArray KScanDevice::aliasName( const QByteArray& name )
 {
     int *i = (*option_dic)[ name ];
-    Q3CString ret;
+    QByteArray ret;
 
     if( i ) return( name );
     ret = name;

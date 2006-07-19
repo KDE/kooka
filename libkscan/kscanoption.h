@@ -27,7 +27,7 @@
 #include <qsocketnotifier.h>
 #include <qdatastream.h>
 //Added by qt3to4:
-#include <Q3CString>
+#include <QByteArray>
 
 extern "C" {
 #include <sane/sane.h>
@@ -69,7 +69,7 @@ public:
    * option is valid and contains the correct value retrieved from the
    * scanner.
    **/
-  KScanOption( const Q3CString& new_name );
+  KScanOption( const QByteArray& new_name );
 
   /**
    * creates a KScanOption from another
@@ -133,7 +133,7 @@ public:
     **/
   bool get( int* ) const;
   bool get( KGammaTable* ) const;
-  Q3CString get( void ) const;
+  QByteArray get( void ) const;
 
    /**
     * This function creates a widget for the scanner option depending
@@ -165,7 +165,7 @@ public:
   bool        getRangeFromList( double*, double*, double* ) const;
   bool        getRange( double*, double*, double* ) const;
 
-  Q3CString    getName() const { return( name ); }
+  QByteArray    getName() const { return( name ); }
   void *      getBuffer() const { return( buffer ); }
   QWidget     *widget( ) const { return( internal_widget ); }
   /**
@@ -187,7 +187,7 @@ public:
 
    ### not implemented at all?
    **/
-  KSANE_Type typeToSet( const Q3CString& name );
+  KSANE_Type typeToSet( const QByteArray& name );
 
   /**
    *  returns a string describing the unit of given the option.
@@ -196,7 +196,7 @@ public:
 
    ###  not implemented at all?
    **/
-  QString unitOf( const Q3CString& name );
+  QString unitOf( const QByteArray& name );
 
 public slots:
   void       slRedrawWidget( KScanOption *so );
@@ -212,7 +212,7 @@ protected slots:
    *  This is an internal slot.
    **/
   void		  slWidgetChange( void );
-  void		  slWidgetChange( const Q3CString& );
+  void		  slWidgetChange( const QByteArray& );
   void		  slWidgetChange( int );
 	
   signals:
@@ -236,7 +236,7 @@ protected slots:
 
 private:
   bool       applyVal( void );
-  bool       initOption( const Q3CString& new_name );
+  bool       initOption( const QByteArray& new_name );
   void       *allocBuffer( long );
 
   QWidget    *entryField ( QWidget *parent, const QString& text );
@@ -244,7 +244,7 @@ private:
   QWidget    *comboBox   ( QWidget *parent, const QString& text );
 	
   const      SANE_Option_Descriptor *desc;
-  Q3CString    name;
+  QByteArray    name;
   void       *buffer;
   QWidget    *internal_widget;
   bool       buffer_untouched;

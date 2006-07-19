@@ -27,7 +27,7 @@
 #include <q3strlist.h>
 #include <qsocketnotifier.h>
 //Added by qt3to4:
-#include <Q3CString>
+#include <QByteArray>
 #include <Q3PtrList>
 
 
@@ -92,7 +92,7 @@ public:
      *   @return the state of the operation
      *   @param backend: the name of the backend to open
      */
-    KScanStat openDevice( const Q3CString& backend );
+    KScanStat openDevice( const QByteArray& backend );
 
     /**
      *  returns the names of all existing Scan Devices in the system.
@@ -107,7 +107,7 @@ public:
      * returns the short, technical name of the currently attached backend.
      * It is in the form 'umax:/dev/sg1'.
      */
-    Q3CString shortScannerName() const { return scanner_name; }
+    QByteArray shortScannerName() const { return scanner_name; }
 
     /**
      *  returns a long, human readable name of the scanner, like
@@ -119,7 +119,7 @@ public:
      * @param a QString with a backend string
      * @return a QString containing a human readable scanner name
      **/
-    QString getScannerName( const Q3CString& name = 0 ) const;
+    QString getScannerName( const QByteArray& name = 0 ) const;
 
     /*
      *  ========= Preview Functions ==========
@@ -233,7 +233,7 @@ public:
      *  @param name: the name of a option from a returned option-List
      *  @return true, if the option exists
      */
-    bool optionExists( const Q3CString& name );
+    bool optionExists( const QByteArray& name );
 
     /**
      *  checks if the backend knows the option with the required name under
@@ -241,7 +241,7 @@ public:
      *  is returned, otherwise a null QCString.
      */
 
-    Q3CString aliasName( const Q3CString& name );
+    QByteArray aliasName( const QByteArray& name );
 
     /**
      *  returns a Widget suitable for the selected Option and creates the
@@ -252,7 +252,7 @@ public:
      *  @param desc: pointer to the text appearing as widget text
      *  @param tooltip: tooltip text. If zero, the SANE text will be used.
      **/
-    KScanOption *getGuiElement( const Q3CString& name, QWidget *parent,
+    KScanOption *getGuiElement( const QByteArray& name, QWidget *parent,
                                 const QString& desc = QString::null,
                                 const QString& tooltip = QString::null );
 
@@ -260,12 +260,12 @@ public:
      *  returns the pointer to an already created Scanoption from the
      *  gui element list. Cares for option name aliases.
      */
-    KScanOption *getExistingGuiElement( const Q3CString& name );
+    KScanOption *getExistingGuiElement( const QByteArray& name );
 
     /**
      *  sets an widget of the named option enabled/disabled
      **/
-    void guiSetEnabled( const Q3CString& name, bool state );
+    void guiSetEnabled( const QByteArray& name, bool state );
 
     /**
      *  returns the maximum scan size. This is interesting e.g. for the
@@ -323,7 +323,7 @@ public slots:
     void slSaveScanConfigSet( const QString&, const QString& );
 
 
-    void slSetDirty( const Q3CString& name );
+    void slSetDirty( const QByteArray& name );
 
     /**
      * Closes the scan device and frees all related data, makes
@@ -444,7 +444,7 @@ private:
 
     /* Data for the scan process */
     /* This could/should go to  a small help object */
-    Q3CString             scanner_name;
+    QByteArray             scanner_name;
     SANE_Byte           *data;
     QImage              *img;
     SANE_Parameters      sane_scan_param;

@@ -27,7 +27,7 @@
 #include <qpoint.h>
 //Added by qt3to4:
 #include <QHBoxLayout>
-#include <Q3CString>
+#include <QByteArray>
 
 #include <kruler.h>
 #include <q3memarray.h>
@@ -94,7 +94,7 @@ private:
     QHBoxLayout *layout;
     ImageCanvas *img_canvas;
     QComboBox   *pre_format_combo;
-    Q3MemArray<Q3CString> format_ids;
+    Q3MemArray<QByteArray> format_ids;
     Q3ButtonGroup * bgroup;
     QRadioButton * rb1;
     QRadioButton * rb2;

@@ -27,7 +27,7 @@
 #include <qapplication.h>
 #include <qcheckbox.h>
 //Added by qt3to4:
-#include <Q3CString>
+#include <QByteArray>
 #include <QSplitter>
 #include <kglobal.h>
 #include <klocale.h>
@@ -258,7 +258,7 @@ bool ScanDialog::setup()
    }
 
    /* ..if there are devices.. */
-   Q3CString configDevice;
+   QByteArray configDevice;
    good_scan_connect = true;
    if( scannerNames.count() > 0 )
    {
