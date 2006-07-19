@@ -32,7 +32,7 @@
 #include <k3dockwidget.h>
 #include <qstring.h>
 #include <kaction.h>
-
+#include <ktoggleaction.h>
 /**
  * This class is just a helper class since the KDockWidget classes do not yet
  * export KActions but only a QPopup-Pointer, which is quite useless in case

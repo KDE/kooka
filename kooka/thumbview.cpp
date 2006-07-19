@@ -39,6 +39,7 @@
 #include <kglobal.h>
 #include <kstandarddirs.h>
 #include <kprogressbar.h>
+#include <kvbox.h>
 
 #include "thumbview.h"
 #include "thumbview.moc"
@@ -48,7 +49,7 @@
 
 
 ThumbView::ThumbView( QWidget *parent, const char *name )
-   : Q3VBox( parent ),
+   : KVBox( parent ),
      m_iconView(0),
      m_job(0)
 {

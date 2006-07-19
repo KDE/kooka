@@ -48,9 +48,10 @@
 #include <kscanslider.h>
 #include "kookaimage.h"
 #include "kookapref.h"
-#include <q3vbox.h>
-#include <q3hbox.h>
+
+
 #include <qcombobox.h>
+#include <kvbox.h>
 
 
 
@@ -101,7 +102,7 @@ EngineError ocradDialog::setupGui()
 {
     KOCRBase::setupGui();
 
-    Q3VBox *page = ocrPage();
+    KVBox *page = ocrPage();
     Q_CHECK_PTR( page );
 
     KConfig *conf = KGlobal::config ();
@@ -135,7 +136,7 @@ EngineError ocradDialog::setupGui()
     kDebug(28000) << "Layout detection from config: " << layoutDetect << endl;
 
     (void) new KSeparator( Qt::Horizontal, page);
-    Q3HBox *hb1 = new Q3HBox(page);
+    KHBox *hb1 = new KHBox(page);
     hb1->setSpacing( KDialog::spacingHint() );
     (void) new QLabel( i18n("OCRAD layout analysis mode: "), hb1);
     m_layoutMode = new QComboBox(hb1);
@@ -146,7 +147,7 @@ EngineError ocradDialog::setupGui()
 
     /** stating the ocrad binary **/
     (void) new KSeparator( Qt::Horizontal, page);
-    Q3HBox *hb = new Q3HBox(page);
+    KHBox *hb = new KHBox(page);
     hb->setSpacing( KDialog::spacingHint());
 
     m_binaryLabel = new QLabel( i18n("Using ocrad binary: ") + res, hb );

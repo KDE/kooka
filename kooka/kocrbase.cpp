@@ -43,8 +43,8 @@
 #include <kseparator.h>
 #include <kmessagebox.h>
 #include <qlabel.h>
-#include <q3hbox.h>
-#include <q3vbox.h>
+
+
 
 #include "resource.h"
 #include "kocrbase.h"
@@ -61,6 +61,7 @@
 #include <qsizepolicy.h>
 #include <q3groupbox.h>
 #include <qcheckbox.h>
+#include <kvbox.h>
 
 KOCRBase::KOCRBase( QWidget *parent, KSpellConfig *spellConfig,
                     KDialogBase::DialogType face )
@@ -125,7 +126,7 @@ void KOCRBase::imgIntro()
     (void) new QLabel( i18n("Image Information"), m_imgPage );
 
     // Caption - Label and image
-    m_imgHBox = new Q3HBox( m_imgPage );
+    m_imgHBox = new KHBox( m_imgPage );
 
     m_imgHBox->setSpacing( KDialog::spacingHint());
 
@@ -139,7 +140,7 @@ void KOCRBase::imgIntro()
     /* See introduceImage where the meta box is filled with data from the
      * incoming widget.
      */
-    m_metaBox = new Q3VBox( m_imgHBox );
+    m_metaBox = new KVBox( m_imgHBox );
 }
 
 /*
@@ -163,7 +164,7 @@ void KOCRBase::ocrIntro( )
 
     if( pix.load( logo ))
     {
-        Q3HBox *hb_cap = new Q3HBox( m_ocrPage );
+        KHBox *hb_cap = new KHBox( m_ocrPage );
         hb_cap->setSpacing( KDialog::spacingHint());
 
         QLabel *imgLab = new QLabel( hb_cap );
@@ -237,7 +238,7 @@ void KOCRBase::introduceImage( KookaImage* img)
          groups = info.preferredGroups();
 
     delete m_metaBox;
-    m_metaBox = new Q3VBox( m_imgHBox );
+    m_metaBox = new KVBox( m_imgHBox );
 
     /* Start to create a preview job for the thumb */
     KUrl::List li(img->url());

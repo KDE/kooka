@@ -33,13 +33,14 @@
 #include <qimage.h>
 #include <qpixmap.h>
 #include <qcolor.h>
-#include <q3vbox.h>
+
 
 #include <k3iconview.h>
 #include <kurl.h>
 #include <kio/previewjob.h>
 #include <kfileitem.h>
 #include <kfileiconview.h>
+#include <kvbox.h>
 
 /* KConfig group definitions */
 #define MARGIN_COLOR1 "MarginColor1"
@@ -56,7 +57,7 @@ class Q3ListViewItem;
 class KProgress;
 class KIO::PreviewJob;
 
-class ThumbView: public Q3VBox /* K3IconView */
+class ThumbView: public KVBox /* K3IconView */
 {
    Q_OBJECT
 

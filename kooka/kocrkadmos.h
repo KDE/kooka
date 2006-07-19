@@ -30,6 +30,7 @@
 
 #include <kdialogbase.h>
 #include <qmap.h>
+#include <kvbox.h>
 
 #include "kocrbase.h"
 /**
@@ -88,9 +89,9 @@ public slots:
 protected:
     void writeConfig();
 
-    void setupPreprocessing( Q3VBox *box );
-    void setupSegmentation(  Q3VBox *box );
-    void setupClassification( Q3VBox *box );
+    void setupPreprocessing( KVBox *box );
+    void setupSegmentation(  KVBox *box );
+    void setupClassification( KVBox *box );
 
     EngineError findClassifiers();
     EngineError findClassifierPath();

@@ -38,6 +38,7 @@
 #include <kscanslider.h>
 #include <kanimwidget.h>
 #include <ksconfig.h>
+#include <kvbox.h>
 
 #include "ksaneocr.h"
 /**
@@ -46,8 +47,8 @@
 
 
 class KookaImage;
-class Q3HBox;
-class Q3VBox;
+class KHBox;
+class KVBox;
 class QLabel;
 class QSize;
 class KSpellConfig;
@@ -80,8 +81,8 @@ public:
      */
     virtual QString ocrEngineDesc() const { return QString(); }
 
-    Q3VBox* ocrPage() const { return m_ocrPage; }
-    Q3VBox* imagePage() const { return m_imgPage; }
+    KVBox* ocrPage() const { return m_ocrPage; }
+    KVBox* imagePage() const { return m_imgPage; }
 
     KSpellConfig* spellConfig() const
         { return m_spellConfig; }
@@ -141,11 +142,11 @@ private slots:
 
 private:
     KAnimWidget  *m_animation;
-    Q3VBox        *m_ocrPage;
-    Q3VBox        *m_imgPage;
-    Q3VBox        *m_spellchkPage;
-    Q3VBox        *m_metaBox;
-    Q3HBox        *m_imgHBox;
+    KVBox        *m_ocrPage;
+    KVBox        *m_imgPage;
+    KVBox        *m_spellchkPage;
+    KVBox        *m_metaBox;
+    KHBox        *m_imgHBox;
     QLabel       *m_previewPix;
     KookaImage   *m_currImg;
 

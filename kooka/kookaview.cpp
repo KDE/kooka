@@ -54,7 +54,7 @@
 #include <q3paintdevicemetrics.h>
 #include <q3popupmenu.h>
 #include <q3widgetstack.h>
-#include <q3hbox.h>
+
 
 //Added by qt3to4:
 #include <QPixmap>
@@ -83,6 +83,7 @@
 #include <kparts/componentfactory.h>
 #include <qimage.h>
 #include <kmenu.h>
+#include <kvbox.h>
 
 
 #define STARTUP_IMG_SELECTION   "SelectedImageOnStartup"
@@ -167,7 +168,7 @@ KookaView::KookaView( KParts::DockMainWindow3 *parent, const Q3CString& deviceTo
 
    m_dockRecent->setDockSite(KDockWidget::DockFullSite);
 
-   Q3HBox *recentBox = new Q3HBox( m_dockRecent );
+   KHBox *recentBox = new KHBox( m_dockRecent );
    recentBox->setMargin(KDialog::marginHint());
    QLabel *lab = new QLabel( i18n("Gallery:"), recentBox );
    lab->setSizePolicy( QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed) );

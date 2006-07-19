@@ -297,7 +297,7 @@ void Kooka::readProperties(KConfig *config)
     // the app is being restored.  read in here whatever you wrote
     // in 'saveProperties'
    config->setGroup( KOOKA_STATE_GROUP );
-   m_prefDialogIndex = config->readNumEntry( PREFERENCE_DIA_TAB, 0 );
+   m_prefDialogIndex = config->readEntry( PREFERENCE_DIA_TAB, 0 );
    // QString url = config->readPathEntry("lastURL");
 
 }

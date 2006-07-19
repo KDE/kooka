@@ -45,10 +45,11 @@
 #include "kocrgocr.h"
 #include "kocrgocr.moc"
 #include <kscanslider.h>
+#include <kvbox.h>
 #include "kookaimage.h"
 #include "kookapref.h"
-#include <q3vbox.h>
-#include <q3hbox.h>
+
+
 
 /* defines for konfig-reading */
 
@@ -90,7 +91,7 @@ EngineError KGOCRDialog::setupGui()
 {
     KOCRBase::setupGui();
 
-    Q3VBox *page = ocrPage();
+    KVBox *page = ocrPage();
     Q_CHECK_PTR( page );
 
     KConfig *conf = KGlobal::config ();
@@ -121,9 +122,9 @@ EngineError KGOCRDialog::setupGui()
     (void) new QLabel( i18n("Using GOCR binary: ") + res, page );
     (void) new KSeparator( Qt::Horizontal, page);
 
-    Q3HBox *hb = new Q3HBox(page);
+    KHBox *hb = new KHBox(page);
     hb->setSpacing( KDialog::spacingHint());
-    Q3VBox *innerBox = new Q3VBox( hb );
+    KVBox *innerBox = new KVBox( hb );
     innerBox->setSpacing( KDialog::spacingHint());
     /* This is for a 'work-in-progress'-Animation */
     getAnimation(hb);

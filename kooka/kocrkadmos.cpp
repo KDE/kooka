@@ -28,7 +28,7 @@
 #include <qlabel.h>
 #include <qfileinfo.h>
 #include <qtooltip.h>
-#include <q3vbox.h>
+
 #include <q3dict.h>
 #include <qdir.h>
 #include <qmap.h>
@@ -53,6 +53,7 @@
 #include <qcheckbox.h>
 #include <kstandarddirs.h>
 #include <qstringlist.h>
+#include <kvbox.h>
 
 
 /* defines for konfig-reading */
@@ -269,7 +270,7 @@ EngineError KadmosDialog::setupGui()
     // setupClassification( addVBoxPage( i18n("Classification")));
 
     /* continue page setup on the first page */
-    Q3VBox *page = ocrPage();
+    KVBox *page = ocrPage();
 
     // Horizontal line
     (void) new KSeparator( Qt::Horizontal, page);
@@ -278,7 +279,7 @@ EngineError KadmosDialog::setupGui()
 
     (void) new QLabel( i18n("Please classify the font type and language of the text on the image:"),
 		       page );
-    Q3HBox *locBox = new Q3HBox( page );
+    KHBox *locBox = new KHBox( page );
     m_bbFont = new Q3ButtonGroup(1, Qt::Horizontal, i18n("Font Type Selection"), locBox);
 
     m_rbMachine = new QRadioButton( i18n("Machine print"), m_bbFont );
@@ -295,7 +296,7 @@ EngineError KadmosDialog::setupGui()
     m_rbMachine->setChecked(true);
 
     /* --- */
-    Q3HBox *innerBox = new Q3HBox( page );
+    KHBox *innerBox = new KHBox( page );
     innerBox->setSpacing( KDialog::spacingHint());
 
     Q3ButtonGroup *cbGroup = new Q3ButtonGroup( 1, Qt::Horizontal, i18n("OCR Modifier"), innerBox );
@@ -366,17 +367,17 @@ void KadmosDialog::slFontChanged( int id )
 }
 
 
-void KadmosDialog::setupPreprocessing( Q3VBox*  )
+void KadmosDialog::setupPreprocessing( KVBox*  )
 {
 
 }
 
-void KadmosDialog::setupSegmentation(  Q3VBox* )
+void KadmosDialog::setupSegmentation(  KVBox* )
 {
 
 }
 
-void KadmosDialog::setupClassification( Q3VBox* )
+void KadmosDialog::setupClassification( KVBox* )
 {
 
 }
