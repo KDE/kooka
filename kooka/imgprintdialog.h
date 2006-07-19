@@ -34,6 +34,7 @@
 #include <kdeprint/kprintdialogpage.h>
 
 #include "kookaimage.h"
+class Q3ButtonGroup;
 
 #define OPT_SCALING  "kde-kooka-scaling"
 #define OPT_SCAN_RES "kde-kooka-scanres"

@@ -56,7 +56,7 @@
 
 
 ocradDialog::ocradDialog( QWidget *parent, K3SpellConfig *spellConfig )
-    :KOCRBase( parent, spellConfig, KDialogBase::Tabbed ),
+    :KOCRBase( parent, spellConfig, KPageDialog::Tabbed ),
      m_ocrCmd( QString()),
      m_orfUrlRequester(0L),
      m_layoutMode(0),

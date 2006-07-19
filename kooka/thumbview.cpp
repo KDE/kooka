@@ -108,21 +108,21 @@ bool ThumbView::readSettings()
 
    int value;
    bool sizeDirty = false;
-   value = cfg->readNumEntry( THUMB_MARGIN, 5 );
+   value = cfg->readEntry( THUMB_MARGIN, 5 );
    if( value != m_thumbMargin )
    {
       sizeDirty = true;
       m_thumbMargin = value;
    }
 
-   value = cfg->readNumEntry( PIXMAP_WIDTH, 100 );
+   value = cfg->readEntry( PIXMAP_WIDTH, 100 );
    if( value != m_pixWidth || m_pixWidth == 0 )
    {
       sizeDirty  = true;
       m_pixWidth = value;
    }
 
-   value = cfg->readNumEntry( PIXMAP_HEIGHT, 120 );
+   value = cfg->readEntry( PIXMAP_HEIGHT, 120 );
    if( value != m_pixHeight || m_pixHeight == 0 )
    {
       sizeDirty  = true;
@@ -214,7 +214,7 @@ void ThumbView::slImageRenamed( KFileItem *kfit, const KUrl& newUrl )
     if( kfit->isDir() ) {
 	clear();
     }
-    
+
     for ( Q3IconViewItem *item = m_iconView->firstItem(); item; item = item->nextItem() )
     {
         ThumbViewItem *it=static_cast<ThumbViewItem*>( item );

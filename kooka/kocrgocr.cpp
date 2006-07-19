@@ -30,7 +30,7 @@
 #include <qlabel.h>
 #include <qfileinfo.h>
 #include <qtooltip.h>
-
+#include <kpagedialog.h>
 #include <kapplication.h>
 #include <kconfig.h>
 #include <kglobal.h>
@@ -60,7 +60,7 @@
 
 
 KGOCRDialog::KGOCRDialog( QWidget *parent, K3SpellConfig *spellConfig )
-    :KOCRBase( parent, spellConfig, KDialog::Tabbed ),
+    :KOCRBase( parent, spellConfig, KPageDialog::Tabbed ),
      m_ocrCmd( QString())
 {
    kDebug(28000) << "Starting KOCR-Start-Dialog!" << endl;
@@ -131,19 +131,19 @@ EngineError KGOCRDialog::setupGui()
 
     /* Slider for OCR-Options */
     sliderGrayLevel = new KScanSlider( innerBox , i18n("&Gray level"), 0, 254, true, 160 );
-    int numdefault = conf->readNumEntry( CFG_GOCR_GRAYLEVEL, 160 );
+    int numdefault = conf->readEntry( CFG_GOCR_GRAYLEVEL, 160 );
     sliderGrayLevel->slSetSlider( numdefault );
     sliderGrayLevel->setToolTip(
                    i18n( "The numeric value gray pixels are \nconsidered to be black.\n\nDefault is 160"));
 
     sliderDustSize = new KScanSlider( innerBox, i18n("&Dust size" ), 0, 60, true, 10 );
-    numdefault = conf->readNumEntry( CFG_GOCR_DUSTSIZE, 10 );
+    numdefault = conf->readEntry( CFG_GOCR_DUSTSIZE, 10 );
     sliderDustSize->slSetSlider( numdefault );
     sliderDustSize->setToolTip(
                    i18n( "Clusters smaller than this value\nwill be considered to be dust and \nremoved from the image.\n\nDefault is 10"));
 
     sliderSpace = new KScanSlider( innerBox, i18n( "&Space width" ), 0, 60, true, 0 );
-    numdefault = conf->readNumEntry( CFG_GOCR_SPACEWIDTH, 0 );
+    numdefault = conf->readEntry( CFG_GOCR_SPACEWIDTH, 0 );
     sliderSpace->slSetSlider( numdefault );
     sliderSpace->setToolTip( i18n("Spacing between characters.\n\nDefault is 0 what means autodetection"));
 

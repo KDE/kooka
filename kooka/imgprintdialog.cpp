@@ -44,6 +44,7 @@
 #include <qlabel.h>
 #include <qtooltip.h>
 #include <kdebug.h>
+#include <Q3ButtonGroup>
 
 #define ID_SCREEN 0
 #define ID_ORIG   1
@@ -51,7 +52,7 @@
 #define ID_FIT_PAGE 3
 
 ImgPrintDialog::ImgPrintDialog( KookaImage *img, QWidget *parent, const char* name )
-    : KPrintDialogPage( parent, name ),
+    : KPrintDialogPage( parent),
       m_image(img),
       m_ignoreSignal(false)
 {
@@ -105,7 +106,7 @@ ImgPrintDialog::ImgPrintDialog( KookaImage *img, QWidget *parent, const char* na
 
     /* Scan resolution of the image */
     m_dpi = new KIntNumInput( group1 );
-    m_dpi->setLabel( i18n("Scan resolution (dpi) " ), AlignVCenter );
+    m_dpi->setLabel( i18n("Scan resolution (dpi) " ), Qt::AlignVCenter );
     m_dpi->setValue( 300 );
     m_dpi->setSuffix( i18n(" dpi"));
 
@@ -117,11 +118,11 @@ ImgPrintDialog::ImgPrintDialog( KookaImage *img, QWidget *parent, const char* na
     hbox->addWidget( group );
 
     m_sizeW = new KIntNumInput( group );
-    m_sizeW->setLabel( i18n("Image width:"), AlignVCenter );
+    m_sizeW->setLabel( i18n("Image width:"), Qt::AlignVCenter );
     m_sizeW->setSuffix( i18n(" mm"));
     connect( m_sizeW, SIGNAL(valueChanged(int)), SLOT(slCustomWidthChanged(int)));
-    m_sizeH = new KIntNumInput( m_sizeW, AlignVCenter, group  );
-    m_sizeH->setLabel( i18n("Image height:"), AlignVCenter);
+    m_sizeH = new KIntNumInput( m_sizeW, Qt::AlignVCenter, group  );
+    m_sizeH->setLabel( i18n("Image height:"), Qt::AlignVCenter);
     m_sizeH->setSuffix( i18n(" mm"));
     connect( m_sizeH, SIGNAL(valueChanged(int)), SLOT(slCustomHeightChanged(int)));
 

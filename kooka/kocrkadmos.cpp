@@ -28,6 +28,7 @@
 #include <qlabel.h>
 #include <qfileinfo.h>
 #include <qtooltip.h>
+#include <kpagedialog.h>
 
 #include <q3dict.h>
 #include <qdir.h>
@@ -66,7 +67,7 @@
 #define CNTRY_GB i18n( "Great Britain, USA" )
 
 KadmosDialog::KadmosDialog( QWidget *parent, K3SpellConfig *spellConfig )
-    :KOCRBase( parent, spellConfig, KDialog::Tabbed ),
+    :KOCRBase( parent, spellConfig, KPageDialog::Tabbed ),
      m_cbNoise(0),
      m_cbAutoscale(0),
      m_haveNorm(false)
