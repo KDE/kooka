@@ -45,7 +45,7 @@
 #include <QMouseEvent>
 #include <stdio.h>
 #include <unistd.h>
-
+#include <k3sconfig.h>
 #include <img_canvas.h>
 
 #include "img_saver.h"
@@ -97,12 +97,12 @@ KSANEOCR::KSANEOCR( QWidget*, KConfig *cfg ):
     m_tmpFile = 0L;
 
     if( cfg )
-        m_hideDiaWhileSpellcheck = cfg->readBoolEntry( HIDE_BASE_DIALOG, true );
+        m_hideDiaWhileSpellcheck = cfg->readEntry( HIDE_BASE_DIALOG, true );
     /*
      * a initial config is needed as a starting point for the config dialog
      * but also for ocr without visible dialog.
      */
-    m_spellInitialConfig = new K3SpellConfig( 0L, 0L ,0L, false );
+    m_spellInitialConfig = new K3SpellConfig( 0L, 0L , false );
 
     if( konf )
     {
@@ -123,7 +123,7 @@ KSANEOCR::KSANEOCR( QWidget*, KConfig *cfg ):
 #endif
         kDebug(28000) << "OCR engine is " << eng << endl;
 
-        m_unlinkORF = konf->readBoolEntry( CFG_OCR_CLEANUP, true );
+        m_unlinkORF = konf->readEntry( CFG_OCR_CLEANUP, true );
     }
 
     /* resize m_blocks to size 1 since there is at least one block */
@@ -410,7 +410,7 @@ void KSANEOCR::startOCRAD( )
     *daemon << QString::number( ocrDia->layoutDetectionMode());
 
     KConfig *konf = KGlobal::config ();
-    KConfigGroupSaver( konf, CFG_GROUP_OCRAD );
+    //KConfigGroupSaver( konf, CFG_GROUP_OCRAD );
 
     QString format = konf->readEntry( CFG_OCRAD_FORMAT, "utf8");
     *daemon << QString("-F");
@@ -1408,7 +1408,7 @@ void KSANEOCR::slSpellDead()
         {
             kDebug(28000) << "KSpell finished with Errors" << endl;
         }
-        else if( m_spell->status() == KSpell::Crashed )
+        else if( m_spell->status() == K3Spell::Crashed )
         {
             kDebug(28000) << "KSpell Chrashed" << endl;
         }

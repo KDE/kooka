@@ -28,7 +28,7 @@
 #ifndef KOCRKADMOS_H
 #define KOCRKADMOS_H
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 #include <qmap.h>
 #include <kvbox.h>
 

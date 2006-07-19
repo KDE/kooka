@@ -117,7 +117,8 @@ bool KookaImage::loadFromUrl( const KUrl& url )
    bool ret = true;
    m_url = url;
    QString filename = localFileName( );
-   QString format ( imageFormat( filename ));
+#warning "kde4 : port it"   
+   QString format;// ( imageFormat( filename ));
 
    /* if the format was not recogniseable, check the extension, if it is tif, try to read it by
     * tifflib */

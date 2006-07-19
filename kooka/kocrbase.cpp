@@ -90,7 +90,7 @@ KOCRBase::KOCRBase( QWidget *parent, K3SpellConfig *spellConfig,
 
     KConfig *konf = KGlobal::config ();
     KConfigGroupSaver gs( konf, CFG_OCR_KSPELL );
-    m_userWantsSpellCheck = konf->readBoolEntry(CFG_WANT_KSPELL, true);
+    m_userWantsSpellCheck = konf->readEntry(CFG_WANT_KSPELL, true);
 
     /* Connect signals which disable the fields and store the configuration */
     connect( this, SIGNAL( user1Clicked()), this, SLOT( writeConfig()));
@@ -105,11 +105,11 @@ KOCRBase::KOCRBase( QWidget *parent, K3SpellConfig *spellConfig,
 }
 
 
-KAnimWidget* KOCRBase::getAnimation(QWidget *parent)
+KAnimatedButton* KOCRBase::getAnimation(QWidget *parent)
 {
    if( ! m_animation )
    {
-      m_animation = new KAnimWidget( QString("kde"), 48, parent, "ANIMATION" );
+      m_animation = new KAnimatedButton( QString("kde"), 48, parent, "ANIMATION" );
    }
    return( m_animation );
 }

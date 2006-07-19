@@ -27,7 +27,7 @@
 #ifndef KOCRBASE_H
 #define KOCRBASE_H
 
-#include <kdialog.h>
+#include <kpagedialog.h>
 #include <kio/previewjob.h>
 #include <qimage.h>
 #include <qstring.h>
@@ -55,12 +55,12 @@ class K3SpellConfig;
 class QCheckBox;
 class Q3GroupBox;
 
-class KOCRBase: public KDialog
+class KOCRBase: public KPageDialog
 {
     Q_OBJECT
 public:
     KOCRBase( QWidget *, K3SpellConfig *spellConfig,
-              KPageDialog::DialogType face = KPageDialog::Plain );
+              KPageDialog::FaceType face = KPageDialog::Plain );
     ~KOCRBase();
 
     virtual EngineError setupGui();
@@ -127,7 +127,7 @@ protected:
 
 
 protected slots:
-    virtual KAnimWidget* getAnimation(QWidget*);
+    virtual KAnimatedButton* getAnimation(QWidget*);
     virtual void writeConfig();
     virtual void slSpellConfigChanged();
 
@@ -141,7 +141,7 @@ private slots:
     virtual void slGotPreview( const KFileItem*, const QPixmap& );
 
 private:
-    KAnimWidget  *m_animation;
+    KAnimatedButton  *m_animation;
     KVBox        *m_ocrPage;
     KVBox        *m_imgPage;
     KVBox        *m_spellchkPage;
