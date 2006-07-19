@@ -46,7 +46,7 @@
 #include <Q3Frame>
 #include <QLabel>
 #include <QVBoxLayout>
-
+#include <kicon.h>
 #include <devselector.h>
 #include "config.h"
 #include "thumbview.h"
@@ -84,7 +84,7 @@ void KookaPreferences::setupOCRPage()
     QFrame *page = new QFrame();
     KPageWidgetItem *pageItem = new KPageWidgetItem( page, i18n("OCR") );
     pageItem->setHeader(  i18n("Optical Character Recognition" ) );
-    pageItem->setIcon( BarIcon("ocrImage", K3Icon::SizeMedium ) );
+    pageItem->setIcon( KIcon( BarIcon("ocrImage", K3Icon::SizeMedium ) ) );
     addPage( pageItem );
 
     QVBoxLayout *top = new QVBoxLayout( page );
@@ -120,7 +120,7 @@ void KookaPreferences::setupOCRPage()
     if( !cmdGocr.isEmpty() )
     {
         /* Found the command */
-        m_urlReqGocr->setURL( cmdGocr );
+        m_urlReqGocr->setUrl( cmdGocr );
         m_gocrBut->setEnabled(true);
         haveGocr = true;
     }
@@ -139,7 +139,7 @@ void KookaPreferences::setupOCRPage()
     if( !cmdOcrad.isEmpty() )
     {
         /* Found the command */
-        m_urlReqOcrad->setURL( cmdOcrad );
+        m_urlReqOcrad->setUrl( cmdOcrad );
         m_ocradBut->setEnabled(true);
         haveOcrad = true;
     }
@@ -322,7 +322,7 @@ void KookaPreferences::setupStartupPage()
     QFrame *page = new QFrame();
     KPageWidgetItem *pageItem = new KPageWidgetItem( page, i18n("Startup") );
     pageItem->setHeader(i18n("Kooka Startup Preferences" ) );
-    pageItem->setIcon( BarIcon("gear", K3Icon::SizeMedium ) );
+    pageItem->setIcon( KIcon( BarIcon("gear", K3Icon::SizeMedium ) ));
     addPage( pageItem );
 
     QVBoxLayout *top = new QVBoxLayout( page );
@@ -336,7 +336,7 @@ void KookaPreferences::setupStartupPage()
 				page,  "CB_NET_QUERY" );
     cbNetQuery->setToolTip(
 		   i18n( "Check this if you want a network query for available scanners.\nNote that this does not mean a query over the entire network but only the stations configured for SANE." ));
-    cbNetQuery->setChecked( ! (konf->readBoolEntry( STARTUP_ONLY_LOCAL, false )) );
+    cbNetQuery->setChecked( ! (konf->readEntry( STARTUP_ONLY_LOCAL, false )) );
 
 
     /* Show scanner selection box on startup (Checkbox) */
@@ -345,14 +345,14 @@ void KookaPreferences::setupStartupPage()
     cbShowScannerSelection->setToolTip(
 		   i18n( "Check this if you once checked 'do not show the scanner selection on startup',\nbut you want to see it again." ));
 
-    cbShowScannerSelection->setChecked( !konf->readBoolEntry( STARTUP_SKIP_ASK, false ));
+    cbShowScannerSelection->setChecked( !konf->readEntry( STARTUP_SKIP_ASK, false ));
 
     /* Read startup image on startup (Checkbox) */
     cbReadStartupImage = new QCheckBox( i18n("Load the last image into the viewer on startup"),
 					    page,  "CB_LOAD_ON_START" );
     cbReadStartupImage->setToolTip(
 		   i18n( "Check this if you want Kooka to load the last selected image into the viewer on startup.\nIf your images are large, that might slow down Kooka's start." ));
-    cbReadStartupImage->setChecked( konf->readBoolEntry( STARTUP_READ_IMAGE, true));
+    cbReadStartupImage->setChecked( konf->readEntry( STARTUP_READ_IMAGE, true));
 
     /* -- */
 
@@ -370,7 +370,7 @@ void KookaPreferences::setupSaveFormatPage( )
    QFrame *page = new QFrame();
    KPageWidgetItem *pageItem = new KPageWidgetItem( page, i18n("Image Saving") );
    pageItem->setHeader(i18n("Configure Image Save Assistant" ) );
-   pageItem->setIcon( BarIcon("filesave", K3Icon::SizeMedium ) );
+   pageItem->setIcon( KIcon(  BarIcon("filesave", K3Icon::SizeMedium ) ) );
    addPage( pageItem );
 
    QVBoxLayout *top = new QVBoxLayout( page );
@@ -380,13 +380,13 @@ void KookaPreferences::setupSaveFormatPage( )
    /* Skip the format asking if a format entry  exists */
    cbSkipFormatAsk = new QCheckBox( i18n("Always display image save assistant"),
 				     page,  "CB_IMGASSIST_QUERY" );
-   cbSkipFormatAsk->setChecked( konf->readBoolEntry( OP_FILE_ASK_FORMAT, true  ));
+   cbSkipFormatAsk->setChecked( konf->readEntry( OP_FILE_ASK_FORMAT, true  ));
    cbSkipFormatAsk->setToolTip( i18n("Check this if you want to see the image save assistant even if there is a default format for the image type." ));
    top->addWidget( cbSkipFormatAsk );
 
    cbFilenameAsk = new QCheckBox( i18n("Ask for filename when saving file"),
                     page,  "CB_ASK_FILENAME" );
-   cbFilenameAsk->setChecked( konf->readBoolEntry( OP_ASK_FILENAME, false));
+   cbFilenameAsk->setChecked( konf->readEntry( OP_ASK_FILENAME, false));
    cbFilenameAsk->setToolTip( i18n("Check this if you want to enter a filename when an image has been scanned." ));
    top->addWidget( cbFilenameAsk );
 
@@ -401,7 +401,7 @@ void KookaPreferences::setupThumbnailPage()
    QFrame *page = new QFrame();
    KPageWidgetItem *pageItem = new KPageWidgetItem( page, i18n("Thumbnail View") );
    pageItem->setHeader(i18n("Thumbnail Gallery View" ) );
-   pageItem->setIcon( BarIcon("thumbnail", K3Icon::SizeMedium ) );
+   pageItem->setIcon(KIcon(  BarIcon("thumbnail", K3Icon::SizeMedium ) ) );
    addPage( pageItem );
 
    QVBoxLayout *top = new QVBoxLayout( page );
@@ -429,8 +429,8 @@ void KookaPreferences::setupThumbnailPage()
    Q3GroupBox *hgb3 = new Q3GroupBox(1, Qt::Horizontal, i18n("Thumbnail Frame" ), page );
 
    /* Thumbnail size */
-   int w = konf->readNumEntry( PIXMAP_WIDTH, 100);
-   int h = konf->readNumEntry( PIXMAP_HEIGHT, 120 );
+   int w = konf->readEntry( PIXMAP_WIDTH, 100);
+   int h = konf->readEntry( PIXMAP_HEIGHT, 120 );
    Q3Grid *lGrid = new Q3Grid( 2, hgb2 );
    lGrid->setSpacing( 2 );
    QLabel *l1 = new QLabel( i18n("Thumbnail maximum &width:"), lGrid );
@@ -445,7 +445,7 @@ void KookaPreferences::setupThumbnailPage()
    l1->setBuddy( m_thumbHeight );
 
    /* Frame Stuff */
-   int frameWidth = konf->readNumEntry( THUMB_MARGIN, 3 );
+   int frameWidth = konf->readEntry( THUMB_MARGIN, 3 );
    QColor col1    = konf->readColorEntry( MARGIN_COLOR1, &(colorGroup().base()));
    QColor col2    = konf->readColorEntry( MARGIN_COLOR2, &(colorGroup().foreground()));
 

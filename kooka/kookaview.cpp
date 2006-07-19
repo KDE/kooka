@@ -110,8 +110,8 @@ KookaView::KookaView( KParts::DockMainWindow3 *parent, const Q3CString& deviceTo
    m_mainDock = parent->createDockWidget( "Kookas MainDock",
                                           loader->loadIcon( "folder_image", K3Icon::Small ),
                                           0L, i18n("Image Viewer"));
-   m_mainDock->setEnableDocking(KDockWidget::DockNone );
-   m_mainDock->setDockSite( KDockWidget::DockFullSite );
+   m_mainDock->setEnableDocking(K3DockWidget::DockNone );
+   m_mainDock->setDockSite( K3DockWidget::DockFullSite );
 
    parent->setView( m_mainDock);
    parent->setMainDockWidget( m_mainDock);
@@ -122,23 +122,26 @@ KookaView::KookaView( KParts::DockMainWindow3 *parent, const Q3CString& deviceTo
    connect( img_canvas, SIGNAL( imageReadOnly(bool)),
 	    this, SLOT(slViewerReadOnly(bool)));
 
-   KMenu *ctxtmenu = static_cast<KMenu*>(img_canvas->contextMenu());
+   Q3PopupMenu *ctxtmenu = static_cast<Q3PopupMenu*>(img_canvas->contextMenu());
+#warning "kde4: port to kmenu"
+#if 0
    if( ctxtmenu )
-       ctxtmenu->insertTitle(i18n("Image View"));
+       ctxtmenu->addTitle(i18n("Image View"));
+#endif
    m_mainDock->setWidget( img_canvas );
 
    /** Thumbview **/
    m_dockThumbs = parent->createDockWidget( "Thumbs",
 					    loader->loadIcon( "thumbnail", K3Icon::Small ),
 					    0L,  i18n("Thumbnails"));
-   m_dockThumbs->setDockSite(KDockWidget::DockFullSite );
+   m_dockThumbs->setDockSite(K3DockWidget::DockFullSite );
 
    /* thumbnail viewer widget */
    m_thumbview = new ThumbView( m_dockThumbs);
    m_dockThumbs->setWidget( m_thumbview );
 
    m_dockThumbs->manualDock( m_mainDock,              // dock target
-			     KDockWidget::DockBottom, // dock site
+			     K3DockWidget::DockBottom, // dock site
 			     20 );                  // relation target/this (in percent)
 
    /** Packager Dock **/
@@ -146,11 +149,11 @@ KookaView::KookaView( KParts::DockMainWindow3 *parent, const Q3CString& deviceTo
    m_dockPackager = parent->createDockWidget( "Scanpackager",
 					    loader->loadIcon( "palette_color", K3Icon::Small ),
 					    0L, i18n("Gallery"));
-   m_dockPackager->setDockSite(KDockWidget::DockFullSite);
+   m_dockPackager->setDockSite(K3DockWidget::DockFullSite);
    packager = new ScanPackager( m_dockPackager );
    m_dockPackager->setWidget( packager );
    m_dockPackager->manualDock( m_mainDock,              // dock target
-                         KDockWidget::DockLeft, // dock site
+                         K3DockWidget::DockLeft, // dock site
                          30 );                  // relation target/this (in percent)
 
 
@@ -166,7 +169,7 @@ KookaView::KookaView( KParts::DockMainWindow3 *parent, const Q3CString& deviceTo
 					     loader->loadIcon( "image", K3Icon::Small ),
 					     0L, i18n("Gallery Folders"));
 
-   m_dockRecent->setDockSite(KDockWidget::DockFullSite);
+   m_dockRecent->setDockSite(K3DockWidget::DockFullSite);
 
    KHBox *recentBox = new KHBox( m_dockRecent );
    recentBox->setMargin(KDialog::marginHint());
@@ -176,7 +179,7 @@ KookaView::KookaView( KParts::DockMainWindow3 *parent, const Q3CString& deviceTo
 
    m_dockRecent->setWidget( recentBox );
    m_dockRecent->manualDock( m_dockPackager,              // dock target
-                         KDockWidget::DockBottom, // dock site
+                         K3DockWidget::DockBottom, // dock site
                          5 );                  // relation target/this (in percent)
 
 
@@ -195,14 +198,14 @@ KookaView::KookaView( KParts::DockMainWindow3 *parent, const Q3CString& deviceTo
  					     loader->loadIcon( "folder", K3Icon::Small ),
  					     0L, i18n("Scan Parameter"));
    //
-   m_dockScanParam->setDockSite(KDockWidget::DockFullSite);
+   m_dockScanParam->setDockSite(K3DockWidget::DockFullSite);
 
    m_dockScanParam->setWidget( 0 ); // later
    sane = new KScanDevice( m_dockScanParam );
    Q_CHECK_PTR(sane);
 
    m_dockScanParam->manualDock( m_dockRecent,              // dock target
-				KDockWidget::DockBottom, // dock site
+				K3DockWidget::DockBottom, // dock site
 				20 );                  // relation target/this (in percent)
    m_dockScanParam->hide();
 
@@ -224,7 +227,7 @@ KookaView::KookaView( KParts::DockMainWindow3 *parent, const Q3CString& deviceTo
    }
    m_dockPreview->setWidget( preview_canvas );
    m_dockPreview->manualDock( m_mainDock,              // dock target
-			      KDockWidget::DockCenter, // dock site
+			      K3DockWidget::DockCenter, // dock site
 			      100 );                  // relation target/this (in percent)
 
    /* Create a text editor part for ocr results */
@@ -239,7 +242,7 @@ KookaView::KookaView( KParts::DockMainWindow3 *parent, const Q3CString& deviceTo
    {
        m_dockOCRText->setWidget( m_ocrResEdit ); // m_textEdit->widget() );
        m_dockOCRText->manualDock( m_dockThumbs,              // dock target
-                                  KDockWidget::DockCenter, // dock site
+                                  K3DockWidget::DockCenter, // dock site
                                   100 );                  // relation target/this (in percent)
 
        m_ocrResEdit->setTextFormat( Qt::PlainText );
@@ -411,7 +414,7 @@ Q3CString KookaView::userDeviceSelection( ) const
 
    /* a list of backends the scan backend knows */
    Q3StrList backends = sane->getDevices();
-   QStrListIterator  it( backends );
+   Q3StrListIterator  it( backends );
 
    Q3CString selDevice;
    if( backends.count() > 0 )
@@ -449,7 +452,7 @@ void KookaView::loadStartupImage( void )
    if( konf )
    {
       konf->setGroup(GROUP_STARTUP);
-      bool wantReadOnStart = konf->readBoolEntry( STARTUP_READ_IMAGE, true );
+      bool wantReadOnStart = konf->readEntry( STARTUP_READ_IMAGE, true );
 
       if( wantReadOnStart )
       {
@@ -969,7 +972,7 @@ void KookaView::slOpenCurrInGraphApp( void )
 
       urllist.append( ftvi->url());
 
-      KRun::displayOpenWithDialog( urllist );
+      KRun::displayOpenWithDialog( urllist,0L );
    }
 }
 
@@ -1054,7 +1057,9 @@ void KookaView::slFreshUpThumbView()
 
 void KookaView::createDockMenu( KActionCollection *col, K3DockMainWindow *mainWin, const char * name )
 {
-   KActionMenu *actionMenu = new KActionMenu( i18n("Tool Views"), "view_icon", col, name );
+#warning "kde4: port it"
+#if 0
+    KActionMenu *actionMenu = new KActionMenu( i18n("Tool Views"), "view_icon", col, name );
 
    actionMenu->insert( new dwMenuAction( i18n("Show Image Viewer"),
 					 KShortcut(), m_mainDock, col,
@@ -1082,6 +1087,7 @@ void KookaView::createDockMenu( KActionCollection *col, K3DockMainWindow *mainWi
    actionMenu->insert( new dwMenuAction( i18n("Show OCR Results"),
 					 KShortcut(), m_dockOCRText, col,
 					 mainWin, "dock_ocrResults" ));
+#endif
 }
 
 

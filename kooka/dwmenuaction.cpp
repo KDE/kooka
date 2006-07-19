@@ -32,8 +32,8 @@
 //-------------------------------------
 
 dwMenuAction::dwMenuAction( const QString& text, const KShortcut& cut,
-			    KDockWidget *dw,QObject* parent,
-			    KDockMainWindow *mw, const char* name )
+			    K3DockWidget *dw,QObject* parent,
+			    K3DockMainWindow *mw, const char* name )
     :KToggleAction(text,cut,parent,name),m_dw(dw),m_mw(mw)
 {
     connect(this,SIGNAL(toggled(bool)),this,SLOT(slotToggled(bool)));

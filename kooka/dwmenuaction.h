@@ -34,7 +34,7 @@
 #include <kaction.h>
 #include <ktoggleaction.h>
 /**
- * This class is just a helper class since the KDockWidget classes do not yet
+ * This class is just a helper class since the K3DockWidget classes do not yet
  * export KActions but only a QPopup-Pointer, which is quite useless in case
  * you have a xml-file driven gui.
  * This class provides Actions for show and hide parts of the GUI (dockwidgets)
@@ -46,13 +46,13 @@ class dwMenuAction:public KToggleAction
 public:
    dwMenuAction( const QString& text,
 		 const KShortcut& cut = KShortcut(),
-		 KDockWidget *dw=0, QObject* parent = 0,
-		 KDockMainWindow * mw=0, const char* name = 0 );
+		 K3DockWidget *dw=0, QObject* parent = 0,
+		 K3DockMainWindow * mw=0, const char* name = 0 );
    virtual ~dwMenuAction();
 
 private:
-   KDockWidget *m_dw;
-   KDockMainWindow *m_mw;
+   K3DockWidget *m_dw;
+   K3DockMainWindow *m_mw;
 protected slots:
    void slotToggled(bool);
    void anDWChanged();

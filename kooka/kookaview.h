@@ -47,7 +47,7 @@
 #include "scanparams.h"
 #include "img_canvas.h"
 
-class KDockWidget;
+class K3DockWidget;
 class QPainter;
 class KSANEOCR;
 class KConfig;
@@ -92,7 +92,7 @@ public:
 
     bool ToggleVisibility( int );
     void loadStartupImage( void );
-    KDockWidget *mainDockWidget( ) { return m_mainDock; }
+    K3DockWidget *mainDockWidget( ) { return m_mainDock; }
 
     void createDockMenu( KActionCollection*, K3DockMainWindow *, const char *);
 
@@ -227,13 +227,13 @@ private:
 
     KSANEOCR *ocrFabric;
 
-    KDockWidget *m_mainDock;
-    KDockWidget *m_dockScanParam;
-    KDockWidget *m_dockThumbs;
-    KDockWidget *m_dockPackager;
-    KDockWidget *m_dockRecent;
-    KDockWidget *m_dockPreview;
-    KDockWidget *m_dockOCRText;
+    K3DockWidget *m_mainDock;
+    K3DockWidget *m_dockScanParam;
+    K3DockWidget *m_dockThumbs;
+    K3DockWidget *m_dockPackager;
+    K3DockWidget *m_dockRecent;
+    K3DockWidget *m_dockPreview;
+    K3DockWidget *m_dockOCRText;
 
     KMainWindow *m_mainWindow;
 
