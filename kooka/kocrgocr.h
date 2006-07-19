@@ -28,7 +28,7 @@
 #ifndef KOCRGOCR_H
 #define KOCRGOCR_H
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 #include <qimage.h>
 #include <qstring.h>
 
@@ -40,13 +40,13 @@
   *@author Klaas Freitag
   */
 
-class KSpellConfig;
+class K3SpellConfig;
 
 class KGOCRDialog: public KOCRBase
 {
     Q_OBJECT
 public:
-    KGOCRDialog( QWidget*, KSpellConfig* );
+    KGOCRDialog( QWidget*, K3SpellConfig* );
     ~KGOCRDialog();
 
     QString getOCRCmd( void ) const

@@ -44,7 +44,7 @@ class QWidget;
 class Q3ButtonGroup;
 class KConfig;
 class QCheckBox;
-class KSpellConfig;
+class K3SpellConfig;
 class QRadioButton;
 
 class KadmosClassifier   /* Not yet used FIXME */
@@ -68,7 +68,7 @@ class KadmosDialog: public KOCRBase
 {
     Q_OBJECT
 public:
-    KadmosDialog( QWidget *, KSpellConfig *spellConfig );
+    KadmosDialog( QWidget *, K3SpellConfig *spellConfig );
     ~KadmosDialog();
 
     typedef QMap<QString, QString> StrMap;

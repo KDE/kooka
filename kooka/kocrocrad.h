@@ -28,7 +28,7 @@
 #ifndef KOCROCRAD_H
 #define KOCROCRAD_H
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 #include <qimage.h>
 #include <qstring.h>
 //Added by qt3to4:
@@ -48,7 +48,7 @@
   *@author Klaas Freitag
   */
 
-class KSpellConfig;
+class K3SpellConfig;
 class KUrlRequester;
 class KProcess;
 class QLabel;
@@ -58,7 +58,7 @@ class ocradDialog: public KOCRBase
 {
     Q_OBJECT
 public:
-    ocradDialog( QWidget*, KSpellConfig* );
+    ocradDialog( QWidget*, K3SpellConfig* );
     ~ocradDialog();
 
     QString getOCRCmd( void ) const

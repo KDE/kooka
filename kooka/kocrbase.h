@@ -51,7 +51,7 @@ class KHBox;
 class KVBox;
 class QLabel;
 class QSize;
-class KSpellConfig;
+class K3SpellConfig;
 class QCheckBox;
 class Q3GroupBox;
 
@@ -59,8 +59,8 @@ class KOCRBase: public KDialog
 {
     Q_OBJECT
 public:
-    KOCRBase( QWidget *, KSpellConfig *spellConfig,
-              KDialogBase::DialogType face = KDialogBase::Plain );
+    KOCRBase( QWidget *, K3SpellConfig *spellConfig,
+              KPageDialog::DialogType face = KPageDialog::Plain );
     ~KOCRBase();
 
     virtual EngineError setupGui();

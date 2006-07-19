@@ -63,7 +63,7 @@
 #include <qcheckbox.h>
 #include <kvbox.h>
 
-KOCRBase::KOCRBase( QWidget *parent, KSpellConfig *spellConfig,
+KOCRBase::KOCRBase( QWidget *parent, K3SpellConfig *spellConfig,
                     KDialogBase::DialogType face )
    :KDialog( face, i18n("Optical Character Recognition"),
 		 User2|Close|User1, User1, parent,0, false, true,
@@ -193,7 +193,7 @@ void KOCRBase::spellCheckIntro()
     m_gbSpellOpts = new Q3GroupBox( 1, Qt::Horizontal, i18n("Spell-Check Options"),
                                    m_spellchkPage );
 
-    KSpellConfig *sCfg = new KSpellConfig( m_gbSpellOpts, "SPELLCHK", m_spellConfig, false );
+    K3SpellConfig *sCfg = new K3SpellConfig( m_gbSpellOpts, "SPELLCHK", m_spellConfig, false );
     /* A space eater */
     QWidget *spaceEater = new QWidget(m_spellchkPage);
     spaceEater->setSizePolicy( QSizePolicy( QSizePolicy::Ignored, QSizePolicy::Ignored ));
