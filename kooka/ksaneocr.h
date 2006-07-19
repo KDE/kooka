@@ -59,8 +59,8 @@ class KProcess;
 class QRect;
 class QPixmap;
 class QStringList;
-class KSpell;
-class KSpellConfig;
+class K3Spell;
+class K3SpellConfig;
 class ImageCanvas;
 class KConfig;
 // class ocrWord;
@@ -106,7 +106,7 @@ public:
     /**
      * @return the current spell config.
      */
-    KSpellConfig* ocrSpellConfig() const
+    K3SpellConfig* ocrSpellConfig() const
         { return m_spellInitialConfig; }
 
 
@@ -197,7 +197,7 @@ protected slots:
     void slotClose ();
     void slotStopOCR();
 
-    void slSpellReady( KSpell* );
+    void slSpellReady( K3Spell* );
     void slSpellDead( );
     /**
      * a new list of ocr results of the current ocr process arrived and is available
@@ -260,11 +260,11 @@ private:
 
     ImageCanvas     *m_imgCanvas;
 
-    KSpell          *m_spell;
+    K3Spell          *m_spell;
     bool             m_wantKSpell;
     bool             m_kspellVisible;
     bool             m_hideDiaWhileSpellcheck;
-    KSpellConfig    *m_spellInitialConfig;
+    K3SpellConfig    *m_spellInitialConfig;
 
     /* ValueVector of wordLists for every line of ocr results */
     ocrBlock         m_ocrPage; /* one block contains all lines of the page */

@@ -488,10 +488,10 @@ void KookaPreferences::slotApply( void )
    konf->setGroup(QString::fromLatin1(GROUP_STARTUP));
    bool cbVal = !(cbShowScannerSelection->isChecked());
    kDebug(28000) << "Writing for " << STARTUP_SKIP_ASK << ": " << cbVal << endl;
-   konf->writeEntry( STARTUP_SKIP_ASK, cbVal, true, true ); /* global flag goes to kdeglobals */
+   konf->writeEntry( STARTUP_SKIP_ASK, cbVal, KConfig::Persistent|KConfig::Global ); /* global flag goes to kdeglobals */
 
    /* only search for local (=non-net) scanners ? */
-   konf->writeEntry( STARTUP_ONLY_LOCAL,  !cbNetQuery->isChecked(), true, true ); /* global */
+   konf->writeEntry( STARTUP_ONLY_LOCAL,  !cbNetQuery->isChecked(), KConfig::Persistent|KConfig::Global); /* global */
 
    /* Should kooka open the last displayed image in the viewer ? */
    if( cbReadStartupImage )

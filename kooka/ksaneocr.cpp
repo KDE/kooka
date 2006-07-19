@@ -33,8 +33,8 @@
 #include <ktempfile.h>
 #include <kprocess.h>
 #include <stdlib.h>
-#include <kspell.h>
-#include <kspelldlg.h>
+#include <k3spell.h>
+#include <k3spelldlg.h>
 #include <qfile.h>
 #include <qcolor.h>
 //Added by qt3to4:
@@ -102,7 +102,7 @@ KSANEOCR::KSANEOCR( QWidget*, KConfig *cfg ):
      * a initial config is needed as a starting point for the config dialog
      * but also for ocr without visible dialog.
      */
-    m_spellInitialConfig = new KSpellConfig( 0L, 0L ,0L, false );
+    m_spellInitialConfig = new K3SpellConfig( 0L, 0L ,0L, false );
 
     if( konf )
     {
@@ -284,8 +284,8 @@ void KSANEOCR::finishedOCRVisible( bool success )
             * create a new kspell object, based on the config of the base dialog
             */
 
-           connect( new KSpell( m_parent, i18n("Kooka OCR Dictionary Check"),
-                                this, SLOT( slSpellReady(KSpell*)),
+           connect( new K3Spell( m_parent, i18n("Kooka OCR Dictionary Check"),
+                                this, SLOT( slSpellReady(K3Spell*)),
                                 m_ocrProcessDia->spellConfig() ),
                     SIGNAL( death()), this, SLOT(slSpellDead()));
        }
@@ -598,7 +598,7 @@ void KSANEOCR::startOCRProcess( void )
        {
            KMessageBox::error( m_parent,
                                i18n("The classifier file necessary for OCR cannot be loaded: %1;\n"
-                                   "OCR with the KADMOS engine is not possible." , 
+                                   "OCR with the KADMOS engine is not possible." ,
                                clasPath), i18n("KADMOS Installation Problem"));
            finishedOCRVisible(false);
            return;
@@ -1350,7 +1350,7 @@ void KSANEOCR::slMisspelling( const QString& originalword, const QStringList& su
  * slot is called if the KSpell-object feels itself ready for operation.
  * Coming into this slot, the spelling starts in a line by line manner
  */
-void KSANEOCR::slSpellReady( KSpell *spell )
+void KSANEOCR::slSpellReady( K3Spell *spell )
 {
     m_spell = spell;
     connect ( m_spell, SIGNAL( misspelling( const QString&, const QStringList&,
@@ -1396,15 +1396,15 @@ void KSANEOCR::slSpellDead()
     }
     else
     {
-        if( m_spell->status() == KSpell::Cleaning )
+        if( m_spell->status() == K3Spell::Cleaning )
         {
             kDebug(28000) << "KSpell cleans up" << endl;
         }
-        else if( m_spell->status() == KSpell::Finished )
+        else if( m_spell->status() == K3Spell::Finished )
         {
             kDebug(28000) << "KSpell finished" << endl;
         }
-        else if( m_spell->status() == KSpell::Error )
+        else if( m_spell->status() == K3Spell::Error )
         {
             kDebug(28000) << "KSpell finished with Errors" << endl;
         }

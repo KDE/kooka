@@ -114,7 +114,8 @@ FormatDialog::FormatDialog( QWidget *parent, const QString&, const char *name )
 #ifdef USE_KIMAGEIO
    QStringList fo = KImageIO::types();
 #else
-   QStringList fo = QImage::outputFormatList();
+#warning "kde4: port it"
+   QStringList fo;// = QImage::outputFormatList();
 #endif
    kDebug(28000) << "#### have " << fo.count() << " image types" << endl;
    lb_format->insertStringList( fo );
@@ -246,7 +247,7 @@ ImgSaver::ImgSaver(  QWidget *parent, const KUrl dir_name )
       }
       else
       {
-	 directory = dir_name.directory(true, false);
+	 directory = dir_name.directory(KUrl::IgnoreTrailingSlash);
       }
    }
 
@@ -348,7 +349,7 @@ ImgSaveStat ImgSaver::saveImage( QImage *image )
    KConfig *konf = KGlobal::config ();
    konf->setGroup( OP_FILE_GROUP );
 
-   if( konf->readBoolEntry( OP_ASK_FILENAME, false ) )
+   if( konf->readEntry( OP_ASK_FILENAME, false ) )
    {
        bool ok;
        QString text = KInputDialog::getText( i18n( "Filename" ), i18n("Enter filename:"),
@@ -419,7 +420,7 @@ ImgSaveStat ImgSaver::saveImage( QImage *image, const KUrl& filename, const QStr
     }
 
     QString localFilename;
-    localFilename = filename.directory( false, true) + filename.fileName();
+    localFilename = filename.directory( KUrl::ObeyTrailingSlash) + filename.fileName();
 
     kDebug(28000) << "saveImage: Saving "<< localFilename << " in format " << format << endl;
     if( format.isEmpty() )
@@ -704,7 +705,7 @@ void ImgSaver::readConfig( void )
    KConfig *konf = KGlobal::config ();
    Q_CHECK_PTR( konf );
    konf->setGroup( OP_FILE_GROUP );
-   ask_for_format = konf->readBoolEntry( OP_FILE_ASK_FORMAT, true );
+   ask_for_format = konf->readEntry( OP_FILE_ASK_FORMAT, true );
 
    QDir home = QDir::home();
 }

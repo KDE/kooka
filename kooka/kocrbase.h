@@ -27,7 +27,7 @@
 #ifndef KOCRBASE_H
 #define KOCRBASE_H
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 #include <kio/previewjob.h>
 #include <qimage.h>
 #include <qstring.h>
@@ -55,7 +55,7 @@ class KSpellConfig;
 class QCheckBox;
 class Q3GroupBox;
 
-class KOCRBase: public KDialogBase
+class KOCRBase: public KDialog
 {
     Q_OBJECT
 public:
@@ -84,7 +84,7 @@ public:
     KVBox* ocrPage() const { return m_ocrPage; }
     KVBox* imagePage() const { return m_imgPage; }
 
-    KSpellConfig* spellConfig() const
+    K3SpellConfig* spellConfig() const
         { return m_spellConfig; }
 
     bool wantSpellCheck();
@@ -150,7 +150,7 @@ private:
     QLabel       *m_previewPix;
     KookaImage   *m_currImg;
 
-    KSpellConfig *m_spellConfig;
+    K3SpellConfig *m_spellConfig;
     bool          m_wantSpellCfg;         /* show the spellcheck options? */
     bool          m_userWantsSpellCheck;  /* user has enabled/disabled spellcheck */
     QSize         m_previewSize;

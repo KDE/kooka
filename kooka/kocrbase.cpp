@@ -65,7 +65,7 @@
 
 KOCRBase::KOCRBase( QWidget *parent, KSpellConfig *spellConfig,
                     KDialogBase::DialogType face )
-   :KDialogBase( face, i18n("Optical Character Recognition"),
+   :KDialog( face, i18n("Optical Character Recognition"),
 		 User2|Close|User1, User1, parent,0, false, true,
 		 KGuiItem( i18n("Start OCR" ), "launch",
 			   i18n("Start the Optical Character Recognition process" )),
@@ -82,6 +82,9 @@ KOCRBase::KOCRBase( QWidget *parent, KSpellConfig *spellConfig,
     m_cbWantCheck(0L),
     m_gbSpellOpts(0L)
 {
+    setCaption(i18n("Optical Character Recognition") );
+    setButtons(  User2|Close|User1 );
+    setDefaultButton( User1 );
     kDebug(28000) << "OCR Base Dialog!" << endl;
     // Layout-Boxes
 
@@ -152,7 +155,7 @@ void KOCRBase::ocrIntro( )
 
     // Caption - Label and image
     /* labelstring */
-    (void) new QLabel( i18n("<b>Starting Optical Character Recognition with %1</b><p>", 
+    (void) new QLabel( i18n("<b>Starting Optical Character Recognition with %1</b><p>",
                         ocrEngineName() ), m_ocrPage );
     // Find the kadmos logo and display if available
     KStandardDirs stdDir;
