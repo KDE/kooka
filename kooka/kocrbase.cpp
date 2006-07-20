@@ -64,13 +64,8 @@
 #include <kvbox.h>
 
 KOCRBase::KOCRBase( QWidget *parent, K3SpellConfig *spellConfig,
-                    KDialogBase::DialogType face )
-   :KDialog( face, i18n("Optical Character Recognition"),
-		 User2|Close|User1, User1, parent,0, false, true,
-		 KGuiItem( i18n("Start OCR" ), "launch",
-			   i18n("Start the Optical Character Recognition process" )),
-                 KGuiItem( i18n("Cancel" ), "stopocr",
-			   i18n("Stop the OCR Process" ))),
+                    KPageDialog::FaceType face )
+   :KPageDialog( parent ),
     m_animation(0L),
     m_metaBox(0L),
     m_imgHBox(0L),
@@ -85,6 +80,11 @@ KOCRBase::KOCRBase( QWidget *parent, K3SpellConfig *spellConfig,
     setCaption(i18n("Optical Character Recognition") );
     setButtons(  User2|Close|User1 );
     setDefaultButton( User1 );
+    setFaceType( face );
+    setButtonGuiItem( User1,  KGuiItem( i18n("Start OCR" ), "launch", i18n("Start the Optical Character Recognition process" )) );
+    setButtonGuiItem( User2,  KGuiItem( i18n("Cancel" ), "stopocr", i18n("Stop the OCR Process" )) );
+    setModal( false );
+    showButtonSeparator( true );
     kDebug(28000) << "OCR Base Dialog!" << endl;
     // Layout-Boxes
 
@@ -125,7 +125,8 @@ EngineError KOCRBase::setupGui()
 
 void KOCRBase::imgIntro()
 {
-    m_imgPage = addVBoxPage( i18n("Image") );
+    m_imgPage = new KVBox();
+    addPage( m_imgPage, i18n("Image") );
     (void) new QLabel( i18n("Image Information"), m_imgPage );
 
     // Caption - Label and image

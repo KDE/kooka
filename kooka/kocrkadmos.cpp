@@ -29,7 +29,7 @@
 #include <qfileinfo.h>
 #include <qtooltip.h>
 #include <kpagedialog.h>
-
+#include <Q3Button>
 #include <q3dict.h>
 #include <qdir.h>
 #include <qmap.h>
@@ -158,7 +158,7 @@ EngineError KadmosDialog::findClassifiers()
     for ( QStringList::Iterator it = lst.begin(); it != lst.end(); ++it )
     {
         QFileInfo fi( *it);
-        QString name = fi.fileName().lower();
+        QString name = fi.fileName().toLower();
 
         kDebug(28000) << "Checking file " << *it << endl;
 

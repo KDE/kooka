@@ -75,7 +75,7 @@ void ImageNameCombo::rewriteList( KFileTreeBranch *branch, const QString& selTex
    }
 
    int index = items.findIndex( selText );
-   setCurrentItem( index );
+   setCurrentIndex( index );
 }
 
 void ImageNameCombo::slotGalleryPathChanged( KFileTreeBranch* branch, const QString& relativPath )

@@ -130,7 +130,7 @@ ScanPackager::ScanPackager( QWidget *parent ) : KFileTreeView( parent )
 
    /* create a context menu and set the title */
    m_contextMenu = new KMenu();
-   static_cast<KMenu*>(m_contextMenu)->insertTitle( i18n( "Gallery" ));
+   static_cast<Q3PopupMenu*>(m_contextMenu)->insertTitle( i18n( "Gallery" ));
 
 }
 
@@ -987,7 +987,7 @@ void ScanPackager::slotExportFile( )
 
       // initial += fromUrl.filename(false);
       QString initial = m_currCopyDir + "/";
-      initial += fromUrl.filename(false);
+      initial += fromUrl.fileName(false);
       KUrl fileName = KFileDialog::getSaveUrl ( initial,
 						filter, this );
 

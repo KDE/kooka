@@ -58,7 +58,7 @@ ThumbView::ThumbView( QWidget *parent, const char *name )
    m_pixHeight = 0;
    m_thumbMargin = 5;
    m_iconView = new K3IconView( this, name );
-   m_progress = new KProgress( this );
+   m_progress = new KProgressBar( this );
    m_progress->hide();
 
    m_pixWidth  = 100;
@@ -345,7 +345,7 @@ void ThumbView::slNewFileItems( const KFileItemList& items )
 
 	 /* Create a new empty preview pixmap and store the pointer to it */
 	 ThumbViewItem *newIconViewIt = new ThumbViewItem( m_iconView,
-							   item->url().filename(),
+							   item->url().fileName(),
 							   createPixmap( p ),
 							   item );
 
@@ -382,7 +382,7 @@ void ThumbView::slNewFileItems( const KFileItemList& items )
    {
       /* Progress-Bar */
       m_progress->show();
-      m_progress->setTotalSteps(m_pendingJobs.count());
+      m_progress->setMaximum(m_pendingJobs.count());
       m_cntJobsStarted = 0;
 
       /* start a preview-job */
@@ -419,7 +419,7 @@ void ThumbView::slGotPreview( const KFileItem* newFileItem, const QPixmap& newPi
    item->setPixmap( createPixmap(newPix) );
    m_cntJobsStarted+=1;
 
-   m_progress->setProgress(m_cntJobsStarted);
+   m_progress->setValue(m_cntJobsStarted);
 
    // kDebug(28000)<< "jobs-Counter: " << m_cntJobsStarted << endl;
 
