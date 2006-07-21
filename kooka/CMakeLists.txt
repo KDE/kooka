@@ -16,19 +16,19 @@ set(kooka_SRCS
    ksaneocr.cpp 
    kookaimage.cpp 
    kookaimagemeta.cpp 
-   scanpackager.cpp 
+   #scanpackager.cpp 
    imgnamecombo.cpp 
    imageselectline.cpp 
-   thumbview.cpp 
+   #thumbview.cpp 
    thumbviewitem.cpp 
-   dwmenuaction.cpp 
-   kocrbase.cpp 
+   #dwmenuaction.cpp 
+   #kocrbase.cpp 
    kocrgocr.cpp 
    kocrkadmos.cpp 
    kadmosocr.cpp 
    ocrword.cpp 
    ocrresedit.cpp 
-   kookaprint.cpp 
+   #kookaprint.cpp 
    imgprintdialog.cpp 
    kocrocrad.cpp )
 
