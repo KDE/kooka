@@ -368,7 +368,7 @@ void ScanDialog::slotNewPreview( QImage *image )
     if( image )
     {
         m_previewImage = *image;
-        // hmmm - dont know, if conversion of the bit-depth is necessary.
+        // hmmm - don't know, if conversion of the bit-depth is necessary.
         // m_previewImage.convertDepth(32);
 
         /* The previewer does not copy the image data ! */

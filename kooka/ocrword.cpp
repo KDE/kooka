@@ -71,7 +71,7 @@ QStringList ocrWordList::stringList()
     for ( it = begin(); it != end(); ++it )
     {
 #if 0
-        /* Uncommented this to prevent an error that occurs if the lenght of the
+        /* Uncommented this to prevent an error that occurs if the length of the
          * spellchecked stringlist and the ocr_page wordlist are not the same length.
          * For the ocrpage words connected with a dash are one word while the code
          * below parts them into two. That confuses the replacement code if the user

@@ -194,7 +194,7 @@ void ocradDialog::enableFields(bool )
 }
 
 /* Later: Allow interactive loading of orf files
- *  for now, return emty string
+ *  for now, return empty string
  */
 QString ocradDialog::orfUrl() const
 {
@@ -241,7 +241,7 @@ void ocradDialog::slReceiveStdIn( KProcess*, char *buffer, int buflen)
 
         if( m_binaryLabel )
         {
-            m_binaryLabel->setText(m_binaryLabel->text() + "\n" + v );
+            m_binaryLabel->setText(m_binaryLabel->text() + '\n' + v );
             m_binaryLabel->update();
         }
     }

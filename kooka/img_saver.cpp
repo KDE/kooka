@@ -138,7 +138,7 @@ FormatDialog::FormatDialog( QWidget *parent, const QString&, const char *name )
    Q_CHECK_PTR( cb_subf );
 
    // Checkbox to store setting
-   cbDontAsk  = new QCheckBox(i18n("Don't ask again for the save format if it is defined."),
+   cbDontAsk  = new QCheckBox(i18n("Do not ask again for the save format if it is defined."),
 			      page );
    Q_CHECK_PTR( cbDontAsk );
 
@@ -361,13 +361,13 @@ ImgSaveStat ImgSaver::saveImage( QImage *image )
        }
    }
 
-   QString fi = directory + "/" + filename;
+   QString fi = directory + '/' + filename;
 
    if( extension(fi).isEmpty() )
    {
        if( ! fi.endsWith( "." )  )
        {
-	   fi+= ".";
+	   fi+= '.';
        }
        fi+=format.lower();
    }
@@ -395,11 +395,11 @@ QString ImgSaver::createFilename( QString format )
 
     QString num;
     num.setNum(c);
-    QString fname = "kscan_" + num.rightJustified(4, '0') + "." + format.lower();
+    QString fname = "kscan_" + num.rightJustified(4, '0') + '.' + format.lower();
 
     while( files.exists( fname ) ) {
         num.setNum(++c);
-        fname = "kscan_" + num.rightJustified(4, '0') + "." + format.lower();
+        fname = "kscan_" + num.rightJustified(4, '0') + '.' + format.lower();
     }
 
     return( fname );
@@ -768,7 +768,7 @@ bool ImgSaver::renameImage( const KUrl& fromUrl, KUrl& toUrl, bool askExt,  QWid
       QString fName = toUrl.fileName();
       if( ! fName.endsWith( "." )  )
       {
-	 fName += ".";
+	 fName += '.';
       }
       fName += extFrom;
 
@@ -823,7 +823,7 @@ bool ImgSaver::renameImage( const KUrl& fromUrl, KUrl& toUrl, bool askExt,  QWid
 QString ImgSaver::tempSaveImage( KookaImage *img, const QString& format, int colors )
 {
 
-    KTempFile *tmpFile = new KTempFile( QString(), "."+format.lower());
+    KTempFile *tmpFile = new KTempFile( QString(), '.'+format.lower());
     tmpFile->setAutoDelete( false );
     tmpFile->close();
 
@@ -869,7 +869,7 @@ bool ImgSaver::copyImage( const KUrl& fromUrl, const KUrl& toUrl, QWidget *overW
       int result = KMessageBox::Yes;
       QString fName = toUrl.fileName();
       if( ! fName.endsWith( "." ))
-	 fName += ".";
+	 fName += '.';
       fName += extFrom;
 
       QString s;

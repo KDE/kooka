@@ -246,7 +246,7 @@ public:
     /**
      *  returns a Widget suitable for the selected Option and creates the
      *  KScanOption. It is internally connected to the scan device, every
-     *  change to the widget is automaticly considered by the scan device.
+     *  change to the widget is automatically considered by the scan device.
      *  @param name: Name of the SANE Option
      *  @param parent: pointer to the parent widget
      *  @param desc: pointer to the text appearing as widget text

@@ -177,7 +177,7 @@ void KSANEOCR::slSetImage(KookaImage *img )
 }
 
 /*
- * Request to visualise a line-box in the source image, KADMOS Engine
+ * Request to visualize a line-box in the source image, KADMOS Engine
  */
 void KSANEOCR::slLineBox( const QRect& )
 {
@@ -221,7 +221,7 @@ bool KSANEOCR::startOCRVisible( QWidget *parent )
    }
 
    /*
-    * this part is independant from the engine again
+    * this part is independent from the engine again
     */
    if( m_ocrProcessDia )
    {
@@ -814,7 +814,7 @@ bool KSANEOCR::readORF( const QString& fileName, QString& errStr )
 
     /* clear the ocr result page */
     m_ocrPage.clear();
-    kDebug(28000) << "***** starting to analyse orf at " << fileName << " *****" << endl;
+    kDebug(28000) << "***** starting to analyze orf at " << fileName << " *****" << endl;
 
     /* some  checks on the orf */
     QFileInfo fi( fileName );
@@ -1106,7 +1106,7 @@ QString KSANEOCR::ocrResultText()
         {
             res += space + *lineIt;
         }
-        res += "\n";
+        res += '\n';
     }
     kDebug(28000) << "Returning result String  " << res << endl;
     return res;

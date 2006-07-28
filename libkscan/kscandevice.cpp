@@ -1393,7 +1393,7 @@ void KScanDevice::doProcessABlock( void )
 
 	/* This is also hit after the normal finish of the scan. Most probably,
 	 * the QSocketnotifier fires for a few times after the scan has been
-	 * cancelled.  Does it matter ? To see it, just uncomment the qDebug msg.
+	 * canceled.  Does it matter ? To see it, just uncomment the qDebug msg.
 	 */
 	kDebug(29000) << "Stopping the scan progress !" << endl;
 	goOn = false;
@@ -1426,7 +1426,7 @@ void KScanDevice::doProcessABlock( void )
   if( sane_stat == SANE_STATUS_CANCELLED )
   {
      scanStatus = SSTAT_STOP_NOW;
-     kDebug(29000) << "Scan was cancelled" << endl;
+     kDebug(29000) << "Scan was canceled" << endl;
 
      // stat = KSCAN_CANCELLED;
      // emit( sigScanFinished( stat ));

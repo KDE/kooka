@@ -107,7 +107,7 @@ QString KookaImage::localFileName( ) const
 {
 
     if( ! m_url.isEmpty() )
-        return( m_url.directory() + "/" + m_url.fileName());
+        return( m_url.directory() + '/' + m_url.fileName());
     else
         return QString();
 }

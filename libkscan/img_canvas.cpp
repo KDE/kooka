@@ -163,7 +163,7 @@ void ImageCanvas::newImage( QImage *new_image )
 {
 
     /** do cleanups **/
-   // dont free old image -> not yours
+   // don't free old image -> not yours
    image = new_image;
 
    if( ! image || image->isNull())
@@ -509,7 +509,7 @@ void ImageCanvas::viewportMouseMoveEvent(QMouseEvent *ev)
    int cx = contentsX(), cy = contentsY();
 
    // debug("Mouse Coord x: %d, y: %d | cx: %d, cy: %d", x,y, cx, cy );
-   // dont draw out of the scaled Pixmap
+   // don't draw out of the scaled Pixmap
    if( x < 0 ) x = 0;
    int ix, iy;
 	scale_matrix.map( image->width(), image->height(), &ix, &iy );

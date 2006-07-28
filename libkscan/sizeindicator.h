@@ -33,7 +33,7 @@ class QPainter;
  *  the size indicator is a small widget that displays a file size in a small
  *  frame. The unit (currently kB and MB) is selected automagically.
  *  If the file size grows bigger than the threshold set in the constructor,
- *  the widget starts to change its background color to visualise to the
+ *  the widget starts to change its background color to visualize to the
  *  user that he is doing something obvious.
  */
 

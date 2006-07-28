@@ -276,7 +276,7 @@ void ScanPackager::slotDecorate( KFileTreeViewItem* item )
        {
            m_nextUrlToShow = KUrl(); // do this first to prevent recursion
            slClicked( item );
-           setCurrentItem(item);     // neccessary in case of new file from D&D
+           setCurrentItem(item);     // necessary in case of new file from D&D
        }
    }
 }
@@ -389,7 +389,7 @@ QString ScanPackager::buildNewFilename( QString cmplFilename, QString currFormat
    if( newExt.isEmpty() )
    {
       /* ok, fine -> return the currFormat-Extension */
-      ext = base + "." + currFormat;
+      ext = base + '.' + currFormat;
    }
    else if( newExt == nowExt )
    {
@@ -402,7 +402,7 @@ QString ScanPackager::buildNewFilename( QString cmplFilename, QString currFormat
       KMessageBox::sorry( 0L, i18n( "You entered a file extension that differs from the existing one. That is not yet possible. Converting 'on the fly' is planned for a future release.\n"
 				      "Kooka corrects the extension."),
 			  i18n("On the Fly Conversion"));
-      ext = base + "." + currFormat;
+      ext = base + '.' + currFormat;
    }
    return( ext );
 }
@@ -986,7 +986,7 @@ void ScanPackager::slotExportFile( )
       filter += "\n*|" + i18n( "All Files" );
 
       // initial += fromUrl.filename(false);
-      QString initial = m_currCopyDir + "/";
+      QString initial = m_currCopyDir + '/';
       initial += fromUrl.fileName(false);
       KUrl fileName = KFileDialog::getSaveUrl ( initial,
 						filter, this );
