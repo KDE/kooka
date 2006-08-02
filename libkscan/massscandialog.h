@@ -24,7 +24,7 @@
 #include <qdialog.h>
 //Added by qt3to4:
 #include <QLabel>
-#include <Q3ProgressBar>
+#include <QProgressBar>
 class QLabel;
 
 /**
@@ -46,7 +46,7 @@ public slots:
 
    void setPageProgress( int p )
       {
-	 progressbar->setProgress( p );
+	 progressbar->setValue( p );
       }
 		
 private:
@@ -59,7 +59,7 @@ private:
    QString     progress;
    QLabel      *l_progress;	
 
-   Q3ProgressBar *progressbar;
+   QProgressBar *progressbar;
 
    class MassScanDialogPrivate;
    MassScanDialogPrivate *d;

@@ -19,7 +19,6 @@
 
 #include <qlayout.h>
 #include <qlabel.h>
-#include <q3progressbar.h>
 #include <q3groupbox.h>
 #include <q3frame.h>
 //Added by qt3to4:
@@ -82,7 +81,8 @@ MassScanDialog::MassScanDialog( QWidget *parent )
    QPushButton *pb_cancel_scan = new QPushButton( i18n("Cancel Scan"), f2);
    l_scanp->addWidget( pb_cancel_scan,3 );
 
-   progressbar = new Q3ProgressBar( 1000, f2 );
+   progressbar = new QProgressBar( f2 );
+   progressbar->setMaximum(1000);
    l_pro->addWidget( progressbar, 3 );
 
  	/* Buttons to start scanning and close the Window */
