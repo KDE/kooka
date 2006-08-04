@@ -69,7 +69,6 @@
 #include <klibloader.h>
 #include <klocale.h>
 #include <kmessagebox.h>
-#include <keditcl.h>
 #include <kled.h>
 #include <kcombobox.h>
 #include <kaction.h>
