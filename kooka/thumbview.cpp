@@ -38,7 +38,7 @@
 #include <kimageeffect.h>
 #include <kglobal.h>
 #include <kstandarddirs.h>
-#include <kprogressbar.h>
+#include <qprogressbar.h>
 #include <kvbox.h>
 
 #include "thumbview.h"
@@ -58,7 +58,7 @@ ThumbView::ThumbView( QWidget *parent, const char *name )
    m_pixHeight = 0;
    m_thumbMargin = 5;
    m_iconView = new K3IconView( this, name );
-   m_progress = new KProgressBar( this );
+   m_progress = new QProgressBar( this );
    m_progress->hide();
 
    m_pixWidth  = 100;

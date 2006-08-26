@@ -54,7 +54,7 @@
 
 class QPixmap;
 class Q3ListViewItem;
-class KProgressBar;
+class QProgressBar;
 class KIO::PreviewJob;
 
 class ThumbView: public KVBox /* K3IconView */
@@ -135,7 +135,7 @@ private:
 
    bool    deleteImage( KFileItem* );
    K3IconView *m_iconView;
-   KProgressBar *m_progress;
+   QProgressBar *m_progress;
 
    KUrl    m_currentDir;
    QPixmap m_basePix;
