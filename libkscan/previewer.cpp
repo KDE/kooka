@@ -615,7 +615,7 @@ void Previewer::checkForScannerBg()
             goWhite = ( KMessageBox::questionYesNo( this,
                                                     i18n("The autodetection of images on the preview depends on the background color of the preview image (Think of a preview of an empty scanner).\nPlease select whether the background of the preview image is black or white"),
                                                     i18n("Image Autodetection"),
-                                                    i18n("White"), i18n("Black") ) == KMessageBox::Yes );
+                                                    KGuiItem(i18n("White")), KGuiItem(i18n("Black")) ) == KMessageBox::Yes );
             kDebug(29000) << "User said " << isWhite << endl;
 
         }
