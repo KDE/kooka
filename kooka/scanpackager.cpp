@@ -987,7 +987,7 @@ void ScanPackager::slotExportFile( )
 
       // initial += fromUrl.filename(false);
       QString initial = m_currCopyDir + '/';
-      initial += fromUrl.fileName(false);
+      initial += fromUrl.fileName(KUrl::ObeyTrailingSlash);
       KUrl fileName = KFileDialog::getSaveUrl ( initial,
 						filter, this );
 
@@ -1045,7 +1045,7 @@ void ScanPackager::slotUrlsDropped( QWidget*, QDropEvent* ev, KUrl::List& urls, 
        if( ! urls.empty() )
        {
            KUrl nextSel = copyTo;
-           nextSel.addPath( urls.back().fileName(false));
+           nextSel.addPath( urls.back().fileName(KUrl::ObeyTrailingSlash));
 
            kDebug(28000) << "Selecting next url: " << nextSel.url() << endl;
            m_nextUrlToShow = nextSel;
