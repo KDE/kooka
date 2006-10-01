@@ -30,7 +30,7 @@
 #include <kmessagebox.h>
 #include <kconfig.h>
 #include <kapplication.h>
-#include <ktempfile.h>
+#include <ktemporaryfile.h>
 #include <kprocess.h>
 #include <stdlib.h>
 #include <k3spell.h>
@@ -140,7 +140,7 @@ KSANEOCR::~KSANEOCR()
    }
    if ( m_tmpFile )
    {
-       m_tmpFile->setAutoDelete( true );
+       m_tmpFile->setAutoRemove( true );
        delete m_tmpFile;
    }
 
@@ -380,17 +380,18 @@ void KSANEOCR::startOCRAD( )
     // if( m_ocrResultImage.isEmpty() )
     {
 	/* The url is empty. Start the program to fill up a temp file */
-	m_ocrResultImage = ImgSaver::tempSaveImage( m_img, "BMP", 8 ); // m_tmpFile->name();
+	m_ocrResultImage = ImgSaver::tempSaveImage( m_img, "BMP", 8 ); // m_tmpFile->fileName();
 	kDebug(28000) << "The new image name is <" << m_ocrResultImage << ">" << endl;
     }
 
     m_ocrImagePBM = ImgSaver::tempSaveImage( m_img, "PBM", 1 );
 
     /* temporar file for orf result */
-    KTempFile *tmpOrf = new KTempFile( QString(), ".orf" );
-    tmpOrf->setAutoDelete( false );
-    tmpOrf->close();
-    m_tmpOrfName = QFile::encodeName(tmpOrf->name());
+    KTemporaryFile *tmpOrf = new KTempFile();
+    tmpOrf->setSuffix(".orf");
+    tmpOrf->setAutoRemove( false );
+    tmpOrf->open();
+    m_tmpOrfName = QFile::encodeName(tmpOrf->fileName());
 
 
     if( daemon )
@@ -527,7 +528,7 @@ void KSANEOCR::startOCRProcess( void )
        else
            format = "PPM";
 
-       QString tmpFile = ImgSaver::tempSaveImage( m_img, format ); // m_tmpFile->name();
+       QString tmpFile = ImgSaver::tempSaveImage( m_img, format ); // m_tmpFile->fileName();
 
        kDebug(28000) <<  "Starting GOCR-Command: " << cmd << " on file " << tmpFile
 		      << ", format " << format << endl;
@@ -617,22 +618,23 @@ void KSANEOCR::startOCRProcess( void )
        }
        else
        {
-	   /** Since initialising succeeded, we start the ocr here **/
-	   m_rep.SetNoiseReduction( kadDia->getNoiseReduction() );
-	   m_rep.SetScaling( kadDia->getAutoScale() );
-	   kDebug(28000) << "Image size " << m_img->width() << " x " << m_img->height() << endl;
-	   kDebug(28000) << "Image depth " << m_img->depth() << ", colors: " << m_img->numColors() << endl;
+		/** Since initialising succeeded, we start the ocr here **/
+		m_rep.SetNoiseReduction( kadDia->getNoiseReduction() );
+		m_rep.SetScaling( kadDia->getAutoScale() );
+		kDebug(28000) << "Image size " << m_img->width() << " x " << m_img->height() << endl;
+		kDebug(28000) << "Image depth " << m_img->depth() << ", colors: " << m_img->numColors() << endl;
 #define USE_KADMOS_FILEOP /* use a save-file for OCR instead of filling the reImage struct manually */
 #ifdef USE_KADMOS_FILEOP
-	   m_tmpFile = new KTempFile( QString(), QString("bmp"));
-	   m_tmpFile->setAutoDelete( false );
-	   m_tmpFile->close();
-	   QString tmpFile = m_tmpFile->name();
-	   kDebug() << "Saving to file " << tmpFile << endl;
-	   m_img->save( tmpFile, "BMP" );
-	   m_rep.SetImage(tmpFile);
+		m_tmpFile = new KTemporaryFile();
+		m_tmpFile->setSuffix("bmp");
+		m_tmpFile->setAutoRemove( false );
+		m_tmpFile->open();
+		QString tmpFile = m_tmpFile->fileName();
+		kDebug() << "Saving to file " << tmpFile << endl;
+		m_img->save( tmpFile, "BMP" );
+		m_rep.SetImage(tmpFile);
 #else
-	   m_rep.SetImage(m_img);
+		m_rep.SetImage(m_img);
 #endif
 	   // rep.Recognize();
 	   m_rep.run();

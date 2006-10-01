@@ -42,7 +42,7 @@
 #include <kio/file.h>
 #include <kio/job.h>
 #include <kio/netaccess.h>
-#include <ktempfile.h>
+#include <ktemporaryfile.h>
 #include <kinputdialog.h>
 
 #include <qdir.h>
@@ -823,9 +823,10 @@ bool ImgSaver::renameImage( const KUrl& fromUrl, KUrl& toUrl, bool askExt,  QWid
 QString ImgSaver::tempSaveImage( KookaImage *img, const QString& format, int colors )
 {
 
-    KTempFile *tmpFile = new KTempFile( QString(), '.'+format.lower());
-    tmpFile->setAutoDelete( false );
-    tmpFile->close();
+    KTemporaryFile tmpFile;
+    tmpFile.setSuffix('.'+format.lower());
+    tmpFile.setAutoRemove( false );
+    tmpFile.open();
 
     KookaImage tmpImg;
 
@@ -847,11 +848,9 @@ QString ImgSaver::tempSaveImage( KookaImage *img, const QString& format, int col
     QString name;
     if( img )
     {
-	name = tmpFile->name();
-
+	name = tmpFile.fileName();
 	if( ! img->save( name, format.latin1() ) ) name = QString();
     }
-    delete tmpFile;
     return name;
 }
 

@@ -54,7 +54,7 @@
 
 class KOCRBase;
 class KookaImage;
-class KTempFile;
+class KTemporaryFile;
 class KProcess;
 class QRect;
 class QPixmap;
@@ -245,7 +245,7 @@ private:
     KOCRBase        *m_ocrProcessDia;
     KProcess        *daemon;
     bool             visibleOCRRunning;
-    KTempFile       *m_tmpFile;
+    KTemporaryFile       *m_tmpFile;
 
     KookaImage      *m_img;
     QString         m_ocrResultText;
