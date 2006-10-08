@@ -387,7 +387,7 @@ void KSANEOCR::startOCRAD( )
     m_ocrImagePBM = ImgSaver::tempSaveImage( m_img, "PBM", 1 );
 
     /* temporar file for orf result */
-    KTemporaryFile *tmpOrf = new KTempFile();
+    KTemporaryFile *tmpOrf = new KTemporaryFile();
     tmpOrf->setSuffix(".orf");
     tmpOrf->setAutoRemove( false );
     tmpOrf->open();
