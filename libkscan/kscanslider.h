@@ -47,7 +47,7 @@ class QLabel;
  *
  * @author Klaas Freitag <freitag@suse.de>
  */
-class KScanSlider : public Q3Frame
+class KScanSlider : public QFrame
 {
    Q_OBJECT
    Q_PROPERTY( int slider_val READ value WRITE slSetSlider )
@@ -119,7 +119,7 @@ private:
 /**
  * a entry field with a prefix text for description.
  */
-class KScanEntry : public Q3Frame
+class KScanEntry : public QFrame
 {
    Q_OBJECT
    Q_PROPERTY( QString text READ text WRITE slSetEntry )

@@ -49,7 +49,7 @@ MassScanDialog::MassScanDialog( QWidget *parent )
  	
  	/* Scan parameter information */
  	Q3GroupBox *f1 = new Q3GroupBox( i18n("Scan Parameter"), this );
- 	//f1->setFrameStyle( Q3Frame::Box | Q3Frame::Sunken );
+ 	//f1->setFrameStyle( QFrame::Box | QFrame::Sunken );
  	//f1->setMargin(5);
  	//f1->setLineWidth( 1 );
    QVBoxLayout *l_main = new QVBoxLayout( f1,/*f1->frameWidth()+*/3, 3 );
@@ -65,7 +65,7 @@ MassScanDialog::MassScanDialog( QWidget *parent )
  	
  	/* Scan Progress information */
  	Q3GroupBox *f2 = new Q3GroupBox( i18n("Scan Progress"), this );
- 	//f2->setFrameStyle( Q3Frame::Box | Q3Frame::Sunken );
+ 	//f2->setFrameStyle( QFrame::Box | QFrame::Sunken );
  	//f2->setMargin(15);
  	//f2->setLineWidth( 1 );
    QVBoxLayout *l_pro = new QVBoxLayout( f2, /*f2->frameWidth()+*/3, 3 );

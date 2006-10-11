@@ -108,7 +108,7 @@ bool ScanParams::connectDevice( KScanDevice *newScanDevice )
    adf = ADF_OFF;
 
    /* Frame stuff for toplevel of scanparams - beautification */
-   setFrameStyle( Q3Frame::Panel | Q3Frame::Raised );
+   setFrameStyle( QFrame::Panel | QFrame::Raised );
    setLineWidth( 1 );
 
 
@@ -232,7 +232,7 @@ Q3ScrollView *ScanParams::scannerParams( )
    sv->setHScrollBarMode( Q3ScrollView::AlwaysOff );
    sv->setResizePolicy( Q3ScrollView::AutoOneFit );
    KVBox *pbox = new KVBox( sv->viewport());
-   sv->setFrameStyle( Q3Frame::NoFrame );
+   sv->setFrameStyle( QFrame::NoFrame );
 
    sv->addChild( pbox );
 

@@ -29,7 +29,7 @@
 #include <QPixmap>
 #include <QByteArray>
 #include <Q3StrList>
-#include <Q3Frame>
+#include <QFrame>
 #include <QHBoxLayout>
 
 #include <kiconloader.h>
@@ -41,7 +41,7 @@
 KScanSlider::KScanSlider( QWidget *parent, const QString& text,
 			  double min, double max, bool haveStdButt,
 			  int stdValue )
-   : Q3Frame( parent ),
+   : QFrame( parent ),
      m_stdValue( stdValue ),
      m_stdButt(0)
 {
@@ -157,7 +157,7 @@ KScanSlider::~KScanSlider()
 /* ====================================================================== */
 
 KScanEntry::KScanEntry( QWidget *parent, const QString& text )
- : Q3Frame( parent )
+ : QFrame( parent )
 {
     QHBoxLayout *hb = new QHBoxLayout( this );
 
