@@ -25,7 +25,7 @@ set(kscan_LIB_SRCS
    sizeindicator.cpp 
    imgscaninfo.cpp )
 
-kde4_automoc(${kscan_LIB_SRCS})
+kde4_automoc(kscan ${kscan_LIB_SRCS})
 
 kde4_add_library(kscan SHARED ${kscan_LIB_SRCS})
 
