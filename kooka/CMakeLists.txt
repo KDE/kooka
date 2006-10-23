@@ -32,7 +32,7 @@ set(kooka_SRCS
    imgprintdialog.cpp 
    kocrocrad.cpp )
 
-kde4_automoc(kooka ${kooka_SRCS})
+kde4_automoc(${kooka_SRCS})
 
 kde4_add_executable(kooka ${kooka_SRCS})
 
