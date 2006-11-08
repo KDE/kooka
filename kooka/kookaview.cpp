@@ -122,7 +122,9 @@ KookaView::KookaView( KParts::DockMainWindow3 *parent, const Q3CString& deviceTo
 	    this, SLOT(slViewerReadOnly(bool)));
 
    Q3PopupMenu *ctxtmenu = static_cast<Q3PopupMenu*>(img_canvas->contextMenu());
+#ifdef __GNUC__
 #warning "kde4: port to kmenu"
+#endif   
 #if 0
    if( ctxtmenu )
        ctxtmenu->addTitle(i18n("Image View"));
@@ -1056,7 +1058,9 @@ void KookaView::slFreshUpThumbView()
 
 void KookaView::createDockMenu( KActionCollection *col, K3DockMainWindow *mainWin, const char * name )
 {
+#ifdef __GNUC__
 #warning "kde4: port it"
+#endif	
 #if 0
     KActionMenu *actionMenu = new KActionMenu( i18n("Tool Views"), "view_icon", col, name );
 

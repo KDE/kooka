@@ -312,7 +312,9 @@ bool ScanDialog::setup()
    }
 
     /* set initial sizes */
+#ifdef __GNUC__
 #warning "kde4: port it"
+#endif   
    //setInitialSize( configDialogSize( GROUP_STARTUP ));
 
     KConfig *kfg = KGlobal::config();
@@ -333,7 +335,9 @@ bool ScanDialog::setup()
 void ScanDialog::slotClose()
 {
    /* Save the dialog start size to global configuration */
+#ifdef __GNUC__
 #warning "kde4: port it"
+#endif	
     //saveDialogSize( GROUP_STARTUP, true );
 
    if( splitter )

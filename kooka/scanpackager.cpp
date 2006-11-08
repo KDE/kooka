@@ -1139,7 +1139,9 @@ void ScanPackager::slotDeleteItems( )
       s = i18n("Do you really want to delete this image?\nIt cannot be restored." );
       if( item->isDir() )
       {
-         #warning i18n: What is this empty name for a folder in the message?
+#ifdef __GNUC__
+#warning i18n: What is this empty name for a folder in the message?
+#endif	      
 	 s = i18n("Do you really want to delete the folder %1\nand all the images inside?", QString(""));
       }
       result = KMessageBox::warningContinueCancel(this, s, i18n( "Delete Collection Item"),

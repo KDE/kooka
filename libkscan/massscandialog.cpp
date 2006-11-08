@@ -73,7 +73,9 @@ MassScanDialog::MassScanDialog( QWidget *parent )
 
  	QHBoxLayout *l_scanp = new QHBoxLayout( );
  	l_pro->addLayout( l_scanp, 5 );
+#ifdef __GNUC__	
    #warning i18n: Missing an argument to call below
+#endif	
    progress = i18n("Scanning page %1");
    l_progress = new QLabel( progress, f2 );
    l_scanp->addWidget( l_progress, 3 );

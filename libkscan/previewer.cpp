@@ -144,7 +144,9 @@ Previewer::Previewer(QWidget *parent, const char *name )
     layout->addWidget( img_canvas, 6 );
 
     /* Actions for the previewer zoom */
+#ifdef __GNUC__
 #warning PORTME
+#endif    
 #if 0
     KAction *act;
     act =  new KAction(i18n("Scale to W&idth"), KShortcut( Qt::CTRL+Qt::Key_I),

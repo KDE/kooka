@@ -73,7 +73,9 @@ void DispGamma::paintEvent( QPaintEvent *ev )
     {
 		p.drawLine(x,y, i ,vals->at(i));
     }
+#ifdef __GNUC__
 #warning " kde 4 ? flush necessary now ?";	
+#endif    
     //p.flush();
 }
 

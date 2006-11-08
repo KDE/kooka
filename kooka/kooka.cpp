@@ -405,14 +405,18 @@ void Kooka::optionsPreferences()
 {
     // popup some sort of preference dialog, here
     KookaPreferences dlg;
+#ifdef __GNUC__
 #warning "kde4: port it"
+#endif    
     //dlg.showPage( m_prefDialogIndex );
     connect( &dlg, SIGNAL( dataSaved() ), m_view, SLOT(slFreshUpThumbView()));
 
     if (dlg.exec())
     {
         // redo your settings
+#ifdef __GNUC__ 
 #warning "kde4: port it"
+#endif	    
         //m_prefDialogIndex = dlg.activePageIndex();
        // m_view->slFreshUpThumbView();
     }

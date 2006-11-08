@@ -114,7 +114,9 @@ FormatDialog::FormatDialog( QWidget *parent, const QString&, const char *name )
 #ifdef USE_KIMAGEIO
    QStringList fo = KImageIO::types();
 #else
+#ifdef __GNUC__
 #warning "kde4: port it"
+#endif   
    QStringList fo;// = QImage::outputFormatList();
 #endif
    kDebug(28000) << "#### have " << fo.count() << " image types" << endl;
