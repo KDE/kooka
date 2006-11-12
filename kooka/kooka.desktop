@@ -12,5 +12,5 @@ GenericName[x-test]=xxScan & OCR Programxx
 Name=Kooka
 Name[x-test]=xxKookaxx
 
-X-DCOP-ServiceType=Multi
+X-DBUS-StartupType=Multi
 Categories=Qt;KDE;Graphics;
