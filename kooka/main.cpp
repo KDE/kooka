@@ -107,10 +107,10 @@ int main( int argc, char *argv[] )
 
    Kooka  *kooka = new Kooka(devToUse);
    app.setMainWidget( kooka );
-
+#ifdef Q_OS_UNIX
    KWin::setIcons(kooka->winId(), loader->loadIcon( "scanner", K3Icon::Desktop ),
 		  loader->loadIcon("scanner", K3Icon::Small) );
-
+#endif
    kooka->show();
    app.processEvents();
    kooka->startup();
