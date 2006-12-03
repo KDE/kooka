@@ -30,7 +30,6 @@
 //Added by qt3to4:
 #include <QPixmap>
 #include <Q3CString>
-#include <kopenwith.h>
 #include <k3dockwidget.h>
 #include <qtabwidget.h>
 #include <qlayout.h>
