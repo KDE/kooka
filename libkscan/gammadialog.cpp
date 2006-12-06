@@ -95,6 +95,7 @@ GammaDialog::GammaDialog( QWidget *parent ) :
     // Finished and Activate !
     bigdad->activate();
     resize( 480, 300 );
+    connect(this,SIGNAL(applyClicked()),this,SLOT(slotApply()));
 }
 
 
