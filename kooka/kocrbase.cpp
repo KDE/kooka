@@ -39,7 +39,7 @@
 #include <kglobal.h>
 #include <kdebug.h>
 #include <klocale.h>
-#include <kanimwidget.h>
+#include <kanimatedbutton.h>
 #include <kseparator.h>
 #include <kmessagebox.h>
 #include <qlabel.h>

@@ -36,7 +36,6 @@
 #include <QLabel>
 
 #include <kscanslider.h>
-#include <kanimwidget.h>
 #include <ksconfig.h>
 #include <kvbox.h>
 
@@ -46,6 +45,7 @@
   */
 
 
+class KAnimatedButton;
 class KookaImage;
 class KHBox;
 class KVBox;
