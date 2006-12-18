@@ -60,7 +60,7 @@
 #include <kparts/partmanager.h>
 #include <kstdaccel.h>
 #include <kaction.h>
-#include <kstdaction.h>
+#include <kstandardaction.h>
 #include <qicon.h>
 #include <k3urldrag.h>
 #include <ktoggleaction.h>
@@ -129,14 +129,14 @@ void Kooka::startup( void )
 void Kooka::setupActions()
 {
 
-    KStdAction::print(this, SLOT(filePrint()), actionCollection());
-    KStdAction::quit(this , SLOT(close()), actionCollection());
+    KStandardAction::print(this, SLOT(filePrint()), actionCollection());
+    KStandardAction::quit(this , SLOT(close()), actionCollection());
 
-    KStdAction::keyBindings(this, SLOT(configureShortcuts()),
+    KStandardAction::keyBindings(this, SLOT(configureShortcuts()),
 actionCollection());
-    KStdAction::configureToolbars(this, SLOT(optionsConfigureToolbars()),
+    KStandardAction::configureToolbars(this, SLOT(optionsConfigureToolbars()),
 				  actionCollection());
-    KStdAction::preferences(this, SLOT(optionsPreferences()), actionCollection());
+    KStandardAction::preferences(this, SLOT(optionsPreferences()), actionCollection());
 
     m_view->createDockMenu(actionCollection(), this, "settings_show_docks" );
 
