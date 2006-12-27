@@ -1145,7 +1145,7 @@ void ScanPackager::slotDeleteItems( )
 	 s = i18n("Do you really want to delete the folder %1\nand all the images inside?", QString(""));
       }
       result = KMessageBox::warningContinueCancel(this, s, i18n( "Delete Collection Item"),
-					  KStdGuiItem::del(), "AskForDeleteFiles" );
+					  KStandardGuiItem::del(), "AskForDeleteFiles" );
    }
 
    /* Since we are currently talking about local files here, NetAccess is OK */

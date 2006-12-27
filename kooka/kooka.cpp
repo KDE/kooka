@@ -58,7 +58,7 @@
 #include <kmessagebox.h>
 #include <k3dockwidget.h>
 #include <kparts/partmanager.h>
-#include <kstdaccel.h>
+#include <kstandardshortcut.h>
 #include <kaction.h>
 #include <kstandardaction.h>
 #include <qicon.h>

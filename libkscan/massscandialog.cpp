@@ -28,7 +28,7 @@
 #include <klocale.h>
 #include <kdebug.h>
 #include <kpushbutton.h>
-#include <kstdguiitem.h>
+#include <KStandardGuiItem>
 #include <kguiitem.h>
 #include "massscandialog.h"
 
@@ -96,7 +96,7 @@ MassScanDialog::MassScanDialog( QWidget *parent )
    QPushButton *b_cancel = new QPushButton( i18n("Stop"), this );
    connect( b_cancel, SIGNAL(clicked()), this, SLOT(slStopScan()) );
 
-   QPushButton *b_finish = new KPushButton( KStdGuiItem::close(), this);
+   QPushButton *b_finish = new KPushButton( KStandardGuiItem::close(), this);
    connect( b_finish, SIGNAL(clicked()), this, SLOT(slFinished()) );
 
    l_but->addWidget( b_start );
