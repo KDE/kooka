@@ -604,7 +604,7 @@ void KSANEOCR::startOCRProcess( void )
            finishedOCRVisible(false);
            return;
        }
-       Q3CString c = clasPath.latin1();
+       Q3CString c = clasPath.toLatin1();
 
        kDebug(28000) << "Using classifier " << c << endl;
        m_rep.Init( c );

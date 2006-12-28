@@ -683,11 +683,11 @@ ImgSaveStat ImgSaver::save( QImage *image, const QString &filename,
 #endif
       kDebug(28000) << "ImgSaver: saving image to <" << filename << "> as <" << format << "/" << subformat <<">" << endl;
 
-      result = image->save( filename, format.latin1() );
+      result = image->save( filename, format.toLatin1() );
 
 
       last_file = fi.absoluteFilePath();
-      last_format = format.latin1();
+      last_format = format.toLatin1();
    }
 
    if( result )
@@ -851,7 +851,7 @@ QString ImgSaver::tempSaveImage( KookaImage *img, const QString& format, int col
     if( img )
     {
 	name = tmpFile.fileName();
-	if( ! img->save( name, format.latin1() ) ) name = QString();
+	if( ! img->save( name, format.toLatin1() ) ) name = QString();
     }
     return name;
 }

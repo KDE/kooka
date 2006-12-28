@@ -994,7 +994,7 @@ QStringList KScanOption::getList( ) const
 	 else
 	    s.sprintf( "%d", *sint );
 	 sint++;
-	 strList.append( s.local8Bit() );
+	 strList.append( s );
       }
    }
    return( strList );

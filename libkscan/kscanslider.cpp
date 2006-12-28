@@ -231,7 +231,7 @@ KScanCombo::KScanCombo( QWidget *parent, const QString& text,
         combo->addItems( list );
 
     for ( QStringList::ConstIterator it = list.begin(); it != list.end(); ++it ) {
-        combolist.append( (*it).local8Bit() );
+        combolist.append( (*it).toLocal8Bit() );
     }
 }
 
@@ -259,7 +259,7 @@ void KScanCombo::createCombo( const QString& text )
 void KScanCombo::slSetEntry( const QString &t )
 {
     if( t.isNull() ) 	return;
-    int i = combolist.find( t.local8Bit() );
+    int i = combolist.find( t.toLocal8Bit() );
 
     /* Important to check value to avoid recursive signals ;) */
     if( i == combo->currentIndex() )

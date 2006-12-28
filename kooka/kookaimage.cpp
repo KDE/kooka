@@ -154,7 +154,7 @@ bool KookaImage::loadFromUrl( const KUrl& url )
    {
       /* if it is tiff, check with Tifflib if it is multiple sided */
       kDebug(28000) << "Trying to load TIFF!" << endl;
-      tif = TIFFOpen(filename.latin1(), "r");
+      tif = TIFFOpen(filename.toLatin1(), "r");
       if (tif)
       {
 	 do {
@@ -230,7 +230,7 @@ bool KookaImage::loadTiffDir( const QString& filename, int no )
    TIFF* tif = 0;
    /* if it is tiff, check with Tifflib if it is multiple sided */
    kDebug(28000) << "Trying to load TIFF, subimage number "<< no  << endl;
-   tif = TIFFOpen(filename.latin1(), "r");
+   tif = TIFFOpen(filename.toLatin1(), "r");
    if (!tif)
       return false;
 

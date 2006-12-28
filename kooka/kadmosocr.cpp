@@ -337,7 +337,7 @@ void CRep::drawBox( QPixmap* pix, const QRect& r, const QColor& color )
 KADMOS_ERROR CRep::SetImage( const QString file )
 {
     ReImageHandle image_handle;
-    image_handle = re_readimage(file.latin1(), &m_RepData.image);
+    image_handle = re_readimage(file.toLatin1(), &m_RepData.image);
     if( ! image_handle )
     {
         kDebug(28000) << "Can not load input file" << endl;

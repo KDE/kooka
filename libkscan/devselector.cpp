@@ -153,7 +153,7 @@ void DeviceSelector::setScanSources( const Q3StrList& sources,
    bool default_ok = false;
    KConfig *gcfg = KGlobal::config();
    gcfg->setGroup(QString::fromLatin1(GROUP_STARTUP));
-   QByteArray defstr = gcfg->readEntry( STARTUP_SCANDEV, "" ).local8Bit();
+   QByteArray defstr = gcfg->readEntry( STARTUP_SCANDEV, "" ).toLocal8Bit();
 
    /* Selector-Stuff*/
    uint nr = 0;
