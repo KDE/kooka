@@ -36,6 +36,7 @@
 #include <klocale.h>
 #include <kdebug.h>
 #include <kvbox.h>
+#include <kapplication.h>
 #include "kscanslider.h"
 
 KScanSlider::KScanSlider( QWidget *parent, const QString& text,
@@ -51,7 +52,7 @@ KScanSlider::KScanSlider( QWidget *parent, const QString& text,
 
     if( haveStdButt )
     {
-       KIconLoader *loader = KGlobal::iconLoader();
+       KIconLoader *loader = kapp->iconLoader();
        m_stdButt = new QPushButton( this );
        m_stdButt->setPixmap( loader->loadIcon( "undo",K3Icon::Small ));
 
