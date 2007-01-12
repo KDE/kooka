@@ -75,6 +75,9 @@ KookaPreferences::KookaPreferences()
     setupSaveFormatPage();
     setupThumbnailPage();
     setupOCRPage();
+    connect(this,SIGNAL(okClicked()),this,SLOT(slotOk()));
+    connect(this,SIGNAL(defaultClicked()),this,SLOT(slotDefault()));
+    connect(this,SIGNAL(applyClicked()),this,SLOT(slotApply()));
 }
 
 void KookaPreferences::setupOCRPage()
