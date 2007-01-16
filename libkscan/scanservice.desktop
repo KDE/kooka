@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Name=KDE Scan Service
+Name[el]=Υπηρεσία σάρωσης του KDE
 Name[fr]=Service de numérisation pour KDE
 Name[x-test]=xxKDE Scan Servicexx
 X-KDE-Library=libkscan

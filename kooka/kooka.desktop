@@ -7,6 +7,7 @@ Path=
 Terminal=false
 DocPath=kooka/index.html
 GenericName=Scan & OCR Program
+GenericName[el]=Πρόγραμμα Σάρωσης & OCR
 GenericName[fr]=Numérisation et reconnaissance de caractères
 GenericName[x-test]=xxScan & OCR Programxx
 Name=Kooka
