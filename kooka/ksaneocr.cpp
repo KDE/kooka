@@ -68,6 +68,7 @@
 #include <qpen.h>
 #include <qbrush.h>
 #include <qfileinfo.h>
+#include <kconfiggroup.h>
 
 /*
  * Thread support is disabled here because the kadmos lib seems not to be
@@ -91,7 +92,7 @@ KSANEOCR::KSANEOCR( QWidget*, KConfig *cfg ):
     m_applyFilter(false),
     m_unlinkORF(true)
 {
-    KConfig *konf = KGlobal::config ();
+    KSharedConfig::Ptr konf = KGlobal::config();
     m_ocrEngine = OCRAD;
     m_img = 0L;
     m_tmpFile = 0L;
@@ -410,7 +411,7 @@ void KSANEOCR::startOCRAD( )
     *daemon << QString("-l");
     *daemon << QString::number( ocrDia->layoutDetectionMode());
 
-    KConfig *konf = KGlobal::config ();
+    KSharedConfig::Ptr konf = KGlobal::config();
     //KConfigGroupSaver( konf, CFG_GROUP_OCRAD );
 
     QString format = konf->readEntry( CFG_OCRAD_FORMAT, "utf8");

@@ -62,6 +62,7 @@
 #include <q3groupbox.h>
 #include <qcheckbox.h>
 #include <kvbox.h>
+#include <kconfiggroup.h>
 
 KOCRBase::KOCRBase( QWidget *parent, K3SpellConfig *spellConfig,
                     KPageDialog::FaceType face )
@@ -88,7 +89,7 @@ KOCRBase::KOCRBase( QWidget *parent, K3SpellConfig *spellConfig,
     kDebug(28000) << "OCR Base Dialog!" << endl;
     // Layout-Boxes
 
-    KConfig *konf = KGlobal::config ();
+    KSharedConfig::Ptr konf = KGlobal::config();
     KConfigGroupSaver gs( konf, CFG_OCR_KSPELL );
     m_userWantsSpellCheck = konf->readEntry(CFG_WANT_KSPELL, true);
 
@@ -368,7 +369,7 @@ void KOCRBase::slWantSpellcheck( bool wantIt )
     }
     m_userWantsSpellCheck = wantIt;
 
-    KConfig *konf = KGlobal::config ();
+    KSharedConfig::Ptr konf = KGlobal::config();
     KConfigGroupSaver gs( konf, CFG_OCR_KSPELL );
     konf->writeEntry( CFG_WANT_KSPELL, wantIt );
 }

@@ -215,7 +215,7 @@ QString KookaPreferences::tryFindBinary( const QString& bin, const QString& conf
 {
 
     /* First check the config files for an entry */
-    KConfig *cfg = KGlobal::config();
+    KSharedConfig::Ptr cfg = KGlobal::config();
     cfg->setGroup(CFG_GROUP_OCR_DIA);
     QString res = cfg->readPathEntry( configKey /* CFG_GOCR_BINARY */, "notFound" );
 

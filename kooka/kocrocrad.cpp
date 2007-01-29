@@ -105,7 +105,7 @@ EngineError ocradDialog::setupGui()
     KVBox *page = ocrPage();
     Q_CHECK_PTR( page );
 
-    KConfig *conf = KGlobal::config ();
+    KSharedConfig::Ptr conf = KGlobal::config();
     conf->setGroup( CFG_GROUP_OCR_DIA );
 
     // Horizontal line
@@ -178,7 +178,7 @@ ocradDialog::~ocradDialog()
 
 void ocradDialog::writeConfig( void )
 {
-   KConfig *conf = KGlobal::config ();
+   KSharedConfig::Ptr conf = KGlobal::config();
    conf->setGroup( CFG_GROUP_OCR_DIA );
 
    conf->writeEntry( CFG_OCRAD_BINARY, QString(getOCRCmd()));

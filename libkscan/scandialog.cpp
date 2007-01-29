@@ -136,7 +136,7 @@ void ScanDialog::createOptionsTab( void )
 
 
    /* Read settings for startup behavior */
-   KConfig *gcfg = KGlobal::config();
+   KSharedConfig::Ptr gcfg = KGlobal::config();
    gcfg->setGroup(QString::fromLatin1(GROUP_STARTUP));
    bool skipDialog  = gcfg->readEntry( STARTUP_SKIP_ASK, false );
    bool onlyLocal   = gcfg->readEntry( STARTUP_ONLY_LOCAL, false );
@@ -160,7 +160,7 @@ void ScanDialog::slotNetworkToggle( bool state)
    bool writestate = !state;
 
    kDebug(29000) << "slotNetworkToggle: Writing state " << writestate << endl;
-   KConfig *c = KGlobal::config();
+   KSharedConfig::Ptr c = KGlobal::config();
    c->setGroup(QString::fromLatin1(GROUP_STARTUP));
    c->writeEntry( STARTUP_ONLY_LOCAL, writestate, KConfigBase::Normal|KConfigBase::Global);
 }
@@ -170,7 +170,7 @@ void ScanDialog::slotAskOnStartToggle(bool state)
    bool writestate = !state;
 
    kDebug(29000) << "slotAskOnStartToggle: Writing state " << writestate << endl;
-   KConfig *c = KGlobal::config();
+   KSharedConfig::Ptr c = KGlobal::config();
    c->setGroup(QString::fromLatin1(GROUP_STARTUP));
    c->writeEntry( STARTUP_SKIP_ASK, writestate, KConfigBase::Normal|KConfigBase::Global);
 }
@@ -317,7 +317,7 @@ bool ScanDialog::setup()
 #endif   
    //setInitialSize( configDialogSize( GROUP_STARTUP ));
 
-    KConfig *kfg = KGlobal::config();
+    KSharedConfig::Ptr kfg = KGlobal::config();
     if( kfg )
     {
        QRect r = KGlobalSettings::desktopGeometry(this);
@@ -342,7 +342,7 @@ void ScanDialog::slotClose()
 
    if( splitter )
    {
-      KConfig *kfg = KGlobal::config();
+      KSharedConfig::Ptr kfg = KGlobal::config();
       if( kfg )
       {
          QRect r = KGlobalSettings::desktopGeometry(this);

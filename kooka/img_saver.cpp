@@ -348,7 +348,7 @@ ImgSaveStat ImgSaver::saveImage( QImage *image )
    kDebug(28000) << "saveImage: Directory is " << directory << endl;
    QString filename = createFilename( format );
 
-   KConfig *konf = KGlobal::config ();
+   KSharedConfig::Ptr konf = KGlobal::config();
    konf->setGroup( OP_FILE_GROUP );
 
    if( konf->readEntry( OP_ASK_FILENAME, false ) )
@@ -438,7 +438,7 @@ ImgSaveStat ImgSaver::saveImage( QImage *image, const KUrl& filename, const QStr
 QString ImgSaver::findFormat( picType type )
 {
    QString format;
-   KConfig *konf = KGlobal::config ();
+   KSharedConfig::Ptr konf = KGlobal::config();
    konf->setGroup( OP_FILE_GROUP );
 
    if( type == PT_THUMBNAIL )
@@ -565,7 +565,7 @@ bool ImgSaver::isRememberedFormat( picType type, QString format ) const
 
 QString ImgSaver::getFormatForType( picType type ) const
 {
-   KConfig *konf = KGlobal::config ();
+   KSharedConfig::Ptr konf = KGlobal::config();
    Q_CHECK_PTR( konf );
    konf->setGroup( OP_FILE_GROUP );
 
@@ -595,7 +595,7 @@ QString ImgSaver::getFormatForType( picType type ) const
 
 void ImgSaver::storeFormatForType( picType type, QString format, bool ask )
 {
-   KConfig *konf = KGlobal::config ();
+   KSharedConfig::Ptr konf = KGlobal::config();
    Q_CHECK_PTR( konf );
    konf->setGroup( OP_FILE_GROUP );
 
@@ -704,7 +704,7 @@ ImgSaveStat ImgSaver::save( QImage *image, const QString &filename,
 void ImgSaver::readConfig( void )
 {
 
-   KConfig *konf = KGlobal::config ();
+   KSharedConfig::Ptr konf = KGlobal::config();
    Q_CHECK_PTR( konf );
    konf->setGroup( OP_FILE_GROUP );
    ask_for_format = konf->readEntry( OP_FILE_ASK_FORMAT, true );

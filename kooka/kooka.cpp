@@ -79,7 +79,7 @@ Kooka::Kooka( const Q3CString& deviceToUse)
     setXMLFile( "kookaui.rc", true );
 
     setAcceptDrops(false); // Waba: Not (yet?) supported
-    KConfig *konf = KGlobal::config ();
+    KSharedConfig::Ptr konf = KGlobal::config();
     readDockConfig ( konf, DOCK_SIZES );
 
     // then, setup our actions
@@ -113,7 +113,7 @@ void Kooka::createMyGUI( KParts::Part *part )
 
 Kooka::~Kooka()
 {
-   KConfig *konf = KGlobal::config ();
+   KSharedConfig::Ptr konf = KGlobal::config();
    m_view->slCloseScanDevice();
    writeDockConfig ( konf, DOCK_SIZES );
    delete m_printer;

@@ -124,7 +124,7 @@ Previewer::Previewer(QWidget *parent, const char *name )
     layout->addLayout( left, 2 );
 
     /* Load autoselection values from Config file */
-    KConfig *cfg = KGlobal::config();
+    KSharedConfig::Ptr cfg = KGlobal::config();
     cfg->setGroup( GROUP_STARTUP );
 
     /* Units etc. TODO: get from Config */

@@ -94,7 +94,7 @@ EngineError KGOCRDialog::setupGui()
     KVBox *page = ocrPage();
     Q_CHECK_PTR( page );
 
-    KConfig *conf = KGlobal::config ();
+    KSharedConfig::Ptr conf = KGlobal::config();
     conf->setGroup( CFG_GROUP_OCR_DIA );
 
     // Horizontal line
@@ -180,7 +180,7 @@ KGOCRDialog::~KGOCRDialog()
 
 void KGOCRDialog::writeConfig( void )
 {
-   KConfig *conf = KGlobal::config ();
+   KSharedConfig::Ptr conf = KGlobal::config();
    conf->setGroup( CFG_GROUP_OCR_DIA );
 
    conf->writeEntry( CFG_GOCR_BINARY, QString(getOCRCmd()));

@@ -78,7 +78,7 @@ DeviceSelector::DeviceSelector( QWidget *parent, Q3StrList& devList,
    cbSkipDialog = new QCheckBox( i18n("&Do not ask on startup again, always use this device"),
 				 page, "CBOX_SKIP_ON_START" );
 
-   KConfig *gcfg = KGlobal::config();
+   KSharedConfig::Ptr gcfg = KGlobal::config();
    gcfg->setGroup(QString::fromLatin1(GROUP_STARTUP));
    bool skipDialog = gcfg->readEntry( STARTUP_SKIP_ASK, false );
    cbSkipDialog->setChecked( skipDialog );
@@ -89,7 +89,7 @@ DeviceSelector::DeviceSelector( QWidget *parent, Q3StrList& devList,
 
 QByteArray DeviceSelector::getDeviceFromConfig( void ) const
 {
-   KConfig *gcfg = KGlobal::config();
+   KSharedConfig::Ptr gcfg = KGlobal::config();
    gcfg->setGroup(QString::fromLatin1(GROUP_STARTUP));
    bool skipDialog = gcfg->readEntry( STARTUP_SKIP_ASK, false );
 
@@ -136,7 +136,7 @@ QByteArray DeviceSelector::getSelectedDevice( void ) const
    kDebug(29000) << "The selected device: <" << dev << ">" << endl;
 
    /* Store scanner selection settings */
-   KConfig *c = KGlobal::config();
+   KSharedConfig::Ptr c = KGlobal::config();
    c->setGroup(QString::fromLatin1(GROUP_STARTUP));
    /* Write both the scan device and the skip-start-dialog flag global. */
    c->writeEntry( STARTUP_SCANDEV, dev, KConfigBase::Normal|KConfigBase::Global);
@@ -151,7 +151,7 @@ void DeviceSelector::setScanSources( const Q3StrList& sources,
 				     const QStringList& hrSources )
 {
    bool default_ok = false;
-   KConfig *gcfg = KGlobal::config();
+   KSharedConfig::Ptr gcfg = KGlobal::config();
    gcfg->setGroup(QString::fromLatin1(GROUP_STARTUP));
    QByteArray defstr = gcfg->readEntry( STARTUP_SCANDEV, "" ).toLocal8Bit();
 

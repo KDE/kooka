@@ -189,7 +189,7 @@ KScanDevice::KScanDevice( QObject *parent )
     pixel_y = 0;
     scanner_name = 0L;
 
-    KConfig *konf = KGlobal::config ();
+    KSharedConfig::Ptr konf = KGlobal::config();
     konf->setGroup( GROUP_STARTUP );
     bool netaccess = konf->readEntry( STARTUP_ONLY_LOCAL, false );
     kDebug(29000) << "Query for network scanners " << (netaccess ? "Not enabled" : "Enabled") << endl;

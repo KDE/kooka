@@ -449,7 +449,7 @@ void KookaView::loadStartupImage( void )
    kDebug( 28000) << "Starting to load startup image" << endl;
 
    /* Now set the configured stuff */
-   KConfig *konf = KGlobal::config ();
+   KSharedConfig::Ptr konf = KGlobal::config();
    if( konf )
    {
       konf->setGroup(GROUP_STARTUP);

@@ -55,6 +55,7 @@
 #include <kstandarddirs.h>
 #include <qstringlist.h>
 #include <kvbox.h>
+#include <kconfiggroup.h>
 
 
 /* defines for konfig-reading */
@@ -238,7 +239,7 @@ EngineError KadmosDialog::findClassifierPath()
     KStandardDirs stdDir;
     EngineError err = ENG_OK;
 
-    KConfig *conf = KGlobal::config ();
+    KSharedConfig::Ptr conf = KGlobal::config();
     KConfigGroupSaver gs( conf, CFG_GROUP_KADMOS );
 
     m_customClassifierPath = conf->readPathEntry( CFG_KADMOS_CLASSIFIER_PATH );
@@ -343,7 +344,7 @@ void KadmosDialog::slFontChanged( int id )
 {
     m_cbLang->clear();
 
-    KConfig *conf = KGlobal::config ();
+    KSharedConfig::Ptr conf = KGlobal::config();
     KConfigGroupSaver gs( conf, CFG_GROUP_KADMOS );
 
 
