@@ -1166,7 +1166,7 @@ void KScanDevice::slScanFinished( KScanStat status )
 	data = 0;
     }
 
-    if( status == KSCAN_OK )
+    if( status == KSCAN_OK && img )
     {
 	ImgScanInfo info;
 	/* FIXME: Both resolutions are equal here but should be
