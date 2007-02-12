@@ -197,7 +197,7 @@ void ScanPackager::slotDirCount( KFileTreeViewItem* item, int cnt )
 {
    if( item && item->isDir() )
    {
-      QString cc = i18np( "one item", "%n items", cnt);
+      QString cc = i18np( "one item", "%1 items", cnt);
       item->setText( 1, cc );
    }
    else
