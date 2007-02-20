@@ -124,8 +124,7 @@ Previewer::Previewer(QWidget *parent, const char *name )
     layout->addLayout( left, 2 );
 
     /* Load autoselection values from Config file */
-    KSharedConfig::Ptr cfg = KGlobal::config();
-    cfg->setGroup( GROUP_STARTUP );
+    KConfigGroup cfg(KGlobal::config(), GROUP_STARTUP );
 
     /* Units etc. TODO: get from Config */
     sizeUnit = KRuler::Millimetres;

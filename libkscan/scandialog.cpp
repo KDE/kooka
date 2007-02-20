@@ -33,7 +33,6 @@
 #include <klocale.h>
 #include <kdebug.h>
 #include <kconfig.h>
-#include <ksimpleconfig.h>
 #include <kled.h>
 #include <kglobalsettings.h>
 #include <kscandevice.h>

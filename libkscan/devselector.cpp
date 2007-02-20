@@ -38,7 +38,6 @@
 #include <kglobal.h>
 #include <klocale.h>
 #include <kmessagebox.h>
-#include <ksimpleconfig.h>
 
 #include "devselector.h"
 

@@ -49,7 +49,6 @@
 #include "devselector.h"
 #include "imgscaninfo.h"
 
-#include <ksimpleconfig.h>
 
 #define MIN_PREVIEW_DPI 75
 #define UNDEF_SCANNERNAME I18N_NOOP( "undefined" )
@@ -189,9 +188,8 @@ KScanDevice::KScanDevice( QObject *parent )
     pixel_y = 0;
     scanner_name = 0L;
 
-    KSharedConfig::Ptr konf = KGlobal::config();
-    konf->setGroup( GROUP_STARTUP );
-    bool netaccess = konf->readEntry( STARTUP_ONLY_LOCAL, false );
+    KConfigGroup konf(KGlobal::config(), GROUP_STARTUP );
+    bool netaccess = konf.readEntry( STARTUP_ONLY_LOCAL, false );
     kDebug(29000) << "Query for network scanners " << (netaccess ? "Not enabled" : "Enabled") << endl;
     if( sane_stat == SANE_STATUS_GOOD )
     {
@@ -1480,7 +1478,7 @@ QString KScanDevice::getConfig( const QString& key, const QString& def ) const
 {
     QString confFile = SCANNER_DB_FILE;
 
-    KSimpleConfig scanConfig( confFile, true );
+    KConfig scanConfig(  confFile, KConfig::OnlyLocal);
     scanConfig.setGroup( shortScannerName() );
 
     return scanConfig.readEntry( key, def );
@@ -1499,7 +1497,7 @@ void KScanDevice::slStoreConfig( const QString& key, const QString& val )
     {
         kDebug(29000) << "Storing config " << key << " in Group " << scannerName << endl;
 
-        KSimpleConfig scanConfig( confFile );
+        KConfig scanConfig( confFile, KConfig::OnlyLocal);
         scanConfig.setGroup( scannerName );
         scanConfig.writeEntry( key, val );
         scanConfig.sync();

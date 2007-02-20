@@ -182,7 +182,7 @@ bool KScanOptSet::load( const QString& /*scannerName*/ )
    kDebug( 29000) << "** Reading from scan configuration file <" << confFile << ">" << endl;
    bool ret = true;
 
-   KConfig *scanConfig = new KConfig( confFile, true );
+   KConfig *scanConfig = new KConfig( confFile);
    QString cfgName = name; /* of the KScanOptSet, given in constructor */
 
    if( cfgName.isNull() || cfgName.isEmpty() )
