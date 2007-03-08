@@ -53,7 +53,7 @@ KScanSlider::KScanSlider( QWidget *parent, const QString& text,
     {
        KIconLoader *loader = KIconLoader::global();
        m_stdButt = new QPushButton( this );
-       m_stdButt->setPixmap( loader->loadIcon( "undo",K3Icon::Small ));
+       m_stdButt->setPixmap( loader->loadIcon( "edit-undo",K3Icon::Small ));
 
        /* connect the button click to setting the value */
        connect( m_stdButt, SIGNAL(clicked()),
