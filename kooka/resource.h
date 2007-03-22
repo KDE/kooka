@@ -28,9 +28,7 @@
 #ifndef RESSOURCE_H
 #define RESSOURCE_H
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
+#include <kdeversion.h>
 
 
 ///////////////////////////////////////////////////////////////////
@@ -85,7 +83,7 @@
 
 ///////////////////////////////////////////////////////////////////
 // General application values
-#define IDS_APP_ABOUT "Ksanetest\n Version " VERSION
+#define IDS_APP_ABOUT "Ksanetest\n Version " KDE_VERSION_STRING
 
 #define IDS_DEFAULT                 "Ready."
 
