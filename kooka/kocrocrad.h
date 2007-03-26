@@ -50,7 +50,7 @@
 
 class K3SpellConfig;
 class KUrlRequester;
-class KProcess;
+class K3Process;
 class QLabel;
 class QComboBox;
 
@@ -93,7 +93,7 @@ private:
     void version( const QString& exe );
 
 private slots:
-    void slReceiveStdIn( KProcess *proc, char *buffer, int buflen);
+    void slReceiveStdIn( K3Process *proc, char *buffer, int buflen);
 
 private:
 
@@ -101,7 +101,7 @@ private:
     KUrlRequester *m_orfUrlRequester;
     QComboBox      *m_layoutMode;
     QLabel         *m_binaryLabel;
-    KProcess       *m_proc;
+    K3Process       *m_proc;
     int             m_version;
 };
 

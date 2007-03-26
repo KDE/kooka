@@ -31,7 +31,7 @@
 #include <kconfig.h>
 #include <kapplication.h>
 #include <ktemporaryfile.h>
-#include <kprocess.h>
+#include <k3process.h>
 #include <stdlib.h>
 #include <k3spell.h>
 #include <k3spelldlg.h>
@@ -401,7 +401,7 @@ void KSANEOCR::startOCRAD( )
 	daemon = 0;
     }
 
-    daemon = new KProcess;
+    daemon = new K3Process;
     Q_CHECK_PTR(daemon);
 
     *daemon << cmd;
@@ -433,14 +433,14 @@ void KSANEOCR::startOCRAD( )
 
     m_ocrResultText = "";
 
-    connect(daemon, SIGNAL(processExited(KProcess *)),
-	    this,   SLOT(  ocradExited(KProcess*)));
-    connect(daemon, SIGNAL(receivedStdout(KProcess *, char*, int)),
-	    this,   SLOT(  ocradStdIn(KProcess*, char*, int)));
-    connect(daemon, SIGNAL(receivedStderr(KProcess *, char*, int)),
-	    this,   SLOT(  ocradStdErr(KProcess*, char*, int)));
+    connect(daemon, SIGNAL(processExited(K3Process *)),
+	    this,   SLOT(  ocradExited(K3Process*)));
+    connect(daemon, SIGNAL(receivedStdout(K3Process *, char*, int)),
+	    this,   SLOT(  ocradStdIn(K3Process*, char*, int)));
+    connect(daemon, SIGNAL(receivedStderr(K3Process *, char*, int)),
+	    this,   SLOT(  ocradStdErr(K3Process*, char*, int)));
 
-    if (!daemon->start(KProcess::NotifyOnExit, KProcess::All))
+    if (!daemon->start(K3Process::NotifyOnExit, K3Process::All))
     {
 	kDebug(28000) <<  "Error starting ocrad-daemon!" << endl;
     }
@@ -453,7 +453,7 @@ void KSANEOCR::startOCRAD( )
 }
 
 
-void KSANEOCR::ocradExited(KProcess* )
+void KSANEOCR::ocradExited(K3Process* )
 {
     kDebug(28000) << "ocrad exit " << endl;
     QString err;
@@ -470,14 +470,14 @@ void KSANEOCR::ocradExited(KProcess* )
 
 }
 
-void KSANEOCR::ocradStdErr(KProcess*, char* buffer, int buflen)
+void KSANEOCR::ocradStdErr(K3Process*, char* buffer, int buflen)
 {
    QString errorBuffer = QString::fromLocal8Bit(buffer, buflen);
    kDebug(28000) << "ocrad says on stderr: " << errorBuffer << endl;
 
 }
 
-void KSANEOCR::ocradStdIn(KProcess*, char* buffer, int buflen)
+void KSANEOCR::ocradStdIn(K3Process*, char* buffer, int buflen)
 {
    QString errorBuffer = QString::fromLocal8Bit(buffer, buflen);
    kDebug(28000) << "ocrad says on stdin: " << errorBuffer << endl;
@@ -539,16 +539,16 @@ void KSANEOCR::startOCRProcess( void )
            daemon = 0;
        }
 
-       daemon = new KProcess;
+       daemon = new K3Process;
        Q_CHECK_PTR(daemon);
        m_ocrResultText = "";
 
-       connect(daemon, SIGNAL(processExited(KProcess *)),
-               this,   SLOT(  gocrExited(KProcess*)));
-       connect(daemon, SIGNAL(receivedStdout(KProcess *, char*, int)),
-               this,   SLOT(  gocrStdIn(KProcess*, char*, int)));
-       connect(daemon, SIGNAL(receivedStderr(KProcess *, char*, int)),
-               this,   SLOT(  gocrStdErr(KProcess*, char*, int)));
+       connect(daemon, SIGNAL(processExited(K3Process *)),
+               this,   SLOT(  gocrExited(K3Process*)));
+       connect(daemon, SIGNAL(receivedStdout(K3Process *, char*, int)),
+               this,   SLOT(  gocrStdIn(K3Process*, char*, int)));
+       connect(daemon, SIGNAL(receivedStderr(K3Process *, char*, int)),
+               this,   SLOT(  gocrStdErr(K3Process*, char*, int)));
 
        QString opt;
        *daemon << QFile::encodeName(cmd);
@@ -578,7 +578,7 @@ void KSANEOCR::startOCRProcess( void )
 
        m_ocrCurrLine = 0;  // Important in gocrStdIn to store the results
 
-       if (!daemon->start(KProcess::NotifyOnExit, KProcess::All))
+       if (!daemon->start(K3Process::NotifyOnExit, K3Process::All))
        {
            kDebug(28000) <<  "Error starting daemon!" << endl;
        }
@@ -724,7 +724,7 @@ void KSANEOCR::slotKadmosResult()
 /*
  *
  */
-void KSANEOCR::gocrExited(KProcess* d)
+void KSANEOCR::gocrExited(K3Process* d)
 {
    kDebug(28000) << "daemonExited start !" << endl;
 
@@ -1060,7 +1060,7 @@ void KSANEOCR::cleanUpFiles( void )
 }
 
 
-void KSANEOCR::gocrStdErr(KProcess*, char* buffer, int buflen)
+void KSANEOCR::gocrStdErr(K3Process*, char* buffer, int buflen)
 {
    QString errorBuffer = QString::fromLocal8Bit(buffer, buflen);
    kDebug(28000) << "gocr says: " << errorBuffer << endl;
@@ -1068,7 +1068,7 @@ void KSANEOCR::gocrStdErr(KProcess*, char* buffer, int buflen)
 }
 
 
-void KSANEOCR::gocrStdIn(KProcess*, char* buffer, int buflen)
+void KSANEOCR::gocrStdIn(K3Process*, char* buffer, int buflen)
 {
     QString aux = QString::fromLocal8Bit(buffer, buflen);
 

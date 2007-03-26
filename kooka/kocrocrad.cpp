@@ -41,7 +41,7 @@
 #include <kseparator.h>
 #include <kmessagebox.h>
 #include <kurlrequester.h>
-#include <kprocess.h>
+#include <k3process.h>
 
 #include "resource.h"
 #include "kocrocrad.h"
@@ -208,22 +208,22 @@ void ocradDialog::version( const QString& exe )
 {
     if( m_proc ) delete m_proc;
 
-    m_proc = new KProcess;
+    m_proc = new K3Process;
 
     kDebug(28000) << "Using " << exe << " as command" << endl;
     *m_proc << exe;
     *m_proc << QString("-V");
 
-    connect( m_proc, SIGNAL(receivedStdout(KProcess *, char *, int )),
-             this,     SLOT(slReceiveStdIn(KProcess *, char *, int )));
+    connect( m_proc, SIGNAL(receivedStdout(K3Process *, char *, int )),
+             this,     SLOT(slReceiveStdIn(K3Process *, char *, int )));
 
-    if( ! m_proc->start( KProcess::NotifyOnExit, KProcess::Stdout ) )
+    if( ! m_proc->start( K3Process::NotifyOnExit, K3Process::Stdout ) )
     {
         slReceiveStdIn( 0, (char*) "unknown", 7 );
     }
 }
 
-void ocradDialog::slReceiveStdIn( KProcess*, char *buffer, int buflen)
+void ocradDialog::slReceiveStdIn( K3Process*, char *buffer, int buflen)
 {
     QString vstr = QString::fromUtf8(buffer, buflen);
 
