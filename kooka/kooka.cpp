@@ -390,7 +390,7 @@ void Kooka::optionsConfigureToolbars()
 {
     // use the standard toolbar editor
     saveMainWindowSettings(KGlobal::config(), autoSaveGroup());
-    KEditToolbar dlg(factory());
+    KEditToolBar dlg(factory());
     connect(&dlg, SIGNAL(newToolbarConfig()), SLOT(newToolbarConfig()));
     dlg.exec();
 }
