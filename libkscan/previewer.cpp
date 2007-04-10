@@ -22,7 +22,6 @@
 #include <qfontmetrics.h>
 
 #include <qtooltip.h>
-#include <q3popupmenu.h>
 #include <qfile.h>
 #include <qtextstream.h>
 #include <qcombobox.h>
