@@ -234,7 +234,7 @@ private:
     K3DockWidget *m_dockPreview;
     K3DockWidget *m_dockOCRText;
 
-    KMainWindow *m_mainWindow;
+    KXmlGuiWindow *m_mainWindow;
 
     ocrResEdit  *m_ocrResEdit;
 };

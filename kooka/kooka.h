@@ -32,7 +32,7 @@
 #endif
 
 #include <kapplication.h>
-#include <kmainwindow.h>
+#include <kxmlguiwindow.h>
 #include <k3dockwidget.h>
 #include <dockmainwindow3.h>
 //Added by qt3to4:
