@@ -20,7 +20,7 @@
 #include <qlayout.h>
 #include <qpushbutton.h>
 #include <qspinbox.h>
-#include <qtooltip.h>
+
 #include <qcombobox.h>
 #include <qlabel.h>
 #include <qslider.h>

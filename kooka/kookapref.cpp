@@ -37,7 +37,7 @@
 #include <kstandarddirs.h>
 
 #include <qlayout.h>
-#include <qtooltip.h>
+
 
 #include <q3grid.h>
 #include <qcheckbox.h>

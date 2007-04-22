@@ -22,7 +22,7 @@
 #include <qlayout.h>
 #include <qstringlist.h>
 #include <q3strlist.h>
-#include <qtooltip.h>
+
 #include <qsizepolicy.h>
 #include <qapplication.h>
 #include <qcheckbox.h>

@@ -29,7 +29,7 @@
 #include <qlayout.h>
 #include <qlabel.h>
 #include <qfileinfo.h>
-#include <qtooltip.h>
+
 #include <qregexp.h>
 
 #include <kapplication.h>

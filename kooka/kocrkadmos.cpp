@@ -27,7 +27,7 @@
 #include <qlayout.h>
 #include <qlabel.h>
 #include <qfileinfo.h>
-#include <qtooltip.h>
+
 #include <kpagedialog.h>
 #include <Q3Button>
 #include <q3dict.h>

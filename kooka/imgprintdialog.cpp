@@ -42,7 +42,7 @@
 
 #include <q3paintdevicemetrics.h>
 #include <qlabel.h>
-#include <qtooltip.h>
+
 #include <kdebug.h>
 #include <Q3ButtonGroup>
 

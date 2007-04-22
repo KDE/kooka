@@ -21,7 +21,7 @@
 #include <qlabel.h>
 #include <qfontmetrics.h>
 
-#include <qtooltip.h>
+
 #include <qfile.h>
 #include <qtextstream.h>
 #include <qcombobox.h>

@@ -24,7 +24,7 @@
 #include <qpushbutton.h>
 #include <qcombobox.h>
 #include <qimage.h>
-#include <qtooltip.h>
+
 #include <qmessagebox.h>
 #include <qlayout.h>
 #include <q3dict.h>

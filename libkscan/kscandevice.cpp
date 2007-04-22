@@ -27,7 +27,7 @@
 #include <qlineedit.h>
 #include <qlabel.h>
 #include <qlayout.h>
-#include <qtooltip.h>
+
 #include <qimage.h>
 #include <qfileinfo.h>
 #include <qapplication.h>
