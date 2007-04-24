@@ -38,10 +38,10 @@
 #include <QHBoxLayout>
 
 
+#include <kdialogbuttonbox.h>
 #include <kfiledialog.h>
 #include <klocale.h>
 #include <kdebug.h>
-#include <k3buttonbox.h>
 #include <kiconloader.h>
 #include <kled.h>
 #include <kseparator.h>
@@ -160,10 +160,10 @@ bool ScanParams::connectDevice( KScanDevice *newScanDevice )
 
    /* Create a Start-Scan-Button */
    (void) new KSeparator( Qt::Horizontal, this);
-   K3ButtonBox *kbb = new K3ButtonBox( this );
-   QPushButton* pb = kbb->addButton( i18n( "Final S&can" ));
+   KDialogButtonBox *kbb = new KDialogButtonBox( this );
+   QPushButton* pb = kbb->addButton( i18n( "Final S&can" ), QDialogButtonBox::ActionRole);
    connect( pb, SIGNAL(clicked()), this, SLOT(slStartScan()) );
-   pb = kbb->addButton( i18n( "&Preview Scan" ));
+   pb = kbb->addButton( i18n( "&Preview Scan" ), QDialogButtonBox::ActionRole);
    connect( pb, SIGNAL(clicked()), this, SLOT(slAcquirePreview()) );
    kbb->layout();
 
