@@ -230,7 +230,7 @@ const KScanOption& KScanOption::operator= (const KScanOption& so )
    internal_widget = so.internal_widget;
 
    if( buffer ) {
-      delete( (char*)buffer);
+      delete [] buffer;
       buffer = 0;
    }
 
