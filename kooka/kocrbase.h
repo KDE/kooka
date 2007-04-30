@@ -138,7 +138,7 @@ protected slots:
 
 private slots:
     virtual void slPreviewResult( KJob* );
-    virtual void slGotPreview( const KFileItem*, const QPixmap& );
+    void slGotPreview( const KFileItem&, const QPixmap& );
 
 private:
     KAnimatedButton  *m_animation;

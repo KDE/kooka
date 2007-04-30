@@ -98,7 +98,7 @@ public slots:
       }
 
    void slNewFileItems( const KFileItemList& );
-   void slGotPreview( const KFileItem*, const QPixmap& );
+   void slGotPreview( const KFileItem&, const QPixmap& );
    void slPreviewResult( KJob* );
 
    /**

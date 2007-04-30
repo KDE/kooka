@@ -254,9 +254,9 @@ void KOCRBase::introduceImage( KookaImage* img)
     {
         connect( m_job, SIGNAL( result( KJob * )),
                  this, SLOT( slPreviewResult( KJob * )));
-        connect( m_job, SIGNAL( gotPreview( const KFileItem*, const QPixmap& )),
-                 SLOT( slGotPreview( const KFileItem*, const QPixmap& ) ));
-         /* KIO::Jo result is called in any way: Success, Failed, Error,
+        connect( m_job, SIGNAL( gotPreview( const KFileItem&, const QPixmap& )),
+                 SLOT( slGotPreview( const KFileItem&, const QPixmap& ) ));
+         /* KIO::Job result is called in any way: Success, Failed, Error,
           * thus connecting the failed is not really necessary.
           */
     }
@@ -309,7 +309,7 @@ void KOCRBase::slPreviewResult(KJob *job )
    }
 }
 
-void KOCRBase::slGotPreview( const KFileItem*, const QPixmap& newPix )
+void KOCRBase::slGotPreview( const KFileItem&, const QPixmap& newPix )
 {
     kDebug(28000) << "Got the preview" << endl;
     m_previewPix->setPixmap(newPix);

@@ -392,8 +392,8 @@ void ThumbView::slNewFileItems( const KFileItemList& items )
       {
 	 connect( m_job, SIGNAL( result( KJob * )),
 		  this, SLOT( slPreviewResult( KJob * )));
-	 connect( m_job, SIGNAL( gotPreview( const KFileItem*, const QPixmap& )),
-		  SLOT( slGotPreview( const KFileItem*, const QPixmap& ) ));
+	 connect( m_job, SIGNAL( gotPreview( const KFileItem&, const QPixmap& )),
+		  SLOT( slGotPreview( const KFileItem&, const QPixmap& ) ));
 
          m_pendingJobs.clear();
 
@@ -409,10 +409,9 @@ void ThumbView::slNewFileItems( const KFileItemList& items )
 
 
 
-void ThumbView::slGotPreview( const KFileItem* newFileItem, const QPixmap& newPix )
+void ThumbView::slGotPreview( const KFileItem& newFileItem, const QPixmap& newPix )
 {
-   if( ! newFileItem ) return;
-   KFileIconViewItem *item = static_cast<KFileIconViewItem*>(const_cast<void*>(newFileItem->extraData( this )));
+   KFileIconViewItem *item = static_cast<KFileIconViewItem*>(const_cast<void*>(newFileItem.extraData(this)));
 
    if( ! item ) return;
 
