@@ -39,7 +39,7 @@
 #include <kimageio.h>
 #include <kiconloader.h>
 #include <kdebug.h>
-#include <kwm.h>
+#include <kwindowsystem.h>
 
 #include "kooka.h"
 #include "version.h"
@@ -108,7 +108,7 @@ int main( int argc, char *argv[] )
    Kooka  *kooka = new Kooka(devToUse);
    app.setMainWidget( kooka );
 #ifdef Q_OS_UNIX
-   KWM::setIcons(kooka->winId(), loader->loadIcon( "scanner", K3Icon::Desktop ),
+   KWindowSystem::setIcons(kooka->winId(), loader->loadIcon( "scanner", K3Icon::Desktop ),
 		  loader->loadIcon("scanner", K3Icon::Small) );
 #endif
    kooka->show();
