@@ -110,8 +110,8 @@ public:
 };
 
 
-Previewer::Previewer(QWidget *parent, const char *name )
-    : QWidget(parent,name)
+Previewer::Previewer(QWidget *parent)
+    : QWidget(parent)
 {
     d = new PreviewerPrivate();
 

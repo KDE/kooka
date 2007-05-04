@@ -214,7 +214,7 @@ public slots:
     * enable or disable the combobox.
     * @param b enables the combobox if true.
     */
-   void		setEnabled( bool b){ if(combo) combo->setEnabled( b ); };
+   void		setEnabled( bool b){ if(combo) combo->setEnabled( b ); }
 
    /**
     * set an icon for a string in the combobox

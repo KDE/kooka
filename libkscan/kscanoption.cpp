@@ -160,7 +160,7 @@ bool KScanOption::initOption( const QByteArray& new_name )
 	}
     }
 
-   return( desc > 0 );
+   return desc;
 }
 
 KScanOption::KScanOption( const KScanOption &so ) :

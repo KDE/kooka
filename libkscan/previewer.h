@@ -47,7 +47,7 @@ class Previewer : public QWidget
 {
     Q_OBJECT
 public:
-    Previewer(QWidget *parent=0, const char *name=0);
+    Previewer(QWidget *parent=0);
     ~Previewer();
 
     ImageCanvas *getImageCanvas( void ){ return( img_canvas ); }
