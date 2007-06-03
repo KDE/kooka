@@ -104,11 +104,11 @@ EngineError KadmosDialog::findClassifiers()
     findClassifierPath();
 
     KLocale *locale = KGlobal::locale();
-    QStringList allCountries = locale->allLanguagesTwoAlpha ();
+    QStringList allCountries = locale->allLanguagesList();
     for ( QStringList::Iterator it = allCountries.begin();
           it != allCountries.end(); ++it )
     {
-        m_longCountry2short[locale->twoAlphaToCountryName(*it)] = *it;
+        m_longCountry2short[locale->countryCodeToName(*it)] = *it;
     }
     m_longCountry2short[i18n("European Countries")] = "eu";
     m_longCountry2short[ CNTRY_CZ ] = "cz";
@@ -168,7 +168,7 @@ EngineError KadmosDialog::findClassifiers()
             QString lang = name.mid(3,2);
             if( allCountries.contains(lang) )
             {
-                QString lngCountry = locale->twoAlphaToCountryName(lang);
+                QString lngCountry = locale->countryCodeToName(lang);
                 if( lngCountry.isEmpty() )
                     lngCountry = name;
                 m_ttfClassifier << lngCountry;
@@ -193,7 +193,7 @@ EngineError KadmosDialog::findClassifiers()
             QString lang = name.mid(4,2);
             if( allCountries.contains(lang) )
             {
-                QString lngCountry = locale->twoAlphaToCountryName(lang);
+                QString lngCountry = locale->countryCodeToName(lang);
                 if( lngCountry.isEmpty() )
                     lngCountry = name;
                 m_handClassifier << lngCountry;
