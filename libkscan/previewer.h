@@ -36,8 +36,6 @@
   *@author Klaas Freitag
   */
 class ImageCanvas;
-class QCheckBox;
-class QSlider;
 class KScanDevice;
 class QComboBox;
 class QRadioButton;

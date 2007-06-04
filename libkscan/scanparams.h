@@ -34,7 +34,6 @@
   *@author Klaas Freitag
   */
 
-class GammaDialog;
 class KScanOptSet;
 class Q3ScrollView;
 class KLed;
