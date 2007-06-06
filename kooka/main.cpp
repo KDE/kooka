@@ -105,6 +105,7 @@ int main( int argc, char *argv[] )
    }
 
 
+   args->clear();
    Kooka  *kooka = new Kooka(devToUse);
    app.setMainWidget( kooka );
 #ifdef Q_OS_UNIX
