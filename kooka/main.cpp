@@ -113,7 +113,7 @@ int main( int argc, char *argv[] )
    kooka->show();
    app.processEvents();
    kooka->startup();
-
+   args->clear();
    int ret = app.exec();
 
    return ret;
