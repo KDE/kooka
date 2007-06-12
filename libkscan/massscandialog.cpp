@@ -33,9 +33,11 @@
 #include "massscandialog.h"
 
 MassScanDialog::MassScanDialog( QWidget *parent )
-   :QDialog( parent, "MASS_SCAN", true )
+   :QDialog( parent )
 {
-   setCaption( i18n( "ADF Scanning" ));
+   setObjectName( QLatin1String( "MASS_SCAN" ) );
+   setModal( true );
+   setWindowTitle( i18n( "ADF Scanning" ) );
    kDebug(29000) << "Starting MassScanDialog!" << endl;
    // Layout-Boxes
    QVBoxLayout *bigdad = new QVBoxLayout( this );

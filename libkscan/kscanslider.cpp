@@ -32,7 +32,7 @@
 #include <QFrame>
 #include <QHBoxLayout>
 
-#include <kiconloader.h>
+#include <kicon.h>
 #include <klocale.h>
 #include <kdebug.h>
 #include <kvbox.h>
@@ -46,14 +46,14 @@ KScanSlider::KScanSlider( QWidget *parent, const QString& text,
      m_stdButt(0)
 {
     QHBoxLayout *hb = new QHBoxLayout( this );
-    l1 = new QLabel( text, this, "AUTO_SLIDER_LABEL" );
+    l1 = new QLabel( text, this );
+    l1->setObjectName( QLatin1String( "AUTO_SLIDER_LABEL" ) );
     hb->addWidget( l1,20 );
 
     if( haveStdButt )
     {
-       KIconLoader *loader = KIconLoader::global();
        m_stdButt = new QPushButton( this );
-       m_stdButt->setPixmap( loader->loadIcon( "edit-undo",K3Icon::Small ));
+       m_stdButt->setIcon( KIcon( "edit-undo" ) );
 
        /* connect the button click to setting the value */
        connect( m_stdButt, SIGNAL(clicked()),
@@ -67,8 +67,8 @@ KScanSlider::KScanSlider( QWidget *parent, const QString& text,
 
     slider = new QSlider( (int) min, (int)max, 1, (int)min, Qt::Horizontal, this, "AUTO_SLIDER_" );
     slider->setTickmarks( QSlider::TicksBelow );
-    slider->setTickInterval( int(QMAX( (max-min)/10, 1.0 )) );
-    slider->setSteps( int(QMAX( (max-min)/20, 1.0) ), int(QMAX( (max-min)/10, 1.0) ) );
+    slider->setTickInterval( int(qMax( (max-min)/10, 1.0 )) );
+    slider->setSteps( int(qMax( (max-min)/20, 1.0) ), int(qMax( (max-min)/10, 1.0) ) );
     slider->setMinimumWidth( 140 );
     /* set a buddy */
     l1->setBuddy( slider );
@@ -161,10 +161,12 @@ KScanEntry::KScanEntry( QWidget *parent, const QString& text )
 {
     QHBoxLayout *hb = new QHBoxLayout( this );
 
-    QLabel *l1 = new QLabel( text, this, "AUTO_ENTRYFIELD" );
+    QLabel *l1 = new QLabel( text, this );
+    l1->setObjectName( QLatin1String( "AUTO_ENTRYFIELD" ) );
     hb->addWidget( l1,1 );
 
-    entry = new QLineEdit( this, "AUTO_ENTRYFIELD_E" );
+    entry = new QLineEdit( this );
+    entry->setObjectName( QLatin1String( "AUTO_ENTRYFIELD_E" ) );
     l1->setBuddy( entry );
     connect( entry, SIGNAL( textChanged(const QString& )),
 	     this, SLOT( slEntryChange(const QString&)));
@@ -281,9 +283,10 @@ void KScanCombo::slSetIcon( const QPixmap& pix, const QString& str)
 {
    for( int i=0; i < combo->count(); i++ )
    {
-      if( combo->text(i) == str )
+      if( combo->itemText(i) == str )
       {
-	 combo->changeItem( pix, str, i );
+	 combo->setItemIcon( i, QIcon( pix ) );
+	 combo->setItemText( i, str );
 	 break;
       }
    }
@@ -297,7 +300,7 @@ QString KScanCombo::currentText( void ) const
 
 QString KScanCombo::text( int i ) const
 {
-   return( combo->text(i) );
+   return( combo->itemText(i) );
 }
 
 void    KScanCombo::setCurrentItem( int i )

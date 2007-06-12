@@ -740,7 +740,7 @@ bool KScanOption::set( const QByteArray& c_string )
    
    if( QString(c_string).contains( re ))
    {
-      QStringList relist = QStringList::split( ", ", QString(c_string) );
+      QStringList relist = QString(c_string).split( ", ", QString::SkipEmptyParts );
       
       int brig = (relist[0]).toInt();
       int contr = (relist[1]).toInt();
@@ -1091,7 +1091,8 @@ QWidget *KScanOption::createWidget( QWidget *parent, const QString& w_desc,
     {
     case BOOL:
       /* Widget Type is ToggleButton */
-      w = new  QCheckBox( text, parent, "AUTO_TOGGLE_BUTTON" );
+      w = new  QCheckBox( text, parent );
+      w->setObjectName( QLatin1String( "AUTO_TOGGLE_BUTTON" ) );
       connect( w, SIGNAL(clicked()), this,
 	       SLOT(slWidgetChange()));
       break;

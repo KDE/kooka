@@ -61,8 +61,10 @@ GammaDialog::GammaDialog( QWidget *parent ) :
     // Layout-Boxes
     QVBoxLayout *bigdad    = new QVBoxLayout( page );
     bigdad->setSpacing( 10 );
-    QHBoxLayout *lhMiddle  = new QHBoxLayout( 5 );
-    QVBoxLayout *lvSliders = new QVBoxLayout( 10 );
+    QHBoxLayout *lhMiddle  = new QHBoxLayout();
+    lhMiddle->setSpacing( 5 );
+    QVBoxLayout *lvSliders = new QVBoxLayout();
+    lvSliders->setSpacing( 10 );
 
     QLabel *l_top = new QLabel( i18n( "<B>Edit the custom gamma table</B><BR>This gamma table is passed to the scanner hardware." ), page );
     bigdad->addWidget( l_top, 1 );

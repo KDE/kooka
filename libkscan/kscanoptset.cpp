@@ -154,10 +154,10 @@ void KScanOptSet::saveConfig( const QString& scannerName, const QString& configN
    if( configName.isNull() || configName.isEmpty() )
       cfgName = "default";
 
-   scanConfig->setGroup( cfgName );
+   KConfigGroup cg( scanConfig, cfgName );
 
-   scanConfig->writeEntry( "description", descr );
-   scanConfig->writeEntry( "scannerName", scannerName );
+   cg.writeEntry( "description", descr );
+   cg.writeEntry( "scannerName", scannerName );
    Q3AsciiDictIterator<KScanOption> it( *this);
 
     while ( it.current() )
@@ -167,7 +167,7 @@ void KScanOptSet::saveConfig( const QString& scannerName, const QString& configN
 
        kDebug(29000) << "writing " << name << " = <" << line << ">" << endl;
 
-       scanConfig->writeEntry( name, line );
+       cg.writeEntry( name, line );
 
        ++it;
     }
@@ -207,7 +207,7 @@ bool KScanOptSet::load( const QString& /*scannerName*/ )
 	 QByteArray optName = it.key().toLatin1();
 	 KScanOption optset( optName );
 
-	 QByteArray val = it.data().toLatin1();
+	 QByteArray val = it.value().toLatin1();
 	 kDebug(29000) << "Reading for " << optName << " value " << val << endl;
 
 	 optset.set( val );

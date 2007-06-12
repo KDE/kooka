@@ -75,11 +75,11 @@ DeviceSelector::DeviceSelector( QWidget *parent, Q3StrList& devList,
    setScanSources( devList, hrdevList );
 
    cbSkipDialog = new QCheckBox( i18n("&Do not ask on startup again, always use this device"),
-				 page, "CBOX_SKIP_ON_START" );
+				 page );
+   cbSkipDialog->setObjectName( QLatin1String( "CBOX_SKIP_ON_START" ) );
 
-   KSharedConfig::Ptr gcfg = KGlobal::config();
-   gcfg->setGroup(QString::fromLatin1(GROUP_STARTUP));
-   bool skipDialog = gcfg->readEntry( STARTUP_SKIP_ASK, false );
+   KConfigGroup gcfg( KGlobal::config(), GROUP_STARTUP );
+   bool skipDialog = gcfg.readEntry( STARTUP_SKIP_ASK, false );
    cbSkipDialog->setChecked( skipDialog );
 
    topLayout->addWidget(cbSkipDialog);
@@ -88,16 +88,15 @@ DeviceSelector::DeviceSelector( QWidget *parent, Q3StrList& devList,
 
 QByteArray DeviceSelector::getDeviceFromConfig( void ) const
 {
-   KSharedConfig::Ptr gcfg = KGlobal::config();
-   gcfg->setGroup(QString::fromLatin1(GROUP_STARTUP));
-   bool skipDialog = gcfg->readEntry( STARTUP_SKIP_ASK, false );
+   KConfigGroup gcfg( KGlobal::config(), GROUP_STARTUP );
+   bool skipDialog = gcfg.readEntry( STARTUP_SKIP_ASK, false );
 
    QByteArray result;
 
    /* in this case, the user has checked 'Do not ask me again' and does not
     * want to be bothered any more.
     */
-   result = QFile::encodeName(gcfg->readEntry( STARTUP_SCANDEV, "" ));
+   result = QFile::encodeName(gcfg.readEntry( STARTUP_SCANDEV, "" ));
    kDebug(29000) << "Got scanner from config file to use: " << result << endl;
 
    /* Now check if the scanner read from the config file is available !
@@ -135,12 +134,10 @@ QByteArray DeviceSelector::getSelectedDevice( void ) const
    kDebug(29000) << "The selected device: <" << dev << ">" << endl;
 
    /* Store scanner selection settings */
-   KSharedConfig::Ptr c = KGlobal::config();
-   c->setGroup(QString::fromLatin1(GROUP_STARTUP));
+   KConfigGroup c( KGlobal::config(), GROUP_STARTUP );
    /* Write both the scan device and the skip-start-dialog flag global. */
-   c->writeEntry( STARTUP_SCANDEV, dev, KConfigBase::Normal|KConfigBase::Global);
-   c->writeEntry( STARTUP_SKIP_ASK, getShouldSkip(), KConfigBase::Normal|KConfigBase::Global);
-   c->sync();
+   c.writeEntry( STARTUP_SCANDEV, dev, KConfigBase::Normal|KConfigBase::Global);
+   c.writeEntry( STARTUP_SKIP_ASK, getShouldSkip(), KConfigBase::Normal|KConfigBase::Global);
 
    return dev;
 }
@@ -150,9 +147,8 @@ void DeviceSelector::setScanSources( const Q3StrList& sources,
 				     const QStringList& hrSources )
 {
    bool default_ok = false;
-   KSharedConfig::Ptr gcfg = KGlobal::config();
-   gcfg->setGroup(QString::fromLatin1(GROUP_STARTUP));
-   QByteArray defstr = gcfg->readEntry( STARTUP_SCANDEV, "" ).toLocal8Bit();
+   KConfigGroup gcfg( KGlobal::config(), GROUP_STARTUP );
+   QByteArray defstr = gcfg.readEntry( STARTUP_SCANDEV, "" ).toLocal8Bit();
 
    /* Selector-Stuff*/
    uint nr = 0;

@@ -609,7 +609,7 @@ void ScanParams::slFileSelect( void )
    if ( fd.exec() == QDialog::Accepted ) {
       fileName = fd.selectedFile();
       QFileInfo ppath( fileName );
-      last_virt_scan_path = QDir(ppath.dirPath(true));
+      last_virt_scan_path = QDir(ppath.absolutePath());
    } else {
       return;
    }
@@ -639,7 +639,7 @@ void ScanParams::slVirtScanModeSelect( int id )
 	 kDebug(29000) << "Found File in Filename-Option: " << vf << endl;
 
 	 QFileInfo fi( vf );
-	 if( fi.extension() != QString::fromLatin1("pnm") )
+	 if( fi.completeSuffix() != QString::fromLatin1("pnm") )
 	    virt_filename->set(QByteArray(""));
       }
    } else {
