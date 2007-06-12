@@ -52,11 +52,11 @@ void DispGamma::paintEvent( QPaintEvent *ev )
 
     p.setClipRect( ev->rect());
 
-    p.setPen( colorGroup().highlight() );
-    p.setBrush( colorGroup().base() );
+    p.setPen( palette().color( QPalette::Highlight ) );
+    p.setBrush( palette().brush( QPalette::Base ) );
     // Backgrond
     p.drawRect( 0,0, w, 256 );
-    p.setPen( QPen(colorGroup().midlight(), 1, Qt::DotLine));
+    p.setPen( QPen(palette().color(QPalette::Midlight), 1, Qt::DotLine));
     // horizontal Grid
     for( int l = 1; l < 5; l++ )
             p.drawLine( 1, l*51, 255, l*51 );
@@ -66,7 +66,7 @@ void DispGamma::paintEvent( QPaintEvent *ev )
             p.drawLine( l*51, 2, l*51, 255 );
 
     // draw gamma-Line
-    p.setPen( colorGroup().highlight() );
+    p.setPen( palette().color( QPalette::Highlight ) );
 	int x = 1;
 	int y = vals->at(1);
     for( int i = 2; i < w-1; i++ )

@@ -299,7 +299,7 @@ bool ScanDialog::setup()
    /* Move the scan params to the left, for backward compatibility.
     * However, having it on the right looks a bit better IMHO */
    if( splitter && m_scanParams )
-      splitter->moveToFirst( m_scanParams );
+      splitter->insertWidget( 0, m_scanParams );
 
    if( good_scan_connect )
    {
@@ -319,11 +319,11 @@ bool ScanDialog::setup()
     {
        QRect r = KGlobalSettings::desktopGeometry(this);
 
-       kfg->setGroup( GROUP_STARTUP );
+       const KConfigGroup cg( kfg, GROUP_STARTUP );
        /* Since this is a vertical splitter, only the width is important */
        QString key = QString::fromLatin1( SCANDIA_SPLITTER_SIZES ).arg( r.width());
        kDebug(29000) << "Read Splitter-Sizes " << key  << endl;
-       splitter->setSizes( kfg->readIntListEntry( key ));
+       splitter->setSizes( cg.readEntry( key, QList<int>() ) );
     }
 
    return true;
@@ -344,10 +344,10 @@ void ScanDialog::slotClose()
       {
          QRect r = KGlobalSettings::desktopGeometry(this);
 
-	 kfg->setGroup( GROUP_STARTUP );
+	 KConfigGroup cg( kfg, GROUP_STARTUP );
 	 /* Since this is a vertical splitter, only the width is important */
 	 QString key = QString::fromLatin1( SCANDIA_SPLITTER_SIZES ).arg( r.width());
-	 kfg->writeEntry( key, splitter->sizes(), KConfigBase::Normal|KConfigBase::Global);
+	 cg.writeEntry( key, splitter->sizes(), KConfigBase::Normal|KConfigBase::Global);
       }
    }
 

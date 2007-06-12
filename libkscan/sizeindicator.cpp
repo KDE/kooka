@@ -100,7 +100,7 @@ void SizeIndicator::drawContents( QPainter *p )
       warnColor.setHsv( 0, c, c );
 
       p->drawImage( 0,0,
-		    KImageEffect::unbalancedGradient( s, colorGroup().background(),
+		    KImageEffect::unbalancedGradient( s, palette().color(QPalette::Window),
 						      warnColor, KImageEffect::CrossDiagonalGradient, 200,200 ));
    }
    /* Displaying the text */
