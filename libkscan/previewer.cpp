@@ -117,9 +117,11 @@ Previewer::Previewer(QWidget *parent)
 
     QVBoxLayout *top = new QVBoxLayout( this );
     top->setSpacing( 10 );
-    layout = new QHBoxLayout( 2 );
+    layout = new QHBoxLayout();
+    layout->setSpacing( 2 );
     top->addLayout( layout, 9 );
-    QVBoxLayout *left = new QVBoxLayout( 3 );
+    QVBoxLayout *left = new QVBoxLayout();
+    left->setSpacing( 3 );
     layout->addLayout( left, 2 );
 
     /* Load autoselection values from Config file */
@@ -229,8 +231,11 @@ Previewer::Previewer(QWidget *parent)
     (void) new QLabel( i18n("scanner background"), d->m_autoSelGroup );
 
     QLabel *l1= new QLabel( i18n("Thresh&old:"), d->m_autoSelGroup );
-    d->m_sliderThresh = new QSlider( 0, 254, 10, d->m_autoSelThresh,  Qt::Horizontal,
-                                     d->m_autoSelGroup );
+    d->m_sliderThresh = new QSlider( Qt::Horizontal, d->m_autoSelGroup );
+    d->m_sliderThresh->setRange( 0, 254 );
+    d->m_sliderThresh->setPageStep( 10 );
+    d->m_sliderThresh->setValue( d->m_autoSelThresh );
+
     connect( d->m_sliderThresh, SIGNAL(valueChanged(int)), SLOT(slSetAutoSelThresh(int)));
     d->m_sliderThresh->setToolTip(
                    i18n("Threshold for autodetection.\n"

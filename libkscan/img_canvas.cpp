@@ -102,7 +102,7 @@ ImageCanvas::ImageCanvas(QWidget *parent,
         img_size = image->size();
         pmScaled = new QPixmap( img_size );
 
-        pmScaled->convertFromImage( *image );
+        *pmScaled = QPixmap::fromImage( *image );
 
         acquired = true;
     } else {
@@ -190,7 +190,7 @@ void ImageCanvas::newImage( QImage *new_image )
    {
       pmScaled = new QPixmap( image->size() );
 
-      pmScaled->convertFromImage( *image, image->depth() == 1 ? Qt::MonoOnly : Qt::AutoColor );
+      *pmScaled = QPixmap::fromImage( *image, image->depth() == 1 ? Qt::MonoOnly : Qt::AutoColor );
 
       acquired = true;
 
@@ -214,7 +214,7 @@ void ImageCanvas::newImage( QImage *new_image )
 
 
    kDebug(29000) << "going to repaint!" << endl;
-   repaint( true );
+   repaint();
    kDebug(29000) << "repaint ok" << endl;
 }
 
@@ -304,7 +304,7 @@ QRect ImageCanvas::sel( void )
 	/* Get the size in real image pixels */
 
 	// debug_rect( "PRE map", selected );
-   	QRect mapped = inv_scale_matrix.map( (const QRect) *selected );
+   	QRect mapped = inv_scale_matrix.mapRect( (const QRect) *selected );
    	// debug_rect( "Postmap", &mapped );
    	if( mapped.x() > 0 )
 	    retval.setLeft((int) (1000.0/( (double)image->width() / (double)mapped.x())));
@@ -414,7 +414,7 @@ void ImageCanvas::newRectSlot( QRect newSel )
        to_map.setRect( rx, ry, rw, rh );
 
        kDebug(29000) << "ImageCanvas Selection: W=" << to_map.width() << " H=" << to_map.height() << endl;
-       *selected = scale_matrix.map( to_map );
+       *selected = scale_matrix.mapRect( to_map );
        kDebug(29000) << "ImageCanvas Selection: W=" << selected->width() << " H=" << selected->height() << endl;
        emit( newRect( sel() ));
        newRectSlot();
@@ -482,7 +482,7 @@ void ImageCanvas::viewportMouseReleaseEvent(QMouseEvent *ev)
     QPainter p(viewport());
     drawAreaBorder(&p,TRUE);
     moving = MOVE_NONE;
-    *selected = selected->normalize();
+    *selected = selected->normalized();
 
     if(selected->width () < MIN_AREA_WIDTH ||
        selected->height() < MIN_AREA_HEIGHT)
@@ -619,7 +619,7 @@ void ImageCanvas::viewportMouseMoveEvent(QMouseEvent *ev)
 
     		x = mx+lx; y = my+ly;
 
-    		selected->moveBy( mx, my );
+    		selected->translate( mx, my );
 
     	}
     	drawAreaBorder(&p);
@@ -714,7 +714,7 @@ void ImageCanvas::update_scaled_pixmap( void )
 
     // reconvert the selection to orig size
     if( selected ) {
-        *selected = inv_scale_matrix.map( (const QRect) *selected );
+        *selected = inv_scale_matrix.mapRect( (const QRect) *selected );
     }
 
     scale_matrix.reset();                         // transformation matrix
@@ -729,15 +729,15 @@ void ImageCanvas::update_scaled_pixmap( void )
     }
 
     scale_matrix.scale( used_xscaler, used_yscaler );  // define scale factors
-    inv_scale_matrix = scale_matrix.invert();	// for redraw of selection
+    inv_scale_matrix = scale_matrix.inverted();	// for redraw of selection
 
     if( selected ) {
-        *selected = scale_matrix.map( (const QRect )*selected );
+        *selected = scale_matrix.mapRect( (const QRect )*selected );
     }
 
-    pmScaled->convertFromImage( *image );
+    *pmScaled = QPixmap::fromImage( *image );
 
-    *pmScaled = pmScaled->xForm( scale_matrix );  // create scaled pixmap
+    *pmScaled = pmScaled->transformed( scale_matrix );  // create scaled pixmap
 
     /* Resizing to 0,0 never may be dropped, otherwise there are problems
      * with redrawing of new images.
@@ -871,7 +871,7 @@ preview_state ImageCanvas::classifyPoint(int x,int y)
 {
   if(selected->isEmpty()) return MOVE_NONE;
 
-  QRect a = selected->normalize();
+  QRect a = selected->normalized();
 
   int top = 0,left = 0,right = 0,bottom = 0;
   int lx = a.left()-x, rx = x-a.right();
@@ -1041,7 +1041,7 @@ int ImageCanvas::highlight( const QRect& rect, const QPen& pen, const QBrush&, b
 
     int idx = d->highlightRects.findIndex(saveRect);
 
-    QRect targetRect = scale_matrix.map( rect );
+    QRect targetRect = scale_matrix.mapRect( rect );
 
     updateContents(targetRect.x()-1, targetRect.y()-1,
                    targetRect.width()+2, targetRect.height()+2 );
@@ -1066,7 +1066,7 @@ void ImageCanvas::removeHighlight( int idx )
     /* take the rectangle from the stored highlight rects and map it to the viewer scaling */
     QRect r = d->highlightRects[idx];
     d->highlightRects.remove(r);
-    QRect targetRect = scale_matrix.map( r );
+    QRect targetRect = scale_matrix.mapRect( r );
 
 #if 0
     /* create a small pixmap with a copy of the region in question of the original image */

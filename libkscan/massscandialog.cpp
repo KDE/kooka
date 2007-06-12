@@ -43,7 +43,8 @@ MassScanDialog::MassScanDialog( QWidget *parent )
    QVBoxLayout *bigdad = new QVBoxLayout( this );
    bigdad->setSpacing( 5 );
    // QHBoxLayout *hl1= new QHBoxLayout( );      // Caption
-   QHBoxLayout *l_but  = new QHBoxLayout( 10 );  // Buttons
+   QHBoxLayout *l_but  = new QHBoxLayout();  // Buttons
+   l_but->setSpacing( 10 );
  	
  	/* Caption */
  	QLabel *l1 = new QLabel( i18n( "<B>Mass Scanning</B>" ), this);
@@ -54,7 +55,9 @@ MassScanDialog::MassScanDialog( QWidget *parent )
  	//f1->setFrameStyle( QFrame::Box | QFrame::Sunken );
  	//f1->setMargin(5);
  	//f1->setLineWidth( 1 );
-   QVBoxLayout *l_main = new QVBoxLayout( f1,/*f1->frameWidth()+*/3, 3 );
+   QVBoxLayout *l_main = new QVBoxLayout( f1 );
+   l_main->setMargin( /*f1->frameWidth()+*/3 );
+   l_main->setSpacing( 3 );
  	bigdad->addWidget( f1, 6 );
  	
    scanopts = i18n("Scanning <B>%s</B> with <B>%d</B> dpi");
@@ -70,7 +73,9 @@ MassScanDialog::MassScanDialog( QWidget *parent )
  	//f2->setFrameStyle( QFrame::Box | QFrame::Sunken );
  	//f2->setMargin(15);
  	//f2->setLineWidth( 1 );
-   QVBoxLayout *l_pro = new QVBoxLayout( f2, /*f2->frameWidth()+*/3, 3 );
+   QVBoxLayout *l_pro = new QVBoxLayout( f2 );
+   l_pro->setMargin( /*f2->frameWidth()+*/3 );
+   l_pro->setSpacing( 3 );
  	bigdad->addWidget( f2, 6 );
 
  	QHBoxLayout *l_scanp = new QHBoxLayout( );

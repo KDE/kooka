@@ -77,7 +77,8 @@ ScanDialog::ScanDialog( QWidget *parent )
     addPage( page, i18n("&Scanning") );
 
 
-    splitter = new QSplitter( Qt::Horizontal, page, "splitter" );
+    splitter = new QSplitter( Qt::Horizontal, page );
+    splitter->setObjectName( QLatin1String( "splitter" ) );
     Q_CHECK_PTR( splitter );
 
     m_scanParams = 0;
@@ -135,10 +136,9 @@ void ScanDialog::createOptionsTab( void )
 
 
    /* Read settings for startup behavior */
-   KSharedConfig::Ptr gcfg = KGlobal::config();
-   gcfg->setGroup(QString::fromLatin1(GROUP_STARTUP));
-   bool skipDialog  = gcfg->readEntry( STARTUP_SKIP_ASK, false );
-   bool onlyLocal   = gcfg->readEntry( STARTUP_ONLY_LOCAL, false );
+   KConfigGroup gcfg( KGlobal::config(), GROUP_STARTUP );
+   bool skipDialog  = gcfg.readEntry( STARTUP_SKIP_ASK, false );
+   bool onlyLocal   = gcfg.readEntry( STARTUP_ONLY_LOCAL, false );
 
    /* Note: flag must be inverted because of question is 'the other way round' */
    cb_askOnStart->setChecked( !skipDialog );
@@ -159,9 +159,8 @@ void ScanDialog::slotNetworkToggle( bool state)
    bool writestate = !state;
 
    kDebug(29000) << "slotNetworkToggle: Writing state " << writestate << endl;
-   KSharedConfig::Ptr c = KGlobal::config();
-   c->setGroup(QString::fromLatin1(GROUP_STARTUP));
-   c->writeEntry( STARTUP_ONLY_LOCAL, writestate, KConfigBase::Normal|KConfigBase::Global);
+   KConfigGroup c( KGlobal::config(), GROUP_STARTUP );
+   c.writeEntry( STARTUP_ONLY_LOCAL, writestate, KConfigBase::Normal|KConfigBase::Global);
 }
 
 void ScanDialog::slotAskOnStartToggle(bool state)
@@ -169,9 +168,8 @@ void ScanDialog::slotAskOnStartToggle(bool state)
    bool writestate = !state;
 
    kDebug(29000) << "slotAskOnStartToggle: Writing state " << writestate << endl;
-   KSharedConfig::Ptr c = KGlobal::config();
-   c->setGroup(QString::fromLatin1(GROUP_STARTUP));
-   c->writeEntry( STARTUP_SKIP_ASK, writestate, KConfigBase::Normal|KConfigBase::Global);
+   KConfigGroup c( KGlobal::config(), GROUP_STARTUP );
+   c.writeEntry( STARTUP_SKIP_ASK, writestate, KConfigBase::Normal|KConfigBase::Global);
 }
 
 void ScanDialog::slotScanStart( )

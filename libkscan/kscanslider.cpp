@@ -65,18 +65,22 @@ KScanSlider::KScanSlider( QWidget *parent, const QString& text,
        hb->addSpacing( 4 );
     }
 
-    slider = new QSlider( (int) min, (int)max, 1, (int)min, Qt::Horizontal, this, "AUTO_SLIDER_" );
-    slider->setTickmarks( QSlider::TicksBelow );
+    slider = new QSlider( Qt::Horizontal, this );
+    slider->setObjectName( QLatin1String( "AUTO_SLIDER_" ) );
+    slider->setRange( (int)min, (int)max );
+    slider->setValue( (int)min );
+    slider->setTickPosition( QSlider::TicksBelow );
     slider->setTickInterval( int(qMax( (max-min)/10, 1.0 )) );
-    slider->setSteps( int(qMax( (max-min)/20, 1.0) ), int(qMax( (max-min)/10, 1.0) ) );
+    slider->setSingleStep( int(qMax( (max-min)/20, 1.0) ) );
+    slider->setPageStep( int(qMax( (max-min)/10, 1.0) ) );
     slider->setMinimumWidth( 140 );
     /* set a buddy */
     l1->setBuddy( slider );
 
     /* create a spinbox for displaying the values */
-    m_spin = new QSpinBox( (int) min, (int) max,
-			   1, // step
-			   this );
+    m_spin = new QSpinBox( this );
+    m_spin->setRange( (int)min, (int)max );
+    m_spin->setSingleStep( 1 );
 
 
     /* make spin box changes change the slider */
