@@ -62,12 +62,13 @@ class KScanDevice::KScanDevicePrivate
 {
 public:
     KScanDevicePrivate()
-	: currScanResolution(0)
+	: currScanResolutionX(0),
+	  currScanResolutionY(0)
 	{
 	    
 	}
 
-    int currScanResolution;
+    int currScanResolutionX, currScanResolutionY;
     
 };
 
@@ -789,13 +790,16 @@ KScanStat KScanDevice::acquirePreview( bool forceGray, int dpi )
    }
 
    /* Set scan resolution for preview. */
-   if( optionExists( SANE_NAME_SCAN_Y_RESOLUTION ) )
+   if( !optionExists( SANE_NAME_SCAN_Y_RESOLUTION ) )
+      d->currScanResolutionY = 0;
+   else
    {
       KScanOption yres ( SANE_NAME_SCAN_Y_RESOLUTION );
       /* if active ? */
       storeOptions->backupOption( yres );
       yres.set( set_dpi );
       apply( &yres );
+      yres.get( &d->currScanResolutionY );
 
       /* Resolution bind switch ? */
       if( optionExists( SANE_NAME_RESOLUTION_BIND ) )
@@ -812,8 +816,10 @@ KScanStat KScanDevice::acquirePreview( bool forceGray, int dpi )
    apply( &res );
 
    /* Store the resulting preview for additional image information */
-   res.get( &d->currScanResolution );
+   res.get( &d->currScanResolutionX );
 
+   if ( d->currScanResolutionY == 0 )
+      d->currScanResolutionY = d->currScanResolutionX;
 
    /* Start scanning */
    KScanStat stat = acquire_data( true );
@@ -915,6 +921,18 @@ KScanStat KScanDevice::acquire( const QString& filename )
  	        kDebug(29000) << "Option <" << so->getName() << "> is not active !" << endl;
  	    }
  	}
+
+	/** Scan Resolution should always exist. **/
+	KScanOption res( SANE_NAME_SCAN_RESOLUTION );
+	res.get( &d->currScanResolutionX );
+        if ( !optionExists( SANE_NAME_SCAN_Y_RESOLUTION ) )
+           d->currScanResolutionY = d->currScanResolutionX;
+        else
+        {
+           KScanOption yres( SANE_NAME_SCAN_Y_RESOLUTION );
+           yres.get( &d->currScanResolutionY );
+        }
+
 	return( acquire_data( false ));
     }
     else
@@ -1170,12 +1188,13 @@ void KScanDevice::slScanFinished( KScanStat status )
     if( status == KSCAN_OK && img )
     {
 	ImgScanInfo info;
-	/* FIXME: Both resolutions are equal here but should be
-	 *        x and y different
-	 */
-	info.setXResolution(d->currScanResolution);
-	info.setYResolution(d->currScanResolution);
+	info.setXResolution(d->currScanResolutionX);
+	info.setYResolution(d->currScanResolutionY);
 	info.setScannerName(shortScannerName());
+
+	// put the resolution also into the image itself
+	img->setDotsPerMeterX(static_cast<int>(d->currScanResolutionX / 0.0254 + 0.5));
+	img->setDotsPerMeterY(static_cast<int>(d->currScanResolutionY / 0.0254 + 0.5));
 
 	if( scanningPreview )
 	{
