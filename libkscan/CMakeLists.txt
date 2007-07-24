@@ -29,7 +29,7 @@ set(kscan_LIB_SRCS
 
 kde4_add_library(kscan SHARED ${kscan_LIB_SRCS})
 
-target_link_libraries(kscan   ${SANE_LIBRARIES} ${KDE4_KDE3SUPPORT_LIBS})
+target_link_libraries(kscan   ${SANE_LIBRARIES} ${KDE4_KDE3SUPPORT_LIBS} ${KDE4_KDEUI_LIBS})
 
 set_target_properties(kscan PROPERTIES VERSION 1.0.0 SOVERSION 1 )
 install(TARGETS kscan  DESTINATION ${LIB_INSTALL_DIR} )
