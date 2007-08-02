@@ -51,7 +51,7 @@ DeviceSelector::DeviceSelector( QWidget *parent, Q3StrList& devList,
     setDefaultButton( Ok );
     setModal( true );
     showButtonSeparator( true );
-   kDebug(29000) << "Starting DevSelector!" << endl;
+   kDebug(29000) << "Starting DevSelector!";
    // Layout-Boxes
    QWidget *page = new QWidget( this );
    Q_CHECK_PTR( page );
@@ -97,18 +97,18 @@ QByteArray DeviceSelector::getDeviceFromConfig( void ) const
     * want to be bothered any more.
     */
    result = QFile::encodeName(gcfg.readEntry( STARTUP_SCANDEV, "" ));
-   kDebug(29000) << "Got scanner from config file to use: " << result << endl;
+   kDebug(29000) << "Got scanner from config file to use: " << result;
 
    /* Now check if the scanner read from the config file is available !
     * if not, ask the user !
     */
    if( skipDialog && devices.find( result ) > -1 )
    {
-      kDebug(29000) << "Scanner from Config file is available - fine." << endl;
+      kDebug(29000) << "Scanner from Config file is available - fine.";
    }
    else
    {
-      kDebug(29000) << "Scanner from Config file is _not_ available" << endl;
+      kDebug(29000) << "Scanner from Config file is _not_ available";
       result = QByteArray();
    }
 
@@ -125,13 +125,13 @@ QByteArray DeviceSelector::getSelectedDevice( void ) const
    unsigned int selID = selectBox->id( selectBox->selected() );
 
    int dcount = devices.count();
-   kDebug(29000) << "The Selected ID is <" << selID << ">/" << dcount << endl;
+   kDebug(29000) << "The Selected ID is <" << selID << ">/" << dcount;
    if (selID < 0)
 	return 0;
 
    const char * dev = devices.at( selID );
 
-   kDebug(29000) << "The selected device: <" << dev << ">" << endl;
+   kDebug(29000) << "The selected device: <" << dev << ">";
 
    /* Store scanner selection settings */
    KConfigGroup c( KGlobal::config(), GROUP_STARTUP );

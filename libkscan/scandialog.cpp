@@ -158,7 +158,7 @@ void ScanDialog::slotNetworkToggle( bool state)
 {
    bool writestate = !state;
 
-   kDebug(29000) << "slotNetworkToggle: Writing state " << writestate << endl;
+   kDebug(29000) << "slotNetworkToggle: Writing state " << writestate;
    KConfigGroup c( KGlobal::config(), GROUP_STARTUP );
    c.writeEntry( STARTUP_ONLY_LOCAL, writestate, KConfigBase::Normal|KConfigBase::Global);
 }
@@ -167,7 +167,7 @@ void ScanDialog::slotAskOnStartToggle(bool state)
 {
    bool writestate = !state;
 
-   kDebug(29000) << "slotAskOnStartToggle: Writing state " << writestate << endl;
+   kDebug(29000) << "slotAskOnStartToggle: Writing state " << writestate;
    KConfigGroup c( KGlobal::config(), GROUP_STARTUP );
    c.writeEntry( STARTUP_SKIP_ASK, writestate, KConfigBase::Normal|KConfigBase::Global);
 }
@@ -202,7 +202,7 @@ void ScanDialog::slotAcquireStart( )
 
 void ScanDialog::slotScanFinished( KScanStat status )
 {
-   kDebug(29000) << "Scan finished with status " << status << endl;
+   kDebug(29000) << "Scan finished with status " << status;
    if( m_scanParams )
    {
       m_scanParams->setEnabled( true );
@@ -265,7 +265,7 @@ bool ScanDialog::setup()
 
       if( configDevice.isEmpty() || configDevice.isNull() )
       {
-	 kDebug(29000) << "configDevice is not valid - starting selector!" << configDevice << endl;
+	 kDebug(29000) << "configDevice is not valid - starting selector!" << configDevice;
 	 if ( ds.exec() == QDialog::Accepted )
 	 {
 	    configDevice = ds.getSelectedDevice();
@@ -281,7 +281,7 @@ bool ScanDialog::setup()
 	 /* ..and connect to the gui (create the gui) */
 	 if ( !m_scanParams->connectDevice( m_device ) )
 	 {
-	    kDebug(29000) << "ERR: Could not connect scan device" << endl;
+	    kDebug(29000) << "ERR: Could not connect scan device";
 	    good_scan_connect = false;
 	 }
       }
@@ -322,7 +322,7 @@ bool ScanDialog::setup()
        const KConfigGroup cg( kfg, GROUP_STARTUP );
        /* Since this is a vertical splitter, only the width is important */
        QString key = QString::fromLatin1( SCANDIA_SPLITTER_SIZES ).arg( r.width());
-       kDebug(29000) << "Read Splitter-Sizes " << key  << endl;
+       kDebug(29000) << "Read Splitter-Sizes " << key ;
        splitter->setSizes( cg.readEntry( key, QList<int>() ) );
     }
 
@@ -359,7 +359,7 @@ void ScanDialog::slotClose()
    if( m_device )
       m_device->slCloseDevice();
    else
-      kDebug(29000) << "ERR: no device exists :(" << endl;
+      kDebug(29000) << "ERR: no device exists :(";
       // bullshit happend
    accept();
 }

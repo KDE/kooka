@@ -53,7 +53,7 @@
 
 inline void debug_rect( const char *name, QRect *r )
 {
-	kDebug(29000) << (name ? name: "NONAME") << ": " << r->x() << ", " << r->y() << ", " << r->width() << ", " << r->height() << endl;
+	kDebug(29000) << (name ? name: "NONAME") << ": " << r->x() << ", " << r->y() << ", " << r->width() << ", " << r->height();
 }
 
 
@@ -128,7 +128,7 @@ ImageCanvas::ImageCanvas(QWidget *parent,
 
 ImageCanvas::~ImageCanvas()
 {
-   kDebug(29000) << "Destructor of ImageCanvas" << endl;
+   kDebug(29000) << "Destructor of ImageCanvas";
     noRectSlot();
     delete selected;
     selected = 0;
@@ -143,7 +143,7 @@ void ImageCanvas::deleteView( QImage *delimage )
 
    if( delimage == img )
    {
-      kDebug(29000) << "ImageCanvas -> emiting newImage(0L)" << endl;
+      kDebug(29000) << "ImageCanvas -> emiting newImage(0L)";
       newImage( 0L );
       noRectSlot();
    }
@@ -168,7 +168,7 @@ void ImageCanvas::newImage( QImage *new_image )
 
    if( ! image || image->isNull())
    {
-      kDebug(29000) << "newImage: Got Empty image !" << endl;
+      kDebug(29000) << "newImage: Got Empty image !";
    }
 
    if( pmScaled )
@@ -196,26 +196,26 @@ void ImageCanvas::newImage( QImage *new_image )
 
       if( d->keepZoom )
       {
-          kDebug(29000) << "Preserving Zoom settings!" << endl;
+          kDebug(29000) << "Preserving Zoom settings!";
       }
       else
       {
-          kDebug(29000) << "Resetting Zoom to original size!" << endl;
+          kDebug(29000) << "Resetting Zoom to original size!";
           setScaleKind( defaultScaleKind() );
       }
 
       update_scaled_pixmap();
       setContentsPos(0,0);
    } else {
-      kDebug(29000) << "New image called without image => deleting!" << endl;
+      kDebug(29000) << "New image called without image => deleting!";
       acquired = false;
       resizeContents( 0,0 );
    }
 
 
-   kDebug(29000) << "going to repaint!" << endl;
+   kDebug(29000) << "going to repaint!";
    repaint();
-   kDebug(29000) << "repaint ok" << endl;
+   kDebug(29000) << "repaint ok";
 }
 
 QSize ImageCanvas::sizeHint() const
@@ -402,20 +402,20 @@ void ImageCanvas::newRectSlot( QRect newSel )
        int w = image->width();
        int h = image->height();
 
-       kDebug(29000) << "ImageCanvas: Image size is " << w << "x" << h << endl;
-       kDebug(29000) << "ImageCanvas got selection Rect: W=" << newSel.width() << ", H=" << newSel.height() << endl;
+       kDebug(29000) << "ImageCanvas: Image size is " << w << "x" << h;
+       kDebug(29000) << "ImageCanvas got selection Rect: W=" << newSel.width() << ", H=" << newSel.height();
        // to_map.setWidth(static_cast<int>(w * newSel.width() / 1000.0));
        rw = static_cast<int>(w * newSel.width()  / 1000.0);
        rx = static_cast<int>(w * newSel.x()      / 1000.0);
        ry = static_cast<int>(h * newSel.y()      / 1000.0);
        rh = static_cast<int>(h * newSel.height() / 1000.0);
-       kDebug(29000) << "ImageCanvas: scaled Height is " << rh << endl;
+       kDebug(29000) << "ImageCanvas: scaled Height is " << rh;
 
        to_map.setRect( rx, ry, rw, rh );
 
-       kDebug(29000) << "ImageCanvas Selection: W=" << to_map.width() << " H=" << to_map.height() << endl;
+       kDebug(29000) << "ImageCanvas Selection: W=" << to_map.width() << " H=" << to_map.height();
        *selected = scale_matrix.mapRect( to_map );
-       kDebug(29000) << "ImageCanvas Selection: W=" << selected->width() << " H=" << selected->height() << endl;
+       kDebug(29000) << "ImageCanvas Selection: W=" << selected->width() << " H=" << selected->height();
        emit( newRect( sel() ));
        newRectSlot();
    }
@@ -603,12 +603,12 @@ void ImageCanvas::viewportMouseMoveEvent(QMouseEvent *ev)
     		if( selected->x()+ selected->width()+mx >= ix-cx )
     		{
     			mx =  ix -cx - selected->width() - selected->x();
-    			kDebug(29000) << "runs out !" << endl;
+    			kDebug(29000) << "runs out !";
     		}
     		if( selected->y()+ selected->height()+my >= iy-cy )
     		{
     			my =  iy -cy - selected->height() - selected->y();
-    			kDebug(29000) << "runs out !" << endl;
+    			kDebug(29000) << "runs out !";
     		}
 
     		/* Check if rectangle would run out of the image on left and top */
@@ -632,10 +632,10 @@ void ImageCanvas::viewportMouseMoveEvent(QMouseEvent *ev)
 
 void ImageCanvas::setScaleFactor( int i )
 {
-   kDebug(29000) <<  "Setting Scalefactor to " << i << endl;
+   kDebug(29000) <<  "Setting Scalefactor to " << i;
    scale_factor = i;
    if( i == 0 ){
-       kDebug(29000) << "Setting Dynamic Scaling!" << endl;
+       kDebug(29000) << "Setting Dynamic Scaling!";
        setScaleKind(DYNAMIC);
    }
    update_scaled_pixmap();
@@ -660,9 +660,9 @@ void ImageCanvas::update_scaled_pixmap( void )
 
     QApplication::setOverrideCursor(Qt::WaitCursor);
 
-    kDebug(28000) << "Updating scaled_pixmap" << endl;
+    kDebug(28000) << "Updating scaled_pixmap";
     if( scaleKind() == DYNAMIC )
-        kDebug(28000) << "Scaling DYNAMIC" << endl;
+        kDebug(28000) << "Scaling DYNAMIC";
     QSize noSBSize( visibleWidth(), visibleHeight());
 
     // if( verticalScrollBar()->visible() ) noSBSize.width()+=sbWidth;
@@ -1059,7 +1059,7 @@ void ImageCanvas::removeHighlight( int idx )
 {
     if( idx >= d->highlightRects.count() )
     {
-        kDebug(28000) << "removeHighlight: Not a valid index" << endl;
+        kDebug(28000) << "removeHighlight: Not a valid index";
         return;
     }
 

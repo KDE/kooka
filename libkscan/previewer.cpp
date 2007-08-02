@@ -443,7 +443,7 @@ void Previewer::slFormatChange( int id )
       if( format_id == portrait_id )
       {   /* Portrait Mode */
 	 p = calcPercent( s_short, s_long );
-	 kDebug(29000) << "Now is portrait-mode" << endl;
+	 kDebug(29000) << "Now is portrait-mode";
       }
       else
       {   /* Landscape-Mode */
@@ -470,7 +470,7 @@ void Previewer::slCustomChange( void )
 
 void Previewer::slNewScanResolutions( int x, int y )
 {
-   kDebug(29000) << "got new Scan Resolutions: " << x << "|" << y << endl;
+   kDebug(29000) << "got new Scan Resolutions: " << x << "|" << y;
    scanResX = x;
    scanResY = y;
 
@@ -493,7 +493,7 @@ void Previewer::slNewDimen(QRect r)
    s = i18n("width %1 mm", int(selectionWidthMm));
    emit(setScanWidth(s));
 
-   kDebug(29000) << "Setting new Dimension " << s << endl;
+   kDebug(29000) << "Setting new Dimension " << s;
    s = i18n("height %1 mm", int(selectionHeightMm));
    emit(setScanHeight(s));
 
@@ -529,7 +529,7 @@ QPoint Previewer::calcPercent( int w_mm, int h_mm )
  		p.setX( static_cast<int>(1000.0*w_mm / overallWidth) );
  		p.setY( static_cast<int>(1000.0*h_mm / overallHeight) );
  	} else {
- 		kDebug(29000) << "ERROR: Only mm supported yet !" << endl;
+ 		kDebug(29000) << "ERROR: Only mm supported yet !";
  	}
  	return( p );
 
@@ -553,7 +553,7 @@ void Previewer::slScaleToHeight()
 
 void Previewer::slConnectScanner( KScanDevice *scan )
 {
-    kDebug(29000) << "Connecting scan device!" << endl;
+    kDebug(29000) << "Connecting scan device!";
     d->m_scanner = scan;
 
     if( scan )
@@ -615,13 +615,13 @@ void Previewer::checkForScannerBg()
         if( isWhite == "unknown" )
         {
             /* not yet known, should ask the user. */
-            kDebug(29000) << "Dont know the scanner background yet!" << endl;
+            kDebug(29000) << "Dont know the scanner background yet!";
 
             goWhite = ( KMessageBox::questionYesNo( this,
                                                     i18n("The autodetection of images on the preview depends on the background color of the preview image (Think of a preview of an empty scanner).\nPlease select whether the background of the preview image is black or white"),
                                                     i18n("Image Autodetection"),
                                                     KGuiItem(i18n("White")), KGuiItem(i18n("Black")) ) == KMessageBox::Yes );
-            kDebug(29000) << "User said " << isWhite << endl;
+            kDebug(29000) << "User said " << isWhite;
 
         }
         else
@@ -649,7 +649,7 @@ void Previewer::slAutoSelToggled(bool isOn )
     {
         QRect r = img_canvas->sel();
 
-        kDebug(29000) << "The rect is " << r.width() << " x " << r.height() << endl;
+        kDebug(29000) << "The rect is " << r.width() << " x " << r.height();
         d->m_doAutoSelection = isOn;
 
         /* Store configuration */
@@ -664,7 +664,7 @@ void Previewer::slAutoSelToggled(bool isOn )
             /* if there is already an image, check, if the bg-color is set already */
             if( img_canvas->rootImage() )
             {
-                kDebug(29000) << "No selection -> try to find one!" << endl;
+                kDebug(29000) << "No selection -> try to find one!";
 
                 findSelection();
             }
@@ -684,7 +684,7 @@ void Previewer::slAutoSelToggled(bool isOn )
 void Previewer::slSetAutoSelThresh(int t)
 {
     d->m_autoSelThresh = t;
-    kDebug(29000) << "Setting threshold to " << t << endl;
+    kDebug(29000) << "Setting threshold to " << t;
     if( d->m_scanner )
         d->m_scanner->slStoreConfig( CFG_AUTOSEL_THRESH, QString::number(t) );
     findSelection();
@@ -693,7 +693,7 @@ void Previewer::slSetAutoSelThresh(int t)
 void Previewer::slSetAutoSelDustsize(int dSize)
 {
     d->m_dustsize = dSize;
-    kDebug(29000) << "Setting dustsize to " << dSize << endl;
+    kDebug(29000) << "Setting dustsize to " << dSize;
     findSelection();
 }
 
@@ -704,11 +704,11 @@ void Previewer::slSetAutoSelDustsize(int dSize)
  **/
 void  Previewer::findSelection( )
 {
-    kDebug(29000) << "Searching Selection" << endl;
+    kDebug(29000) << "Searching Selection";
 
-    kDebug(29000) << "Threshold: " << d->m_autoSelThresh << endl;
-    kDebug(29000) << "dustsize: " << d->m_dustsize << endl;
-    kDebug(29000) << "isWhite: " << d->m_bgIsWhite << endl;
+    kDebug(29000) << "Threshold: " << d->m_autoSelThresh;
+    kDebug(29000) << "dustsize: " << d->m_dustsize;
+    kDebug(29000) << "isWhite: " << d->m_bgIsWhite;
 
 
     if( ! d->m_doAutoSelection ) return;
@@ -723,17 +723,17 @@ void  Previewer::findSelection( )
     Q3MemArray<long> heightSum;
     Q3MemArray<long> widthSum;
 
-    kDebug(29000)<< "Preview size is " << iWidth << "x" << iHeight << endl;
+    kDebug(29000)<< "Preview size is " << iWidth << "x" << iHeight;
 
     if( (d->m_heightSum).size() == 0 && (iHeight>0) )
     {
-        kDebug(29000) << "Starting to fill Array " << endl;
+        kDebug(29000) << "Starting to fill Array ";
         Q3MemArray<long> heightSum(iHeight);
         Q3MemArray<long> widthSum(iWidth);
         heightSum.fill(0);
         widthSum.fill(0);
 
-        kDebug(29000) << "filled  Array with zero " << endl;
+        kDebug(29000) << "filled  Array with zero ";
 
         for( line = 0; line < iHeight; line++ )
         {
@@ -741,7 +741,7 @@ void  Previewer::findSelection( )
             for( x = 0; x < iWidth; x++ )
             {
                 int gray  = qGray( img->pixel( x, line ));
-                // kDebug(29000) << "Gray-Value at line " << gray << endl;
+                // kDebug(29000) << "Gray-Value at line " << gray;
                 Q_ASSERT( line < iHeight );
                 Q_ASSERT( x < iWidth );
                 int hsum = heightSum.at(line);
@@ -753,11 +753,11 @@ void  Previewer::findSelection( )
             heightSum[line] = heightSum[line]/iWidth;
         }
         /* Divide by amount of pixels */
-        kDebug(29000) << "Resizing now" << endl;
+        kDebug(29000) << "Resizing now";
         for( x = 0; x < iWidth; x++ )
             widthSum[x] = widthSum[x]/iHeight;
 
-        kDebug(29000) << "Filled Arrays successfully" << endl;
+        kDebug(29000) << "Filled Arrays successfully";
         d->m_widthSum  = widthSum;
         d->m_heightSum = heightSum;
     }
@@ -812,11 +812,11 @@ void  Previewer::findSelection( )
 
     kDebug(29000) << " -- Autodetection -- " <<  endl;
     kDebug(29000) << "Area top " << r.top() <<  endl;
-    kDebug(29000) << "Area left" << r.left() << endl;
-    kDebug(29000) << "Area bottom " << r.bottom() << endl;
-    kDebug(29000) << "Area right " << r.right() << endl;
-    kDebug(29000) << "Area width " << r.width() << endl;
-    kDebug(29000) << "Area height " << r.height() << endl;
+    kDebug(29000) << "Area left" << r.left();
+    kDebug(29000) << "Area bottom " << r.bottom();
+    kDebug(29000) << "Area right " << r.right();
+    kDebug(29000) << "Area width " << r.width();
+    kDebug(29000) << "Area height " << r.height();
 
     img_canvas->newRectSlot( r );
     slCustomChange();

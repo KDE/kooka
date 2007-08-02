@@ -106,7 +106,7 @@ ScanSourceDialog::ScanSourceDialog( QWidget *parent, const QStringList list, ADF
 	    adf = ADF_SCAN_ALONG;
 	    break;
 	 default:
-	    kDebug(29000) << "Undefined Source !" << endl;
+	    kDebug(29000) << "Undefined Source !";
 	    // Hmmm.
 	    break;
       }
@@ -186,7 +186,7 @@ int ScanSourceDialog::sourceAdfEntry( void ) const
 void ScanSourceDialog::slSetSource( const QString source )
 {
    if( !sources  ) return;
-   kDebug(29000) << "Setting <" << source << "> as source" << endl;
+   kDebug(29000) << "Setting <" << source << "> as source";
 
    if( bgroup )
       bgroup->setEnabled( false );

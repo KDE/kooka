@@ -118,11 +118,11 @@ void KScanSlider::slSetSlider( int value )
 {
     /* Important to check value to avoid recursive signals ;) */
     // debug( "Slider val: %d -> %d", value, slider_val );
-    kDebug(29000) << "Setting Slider with " << value << endl;
+    kDebug(29000) << "Setting Slider with " << value;
 
     if( value == slider->value() )
     {
-      kDebug(29000) << "Returning because slider value is already == " << value << endl;
+      kDebug(29000) << "Returning because slider value is already == " << value;
       return;
     }
     slider->setValue( value );
@@ -132,7 +132,7 @@ void KScanSlider::slSetSlider( int value )
 
 void KScanSlider::slSliderChange( int v )
 {
-   // kDebug(29000) << "Got slider val: " << v << endl;
+   // kDebug(29000) << "Got slider val: " << v;
     // slider_val = v;
     int spin = m_spin->value();
     if( v != spin )
@@ -184,22 +184,22 @@ KScanEntry::KScanEntry( QWidget *parent, const QString& text )
 QString  KScanEntry::text( void ) const
 {
    QString str = QString::null;
-   // kDebug(29000) << "entry is "<< entry << endl;
+   // kDebug(29000) << "entry is "<< entry;
    if(entry)
    {
        str = entry->text();
       if( ! str.isNull() && ! str.isEmpty())
       {
-	 kDebug(29000) << "KScanEntry returns <" << str << ">" << endl;
+	 kDebug(29000) << "KScanEntry returns <" << str << ">";
       }
       else
       {
-	 kDebug(29000) << "KScanEntry:  nothing entered !" << endl;
+	 kDebug(29000) << "KScanEntry:  nothing entered !";
       }
    }
    else
    {
-      kDebug(29000) << "KScanEntry ERR: member var entry not defined!" << endl;
+      kDebug(29000) << "KScanEntry ERR: member var entry not defined!";
    }
    return ( str );
 }
@@ -274,13 +274,13 @@ void KScanCombo::slSetEntry( const QString &t )
     if( i > -1 )
 	combo->setCurrentIndex( i );
     else
-	kDebug(29000) << "Combo item not in list !" << endl;
+	kDebug(29000) << "Combo item not in list !";
 }
 
 void KScanCombo::slComboChange( const QString &t )
 {
     emit valueChanged( QByteArray( t.toLatin1() ) );
-    kDebug(29000) << "Combo: valueChanged emitted!" << endl;
+    kDebug(29000) << "Combo: valueChanged emitted!";
 }
 
 void KScanCombo::slSetIcon( const QPixmap& pix, const QString& str)

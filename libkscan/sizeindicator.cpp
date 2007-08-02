@@ -65,7 +65,7 @@ SizeIndicator::~SizeIndicator()
 void SizeIndicator::setSizeInByte( long newSize )
 {
    sizeInByte = newSize;
-   kDebug(29000) << "New size in byte: " << newSize << endl ;
+   kDebug(29000) << "New size in byte: " << newSize;
 
    KLocalizedString unit = ki18n( "%1 kB" );
    double sizer = double(sizeInByte)/1024.0; // produces kiloBytes
