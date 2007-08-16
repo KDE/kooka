@@ -311,7 +311,7 @@ QString KScanDevice::getScannerName(const QByteArray& name) const
   else
   {
      scanner = scannerDevices[ name ];
-     ret = QString::null;
+     ret = QString();
   }
 
   if( scanner ) {

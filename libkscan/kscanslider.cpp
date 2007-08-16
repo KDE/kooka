@@ -183,7 +183,7 @@ KScanEntry::KScanEntry( QWidget *parent, const QString& text )
 
 QString  KScanEntry::text( void ) const
 {
-   QString str = QString::null;
+   QString str = QString();
    // kDebug(29000) << "entry is "<< entry;
    if(entry)
    {
