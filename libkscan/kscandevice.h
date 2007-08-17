@@ -150,7 +150,7 @@ public:
      *  @param QImage *image - Pointer to a reserved image
      *  @return the state of the operation in KScanStat
      */
-    KScanStat acquire( const QString& filename = QString::null );	//krazy:exclude=nullstrassign for old broken gcc
+    KScanStat acquire( const QString& filename = QString() );
 
     /**
      *  returns the default filename of the preview image of this scanner.
@@ -253,8 +253,8 @@ public:
      *  @param tooltip: tooltip text. If zero, the SANE text will be used.
      **/
     KScanOption *getGuiElement( const QByteArray& name, QWidget *parent,
-                                const QString& desc = QString::null,	//krazy:exclude=nullstrassign for old broken gcc
-                                const QString& tooltip = QString::null );	//krazy:exclude=nullstrassign for old broken gcc
+                                const QString& desc = QString(),
+                                const QString& tooltip = QString() );
 
     /**
      *  returns the pointer to an already created Scanoption from the

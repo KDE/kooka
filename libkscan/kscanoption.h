@@ -151,8 +151,8 @@ public:
     **/
 
   QWidget *createWidget( QWidget *parent,
-			 const QString& w_desc = QString::null,	//krazy:exclude=nullstrassign for old broken gcc
-			 const QString& tooltip = QString::null );	//krazy:exclude=nullstrassign for old broken gcc
+			 const QString& w_desc = QString(),
+			 const QString& tooltip = QString() );
 
   /* Operators */
   const KScanOption& operator= (const KScanOption& so );
