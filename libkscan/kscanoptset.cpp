@@ -195,11 +195,9 @@ bool KScanOptSet::load( const QString& /*scannerName*/ )
    }
    else
    {
-      scanConfig->setGroup( name );
-
       typedef QMap<QString, QString> StringMap;
 
-      StringMap strMap = scanConfig->entryMap( name );
+      StringMap strMap = scanConfig->group(name).entryMap();
 
       StringMap::Iterator it;
       for( it = strMap.begin(); it != strMap.end(); ++it )
