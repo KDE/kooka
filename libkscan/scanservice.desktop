@@ -56,6 +56,6 @@ Name[x-test]=xxKDE Scan Servicexx
 Name[xh]=Inkonzo yemita yovavanyo ye KDE
 Name[zh_HK]=KDE 掃描服務
 Name[zh_TW]=KDE 掃描服務
-X-KDE-Library=libkscan
+X-KDE-Library=kscan
 InitialPreference=2
 ServiceTypes=KScan/KScanDialog

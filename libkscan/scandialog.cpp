@@ -38,6 +38,7 @@
 #include <kscandevice.h>
 #include <kpagewidgetmodel.h>
 #include <kvbox.h>
+#include <kpluginloader.h>
 // libkscan stuff
 #include "scanparams.h"
 #include "devselector.h"
@@ -47,17 +48,15 @@
 
 #define SCANDIA_SPLITTER_SIZES "ScanDialogSplitter %1"
 
-extern "C" {
-    void * init_libkscan() {
-        return new ScanDialogFactory;
-    }
-}
+K_EXPORT_PLUGIN(ScanDialogFactory("kscan", "libkscan"))
 
-ScanDialogFactory::ScanDialogFactory( QObject *parent )
-    : KScanDialogFactory( parent )
+ScanDialogFactory::ScanDialogFactory( const char *componentName,
+                                      const char *catalogName,
+                                      QObject *parent )
+    : KScanDialogFactory( componentName, catalogName, parent )
 {
     setName( "ScanDialogFactory" );
-    KGlobal::locale()->insertCatalog( QString::fromLatin1("libkscan") );
+    //KGlobal::locale()->insertCatalog( QString::fromLatin1("libkscan") );
 }
 
 KScanDialog * ScanDialogFactory::createDialog( QWidget *parent)
@@ -115,7 +114,6 @@ void ScanDialog::createOptionsTab( void )
    KPageWidgetItem *pageItem = new KPageWidgetItem( page, i18n("&Options"));
    addPage( pageItem );
    //Necessary ?
-   setMainWidget(page);
 
    Q3GroupBox *gb = new Q3GroupBox( 1, Qt::Horizontal, i18n("Startup Options"), page, "GB_STARTUP" );
    QLabel *label = new QLabel( i18n( "Note: changing these options will affect the scan plugin on next start." ),
