@@ -48,27 +48,14 @@
 
 #define SCANDIA_SPLITTER_SIZES "ScanDialogSplitter %1"
 
-K_EXPORT_PLUGIN(ScanDialogFactory("kscan", "libkscan"))
-
-ScanDialogFactory::ScanDialogFactory( const char *componentName,
-                                      const char *catalogName,
-                                      QObject *parent )
-    : KScanDialogFactory( componentName, catalogName, parent )
-{
-    setName( "ScanDialogFactory" );
-    //KGlobal::locale()->insertCatalog( QString::fromLatin1("libkscan") );
-}
-
-KScanDialog * ScanDialogFactory::createDialog( QWidget *parent)
-{
-    return new ScanDialog( parent );
-}
+K_PLUGIN_FACTORY( ScanDialogFactory, registerPlugin<ScanDialog>(); )
+K_EXPORT_PLUGIN( ScanDialogFactory("kscanplugin") )
 
 
 ///////////////////////////////////////////////////////////////////
 
 
-ScanDialog::ScanDialog( QWidget *parent )
+ScanDialog::ScanDialog( QWidget *parent, const QVariantList & )
    : KScanDialog( Tabbed, Close|Help, parent ),
      good_scan_connect(false)
 {
