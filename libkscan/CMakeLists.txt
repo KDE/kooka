@@ -29,7 +29,7 @@ set(kscan_LIB_SRCS
 
 kde4_add_plugin(kscanplugin ${kscan_LIB_SRCS})
 
-target_link_libraries(kscanplugin   ${SANE_LIBRARIES} ${KDE4_KDE3SUPPORT_LIBS} ${KDE4_KDEUI_LIBS})
+target_link_libraries(kscanplugin   ${SANE_LIBRARY} ${KDE4_KDE3SUPPORT_LIBS} ${KDE4_KDEUI_LIBS})
 
 install(TARGETS kscanplugin  DESTINATION ${PLUGIN_INSTALL_DIR} )
 
