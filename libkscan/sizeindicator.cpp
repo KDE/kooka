@@ -25,7 +25,7 @@
 #include <QLabel>
 #include <QFrame>
 
-#include <kimageeffect.h>
+#include <qimageblitz.h>
 #include <klocale.h>
 #include <kdebug.h>
 #include <qpainter.h>
@@ -100,8 +100,8 @@ void SizeIndicator::drawContents( QPainter *p )
       warnColor.setHsv( 0, c, c );
 
       p->drawImage( 0,0,
-		    KImageEffect::unbalancedGradient( s, palette().color(QPalette::Window),
-						      warnColor, KImageEffect::CrossDiagonalGradient, 200,200 ));
+		    Blitz::unbalancedGradient( s, palette().color(QPalette::Window),
+						      warnColor, Blitz::CrossDiagonalGradient, 200,200 ));
    }
    /* Displaying the text */
    QString t = text();

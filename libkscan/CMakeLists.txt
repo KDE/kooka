@@ -1,7 +1,7 @@
 
 add_subdirectory( pics ) 
 
-include_directories( ${CMAKE_SOURCE_DIR}/libkscan ${SANE_INCLUDE_DIR}  )
+include_directories( ${CMAKE_SOURCE_DIR}/libkscan ${SANE_INCLUDE_DIR} ${BLITZ_INCLUDES} )
 
 add_definitions (-DQT3_SUPPORT -DQT3_SUPPORT_WARNINGS)
 
@@ -29,7 +29,7 @@ set(kscan_LIB_SRCS
 
 kde4_add_plugin(kscanplugin ${kscan_LIB_SRCS})
 
-target_link_libraries(kscanplugin   ${SANE_LIBRARY} ${KDE4_KDE3SUPPORT_LIBS} ${KDE4_KDEUI_LIBS})
+target_link_libraries(kscanplugin   ${SANE_LIBRARY} ${KDE4_KDE3SUPPORT_LIBS} ${KDE4_KDEUI_LIBS} ${BLITZ_LIBRARIES})
 
 install(TARGETS kscanplugin  DESTINATION ${PLUGIN_INSTALL_DIR} )
 
