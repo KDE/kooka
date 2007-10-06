@@ -25,6 +25,7 @@
 #include <QByteArray>
 #include <kdebug.h>
 #include <kconfig.h>
+#include <kconfiggroup.h>
 
 #include "kscandevice.h"
 #include "kscanoption.h"
