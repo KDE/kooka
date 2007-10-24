@@ -1497,7 +1497,7 @@ QString KScanDevice::getConfig( const QString& key, const QString& def ) const
 {
     QString confFile = SCANNER_DB_FILE;
 
-    KConfig scanConfig(  confFile, KConfig::OnlyLocal);
+    KConfig scanConfig(  confFile, KConfig::SimpleConfig);
     KConfigGroup cg( &scanConfig, shortScannerName() );
 
     return cg.readEntry( key, def );
@@ -1516,7 +1516,7 @@ void KScanDevice::slStoreConfig( const QString& key, const QString& val )
     {
         kDebug(29000) << "Storing config " << key << " in Group " << scannerName;
 
-        KConfig scanConfig( confFile, KConfig::OnlyLocal);
+        KConfig scanConfig( confFile, KConfig::SimpleConfig);
         KConfigGroup cg( &scanConfig, scannerName );
         cg.writeEntry( key, val );
         scanConfig.sync();
