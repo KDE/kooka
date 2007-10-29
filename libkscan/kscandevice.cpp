@@ -229,6 +229,7 @@ KScanDevice::~KScanDevice()
   if( storeOptions )  delete (storeOptions );
   kDebug(29000) << "Calling sane_exit to finish sane!";
   sane_exit();
+  delete d;
 }
 
 
