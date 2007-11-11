@@ -120,7 +120,7 @@ bool ScanParams::connectDevice( KScanDevice *newScanDevice )
    //top->setSpacing(6);
    KHBox *hb = new KHBox( this );
    hb->layout()->setSpacing( KDialog::spacingHint() );
-   QString cap = i18n("<B>Scanner Settings</B>");
+   QString cap = i18n("<b>Scanner Settings</b>");
    cap += sane_device->getScannerName();
    (void ) new QLabel( cap, hb );
    m_led = new KLed( hb );
@@ -161,15 +161,15 @@ bool ScanParams::connectDevice( KScanDevice *newScanDevice )
    /* Create a Start-Scan-Button */
    (void) new KSeparator( Qt::Horizontal, this);
    KDialogButtonBox *kbb = new KDialogButtonBox( this );
-   QPushButton* pb = kbb->addButton( i18n( "Final S&can" ), QDialogButtonBox::ActionRole);
+   QPushButton* pb = kbb->addButton( i18nc( "@action:button", "Final S&can" ), QDialogButtonBox::ActionRole);
    connect( pb, SIGNAL(clicked()), this, SLOT(slStartScan()) );
-   pb = kbb->addButton( i18n( "&Preview Scan" ), QDialogButtonBox::ActionRole);
+   pb = kbb->addButton( i18nc( "@action:button", "&Preview Scan" ), QDialogButtonBox::ActionRole);
    connect( pb, SIGNAL(clicked()), this, SLOT(slAcquirePreview()) );
    kbb->layout();
 
    /* Initialise the progress dialog */
-   progressDialog = new Q3ProgressDialog( i18n("Scanning in progress"),
-					 i18n("Stop"), 100, 0L,
+   progressDialog = new Q3ProgressDialog( i18nc( "@info", "Scanning in progress"),
+					 i18nc( "@action:button", "Stop"), 100, 0L,
 					 "SCAN_PROGRESS", true, 0  );
    progressDialog->setAutoClose( true );
    progressDialog->setAutoReset( true );
@@ -282,7 +282,7 @@ Q3ScrollView *ScanParams::scannerParams( )
 
       if( l.count() > 1 )
       {
-	 pb_source_sel = new QPushButton( i18n("Source..."), hb );
+	 pb_source_sel = new QPushButton( i18nc( "@action:button", "Source..."), hb );
 	 connect( pb_source_sel, SIGNAL(clicked()), this, SLOT(slSourceSelect()));
 	 initialise( &source );
 	 hb->setStretchFactor( pb_source_sel, 3 );
@@ -462,13 +462,13 @@ Q3ScrollView *ScanParams::scannerParams( )
    }
    else
    {
-      (void) new QLabel( i18n("Custom Gamma Table"), hb1 );
+      (void) new QLabel( i18nc( "@label", "Custom Gamma Table"), hb1 );
    }
 
    /* Connect a signal to refresh activity of the gamma tables */
    (void) new QWidget( hb1 ); /* dummy widget to eat space */
 
-   pb_edit_gtable = new QPushButton( i18n("Edit..."), hb1 );
+   pb_edit_gtable = new QPushButton( i18nc( "@action:button", "Edit..." ), hb1 );
    Q_CHECK_PTR(pb_edit_gtable);
 
    connect( pb_edit_gtable, SIGNAL( clicked () ),
@@ -503,7 +503,7 @@ Q3ScrollView *ScanParams::scannerParams( )
 				      SANE_DESC_GRAY_PREVIEW );
      initialise( so );
      cb_gray_preview = (QCheckBox*) so->widget();
-     cb_gray_preview->setToolTip( i18n("Acquire a gray preview even in color mode (faster)") );
+     cb_gray_preview->setToolTip( i18nc( "@info:tooltip", "Acquire a gray preview even in color mode (faster)") );
    }
    return( sv );
 }
@@ -513,7 +513,12 @@ void ScanParams::createNoScannerMsg( void )
 {
    /* Mode setting */
    QString cap;
-   cap = i18n( "<B>Problem: No Scanner was found</B><P>Your system does not provide a SANE <I>(Scanner Access Now Easy)</I> installation, which is required by the KDE scan support.<P>Please install and configure SANE correctly on your system.<P>Visit the SANE homepage under http://www.sane-project.org to find out more about SANE installation and configuration. " );
+   cap = i18n( "<b>Problem: No Scanner was found</b>"
+               "<p>Your system does not provide a SANE <i>(Scanner Access Now Easy)</i> "
+               "installation, which is required by the KDE scan support.</p>"
+               "<p>Please install and configure SANE correctly on your system.</p>"
+               "<p>Visit the SANE homepage under http://www.sane-project.org to "
+               "find out more about SANE installation and configuration.</p>" );
 
    (void) new QLabel( cap, this );
 
@@ -603,7 +608,7 @@ void ScanParams::slFileSelect( void )
 
 
    KFileDialog fd(last_virt_scan_path.path(), filter, this);
-   fd.setCaption( i18n("Select Input File") );
+   fd.setCaption( i18nc( "@title:window", "Select Input File") );
    /* Read the filename and remind it */
    QString fileName;
    if ( fd.exec() == QDialog::Accepted ) {
@@ -668,12 +673,12 @@ void ScanParams::virtualScannerParams( void )
    connect( bg_virt_scan_mode, SIGNAL(clicked(int)),
 	    this, SLOT( slVirtScanModeSelect(int)));
 
-   QRadioButton *rb1 = new QRadioButton( i18n("SANE debug (pnm only)"),
+   QRadioButton *rb1 = new QRadioButton( i18nc( "@option:radio", "SANE debug (pnm only)"),
 					 bg_virt_scan_mode, "VirtScanSANEDebug" );
 
 
 
-   QRadioButton *rb2 = new QRadioButton( i18n("virt. Scan (all Qt modes)"),
+   QRadioButton *rb2 = new QRadioButton( i18nc( "@option:radio", "virt. Scan (all Qt modes)"),
 					 bg_virt_scan_mode, "VirtScanQtModes" );
 
    rb1->setChecked( true );
@@ -734,7 +739,7 @@ void ScanParams::virtualScannerParams( void )
 
 
    /* GUI-Element grayify on startup */
-   so = sane_device->getGuiElement( "grayify", this, i18n("convert the image to gray on loading"), 0 );
+   so = sane_device->getGuiElement( "grayify", this, i18nc( "@option:check", "Convert the image to gray on loading"), 0 );
    if ( so )
    {
       top->addWidget( so->widget(), 1 );
@@ -743,7 +748,7 @@ void ScanParams::virtualScannerParams( void )
    }
 
    /* GUI-Element three pass simulation */
-   so = sane_device->getGuiElement( "three-pass", this, i18n("Simulate three-pass acquiring"), 0 );
+   so = sane_device->getGuiElement( "three-pass", this, i18nc( "@option:check", "Simulate three-pass acquiring"), 0 );
    if ( so )
    {
       top->addWidget( so->widget(), 1 );
@@ -773,9 +778,9 @@ void ScanParams::slStartScan( void )
 	 q = virt_filename->get();
       if( q.isEmpty() )
       {
-	 QMessageBox::information( this, i18n("KSANE"),
-				   i18n("The filename for virtual scanning is not set.\n"
-					"Please set the filename first.") );
+	 QMessageBox::information( this, i18nc("@title:window", "KSANE"),
+				   i18nc("@info", "The filename for virtual scanning is not set.\n"
+					 "Please set the filename first.") );
 	 stat = KSCAN_ERR_PARAM;
       }
    }
