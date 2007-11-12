@@ -1499,7 +1499,8 @@ QString KScanDevice::getConfig( const QString& key, const QString& def ) const
     QString confFile = SCANNER_DB_FILE;
 
     KConfig scanConfig(  confFile, KConfig::SimpleConfig);
-    KConfigGroup cg( &scanConfig, shortScannerName() );
+    QString scannerName = shortScannerName();
+    KConfigGroup cg( &scanConfig, scannerName );
 
     return cg.readEntry( key, def );
 }
