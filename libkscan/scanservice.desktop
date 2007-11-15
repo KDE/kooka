@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Type=Service
 Name=KDE Scan Service
 Name[af]=Kde Skandeer Diens
@@ -60,4 +59,4 @@ Name[zh_HK]=KDE 掃描服務
 Name[zh_TW]=KDE 掃描服務
 X-KDE-Library=kscanplugin
 InitialPreference=2
-ServiceTypes=KScan/KScanDialog
+X-KDE-ServiceTypes=KScan/KScanDialog
