@@ -810,8 +810,8 @@ void  Previewer::findSelection( )
     // r.setLeft( start );
     // r.setRight( end );
 
-    kDebug(29000) << " -- Autodetection -- " <<  endl;
-    kDebug(29000) << "Area top " << r.top() <<  endl;
+    kDebug(29000) << " -- Autodetection -- ";
+    kDebug(29000) << "Area top " << r.top();
     kDebug(29000) << "Area left" << r.left();
     kDebug(29000) << "Area bottom " << r.bottom();
     kDebug(29000) << "Area right " << r.right();
