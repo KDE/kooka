@@ -115,7 +115,7 @@ bool ScanParams::connectDevice( KScanDevice *newScanDevice )
    // QVBoxLayout *top = new QVBoxLayout(this, 6);
    QHBox *hb = new QHBox( this );
    hb->layout()->setSpacing( KDialog::spacingHint() );
-   QString cap = i18n("<B>Scanner Settings</B>");
+   QString cap = i18n("<B>Scanner Settings</B> ");
    cap += sane_device->getScannerName();
    (void ) new QLabel( cap, hb );
    m_led = new KLed( hb );
@@ -156,9 +156,12 @@ bool ScanParams::connectDevice( KScanDevice *newScanDevice )
    /* Create a Start-Scan-Button */
    (void) new KSeparator( KSeparator::HLine, this);
    KButtonBox *kbb = new KButtonBox( this );
-   QPushButton* pb = kbb->addButton( i18n( "Final S&can" ));
+   QPushButton* pb = kbb->addButton( i18n( "Start Scan" ));
+   pb->setMinimumWidth(100);
    connect( pb, SIGNAL(clicked()), this, SLOT(slStartScan()) );
-   pb = kbb->addButton( i18n( "&Preview Scan" ));
+   kbb->addStretch();
+   pb = kbb->addButton( i18n( "Preview" ));
+   pb->setMinimumWidth(100);
    connect( pb, SIGNAL(clicked()), this, SLOT(slAcquirePreview()) );
    kbb->layout();
 

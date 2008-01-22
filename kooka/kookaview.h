@@ -158,7 +158,8 @@ public slots:
      * slot to select the scanner device. Does all the work with selection
      * of scanner, disconnection of the old device and connecting the new.
      */
-    bool slSelectDevice(const QCString& useDevice=QCString());
+    bool slSelectDevice(const QCString& useDevice = QCString(), bool alwaysAsk = true);
+    void slAddDevice();
 
     void connectViewerAction( KAction *action );
     void connectGalleryAction( KAction *action );
@@ -203,9 +204,11 @@ private:
     QImage rotateRight( QImage* );
     QImage rotateLeft ( QImage* );
     QImage rotate180  ( QImage* );
-    QCString userDeviceSelection( ) const;
+    QCString userDeviceSelection(bool alwaysAsk);
 
     void updateCurrImage( QImage& ) ;
+
+    QWidget *m_parent;
 
     ImageCanvas  *img_canvas;
     ThumbView    *m_thumbview;

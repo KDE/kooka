@@ -7,13 +7,13 @@ noinst_HEADERS = kscandevice.h kscanslider.h kgammatable.h \
 	gammadialog.h dispgamma.h \
 	scansourcedialog.h scanparams.h massscandialog.h devselector.h \
         img_canvas.h previewer.h imgscaledialog.h sizeindicator.h \
-	imgscaninfo.h
+	imgscaninfo.h adddevice.h
 
 libkscan_la_SOURCES = kscandevice.cpp kscanslider.cpp kgammatable.cpp\
         kscanoption.cpp kscanoptset.cpp \
 	gammadialog.cpp dispgamma.cpp \
 	scansourcedialog.cpp scanparams.cpp massscandialog.cpp \
-        devselector.cpp scandialog.cpp \
+        devselector.cpp adddevice.cpp scandialog.cpp \
 	img_canvas.cpp previewer.cpp imgscaledialog.cpp sizeindicator.cpp \
 	imgscaninfo.cpp
 

@@ -256,9 +256,13 @@ actionCollection());
 		       actionCollection(), "savescanparam" );
 #endif
 
-    (void) new KAction(i18n("Select Scan Device"), "scanner", 0,
+    (void) new KAction(i18n("Select Scan Device..."), "scanner", 0,
 		       m_view, SLOT( slSelectDevice()),
 		       actionCollection(), "selectsource" );
+
+    (void) new KAction(i18n("Add Scan Device..."), "add", 0,
+		       m_view, SLOT( slAddDevice()),
+		       actionCollection(), "addsource" );
 
     (void) new KAction( i18n("Enable All Warnings && Messages"), 0,
 			this,  SLOT(slEnableWarnings()),

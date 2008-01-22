@@ -43,8 +43,8 @@
 
 DeviceSelector::DeviceSelector( QWidget *parent, QStrList& devList,
 				const QStringList& hrdevList )
-    : KDialogBase( parent,  "DeviceSel", true, i18n("Welcome to Kooka"),
-		   Ok|Cancel, Ok, true )
+    : KDialogBase( parent,  "DeviceSel", true, i18n("Select Scan Device"),
+		   KDialogBase::Ok|KDialogBase::Cancel, KDialogBase::Ok, true )
 {
    kdDebug(29000) << "Starting DevSelector!" << endl;
    // Layout-Boxes
@@ -59,7 +59,7 @@ DeviceSelector::DeviceSelector( QWidget *parent, QStrList& devList,
    label->resize( 100, 350 );
    topLayout->addWidget( label );
 
-   selectBox = new QButtonGroup( 1, Horizontal, i18n( "Select Scan Device" ),
+   selectBox = new QButtonGroup( 1, Horizontal, i18n( "Available Scanners" ),
 				 page, "ButtonBox");
    Q_CHECK_PTR( selectBox );
    selectBox->setExclusive( true );
@@ -75,7 +75,6 @@ DeviceSelector::DeviceSelector( QWidget *parent, QStrList& devList,
    cbSkipDialog->setChecked( skipDialog );
 
    topLayout->addWidget(cbSkipDialog);
-   
 }
 
 QCString DeviceSelector::getDeviceFromConfig( void ) const

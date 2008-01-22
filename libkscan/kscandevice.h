@@ -85,11 +85,26 @@ public:
     ~KScanDevice( );
 
     /**
+     *  add an explicitly specified device to the list of known ones.
+     *   @param backend: the device name+parameters of the backend to add
+     *   @param description: a readable description for it
+     *   @param dontSave: if true, don't save the new device in the permanent configuration
+     */
+    void addUserSpecifiedDevice(const QString& backend,const QString& description,
+				bool dontSave = false);
+
+    /**
      *  opens the device named backend.
      *   @return the state of the operation
      *   @param backend: the name of the backend to open
      */
     KScanStat openDevice( const QCString& backend );
+
+    /**
+     *  get an error message for the last SANE operation.
+     *   @return the error message string
+     */
+    QString lastErrorMessage() const;
 
     /**
      *  returns the names of all existing Scan Devices in the system.
@@ -454,6 +469,8 @@ private:
 
     class KScanDevicePrivate;
     KScanDevicePrivate *d;
+
+    SANE_Status sane_stat;
 };
 
 #endif

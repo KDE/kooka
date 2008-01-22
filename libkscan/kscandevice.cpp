@@ -48,9 +48,13 @@
 
 #include <ksimpleconfig.h>
 
-#define MIN_PREVIEW_DPI 75
-#define UNDEF_SCANNERNAME I18N_NOOP( "undefined" )
-#define MAX_PROGRESS 100
+#define MIN_PREVIEW_DPI		75
+#define UNDEF_SCANNERNAME	I18N_NOOP( "undefined" )
+#define MAX_PROGRESS		100
+
+#define USERDEV_GROUP		"User Specified Scanners"
+#define USERDEV_DEVS		"Devices"
+#define USERDEV_DESC		"Description"
 
 /* ---------------------------------------------------------------------------
    Private class for KScanDevice
@@ -166,7 +170,9 @@ KScanOption *KScanDevice::getGuiElement( const QCString& name, QWidget *parent,
 KScanDevice::KScanDevice( QObject *parent )
    : QObject( parent )
 {
-    SANE_Status sane_stat = sane_init(NULL, NULL );
+    kdDebug(29000) << k_funcinfo << endl;
+
+    sane_stat = sane_init(NULL, NULL );
 
     d = new KScanDevicePrivate();
     
@@ -208,6 +214,22 @@ KScanDevice::KScanDevice( QObject *parent )
 	    	kdDebug(29000) << "Found Scanner: " << dev_list[devno]->name << endl;
             }
         }
+
+	KSimpleConfig scanConfig(SCANNER_DB_FILE,true);
+	scanConfig.setGroup(USERDEV_GROUP);
+	QStringList devs = scanConfig.readListEntry(USERDEV_DEVS);
+	QStringList dscs = scanConfig.readListEntry(USERDEV_DESC);
+
+	if (devs.count()>0)
+	{
+		QStringList dscs = scanConfig.readListEntry(USERDEV_DESC);
+		QStringList::const_iterator it2 = dscs.begin();
+		for (QStringList::const_iterator it1 = devs.begin(); it1!=devs.end(); ++it1,++it2)
+		{
+			addUserSpecifiedDevice((*it1),(*it2));
+		}
+	}
+
 #if 0
         connect( this, SIGNAL(sigOptionsChanged()), SLOT(slReloadAll()));
 #endif
@@ -219,7 +241,6 @@ KScanDevice::KScanDevice( QObject *parent )
      }
 
     connect( this, SIGNAL( sigScanFinished( KScanStat )), SLOT( slScanFinished( KScanStat )));
-
 }
 
 
@@ -232,36 +253,78 @@ KScanDevice::~KScanDevice()
 }
 
 
+
+void KScanDevice::addUserSpecifiedDevice(const QString& backend,const QString& description,bool dontSave)
+{
+	if (backend.isEmpty()) return;
+
+	kdDebug(29000) << k_funcinfo << "adding [" << backend << "]='" << description << "' dontSave=" << dontSave << endl;
+
+	if (!dontSave)
+	{
+		KSimpleConfig scanConfig(SCANNER_DB_FILE);
+
+		scanConfig.setGroup(USERDEV_GROUP);
+		QStringList devs = scanConfig.readListEntry(USERDEV_DEVS);
+		QStringList dscs = scanConfig.readListEntry(USERDEV_DESC);
+							// get existing device lists
+		int i = devs.findIndex(backend);
+		if (i>=0)				// see if already in list
+		{
+			dscs[i] = description;		// if so just update
+		}
+		else
+		{
+			devs.append(backend);		// add new entry to lists
+			dscs.append(description);
+		}
+
+		scanConfig.writeEntry(USERDEV_DEVS,devs);
+		scanConfig.writeEntry(USERDEV_DESC,dscs);
+		scanConfig.sync();
+	}
+
+	SANE_Device *userdev = new SANE_Device;
+
+	//  Need a permanent copy of the strings, because SANE_Device only holds
+	//  pointers to them.  Unfortunately there is a memory leak here, the
+	//  two QCString's are never deleted.  There is only one of these objects
+	//  in most applications, so hopefully it won't matter too much.
+
+	userdev->name = *(new QCString(backend.local8Bit()));
+	userdev->model = *(new QCString(description.local8Bit()));
+	userdev->vendor = "User specified";
+	userdev->type = "scanner";
+
+	scanner_avail.append(userdev->name);
+	scannerDevices.insert(userdev->name,userdev);
+}
+
+
+
 KScanStat KScanDevice::openDevice( const QCString& backend )
 {
    KScanStat    stat      = KSCAN_OK;
-   SANE_Status 	sane_stat = SANE_STATUS_GOOD;
 
-   if( backend.isEmpty() ) return KSCAN_ERR_PARAM;
+   kdDebug(29000) << k_funcinfo << "backend=[" << backend << "]" << endl;
+
+   sane_stat = SANE_STATUS_UNSUPPORTED;
+   if( backend.isEmpty() ) return (KSCAN_ERR_PARAM);
 
    // search for scanner
    int indx = scanner_avail.find( backend );
-
-   if( indx < 0 ) {
-      stat = KSCAN_ERR_NO_DEVICE;
-   }
+   if( indx < 0 ) return (KSCAN_ERR_NO_DEVICE);
 
    // if available, build lists of properties
-   if( stat == KSCAN_OK )
+   sane_stat = sane_open( backend, &scanner_handle );
+   if( sane_stat == SANE_STATUS_GOOD )
    {
-      sane_stat = sane_open( backend, &scanner_handle );
-
-
-      if( sane_stat == SANE_STATUS_GOOD )
-      {
 	     // fill description dic with names and numbers
-	stat = find_options();
-	scanner_name = backend;
-
-      } else {
-	stat = KSCAN_ERR_OPEN_DEV;
-	scanner_name = UNDEF_SCANNERNAME;
-      }
+	   stat = find_options();
+	   scanner_name = backend;
+   } else {
+	   stat = KSCAN_ERR_OPEN_DEV;
+	   scanner_name = UNDEF_SCANNERNAME;
    }
 
    if( stat == KSCAN_OK )
@@ -269,6 +332,18 @@ KScanStat KScanDevice::openDevice( const QCString& backend )
 
    return( stat );
 }
+
+
+
+
+QString KScanDevice::lastErrorMessage() const
+{
+	kdDebug(29000) << k_funcinfo << "stat=" << sane_stat << endl;
+	return (sane_strstatus(sane_stat));
+}
+
+
+
 
 void KScanDevice::slCloseDevice( )
 {
@@ -449,7 +524,7 @@ KScanStat KScanDevice::apply( KScanOption *opt, bool isGammaTable )
    int sane_result = 0;
 
    int         *num = (*option_dic)[ opt->getName() ];
-   SANE_Status sane_stat = SANE_STATUS_GOOD;
+   sane_stat = SANE_STATUS_GOOD;
    const QCString& oname = opt->getName();
 
    if ( oname == "preview" || oname == "mode" ) {
@@ -1016,7 +1091,7 @@ KScanStat KScanDevice::createNewImage( SANE_Parameters *p )
 
 KScanStat KScanDevice::acquire_data( bool isPreview )
 {
-   SANE_Status	  sane_stat = SANE_STATUS_GOOD;
+   sane_stat = SANE_STATUS_GOOD;
    KScanStat       stat = KSCAN_OK;
 
    scanningPreview = isPreview;
@@ -1245,7 +1320,7 @@ void KScanDevice::doProcessABlock( void )
   SANE_Byte	  *rptr         = 0;
   SANE_Int	  bytes_written = 0;
   int		  chan          = 0;
-  SANE_Status     sane_stat     = SANE_STATUS_GOOD;
+  sane_stat     = SANE_STATUS_GOOD;
   uchar	          eight_pix     = 0;
   bool 	  goOn = true;
 

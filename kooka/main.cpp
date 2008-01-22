@@ -77,6 +77,7 @@ int main( int argc, char *argv[] )
 		    KAboutData::License_GPL_V2, "(C) 2000 Klaas Freitag", 0,
 		    I18N_NOOP("http://kooka.kde.org"));
 
+   about.addAuthor( "Jonathan Marten", I18N_NOOP("current maintainer"), "jjm@keelhaul.me.uk" );
    about.addAuthor( "Klaas Freitag", I18N_NOOP("developer"), "freitag@suse.de" );
    about.addAuthor( "Mat Colton", I18N_NOOP("graphics, web"), "mat@colton.de" );
    about.setLicenseText( license );

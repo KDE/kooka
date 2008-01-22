@@ -1,4 +1,4 @@
-/***************************************************************************
+/********************************************* -*- c-basic-offset:4 -*- ****
               kookaview.cpp  -  kookas visible stuff
                              -------------------
     begin                : ?
@@ -27,6 +27,7 @@
  ***************************************************************************/
 
 #include "kookaview.h"
+
 #include "resource.h"
 #include "kscandevice.h"
 #include "imgscaninfo.h"
@@ -45,6 +46,8 @@
 #if 0
 #include "paramsetdialogs.h"
 #endif
+#include "adddevice.h"
+
 #include <qlabel.h>
 #include <qpainter.h>
 #include <qlayout.h>
@@ -54,6 +57,7 @@
 #include <qpaintdevicemetrics.h>
 #include <qpopupmenu.h>
 #include <qwidgetstack.h>
+#include <qimage.h>
 
 #include <kurl.h>
 #include <krun.h>
@@ -72,11 +76,9 @@
 #include <kiconloader.h>
 #include <kshortcut.h>
 #include <kdockwidget.h>
-#include <qobject.h>
+#include <kpopupmenu.h>
 
 #include <kparts/componentfactory.h>
-#include <qimage.h>
-#include <kpopupmenu.h>
 
 
 #define STARTUP_IMG_SELECTION   "SelectedImageOnStartup"
@@ -99,6 +101,7 @@ KookaView::KookaView( KParts::DockMainWindow *parent, const QCString& deviceToUs
    KIconLoader *loader = KGlobal::iconLoader();
    scan_params = 0L;
    preview_canvas = 0L;
+   m_parent = dynamic_cast<QWidget *>(parent);		// for dialogues, etc
 
    m_mainDock = parent->createDockWidget( "Kookas MainDock",
                                           loader->loadIcon( "folder_image", KIcon::Small ),
@@ -193,6 +196,7 @@ KookaView::KookaView( KParts::DockMainWindow *parent, const QCString& deviceToUs
    m_dockScanParam->setWidget( 0 ); // later
    sane = new KScanDevice( m_dockScanParam );
    Q_CHECK_PTR(sane);
+   if (!deviceToUse.isEmpty()) sane->addUserSpecifiedDevice(deviceToUse,"on command line",true);
 
    m_dockScanParam->manualDock( m_dockRecent,              // dock target
 				KDockWidget::DockBottom, // dock site
@@ -240,7 +244,7 @@ KookaView::KookaView( KParts::DockMainWindow *parent, const QCString& deviceToUs
        // m_dockOCRText->hide();
    }
 
-   if( slSelectDevice(deviceToUse))
+   if( slSelectDevice(deviceToUse,false))
    {
       /* Load from config which tab page was selected last time */
    }
@@ -306,10 +310,10 @@ void KookaView::slViewerReadOnly( bool )
 }
 
 
-bool KookaView::slSelectDevice( const QCString& useDevice )
+bool KookaView::slSelectDevice(const QCString& useDevice,bool alwaysAsk)
 {
 
-   kdDebug(28000) << "Kookaview: select a device!" << endl;
+   kdDebug(28000) << k_funcinfo << "use device [" << useDevice << "] ask=" << alwaysAsk << endl;
    bool haveConnection = false;
 
    QCString selDevice;
@@ -321,7 +325,7 @@ bool KookaView::slSelectDevice( const QCString& useDevice )
       selDevice =  useDevice;
       if( selDevice.isEmpty())
       {
-	 selDevice = userDeviceSelection();
+	 selDevice = userDeviceSelection(alwaysAsk);
       }
    }
 
@@ -344,89 +348,140 @@ bool KookaView::slSelectDevice( const QCString& useDevice )
       scan_params = new ScanParams( m_dockScanParam );
       Q_CHECK_PTR(scan_params);
 
-      if( sane->openDevice( selDevice ) == KSCAN_OK )
+      while (!haveConnection)
       {
-         connect( scan_params,    SIGNAL( scanResolutionChanged( int, int )),
-                  preview_canvas, SLOT( slNewScanResolutions( int, int )));
+	  if (sane->openDevice( selDevice )!=KSCAN_OK)
+	  {
+	      kdDebug(28000) << "Could not open device <" << selDevice << ">" << endl;
 
-	 if( ! scan_params->connectDevice( sane ) )
-	 {
-	    kdDebug(28000) << "Connecting to the scanner failed :( ->TODO" << endl;
-	 }
-	 else
-	 {
-	    haveConnection = true;
-	    connectedDevice = selDevice;
+	      QString msg = i18n("<qt><p>\
+There was a problem opening the scanner device. \
+Check that the scanner is connected and switched on, and that SANE support for it \
+is correctly configured.\
+<p>\
+Trying to use scanner device: <b>%2</b>\
+<br>\
+The error reported was: <b>%1</b>").arg(sane->lastErrorMessage()).arg(selDevice);
 
-	    /* New Rectangle selection in the preview, now scanimge exists */
-	    ImageCanvas *previewCanvas = preview_canvas->getImageCanvas();
-	    connect( previewCanvas , SIGNAL( newRect(QRect)),
-		     scan_params, SLOT(slCustomScanSize(QRect)));
-	    connect( previewCanvas, SIGNAL( noRect()),
-		     scan_params, SLOT(slMaximalScanSize()));
-	    // connect( scan_params,    SIGNAL( scanResolutionChanged( int, int )),
-            // 		     preview_canvas, SLOT( slNewScanResolutions( int, int )));
-	    /* load the preview image */
-	    if( preview_canvas )
-	    {
-	       preview_canvas->setPreviewImage( sane->loadPreviewImage() );
+	      if (KMessageBox::warningContinueCancel(m_parent,msg,QString::null,
+						     KGuiItem("Retry"))==KMessageBox::Cancel)
+	      {
+		  break;
+	      }
+	  }
+	  else
+	  {
+	      connect( scan_params,    SIGNAL( scanResolutionChanged( int, int )),
+		       preview_canvas, SLOT( slNewScanResolutions( int, int )));
 
-               /* Call this after the devic is actually open */
-               preview_canvas->slConnectScanner( sane );
-	    }
-	 }
+	      if( ! scan_params->connectDevice( sane ) )
+	      {
+		  // This will never happen, connectDevice always returns TRUE
+		  kdDebug(28000) << "Connecting to the scanner failed :( ->TODO" << endl;
+	      }
+	      else
+	      {
+		  haveConnection = true;
+		  connectedDevice = selDevice;
+
+		  /* New Rectangle selection in the preview, now scanimge exists */
+		  ImageCanvas *previewCanvas = preview_canvas->getImageCanvas();
+		  connect( previewCanvas , SIGNAL( newRect(QRect)),
+			   scan_params, SLOT(slCustomScanSize(QRect)));
+		  connect( previewCanvas, SIGNAL( noRect()),
+			   scan_params, SLOT(slMaximalScanSize()));
+		  // connect( scan_params,    SIGNAL( scanResolutionChanged( int, int )),
+		  // 		     preview_canvas, SLOT( slNewScanResolutions( int, int )));
+		  /* load the preview image */
+		  if( preview_canvas )
+		  {
+		      preview_canvas->setPreviewImage( sane->loadPreviewImage() );
+
+		      /* Call this after the device is actually open */
+		      preview_canvas->slConnectScanner( sane );
+		  }
+	      }
+	  }
       }
-      else
-      {
-	 kdDebug(28000) << "Could not open device <" << selDevice << ">" << endl;
-	 scan_params->connectDevice(0);
-      }
-
-      /* show the widget again */
-
-      m_dockScanParam->setWidget( scan_params );
-
-      m_dockScanParam->show();
    }
-   else
+
+   /* show the widget again */
+
+   m_dockScanParam->setWidget( scan_params );
+   m_dockScanParam->show();
+
+   if (!haveConnection)
    {
-      // no devices available or starting in gallery mode
-      if( scan_params )
-	 scan_params->connectDevice( 0L );
+       // no devices available, or starting in gallery mode
+       if ( scan_params ) scan_params->connectDevice(NULL);
    }
+
    return( haveConnection );
 }
 
-QCString KookaView::userDeviceSelection( ) const
+
+
+
+void KookaView::slAddDevice()
+{
+    kdDebug(29000) << k_funcinfo << endl;
+
+    AddDeviceDialog d(m_parent,i18n("Add Scan Device"));
+    if (d.exec())
+    {
+	QString dev = d.getDevice();
+	QString dsc = d.getDescription();
+	kdDebug(29000) << k_funcinfo << "dev=[" << dev
+		       << "] desc=[" << dsc << "]" << endl;
+
+	sane->addUserSpecifiedDevice(dev,dsc);
+    }
+}
+
+
+
+QCString KookaView::userDeviceSelection(bool alwaysAsk)
 {
    /* Human readable scanner descriptions */
    QStringList hrbackends;
 
    /* a list of backends the scan backend knows */
    QStrList backends = sane->getDevices();
-   QStrListIterator  it( backends );
+
+   if (backends.count()==0)
+   {
+       if (KMessageBox::warningContinueCancel(m_parent,i18n("<qt><p>No scanner devices are available.\
+<p>If your scanner is a type that should be auto-detected by SANE, check that it \
+is connected, switched on and configured correctly.\
+<p>If the scanner cannot be auto-detected by SANE (this includes some network \
+scanners), you need to specify the device to use.  Use the \"Add Scan Device\" \
+option to enter the backend name and parameters, or see that dialogue for more \
+information."),QString::null,KGuiItem(i18n("Add Scan Device...")))!=KMessageBox::Continue) return ("");
+
+       slAddDevice();
+       backends = sane->getDevices();			// refresh the list
+       if (backends.count()==0) return ("");		// give up this time
+   }
 
    QCString selDevice;
-   if( backends.count() > 0 )
+   QStrListIterator  it( backends );
+   while( it )
    {
-      while( it )
-      {
-	 kdDebug( 28000 ) << "Found backend: " << it.current() << endl;
-	 hrbackends.append( sane->getScannerName( it.current() ));
-	 ++it;
-      }
+       kdDebug( 28000 ) << k_funcinfo << "Found backend [" << it.current() << "] = " << sane->getScannerName(it.current()) << endl;
+       hrbackends.append( sane->getScannerName( it.current() ));
+       ++it;
+   }
 
-      /* allow the user to select one */
-       DeviceSelector ds( 0, backends, hrbackends );
-       selDevice = ds.getDeviceFromConfig( );
+   /* allow the user to select one */
+   DeviceSelector ds(m_parent, backends, hrbackends );
+   if (!alwaysAsk) selDevice = ds.getDeviceFromConfig( );
 
-       if( selDevice.isEmpty() || selDevice.isNull() )
+   if( selDevice.isEmpty() || selDevice.isNull() )
+   {
+       kdDebug(29000) << "selDevice not found - starting selector!" << selDevice << endl;
+       if ( ds.exec() == QDialog::Accepted )
        {
-	  kdDebug(29000) << "selDevice not found - starting selector!" << selDevice << endl;
-	  if ( ds.exec() == QDialog::Accepted )
-	  {
-	     selDevice = ds.getSelectedDevice();
-	  }
+	   selDevice = ds.getSelectedDevice();
        }
    }
    return( selDevice );
