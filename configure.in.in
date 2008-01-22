@@ -1,0 +1,17 @@
+#MIN_CONFIG
+DO_NOT_COMPILE="$DO_NOT_COMPILE"
+
+dnl Checks for header files.
+AC_HEADER_DIRENT
+AC_HEADER_STDC
+AC_CHECK_HEADERS(fcntl.h sys/time.h unistd.h stdlib.h paths.h)
+AC_CHECK_SETENV
+AC_CHECK_UNSETENV
+AC_CHECK_USLEEP
+AC_CHECK_MKSTEMPS
+dnl Checks for typedefs, structures, and compiler characteristics.
+AC_HEADER_TIME
+
+CXXFLAGS="$CXXFLAGS $KDE_DEFAULT_CXXFLAGS"
+
+KDE_INIT_DOXYGEN([KDE Graphics API Reference], [Version $VERSION])
