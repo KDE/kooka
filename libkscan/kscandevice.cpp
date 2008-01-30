@@ -309,7 +309,7 @@ QString KScanDevice::getScannerName(const QByteArray& name) const
   {
      scanner = scannerDevices[ scanner_name ];
   }
-  else
+  else if ( ! name.isEmpty() )
   {
      scanner = scannerDevices[ name ];
      ret = QString();
@@ -706,6 +706,9 @@ bool KScanDevice::savePreviewImage( const QImage &image )
 
 KScanStat KScanDevice::acquirePreview( bool forceGray, int dpi )
 {
+   if( ! scanner_handle )
+      return KSCAN_ERR_NO_DEVICE;
+
    double min, max, q;
 
    (void) forceGray;
@@ -903,6 +906,9 @@ void KScanDevice::prepareScan( void )
  **/
 KScanStat KScanDevice::acquire( const QString& filename )
 {
+    if( ! scanner_handle )
+       return KSCAN_ERR_NO_DEVICE;
+
     KScanOption *so = 0;
 
     if( filename.isEmpty() )
