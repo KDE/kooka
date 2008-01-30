@@ -92,6 +92,11 @@ protected:
      */
     void readProperties(KConfig *);
 
+protected slots:
+    void slotUpdateScannerActions(bool haveConnection);
+    void slotUpdateRectangleActions(bool haveSelection);
+    void slotUpdateGalleryActions(bool isDir,int howmanySelected);
+    void slotUpdateLoadedActions(bool isLoaded);
 
 private slots:
 
@@ -114,7 +119,7 @@ private slots:
 
    void slMirrorVertical( void );
    void slMirrorHorizontal( void );
-   void slMirrorBoth( void );
+   //void slMirrorBoth( void );
 
    void slRotateClockWise( void );
    void slRotateCounterClockWise( void );
@@ -136,6 +141,30 @@ private:
 
     KAction      *m_saveOCRTextAction;
    int m_prefDialogIndex;
+
+   KAction *scanAction;
+   KAction *previewAction;
+   KAction *openWithAction;
+   KAction *ocrAction;
+   KAction *ocrSelectAction;
+
+   KAction *newFromSelectionAction;
+   KAction *scaleToWidthAction;
+   KAction *scaleToHeightAction;
+   KAction *scaleToOriginalAction;
+   KAction *mirrorVerticallyAction;
+   KAction *mirrorHorizontallyAction;
+   //KAction *mirrorBothAction;
+   KAction *rotateCwAction;
+   KAction *rotateAcwAction;
+   KAction *rotate180Action;
+
+   KAction *createFolderAction;
+   KAction *saveImageAction;
+   KAction *importImageAction;
+   KAction *deleteImageAction;
+   KAction *unloadImageAction;
+
 };
 
 #endif // KOOKA_H

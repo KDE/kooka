@@ -117,6 +117,10 @@ KookaView::KookaView( KParts::DockMainWindow *parent, const QCString& deviceToUs
    img_canvas->enableContextMenu(true);
    connect( img_canvas, SIGNAL( imageReadOnly(bool)),
 	    this, SLOT(slViewerReadOnly(bool)));
+   connect( img_canvas, SIGNAL( newRect()),
+	    this, SLOT(slSelectionChanged()));
+   connect( img_canvas, SIGNAL( noRect()),
+	    this, SLOT(slSelectionChanged()));
    
    KPopupMenu *ctxtmenu = static_cast<KPopupMenu*>(img_canvas->contextMenu());
    if( ctxtmenu )
@@ -154,6 +158,11 @@ KookaView::KookaView( KParts::DockMainWindow *parent, const QCString& deviceToUs
 	    this, SLOT( slShowThumbnails( KFileTreeViewItem* )));
    connect( m_thumbview, SIGNAL( selectFromThumbnail( const KURL& )),
 	    packager, SLOT( slSelectImage(const KURL&)));
+   connect(packager,SIGNAL(selectionChanged()),
+	   this,SLOT(slotGallerySelectionChanged()));
+   connect(packager,SIGNAL(showImage(KookaImage *)),
+	   this,SLOT(slotLoadedImageChanged(KookaImage *)));
+
 
    /*
     * Create a Kombobox that holds the last folders visible even on the preview page
@@ -196,7 +205,8 @@ KookaView::KookaView( KParts::DockMainWindow *parent, const QCString& deviceToUs
    m_dockScanParam->setWidget( 0 ); // later
    sane = new KScanDevice( m_dockScanParam );
    Q_CHECK_PTR(sane);
-   if (!deviceToUse.isEmpty()) sane->addUserSpecifiedDevice(deviceToUse,"on command line",true);
+   if (!deviceToUse.isEmpty() && deviceToUse!="gallery")
+       sane->addUserSpecifiedDevice(deviceToUse,"on command line",true);
 
    m_dockScanParam->manualDock( m_dockRecent,              // dock target
 				KDockWidget::DockBottom, // dock site
@@ -314,7 +324,8 @@ bool KookaView::slSelectDevice(const QCString& useDevice,bool alwaysAsk)
 {
 
    kdDebug(28000) << k_funcinfo << "use device [" << useDevice << "] ask=" << alwaysAsk << endl;
-   bool haveConnection = false;
+   haveConnection = false;
+   connectedDevice = "";
 
    QCString selDevice;
    /* in case useDevice is the term 'gallery', the user does not want to
@@ -416,6 +427,7 @@ The error reported was: <b>%1</b>").arg(sane->lastErrorMessage()).arg(selDevice)
        if ( scan_params ) scan_params->connectDevice(NULL);
    }
 
+   emit signalScannerChanged(haveConnection);
    return( haveConnection );
 }
 
@@ -488,6 +500,58 @@ information."),QString::null,KGuiItem(i18n("Add Scan Device...")))!=KMessageBox:
 }
 
 
+
+
+
+QString KookaView::scannerName() const
+{
+    if (connectedDevice=="") return (i18n("Gallery"));
+    if (!haveConnection) return (i18n("No scanner connected"));
+    return (sane->getScannerName(connectedDevice));
+}
+
+
+
+void KookaView::slSelectionChanged()
+{
+    kdDebug( 28000) << k_funcinfo << endl;
+    emit signalRectangleChanged(img_canvas->selectedImage(NULL));
+}
+
+
+
+void KookaView::slotGallerySelectionChanged()
+{
+    kdDebug( 28000) << k_funcinfo << endl;
+
+    KFileTreeViewItem *fti = packager->currentKFileTreeViewItem();
+    if (fti==NULL)
+    {
+	emit signalGallerySelectionChanged(false,0);
+    }
+    else
+    {
+	emit signalGallerySelectionChanged(fti->isDir(),packager->selectedItems().count());
+    }
+}
+
+
+void KookaView::slotLoadedImageChanged(KookaImage *img)
+{
+    kdDebug( 28000) << k_funcinfo << "img=" << ((void*)img) << endl;
+    emit signalLoadedImageChanged(img!=NULL);
+}
+
+
+bool KookaView::galleryRootSelected() const
+{
+    if (packager==NULL) return (false);
+    KFileTreeViewItem *tvi = packager->currentKFileTreeViewItem();
+    if (tvi==NULL) return (true);
+    return (tvi==packager->branches().first()->root());
+}
+
+
 void KookaView::loadStartupImage( void )
 {
    kdDebug( 28000) << "Starting to load startup image" << endl;
@@ -520,6 +584,7 @@ void KookaView::loadStartupImage( void )
 void KookaView::print()
 {
     /* For now, print a single file. Later, print multiple images to one page */
+
     KookaImage *img = packager->getCurrImage();
     if ( !img )
         return;
@@ -534,17 +599,16 @@ void KookaView::print()
     }
 }
 
-void KookaView::slNewPreview( QImage *new_img, ImgScanInfo * )
+
+void KookaView::slNewPreview( QImage *new_img,ImgScanInfo *info)
 {
-   if( new_img )
-   {
-      if( ! new_img->isNull() )
-      {
-	 /* flip preview to front */
-	 m_dockPreview->makeDockVisible();
-      }
-      preview_canvas->newImage( new_img );
-   }
+   if (!new_img) return;
+
+   kdDebug(29000) << k_funcinfo << "new preview image, size=" << new_img->size()
+		  << " res=[" << info->getXResolution() << "x" << info->getYResolution() << "]" << endl;
+							// flip preview to front
+   if (!new_img->isNull()) m_dockPreview->makeDockVisible();
+   preview_canvas->newImage(new_img);			// set new image and size
 }
 
 
@@ -756,7 +820,6 @@ void KookaView::slCreateNewImgFromSelection()
 
 void KookaView::slRotateImage(int angle)
 {
-    // QImage *img = (QImage*) img_canvas->rootImage();
    KookaImage *img = packager->getCurrImage();
    bool doUpdate = true;
 
@@ -771,20 +834,19 @@ void KookaView::slRotateImage(int angle)
 	    emit( signalChangeStatusbar( i18n("Rotate image 90 degrees" )));
 	    resImg = rotateRight( img );
 	    break;
-	 case 180:
-	    emit( signalChangeStatusbar( i18n("Rotate image 180 degrees" )));
-	    resImg = rotate180( img );
-	    break;
+//	 case 180:
+//	    emit( signalChangeStatusbar( i18n("Rotate image 180 degrees" )));
+//	    resImg = rotate180( img );
+//	    break;
 	 case 270:
 	 case -90:
 	    emit( signalChangeStatusbar( i18n("Rotate image -90 degrees" )));
 	    resImg = rotateLeft( img );
-
 	    break;
-	 default:
-	    kdDebug(28000) << "Not supported yet !" << endl;
-	    doUpdate = false;
 
+	 default:
+	    kdDebug(28000) << k_funcinfo << "Angle " << angle << " not supported!" << endl;
+	    doUpdate = false;
 	    break;
       }
       QApplication::restoreOverrideCursor();
@@ -825,7 +887,7 @@ void KookaView::slMirrorImage( MirrorType m )
 	    resImg = img->mirror( true, true );
 	    break;
 	 default:
-	    kdDebug(28000) << "Mirroring: no way ;)" << endl;
+	    kdDebug(28000) << k_funcinfo << "Mirror type " << m << " not supported!" << endl;
 	    doUpdate = false;
       }
       QApplication::restoreOverrideCursor();
@@ -1052,19 +1114,19 @@ QImage KookaView::rotateRight( QImage *m_img )
    return( rot );
 }
 
-QImage KookaView::rotate180( QImage *m_img )
-{
-   QImage rot;
-   
-   if( m_img )
-   {
-       QWMatrix m;
-
-       m.rotate(+180);
-       rot = m_img->xForm(m);
-   }
-   return( rot );
-}
+//QImage KookaView::rotate180( QImage *m_img )
+//{
+//   QImage rot;
+//   
+//   if( m_img )
+//   {
+//       QWMatrix m;
+//
+//       m.rotate(+180);
+//       rot = m_img->xForm(m);
+//   }
+//   return( rot );
+//}
 
 
 

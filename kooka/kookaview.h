@@ -99,6 +99,12 @@ public:
     // KParts::Part* ocrResultPart() { return m_textEdit; }
 
     ImageCanvas *getImageViewer() { return img_canvas; }
+
+    bool scannerConnected() const { return (haveConnection); }
+    QString scannerName() const;
+
+    bool galleryRootSelected() const;
+
 public slots:
     void slShowPreview()  {  }
     void slShowPackager() {  }
@@ -184,6 +190,11 @@ protected slots:
      * called if an viewer image was set to read only or back to read write state.
      */
     void slViewerReadOnly( bool ro );
+
+    void slSelectionChanged();
+    void slotGallerySelectionChanged();
+    void slotLoadedImageChanged(KookaImage *img);
+
 signals:
     /**
      * Use this signal to change the content of the statusbar
@@ -200,10 +211,15 @@ signals:
      */
     void signalChangeCaption(const QString& text);
 
+    void signalScannerChanged(bool haveConnection);
+    void signalRectangleChanged(bool haveSelection);
+    void signalGallerySelectionChanged(bool isDir,int howmanySelected);
+    void signalLoadedImageChanged(bool isLoaded);
+
 private:
     QImage rotateRight( QImage* );
     QImage rotateLeft ( QImage* );
-    QImage rotate180  ( QImage* );
+    //QImage rotate180  ( QImage* );
     QCString userDeviceSelection(bool alwaysAsk);
 
     void updateCurrImage( QImage& ) ;
@@ -216,6 +232,7 @@ private:
     Previewer    *preview_canvas;
     ScanPackager *packager;
     ScanParams   *scan_params;
+    bool haveConnection;
 
     KScanDevice  *sane;
     KComboBox    *recentFolder;

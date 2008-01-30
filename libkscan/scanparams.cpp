@@ -156,13 +156,14 @@ bool ScanParams::connectDevice( KScanDevice *newScanDevice )
    /* Create a Start-Scan-Button */
    (void) new KSeparator( KSeparator::HLine, this);
    KButtonBox *kbb = new KButtonBox( this );
-   QPushButton* pb = kbb->addButton( i18n( "Start Scan" ));
-   pb->setMinimumWidth(100);
-   connect( pb, SIGNAL(clicked()), this, SLOT(slStartScan()) );
-   kbb->addStretch();
-   pb = kbb->addButton( i18n( "Preview" ));
+
+   QPushButton* pb = kbb->addButton( i18n( "Preview" ));
    pb->setMinimumWidth(100);
    connect( pb, SIGNAL(clicked()), this, SLOT(slAcquirePreview()) );
+   kbb->addStretch();
+   pb = kbb->addButton( i18n( "Start Scan" ));
+   pb->setMinimumWidth(100);
+   connect( pb, SIGNAL(clicked()), this, SLOT(slStartScan()) );
    kbb->layout();
 
    /* Initialise the progress dialog */

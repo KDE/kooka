@@ -129,8 +129,7 @@ Previewer::Previewer(QWidget *parent, const char *name )
 
     overallHeight = 295;  /* Default DIN A4 */
     overallWidth = 210;
-    kdDebug(29000) << "Previewer: got Overallsize: " <<
-        overallWidth << " x " << overallHeight << endl;
+    kdDebug(29000) << k_funcinfo << "initial overall size [" << overallWidth << "," << overallHeight << "]" << endl;
     img_canvas  = new ImageCanvas( this );
 
     img_canvas->setDefaultScaleKind( ImageCanvas::DYNAMIC );
@@ -291,6 +290,7 @@ bool Previewer::setPreviewImage( const QImage &image )
    if ( image.isNull() )
 	return false;
 
+   kdDebug(29000) << k_funcinfo << "setting new image, size=" << image.size() << endl;
    m_previewImage = image;
    img_canvas->newImage( &m_previewImage );
 
@@ -308,21 +308,30 @@ QString Previewer::galleryRoot()
 
 }
 
-void Previewer::newImage( QImage *ni )
+void Previewer::newImage(QImage *ni)
 {
+   kdDebug(29000) << k_funcinfo << "size=" << ni->size() << endl;
+
    /* image canvas does not copy the image, so we hold a copy here */
    m_previewImage = *ni;
 
-   /* clear the auto detection arrays */
-   d->m_heightSum.resize( 0 );
-   d->m_widthSum.resize( 0 );
+   /* set the overall size to match the actual scanner area */
+   setScanSize(static_cast<int>((ni->width()*1000.0)/ni->dotsPerMeterX() + 0.5),
+	       static_cast<int>((ni->height()*1000.0)/ni->dotsPerMeterY() + 0.5),
+	       KRuler::Millimetres);			// only this unit supported!
 
-   img_canvas->newImage( &m_previewImage );
-   findSelection( );
+   /* clear the auto detection arrays */
+   d->m_heightSum.resize(0);
+   d->m_widthSum.resize(0);
+
+   img_canvas->newImage(&m_previewImage);
+   findSelection();
 }
 
 void Previewer::setScanSize( int w, int h, KRuler::MetricStyle unit )
 {
+   kdDebug(29000) << k_funcinfo << "to [" << w << "," << h << "]" << endl;
+
    overallWidth = w;
    overallHeight = h;
    sizeUnit = unit;
@@ -465,6 +474,8 @@ void Previewer::slNewScanResolutions( int x, int y )
  */
 void Previewer::slNewDimen(QRect r)
 {
+   kdDebug(29000) << k_funcinfo << "rect=" << r << " width=" << overallWidth << " height=" << overallHeight << endl;
+
    if( r.height() > 0)
         selectionWidthMm = (overallWidth / 1000 * r.width());
    if( r.width() > 0)

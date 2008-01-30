@@ -1,8 +1,8 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="Kooka" version="4">
+<kpartgui name="Kooka" version="6">
 
  <MenuBar>
-  <Menu name="file"><text>&amp;File</text>
+  <Menu name="file"><text>File</text>
    <Action name="foldernew"/>
    <Action name="saveImage"/>
    <Action name="importImage"/>
@@ -10,11 +10,17 @@
    <Action name="unloadImage"/>
    <Action name="saveOCRResult"/>
   </Menu>
-  <Menu name="imgCanvas"><text>&amp;Image</text>
-   <Action name="openInGraphApp"/>
+
+  <Menu name="scan"><text>S&amp;can</text>
+   <Action name="startPreview"/>
+   <Action name="startScan"/>
    <Separator/>
    <Action name="ocrImage"/>
    <Action name="ocrImageSelect"/>
+  </Menu>
+
+  <Menu name="imgCanvas"><text>&amp;Image</text>
+   <Action name="openInGraphApp"/>
    <Separator/>
    <Action name="scaleToWidth"/>
    <Action name="scaleToHeight"/>
@@ -26,11 +32,12 @@
    <Action name="mirrorHorizontal"/>
    <Action name="mirrorBoth"/>
    <Separator/>
-   <Action name="rotateClockwise"/>
    <Action name="rotateCounterClockwise"/>
+   <Action name="rotateClockwise"/>
    <Action name="upsitedown"/>
   </Menu>
-  <Menu name="settings"><text>&amp;Settings</text>
+
+  <Menu name="settings"><text>Settings</text>
    <Action name="settings_show_docks" append="show_merge"/>
    <Action name="enable_msgs" append="save_merge"/>
    <Separator append="save_merge"/>
@@ -42,11 +49,8 @@
   </Menu>
  </MenuBar>
 
- <ToolBar name="mainToolBar" fullWidth="true">
+ <ToolBar name="mainToolBar">
   <text>Image Viewer Toolbar</text>
-  <Action name="ocrImage"/>
-  <Action name="ocrImageSelect"/>
-  <Separator/>
   <Action name="scaleToWidth"/>
   <Action name="scaleToHeight"/>
   <Action name="scaleOriginal"/>
@@ -58,9 +62,19 @@
   <Action name="mirrorHorizontal"/>
   <Action name="mirrorBoth"/>
   <Separator/>
-  <Action name="rotateClockwise"/>
   <Action name="rotateCounterClockwise"/>
+  <Action name="rotateClockwise"/>
   <Action name="upsitedown"/>
  </ToolBar>
+
+ <ToolBar name="scanToolBar">
+  <text>Scanning Toolbar</text>
+  <Action name="startPreview"/>
+  <Action name="startScan"/>
+  <Separator/>
+  <Action name="ocrImage"/>
+  <Action name="ocrImageSelect"/>
+ </ToolBar>
+
 
 </kpartgui>

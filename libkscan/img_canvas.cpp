@@ -78,6 +78,8 @@ ImageCanvas::ImageCanvas(QWidget *parent,
    QScrollView( parent, name ),
    m_contextMenu(0)
 {
+    kdDebug(29000) << k_funcinfo << endl;
+
     d = new ImageCanvasPrivate();
 
     scale_factor     = 100; // means original size
@@ -98,6 +100,7 @@ ImageCanvas::ImageCanvas(QWidget *parent,
     {
         img_size = image->size();
         pmScaled = new QPixmap( img_size );
+	kdDebug(29000) << "  image size from image is " << img_size << endl;
 
 #ifdef USE_KPIXMAPIO
         *pmScaled = pixIO.convertToPixmap(*image);
@@ -108,6 +111,7 @@ ImageCanvas::ImageCanvas(QWidget *parent,
         acquired = true;
     } else {
         img_size = size();
+	kdDebug(29000) << "  unspecified image size is " << img_size << endl;
     }
 
 
@@ -129,7 +133,7 @@ ImageCanvas::ImageCanvas(QWidget *parent,
 
 ImageCanvas::~ImageCanvas()
 {
-   kdDebug(29000) << "Destructor of ImageCanvas" << endl;
+    kdDebug(29000) << k_funcinfo << endl;
     noRectSlot();
     if( selected ) delete selected;
     selected = 0;
@@ -189,6 +193,7 @@ void ImageCanvas::newImage( QImage *new_image )
    /** handle the new image **/
    if( image )
    {
+      kdDebug(29000) << k_funcinfo << "new image size is " << image->size() << endl;
       if( image->depth() == 1 ) {
 	 pmScaled = new QPixmap( image->size(), 1 );
       } else {
@@ -198,7 +203,6 @@ void ImageCanvas::newImage( QImage *new_image )
 
       // image->convertDepth(32);
 #ifdef USE_KPIXMAPIO
-
       *pmScaled = pixIO.convertToPixmap(*image);
 #else
       pmScaled->convertFromImage( *image );
@@ -226,9 +230,9 @@ void ImageCanvas::newImage( QImage *new_image )
    }
 
 
-   kdDebug(29000) << "going to repaint!" << endl;
+   //kdDebug(29000) << "going to repaint!" << endl;
    repaint( true );
-   kdDebug(29000) << "repaint ok" << endl;
+   //kdDebug(29000) << "repaint ok" << endl;
 }
 
 QSize ImageCanvas::sizeHint() const
@@ -352,7 +356,7 @@ bool ImageCanvas::selectedImage( QImage *retImg )
       int h = (s.height() * r.height())/1000;
 
       if( w > 0 && h > 0 ) {
-	 *retImg = entireImg->copy( x, y, w, h );
+	 if (retImg!=NULL) *retImg = entireImg->copy( x, y, w, h );
 	 result = true;
       }
    }
@@ -399,6 +403,8 @@ void ImageCanvas::timerEvent(QTimerEvent *)
 
 void ImageCanvas::newRectSlot( QRect newSel )
 {
+   kdDebug(29000) << k_funcinfo << "rect=" << newSel << endl;
+
    QRect to_map;
    QPainter p(viewport());
    drawAreaBorder(&p,TRUE);
@@ -413,20 +419,19 @@ void ImageCanvas::newRectSlot( QRect newSel )
        int w = image->width();
        int h = image->height();
 
-       kdDebug(29000) << "ImageCanvas: Image size is " << w << "x" << h << endl;
-       kdDebug(29000) << "ImageCanvas got selection Rect: W=" << newSel.width() << ", H=" << newSel.height() << endl;
+       kdDebug(29000) << "  Image size is " << w << "x" << h << endl;
+       kdDebug(29000) << "  got selection Rect " << newSel << endl;
        // to_map.setWidth(static_cast<int>(w * newSel.width() / 1000.0));
        rw = static_cast<int>(w * newSel.width()  / 1000.0);
        rx = static_cast<int>(w * newSel.x()      / 1000.0);
        ry = static_cast<int>(h * newSel.y()      / 1000.0);
        rh = static_cast<int>(h * newSel.height() / 1000.0);
-       kdDebug(29000) << "ImageCanvas: scaled Height is " << rh << endl;
+       //kdDebug(29000) << "  scaled Height is " << rh << endl;
 
        to_map.setRect( rx, ry, rw, rh );
 
-       kdDebug(29000) << "ImageCanvas Selection: W=" << to_map.width() << " H=" << to_map.height() << endl;
        *selected = scale_matrix.map( to_map );
-       kdDebug(29000) << "ImageCanvas Selection: W=" << selected->width() << " H=" << selected->height() << endl;
+       kdDebug(29000) << "  to_map=" << to_map << " selected=" << *selected << endl;
        emit( newRect( sel() ));
        newRectSlot();
    }
@@ -614,12 +619,12 @@ void ImageCanvas::viewportMouseMoveEvent(QMouseEvent *ev)
     		if( selected->x()+ selected->width()+mx >= ix-cx )
     		{
     			mx =  ix -cx - selected->width() - selected->x();
-    			kdDebug(29000) << "runs out !" << endl;
+    			//kdDebug(29000) << "runs out !" << endl;
     		}
     		if( selected->y()+ selected->height()+my >= iy-cy )
     		{
     			my =  iy -cy - selected->height() - selected->y();
-    			kdDebug(29000) << "runs out !" << endl;
+    			//kdDebug(29000) << "runs out !" << endl;
     		}
 
     		/* Check if rectangle would run out of the image on left and top */
@@ -701,7 +706,7 @@ void ImageCanvas::update_scaled_pixmap( void )
                            double(image->width());
             kdDebug(29000) << "FIT WIDTH scrollbar to substract: " << sbWidth << endl;
         }
-        scale_factor = 100*used_xscaler;
+        scale_factor = static_cast<int>(100*used_xscaler);
         break;
     case FIT_HEIGHT:
         used_yscaler = used_xscaler = double(noSBSize.height())/double(image->height());
@@ -716,12 +721,12 @@ void ImageCanvas::update_scaled_pixmap( void )
             kdDebug(29000) << "FIT HEIGHT scrollbar to substract: " << sbWidth << endl;
             // scale = int(100.0*(noSBSize.height() -sbWidth) / image->height());
         }
-        scale_factor = 100*used_xscaler;
+        scale_factor = static_cast<int>(100*used_xscaler);
 
         break;
     case ZOOM:
         used_xscaler = used_yscaler = double(getScaleFactor())/100.0;
-        scale_factor = 100*used_xscaler;
+        scale_factor = static_cast<int>(100*used_xscaler);
         break;
     default:
         break;

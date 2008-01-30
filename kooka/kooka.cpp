@@ -93,11 +93,23 @@ Kooka::Kooka( const QCString& deviceToUse)
             this, SLOT(cleanStatusbar()));
     connect(m_view, SIGNAL(signalChangeCaption(const QString&)),
             this,   SLOT(changeCaption(const QString&)));
+    connect(m_view, SIGNAL(signalScannerChanged(bool)),
+            this,   SLOT(slotUpdateScannerActions(bool)));
+    connect(m_view,SIGNAL(signalRectangleChanged(bool)),
+            this,   SLOT(slotUpdateRectangleActions(bool)));
+    connect(m_view,SIGNAL(signalGallerySelectionChanged(bool,int)),
+            this,   SLOT(slotUpdateGalleryActions(bool,int)));
+    connect(m_view,SIGNAL(signalLoadedImageChanged(bool)),
+            this,   SLOT(slotUpdateLoadedActions(bool)));
 
     changeCaption( i18n( "KDE Scanning" ));
 
     setAutoSaveSettings(  QString::fromLatin1("General Options"),
                           true );
+
+    slotUpdateScannerActions(m_view->scannerConnected());
+    slotUpdateRectangleActions(false);
+    slotUpdateGalleryActions(true,0);
 }
 
 void Kooka::createMyGUI( KParts::Part *part )
@@ -137,40 +149,32 @@ actionCollection());
     m_view->createDockMenu(actionCollection(), this, "settings_show_docks" );
 
     /* Image Viewer action Toolbar - OCR, Scaling etc. */
-    (void) new KAction(i18n("&OCR Image..."), "ocr", CTRL+Key_O,
-		       m_view, SLOT(doOCR()),
-		       actionCollection(), "ocrImage" );
 
-    (void) new KAction(i18n("O&CR on Selection..."), "ocr-select", CTRL+Key_C,
-		       m_view, SLOT(doOCRonSelection()),
-		       actionCollection(), "ocrImageSelect" );
+    scaleToWidthAction =  new KAction(i18n("Scale to Width"), "scaletowidth", CTRL+Key_I,
+				      m_view, SLOT( slIVScaleToWidth()),
+				      actionCollection(), "scaleToWidth" );
+    m_view->connectViewerAction( scaleToWidthAction );
 
-    KAction *act;
-    act =  new KAction(i18n("Scale to W&idth"), "scaletowidth", CTRL+Key_I,
-		       m_view, SLOT( slIVScaleToWidth()),
-		       actionCollection(), "scaleToWidth" );
-    m_view->connectViewerAction( act );
+    scaleToHeightAction = new KAction(i18n("Scale to Height"), "scaletoheight", CTRL+Key_H,
+				      m_view, SLOT( slIVScaleToHeight()),
+				      actionCollection(), "scaleToHeight" );
+    m_view->connectViewerAction( scaleToHeightAction );
 
-    act = new KAction(i18n("Scale to &Height"), "scaletoheight", CTRL+Key_H,
-		       m_view, SLOT( slIVScaleToHeight()),
-		       actionCollection(), "scaleToHeight" );
-    m_view->connectViewerAction( act );
-
-    act = new KAction(i18n("Original &Size"), "scaleorig", CTRL+Key_S,
-                      m_view, SLOT( slIVScaleOriginal()),
-                      actionCollection(), "scaleOriginal" );
-    m_view->connectViewerAction( act );
+    scaleToOriginalAction = new KAction(i18n("Original Size"), "scaleorig", CTRL+Key_1,
+					m_view, SLOT( slIVScaleOriginal()),
+					actionCollection(), "scaleOriginal" );
+    m_view->connectViewerAction( scaleToOriginalAction );
 
 #ifdef QICONSET_HONOUR_ON_OFF
     /* The Toggleaction does not seem to handle the on/off icon from QIconSet */
     QIconSet lockSet;
     lockSet.setPixmap(BarIcon("lock")  , QIconSet::Automatic, QIconSet::Normal, QIconSet::On );
     lockSet.setPixmap(BarIcon("unlock"), QIconSet::Automatic, QIconSet::Normal, QIconSet::Off);
-    act = new KToggleAction ( i18n("Keep &Zoom Setting"), lockSet, CTRL+Key_Z,
-                              actionCollection(), "keepZoom" );
+    KAction *act = new KToggleAction ( i18n("Keep Zoom Setting"), lockSet, CTRL+Key_Z,
+				       actionCollection(), "keepZoom" );
 #else
-    act = new KToggleAction( i18n("Keep &Zoom Setting"), BarIcon("lockzoom"), CTRL+Key_Z,
-                             actionCollection(), "keepZoom" );
+    KAction *act = new KToggleAction( i18n("Keep Zoom Setting"), BarIcon("lockzoom"), CTRL+Key_Z,
+				      actionCollection(), "keepZoom" );
 #endif
 
     connect( act, SIGNAL( toggled( bool ) ), m_view->getImageViewer(),
@@ -184,77 +188,80 @@ actionCollection());
 		       actionCollection(), "showZoomDialog" );
     m_view->connectViewerAction( act );
 
-    (void) new KAction(i18n("Create From Selectio&n"), "crop", CTRL+Key_N,
-		       m_view, SLOT( slCreateNewImgFromSelection() ),
-		       actionCollection(), "createFromSelection" );
+    newFromSelectionAction = new KAction(i18n("Create From Selection"), "crop", CTRL+Key_N,
+					 m_view, SLOT( slCreateNewImgFromSelection() ),
+					 actionCollection(), "createFromSelection" );
 
-    (void) new KAction(i18n("Mirror Image &Vertically"), "mirror-vert", CTRL+Key_V,
-		       this, SLOT( slMirrorVertical() ),
-		       actionCollection(), "mirrorVertical" );
+    mirrorVerticallyAction = new KAction(i18n("Mirror Vertically"), "mirror-vert", CTRL+Key_V,
+					 this, SLOT( slMirrorVertical() ),
+					 actionCollection(), "mirrorVertical" );
 
-    (void) new KAction(i18n("&Mirror Image Horizontally"), "mirror-horiz", CTRL+Key_M,
-		       this, SLOT( slMirrorHorizontal() ),
-		       actionCollection(), "mirrorHorizontal" );
+    mirrorHorizontallyAction = new KAction(i18n("Mirror Horizontally"), "mirror-horiz", CTRL+Key_M,
+					   this, SLOT( slMirrorHorizontal() ),
+					   actionCollection(), "mirrorHorizontal" );
 
-    (void) new KAction(i18n("Mirror Image &Both Directions"), "mirror-both", CTRL+Key_B,
-		       this, SLOT( slMirrorBoth() ),
-		       actionCollection(), "mirrorBoth" );
+    // This is the same operation as "Rotate 180 degrees"!
+    //    mirrorBothAction = new KAction(i18n("Mirror Both Directions"), "mirror-both", CTRL+Key_B,
+    //				   this, SLOT( slMirrorBoth() ),
+    //				   actionCollection(), "mirrorBoth" );
 
-    (void) new KAction(i18n("Open Image in &Graphic Application..."), "fileopen", CTRL+Key_G,
-		       m_view, SLOT( slOpenCurrInGraphApp() ),
-		       actionCollection(), "openInGraphApp" );
+    openWithAction = new KAction(i18n("Open With..."), "fileopen", KStdAccel::open(),
+				 m_view, SLOT( slOpenCurrInGraphApp() ),
+				 actionCollection(), "openInGraphApp" );
 
-    act = new KAction(i18n("&Rotate Image Clockwise"), "rotate_cw", CTRL+Key_R,
-		      this, SLOT( slRotateClockWise() ),
-		       actionCollection(), "rotateClockwise" );
-    m_view->connectViewerAction( act );
+    rotateCwAction = new KAction(i18n("Rotate Clockwise"), "rotate_cw", CTRL+Key_9,
+				 this, SLOT( slRotateClockWise() ),
+				 actionCollection(), "rotateClockwise" );
+    m_view->connectViewerAction( rotateCwAction );
 
-    act = new KAction(i18n("Rotate Image Counter-Clock&wise"), "rotate_ccw", CTRL+Key_W,
-		       this, SLOT( slRotateCounterClockWise() ),
-		       actionCollection(), "rotateCounterClockwise" );
-    m_view->connectViewerAction( act );
+    rotateAcwAction = new KAction(i18n("Rotate Counter-Clockwise"), "rotate_ccw", CTRL+Key_7,
+				  this, SLOT( slRotateCounterClockWise() ),
+				  actionCollection(), "rotateCounterClockwise" );
+    m_view->connectViewerAction( rotateAcwAction );
 
-    act = new KAction(i18n("Rotate Image 180 &Degrees"), "rotate", CTRL+Key_D,
-		       this, SLOT( slRotate180() ),
-		       actionCollection(), "upsitedown" );
-    m_view->connectViewerAction( act );
+    rotate180Action = new KAction(i18n("Rotate 180 Degrees"), "rotate", CTRL+Key_8,
+				  this, SLOT( slRotate180() ),
+				  actionCollection(), "upsitedown" );
+    m_view->connectViewerAction( rotate180Action );
 
     /* Gallery actions */
-    act = new KAction(i18n("&Create Folder..."), "folder_new", 0,
-		      m_view->gallery(), SLOT( slotCreateFolder() ),
-		       actionCollection(), "foldernew" );
-    m_view->connectGalleryAction( act );
+    createFolderAction = new KAction(i18n("Create Folder..."), "folder_new", 0,
+				     m_view->gallery(), SLOT( slotCreateFolder() ),
+				     actionCollection(), "foldernew" );
+    m_view->connectGalleryAction( createFolderAction );
 
-    act = new KAction(i18n("&Save Image..."), "filesave", 0,
-		      m_view->gallery(), SLOT( slotExportFile() ),
-		       actionCollection(), "saveImage" );
-    m_view->connectGalleryAction( act );
+    saveImageAction = new KAction(i18n("Save Image..."), "filesave", KStdAccel::save(),
+				  m_view->gallery(), SLOT( slotExportFile() ),
+				  actionCollection(), "saveImage" );
+    m_view->connectGalleryAction( saveImageAction );
 
-    act = new KAction(i18n("&Import Image..."), "inline_image", 0,
-		      m_view->gallery(), SLOT( slotImportFile() ),
-		       actionCollection(), "importImage" );
-    m_view->connectGalleryAction( act );
+    importImageAction = new KAction(i18n("Import Image..."), "inline_image", 0,
+				    m_view->gallery(), SLOT( slotImportFile() ),
+				    actionCollection(), "importImage" );
+    m_view->connectGalleryAction( importImageAction );
 
-    act = new KAction(i18n("&Delete Image"), "edittrash", 0,
-		      m_view->gallery(), SLOT( slotDeleteItems() ),
-		       actionCollection(), "deleteImage" );
-    m_view->connectGalleryAction( act );
+    deleteImageAction = new KAction(i18n("Delete Image"), "editdelete", SHIFT+Key_Delete,
+				    m_view->gallery(), SLOT( slotDeleteItems() ),
+				    actionCollection(), "deleteImage" );
+    m_view->connectGalleryAction( deleteImageAction );
 
-    act = new KAction(i18n("&Unload Image"), "fileclose", 0,
-		      m_view->gallery(), SLOT( slotUnloadItems() ),
-		       actionCollection(), "unloadImage" );
-    m_view->connectGalleryAction( act );
+    unloadImageAction = new KAction(i18n("Unload Image"), "fileclose", CTRL+SHIFT+Key_U,
+				    m_view->gallery(), SLOT( slotUnloadItems() ),
+				    actionCollection(), "unloadImage" );
+    m_view->connectGalleryAction( unloadImageAction );
 
 #if 0
     /* not yet supported actions - coming post 3.1 */
-    (void) new KAction(i18n("&Load Scan Parameters"), "bookmark_add", CTRL+Key_L,
+    (void) new KAction(i18n("Load Scan Parameters"), "bookmark_add", CTRL+Key_L,
                        m_view, SLOT(slLoadScanParams()),
                        actionCollection(), "loadscanparam" );
 
-    (void) new KAction(i18n("Save &Scan Parameters"), "bookmark_add", CTRL+Key_S,
+    (void) new KAction(i18n("Save Scan Parameters"), "bookmark_add", CTRL+Key_S,
 		       m_view, SLOT(slSaveScanParams()),
 		       actionCollection(), "savescanparam" );
 #endif
+
+    // "Settings" menu
 
     (void) new KAction(i18n("Select Scan Device..."), "scanner", 0,
 		       m_view, SLOT( slSelectDevice()),
@@ -269,7 +276,27 @@ actionCollection());
 			actionCollection(), "enable_msgs");
 
 
-    m_saveOCRTextAction = new KAction( i18n("Save OCR Res&ult Text"), "filesaveas", CTRL+Key_U,
+    // Scanning functions
+
+    scanAction = new KAction(i18n("Preview"), "preview", 0,
+		       m_view, SLOT( slStartPreview()),
+		       actionCollection(), "startPreview" );
+
+    previewAction = new KAction(i18n("Start Scan"), "scanner", 0,
+		       m_view, SLOT( slStartFinalScan()),
+		       actionCollection(), "startScan" );
+
+    // OCR functions
+
+    ocrAction = new KAction(i18n("OCR Image..."), "ocr", 0,
+			    m_view, SLOT(doOCR()),
+			    actionCollection(), "ocrImage" );
+
+    ocrSelectAction = new KAction(i18n("OCR Selection..."), "ocr-select", 0,
+				  m_view, SLOT(doOCRonSelection()),
+				  actionCollection(), "ocrImageSelect" );
+
+    m_saveOCRTextAction = new KAction( i18n("Save OCR Result Text..."), "filesaveas", CTRL+Key_U,
                                        m_view, SLOT(slSaveOCRResult()),
                                        actionCollection(), "saveOCRResult");
 }
@@ -438,10 +465,10 @@ void Kooka::slMirrorHorizontal( void )
     m_view->slMirrorImage( KookaView::MirrorHorizontal );
 }
 
-void Kooka::slMirrorBoth( void )
-{
-    m_view->slMirrorImage( KookaView::MirrorBoth );
-}
+//void Kooka::slMirrorBoth( void )
+//{
+//    m_view->slMirrorImage( KookaView::MirrorBoth );
+//}
 
 void Kooka::slRotateClockWise( void )
 {
@@ -456,7 +483,8 @@ void Kooka::slRotateCounterClockWise( void )
 
 void Kooka::slRotate180( void )
 {
-   m_view->slRotateImage( 180 );
+    m_view->slMirrorImage( KookaView::MirrorBoth );
+    //m_view->slRotateImage( 180 );
 }
 
 void Kooka::slEnableWarnings( )
@@ -465,5 +493,80 @@ void Kooka::slEnableWarnings( )
    KMessageBox::enableAllMessages();
    kapp->config()->reparseConfiguration();
 }
+
+
+void Kooka::slotUpdateScannerActions(bool haveConnection)
+{
+	kdDebug(29000) << k_funcinfo << "hc=" << haveConnection << endl;
+
+	scanAction->setEnabled(haveConnection);
+	previewAction->setEnabled(haveConnection);
+
+	setCaption(m_view->scannerName());
+}
+
+
+void Kooka::slotUpdateRectangleActions(bool haveSelection)
+{
+	kdDebug(29000) << k_funcinfo << "hs=" << haveSelection << endl;
+
+	ocrSelectAction->setEnabled(haveSelection);
+	newFromSelectionAction->setEnabled(haveSelection);
+}
+
+
+void Kooka::slotUpdateGalleryActions(bool isDir,int howmanySelected)
+{
+	kdDebug(29000) << k_funcinfo << "isdir=" << isDir << " howmany=" << howmanySelected << endl;
+
+	const bool singleImage = howmanySelected==1 && !isDir;
+
+	ocrAction->setEnabled(singleImage);
+	openWithAction->setEnabled(singleImage);
+
+	scaleToWidthAction->setEnabled(singleImage);
+	scaleToHeightAction->setEnabled(singleImage);
+	scaleToOriginalAction->setEnabled(singleImage);
+	mirrorVerticallyAction->setEnabled(singleImage);
+	mirrorHorizontallyAction->setEnabled(singleImage);
+	//mirrorBothAction->setEnabled(singleImage);
+	rotateCwAction->setEnabled(singleImage);
+	rotateAcwAction->setEnabled(singleImage);
+	rotate180Action->setEnabled(singleImage);
+
+	if (howmanySelected==0) slotUpdateRectangleActions(false);
+
+	createFolderAction->setEnabled(isDir);
+	importImageAction->setEnabled(isDir);
+
+	saveImageAction->setEnabled(singleImage);
+
+	if (isDir)
+	{
+		unloadImageAction->setText(i18n("Unload Folder"));
+		unloadImageAction->setEnabled(true);
+
+		deleteImageAction->setText(i18n("Delete Folder"));
+		deleteImageAction->setEnabled(!m_view->galleryRootSelected());
+	}
+	else
+	{
+		unloadImageAction->setText(i18n("Unload Image"));
+		unloadImageAction->setEnabled(singleImage &&
+					      m_view->gallery()->getCurrImage()!=NULL);
+
+		deleteImageAction->setText(i18n("Delete Image"));
+		deleteImageAction->setEnabled(singleImage);
+	}
+}
+
+
+void Kooka::slotUpdateLoadedActions(bool isLoaded)
+{
+	kdDebug(29000) << k_funcinfo << "loaded=" << isLoaded << endl;
+
+	unloadImageAction->setEnabled(isLoaded);
+}
+
 
 #include "kooka.moc"

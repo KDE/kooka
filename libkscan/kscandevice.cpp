@@ -1252,12 +1252,12 @@ void KScanDevice::slScanFinished( KScanStat status )
 
     emit( sigScanProgress( MAX_PROGRESS ));
 
-    kdDebug(29000) << "Slot ScanFinished hit with status " <<  status << endl;
+    kdDebug(29000) << k_funcinfo << "status=" <<  status << endl;
 
     if( data )
     {
 	delete[] data;
-	data = 0;
+	data = NULL;
     }
 
     if( status == KSCAN_OK && img )
@@ -1273,7 +1273,7 @@ void KScanDevice::slScanFinished( KScanStat status )
 
 	if( scanningPreview )
 	{
-	    kdDebug(29000) << "Scanning a preview !" << endl;
+	    //kdDebug(29000) << "Scanning a preview !" << endl;
 	    savePreviewImage(*img);
 	    emit( sigNewPreview( img, &info ));
 
