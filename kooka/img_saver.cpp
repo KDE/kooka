@@ -58,6 +58,8 @@
 #include "previewer.h"
 #include "kookaimage.h"
 
+#define USE_KIMAGEIO
+
 FormatDialog::FormatDialog( QWidget *parent, const QString&, const char *name )
    :KDialogBase( parent, name, true,
                  /* Tabbed,*/ i18n( "Kooka Save Assistant" ),
@@ -208,11 +210,11 @@ QCString FormatDialog::getSubFormat( ) const
 #include "formathelp.h"
 void FormatDialog::buildHelp( void )
 {
-   format_help.insert( QString::fromLatin1("BMP"), HELP_BMP );
-   format_help.insert( QString::fromLatin1("PNM"), HELP_PNM );
-   format_help.insert( QString::fromLatin1("JPEG"), HELP_JPG );
-   format_help.insert( QString::fromLatin1("JPG"), HELP_JPG );
-   format_help.insert( QString::fromLatin1("EPS"), HELP_EPS );
+   format_help.insert( QString::fromLatin1("BMP"), i18n(HELP_BMP) );
+   format_help.insert( QString::fromLatin1("PNM"), i18n(HELP_PNM) );
+   format_help.insert( QString::fromLatin1("JPEG"), i18n(HELP_JPG) );
+   format_help.insert( QString::fromLatin1("JPG"), i18n(HELP_JPG) );
+   format_help.insert( QString::fromLatin1("EPS"), i18n(HELP_EPS) );
 }
 
 
@@ -374,24 +376,22 @@ ImgSaveStat ImgSaver::saveImage( QImage *image )
  *  This is done by numbering all existing files and adding
  *  one
  **/
-QString ImgSaver::createFilename( QString format )
+QString ImgSaver::createFilename(QString format)
 {
-    if( format.isNull() || format.isEmpty() ) return( 0 );
+    if (format.isEmpty()) return (QString::null);
+    const QString suffix = KImageIO::suffix(format);	// file extension for saving
 
-    QString s = "kscan_*." + format.lower();
-    QDir files( directory, s );
-    long c = 1;
+    QString s = "kscan_*."+suffix;
+    QDir files(directory,s);				// list of existing files
 
-    QString num;
-    num.setNum(c);
-    QString fname = "kscan_" + num.rightJustify(4, '0') + "." + format.lower();
-
-    while( files.exists( fname ) ) {
-        num.setNum(++c);
-        fname = "kscan_" + num.rightJustify(4, '0') + "." + format.lower();
+    QString fname;
+    for (unsigned long c = 1; c<=files.count()+1; ++c)	// that must be the upper bound
+    {
+	fname = "kscan_"+QString::number(c).rightJustify(4,'0')+"."+suffix;
+	if (!files.exists(fname)) break;
     }
 
-    return( fname );
+    return (fname);
 }
 
 /**

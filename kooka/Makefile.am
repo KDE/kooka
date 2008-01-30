@@ -42,5 +42,4 @@ kde_conf_DATA = kookarc
 xdg_apps_DATA = kooka.desktop
 
 messages: rc.cpp
-	$(XGETTEXT) *.cpp -o $(podir)/kooka.pot
-
+	$(XGETTEXT) *.cpp *.h -o $(podir)/kooka.pot

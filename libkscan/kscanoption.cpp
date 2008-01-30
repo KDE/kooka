@@ -32,6 +32,7 @@
 #include <qregexp.h>
 
 #include <kdebug.h>
+#include <klocale.h>
 
 #include <unistd.h>
 #include "kgammatable.h"
@@ -1084,7 +1085,7 @@ QWidget *KScanOption::createWidget( QWidget *parent, const QString& w_desc,
     {
     case BOOL:
       /* Widget Type is ToggleButton */
-      w = new  QCheckBox( text, parent, "AUTO_TOGGLE_BUTTON" );
+      w = new  QCheckBox( i18n(text.utf8()), parent, "AUTO_TOGGLE_BUTTON" );
       connect( w, SIGNAL(clicked()), this,
 	       SLOT(slWidgetChange()));
       break;
@@ -1127,7 +1128,7 @@ QWidget *KScanOption::createWidget( QWidget *parent, const QString& w_desc,
 	tt = QString::fromLocal8Bit( desc->desc );
  			
       if( !tt.isEmpty() )
-	QToolTip::add( internal_widget, tt );
+	QToolTip::add( internal_widget, i18n(tt.utf8()) );
     }
  	
   /* Check if option is active, setEnabled etc. */

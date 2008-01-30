@@ -335,64 +335,6 @@ void Kooka::dragEnterEvent(QDragEnterEvent *event)
     event->accept(KURLDrag::canDecode(event));
 }
 
-#if 0
-void Kooka::dropEvent(QDropEvent *event)
-{
-    // this is a very simplistic implementation of a drop event.  we
-    // will only accept a dropped URL.  the Qt dnd code can do *much*
-    // much more, so please read the docs there
-    KURL::List uri;
-
-    // see if we can decode a URI.. if not, just ignore it
-    if (KURLDrag::decode(event, uri) && !uri.isEmpty())
-    {
-        // okay, we have a URI.. process it
-        const KURL &url = uri.first();
-	kdDebug(29000) << "Importing URI " << url.url() << endl;
-
-        // TODO: Do something with url
-        // Waba: See also setAcceptDrops() above
-    }
-}
-
-void Kooka::fileNew()
-{
-    // this slot is called whenever the File->New menu is selected,
-    // the New shortcut is pressed (usually CTRL+N) or the New toolbar
-    // button is clicked
-
-    // create a new window
-    (new Kooka)->show();
-}
-
-void Kooka::fileOpen()
-{
-    // this slot is called whenever the File->Open menu is selected,
-    // the Open shortcut is pressed (usually CTRL+O) or the Open toolbar
-    // button is clicked
-}
-
-void Kooka::fileSave()
-{
-    // this slot is called whenever the File->Save menu is selected,
-    // the Save shortcut is pressed (usually CTRL+S) or the Save toolbar
-    // button is clicked
-
-    // save the current file
-}
-
-
-void Kooka::fileSaveAs()
-{
-    // this slot is called whenever the File->Save As menu is selected,
-   QStrList strlist;
-   strlist.append( "BMP" );
-   strlist.append( "JPEG" );
-   FormatDialog fd( 0, "FormatDialog", &strlist );
-   fd.exec();
-
-}
-#endif
 
 void Kooka::filePrint()
 {

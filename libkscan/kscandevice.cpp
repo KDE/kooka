@@ -172,6 +172,10 @@ KScanDevice::KScanDevice( QObject *parent )
 {
     kdDebug(29000) << k_funcinfo << endl;
 
+    /* Get SANE translations - bug 98150 */
+    KGlobal::dirs()->addResourceDir( "locale", QString::fromLatin1("/usr/share/locale/") );
+    KGlobal::locale()->insertCatalogue( QString::fromLatin1("sane-backends") );
+
     sane_stat = sane_init(NULL, NULL );
 
     d = new KScanDevicePrivate();

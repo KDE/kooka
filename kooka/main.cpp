@@ -43,23 +43,23 @@
 #include "kooka.h"
 #include "version.h"
 
-static const char description[] =
-          "Kooka is a KDE application which provides access to scanner hardware\n"
-	      "using the SANE library.\n"
-	      "Kooka helps you scan, save your image in the correct image format\n"
-	      "and perform Optical Character Recognition on it, using gocr, Joerg\n"
-	      "Schulenburg's and friends' Open Source ocr program.";
+static const char description[] = I18N_NOOP(
+	"Kooka is a KDE application which provides access to scanner hardware\n"
+	"using the SANE library.\n"
+	"Kooka helps you scan, save your image in the correct image format\n"
+	"and perform Optical Character Recognition on it (using gocr, Joerg\n"
+	"Schulenburg's and friends' Open Source ocr program).");
 
-static const char license[] =
-"This program is distributed under the terms of the GPL v2 as publishec by\n"
-"the Free Software Foundation\n\n"
-"As a special exception, permission is given to link this program\n"
-"with any version of the KADMOS ocr/icr engine of reRecognition GmbH,\n"
-"Kreuzlingen and distribute the resulting executable without\n"
-"including the source code for KADMOS in the source distribution.\n\n"
-"As a special exception, permission is given to link this program\n"
-"with any edition of Qt, and distribute the resulting executable,\n"
-"without including the source code for Qt in the source distribution.\n";
+static const char license[] = I18N_NOOP(
+	"This program is distributed under the terms of the GPL v2 as publishec by\n"
+	"the Free Software Foundation\n\n"
+	"As a special exception, permission is given to link this program\n"
+	"with any version of the KADMOS ocr/icr engine of reRecognition GmbH,\n"
+	"Kreuzlingen and distribute the resulting executable without\n"
+	"including the source code for KADMOS in the source distribution.\n\n"
+	"As a special exception, permission is given to link this program\n"
+	"with any edition of Qt, and distribute the resulting executable,\n"
+	"without including the source code for Qt in the source distribution.\n");
 
 
 static KCmdLineOptions options[] =
@@ -73,7 +73,7 @@ static KCmdLineOptions options[] =
 
 int main( int argc, char *argv[] )
 {
-   KAboutData about("kooka", I18N_NOOP("Kooka"), KOOKA_VERSION, I18N_NOOP(description),
+   KAboutData about("kooka", I18N_NOOP("Kooka"), KOOKA_VERSION, description,
 		    KAboutData::License_GPL_V2, "(C) 2000 Klaas Freitag", 0,
 		    I18N_NOOP("http://kooka.kde.org"));
 

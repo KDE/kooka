@@ -39,7 +39,7 @@ KScanSlider::KScanSlider( QWidget *parent, const QString& text,
      m_stdButt(0)
 {
     QHBoxLayout *hb = new QHBoxLayout( this );
-    l1 = new QLabel( text, this, "AUTO_SLIDER_LABEL" );
+    l1 = new QLabel( i18n(text.utf8()), this, "AUTO_SLIDER_LABEL" );
     hb->addWidget( l1,20 );
 
     if( haveStdButt )
@@ -154,7 +154,7 @@ KScanEntry::KScanEntry( QWidget *parent, const QString& text )
 {
     QHBoxLayout *hb = new QHBoxLayout( this );
 
-    QLabel *l1 = new QLabel( text, this, "AUTO_ENTRYFIELD" );
+    QLabel *l1 = new QLabel( i18n(text.utf8()), this, "AUTO_ENTRYFIELD" );
     hb->addWidget( l1,1 );
 
     entry = new QLineEdit( this, "AUTO_ENTRYFIELD_E" );
@@ -216,24 +216,29 @@ void KScanEntry::slReturnPressed( void )
 KScanCombo::KScanCombo( QWidget *parent, const QString& text,
 			const QStrList& list )
     : QHBox( parent ),
-      combo(0)
+      combo(NULL)
 {
     createCombo( text );
-    if( combo )
-        combo->insertStrList( list);
+    if (combo!=NULL)
+    {
+	for ( QStrList::ConstIterator it = list.begin(); it != list.end(); ++it )
+	{
+	    combo->insertItem( i18n(*it) );
+	}
+    }
     combolist = list;
 }
 
 KScanCombo::KScanCombo( QWidget *parent, const QString& text,
 			const QStringList& list )
     : QHBox( parent ),
-      combo(0)
+      combo(NULL)
 {
     createCombo( text );
-    if( combo )
-        combo->insertStringList( list );
 
-    for ( QStringList::ConstIterator it = list.begin(); it != list.end(); ++it ) {
+    for ( QStringList::ConstIterator it = list.begin(); it != list.end(); ++it )
+    {
+	if (combo!=NULL) combo->insertItem( i18n( (*it).utf8() ) );
         combolist.append( (*it).local8Bit() );
     }
 }
@@ -244,8 +249,7 @@ void KScanCombo::createCombo( const QString& text )
     setSpacing( 12 );
     setMargin( 2 );
 
-
-    (void) new QLabel( text, this, "AUTO_COMBOLABEL" );
+    (void) new QLabel( i18n(text.utf8()), this, "AUTO_COMBOLABEL" );
 
     combo = new QComboBox( this, "AUTO_COMBO" );
 
