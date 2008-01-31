@@ -45,6 +45,7 @@
 #include <kiconloader.h>
 #include <kled.h>
 #include <kseparator.h>
+#include <kpushbutton.h>
 
 #include "scanparams.h"
 #include <scansourcedialog.h>
@@ -119,8 +120,8 @@ bool ScanParams::connectDevice( KScanDevice *newScanDevice )
    // QVBoxLayout *top = new QVBoxLayout(this);
    //top->setSpacing(6);
    KHBox *hb = new KHBox( this );
-   hb->layout()->setSpacing( KDialog::spacingHint() );
-   QString cap = i18n("<b>Scanner Settings</b>");
+   hb->setSpacing( KDialog::spacingHint() );
+   QString cap = i18n("<b>Scanner Settings</b>") + " : ";
    cap += sane_device->getScannerName();
    (void ) new QLabel( cap, hb );
    m_led = new KLed( hb );
@@ -161,7 +162,8 @@ bool ScanParams::connectDevice( KScanDevice *newScanDevice )
    /* Create a Start-Scan-Button */
    (void) new KSeparator( Qt::Horizontal, this);
    KDialogButtonBox *kbb = new KDialogButtonBox( this );
-   QPushButton* pb = kbb->addButton( i18nc( "@action:button", "Final S&can" ), QDialogButtonBox::ActionRole);
+   QPushButton* pb = kbb->addButton( KGuiItem( i18nc( "@action:button", "Final S&can" ), "scanner" ),
+                                     QDialogButtonBox::ActionRole );
    connect( pb, SIGNAL(clicked()), this, SLOT(slStartScan()) );
    pb = kbb->addButton( i18nc( "@action:button", "&Preview Scan" ), QDialogButtonBox::ActionRole);
    connect( pb, SIGNAL(clicked()), this, SLOT(slAcquirePreview()) );
@@ -232,9 +234,8 @@ Q3ScrollView *ScanParams::scannerParams( )
    sv->setHScrollBarMode( Q3ScrollView::AlwaysOff );
    sv->setResizePolicy( Q3ScrollView::AutoOneFit );
    KVBox *pbox = new KVBox( sv->viewport());
+   pbox->setSpacing( KDialog::spacingHint() );
    sv->setFrameStyle( QFrame::NoFrame );
-
-   sv->addChild( pbox );
 
    KHBox *hb = new KHBox(pbox);
 
@@ -505,6 +506,14 @@ Q3ScrollView *ScanParams::scannerParams( )
      cb_gray_preview = (QCheckBox*) so->widget();
      cb_gray_preview->setToolTip( i18nc( "@info:tooltip", "Acquire a gray preview even in color mode (faster)") );
    }
+
+   QWidget *spacer = new QWidget( pbox );
+   spacer->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Expanding);
+
+   pbox->setMinimumWidth( pbox->sizeHint().width() );
+   sv->setMinimumWidth( pbox->minimumWidth() );
+   sv->addChild( pbox );
+
    return( sv );
 }
 
