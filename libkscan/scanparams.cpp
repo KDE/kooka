@@ -114,8 +114,8 @@ bool ScanParams::connectDevice( KScanDevice *newScanDevice )
    /* A top layout box */
    // QVBoxLayout *top = new QVBoxLayout(this, 6);
    QHBox *hb = new QHBox( this );
-   hb->layout()->setSpacing( KDialog::spacingHint() );
-   QString cap = i18n("<B>Scanner Settings</B>");
+   hb->setSpacing( KDialog::spacingHint() );
+   QString cap = i18n("<B>Scanner Settings</B>") + " : ";
    cap += sane_device->getScannerName();
    (void ) new QLabel( cap, hb );
    m_led = new KLed( hb );
@@ -156,7 +156,7 @@ bool ScanParams::connectDevice( KScanDevice *newScanDevice )
    /* Create a Start-Scan-Button */
    (void) new KSeparator( KSeparator::HLine, this);
    KButtonBox *kbb = new KButtonBox( this );
-   QPushButton* pb = kbb->addButton( i18n( "Final S&can" ));
+   QPushButton* pb = kbb->addButton( KGuiItem( i18n( "Final S&can" ), "scanner" ) );
    connect( pb, SIGNAL(clicked()), this, SLOT(slStartScan()) );
    pb = kbb->addButton( i18n( "&Preview Scan" ));
    connect( pb, SIGNAL(clicked()), this, SLOT(slAcquirePreview()) );
@@ -227,9 +227,8 @@ QScrollView *ScanParams::scannerParams( )
    sv->setHScrollBarMode( QScrollView::AlwaysOff );
    sv->setResizePolicy( QScrollView::AutoOneFit );
    QVBox *pbox = new QVBox( sv->viewport());
+   pbox->setSpacing( KDialog::spacingHint() );
    sv->setFrameStyle( QFrame::NoFrame );
-
-   sv->addChild( pbox );
 
    QHBox *hb = new QHBox(pbox);
 
@@ -500,6 +499,14 @@ QScrollView *ScanParams::scannerParams( )
      cb_gray_preview = (QCheckBox*) so->widget();
      QToolTip::add( cb_gray_preview, i18n("Acquire a gray preview even in color mode (faster)") );
    }
+
+   QWidget *spacer = new QWidget( pbox );
+   spacer->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Expanding);
+
+   pbox->setMinimumWidth( pbox->sizeHint().width() );
+   sv->setMinimumWidth( pbox->minimumWidth() );
+   sv->addChild( pbox );
+
    return( sv );
 }
 

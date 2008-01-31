@@ -106,16 +106,22 @@ public:
     QMemArray<long> m_widthSum;
 };
 
-
 Previewer::Previewer(QWidget *parent, const char *name )
     : QWidget(parent,name)
 {
     d = new PreviewerPrivate();
 
-    QVBoxLayout *top = new QVBoxLayout( this, 10 );
-    layout = new QHBoxLayout( 2 );
+    // beautification to look like the left scanparams widget in the dialog
+    QHBoxLayout *htop = new QHBoxLayout( this );
+    QFrame *frame = new QFrame( this );
+    frame->setFrameStyle( QFrame::Panel | QFrame::Raised );
+    frame->setLineWidth( 1 );
+    htop->addWidget( frame );
+
+    QVBoxLayout *top = new QVBoxLayout( frame, KDialog::marginHint(), KDialog::spacingHint() );
+    layout = new QHBoxLayout( KDialog::spacingHint() );
     top->addLayout( layout, 9 );
-    QVBoxLayout *left = new QVBoxLayout( 3 );
+    QVBoxLayout *left = new QVBoxLayout( KDialog::spacingHint() );
     layout->addLayout( left, 2 );
 
     /* Load autoselection values from Config file */
@@ -131,7 +137,7 @@ Previewer::Previewer(QWidget *parent, const char *name )
     overallWidth = 210;
     kdDebug(29000) << "Previewer: got Overallsize: " <<
         overallWidth << " x " << overallHeight << endl;
-    img_canvas  = new ImageCanvas( this );
+    img_canvas  = new ImageCanvas( frame );
 
     img_canvas->setDefaultScaleKind( ImageCanvas::DYNAMIC );
     img_canvas->enableContextMenu(true);
@@ -153,13 +159,13 @@ Previewer::Previewer(QWidget *parent, const char *name )
     connect( img_canvas, SIGNAL(newRect(QRect)), this, SLOT(slNewDimen(QRect)));
 
     /* Stuff for the preview-Notification */
-    left->addWidget( new QLabel( i18n("<B>Preview</B>"), this ), 1);
+    left->addWidget( new QLabel( i18n("<B>Preview</B>"), frame ), 1);
 
     // Create a button group to contain buttons for Portrait/Landscape
-    bgroup = new QVButtonGroup( i18n("Scan Size"), this );
+    bgroup = new QVButtonGroup( i18n("Scan Size"), frame );
 
     // -----
-    pre_format_combo = new QComboBox( this, "PREVIEWFORMATCOMBO" );
+    pre_format_combo = new QComboBox( frame, "PREVIEWFORMATCOMBO" );
     pre_format_combo->insertItem( i18n( "Custom" ), ID_CUSTOM);
     pre_format_combo->insertItem( i18n( "DIN A4" ), ID_A4);
     pre_format_combo->insertItem( i18n( "DIN A5" ), ID_A5);
@@ -194,7 +200,7 @@ Previewer::Previewer(QWidget *parent, const char *name )
 
 
     /** Autoselection Box **/
-    d->m_autoSelGroup = new QGroupBox( 1, Horizontal, i18n("Auto-Selection"), this);
+    d->m_autoSelGroup = new QGroupBox( 1, Horizontal, i18n("Auto-Selection"), frame);
 
     QHBox *hbox       = new QHBox(d->m_autoSelGroup);
     d->m_cbAutoSel    = new QCheckBox( i18n("Active on"), hbox );
@@ -240,7 +246,7 @@ Previewer::Previewer(QWidget *parent, const char *name )
     left->addWidget(d->m_autoSelGroup);
 
     /* Labels for the dimension */
-    QGroupBox *gbox = new QGroupBox( 1, Horizontal, i18n("Selection"), this, "GROUPBOX" );
+    QGroupBox *gbox = new QGroupBox( 1, Horizontal, i18n("Selection"), frame, "GROUPBOX" );
 
     QLabel *l2 = new QLabel( i18n("width - mm" ), gbox );
     QLabel *l3 = new QLabel( i18n("height - mm" ), gbox );
