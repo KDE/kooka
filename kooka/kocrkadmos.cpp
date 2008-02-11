@@ -34,6 +34,9 @@
 #include <qmap.h>
 #include <qbuttongroup.h>
 #include <qradiobutton.h>
+#include <qcombobox.h>
+#include <qcheckbox.h>
+#include <qstringlist.h>
 
 #include <kapplication.h>
 #include <kconfig.h>
@@ -43,16 +46,12 @@
 #include <kanimwidget.h>
 #include <kseparator.h>
 #include <kmessagebox.h>
+#include <kstandarddirs.h>
 
 #include "resource.h"
 #include "ksaneocr.h"  // TODO: Really needed?
 #include "kocrkadmos.h"
 #include "kocrkadmos.moc"
-
-#include <kscanslider.h>
-#include <qcheckbox.h>
-#include <kstandarddirs.h>
-#include <qstringlist.h>
 
 
 /* defines for konfig-reading */

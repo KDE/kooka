@@ -23,10 +23,10 @@
 #include <qlineedit.h>
 #include <qcombobox.h>
 
-#include <kscanslider.h>
 #include <klocale.h>
 #include <kdebug.h>
 
+#include "kscancontrols.h"
 #include "gammadialog.h"
 
 GammaDialog::GammaDialog( QWidget *parent ) :

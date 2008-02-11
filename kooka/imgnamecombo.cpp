@@ -35,8 +35,9 @@
 #include <klocale.h>
 #include <kfiletreebranch.h>
 
+#include "imgsaver.h"
+
 #include "imgnamecombo.h"
-#include "img_saver.h"
 
 ImageNameCombo::ImageNameCombo( QWidget *parent )
    : KComboBox( parent )

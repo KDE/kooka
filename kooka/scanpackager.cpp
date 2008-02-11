@@ -28,7 +28,7 @@
 
 #include "scanpackager.h"
 #include "resource.h"
-#include "img_saver.h"
+#include "imgsaver.h"
 #include "kookaimage.h"
 #include "kookaimagemeta.h"
 #include "previewer.h"

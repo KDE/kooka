@@ -24,25 +24,15 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef __IMG_SAVER_H__
-#define __IMG_SAVER_H__
+#ifndef __IMGSAVER_H__
+#define __IMGSAVER_H__
+
 #include <qobject.h>
-#include <qwidget.h>
-#include <qlabel.h>
-#include <qmemarray.h>
-#include <qstring.h>
-#include <qimage.h>
-#include <stdlib.h>
-#include <qdialog.h>
-#include <qpushbutton.h>
-#include <qcombobox.h>
-#include <qcheckbox.h>
-#include <qlistbox.h>
-#include <qmap.h>
-#include <kdialogbase.h>
+
 #include <kurl.h>
 
 
+#define OP_FILE_GROUP      "Files"
 #define OP_FILE_ASK_FORMAT "AskForSaveFormat"
 #define OP_ASK_FILENAME    "AskForFilename"
 #define OP_FORMAT_HICOLOR  "HiColorSaveFormat"
@@ -53,8 +43,7 @@
 #define OP_PREVIEW_GROUP   "ScanPreview"
 #define OP_PREVIEW_FILE    "PreviewFile"
 #define OP_PREVIEW_FORMAT  "PreviewFormat"
-#define OP_FILE_GROUP      "Files"
-
+#define OP_ONLY_REC_FMT    "OnlyRecommended"
 
 /**
  *  enum ImgSaveStat:
@@ -92,47 +81,6 @@ typedef enum {
 
 
 class KookaImage;
-/**
- *  Class FormatDialog:
- *  Asks the user for the image-Format and gives help for
- *  selecting it.
- **/
-
-class FormatDialog:public KDialogBase
-{
-   Q_OBJECT
-public:
-   FormatDialog( QWidget *parent, const QString&, const char * );
-
-
-   QString      getFormat( ) const;
-   QCString      getSubFormat( ) const;
-   QString      errorString( ImgSaveStat stat );
-
-   bool         askForFormat( ) const
-      { return( ! cbDontAsk->isChecked()); }
-
-public slots:
-    void        setSelectedFormat( QString );
-
-
-protected slots:
-   void 	showHelp( const QString& item );
-
-private:
-
-   void		check_subformat( const QString & format );
-   void 	buildHelp( void );
-   void 	readConfig( void );
-
-   QMap<QString, QString> 	format_help;
-   QComboBox   	*cb_subf;
-   QListBox    	*lb_format;
-   QLabel      	*l_help;
-   QLabel	*l2;
-   QCheckBox    *cbRemember;
-   QCheckBox    *cbDontAsk;
-};
 
 /**
  *  Class ImgSaver:
@@ -142,7 +90,8 @@ private:
  *  and cares for database entries (later ;)
  **/
 
-class ImgSaver:public QObject {
+class ImgSaver : public QObject
+{
    Q_OBJECT
 public:
 	/**
@@ -179,12 +128,13 @@ public:
    /* static function that returns the extension of an url */
    static QString extension( const KURL& );
 
+   static QString picTypeAsString(picType type);
+
 public slots:
    ImgSaveStat saveImage( QImage *image );
    ImgSaveStat saveImage( QImage *image, const KURL& filename, const QString& imgFormat );
 
 private:
-   QString 	picTypeAsString( picType type ) const;
    QString      findFormat( picType type );
    QString      findSubFormat( QString format );
    void		createDir( const QString& );
@@ -195,14 +145,11 @@ private:
    void	        readConfig( void );
    QString      startFormatDialog( picType );
 
-   // QStrList    all_formats;
    QString     	directory;    // dir where the image should be saved
    QString     	last_file;
    QCString   	subformat;
    QCString    	last_format;
    bool	       	ask_for_format;
-
-   // QDict<QString> formats;
 };
 
 #endif

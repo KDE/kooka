@@ -1,4 +1,4 @@
-/* This file is part of the KDE Project
+/* This file is part of the KDE Project			-*- mode:c++; -*-
    Copyright (C) 1999 Klaas Freitag <freitag@suse.de>
 
    This library is free software; you can redistribute it and/or

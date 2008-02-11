@@ -18,7 +18,7 @@
 */
 
 #include "scansourcedialog.h"
-#include "kscanslider.h"
+#include "kscancontrols.h"
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -45,7 +45,7 @@ extern "C"{
 #endif
 
 
-ScanSourceDialog::ScanSourceDialog( QWidget *parent, const QStrList list, ADF_BEHAVE adfBehave )
+ScanSourceDialog::ScanSourceDialog( QWidget *parent, const QStrList list, AdfBehaviour adfBehave )
  : KDialogBase( parent, "SOURCE_DIALOG", true, i18n("Scan Source Selection"),
 		Ok|Cancel,Ok, true)
 {
@@ -163,6 +163,7 @@ int ScanSourceDialog::sourceAdfEntry( void ) const
    {
       QString q = sources->text( i );
 
+// TODO: this enables advanced ADF options, not implemented yet
 #if 0
       if( q == "ADF" || q == SANE_NAME_DOCUMENT_FEEDER )
          return( i );

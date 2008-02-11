@@ -17,7 +17,9 @@
    Boston, MA 02110-1301, USA.
 */
 
+#include <unistd.h>
 #include <stdlib.h>
+
 #include <qwidget.h>
 #include <qobject.h>
 #include <qasciidict.h>
@@ -34,11 +36,13 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-#include <unistd.h>
 #include "kgammatable.h"
 #include "kscandevice.h"
-#include "kscanslider.h"
+#include "kscancontrols.h"
 #include "kscanoptset.h"
+
+#include "kscanoption.h"
+#include "kscanoption.moc"
 
 
 // #define MIN_PREVIEW_DPI 20
@@ -48,6 +52,12 @@
 #undef MEM_DEBUG
 
 #undef APPLY_IN_SITU
+
+
+//  This defines the possible resolutions that will be shown by the combo.
+//  Only resolutions from this list falling within the scanner's allowed range
+//  will be included.
+static const int resList[] = { 50, 75, 100, 150, 200, 300, 600, 900, 1200, 1800, 2400, 4800, 9600, 0 };
 
 
 
@@ -117,7 +127,6 @@ bool KScanOption::initOption( const QCString& new_name )
 
    if( desc )
    {
-  		
 	/* Gamma-Table - initial values */
 	gamma = 0; /* marks as unvalid */	
 	brightness = 0;
@@ -129,7 +138,7 @@ bool KScanOption::initOption( const QCString& new_name )
   	{
   	    case SANE_TYPE_INT:
   	    case SANE_TYPE_FIXED:
-	    case SANE_TYPE_STRING:  		
+	    case SANE_TYPE_STRING:		
  		buffer = allocBuffer( desc->size );
 	    break;
     	    case SANE_TYPE_BOOL:
@@ -256,7 +265,7 @@ const KScanOption& KScanOption::operator= (const KScanOption& so )
 
 void KScanOption::slWidgetChange( const QCString& t )
 {
-    kdDebug(29000) << "Received WidgetChange for " << getName() << " (const QCString&)" << endl;
+    //kdDebug(29000) << k_funcinfo << "received WidgetChange for " << getName() << endl;
     set( t );
     emit( guiChange( this ) );
     // emit( optionChanged( this ));
@@ -264,12 +273,11 @@ void KScanOption::slWidgetChange( const QCString& t )
 
 void KScanOption::slWidgetChange( void )
 {
-    kdDebug(29000) << "Received WidgetChange for " << getName() << " (void)" << endl;
+    //kdDebug(29000) << k_funcinfo << "received WidgetChange for " << getName() << endl;
     /* If Type is bool, the widget is a checkbox. */
-    if( type() == BOOL )
+    if( type() == KScanOption::Bool )
     {
 	bool b = ((QCheckBox*) internal_widget)->isChecked();
-	kdDebug(29000) << "Setting bool: " << b << endl;
 	set( b );
     }
     emit( guiChange( this ) );
@@ -279,61 +287,59 @@ void KScanOption::slWidgetChange( void )
 
 void KScanOption::slWidgetChange( int i )
 {
-    kdDebug(29000) << "Received WidgetChange for " << getName() << " (int)" << endl;
+    //kdDebug(29000) << k_funcinfo << "received WidgetChange for " << getName() << endl;
     set( i );
     emit( guiChange( this ) );
     // emit( optionChanged( this ));
 }
 
+// TODO: eliminate redundant 'so' parameter, see comment below!
 /* this slot is called on a widget change, if a widget was created.
  * In normal case, it is internally connected, so the param so and
  * this are equal !
  */
 void KScanOption::slRedrawWidget( KScanOption *so )
 {
-  // qDebug( "Checking widget %s", (const char*) so->getName());
-  int     help = 0;
-  QString string;
+    int i = 0;
+    QWidget *w = so->widget();
+    QString string;
 	
-  QWidget *w = so->widget();
-	
-  if( so->valid() && w && so->getBuffer() )
+    if (!so->valid() || w==NULL || so->getBuffer()==NULL) return;
+
+    switch (so->type())
     {
-      switch( so->type( ) )
-	{
-	case BOOL:
-	  if( so->get( &help ))
-	    ((QCheckBox*) w)->setChecked( (bool) help );
-	  /* Widget Type is ToggleButton */
-	  break;
-	case SINGLE_VAL:
- 	 			/* Widget Type is Entry-Field - not implemented yet */
- 	 			
-	  break;
-	case RANGE:
- 	 	  		/* Widget Type is Slider */
-	  if( so->get( &help ))
-	    ((KScanSlider*)w)->slSetSlider( help );
-				 	 	  		
-	  break;
-	case GAMMA_TABLE:
- 	 	  		/* Widget Type is GammaTable */
-	  // w = new QSlider( parent, "AUTO_GAMMA" );
-	  break;
-	case STR_LIST:	 		
-	  // w = comboBox( parent, text );
-	  ((KScanCombo*)w)->slSetEntry( so->get() ); 	  		
- 	 	  		/* Widget Type is Selection Box */
-	  break;
-	case STRING:
-	  // w = entryField( parent, text );
-	  ((KScanEntry*)w)->slSetEntry( so->get() ); 	  	 	
- 	  	 		/* Widget Type is Selection Box */
-	  break;
-	default:
- 	  			// w  = 0;
-	  break;
-	}
+case KScanOption::Bool:					/* Widget Type is Toggle Button */
+        if (so->get(&i)) static_cast<QCheckBox *>(w)->setChecked((bool) i);
+        break;
+
+case KScanOption::SingleValue: 	 			/* Widget Type is Entry Field */
+        break;						/* not implemented yet */
+
+case KScanOption::Range: 	 	  		/* Widget Type is Slider */
+        if (so->get(&i)) static_cast<KScanSlider *>(w)->slSetSlider(i);
+        break;
+
+case KScanOption::Resolution: 	 	  		/* Widget Type is Resolution Combo */
+        static_cast<KScanCombo *>(w)->slSetEntry(so->get());
+        break;
+
+case KScanOption::GammaTable: 	 	  		/* Widget Type is Gamma Table */
+        break;
+
+case KScanOption::StringList:				/* Widget Type is Selection Box */
+        static_cast<KScanCombo *>(w)->slSetEntry(so->get());
+        break;
+
+case KScanOption::String:				/* Widget Type is String */
+        static_cast<KScanEntry *>(w)->slSetEntry(so->get());
+        break;
+
+case KScanOption::File: 	  	 		/* Widget Type is File */
+        static_cast<KScanFileRequester *>(w)->slSetEntry(so->get());
+        break;
+
+default:
+        break;
     }
 }
 
@@ -349,7 +355,7 @@ void KScanOption::slReload( void )
 		
    if( widget() )
    {
-      kdDebug(29000) << "constraint is " << desc->cap << endl;
+       //kdDebug(29000) << "constraint is " << desc->cap << endl;
       if( !active() )
 	 kdDebug(29000) << desc->name << " is not active now" << endl;
 
@@ -404,7 +410,7 @@ void KScanOption::slReload( void )
 	    kdDebug(29000) << "ERROR: Cant get value for " << getName() << ": " << sane_strstatus( sane_stat ) << endl;
 	 } else {
 	    buffer_untouched = false;
-	    kdDebug(29000) << "Setting buffer untouched to FALSE" << endl;
+	    //kdDebug(29000) << "Setting buffer untouched to FALSE" << endl;
 	 }
       }
    }
@@ -464,53 +470,58 @@ bool KScanOption::softwareSetable( void )
 }
 
 
-KSANE_Type KScanOption::type( void ) const
+KScanOption::WidgetType KScanOption::type() const
 {
-   KSANE_Type ret = INVALID_TYPE;
+    KScanOption::WidgetType ret = KScanOption::Invalid;
 	
-   if( valid() )
-   {
-      switch( desc->type )
-      {	
-	 case SANE_TYPE_BOOL:
-	    ret = BOOL;
-	    break;
-	 case SANE_TYPE_INT:
-	 case SANE_TYPE_FIXED:
-	    if( desc->constraint_type == SANE_CONSTRAINT_RANGE )
+    if (valid())
+    {
+        switch (desc->type)
+        {	
+case SANE_TYPE_BOOL:
+            ret = KScanOption::Bool;
+            break;
+
+case SANE_TYPE_INT:
+case SANE_TYPE_FIXED:
+            if (desc->constraint_type == SANE_CONSTRAINT_RANGE)
 	    {
-	       /* FIXME ! Dies scheint nicht wirklich so zu sein */
-	       if( desc->size == sizeof( SANE_Word ))
-		  ret = RANGE;
-	       else
-		  ret = GAMMA_TABLE;
+                if (desc->unit==SANE_UNIT_DPI) ret = KScanOption::Resolution;
+                else
+                {
+                    /* FIXME ! Dies scheint nicht wirklich so zu sein */
+                    /* in other words: This does not really seem to be the case */
+                    if (desc->size==sizeof(SANE_Word)) ret = KScanOption::Range;
+                    else ret = KScanOption::GammaTable;
+                }
+            }
+	    else if(desc->constraint_type==SANE_CONSTRAINT_NONE)
+	    {
+                ret = KScanOption::SingleValue;
 	    }
-	    else if( desc->constraint_type == SANE_CONSTRAINT_NONE )
+	    else if (desc->constraint_type==SANE_CONSTRAINT_WORD_LIST)
 	    {
-	       ret = SINGLE_VAL;
-	    }
-	    else if( desc->constraint_type == SANE_CONSTRAINT_WORD_LIST )
-	    {
-		ret = STR_LIST;
-		// ret = GAMMA_TABLE;
+		ret = KScanOption::StringList;
 	    }
 	    else
 	    {
-	       ret = INVALID_TYPE;
+                ret = KScanOption::Invalid;
 	    }
 	    break;
-	 case SANE_TYPE_STRING:
-	    if( desc->constraint_type == SANE_CONSTRAINT_STRING_LIST )
-	       ret = STR_LIST;
-	    else
-	       ret = STRING;
+
+case SANE_TYPE_STRING:
+            if (QCString(desc->name)=="filename") ret = KScanOption::File;
+            else if (desc->constraint_type==SANE_CONSTRAINT_STRING_LIST) ret = KScanOption::StringList;
+	    else ret = KScanOption::String;
 	    break;
-	 default:
-	    ret = INVALID_TYPE;
+
+default:    ret = KScanOption::Invalid;
 	    break;
-      }
-   }
-   return( ret ); 	
+        }
+    }
+
+    //kdDebug(29000) << k_funcinfo << "for SANE type " << (desc ? desc->type : -1) << " returning " << ret << endl;
+    return (ret);
 }
 
 
@@ -571,9 +582,7 @@ bool KScanOption::set( int val )
       applyVal();
 #endif
 
-#if 0
-      emit( optionChanged( this ));
-#endif
+      //emit( optionChanged( this ));
    }
 
    return( ret );
@@ -637,9 +646,7 @@ bool KScanOption::set( double val )
 #ifdef APPLY_IN_SITU
       applyVal();
 #endif
-#if 0
-      emit( optionChanged( this ));
-#endif
+      //emit( optionChanged( this ));
    }
 
    return( ret );
@@ -712,9 +719,7 @@ bool KScanOption::set( int *val, int size )
 #ifdef APPLY_IN_SITU
 	applyVal();
 #endif
-#if 0
-	emit( optionChanged( this ));
-#endif
+	//emit( optionChanged( this ));
     }
 
     return( ret );
@@ -794,9 +799,7 @@ bool KScanOption::set( const QCString& c_string )
 #ifdef APPLY_IN_SITU
       applyVal();
 #endif
-#if 0
-      emit( optionChanged( this ));
-#endif
+      //emit( optionChanged( this ));
    }
    kdDebug(29000) << "Returning " << ret << endl;
    return( ret );
@@ -851,9 +854,7 @@ bool KScanOption::set( KGammaTable *gt )
 #ifdef APPLY_IN_SITU
       applyVal();
 #endif
-#if 0
-      emit( optionChanged( this ));
-#endif
+      //emit( optionChanged( this ));
    }
 
    return( ret );
@@ -938,7 +939,7 @@ QCString KScanOption::get( void ) const
 
    /* Handle gamma-table correctly */
    ;
-   if( type() == GAMMA_TABLE )
+   if( type() == KScanOption::GammaTable )
    {
       retstr.sprintf( "%d, %d, %d", gamma, brightness, contrast );
    }
@@ -961,37 +962,55 @@ bool KScanOption::get( KGammaTable *gt ) const
 }
 
 
-QStrList KScanOption::getList( ) const
+
+QStrList KScanOption::getList() const
 {
-   if( ! desc ) return( false );
-   const char	**sstring = 0;
-   QStrList strList;
+    if (desc==NULL) return (false);
+    const char **sstring = NULL;
+    QStrList strList;
 
-   if( desc->constraint_type == SANE_CONSTRAINT_STRING_LIST ) {
-      sstring =  (const char**) desc->constraint.string_list;
+    if (desc->constraint_type==SANE_CONSTRAINT_STRING_LIST)
+    {
+        sstring = (const char **)desc->constraint.string_list;
 
-      while( *sstring )
-      {
-	 // qDebug( "This is in the stringlist: %s", *sstring );
-	 strList.append( *sstring );
-	 sstring++;
-      }
+        while (*sstring!=NULL)
+        {
+            strList.append(*sstring);
+            sstring++;
+        }
    }
-   if( desc->constraint_type == SANE_CONSTRAINT_WORD_LIST ) {
-      const SANE_Int *sint =  desc->constraint.word_list;
-      int amount_vals = *sint; sint ++;
-      QString s;
+   else if (desc->constraint_type==SANE_CONSTRAINT_WORD_LIST)
+   {
+       const SANE_Int *sint = desc->constraint.word_list;
+       int amount_vals = *sint;
+       sint++;
+       QString s;
 
-      for( int i=0; i < amount_vals; i++ ) {
-	 if( desc->type == SANE_TYPE_FIXED )
-	    s.sprintf( "%f", SANE_UNFIX(*sint) );
-	 else
-	    s.sprintf( "%d", *sint );
-	 sint++;
-	 strList.append( s.local8Bit() );
-      }
+       for (int i = 0; i<amount_vals; i++)
+       {
+           if (desc->type==SANE_TYPE_FIXED) s.sprintf("%f",SANE_UNFIX(*sint));
+           else s.sprintf("%d",*sint);
+           sint++;
+           strList.append(s.local8Bit());
+       }
    }
-   return( strList );
+   else if (desc->constraint_type==SANE_CONSTRAINT_RANGE && type()==KScanOption::Resolution)
+   {
+       double min,max,q;
+       int imin,imax;
+       getRange( &min, &max, &q );
+       imin = static_cast<int>(min);
+       imax = static_cast<int>(max);
+
+       for (const int *ip = resList; *ip!=0; ++ip)
+       {
+           if (*ip<imin) continue;
+           if (*ip>imax) continue;
+           strList.append(QString::number(*ip).ascii());
+       }
+   }
+
+   return (strList);
 }
 
 
@@ -1060,118 +1079,124 @@ bool KScanOption::getRange( double *min, double *max, double *q ) const
    return( ret );
 }
 
+
+
 QWidget *KScanOption::createWidget( QWidget *parent, const QString& w_desc,
                                     const QString& tooltip )
 {
-  QStrList list;
-  if( ! valid() )
-  {
-     kdDebug(29000) << "The option is not valid!" << endl;
-     return( 0 );
-  }
-  QWidget *w = 0;
-  /* free the old widget */
-  delete internal_widget;
-  internal_widget = 0;
- 	
-  /* check for text */
-  QString text = w_desc;
-  if( text.isEmpty() && desc ) {
-    text = QString::fromLocal8Bit( desc->title );
-  }
- 	
- 	
-  switch( type( ) )
+    QStrList list;
+    if (!valid())
     {
-    case BOOL:
-      /* Widget Type is ToggleButton */
-      w = new  QCheckBox( i18n(text.utf8()), parent, "AUTO_TOGGLE_BUTTON" );
-      connect( w, SIGNAL(clicked()), this,
-	       SLOT(slWidgetChange()));
-      break;
-    case SINGLE_VAL:
-      /* Widget Type is Entry-Field */
-      w = 0; // new QEntryField(
-      kdDebug(29000) << "can not create widget for SINGLE_VAL!" << endl;
-      break;
-    case RANGE:
-      /* Widget Type is Slider */
-      w = KSaneSlider( parent, text );
-      break;
-    case GAMMA_TABLE:
-      /* Widget Type is Slider */
-      // w = KSaneSlider( parent, text );
-      kdDebug(29000) << "can not create widget for GAMMA_TABLE!" << endl;
-      w = 0; // No widget, needs to be a set !
-      break;
-    case STR_LIST:	 		
-      w = comboBox( parent, text );
-      /* Widget Type is Selection Box */
-      break;
-    case STRING:
-      w = entryField( parent, text );
-      /* Widget Type is Selection Box */
-      break;
-    default:
-       kdDebug(29000) << "returning zero for default widget creation!" << endl;
-      w  = 0;
-      break;
+        kdDebug(29000) << "The option is not valid!" << endl;
+	return (NULL);
+    }
+
+    delete internal_widget; internal_widget = NULL;	/* free the old widget */
+ 	
+    text = w_desc;					/* check for text */
+    if (text.isEmpty() && desc!=NULL) text = QString::fromLocal8Bit( desc->title );
+    if (type()!=KScanOption::Bool) text += ":";
+
+    kdDebug(29000) << k_funcinfo << "type=" << type() << " text=[" << text << "]" << endl;
+ 	
+    QWidget *w = NULL;
+    switch (type())
+    {
+case KScanOption::Bool:						/* Widget Type is ToggleButton */
+	w = createToggleButton( parent, text );
+	break;
+
+case KScanOption::SingleValue:					/* Widget Type is Entry-Field */
+	kdDebug(29000) << k_funcinfo << "SingleValue not implemented yet" << endl;
+	break;
+
+case KScanOption::Range:						/* Widget Type is Slider */
+	w = createSlider( parent, text );
+	break;
+
+case KScanOption::Resolution:					/* Widget Type is Resolution */
+	w = createComboBox( parent, text );
+	break;
+
+case KScanOption::GammaTable:					/* Widget Type is Gamma Table */
+	kdDebug(29000) << k_funcinfo << "GammaTable not implemented here" << endl;
+	break;						// No widget, needs to be a set !
+
+case KScanOption::StringList:	 		
+	w = createComboBox( parent, text );		/* Widget Type is Selection Box */
+	break;
+
+case KScanOption::String:
+	w = createEntryField( parent, text );		/* Widget Type is String Entry */
+	break;
+
+case KScanOption::File:
+	w = createFileField( parent, text );		/* Widget Type is Filename */
+        break;
+
+default:
+	kdDebug(29000) << k_funcinfo << "cannot create widget for unknown type " << type() << endl;
+	break;
     }
  	
-  if( w )
+    if (w!=NULL)
     {
-      internal_widget = w;
-      connect( this, SIGNAL( optionChanged( KScanOption*)),
-	       SLOT( slRedrawWidget( KScanOption* )));
-      QString tt = tooltip;
-      if( tt.isEmpty() && desc )
-	tt = QString::fromLocal8Bit( desc->desc );
- 			
-      if( !tt.isEmpty() )
-	QToolTip::add( internal_widget, i18n(tt.utf8()) );
+        internal_widget = w;
+	connect(this, SIGNAL(optionChanged(KScanOption *)),
+		SLOT(slRedrawWidget(KScanOption *)));
+
+	QString tt = tooltip;
+	if (tt.isEmpty() && desc!=NULL) tt = QString::fromLocal8Bit( desc->desc );
+	if (!tt.isEmpty()) QToolTip::add(internal_widget, i18n(tt.utf8()));
     }
  	
-  /* Check if option is active, setEnabled etc. */
-  slReload();
-  if( w ) slRedrawWidget( this );
-  return( w );
+    slReload();						/* Check if option is active, setEnabled etc. */
+    if (w!=NULL) slRedrawWidget(this);
+    return (w);
 }
 
 
-QWidget *KScanOption::comboBox( QWidget *parent, const QString& text )
+QWidget *KScanOption::createToggleButton( QWidget *parent, const QString& text )
 {
-  QStrList list = getList();
-
-  KScanCombo *cb = new KScanCombo( parent, text, list);
-
-  connect( cb, SIGNAL( valueChanged( const QCString& )), this,
-	   SLOT( slWidgetChange( const QCString& )));
-
-  return( cb );
+    QWidget *cb = new QCheckBox( i18n(text.utf8()), parent);
+    connect( cb, SIGNAL(clicked()), SLOT(slWidgetChange()));
+    return (cb);
 }
 
 
-QWidget *KScanOption::entryField( QWidget *parent, const QString& text )
+QWidget *KScanOption::createComboBox( QWidget *parent, const QString& text )
 {
-  KScanEntry *ent = new KScanEntry( parent, text );
-  connect( ent, SIGNAL( valueChanged( QCString )), this,
-	   SLOT( slWidgetChange( QCString )));
-	
-  return( ent );
+    QStrList list = getList();
+    KScanCombo *cb = new KScanCombo( parent, text, list);
+    connect(cb, SIGNAL(valueChanged(const QCString&)), SLOT(slWidgetChange(const QCString&)));
+    return (cb);
 }
 
 
-QWidget *KScanOption::KSaneSlider( QWidget *parent, const QString& text )
+QWidget *KScanOption::createEntryField( QWidget *parent, const QString& text )
 {
-  double min, max, quant;
-  getRange( &min, &max, &quant );
+    KScanEntry *ent = new KScanEntry( parent, text );
+    connect(ent, SIGNAL(valueChanged(const QCString &)), SLOT(slWidgetChange(const QCString &)));
+    return (ent);
+}
 
-  KScanSlider *slider = new KScanSlider( parent, text, min, max );
-  /* Connect to the options change Slot */
-  connect( slider, SIGNAL( valueChanged(int)), this,
-	   SLOT( slWidgetChange(int)));
 
-  return( slider );
+QWidget *KScanOption::createSlider( QWidget *parent, const QString& text )
+{
+    double min, max, quant;
+    getRange( &min, &max, &quant );
+
+    KScanSlider *slider = new KScanSlider( parent, text, min, max,true );
+    connect(slider, SIGNAL(valueChanged(int)), SLOT(slWidgetChange(int)));
+    return (slider);
+}
+
+
+QWidget *KScanOption::createFileField( QWidget *parent, const QString& text )
+{
+    KScanFileRequester *req = new KScanFileRequester(parent,text);
+    connect( req, SIGNAL(valueChanged(const QCString &)), SLOT(slWidgetChange(const QCString &)));
+    return (req);
 }
 
 
@@ -1219,4 +1244,11 @@ bool KScanOption::applyVal( void )
    }
    return( res );
 }	
-#include "kscanoption.moc"
+
+
+QLabel *KScanOption::getLabel(QWidget *parent) const
+{
+    QString t = text;
+    if (internal_widget->isA("QCheckBox")) t = QString::null;
+    return (new QLabel(t,parent));
+}

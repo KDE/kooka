@@ -26,7 +26,7 @@
 
 
 #include "kookapref.h"
-#include "img_saver.h"
+#include "imgsaver.h"
 
 #include <klocale.h>
 #include <kiconloader.h>
@@ -42,12 +42,12 @@
 #include <qgrid.h>
 #include <qcheckbox.h>
 #include <qstringlist.h>
+#include <qlabel.h>
 
 #include <devselector.h>
 #include "config.h"
 #include "thumbview.h"
 #include "imageselectline.h"
-#include "kscanslider.h"
 #include "ksaneocr.h"
 
 #include <kmessagebox.h>

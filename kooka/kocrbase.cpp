@@ -48,7 +48,6 @@
 #include "ksaneocr.h"
 #include "kookaimage.h"
 
-#include <kscanslider.h>
 #include <kstandarddirs.h>
 #include <kfilemetainfo.h>
 #include <ksconfig.h>

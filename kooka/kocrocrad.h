@@ -32,7 +32,6 @@
 #include <qimage.h>
 #include <qstring.h>
 
-#include <kscanslider.h>
 #include <kanimwidget.h>
 
 #include "kocrbase.h"

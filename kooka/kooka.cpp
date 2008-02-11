@@ -23,42 +23,28 @@
  *  without including the source code for Qt in the source distribution.   *
  *                                                                         *
  ***************************************************************************/
-#include "kooka.h"
-#include "kookaview.h"
-#include "resource.h"
-
-#include "kookapref.h"
-#include "imgprintdialog.h"
-
-#include <qlineedit.h>
-#include <qprinter.h>
-#include <qprintdialog.h>
-#include <qpainter.h>
-#include <qpaintdevicemetrics.h>
 
 #include <kglobal.h>
 #include <klocale.h>
 #include <kdebug.h>
 #include <kiconloader.h>
-#include <kmenubar.h>
-#include <kaccel.h>
-#include <kio/netaccess.h>
-#include <kfiledialog.h>
-#include <kconfig.h>
+#include <kapplication.h>
 #include <kprinter.h>
 #include <kstatusbar.h>
 #include <kurl.h>
-#include <kurlrequesterdlg.h>
-#include <qstrlist.h>
 #include <kedittoolbar.h>
 #include <kmessagebox.h>
-#include <kdockwidget.h>
-#include <kparts/partmanager.h>
 #include <kstdaccel.h>
 #include <kaction.h>
 #include <kstdaction.h>
-#include <qiconset.h>
 #include <kurldrag.h>
+
+#include "kookapref.h"
+#include "formatdialog.h"
+#include "kookaview.h"
+
+#include "kooka.h"
+
 
 #define DOCK_SIZES "DockSizes"
 
@@ -431,9 +417,10 @@ void Kooka::slRotate180( void )
 
 void Kooka::slEnableWarnings( )
 {
-   KMessageBox::information (this, i18n("All messages and warnings will now be shown."));
-   KMessageBox::enableAllMessages();
-   kapp->config()->reparseConfiguration();
+    KMessageBox::information(this,i18n("All messages and warnings will now be shown."));
+    KMessageBox::enableAllMessages();
+    FormatDialog::forgetRemembered();
+    kapp->config()->reparseConfiguration();
 }
 
 

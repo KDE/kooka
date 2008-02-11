@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSCANSLIDER_H
-#define KSCANSLIDER_H
+#ifndef KSCANCONTROLS_H
+#define KSCANCONTROLS_H
 
 #include <qframe.h>
 #include <qstrlist.h>
@@ -26,6 +26,9 @@
 #include <qcombobox.h>
 #include <qslider.h>
 #include <qlineedit.h>
+
+#include <kurlrequester.h>
+
 /**
   *@author Klaas Freitag
   */
@@ -33,6 +36,7 @@
 class QPushButton;
 class QSpinBox;
 class QLabel;
+
 
 /**
  * a kind of extended slider which has a spinbox beside the slider offering
@@ -106,15 +110,12 @@ private:
    QSpinBox     *m_spin;
    int          m_stdValue;
    QPushButton  *m_stdButt;
-   class KScanSliderPrivate;
-   KScanSliderPrivate *d;
-
 };
 
 /**
  * a entry field with a prefix text for description.
  */
-class KScanEntry : public QFrame
+class KScanEntry : public QHBox
 {
    Q_OBJECT
    Q_PROPERTY( QString text READ text WRITE slSetEntry )
@@ -157,10 +158,6 @@ private slots:
 
 private:
    QLineEdit 	*entry;
-
-   class KScanEntryPrivate;
-   KScanEntryPrivate *d;
-
 };
 
 
@@ -236,9 +233,60 @@ private:
     void createCombo( const QString& text );
    QComboBox	*combo;
    QStrList	combolist;
+};
 
-   class KScanComboPrivate;
-   KScanComboPrivate *d;
+
+
+
+
+
+
+/**
+ * a entry field with a prefix text for description.
+ */
+class KScanFileRequester : public QHBox
+{
+   Q_OBJECT
+   Q_PROPERTY( QString text READ text WRITE slSetEntry )
+
+public:
+   /**
+    * create a new entry field prepended by text.
+    * @param parent the parent widget
+    * @text the prefix text
+    */
+   KScanFileRequester( QWidget *parent, const QString& text );
+   // ~KScanFileRequester();
+
+   /**
+    * @return the current entry field contents.
+    */
+   QString text( ) const;
+
+public slots:
+   /**
+    * set the current text
+    * @param t the new string
+    */
+   void		slSetEntry( const QString& t );
+   /**
+    * enable or disable the text entry.
+    * @param b set enabled if true, else disabled.
+    */
+   void		setEnabled( bool b ){ if( entry) entry->setEnabled( b ); }
+
+protected slots:
+   void         slReturnPressed( void );
+
+signals:
+   void		valueChanged( const QCString& );
+   void         returnPressed( const QCString& );
+
+private slots:
+   void		slEntryChange( const QString& );
+
+private:
+   KURLRequester 	*entry;
 };
 
 #endif

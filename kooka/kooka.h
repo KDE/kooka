@@ -31,9 +31,6 @@
 #include <config.h>
 #endif
 
-#include <kapplication.h>
-#include <kmainwindow.h>
-#include <kdockwidget.h>
 #include <kparts/dockmainwindow.h>
 
 #define KOOKA_STATE_GROUP "State"

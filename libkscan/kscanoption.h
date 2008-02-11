@@ -1,4 +1,4 @@
-/* This file is part of the KDE Project
+/* This file is part of the KDE Project			-*- mode:c++; -*-
    Copyright (C) 2000 Klaas Freitag <freitag@suse.de>  
 
    This library is free software; you can redistribute it and/or
@@ -20,12 +20,7 @@
 #ifndef _KSCANOPTION_H_
 #define _KSCANOPTION_H_
 
-#include <qwidget.h>
-#include <qdict.h>
 #include <qobject.h>
-#include <qstrlist.h>
-#include <qsocketnotifier.h>
-#include <qdatastream.h>
 
 extern "C" {
 #include <sane/sane.h>
@@ -40,8 +35,8 @@ typedef enum { KSCAN_OK, KSCAN_ERROR, KSCAN_ERR_NO_DEVICE,
                KSCAN_RELOAD, KSCAN_CANCELLED, KSCAN_OPT_NOT_ACTIVE }
 KScanStat;
 
-typedef enum { INVALID_TYPE, BOOL, SINGLE_VAL, RANGE, GAMMA_TABLE, STR_LIST, STRING }
-KSANE_Type;
+
+class QLabel;
 
 class KGammaTable;
 
@@ -59,9 +54,23 @@ class KGammaTable;
 
 class KScanOption : public QObject
 {
-  Q_OBJECT
+    Q_OBJECT
 
 public:
+
+    enum WidgetType
+    {
+        Invalid,
+        Bool,
+        SingleValue,
+        Range,
+        GammaTable,
+        StringList,
+        String,
+        Resolution,
+        File
+    };
+
   /**
    * creates a new option object for the named option. After that, the
    * option is valid and contains the correct value retrieved from the
@@ -73,6 +82,7 @@ public:
    * creates a KScanOption from another
    **/
   KScanOption( const KScanOption& so );
+
   ~KScanOption();
 
    /**
@@ -111,10 +121,9 @@ public:
   bool softwareSetable();
 
    /**
-    * returns the type the option is. Type is one of
-    * INVALID_TYPE, BOOL, SINGLE_VAL, RANGE, GAMMA_TABLE, STR_LIST, STRING
+    * returns the type the option is.
     **/
-  KSANE_Type type( void ) const;
+  KScanOption::WidgetType type( void ) const;
 
    /**
     * set the option depending on the type
@@ -123,7 +132,7 @@ public:
   bool set( double val );
   bool set( int *p_val, int size );
   bool set( const QCString& );
-  bool set( bool b ){ if( b ) return(set( (int)(1==1) )); else return( set( (int) (1==0) )); }
+  bool set( bool b ){ return (set(b ? 1 : 0)); }
   bool set( KGammaTable  *gt );
 
    /**
@@ -152,6 +161,9 @@ public:
 			 const QString& w_desc = QString::null,
 			 const QString& tooltip = QString::null );
 
+    QLabel *getLabel(QWidget *parent) const;
+
+
   /* Operators */
   const KScanOption& operator= (const KScanOption& so );
 
@@ -168,8 +180,6 @@ public:
   QWidget     *widget( ) const { return( internal_widget ); }
   /**
    *  returns the type of the selected option.
-   *  This might be SINGLE_VAL, VAL_LIST, STR_LIST, GAMMA_TABLE,
-   *  RANGE or BOOL
    *
    *  You may use the information returned to decide, in which way
    *  the option is to set.
@@ -185,7 +195,7 @@ public:
 
    ### not implemented at all?
    **/
-  KSANE_Type typeToSet( const QCString& name );
+  //KScanOption::WidgetType typeToSet( const QCString& name );
 
   /**
    *  returns a string describing the unit of given the option.
@@ -194,7 +204,7 @@ public:
 
    ###  not implemented at all?
    **/
-  QString unitOf( const QCString& name );
+  //QString unitOf( const QCString& name );
 
 public slots:
   void       slRedrawWidget( KScanOption *so );
@@ -213,7 +223,10 @@ protected slots:
   void		  slWidgetChange( const QCString& );
   void		  slWidgetChange( int );
 	
-  signals:
+signals:
+
+
+// TODO: eliminate, this signal is not used and is never emit'ted!!!!!!!!
   /**
    *  Signal emitted if a option changed for different reasons.
    *  The signal should be connected by outside objects.
@@ -225,7 +238,7 @@ protected slots:
    *  a widget exists, it needs to be set to the new value.
    *  This is a more internal signal
    **/
-  void      optionSet( void );
+  //void      optionSet( void );
 
   /**
    *  Signal called when user changes a gui - element
@@ -237,12 +250,16 @@ private:
   bool       initOption( const QCString& new_name );
   void       *allocBuffer( long );
 
-  QWidget    *entryField ( QWidget *parent, const QString& text );
-  QWidget    *KSaneSlider( QWidget *parent, const QString& text );
-  QWidget    *comboBox   ( QWidget *parent, const QString& text );
+  QWidget    *createToggleButton( QWidget *parent, const QString& text );
+  QWidget    *createEntryField ( QWidget *parent, const QString& text );
+  QWidget    *createSlider( QWidget *parent, const QString& text );
+  QWidget    *createComboBox   ( QWidget *parent, const QString& text );
+  QWidget    *createFileField( QWidget *parent, const QString& text );
 	
   const      SANE_Option_Descriptor *desc;
   QCString    name;
+    QString text;
+
   void       *buffer;
   QWidget    *internal_widget;
   bool       buffer_untouched;
@@ -254,7 +271,6 @@ private:
    class KScanOptionPrivate;
    KScanOptionPrivate *d;
 };
-
 
 
 #endif

@@ -28,7 +28,7 @@
   *@author Klaas Freitag
   */
 
-typedef enum { ADF_OFF, ADF_SCAN_ALONG, ADF_SCAN_ONCE } ADF_BEHAVE;
+typedef enum { ADF_OFF, ADF_SCAN_ALONG, ADF_SCAN_ONCE } AdfBehaviour;
 
 class KScanCombo;
 class QRadioButton;
@@ -38,13 +38,13 @@ class ScanSourceDialog : public KDialogBase
 {
    Q_OBJECT
 public:
-   ScanSourceDialog( QWidget *parent, const QStrList, ADF_BEHAVE );
+   ScanSourceDialog( QWidget *parent, const QStrList, AdfBehaviour );
    ~ScanSourceDialog();
 
    // void 	fillWithSources( QStrList *list );
    QString 	getText( void ) const;
 
-   ADF_BEHAVE 	getAdfBehave( void ) const
+   AdfBehaviour 	getAdfBehave( void ) const
       { return( adf ); }
 
 
@@ -59,7 +59,7 @@ private:
    KScanCombo    *sources;
    QButtonGroup  *bgroup;
    QRadioButton  *rb0, *rb1;
-   ADF_BEHAVE    adf;
+   AdfBehaviour    adf;
    bool          adf_enabled;
 
    class ScanSourceDialogPrivate;

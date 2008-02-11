@@ -45,7 +45,7 @@
 
 #include "resource.h"
 #include "kocrocrad.h"
-#include <kscanslider.h>
+//#include <kscanslider.h>
 #include "kookaimage.h"
 #include "kookapref.h"
 #include <qvbox.h>

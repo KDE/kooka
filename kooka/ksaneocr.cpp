@@ -42,7 +42,7 @@
 
 #include <img_canvas.h>
 
-#include "img_saver.h"
+#include "imgsaver.h"
 #include "kadmosocr.h"
 #include "kocrbase.h"
 #include "kocrkadmos.h"

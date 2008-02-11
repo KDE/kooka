@@ -40,7 +40,7 @@
 #include <unistd.h>
 #include "kgammatable.h"
 #include "kscandevice.h"
-#include "kscanslider.h"
+#include "kscancontrols.h"
 #include "kscanoption.h"
 #include "kscanoptset.h"
 #include "devselector.h"
@@ -117,14 +117,15 @@ KScanOption *KScanDevice::getGuiElement( const QCString& name, QWidget *parent,
 					 const QString& desc,
 					 const QString& tooltip )
 {
-   if( name.isEmpty() ) return(0);
-   QWidget *w = 0;
-   KScanOption *so = 0;
+   if (name.isEmpty()) return (NULL);
+   if (!optionExists(name)) return (NULL);
 
    QCString alias = aliasName( name );
 
+   kdDebug(29000) << k_funcinfo << "for name=[" << name << "] desc=[" << desc << "] alias=[" << alias << "]" << endl;
+
    /* Check if already exists */
-   so = getExistingGuiElement( name );
+   KScanOption *so = getExistingGuiElement( name );
 
    if( so ) return( so );
 
@@ -136,7 +137,7 @@ KScanOption *KScanDevice::getGuiElement( const QCString& name, QWidget *parent,
       /** store new gui-elem in list of all gui-elements */
       gui_elements.append( so );
 
-      w = so->createWidget( parent, desc, tooltip );
+      QWidget *w = so->createWidget( parent, desc, tooltip );
       if( w )
       {
 	 connect( so,   SIGNAL( optionChanged( KScanOption* ) ),
@@ -1030,6 +1031,10 @@ KScanStat KScanDevice::acquire( const QString& filename )
 		emit( sigNewImage( &i, &info ));
 	     }
 	}
+        else
+        {
+            return KSCAN_ERR_PARAM;
+        }
     }
 
     return KSCAN_OK;
@@ -1116,6 +1121,12 @@ KScanStat KScanDevice::acquire_data( bool isPreview )
 	 kdDebug(29000) << "depth : " << sane_scan_param.depth << endl;
 	 kdDebug(29000) << "pixels_per_line : " << sane_scan_param.pixels_per_line << endl;
 	 kdDebug(29000) << "bytes_per_line : " << sane_scan_param.bytes_per_line << endl;
+
+         if( sane_scan_param.pixels_per_line == 0 || sane_scan_param.lines < 1 )
+         {
+             kdDebug(29000) << "ERROR: Acquiring empty picture !" << endl;
+             stat = KSCAN_ERR_EMPTY_PIC;
+         }
       }
       else
       {
@@ -1127,13 +1138,6 @@ KScanStat KScanDevice::acquire_data( bool isPreview )
    {
 	 stat = KSCAN_ERR_OPEN_DEV;
 	 kdDebug(29000) << "sane-start-Error: " << sane_strstatus( sane_stat ) << endl;
-   }
-
-
-   if( sane_scan_param.pixels_per_line == 0 || sane_scan_param.lines < 1 )
-   {
-      kdDebug(29000) << "ERROR: Acquiring empty picture !" << endl;
-      stat = KSCAN_ERR_EMPTY_PIC;
    }
 
    /* Create new Image from SANE-Parameters */

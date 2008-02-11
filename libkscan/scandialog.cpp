@@ -26,6 +26,7 @@
 #include <qsizepolicy.h>
 #include <qapplication.h>
 #include <qcheckbox.h>
+#include <qvbox.h>
 
 #include <kglobal.h>
 #include <klocale.h>

@@ -44,7 +44,6 @@
 #include "ksaneocr.h"  // TODO: Really needed?
 #include "kocrgocr.h"
 #include "kocrgocr.moc"
-#include <kscanslider.h>
 #include "kookaimage.h"
 #include "kookapref.h"
 #include <qvbox.h>

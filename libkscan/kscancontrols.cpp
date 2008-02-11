@@ -29,7 +29,16 @@
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kdebug.h>
-#include "kscanslider.h"
+#include <kurlrequester.h>
+#include <kimageio.h>
+
+#include "kscancontrols.h"
+#include "kscancontrols.moc"
+
+
+// TODO: a better way to implement these would be as a subclass of an abstract base
+// class.  May eliminate some of the switch'es in kscanoption.cpp!
+
 
 KScanSlider::KScanSlider( QWidget *parent, const QString& text,
 			  double min, double max, bool haveStdButt,
@@ -39,8 +48,32 @@ KScanSlider::KScanSlider( QWidget *parent, const QString& text,
      m_stdButt(0)
 {
     QHBoxLayout *hb = new QHBoxLayout( this );
-    l1 = new QLabel( i18n(text.utf8()), this, "AUTO_SLIDER_LABEL" );
-    hb->addWidget( l1,20 );
+
+    slider = new QSlider( (int) min, (int)max, 1, (int)min, QSlider::Horizontal, this, "AUTO_SLIDER_" );
+    slider->setTickmarks( QSlider::Below );
+    slider->setTickInterval( int(QMAX( (max-min)/10, 1 )) );
+    slider->setSteps( int(QMAX( (max-min)/20, 1) ), int(QMAX( (max-min)/10, 1) ) );
+    slider->setMinimumWidth( 140 );
+
+    /* create a spinbox for displaying the values */
+    m_spin = new QSpinBox( (int) min, (int) max,
+			   1, // step
+			   this );
+
+
+    /* make spin box changes change the slider */
+    connect( m_spin, SIGNAL(valueChanged(int)), this, SLOT(slSliderChange(int)));
+
+    /* Handle internal number display */
+    connect(slider, SIGNAL(valueChanged(int)), this, SLOT( slSliderChange(int) ));
+
+    /* set Value 0 to the widget */
+    slider->setValue( (int) min -1 );
+
+    /* Add to layout widget and activate */
+    hb->addWidget( slider, 36 );
+    hb->addSpacing( 4 );
+    hb->addWidget( m_spin, 0 );
 
     if( haveStdButt )
     {
@@ -53,39 +86,10 @@ KScanSlider::KScanSlider( QWidget *parent, const QString& text,
 		this, SLOT(slRevertValue()));
 
        QToolTip::add( m_stdButt,
-		      i18n( "Revert value back to its standard value %1" ).arg( stdValue ));
-       hb->addWidget( m_stdButt, 0 );
+		      i18n( "Reset this setting to its standard value, %1" ).arg( stdValue ));
        hb->addSpacing( 4 );
+       hb->addWidget( m_stdButt, 0 );
     }
-
-    slider = new QSlider( (int) min, (int)max, 1, (int)min, QSlider::Horizontal, this, "AUTO_SLIDER_" );
-    slider->setTickmarks( QSlider::Below );
-    slider->setTickInterval( int(QMAX( (max-min)/10, 1 )) );
-    slider->setSteps( int(QMAX( (max-min)/20, 1) ), int(QMAX( (max-min)/10, 1) ) );
-    slider->setMinimumWidth( 140 );
-    /* set a buddy */
-    l1->setBuddy( slider );
-
-    /* create a spinbox for displaying the values */
-    m_spin = new QSpinBox( (int) min, (int) max,
-			   1, // step
-			   this );
-
-
-    /* make spin box changes change the slider */
-    connect( m_spin, SIGNAL(valueChanged(int)), this, SLOT(slSliderChange(int)));
-
-    /* Handle internal number display */
-    // connect(slider, SIGNAL(valueChanged(int)), numdisp, SLOT( setNum(int) ));
-    connect(slider, SIGNAL(valueChanged(int)), this, SLOT( slSliderChange(int) ));
-
-    /* set Value 0 to the widget */
-    slider->setValue( (int) min -1 );
-
-    /* Add to layout widget and activate */
-    hb->addWidget( slider, 36 );
-    hb->addSpacing( 4 );
-    hb->addWidget( m_spin, 0 );
 
     hb->activate();
 
@@ -95,8 +99,6 @@ void KScanSlider::setEnabled( bool b )
 {
     if( slider )
 	slider->setEnabled( b );
-    if( l1 )
-	l1->setEnabled( b );
     if( m_spin )
 	m_spin->setEnabled( b );
     if( m_stdButt )
@@ -150,28 +152,18 @@ KScanSlider::~KScanSlider()
 /* ====================================================================== */
 
 KScanEntry::KScanEntry( QWidget *parent, const QString& text )
- : QFrame( parent )
+ : QHBox( parent )
 {
-    QHBoxLayout *hb = new QHBoxLayout( this );
-
-    QLabel *l1 = new QLabel( i18n(text.utf8()), this, "AUTO_ENTRYFIELD" );
-    hb->addWidget( l1,1 );
-
     entry = new QLineEdit( this, "AUTO_ENTRYFIELD_E" );
-    l1->setBuddy( entry );
     connect( entry, SIGNAL( textChanged(const QString& )),
 	     this, SLOT( slEntryChange(const QString&)));
     connect( entry, SIGNAL( returnPressed()),
 	     this,  SLOT( slReturnPressed()));
-
-    hb->addWidget( entry,3 );
-    hb->activate();
 }
 
 QString  KScanEntry::text( void ) const
 {
    QString str = QString::null;
-   // kdDebug(29000) << "entry is "<< entry << endl;
    if(entry)
    {
        str = entry->text();
@@ -246,18 +238,12 @@ KScanCombo::KScanCombo( QWidget *parent, const QString& text,
 
 void KScanCombo::createCombo( const QString& text )
 {
-    setSpacing( 12 );
-    setMargin( 2 );
-
-    (void) new QLabel( i18n(text.utf8()), this, "AUTO_COMBOLABEL" );
-
     combo = new QComboBox( this, "AUTO_COMBO" );
 
     connect( combo, SIGNAL(activated( const QString &)), this,
              SLOT( slComboChange( const QString &)));
     connect( combo, SIGNAL(activated( int )),
 	     this,  SLOT(slFireActivated(int)));
-
 }
 
 
@@ -320,4 +306,77 @@ void KScanCombo::slFireActivated( int i )
    emit( activated( i ));
 }
 
-#include "kscanslider.moc"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* ====================================================================== */
+
+KScanFileRequester::KScanFileRequester( QWidget *parent, const QString& text )
+ : QHBox( parent )
+{
+    entry = new KURLRequester( this );
+
+    QString fileSelector = "*.pnm *.PNM|PNM Image Files (*.pnm)\n";
+    fileSelector += KImageIO::pattern()+"\n";
+    fileSelector += i18n("*|All Files\n");
+    entry->setFilter(fileSelector);
+
+    connect( entry, SIGNAL( textChanged(const QString& )),
+	     SLOT( slEntryChange(const QString&)));
+    connect( entry, SIGNAL( returnPressed()),
+	     SLOT( slReturnPressed()));
+}
+
+QString  KScanFileRequester::text( void ) const
+{
+   QString str = QString::null;
+   // kdDebug(29000) << "entry is "<< entry << endl;
+   if(entry)
+   {
+       str = entry->url();
+      if( ! str.isNull() && ! str.isEmpty())
+      {
+	 kdDebug(29000) << "KScanFileRequester returns <" << str << ">" << endl;
+      }
+      else
+      {
+	 kdDebug(29000) << "KScanFileRequester:  nothing entered !" << endl;
+      }
+   }
+   else
+   {
+      kdDebug(29000) << "KScanFileRequester ERR: member var entry not defined!" << endl;
+   }
+   return ( str );
+}
+
+void KScanFileRequester::slSetEntry( const QString& t )
+{
+    if( t == entry->url() )
+	return;
+    /* Important to check value to avoid recursive signals ;) */
+
+    entry->setURL( t );
+}
+
+void KScanFileRequester::slEntryChange( const QString& t )
+{
+    emit valueChanged( QCString( t.latin1() ) );
+}
+
+void KScanFileRequester::slReturnPressed( void )
+{
+   QString t = text();
+   emit returnPressed( QCString( t.latin1()));
+}
