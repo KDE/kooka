@@ -86,16 +86,30 @@ QString KadmosDialog::ocrEngineName() const
 
 QString KadmosDialog::ocrEngineDesc() const
 {
-    return i18n("This version of Kooka was linked with the <I>KADMOS OCR/ICR engine</I>, a "
-                "commercial engine for optical character recognition.<P>"
-                "Kadmos is a product of <B>re Recognition AG</B><BR>"
-                "For more information about Kadmos OCR see "
-                "<A HREF=http://www.rerecognition.com>"
-                "http://www.rerecognition.com</A>");
+    return (KadmosDialog::engineDesc());
 }
 
 
-EngineError KadmosDialog::findClassifiers()
+QString KadmosDialog::engineDesc()
+{
+    return (i18n("<qt>"
+                 "<p>"
+                 "<b>Kadmos</b> is a commercial OCR/ICR library produced by reRecognition&nbsp;AG. "
+                 "<p>"
+#ifdef HAVE_KADMOS
+                 "This version of Kooka is configured to use the Kadmos engine."
+#else
+                 "This version of Kooka is not configured for Kadmos.  The Kadmos "
+                 "libraries need to be installed, and Kooka needs to be rebuilt with "
+                 "the '--with-kadmos' option."
+#endif
+                 "<p>"
+                 "See <a href=\"http://www.rerecognition.com\">www.rerecognition.com</a> "
+                 "for more information on Kadmos."));
+}
+
+
+KSaneOcr::EngineError KadmosDialog::findClassifiers()
 {
     findClassifierPath();
 
@@ -220,20 +234,20 @@ EngineError KadmosDialog::findClassifiers()
     if( m_handClassifier.count()+m_ttfClassifier.count()>0 )
     {
         /* There are classifiers */
-        return ENG_OK;
+        return KSaneOcr::ENG_OK;
     }
     else
     {
         /* Classifier are missing */
-        return ENG_DATA_MISSING;
+        return KSaneOcr::ENG_DATA_MISSING;
     }
 }
 
 
-EngineError KadmosDialog::findClassifierPath()
+KSaneOcr::EngineError KadmosDialog::findClassifierPath()
 {
     KStandardDirs stdDir;
-    EngineError err = ENG_OK;
+    KSaneOcr::EngineError err = KSaneOcr::ENG_OK;
 
     KConfig *conf = KGlobal::config ();
     KConfigGroupSaver gs( conf, CFG_GROUP_KADMOS );
@@ -258,10 +272,10 @@ EngineError KadmosDialog::findClassifierPath()
 }
 
 
-EngineError KadmosDialog::setupGui()
+KSaneOcr::EngineError KadmosDialog::setupGui()
 {
 
-    EngineError err = KOCRBase::setupGui();
+    KSaneOcr::EngineError err = KOCRBase::setupGui();
 
     // setupPreprocessing( addVBoxPage(   i18n("Preprocessing")));
     // setupSegmentation(  addVBoxPage(   i18n("Segmentation")));
@@ -306,7 +320,7 @@ EngineError KadmosDialog::setupGui()
     getAnimation(innerBox);
     // (void) new QWidget ( page );
 
-    if( err != ENG_OK )
+    if( err != KSaneOcr::ENG_OK )
     {
        enableFields(false);
        enableButton(User1, false );
@@ -329,7 +343,7 @@ EngineError KadmosDialog::setupGui()
                                    "OCR with KADMOS will not be possible!\n\n"
                                    "Change the OCR engine in the preferences dialog."),
                            i18n("Installation Error") );
-        err = ENG_BAD_SETUP;
+        err = KSaneOcr::ENG_BAD_SETUP;
     }
     else
         slFontChanged( 0 ); // Load machine print font language list

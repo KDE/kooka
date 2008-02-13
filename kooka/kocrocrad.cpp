@@ -79,17 +79,26 @@ QString ocradDialog::ocrEngineName() const
 
 QString ocradDialog::ocrEngineDesc() const
 {
-    return i18n("ocrad is a Free Software project "
-                "for optical character recognition.<p>"
-                "The author of ocrad is <b>Antonio Diaz</b><br>"
-                "For more information about ocrad see "
-                "<A HREF=\"http://www.gnu.org/software/ocrad/ocrad.html\">"
-                "http://www.gnu.org/software/ocrad/ocrad.html</A><p>"
-        "Images should be scanned in black/white mode for ocrad.<br>"
-        "Best results are achieved if the characters are at least 20 pixels high.<p>"
-        "Problems arise, as usual, with very bold or very light or broken characters, "
-        "the same with merged character groups.");
+    return (ocradDialog::engineDesc());
 }
+
+
+QString ocradDialog::engineDesc()
+{
+    return (i18n("<qt>"
+                 "<p>"
+                 "<b>OCRAD</b> is an free software OCR engine by Antonio&nbsp;Diaz, "
+                 "part of the GNU&nbsp;Project. "
+                 "<p>"
+                 "Images for OCR should be scanned in black/white (lineart) mode. "
+                 "Best results are achieved if the characters are at least "
+                 "20&nbsp;pixels high.  Problems may arise, as usual, with very bold "
+                 "or very light or broken characters, or with merged character groups."
+                 "<p>"
+                 "See <a href=\"http://www.gnu.org/software/ocrad/ocrad.html\">www.gnu.org/software/ocrad/ocrad.html</a> "
+                 "for more information on OCRAD."));
+}
+
 
 
 int ocradDialog::layoutDetectionMode() const
@@ -97,7 +106,7 @@ int ocradDialog::layoutDetectionMode() const
     return m_layoutMode->currentItem();
 }
 
-EngineError ocradDialog::setupGui()
+KSaneOcr::EngineError ocradDialog::setupGui()
 {
     KOCRBase::setupGui();
 
@@ -114,7 +123,7 @@ EngineError ocradDialog::setupGui()
     QString res = conf->readPathEntry( CFG_OCRAD_BINARY, "notFound" );
     if( res == "notFound" )
     {
-        res = KookaPreferences::tryFindBinary("ocrad", CFG_OCRAD_BINARY);
+        res = KookaPref::tryFindOcrad();
         if( res.isEmpty() )
         {
             /* Popup here telling that the config needs to be called */
@@ -158,7 +167,7 @@ EngineError ocradDialog::setupGui()
 
     /* This is for a 'work-in-progress'-Animation */
 
-    return ENG_OK;
+    return KSaneOcr::ENG_OK;
 }
 
 void ocradDialog::introduceImage( KookaImage *img )

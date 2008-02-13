@@ -359,7 +359,7 @@ void Kooka::newToolbarConfig()
 void Kooka::optionsPreferences()
 {
     // popup some sort of preference dialog, here
-    KookaPreferences dlg;
+    KookaPref dlg;
     dlg.showPage( m_prefDialogIndex );
     connect( &dlg, SIGNAL( dataSaved() ), m_view, SLOT(slFreshUpThumbView()));
 

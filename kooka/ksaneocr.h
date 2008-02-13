@@ -1,4 +1,4 @@
-/***************************************************************************
+/***************************************************** -*- mode:c++; -*- ***
                           ksaneocr.h  - ocr-engine class
                              -------------------
     begin                : Fri Jun 30 2000
@@ -26,12 +26,15 @@
 
 #ifndef KSANEOCR_H
 #define KSANEOCR_H
-#include <qwidget.h>
+
+#include "config.h"
+
 #include <qobject.h>
 
 #include "ocrword.h"
 
 #define CFG_OCR_ENGINE    "ocrEngine"
+#define CFG_OCR_ENGINE2   "ocrEngine2"
 #define CFG_OCR_CLEANUP   "unlinkORF"  /* delete orf file? */
 
 #define CFG_OCR_KSPELL    "ocrSpellSettings"
@@ -60,30 +63,42 @@ class KSpell;
 class KSpellConfig;
 class ImageCanvas;
 class KConfig;
-// class ocrWord;
-// class ocrPage;
 
 #ifdef HAVE_KADMOS
 #include "kadmosocr.h"
 #endif
 
-/*
- * Error Classifier the report errors on bad engine setup
- */
-typedef enum{ ENG_ERROR, ENG_OK, ENG_DATA_MISSING, ENG_BAD_SETUP } EngineError;
-
-class KSANEOCR : public QObject
+class KSaneOcr : public QObject
 {
     Q_OBJECT
+
+
 public:
-    enum OCREngines{ GOCR, OCRAD, KADMOS };
 
-    KSANEOCR( QWidget*, KConfig *);
-    ~KSANEOCR();
+    /*
+     * Error Classifier the report errors on bad engine setup
+     */
+    enum EngineError
+    {
+        ENG_ERROR,
+        ENG_OK,
+        ENG_DATA_MISSING,
+        ENG_BAD_SETUP
+    };
 
-    bool startOCRVisible( QWidget* parent=0);
+    enum OcrEngine
+    {
+        OcrNone,
+        OcrGocr,
+        OcrOcrad,
+        OcrKadmos
+    };
 
-    void finishedOCRVisible( bool );
+    KSaneOcr(QWidget *parent, KConfig *config);
+    ~KSaneOcr();
+
+    bool startOCRVisible(QWidget* parent = NULL);
+    void finishedOCRVisible(bool);
 
     /**
      * checks after a ocr run if the line number exists in the result
@@ -114,6 +129,10 @@ public:
      * the image to ocr.
      */
     void setImageCanvas( ImageCanvas* canvas );
+
+
+    static const QString engineName(OcrEngine eng);
+
 
 signals:
     void newOCRResultText( const QString& );
@@ -251,7 +270,7 @@ private:
     QString         m_tmpOrfName;
     QImage          *m_resultImage;
 
-    OCREngines      m_ocrEngine;
+    OcrEngine      m_ocrEngine;
     QPixmap         m_resPixmap;
     QPixmap         m_storePixmap;
 

@@ -58,7 +58,7 @@ public:
               KDialogBase::DialogType face = KDialogBase::Plain );
     ~KOCRBase();
 
-    virtual EngineError setupGui();
+    virtual KSaneOcr::EngineError setupGui();
 
     /**
      * @return the name of the ocr engine

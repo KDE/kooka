@@ -72,7 +72,7 @@ public:
 
     typedef QMap<QString, QString> StrMap;
 
-    EngineError setupGui();
+    KSaneOcr::EngineError setupGui();
     bool getAutoScale();
     bool getNoiseReduction();
     bool getSelClassifier(QString&) const;
@@ -81,6 +81,8 @@ public:
     QString ocrEngineName() const;
     QString ocrEngineDesc() const;
     QString ocrEngineLogo() const;
+
+    static QString engineDesc();
 
 public slots:
     void enableFields(bool);
@@ -92,8 +94,8 @@ protected:
     void setupSegmentation(  QVBox *box );
     void setupClassification( QVBox *box );
 
-    EngineError findClassifiers();
-    EngineError findClassifierPath();
+    KSaneOcr::EngineError findClassifiers();
+    KSaneOcr::EngineError findClassifierPath();
 private slots:
 
     void slFontChanged( int id );

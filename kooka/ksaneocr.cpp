@@ -68,7 +68,7 @@
  * thread save unfortunately. See slotKadmosResult-comments for more information
  */
 
-KSANEOCR::KSANEOCR( QWidget*, KConfig *cfg ):
+KSaneOcr::KSaneOcr( QWidget*, KConfig *cfg ):
     m_ocrProcessDia(0L),
     daemon(0L),
     visibleOCRRunning(false),
@@ -86,7 +86,7 @@ KSANEOCR::KSANEOCR( QWidget*, KConfig *cfg ):
     m_unlinkORF(true)
 {
     KConfig *konf = KGlobal::config ();
-    m_ocrEngine = OCRAD;
+    m_ocrEngine = KSaneOcr::OcrNone;
     m_img = 0L;
     m_tmpFile = 0L;
 
@@ -102,20 +102,8 @@ KSANEOCR::KSANEOCR( QWidget*, KConfig *cfg ):
     {
         /* -- ocr dialog information -- */
         konf->setGroup( CFG_GROUP_OCR_DIA );
-        QString eng = konf->readEntry(CFG_OCR_ENGINE, "ocrad");
-
-        if( eng == "ocrad" )
-        {
-            m_ocrEngine = OCRAD;
-        }
-        else if( eng == "gocr" )
-        {
-            m_ocrEngine = GOCR;
-        }
-#ifdef HAVE_KADMOS
-        else if( eng == QString("kadmos") ) m_ocrEngine = KADMOS;
-#endif
-        kdDebug(28000) << "OCR engine is " << eng << endl;
+        m_ocrEngine = static_cast<KSaneOcr::OcrEngine>(konf->readNumEntry(CFG_OCR_ENGINE2,KSaneOcr::OcrNone));
+        kdDebug(28000) << k_funcinfo << "OCR engine is " << m_ocrEngine << " = " << engineName(m_ocrEngine) << endl;
 
         m_unlinkORF = konf->readBoolEntry( CFG_OCR_CLEANUP, true );
     }
@@ -126,7 +114,7 @@ KSANEOCR::KSANEOCR( QWidget*, KConfig *cfg ):
 }
 
 
-KSANEOCR::~KSANEOCR()
+KSaneOcr::~KSaneOcr()
 {
    if( daemon  ) {
       delete( daemon );
@@ -152,7 +140,7 @@ KSANEOCR::~KSANEOCR()
  * This slot is called to introduce a new image, usually if the user clicks on a
  * new image either in the gallery or on the thumbnailview.
  */
-void KSANEOCR::slSetImage(KookaImage *img )
+void KSaneOcr::slSetImage(KookaImage *img )
 {
    if( ! img ) return           ;
 
@@ -173,7 +161,7 @@ void KSANEOCR::slSetImage(KookaImage *img )
 /*
  * Request to visualise a line-box in the source image, KADMOS Engine
  */
-void KSANEOCR::slLineBox( const QRect& )
+void KSaneOcr::slLineBox( const QRect& )
 {
     if( ! m_img ) return;
 }
@@ -183,22 +171,22 @@ void KSANEOCR::slLineBox( const QRect& )
  * starts visual ocr process. Depending on the ocr engine, this function creates
  * a new dialog, and shows it.
  */
-bool KSANEOCR::startOCRVisible( QWidget *parent )
+bool KSaneOcr::startOCRVisible( QWidget *parent )
 {
    if( visibleOCRRunning ) return( false );
    bool res = true;
 
    m_parent = parent;
 
-   if( m_ocrEngine == GOCR )
+   if( m_ocrEngine == KSaneOcr::OcrGocr )
    {
        m_ocrProcessDia = new KGOCRDialog ( parent, m_spellInitialConfig );
    }
-   else if( m_ocrEngine == OCRAD )
+   else if( m_ocrEngine == KSaneOcr::OcrOcrad )
    {
        m_ocrProcessDia = new ocradDialog( parent, m_spellInitialConfig );
    }
-   else if( m_ocrEngine == KADMOS )
+   else if( m_ocrEngine == KSaneOcr::OcrKadmos )
    {
 #ifdef HAVE_KADMOS
 /*** Kadmos Engine OCR ***/
@@ -209,9 +197,16 @@ bool KSANEOCR::startOCRVisible( QWidget *parent )
        kdDebug(28000) << "Sorry, this version of Kooka has no KADMOS support" << endl;
 #endif /* HAVE_KADMOS */
    }
+   else if( m_ocrEngine == KSaneOcr::OcrNone )
+   {
+       KMessageBox::sorry(NULL,i18n("No OCR engine is configured.\n"
+                                    "Please select one in Kooka's options dialog."));
+       return (false);
+   }
    else
    {
-      kdDebug(28000) << "ERR Unknown OCR engine requested!" << endl;
+       kdDebug(28000) << "Unknown OCR engine requested!" << endl;
+       return (false);
    }
 
    /*
@@ -238,7 +233,7 @@ bool KSANEOCR::startOCRVisible( QWidget *parent )
  * It does the not engine dependant cleanups like re-enabling buttons etc.
  */
 
-void KSANEOCR::finishedOCRVisible( bool success )
+void KSaneOcr::finishedOCRVisible( bool success )
 {
    bool doSpellcheck = m_wantKSpell;
 
@@ -300,7 +295,7 @@ void KSANEOCR::finishedOCRVisible( bool success )
  * starting the spell check on line m_ocrCurrLine if the line exists.
  * If not, the function returns.
  */
-void KSANEOCR::startLineSpellCheck()
+void KSaneOcr::startLineSpellCheck()
 {
     if( m_ocrCurrLine < m_ocrPage.size() )
     {
@@ -340,7 +335,7 @@ void KSANEOCR::startLineSpellCheck()
 
 /* User Cancel is called when the user does not really start the
  * ocr but uses the cancel-Button to come out of the Dialog */
-void KSANEOCR::slotClose()
+void KSaneOcr::slotClose()
 {
     kdDebug(28000) << "closing ocr Dialog" << endl;
    if( daemon && daemon->isRunning() )
@@ -351,7 +346,7 @@ void KSANEOCR::slotClose()
    finishedOCRVisible(false);
 }
 
-void KSANEOCR::slotStopOCR()
+void KSaneOcr::slotStopOCR()
 {
     kdDebug(28000) << "closing ocr Dialog" << endl;
     if( daemon && daemon->isRunning() )
@@ -364,7 +359,7 @@ void KSANEOCR::slotStopOCR()
 
 }
 
-void KSANEOCR::startOCRAD( )
+void KSaneOcr::startOCRAD( )
 {
     ocradDialog *ocrDia = static_cast<ocradDialog*>(m_ocrProcessDia);
 
@@ -445,7 +440,7 @@ void KSANEOCR::startOCRAD( )
 }
 
 
-void KSANEOCR::ocradExited(KProcess* )
+void KSaneOcr::ocradExited(KProcess* )
 {
     kdDebug(28000) << "ocrad exit " << endl;
     QString err;
@@ -462,14 +457,14 @@ void KSANEOCR::ocradExited(KProcess* )
 
 }
 
-void KSANEOCR::ocradStdErr(KProcess*, char* buffer, int buflen)
+void KSaneOcr::ocradStdErr(KProcess*, char* buffer, int buflen)
 {
    QString errorBuffer = QString::fromLocal8Bit(buffer, buflen);
    kdDebug(28000) << "ocrad says on stderr: " << errorBuffer << endl;
 
 }
 
-void KSANEOCR::ocradStdIn(KProcess*, char* buffer, int buflen)
+void KSaneOcr::ocradStdIn(KProcess*, char* buffer, int buflen)
 {
    QString errorBuffer = QString::fromLocal8Bit(buffer, buflen);
    kdDebug(28000) << "ocrad says on stdin: " << errorBuffer << endl;
@@ -482,7 +477,7 @@ void KSANEOCR::ocradStdIn(KProcess*, char* buffer, int buflen)
  * This slot is fired if the user clicks on the 'Start' button of the GUI, no
  * difference which engine is active.
  */
-void KSANEOCR::startOCRProcess( void )
+void KSaneOcr::startOCRProcess( void )
 {
    if( ! m_ocrProcessDia ) return;
 
@@ -490,12 +485,12 @@ void KSANEOCR::startOCRProcess( void )
    m_ocrProcessDia->startOCR();
 
    kapp->processEvents();
-   if( m_ocrEngine == OCRAD )
+   if( m_ocrEngine == KSaneOcr::OcrOcrad )
    {
        startOCRAD();
    }
 
-   if( m_ocrEngine == GOCR )
+   if( m_ocrEngine == KSaneOcr::OcrGocr )
    {
        /*
         * Starting a gocr process
@@ -666,7 +661,7 @@ void KSANEOCR::startOCRProcess( void )
  * checks if the KADMOS engine is finished already and if not it fires a timer.
  */
 
-void KSANEOCR::slotKadmosResult()
+void KSaneOcr::slotKadmosResult()
 {
 #ifdef HAVE_KADMOS
     kdDebug(28000) << "check for Recognition finished" << endl;
@@ -715,7 +710,7 @@ void KSANEOCR::slotKadmosResult()
 /*
  *
  */
-void KSANEOCR::gocrExited(KProcess* d)
+void KSaneOcr::gocrExited(KProcess* d)
 {
    kdDebug(28000) << "daemonExited start !" << endl;
 
@@ -784,7 +779,7 @@ void KSANEOCR::gocrExited(KProcess* d)
  *
  */
 
-bool KSANEOCR::readORF( const QString& fileName, QString& errStr )
+bool KSaneOcr::readORF( const QString& fileName, QString& errStr )
 {
     QFile file( fileName );
     QRegExp rx;
@@ -1011,7 +1006,7 @@ bool KSANEOCR::readORF( const QString& fileName, QString& errStr )
 }
 
 
-void KSANEOCR::cleanUpFiles( void )
+void KSaneOcr::cleanUpFiles( void )
 {
     if( m_tmpFile )
     {
@@ -1051,7 +1046,7 @@ void KSANEOCR::cleanUpFiles( void )
 }
 
 
-void KSANEOCR::gocrStdErr(KProcess*, char* buffer, int buflen)
+void KSaneOcr::gocrStdErr(KProcess*, char* buffer, int buflen)
 {
    QString errorBuffer = QString::fromLocal8Bit(buffer, buflen);
    kdDebug(28000) << "gocr says: " << errorBuffer << endl;
@@ -1059,7 +1054,7 @@ void KSANEOCR::gocrStdErr(KProcess*, char* buffer, int buflen)
 }
 
 
-void KSANEOCR::gocrStdIn(KProcess*, char* buffer, int buflen)
+void KSaneOcr::gocrStdIn(KProcess*, char* buffer, int buflen)
 {
     QString aux = QString::fromLocal8Bit(buffer, buflen);
 
@@ -1084,7 +1079,7 @@ void KSANEOCR::gocrStdIn(KProcess*, char* buffer, int buflen)
 /*
  * Assemble the result text
  */
-QString KSANEOCR::ocrResultText()
+QString KSaneOcr::ocrResultText()
 {
     QString res;
     const QString space(" ");
@@ -1111,7 +1106,7 @@ QString KSANEOCR::ocrResultText()
  * event filter to filter the mouse events to the image viewer
  */
 
-void KSANEOCR::setImageCanvas( ImageCanvas *canvas )
+void KSaneOcr::setImageCanvas( ImageCanvas *canvas )
 {
     m_imgCanvas = canvas;
 
@@ -1119,7 +1114,7 @@ void KSANEOCR::setImageCanvas( ImageCanvas *canvas )
 }
 
 
-bool KSANEOCR::eventFilter( QObject *object, QEvent *event )
+bool KSaneOcr::eventFilter( QObject *object, QEvent *event )
 {
     QWidget *w = (QWidget*) object;
 
@@ -1215,7 +1210,7 @@ bool KSANEOCR::eventFilter( QObject *object, QEvent *event )
  * KSpell detects the correction by itself and delivers it in newword here.
  * To see all alternatives KSpell proposes, slMissspelling must be used.
  */
-void KSANEOCR::slSpellCorrected( const QString& originalword,
+void KSaneOcr::slSpellCorrected( const QString& originalword,
                                  const QString& newword,
                                  unsigned int pos )
 {
@@ -1240,7 +1235,7 @@ void KSANEOCR::slSpellCorrected( const QString& originalword,
 }
 
 
-void KSANEOCR::slSpellIgnoreWord( const QString& word )
+void KSaneOcr::slSpellIgnoreWord( const QString& word )
 {
     ocrWord ignoreOCRWord;
 
@@ -1265,7 +1260,7 @@ void KSANEOCR::slSpellIgnoreWord( const QString& word )
     }
 }
 
-ocrWord KSANEOCR::ocrWordFromKSpellWord( int line, const QString& word )
+ocrWord KSaneOcr::ocrWordFromKSpellWord( int line, const QString& word )
 {
     ocrWord resWord;
     if( lineValid(line) )
@@ -1279,7 +1274,7 @@ ocrWord KSANEOCR::ocrWordFromKSpellWord( int line, const QString& word )
 }
 
 
-bool KSANEOCR::lineValid( int line )
+bool KSaneOcr::lineValid( int line )
 {
     bool ret = false;
 
@@ -1289,7 +1284,7 @@ bool KSANEOCR::lineValid( int line )
     return ret;
 }
 
-void KSANEOCR::slMisspelling( const QString& originalword, const QStringList& suggestions,
+void KSaneOcr::slMisspelling( const QString& originalword, const QStringList& suggestions,
                               unsigned int pos )
 {
     /* for the first try, use the first suggestion */
@@ -1344,7 +1339,7 @@ void KSANEOCR::slMisspelling( const QString& originalword, const QStringList& su
  * slot is called if the KSpell-object feels itself ready for operation.
  * Coming into this slot, the spelling starts in a line by line manner
  */
-void KSANEOCR::slSpellReady( KSpell *spell )
+void KSaneOcr::slSpellReady( KSpell *spell )
 {
     m_spell = spell;
     connect ( m_spell, SIGNAL( misspelling( const QString&, const QStringList&,
@@ -1374,7 +1369,7 @@ void KSANEOCR::slSpellReady( KSpell *spell )
  * If it is an KSpell-init problem, the m_spell variable is still zero and
  * Kooka pops up a warning.
  */
-void KSANEOCR::slSpellDead()
+void KSaneOcr::slSpellDead()
 {
     if( ! m_spell )
     {
@@ -1432,7 +1427,7 @@ void KSANEOCR::slSpellDead()
  * This slot reads the current line from the member m_ocrCurrLine and
  * writes the corrected wordlist to the member page word lists
  */
-void KSANEOCR::slCheckListDone(bool)
+void KSaneOcr::slCheckListDone(bool)
 {
 
     /*
@@ -1460,7 +1455,7 @@ void KSANEOCR::slCheckListDone(bool)
  * The original word was origWord. This slot is called from slSpellCorrected
  *
  */
-bool KSANEOCR::slUpdateWord( int line, int spellWordIndx, const QString& origWord,
+bool KSaneOcr::slUpdateWord( int line, int spellWordIndx, const QString& origWord,
                              const QString& newWord )
 {
     bool result = false;
@@ -1487,7 +1482,23 @@ bool KSANEOCR::slUpdateWord( int line, int spellWordIndx, const QString& origWor
 }
 
 
-char KSANEOCR::UndetectedChar = '_';
+char KSaneOcr::UndetectedChar = '_';
 
 /* -- */
+
+
+
+const QString KSaneOcr::engineName(OcrEngine eng)
+{
+    switch (eng)
+    {
+case OcrNone:   return (i18n("None"));
+case OcrGocr:   return (i18n("GOCR"));
+case OcrOcrad:  return (i18n("OCRAD"));
+case OcrKadmos: return (i18n("Kadmos"));
+default:        return (i18n("Unknown"));
+    }
+}
+
+
 #include "ksaneocr.moc"

@@ -45,10 +45,10 @@
 
 static const char description[] = I18N_NOOP(
 	"Kooka is a KDE application which provides access to scanner hardware\n"
-	"using the SANE library.\n"
-	"Kooka helps you scan, save your image in the correct image format\n"
-	"and perform Optical Character Recognition on it (using gocr, Joerg\n"
-	"Schulenburg's and friends' Open Source ocr program).");
+	"using the SANE library.\n\n"
+	"Kooka allows you to scan and save in any image format that KDE supports,\n"
+	"and can perform Optical Character Recognition using the open source GOCR\n"
+        "or OCRAD programs, or the commercial KADMOS library.");
 
 static const char license[] = I18N_NOOP(
 	"This program is distributed under the terms of the GPL v2 as publishec by\n"

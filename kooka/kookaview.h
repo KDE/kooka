@@ -47,7 +47,7 @@
 
 class KDockWidget;
 class QPainter;
-class KSANEOCR;
+class KSaneOcr;
 class KConfig;
 class KPrinter;
 class KComboBox;
@@ -243,7 +243,7 @@ private:
     int          image_pool_id;
     int 	 preview_id;
 
-    KSANEOCR *ocrFabric;
+    KSaneOcr *ocrFabric;
 
     KDockWidget *m_mainDock;
     KDockWidget *m_dockScanParam;

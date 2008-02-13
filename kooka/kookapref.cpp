@@ -24,40 +24,47 @@
  *                                                                         *
  ***************************************************************************/
 
-
-#include "kookapref.h"
-#include "imgsaver.h"
-
-#include <klocale.h>
-#include <kiconloader.h>
-#include <kconfig.h>
-#include <kdebug.h>
-#include <knuminput.h>
-#include <kcolorbutton.h>
-#include <kstandarddirs.h>
-
 #include <qlayout.h>
 #include <qtooltip.h>
 #include <qvgroupbox.h>
 #include <qgrid.h>
 #include <qcheckbox.h>
-#include <qstringlist.h>
 #include <qlabel.h>
 
-#include <devselector.h>
-#include "config.h"
-#include "thumbview.h"
-#include "imageselectline.h"
-#include "ksaneocr.h"
+#include <klocale.h>
+#include <kiconloader.h>
+#include <kconfig.h>
+#include <kglobal.h>
+#include <kdebug.h>
+#include <knuminput.h>
+#include <kcolorbutton.h>
+#include <kstandarddirs.h>
+#include <kcombobox.h>
+#include <kactivelabel.h>
 
 #include <kmessagebox.h>
-#include <qbuttongroup.h>
-#include <qradiobutton.h>
 #include <kurlrequester.h>
+#include <kseparator.h>
 
-KookaPreferences::KookaPreferences()
-    : KDialogBase(IconList, i18n("Preferences"),
-                  Help|Default|Ok|Apply|Cancel, Ok )
+#include "devselector.h"
+#include "imgsaver.h"
+
+#include "thumbview.h"
+#include "imageselectline.h"
+
+#include "ksaneocr.h"
+#include "kocrgocr.h"
+#include "kocrocrad.h"
+#include "kocrkadmos.h"
+
+#include "kookapref.h"
+#include "kookapref.moc"
+
+
+KookaPref::KookaPref()
+    : KDialogBase(KDialogBase::IconList, i18n("Preferences"),
+                  KDialogBase::Help|KDialogBase::Default|KDialogBase::Ok|KDialogBase::Apply|KDialogBase::Cancel,
+                  KDialogBase::Ok )
 {
     // this is the base class for your preferences dialog.  it is now
     // a Treelist dialog.. but there are a number of other
@@ -70,239 +77,166 @@ KookaPreferences::KookaPreferences()
     setupOCRPage();
 }
 
-void KookaPreferences::setupOCRPage()
+void KookaPref::setupOCRPage()
 {
     konf->setGroup( CFG_GROUP_OCR_DIA );
 
     QFrame *page = addPage( i18n("OCR"), i18n("Optical Character Recognition" ),
-			    BarIcon("ocrImage", KIcon::SizeMedium ) );
+			    BarIcon("ocr", KIcon::SizeMedium ) );
 
-    QVBoxLayout *top = new QVBoxLayout( page, 0, spacingHint() );
+    QGridLayout *lay = new QGridLayout(page,7,2,KDialog::marginHint(),
+                                       KDialog::spacingHint());
+    lay->setRowStretch(6,9);
+    lay->setColStretch(1,9);
 
-    bool haveGocr = false;
-    bool haveOcrad = false;
-    bool haveKadmos = false;
+    engineCB = new KComboBox(page);
+    engineCB->insertItem(KSaneOcr::engineName(KSaneOcr::OcrNone),KSaneOcr::OcrNone);
+    engineCB->insertItem(KSaneOcr::engineName(KSaneOcr::OcrGocr),KSaneOcr::OcrGocr);
+    engineCB->insertItem(KSaneOcr::engineName(KSaneOcr::OcrOcrad),KSaneOcr::OcrOcrad);
+    engineCB->insertItem(KSaneOcr::engineName(KSaneOcr::OcrKadmos),KSaneOcr::OcrKadmos);
 
-    /*
-     * Switch ocr engines
-     */
-    QButtonGroup *engGroup = new QButtonGroup( 1, Qt::Horizontal, i18n("OCR Engine to Use"), page );
-    m_gocrBut   = new QRadioButton( i18n("GOCR engine")  , engGroup );
-    m_kadmosBut = new QRadioButton( i18n("KADMOS engine"), engGroup );
-    m_ocradBut  = new QRadioButton( i18n("OCRAD engine"), engGroup );
-    m_kadmosBut->setChecked(false);
-    m_gocrBut->setChecked(false);
-    m_ocradBut->setChecked(false);
-    top->addWidget( engGroup );
+    connect(engineCB,SIGNAL(activated(int)),SLOT(slotEngineSelected(int)));
+    lay->addWidget(engineCB,0,1);
 
-    /*
-     * GOCR Option Box
-     */
-    QVGroupBox *gp = new QVGroupBox( i18n("GOCR OCR"), page );
-    m_urlReqGocr = binaryCheckBox( gp, "gocr" );
-    connect( m_urlReqGocr, SIGNAL( textChanged( const QString& )),
-             this, SLOT( slCheckOnGOCR( const QString& )));
-    QString cmdGocr = tryFindBinary( "gocr", CFG_GOCR_BINARY );
-    kdDebug(28000) << "Found gocr command: " << cmdGocr << endl;
-    m_gocrBut->setEnabled(false);
-    if( !cmdGocr.isEmpty() )
-    {
-        /* Found the command */
-        m_urlReqGocr->setURL( cmdGocr );
-        m_gocrBut->setEnabled(true);
-        haveGocr = true;
-    }
-    top->addWidget( gp );
+    QLabel *lab = new QLabel(i18n("OCR Engine:"),page);
+    lab->setBuddy(engineCB);
+    lay->addWidget(lab,0,0,Qt::AlignRight);
 
-    /*
-     * OCRAD Option Box
-     */
-    gp = new QVGroupBox( i18n("OCRAD OCR"), page );
-    m_urlReqOcrad = binaryCheckBox( gp, "ocrad" );
-    connect( m_urlReqOcrad, SIGNAL( textChanged( const QString& )),
-             this, SLOT( slCheckOnOCRAD( const QString& )));
-    QString cmdOcrad = tryFindBinary( "ocrad", CFG_OCRAD_BINARY );
-    kdDebug(28000) << "Found ocrad command: " << cmdOcrad << endl;
-    m_ocradBut->setEnabled(false);
-    if( !cmdOcrad.isEmpty() )
-    {
-        /* Found the command */
-        m_urlReqOcrad->setURL( cmdOcrad );
-        m_ocradBut->setEnabled(true);
-        haveOcrad = true;
-    }
-    top->addWidget( gp );
+    lay->setRowSpacing(1,KDialog::marginHint());
 
-    /*
-     * Global Kadmos Options
-     */
-    QVGroupBox *kgp = new QVGroupBox( i18n("KADMOS OCR"), page );
+    binaryReq = new KURLRequester(page);
+    binaryReq->setMode(KFile::File|KFile::ExistingOnly|KFile::LocalOnly);
+    lay->addWidget(binaryReq,2,1);
 
-#ifdef HAVE_KADMOS
-    (void) new QLabel( i18n("The KADMOS OCR engine is available"), kgp);
-    m_kadmosBut->setChecked(true);
-    m_kadmosBut->setEnabled(true);
-    haveKadmos = true;
-#else
-    (void) new QLabel( i18n("The KADMOS OCR engine is not available in this version of Kooka"), kgp );
-    m_kadmosBut->setEnabled(false);
-#endif
-    top->addWidget( kgp );
-    QWidget *spaceEater = new QWidget( page );
-    spaceEater->setSizePolicy( QSizePolicy( QSizePolicy::Ignored, QSizePolicy::Ignored ));
-    top->addWidget( spaceEater );
+    lab = new QLabel(i18n("Engine executable:"),page);
+    lab->setBuddy(binaryReq);
+    lay->addWidget(lab,2,0,Qt::AlignRight);
 
-    /*
-     *  Now read the config value CFG_OCR_ENGINE and set the radios to the value if available
-     */
-    QString useEngine = konf->readEntry( CFG_OCR_ENGINE, "ocrad" );
-    if( useEngine != "notFound" )
-    {
-        if( useEngine == "gocr" && haveGocr )
-	{
-            m_gocrBut->setChecked(true);
-	    m_prevOCREngine = "gocr";
-	}
-        else if( useEngine == "ocrad" && haveOcrad )
-	{
-            m_ocradBut->setChecked(true);
-	    m_prevOCREngine = "ocrad";
-	}
-        else if( useEngine == "kadmos" && haveKadmos )
-	{
-            m_kadmosBut->setChecked(true);
-	    m_prevOCREngine = "kadmos";
-	}
-    }
+    lay->setRowSpacing(3,KDialog::marginHint());
+
+    KSeparator *sep = new KSeparator(KSeparator::HLine,page);
+    lay->addMultiCellWidget(sep,4,4,0,1);
+
+    lay->setRowSpacing(5,KDialog::marginHint());
+
+    ocrDesc = new KActiveLabel("?",page);
+    lay->addMultiCellWidget(ocrDesc,6,6,0,1);
+
+    originalEngine = static_cast<KSaneOcr::OcrEngine>(konf->readNumEntry(CFG_OCR_ENGINE2,KSaneOcr::OcrNone));
+    engineCB->setCurrentItem(originalEngine);
+    slotEngineSelected(originalEngine);
 }
 
-KURLRequester* KookaPreferences::binaryCheckBox( QWidget *parent, const QString& program )
+
+void KookaPref::slotEngineSelected(int i)
 {
-    QHBox *hbox = new QHBox( parent );
+    selectedEngine = static_cast<KSaneOcr::OcrEngine>(i);
+    kdDebug(29000) << k_funcinfo << "engine=" << selectedEngine << endl;
 
-    (void) new QLabel( i18n("Select the %1 binary to use:").arg( program ), hbox );
-    KURLRequester* urlRequester = new KURLRequester( parent );
-    urlRequester->setMode( KFile::File | KFile::ExistingOnly | KFile::LocalOnly );
+    QString msg;
+    switch (selectedEngine)
+    {
+case KSaneOcr::OcrNone:
+        binaryReq->setEnabled(false);
+        binaryReq->clear();
+        msg = i18n("No OCR engine is selected. Select and configure one to perform OCR.");
+        break;
 
-    QToolTip::add( urlRequester,
-                   i18n( "Enter the path to %1, the optical-character-recognition "
-			 "command line tool.").arg(program));
-    return urlRequester;
+case KSaneOcr::OcrGocr:
+        binaryReq->setEnabled(true);
+        binaryReq->setURL(tryFindGocr());
+        msg = KGOCRDialog::engineDesc();
+        break;
+
+case KSaneOcr::OcrOcrad:
+        binaryReq->setEnabled(true);
+        binaryReq->setURL(tryFindOcrad());
+        msg = ocradDialog::engineDesc();
+        break;
+
+case KSaneOcr::OcrKadmos:
+        binaryReq->setEnabled(false);
+        binaryReq->clear();
+        msg = KadmosDialog::engineDesc();
+        break;
+
+default:
+        binaryReq->setEnabled(false);
+        binaryReq->clear();
+
+        msg = i18n("Unknown engine %1!").arg(selectedEngine);
+        break;
+    }
+
+    ocrDesc->setText(msg);
 }
 
 
-QString KookaPreferences::tryFindGocr( void )
+QString KookaPref::tryFindGocr( void )
 {
    return( tryFindBinary( "gocr", CFG_GOCR_BINARY ) );
 }
 
-QString KookaPreferences::tryFindBinary( const QString& bin, const QString& configKey )
+
+QString KookaPref::tryFindOcrad( void )
 {
+   return( tryFindBinary( "ocrad", CFG_OCRAD_BINARY ) );
+}
+
+
+QString KookaPref::tryFindBinary(const QString &bin,const QString &configKey)
+{
+    KConfig *cfg = KGlobal::config();
 
     /* First check the config files for an entry */
-    KConfig *cfg = KGlobal::config();
     cfg->setGroup(CFG_GROUP_OCR_DIA);
-    QString res = cfg->readPathEntry( configKey /* CFG_GOCR_BINARY */, "notFound" );
+    QString exe = cfg->readPathEntry(configKey);	// try from config file
 
-    if( res != "notFound" )
+    // Why do we do the second test here?  checkOCRBin() does the same, why also?
+    if (!exe.isEmpty() && exe.contains(bin))
     {
-        QFileInfo fi( res );
-        if( fi.exists() && fi.isExecutable() && !fi.isDir() && res.contains(bin) )
-        {
-            return res;
-        }
+        QFileInfo fi(exe);				// check for valid executable
+        if (fi.exists() && fi.isExecutable() && !fi.isDir()) return (exe);
     }
 
-    res = QString();
-
-    QStringList locations;
-    locations.append( "/usr/bin/" + bin );
-    locations.append( "/bin/" + bin );
-    locations.append( "/usr/X11R6/bin/"+bin );
-    locations.append( "/usr/local/bin/"+bin );
-
-    for ( QStringList::Iterator it = locations.begin(); it != locations.end(); ++it )
-    {
-        QString cmd = *it;
-        kdDebug(28000) << "checking command " << cmd << endl;
-        QFileInfo fi( cmd );
-        if( fi.exists() && fi.isExecutable() && !fi.isDir())
-        {
-            res  = cmd;
-            kdDebug(28000) << "found  command " << res << endl;
-            break;
-        }
-    }
-
-    return( res );
+    /* Otherwise find the program on the user's search path */
+    return (KGlobal::dirs()->findExe(bin));		// search using $PATH
 }
 
 
-void KookaPreferences::slCheckOnGOCR( const QString& cmd )
+bool KookaPref::checkOCRBin(const QString &cmd,const QString &bin,bool show_msg)
 {
-    if( checkOCRBinIntern( cmd, "gocr", false ))
+    // Why do we do this test?  See above.
+    if (!cmd.contains(bin)) return (false);
+
+    QFileInfo fi(cmd);
+    if (!fi.exists())
     {
-        // cmd exists and is executable
-        m_gocrBut->setEnabled( true );
+        if (show_msg) KMessageBox::sorry(this,i18n("<qt>"
+                                                   "The path <b>%1</b> does not lead to a valid binary.\n"
+                                                   "Please check the path and and install the program if necessary.").arg(cmd),
+                                         i18n("OCR Engine Not Found"));
+        return (false);
     }
     else
     {
-        m_gocrBut->setEnabled( false );
+        /* File exists, check if not dir and executable */
+        if (fi.isDir() || (!fi.isExecutable()))
+        {
+            if (show_msg) KMessageBox::sorry(this,i18n("<qt>"
+                                                       "The program <b>%1</b> exists, but is not executable.\n"
+                                                       "Please check the path and permissions, and/or reinstall the program if necessary.").arg(cmd),
+                                             i18n("OCR Engine Not Executable"));
+            return (false);
+        }
     }
-}
 
-void KookaPreferences::slCheckOnOCRAD( const QString& cmd )
-{
-    if( checkOCRBinIntern( cmd, "ocrad", false ))
-    {
-        // cmd exists and is executable
-        m_ocradBut->setEnabled( true );
-    }
-    else
-    {
-        m_ocradBut->setEnabled( false );
-    }
-}
-
-#if 0
-void KookaPreferences::checkOCRBinarySilent( const QString& cmd )
-{
-    // checkOCRBinIntern( cmd, this->sender(), false);
-}
-#endif
-bool KookaPreferences::checkOCRBinIntern( const QString& cmd, const QString& tool, bool show_msg )
-{
-   if( ! cmd.contains( tool )) return false;
-
-   bool ret = true;
-   QFileInfo fi( cmd );
-   if( ! fi.exists() )
-   {
-      if( show_msg )
-      KMessageBox::sorry( this, i18n( "The path does not lead to a valid binary.\n"
-				      "Please check your installation and/or install the program."),
-			  i18n("OCR Software Not Found") );
-      ret = false;
-   }
-   else
-   {
-      /* File exists, check if not dir and executable */
-      if( fi.isDir() || (! fi.isExecutable()) )
-      {
-	 if( show_msg )
-	    KMessageBox::sorry( this, i18n( "The program exists, but is not executable.\n"
-					    "Please check your installation and/or install the binary properly."),
-				i18n("OCR Software Not Executable") );
-	 ret = false;
-      }
-   }
-
-   return ret;
+    return (true);
 }
 
 
 
-void KookaPreferences::setupStartupPage()
+void KookaPref::setupStartupPage()
 {
 
     /* startup options */
@@ -316,7 +250,7 @@ void KookaPreferences::setupStartupPage()
 
     /* Query for network scanner (Checkbox) */
     cbNetQuery = new QCheckBox( i18n("Query network for available scanners"),
-				page,  "CB_NET_QUERY" );
+				page);
     QToolTip::add( cbNetQuery,
 		   i18n( "Check this if you want a network query for available scanners.\nNote that this does not mean a query over the entire network but only the stations configured for SANE!" ));
     cbNetQuery->setChecked( ! (konf->readBoolEntry( STARTUP_ONLY_LOCAL, false )) );
@@ -324,7 +258,7 @@ void KookaPreferences::setupStartupPage()
 
     /* Show scanner selection box on startup (Checkbox) */
     cbShowScannerSelection = new QCheckBox( i18n("Show the scanner selection box on next startup"),
-					    page,  "CB_SHOW_SELECTION" );
+					    page);
     QToolTip::add( cbShowScannerSelection,
 		   i18n( "Check this if you once checked 'do not show the scanner selection on startup',\nbut you want to see it again." ));
 
@@ -332,7 +266,7 @@ void KookaPreferences::setupStartupPage()
 
     /* Read startup image on startup (Checkbox) */
     cbReadStartupImage = new QCheckBox( i18n("Load the last image into the viewer on startup"),
-					    page,  "CB_LOAD_ON_START" );
+					    page);
     QToolTip::add( cbReadStartupImage,
 		   i18n( "Check this if you want Kooka to load the last selected image into the viewer on startup.\nIf your images are large, that might slow down Kooka's start." ));
     cbReadStartupImage->setChecked( konf->readBoolEntry( STARTUP_READ_IMAGE, true));
@@ -347,7 +281,7 @@ void KookaPreferences::setupStartupPage()
 
 }
 
-void KookaPreferences::setupSaveFormatPage( )
+void KookaPref::setupSaveFormatPage( )
 {
    konf->setGroup( OP_FILE_GROUP );
    QFrame *page = addPage( i18n("Image Saving"), i18n("Configure Image Save Assistant" ),
@@ -356,13 +290,13 @@ void KookaPreferences::setupSaveFormatPage( )
 
    /* Skip the format asking if a format entry  exists */
    cbSkipFormatAsk = new QCheckBox( i18n("Always display image save assistant"),
-				     page,  "CB_IMGASSIST_QUERY" );
+				     page);
    cbSkipFormatAsk->setChecked( konf->readBoolEntry( OP_FILE_ASK_FORMAT, true  ));
    QToolTip::add( cbSkipFormatAsk, i18n("Check this if you want to see the image save assistant even if there is a default format for the image type." ));
    top->addWidget( cbSkipFormatAsk );
 
    cbFilenameAsk = new QCheckBox( i18n("Ask for filename when saving file"),
-                    page,  "CB_ASK_FILENAME" );
+                    page);
    cbFilenameAsk->setChecked( konf->readBoolEntry( OP_ASK_FILENAME, false));
    QToolTip::add( cbFilenameAsk, i18n("Check this if you want to enter a filename when an image has been scanned." ));
    top->addWidget( cbFilenameAsk );
@@ -372,7 +306,7 @@ void KookaPreferences::setupSaveFormatPage( )
    top->addStretch(10);
 }
 
-void KookaPreferences::setupThumbnailPage()
+void KookaPref::setupThumbnailPage()
 {
    konf->setGroup( THUMB_GROUP );
 
@@ -444,7 +378,7 @@ void KookaPreferences::setupThumbnailPage()
 }
 
 
-void KookaPreferences::slotOk( void )
+void KookaPref::slotOk( void )
 {
   slotApply();
   accept();
@@ -452,7 +386,7 @@ void KookaPreferences::slotOk( void )
 }
 
 
-void KookaPreferences::slotApply( void )
+void KookaPref::slotApply( void )
 {
     /* ** startup options ** */
 
@@ -490,38 +424,38 @@ void KookaPreferences::slotApply( void )
 
     /* ** OCR Options ** */
     konf->setGroup( CFG_GROUP_OCR_DIA );
-    QString eng( "gocr" );
-
-    if( m_ocradBut->isChecked() )
-        eng = "ocrad";
-
-    if( m_kadmosBut && m_kadmosBut->isChecked() )
-        eng = "kadmos";
-
-    if( eng != m_prevOCREngine )
+    konf->writeEntry(CFG_OCR_ENGINE2,selectedEngine);
+    if (selectedEngine!=originalEngine)
     {
         // selection of the ocr engine has changed. Popup button.
-        KMessageBox::sorry( this, i18n( "The OCR engine settings were changed.\n"
-                                        "Note that Kooka needs to be restarted to change the OCR engine."),
-                            i18n("OCR Engine Change") );
+        KMessageBox::information(this,i18n("The OCR engine has been changed.\n"
+                                           "Kooka needs to be restarted for this "
+                                           "change to take effect."),
+                                 i18n("OCR Engine Changed"));
     }
 
-    konf->writeEntry(CFG_OCR_ENGINE, eng );
+    QString path = binaryReq->url();
+    if (!path.isEmpty())
+    {
+        switch (selectedEngine)
+        {
+case KSaneOcr::OcrGocr:
+            if (checkOCRBin(path,"gocr",true)) konf->writePathEntry(CFG_GOCR_BINARY,path);
+            break;
 
-    QString path = m_urlReqGocr->url();
-    if( ! path.isEmpty() )
-        konf->writePathEntry( CFG_GOCR_BINARY, path );
+case KSaneOcr::OcrOcrad:
+            if (checkOCRBin(path,"ocrad",true)) konf->writePathEntry(CFG_OCRAD_BINARY,path);
+            break;
 
-    path = m_urlReqOcrad->url();
-    if( ! path.isEmpty() )
-        konf->writePathEntry( CFG_OCRAD_BINARY, path );
+default:    break;
+        }
+    }
 
     konf->sync();
-
     emit dataSaved();
 }
 
-void KookaPreferences::slotDefault( void )
+void KookaPref::slotDefault( void )
 {
     cbNetQuery->setChecked( true );
     cbShowScannerSelection->setChecked( true);
@@ -538,10 +472,6 @@ void KookaPreferences::slotDefault( void )
     m_frameWidth->setValue( 3 );
     m_colButt1->setColor( col1 );
     m_colButt2->setColor( col2 );
-    m_gocrBut->setChecked(true);
+
+    slotEngineSelected(KSaneOcr::OcrNone);
 }
-
-
-
-#include "kookapref.moc"
-

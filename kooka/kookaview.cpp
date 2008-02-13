@@ -336,6 +336,7 @@ bool KookaView::slSelectDevice(const QCString& useDevice,bool alwaysAsk)
     {
         selDevice =  useDevice;
         if (selDevice.isEmpty()) selDevice = userDeviceSelection(alwaysAsk);
+        if (selDevice.isEmpty()) return (false);	// dialogue cancelled
     }
 
     // Allow reopening
@@ -449,7 +450,8 @@ QCString KookaView::userDeviceSelection(bool alwaysAsk)
 
    if (backends.count()==0)
    {
-       if (KMessageBox::warningContinueCancel(m_parent,i18n("<qt><p>No scanner devices are available.\
+       if (KMessageBox::warningContinueCancel(m_parent,i18n("<qt>\
+<p>No scanner devices are available.\
 <p>If your scanner is a type that should be auto-detected by SANE, check that it \
 is connected, switched on and configured correctly.\
 <p>If the scanner cannot be auto-detected by SANE (this includes some network \
@@ -661,7 +663,7 @@ void KookaView::startOCR( KookaImage *img )
    {
       if( ocrFabric == 0L )
       {
-          ocrFabric = new KSANEOCR( m_mainDock, KGlobal::config() );
+          ocrFabric = new KSaneOcr( m_mainDock, KGlobal::config() );
           ocrFabric->setImageCanvas( img_canvas );
 
           connect( ocrFabric, SIGNAL( newOCRResultText( const QString& )),

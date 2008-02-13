@@ -61,11 +61,13 @@ public:
     QString getOCRCmd( void ) const
         { return m_ocrCmd;}
 
-    EngineError setupGui();
+    KSaneOcr::EngineError setupGui();
 
     QString ocrEngineName() const;
     QString ocrEngineDesc() const;
     QString ocrEngineLogo() const;
+
+    static QString engineDesc();
 
     QString orfUrl() const;
 

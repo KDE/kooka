@@ -59,11 +59,13 @@ public:
     int getSpaceWidth( void ) const
         { return( sliderSpace->value());}
 
-    EngineError setupGui();
+    KSaneOcr::EngineError setupGui();
 
+    QString ocrEngineLogo() const;
     QString ocrEngineName() const;
     QString ocrEngineDesc() const;
-    QString ocrEngineLogo() const;
+
+    static QString engineDesc();
 
 public slots:
     void enableFields(bool);

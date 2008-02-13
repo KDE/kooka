@@ -106,13 +106,13 @@ KAnimWidget* KOCRBase::getAnimation(QWidget *parent)
    return( m_animation );
 }
 
-EngineError KOCRBase::setupGui()
+KSaneOcr::EngineError KOCRBase::setupGui()
 {
     ocrIntro();
     imgIntro();
     if( m_wantSpellCfg ) spellCheckIntro();
 
-    return ENG_OK;
+    return KSaneOcr::ENG_OK;
 }
 
 void KOCRBase::imgIntro()

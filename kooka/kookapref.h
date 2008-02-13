@@ -1,4 +1,4 @@
-/***************************************************************************
+/***************************************************** -*- mode:c++; -*- ***
                           kookapref.h  - Preferences
                              -------------------
     begin                : Sun Jan 16 2000
@@ -23,45 +23,43 @@
  *  without including the source code for Qt in the source distribution.   *
  *                                                                         *
  ***************************************************************************/
+
 #ifndef KOOKAPREF_H
 #define KOOKAPREF_H
 
 #include <kdialogbase.h>
-#include <qframe.h>
 
-class KConfig;
-class QLabel;
-class KIntNumInput;
-class KColorButton;
-class ImageSelectLine;
-class KScanEntry;
-class QRadioButton;
-class KURLRequester;
-class QCheckBox;
+#include "ksaneocr.h"
 
 #define STARTUP_READ_IMAGE "ReadImageOnStart"
 #define CFG_GROUP_OCR_DIA  "ocrDialog"
 #define CFG_OCRAD_BINARY   "ocradBinary"
 #define CFG_GOCR_BINARY    "gocrBinary"
 
-class KookaPreferences : public KDialogBase
+class KIntNumInput;
+class KColorButton;
+class ImageSelectLine;
+class KURLRequester;
+class QCheckBox;
+class KComboBox;
+class KActiveLabel;
+
+
+class KookaPref : public KDialogBase
 {
     Q_OBJECT
-public:
-    KookaPreferences();
-    static QString tryFindGocr( void );
-    static QString tryFindBinary( const QString&, const QString& );
 
-public slots:
+public:
+    KookaPref();
+
+    static QString tryFindGocr();
+    static QString tryFindOcrad();
+
+protected slots:
     void slotOk( void );
     void slotApply( void );
     void slotDefault( void );
-
-private slots:
-    bool checkOCRBinIntern( const QString&, const QString&, bool );
-
-    void slCheckOnGOCR( const QString& );
-    void slCheckOnOCRAD( const QString& );
+    void slotEngineSelected(int i);
 
 signals:
     void dataSaved();
@@ -71,15 +69,24 @@ private:
     void setupSaveFormatPage();
     void setupThumbnailPage();
     void setupOCRPage();
-    KURLRequester* binaryCheckBox( QWidget *, const QString& );
 
-    QCheckBox *cbNetQuery;
-    QCheckBox *cbSkipFormatAsk;
-    QCheckBox *cbFilenameAsk;
-    QCheckBox *cbShowScannerSelection;
+    bool checkOCRBin(const QString &cmd,const QString &bin,bool showMsg);
+    static QString tryFindBinary(const QString &bin,const QString &configKey);
+
     KConfig   *konf;
+    KSaneOcr::OcrEngine originalEngine;
+    KSaneOcr::OcrEngine selectedEngine;
+
+    // Startup
+    QCheckBox *cbNetQuery;
+    QCheckBox *cbShowScannerSelection;
     QCheckBox *cbReadStartupImage;
 
+    // Image Saving
+    QCheckBox *cbSkipFormatAsk;
+    QCheckBox *cbFilenameAsk;
+
+    // Thumbnail View
     KIntNumInput *m_thumbWidth;
     KIntNumInput *m_thumbHeight;
     KIntNumInput *m_frameWidth;
@@ -87,14 +94,10 @@ private:
     KColorButton *m_colButt1;
     KColorButton *m_colButt2;
 
-    KURLRequester *m_urlReqGocr;
-    KURLRequester *m_urlReqOcrad;
-
-    QRadioButton *m_gocrBut;
-    QRadioButton *m_kadmosBut;
-    QRadioButton *m_ocradBut;
-    QString       m_prevOCREngine;
+    // OCR
+    KURLRequester *binaryReq;
+    KComboBox *engineCB;
+    KActiveLabel *ocrDesc;
 };
 
-
-#endif // KOOKAPREF_H
+#endif

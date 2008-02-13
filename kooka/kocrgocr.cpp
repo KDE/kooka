@@ -75,17 +75,27 @@ QString KGOCRDialog::ocrEngineName() const
     return i18n("GOCR" );
 }
 
+
 QString KGOCRDialog::ocrEngineDesc() const
 {
-    return i18n("GOCR is an Open Source project "
-                "for optical character recognition.<P>"
-                "The author of gocr is <B>Joerg Schulenburg</B><BR>"
-                "For more information about gocr see "
-                "<A HREF=http://jocr.sourceforge.net>"
-                "http://jocr.sourceforge.net</A>");
+    return (KGOCRDialog::engineDesc());
 }
 
-EngineError KGOCRDialog::setupGui()
+
+QString KGOCRDialog::engineDesc()
+{
+    return (i18n("<qt>"
+                 "<p>"
+                 "<b>GOCR</b> (sometimes known as <b>JOCR</b>) is an open source "
+                 "OCR engine, originally started by Joerg&nbsp;Schulenburg and now "
+                 "with a team of active developers. "
+                 "<p>"
+                 "See <a href=\"http://jocr.sourceforge.net\">jocr.sourceforge.net</a> "
+                 "for more information on GOCR."));
+}
+
+
+KSaneOcr::EngineError KGOCRDialog::setupGui()
 {
     KOCRBase::setupGui();
 
@@ -102,7 +112,7 @@ EngineError KGOCRDialog::setupGui()
     QString res = conf->readPathEntry( CFG_GOCR_BINARY, "notFound" );
     if( res == "notFound" )
     {
-        res = KookaPreferences::tryFindGocr();
+        res = KookaPref::tryFindGocr();
         if( res.isEmpty() )
         {
             /* Popup here telling that the config needs to be called */
@@ -145,7 +155,7 @@ EngineError KGOCRDialog::setupGui()
     sliderSpace->slSetSlider( numdefault );
     QToolTip::add( sliderSpace, i18n("Spacing between characters.\n\nDefault is 0 what means autodetection"));
 
-    return ENG_OK;
+    return KSaneOcr::ENG_OK;
 }
 
 void KGOCRDialog::introduceImage( KookaImage *img )

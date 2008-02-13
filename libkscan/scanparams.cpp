@@ -197,53 +197,36 @@ bool ScanParams::connectDevice( KScanDevice *newScanDevice,bool galleryMode )
 
 ScanParams::~ScanParams()
 {
-   if( startupOptset )
-   {
-      delete startupOptset;
-      startupOptset = 0;
-   }
+    kdDebug(29000) << k_funcinfo << endl;
 
-   if( progressDialog )
-   {
-      delete( progressDialog );
-      progressDialog = 0;
-   }
+    delete startupOptset;  startupOptset = NULL;
+    delete progressDialog; progressDialog = NULL;
 }
 
-void ScanParams::initialise( KScanOption *so )
+
+
+void ScanParams::initialise(KScanOption *so)
 {
-   if( ! so ) return;
-   bool initialised = false;
+    if (so==NULL) return;
+    if (startupOptset==NULL) return;
 
-   if( startupOptset )
-   {
-      QCString name = so->getName();
-      if( ! name.isEmpty() ){
-	 QCString val = startupOptset->getValue( name );
-	 kdDebug( 29000) << "Initialising <" << name << "> with value <" << val << ">" << endl;
-	 so->set( val );
-	 sane_device->apply(so);
-	 initialised = true;
-      }
-   }
-
-   if( ! initialised )
-   {
-
-   }
+    QCString name = so->getName();
+    if (!name.isEmpty())
+    {
+        QCString val = startupOptset->getValue(name);
+        kdDebug(29000) << "Initialising <" << name << "> with value <" << val << ">" << endl;
+        so->set(val);
+        sane_device->apply(so);
+    }
 }
 
 
 
 
-//QFrame *ScanParams::scannerParams()
 QScrollView *ScanParams::scannerParams()
 {
     KScanOption *so;
 
-//    /* This is for a real scanner */
-//    QFrame *frame = new QFrame(this);
-//    frame->setFrameStyle(QFrame::StyledPanel+QFrame::Sunken);
     QScrollView *sv = new QScrollView(this);
     sv->setHScrollBarMode( QScrollView::AlwaysOff );
     sv->setResizePolicy( QScrollView::AutoOneFit );
@@ -251,7 +234,6 @@ QScrollView *ScanParams::scannerParams()
     QWidget *frame = new QWidget(sv->viewport());
 
     frame->setBackgroundColor(sv->backgroundColor());
-    //sv->setBackgroundColor(Qt::green);
 
     QGridLayout *lay = new QGridLayout(frame,1,4,KDialog::marginHint(),2*KDialog::spacingHint());
     lay->setColStretch(2,1);
@@ -674,10 +656,10 @@ QScrollView *ScanParams::scannerParams()
     lay->addMultiCellWidget(new QLabel("",frame),row,row,0,3);
     lay->setRowStretch(row,1);				// dummy row for stretch
 
-frame->setMinimumWidth( frame->sizeHint().width() );
-   sv->setMinimumWidth( frame->minimumWidth());
+    frame->setMinimumWidth(frame->sizeHint().width());
+    sv->setMinimumWidth(frame->minimumWidth());
     sv->addChild(frame);
-//    return (frame);
+
     return (sv);
 }
 
@@ -701,7 +683,7 @@ to perform scanning.");
     else
     {
         msg = i18n("<qt>\
-<b>Problem: No scanner found, or unable to access it</b> \
+<b>Problem: No scanner found, or unable to access it</b>\
 <p>\
 There was a problem using the SANE (Scanner Access Now Easy) library to access \
 the scanner device.  There may be a problem with your SANE installation, or it \
