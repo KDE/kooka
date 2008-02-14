@@ -193,7 +193,7 @@ protected slots:
 
     void slSelectionChanged();
     void slotGallerySelectionChanged();
-    void slotLoadedImageChanged(KookaImage *img);
+    void slotLoadedImageChanged(KookaImage *img,bool isDir);
 
 signals:
     /**
@@ -214,7 +214,7 @@ signals:
     void signalScannerChanged(bool haveConnection);
     void signalRectangleChanged(bool haveSelection);
     void signalGallerySelectionChanged(bool isDir,int howmanySelected);
-    void signalLoadedImageChanged(bool isLoaded);
+    void signalLoadedImageChanged(bool isLoaded,bool isDir);
 
 private:
     QImage rotateRight( QImage* );

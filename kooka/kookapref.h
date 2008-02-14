@@ -31,10 +31,14 @@
 
 #include "ksaneocr.h"
 
-#define STARTUP_READ_IMAGE "ReadImageOnStart"
-#define CFG_GROUP_OCR_DIA  "ocrDialog"
-#define CFG_OCRAD_BINARY   "ocradBinary"
-#define CFG_GOCR_BINARY    "gocrBinary"
+#define GROUP_GENERAL           "General"
+#define GENERAL_ALLOW_RENAME    "AllowRename"
+
+#define STARTUP_READ_IMAGE      "ReadImageOnStart"
+
+#define CFG_GROUP_OCR_DIA       "ocrDialog"
+#define CFG_OCRAD_BINARY        "ocradBinary"
+#define CFG_GOCR_BINARY         "gocrBinary"
 
 class KIntNumInput;
 class KColorButton;
@@ -55,6 +59,8 @@ public:
     static QString tryFindGocr();
     static QString tryFindOcrad();
 
+    bool allowGalleryRename();
+
 protected slots:
     void slotOk( void );
     void slotApply( void );
@@ -65,6 +71,7 @@ signals:
     void dataSaved();
 
 private:
+    void setupGeneralPage();
     void setupStartupPage();
     void setupSaveFormatPage();
     void setupThumbnailPage();
@@ -76,6 +83,9 @@ private:
     KConfig   *konf;
     KSaneOcr::OcrEngine originalEngine;
     KSaneOcr::OcrEngine selectedEngine;
+
+    // General
+    QCheckBox *cbAllowRename;
 
     // Startup
     QCheckBox *cbNetQuery;

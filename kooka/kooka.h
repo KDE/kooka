@@ -93,7 +93,7 @@ protected slots:
     void slotUpdateScannerActions(bool haveConnection);
     void slotUpdateRectangleActions(bool haveSelection);
     void slotUpdateGalleryActions(bool isDir,int howmanySelected);
-    void slotUpdateLoadedActions(bool isLoaded);
+    void slotUpdateLoadedActions(bool isLoaded,bool isDir);
 
 private slots:
 
@@ -151,7 +151,6 @@ private:
    KAction *scaleToOriginalAction;
    KAction *mirrorVerticallyAction;
    KAction *mirrorHorizontallyAction;
-   //KAction *mirrorBothAction;
    KAction *rotateCwAction;
    KAction *rotateAcwAction;
    KAction *rotate180Action;
@@ -160,6 +159,7 @@ private:
    KAction *saveImageAction;
    KAction *importImageAction;
    KAction *deleteImageAction;
+   KAction *renameImageAction;
    KAction *unloadImageAction;
 
 };

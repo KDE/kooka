@@ -28,15 +28,6 @@
 #ifndef SCANPACKAGER_H
 #define SCANPACKAGER_H
 
-#include <qlistview.h>
-#include <qimage.h>
-#include <qpixmap.h>
-#include <qdragobject.h>
-#include <qmap.h>
-#include <klistview.h>
-#include <kio/job.h>
-#include <kio/global.h>
-#include <kio/file.h>
 #include <kfiletreeview.h>
 
 
@@ -44,32 +35,16 @@
   *@author Klaas Freitag
   */
 
-class KURL;
 class QPopupMenu;
-class KFileTreeViewItem;
+class QImage;
+class QListViewItem;
+
 class KookaImage;
 class KookaImageMeta;
-class KFileTreeBranch;
-
+class KURL;
 
 typedef enum{ Dummy, NameSearch, UrlSearch } SearchType;
 
-class JobDescription
-{
-public:
-   enum JobType { NoJob, ImportJob, RenameJob, ExportJob };
-   JobDescription():jobType( NoJob ), kioJob(0L), pitem(0L) {}
-   JobDescription( KIO::Job* kiojob, KFileTreeViewItem *new_item, JobType type ) :
-      jobType(type), kioJob(kiojob), pitem(new_item) {}
-
-   JobType type( void ) { return( jobType ); }
-   KFileTreeViewItem *item( void ) { return( pitem ); }
-   KIO::Job* job( void ){ return( kioJob ); }
-private:
-   JobType       jobType;
-   KIO::Job*     kioJob;
-   KFileTreeViewItem* pitem;
-};
 
 class ScanPackager : public KFileTreeView
 {
@@ -86,11 +61,12 @@ public:
 
    QPopupMenu *contextMenu() const { return m_contextMenu; }
    void         openRoots();
+   void setAllowRename(bool on);
 
 public slots:
    void         slSelectImage( const KURL& );
    void 	slAddImage( QImage *img, KookaImageMeta* meta = 0 );
-   void         slShowContextMenue(QListViewItem *, const QPoint &, int );
+   void         slShowContextMenu(QListViewItem *lvi,const QPoint &p);
 
    void         slotExportFile( );
     void        slotImportFile();
@@ -112,6 +88,7 @@ protected slots:
    void         slImageArrived( KFileTreeViewItem *item, KookaImage* image );
    void         slotCreateFolder( );
    void         slotDeleteItems( );
+   void         slotRenameItems( );
    void         slotUnloadItems( );
    void         slotUnloadItem( KFileTreeViewItem *curr );
    void         slotDirCount( KFileTreeViewItem *item, int cnt );
@@ -119,7 +96,7 @@ protected slots:
    void         slotDeleteFromBranch( KFileItem* );
    void         slotStartupFinished( KFileTreeViewItem * );
 signals:
-   void         showImage  ( KookaImage* );
+   void         showImage(KookaImage *img,bool isDir);
    void         deleteImage( KookaImage* );
    void         unloadImage( KookaImage* );
    void         galleryPathSelected( KFileTreeBranch* branch, const QString& relativPath );

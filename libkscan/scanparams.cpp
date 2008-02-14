@@ -674,7 +674,7 @@ void ScanParams::createNoScannerMsg(bool galleryMode)
         msg = i18n("<qt>\
 <b>Gallery Mode: No scanner selected</b>\
 <p>\
-In this mode you can browse and manipulate images already in the gallery.\
+In this mode you can browse, manipulate and OCR images already in the gallery.\
 <p>\
 Select a scanner device \
 (use the menu option <i>Settings&nbsp;- Select Scan&nbsp;Device</i>) \

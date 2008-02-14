@@ -71,6 +71,7 @@ KookaPref::KookaPref()
     // possibilities (including Tab, Swallow, and just Plain)
     konf = KGlobal::config ();
 
+    setupGeneralPage();
     setupStartupPage();
     setupSaveFormatPage();
     setupThumbnailPage();
@@ -236,17 +237,42 @@ bool KookaPref::checkOCRBin(const QString &cmd,const QString &bin,bool show_msg)
 
 
 
+void KookaPref::setupGeneralPage()
+{
+    konf->setGroup( GROUP_GENERAL );
+
+    QFrame *page = addPage( i18n("General"), i18n("General Options" ),
+			    BarIcon("configure", KIcon::SizeMedium ) );
+    QVBoxLayout *top = new QVBoxLayout( page, 0, spacingHint() );
+    top->addSpacing(KDialogBase::spacingHint());
+
+    /* Allow renaming in gallery */
+    cbAllowRename = new QCheckBox( i18n("Click-to-rename in gallery"),
+				page);
+    QToolTip::add( cbAllowRename,
+		   i18n( "Check this if you want to be able to rename gallery items by clicking on them "
+                         "(otherwise, use the \"Rename\" menu option)"));
+    cbAllowRename->setChecked(konf->readBoolEntry(GENERAL_ALLOW_RENAME,false));
+
+    top->addWidget(cbAllowRename);
+
+    top->addStretch(10);
+}
+
+
+
 void KookaPref::setupStartupPage()
 {
 
     /* startup options */
     konf->setGroup( GROUP_STARTUP );
 
-    QFrame *page = addPage( i18n("Startup"), i18n("Kooka Startup Preferences" ),
+    QFrame *page = addPage( i18n("Startup"), i18n("Startup Options" ),
 			    BarIcon("gear", KIcon::SizeMedium ) );
     QVBoxLayout *top = new QVBoxLayout( page, 0, spacingHint() );
     /* Description-Label */
     top->addWidget( new QLabel( i18n("Note that changing these options will affect Kooka's next start!"), page ));
+    top->addSpacing(KDialogBase::spacingHint());
 
     /* Query for network scanner (Checkbox) */
     cbNetQuery = new QCheckBox( i18n("Query network for available scanners"),
@@ -281,10 +307,12 @@ void KookaPref::setupStartupPage()
 
 }
 
+
+
 void KookaPref::setupSaveFormatPage( )
 {
    konf->setGroup( OP_FILE_GROUP );
-   QFrame *page = addPage( i18n("Image Saving"), i18n("Configure Image Save Assistant" ),
+   QFrame *page = addPage( i18n("Image Saving"), i18n("Configure Image Saving" ),
 			    BarIcon("filesave", KIcon::SizeMedium ) );
    QVBoxLayout *top = new QVBoxLayout( page, 0, spacingHint() );
 
@@ -382,16 +410,18 @@ void KookaPref::slotOk( void )
 {
   slotApply();
   accept();
-
 }
 
 
 void KookaPref::slotApply( void )
 {
-    /* ** startup options ** */
+   /* ** general options ** */
+   konf->setGroup(GROUP_GENERAL);
+   konf->writeEntry(GENERAL_ALLOW_RENAME,allowGalleryRename());
 
+    /* ** startup options ** */
    /** write the global one, to read from libkscan also */
-   konf->setGroup(QString::fromLatin1(GROUP_STARTUP));
+   konf->setGroup(GROUP_STARTUP);
    bool cbVal = !(cbShowScannerSelection->isChecked());
    kdDebug(28000) << "Writing for " << STARTUP_SKIP_ASK << ": " << cbVal << endl;
    konf->writeEntry( STARTUP_SKIP_ASK, cbVal, true, true ); /* global flag goes to kdeglobals */
@@ -457,6 +487,7 @@ default:    break;
 
 void KookaPref::slotDefault( void )
 {
+    cbAllowRename->setChecked(false);
     cbNetQuery->setChecked( true );
     cbShowScannerSelection->setChecked( true);
     cbReadStartupImage->setChecked( true);
@@ -474,4 +505,10 @@ void KookaPref::slotDefault( void )
     m_colButt2->setColor( col2 );
 
     slotEngineSelected(KSaneOcr::OcrNone);
+}
+
+
+bool KookaPref::allowGalleryRename()
+{
+    return (cbAllowRename->isChecked());
 }

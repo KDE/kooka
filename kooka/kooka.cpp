@@ -44,6 +44,7 @@
 #include "kookaview.h"
 
 #include "kooka.h"
+#include "kooka.moc"
 
 
 #define DOCK_SIZES "DockSizes"
@@ -85,8 +86,8 @@ Kooka::Kooka( const QCString& deviceToUse)
             this,   SLOT(slotUpdateRectangleActions(bool)));
     connect(m_view,SIGNAL(signalGallerySelectionChanged(bool,int)),
             this,   SLOT(slotUpdateGalleryActions(bool,int)));
-    connect(m_view,SIGNAL(signalLoadedImageChanged(bool)),
-            this,   SLOT(slotUpdateLoadedActions(bool)));
+    connect(m_view,SIGNAL(signalLoadedImageChanged(bool,bool)),
+            this,   SLOT(slotUpdateLoadedActions(bool,bool)));
 
     changeCaption( i18n( "KDE Scanning" ));
 
@@ -127,14 +128,14 @@ void Kooka::setupActions()
     KStdAction::quit(this , SLOT(close()), actionCollection());
 
     KStdAction::keyBindings(guiFactory(), SLOT(configureShortcuts()), 
-actionCollection());
+                            actionCollection());
     KStdAction::configureToolbars(this, SLOT(optionsConfigureToolbars()),
 				  actionCollection());
     KStdAction::preferences(this, SLOT(optionsPreferences()), actionCollection());
 
     m_view->createDockMenu(actionCollection(), this, "settings_show_docks" );
 
-    /* Image Viewer action Toolbar - OCR, Scaling etc. */
+    /* Image Viewer action Toolbar - Scaling etc. */
 
     scaleToWidthAction =  new KAction(i18n("Scale to Width"), "scaletowidth", CTRL+Key_I,
 				      m_view, SLOT( slIVScaleToWidth()),
@@ -186,11 +187,6 @@ actionCollection());
 					   this, SLOT( slMirrorHorizontal() ),
 					   actionCollection(), "mirrorHorizontal" );
 
-    // This is the same operation as "Rotate 180 degrees"!
-    //    mirrorBothAction = new KAction(i18n("Mirror Both Directions"), "mirror-both", CTRL+Key_B,
-    //				   this, SLOT( slMirrorBoth() ),
-    //				   actionCollection(), "mirrorBoth" );
-
     openWithAction = new KAction(i18n("Open With..."), "fileopen", KStdAccel::open(),
 				 m_view, SLOT( slOpenCurrInGraphApp() ),
 				 actionCollection(), "openInGraphApp" );
@@ -221,7 +217,7 @@ actionCollection());
 				  actionCollection(), "saveImage" );
     m_view->connectGalleryAction( saveImageAction );
 
-    importImageAction = new KAction(i18n("Import Image..."), "inline_image", 0,
+    importImageAction = new KAction(i18n("Import Image..."), "fileimport", 0,
 				    m_view->gallery(), SLOT( slotImportFile() ),
 				    actionCollection(), "importImage" );
     m_view->connectGalleryAction( importImageAction );
@@ -230,6 +226,11 @@ actionCollection());
 				    m_view->gallery(), SLOT( slotDeleteItems() ),
 				    actionCollection(), "deleteImage" );
     m_view->connectGalleryAction( deleteImageAction );
+
+    renameImageAction = new KAction(i18n("Rename Image"), "edittool", Key_F2,
+				    m_view->gallery(), SLOT( slotRenameItems() ),
+				    actionCollection(), "renameImage" );
+    m_view->connectGalleryAction( renameImageAction );
 
     unloadImageAction = new KAction(i18n("Unload Image"), "fileclose", CTRL+SHIFT+Key_U,
 				    m_view->gallery(), SLOT( slotUnloadItems() ),
@@ -360,13 +361,15 @@ void Kooka::optionsPreferences()
 {
     // popup some sort of preference dialog, here
     KookaPref dlg;
-    dlg.showPage( m_prefDialogIndex );
-    connect( &dlg, SIGNAL( dataSaved() ), m_view, SLOT(slFreshUpThumbView()));
+    dlg.showPage(m_prefDialogIndex);
+    connect(&dlg,SIGNAL(dataSaved()),m_view,SLOT(slFreshUpThumbView()));
 
     if (dlg.exec())
     {
         // redo your settings
        m_prefDialogIndex = dlg.activePageIndex();
+
+       m_view->gallery()->setAllowRename(dlg.allowGalleryRename());
        // m_view->slFreshUpThumbView();
     }
 }
@@ -392,11 +395,6 @@ void Kooka::slMirrorHorizontal( void )
 {
     m_view->slMirrorImage( KookaView::MirrorHorizontal );
 }
-
-//void Kooka::slMirrorBoth( void )
-//{
-//    m_view->slMirrorImage( KookaView::MirrorBoth );
-//}
 
 void Kooka::slRotateClockWise( void )
 {
@@ -458,7 +456,6 @@ void Kooka::slotUpdateGalleryActions(bool isDir,int howmanySelected)
 	scaleToOriginalAction->setEnabled(singleImage);
 	mirrorVerticallyAction->setEnabled(singleImage);
 	mirrorHorizontallyAction->setEnabled(singleImage);
-	//mirrorBothAction->setEnabled(singleImage);
 	rotateCwAction->setEnabled(singleImage);
 	rotateAcwAction->setEnabled(singleImage);
 	rotate180Action->setEnabled(singleImage);
@@ -476,7 +473,10 @@ void Kooka::slotUpdateGalleryActions(bool isDir,int howmanySelected)
 		unloadImageAction->setEnabled(true);
 
 		deleteImageAction->setText(i18n("Delete Folder"));
-		deleteImageAction->setEnabled(!m_view->galleryRootSelected());
+		renameImageAction->setText(i18n("Rename Folder"));
+                bool rs = m_view->galleryRootSelected();
+		deleteImageAction->setEnabled(!rs);
+		renameImageAction->setEnabled(!rs);
 	}
 	else
 	{
@@ -485,17 +485,15 @@ void Kooka::slotUpdateGalleryActions(bool isDir,int howmanySelected)
 					      m_view->gallery()->getCurrImage()!=NULL);
 
 		deleteImageAction->setText(i18n("Delete Image"));
+		renameImageAction->setText(i18n("Rename Image"));
 		deleteImageAction->setEnabled(singleImage);
+		renameImageAction->setEnabled(singleImage);
 	}
 }
 
 
-void Kooka::slotUpdateLoadedActions(bool isLoaded)
+void Kooka::slotUpdateLoadedActions(bool isLoaded,bool isDir)
 {
-	kdDebug(29000) << k_funcinfo << "loaded=" << isLoaded << endl;
-
-	unloadImageAction->setEnabled(isLoaded);
+	kdDebug(29000) << k_funcinfo << "loaded=" << isLoaded << " isDir=" << isDir << endl;
+	unloadImageAction->setEnabled(isLoaded || isDir);
 }
-
-
-#include "kooka.moc"

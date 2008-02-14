@@ -160,8 +160,8 @@ KookaView::KookaView( KParts::DockMainWindow *parent, const QCString& deviceToUs
 	    packager, SLOT( slSelectImage(const KURL&)));
    connect(packager,SIGNAL(selectionChanged()),
 	   this,SLOT(slotGallerySelectionChanged()));
-   connect(packager,SIGNAL(showImage(KookaImage *)),
-	   this,SLOT(slotLoadedImageChanged(KookaImage *)));
+   connect(packager,SIGNAL(showImage(KookaImage *,bool)),
+	   this,SLOT(slotLoadedImageChanged(KookaImage *,bool)));
 
 
    /*
@@ -268,7 +268,7 @@ KookaView::KookaView( KParts::DockMainWindow *parent, const QCString& deviceToUs
    connect( sane, SIGNAL( sigScanFinished(KScanStat)), this, SLOT(slScanFinished(KScanStat)));
    connect( sane, SIGNAL( sigAcquireStart()), this, SLOT( slAcquireStart()));
    /* Image canvas should show a new document */
-   connect( packager, SIGNAL( showImage( KookaImage* )),
+   connect( packager, SIGNAL( showImage( KookaImage*,bool )),
             this,       SLOT( slShowAImage( KookaImage*)));
 
    connect( packager, SIGNAL( aboutToShowImage(const KURL&)),
@@ -525,10 +525,10 @@ void KookaView::slotGallerySelectionChanged()
 }
 
 
-void KookaView::slotLoadedImageChanged(KookaImage *img)
+void KookaView::slotLoadedImageChanged(KookaImage *img,bool isDir)
 {
-    kdDebug( 28000) << k_funcinfo << "img=" << ((void*)img) << endl;
-    emit signalLoadedImageChanged(img!=NULL);
+    kdDebug( 28000) << k_funcinfo << "img=" << ((void*)img) << " isDir=" << isDir << endl;
+    emit signalLoadedImageChanged(img!=NULL,isDir);
 }
 
 

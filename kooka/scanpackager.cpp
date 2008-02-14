@@ -33,6 +33,7 @@
 #include "kookaimagemeta.h"
 #include "previewer.h"
 #include "devselector.h"
+#include "kookapref.h"
 
 #include <qapplication.h>
 #include <qdir.h>
@@ -66,24 +67,27 @@
 #include <kio/file.h>
 #include <kio/job.h>
 
-#define STARTUP_FIRST_START "firstStart"
+//#define STARTUP_FIRST_START "firstStart"
 
 
 /* ----------------------------------------------------------------------- */
 /* Constructor Scan Packager */
 ScanPackager::ScanPackager( QWidget *parent ) : KFileTreeView( parent )
 {
-   // TODO:
-   setItemsRenameable (true );
+   setItemsRenameable(false);
    setDefaultRenameAction( QListView::Reject );
+
    addColumn( i18n("Image Name" ));
    setColumnAlignment( 0, AlignLeft );
+   setRenameable ( 0, true );
 
    addColumn( i18n("Size") );
    setColumnAlignment( 1, AlignRight );
-   setColumnAlignment( 2, AlignRight );
+   setRenameable ( 1, false );
 
-   addColumn( i18n("Format" )); setColumnAlignment( 3, AlignRight );
+   addColumn( i18n("Format" ));
+   setColumnAlignment( 2, AlignRight );
+   setRenameable ( 2, false );
 
    /* Drag and Drop */
    setDragEnabled( true );
@@ -93,11 +97,9 @@ ScanPackager::ScanPackager( QWidget *parent ) : KFileTreeView( parent )
    connect( this, SIGNAL(dropped( QWidget*, QDropEvent*, KURL::List&, KURL& )),
 	    this, SLOT( slotUrlsDropped( QWidget*, QDropEvent*, KURL::List&, KURL& )));
 
-   kdDebug(28000) << "connected Drop-Signal" << endl;
-   setRenameable ( 0, true );
-   setRenameable ( 1, false );
-   setRenameable ( 2, false );
-   setRenameable ( 3, false );
+   KConfig *konf = KGlobal::config();
+   konf->setGroup(GROUP_GENERAL);
+   setAllowRename(konf->readBoolEntry(GENERAL_ALLOW_RENAME,false));
 
    setRootIsDecorated( false );
 
@@ -105,7 +107,7 @@ ScanPackager::ScanPackager( QWidget *parent ) : KFileTreeView( parent )
 	    SLOT( slClicked(QListViewItem*)));
 
    connect( this, SIGNAL( rightButtonPressed( QListViewItem *, const QPoint &, int )),
-	    SLOT( slShowContextMenue(QListViewItem *, const QPoint &, int )));
+	    SLOT( slShowContextMenu(QListViewItem *,const QPoint &)));
 
    connect( this, SIGNAL(itemRenamed (QListViewItem*, const QString &, int ) ), this,
 	    SLOT(slFileRename( QListViewItem*, const QString&, int)));
@@ -209,10 +211,9 @@ void ScanPackager::slotDecorate( KFileTreeViewItem* item )
    if( item->isDir())
    {
       // done in extra slot.
-      kdDebug(28000) << "Decorating directory!" << endl;
+      //kdDebug(28000) << "Decorating directory!" << endl;
    }
    else
-
    {
       KFileItem *kfi = item->fileItem();
 
@@ -284,7 +285,7 @@ void ScanPackager::slotDecorate( KFileTreeViewItem* item )
 void ScanPackager::slotDecorate( KFileTreeBranch* branch, const KFileTreeViewItemList& list )
 {
    (void) branch;
-   kdDebug(28000) << "decorating slot for list !" << endl;
+   //kdDebug(28000) << "decorating slot for list !" << endl;
 
    KFileTreeViewItemListIterator it( list );
 
@@ -501,7 +502,7 @@ void ScanPackager::slClicked( QListViewItem *newItem )
       if( item->isDir())
       {
 	 kdDebug(28000) << "clicked: Is a directory !" << endl;
-	 emit( showImage( 0L ));
+	 emit showImage(NULL,true);
 	 kdDebug(28000) << "emitting showThumbnails" << endl;
       }
       else
@@ -642,7 +643,7 @@ void ScanPackager::slImageArrived( KFileTreeViewItem *item, KookaImage* image )
 	 kfi->setExtraData( (void*) this, (void*) image );
       }
       slotDecorate( item );
-      emit( showImage( image ));
+      emit showImage(image,false);
    }
 }
 
@@ -944,25 +945,17 @@ KFileTreeViewItem *ScanPackager::spFindItem( SearchType type, const QString name
 }
 
 /* ----------------------------------------------------------------------- */
-void ScanPackager::slShowContextMenue(QListViewItem *lvi, const QPoint &p, int col )
+void ScanPackager::slShowContextMenu(QListViewItem *lvi,const QPoint &p)
 {
-   kdDebug(28000) << "Showing Context Menue" << endl;
-   (void) col;
+    KFileTreeViewItem *curr = NULL;
 
-   KFileTreeViewItem *curr = 0;
+    if (lvi!=NULL)
+    {
+        curr = currentKFileTreeViewItem();
+        if (curr->isDir()) setSelected(curr,true);
+    }
 
-   if( lvi )
-   {
-      curr = currentKFileTreeViewItem();
-      if( curr->isDir() )
-	 setSelected( curr, true );
-   }
-
-   if( m_contextMenu )
-   {
-      m_contextMenu->exec( p );
-   }
-
+    if (m_contextMenu!=NULL) m_contextMenu->exec(p);
 }
 
 /* ----------------------------------------------------------------------- */
@@ -1066,7 +1059,7 @@ void ScanPackager::slotCanceled( KIO::Job* )
 void ScanPackager::slotUnloadItems( )
 {
    KFileTreeViewItem *curr = currentKFileTreeViewItem();
-   emit( showImage( 0L ));
+   emit showImage(NULL,false);
    slotUnloadItem( curr );
 }
 
@@ -1116,59 +1109,80 @@ void ScanPackager::slotUnloadItem( KFileTreeViewItem *curr )
 }
 
 /* ----------------------------------------------------------------------- */
-void ScanPackager::slotDeleteItems( )
+
+void ScanPackager::slotDeleteItems()
+{
+    KFileTreeViewItem *curr = currentKFileTreeViewItem();
+    if (curr==NULL) return;
+
+    KURL urlToDel = curr->url();
+    QListViewItem *nextToSelect = curr->nextSibling();	// select this afterwards
+    bool ask = true;					// for future expansion
+    bool isDir = (curr->fileItem()->isDir());		// deleting a folder
+
+    if (ask)
+    {
+        QString s;
+        QString dontAskKey;
+
+        if (isDir)
+        {
+            s = i18n("<qt>Do you really want to permanently delete the folder<br>"
+                     "<b>%1</b><br>"
+                     "and all of its contents? It cannot be restored!").arg(urlToDel.pathOrURL());
+            dontAskKey = "AskForDeleteDirs";
+        }
+        else
+        {
+            s = i18n("<qt>Do you really want to permanently delete the image<br>"
+                     "<b>%1</b>?<br>"
+                     "It cannot be restored!").arg(urlToDel.pathOrURL());
+            dontAskKey = "AskForDeleteFiles";
+        }
+
+        if (KMessageBox::warningContinueCancel(this,s,i18n("Delete Gallery Item"),
+                                               KStdGuiItem::del(),
+                                               dontAskKey)!=KMessageBox::Continue) return;
+    }
+
+    kdDebug(28000) << k_funcinfo << "Deleting " << urlToDel.prettyURL() << endl;
+    /* Since we are currently talking about local files here, NetAccess is OK */
+    if (!KIO::NetAccess::del(urlToDel,NULL))
+    {
+        KMessageBox::error(this,i18n("<qt>Unable to delete the image or folder<br>"
+                                     "<b>%2</b><br><br>"
+                                     "%1").arg(KIO::NetAccess::lastErrorString(),urlToDel.pathOrURL()));
+        return;
+    }
+
+    if (nextToSelect!=NULL) setSelected(nextToSelect,true);
+
+    /* TODO: remove the directory from the imageNameCombobox */
+    if (isDir)
+    {
+        /* The directory needs to be removed from the name combo */
+        emit(directoryToRemove(curr->branch(),itemDirectory(curr,true)));
+    }
+}
+
+
+
+
+void ScanPackager::slotRenameItems( )
 {
    KFileTreeViewItem *curr = currentKFileTreeViewItem();
-   if( ! curr ) return;
-
-   KURL urlToDel = curr->url();
-   QListViewItem *nextToSelect = curr->nextSibling();
-
-   kdDebug(28000) << "Deleting: " << urlToDel.prettyURL() << endl;
-   bool ask = true; /* for later use */
-
-   int result = KMessageBox::Yes;
-
-   KFileItem *item = curr->fileItem();
-   if( ask )
-   {
-      QString s;
-      s = i18n("Do you really want to delete this image?\nIt cannot be restored!" );
-      if( item->isDir() )
-      {
-	 s = i18n("Do you really want to delete the folder %1\nand all the images inside?").arg("");
-      }
-      result = KMessageBox::warningContinueCancel(this, s, i18n( "Delete Collection Item"),
-					  KStdGuiItem::del(), "AskForDeleteFiles" );
-   }
-
-   /* Since we are currently talking about local files here, NetAccess is OK */
-   if( result == KMessageBox::Continue )
-   {
-      if( KIO::NetAccess::del( urlToDel, 0 ))
-      {
-	 if( nextToSelect )
-	    setSelected( nextToSelect, true );
-	 /* TODO: remove the directory from the imageNameCombobox */
-	 if( curr && item->isDir() )
-	 {
-	    /* The directory needs to be removed from the name combo */
-	    emit(directoryToRemove( curr->branch(), itemDirectory( curr, true ) ));
-	 }
-
-      }
-      else
-	 kdDebug(28000) << "Deleting files failed" << endl;
-
-   }
+   if (curr!=NULL) rename(curr,0);
 }
+
+
+
 
 /* ----------------------------------------------------------------------- */
 void ScanPackager::slotCreateFolder( )
 {
    bool ok;
    QString folder = KInputDialog::getText( i18n( "New Folder" ),
-         i18n( "Please enter a name for the new folder:" ), QString::null,
+         i18n( "Name for the new folder:" ), QString::null,
          &ok, this );
 
    if( ok )
@@ -1219,9 +1233,9 @@ QString ScanPackager::getImgName( QString name_on_disk )
 }
 
 /* ----------------------------------------------------------------------- */
-ScanPackager::~ScanPackager(){
-      kdDebug(29000) << "Destructor of ScanPackager" << endl;
-
+ScanPackager::~ScanPackager()
+{
+    kdDebug(29000) << k_funcinfo << endl;
 }
 
 /* called whenever one branch detects a deleted file */
@@ -1255,6 +1269,13 @@ void ScanPackager::contentsDragMoveEvent( QDragMoveEvent *e )
       }
    }
    e->acceptAction();
+}
+
+
+void ScanPackager::setAllowRename(bool on)
+{
+    kdDebug(29000) << k_funcinfo << "allow=" << on << endl;
+    setItemsRenameable(on);
 }
 
 
