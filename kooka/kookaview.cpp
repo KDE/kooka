@@ -511,15 +511,16 @@ void KookaView::slSelectionChanged()
 
 void KookaView::slotGallerySelectionChanged()
 {
-    kdDebug( 28000) << k_funcinfo << endl;
-
     KFileTreeViewItem *fti = packager->currentKFileTreeViewItem();
+
     if (fti==NULL)
     {
+        emit signalChangeStatusbar(i18n("No selection"));
 	emit signalGallerySelectionChanged(false,0);
     }
     else
     {
+        if (fti->isDir()) emit signalChangeStatusbar(i18n("Gallery folder %1").arg(fti->url().pathOrURL()));
 	emit signalGallerySelectionChanged(fti->isDir(),packager->selectedItems().count());
     }
 }
@@ -528,6 +529,8 @@ void KookaView::slotGallerySelectionChanged()
 void KookaView::slotLoadedImageChanged(KookaImage *img,bool isDir)
 {
     kdDebug( 28000) << k_funcinfo << "img=" << ((void*)img) << " isDir=" << isDir << endl;
+
+    if (!isDir && img==NULL) emit signalChangeStatusbar(i18n("Image unloaded"));
     emit signalLoadedImageChanged(img!=NULL,isDir);
 }
 
@@ -574,9 +577,9 @@ void KookaView::print()
 {
     /* For now, print a single file. Later, print multiple images to one page */
 
-    KookaImage *img = packager->getCurrImage();
-    if ( !img )
-        return;
+    KookaImage *img = packager->getCurrImage(true);	// load image if necessary
+    if (img==NULL) return;
+
     KPrinter printer; // ( true, pMode );
     printer.setUsePrinterResolution(true);
     printer.addDialogPage( new ImgPrintDialog( img ));
@@ -652,59 +655,51 @@ void KookaView::doOCRonSelection( void )
 void KookaView::doOCR( void )
 {
    emit( signalChangeStatusbar( i18n("Starting OCR on the entire image" )));
-    KookaImage *img = packager->getCurrImage();
+    KookaImage *img = packager->getCurrImage(true);
    startOCR( img );
    emit( signalCleanStatusbar( ));
 }
 
-void KookaView::startOCR( KookaImage *img )
+
+void KookaView::startOCR(KookaImage *img)
 {
-   if( img && ! img->isNull() )
+   if (img==NULL || img->isNull()) return;
+
+   if (ocrFabric==NULL)
    {
-      if( ocrFabric == 0L )
-      {
-          ocrFabric = new KSaneOcr( m_mainDock, KGlobal::config() );
-          ocrFabric->setImageCanvas( img_canvas );
+       ocrFabric = new KSaneOcr( m_mainDock, KGlobal::config() );
+       ocrFabric->setImageCanvas( img_canvas );
 
-          connect( ocrFabric, SIGNAL( newOCRResultText( const QString& )),
-                   m_ocrResEdit, SLOT(setText( const QString& )));
+       connect( ocrFabric, SIGNAL( newOCRResultText( const QString& )),
+                m_ocrResEdit, SLOT(setText( const QString& )));
 
-	  connect( ocrFabric, SIGNAL( newOCRResultText( const QString& )),
-		   m_dockOCRText, SLOT( show() ));
+       connect( ocrFabric, SIGNAL( newOCRResultText( const QString& )),
+                m_dockOCRText, SLOT( show() ));
 	  
-          connect( ocrFabric, SIGNAL( repaintOCRResImage( )),
-                   img_canvas, SLOT(repaint()));
+       connect( ocrFabric, SIGNAL( repaintOCRResImage( )),
+                img_canvas, SLOT(repaint()));
 
-	  connect( ocrFabric, SIGNAL( clearOCRResultText()),
-		   m_ocrResEdit, SLOT(clear()));
+       connect( ocrFabric, SIGNAL( clearOCRResultText()),
+                m_ocrResEdit, SLOT(clear()));
 
-          connect( ocrFabric,    SIGNAL( updateWord(int, const QString&, const QString& )),
-                   m_ocrResEdit, SLOT( slUpdateOCRResult( int, const QString&, const QString& )));
+       connect( ocrFabric,    SIGNAL( updateWord(int, const QString&, const QString& )),
+                m_ocrResEdit, SLOT( slUpdateOCRResult( int, const QString&, const QString& )));
 
-          connect( ocrFabric,    SIGNAL( ignoreWord(int, const ocrWord&)),
-                   m_ocrResEdit, SLOT( slIgnoreWrongWord( int, const ocrWord& )));
+       connect( ocrFabric,    SIGNAL( ignoreWord(int, const ocrWord&)),
+                m_ocrResEdit, SLOT( slIgnoreWrongWord( int, const ocrWord& )));
 
-          connect( ocrFabric, SIGNAL( markWordWrong(int, const ocrWord& )),
-                   m_ocrResEdit, SLOT( slMarkWordWrong( int, const ocrWord& )));
+       connect( ocrFabric, SIGNAL( markWordWrong(int, const ocrWord& )),
+                m_ocrResEdit, SLOT( slMarkWordWrong( int, const ocrWord& )));
 
-          connect( ocrFabric,    SIGNAL( readOnlyEditor( bool )),
-                   m_ocrResEdit, SLOT( setReadOnly( bool )));
+       connect( ocrFabric,    SIGNAL( readOnlyEditor( bool )),
+                m_ocrResEdit, SLOT( setReadOnly( bool )));
 
-          connect( ocrFabric,    SIGNAL( selectWord( int, const ocrWord& )),
-                   m_ocrResEdit, SLOT( slSelectWord( int, const ocrWord& )));
-
-      }
-
-      Q_CHECK_PTR( ocrFabric );
-      ocrFabric->slSetImage( img );
-
-      if( !ocrFabric->startOCRVisible(m_mainDock) )
-      {
-	 KMessageBox::sorry(0, i18n("Could not start OCR-Process.\n"
-				    "Probably there is already one running." ));
-
-      }
+       connect( ocrFabric,    SIGNAL( selectWord( int, const ocrWord& )),
+                m_ocrResEdit, SLOT( slSelectWord( int, const ocrWord& )));
    }
+
+   ocrFabric->slSetImage(img);
+   ocrFabric->startOCRVisible(m_mainDock);
 }
 
 
@@ -949,26 +944,23 @@ void KookaView::slSaveScanParams( )
 #endif
 }
 
-void KookaView::slShowAImage( KookaImage *img )
+
+void KookaView::slShowAImage(KookaImage *img)
 {
-   kdDebug(28000) << "Show new Image" << endl;
-   if( img_canvas )
-   {
-      img_canvas->newImage( img );
-      img_canvas->setReadOnly(false);
-   }
+    if (img_canvas)
+    {
+        img_canvas->newImage(img);
+        img_canvas->setReadOnly(false);
+    }
 
-   /* tell ocr about */
-   if( ocrFabric )
-   {
-       ocrFabric->slSetImage( img );
-   }
+    if (ocrFabric) ocrFabric->slSetImage(img);		/* tell ocr about it */
 
-   /* Status Bar */
-   KStatusBar *statBar = m_mainWindow->statusBar();
-   if( img_canvas )
-       statBar->changeItem( img_canvas->imageInfoString(), StatusImage );
+    KStatusBar *statBar = m_mainWindow->statusBar();	/* Status Bar */
+    if (img_canvas) statBar->changeItem(img_canvas->imageInfoString(),StatusImage);
+
+    if (img) emit signalChangeStatusbar(i18n("Showing image %1").arg(img->url().pathOrURL()));
 }
+
 
 void KookaView::slUnloadAImage( KookaImage * )
 {
@@ -1071,23 +1063,15 @@ void KookaView::saveProperties(KConfig *config)
 }
 
 
-void KookaView::slOpenCurrInGraphApp( void )
+void KookaView::slOpenCurrInGraphApp()
 {
-   QString file;
+    if (packager==NULL) return;
 
-   if( packager )
-   {
-      KFileTreeViewItem *ftvi = packager->currentKFileTreeViewItem();
+    KFileTreeViewItem *ftvi = packager->currentKFileTreeViewItem();
+    if (ftvi==NULL) return;
 
-      if( ! ftvi ) return;
-
-      kdDebug(28000) << "Trying to open <" << ftvi->url().prettyURL()<< ">" << endl;
-      KURL::List urllist;
-
-      urllist.append( ftvi->url());
-
-      KRun::displayOpenWithDialog( urllist );
-   }
+    KURL::List urllist(ftvi->url());
+    KRun::displayOpenWithDialog(urllist);
 }
 
 

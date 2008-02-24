@@ -171,61 +171,59 @@ void KSaneOcr::slLineBox( const QRect& )
  * starts visual ocr process. Depending on the ocr engine, this function creates
  * a new dialog, and shows it.
  */
-bool KSaneOcr::startOCRVisible( QWidget *parent )
+bool KSaneOcr::startOCRVisible(QWidget *parent)
 {
-   if( visibleOCRRunning ) return( false );
-   bool res = true;
+    if (visibleOCRRunning)
+    {
+        KMessageBox::sorry(NULL,i18n("An OCR process is already running."));
+        return (false);
+    }
 
-   m_parent = parent;
+    m_ocrProcessDia = NULL;
+    m_parent = parent;
 
-   if( m_ocrEngine == KSaneOcr::OcrGocr )
-   {
-       m_ocrProcessDia = new KGOCRDialog ( parent, m_spellInitialConfig );
-   }
-   else if( m_ocrEngine == KSaneOcr::OcrOcrad )
-   {
-       m_ocrProcessDia = new ocradDialog( parent, m_spellInitialConfig );
-   }
-   else if( m_ocrEngine == KSaneOcr::OcrKadmos )
-   {
+    if (m_ocrEngine == KSaneOcr::OcrGocr)
+    {
+        m_ocrProcessDia = new KGOCRDialog( parent, m_spellInitialConfig );
+    }
+    else if (m_ocrEngine == KSaneOcr::OcrOcrad)
+    {
+        m_ocrProcessDia = new ocradDialog( parent, m_spellInitialConfig );
+    }
+    else if (m_ocrEngine == KSaneOcr::OcrKadmos)
+    {
 #ifdef HAVE_KADMOS
-/*** Kadmos Engine OCR ***/
-       m_ocrProcessDia = new KadmosDialog( parent, m_spellInitialConfig );
+        m_ocrProcessDia = new KadmosDialog(parent, m_spellInitialConfig);
 #else
-       KMessageBox::sorry(0, i18n("This version of Kooka was not compiled with KADMOS support.\n"
-           "Please select another OCR engine in Kooka's options dialog."));
-       kdDebug(28000) << "Sorry, this version of Kooka has no KADMOS support" << endl;
-#endif /* HAVE_KADMOS */
-   }
-   else if( m_ocrEngine == KSaneOcr::OcrNone )
-   {
-       KMessageBox::sorry(NULL,i18n("No OCR engine is configured.\n"
-                                    "Please select one in Kooka's options dialog."));
-       return (false);
-   }
-   else
-   {
-       kdDebug(28000) << "Unknown OCR engine requested!" << endl;
-       return (false);
-   }
+        KMessageBox::sorry(NULL,i18n("This version of Kooka is not compiled with KADMOS support.\n"
+                                     "Please select another OCR engine."));
+#endif	/* HAVE_KADMOS */
+    }
+    else if (m_ocrEngine == KSaneOcr::OcrNone)
+    {
+        KMessageBox::sorry(NULL,i18n("No OCR engine is configured.\n"
+                                     "Please select and configure one (in the 'Configure Kooka...' dialog) to perform OCR."));
+    }
+    else
+    {
+        kdDebug(28000) << "Unknown OCR engine " << m_ocrEngine << endl;
+    }
 
    /*
     * this part is independant from the engine again
     */
-   if( m_ocrProcessDia )
-   {
-       m_ocrProcessDia->setupGui();
+    if (m_ocrProcessDia==NULL) return (false);
 
-       m_ocrProcessDia->introduceImage( m_img );
-       visibleOCRRunning = true;
+    m_ocrProcessDia->setupGui();
+    m_ocrProcessDia->introduceImage(m_img);
+    visibleOCRRunning = true;
 
-      connect( m_ocrProcessDia, SIGNAL( user1Clicked()), this, SLOT( startOCRProcess() ));
-      connect( m_ocrProcessDia, SIGNAL( closeClicked()), this, SLOT( slotClose() ));
-      connect( m_ocrProcessDia, SIGNAL( user2Clicked()), this, SLOT( slotStopOCR() ));
-      m_ocrProcessDia->show();
+    connect( m_ocrProcessDia, SIGNAL( user1Clicked()), this, SLOT( startOCRProcess() ));
+    connect( m_ocrProcessDia, SIGNAL( closeClicked()), this, SLOT( slotClose() ));
+    connect( m_ocrProcessDia, SIGNAL( user2Clicked()), this, SLOT( slotStopOCR() ));
+    m_ocrProcessDia->show();
 
-   }
-   return( res );
+    return (true);
 }
 
 /**

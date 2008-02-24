@@ -17,29 +17,23 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include <unistd.h>
-#include <stdlib.h>
-
 #include <qwidget.h>
 #include <qobject.h>
-#include <qasciidict.h>
-#include <qcombobox.h>
-#include <qslider.h>
 #include <qcheckbox.h>
-#include <qlineedit.h>
 #include <qlabel.h>
-#include <qlayout.h>
 #include <qtooltip.h>
-#include <qimage.h>
 #include <qregexp.h>
 
 #include <kdebug.h>
 #include <klocale.h>
 
+extern "C" {
+#include <sane/sane.h>
+}
+
 #include "kgammatable.h"
 #include "kscandevice.h"
 #include "kscancontrols.h"
-#include "kscanoptset.h"
 
 #include "kscanoption.h"
 #include "kscanoption.moc"
@@ -50,6 +44,7 @@
 
 /* switch to show some from time to time useful alloc-messages */
 #undef MEM_DEBUG
+#undef GETSET_DEBUG
 
 #undef APPLY_IN_SITU
 
@@ -64,7 +59,7 @@ static const int resList[] = { 50, 75, 100, 150, 200, 300, 600, 900, 1200, 1800,
 /** inline-access to the option descriptor, object to changes with global vars. **/
 inline const SANE_Option_Descriptor *getOptionDesc( const QCString& name )
 {
-   int *idx = (*KScanDevice::option_dic)[ name ];
+   int *idx = KScanDevice::option_dic->find(name);
    
    const SANE_Option_Descriptor *d = 0;
    // debug( "<< for option %s >>", name );
@@ -88,180 +83,113 @@ inline const SANE_Option_Descriptor *getOptionDesc( const QCString& name )
 /* ************************************************************************ */
 /* KScan Option                                                             */
 /* ************************************************************************ */
-KScanOption::KScanOption( const QCString& new_name ) :
-   QObject()
+
+KScanOption::KScanOption(const QCString& new_name)
 {
-   if( initOption( new_name ) )
-   {
-      int  *num = (*KScanDevice::option_dic)[ getName() ];	
-      if( !num || !buffer )
-	 return;
+    if (!initOption(new_name))
+    {
+        kdDebug(29000) << k_funcinfo << "initOption for <" << new_name << "> failed!" << endl;
+        return;
+    }
 
-      SANE_Status sane_stat = sane_control_option( KScanDevice::scanner_handle, *num,
-						   SANE_ACTION_GET_VALUE,
-						   buffer, 0 );
+    int *num = KScanDevice::option_dic->find(name);
+    if (num==NULL || buffer.isNull()) return;
 
-      if( sane_stat == SANE_STATUS_GOOD )
-      {
-	 buffer_untouched = false;
-      }
-   }
-   else
-   {
-      kdDebug(29000) << "Had problems to create KScanOption - initOption failed !" << endl;
-   }
+    SANE_Status sane_stat = sane_control_option(KScanDevice::scanner_handle, *num,
+                                                SANE_ACTION_GET_VALUE,
+                                                buffer.data(),NULL);
+    if (sane_stat==SANE_STATUS_GOOD) buffer_untouched = false;
 }
 
 
-bool KScanOption::initOption( const QCString& new_name )
+bool KScanOption::initOption(const QCString& new_name)
 {
-   desc = 0;
-   if( new_name.isEmpty() ) return( false );
+    desc = NULL;
+    if (new_name.isEmpty()) return (false);
 
-   name = new_name;
-   desc = getOptionDesc( name );
-   buffer = 0;
-   internal_widget = 0;
-   buffer_untouched = true;
-   buffer_size = 0;
+    name = new_name;
+    desc = getOptionDesc(name);
+    buffer.resize(0);
+    buffer_untouched = true;
+    internal_widget = NULL;
 
-   if( desc )
-   {
-	/* Gamma-Table - initial values */
-	gamma = 0; /* marks as unvalid */	
-	brightness = 0;
-	contrast = 0;
-	gamma = 100;
+    if (desc==NULL) return (false);
+
+    /* Gamma-Table - initial values */
+    gamma = 0; /* marks as unvalid */
+    brightness = 0;
+    contrast = 0;
+    gamma = 100;
 	
-  	// allocate memory
-  	switch( desc->type )
-  	{
-  	    case SANE_TYPE_INT:
-  	    case SANE_TYPE_FIXED:
-	    case SANE_TYPE_STRING:		
- 		buffer = allocBuffer( desc->size );
-	    break;
-    	    case SANE_TYPE_BOOL:
-	 	buffer = allocBuffer( sizeof( SANE_Word ) );
-	    break;
-            default:
-    		buffer_size = 0;
-	        buffer = 0;
-  	}
+    allocForDesc();
 
-	KScanOption *gtOption = (*KScanDevice::gammaTables)[ new_name ];
-	if( gtOption )
-	{
-	   kdDebug(29000) << "Is older GammaTable!" << endl;
-	   KGammaTable gt;
-	   gtOption->get( &gt );
+    KScanOption *gtOption = (*KScanDevice::gammaTables)[ new_name ];
+    if( gtOption )
+    {
+        kdDebug(29000) << "Is older GammaTable!" << endl;
+        KGammaTable gt;
+        gtOption->get( &gt );
 	
-	   gamma = gt.getGamma();
-	   contrast = gt.getContrast();
-	   brightness = gt.getBrightness();
-	}
-	else
-	{
-	   // kdDebug(29000) << "Is NOT older GammaTable!" << endl;
-	}
+        gamma = gt.getGamma();
+        contrast = gt.getContrast();
+        brightness = gt.getBrightness();
     }
 
-   return desc;
+   return (true);
 }
 
-KScanOption::KScanOption( const KScanOption &so ) :
-   QObject()
+
+KScanOption::KScanOption(const KScanOption &so)
+    : QObject()
 {
-   /* desc is stored by sane-lib and may be copied */
-   desc = so.desc;
-   name = so.name;
-   buffer_untouched = so.buffer_untouched;
-   gamma = so.gamma;
-   brightness = so.brightness;
-   contrast = so.contrast;
+    desc = so.desc;					// stored by sane-lib -> may be copied
+    name = so.name;					// QCString explicit sharing -> shallow copy
+    internal_widget = NULL;				// the widget is not copied!
 
-   /* intialise */
-   buffer = 0;
-   buffer_size = 0;
+    gamma = so.gamma;
+    brightness = so.brightness;
+    contrast = so.contrast;
 
-   /* the widget is not copied ! */
-   internal_widget = 0;
-   
-   if( ! ( desc && name ) )
-   {
-      kdWarning( 29000) << "Trying to copy a not healthy option (no name nor desc)" << endl;
-      return;
-   }
-   
-   if( so.buffer_untouched )
-      kdDebug(29000) << "Buffer of source is untouched!" << endl;
-
-   switch( desc->type )
-   {
-       case SANE_TYPE_INT:
-       case SANE_TYPE_FIXED:
-       case SANE_TYPE_STRING:  		
-	    buffer = allocBuffer( desc->size );
-	    // desc->size / sizeof( SANE_Word )
-	    memcpy( buffer, so.buffer, buffer_size  );
-       break;
-       case SANE_TYPE_BOOL:
-	    buffer = allocBuffer( sizeof( SANE_Word ) );
- 	    memcpy( buffer, so.buffer,  buffer_size );
-       break;
-       default:
-	  kdWarning( 29000 ) << "unknown option type in copy constructor" << endl;
-	  break;
+    if (desc==NULL && name.isNull())
+    {
+        kdWarning(29000) << "Trying to copy a not healthy option (no name nor desc)" << endl;
+        return;
     }
+
+    buffer = so.buffer.copy();				// QByteArray -> deep copy
+    buffer_untouched = so.buffer_untouched;
 }
 
 
-const QString KScanOption::configLine( void )
+const QString KScanOption::configLine()
 {
-   QCString strval = this->get();
-   kdDebug(29000) << "configLine returns <" << strval << ">" << endl;
-   return( strval );
+    QCString strval = this->get();
+    kdDebug(29000) << "configLine returns <" << strval << ">" << endl;
+    return (strval);
 }
 
 
-const KScanOption& KScanOption::operator= (const KScanOption& so )
+const KScanOption &KScanOption::operator=(const KScanOption &so)
 {
-   /* desc is stored by sane-lib and may be copied */
-   if( this == &so ) return( *this );
+    if (this==&so) return (*this);
 
-   desc = so.desc;
-   name = so.name;
-   buffer_untouched = so.buffer_untouched;
-   gamma = so.gamma;
-   brightness = so.brightness;
-   contrast = so.contrast;
+    desc = so.desc;					// stored by sane-lib -> may be copied
+    name = so.name;					// QCString explicit sharing -> shallow copy
 
-   delete internal_widget;
-   internal_widget = so.internal_widget;
+    gamma = so.gamma;
+    brightness = so.brightness;
+    contrast = so.contrast;
 
-   if( buffer ) {
-      delete [] buffer;
-      buffer = 0;
-   }
+    delete internal_widget;				// widget *is* copied here
+    internal_widget = so.internal_widget;
 
-   switch( desc->type )
-   {
-       case SANE_TYPE_INT:
-       case SANE_TYPE_FIXED:
-       case SANE_TYPE_STRING:  		
-	    buffer = allocBuffer( desc->size );
-	    memcpy( buffer, so.buffer, buffer_size );
-       break;
-       case SANE_TYPE_BOOL:
-	    buffer = allocBuffer( sizeof( SANE_Word ) );
- 	    memcpy( buffer, so.buffer,  buffer_size );
-       break;
-       default:
-            buffer = 0;
-            buffer_size = 0;
-    }
-    return( *this );
+    buffer.resize(0);					// throw away old buffer
+    buffer = so.buffer.copy();				// QByteArray -> deep copy
+    buffer_untouched = so.buffer_untouched;
+
+    return (*this);
 }
+
 
 void KScanOption::slWidgetChange( const QCString& t )
 {
@@ -345,89 +273,62 @@ default:
 
 /* In this slot, the option queries the scanner for current values. */
 
-void KScanOption::slReload( void )
+void KScanOption::slReload()
 {
-   int  *num = (*KScanDevice::option_dic)[ getName() ];	
-   desc = getOptionDesc( getName() );	
-	
-   if( !desc || !num  )
-      return;
+    int *num = KScanDevice::option_dic->find(name);
+    if (!valid() || num==NULL) return;
+    desc = getOptionDesc(name);	
 		
-   if( widget() )
-   {
-       //kdDebug(29000) << "constraint is " << desc->cap << endl;
-      if( !active() )
-	 kdDebug(29000) << desc->name << " is not active now" << endl;
-
-      if( !softwareSetable() )
-	 kdDebug(29000) << desc->name << " is not software setable" << endl;
-
-      if( !active() || !softwareSetable() )
-      {
-	 kdDebug(29000) << "Disabling widget " << getName() << " !" << endl;
-	 widget()->setEnabled( false );
-      }
-      else
-	 widget()->setEnabled( true );
-   }
+    if (widget()!=NULL)
+    {
+        if (!active())
+        {
+            kdDebug(29000) << desc->name << " is not active" << endl;
+            widget()->setEnabled(false);
+        }
+        else if (!softwareSetable())
+        {
+            kdDebug(29000) << desc->name << " is not software setable" << endl;
+            widget()->setEnabled(false);
+        }
+        else widget()->setEnabled(true);
+    }
 	
-   /* first get mem if nothing is approbiate */
-   if( !buffer )
+   if (buffer.isNull())					/* first get mem if needed */
    {
-      kdDebug(29000) << " *********** getting without space **********" << endl;
-      // allocate memory
-      switch( desc->type )
-      {
-	 case SANE_TYPE_INT:
-	 case SANE_TYPE_FIXED:
-	 case SANE_TYPE_STRING:  		
-	    buffer = allocBuffer( desc->size );
-	    break;
-	 case SANE_TYPE_BOOL:
-	    buffer = allocBuffer( sizeof( SANE_Word ) );
-	    break;
-	 default:
-	    if( desc->size > 0 )
-	    {
-	       buffer = allocBuffer( desc->size );
-	    }
-      }
+       kdDebug(29000) << k_funcinfo << "need to allocate now" << endl;
+       allocForDesc();
    }
 
-   if( active())
-   {
-      if( (size_t) desc->size > buffer_size )
-      {
-	 kdDebug(29000) << "ERROR: Buffer to small" << endl;
-      }
-      else
-      {
-	 SANE_Status sane_stat = sane_control_option( KScanDevice::scanner_handle, *num,
-						      SANE_ACTION_GET_VALUE, buffer, 0 );
+   if (!active()) return;
 
-	 if( sane_stat != SANE_STATUS_GOOD )
-	 {
-	    kdDebug(29000) << "ERROR: Cant get value for " << getName() << ": " << sane_strstatus( sane_stat ) << endl;
-	 } else {
-	    buffer_untouched = false;
-	    //kdDebug(29000) << "Setting buffer untouched to FALSE" << endl;
-	 }
-      }
+   if (((size_t) desc->size)>buffer.size())
+   {
+       kdDebug(29000) << "ERROR: Buffer too small for <" << name << ">"
+                      << " size " << buffer.size() << " need " << desc->size << endl;
+       return;
    }
+
+   SANE_Status sane_stat = sane_control_option( KScanDevice::scanner_handle, *num,
+                                                SANE_ACTION_GET_VALUE, buffer.data(),NULL);
+   if( sane_stat != SANE_STATUS_GOOD )
+   {
+       kdDebug(29000) << "ERROR: Can't get value for <" << name << "> " << sane_strstatus( sane_stat ) << endl;
+       return;
+   }
+
+   //kdDebug(29000) << "Setting buffer untouched to FALSE" << endl;
+   buffer_untouched = false;
 }
 
 
 KScanOption::~KScanOption()
 {
 #ifdef MEM_DEBUG
-   qDebug( "M: FREEing %d byte of option <%s>", buffer_size, (const char*) getName());
+    if (!buffer.isNull()) kdDebug(29000) << k_funcinfo << "Freeing " << buffer.size() << " bytes for <" << name << ">" << endl;
 #endif
 }
 
-bool KScanOption::valid( void ) const
-{
-  return( desc && 1 );
-}
 
 bool KScanOption::autoSetable( void )
 {
@@ -525,143 +426,117 @@ default:    ret = KScanOption::Invalid;
 }
 
 
-bool KScanOption::set( int val )
+bool KScanOption::set(int val)
 {
-   if( ! desc ) return( false );
-   bool ret = false;
-
-   int word_size       = 0;
-   QMemArray<SANE_Word> qa;
-   SANE_Word sw        = SANE_TRUE;
-   const SANE_Word sw1 = val;
-   const SANE_Word sw2 = SANE_FIX( (double) val );
-
-   switch( desc->type )
-   {
-      case SANE_TYPE_BOOL:
-	
-	 if( ! val )
-	    sw = SANE_FALSE;
-	 if( buffer ) {
-	    memcpy( buffer, &sw, sizeof( SANE_Word ));
-	    ret = true;
-	 }
-	 break;
-	 // Type int: Fill the whole buffer with that value
-      case SANE_TYPE_INT:
-	 word_size = desc->size / sizeof( SANE_Word );
-
-	 qa.resize( word_size );
-	 qa.fill( sw1 );
-	
-	 if( buffer ) {
-	    memcpy( buffer, qa.data(), desc->size );
-	    ret = true;
-	 }
-	 break;
-
-	 // Type fixed: Fill the whole buffer with that value
-      case SANE_TYPE_FIXED:
-	 word_size = desc->size / sizeof( SANE_Word );
-
-	 qa.resize( word_size );
-	 qa.fill( sw2 );
-	
-	 if( buffer ) {
-	    memcpy( buffer, qa.data(), desc->size );
-	    ret = true;
-	 }
-	 break;
-       default:
-	 kdDebug(29000) << "Cant set " << name << "  with type int" << endl;
-   }
-   if( ret )
-   {
-      buffer_untouched = false;
-#ifdef APPLY_IN_SITU
-      applyVal();
+    if (!valid() || buffer.isNull()) return (false);
+#ifdef GETSET_DEBUG
+    kdDebug(29000) << k_funcinfo << "Setting <" << name << "> to " << val << endl;
 #endif
 
-      //emit( optionChanged( this ));
-   }
+    int word_size;
+    QMemArray<SANE_Word> qa;
+    SANE_Word sw;
 
-   return( ret );
+    switch (desc->type)
+    {
+case SANE_TYPE_BOOL:					// Assign a Boolean value
+        sw = (val ? SANE_TRUE : SANE_FALSE);
+        buffer.duplicate(((const char *) &sw),sizeof(SANE_Word));
+        break;
+
+case SANE_TYPE_INT:					// Fill the whole buffer with that value
+	word_size = desc->size/sizeof(SANE_Word);
+	qa.resize(word_size);
+        sw = static_cast<SANE_Word>(val);
+	qa.fill(sw);
+        buffer.duplicate(((const char *) qa.data()),desc->size);
+	break;
+
+case SANE_TYPE_FIXED:					// Fill the whole buffer with that value
+        word_size = desc->size/sizeof(SANE_Word);
+        qa.resize(word_size);
+        sw = SANE_FIX(static_cast<double>(val));
+        qa.fill(sw);
+        buffer.duplicate(((const char *) qa.data()),desc->size);
+        break;
+
+default:
+	kdDebug(29000) << k_funcinfo << "Can't set <" << name << "> with this type" << endl;
+        return (false);
+        break;
+    }
+
+    buffer_untouched = false;
+#ifdef APPLY_IN_SITU
+    applyVal();
+#endif
+    //emit( optionChanged( this ));
+    return (true);
 }
 
 
 
-bool KScanOption::set( double val )
+bool KScanOption::set(double val)
 {
-   if( ! desc ) return( false );
-   bool ret = false;
-   int  word_size = 0;
-   QMemArray<SANE_Word> qa;
-   SANE_Word sw = SANE_FALSE;
-
-   switch( desc->type )
-   {
-      case SANE_TYPE_BOOL:
-	
-	 if( val > 0 )
-	    sw = SANE_TRUE;
-	 if( buffer ) {
-	    memcpy( buffer, &sw, sizeof( SANE_Word ));
-	    ret = true;
-	 }
-	 break;
-	 // Type int: Fill the whole buffer with that value
-      case SANE_TYPE_INT:
-	 sw = (SANE_Word) val;
-	 word_size = desc->size / sizeof( SANE_Word );
-
-	 qa.resize( word_size );
-	 qa.fill( sw );
-	
-	 if( buffer ) {
-	    memcpy( buffer, qa.data(), desc->size );
-	    ret = true;
-	 }
-	 break;
-
-	 // Type fixed: Fill the whole buffer with that value
-      case SANE_TYPE_FIXED:
-	 sw = SANE_FIX( val );
-	 word_size = desc->size / sizeof( SANE_Word );
-
-	 qa.resize( word_size );
-	 qa.fill( sw );
-	
-	 if( buffer ) {
-	    memcpy( buffer, qa.data(), desc->size );
-	    ret = true;
-	 }
-	 break;
-      default:
-	 kdDebug(29000) << "Cant set " << name << " with type double" << endl;
-   }
-
-   if( ret )
-   {
-      buffer_untouched = false;
-#ifdef APPLY_IN_SITU
-      applyVal();
+    if (!valid() || buffer.isNull()) return (false);
+#ifdef GETSET_DEBUG
+    kdDebug(29000) << k_funcinfo << "Setting <" << name << "> to " << val << endl;
 #endif
-      //emit( optionChanged( this ));
+
+    int word_size;
+    QMemArray<SANE_Word> qa;
+    SANE_Word sw;
+
+    switch (desc->type)
+    {
+case SANE_TYPE_BOOL:					// Assign a Boolean value
+        sw = (val>0 ? SANE_TRUE : SANE_FALSE);
+        buffer.duplicate(((const char *) &sw),sizeof(SANE_Word));
+        break;
+
+case SANE_TYPE_INT:					// Fill the whole buffer with that value
+        word_size = desc->size/sizeof(SANE_Word);
+        qa.resize(word_size);
+        sw = static_cast<SANE_Word>(val);
+        qa.fill(sw);
+        buffer.duplicate(((const char *) qa.data()),desc->size);
+        break;
+
+case SANE_TYPE_FIXED:					// Fill the whole buffer with that value
+        word_size = desc->size/sizeof(SANE_Word);
+        qa.resize(word_size);
+        sw = SANE_FIX(val);
+        qa.fill(sw);
+        buffer.duplicate(((const char *) qa.data()),desc->size);
+        break;
+
+default:
+	kdDebug(29000) << k_funcinfo << "Can't set <" << name << "> with this type" << endl;
+        return (false);
+        break;
    }
 
-   return( ret );
+    buffer_untouched = false;
+#ifdef APPLY_IN_SITU
+    applyVal();
+#endif
+    //emit optionChanged( this );
+    return (true);
 }
 
 
-
-bool KScanOption::set( int *val, int size )
+bool KScanOption::set(int *val,int size)
 {
-    if( ! desc || ! val ) return( false );
-    bool   ret    = false;
-    int    offset = 0;
+    if (!valid() || buffer.isNull()) return (false);
+    if (val==NULL) return (false);
+#ifdef GETSET_DEBUG
+    kdDebug(29000) << k_funcinfo << "Setting <" << name << "> to [" << size << "]" << endl;
+#endif
 
-    int word_size = desc->size / sizeof( SANE_Word ); /* add 1 in case offset is needed */
-    QMemArray<SANE_Word> qa( 1+word_size );
+    int offset = 0;
+    int word_size = desc->size/sizeof(SANE_Word);
+    QMemArray<SANE_Word> qa(1+word_size);		/* add 1 in case offset is needed */
+
 #if 0
     if( desc->constraint_type == SANE_CONSTRAINT_WORD_LIST )
     {
@@ -673,292 +548,255 @@ bool KScanOption::set( int *val, int size )
     }
 #endif
 
-    switch( desc->type )
+    switch (desc->type)
     {
-	case SANE_TYPE_INT:
-	    for( int i = 0; i < word_size; i++ )
-	    {
-		if( i < size )
-		    qa[offset+i] = (SANE_Word) *(val++);
-		else
-		    qa[offset+i] = (SANE_Word) *val;
-	    }
-	    ret = true;
-	    break;
+case SANE_TYPE_INT:
+        for (int i = 0; i<word_size; i++)
+        {
+            if (i<size) qa[offset+i] = (SANE_Word) *(val++);
+            else qa[offset+i] = (SANE_Word) *val;
+        }
+        break;
 
-	    // Type fixed: Fill the whole buffer with that value
-	case SANE_TYPE_FIXED:
-	    for( int i = 0; i < word_size; i++ )
-	    {
-		if( i < size )
-		    qa[offset+i] = SANE_FIX((double)*(val++));
-		else
-		    qa[offset+i] = SANE_FIX((double) *val );
-	    }
-	    ret = true;
-	    break;
-	default:
-	    kdDebug(29000) << "Cant set " << name << " with type int*" << endl;
-	
+case SANE_TYPE_FIXED:
+        for (int i = 0; i<word_size; i++)
+        {
+            if (i<size) qa[offset+i] = SANE_FIX((double) *(val++));
+            else qa[offset+i] = SANE_FIX((double) *val);
+        }
+        break;
+
+default:
+	kdDebug(29000) << k_funcinfo << "Can't set <" << name << "> with this type" << endl;
+        return (false);
+        break;
     }
 
-    if( ret && buffer ) {
-	int copybyte = desc->size;
-	
-	if( offset )
-	    copybyte += sizeof( SANE_Word );
+    int copybyte = desc->size;
+    if (offset) copybyte += sizeof(SANE_Word);
 
-	kdDebug(29000) << "Copying " << copybyte << " byte to options buffer" << endl;
-	
-	memcpy( buffer, qa.data(), copybyte );
-    }
-
-    if( ret )
-    {
-	buffer_untouched = false;
+    //kdDebug(29000) << "Copying " << copybyte << " byte to options buffer" << endl;
+    buffer.duplicate(((const char *) qa.data()),copybyte);
+    buffer_untouched = false;
 #ifdef APPLY_IN_SITU
-	applyVal();
+    applyVal();
 #endif
-	//emit( optionChanged( this ));
-    }
-
-    return( ret );
+    //emit( optionChanged( this ));
+    return (true);
 }
 
-bool KScanOption::set( const QCString& c_string )
-{
-   bool ret = false;
-   int  val = 0;
-   
-   if( ! desc ) return( false );
 
-   /* Check if it is a gammatable. If it is, convert to KGammaTable and call
-    *  the approbiate set method.
-    */
-   QRegExp re( "\\d+, \\d+, \\d+" );
-   re.setMinimal(true);
+bool KScanOption::set(const QCString &c_string)
+{
+    if (!valid() || buffer.isNull()) return (false);
+#ifdef GETSET_DEBUG
+    kdDebug(29000) << k_funcinfo << "Setting <" << name << "> to '" << c_string << "'" << endl;
+#endif
+
+    int val;
    
-   if( QString(c_string).contains( re ))
-   {
-      QStringList relist = QStringList::split( ", ", QString(c_string) );
+    /* Check if it is a gammatable. If it is, convert to KGammaTable and call
+     *  the approbiate set method.
+     */
+    QRegExp re( "\\d+, \\d+, \\d+" );
+    re.setMinimal(true);
+    if (QString(c_string).contains(re))
+    {
+        QStringList relist = QStringList::split( ", ", QString(c_string) );
       
-      int brig = (relist[0]).toInt();
-      int contr = (relist[1]).toInt();
-      int gamm = (relist[2]).toInt();
+        int brig = (relist[0]).toInt();
+        int contr = (relist[1]).toInt();
+        int gamm = (relist[2]).toInt();
 
-      KGammaTable gt( brig, contr, gamm );
-      ret = set( &gt );
-      kdDebug(29000) << "Setting GammaTable with int vals " << brig << "|" << contr << "|" << gamm << endl;
-      
-      return( ret );
-   }
-
-   
-   /* On String-type the buffer gets malloced in Constructor */
-   switch( desc->type )
-   {
-       case SANE_TYPE_STRING:
-	   kdDebug(29000) << "Setting " << c_string << " as String" << endl;
-   	
-	   if( buffer_size >= c_string.length() )
-	   {
-	       memset( buffer, 0, buffer_size );
-	       qstrncpy( (char*) buffer, (const char*) c_string, buffer_size );
-	       ret = true;
-	   }
-	   else
-	   {
-	       kdDebug(29000) << "ERROR: Buffer for String " << c_string << " too small: " << buffer_size << "  < " << c_string.length() << endl;
-	   }
-	   break;
-       case SANE_TYPE_INT:
-       case SANE_TYPE_FIXED:
-	   kdDebug(29000) << "Type is INT or FIXED, try to set value <" << c_string << ">" << endl;
-	   val = c_string.toInt( &ret );
-	   if( ret ) 
-	       set( &val, 1 );
-	   else
-	       kdDebug(29000) << "Conversion of string value failed!" << endl;
-	   
-	   break;
-      case SANE_TYPE_BOOL:
-	 kdDebug(29000) << "Type is BOOL, setting value <" << c_string << ">" << endl;
-	 val = 0;
-	 if( c_string == "true" ) val = 1;
-	 set( val );
-	 break;
-       default:
-	   kdDebug(29000) << "Type of " << name << " is " << desc->type << endl;
-	   kdDebug(29000) << "Cant set " << name << " with type string" << endl;
-	   break;
-   }
-
-   if( ret )
-   {
-      buffer_untouched = false;
-#ifdef APPLY_IN_SITU
-      applyVal();
-#endif
-      //emit( optionChanged( this ));
-   }
-   kdDebug(29000) << "Returning " << ret << endl;
-   return( ret );
-}
-
-
-bool KScanOption::set( KGammaTable *gt )
-{
-   if( ! desc ) return( false );
-   bool ret = true;
-   int size = gt->tableSize();
-   SANE_Word *run = gt->getTable();
-
-   int word_size = desc->size / sizeof( SANE_Word );
-   QMemArray<SANE_Word> qa( word_size );
-   kdDebug(29000) << "KScanOption::set for Gammatable !" << endl;
-   switch( desc->type )
-   {
-      case SANE_TYPE_INT:
-	 for( int i = 0; i < word_size; i++ ){
-	    if( i < size )
-	       qa[i] = *run++;
-	    else
-	       qa[i] = *run;
-	 }
-	 break;
-
-      // Type fixed: Fill the whole buffer with that value
-      case SANE_TYPE_FIXED:
-	 for( int i = 0; i < word_size; i++ ){
-	    if( i < size )
-	       qa[i] = SANE_FIX((double)*(run++));
-	    else
-	       qa[i] = SANE_FIX((double) *run );
-	 }
-	 break;
-      default:
-	 kdDebug(29000) << "Cant set " << name << " with type GammaTable" << endl;
-	 ret = false;
-	
-   }
-
-   if( ret && buffer )
-   {
-      /* remember raw vals */
-      gamma      = gt->getGamma();
-      brightness = gt->getBrightness();
-      contrast   = gt->getContrast();
-
-      memcpy( buffer, qa.data(), desc->size );
-      buffer_untouched = false;
-#ifdef APPLY_IN_SITU
-      applyVal();
-#endif
-      //emit( optionChanged( this ));
-   }
-
-   return( ret );
-}
-
-bool KScanOption::get( int *val ) const
-{
-  SANE_Word sane_word;
-  double d;
-  if( !valid() || !getBuffer())
-    return( false );
-			
-  switch( desc->type )
-    {
-    case SANE_TYPE_BOOL:
-      /* Buffer has a SANE_Word */
-      sane_word = *((SANE_Word*)buffer);
-      if( sane_word == SANE_TRUE )
-	*val = 1;
-      else
-	*val = 0;
-      break;
-      /* Type int: Fill the whole buffer with that value */
-      /* reading the first is OK */
-    case SANE_TYPE_INT:
-      sane_word = *((SANE_Word*)buffer);
-      *val = sane_word;
-      break;
-
-      // Type fixed: whole buffer filled with the same value
-    case SANE_TYPE_FIXED:
-      d = SANE_UNFIX(*(SANE_Word*)buffer);
-      *val = (int)d;
-      break;
-    default:
-      kdDebug(29000) << "Cant get " << name << " to type int" << endl;
-      return( false );
+        KGammaTable gt( brig, contr, gamm );
+        kdDebug(29000) << "Setting GammaTable with int vals " << brig << "," << contr << "," << gamm << endl;
+        return (set(&gt));
     }
 
-  // qDebug( "option::get returns %d", *val );
-  return( true );
+    /* On String-type the buffer gets malloced in Constructor */
+    switch (desc->type)
+    {
+case SANE_TYPE_STRING:
+        buffer.duplicate(c_string.data(),(c_string.length()+1));
+        break;
+
+case SANE_TYPE_INT:
+case SANE_TYPE_FIXED:
+        bool ok;
+        val = c_string.toInt(&ok);
+        if (ok) set(&val,1);
+        else
+        {
+            kdDebug(29000) << k_funcinfo << "Conversion of string value [" << c_string << "] failed!" << endl;
+            return (false);
+        }
+        break;
+
+case SANE_TYPE_BOOL:
+        val = (c_string=="true") ? 1 : 0;
+        set(val);
+        break;
+
+default:
+	kdDebug(29000) << k_funcinfo << "Can't set <" << name << "> with this type" << endl;
+        return (false);
+        break;
+    }
+
+    buffer_untouched = false;
+#ifdef APPLY_IN_SITU
+    applyVal();
+#endif
+    //emit( optionChanged( this ));
+    return (true);
 }
 
 
-
-QCString KScanOption::get( void ) const
+bool KScanOption::set(KGammaTable *gt)
 {
-   QCString retstr;
+    if (!valid() || buffer.isNull()) return (false);
+#ifdef GETSET_DEBUG
+    kdDebug(29000) << k_funcinfo << "Setting <" << name << ">" << endl;
+#endif
 
-   SANE_Word sane_word;
+    int size = gt->tableSize();
+    SANE_Word *run = gt->getTable();
+
+    int word_size = desc->size/sizeof(SANE_Word);
+    QMemArray<SANE_Word> qa(word_size);
+
+    switch (desc->type)
+    {
+case SANE_TYPE_INT:
+        for (int i = 0; i<word_size; i++)
+        {
+	    if (i<size) qa[i] = *run++;
+	    else qa[i] = *run;
+        }
+        break;
+
+case SANE_TYPE_FIXED:
+        for (int i = 0; i<word_size; i++)
+        {
+	    if (i<size) qa[i] = SANE_FIX((double) *(run++));
+	    else qa[i] = SANE_FIX((double) *run);
+        }
+        break;
+
+default:
+	kdDebug(29000) << k_funcinfo << "Can't set <" << name << "> with this type" << endl;
+        return (false);
+        break;
+    }
+
+    /* Remember raw values */
+    gamma      = gt->getGamma();
+    brightness = gt->getBrightness();
+    contrast   = gt->getContrast();
+
+    buffer.duplicate(((const char *) qa.data()),desc->size);
+    buffer_untouched = false;
+#ifdef APPLY_IN_SITU
+    applyVal();
+#endif
+    //emit( optionChanged( this ));
+    return (true);
+}
 
 
-   if( !valid() || !getBuffer())
-      return( "parametererror" );
+bool KScanOption::get(int *val) const
+{
+    if (!valid() || buffer.isNull()) return (false);
+
+    SANE_Word sane_word;
+    double d;
 			
-   switch( desc->type )
-   {
-      case SANE_TYPE_BOOL:
-	 sane_word = *((SANE_Word*)buffer);
-	 if( sane_word == SANE_TRUE )
-	    retstr = "true";
-	 else	
-	    retstr = "false";
-	 break;
-      case SANE_TYPE_STRING:
-	 retstr = (const char*) getBuffer();
-	 // retstr.sprintf( "%s", cc );
-	 break;
-      case SANE_TYPE_INT:
-	 sane_word = *((SANE_Word*)buffer);
-	 retstr.setNum( sane_word );
-	 break;
-      case SANE_TYPE_FIXED:
-	 sane_word = (SANE_Word) SANE_UNFIX(*(SANE_Word*)buffer);
-	 retstr.setNum( sane_word );
-	 break;
+    switch (desc->type)
+    {
+case SANE_TYPE_BOOL:					/* Buffer has a SANE_Word */
+        sane_word = *((SANE_Word *) buffer.data());
+        *val = (sane_word==SANE_TRUE ? 1 : 0);
+        break;
+
+case SANE_TYPE_INT:					/* reading just the first is OK */
+        sane_word = *((SANE_Word *) buffer.data());
+        *val = sane_word;
+        break;
+
+case SANE_TYPE_FIXED:					/* reading just the first is OK */
+        d = SANE_UNFIX(*((SANE_Word *) buffer.data()));
+        *val = static_cast<int>(d);
+        break;
+
+default:
+	kdDebug(29000) << k_funcinfo << "Can't get <" << name << "> as this type" << endl;
+        return (false);
+    }
+
+#ifdef GETSET_DEBUG
+    kdDebug(29000) << k_funcinfo << "Returning <" << name << "> as " << *val << endl;
+#endif
+    return (true);
+}
+
+
+QCString KScanOption::get() const
+{
+    if (!valid() || buffer.isNull()) return ("parametererror");
+
+    QCString retstr;
+    SANE_Word sane_word;
+
+    /* Handle gamma-table correctly */
+    if (type()==KScanOption::GammaTable)
+    {
+        retstr.sprintf( "%d, %d, %d", gamma, brightness, contrast );
+    }
+    else
+    {
+        switch (desc->type)
+        {
+case SANE_TYPE_BOOL:
+            sane_word = *((SANE_Word *) buffer.data());
+            retstr = (sane_word==SANE_TRUE ? "true" : "false");
+            break;
+
+case SANE_TYPE_STRING:
+            retstr = (const char*) buffer.data();
+            break;
+
+case SANE_TYPE_INT:
+            sane_word = *((SANE_Word *) buffer.data());
+            retstr.setNum(sane_word);
+            break;
+
+case SANE_TYPE_FIXED:
+            sane_word = (SANE_Word) SANE_UNFIX(*((SANE_Word *) buffer.data()));
+            retstr.setNum(sane_word);
+            break;
 	
-      default:
-	 kdDebug(29000) << "Cant get " << getName() << " to type String !" << endl;
-	 retstr = "unknown";
-   }
+default:
+            kdDebug(29000) << k_funcinfo << "Can't get <" << name << "> as this type" << endl;
+            retstr = "unknown";
+            break;
+        }
+    }
 
-   /* Handle gamma-table correctly */
-   ;
-   if( type() == KScanOption::GammaTable )
-   {
-      retstr.sprintf( "%d, %d, %d", gamma, brightness, contrast );
-   }
-
-   kdDebug(29000) << "option::get returns " << retstr << endl;
-   return( retstr );
+#ifdef GETSET_DEBUG
+    kdDebug(29000) << k_funcinfo << "Returning <" << name << "> as '" << retstr << "'" << endl;
+#endif
+    return (retstr);
 }
 
 
 /* Caller needs to have the space ;) */
 bool KScanOption::get( KGammaTable *gt ) const
 {
-    if( gt )
-    {
-        gt->setAll( gamma, brightness, contrast );
-        // gt->calcTable();
-        return( true );
-    }
-    return( false );
+    if (gt==NULL) return (false);
+
+    gt->setAll( gamma, brightness, contrast );
+    // gt->calcTable();
+    return (true);
 }
 
 
@@ -1102,23 +940,23 @@ QWidget *KScanOption::createWidget( QWidget *parent, const QString& w_desc,
     QWidget *w = NULL;
     switch (type())
     {
-case KScanOption::Bool:						/* Widget Type is ToggleButton */
+case KScanOption::Bool:					/* Widget Type is ToggleButton */
 	w = createToggleButton( parent, text );
 	break;
 
-case KScanOption::SingleValue:					/* Widget Type is Entry-Field */
+case KScanOption::SingleValue:				/* Widget Type is Entry-Field */
 	kdDebug(29000) << k_funcinfo << "SingleValue not implemented yet" << endl;
 	break;
 
-case KScanOption::Range:						/* Widget Type is Slider */
+case KScanOption::Range:				/* Widget Type is Slider */
 	w = createSlider( parent, text );
 	break;
 
-case KScanOption::Resolution:					/* Widget Type is Resolution */
+case KScanOption::Resolution:				/* Widget Type is Resolution */
 	w = createComboBox( parent, text );
 	break;
 
-case KScanOption::GammaTable:					/* Widget Type is Gamma Table */
+case KScanOption::GammaTable:				/* Widget Type is Gamma Table */
 	kdDebug(29000) << k_funcinfo << "GammaTable not implemented here" << endl;
 	break;						// No widget, needs to be a set !
 
@@ -1142,8 +980,7 @@ default:
     if (w!=NULL)
     {
         internal_widget = w;
-	connect(this, SIGNAL(optionChanged(KScanOption *)),
-		SLOT(slRedrawWidget(KScanOption *)));
+	connect(this, SIGNAL(optionChanged(KScanOption *)),SLOT(slRedrawWidget(KScanOption *)));
 
 	QString tt = tooltip;
 	if (tt.isEmpty() && desc!=NULL) tt = QString::fromLocal8Bit( desc->desc );
@@ -1156,7 +993,7 @@ default:
 }
 
 
-QWidget *KScanOption::createToggleButton( QWidget *parent, const QString& text )
+inline QWidget *KScanOption::createToggleButton( QWidget *parent, const QString& text )
 {
     QWidget *cb = new QCheckBox( i18n(text.utf8()), parent);
     connect( cb, SIGNAL(clicked()), SLOT(slWidgetChange()));
@@ -1164,7 +1001,7 @@ QWidget *KScanOption::createToggleButton( QWidget *parent, const QString& text )
 }
 
 
-QWidget *KScanOption::createComboBox( QWidget *parent, const QString& text )
+inline QWidget *KScanOption::createComboBox( QWidget *parent, const QString& text )
 {
     QStrList list = getList();
     KScanCombo *cb = new KScanCombo( parent, text, list);
@@ -1173,7 +1010,7 @@ QWidget *KScanOption::createComboBox( QWidget *parent, const QString& text )
 }
 
 
-QWidget *KScanOption::createEntryField( QWidget *parent, const QString& text )
+inline QWidget *KScanOption::createEntryField( QWidget *parent, const QString& text )
 {
     KScanEntry *ent = new KScanEntry( parent, text );
     connect(ent, SIGNAL(valueChanged(const QCString &)), SLOT(slWidgetChange(const QCString &)));
@@ -1181,7 +1018,7 @@ QWidget *KScanOption::createEntryField( QWidget *parent, const QString& text )
 }
 
 
-QWidget *KScanOption::createSlider( QWidget *parent, const QString& text )
+inline QWidget *KScanOption::createSlider( QWidget *parent, const QString& text )
 {
     double min, max, quant;
     getRange( &min, &max, &quant );
@@ -1192,7 +1029,7 @@ QWidget *KScanOption::createSlider( QWidget *parent, const QString& text )
 }
 
 
-QWidget *KScanOption::createFileField( QWidget *parent, const QString& text )
+inline QWidget *KScanOption::createFileField( QWidget *parent, const QString& text )
 {
     KScanFileRequester *req = new KScanFileRequester(parent,text);
     connect( req, SIGNAL(valueChanged(const QCString &)), SLOT(slWidgetChange(const QCString &)));
@@ -1200,38 +1037,57 @@ QWidget *KScanOption::createFileField( QWidget *parent, const QString& text )
 }
 
 
-
-
-void *KScanOption::allocBuffer( long size )
+void KScanOption::allocForDesc()
 {
-  if( size < 1 ) return( 0 );
+    if (desc==NULL) return;
+    switch (desc->type)
+    {
+case SANE_TYPE_INT:
+case SANE_TYPE_FIXED:
+case SANE_TYPE_STRING:		
+        allocBuffer(desc->size);
+        break;
 
-#ifdef MEM_DEBUG
-  qDebug( "M: Reserving %ld bytes of mem for <%s>", size, (const char*) getName() );
-#endif
+case SANE_TYPE_BOOL:
+        allocBuffer(sizeof(SANE_Word));
+        break;
 
-  void *r = new char[ size ];
-  buffer_size = size;
-
-  if( r ) memset( r, 0, size );
-
-  return( r );
-
+default:
+        if (desc->size>0) allocBuffer(desc->size);
+        break;
+    }
 }
 
 
+void KScanOption::allocBuffer(long size)
+{
+    if (size<1) return;
 
+#ifdef MEM_DEBUG
+    kdDebug(29000) << k_funcinfo << "Allocating " << size << " bytes for <" << name << ">" << endl;
+#endif
+    if (!buffer.resize(size))				// set buffer size
+    {
+        kdDebug(29000) << k_funcinfo << "FATAL: Allocating " << size << " bytes for <" << name << "> failed!" << endl;
+        return;
+    }
+
+    buffer.fill(0);					// clear allocated buffer
+}
+
+
+#ifdef APPLY_IN_SITU
 bool KScanOption::applyVal( void )
 {
    bool res = true;
-   int *idx = (*KScanDevice::option_dic)[ name ];
+   int *idx = KScanDevice::option_dic->find(name);
 
    if( *idx == 0 ) return( false );
-   if( ! buffer )  return( false );
+   if(buffer.isNull() )  return( false );
 
    SANE_Status stat = sane_control_option ( KScanDevice::scanner_handle, *idx,
-					    SANE_ACTION_SET_VALUE, buffer,
-					    0 );
+					    SANE_ACTION_SET_VALUE, buffer.data(),
+					    NULL);
    if( stat != SANE_STATUS_GOOD )
    {
       kdDebug(29000) << "Error in in situ appliance " << getName() << ": " << sane_strstatus( stat ) << endl;
@@ -1244,6 +1100,7 @@ bool KScanOption::applyVal( void )
    }
    return( res );
 }	
+#endif
 
 
 QLabel *KScanOption::getLabel(QWidget *parent) const

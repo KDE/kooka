@@ -29,6 +29,7 @@
 #define SCANPACKAGER_H
 
 #include <kfiletreeview.h>
+#include <ktrader.h>
 
 
 /**
@@ -38,10 +39,13 @@
 class QPopupMenu;
 class QImage;
 class QListViewItem;
+class QSignalMapper;
 
 class KookaImage;
 class KookaImageMeta;
+
 class KURL;
+class KActionMenu;
 
 typedef enum{ Dummy, NameSearch, UrlSearch } SearchType;
 
@@ -55,13 +59,15 @@ public:
     virtual QString getImgName( QString name_on_disk );
 
     QString 	getCurrImageFileName( bool ) const;
-    KookaImage* getCurrImage() const;
+    KookaImage* getCurrImage(bool loadOnDemand = false);
 
     KFileTreeBranch* openRoot( const KURL&, bool open=false );
 
    QPopupMenu *contextMenu() const { return m_contextMenu; }
    void         openRoots();
+
    void setAllowRename(bool on);
+   void showOpenWithMenu(KActionMenu *menu);
 
 public slots:
    void         slSelectImage( const KURL& );
@@ -95,6 +101,9 @@ protected slots:
    void         slotUrlsDropped( QWidget*, QDropEvent*, KURL::List& urls, KURL& copyTo );
    void         slotDeleteFromBranch( KFileItem* );
    void         slotStartupFinished( KFileTreeViewItem * );
+   void         slotItemExpanded(QListViewItem *item);
+   void slotOpenWith(int idx);
+
 signals:
    void         showImage(KookaImage *img,bool isDir);
    void         deleteImage( KookaImage* );
@@ -128,6 +137,9 @@ private:
     KIO::Job     *copyjob;
     int          img_counter;
     QPopupMenu    *m_contextMenu;
+
+    KTrader::OfferList openWithOffers;
+    QSignalMapper *openWithMapper;
 
     // like m_nextUrlToSelect in KFileTreeView but for our own purposes (showing the image)
     KURL         m_nextUrlToShow;

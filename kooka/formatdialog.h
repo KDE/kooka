@@ -41,18 +41,17 @@ class FormatDialog : public KDialogBase
 Q_OBJECT
 
 public:
-   FormatDialog( QWidget *parent, picType type);
+   FormatDialog( QWidget *parent, ImgSaver::ImageType type);
 
    QString      getFormat( ) const;
    QCString      getSubFormat( ) const;
+   void        setSelectedFormat(const QString &fo);
 
    bool         askForFormat( ) const
       { return( ! cbDontAsk->isChecked()); }
 
    static void forgetRemembered();
 
-public slots:
-    void        setSelectedFormat( QString );
 
 
 protected slots:
@@ -64,7 +63,7 @@ private:
    void		check_subformat( const QString & format );
 
    QStringList formatList;
-   picType imgType;
+   ImgSaver::ImageType imgType;
 
    QComboBox   	*cb_subf;
    QListBox    	*lb_format;

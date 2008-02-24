@@ -26,7 +26,6 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "scanpackager.h"
 #include "resource.h"
 #include "imgsaver.h"
 #include "kookaimage.h"
@@ -45,10 +44,14 @@
 #include <qfiledialog.h>
 #include <qstringlist.h>
 #include <qheader.h>
+#include <qsignalmapper.h>
 
 #include <kfiletreeview.h>
 #include <kfiletreeviewitem.h>
 #include <kfiletreebranch.h>
+#include <kactionclasses.h>
+#include <ktrader.h>
+#include <krun.h>
 
 #include <kurldrag.h>
 #include <kpopupmenu.h>
@@ -66,6 +69,9 @@
 #include <kio/jobclasses.h>
 #include <kio/file.h>
 #include <kio/job.h>
+
+#include "scanpackager.h"
+#include "scanpackager.moc"
 
 //#define STARTUP_FIRST_START "firstStart"
 
@@ -112,6 +118,8 @@ ScanPackager::ScanPackager( QWidget *parent ) : KFileTreeView( parent )
    connect( this, SIGNAL(itemRenamed (QListViewItem*, const QString &, int ) ), this,
 	    SLOT(slFileRename( QListViewItem*, const QString&, int)));
 
+   connect(this,SIGNAL(expanded(QListViewItem *)),SLOT(slotItemExpanded(QListViewItem *)));
+
 
    img_counter = 1;
    /* Set the current export dir to home */
@@ -131,7 +139,9 @@ ScanPackager::ScanPackager( QWidget *parent ) : KFileTreeView( parent )
    m_contextMenu = new KPopupMenu();
    static_cast<KPopupMenu*>(m_contextMenu)->insertTitle( i18n( "Gallery" ));
 
+   openWithMapper = NULL;
 }
+
 
 void ScanPackager::openRoots()
 {
@@ -144,6 +154,7 @@ void ScanPackager::openRoots()
 
    /* open more configurable image repositories TODO */
 }
+
 
 KFileTreeBranch* ScanPackager::openRoot( const KURL& root, bool  )
 {
@@ -192,18 +203,56 @@ void ScanPackager::slotStartupFinished( KFileTreeViewItem *it )
    }
 }
 
-void ScanPackager::slotDirCount( KFileTreeViewItem* item, int cnt )
+
+void ScanPackager::slotDirCount(KFileTreeViewItem* item,int cnt)
 {
-   if( item && item->isDir() )
-   {
-      QString cc = i18n( "one item", "%n items", cnt);
-      item->setText( 1, cc );
-   }
-   else
-   {
-      kdDebug(28000) << "Item is NOT directory - do not set child count!" << endl;
-   }
+    if (item==NULL) return;
+    if (!item->isDir()) return;
+
+    int imgCount = 0;					// total these separately,
+    int dirCount = 0;					// we want individual counts
+							// for files and subfolders
+    const QListViewItem *ch = item->firstChild();
+    while (ch!=NULL)
+    {
+        KFileTreeViewItem *ci = static_cast<const KFileTreeViewItem*>(ch);
+        if (ci->isDir()) ++dirCount;
+        else ++imgCount;
+        ch = ch->nextSibling();
+    }
+
+    QString cc = "";
+    if (dirCount==0)
+    {
+        if (imgCount==0) cc = i18n("empty");
+        else cc = i18n("one image","%n images",imgCount);
+    }
+    else
+    {
+        if (imgCount>0) cc = i18n("one image, ","%n images, ",imgCount);
+        cc += i18n("1 folder","%n folders",dirCount);
+    }
+
+    item->setText(1,cc);
 }
+
+
+void ScanPackager::slotItemExpanded(QListViewItem *item)
+{
+    if (item==NULL) return;
+
+    KFileTreeViewItem *it = static_cast<KFileTreeViewItem*>(item);
+    if (!it->isDir()) return;
+
+    const QListViewItem *ch = item->firstChild();
+    while (ch!=NULL)
+    {
+        KFileTreeViewItem *ci = static_cast<const KFileTreeViewItem*>(ch);
+        if (ci->isDir() && !ci->alreadyListed()) ci->branch()->populate(ci->url(),ci);
+        ch = ch->nextSibling();
+    }
+}
+
 
 void ScanPackager::slotDecorate( KFileTreeViewItem* item )
 {
@@ -647,20 +696,22 @@ void ScanPackager::slImageArrived( KFileTreeViewItem *item, KookaImage* image )
    }
 }
 
-KookaImage* ScanPackager::getCurrImage() const
+
+KookaImage* ScanPackager::getCurrImage(bool loadOnDemand)
 {
     KFileTreeViewItem *curr = currentKFileTreeViewItem();
-    KookaImage *img = 0L;
+    if (curr==NULL) return (NULL);			// no current item
+    if (curr->isDir()) return (NULL);			// is a directory
 
-    if( curr )
+    KFileItem *kfi = curr->fileItem();
+    if (kfi==NULL) return (NULL);
+    if (kfi->extraData(this)==NULL)			// see if already loaded
     {
-        KFileItem *kfi = curr->fileItem();
-        if( kfi )
-        {
-          img = static_cast<KookaImage*>(kfi->extraData( this ));
-        }
+        if (!loadOnDemand) return (NULL);		// not loaded, and don't want to
+        slClicked(curr);				// select/load this image
     }
-    return(img);
+
+    return (static_cast<KookaImage*>(kfi->extraData(this)));
 }
 
 
@@ -1279,4 +1330,63 @@ void ScanPackager::setAllowRename(bool on)
 }
 
 
-#include "scanpackager.moc"
+
+
+
+
+void ScanPackager::showOpenWithMenu(KActionMenu *menu)
+{
+    kdDebug(29000) << k_funcinfo << endl;
+
+    KFileTreeViewItem *curr = currentKFileTreeViewItem();
+    QString mimeType = KMimeType::findByURL(curr->url())->name();
+    kdDebug(28000) << "Trying to open <" << curr->url().prettyURL()<< "> which is " << mimeType << endl;
+
+    openWithOffers = KTrader::self()->query(mimeType,"Type=='Application'");
+
+    if (openWithMapper==NULL)
+    {
+        openWithMapper = new QSignalMapper(this);
+        connect(openWithMapper,SIGNAL(mapped(int)),SLOT(slotOpenWith(int)));
+    }
+
+    menu->popupMenu()->clear();
+
+    int i = 0;
+    for (KTrader::OfferList::ConstIterator it = openWithOffers.begin();
+         it!=openWithOffers.end(); ++it, ++i)
+    {
+        KService::Ptr service = (*it);
+        kdDebug(29000) << "  offer: " << (*it)->name() << endl;
+
+        QString actionName((*it)->name().replace("&","&&"));
+        KAction *act = new KAction(actionName,(*it)->pixmap(KIcon::Small),0,
+                                   openWithMapper,SLOT(map()),
+                                   menu->parentCollection());
+        openWithMapper->setMapping(act,i);
+        menu->insert(act);
+    }
+
+    menu->popupMenu()->insertSeparator();
+    KAction *act = new KAction(i18n("Other..."),0,openWithMapper,SLOT(map()),
+                               menu->parentCollection());
+    openWithMapper->setMapping(act,i);
+    menu->insert(act);
+}
+
+
+void ScanPackager::slotOpenWith(int idx)
+{
+    kdDebug(29000) << k_funcinfo << "idx=" << idx << endl;
+
+    KFileTreeViewItem *ftvi = currentKFileTreeViewItem();
+    if (ftvi==NULL) return;
+    KURL::List urllist(ftvi->url());
+
+    if (idx<openWithOffers.count())			// application from the menu
+    {
+        KService::Ptr ptr = openWithOffers[idx];
+        KRun::run(*ptr,urllist);
+    }
+    else KRun::displayOpenWithDialog(urllist);		// last item = "Other..."
+}

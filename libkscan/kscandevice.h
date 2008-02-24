@@ -295,7 +295,7 @@ public:
 
     static bool        scanner_initialised;
     static SANE_Handle scanner_handle;
-    static QAsciiDict<int>*  option_dic;
+    static QAsciiDict<int> *option_dic;
     static SANE_Device const **dev_list;
     static KScanOptSet *gammaTables;
 

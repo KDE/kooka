@@ -38,6 +38,7 @@
 #include <kaction.h>
 #include <kstdaction.h>
 #include <kurldrag.h>
+#include <kpopupmenu.h>
 
 #include "kookapref.h"
 #include "formatdialog.h"
@@ -70,7 +71,8 @@ Kooka::Kooka( const QCString& deviceToUse)
 
     createGUI(0L); // m_view->ocrResultPart());
     // and a status bar
-    statusBar()->insertItem( QString(), KookaView::StatusTemp );
+    statusBar()->insertItem(i18n("Ready"),KookaView::StatusTemp,1);
+    statusBar()->setItemAlignment(KookaView::StatusTemp,Qt::AlignLeft);
     statusBar()->show();
 
     // allow the view to change the statusbar and caption
@@ -123,15 +125,12 @@ void Kooka::startup( void )
 
 void Kooka::setupActions()
 {
+    printImageAction = KStdAction::print(this, SLOT(filePrint()), actionCollection());
 
-    KStdAction::print(this, SLOT(filePrint()), actionCollection());
-    KStdAction::quit(this , SLOT(close()), actionCollection());
-
-    KStdAction::keyBindings(guiFactory(), SLOT(configureShortcuts()), 
-                            actionCollection());
-    KStdAction::configureToolbars(this, SLOT(optionsConfigureToolbars()),
-				  actionCollection());
-    KStdAction::preferences(this, SLOT(optionsPreferences()), actionCollection());
+    KStdAction::quit(this,SLOT(close()),actionCollection());
+    KStdAction::keyBindings(guiFactory(),SLOT(configureShortcuts()),actionCollection());
+    KStdAction::configureToolbars(this,SLOT(optionsConfigureToolbars()),actionCollection());
+    KStdAction::preferences(this,SLOT(optionsPreferences()),actionCollection());
 
     m_view->createDockMenu(actionCollection(), this, "settings_show_docks" );
 
@@ -175,7 +174,7 @@ void Kooka::setupActions()
 		       actionCollection(), "showZoomDialog" );
     m_view->connectViewerAction( act );
 
-    newFromSelectionAction = new KAction(i18n("Create From Selection"), "crop", CTRL+Key_N,
+    newFromSelectionAction = new KAction(i18n("New Image From Selection"), "crop", CTRL+Key_N,
 					 m_view, SLOT( slCreateNewImgFromSelection() ),
 					 actionCollection(), "createFromSelection" );
 
@@ -186,10 +185,6 @@ void Kooka::setupActions()
     mirrorHorizontallyAction = new KAction(i18n("Mirror Horizontally"), "mirror-horiz", CTRL+Key_M,
 					   this, SLOT( slMirrorHorizontal() ),
 					   actionCollection(), "mirrorHorizontal" );
-
-    openWithAction = new KAction(i18n("Open With..."), "fileopen", KStdAccel::open(),
-				 m_view, SLOT( slOpenCurrInGraphApp() ),
-				 actionCollection(), "openInGraphApp" );
 
     rotateCwAction = new KAction(i18n("Rotate Clockwise"), "rotate_cw", CTRL+Key_9,
 				 this, SLOT( slRotateClockWise() ),
@@ -212,6 +207,14 @@ void Kooka::setupActions()
 				     actionCollection(), "foldernew" );
     m_view->connectGalleryAction( createFolderAction );
 
+    //openWithAction = new KAction(i18n("Open In Graphical Application..."), "fileopen", KStdAccel::open(),
+    //				 m_view, SLOT( slOpenCurrInGraphApp() ),
+    //				 actionCollection(), "openInGraphApp" );
+    openWithMenu = new KActionMenu(i18n("Open With"),"fileopen",
+                                   actionCollection(),"openWith");
+    connect(openWithMenu->popupMenu(),SIGNAL(aboutToShow()),SLOT(slotOpenWithMenu()));
+    m_view->connectGalleryAction( openWithMenu );
+
     saveImageAction = new KAction(i18n("Save Image..."), "filesave", KStdAccel::save(),
 				  m_view->gallery(), SLOT( slotExportFile() ),
 				  actionCollection(), "saveImage" );
@@ -220,7 +223,7 @@ void Kooka::setupActions()
     importImageAction = new KAction(i18n("Import Image..."), "fileimport", 0,
 				    m_view->gallery(), SLOT( slotImportFile() ),
 				    actionCollection(), "importImage" );
-    m_view->connectGalleryAction( importImageAction );
+    //m_view->connectGalleryAction( importImageAction );
 
     deleteImageAction = new KAction(i18n("Delete Image"), "editdelete", SHIFT+Key_Delete,
 				    m_view->gallery(), SLOT( slotDeleteItems() ),
@@ -449,7 +452,6 @@ void Kooka::slotUpdateGalleryActions(bool isDir,int howmanySelected)
 	const bool singleImage = howmanySelected==1 && !isDir;
 
 	ocrAction->setEnabled(singleImage);
-	openWithAction->setEnabled(singleImage);
 
 	scaleToWidthAction->setEnabled(singleImage);
 	scaleToHeightAction->setEnabled(singleImage);
@@ -466,6 +468,7 @@ void Kooka::slotUpdateGalleryActions(bool isDir,int howmanySelected)
 	importImageAction->setEnabled(isDir);
 
 	saveImageAction->setEnabled(singleImage);
+	printImageAction->setEnabled(singleImage);
 
 	if (isDir)
 	{
@@ -496,4 +499,10 @@ void Kooka::slotUpdateLoadedActions(bool isLoaded,bool isDir)
 {
 	kdDebug(29000) << k_funcinfo << "loaded=" << isLoaded << " isDir=" << isDir << endl;
 	unloadImageAction->setEnabled(isLoaded || isDir);
+}
+
+
+void Kooka::slotOpenWithMenu()
+{
+    m_view->gallery()->showOpenWithMenu(openWithMenu);
 }

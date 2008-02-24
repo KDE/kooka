@@ -24,7 +24,6 @@
 
 extern "C" {
 #include <sane/sane.h>
-#include <sane/saneopts.h>
 }
 
 
@@ -89,12 +88,12 @@ public:
     * tests if the option is initialised. It is initialised, if the value
     * for the option was once read from the scanner
     **/
-  bool initialised( void ){ return( ! buffer_untouched );}
+    bool initialised( void ) const { return( ! buffer_untouched );}
 
    /**
     * checks if the option is valid, means that the option is known by the scanner
     **/
-  bool valid( void ) const;
+    bool valid( void ) const { return (desc!=NULL); }
 
    /**
     * checks if the option is auto setable, what means, the scanner can cope
@@ -176,8 +175,8 @@ public:
   bool        getRange( double*, double*, double* ) const;
 
   QCString    getName() const { return( name ); }
-  void *      getBuffer() const { return( buffer ); }
-  QWidget     *widget( ) const { return( internal_widget ); }
+  void *      getBuffer() const { return( buffer.data() ); }
+  QWidget     *widget() const { return( internal_widget ); }
   /**
    *  returns the type of the selected option.
    *
@@ -246,9 +245,12 @@ signals:
   void      guiChange( KScanOption* );
 
 private:
+#ifdef APPLY_IN_SITU
   bool       applyVal( void );
-  bool       initOption( const QCString& new_name );
-  void       *allocBuffer( long );
+#endif
+    bool       initOption( const QCString& new_name );
+    void allocForDesc();
+  void       allocBuffer( long );
 
   QWidget    *createToggleButton( QWidget *parent, const QString& text );
   QWidget    *createEntryField ( QWidget *parent, const QString& text );
@@ -260,16 +262,14 @@ private:
   QCString    name;
     QString text;
 
-  void       *buffer;
-  QWidget    *internal_widget;
+//  void       *buffer;
+    QByteArray buffer;
   bool       buffer_untouched;
-  size_t     buffer_size;
+//  size_t     buffer_size;
+  QWidget    *internal_widget;
 
   /* For gamma-Tables remember gamma, brightness, contrast */
   int        gamma, brightness, contrast;
-
-   class KScanOptionPrivate;
-   KScanOptionPrivate *d;
 };
 
 

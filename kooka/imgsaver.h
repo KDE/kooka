@@ -1,4 +1,4 @@
-/***************************************************************************
+/***************************************************** -*- mode:c++; -*- ***
                           img_saver.h  -  description
                              -------------------
     begin                : Mon Dec 27 1999
@@ -64,22 +64,6 @@ typedef enum {
 
 } ImgSaveStat;
 
-/**
- *  enum picType:
- *  Specifies the type of the image to save. This is important for
- *  getting the format.
- **/
-typedef enum {
-   PT_PREVIEW,
-   PT_THUMBNAIL,
-   PT_HICOLOR_IMAGE,
-   PT_COLOR_IMAGE,
-   PT_GRAY_IMAGE,
-   PT_BW_IMAGE,
-   PT_FINISHED
-} picType;
-
-
 class KookaImage;
 
 /**
@@ -92,8 +76,26 @@ class KookaImage;
 
 class ImgSaver : public QObject
 {
-   Q_OBJECT
+    Q_OBJECT
+
 public:
+
+    /**
+     *  enum ImageType:
+     *  Specifies the type of the image to save. This is important for
+     *  getting the format.
+     **/
+    enum ImageType
+    {
+        ImgNone       = 0x00,
+        ImgPreview    = 0x01,
+        ImgThumbnail  = 0x02,
+        ImgHicolor    = 0x04,
+        ImgColor      = 0x08,
+        ImgGray       = 0x10,
+        ImgBW         = 0x20
+    };
+
 	/**
 	 *  constructor of the image-saver object.
 	 *  name is the name of a subdirectory of the save directory,
@@ -116,9 +118,9 @@ public:
     */
    QCString    lastSaveFormat( void ) const { return( last_format ); }
 
-   QString     getFormatForType( picType ) const;
-   void        storeFormatForType( picType, QString, bool );
-   bool        isRememberedFormat( picType type, QString format ) const;
+   QString     getFormatForType( ImgSaver::ImageType ) const;
+   void        storeFormatForType( ImgSaver::ImageType, QString, bool );
+   bool        isRememberedFormat( ImgSaver::ImageType type, QString format ) const;
 
    /* static function that exports a file */
    static bool    copyImage( const KURL& fromUrl, const KURL& toUrl, QWidget *overWidget=0 );
@@ -128,14 +130,14 @@ public:
    /* static function that returns the extension of an url */
    static QString extension( const KURL& );
 
-   static QString picTypeAsString(picType type);
+   static QString picTypeAsString(ImgSaver::ImageType type);
 
 public slots:
    ImgSaveStat saveImage( QImage *image );
    ImgSaveStat saveImage( QImage *image, const KURL& filename, const QString& imgFormat );
 
 private:
-   QString      findFormat( picType type );
+   QString      findFormat( ImgSaver::ImageType type );
    QString      findSubFormat( QString format );
    void		createDir( const QString& );
 
@@ -143,7 +145,7 @@ private:
 		     const QString &subformat );
    QString      createFilename( QString format );
    void	        readConfig( void );
-   QString      startFormatDialog( picType );
+   QString      startFormatDialog( ImgSaver::ImageType );
 
    QString     	directory;    // dir where the image should be saved
    QString     	last_file;

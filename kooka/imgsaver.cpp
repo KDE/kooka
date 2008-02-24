@@ -125,28 +125,28 @@ void ImgSaver::createDir( const QString& dir )
 ImgSaveStat ImgSaver::saveImage( QImage *image )
 {
    ImgSaveStat stat;
-   picType imgType;
+   ImgSaver::ImageType imgType;
 
    if( !image ) return( ISS_ERR_PARAM );
 
    /* Find out what kind of image it is  */
    if( image->depth() > 8 )
    {
-      imgType = PT_HICOLOR_IMAGE;
+      imgType = ImgSaver::ImgHicolor;
    }
    else
    {
       if( image->depth() == 1 || image->numColors() == 2 )
       {
 	 kdDebug(28000) << "This is black And White!" << endl;
-	 imgType = PT_BW_IMAGE;
+	 imgType = ImgSaver::ImgBW;
       }
       else
       {
-	 imgType  = PT_COLOR_IMAGE;
+	 imgType  = ImgSaver::ImgColor;
 	 if( image->allGray() )
 	 {
-	    imgType = PT_GRAY_IMAGE;
+	    imgType = ImgSaver::ImgGray;
 	 }
       }
    }
@@ -250,10 +250,10 @@ ImgSaveStat ImgSaver::saveImage( QImage *image, const KURL& filename, const QStr
 /*
  * findFormat does all the stuff with the dialog.
  */
-QString ImgSaver::findFormat( picType type )
+QString ImgSaver::findFormat( ImgSaver::ImageType type )
 {
-   if (type==PT_THUMBNAIL) return ("BMP");		// thumbnail always this format
-   if (type==PT_PREVIEW) return ("BMP");		// preview always this format
+   if (type==ImgSaver::ImgThumbnail) return ("BMP");	// thumbnail always this format
+   if (type==ImgSaver::ImgPreview) return ("BMP");	// preview always this format
 							// real images from here on
    QString format;
    KConfig *konf = KGlobal::config ();
@@ -261,19 +261,19 @@ QString ImgSaver::findFormat( picType type )
 
    switch( type )
    {
-      case PT_COLOR_IMAGE:
+      case ImgSaver::ImgColor:
 	 format = konf->readEntry( OP_FORMAT_COLOR, "nothing" );
 	 kdDebug( 28000 ) <<  "Format for Color: " << format << endl;
 	 break;
-      case PT_GRAY_IMAGE:
+      case ImgSaver::ImgGray:
 	 format = konf->readEntry( OP_FORMAT_GRAY, "nothing" );
 	 kdDebug( 28000 ) <<  "Format for Gray: " << format << endl;
 	 break;
-      case PT_BW_IMAGE:
+      case ImgSaver::ImgBW:
 	 format = konf->readEntry( OP_FORMAT_BW, "nothing" );
 	 kdDebug( 28000 ) <<  "Format for BlackAndWhite: " << format << endl;
 	 break;
-      case PT_HICOLOR_IMAGE:
+      case ImgSaver::ImgHicolor:
 	 format = konf->readEntry( OP_FORMAT_HICOLOR, "nothing" );
 	 kdDebug( 28000 ) <<  "Format for HiColorImage: " << format << endl;
 	 break;
@@ -288,25 +288,25 @@ QString ImgSaver::findFormat( picType type )
 }
 
 
-QString ImgSaver::picTypeAsString(picType type)
+QString ImgSaver::picTypeAsString(ImgSaver::ImageType type)
 {
     QString res;
 
     switch (type)
     {
-case PT_COLOR_IMAGE:
+case ImgSaver::ImgColor:
         res = i18n("indexed color image (up to 8 bit depth)");
 	break;
 
-case PT_GRAY_IMAGE:
+case ImgSaver::ImgGray:
 	res = i18n("gray scale image (up to 8 bit depth)");
 	break;
 
-case PT_BW_IMAGE:
+case ImgSaver::ImgBW:
 	res = i18n("lineart image (black and white, 1 bit depth)");
 	break;
 
-case PT_HICOLOR_IMAGE:
+case ImgSaver::ImgHicolor:
 	res = i18n("high/true color image (more than 8 bit depth)");
 	break;
 
@@ -319,13 +319,13 @@ default:
 }
 
 
-QString ImgSaver::startFormatDialog( picType type)
+QString ImgSaver::startFormatDialog( ImgSaver::ImageType type)
 {
 
    FormatDialog fd(NULL,type);
 
    // set default values
-   if( type != PT_PREVIEW )
+   if( type != ImgSaver::ImgPreview )
    {
       QString defFormat = getFormatForType( type );
       fd.setSelectedFormat( defFormat );
@@ -349,7 +349,7 @@ QString ImgSaver::startFormatDialog( picType type)
  *  This method returns true if the image format given in format is remembered
  *  for that image type.
  */
-bool ImgSaver::isRememberedFormat( picType type, QString format ) const
+bool ImgSaver::isRememberedFormat( ImgSaver::ImageType type, QString format ) const
 {
    if( getFormatForType( type ) == format )
    {
@@ -365,7 +365,7 @@ bool ImgSaver::isRememberedFormat( picType type, QString format ) const
 
 
 
-QString ImgSaver::getFormatForType( picType type ) const
+QString ImgSaver::getFormatForType( ImgSaver::ImageType type ) const
 {
    KConfig *konf = KGlobal::config ();
    Q_CHECK_PTR( konf );
@@ -375,16 +375,16 @@ QString ImgSaver::getFormatForType( picType type ) const
 
    switch( type )
    {
-      case PT_COLOR_IMAGE:
+      case ImgSaver::ImgColor:
 	 f = konf->readEntry( OP_FORMAT_COLOR, "BMP" );
 	 break;
-      case PT_GRAY_IMAGE:
+      case ImgSaver::ImgGray:
 	 f = konf->readEntry( OP_FORMAT_GRAY, "BMP" );
 	 break;
-      case PT_BW_IMAGE:
+      case ImgSaver::ImgBW:
 	 f = konf->readEntry( OP_FORMAT_BW, "BMP" );
 	 break;
-      case PT_HICOLOR_IMAGE:
+      case ImgSaver::ImgHicolor:
 	 f = konf->readEntry( OP_FORMAT_HICOLOR, "BMP" );
 	 break;
       default:
@@ -395,7 +395,7 @@ QString ImgSaver::getFormatForType( picType type ) const
 }
 
 
-void ImgSaver::storeFormatForType( picType type, QString format, bool ask )
+void ImgSaver::storeFormatForType( ImgSaver::ImageType type, QString format, bool ask )
 {
    KConfig *konf = KGlobal::config ();
    Q_CHECK_PTR( konf );
@@ -406,16 +406,16 @@ void ImgSaver::storeFormatForType( picType type, QString format, bool ask )
 
    switch( type )
    {
-      case PT_COLOR_IMAGE:
+      case ImgSaver::ImgColor:
 	 konf->writeEntry( OP_FORMAT_COLOR, format );
 	 break;
-      case PT_GRAY_IMAGE:
+      case ImgSaver::ImgGray:
 	 konf->writeEntry( OP_FORMAT_GRAY, format  );
 	 break;
-      case PT_BW_IMAGE:
+      case ImgSaver::ImgBW:
 	 konf->writeEntry( OP_FORMAT_BW, format );
 	 break;
-      case PT_HICOLOR_IMAGE:
+      case ImgSaver::ImgHicolor:
 	 konf->writeEntry( OP_FORMAT_HICOLOR, format );
 	 break;
       default:

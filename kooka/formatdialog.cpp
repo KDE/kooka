@@ -35,98 +35,108 @@
 
 struct formatInfo
 {
-	const char *format;
-	QString helpString;
-	picType recForTypes[5];
+    const char *format;
+    QString helpString;
+    int recForTypes;
 };
 
 static struct formatInfo formats[] =
 {
-	{ "BMP", I18N_NOOP(
+    { "BMP", I18N_NOOP(
 "<b>Bitmap Picture</b> is a widely used format for images under MS Windows. \
 It is suitable for color, grayscale and line art images. \
 <p>This format is widely supported but is not recommended, use an open format \
 instead."),
-	  { PT_FINISHED } },
+      ImgSaver::ImgNone },
 
-	{ "PBM", I18N_NOOP(
+    { "PBM", I18N_NOOP(
 "<b>Portable Bitmap</b>, as used by Netpbm, is an uncompressed format for line art \
 (bitmap) images. Only 1 bit per pixel depth is supported."),
-	  { PT_BW_IMAGE, PT_FINISHED } },
+      ImgSaver::ImgBW },
 
-	{ "PGM", I18N_NOOP(
+    { "PGM", I18N_NOOP(
 "<b>Portable Greymap</b>, as used by Netpbm, is an uncompressed format for grayscale \
 images. Only 8 bit per pixel depth is supported."),
-	  { PT_GRAY_IMAGE, PT_FINISHED } },
+      ImgSaver::ImgGray },
 
-	{ "PPM", I18N_NOOP(
+    { "PPM", I18N_NOOP(
 "<b>Portable Pixmap</b>, as used by Netpbm, is an uncompressed format for full colour \
 images. Only 24 bit per pixel RGB is supported."),
-	  { PT_COLOR_IMAGE, PT_HICOLOR_IMAGE, PT_FINISHED } },
+      ImgSaver::ImgColor|ImgSaver::ImgHicolor },
 
-	{ "PCX",
-	  I18N_NOOP(
+      { "PCX", I18N_NOOP(
 "This is a lossless compressed format which is often supported by PC imaging \
 applications, although it is rather old and unsophisticated.  It is suitable for \
 color and grayscale images. \
 <p>This format is not recommended, use an open format instead."),
-	  { PT_FINISHED } },
+        ImgSaver::ImgNone },
 
-	{ "XBM", I18N_NOOP(
+    { "XBM", I18N_NOOP(
 "<b>X Bitmap</b> is often used by the X Window System to store cursor and icon bitmaps. \
 <p>Unless required for this purpose, use a general purpose format instead."),
-	  { PT_FINISHED } },
+      ImgSaver::ImgNone },
 
-	{ "XPM", I18N_NOOP(
+    { "XPM", I18N_NOOP(
 "<b>X Pixmap</b> is often used by the X Window System for color icons and other images. \
 <p>Unless required for this purpose, use a general purpose format instead."),
-	  { PT_FINISHED } },
+      ImgSaver::ImgNone },
 
-	{ "PNG",
-	  I18N_NOOP(
+    { "PNG", I18N_NOOP(
 "<b>Portable Network Graphics</b> is a lossless compressed format designed to be \
 portable and extensible. It is suitable for any type of color or grayscale images, \
 indexed or true color. \
 <p>PNG is an open format which is widely supported."),
-	  { PT_BW_IMAGE, PT_COLOR_IMAGE, PT_GRAY_IMAGE, PT_HICOLOR_IMAGE, PT_FINISHED } },
+      ImgSaver::ImgBW|ImgSaver::ImgColor|ImgSaver::ImgGray|ImgSaver::ImgHicolor },
 
-	{ "JPEG", I18N_NOOP(
+    { "JPEG", I18N_NOOP(
 "<b>JPEG</b> is a compressed format suitable for true color or grayscale images. \
 It is a lossy format, so it is not recommended for archiving or for repeated loading \
 and saving. \
 <p>This is an open format which is widely supported."),
-	  { PT_HICOLOR_IMAGE, PT_GRAY_IMAGE, PT_FINISHED } },
+      ImgSaver::ImgHicolor|ImgSaver::ImgGray },
 
-	{ "JP2", I18N_NOOP(
+    { "JP2", I18N_NOOP(
 "<b>JPEG 2000</b> was intended as an update to the JPEG format, with the option of \
 lossless compression, but so far is not widely supported. It is suitable for true \
 color or grayscale images."),
-	  { PT_FINISHED } },
+      ImgSaver::ImgNone },
 
-	{ "EPS",
-	  I18N_NOOP(
+    { "EPS", I18N_NOOP(
 "<b>Encapsulated PostScript</b> is derived from the PostScript&trade; \
 page description language.  Use this format for importing into other \
 applications, or to use with (e.g.) TeX."),
-	  { PT_FINISHED } },
+      ImgSaver::ImgNone },
 
-	{ "TGA", I18N_NOOP(
+    { "TGA", I18N_NOOP(
 "<b>Truevision Targa</b> can store full colour images with an alpha channel, and is \
 used extensively by animation and video applications. \
 <p>This format is not recommended, use an open format instead."),
-	  { PT_FINISHED } },
+      ImgSaver::ImgNone },
 
-	{ "XV", "",
-	  { PT_FINISHED } },
+    { "GIF", I18N_NOOP(					// writing may not be supported
+"<b>Graphics Interchange Format</b> is a popular but patent-encumbered format often \
+used for web graphics.  It uses lossless compression with up to 256 colors and optional \
+transparency.\
+<p>For legal reasons this format is not recommended, use an open format instead."),
+      ImgSaver::ImgNone },
 
-	{ "RGB", "",
-	  { PT_FINISHED } },
+    { "TIFF", I18N_NOOP(				// writing may not be supported
+"<b>Tagged Image File Format</b> is a versatile and extensible file format often \
+supported by imaging and publishing applications. It supports indexed and true colour \
+images with alpha transparency. Because there are many variations, there may sometimes \
+be compatibility problems.\
+<p>Unless required for use with other applications, use an open format instead."),
+      ImgSaver::ImgBW|ImgSaver::ImgColor|ImgSaver::ImgGray|ImgSaver::ImgHicolor },
 
-	{ NULL, "", { } }
+    { "XV", "", ImgSaver::ImgNone },
+
+    { "RGB", "", ImgSaver::ImgNone },
+
+    { NULL, "", ImgSaver::ImgNone }
 };
 
 
-FormatDialog::FormatDialog( QWidget *parent, picType type)
+FormatDialog::FormatDialog( QWidget *parent, ImgSaver::ImageType type)
 	: KDialogBase( parent, NULL, true,
                  /* Tabbed,*/ i18n( "Save Assistant" ),
 		 KDialogBase::Ok|KDialogBase::Cancel)
@@ -164,7 +174,6 @@ FormatDialog::FormatDialog( QWidget *parent, picType type)
     // Insert label for help text
     l_help = new QLabel(page);
     l_help->setFrameStyle( QFrame::Panel|QFrame::Sunken );
-    //l_help->setText( i18n("-No format selected-" ));
     l_help->setAlignment(Qt::AlignLeft|Qt::AlignTop);
     l_help->setMinimumSize(230,200);
     l_help->setMargin(4);
@@ -243,15 +252,10 @@ void FormatDialog::check_subformat( const QString & format )
 }
 
 
-void FormatDialog::setSelectedFormat( QString fo )
+void FormatDialog::setSelectedFormat(const QString &fo)
 {
-   QListBoxItem *item = lb_format->findItem( fo );
-
-   if( item )
-   {
-      // Select it.
-      lb_format->setSelected( lb_format->index(item), true );
-   }
+   QListBoxItem *item = lb_format->findItem(fo);
+   if (item!=NULL) lb_format->setSelected(lb_format->index(item),true);
 }
 
 
@@ -289,16 +293,11 @@ void FormatDialog::buildFormatList(bool recOnly)
 	    {						// search for this format
 		if (ip->format!=(*it)) continue;
 
-		for (picType *pt = &ip->recForTypes[0]; *pt!=PT_FINISHED; ++pt)
-		{					// look through list of types
-		    if (*pt==imgType)			// recommended for this type
-		    {
-			formatOk = true;		// this format to be shown
-			break;				// no more to do
-		    }
+                if (ip->recForTypes & imgType)		// recommended for this type?
+		{
+                    formatOk = true;			// this format to be shown
+                    break;				// no more to do
 		}
-
-		if (formatOk) break;			// found this format to be shown
 	    }
 
 	    if (!formatOk) continue;			// this format not to be shown

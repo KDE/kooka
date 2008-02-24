@@ -94,6 +94,7 @@ protected slots:
     void slotUpdateRectangleActions(bool haveSelection);
     void slotUpdateGalleryActions(bool isDir,int howmanySelected);
     void slotUpdateLoadedActions(bool isLoaded,bool isDir);
+    void slotOpenWithMenu();
 
 private slots:
 
@@ -141,7 +142,6 @@ private:
 
    KAction *scanAction;
    KAction *previewAction;
-   KAction *openWithAction;
    KAction *ocrAction;
    KAction *ocrSelectAction;
 
@@ -157,11 +157,13 @@ private:
 
    KAction *createFolderAction;
    KAction *saveImageAction;
+   KAction *printImageAction;
    KAction *importImageAction;
    KAction *deleteImageAction;
    KAction *renameImageAction;
    KAction *unloadImageAction;
 
+   KActionMenu *openWithMenu;
 };
 
 #endif // KOOKA_H

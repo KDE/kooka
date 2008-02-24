@@ -1,15 +1,22 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="Kooka" version="7">
+<kpartgui name="Kooka" version="4">
 
  <MenuBar>
-  <Menu name="file"><text>File</text>
+  <Menu name="file" noMerge="1"><text>Gallery</text>
    <Action name="foldernew"/>
+   <Action name="openWith"/>
    <Action name="saveImage"/>
+   <Action name="saveOCRResult"/>
    <Action name="importImage"/>
    <Action name="renameImage"/>
    <Action name="deleteImage"/>
+   <Separator/>
+   <Action name="createFromSelection"/>
    <Action name="unloadImage"/>
-   <Action name="saveOCRResult"/>
+   <Separator/>
+   <Action name="file_print"/>
+   <Separator/>
+   <Action name="file_quit"/>
   </Menu>
 
   <Menu name="scan"><text>S&amp;can</text>
@@ -21,13 +28,11 @@
   </Menu>
 
   <Menu name="imgCanvas"><text>&amp;Image</text>
-   <Action name="openInGraphApp"/>
-   <Separator/>
    <Action name="scaleToWidth"/>
    <Action name="scaleToHeight"/>
    <Action name="scaleOriginal"/>
-   <Separator/>
-   <Action name="createFromSelection"/>
+   <Action name="openInGraphApp"/>
+   <Action name="keepZoom"/>
    <Separator/>
    <Action name="mirrorVertical"/>
    <Action name="mirrorHorizontal"/>
@@ -40,11 +45,12 @@
 
   <Menu name="settings"><text>Settings</text>
    <Action name="settings_show_docks" append="show_merge"/>
+   <Separator/>
    <Action name="enable_msgs" append="save_merge"/>
-   <Separator append="save_merge"/>
+   <Separator/>
    <Action name="selectsource" append="save_merge"/>
    <Action name="addsource" append="save_merge"/>
-   <Separator append="save_merge"/>
+   <Separator/>
    <Action name="loadscanparam" append="save_merge"/>
    <Action name="savescanparam" append="save_merge"/>
   </Menu>
