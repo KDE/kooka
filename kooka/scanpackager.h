@@ -88,8 +88,8 @@ protected:
    virtual void contentsDragMoveEvent( QDragMoveEvent *e );
 
 protected slots:
-   void         slClicked( QListViewItem * );
-   void         slFileRename( QListViewItem*, const QString&, int );
+   void         slClicked(QListViewItem *);
+   void         slFileRename(QListViewItem *it,const QString &newName);
    // void         slFilenameChanged( KFileTreeViewItem*, const KURL & );
    void         slImageArrived( KFileTreeViewItem *item, KookaImage* image );
    void         slotCreateFolder( );
@@ -105,7 +105,7 @@ protected slots:
    void slotOpenWith(int idx);
 
 signals:
-   void         showImage(KookaImage *img,bool isDir);
+   void         showImage(const KookaImage *img,bool isDir);
    void         deleteImage( KookaImage* );
    void         unloadImage( KookaImage* );
    void         galleryPathSelected( KFileTreeBranch* branch, const QString& relativPath );

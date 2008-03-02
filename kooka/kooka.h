@@ -142,6 +142,7 @@ private:
 
    KAction *scanAction;
    KAction *previewAction;
+   KAction *paramsAction;
    KAction *ocrAction;
    KAction *ocrSelectAction;
 

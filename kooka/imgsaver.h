@@ -124,7 +124,7 @@ public:
 
    /* static function that exports a file */
    static bool    copyImage( const KURL& fromUrl, const KURL& toUrl, QWidget *overWidget=0 );
-   static bool    renameImage( const KURL& fromUrl, KURL& toUrl, bool askExt=false, QWidget *overWidget=0 );
+   static bool    renameImage( const KURL& fromUrl, const KURL& toUrl, bool askExt=false, QWidget *overWidget=0 );
    static QString tempSaveImage( KookaImage *img, const QString& format, int colors = -1 );
 
    /* static function that returns the extension of an url */

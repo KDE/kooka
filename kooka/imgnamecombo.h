@@ -37,6 +37,7 @@
 
 class QListViewItem;
 class KFileBranch;
+class KFileTreeBranch;
 
 class ImageNameCombo: public KComboBox
 {

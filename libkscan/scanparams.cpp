@@ -811,13 +811,17 @@ KScanStat ScanParams::prepareScan(QString *vfp)
             stat = KSCAN_ERR_PARAM;
         }
 
-        QFileInfo fi(virtfile);
-        if (!fi.exists())
+        if (stat==KSCAN_OK)
         {
-            KMessageBox::sorry(this,i18n("<qt>The testing or virtual file<br><b>%1</b><br>was not found or is not readable").arg(virtfile));
-            stat = KSCAN_ERR_PARAM;
+            QFileInfo fi(virtfile);
+            if (!fi.exists())
+            {
+                KMessageBox::sorry(this,i18n("<qt>The testing or virtual file<br><b>%1</b><br>was not found or is not readable").arg(virtfile));
+                stat = KSCAN_ERR_PARAM;
+            }
         }
-        else
+
+        if (stat==KSCAN_OK)
         {
             if (scan_mode==ID_SANE_DEBUG)
             {

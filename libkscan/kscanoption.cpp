@@ -164,7 +164,7 @@ KScanOption::KScanOption(const KScanOption &so)
 const QString KScanOption::configLine()
 {
     QCString strval = this->get();
-    kdDebug(29000) << "configLine returns <" << strval << ">" << endl;
+    //kdDebug(29000) << "configLine returns <" << strval << ">" << endl;
     return (strval);
 }
 
@@ -297,16 +297,17 @@ void KScanOption::slReload()
    if (buffer.isNull())					/* first get mem if needed */
    {
        kdDebug(29000) << k_funcinfo << "need to allocate now" << endl;
-       allocForDesc();
+       allocForDesc();					// allocate the buffer now
    }
 
    if (!active()) return;
 
    if (((size_t) desc->size)>buffer.size())
    {
-       kdDebug(29000) << "ERROR: Buffer too small for <" << name << ">"
+       kdDebug(29000) << k_funcinfo << "buffer too small for <" << name << ">"
                       << " size " << buffer.size() << " need " << desc->size << endl;
-       return;
+       allocForDesc();					// grow the buffer
+       //return;
    }
 
    SANE_Status sane_stat = sane_control_option( KScanDevice::scanner_handle, *num,
@@ -742,7 +743,7 @@ default:
 
 QCString KScanOption::get() const
 {
-    if (!valid() || buffer.isNull()) return ("parametererror");
+    if (!valid() || buffer.isNull()) return (PARAM_ERROR);
 
     QCString retstr;
     SANE_Word sane_word;

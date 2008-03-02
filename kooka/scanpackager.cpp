@@ -80,8 +80,10 @@
 /* Constructor Scan Packager */
 ScanPackager::ScanPackager( QWidget *parent ) : KFileTreeView( parent )
 {
-   setItemsRenameable(false);
+   setItemsRenameable(false);				// set later from config
    setDefaultRenameAction( QListView::Reject );
+
+   //header()->setStretchEnabled(true,0);		// do we like this effect?
 
    addColumn( i18n("Image Name" ));
    setColumnAlignment( 0, AlignLeft );
@@ -116,7 +118,7 @@ ScanPackager::ScanPackager( QWidget *parent ) : KFileTreeView( parent )
 	    SLOT( slShowContextMenu(QListViewItem *,const QPoint &)));
 
    connect( this, SIGNAL(itemRenamed (QListViewItem*, const QString &, int ) ), this,
-	    SLOT(slFileRename( QListViewItem*, const QString&, int)));
+	    SLOT(slFileRename(QListViewItem*,const QString&)));
 
    connect(this,SIGNAL(expanded(QListViewItem *)),SLOT(slotItemExpanded(QListViewItem *)));
 
@@ -348,68 +350,54 @@ void ScanPackager::slotDecorate( KFileTreeBranch* branch, const KFileTreeViewIte
 }
 
 
-
-void ScanPackager::slFileRename( QListViewItem* it, const QString& newStr, int )
+void ScanPackager::slFileRename(QListViewItem *it,const QString &newName)
 {
+    if (it==NULL) return;
+    KFileTreeViewItem *item = static_cast<KFileTreeViewItem *>(it);
 
-   bool success = true;
-   if( !it ) return;
+    bool success = (!newName.isEmpty());
 
-   if( newStr.isEmpty() )
-      success = false;
+    KURL urlFrom = item->url();
+    KURL urlTo(urlFrom);
+    urlTo.setFileName("");				/* clean filename, apply new name */
+    urlTo.setFileName(newName);
 
-   KFileTreeViewItem *item = static_cast<KFileTreeViewItem*>(it);
-
-   /* Free memory and imform everybody who is interested. */
-   KURL urlFrom = item->url();
-   KURL urlTo( urlFrom );
-
-   /* clean filename and apply new name */
-   urlTo.setFileName("");
-   urlTo.setFileName(newStr);
-
-   if( success )
-   {
-      if( urlFrom == urlTo )
-      {
-	 kdDebug(28000) << "Renaming to same url does not make sense!" << endl;
-	 success = false;
-      }
-      else
-      {
+    if (success)
+    {
+        if (urlFrom==urlTo)
+        {
+            kdDebug(28000) << "Renaming to same!" << endl;
+            success = false;
+        }
+        else
+        {
 	 /* clear selection, because the renamed image comes in through
 	  * kdirlister again
 	  */
-	 slotUnloadItem( item );
+            // slotUnloadItem(item);			// unnecessary, bug 68532
+							// because of "note new URL" below
+            kdDebug(28000) << k_funcinfo
+                           << "Renaming " << urlFrom.prettyURL()
+                           << " -> " << urlTo.prettyURL() << endl;
 
-	 kdDebug(28000) << "Renaming to " << urlTo.prettyURL() <<
-	    " from " << urlFrom.prettyURL() << endl;
+            //setSelected(item,false);
 
-	 /* to urlTo the really used filename is written */
-	 setSelected( item, false );
+            success = ImgSaver::renameImage(urlFrom,urlTo,false,this);
+            if (success)				// rename the file
+            {
+                item->fileItem()->setURL(urlTo);	// note new URL
+                emit fileRenamed(item->fileItem(),urlTo);
+            }
+        }
+    }
 
-	 if( ImgSaver::renameImage( urlFrom, urlTo, false, this ) )
-	 {
-	    kdDebug(28000) << "renaming OK" << endl;
-            emit fileRenamed( item->fileItem(), urlTo );
-	    success=true;
-	 }
-	 else
-	 {
-	    success = false;
-	 }
-      }
-   }
+    if (!success)
+    {
+        kdDebug(28000) << "renaming failed" << endl;
+        item->setText(0,urlFrom.fileName());		// restore the name
+    }
 
-   if( !success )
-   {
-      kdDebug(28000) << "renaming failed" << endl;
-      /* restore the name */
-      item->setText(0, urlFrom.fileName() );
-      setSelected( item, true );
-
-   }
-
+//    setSelected(item,true);				// restore the selection
 }
 
 

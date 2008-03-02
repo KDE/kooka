@@ -164,7 +164,7 @@ void ImageCanvas::newImageHoldZoom( QImage *new_image )
     d->keepZoom = holdZ;
 }
 
-void ImageCanvas::newImage( QImage *new_image )
+void ImageCanvas::newImage( const QImage *new_image )
 {
 
     /** do cleanups **/

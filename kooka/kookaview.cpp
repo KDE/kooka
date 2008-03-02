@@ -26,28 +26,6 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "kookaview.h"
-
-#include "resource.h"
-#include "kscandevice.h"
-#include "imgscaninfo.h"
-#include "devselector.h"
-#include "ksaneocr.h"
-#include "imgsaver.h"
-#include "kookapref.h"
-#include "imgnamecombo.h"
-#include "thumbview.h"
-#include "dwmenuaction.h"
-#include "kookaimage.h"
-#include "kookaimagemeta.h"
-#include "ocrresedit.h"
-#include "kookaprint.h"
-#include "imgprintdialog.h"
-#if 0
-#include "paramsetdialogs.h"
-#endif
-#include "adddevice.h"
-
 #include <qlabel.h>
 #include <qpainter.h>
 #include <qlayout.h>
@@ -79,6 +57,28 @@
 #include <kpopupmenu.h>
 
 #include <kparts/componentfactory.h>
+
+#include "resource.h"
+#include "kscandevice.h"
+#include "imgscaninfo.h"
+#include "devselector.h"
+#include "ksaneocr.h"
+#include "imgsaver.h"
+#include "kookapref.h"
+#include "imgnamecombo.h"
+#include "thumbview.h"
+#include "dwmenuaction.h"
+#include "kookaimage.h"
+#include "kookaimagemeta.h"
+#include "ocrresedit.h"
+#include "kookaprint.h"
+#include "imgprintdialog.h"
+#include "adddevice.h"
+#include "scanparamsdialog.h"
+
+#include "kookaview.h"
+#include "kookaview.moc"
+
 
 
 #define STARTUP_IMG_SELECTION   "SelectedImageOnStartup"
@@ -160,8 +160,8 @@ KookaView::KookaView( KParts::DockMainWindow *parent, const QCString& deviceToUs
 	    packager, SLOT( slSelectImage(const KURL&)));
    connect(packager,SIGNAL(selectionChanged()),
 	   this,SLOT(slotGallerySelectionChanged()));
-   connect(packager,SIGNAL(showImage(KookaImage *,bool)),
-	   this,SLOT(slotLoadedImageChanged(KookaImage *,bool)));
+   connect(packager,SIGNAL(showImage(const KookaImage *,bool)),
+	   this,SLOT(slotLoadedImageChanged(const KookaImage *,bool)));
 
 
    /*
@@ -268,8 +268,8 @@ KookaView::KookaView( KParts::DockMainWindow *parent, const QCString& deviceToUs
    connect( sane, SIGNAL( sigScanFinished(KScanStat)), this, SLOT(slScanFinished(KScanStat)));
    connect( sane, SIGNAL( sigAcquireStart()), this, SLOT( slAcquireStart()));
    /* Image canvas should show a new document */
-   connect( packager, SIGNAL( showImage( KookaImage*,bool )),
-            this,       SLOT( slShowAImage( KookaImage*)));
+   connect( packager, SIGNAL( showImage( const KookaImage*,bool )),
+            this,       SLOT( slShowAImage( const KookaImage*)));
 
    connect( packager, SIGNAL( aboutToShowImage(const KURL&)),
 	    this,       SLOT( slStartLoading( const KURL& )));
@@ -299,10 +299,9 @@ KookaView::KookaView( KParts::DockMainWindow *parent, const QCString& deviceToUs
 
    /* Set a large enough size */
    int w = statBar->fontMetrics().
-           width(img_canvas->imageInfoString(2000, 2000, 48));
+           width(img_canvas->imageInfoString(2000, 2000, 48)+"--");
    kdDebug(28000) << "Fixed size for status bar: " << w << " from string " << img_canvas->imageInfoString(2000, 2000, 48) << endl;
    statBar->setItemFixed( StatusImage, w );
-
 }
 
 
@@ -336,7 +335,12 @@ bool KookaView::slSelectDevice(const QCString& useDevice,bool alwaysAsk)
     {
         selDevice =  useDevice;
         if (selDevice.isEmpty()) selDevice = userDeviceSelection(alwaysAsk);
-        if (selDevice.isEmpty()) return (false);	// dialogue cancelled
+
+        if (selDevice.isEmpty())			// dialogue cancelled
+        {
+            if (scan_params!=NULL) return (false);	// have setup, do nothing
+            gallery_mode = true;
+        }
     }
 
     // Allow reopening
@@ -452,7 +456,7 @@ QCString KookaView::userDeviceSelection(bool alwaysAsk)
    {
        if (KMessageBox::warningContinueCancel(m_parent,i18n("<qt>\
 <p>No scanner devices are available.\
-<p>If your scanner is a type that should be auto-detected by SANE, check that it \
+<p>If your scanner is a type that can be auto-detected by SANE, check that it \
 is connected, switched on and configured correctly.\
 <p>If the scanner cannot be auto-detected by SANE (this includes some network \
 scanners), you need to specify the device to use.  Use the \"Add Scan Device\" \
@@ -520,13 +524,15 @@ void KookaView::slotGallerySelectionChanged()
     }
     else
     {
-        if (fti->isDir()) emit signalChangeStatusbar(i18n("Gallery folder %1").arg(fti->url().pathOrURL()));
+        emit signalChangeStatusbar(i18n("Gallery %1 %2")
+                                   .arg(fti->isDir() ? i18n("folder") : i18n("image"))
+                                   .arg(fti->url().pathOrURL()));
 	emit signalGallerySelectionChanged(fti->isDir(),packager->selectedItems().count());
     }
 }
 
 
-void KookaView::slotLoadedImageChanged(KookaImage *img,bool isDir)
+void KookaView::slotLoadedImageChanged(const KookaImage *img,bool isDir)
 {
     kdDebug( 28000) << k_funcinfo << "img=" << ((void*)img) << " isDir=" << isDir << endl;
 
@@ -910,10 +916,12 @@ void KookaView::slSaveOCRResult()
 
 }
 
-
+#if 0
 void KookaView::slLoadScanParams( )
 {
-   if( ! sane ) return;
+    if (sane==NULL) return;				// no scanner device
+    kdDebug(29000) << k_funcinfo << "NYI" << endl;
+
 #if 0
    /* not yet cooked */
    LoadSetDialog loadDialog( m_mainDock, sane->shortScannerName(), sane );
@@ -923,29 +931,18 @@ void KookaView::slLoadScanParams( )
    }
 #endif
 }
-
-void KookaView::slSaveScanParams( )
-{
-   if( !sane ) return;
-
-   /* not yet cooked */
-#if 0
-   KScanOptSet optSet( "SaveSet" );
-
-   sane->getCurrentOptions( &optSet );
-   SaveSetDialog dialog( m_mainDock /* this */ , &optSet );
-   if( dialog.exec())
-   {
-      kdDebug(28000)<< "Executed successfully" << endl;
-      QString name = dialog.paramSetName();
-      QString desc = dialog.paramSetDescription();
-      sane->slSaveScanConfigSet( name, desc );
-   }
 #endif
+
+
+void KookaView::slScanParams()
+{
+    if (sane==NULL) return;				// no scanner device
+    ScanParamsDialog d(m_mainDock,sane);
+    d.exec();
 }
 
 
-void KookaView::slShowAImage(KookaImage *img)
+void KookaView::slShowAImage(const KookaImage *img)
 {
     if (img_canvas)
     {
@@ -1186,4 +1183,3 @@ void KookaView::createDockMenu( KActionCollection *col, KDockMainWindow *mainWin
 }
 
 
-#include "kookaview.moc"

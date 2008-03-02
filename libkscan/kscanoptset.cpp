@@ -19,14 +19,23 @@
 
 #include <qstring.h>
 #include <qasciidict.h>
-#include <qmap.h>
-#include <qdict.h>
+//#include <qdict.h>
+//#include <qstringlist.h>
+
 #include <kdebug.h>
 #include <kconfig.h>
+#include <klocale.h>
 
 #include "kscandevice.h"
 #include "kscanoption.h"
+
 #include "kscanoptset.h"
+
+
+#define SAVESET_GROUP		"Save Set"
+#define SAVESET_KEY_SETDESC	"SetDesc"
+#define SAVESET_KEY_SCANNER	"ScannerName"
+
 
 KScanOptSet::KScanOptSet( const QCString& setName )
 {
@@ -43,8 +52,8 @@ KScanOptSet::KScanOptSet( const QCString& setName )
 
 KScanOptSet::~KScanOptSet()
 {
-   /* removes all deep copies from backupOption */
-   strayCatsList.clear();
+    kdDebug(29000) << k_funcinfo << "have " << strayCatsList.count() << " strays" << endl;
+    strayCatsList.clear();				/* deep copies from backupOption */
 }
 
 
@@ -139,83 +148,107 @@ void KScanOptSet::backupOptionDict( const QAsciiDict<KScanOption>& optDict )
 
 }
 
-/* */
+
 void KScanOptSet::saveConfig( const QString& scannerName, const QString& configName,
 			      const QString& descr )
 {
-   QString confFile = SCANNER_DB_FILE;
-   kdDebug( 29000) << "Creating scan configuration file <" << confFile << ">" << endl;
+    QString confFile = SCANNER_DB_FILE;
+    kdDebug(29000) << k_funcinfo << "scanner [" << scannerName << "]"
+                   << " config=[" << configName << "]"
+                   << " file <" << confFile << ">" << endl;
 
-   KConfig *scanConfig = new KConfig( confFile );
-   QString cfgName = configName;
+    KConfig scanConfig(confFile);
+    QString cfgName = configName;
+    if (cfgName.isEmpty()) cfgName = "default";
 
-   if( configName.isNull() || configName.isEmpty() )
-      cfgName = "default";
+    scanConfig.setGroup(QString("%1 %2").arg(SAVESET_GROUP,cfgName));
+    scanConfig.writeEntry(SAVESET_KEY_SETDESC,descr);
+    scanConfig.writeEntry(SAVESET_KEY_SCANNER,scannerName);
 
-   scanConfig->setGroup( cfgName );
-
-   scanConfig->writeEntry( "description", descr );
-   scanConfig->writeEntry( "scannerName", scannerName );
-   QAsciiDictIterator<KScanOption> it( *this);
-
-    while ( it.current() )
+    QAsciiDictIterator<KScanOption> it(*this);
+    while (it.current()!=NULL)
     {
-       const QString line = it.current() -> configLine();
-       const QString name = it.current()->getName();
-
-       kdDebug(29000) << "writing " << name << " = <" << line << ">" << endl;
-
-       scanConfig->writeEntry( name, line );
-
-       ++it;
+        const QString line = it.current()->configLine();
+        if (line!=PARAM_ERROR)
+        {
+            const QString name = it.current()->getName();
+            kdDebug(29000) << "  writing <" << name << "> = <" << line << ">" << endl;
+            scanConfig.writeEntry(name,line);
+        }
+        ++it;
     }
 
-    scanConfig->sync();
-    delete( scanConfig );
+    scanConfig.sync();
+    kdDebug(29000) << k_funcinfo << "done" << endl;
 }
 
-bool KScanOptSet::load( const QString& /*scannerName*/ )
+
+bool KScanOptSet::load(const QString &scannerName)
 {
-   QString confFile = SCANNER_DB_FILE;
-   kdDebug( 29000) << "** Reading from scan configuration file <" << confFile << ">" << endl;
-   bool ret = true;
+    kdDebug(29000) << k_funcinfo << "Reading <" << name << "> from <" << SCANNER_DB_FILE << ">" << endl;
 
-   KConfig *scanConfig = new KConfig( confFile, true );
-   QString cfgName = name; /* of the KScanOptSet, given in constructor */
+    KConfig conf(SCANNER_DB_FILE,true,false);
 
-   if( cfgName.isNull() || cfgName.isEmpty() )
-      cfgName = "default";
+    QString grpName = QString("%1 %2").arg(SAVESET_GROUP,name); /* of the KScanOptSet, given in constructor */
+    if (!conf.hasGroup(grpName))
+    {
+        kdDebug(29000) << "Group " << grpName << " does not exist in configuration!" << endl;
+        return (false);
+    }
 
-   if( ! scanConfig->hasGroup( name ) )
-   {
-      kdDebug(29000) << "Group " << name << " does not exist in configuration !" << endl;
-      ret = false;
-   }
-   else
-   {
-      scanConfig->setGroup( name );
+    conf.setGroup(grpName);
+    StringMap strMap = conf.entryMap(grpName);
 
-      typedef QMap<QString, QString> StringMap;
+    for (StringMap::Iterator it = strMap.begin(); it!=strMap.end(); ++it)
+    {
+        QString optName = it.key().latin1();
+        if (optName==SAVESET_KEY_SETDESC) continue;
+        if (optName==SAVESET_KEY_SCANNER) continue;
 
-      StringMap strMap = scanConfig->entryMap( name );
+        KScanOption optset(optName.latin1());
 
-      StringMap::Iterator it;
-      for( it = strMap.begin(); it != strMap.end(); ++it )
-      {
-	 QCString optName = it.key().latin1();
-	 KScanOption optset( optName );
+        QCString val = it.data().latin1();
+        kdDebug(29000) << "For <" << optName << "> read value <" << val << ">" << endl;
 
-	 QCString val = it.data().latin1();
-	 kdDebug(29000) << "Reading for " << optName << " value " << val << endl;
+        optset.set(val);
+        backupOption(optset);
+    }
 
-	 optset.set( val );
-
-	 backupOption( optset );
-      }
-   }
-   delete( scanConfig );
-
-   return( ret );
+    return (true);
 }
 
-/* END */
+
+
+KScanOptSet::StringMap KScanOptSet::readList()
+{
+    KConfig conf(SCANNER_DB_FILE,true,false );
+    const QString groupName = SAVESET_GROUP;
+    StringMap ret;
+
+    const QStringList groups = conf.groupList();
+    for (QStringList::const_iterator it = groups.constBegin(); it!=groups.constEnd(); ++it)
+    {
+        QString grp = (*it);
+        kdDebug(29000) << k_funcinfo << "group [" << grp << "]" << endl;
+        if (grp.startsWith(groupName))
+        {
+            QString set = grp.mid(groupName.length()+1);
+            if (set==DEFAULT_OPTIONSET) continue;	// don't show this one
+
+            conf.setGroup(grp);
+            ret[set] = conf.readEntry(SAVESET_KEY_SETDESC,i18n("No description"));
+        }
+    }
+
+    return (ret);
+}
+
+
+void KScanOptSet::deleteSet(const QString &name)
+{
+    KConfig conf(SCANNER_DB_FILE,false,false );
+
+    QString grpName = QString("%1 %2").arg(SAVESET_GROUP,name);
+    conf.deleteGroup(grpName);
+    conf.sync();
+}

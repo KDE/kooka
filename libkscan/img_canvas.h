@@ -123,7 +123,7 @@ public slots:
             repaint();
         }
     virtual QSize sizeHint() const;
-    void newImage( QImage* );
+    void newImage(const QImage* );
     void newImageHoldZoom( QImage* );
     void deleteView( QImage *);
     void newRectSlot();

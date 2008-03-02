@@ -284,7 +284,8 @@ void FormatDialog::buildFormatList(bool recOnly)
     kdDebug(29000) << k_funcinfo << "only=" << recOnly << " type=" << imgType << endl;
 
     lb_format->clear();
-    for (QStringList::const_iterator it = formatList.begin(); it!=formatList.end(); ++it)
+    for (QStringList::const_iterator it = formatList.constBegin();
+         it!=formatList.constEnd(); ++it)
     {
 	if (recOnly)					// only want recommended
 	{

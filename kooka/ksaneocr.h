@@ -190,7 +190,7 @@ signals:
     void readOnlyEditor( bool );
 
 public slots:
-    void slSetImage( KookaImage* );
+    void slSetImage( const KookaImage* );
 
     void slLineBox( const QRect& );
 

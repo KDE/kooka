@@ -140,7 +140,7 @@ KSaneOcr::~KSaneOcr()
  * This slot is called to introduce a new image, usually if the user clicks on a
  * new image either in the gallery or on the thumbnailview.
  */
-void KSaneOcr::slSetImage(KookaImage *img )
+void KSaneOcr::slSetImage(const KookaImage *img )
 {
    if( ! img ) return           ;
 

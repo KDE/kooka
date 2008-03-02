@@ -140,8 +140,8 @@ public slots:
 
     void slSaveOCRResult();
 
-    void slLoadScanParams( );
-    void slSaveScanParams( );
+    //void slLoadScanParams( );
+    void slScanParams();
 
     void slOCRResultImage( const QPixmap& );
 
@@ -177,7 +177,7 @@ public slots:
 
 protected slots:
 
-    void  slShowAImage( KookaImage* );
+    void  slShowAImage( const KookaImage* );
     void  slUnloadAImage( KookaImage* );
 
     /**
@@ -193,7 +193,7 @@ protected slots:
 
     void slSelectionChanged();
     void slotGallerySelectionChanged();
-    void slotLoadedImageChanged(KookaImage *img,bool isDir);
+    void slotLoadedImageChanged(const KookaImage *img,bool isDir);
 
 signals:
     /**

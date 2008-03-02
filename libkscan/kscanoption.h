@@ -40,6 +40,8 @@ class QLabel;
 class KGammaTable;
 
 
+#define PARAM_ERROR	"parametererror"
+
 /**
  *  This is KScanOption, a class which holds a single scanner option.
  *
@@ -248,8 +250,8 @@ private:
 #ifdef APPLY_IN_SITU
   bool       applyVal( void );
 #endif
-    bool       initOption( const QCString& new_name );
-    void allocForDesc();
+  bool       initOption( const QCString& new_name );
+  void       allocForDesc();
   void       allocBuffer( long );
 
   QWidget    *createToggleButton( QWidget *parent, const QString& text );
@@ -259,13 +261,11 @@ private:
   QWidget    *createFileField( QWidget *parent, const QString& text );
 	
   const      SANE_Option_Descriptor *desc;
-  QCString    name;
-    QString text;
+  QCString   name;
+  QString    text;
 
-//  void       *buffer;
-    QByteArray buffer;
+  QByteArray buffer;
   bool       buffer_untouched;
-//  size_t     buffer_size;
   QWidget    *internal_widget;
 
   /* For gamma-Tables remember gamma, brightness, contrast */

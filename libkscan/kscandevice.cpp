@@ -1536,17 +1536,14 @@ void KScanDevice::doProcessABlock( void )
 } /* end of fkt */
 
 
-void KScanDevice::slSaveScanConfigSet( const QString& setName, const QString& descr )
+void KScanDevice::slSaveScanConfigSet(const QString &setName,const QString &descr)
 {
-   if( setName.isEmpty() || setName.isNull()) return;
+    if (setName.isEmpty()) return;
+    kdDebug(29000) << k_funcinfo << "Saving Configuration [" << setName << "]" << endl;
 
-   kdDebug(29000) << "Saving Scan Configuration" << setName << endl;
-
-   KScanOptSet optSet( DEFAULT_OPTIONSET );
-   getCurrentOptions( &optSet );
-
-   optSet.saveConfig( scanner_name , setName, descr );
-
+    KScanOptSet optSet(DEFAULT_OPTIONSET);
+    getCurrentOptions(&optSet);
+    optSet.saveConfig(scanner_name,setName,descr);
 }
 
 

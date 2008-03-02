@@ -240,17 +240,6 @@ void Kooka::setupActions()
 				    actionCollection(), "unloadImage" );
     m_view->connectGalleryAction( unloadImageAction );
 
-#if 0
-    /* not yet supported actions - coming post 3.1 */
-    (void) new KAction(i18n("Load Scan Parameters"), "bookmark_add", CTRL+Key_L,
-                       m_view, SLOT(slLoadScanParams()),
-                       actionCollection(), "loadscanparam" );
-
-    (void) new KAction(i18n("Save Scan Parameters"), "bookmark_add", CTRL+Key_S,
-		       m_view, SLOT(slSaveScanParams()),
-		       actionCollection(), "savescanparam" );
-#endif
-
     // "Settings" menu
 
     (void) new KAction(i18n("Select Scan Device..."), "scanner", 0,
@@ -268,13 +257,17 @@ void Kooka::setupActions()
 
     // Scanning functions
 
-    scanAction = new KAction(i18n("Preview"), "preview", 0,
+    scanAction = new KAction(i18n("Preview"), "preview", Key_F3,
 		       m_view, SLOT( slStartPreview()),
 		       actionCollection(), "startPreview" );
 
-    previewAction = new KAction(i18n("Start Scan"), "scanner", 0,
+    previewAction = new KAction(i18n("Start Scan"), "scanner", Key_F4,
 		       m_view, SLOT( slStartFinalScan()),
 		       actionCollection(), "startScan" );
+
+    paramsAction = new KAction(i18n("Scan Parameters..."), "bookmark_add", CTRL+SHIFT+Key_S,
+                               m_view, SLOT(slScanParams()),
+                               actionCollection(), "scanparam" );
 
     // OCR functions
 
@@ -431,6 +424,7 @@ void Kooka::slotUpdateScannerActions(bool haveConnection)
 
 	scanAction->setEnabled(haveConnection);
 	previewAction->setEnabled(haveConnection);
+	paramsAction->setEnabled(haveConnection);
 
 	setCaption(m_view->scannerName());
 }

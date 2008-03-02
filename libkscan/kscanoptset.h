@@ -20,13 +20,11 @@
 #ifndef KSCANOPTSET_H
 #define KSCANOPTSET_H
 
-#include <qobject.h>
-#include <qstring.h>
-#include <qptrlist.h>
 #include <qasciidict.h>
+#include <qmap.h>
 
+class KScanOption;
 
-#include "kscanoption.h"
 
 /**
   * This is a container class for KScanOption-objects, which contain information
@@ -50,6 +48,8 @@ class KScanOptSet: public QAsciiDict<KScanOption>
 {
 
 public:
+    typedef QMap<QString,QString> StringMap;
+
    /**
     *  Constructor to create  a new Container. Takes a string as a name, which
     *  has no special meaning yet ;)
@@ -90,10 +90,13 @@ public:
     * load for the scanner you want.
     * @param scannerName: A scanner's name
     */
-   bool load( const QString& scannerName );
+   bool load(const QString &scannerName = QString::null);
 
    QString  getDescription() const;
    
+   static StringMap readList();
+   static void deleteSet(const QString &name);
+
 public slots:
  
     void slSetDescription( const QString& );
@@ -104,10 +107,8 @@ private:
    /* List to collect objects for which memory was allocated and must be freed */
    QPtrList<KScanOption> strayCatsList;
 
-   class KScanOptSetPrivate;
-   KScanOptSetPrivate *d;
-
    QString description;
 };
+
 
 #endif // KScanOptSet

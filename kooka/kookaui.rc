@@ -23,6 +23,10 @@
    <Action name="startPreview"/>
    <Action name="startScan"/>
    <Separator/>
+   <Action name="loadscanparam"/>
+   <Action name="savescanparam"/>
+   <Action name="scanparam"/>
+   <Separator/>
    <Action name="ocrImage"/>
    <Action name="ocrImageSelect"/>
   </Menu>
@@ -50,9 +54,6 @@
    <Separator/>
    <Action name="selectsource" append="save_merge"/>
    <Action name="addsource" append="save_merge"/>
-   <Separator/>
-   <Action name="loadscanparam" append="save_merge"/>
-   <Action name="savescanparam" append="save_merge"/>
   </Menu>
  </MenuBar>
 

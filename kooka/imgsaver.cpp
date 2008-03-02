@@ -558,7 +558,7 @@ QString ImgSaver::extension( const KURL& url )
 }
 
 
-bool ImgSaver::renameImage( const KURL& fromUrl, KURL& toUrl, bool askExt,  QWidget *overWidget )
+bool ImgSaver::renameImage( const KURL& fromUrl, const KURL& toUrl, bool askExt,  QWidget *overWidget )
 {
    /* Check if the provided filename has a extension */
    QString extTo = extension( toUrl );

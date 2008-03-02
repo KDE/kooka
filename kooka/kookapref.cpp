@@ -244,7 +244,9 @@ void KookaPref::setupGeneralPage()
     QFrame *page = addPage( i18n("General"), i18n("General Options" ),
 			    BarIcon("configure", KIcon::SizeMedium ) );
     QVBoxLayout *top = new QVBoxLayout( page, 0, spacingHint() );
-    top->addSpacing(KDialogBase::spacingHint());
+    /* Description-Label */
+    top->addWidget(new QLabel(i18n("These options will take effect when Kooka is next started."),page));
+    top->addSpacing(2*KDialogBase::spacingHint());
 
     /* Allow renaming in gallery */
     cbAllowRename = new QCheckBox( i18n("Click-to-rename in gallery"),
@@ -271,8 +273,8 @@ void KookaPref::setupStartupPage()
 			    BarIcon("gear", KIcon::SizeMedium ) );
     QVBoxLayout *top = new QVBoxLayout( page, 0, spacingHint() );
     /* Description-Label */
-    top->addWidget( new QLabel( i18n("Note that changing these options will affect Kooka's next start!"), page ));
-    top->addSpacing(KDialogBase::spacingHint());
+    top->addWidget(new QLabel(i18n("These options will take effect when Kooka is next started."),page));
+    top->addSpacing(2*KDialogBase::spacingHint());
 
     /* Query for network scanner (Checkbox) */
     cbNetQuery = new QCheckBox( i18n("Query network for available scanners"),
@@ -283,16 +285,14 @@ void KookaPref::setupStartupPage()
 
 
     /* Show scanner selection box on startup (Checkbox) */
-    cbShowScannerSelection = new QCheckBox( i18n("Show the scanner selection box on next startup"),
-					    page);
+    cbShowScannerSelection = new QCheckBox( i18n("Show the scanner selection dialog"),page);
     QToolTip::add( cbShowScannerSelection,
 		   i18n( "Check this if you once checked 'do not show the scanner selection on startup',\nbut you want to see it again." ));
 
     cbShowScannerSelection->setChecked( !konf->readBoolEntry( STARTUP_SKIP_ASK, false ));
 
     /* Read startup image on startup (Checkbox) */
-    cbReadStartupImage = new QCheckBox( i18n("Load the last image into the viewer on startup"),
-					    page);
+    cbReadStartupImage = new QCheckBox( i18n("Load the last selected image into the viewer"),page);
     QToolTip::add( cbReadStartupImage,
 		   i18n( "Check this if you want Kooka to load the last selected image into the viewer on startup.\nIf your images are large, that might slow down Kooka's start." ));
     cbReadStartupImage->setChecked( konf->readBoolEntry( STARTUP_READ_IMAGE, true));
@@ -312,24 +312,23 @@ void KookaPref::setupStartupPage()
 void KookaPref::setupSaveFormatPage( )
 {
    konf->setGroup( OP_FILE_GROUP );
-   QFrame *page = addPage( i18n("Image Saving"), i18n("Configure Image Saving" ),
+   QFrame *page = addPage( i18n("Image Saving"), i18n("Image Saving Options" ),
 			    BarIcon("filesave", KIcon::SizeMedium ) );
    QVBoxLayout *top = new QVBoxLayout( page, 0, spacingHint() );
+   top->addSpacing(KDialogBase::spacingHint());
 
    /* Skip the format asking if a format entry  exists */
-   cbSkipFormatAsk = new QCheckBox( i18n("Always display image save assistant"),
+   cbSkipFormatAsk = new QCheckBox( i18n("Always use the Save Assistant"),
 				     page);
    cbSkipFormatAsk->setChecked( konf->readBoolEntry( OP_FILE_ASK_FORMAT, true  ));
    QToolTip::add( cbSkipFormatAsk, i18n("Check this if you want to see the image save assistant even if there is a default format for the image type." ));
    top->addWidget( cbSkipFormatAsk );
 
-   cbFilenameAsk = new QCheckBox( i18n("Ask for filename when saving file"),
+   cbFilenameAsk = new QCheckBox( i18n("Ask for filename when saving"),
                     page);
    cbFilenameAsk->setChecked( konf->readBoolEntry( OP_ASK_FILENAME, false));
    QToolTip::add( cbFilenameAsk, i18n("Check this if you want to enter a filename when an image has been scanned." ));
    top->addWidget( cbFilenameAsk );
-
-
 
    top->addStretch(10);
 }
@@ -343,6 +342,7 @@ void KookaPref::setupThumbnailPage()
    QVBoxLayout *top = new QVBoxLayout( page, 0, spacingHint() );
 
    top->addWidget( new QLabel( i18n("Here you can configure the appearance of the thumbnail view of your scan picture gallery."),page ));
+   top->addSpacing(2*KDialogBase::spacingHint());
 
    /* Backgroundimage */
    KStandardDirs stdDir;
