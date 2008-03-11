@@ -24,6 +24,7 @@
 #include <qcheckbox.h>
 #include <qbuttongroup.h>
 #include <qradiobutton.h>
+#include <qfileinfo.h>
 
 #include <kfiledialog.h>
 #include <klocale.h>
@@ -34,6 +35,7 @@
 #include <kseparator.h>
 #include <kmessagebox.h>
 #include <kactivelabel.h>
+#include <kmimetype.h>
 
 #include <sane/saneopts.h>
 
@@ -825,10 +827,13 @@ KScanStat ScanParams::prepareScan(QString *vfp)
         {
             if (scan_mode==ID_SANE_DEBUG)
             {
-                QFileInfo fi(virtfile);
-                if (fi.extension().lower()!="pnm")
+                KMimeType::Ptr mimetype = KMimeType::findByPath(virtfile);
+                if (!(mimetype->is("image/x-portable-bitmap") ||
+                      mimetype->is("image/x-portable-greymap") ||
+                      mimetype->is("image/x-portable-pixmap")))
                 {
-                    KMessageBox::sorry(this,i18n("SANE Debug can only read PNM files"));
+                    KMessageBox::sorry(this,i18n("<qt>SANE Debug can only read PNM files.<br>"
+                                                 "This file is type <b>%1</b>.").arg(mimetype->name()));
                     stat = KSCAN_ERR_PARAM;
                 }
             }

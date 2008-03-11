@@ -434,7 +434,7 @@ private:
      **/
     void                prepareScan( void );
 
-    KScanStat           createNewImage( SANE_Parameters *p );
+    KScanStat           createNewImage(const SANE_Parameters *p );
 
 // not implemented
 //   QWidget	      *entryField( QWidget *parent, const QString& text,

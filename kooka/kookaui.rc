@@ -10,6 +10,7 @@
    <Action name="importImage"/>
    <Action name="renameImage"/>
    <Action name="deleteImage"/>
+   <Action name="propsImage"/>
    <Separator/>
    <Action name="createFromSelection"/>
    <Action name="unloadImage"/>

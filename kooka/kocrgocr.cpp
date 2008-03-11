@@ -137,6 +137,8 @@ KSaneOcr::EngineError KGOCRDialog::setupGui()
     /* This is for a 'work-in-progress'-Animation */
     getAnimation(hb);
 
+    // TODO: fix labels on these sliders (kscancontrols ABI changed)
+
     /* Slider for OCR-Options */
     sliderGrayLevel = new KScanSlider( innerBox , i18n("&Gray level"), 0, 254, true, 160 );
     int numdefault = conf->readNumEntry( CFG_GOCR_GRAYLEVEL, 160 );

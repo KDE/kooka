@@ -60,6 +60,7 @@ typedef enum {
    ISS_ERR_UNKNOWN,
    ISS_ERR_PARAM,       /* Parameter wrong */
    ISS_ERR_PROTOCOL,
+   ISS_ERR_MKDIR,
    ISS_SAVE_CANCELED
 
 } ImgSaveStat;
@@ -111,8 +112,7 @@ public:
    /**
     *  returns the name of the last file that was saved by ImgSaver.
     */
-   QString     lastFilename() const { return( last_file ); }
-   KURL        lastFileUrl() const { return( KURL(last_file )); }
+   KURL        lastURL() const { return( last_url ); }
    /**
     *  returns the image format of the last saved image.
     */
@@ -133,24 +133,25 @@ public:
    static QString picTypeAsString(ImgSaver::ImageType type);
 
 public slots:
-   ImgSaveStat saveImage( QImage *image );
-   ImgSaveStat saveImage( QImage *image, const KURL& filename, const QString& imgFormat );
+   ImgSaveStat saveImage( const QImage *image );
+   ImgSaveStat saveImage( const QImage *image, const KURL &url, const QString& imgFormat );
 
 private:
    QString      findFormat( ImgSaver::ImageType type );
    QString      findSubFormat( QString format );
    void		createDir( const QString& );
 
-   ImgSaveStat  save( QImage *image, const QString &filename, const QString &format,
+   ImgSaveStat  save( const QImage *image, const KURL &url, const QString &format,
 		     const QString &subformat );
    QString      createFilename( QString format );
    void	        readConfig( void );
    QString      startFormatDialog( ImgSaver::ImageType );
 
    QString     	directory;    // dir where the image should be saved
-   QString     	last_file;
+
    QCString   	subformat;
    QCString    	last_format;
+    KURL last_url;
    bool	       	ask_for_format;
 };
 

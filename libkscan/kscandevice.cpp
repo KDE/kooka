@@ -1044,57 +1044,52 @@ KScanStat KScanDevice::acquire( const QString& filename )
 /**
  *  Creates a new QImage from the retrieved Image Options
  **/
-KScanStat KScanDevice::createNewImage( SANE_Parameters *p )
+KScanStat KScanDevice::createNewImage(const SANE_Parameters *p)
 {
-  if( !p ) return( KSCAN_ERR_PARAM );
-  KScanStat       stat = KSCAN_OK;
+    if (p==NULL) return (KSCAN_ERR_PARAM);
+    KScanStat stat = KSCAN_OK;
 
-  if( img ) {
-     delete( img );
-     img = 0;
-  }
-
-  if( p->depth == 1 )  //  Lineart !!
-  {
-    img =  new QImage( p->pixels_per_line, p->lines, 8 );
-    if( img )
+    if (img!=NULL)
     {
-      img->setNumColors( 2 );
-      img->setColor( 0, qRgb( 0,0,0));
-      img->setColor( 1, qRgb( 255,255,255) );
+        delete img;
+        img = NULL;
     }
-  }
-  else if( p->depth == 8 )
-  {
-    // 8 bit rgb-Picture
-    if( p->format == SANE_FRAME_GRAY )
-    {
-      /* Grayscale */
-      img = new QImage( p->pixels_per_line, p->lines, 8 );
-      if( img )
-      {
-	img->setNumColors( 256 );
 
-	for(int i = 0; i<256; i++)
-	  img->setColor(i, qRgb(i,i,i));
-      }
-    }
-    else
+    if (p->depth==1)					//  Line art (bitmap)
     {
-      /* true color image */
-      img =  new QImage( p->pixels_per_line, p->lines, 32 );
-      if( img )
-	img->setAlphaBuffer( false );
+        img = new QImage(p->pixels_per_line,p->lines,8);
+        if (img!=NULL)
+        {
+            img->setNumColors(2);
+            img->setColor(0,qRgb(0x00,0x00,0x00));
+            img->setColor(1,qRgb(0xFF,0xFF,0xFF));
+        }
     }
-  }
-  else
-  {
-    /* ERROR: NO OTHER DEPTHS supported */
-    kdDebug(29000) << "KScan supports only bit dephts 1 and 8 yet!" << endl;
-  }
+    else if (p->depth==8)				// 8 bit RGB
+    {
+        if (p->format==SANE_FRAME_GRAY)			// Grey scale
+        {
+            img = new QImage(p->pixels_per_line,p->lines,8);
+            if (img!=NULL)
+            {
+                img->setNumColors(256);
+                for (int i = 0; i<256; i++) img->setColor(i,qRgb(i,i,i));
+            }
+        }
+        else						// True colour
+        {
+            img = new QImage(p->pixels_per_line,p->lines,32);
+            if (img!=NULL) img->setAlphaBuffer(false);
+        }
+    }
+    else						// Error, no others supported
+    {
+        kdDebug(29000) << k_funcinfo << "Only bit depths 1 or 8 supported!" << endl;
+        stat = KSCAN_ERR_PARAM;
+    }
 
-  if( ! img ) stat = KSCAN_ERR_MEMORY;
-  return( stat );
+    if (img==NULL && stat==KSCAN_OK) stat = KSCAN_ERR_MEMORY;
+    return (stat);
 }
 
 

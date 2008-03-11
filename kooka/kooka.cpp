@@ -240,6 +240,11 @@ void Kooka::setupActions()
 				    actionCollection(), "unloadImage" );
     m_view->connectGalleryAction( unloadImageAction );
 
+    propsImageAction = new KAction(i18n("Properties..."), 0,
+				    m_view->gallery(), SLOT( slotItemProperties() ),
+				    actionCollection(), "propsImage" );
+    m_view->connectGalleryAction( propsImageAction );
+
     // "Settings" menu
 
     (void) new KAction(i18n("Select Scan Device..."), "scanner", 0,
@@ -474,6 +479,7 @@ void Kooka::slotUpdateGalleryActions(bool isDir,int howmanySelected)
                 bool rs = m_view->galleryRootSelected();
 		deleteImageAction->setEnabled(!rs);
 		renameImageAction->setEnabled(!rs);
+                propsImageAction->setEnabled(!rs);
 	}
 	else
 	{
@@ -485,6 +491,7 @@ void Kooka::slotUpdateGalleryActions(bool isDir,int howmanySelected)
 		renameImageAction->setText(i18n("Rename Image"));
 		deleteImageAction->setEnabled(singleImage);
 		renameImageAction->setEnabled(singleImage);
+                propsImageAction->setEnabled(singleImage);
 	}
 }
 

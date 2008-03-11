@@ -163,6 +163,7 @@ private:
    KAction *deleteImageAction;
    KAction *renameImageAction;
    KAction *unloadImageAction;
+   KAction *propsImageAction;
 
    KActionMenu *openWithMenu;
 };

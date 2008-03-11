@@ -26,34 +26,15 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "resource.h"
-#include "imgsaver.h"
-#include "kookaimage.h"
-#include "kookaimagemeta.h"
-#include "previewer.h"
-#include "devselector.h"
-#include "kookapref.h"
-
-#include <qapplication.h>
-#include <qdir.h>
-#include <qfile.h>
-#include <qpopupmenu.h>
-#include <qdict.h>
-#include <qpixmap.h>
-#include <kmessagebox.h>
-#include <qfiledialog.h>
-#include <qstringlist.h>
-#include <qheader.h>
+#include <qfileinfo.h>
 #include <qsignalmapper.h>
+#include <qlistview.h>
 
+#include <kmessagebox.h>
 #include <kfiletreeview.h>
-#include <kfiletreeviewitem.h>
-#include <kfiletreebranch.h>
-#include <kactionclasses.h>
 #include <ktrader.h>
 #include <krun.h>
-
-#include <kurldrag.h>
+#include <kpropertiesdialog.h>
 #include <kpopupmenu.h>
 #include <kaction.h>
 #include <kinputdialog.h>
@@ -62,18 +43,17 @@
 #include <kurl.h>
 #include <kdebug.h>
 #include <klocale.h>
-#include <kglobal.h>
-#include <kio/global.h>
-#include <kio/progressbase.h>
+
 #include <kio/netaccess.h>
-#include <kio/jobclasses.h>
-#include <kio/file.h>
-#include <kio/job.h>
+
+#include "imgsaver.h"
+#include "kookaimage.h"
+#include "kookaimagemeta.h"
+#include "previewer.h"
+#include "kookapref.h"
 
 #include "scanpackager.h"
 #include "scanpackager.moc"
-
-//#define STARTUP_FIRST_START "firstStart"
 
 
 /* ----------------------------------------------------------------------- */
@@ -347,6 +327,22 @@ void ScanPackager::slotDecorate( KFileTreeBranch* branch, const KFileTreeViewIte
       slotDecorate( kftvi );
       emit fileChanged( kftvi->fileItem() );
    }
+}
+
+
+void ScanPackager::updateParent(const KFileTreeViewItem *curr)
+{
+    KFileTreeBranch *branch = branches().at(0);		/* There should be at least one */
+    if (branch==NULL) return;
+
+    QString strdir = itemDirectory(curr);
+    // if(strdir.endsWith(QString("/"))) strdir.truncate( strdir.length() - 1 );
+    kdDebug(28000) << k_funcinfo << "Updating directory " << strdir << endl;
+    KURL dir = KURL::fromPathOrURL(strdir);
+    branch->updateDirectory(dir);
+
+    KFileTreeViewItem *parent = branch->findTVIByURL(dir);
+    if (parent!=NULL) parent->setOpen(true);		/* Ensure parent is expanded */
 }
 
 
@@ -823,88 +819,60 @@ void ScanPackager::slotCurrentImageChanged( QImage *img )
 /* This slot takes a new scanned Picture and saves it.
  * It urgently needs to make a deep copy of the image !
  */
-void ScanPackager::slAddImage( QImage *img, KookaImageMeta* )
+
+void ScanPackager::addImage(const QImage *img,KookaImageMeta *meta)
 {
-   ImgSaveStat is_stat = ISS_OK;
-   /* Save the image with the help of the ImgSaver */
-   if( ! img ) return;
+    if (img==NULL) return;
+    ImgSaveStat is_stat = ISS_OK;
 
-   /* currently selected item is the directory or a file item */
-   KFileTreeViewItem *curr = currentKFileTreeViewItem();
+    KFileTreeViewItem *curr = currentKFileTreeViewItem();
+    if (curr==NULL)					// into root if nothing is selected
+    {
+        KFileTreeBranch *branch = branches().at(0);	// there should be at least one
+        if (branch!=NULL)
+        {
+            curr = findItem(branch,i18n("Incoming/"));	// if user has created this????
+            if (curr==NULL) curr = branch->root();
+        }
 
-   /* Use root if nothing is selected */
-   if( ! curr )
-   {
-      KFileTreeBranch *b = branches().at(0); /* There should be at least one */
+        if (curr==NULL) return;				// something very odd has happened!
+        setSelected(curr,true);
+    }
 
-      if( b )
-      {
-	 curr = findItem( b, i18n( "Incoming/" ) );
-	 if( ! curr ) curr = b->root();
-      }
+    KURL dir = KURL::fromPathOrURL(itemDirectory(curr));
+							// find out where new image will go
+    ImgSaver imgsaver(this,dir);
+    is_stat = imgsaver.saveImage(img);			// try to save the image
+    if (is_stat!=ISS_OK)				// image saving failed
+    {
+        if (is_stat==ISS_SAVE_CANCELED) return;		// user cancelled, just ignore
 
-      /* If curr is still undefined, something very tough has happend. Go away here */
-      if( !curr ) return;
+        KMessageBox::error(this,i18n("<qt>Could not save the image<br><b>%2</b><br>%1")
+                           .arg(imgsaver.errorString(is_stat))
+                                .arg(imgsaver.lastURL().prettyURL()),
+                           i18n("Save Error"));
+        return;
+    }
 
-      setSelected( curr, true );
-   }
+    /* Add the new image to the list of new images */
+    KURL lurl = imgsaver.lastURL();
+    slotSetNextUrlToSelect(lurl);
+    m_nextUrlToShow = lurl;
 
-   /* find the directory above the current one */
-
-   KURL dir(itemDirectory( curr ));
-
-   /* Path of curr sel item */
-   ImgSaver img_saver( this, dir );
-
-   is_stat = img_saver.saveImage( img );
-   if( is_stat == ISS_ERR_FORMAT_NO_WRITE )
-   {
-      KMessageBox::error( this, i18n( "Cannot write this image format.\nImage will not be saved!"),
-			    i18n("Save Error") );
-   }
-   else if( is_stat == ISS_ERR_PERM )
-   {
-      KMessageBox::error( this, i18n( "Image file is write protected.\nImage will not be saved!"),
-			    i18n("Save Error") );
-
-   }
-   else if( is_stat != ISS_OK )
-   {
-      if( is_stat == ISS_SAVE_CANCELED )
-      {
-	 return;
-      }
-      kdDebug(28000) << "ERROR: Saving failed: " << img_saver.errorString( is_stat ) << endl;
-      /* And now ?? */
-   }
-
-   /* Add the new image to the list of new images */
-   KURL lurl = img_saver.lastFileUrl();
-
-   KFileTreeBranchList branchlist = branches();
-   KFileTreeBranch *kookaBranch = branchlist.at(0);
-
-   QString strdir = itemDirectory(curr);
-   if(strdir.endsWith(QString("/"))) strdir.truncate( strdir.length() - 1 );
-   kdDebug(28000) << "Updating directory with " << strdir << endl;
-
-   if( kookaBranch ) kookaBranch->updateDirectory( KURL(strdir) );
-   slotSetNextUrlToSelect( lurl );
-   m_nextUrlToShow = lurl;
-
-   QString s;
-   /* Count amount of children of the father */
-   QListViewItem *paps = curr->parent();
-   if( curr->isDir() ) /* take only father if the is no directory */
-      paps = curr;
-
-   if( paps )
-   {
-      int childcount = paps->childCount();
-      s = i18n("%1 images").arg(childcount);
-      paps->setText( 1, s);
-      setOpen( paps, true );
-   }
+    updateParent(curr);
+//   QString s;
+//   /* Count amount of children of the father */
+//   QListViewItem *paps = curr->parent();
+//   if( curr->isDir() ) /* take only father if the is no directory */
+//      paps = curr;
+//
+//   if( paps )
+//   {
+//      int childcount = paps->childCount();
+//      s = i18n("%1 images").arg(childcount);
+//      paps->setText( 1, s);
+//      setOpen( paps, true );
+//   }
 
 }
 
@@ -1147,6 +1115,17 @@ void ScanPackager::slotUnloadItem( KFileTreeViewItem *curr )
    }
 }
 
+
+
+void ScanPackager::slotItemProperties()
+{
+    KFileTreeViewItem *curr = currentKFileTreeViewItem();
+    if (curr==NULL) return;
+
+    (void) new KPropertiesDialog(curr->url(),this);
+}
+
+
 /* ----------------------------------------------------------------------- */
 
 void ScanPackager::slotDeleteItems()
@@ -1195,6 +1174,8 @@ void ScanPackager::slotDeleteItems()
     }
 
     if (nextToSelect!=NULL) setSelected(nextToSelect,true);
+
+    updateParent(curr);
 
     /* TODO: remove the directory from the imageNameCombobox */
     if (isDir)

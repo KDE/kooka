@@ -74,7 +74,6 @@ ImgSaver::ImgSaver(  QWidget *parent, const KURL dir_name )
    createDir( directory );
    readConfig();
 
-   last_file = "";
    last_format ="";
 
 }
@@ -88,7 +87,6 @@ ImgSaver::ImgSaver( QWidget *parent )
 
    readConfig();
 
-   last_file = "";
    last_format ="";
 
 }
@@ -118,86 +116,129 @@ void ImgSaver::createDir( const QString& dir )
 #endif
 }
 
+
 /**
  *   This function asks the user for a filename or creates
  *   one by itself, depending on the settings
  **/
-ImgSaveStat ImgSaver::saveImage( QImage *image )
+ImgSaveStat ImgSaver::saveImage(const QImage *image)
 {
-   ImgSaveStat stat;
-   ImgSaver::ImageType imgType;
+    if (image==NULL) return (ISS_ERR_PARAM);
 
-   if( !image ) return( ISS_ERR_PARAM );
+    ImgSaver::ImageType imgType = ImgSaver::ImgNone;	// find out what kind of image it is
+    if (image->depth()>8) imgType = ImgSaver::ImgHicolor;
+    else
+    {
+        if (image->depth()==1 || image->numColors()==2) imgType = ImgSaver::ImgBW;
+        else
+        {
+            if (image->allGray()) imgType = ImgSaver::ImgGray;
+            else imgType = ImgSaver::ImgColor;
+        }
+    }
 
-   /* Find out what kind of image it is  */
-   if( image->depth() > 8 )
-   {
-      imgType = ImgSaver::ImgHicolor;
-   }
-   else
-   {
-      if( image->depth() == 1 || image->numColors() == 2 )
-      {
-	 kdDebug(28000) << "This is black And White!" << endl;
-	 imgType = ImgSaver::ImgBW;
-      }
-      else
-      {
-	 imgType  = ImgSaver::ImgColor;
-	 if( image->allGray() )
-	 {
-	    imgType = ImgSaver::ImgGray;
-	 }
-      }
-   }
+    QString format = findFormat(imgType);		// find/ask for image format
+    QString subformat = findSubFormat(format);
+    if (format.isEmpty()) return (ISS_SAVE_CANCELED);	// dialogue cancelled
 
+    QString filename = createFilename(format);		// find an unused filename
 
-   QString format = findFormat( imgType );
-   QString subformat = findSubFormat( format );
-   // Call save-Function with this params
+    KConfig *konf = KGlobal::config();
+    konf->setGroup(OP_FILE_GROUP);
+    if (konf->readBoolEntry(OP_ASK_FILENAME,false))	// do we ask for a file name?
+    {
+        bool ok;
+	// TODO: combine this file name request with the format dialogue, if used
+        QString text = KInputDialog::getText(i18n("Filename"),i18n("Enter image file name:"),
+                                             filename,&ok);
 
-   if( format.isEmpty() )
-   {
-    	kdDebug(28000) << "Save canceled by user -> no save !" << endl;
-    	return( ISS_SAVE_CANCELED );
-   }
+        if (!ok) return (ISS_SAVE_CANCELED);
+        filename = text;
+    }
 
-   kdDebug(28000) << "saveImage: Directory is " << directory << endl;
-   QString filename = createFilename( format );
+    QString fi = directory+"/"+filename;		// full path to save
+    if (extension(fi).isEmpty())			// does it have an extension?
+    {
+        if (!fi.endsWith(".")) fi +=  ".";
+#ifdef USE_KIMAGEIO
+        fi += KImageIO::suffix(format);
+#else
+        fi += format.lower();
+#endif
+    }
 
-   KConfig *konf = KGlobal::config ();
-   konf->setGroup( OP_FILE_GROUP );
-
-   if( konf->readBoolEntry( OP_ASK_FILENAME, false ) )
-   {
-       bool ok;
-       QString text = KInputDialog::getText( i18n( "Filename" ), i18n("Enter filename:"),
-					     filename, &ok );
-
-       if(ok)
-       {
-	   filename = text;
-       }
-   }
-       
-   QString fi = directory + "/" + filename;
-
-   if( extension(fi).isEmpty() )
-   {
-       if( ! fi.endsWith( "." )  )
-       {
-	   fi+= ".";
-       }
-       fi+=format.lower();
-   }
-
-
-   kdDebug(28000) << "saveImage: saving file <" << fi << ">" << endl;
-   stat = save( image, fi, format, subformat );
-
-   return( stat );
-
+    return (save(image,fi,format,subformat));
 }
+
+
+
+/**
+ *   This function uses a filename provided by the caller.
+ **/
+ImgSaveStat ImgSaver::saveImage(const QImage *image,const KURL &url,const QString &imgFormat)
+{
+    QString format = imgFormat;
+    if (format.isEmpty()) format = "BMP";
+
+    return (save(image,url,format,QString::null));
+}
+
+
+/**
+   private save() does the work to save the image.
+   the filename must be complete and local.
+**/
+ImgSaveStat ImgSaver::save(const QImage *image,const KURL &url,
+                           const QString &format,const QString &subformat)
+{
+    if (format.isEmpty() || image==NULL) return (ISS_ERR_PARAM);
+
+    kdDebug(28000) << k_funcinfo << "to " << url.prettyURL()
+                   << " in format <" << format << ">"
+                   << " subformat <" << subformat << ">" << endl;
+
+    last_format = format.latin1();			// save for error message later
+    last_url = url;
+
+    if (!url.isLocalFile())				// file must be local
+    {
+	kdDebug(29000) << k_funcinfo << "Can only save local files" << endl;
+	return (ISS_ERR_PROTOCOL);
+    }
+
+    QString filename = url.path();			// local file path
+    QFileInfo fi(filename);				// information for that
+    QString dirPath = fi.dirPath();			// containing directory
+
+    QDir dir(dirPath);
+    if (!dir.exists())					// should always exist, except
+    {							// for first preview save
+        kdDebug(28000) << "Creating dir <" << dirPath << ">" << endl;
+        if (!dir.mkdir(dirPath))
+        {
+	    kdDebug(28000) << k_funcinfo << "Could not create directory <" << dirPath << ">" << endl;
+            return (ISS_ERR_MKDIR);
+        }
+    }
+
+    if (fi.exists() && !fi.isWritable())
+    {
+        kdDebug(28000) << k_funcinfo << "Cannot overwrite existing file <" << filename << ">" << endl;
+        return (ISS_ERR_PERM);
+    }
+
+#ifdef USE_KIMAGEIO
+    if (!KImageIO::canWrite(format))			// check the format, is it writable?
+    {
+        kdDebug(28000) << k_funcinfo << "Cannot write format <" << format << ">" << endl;
+        return (ISS_ERR_FORMAT_NO_WRITE);
+    }
+#endif
+
+    bool result = image->save(filename,format.latin1());
+    return (result ? ISS_OK : ISS_ERR_UNKNOWN);
+}
+
 
 /**
  *  This member creates a filename for the image to save.
@@ -221,31 +262,6 @@ QString ImgSaver::createFilename(QString format)
 
     return (fname);
 }
-
-/**
- *   This function gets a filename from the parent. The filename must not be relative.
- **/
-ImgSaveStat ImgSaver::saveImage( QImage *image, const KURL& filename, const QString& imgFormat )
-{
-    QString format = imgFormat;
-
-    /* Check if the filename is local */
-    if( !filename.isLocalFile())
-    {
-	kdDebug(29000) << "ImgSaver: Can only save local image, sorry !" << endl;
-	return( ISS_ERR_PROTOCOL );
-    }
-
-    QString localFilename = filename.path();
-    //localFilename = filename.directory( false, true) + filename.fileName();
-
-    kdDebug(28000) << "saveImage: Saving "<< localFilename << " in format " << format << endl;
-    if( format.isEmpty() )
-	format = "BMP";
-
-    return( save( image, localFilename, format, "" ) );
-}
-
 
 /*
  * findFormat does all the stuff with the dialog.
@@ -433,75 +449,6 @@ QString ImgSaver::findSubFormat( QString format )
 
 }
 
-/**
-   private save() does the work to save the image.
-   the filename must be complete and local.
-**/
-ImgSaveStat ImgSaver::save( QImage *image, const QString &filename,
-			    const QString &format,
-			    const QString &subformat )
-{
-
-   bool result = false;
-   kdDebug(28000) << "in ImgSaver::save: saving " << filename << endl;
-   if( ! format || !image )
-   {
-      kdDebug(28000) << "ImgSaver ERROR: Wrong parameter Format <" << format << "> or image" << endl;
-      return( ISS_ERR_PARAM );
-   }
-
-   if( image )
-   {
-      // remember the last processed file - only the filename - no path
-      QFileInfo fi( filename );
-      QString dirPath = fi.dirPath();
-      QDir dir = QDir( dirPath );
-
-      if( ! dir.exists() )
-      {
-	 /* The dir to save in always should exist, except in the first preview save */
-	 kdDebug(28000) << "Creating dir " << dirPath << endl;
-	 if( !dir.mkdir( dirPath ) )
-	 {
-	    kdDebug(28000) << "ERR: Could not create directory" << endl;
-	 }
-      }
-
-      if( fi.exists() && !fi.isWritable() )
-      {
-	 kdDebug(28000) << "Cant write to file <" << filename << ">, cant save !" << endl;
-	 result = false;
-	 return( ISS_ERR_PERM );
-      }
-
-      /* Check the format, is it writable ? */
-#ifdef USE_KIMAGEIO
-      if( ! KImageIO::canWrite( format ) )
-      {
-	 kdDebug(28000) << "Cant write format <" << format << ">" << endl;
-	 result = false;
-	 return( ISS_ERR_FORMAT_NO_WRITE );
-      }
-#endif
-      kdDebug(28000) << "ImgSaver: saving image to <" << filename << "> as <" << format << "/" << subformat <<">" << endl;
-
-      result = image->save( filename, format.latin1() );
-
-
-      last_file = fi.absFilePath();
-      last_format = format.latin1();
-   }
-
-   if( result )
-      return( ISS_OK );
-   else {
-      last_file = "";
-      last_format = "";
-      return( ISS_ERR_UNKNOWN );
-   }
-
-}
-
 
 void ImgSaver::readConfig( void )
 {
@@ -510,34 +457,32 @@ void ImgSaver::readConfig( void )
    Q_CHECK_PTR( konf );
    konf->setGroup( OP_FILE_GROUP );
    ask_for_format = konf->readBoolEntry( OP_FILE_ASK_FORMAT, true );
-
-   QDir home = QDir::home();
 }
 
 
-
-
-
-QString ImgSaver::errorString( ImgSaveStat stat )
+QString ImgSaver::errorString(ImgSaveStat stat)
 {
-   QString re;
-
-   switch( stat ) {
-      case ISS_OK:           re = i18n( " image save OK      " ); break;
-      case ISS_ERR_PERM:     re = i18n( " permission error   " ); break;
-      case ISS_ERR_FILENAME: re = i18n( " bad filename       " ); break;
-      case ISS_ERR_NO_SPACE: re = i18n( " no space on device " ); break;
-      case ISS_ERR_FORMAT_NO_WRITE: re = i18n( " could not write image format " ); break;
-      case ISS_ERR_PROTOCOL: re = i18n( " can not write file using that protocol "); break;
-      case ISS_SAVE_CANCELED: re = i18n( " user canceled saving " ); break;
-      case ISS_ERR_UNKNOWN:  re = i18n( " unknown error      " ); break;
-      case ISS_ERR_PARAM:    re = i18n( " parameter wrong    " ); break;
-
-      default: re = "";
-   }
-   return( re );
-
+    QString re;
+    switch (stat)
+    {
+case ISS_OK:			re = i18n("Save OK");			break;
+case ISS_ERR_PERM:		re = i18n("Permission denied");		break;
+case ISS_ERR_FILENAME:		re = i18n("Bad file name");		break;  // never used
+case ISS_ERR_NO_SPACE:		re = i18n("No space left on device");	break;	// never used
+case ISS_ERR_FORMAT_NO_WRITE:	re = i18n("Cannot write image format '%1'").arg(last_format);
+									break;
+case ISS_ERR_PROTOCOL:		re = i18n("Cannot write using protocol '%1'").arg(last_url.protocol());
+									break;
+case ISS_SAVE_CANCELED:		re = i18n("User cancelled saving");	break;
+case ISS_ERR_MKDIR:		re = i18n("Cannot create directory");	break;
+case ISS_ERR_UNKNOWN:		re = i18n("Save failed");		break;
+case ISS_ERR_PARAM:		re = i18n("Bad parameter");		break;
+default:			re = i18n("Unknown status %1").arg(stat);
+				break;
+    }
+    return (re);
 }
+
 
 QString ImgSaver::extension( const KURL& url )
 {

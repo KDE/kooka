@@ -69,18 +69,15 @@ public:
    void setAllowRename(bool on);
    void showOpenWithMenu(KActionMenu *menu);
 
+   void 	addImage(const QImage *img,KookaImageMeta *meta = NULL);
+
 public slots:
    void         slSelectImage( const KURL& );
-   void 	slAddImage( QImage *img, KookaImageMeta* meta = 0 );
    void         slShowContextMenu(QListViewItem *lvi,const QPoint &p);
 
    void         slotExportFile( );
     void        slotImportFile();
-   void         slotCanceled(KIO::Job*);
    void         slotCurrentImageChanged( QImage* );
-
-   void         slotDecorate( KFileTreeViewItem* );
-   void         slotDecorate( KFileTreeBranch*, const KFileTreeViewItemList& );
 
    void         slotSelectDirectory( const QString& );
 
@@ -103,6 +100,11 @@ protected slots:
    void         slotStartupFinished( KFileTreeViewItem * );
    void         slotItemExpanded(QListViewItem *item);
    void slotOpenWith(int idx);
+   void slotItemProperties();
+
+   void         slotDecorate( KFileTreeViewItem* );
+   void         slotDecorate( KFileTreeBranch*, const KFileTreeViewItemList& );
+   void         slotCanceled(KIO::Job*);
 
 signals:
    void         showImage(const KookaImage *img,bool isDir);
@@ -126,7 +128,8 @@ private:
 
     QString 	 buildNewFilename( QString cmplFilename, QString currFormat ) const;
    KFileTreeViewItem *spFindItem( SearchType type, const QString name, const KFileTreeBranch* branch = 0 );
-   QString       itemDirectory( const KFileTreeViewItem*, bool relativ = false ) const;
+   QString       itemDirectory( const KFileTreeViewItem *item, bool relativ = false ) const;
+   void updateParent(const KFileTreeViewItem *curr);
 
    // int 	        readDir( QListViewItem *parent, QString dir_to_read );
     void         showContextMenu( QPoint p, bool show_folder = true );

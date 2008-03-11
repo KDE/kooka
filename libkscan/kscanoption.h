@@ -207,6 +207,9 @@ public:
    **/
   //QString unitOf( const QCString& name );
 
+    static QString errorMessage(KScanStat stat);
+
+
 public slots:
   void       slRedrawWidget( KScanOption *so );
   /**

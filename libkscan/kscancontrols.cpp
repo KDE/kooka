@@ -327,7 +327,7 @@ KScanFileRequester::KScanFileRequester( QWidget *parent, const QString& text )
 {
     entry = new KURLRequester( this );
 
-    QString fileSelector = "*.pnm *.PNM|PNM Image Files (*.pnm)\n";
+    QString fileSelector = "*.pnm *.PNM *.pbm *.PBM *.pgm *.PGM *.ppm *.PPM|PNM Image Files (*.pnm,*.pbm,*.pgm,*.ppm)\n";
     fileSelector += KImageIO::pattern()+"\n";
     fileSelector += i18n("*|All Files\n");
     entry->setFilter(fileSelector);

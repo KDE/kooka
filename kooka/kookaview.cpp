@@ -758,7 +758,7 @@ void KookaView::slNewImageScanned( QImage* img, ImgScanInfo* si )
 {
     KookaImageMeta *meta = new KookaImageMeta;
     meta->setScanResolution(si->getXResolution(), si->getYResolution());
-    packager->slAddImage(img, meta);
+    packager->addImage(img, meta);
 }
 
 
@@ -769,15 +769,17 @@ void KookaView::slScanFinished( KScanStat stat )
 
    if (stat!=KSCAN_OK && stat!=KSCAN_CANCELLED)
    {
-       QString msg = i18n("<qt><p>\
-There was a problem during preview or scanning. \
-<br>\
-Check that the scanner is still connected and switched on, \
-and that media is loaded if required.\
-<p>\
-Trying to use scanner device: <b>%2</b>\
-<br>\
-The error reported was: <b>%1</b>").arg(sane->lastErrorMessage()).arg(connectedDevice);
+       QString msg = i18n("<qt><p>"
+                          "There was a problem during preview or scanning."
+                          "<br>"
+                          "Check that the scanner is still connected and switched on, "
+                          "and that media is loaded if required."
+                          "<p>"
+                          "Trying to use scanner device: <b>%3</b><br>"
+                          "SANE reported error: <b>%1</b><br>"
+                          "libkscan reported error: <b>%2</b>").arg(sane->lastErrorMessage())
+                                                               .arg(KScanOption::errorMessage(stat))
+                                                               .arg(connectedDevice);
 
        KMessageBox::error(m_parent,msg);
    }
@@ -816,7 +818,7 @@ void KookaView::slCreateNewImgFromSelection()
       QImage img;
       if( img_canvas->selectedImage( &img ) )
       {
-	 packager->slAddImage( &img );
+	 packager->addImage( &img );
       }
       emit( signalCleanStatusbar( ));
    }
