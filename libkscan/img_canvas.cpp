@@ -676,9 +676,9 @@ void ImageCanvas::update_scaled_pixmap( void )
 
     QApplication::setOverrideCursor(waitCursor);
 
-    kdDebug(28000) << "Updating scaled_pixmap" << endl;
+    kdDebug(29000) << "Updating scaled_pixmap" << endl;
     if( scaleKind() == DYNAMIC )
-        kdDebug(28000) << "Scaling DYNAMIC" << endl;
+        kdDebug(29000) << "Scaling DYNAMIC" << endl;
     QSize noSBSize( visibleWidth(), visibleHeight());
     const int sbWidth = kapp->style().pixelMetric( QStyle::PM_ScrollBarExtent );
 
@@ -1090,7 +1090,7 @@ void ImageCanvas::removeHighlight( int idx )
 {
     if( (unsigned) idx >= d->highlightRects.count() )
     {
-        kdDebug(28000) << "removeHighlight: Not a valid index" << endl;
+        kdDebug(29000) << "removeHighlight: Not a valid index" << endl;
         return;
     }
 
