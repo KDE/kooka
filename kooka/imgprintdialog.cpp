@@ -154,6 +154,8 @@ void ImgPrintDialog::setOptions(const QMap<QString,QString>& opts)
         m_rbOrigSize->setChecked(true);
     else if( scale == "custom" )
         m_rbScale->setChecked(true);
+    else if( scale == "fitpage" )
+        m_rbFitPage->setChecked(true);
     else
         m_rbScreen->setChecked(true);
 
