@@ -202,7 +202,7 @@ ImgSaveStat ImgSaver::save(const QImage *image,const KURL &url,
 
     if (!url.isLocalFile())				// file must be local
     {
-	kdDebug(29000) << k_funcinfo << "Can only save local files" << endl;
+	kdDebug(28000) << k_funcinfo << "Can only save local files" << endl;
 	return (ISS_ERR_PROTOCOL);
     }
 
@@ -588,7 +588,7 @@ QString ImgSaver::tempSaveImage( KookaImage *img, const QString& format, int col
 	}
 	else
 	{
-	    kdDebug(29000) << "ERROR: Wrong color depth requested: " << colors << endl;
+	    kdDebug(28000) << "ERROR: Wrong color depth requested: " << colors << endl;
 	    img = 0;
 	}
     }

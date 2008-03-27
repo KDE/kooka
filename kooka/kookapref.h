@@ -29,7 +29,7 @@
 
 #include <kdialogbase.h>
 
-#include "ksaneocr.h"
+#include "ocrengine.h"
 
 #define GROUP_GENERAL           "General"
 #define GENERAL_ALLOW_RENAME    "AllowRename"
@@ -40,13 +40,16 @@
 #define CFG_OCRAD_BINARY        "ocradBinary"
 #define CFG_GOCR_BINARY         "gocrBinary"
 
+class QCheckBox;
+class QPushButton;
+
 class KIntNumInput;
 class KColorButton;
-class ImageSelectLine;
 class KURLRequester;
-class QCheckBox;
 class KComboBox;
 class KActiveLabel;
+
+class ImageSelectLine;
 
 
 class KookaPref : public KDialogBase
@@ -62,10 +65,11 @@ public:
     bool allowGalleryRename();
 
 protected slots:
-    void slotOk( void );
-    void slotApply( void );
-    void slotDefault( void );
+    void slotOk();
+    void slotApply();
+    void slotDefault();
     void slotEngineSelected(int i);
+    void slotEnableWarnings();
 
 signals:
     void dataSaved();
@@ -78,14 +82,14 @@ private:
     void setupOCRPage();
 
     bool checkOCRBin(const QString &cmd,const QString &bin,bool showMsg);
-    static QString tryFindBinary(const QString &bin,const QString &configKey);
 
-    KConfig   *konf;
-    KSaneOcr::OcrEngine originalEngine;
-    KSaneOcr::OcrEngine selectedEngine;
+    KConfig *konf;
+    OcrEngine::EngineType originalEngine;
+    OcrEngine::EngineType selectedEngine;
 
     // General
     QCheckBox *cbAllowRename;
+    QPushButton *pbEnableMsgs;
 
     // Startup
     QCheckBox *cbNetQuery;

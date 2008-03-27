@@ -1,7 +1,6 @@
-/***************************************************************************
-                     kocrgocr.h - ocr dialog for GOCR
+/***************************************************** -*- mode:c++; -*- ***
                              -------------------
-    begin                : Sun Jun 11 2000
+    begin                : Fri Jun 30 2000
     copyright            : (C) 2000 by Klaas Freitag
     email                : freitag@suse.de
  ***************************************************************************/
@@ -24,65 +23,42 @@
  *                                                                         *
  ***************************************************************************/
 
+#ifndef OCROCRADENGINE_H
+#define OCROCRADENGINE_H
 
-#ifndef KOCRGOCR_H
-#define KOCRGOCR_H
+#include "ocrengine.h"
 
-#include <kdialogbase.h>
-#include <qimage.h>
-#include <qstring.h>
+class KProcess;
 
-#include "kscancontrols.h"
-#include <kanimwidget.h>
-
-#include "kocrbase.h"
-/**
-  *@author Klaas Freitag
-  */
-
-class KSpellConfig;
-
-class KGOCRDialog: public KOCRBase
+class OcrOcradEngine : public OcrEngine
 {
     Q_OBJECT
+
 public:
-    KGOCRDialog( QWidget*, KSpellConfig* );
-    ~KGOCRDialog();
+    OcrOcradEngine(QWidget *parent = NULL);
+    ~OcrOcradEngine();
 
-    QString getOCRCmd( void ) const
-        { return m_ocrCmd;}
+    OcrBaseDialog *createOCRDialog(QWidget *parent,KSpellConfig *spellConfig = NULL);
 
-    int getGraylevel( void ) const
-        { return( sliderGrayLevel->value());}
-    int getDustsize( void ) const
-        { return( sliderDustSize->value());}
-    int getSpaceWidth( void ) const
-        { return( sliderSpace->value());}
-
-    KSaneOcr::EngineError setupGui();
-
-    QString ocrEngineLogo() const;
-    QString ocrEngineName() const;
-    QString ocrEngineDesc() const;
-
+    OcrEngine::EngineType engineType() const { return (OcrEngine::EngineOcrad); }
     static QString engineDesc();
 
-public slots:
-    void enableFields(bool);
-    void introduceImage( KookaImage* );
-
-protected:
-    void writeConfig();
-
+protected slots:
+    void ocradStdIn(KProcess *proc,char *buffer,int buflen);
+    void ocradStdErr(KProcess *proc,char *buffer,int buflen);
+    void ocradExited(KProcess *proc);
 
 private:
+    void startProcess(OcrBaseDialog *dia,KookaImage *img);
+    void cleanUpFiles();
+    QString readORF(const QString &fileName);
 
-
-    KScanSlider *sliderGrayLevel;
-    KScanSlider *sliderDustSize;
-    KScanSlider *sliderSpace;
-
-    QString      m_ocrCmd;
+private:
+    QString m_tempOrfName;
+    QString m_ocrImagePBM;
+    QString m_tmpOrfName;
+    int ocradVersion;
 };
 
-#endif
+
+#endif							// OCROCRADENGINE_H

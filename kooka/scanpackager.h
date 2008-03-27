@@ -95,7 +95,7 @@ protected slots:
    void         slotUnloadItems( );
    void         slotUnloadItem( KFileTreeViewItem *curr );
    void         slotDirCount( KFileTreeViewItem *item, int cnt );
-   void         slotUrlsDropped( QWidget*, QDropEvent*, KURL::List& urls, KURL& copyTo );
+   void         slotUrlsDropped(KFileTreeView *me,QDropEvent *ev,QListViewItem *parent,QListViewItem *after);
    void         slotDeleteFromBranch( KFileItem* );
    void         slotStartupFinished( KFileTreeViewItem * );
    void         slotItemExpanded(QListViewItem *item);
@@ -127,7 +127,7 @@ private:
    QCString     getImgFormat( KFileTreeViewItem* item ) const;
 
     QString 	 buildNewFilename( QString cmplFilename, QString currFormat ) const;
-   KFileTreeViewItem *spFindItem( SearchType type, const QString name, const KFileTreeBranch* branch = 0 );
+   KFileTreeViewItem *spFindItem(SearchType type,const QString &name,const KFileTreeBranch *branch = NULL);
    QString       itemDirectory( const KFileTreeViewItem *item, bool relativ = false ) const;
    void updateParent(const KFileTreeViewItem *curr);
 
@@ -137,7 +137,6 @@ private:
     QString      m_currImportDir;
     QString      m_currCopyDir;
     QString      currSelectedDir;
-    KIO::Job     *copyjob;
     int          img_counter;
     QPopupMenu    *m_contextMenu;
 

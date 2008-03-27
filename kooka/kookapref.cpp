@@ -30,6 +30,7 @@
 #include <qgrid.h>
 #include <qcheckbox.h>
 #include <qlabel.h>
+#include <qpushbutton.h>
 
 #include <klocale.h>
 #include <kiconloader.h>
@@ -41,7 +42,7 @@
 #include <kstandarddirs.h>
 #include <kcombobox.h>
 #include <kactivelabel.h>
-
+#include <kapplication.h>
 #include <kmessagebox.h>
 #include <kurlrequester.h>
 #include <kseparator.h>
@@ -51,11 +52,11 @@
 
 #include "thumbview.h"
 #include "imageselectline.h"
+#include "formatdialog.h"
 
-#include "ksaneocr.h"
-#include "kocrgocr.h"
-#include "kocrocrad.h"
-#include "kocrkadmos.h"
+#include "ocrgocrengine.h"
+#include "ocrocradengine.h"
+#include "ocrkadmosengine.h"
 
 #include "kookapref.h"
 #include "kookapref.moc"
@@ -91,10 +92,10 @@ void KookaPref::setupOCRPage()
     lay->setColStretch(1,9);
 
     engineCB = new KComboBox(page);
-    engineCB->insertItem(KSaneOcr::engineName(KSaneOcr::OcrNone),KSaneOcr::OcrNone);
-    engineCB->insertItem(KSaneOcr::engineName(KSaneOcr::OcrGocr),KSaneOcr::OcrGocr);
-    engineCB->insertItem(KSaneOcr::engineName(KSaneOcr::OcrOcrad),KSaneOcr::OcrOcrad);
-    engineCB->insertItem(KSaneOcr::engineName(KSaneOcr::OcrKadmos),KSaneOcr::OcrKadmos);
+    engineCB->insertItem(OcrEngine::engineName(OcrEngine::EngineNone),OcrEngine::EngineNone);
+    engineCB->insertItem(OcrEngine::engineName(OcrEngine::EngineGocr),OcrEngine::EngineGocr);
+    engineCB->insertItem(OcrEngine::engineName(OcrEngine::EngineOcrad),OcrEngine::EngineOcrad);
+    engineCB->insertItem(OcrEngine::engineName(OcrEngine::EngineKadmos),OcrEngine::EngineKadmos);
 
     connect(engineCB,SIGNAL(activated(int)),SLOT(slotEngineSelected(int)));
     lay->addWidget(engineCB,0,1);
@@ -123,7 +124,7 @@ void KookaPref::setupOCRPage()
     ocrDesc = new KActiveLabel("?",page);
     lay->addMultiCellWidget(ocrDesc,6,6,0,1);
 
-    originalEngine = static_cast<KSaneOcr::OcrEngine>(konf->readNumEntry(CFG_OCR_ENGINE2,KSaneOcr::OcrNone));
+    originalEngine = static_cast<OcrEngine::EngineType>(konf->readNumEntry(CFG_OCR_ENGINE2,OcrEngine::EngineNone));
     engineCB->setCurrentItem(originalEngine);
     slotEngineSelected(originalEngine);
 }
@@ -131,34 +132,34 @@ void KookaPref::setupOCRPage()
 
 void KookaPref::slotEngineSelected(int i)
 {
-    selectedEngine = static_cast<KSaneOcr::OcrEngine>(i);
-    kdDebug(29000) << k_funcinfo << "engine=" << selectedEngine << endl;
+    selectedEngine = static_cast<OcrEngine::EngineType>(i);
+    kdDebug(28000) << k_funcinfo << "engine=" << selectedEngine << endl;
 
     QString msg;
     switch (selectedEngine)
     {
-case KSaneOcr::OcrNone:
+case OcrEngine::EngineNone:
         binaryReq->setEnabled(false);
         binaryReq->clear();
         msg = i18n("No OCR engine is selected. Select and configure one to perform OCR.");
         break;
 
-case KSaneOcr::OcrGocr:
+case OcrEngine::EngineGocr:
         binaryReq->setEnabled(true);
         binaryReq->setURL(tryFindGocr());
-        msg = KGOCRDialog::engineDesc();
+        msg = OcrGocrEngine::engineDesc();
         break;
 
-case KSaneOcr::OcrOcrad:
+case OcrEngine::EngineOcrad:
         binaryReq->setEnabled(true);
         binaryReq->setURL(tryFindOcrad());
-        msg = ocradDialog::engineDesc();
+        msg = OcrOcradEngine::engineDesc();
         break;
 
-case KSaneOcr::OcrKadmos:
+case OcrEngine::EngineKadmos:
         binaryReq->setEnabled(false);
         binaryReq->clear();
-        msg = KadmosDialog::engineDesc();
+        msg = OcrKadmosEngine::engineDesc();
         break;
 
 default:
@@ -173,19 +174,7 @@ default:
 }
 
 
-QString KookaPref::tryFindGocr( void )
-{
-   return( tryFindBinary( "gocr", CFG_GOCR_BINARY ) );
-}
-
-
-QString KookaPref::tryFindOcrad( void )
-{
-   return( tryFindBinary( "ocrad", CFG_OCRAD_BINARY ) );
-}
-
-
-QString KookaPref::tryFindBinary(const QString &bin,const QString &configKey)
+QString tryFindBinary(const QString &bin,const QString &configKey)
 {
     KConfig *cfg = KGlobal::config();
 
@@ -202,6 +191,18 @@ QString KookaPref::tryFindBinary(const QString &bin,const QString &configKey)
 
     /* Otherwise find the program on the user's search path */
     return (KGlobal::dirs()->findExe(bin));		// search using $PATH
+}
+
+
+QString KookaPref::tryFindGocr( void )
+{
+   return( tryFindBinary( "gocr", CFG_GOCR_BINARY ) );
+}
+
+
+QString KookaPref::tryFindOcrad( void )
+{
+   return( tryFindBinary( "ocrad", CFG_OCRAD_BINARY ) );
 }
 
 
@@ -239,14 +240,12 @@ bool KookaPref::checkOCRBin(const QString &cmd,const QString &bin,bool show_msg)
 
 void KookaPref::setupGeneralPage()
 {
-    konf->setGroup( GROUP_GENERAL );
+    konf->setGroup(GROUP_GENERAL);
 
     QFrame *page = addPage( i18n("General"), i18n("General Options" ),
 			    BarIcon("configure", KIcon::SizeMedium ) );
-    QVBoxLayout *top = new QVBoxLayout( page, 0, spacingHint() );
-    /* Description-Label */
-    top->addWidget(new QLabel(i18n("These options will take effect when Kooka is next started."),page));
-    top->addSpacing(2*KDialogBase::spacingHint());
+    QVBoxLayout *top = new QVBoxLayout( page, 0, KDialogBase::spacingHint() );
+    top->addSpacing(KDialogBase::marginHint());
 
     /* Allow renaming in gallery */
     cbAllowRename = new QCheckBox( i18n("Click-to-rename in gallery"),
@@ -255,8 +254,20 @@ void KookaPref::setupGeneralPage()
 		   i18n( "Check this if you want to be able to rename gallery items by clicking on them "
                          "(otherwise, use the \"Rename\" menu option)"));
     cbAllowRename->setChecked(konf->readBoolEntry(GENERAL_ALLOW_RENAME,false));
-
     top->addWidget(cbAllowRename);
+
+    top->addSpacing(KDialogBase::marginHint());
+    KSeparator *sep = new KSeparator(KSeparator::HLine,page);
+    top->addWidget(sep);
+    top->addSpacing(KDialogBase::marginHint());
+
+    /* Enable messages and questions */
+    QLabel *l = new QLabel(i18n("Use this button to reenable all messages and questions which\nhave been hidden by using \"Don't ask me again\"."),page);
+    top->addWidget(l);
+
+    pbEnableMsgs = new QPushButton(i18n("Enable Messages/Questions"),page);
+    connect(pbEnableMsgs,SIGNAL(clicked()),SLOT(slotEnableWarnings()));
+    top->addWidget(pbEnableMsgs,0,Qt::AlignLeft);
 
     top->addStretch(10);
 }
@@ -455,25 +466,17 @@ void KookaPref::slotApply( void )
     /* ** OCR Options ** */
     konf->setGroup( CFG_GROUP_OCR_DIA );
     konf->writeEntry(CFG_OCR_ENGINE2,selectedEngine);
-    if (selectedEngine!=originalEngine)
-    {
-        // selection of the ocr engine has changed. Popup button.
-        KMessageBox::information(this,i18n("The OCR engine has been changed.\n"
-                                           "Kooka needs to be restarted for this "
-                                           "change to take effect."),
-                                 i18n("OCR Engine Changed"));
-    }
 
     QString path = binaryReq->url();
     if (!path.isEmpty())
     {
         switch (selectedEngine)
         {
-case KSaneOcr::OcrGocr:
+case OcrEngine::EngineGocr:
             if (checkOCRBin(path,"gocr",true)) konf->writePathEntry(CFG_GOCR_BINARY,path);
             break;
 
-case KSaneOcr::OcrOcrad:
+case OcrEngine::EngineOcrad:
             if (checkOCRBin(path,"ocrad",true)) konf->writePathEntry(CFG_OCRAD_BINARY,path);
             break;
 
@@ -484,6 +487,7 @@ default:    break;
     konf->sync();
     emit dataSaved();
 }
+
 
 void KookaPref::slotDefault( void )
 {
@@ -504,11 +508,22 @@ void KookaPref::slotDefault( void )
     m_colButt1->setColor( col1 );
     m_colButt2->setColor( col2 );
 
-    slotEngineSelected(KSaneOcr::OcrNone);
+    slotEngineSelected(OcrEngine::EngineNone);
 }
 
 
 bool KookaPref::allowGalleryRename()
 {
     return (cbAllowRename->isChecked());
+}
+
+
+void KookaPref::slotEnableWarnings()
+{
+    kdDebug(28000) << k_funcinfo << endl;
+    KMessageBox::enableAllMessages();
+    FormatDialog::forgetRemembered();
+    kapp->config()->reparseConfiguration();
+
+    pbEnableMsgs->setEnabled(false);			// show this has been done
 }

@@ -28,7 +28,6 @@
 #include <klocale.h>
 #include <kdebug.h>
 #include <kiconloader.h>
-#include <kapplication.h>
 #include <kprinter.h>
 #include <kstatusbar.h>
 #include <kurl.h>
@@ -41,7 +40,6 @@
 #include <kpopupmenu.h>
 
 #include "kookapref.h"
-#include "formatdialog.h"
 #include "kookaview.h"
 
 #include "kooka.h"
@@ -90,6 +88,10 @@ Kooka::Kooka( const QCString& deviceToUse)
             this,   SLOT(slotUpdateGalleryActions(bool,int)));
     connect(m_view,SIGNAL(signalLoadedImageChanged(bool,bool)),
             this,   SLOT(slotUpdateLoadedActions(bool,bool)));
+    connect(m_view,SIGNAL(signalOcrResultAvailable(bool)),
+            this,   SLOT(slotUpdateOcrResultActions(bool)));
+    connect(m_view,SIGNAL(signalOcrPrefs()),
+            this,   SLOT(optionsOcrPreferences()));
 
     changeCaption( i18n( "KDE Scanning" ));
 
@@ -99,27 +101,31 @@ Kooka::Kooka( const QCString& deviceToUse)
     slotUpdateScannerActions(m_view->scannerConnected());
     slotUpdateRectangleActions(false);
     slotUpdateGalleryActions(true,0);
+    slotUpdateOcrResultActions(false);
 }
+
 
 void Kooka::createMyGUI( KParts::Part *part )
 {
     kdDebug(28000) << "Part changed, Creating gui" << endl;
     createGUI(part);
-
 }
+
 
 Kooka::~Kooka()
 {
-   KConfig *konf = KGlobal::config ();
-   m_view->slCloseScanDevice();
-   writeDockConfig ( konf, DOCK_SIZES );
-   delete m_printer;
+    KConfig *konf = KGlobal::config();
+    m_view->slCloseScanDevice();
+    writeDockConfig (konf,DOCK_SIZES);
+    delete m_view;					// ensure its config saved
+    delete m_printer;
 }
 
-void Kooka::startup( void )
+
+void Kooka::startup()
 {
-   kdDebug(29000) << "Starting startup !" << endl;
-   if( m_view ) m_view->loadStartupImage();
+    kdDebug(28000) << k_funcinfo << endl;
+    if (m_view!=NULL) m_view->loadStartupImage();
 }
 
 
@@ -159,7 +165,7 @@ void Kooka::setupActions()
     KAction *act = new KToggleAction ( i18n("Keep Zoom Setting"), lockSet, CTRL+Key_Z,
 				       actionCollection(), "keepZoom" );
 #else
-    KAction *act = new KToggleAction( i18n("Keep Zoom Setting"), BarIcon("lockzoom"), CTRL+Key_Z,
+    KAction *act = new KToggleAction( i18n("Keep Zoom Setting"), "lockzoom", CTRL+Key_Z,
 				      actionCollection(), "keepZoom" );
 #endif
 
@@ -255,9 +261,9 @@ void Kooka::setupActions()
 		       m_view, SLOT( slAddDevice()),
 		       actionCollection(), "addsource" );
 
-    (void) new KAction( i18n("Enable All Warnings && Messages"), 0,
-			this,  SLOT(slEnableWarnings()),
-			actionCollection(), "enable_msgs");
+//    (void) new KAction( i18n("Enable All Warnings && Messages"), 0,
+//			this,  SLOT(slEnableWarnings()),
+//			actionCollection(), "enable_msgs");
 
 
     // Scanning functions
@@ -287,6 +293,10 @@ void Kooka::setupActions()
     m_saveOCRTextAction = new KAction( i18n("Save OCR Result Text..."), "filesaveas", CTRL+Key_U,
                                        m_view, SLOT(slSaveOCRResult()),
                                        actionCollection(), "saveOCRResult");
+
+    ocrSpellAction = new KAction(i18n("Spell Check OCR Result..."), "spellcheck", 0,
+				  m_view, SLOT(slOcrSpellCheck()),
+				  actionCollection(), "ocrSpellCheck" );
 }
 
 
@@ -358,6 +368,7 @@ void Kooka::newToolbarConfig()
     applyMainWindowSettings(KGlobal::config(), autoSaveGroup());
 }
 
+
 void Kooka::optionsPreferences()
 {
     // popup some sort of preference dialog, here
@@ -374,6 +385,14 @@ void Kooka::optionsPreferences()
        // m_view->slFreshUpThumbView();
     }
 }
+
+
+void Kooka::optionsOcrPreferences()
+{
+    m_prefDialogIndex = 4;				// go to OCR page
+    optionsPreferences();
+}
+
 
 void Kooka::changeStatusbar(const QString& text)
 {
@@ -414,92 +433,100 @@ void Kooka::slRotate180( void )
     //m_view->slRotateImage( 180 );
 }
 
-void Kooka::slEnableWarnings( )
-{
-    KMessageBox::information(this,i18n("All messages and warnings will now be shown."));
-    KMessageBox::enableAllMessages();
-    FormatDialog::forgetRemembered();
-    kapp->config()->reparseConfiguration();
-}
+//void Kooka::slEnableWarnings( )
+//{
+//    KMessageBox::information(this,i18n("All messages and warnings will now be shown."));
+//    KMessageBox::enableAllMessages();
+//    FormatDialog::forgetRemembered();
+//    kapp->config()->reparseConfiguration();
+//}
 
 
 void Kooka::slotUpdateScannerActions(bool haveConnection)
 {
-	kdDebug(29000) << k_funcinfo << "hc=" << haveConnection << endl;
+    kdDebug(28000) << k_funcinfo << "hc=" << haveConnection << endl;
 
-	scanAction->setEnabled(haveConnection);
-	previewAction->setEnabled(haveConnection);
-	paramsAction->setEnabled(haveConnection);
+    scanAction->setEnabled(haveConnection);
+    previewAction->setEnabled(haveConnection);
+    paramsAction->setEnabled(haveConnection);
 
-	setCaption(m_view->scannerName());
+    setCaption(m_view->scannerName());
 }
 
 
 void Kooka::slotUpdateRectangleActions(bool haveSelection)
 {
-	kdDebug(29000) << k_funcinfo << "hs=" << haveSelection << endl;
+    kdDebug(28000) << k_funcinfo << "hs=" << haveSelection << endl;
 
-	ocrSelectAction->setEnabled(haveSelection);
-	newFromSelectionAction->setEnabled(haveSelection);
+    ocrSelectAction->setEnabled(haveSelection);
+    newFromSelectionAction->setEnabled(haveSelection);
 }
 
 
 void Kooka::slotUpdateGalleryActions(bool isDir,int howmanySelected)
 {
-	kdDebug(29000) << k_funcinfo << "isdir=" << isDir << " howmany=" << howmanySelected << endl;
+    kdDebug(28000) << k_funcinfo << "isdir=" << isDir << " howmany=" << howmanySelected << endl;
 
-	const bool singleImage = howmanySelected==1 && !isDir;
+    const bool singleImage = howmanySelected==1 && !isDir;
 
-	ocrAction->setEnabled(singleImage);
+    ocrAction->setEnabled(singleImage);
 
-	scaleToWidthAction->setEnabled(singleImage);
-	scaleToHeightAction->setEnabled(singleImage);
-	scaleToOriginalAction->setEnabled(singleImage);
-	mirrorVerticallyAction->setEnabled(singleImage);
-	mirrorHorizontallyAction->setEnabled(singleImage);
-	rotateCwAction->setEnabled(singleImage);
-	rotateAcwAction->setEnabled(singleImage);
-	rotate180Action->setEnabled(singleImage);
+    scaleToWidthAction->setEnabled(singleImage);
+    scaleToHeightAction->setEnabled(singleImage);
+    scaleToOriginalAction->setEnabled(singleImage);
+    mirrorVerticallyAction->setEnabled(singleImage);
+    mirrorHorizontallyAction->setEnabled(singleImage);
+    rotateCwAction->setEnabled(singleImage);
+    rotateAcwAction->setEnabled(singleImage);
+    rotate180Action->setEnabled(singleImage);
 
-	if (howmanySelected==0) slotUpdateRectangleActions(false);
+    if (howmanySelected==0) slotUpdateRectangleActions(false);
 
-	createFolderAction->setEnabled(isDir);
-	importImageAction->setEnabled(isDir);
+    createFolderAction->setEnabled(isDir);
+    importImageAction->setEnabled(isDir);
 
-	saveImageAction->setEnabled(singleImage);
-	printImageAction->setEnabled(singleImage);
+    saveImageAction->setEnabled(singleImage);
+    printImageAction->setEnabled(singleImage);
 
-	if (isDir)
-	{
-		unloadImageAction->setText(i18n("Unload Folder"));
-		unloadImageAction->setEnabled(true);
+    if (isDir)
+    {
+        unloadImageAction->setText(i18n("Unload Folder"));
+        unloadImageAction->setEnabled(true);
 
-		deleteImageAction->setText(i18n("Delete Folder"));
-		renameImageAction->setText(i18n("Rename Folder"));
-                bool rs = m_view->galleryRootSelected();
-		deleteImageAction->setEnabled(!rs);
-		renameImageAction->setEnabled(!rs);
-                propsImageAction->setEnabled(!rs);
-	}
-	else
-	{
-		unloadImageAction->setText(i18n("Unload Image"));
-		unloadImageAction->setEnabled(singleImage &&
-					      m_view->gallery()->getCurrImage()!=NULL);
+        deleteImageAction->setText(i18n("Delete Folder"));
+        renameImageAction->setText(i18n("Rename Folder"));
+        bool rs = m_view->galleryRootSelected();
+        deleteImageAction->setEnabled(!rs);
+        renameImageAction->setEnabled(!rs);
+        propsImageAction->setEnabled(!rs);
+    }
+    else
+    {
+        unloadImageAction->setText(i18n("Unload Image"));
+        unloadImageAction->setEnabled(singleImage &&
+                                      m_view->gallery()->getCurrImage()!=NULL);
 
-		deleteImageAction->setText(i18n("Delete Image"));
-		renameImageAction->setText(i18n("Rename Image"));
-		deleteImageAction->setEnabled(singleImage);
-		renameImageAction->setEnabled(singleImage);
-                propsImageAction->setEnabled(singleImage);
-	}
+        deleteImageAction->setText(i18n("Delete Image"));
+        renameImageAction->setText(i18n("Rename Image"));
+        deleteImageAction->setEnabled(singleImage);
+        renameImageAction->setEnabled(singleImage);
+        propsImageAction->setEnabled(singleImage);
+    }
 }
 
 
 void Kooka::slotUpdateLoadedActions(bool isLoaded,bool isDir)
 {
-	kdDebug(29000) << k_funcinfo << "loaded=" << isLoaded << " isDir=" << isDir << endl;
-	unloadImageAction->setEnabled(isLoaded || isDir);
+    kdDebug(28000) << k_funcinfo << "loaded=" << isLoaded << " isDir=" << isDir << endl;
+    unloadImageAction->setEnabled(isLoaded || isDir);
+}
+
+
+void Kooka::slotUpdateOcrResultActions(bool haveText)
+{
+    kdDebug(28000) << k_funcinfo << "have=" << haveText << endl;
+    m_saveOCRTextAction->setEnabled(haveText);
+    ocrSpellAction->setEnabled(haveText);
 }
 
 

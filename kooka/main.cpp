@@ -96,7 +96,7 @@ int main( int argc, char *argv[] )
    {
       devToUse = "gallery";
    }
-   kdDebug( 29000) << "DevToUse is " << devToUse << endl;
+   kdDebug(28000) << "DevToUse is " << devToUse << endl;
 
    if (args->count() == 1)
    {

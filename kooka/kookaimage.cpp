@@ -92,7 +92,7 @@ void KookaImage::setFileItem( KFileItem* it )
     m_fileItem = it;
 }
 
-const KFileMetaInfo KookaImage::fileMetaInfo( )
+const KFileMetaInfo KookaImage::fileMetaInfo( ) const
 {
     QString filename = localFileName( );
     if( ! filename.isEmpty() )

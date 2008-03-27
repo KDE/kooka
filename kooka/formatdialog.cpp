@@ -281,7 +281,7 @@ QCString FormatDialog::getSubFormat( ) const
 
 void FormatDialog::buildFormatList(bool recOnly)
 {
-    kdDebug(29000) << k_funcinfo << "only=" << recOnly << " type=" << imgType << endl;
+    kdDebug(28000) << k_funcinfo << "only=" << recOnly << " type=" << imgType << endl;
 
     lb_format->clear();
     for (QStringList::const_iterator it = formatList.constBegin();

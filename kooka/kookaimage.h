@@ -103,7 +103,7 @@ public:
     /**
      * @return the KFileMetaInfo
      **/
-    const KFileMetaInfo fileMetaInfo( );
+    const KFileMetaInfo fileMetaInfo( ) const;
 
     /**
      * set the url of the kooka image. Note that loadFromUrl sets this

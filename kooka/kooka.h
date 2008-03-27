@@ -94,6 +94,7 @@ protected slots:
     void slotUpdateRectangleActions(bool haveSelection);
     void slotUpdateGalleryActions(bool isDir,int howmanySelected);
     void slotUpdateLoadedActions(bool isLoaded,bool isDir);
+    void slotUpdateOcrResultActions(bool haveText);
     void slotOpenWithMenu();
 
 private slots:
@@ -107,23 +108,19 @@ private slots:
    void optionsShowPreviewer();
    void optionsConfigureToolbars();
    void optionsPreferences();
+   void optionsOcrPreferences();
 
    void changeStatusbar(const QString& text);
    void cleanStatusbar(void) { changeStatusbar(""); }
    void changeCaption(const QString& text);
    void newToolbarConfig();
 
-   // void fileSaveAs();
-
    void slMirrorVertical( void );
    void slMirrorHorizontal( void );
-   //void slMirrorBoth( void );
 
    void slRotateClockWise( void );
    void slRotateCounterClockWise( void );
    void slRotate180( void );
-
-   void slEnableWarnings();
 
 private:
    void setupAccel();
@@ -145,6 +142,7 @@ private:
    KAction *paramsAction;
    KAction *ocrAction;
    KAction *ocrSelectAction;
+   KAction *ocrSpellAction;
 
    KAction *newFromSelectionAction;
    KAction *scaleToWidthAction;

@@ -31,7 +31,7 @@
 #include <kdialogbase.h>
 #include <qmap.h>
 
-#include "kocrbase.h"
+#include "ocrbasedialog.h"
 /**
   *@author Klaas Freitag
   */
@@ -43,8 +43,10 @@ class QWidget;
 class QButtonGroup;
 class KConfig;
 class QCheckBox;
-class KSpellConfig;
+//class KSpellConfig;
 class QRadioButton;
+
+class QComboBox;
 
 class KadmosClassifier   /* Not yet used FIXME */
 {
@@ -63,16 +65,16 @@ private:
 };
 
 
-class KadmosDialog: public KOCRBase
+class KadmosDialog: public OcrBaseDialog
 {
     Q_OBJECT
 public:
-    KadmosDialog( QWidget *, KSpellConfig *spellConfig );
+    KadmosDialog(QWidget *parent,KSpellConfig *spellConfig = NULL);
     ~KadmosDialog();
 
     typedef QMap<QString, QString> StrMap;
 
-    KSaneOcr::EngineError setupGui();
+    OcrEngine::EngineError setupGui();
     bool getAutoScale();
     bool getNoiseReduction();
     bool getSelClassifier(QString&) const;
@@ -81,8 +83,6 @@ public:
     QString ocrEngineName() const;
     QString ocrEngineDesc() const;
     QString ocrEngineLogo() const;
-
-    static QString engineDesc();
 
 public slots:
     void enableFields(bool);
@@ -94,8 +94,8 @@ protected:
     void setupSegmentation(  QVBox *box );
     void setupClassification( QVBox *box );
 
-    KSaneOcr::EngineError findClassifiers();
-    KSaneOcr::EngineError findClassifierPath();
+    OcrEngine::EngineError findClassifiers();
+    OcrEngine::EngineError findClassifierPath();
 private slots:
 
     void slFontChanged( int id );

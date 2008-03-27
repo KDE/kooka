@@ -62,7 +62,7 @@
 #include "kscandevice.h"
 #include "imgscaninfo.h"
 #include "devselector.h"
-#include "ksaneocr.h"
+//#include "ksaneocr.h"
 #include "imgsaver.h"
 #include "kookapref.h"
 #include "imgnamecombo.h"
@@ -87,7 +87,7 @@
 KookaView::KookaView( KParts::DockMainWindow *parent, const QCString& deviceToUse)
    : QObject(),
      m_ocrResultImg(0),
-     ocrFabric(0),
+     ocrFabric(NULL),
      m_mainDock(0),
      m_dockScanParam(0),
      m_dockThumbs(0),
@@ -307,10 +307,9 @@ KookaView::KookaView( KParts::DockMainWindow *parent, const QCString& deviceToUs
 
 KookaView::~KookaView()
 {
-   saveProperties( KGlobal::config () );
-   delete preview_canvas;
-
-   kdDebug(28000)<< "Finished saving config data" << endl;
+    saveProperties(KGlobal::config());
+    delete preview_canvas;
+    kdDebug(28000) << k_funcinfo << "finished" << endl;
 }
 
 void KookaView::slViewerReadOnly( bool )
@@ -428,14 +427,14 @@ The error reported was: <b>%1</b>").arg(sane->lastErrorMessage()).arg(selDevice)
 
 void KookaView::slAddDevice()
 {
-    kdDebug(29000) << k_funcinfo << endl;
+    kdDebug(28000) << k_funcinfo << endl;
 
     AddDeviceDialog d(m_parent,i18n("Add Scan Device"));
     if (d.exec())
     {
 	QString dev = d.getDevice();
 	QString dsc = d.getDescription();
-	kdDebug(29000) << k_funcinfo << "dev=[" << dev
+	kdDebug(28000) << k_funcinfo << "dev=[" << dev
 		       << "] desc=[" << dsc << "]" << endl;
 
 	sane->addUserSpecifiedDevice(dev,dsc);
@@ -483,7 +482,7 @@ information."),QString::null,KGuiItem(i18n("Add Scan Device...")))!=KMessageBox:
 
    if( selDevice.isEmpty() || selDevice.isNull() )
    {
-       kdDebug(29000) << "selDevice not found - starting selector!" << selDevice << endl;
+       kdDebug(28000) << "selDevice not found - starting selector!" << selDevice << endl;
        if ( ds.exec() == QDialog::Accepted )
        {
 	   selDevice = ds.getSelectedDevice();
@@ -550,32 +549,19 @@ bool KookaView::galleryRootSelected() const
 }
 
 
-void KookaView::loadStartupImage( void )
+void KookaView::loadStartupImage()
 {
-   kdDebug( 28000) << "Starting to load startup image" << endl;
-
-   /* Now set the configured stuff */
    KConfig *konf = KGlobal::config ();
-   if( konf )
+   konf->setGroup(GROUP_STARTUP);
+   bool wantReadOnStart = konf->readBoolEntry(STARTUP_READ_IMAGE,true);
+
+   if (wantReadOnStart)
    {
-      konf->setGroup(GROUP_STARTUP);
-      bool wantReadOnStart = konf->readBoolEntry( STARTUP_READ_IMAGE, true );
-
-      if( wantReadOnStart )
-      {
-	 QString startup = konf->readPathEntry( STARTUP_IMG_SELECTION );
-
-	 if( !startup.isEmpty() )
-	 {
-	    kdDebug(28000) << "Loading startup image !" << endl;
-	    packager->slSelectImage( KURL(startup) );
-	 }
-      }
-      else
-      {
-	 kdDebug(28000) << "Do not load startup image due to config value" << endl;
-      }
+       QString startup = konf->readPathEntry(STARTUP_IMG_SELECTION);
+       kdDebug(28000) << k_funcinfo << "load startup image [" << startup << "]" << endl;
+       if (!startup.isEmpty()) packager->slSelectImage(startup);
    }
+   else kdDebug(28000) << k_funcinfo << "Do not load startup image" << endl;
 }
 
 
@@ -602,7 +588,7 @@ void KookaView::slNewPreview( QImage *new_img,ImgScanInfo *info)
 {
    if (!new_img) return;
 
-   kdDebug(29000) << k_funcinfo << "new preview image, size=" << new_img->size()
+   kdDebug(28000) << k_funcinfo << "new preview image, size=" << new_img->size()
 		  << " res=[" << info->getXResolution() << "x" << info->getYResolution() << "]" << endl;
 							// flip preview to front
    if (!new_img->isNull()) m_dockPreview->makeDockVisible();
@@ -644,69 +630,112 @@ bool KookaView::ToggleVisibility( int item )
 }
 
 
-void KookaView::doOCRonSelection( void )
+void KookaView::doOCRonSelection()
 {
-   emit( signalChangeStatusbar( i18n("Starting OCR on selection" )));
+   emit signalChangeStatusbar(i18n("Starting OCR on selection"));
 
    KookaImage img;
+   if (img_canvas->selectedImage(&img)) startOCR(&img);
 
-   if( img_canvas->selectedImage(&img) )
-   {
-      startOCR( &img );
-   }
-   emit( signalCleanStatusbar() );
+   emit signalCleanStatusbar();
 }
 
-/* Does OCR on the entire picture */
-void KookaView::doOCR( void )
+
+void KookaView::doOCR()
 {
-   emit( signalChangeStatusbar( i18n("Starting OCR on the entire image" )));
-    KookaImage *img = packager->getCurrImage(true);
-   startOCR( img );
-   emit( signalCleanStatusbar( ));
+   emit signalChangeStatusbar(i18n("Starting OCR on the image"));
+
+   KookaImage *img = packager->getCurrImage(true);
+   startOCR(img);
+
+   emit signalCleanStatusbar();
 }
+
+
+void KookaView::slOcrSpellCheck()
+{
+    kdDebug() << k_funcinfo << endl;
+
+    emit signalChangeStatusbar(i18n("OCR Spell Check"));
+
+    if (ocrFabric==NULL || !ocrFabric->engineValid())
+    {
+        KMessageBox::sorry(m_parent,
+                           i18n("OCR has not been performed yet, or the engine has been changed"),
+                           i18n("OCR Spell Check not possible"));
+        return;
+    }
+
+    ocrFabric->performSpellCheck();
+    emit signalCleanStatusbar();
+}
+
+
 
 
 void KookaView::startOCR(KookaImage *img)
 {
-   if (img==NULL || img->isNull()) return;
+    if (img==NULL || img->isNull()) return;
 
-   if (ocrFabric==NULL)
-   {
-       ocrFabric = new KSaneOcr( m_mainDock, KGlobal::config() );
-       ocrFabric->setImageCanvas( img_canvas );
+    if (ocrFabric!=NULL && !ocrFabric->engineValid())	// exists, but needs to be changed?
+    {
+        delete ocrFabric;
+        ocrFabric = NULL;
+    }
 
-       connect( ocrFabric, SIGNAL( newOCRResultText( const QString& )),
-                m_ocrResEdit, SLOT(setText( const QString& )));
+    if (ocrFabric==NULL)
+    {
+        //ocrFabric = new OcrEngine( m_mainDock, KGlobal::config() );
+        bool gotoPrefs = false;
+        ocrFabric = OcrEngine::createEngine(m_mainDock,&gotoPrefs);
+        if (ocrFabric==NULL)
+        {
+            kdDebug(28000) << k_funcinfo << "Cannot create OCR engine!" << endl;
+            if (gotoPrefs) emit signalOcrPrefs();
+            return;
+        }
 
-       connect( ocrFabric, SIGNAL( newOCRResultText( const QString& )),
-                m_dockOCRText, SLOT( show() ));
+        ocrFabric->setImageCanvas( img_canvas );
+
+        connect( ocrFabric, SIGNAL( newOCRResultText( const QString& )),
+                 this, SLOT(slotOcrResultText( const QString& )));
+
+        connect( ocrFabric, SIGNAL( newOCRResultText( const QString& )),
+                 m_dockOCRText, SLOT( show() ));
 	  
-       connect( ocrFabric, SIGNAL( repaintOCRResImage( )),
-                img_canvas, SLOT(repaint()));
+        connect( ocrFabric, SIGNAL( repaintOCRResImage( )),
+                 img_canvas, SLOT(repaint()));
 
-       connect( ocrFabric, SIGNAL( clearOCRResultText()),
-                m_ocrResEdit, SLOT(clear()));
+        connect( ocrFabric, SIGNAL( clearOCRResultText()),
+                 m_ocrResEdit, SLOT(clear()));
 
-       connect( ocrFabric,    SIGNAL( updateWord(int, const QString&, const QString& )),
-                m_ocrResEdit, SLOT( slUpdateOCRResult( int, const QString&, const QString& )));
+        connect( ocrFabric,    SIGNAL( updateWord(int, const QString&, const QString& )),
+                 m_ocrResEdit, SLOT( slUpdateOCRResult( int, const QString&, const QString& )));
 
-       connect( ocrFabric,    SIGNAL( ignoreWord(int, const ocrWord&)),
-                m_ocrResEdit, SLOT( slIgnoreWrongWord( int, const ocrWord& )));
+        connect( ocrFabric,    SIGNAL( ignoreWord(int, const ocrWord&)),
+                 m_ocrResEdit, SLOT( slIgnoreWrongWord( int, const ocrWord& )));
 
-       connect( ocrFabric, SIGNAL( markWordWrong(int, const ocrWord& )),
-                m_ocrResEdit, SLOT( slMarkWordWrong( int, const ocrWord& )));
+        connect( ocrFabric, SIGNAL( markWordWrong(int, const ocrWord& )),
+                 m_ocrResEdit, SLOT( slMarkWordWrong( int, const ocrWord& )));
 
-       connect( ocrFabric,    SIGNAL( readOnlyEditor( bool )),
-                m_ocrResEdit, SLOT( setReadOnly( bool )));
+        connect( ocrFabric,    SIGNAL( readOnlyEditor( bool )),
+                 m_ocrResEdit, SLOT( setReadOnly( bool )));
 
-       connect( ocrFabric,    SIGNAL( selectWord( int, const ocrWord& )),
-                m_ocrResEdit, SLOT( slSelectWord( int, const ocrWord& )));
-   }
+        connect( ocrFabric,    SIGNAL( selectWord( int, const ocrWord& )),
+                 m_ocrResEdit, SLOT( slSelectWord( int, const ocrWord& )));
+    }
 
-   ocrFabric->slSetImage(img);
-   ocrFabric->startOCRVisible(m_mainDock);
+    ocrFabric->setImage(img);
+    ocrFabric->startOCRVisible(m_mainDock);
 }
+
+
+void KookaView::slotOcrResultText(const QString &text)
+{
+    m_ocrResEdit->setText(text);
+    emit signalOcrResultAvailable(!text.isEmpty());
+}
+
 
 
 void KookaView::slOCRResultImage( const QPixmap& pix )
@@ -922,7 +951,7 @@ void KookaView::slSaveOCRResult()
 void KookaView::slLoadScanParams( )
 {
     if (sane==NULL) return;				// no scanner device
-    kdDebug(29000) << k_funcinfo << "NYI" << endl;
+    kdDebug(28000) << k_funcinfo << "NYI" << endl;
 
 #if 0
    /* not yet cooked */
@@ -952,7 +981,7 @@ void KookaView::slShowAImage(const KookaImage *img)
         img_canvas->setReadOnly(false);
     }
 
-    if (ocrFabric) ocrFabric->slSetImage(img);		/* tell ocr about it */
+    if (ocrFabric) ocrFabric->setImage(img);		/* tell ocr about it */
 
     KStatusBar *statBar = m_mainWindow->statusBar();	/* Status Bar */
     if (img_canvas) statBar->changeItem(img_canvas->imageInfoString(),StatusImage);
@@ -1058,7 +1087,6 @@ void KookaView::saveProperties(KConfig *config)
    config->setGroup( GROUP_STARTUP );
    /* Get with path */
    config->writePathEntry( STARTUP_IMG_SELECTION, packager->getCurrImageFileName(true));
-
 }
 
 
@@ -1121,7 +1149,7 @@ QImage KookaView::rotateRight( QImage *m_img )
 void KookaView::connectViewerAction( KAction *action )
 {
    QPopupMenu *popup = img_canvas->contextMenu();
-   //kdDebug(29000) << "This is the popup: " << popup << endl;
+   //kdDebug(28000) << "This is the popup: " << popup << endl;
    if( popup && action )
    {
       action->plug( popup );

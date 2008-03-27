@@ -47,7 +47,7 @@
 
 class KDockWidget;
 class QPainter;
-class KSaneOcr;
+class OcrEngine;
 class KConfig;
 class KPrinter;
 class KComboBox;
@@ -117,6 +117,7 @@ public slots:
 
     void doOCR( void );
     void doOCRonSelection( void );
+    void slOcrSpellCheck();
 
     void slStartPreview() { if( scan_params ) scan_params->slAcquirePreview(); }
     void slStartFinalScan() { if( scan_params ) scan_params->slStartScan(); }
@@ -194,6 +195,7 @@ protected slots:
     void slSelectionChanged();
     void slotGallerySelectionChanged();
     void slotLoadedImageChanged(const KookaImage *img,bool isDir);
+    void slotOcrResultText(const QString &text);
 
 signals:
     /**
@@ -215,6 +217,8 @@ signals:
     void signalRectangleChanged(bool haveSelection);
     void signalGallerySelectionChanged(bool isDir,int howmanySelected);
     void signalLoadedImageChanged(bool isLoaded,bool isDir);
+    void signalOcrResultAvailable(bool haveText);
+    void signalOcrPrefs();
 
 private:
     QImage rotateRight( QImage* );
@@ -243,7 +247,7 @@ private:
     int          image_pool_id;
     int 	 preview_id;
 
-    KSaneOcr *ocrFabric;
+    OcrEngine *ocrFabric;
 
     KDockWidget *m_mainDock;
     KDockWidget *m_dockScanParam;

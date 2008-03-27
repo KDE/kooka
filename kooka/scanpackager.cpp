@@ -29,6 +29,7 @@
 #include <qfileinfo.h>
 #include <qsignalmapper.h>
 #include <qlistview.h>
+#include <qdir.h>
 
 #include <kmessagebox.h>
 #include <kfiletreeview.h>
@@ -43,6 +44,7 @@
 #include <kurl.h>
 #include <kdebug.h>
 #include <klocale.h>
+#include <kurldrag.h>
 
 #include <kio/netaccess.h>
 
@@ -82,8 +84,8 @@ ScanPackager::ScanPackager( QWidget *parent ) : KFileTreeView( parent )
    setDropVisualizer(true);
    setAcceptDrops(true);
 
-   connect( this, SIGNAL(dropped( QWidget*, QDropEvent*, KURL::List&, KURL& )),
-	    this, SLOT( slotUrlsDropped( QWidget*, QDropEvent*, KURL::List&, KURL& )));
+   connect(this,SIGNAL(dropped(KFileTreeView *,QDropEvent *,QListViewItem *,QListViewItem *)),
+           SLOT(slotUrlsDropped(KFileTreeView *,QDropEvent *,QListViewItem *,QListViewItem *)));
 
    KConfig *konf = KGlobal::config();
    konf->setGroup(GROUP_GENERAL);
@@ -880,75 +882,63 @@ void ScanPackager::addImage(const QImage *img,KookaImageMeta *meta)
 /* selects and opens the file with the given name. This is used to restore the
  * last displayed image by its name.
  */
-void ScanPackager::slSelectImage( const KURL& name )
+void ScanPackager::slSelectImage(const KURL &name)
 {
-
-   KFileTreeViewItem *found = spFindItem( UrlSearch, name.url() );
-
-   if( found )
-   {
-      kdDebug(28000) << "slSelectImage: Found an item !" << endl;
-      ensureItemVisible( found );
-      setCurrentItem( found );
-      slClicked( found );
-   }
-
+    KFileTreeViewItem *found = spFindItem(UrlSearch,name.url());
+    if (found)
+    {
+        ensureItemVisible(found);
+        setCurrentItem(found);
+        slClicked(found);
+    }
 }
 
 
-KFileTreeViewItem *ScanPackager::spFindItem( SearchType type, const QString name, const KFileTreeBranch *branch )
+KFileTreeViewItem *ScanPackager::spFindItem(SearchType type,const QString &name,const KFileTreeBranch *branch)
 {
-   /* Prepare a list of branches to go through. If the parameter branch is set, search
-    * only in the parameter branch. If it is zero, search all branches returned by
-    * kfiletreeview.branches()
-    */
-   KFileTreeBranchList branchList;
+    /* Prepare a list of branches to go through. If the parameter branch is set, search
+     * only in the parameter branch. If it is zero, search all branches returned by
+     * kfiletreeview.branches()
+     */
 
-   if( branch )
-   {
-      branchList.append( branch );
-   }
-   else
-   {
-      branchList = branches();
-   }
+    KFileTreeBranchList branchList;
+    if (branch!=NULL) branchList.append(branch);
+    else branchList = branches();
 
+    KFileItem *kfi = NULL;
+    KFileTreeViewItem *foundItem = NULL;
+    KURL url;
 
-   KFileTreeBranchIterator it( branchList );
-   KFileItem *kfi = 0L;
-   KFileTreeViewItem *foundItem = 0L;
+    KFileTreeBranch *branchloop;			// Loop until kfi is defined
+    for (KFileTreeBranchIterator it(branchList); kfi==NULL && it.current(); ++it)
+    {
+        branchloop = *it;
+        switch (type)
+        {
+case Dummy:
+default:    break;
 
-   /* Leave the loop in case kfi is defined */
-   KFileTreeBranch *branchloop = 0L;
-   for( ; !kfi && it.current(); ++it )
-   {
-      branchloop = *it;
-      KURL url(name);
-      switch( type )
-      {
-	 case Dummy:
-	    kdDebug(28000) << "Dummy search skipped !" << endl;
+case NameSearch:
+	    kdDebug(28000) << k_funcinfo << "name search for " << name << endl;
+	    kfi = branchloop->findByName(name);
 	    break;
-	 case NameSearch:
-	    kdDebug(28000) << "ScanPackager: searching for " << name << endl;
-	    kfi = branchloop->findByName( name );
-	    break;
-	 case UrlSearch:
-	    kdDebug(28000) << "ScanPackager: URL search for " << name << endl;
-	    kfi = branchloop->find( url );
-	    break;
-      default:
-	 kdDebug(28000) << "Scanpackager: Wrong search type !" << endl;
-	 break;
-      }
 
-   }
-   if( kfi )
-   {
-      foundItem = static_cast<KFileTreeViewItem*>(kfi->extraData(branchloop));
-      kdDebug(28000) << "spFindItem: Success !" << foundItem << endl;
-   }
-   return( foundItem );
+case UrlSearch:
+            url = name;					// ensure canonical path
+            url.setPath(QDir(url.path()).canonicalPath());
+	    kdDebug(28000) << k_funcinfo << "URL search for " << url << endl;
+	    kfi = branchloop->findByURL(url);
+	    break;
+        }
+    }
+
+    if (kfi!=NULL)					// found something
+    {
+        foundItem = static_cast<KFileTreeViewItem *>(kfi->extraData(branchloop));
+        kdDebug(28000) << k_funcinfo << "Success " << foundItem->path() << endl;
+    }
+
+    return (foundItem);
 }
 
 /* ----------------------------------------------------------------------- */
@@ -1030,31 +1020,41 @@ void ScanPackager::slotImportFile()
 
 
 
-void ScanPackager::slotUrlsDropped( QWidget*, QDropEvent* ev, KURL::List& urls, KURL& copyTo )
+
+//  Using this form of the drop signal so we can check whether the drop
+//  is on top of a directory (in which case we want to move/copy into it).
+
+void ScanPackager::slotUrlsDropped(KFileTreeView *me,QDropEvent *ev,
+                                   QListViewItem *parent,QListViewItem *after)
 {
-   if( !urls.isEmpty() )
-   {
-       kdDebug(28000) << "Kooka drop event!" << endl;
-       // kdDebug(28000) << "Kooka drop event. First src url=" << urls.first() << " copyTo=" << copyTo
-       //    << " move=" << ( ev->action() == QDropEvent::Move ) << endl;
+    KFileTreeViewItem *pa = static_cast<KFileTreeViewItem*>(parent);
+    KFileTreeViewItem *af = static_cast<KFileTreeViewItem*>(after);
 
-       /* first make the last url to copy to the one to select next */
-       if( ! urls.empty() )
-       {
-           KURL nextSel = copyTo;
-           nextSel.addPath( urls.back().fileName(false));
+    KURL::List urls;
+    KURLDrag::decode(ev,urls);
+    if (urls.empty()) return;
 
-           kdDebug(28000) << "Selecting next url: " << nextSel.url() << endl;
-           m_nextUrlToShow = nextSel;
-           // slotSetNextUrlToSelect( nextSel );
-       }
+    //kdDebug(28000) << k_funcinfo << "parent=" << (pa==NULL?"null":pa->url()) << endl;
+    //kdDebug(28000) << "  after=" << (af==NULL?"null":af->url()) << endl;
+    //kdDebug(28000) << "  srcs=" << urls.count() << " first=" << urls.first() << endl;
+    
+    KFileTreeViewItem *onto = (af!=NULL) ? af : pa;
+    if (onto==NULL) return;
 
-      if ( ev->action() == QDropEvent::Move )
-        copyjob = KIO::move( urls, copyTo, true );
-      else
-        copyjob = KIO::copy( urls, copyTo, true );
-   }
+    KURL dest = onto->url();
+    if (!onto->isDir()) dest.setFileName(QString::null);
+    dest.adjustPath(1);
+    kdDebug(28000) << k_funcinfo << "resolved destination " << dest << endl;
+
+    /* first make the last url to copy to the one to select next */
+    KURL nextSel = dest;
+    nextSel.addPath(urls.back().fileName(false));
+    m_nextUrlToShow = nextSel;
+
+    if (ev->action()==QDropEvent::Move) KIO::move(urls,dest,true);
+    else KIO::copy(urls,dest,true);
 }
+
 
 void ScanPackager::slotCanceled( KIO::Job* )
 {
@@ -1255,7 +1255,7 @@ QString ScanPackager::getImgName( QString name_on_disk )
 /* ----------------------------------------------------------------------- */
 ScanPackager::~ScanPackager()
 {
-    kdDebug(29000) << k_funcinfo << endl;
+    kdDebug(28000) << k_funcinfo << endl;
 }
 
 /* called whenever one branch detects a deleted file */
@@ -1294,7 +1294,7 @@ void ScanPackager::contentsDragMoveEvent( QDragMoveEvent *e )
 
 void ScanPackager::setAllowRename(bool on)
 {
-    kdDebug(29000) << k_funcinfo << "allow=" << on << endl;
+    kdDebug(28000) << k_funcinfo << "allow=" << on << endl;
     setItemsRenameable(on);
 }
 
@@ -1305,7 +1305,7 @@ void ScanPackager::setAllowRename(bool on)
 
 void ScanPackager::showOpenWithMenu(KActionMenu *menu)
 {
-    kdDebug(29000) << k_funcinfo << endl;
+    kdDebug(28000) << k_funcinfo << endl;
 
     KFileTreeViewItem *curr = currentKFileTreeViewItem();
     QString mimeType = KMimeType::findByURL(curr->url())->name();
@@ -1326,7 +1326,7 @@ void ScanPackager::showOpenWithMenu(KActionMenu *menu)
          it!=openWithOffers.end(); ++it, ++i)
     {
         KService::Ptr service = (*it);
-        kdDebug(29000) << "  offer: " << (*it)->name() << endl;
+        kdDebug(28000) << "  offer: " << (*it)->name() << endl;
 
         QString actionName((*it)->name().replace("&","&&"));
         KAction *act = new KAction(actionName,(*it)->pixmap(KIcon::Small),0,
@@ -1346,13 +1346,13 @@ void ScanPackager::showOpenWithMenu(KActionMenu *menu)
 
 void ScanPackager::slotOpenWith(int idx)
 {
-    kdDebug(29000) << k_funcinfo << "idx=" << idx << endl;
+    kdDebug(28000) << k_funcinfo << "idx=" << idx << endl;
 
     KFileTreeViewItem *ftvi = currentKFileTreeViewItem();
     if (ftvi==NULL) return;
     KURL::List urllist(ftvi->url());
 
-    if (idx<openWithOffers.count())			// application from the menu
+    if (idx<((int) openWithOffers.count()))		// application from the menu
     {
         KService::Ptr ptr = openWithOffers[idx];
         KRun::run(*ptr,urllist);

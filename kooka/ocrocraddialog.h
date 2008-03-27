@@ -1,4 +1,4 @@
-/***************************************************************************
+/***************************************************** -*- mode:c++; -*- ***
                      kocrocrad.h - ocr dialog for ocrad
                              -------------------
     begin                : Tue Jul 15 2003
@@ -25,83 +25,68 @@
  ***************************************************************************/
 
 
-#ifndef KOCROCRAD_H
-#define KOCROCRAD_H
+#ifndef OCROCRADDIALOG_H
+#define OCROCRADDIALOG_H
 
-#include <kdialogbase.h>
-#include <qimage.h>
-#include <qstring.h>
-
-#include <kanimwidget.h>
-
-#include "kocrbase.h"
+#include "ocrbasedialog.h"
 
 #define CFG_GROUP_OCRAD "ocrad"
 #define CFG_OCRAD_LAYOUT_DETECTION "layoutDetection"
 #define CFG_OCRAD_EXTRA_ARGUMENTS  "extraArguments"
 #define CFG_OCRAD_FORMAT "format"
 #define CFG_OCRAD_CHARSET "charset"
+
+
 /**
   *@author Klaas Freitag
   */
 
-class KSpellConfig;
 class KURLRequester;
-class KProcess;
-class QLabel;
 class QComboBox;
 
-class ocradDialog: public KOCRBase
+class OcrOcradDialog : public OcrBaseDialog
 {
     Q_OBJECT
+
 public:
-    ocradDialog( QWidget*, KSpellConfig* );
-    ~ocradDialog();
+    OcrOcradDialog(QWidget *parent,KSpellConfig *spellConfig = NULL);
+    ~OcrOcradDialog();
 
-    QString getOCRCmd( void ) const
-        { return m_ocrCmd;}
-
-    KSaneOcr::EngineError setupGui();
+    OcrEngine::EngineError setupGui();
 
     QString ocrEngineName() const;
     QString ocrEngineDesc() const;
     QString ocrEngineLogo() const;
 
-    static QString engineDesc();
+    QString getOCRCmd() const	{ return (m_ocrCmd); }
 
-    QString orfUrl() const;
-
-    int layoutDetectionMode() const;
-
-    /**
+    /*
      * returns the numeric version of the ocrad program.
-     *
      * Attention: This method returns 10 for ocrad v. 0.10 and 8 for ocrad-0.8
      */
-    int getNumVersion();
+    int getNumVersion() const	{ return (m_version); }
 
-public slots:
-    void enableFields(bool);
-    void introduceImage( KookaImage* );
+    QString orfUrl() const;
+    int layoutDetectionMode() const;
 
 protected:
+    void enableFields(bool enable);
+
+protected slots:
     void writeConfig();
 
-
 private:
-    void version( const QString& exe );
+    void version(const QString &exe);
 
 private slots:
-    void slReceiveStdIn( KProcess *proc, char *buffer, int buflen);
+    void slReceiveStdIn( KProcess *proc,char *buffer,int buflen);
 
 private:
-
-    QString      m_ocrCmd;
-    KURLRequester *m_orfUrlRequester;
+    QString         m_ocrCmd;
+    KURLRequester  *m_orfUrlRequester;
     QComboBox      *m_layoutMode;
-    QLabel         *m_binaryLabel;
     KProcess       *m_proc;
     int             m_version;
 };
 
-#endif
+#endif							// OCROCRADDIALOG_H

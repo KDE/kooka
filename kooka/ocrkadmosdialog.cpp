@@ -49,9 +49,12 @@
 #include <kstandarddirs.h>
 
 #include "resource.h"
-#include "ksaneocr.h"  // TODO: Really needed?
-#include "kocrkadmos.h"
-#include "kocrkadmos.moc"
+//#include "ksaneocr.h"  // TODO: Really needed?
+
+#include "ocrkadmosengine.h"
+
+#include "ocrkadmosdialog.h"
+#include "ocrkadmosdialog.moc"
 
 
 /* defines for konfig-reading */
@@ -63,11 +66,11 @@
 #define CNTRY_CZ i18n( "Czech Republic, Slovakia")
 #define CNTRY_GB i18n( "Great Britain, USA" )
 
-KadmosDialog::KadmosDialog( QWidget *parent, KSpellConfig *spellConfig )
-    :KOCRBase( parent, spellConfig, KDialogBase::Tabbed ),
-     m_cbNoise(0),
-     m_cbAutoscale(0),
-     m_haveNorm(false)
+KadmosDialog::KadmosDialog(QWidget *parent,KSpellConfig *spellConfig)
+    : OcrBaseDialog(parent,spellConfig),
+      m_cbNoise(0),
+      m_cbAutoscale(0),
+      m_haveNorm(false)
 {
    kdDebug(28000) << "Starting KOCR-Start-Dialog!" << endl;
    // Layout-Boxes
@@ -81,35 +84,16 @@ QString KadmosDialog::ocrEngineLogo() const
 
 QString KadmosDialog::ocrEngineName() const
 {
-    return i18n("KADMOS OCR/ICR");
+    return (OcrEngine::engineName(OcrEngine::EngineKadmos));
 }
 
 QString KadmosDialog::ocrEngineDesc() const
 {
-    return (KadmosDialog::engineDesc());
+    return (OcrKadmosEngine::engineDesc());
 }
 
 
-QString KadmosDialog::engineDesc()
-{
-    return (i18n("<qt>"
-                 "<p>"
-                 "<b>Kadmos</b> is a commercial OCR/ICR library produced by reRecognition&nbsp;AG. "
-                 "<p>"
-#ifdef HAVE_KADMOS
-                 "This version of Kooka is configured to use the Kadmos engine."
-#else
-                 "This version of Kooka is not configured for Kadmos.  The Kadmos "
-                 "libraries need to be installed, and Kooka needs to be rebuilt with "
-                 "the '--with-kadmos' option."
-#endif
-                 "<p>"
-                 "See <a href=\"http://www.rerecognition.com\">www.rerecognition.com</a> "
-                 "for more information on Kadmos."));
-}
-
-
-KSaneOcr::EngineError KadmosDialog::findClassifiers()
+OcrEngine::EngineError KadmosDialog::findClassifiers()
 {
     findClassifierPath();
 
@@ -234,20 +218,20 @@ KSaneOcr::EngineError KadmosDialog::findClassifiers()
     if( m_handClassifier.count()+m_ttfClassifier.count()>0 )
     {
         /* There are classifiers */
-        return KSaneOcr::ENG_OK;
+        return OcrEngine::ENG_OK;
     }
     else
     {
         /* Classifier are missing */
-        return KSaneOcr::ENG_DATA_MISSING;
+        return OcrEngine::ENG_DATA_MISSING;
     }
 }
 
 
-KSaneOcr::EngineError KadmosDialog::findClassifierPath()
+OcrEngine::EngineError KadmosDialog::findClassifierPath()
 {
     KStandardDirs stdDir;
-    KSaneOcr::EngineError err = KSaneOcr::ENG_OK;
+    OcrEngine::EngineError err = OcrEngine::ENG_OK;
 
     KConfig *conf = KGlobal::config ();
     KConfigGroupSaver gs( conf, CFG_GROUP_KADMOS );
@@ -272,10 +256,10 @@ KSaneOcr::EngineError KadmosDialog::findClassifierPath()
 }
 
 
-KSaneOcr::EngineError KadmosDialog::setupGui()
+OcrEngine::EngineError KadmosDialog::setupGui()
 {
 
-    KSaneOcr::EngineError err = KOCRBase::setupGui();
+    OcrEngine::EngineError err = OcrBaseDialog::setupGui();
 
     // setupPreprocessing( addVBoxPage(   i18n("Preprocessing")));
     // setupSegmentation(  addVBoxPage(   i18n("Segmentation")));
@@ -320,7 +304,7 @@ KSaneOcr::EngineError KadmosDialog::setupGui()
     getAnimation(innerBox);
     // (void) new QWidget ( page );
 
-    if( err != KSaneOcr::ENG_OK )
+    if( err != OcrEngine::ENG_OK )
     {
        enableFields(false);
        enableButton(User1, false );
@@ -343,7 +327,7 @@ KSaneOcr::EngineError KadmosDialog::setupGui()
                                    "OCR with KADMOS will not be possible!\n\n"
                                    "Change the OCR engine in the preferences dialog."),
                            i18n("Installation Error") );
-        err = KSaneOcr::ENG_BAD_SETUP;
+        err = OcrEngine::ENG_BAD_SETUP;
     }
     else
         slFontChanged( 0 ); // Load machine print font language list
@@ -513,9 +497,14 @@ KadmosDialog::~KadmosDialog()
 
 }
 
-void KadmosDialog::writeConfig( void )
+void KadmosDialog::writeConfig()
 {
+    kdDebug(28000) << k_funcinfo << endl;
 
+    OcrBaseDialog::writeConfig();
+
+    KConfig *conf = KGlobal::config();
+    // TODO: must be something to save here!
 }
 
 

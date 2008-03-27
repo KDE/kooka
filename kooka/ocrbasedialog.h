@@ -1,4 +1,4 @@
-/***************************************************************************
+/***************************************************** -*- mode:c++; -*- ***
                   kocrbase.h  - base dialog for OCR
                              -------------------
     begin                : Sun Jun 11 2000
@@ -24,116 +24,115 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef KOCRBASE_H
-#define KOCRBASE_H
+#ifndef OCRBASEDIALOG_H
+#define OCRBASEDIALOG_H
 
 #include <kdialogbase.h>
 #include <kio/previewjob.h>
-#include <qimage.h>
-#include <qstring.h>
 
-#include <kanimwidget.h>
-#include <ksconfig.h>
+#include "ocrengine.h"
 
-#include "ksaneocr.h"
 /**
   *@author Klaas Freitag
   */
 
-
-class KookaImage;
 class QHBox;
 class QVBox;
 class QLabel;
 class QSize;
-class KSpellConfig;
 class QCheckBox;
 class QGroupBox;
 
-class KOCRBase: public KDialogBase
+class KAnimWidget;
+class KSpellConfig;
+class KookaImage;
+
+class OcrBaseDialog: public KDialogBase
 {
     Q_OBJECT
-public:
-    KOCRBase( QWidget *, KSpellConfig *spellConfig,
-              KDialogBase::DialogType face = KDialogBase::Plain );
-    ~KOCRBase();
 
-    virtual KSaneOcr::EngineError setupGui();
+public:
+    OcrBaseDialog(QWidget *parent,
+                  KSpellConfig *spellConfig = NULL,
+                  KDialogBase::DialogType face = KDialogBase::Tabbed);
+    virtual ~OcrBaseDialog();
+
+    virtual OcrEngine::EngineError setupGui();
 
     /**
      * @return the name of the ocr engine
      */
-    virtual QString ocrEngineName() const { return QString(); }
+    virtual QString ocrEngineName() const = 0;
 
     /**
      * @return the filename (without path) of the logo of the ocr engine.
      * the logo needs to be installed in $KDEDIR/share/apps/kooka/pics
      */
-    virtual QString ocrEngineLogo() const { return QString(); }
+    virtual QString ocrEngineLogo() const = 0;
 
     /**
      * @return a description string of the ocr engine
      */
-    virtual QString ocrEngineDesc() const { return QString(); }
+    virtual QString ocrEngineDesc() const = 0;
 
-    QVBox* ocrPage() const { return m_ocrPage; }
-    QVBox* imagePage() const { return m_imgPage; }
+    virtual void introduceImage(const KookaImage *img);
 
-    KSpellConfig* spellConfig() const
-        { return m_spellConfig; }
-
-    bool wantSpellCheck();
+    bool wantSpellCheck() const		{ return (m_userWantsSpellCheck); }
+    KSpellConfig* spellConfig() const	{ return (m_spellConfig); }
 
 public slots:
-    virtual void stopAnimation();
-    virtual void startAnimation();
+    void stopOCR();
+    void startOCR();
 
-    virtual void introduceImage( KookaImage* );
-
-    virtual void startOCR();
-    virtual void stopOCR();
+protected:
     /**
      * enable or disable dialog fields. This slot is called when the ocr process starts
      * with parameter state=false and called again if the gui should accept user input
      * again after ocr finished with parameter true.
      */
-    virtual void enableFields(bool state);
+    virtual void enableFields(bool enable) = 0;
 
-protected:
+    KAnimWidget *getAnimation(QWidget *parent);
+// TODO: can be private?
+
+    void ocrShowInfo(const QString &binary,const QString &version = QString::null);
+    void ocrShowVersion(const QString &version);
+
+    QVBox *ocrPage() const		{ return (m_ocrPage); }
+
+protected slots:
+    virtual void writeConfig();
+
+private:
     /**
      * This creates a a tab OCR in the dialog and creates a small intro about the
      * ocr engine used.
      * It calls the virtual subs ocrEngineName, ocrEngineLogo and ocrEngineDesc which
      * must return the approbiate values for the engines.
-     * @return a pointer to a VBox in which further elements can be layouted
      */
-    virtual void ocrIntro();
+    void ocrIntro();
 
     /**
      * This creates a a tab Image Info in the dialog and creates a image description
      * about the current image to ocr.
      */
-    virtual void imgIntro();
+    void imgIntro();
 
     /**
      * This sets up the spellchecking configuration
      */
-    virtual void spellCheckIntro();
+    void spellCheckIntro();
 
-
-protected slots:
-    virtual KAnimWidget* getAnimation(QWidget*);
-    virtual void writeConfig();
-    virtual void slSpellConfigChanged();
-
+private slots:
     /**
      * hit if the user toggles the want-spellcheck checkbox
      */
-    virtual void slWantSpellcheck( bool wantIt );
+    void slWantSpellcheck(bool wantIt);
 
-private slots:
-    virtual void slPreviewResult( KIO::Job* );
-    virtual void slGotPreview( const KFileItem*, const QPixmap& );
+    void slPreviewResult(KIO::Job *job);
+    void slGotPreview(const KFileItem *item,const QPixmap &newPix);
+    void stopAnimation();
+    void startAnimation();
 
 private:
     KAnimWidget  *m_animation;
@@ -143,7 +142,6 @@ private:
     QVBox        *m_metaBox;
     QHBox        *m_imgHBox;
     QLabel       *m_previewPix;
-    KookaImage   *m_currImg;
 
     KSpellConfig *m_spellConfig;
     bool          m_wantSpellCfg;         /* show the spellcheck options? */
@@ -152,6 +150,7 @@ private:
 
     QCheckBox     *m_cbWantCheck;
     QGroupBox     *m_gbSpellOpts;
+    QLabel *m_lVersion;
 };
 
-#endif
+#endif							// OCRBASEDIALOG_H
