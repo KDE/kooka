@@ -276,6 +276,10 @@ void Kooka::setupActions()
 		       m_view, SLOT( slStartFinalScan()),
 		       actionCollection(), "startScan" );
 
+    photocopyAction = new KAction(i18n("PhotoCopy"), "photocopy", CTRL+Key_F,
+		       m_view, SLOT( slStartPhotoCopy()),
+		       actionCollection(), "startPhotoCopy" );
+
     paramsAction = new KAction(i18n("Scan Parameters..."), "bookmark_add", CTRL+SHIFT+Key_S,
                                m_view, SLOT(slScanParams()),
                                actionCollection(), "scanparam" );
@@ -448,6 +452,7 @@ void Kooka::slotUpdateScannerActions(bool haveConnection)
 
     scanAction->setEnabled(haveConnection);
     previewAction->setEnabled(haveConnection);
+    photocopyAction->setEnabled(haveConnection);
     paramsAction->setEnabled(haveConnection);
 
     setCaption(m_view->scannerName());

@@ -76,6 +76,8 @@
 #include "adddevice.h"
 #include "scanparamsdialog.h"
 
+#include "photocopyprintdialogpage.h"
+
 #include "kookaview.h"
 #include "kookaview.moc"
 
@@ -101,6 +103,8 @@ KookaView::KookaView( KParts::DockMainWindow *parent, const QCString& deviceToUs
    KIconLoader *loader = KGlobal::iconLoader();
    scan_params = NULL;
    preview_canvas = NULL;
+   isPhotoCopyMode=false;
+
    m_parent = dynamic_cast<QWidget *>(parent);		// for dialogues, etc
 
    m_mainDock = parent->createDockWidget( "Kookas MainDock",
@@ -260,12 +264,21 @@ KookaView::KookaView( KParts::DockMainWindow *parent, const QCString& deviceToUs
    }
 
    /* New image created after scanning */
-   connect(sane, SIGNAL(sigNewImage(QImage*,ImgScanInfo*)), this, SLOT(slNewImageScanned(QImage*,ImgScanInfo*)));
+
+
+   connect( sane, SIGNAL( sigScanFinished(KScanStat)), this, SLOT(slScanFinished(KScanStat)));
+   connect( sane, SIGNAL( sigScanFinished(KScanStat)), this, SLOT(slPhotoCopyScan(KScanStat)));
+   /* New image created after scanning now call save dialog*/
+    connect(sane, SIGNAL(sigNewImage(QImage*,ImgScanInfo*)), this, SLOT(slNewImageScanned(QImage*,ImgScanInfo*)));
+   /* New image created after scanning now print it*/    
+    connect(sane, SIGNAL(sigNewImage(QImage*,ImgScanInfo*)), this, SLOT(slPhotoCopyPrint(QImage*,ImgScanInfo*)));
+
+
    /* New preview image */
    connect(sane, SIGNAL(sigNewPreview(QImage*,ImgScanInfo *)), this, SLOT( slNewPreview(QImage*,ImgScanInfo *)));
 
    connect( sane, SIGNAL( sigScanStart() ), this, SLOT( slScanStart()));
-   connect( sane, SIGNAL( sigScanFinished(KScanStat)), this, SLOT(slScanFinished(KScanStat)));
+
    connect( sane, SIGNAL( sigAcquireStart()), this, SLOT( slAcquireStart()));
    /* Image canvas should show a new document */
    connect( packager, SIGNAL( showImage( const KookaImage*,bool )),
@@ -785,6 +798,7 @@ void KookaView::slAcquireStart( )
 
 void KookaView::slNewImageScanned( QImage* img, ImgScanInfo* si )
 {
+    if ( isPhotoCopyMode ) return;
     KookaImageMeta *meta = new KookaImageMeta;
     meta->setScanResolution(si->getXResolution(), si->getYResolution());
     packager->addImage(img, meta);
@@ -1210,6 +1224,51 @@ void KookaView::createDockMenu( KActionCollection *col, KDockMainWindow *mainWin
    actionMenu->insert( new dwMenuAction( i18n("Show OCR Results"),
 					 KShortcut(), m_dockOCRText, col,
 					 mainWin, "dock_ocrResults" ));
+}
+
+
+/* Slot called to start copying to printer */
+void KookaView::slStartPhotoCopy( )
+{
+    kdDebug(28000) << "Entered slot KookaView::slStartPhotoCopy" << endl;
+
+    if ( scan_params == 0 ) return;
+    isPhotoCopyMode=true;
+    photoCopyPrinter = new KPrinter( true, QPrinter::HighResolution ); 
+    photoCopyPrinter->removeStandardPage( KPrinter::CopiesPage );
+    photoCopyPrinter->setUsePrinterResolution(true);
+    photoCopyPrinter->setOption( OPT_SCALING, "fitpage");
+    photoCopyPrinter->setFullPage(true);
+    slPhotoCopyScan( KSCAN_OK );
+}
+
+void KookaView::slPhotoCopyPrint( QImage* img, ImgScanInfo* si )
+{
+    kdDebug(28000) << "Entered slot KookaView::slPhotoCopyPrint" << endl;
+
+    if ( ! isPhotoCopyMode ) return;
+    KookaImage kooka_img=KookaImage( *img );
+    KookaPrint kookaprint( photoCopyPrinter );
+    kookaprint.printImage( &kooka_img );
+
+}
+
+void KookaView::slPhotoCopyScan( KScanStat status )
+{
+    kdDebug(28000) << "Entered slot KookaView::slPhotoCopyScan" << endl;
+    if ( ! isPhotoCopyMode ) return;
+
+    photoCopyPrinter->addDialogPage( new PhotoCopyPrintDialogPage( sane ) );
+//    photoCopyPrinter->addDialogPage( new ImgPrintDialog( 0 ) );
+    if( photoCopyPrinter->setup( 0, "PhotoCopy" )) {
+        Q_CHECK_PTR( sane );
+        scan_params->slStartScan( );
+    }
+    else {
+        isPhotoCopyMode=false;
+        delete photoCopyPrinter;
+    }
+
 }
 
 

@@ -178,6 +178,10 @@ public slots:
 
 protected slots:
 
+    void slStartPhotoCopy();
+    void slPhotoCopyPrint(QImage* , ImgScanInfo* );
+    void slPhotoCopyScan( KScanStat );
+
     void  slShowAImage( const KookaImage* );
     void  slUnloadAImage( KookaImage* );
 
@@ -260,6 +264,10 @@ private:
     KMainWindow *m_mainWindow;
 
     ocrResEdit  *m_ocrResEdit;
+
+    bool        isPhotoCopyMode;
+    KPrinter*   photoCopyPrinter;
+
 };
 
 #endif // KOOKAVIEW_H

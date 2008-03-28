@@ -22,6 +22,7 @@
   <Menu name="scan"><text>S&amp;can</text>
    <Action name="startPreview"/>
    <Action name="startScan"/>
+   <Action name="startPhotoCopy"/>
    <Separator/>
    <Action name="loadscanparam"/>
    <Action name="savescanparam"/>

@@ -15,7 +15,7 @@ kooka_SOURCES =		main.cpp kooka.cpp kookaview.cpp kookapref.cpp 		\
 			ocrresedit.cpp kookaprint.cpp imgprintdialog.cpp	\
 			ocrocraddialog.cpp scanparamsdialog.cpp			\
 			newscanparams.cpp ocrgocrengine.cpp ocrocradengine.cpp	\
-			ocrkadmosengine.cpp
+			ocrkadmosengine.cpp photocopyprintdialogpage.cpp
 
 kooka_CXXFLAGS =	-DUSE_KIMAGEIO
 
@@ -36,7 +36,7 @@ noinst_HEADERS =	kookaview.h scanpackager.h				\
 			kadmosocr.h ocrword.h ocrresedit.h kookaprint.h		\
 			imgprintdialog.h ocrocraddialog.h scanparamsdialog.h	\
 			newscanparams.h ocrgocrengine.h ocrocradengine.h	\
-			ocrkadmosengine.h
+			ocrkadmosengine.h photocopyprintdialogpage.h
 
 appdatadir =		$(kde_datadir)/kooka
 appdata_DATA =		kookaui.rc
