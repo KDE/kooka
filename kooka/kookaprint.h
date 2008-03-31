@@ -76,7 +76,7 @@ public:
 
 public slots:
 
-    bool printImage( KookaImage* );
+    bool printImage( KookaImage*, int );
     void printFittingToPage(KookaImage *img);
 protected:
     typedef enum { SW, NW, NO, SO } MarkerDirection;

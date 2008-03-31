@@ -592,7 +592,7 @@ void KookaView::print()
     if( printer.setup( m_mainWindow, i18n("Print %1").arg(img->localFileName().section('/', -1)) ))
     {
 	KookaPrint kookaprint( &printer );
-	kookaprint.printImage(img);
+	kookaprint.printImage(img, 10);
     }
 }
 
@@ -1235,9 +1235,9 @@ void KookaView::slStartPhotoCopy( )
     if ( scan_params == 0 ) return;
     isPhotoCopyMode=true;
     photoCopyPrinter = new KPrinter( true, QPrinter::HighResolution ); 
-    photoCopyPrinter->removeStandardPage( KPrinter::CopiesPage );
+//    photoCopyPrinter->removeStandardPage( KPrinter::CopiesPage );
     photoCopyPrinter->setUsePrinterResolution(true);
-    photoCopyPrinter->setOption( OPT_SCALING, "fitpage");
+    photoCopyPrinter->setOption( OPT_SCALING, "scan");
     photoCopyPrinter->setFullPage(true);
     slPhotoCopyScan( KSCAN_OK );
 }
@@ -1249,7 +1249,7 @@ void KookaView::slPhotoCopyPrint( QImage* img, ImgScanInfo* si )
     if ( ! isPhotoCopyMode ) return;
     KookaImage kooka_img=KookaImage( *img );
     KookaPrint kookaprint( photoCopyPrinter );
-    kookaprint.printImage( &kooka_img );
+    kookaprint.printImage( &kooka_img ,0 );
 
 }
 
@@ -1258,7 +1258,13 @@ void KookaView::slPhotoCopyScan( KScanStat status )
     kdDebug(28000) << "Entered slot KookaView::slPhotoCopyScan" << endl;
     if ( ! isPhotoCopyMode ) return;
 
-    photoCopyPrinter->addDialogPage( new PhotoCopyPrintDialogPage( sane ) );
+//    photoCopyPrinter->addDialogPage( new PhotoCopyPrintDialogPage( sane ) );
+
+    KScanOption res ( SANE_NAME_SCAN_RESOLUTION );
+    photoCopyPrinter->setOption( OPT_SCAN_RES, res.get() );
+    photoCopyPrinter->setMargins(QSize(0,0));
+    kdDebug(28000) << "Resolution " << res.get() << endl;
+
 //    photoCopyPrinter->addDialogPage( new ImgPrintDialog( 0 ) );
     if( photoCopyPrinter->setup( 0, "PhotoCopy" )) {
         Q_CHECK_PTR( sane );

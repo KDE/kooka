@@ -42,11 +42,12 @@ KookaPrint::KookaPrint( KPrinter *printer )
 
 }
 
-bool KookaPrint::printImage( KookaImage *img )
+bool KookaPrint::printImage( KookaImage *img, int intextraMarginPercent = 10)
 {
     bool result = true;
     if( ! m_printer || !img) return false;
 
+    m_extraMarginPercent = intextraMarginPercent;
     QString psMode = m_printer->option( OPT_PSGEN_DRAFT );
     kdDebug(28000) << "User setting for quality: " << psMode << endl;
 
@@ -101,6 +102,7 @@ bool KookaPrint::printImage( KookaImage *img )
     QSize margins = m_printer->margins();
     kdDebug(28000) << "Printer-Margins left: " << margins.width() << " and top " << margins.height()
                    << endl;
+
     if( reso > 0)
     {
 	double sizeInch = double(img->width()) / double(reso);
