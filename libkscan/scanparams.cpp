@@ -687,7 +687,7 @@ void ScanParams::virtualScannerParams( void )
 
 
 
-   QRadioButton *rb2 = new QRadioButton( i18nc( "@option:radio", "virt. Scan (all Qt modes)"),
+   QRadioButton *rb2 = new QRadioButton( i18nc( "@option:radio", "Virtual Scan (all Qt modes)"),
 					 bg_virt_scan_mode, "VirtScanQtModes" );
 
    rb1->setChecked( true );
