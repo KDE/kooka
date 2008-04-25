@@ -58,14 +58,12 @@
 
 #include <kparts/componentfactory.h>
 
-#include "resource.h"
 #include "kscandevice.h"
 #include "imgscaninfo.h"
 #include "devselector.h"
-//#include "ksaneocr.h"
 #include "imgsaver.h"
 #include "kookapref.h"
-#include "imgnamecombo.h"
+#include "imagenamecombo.h"
 #include "thumbview.h"
 #include "dwmenuaction.h"
 #include "kookaimage.h"
@@ -75,6 +73,8 @@
 #include "imgprintdialog.h"
 #include "adddevice.h"
 #include "scanparamsdialog.h"
+#include "kookagallery.h"
+#include "scanpackager.h"
 
 #include "photocopyprintdialogpage.h"
 
@@ -94,7 +94,6 @@ KookaView::KookaView( KParts::DockMainWindow *parent, const QCString& deviceToUs
      m_dockScanParam(0),
      m_dockThumbs(0),
      m_dockPackager(0),
-     m_dockRecent(0),
      m_dockPreview(0),
      m_dockOCRText(0),
      m_mainWindow(parent),
@@ -151,53 +150,29 @@ KookaView::KookaView( KParts::DockMainWindow *parent, const QCString& deviceToUs
 					    loader->loadIcon( "palette_color", KIcon::Small ),
 					    0L, i18n("Gallery"));
    m_dockPackager->setDockSite(KDockWidget::DockFullSite);
-   packager = new ScanPackager( m_dockPackager );
-   m_dockPackager->setWidget( packager );
+   m_gallery = new KookaGallery(m_dockPackager);
+   m_dockPackager->setWidget( m_gallery );
    m_dockPackager->manualDock( m_mainDock,              // dock target
                          KDockWidget::DockLeft, // dock site
                          30 );                  // relation target/this (in percent)
 
-
+   ScanPackager *packager = m_gallery->galleryTree();
    connect( packager, SIGNAL(showThumbnails( KFileTreeViewItem* )),
 	    this, SLOT( slShowThumbnails( KFileTreeViewItem* )));
    connect( m_thumbview, SIGNAL( selectFromThumbnail( const KURL& )),
 	    packager, SLOT( slSelectImage(const KURL&)));
-   connect(packager,SIGNAL(selectionChanged()),
+   connect(packager, SIGNAL(selectionChanged()),
 	   this,SLOT(slotGallerySelectionChanged()));
    connect(packager,SIGNAL(showImage(const KookaImage *,bool)),
 	   this,SLOT(slotLoadedImageChanged(const KookaImage *,bool)));
 
-
-   /*
-    * Create a Kombobox that holds the last folders visible even on the preview page
-    */
-   m_dockRecent  = parent->createDockWidget( "Recent",
-					     loader->loadIcon( "image", KIcon::Small ),
-					     0L, i18n("Gallery Folders"));
-
-   m_dockRecent->setDockSite(KDockWidget::DockFullSite);
-
-   QHBox *recentBox = new QHBox( m_dockRecent );
-   recentBox->setMargin(KDialog::marginHint());
-   QLabel *lab = new QLabel( i18n("Gallery:"), recentBox );
-   lab->setSizePolicy( QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed) );
-   recentFolder = new ImageNameCombo( recentBox );
-
-   m_dockRecent->setWidget( recentBox );
-   m_dockRecent->manualDock( m_dockPackager,              // dock target
-                         KDockWidget::DockBottom, // dock site
-                         5 );                  // relation target/this (in percent)
-
-
-
-   connect( packager,  SIGNAL( galleryPathSelected( KFileTreeBranch*, const QString&)),
-	    recentFolder, SLOT( slotGalleryPathChanged( KFileTreeBranch*, const QString& )));
-
-   connect( packager,  SIGNAL( directoryToRemove( KFileTreeBranch*, const QString&)),
-	    recentFolder, SLOT(   slotPathRemove( KFileTreeBranch*, const QString& )));
-
-   connect( recentFolder, SIGNAL(activated( const QString& )),
-	    packager, SLOT(slotSelectDirectory( const QString& )));
+   ImageNameCombo *recentFolder = m_gallery->galleryRecent();
+   connect(packager,SIGNAL(galleryPathChanged( KFileTreeBranch *,const QString &)),
+           recentFolder,SLOT(slotPathChanged(KFileTreeBranch *,const QString &)));
+   connect(packager,SIGNAL(galleryDirectoryRemoved(KFileTreeBranch *,const QString &)),
+	    recentFolder,SLOT(slotPathRemoved(KFileTreeBranch *,const QString &)));
+   connect(recentFolder,SIGNAL(pathSelected(const QString &,const QString &)),
+           packager,SLOT(slotSelectDirectory(const QString &,const QString &)));
 
    /* the object from the kscan lib to handle low level scanning */
    m_dockScanParam = parent->createDockWidget( "Scan Parameter",
@@ -212,7 +187,7 @@ KookaView::KookaView( KParts::DockMainWindow *parent, const QCString& deviceToUs
    if (!deviceToUse.isEmpty() && deviceToUse!="gallery")
        sane->addUserSpecifiedDevice(deviceToUse,"on command line",true);
 
-   m_dockScanParam->manualDock( m_dockRecent,              // dock target
+   m_dockScanParam->manualDock( m_dockPackager,              // dock target
 				KDockWidget::DockBottom, // dock site
 				20 );                  // relation target/this (in percent)
    m_dockScanParam->hide();
@@ -527,7 +502,7 @@ void KookaView::slSelectionChanged()
 
 void KookaView::slotGallerySelectionChanged()
 {
-    KFileTreeViewItem *fti = packager->currentKFileTreeViewItem();
+    KFileTreeViewItem *fti = m_gallery->currentItem();
 
     if (fti==NULL)
     {
@@ -539,7 +514,7 @@ void KookaView::slotGallerySelectionChanged()
         emit signalChangeStatusbar(i18n("Gallery %1 %2")
                                    .arg(fti->isDir() ? i18n("folder") : i18n("image"))
                                    .arg(fti->url().pathOrURL()));
-	emit signalGallerySelectionChanged(fti->isDir(),packager->selectedItems().count());
+	emit signalGallerySelectionChanged(fti->isDir(),gallery()->selectedItems().count());
     }
 }
 
@@ -555,16 +530,15 @@ void KookaView::slotLoadedImageChanged(const KookaImage *img,bool isDir)
 
 bool KookaView::galleryRootSelected() const
 {
-    if (packager==NULL) return (false);
-    KFileTreeViewItem *tvi = packager->currentKFileTreeViewItem();
+    KFileTreeViewItem *tvi = m_gallery->currentItem();
     if (tvi==NULL) return (true);
-    return (tvi==packager->branches().first()->root());
+    return (tvi==gallery()->branches().first()->root());
 }
 
 
 void KookaView::loadStartupImage()
 {
-   KConfig *konf = KGlobal::config ();
+   KConfig *konf = KGlobal::config();
    konf->setGroup(GROUP_STARTUP);
    bool wantReadOnStart = konf->readBoolEntry(STARTUP_READ_IMAGE,true);
 
@@ -572,7 +546,7 @@ void KookaView::loadStartupImage()
    {
        QString startup = konf->readPathEntry(STARTUP_IMG_SELECTION);
        kdDebug(28000) << k_funcinfo << "load startup image [" << startup << "]" << endl;
-       if (!startup.isEmpty()) packager->slSelectImage(startup);
+       if (!startup.isEmpty()) gallery()->slSelectImage(startup);
    }
    else kdDebug(28000) << k_funcinfo << "Do not load startup image" << endl;
 }
@@ -582,7 +556,7 @@ void KookaView::print()
 {
     /* For now, print a single file. Later, print multiple images to one page */
 
-    KookaImage *img = packager->getCurrImage(true);	// load image if necessary
+    KookaImage *img = gallery()->getCurrImage(true);	// load image if necessary
     if (img==NULL) return;
 
     KPrinter printer; // ( true, pMode );
@@ -609,40 +583,6 @@ void KookaView::slNewPreview( QImage *new_img,ImgScanInfo *info)
 }
 
 
-bool KookaView::ToggleVisibility( int item )
-{
-   QWidget *w = 0;
-   bool    ret = false;
-
-   switch( item )
-   {
-      case ID_VIEW_SCANPARAMS:
-	 w = scan_params;
-	 break;
-      case ID_VIEW_POOL:
-	 w = preview_canvas;
-	 break;
-      default:
-	 w = 0;
-   }
-
-   if( w )
-   {
-      if( w->isVisible() )
-      {
-	 w->hide();
-	 ret = false;
-      }
-      else
-      {
-	 w->show();
-	 ret = true;
-      }
-   }
-   return ret;
-}
-
-
 void KookaView::doOCRonSelection()
 {
    emit signalChangeStatusbar(i18n("Starting OCR on selection"));
@@ -658,7 +598,7 @@ void KookaView::doOCR()
 {
    emit signalChangeStatusbar(i18n("Starting OCR on the image"));
 
-   KookaImage *img = packager->getCurrImage(true);
+   KookaImage *img = gallery()->getCurrImage(true);
    startOCR(img);
 
    emit signalCleanStatusbar();
@@ -801,7 +741,7 @@ void KookaView::slNewImageScanned( QImage* img, ImgScanInfo* si )
     if ( isPhotoCopyMode ) return;
     KookaImageMeta *meta = new KookaImageMeta;
     meta->setScanResolution(si->getXResolution(), si->getYResolution());
-    packager->addImage(img, meta);
+    gallery()->addImage(img, meta);
 }
 
 
@@ -861,7 +801,7 @@ void KookaView::slCreateNewImgFromSelection()
       QImage img;
       if( img_canvas->selectedImage( &img ) )
       {
-	 packager->addImage( &img );
+	 gallery()->addImage( &img );
       }
       emit( signalCleanStatusbar( ));
    }
@@ -871,7 +811,7 @@ void KookaView::slCreateNewImgFromSelection()
 
 void KookaView::slRotateImage(int angle)
 {
-   KookaImage *img = packager->getCurrImage();
+   KookaImage *img = gallery()->getCurrImage();
    bool doUpdate = true;
 
    if( img )
@@ -1020,7 +960,7 @@ void KookaView::slShowThumbnails(KFileTreeViewItem *dirKfi, bool forceRedraw )
    if( ! dirKfi )
    {
       /* do on the current visible dir */
-      KFileTreeViewItem *kftvi = packager->currentKFileTreeViewItem();
+      KFileTreeViewItem *kftvi = m_gallery->currentItem();
       if ( !kftvi )
       {
           return;
@@ -1035,7 +975,7 @@ void KookaView::slShowThumbnails(KFileTreeViewItem *dirKfi, bool forceRedraw )
 	 kftvi = static_cast<KFileTreeViewItem*>(static_cast<QListViewItem*>(kftvi)->parent());
 	 dirKfi = kftvi;
 	 forceRedraw = true;
-	 packager->setSelected( static_cast<QListViewItem*>(dirKfi), true );
+	 gallery()->setSelected( static_cast<QListViewItem*>(dirKfi), true );
       }
    }
 
@@ -1084,7 +1024,7 @@ void KookaView::updateCurrImage( QImage& img )
     if( ! img_canvas->readOnly() )
     {
 	emit( signalChangeStatusbar( i18n("Storing image changes" )));
-	packager->slotCurrentImageChanged( &img );
+	gallery()->slotCurrentImageChanged( &img );
 	emit( signalCleanStatusbar());
     }
     else
@@ -1097,18 +1037,16 @@ void KookaView::updateCurrImage( QImage& img )
 
 void KookaView::saveProperties(KConfig *config)
 {
-   kdDebug(28000) << "Saving Properties for KookaView !" << endl;
-   config->setGroup( GROUP_STARTUP );
-   /* Get with path */
-   config->writePathEntry( STARTUP_IMG_SELECTION, packager->getCurrImageFileName(true));
+    kdDebug(28000) << k_funcinfo << endl;
+
+    config->setGroup(GROUP_STARTUP);
+    config->writePathEntry(STARTUP_IMG_SELECTION,gallery()->getCurrImageFileName(true));
 }
 
 
 void KookaView::slOpenCurrInGraphApp()
 {
-    if (packager==NULL) return;
-
-    KFileTreeViewItem *ftvi = packager->currentKFileTreeViewItem();
+    KFileTreeViewItem *ftvi = m_gallery->currentItem();
     if (ftvi==NULL) return;
 
     KURL::List urllist(ftvi->url());
@@ -1162,37 +1100,32 @@ QImage KookaView::rotateRight( QImage *m_img )
 
 void KookaView::connectViewerAction( KAction *action )
 {
-   QPopupMenu *popup = img_canvas->contextMenu();
-   //kdDebug(28000) << "This is the popup: " << popup << endl;
-   if( popup && action )
-   {
-      action->plug( popup );
-   }
+    QPopupMenu *popup = img_canvas->contextMenu();
+    if (popup!=NULL && action!=NULL) action->plug(popup);
 }
+
 
 void KookaView::connectGalleryAction( KAction *action )
 {
-   QPopupMenu *popup = packager->contextMenu();
-
-   if( popup && action )
-   {
-      action->plug( popup );
-   }
+    QPopupMenu *popup = gallery()->contextMenu();
+    if (popup!=NULL && action!=NULL) action->plug(popup);
 }
 
-void KookaView::slFreshUpThumbView()
+
+void KookaView::slotApplySettings()
 {
-   if( m_thumbview )
+   if (m_thumbview!=NULL)
    {
-      /* readSettings returns true if something changes */
-      if( m_thumbview->readSettings() )
-      {
-	 kdDebug(28000) << "Thumbview-Settings changed, readraw thumbs" << endl;
-	 /* new settings */
-	 slShowThumbnails(0, true);
-      }
+       if (m_thumbview->readSettings())			/* true if something changes */
+       {
+           kdDebug(28000) << "Thumbview-Settings changed, readraw thumbs" << endl;
+           slShowThumbnails(0,true);			/* with new settings */
+       }
    }
+
+   if (m_gallery!=NULL) m_gallery->readSettings();	// layout and rename
 }
+
 
 void KookaView::createDockMenu( KActionCollection *col, KDockMainWindow *mainWin, const char * name )
 {
@@ -1206,9 +1139,6 @@ void KookaView::createDockMenu( KActionCollection *col, KDockMainWindow *mainWin
 					 KShortcut(), m_dockPreview, col,
 					 mainWin, "dock_preview" ));
 
-   actionMenu->insert( new dwMenuAction( i18n("Show Recent Gallery Folders"),
-					 KShortcut(), m_dockRecent, col,
-					 mainWin, "dock_recent" ));
    actionMenu->insert( new dwMenuAction( i18n("Show Gallery"),
 					 KShortcut(), m_dockPackager, col,
 					 mainWin, "dock_gallery" ));
@@ -1266,7 +1196,7 @@ void KookaView::slPhotoCopyScan( KScanStat status )
     kdDebug(28000) << "Resolution " << res.get() << endl;
 
 //    photoCopyPrinter->addDialogPage( new ImgPrintDialog( 0 ) );
-    if( photoCopyPrinter->setup( 0, "PhotoCopy" )) {
+    if( photoCopyPrinter->setup( 0, "Photocopy" )) {
         Q_CHECK_PTR( sane );
         scan_params->slStartScan( );
     }

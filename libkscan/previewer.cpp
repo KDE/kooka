@@ -308,7 +308,7 @@ QString Previewer::galleryRoot()
 
 }
 
-void Previewer::newImage(QImage *ni)
+void Previewer::newImage(const QImage *ni)
 {
    kdDebug(29000) << k_funcinfo << "size=" << ni->size() << endl;
 

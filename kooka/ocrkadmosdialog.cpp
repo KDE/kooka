@@ -48,9 +48,6 @@
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
 
-#include "resource.h"
-//#include "ksaneocr.h"  // TODO: Really needed?
-
 #include "ocrkadmosengine.h"
 
 #include "ocrkadmosdialog.h"

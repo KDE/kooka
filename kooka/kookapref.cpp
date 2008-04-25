@@ -240,26 +240,41 @@ bool KookaPref::checkOCRBin(const QString &cmd,const QString &bin,bool show_msg)
 
 void KookaPref::setupGeneralPage()
 {
-    konf->setGroup(GROUP_GENERAL);
-
     QFrame *page = addPage( i18n("General"), i18n("General Options" ),
 			    BarIcon("configure", KIcon::SizeMedium ) );
-    QVBoxLayout *top = new QVBoxLayout( page, 0, KDialogBase::spacingHint() );
-    top->addSpacing(KDialogBase::marginHint());
+    QVBoxLayout *top = new QVBoxLayout( page, 0, spacingHint() );
 
-    /* Allow renaming in gallery */
-    cbAllowRename = new QCheckBox( i18n("Click-to-rename in gallery"),
-				page);
+    /* Description-Label */
+    top->addWidget(new QLabel(i18n("These options will take effect immediately."),page));
+    top->addSpacing(2*KDialogBase::spacingHint());
+
+    /* Gallery options */
+    QVGroupBox *gg = new QVGroupBox(i18n("Image Gallery"),page);
+
+    konf->setGroup(GROUP_GALLERY);
+
+    /* Layout */
+    QHBox *hb1 = new QHBox(gg);
+    QLabel *lab = new QLabel(i18n("Show recent folders: "),hb1);
+
+    layoutCB = new KComboBox(hb1);
+    layoutCB->insertItem(i18n("Not shown"),KookaGallery::NoRecent);
+    layoutCB->insertItem(i18n("At top"),KookaGallery::RecentAtTop);
+    layoutCB->insertItem(i18n("At bottom"),KookaGallery::RecentAtBottom);
+    layoutCB->setCurrentItem(konf->readNumEntry(GALLERY_LAYOUT,KookaGallery::RecentAtTop));
+    lab->setBuddy(layoutCB);
+    hb1->setStretchFactor(layoutCB,1);
+
+    /* Allow renaming */
+    cbAllowRename = new QCheckBox(i18n("Allow click-to-rename"),gg);
     QToolTip::add( cbAllowRename,
 		   i18n( "Check this if you want to be able to rename gallery items by clicking on them "
                          "(otherwise, use the \"Rename\" menu option)"));
-    cbAllowRename->setChecked(konf->readBoolEntry(GENERAL_ALLOW_RENAME,false));
-    top->addWidget(cbAllowRename);
+    cbAllowRename->setChecked(konf->readBoolEntry(GALLERY_ALLOW_RENAME,false));
 
-    top->addSpacing(KDialogBase::marginHint());
-    KSeparator *sep = new KSeparator(KSeparator::HLine,page);
-    top->addWidget(sep);
-    top->addSpacing(KDialogBase::marginHint());
+    top->addWidget(gg);
+
+    top->addSpacing(2*KDialogBase::marginHint());
 
     /* Enable messages and questions */
     QLabel *l = new QLabel(i18n("Use this button to reenable all messages and questions which\nhave been hidden by using \"Don't ask me again\"."),page);
@@ -426,9 +441,10 @@ void KookaPref::slotOk( void )
 
 void KookaPref::slotApply( void )
 {
-   /* ** general options ** */
-   konf->setGroup(GROUP_GENERAL);
-   konf->writeEntry(GENERAL_ALLOW_RENAME,allowGalleryRename());
+   /* ** general - gallery options ** */
+   konf->setGroup(GROUP_GALLERY);
+   konf->writeEntry(GALLERY_ALLOW_RENAME,galleryAllowRename());
+   konf->writeEntry(GALLERY_LAYOUT,galleryLayout());
 
     /* ** startup options ** */
    /** write the global one, to read from libkscan also */
@@ -492,6 +508,8 @@ default:    break;
 void KookaPref::slotDefault( void )
 {
     cbAllowRename->setChecked(false);
+    layoutCB->setCurrentItem(KookaGallery::RecentAtTop);
+
     cbNetQuery->setChecked( true );
     cbShowScannerSelection->setChecked( true);
     cbReadStartupImage->setChecked( true);
@@ -512,9 +530,15 @@ void KookaPref::slotDefault( void )
 }
 
 
-bool KookaPref::allowGalleryRename()
+bool KookaPref::galleryAllowRename() const
 {
     return (cbAllowRename->isChecked());
+}
+
+
+KookaGallery::Layout KookaPref::galleryLayout() const
+{
+    return (static_cast<KookaGallery::Layout>(layoutCB->currentItem()));
 }
 
 

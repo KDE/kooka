@@ -1,4 +1,4 @@
-/***************************************************************************
+/***************************************************** -*- mode:c++; -*- ***
                           scanpackager.h  -  description
                              -------------------
     begin                : Fri Dec 17 1999
@@ -79,7 +79,7 @@ public slots:
     void        slotImportFile();
    void         slotCurrentImageChanged( QImage* );
 
-   void         slotSelectDirectory( const QString& );
+   void         slotSelectDirectory(const QString &branchName,const QString &relPath);
 
 protected:
    virtual void contentsDragMoveEvent( QDragMoveEvent *e );
@@ -110,8 +110,8 @@ signals:
    void         showImage(const KookaImage *img,bool isDir);
    void         deleteImage( KookaImage* );
    void         unloadImage( KookaImage* );
-   void         galleryPathSelected( KFileTreeBranch* branch, const QString& relativPath );
-   void         directoryToRemove( KFileTreeBranch *branch, const QString& relativPath );
+   void         galleryPathChanged( KFileTreeBranch* branch, const QString& relativPath );
+   void         galleryDirectoryRemoved( KFileTreeBranch *branch, const QString& relativPath );
    void         showThumbnails( KFileTreeViewItem* );
 
    void         aboutToShowImage( const KURL& ); /* starting to load image */

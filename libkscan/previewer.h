@@ -57,7 +57,7 @@ public:
     void findSelection();
 
 public slots:
-    void newImage( QImage* );
+    void newImage(const QImage *ni);
     void slFormatChange( int id );
     void slOrientChange(int);
     void slSetDisplayUnit( KRuler::MetricStyle unit );

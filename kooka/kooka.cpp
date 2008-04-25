@@ -41,6 +41,7 @@
 
 #include "kookapref.h"
 #include "kookaview.h"
+#include "scanpackager.h"
 
 #include "kooka.h"
 #include "kooka.moc"
@@ -276,7 +277,7 @@ void Kooka::setupActions()
 		       m_view, SLOT( slStartFinalScan()),
 		       actionCollection(), "startScan" );
 
-    photocopyAction = new KAction(i18n("PhotoCopy"), "photocopy", CTRL+Key_F,
+    photocopyAction = new KAction(i18n("Photocopy..."), "photocopy", CTRL+Key_F,
 		       m_view, SLOT( slStartPhotoCopy()),
 		       actionCollection(), "startPhotoCopy" );
 
@@ -375,19 +376,11 @@ void Kooka::newToolbarConfig()
 
 void Kooka::optionsPreferences()
 {
-    // popup some sort of preference dialog, here
     KookaPref dlg;
     dlg.showPage(m_prefDialogIndex);
-    connect(&dlg,SIGNAL(dataSaved()),m_view,SLOT(slFreshUpThumbView()));
+    connect(&dlg,SIGNAL(dataSaved()),m_view,SLOT(slotApplySettings()));
 
-    if (dlg.exec())
-    {
-        // redo your settings
-       m_prefDialogIndex = dlg.activePageIndex();
-
-       m_view->gallery()->setAllowRename(dlg.allowGalleryRename());
-       // m_view->slFreshUpThumbView();
-    }
+    if (dlg.exec()) m_prefDialogIndex = dlg.activePageIndex();
 }
 
 

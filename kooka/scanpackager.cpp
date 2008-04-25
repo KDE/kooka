@@ -52,7 +52,6 @@
 #include "kookaimage.h"
 #include "kookaimagemeta.h"
 #include "previewer.h"
-#include "kookapref.h"
 
 #include "scanpackager.h"
 #include "scanpackager.moc"
@@ -60,7 +59,8 @@
 
 /* ----------------------------------------------------------------------- */
 /* Constructor Scan Packager */
-ScanPackager::ScanPackager( QWidget *parent ) : KFileTreeView( parent )
+ScanPackager::ScanPackager(QWidget *parent)
+    : KFileTreeView(parent)
 {
    setItemsRenameable(false);				// set later from config
    setDefaultRenameAction( QListView::Reject );
@@ -86,10 +86,6 @@ ScanPackager::ScanPackager( QWidget *parent ) : KFileTreeView( parent )
 
    connect(this,SIGNAL(dropped(KFileTreeView *,QDropEvent *,QListViewItem *,QListViewItem *)),
            SLOT(slotUrlsDropped(KFileTreeView *,QDropEvent *,QListViewItem *,QListViewItem *)));
-
-   KConfig *konf = KGlobal::config();
-   konf->setGroup(GROUP_GENERAL);
-   setAllowRename(konf->readBoolEntry(GENERAL_ALLOW_RENAME,false));
 
    setRootIsDecorated( false );
 
@@ -199,7 +195,7 @@ void ScanPackager::slotDirCount(KFileTreeViewItem* item,int cnt)
     const QListViewItem *ch = item->firstChild();
     while (ch!=NULL)
     {
-        KFileTreeViewItem *ci = static_cast<const KFileTreeViewItem*>(ch);
+        const KFileTreeViewItem *ci = static_cast<const KFileTreeViewItem*>(ch);
         if (ci->isDir()) ++dirCount;
         else ++imgCount;
         ch = ch->nextSibling();
@@ -217,7 +213,7 @@ void ScanPackager::slotDirCount(KFileTreeViewItem* item,int cnt)
         cc += i18n("1 folder","%n folders",dirCount);
     }
 
-    item->setText(1,cc);
+    item->setText(1," "+cc);
 }
 
 
@@ -228,10 +224,10 @@ void ScanPackager::slotItemExpanded(QListViewItem *item)
     KFileTreeViewItem *it = static_cast<KFileTreeViewItem*>(item);
     if (!it->isDir()) return;
 
-    const QListViewItem *ch = item->firstChild();
+    QListViewItem *ch = item->firstChild();
     while (ch!=NULL)
     {
-        KFileTreeViewItem *ci = static_cast<const KFileTreeViewItem*>(ch);
+        KFileTreeViewItem *ci = static_cast<KFileTreeViewItem *>(ch);
         if (ci->isDir() && !ci->alreadyListed()) ci->branch()->populate(ci->url(),ci);
         ch = ch->nextSibling();
     }
@@ -295,7 +291,7 @@ void ScanPackager::slotDecorate( KFileTreeViewItem* item )
 
       /* Image format */
       QString format = getImgFormat( item );
-      item->setText( 2, format );
+      item->setText( 2, " "+format );
    }
 
    // This code is quite similar to m_nextUrlToSelect in KFileTreeView::slotNewTreeViewItems
@@ -487,42 +483,29 @@ QString ScanPackager::itemDirectory( const KFileTreeViewItem* item, bool relativ
    }
    return( relativUrl );
 }
+
+
 /* ----------------------------------------------------------------------- */
 /* This slot receives a string from the gallery-path combobox shown under the
- * image gallery. The form of the string coming in here is <branch-name> - <
- * relativ directory under the branch. Now it is to assemble a complete path
- * from the data, find out which KFileTreeViewItem is associated with it and
- * call slClicked with it.
+ * image gallery, the relative directory under the branch.  Now it is to assemble
+ * a complete path from the data, find out which KFileTreeViewItem is associated
+ * with it and call slClicked with it.
  */
 
-void ScanPackager::slotSelectDirectory( const QString & dirString )
+void ScanPackager::slotSelectDirectory(const QString &branchName,const QString &relPath)
 {
-   kdDebug(28000) << "Trying to decode directory string " << dirString << endl;
+    kdDebug(28000) << k_funcinfo << "branch=" << branchName << " path=" << relPath << endl;
 
-   QString searchFor = QString::fromLatin1(" - ");
-   int pos = dirString.find( searchFor );
+    KFileTreeViewItem *kfi;
+    if (!branchName.isEmpty()) kfi = findItem(branchName,relPath);
+    else kfi = findItem(branches().at(0),relPath);
+    if (kfi==NULL) return;
 
-   if( pos > -1 )
-   {
-      /* Splitting up the string coming in */
-      QString branchName = dirString.left( pos );
-      QString relPath( dirString );
-
-      relPath = relPath.remove( 0, pos + searchFor.length());
-
-      kdDebug(28000) << "Splitted up to branch <" << branchName << "> and <" << relPath << endl;
-
-      KFileTreeViewItem *kfi = findItem( branchName, relPath );
-
-      if( kfi )
-      {
-	 kdDebug(28000) << "got a new item to select !" << endl;
-	 ensureItemVisible(kfi);
-	 setCurrentItem(kfi);
-         slClicked(kfi); // load thumbnails for this dir etc.
-      }
-   }
+    ensureItemVisible(kfi);
+    setCurrentItem(kfi);
+    slClicked(kfi);					// load thumbnails, etc.
 }
+
 
 /* ----------------------------------------------------------------------- */
 /* This slot is called when clicking on an item.                           */
@@ -538,7 +521,6 @@ void ScanPackager::slClicked( QListViewItem *newItem )
       {
 	 kdDebug(28000) << "clicked: Is a directory !" << endl;
 	 emit showImage(NULL,true);
-	 kdDebug(28000) << "emitting showThumbnails" << endl;
       }
       else
       {
@@ -559,15 +541,15 @@ void ScanPackager::slClicked( QListViewItem *newItem )
 	 QString relativUrl = itemDirectory( item, true );
 	 kdDebug(28000) << "Emitting " << relativUrl << " as new relative Url" << endl;
 	 /* Emit the signal with branch and the relative path */
-	 emit( galleryPathSelected( item->branch(), relativUrl ));
+	 emit( galleryPathChanged( item->branch(), relativUrl ));
 
-	 if( item->isDir() )
+	 if (item->isDir())
 	 {
-	    emit( showThumbnails( item ));
+	    emit showThumbnails(item);
 	 }
 	 else
 	 {
-	    emit( showThumbnails(  static_cast<KFileTreeViewItem*>(item->parent())));
+	    emit showThumbnails(static_cast<KFileTreeViewItem*>(item->parent()));
 	 }
       }
       else
@@ -1063,56 +1045,52 @@ void ScanPackager::slotCanceled( KIO::Job* )
 
 
 /* ----------------------------------------------------------------------- */
-void ScanPackager::slotUnloadItems( )
+void ScanPackager::slotUnloadItems()
 {
-   KFileTreeViewItem *curr = currentKFileTreeViewItem();
-   emit showImage(NULL,false);
-   slotUnloadItem( curr );
+    KFileTreeViewItem *curr = currentKFileTreeViewItem();
+    emit showImage(NULL,false);
+    slotUnloadItem(curr);
 }
 
-void ScanPackager::slotUnloadItem( KFileTreeViewItem *curr )
+
+void ScanPackager::slotUnloadItem(KFileTreeViewItem *curr)
 {
-   if( ! curr ) return;
+    if (curr==NULL) return;
 
-   if( curr->isDir())
-   {
-      KFileTreeViewItem *child = static_cast<KFileTreeViewItem*>(curr->firstChild());
-      while( child )
-      {
-	 kdDebug(28000) << "Unloading item " << child << endl;
-	 slotUnloadItem( child );
-	 child = static_cast<KFileTreeViewItem*> (child->nextSibling());
-      }
-   }
-   else
-   {
-      KFileItem *kfi = curr->fileItem();
-      KookaImage *image = static_cast<KookaImage*>(kfi->extraData( this ));
+    if (curr->isDir())					// is a directory
+    {
+        KFileTreeViewItem *child = static_cast<KFileTreeViewItem*>(curr->firstChild());
+        while (child!=NULL)
+        {
+            slotUnloadItem(child);			// recursively unload contents
+            child = static_cast<KFileTreeViewItem*>(child->nextSibling());
+        }
+    }
+    else						// is a file/image
+    {
+        KFileItem *kfi = curr->fileItem();
+        KookaImage *image = static_cast<KookaImage*>(kfi->extraData(this));
 
-      /* If image is zero, ok, than there is nothing to unload :) */
-      if( image )
-      {
-	 if( image->subImagesCount() > 0 )
-	 {
+        if (image==NULL) return;			// ok, nothing to unload
+
+        if (image->subImagesCount()>0)			// image with subimages
+        {
 	    KFileTreeViewItem *child = static_cast<KFileTreeViewItem*>(curr->firstChild());
-
-	    while( child )
+	    while (child!=NULL)				// recursively unload subimages
 	    {
-	       KFileTreeViewItem *nextChild = 0;
-	       kdDebug(28000) << "Unloading subimage item " << child << endl;
-	       slotUnloadItem( child );
-	       nextChild = static_cast<KFileTreeViewItem*> (child->nextSibling());
-	       delete child;
-	       child = nextChild;
+                KFileTreeViewItem *nextChild = NULL;
+                slotUnloadItem(child);
+                nextChild = static_cast<KFileTreeViewItem*>(child->nextSibling());
+                delete child;
+                child = nextChild;
 	    }
-	 }
+        }
 
-	 emit( unloadImage( image ));
-	 delete image;
-	 kfi->removeExtraData( this );
-	 slotDecorate( curr );
-      }
-   }
+        emit unloadImage(image);
+        delete image;
+        kfi->removeExtraData(this);
+        slotDecorate(curr);
+    }
 }
 
 
@@ -1177,11 +1155,10 @@ void ScanPackager::slotDeleteItems()
 
     updateParent(curr);
 
-    /* TODO: remove the directory from the imageNameCombobox */
     if (isDir)
     {
         /* The directory needs to be removed from the name combo */
-        emit(directoryToRemove(curr->branch(),itemDirectory(curr,true)));
+        emit galleryDirectoryRemoved(curr->branch(),itemDirectory(curr,true));
     }
 }
 

@@ -1,9 +1,6 @@
-/***************************************************************************
-                          imgnamecombo.h - combobox for image names
+/***************************************************** -*- mode:c++; -*- ***
+                          kookagallery.h  -  Main view
                              -------------------
-    begin                : Tue Nov 13 2001
-    copyright            : (C) 2001 by Klaas Freitag
-    email                : freitag@suse.de
  ***************************************************************************/
 
 /***************************************************************************
@@ -24,35 +21,49 @@
  *                                                                         *
  ***************************************************************************/
 
+#ifndef KOOKAGALLERY_H
+#define KOOKAGALLERY_H
 
-#ifndef IMGNAMECOMBO_H
-#define IMGNAMECOMBO_H
+#include <qframe.h>
+
+#include "scanpackager.h"
+
+class QGridLayout;
+class QHBox;
+
+class KFileTreeViewItem;
+
+class ImageNameCombo;
 
 
-#include <kcombobox.h>
-
-/**
-  *@author Klaas Freitag
-*/
-
-class QListViewItem;
-class KFileBranch;
-class KFileTreeBranch;
-
-class ImageNameCombo: public KComboBox
+class KookaGallery : public QFrame
 {
-   Q_OBJECT
+    Q_OBJECT
+
 public:
-   ImageNameCombo( QWidget* );
-   ~ImageNameCombo();
+    enum Layout
+    {
+        NoRecent,
+        RecentAtTop,
+        RecentAtBottom
+    };
 
-public slots:
+    KookaGallery(QWidget *parent);
 
-   void slotGalleryPathChanged( KFileTreeBranch* branch, const QString& relativPath );
-   void slotPathRemove( KFileTreeBranch *branch, const QString& relPath );
+    void readSettings();
+
+    ScanPackager *galleryTree() const		{ return (m_galleryTree); }
+    KFileTreeViewItem *currentItem() const	{ return (m_galleryTree->currentKFileTreeViewItem()); }
+    ImageNameCombo *galleryRecent() const	{ return (m_galleryRecent); }
+
 private:
-   void rewriteList( KFileTreeBranch *, const QString& selText );
-   QStringList items;
+    void setLayout(KookaGallery::Layout option);
+
+    QGridLayout *m_layout;
+    QHBox *m_recentBox;
+
+    ImageNameCombo *m_galleryRecent;
+    ScanPackager *m_galleryTree;
 };
 
-#endif
+#endif							// KOOKAGALLERY_H

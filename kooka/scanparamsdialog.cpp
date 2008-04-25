@@ -171,7 +171,16 @@ void ScanParamsDialog::slotSave()
     if (item!=NULL) name = item->text();
     kdDebug(28000) << k_funcinfo << "selected set [" << name << "]" << endl;
 
-    NewScanParams d(this,name,(sets.contains(name) ? sets[name] : QString::null),false);
+    QString newdesc = QString::null;
+    if (sets.contains(name)) newdesc = sets[name];
+    else
+    {
+        const KScanOption *sm = sane->getExistingGuiElement(SANE_NAME_SCAN_MODE);
+        const KScanOption *sr = sane->getExistingGuiElement(SANE_NAME_SCAN_RESOLUTION);
+        if (sm!=NULL && sr!=NULL) newdesc = i18n("%1, %2 dpi").arg(sm->get(),sr->get());
+    }
+
+    NewScanParams d(this,name,newdesc,false);
     if (d.exec())
     {
         QString newName = d.getName();

@@ -1,4 +1,4 @@
-/***************************************************************************
+/***************************************************** -*- mode:c++; -*- ***
                           kookaview.h  -  Main view
                              -------------------
     begin                : Sun Jan 16 2000
@@ -41,22 +41,23 @@
 // application specific includes
 #include "kscandevice.h"
 #include "previewer.h"
-#include "scanpackager.h"
 #include "scanparams.h"
 #include "img_canvas.h"
+#include "kookagallery.h"
 
 class KDockWidget;
 class QPainter;
 class OcrEngine;
 class KConfig;
 class KPrinter;
-class KComboBox;
 class KAction;
 class KActionCollection;
 class ThumbView;
 class KookaImage;
 class QPixmap;
 class ocrResEdit;
+class KFileTreeViewItem;
+
 /**
  * This is the main view class for Kooka.  Most of the non-menu,
  * non-toolbar, and non-statusbar (e.g., non frame) GUI code should go
@@ -88,17 +89,12 @@ public:
      */
     void print( );
 
-    bool ToggleVisibility( int );
-    void loadStartupImage( void );
-    KDockWidget *mainDockWidget( ) { return m_mainDock; }
+    void loadStartupImage();
+    KDockWidget *mainDockWidget() const	{ return (m_mainDock); }
+    ScanPackager *gallery() const	{ return (m_gallery->galleryTree()); }
+    ImageCanvas *getImageViewer() const	{ return (img_canvas); }
 
     void createDockMenu( KActionCollection*, KDockMainWindow *, const char *);
-
-    ScanPackager *gallery() { return packager; }
-
-    // KParts::Part* ocrResultPart() { return m_textEdit; }
-
-    ImageCanvas *getImageViewer() { return img_canvas; }
 
     bool scannerConnected() const { return (haveConnection); }
     QString scannerName() const;
@@ -147,7 +143,7 @@ public slots:
     void slOCRResultImage( const QPixmap& );
 
     void slShowThumbnails( KFileTreeViewItem *dirKfi = 0, bool forceRedraw=false);
-     void slFreshUpThumbView();
+     void slotApplySettings();
 
     /**
      * slot that show the image viewer
@@ -238,12 +234,12 @@ private:
     ThumbView    *m_thumbview;
 
     Previewer    *preview_canvas;
-    ScanPackager *packager;
+    KookaGallery *m_gallery;
+
     ScanParams   *scan_params;
     bool haveConnection;
 
     KScanDevice  *sane;
-    KComboBox    *recentFolder;
 
     QCString     connectedDevice;
 
@@ -257,7 +253,6 @@ private:
     KDockWidget *m_dockScanParam;
     KDockWidget *m_dockThumbs;
     KDockWidget *m_dockPackager;
-    KDockWidget *m_dockRecent;
     KDockWidget *m_dockPreview;
     KDockWidget *m_dockOCRText;
 

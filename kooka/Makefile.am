@@ -8,7 +8,7 @@ METASOURCES =		AUTO
 kooka_SOURCES =		main.cpp kooka.cpp kookaview.cpp kookapref.cpp 		\
 			imgsaver.cpp formatdialog.cpp ocrengine.cpp 		\
 			kookaimage.cpp kookaimagemeta.cpp scanpackager.cpp 	\
-			imgnamecombo.cpp imageselectline.cpp      		\
+			imagenamecombo.cpp imageselectline.cpp kookagallery.cpp	\
 			thumbview.cpp thumbviewitem.cpp                         \
 			dwmenuaction.cpp ocrbasedialog.cpp ocrgocrdialog.cpp	\
 			ocrkadmosdialog.cpp kadmosocr.cpp ocrword.cpp   	\
@@ -30,7 +30,7 @@ INCLUDES =		-I$(top_srcdir)/libkscan $(all_includes)		\
 noinst_HEADERS =	kookaview.h scanpackager.h				\
 			imgsaver.h formatdialog.h ocrbasedialog.h		\
 			kooka.h kookaiface.h thumbview.h thumbviewitem.h	\
-			kookapref.h resource.h imgnamecombo.h			\
+			kookapref.h imagenamecombo.h kookagallery.h		\
 			imageselectline.h kookaimage.h kookaimagemeta.h		\
 			ocrbasedialog.h ocrgocrdialog.h ocrkadmosdialog.h	\
 			kadmosocr.h ocrword.h ocrresedit.h kookaprint.h		\

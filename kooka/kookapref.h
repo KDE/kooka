@@ -29,10 +29,12 @@
 
 #include <kdialogbase.h>
 
+#include "kookagallery.h"
 #include "ocrengine.h"
 
-#define GROUP_GENERAL           "General"
-#define GENERAL_ALLOW_RENAME    "AllowRename"
+#define GROUP_GALLERY		"Gallery"
+#define GALLERY_ALLOW_RENAME	"AllowRename"
+#define GALLERY_LAYOUT		"Layout"
 
 #define STARTUP_READ_IMAGE      "ReadImageOnStart"
 
@@ -62,7 +64,8 @@ public:
     static QString tryFindGocr();
     static QString tryFindOcrad();
 
-    bool allowGalleryRename();
+    bool galleryAllowRename() const;
+    KookaGallery::Layout galleryLayout() const;
 
 protected slots:
     void slotOk();
@@ -90,6 +93,7 @@ private:
     // General
     QCheckBox *cbAllowRename;
     QPushButton *pbEnableMsgs;
+    KComboBox *layoutCB;
 
     // Startup
     QCheckBox *cbNetQuery;
