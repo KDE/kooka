@@ -192,7 +192,7 @@ protected slots:
      */
     void slViewerReadOnly( bool ro );
 
-    void slSelectionChanged();
+    void slotSelectionChanged(QRect newSelection);
     void slotGallerySelectionChanged();
     void slotLoadedImageChanged(const KookaImage *img,bool isDir);
     void slotOcrResultText(const QString &text);

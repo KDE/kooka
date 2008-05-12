@@ -9,7 +9,7 @@ noinst_HEADERS = kscandevice.h kscancontrols.h kgammatable.h \
 	gammadialog.h dispgamma.h \
 	scansourcedialog.h scanparams.h massscandialog.h devselector.h \
         img_canvas.h previewer.h imgscaledialog.h sizeindicator.h \
-	imgscaninfo.h adddevice.h
+	imgscaninfo.h adddevice.h scansizeselector.h
 
 libkscan_la_SOURCES = kscandevice.cpp kscancontrols.cpp kgammatable.cpp\
         kscanoption.cpp kscanoptset.cpp \
@@ -17,7 +17,7 @@ libkscan_la_SOURCES = kscandevice.cpp kscancontrols.cpp kgammatable.cpp\
 	scansourcedialog.cpp scanparams.cpp massscandialog.cpp \
         devselector.cpp adddevice.cpp scandialog.cpp \
 	img_canvas.cpp previewer.cpp imgscaledialog.cpp sizeindicator.cpp \
-	imgscaninfo.cpp
+	imgscaninfo.cpp scansizeselector.cpp
 
 
 libkscan_la_LDFLAGS = $(all_libraries) $(LIBSANE_LDFLAGS) -no-undefined -version-info 2:0

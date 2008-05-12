@@ -17,16 +17,18 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "sizeindicator.h"
-
-#include <qpalette.h>
-#include <qimage.h>
-
 #include <kimageeffect.h>
 #include <klocale.h>
 #include <kdebug.h>
-#include <qpainter.h>
 
+#include <kio/global.h>
+
+#include <qpainter.h>
+#include <qpalette.h>
+#include <qimage.h>
+
+#include "sizeindicator.h"
+#include "sizeindicator.moc"
 
 
 SizeIndicator::SizeIndicator( QWidget *parent, long  thres, long crit )
@@ -34,7 +36,7 @@ SizeIndicator::SizeIndicator( QWidget *parent, long  thres, long crit )
 {
    sizeInByte = -1;
    setFrameStyle( QFrame::Box | QFrame::Sunken );
-   setMinimumWidth( fontMetrics().width( QString::fromLatin1("MMM.MM MB") ));
+   setMinimumWidth( fontMetrics().width( QString::fromLatin1("MMMM.MM MB") ));
    setCritical( crit );
    threshold = thres;
 
@@ -56,34 +58,18 @@ void SizeIndicator::setThreshold( long thres )
 
 SizeIndicator::~SizeIndicator()
 {
-
 }
 
-void SizeIndicator::setSizeInByte( long newSize )
+
+void SizeIndicator::setSizeInByte(long newSize)
 {
-   sizeInByte = newSize;
-   kdDebug(29000) << "New size in byte: " << newSize << endl ;
+    kdDebug(29000) << k_funcinfo << "New size " << newSize << " bytes" << endl;
 
-   QString t;
+    sizeInByte = newSize;
 
-   QString unit = i18n( "%1 kB" );
-   double sizer = double(sizeInByte)/1024.0; // produces kiloBytes
-   int precision = 1;
-   int fwidth = 3;
-
-   if( sizer > 999.9999999 )
-   {
-      unit = i18n( "%1 MB" );
-      sizer = sizer / 1024.0;
-      precision = 2;
-      fwidth = 2;
-   }
-
-   t = unit.arg( sizer, fwidth, 'f', precision);
-   setText(t);
-
+    if (newSize<0) setText("");
+    else setText(KIO::convertSize(newSize));
 }
-
 
 
 void SizeIndicator::drawContents( QPainter *p )
@@ -109,5 +95,3 @@ void SizeIndicator::drawContents( QPainter *p )
 		AlignHCenter | AlignVCenter, t);
 
 }
-
-#include "sizeindicator.moc"

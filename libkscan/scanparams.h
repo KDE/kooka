@@ -39,6 +39,8 @@ class KGammaTable;
 class KScanOptSet;
 class KLed;
 
+class ScanSizeSelector;
+
 typedef enum { ID_SANE_DEBUG, ID_QT_IMGIO, ID_SCAN } ScanMode;
 
 class ScanParams : public QFrame
@@ -54,14 +56,6 @@ public:
     KLed *operationLED() { return m_led; }
 
 public slots:
-    /**
-     * In this slot, a custom scan window can be set, e.g. through a preview
-     * image with a area selector. The QRect-param needs to contain values
-     * between 0 and 1000, which are interpreted as tenth of percent of the
-     * whole image dimensions.
-     **/
-    void slCustomScanSize( QRect );
-
     /**
      * sets the scan area to the default, which is the whole area.
      */
@@ -124,7 +118,11 @@ protected slots:
      *  the same slot as @see slNewXResolution but for y resolution changes.
      */
     void slNewYResolution( KScanOption* );
+    void slNewScanMode();
 
+
+    void slotScanSizeSelected(QRect rect);
+    void slotNewPreviewRect(QRect rect);
 
 signals:
     /**
@@ -133,26 +131,33 @@ signals:
      *
      *  As parameters the resolutions in x- and y-direction are coming.
      */
-    void scanResolutionChanged( int, int );
+    void scanResolutionChanged(int xres,int yres);
+    void scanModeChanged(int bytes_per_pix);
+
+    void newCustomScanSize(QRect rect);
 
 private:
     KScanStat prepareScan(QString *vfp);
-    void createNoScannerMsg(bool galleryMode);
-    void initialise( KScanOption* );
-    void setEditCustomGammaTableState();
-
     KScanStat performADFScan();
+
+    void createNoScannerMsg(bool galleryMode);
+    void initialise(KScanOption *opt);
+    void initStartupArea();
+    void setEditCustomGammaTableState();
+    QScrollView *scannerParams();
+
+    void applyRect(const QRect &rect);
 
     KScanDevice *sane_device;
     KScanOption *virt_filename;
 
-    QScrollView *scannerParams( );
     QCheckBox *cb_gray_preview;
     QPushButton *pb_edit_gtable;
     QProgressDialog *progressDialog;
 
     AdfBehaviour adf;
     ScanMode scan_mode;
+    ScanSizeSelector *area_sel;
 
     KScanOption *xy_resolution_bind;
     KScanOption *source_sel;

@@ -305,13 +305,14 @@ void KScanOption::slReload()
    if (((size_t) desc->size)>buffer.size())
    {
        kdDebug(29000) << k_funcinfo << "buffer too small for <" << name << ">"
+                      << " type " << desc->type
                       << " size " << buffer.size() << " need " << desc->size << endl;
        allocForDesc();					// grow the buffer
        //return;
    }
 
-   SANE_Status sane_stat = sane_control_option( KScanDevice::scanner_handle, *num,
-                                                SANE_ACTION_GET_VALUE, buffer.data(),NULL);
+   SANE_Status sane_stat = sane_control_option(KScanDevice::scanner_handle,*num,
+                                                SANE_ACTION_GET_VALUE,buffer.data(),NULL);
    if( sane_stat != SANE_STATUS_GOOD )
    {
        kdDebug(29000) << "ERROR: Can't get value for <" << name << "> " << sane_strstatus( sane_stat ) << endl;
@@ -595,7 +596,8 @@ bool KScanOption::set(const QCString &c_string)
 #endif
 
     int val;
-   
+    int origSize;
+
     /* Check if it is a gammatable. If it is, convert to KGammaTable and call
      *  the approbiate set method.
      */
@@ -618,7 +620,9 @@ bool KScanOption::set(const QCString &c_string)
     switch (desc->type)
     {
 case SANE_TYPE_STRING:
+        origSize = buffer.size();
         buffer.duplicate(c_string.data(),(c_string.length()+1));
+        buffer.resize(origSize);			// restore original size
         break;
 
 case SANE_TYPE_INT:
@@ -854,7 +858,7 @@ QStrList KScanOption::getList() const
 
 
 
-bool KScanOption::getRangeFromList( double *min, double *max, double *q ) const
+bool KScanOption::getRangeFromList(double *min,double *max,double *quant) const
 {
    if( !desc ) return( false );
    bool ret = true;
@@ -867,7 +871,7 @@ bool KScanOption::getRangeFromList( double *min, double *max, double *q ) const
 	    double value;
 	    *min = 0;
 	    *max = 0;
-	    *q = -1; // What is q?
+	    if (quant!=NULL) *quant = -1; // What is q?
 
             for( int i=0; i < amount_vals; i++ ) {
 		if( desc->type == SANE_TYPE_FIXED ) {
@@ -878,9 +882,11 @@ bool KScanOption::getRangeFromList( double *min, double *max, double *q ) const
 		if ((*min > value) || (*min == 0)) *min = value;
 		if ((*max < value) || (*max == 0)) *max = value;
 		
+// TODO: "max>min" and "max-min" below are operating on the pointers!!!
+
 		if( min != 0 && max != 0 && max > min ) {
 		    double newq = max - min;
-		    *q = newq;
+		    if (quant!=NULL) *quant = newq;
 		}
 		sint++;
             }
@@ -893,10 +899,12 @@ bool KScanOption::getRangeFromList( double *min, double *max, double *q ) const
 
 
 
-bool KScanOption::getRange( double *min, double *max, double *q ) const
+bool KScanOption::getRange(double *min,double *max,double *quant) const
 {
    if( !desc ) return( false );
    bool ret = true;
+
+// TODO: is SANE_CONSTRAINT_WORD_LIST correct here????
 
    if( desc->constraint_type == SANE_CONSTRAINT_RANGE ||
 	   desc->constraint_type == SANE_CONSTRAINT_WORD_LIST ) {
@@ -905,11 +913,11 @@ bool KScanOption::getRange( double *min, double *max, double *q ) const
       if( desc->type == SANE_TYPE_FIXED ) {
 	  *min = (double) SANE_UNFIX( r->min );
  	  *max = (double) SANE_UNFIX( r->max );
-	  *q   = (double) SANE_UNFIX( r->quant );
+	  if (quant!=NULL) *quant   = (double) SANE_UNFIX( r->quant );
       } else {
 	  *min = r->min ;
 	  *max = r->max ;
-	  *q   = r->quant ;
+	  if (quant!=NULL) *quant = r->quant ;
       }
    } else {
       kdDebug(29000) << "getRange: No range type " << desc->name << endl;
@@ -1067,6 +1075,7 @@ void KScanOption::allocBuffer(long size)
 #ifdef MEM_DEBUG
     kdDebug(29000) << k_funcinfo << "Allocating " << size << " bytes for <" << name << ">" << endl;
 #endif
+
     if (!buffer.resize(size))				// set buffer size
     {
         kdDebug(29000) << k_funcinfo << "FATAL: Allocating " << size << " bytes for <" << name << "> failed!" << endl;

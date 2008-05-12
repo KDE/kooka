@@ -1,4 +1,4 @@
-/* This file is part of the KDE Project
+/* This file is part of the KDE Project			-*- mode:c++; -*-
    Copyright (C) 1999 Klaas Freitag <freitag@suse.de>
 
    This library is free software; you can redistribute it and/or
@@ -20,22 +20,11 @@
 #ifndef __IMG_CANVAS_H__
 #define __IMG_CANVAS_H__
 
-#include <qwidget.h>
 #include <qrect.h>
-#include <stdlib.h>
-#include <qsize.h>
 #include <qwmatrix.h>
 #include <qscrollview.h>
-#include <qstrlist.h>
-
-#ifdef USE_KPIXMAPIO
-#include <kpixmapio.h>
-#endif
 
 class QPopupMenu;
-class QPixmap;
-class QImage;
-class QPainter;
 
 enum preview_state {
 	MOVE_NONE,
@@ -63,12 +52,6 @@ enum cursor_type {
 const int MIN_AREA_WIDTH = 3;
 const int MIN_AREA_HEIGHT = 3;
 const int delta = 3;
-#ifdef __PREVIEW_CPP__
-int max_dpi = 600;
-#else
-extern int max_dpi;
-#endif
-
 
 
 class ImageCanvas: public QScrollView
@@ -85,6 +68,7 @@ public:
                  const QImage *start_image = 0,
                  const char *name = 0);
     ~ImageCanvas( );
+    virtual QSize sizeHint() const;
 
     int getBrightness() const;
     int getContrast() const;
@@ -112,6 +96,8 @@ public:
 
     const QString imageInfoString( int w=0, int h=0, int d=0 );
 
+    void setSelectionRect(const QRect &rect);
+
 public slots:
     void setBrightness(int);
     void setContrast(int );
@@ -122,13 +108,10 @@ public slots:
             maintain_aspect = aspect_in_mind;
             repaint();
         }
-    virtual QSize sizeHint() const;
-    void newImage(const QImage* );
-    void newImageHoldZoom( QImage* );
-    void deleteView( QImage *);
-    void newRectSlot();
-    void newRectSlot( QRect newSel );
-    void noRectSlot( void );
+
+    void newImage(const QImage *new_image,bool hold_zoom = false);
+    void newImageHoldZoom(const QImage *new_image);
+    void deleteView(const QImage *delimage);
     void setScaleFactor( int i );
     void handle_popup(int item );
     void enableContextMenu( bool wantContextMenu );
@@ -156,8 +139,6 @@ public slots:
     bool readOnly();
 	
 signals:
-    void noRect( void );
-    void newRect( void );
     void newRect( QRect );
     void scalingRequested();
     void closingRequested();
@@ -180,6 +161,9 @@ protected:
     void resizeEvent( QResizeEvent * event );
 
 private:
+    void startMarqueeTimer();
+    void stopMarqueeTimer();
+
     QStrList      urls;
 
     int           scale_factor;
@@ -200,16 +184,16 @@ private:
     bool		 maintain_aspect;
 
     int	         timer_id;
-    QRect 	 *selected;
+    QRect selected;
     preview_state moving;
     int 		 cr1,cr2;
     int 		 lx,ly;
     bool 	 acquired;
 
     /* private functions for the running ant */
-    void drawHAreaBorder(QPainter &p,int x1,int x2,int y,int r = FALSE);
-    void drawVAreaBorder(QPainter &p,int x,int y1,int y2,int r = FALSE);
-    void drawAreaBorder(QPainter *p,int r = FALSE);
+    void drawHAreaBorder(QPainter &p,int x1,int x2,int y,bool remove);
+    void drawVAreaBorder(QPainter &p,int x,int y1,int y2,bool remove);
+    void drawAreaBorder(QPainter *p,bool remove = false);
     void update_scaled_pixmap( void );
 
     preview_state classifyPoint(int x,int y);

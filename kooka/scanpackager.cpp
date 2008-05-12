@@ -867,12 +867,11 @@ void ScanPackager::addImage(const QImage *img,KookaImageMeta *meta)
 void ScanPackager::slSelectImage(const KURL &name)
 {
     KFileTreeViewItem *found = spFindItem(UrlSearch,name.url());
-    if (found)
-    {
-        ensureItemVisible(found);
-        setCurrentItem(found);
-        slClicked(found);
-    }
+    if (found==NULL) found = m_defaultBranch->root();
+
+    ensureItemVisible(found);
+    setCurrentItem(found);
+    slClicked(found);
 }
 
 

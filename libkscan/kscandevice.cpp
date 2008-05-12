@@ -45,6 +45,7 @@
 #include "kscanoptset.h"
 #include "devselector.h"
 #include "imgscaninfo.h"
+#include "previewer.h"
 
 #include <ksimpleconfig.h>
 
@@ -749,15 +750,17 @@ void KScanDevice::slStopScanning( void )
 
 const QString KScanDevice::previewFile()
 {
-   QString dir = (KGlobal::dirs())->saveLocation( "data", "ScanImages", true );
-   if( !dir.endsWith("/") )
-      dir += "/";
+// TODO: this doesn't work if that directory doesn't exist,
+// and nothing ever creates that directory!
+// Save somewhere in the application directory instead.
 
-   QString fname = dir + QString::fromLatin1(".previews/");
-   QString sname( getScannerName(shortScannerName()) );
-   sname.replace( '/', "_");
+    QString dir = Previewer::galleryRoot();
 
-   return fname+sname;
+    QString fname = dir + QString::fromLatin1(".previews/");
+    QString sname( getScannerName(shortScannerName()) );
+    sname.replace( '/', "_");
+
+    return fname+sname;
 }
 
 QImage KScanDevice::loadPreviewImage()
@@ -1210,6 +1213,15 @@ KScanStat KScanDevice::acquire_data( bool isPreview )
    }
    return( stat );
 }
+
+
+void KScanDevice::getCurrentFormat(int *format,int *depth)
+{
+    sane_get_parameters(scanner_handle,&sane_scan_param );
+    *format = sane_scan_param.format;
+    *depth = sane_scan_param.depth;
+}
+
 
 void KScanDevice::loadOptionSet( KScanOptSet *optSet )
 {

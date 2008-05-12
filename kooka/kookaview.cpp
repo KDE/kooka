@@ -119,11 +119,9 @@ KookaView::KookaView( KParts::DockMainWindow *parent, const QCString& deviceToUs
    img_canvas->setMinimumSize(100,200);
    img_canvas->enableContextMenu(true);
    connect( img_canvas, SIGNAL( imageReadOnly(bool)),
-	    this, SLOT(slViewerReadOnly(bool)));
-   connect( img_canvas, SIGNAL( newRect()),
-	    this, SLOT(slSelectionChanged()));
-   connect( img_canvas, SIGNAL( noRect()),
-	    this, SLOT(slSelectionChanged()));
+	    SLOT(slViewerReadOnly(bool)));
+   connect( img_canvas, SIGNAL( newRect(QRect)),
+	    SLOT(slotSelectionChanged(QRect)));
    
    KPopupMenu *ctxtmenu = static_cast<KPopupMenu*>(img_canvas->contextMenu());
    if( ctxtmenu )
@@ -288,7 +286,7 @@ KookaView::KookaView( KParts::DockMainWindow *parent, const QCString& deviceToUs
    /* Set a large enough size */
    int w = statBar->fontMetrics().
            width(img_canvas->imageInfoString(2000, 2000, 48)+"--");
-   kdDebug(28000) << "Fixed size for status bar: " << w << " from string " << img_canvas->imageInfoString(2000, 2000, 48) << endl;
+   kdDebug(28000) << "Fixed size for status bar " << w << endl;
    statBar->setItemFixed( StatusImage, w );
 }
 
@@ -345,7 +343,8 @@ bool KookaView::slSelectDevice(const QCString& useDevice,bool alwaysAsk)
         while (!haveConnection)
         {
             kdDebug(28000) << "Opening device " << selDevice << endl;
-            if (sane->openDevice(selDevice)!=KSCAN_OK)
+            if (sane->openDevice(selDevice)==KSCAN_OK) haveConnection = true;
+            else
             {
                 QString msg = i18n("<qt><p>\
 There was a problem opening the scanner device. \
@@ -356,53 +355,43 @@ Trying to use scanner device: <b>%2</b>\
 <br>\
 The error reported was: <b>%1</b>").arg(sane->lastErrorMessage()).arg(selDevice);
 
-                if (KMessageBox::warningContinueCancel(m_parent,msg,QString::null,
-                                                       KGuiItem("Retry"))==KMessageBox::Cancel)
-                {
-                    break;
-                }
+                int tryAgain = KMessageBox::warningContinueCancel(m_parent,msg,QString::null,
+                                                       KGuiItem("Retry"));
+                if (tryAgain==KMessageBox::Cancel) break;
             }
-            else
-            {
-                connect( scan_params,    SIGNAL( scanResolutionChanged( int, int )),
-                         preview_canvas, SLOT( slNewScanResolutions( int, int )));
+        }
 
-                if (!scan_params->connectDevice(sane))
-                {
-                    // This will never happen, connectDevice always returns TRUE
-                    kdDebug(28000) << "Connecting to the scanner failed :( ->TODO" << endl;
-                }
-                else
-                {
-                    haveConnection = true;
-                    connectedDevice = selDevice;
+        if (haveConnection)				// scanner connected OK
+        {
+            QSize s = sane->getMaxScanSize();		// fix for 160148
+            kdDebug(28000) << k_funcinfo << "scanner max size = " << s << endl;
+            preview_canvas->setScannerBedSize(s.width(),s.height());
 
-                    /* New Rectangle selection in the preview, now scanimge exists */
-                    ImageCanvas *previewCanvas = preview_canvas->getImageCanvas();
-                    connect( previewCanvas , SIGNAL( newRect(QRect)),
-                             scan_params, SLOT(slCustomScanSize(QRect)));
-                    connect( previewCanvas, SIGNAL( noRect()),
-                             scan_params, SLOT(slMaximalScanSize()));
-                    // connect( scan_params,    SIGNAL( scanResolutionChanged( int, int )),
-                    // 		     preview_canvas, SLOT( slNewScanResolutions( int, int )));
+            connect( scan_params,    SIGNAL( scanResolutionChanged( int, int )),
+                     preview_canvas, SLOT( slNewScanResolutions( int, int )));
+            connect( scan_params,    SIGNAL( scanModeChanged(int )),
+                     preview_canvas, SLOT( slNewScanMode( int )));
 
-                    if (preview_canvas!=NULL)		/* load the preview image */
-                    {
-                        preview_canvas->setPreviewImage( sane->loadPreviewImage() );
-                        /* Call this after the device is actually open */
-                        preview_canvas->slConnectScanner( sane );
-                    }
-                }
-            }
+            connect(scan_params,SIGNAL(newCustomScanSize(QRect)),
+                    preview_canvas,SLOT(slotNewCustomScanSize(QRect)));
+
+            connect(preview_canvas,SIGNAL(newPreviewRect(QRect)),
+                    scan_params,SLOT(slotNewPreviewRect(QRect)));
+
+            scan_params->connectDevice(sane);
+            connectedDevice = selDevice;
+
+            preview_canvas->setPreviewImage(sane->loadPreviewImage());
+							// load saved preview image
+            preview_canvas->connectScanner(sane);	// load its autosel options
         }
     }
 
     m_dockScanParam->setWidget(scan_params);
-    m_dockScanParam->show();				/* Show the widget again */
+    m_dockScanParam->show();				// show the widget again
 
-    if (!haveConnection)
-    {
-        // No devices available, or starting in gallery mode
+    if (!haveConnection)				// no scanner device available,
+    {							// or starting in gallery mode
         if (scan_params!=NULL) scan_params->connectDevice(NULL,gallery_mode);
     }
 
@@ -492,10 +481,9 @@ QString KookaView::scannerName() const
 
 
 
-void KookaView::slSelectionChanged()
+void KookaView::slotSelectionChanged(QRect newSelection)
 {
-    kdDebug( 28000) << k_funcinfo << endl;
-    emit signalRectangleChanged(img_canvas->selectedImage(NULL));
+    emit signalRectangleChanged(newSelection.isValid());
 }
 
 
@@ -521,8 +509,6 @@ void KookaView::slotGallerySelectionChanged()
 
 void KookaView::slotLoadedImageChanged(const KookaImage *img,bool isDir)
 {
-    kdDebug( 28000) << k_funcinfo << "img=" << ((void*)img) << " isDir=" << isDir << endl;
-
     if (!isDir && img==NULL) emit signalChangeStatusbar(i18n("Image unloaded"));
     emit signalLoadedImageChanged(img!=NULL,isDir);
 }
@@ -901,27 +887,10 @@ void KookaView::slSaveOCRResult()
 
 }
 
-#if 0
-void KookaView::slLoadScanParams( )
-{
-    if (sane==NULL) return;				// no scanner device
-    kdDebug(28000) << k_funcinfo << "NYI" << endl;
-
-#if 0
-   /* not yet cooked */
-   LoadSetDialog loadDialog( m_mainDock, sane->shortScannerName(), sane );
-   if( loadDialog.exec())
-   {
-      kdDebug(28000)<< "Executed successfully" << endl;
-   }
-#endif
-}
-#endif
-
 
 void KookaView::slScanParams()
 {
-    if (sane==NULL) return;				// no scanner device
+    if (sane==NULL) return;				// must have a scanner device
     ScanParamsDialog d(m_mainDock,sane);
     d.exec();
 }

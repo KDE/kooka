@@ -287,6 +287,8 @@ public:
      **/
     QSize getMaxScanSize( void ) const;
 
+    void getCurrentFormat(int *format,int *depth);
+
     /**
      *  returns the information bit stored for the currently attached scanner
      *  identified by the key.

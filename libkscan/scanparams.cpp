@@ -43,12 +43,13 @@
 #include "massscandialog.h"
 #include "gammadialog.h"
 #include "kscancontrols.h"
+#include "scansizeselector.h"
 
 #include "scanparams.h"
 #include "scanparams.moc"
 
 
-// SANE testing options
+//  SANE testing options
 
 #define TESTING_OPTIONS
 
@@ -77,8 +78,6 @@
 #endif
 
 
-
-
 ScanParams::ScanParams( QWidget *parent, const char *name )
    : QFrame( parent, name )
 {
@@ -103,7 +102,7 @@ ScanParams::ScanParams( QWidget *parent, const char *name )
 }
 
 
-bool ScanParams::connectDevice( KScanDevice *newScanDevice,bool galleryMode )
+bool ScanParams::connectDevice(KScanDevice *newScanDevice,bool galleryMode)
 {
    /* Frame stuff for toplevel of scanparams - beautification */
     setFrameStyle(QFrame::Panel|QFrame::Raised);
@@ -122,12 +121,6 @@ bool ScanParams::connectDevice( KScanDevice *newScanDevice,bool galleryMode )
     }
 
     sane_device = newScanDevice;
-    ///* Debug: dump common Options */
-    //QStrList strl = sane_device->getCommonOptions();
-    //QString emp;
-    //for ( emp=strl.first(); strl.current(); emp=strl.next() )
-    //   kdDebug(29000) << "Common: " << strl.current() << endl;
-
     scan_mode = ID_SCAN;
     adf = ADF_OFF;
 
@@ -168,12 +161,12 @@ bool ScanParams::connectDevice( KScanDevice *newScanDevice,bool galleryMode )
     lay->addMultiCellWidget(sep,4,4,0,1);
 
     /* Create the Scan Buttons */
-    QPushButton* pb = new QPushButton(i18n("Preview"),this);
+    QPushButton* pb = new QPushButton(i18n("Pre&view"),this);
     pb->setMinimumWidth(100);
     connect( pb, SIGNAL(clicked()), this, SLOT(slAcquirePreview()) );
     lay->addWidget(pb,5,0,Qt::AlignLeft);
 
-    pb = new QPushButton(i18n("Start Scan"),this);
+    pb = new QPushButton(i18n("Star&t Scan"),this);
     pb->setMinimumWidth(100);
     connect( pb, SIGNAL(clicked()), this, SLOT(slStartScan()) );
     lay->addWidget(pb,5,1,Qt::AlignRight);
@@ -242,7 +235,8 @@ QScrollView *ScanParams::scannerParams()
     lay->setColSpacing(1,KDialog::marginHint());
 
     int row = 0;
-
+    QLabel *l;
+    QWidget *w;
 
     virt_filename = sane_device->getGuiElement( SANE_NAME_FILE, frame,
                                                 SANE_TITLE_FILE,
@@ -253,8 +247,9 @@ QScrollView *ScanParams::scannerParams()
         connect( virt_filename, SIGNAL(guiChange(KScanOption*)),
                  SLOT(slReloadAllGui( KScanOption* )));
 
-        lay->addWidget(virt_filename->getLabel(frame),row,0,Qt::AlignLeft);
-        lay->addMultiCellWidget(virt_filename->widget(),row,row,2,3);
+        l = virt_filename->getLabel(frame); lay->addWidget(l,row,0,Qt::AlignLeft);
+        w = virt_filename->widget(); lay->addMultiCellWidget(w,row,row,2,3);
+        l->setBuddy(w);
         ++row;
 
         /* Selection for either virtual scanner or SANE debug */
@@ -297,9 +292,12 @@ QScrollView *ScanParams::scannerParams()
         initialise( so );
         connect( so, SIGNAL(guiChange(KScanOption*)),
                  SLOT(slReloadAllGui( KScanOption* )));
+        connect( so, SIGNAL(guiChange(KScanOption*)),
+                 SLOT(slNewScanMode()));
 
-        lay->addWidget(so->getLabel(frame),row,0,Qt::AlignLeft);
+        l = so->getLabel(frame); lay->addWidget(l,row,0,Qt::AlignLeft);
         lay->addMultiCellWidget(cb,row,row,2,3);
+        l->setBuddy(cb);
         ++row;
     }
 
@@ -320,8 +318,9 @@ QScrollView *ScanParams::scannerParams()
         connect( so, SIGNAL(guiChange(KScanOption*)),
                  this, SLOT(slReloadAllGui( KScanOption* )));
 
-        lay->addWidget(so->getLabel(frame),row,0,Qt::AlignLeft);
-        lay->addWidget(so->widget(),row,2);
+        l = so->getLabel(frame); lay->addWidget(l,row,0,Qt::AlignLeft);
+        w = so->widget(); lay->addWidget(w,row,2);
+        l->setBuddy(w);
         lay->addWidget(new QLabel(i18n("dpi"),frame),row,3,Qt::AlignLeft);
 							// SANE resolution always in DPI
         ++row;
@@ -338,8 +337,9 @@ QScrollView *ScanParams::scannerParams()
             connect( xy_resolution_bind, SIGNAL(guiChange(KScanOption*)),
                      this, SLOT(slReloadAllGui( KScanOption* )));
 
-            lay->addWidget(so->getLabel(frame),row,0,Qt::AlignLeft);
-            lay->addMultiCellWidget(so->widget(),row,row,2,3);
+            l = so->getLabel(frame); lay->addWidget(l,row,0,Qt::AlignLeft);
+            w = so->widget(); lay->addMultiCellWidget(w,row,row,2,3);
+            l->setBuddy(w);
             ++row;
         }
 
@@ -355,13 +355,14 @@ QScrollView *ScanParams::scannerParams()
                 so->get( &y_res );
             so->slRedrawWidget( so );
 
-            lay->addWidget(so->getLabel(frame),row,0,Qt::AlignLeft);
-            lay->addWidget(so->widget(),row,2);
+            l = so->getLabel(frame); lay->addWidget(l,row,0,Qt::AlignLeft);
+            w = so->widget(); lay->addWidget(w,row,2);
+            l->setBuddy(w);
             lay->addWidget(new QLabel(i18n("dpi"),frame),row,3,Qt::AlignLeft);
             ++row;
         }
 
-        emit scanResolutionChanged( x_y_res, y_res );
+        emit scanResolutionChanged(x_y_res,y_res);	// tell the previewer
     }
     else
     {
@@ -372,6 +373,8 @@ QScrollView *ScanParams::scannerParams()
         if (so!=NULL)
         {
             initialise( so );
+            int x_y_res;
+            so->get( &x_y_res );
             so->slRedrawWidget( so );
 
             /* connect to slot that passes the resolution to the previewer */
@@ -380,16 +383,28 @@ QScrollView *ScanParams::scannerParams()
             connect( so, SIGNAL(guiChange(KScanOption*)),
                      this, SLOT(slReloadAllGui( KScanOption* )));
 
-            lay->addWidget(so->getLabel(frame),row,0,Qt::AlignLeft);
-            lay->addWidget(so->widget(),row,2);
+            l = so->getLabel(frame); lay->addWidget(l,row,0,Qt::AlignLeft);
+            w = so->widget(); lay->addWidget(w,row,2);
+            l->setBuddy(w);
             lay->addWidget(new QLabel(i18n("dpi"),frame),row,3,Qt::AlignLeft);
             ++row;
+
+            emit scanResolutionChanged(x_y_res,x_y_res);
         }
         else
         {
             kdDebug(29000) << "SERIOUS: No Resolution setting possible!" << endl;
         }
     }
+
+    /* Scan size setting */
+    area_sel = new ScanSizeSelector(frame,sane_device->getMaxScanSize());
+    connect(area_sel,SIGNAL(sizeSelected(QRect)),SLOT(slotScanSizeSelected(QRect)));
+    l = new QLabel("Scan &area:",frame);		// make sure it gets an accel
+    lay->addWidget(l,row,0,Qt::AlignTop|Qt::AlignLeft);
+    lay->addMultiCellWidget(area_sel,row,row,2,3,Qt::AlignTop);
+    l->setBuddy(area_sel);
+    ++row;
 
     /* Insert another beautification line */
     lay->addMultiCellWidget(new KSeparator(KSeparator::HLine,frame),row,row,0,3);
@@ -406,8 +421,9 @@ QScrollView *ScanParams::scannerParams()
         connect( source_sel, SIGNAL(guiChange(KScanOption*)),
                  this, SLOT(slReloadAllGui( KScanOption* )));
 
-        lay->addWidget(source_sel->getLabel(frame),row,0,Qt::AlignLeft);
-        lay->addMultiCellWidget(source_sel->widget(),row,row,2,3);
+        l = source_sel->getLabel(frame); lay->addWidget(l,row,0,Qt::AlignLeft);
+        w = source_sel->widget(); lay->addMultiCellWidget(w,row,row,2,3);
+        l->setBuddy(w);
         ++row;
 
         //  Will need to enable the "Advanced" dialogue later, because that
@@ -429,8 +445,9 @@ QScrollView *ScanParams::scannerParams()
         connect( so,   SIGNAL(guiChange(KScanOption*)),
                  this, SLOT(slReloadAllGui( KScanOption* )));
 
-        lay->addWidget(so->getLabel(frame),row,0,Qt::AlignLeft);
-        lay->addMultiCellWidget(so->widget(),row,row,2,3);
+        l = so->getLabel(frame); lay->addWidget(l,row,0,Qt::AlignLeft);
+        w = so->widget(); lay->addMultiCellWidget(w,row,row,2,3);
+        l->setBuddy(w);
         ++row;
     }
 
@@ -443,8 +460,9 @@ QScrollView *ScanParams::scannerParams()
         connect( so,   SIGNAL(guiChange(KScanOption*)),
                  this, SLOT(slReloadAllGui( KScanOption* )));
 
-        lay->addWidget(so->getLabel(frame),row,0,Qt::AlignLeft);
-        lay->addMultiCellWidget(so->widget(),row,row,2,3);
+        l = so->getLabel(frame); lay->addWidget(l,row,0,Qt::AlignLeft);
+        w = so->widget(); lay->addMultiCellWidget(w,row,row,2,3);
+        l->setBuddy(w);
         ++row;
     }
 
@@ -457,8 +475,9 @@ QScrollView *ScanParams::scannerParams()
         connect( so,   SIGNAL(guiChange(KScanOption*)),
                  this, SLOT(slReloadAllGui( KScanOption* )));
 
-        lay->addWidget(so->getLabel(frame),row,0,Qt::AlignLeft);
-        lay->addMultiCellWidget(so->widget(),row,row,2,3);
+        l = so->getLabel(frame); lay->addWidget(l,row,0,Qt::AlignLeft);
+        w = so->widget(); lay->addMultiCellWidget(w,row,row,2,3);
+        l->setBuddy(w);
         ++row;
     }
 
@@ -472,8 +491,9 @@ QScrollView *ScanParams::scannerParams()
         connect( so,   SIGNAL(guiChange(KScanOption*)),
                  this, SLOT(slReloadAllGui( KScanOption* )));
 
-        lay->addWidget(so->getLabel(frame),row,0,Qt::AlignLeft);
-        lay->addMultiCellWidget(so->widget(),row,row,2,3);
+        l = so->getLabel(frame); lay->addWidget(l,row,0,Qt::AlignLeft);
+        w = so->widget(); lay->addMultiCellWidget(w,row,row,2,3);
+        l->setBuddy(w);
         ++row;
     }
 
@@ -486,9 +506,12 @@ QScrollView *ScanParams::scannerParams()
         initialise(so);
         connect( so,   SIGNAL(guiChange(KScanOption*)),
                  this, SLOT(slReloadAllGui( KScanOption* )));
+        connect( so, SIGNAL(guiChange(KScanOption*)),
+                 SLOT(slNewScanMode()));
 
-        lay->addWidget(so->getLabel(frame),row,0,Qt::AlignLeft);
-        lay->addMultiCellWidget(so->widget(),row,row,2,3);
+        l = so->getLabel(frame); lay->addWidget(l,row,0,Qt::AlignLeft);
+        w = so->widget(); lay->addMultiCellWidget(w,row,row,2,3);
+        l->setBuddy(w);
         ++row;
     }
 
@@ -502,8 +525,9 @@ QScrollView *ScanParams::scannerParams()
         connect( so,   SIGNAL(guiChange(KScanOption*)),
                  this, SLOT(slReloadAllGui( KScanOption* )));
 
-        lay->addWidget(so->getLabel(frame),row,0,Qt::AlignLeft);
-        lay->addMultiCellWidget(so->widget(),row,row,2,3);
+        l = so->getLabel(frame); lay->addWidget(l,row,0,Qt::AlignLeft);
+        w = so->widget(); lay->addMultiCellWidget(w,row,row,2,3);
+        l->setBuddy(w);
         ++row;
     }
 
@@ -516,8 +540,9 @@ QScrollView *ScanParams::scannerParams()
         connect( so,   SIGNAL(guiChange(KScanOption*)),
                  this, SLOT(slReloadAllGui( KScanOption* )));
 
-        lay->addWidget(so->getLabel(frame),row,0,Qt::AlignLeft);
-        lay->addMultiCellWidget(so->widget(),row,row,2,3);
+        l = so->getLabel(frame); lay->addWidget(l,row,0,Qt::AlignLeft);
+        w = so->widget(); lay->addMultiCellWidget(w,row,row,2,3);
+        l->setBuddy(w);
         ++row;
     }
 
@@ -530,8 +555,9 @@ QScrollView *ScanParams::scannerParams()
         connect( so,   SIGNAL(guiChange(KScanOption*)),
                  this, SLOT(slReloadAllGui( KScanOption* )));
 
-        lay->addWidget(so->getLabel(frame),row,0,Qt::AlignLeft);
-        lay->addMultiCellWidget(so->widget(),row,row,2,3);
+        l = so->getLabel(frame); lay->addWidget(l,row,0,Qt::AlignLeft);
+        w = so->widget(); lay->addMultiCellWidget(w,row,row,2,3);
+        l->setBuddy(w);
         ++row;
     }
 #endif
@@ -545,8 +571,9 @@ QScrollView *ScanParams::scannerParams()
                                          SANE_DESC_SCAN_SPEED );
         initialise( so );
 
-        lay->addWidget(so->getLabel(frame),row,0,Qt::AlignLeft);
-        lay->addMultiCellWidget(so->widget(),row,row,2,3);
+        l = so->getLabel(frame); lay->addWidget(l,row,0,Qt::AlignLeft);
+        w = so->widget(); lay->addMultiCellWidget(w,row,row,2,3);
+        l->setBuddy(w);
         ++row;
     }
 
@@ -557,8 +584,9 @@ QScrollView *ScanParams::scannerParams()
     if (so!=NULL)
     {
         initialise( so );
-        lay->addWidget(so->getLabel(frame),row,0,Qt::AlignLeft);
-        lay->addMultiCellWidget(so->widget(),row,row,2,3);
+        l = so->getLabel(frame); lay->addWidget(l,row,0,Qt::AlignLeft);
+        w = so->widget(); lay->addMultiCellWidget(w,row,row,2,3);
+        l->setBuddy(w);
         ++row;
     }
 
@@ -569,8 +597,9 @@ QScrollView *ScanParams::scannerParams()
     if (so!=NULL)
     {
         initialise( so );
-        lay->addWidget(so->getLabel(frame),row,0,Qt::AlignLeft);
-        lay->addMultiCellWidget(so->widget(),row,row,2,3);
+        l = so->getLabel(frame); lay->addWidget(l,row,0,Qt::AlignLeft);
+        w = so->widget(); lay->addMultiCellWidget(w,row,row,2,3);
+        l->setBuddy(w);
         ++row;
     }
 
@@ -581,8 +610,9 @@ QScrollView *ScanParams::scannerParams()
     if (so!=NULL)
     {
         initialise( so );
-        lay->addWidget(so->getLabel(frame),row,0,Qt::AlignLeft);
-        lay->addMultiCellWidget(so->widget(),row,row,2,3);
+        l = so->getLabel(frame); lay->addWidget(l,row,0,Qt::AlignLeft);
+        w = so->widget(); lay->addMultiCellWidget(w,row,row,2,3);
+        l->setBuddy(w);
         ++row;
     }
 
@@ -591,8 +621,9 @@ QScrollView *ScanParams::scannerParams()
     if (so!=NULL)
     {
         initialise( so );
-        lay->addWidget(so->getLabel(frame),row,0,Qt::AlignLeft);
-        lay->addMultiCellWidget(so->widget(),row,row,2,3);
+        l = so->getLabel(frame); lay->addWidget(l,row,0,Qt::AlignLeft);
+        w = so->widget(); lay->addMultiCellWidget(w,row,row,2,3);
+        l->setBuddy(w);
         ++row;
     }
 
@@ -636,8 +667,9 @@ QScrollView *ScanParams::scannerParams()
     if (so!=NULL)
     {
         initialise( so );
-        lay->addWidget(so->getLabel(frame),row,0,Qt::AlignLeft);
-        lay->addMultiCellWidget(so->widget(),row,row,2,3);
+        l = so->getLabel(frame); lay->addWidget(l,row,0,Qt::AlignLeft);
+        w = so->widget(); lay->addMultiCellWidget(w,row,row,2,3);
+        l->setBuddy(w);
         ++row;
     }
 
@@ -651,9 +683,15 @@ QScrollView *ScanParams::scannerParams()
         lay->addWidget(so->getLabel(frame),row,0,Qt::AlignLeft);
         lay->addMultiCellWidget(so->widget(),row,row,2,3);
         ++row;
+
         cb_gray_preview = (QCheckBox*) so->widget();
         QToolTip::add( cb_gray_preview, i18n("Acquire a gray preview even in color mode (faster)") );
     }
+
+#ifdef RESTORE_AREA
+    initStartupArea();					// set up and tell previewer
+#endif
+    slNewScanMode();					// tell previewer this too
 
     lay->addMultiCellWidget(new QLabel("",frame),row,row,0,3);
     lay->setRowStretch(row,1);				// dummy row for stretch
@@ -666,6 +704,25 @@ QScrollView *ScanParams::scannerParams()
 }
 
 
+void ScanParams::initStartupArea()
+{
+    if (startupOptset==NULL) return;
+							// set scan area from saved
+    KScanOption tl_x(SANE_NAME_SCAN_TL_X); initialise(&tl_x);
+    KScanOption tl_y(SANE_NAME_SCAN_TL_Y); initialise(&tl_y);
+    KScanOption br_x(SANE_NAME_SCAN_BR_X); initialise(&br_x);
+    KScanOption br_y(SANE_NAME_SCAN_BR_Y); initialise(&br_y);
+
+    QRect rect;
+    int val1,val2;
+    tl_x.get(&val1); rect.setLeft(val1);		// pass area to previewer
+    br_x.get(&val2); rect.setWidth(val2-val1);
+    tl_y.get(&val1); rect.setTop(val1);
+    br_y.get(&val2); rect.setHeight(val2-val1);
+    emit newCustomScanSize(rect);
+
+    area_sel->selectSize(rect);				// set selector to match
+}
 
 
 void ScanParams::createNoScannerMsg(bool galleryMode)
@@ -864,7 +921,8 @@ void ScanParams::slAcquirePreview()
     bool gray_preview = false;
     if (cb_gray_preview!=NULL) gray_preview  = cb_gray_preview->isChecked();
 
-    slMaximalScanSize();				/* Always preview at maximal size */
+    slMaximalScanSize();				// always preview at maximal size
+    area_sel->selectCustomSize(QRect());		// reset selector to reflect that
 
     stat = sane_device->acquirePreview(gray_preview);
     if (stat!=KSCAN_OK) kdDebug(29000) << k_funcinfo << "Error, preview status " << stat << endl;
@@ -1093,54 +1151,80 @@ void ScanParams::setEditCustomGammaTableState()
 }
 
 
-/* Custom Scan size setting.
- * The custom scan size is given in the QRect parameter. It must contain values
- * from 0..1000 which are interpreted as tenth of percent of the overall dimension.
- */
-void ScanParams::slCustomScanSize( QRect sel)
+void ScanParams::applyRect(const QRect &rect)
 {
-   kdDebug(29000) << "Custom-Size: " << sel.x() << ", " << sel.y() << " - " << sel.width() << "x" << sel.height() << endl;
+    kdDebug(29000) << k_funcinfo << "rect=" << rect << endl;
 
-   KScanOption tl_x( SANE_NAME_SCAN_TL_X );
-   KScanOption tl_y( SANE_NAME_SCAN_TL_Y );
-   KScanOption br_x( SANE_NAME_SCAN_BR_X );
-   KScanOption br_y( SANE_NAME_SCAN_BR_Y );
+    KScanOption tl_x(SANE_NAME_SCAN_TL_X);
+    KScanOption tl_y(SANE_NAME_SCAN_TL_Y);
+    KScanOption br_x(SANE_NAME_SCAN_BR_X);
+    KScanOption br_y(SANE_NAME_SCAN_BR_Y);
 
-   double min1=0.0, max1=0.0, min2=0.0, max2=0.0, dummy1=0.0, dummy2=0.0;
-   tl_x.getRange( &min1, &max1, &dummy1 );
-   br_x.getRange( &min2, &max2, &dummy2 );
+    double min1,max1;
+    double min2,max2;
 
-   /* overall width */
-   double range = max2-min1;
-   double w = min1 + double(range * (double(sel.x()) / 1000.0) );
-   tl_x.set( w );
-   w = min1 + double(range * double(sel.x() + sel.width())/1000.0);
-   br_x.set( w );
+    if (!rect.isValid())					// set full scan area
+    {
+        tl_x.getRange(&min1,&max1); tl_x.set(min1);
+        br_x.getRange(&min1,&max1); br_x.set(max1);
+        tl_y.getRange(&min2,&max2); tl_y.set(min2);
+        br_y.getRange(&min2,&max2); br_y.set(max2);
+
+        kdDebug(29000) << "    setting maximum [" << min1 << "," << min2
+                       << " - " << max1 << "," << max2 << "]" << endl;
+    }
+    else
+    {
+        double tlx = rect.left();
+        double tly = rect.top();
+        double brx = rect.right();
+        double bry = rect.bottom();
+
+        tl_x.getRange(&min1,&max1);
+        if (tlx<min1)
+        {
+            brx += (min1-tlx);
+            tlx = min1;
+        }
+        tl_x.set(tlx); br_x.set(brx);
+
+        tl_y.getRange(&min2,&max2);
+        if (tly<min2)
+        {
+            bry += (min2-tly);
+            tly = min2;
+        }
+        tl_y.set(tly); br_y.set(bry);
+
+        kdDebug(29000) << "    setting [" << tlx << "," << tly
+                       << " - " << brx << "," << bry << "]" << endl;
+    }
+
+    sane_device->apply(&tl_x);
+    sane_device->apply(&tl_y);
+    sane_device->apply(&br_x);
+    sane_device->apply(&br_y);
+}
 
 
-   kdDebug(29000) << "set tl_x: " << min1 + double(range * (double(sel.x()) / 1000.0) ) << endl;
-   kdDebug(29000) << "set br_x: " << min1 + double(range * (double(sel.x() + sel.width())/1000.0)) << endl;
+//  The previewer is telling us that the user has drawn or auto-selected a
+//  new preview area.
+void ScanParams::slotNewPreviewRect(QRect rect)
+{
+    kdDebug(29000) << k_funcinfo << "rect=" << rect << endl;
 
-   /** Y-Value setting */
-   tl_y.getRange( &min1, &max1, &dummy1 );
-   br_y.getRange(&min2, &max2, &dummy2 );
-
-   /* overall width */
-   range = max2-min1;
-   w = min1 + range * double(sel.y()) / 1000.0;
-   tl_y.set( w );
-   w = min1 + range * double(sel.y() + sel.height())/1000.0;
-   br_y.set( w );
+    applyRect(rect);
+    area_sel->selectCustomSize(rect);
+}
 
 
-   kdDebug(29000) << "set tl_y: " << min1 + double(range * (double(sel.y()) / 1000.0) ) << endl;
-   kdDebug(29000) << "set br_y: " << min1 + double(range * (double(sel.y() + sel.height())/1000.0)) << endl;
+//  A new preset scan size or orientation chosen by the user
+void ScanParams::slotScanSizeSelected(QRect rect)
+{
+    kdDebug(29000) << k_funcinfo << "rect=" << rect << " full=" << !rect.isValid() << endl;
 
-
-   sane_device->apply( &tl_x );
-   sane_device->apply( &tl_y );
-   sane_device->apply( &br_x );
-   sane_device->apply( &br_y );
+    applyRect(rect);
+    emit newCustomScanSize(rect);
 }
 
 
@@ -1149,8 +1233,8 @@ void ScanParams::slCustomScanSize( QRect sel)
  */
 void ScanParams::slMaximalScanSize( void )
 {
-   kdDebug(29000) << "Setting to default" << endl;
-   slCustomScanSize(QRect( 0,0,1000,1000));
+    kdDebug(29000) << "Setting to default" << endl;
+    slotScanSizeSelected(QRect());
 }
 
 
@@ -1199,6 +1283,28 @@ void ScanParams::slNewYResolution(KScanOption *opt)
 
    emit( scanResolutionChanged( x_res, y_res ) );
 
+}
+
+
+void ScanParams::slNewScanMode()
+{
+    int format = SANE_FRAME_RGB;
+    int depth = 8;
+    sane_device->getCurrentFormat(&format,&depth);
+
+    int strips = (format==SANE_FRAME_GRAY ? 1 : 3);
+
+    kdDebug(29000) << k_funcinfo << "format " << format << " depth " << depth
+                   << " -> strips " << strips << endl;
+
+    if (strips==1 && depth==1)				// bitmap scan
+    {
+        emit scanModeChanged(0);			// 8 pixels per byte
+    }
+    else
+    {							// bytes per pixel
+        emit scanModeChanged(strips*(depth==16 ? 2 : 1));
+    }
 }
 
 

@@ -75,7 +75,7 @@ int main( int argc, char *argv[] )
 {
    KAboutData about("kooka", I18N_NOOP("Kooka"), KOOKA_VERSION, description,
 		    KAboutData::License_GPL_V2, "(C) 2000 Klaas Freitag", 0,
-		    I18N_NOOP("http://kooka.kde.org"));
+		    I18N_NOOP("http://techbase.kde.org/Projects/Kooka"));
 
    about.addAuthor( "Jonathan Marten", I18N_NOOP("current maintainer"), "jjm@keelhaul.me.uk" );
    about.addAuthor( "Klaas Freitag", I18N_NOOP("developer"), "freitag@suse.de" );

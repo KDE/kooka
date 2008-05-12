@@ -26,6 +26,7 @@
 #include <qsizepolicy.h>
 #include <qapplication.h>
 #include <qcheckbox.h>
+#include <qgroupbox.h>
 #include <qvbox.h>
 
 #include <kglobal.h>
@@ -302,7 +303,7 @@ bool ScanDialog::setup()
    {
       m_previewer->setEnabled( true );
       m_previewer->setPreviewImage( m_device->loadPreviewImage() );
-      m_previewer->slConnectScanner( m_device );
+      m_previewer->connectScanner( m_device );
    }
 
     /* set initial sizes */

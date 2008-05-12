@@ -173,8 +173,8 @@ public:
    
   // Possible Values
   QStrList    getList() const;
-  bool        getRangeFromList( double*, double*, double* ) const;
-  bool        getRange( double*, double*, double* ) const;
+  bool        getRangeFromList(double *max,double *min,double *quant = NULL) const;
+  bool        getRange(double *max,double *min,double *quant = NULL) const;
 
   QCString    getName() const { return( name ); }
   void *      getBuffer() const { return( buffer.data() ); }

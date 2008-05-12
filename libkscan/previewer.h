@@ -1,4 +1,4 @@
-/* This file is part of the KDE Project
+/* This file is part of the KDE Project			-*- mode:c++; -*-
    Copyright (C) 2000 Klaas Freitag <freitag@suse.de>
 
    This library is free software; you can redistribute it and/or
@@ -23,53 +23,48 @@
 #include <qwidget.h>
 #include <qimage.h>
 #include <qrect.h>
-#include <qbuttongroup.h>
-#include <qpoint.h>
 
 #include <kruler.h>
-#include <qmemarray.h>
 
 /**
   *@author Klaas Freitag
   */
 class ImageCanvas;
-class QCheckBox;
-class QSlider;
+class SizeIndicator;
 class KScanDevice;
-class QComboBox;
-class QRadioButton;
-class QHBoxLayout;
+class QLabel;
+
 
 class Previewer : public QWidget
 {
     Q_OBJECT
+
 public:
-    Previewer(QWidget *parent=0, const char *name=0);
+    Previewer(QWidget *parent = NULL);
     ~Previewer();
 
-    ImageCanvas *getImageCanvas( void ){ return( img_canvas ); }
+    ImageCanvas *getImageCanvas() const		{ return (img_canvas); }
 
     /**
      * Static function that returns the image gallery base dir.
      */
     static QString galleryRoot();
-    bool setPreviewImage( const QImage &image );
-    void findSelection();
+
+    bool setPreviewImage(const QImage &image);
+    void newImage(const QImage *image);
+    void setScannerBedSize(int w,int h);
+    void setDisplayUnit(KRuler::MetricStyle unit);
+    void connectScanner(KScanDevice *scan);
 
 public slots:
-    void newImage(const QImage *ni);
-    void slFormatChange( int id );
-    void slOrientChange(int);
-    void slSetDisplayUnit( KRuler::MetricStyle unit );
-    void setScanSize( int w, int h, KRuler::MetricStyle unit );
-    void slCustomChange( void );
-    void slNewDimen(QRect r);
-    void slNewScanResolutions( int, int );
-    void recalcFileSize( void );
+    void slotNewAreaSelected(QRect r);
+    void slNewScanResolutions(int xres,int yres);
+    void slNewScanMode(int bytes_per_pix);
     void slSetAutoSelThresh(int);
     void slSetAutoSelDustsize(int);
-    void slSetScannerBgIsWhite(bool b);
-    void slConnectScanner( KScanDevice *scan );
+
+    void slotNewCustomScanSize(QRect rect);
+
 protected slots:
     void slScaleToWidth();
     void slScaleToHeight();
@@ -77,39 +72,29 @@ protected slots:
     void slScanBackgroundChanged(int);
 
 signals:
-    void newRect( QRect );
-    void noRect( void );
-    void setScanWidth(const QString&);
-    void setScanHeight(const QString&);
-    void setSelectionSize( long );
+    void newPreviewRect(QRect rect);
 
 private:
     void checkForScannerBg();
+    void setScannerBgIsWhite(bool isWhite);
 
-    QPoint calcPercent( int, int );
+    void updateSelectionDims();
+    void findSelection();
 
-    QHBoxLayout *layout;
+    bool imagePiece(QMemArray<long> src,int &start,int &end);
+
+    QLabel *selSize1;
+    QLabel *selSize2;
+    SizeIndicator *fileSize;
+
     ImageCanvas *img_canvas;
-    QComboBox   *pre_format_combo;
-    QMemArray<QCString> format_ids;
-    QButtonGroup * bgroup;
-    QRadioButton * rb1;
-    QRadioButton * rb2;
-    QImage       m_previewImage;
+    QImage m_previewImage;
 
-    bool imagePiece( QMemArray<long> src,
-                     int& start,
-                     int& end );
-
-    int landscape_id, portrait_id;
-
-    double overallWidth, overallHeight;
-    KRuler::MetricStyle sizeUnit;
     KRuler::MetricStyle displayUnit;
-    bool isCustom;
+    int bedWidth,bedHeight;
 
     int  scanResX, scanResY;
-    int  pix_per_byte;
+    int  m_bytesPerPix;
     double selectionWidthMm;
     double selectionHeightMm;
 
