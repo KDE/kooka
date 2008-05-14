@@ -1,0 +1,12 @@
+KScan is KDE's Scanner Library.
+It's used by kooka and by koffice.
+It provides an easy-to-use library, which
+allows you to acces your scanner (camera - as long as it's
+sane compatible).
+
+It's based on SANE.
+You can find SANE under http://www.sane-project.org/
+
+
+Nikolas Zimmermann
+<wildfox@kde.org>

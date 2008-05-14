@@ -1,0 +1,59 @@
+
+Our TODO List:
+2. Tue Oct 31 18:12:25 CET 2000  - Klaas Freitag <freitag@suse.de>
+
+    OK, trying to find smaller portions of work to do ;)
+    Trying to write down the status of the classes here.
+
+    Probably all classes need:
+    - a cleanup of the code. Lots of unused stuff may be deleted.
+    - a debug concept. By now, the function debug() is used, but probably that not state of the art?
+    - a rewrite/cleaning to adept to Qt 2.x
+    - the gui functionality KDE 2.x - features.
+    - KDE-features at all ! The whole stuff does not use any KDE-funcitonality, only Qt.
+      What about having a Version which compiles without KDE ? .o0( Good idea to think about ? )
+    - attention to drop QString where possible, and I think, its possible where SANE-stuff is
+      used.
+    - I18N-functions. In resource.h, I defined a macro I18N which does not much by now. I tried
+      to place it around strings to prepare for real I18N treatment. How is that done ?
+    - C++ - cleanup. Nearly no class has proper default and copy constructor and stuff...
+
+    KGammaTable: an abstrct data type
+       - seems to work more or less for 255-color images. Does not work for palettes with more entries.
+
+       - needs documentation
+
+    KScanDevice: logic scanner device.
+       - has mixed code for the widget-factory (getGuiElement) and the logic scanner. Dont know if 
+         that is cool, or if we should participate that.
+       - Has the sane scanner handle  as a modul global variable. Thus, only one scanner handle can
+         be used in one application. 
+       - No net device yet. I never had a look for it, and if it works or not. I only disabled it to
+         cut down complexity.
+       - ... much more 
+       - should be able to load and apply option sets (see there).       
+
+       - needs documentation
+
+    KScanOption:
+       - has no possibility to be applied immediatly after being set. That might be a real problem
+         in some cases. Good ideas are welcome.
+         By now, the Option can be set and needs to be applied (means sent to the scanner device)
+         by a call to the apply method in KScanDevice. After that, it could be checked, if other
+         options changed thereby. Thats fine under the aspect of a good OO design, but might cause
+         problems in case a option is changed and there is no possibility to call apply.
+
+       - needs documentation
+
+    KScanOptSet: 
+       - needs possibility to be stored and loaded in/from KDE-configuration files. Example:
+         Option set (including resolution, gammatables etc.) for photos, for ocr, bla...
+       
+
+    KScanSlider: 
+       - needs a neutral button in the widget !
+
+    KScanEntry : 
+    KScanCombo : 
+
+    ... much more.
