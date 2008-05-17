@@ -1165,7 +1165,6 @@ KScanStat KScanDevice::acquire_data( bool isPreview )
    if( stat == KSCAN_OK )
    {
       overall_bytes 	= 0;
-      scanStatus = SSTAT_IN_PROGRESS;
       pixel_x 		    = 0;
       pixel_y 		    = 0;
       overall_bytes         = 0;
@@ -1173,17 +1172,16 @@ KScanStat KScanDevice::acquire_data( bool isPreview )
 
       /* internal status to indicate Scanning in progress
        *  this status might be changed by pressing Stop on a GUI-Dialog displayed during scan */
-      if( sane_set_io_mode( scanner_handle, SANE_TRUE ) == SANE_STATUS_GOOD )
+      scanStatus = SSTAT_IN_PROGRESS;
+
+      int fd = 0;
+      //  Don't assume that sane_get_select_fd will succeed even if sane_set_io_mode
+      //  successfully sets I/O mode to noblocking - bug 159300
+      if (sane_set_io_mode(scanner_handle,SANE_TRUE)==SANE_STATUS_GOOD &&
+          sane_get_select_fd(scanner_handle,&fd)==SANE_STATUS_GOOD)
       {
-
-	 int fd = 0;
-	 if( sane_get_select_fd( scanner_handle, &fd ) == SANE_STATUS_GOOD )
-	 {
-	    sn = new QSocketNotifier( fd, QSocketNotifier::Read, this );
-	    QObject::connect( sn, SIGNAL(activated(int)),
-			      this, SLOT( doProcessABlock() ) );
-
-	 }
+          sn = new QSocketNotifier(fd,QSocketNotifier::Read,this);
+          QObject::connect(sn,SIGNAL(activated(int)),this,SLOT(doProcessABlock()));
       }
       else
       {
