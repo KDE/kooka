@@ -219,7 +219,7 @@ KScanCombo::KScanCombo( QWidget *parent, const QString& text,
 	}
     }
     combolist = list;
-setFocusProxy(combo);
+    setFocusProxy(combo);
 }
 
 KScanCombo::KScanCombo( QWidget *parent, const QString& text,

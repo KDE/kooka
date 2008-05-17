@@ -23,6 +23,7 @@
  *  without including the source code for Qt in the source distribution.   *
  *                                                                         *
  ***************************************************************************/
+
 #ifndef KOOKAVIEW_H
 #define KOOKAVIEW_H
 
@@ -98,8 +99,15 @@ public:
 
     bool scannerConnected() const { return (haveConnection); }
     QString scannerName() const;
+    void closeScanDevice();
 
     bool galleryRootSelected() const;
+
+    void connectViewerAction(KAction *action);
+    void connectGalleryAction(KAction *action);
+    void connectThumbnailAction(KAction *action);
+
+    void saveProperties( KConfig* );
 
 public slots:
     void slShowPreview()  {  }
@@ -142,7 +150,6 @@ public slots:
 
     void slOCRResultImage( const QPixmap& );
 
-    void slShowThumbnails( KFileTreeViewItem *dirKfi = 0, bool forceRedraw=false);
      void slotApplySettings();
 
     /**
@@ -154,8 +161,6 @@ public slots:
      **/
     void startOCR( KookaImage* );
 
-    void  slCloseScanDevice();
-    void saveProperties( KConfig* );
 
     /**
      * slot to select the scanner device. Does all the work with selection
@@ -163,9 +168,6 @@ public slots:
      */
     bool slSelectDevice(const QCString& useDevice = QCString(), bool alwaysAsk = true);
     void slAddDevice();
-
-    void connectViewerAction( KAction *action );
-    void connectGalleryAction( KAction *action );
 
     void slScanStart();
     void slScanFinished( KScanStat stat );
@@ -265,4 +267,4 @@ private:
 
 };
 
-#endif // KOOKAVIEW_H
+#endif							// KOOKAVIEW_H

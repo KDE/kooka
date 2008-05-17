@@ -116,7 +116,7 @@ void Kooka::createMyGUI( KParts::Part *part )
 Kooka::~Kooka()
 {
     KConfig *konf = KGlobal::config();
-    m_view->slCloseScanDevice();
+    m_view->closeScanDevice();
     writeDockConfig (konf,DOCK_SIZES);
     delete m_view;					// ensure its config saved
     delete m_printer;
@@ -221,11 +221,13 @@ void Kooka::setupActions()
                                    actionCollection(),"openWith");
     connect(openWithMenu->popupMenu(),SIGNAL(aboutToShow()),SLOT(slotOpenWithMenu()));
     m_view->connectGalleryAction( openWithMenu );
+    m_view->connectThumbnailAction( openWithMenu );
 
     saveImageAction = new KAction(i18n("Save Image..."), "filesave", KStdAccel::save(),
 				  m_view->gallery(), SLOT( slotExportFile() ),
 				  actionCollection(), "saveImage" );
     m_view->connectGalleryAction( saveImageAction );
+    m_view->connectThumbnailAction( saveImageAction );
 
     importImageAction = new KAction(i18n("Import Image..."), "fileimport", 0,
 				    m_view->gallery(), SLOT( slotImportFile() ),
@@ -236,6 +238,7 @@ void Kooka::setupActions()
 				    m_view->gallery(), SLOT( slotDeleteItems() ),
 				    actionCollection(), "deleteImage" );
     m_view->connectGalleryAction( deleteImageAction );
+    m_view->connectThumbnailAction( deleteImageAction );
 
     renameImageAction = new KAction(i18n("Rename Image"), "edittool", Key_F2,
 				    m_view->gallery(), SLOT( slotRenameItems() ),
@@ -246,11 +249,13 @@ void Kooka::setupActions()
 				    m_view->gallery(), SLOT( slotUnloadItems() ),
 				    actionCollection(), "unloadImage" );
     m_view->connectGalleryAction( unloadImageAction );
+    m_view->connectThumbnailAction( unloadImageAction );
 
-    propsImageAction = new KAction(i18n("Properties..."), 0,
+    propsImageAction = new KAction(i18n("Properties..."), ALT+Key_Return,
 				    m_view->gallery(), SLOT( slotItemProperties() ),
 				    actionCollection(), "propsImage" );
     m_view->connectGalleryAction( propsImageAction );
+    m_view->connectThumbnailAction( propsImageAction );
 
     // "Settings" menu
 

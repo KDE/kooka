@@ -105,12 +105,8 @@ private:
     QCheckBox *cbFilenameAsk;
 
     // Thumbnail View
-    KIntNumInput *m_thumbWidth;
-    KIntNumInput *m_thumbHeight;
-    KIntNumInput *m_frameWidth;
     ImageSelectLine *m_tileSelector;
-    KColorButton *m_colButt1;
-    KColorButton *m_colButt2;
+    KComboBox *m_thumbSizeCb;
 
     // OCR
     KURLRequester *binaryReq;

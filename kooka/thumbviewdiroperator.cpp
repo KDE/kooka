@@ -1,12 +1,10 @@
 /***************************************************************************
-               thumbviewitem.h  - Thumbnailview items
                              -------------------
-    begin                : Tue Apr 24 2002
-    copyright            : (C) 2002 by Klaas Freitag
-    email                : freitag@suse.de
+    copyright            : (C) 2008 by Jonathan Marten
+    email                : jjm@keelhaul.me.uk
 
-    $Id$
  ***************************************************************************/
+
 
 /***************************************************************************
  *                                                                         *
@@ -26,35 +24,38 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef __THUMBVIEWITEM_H__
-#define __THUMBVIEWITEM_H__
-
-#include <kiconview.h>
-#include <kurl.h>
-#include <kio/previewjob.h>
+#include <kdebug.h>
 #include <kfileitem.h>
-#include <kfileiconview.h>
+#include <klocale.h>
+#include <kactionclasses.h>
+#include <kpopupmenu.h>
+#include <kdiroperator.h>
 
-class KFileTreeViewItem;
+#include "thumbviewdiroperator.h"
+#include "thumbviewdiroperator.moc"
 
 
-class ThumbViewItem: public KFileIconViewItem
+ThumbViewDirOperator::ThumbViewDirOperator(const KURL &url,
+                                           QWidget *parent,const char *name)
+    : KDirOperator(url,parent,name)
 {
-public:
-   ThumbViewItem( QIconView *parent,
-		  const QString &text,
-		  const QPixmap &pixmap,
-		  KFileItem *fi );
+    kdDebug(28000) << k_funcinfo << endl;
 
-    void setItemUrl( const KURL& u );
+    setupMenu(0);					// don't want the built-in actions
 
-    KURL itemUrl() const
-      { return m_url; }
-
-private:
-   KURL m_url;
+    m_menu = static_cast<KActionMenu*>(actionCollection()->action("popupMenu"));
+    if (m_menu==NULL) kdDebug(28000) << k_funcinfo << "no popup menu!" << endl;
+    else m_menu->popupMenu()->insertTitle(i18n("Thumbnails"));
+}
 
 
-};
+void ThumbViewDirOperator::activatedMenu(const KFileItem *kfi,const QPoint &pos)
+{
+    if (m_menu!=NULL) m_menu->popup(pos);
+}
 
-#endif
+
+QPopupMenu *ThumbViewDirOperator::contextMenu() const
+{
+    return (m_menu!=NULL ? static_cast<QPopupMenu *>(m_menu->popupMenu()) : NULL);
+}

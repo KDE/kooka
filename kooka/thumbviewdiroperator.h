@@ -1,11 +1,8 @@
-/***************************************************************************
-               thumbviewitem.cpp  - Thumbview item class
+/***************************************************** -*- mode:c++; -*- ***
                              -------------------
-    begin                : Tue Apr 24 2002
-    copyright            : (C) 2002 by Klaas Freitag
-    email                : freitag@suse.de
+    copyright            : (C) 2008 by Jonathan Marten
+    email                : jjm@keelhaul.me.uk
 
-    $Id$
  ***************************************************************************/
 
 /***************************************************************************
@@ -26,24 +23,33 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <kfileitem.h>
-#include <kfileiconview.h>
+#ifndef THUMBVIEWDIROPERATOR_H
+#define THUMBVIEWDIROPERATOR_H
 
-#include "thumbview.h"
-#include "thumbviewitem.h"
+#include <kdiroperator.h>
 
-ThumbViewItem::ThumbViewItem(QIconView *parent, const QString &text,
-			     const QPixmap &pixmap,
-			     KFileItem *fi )
-   :KFileIconViewItem( parent, text, pixmap,fi )
+class KFileItem;
+class KActionMenu;
+
+class QPopupMenu;
+class QPoint;
+
+
+class ThumbViewDirOperator : public KDirOperator
 {
+    Q_OBJECT
 
-}
+public:
+    ThumbViewDirOperator(const KURL &url = KURL(),QWidget *parent = NULL,const char *name = NULL);
+    virtual ~ThumbViewDirOperator() {};
 
-void ThumbViewItem:: setItemUrl( const KURL& u )
-{
-    m_url = u;
-    setText( m_url.fileName());
-}
+    QPopupMenu *contextMenu() const;
 
+protected slots:
+    void activatedMenu(const KFileItem *kfi,const QPoint &pos);
 
+private:
+    KActionMenu *m_menu;
+};
+
+#endif							// THUMBVIEWDIROPERATOR_H

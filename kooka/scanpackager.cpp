@@ -323,7 +323,7 @@ void ScanPackager::slotDecorate( KFileTreeBranch* branch, const KFileTreeViewIte
    {
       KFileTreeViewItem *kftvi = *it;
       slotDecorate( kftvi );
-      emit fileChanged( kftvi->fileItem() );
+      emit fileChanged(kftvi->fileItem());
    }
 }
 
@@ -353,7 +353,7 @@ void ScanPackager::slFileRename(QListViewItem *it,const QString &newName)
 
     KURL urlFrom = item->url();
     KURL urlTo(urlFrom);
-    urlTo.setFileName("");				/* clean filename, apply new name */
+//    urlTo.setFileName("");				/* clean filename, apply new name */
     urlTo.setFileName(newName);
 
     if (success)
@@ -380,7 +380,8 @@ void ScanPackager::slFileRename(QListViewItem *it,const QString &newName)
             if (success)				// rename the file
             {
                 item->fileItem()->setURL(urlTo);	// note new URL
-                emit fileRenamed(item->fileItem(),urlTo);
+                //emit fileRenamed(item->fileItem(),urlTo);
+                emit fileRenamed(item,urlTo.fileName());
             }
         }
     }
@@ -509,55 +510,46 @@ void ScanPackager::slotSelectDirectory(const QString &branchName,const QString &
 
 /* ----------------------------------------------------------------------- */
 /* This slot is called when clicking on an item.                           */
-void ScanPackager::slClicked( QListViewItem *newItem )
+void ScanPackager::slClicked(QListViewItem *newItem)
 {
-   KFileTreeViewItem *item = static_cast<KFileTreeViewItem*>(newItem);
+    KFileTreeViewItem *item = static_cast<KFileTreeViewItem*>(newItem);
 
-   if( item ) // can be 0, when clicking where no item is present
-   {
-      kdDebug(28000) << "Clicked - newItem !" << endl;
-      /* Check if directory, hide image for now, later show a thumb view */
-      if( item->isDir())
-      {
-	 kdDebug(28000) << "clicked: Is a directory !" << endl;
-	 emit showImage(NULL,true);
-      }
-      else
-      {
-	 /* if not a dir, load the image if necessary. This is done by loadImageForItem,
-	  * which is async( TODO ). The image finally arrives in slotImageArrived */
-	 QApplication::setOverrideCursor(waitCursor);
-	 emit( aboutToShowImage( item->url()));
-	 loadImageForItem( item );
-	 QApplication::restoreOverrideCursor();
-      }
+    if (item==NULL) return;				// can click over no item
 
-      /* emit a signal indicating the new directory if there is a new one */
-      QString wholeDir = itemDirectory( item, false ); /* not relativ to root */
+    kdDebug(28000) << k_funcinfo << endl;
+    emit showItem(item);				// tell the (new) thumbnail view
 
-      if( currSelectedDir != wholeDir )
-      {
-	 currSelectedDir = wholeDir;
-	 QString relativUrl = itemDirectory( item, true );
-	 kdDebug(28000) << "Emitting " << relativUrl << " as new relative Url" << endl;
-	 /* Emit the signal with branch and the relative path */
-	 emit( galleryPathChanged( item->branch(), relativUrl ));
+    //  Check if directory, hide image for now, later show a thumb view?
+    if (item->isDir())					// is it a directory?
+    {
+	 emit showImage(NULL,true);			// unload current image
+    }
+    else						// not a directory
+    {
+        //  Load the image if necessary. This is done by loadImageForItem,
+        //  which is async (TODO). The image finally arrives in slotImageArrived.
+        QApplication::setOverrideCursor(waitCursor);
+        emit aboutToShowImage(item->url());
+        loadImageForItem(item);
+        QApplication::restoreOverrideCursor();
+    }
 
-	 if (item->isDir())
-	 {
-	    emit showThumbnails(item);
-	 }
-	 else
-	 {
-	    emit showThumbnails(static_cast<KFileTreeViewItem*>(item->parent()));
-	 }
-      }
-      else
-      {
-	 // kdDebug(28000) << "directory is not new: " << currSelectedDir << endl;
-      }
-   }
+    //  Indicate the new directory if it has changed
+    QString wholeDir = itemDirectory(item,false);	// not relative to root
+    if (currSelectedDir!=wholeDir)
+    {
+        currSelectedDir = wholeDir;
+        QString relativUrl = itemDirectory(item,true);
+        kdDebug(28000) << "Emitting " << relativUrl << " as new relative URL" << endl;
+        //  Emit the signal with branch and the relative path
+        emit galleryPathChanged(item->branch(),relativUrl);
+
+        // Show new thumbnail directory
+        if (item->isDir()) emit showThumbnails(item);
+        else emit showThumbnails(static_cast<KFileTreeViewItem *>(item->parent()));
+    }
 }
+
 
 void ScanPackager::loadImageForItem( KFileTreeViewItem *item )
 {
@@ -1110,36 +1102,32 @@ void ScanPackager::slotDeleteItems()
     KFileTreeViewItem *curr = currentKFileTreeViewItem();
     if (curr==NULL) return;
 
-    KURL urlToDel = curr->url();
+    KURL urlToDel = curr->url();			// item to be deleted
     QListViewItem *nextToSelect = curr->nextSibling();	// select this afterwards
-    bool ask = true;					// for future expansion
-    bool isDir = (curr->fileItem()->isDir());		// deleting a folder
+    bool isDir = (curr->fileItem()->isDir());		// deleting a folder?
 
-    if (ask)
+    QString s;
+    QString dontAskKey;
+    if (isDir)
     {
-        QString s;
-        QString dontAskKey;
-
-        if (isDir)
-        {
-            s = i18n("<qt>Do you really want to permanently delete the folder<br>"
-                     "<b>%1</b><br>"
-                     "and all of its contents? It cannot be restored!").arg(urlToDel.pathOrURL());
-            dontAskKey = "AskForDeleteDirs";
-        }
-        else
-        {
-            s = i18n("<qt>Do you really want to permanently delete the image<br>"
-                     "<b>%1</b>?<br>"
-                     "It cannot be restored!").arg(urlToDel.pathOrURL());
-            dontAskKey = "AskForDeleteFiles";
-        }
-
-        if (KMessageBox::warningContinueCancel(this,s,i18n("Delete Gallery Item"),
-                                               KStdGuiItem::del(),
-                                               dontAskKey)!=KMessageBox::Continue) return;
+        s = i18n("<qt>Do you really want to permanently delete the folder<br>"
+                 "<b>%1</b><br>"
+                 "and all of its contents? It cannot be restored!").arg(urlToDel.pathOrURL());
+        dontAskKey = "AskForDeleteDirs";
+    }
+    else
+    {
+        s = i18n("<qt>Do you really want to permanently delete the image<br>"
+                 "<b>%1</b>?<br>"
+                 "It cannot be restored!").arg(urlToDel.pathOrURL());
+        dontAskKey = "AskForDeleteFiles";
     }
 
+    if (KMessageBox::warningContinueCancel(this,s,i18n("Delete Gallery Item"),
+                                           KStdGuiItem::del(),
+                                           dontAskKey)!=KMessageBox::Continue) return;
+
+    slotUnloadItem(curr);
     kdDebug(28000) << k_funcinfo << "Deleting " << urlToDel.prettyURL() << endl;
     /* Since we are currently talking about local files here, NetAccess is OK */
     if (!KIO::NetAccess::del(urlToDel,NULL))
@@ -1150,15 +1138,25 @@ void ScanPackager::slotDeleteItems()
         return;
     }
 
-    if (nextToSelect!=NULL) setSelected(nextToSelect,true);
-
-    updateParent(curr);
-
-    if (isDir)
+    updateParent(curr);					// update parent folder count
+    if (isDir)						// remove from the name combo
     {
-        /* The directory needs to be removed from the name combo */
         emit galleryDirectoryRemoved(curr->branch(),itemDirectory(curr,true));
     }
+
+#if 0
+    if (nextToSelect!=NULL) setSelected(nextToSelect,true);
+    //  TODO: if doing the above, also need to signal to update thumbnail
+    //  as below.
+    //
+    //  But doing that leads to inconsistency between deleting the last item
+    //  in a folder (nothing is selected afterwards) and deleting anything
+    //  else (the next image is selected and loaded).  So leaving this
+    //  commented out for now.
+    curr = currentKFileTreeViewItem();
+    kdDebug() << k_funcinfo << "new selection after delete " << (curr==NULL ? "NULL" : curr->url().prettyURL()) << endl;
+    if (curr!=NULL) emit showItem(curr);
+#endif
 }
 
 

@@ -46,6 +46,7 @@
 #include <kmessagebox.h>
 #include <kurlrequester.h>
 #include <kseparator.h>
+#include <kicontheme.h>
 
 #include "devselector.h"
 #include "imgsaver.h"
@@ -361,74 +362,59 @@ void KookaPref::setupSaveFormatPage( )
 
 void KookaPref::setupThumbnailPage()
 {
-   konf->setGroup( THUMB_GROUP );
+    konf->setGroup(THUMB_GROUP);
 
-   QFrame *page = addPage( i18n("Thumbnail View"), i18n("Thumbnail Gallery View" ),
+    QFrame *page = addPage( i18n("Thumbnail View"), i18n("Thumbnail Gallery View" ),
 			    BarIcon("thumbnail", KIcon::SizeMedium ) );
-   QVBoxLayout *top = new QVBoxLayout( page, 0, spacingHint() );
+    QGridLayout *lay = new QGridLayout(page,5,2,0,
+                                       KDialog::spacingHint());
+    lay->setRowStretch(4,9);
+    lay->setColStretch(1,9);
 
-   top->addWidget( new QLabel( i18n("Here you can configure the appearance of the thumbnail view of your scan picture gallery."),page ));
-   top->addSpacing(2*KDialogBase::spacingHint());
+    QLabel *title = new QLabel(i18n("Here you can configure the appearance of the scan gallery thumbnail view."),page);
+    lay->addMultiCellWidget(title,0,0,0,2);
+    lay->setRowSpacing(1,2*KDialogBase::spacingHint());
 
-   /* Backgroundimage */
-   KStandardDirs stdDir;
-   QString bgImg = konf->readPathEntry( BG_WALLPAPER );
-   if( bgImg.isEmpty() )
-      bgImg = stdDir.findResource( "data", STD_TILE_IMG );
+    /* Background image */
+    QString bgImg = konf->readPathEntry(THUMB_BG_WALLPAPER,ThumbView::standardBackground());
 
-   /* image file selector */
-   QVGroupBox *hgb1 = new QVGroupBox( i18n("Thumbview Background" ), page );
-   m_tileSelector = new ImageSelectLine( hgb1, i18n("Select background image:"));
-   kdDebug(28000) << "Setting tile url " << bgImg << endl;
-   m_tileSelector->setURL( KURL(bgImg) );
+    QLabel *l = new QLabel(i18n("Background:"),page);
+    lay->addWidget(l,2,0,Qt::AlignRight);
 
-   top->addWidget( hgb1 );
+    /* image file selector */
+    m_tileSelector = new ImageSelectLine(page,QString::null);
+    kdDebug(28000) << "Setting tile url " << bgImg << endl;
+    m_tileSelector->setURL(bgImg);
+    lay->addWidget(m_tileSelector,2,1);
+    l->setBuddy(m_tileSelector);
 
-   /* Add the Boxes to configure size, framestyle and background */
-   QVGroupBox *hgb2 = new QVGroupBox( i18n("Thumbnail Size" ), page );
-   QVGroupBox *hgb3 = new QVGroupBox( i18n("Thumbnail Frame" ), page );
+    /* Preview size */
+    l = new QLabel(i18n("Preview size:"),page);
+    lay->addWidget(l,3,0,Qt::AlignRight);
 
-   /* Thumbnail size */
-   int w = konf->readNumEntry( PIXMAP_WIDTH, 100);
-   int h = konf->readNumEntry( PIXMAP_HEIGHT, 120 );
-   QGrid *lGrid = new QGrid( 2, hgb2 );
-   lGrid->setSpacing( 2 );
-   QLabel *l1 = new QLabel( i18n("Thumbnail maximum &width:"), lGrid );
-   m_thumbWidth = new KIntNumInput( w, lGrid );
-   m_thumbWidth->setMinValue(1);
-   l1->setBuddy( m_thumbWidth );
+    m_thumbSizeCb = new KComboBox(page);
+    m_thumbSizeCb->insertItem(ThumbView::sizeName(KIcon::SizeEnormous));	// 0
+    m_thumbSizeCb->insertItem(ThumbView::sizeName(KIcon::SizeHuge));		// 1
+    m_thumbSizeCb->insertItem(ThumbView::sizeName(KIcon::SizeLarge));		// 2
+    m_thumbSizeCb->insertItem(ThumbView::sizeName(KIcon::SizeMedium));		// 3
+    m_thumbSizeCb->insertItem(ThumbView::sizeName(KIcon::SizeSmallMedium));	// 4
 
-   lGrid->setSpacing( 4 );
-   l1 = new QLabel( i18n("Thumbnail maximum &height:"), lGrid );
-   m_thumbHeight = new KIntNumInput( m_thumbWidth, h, lGrid );
-   m_thumbHeight->setMinValue(1);
-   l1->setBuddy( m_thumbHeight );
+    KIcon::StdSizes size = static_cast<KIcon::StdSizes>(konf->readNumEntry(THUMB_PREVIEW_SIZE,
+                                                                           KIcon::SizeHuge));
+    int sel;
+    switch (size)
+    {
+case KIcon::SizeEnormous:	sel = 0;	break;
+default:
+case KIcon::SizeHuge:		sel = 1;	break;
+case KIcon::SizeLarge:		sel = 2;	break;
+case KIcon::SizeMedium:		sel = 3;	break;
+case KIcon::SizeSmallMedium:	sel = 4;	break;
+    }
+    m_thumbSizeCb->setCurrentItem(sel);
 
-   /* Frame Stuff */
-   int frameWidth = konf->readNumEntry( THUMB_MARGIN, 3 );
-   QColor col1    = konf->readColorEntry( MARGIN_COLOR1, &(colorGroup().base()));
-   QColor col2    = konf->readColorEntry( MARGIN_COLOR2, &(colorGroup().foreground()));
-
-   QGrid *fGrid = new QGrid( 2, hgb3 );
-   fGrid->setSpacing( 2 );
-   l1 = new QLabel(i18n("Thumbnail &frame width:"), fGrid );
-   m_frameWidth = new KIntNumInput( frameWidth, fGrid );
-   m_frameWidth->setMinValue(0);
-   l1->setBuddy( m_frameWidth );
-
-   l1 = new QLabel(i18n("Frame color &1: "), fGrid );
-   m_colButt1 = new KColorButton( col1, fGrid );
-   l1->setBuddy( m_colButt1 );
-
-   l1 = new QLabel(i18n("Frame color &2: "), fGrid );
-   m_colButt2 = new KColorButton( col2, fGrid );
-   l1->setBuddy( m_colButt2 );
-   /* TODO: Gradient type */
-
-   top->addWidget( hgb2, 10);
-   top->addWidget( hgb3, 10);
-   top->addStretch(10);
-
+    lay->addWidget(m_thumbSizeCb,3,1);
+    l->setBuddy(m_thumbSizeCb);
 }
 
 
@@ -467,17 +453,24 @@ void KookaPref::slotApply( void )
     konf->writeEntry( OP_ASK_FILENAME, cbFilenameAsk->isChecked() );
 
     /* ** Thumbnail options ** */
-    konf->setGroup( THUMB_GROUP );
-    konf->writeEntry( PIXMAP_WIDTH, m_thumbWidth->value() );
-    konf->writeEntry( PIXMAP_HEIGHT, m_thumbHeight->value() );
-    konf->writeEntry( THUMB_MARGIN, m_frameWidth->value() );
-    konf->writeEntry( MARGIN_COLOR1, m_colButt1->color());
-    konf->writeEntry( MARGIN_COLOR2, m_colButt2->color());
+    konf->setGroup(THUMB_GROUP);
 
     KURL bgUrl = m_tileSelector->selectedURL().url();
     bgUrl.setProtocol("");
     kdDebug(28000) << "Writing tile-pixmap " << bgUrl.prettyURL() << endl;
-    konf->writePathEntry( BG_WALLPAPER, bgUrl.url() );
+    konf->writePathEntry(THUMB_BG_WALLPAPER,bgUrl.url());
+
+    KIcon::StdSizes size;
+    switch (m_thumbSizeCb->currentItem())
+    {
+case 0:		size = KIcon::SizeEnormous;	break;
+default:
+case 1:		size = KIcon::SizeHuge;		break;
+case 2:		size = KIcon::SizeLarge;	break;
+case 3:		size = KIcon::SizeMedium;	break;
+case 4:		size = KIcon::SizeSmallMedium;	break;
+    }
+    konf->writeEntry(THUMB_PREVIEW_SIZE,size);
 
     /* ** OCR Options ** */
     konf->setGroup( CFG_GROUP_OCR_DIA );
@@ -514,17 +507,9 @@ void KookaPref::slotDefault( void )
     cbShowScannerSelection->setChecked( true);
     cbReadStartupImage->setChecked( true);
     cbSkipFormatAsk->setChecked( true  );
-    KStandardDirs stdDir;
-    QString bgImg = stdDir.findResource( "data", STD_TILE_IMG );
-    m_tileSelector->setURL( KURL(bgImg) );
-    m_thumbWidth->setValue( 100 );
-    m_thumbHeight->setValue( 120 );
-    QColor col1    = QColor( colorGroup().base());
-    QColor col2    = QColor( colorGroup().foreground());
 
-    m_frameWidth->setValue( 3 );
-    m_colButt1->setColor( col1 );
-    m_colButt2->setColor( col2 );
+    m_tileSelector->setURL(ThumbView::standardBackground());
+    m_thumbSizeCb->setCurrentItem(1);			// "Very Large"
 
     slotEngineSelected(OcrEngine::EngineNone);
 }

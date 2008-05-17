@@ -115,11 +115,13 @@ signals:
    void         showThumbnails( KFileTreeViewItem* );
 
    void         aboutToShowImage( const KURL& ); /* starting to load image */
-   void         imageChanged( KFileItem* );     /* the image has changed  */
 
-    void         fileDeleted( KFileItem* );
-    void         fileChanged( KFileItem* );
-    void         fileRenamed( KFileItem*, const KURL& );
+    void imageChanged(const KFileItem *kfi);
+    void fileDeleted(const KFileItem *kfi);
+    void fileChanged(const KFileItem *kfi);
+    void fileRenamed(const KFileTreeViewItem *item,const QString &newName);
+    void showItem(const KFileTreeViewItem *item);
+
 
 private:
    QString     localFileName( KFileTreeViewItem* it ) const;

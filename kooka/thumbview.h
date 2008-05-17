@@ -1,11 +1,10 @@
-/***************************************************************************
+/***************************************************** -*- mode:c++; -*- ***
                thumbview.h  - Class to display thumbnailed images
                              -------------------
     begin                : Tue Apr 18 2002
     copyright            : (C) 2002 by Klaas Freitag
     email                : freitag@suse.de
 
-    $Id$
  ***************************************************************************/
 
 /***************************************************************************
@@ -26,128 +25,78 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef __THUMBVIEW_H__
-#define __THUMBVIEW_H__
+#ifndef THUMBVIEW_H
+#define THUMBVIEW_H
 
-#include <qwidget.h>
-#include <qimage.h>
-#include <qpixmap.h>
-#include <qcolor.h>
 #include <qvbox.h>
+#include <qmap.h>
 
-#include <kiconview.h>
+#include <kicontheme.h>
 #include <kurl.h>
-#include <kio/previewjob.h>
-#include <kfileitem.h>
-#include <kfileiconview.h>
 
-/* KConfig group definitions */
-#define MARGIN_COLOR1 "MarginColor1"
-#define MARGIN_COLOR2 "MarginColor2"
-#define PIXMAP_WIDTH  "pixmapWidth"
-#define PIXMAP_HEIGHT "pixmapHeight"
-#define THUMB_MARGIN  "thumbnailMargin"
-#define THUMB_GROUP   "thumbnailView"
-#define BG_WALLPAPER  "BackGroundTile"
-#define STD_TILE_IMG  "kooka/pics/thumbviewtile.png"
+//  KConfig group definitions
+#define THUMB_GROUP		"thumbnailView"
+#define THUMB_PREVIEW_SIZE	"previewSize"
+#define THUMB_BG_WALLPAPER	"BackGroundTile"
+#define THUMB_STD_TILE_IMG	"kooka/pics/thumbviewtile.png"
 
-class QPixmap;
-class QListViewItem;
-class KProgress;
-class KIO::PreviewJob;
+class KFileItem;
+class KFileIconView;
+class KFileTreeViewItem;
+class KActionMenu;
+class KToggleAction;
 
-class ThumbView: public QVBox /* KIconView */
+class QPopupMenu;
+
+class ThumbViewDirOperator;
+
+
+class ThumbView : public QVBox
 {
    Q_OBJECT
 
 public:
+    ThumbView(QWidget *parent,const char *name = NULL);
+    ~ThumbView();
 
-   ThumbView( QWidget *parent, const char *name=0 );
-   ~ThumbView();
+    QPopupMenu *contextMenu() const;
+    bool readSettings();
 
-   void setCurrentDir( const KURL& s)
-      { m_currentDir = s; }
-   KURL currentDir( ) const
-      { return m_currentDir; }
+    static QString standardBackground();
+    static QString sizeName(KIcon::StdSizes size);
 
-   QSize tumbSize( ) const
-      {
-	 return( QSize( m_pixWidth, m_pixHeight ));
-      }
-
-   int thumbMargin() const
-      {
-	 return m_thumbMargin;
-      }
 public slots:
-   void slSetThumbSize( int w, int h )
-      {
-	 m_pixWidth  = w;
-	 m_pixHeight = h;
-      }
-   void slSetThumbSize( const QSize& s )
-      {
-	 m_pixWidth  = s.width();
-	 m_pixHeight = s.height();
-      }
-
-   void slSetThumbMargin( int m )
-      {
-	 m_thumbMargin = m;
-      }
-
-   void slNewFileItems( const KFileItemList& );
-   void slGotPreview( const KFileItem*, const QPixmap& );
-   void slPreviewResult( KIO::Job* );
-
-   /**
-    *  This connects to the IconView's executed signal and tells the packager
-    *  to select the image
-    */
-   void slDoubleClicked( QIconViewItem* );
-
-   /**
-    *  indication that a image changed, needs to be reloaded.
-    */
-   void slImageChanged( KFileItem * );
-   void slImageDeleted( KFileItem * );
-   void slSetBackGround( );
-   void slCheckForUpdate( KFileItem* );
-   bool readSettings();
-   void clear();
-
-    void slImageRenamed( KFileItem*, const KURL& );
+    void slotSetSize(int size);
+    void slotImageDeleted(const KFileItem *kfi);
+    void slotImageChanged(const KFileItem *kfi);
+    void slotImageRenamed(const KFileTreeViewItem *item,const QString &newName);
+    void slotSelectImage(const KFileTreeViewItem *item);
 
 protected:
+    void saveConfig();
 
-   void saveConfig();
+protected slots:
+    void slotAboutToShowMenu();
+    void slotFileSelected(const KFileItem *kfi);
+    void slotFinishedLoading();
 
 signals:
-   /**
-    * selects a QListViewItem from the thumbnail. This signal only makes
-    * sense if connected to a ScanPackager.
-    */
-   void selectFromThumbnail( const KURL& );
+    void selectFromThumbnail(const KURL &url);
 
 private:
-   QPixmap createPixmap( const QPixmap& ) const;
+    void setBackground();
 
-   bool    deleteImage( KFileItem* );
-   KIconView *m_iconView;
-   KProgress *m_progress;
+    KActionMenu *m_sizeMenu;
+    bool m_firstMenu;
+    QMap<KIcon::StdSizes,KToggleAction *> m_sizeMap;
 
-   KURL    m_currentDir;
-   QPixmap m_basePix;
-   int     m_pixWidth;
-   int     m_pixHeight;
-   int     m_thumbMargin;
-   QColor  m_marginColor1;
-   QColor  m_marginColor2;
-   QString m_bgImg;
-   int     m_cntJobsStarted;
-   KIO::PreviewJob *m_job;
+    KIcon::StdSizes m_thumbSize;
+    QString m_bgImg;
 
-    KFileItemList m_pendingJobs;
+    ThumbViewDirOperator *m_dirop;
+    KFileIconView *m_fileview;
+    KURL m_lastSelected;
+    QString m_toSelect;
 };
 
-#endif
+#endif							// THUMBVIEW_H

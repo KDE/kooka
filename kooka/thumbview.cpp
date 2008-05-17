@@ -5,7 +5,6 @@
     copyright            : (C) 2002 by Klaas Freitag
     email                : freitag@suse.de
 
-    $Id$
  ***************************************************************************/
 
 
@@ -27,267 +26,12 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <qpixmap.h>
-#include <qpainter.h>
 
-#include <kio/previewjob.h>
-#include <kdebug.h>
-#include <kfileitem.h>
-#include <kfileiconview.h>
-#include <kfiletreeviewitem.h>
-#include <kimageeffect.h>
-#include <kglobal.h>
-#include <kstandarddirs.h>
-#include <kprogress.h>
+/*
+    Some most useful original comments retained here for reference,
+    probably not relevant now that we are using kio/kfile to do all
+    the hard work.
 
-#include "thumbview.h"
-#include "thumbview.moc"
-
-#include "thumbviewitem.h"
-
-
-
-ThumbView::ThumbView( QWidget *parent, const char *name )
-   : QVBox( parent ),
-     m_iconView(0),
-     m_job(0)
-{
-   setMargin(3);
-   m_pixWidth = 0;
-   m_pixHeight = 0;
-   m_thumbMargin = 5;
-   m_iconView = new KIconView( this, name );
-   m_progress = new KProgress( this );
-   m_progress->hide();
-
-   m_pixWidth  = 100;
-   m_pixHeight = 100;
-
-   readSettings();
-
-   m_basePix.resize( QSize( m_pixWidth, m_pixHeight ) );
-   m_basePix.fill();  // fills white per default TODO
-
-
-   m_iconView->setItemsMovable( false );
-
-   slSetBackGround();
-
-   connect( m_iconView, SIGNAL( executed( QIconViewItem* )),
-	    this, SLOT( slDoubleClicked( QIconViewItem* )));
-
-   m_pendingJobs.setAutoDelete(false);
-}
-
-ThumbView::~ThumbView()
-{
-   saveConfig();
-}
-
-bool ThumbView::readSettings()
-{
-   KConfig *cfg = KGlobal::config();
-   cfg->setGroup( THUMB_GROUP );
-   bool dirty = false;
-
-   QColor color;
-   color = cfg->readColorEntry( MARGIN_COLOR1, &(colorGroup().base()));
-   if( color != m_marginColor1 )
-   {
-      dirty = true;
-      m_marginColor1 = color;
-   }
-
-   color = cfg->readColorEntry( MARGIN_COLOR2, &(colorGroup().foreground()));
-   if( color != m_marginColor2 )
-   {
-      dirty = true;
-      m_marginColor2 = color;
-   }
-
-   int value;
-   bool sizeDirty = false;
-   value = cfg->readNumEntry( THUMB_MARGIN, 5 );
-   if( value != m_thumbMargin )
-   {
-      sizeDirty = true;
-      m_thumbMargin = value;
-   }
-
-   value = cfg->readNumEntry( PIXMAP_WIDTH, 100 );
-   if( value != m_pixWidth || m_pixWidth == 0 )
-   {
-      sizeDirty  = true;
-      m_pixWidth = value;
-   }
-
-   value = cfg->readNumEntry( PIXMAP_HEIGHT, 120 );
-   if( value != m_pixHeight || m_pixHeight == 0 )
-   {
-      sizeDirty  = true;
-      m_pixHeight = value;
-   }
-
-   if( sizeDirty )
-   {
-      int gX = 2*m_thumbMargin+m_pixWidth+10;
-      int gY = 2*m_thumbMargin+m_pixHeight+10;
-      m_iconView->setGridX(gX);
-      m_iconView->setGridY(gY);
-      kdDebug(28000) << "Setting Grid " << gX << " - " << gY << endl;
-   }
-
-   KStandardDirs stdDir;
-   QString newBgImg = cfg->readEntry( BG_WALLPAPER, stdDir.findResource( "data", STD_TILE_IMG ) );
-
-   if( m_bgImg != newBgImg )
-   {
-      m_bgImg = newBgImg;
-      slSetBackGround();
-   }
-
-   return (sizeDirty || dirty);
-}
-
-void ThumbView::slDoubleClicked( QIconViewItem *qIt )
-{
-   ThumbViewItem *it = static_cast<ThumbViewItem*>( qIt );
-
-   if( it )
-   {
-      const KURL url = it->itemUrl();
-
-      emit( selectFromThumbnail( url ));
-   }
-}
-
-void ThumbView::slSetBackGround( )
-{
-   QPixmap bgPix;
-   if( m_bgImg.isEmpty())
-   {
-      bgPix.resize( QSize(16, 16));
-      bgPix.fill( QPixmap::blue );
-   }
-   else
-   {
-      bgPix.load( m_bgImg );
-   }
-
-   m_iconView->setPaletteBackgroundPixmap ( bgPix );
-   setPaletteBackgroundPixmap ( bgPix );
-
-}
-
-void ThumbView::slImageChanged( KFileItem *kfit )
-{
-   if( ! kfit ) return;
-   // kdDebug(28000) << "changes to one thumbnail!" << endl;
-
-   KURL thumbDir = currentDir();
-   KURL itemUrl = kfit->url();
-
-   /* delete filename */
-   itemUrl.setFileName( QString());
-   if( !itemUrl.equals( thumbDir, true ))
-   {
-      // kdDebug(28000) << "returning, because directory does not match: " << itemUrl.prettyURL() << endl;
-      // kdDebug(28000) << "and my URL: " << thumbDir.prettyURL() << endl;
-      return;
-   }
-
-   if( deleteImage( kfit ))
-   {
-      kdDebug(28000) << "was changed, deleted first!" << endl;
-   }
-   /* Trigger a new reading */
-   KFileItemList li;
-   li.append( kfit );
-   slNewFileItems( li );
-}
-
-void ThumbView::slImageRenamed( KFileItem *kfit, const KURL& newUrl )
-{
-    const KURL url = kfit->url();
-
-    if( kfit->isDir() ) {
-	clear();
-    }
-    
-    for ( QIconViewItem *item = m_iconView->firstItem(); item; item = item->nextItem() )
-    {
-        ThumbViewItem *it=static_cast<ThumbViewItem*>( item );
-
-        if( url == it->itemUrl() )
-        {
-            it->setItemUrl( newUrl );
-
-            break;
-        }
-   }
-}
-
-
-void  ThumbView::slCheckForUpdate( KFileItem *kfit )
-{
-   if( ! kfit ) return;
-
-   kdDebug(28000) << "Checking for update of thumbview!" << endl;
-
-   KURL searchUrl = kfit->url();
-   bool haveItem = false;
-
-   /* iterate over all icon items and compare urls.
-    * TODO: Check the parent url to avoid iteration over all */
-   for ( QIconViewItem *item = m_iconView->firstItem(); item && !haveItem;
-	 item = item->nextItem() )
-   {
-      if( searchUrl == static_cast<ThumbViewItem*>(item)->itemUrl() )
-      {
-	 haveItem = true;
-      }
-   }
-
-   /* if we still do not have the item, it is not in the thumbview. */
-   if( ! haveItem )
-   {
-      KFileItemList kfiList;
-
-      kfiList.append( kfit );
-      slNewFileItems( kfiList );
-   }
-
-}
-
-
-bool ThumbView::deleteImage( KFileItem *kfit )
-{
-   if( ! kfit ) return false;
-
-
-   KURL searchUrl = kfit->url();
-   bool haveItem = false;
-
-   /* iterate over all icon items and compare urls.
-    * TODO: Check the parent url to avoid iteration over all */
-   for ( QIconViewItem *item = m_iconView->firstItem(); item && !haveItem; item = item->nextItem() )
-   {
-      if( searchUrl == static_cast<ThumbViewItem*>(item)->itemUrl() )
-      {
-	 m_iconView->takeItem( item );
-	 haveItem = true;
-      }
-   }
-   kdDebug(28000) << "Deleting image from thumbview, result is " << haveItem << endl;
-   return( haveItem );
-}
-
-void ThumbView::slImageDeleted( KFileItem *kfit )
-{
-   deleteImage( kfit );
-
-
-   /*
     From a mail from Waldo pointing out two probs in Thumbview:
 
     1) KDirLister is the owner of the KFileItems it emits, this means
@@ -303,192 +47,297 @@ void ThumbView::slImageDeleted( KFileItem *kfit )
        fileitems that get deleted from the PreviewJob with
        PreviewJob::removeItem.
 
-   */
-   if( m_job )  /* is a job running? Remove the item from it if existing. */
-   {
-       m_job->removeItem( kfit );
-   }
+    2) I think you may end up creating two PreviewJob's in parallel
+       when the slNewFileItems() function is called two times in
+       quick succession. The current code doesn't seem to expect
+       that, given the comment in slPreviewResult(). In the light of
+       (1) it might become fatal since you will not be able to call
+       PreviewJob::removeItem on the proper job. I suggest to queue
+       new items when a job is already running and start a new job
+       once the first one is finished when there are any items left
+       in the queue. Don't forget to delete items from the queue if
+       they get deleted in the mean time.
 
-   /* check if it is in the pending list */
-   m_pendingJobs.removeRef(kfit);
+       The strategy is as follows: In the global list m_pendingJobs
+       the jobs to start are appended. Only if m_job is zero (no job
+       is running) a job is started on the current m_pendingJobs list.
+       The m_pendingJobs list is clear afterwords.
+*/
+
+#include <qsignalmapper.h>
+#include <qpopupmenu.h>
+
+#include <kfileitem.h>
+#include <kfileiconview.h>
+#include <kfiletreeviewitem.h>
+#include <kglobal.h>
+#include <kstandarddirs.h>
+#include <kaction.h>
+#include <kactionclasses.h>
+#include <kdiroperator.h>
+#include <kfileiconview.h>
+#include <klocale.h>
+#include <kpopupmenu.h>
+
+#include "previewer.h"
+#include "thumbviewdiroperator.h"
+
+#include "thumbview.h"
+#include "thumbview.moc"
+
+
+ThumbView::ThumbView(QWidget *parent,const char *name)
+    : QVBox(parent)
+{
+    setMargin(3);
+    m_thumbSize = KIcon::SizeHuge;
+    m_bgImg = QString::null;
+    m_firstMenu = true;					// first time menu used
+
+    m_dirop = new ThumbViewDirOperator(KURL(Previewer::galleryRoot()),this);
+
+    m_fileview = new KFileIconView(this,"filepreview");
+    m_dirop->setView(m_fileview);
+
+    m_fileview->setViewName(i18n("Thumbnails"));
+    m_fileview->setSelectionMode(KFile::Single);
+    m_fileview->setViewMode(KFileView::Files);
+    m_fileview->setIgnoreMaximumSize(true);
+    m_fileview->showPreviews();
+
+    connect(m_fileview->signaler(),SIGNAL(fileHighlighted(const KFileItem *)),
+            SLOT(slotFileSelected(const KFileItem *)));
+    connect(m_fileview->signaler(),SIGNAL(activatedMenu(const KFileItem *,const QPoint &)),
+            SLOT(slotFileSelected(const KFileItem *)));
+
+    connect(m_dirop,SIGNAL(finishedLoading()),SLOT(slotFinishedLoading()));
+
+    m_lastSelected = m_dirop->url();
+    m_toSelect = QString::null;
+
+    readSettings();
+
+    m_sizeMenu = new KActionMenu(i18n("Preview Size"),this);
+    QSignalMapper *mapper = new QSignalMapper(this);
+    KToggleAction *act;
+
+    act = new KToggleAction(sizeName(KIcon::SizeEnormous),0,mapper,SLOT(map()),NULL);
+    mapper->setMapping(act,KIcon::SizeEnormous);
+    m_sizeMap[KIcon::SizeEnormous] = act;
+    m_sizeMenu->insert(act);
+
+    act = new KToggleAction(sizeName(KIcon::SizeHuge),0,mapper,SLOT(map()),NULL);
+    mapper->setMapping(act,KIcon::SizeHuge);
+    m_sizeMap[KIcon::SizeHuge] = act;
+    m_sizeMenu->insert(act);
+
+    act = new KToggleAction(sizeName(KIcon::SizeLarge),0,mapper,SLOT(map()),NULL);
+    mapper->setMapping(act,KIcon::SizeLarge);
+    m_sizeMap[KIcon::SizeLarge] = act;
+    m_sizeMenu->insert(act);
+
+    act = new KToggleAction(sizeName(KIcon::SizeMedium),0,mapper,SLOT(map()),NULL);
+    mapper->setMapping(act,KIcon::SizeMedium);
+    m_sizeMap[KIcon::SizeMedium] = act;
+    m_sizeMenu->insert(act);
+
+    act = new KToggleAction(sizeName(KIcon::SizeSmallMedium),0,mapper,SLOT(map()),NULL);
+    mapper->setMapping(act,KIcon::SizeSmallMedium);
+    m_sizeMap[KIcon::SizeSmallMedium] = act;
+    m_sizeMenu->insert(act);
+
+    connect(mapper,SIGNAL(mapped(int)),SLOT(slotSetSize(int)));
+    connect(contextMenu(),SIGNAL(aboutToShow()),SLOT(slotAboutToShowMenu()));
 }
 
 
-void ThumbView::slNewFileItems( const KFileItemList& items )
+ThumbView::~ThumbView()
 {
-   kdDebug(28000) << "Creating thumbnails for fileItemList" << endl;
-
-   /* Fill the pending jobs list. */
-   KFileItemListIterator it( items );
-   KFileItem *item = 0;
-   for ( ; (item = it.current()); ++it )
-   {
-      QString filename = item->url().prettyURL();
-      if( item->isDir() )
-      {
-	 /* create a dir pixmap */
-      }
-      else
-      {
-	 QPixmap p(m_basePix) ;
-	 QPixmap mime( item->pixmap(0) );
-
-	 if( p.width() > mime.width() && p.height() > mime.height() )
-	 {
-	    QPainter paint( &p );
-	    paint.drawPixmap( (p.width()-mime.width())/2,
-			      (p.height()-mime.height())/2,
-			      mime );
-	    paint.flush();
-	 }
-
-	 /* Create a new empty preview pixmap and store the pointer to it */
-	 ThumbViewItem *newIconViewIt = new ThumbViewItem( m_iconView,
-							   item->url().filename(),
-							   createPixmap( p ),
-							   item );
-
-	 newIconViewIt->setItemUrl( item->url() );
-
-	 /* tell the file item about the iconView-representation */
-	 item->setExtraData( this, newIconViewIt );
-
-	 m_pendingJobs.append( item );
-      }
-   }
-
-   /*
-     From a mail from Waldo Bastian pointing out problems with thumbview:
-
-     2) I think you may end up creating two PreviewJob's in parallel
-        when the slNewFileItems() function is called two times in
-        quick succession. The current code doesn't seem to expect
-        that, given the comment in slPreviewResult(). In the light of
-        1) it might become fatal since you will not be able to call
-        PreviewJob::removeItem on the proper job. I suggest to queue
-        new items when a job is already running and start a new job
-        once the first one is finished when there are any items left
-        in the queue. Don't forget to delete items from the queue if
-        they get deleted in the mean time.
-
-        The strategy is as follows: In the global list m_pendingJobs
-        the jobs to start are appended. Only if m_job is zero (no job
-        is running) a job is started on the current m_pendingJobs list.
-        The m_pendingJobs list is clear afterwords.
-   */
-
-   if( ! m_job && m_pendingJobs.count() > 0 )
-   {
-      /* Progress-Bar */
-      m_progress->show();
-      m_progress->setTotalSteps(m_pendingJobs.count());
-      m_cntJobsStarted = 0;
-
-      /* start a preview-job */
-      m_job = KIO::filePreview(m_pendingJobs, m_pixWidth, m_pixHeight );
-
-      if( m_job )
-      {
-	 connect( m_job, SIGNAL( result( KIO::Job * )),
-		  this, SLOT( slPreviewResult( KIO::Job * )));
-	 connect( m_job, SIGNAL( gotPreview( const KFileItem*, const QPixmap& )),
-		  SLOT( slGotPreview( const KFileItem*, const QPixmap& ) ));
-
-         m_pendingJobs.clear();
-
-         /* KIO::Jo result is called in any way: Success, Failed, Error,
-	  * thus connecting the failed is not really necessary.
-	  */
-        // connect( job, SIGNAL( failed( const KFileItem* )),
-        //          this, SLOT( slotFailed( const KFileItem* ) ));
-
-      }
-   }
+    saveConfig();
 }
 
 
-
-void ThumbView::slGotPreview( const KFileItem* newFileItem, const QPixmap& newPix )
+QPopupMenu *ThumbView::contextMenu() const
 {
-   if( ! newFileItem ) return;
-   KFileIconViewItem *item = static_cast<KFileIconViewItem*>(const_cast<void*>(newFileItem->extraData( this )));
-
-   if( ! item ) return;
-
-   item->setPixmap( createPixmap(newPix) );
-   m_cntJobsStarted+=1;
-
-   m_progress->setProgress(m_cntJobsStarted);
-
-   // kdDebug(28000)<< "jobs-Counter: " << m_cntJobsStarted << endl;
-
-}
-
-void ThumbView::slPreviewResult( KIO::Job *job )
-{
-   if( job && job->error() > 0 )
-   {
-      kdDebug(28000) << "Thumbnail Creation ERROR: " << job->errorString() << endl;
-      job->showErrorDialog( 0 );
-   }
-
-   if( job != m_job )
-   {
-      kdDebug(28000) << "Very obscure: Job finished is not mine!"  << endl;
-   }
-   /* finished */
-   kdDebug(28000) << "Thumbnail job finished." << endl;
-   m_cntJobsStarted = 0;
-   m_progress->reset();
-   m_progress->hide();
-   m_job = 0L;
-
-   /* maybe there is a new job to start because of pending items? */
-   if( m_pendingJobs.count() > 0 )
-   {
-       slNewFileItems( KFileItemList() );  /* Call with an empty list */
-   }
+    return (m_dirop->contextMenu());
 }
 
 
-QPixmap ThumbView::createPixmap( const QPixmap& preview ) const
+void ThumbView::slotAboutToShowMenu()
 {
-   QImage ires = KImageEffect::unbalancedGradient( QSize( 2*m_thumbMargin+ preview.width(),
-							  2*m_thumbMargin+ preview.height()),
-						   m_marginColor1, m_marginColor2,
-						   KImageEffect::DiagonalGradient );
+    if (m_sizeMenu==NULL) return;
+    kdDebug(28000) << k_funcinfo << endl;
 
+    if (m_firstMenu)					// popup for the first time
+    {
+        QPopupMenu *menu = contextMenu();
+        menu->insertSeparator();
+        m_sizeMenu->plug(menu);				// append size menu at end
+        m_firstMenu = false;				// don't do this again
+    }
 
-   QPixmap pixRet;
-   pixRet.convertFromImage( ires );
-   QPainter p( &pixRet );
-
-   p.drawPixmap( m_thumbMargin, m_thumbMargin, preview );
-   p.flush();
-   // draw on pixmap
-
-   return( pixRet );
+    for (QMap<KIcon::StdSizes,KToggleAction *>::const_iterator it = m_sizeMap.constBegin();
+         it!=m_sizeMap.constEnd(); ++it)		// tick applicable size entry
+    {
+        it.data()->setChecked(m_thumbSize==it.key());
+    }
 }
 
 
-void ThumbView::clear()
+void ThumbView::slotSetSize(int size)
 {
-   if( m_job )
-      m_job->kill( false /* not silently to get result-signal */ );
-   m_iconView->clear();
+    kdDebug() << k_funcinfo << "size " << size << endl;
+    m_thumbSize = static_cast<KIcon::StdSizes>(size);
+    m_fileview->setPreviewSize(m_thumbSize);
+}
+
+
+void ThumbView::slotFinishedLoading()
+{
+    if (m_toSelect.isNull()) return;			// nothing to do
+
+    m_fileview->signaler()->blockSignals(true);		// avoid signal loop
+    m_dirop->setCurrentItem(m_toSelect);
+    m_fileview->signaler()->blockSignals(false);
+    m_toSelect = QString::null;				// have dealt with this now
+}
+
+
+void ThumbView::slotFileSelected(const KFileItem *kfi)
+{
+    KURL url = (kfi!=NULL ? kfi->url() : m_dirop->url());
+    kdDebug(28000) << k_funcinfo << url.prettyURL() << endl;
+
+    if (url!=m_lastSelected)
+    {
+        m_lastSelected = url;
+        emit selectFromThumbnail(url);
+    }
+}
+
+
+void ThumbView::slotSelectImage(const KFileTreeViewItem *item)
+{
+    kdDebug(28000) << k_funcinfo << "item url=" << item->url().prettyURL() << " isDir=" << item->isDir() << endl;
+
+    KURL cur = m_dirop->url();				// directory currently showing
+
+    KURL urlToShow = item->url();			// new URL to show
+    KURL dirToShow = urlToShow;				// directiory part of that
+    if (!item->isDir()) dirToShow.setFileName(QString::null);
+
+    if (cur.path(+1)!=dirToShow.path(+1))		// see if changing path
+    {
+        if (!item->isDir()) m_toSelect = urlToShow.fileName();
+							// select that when loading finished
+        m_dirop->setURL(dirToShow,true);		// change path and reload
+        return;
+    }
+
+    const KFileItem *curItem = m_dirop->selectedItems()->getFirst();
+    if (curItem!=NULL)					// the current selection
+    {
+        if (curItem->url()==urlToShow) return;		// already selected
+    }
+
+    m_fileview->signaler()->blockSignals(true);		// avoid signal loop
+    m_dirop->setCurrentItem(item->isDir() ? QString::null : urlToShow.fileName());
+    m_fileview->signaler()->blockSignals(false);
+}
+
+
+bool ThumbView::readSettings()
+{
+    KConfig *cfg = KGlobal::config();
+    cfg->setGroup(THUMB_GROUP);
+    bool changed = false;
+
+    KIcon::StdSizes size = static_cast<KIcon::StdSizes>(cfg->readNumEntry(THUMB_PREVIEW_SIZE,
+                                                                          KIcon::SizeHuge));
+    if (size!=m_thumbSize)
+    {
+        slotSetSize(size);
+        changed = true;
+    }
+
+    QString newBgImg = cfg->readEntry(THUMB_BG_WALLPAPER,
+                                      standardBackground());
+    if (newBgImg!=m_bgImg )
+    {
+        m_bgImg = newBgImg;
+        setBackground();
+        changed = true;
+    }
+
+    return (changed);
 }
 
 
 void ThumbView::saveConfig()
 {
-   KConfig *cfg = KGlobal::config();
-   cfg->setGroup( THUMB_GROUP );
-
-   cfg->writeEntry( MARGIN_COLOR1, m_marginColor1 );
-   cfg->writeEntry( MARGIN_COLOR2, m_marginColor2 );
-   cfg->writeEntry( PIXMAP_WIDTH, m_pixWidth );
-   cfg->writeEntry( PIXMAP_HEIGHT, m_pixHeight );
-   cfg->writeEntry( THUMB_MARGIN, m_thumbMargin );
+    // Do nothing, preview size set by menu is for this session only.
+    // Set the default size in Kooka Preferences.
+}
 
 
+void ThumbView::setBackground()
+{
+    QPixmap bgPix;
+
+    if (!m_bgImg.isEmpty()) bgPix.load(m_bgImg);
+    else
+    {
+        bgPix.resize(QSize(16,16));
+        bgPix.fill(QPixmap::blue);
+    }
+
+    m_fileview->widget()->setPaletteBackgroundPixmap(bgPix);
+}
+
+
+void ThumbView::slotImageChanged(const KFileItem *kfi)
+{
+    kdDebug(28000) << k_funcinfo << kfi->url().prettyURL() << endl;
+    m_fileview->updateView(kfi);			// update that view item
+}
+
+
+void ThumbView::slotImageRenamed(const KFileTreeViewItem *item,const QString &newName)
+{
+    kdDebug(28000) << k_funcinfo << item->url().prettyURL() << " -> " << newName << endl;
+
+    if (item->isDir()) return;				// directory rename, nothing to do
+
+    KURL cur = m_dirop->url();				// check it's the one currently showing
+    if (item->url().directory(false)!=cur.path(+1)) return;
+
+    m_toSelect = newName;				// select new after update
+    m_fileview->updateView(item->fileItem());		// update that view item
+}
+
+
+void ThumbView::slotImageDeleted(const KFileItem *kfi)
+{
+    // No need to do anything, KDirOperator/KFileView handles all of that
+}
+
+
+QString ThumbView::standardBackground()
+{
+    return (KGlobal::dirs()->findResource("data",THUMB_STD_TILE_IMG));
+}
+
+
+QString ThumbView::sizeName(KIcon::StdSizes size)
+{
+    switch (size)
+    {
+case KIcon::SizeEnormous:	return (i18n("Very Large"));
+case KIcon::SizeHuge:		return (i18n("Large"));
+case KIcon::SizeLarge:		return (i18n("Medium"));
+case KIcon::SizeMedium:		return (i18n("Small"));
+case KIcon::SizeSmallMedium:	return (i18n("Very Small"));
+case KIcon::SizeSmall:		return (i18n("Tiny"));
+default:			return ("?");
+    }
 }
