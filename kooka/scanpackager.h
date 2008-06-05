@@ -124,9 +124,10 @@ signals:
 
 
 private:
-   QString     localFileName( KFileTreeViewItem* it ) const;
+   static QString localFileName(KFileTreeViewItem *item);
+   static QCString getImgFormat(KFileTreeViewItem *item);
+
    void 	loadImageForItem( KFileTreeViewItem* item );
-   QCString     getImgFormat( KFileTreeViewItem* item ) const;
 
     QString 	 buildNewFilename( QString cmplFilename, QString currFormat ) const;
    KFileTreeViewItem *spFindItem(SearchType type,const QString &name,const KFileTreeBranch *branch = NULL);

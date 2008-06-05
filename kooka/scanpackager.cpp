@@ -45,6 +45,10 @@
 #include <kdebug.h>
 #include <klocale.h>
 #include <kurldrag.h>
+#include <kmimetype.h>
+#ifdef USE_KIMAGEIO
+#include <kimageio.h>
+#endif
 
 #include <kio/netaccess.h>
 
@@ -234,81 +238,59 @@ void ScanPackager::slotItemExpanded(QListViewItem *item)
 }
 
 
-void ScanPackager::slotDecorate( KFileTreeViewItem* item )
+void ScanPackager::slotDecorate(KFileTreeViewItem *item)
 {
-   if( !item ) return;
-   if( item->isDir())
-   {
-      // done in extra slot.
-      //kdDebug(28000) << "Decorating directory!" << endl;
-   }
-   else
-   {
-      KFileItem *kfi = item->fileItem();
+    if (item==NULL) return;
 
-      KookaImage *img = 0L;
+    if (!item->isDir())					// dir is done in another slot
+    {
+        KFileItem *kfi = item->fileItem();
 
-      if( kfi )
-      {
-	 img = static_cast<KookaImage*>(kfi->extraData( this ));
-      }
+        QString format = getImgFormat(item);		// this is safe for any file
+        item->setText(2,(" "+format));
 
-      if( img )
-      {
+        KookaImage *img = NULL;
+        if (kfi!=NULL) img = static_cast<KookaImage *>(kfi->extraData(this));
 
-	 /* The image appears to be loaded to memory. */
-	 if( img->depth() == 1 )
-	 {
-	    /* a bw-image */
-	    item->setPixmap( 0, m_bwPixmap );
-	 }
-	 else
-	 {
-	    if( img->isGrayscale() )
-	    {
-	       item->setPixmap( 0, m_grayPixmap );
-	    }
-	    else
-	    {
-	       item->setPixmap( 0, m_colorPixmap );
-	    }
-	 }
+        if (img!=NULL)					// image appears to be loaded
+        {						// set image depth pixmap
+            if (img->depth()==1) item->setPixmap(0,m_bwPixmap);
+            else
+            {
+                if (img->isGrayscale()) item->setPixmap(0,m_grayPixmap);
+                else item->setPixmap(0,m_colorPixmap);
+            }
+							// set image size column
+            QString t = i18n("%1 x %2").arg(img->width()).arg(img->height());
+            item->setText(1,t);
+        }
+        else						// not yet loaded, show file info
+        {
+            if (!format.isEmpty())			// if a valid image file
+            {
+                item->setPixmap(0,m_floppyPixmap);
+                if (kfi!=NULL) item->setText(1,KIO::convertSize(kfi->size()));
+            }
+            else
+            {
+                item->setPixmap(0,KMimeType::pixmapForURL(item->url(),0,KIcon::Small));
+            }
+        }
+    }
 
-	 /* set image size in pixels */
-	 QString t = i18n( "%1 x %2" ).arg( img->width()).arg(img->height());
-	 item->setText( 1, t );
-	 kdDebug( 28000) << "Image loaded and decorated!" << endl;
-      }
-      else
-      {
-	 /* Item is not yet loaded. Display file information */
-	 item->setPixmap( 0, m_floppyPixmap );
-	 if ( kfi )
-	 {
-	    item->setText(1, KIO::convertSize( kfi->size() ));
-	 }
-      }
-
-      /* Image format */
-      QString format = getImgFormat( item );
-      item->setText( 2, " "+format );
-   }
-
-   // This code is quite similar to m_nextUrlToSelect in KFileTreeView::slotNewTreeViewItems
-   // When scanning a new image, we wait for the KDirLister to notice the new file,
-   // and then we have the KFileTreeViewItem that we need to display the image.
-   if ( ! m_nextUrlToShow.isEmpty() )
-   {
-       if( m_nextUrlToShow.equals(item->url(), true ))
-       {
-           m_nextUrlToShow = KURL(); // do this first to prevent recursion
-           slClicked( item );
-           setCurrentItem(item);     // neccessary in case of new file from D&D
-       }
-   }
+    // This code is quite similar to m_nextUrlToSelect in KFileTreeView::slotNewTreeViewItems
+    // When scanning a new image, we wait for the KDirLister to notice the new file,
+    // and then we have the KFileTreeViewItem that we need to display the image.
+    if (!m_nextUrlToShow.isEmpty())
+    {
+        if (m_nextUrlToShow.equals(item->url(),true))
+        {
+            m_nextUrlToShow = KURL();			// do this first to prevent recursion
+            slClicked(item);
+            setCurrentItem(item);			// neccessary in case of new file from D&D
+        }
+    }
 }
-
-
 
 
 void ScanPackager::slotDecorate( KFileTreeBranch* branch, const KFileTreeViewItemList& list )
@@ -551,94 +533,79 @@ void ScanPackager::slClicked(QListViewItem *newItem)
 }
 
 
-void ScanPackager::loadImageForItem( KFileTreeViewItem *item )
+void ScanPackager::loadImageForItem(KFileTreeViewItem *item)
 {
+    if (item==NULL) return;
 
-   if( ! item ) return;
-   bool result = true;
+    KFileItem *kfi = item->fileItem();
+    if (kfi==NULL) return;
 
-   KFileItem *kfi = item->fileItem();
-   if( ! kfi ) return;
+    kdDebug(28000) << k_funcinfo << "loading " << item->url().prettyURL() << endl;
 
-   KookaImage *img = static_cast<KookaImage*>( kfi->extraData(this));
+    QString format = getImgFormat(item);		// check for valid image format
+    if (format.isEmpty())
+    {
+        kdDebug(28000) << "not a valid image format!" << endl;
+        return;
+    }
 
-   if( img )
-   {
-      kdDebug(28000) << "Image already loaded." << endl;
-      /* result is still true, image must be shown. */
-   }
-   else
-   {
-      /* The image needs to be loaded. Possibly it is a multi-page image.
-       * If it is, the kookaImage has a subImageCount larger than one. We
-       * create an subimage-item for every subimage, but do not yet load
-       * them.
-       */
-      KURL url = item->url();
+    KookaImage *img = static_cast<KookaImage *>(kfi->extraData(this));
+    if (img==NULL)					// image not already loaded
+    {
+        // The image needs to be loaded. Possibly it is a multi-page image.
+        // If it is, the kookaImage has a subImageCount larger than one. We
+        // create an subimage-item for every subimage, but do not yet load
+        // them.
 
-      img = new KookaImage( );
-      if( !img || !img->loadFromUrl( url ) )
-      {
-	 kdDebug(28000) << "Loading KookaImage from File failed!" << endl;
-	 result = false;
-      }
-      else
-      {
-          /* store the fileitem */
-          img->setFileItem( kfi );
+        img = new KookaImage();
+        if (img==NULL || !img->loadFromUrl(item->url()))
+        {
+            kdDebug(28000) << "loading failed!" << endl;
+            return;
+        }
 
-          /* care for subimages, create items for them */
-          kdDebug(28000) << "subImage-count: " << img->subImagesCount() << endl;
-          if( img->subImagesCount() > 1 )
-          {
-              KIconLoader *loader = KGlobal::iconLoader();
-              kdDebug(28000) << "SubImages existing!" << endl;
+        img->setFileItem(kfi);				// store the fileitem
 
-              /* Start at the image with index 1, that makes  one less than are actually in the
-               * image. But image 0 was already created above. */
-              KFileTreeViewItem *prevItem=0;
-              for( int i = 1; i < img->subImagesCount(); i++ )
-              {
-                  kdDebug(28000) << "Creating subimage no " << i << endl;
-                  KFileItem *newKfi = new KFileItem( *kfi );
-                  KFileTreeViewItem *subImgItem = new KFileTreeViewItem( item, newKfi, item->branch());
+        kdDebug(28000) << "subImage-count: " << img->subImagesCount() << endl;
+        if (img->subImagesCount()>1)			// look for subimages,
+        {						// create items for them
+            KIconLoader *loader = KGlobal::iconLoader();
+            kdDebug(28000) << "SubImages existing!" << endl;
 
-                  if( prevItem )
-                  {
-                      subImgItem->moveItem( prevItem );
-                  }
-                  prevItem = subImgItem;
+            // Start at the image with index 1, that makes one less than
+            // are actually in the image. But image 0 was already created above.
+            KFileTreeViewItem *prevItem = NULL;
+            for (int i = 1; i<img->subImagesCount(); i++)
+            {
+                kdDebug(28000) << "Creating subimage no " << i << endl;
+                KFileItem *newKfi = new KFileItem(*kfi);
+                KFileTreeViewItem *subImgItem = new KFileTreeViewItem(item,newKfi,item->branch());
 
-                  subImgItem->setPixmap( 0, loader->loadIcon( "editcopy", KIcon::Small ));
-                  subImgItem->setText( 0, i18n("Sub-image %1").arg( i ) );
-                  KookaImage  *subImgImg = new KookaImage( i, img );
-                  subImgImg->setFileItem( newKfi );
-                  newKfi->setExtraData( (void*) this, (void*) subImgImg );
-              }
-          }
-      }
-   }
+                if (prevItem!=NULL) subImgItem->moveItem(prevItem);
+                prevItem = subImgItem;
 
+                subImgItem->setPixmap(0,loader->loadIcon("editcopy",KIcon::Small));
+                subImgItem->setText(0,i18n("Sub-image %1").arg(i));
+                KookaImage *subImgImg = new KookaImage(i,img);
+                subImgImg->setFileItem(newKfi);
+                newKfi->setExtraData(this,subImgImg );
+            }
+        }
+    }
 
-   if( result && img )
-   {
-      if( img->isSubImage() )
-      {
-	 kdDebug(28000) << "it _is_ a subimage" << endl;
-	 /* load if not loaded */
-	 if( img->isNull())
-	 {
-	    kdDebug(28000) << "extracting subimage" << endl;
-	    img->extractNow();
-	 }
-	 else
-	 {
-	    kdDebug(28000) << "Is not a null image" << endl;
-	 }
-      }
-      slImageArrived( item, img );
-   }
+    if (img->isSubImage())				// this is a subimage
+    {
+        kdDebug(28000) << "it _is_ a subimage" << endl;
+        if (img->isNull())				// if not already loaded,
+        {
+            kdDebug(28000) << "extracting subimage" << endl;
+            img->extractNow();				// load it now
+        }
+    }
+
+    slImageArrived(item,img);
 }
+
 
 /* Hit this slot with a file for a kfiletreeviewitem. */
 void ScanPackager::slImageArrived( KFileTreeViewItem *item, KookaImage* image )
@@ -700,42 +667,39 @@ QString ScanPackager::getCurrImageFileName( bool withPath = true ) const
    return( result );
 }
 
-/* ----------------------------------------------------------------------- */
-QCString ScanPackager::getImgFormat( KFileTreeViewItem* item ) const
+
+QCString ScanPackager::getImgFormat(KFileTreeViewItem *item)
 {
+    if (item==NULL) return ("");
 
-   QCString cstr;
+    KFileItem *kfi = item->fileItem();
+    if (kfi==NULL) return ("");
 
-   if( !item ) return( cstr );
-#if 0
-   KFileItem *kfi = item->fileItem();
+    // Check that this is a plausible image format (MIME type = "image/anything")
+    // before trying to get the image type.
+    QString mimetype = kfi->mimetype();
+    if (!mimetype.startsWith("image/")) return ("");
 
-   QString mime = kfi->mimetype();
+    QString f = localFileName(item);
+#ifdef USE_KIMAGEIO
+    return (KImageIO::type(f).local8Bit());
+#else
+    return (QImage::imageFormat(f));
 #endif
-
-   // TODO find the real extension for use with the filename !
-   // temporarely:
-   QString f = localFileName( item );
-
-   return( QImage::imageFormat( f ));
-
 }
 
-QString ScanPackager::localFileName( KFileTreeViewItem *it ) const
+
+QString ScanPackager::localFileName(KFileTreeViewItem *item)
 {
-   if( ! it ) return( QString::null );
+    if (item==NULL) return (QString::null);
 
-   KURL url = it->url();
+    bool isLocal = false;
+    KURL u = item->fileItem()->mostLocalURL(isLocal);
+    if (!isLocal) return (QString::null);
 
-   QString res;
-
-   if( url.isLocalFile())
-   {
-      res = url.directory( false, true ) + url.fileName();
-   }
-
-   return( res );
+    return (u.path());
 }
+
 
 /* Called if the image exists but was changed by image manipulation func   */
 void ScanPackager::slotCurrentImageChanged( QImage *img )
@@ -755,6 +719,12 @@ void ScanPackager::slotCurrentImageChanged( QImage *img )
 
    const QString filename = localFileName( curr );
    const QCString format = getImgFormat( curr );
+   if (format.isEmpty())				// not an image, should never happen
+   {
+       kdDebug(28000) << k_funcinfo << "not a valid image format!" << endl;
+       return;
+   }
+
    ImgSaver saver( this );
    ImgSaveStat is_stat = ISS_OK;
    is_stat = saver.saveImage( img, filename, format );
@@ -928,41 +898,48 @@ void ScanPackager::slShowContextMenu(QListViewItem *lvi,const QPoint &p)
     if (m_contextMenu!=NULL) m_contextMenu->exec(p);
 }
 
-/* ----------------------------------------------------------------------- */
 
-void ScanPackager::slotExportFile( )
+void ScanPackager::slotExportFile()
 {
-   KFileTreeViewItem *curr = currentKFileTreeViewItem();
-   if( ! curr ) return;
+    KFileTreeViewItem *curr = currentKFileTreeViewItem();
+    if (curr==NULL) return;
 
-   if( curr->isDir() )
-   {
-      kdDebug(28000) << "Not yet implemented!" << endl;
-   }
-   else
-   {
-      KURL fromUrl( curr->url());
-      QString filter = "*." + getImgFormat(curr).lower();
-      filter += "\n*|" + i18n( "All Files" );
+    if (curr->isDir())
+    {
+        kdDebug(28000) << "Not yet implemented!" << endl;
+        return;
+    }
 
-      // initial += fromUrl.filename(false);
-      QString initial = m_currCopyDir + "/";
-      initial += fromUrl.filename(false);
-      KURL fileName = KFileDialog::getSaveURL ( initial,
-						filter, this );
+    KURL fromUrl(curr->url());
 
-      if ( fileName.isValid() )                  // got a file name
-      {
-         if( fromUrl == fileName ) return;
+    QString filter;
+    QCString format = getImgFormat(curr);
+    if (!format.isEmpty())
+    {
+#ifdef USE_KIMAGEIO
+        filter = "*."+KImageIO::suffix(format)+"\n";
+#else
+        filter = "*."+format.lower()+"\n";
+#endif
+    }
+    filter += "*|"+i18n("All Files");
 
-	 /* Since it is asynchron, we will never get if it succeeded. */
-	 ImgSaver::copyImage( fromUrl, fileName );
+    // initial += fromUrl.filename(false);
+    QString initial = m_currCopyDir+"/";
+    initial += fromUrl.filename(false);
 
-         /* remember the filename for the next export */
-	 fileName.setFileName( QString());
-	 m_currCopyDir = fileName.url( );
-      }
-   }
+    KURL fileName = KFileDialog::getSaveURL(initial,filter,this);
+    if (fileName.isValid())				// got a file name
+    {
+        if (fromUrl==fileName) return;			// can't save over myself
+
+        /* Since it is asynchron, we will never know if it succeeded. */
+        ImgSaver::copyImage(fromUrl,fileName);
+
+        /* Remember the filename for the next export */
+        fileName.setFileName(QString::null);
+        m_currCopyDir = fileName.url();
+    }
 }
 
 

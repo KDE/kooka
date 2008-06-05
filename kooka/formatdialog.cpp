@@ -21,11 +21,13 @@
 #include <qcombobox.h>
 
 #include <kdialog.h>
-#include <kimageio.h>
 #include <kseparator.h>
 #include <klocale.h>
 #include <kdebug.h>
 #include <kconfig.h>
+#ifdef USE_KIMAGEIO
+#include <kimageio.h>
+#endif
 
 #include "imgsaver.h"
 
