@@ -124,6 +124,7 @@ ScanPackager::ScanPackager(QWidget *parent)
    static_cast<KPopupMenu*>(m_contextMenu)->insertTitle( i18n( "Gallery" ));
 
    openWithMapper = NULL;
+   openWithActions = NULL;
 }
 
 
@@ -1270,6 +1271,9 @@ void ScanPackager::showOpenWithMenu(KActionMenu *menu)
         connect(openWithMapper,SIGNAL(mapped(int)),SLOT(slotOpenWith(int)));
     }
 
+    if (openWithActions==NULL) openWithActions = new KActionCollection(this);
+							// separate from application's actions
+    openWithActions->clear();				// delete any previous actions
     menu->popupMenu()->clear();
 
     int i = 0;
@@ -1282,14 +1286,14 @@ void ScanPackager::showOpenWithMenu(KActionMenu *menu)
         QString actionName((*it)->name().replace("&","&&"));
         KAction *act = new KAction(actionName,(*it)->pixmap(KIcon::Small),0,
                                    openWithMapper,SLOT(map()),
-                                   menu->parentCollection());
+                                   openWithActions);
         openWithMapper->setMapping(act,i);
         menu->insert(act);
     }
 
     menu->popupMenu()->insertSeparator();
     KAction *act = new KAction(i18n("Other..."),0,openWithMapper,SLOT(map()),
-                               menu->parentCollection());
+                               openWithActions);
     openWithMapper->setMapping(act,i);
     menu->insert(act);
 }

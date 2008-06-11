@@ -46,6 +46,7 @@ class KookaImageMeta;
 
 class KURL;
 class KActionMenu;
+class KActionCollection;
 
 typedef enum{ Dummy, NameSearch, UrlSearch } SearchType;
 
@@ -145,6 +146,7 @@ private:
 
     KTrader::OfferList openWithOffers;
     QSignalMapper *openWithMapper;
+    KActionCollection *openWithActions;
 
     // like m_nextUrlToSelect in KFileTreeView but for our own purposes (showing the image)
     KURL         m_nextUrlToShow;
