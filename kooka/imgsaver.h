@@ -32,18 +32,18 @@
 #include <kurl.h>
 
 
-#define OP_FILE_GROUP      "Files"
-#define OP_FILE_ASK_FORMAT "AskForSaveFormat"
-#define OP_ASK_FILENAME    "AskForFilename"
-#define OP_FORMAT_HICOLOR  "HiColorSaveFormat"
-#define OP_FORMAT_COLOR    "ColorSaveFormat"
-#define OP_FORMAT_GRAY     "GraySaveFormat"
-#define OP_FORMAT_BW       "BWSaveFormat"
-#define OP_FORMAT_THUMBNAIL "ThumbnailFormat"
-#define OP_PREVIEW_GROUP   "ScanPreview"
-#define OP_PREVIEW_FILE    "PreviewFile"
-#define OP_PREVIEW_FORMAT  "PreviewFormat"
-#define OP_ONLY_REC_FMT    "OnlyRecommended"
+#define OP_SAVER_GROUP         "Files"
+
+#define OP_SAVER_ASK_FORMAT    "AskForSaveFormat"
+#define OP_SAVER_ASK_FILENAME  "AskForFilename"
+#define OP_SAVER_REC_FMT       "OnlyRecommended"
+
+#define OP_FORMAT_HICOLOR      "HiColorSaveFormat"
+#define OP_FORMAT_COLOR        "ColorSaveFormat"
+#define OP_FORMAT_GRAY         "GraySaveFormat"
+#define OP_FORMAT_BW           "BWSaveFormat"
+#define OP_FORMAT_THUMBNAIL    "ThumbnailFormat"
+#define OP_FORMAT_UNKNOWN      "UnknownFormat"
 
 /**
  *  enum ImgSaveStat:
@@ -105,54 +105,54 @@ public:
 	 *  @param dir  Name of the save root directory
 	 *  @param name Name of a subdirectory in the saveroot.
 	 **/
-   ImgSaver( QWidget *parent, const KURL );
-   ImgSaver( QWidget *parent );
+    ImgSaver(QWidget *parent,const KURL &dir = KURL());
 
-   QString     errorString( ImgSaveStat );
-   /**
-    *  returns the name of the last file that was saved by ImgSaver.
-    */
-   KURL        lastURL() const { return( last_url ); }
-   /**
-    *  returns the image format of the last saved image.
-    */
-   QCString    lastSaveFormat( void ) const { return( last_format ); }
+    QString     errorString( ImgSaveStat );
 
-   QString     getFormatForType( ImgSaver::ImageType ) const;
-   void        storeFormatForType( ImgSaver::ImageType, QString, bool );
-   bool        isRememberedFormat( ImgSaver::ImageType type, QString format ) const;
+    /**
+     *  returns the name of the last file that was saved by ImgSaver.
+     */
+    KURL        lastURL() const { return( last_url ); }
 
-   /* static function that exports a file */
-   static bool    copyImage( const KURL& fromUrl, const KURL& toUrl, QWidget *overWidget=0 );
-   static bool    renameImage( const KURL& fromUrl, const KURL& toUrl, bool askExt=false, QWidget *overWidget=0 );
-   static QString tempSaveImage( KookaImage *img, const QString& format, int colors = -1 );
+    /**
+     *  returns the image format of the last saved image.
+     */
+    QCString    lastSaveFormat( void ) const { return( last_format ); }
 
-   /* static function that returns the extension of an url */
-   static QString extension( const KURL& );
+    /* static functions used by the gallery operations */
+    static bool copyImage( const KURL& fromUrl, const KURL& toUrl, QWidget *overWidget=0 );
+    static bool renameImage( const KURL& fromUrl, const KURL& toUrl, bool askExt=false, QWidget *overWidget=0 );
+    static QString tempSaveImage( KookaImage *img, const QString& format, int colors = -1 );
 
-   static QString picTypeAsString(ImgSaver::ImageType type);
+    static bool isRememberedFormat(ImgSaver::ImageType type,const QString &format);
+    static QString picTypeAsString(ImgSaver::ImageType type);
 
 public slots:
-   ImgSaveStat saveImage( const QImage *image );
-   ImgSaveStat saveImage( const QImage *image, const KURL &url, const QString& imgFormat );
+    ImgSaveStat saveImage( const QImage *image );
+    ImgSaveStat saveImage( const QImage *image, const KURL &url, const QString& imgFormat );
 
 private:
-   QString      findFormat( ImgSaver::ImageType type );
-   QString      findSubFormat( QString format );
-   void		createDir( const QString& );
+    static QString findFormat(ImgSaver::ImageType type);
+    static QString findSubFormat(const QString &format);
 
-   ImgSaveStat  save( const QImage *image, const KURL &url, const QString &format,
-		     const QString &subformat );
-   QString      createFilename( QString format );
-   void	        readConfig( void );
-   QString      startFormatDialog( ImgSaver::ImageType );
+    static QString getFormatForType(ImgSaver::ImageType);
+    static void storeFormatForType(ImgSaver::ImageType,const QString &format);
 
-   QString     	directory;    // dir where the image should be saved
+    ImgSaveStat save(const QImage *image,const KURL &url,
+                     const QString &format,const QString &subformat);
 
-   QCString   	subformat;
-   QCString    	last_format;
+    static void createDir(const QString &dir);
+    QString createFilename();
+
+    /* static function that returns the extension of an url */
+    static QString extension(const KURL &url);
+
+    QString m_saveDirectory;				// dir where the image should be saved
+    QCString last_format;
     KURL last_url;
-   bool	       	ask_for_format;
+
+    bool m_saveAskFormat;
+    bool m_saveAskFilename;
 };
 
 #endif

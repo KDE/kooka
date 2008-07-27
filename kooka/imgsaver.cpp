@@ -25,20 +25,17 @@
  ***************************************************************************/
 
 #include <qdir.h>
-#include <qlayout.h>
-#include <qcombobox.h>
+#include <qregexp.h>
 
 #include <kglobal.h>
 #include <kconfig.h>
 #include <kimageio.h>
-#include <kseparator.h>
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kdebug.h>
+#include <ktempfile.h>
 #include <kio/job.h>
 #include <kio/netaccess.h>
-#include <ktempfile.h>
-#include <kinputdialog.h>
 
 #include "previewer.h"
 #include "kookaimage.h"
@@ -48,71 +45,44 @@
 #include "imgsaver.moc"
 
 
-ImgSaver::ImgSaver(  QWidget *parent, const KURL dir_name )
-   : QObject( parent )
+ImgSaver::ImgSaver(QWidget *parent,const KURL &dir)
+    : QObject(parent)
 {
+    if (dir.isValid() && !dir.isEmpty() && dir.protocol()=="file")
+    {							// can use specified place
+        m_saveDirectory = dir.directory(true,false);
+        kdDebug(28000) << k_funcinfo << "specified directory " << m_saveDirectory << endl;
+    }
+    else						// cannot, so use default
+    {
+        m_saveDirectory = Previewer::galleryRoot();
+        kdDebug(28000) << k_funcinfo << "default directory " << m_saveDirectory << endl;
+    }
 
-   if( dir_name.isEmpty() || dir_name.protocol() != "file" )
-   {
-      kdDebug(28000) << "ImageServer initialised with wrong dir " << dir_name.url() << endl;
-      directory = Previewer::galleryRoot();
-   }
-   else
-   {
-      /* A path was given */
-      if( dir_name.protocol() != "file"  )
-      {
-	 kdDebug(28000) << "ImgSaver: Can only save local image, sorry !" << endl;
-      }
-      else
-      {
-	 directory = dir_name.directory(true, false);
-      }
-   }
-
-   kdDebug(28000) << "ImageSaver uses dir <" << directory << endl;
-   createDir( directory );
-   readConfig();
-
-   last_format ="";
-
-}
-
-
-ImgSaver::ImgSaver( QWidget *parent )
-   :QObject( parent )
-{
-   directory = Previewer::galleryRoot();
-   createDir( directory );
-
-   readConfig();
-
-   last_format ="";
-
+    createDir(m_saveDirectory);				// ensure save location exists
+    last_format = "";					// nothing saved yet
 }
 
 
 /* Needs a full qualified directory name */
-void ImgSaver::createDir( const QString& dir )
+void ImgSaver::createDir(const QString &dir)
 {
-   KURL url( dir );
-
-   if( ! KIO::NetAccess::exists(url, false, 0) )
-   {
-      kdDebug(28000) << "Wrn: Directory <" << dir << "> does not exist -> try to create  !" << endl;
-      // if( mkdir( QFile::encodeName( dir ), S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH ) != 0 )
-      if( KIO::mkdir( KURL(dir)))
-      {
-        KMessageBox::sorry(0, i18n("The folder\n%1\n does not exist and could not be created;\n"
-                        "please check the permissions.").arg(dir));
-      }
-   }
+    KURL url(dir);
+    if (!KIO::NetAccess::exists(url,false,0))
+    {
+        kdDebug(28000) << k_funcinfo << "directory <" << dir << "> does not exist, try to create" << endl;
+        // if( mkdir( QFile::encodeName( dir ), S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH ) != 0 )
+        if (KIO::mkdir(url))
+        {
+            KMessageBox::sorry(0,i18n("<qt>The folder<br><b>%1</b><br>does not exist and could not be created").arg(dir));
+        }
+    }
 #if 0
-   if( ! fi.isWritable() )
-   {
+    if (!fi.isWritable())
+    {
         KMessageBox::sorry(0, i18n("The directory\n%1\n is not writeable;\nplease check the permissions.")
-                .arg(dir));
-   }
+                           .arg(dir));
+    }
 #endif
 }
 
@@ -137,37 +107,65 @@ ImgSaveStat ImgSaver::saveImage(const QImage *image)
         }
     }
 
-    QString format = findFormat(imgType);		// find/ask for image format
-    QString subformat = findSubFormat(format);
-    if (format.isEmpty()) return (ISS_SAVE_CANCELED);	// dialogue cancelled
-
-    QString filename = createFilename(format);		// find an unused filename
+    QString saveFilename = createFilename();		// find next unused filename
+    QString saveFormat = findFormat(imgType);		// find saved image format
+    QString saveSubformat = findSubFormat(saveFormat);	// currently not used
 
     KConfig *konf = KGlobal::config();
-    konf->setGroup(OP_FILE_GROUP);
-    if (konf->readBoolEntry(OP_ASK_FILENAME,false))	// do we ask for a file name?
-    {
-        bool ok;
-	// TODO: combine this file name request with the format dialogue, if used
-        QString text = KInputDialog::getText(i18n("Filename"),i18n("Enter image file name:"),
-                                             filename,&ok);
+    konf->setGroup(OP_SAVER_GROUP);			// get dialogue preferences
+    m_saveAskFilename = konf->readBoolEntry(OP_SAVER_ASK_FILENAME,false);
+    m_saveAskFormat = konf->readBoolEntry(OP_SAVER_ASK_FORMAT,false);
 
-        if (!ok) return (ISS_SAVE_CANCELED);
-        filename = text;
+    kdDebug(28000) << k_funcinfo << "before dialogue,"
+                   << " ask_filename=" << m_saveAskFilename
+                   << " ask_format=" << m_saveAskFormat
+                   << " filename=[" << saveFilename << "]"
+                   << " format=[" << saveFormat << "]"
+                   << " subformat=[" << saveSubformat << "]"
+                   << endl;
+
+
+    while (saveFormat.isEmpty() || m_saveAskFormat || m_saveAskFilename)
+    {							// is a dialogue neeeded?
+        FormatDialog fd(NULL,imgType,m_saveAskFormat,saveFormat,m_saveAskFilename,saveFilename);
+        if (!fd.exec()) return (ISS_SAVE_CANCELED);	// do the dialogue
+
+        saveFilename = fd.getFilename();		// get filename as entered
+        if (fd.useAssistant())				// redo with format options
+        {
+            m_saveAskFormat = true;
+            continue;
+        }
+
+        saveFormat = fd.getFormat();			// get results from that
+        saveSubformat = fd.getSubFormat();
+
+        if (!saveFormat.isEmpty())			// have a valid format
+        {
+            if (fd.alwaysUseFormat()) storeFormatForType(imgType,saveFormat);
+            break;					// save format for future
+        }
     }
 
-    QString fi = directory+"/"+filename;		// full path to save
-    if (extension(fi).isEmpty())			// does it have an extension?
-    {
-        if (!fi.endsWith(".")) fi +=  ".";
+    kdDebug(28000) << k_funcinfo << "after dialogue,"
+                   << " filename=[" << saveFilename << "]"
+                   << " format=[" << saveFormat << "]"
+                   << " subformat=[" << saveSubformat << "]"
+                   << endl;
+
+    QString fi = m_saveDirectory+"/"+saveFilename;	// full path to save
 #ifdef USE_KIMAGEIO
-        fi += KImageIO::suffix(format);
+    QString ext = KImageIO::suffix(saveFormat);		// extension it should have
 #else
-        fi += format.lower();
+    QString ext = saveFormat.lower();
 #endif
+    if (extension(fi)!=ext)				// already has correct extension?
+    {
+        fi +=  ".";					// no, add it on
+        fi += ext;
     }
 
-    return (save(image,fi,format,subformat));
+    return (save(image,fi,saveFormat,saveSubformat));	// save image to that file
 }
 
 
@@ -241,67 +239,46 @@ ImgSaveStat ImgSaver::save(const QImage *image,const KURL &url,
 
 
 /**
- *  This member creates a filename for the image to save.
- *  This is done by numbering all existing files and adding
- *  one
+ *  Find the next filename to use for the image to save.
+ *  This is done by enumerating and checking against all existing files,
+ *  regardless of format - because we have not resolved the format yet.
  **/
-QString ImgSaver::createFilename(QString format)
+QString ImgSaver::createFilename()
 {
-    if (format.isEmpty()) return (QString::null);
-    const QString suffix = KImageIO::suffix(format);	// file extension for saving
-
-    QString s = "kscan_*."+suffix;
-    QDir files(directory,s);				// list of existing files
+    QDir files(m_saveDirectory,"kscan_[0-9][0-9][0-9][0-9].*");
+    QStringList l(files.entryList());
+    l.gres(QRegExp("\\..*$"),"");
 
     QString fname;
-    for (unsigned long c = 1; c<=files.count()+1; ++c)	// that must be the upper bound
+    for (unsigned long c = 1; c<=l.count()+1; ++c)	// that must be the upper bound
     {
-	fname = "kscan_"+QString::number(c).rightJustify(4,'0')+"."+suffix;
-	if (!files.exists(fname)) break;
+	fname = "kscan_"+QString::number(c).rightJustify(4,'0');
+	if (!l.contains(fname)) break;
     }
 
+    kdDebug(28000) << k_funcinfo << "returning '" << fname << "'" << endl;
     return (fname);
 }
 
+
 /*
- * findFormat does all the stuff with the dialog.
+ * findFormat looks to see if there is a previously saved file format for
+ * the image type in question.
  */
-QString ImgSaver::findFormat( ImgSaver::ImageType type )
+
+QString ImgSaver::findFormat(ImgSaver::ImageType type)
 {
-   if (type==ImgSaver::ImgThumbnail) return ("BMP");	// thumbnail always this format
-   if (type==ImgSaver::ImgPreview) return ("BMP");	// preview always this format
+    if (type==ImgSaver::ImgThumbnail) return ("BMP");	// thumbnail always this format
+    if (type==ImgSaver::ImgPreview) return ("BMP");	// preview always this format
 							// real images from here on
-   QString format;
-   KConfig *konf = KGlobal::config ();
-   konf->setGroup( OP_FILE_GROUP );
-
-   switch( type )
-   {
-      case ImgSaver::ImgColor:
-	 format = konf->readEntry( OP_FORMAT_COLOR, "nothing" );
-	 kdDebug( 28000 ) <<  "Format for Color: " << format << endl;
-	 break;
-      case ImgSaver::ImgGray:
-	 format = konf->readEntry( OP_FORMAT_GRAY, "nothing" );
-	 kdDebug( 28000 ) <<  "Format for Gray: " << format << endl;
-	 break;
-      case ImgSaver::ImgBW:
-	 format = konf->readEntry( OP_FORMAT_BW, "nothing" );
-	 kdDebug( 28000 ) <<  "Format for BlackAndWhite: " << format << endl;
-	 break;
-      case ImgSaver::ImgHicolor:
-	 format = konf->readEntry( OP_FORMAT_HICOLOR, "nothing" );
-	 kdDebug( 28000 ) <<  "Format for HiColorImage: " << format << endl;
-	 break;
-      default:
-	 format = "nothing";
-	 kdDebug( 28000 ) <<  "ERR: Could not find image type !" << endl;
-	 break;
-   }
-
-   if (format=="nothing" || ask_for_format) format = startFormatDialog(type);
-   return (format);
+    QString format = getFormatForType(type);
+    kdDebug(28000) << k_funcinfo << "format for type " << type << " = " << format << endl;
+    return (format);
 }
+
+
+
+
 
 
 QString ImgSaver::picTypeAsString(ImgSaver::ImageType type)
@@ -335,129 +312,76 @@ default:
 }
 
 
-QString ImgSaver::startFormatDialog( ImgSaver::ImageType type)
-{
-
-   FormatDialog fd(NULL,type);
-
-   // set default values
-   if( type != ImgSaver::ImgPreview )
-   {
-      QString defFormat = getFormatForType( type );
-      fd.setSelectedFormat( defFormat );
-   }
-
-   QString format;
-   if( fd.exec() )
-   {
-      format = fd.getFormat();
-      kdDebug(28000) << "Storing to format <" << format << ">" << endl;
-      bool ask = fd.askForFormat();
-      kdDebug(28000)<< "Store askFor is " << ask << endl;
-      storeFormatForType( type, format, ask );
-      subformat = fd.getSubFormat();
-   }
-   return( format );
-}
 
 
 /*
  *  This method returns true if the image format given in format is remembered
  *  for that image type.
  */
-bool ImgSaver::isRememberedFormat( ImgSaver::ImageType type, QString format ) const
+bool ImgSaver::isRememberedFormat(ImgSaver::ImageType type,const QString &format)
 {
-   if( getFormatForType( type ) == format )
-   {
-      return( true );
-   }
-   else
-   {
-      return( false );
-   }
-
+    return (getFormatForType(type)==format);
 }
 
 
 
 
-QString ImgSaver::getFormatForType( ImgSaver::ImageType type ) const
+const char *configKeyFor(ImgSaver::ImageType type)
 {
-   KConfig *konf = KGlobal::config ();
-   Q_CHECK_PTR( konf );
-   konf->setGroup( OP_FILE_GROUP );
+    switch (type)
+    {
+case ImgSaver::ImgColor:    return (OP_FORMAT_COLOR);
+case ImgSaver::ImgGray:     return (OP_FORMAT_GRAY);
+case ImgSaver::ImgBW:       return (OP_FORMAT_BW);
+case ImgSaver::ImgHicolor:  return (OP_FORMAT_HICOLOR);
 
-   QString f;
-
-   switch( type )
-   {
-      case ImgSaver::ImgColor:
-	 f = konf->readEntry( OP_FORMAT_COLOR, "BMP" );
-	 break;
-      case ImgSaver::ImgGray:
-	 f = konf->readEntry( OP_FORMAT_GRAY, "BMP" );
-	 break;
-      case ImgSaver::ImgBW:
-	 f = konf->readEntry( OP_FORMAT_BW, "BMP" );
-	 break;
-      case ImgSaver::ImgHicolor:
-	 f = konf->readEntry( OP_FORMAT_HICOLOR, "BMP" );
-	 break;
-      default:
-	 f = "BMP";
-	 break;
-   }
-   return( f );
+default:                    kdDebug(28000) << k_funcinfo << "unknown type " << type << endl;
+                            return (OP_FORMAT_UNKNOWN);
+    }
 }
 
 
-void ImgSaver::storeFormatForType( ImgSaver::ImageType type, QString format, bool ask )
+
+QString ImgSaver::getFormatForType(ImgSaver::ImageType type)
 {
-   KConfig *konf = KGlobal::config ();
-   Q_CHECK_PTR( konf );
-   konf->setGroup( OP_FILE_GROUP );
-
-   konf->writeEntry( OP_FILE_ASK_FORMAT, ask );
-   ask_for_format = ask;
-
-   switch( type )
-   {
-      case ImgSaver::ImgColor:
-	 konf->writeEntry( OP_FORMAT_COLOR, format );
-	 break;
-      case ImgSaver::ImgGray:
-	 konf->writeEntry( OP_FORMAT_GRAY, format  );
-	 break;
-      case ImgSaver::ImgBW:
-	 konf->writeEntry( OP_FORMAT_BW, format );
-	 break;
-      case ImgSaver::ImgHicolor:
-	 konf->writeEntry( OP_FORMAT_HICOLOR, format );
-	 break;
-      default:
-	 kdDebug(28000) << "Wrong Type  - cant store format setting" << endl;
-	 break;
-   }
-   konf->sync();
+    KConfig *konf = KGlobal::config();
+    konf->setGroup(OP_SAVER_GROUP);
+    return (konf->readEntry(configKeyFor(type)));
 }
 
 
-QString ImgSaver::findSubFormat( QString format )
+void ImgSaver::storeFormatForType(ImgSaver::ImageType type,const QString &format)
 {
-   kdDebug(28000) << "Searching Subformat for " << format << endl;
-   return( subformat );
+    KConfig *konf = KGlobal::config();
+    konf->setGroup(OP_SAVER_GROUP);
 
+    //  We don't save OP_FILE_ASK_FORMAT here, this is the global setting
+    //  "Always use the Save Assistant" from the Kooka configuration which
+    //  is a preference option affecting all image types.  To get automatic
+    //  saving in the preferred format, turn off that option in "Configure
+    //  Kooka - Image Saver" and select "Always use this format for this type
+    //  of file" when saving an image.  As long as an image of that type has
+    //  scanned and saved, then the Save Assistant will not subsequently
+    //  appear for that image type.
+    //
+    //  This means that turning on the "Always use the Save Assistant" option
+    //  will do exactly what it says.
+    //
+    //  konf->writeEntry( OP_FILE_ASK_FORMAT, ask );
+    //  m_saveAskFormat = ask;
+
+    konf->writeEntry(configKeyFor(type),format);
+    konf->sync();
 }
 
 
-void ImgSaver::readConfig( void )
-{
 
-   KConfig *konf = KGlobal::config ();
-   Q_CHECK_PTR( konf );
-   konf->setGroup( OP_FILE_GROUP );
-   ask_for_format = konf->readBoolEntry( OP_FILE_ASK_FORMAT, true );
+QString ImgSaver::findSubFormat(const QString &format)
+{
+    kdDebug(28000) << k_funcinfo << "for " << format << endl;
+    return (QString::null);				// no subformats currently used
 }
+
 
 
 QString ImgSaver::errorString(ImgSaveStat stat)
@@ -484,22 +408,14 @@ default:			re = i18n("Unknown status %1").arg(stat);
 }
 
 
-QString ImgSaver::extension( const KURL& url )
+QString ImgSaver::extension(const KURL &url)
 {
-   QString extension = url.fileName();
+    QString extension = url.fileName();
 
-   int dotPos = extension.findRev( '.' );
-   if( dotPos > 0 )
-   {
-      int len = extension.length();
-      extension = extension.right( len - dotPos -1 );
-   }
-   else
-   {
-      /* No extension was supplied */
-      extension = QString();
-   }
-   return extension;
+    int dotPos = extension.findRev('.');		// find last separator
+    if( dotPos>0) extension = extension.mid(dotPos+1);	// extract from filename
+    else extension = QString::null;			// no extension
+    return (extension);
 }
 
 
@@ -512,7 +428,8 @@ bool ImgSaver::renameImage( const KURL& fromUrl, const KURL& toUrl, bool askExt,
 
    if( extTo.isEmpty() && !extFrom.isEmpty() )
    {
-      /* Ask if the extension should be added */
+      /* Ask if the extension
+ should be added */
       int result = KMessageBox::Yes;
       QString fName = toUrl.fileName();
       if( ! fName.endsWith( "." )  )

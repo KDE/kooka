@@ -338,22 +338,25 @@ void KookaPref::setupStartupPage()
 
 void KookaPref::setupSaveFormatPage( )
 {
-   konf->setGroup( OP_FILE_GROUP );
+   konf->setGroup( OP_SAVER_GROUP );
    QFrame *page = addPage( i18n("Image Saving"), i18n("Image Saving Options" ),
 			    BarIcon("filesave", KIcon::SizeMedium ) );
+
    QVBoxLayout *top = new QVBoxLayout( page, 0, spacingHint() );
-   top->addSpacing(KDialogBase::spacingHint());
+   /* Description-Label */
+   top->addWidget(new QLabel(i18n("These options will take effect immediately."),page));
+   top->addSpacing(2*KDialogBase::spacingHint());
 
    /* Skip the format asking if a format entry  exists */
    cbSkipFormatAsk = new QCheckBox( i18n("Always use the Save Assistant"),
 				     page);
-   cbSkipFormatAsk->setChecked( konf->readBoolEntry( OP_FILE_ASK_FORMAT, true  ));
-   QToolTip::add( cbSkipFormatAsk, i18n("Check this if you want to see the image save assistant even if there is a default format for the image type." ));
+   cbSkipFormatAsk->setChecked( konf->readBoolEntry( OP_SAVER_ASK_FORMAT,false));
+   QToolTip::add( cbSkipFormatAsk, i18n("Check this if you want to use the image save assistant even if there is a default format for the image type." ));
    top->addWidget( cbSkipFormatAsk );
 
    cbFilenameAsk = new QCheckBox( i18n("Ask for filename when saving"),
                     page);
-   cbFilenameAsk->setChecked( konf->readBoolEntry( OP_ASK_FILENAME, false));
+   cbFilenameAsk->setChecked( konf->readBoolEntry( OP_SAVER_ASK_FILENAME, false));
    QToolTip::add( cbFilenameAsk, i18n("Check this if you want to enter a filename when an image has been scanned." ));
    top->addWidget( cbFilenameAsk );
 
@@ -447,10 +450,10 @@ void KookaPref::slotApply( void )
       konf->writeEntry( STARTUP_READ_IMAGE, cbReadStartupImage->isChecked());
 
     /* ** Image saver option(s) ** */
-    konf->setGroup( OP_FILE_GROUP );
+    konf->setGroup( OP_SAVER_GROUP );
     bool showFormatAssist = cbSkipFormatAsk->isChecked();
-    konf->writeEntry( OP_FILE_ASK_FORMAT, showFormatAssist );
-    konf->writeEntry( OP_ASK_FILENAME, cbFilenameAsk->isChecked() );
+    konf->writeEntry( OP_SAVER_ASK_FORMAT, showFormatAssist );
+    konf->writeEntry( OP_SAVER_ASK_FILENAME, cbFilenameAsk->isChecked() );
 
     /* ** Thumbnail options ** */
     konf->setGroup(THUMB_GROUP);

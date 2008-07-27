@@ -1,4 +1,4 @@
-/***************************************************************************
+/***************************************************** -*- mode:c++; -*- ***
  *                                                                         *
  *  This file may be distributed and/or modified under the terms of the    *
  *  GNU General Public License version 2 as published by the Free Software *
@@ -28,7 +28,8 @@
 class QComboBox;
 class QListBox;
 class QLabel;
-class QCheckBox;
+class QLineEdit;
+class QListBoxItem;
 
 /**
  *  Class FormatDialog:
@@ -38,40 +39,55 @@ class QCheckBox;
 
 class FormatDialog : public KDialogBase
 {
-Q_OBJECT
+    Q_OBJECT
 
 public:
-   FormatDialog( QWidget *parent, ImgSaver::ImageType type);
+    FormatDialog(QWidget *parent,ImgSaver::ImageType type,
+                 bool askForFormat,const QString &format,
+                 bool askForFilename,const QString &filename);
 
-   QString      getFormat( ) const;
-   QCString      getSubFormat( ) const;
-   void        setSelectedFormat(const QString &fo);
+    QString getFormat() const;
+    QCString getSubFormat() const;
+    QString getFilename() const;
+    bool alwaysUseFormat() const { return (cbDontAsk!=NULL ? cbDontAsk->isChecked() : false); }
+    bool useAssistant() const { return (m_wantAssistant); }
 
-   bool         askForFormat( ) const
-      { return( ! cbDontAsk->isChecked()); }
+    void setSelectedFormat(const QString &format);
 
-   static void forgetRemembered();
+    static void forgetRemembered();
 
-
+protected:
+    virtual void show();
 
 protected slots:
-   void 	showHelp( const QString& item );
-   void buildFormatList(bool recOnly);
-   void slotOk();
+    void slotOk();
+    void slotUser1();
+
+private slots:
+    void checkValid();
+    void buildFormatList(bool recOnly);
+    void formatSelected(QListBoxItem *item);
 
 private:
-   void		check_subformat( const QString & format );
+    void check_subformat(const QString &format);
+    void showExtension(const QString &format);
 
-   QStringList formatList;
-   ImgSaver::ImageType imgType;
+    QStringList formatList;
+    ImgSaver::ImageType imgType;
 
-   QComboBox   	*cb_subf;
-   QListBox    	*lb_format;
-   QLabel      	*l_help;
-   QLabel	*l2;
-   QCheckBox    *cbRemember;
-   QCheckBox    *cbDontAsk;
-   QCheckBox    *cbRecOnly;
+    QComboBox *cb_subf;
+    QListBox *lb_format;
+    QCheckBox *cbDontAsk;
+    QCheckBox *cbRecOnly;
+    QLabel *l_help;
+    QLabel *l_subf;
+
+    QLineEdit *le_filename;
+    QLabel *l_ext;
+
+    QString m_format;
+    QString m_filename;
+    bool m_wantAssistant;
 };
 
-#endif
+#endif							// FORMATDIALOG_H

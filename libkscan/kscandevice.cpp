@@ -231,7 +231,8 @@ KScanDevice::KScanDevice( QObject *parent )
 		QStringList dscs = scanConfig.readListEntry(USERDEV_DESC);
 		QStringList::const_iterator it2 = dscs.begin();
 		for (QStringList::const_iterator it1 = devs.begin(); it1!=devs.end(); ++it1,++it2)
-		{
+		{					// avoid duplication
+                    if (!scanner_avail.contains((*it1).local8Bit()))
 			addUserSpecifiedDevice((*it1),(*it2));
 		}
 	}
