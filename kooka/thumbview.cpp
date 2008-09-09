@@ -223,7 +223,7 @@ void ThumbView::slotSelectImage(const KFileTreeViewItem *item)
     KURL cur = m_dirop->url();				// directory currently showing
 
     KURL urlToShow = item->url();			// new URL to show
-    KURL dirToShow = urlToShow;				// directiory part of that
+    KURL dirToShow = urlToShow;				// directory part of that
     if (!item->isDir()) dirToShow.setFileName(QString::null);
 
     if (cur.path(+1)!=dirToShow.path(+1))		// see if changing path

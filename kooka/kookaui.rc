@@ -2,7 +2,7 @@
 <kpartgui name="Kooka" version="4">
 
  <MenuBar>
-  <Menu name="file" noMerge="1"><text>Gallery</text>
+  <Menu name="file" noMerge="1"><text>&amp;Gallery</text>
    <Action name="foldernew"/>
    <Action name="openWith"/>
    <Action name="saveImage"/>
@@ -49,7 +49,7 @@
    <Action name="upsitedown"/>
   </Menu>
 
-  <Menu name="settings"><text>Settings</text>
+  <Menu name="settings"><text>S&amp;ettings</text>
    <Action name="settings_show_docks" append="show_merge"/>
    <Separator/>
    <Action name="enable_msgs" append="save_merge"/>

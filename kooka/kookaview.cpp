@@ -499,7 +499,7 @@ void KookaView::slotGallerySelectionChanged()
                                    .arg(fti->isDir() ? i18n("folder") : i18n("image"))
                                    .arg(fti->url().pathOrURL()));
 	emit signalGallerySelectionChanged(fti->isDir(),gallery()->selectedItems().count());
-//        if (fti->isDir() && m_thumbview!=NULL) m_thumbview->slotSelectImage(fti->url());
+        if (m_thumbview!=NULL) m_thumbview->slotSelectImage(fti);
     }
 }
 

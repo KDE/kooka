@@ -51,10 +51,10 @@ static const char description[] = I18N_NOOP(
         "or OCRAD programs, or the commercial KADMOS library.");
 
 static const char license[] = I18N_NOOP(
-	"This program is distributed under the terms of the GPL v2 as publishec by\n"
+	"This program is distributed under the terms of the GPL v2 as published by\n"
 	"the Free Software Foundation\n\n"
 	"As a special exception, permission is given to link this program\n"
-	"with any version of the KADMOS ocr/icr engine of reRecognition GmbH,\n"
+	"with any version of the KADMOS OCR/ICR engine of reRecognition GmbH,\n"
 	"Kreuzlingen and distribute the resulting executable without\n"
 	"including the source code for KADMOS in the source distribution.\n\n"
 	"As a special exception, permission is given to link this program\n"
