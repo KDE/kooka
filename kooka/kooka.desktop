@@ -1,11 +1,9 @@
 [Desktop Entry]
-Encoding=UTF-8
 Type=Application
 Exec=kooka %i %U
 Icon=scanner
-Path=
 Terminal=false
-DocPath=kooka/index.html
+X-DocPath=kooka/index.html
 GenericName=Scan & OCR Program
 GenericName[el]=Πρόγραμμα σάρωσης και OCR
 GenericName[es]=Programa de escáner y OCR
