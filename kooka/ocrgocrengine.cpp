@@ -23,23 +23,25 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <kdebug.h>
-#include <kprocess.h>
-#include <ktempdir.h>
-#include <klocale.h>
+#include "ocrgocrengine.h"
+#include "ocrgocrengine.moc"
 
 #include <qregexp.h>
 #include <qfile.h>
 #include <qdir.h>
 #include <qstringlist.h>
 
-#include "img_canvas.h"
+#include <kdebug.h>
+#include <kprocess.h>
+#include <ktempdir.h>
+#include <klocale.h>
+
+#include "libkscan/img_canvas.h"
+
 #include "imgsaver.h"
 #include "kookaimage.h"
 #include "ocrgocrdialog.h"
 
-#include "ocrgocrengine.h"
-#include "ocrgocrengine.moc"
 
 
 
@@ -99,97 +101,96 @@ void OcrGocrEngine::startProcess(OcrBaseDialog *dia,KookaImage *img)
     daemon = new KProcess();				// start new GOCR process
     Q_CHECK_PTR(daemon);
 
+    m_ocrResultText = QString::null;			// clear buffer for capturing
+
     m_tempDir = new KTempDir();				// new unique temporary directory
-    m_tempDir->setAutoDelete(true);			// clear it when finished
+    m_tempDir->setAutoRemove(true);			// clear it when finished
     daemon->setWorkingDirectory(m_tempDir->name());	// run process in there
 
-    connect(daemon,SIGNAL(processExited(KProcess *)),SLOT(gocrExited(KProcess*)));
-    connect(daemon,SIGNAL(receivedStdout(KProcess *,char *,int)),SLOT(gocrStdIn(KProcess *,char *,int)));
-    connect(daemon,SIGNAL(receivedStderr(KProcess *,char *,int)),SLOT(gocrStdErr(KProcess *,char *,int)));
+    connect(daemon, SIGNAL(finished(int, QProcess::ExitStatus)), SLOT(slotGOcrExited(int, QProcess::ExitStatus)));
+    connect(daemon, SIGNAL(readyReadStandardOutput()), SLOT(slotGOocrStdout()));
+    connect(daemon, SIGNAL(readyReadStandardError()), SLOT(slotGOcrStderr()));
 
-    *daemon << QFile::encodeName(cmd);
-    *daemon << "-x" << "-";				// progress to stdout
+    QStringList args;					// arguments for process
+    args << "-x" << "-";				// progress to stdout
 
     if (img->numColors()<0 || img->numColors()>3)	// Not a B&W image
     {
-        *daemon << "-l" << QString::number(gocrDia->getGraylevel());
+        args << "-l" << QString::number(gocrDia->getGraylevel());
     }
+    args << "-s" << QString::number(gocrDia->getSpaceWidth());
+    args << "-d" << QString::number(gocrDia->getDustsize());
 
-    *daemon << "-s" << QString::number(gocrDia->getSpaceWidth());
-    *daemon << "-d" << QString::number(gocrDia->getDustsize());
+    args << "-v" << "32";				// write a result image
 
-    *daemon << "-v" << "32";				// write a result image
+    args << "-i" << QFile::encodeName(m_tempFile);
 
-    *daemon << "-i" << QFile::encodeName(m_tempFile);
+    kDebug() << "Running GOGR on" << format << "file"
+             << "as [" << cmd << args.join(" ") << "]";
 
-    const QValueList<QCString> args = daemon->args();
-    QStringList arglist;				// report the complete command
-    for (QValueList<QCString>::const_iterator it = args.constBegin(); it!=args.constEnd(); ++it)
+    daemon->setProgram(QFile::encodeName(cmd), args);
+    daemon->setNextOpenMode(QIODevice::ReadOnly);
+    daemon->setOutputChannelMode(KProcess::SeparateChannels);
+
+    daemon->start();
+    if (!daemon->waitForStarted(5000))
     {
-        arglist.append(*it);
+        kDebug() << "Error starting GOCR process!";
     }
-    kdDebug(28000) <<  k_funcinfo << "Running GOGR on " << format << " file"
-                   << " as [" << arglist.join(" ") << "]" << endl;
-
-//       m_ocrCurrLine = 0;  // Important in gocrStdIn to store the results
-
-    if (!daemon->start(KProcess::NotifyOnExit,KProcess::All))
-    {
-        kdDebug(28000) << "Error starting GOCR process!" << endl;
-    }
-    else kdDebug(28000) << "GOCR process started OK" << endl;
+    else kDebug() << "GOCR process started";
 }
 
 
 
 
 
-void OcrGocrEngine::gocrExited(KProcess *proc)
+void OcrGocrEngine::slotGOcrExited(int exitCode, QProcess::ExitStatus exitStatus)
 {
-   kdDebug(28000) << k_funcinfo << endl;
+   kDebug() << "exit code" << exitCode << "status" << exitStatus;
+
+   slotGOcrStdout();					// read anything remaining
+   slotGOcrStderr();
 
    /* Now all the text of gocr is in the member m_ocrResultText. This one must
     * be split up now to m_ocrPage. First break up the lines, resize m_ocrPage
     * accordingly and than go through every line and create ocrwords for every
     * word.
     */
-   QStringList lines = QStringList::split( '\n', m_ocrResultText, true );
+   QStringList lines = m_ocrResultText.split('\n', QString::SkipEmptyParts);
 
    m_ocrPage.clear();
    m_ocrPage.resize( lines.count() );
 
-   kdDebug(28000) << "RESULT " << m_ocrResultText << " was splitted to lines " << lines.count() << endl;
+   kDebug() << "RESULT" << m_ocrResultText << "split to" << lines.count() << "lines";
 
    unsigned int lineCnt = 0;
 
    for ( QStringList::Iterator it = lines.begin(); it != lines.end(); ++it )
    {
-       //kdDebug(28000) << "Splitting up line " << *it << endl;
-       ocrWordList ocrLine;
+       OcrWordList ocrLine;
 
-       QStringList words = QStringList::split( QRegExp( "\\s+" ), *it, false );
+       QStringList words = (*it).split(QRegExp("\\s+"), QString::SkipEmptyParts);
        for ( QStringList::Iterator itWord = words.begin(); itWord != words.end(); ++itWord )
        {
-           //kdDebug(28000) << "Appending to results: " << *itWord << endl;
-           ocrLine.append( ocrWord( *itWord ));
+           ocrLine.append( OcrWord( *itWord ));
        }
        m_ocrPage[lineCnt] = ocrLine;
        lineCnt++;
    }
-   kdDebug(28000) << "Finished to split!" << endl;
+   kDebug() << "Finished splitting";
 
    if (m_introducedImage!=NULL) delete m_introducedImage;
    m_introducedImage = new KookaImage();		// start with a new image
 
    // Find and load the GOCR result image
-   QDir *dir = m_tempDir->qDir();
+   QDir dir(m_tempDir->name());
    const char **prf = possibleResultFiles;
    while (*prf!=NULL)					// search for result files
    {
-       QString rf = dir->absFilePath(*prf);
+       QString rf = dir.absoluteFilePath(*prf);
        if (QFile::exists(rf))				// take first one that matches
        {
-           kdDebug(28000) << k_funcinfo << "found result image " << rf << endl;
+           kDebug() << "found result image" << rf;
            m_ocrResultImage = rf;
            break;
        }
@@ -198,9 +199,9 @@ void OcrGocrEngine::gocrExited(KProcess *proc)
    }
 
    if (!m_ocrResultImage.isNull()) m_introducedImage->load(m_ocrResultImage);
-   else kdDebug(28000) << k_funcinfo << "cannot find result image in" << dir->absPath() << endl;
+   else kDebug() << "cannot find result image in" << dir.absolutePath();
 
-   finishedOCRVisible(proc->normalExit());
+   finishedOCRVisible(daemon->exitStatus()==QProcess::NormalExit);
 }
 
 
@@ -210,21 +211,21 @@ void OcrGocrEngine::cleanUpFiles()
 {
     if (!m_ocrResultImage.isNull())
     {
-        kdDebug(28000) << k_funcinfo << "Removing result file " << m_ocrResultImage << endl;
+        kDebug() << "Removing result file" << m_ocrResultImage;
         QFile::remove(m_ocrResultImage);
         m_ocrResultImage = QString::null;
     }
 
     if (!m_tempFile.isNull())
     {
-        kdDebug(28000) << k_funcinfo << "Removing input file " << m_tempFile << endl;
+        kDebug() << "Removing input file" << m_tempFile;
         QFile::remove(m_tempFile);
         m_tempFile = QString::null;
     }
 
     if (m_tempDir!=NULL)
     {
-        kdDebug(28000) << k_funcinfo << "Removing temp directory " << m_tempDir->name() << endl;
+        kDebug() << "Removing temp directory" << m_tempDir->name();
         delete m_tempDir;				// autoDelete will do the rest
         m_tempDir = NULL;
     }
@@ -232,28 +233,37 @@ void OcrGocrEngine::cleanUpFiles()
 
 
 // TODO: send this to a log for viewing
-void OcrGocrEngine::gocrStdErr(KProcess *proc, char *buffer, int buflen)
+void OcrGocrEngine::slotGOcrStderr()
 {
-   QString errorBuffer = QString::fromLocal8Bit(buffer, buflen);
-   kdDebug(28000) << "gocr stderr: " << errorBuffer << endl;
-
+    daemon->setReadChannel(QProcess::StandardError);
+    while (true)
+    {
+        QByteArray line = daemon->readLine();
+        if (line.isEmpty()) break;
+        kDebug() << "GOCR stderr:" << line;
+    }
 }
 
 
-void OcrGocrEngine::gocrStdIn(KProcess *proc, char* buffer, int buflen)
+void OcrGocrEngine::slotGOcrStdout()
 {
-    QString aux = QString::fromLocal8Bit(buffer, buflen);
-
     QRegExp rx( "^\\s*\\d+\\s+\\d+");			// this never seems to match!
-    if( rx.search( aux ) > -1 )
-    {
-        /* calculate ocr progress for gocr */
-        int progress = rx.capturedTexts()[0].toInt();
-        int subProgress = rx.capturedTexts()[1].toInt();
-        // kdDebug(28000) << "Emitting progress: " << progress << endl;
-        emit ocrProgress( progress, subProgress );
-        return;
-    }
 
-    m_ocrResultText += aux;				// append to OCR results
+    daemon->setReadChannel(QProcess::StandardOutput);
+    while (true)
+    {
+        QByteArray line = daemon->readLine();
+        if (line.isEmpty()) break;
+
+        if (rx.indexIn(line)>-1)
+        {
+            /* calculate ocr progress for gocr */
+            int progress = rx.capturedTexts()[0].toInt();
+            int subProgress = rx.capturedTexts()[1].toInt();
+            emit ocrProgress(progress, subProgress);
+            continue;
+        }
+
+        m_ocrResultText += line;			// append to OCR results
+    }
 }

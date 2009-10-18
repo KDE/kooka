@@ -17,36 +17,39 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef __IMGSCANINFO_H__
-#define __IMGSCANINFO_H__
+#ifndef IMGSCANINFO_H
+#define IMGSCANINFO_H
+
+#include "libkscanexport.h"
 
 #include <qstring.h>
 
 /* ----------------------------------------------------------------------
  *
  */
-class ImgScanInfo
+class KSCAN_EXPORT ImgScanInfo
 {
 public:
     ImgScanInfo();
 
-    int getXResolution();
-    int getYResolution();
-    QString getMode();
-    QString getScannerName();
+    int getXResolution() const;
+    int getYResolution() const;
+    QString getMode() const;
+    QString getScannerName() const;
 
     void setXResolution( int );
     void setYResolution( int );
     void setMode( const QString& );
     void setScannerName( const QString& );
+
 private:
     int m_xRes;
     int m_yRes;
     QString m_mode;
     QString m_scanner;
 
-   class ImgScanInfoPrivate;
-   ImgScanInfoPrivate *d;
+    class ImgScanInfoPrivate;
+    ImgScanInfoPrivate *d;
 };
 
-#endif
+#endif							// IMGSCANINFO_H

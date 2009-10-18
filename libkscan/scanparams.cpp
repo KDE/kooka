@@ -17,40 +17,45 @@
    Boston, MA 02110-1301, USA.
 */
 
+#include "scanparams.h"
+#include "scanparams.moc"
+
 #include <qpushbutton.h>
 #include <qimage.h>
 #include <qtooltip.h>
 #include <qprogressdialog.h>
 #include <qcheckbox.h>
-#include <qbuttongroup.h>
+#include <q3buttongroup.h>
 #include <qradiobutton.h>
 #include <qfileinfo.h>
+#include <qgridlayout.h>
+#include <qlabel.h>
+#include <q3scrollview.h>
 
 #include <kfiledialog.h>
 #include <klocale.h>
 #include <kdebug.h>
-#include <kbuttonbox.h>
 #include <kiconloader.h>
 #include <kled.h>
 #include <kseparator.h>
 #include <kmessagebox.h>
-#include <kactivelabel.h>
 #include <kmimetype.h>
+#include <khbox.h>
 
+extern "C"
+{
 #include <sane/saneopts.h>
+}
 
 #include "scansourcedialog.h"
 #include "massscandialog.h"
 #include "gammadialog.h"
+#include "kgammatable.h"
 #include "kscancontrols.h"
 #include "scansizeselector.h"
 
-#include "scanparams.h"
-#include "scanparams.moc"
-
 
 //  SANE testing options
-
 #define TESTING_OPTIONS
 
 #ifndef SANE_NAME_TEST_PICTURE
@@ -78,9 +83,11 @@
 #endif
 
 
-ScanParams::ScanParams( QWidget *parent, const char *name )
-   : QFrame( parent, name )
+ScanParams::ScanParams( QWidget *parent)
+   : QFrame( parent)
 {
+    setObjectName("ScanParams");
+
     sane_device = NULL;
     virt_filename = NULL;
     pb_edit_gtable = NULL;
@@ -102,19 +109,19 @@ ScanParams::ScanParams( QWidget *parent, const char *name )
 }
 
 
-bool ScanParams::connectDevice(KScanDevice *newScanDevice,bool galleryMode)
+bool ScanParams::connectDevice(KScanDevice *newScanDevice, bool galleryMode)
 {
    /* Frame stuff for toplevel of scanparams - beautification */
     setFrameStyle(QFrame::Panel|QFrame::Raised);
     setLineWidth(1);
 
-    QGridLayout *lay = new QGridLayout(this,6,2,KDialog::marginHint(),
-                                       KDialog::spacingHint() );
-    lay->setColStretch(0,9);
+    QGridLayout *lay = new QGridLayout(this);
+    lay->setSpacing(KDialog::spacingHint());
+    lay->setColumnStretch(0,9);
 
     if (newScanDevice==NULL)				// no scanner device
     {
-        kdDebug(29000) << k_funcinfo << "No scan device, gallery=" << galleryMode << endl;
+        kDebug() << "No scan device, gallery=" << galleryMode;
         sane_device = NULL;
         createNoScannerMsg(galleryMode);
         return (true);
@@ -133,10 +140,9 @@ bool ScanParams::connectDevice(KScanDevice *newScanDevice,bool galleryMode)
     lay->addWidget(m_led,0,1,Qt::AlignRight);
 
     lab = new QLabel(sane_device->getScannerName(),this);
-    lay->addMultiCellWidget(lab,1,1,0,1,Qt::AlignLeft);
+    lay->addWidget(lab,1,0,1,2,Qt::AlignLeft);
 
-    KSeparator *sep = new KSeparator(KSeparator::HLine,this);
-    lay->addMultiCellWidget(sep,2,2,0,1);
+    lay->addWidget(new KSeparator(Qt::Horizontal,this),2,0,1,-1);
 
     /* load the startup scanoptions */
     startupOptset = new KScanOptSet( DEFAULT_OPTIONSET );
@@ -144,47 +150,46 @@ bool ScanParams::connectDevice(KScanDevice *newScanDevice,bool galleryMode)
 
     if( !startupOptset->load( "Startup" ) )
     {
-        kdDebug(29000) << "Could not load Startup-Options" << endl;
+        kDebug() << "Could not load Startup-Options";
         delete startupOptset;
         startupOptset = NULL;
     }
 
     /* Now create Widgets for the important scan settings */
-    QScrollView *sv = scannerParams();
-    lay->addMultiCellWidget(sv,3,3,0,1);
+    Q3ScrollView *sv = scannerParams();
+    lay->addWidget(sv,3,0,1,2);
     lay->setRowStretch(3,9);
 
     /* Reload all options to care for inactive options */
-    sane_device->slReloadAll();
+    sane_device->slotReloadAll();
 
-    sep = new KSeparator(KSeparator::HLine,this);
-    lay->addMultiCellWidget(sep,4,4,0,1);
+    lay->addWidget(new KSeparator(Qt::Horizontal,this),4,0,1,-1);
 
     /* Create the Scan Buttons */
     QPushButton* pb = new QPushButton(i18n("Pre&view"),this);
     pb->setMinimumWidth(100);
-    connect( pb, SIGNAL(clicked()), this, SLOT(slAcquirePreview()) );
+    connect( pb, SIGNAL(clicked()), SLOT(slotAcquirePreview()) );
     lay->addWidget(pb,5,0,Qt::AlignLeft);
 
     pb = new QPushButton(i18n("Star&t Scan"),this);
     pb->setMinimumWidth(100);
-    connect( pb, SIGNAL(clicked()), this, SLOT(slStartScan()) );
+    connect( pb, SIGNAL(clicked()), SLOT(slotStartScan()) );
     lay->addWidget(pb,5,1,Qt::AlignRight);
 
     /* Initialise the progress dialog */
     progressDialog = new QProgressDialog( i18n("Scanning in progress"),
-                                          i18n("Stop"), 100, 0L,
-                                          "SCAN_PROGRESS", true, 0  );
-    progressDialog->setAutoClose( true );
-    progressDialog->setAutoReset( true );
-    progressDialog->setCaption(i18n("Scanning"));
+                                          i18n("Stop"), 0, 100, NULL);
+    progressDialog->setModal(true);
+    progressDialog->setAutoClose(true);
+    progressDialog->setAutoReset(true);
+    progressDialog->setWindowTitle(i18n("Scanning"));
 
     connect( sane_device, SIGNAL(sigScanProgress(int)),
              progressDialog, SLOT(setProgress(int)));
 
     /* Connect the Progress Dialogs cancel-Button */
     connect( progressDialog, SIGNAL( cancelled() ), sane_device,
-             SLOT( slStopScanning() ) );
+             SLOT( slotStopScanning() ) );
 
     return (true);
 }
@@ -192,7 +197,7 @@ bool ScanParams::connectDevice(KScanDevice *newScanDevice,bool galleryMode)
 
 ScanParams::~ScanParams()
 {
-    kdDebug(29000) << k_funcinfo << endl;
+    kDebug();
 
     delete startupOptset;  startupOptset = NULL;
     delete progressDialog; progressDialog = NULL;
@@ -205,11 +210,11 @@ void ScanParams::initialise(KScanOption *so)
     if (so==NULL) return;
     if (startupOptset==NULL) return;
 
-    QCString name = so->getName();
+    QByteArray name = so->getName();
     if (!name.isEmpty())
     {
-        QCString val = startupOptset->getValue(name);
-        kdDebug(29000) << "Initialising <" << name << "> with value <" << val << ">" << endl;
+        QByteArray val = startupOptset->getValue(name);
+        kDebug() << "Initialising" << name << "with value" << val;
         so->set(val);
         sane_device->apply(so);
     }
@@ -218,21 +223,22 @@ void ScanParams::initialise(KScanOption *so)
 
 
 
-QScrollView *ScanParams::scannerParams()
+Q3ScrollView *ScanParams::scannerParams()
 {
     KScanOption *so;
 
-    QScrollView *sv = new QScrollView(this);
-    sv->setHScrollBarMode( QScrollView::AlwaysOff );
-    sv->setResizePolicy( QScrollView::AutoOneFit );
+    Q3ScrollView *sv = new Q3ScrollView(this);
+    sv->setHScrollBarMode(Q3ScrollView::AlwaysOff);
+    sv->setResizePolicy(Q3ScrollView::AutoOneFit);
 
     QWidget *frame = new QWidget(sv->viewport());
 
-    frame->setBackgroundColor(sv->backgroundColor());
+    //frame->setBackgroundColor(sv->palette().background());
 
-    QGridLayout *lay = new QGridLayout(frame,1,4,KDialog::marginHint(),2*KDialog::spacingHint());
-    lay->setColStretch(2,1);
-    lay->setColSpacing(1,KDialog::marginHint());
+    QGridLayout *lay = new QGridLayout(frame);
+    lay->setSpacing(2*KDialog::spacingHint());
+    lay->setColumnStretch(2,1);
+    lay->setColumnMinimumWidth(1,KDialog::marginHint());
 
     int row = 0;
     QLabel *l;
@@ -244,17 +250,17 @@ QScrollView *ScanParams::scannerParams()
     if (virt_filename!=NULL)
     {
         initialise( virt_filename );
-        connect( virt_filename, SIGNAL(guiChange(KScanOption*)),
-                 SLOT(slReloadAllGui( KScanOption* )));
+        connect( virt_filename, SIGNAL(guiChange(KScanOption *)),
+                 SLOT(slotReloadAllGui(KScanOption *)));
 
         l = virt_filename->getLabel(frame); lay->addWidget(l,row,0,Qt::AlignLeft);
-        w = virt_filename->widget(); lay->addMultiCellWidget(w,row,row,2,3);
+        w = virt_filename->widget(); lay->addWidget(w,row,2,1,-1);
         l->setBuddy(w);
         ++row;
 
         /* Selection for either virtual scanner or SANE debug */
-        QButtonGroup *vbg = new QButtonGroup( 2, Qt::Vertical, i18n("Testing Mode"),frame);
-        connect(vbg,SIGNAL(clicked(int)),SLOT(slVirtScanModeSelect(int)));
+        Q3ButtonGroup *vbg = new Q3ButtonGroup( 2, Qt::Vertical, i18n("Testing Mode"),frame);
+        connect(vbg,SIGNAL(clicked(int)),SLOT(slotVirtScanModeSelect(int)));
 
         QRadioButton *rb1 = new QRadioButton(i18n("SANE Debug (from PNM image)"),vbg);
         QRadioButton *rb2 = new QRadioButton(i18n("Virtual Scanner (any image format)"),vbg);
@@ -263,10 +269,10 @@ QScrollView *ScanParams::scannerParams()
         rb1->setChecked(scan_mode==ID_SANE_DEBUG);
         rb2->setChecked(scan_mode==ID_QT_IMGIO);
 
-        lay->addMultiCellWidget(vbg,row,row,2,3);
+        lay->addWidget(vbg,row,2,1,-1);
         ++row;
 
-        lay->addMultiCellWidget(new KSeparator(KSeparator::HLine,frame),row,row,0,3);
+        lay->addWidget(new KSeparator(Qt::Horizontal,frame),row,0,1,-1);
         ++row;
     }
 
@@ -280,23 +286,23 @@ QScrollView *ScanParams::scannerParams()
 
         // Having loaded the 'sane-backends' message catalogue, these strings
         // are now translatable.
-        cb->slSetIcon( pixLineArt, i18n("Line art") );
-        cb->slSetIcon( pixLineArt, i18n("Lineart") );
-        cb->slSetIcon( pixLineArt, i18n("Binary") );
-        cb->slSetIcon( pixGray, i18n("Gray") );
-        cb->slSetIcon( pixGray, i18n("Grey") );
-        cb->slSetIcon( pixColor, i18n("Color") );
-        cb->slSetIcon( pixColor, i18n("Colour") );
-        cb->slSetIcon( pixHalftone, i18n("Halftone") );
+        cb->slotSetIcon( pixLineArt, i18n("Line art") );
+        cb->slotSetIcon( pixLineArt, i18n("Lineart") );
+        cb->slotSetIcon( pixLineArt, i18n("Binary") );
+        cb->slotSetIcon( pixGray, i18n("Gray") );
+        cb->slotSetIcon( pixGray, i18n("Grey") );
+        cb->slotSetIcon( pixColor, i18n("Color") );
+        cb->slotSetIcon( pixColor, i18n("Colour") );
+        cb->slotSetIcon( pixHalftone, i18n("Halftone") );
 
         initialise( so );
         connect( so, SIGNAL(guiChange(KScanOption*)),
-                 SLOT(slReloadAllGui( KScanOption* )));
+                 SLOT(slotReloadAllGui( KScanOption* )));
         connect( so, SIGNAL(guiChange(KScanOption*)),
-                 SLOT(slNewScanMode()));
+                 SLOT(slotNewScanMode()));
 
         l = so->getLabel(frame); lay->addWidget(l,row,0,Qt::AlignLeft);
-        lay->addMultiCellWidget(cb,row,row,2,3);
+        lay->addWidget(cb,row,2,1,-1);
         l->setBuddy(cb);
         ++row;
     }
@@ -310,13 +316,13 @@ QScrollView *ScanParams::scannerParams()
         initialise( so );
         int x_y_res;
         so->get( &x_y_res );
-        so->slRedrawWidget( so );
+        so->slotRedrawWidget( so );
 
         /* connect to slot that passes the resolution to the previewer */
         connect( so, SIGNAL(guiChange(KScanOption*)),
-                 this, SLOT( slNewXResolution(KScanOption*)));
+                 this, SLOT( slotNewXResolution(KScanOption*)));
         connect( so, SIGNAL(guiChange(KScanOption*)),
-                 this, SLOT(slReloadAllGui( KScanOption* )));
+                 this, SLOT(slotReloadAllGui( KScanOption* )));
 
         l = so->getLabel(frame); lay->addWidget(l,row,0,Qt::AlignLeft);
         w = so->widget(); lay->addWidget(w,row,2);
@@ -331,14 +337,14 @@ QScrollView *ScanParams::scannerParams()
         if (xy_resolution_bind!=NULL)
         {
             initialise( xy_resolution_bind );
-            xy_resolution_bind->slRedrawWidget( xy_resolution_bind );
+            xy_resolution_bind->slotRedrawWidget( xy_resolution_bind );
 
             /* Connect to Gui-change-Slot */
             connect( xy_resolution_bind, SIGNAL(guiChange(KScanOption*)),
-                     this, SLOT(slReloadAllGui( KScanOption* )));
+                     this, SLOT(slotReloadAllGui( KScanOption* )));
 
             l = so->getLabel(frame); lay->addWidget(l,row,0,Qt::AlignLeft);
-            w = so->widget(); lay->addMultiCellWidget(w,row,row,2,3);
+            w = so->widget(); lay->addWidget(w,row,2,1,-1);
             l->setBuddy(w);
             ++row;
         }
@@ -353,7 +359,7 @@ QScrollView *ScanParams::scannerParams()
             initialise( so );
             if( so->active() )
                 so->get( &y_res );
-            so->slRedrawWidget( so );
+            so->slotRedrawWidget( so );
 
             l = so->getLabel(frame); lay->addWidget(l,row,0,Qt::AlignLeft);
             w = so->widget(); lay->addWidget(w,row,2);
@@ -375,13 +381,13 @@ QScrollView *ScanParams::scannerParams()
             initialise( so );
             int x_y_res;
             so->get( &x_y_res );
-            so->slRedrawWidget( so );
+            so->slotRedrawWidget( so );
 
             /* connect to slot that passes the resolution to the previewer */
             connect( so, SIGNAL(guiChange(KScanOption*)),
-                     this, SLOT( slNewXResolution(KScanOption*)));
+                     this, SLOT( slotNewXResolution(KScanOption*)));
             connect( so, SIGNAL(guiChange(KScanOption*)),
-                     this, SLOT(slReloadAllGui( KScanOption* )));
+                     this, SLOT(slotReloadAllGui( KScanOption* )));
 
             l = so->getLabel(frame); lay->addWidget(l,row,0,Qt::AlignLeft);
             w = so->widget(); lay->addWidget(w,row,2);
@@ -393,7 +399,7 @@ QScrollView *ScanParams::scannerParams()
         }
         else
         {
-            kdDebug(29000) << "SERIOUS: No Resolution setting possible!" << endl;
+            kDebug() << "Serious: No Resolution setting available!";
         }
     }
 
@@ -402,12 +408,12 @@ QScrollView *ScanParams::scannerParams()
     connect(area_sel,SIGNAL(sizeSelected(QRect)),SLOT(slotScanSizeSelected(QRect)));
     l = new QLabel("Scan &area:",frame);		// make sure it gets an accel
     lay->addWidget(l,row,0,Qt::AlignTop|Qt::AlignLeft);
-    lay->addMultiCellWidget(area_sel,row,row,2,3,Qt::AlignTop);
+    lay->addWidget(area_sel,row,2,1,-1,Qt::AlignTop);
     l->setBuddy(area_sel);
     ++row;
 
     /* Insert another beautification line */
-    lay->addMultiCellWidget(new KSeparator(KSeparator::HLine,frame),row,row,0,3);
+    lay->addWidget(new KSeparator(Qt::Horizontal,frame),row,0,1,-1);
     ++row;
 
     /* Add a button for Source-Selection */
@@ -419,10 +425,10 @@ QScrollView *ScanParams::scannerParams()
     {
         initialise( source_sel );
         connect( source_sel, SIGNAL(guiChange(KScanOption*)),
-                 this, SLOT(slReloadAllGui( KScanOption* )));
+                 this, SLOT(slotReloadAllGui( KScanOption* )));
 
         l = source_sel->getLabel(frame); lay->addWidget(l,row,0,Qt::AlignLeft);
-        w = source_sel->widget(); lay->addMultiCellWidget(w,row,row,2,3);
+        w = source_sel->widget(); lay->addWidget(w,row,2,1,-1);
         l->setBuddy(w);
         ++row;
 
@@ -430,8 +436,8 @@ QScrollView *ScanParams::scannerParams()
         //  contains other ADF options.  They are not implemented at the moment
         //  but they may be some day...
         //QPushButton *pb = new QPushButton( i18n("Source && ADF Options..."), frame);
-        //connect(pb, SIGNAL(clicked()), SLOT(slSourceSelect()));
-        //lay->addMultiCellWidget(pb,row,row,2,3,Qt::AlignRight);
+        //connect(pb, SIGNAL(clicked()), SLOT(slotSourceSelect()));
+        //lay->addWidget(pb,row,2,1,-1,Qt::AlignRight);
         //++row;
     }
 
@@ -443,10 +449,10 @@ QScrollView *ScanParams::scannerParams()
     {
         initialise(so);
         connect( so,   SIGNAL(guiChange(KScanOption*)),
-                 this, SLOT(slReloadAllGui( KScanOption* )));
+                 this, SLOT(slotReloadAllGui( KScanOption* )));
 
         l = so->getLabel(frame); lay->addWidget(l,row,0,Qt::AlignLeft);
-        w = so->widget(); lay->addMultiCellWidget(w,row,row,2,3);
+        w = so->widget(); lay->addWidget(w,row,2,1,-1);
         l->setBuddy(w);
         ++row;
     }
@@ -458,10 +464,10 @@ QScrollView *ScanParams::scannerParams()
     {
         initialise(so);
         connect( so,   SIGNAL(guiChange(KScanOption*)),
-                 this, SLOT(slReloadAllGui( KScanOption* )));
+                 this, SLOT(slotReloadAllGui( KScanOption* )));
 
         l = so->getLabel(frame); lay->addWidget(l,row,0,Qt::AlignLeft);
-        w = so->widget(); lay->addMultiCellWidget(w,row,row,2,3);
+        w = so->widget(); lay->addWidget(w,row,2,1,-1);
         l->setBuddy(w);
         ++row;
     }
@@ -473,10 +479,10 @@ QScrollView *ScanParams::scannerParams()
     {
         initialise(so);
         connect( so,   SIGNAL(guiChange(KScanOption*)),
-                 this, SLOT(slReloadAllGui( KScanOption* )));
+                 this, SLOT(slotReloadAllGui( KScanOption* )));
 
         l = so->getLabel(frame); lay->addWidget(l,row,0,Qt::AlignLeft);
-        w = so->widget(); lay->addMultiCellWidget(w,row,row,2,3);
+        w = so->widget(); lay->addWidget(w,row,2,1,-1);
         l->setBuddy(w);
         ++row;
     }
@@ -489,28 +495,28 @@ QScrollView *ScanParams::scannerParams()
     {
         initialise(so);
         connect( so,   SIGNAL(guiChange(KScanOption*)),
-                 this, SLOT(slReloadAllGui( KScanOption* )));
+                 this, SLOT(slotReloadAllGui( KScanOption* )));
 
         l = so->getLabel(frame); lay->addWidget(l,row,0,Qt::AlignLeft);
-        w = so->widget(); lay->addMultiCellWidget(w,row,row,2,3);
+        w = so->widget(); lay->addWidget(w,row,2,1,-1);
         l->setBuddy(w);
         ++row;
     }
 
-    kdDebug(29000) << "Bit-Depth exists" << endl;
     so = sane_device->getGuiElement( SANE_NAME_BIT_DEPTH, frame,
                                      SANE_TITLE_BIT_DEPTH,
                                      SANE_DESC_BIT_DEPTH );
     if (so!=NULL)
     {
+        kDebug() << "Bit-Depth option exists";
         initialise(so);
         connect( so,   SIGNAL(guiChange(KScanOption*)),
-                 this, SLOT(slReloadAllGui( KScanOption* )));
+                 this, SLOT(slotReloadAllGui( KScanOption* )));
         connect( so, SIGNAL(guiChange(KScanOption*)),
-                 SLOT(slNewScanMode()));
+                 SLOT(slotNewScanMode()));
 
         l = so->getLabel(frame); lay->addWidget(l,row,0,Qt::AlignLeft);
-        w = so->widget(); lay->addMultiCellWidget(w,row,row,2,3);
+        w = so->widget(); lay->addWidget(w,row,2,1,-1);
         l->setBuddy(w);
         ++row;
     }
@@ -523,10 +529,10 @@ QScrollView *ScanParams::scannerParams()
     {
         initialise(so);
         connect( so,   SIGNAL(guiChange(KScanOption*)),
-                 this, SLOT(slReloadAllGui( KScanOption* )));
+                 this, SLOT(slotReloadAllGui( KScanOption* )));
 
         l = so->getLabel(frame); lay->addWidget(l,row,0,Qt::AlignLeft);
-        w = so->widget(); lay->addMultiCellWidget(w,row,row,2,3);
+        w = so->widget(); lay->addWidget(w,row,2,1,-1);
         l->setBuddy(w);
         ++row;
     }
@@ -538,10 +544,10 @@ QScrollView *ScanParams::scannerParams()
     {
         initialise(so);
         connect( so,   SIGNAL(guiChange(KScanOption*)),
-                 this, SLOT(slReloadAllGui( KScanOption* )));
+                 this, SLOT(slotReloadAllGui( KScanOption* )));
 
         l = so->getLabel(frame); lay->addWidget(l,row,0,Qt::AlignLeft);
-        w = so->widget(); lay->addMultiCellWidget(w,row,row,2,3);
+        w = so->widget(); lay->addWidget(w,row,2,1,-1);
         l->setBuddy(w);
         ++row;
     }
@@ -553,10 +559,10 @@ QScrollView *ScanParams::scannerParams()
     {
         initialise(so);
         connect( so,   SIGNAL(guiChange(KScanOption*)),
-                 this, SLOT(slReloadAllGui( KScanOption* )));
+                 this, SLOT(slotReloadAllGui( KScanOption* )));
 
         l = so->getLabel(frame); lay->addWidget(l,row,0,Qt::AlignLeft);
-        w = so->widget(); lay->addMultiCellWidget(w,row,row,2,3);
+        w = so->widget(); lay->addWidget(w,row,2,1,-1);
         l->setBuddy(w);
         ++row;
     }
@@ -572,7 +578,7 @@ QScrollView *ScanParams::scannerParams()
         initialise( so );
 
         l = so->getLabel(frame); lay->addWidget(l,row,0,Qt::AlignLeft);
-        w = so->widget(); lay->addMultiCellWidget(w,row,row,2,3);
+        w = so->widget(); lay->addWidget(w,row,2,1,-1);
         l->setBuddy(w);
         ++row;
     }
@@ -585,7 +591,7 @@ QScrollView *ScanParams::scannerParams()
     {
         initialise( so );
         l = so->getLabel(frame); lay->addWidget(l,row,0,Qt::AlignLeft);
-        w = so->widget(); lay->addMultiCellWidget(w,row,row,2,3);
+        w = so->widget(); lay->addWidget(w,row,2,1,-1);
         l->setBuddy(w);
         ++row;
     }
@@ -598,7 +604,7 @@ QScrollView *ScanParams::scannerParams()
     {
         initialise( so );
         l = so->getLabel(frame); lay->addWidget(l,row,0,Qt::AlignLeft);
-        w = so->widget(); lay->addMultiCellWidget(w,row,row,2,3);
+        w = so->widget(); lay->addWidget(w,row,2,1,-1);
         l->setBuddy(w);
         ++row;
     }
@@ -611,7 +617,7 @@ QScrollView *ScanParams::scannerParams()
     {
         initialise( so );
         l = so->getLabel(frame); lay->addWidget(l,row,0,Qt::AlignLeft);
-        w = so->widget(); lay->addMultiCellWidget(w,row,row,2,3);
+        w = so->widget(); lay->addWidget(w,row,2,1,-1);
         l->setBuddy(w);
         ++row;
     }
@@ -622,7 +628,7 @@ QScrollView *ScanParams::scannerParams()
     {
         initialise( so );
         l = so->getLabel(frame); lay->addWidget(l,row,0,Qt::AlignLeft);
-        w = so->widget(); lay->addMultiCellWidget(w,row,row,2,3);
+        w = so->widget(); lay->addWidget(w,row,2,1,-1);
         l->setBuddy(w);
         ++row;
     }
@@ -631,7 +637,7 @@ QScrollView *ScanParams::scannerParams()
     /* The gamma table can be used - add a button for editing */
     if (sane_device->optionExists( SANE_NAME_CUSTOM_GAMMA ) )
     {
-        QHBox *hb1 = new QHBox(frame);
+        KHBox *hb1 = new KHBox(frame);
         so = sane_device->getGuiElement( SANE_NAME_CUSTOM_GAMMA, hb1,
                                          SANE_TITLE_CUSTOM_GAMMA,
                                          SANE_DESC_CUSTOM_GAMMA );
@@ -639,11 +645,11 @@ QScrollView *ScanParams::scannerParams()
         {
             initialise( so );
             connect( so,   SIGNAL(guiChange(KScanOption*)),
-                     this, SLOT(slReloadAllGui( KScanOption* )));
+                     this, SLOT(slotReloadAllGui( KScanOption* )));
 
             /* This connection cares for enabling/disabling the edit-Button */
             connect( so,   SIGNAL(guiChange(KScanOption*)),
-                     this, SLOT(slOptionNotify(KScanOption*)));
+                     this, SLOT(slotOptionNotify(KScanOption*)));
         }
 
         /* Connect a signal to refresh activity of the gamma tables */
@@ -652,11 +658,11 @@ QScrollView *ScanParams::scannerParams()
         pb_edit_gtable = new QPushButton( i18n("Edit..."), hb1 );
 
         connect( pb_edit_gtable, SIGNAL( clicked () ),
-                 this, SLOT( slEditCustGamma () ) );
+                 this, SLOT( slotEditCustGamma () ) );
         setEditCustomGammaTableState();
 
         lay->addWidget(so->getLabel(frame),row,0,Qt::AlignLeft);
-        lay->addMultiCellWidget(hb1,row,row,2,3);
+        lay->addWidget(hb1,row,2,1,-1);
         ++row;
     }
     /* my Epson Perfection backends offer a list of user defined gamma values */
@@ -668,7 +674,7 @@ QScrollView *ScanParams::scannerParams()
     {
         initialise( so );
         l = so->getLabel(frame); lay->addWidget(l,row,0,Qt::AlignLeft);
-        w = so->widget(); lay->addMultiCellWidget(w,row,row,2,3);
+        w = so->widget(); lay->addWidget(w,row,2,1,-1);
         l->setBuddy(w);
         ++row;
     }
@@ -681,19 +687,19 @@ QScrollView *ScanParams::scannerParams()
     {
         initialise( so );
         lay->addWidget(so->getLabel(frame),row,0,Qt::AlignLeft);
-        lay->addMultiCellWidget(so->widget(),row,row,2,3);
+        lay->addWidget(so->widget(),row,2,1,-1);
         ++row;
 
-        cb_gray_preview = (QCheckBox*) so->widget();
-        QToolTip::add( cb_gray_preview, i18n("Acquire a gray preview even in color mode (faster)") );
+        cb_gray_preview = static_cast<QCheckBox *>(so->widget());
+        cb_gray_preview->setToolTip(i18n("Acquire a gray preview even in color mode (faster)"));
     }
 
 #ifdef RESTORE_AREA
     initStartupArea();					// set up and tell previewer
 #endif
-    slNewScanMode();					// tell previewer this too
+    slotNewScanMode();					// tell previewer this too
 
-    lay->addMultiCellWidget(new QLabel("",frame),row,row,0,3);
+    lay->addWidget(new QLabel("",frame),row,0,1,-1);
     lay->setRowStretch(row,1);				// dummy row for stretch
 
     frame->setMinimumWidth(frame->sizeHint().width());
@@ -756,9 +762,11 @@ See the SANE project home page \
 for more information on SANE installation and setup.");
     }
 
-    KActiveLabel *lab = new KActiveLabel(msg,this);
+    QLabel *lab = new QLabel(msg, this);
+    lab->setWordWrap(true);
+    lab->setOpenExternalLinks(true);
     QGridLayout *lay = dynamic_cast<QGridLayout *>(layout());
-    if (lay!=NULL) lay->addWidget(lab,0,0);
+    if (lay!=NULL) lay->addWidget(lab, 0, 0, Qt::AlignTop);
 }
 
 
@@ -767,22 +775,21 @@ for more information on SANE installation and setup.");
  * This is useful if the parameter - Gui has widgets in his own space, which depend
  * on widget controlled by the KScanOption.
  */
-void ScanParams::slOptionNotify( KScanOption *kso )
+void ScanParams::slotOptionNotify(const KScanOption *so)
 {
-   if( !kso || !kso->valid()) return;
-   setEditCustomGammaTableState	();
+    if (so==NULL || !so->valid()) return;
+    setEditCustomGammaTableState();
 }
 
 
-void ScanParams::slSourceSelect( void )
+void ScanParams::slotSourceSelect()
 {
-   kdDebug(29000) << "Open Window for source selection !" << endl;
    KScanOption so( SANE_NAME_SCAN_SOURCE );
    AdfBehaviour adf = ADF_OFF;
 
-   const QCString& currSource = so.get();
-   kdDebug(29000) << "Current Source is <" << currSource << ">" << endl;
-   QStrList sources;
+   const QByteArray &currSource = so.get();
+   kDebug() << "Current source is" << currSource;
+   QList<QByteArray> sources;
 
    if( so.valid() )
    {
@@ -794,7 +801,7 @@ void ScanParams::slSourceSelect( void )
 #endif
 
       ScanSourceDialog d( this, sources, adf );
-      d.slSetSource( currSource );
+      d.slotSetSource( currSource );
 
       if( d.exec() == QDialog::Accepted  )
       {
@@ -802,17 +809,16 @@ void ScanParams::slSourceSelect( void )
 	 adf = d.getAdfBehave();
 
 	 /* set the selected Document source, the behavior is stored in a membervar */
-	 so.set( QCString(sel_source.latin1()) ); // FIX in ScanSourceDialog, then here
+	 so.set(sel_source.toLatin1());			// FIX in ScanSourceDialog, then here
 	 sane_device->apply( &so );
 
          if (source_sel!=NULL)
          {
-             source_sel->slReload();
-             source_sel->slRedrawWidget(source_sel);
+             source_sel->slotReload();
+             source_sel->slotRedrawWidget(source_sel);
          }
 
-	 kdDebug(29000) << "Dialog finished OK: " << sel_source << ", " << adf << endl;
-
+	 kDebug() << "new source" << sel_source << "ADF" << adf;
       }
    }
 }
@@ -821,7 +827,7 @@ void ScanParams::slSourceSelect( void )
 /** Slot which is called if the user switches in the gui between
  *  the SANE-Debug-Mode and the qt image reading
  */
-void ScanParams::slVirtScanModeSelect(int id)
+void ScanParams::slotVirtScanModeSelect(int id)
 {
     if (id==0)						// SANE Debug
     {
@@ -856,7 +862,7 @@ void ScanParams::slVirtScanModeSelect(int id)
 
 KScanStat ScanParams::prepareScan(QString *vfp)
 {
-    kdDebug(29000) << k_funcinfo << "scan mode=" << scan_mode << endl;
+    kDebug() << "scan mode=" << scan_mode;
 
     KScanStat stat = KSCAN_OK;
     QString virtfile;
@@ -875,7 +881,7 @@ KScanStat ScanParams::prepareScan(QString *vfp)
             QFileInfo fi(virtfile);
             if (!fi.exists())
             {
-                KMessageBox::sorry(this,i18n("<qt>The testing or virtual file<br><b>%1</b><br>was not found or is not readable").arg(virtfile));
+                KMessageBox::sorry(this,i18n("<qt>The testing or virtual file<br><filename>%1</filename><br>was not found or is not readable", virtfile));
                 stat = KSCAN_ERR_PARAM;
             }
         }
@@ -890,7 +896,7 @@ KScanStat ScanParams::prepareScan(QString *vfp)
                       mimetype->is("image/x-portable-pixmap")))
                 {
                     KMessageBox::sorry(this,i18n("<qt>SANE Debug can only read PNM files.<br>"
-                                                 "This file is type <b>%1</b>.").arg(mimetype->name()));
+                                                 "This file is type <b>%1</b>.", mimetype->name()));
                     stat = KSCAN_ERR_PARAM;
                 }
             }
@@ -904,7 +910,7 @@ KScanStat ScanParams::prepareScan(QString *vfp)
 
 
 /* Slot called to start acquiring a preview */
-void ScanParams::slAcquirePreview()
+void ScanParams::slotAcquirePreview()
 {
     if (scan_mode==ID_QT_IMGIO)
     {
@@ -916,60 +922,60 @@ void ScanParams::slAcquirePreview()
     KScanStat stat = prepareScan(&virtfile);
     if (stat!=KSCAN_OK) return;
 
-    kdDebug(29000) << k_funcinfo << "scan mode=" << scan_mode << " virtfile=[" << virtfile << "]" << endl;
+    kDebug() << "scan mode=" << scan_mode << "virtfile" << virtfile;
 
     bool gray_preview = false;
     if (cb_gray_preview!=NULL) gray_preview  = cb_gray_preview->isChecked();
 
-    slMaximalScanSize();				// always preview at maximal size
+    slotMaximalScanSize();				// always preview at maximal size
     area_sel->selectCustomSize(QRect());		// reset selector to reflect that
 
     stat = sane_device->acquirePreview(gray_preview);
-    if (stat!=KSCAN_OK) kdDebug(29000) << k_funcinfo << "Error, preview status " << stat << endl;
+    if (stat!=KSCAN_OK) kDebug() << "Error, preview status " << stat;
 }
 
 
 /* Slot called to start scanning */
-void ScanParams::slStartScan()
+void ScanParams::slotStartScan()
 {
     QString virtfile;
     KScanStat stat = prepareScan(&virtfile);
     if (stat!=KSCAN_OK) return;
 
-    kdDebug(29000) << k_funcinfo << "scan mode=" << scan_mode << " virtfile=[" << virtfile << "]" << endl;
+    kDebug() << "scan mode=" << scan_mode << "virtfile" << virtfile;
 
     if (scan_mode!=ID_QT_IMGIO)				// acquire via SANE
     {
         if (adf==ADF_OFF)
         {
 	    /* Progress-Dialog */
-	    progressDialog->setProgress(0);
+	    progressDialog->setValue(0);
 	    if (progressDialog->isHidden()) progressDialog->show();
-	    kdDebug(29000) << "Start to acquire image" << endl;
+	    kDebug() << "Start to acquire image";
 	    stat = sane_device->acquire();
         }
         else
         {
-	    kdDebug(29000) << "ADF Scan not yet implemented :-/" << endl;
+	    kDebug() << "ADF Scan not yet implemented :-/";
 	    // stat = performADFScan();
         }
     }
     else						// acquire via Qt-IMGIO
     {
-        kdDebug(29000) << "Acquiring from virtual file" << endl;
+        kDebug() << "Acquiring from virtual file";
         stat = sane_device->acquire(virtfile);
     }
 
-    if (stat!=KSCAN_OK) kdDebug(29000) << k_funcinfo << "Error, scan status " << stat << endl;
+    if (stat!=KSCAN_OK) kDebug() << "Error, scan status " << stat;
 }
 
 
 
 /* Slot called to start the Custom Gamma Table Edit dialog */
 
-void ScanParams::slEditCustGamma( void )
+void ScanParams::slotEditCustGamma( void )
 {
-    kdDebug(29000) << "Called EditCustGamma ;)" << endl;
+    kDebug();
     KGammaTable old_gt;
 
 
@@ -997,7 +1003,7 @@ void ScanParams::slEditCustGamma( void )
 	  KScanOption grayGt( SANE_NAME_GAMMA_VECTOR );
 	  /* This will be fine for all color gt's. */
 	  grayGt.get( &old_gt );
-	  kdDebug(29000) << "Gray Gamma Table is active " << endl;
+	  kDebug() << "Gray Gamma Table is active ";
        }
        else
        {
@@ -1009,47 +1015,46 @@ void ScanParams::slEditCustGamma( void )
 	  {
 	     KScanOption redGt( SANE_NAME_GAMMA_VECTOR_R );
 	     redGt.get( &old_gt );
-	     kdDebug(29000) << "Getting old gamma table from Red channel" << endl;
+	     kDebug() << "Getting old gamma table from Red channel";
 	  }
 	  else
 	  {
 	     /* uh ! No current gammatable could be retrieved. Use the 100/0/0 gt
 	      * created by KGammaTable's constructor. Nothing to do for that.
 	      */
-	     kdDebug(29000) << "WRN: Could not retrieve a gamma table" << endl;
+	     kDebug() << "Could not retrieve a gamma table";
 	  }
        }
     }
 
-    kdDebug(29000) << "Old gamma table: " << old_gt.getGamma() << ", " << old_gt.getBrightness() << ", " << old_gt.getContrast() << endl;
+    kDebug() << "Old gamma table:" << old_gt.getGamma() << old_gt.getBrightness() << old_gt.getContrast();
 
     GammaDialog gdiag( this );
     connect( &gdiag, SIGNAL( gammaToApply(KGammaTable*) ),
-	     this,     SLOT( slApplyGamma(KGammaTable*) ) );
+	     this,     SLOT( slotApplyGamma(const KGammaTable *) ) );
 
     gdiag.setGt( old_gt );
 
     if( gdiag.exec() == QDialog::Accepted  )
     {
-       slApplyGamma( gdiag.getGt() );
-       kdDebug(29000) << "Fine, applied new Gamma Table !" << endl;
+       slotApplyGamma( gdiag.getGt() );
+       kDebug() << "Applied new Gamma Table";
     }
     else
     {
        /* reset to old values */
-       slApplyGamma( &old_gt );
-       kdDebug(29000) << "Cancel, reverted to old Gamma Table !" << endl;
+       slotApplyGamma( &old_gt );
+       kDebug() << "Cancelled, reverted to old Gamma Table";
     }
 
 }
 
 
-void ScanParams::slApplyGamma( KGammaTable* gt )
+void ScanParams::slotApplyGamma(const KGammaTable *gt)
 {
    if( ! gt ) return;
 
-   kdDebug(29000) << "Applying gamma table: " << gt->getGamma() <<
-      ", " << gt->getBrightness() << ", " << gt->getContrast() << endl;
+   kDebug(29000) << "Applying gamma table:" << gt->getGamma() << gt->getBrightness() << gt->getContrast();
 
 
    if( sane_device->optionExists( SANE_NAME_GAMMA_VECTOR ) )
@@ -1096,13 +1101,13 @@ void ScanParams::slApplyGamma( KGammaTable* gt )
  * - Apply the option and reload all if the option affects all
  */
 
-void ScanParams::slReloadAllGui( KScanOption* t)
+void ScanParams::slotReloadAllGui( KScanOption* t)
 {
     if( !t || ! sane_device ) return;
-    kdDebug(29000) << "This is slReloadAllGui for widget <" << t->getName() << ">" << endl;
+    kDebug() << "for widget" << t->getName();
     /* Need to reload all _except_ the one which was actually changed */
 
-    sane_device->slReloadAllBut( t );
+    sane_device->slotReloadAllBut( t );
 
     /* Custom Gamma <- What happens if that does not exist for some scanner ? TODO */
     setEditCustomGammaTableState();
@@ -1118,7 +1123,6 @@ void ScanParams::setEditCustomGammaTableState()
       return;
 
    bool butState = false;
-   kdDebug(29000) << "Checking state of edit custom gamma button !" << endl;
 
    if( sane_device->optionExists( SANE_NAME_CUSTOM_GAMMA ) )
    {
@@ -1147,13 +1151,15 @@ void ScanParams::setEditCustomGammaTableState()
       butState = kso.active();
       // kdDebug(29000) << "CustomGamma blue is active: " << butState << endl;
    }
+
+   kDebug() << "State of edit custom gamma button:" << butState;
    pb_edit_gtable->setEnabled( butState );
 }
 
 
 void ScanParams::applyRect(const QRect &rect)
 {
-    kdDebug(29000) << k_funcinfo << "rect=" << rect << endl;
+    kDebug() << "rect=" << rect;
 
     KScanOption tl_x(SANE_NAME_SCAN_TL_X);
     KScanOption tl_y(SANE_NAME_SCAN_TL_Y);
@@ -1170,8 +1176,7 @@ void ScanParams::applyRect(const QRect &rect)
         tl_y.getRange(&min2,&max2); tl_y.set(min2);
         br_y.getRange(&min2,&max2); br_y.set(max2);
 
-        kdDebug(29000) << "    setting maximum [" << min1 << "," << min2
-                       << " - " << max1 << "," << max2 << "]" << endl;
+        kDebug() << "setting full area" << min1 << min2 << "-" << max1 << max2;
     }
     else
     {
@@ -1196,8 +1201,7 @@ void ScanParams::applyRect(const QRect &rect)
         }
         tl_y.set(tly); br_y.set(bry);
 
-        kdDebug(29000) << "    setting [" << tlx << "," << tly
-                       << " - " << brx << "," << bry << "]" << endl;
+        kDebug() << "setting area" << tlx << tly << "-" << brx << bry;
     }
 
     sane_device->apply(&tl_x);
@@ -1209,9 +1213,9 @@ void ScanParams::applyRect(const QRect &rect)
 
 //  The previewer is telling us that the user has drawn or auto-selected a
 //  new preview area.
-void ScanParams::slotNewPreviewRect(QRect rect)
+void ScanParams::slotNewPreviewRect(const QRect &rect)
 {
-    kdDebug(29000) << k_funcinfo << "rect=" << rect << endl;
+    kDebug() << "rect=" << rect;
 
     applyRect(rect);
     area_sel->selectCustomSize(rect);
@@ -1219,9 +1223,9 @@ void ScanParams::slotNewPreviewRect(QRect rect)
 
 
 //  A new preset scan size or orientation chosen by the user
-void ScanParams::slotScanSizeSelected(QRect rect)
+void ScanParams::slotScanSizeSelected(const QRect &rect)
 {
-    kdDebug(29000) << k_funcinfo << "rect=" << rect << " full=" << !rect.isValid() << endl;
+    kDebug() << "rect=" << rect << "full=" << !rect.isValid();
 
     applyRect(rect);
     emit newCustomScanSize(rect);
@@ -1231,18 +1235,16 @@ void ScanParams::slotScanSizeSelected(QRect rect)
 /**
  * sets the scan area to the default, which is the whole area.
  */
-void ScanParams::slMaximalScanSize( void )
+void ScanParams::slotMaximalScanSize()
 {
-    kdDebug(29000) << "Setting to default" << endl;
+    kDebug() << "Setting to default";
     slotScanSizeSelected(QRect());
 }
 
 
-void ScanParams::slNewXResolution(KScanOption *opt)
+void ScanParams::slotNewXResolution(KScanOption *opt)
 {
    if(! opt ) return;
-
-   kdDebug(29000) << "Got new X-Resolution !" << endl;
 
    int x_res = 0;
    opt->get( &x_res );
@@ -1262,7 +1264,7 @@ void ScanParams::slNewXResolution(KScanOption *opt)
    emit( scanResolutionChanged( x_res, y_res ) );
 }
 
-void ScanParams::slNewYResolution(KScanOption *opt)
+void ScanParams::slotNewYResolution(KScanOption *opt)
 {
    if( ! opt ) return;
 
@@ -1286,7 +1288,7 @@ void ScanParams::slNewYResolution(KScanOption *opt)
 }
 
 
-void ScanParams::slNewScanMode()
+void ScanParams::slotNewScanMode()
 {
     int format = SANE_FRAME_RGB;
     int depth = 8;
@@ -1294,8 +1296,7 @@ void ScanParams::slNewScanMode()
 
     int strips = (format==SANE_FRAME_GRAY ? 1 : 3);
 
-    kdDebug(29000) << k_funcinfo << "format " << format << " depth " << depth
-                   << " -> strips " << strips << endl;
+    kDebug() << "format" << format << "depth" << depth << "-> strips " << strips;
 
     if (strips==1 && depth==1)				// bitmap scan
     {

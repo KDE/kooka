@@ -17,16 +17,20 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef _KSCANOPTION_H_
-#define _KSCANOPTION_H_
+#ifndef KSCANOPTION_H
+#define KSCANOPTION_H
+
+#include "libkscanexport.h"
 
 #include <qobject.h>
+#include <qbytearray.h>
 
 extern "C" {
 #include <sane/sane.h>
 }
 
 
+// TODO: class enum, see comment on KScanOption::errorMessage()
 typedef enum { KSCAN_OK, KSCAN_ERROR, KSCAN_ERR_NO_DEVICE,
 	       KSCAN_ERR_BLOCKED, KSCAN_ERR_NO_DOC, KSCAN_ERR_PARAM,
                KSCAN_ERR_OPEN_DEV, KSCAN_ERR_CONTROL, KSCAN_ERR_EMPTY_PIC,
@@ -53,7 +57,7 @@ class KGammaTable;
  **/
 
 
-class KScanOption : public QObject
+class KSCAN_EXPORT KScanOption : public QObject
 {
     Q_OBJECT
 
@@ -77,7 +81,7 @@ public:
    * option is valid and contains the correct value retrieved from the
    * scanner.
    **/
-  KScanOption( const QCString& new_name );
+  KScanOption( const QByteArray& new_name );
 
   /**
    * creates a KScanOption from another
@@ -132,7 +136,7 @@ public:
   bool set( int val );
   bool set( double val );
   bool set( int *p_val, int size );
-  bool set( const QCString& );
+  bool set( const QByteArray& );
   bool set( bool b ){ return (set(b ? 1 : 0)); }
   bool set( KGammaTable  *gt );
 
@@ -141,7 +145,7 @@ public:
     **/
   bool get( int* ) const;
   bool get( KGammaTable* ) const;
-  QCString get( void ) const;
+  QByteArray get() const;
 
    /**
     * This function creates a widget for the scanner option depending
@@ -172,12 +176,12 @@ public:
 
    
   // Possible Values
-  QStrList    getList() const;
+  QList<QByteArray>    getList() const;
   bool        getRangeFromList(double *max,double *min,double *quant = NULL) const;
   bool        getRange(double *max,double *min,double *quant = NULL) const;
 
-  QCString    getName() const { return( name ); }
-  void *      getBuffer() const { return( buffer.data() ); }
+  QByteArray    getName() const { return( name ); }
+  void *      getBuffer() { return( buffer.data() ); }
   QWidget     *widget() const { return( internal_widget ); }
   /**
    *  returns the type of the selected option.
@@ -196,7 +200,7 @@ public:
 
    ### not implemented at all?
    **/
-  //KScanOption::WidgetType typeToSet( const QCString& name );
+  //KScanOption::WidgetType typeToSet( const QByteArray& name );
 
   /**
    *  returns a string describing the unit of given the option.
@@ -205,17 +209,17 @@ public:
 
    ###  not implemented at all?
    **/
-  //QString unitOf( const QCString& name );
+  //QString unitOf( const QByteArray& name );
 
     static QString errorMessage(KScanStat stat);
 
 
 public slots:
-  void       slRedrawWidget( KScanOption *so );
+  void       slotRedrawWidget(KScanOption *so);
   /**
    *	 that slot makes the option to reload the buffer from the scanner.
    */
-  void       slReload( void );
+  void       slotReload( void );
 
 protected slots:
   /**
@@ -223,9 +227,9 @@ protected slots:
    *  and if the value of the widget is changed.
    *  This is an internal slot.
    **/
-  void		  slWidgetChange( void );
-  void		  slWidgetChange( const QCString& );
-  void		  slWidgetChange( int );
+  void		  slotWidgetChange( void );
+  void		  slotWidgetChange( const QByteArray& );
+  void		  slotWidgetChange( int );
 	
 signals:
 
@@ -253,7 +257,7 @@ private:
 #ifdef APPLY_IN_SITU
   bool       applyVal( void );
 #endif
-  bool       initOption( const QCString& new_name );
+  bool       initOption( const QByteArray& new_name );
   void       allocForDesc();
   void       allocBuffer( long );
 
@@ -264,7 +268,7 @@ private:
   QWidget    *createFileField( QWidget *parent, const QString& text );
 	
   const      SANE_Option_Descriptor *desc;
-  QCString   name;
+  QByteArray   name;
   QString    text;
 
   QByteArray buffer;
@@ -276,4 +280,4 @@ private:
 };
 
 
-#endif
+#endif							// KSCANOPTION_H

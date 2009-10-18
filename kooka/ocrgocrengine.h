@@ -27,10 +27,11 @@
 #ifndef OCRGOCRENGINE_H
 #define OCRGOCRENGINE_H
 
+#include <qprocess.h>
+
 #include "ocrengine.h"
 
 
-class KProcess;
 class KTempDir;
 
 
@@ -42,15 +43,15 @@ public:
     OcrGocrEngine(QWidget *parent = NULL);
     ~OcrGocrEngine();
 
-    OcrBaseDialog *createOCRDialog(QWidget *parent,KSpellConfig *spellConfig = NULL);
+    OcrBaseDialog *createOCRDialog(QWidget *parent, KSpellConfig *spellConfig = NULL);
 
     OcrEngine::EngineType engineType() const { return (OcrEngine::EngineGocr); }
     static QString engineDesc();
 
 protected slots:
-    void gocrStdIn(KProcess *proc, char *buffer, int buflen);
-    void gocrStdErr(KProcess *proc, char *buffer, int buflen);
-    void gocrExited(KProcess *proc);
+    void slotGOcrStdout();
+    void slotGOcrStderr();
+    void slotGOcrExited(int exitCode, QProcess::ExitStatus exitStatus);
 
 private:
     void startProcess(OcrBaseDialog *dia,KookaImage *img);

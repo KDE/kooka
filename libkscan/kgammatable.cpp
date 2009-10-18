@@ -17,10 +17,13 @@
    Boston, MA 02110-1301, USA.
 */
 
+#include "kgammatable.h"
+#include "kgammatable.moc"
+
 #include <math.h>
 
 #include <kdebug.h>
-#include "kgammatable.h"
+
 
 KGammaTable::KGammaTable( int gamma, int brightness, int contrast  ) 
     : QObject()
@@ -65,7 +68,7 @@ void KGammaTable::calcTable( )
 
    if( gr == 0 )
    {
-      kdDebug(29000) << "Cant calc table -> would raise div. by zero !" << endl;
+      kDebug() << "Can't calculate table, division by zero!";
       return;
    }
    
@@ -90,4 +93,3 @@ SANE_Word* KGammaTable::getTable()
     if( dirty ) calcTable();
     return( gt.data());
 }
-#include "kgammatable.moc"

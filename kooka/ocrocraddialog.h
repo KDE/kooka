@@ -41,15 +41,17 @@
   *@author Klaas Freitag
   */
 
-class KURLRequester;
 class QComboBox;
+
+class KUrlRequester;
+
 
 class OcrOcradDialog : public OcrBaseDialog
 {
     Q_OBJECT
 
 public:
-    OcrOcradDialog(QWidget *parent,KSpellConfig *spellConfig = NULL);
+    OcrOcradDialog(QWidget *parent, KSpellConfig *spellConfig = NULL);
     ~OcrOcradDialog();
 
     OcrEngine::EngineError setupGui();
@@ -73,19 +75,15 @@ protected:
     void enableFields(bool enable);
 
 protected slots:
-    void writeConfig();
+    void slotWriteConfig();
 
 private:
     void version(const QString &exe);
 
-private slots:
-    void slReceiveStdIn( KProcess *proc,char *buffer,int buflen);
-
 private:
     QString         m_ocrCmd;
-    KURLRequester  *m_orfUrlRequester;
+    KUrlRequester  *m_orfUrlRequester;
     QComboBox      *m_layoutMode;
-    KProcess       *m_proc;
     int             m_version;
 };
 

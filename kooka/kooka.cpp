@@ -24,55 +24,73 @@
  *                                                                         *
  ***************************************************************************/
 
+#include "kooka.h"
+#include "kooka.moc"
+
+#include <qevent.h>
+
 #include <kglobal.h>
 #include <klocale.h>
 #include <kdebug.h>
 #include <kiconloader.h>
+#ifndef KDE4
 #include <kprinter.h>
+#endif
 #include <kstatusbar.h>
 #include <kurl.h>
-#include <kedittoolbar.h>
+//#include <kedittoolbar.h>
 #include <kmessagebox.h>
-#include <kstdaccel.h>
+//#include <kstandardaccel.h>
 #include <kaction.h>
-#include <kstdaction.h>
-#include <kurldrag.h>
-#include <kpopupmenu.h>
+#include <kactionmenu.h>
+#include <ktoggleaction.h>
+#include <kstandardaction.h>
+#include <kactioncollection.h>
+#include <kmenu.h>
+#include <kxmlguiwindow.h>
 
+#include "scanpackager.h"
 #include "kookapref.h"
 #include "kookaview.h"
-#include "scanpackager.h"
 
-#include "kooka.h"
-#include "kooka.moc"
+#include <kvbox.h>
+#include <qlabel.h>
+
+
 
 
 #define DOCK_SIZES "DockSizes"
 
 
-Kooka::Kooka( const QCString& deviceToUse)
-   : KParts::DockMainWindow( 0, "Kooka" ),
+Kooka::Kooka(const QByteArray &deviceToUse)
+    : KXmlGuiWindow(NULL),
+#ifndef KDE4
       m_printer(0),
+#endif
       m_prefDialogIndex(0)
 {
-    /* Start to create the main view framework */
-    m_view = new KookaView( this, deviceToUse);
+    setObjectName("Kooka");
 
-    /* Call createGUI on the ocr-result view */
-    setXMLFile( "kookaui.rc", true );
+    // Set the status bar up first, so that this item is leftmost
+    KStatusBar *statBar = statusBar();
+    statBar->insertItem(i18n("Ready"), KookaView::StatusTemp, 1);
+    statBar->setItemAlignment(KookaView::StatusTemp, Qt::AlignLeft);
+    statBar->show();
+
+    /* Start to create the main view framework */
+    m_view = new KookaView(this, deviceToUse);
+    setCentralWidget(m_view);
 
     setAcceptDrops(false); // Waba: Not (yet?) supported
-    KConfig *konf = KGlobal::config ();
-    readDockConfig ( konf, DOCK_SIZES );
+
+    setAutoSaveSettings();				// default group, do save
+//    readDockConfig(KGlobal::config().data(), DOCK_SIZES);
+    readProperties(KGlobal::config()->group(autoSaveGroup()));
 
     // then, setup our actions
     setupActions();
 
-    createGUI(0L); // m_view->ocrResultPart());
-    // and a status bar
-    statusBar()->insertItem(i18n("Ready"),KookaView::StatusTemp,1);
-    statusBar()->setItemAlignment(KookaView::StatusTemp,Qt::AlignLeft);
-    statusBar()->show();
+    setupGUI(KXmlGuiWindow::Default, "kookaui.rc");
 
     // allow the view to change the statusbar and caption
     connect(m_view, SIGNAL(signalChangeStatusbar(const QString&)),
@@ -96,9 +114,6 @@ Kooka::Kooka( const QCString& deviceToUse)
 
     changeCaption( i18n( "KDE Scanning" ));
 
-    setAutoSaveSettings(  QString::fromLatin1("General Options"),
-                          true );
-
     slotUpdateScannerActions(m_view->scannerConnected());
     slotUpdateRectangleActions(false);
     slotUpdateGalleryActions(true,0);
@@ -106,241 +121,250 @@ Kooka::Kooka( const QCString& deviceToUse)
 }
 
 
-void Kooka::createMyGUI( KParts::Part *part )
-{
-    kdDebug(28000) << "Part changed, Creating gui" << endl;
-    createGUI(part);
-}
-
 
 Kooka::~Kooka()
 {
-    KConfig *konf = KGlobal::config();
     m_view->closeScanDevice();
-    writeDockConfig (konf,DOCK_SIZES);
+//    writeDockConfig(KGlobal::config().data(), DOCK_SIZES);
     delete m_view;					// ensure its config saved
+#ifndef KDE4
     delete m_printer;
+#endif
 }
 
 
 void Kooka::startup()
 {
-    kdDebug(28000) << k_funcinfo << endl;
+    kDebug();
     if (m_view!=NULL) m_view->loadStartupImage();
 }
 
 
+// TODO: use KStandardShortcut wherever available
 void Kooka::setupActions()
 {
-    printImageAction = KStdAction::print(this, SLOT(filePrint()), actionCollection());
+    printImageAction = KStandardAction::print(this, SLOT(filePrint()), actionCollection());
 
-    KStdAction::quit(this,SLOT(close()),actionCollection());
-    KStdAction::keyBindings(guiFactory(),SLOT(configureShortcuts()),actionCollection());
-    KStdAction::configureToolbars(this,SLOT(optionsConfigureToolbars()),actionCollection());
-    KStdAction::preferences(this,SLOT(optionsPreferences()),actionCollection());
+    KStandardAction::quit(this, SLOT(close()), actionCollection());
+    //KStandardAction::keyBindings(guiFactory(),SLOT(configureShortcuts()),actionCollection());
+    //KStandardAction::configureToolbars(this,SLOT(optionsConfigureToolbars()),actionCollection());
+    KStandardAction::preferences(this, SLOT(optionsPreferences()), actionCollection());
 
-    m_view->createDockMenu(actionCollection(), this, "settings_show_docks" );
+//    m_view->createDockMenu(actionCollection(), this, "settings_show_docks");
 
-    /* Image Viewer action Toolbar - Scaling etc. */
+    // Image Viewer
 
-    scaleToWidthAction =  new KAction(i18n("Scale to Width"), "scaletowidth", CTRL+Key_I,
-				      m_view, SLOT( slIVScaleToWidth()),
-				      actionCollection(), "scaleToWidth" );
-    m_view->connectViewerAction( scaleToWidthAction );
+    scaleToWidthAction =  new KAction(KIcon("zoom-fit-width"), i18n("Scale to Width"), this);
+    scaleToWidthAction->setShortcut(Qt::CTRL+Qt::Key_I);
+    connect(scaleToWidthAction, SIGNAL(triggered()), m_view, SLOT(slotIVScaleToWidth()));
+    actionCollection()->addAction("scaleToWidth", scaleToWidthAction);
+    m_view->connectViewerAction(scaleToWidthAction);
 
-    scaleToHeightAction = new KAction(i18n("Scale to Height"), "scaletoheight", CTRL+Key_H,
-				      m_view, SLOT( slIVScaleToHeight()),
-				      actionCollection(), "scaleToHeight" );
-    m_view->connectViewerAction( scaleToHeightAction );
+    scaleToHeightAction = new KAction(KIcon("zoom-fit-height"), i18n("Scale to Height"), this);
+    scaleToHeightAction->setShortcut(Qt::CTRL+Qt::Key_H);
+    connect(scaleToHeightAction, SIGNAL(triggered()), m_view, SLOT(slotIVScaleToHeight()));
+    actionCollection()->addAction("scaleToheight", scaleToHeightAction);
+    m_view->connectViewerAction(scaleToHeightAction);
 
-    scaleToOriginalAction = new KAction(i18n("Original Size"), "scaleorig", CTRL+Key_1,
-					m_view, SLOT( slIVScaleOriginal()),
-					actionCollection(), "scaleOriginal" );
-    m_view->connectViewerAction( scaleToOriginalAction );
+    scaleToOriginalAction = new KAction(KIcon("zoom-original"), i18n("Original Size"), this);
+    scaleToOriginalAction->setShortcut(Qt::CTRL+Qt::Key_1);
+    connect(scaleToOriginalAction, SIGNAL(triggered()), m_view, SLOT(slotIVScaleOriginal()));
+    actionCollection()->addAction("scaleOriginal", scaleToOriginalAction);
+    m_view->connectViewerAction(scaleToOriginalAction);
 
-#ifdef QICONSET_HONOUR_ON_OFF
-    /* The Toggleaction does not seem to handle the on/off icon from QIconSet */
-    QIconSet lockSet;
-    lockSet.setPixmap(BarIcon("lock")  , QIconSet::Automatic, QIconSet::Normal, QIconSet::On );
-    lockSet.setPixmap(BarIcon("unlock"), QIconSet::Automatic, QIconSet::Normal, QIconSet::Off);
-    KAction *act = new KToggleAction ( i18n("Keep Zoom Setting"), lockSet, CTRL+Key_Z,
-				       actionCollection(), "keepZoom" );
-#else
-    KAction *act = new KToggleAction( i18n("Keep Zoom Setting"), "lockzoom", CTRL+Key_Z,
-				      actionCollection(), "keepZoom" );
-#endif
+    KToggleAction *tact = new KToggleAction(KIcon("lockzoom"), i18n("Keep Zoom Setting"), this);
+    tact->setShortcut(Qt::CTRL+Qt::Key_Z);
+//    connect(tact, SIGNAL(toggled(bool)), m_view->getImageViewer(), SLOT(setKeepZoom(bool)));
+    actionCollection()->addAction("keepZoom", tact);
+    m_view->connectViewerAction(tact);
 
-    connect( act, SIGNAL( toggled( bool ) ), m_view->getImageViewer(),
-             SLOT(setKeepZoom(bool)));
+    // Thumb view and gallery actions
 
-    m_view->connectViewerAction( act );
+    KAction *act = new KAction(KIcon("page-zoom"), i18n("Set Zoom..."), this);
+    connect(act, SIGNAL(triggered()), m_view, SLOT(slotIVShowZoomDialog()));
+    actionCollection()->addAction("showZoomDialog", act);
+    m_view->connectViewerAction(act);
 
-    /* thumbview and gallery actions */
-    act = new KAction(i18n("Set Zoom..."), "viewmag", 0,
-		       m_view, SLOT( slIVShowZoomDialog()),
-		       actionCollection(), "showZoomDialog" );
-    m_view->connectViewerAction( act );
+    newFromSelectionAction = new KAction(KIcon("crop"), i18n("New Image From Selection"), this);
+    newFromSelectionAction->setShortcut(Qt::CTRL+Qt::Key_N);
+    connect(newFromSelectionAction, SIGNAL(triggered()), m_view, SLOT(slotCreateNewImgFromSelection()));
+    actionCollection()->addAction("createFromSelection", newFromSelectionAction);
 
-    newFromSelectionAction = new KAction(i18n("New Image From Selection"), "crop", CTRL+Key_N,
-					 m_view, SLOT( slCreateNewImgFromSelection() ),
-					 actionCollection(), "createFromSelection" );
+    mirrorVerticallyAction = new KAction(KIcon("object-flip-vertical"), i18n("Mirror Vertically"), this);
+    mirrorVerticallyAction->setShortcut(Qt::CTRL+Qt::Key_V);
+    connect(mirrorVerticallyAction, SIGNAL(triggered()), SLOT(slotMirrorVertical()));
+    actionCollection()->addAction("mirrorVertical", mirrorVerticallyAction);
 
-    mirrorVerticallyAction = new KAction(i18n("Mirror Vertically"), "mirror-vert", CTRL+Key_V,
-					 this, SLOT( slMirrorVertical() ),
-					 actionCollection(), "mirrorVertical" );
+    mirrorHorizontallyAction = new KAction(KIcon("object-flip-horizontal"), i18n("Mirror Horizontally"), this);
+    mirrorHorizontallyAction->setShortcut(Qt::CTRL+Qt::Key_M);
+    connect(mirrorHorizontallyAction, SIGNAL(triggered()), SLOT(slotMirrorHorizontal()));
+    actionCollection()->addAction("mirrorHorizontal", mirrorHorizontallyAction);
 
-    mirrorHorizontallyAction = new KAction(i18n("Mirror Horizontally"), "mirror-horiz", CTRL+Key_M,
-					   this, SLOT( slMirrorHorizontal() ),
-					   actionCollection(), "mirrorHorizontal" );
+    rotateCwAction = new KAction(KIcon("object-rotate-right"), i18n("Rotate Clockwise"), this);
+    rotateCwAction->setShortcut(Qt::CTRL+Qt::Key_9);
+    connect(rotateCwAction, SIGNAL(triggered()), SLOT(slotRotateClockWise()));
+    actionCollection()->addAction("rotateClockwise", rotateCwAction);
+    m_view->connectViewerAction(rotateCwAction);
 
-    rotateCwAction = new KAction(i18n("Rotate Clockwise"), "rotate_cw", CTRL+Key_9,
-				 this, SLOT( slRotateClockWise() ),
-				 actionCollection(), "rotateClockwise" );
-    m_view->connectViewerAction( rotateCwAction );
+    rotateAcwAction = new KAction(KIcon("object-rotate-left"), i18n("Rotate Counter-Clockwise"), this);
+    rotateAcwAction->setShortcut(Qt::CTRL+Qt::Key_7);
+    connect(rotateAcwAction, SIGNAL(triggered()), SLOT(slotRotateCounterClockWise()));
+    actionCollection()->addAction("rotateCounterClockwise", rotateAcwAction);
+    m_view->connectViewerAction(rotateAcwAction);
 
-    rotateAcwAction = new KAction(i18n("Rotate Counter-Clockwise"), "rotate_ccw", CTRL+Key_7,
-				  this, SLOT( slRotateCounterClockWise() ),
-				  actionCollection(), "rotateCounterClockwise" );
-    m_view->connectViewerAction( rotateAcwAction );
+    rotate180Action = new KAction(KIcon("rotate180"), i18n("Rotate 180 Degrees"), this);
+    rotate180Action->setShortcut(Qt::CTRL+Qt::Key_8);
+    connect(rotate180Action, SIGNAL(triggered()), SLOT(slotRotate180()));
+    actionCollection()->addAction("upsitedown", rotate180Action);
+    m_view->connectViewerAction(rotate180Action);
 
-    rotate180Action = new KAction(i18n("Rotate 180 Degrees"), "rotate", CTRL+Key_8,
-				  this, SLOT( slRotate180() ),
-				  actionCollection(), "upsitedown" );
-    m_view->connectViewerAction( rotate180Action );
+    // Gallery actions
 
-    /* Gallery actions */
-    createFolderAction = new KAction(i18n("Create Folder..."), "folder_new", 0,
-				     m_view->gallery(), SLOT( slotCreateFolder() ),
-				     actionCollection(), "foldernew" );
-    m_view->connectGalleryAction( createFolderAction );
+    createFolderAction = new KAction(KIcon("folder-new"), i18n("Create Folder..."), this);
+    connect(createFolderAction, SIGNAL(triggered()), m_view->gallery(), SLOT(slotCreateFolder()));
+    actionCollection()->addAction("foldernew", createFolderAction);
+    m_view->connectGalleryAction(createFolderAction);
 
-    //openWithAction = new KAction(i18n("Open In Graphical Application..."), "fileopen", KStdAccel::open(),
-    //				 m_view, SLOT( slOpenCurrInGraphApp() ),
-    //				 actionCollection(), "openInGraphApp" );
-    openWithMenu = new KActionMenu(i18n("Open With"),"fileopen",
-                                   actionCollection(),"openWith");
-    connect(openWithMenu->popupMenu(),SIGNAL(aboutToShow()),SLOT(slotOpenWithMenu()));
-    m_view->connectGalleryAction( openWithMenu );
-    m_view->connectThumbnailAction( openWithMenu );
+    openWithMenu = new KActionMenu(KIcon("document-open"), i18n("Open With"), this);
+    connect(openWithMenu->menu(), SIGNAL(aboutToShow()), SLOT(slotOpenWithMenu()));
+    actionCollection()->addAction("openWidth", openWithMenu);
+    m_view->connectGalleryAction(openWithMenu);
+    m_view->connectThumbnailAction(openWithMenu);
 
-    saveImageAction = new KAction(i18n("Save Image..."), "filesave", KStdAccel::save(),
-				  m_view->gallery(), SLOT( slotExportFile() ),
-				  actionCollection(), "saveImage" );
-    m_view->connectGalleryAction( saveImageAction );
-    m_view->connectThumbnailAction( saveImageAction );
+    saveImageAction = new KAction(KIcon("document-save"), i18n("Save Image..."), this);
+    saveImageAction->setShortcut(KStandardShortcut::save());
+    connect(saveImageAction, SIGNAL(triggered()), m_view->gallery(), SLOT(slotExportFile()));
+    actionCollection()->addAction("saveImage", saveImageAction);
+    m_view->connectGalleryAction(saveImageAction);
+    m_view->connectThumbnailAction(saveImageAction);
 
-    importImageAction = new KAction(i18n("Import Image..."), "fileimport", 0,
-				    m_view->gallery(), SLOT( slotImportFile() ),
-				    actionCollection(), "importImage" );
+    importImageAction = new KAction(KIcon("document-import"), i18n("Import Image..."), this);
+    connect(importImageAction, SIGNAL(triggered()), m_view->gallery(), SLOT(slotImportFile()));
+    actionCollection()->addAction("importImage", importImageAction);
     //m_view->connectGalleryAction( importImageAction );
 
-    deleteImageAction = new KAction(i18n("Delete Image"), "editdelete", SHIFT+Key_Delete,
-				    m_view->gallery(), SLOT( slotDeleteItems() ),
-				    actionCollection(), "deleteImage" );
-    m_view->connectGalleryAction( deleteImageAction );
-    m_view->connectThumbnailAction( deleteImageAction );
+    deleteImageAction = new KAction(KIcon("edit-delete"), i18n("Delete Image"), this);
+    // TODO: can get standard accel?
+    deleteImageAction->setShortcut(Qt::SHIFT+Qt::Key_Delete);
+    connect(deleteImageAction, SIGNAL(triggered()), m_view->gallery(), SLOT(slotDeleteItems()));
+    actionCollection()->addAction("deleteImage", deleteImageAction);
+    m_view->connectGalleryAction(deleteImageAction);
+    m_view->connectThumbnailAction(deleteImageAction);
 
-    renameImageAction = new KAction(i18n("Rename Image"), "edittool", Key_F2,
-				    m_view->gallery(), SLOT( slotRenameItems() ),
-				    actionCollection(), "renameImage" );
-    m_view->connectGalleryAction( renameImageAction );
+    renameImageAction = new KAction(KIcon("edit-rename"), i18n("Rename Image"), this);
+    renameImageAction->setShortcut(Qt::Key_F2);
+    connect(renameImageAction, SIGNAL(triggered()), m_view->gallery(), SLOT(slotRenameItems()));
+    actionCollection()->addAction("renameImage", renameImageAction);
+    m_view->connectGalleryAction(renameImageAction);
 
-    unloadImageAction = new KAction(i18n("Unload Image"), "fileclose", CTRL+SHIFT+Key_U,
-				    m_view->gallery(), SLOT( slotUnloadItems() ),
-				    actionCollection(), "unloadImage" );
-    m_view->connectGalleryAction( unloadImageAction );
-    m_view->connectThumbnailAction( unloadImageAction );
+    unloadImageAction = new KAction(KIcon("document-close"), i18n("Unload Image"), this);
+    unloadImageAction->setShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_U);
+    connect(unloadImageAction, SIGNAL(triggered()), m_view->gallery(), SLOT(slotUnloadItems()));
+    actionCollection()->addAction("unloadImage", unloadImageAction);
+    m_view->connectGalleryAction(unloadImageAction);
+    m_view->connectThumbnailAction(unloadImageAction);
 
-    propsImageAction = new KAction(i18n("Properties..."), ALT+Key_Return,
-				    m_view->gallery(), SLOT( slotItemProperties() ),
-				    actionCollection(), "propsImage" );
-    m_view->connectGalleryAction( propsImageAction );
-    m_view->connectThumbnailAction( propsImageAction );
+    propsImageAction = new KAction(KIcon("document-properties"), i18n("Properties..."), this);
+    propsImageAction->setShortcut(Qt::ALT+Qt::Key_Return);
+    connect(propsImageAction, SIGNAL(triggered()), m_view->gallery(), SLOT(slotItemProperties()));
+    actionCollection()->addAction("propsImage", propsImageAction);
+    m_view->connectGalleryAction(propsImageAction);
+    m_view->connectThumbnailAction(propsImageAction);
 
     // "Settings" menu
 
-    (void) new KAction(i18n("Select Scan Device..."), "scanner", 0,
-		       m_view, SLOT( slSelectDevice()),
-		       actionCollection(), "selectsource" );
+    act = new KAction(KIcon("scanner"), i18n("Select Scan Device..."), this);
+    connect(act, SIGNAL(triggered()), m_view, SLOT(slotSelectDevice()));
+    actionCollection()->addAction("selectsource", act);
 
-    (void) new KAction(i18n("Add Scan Device..."), "add", 0,
-		       m_view, SLOT( slAddDevice()),
-		       actionCollection(), "addsource" );
-
-//    (void) new KAction( i18n("Enable All Warnings && Messages"), 0,
-//			this,  SLOT(slEnableWarnings()),
-//			actionCollection(), "enable_msgs");
-
+    act = new KAction(KIcon("list-add"), i18n("Add Scan Device..."), this);
+    connect(act, SIGNAL(triggered()), m_view, SLOT(slotAddDevice()));
+    actionCollection()->addAction("addsource", act);
 
     // Scanning functions
 
-    scanAction = new KAction(i18n("Preview"), "preview", Key_F3,
-		       m_view, SLOT( slStartPreview()),
-		       actionCollection(), "startPreview" );
+    previewAction = new KAction(KIcon("preview"), i18n("Preview"), this);
+    previewAction->setShortcut(Qt::Key_F3);
+    connect(previewAction, SIGNAL(triggered()), m_view, SLOT(slotStartPreview()));
+    actionCollection()->addAction("startPreview", previewAction);
 
-    previewAction = new KAction(i18n("Start Scan"), "scanner", Key_F4,
-		       m_view, SLOT( slStartFinalScan()),
-		       actionCollection(), "startScan" );
+    scanAction = new KAction(KIcon("scanner"), i18n("Start Scan"), this);
+    scanAction->setShortcut(Qt::Key_F4);
+    connect(scanAction, SIGNAL(triggered()), m_view, SLOT(slotStartFinalScan()));
+    actionCollection()->addAction("startScan", scanAction);
 
-    photocopyAction = new KAction(i18n("Photocopy..."), "photocopy", CTRL+Key_F,
-		       m_view, SLOT( slStartPhotoCopy()),
-		       actionCollection(), "startPhotoCopy" );
+    photocopyAction = new KAction(KIcon("photocopy"), i18n("Photocopy..."), this);
+    photocopyAction->setShortcut(Qt::CTRL+Qt::Key_F);
+    connect(photocopyAction, SIGNAL(triggered()), m_view, SLOT(slotStartPhotoCopy()));
+    actionCollection()->addAction("startPhotoCopy", photocopyAction);
 
-    paramsAction = new KAction(i18n("Scan Parameters..."), "bookmark_add", CTRL+SHIFT+Key_S,
-                               m_view, SLOT(slScanParams()),
-                               actionCollection(), "scanparam" );
+    paramsAction = new KAction(KIcon("bookmark-new"), i18n("Scan Parameters..."), this);
+    paramsAction->setShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_S);
+    connect(paramsAction, SIGNAL(triggered()), m_view, SLOT(slotScanParams()));
+    actionCollection()->addAction("scanparam", paramsAction);
 
     // OCR functions
 
-    ocrAction = new KAction(i18n("OCR Image..."), "ocr", 0,
-			    m_view, SLOT(doOCR()),
-			    actionCollection(), "ocrImage" );
+    ocrAction = new KAction(KIcon("ocr"), i18n("OCR Image..."), this);
+    connect(ocrAction, SIGNAL(triggered()), m_view, SLOT(slotStartOcr()));
+    actionCollection()->addAction("ocrImage", ocrAction);
 
-    ocrSelectAction = new KAction(i18n("OCR Selection..."), "ocr-select", 0,
-				  m_view, SLOT(doOCRonSelection()),
-				  actionCollection(), "ocrImageSelect" );
+    ocrSelectAction = new KAction(KIcon("ocr-select"), i18n("OCR Selection..."), this);
+    connect(ocrSelectAction, SIGNAL(triggered()), m_view, SLOT(slotStartOcrSelection()));
+    actionCollection()->addAction("ocrImageSelect", ocrSelectAction);
 
-    m_saveOCRTextAction = new KAction( i18n("Save OCR Result Text..."), "filesaveas", CTRL+Key_U,
-                                       m_view, SLOT(slSaveOCRResult()),
-                                       actionCollection(), "saveOCRResult");
+    m_saveOCRTextAction = new KAction(KIcon("document-save-as"), i18n("Save OCR Result Text..."), this);
+    m_saveOCRTextAction->setShortcut(Qt::CTRL+Qt::Key_U);
+    connect(m_saveOCRTextAction, SIGNAL(triggered()), m_view, SLOT(slotSaveOcrResult()));
+    actionCollection()->addAction("saveOCRResult", m_saveOCRTextAction);
 
-    ocrSpellAction = new KAction(i18n("Spell Check OCR Result..."), "spellcheck", 0,
-				  m_view, SLOT(slOcrSpellCheck()),
-				  actionCollection(), "ocrSpellCheck" );
+    ocrSpellAction = new KAction(KIcon("tools-check-spelling"), i18n("Spell Check OCR Result..."), this);
+    connect(ocrSpellAction, SIGNAL(triggered()), m_view, SLOT(slotOcrSpellCheck()));
+    actionCollection()->addAction("ocrSpellCheck", ocrSpellAction);
 }
 
 
-void Kooka::saveProperties(KConfig *config)
+void Kooka::closeEvent(QCloseEvent *ev)
 {
+    KConfigGroup grp = KGlobal::config()->group(autoSaveGroup());
+    saveProperties(grp);
+    KXmlGuiWindow::closeEvent(ev);
+}
+
+
+
+void Kooka::saveProperties(KConfigGroup &grp)
+{
+    kDebug();
+
     // the 'config' object points to the session managed
     // config file.  anything you write here will be available
     // later when this app is restored
 
-   //if (!m_view->currentURL().isNull())
-   //     config->writePathEntry("lastURL", m_view->currentURL());
-   kdDebug(28000) << "In kooka's saveProperties !" << endl;
-   config->setGroup( KOOKA_STATE_GROUP );
-   config->writeEntry( PREFERENCE_DIA_TAB, m_prefDialogIndex );
-   m_view->saveProperties( config );
+    //if (!m_view->currentURL().isNull())
+    //     config->writePathEntry("lastURL", m_view->currentURL());
+    grp.writeEntry(PREFERENCE_DIA_TAB, m_prefDialogIndex);
+    m_view->saveProperties(grp);
 }
 
-void Kooka::readProperties(KConfig *config)
+
+void Kooka::readProperties(const KConfigGroup &grp)
 {
-   (void) config;
+    kDebug();
+
     // the 'config' object points to the session managed
     // config file.  this function is automatically called whenever
     // the app is being restored.  read in here whatever you wrote
     // in 'saveProperties'
-   config->setGroup( KOOKA_STATE_GROUP );
-   m_prefDialogIndex = config->readNumEntry( PREFERENCE_DIA_TAB, 0 );
-   // QString url = config->readPathEntry("lastURL");
-
+    m_prefDialogIndex = grp.readEntry(PREFERENCE_DIA_TAB, 0);
+    // QString url = grp.readPathEntry("lastURL");
 }
 
-void Kooka::dragEnterEvent(QDragEnterEvent *event)
+
+void Kooka::dragEnterEvent(QDragEnterEvent *ev)
 {
-    // accept uri drops only
-    event->accept(KURLDrag::canDecode(event));
+    KUrl::List uriList = KUrl::List::fromMimeData(ev->mimeData());
+    if (!uriList.isEmpty()) ev->accept();		// accept URI drops only
 }
 
 
@@ -353,39 +377,38 @@ void Kooka::filePrint()
 
 }
 
-void Kooka::optionsShowScanParams()
-{
-   m_view->slSetScanParamsVisible( m_scanParamsAction->isChecked() );
-}
 
-void Kooka::optionsShowPreviewer()
-{
-   m_view->slSetTabWVisible( m_previewerAction->isChecked());
-}
+// KXmlGuiWindow does this automatically now
+//
+//void Kooka::optionsConfigureToolbars()
+//{
+//    saveMainWindowSettings(KGlobal::config()->group(autoSaveGroup()));
+//    KEditToolBar dlg(factory());			// use the standard toolbar editor
+//    connect(&dlg, SIGNAL(newToolBarConfig()), SLOT(newToolbarConfig()));
+//    dlg.exec();
+//}
 
-void Kooka::optionsConfigureToolbars()
-{
-    // use the standard toolbar editor
-    saveMainWindowSettings(KGlobal::config(), autoSaveGroup());
-    KEditToolbar dlg(factory());
-    connect(&dlg, SIGNAL(newToolbarConfig()), SLOT(newToolbarConfig()));
-    dlg.exec();
-}
-
-void Kooka::newToolbarConfig()
-{
-    // OK/Apply pressed in the toolbar editor
-    applyMainWindowSettings(KGlobal::config(), autoSaveGroup());
-}
+//void Kooka::newToolbarConfig()
+//{
+//    // OK/Apply pressed in the toolbar editor
+//    applyMainWindowSettings(KGlobal::config()->group(autoSaveGroup()));
+//}
 
 
 void Kooka::optionsPreferences()
 {
     KookaPref dlg;
-    dlg.showPage(m_prefDialogIndex);
-    connect(&dlg,SIGNAL(dataSaved()),m_view,SLOT(slotApplySettings()));
 
-    if (dlg.exec()) m_prefDialogIndex = dlg.activePageIndex();
+#ifndef KDE4
+    dlg.showPageIndex(m_prefDialogIndex);
+#endif
+    connect(&dlg, SIGNAL(dataSaved()), m_view, SLOT(slotApplySettings()));
+#ifndef KDE4
+    if (dlg.exec()) m_prefDialogIndex = dlg.currentPageIndex();
+#else
+    dlg.exec();
+#endif
+
 }
 
 
@@ -399,7 +422,7 @@ void Kooka::optionsOcrPreferences()
 void Kooka::changeStatusbar(const QString& text)
 {
     // display the text on the statusbar
-    statusBar()->changeItem( text, KookaView::StatusTemp );
+    statusBar()->changeItem(text, KookaView::StatusTemp);
 }
 
 void Kooka::changeCaption(const QString& text)
@@ -408,30 +431,29 @@ void Kooka::changeCaption(const QString& text)
     setCaption(text);
 }
 
-void Kooka::slMirrorVertical( void )
+void Kooka::slotMirrorVertical( void )
 {
-   m_view->slMirrorImage( KookaView::MirrorVertical );
+   m_view->slotMirrorImage( KookaView::MirrorVertical );
 }
 
-void Kooka::slMirrorHorizontal( void )
+void Kooka::slotMirrorHorizontal( void )
 {
-    m_view->slMirrorImage( KookaView::MirrorHorizontal );
+    m_view->slotMirrorImage( KookaView::MirrorHorizontal );
 }
 
-void Kooka::slRotateClockWise( void )
+void Kooka::slotRotateClockWise( void )
 {
-   m_view->slRotateImage( 90 );
+   m_view->slotRotateImage( 90 );
 }
 
-void Kooka::slRotateCounterClockWise( void )
+void Kooka::slotRotateCounterClockWise( void )
 {
-   m_view->slRotateImage( -90 );
-
+   m_view->slotRotateImage( -90 );
 }
 
-void Kooka::slRotate180( void )
+void Kooka::slotRotate180( void )
 {
-    m_view->slMirrorImage( KookaView::MirrorBoth );
+    m_view->slotMirrorImage( KookaView::MirrorBoth );
     //m_view->slRotateImage( 180 );
 }
 
@@ -446,7 +468,7 @@ void Kooka::slRotate180( void )
 
 void Kooka::slotUpdateScannerActions(bool haveConnection)
 {
-    kdDebug(28000) << k_funcinfo << "hc=" << haveConnection << endl;
+    kDebug() << "haveConnection" << haveConnection;
 
     scanAction->setEnabled(haveConnection);
     previewAction->setEnabled(haveConnection);
@@ -459,7 +481,7 @@ void Kooka::slotUpdateScannerActions(bool haveConnection)
 
 void Kooka::slotUpdateRectangleActions(bool haveSelection)
 {
-    kdDebug(28000) << k_funcinfo << "hs=" << haveSelection << endl;
+    kDebug() << "haveSelection" << haveSelection;
 
     ocrSelectAction->setEnabled(haveSelection);
     newFromSelectionAction->setEnabled(haveSelection);
@@ -468,7 +490,7 @@ void Kooka::slotUpdateRectangleActions(bool haveSelection)
 
 void Kooka::slotUpdateGalleryActions(bool isDir,int howmanySelected)
 {
-    kdDebug(28000) << k_funcinfo << "isdir=" << isDir << " howmany=" << howmanySelected << endl;
+    kDebug() << "isdir" << isDir << "howmany" << howmanySelected;
 
     const bool singleImage = howmanySelected==1 && !isDir;
 
@@ -520,14 +542,14 @@ void Kooka::slotUpdateGalleryActions(bool isDir,int howmanySelected)
 
 void Kooka::slotUpdateLoadedActions(bool isLoaded,bool isDir)
 {
-    kdDebug(28000) << k_funcinfo << "loaded=" << isLoaded << " isDir=" << isDir << endl;
+    kDebug() << "loaded" << isLoaded << "isDir" << isDir;
     unloadImageAction->setEnabled(isLoaded || isDir);
 }
 
 
 void Kooka::slotUpdateOcrResultActions(bool haveText)
 {
-    kdDebug(28000) << k_funcinfo << "have=" << haveText << endl;
+    kDebug() << "haveText" << haveText;
     m_saveOCRTextAction->setEnabled(haveText);
     ocrSpellAction->setEnabled(haveText);
 }

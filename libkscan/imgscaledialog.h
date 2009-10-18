@@ -17,46 +17,43 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef __IMGSCALEDIALOG_H__
-#define __IMGSCALEDIALOG_H__
+#ifndef IMGSCALEDIALOG_H
+#define IMGSCALEDIALOG_H
 
-#include <qlineedit.h>
-#include <kdialogbase.h>
+#include "libkscanexport.h"
 
+#include <kdialog.h>
+
+class KLineEdit;
 
 /* ----------------------------------------------------------------------
  * The ImgScaleDialg is a small dialog to be used by the image canvas. It
  * allows the user to select a zoom factor in percent, either in steps
  * or as a custom value.
  */
-class ImgScaleDialog : public KDialogBase
+class KSCAN_EXPORT ImgScaleDialog : public KDialog
 {
    Q_OBJECT
-   Q_PROPERTY( int selected READ getSelected WRITE setSelValue )
       
 public:
-   ImgScaleDialog( QWidget *parent, int curr_sel = 100,
-		   const char *name = 0 );
+   ImgScaleDialog( QWidget *parent, int curr_sel = 100);
 
-public slots:
-   void enableAndFocus( bool b )
-   {
-      leCust->setEnabled( b ); leCust->setFocus();
-   }
-
-   void setSelValue( int val );
-   int  getSelected() const;
+   int getSelected() const;
 
 signals:
-   void customScaleChange( int );
-public slots:
-   void customChanged( const QString& );
+   void customScaleChange(int scale);
+
+protected slots:
+   void slotSetSelValue(int val);
+   void slotEnableAndFocus(bool b);
+   void slotCustomChanged(const QString &text);
+
 private:
-   QLineEdit *leCust;
+   KLineEdit *leCust;
    int selected;
 
    class ImgScaleDialogPrivate;
    ImgScaleDialogPrivate *d;
 };
 
-#endif
+#endif							// IMGSCALEDIALOG_H

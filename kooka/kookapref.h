@@ -27,7 +27,7 @@
 #ifndef KOOKAPREF_H
 #define KOOKAPREF_H
 
-#include <kdialogbase.h>
+#include <kpagedialog.h>
 
 #include "kookagallery.h"
 #include "ocrengine.h"
@@ -44,33 +44,36 @@
 
 class QCheckBox;
 class QPushButton;
+class QLabel;
 
 class KIntNumInput;
 class KColorButton;
-class KURLRequester;
+class KUrlRequester;
 class KComboBox;
-class KActiveLabel;
 
 class ImageSelectLine;
 
 
-class KookaPref : public KDialogBase
+class KookaPref : public KPageDialog
 {
     Q_OBJECT
 
 public:
-    KookaPref();
+    KookaPref(QWidget *parent = NULL);
 
     static QString tryFindGocr();
     static QString tryFindOcrad();
 
     bool galleryAllowRename() const;
-    KookaGallery::Layout galleryLayout() const;
+    //KookaGallery::Layout galleryLayout() const;
+
+    // TODO: reimplement for KDE4, used in Kooka::optionsPreferences()
+    //void showPageIndex(int page);
+    //int currentPageIndex(void);
 
 protected slots:
-    void slotOk();
-    void slotApply();
-    void slotDefault();
+    void slotSaveSettings();
+    void slotSetDefaults();
     void slotEngineSelected(int i);
     void slotEnableWarnings();
 
@@ -86,7 +89,7 @@ private:
 
     bool checkOCRBin(const QString &cmd,const QString &bin,bool showMsg);
 
-    KConfig *konf;
+    KSharedConfig *konf;
     OcrEngine::EngineType originalEngine;
     OcrEngine::EngineType selectedEngine;
 
@@ -109,9 +112,9 @@ private:
     KComboBox *m_thumbSizeCb;
 
     // OCR
-    KURLRequester *binaryReq;
+    KUrlRequester *binaryReq;
     KComboBox *engineCB;
-    KActiveLabel *ocrDesc;
+    QLabel *ocrDesc;
 };
 
-#endif
+#endif							// KOOKAPREF_H

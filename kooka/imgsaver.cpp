@@ -24,6 +24,9 @@
  *                                                                         *
  ***************************************************************************/
 
+#include "imgsaver.h"
+//#include "imgsaver.moc"
+
 #include <qdir.h>
 #include <qregexp.h>
 
@@ -33,30 +36,30 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kdebug.h>
-#include <ktempfile.h>
+#include <ktemporaryfile.h>
+#include <kmimetype.h>
+
 #include <kio/job.h>
 #include <kio/netaccess.h>
 
-#include "previewer.h"
+#include "libkscan/previewer.h"
+
 #include "kookaimage.h"
 #include "formatdialog.h"
 
-#include "imgsaver.h"
-#include "imgsaver.moc"
 
-
-ImgSaver::ImgSaver(QWidget *parent,const KURL &dir)
-    : QObject(parent)
+ImgSaver::ImgSaver(QWidget *parent, const KUrl &dir)
+//    : QObject(parent)
 {
     if (dir.isValid() && !dir.isEmpty() && dir.protocol()=="file")
     {							// can use specified place
-        m_saveDirectory = dir.directory(true,false);
-        kdDebug(28000) << k_funcinfo << "specified directory " << m_saveDirectory << endl;
+        m_saveDirectory = dir.directory(KUrl::IgnoreTrailingSlash);
+        kDebug() << "specified directory" << m_saveDirectory;
     }
     else						// cannot, so use default
     {
         m_saveDirectory = Previewer::galleryRoot();
-        kdDebug(28000) << k_funcinfo << "default directory " << m_saveDirectory << endl;
+        kDebug() << "default directory" << m_saveDirectory;
     }
 
     createDir(m_saveDirectory);				// ensure save location exists
@@ -67,21 +70,20 @@ ImgSaver::ImgSaver(QWidget *parent,const KURL &dir)
 /* Needs a full qualified directory name */
 void ImgSaver::createDir(const QString &dir)
 {
-    KURL url(dir);
-    if (!KIO::NetAccess::exists(url,false,0))
+    KUrl url(dir);
+    if (!KIO::NetAccess::exists(url, false, 0))
     {
-        kdDebug(28000) << k_funcinfo << "directory <" << dir << "> does not exist, try to create" << endl;
+        kDebug() << "directory" << dir << "does not exist, try to create";
         // if( mkdir( QFile::encodeName( dir ), S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH ) != 0 )
         if (KIO::mkdir(url))
         {
-            KMessageBox::sorry(0,i18n("<qt>The folder<br><b>%1</b><br>does not exist and could not be created").arg(dir));
+            KMessageBox::sorry(NULL, i18n("<qt>The folder<br><filename>%1</filename><br>does not exist and could not be created", dir));
         }
     }
 #if 0
     if (!fi.isWritable())
     {
-        KMessageBox::sorry(0, i18n("The directory\n%1\n is not writeable;\nplease check the permissions.")
-                           .arg(dir));
+        KMessageBox::sorry(NULL, i18n("<qt>The directory<br><filename>%1</filename><br> is not writeable, please check the permissions.", dir));
     }
 #endif
 }
@@ -110,20 +112,17 @@ ImgSaveStat ImgSaver::saveImage(const QImage *image)
     QString saveFilename = createFilename();		// find next unused filename
     QString saveFormat = findFormat(imgType);		// find saved image format
     QString saveSubformat = findSubFormat(saveFormat);	// currently not used
+							// get dialogue preferences
+    const KConfigGroup grp = KGlobal::config()->group(OP_SAVER_GROUP);
+    m_saveAskFilename = grp.readEntry(OP_SAVER_ASK_FILENAME, false);
+    m_saveAskFormat = grp.readEntry(OP_SAVER_ASK_FORMAT, false);
 
-    KConfig *konf = KGlobal::config();
-    konf->setGroup(OP_SAVER_GROUP);			// get dialogue preferences
-    m_saveAskFilename = konf->readBoolEntry(OP_SAVER_ASK_FILENAME,false);
-    m_saveAskFormat = konf->readBoolEntry(OP_SAVER_ASK_FORMAT,false);
-
-    kdDebug(28000) << k_funcinfo << "before dialogue,"
-                   << " ask_filename=" << m_saveAskFilename
-                   << " ask_format=" << m_saveAskFormat
-                   << " filename=[" << saveFilename << "]"
-                   << " format=[" << saveFormat << "]"
-                   << " subformat=[" << saveSubformat << "]"
-                   << endl;
-
+    kDebug() << "before dialogue,"
+             << "ask_filename=" << m_saveAskFilename
+             << "ask_format=" << m_saveAskFormat
+             << "filename=" << saveFilename
+             << "format=" << saveFormat
+             << "subformat=" << saveSubformat;
 
     while (saveFormat.isEmpty() || m_saveAskFormat || m_saveAskFilename)
     {							// is a dialogue neeeded?
@@ -147,25 +146,24 @@ ImgSaveStat ImgSaver::saveImage(const QImage *image)
         }
     }
 
-    kdDebug(28000) << k_funcinfo << "after dialogue,"
-                   << " filename=[" << saveFilename << "]"
-                   << " format=[" << saveFormat << "]"
-                   << " subformat=[" << saveSubformat << "]"
-                   << endl;
+    kDebug() << "after dialogue,"
+             << "filename=" << saveFilename
+             << "format=" << saveFormat
+             << "subformat=" << saveSubformat;
 
     QString fi = m_saveDirectory+"/"+saveFilename;	// full path to save
 #ifdef USE_KIMAGEIO
     QString ext = KImageIO::suffix(saveFormat);		// extension it should have
 #else
-    QString ext = saveFormat.lower();
+    QString ext = saveFormat.toLower();
 #endif
     if (extension(fi)!=ext)				// already has correct extension?
     {
         fi +=  ".";					// no, add it on
         fi += ext;
     }
-
-    return (save(image,fi,saveFormat,saveSubformat));	// save image to that file
+							// save image to that file
+    return (save(image, fi, saveFormat, saveSubformat));
 }
 
 
@@ -173,12 +171,14 @@ ImgSaveStat ImgSaver::saveImage(const QImage *image)
 /**
  *   This function uses a filename provided by the caller.
  **/
-ImgSaveStat ImgSaver::saveImage(const QImage *image,const KURL &url,const QString &imgFormat)
+ImgSaveStat ImgSaver::saveImage(const QImage *image,
+                                const KUrl &url,
+                                const QString &imgFormat)
 {
     QString format = imgFormat;
     if (format.isEmpty()) format = "BMP";
 
-    return (save(image,url,format,QString::null));
+    return (save(image, url, format));
 }
 
 
@@ -186,54 +186,54 @@ ImgSaveStat ImgSaver::saveImage(const QImage *image,const KURL &url,const QStrin
    private save() does the work to save the image.
    the filename must be complete and local.
 **/
-ImgSaveStat ImgSaver::save(const QImage *image,const KURL &url,
-                           const QString &format,const QString &subformat)
+ImgSaveStat ImgSaver::save(const QImage *image,
+                           const KUrl &url,
+                           const QString &format,
+                           const QString &subformat)
 {
     if (format.isEmpty() || image==NULL) return (ISS_ERR_PARAM);
 
-    kdDebug(28000) << k_funcinfo << "to " << url.prettyURL()
-                   << " in format <" << format << ">"
-                   << " subformat <" << subformat << ">" << endl;
+    kDebug() << "to" << url.prettyUrl() << "format" << format << "subformat" << subformat;
 
-    last_format = format.latin1();			// save for error message later
+    last_format = format.toLatin1();			// save for error message later
     last_url = url;
 
     if (!url.isLocalFile())				// file must be local
     {
-	kdDebug(28000) << k_funcinfo << "Can only save local files" << endl;
+	kDebug() << "Can only save local files";
 	return (ISS_ERR_PROTOCOL);
     }
 
     QString filename = url.path();			// local file path
     QFileInfo fi(filename);				// information for that
-    QString dirPath = fi.dirPath();			// containing directory
+    QString dirPath = fi.path();			// containing directory
 
     QDir dir(dirPath);
     if (!dir.exists())					// should always exist, except
     {							// for first preview save
-        kdDebug(28000) << "Creating dir <" << dirPath << ">" << endl;
+        kDebug() << "Creating directory" << dirPath;
         if (!dir.mkdir(dirPath))
         {
-	    kdDebug(28000) << k_funcinfo << "Could not create directory <" << dirPath << ">" << endl;
+	    kDebug() << "Could not create directory" << dirPath;
             return (ISS_ERR_MKDIR);
         }
     }
 
     if (fi.exists() && !fi.isWritable())
     {
-        kdDebug(28000) << k_funcinfo << "Cannot overwrite existing file <" << filename << ">" << endl;
+        kDebug() << "Cannot overwrite existing file" << filename;
         return (ISS_ERR_PERM);
     }
 
 #ifdef USE_KIMAGEIO
     if (!KImageIO::canWrite(format))			// check the format, is it writable?
     {
-        kdDebug(28000) << k_funcinfo << "Cannot write format <" << format << ">" << endl;
+        kDebug() << "Cannot write format" << format;
         return (ISS_ERR_FORMAT_NO_WRITE);
     }
 #endif
 
-    bool result = image->save(filename,format.latin1());
+    bool result = image->save(filename, last_format);
     return (result ? ISS_OK : ISS_ERR_UNKNOWN);
 }
 
@@ -247,16 +247,16 @@ QString ImgSaver::createFilename()
 {
     QDir files(m_saveDirectory,"kscan_[0-9][0-9][0-9][0-9].*");
     QStringList l(files.entryList());
-    l.gres(QRegExp("\\..*$"),"");
+    l.replaceInStrings(QRegExp("\\..*$"),"");
 
     QString fname;
-    for (unsigned long c = 1; c<=l.count()+1; ++c)	// that must be the upper bound
+    for (int c = 1; c<=l.count()+1; ++c)		// that must be the upper bound
     {
-	fname = "kscan_"+QString::number(c).rightJustify(4,'0');
+	fname = "kscan_"+QString::number(c).rightJustified(4, '0');
 	if (!l.contains(fname)) break;
     }
 
-    kdDebug(28000) << k_funcinfo << "returning '" << fname << "'" << endl;
+    kDebug() << "returning" << fname;
     return (fname);
 }
 
@@ -272,7 +272,7 @@ QString ImgSaver::findFormat(ImgSaver::ImageType type)
     if (type==ImgSaver::ImgPreview) return ("BMP");	// preview always this format
 							// real images from here on
     QString format = getFormatForType(type);
-    kdDebug(28000) << k_funcinfo << "format for type " << type << " = " << format << endl;
+    kDebug() << "format for type" << type << "=" << format;
     return (format);
 }
 
@@ -304,7 +304,7 @@ case ImgSaver::ImgHicolor:
 	break;
 
 default:
-	res = i18n("unknown image type %1").arg(type);
+	res = i18n("unknown image type %1", type);
 	break;
     }
 
@@ -318,7 +318,7 @@ default:
  *  This method returns true if the image format given in format is remembered
  *  for that image type.
  */
-bool ImgSaver::isRememberedFormat(ImgSaver::ImageType type,const QString &format)
+bool ImgSaver::isRememberedFormat(ImgSaver::ImageType type, const QString &format)
 {
     return (getFormatForType(type)==format);
 }
@@ -335,7 +335,7 @@ case ImgSaver::ImgGray:     return (OP_FORMAT_GRAY);
 case ImgSaver::ImgBW:       return (OP_FORMAT_BW);
 case ImgSaver::ImgHicolor:  return (OP_FORMAT_HICOLOR);
 
-default:                    kdDebug(28000) << k_funcinfo << "unknown type " << type << endl;
+default:                    kDebug() << "unknown type" << type;
                             return (OP_FORMAT_UNKNOWN);
     }
 }
@@ -344,16 +344,14 @@ default:                    kdDebug(28000) << k_funcinfo << "unknown type " << t
 
 QString ImgSaver::getFormatForType(ImgSaver::ImageType type)
 {
-    KConfig *konf = KGlobal::config();
-    konf->setGroup(OP_SAVER_GROUP);
-    return (konf->readEntry(configKeyFor(type)));
+    const KConfigGroup grp = KGlobal::config()->group(OP_SAVER_GROUP);
+    return (grp.readEntry(configKeyFor(type), ""));
 }
 
 
 void ImgSaver::storeFormatForType(ImgSaver::ImageType type,const QString &format)
 {
-    KConfig *konf = KGlobal::config();
-    konf->setGroup(OP_SAVER_GROUP);
+    KConfigGroup grp = KGlobal::config()->group(OP_SAVER_GROUP);
 
     //  We don't save OP_FILE_ASK_FORMAT here, this is the global setting
     //  "Always use the Save Assistant" from the Kooka configuration which
@@ -370,15 +368,15 @@ void ImgSaver::storeFormatForType(ImgSaver::ImageType type,const QString &format
     //  konf->writeEntry( OP_FILE_ASK_FORMAT, ask );
     //  m_saveAskFormat = ask;
 
-    konf->writeEntry(configKeyFor(type),format);
-    konf->sync();
+    grp.writeEntry(configKeyFor(type), format);
+    grp.sync();
 }
 
 
 
 QString ImgSaver::findSubFormat(const QString &format)
 {
-    kdDebug(28000) << k_funcinfo << "for " << format << endl;
+    kDebug() << "for" << format;
     return (QString::null);				// no subformats currently used
 }
 
@@ -393,177 +391,196 @@ case ISS_OK:			re = i18n("Save OK");			break;
 case ISS_ERR_PERM:		re = i18n("Permission denied");		break;
 case ISS_ERR_FILENAME:		re = i18n("Bad file name");		break;  // never used
 case ISS_ERR_NO_SPACE:		re = i18n("No space left on device");	break;	// never used
-case ISS_ERR_FORMAT_NO_WRITE:	re = i18n("Cannot write image format '%1'").arg(last_format);
+case ISS_ERR_FORMAT_NO_WRITE:	re = i18n("Cannot write image format '%1'",last_format.data());
 									break;
-case ISS_ERR_PROTOCOL:		re = i18n("Cannot write using protocol '%1'").arg(last_url.protocol());
+case ISS_ERR_PROTOCOL:		re = i18n("Cannot write using protocol '%1'",last_url.protocol());
 									break;
 case ISS_SAVE_CANCELED:		re = i18n("User cancelled saving");	break;
 case ISS_ERR_MKDIR:		re = i18n("Cannot create directory");	break;
 case ISS_ERR_UNKNOWN:		re = i18n("Save failed");		break;
 case ISS_ERR_PARAM:		re = i18n("Bad parameter");		break;
-default:			re = i18n("Unknown status %1").arg(stat);
+default:			re = i18n("Unknown status %1",stat);
 				break;
     }
     return (re);
 }
 
 
-QString ImgSaver::extension(const KURL &url)
+QString ImgSaver::extension(const KUrl &url)
 {
-    QString extension = url.fileName();
-
-    int dotPos = extension.findRev('.');		// find last separator
-    if( dotPos>0) extension = extension.mid(dotPos+1);	// extract from filename
-    else extension = QString::null;			// no extension
-    return (extension);
+    return (KMimeType::extractKnownExtension(url.pathOrUrl()));
+//    QString extension = url.fileName();
+//    int dotPos = extension.findRev('.');		// find last separator
+//    if( dotPos>0) extension = extension.mid(dotPos+1);	// extract from filename
+//    else extension = QString::null;			// no extension
+//    return (extension);
 }
 
 
-bool ImgSaver::renameImage( const KURL& fromUrl, const KURL& toUrl, bool askExt,  QWidget *overWidget )
+QString ImgSaver::tempSaveImage(const KookaImage *img, const QString &format, int colors)
 {
-   /* Check if the provided filename has a extension */
-   QString extTo = extension( toUrl );
-   QString extFrom = extension( fromUrl );
-   KURL targetUrl( toUrl );
+    if (img==NULL) return (QString::null);
 
-   if( extTo.isEmpty() && !extFrom.isEmpty() )
-   {
-      /* Ask if the extension
- should be added */
-      int result = KMessageBox::Yes;
-      QString fName = toUrl.fileName();
-      if( ! fName.endsWith( "." )  )
-      {
-	 fName += ".";
-      }
-      fName += extFrom;
+    KTemporaryFile tmpFile;
+    tmpFile.setSuffix("."+format.toLower());
+    tmpFile.setAutoRemove(false);
 
-      if( askExt )
-      {
+    if (!tmpFile.open())
+    {
+        kDebug() << "Error opening temp file" << tmpFile.fileName();
+        tmpFile.setAutoRemove(true);
+        return (QString::null);
+    }
 
-	 QString s;
-	 s = i18n("The filename you supplied has no file extension.\nShould the correct one be added automatically? ");
-	 s += i18n( "That would result in the new filename: %1" ).arg( fName);
-
-	 result = KMessageBox::questionYesNo(overWidget, s, i18n( "Extension Missing"),
-					     i18n("Add Extension"), i18n("Do Not Add"),
-					     "AutoAddExtensions" );
-      }
-
-      if( result == KMessageBox::Yes )
-      {
-	 targetUrl.setFileName( fName );
-	 kdDebug(28000) << "Rename file to " << targetUrl.prettyURL() << endl;
-      }
-   }
-   else if( !extFrom.isEmpty() && extFrom != extTo )
-   {
-       if( ! ((extFrom.lower() == "jpeg" && extTo.lower() == "jpg") ||
-	      (extFrom.lower() == "jpg"  && extTo.lower() == "jpeg" )))
-       {
-	   /* extensions differ -> TODO */
-	   KMessageBox::error( overWidget,
-			       i18n("Format changes of images are currently not supported."),
-			       i18n("Wrong Extension Found" ));
-	   return(false);
-       }
-   }
-
-   bool success = false;
-
-   if( KIO::NetAccess::exists( targetUrl, false,0 ) )
-   {
-      kdDebug(28000)<< "Target already exists - can not copy" << endl;
-   }
-   else
-   {
-      if( KIO::file_move(fromUrl, targetUrl) )
-      {
-	 success = true;
-      }
-   }
-   return( success );
-}
-
-
-QString ImgSaver::tempSaveImage( KookaImage *img, const QString& format, int colors )
-{
-
-    KTempFile *tmpFile = new KTempFile( QString(), "."+format.lower());
-    tmpFile->setAutoDelete( false );
-    tmpFile->close();
+    QString name = tmpFile.fileName();
+    tmpFile.close();
 
     KookaImage tmpImg;
-
-    if( colors != -1 && img->numColors() != colors )
+    if (colors!=-1 && img->numColors()!=colors)
     {
 	// Need to convert image
-	if( colors == 1 || colors == 8 || colors == 24 || colors == 32 )
-	{
-	    tmpImg = img->convertDepth( colors );
-	    img = &tmpImg;
-	}
-	else
-	{
-	    kdDebug(28000) << "ERROR: Wrong color depth requested: " << colors << endl;
-	    img = 0;
-	}
+        QImage::Format newfmt;
+        switch (colors)
+        {
+case 1:     newfmt = QImage::Format_Mono;
+            break;
+
+case 8:     newfmt = QImage::Format_Indexed8;
+            break;
+
+
+case 24:    newfmt = QImage::Format_RGB888;
+            break;
+
+
+case 32:    newfmt = QImage::Format_RGB32;
+            break;
+
+default:    kDebug() << "Error: Bad color depth requested" << colors;
+            tmpFile.setAutoRemove(true);
+            return (QString::null);
+        }
+
+        tmpImg = img->convertToFormat(newfmt);
+        img = &tmpImg;
     }
 
-    QString name;
-    if( img )
+    kDebug() << "Saving to" << name << "in format" << format.toUpper();
+    if (!img->save(name, format.toLatin1()))
     {
-	name = tmpFile->name();
-
-	if( ! img->save( name, format.latin1() ) ) name = QString();
+        kDebug() << "Error saving to" << name;
+        tmpFile.setAutoRemove(true);
+        return (QString::null);
     }
-    delete tmpFile;
-    return name;
+
+    return (name);
 }
 
-bool ImgSaver::copyImage( const KURL& fromUrl, const KURL& toUrl, QWidget *overWidget )
+
+
+
+// TODO: are copy/rename similar enough to merge?
+
+bool ImgSaver::renameImage(const KUrl &fromUrl, const KUrl &toUrl, bool askExt, QWidget *overWidget)
 {
+    /* Check if the provided filename has a extension */
+    QString extFrom = extension(fromUrl);
+    QString extTo = extension(toUrl);
+    KUrl targetUrl(toUrl);
 
-   /* Check if the provided filename has a extension */
-   QString extTo = extension( toUrl );
-   QString extFrom = extension( fromUrl );
-   KURL targetUrl( toUrl );
+    if (extTo.isEmpty() && !extFrom.isEmpty())
+    {
+        /* Ask if the extension should be added */
+        int result = KMessageBox::Yes;
+        QString fName = toUrl.fileName();
+        if (!fName.endsWith( "." )) fName += ".";
+        fName += extFrom;
 
-   if( extTo.isEmpty() && !extFrom.isEmpty())
-   {
-      /* Ask if the extension should be added */
-      int result = KMessageBox::Yes;
-      QString fName = toUrl.fileName();
-      if( ! fName.endsWith( "." ))
-	 fName += ".";
-      fName += extFrom;
-
-      QString s;
-      s = i18n("The filename you supplied has no file extension.\nShould the correct one be added automatically? ");
-      s += i18n( "That would result in the new filename: %1" ).arg( fName);
-
-      result = KMessageBox::questionYesNo(overWidget, s, i18n( "Extension Missing"),
-					  i18n("Add Extension"), i18n("Do Not Add"),
-					  "AutoAddExtensions" );
-
-      if( result == KMessageBox::Yes )
-      {
-	 targetUrl.setFileName( fName );
+        if (askExt)
+        {
+            result = KMessageBox::questionYesNo(overWidget,
+                                                i18n("<qt><p>The file name you supplied has no file extension."
+                                                     "<br>Should the original one be added?\n"
+                                                     "<p>That would result in the new file name <filename>%1</filename>", fName),
+                                                i18n("Extension Missing"),
+                                                KGuiItem(i18n("Add Extension")),
+                                                KGuiItem(i18n("Do Not Add")),
+                                                "AutoAddExtensions");
       }
-   }
-   else if( !extFrom.isEmpty() && extFrom != extTo )
-   {
-      /* extensions differ -> TODO */
-       if( ! ((extFrom.lower() == "jpeg" && extTo.lower() == "jpg") ||
-	      (extFrom.lower() == "jpg"  && extTo.lower() == "jpeg" )))
-       {
-	   KMessageBox::error( overWidget, i18n("Format changes of images are currently not supported."),
-			       i18n("Wrong Extension Found" ));
-	   return(false);
+
+      if (result == KMessageBox::Yes)
+      {
+          targetUrl.setFileName( fName );
+          kDebug() << "Rename file to" << targetUrl.prettyUrl();
+      }
+    }
+    else if(!extFrom.isEmpty() && extFrom!=extTo)
+    {
+        KMimeType::Ptr fromType = KMimeType::findByUrl(fromUrl);
+        KMimeType::Ptr toType = KMimeType::findByUrl(toUrl);
+        if (!toType->is(fromType->name()))
+        {
+            KMessageBox::error(overWidget,
+                               i18n("Format changes of images are currently not supported."),
+			       i18n("Wrong Extension"));
+            return (false);
+        }
+    }
+
+    if (KIO::NetAccess::exists(targetUrl, false, overWidget))
+    {
+        kDebug() << "Target already exists" << targetUrl;
+        return (false);
+    }
+
+    return (KIO::NetAccess::move(fromUrl, targetUrl, overWidget));
+}
+
+
+
+
+
+bool ImgSaver::copyImage(const KUrl &fromUrl, const KUrl &toUrl, QWidget *overWidget)
+{
+    /* Check if the provided filename has a extension */
+    QString extFrom = extension(fromUrl);
+    QString extTo = extension(toUrl);
+    KUrl targetUrl(toUrl);
+
+    if (extTo.isEmpty() && !extFrom.isEmpty())
+    {
+        /* Ask if the extension should be added */
+        QString fName = toUrl.fileName();
+        if(!fName.endsWith(".")) fName += ".";
+        fName += extFrom;
+
+        int result = KMessageBox::questionYesNo(overWidget,
+                                                i18n("<qt><p>The file name you supplied has no file extension."
+                                                     "<br>Should the original one be added?\n"
+                                                     "<p>That would result in the new file name <filename>%1</filename>", fName),
+                                                i18n("Extension Missing"),
+                                                KGuiItem(i18n("Add Extension")),
+                                                KGuiItem(i18n("Do Not Add")),
+                                                "AutoAddExtensions");
+        if (result==KMessageBox::Yes)
+        {
+            targetUrl.setFileName(fName);
+            kDebug() << "Copy to" << targetUrl.prettyUrl();
+        }
+    }
+    else if (!extFrom.isEmpty() && extFrom!=extTo)
+    {
+        KMimeType::Ptr fromType = KMimeType::findByUrl(fromUrl);
+        KMimeType::Ptr toType = KMimeType::findByUrl(toUrl);
+        if (!toType->is(fromType->name()))
+        {
+            KMessageBox::error(overWidget,
+                               i18n("Format changes of images are currently not supported."),
+			       i18n("Wrong Extension"));
+	   return (false);
        }
    }
 
-   KIO::Job *copyjob = KIO::copy( fromUrl, targetUrl, false );
-
-   return( copyjob ? true : false );
+    // TODO: need an 'exists' overwrite check as above?
+    return (KIO::NetAccess::copy(fromUrl, targetUrl, overWidget));
 }

@@ -25,40 +25,44 @@
  ***************************************************************************/
 
 
-#ifndef KOCRKADMOS_H
-#define KOCRKADMOS_H
+#ifndef OCRKADMOSDIALOG_H
+#define OCRKADMOSDIALOG_H
 
-#include <kdialogbase.h>
 #include <qmap.h>
 
 #include "ocrbasedialog.h"
+
+
 /**
   *@author Klaas Freitag
   */
 
 
 
-class KScanCombo;
 class QWidget;
-class QButtonGroup;
-class KConfig;
+class Q3GroupBox;
 class QCheckBox;
-//class KSpellConfig;
 class QRadioButton;
-
 class QComboBox;
+class Q3ButtonGroup;
+
+class KConfig;
+
+//class KScanCombo;
+
 
 class KadmosClassifier   /* Not yet used FIXME */
 {
 public:
    KadmosClassifier( QString lang, QString filename );
+
    QString getCmplFilename() const { return path+filename; }
    QString getFilename()     const { return filename; }
    QString language()        const { return languagesName; }
 
    void setPath( const QString& p ) { path=p; }
-private:
 
+private:
    QString filename;
    QString path;
    QString languagesName;
@@ -68,8 +72,9 @@ private:
 class KadmosDialog: public OcrBaseDialog
 {
     Q_OBJECT
+
 public:
-    KadmosDialog(QWidget *parent,KSpellConfig *spellConfig = NULL);
+    KadmosDialog(QWidget *parent, KSpellConfig *spellConfig = NULL);
     ~KadmosDialog();
 
     typedef QMap<QString, QString> StrMap;
@@ -88,17 +93,18 @@ public slots:
     void enableFields(bool);
 
 protected:
-    void writeConfig();
-
-    void setupPreprocessing( QVBox *box );
-    void setupSegmentation(  QVBox *box );
-    void setupClassification( QVBox *box );
+    void setupPreprocessing(KVBox *box);
+    void setupSegmentation(KVBox *box);
+    void setupClassification(KVBox *box);
 
     OcrEngine::EngineError findClassifiers();
     OcrEngine::EngineError findClassifierPath();
-private slots:
 
-    void slFontChanged( int id );
+protected slots:
+    void slotWriteConfig();
+
+private slots:
+    void slotFontChanged(int id);
 
 private:
     StrMap                m_classifierTranslate;
@@ -107,13 +113,13 @@ private:
     QCheckBox             *m_cbAutoscale;
     QString                m_customClassifierPath;
 
-    QButtonGroup	  *m_bbFont;
+    Q3ButtonGroup	  *m_bbFont;
 
     QRadioButton          *m_rbMachine;
     QRadioButton          *m_rbHand;
     QRadioButton          *m_rbNorm;
 
-    QGroupBox      	  *m_gbLang;
+    Q3GroupBox      	  *m_gbLang;
 
     QComboBox             *m_cbLang;
 
@@ -127,4 +133,4 @@ private:
     StringMap m_longCountry2short;
 };
 
-#endif
+#endif							// OCRKADMOSDIALOG_H

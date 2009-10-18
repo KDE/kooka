@@ -23,29 +23,32 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "config.h"
+#include "ocrengine.h"
+#include "ocrengine.moc"
+
+#include <qpen.h>
+#include <qvector.h>
+#include <qevent.h>
 
 #include <kdebug.h>
 #include <kmessagebox.h>
 #include <kapplication.h>
 #include <kprocess.h>
+#ifndef KDE4
 #include <kspell.h>
 #include <kspelldlg.h>
 #include <ksconfig.h>
-#include <kguiitem.h>
+#endif
 #include <klocale.h>
-#include <kdialogbase.h>
+#include <kdialog.h>
+#include <kvbox.h>
 
-#include <qpen.h>
-#include <qvbox.h>
-
-#include "img_canvas.h"
+#include "libkscan/img_canvas.h"
 
 #include "kookaimage.h"
 #include "kookapref.h"
 
 #include "ocrbasedialog.h"
-#include "ocrkadmosdialog.h"
 #include "ocrocraddialog.h"
 #include "ocrgocrdialog.h"
 #include "ocrword.h"
@@ -54,10 +57,12 @@
 #ifdef HAVE_KADMOS
 #include "kadmosocr.h"
 #include "ocrkadmosengine.h"
+#include "ocrkadmosdialog.h"
 #endif
 
-#include "ocrengine.h"
-#include "ocrengine.moc"
+
+
+// TODO: Spell checking needs to be ported to Sonnet for KDE4
 
 
 #define HIDE_BASE_DIALOG "hideOCRDialogWhileSpellCheck"
@@ -85,14 +90,15 @@ OcrEngine::OcrEngine(QWidget *parent)
 
     /*
      * a initial config is needed as a starting point for the config dialog
-     * but also for ocr without visible dialog.
+     * but also for OCR without visible dialog.
      */
+#ifndef KDE4
     m_spellInitialConfig = new KSpellConfig(NULL,NULL,NULL,false);
-
-    KConfig *konf = KGlobal::config();
-    konf->setGroup(CFG_GROUP_OCR_DIA);			// OCR dialog information
-    m_hideDiaWhileSpellcheck = konf->readBoolEntry( HIDE_BASE_DIALOG, true );
-    m_unlinkORF = konf->readBoolEntry( CFG_OCR_CLEANUP, true );
+#endif
+							// OCR dialog information
+    KConfigGroup grp = KGlobal::config()->group(CFG_GROUP_OCR_DIA);
+    m_hideDiaWhileSpellcheck = grp.readEntry(HIDE_BASE_DIALOG, true);
+    m_unlinkORF = grp.readEntry(CFG_OCR_CLEANUP, true);
 
     m_blocks.resize(1);					// there is at least one block
 }
@@ -102,18 +108,20 @@ OcrEngine::~OcrEngine()
 {
    if (daemon!=NULL) delete daemon;
    if (m_introducedImage!=NULL) delete m_introducedImage;
+#ifndef KDE4
    if (m_spellInitialConfig!=NULL) delete m_spellInitialConfig;
+#endif
 }
 
 
 
 OcrEngine *OcrEngine::createEngine(QWidget *parent,bool *gotoPrefs)
 {
-    KConfig *konf = KGlobal::config();
-    konf->setGroup(CFG_GROUP_OCR_DIA);
+    KConfigGroup grp = KGlobal::config()->group(CFG_GROUP_OCR_DIA);
 
-    OcrEngine::EngineType eng = static_cast<OcrEngine::EngineType>(konf->readNumEntry(CFG_OCR_ENGINE2,OcrEngine::EngineNone));
-    kdDebug(28000) << k_funcinfo << "configured OCR engine is " << eng << " = " << engineName(eng) << endl;
+    OcrEngine::EngineType eng = static_cast<OcrEngine::EngineType>(grp.readEntry(CFG_OCR_ENGINE2,
+                                                                                 static_cast<int>(OcrEngine::EngineNone)));
+    kDebug() << "configured OCR engine is" << eng << "=" << engineName(eng);
 
     QString msg = QString::null;
     switch (eng)
@@ -134,7 +142,7 @@ case OcrEngine::EngineNone:     msg = i18n("No OCR engine is configured.\n"
                                            "Please select and configure one in the OCR configuration dialog.");
                                 break;
 
-default:			kdDebug(28000) << "Cannot create engine of type " << eng << endl;
+default:			kDebug() << "Cannot create engine of type" << eng;
 				return (NULL);
     }
 
@@ -153,11 +161,11 @@ bool OcrEngine::engineValid() const
 {
     OcrEngine::EngineType curEngine = engineType();
 
-    KConfig *konf = KGlobal::config();
-    konf->setGroup(CFG_GROUP_OCR_DIA);
-    OcrEngine::EngineType confEngine = static_cast<OcrEngine::EngineType>(konf->readNumEntry(CFG_OCR_ENGINE2,OcrEngine::EngineNone));
+    KConfigGroup grp = KGlobal::config()->group(CFG_GROUP_OCR_DIA);
+    OcrEngine::EngineType confEngine = static_cast<OcrEngine::EngineType>(grp.readEntry(CFG_OCR_ENGINE2,
+                                                                                        static_cast<int>(OcrEngine::EngineNone)));
 
-    kdDebug(28000) << k_funcinfo << "cur=" << curEngine << " conf=" << confEngine << endl;
+    kDebug() << "cur" << curEngine << "conf" << confEngine;
     return (curEngine==confEngine);
 }
 
@@ -194,7 +202,7 @@ bool OcrEngine::startOCRVisible(QWidget *parent)
 {
     if (visibleOCRRunning)
     {
-        KMessageBox::sorry(NULL,i18n("An OCR process is already running"));
+        KMessageBox::sorry(parent, i18n("An OCR process is already running"));
         return (false);
     }
 
@@ -226,7 +234,7 @@ void OcrEngine::finishedOCRVisible( bool success )
 
     if (m_ocrProcessDia)
     {
-        m_ocrProcessDia->stopOCR();
+        m_ocrProcessDia->slotStopOCR();
         doSpellcheck = m_ocrProcessDia->wantSpellCheck();
     }
 
@@ -240,9 +248,9 @@ void OcrEngine::finishedOCRVisible( bool success )
             if (m_resultImage!=NULL) delete m_resultImage;
 
             m_resultImage = new QImage(m_ocrResultImage);
-            kdDebug(28000) << k_funcinfo << "Result image " << m_ocrResultImage
-                           << " dimensions " << m_resultImage->width()
-                           << "x" << m_resultImage->height() << endl;
+            kDebug() << "Result image" << m_ocrResultImage
+                     << "dimensions [" << m_resultImage->width()
+                     << "x" << m_resultImage->height() << "]";
 
             /* The image canvas is present. Set it to our image */
             m_imgCanvas->newImageHoldZoom(m_resultImage);
@@ -263,16 +271,16 @@ void OcrEngine::finishedOCRVisible( bool success )
     visibleOCRRunning = false;
     cleanUpFiles();
 
-    kdDebug(28000) << "# OCR finished #" << endl;
+    kDebug() << "OCR finished";
 }
 
 
 
 void OcrEngine::performSpellCheck()
 {
-   kdDebug(28000) << k_funcinfo << endl;
+   kDebug();
 
-   KDialogBase *soloDialog = NULL;			// standalone spell check options
+   KDialog *soloDialog = NULL;			// standalone spell check options
 							// Don't make this automatic in
 							// the 'if' block below!  When it
    							// gets deleted, its grandchild - the
@@ -282,24 +290,31 @@ void OcrEngine::performSpellCheck()
    KSpellConfig *spconf;
    if (m_ocrProcessDia==NULL)				// not called by OCR dialogue
    {							// get spell check options
-       soloDialog = new KDialogBase(m_parent,NULL,true,i18n("OCR Spell Check Options"),
-                                    KDialogBase::Ok+KDialogBase::Cancel,
-                                    KDialogBase::Ok,true);
-       soloDialog->setButtonOK(KGuiItem(i18n("Start Spell Check")));
+       soloDialog = new KDialog(m_parent);
+       soloDialog->setObjectName("SoloDialog");
+       soloDialog->setModal(true);
+       soloDialog->setCaption(i18n("OCR Spell Check Options"));
+       soloDialog->setButtons(KDialog::Ok|KDialog::Cancel);
+       soloDialog->setButtonText(KDialog::Ok, i18n("Start Spell Check"));
+       soloDialog->showButtonSeparator(true);
 
-       QVBox *vb = soloDialog->makeVBoxMainWidget();
+       KVBox *vb = new KVBox(soloDialog);
+       soloDialog->setMainWidget(vb);
+#ifndef KDE4
        spconf = new KSpellConfig(vb,NULL,NULL,false);
-
+#endif
        if (!soloDialog->exec()) return;
        soloDialog->hide();
    }
    else spconf = m_ocrProcessDia->spellConfig();	// options from OCR dialogue
 
    m_ocrCurrLine = 0;					// start at beginning of text
+#ifndef KDE4
    KSpell *speller = new KSpell(m_parent,i18n("OCR Spell Check"),
-                                this,SLOT(slSpellReady(KSpell*)),spconf);
+                                this,SLOT(slotSpellReady(KSpell*)),spconf);
    connect(speller,SIGNAL(death()),SLOT(slSpellDead()));
 							// begin spell checking
+#endif
    if (soloDialog!=NULL) delete soloDialog;		// finished with the dialogue
 }
 
@@ -311,6 +326,7 @@ void OcrEngine::performSpellCheck()
  */
 void OcrEngine::startLineSpellCheck()
 {
+#ifndef KDE4
     if( m_ocrCurrLine < m_ocrPage.size() )
     {
         m_checkStrings = (m_ocrPage[m_ocrCurrLine]).stringList();
@@ -318,16 +334,17 @@ void OcrEngine::startLineSpellCheck()
         /* In case the checklist is empty, call the result slot immediately */
         if( m_checkStrings.count() == 0 )
         {
-            slCheckListDone(false);
+            slotCheckListDone(false);
 	    return;
         }
 
-        kdDebug(28000)<< "Wordlist (size " << m_ocrPage[m_ocrCurrLine].count() << ", line " << m_ocrCurrLine << "):" << m_checkStrings.join(", ") << endl;
+        kDebug()<< "Wordlist size" << m_ocrPage[m_ocrCurrLine].count()
+                << "line" << m_ocrCurrLine << ":" << m_checkStrings.join(", ");
 
         // if( list.count() > 0 )
 
         m_spell->checkList( &m_checkStrings, m_kspellVisible );
-	kdDebug(28000)<< "Started!" << endl;
+	kDebug()<< "Started";
         /**
          * This call ends in three slots:
          * 1. slMisspelling:    Hit _before_ the dialog (if any) appears. Time to
@@ -340,38 +357,39 @@ void OcrEngine::startLineSpellCheck()
     }
     else
     {
-        kdDebug(28000) << k_funcinfo <<" -- no more lines !" << endl;
+        kDebug() << "no more lines";
         m_spell->cleanUp();
     }
+#endif
+}
+
+
+void OcrEngine::stopOCRProcess(bool tellUser)
+{
+    if (daemon!=NULL && daemon->state()==QProcess::Running)
+    {
+        kDebug() << "Killing daemon";
+        daemon->kill();
+        if (tellUser) KMessageBox::error(m_parent,i18n("The OCR process was stopped"));
+    }
+
+    finishedOCRVisible(false);
 }
 
 
 /* Called by "Close" used while OCR is not in progress */
 void OcrEngine::slotClose()
 {
-    kdDebug(28000) << k_funcinfo << "close dialogue" << endl;
-    if (daemon!=NULL && daemon->isRunning())
-    {
-        kdDebug(28000) << "Killing daemon" << endl;
-        daemon->kill(9);
-    }
-
-    finishedOCRVisible(false);
+    kDebug();
+    stopOCRProcess(false);
 }
 
 
 /* Called by "Cancel" used while OCR is in progress */
 void OcrEngine::slotStopOCR()
 {
-    kdDebug(28000) << k_funcinfo << "stop OCR" << endl;
-    if( daemon && daemon->isRunning() )
-    {
-        kdDebug(28000) << "Killing daemon" << endl;
-        daemon->kill(9);
-        KMessageBox::error(m_parent,i18n("The OCR process was stopped"));
-    }
-
-    finishedOCRVisible(false);
+    kDebug();
+    stopOCRProcess(true);
 }
 
 
@@ -380,7 +398,7 @@ void OcrEngine::startOCRProcess()
 {
     if (m_ocrProcessDia==NULL) return;
 
-    m_ocrProcessDia->startOCR();			// start the animation,
+    m_ocrProcessDia->slotStartOCR();			// start the animation,
 							// set fields disabled
     kapp->processEvents();
 
@@ -400,20 +418,21 @@ QString OcrEngine::ocrResultText()
     const QString space(" ");
 
     /* start from the back and search the original word to replace it */
-    QValueVector<ocrWordList>::iterator pageIt;
 
-    for( pageIt = m_ocrPage.begin(); pageIt != m_ocrPage.end(); ++pageIt )
+    for (QVector<OcrWordList>::const_iterator pageIt = m_ocrPage.constBegin();
+         pageIt != m_ocrPage.constEnd(); ++pageIt)
     {
         /* thats goes over all lines */
-        QValueList<ocrWord>::iterator lineIt;
-        for( lineIt = (*pageIt).begin(); lineIt != (*pageIt).end(); ++lineIt )
+        for (QList<OcrWord>::const_iterator lineIt = (*pageIt).constBegin();
+             lineIt != (*pageIt).constEnd(); ++lineIt)
         {
-            res += space + *lineIt;
+            res += space + (*lineIt);
         }
         res += "\n";
     }
-    kdDebug(28000) << "Returning result String  " << res << endl;
-    return res;
+
+    kDebug() << "Returning result" << res;
+    return (res);
 }
 
 
@@ -446,7 +465,7 @@ bool OcrEngine::eventFilter( QObject *object, QEvent *event )
 	    m_imgCanvas->viewportToContents( mev->x(), mev->y(),
 					     x, y );
 
-            kdDebug(28000) << "Clicked to " << x << "/" << y << ", scale " << scale << endl;
+            kDebug() << "Clicked to [" << x << "," << y << "] scale" << scale;
             if( scale != 100 )
             {
                 // Scale is e.g. 50 that means tha the image is only half of size.
@@ -454,21 +473,21 @@ bool OcrEngine::eventFilter( QObject *object, QEvent *event )
                 y = int(double(y)*100/scale);
                 x = int(double(x)*100/scale);
             }
-            /* now search the word that was clicked on */
-            QValueVector<ocrWordList>::iterator pageIt;
 
+            /* now search the word that was clicked on */
 	    int line = 0;
 	    bool valid = false;
-	    ocrWord wordToFind;
+	    OcrWord wordToFind;
 
-            for( pageIt = m_ocrPage.begin(); pageIt != m_ocrPage.end(); ++pageIt )
+            QVector<OcrWordList>::const_iterator pageIt = m_ocrPage.constBegin();
+            for ( ; pageIt != m_ocrPage.constEnd(); ++pageIt )
             {
                 QRect r = (*pageIt).wordListRect();
 
                 if( y > r.top() && y < r.bottom() )
                 {
-		   kdDebug(28000)<< "It is in between " << r.top() << "/" << r.bottom()
-				 << ", line " << line << endl;
+		   kDebug() << "It is in between [" << r.top() << "," << r.bottom()
+                            << "] line " << line;
 		   valid = true;
 		   break;
                 }
@@ -483,8 +502,8 @@ bool OcrEngine::eventFilter( QObject *object, QEvent *event )
 	    {
 	       valid = false;
 	       /* find the word in the line and mark it */
-	       ocrWordList words = *pageIt;
-	       ocrWordList::iterator wordIt;
+	       OcrWordList words = *pageIt;
+	       OcrWordList::iterator wordIt;
 
 	       for( wordIt = words.begin(); wordIt != words.end() && !valid; ++wordIt )
 	       {
@@ -503,7 +522,7 @@ bool OcrEngine::eventFilter( QObject *object, QEvent *event )
 	     */
 	    if( valid )
 	    {
-	       kdDebug(28000) << "Found the clicked word " << wordToFind << endl;
+	       kDebug() << "Found clicked word" << wordToFind;
 	       emit selectWord( line, wordToFind );
 	    }
 
@@ -525,16 +544,18 @@ bool OcrEngine::eventFilter( QObject *object, QEvent *event )
  * KSpell detects the correction by itself and delivers it in newword here.
  * To see all alternatives KSpell proposes, slMissspelling must be used.
  */
-void OcrEngine::slSpellCorrected( const QString& originalword,
+void OcrEngine::slotSpellCorrected( const QString& originalword,
                                  const QString& newword,
-                                 unsigned int pos )
+                                 int pos )
 {
-    kdDebug(28000) << "Corrected: Original Word " << originalword << " was corrected to "
-                   << newword << ", pos ist " << pos << endl;
+#ifndef KDE4
+    kDebug() << "Corrected: original word" << originalword
+             << "was corrected to" << newword
+             << "pos" << pos;
 
-    kdDebug(28000) << "Dialog state is " << m_spell->dlgResult() << endl;
+    kDebug() << "Dialog state is" << m_spell->dlgResult();
 
-    if( slUpdateWord( m_ocrCurrLine, pos, originalword, newword ) )
+    if( slotUpdateWord( m_ocrCurrLine, pos, originalword, newword ) )
     {
         if( m_imgCanvas && m_currHighlight > -1 )
         {
@@ -543,18 +564,18 @@ void OcrEngine::slSpellCorrected( const QString& originalword,
         }
         else
         {
-            kdDebug(28000) << "No highlighting to remove!" << endl;
+            kDebug() << "No highlighting to remove!";
         }
     }
-
+#endif
 }
 
 
-void OcrEngine::slSpellIgnoreWord( const QString& word )
+void OcrEngine::slotSpellIgnoreWord( const QString& word )
 {
-    ocrWord ignoreOCRWord;
+    OcrWord ignoreOCRWord;
 
-    ignoreOCRWord = ocrWordFromKSpellWord( m_ocrCurrLine, word );
+    ignoreOCRWord = OcrWordFromKSpellWord( m_ocrCurrLine, word );
     if( ! ignoreOCRWord.isEmpty() )
     {
         emit ignoreWord( m_ocrCurrLine, ignoreOCRWord );
@@ -565,9 +586,9 @@ void OcrEngine::slSpellIgnoreWord( const QString& word )
 
             /* create a new highlight. That will never be removed */
             QBrush brush;
-            QPen pen( gray, 1 );
+            QPen pen( Qt::gray, 1 );
             QRect r = ignoreOCRWord.rect();
-            r.moveBy(0,2);  // a bit offset to the top
+            r.translate(0,2);  // a bit offset to the top
 
             if( m_applyFilter )
                 m_imgCanvas->highlight( r, pen, brush );
@@ -575,12 +596,12 @@ void OcrEngine::slSpellIgnoreWord( const QString& word )
     }
 }
 
-ocrWord OcrEngine::ocrWordFromKSpellWord( int line, const QString& word )
+OcrWord OcrEngine::OcrWordFromKSpellWord( int line, const QString& word )
 {
-    ocrWord resWord;
+    OcrWord resWord;
     if( lineValid(line) )
     {
-        ocrWordList words = m_ocrPage[line];
+        OcrWordList words = m_ocrPage[line];
 
         words.findFuzzyIndex( word, resWord );
     }
@@ -591,24 +612,24 @@ ocrWord OcrEngine::ocrWordFromKSpellWord( int line, const QString& word )
 
 bool OcrEngine::lineValid(int line) const
 {
-    return (line>=0 && ((uint) line)<m_ocrPage.count());
+    return (line>=0 && line<m_ocrPage.count());
 }
 
 
-void OcrEngine::slMisspelling( const QString& originalword, const QStringList& suggestions,
-                              unsigned int pos )
+void OcrEngine::slotMisspelling( const QString& originalword, const QStringList& suggestions,
+                              int pos )
 {
     /* for the first try, use the first suggestion */
-    ocrWord s( suggestions.first());
-    kdDebug(28000) << "Misspelled: " << originalword << " at position " << pos << endl;
+    OcrWord s( suggestions.first());
+    kDebug() << "Misspelled:" << originalword << "at" << pos;
 
     int line = m_ocrCurrLine;
     m_currHighlight = -1;
 
-    // ocrWord resWord = ocrWordFromKSpellWord( line, originalword );
-    ocrWordList words = m_ocrPage[line];
-    ocrWord resWord;
-    kdDebug(28000) << "Size of wordlist (line " << line << "): " << words.count() << endl;
+    // OcrWord resWord = OcrWordFromKSpellWord( line, originalword );
+    OcrWordList words = m_ocrPage[line];
+    OcrWord resWord;
+    kDebug() << "Size of wordlist for line" << line << "is" << words.count();
 
     if( pos < words.count() )
     {
@@ -618,18 +639,18 @@ void OcrEngine::slMisspelling( const QString& originalword, const QStringList& s
     if( ! resWord.isEmpty() )
     {
         QBrush brush;
-        brush.setColor( QColor(red)); // , "Dense4Pattern" );
+        brush.setColor( Qt::red); // , "Dense4Pattern" );
         brush.setStyle( Qt::Dense4Pattern );
-        QPen pen( red, 2 );
+        QPen pen( Qt::red, 2 );
         QRect r = resWord.rect();
 
-        r.moveBy(0,2);  // a bit offset to the top
+        r.translate(0,2);  // a bit offset to the top
 
         if( m_applyFilter )
             m_currHighlight = m_imgCanvas->highlight( r, pen, brush, true );
 
-        kdDebug(28000) << "Position ist " << r.x() << ", " << r.y() << ", width: "
-		       << r.width() << ", height: " << r.height() << endl;
+        kDebug() << "Position [" << r.x() << "," << r.y()
+                 << "] width" << r.width() << "height " << r.height();
 
         /* draw a line under the word to check */
 
@@ -638,7 +659,7 @@ void OcrEngine::slMisspelling( const QString& originalword, const QStringList& s
     }
     else
     {
-        kdDebug(28000) << "Could not find the ocrword for " << originalword << endl;
+        kDebug() << "Could not find the OcrWord for" << originalword;
     }
 
     emit markWordWrong( line, resWord );
@@ -650,28 +671,30 @@ void OcrEngine::slMisspelling( const QString& originalword, const QStringList& s
  * slot is called if the KSpell-object feels itself ready for operation.
  * Coming into this slot, the spelling starts in a line by line manner
  */
-void OcrEngine::slSpellReady( KSpell *spell )
+void OcrEngine::slotSpellReady( KSpell *spell )
 {
+#ifndef KDE4
     m_spell = spell;
     connect ( m_spell, SIGNAL( misspelling( const QString&, const QStringList&,
                                             unsigned int )),
-              this, SLOT( slMisspelling(const QString& ,
+              this, SLOT( slotMisspelling(const QString& ,
                                         const QStringList& ,
                                         unsigned int  )));
     connect( m_spell, SIGNAL( corrected ( const QString&, const QString&, unsigned int )),
-             this, SLOT( slSpellCorrected( const QString&, const QString&, unsigned int )));
+             this, SLOT( slotSpellCorrected( const QString&, const QString&, unsigned int )));
 
     connect( m_spell, SIGNAL( ignoreword( const QString& )),
-             this, SLOT( slSpellIgnoreWord( const QString& )));
+             this, SLOT( slotSpellIgnoreWord( const QString& )));
 
-    connect( m_spell, SIGNAL( done(bool)), this, SLOT(slCheckListDone(bool)));
+    connect( m_spell, SIGNAL( done(bool)), this, SLOT(slotCheckListDone(bool)));
 
-    kdDebug(28000) << "Spellcheck available" << endl;
+    kDebug() << "Spellcheck available";
 
     if( m_ocrProcessDia && m_hideDiaWhileSpellcheck )
         m_ocrProcessDia->hide();
     emit readOnlyEditor( true );
     startLineSpellCheck();
+#endif
 }
 
 /**
@@ -680,11 +703,12 @@ void OcrEngine::slSpellReady( KSpell *spell )
  * If it is an KSpell-init problem, the m_spell variable is still zero and
  * Kooka pops up a warning.
  */
-void OcrEngine::slSpellDead()
+void OcrEngine::slotSpellDead()
 {
+#ifndef KDE4
     if( ! m_spell )
     {
-        kdDebug(28000) << "Spellcheck NOT available" << endl;
+        kDebug() << "Spellcheck NOT available";
         /* Spellchecking has not yet been existing, thus there is a base problem with
          * spellcheck on this system.
          */
@@ -698,23 +722,23 @@ void OcrEngine::slSpellDead()
     {
         if( m_spell->status() == KSpell::Cleaning )
         {
-            kdDebug(28000) << "KSpell cleans up" << endl;
+            kDebug() << "KSpell cleans up";
         }
         else if( m_spell->status() == KSpell::Finished )
         {
-            kdDebug(28000) << "KSpell finished" << endl;
+            kDebug() << "KSpell finished";
         }
         else if( m_spell->status() == KSpell::Error )
         {
-            kdDebug(28000) << "KSpell finished with Errors" << endl;
+            kDebug() << "KSpell finished with errors";
         }
         else if( m_spell->status() == KSpell::Crashed )
         {
-            kdDebug(28000) << "KSpell Chrashed" << endl;
+            kDebug() << "KSpell crashed";
         }
         else
         {
-            kdDebug(28000) << "KSpell finished with unknown state!" << endl;
+            kDebug() << "KSpell finished with unknown state" << m_spell->status();
         }
 
         /* save the current config */
@@ -731,6 +755,7 @@ void OcrEngine::slSpellDead()
     if( m_ocrProcessDia )
         m_ocrProcessDia->show();
     emit readOnlyEditor( false );
+#endif
 }
 
 
@@ -738,9 +763,10 @@ void OcrEngine::slSpellDead()
  * This slot reads the current line from the member m_ocrCurrLine and
  * writes the corrected wordlist to the member page word lists
  */
-void OcrEngine::slCheckListDone(bool shouldUpdate)
+// TODO: never used as slot
+void OcrEngine::slotCheckListDone(bool shouldUpdate)
 {
-
+#ifndef KDE4
     /*
      * nothing needs to be updated here in the texts, because it is already done
      * in the slSpellCorrected  slot
@@ -756,38 +782,38 @@ void OcrEngine::slCheckListDone(bool shouldUpdate)
     else
     {
         m_ocrCurrLine++;
-	kdDebug(28000) << "Starting spellcheck from CheckListDone" << endl;
+	kDebug() << "Starting spellcheck";
         startLineSpellCheck();
     }
+#endif
 }
+
 
 /**
  * updates the word at position spellWordIndx in line line to the new word newWord.
  * The original word was origWord. This slot is called from slSpellCorrected
  *
  */
-bool OcrEngine::slUpdateWord( int line, int spellWordIndx, const QString& origWord,
+bool OcrEngine::slotUpdateWord( int line, int spellWordIndx, const QString& origWord,
                              const QString& newWord )
 {
     bool result = false;
 
     if( lineValid( line ))
     {
-        ocrWordList words = m_ocrPage[line];
-        kdDebug(28000) << "Updating word " << origWord << " to " << newWord << endl;
+        OcrWordList words = m_ocrPage[line];
+        kDebug() << "Updating word" << origWord << "->" << newWord;
 
         if( words.updateOCRWord( words[spellWordIndx] /* origWord */, newWord ) )  // searches for the word and updates
         {
             result = true;
             emit updateWord( line, origWord, newWord );
         }
-        else
-            kdDebug(28000) << "WRN: Update from " << origWord << " to " << newWord << " failed" << endl;
-
+        else kDebug() << "Update failed!";
     }
     else
     {
-        kdDebug(28000) << "WRN: Line " << line << " no not valid!" << endl;
+        kDebug() << "Line" << line << "not valid!";
     }
     return result;
 }

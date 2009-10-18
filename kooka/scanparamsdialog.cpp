@@ -17,77 +17,86 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include <klineedit.h>
-#include <klocale.h>
-#include <kconfig.h>
-#include <kdebug.h>
-#include <kmessagebox.h>
-#include <kstdguiitem.h>
+#include "scanparamsdialog.h"
+#include "scanparamsdialog.moc"
 
 #include <qlabel.h>
 #include <qframe.h>
 #include <qlayout.h>
 #include <qpushbutton.h>
-#include <qtooltip.h>
+#include <qlistwidget.h>
 
-#include "kscandevice.h"
-#include "kscanoptset.h"
+#include <klineedit.h>
+#include <klocale.h>
+#include <kconfig.h>
+#include <kdebug.h>
+#include <kmessagebox.h>
+#include <kstandardguiitem.h>
+
+#include "libkscan/kscandevice.h"
+#include "libkscan/kscanoptset.h"
+
 #include "newscanparams.h"
-
-#include "scanparamsdialog.h"
-#include "scanparamsdialog.moc"
 
 
 ScanParamsDialog::ScanParamsDialog(QWidget *parent,KScanDevice *scandev)
-    : KDialogBase(parent,NULL,true,i18n("Scan Parameters"),KDialogBase::Close)
+    : KDialog(parent)
 {
-    enableButtonSeparator(true);
+    setObjectName("ScanParamsDialog");
 
-    QFrame *mf = makeMainWidget();
-    QGridLayout *gl = new QGridLayout(mf,8,3,KDialog::marginHint(),KDialog::spacingHint());
+    setModal(true);
+    setButtons(KDialog::Close);
+    setCaption(i18n("Scan Parameters"));
+    showButtonSeparator(true);
 
-    paramsList = new QListBox(mf);
-    paramsList->setSelectionMode(QListBox::Single);
-    paramsList->setVScrollBarMode(QScrollView::AlwaysOn);
+    // TODO: can this be just a QWidget?
+    QFrame *mf = new QFrame(this);
+    setMainWidget(mf);
+    QGridLayout *gl = new QGridLayout(mf);
+    gl->setSpacing(KDialog::spacingHint());
+
+    paramsList = new QListWidget(mf);
+    paramsList->setSelectionMode(QAbstractItemView::SingleSelection);
+    paramsList->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
     paramsList->setMinimumWidth(200);
-    connect(paramsList,SIGNAL(selectionChanged(QListBoxItem *)),
-            SLOT(slotSelectionChanged(QListBoxItem *)));
-    connect(paramsList,SIGNAL(doubleClicked(QListBoxItem *)),
-            SLOT(slotLoadAndClose(QListBoxItem *)));
-    gl->addMultiCellWidget(paramsList,1,4,0,0);
+    connect(paramsList, SIGNAL(selectionChanged(QListWidgetItem *)),
+            SLOT(slotSelectionChanged(QListWidgetItem *)));
+    connect(paramsList, SIGNAL(doubleClicked(QListWidgetItem *)),
+            SLOT(slotLoadAndClose(QListWidgetItem *)));
+    gl->addWidget(paramsList, 1, 0, 5, 1);
 
-    QLabel *l = new QLabel(i18n("Saved scan parameter sets:"),mf);
-    gl->addWidget(l,0,0,Qt::AlignLeft);
+    QLabel *l = new QLabel(i18n("Saved scan parameter sets:"), mf);
+    gl->addWidget(l, 0, 0, Qt::AlignLeft);
     l->setBuddy(paramsList);
 
-    buttonLoad = new QPushButton(i18n("Load"),mf);
-    connect(buttonLoad,SIGNAL(clicked()),SLOT(slotLoad()));
-    QToolTip::add(buttonLoad,i18n("Load the selected scan parameter set to use as scanner settings"));
-    gl->addWidget(buttonLoad,1,2);
+    buttonLoad = new QPushButton(i18n("Load"), mf);
+    connect(buttonLoad, SIGNAL(clicked()), SLOT(slotLoad()));
+    buttonLoad->setToolTip(i18n("Load the selected scan parameter set to use as scanner settings"));
+    gl->addWidget(buttonLoad, 1, 2);
 
-    buttonSave = new QPushButton(i18n("Save..."),mf);
-    connect(buttonSave,SIGNAL(clicked()),SLOT(slotSave()));
-    QToolTip::add(buttonSave,i18n("Save the current scanner settings as a new scan parameter set"));
-    gl->addWidget(buttonSave,2,2);
+    buttonSave = new QPushButton(i18n("Save..."), mf);
+    connect(buttonSave, SIGNAL(clicked()), SLOT(slotSave()));
+    buttonSave->setToolTip(i18n("Save the current scanner settings as a new scan parameter set"));
+    gl->addWidget(buttonSave, 2, 2);
 
-    buttonDelete = new QPushButton(i18n("Delete"),mf);
-    connect(buttonDelete,SIGNAL(clicked()),SLOT(slotDelete()));
-    QToolTip::add(buttonDelete,i18n("Delete the selected scan parameter set"));
-    gl->addWidget(buttonDelete,3,2);
+    buttonDelete = new QPushButton(i18n("Delete"), mf);
+    connect(buttonDelete, SIGNAL(clicked()), SLOT(slotDelete()));
+    buttonDelete->setToolTip(i18n("Delete the selected scan parameter set"));
+    gl->addWidget(buttonDelete, 3, 2);
 
-    buttonEdit = new QPushButton(i18n("Edit..."),mf);
-    connect(buttonEdit,SIGNAL(clicked()),SLOT(slotEdit()));
-    QToolTip::add(buttonEdit,i18n("Change the name or description of the selected scan parameter set"));
-    gl->addWidget(buttonEdit,4,2);
+    buttonEdit = new QPushButton(i18n("Edit..."), mf);
+    connect(buttonEdit, SIGNAL(clicked()), SLOT(slotEdit()));
+    buttonEdit->setToolTip(i18n("Change the name or description of the selected scan parameter set"));
+    gl->addWidget(buttonEdit, 4, 2);
 
-    gl->setRowStretch(5,9);
-    gl->setRowSpacing(6,KDialog::marginHint());
+    gl->setRowStretch(5, 9);
+    gl->setRowMinimumHeight(6, KDialog::marginHint());
 
-    gl->setColStretch(0,9);
-    gl->setColSpacing(1,KDialog::marginHint());
+    gl->setColumnStretch(0, 9);
+    gl->setColumnMinimumWidth(1, KDialog::marginHint());
 
-    descLabel = new QLabel(i18n("-"),mf);
-    gl->addMultiCellWidget(descLabel,7,7,0,2);
+    descLabel = new QLabel(i18n("-"), mf);
+    gl->addWidget(descLabel, 7, 0, 1, 3);
 
     sane = scandev;
 
@@ -103,13 +112,13 @@ void ScanParamsDialog::populateList()
 
     for (KScanOptSet::StringMap::const_iterator it = sets.constBegin(); it!=sets.constEnd(); ++it)
     {
-        kdDebug(28000) << k_funcinfo << "saveset [" << it.key() << "]" << endl;
-        paramsList->insertItem(it.key());
+        kDebug() << "saveset" << it.key();
+        paramsList->addItem(it.key());
     }
 }
 
 
-void ScanParamsDialog::slotSelectionChanged(QListBoxItem *item)
+void ScanParamsDialog::slotSelectionChanged(QListWidgetItem *item)
 {
     QString desc;
     bool enable = false;
@@ -127,38 +136,37 @@ void ScanParamsDialog::slotSelectionChanged(QListBoxItem *item)
     buttonEdit->setEnabled(enable);
 
     if (enable) buttonLoad->setDefault(true);
-    else actionButton(KDialogBase::Close)->setDefault(true);
+    else setDefaultButton(KDialog::Close);
 }
 
 
 
 void ScanParamsDialog::slotLoad()
 {
-
-    QListBoxItem *item = paramsList->selectedItem();
+    QListWidgetItem *item = paramsList->currentItem();
     if (item==NULL) return;
     QString name = item->text();
-    kdDebug(28000) << k_funcinfo << "set [" << name << "]" << endl;
+    kDebug() << "set" << name;
 
-    KScanOptSet optSet(name.local8Bit());
+    KScanOptSet optSet(name.toLocal8Bit());
     if (!optSet.load())
     {
-        kdDebug(28000) << k_funcinfo << "Failed to load set [" << name << "]!" << endl;
+        kDebug() << "Failed to load set" << name;
         return;
     }
 
     sane->loadOptionSet(&optSet);
-    sane->slReloadAll();
+    sane->slotReloadAll();
 }
 
 
-void ScanParamsDialog::slotLoadAndClose(QListBoxItem *item)
+void ScanParamsDialog::slotLoadAndClose(QListWidgetItem *item)
 {
     if (item==NULL) return;
 
-    kdDebug(28000) << k_funcinfo << "set [" << item->text() << "]" << endl;
+    kDebug() << "set" << item->text();
 
-    paramsList->setSelected(item,true);
+    paramsList->setCurrentItem(item);
     slotLoad();
     accept();
 }
@@ -167,9 +175,9 @@ void ScanParamsDialog::slotLoadAndClose(QListBoxItem *item)
 void ScanParamsDialog::slotSave()
 {
     QString name = QString::null;
-    QListBoxItem *item = paramsList->selectedItem();
+    QListWidgetItem *item = paramsList->currentItem();
     if (item!=NULL) name = item->text();
-    kdDebug(28000) << k_funcinfo << "selected set [" << name << "]" << endl;
+    kDebug() << "selected set" << name;
 
     QString newdesc = QString::null;
     if (sets.contains(name)) newdesc = sets[name];
@@ -177,7 +185,7 @@ void ScanParamsDialog::slotSave()
     {
         const KScanOption *sm = sane->getExistingGuiElement(SANE_NAME_SCAN_MODE);
         const KScanOption *sr = sane->getExistingGuiElement(SANE_NAME_SCAN_RESOLUTION);
-        if (sm!=NULL && sr!=NULL) newdesc = i18n("%1, %2 dpi").arg(sm->get(),sr->get());
+        if (sm!=NULL && sr!=NULL) newdesc = i18n("%1, %2 dpi", sm->get().data(), sr->get().data());
     }
 
     NewScanParams d(this,name,newdesc,false);
@@ -186,22 +194,25 @@ void ScanParamsDialog::slotSave()
         QString newName = d.getName();
         QString newDesc = d.getDescription();
 
-        kdDebug(28000) << k_funcinfo << "name=[" << newName << "] desc=[" << newDesc << "]" << endl;
+        kDebug() << "name" << newName << "desc" << newDesc;
 
-        KScanOptSet optSet(newName.local8Bit());
+        KScanOptSet optSet(newName.toLocal8Bit());
         sane->getCurrentOptions(&optSet);
 
         optSet.saveConfig(sane->shortScannerName(),newName,newDesc);
         sets[newName] = newDesc;
 
-        paramsList->setCurrentItem(0);
-        QListBoxItem *item = paramsList->findItem(newName,Qt::ExactMatch|Qt::CaseSensitive);
-        if (item==NULL)
+        // TODO: why?
+        paramsList->setCurrentItem(NULL);
+        QList<QListWidgetItem *> found = paramsList->findItems(newName, Qt::MatchFixedString|Qt::MatchCaseSensitive);
+        if (found.count()==0)
         {
-            paramsList->insertItem(newName);
-            item = paramsList->item(paramsList->numRows()-1);
+            paramsList->addItem(newName);
+            item = paramsList->item(paramsList->count()-1);
         }
-        paramsList->setSelected(item,true);
+        else item = found.first();
+
+        paramsList->setCurrentItem(item);
         slotSelectionChanged(item);
     }
 }
@@ -209,10 +220,10 @@ void ScanParamsDialog::slotSave()
 
 void ScanParamsDialog::slotEdit()
 {
-    QListBoxItem *item = paramsList->selectedItem();
+    QListWidgetItem *item = paramsList->currentItem();
     if (item==NULL) return;
     QString oldName = item->text();
-    kdDebug(28000) << k_funcinfo << "selected set [" << oldName << "]" << endl;
+    kDebug() << "selected set" << oldName;
 
     NewScanParams d(this,oldName,sets[oldName],true);
     if (d.exec())
@@ -221,23 +232,23 @@ void ScanParamsDialog::slotEdit()
         QString newDesc = d.getDescription();
         if (newName==oldName && newDesc==sets[oldName]) return;
 
-        kdDebug(28000) << k_funcinfo << "new name=[" << newName << "] desc=[" << newDesc << "]" << endl;
+        kDebug() << "new name" << newName << "desc" << newDesc;
 
-        KScanOptSet optSet(oldName.local8Bit());
+        KScanOptSet optSet(oldName.toLocal8Bit());
         if (!optSet.load())
         {
-            kdDebug(28000) << k_funcinfo << "Failed to load set [" << oldName << "]!" << endl;
+            kDebug() << "Failed to load set" << oldName;
             return;
         }
 
         KScanOptSet::deleteSet(oldName);		// do first, in case name not changed
         optSet.saveConfig(sane->shortScannerName(),newName,newDesc);
 
-        sets.erase(oldName);				// do first, ditto
+        sets.remove(oldName);				// do first, ditto
         sets[newName] = newDesc;
 
-        int ix = paramsList->index(item);
-        paramsList->changeItem(newName,ix);
+        int ix = paramsList->row(item);
+        item->setText(newName);
         slotSelectionChanged(paramsList->item(ix));	// recalculate 'item', it may change
     }
 }
@@ -245,17 +256,18 @@ void ScanParamsDialog::slotEdit()
 
 void ScanParamsDialog::slotDelete()
 {
-    QListBoxItem *item = paramsList->selectedItem();
+    QListWidgetItem *item = paramsList->currentItem();
     if (item==NULL) return;
     QString name = item->text();
-    kdDebug(28000) << k_funcinfo << "set [" << name << "]" << endl;
+    kDebug() << "set" << name;
 
-    if (KMessageBox::warningContinueCancel(this,i18n("<qt>Do you really want to delete the set '<b>%1</b>'?").arg(name),
+    if (KMessageBox::warningContinueCancel(this,i18n("<qt>Do you really want to delete the set '<b>%1</b>'?", name),
                                            i18n("Delete Scan Parameter Set"),
-                                           KStdGuiItem::del(),
+                                           KStandardGuiItem::del(),
+                                           KStandardGuiItem::cancel(),
                                            "deleteSaveSet")!=KMessageBox::Continue) return;
 
     KScanOptSet::deleteSet(name);
-    paramsList->removeItem(paramsList->index(item));
+    delete paramsList->takeItem(paramsList->row(item));
     slotSelectionChanged(NULL);
 }

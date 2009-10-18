@@ -19,51 +19,53 @@
 
 #ifndef SCANSOURCEDIALOG_H
 #define SCANSOURCEDIALOG_H
-#include <qwidget.h>
-#include <kdialogbase.h>
-#include <qstrlist.h>
-#include <qstring.h>
+
+#include "libkscanexport.h"
+
+#include <kdialog.h>
 
 /**
   *@author Klaas Freitag
   */
 
+
+// TODO: into class
 typedef enum { ADF_OFF, ADF_SCAN_ALONG, ADF_SCAN_ONCE } AdfBehaviour;
 
-class KScanCombo;
 class QRadioButton;
-class QButtonGroup;
+class Q3ButtonGroup;
 
-class ScanSourceDialog : public KDialogBase
+class KScanCombo;
+
+
+class KSCAN_EXPORT ScanSourceDialog : public KDialog
 {
-   Q_OBJECT
+    Q_OBJECT
+
 public:
-   ScanSourceDialog( QWidget *parent, const QStrList, AdfBehaviour );
+    ScanSourceDialog(QWidget *parent, const QList<QByteArray> list, AdfBehaviour adfBehave);
    ~ScanSourceDialog();
 
    // void 	fillWithSources( QStrList *list );
    QString 	getText( void ) const;
 
-   AdfBehaviour 	getAdfBehave( void ) const
-      { return( adf ); }
+   AdfBehaviour 	getAdfBehave( void ) const { return( adf ); }
+   int          sourceAdfEntry() const;
 
 
 public slots:
-   void        	slNotifyADF( int );
-   void    	slChangeSource( int );
-   int          sourceAdfEntry( void ) const;
-   void         slSetSource( const QString source );
+   void         slotSetSource( const QString &source );
+
+protected slots:
+   void        	slotNotifyADF( int );
+   void    	slotChangeSource( int );
 
 private:
-
    KScanCombo    *sources;
-   QButtonGroup  *bgroup;
+   Q3ButtonGroup  *bgroup;
    QRadioButton  *rb0, *rb1;
    AdfBehaviour    adf;
    bool          adf_enabled;
-
-   class ScanSourceDialogPrivate;
-   ScanSourceDialogPrivate *d;
 };
 
-#endif
+#endif							// SCANSOURCEDIALOG_H

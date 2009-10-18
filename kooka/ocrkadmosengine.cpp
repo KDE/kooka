@@ -23,20 +23,20 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <kdebug.h>
-#include <klocale.h>
-#include <ktempfile.h>
-#include <kmessagebox.h>
+#include "ocrkadmosengine.h"
+#include "ocrkadmosengine.moc"
 
 #ifdef QT_THREAD_SUPPORT
 #include <qtimer.h>
 #endif
 
+#include <kdebug.h>
+#include <klocale.h>
+#include <ktemporaryfile.h>
+#include <kmessagebox.h>
+
 #include "kookaimage.h"
 #include "ocrkadmosdialog.h"
-
-#include "ocrkadmosengine.h"
-#include "ocrkadmosengine.moc"
 
 
 #define USE_KADMOS_FILEOP /* use a save-file for OCR instead of filling the reImage struct manually */
@@ -51,7 +51,7 @@
 OcrKadmosEngine::OcrKadmosEngine(QWidget *parent)
     : OcrEngine(parent)
 {
-    m_tmpFile = NULL;
+    m_tmpFile = QString::null;
 }
 
 
@@ -86,9 +86,9 @@ QString OcrKadmosEngine::engineDesc()
 }
 
 
-void OcrKadmosEngine::startProcess(OcrBaseDialog *dia,KookaImage *img)
+void OcrKadmosEngine::startProcess(OcrBaseDialog *dia, KookaImage *img)
 {
-    kdDebug(28000) << k_funcinfo << endl;
+    kDebug();
 
     KadmosDialog *kadDia = static_cast<KadmosDialog *>(dia);
 
@@ -102,9 +102,9 @@ void OcrKadmosEngine::startProcess(OcrBaseDialog *dia,KookaImage *img)
         finishedOCRVisible(false);
         return;
     }
-    QCString c = clasPath.latin1();
+    QByteArray c = clasPath.toLatin1();
 
-    kdDebug(28000) << "Using classifier " << c << endl;
+    kDebug() << "Using classifier" << c;
 #ifdef HAVE_KADMOS
     m_rep.Init( c );
     if( m_rep.kadmosError() ) /* check if kadmos initialised OK */
@@ -120,15 +120,23 @@ void OcrKadmosEngine::startProcess(OcrBaseDialog *dia,KookaImage *img)
         /** Since initialising succeeded, we start the ocr here **/
         m_rep.SetNoiseReduction( kadDia->getNoiseReduction() );
         m_rep.SetScaling( kadDia->getAutoScale() );
-        kdDebug(28000) << "Image size " << img->width() << " x " << img->height() << endl;
-        kdDebug(28000) << "Image depth " << img->depth() << ", colors: " << img->numColors() << endl;
+        kDebug() << "Image size [" << img->width() << " x " << img->height() << "]";
+        kDebug() << "Image depth" << img->depth() << "colors" << img->numColors();
 #ifdef USE_KADMOS_FILEOP
-        m_tmpFile = new KTempFile( QString(), QString("bmp"));
-        m_tmpFile->setAutoDelete( false );
-        m_tmpFile->close();
-        QString tmpFile = m_tmpFile->name();
-        kdDebug() << "Saving to file " << tmpFile << endl;
-        img->save( tmpFile, "BMP" );
+        KTemporaryFile tmpFile;
+        tmpFile.setSuffix(".bmp");
+        tmpFile.setAutoRemove(false);
+
+        if (!tmpFile.open())
+        {
+            kDebug() << "error creating temporary file";
+            return;
+        }
+        m_tmpFile = QFile::encodeName(tmpFile.fileName());
+
+        kDebug() << "Saving to file" << m_tmpFile;
+        img->save(&tmpFile,"BMP");			// save to temp file
+        tmpFile.close();
         m_rep.SetImage(tmpFile);
 #else							// USE_KADMOS_FILEOP
         m_rep.SetImage(img);
@@ -154,12 +162,12 @@ void OcrKadmosEngine::startProcess(OcrBaseDialog *dia,KookaImage *img)
 #endif							// HAVE_KADMOS
 #ifdef QT_THREAD_SUPPORT
     /* start a timer and wait until it fires. */
-    QTimer::singleShot( 500, this, SLOT( slotKadmosResult() ));
+    QTimer::singleShot(500, this, SLOT(slotKadmosResult()));
 #else							// QT_THREAD_SUPPORT
     slotKadmosResult();
 #endif							// QT_THREAD_SUPPORT
 
-    kdDebug(28000) << k_funcinfo << "done" << endl;
+    kDebug() << "done";
 }
 
 
@@ -175,19 +183,19 @@ void OcrKadmosEngine::startProcess(OcrBaseDialog *dia,KookaImage *img)
 
 void OcrKadmosEngine::slotKadmosResult()
 {
-    kdDebug(28000) << k_funcinfo << endl;
+    kDebug();
 
 #ifdef HAVE_KADMOS
     if( m_rep.finished() )
     {
         /* The recognition thread is finished. */
-        kdDebug(28000) << "kadmos is finished." << endl;
+        kDebug() << "Kadmos is finished";
 
         m_ocrResultText = "";
 	if( ! m_rep.kadmosError() )
 	{
 	    int lines = m_rep.GetMaxLine();
-	    kdDebug(28000) << "Count lines: " << lines << endl;
+	    kDebug() << "Count lines" << lines;
 	    m_ocrPage.clear();
 	    m_ocrPage.resize( lines );
 
@@ -196,7 +204,7 @@ void OcrKadmosEngine::slotKadmosResult()
 		// ocrWordList wordList = m_rep.getLineWords(line);
 		/* call an ocr engine independent method to use the spellbook */
 		ocrWordList words = m_rep.getLineWords(line);
-		kdDebug(28000) << "Have " << words.count() << " entries in list" << endl;
+		kDebug() << "Have" << words.count() << "entries in list";
 		m_ocrPage[line]=words;
 	    }
 
@@ -218,11 +226,11 @@ void OcrKadmosEngine::slotKadmosResult()
 void OcrKadmosEngine::cleanUpFiles()
 {
 #ifdef USE_KADMOS_FILEOP
-    if (m_tmpFile!=NULL)
+    if (!m_tmpFile.isNull())
     {
-        m_tmpFile->setAutoDelete(true);
-        delete m_tmpFile;
-        m_tmpFile = NULL;
+        kDebug() << "Removing temporary file" << m_tmpFile;
+        QFile::remove(m_tmpFile);
+        m_tmpFile = QString::null;
     }
 #endif
 }

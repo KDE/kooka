@@ -27,11 +27,14 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef __DW_MENU_ACTION
-#define __DW_MENU_ACTION
-#include <kdockwidget.h>
-#include <qstring.h>
-#include <kaction.h>
+#ifndef DWMENUACTION_H
+#define DWMENUACTION_H
+
+#include <ktoggleaction.h>
+
+class K3DockWidget;
+class K3DockMainWindow;
+
 
 /**
  * This class is just a helper class since the KDockWidget classes do not yet
@@ -40,23 +43,26 @@
  * This class provides Actions for show and hide parts of the GUI (dockwidgets)
  * Maybe that classes can be removed as soon the DockWidget know Actions
  */
-class dwMenuAction:public KToggleAction
+
+class dwMenuAction : public KToggleAction
 {
-   Q_OBJECT
+    Q_OBJECT
+
 public:
-   dwMenuAction( const QString& text,
-		 const KShortcut& cut = KShortcut(),
-		 KDockWidget *dw=0, QObject* parent = 0,
-		 KDockMainWindow * mw=0, const char* name = 0 );
-   virtual ~dwMenuAction();
+    dwMenuAction(const QString &text,
+		 K3DockWidget *dw,
+		 K3DockMainWindow *mw,
+                 QObject *parent = NULL);
+    virtual ~dwMenuAction();
 
 private:
-   KDockWidget *m_dw;
-   KDockMainWindow *m_mw;
+    K3DockWidget *m_dw;
+    K3DockMainWindow *m_mw;
+
 protected slots:
-   void slotToggled(bool);
-   void anDWChanged();
-   void slotWidgetDestroyed();
+    void slotToggled(bool);
+    void anDWChanged();
+    void slotWidgetDestroyed();
 };
 
-#endif
+#endif							// DWMENUACTION_H

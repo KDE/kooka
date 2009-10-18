@@ -24,25 +24,24 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef _OCR_WORD_
-#define _OCR_WORD_
+#ifndef OCRWORD_H
+#define OCRWORD_H
 
 #include <qstringlist.h>
-#include <qvaluevector.h>
-#include <qvaluelist.h>
+#include <qvector.h>
+#include <qlist.h>
 #include <qrect.h>
 
-class QString;
-class QRect;
 
 
-/* ==== ocrWord ====================================== */
-class ocrWord : public QString
+/* ==== OcrWord ====================================== */
+
+class OcrWord : public QString
 {
 public:
-    ocrWord(const QString& s);
-    ocrWord();
-    QStringList getAlternatives()
+    OcrWord(const QString& s);
+    OcrWord();
+    QStringList getAlternatives() const
         { return m_alternatives; }
 
     void setAlternatives( const QString& s )
@@ -60,7 +59,7 @@ public:
 
     void setRect( const QRect& r )
         { m_position = r; }
-    QRect rect()
+    QRect rect() const
         { return m_position; }
 
 private:
@@ -70,22 +69,22 @@ private:
     QRect       m_position;
 };
 
-/* ==== ocrWordList ====================================== */
+/* ==== OcrWordList ====================================== */
 
 /**
  * This represents a line of words in an ocr'ed document
  */
-class ocrWordList : public QValueList<ocrWord>
+class OcrWordList : public QList<OcrWord>
 {
 public:
-    ocrWordList();
+    OcrWordList();
     QStringList stringList();
 
     bool updateOCRWord( const QString& from, const QString& to );
 
-    bool findFuzzyIndex( const QString& word, ocrWord& resWord );
+    bool findFuzzyIndex( const QString& word, OcrWord& resWord );
 
-    QRect wordListRect( );
+    QRect wordListRect( ) const;
 
     void setBlock( int b );
     int block() const { return m_block; }
@@ -98,14 +97,14 @@ private:
  * All lines of a block: A value vector containing as much as entries
  * as lines are available in a block. Needs to be resized acordingly.
  */
-typedef QValueVector<ocrWordList> ocrBlock;
+typedef QVector<OcrWordList> ocrBlock;
 
 /**
  * Blocks taken together form the page.
  * Attention: Needs to be resized to the amount of blocks !!
  */
-typedef QValueVector<ocrBlock> ocrBlockPage;
+typedef QVector<ocrBlock> ocrBlockPage;
 
-typedef QValueVector<QRect> rectList;
+typedef QVector<QRect> rectList;
 
-#endif
+#endif							// OCRWORD_H

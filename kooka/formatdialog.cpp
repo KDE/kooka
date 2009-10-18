@@ -16,24 +16,24 @@
  *                                                                         *
  ***************************************************************************/
 
+#include "formatdialog.h"
+#include "formatdialog.moc"
+
 #include <qlayout.h>
 #include <qlabel.h>
 #include <qcombobox.h>
 #include <qlineedit.h>
+#include <qlistwidget.h>
 
 #include <kdialog.h>
 #include <kseparator.h>
 #include <klocale.h>
 #include <kdebug.h>
 #include <kconfig.h>
-#ifdef USE_KIMAGEIO
 #include <kimageio.h>
-#endif
 
-#include "imgsaver.h"
-
-#include "formatdialog.h"
-#include "formatdialog.moc"
+//#include "imgsaver.h"
+#include "kookaimage.h"
 
 
 struct formatInfo
@@ -43,6 +43,11 @@ struct formatInfo
     int recForTypes;
 };
 
+
+// TODO: there are more types now, this list needs extending.  Also the list
+// (even after cleaning up) includes some synonyms, e.g. TIF for TIFF.  Need
+// to get information for TIFF when TIF is requested, preferably without having
+// to duplicate the help strings.
 static struct formatInfo formats[] =
 {
     { "BMP", I18N_NOOP(
@@ -63,7 +68,7 @@ images. Only 8 bit per pixel depth is supported."),
       ImgSaver::ImgGray },
 
     { "PPM", I18N_NOOP(
-"<b>Portable Pixmap</b>, as used by Netpbm, is an uncompressed format for full colour \
+"<b>Portable Pixmap</b>, as used by Netpbm, is an uncompressed format for full color \
 images. Only 24 bit per pixel RGB is supported."),
       ImgSaver::ImgColor|ImgSaver::ImgHicolor },
 
@@ -124,7 +129,7 @@ optional transparency.\
       ImgSaver::ImgNone },
 
     { "TIFF", I18N_NOOP(				// writing may not be supported
-"<b>Tagged Image File Format</b> is a versatile and extensible file format often \
+"<b>Tagged Image File Format</b> is a versatile and extensible file format widely \
 supported by imaging and publishing applications. It supports indexed and true color \
 images with alpha transparency.\
 <p>Because there are many variations, there may sometimes be compatibility problems.\
@@ -140,12 +145,19 @@ Unless required for use with other applications, use an open format instead."),
 
 
 
-FormatDialog::FormatDialog(QWidget *parent,ImgSaver::ImageType type,
-                           bool askForFormat,const QString &format,
-                           bool askForFilename,const QString &filename)
-        : KDialogBase(parent,NULL,true,QString::null,
-                      KDialogBase::Ok|KDialogBase::Cancel|KDialogBase::User1)
+FormatDialog::FormatDialog(QWidget *parent, ImgSaver::ImageType type,
+                           bool askForFormat, const QString &format,
+                           bool askForFilename, const QString &filename)
+    : KDialog(parent)
 {
+    setObjectName("FormatDialog");
+
+    kDebug();
+
+    setModal(true);
+    setButtons(KDialog::Ok|KDialog::Cancel|KDialog::User1);
+    setCaption(askForFormat ? i18n("Save Assistant") : i18n("Save Scan"));
+
     QWidget *page = new QWidget(this);
     setMainWidget(page);
 
@@ -164,9 +176,8 @@ FormatDialog::FormatDialog(QWidget *parent,ImgSaver::ImageType type,
 
     m_wantAssistant = false;
 
-    setCaption(askForFormat ? i18n("Save Assistant") : i18n("Save Scan"));
-
-    QGridLayout *gl = new QGridLayout(page,1,3,0,KDialog::spacingHint());
+    QGridLayout *gl = new QGridLayout(page);
+    gl->setSpacing(KDialog::spacingHint());
     int row = 0;
 
     QLabel *l1;
@@ -174,40 +185,48 @@ FormatDialog::FormatDialog(QWidget *parent,ImgSaver::ImageType type,
 
     if (askForFormat)					// format selector section
     {
-        l1 = new QLabel(i18n("<qt>Select a format to save the scanned image.<br>This is a <b>%1</b>.")
-                                .arg(ImgSaver::picTypeAsString(type)),page);
-        gl->addMultiCellWidget(l1,row,row,0,2);
+        l1 = new QLabel(i18n("<qt>Select a format to save the scanned image.<br>This is a <b>%1</b>.",
+                             ImgSaver::picTypeAsString(type)), page);
+        gl->addWidget(l1, row, 0, 1, 3);
         ++row;
 
-        sep = new KSeparator(KSeparator::HLine,page);
-        gl->addMultiCellWidget(sep,row,row,0,2);
+        sep = new KSeparator(Qt::Horizontal, page);
+        gl->addWidget(sep, row, 0, 1, 3);
         ++row;
 
         // Insert scrolled list for formats
         l1 = new QLabel(i18n("Image file &format:"),page);
         gl->addWidget(l1,row,0,Qt::AlignLeft);
 
-        lb_format = new QListBox(page);
-#ifdef USE_KIMAGEIO
-        formatList = KImageIO::types();
-#else
-        formatList = QImage::outputFormatList();
-#endif
-        kdDebug(28000) << k_funcinfo << "have " << formatList.count() << " image types" << endl;
+        lb_format = new QListWidget(page);
+
+        // Clean up the list that we get from KImageIO (=Qt).  The raw list
+        // contains mixed case, spaces and duplicates.
+        QStringList supportedTypes = KImageIO::types(KImageIO::Writing);
+        formatList.clear();
+        for (QStringList::const_iterator it = supportedTypes.constBegin();
+             it!=supportedTypes.constEnd(); ++it)
+        {
+            QString type = (*it).toUpper().trimmed();
+            if (!formatList.contains(type)) formatList.append(type);
+        }
+        kDebug() << "have" << formatList.count() << "image types"
+                 << "from" << supportedTypes.count() << "supported";
+							// list box is filled later
         imgType = type;
-							// list is built later
-        connect(lb_format,SIGNAL(highlighted(QListBoxItem *)),SLOT(formatSelected(QListBoxItem *)));
+        connect(lb_format, SIGNAL(currentItemChanged(QListWidgetItem *,QListWidgetItem *)), SLOT(formatSelected(QListWidgetItem *)));
         l1->setBuddy(lb_format);
         gl->addWidget(lb_format,row+1,0);
         gl->setRowStretch(row+1,1);
 
         // Insert label for help text
         l_help = new QLabel(page);
-        l_help->setFrameStyle( QFrame::Panel|QFrame::Sunken );
+        l_help->setFrameStyle(QFrame::Panel|QFrame::Sunken);
         l_help->setAlignment(Qt::AlignLeft|Qt::AlignTop);
         l_help->setMinimumSize(230,200);
         l_help->setMargin(4);
-        gl->addMultiCellWidget(l_help,row,row+3,1,2);
+        l_help->setWordWrap(true);
+        gl->addWidget(l_help, row, 1, 4, 2);
 
         // Insert selection box for subformat
         l_subf = new QLabel(i18n("Image sub-format:"),page);
@@ -218,72 +237,78 @@ FormatDialog::FormatDialog(QWidget *parent,ImgSaver::ImageType type,
         l_subf->setBuddy(cb_subf);
         row += 4;
 
-        sep = new KSeparator(KSeparator::HLine,page);
-        gl->addMultiCellWidget(sep,row,row,0,2);
+        sep = new KSeparator(Qt::Horizontal, page);
+        gl->addWidget(sep, row, 0, 1, 3);
         ++row;
 
         // Checkbox to store setting
         cbRecOnly = new QCheckBox(i18n("Only show recommended formats for this image type"),page);
-        gl->addMultiCellWidget(cbRecOnly,row,row,0,2,Qt::AlignLeft);
+        gl->addWidget(cbRecOnly, row, 0, 1, 3, Qt::AlignLeft);
         ++row;
 
-        KConfig *conf = KGlobal::config();
-        conf->setGroup(OP_SAVER_GROUP);
-        cbRecOnly->setChecked(conf->readBoolEntry(OP_SAVER_REC_FMT,true));
-        connect(cbRecOnly,SIGNAL(toggled(bool)),SLOT(buildFormatList(bool)));
+        KConfigGroup grp = KGlobal::config()->group(OP_SAVER_GROUP);
+        cbRecOnly->setChecked(grp.readEntry(OP_SAVER_REC_FMT, true));
+        connect(cbRecOnly, SIGNAL(toggled(bool)), SLOT(buildFormatList(bool)));
 
         cbDontAsk  = new QCheckBox(i18n("Always use this save format for this image type"),page);
-        gl->addMultiCellWidget(cbDontAsk,row,row,0,2,Qt::AlignLeft);
+        gl->addWidget(cbDontAsk, row, 0, 1, 3, Qt::AlignLeft);
         ++row;
 
         buildFormatList(cbRecOnly->isChecked());	// now have this setting
 
-        showButton(KDialogBase::User1,false);		// don't want this button
+        showButton(KDialog::User1, false);		// don't want this button
     }
 
-    gl->setColStretch(1,1);
-    gl->setColSpacing(1,KDialog::marginHint());
+    gl->setColumnStretch(1, 1);
+    gl->setColumnMinimumWidth(1, KDialog::marginHint());
 
     if (askForFormat && askForFilename)
     {
-        sep = new KSeparator(KSeparator::HLine,page);
-        gl->addMultiCellWidget(sep,row,row,0,2);
+        sep = new KSeparator(Qt::Horizontal, page);
+        gl->addWidget(sep, row, 0, 1, 3);
         ++row;
     }
 
     if (askForFilename)					// file name section
     {
-        l1 = new QLabel(i18n("&Image file name:"),page);
-        gl->addMultiCellWidget(l1,row,row,0,2);
+        l1 = new QLabel(i18n("&Image file name:"), page);
+        gl->addWidget(l1, row, 0, 1, 3);
         ++row;
 
-        le_filename = new QLineEdit(filename,page);
-        connect(le_filename,SIGNAL(textChanged(const QString &)),SLOT(checkValid()));
+        le_filename = new QLineEdit(filename, page);
+        connect(le_filename, SIGNAL(textChanged(const QString &)), SLOT(checkValid()));
         l1->setBuddy(le_filename);
-        gl->addMultiCellWidget(le_filename,row,row,0,1);
+        gl->addWidget(le_filename, row, 0, 1, 2);
 
         l_ext = new QLabel("",page);
-        gl->addWidget(l_ext,row,2,Qt::AlignLeft);
+        gl->addWidget(l_ext, row, 2, Qt::AlignLeft);
         ++row;
 
-        if (!askForFormat) setButtonText(KDialogBase::User1,i18n("Select Format..."));
+        if (!askForFormat) setButtonText(KDialog::User1, i18n("Select Format..."));
     }
 
     if (lb_format!=NULL)				// have the format selector
     {							// preselect the remembered format
-        QListBoxItem *format_item = lb_format->findItem(format);
-        if (format_item!=NULL) lb_format->setSelected(format_item,true);
+        QList<QListWidgetItem *> items = lb_format->findItems(format, Qt::MatchFixedString);
+        if (!items.isEmpty())
+        {
+            QListWidgetItem *format_item = items.first();
+            if (format_item!=NULL) lb_format->setCurrentItem(format_item);
+        }
     }
     else						// no format selector, but
     {							// asking for a file name
         showExtension(format);				// show extension it will have
     }
+
+    connect(this, SIGNAL(okClicked()), SLOT(slotOk()));
+    connect(this, SIGNAL(user1Clicked()), SLOT(slotUser1()));
 }
 
 
 void FormatDialog::show()
 {
-    KDialogBase::show();
+    KDialog::show();
 
     if (le_filename!=NULL)				// asking for a file name
     {
@@ -296,28 +321,25 @@ void FormatDialog::show()
 void FormatDialog::showExtension(const QString &format)
 {
     if (l_ext==NULL) return;				// no UI for this
-
-    QString suf = KImageIO::suffix(format);
-    if (suf.isEmpty()) suf = format.lower();
-    l_ext->setText(QString(".%1").arg(suf));		// show extension it will have
-}
+    l_ext->setText("."+KookaImage::extensionForFormat(format));
+}							// show extension it will have
 
 
-void FormatDialog::formatSelected(QListBoxItem *item)
+void FormatDialog::formatSelected(QListWidgetItem *item)
 {
     if (l_help==NULL) return;				// not showing this
 
     if (item==NULL)					// nothing is selected
     {
 	l_help->setText(i18n("No format selected."));
-	enableButtonOK(false);
+	enableButtonOk(false);
 
         lb_format->clearSelection();
         if (l_ext!=NULL) l_ext->setText(".???");
 	return;
     }
 
-    lb_format->setSelected(item,true);			// focus highlight -> select
+    lb_format->setCurrentItem(item);			// focus highlight -> select
 
     QString itxt = item->text();
     const char *helptxt = NULL;
@@ -344,7 +366,7 @@ void FormatDialog::formatSelected(QListBoxItem *item)
 }
 
 
-void FormatDialog::check_subformat( const QString & format )
+void FormatDialog::check_subformat(const QString &format)
 {
     if (cb_subf==NULL) return;				// not showing this
     // not yet implemented
@@ -359,8 +381,8 @@ void FormatDialog::setSelectedFormat(const QString &fo)
 {
     if (lb_format==NULL) return;			// not showing this
 
-    QListBoxItem *item = lb_format->findItem(fo);
-    if (item!=NULL) lb_format->setSelected(lb_format->index(item),true);
+    QListWidgetItem *item = lb_format->findItems(fo, Qt::MatchFixedString).first();
+    if (item!=NULL) lb_format->setCurrentItem(item);
 }
 
 
@@ -368,8 +390,8 @@ QString FormatDialog::getFormat() const
 {
     if (lb_format==NULL) return (m_format);		// no UI for this
 
-    int item = lb_format->currentItem();
-    if (item>-1) return(lb_format->text(item));
+    const QListWidgetItem *item = lb_format->currentItem();
+    if (item!=NULL) return(item->text());
 
     return ("BMP");					// a sort of default
 }
@@ -382,7 +404,7 @@ QString FormatDialog::getFilename() const
 }
 
 
-QCString FormatDialog::getSubFormat( ) const
+QByteArray FormatDialog::getSubFormat( ) const
 {
    // Not yet...
    return( "" );
@@ -393,9 +415,9 @@ void FormatDialog::checkValid()
 {
     bool ok = true;					// so far, anyway
 
-    if (lb_format!=NULL && lb_format->selectedItem()==NULL) ok = false;
+    if (lb_format!=NULL && lb_format->selectedItems().count()==0) ok = false;
     if (le_filename!=NULL && le_filename->text().isEmpty()) ok = false;
-    enableButtonOK(ok);
+    enableButtonOk(ok);
 }
 
 
@@ -403,7 +425,7 @@ void FormatDialog::buildFormatList(bool recOnly)
 {
     if (lb_format==NULL) return;			// not showing this
 
-    kdDebug(28000) << k_funcinfo << "only=" << recOnly << " type=" << imgType << endl;
+    kDebug() << "only" << recOnly << "type" << imgType;
 
     lb_format->clear();
     for (QStringList::const_iterator it = formatList.constBegin();
@@ -426,7 +448,8 @@ void FormatDialog::buildFormatList(bool recOnly)
 	    if (!formatOk) continue;			// this format not to be shown
 	}
 
-	lb_format->insertItem((*it).upper());		// add format to list
+// TODO: format item (text) could also have MIME type pixmap
+	lb_format->addItem((*it).toUpper());		// add format to list
     }
 
     formatSelected(NULL);				// selection has been cleared
@@ -437,33 +460,32 @@ void FormatDialog::slotOk()
 {
     if (cbRecOnly!=NULL)				// have UI for this
     {
-        KConfig *conf = KGlobal::config();
-        conf->setGroup(OP_SAVER_GROUP);			// save state of this option
-        conf->writeEntry(OP_SAVER_REC_FMT,cbRecOnly->isChecked());
-    }
+        KConfigGroup grp = KGlobal::config()->group(OP_SAVER_GROUP);
+        grp.writeEntry(OP_SAVER_REC_FMT, cbRecOnly->isChecked());
+    }							// save state of this option
 
-    KDialogBase::slotOk();
+    accept();
 }
 
 
 void FormatDialog::slotUser1()
 {
     m_wantAssistant = true;
-    KDialogBase::slotOk();
+    accept();
 }
 
 
 
 void FormatDialog::forgetRemembered()
 {
-    KConfig *conf = KGlobal::config();
-    conf->setGroup(OP_SAVER_GROUP);
+    KConfigGroup grp = KGlobal::config()->group(OP_SAVER_GROUP);
 							// reset all options to default
-    conf->deleteEntry(OP_SAVER_REC_FMT);
-    conf->deleteEntry(OP_SAVER_ASK_FORMAT);
-    conf->deleteEntry(OP_SAVER_ASK_FILENAME);
-    conf->deleteEntry(OP_FORMAT_HICOLOR);
-    conf->deleteEntry(OP_FORMAT_COLOR);
-    conf->deleteEntry(OP_FORMAT_GRAY);
-    conf->deleteEntry(OP_FORMAT_BW);
+    grp.deleteEntry(OP_SAVER_REC_FMT);
+    grp.deleteEntry(OP_SAVER_ASK_FORMAT);
+    grp.deleteEntry(OP_SAVER_ASK_FILENAME);
+    grp.deleteEntry(OP_FORMAT_HICOLOR);
+    grp.deleteEntry(OP_FORMAT_COLOR);
+    grp.deleteEntry(OP_FORMAT_GRAY);
+    grp.deleteEntry(OP_FORMAT_BW);
+    grp.sync();
 }

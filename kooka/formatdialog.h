@@ -16,20 +16,20 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef __FORMATDIALOG_H__
-#define __FORMATDIALOG_H__
+#ifndef FORMATDIALOG_H
+#define FORMATDIALOG_H
 
 #include <qcheckbox.h>
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 
 #include "imgsaver.h"
 
 class QComboBox;
-class QListBox;
 class QLabel;
 class QLineEdit;
-class QListBoxItem;
+class QListWidget;
+class QListWidgetItem;
 
 /**
  *  Class FormatDialog:
@@ -37,17 +37,17 @@ class QListBoxItem;
  *  selecting it.
  **/
 
-class FormatDialog : public KDialogBase
+class FormatDialog : public KDialog
 {
     Q_OBJECT
 
 public:
-    FormatDialog(QWidget *parent,ImgSaver::ImageType type,
-                 bool askForFormat,const QString &format,
-                 bool askForFilename,const QString &filename);
+    FormatDialog(QWidget *parent, ImgSaver::ImageType type,
+                 bool askForFormat, const QString &format,
+                 bool askForFilename, const QString &filename);
 
     QString getFormat() const;
-    QCString getSubFormat() const;
+    QByteArray getSubFormat() const;
     QString getFilename() const;
     bool alwaysUseFormat() const { return (cbDontAsk!=NULL ? cbDontAsk->isChecked() : false); }
     bool useAssistant() const { return (m_wantAssistant); }
@@ -66,7 +66,7 @@ protected slots:
 private slots:
     void checkValid();
     void buildFormatList(bool recOnly);
-    void formatSelected(QListBoxItem *item);
+    void formatSelected(QListWidgetItem *item);
 
 private:
     void check_subformat(const QString &format);
@@ -76,7 +76,7 @@ private:
     ImgSaver::ImageType imgType;
 
     QComboBox *cb_subf;
-    QListBox *lb_format;
+    QListWidget *lb_format;
     QCheckBox *cbDontAsk;
     QCheckBox *cbRecOnly;
     QLabel *l_help;

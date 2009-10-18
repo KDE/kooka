@@ -26,97 +26,112 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <qdict.h>
-#include <qpixmap.h>
-
 #include <kapplication.h>
-#include <dcopclient.h>
 #include <kaboutdata.h>
 #include <kcmdlineargs.h>
 #include <klocale.h>
 #include <kglobal.h>
-#include <kimageio.h>
 #include <kiconloader.h>
 #include <kdebug.h>
-#include <kwin.h>
+#include <kwindowsystem.h>
 
 #include "kooka.h"
-#include "version.h"
-
-static const char description[] = I18N_NOOP(
-	"Kooka is a KDE application which provides access to scanner hardware\n"
-	"using the SANE library.\n\n"
-	"Kooka allows you to scan and save in any image format that KDE supports,\n"
-	"and can perform Optical Character Recognition using the open source GOCR\n"
-        "or OCRAD programs, or the commercial KADMOS library.");
-
-static const char license[] = I18N_NOOP(
-	"This program is distributed under the terms of the GPL v2 as published by\n"
-	"the Free Software Foundation\n\n"
-	"As a special exception, permission is given to link this program\n"
-	"with any version of the KADMOS OCR/ICR engine of reRecognition GmbH,\n"
-	"Kreuzlingen and distribute the resulting executable without\n"
-	"including the source code for KADMOS in the source distribution.\n\n"
-	"As a special exception, permission is given to link this program\n"
-	"with any edition of Qt, and distribute the resulting executable,\n"
-	"without including the source code for Qt in the source distribution.\n");
+#include "svnversion.h"
 
 
-static KCmdLineOptions options[] =
-{
-  { "d ", I18N_NOOP("The SANE compatible device specification (e.g. umax:/dev/sg0)"), "" },
-  { "g", I18N_NOOP("Gallery mode - do not connect to scanner"), "" },
-  KCmdLineLastOption
-};
+static const char shortDesc[] = "Scanning, image gallery and OCR";
 
+static const char longDesc[] = "Kooka is a KDE application which provides "
+    "access to scanner hardware using the "
+    "<a href=\"http://www.sane-project.org/\">SANE</a> library."
+    "\n\n"
+    "Kooka allows you to scan, save and view in any image format that KDE supports, "
+    "and can perform Optical Character Recognition using the open source "
+    "<a href=\"http://jocr.sourceforge.net/\">GOCR</a> or "
+    "<a href=\"http://www.gnu.org/software/ocrad/ocrad.html\">OCRAD</a> programs, "
+    "or the commercial <a href=\"http://www.rerecognition.com/\">KADMOS</a> library.";
+
+// TODO: is the second paragraph of this licence needed with GPL Qt?
+static const char addLicense[] =
+    "This program is distributed under the terms of the GPL v2 as published\n"
+    "by the Free Software Foundation.\n"
+    "\n"
+    "As a special exception, permission is given to link this program\n"
+    "with any edition of Qt, and distribute the resulting executable\n"
+    "without including the source code for Qt in the source distribution.\n"
+    "\n"
+    "As a special exception, permission is given to link this program\n"
+    "with any version of the KADMOS OCR/ICR engine of reRecognition GmbH\n"
+    "(http://www.rerecognition.com), and distribute the resulting executable\n"
+    "without including the source code for KADMOS in the source distribution.\n"
+    "\n"
+    "Note that linking against KADMOS is not permitted under the terms of\n"
+    "the Qt GPL licence, so if you wish to do this then you must have a\n"
+    "commercial Qt development licence.\n";
+
+static const char copyright[] =
+    "(C) 2000-2009 Klaas Freitag, Jonathan Marten";
 
 
 int main( int argc, char *argv[] )
 {
-   KAboutData about("kooka", I18N_NOOP("Kooka"), KOOKA_VERSION, description,
-		    KAboutData::License_GPL_V2, "(C) 2000 Klaas Freitag", 0,
-		    I18N_NOOP("http://techbase.kde.org/Projects/Kooka"));
+    KAboutData about("kooka",				// appName
+                     "",				// catalogName
+                     ki18n("Kooka"),			// programName
+#if SVN_HAVE_VERSION
+                     (VERSION " (SVN " SVN_REVISION_STRING " of " SVN_LAST_CHANGE ")"),
+#else
+                     VERSION,				// version
+#endif
+                     ki18n(shortDesc),			// shortDescription
+                     KAboutData::License_GPL_V2,	// licenseType
+                     ki18n(copyright),			// copyrightStatement
+                     ki18n(longDesc),			// text
+                     "http://techbase.kde.org/Projects/Kooka");
 
-   about.addAuthor( "Jonathan Marten", I18N_NOOP("current maintainer"), "jjm@keelhaul.me.uk" );
-   about.addAuthor( "Klaas Freitag", I18N_NOOP("developer"), "freitag@suse.de" );
-   about.addAuthor( "Mat Colton", I18N_NOOP("graphics, web"), "mat@colton.de" );
-   about.setLicenseText( license );
+    about.addAuthor(ki18n("Jonathan Marten"), ki18n("Current maintainer, KDE4 port"), "jjm@keelhaul.me.uk");
+    about.addAuthor(ki18n("Klaas Freitag"), ki18n("Developer"), "freitag@suse.de");
+    about.addCredit(ki18n("Mat Colton"), ki18n("Graphics, web"), "mat@colton.de");
+    about.addCredit(ki18n("Ivan Shvedunov"), ki18n("Original kscan application"), "ivan@rf-hp.npi.msu.su");
+    about.addCredit(ki18n("Alex Kempshall"), ki18n("Photocopy facility"), "alexkempshall@btinternet.com");
+    about.addLicenseText(ki18n(addLicense));
 
-   KCmdLineArgs::init(argc, argv, &about);
-   KCmdLineArgs::addCmdLineOptions( options ); // Add my own options.
+    KCmdLineArgs::init(argc, argv, &about);
 
-   KApplication app;
-   KGlobal::locale()->insertCatalogue("libkscan");
-   KImageIO::registerFormats();
-   KIconLoader *loader = KGlobal::iconLoader();
+    KCmdLineOptions options;
+    options.add("d <device>", ki18n("The SANE compatible device specification (e.g. umax:/dev/sg0)"));
+    options.add("g", ki18n("Gallery mode - do not connect to scanner"));
+    KCmdLineArgs::addCmdLineOptions(options);		// Add my own options
 
-   KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
-   QCString  devToUse = args->getOption( "d" );
-   if( args->isSet("g") )
-   {
-      devToUse = "gallery";
-   }
-   kdDebug(28000) << "DevToUse is " << devToUse << endl;
+    KApplication app;
+    KGlobal::locale()->insertCatalog("libkscan");
+//   KImageIO::registerFormats();
 
-   if (args->count() == 1)
-   {
-      args->usage();
-      // exit(-1);
-   }
+    KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
+    QString devToUse = args->getOption("d");
+    if (args->isSet("g"))
+    {
+        devToUse = "gallery";
+    }
+    kDebug() << "DevToUse is" << devToUse;
 
+// TODO: not sure what this did
+//    if (args->count()==1)
+//    {
+//        args->usage();
+//        // exit(-1);
+//    }
 
-   Kooka  *kooka = new Kooka(devToUse);
-   app.setMainWidget( kooka );
+    Kooka  *kooka = new Kooka(devToUse.toLocal8Bit());
 
-   KWin::setIcons(kooka->winId(), loader->loadIcon( "scanner", KIcon::Desktop ),
-		  loader->loadIcon("scanner", KIcon::Small) );
+    KWindowSystem::setIcons(kooka->winId(),
+                            KIconLoader::global()->loadIcon("scanner", KIconLoader::Desktop),
+                            KIconLoader::global()->loadIcon("scanner", KIconLoader::Small));
 
-   kooka->show();
-   app.processEvents();
-   kooka->startup();
-   args->clear();
-   int ret = app.exec();
+    kooka->show();
+    app.processEvents();
+    kooka->startup();
+    args->clear();
 
-   return ret;
-
+    return (app.exec());
 }

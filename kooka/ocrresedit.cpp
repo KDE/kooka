@@ -23,21 +23,25 @@
  *  without including the source code for Qt in the source distribution.   *
  *                                                                         *
  ***************************************************************************/
-#include <qcolor.h>
 
 #include "ocrresedit.h"
-#include "ocrword.h"
+#include "ocrresedit.moc"
+
+#include <qcolor.h>
+#include <qfile.h>
+#include <qtextstream.h>
+
 #include <kdebug.h>
 #include <kfiledialog.h>
 #include <klocale.h>
 
-#include <qfile.h>
-#include <qtextstream.h>
+#include "ocrword.h"
+
 
 /* -------------------- ocrResEdit -------------------- */
 
-ocrResEdit::ocrResEdit( QWidget *parent )
-    : QTextEdit(parent)
+OcrResEdit::OcrResEdit( QWidget *parent )
+    : Q3TextEdit(parent)
 {
     m_updateColor.setNamedColor( "SeaGreen");
     m_ignoreColor.setNamedColor( "CadetBlue4" );
@@ -45,62 +49,58 @@ ocrResEdit::ocrResEdit( QWidget *parent )
 }
 
 
-void ocrResEdit::slMarkWordWrong( int line, const ocrWord& word )
+void OcrResEdit::slotMarkWordWrong(int line, const OcrWord &word)
 {
     // m_textEdit->setSelection( line,
-    slReplaceWord( line, word, word, m_wrnColor );
+    slotReplaceWord( line, word, word, m_wrnColor );
 }
 
 
-void ocrResEdit::slUpdateOCRResult( int line, const QString& wordFrom,
+void OcrResEdit::slotUpdateOCRResult( int line, const QString& wordFrom,
                                    const QString& wordTo )
 {
     /* the index is quite useless here, since  the text could have had been
      * changed by corrections before. Thus better search the word and update
      * it.
      */
-    slReplaceWord( line, wordFrom, wordTo, m_updateColor );
+    slotReplaceWord( line, wordFrom, wordTo, m_updateColor );
 
 }
 
 
-void ocrResEdit::slIgnoreWrongWord( int line, const ocrWord& word )
+void OcrResEdit::slotIgnoreWrongWord( int line, const OcrWord& word )
 {
-    slReplaceWord( line, word, word, m_ignoreColor );
+    slotReplaceWord( line, word, word, m_ignoreColor );
 }
 
 
-void ocrResEdit::slSelectWord( int line, const ocrWord& word )
+void OcrResEdit::slotSelectWord(int line, const OcrWord &word)
 {
    if( line < paragraphs() )
    {
       QString editLine = text(line);
-      int cnt = editLine.contains( word);
-
-      if( cnt > 0 )
+      int pos = editLine.indexOf(word);
+      if (pos>-1)
       {
-	 int pos = editLine.find(word);
-	 setCursorPosition( line, pos );
+	 setCursorPosition(line, pos);
 	 setSelection( line, pos, line, pos + word.length());
       }
    }
 }
 
-void ocrResEdit::slReplaceWord( int line, const QString& wordFrom,
+void OcrResEdit::slotReplaceWord( int line, const QString& wordFrom,
                                const QString& wordTo, const QColor& color )
 {
-    kdDebug(28000) << "Updating word " << wordFrom << " in line " << line << endl;
+    kDebug() << "Updating word" << wordFrom << "in line" << line;
 
     bool isRO = isReadOnly();
 
     if( line < paragraphs() )
     {
         QString editLine = text(line);
-        int cnt = editLine.contains( wordFrom );
-
-        if( cnt > 0 )
+        int pos = editLine.indexOf(wordFrom);
+        if (pos>-1)
         {
-            int pos = editLine.find(wordFrom);
             setSelection( line, pos, line, pos+wordFrom.length());
 
             QColor saveCol = this->color();
@@ -116,18 +116,18 @@ void ocrResEdit::slReplaceWord( int line, const QString& wordFrom,
         }
         else
         {
-            kdDebug(28000) << "WRN: Paragraph does not contain word " << wordFrom << endl;
+            kDebug() << "WRN: Paragraph does not contain word" << wordFrom;
         }
 
     }
     else
     {
-        kdDebug(28000) << "WRN: editor does not have line " << line << endl;
+        kDebug() << "WRN: editor does not have line" << line;
     }
 }
 
 
-void ocrResEdit::slSaveText()
+void OcrResEdit::slotSaveText()
 {
     QString fileName = KFileDialog::getSaveFileName( (QDir::home()).path(),
                                                  "*.txt",
@@ -136,13 +136,11 @@ void ocrResEdit::slSaveText()
     if( fileName.isEmpty() )
       return;
     QFile file( fileName );
-    if ( file.open( IO_WriteOnly ) )
+    if (file.open(QIODevice::WriteOnly))
     {
         QTextStream stream( &file );
         stream << text();
         file.close();
     }
+// TODO: error reporting
 }
-
-#include "ocrresedit.moc"
-/*   */

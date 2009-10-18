@@ -20,7 +20,9 @@
 #ifndef ADDDEVICE_H
 #define ADDDEVICE_H
 
-#include <kdialogbase.h>
+#include "libkscanexport.h"
+
+#include <kdialog.h>
 
 class KLineEdit;
 
@@ -29,7 +31,7 @@ class KLineEdit;
  *  the case where it cannot be automatically detected by SANE.
  */
 
-class AddDeviceDialog : public KDialogBase
+class KSCAN_EXPORT AddDeviceDialog : public KDialog
 {
 	Q_OBJECT
 

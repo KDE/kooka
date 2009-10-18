@@ -20,6 +20,8 @@
 #ifndef SCANPARAMS_H
 #define SCANPARAMS_H
 
+#include "libkscanexport.h"
+
 #include "kscandevice.h"
 #include "scansourcedialog.h"
 
@@ -30,9 +32,10 @@
   *@author Klaas Freitag
   */
 
-class QScrollView;
+class Q3ScrollView;
 class QProgressDialog;
 class QPushButton;
+class QCheckBox;
 
 class KScanOption;
 class KGammaTable;
@@ -41,17 +44,20 @@ class KLed;
 
 class ScanSizeSelector;
 
+
+// TODO: into class
 typedef enum { ID_SANE_DEBUG, ID_QT_IMGIO, ID_SCAN } ScanMode;
 
-class ScanParams : public QFrame
+
+class KSCAN_EXPORT ScanParams : public QFrame
 {
     Q_OBJECT
 
 public:
-    ScanParams( QWidget *parent, const char *name = 0);
+    ScanParams( QWidget *parent);
     ~ScanParams();
 
-    bool connectDevice( KScanDevice* newScanDevice,bool galleryMode = false );
+    bool connectDevice(KScanDevice *newScanDevice, bool galleryMode = false);
 
     KLed *operationLED() { return m_led; }
 
@@ -59,50 +65,50 @@ public slots:
     /**
      * sets the scan area to the default, which is the whole area.
      */
-    void slMaximalScanSize( void );
+    void slotMaximalScanSize();
 
     /**
      * starts acquireing a preview image.
      * This ends up in a preview-signal of the scan-device object
      */
-    void slAcquirePreview( void );
-    void slStartScan( void );
+    void slotAcquirePreview();
+    void slotStartScan();
 
     /**
      * connect this slot to KScanOptions Signal optionChanged to be informed
      * on a options change.
      */
-    void slOptionNotify( KScanOption *kso );
+    void slotOptionNotify(const KScanOption *so);
 
 protected slots:
     /**
      * connected to the button which opens the source selection dialog
      */
-    void slSourceSelect( void );
+    void slotSourceSelect();
 
     /**
      *  Slot to call if the virtual scanner mode is changed
      */
-    void slVirtScanModeSelect( int id );
+    void slotVirtScanModeSelect( int id );
 
     /**
      *  Slot for result on an edit-Custom Gamma Table request.
      *  Starts a dialog.
      */
-    void slEditCustGamma( void );
+    void slotEditCustGamma();
 
     /**
      *  Slot called if a Gui-Option changed due to user action, eg. the
      *  user selects another entry in a List.
      *  Action to do is to apply the new value and check, if it affects others.
      */
-    void slReloadAllGui( KScanOption* );
+    void slotReloadAllGui(KScanOption *so);
 
     /**
      *  Slot called when the Edit Custom Gamma-Dialog has a new gamma table
      *  to apply. This is an internal slot.
      */
-    void slApplyGamma( KGammaTable* );
+    void slotApplyGamma(const KGammaTable *gt);
 
     /**
      *  internal slot called when the slider for x resolution changes.
@@ -112,17 +118,17 @@ protected slots:
      *
      *  That is e.g. useful for size calculations
      */
-    void slNewXResolution( KScanOption* );
+    void slotNewXResolution(KScanOption *so);
 
     /**
      *  the same slot as @see slNewXResolution but for y resolution changes.
      */
-    void slNewYResolution( KScanOption* );
-    void slNewScanMode();
+    void slotNewYResolution(KScanOption *so);
 
+    void slotNewScanMode();
 
-    void slotScanSizeSelected(QRect rect);
-    void slotNewPreviewRect(QRect rect);
+    void slotScanSizeSelected(const QRect &rect);
+    void slotNewPreviewRect(const QRect &rect);
 
 signals:
     /**
@@ -134,7 +140,7 @@ signals:
     void scanResolutionChanged(int xres,int yres);
     void scanModeChanged(int bytes_per_pix);
 
-    void newCustomScanSize(QRect rect);
+    void newCustomScanSize(const QRect &rect);
 
 private:
     KScanStat prepareScan(QString *vfp);
@@ -144,7 +150,7 @@ private:
     void initialise(KScanOption *opt);
     void initStartupArea();
     void setEditCustomGammaTableState();
-    QScrollView *scannerParams();
+    Q3ScrollView *scannerParams();
 
     void applyRect(const QRect &rect);
 
@@ -169,4 +175,4 @@ private:
     bool m_firstGTEdit;
 };
 
-#endif
+#endif							// SCANPARAMS_H

@@ -20,8 +20,12 @@
 #ifndef KSCANOPTSET_H
 #define KSCANOPTSET_H
 
-#include <qasciidict.h>
+#include "libkscanexport.h"
+
+#include <q3asciidict.h>
 #include <qmap.h>
+#include <qbytearray.h>
+#include <qlist.h>
 
 class KScanOption;
 
@@ -44,7 +48,7 @@ class KScanOption;
 
 
 
-class KScanOptSet: public QAsciiDict<KScanOption>
+class KSCAN_EXPORT KScanOptSet : public Q3AsciiDict<KScanOption>
 {
 
 public:
@@ -54,7 +58,7 @@ public:
     *  Constructor to create  a new Container. Takes a string as a name, which
     *  has no special meaning yet ;)
     */
-   KScanOptSet( const QCString& );
+   KScanOptSet( const QByteArray& );
    ~KScanOptSet();
 
    /**
@@ -67,10 +71,10 @@ public:
    /**
     *  returns a pointer to a stored option given by name.
     */
-   KScanOption *get( const QCString name ) const;
-   QCString      getValue( const QCString name ) const;
+   KScanOption *get( const QByteArray &name ) const;
+   QByteArray      getValue( const QByteArray &name ) const;
 
-   void backupOptionDict( const QAsciiDict<KScanOption>& ); 
+   void backupOptionDict( const Q3AsciiDict<KScanOption>& ); 
 
    /**
     * saves a configuration set to the configuration file 'ScanSettings'
@@ -92,20 +96,20 @@ public:
     */
    bool load(const QString &scannerName = QString::null);
 
-   QString  getDescription() const;
+    void setDescription(const QString &desc);
+    QString  getDescription() const { return (description); }
+    const QByteArray &optSetName() const { return (name); }
+
+
    
    static StringMap readList();
    static void deleteSet(const QString &name);
 
-public slots:
- 
-    void slSetDescription( const QString& );
-   
 private:
-   QCString name;
+   QByteArray name;
 
    /* List to collect objects for which memory was allocated and must be freed */
-   QPtrList<KScanOption> strayCatsList;
+   QList<KScanOption *> strayCatsList;
 
    QString description;
 };

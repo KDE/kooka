@@ -24,34 +24,35 @@
  *                                                                         *
  ***************************************************************************/
 
+#include "ocrbasedialog.h"
+#include "ocrbasedialog.moc"
+
+#include <qlabel.h>
+#include <qsizepolicy.h>
+#include <q3groupbox.h>
+#include <qcheckbox.h>
+#include <qlayout.h>
+
 #include <kconfig.h>
 #include <kglobal.h>
 #include <kdebug.h>
 #include <klocale.h>
-#include <kanimwidget.h>
-#include <kactivelabel.h>
+#include <kanimatedbutton.h>
 #include <kstandarddirs.h>
+#ifndef KDE4
 #include <ksconfig.h>
+#endif
 #include <kseparator.h>
+#include <khbox.h>
+#include <kvbox.h>
 
 #include <kio/job.h>
+#include <kio/jobuidelegate.h>
 #include <kio/previewjob.h>
-
-#include <qlabel.h>
-#include <qhbox.h>
-#include <qvbox.h>
-#include <qgrid.h>
-#include <qsizepolicy.h>
-#include <qgroupbox.h>
-#include <qcheckbox.h>
-
-#include <qlayout.h>
 
 #include "ocrengine.h"
 #include "kookaimage.h"
 
-#include "ocrbasedialog.h"
-#include "ocrbasedialog.moc"
 
 
 #define CFG_OCR_SPELL    "ocrSpellSettings"
@@ -67,12 +68,8 @@
 
 
 
-OcrBaseDialog::OcrBaseDialog(QWidget *parent,KSpellConfig *spellConfig,KDialogBase::DialogType face)
-    : KDialogBase(face,i18n("Optical Character Recognition"),
-                  KDialogBase::User1|KDialogBase::User2|KDialogBase::Close,
-                  KDialogBase::User1,parent,NULL,false,true,
-                  KGuiItem(i18n("Start OCR"),"launch",i18n("Start the Optical Character Recognition process")),
-                  KGuiItem(i18n("Cancel"),"stopocr",i18n("Stop the OCR Process"))),
+OcrBaseDialog::OcrBaseDialog(QWidget *parent, KSpellConfig *spellConfig)
+    : KPageDialog(parent),
       m_animation(NULL),
       m_metaBox(NULL),
       m_imgHBox(NULL),
@@ -84,35 +81,45 @@ OcrBaseDialog::OcrBaseDialog(QWidget *parent,KSpellConfig *spellConfig,KDialogBa
       m_gbSpellOpts(NULL),
       m_lVersion(NULL)
 {
-    kdDebug(28000) << k_funcinfo << endl;
+    kDebug();
 
-    KConfig *konf = KGlobal::config();
-    KConfigGroupSaver gs(konf,CFG_OCR_SPELL);
-    m_userWantsSpellCheck = konf->readBoolEntry(CFG_WANT_KSPELL,true);
+    setObjectName("OcrBaseDialog");
 
-    if (m_spellConfig!=NULL && konf->hasGroup(CFG_OCR_KSPELL))
+    setModal(true);
+    setButtons(KDialog::User1|KDialog::User2|KDialog::Close);
+    setDefaultButton(KDialog::User1);
+    setCaption(i18n("Optical Character Recognition"));
+    setButtonGuiItem(KDialog::User1, KGuiItem(i18n("Start OCR"), "launch", i18n("Start the Optical Character Recognition process")));
+    setButtonGuiItem(KDialog::User2, KGuiItem(i18n("Stop OCR"), "cancel", i18n("Stop the Optical Character Recognition process")));
+
+    const KConfigGroup grp1 = KGlobal::config()->group(CFG_OCR_SPELL);
+    m_userWantsSpellCheck = grp1.readEntry(CFG_WANT_KSPELL, true);
+
+#ifndef KDE4
+    if (m_spellConfig!=NULL && KGlobal::config()->hasGroup(CFG_OCR_KSPELL))
     {
-        konf->setGroup(CFG_OCR_KSPELL);
+        const KConfigGroup grp2 = KGlobal::config()->group(CFG_OCR_KSPELL);
         // from kdelibs/kdeui/ksconfig.cpp KSpellConfig:readGlobalSettings()
-        m_spellConfig->setNoRootAffix(konf->readNumEntry(CFG_KS_NOROOTAFFIX,0));
-        m_spellConfig->setRunTogether(konf->readNumEntry(CFG_KS_RUNTOGETHER,0));
-        m_spellConfig->setDictionary(konf->readEntry(CFG_KS_DICTIONARY));
-        m_spellConfig->setDictFromList(konf->readNumEntry(CFG_KS_DICTFROMLIST,false));
-        m_spellConfig->setEncoding(konf->readNumEntry(CFG_KS_ENCODING,0));	// ASCII
-        m_spellConfig->setClient(konf->readNumEntry(CFG_KS_CLIENT,0));		// ISpell
+        m_spellConfig->setNoRootAffix(grp2.readEntry(CFG_KS_NOROOTAFFIX, 0));
+        m_spellConfig->setRunTogether(grp2.readEntry(CFG_KS_RUNTOGETHER, 0));
+        m_spellConfig->setDictionary(grp2.readEntry(CFG_KS_DICTIONARY));
+        m_spellConfig->setDictFromList(grp2.readEntry(CFG_KS_DICTFROMLIST, false));
+        m_spellConfig->setEncoding(grp2.readEntry(CFG_KS_ENCODING, 0));	// ASCII
+        m_spellConfig->setClient(grp2.readEntry(CFG_KS_CLIENT, 0));	// ISpell
     }
+#endif
 
     /* Connect signals which disable the fields and store the configuration */
-    connect(this,SIGNAL(user1Clicked()),SLOT(writeConfig()));
-    connect(this,SIGNAL(user1Clicked()),SLOT(startOCR()));
-    connect(this,SIGNAL(user2Clicked()),SLOT(stopOCR()));
+    connect(this, SIGNAL(user1Clicked()), SLOT(slotWriteConfig()));
+    connect(this, SIGNAL(user1Clicked()), SLOT(slotStartOCR()));
+    connect(this, SIGNAL(user2Clicked()), SLOT(slotStopOCR()));
 
     m_previewSize.setWidth(200);
     m_previewSize.setHeight(300);
 
-    enableButton(KDialogBase::User1,true);		/* Start OCR */
-    enableButton(KDialogBase::User2,false);		/* Cancel */
-    enableButton(KDialogBase::Close,true);		/* Close */
+    enableButton(KDialog::User1, true);			/* Start OCR */
+    enableButton(KDialog::User2, false);		/* Stop OCR */
+    enableButton(KDialog::Close, true);			/* Close */
 }
 
 
@@ -121,10 +128,15 @@ OcrBaseDialog::~OcrBaseDialog()
 }
 
 
-KAnimWidget* OcrBaseDialog::getAnimation(QWidget *parent)
+KAnimatedButton* OcrBaseDialog::getAnimation(QWidget *parent)
 {
-   if (m_animation==NULL) m_animation = new KAnimWidget("kde",48,parent);
-   return (m_animation);
+    if (m_animation==NULL) m_animation = new KAnimatedButton(parent);
+    m_animation->setIcons("process-working-kde");
+    // TODO: is this needed?
+    //m_animation->setIconSize(KIconLoader::SizeLarge);
+    m_animation->updateIcons();
+
+    return (m_animation);
 }
 
 
@@ -139,15 +151,15 @@ OcrEngine::EngineError OcrBaseDialog::setupGui()
 
 void OcrBaseDialog::imgIntro()
 {
-    m_imgPage = addVBoxPage( i18n("Source") );
-    new QLabel(i18n("<b>Source Image Information</b>"),m_imgPage);
+    KVBox *vb = new KVBox(this);
+
+    new QLabel(i18n("<b>Source Image Information</b>"), vb);
 
     // Caption - Label and image
-    m_imgHBox = new QHBox( m_imgPage );
+    m_imgHBox = new KHBox(vb);
+    m_imgHBox->setSpacing(KDialog::spacingHint());
 
-    m_imgHBox->setSpacing( KDialog::spacingHint());
-
-    m_previewPix = new QLabel( m_imgHBox );
+    m_previewPix = new QLabel(m_imgHBox);
     m_previewPix->setPixmap(QPixmap());
     m_previewPix->setFixedSize(m_previewSize);
     m_previewPix->setAlignment( Qt::AlignCenter );
@@ -157,7 +169,9 @@ void OcrBaseDialog::imgIntro()
     /* See introduceImage where the meta box is filled with data from the
      * incoming widget.
      */
-    m_metaBox = new QVBox( m_imgHBox );
+    m_metaBox = new KVBox(m_imgHBox);
+
+    m_imgPage = addPage(vb, i18n("Source"));
 }
 
 
@@ -166,13 +180,16 @@ void OcrBaseDialog::imgIntro()
  */
 void OcrBaseDialog::ocrIntro()
 {
-    m_ocrPage = addVBoxPage(i18n("OCR"));
+    KVBox *vb = new KVBox(this);
 
-    QWidget *topWid = new QWidget(m_ocrPage);		// engine title/logo/description
-    QGridLayout *gl = new QGridLayout(topWid,3,2,0,KDialog::spacingHint());
+    //new QLabel(i18n("<b>OCR Title</b><br>"), vb);
 
-    QLabel *l = new QLabel(i18n("<b>Optical Character Recognition using %1</b><br>")
-                          .arg(ocrEngineName()),topWid);
+    // TODO: can topWid be combined with vb?
+    QWidget *topWid = new QWidget(vb);			// engine title/logo/description
+    QGridLayout *gl = new QGridLayout(topWid);
+    gl->setSpacing(KDialog::spacingHint());
+
+    QLabel *l = new QLabel(i18n("<b>Optical Character Recognition using %1</b><br>", ocrEngineName()),topWid);
     gl->addWidget(l,0,0);
 
     // Find the logo and display if available
@@ -186,42 +203,48 @@ void OcrBaseDialog::ocrIntro()
         gl->addWidget(imgLab,0,1,Qt::AlignRight|Qt::AlignTop);
     }
 
-    gl->setRowSpacing(1,KDialog::spacingHint());
+    gl->setRowMinimumHeight(1, KDialog::spacingHint());
 
-    KActiveLabel *al = new KActiveLabel(ocrEngineDesc(),topWid);
-    gl->addMultiCellWidget(al,2,2,0,1);
+    l = new QLabel(ocrEngineDesc(),topWid);
+    l->setOpenExternalLinks(true);
+    gl->addWidget(l, 2, 0, 1, 2);
 
-    gl->setRowStretch(2,1);
-    gl->setColStretch(0,1);
+    gl->setRowStretch(2, 1);
+    gl->setColumnStretch(0, 1);
+
+    m_ocrPage = addPage(vb, i18n("OCR"));
 }
 
 
 
-void OcrBaseDialog::ocrShowInfo(const QString &binary,const QString &version)
+void OcrBaseDialog::ocrShowInfo(const QString &binary, const QString &version)
 {
-    new KSeparator(KSeparator::HLine,m_ocrPage);
+    QWidget *page = ocrPage()->widget();
 
-    QWidget *botWid = new QWidget(m_ocrPage);		// engine path/version/spinner
-    QGridLayout *gl = new QGridLayout(botWid,3,3,0,KDialog::spacingHint());
+    new KSeparator(Qt::Horizontal, page);
+
+    QWidget *botWid = new QWidget(page);		// engine path/version/spinner
+    QGridLayout *gl = new QGridLayout(botWid);
+    gl->setSpacing(KDialog::spacingHint());
     QLabel *l;
 
     if (!binary.isNull())
     {
-        l = new QLabel(i18n("%1 binary:").arg(ocrEngineName()),botWid);
-        gl->addWidget(l,0,0,Qt::AlignRight);
+        l = new QLabel(i18n("%1 binary:", ocrEngineName()), botWid);
+        gl->addWidget(l, 0, 0, Qt::AlignRight);
 
-        l = new QLabel(QString("%1").arg(binary),botWid);
-        gl->addWidget(l,0,1,Qt::AlignLeft);
+        l = new QLabel(binary, botWid);
+        gl->addWidget(l, 0, 1, Qt::AlignLeft);
 
         l = new QLabel(i18n("Version:"),botWid);
-        gl->addWidget(l,1,0,Qt::AlignRight);
+        gl->addWidget(l, 1, 0, Qt::AlignRight);
 
         m_lVersion = new QLabel((!version.isNull() ? version : i18n("unknown")),botWid);
-        gl->addWidget(m_lVersion,1,1,Qt::AlignLeft);
+        gl->addWidget(m_lVersion, 1, 1,Qt::AlignLeft);
     }
 
-    gl->addMultiCellWidget(getAnimation(botWid),0,2,2,2,Qt::AlignTop|Qt::AlignRight);
-    gl->setColStretch(1,1);
+    gl->addWidget(getAnimation(botWid), 0, 2, 3, 1, Qt::AlignTop|Qt::AlignRight);
+    gl->setColumnStretch(1, 1);
 }
 
 
@@ -234,28 +257,30 @@ void OcrBaseDialog::ocrShowVersion(const QString &version)
 
 void OcrBaseDialog::spellCheckIntro()
 {
-    m_spellchkPage = addVBoxPage( i18n("Spell Check") );
+    KVBox *vb = new KVBox(this);
 
-    new QLabel(i18n("<b>OCR Post Processing</b><br>"),m_spellchkPage);
+    new QLabel(i18n("<b>OCR Post Processing</b><br>"), vb);
 
     /* Want the spell checking at all? Checkbox here */
     m_cbWantCheck = new QCheckBox( i18n("Spell-check the OCR results"),
-                                   m_spellchkPage );
+                                   vb);
     /* Spellcheck options */
-    m_gbSpellOpts = new QGroupBox( 1, Qt::Horizontal, i18n("Spell-check Options"),
-                                   m_spellchkPage );
-
+    m_gbSpellOpts = new Q3GroupBox( 1, Qt::Horizontal, i18n("Spell-check Options"),
+                                   vb );
+#ifndef KDE4
     KSpellConfig *sCfg = new KSpellConfig(m_gbSpellOpts,NULL,m_spellConfig,false);
     m_spellConfig = sCfg;				// use our copy from now on
-
+#endif
     /* connect toggle button */
     connect(m_cbWantCheck,SIGNAL(toggled(bool)),SLOT(slWantSpellcheck(bool)));
     m_cbWantCheck->setChecked(m_userWantsSpellCheck);
     m_gbSpellOpts->setEnabled(m_userWantsSpellCheck);
 
     /* A space eater */
-    QWidget *spaceEater = new QWidget(m_spellchkPage);
+    QWidget *spaceEater = new QWidget(vb);
     spaceEater->setSizePolicy( QSizePolicy( QSizePolicy::Ignored, QSizePolicy::Ignored ));
+
+    m_spellChkPage = addPage(vb, i18n("Spell Check"));
 }
 
 
@@ -274,15 +299,15 @@ void OcrBaseDialog::startAnimation()
 void OcrBaseDialog::introduceImage(const KookaImage *img)
 {
     if (img==NULL) return;
-    kdDebug(28000) << k_funcinfo << "url=" << img->url() << " filebound=" << img->isFileBound() << endl;
+    kDebug() << "url" << img->url() << "filebound" << img->isFileBound();
 
     delete m_metaBox;
-    m_metaBox = new QVBox(m_imgHBox);
+    m_metaBox = new KVBox(m_imgHBox);
 
     if (img->isFileBound())				// image backed by a file
     {
         /* Start to create a preview job for the thumb */
-        KURL::List li(img->url());
+        KUrl::List li(img->url());
         KIO::PreviewJob *m_job = KIO::filePreview(li,m_previewSize.width(),m_previewSize.height());
         if (m_job!=NULL)
         {
@@ -299,40 +324,51 @@ void OcrBaseDialog::introduceImage(const KookaImage *img)
     }
     else						// image only exists in memory
     {							// do the preview ourselves
-        QImage qimg = img->smoothScale(m_previewSize,QImage::ScaleMin);
-        slGotPreview(NULL,QPixmap(qimg));
+        QImage qimg = img->scaled(m_previewSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+        slotGotPreview(NULL, QPixmap::fromImage(qimg));
     }
 
     KFileMetaInfo info = img->fileMetaInfo();
     if (info.isValid())					// available from file
     {
-        QStringList groups = info.preferredGroups();
-        for ( QStringList::const_iterator it = groups.constBegin();
-              it!=groups.constEnd(); ++it)
-        {
-            const QString theGroup(*it);
-            QStringList keys = info.group(theGroup).supportedKeys();
-            if (keys.count()>0)
-            {
-                // info.groupInfo( theGroup )->translatedName()
-                // FIXME: howto get the translated group name?
-                QLabel *lGroup = new QLabel(theGroup,m_metaBox);
-                lGroup->setBackgroundColor(QColor(gray));
-                lGroup->setMargin(KDialog::spacingHint());
+        QWidget *nGrid = new QWidget(m_metaBox);
 
-                QGrid *nGrid = new QGrid(2,m_metaBox);
-                nGrid->setSpacing(KDialog::spacingHint());
-                for (QStringList::const_iterator keyIt = keys.constBegin();
-                     keyIt!=keys.constEnd(); ++keyIt)
+        QGridLayout *gl = new QGridLayout(nGrid);
+        gl->setSpacing(KDialog::spacingHint());
+        int row = 0;					// row in grid layout
+
+        const KFileMetaInfoGroupList groups = info.supportedGroups();
+        for (KFileMetaInfoGroupList::const_iterator grpIt = groups.constBegin();
+             grpIt!=groups.constEnd(); ++grpIt)
+        {
+            const KFileMetaInfoGroup theGroup(*grpIt);
+            kDebug() << "group" << theGroup.name();
+
+            const KFileMetaInfoItemList theItems = theGroup.items();
+            if (!theItems.isEmpty())
+            {
+                QLabel *l = new QLabel(theGroup.name(), nGrid);
+                QPalette pal = l->palette();
+                pal.setColor(l->backgroundRole(), Qt::gray);
+                l->setPalette(pal);
+                l->setMargin(KDialog::spacingHint());
+                gl->addWidget(l, row, 0, 1, 2);
+                ++row;
+
+                for (KFileMetaInfoItemList::const_iterator itemIt = theItems.constBegin();
+                     itemIt!=theItems.constEnd(); ++itemIt)
                 {
-                    KFileMetaInfoItem item = info.item(*keyIt);
-                    QString itKey = item.translatedKey();
-                    if (itKey.isEmpty()) itKey = item.key();
-                    if (!itKey.isEmpty())
+                    const KFileMetaInfoItem item = (*itemIt);
+                    QString itName = item.name();
+                    kDebug() << "item" << itName;
+
+                    if (!itName.isEmpty())
                     {
-                        new QLabel(item.translatedKey()+": ",nGrid);
-                        new QLabel(item.string(),nGrid);
-                        kdDebug(28000) << "hasKey " << *keyIt << endl;
+                        l = new QLabel(itName+": ",nGrid);
+                        gl->addWidget(l, row, 0);
+                        l = new QLabel(item.prefix()+item.value().toString()+item.suffix(), nGrid);
+                        gl->addWidget(l, row, 1);
+                        ++row;
                     }
                 }
             }
@@ -340,84 +376,98 @@ void OcrBaseDialog::introduceImage(const KookaImage *img)
     }
     else						// basic information by hand
     {
-        QLabel *lGroup = new QLabel(i18n("Selection"),m_metaBox);
-        lGroup->setBackgroundColor(QColor(gray));
-        lGroup->setMargin(KDialog::spacingHint());
+        QWidget *nGrid = new QWidget(m_metaBox);
 
-        QGrid *nGrid = new QGrid(2,m_metaBox);
-        nGrid->setSpacing(KDialog::spacingHint());
+        QGridLayout *gl = new QGridLayout(nGrid);
+        gl->setSpacing(KDialog::spacingHint());
 
-        new QLabel(i18n("Dimensions:"),nGrid);
-        new QLabel(QString("%1 x %2 pixels").arg(img->width()).arg(img->height()),nGrid);
+        QLabel *l = new QLabel(i18n("Selection"), m_metaBox);
+        QPalette pal = l->palette();
+        pal.setColor(l->backgroundRole(), Qt::gray);
+        l->setPalette(pal);
+        l->setMargin(KDialog::spacingHint());
+        gl->addWidget(l, 0, 0, 1, 2);
 
-        new QLabel(i18n("Bit Depth:"),nGrid);
-        new QLabel(QString("%1 bpp").arg(img->depth()),nGrid);
+        l = new QLabel(i18n("Dimensions:"), nGrid);
+        gl->addWidget(l, 1, 0);
+        l = new QLabel(i18n("%1 x %2 pixels", img->width(), img->height()), nGrid);
+        gl->addWidget(l, 1, 1);
+
+        l = new QLabel(i18n("Bit Depth:"), nGrid);
+        gl->addWidget(l, 2, 0);
+        l = new QLabel(i18n("%1 bpp", img->depth()), nGrid);
+        gl->addWidget(l, 3, 1);
     }
 
     QWidget *spaceEater = new QWidget(m_metaBox);
-    spaceEater->setSizePolicy(QSizePolicy(QSizePolicy::Ignored,QSizePolicy::Ignored));
+    spaceEater->setSizePolicy(QSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored));
     m_metaBox->show();
 }
 
 
-void OcrBaseDialog::slPreviewResult(KIO::Job *job)
+void OcrBaseDialog::slotPreviewResult(KIO::Job *job)
 {
-    if (job!=NULL && job->error()>0) job->showErrorDialog(NULL);
-}
-
-
-void OcrBaseDialog::slGotPreview(const KFileItem *item,const QPixmap &newPix)
-{
-    kdDebug(28000) << k_funcinfo << endl;
-    if (m_previewPix!=NULL) m_previewPix->setPixmap(newPix);
-}
-
-
-void OcrBaseDialog::writeConfig()
-{
-    kdDebug(28000) << k_funcinfo << endl;
-
-    KConfig *conf = KGlobal::config();
-    conf->setGroup(CFG_OCR_SPELL);
-    conf->writeEntry(CFG_WANT_KSPELL,m_cbWantCheck->isChecked());
-
-    if (m_spellConfig!=NULL)
+    if (job!=NULL && job->error()>0)
     {
-        conf->setGroup(CFG_OCR_KSPELL);
-        // from kdelibs/kdeui/ksconfig.cpp KSpellConfig::writeGlobalSettings()
-        conf->writeEntry(CFG_KS_NOROOTAFFIX,(int) m_spellConfig->noRootAffix());
-        conf->writeEntry(CFG_KS_RUNTOGETHER,(int) m_spellConfig->runTogether());
-        conf->writeEntry(CFG_KS_DICTIONARY,m_spellConfig->dictionary());
-        conf->writeEntry(CFG_KS_DICTFROMLIST,(int) m_spellConfig->dictFromList());
-        conf->writeEntry(CFG_KS_ENCODING,(int) m_spellConfig->encoding());
-        conf->writeEntry(CFG_KS_CLIENT,m_spellConfig->client());
+        job->ui()->setWindow(NULL);
+        job->ui()->showErrorMessage();
     }
 }
 
 
-void OcrBaseDialog::startOCR()
+void OcrBaseDialog::slotGotPreview(const KFileItem *item, const QPixmap &newPix)
+{
+    kDebug();
+    if (m_previewPix!=NULL) m_previewPix->setPixmap(newPix);
+}
+
+
+void OcrBaseDialog::slotWriteConfig()
+{
+    kDebug();
+
+    KConfigGroup grp1 = KGlobal::config()->group(CFG_OCR_SPELL);
+    grp1.writeEntry(CFG_WANT_KSPELL, m_cbWantCheck->isChecked());
+
+#ifndef KDE4
+    if (m_spellConfig!=NULL)
+    {
+        KConfigGroup grp2 = KGlobal::config()->group(CFG_OCR_KSPELL);
+        // from kdelibs/kdeui/ksconfig.cpp KSpellConfig::writeGlobalSettings()
+        grp2.writeEntry(CFG_KS_NOROOTAFFIX, (int) m_spellConfig->noRootAffix());
+        grp2.writeEntry(CFG_KS_RUNTOGETHER, (int) m_spellConfig->runTogether());
+        grp2.writeEntry(CFG_KS_DICTIONARY, m_spellConfig->dictionary());
+        grp2.writeEntry(CFG_KS_DICTFROMLIST, (int) m_spellConfig->dictFromList());
+        grp2.writeEntry(CFG_KS_ENCODING, (int) m_spellConfig->encoding());
+        grp2.writeEntry(CFG_KS_CLIENT, m_spellConfig->client());
+    }
+#endif
+}
+
+
+void OcrBaseDialog::slotStartOCR()
 {
     enableFields(false);
     startAnimation();
 
-    enableButton(KDialogBase::User1,false);		/* Start OCR */
-    enableButton(KDialogBase::User2,true);		/* Cancel */
-    enableButton(KDialogBase::Close,false);
+    enableButton(KDialog::User1,false);			/* Start OCR */
+    enableButton(KDialog::User2,true);			/* Stop OCR */
+    enableButton(KDialog::Close,false);			/* Close */
 }
 
 
-void OcrBaseDialog::stopOCR()
+void OcrBaseDialog::slotStopOCR()
 {
     enableFields(true);
     stopAnimation();
 
-    enableButton(KDialogBase::User1,true);
-    enableButton(KDialogBase::User2,false);
-    enableButton(KDialogBase::Close,true);
+    enableButton(KDialog::User1,true);
+    enableButton(KDialog::User2,false);
+    enableButton(KDialog::Close,true);
 }
 
 
-void OcrBaseDialog::slWantSpellcheck(bool wantIt)
+void OcrBaseDialog::slotWantSpellcheck(bool wantIt)
 {
     m_gbSpellOpts->setEnabled(wantIt);
     m_userWantsSpellCheck = wantIt;

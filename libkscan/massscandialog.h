@@ -20,33 +20,34 @@
 #ifndef MASSSCANDIALOG_H
 #define MASSSCANDIALOG_H
 
-#include <qstring.h>
-#include <qdialog.h>
+#include "libkscanexport.h"
+
+#include <kdialog.h>
 
 class QProgressBar;
 class QLabel;
+
 
 /**
   *@author Klaas Freitag
   */
 
-class MassScanDialog : public QDialog
+class KSCAN_EXPORT MassScanDialog : public KDialog
 {
    Q_OBJECT
+
 public: 
    MassScanDialog( QWidget *parent);
    ~MassScanDialog();
 	
 public slots:
 
-   void slStartScan( void );
-   void slStopScan( void );
-   void slFinished( void );	
+   void slotStartScan();
+   void slotStopScan();
+   void slotFinished();	
 
-   void setPageProgress( int p )
-      {
-	 progressbar->setProgress( p );
-      }
+    // TODO: needs to be a slot?
+   void setPageProgress( int p );
 		
 private:
    QString     scanopts;
@@ -59,9 +60,6 @@ private:
    QLabel      *l_progress;	
 
    QProgressBar *progressbar;
-
-   class MassScanDialogPrivate;
-   MassScanDialogPrivate *d;
 };
 
-#endif
+#endif							// MASSSCANDIALOG_H

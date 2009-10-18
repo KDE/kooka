@@ -40,7 +40,7 @@ class ThumbViewDirOperator : public KDirOperator
     Q_OBJECT
 
 public:
-    ThumbViewDirOperator(const KURL &url = KURL(),QWidget *parent = NULL,const char *name = NULL);
+    ThumbViewDirOperator(const KUrl &url = KUrl(), QWidget *parent = NULL);
     virtual ~ThumbViewDirOperator() {};
 
     QPopupMenu *contextMenu() const;

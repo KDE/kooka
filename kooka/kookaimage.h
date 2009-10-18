@@ -24,15 +24,15 @@
  *                                                                         *
  ***************************************************************************/
 
-
-
 #ifndef KOOKAIMAGE_H
 #define KOOKAIMAGE_H
-#include <kurl.h>
+
 #include <qimage.h>
-#include <qptrlist.h>
-#include <qvaluevector.h>
+#include <qlist.h>
+#include <qvector.h>
 #include <qrect.h>
+
+#include <kurl.h>
 
 #include <kfilemetainfo.h>
 
@@ -45,78 +45,78 @@ class KFileItem;
   * multiple pages.
   */
 
+// TODO: into class
 typedef enum { MaxCut, MediumCut } TileMode;
 
-class KookaImage: public QImage
+class KookaImage : public QImage
 {
 public:
-
-    KookaImage( );
+    KookaImage();
     /**
      * creating a subimage for a parent image.
      * @param subNo contains the sequence number of subimages to create.
      * @param p is the parent image.
      */
-    KookaImage(  int subNo, KookaImage *p );
-    KookaImage( 	const QImage& img );
+    KookaImage(int subNo, KookaImage *p);
+    KookaImage(const QImage &img);
 
-    KookaImage& operator=(const KookaImage& );
-    KookaImage& operator=(const QImage& );
+    KookaImage& operator=(const KookaImage &src);
+    KookaImage& operator=(const QImage &src);
+
     /**
      * load an image from a KURL. This method reads the entire file and sets
      * the values for subimage count.
      */
-    bool         loadFromUrl( const KURL& );
+    bool loadFromUrl(const KUrl &url);
 
     ~KookaImage();
 
     /**
-     * the amount of subimages. This is 0 if there are no subimages.
+     * the number of subimages. This is 0 if there are no subimages.
      */
-    int         	subImagesCount() const;
+    int subImagesCount() const;
 
     /**
      * the parent image.
      */
-    KookaImage*  parentImage() const;
+    KookaImage *parentImage() const;
 
     /**
      * returns true if this is a subimage.
      */
-    bool         isSubImage() const;
+    bool isSubImage() const;
 
     /**
      * extracts the correct subimage according to the number given in the constructor.
      */
-    void         extractNow();
+    void extractNow();
 
-    KURL         url() const;
-    QString      localFileName( ) const;
+    KUrl url() const { return m_url; }
+    QString localFileName() const;
 
     /**
      *  Set and get the KFileItem of the image. Note that the KFileItem pointer returned
-     *  may be zero.
+     *  may be NULL.
      */
-    KFileItem*   fileItem() const;
-    void         setFileItem( KFileItem* );
+    KFileItem *fileItem() const;
+    void setFileItem(KFileItem *item);
 
     /**
      * @return the KFileMetaInfo
      **/
-    const KFileMetaInfo fileMetaInfo( ) const;
+    const KFileMetaInfo fileMetaInfo() const;
 
     /**
      * set the url of the kooka image. Note that loadFromUrl sets this
      * url automatically.
      */
-    void setUrl( const KURL& url )
-        { m_url = url; }
+    void setUrl(const KUrl &url) { m_url = url; }
 
     /**
      * checks if the image is file bound ie. was loaded from file. If this
      * method returns false, fileMetaInfo and FileItem are undefined.
      */
-    bool isFileBound()const { return m_fileBound; }
+    bool isFileBound() const { return m_fileBound; }
 
     /**
      * Create tiles on the given image. That is just cut the image in parts
@@ -126,18 +126,28 @@ public:
      * left-top tile is index 1,1.
      * Use getTile() to read the QRect list.
      */
-    int cutToTiles( const QSize maxSize, int& rows, int& cols, TileMode mode = MaxCut );
+    int cutToTiles(const QSize maxSize, int &rows, int &cols, TileMode mode = MaxCut);
 
     /**
      * read tiles from the tile list. The image needs to be tiled by method
      * cutToTiles before.
      */
-    QRect getTileRect( int rowPos, int colPos ) const;
+    QRect getTileRect(int rowPos, int colPos) const;
 
     /**
      * retrieve the sub number of this image.
      */
     int subNumber() const { return m_subNo; }
+
+
+
+    // Useful things now missing from KImageIO
+    static QString extensionForFormat(const QString &format);
+    // TODO: format handling seems to be a mix of QString and QByteArray
+    static QString formatForUrl(const KUrl &url);
+
+
+
 
 private:
     int 		m_subImages;
@@ -149,22 +159,16 @@ private:
 
     /* In case being a subimage */
     KookaImage          *m_parent;
-    KURL                m_url;
+    KUrl                m_url;
     /* Fileitem if available */
     KFileItem           *m_fileItem;
     bool                m_fileBound;
 
-    QValueVector<QRect> m_tileVector;
+    QVector<QRect> m_tileVector;
     int                 m_tileCols;  /* number of tile columns  */
 };
 
 
-class KookaImageList: public QPtrList<KookaImage>
-{
-public:
-   KookaImageList() {}
-   ~KookaImageList() {}
-};
+//typedef QList<KookaImage *> KookaImageList;
 
-
-#endif
+#endif							// KOOKAIMAGE_H

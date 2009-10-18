@@ -24,35 +24,37 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef _OCR_RESEDIT_
-#define _OCR_RESEDIT_
+#ifndef OCRRESEDIT_H
+#define OCRRESEDIT_H
 
-#include <qtextedit.h>
+#include <q3textedit.h>
 
 class QString;
 class QColor;
-class ocrWord;
 
-class ocrResEdit : public QTextEdit
+class OcrWord;
+
+
+class OcrResEdit : public Q3TextEdit
 {
     Q_OBJECT
 public:
-    ocrResEdit( QWidget  *parent );
+    OcrResEdit(QWidget *parent);
 
 public slots:
-    void slUpdateOCRResult( int line, const QString& wordFrom,
+    void slotUpdateOCRResult( int line, const QString& wordFrom,
                             const QString& wordTo );
 
-    void slMarkWordWrong( int line, const ocrWord& word );
+    void slotMarkWordWrong( int line, const OcrWord& word );
 
-    void slIgnoreWrongWord( int line, const ocrWord& word );
+    void slotIgnoreWrongWord( int line, const OcrWord& word );
 
-    void slSelectWord( int line, const ocrWord& word );
+    void slotSelectWord( int line, const OcrWord& word );
 
-    void slSaveText();
+    void slotSaveText();
 
 protected slots:
-    void slReplaceWord( int line, const QString& wordFrom,
+    void slotReplaceWord( int line, const QString& wordFrom,
                         const QString& wordTo, const QColor& color );
 
 private:
@@ -62,4 +64,4 @@ private:
 
 };
 
-#endif
+#endif							// OCRRESEDIT_H

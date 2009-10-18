@@ -20,43 +20,46 @@
 #ifndef DISPGAMMA_H
 #define DISPGAMMA_H
 
+#include "libkscanexport.h"
+
 #include <qwidget.h>
 #include <qsizepolicy.h>
 #include <qsize.h>
-#include <qmemarray.h>
 
-extern "C"{
+extern "C"
+{
 #include <sane/sane.h>
 #include <sane/saneopts.h>
 }
+
+class QPaintEvent;
+class QVector<class T>;
+
+
 /**
   *@author Klaas Freitag
   */
 
-class DispGamma : public QWidget  {
+class KSCAN_EXPORT DispGamma : public QWidget
+{
     Q_OBJECT
+
 public: 
     DispGamma( QWidget *parent );
     ~DispGamma();
 
-    QSize sizeHint( void );
-    QSizePolicy sizePolicy( void );
+    QSize sizeHint() const;
+    QSizePolicy sizePolicy();
 
-    void setValueRef( QMemArray<SANE_Word> *newVals )
-    {
-        vals = newVals;
-    }
+    void setValueRef(QVector<SANE_Word> *newVals) { vals = newVals; }
+
 protected:
-    void paintEvent (QPaintEvent *ev );
-    void resizeEvent( QResizeEvent* );
+    void paintEvent(QPaintEvent *ev);
+    void resizeEvent(QResizeEvent *ev);
 
 private:
-
-    QMemArray<SANE_Word> *vals;
+    QVector<SANE_Word> *vals;
     int margin;
-
-   class DispGammaPrivate;
-   DispGammaPrivate *d;
 };
 
-#endif
+#endif							// DISPGAMMA_H

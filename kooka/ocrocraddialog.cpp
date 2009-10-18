@@ -24,36 +24,35 @@
  *                                                                         *
  ***************************************************************************/
 
+#include "ocrocraddialog.h"
+#include "ocrocraddialog.moc"
+
+#include <qlabel.h>
+#include <qregexp.h>
+#include <qcombobox.h>
+
 #include <kglobal.h>
 #include <kdebug.h>
 #include <klocale.h>
-#include <kanimwidget.h>
+#include <kanimatedbutton.h>
 #include <kseparator.h>
 #include <kmessagebox.h>
 #include <kurlrequester.h>
 #include <kprocess.h>
-
-#include <qlabel.h>
-#include <qregexp.h>
-#include <qvbox.h>
-#include <qhbox.h>
-#include <qcombobox.h>
+#include <kvbox.h>
+#include <khbox.h>
 
 #include "kookaimage.h"
 #include "kookapref.h"
 
 #include "ocrocradengine.h"
 
-#include "ocrocraddialog.h"
-#include "ocrocraddialog.moc"
 
-
-OcrOcradDialog::OcrOcradDialog(QWidget *parent,KSpellConfig *spellConfig)
-    : OcrBaseDialog(parent,spellConfig),
+OcrOcradDialog::OcrOcradDialog(QWidget *parent, KSpellConfig *spellConfig)
+    : OcrBaseDialog(parent, spellConfig),
       m_ocrCmd(QString::null),
       m_orfUrlRequester(NULL),
       m_layoutMode(0),
-      m_proc(NULL),
       m_version(0)
 {
 }
@@ -61,7 +60,6 @@ OcrOcradDialog::OcrOcradDialog(QWidget *parent,KSpellConfig *spellConfig)
 
 OcrOcradDialog::~OcrOcradDialog()
 {
-    if (m_proc!=NULL) delete m_proc;
 }
 
 
@@ -87,28 +85,27 @@ OcrEngine::EngineError OcrOcradDialog::setupGui()
 {
     OcrBaseDialog::setupGui();
 
-    QVBox *page = ocrPage();
-    KConfig *conf = KGlobal::config();
+    KVBox *page = static_cast<KVBox *>(ocrPage()->widget());
 
     /* layout detection mode combo */
-    conf->setGroup(CFG_GROUP_OCRAD);
-    int layoutDetect = conf->readNumEntry(CFG_OCRAD_LAYOUT_DETECTION,0);
+    KConfigGroup grp1 = KGlobal::config()->group(CFG_GROUP_OCRAD);
+    int layoutDetect = grp1.readEntry(CFG_OCRAD_LAYOUT_DETECTION, 0);
 
-    new KSeparator(KSeparator::HLine,page);
-    QHBox *hb1 = new QHBox(page);
+    new KSeparator(Qt::Horizontal, page);
+    KHBox *hb1 = new KHBox(page);
     hb1->setSpacing(KDialog::spacingHint());
 
     new QLabel(i18n("Layout analysis mode:"),hb1);
 
     m_layoutMode = new QComboBox(hb1);
-    m_layoutMode->insertItem(i18n("No Layout Detection"),0);
-    m_layoutMode->insertItem(i18n("Column Detection"),1);
-    m_layoutMode->insertItem(i18n("Full Layout Detection"),2);
-    m_layoutMode->setCurrentItem(layoutDetect);
+    m_layoutMode->addItem(i18n("No Layout Detection"),0);
+    m_layoutMode->addItem(i18n("Column Detection"),1);
+    m_layoutMode->addItem(i18n("Full Layout Detection"),2);
+    m_layoutMode->setCurrentIndex(layoutDetect);
 
     /* find the OCRAD binary */
-    conf->setGroup(CFG_GROUP_OCR_DIA);
-    QString res = conf->readPathEntry(CFG_OCRAD_BINARY);
+    KConfigGroup grp2 = KGlobal::config()->group(CFG_GROUP_OCR_DIA);
+    QString res = grp2.readPathEntry(CFG_OCRAD_BINARY, "");
     if (res.isEmpty())
     {
         res = KookaPref::tryFindOcrad();
@@ -118,7 +115,7 @@ OcrEngine::EngineError OcrOcradDialog::setupGui()
             KMessageBox::sorry(this,i18n("The path to the OCRAD binary is not configured or is not valid.\n"
                                          "Please enter or check the path in the Kooka configuration."),
                                i18n("OCRAD Software Not Found"));
-            enableButton(KDialogBase::User1,false);
+            enableButton(KDialog::User1, false);
         }
     }
 
@@ -135,18 +132,17 @@ OcrEngine::EngineError OcrOcradDialog::setupGui()
 }
 
 
-void OcrOcradDialog::writeConfig()
+void OcrOcradDialog::slotWriteConfig()
 {
-    kdDebug(28000) << k_funcinfo << endl;
+    kDebug();
 
-    OcrBaseDialog::writeConfig();
+    OcrBaseDialog::slotWriteConfig();
 
-    KConfig *conf = KGlobal::config();
-    conf->setGroup(CFG_GROUP_OCR_DIA);
-    conf->writePathEntry(CFG_OCRAD_BINARY,QString(getOCRCmd()));
+    KConfigGroup grp1 = KGlobal::config()->group(CFG_GROUP_OCR_DIA);
+    grp1.writePathEntry(CFG_OCRAD_BINARY, getOCRCmd());
 
-    conf->setGroup(CFG_GROUP_OCRAD);
-    conf->writeEntry(CFG_OCRAD_LAYOUT_DETECTION,layoutDetectionMode());
+    KConfigGroup grp2 = KGlobal::config()->group(CFG_GROUP_OCRAD);
+    grp2.writeEntry(CFG_OCRAD_LAYOUT_DETECTION,layoutDetectionMode());
 }
 
 
@@ -158,7 +154,7 @@ void OcrOcradDialog::enableFields(bool enable)
 
 int OcrOcradDialog::layoutDetectionMode() const
 {
-    return (m_layoutMode->currentItem());
+    return (m_layoutMode->currentIndex());
 }
 
 
@@ -167,49 +163,38 @@ int OcrOcradDialog::layoutDetectionMode() const
  */
 QString OcrOcradDialog::orfUrl() const
 {
-    if( m_orfUrlRequester )
-	return m_orfUrlRequester->url();
-    else
-	return QString();
+    if (m_orfUrlRequester!=NULL) return (m_orfUrlRequester->url().url());
+    else return (QString::null);
 }
 
 
 void OcrOcradDialog::version(const QString &exe)
 {
-    if (m_proc!=NULL) delete m_proc;
+    kDebug() << "of" << exe;
 
-    m_proc = new KProcess;
+    QString vers;
 
-    kdDebug(28000) << k_funcinfo << "version of " << exe << endl;
-    *m_proc << exe;
-    *m_proc << "-V";
+    KProcess proc;
+    proc << exe << "-V";
 
-    connect(m_proc,SIGNAL(receivedStdout(KProcess *,char *,int)),
-            SLOT(slReceiveStdIn(KProcess *,char *,int)));
-
-    m_proc->start(KProcess::NotifyOnExit,KProcess::Stdout);
-}
-
-
-/*
- * returns the numeric version of the ocrad program. It is queried in the slot
- * slReceiveStdIn, which parses the output of the ocrad -V call.
- *
- * Attention: This method returns 10 for ocrad v. 0.10 and 8 for ocrad-0.8
- */
-void OcrOcradDialog::slReceiveStdIn(KProcess *proc,char *buffer,int buflen)
-{
-    QString vstr = QString::fromUtf8(buffer,buflen);
-
-    QRegExp rx("GNU Ocrad version ([\\d\\.]+)");
-    if (rx.search(vstr)>-1)
+    int status = proc.execute(5000);
+    if (status==0)
     {
-        QString vStr = rx.cap(1);
-        ocrShowVersion(vStr);
+        QByteArray output = proc.readAllStandardOutput();
+        QRegExp rx("GNU Ocrad (version )?([\\d\\.]+)");
+        if (rx.indexIn(output)>-1)
+        {
+            vers = rx.cap(2);
+            m_version = vers.mid(2).toInt();
+        }
+        else vers = i18n("Unknown");
 
-        vStr.remove(0,2);
-        m_version = vStr.toInt();
     }
+    else
+    {
+        kDebug() << "failed with status" << status;
+        vers = i18n("Error");
+    }
+
+    ocrShowVersion(vers);
 }
-
-

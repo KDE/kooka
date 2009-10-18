@@ -25,14 +25,24 @@
  ***************************************************************************/
 
 #include "kookaprint.h"
-#include "kookaimage.h"
-#include <kprinter.h>
+#include "kookaprint.moc"
+
 #include <qpainter.h>
-#include <qpaintdevicemetrics.h>
 #include <qfontmetrics.h>
-#include "imgprintdialog.h"
+#ifndef KDE4
+#include <qpaintdevicemetrics.h>
+#endif
+
 #include <kdebug.h>
 #include <klocale.h>
+#ifndef KDE4
+#include <kprinter.h>
+#endif
+
+#include "imgprintdialog.h"
+#include "kookaimage.h"
+
+
 
 KookaPrint::KookaPrint( KPrinter *printer )
     :QObject(),
@@ -42,14 +52,15 @@ KookaPrint::KookaPrint( KPrinter *printer )
 
 }
 
-bool KookaPrint::printImage( KookaImage *img, int intextraMarginPercent = 10)
+bool KookaPrint::printImage(const KookaImage *img, int intextraMarginPercent)
 {
     bool result = true;
     if( ! m_printer || !img) return false;
 
+#ifndef KDE4
     m_extraMarginPercent = intextraMarginPercent;
     QString psMode = m_printer->option( OPT_PSGEN_DRAFT );
-    kdDebug(28000) << "User setting for quality: " << psMode << endl;
+    kDebug() << "User setting for quality:" << psMode;
 
 #if 0
     if( psMode == "1" )
@@ -64,12 +75,7 @@ bool KookaPrint::printImage( KookaImage *img, int intextraMarginPercent = 10)
     KookaImage   tmpImg;
     QPoint   pt(0, 0);               // the top-left corner (image will be centered)
 
-    // We use a QPaintDeviceMetrics to know the actual page size in pixel,
-    // this gives the real painting area
-    QPaintDeviceMetrics printermetrics( m_painter->device() );
-
     int screenRes  = m_printer->option( OPT_SCREEN_RES ).toInt();
-    // int printerRes = printermetrics.logicalDpiX();
     int printerRes = m_printer->resolution();
 
     QString scale = m_printer->option( OPT_SCALING );
@@ -83,38 +89,37 @@ bool KookaPrint::printImage( KookaImage *img, int intextraMarginPercent = 10)
     }
     else if( scale == "custom" )
     {
-	// kdDebug(28000) << "Not yet implemented: Custom scale" << endl;
+	// kDebug() << "Not yet implemented: Custom scale";
         double userWidthInch = (m_printer->option( OPT_WIDTH ).toDouble() / 25.4 );
 	reso = int( double(img->width()) / userWidthInch );
 
-        kdDebug(28000) << "Custom resolution: " << reso << endl;
+        kDebug() << "Custom resolution:" << reso;
 
     }
     else if( scale == "fitpage" )
     {
-	kdDebug(28000) << "Printing using maximum space on page" << endl;
+	kDebug() << "Printing using maximum space on page";
 	printFittingToPage( img );
 	reso = 0;  // to skip the printing on this page.
     }
 
     /* Scale the image for printing */
-    kdDebug(28000) << "Printer-Resolution: " << printerRes << " and scale-Reso: " << reso << endl;
+    kDebug() << "Printer-Resolution:" << printerRes << "scale-reso:" << reso;
     QSize margins = m_printer->margins();
-    kdDebug(28000) << "Printer-Margins left: " << margins.width() << " and top " << margins.height()
-                   << endl;
+    kDebug() << "Printer-Margins left:" << margins.width() << "top" << margins.height();
 
     if( reso > 0)
     {
 	double sizeInch = double(img->width()) / double(reso);
 	int newWidth = int(sizeInch * printerRes);
 
-	printerRes = printermetrics.logicalDpiY();
+	printerRes = m_painter->logicalDpiY();
 	sizeInch = double(img->height()) / double(reso);
 	int newHeight = int(sizeInch * printerRes );
 
-	kdDebug(28000) << "Scaling to printer size " << newWidth << " x " << newHeight << endl;
+	kDebug() << "Scaling to printer size [" << newWidth << "x" << newHeight << "]";
 
-	tmpImg = img->smoothScale(newWidth, newHeight, QImage::ScaleFree);
+	tmpImg = img->scaled(newWidth, newHeight, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
 
         QSize   sz = tmpImg.size();        // the current image size
         QSize   maxOnPage = maxPageSize(); // the maximum space on one side
@@ -122,8 +127,8 @@ bool KookaPrint::printImage( KookaImage *img, int intextraMarginPercent = 10)
         int maxRows, maxCols;
         int subpagesCnt = tmpImg.cutToTiles( maxOnPage, maxRows, maxCols );
 
-        kdDebug(28000) << "Subpages count: " << subpagesCnt <<
-            " Columns:" << maxCols << " Rows:" << maxRows << endl;
+        kDebug() << "Subpages count:" << subpagesCnt
+                 << "Columns:" << maxCols << "Rows:" << maxRows;
 
         int cnt = 0;
 
@@ -134,8 +139,8 @@ bool KookaPrint::printImage( KookaImage *img, int intextraMarginPercent = 10)
                 const QRect part = tmpImg.getTileRect( row, col );
                 const QSize imgSize = part.size();
 
-                kdDebug(28000) << "Printing part from " << part.x() << "/" << part.y()
-                               << " width:"<< part.width() << " and height " << part.height() << endl;
+                kDebug() << "Printing part from [" << part.x() << "," << part.y() << "]"
+                         << "width:"<< part.width() << "height:" << part.height();
                 QImage tileImg = tmpImg.copy( part );
 
                 m_painter->drawImage( printPosTopLeft(imgSize), tileImg );
@@ -148,13 +153,14 @@ bool KookaPrint::printImage( KookaImage *img, int intextraMarginPercent = 10)
     }
 
     m_painter = 0;  // no, this is not a memory leak. 
+#endif
     return result;
 }
 
-void KookaPrint::printFittingToPage(KookaImage *img)
+void KookaPrint::printFittingToPage(const KookaImage *img)
 {
-    if( ! img || ! m_painter ) return;
-
+    if (img==NULL || m_painter==NULL) return;
+#ifndef KDE4
     KookaImage   tmpImg;
 
     QString psMode = m_printer->option( OPT_RATIO );
@@ -179,10 +185,9 @@ void KookaPrint::printFittingToPage(KookaImage *img)
 	newHeight = int( double( img->height() ) * hAspect );
     }
     
-    tmpImg = img->smoothScale(newWidth, newHeight, QImage::ScaleFree);
-
+    tmpImg = img->scaled(newWidth, newHeight, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
     m_painter->drawImage( 0,0, tmpImg );
-    
+#endif
 }
 
 
@@ -264,11 +269,11 @@ void KookaPrint::drawCutSign( const QPoint& p, int num, MarkerDirection dir )
     int textY = p.y()+ tAway * toffY + textYOff;
     
     // m_painter->drawRect( textX, textY, bRect.width(), bRect.height() );
-    kdDebug(28000) << "Drawing to position " << textX << "/" << textY << endl;
+    kDebug() << "Drawing to position [" << textX << "," << textY << "]";
     m_painter->drawText( textX,
 			 textY,
 			 QString::number(num));
-    QBrush b( brushColor, NoBrush /* remove this to get debug color*/ );
+    QBrush b( brushColor, Qt::NoBrush /* remove this to get debug color*/ );
     
     
     m_painter->setBrush( b );
@@ -285,8 +290,7 @@ void KookaPrint::drawCornerMarker( const QSize& imgSize, int row, int col, int m
 {
     QPoint p;
 
-    kdDebug(28000) << "Marker: Row: " << row << " and col " << col <<" from max "
-		   << maxRows << "x" << maxCols << endl;
+    kDebug() << "Marker: Row" << row << "col" << col << "from max" << maxRows << "x" << maxCols;
     
     // Top left.
     p = printPosTopLeft( imgSize );
@@ -346,20 +350,21 @@ void KookaPrint::drawCornerMarker( const QSize& imgSize, int row, int col, int m
     drawMarkerAroundPoint( p ); /* at bottom left */
 }
 
+
 QSize KookaPrint::maxPageSize( int extraShrinkPercent ) const
 {
-    if( ! m_painter ) return QSize();
-    QPaintDeviceMetrics printermetrics( m_painter->device() );
+    if (!m_painter) return (QSize());
 
     double extraShrink = double(100-extraShrinkPercent)/100.0;
     
-    QSize retSize( printermetrics.width(), printermetrics.height() );
+    QSize retSize(m_painter->device()->width(), m_painter->device()->height());
     
     if( extraShrinkPercent > 0 )
-	retSize = QSize( int(double(printermetrics.width())* extraShrink) ,
-			 int(double(printermetrics.height())* extraShrink ));
-    return retSize;
+	retSize = QSize( int(double(retSize.width())*extraShrink) ,
+			 int(double(retSize.height())*extraShrink ));
+    return (retSize);
 }
+
 
 int KookaPrint::extraMarginPix() const
 {
@@ -409,4 +414,3 @@ QPoint KookaPrint::printPosBottomRight(const QSize& imgSize) const
 
 
 
-#include "kookaprint.moc"

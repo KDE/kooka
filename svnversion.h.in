@@ -1,0 +1,9 @@
+/* -*- mode:c; -*- */
+
+#ifndef VERSION
+#define VERSION			"@VERSION@"
+#endif
+
+#define SVN_REVISION_STRING	"@svn_revision@"
+#define SVN_LAST_CHANGE		"@svn_last_change@"
+#define SVN_HAVE_VERSION	@svn_have_version@

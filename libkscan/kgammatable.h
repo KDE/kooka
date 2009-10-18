@@ -20,14 +20,17 @@
 #ifndef KGAMMATABLE_H
 #define KGAMMATABLE_H
 
-#include <qmemarray.h>
+#include "libkscanexport.h"
+
+#include <qvector.h>
 #include <qobject.h>
 
 extern "C" {
 #include <sane/sane.h>
 }
 
-class KGammaTable: public QObject
+
+class KSCAN_EXPORT KGammaTable : public QObject
 {
    Q_OBJECT
 
@@ -39,7 +42,7 @@ public:
    KGammaTable ( int gamma = 100, int brightness = 0,
 		 int contrast = 0 );
    void setAll ( int gamma, int brightness, int contrast );
-   QMemArray<SANE_Word> *getArrayPtr( void ) { return &gt; }
+   QVector<SANE_Word> *getArrayPtr( void ) { return &gt; }
 
    int  getGamma( ) const      { return g; }
    int  getBrightness( ) const { return b; }
@@ -55,6 +58,9 @@ public slots:
    int        tableSize()      { return gt.size(); }
    SANE_Word  *getTable();
 
+
+// TODO: this signal is never used,
+// so does this class even need to be a Q_OBJECT?
 signals:
    void tableChanged(void);
 
@@ -62,10 +68,7 @@ private:
    void       calcTable( );
    int        g, b, c;
    bool       dirty;
-   QMemArray<SANE_Word> gt;
-
-   class KGammaTablePrivate;
-   KGammaTablePrivate *d;
+   QVector<SANE_Word> gt;
 };
 
-#endif // KGAMMATABLE_H
+#endif							// KGAMMATABLE_H

@@ -24,10 +24,12 @@
  *                                                                         *
  ***************************************************************************/
 
+#include "kookapref.h"
+#include "kookapref.moc"
+
 #include <qlayout.h>
 #include <qtooltip.h>
-#include <qvgroupbox.h>
-#include <qgrid.h>
+#include <q3vgroupbox.h>
 #include <qcheckbox.h>
 #include <qlabel.h>
 #include <qpushbutton.h>
@@ -41,92 +43,101 @@
 #include <kcolorbutton.h>
 #include <kstandarddirs.h>
 #include <kcombobox.h>
-#include <kactivelabel.h>
-#include <kapplication.h>
 #include <kmessagebox.h>
 #include <kurlrequester.h>
 #include <kseparator.h>
 #include <kicontheme.h>
 
-#include "devselector.h"
-#include "imgsaver.h"
+#include "libkscan/devselector.h"
 
+#include "imgsaver.h"
 #include "thumbview.h"
 #include "imageselectline.h"
 #include "formatdialog.h"
-
 #include "ocrgocrengine.h"
 #include "ocrocradengine.h"
 #include "ocrkadmosengine.h"
 
-#include "kookapref.h"
-#include "kookapref.moc"
 
 
-KookaPref::KookaPref()
-    : KDialogBase(KDialogBase::IconList, i18n("Preferences"),
-                  KDialogBase::Help|KDialogBase::Default|KDialogBase::Ok|KDialogBase::Apply|KDialogBase::Cancel,
-                  KDialogBase::Ok )
+KookaPref::KookaPref(QWidget *parent)
+    : KPageDialog(parent)
 {
-    // this is the base class for your preferences dialog.  it is now
-    // a Treelist dialog.. but there are a number of other
-    // possibilities (including Tab, Swallow, and just Plain)
-    konf = KGlobal::config ();
+    setObjectName("KookaPref");
+
+    setModal(true);
+    setButtons(KDialog::Help|KDialog::Default|KDialog::Ok|KDialog::Apply|KDialog::Cancel);
+    setDefaultButton(KDialog::Ok);
+    setCaption(i18n("Preferences"));
+    showButtonSeparator(true);
+
+    konf = KGlobal::config().data();
 
     setupGeneralPage();
     setupStartupPage();
     setupSaveFormatPage();
     setupThumbnailPage();
     setupOCRPage();
+
+    connect(this, SIGNAL(okClicked()), SLOT(slotSaveSettings()));
+    connect(this, SIGNAL(applyClicked()), SLOT(slotSaveSettings()));
+    connect(this, SIGNAL(defaultClicked()), SLOT(slotSetDefaults()));
+
+    setMinimumSize(670, 380);
 }
+
+
 
 void KookaPref::setupOCRPage()
 {
-    konf->setGroup( CFG_GROUP_OCR_DIA );
+    KConfigGroup grp = konf->group(CFG_GROUP_OCR_DIA);
 
-    QFrame *page = addPage( i18n("OCR"), i18n("Optical Character Recognition" ),
-			    BarIcon("ocr", KIcon::SizeMedium ) );
-
-    QGridLayout *lay = new QGridLayout(page,7,2,KDialog::marginHint(),
-                                       KDialog::spacingHint());
-    lay->setRowStretch(6,9);
-    lay->setColStretch(1,9);
+    QFrame *page = new QFrame(this);
+    QGridLayout *lay = new QGridLayout(page);
+    lay->setSpacing(KDialog::spacingHint());
+    lay->setRowStretch(6, 9);
+    lay->setColumnStretch(1, 9);
 
     engineCB = new KComboBox(page);
-    engineCB->insertItem(OcrEngine::engineName(OcrEngine::EngineNone),OcrEngine::EngineNone);
-    engineCB->insertItem(OcrEngine::engineName(OcrEngine::EngineGocr),OcrEngine::EngineGocr);
-    engineCB->insertItem(OcrEngine::engineName(OcrEngine::EngineOcrad),OcrEngine::EngineOcrad);
-    engineCB->insertItem(OcrEngine::engineName(OcrEngine::EngineKadmos),OcrEngine::EngineKadmos);
+    engineCB->addItem(OcrEngine::engineName(OcrEngine::EngineNone), OcrEngine::EngineNone);
+    engineCB->addItem(OcrEngine::engineName(OcrEngine::EngineGocr), OcrEngine::EngineGocr);
+    engineCB->addItem(OcrEngine::engineName(OcrEngine::EngineOcrad), OcrEngine::EngineOcrad);
+    engineCB->addItem(OcrEngine::engineName(OcrEngine::EngineKadmos), OcrEngine::EngineKadmos);
 
-    connect(engineCB,SIGNAL(activated(int)),SLOT(slotEngineSelected(int)));
-    lay->addWidget(engineCB,0,1);
+    connect(engineCB, SIGNAL(activated(int)), SLOT(slotEngineSelected(int)));
+    lay->addWidget(engineCB, 0, 1);
 
-    QLabel *lab = new QLabel(i18n("OCR Engine:"),page);
+    QLabel *lab = new QLabel(i18n("OCR Engine:"), page);
     lab->setBuddy(engineCB);
-    lay->addWidget(lab,0,0,Qt::AlignRight);
+    lay->addWidget(lab, 0, 0, Qt::AlignRight);
 
-    lay->setRowSpacing(1,KDialog::marginHint());
+    lay->setRowMinimumHeight(1, KDialog::marginHint());
 
-    binaryReq = new KURLRequester(page);
+    binaryReq = new KUrlRequester(page);
     binaryReq->setMode(KFile::File|KFile::ExistingOnly|KFile::LocalOnly);
     lay->addWidget(binaryReq,2,1);
 
     lab = new QLabel(i18n("Engine executable:"),page);
     lab->setBuddy(binaryReq);
-    lay->addWidget(lab,2,0,Qt::AlignRight);
+    lay->addWidget(lab, 2, 0, Qt::AlignRight);
 
-    lay->setRowSpacing(3,KDialog::marginHint());
+    lay->setRowMinimumHeight(3, KDialog::marginHint());
 
-    KSeparator *sep = new KSeparator(KSeparator::HLine,page);
-    lay->addMultiCellWidget(sep,4,4,0,1);
+    KSeparator *sep = new KSeparator(Qt::Horizontal, page);
+    lay->addWidget(sep, 4, 0, 1, 2);
+    lay->setRowMinimumHeight(5, KDialog::marginHint());
 
-    lay->setRowSpacing(5,KDialog::marginHint());
+    ocrDesc = new QLabel("?", page);
+    ocrDesc->setOpenExternalLinks(true);
+    ocrDesc->setWordWrap(true);
+    lay->addWidget(ocrDesc, 6, 0, 1, 2, Qt::AlignTop);
 
-    ocrDesc = new KActiveLabel("?",page);
-    lay->addMultiCellWidget(ocrDesc,6,6,0,1);
+    KPageWidgetItem *item = addPage(page, i18n("OCR"));
+    item->setHeader(i18n("Optical Character Recognition"));
+    item->setIcon(KIcon("ocr"));
 
-    originalEngine = static_cast<OcrEngine::EngineType>(konf->readNumEntry(CFG_OCR_ENGINE2,OcrEngine::EngineNone));
-    engineCB->setCurrentItem(originalEngine);
+    originalEngine = static_cast<OcrEngine::EngineType>(grp.readEntry(CFG_OCR_ENGINE2, static_cast<int>(OcrEngine::EngineNone)));
+    engineCB->setCurrentIndex(originalEngine);
     slotEngineSelected(originalEngine);
 }
 
@@ -134,7 +145,7 @@ void KookaPref::setupOCRPage()
 void KookaPref::slotEngineSelected(int i)
 {
     selectedEngine = static_cast<OcrEngine::EngineType>(i);
-    kdDebug(28000) << k_funcinfo << "engine=" << selectedEngine << endl;
+    kDebug() << "engine is" << selectedEngine;
 
     QString msg;
     switch (selectedEngine)
@@ -147,13 +158,13 @@ case OcrEngine::EngineNone:
 
 case OcrEngine::EngineGocr:
         binaryReq->setEnabled(true);
-        binaryReq->setURL(tryFindGocr());
+        binaryReq->setUrl(tryFindGocr());
         msg = OcrGocrEngine::engineDesc();
         break;
 
 case OcrEngine::EngineOcrad:
         binaryReq->setEnabled(true);
-        binaryReq->setURL(tryFindOcrad());
+        binaryReq->setUrl(tryFindOcrad());
         msg = OcrOcradEngine::engineDesc();
         break;
 
@@ -167,7 +178,7 @@ default:
         binaryReq->setEnabled(false);
         binaryReq->clear();
 
-        msg = i18n("Unknown engine %1!").arg(selectedEngine);
+        msg = i18n("Unknown engine %1!", selectedEngine);
         break;
     }
 
@@ -177,11 +188,10 @@ default:
 
 QString tryFindBinary(const QString &bin,const QString &configKey)
 {
-    KConfig *cfg = KGlobal::config();
+    KConfigGroup grp = KGlobal::config()->group(CFG_GROUP_OCR_DIA);
 
     /* First check the config files for an entry */
-    cfg->setGroup(CFG_GROUP_OCR_DIA);
-    QString exe = cfg->readPathEntry(configKey);	// try from config file
+    QString exe = grp.readPathEntry(configKey, QString::null);	// try from config file
 
     // Why do we do the second test here?  checkOCRBin() does the same, why also?
     if (!exe.isEmpty() && exe.contains(bin))
@@ -216,8 +226,8 @@ bool KookaPref::checkOCRBin(const QString &cmd,const QString &bin,bool show_msg)
     if (!fi.exists())
     {
         if (show_msg) KMessageBox::sorry(this,i18n("<qt>"
-                                                   "The path <b>%1</b> does not lead to a valid binary.\n"
-                                                   "Please check the path and and install the program if necessary.").arg(cmd),
+                                                   "The path <filename>%1</filename> is not a valid binary.\n"
+                                                   "Please check the path and and install the program if necessary.", cmd),
                                          i18n("OCR Engine Not Found"));
         return (false);
     }
@@ -227,8 +237,8 @@ bool KookaPref::checkOCRBin(const QString &cmd,const QString &bin,bool show_msg)
         if (fi.isDir() || (!fi.isExecutable()))
         {
             if (show_msg) KMessageBox::sorry(this,i18n("<qt>"
-                                                       "The program <b>%1</b> exists, but is not executable.\n"
-                                                       "Please check the path and permissions, and/or reinstall the program if necessary.").arg(cmd),
+                                                       "The program <filename>%1</filename> exists, but is not executable.\n"
+                                                       "Please check the path and permissions, and/or reinstall the program if necessary.", cmd),
                                              i18n("OCR Engine Not Executable"));
             return (false);
         }
@@ -241,255 +251,257 @@ bool KookaPref::checkOCRBin(const QString &cmd,const QString &bin,bool show_msg)
 
 void KookaPref::setupGeneralPage()
 {
-    QFrame *page = addPage( i18n("General"), i18n("General Options" ),
-			    BarIcon("configure", KIcon::SizeMedium ) );
-    QVBoxLayout *top = new QVBoxLayout( page, 0, spacingHint() );
+    KConfigGroup grp = konf->group(GROUP_GALLERY);
+
+    QFrame *page = new QFrame(this);
+    QVBoxLayout *top = new QVBoxLayout(page);
+    top->setSpacing(KDialog::spacingHint());
 
     /* Description-Label */
-    top->addWidget(new QLabel(i18n("These options will take effect immediately."),page));
-    top->addSpacing(2*KDialogBase::spacingHint());
+    top->addWidget(new QLabel(i18n("These options will take effect immediately."), page));
+    top->addSpacing(2*KDialog::spacingHint());
 
     /* Gallery options */
-    QVGroupBox *gg = new QVGroupBox(i18n("Image Gallery"),page);
-
-    konf->setGroup(GROUP_GALLERY);
+    Q3VGroupBox *gg = new Q3VGroupBox(i18n("Image Gallery"),page);
 
     /* Layout */
-    QHBox *hb1 = new QHBox(gg);
-    QLabel *lab = new QLabel(i18n("Show recent folders: "),hb1);
+    KHBox *hb1 = new KHBox(gg);
+    QLabel *lab = new QLabel(i18n("Show recent folders: "), hb1);
 
     layoutCB = new KComboBox(hb1);
-    layoutCB->insertItem(i18n("Not shown"),KookaGallery::NoRecent);
-    layoutCB->insertItem(i18n("At top"),KookaGallery::RecentAtTop);
-    layoutCB->insertItem(i18n("At bottom"),KookaGallery::RecentAtBottom);
-    layoutCB->setCurrentItem(konf->readNumEntry(GALLERY_LAYOUT,KookaGallery::RecentAtTop));
+    layoutCB->addItem(i18n("Not shown"), KookaGallery::NoRecent);
+    layoutCB->addItem(i18n("At top"), KookaGallery::RecentAtTop);
+    layoutCB->addItem(i18n("At bottom"), KookaGallery::RecentAtBottom);
+    layoutCB->setCurrentIndex(grp.readEntry(GALLERY_LAYOUT, static_cast<int>(KookaGallery::RecentAtTop)));
     lab->setBuddy(layoutCB);
-    hb1->setStretchFactor(layoutCB,1);
+    hb1->setStretchFactor(layoutCB, 1);
 
     /* Allow renaming */
-    cbAllowRename = new QCheckBox(i18n("Allow click-to-rename"),gg);
-    QToolTip::add( cbAllowRename,
-		   i18n( "Check this if you want to be able to rename gallery items by clicking on them "
-                         "(otherwise, use the \"Rename\" menu option)"));
-    cbAllowRename->setChecked(konf->readBoolEntry(GALLERY_ALLOW_RENAME,false));
+    cbAllowRename = new QCheckBox(i18n("Allow click-to-rename"), gg);
+    cbAllowRename->setToolTip(i18n("Check this if you want to be able to rename gallery items by clicking on them (otherwise, use the \"Rename\" menu option)"));
+    cbAllowRename->setChecked(grp.readEntry(GALLERY_ALLOW_RENAME, false));
 
     top->addWidget(gg);
 
-    top->addSpacing(2*KDialogBase::marginHint());
+    top->addSpacing(2*KDialog::marginHint());
 
     /* Enable messages and questions */
-    QLabel *l = new QLabel(i18n("Use this button to reenable all messages and questions which\nhave been hidden by using \"Don't ask me again\"."),page);
-    top->addWidget(l);
+    lab = new QLabel(i18n("Use this button to reenable all messages and questions which\nhave been hidden by using \"Don't ask me again\"."), page);
+    top->addWidget(lab);
 
-    pbEnableMsgs = new QPushButton(i18n("Enable Messages/Questions"),page);
-    connect(pbEnableMsgs,SIGNAL(clicked()),SLOT(slotEnableWarnings()));
+    pbEnableMsgs = new QPushButton(i18n("Enable Messages/Questions"), page);
+    connect(pbEnableMsgs, SIGNAL(clicked()), SLOT(slotEnableWarnings()));
     top->addWidget(pbEnableMsgs,0,Qt::AlignLeft);
 
     top->addStretch(10);
+
+    KPageWidgetItem *item = addPage(page, i18n("General"));
+    item->setHeader(i18n("General Options"));
+    item->setIcon(KIcon("configure"));
 }
 
 
 
 void KookaPref::setupStartupPage()
 {
+    KConfigGroup grp = konf->group(GROUP_STARTUP);
 
     /* startup options */
-    konf->setGroup( GROUP_STARTUP );
+    QFrame *page = new QFrame(this);
+    QVBoxLayout *top = new QVBoxLayout(page);
+    top->setSpacing(KDialog::spacingHint());
 
-    QFrame *page = addPage( i18n("Startup"), i18n("Startup Options" ),
-			    BarIcon("gear", KIcon::SizeMedium ) );
-    QVBoxLayout *top = new QVBoxLayout( page, 0, spacingHint() );
     /* Description-Label */
-    top->addWidget(new QLabel(i18n("These options will take effect when Kooka is next started."),page));
-    top->addSpacing(2*KDialogBase::spacingHint());
+    top->addWidget(new QLabel(i18n("These options will take effect when Kooka is next started."), page));
+    top->addSpacing(2*KDialog::spacingHint());
 
     /* Query for network scanner (Checkbox) */
-    cbNetQuery = new QCheckBox( i18n("Query network for available scanners"),
-				page);
-    QToolTip::add( cbNetQuery,
-		   i18n( "Check this if you want a network query for available scanners.\nNote that this does not mean a query over the entire network but only the stations configured for SANE!" ));
-    cbNetQuery->setChecked( ! (konf->readBoolEntry( STARTUP_ONLY_LOCAL, false )) );
-
+    cbNetQuery = new QCheckBox(i18n("Query network for available scanners"), page);
+    cbNetQuery->setToolTip(i18n("Check this if you want a network query for available scanners.\nNote that this does not mean a query over the entire network but only the stations configured for SANE."));
+    cbNetQuery->setChecked(!grp.readEntry(STARTUP_ONLY_LOCAL, false));
+    top->addWidget(cbNetQuery);
 
     /* Show scanner selection box on startup (Checkbox) */
-    cbShowScannerSelection = new QCheckBox( i18n("Show the scanner selection dialog"),page);
-    QToolTip::add( cbShowScannerSelection,
-		   i18n( "Check this if you once checked 'do not show the scanner selection on startup',\nbut you want to see it again." ));
-
-    cbShowScannerSelection->setChecked( !konf->readBoolEntry( STARTUP_SKIP_ASK, false ));
+    cbShowScannerSelection = new QCheckBox(i18n("Show the scanner selection dialog"), page);
+    cbShowScannerSelection->setToolTip(i18n("Check this to show the scanner selection dialogue on startup."));
+    cbShowScannerSelection->setChecked(!grp.readEntry(STARTUP_SKIP_ASK, false));
+    top->addWidget(cbShowScannerSelection);
 
     /* Read startup image on startup (Checkbox) */
-    cbReadStartupImage = new QCheckBox( i18n("Load the last selected image into the viewer"),page);
-    QToolTip::add( cbReadStartupImage,
-		   i18n( "Check this if you want Kooka to load the last selected image into the viewer on startup.\nIf your images are large, that might slow down Kooka's start." ));
-    cbReadStartupImage->setChecked( konf->readBoolEntry( STARTUP_READ_IMAGE, true));
-
-    /* -- */
-
-    top->addWidget( cbNetQuery );
-    top->addWidget( cbShowScannerSelection );
-    top->addWidget( cbReadStartupImage );
+    cbReadStartupImage = new QCheckBox(i18n("Load the last selected image into the viewer"), page);
+    cbReadStartupImage->setToolTip(i18n("Check this if you want Kooka to load the last selected image into the viewer on startup.\nIf your images are large, that might slow down Kooka's startup."));
+    cbReadStartupImage->setChecked(grp.readEntry(STARTUP_READ_IMAGE, true));
+    top->addWidget(cbReadStartupImage);
 
     top->addStretch(10);
 
+    KPageWidgetItem *item = addPage(page, i18n("Startup"));
+    item->setHeader(i18n("Startup Options"));
+    item->setIcon(KIcon("system-run"));
 }
 
 
 
 void KookaPref::setupSaveFormatPage( )
 {
-   konf->setGroup( OP_SAVER_GROUP );
-   QFrame *page = addPage( i18n("Image Saving"), i18n("Image Saving Options" ),
-			    BarIcon("filesave", KIcon::SizeMedium ) );
+    KConfigGroup grp = konf->group(OP_SAVER_GROUP);
 
-   QVBoxLayout *top = new QVBoxLayout( page, 0, spacingHint() );
-   /* Description-Label */
-   top->addWidget(new QLabel(i18n("These options will take effect immediately."),page));
-   top->addSpacing(2*KDialogBase::spacingHint());
+    // TODO: needs to be a QFrame, or can be a QWidget?
+    QFrame *page = new QFrame(this);
+    QVBoxLayout *top = new QVBoxLayout(page);
+    top->setSpacing(KDialog::spacingHint());
 
-   /* Skip the format asking if a format entry  exists */
-   cbSkipFormatAsk = new QCheckBox( i18n("Always use the Save Assistant"),
-				     page);
-   cbSkipFormatAsk->setChecked( konf->readBoolEntry( OP_SAVER_ASK_FORMAT,false));
-   QToolTip::add( cbSkipFormatAsk, i18n("Check this if you want to use the image save assistant even if there is a default format for the image type." ));
-   top->addWidget( cbSkipFormatAsk );
+    /* Description-Label */
+    top->addWidget(new QLabel(i18n("These options will take effect immediately."), page));
+    top->addSpacing(2*KDialog::spacingHint());
 
-   cbFilenameAsk = new QCheckBox( i18n("Ask for filename when saving"),
-                    page);
-   cbFilenameAsk->setChecked( konf->readBoolEntry( OP_SAVER_ASK_FILENAME, false));
-   QToolTip::add( cbFilenameAsk, i18n("Check this if you want to enter a filename when an image has been scanned." ));
-   top->addWidget( cbFilenameAsk );
+    /* Skip the format asking if a format entry  exists */
+    cbSkipFormatAsk = new QCheckBox(i18n("Always use the Save Assistant"), page);
+    cbSkipFormatAsk->setChecked(grp.readEntry(OP_SAVER_ASK_FORMAT, false));
+    cbSkipFormatAsk->setToolTip(i18n("Check this if you want to use the image save assistant even if there is a default format for the image type."));
+    top->addWidget(cbSkipFormatAsk);
 
-   top->addStretch(10);
+    cbFilenameAsk = new QCheckBox( i18n("Ask for filename when saving"), page);
+    cbFilenameAsk->setChecked(grp.readEntry(OP_SAVER_ASK_FILENAME, false));
+    cbFilenameAsk->setToolTip(i18n("Check this if you want to enter a filename when an image has been scanned."));
+    top->addWidget(cbFilenameAsk);
+
+    top->addStretch(10);
+
+    KPageWidgetItem *item = addPage(page, i18n("Image Saving"));
+    item->setHeader(i18n("Image Saving Options"));
+    item->setIcon(KIcon("document-save"));
 }
+
 
 void KookaPref::setupThumbnailPage()
 {
-    konf->setGroup(THUMB_GROUP);
+    KConfigGroup grp = konf->group(THUMB_GROUP);
 
-    QFrame *page = addPage( i18n("Thumbnail View"), i18n("Thumbnail Gallery View" ),
-			    BarIcon("thumbnail", KIcon::SizeMedium ) );
-    QGridLayout *lay = new QGridLayout(page,5,2,0,
-                                       KDialog::spacingHint());
-    lay->setRowStretch(4,9);
-    lay->setColStretch(1,9);
+    QFrame *page = new QFrame(this);
+    QGridLayout *lay = new QGridLayout(page);
+    // TODO: is this necessary?
+    lay->setSpacing(KDialog::spacingHint());
+    lay->setRowStretch(4, 9);
+    lay->setColumnStretch(1, 9);
 
-    QLabel *title = new QLabel(i18n("Here you can configure the appearance of the scan gallery thumbnail view."),page);
-    lay->addMultiCellWidget(title,0,0,0,2);
-    lay->setRowSpacing(1,2*KDialogBase::spacingHint());
+    QLabel *title = new QLabel(i18n("Here you can configure the appearance of the scan gallery thumbnail view."), page);
+    lay->addWidget(title, 0, 0, 1, -1);
+    lay->setRowMinimumHeight(1, 2*KDialog::spacingHint());
 
     /* Background image */
-    QString bgImg = konf->readPathEntry(THUMB_BG_WALLPAPER,ThumbView::standardBackground());
+    QString bgImg = grp.readPathEntry(THUMB_BG_WALLPAPER, ThumbView::standardBackground());
 
-    QLabel *l = new QLabel(i18n("Background:"),page);
-    lay->addWidget(l,2,0,Qt::AlignRight);
+    QLabel *l = new QLabel(i18n("Background:"), page);
+    lay->addWidget(l, 2, 0, Qt::AlignRight);
 
+    // TODO: replace with KUrlRequester
     /* image file selector */
-    m_tileSelector = new ImageSelectLine(page,QString::null);
-    kdDebug(28000) << "Setting tile url " << bgImg << endl;
+    m_tileSelector = new ImageSelectLine(page, QString::null);
+    kDebug() << "Setting tile URL" << bgImg;
     m_tileSelector->setURL(bgImg);
-    lay->addWidget(m_tileSelector,2,1);
+    lay->addWidget(m_tileSelector, 2, 1);
     l->setBuddy(m_tileSelector);
 
     /* Preview size */
-    l = new QLabel(i18n("Preview size:"),page);
-    lay->addWidget(l,3,0,Qt::AlignRight);
+    l = new QLabel(i18n("Preview size:"), page);
+    lay->addWidget(l, 3, 0, Qt::AlignRight);
 
     m_thumbSizeCb = new KComboBox(page);
-    m_thumbSizeCb->insertItem(ThumbView::sizeName(KIcon::SizeEnormous));	// 0
-    m_thumbSizeCb->insertItem(ThumbView::sizeName(KIcon::SizeHuge));		// 1
-    m_thumbSizeCb->insertItem(ThumbView::sizeName(KIcon::SizeLarge));		// 2
-    m_thumbSizeCb->insertItem(ThumbView::sizeName(KIcon::SizeMedium));		// 3
-    m_thumbSizeCb->insertItem(ThumbView::sizeName(KIcon::SizeSmallMedium));	// 4
+    m_thumbSizeCb->addItem(ThumbView::sizeName(KIconLoader::SizeEnormous));	// 0
+    m_thumbSizeCb->addItem(ThumbView::sizeName(KIconLoader::SizeHuge));		// 1
+    m_thumbSizeCb->addItem(ThumbView::sizeName(KIconLoader::SizeLarge));	// 2
+    m_thumbSizeCb->addItem(ThumbView::sizeName(KIconLoader::SizeMedium));	// 3
+    m_thumbSizeCb->addItem(ThumbView::sizeName(KIconLoader::SizeSmallMedium));	// 4
 
-    KIcon::StdSizes size = static_cast<KIcon::StdSizes>(konf->readNumEntry(THUMB_PREVIEW_SIZE,
-                                                                           KIcon::SizeHuge));
+    KIconLoader::StdSizes size = static_cast<KIconLoader::StdSizes>(grp.readEntry(THUMB_PREVIEW_SIZE,
+                                                                                  static_cast<int>(KIconLoader::SizeHuge)));
     int sel;
     switch (size)
     {
-case KIcon::SizeEnormous:	sel = 0;	break;
+case KIconLoader::SizeEnormous:		sel = 0;	break;
 default:
-case KIcon::SizeHuge:		sel = 1;	break;
-case KIcon::SizeLarge:		sel = 2;	break;
-case KIcon::SizeMedium:		sel = 3;	break;
-case KIcon::SizeSmallMedium:	sel = 4;	break;
+case KIconLoader::SizeHuge:		sel = 1;	break;
+case KIconLoader::SizeLarge:		sel = 2;	break;
+case KIconLoader::SizeMedium:		sel = 3;	break;
+case KIconLoader::SizeSmallMedium:	sel = 4;	break;
     }
-    m_thumbSizeCb->setCurrentItem(sel);
+    m_thumbSizeCb->setCurrentIndex(sel);
 
     lay->addWidget(m_thumbSizeCb,3,1);
     l->setBuddy(m_thumbSizeCb);
+
+    KPageWidgetItem *item = addPage(page, i18n("Thumbnail View"));
+    item->setHeader(i18n("Thumbnail Gallery View"));
+    item->setIcon(KIcon("view-list-icons"));
 }
 
 
-void KookaPref::slotOk( void )
+// TODO: split up into 1 function per page
+void KookaPref::slotSaveSettings()
 {
-  slotApply();
-  accept();
-}
+    kDebug();
 
-
-void KookaPref::slotApply( void )
-{
-   /* ** general - gallery options ** */
-   konf->setGroup(GROUP_GALLERY);
-   konf->writeEntry(GALLERY_ALLOW_RENAME,galleryAllowRename());
-   konf->writeEntry(GALLERY_LAYOUT,galleryLayout());
+    /* ** general - gallery options ** */
+    KConfigGroup grp = konf->group(GROUP_GALLERY);
+    grp.writeEntry(GALLERY_ALLOW_RENAME, galleryAllowRename());
+    grp.writeEntry(GALLERY_LAYOUT, layoutCB->currentIndex());
 
     /* ** startup options ** */
    /** write the global one, to read from libkscan also */
-   konf->setGroup(GROUP_STARTUP);
-   bool cbVal = !(cbShowScannerSelection->isChecked());
-   kdDebug(28000) << "Writing for " << STARTUP_SKIP_ASK << ": " << cbVal << endl;
-   konf->writeEntry( STARTUP_SKIP_ASK, cbVal, true, true ); /* global flag goes to kdeglobals */
+    grp = konf->group(GROUP_STARTUP);
 
-   /* only search for local (=non-net) scanners ? */
-   konf->writeEntry( STARTUP_ONLY_LOCAL,  !cbNetQuery->isChecked(), true, true ); /* global */
 
-   /* Should kooka open the last displayed image in the viewer ? */
-   if( cbReadStartupImage )
-      konf->writeEntry( STARTUP_READ_IMAGE, cbReadStartupImage->isChecked());
+    // TODO: these next 2 entries should go to a global (or libkscan) config
+    bool cbVal = !cbShowScannerSelection->isChecked();
+    kDebug() << "Writing" << STARTUP_SKIP_ASK << ":" << cbVal;
+    grp.writeEntry(STARTUP_SKIP_ASK, cbVal);
+    /* only search for local (=non-net) scanners ? */
+    grp.writeEntry(STARTUP_ONLY_LOCAL, !cbNetQuery->isChecked());
+
+    /* Should kooka open the last displayed image in the viewer ? */
+    if (cbReadStartupImage) grp.writeEntry(STARTUP_READ_IMAGE, cbReadStartupImage->isChecked());
 
     /* ** Image saver option(s) ** */
-    konf->setGroup( OP_SAVER_GROUP );
-    bool showFormatAssist = cbSkipFormatAsk->isChecked();
-    konf->writeEntry( OP_SAVER_ASK_FORMAT, showFormatAssist );
-    konf->writeEntry( OP_SAVER_ASK_FILENAME, cbFilenameAsk->isChecked() );
+    grp = konf->group(OP_SAVER_GROUP);
+    grp.writeEntry(OP_SAVER_ASK_FORMAT, cbSkipFormatAsk->isChecked());
+    grp.writeEntry(OP_SAVER_ASK_FILENAME, cbFilenameAsk->isChecked());
 
     /* ** Thumbnail options ** */
-    konf->setGroup(THUMB_GROUP);
+    grp = konf->group(THUMB_GROUP);
 
-    KURL bgUrl = m_tileSelector->selectedURL().url();
+    KUrl bgUrl = m_tileSelector->selectedURL().url();
     bgUrl.setProtocol("");
-    kdDebug(28000) << "Writing tile-pixmap " << bgUrl.prettyURL() << endl;
-    konf->writePathEntry(THUMB_BG_WALLPAPER,bgUrl.url());
+    kDebug() << "Writing tile-pixmap" << bgUrl.prettyUrl();
+    grp.writePathEntry(THUMB_BG_WALLPAPER, bgUrl.url());
 
-    KIcon::StdSizes size;
-    switch (m_thumbSizeCb->currentItem())
+    KIconLoader::StdSizes size;
+    switch (m_thumbSizeCb->currentIndex())
     {
-case 0:		size = KIcon::SizeEnormous;	break;
+case 0:		size = KIconLoader::SizeEnormous;	break;
 default:
-case 1:		size = KIcon::SizeHuge;		break;
-case 2:		size = KIcon::SizeLarge;	break;
-case 3:		size = KIcon::SizeMedium;	break;
-case 4:		size = KIcon::SizeSmallMedium;	break;
+case 1:		size = KIconLoader::SizeHuge;		break;
+case 2:		size = KIconLoader::SizeLarge;		break;
+case 3:		size = KIconLoader::SizeMedium;		break;
+case 4:		size = KIconLoader::SizeSmallMedium;	break;
     }
-    konf->writeEntry(THUMB_PREVIEW_SIZE,size);
+    grp.writeEntry(THUMB_PREVIEW_SIZE, static_cast<int>(size));
 
     /* ** OCR Options ** */
-    konf->setGroup( CFG_GROUP_OCR_DIA );
-    konf->writeEntry(CFG_OCR_ENGINE2,selectedEngine);
+    grp = konf->group(CFG_GROUP_OCR_DIA);
+    grp.writeEntry(CFG_OCR_ENGINE2, static_cast<int>(selectedEngine));
 
-    QString path = binaryReq->url();
+    QString path = binaryReq->url().path();
     if (!path.isEmpty())
     {
         switch (selectedEngine)
         {
 case OcrEngine::EngineGocr:
-            if (checkOCRBin(path,"gocr",true)) konf->writePathEntry(CFG_GOCR_BINARY,path);
+            if (checkOCRBin(path,"gocr",true)) grp.writePathEntry(CFG_GOCR_BINARY, path);
             break;
 
 case OcrEngine::EngineOcrad:
-            if (checkOCRBin(path,"ocrad",true)) konf->writePathEntry(CFG_OCRAD_BINARY,path);
+            if (checkOCRBin(path,"ocrad",true)) grp.writePathEntry(CFG_OCRAD_BINARY, path);
             break;
 
 default:    break;
@@ -501,10 +513,14 @@ default:    break;
 }
 
 
-void KookaPref::slotDefault( void )
+// TODO: check that all controls are reset here
+// TODO: split up into 1 function per page
+void KookaPref::slotSetDefaults()
 {
+    kDebug();
+
     cbAllowRename->setChecked(false);
-    layoutCB->setCurrentItem(KookaGallery::RecentAtTop);
+    layoutCB->setCurrentIndex(KookaGallery::RecentAtTop);
 
     cbNetQuery->setChecked( true );
     cbShowScannerSelection->setChecked( true);
@@ -512,7 +528,7 @@ void KookaPref::slotDefault( void )
     cbSkipFormatAsk->setChecked( true  );
 
     m_tileSelector->setURL(ThumbView::standardBackground());
-    m_thumbSizeCb->setCurrentItem(1);			// "Very Large"
+    m_thumbSizeCb->setCurrentIndex(1);			// "Very Large"
 
     slotEngineSelected(OcrEngine::EngineNone);
 }
@@ -524,18 +540,19 @@ bool KookaPref::galleryAllowRename() const
 }
 
 
-KookaGallery::Layout KookaPref::galleryLayout() const
-{
-    return (static_cast<KookaGallery::Layout>(layoutCB->currentItem()));
-}
+//KookaGallery::Layout KookaPref::galleryLayout() const
+//{
+//    return (static_cast<KookaGallery::Layout>(layoutCB->currentIndex()));
+//}
 
 
 void KookaPref::slotEnableWarnings()
 {
-    kdDebug(28000) << k_funcinfo << endl;
+    kDebug();
+
     KMessageBox::enableAllMessages();
     FormatDialog::forgetRemembered();
-    kapp->config()->reparseConfiguration();
+    KGlobal::config()->reparseConfiguration();
 
     pbEnableMsgs->setEnabled(false);			// show this has been done
 }

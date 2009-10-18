@@ -27,18 +27,17 @@
 #ifndef KOOKA_H
 #define KOOKA_H
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
-#include <kparts/dockmainwindow.h>
+#include <kxmlguiwindow.h>
 
 #define KOOKA_STATE_GROUP "State"
 #define PREFERENCE_DIA_TAB "PreferencesTab"
 
+class KConfigGroup;
 class KPrinter;
 class KToggleAction;
+class KAction;
 class KActionMenu;
+
 class KookaView;
 
 /**
@@ -49,14 +48,15 @@ class KookaView;
  * @author Klaas Freitag <freitag@suse.de>
  * @version 0.1
  */
-class Kooka : public KParts::DockMainWindow
+class Kooka : public KXmlGuiWindow
 {
     Q_OBJECT
+
 public:
     /**
      * Default Constructor
      */
-    Kooka(const QCString& deviceToUse);
+    Kooka(const QByteArray &deviceToUse);
 
     /**
      * Default Destructor
@@ -66,28 +66,30 @@ public:
    /**
     * Startup, loads (at the moment) only the last displayed image
     **/
-   void startup( void );
+   void startup();
 
 
 protected:
+    virtual void closeEvent(QCloseEvent *ev);
+
     /**
      * Overridden virtuals for Qt drag 'n drop (XDND)
      */
-    virtual void dragEnterEvent(QDragEnterEvent *event);
+    virtual void dragEnterEvent(QDragEnterEvent *ev);
     // virtual void dropEvent(QDropEvent *event);
 
     /**
      * This function is called when it is time for the app to save its
      * properties for session management purposes.
      */
-    void saveProperties(KConfig *);
+    void saveProperties(KConfigGroup &grp);
 
     /**
      * This function is called when this app is restored.  The KConfig
      * object points to the session management config file that was saved
      * with @ref saveProperties
      */
-    void readProperties(KConfig *);
+    void readProperties(const KConfigGroup &grp);
 
 protected slots:
     void slotUpdateScannerActions(bool haveConnection);
@@ -99,28 +101,26 @@ protected slots:
 
 private slots:
 
-    void createMyGUI( KParts::Part* );
+//    void createMyGUI( KParts::Part* );
 
    void filePrint();
    /* ImageViewer-Actions */
 
-   void optionsShowScanParams();
-   void optionsShowPreviewer();
-   void optionsConfigureToolbars();
+//   void optionsConfigureToolbars();
    void optionsPreferences();
    void optionsOcrPreferences();
 
    void changeStatusbar(const QString& text);
    void cleanStatusbar(void) { changeStatusbar(""); }
    void changeCaption(const QString& text);
-   void newToolbarConfig();
+//   void newToolbarConfig();
 
-   void slMirrorVertical( void );
-   void slMirrorHorizontal( void );
+   void slotMirrorVertical( void );
+   void slotMirrorHorizontal( void );
 
-   void slRotateClockWise( void );
-   void slRotateCounterClockWise( void );
-   void slRotate180( void );
+   void slotRotateClockWise( void );
+   void slotRotateCounterClockWise( void );
+   void slotRotate180( void );
 
 private:
    void setupAccel();

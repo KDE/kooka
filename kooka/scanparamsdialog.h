@@ -20,15 +20,13 @@
 #ifndef SCANPARAMSDIALOG_H
 #define SCANPARAMSDIALOG_H
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 
-#include "kscanoptset.h"
-
-//class KLineEdit;
+#include "libkscan/kscanoptset.h"
 
 class QLabel;
-class QListBox;
-class QListBoxItem;
+class QListWidget;
+class QListWidgetItem;
 
 class KScanDevice;
 
@@ -38,26 +36,26 @@ class KScanDevice;
  *  a set of saved scan parameters.
  */
 
-class ScanParamsDialog : public KDialogBase
+class ScanParamsDialog : public KDialog
 {
     Q_OBJECT
 
 public:
-    ScanParamsDialog(QWidget *parent,KScanDevice *scandev);
+    ScanParamsDialog(QWidget *parent, KScanDevice *scandev);
 
 protected slots:
-    void slotSelectionChanged(QListBoxItem *item);
+    void slotSelectionChanged(QListWidgetItem *item);
     void slotLoad();
     void slotSave();
     void slotDelete();
     void slotEdit();
-    void slotLoadAndClose(QListBoxItem *item);
+    void slotLoadAndClose(QListWidgetItem *item);
 
 private:
     void populateList();
 
     QLabel *descLabel;
-    QListBox *paramsList;
+    QListWidget *paramsList;
     QPushButton *buttonLoad;
     QPushButton *buttonSave;
     QPushButton *buttonDelete;

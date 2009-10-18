@@ -24,27 +24,29 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <qstring.h>
 #include "ocrword.h"
+
+#include <qstring.h>
 #include <qrect.h>
-#include <qptrlist.h>
-#include <kdebug.h>
+#include <qlist.h>
 #include <qregexp.h>
 
-/* -------------------- ocrWord -------------------- */
-ocrWord::ocrWord( const QString& s )
+#include <kdebug.h>
+
+/* -------------------- OcrWord -------------------- */
+
+OcrWord::OcrWord(const QString &s)
     : QString(s)
 {
-
 }
 
-ocrWord::ocrWord() : QString()
+OcrWord::OcrWord()
+    : QString()
 {
-
 }
 
 #if 0
-QRect ocrWord::boundingRect()
+QRect OcrWord::boundingRect()
 {
     QRect r;
 
@@ -52,19 +54,20 @@ QRect ocrWord::boundingRect()
 }
 #endif
 
-/* -------------------- CocrWordList ------------------ */
-ocrWordList::ocrWordList()
-    :QValueList<ocrWord>(),
-     m_block(0)
+/* -------------------- OcrWordList ------------------ */
+OcrWordList::OcrWordList()
+    : QList<OcrWord>(),
+      m_block(0)
 {
     // setAutoDelete( true );
 }
 
-QStringList ocrWordList::stringList()
+
+QStringList OcrWordList::stringList()
 {
     QStringList res;
     QRegExp rx("[,\\.-]");
-    ocrWordList::iterator it;
+    OcrWordList::iterator it;
 
     for ( it = begin(); it != end(); ++it )
     {
@@ -86,19 +89,19 @@ QStringList ocrWordList::stringList()
 
 }
 
-bool ocrWordList::updateOCRWord( const QString& from, const QString& to )
+bool OcrWordList::updateOCRWord( const QString& from, const QString& to )
 {
-    ocrWordList::iterator it;
+    OcrWordList::iterator it;
     bool res = false;
 
     for( it = begin(); it != end(); ++it )
     {
         QString word = (*it);
-        kdDebug(28000) <<  "updateOCRWord in list: Comparing word " << word << endl;
-        if( word.contains( from, true ) ) // case sensitive search
+        kDebug() <<  "comparing word" << word;
+        if (word.contains(from))			// case sensitive search
         {
             word.replace( from, to );
-            *it = ocrWord( word );
+            *it = OcrWord( word );
             res = true;
             break;
         }
@@ -106,13 +109,10 @@ bool ocrWordList::updateOCRWord( const QString& from, const QString& to )
     return res;
 }
 
-QRect ocrWordList::wordListRect()
+QRect OcrWordList::wordListRect() const
 {
     QRect rect;
-
-    ocrWordList::iterator it;
-
-    for( it = begin(); it != end(); ++it )
+    for (OcrWordList::const_iterator it = constBegin(); it!=constEnd(); ++it)
     {
         rect = rect.unite( (*it).rect() );
     }
@@ -126,9 +126,9 @@ QRect ocrWordList::wordListRect()
  * This search goes through the wordlist and tries to find the words without caring
  * for special chars. It simply removes all chars from the words that are not alphanumeric.
  */
-bool ocrWordList::findFuzzyIndex( const QString& word, ocrWord& resWord )
+bool OcrWordList::findFuzzyIndex( const QString& word, OcrWord& resWord )
 {
-    ocrWordList::iterator it;
+    OcrWordList::iterator it;
     bool res = false;
 
     for( it = begin(); it != end() && !res; ++it )
@@ -137,8 +137,9 @@ bool ocrWordList::findFuzzyIndex( const QString& word, ocrWord& resWord )
         fuzzyword.remove( QRegExp( "\\W" ));  // Remove all non-word characters.
         fuzzyword.remove( '_' );
 
-        // kdDebug(28000) <<  "findFuzzy: Comparing word " << fuzzyword << " which was "
-        //                << (*it) << " with " <<  word << endl;
+        kDebug() <<  "comparing word" << fuzzyword
+                 << "which was" << (*it)
+                 << " with" <<  word;
         if( fuzzyword == word )
         {
             resWord = *it;
@@ -149,9 +150,7 @@ bool ocrWordList::findFuzzyIndex( const QString& word, ocrWord& resWord )
 
 }
 
-void ocrWordList::setBlock( int b )
+void OcrWordList::setBlock( int b )
 {
     m_block = b;
 }
-
-/*   */

@@ -28,10 +28,8 @@
 ImgScanInfo::ImgScanInfo()
     :m_xRes(0),
      m_yRes(0),
-     d(0)
+     d(NULL)
 {
-
-
 }
 
 void ImgScanInfo::setXResolution( int xres )
@@ -39,7 +37,7 @@ void ImgScanInfo::setXResolution( int xres )
     m_xRes = xres;
 }
 
-int ImgScanInfo::getXResolution()
+int ImgScanInfo::getXResolution() const
 {
     return m_xRes;
 }
@@ -49,7 +47,7 @@ void ImgScanInfo::setYResolution( int yres )
     m_yRes = yres;
 }
 
-int ImgScanInfo::getYResolution()
+int ImgScanInfo::getYResolution() const
 {
     return m_yRes;
 }
@@ -59,7 +57,7 @@ void ImgScanInfo::setMode( const QString& smode )
     m_mode = smode;
 }
 
-QString ImgScanInfo::getMode()
+QString ImgScanInfo::getMode() const
 {
     return m_mode;
 }
@@ -69,7 +67,7 @@ void ImgScanInfo::setScannerName( const QString& name )
     m_scanner = name;
 }
 
-QString ImgScanInfo::getScannerName()
+QString ImgScanInfo::getScannerName() const
 {
     return m_scanner;
 }

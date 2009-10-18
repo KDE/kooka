@@ -20,11 +20,15 @@
 #ifndef SIZEINDICATOR_H
 #define SIZEINDICATOR_H
 
+#include "libkscanexport.h"
+
 #define DEFAULT_CRITICAL (3*1024*1024)
 #define DEFAULT_THRESHOLD (1*1024*1024)
 
-class QPainter;
 #include <qlabel.h>
+
+class QPainter;
+
 
 /**
  *  @short  small size indication widget for file sizes
@@ -37,7 +41,7 @@ class QPainter;
  *  user that he is doing something obvious.
  */
 
-class SizeIndicator: public QLabel
+class KSCAN_EXPORT SizeIndicator : public QLabel
 {
    Q_OBJECT
    // Q_PROPERTY( KGammaTable *gt READ getGt WRITE setGt )
@@ -82,10 +86,9 @@ protected:
    /**
     *  reimplemented to display the color
     */
-   virtual void drawContents( QPainter* );
+   virtual void drawContents(QPainter *p);
 
 private:
-
    long sizeInByte;
    long critical, threshold;
 
@@ -95,4 +98,4 @@ private:
    sizeIndicatorPrivate *d;
 };
 
-#endif
+#endif							// SIZEINDICATOR_H

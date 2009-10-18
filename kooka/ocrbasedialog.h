@@ -27,7 +27,8 @@
 #ifndef OCRBASEDIALOG_H
 #define OCRBASEDIALOG_H
 
-#include <kdialogbase.h>
+#include <kpagedialog.h>
+
 #include <kio/previewjob.h>
 
 #include "ocrengine.h"
@@ -36,25 +37,27 @@
   *@author Klaas Freitag
   */
 
-class QHBox;
-class QVBox;
 class QLabel;
 class QSize;
 class QCheckBox;
 class QGroupBox;
 
-class KAnimWidget;
+class KHBox;
+class KVBox;
+class KAnimatedButton;
 class KSpellConfig;
+class KPageWidgetItem;
+
 class KookaImage;
 
-class OcrBaseDialog: public KDialogBase
+
+class OcrBaseDialog: public KPageDialog
 {
     Q_OBJECT
 
 public:
     OcrBaseDialog(QWidget *parent,
-                  KSpellConfig *spellConfig = NULL,
-                  KDialogBase::DialogType face = KDialogBase::Tabbed);
+                  KSpellConfig *spellConfig = NULL);
     virtual ~OcrBaseDialog();
 
     virtual OcrEngine::EngineError setupGui();
@@ -81,8 +84,8 @@ public:
     KSpellConfig* spellConfig() const	{ return (m_spellConfig); }
 
 public slots:
-    void stopOCR();
-    void startOCR();
+    void slotStopOCR();
+    void slotStartOCR();
 
 protected:
     /**
@@ -92,16 +95,16 @@ protected:
      */
     virtual void enableFields(bool enable) = 0;
 
-    KAnimWidget *getAnimation(QWidget *parent);
+    KAnimatedButton *getAnimation(QWidget *parent);
 // TODO: can be private?
 
     void ocrShowInfo(const QString &binary,const QString &version = QString::null);
     void ocrShowVersion(const QString &version);
 
-    QVBox *ocrPage() const		{ return (m_ocrPage); }
+    KPageWidgetItem *ocrPage() const		{ return (m_ocrPage); }
 
 protected slots:
-    virtual void writeConfig();
+    virtual void slotWriteConfig();
 
 private:
     /**
@@ -127,20 +130,20 @@ private slots:
     /**
      * hit if the user toggles the want-spellcheck checkbox
      */
-    void slWantSpellcheck(bool wantIt);
+    void slotWantSpellcheck(bool wantIt);
 
-    void slPreviewResult(KIO::Job *job);
-    void slGotPreview(const KFileItem *item,const QPixmap &newPix);
+    void slotPreviewResult(KIO::Job *job);
+    void slotGotPreview(const KFileItem *item,const QPixmap &newPix);
     void stopAnimation();
     void startAnimation();
 
 private:
-    KAnimWidget  *m_animation;
-    QVBox        *m_ocrPage;
-    QVBox        *m_imgPage;
-    QVBox        *m_spellchkPage;
-    QVBox        *m_metaBox;
-    QHBox        *m_imgHBox;
+    KAnimatedButton  *m_animation;
+    KPageWidgetItem        *m_ocrPage;
+    KPageWidgetItem        *m_imgPage;
+    KPageWidgetItem        *m_spellChkPage;
+    KVBox        *m_metaBox;
+    KHBox        *m_imgHBox;
     QLabel       *m_previewPix;
 
     KSpellConfig *m_spellConfig;

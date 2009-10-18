@@ -26,8 +26,6 @@
 #ifndef OCRENGINE_H
 #define OCRENGINE_H
 
-#include "config.h"
-
 #include <qobject.h>
 
 #include "ocrword.h"
@@ -43,6 +41,7 @@
 class QRect;
 class QPixmap;
 class QStringList;
+class QImage;
 
 class KProcess;
 class KSpell;
@@ -119,7 +118,7 @@ signals:
     /**
      * select a word in the editor in line line.
      */
-    void selectWord(int line,const ocrWord &word);
+    void selectWord(int line,const OcrWord &word);
 
     /**
      * signal to indicate that a ocr text must be updated due to better results
@@ -136,13 +135,13 @@ signals:
      * signal to indicate that word word was ignored by the user. This should result
      * in a special coloring in the editor.
      */
-    void ignoreWord(int line,const ocrWord &word);
+    void ignoreWord(int line,const OcrWord &word);
 
     /**
      * signal that comes if a word is considered to be wrong in the editor.
      * The word should be marked in any way, e.g. with a signal color.
      **/
-    void markWordWrong(int line,const ocrWord &word);
+    void markWordWrong(int line,const OcrWord &word);
 
     /**
      * signal the tells that the result image was modified.
@@ -181,15 +180,15 @@ protected slots:
     void slotClose();
     void slotStopOCR();
 
-    void slSpellReady(KSpell *spell);
-    void slSpellDead();
+    void slotSpellReady(KSpell *spell);
+    void slotSpellDead();
 
-    void slMisspelling(const QString &originalword,const QStringList &suggestions,unsigned int pos);
-    void slSpellCorrected(const QString &originalword,const QString &newword,unsigned int pos);
-    void slSpellIgnoreWord(const QString &word);
+    void slotMisspelling(const QString &originalword,const QStringList &suggestions,int pos);
+    void slotSpellCorrected(const QString &originalword,const QString &newword,int pos);
+    void slotSpellIgnoreWord(const QString &word);
 
-    void slCheckListDone(bool shouldUpdate);
-    bool slUpdateWord(int line,int spellWordIndx,const QString &origWord,const QString &newWord);
+    void slotCheckListDone(bool shouldUpdate);
+    bool slotUpdateWord(int line,int spellWordIndx,const QString &origWord,const QString &newWord);
 
 private:
     virtual void cleanUpFiles() = 0;
@@ -205,9 +204,11 @@ private:
      *  This method starts the spell checking.
      **/
     void startLineSpellCheck();
-    ocrWord ocrWordFromKSpellWord(int line,const QString &word);
+    OcrWord OcrWordFromKSpellWord(int line,const QString &word);
 
     QString ocrResultText();
+
+    void stopOCRProcess(bool tellUser);
 
 private slots:
     void startOCRProcess();

@@ -1,0 +1,163 @@
+
+project(kooka4)
+
+
+include(FindTIFF)
+if (TIFF_FOUND)
+  message(STATUS "TIFF includes: ${TIFF_INCLUDE_DIR}")
+  message(STATUS "TIFF libraries: ${TIFF_LIBRARIES}")
+  set(HAVE_TIFF true)
+else (TIFF_FOUND)
+  message(STATUS "TIFF library not found, no multi-page image support")
+endif (TIFF_FOUND)
+
+
+# Support for Kadmos
+option(WITH_KADMOS "Enable the Kadmos OCR engine" false)
+option(KADMOS_DIR "Path to Kadmos include and library files, default '/usr/local'" "/usr/local")
+
+if (WITH_KADMOS)
+
+  find_file(KADMOS_HEADER_FOUND kadmos.h PATHS ${KADMOS_DIR})
+  if (KADMOS_HEADER_FOUND)
+    string(REGEX REPLACE "/.*$" "" KADMOS_INCLUDE_DIR KADMOS_HEADER_FOUND)
+    message(STATUS "Kadmos includes: ${KADMOS_INCLUDE_DIR}")
+  else (KADMOS_HEADER_FOUND)
+    message(SEND_ERROR "WITH_KADMOS requested, but Kadmos engine header file 'kadmos.h' not found in ${KADMOS_DIR} - set KADMOS_DIR to locate it")
+  endif (KADMOS_HEADER_FOUND)
+
+  find_file(KADMOS_LIB_FOUND librep.a PATHS ${KADMOS_DIR})
+  if (KADMOS_LIB_FOUND)
+    string(REGEX REPLACE "/.*$" "" KADMOS_LIB_DIR KADMOS_LIB_FOUND)
+    message(STATUS "Kadmos libraries: ${KADMOS_LIB_DIR}")
+  else (KADMOS_LIB_FOUND)
+    message(SEND_ERROR "WITH_KADMOS requested, but Kadmos engine library 'librep.a' not found in ${KADMOS_DIR} - set KADMOS_DIR to locate it")
+  endif (KADMOS_LIB_FOUND)
+
+  set(HAVE_KADMOS true)
+endif (WITH_KADMOS)
+
+
+
+add_subdirectory(pics)
+add_subdirectory(desktop)
+
+
+
+add_definitions(-DKDE4)
+add_definitions(-DKDE_DEFAULT_DEBUG_AREA=28000)
+if (HAVE_KADMOS)
+  add_definitions(-DHAVE_KADMOS)
+endif (HAVE_KADMOS)
+if (HAVE_TIFF)
+  add_definitions(-DHAVE_TIFF)
+endif (HAVE_TIFF)
+
+include_directories(..)
+
+#qt4_generate_dbus_interface(kooka.h org.kde.kooka.kooka.xml OPTIONS -a)
+
+if (HAVE_KADMOS)
+  if (KADMOS_INCLUDE_DIR)
+    include_directories(${KADMOS_INCLUDE_DIR})
+  endif (KADMOS_INCLUDE_DIR)
+  if (KADMOS_LIB_DIR)
+    link_directories(${KADMOS_LIB_DIR})
+  endif (KADMOS_LIB_DIR)
+endif (HAVE_KADMOS)
+
+if (HAVE_TIFF)
+  include_directories(${TIFF_INCLUDE_DIR})
+endif (HAVE_TIFF)
+
+# KCFG files.
+
+##configure_file(kooka.kcfg.cmake ${CMAKE_CURRENT_BINARY_DIR}/kooka.kcfg)
+
+##kde4_add_kcfg_files(kookaprivate_LIB_SRCS
+##  globalsettings_base.kcfgc
+##)
+
+
+########### executable ###############
+
+# TODO: rename some of these files to match class name, some others are obsolete
+set(kooka_SRCS
+  main.cpp
+  kooka.cpp			# -> kookamainwindow
+  kookaview.cpp
+  kookapref.cpp			# -> kookaprefs
+  imgsaver.cpp			# -> imagesaver
+  formatdialog.cpp
+  kookaimage.cpp
+  kookaimagemeta.cpp
+  scanpackager.cpp		# -> ?
+  imagenamecombo.cpp
+  imageselectline.cpp
+  kookagallery.cpp
+  thumbview.cpp
+#  thumbviewdiroperator.cpp
+#  dwmenuaction.cpp
+  ocrengine.cpp			# -> ocrenginebase
+  ocrgocrengine.cpp
+  ocrocradengine.cpp
+  ocrkadmosengine.cpp
+  ocrbasedialog.cpp		# -> ocrdialogbase
+  ocrgocrdialog.cpp
+  ocrocraddialog.cpp
+  ocrkadmosdialog.cpp
+  kadmosocr.cpp			# ?
+  ocrword.cpp
+  ocrresedit.cpp
+  kookaprint.cpp
+  imgprintdialog.cpp
+  scanparamsdialog.cpp
+  newscanparams.cpp		# -> newscaparamsdialog
+  photocopyprintdialogpage.cpp
+)
+
+#kde4_add_app_icon(kooka_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/icons/hi*-apps-kooka.png")
+kde4_add_executable(kooka ${kooka_SRCS})
+target_link_libraries(kooka
+  libkscan
+  ${QT_QT3SUPPORT_LIBRARY}
+  ${KDE4_KDE3SUPPORT_LIBS}
+  ${KDE4_KDEUI_LIBS}
+  ${KDE4_KFILE_LIBS}
+  ${KDE4_KDECORE_LIBS}
+)
+
+if (HAVE_KADMOS)
+  target_link_libraries(kooka librep)
+endif (HAVE_KADMOS)
+
+if (HAVE_TIFF)
+  target_link_libraries(kooka ${TIFF_LIBRARIES})
+endif (HAVE_TIFF)
+
+########### clobbering ###############
+
+add_custom_target(clobber
+  COMMENT "Clobber in ${CMAKE_CURRENT_BINARY_DIR}..."
+  VERBATIM
+  COMMAND sh -c "rm -f *.moc"
+  COMMAND sh -c "rm -f *_automoc.cpp *_automoc.cpp.files"
+  COMMAND sh -c "rm -r -f CMakeFiles *.cmake"
+  COMMAND sh -c "rm -f config-*.h"
+)
+
+########### install files ###############
+
+install(TARGETS kooka ${INSTALL_TARGETS_DEFAULT_ARGS})
+#install(FILES
+#  ${CMAKE_CURRENT_BINARY_DIR}/kooka.kcfg  
+#  custommimeheader.kcfg
+#  DESTINATION ${KCFG_INSTALL_DIR}
+#)
+
+#install(FILES
+#  kooka_config_misc.desktop
+#  DESTINATION ${SERVICES_INSTALL_DIR}
+#)
+
+install(FILES kookaui.rc DESTINATION ${DATA_INSTALL_DIR}/kooka)

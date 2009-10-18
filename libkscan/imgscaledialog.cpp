@@ -17,36 +17,39 @@
    Boston, MA 02110-1301, USA.
 */
 
+#include "imgscaledialog.h"
+#include "imgscaledialog.moc"
+
+#include <q3buttongroup.h>
+#include <qradiobutton.h>
+
 #include <klocale.h>
 #include <kdebug.h>
-#include <qbuttongroup.h>
-#include <qradiobutton.h>
 #include <knumvalidator.h>
-#include "imgscaledialog.h"
+#include <klineedit.h>
 
 /* ############################################################################## */
 
 
-ImgScaleDialog::ImgScaleDialog( QWidget *parent, int curr_sel,
-				const char *name )
-   :KDialogBase( parent,  name , true, i18n("Zoom"),
-                 Ok|Cancel, Ok, true )
+ImgScaleDialog::ImgScaleDialog( QWidget *parent, int curr_sel)
+   : KDialog(parent)
 {
-   // setCaption (i18n ("Image Zoom"));
+    setObjectName("ImgScaleDialog");
+
+    setButtons(KDialog::Ok|KDialog::Cancel);
+    setCaption(i18n("Zoom"));
+    setModal(true);
+    showButtonSeparator(false);
+
    selected = curr_sel;
    int        one_is_selected = false;
-   enableButtonSeparator( false );
 
-   // (void) new QLabel( , main, "Page");
-   //
-   // makeMainWidget();
-   QButtonGroup *radios = new QButtonGroup ( 2, Qt::Horizontal, this );
+   Q3ButtonGroup *radios = new Q3ButtonGroup ( 2, Qt::Horizontal, this );
    setMainWidget(radios);
-   Q_CHECK_PTR(radios);
    radios->setTitle( i18n("Select Image Zoom") );
 
    connect( radios, SIGNAL( clicked( int )),
-	    this, SLOT( setSelValue( int )));
+	    this, SLOT( slotSetSelValue( int )));
 
    // left gap: smaller Image
    QRadioButton *rb25 = new QRadioButton (i18n ("25 %"), radios);
@@ -100,25 +103,25 @@ ImgScaleDialog::ImgScaleDialog( QWidget *parent, int curr_sel,
    // Custom Scaler at the bottom
    QRadioButton *rbCust = new QRadioButton (i18n ("Custom scale factor:"),
 					    radios);
+   connect( rbCust, SIGNAL( toggled( bool )),
+	    this, SLOT(slotEnableAndFocus(bool)));
    if( ! one_is_selected )
       rbCust->setChecked( true );
 
-
-   leCust = new QLineEdit( radios );
+   leCust = new KLineEdit( radios );
    QString sn;
    sn.setNum(curr_sel );
    leCust->setValidator( new KIntValidator( leCust ) );
    leCust->setText(sn );
    connect( leCust, SIGNAL( textChanged( const QString& )),
-	    this, SLOT( customChanged( const QString& )));
-   connect( rbCust, SIGNAL( toggled( bool )),
-	    this, SLOT(enableAndFocus(bool)));
+	    this, SLOT( slotCustomChanged( const QString& )));
    leCust->setEnabled( rbCust->isChecked());
 
 
 }
 
-void ImgScaleDialog::customChanged( const QString& s )
+
+void ImgScaleDialog::slotCustomChanged( const QString& s )
 {
    bool ok;
    int  okval = s.toInt( &ok );
@@ -126,9 +129,10 @@ void ImgScaleDialog::customChanged( const QString& s )
       selected = okval;
       emit( customScaleChange( okval ));
    } else {
-      kdDebug(29000) << "ERR: To large, to smale, or whatever shitty !" << endl;
+      kDebug() << "Error: Out of range!";
    }
 }
+
 
 // This slot is called, when the user changes the Scale-Selection
 // in the button group. The value val is the index of the active
@@ -136,7 +140,7 @@ void ImgScaleDialog::customChanged( const QString& s )
 // If custom size is selected, the ScaleSize is read from the
 // QLineedit.
 //
-void ImgScaleDialog::setSelValue( int val )
+void ImgScaleDialog::slotSetSelValue( int val )
 {
    const int translator[]={ 25, 50, 75, 100, 150,200,300, 400, -1 };
    const size_t translator_size = sizeof( translator ) / sizeof(int);
@@ -160,9 +164,8 @@ void ImgScaleDialog::setSelValue( int val )
 	 }
       } // Selection is not custom
    } else {
-      kdDebug(29000) << "ERR: Invalid size selected !" << endl;
+      kDebug() << "Error: Invalid size selected!";
    }
-   // debug( "SetValue: Selected Scale is %d", selected );
 }
 
 
@@ -172,7 +175,7 @@ int ImgScaleDialog::getSelected() const
 }
 
 
-/* ############################################################################## */
-
-
-#include "imgscaledialog.moc"
+void ImgScaleDialog::slotEnableAndFocus( bool b )
+{
+    leCust->setEnabled( b ); leCust->setFocus();
+}

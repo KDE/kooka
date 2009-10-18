@@ -17,29 +17,27 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include <kimageeffect.h>
-#include <klocale.h>
-#include <kdebug.h>
-
-#include <kio/global.h>
-
-#include <qpainter.h>
-#include <qpalette.h>
-#include <qimage.h>
-
 #include "sizeindicator.h"
 #include "sizeindicator.moc"
 
+#include <qpainter.h>
+#include <qpalette.h>
+#include <QLinearGradient>
+
+#include <klocale.h>
+#include <kdebug.h>
+#include <kglobal.h>
+
 
 SizeIndicator::SizeIndicator( QWidget *parent, long  thres, long crit )
-   :QLabel( parent )
+   : QLabel( parent )
 {
-   sizeInByte = -1;
    setFrameStyle( QFrame::Box | QFrame::Sunken );
-   setMinimumWidth( fontMetrics().width( QString::fromLatin1("MMMM.MM MB") ));
-   setCritical( crit );
-   threshold = thres;
+   setMinimumWidth( fontMetrics().width( QString::fromLatin1("MMMM.MM MiB") ));
 
+   threshold = thres;
+   sizeInByte = -1;
+   setCritical( crit );
 }
 
 
@@ -63,35 +61,36 @@ SizeIndicator::~SizeIndicator()
 
 void SizeIndicator::setSizeInByte(long newSize)
 {
-    kdDebug(29000) << k_funcinfo << "New size " << newSize << " bytes" << endl;
+    kDebug() << "New size" << newSize << "bytes";
 
     sizeInByte = newSize;
 
     if (newSize<0) setText("");
-    else setText(KIO::convertSize(newSize));
+    else setText(KGlobal::locale()->formatByteSize(newSize));
+    // TODO: do we want JEDEC units here?
 }
 
 
 void SizeIndicator::drawContents( QPainter *p )
 {
-   QSize s = size();
-
-   QColor warnColor;
+   const QSize s = size();
+   int w = s.width();
+   int h = s.height();
 
    if( sizeInByte >= threshold )
    {
       int c = int( double(sizeInByte) * devider );
       if( c > 255 ) c = 255;
 
+      QColor warnColor;
       warnColor.setHsv( 0, c, c );
 
-      p->drawImage( 0,0,
-		    KImageEffect::unbalancedGradient( s, colorGroup().background(),
-						      warnColor, KImageEffect::CrossDiagonalGradient, 200,200 ));
+      QLinearGradient g(0, h/2, w, h/2);
+      g.setColorAt(0, palette().background().color());
+      g.setColorAt(1, warnColor);
+      p->fillRect(0, 0, w, h, QBrush(g));
    }
-   /* Displaying the text */
-   QString t = text();
-   p->drawText( 0, 0, s.width(), s.height(),
-		AlignHCenter | AlignVCenter, t);
 
+   /* Displaying the text */
+   p->drawText( 0, 0, w, h, Qt::AlignHCenter|Qt::AlignVCenter, text());
 }

@@ -24,21 +24,30 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef __KOOKA_PRINT_H__
-#define __KOOKA_PRINT_H__
+#ifndef KOOKAPRINT_H
+#define KOOKAPRINT_H
 
 #include <qobject.h>
 #include <qmap.h>
 #include <qstring.h>
+#include <qpoint.h>
+
+#ifndef KDE4
 #include <kprinter.h>
 #include <kdeprint/kprintdialogpage.h>
+#endif
 
-class KookaImage;
-class KPrinter;
 class QPainter;
+class QSize;
+
+class KPrinter;
 class KLineEdit;
 
+class KookaImage;
 
+
+// TODO: this seems to be unused
+#ifndef KDE4
 class ImageSettings : public KPrintDialogPage
 {
 public:
@@ -48,15 +57,16 @@ public:
 
 private:
     KLineEdit *m_width, *m_height;
-
 };
+#endif
 
 
-class KookaPrint:public QObject
+class KookaPrint : public QObject
 {
     Q_OBJECT
+
 public:
-    KookaPrint(KPrinter*);
+    KookaPrint(KPrinter *printer);
 
     /**
      * The top left edge of the required print position
@@ -74,10 +84,11 @@ public:
      */
     virtual QSize maxPageSize( int extraShrinkPercent = 0 ) const;
 
+// TODO: do these need to be slots?
 public slots:
+    bool printImage(const KookaImage *img, int intextraMarginPercent = 10);
+    void printFittingToPage(const KookaImage *img);
 
-    bool printImage( KookaImage*, int );
-    void printFittingToPage(KookaImage *img);
 protected:
     typedef enum { SW, NW, NO, SO } MarkerDirection;
 
@@ -92,4 +103,4 @@ private:
     int          m_extraMarginPercent;
 };
 
-#endif
+#endif							// KOOKAPRINT_H

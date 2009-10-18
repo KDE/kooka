@@ -24,10 +24,10 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef __IMGSAVER_H__
-#define __IMGSAVER_H__
+#ifndef IMGSAVER_H
+#define IMGSAVER_H
 
-#include <qobject.h>
+//#include <qobject.h>
 
 #include <kurl.h>
 
@@ -45,6 +45,9 @@
 #define OP_FORMAT_THUMBNAIL    "ThumbnailFormat"
 #define OP_FORMAT_UNKNOWN      "UnknownFormat"
 
+
+
+// TODO: enum into class
 /**
  *  enum ImgSaveStat:
  *  Errorflags for the save. These enums are returned by the
@@ -75,9 +78,11 @@ class KookaImage;
  *  and cares for database entries (later ;)
  **/
 
-class ImgSaver : public QObject
+// TODO: this doesn't need to be a QObject
+//class ImgSaver : public QObject
+class ImgSaver
 {
-    Q_OBJECT
+//    Q_OBJECT
 
 public:
 
@@ -105,31 +110,31 @@ public:
 	 *  @param dir  Name of the save root directory
 	 *  @param name Name of a subdirectory in the saveroot.
 	 **/
-    ImgSaver(QWidget *parent,const KURL &dir = KURL());
+    ImgSaver(QWidget *parent, const KUrl &dir = KUrl());
 
     QString     errorString( ImgSaveStat );
 
     /**
      *  returns the name of the last file that was saved by ImgSaver.
      */
-    KURL        lastURL() const { return( last_url ); }
+    KUrl        lastURL() const { return (last_url); }
 
     /**
      *  returns the image format of the last saved image.
      */
-    QCString    lastSaveFormat( void ) const { return( last_format ); }
+    QByteArray    lastSaveFormat( void ) const { return (last_format); }
 
     /* static functions used by the gallery operations */
-    static bool copyImage( const KURL& fromUrl, const KURL& toUrl, QWidget *overWidget=0 );
-    static bool renameImage( const KURL& fromUrl, const KURL& toUrl, bool askExt=false, QWidget *overWidget=0 );
-    static QString tempSaveImage( KookaImage *img, const QString& format, int colors = -1 );
+    static bool copyImage( const KUrl& fromUrl, const KUrl& toUrl, QWidget *overWidget=0 );
+    static bool renameImage( const KUrl& fromUrl, const KUrl& toUrl, bool askExt=false, QWidget *overWidget=0 );
+    static QString tempSaveImage(const KookaImage *img, const QString &format, int colors = -1);
 
     static bool isRememberedFormat(ImgSaver::ImageType type,const QString &format);
     static QString picTypeAsString(ImgSaver::ImageType type);
 
-public slots:
+//public slots:
     ImgSaveStat saveImage( const QImage *image );
-    ImgSaveStat saveImage( const QImage *image, const KURL &url, const QString& imgFormat );
+    ImgSaveStat saveImage( const QImage *image, const KUrl &url, const QString& imgFormat );
 
 private:
     static QString findFormat(ImgSaver::ImageType type);
@@ -138,21 +143,22 @@ private:
     static QString getFormatForType(ImgSaver::ImageType);
     static void storeFormatForType(ImgSaver::ImageType,const QString &format);
 
-    ImgSaveStat save(const QImage *image,const KURL &url,
-                     const QString &format,const QString &subformat);
+    ImgSaveStat save(const QImage *image,const KUrl &url,
+                     const QString &format,const QString &subformat = QString::null);
 
     static void createDir(const QString &dir);
     QString createFilename();
 
     /* static function that returns the extension of an url */
-    static QString extension(const KURL &url);
+    static QString extension(const KUrl &url);
 
     QString m_saveDirectory;				// dir where the image should be saved
-    QCString last_format;
-    KURL last_url;
+    QByteArray last_format;
+    KUrl last_url;
 
     bool m_saveAskFormat;
     bool m_saveAskFilename;
 };
 
-#endif
+
+#endif							// IMGSAVER_H

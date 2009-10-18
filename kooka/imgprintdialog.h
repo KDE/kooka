@@ -24,14 +24,21 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef __IMGPRINTDIALOG_H__
-#define __IMGPRINTDIALOG_H__
+#ifndef IMGPRINTDIALOG_H
+#define IMGPRINTDIALOG_H
 
 #include <qmap.h>
 #include <qcheckbox.h>
-#include <kdeprint/kprintdialogpage.h>
+#ifdef KDE4
+#include <qwidget.h>
+#endif
 
-#include "kookaimage.h"
+#ifndef KDE4
+#include <kdeprint/kprintdialogpage.h>
+#endif
+
+class KookaImage;
+//#include "kookaimage.h"
 
 #define OPT_SCALING  "kde-kooka-scaling"
 #define OPT_SCAN_RES "kde-kooka-scanres"
@@ -41,34 +48,41 @@
 #define OPT_PSGEN_DRAFT  "kde-kooka-psdraft"
 #define OPT_RATIO    "kde-kooka-ratio"
 #define OPT_FITPAGE  "kde-kooka-fitpage"
-class QWidget;
+
 class QString;
 class QLabel;
-class KIntNumInput;
-class KookaImage;
-class QVButtonGroup;
+class Q3ButtonGroup;
 class QRadioButton;
 class QCheckBox;
 
-class ImgPrintDialog: public KPrintDialogPage
+class KIntNumInput;
+
+class KookaImage;
+
+#ifndef KDE4
+class ImgPrintDialog : public KPrintDialogPage
+#else
+class ImgPrintDialog : public QWidget
+#endif
 {
     Q_OBJECT
+
 public:
-    ImgPrintDialog( KookaImage *img, QWidget *parent=0L, const char* name=0L );
+    ImgPrintDialog(const KookaImage *img, QWidget *parent = NULL);
 
     void setOptions(const QMap<QString,QString>& opts);
     void getOptions(QMap<QString,QString>& opts, bool include_def = false);
     bool isValid(QString& msg);
 
-    void setImage( KookaImage *img );
+    void setImage(const KookaImage *img );
 
 protected slots:
-    void slScaleChanged( int id );
-    void slCustomWidthChanged(int);
-    void slCustomHeightChanged(int);
+    void slotScaleChanged( int id );
+    void slotCustomWidthChanged(int);
+    void slotCustomHeightChanged(int);
 
 private:
-    QButtonGroup  *m_scaleRadios;
+    Q3ButtonGroup  *m_scaleRadios;
     QRadioButton  *m_rbOrigSize;
     QRadioButton  *m_rbScale;
     QRadioButton  *m_rbScreen;
@@ -81,9 +95,9 @@ private:
     QCheckBox    *m_psDraft;
     QCheckBox    *m_ratio;
 
-    KookaImage *m_image;
+    const KookaImage *m_image;
     QLabel     *m_screenRes;
     bool        m_ignoreSignal;
 };
 
-#endif
+#endif							// IMGPRINTDIALOG_H

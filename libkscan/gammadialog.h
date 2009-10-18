@@ -20,13 +20,11 @@
 #ifndef GAMMADIALOG_H
 #define GAMMADIALOG_H
 
+#include "libkscanexport.h"
+
 #include <qwidget.h>
-#include <qlayout.h>
 
-#include <kgammatable.h>
-#include <kdialogbase.h>
-
-
+#include <kdialog.h>
 
 #include "dispgamma.h"
 
@@ -38,12 +36,10 @@
 class KScanSlider;
 class KGammaTable;
 
-class GammaDialog : public KDialogBase
+class KSCAN_EXPORT GammaDialog : public KDialog
 {
    Q_OBJECT
-// FIXME: Doesn't compile with Qt 3 (malte)
-//   Q_PROPERTY( KGammaTable *gt READ getGt WRITE setGt )
-      
+
 public:
    GammaDialog ( QWidget *parent );
    ~GammaDialog( );
@@ -51,25 +47,19 @@ public:
    KGammaTable *getGt( ) const { return gt; }
    void         setGt( KGammaTable& ngt);
 
-public slots:
+protected slots:
    virtual void slotApply();
 
 signals:
-void gammaToApply( KGammaTable* );
+    void gammaToApply( KGammaTable* );
    
 private:
    KGammaTable *gt;
    DispGamma   *gtDisp;
 
-   QHBoxLayout *lhMiddle;
-   QVBoxLayout *lvSliders;
-
    KScanSlider *wGamma;
    KScanSlider *wBright;
    KScanSlider *wContrast;
-
-   class GammaDialogPrivate;
-   GammaDialogPrivate *d;
 };
 
 #endif

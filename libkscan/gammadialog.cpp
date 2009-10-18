@@ -17,28 +17,34 @@
    Boston, MA 02110-1301, USA.
 */
 
+#include "gammadialog.h"
+#include "gammadialog.moc"
+
 #include <qlabel.h>
-#include <qpushbutton.h>
-#include <qslider.h>
-#include <qlineedit.h>
-#include <qcombobox.h>
+#include <qlayout.h>
 
 #include <klocale.h>
 #include <kdebug.h>
+#include <kgammatable.h>
 
 #include "kscancontrols.h"
-#include "gammadialog.h"
 
-GammaDialog::GammaDialog( QWidget *parent ) :
-   KDialogBase( parent,  "GammaDialog", true, i18n("Custom Gamma Tables"),
-		 Ok|Cancel|Apply, Ok, true )
+
+GammaDialog::GammaDialog(QWidget *parent)
+    : KDialog(parent)
 {
-    gt = new KGammaTable();
-    QWidget *page = new QWidget( this );
+    setObjectName("GammaDialog");
 
+    setButtons(KDialog::Ok|KDialog::Cancel|KDialog::Apply);
+    setCaption(i18n("Custom Gamma Tables"));
+    setModal(true);
+    showButtonSeparator(true);
+
+    QWidget *page = new QWidget(this);
     Q_CHECK_PTR( page );
     setMainWidget( page );
 
+    gt = new KGammaTable();
     /* This connect is for recalculating the table every time a new
      * Bright., Contrast or Gamma-Value is set */
     connect( gt, SIGNAL(tableChanged()), gt, SLOT(getTable()));
@@ -52,9 +58,9 @@ GammaDialog::GammaDialog( QWidget *parent ) :
     // setCaption( i18n( "Gamma Table" ));
 
     // Layout-Boxes
-    QVBoxLayout *bigdad    = new QVBoxLayout( page, 10 );
-    QHBoxLayout *lhMiddle  = new QHBoxLayout( 5 );
-    QVBoxLayout *lvSliders = new QVBoxLayout( 10 );
+    QVBoxLayout *bigdad    = new QVBoxLayout(page);
+    QHBoxLayout *lhMiddle  = new QHBoxLayout(page);
+    QVBoxLayout *lvSliders = new QVBoxLayout(page);
 
     QLabel *l_top = new QLabel( i18n( "<B>Edit the custom gamma table</B><BR>This gamma table is passed to the scanner hardware." ), page );
     bigdad->addWidget( l_top, 1 );
@@ -66,23 +72,26 @@ GammaDialog::GammaDialog( QWidget *parent ) :
     /* Slider Widgets for gamma, brightness, contrast */
     wBright   = new KScanSlider ( page, i18n("Brightness"), -50.0, 50.0 );
     Q_CHECK_PTR(wBright);
-    wBright->slSetSlider( 0 );
+    wBright->slotSetSlider( 0 );
     connect( wBright, SIGNAL(valueChanged(int)), gt, SLOT(setBrightness(int)));
 
     wContrast = new KScanSlider ( page, i18n("Contrast") , -50.0, 50.0 );
     Q_CHECK_PTR(wContrast);
-    wContrast->slSetSlider( 0 );
+    wContrast->slotSetSlider( 0 );
     connect( wContrast, SIGNAL(valueChanged(int)), gt, SLOT(setContrast(int)));
 
     wGamma    = new KScanSlider ( page, i18n("Gamma"),  30.0, 300.0 );
     Q_CHECK_PTR(wGamma);
-    wGamma->slSetSlider(100);
+    wGamma->slotSetSlider(100);
     connect( wGamma, SIGNAL(valueChanged(int)), gt, SLOT(setGamma(int)));
 
     /* and add the Sliders */
     lvSliders->addWidget( wBright,   1 );
     lvSliders->addWidget( wContrast, 1 );
     lvSliders->addWidget( wGamma,    1 );
+
+    connect(this,SIGNAL(okClicked()),SLOT(slotApply));
+    connect(this,SIGNAL(applyClicked()),SLOT(slotApply));
 
     // Finished and Activate !
     bigdad->activate();
@@ -94,21 +103,21 @@ void GammaDialog::setGt(KGammaTable& ngt)
 {
    *gt = ngt;
 
-   if( wBright ) wBright->slSetSlider( gt->getBrightness() );
-   if( wContrast ) wContrast->slSetSlider( gt->getContrast() );
-   if( wGamma ) wGamma->slSetSlider( gt->getGamma() );
+   if( wBright ) wBright->slotSetSlider( gt->getBrightness() );
+   if( wContrast ) wContrast->slotSetSlider( gt->getContrast() );
+   if( wGamma ) wGamma->slotSetSlider( gt->getGamma() );
 
 }
+
 
 void GammaDialog::slotApply()
 {
    /* and call a signal */
    KGammaTable *myTable = getGt();
-   emit( gammaToApply( myTable ));
+   emit gammaToApply(myTable);
 }
+
 
 GammaDialog::~GammaDialog()
 {
-
 }
-#include "gammadialog.moc"

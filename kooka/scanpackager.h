@@ -28,43 +28,48 @@
 #ifndef SCANPACKAGER_H
 #define SCANPACKAGER_H
 
-#include <kfiletreeview.h>
-#include <ktrader.h>
+#include <k3filetreeview.h>
+#include <kmimetypetrader.h>
 
 
 /**
   *@author Klaas Freitag
   */
 
-class QPopupMenu;
 class QImage;
-class QListViewItem;
+class Q3ListViewItem;
 class QSignalMapper;
+
+class KMenu;
+class KUrl;
+class KActionMenu;
+//class KActionCollection;
 
 class KookaImage;
 class KookaImageMeta;
 
-class KURL;
-class KActionMenu;
-class KActionCollection;
 
+
+
+// TODO: into class
 typedef enum{ Dummy, NameSearch, UrlSearch } SearchType;
 
 
-class ScanPackager : public KFileTreeView
+class ScanPackager : public K3FileTreeView
 {
     Q_OBJECT
+
 public:
     ScanPackager( QWidget *parent);
     ~ScanPackager();
     virtual QString getImgName( QString name_on_disk );
 
     QString 	getCurrImageFileName( bool ) const;
-    KookaImage* getCurrImage(bool loadOnDemand = false);
+    const KookaImage *getCurrImage(bool loadOnDemand = false);
 
-    KFileTreeBranch* openRoot( const KURL&, bool open=false );
+    KFileTreeBranch* openRoot(const KUrl &root, bool open = false);
 
-   QPopupMenu *contextMenu() const { return m_contextMenu; }
+   KMenu *contextMenu() const { return m_contextMenu; }
    void         openRoots();
 
    void setAllowRename(bool on);
@@ -73,83 +78,82 @@ public:
    void 	addImage(const QImage *img,KookaImageMeta *meta = NULL);
 
 public slots:
-   void         slSelectImage( const KURL& );
-   void         slShowContextMenu(QListViewItem *lvi,const QPoint &p);
+   void         slotSelectImage( const KUrl& );
+   void         slotShowContextMenu(Q3ListViewItem *lvi,const QPoint &p);
 
    void         slotExportFile( );
     void        slotImportFile();
-   void         slotCurrentImageChanged( QImage* );
+    // TODO: does this need to be a slot?
+   void         slotCurrentImageChanged(const QImage *img);
 
    void         slotSelectDirectory(const QString &branchName,const QString &relPath);
 
 protected:
-   virtual void contentsDragMoveEvent( QDragMoveEvent *e );
+   virtual void contentsDragMoveEvent( QDragMoveEvent *ev);
 
 protected slots:
-   void         slClicked(QListViewItem *);
-   void         slFileRename(QListViewItem *it,const QString &newName);
-   // void         slFilenameChanged( KFileTreeViewItem*, const KURL & );
-   void         slImageArrived( KFileTreeViewItem *item, KookaImage* image );
-   void         slotCreateFolder( );
-   void         slotDeleteItems( );
-   void         slotRenameItems( );
-   void         slotUnloadItems( );
-   void         slotUnloadItem( KFileTreeViewItem *curr );
-   void         slotDirCount( KFileTreeViewItem *item, int cnt );
-   void         slotUrlsDropped(KFileTreeView *me,QDropEvent *ev,QListViewItem *parent,QListViewItem *after);
+   void         slotClicked(Q3ListViewItem *);
+   void         slotFileRename(Q3ListViewItem *it,const QString &newName);
+   // void         slFilenameChanged( KFileTreeViewItem*, const KUrl & );
+   void         slotImageArrived(K3FileTreeViewItem *item, KookaImage *image);
+   void         slotCreateFolder();
+   void         slotDeleteItems();
+   void         slotRenameItems();
+   void         slotUnloadItems();
+   void         slotUnloadItem( K3FileTreeViewItem *curr );
+   void         slotDirCount( K3FileTreeViewItem *item, int cnt );
+   void         slotUrlsDropped(K3FileTreeView *me,QDropEvent *ev,Q3ListViewItem *parent,Q3ListViewItem *after);
    void         slotDeleteFromBranch( KFileItem* );
-   void         slotStartupFinished( KFileTreeViewItem * );
-   void         slotItemExpanded(QListViewItem *item);
+   void         slotStartupFinished( K3FileTreeViewItem * );
+   void         slotItemExpanded(Q3ListViewItem *item);
    void slotOpenWith(int idx);
    void slotItemProperties();
 
-   void         slotDecorate( KFileTreeViewItem* );
-   void         slotDecorate( KFileTreeBranch*, const KFileTreeViewItemList& );
+   void         slotDecorate(K3FileTreeViewItem *item);
+   void         slotDecorate(KFileTreeBranch *branch, const K3FileTreeViewItemList &list);
    void         slotCanceled(KIO::Job*);
 
 signals:
    void         showImage(const KookaImage *img,bool isDir);
-   void         deleteImage( KookaImage* );
-   void         unloadImage( KookaImage* );
+   void         deleteImage(const KookaImage *img);
+   void         unloadImage(const KookaImage *img);
    void         galleryPathChanged( KFileTreeBranch* branch, const QString& relativPath );
    void         galleryDirectoryRemoved( KFileTreeBranch *branch, const QString& relativPath );
-   void         showThumbnails( KFileTreeViewItem* );
+   void         showThumbnails( K3FileTreeViewItem* );
 
-   void         aboutToShowImage( const KURL& ); /* starting to load image */
+   void         aboutToShowImage( const KUrl& ); /* starting to load image */
 
     void imageChanged(const KFileItem *kfi);
     void fileDeleted(const KFileItem *kfi);
     void fileChanged(const KFileItem *kfi);
-    void fileRenamed(const KFileTreeViewItem *item,const QString &newName);
-    void showItem(const KFileTreeViewItem *item);
+    void fileRenamed(const K3FileTreeViewItem *item,const QString &newName);
+    void showItem(const K3FileTreeViewItem *item);
 
 
 private:
-   static QString localFileName(KFileTreeViewItem *item);
-   static QCString getImgFormat(KFileTreeViewItem *item);
+   static QString localFileName(const K3FileTreeViewItem *item);
+   static QByteArray getImgFormat(const K3FileTreeViewItem *item);
 
-   void 	loadImageForItem( KFileTreeViewItem* item );
+   void 	loadImageForItem( K3FileTreeViewItem* item );
 
-    QString 	 buildNewFilename( QString cmplFilename, QString currFormat ) const;
-   KFileTreeViewItem *spFindItem(SearchType type,const QString &name,const KFileTreeBranch *branch = NULL);
-   QString       itemDirectory( const KFileTreeViewItem *item, bool relativ = false ) const;
-   void updateParent(const KFileTreeViewItem *curr);
+    QString 	 buildNewFilename(const QString &cmplFilename,const QString &currFormat) const;
+   K3FileTreeViewItem *spFindItem(SearchType type,const QString &name,const KFileTreeBranch *branch = NULL);
+   QString       itemDirectory( const K3FileTreeViewItem *item, bool relativ = false ) const;
+   void updateParent(const K3FileTreeViewItem *curr);
 
-   // int 	        readDir( QListViewItem *parent, QString dir_to_read );
+   // int 	        readDir( Q3ListViewItem *parent, QString dir_to_read );
     void         showContextMenu( QPoint p, bool show_folder = true );
 
-    QString      m_currImportDir;
-    QString      m_currCopyDir;
     QString      currSelectedDir;
     int          img_counter;
-    QPopupMenu    *m_contextMenu;
+    KMenu    *m_contextMenu;
 
-    KTrader::OfferList openWithOffers;
+    KService::List openWithOffers;
     QSignalMapper *openWithMapper;
-    KActionCollection *openWithActions;
+//    KActionCollection *openWithActions;
 
     // like m_nextUrlToSelect in KFileTreeView but for our own purposes (showing the image)
-    KURL         m_nextUrlToShow;
+    KUrl         m_nextUrlToShow;
 
    QPixmap       m_floppyPixmap;
    QPixmap       m_grayPixmap;
@@ -160,4 +164,4 @@ private:
    bool          m_startup;
 };
 
-#endif
+#endif							// SCANPACKAGER_H

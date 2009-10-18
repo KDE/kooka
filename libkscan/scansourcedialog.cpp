@@ -18,48 +18,49 @@
 */
 
 #include "scansourcedialog.h"
-#include "kscancontrols.h"
+#include "scansourcedialog.moc"
+
+#include <qlabel.h>
+#include <qradiobutton.h>
+#include <q3buttongroup.h>
 
 #include <klocale.h>
 #include <kdebug.h>
+#include <kvbox.h>
 
-#include <qlabel.h>
-#include <qpushbutton.h>
-#include <qlayout.h>
-#include <qvbox.h>
-#include <qhbox.h>
-#include <qradiobutton.h>
-#include <qslider.h>
-#include <qlineedit.h>
-#include <qcombobox.h>
-
-#include <qvbuttongroup.h>
-#include <qbuttongroup.h>
-
+#include "kscancontrols.h"
 
 extern "C"{
 #include <sane/saneopts.h>
 }
+
+
 #ifndef SANE_NAME_DOCUMENT_FEEDER
 #define SANE_NAME_DOCUMENT_FEEDER "Automatic Document Feeder"
 #endif
 
 
-ScanSourceDialog::ScanSourceDialog( QWidget *parent, const QStrList list, AdfBehaviour adfBehave )
- : KDialogBase( parent, "SOURCE_DIALOG", true, i18n("Scan Source Selection"),
-		Ok|Cancel,Ok, true)
+ScanSourceDialog::ScanSourceDialog(QWidget *parent, const QList<QByteArray> list, AdfBehaviour adfBehave)
+    : KDialog(parent)
 {
-   QVBox *vbox = makeVBoxMainWidget();
+    setObjectName("ScanSourceDialog");
+
+    setButtons(KDialog::Ok|KDialog::Cancel);
+    setCaption(i18n("Custom Gamma Tables"));
+    setModal(true);
+    showButtonSeparator(true);
+
+    KVBox *vbox = new KVBox(this);
+    setMainWidget(vbox);
 
    (void) new QLabel( i18n("<B>Source selection</B><P>"
 			   "Note that you may see more sources than actually exist"), vbox );
 
    /* Combo Box for sources */
-   const QStrList xx = list;
    sources = new KScanCombo( vbox,
 			     i18n("Select the Scanner document source:"),
-			     xx);
-   connect( sources, SIGNAL( activated(int)), this, SLOT( slChangeSource(int)));
+			     list);
+   connect( sources, SIGNAL( activated(int)), SLOT( slotChangeSource(int)));
 
 
    /* Button Group for ADF-Behaviour */
@@ -68,9 +69,9 @@ ScanSourceDialog::ScanSourceDialog( QWidget *parent, const QStrList list, AdfBeh
 
    if( sourceAdfEntry() > -1 )
    {
-      bgroup = new QVButtonGroup( i18n("Advanced ADF-Options"), vbox, "ADF_BGROUP" );
+      bgroup = new Q3VButtonGroup( i18n("Advanced ADF-Options"), vbox);
 
-      connect( bgroup, SIGNAL(clicked(int)), this, SLOT( slNotifyADF(int)));
+      connect( bgroup, SIGNAL(clicked(int)), SLOT( slotNotifyADF(int)));
 
       /* Two buttons inside */
       QRadioButton *rbADFTillEnd = new QRadioButton( i18n("Scan until ADF reports out of paper"),
@@ -97,7 +98,7 @@ ScanSourceDialog::ScanSourceDialog( QWidget *parent, const QStrList list, AdfBeh
 	    adf = ADF_SCAN_ALONG;
 	    break;
 	 default:
-	    kdDebug(29000) << "Undefined Source !" << endl;
+	    kDebug() << "Undefined Source!";
 	    // Hmmm.
 	    break;
       }
@@ -109,7 +110,7 @@ QString  ScanSourceDialog::getText( void ) const
    return( sources->currentText() );
 }
 
-void ScanSourceDialog::slNotifyADF( int )
+void ScanSourceDialog::slotNotifyADF( int )
 {
    // debug( "reported adf-select %d", adf_group );
    /* this seems to be broken, adf_text is a visible string?
@@ -131,7 +132,7 @@ void ScanSourceDialog::slNotifyADF( int )
 }
 
 
-void ScanSourceDialog::slChangeSource( int i )
+void ScanSourceDialog::slotChangeSource( int i )
 {
    if( ! bgroup ) return;
 
@@ -153,7 +154,7 @@ void ScanSourceDialog::slChangeSource( int i )
 
 
 
-int ScanSourceDialog::sourceAdfEntry( void ) const
+int ScanSourceDialog::sourceAdfEntry() const
 {
    if( ! sources ) return( -1 );
 
@@ -175,10 +176,10 @@ int ScanSourceDialog::sourceAdfEntry( void ) const
 
 
 
-void ScanSourceDialog::slSetSource( const QString source )
+void ScanSourceDialog::slotSetSource( const QString &source )
 {
    if( !sources  ) return;
-   kdDebug(29000) << "Setting <" << source << "> as source" << endl;
+   kDebug() << "Setting source to" << source;
 
    if( bgroup )
       bgroup->setEnabled( false );
@@ -205,8 +206,4 @@ void ScanSourceDialog::slSetSource( const QString source )
 
 ScanSourceDialog::~ScanSourceDialog()
 {
-
 }
-
-/* EOF */
-#include "scansourcedialog.moc"

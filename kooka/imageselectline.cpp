@@ -25,9 +25,10 @@
  *  without including the source code for Qt in the source distribution.   *
  *                                                                         *
  ***************************************************************************/
-#include <qhbox.h>
-#include <qvbox.h>
-#include <qbutton.h>
+
+#include "imageselectline.h"
+#include "imageselectline.moc"
+
 #include <qpushbutton.h>
 #include <qlabel.h>
 
@@ -38,7 +39,6 @@
 #include <kfiledialog.h>
 #include <kiconloader.h>
 
-#include "imageselectline.h"
 
 /* ############################################################################## */
 
@@ -47,59 +47,62 @@
  * together in a row. The button opens a file selector box to pick a file.
  */
 
-ImageSelectLine::ImageSelectLine( QWidget *parent, const QString& text )
-   : QHBox( parent )
+ImageSelectLine::ImageSelectLine(QWidget *parent, const QString &label)
+    : KHBox(parent)
 {
    setSpacing( 5 );
-   (void) new QLabel( text, this );
-   m_urlCombo       = new KURLComboBox( KURLComboBox::Files, this );
-   m_buttFileSelect = new QPushButton( this );
-   m_buttFileSelect->setPixmap( SmallIcon( "fileopen" ) );
 
+   (void) new QLabel(label, this );
+
+   m_urlCombo       = new KUrlComboBox( KUrlComboBox::Files, this );
    m_urlCombo->setMaxItems(5);
+   connect( m_urlCombo, SIGNAL( urlActivated( const KUrl& )),
+	    SLOT( slotUrlActivated( const KUrl& )));
 
-   connect( m_urlCombo, SIGNAL( urlActivated( const KURL& )),
-	    this, SLOT( slUrlActivated( const KURL& )));
-
+   m_buttFileSelect = new QPushButton(this);
+   m_buttFileSelect->setIcon(KIcon("fileopen"));
    connect( m_buttFileSelect, SIGNAL( clicked() ),
-	    this, SLOT( slSelectFile()));
+	    SLOT( slotSelectFile()));
 }
 
-void ImageSelectLine::slSelectFile()
+
+void ImageSelectLine::slotSelectFile()
 {
-   KURL newUrl;
-   newUrl = KFileDialog::getImageOpenURL();
+   KUrl newUrl;
+   newUrl = KFileDialog::getImageOpenUrl();
 
    QStringList l = m_urlCombo->urls();
 
    if( ! newUrl.isEmpty())
    {
       l.prepend( newUrl.url() );
-      m_urlCombo->setURLs( l );
+      m_urlCombo->setUrls( l );
       m_currUrl = newUrl;
    }
 }
 
-void ImageSelectLine::slUrlActivated( const KURL& url )
+
+void ImageSelectLine::slotUrlActivated(const KUrl &url)
 {
-   kdDebug(28000) << "Activating url: " << url.url() << endl;
+    kDebug() << url.prettyUrl();
+    m_currUrl = url;
+}
+
+
+KUrl ImageSelectLine::selectedURL() const
+{
+    return (m_currUrl);
+}
+
+
+void ImageSelectLine::setURL( const KUrl& url )
+{
+   if( m_urlCombo ) m_urlCombo->setUrl( url );
    m_currUrl = url;
 }
 
-KURL ImageSelectLine::selectedURL() const
-{
-   return m_currUrl;
-}
-
-void ImageSelectLine::setURL( const KURL& url )
-{
-   if( m_urlCombo ) m_urlCombo->setURL( url );
-   m_currUrl = url;
-}
 
 void ImageSelectLine::setURLs( const QStringList& list )
 {
-   if( m_urlCombo ) m_urlCombo->setURLs( list );
+   if( m_urlCombo ) m_urlCombo->setUrls( list );
 }
-
-#include "imageselectline.moc"

@@ -20,7 +20,7 @@
 #ifndef NEWSCANPARAMS_H
 #define NEWSCANPARAMS_H
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 
 class QLineEdit;
 
@@ -29,12 +29,12 @@ class QLineEdit;
  *  a set of saved scan parameters.
  */
 
-class NewScanParams : public KDialogBase
+class NewScanParams : public KDialog
 {
     Q_OBJECT
 
 public:
-    NewScanParams(QWidget *parent,const QString &name,const QString &desc,bool renaming);
+    NewScanParams(QWidget *parent, const QString &name, const QString &desc, bool renaming);
 
     QString getName() const;
     QString getDescription() const;

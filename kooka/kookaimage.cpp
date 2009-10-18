@@ -24,46 +24,59 @@
  *                                                                         *
  ***************************************************************************/
 
+#include "kookaimage.h"
+
 #include <kdebug.h>
 #include <kurl.h>
 #include <kfileitem.h>
+#include <kimageio.h>
 
-#include "kookaimage.h"
-#include "config.h"
-#ifdef HAVE_LIBTIFF
+#ifdef HAVE_TIFF
+extern "C"
+{
 #include <tiffio.h>
 #include <tiff.h>
+}
 #endif
-/**
-  *@author Klaas Freitag
-  */
 
 
-KookaImage::KookaImage( )
-   : QImage(),
-     m_subImages(-1),
-     m_subNo(0),
-     m_parent(0),
-     m_fileBound(false),
-     m_tileCols(0)
+KookaImage::KookaImage()
+    : QImage(),
+      m_subImages(-1),
+      m_subNo(0),
+      m_parent(NULL),
+      m_fileBound(false),
+      m_tileCols(0)
 {
-
+    kDebug();
 }
 
 /* constructor for subimages */
-KookaImage::KookaImage( int subNo, KookaImage *p )
-   : QImage(),
-     m_subImages(-1),
-     m_subNo(subNo),
-     m_parent( p ),
-     m_fileItem(0L),
-     m_fileBound(false),
-     m_tileCols(0)
+KookaImage::KookaImage(int subNo, KookaImage *p)
+    : QImage(),
+      m_subImages(-1),
+      m_subNo(subNo),
+      m_parent(p),
+      m_fileItem(NULL),
+      m_fileBound(false),
+      m_tileCols(0)
 {
-   kdDebug(28000) << "Setting subimageNo to " << subNo << endl;
+    kDebug() << "subimageNo" << subNo;
 }
 
-KookaImage& KookaImage::operator=(const KookaImage& img)
+
+KookaImage::KookaImage(const QImage &img)
+    : QImage(img)
+    // m_subImages( 1 )
+{
+    kDebug();
+
+    /* Load one QImage, can not be Tiff yet. */
+    m_subImages = 0;
+}
+
+
+KookaImage &KookaImage::operator=(const KookaImage &img)
 {
     QImage::operator=(img);
 
@@ -73,37 +86,40 @@ KookaImage& KookaImage::operator=(const KookaImage& img)
     m_url       = img.m_url;
     m_fileItem  = img.m_fileItem;
     
-    return *this;
+    return (*this);
 }
 
-KookaImage& KookaImage::operator=(const QImage& img)
+
+KookaImage &KookaImage::operator=(const QImage &img)
 {
     QImage::operator=(img);
-    return *this;
+    // TODO: does this initialise the rest?
+    return (*this);
 }
 
-KFileItem* KookaImage::fileItem() const
+
+KFileItem *KookaImage::fileItem() const
 {
-    return m_fileItem;
+    return (m_fileItem);
 }
 
-void KookaImage::setFileItem( KFileItem* it )
+
+void KookaImage::setFileItem(KFileItem* fi)
 {
-    m_fileItem = it;
+    m_fileItem = fi;
 }
 
-const KFileMetaInfo KookaImage::fileMetaInfo( ) const
+
+// Only used/displayed by OCR.  Get the "TechnicalInfo".
+const KFileMetaInfo KookaImage::fileMetaInfo() const
 {
-    QString filename = localFileName( );
-    if( ! filename.isEmpty() )
-    {
-        kdDebug(28000) << "Fetching metainfo for " << filename << endl;
-        const KFileMetaInfo info( filename );
-        return info;
-    }
-    else
-        return KFileMetaInfo();
+    QString filename = localFileName();
+    if (filename.isEmpty()) return (KFileMetaInfo());
+
+    kDebug() << "Fetching metainfo for" << filename;
+    return (KFileMetaInfo(filename, QString::null, KFileMetaInfo::TechnicalInfo));
 }
+
 
 QString KookaImage::localFileName( ) const
 {
@@ -114,159 +130,141 @@ QString KookaImage::localFileName( ) const
         return QString();
 }
 
-bool KookaImage::loadFromUrl( const KURL& url )
+
+bool KookaImage::loadFromUrl(const KUrl &url)
 {
-   bool ret = true;
-   m_url = url;
-   QString filename = localFileName( );
-   QString format ( imageFormat( filename ));
+    bool ret = true;					// return status
+    bool isTiff = false;				// do we have a TIFF file?
+    bool haveTiff = false;				// can it be read via TIFF lib?
 
-   /* if the format was not recogniseable, check the extension, if it is tif, try to read it by
-    * tifflib */
-   if( format.isNull() )
-   {
-      if( filename.endsWith( "tif" ) || filename.endsWith( "tiff" ) ||
-	  filename.endsWith( "TIF" ) || filename.endsWith( "TIFF" ) )
-      {
-	 format = "tif";
-	 kdDebug(28000) << "Setting format to tif by extension" << endl;
-      }
-   }
+    m_url = url;
+    if (!m_url.isLocalFile())
+    {
+        kDebug() << "Error: Cannot load non-local images, not yet implemented!";
+        return (false);
+    }
 
-   kdDebug(28000) << "Image format to load: <" << format << "> from file <" << filename << ">" << endl;
-   bool haveTiff = false;
+    QString filename = localFileName();
+    QString format = KookaImage::formatForUrl(url);
 
-   if( !m_url.isLocalFile() )
-   {
-      kdDebug(28000)<<"ERROR: Can not laod non-local images -> not yet implemented!" << endl;
-      return false;
-   }
+    KMimeType::Ptr mime = KMimeType::findByUrl(url, 0, true);
+    if (mime->is("image/tiff"))				// check MIME for TIFF file
+    {
+        isTiff = true;					// note that for later
+        if (format.isEmpty())				// if format wasn't recognised,
+        {
+            format = "TIF";				// set it now
+            kDebug() << "Setting format to TIFF by MIME type";
+        }
+    }
 
-#ifdef HAVE_LIBTIFF
-   TIFF* tif = 0;
-   m_subImages = 0;
+    kDebug() << "Image format to load:" << format << "from file" << filename;
 
-   if( format == "tif" ||
-       format == "TIF" ||
-       format == "TIFF" ||
-       format == "tiff" )
-   {
-      /* if it is tiff, check with Tifflib if it is multiple sided */
-      kdDebug(28000) << "Trying to load TIFF!" << endl;
-      tif = TIFFOpen(filename.latin1(), "r");
-      if (tif)
-      {
-	 do {
-	    m_subImages++;
-	 } while (TIFFReadDirectory(tif));
-	 kdDebug(28000) << m_subImages << " TIFF-directories found" << endl;
-
-	 haveTiff = true;
-      }
-   }
+#ifdef HAVE_TIFF
+    if (isTiff)						// if it is TIFF, check
+    {							// for multiple images
+        m_subImages = 0;				// no subimages found yet
+        kDebug() << "Trying to load TIFF...";
+        TIFF *tif = TIFFOpen(filename.toLatin1(), "r");
+        if (tif!=NULL)
+        {
+            do { ++m_subImages; } while (TIFFReadDirectory(tif));
+            kDebug() << "found" << m_subImages << "TIFF-directories";
+            haveTiff = true;
+        }
+    }
 #endif
-   if( !haveTiff )
-   {
-      /* Qt can only read one image */
-      ret = load(filename);
-      if( ret )
-      {
-	 m_subImages = 0;
-	 m_subNo = 0;
-      }
-   }
-#ifdef HAVE_LIBTIFF
-   else
-   {
-      loadTiffDir( filename, 0);
-      /* its a tiff, read by tifflib directly */
-      // Find the width and height of the image
-   }
+    if (!haveTiff)
+    {
+        ret = QImage::load(filename);			// Qt can only read one image
+        if (ret)					// image loaded OK
+        {
+            m_subImages = 0;
+            m_subNo = 0;
+        }
+    }
+#ifdef HAVE_TIFF
+    else
+    {
+        loadTiffDir(filename, 0);			// read by TIFFlib directly
+    }
 #endif
 
-   m_fileBound = ret;
-   return( ret );
-}
-
-
-KookaImage::KookaImage( const QImage& img )
-   : QImage( img )
-   /* m_subImages( 1 ) */
-{
-   m_subImages = 0;
-
-   /* Load one QImage, can not be Tiff yet. */
-   kdDebug(28000) << "constructor from other image here " << endl;
+    m_fileBound = ret;
+    return (ret);
 }
 
 
 /* loads the number stored in m_subNo */
 void KookaImage::extractNow()
 {
-   kdDebug(28000) << "extracting a subimage number " << m_subNo << endl;
+    kDebug() << "extracting subimage number" << m_subNo;
 
-   KookaImage *parent = parentImage();
-
-   if( parent )
-   {
-      loadTiffDir( parent->localFileName(), m_subNo );
-   }
-   else
-   {
-      kdDebug(28000) << "ERR: No parent defined - can not laod subimage" << endl;
-   }
+    KookaImage *parent = parentImage();
+    if (parent!=NULL) loadTiffDir(parent->localFileName(), m_subNo);
+    else kDebug() << "Error: No parent, cannot load subimage";
 }
 
-KURL KookaImage::url() const
+
+bool KookaImage::loadTiffDir(const QString &filename, int no)
 {
-   return m_url;
-}
+#ifdef HAVE_TIFF
+    int imgWidth,imgHeight;
 
-bool KookaImage::loadTiffDir( const QString& filename, int no )
-{
-#ifdef HAVE_LIBTIFF
-   int imgWidth, imgHeight;
-   TIFF* tif = 0;
-   /* if it is tiff, check with Tifflib if it is multiple sided */
-   kdDebug(28000) << "Trying to load TIFF, subimage number "<< no  << endl;
-   tif = TIFFOpen(filename.latin1(), "r");
-   if (!tif)
-      return false;
+    // if it is TIFF, check with TIFFlib if it is multiple images
+    kDebug() << "Trying to load TIFF, subimage number" << no;
+    TIFF *tif = TIFFOpen(filename.toLatin1(), "r");
+    if (tif==NULL) return (false);
 
-   if( ! TIFFSetDirectory( tif, no ) )
-   {
-      kdDebug(28000) << "ERR: could not set Directory " << no << endl;
-      TIFFClose(tif);
-      return false;
-   }
+    if (!TIFFSetDirectory(tif, no))
+    {
+        kDebug() << "Error: TIFFSetDirectory failed";
+        TIFFClose(tif);
+        return (false);
+    }
    
-   TIFFGetField(tif, TIFFTAG_IMAGEWIDTH,  &imgWidth);
-   TIFFGetField(tif, TIFFTAG_IMAGELENGTH, &imgHeight);
+    TIFFGetField(tif, TIFFTAG_IMAGEWIDTH,  &imgWidth);
+    TIFFGetField(tif, TIFFTAG_IMAGELENGTH, &imgHeight);
 
-   
-   /* TODO: load bw-image correctly only 2 bit */
-   // KookaImage tmpImg;
-   create( imgWidth, imgHeight, 32 );
-   if (TIFFReadRGBAImage(tif, imgWidth, imgHeight, (uint32*) bits(),0))
-   {
-      // successfully read. now convert.
-      // reverse red and blue
-      uint32 *data;
-      data = (uint32 *)bits();
-      for( unsigned i = 0; i < unsigned(imgWidth * imgHeight); ++i )
-      {
-	 uint32 red = ( 0x00FF0000 & data[i] ) >> 16;
-	 uint32 blue = ( 0x000000FF & data[i] ) << 16;
-	 data[i] &= 0xFF00FF00;
-	 data[i] += red + blue;
-      }
-
-      // reverse image (it's upside down)
-      unsigned h = unsigned(imgHeight);
-      for( unsigned ctr = 0; ctr < h>>1; )
-      {
-	 unsigned *line1 = (unsigned *)scanLine( ctr );
-	 unsigned *line2 = (unsigned *)scanLine( imgHeight
+    // TODO: load bw-image correctly only 2 bit
+    //
+    // The Qt3 version of this did:
+    //
+    //   create( imgWidth, imgHeight, 32 );
+    //
+    // and then read the TIFF image into the image data as returned by bits().
+    //
+    // This is not possible on Qt4, where the size/depth of a QImage is set in
+    // its constructor and cannot be subsequently changed.  Insteat we read
+    // the TIFF file into a temporary image and then use QImage::operator=
+    // to shallow copy that temporary image into ours.  After that temporary
+    // image has been destroyed, we have the only copy of the TIFF read image.
+    //
+    QImage tmpImg(imgWidth, imgHeight, QImage::Format_RGB32);
+    uint32 *data = (uint32 *) (tmpImg.bits());
+    if (TIFFReadRGBAImage(tif, imgWidth, imgHeight, data, 0))
+    {							// Successfully read, now convert.
+        // (1) Swap red and blue
+#if 1
+        tmpImg = tmpImg.rgbSwapped();
+#else
+        for (int i = 0; i<(imgWidth*imgHeight); ++i)
+        {
+            uint32 red = (data[i] & 0x00FF0000) >> 16;
+            uint32 blue = (data[i] & 0x000000FF) << 16;
+            data[i] &= 0xFF00FF00;
+            data[i] |= red|blue;
+        }
+#endif
+        // (2) Reverse the image (it's upside down)
+#if 1
+        tmpImg = tmpImg.mirrored();
+#else
+        unsigned h = static_cast<unsigned>(imgHeight>>1);
+        for (unsigned ctr = 0; ctr<h; )
+        {
+            unsigned *line1 = (unsigned *) scanLine(ctr);
+            unsigned *line2 = (unsigned *) scanLine(imgHeight
 						       - ( ++ctr ) );
 
 	 unsigned w = unsigned(imgWidth);
@@ -278,65 +276,74 @@ bool KookaImage::loadTiffDir( const QString& filename, int no )
 	    line1++;
 	    line2++;
 	 }
-      }
-   }
-
-   /* fetch the x- and y-resolutions to adjust images */
-   float xReso, yReso;
-   bool resosFound;
-   resosFound  = TIFFGetField(tif, TIFFTAG_XRESOLUTION, &xReso );
-   resosFound &= TIFFGetField(tif, TIFFTAG_YRESOLUTION, &yReso );
-   kdDebug(28000)<< "Tiff image: X-Resol.: " << xReso << " and Y-Resol.: " << yReso << endl;
-
-   TIFFClose(tif);
-
-   /* Check now if resolution in x- and y-direction differ. If so, stretch the image
-    * accordingly.
-    */
-   if( resosFound && xReso != yReso )
-   {
-       if( xReso > yReso )
-       {
-	   float yScalefactor = xReso / yReso;
-	   kdDebug(28000) << "Different resolution x/y, rescaling with factor " << yScalefactor << endl;
-	   /* rescale the image */
-	   *this = smoothScale( imgWidth, int(imgHeight*yScalefactor), QImage::ScaleFree );
-       }
-       else
-       {
-	   /* yReso > xReso */
-	   float scalefactor = yReso / xReso;
-	   kdDebug(28000) << "Different resolution x/y, rescaling x with factor " << scalefactor << endl;
-	   /* rescale the image */
-	   *this = smoothScale( int(imgWidth*scalefactor), imgHeight, QImage::ScaleFree );
-	   
-       }
-   }
-   
+        }
 #endif
-   return true;
+    }
+    else
+    {
+        kDebug() << "Error: TIFFReadRGBAImage failed";
+        TIFFClose(tif);
+        return (false);
+    }
+
+    // Fetch the x- and y-resolutions to adjust images
+    float xReso,yReso;
+    bool resosFound = TIFFGetField(tif, TIFFTAG_XRESOLUTION, &xReso) &&
+                      TIFFGetField(tif, TIFFTAG_YRESOLUTION, &yReso);
+    kDebug() << "TIFF image: X-Res" << xReso << "Y-Res" << yReso;
+
+    TIFFClose(tif);					// finished with TIFF file
+
+    // Check now if resolution in x- and y-directions differ.
+    // If so, stretch the image accordingly.
+    if (resosFound && xReso!=yReso)
+    {
+        if (xReso>yReso)
+        {
+            float yScalefactor = xReso/yReso;
+            kDebug() << "Different resolution X/Y, rescaling Y with factor" << yScalefactor;
+            /* rescale the image */
+            tmpImg = tmpImg.scaled(imgWidth, int(imgHeight*yScalefactor),
+                                   Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+        }
+        else
+        {
+            float xScalefactor = yReso/xReso;
+            kDebug() << "Different resolution X/Y, rescaling X with factor" << xScalefactor;
+            tmpImg = tmpImg.scaled(int(imgWidth*xScalefactor), imgHeight,
+                                   Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+        }
+    }
+
+    QImage::operator=(tmpImg);				// copy as our image
+#endif							// HAVE_TIFF
+
+   return (true);
 }
 
 
 int KookaImage::subImagesCount() const
 {
-   return( m_subImages );
+    return (m_subImages);
 }
+
 
 KookaImage::~KookaImage()
 {
-
 }
+
 
 KookaImage* KookaImage::parentImage() const
 {
-   return( m_parent );
+    return (m_parent);
 }
+
 
 bool KookaImage::isSubImage() const
 {
-   return( subImagesCount() );
+    return (subImagesCount()>0);
 }
+
 
 /*
  * tiling
@@ -403,11 +410,66 @@ int KookaImage::cutToTiles( const QSize maxSize, int& rows, int& cols, TileMode 
 
 
 
-QRect KookaImage::getTileRect( int rowPos, int colPos ) const
+QRect KookaImage::getTileRect(int rowPos, int colPos) const
 {
     int indx = rowPos*m_tileCols+colPos;
-    kdDebug(28000) << "Tile Index: " << indx << endl;
-    const QRect r = m_tileVector[(rowPos)*m_tileCols + colPos];
+    kDebug() << "Tile index" << indx;
+    return (m_tileVector[(rowPos)*m_tileCols + colPos]);
+}
 
-    return r;
+
+
+
+
+
+
+
+
+
+// KImageIO::suffix(format) seems to be no longer present, with no
+// equivalent available.  The lookup here is to get the preferred
+// file extension for the Qt image format.
+//
+// This assumes that the KDE MIME type system will always recognise
+// a file with the Qt image format key as extension.
+//
+// The dot is not included in the result, unlike KMimeType::mainExtension()
+
+QString KookaImage::extensionForFormat(const QString &format)
+{
+    QString suf = format.toLower();
+    KMimeType::Ptr mime = KMimeType::findByPath("/tmp/x."+suf, 0, true);
+    if (!mime->isDefault())				// not application/octet-stream
+    {
+        QString ext = mime->mainExtension();
+        if (!ext.isEmpty()) suf = ext;
+    }
+    else kDebug() << "no MIME type for image format" << format;
+
+    if (suf.startsWith('.')) suf = suf.mid(1);
+    kDebug() << "for" << format << "returning" << suf;
+    return (suf);
+}
+
+
+// KImageIO::typeForMime returns a list of possible formats.  Normally
+// we assume that there will only be one, but possibly there may be
+// more.  This lookup just takes the first one.
+
+QString KookaImage::formatForUrl(const KUrl &url)
+{
+    KMimeType::Ptr mime = KMimeType::findByUrl(url, 0, true);
+    QStringList formats = KImageIO::typeForMime(mime->name());
+    int fcount = formats.count();			// get format from file name
+    if (fcount==0)					// no MIME/Qt type found
+    {
+        kDebug() << "no format found for MIME type" << mime->name();
+        return (QString::null);
+    }
+    if (fcount>1)					// more than one type found
+    {
+        kDebug() << "found" << fcount << "formats for MIME type" << mime->name();
+    }
+
+    return (formats.first());
 }

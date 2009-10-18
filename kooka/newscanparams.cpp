@@ -17,28 +17,33 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include <klineedit.h>
-#include <klocale.h>
-#include <kdebug.h>
-
-#include <qlabel.h>
-#include <qvbox.h>
-#include <qlineedit.h>
-
 #include "newscanparams.h"
 #include "newscanparams.moc"
 
+#include <qlabel.h>
+#include <qlineedit.h>
+
+#include <klineedit.h>
+#include <klocale.h>
+#include <kdebug.h>
+#include <kvbox.h>
+
+
 
 NewScanParams::NewScanParams(QWidget *parent,
-                             const QString &name,const QString &desc,bool renaming)
-    : KDialogBase(parent,NULL,true,QString::null,
-                  KDialogBase::Ok|KDialogBase::Cancel,KDialogBase::Ok)
+                             const QString &name, const QString &desc, bool renaming)
+    : KDialog(parent)
 {
-    enableButtonSeparator(true);
+    setObjectName("NewScanParams");
 
-    QVBox *vb = makeVBoxMainWidget();
-    vb->setMargin(KDialogBase::marginHint());
-    vb->setSpacing(KDialogBase::spacingHint());
+    setModal(true);
+    setButtons(KDialog::Ok|KDialog::Cancel);
+    showButtonSeparator(true);
+
+    KVBox *vb = new KVBox(this);
+    vb->setMargin(KDialog::marginHint());
+    vb->setSpacing(KDialog::spacingHint());
+    setMainWidget(vb);
 
     if (renaming)
     {
@@ -69,9 +74,9 @@ NewScanParams::NewScanParams(QWidget *parent,
 
 void NewScanParams::slotTextChanged()
 {
-    bool ok = !mNameEdit->text().stripWhiteSpace().isEmpty() &&
-              !mDescEdit->text().stripWhiteSpace().isEmpty();
-    enableButtonOK(ok);
+    bool ok = !mNameEdit->text().trimmed().isEmpty() &&
+              !mDescEdit->text().trimmed().isEmpty();
+    enableButtonOk(ok);
 }
 
 

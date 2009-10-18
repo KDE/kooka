@@ -29,9 +29,9 @@
 #include "scanpackager.h"
 
 class QGridLayout;
-class QHBox;
 
-class KFileTreeViewItem;
+class KHBox;
+class K3FileTreeViewItem;
 
 class ImageNameCombo;
 
@@ -53,14 +53,14 @@ public:
     void readSettings();
 
     ScanPackager *galleryTree() const		{ return (m_galleryTree); }
-    KFileTreeViewItem *currentItem() const	{ return (m_galleryTree->currentKFileTreeViewItem()); }
+    K3FileTreeViewItem *currentItem() const	{ return (m_galleryTree->currentKFileTreeViewItem()); }
     ImageNameCombo *galleryRecent() const	{ return (m_galleryRecent); }
 
 private:
     void setLayout(KookaGallery::Layout option);
 
     QGridLayout *m_layout;
-    QHBox *m_recentBox;
+    KHBox *m_recentBox;
 
     ImageNameCombo *m_galleryRecent;
     ScanPackager *m_galleryTree;

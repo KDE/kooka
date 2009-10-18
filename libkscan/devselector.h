@@ -20,11 +20,13 @@
 #ifndef DEVSELECTOR_H
 #define DEVSELECTOR_H
 
+#include "libkscanexport.h"
 
-#include <kdialogbase.h>
+#include <qbytearray.h>
 
-class QButtonGroup;
-class QStrList;
+#include <kdialog.h>
+
+class Q3ButtonGroup;
 class QStringList;
 class QCheckBox;
 
@@ -51,9 +53,10 @@ class QCheckBox;
  *
  */
 
-class DeviceSelector: public KDialogBase
+class KSCAN_EXPORT DeviceSelector : public KDialog
 {
    Q_OBJECT
+
 public:
    /**
     *  constructs the dialog class
@@ -61,7 +64,7 @@ public:
     *  @param QStrList backends - a list of device names retrieved from the scan device
     *  @param QStrList scannerNames - a list of corresponding human readable sanner names.
     */
-   DeviceSelector( QWidget *parent, QStrList&, const QStringList& );
+   DeviceSelector(QWidget *parent, const QList<QByteArray> &sources, const QStringList &descs);
    ~DeviceSelector();
 
    /**
@@ -69,13 +72,13 @@ public:
     *  @return a CString containing the technical name of the selected device (taken from
     *          the backends-list from the constructor)
     */
-   QCString getSelectedDevice( void ) const;
+   QByteArray getSelectedDevice() const;
 
    /**
     *  returns the users selection if the dialog should be skipped in future.
     *  @return true for should be skipped.
     */
-   bool     getShouldSkip( void ) const;
+   bool     getShouldSkip() const;
 
    /**
     *  retrieval to get the device from the config file. The function reads the applications
@@ -85,20 +88,20 @@ public:
     *  @return a string containing the device to open or null if no device is specified or the
     *  one specified is not valid.
     */
-   QCString getDeviceFromConfig( void ) const;
+   QByteArray getDeviceFromConfig() const;
+
 
 public slots:
-   void setScanSources( const QStrList&, const QStringList& );
+// TODO: does this need to be a slot?
+   void setScanSources(const QList<QByteArray> &sources, const QStringList &descs);
 
 private:
-   QButtonGroup *selectBox;
-   mutable QStrList devices;
+   Q3ButtonGroup *selectBox;
+   mutable QStringList devices;
    QCheckBox   *cbSkipDialog;
-   bool        configDevValid;
    
    class DeviceSelectorPrivate;
    DeviceSelectorPrivate *d;
-   
 };
 
-#endif
+#endif							// DEVSELECTOR_H

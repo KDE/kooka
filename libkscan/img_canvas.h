@@ -17,15 +17,19 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef __IMG_CANVAS_H__
-#define __IMG_CANVAS_H__
+#ifndef IMAGECANVAS_H
+#define IMAGECANVAS_H
+
+#include "libkscanexport.h"
 
 #include <qrect.h>
-#include <qwmatrix.h>
-#include <qscrollview.h>
+#include <qmatrix.h>
+#include <q3scrollview.h>
+#include <qpixmap.h>
 
-class QPopupMenu;
+class KMenu;
 
+// TODO: these two enums into class
 enum preview_state {
 	MOVE_NONE,
 	MOVE_TOP_LEFT,
@@ -49,12 +53,13 @@ enum cursor_type {
 	HREN
 };
 
+// TODO: these to cpp file
 const int MIN_AREA_WIDTH = 3;
 const int MIN_AREA_HEIGHT = 3;
 const int delta = 3;
 
 
-class ImageCanvas: public QScrollView
+class KSCAN_EXPORT ImageCanvas : public Q3ScrollView
 {
     Q_OBJECT
     Q_ENUMS( PopupIDs )
@@ -64,29 +69,29 @@ class ImageCanvas: public QScrollView
     Q_PROPERTY( int scale_factor READ getScaleFactor WRITE setScaleFactor )
 
 public:
-    ImageCanvas( QWidget *parent = 0,
-                 const QImage *start_image = 0,
-                 const char *name = 0);
-    ~ImageCanvas( );
+    ImageCanvas( QWidget *parent = NULL,
+                 const QImage *start_image = NULL);
+    virtual ~ImageCanvas();
+
     virtual QSize sizeHint() const;
 
-    int getBrightness() const;
-    int getContrast() const;
-    int getGamma() const;
+    int getBrightness() const { return (brightness); };
+    int getContrast() const { return (contrast); };
+    int getGamma() const { return (gamma); };
+    int getScaleFactor() const { return (scale_factor); };
 
-    int getScaleFactor() const;
+    const QImage *rootImage() const { return (image); };
 
-    const QImage *rootImage();
-
-    bool hasImage( void ) 	{ return acquired; }
-    QPopupMenu* contextMenu() { return m_contextMenu; }
-    QRect sel( void );
+    bool hasImage() const { return (acquired); }
+    KMenu *contextMenu();
+    QRect sel() const;
 
     enum ScaleKinds { UNSPEC, DYNAMIC, FIT_ORIG, FIT_WIDTH, FIT_HEIGHT, ZOOM };
 
     enum PopupIDs { ID_POP_ZOOM, ID_POP_CLOSE, ID_FIT_WIDTH,
                     ID_FIT_HEIGHT, ID_ORIG_SIZE };
 
+// TODO: parameter names
     bool selectedImage( QImage* );
 
     ScaleKinds scaleKind();
@@ -99,31 +104,31 @@ public:
     void setSelectionRect(const QRect &rect);
 
 public slots:
+// TODO: parameter names, do these need to be slots?
     void setBrightness(int);
     void setContrast(int );
     void setGamma(int );
 
-    void toggleAspect( int aspect_in_mind )
-        {
-            maintain_aspect = aspect_in_mind;
-            repaint();
-        }
+    void toggleAspect(int aspect_in_mind);
 
-    void newImage(const QImage *new_image,bool hold_zoom = false);
+    void newImage(const QImage *new_image, bool hold_zoom = false);
     void newImageHoldZoom(const QImage *new_image);
     void deleteView(const QImage *delimage);
     void setScaleFactor( int i );
-    void handle_popup(int item );
-    void enableContextMenu( bool wantContextMenu );
     void setKeepZoom( bool k );
     void setScaleKind( ScaleKinds k );
     void setDefaultScaleKind( ScaleKinds k );
+
+    // TODO: does these need to be slots?
+    void enableContextMenu(bool wantContextMenu);
+    void handlePopup(int item );
 
     /**
      * Highlight a rectangular area on the current image using the given brush
      * and pen.
      * The function returns a id that needs to be given to the remove method.
      */
+// TODO: parameter names
     int highlight( const QRect&, const QPen&, const QBrush&, bool ensureVis=false );
 
     /**
@@ -134,6 +139,7 @@ public slots:
     /**
      * permit to do changes to the image that are saved back to the file
      */
+// TODO: parameter names
     void setReadOnly( bool );
 
     bool readOnly();
@@ -153,18 +159,16 @@ signals:
 protected:
     void drawContents( QPainter * p, int clipx, int clipy, int clipw, int cliph );
 
-    void timerEvent(QTimerEvent *);
-    void viewportMousePressEvent(QMouseEvent *);
-    void viewportMouseReleaseEvent(QMouseEvent *);
-    void viewportMouseMoveEvent(QMouseEvent *);
-
-    void resizeEvent( QResizeEvent * event );
+    void timerEvent(QTimerEvent *ev);
+    void resizeEvent(QResizeEvent *ev);
+    void viewportMousePressEvent(QMouseEvent *ev);
+    void viewportMouseReleaseEvent(QMouseEvent *ev);
+    void viewportMouseMoveEvent(QMouseEvent *ev);
+    void contentsContextMenuEvent(QContextMenuEvent *ev);
 
 private:
     void startMarqueeTimer();
     void stopMarqueeTimer();
-
-    QStrList      urls;
 
     int           scale_factor;
     const QImage        *image;
@@ -175,12 +179,12 @@ private:
     KPixmapIO	 pixIO;
 #endif
 
-    QWMatrix	 scale_matrix;
-    QWMatrix	 inv_scale_matrix;
-    QPixmap       *pmScaled;
+    QMatrix	 scale_matrix;
+    QMatrix	 inv_scale_matrix;
+    QPixmap       pmScaled;
     float	 used_yscaler;
     float	 used_xscaler;
-    QPopupMenu    *m_contextMenu;
+    KMenu    *mContextMenu;
     bool		 maintain_aspect;
 
     int	         timer_id;
@@ -202,4 +206,4 @@ private:
     ImageCanvasPrivate *d;
 };
 
-#endif
+#endif							// IMAGECANVAS_H

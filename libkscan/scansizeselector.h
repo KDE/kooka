@@ -20,16 +20,20 @@
 #ifndef SCANSIZESELECTOR_H
 #define SCANSIZESELECTOR_H
 
-#include <qvbox.h>
+#include "libkscanexport.h"
+
 #include <qsize.h>
 #include <qrect.h>
 
+#include <kvbox.h>
+
 class QComboBox;
 class QRadioButton;
+
 class PaperSize;
 
 
-class ScanSizeSelector : public QVBox
+class KSCAN_EXPORT ScanSizeSelector : public KVBox
 {
     Q_OBJECT
 

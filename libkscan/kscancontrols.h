@@ -20,14 +20,12 @@
 #ifndef KSCANCONTROLS_H
 #define KSCANCONTROLS_H
 
-#include <qframe.h>
-#include <qstrlist.h>
-#include <qhbox.h>
-#include <qcombobox.h>
-#include <qslider.h>
-#include <qlineedit.h>
+#include "libkscanexport.h"
 
-#include <kurlrequester.h>
+#include <qframe.h>
+#include <qstringlist.h>
+
+#include <khbox.h>
 
 /**
   *@author Klaas Freitag
@@ -36,6 +34,11 @@
 class QPushButton;
 class QSpinBox;
 class QLabel;
+class QComboBox;
+class QSlider;
+class QLineEdit;
+
+class KUrlRequester;
 
 
 /**
@@ -46,10 +49,10 @@ class QLabel;
  *
  * @author Klaas Freitag <freitag@suse.de>
  */
-class KScanSlider : public QFrame
+class KSCAN_EXPORT KScanSlider : public QFrame
 {
    Q_OBJECT
-   Q_PROPERTY( int slider_val READ value WRITE slSetSlider )
+   Q_PROPERTY( int slider_val READ value WRITE slotSetSlider )
 
 public:
    /**
@@ -75,14 +78,13 @@ public:
    /**
     * @return the current slider value
     */
-   int value( ) const
-      { return( slider->value()); }
+   int value( ) const;
 
 public slots:
   /**
    * sets the slider value
    */
-   void		slSetSlider( int );
+   void		slotSetSlider( int );
 
    /**
     * enables the complete slider.
@@ -93,7 +95,7 @@ protected slots:
     /**
      * reverts the slider back to the standard value given in the constructor
      */
-     void         slRevertValue();
+     void         slotRevertValue();
 
    signals:
     /**
@@ -102,7 +104,7 @@ protected slots:
      void	  valueChanged( int );
 
 private slots:
-   void		slSliderChange( int );
+   void		slotSliderChange( int );
 
 private:
    QSlider	*slider;
@@ -115,10 +117,10 @@ private:
 /**
  * a entry field with a prefix text for description.
  */
-class KScanEntry : public QHBox
+class KSCAN_EXPORT KScanEntry : public KHBox
 {
    Q_OBJECT
-   Q_PROPERTY( QString text READ text WRITE slSetEntry )
+   Q_PROPERTY( QString text READ text WRITE slotSetEntry )
 
 public:
    /**
@@ -139,22 +141,22 @@ public slots:
     * set the current text
     * @param t the new string
     */
-   void		slSetEntry( const QString& t );
+   void		slotSetEntry( const QString& t );
    /**
     * enable or disable the text entry.
     * @param b set enabled if true, else disabled.
     */
-   void		setEnabled( bool b ){ if( entry) entry->setEnabled( b ); }
+   void		setEnabled( bool b );
 
 protected slots:
-   void         slReturnPressed( void );
+   void         slotReturnPressed( void );
 
 signals:
-   void		valueChanged( const QCString& );
-   void         returnPressed( const QCString& );
+   void		valueChanged( const QByteArray& );
+   void         returnPressed( const QByteArray& );
 
 private slots:
-   void		slEntryChange( const QString& );
+   void		slotEntryChange( const QString& );
 
 private:
    QLineEdit 	*entry;
@@ -164,10 +166,10 @@ private:
 /**
  * a combobox filled with a decriptional text.
  */
-class KScanCombo : public QHBox
+class KSCAN_EXPORT KScanCombo : public KHBox
 {
    Q_OBJECT
-   Q_PROPERTY( QString cbEntry READ currentText WRITE slSetEntry )
+   Q_PROPERTY( QString cbEntry READ currentText WRITE slotSetEntry )
 
 public:
    /**
@@ -177,8 +179,8 @@ public:
     * @param text the text the combobox is prepended by
     * @param list a stringlist with values the list should contain.
     */
-   KScanCombo( QWidget *parent, const QString& text, const QStrList& list );
-   KScanCombo( QWidget *parent, const QString& text, const QStringList& list );
+   KScanCombo( QWidget *parent, const QString& text, const QList<QByteArray> &list );
+   KScanCombo( QWidget *parent, const QString& text, const QStringList &list );
    // ~KScanCombo();
 
    /**
@@ -201,20 +203,20 @@ public slots:
     * set the current entry to the given string if it is member of the list.
     * if not, the entry is not changed.
     */
-   void		slSetEntry( const QString &);
+   void		slotSetEntry( const QString &);
 
    /**
     * enable or disable the combobox.
     * @param b enables the combobox if true.
     */
-   void		setEnabled( bool b){ if(combo) combo->setEnabled( b ); };
+   void		setEnabled( bool b);
 
    /**
     * set an icon for a string in the combobox
     * @param pix the pixmap to set.
     * @param str the string for which the pixmap should be set.
     */
-   void         slSetIcon( const QPixmap& pix, const QString& str);
+   void         slotSetIcon( const QPixmap& pix, const QString& str);
 
    /**
     * set the current item of the combobox.
@@ -222,17 +224,17 @@ public slots:
    void         setCurrentItem( int i );
 
 private slots:
-   void         slFireActivated( int);
-   void		slComboChange( const QString & );
+   void         slotFireActivated( int);
+   void		slotComboChange( const QString & );
 
 signals:
-   void		valueChanged( const QCString& );
+   void		valueChanged( const QByteArray& );
    void         activated(int);
 
 private:
     void createCombo( const QString& text );
    QComboBox	*combo;
-   QStrList	combolist;
+   QList<QByteArray>	combolist;
 };
 
 
@@ -244,10 +246,10 @@ private:
 /**
  * a entry field with a prefix text for description.
  */
-class KScanFileRequester : public QHBox
+class KSCAN_EXPORT KScanFileRequester : public KHBox
 {
    Q_OBJECT
-   Q_PROPERTY( QString text READ text WRITE slSetEntry )
+   Q_PROPERTY( QString text READ text WRITE slotSetEntry )
 
 public:
    /**
@@ -268,25 +270,25 @@ public slots:
     * set the current text
     * @param t the new string
     */
-   void		slSetEntry( const QString& t );
+   void		slotSetEntry( const QString& t );
    /**
     * enable or disable the text entry.
     * @param b set enabled if true, else disabled.
     */
-   void		setEnabled( bool b ){ if( entry) entry->setEnabled( b ); }
+   void		setEnabled( bool b );
 
 protected slots:
-   void         slReturnPressed( void );
+   void         slotReturnPressed( void );
 
 signals:
-   void		valueChanged( const QCString& );
-   void         returnPressed( const QCString& );
+   void		valueChanged( const QByteArray& );
+   void         returnPressed( const QByteArray& );
 
 private slots:
-   void		slEntryChange( const QString& );
+   void		slotEntryChange( const QString& );
 
 private:
-   KURLRequester 	*entry;
+   KUrlRequester 	*entry;
 };
 
-#endif
+#endif							// KSCANCONTROLS_H

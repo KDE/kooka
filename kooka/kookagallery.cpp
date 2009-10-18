@@ -21,30 +21,31 @@
  *                                                                         *
  ***************************************************************************/
 
+#include "kookagallery.h"
+#include "kookagallery.moc"
+
+#include <qlayout.h>
+#include <qlabel.h>
+
 #include <kdebug.h>
 #include <kdialog.h>
 #include <klocale.h>
 #include <kglobal.h>
-
-#include <qlayout.h>
-#include <qhbox.h>
-#include <qlabel.h>
+#include <khbox.h>
 
 #include "scanpackager.h"
 #include "imagenamecombo.h"
 #include "kookapref.h"
 
-#include "kookagallery.h"
-#include "kookagallery.moc"
 
 
 KookaGallery::KookaGallery(QWidget *parent)
     : QFrame(parent)
 {
-    kdDebug(28000) << k_funcinfo << endl;
-    m_layout = new QGridLayout(this,2,1);
+    kDebug();
+    m_layout = new QGridLayout(this);
 
-    m_recentBox = new QHBox(this);
+    m_recentBox = new KHBox(this);
     m_recentBox->setMargin(KDialog::spacingHint());
     QLabel *lab = new QLabel(i18n("Folder: "),m_recentBox);
     lab->setSizePolicy(QSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed));
@@ -60,18 +61,17 @@ KookaGallery::KookaGallery(QWidget *parent)
 
 void KookaGallery::readSettings()
 {
-    KConfig *konf = KGlobal::config();
-    konf->setGroup(GROUP_GALLERY);
+    KConfigGroup grp = KGlobal::config()->group(GROUP_GALLERY);
 
-    m_galleryTree->setAllowRename(konf->readBoolEntry(GALLERY_ALLOW_RENAME,false));
-    setLayout(static_cast<KookaGallery::Layout>(konf->readNumEntry(GALLERY_LAYOUT,KookaGallery::RecentAtTop)));
+    m_galleryTree->setAllowRename(grp.readEntry(GALLERY_ALLOW_RENAME, false));
+    setLayout(static_cast<KookaGallery::Layout>(grp.readEntry(GALLERY_LAYOUT, static_cast<int>(KookaGallery::RecentAtTop))));
 }
 
 
 void KookaGallery::setLayout(KookaGallery::Layout option)
 {
-    m_layout->remove(m_galleryTree);
-    m_layout->remove(m_recentBox);
+    m_layout->removeWidget(m_galleryTree);
+    m_layout->removeWidget(m_recentBox);
 
     switch (option)
     {

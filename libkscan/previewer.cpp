@@ -17,6 +17,17 @@
    Boston, MA 02110-1301, USA.
 */
 
+#include "previewer.h"
+#include "previewer.moc"
+
+#include <qtooltip.h>
+#include <qcombobox.h>
+#include <q3groupbox.h>
+#include <qlayout.h>
+#include <qslider.h>
+#include <qcheckbox.h>
+#include <qvector.h>
+
 #include <kdebug.h>
 #include <klocale.h>
 #include <kglobal.h>
@@ -24,15 +35,8 @@
 #include <kstandarddirs.h>
 #include <kmessagebox.h>
 #include <kdialog.h>
-
-#include <qhbox.h>
-#include <qtooltip.h>
-#include <qpopupmenu.h>
-#include <qcombobox.h>
-#include <qgroupbox.h>
-#include <qlayout.h>
-#include <qslider.h>
-#include <qcheckbox.h>
+#include <khbox.h>
+#include <kmenu.h>
 
 #ifdef AUTOSEL_DEBUG
 #include <qfile.h>
@@ -42,9 +46,6 @@
 #include "img_canvas.h"
 #include "sizeindicator.h"
 #include "kscandevice.h"
-
-#include "previewer.moc"
-#include "previewer.h"
 
 
 /** Config tags for autoselection **/
@@ -92,23 +93,28 @@ public:
     QSlider     *m_sliderDust;
     QCheckBox   *m_cbAutoSel;
     QComboBox   *m_cbBackground;
-    QGroupBox   *m_autoSelGroup;
+    Q3GroupBox   *m_autoSelGroup;
     KScanDevice *m_scanner;
 
-    QMemArray<long> m_heightSum;
-    QMemArray<long> m_widthSum;
+    QVector<long> m_heightSum;
+    QVector<long> m_widthSum;
 };
 
 
 Previewer::Previewer(QWidget *parent)
     : QWidget(parent)
 {
+    setObjectName("Previewer");
     d = new PreviewerPrivate();
 
-    QVBoxLayout *top = new QVBoxLayout( this, 10 );
-    QHBoxLayout *layout = new QHBoxLayout( 2 );
+    // TODO: hardcoded margin/spacing
+    QVBoxLayout *top = new QVBoxLayout(this);
+    top->setSpacing(10);
+    QHBoxLayout *layout = new QHBoxLayout(NULL);
+    layout->setSpacing(2);
     top->addLayout( layout, 9 );
-    QVBoxLayout *left = new QVBoxLayout( 2*KDialog::spacingHint() );
+    QVBoxLayout *left = new QVBoxLayout(NULL);
+    left->setSpacing(2*KDialog::spacingHint());
     layout->addLayout( left, 2 );
 
     /* Units etc. TODO: get from Config */
@@ -125,14 +131,15 @@ Previewer::Previewer(QWidget *parent)
     layout->addWidget( img_canvas, 6 );
 
     /* Actions for the previewer zoom */
-    KAction *act;
-    act =  new KAction(i18n("Scale to W&idth"), "scaletowidth", CTRL+Key_I,
-		       this, SLOT( slScaleToWidth()), this, "preview_scaletowidth" );
-    act->plug( img_canvas->contextMenu());
+    KAction *act = new KAction(KIcon("scaletowidth"),i18n("Scale to Width"),this);
+    act->setShortcut(Qt::CTRL+Qt::Key_I);
+    connect(act, SIGNAL(triggered()), SLOT(slotScaleToWidth()));
+    img_canvas->contextMenu()->addAction(act);
 
-    act = new KAction(i18n("Scale to &Height"), "scaletoheight", CTRL+Key_H,
-		      this, SLOT( slScaleToHeight()), this, "preview_scaletoheight" );
-    act->plug( img_canvas->contextMenu());
+    act = new KAction(KIcon("scaletoheight"),i18n("Scale to Height"),this);
+    act->setShortcut(Qt::CTRL+Qt::Key_H);
+    connect(act, SIGNAL(triggered()), SLOT(slotScaleToHeight()));
+    img_canvas->contextMenu()->addAction(act);
 
     /*Signals: Control the custom-field and show size of selection */
     connect(img_canvas,SIGNAL(newRect(QRect)),SLOT(slotNewAreaSelected(QRect)));
@@ -141,48 +148,50 @@ Previewer::Previewer(QWidget *parent)
     left->addWidget( new QLabel( i18n("<B>Preview</B>"), this ), 1);
 
     /** Autoselection Box **/
-    d->m_autoSelGroup = new QGroupBox( 1, Horizontal, i18n("Auto-Select"), this);
+    d->m_autoSelGroup = new Q3GroupBox( 1, Qt::Horizontal, i18n("Auto-Select"), this);
 
-    QHBox *hbox       = new QHBox(d->m_autoSelGroup);
+    KHBox *hbox       = new KHBox(d->m_autoSelGroup);
     d->m_cbAutoSel    = new QCheckBox( i18n("Active on"), hbox );
-    QToolTip::add( d->m_cbAutoSel, i18n("Check here if you want autodetection\n"
-                                        "of the document on the preview."));
+    d->m_cbAutoSel->setToolTip(i18n("Check here if you want autodetection\n"
+                                    "of the document on the preview."));
 
     /* combobox to select if black or white background */
     d->m_cbBackground = new QComboBox( hbox );
-    d->m_cbBackground->insertItem(i18n("Black"), BG_ITEM_BLACK );
-    d->m_cbBackground->insertItem(i18n("White"), BG_ITEM_WHITE );
+    d->m_cbBackground->insertItem(BG_ITEM_BLACK, i18n("Black"));
+    d->m_cbBackground->insertItem(BG_ITEM_WHITE, i18n("White"));
     d->m_cbBackground->setEnabled(false);
     connect( d->m_cbBackground, SIGNAL(activated(int) ),
-             this, SLOT( slScanBackgroundChanged( int )));
-
-    QToolTip::add( d->m_cbBackground,
-                   i18n("Select whether a scan of the empty\n"
-                        "scanner glass results in a\n"
-                        "black or a white image."));
-    connect( d->m_cbAutoSel, SIGNAL(toggled(bool) ), SLOT(slAutoSelToggled(bool)));
+             this, SLOT( slotScanBackgroundChanged( int )));
+    d->m_cbBackground->setToolTip(i18n("Select whether a scan of the empty\n"
+                                       "scanner glass results in a\n"
+                                       "black or a white image."));
+    connect( d->m_cbAutoSel, SIGNAL(toggled(bool) ), SLOT(slotAutoSelToggled(bool)));
 
     (void) new QLabel( i18n("scanner background"), d->m_autoSelGroup );
     d->m_autoSelGroup->addSpace(2*KDialog::spacingHint());
 
     QLabel *l1= new QLabel( i18n("Threshold:"), d->m_autoSelGroup );
-    d->m_sliderThresh = new QSlider( 0, 254, 10, d->m_autoSelThresh,  Qt::Horizontal,
-                                     d->m_autoSelGroup );
-    connect( d->m_sliderThresh, SIGNAL(valueChanged(int)), SLOT(slSetAutoSelThresh(int)));
-    QToolTip::add( d->m_sliderThresh,
-                   i18n("Threshold for autodetection.\n"
-                        "All pixels higher (on black background)\n"
-                        "or smaller (on white background)\n"
-                        "than this are considered to be part of the image."));
+    d->m_sliderThresh = new QSlider(d->m_autoSelGroup);
+    d->m_sliderThresh->setRange(0, 254);
+    d->m_sliderThresh->setSingleStep(10);
+    d->m_sliderThresh->setValue(d->m_autoSelThresh);
+    connect( d->m_sliderThresh, SIGNAL(valueChanged(int)), SLOT(slotSetAutoSelThresh(int)));
+    d->m_sliderThresh->setToolTip(i18n("Threshold for autodetection.\n"
+                                       "All pixels lighter (on black background)\n"
+                                       "or darker (on white background)\n"
+                                       "than this are considered to be part of the image."));
     l1->setBuddy(d->m_sliderThresh);
-    d->m_sliderThresh->setTickmarks(QSlider::Below);
+    d->m_sliderThresh->setTickPosition(QSlider::TicksBelow);
     d->m_sliderThresh->setTickInterval(25);
 
 #ifdef AUTOSEL_DUSTSIZE
     /** Dustsize-Slider: No deep impact on result **/
     (void) new QLabel( i18n("Dust size:"), d->m_autoSelGroup);
-    d->m_sliderDust = new QSlider( 0, 50, 5, d->m_dustsize,  Qt::Horizontal, d->m_autoSelGroup);
-    connect( d->m_sliderDust, SIGNAL(valueChanged(int)), SLOT(slSetAutoSelDustsize(int)));
+    d->m_sliderDust = new QSlider(Qt::Horizontal,d->m_autoSelGroup);
+    d->m_sliderDust ->setRange(0,50);
+    d->m_sliderDust ->setSingleStep(5);
+    d->m_sliderDust ->setValue(d->m_dustsize);
+    connect(d->m_sliderDust, SIGNAL(valueChanged(int)), SLOT(slotSetAutoSelDustsize(int)));
 #endif
 
     /* disable Autoselbox as long as no scanner is connected */
@@ -191,7 +200,7 @@ Previewer::Previewer(QWidget *parent)
     left->addWidget(d->m_autoSelGroup);
 
     /* Labels for the dimension */
-    QGroupBox *gbox = new QGroupBox( 1, Horizontal, i18n("Selection"), this, "GROUPBOX" );
+    Q3GroupBox *gbox = new Q3GroupBox( 1, Qt::Horizontal, i18n("Selection"), this, "GROUPBOX" );
 
     selSize1 = new QLabel( i18n("- mm" ), gbox );
     selSize2 = new QLabel( i18n("- pix" ), gbox );
@@ -199,12 +208,12 @@ Previewer::Previewer(QWidget *parent)
     gbox->addSpace(KDialog::spacingHint());
 
     /* size indicator */
-    QHBox *hb = new QHBox( gbox );
+    KHBox *hb = new KHBox( gbox );
     (void) new QLabel( i18n( "Size  "), hb );
     fileSize = new SizeIndicator( hb );
-    QToolTip::add( fileSize, i18n( "This size field shows how large the uncompressed image will be.\n"
-                               "It tries to warn you, if you try to produce huge images by \n"
-                               "changing its background color." ));
+    fileSize->setToolTip(i18n("This size field shows how large the uncompressed image will be.\n"
+                              "It tries to warn you if you try to produce too big an image by \n"
+                              "changing its background color."));
     fileSize->setText( i18n("-") );
 
     left->addWidget( gbox, 1 );
@@ -233,7 +242,7 @@ bool Previewer::setPreviewImage( const QImage &image )
    if ( image.isNull() )
 	return false;
 
-   kdDebug(29000) << k_funcinfo << "setting new image, size=" << image.size() << endl;
+   kDebug() << "setting new image, size" << image.size();
    m_previewImage = image;
    img_canvas->newImage( &m_previewImage );
 
@@ -241,7 +250,10 @@ bool Previewer::setPreviewImage( const QImage &image )
 }
 
 
-// TODO: this doesn't belong here at all - move to kookapref?
+// TODO: this doesn't belong here at all - move to kookapref or scanpackager?
+// also: not a good location, should use <KGlobalSettings::documentPath()>/ScanImages/
+// for a new user.  If the old root exists then nag the user on startup with
+// a "don't ask me again", suggest that they move/copy the gallery folder manually.
 QString Previewer::galleryRoot()
 {
     QString dir = KGlobal::dirs()->saveLocation("data","ScanImages",true);
@@ -253,7 +265,7 @@ QString Previewer::galleryRoot()
 
 void Previewer::newImage(const QImage *image)
 {
-   kdDebug(29000) << k_funcinfo << "size=" << image->size() << endl;
+   kDebug() << "size" << image->size();
 
    /* image canvas does not copy the image, so we hold a copy here */
    m_previewImage = *image;
@@ -269,7 +281,7 @@ void Previewer::newImage(const QImage *image)
 
 void Previewer::setScannerBedSize(int w,int h)
 {
-   kdDebug(29000) << k_funcinfo << "to [" << w << "," << h << "]" << endl;
+   kDebug() << "to [" << w << "," << h << "]";
 
    bedWidth = w;
    bedHeight = h;
@@ -287,7 +299,7 @@ void Previewer::setDisplayUnit(KRuler::MetricStyle unit)
 // sent from ScanParams, selection chosen by user
 void Previewer::slotNewCustomScanSize(QRect rect)
 {
-    kdDebug(29000) << k_funcinfo << "rect=" << rect << endl;
+    kDebug() << "rect" << rect;
 
     if (rect.isValid())
     {
@@ -310,9 +322,9 @@ void Previewer::slotNewCustomScanSize(QRect rect)
 }
 
 
-void Previewer::slNewScanResolutions(int xres,int yres)
+void Previewer::slotNewScanResolutions(int xres,int yres)
 {
-    kdDebug(29000) << k_funcinfo << xres << " x " << yres << endl;
+    kDebug() << "resolution" << xres << " x " << yres;
 
     scanResX = xres;
     scanResY = yres;
@@ -320,9 +332,9 @@ void Previewer::slNewScanResolutions(int xres,int yres)
 }
 
 
-void Previewer::slNewScanMode(int bytes_per_pix)
+void Previewer::slotNewScanMode(int bytes_per_pix)
 {
-    kdDebug(29000) << k_funcinfo << bytes_per_pix << endl;
+    kDebug() << "bytes per pix" << bytes_per_pix;
 
     m_bytesPerPix = bytes_per_pix;
     updateSelectionDims();
@@ -336,7 +348,7 @@ void Previewer::slNewScanMode(int bytes_per_pix)
 
 void Previewer::slotNewAreaSelected(QRect rect)
 {
-    kdDebug(29000) << k_funcinfo << "rect=" << rect << " width=" << bedWidth << " height=" << bedHeight << endl;
+    kDebug() << "rect" << rect << "width" << bedWidth << "height" << bedHeight;
 
     if (rect.isValid())
     {							// convert bedsize/1000 -> mm
@@ -344,7 +356,7 @@ void Previewer::slotNewAreaSelected(QRect rect)
         rect.setRight(static_cast<int>(rect.right()/1000.0*bedWidth+0.5));
         rect.setTop(static_cast<int>(rect.top()/1000.0*bedHeight+0.5));
         rect.setBottom(static_cast<int>(rect.bottom()/1000.0*bedHeight+0.5));
-        kdDebug(29000) << k_funcinfo << "new rect=" << rect << endl;
+        kDebug() << "new rect" << rect;
         emit newPreviewRect(rect);
 
         selectionWidthMm = rect.width();
@@ -364,7 +376,7 @@ void Previewer::slotNewAreaSelected(QRect rect)
 
 void Previewer::updateSelectionDims()
 {
-    selSize1->setText(i18n("%1 x %1 mm").arg(selectionWidthMm).arg(selectionHeightMm));
+    selSize1->setText(i18n("%1 x %2 mm", selectionWidthMm, selectionHeightMm));
 
     /* Calculate file size */
     long size_in_byte = 0;
@@ -376,7 +388,7 @@ void Previewer::updateSelectionDims()
         int pix_w = static_cast<int>(w_inch*scanResX+0.5);
         int pix_h = static_cast<int>(h_inch*scanResY+0.5);
 
-        selSize2->setText(i18n("%1 x %1 pix").arg(pix_w).arg(pix_h));
+        selSize2->setText(i18n("%1 x %2 pix", pix_w, pix_h));
 
         if (m_bytesPerPix!=-1)				// depth of scan available
         {
@@ -397,26 +409,26 @@ void Previewer::updateSelectionDims()
 }
 
 
-void Previewer::slScaleToWidth()
+void Previewer::slotScaleToWidth()
 {
    if( img_canvas )
    {
-      img_canvas->handle_popup( ImageCanvas::ID_FIT_WIDTH );
+      img_canvas->handlePopup( ImageCanvas::ID_FIT_WIDTH );
    }
 }
 
-void Previewer::slScaleToHeight()
+void Previewer::slotScaleToHeight()
 {
    if( img_canvas )
    {
-      img_canvas->handle_popup( ImageCanvas::ID_FIT_HEIGHT);
+      img_canvas->handlePopup( ImageCanvas::ID_FIT_HEIGHT);
    }
 }
 
 
 void Previewer::connectScanner(KScanDevice *scan)
 {
-    kdDebug(29000) << k_funcinfo << endl;
+    kDebug();
     d->m_scanner = scan;
 
     if (scan!=NULL)
@@ -426,7 +438,7 @@ void Previewer::connectScanner(KScanDevice *scan)
         d->m_cbAutoSel->setChecked(scan->getConfig(CFG_AUTOSEL_DO,QString::null)=="on");
 							// "white" is the best default
         bool isWhite = scan->getConfig(CFG_SCANNER_EMPTY_BG,"")!=SCANNER_EMPTY_BLACK;
-        d->m_cbBackground->setCurrentItem(isWhite ? BG_ITEM_WHITE : BG_ITEM_BLACK);
+        d->m_cbBackground->setCurrentIndex(isWhite ? BG_ITEM_WHITE : BG_ITEM_BLACK);
 
         QString h = scan->getConfig(CFG_AUTOSEL_DUSTSIZE,"5");
         d->m_dustsize = h.toInt();
@@ -442,10 +454,10 @@ void Previewer::setScannerBgIsWhite(bool isWhite)
     d->m_bgIsWhite = isWhite;
     if (d->m_scanner!=NULL)
     {
-        d->m_cbBackground->setCurrentItem(isWhite ? BG_ITEM_WHITE : BG_ITEM_BLACK);
+        d->m_cbBackground->setCurrentIndex(isWhite ? BG_ITEM_WHITE : BG_ITEM_BLACK);
         d->m_cbBackground->setEnabled(true);
 
-        d->m_scanner->slStoreConfig(CFG_SCANNER_EMPTY_BG,(isWhite ? SCANNER_EMPTY_WHITE : SCANNER_EMPTY_BLACK));
+        d->m_scanner->slotStoreConfig(CFG_SCANNER_EMPTY_BG,(isWhite ? SCANNER_EMPTY_WHITE : SCANNER_EMPTY_BLACK));
     }
 }
 
@@ -456,21 +468,23 @@ void Previewer::setScannerBgIsWhite(bool isWhite)
  * popup and asks the user.  The result is stored.
  */
 
-void Previewer::checkForScannerBg()
+bool Previewer::checkForScannerBg()
 {
     if (d->m_scanner!=NULL)				// scan device already known?
     {
-        QString curWhite = d->m_scanner->getConfig(CFG_SCANNER_EMPTY_BG,QString::null);
+        QString curWhite = d->m_scanner->getConfig(CFG_SCANNER_EMPTY_BG, "");
         bool goWhite = false;
 
-        if (curWhite.isNull())				// not yet known, should ask the user
+        if (curWhite.isEmpty())				// not yet known, should ask the user
         {
-            kdDebug(29000) << "Dont know the scanner background yet!" << endl;
+            kDebug() << "Don't know the scanner background yet!";
 
-            goWhite = KMessageBox::questionYesNo(this,
-                                                 i18n("The autodetection of images on the preview depends on the background color of the preview image (a preview of an empty scanner).\nPlease select whether the background of the preview image is black or white"),
-                                                 i18n("Image Autodetection"),
-                                                 i18n("White"),i18n("Black"))==KMessageBox::Yes;
+            int res = KMessageBox::questionYesNoCancel(this,
+                                                       i18n("The autodetection of images on the preview depends on the background color of the preview image (the result of scanning with no document loaded).\n\nPlease select whether the background of the preview image is black or white."),
+                                                       i18n("Autodetection Background"),
+                                                       KGuiItem(i18n("White")), KGuiItem(i18n("Black")));
+            if (res==KMessageBox::Cancel) return (false);
+            goWhite = (res==KMessageBox::Yes);
         }
         else
         {
@@ -479,69 +493,68 @@ void Previewer::checkForScannerBg()
 
         setScannerBgIsWhite(goWhite);			// set and save that value
     }
+
+    return (true);
 }
 
 
-void Previewer::slScanBackgroundChanged(int indx)
+void Previewer::slotScanBackgroundChanged(int indx)
 {
     setScannerBgIsWhite(indx==BG_ITEM_WHITE);
 }
 
 
-void Previewer::slAutoSelToggled(bool isOn )
+void Previewer::slotAutoSelToggled(bool isOn )
 {
-    if( isOn )
-        checkForScannerBg();
-
-    if( d->m_cbAutoSel )
+    if (d->m_cbAutoSel)
     {
-        QRect r = img_canvas->sel();
+        if (isOn)
+        {
+            if (!checkForScannerBg())
+            {
+                d->m_cbAutoSel->setChecked(false);
+                return;
+            }
+        }
 
-        kdDebug(29000) << "The rect is " << r.width() << " x " << r.height() << endl;
-        d->m_doAutoSelection = isOn;
+        QRect r = img_canvas->sel();
+        kDebug() << "rect is" << r;
 
         /* Store configuration */
-        if( d->m_scanner )
-        {
-            d->m_scanner->slStoreConfig( CFG_AUTOSEL_DO,
-                                         isOn ? "on" : "off" );
-        }
+        d->m_doAutoSelection = isOn;
+        if (d->m_scanner!=NULL) d->m_scanner->slotStoreConfig(CFG_AUTOSEL_DO,
+                                                              (isOn ? "on" : "off"));
 
-        if( isOn && r.width() < 2 && r.height() < 2)  /* There is no selection yet */
+        if (isOn && r.width()<2 && r.height()<2)	/* There is no selection yet */
         {
             /* if there is already an image, check, if the bg-color is set already */
-            if( img_canvas->rootImage() )
+            if (img_canvas->rootImage())
             {
-                kdDebug(29000) << "No selection -> try to find one!" << endl;
-
+                kDebug() << "No selection, try to find one";
                 findSelection();
             }
-
         }
     }
-    if( d->m_sliderThresh )
-        d->m_sliderThresh->setEnabled(isOn);
-    if( d->m_sliderDust )
-        d->m_sliderDust->setEnabled(isOn);
-    if( d->m_cbBackground )
-        d->m_cbBackground->setEnabled(isOn);
 
+    if (d->m_sliderThresh!=NULL) d->m_sliderThresh->setEnabled(isOn);
+    if (d->m_sliderDust!=NULL) d->m_sliderDust->setEnabled(isOn);
+    if (d->m_cbBackground!=NULL) d->m_cbBackground->setEnabled(isOn);
 }
 
 
-void Previewer::slSetAutoSelThresh(int t)
+void Previewer::slotSetAutoSelThresh(int t)
 {
     d->m_autoSelThresh = t;
-    kdDebug(29000) << "Setting threshold to " << t << endl;
+    kDebug() << "Setting threshold to" << t;
     if( d->m_scanner )
-        d->m_scanner->slStoreConfig( CFG_AUTOSEL_THRESH, QString::number(t) );
+        d->m_scanner->slotStoreConfig( CFG_AUTOSEL_THRESH, QString::number(t) );
     findSelection();
 }
 
-void Previewer::slSetAutoSelDustsize(int dSize)
+void Previewer::slotSetAutoSelDustsize(int dSize)
 {
     d->m_dustsize = dSize;
-    kdDebug(29000) << "Setting dustsize to " << dSize << endl;
+    kDebug() << "Setting dustsize to" << dSize;
     findSelection();
 }
 
@@ -552,12 +565,9 @@ void Previewer::slSetAutoSelDustsize(int dSize)
  **/
 void  Previewer::findSelection( )
 {
-    kdDebug(29000) << "Searching Selection" << endl;
-
-    kdDebug(29000) << "Threshold: " << d->m_autoSelThresh << endl;
-    kdDebug(29000) << "dustsize: " << d->m_dustsize << endl;
-    kdDebug(29000) << "isWhite: " << d->m_bgIsWhite << endl;
-
+    kDebug() << "threshold:" << d->m_autoSelThresh
+             << "dustsize:" << d->m_dustsize
+             << "isWhite:" << d->m_bgIsWhite;
 
     if( ! d->m_doAutoSelection ) return;
     int line;
@@ -568,20 +578,20 @@ void  Previewer::findSelection( )
     long iWidth  = img->width();
     long iHeight = img->height();
 
-    QMemArray<long> heightSum;
-    QMemArray<long> widthSum;
+    //QVector<long> heightSum;
+    //QVector<long> widthSum;
 
-    kdDebug(29000)<< "Preview size is " << iWidth << "x" << iHeight << endl;
+    kDebug()<< "Preview size is" << img->size();
 
     if( (d->m_heightSum).size() == 0 && (iHeight>0) )
     {
-        kdDebug(29000) << "Starting to fill Array " << endl;
-        QMemArray<long> heightSum(iHeight);
-        QMemArray<long> widthSum(iWidth);
+        kDebug() << "Starting to fill Array";
+        QVector<long> heightSum(iHeight);
+        QVector<long> widthSum(iWidth);
         heightSum.fill(0);
         widthSum.fill(0);
 
-        kdDebug(29000) << "filled  Array with zero " << endl;
+        kDebug() << "filled Array with zero";
 
         for( line = 0; line < iHeight; line++ )
         {
@@ -601,11 +611,11 @@ void  Previewer::findSelection( )
             heightSum[line] = heightSum[line]/iWidth;
         }
         /* Divide by amount of pixels */
-        kdDebug(29000) << "Resizing now" << endl;
+        kDebug(29000) << "Resizing...";
         for( x = 0; x < iWidth; x++ )
             widthSum[x] = widthSum[x]/iHeight;
 
-        kdDebug(29000) << "Filled Arrays successfully" << endl;
+        kDebug() << "Filled Arrays successfully";
         d->m_widthSum  = widthSum;
         d->m_heightSum = heightSum;
     }
@@ -658,13 +668,13 @@ void  Previewer::findSelection( )
     // r.setLeft( start );
     // r.setRight( end );
 
-    kdDebug(29000) << " -- Autodetection -- " <<  endl;
-    kdDebug(29000) << "Area top " << r.top() <<  endl;
-    kdDebug(29000) << "Area left" << r.left() << endl;
-    kdDebug(29000) << "Area bottom " << r.bottom() << endl;
-    kdDebug(29000) << "Area right " << r.right() << endl;
-    kdDebug(29000) << "Area width " << r.width() << endl;
-    kdDebug(29000) << "Area height " << r.height() << endl;
+    kDebug() << "Autodetection results:"
+             << "top " << r.top()
+             << "left" << r.left()
+             << "bottom " << r.bottom()
+             << "right " << r.right()
+             << "width " << r.width()
+             << "height " << r.height();
 
     img_canvas->setSelectionRect(r);
     slotNewAreaSelected(r);
@@ -674,9 +684,9 @@ void  Previewer::findSelection( )
 /*
  * returns an Array containing the
  */
-bool Previewer::imagePiece( QMemArray<long> src, int& start, int& end )
+bool Previewer::imagePiece( QVector<long> src, int& start, int& end )
 {
-    for( uint x = 0; x < src.size(); x++ )
+    for( int x = 0; x < src.size(); x++ )
     {
         if( !d->m_bgIsWhite )
         {

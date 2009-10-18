@@ -17,15 +17,20 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef __PHOTOCOPYPRINTDIALOGPAGE_H__
-#define __PHOTOCOPYPRINTDIALOGPAGE_H__
+#ifndef PHOTOCOPYPRINTDIALOGPAGE_H
+#define PHOTOCOPYPRINTDIALOGPAGE_H
 
 #include <qmap.h>
 #include <qcheckbox.h>
+
+#ifndef KDE4
 #include <kdeprint/kprintdialogpage.h>
-#include <scanparams.h>
+#endif
+
+#include "libkscan/scanparams.h"
+
 #include "kookaimage.h"
-#include <qvgroupbox.h>
+
 
 #define OPT_SCALING  "kde-kooka-scaling"
 #define OPT_SCAN_RES "kde-kooka-scanres"
@@ -35,32 +40,38 @@
 #define OPT_PSGEN_DRAFT  "kde-kooka-psdraft"
 #define OPT_RATIO    "kde-kooka-ratio"
 #define OPT_FITPAGE  "kde-kooka-fitpage"
+
+
 class QWidget;
 class QString;
 class QLabel;
+class Q3VGroupBox;
+
 class KIntNumInput;
+
 class KookaImage;
-class QVButtonGroup;
-class QRadioButton;
-class QCheckBox;
 class KScanDevice;
 class Previewer;
 
+#ifndef KDE4
 class PhotoCopyPrintDialogPage: public KPrintDialogPage
+#else
+class PhotoCopyPrintDialogPage: public QWidget
+#endif
 {
     Q_OBJECT
+
 public:
-    PhotoCopyPrintDialogPage( KScanDevice* );
+    PhotoCopyPrintDialogPage(KScanDevice *newScanDevice);
     ~PhotoCopyPrintDialogPage();
-    void setOptions(const QMap<QString,QString>& opts);
-    void getOptions(QMap<QString,QString>& opts, bool include_def = false);
+
+    void setOptions(const QMap<QString,QString> &opts);
+    void getOptions(QMap<QString,QString> &opts, bool include_def = false);
     bool isValid(QString& msg);
 
-public slots:
-
 private:
-    QLabel* constructLabel(QVGroupBox*, char*, const QCString& );
-    QLabel* constructLabel(QVGroupBox*, char*, QString* );
+    QLabel *constructLabel(Q3VGroupBox *group, const char *strTitle, const QByteArray &strSaneOption);
+    QLabel *constructLabel(Q3VGroupBox *group, const char *strTitle, const QString *strContents);
 
     KIntNumInput *m_copies;
     KScanDevice*  sane_device;
@@ -70,4 +81,4 @@ private:
     bool        m_ignoreSignal;
 };
 
-#endif
+#endif							// PHOTOCOPYPRINTDIALOGPAGE_H

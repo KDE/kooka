@@ -26,41 +26,43 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef __IMGSELECTLINE_H__
-#define __IMGSELECTLINE_H__
+#ifndef IMAGESELECTLINE_H
+#define IMAGESELECTLINE_H
 
-#include <qhbox.h>
+#include <khbox.h>
+#include <kurl.h>
 
 /**
  *
  */
 
-class KURL;
-class KURLComboBox;
+class KUrl;
+class KUrlComboBox;
 class QPushButton;
 class QStringList;
 
-class ImageSelectLine:public QHBox
+class ImageSelectLine : public KHBox
 {
    Q_OBJECT
-public:
-   ImageSelectLine( QWidget *parent, const QString& text );
 
-   KURL selectedURL() const;
-   void setURL( const KURL& );
-   void setURLs( const QStringList& );
+public:
+   ImageSelectLine(QWidget *parent, const QString &label);
+
+   KUrl selectedURL() const;
+   void setURL(const KUrl &url);
+   void setURLs(const QStringList &list);
 
 protected slots:
-   void slSelectFile();
-   void slUrlActivated( const KURL& );
+   void slotSelectFile();
+   void slotUrlActivated(const KUrl&url);
 
 private:
 
-   KURL m_currUrl;
-   KURLComboBox *m_urlCombo;
+   KUrl m_currUrl;
+   KUrlComboBox *m_urlCombo;
    QPushButton  *m_buttFileSelect;
 
 };
 
 
-#endif
+#endif							// IMAGESELECTLINE_H

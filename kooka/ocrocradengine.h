@@ -26,7 +26,10 @@
 #ifndef OCROCRADENGINE_H
 #define OCROCRADENGINE_H
 
+#include <qprocess.h>
+
 #include "ocrengine.h"
+
 
 class KProcess;
 
@@ -44,12 +47,12 @@ public:
     static QString engineDesc();
 
 protected slots:
-    void ocradStdIn(KProcess *proc,char *buffer,int buflen);
-    void ocradStdErr(KProcess *proc,char *buffer,int buflen);
-    void ocradExited(KProcess *proc);
+    void slotOcradStdout();
+    void slotOcradStderr();
+    void slotOcradExited(int exitCode, QProcess::ExitStatus exitStatus);
 
 private:
-    void startProcess(OcrBaseDialog *dia,KookaImage *img);
+    void startProcess(OcrBaseDialog *dia, KookaImage *img);
     void cleanUpFiles();
     QString readORF(const QString &fileName);
 

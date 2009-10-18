@@ -28,11 +28,11 @@
 #ifndef THUMBVIEW_H
 #define THUMBVIEW_H
 
-#include <qvbox.h>
 #include <qmap.h>
 
-#include <kicontheme.h>
+#include <kiconloader.h>
 #include <kurl.h>
+#include <kvbox.h>
 
 //  KConfig group definitions
 #define THUMB_GROUP		"thumbnailView"
@@ -40,62 +40,64 @@
 #define THUMB_BG_WALLPAPER	"BackGroundTile"
 #define THUMB_STD_TILE_IMG	"kooka/pics/thumbviewtile.png"
 
+class QMenu;
+
 class KFileItem;
-class KFileIconView;
-class KFileTreeViewItem;
+class K3FileTreeViewItem;
 class KActionMenu;
 class KToggleAction;
 
-class QPopupMenu;
+//class ThumbViewDirOperator;
+class KDirOperator;
 
-class ThumbViewDirOperator;
 
-
-class ThumbView : public QVBox
+class ThumbView : public KVBox
 {
    Q_OBJECT
 
 public:
-    ThumbView(QWidget *parent,const char *name = NULL);
+    ThumbView(QWidget *parent);
     ~ThumbView();
 
-    QPopupMenu *contextMenu() const;
+    //KMenu *contextMenu() const;
     bool readSettings();
 
     static QString standardBackground();
-    static QString sizeName(KIcon::StdSizes size);
+    static QString sizeName(KIconLoader::StdSizes size);
+
+    QSize sizeHint() const;
 
 public slots:
     void slotSetSize(int size);
     void slotImageDeleted(const KFileItem *kfi);
     void slotImageChanged(const KFileItem *kfi);
-    void slotImageRenamed(const KFileTreeViewItem *item,const QString &newName);
-    void slotSelectImage(const KFileTreeViewItem *item);
+    void slotImageRenamed(const K3FileTreeViewItem *item,const QString &newName);
+    void slotSelectImage(const K3FileTreeViewItem *item);
 
 protected:
     void saveConfig();
 
 protected slots:
-    void slotAboutToShowMenu();
-    void slotFileSelected(const KFileItem *kfi);
+    void slotAboutToShowMenu(const KFileItem &kfi, QMenu *menu);
+    void slotFileSelected(const KFileItem &kfi);
     void slotFinishedLoading();
 
 signals:
-    void selectFromThumbnail(const KURL &url);
+    void selectFromThumbnail(const KUrl &url);
 
 private:
     void setBackground();
 
     KActionMenu *m_sizeMenu;
     bool m_firstMenu;
-    QMap<KIcon::StdSizes,KToggleAction *> m_sizeMap;
+    QMap<KIconLoader::StdSizes, KToggleAction *> m_sizeMap;
 
-    KIcon::StdSizes m_thumbSize;
+    KIconLoader::StdSizes m_thumbSize;
     QString m_bgImg;
 
-    ThumbViewDirOperator *m_dirop;
-    KFileIconView *m_fileview;
-    KURL m_lastSelected;
+    //ThumbViewDirOperator *m_dirop;
+    KDirOperator *m_dirop;
+    KUrl m_lastSelected;
     QString m_toSelect;
 };
 

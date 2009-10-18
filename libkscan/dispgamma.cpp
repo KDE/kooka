@@ -17,23 +17,26 @@
    Boston, MA 02110-1301, USA.
 */
 
+#include "dispgamma.h"
+#include "dispgamma.moc"
+
 #include <qpainter.h>
 #include <qpixmap.h>
+#include <qevent.h>
 
-#include "dispgamma.h"
 
-DispGamma::DispGamma( QWidget *parent ) : QWidget( parent )
+DispGamma::DispGamma( QWidget *parent )
+    : QWidget( parent )
 {
-    vals = 0;
+    vals = NULL;
     margin = 10;
 }
 
 DispGamma::~DispGamma()
 {
-
 }
 
-void DispGamma::resizeEvent (QResizeEvent* )
+void DispGamma::resizeEvent (QResizeEvent*ev )
 {
     repaint();
 }
@@ -41,7 +44,7 @@ void DispGamma::resizeEvent (QResizeEvent* )
 void DispGamma::paintEvent( QPaintEvent *ev )
 {
     QPainter p(this);
-    int w = vals->size() +1;
+    int w = vals->size()+1;
 
     // Viewport auf margin setzen.
     p.setViewport( margin, margin, width() - margin, height() - margin );
@@ -49,11 +52,12 @@ void DispGamma::paintEvent( QPaintEvent *ev )
 
     p.setClipRect( ev->rect());
 
-    p.setPen( colorGroup().highlight() );
-    p.setBrush( colorGroup().base() );
-    // Backgrond
+    p.setPen(palette().highlight().color());
+    p.setBrush(palette().base());
+    // Background
     p.drawRect( 0,0, w, 256 );
-    p.setPen( QPen(colorGroup().midlight(), 1, DotLine));
+
+    p.setPen(QPen(palette().midlight(), 1, Qt::DotLine));
     // horizontal Grid
     for( int l = 1; l < 5; l++ )
             p.drawLine( 1, l*51, 255, l*51 );
@@ -63,23 +67,24 @@ void DispGamma::paintEvent( QPaintEvent *ev )
             p.drawLine( l*51, 2, l*51, 255 );
 
     // draw gamma-Line
-    p.setPen( colorGroup().highlight() );
-    p.moveTo( 1, vals->at(1) );
-    for( int i = 2; i < w-1; i++ )
+    p.setPen(palette().highlight().color());
+
+    int py = vals->at(1);
+    for( int x = 2; x<w-1; x++)
     {
-        p.lineTo( i, vals->at(i) );
+        int y = vals->at(x);
+        p.drawLine(x-1,py,x,y);
+        py = y;
     }
-    p.flush();
 }
 
 
-QSize DispGamma::sizeHint( void )
+QSize DispGamma::sizeHint() const
 {
     return QSize( 256 + 2*margin,256 + 2 * margin );
 }
 
-QSizePolicy DispGamma::sizePolicy( void )
+QSizePolicy DispGamma::sizePolicy()
 {
     return QSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding );
 }
-#include "dispgamma.moc"

@@ -26,8 +26,6 @@
 #ifndef OCRKADMOSENGINE_H
 #define OCRKADMOSENGINE_H
 
-#include "config.h"
-
 #include "ocrengine.h"
 
 #ifdef HAVE_KADMOS
@@ -59,7 +57,7 @@ private:
     void cleanUpFiles();
 
 private:
-    KTempFile *m_tmpFile;
+    QString m_tmpFile;
 #ifdef HAVE_KADMOS
     Kadmos::CRep m_rep;
 #endif

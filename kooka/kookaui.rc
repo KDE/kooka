@@ -2,7 +2,7 @@
 <kpartgui name="Kooka" version="4">
 
  <MenuBar>
-  <Menu name="file" noMerge="1"><text>&amp;Gallery</text>
+  <Menu name="file" noMerge="1"><text>&amp;File</text>
    <Action name="foldernew"/>
    <Action name="openWith"/>
    <Action name="saveImage"/>

@@ -20,22 +20,26 @@
 #ifndef PREVIEWER_H
 #define PREVIEWER_H
 
+#include "libkscanexport.h"
+
 #include <qwidget.h>
-#include <qimage.h>
 #include <qrect.h>
+#include <qvector.h>
 
 #include <kruler.h>
 
 /**
   *@author Klaas Freitag
   */
-class ImageCanvas;
-class SizeIndicator;
-class KScanDevice;
 class QLabel;
 
+class KScanDevice;
 
-class Previewer : public QWidget
+class ImageCanvas;
+class SizeIndicator;
+
+
+class KSCAN_EXPORT Previewer : public QWidget
 {
     Q_OBJECT
 
@@ -58,30 +62,30 @@ public:
 
 public slots:
     void slotNewAreaSelected(QRect r);
-    void slNewScanResolutions(int xres,int yres);
-    void slNewScanMode(int bytes_per_pix);
-    void slSetAutoSelThresh(int);
-    void slSetAutoSelDustsize(int);
+    void slotNewScanResolutions(int xres,int yres);
+    void slotNewScanMode(int bytes_per_pix);
+    void slotSetAutoSelThresh(int);
+    void slotSetAutoSelDustsize(int);
 
     void slotNewCustomScanSize(QRect rect);
 
 protected slots:
-    void slScaleToWidth();
-    void slScaleToHeight();
-    void slAutoSelToggled(bool);
-    void slScanBackgroundChanged(int);
+    void slotScaleToWidth();
+    void slotScaleToHeight();
+    void slotAutoSelToggled(bool);
+    void slotScanBackgroundChanged(int);
 
 signals:
     void newPreviewRect(QRect rect);
 
 private:
-    void checkForScannerBg();
+    bool checkForScannerBg();
     void setScannerBgIsWhite(bool isWhite);
 
     void updateSelectionDims();
     void findSelection();
 
-    bool imagePiece(QMemArray<long> src,int &start,int &end);
+    bool imagePiece(QVector<long> src,int &start,int &end);
 
     QLabel *selSize1;
     QLabel *selSize2;
@@ -102,4 +106,4 @@ private:
     PreviewerPrivate *d;
 };
 
-#endif
+#endif							// PREVIEWER_H

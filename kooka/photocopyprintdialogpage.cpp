@@ -17,26 +17,24 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include <klocale.h>
-#include <knuminput.h>
-#include <kdialog.h>
+#include "photocopyprintdialogpage.h"
+#include "photocopyprintdialogpage.moc"
 
 #include <qstring.h>
 #include <qmap.h>
 #include <qlayout.h>
-#include <qvbuttongroup.h>
 #include <qcheckbox.h>
 #include <qradiobutton.h>
-#include "kookaimage.h"
-#include <qvgroupbox.h>
-#include <qhgroupbox.h>
-#include <qpaintdevicemetrics.h>
+#include <q3vgroupbox.h>
+#include <q3hgroupbox.h>
 #include <qlabel.h>
-#include <qtooltip.h>
-#include <kdebug.h>
 
-#include "photocopyprintdialogpage.h"
-#include "photocopyprintdialogpage.moc"
+#include <kdebug.h>
+#include <klocale.h>
+#include <knuminput.h>
+#include <kdialog.h>
+
+#include "kookaimage.h"
 
 #define ID_SCREEN 0
 #define ID_ORIG   1
@@ -47,28 +45,34 @@
 #define SANE_NAME_SCAN_BR_X             "br-x"
 #define SANE_NAME_SCAN_BR_Y             "br-y"
 
-PhotoCopyPrintDialogPage::PhotoCopyPrintDialogPage( KScanDevice* newScanDevice )
-    : KPrintDialogPage( )
+PhotoCopyPrintDialogPage::PhotoCopyPrintDialogPage(KScanDevice *newScanDevice)
+#ifndef KDE4
+    : KPrintDialogPage()
+#else
+    : QWidget()
+#endif
 {
-    kdDebug(28000) << "Created a  PhotoCopyPrintDialogPage" << endl;
-    QString str;
+    kDebug();
 
+#ifndef KDE4
     setTitle(i18n("PhotoCopier"));
+#endif
 
     sane_device = newScanDevice;
 
-    QVBoxLayout *leftVBox = new QVBoxLayout( this );
+    QVBoxLayout *leftVBox = new QVBoxLayout(this);
 
-    QHGroupBox *prtgroup1 = new QHGroupBox( i18n( "Print options" ), this );
+    Q3HGroupBox *prtgroup1 = new Q3HGroupBox( i18n( "Print options" ), this );
 
     /* Allow for number of Copies */
     m_copies = new KIntNumInput( prtgroup1 );
-    m_copies->setLabel( i18n("Copies: " ), AlignVCenter );
+    m_copies->setLabel(i18n("Copies: " ), Qt::AlignVCenter );
     m_copies->setValue( 1 );
-    m_copies->setMinValue( 1 );
-    m_copies->setMaxValue( 1 );
+    m_copies->setMinimum( 1 );
+    // TODO: is this correct?  maximum number of copies 1?
+    m_copies->setMaximum( 1 );
 
-    QHBoxLayout *prtHBox = new QHBoxLayout( );
+    QHBoxLayout *prtHBox = new QHBoxLayout(this);
 
     prtHBox->addWidget( prtgroup1 );
 
@@ -79,9 +83,9 @@ PhotoCopyPrintDialogPage::PhotoCopyPrintDialogPage( KScanDevice* newScanDevice )
     prtHBox->addStretch(1);
 
 // Scanner options
-    str = i18n("Scanner Settings: ");
+    QString str = i18n("Scanner Settings: ");
     str += sane_device->getScannerName();
-    QVGroupBox *scangroup1 = new QVGroupBox( str, this );
+    Q3VGroupBox *scangroup1 = new Q3VGroupBox( str, this );
 
     str = i18n("Scan size:  ");
     QString strBR_X;
@@ -122,48 +126,50 @@ PhotoCopyPrintDialogPage::PhotoCopyPrintDialogPage( KScanDevice* newScanDevice )
 
 }
 
+
 PhotoCopyPrintDialogPage::~PhotoCopyPrintDialogPage()
 {
-    kdDebug(28000) << "Collapsed a PhotoCopyPrintDialogPage!" << endl;
+    kDebug();
 }
+
 
 void PhotoCopyPrintDialogPage::setOptions(const QMap<QString,QString>& opts)
 {
-    kdDebug(28000) << "Entered PhotoCopyPrintDialogPage::setOptions" << endl;
+    kDebug();
 }
 
 
 void PhotoCopyPrintDialogPage::getOptions(QMap<QString,QString>& opts, bool )
 {
-    kdDebug(28000) << "Entered PhotoCopyPrintDialogPage::getOptions" << endl;
+    kDebug();
 }
+
 
 bool PhotoCopyPrintDialogPage::isValid(QString& msg)
 {
-
-    return true;
+    return (true);
 }
 
-QLabel* PhotoCopyPrintDialogPage::constructLabel(QVGroupBox* group, char* strTitle,  const QCString&  strSaneOption)
+
+QLabel *PhotoCopyPrintDialogPage::constructLabel(Q3VGroupBox *group, const char *strTitle, const QByteArray &strSaneOption)
 {
-    QString str = i18n(strTitle)+": ";
-    str.append( "\t" );
-    KScanOption res ( strSaneOption );
-    str.append( res.get() );
-    QLabel* lbl = new QLabel( group );
-    lbl->setText( str );
-    return ( lbl );
+    KScanOption res (strSaneOption);
+    QString str = i18n(strTitle)+": "+"\t"+res.get();
+    QLabel* lbl = new QLabel(group);
+    lbl->setText(str);
+    return (lbl);
 }
 
-QLabel* PhotoCopyPrintDialogPage::constructLabel(QVGroupBox* group, char* strTitle,  QString* strContents)
+
+// The unusual 'const QString *' parameter is here so that this function can
+// be overloaded with the previous.  If this were 'const QString &' then the
+// overload would be ambiguous (because there is a converion from QByteArray
+// to QString).
+
+QLabel *PhotoCopyPrintDialogPage::constructLabel(Q3VGroupBox *group, const char *strTitle, const QString *strContents)
 {
-    QString str = i18n(strTitle)+": ";
-
-    str.append( "\t" );
-    str.append( *strContents );
-    QLabel* lbl = new QLabel( group );
-    lbl->setText( str );
-    return ( lbl );
+    QString str = i18n(strTitle)+": "+"\t"+(*strContents);
+    QLabel* lbl = new QLabel(group);
+    lbl->setText(str);
+    return (lbl);
 }
-
-

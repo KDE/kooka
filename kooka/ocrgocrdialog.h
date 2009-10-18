@@ -28,17 +28,15 @@
 #ifndef OCRGOCRDIALOG_H
 #define OCRGOCRDIALOG_H
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 
-#include "kscancontrols.h"
+#include "libkscan/kscancontrols.h"
 
 #include "ocrbasedialog.h"
 
 /**
   *@author Klaas Freitag
   */
-
-class KProcess;
 
 
 class OcrGocrDialog : public OcrBaseDialog
@@ -60,26 +58,22 @@ public:
     QString ocrEngineName() const;
     QString ocrEngineDesc() const;
 
-    void introduceImage( const KookaImage* );
+    void introduceImage(const KookaImage *img);
 
 protected:
     void enableFields(bool enable);
 
 protected slots:
-    void writeConfig();
+    void slotWriteConfig();
 
 private:
     void version(const QString &exe);
-
-private slots:
-    void slReceiveStdErr(KProcess *proc,char *buffer,int buflen);
 
 private:
     KScanSlider *sliderGrayLevel;
     KScanSlider *sliderDustSize;
     KScanSlider *sliderSpace;
 
-    KProcess *m_proc;
     QString m_ocrCmd;
     bool m_isBW;
 };

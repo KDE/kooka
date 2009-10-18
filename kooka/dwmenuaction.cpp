@@ -29,21 +29,31 @@
 
 #include "dwmenuaction.h"
 #include "dwmenuaction.moc"
+
+#include <k3dockwidget.h>
+
+
 //-------------------------------------
 
-dwMenuAction::dwMenuAction( const QString& text, const KShortcut& cut,
-			    KDockWidget *dw,QObject* parent,
-			    KDockMainWindow *mw, const char* name )
-    :KToggleAction(text,cut,parent,name),m_dw(dw),m_mw(mw)
+dwMenuAction::dwMenuAction(const QString &text,
+                           K3DockWidget *dw,
+                           K3DockMainWindow *mw,
+                           QObject *parent)
+    : KToggleAction(text, parent),
+      m_dw(dw),
+      m_mw(mw)
 {
-    connect(this,SIGNAL(toggled(bool)),this,SLOT(slotToggled(bool)));
-    connect(m_dw->dockManager(),SIGNAL(change()),this,SLOT(anDWChanged()));
-    connect(m_dw,SIGNAL(destroyed()),this,SLOT(slotWidgetDestroyed()));
-    setChecked(m_dw->mayBeHide());
+    connect(this, SIGNAL(toggled(bool)), SLOT(slotToggled(bool)));
+    //connect(m_dw->dockManager(), SIGNAL(change()), SLOT(anDWChanged()));
+    //connect(m_dw,SIGNAL(destroyed()), SLOT(slotWidgetDestroyed()));
+    //setChecked(m_dw->mayBeHide());
 }
 
 
-dwMenuAction::~dwMenuAction(){;}
+dwMenuAction::~dwMenuAction()
+{
+}
+
 
 void dwMenuAction::anDWChanged()
 {
@@ -55,18 +65,15 @@ void dwMenuAction::anDWChanged()
 void dwMenuAction::slotToggled(bool t)
 {
 
-    if ((!t) && m_dw->mayBeHide() ) m_dw->undock();
-        else
-    if ( t && m_dw->mayBeShow() ) m_mw->makeDockVisible(m_dw);
-
+    if (!t && m_dw->mayBeHide()) m_dw->undock();
+    else if (t && m_dw->mayBeShow()) m_mw->makeDockVisible(m_dw);
 }
 
 
 void dwMenuAction::slotWidgetDestroyed()
 {
-    unplugAll();
+    // TODO: not sure whether this is needed now...
+    //unplugAll();
+    foreach (QWidget *w, associatedWidgets()) w->removeAction(this);
     deleteLater();
 }
-
-
-/* END */

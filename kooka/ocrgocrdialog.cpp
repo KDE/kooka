@@ -24,6 +24,15 @@
  *                                                                         *
  ***************************************************************************/
 
+#include "ocrgocrdialog.h"
+#include "ocrgocrdialog.moc"
+
+#include <qlabel.h>
+#include <qtooltip.h>
+#include <qregexp.h>
+#include <qgridlayout.h>
+
+#include <kvbox.h>
 #include <kconfig.h>
 #include <kglobal.h>
 #include <kdebug.h>
@@ -32,19 +41,10 @@
 #include <kmessagebox.h>
 #include <kprocess.h>
 
-#include <qvbox.h>
-#include <qlabel.h>
-#include <qtooltip.h>
-#include <qregexp.h>
-#include <qgrid.h>
-
 #include "kookaimage.h"
 #include "kookapref.h"
 
 #include "ocrgocrengine.h"
-
-#include "ocrgocrdialog.h"
-#include "ocrgocrdialog.moc"
 
 /* defines for konfig-reading */
 
@@ -54,9 +54,8 @@
 #define CFG_GOCR_SPACEWIDTH "gocrSpaceWidth"
 
 
-OcrGocrDialog::OcrGocrDialog( QWidget *parent,KSpellConfig *spellConfig)
-    : OcrBaseDialog(parent,spellConfig),
-      m_proc(NULL),
+OcrGocrDialog::OcrGocrDialog(QWidget *parent, KSpellConfig *spellConfig)
+    : OcrBaseDialog(parent, spellConfig),
       m_ocrCmd(QString::null),
       m_isBW(false)
 {
@@ -65,7 +64,6 @@ OcrGocrDialog::OcrGocrDialog( QWidget *parent,KSpellConfig *spellConfig)
 
 OcrGocrDialog::~OcrGocrDialog()
 {
-    if (m_proc!=NULL) delete m_proc;
 }
 
 
@@ -89,52 +87,57 @@ OcrEngine::EngineError OcrGocrDialog::setupGui()
 {
     OcrBaseDialog::setupGui();
 
-    QVBox *page = ocrPage();
-    KConfig *conf = KGlobal::config();
-    conf->setGroup(CFG_GROUP_GOCR);
+    KVBox *page = static_cast<KVBox *>(ocrPage()->widget());
+    new KSeparator(Qt::Horizontal, page);
 
-    new KSeparator(KSeparator::HLine,page);
+    KConfigGroup grp1 = KGlobal::config()->group(CFG_GROUP_GOCR);
 
     /* Sliders for OCR-Options */
-    QGrid *g = new QGrid(2,Qt::Horizontal,page);
-    g->setSpacing(KDialog::spacingHint());
+    QGridLayout *gl = new QGridLayout(page);
+    gl->setSpacing(KDialog::spacingHint());
 
-    QLabel *l = new QLabel(i18n("Gray level:"),g);
-    sliderGrayLevel = new KScanSlider( g , QString::null, 0, 254, true, 160 );
-    int numdefault = conf->readNumEntry( CFG_GOCR_GRAYLEVEL, 160 );
-    sliderGrayLevel->slSetSlider( numdefault );
-    QToolTip::add( sliderGrayLevel,
-                   i18n( "The threshold value below which gray pixels are\nconsidered to be black.\n\nThe default is 160."));
+    QLabel *l = new QLabel(i18n("Gray level:"), page);
+    gl->addWidget(l, 0, 0);
+    sliderGrayLevel = new KScanSlider(page, QString::null, 0, 254, true, 160 );
+    int numdefault = grp1.readEntry(CFG_GOCR_GRAYLEVEL, 160);
+    sliderGrayLevel->slotSetSlider(numdefault);
+    sliderGrayLevel->setToolTip(i18n("The threshold value below which gray pixels are\nconsidered to be black.\n\nThe default is 160."));
     l->setBuddy(sliderGrayLevel);
+    gl->addWidget(sliderGrayLevel, 0, 1);
 
-    l = new QLabel(i18n("Dust size:"),g);
-    sliderDustSize = new KScanSlider( g, QString::null, 0, 60, true, 10 );
-    numdefault = conf->readNumEntry( CFG_GOCR_DUSTSIZE, 10 );
-    sliderDustSize->slSetSlider( numdefault );
-    QToolTip::add( sliderDustSize,
-                   i18n( "Clusters smaller than this value\nwill be considered to be dust, and\nremoved from the image.\n\nThe default is 10."));
+    l = new QLabel(i18n("Dust size:"), page);
+    gl->addWidget(l, 1, 0);
+    sliderDustSize = new KScanSlider(page, QString::null, 0, 60, true, 10 );
+    numdefault = grp1.readEntry(CFG_GOCR_DUSTSIZE, 10);
+    sliderDustSize->slotSetSlider(numdefault);
+    sliderDustSize->setToolTip(i18n("Clusters smaller than this value\nwill be considered to be dust, and\nremoved from the image.\n\nThe default is 10."));
     l->setBuddy(sliderDustSize);
+    gl->addWidget(sliderDustSize, 1, 1);
 
-    l = new QLabel(i18n("Space width:"),g);
-    sliderSpace = new KScanSlider( g, QString::null, 0, 60, true, 0 );
-    numdefault = conf->readNumEntry( CFG_GOCR_SPACEWIDTH, 0 );
-    sliderSpace->slSetSlider( numdefault );
-    QToolTip::add( sliderSpace, i18n("Spacing between characters.\n\nThe default is 0 which means autodetection."));
+    l = new QLabel(i18n("Space width:"), page);
+    gl->addWidget(l, 2, 0);
+    sliderSpace = new KScanSlider(page, QString::null, 0, 60, true, 0 );
+    numdefault = grp1.readEntry(CFG_GOCR_SPACEWIDTH, 0);
+    sliderSpace->slotSetSlider(numdefault);
+    sliderSpace->setToolTip(i18n("Spacing between characters.\n\nThe default is 0 which means autodetection."));
     l->setBuddy(sliderSpace);
+    gl->addWidget(sliderSpace, 2, 1);
+
+    gl->setRowStretch(3, 1);
 
     /* find the GOCR binary */
-    conf->setGroup(CFG_GROUP_OCR_DIA);
-    QString res = conf->readPathEntry(CFG_GOCR_BINARY);
+    KConfigGroup grp2 = KGlobal::config()->group(CFG_GROUP_OCR_DIA);
+    QString res = grp2.readPathEntry(CFG_GOCR_BINARY, "");
     if (res.isEmpty())
     {
         res = KookaPref::tryFindGocr();
         if (res.isEmpty())
         {
             /* Popup here telling that the config needs to be called */
-            KMessageBox::sorry(this,i18n("The path to the GOCR binary is not configured or is not valid.\n"
-                                         "Please enter or check the path in the Kooka configuration."),
+            KMessageBox::sorry(this, i18n("The path to the GOCR binary is not configured or is not valid.\n"
+                                          "Please enter or check the path in the Kooka configuration."),
                                i18n("GOCR Software Not Found"));
-            enableButton(KDialogBase::User1,false);
+            enableButton(KDialog::User1, false);
         }
     }
 
@@ -159,7 +162,7 @@ void OcrGocrDialog::introduceImage(const KookaImage *img)
     m_isBW = true;
     if (img->numColors()>0 && img->numColors()<3)
     {
-        kdDebug(28000) << k_funcinfo << "Have " << img->numColors() << " colors on depth " << img->depth() << endl;
+        kDebug() << "Have" << img->numColors() << "colors on depth" << img->depth();
         /* that means it is a black-and-white image. Thus we do not need the GrayLevel slider */
         m_isBW = false;
     }
@@ -168,20 +171,19 @@ void OcrGocrDialog::introduceImage(const KookaImage *img)
 }
 
 
-void OcrGocrDialog::writeConfig( void )
+void OcrGocrDialog::slotWriteConfig( void )
 {
-    kdDebug(28000) << k_funcinfo << endl;
+    kDebug();
 
-    OcrBaseDialog::writeConfig();
+    OcrBaseDialog::slotWriteConfig();
 
-    KConfig *conf = KGlobal::config();
-    conf->setGroup(CFG_GROUP_OCR_DIA);
-    conf->writePathEntry(CFG_GOCR_BINARY,QString(getOCRCmd()));
+    KConfigGroup grp1 = KGlobal::config()->group(CFG_GROUP_OCR_DIA);
+    grp1.writePathEntry(CFG_GOCR_BINARY, getOCRCmd());
 
-    conf->setGroup(CFG_GROUP_GOCR);
-    conf->writeEntry(CFG_GOCR_GRAYLEVEL,getGraylevel());
-    conf->writeEntry(CFG_GOCR_DUSTSIZE,getDustsize());
-    conf->writeEntry(CFG_GOCR_SPACEWIDTH,getSpaceWidth());
+    KConfigGroup grp2 = KGlobal::config()->group(CFG_GROUP_GOCR);
+    grp2.writeEntry(CFG_GOCR_GRAYLEVEL, getGraylevel());
+    grp2.writeEntry(CFG_GOCR_DUSTSIZE, getDustsize());
+    grp2.writeEntry(CFG_GOCR_SPACEWIDTH, getSpaceWidth());
 }
 
 
@@ -195,29 +197,26 @@ void OcrGocrDialog::enableFields(bool enable)
 
 void OcrGocrDialog::version(const QString &exe)
 {
-    if (m_proc!=NULL) delete m_proc;
+    kDebug() << "of" << exe;
 
-    m_proc = new KProcess;
+    QString vers;
 
-    kdDebug(28000) << k_funcinfo << "version of " << exe << endl;
-    *m_proc << exe;
-    *m_proc << "-h";
+    KProcess proc;
+    proc << exe << "-h";
 
-    connect(m_proc,SIGNAL(receivedStderr(KProcess *,char *,int)),
-            SLOT(slReceiveStdErr(KProcess *,char *,int)));
-
-    m_proc->start(KProcess::NotifyOnExit,KProcess::Stderr);
-}
-
-
-void OcrGocrDialog::slReceiveStdErr(KProcess *proc,char *buffer,int buflen)
-{
-    QString vstr = QString::fromUtf8(buffer,buflen);
-
-    QRegExp rx("-- gocr ([\\d\\.]+)");
-    if (rx.search(vstr)>-1)
+    int status = proc.execute(5000);
+    if (status==0)
     {
-        QString vStr = rx.cap(1);
-        ocrShowVersion(vStr);
+        QByteArray output = proc.readAllStandardError();
+        QRegExp rx("-- gocr ([\\d\\.\\s]+)");
+        if (rx.indexIn(output)>-1) vers = rx.cap(1);
+        else vers = i18n("Unknown");
     }
+    else
+    {
+        kDebug() << "failed with status" << status;
+        vers = i18n("Error");
+    }
+
+    ocrShowVersion(vers);
 }

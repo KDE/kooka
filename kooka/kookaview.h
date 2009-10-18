@@ -27,37 +27,53 @@
 #ifndef KOOKAVIEW_H
 #define KOOKAVIEW_H
 
-#include <qwidget.h>
-#include <kopenwith.h>
-#include "kookaiface.h"
-#include <kdockwidget.h>
-#include <qtabwidget.h>
-#include <qlayout.h>
-#include <qimage.h>
-#include <qsplitter.h>
+#include <ktabwidget.h>
+//#include <kvbox.h>
 
-#include <kparts/dockmainwindow.h>
-#include <kparts/part.h>
+// TODO: inline functions into .cpp, then these includes not needed
+#include "libkscan/previewer.h"
+#include "libkscan/scanparams.h"
+#include "libkscan/img_canvas.h"
 
-// application specific includes
-#include "kscandevice.h"
-#include "previewer.h"
-#include "scanparams.h"
-#include "img_canvas.h"
-#include "kookagallery.h"
-
-class KDockWidget;
 class QPainter;
-class OcrEngine;
-class KConfig;
+class QPixmap;
+class QSplitter;
+
+//class K3DockWidget;
+//class K3DockMainWindow;
+class KConfigGroup;
 class KPrinter;
 class KAction;
 class KActionCollection;
+class K3FileTreeViewItem;
+class KMainWindow;
+
+class OcrEngine;
 class ThumbView;
 class KookaImage;
-class QPixmap;
-class ocrResEdit;
-class KFileTreeViewItem;
+class KookaGallery;
+class OcrResEdit;
+class ScanPackager;
+
+
+
+
+class WidgetSite : public QWidget
+{
+    Q_OBJECT
+
+public:
+    WidgetSite(QWidget *parent, QWidget *widget = NULL);
+    void setWidget(QWidget *widget);
+
+private:
+    static int mCount;
+};
+
+
+
+
+
 
 /**
  * This is the main view class for Kooka.  Most of the non-menu,
@@ -68,17 +84,19 @@ class KFileTreeViewItem;
  * @author Klaas Freitag <freitag@suse.de>
  * @version 0.1
  */
-class KookaView : public QObject
+class KookaView : public KTabWidget
 {
     Q_OBJECT
+
 public:
-    typedef enum { MirrorVertical, MirrorHorizontal, MirrorBoth } MirrorType;
-    typedef enum { StatusTemp, StatusImage } StatusBarIDs;
+    enum MirrorType { MirrorVertical, MirrorHorizontal, MirrorBoth};
+    enum StatusBarIDs { StatusTemp, StatusImage };
+    enum TabPage { TabScan = 0, TabGallery = 1, TabOcr = 2 };
 
     /**
      * Default constructor
      */
-    KookaView(KParts::DockMainWindow *parent, const QCString& deviceToUse);
+    KookaView(KMainWindow *parent, const QByteArray &deviceToUse);
 
     /**
      * Destructor
@@ -91,11 +109,11 @@ public:
     void print( );
 
     void loadStartupImage();
-    KDockWidget *mainDockWidget() const	{ return (m_mainDock); }
-    ScanPackager *gallery() const	{ return (m_gallery->galleryTree()); }
+//    K3DockWidget *mainDockWidget() const	{ return (m_mainDock); }
+    ScanPackager *gallery() const;
     ImageCanvas *getImageViewer() const	{ return (img_canvas); }
 
-    void createDockMenu( KActionCollection*, KDockMainWindow *, const char *);
+//    void createDockMenu(KActionCollection *ac, K3DockMainWindow *mainWin, const char *actName);
 
     bool scannerConnected() const { return (haveConnection); }
     QString scannerName() const;
@@ -107,97 +125,100 @@ public:
     void connectGalleryAction(KAction *action);
     void connectThumbnailAction(KAction *action);
 
-    void saveProperties( KConfig* );
+    void saveProperties(KConfigGroup &grp);
 
 public slots:
-    void slShowPreview()  {  }
-    void slShowPackager() {  }
-    void slNewPreview( QImage *, ImgScanInfo * );
+    void slotShowPreview()  {  }
+    void slotShowPackager() {  }
+    void slotNewPreview( QImage *, ImgScanInfo * );
 
-    void slSetScanParamsVisible( bool v )
+// TODO: members with code into .cpp file
+    void slotSetScanParamsVisible( bool v )
         { if( v ) scan_params->show(); else scan_params->hide(); }
-    void slSetTabWVisible( bool v )
+    void slotSetTabWVisible( bool v )
         { if( v ) preview_canvas->show(); else preview_canvas->hide(); }
 
-    void doOCR( void );
-    void doOCRonSelection( void );
-    void slOcrSpellCheck();
+    void slotStartOcr();
+    void slotStartOcrSelection();
+    void slotOcrSpellCheck();
+    void slotSaveOcrResult();
 
-    void slStartPreview() { if( scan_params ) scan_params->slAcquirePreview(); }
-    void slStartFinalScan() { if( scan_params ) scan_params->slStartScan(); }
+    void slotStartPreview() { if( scan_params ) scan_params->slotAcquirePreview(); }
+    void slotStartFinalScan() { if( scan_params ) scan_params->slotStartScan(); }
 
-    void slCreateNewImgFromSelection( void );
+    void slotCreateNewImgFromSelection();
 
-    void slRotateImage( int );
+    void slotRotateImage(int angle);
 
-    void slMirrorImage( MirrorType );
+    void slotMirrorImage(KookaView::MirrorType type);
 
-    void slIVScaleToWidth( void )
-        { if( img_canvas ) img_canvas->handle_popup(ImageCanvas::ID_FIT_WIDTH );}
-    void slIVScaleToHeight( void )
-        { if( img_canvas ) img_canvas->handle_popup(ImageCanvas::ID_FIT_HEIGHT );}
-    void slIVScaleOriginal( void )
-        { if( img_canvas ) img_canvas->handle_popup(ImageCanvas::ID_ORIG_SIZE ); }
-    void slIVShowZoomDialog( )
-        { if( img_canvas ) img_canvas->handle_popup(ImageCanvas::ID_POP_ZOOM ); }
+    void slotIVScaleToWidth()
+        { if( img_canvas ) img_canvas->handlePopup(ImageCanvas::ID_FIT_WIDTH );}
+    void slotIVScaleToHeight()
+        { if( img_canvas ) img_canvas->handlePopup(ImageCanvas::ID_FIT_HEIGHT );}
+    void slotIVScaleOriginal()
+        { if( img_canvas ) img_canvas->handlePopup(ImageCanvas::ID_ORIG_SIZE ); }
+    void slotIVShowZoomDialog( )
+        { if( img_canvas ) img_canvas->handlePopup(ImageCanvas::ID_POP_ZOOM ); }
 
-    void slOpenCurrInGraphApp( void );
+    void slotOpenCurrInGraphApp();
 
-    void slSaveOCRResult();
 
     //void slLoadScanParams( );
-    void slScanParams();
+    void slotScanParams();
 
-    void slOCRResultImage( const QPixmap& );
+    void slotOCRResultImage( const QPixmap& );
 
      void slotApplySettings();
 
     /**
      * slot that show the image viewer
      */
-    void slStartLoading( const KURL& url );
+    void slotStartLoading(const KUrl &url);
     /**
      * starts ocr on the image the parameter is pointing to
      **/
-    void startOCR( KookaImage* );
+    void startOCR(const KookaImage *img);
 
 
     /**
      * slot to select the scanner device. Does all the work with selection
      * of scanner, disconnection of the old device and connecting the new.
      */
-    bool slSelectDevice(const QCString& useDevice = QCString(), bool alwaysAsk = true);
-    void slAddDevice();
+    bool slotSelectDevice(const QByteArray &useDevice = "", bool alwaysAsk = true);
+    void slotAddDevice();
 
-    void slScanStart();
-    void slScanFinished( KScanStat stat );
-    void slAcquireStart();
+    void slotScanStart();
+    void slotScanFinished( KScanStat stat );
+    void slotAcquireStart();
 
 
 protected slots:
 
-    void slStartPhotoCopy();
-    void slPhotoCopyPrint(QImage* , ImgScanInfo* );
-    void slPhotoCopyScan( KScanStat );
+    void slotStartPhotoCopy();
+    void slotPhotoCopyPrint(QImage* , ImgScanInfo* );
+    void slotPhotoCopyScan( KScanStat );
 
-    void  slShowAImage( const KookaImage* );
-    void  slUnloadAImage( KookaImage* );
+    void slotShowAImage(const KookaImage *img);
+    void slotUnloadAImage(const KookaImage *img);
 
     /**
      * called from the scandevice if a new Image was successfully scanned.
      * Needs to convert the one-page-QImage to a KookaImage
      */
-    void slNewImageScanned(QImage*, ImgScanInfo*);
+    void slotNewImageScanned(QImage*, ImgScanInfo*);
 
     /**
      * called if an viewer image was set to read only or back to read write state.
      */
-    void slViewerReadOnly( bool ro );
+    void slotViewerReadOnly(bool ro);
 
     void slotSelectionChanged(QRect newSelection);
     void slotGallerySelectionChanged();
-    void slotLoadedImageChanged(const KookaImage *img,bool isDir);
+    void slotLoadedImageChanged(const KookaImage *img, bool isDir);
     void slotOcrResultText(const QString &text);
+
+    void slotTabChanged(int index);
 
 signals:
     /**
@@ -208,29 +229,26 @@ signals:
     /**
      * Use this signal to clean up the statusbar
      */
-    void signalCleanStatusbar( void );
+    void signalCleanStatusbar();
 
     /**
      * Use this signal to change the content of the caption
      */
-    void signalChangeCaption(const QString& text);
+    void signalChangeCaption(const QString &text);
 
     void signalScannerChanged(bool haveConnection);
     void signalRectangleChanged(bool haveSelection);
-    void signalGallerySelectionChanged(bool isDir,int howmanySelected);
-    void signalLoadedImageChanged(bool isLoaded,bool isDir);
+    void signalGallerySelectionChanged(bool isDir, int howmanySelected);
+    void signalLoadedImageChanged(bool isLoaded, bool isDir);
     void signalOcrResultAvailable(bool haveText);
     void signalOcrPrefs();
 
 private:
-    QImage rotateRight( QImage* );
-    QImage rotateLeft ( QImage* );
-    //QImage rotate180  ( QImage* );
-    QCString userDeviceSelection(bool alwaysAsk);
+    QByteArray userDeviceSelection(bool alwaysAsk);
 
     void updateCurrImage( QImage& ) ;
 
-    QWidget *m_parent;
+    KMainWindow *m_mainWindow;
 
     ImageCanvas  *img_canvas;
     ThumbView    *m_thumbview;
@@ -243,7 +261,7 @@ private:
 
     KScanDevice  *sane;
 
-    QCString     connectedDevice;
+    QByteArray     connectedDevice;
 
     QImage       *m_ocrResultImg;
     int          image_pool_id;
@@ -251,20 +269,31 @@ private:
 
     OcrEngine *ocrFabric;
 
-    KDockWidget *m_mainDock;
-    KDockWidget *m_dockScanParam;
-    KDockWidget *m_dockThumbs;
-    KDockWidget *m_dockPackager;
-    KDockWidget *m_dockPreview;
-    KDockWidget *m_dockOCRText;
+//    K3DockWidget *m_mainDock;
+//    K3DockWidget *m_dockScanParam;
+//    K3DockWidget *m_dockThumbs;
+//    K3DockWidget *m_dockPackager;
+//    K3DockWidget *m_dockPreview;
+//    K3DockWidget *m_dockOCRText;
 
-    KMainWindow *m_mainWindow;
 
-    ocrResEdit  *m_ocrResEdit;
+    OcrResEdit  *m_ocrResEdit;
 
     bool        isPhotoCopyMode;
     KPrinter*   photoCopyPrinter;
 
+    QSplitter *mScanPage;
+    QSplitter *mGalleryPage;
+    QSplitter *mOcrPage;
+
+    WidgetSite *mParamsSite;
+
+    WidgetSite *mScanGallerySite;
+    WidgetSite *mGalleryGallerySite;
+    WidgetSite *mOcrGallerySite;
+
+    WidgetSite *mGalleryImgviewSite;
+    WidgetSite *mOcrImgviewSite;
 };
 
 #endif							// KOOKAVIEW_H

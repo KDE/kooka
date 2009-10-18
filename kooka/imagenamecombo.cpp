@@ -25,14 +25,15 @@
  *                                                                         *
  ***************************************************************************/
 
+#include "imagenamecombo.h"
+#include "imagenamecombo.moc"
+
 #include <kdebug.h>
 #include <klocale.h>
 #include <kcombobox.h>
-#include <kfiletreeview.h>
+#include <k3filetreeview.h>
 #include <kfiletreebranch.h>
 
-#include "imagenamecombo.h"
-#include "imagenamecombo.moc"
 
 
 #define GALLERY_PATH_SEP	" - "
@@ -47,7 +48,7 @@ ImageNameCombo::ImageNameCombo(QWidget *parent)
 
 QString itemName(KFileTreeBranch *branch,const QString &relPath)
 {
-    KFileTreeView *view = static_cast<KFileTreeView *>(branch->root()->listView());
+    K3FileTreeView *view = static_cast<K3FileTreeView *>(branch->root()->listView());
     if (view==NULL) return (relPath);
 
     if (relPath=="/") return (branch->name());		// root => gallery name
@@ -59,13 +60,13 @@ QString itemName(KFileTreeBranch *branch,const QString &relPath)
 void ImageNameCombo::slotPathRemoved(KFileTreeBranch *branch,const QString &relPath)
 {
     QString removedEntry = itemName(branch,relPath);
-    kdDebug(28000) << k_funcinfo << "removing " << removedEntry << endl;
+    kDebug() << "removing " << removedEntry;
 
     if (!items.contains(removedEntry)) return;		// nothing to do
 
     QString select = currentText();			// save current selection
-    items.remove(removedEntry);
-    setCurrentItem(items.findIndex(select));		// restore current selection
+    items.removeOne(removedEntry);
+    setCurrentIndex(items.indexOf(select));		// restore current selection
 
     // Having done the above, the original code used to call rewriteList()
     // which did something like:
@@ -85,7 +86,7 @@ void ImageNameCombo::slotPathRemoved(KFileTreeBranch *branch,const QString &relP
 void ImageNameCombo::slotPathChanged(KFileTreeBranch *branch,const QString &relPath)
 {
     QString newEntry = itemName(branch,relPath);
-    kdDebug(28000) << k_funcinfo << "inserting " << newEntry << endl;
+    kDebug() << "inserting " << newEntry;
 
     setCurrentItem(newEntry,true,0);			// insert at top if missing
 }
@@ -96,7 +97,7 @@ void ImageNameCombo::slotActivated(const QString &itemText)
     QString branchName = QString::null;
     QString relPath = itemText;
 
-    int ix = relPath.find(GALLERY_PATH_SEP);		// is the separator present?
+    int ix = relPath.indexOf(GALLERY_PATH_SEP);		// is the separator present?
     if (ix>0)						// (multiple gallery roots)
     {
         branchName = relPath.left(ix);			// split into root and path

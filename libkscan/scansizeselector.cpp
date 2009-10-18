@@ -17,16 +17,16 @@
    Boston, MA 02110-1301, USA.
 */
 
+#include "scansizeselector.h"
+#include "scansizeselector.moc"
+
 #include <qcombobox.h>
 #include <qradiobutton.h>
-#include <qbuttongroup.h>
-#include <qvbox.h>
+#include <q3buttongroup.h>
 
 #include <klocale.h>
 #include <kdebug.h>
-
-#include "scansizeselector.h"
-#include "scansizeselector.moc"
+#include <kvbox.h>
 
 
 struct PaperSize
@@ -50,9 +50,9 @@ static const PaperSize sizes[] =
 
 
 ScanSizeSelector::ScanSizeSelector(QWidget *parent,const QSize &bedSize)
-    : QVBox(parent)
+    : KVBox(parent)
 {
-    kdDebug(29000) << k_funcinfo << "bed size = " << bedSize << endl;
+    kDebug() << "bed size" << bedSize;
 
     bedWidth = bedSize.width();
     bedHeight = bedSize.height();
@@ -61,16 +61,16 @@ ScanSizeSelector::ScanSizeSelector(QWidget *parent,const QSize &bedSize)
     connect(m_sizeCb,SIGNAL(activated(int)),SLOT(slotSizeSelected(int)));
     setFocusProxy(m_sizeCb);
 
-    m_sizeCb->insertItem(i18n("Full size"));		// index 0
-    m_sizeCb->insertItem(i18n("(No selection)"));	// index 1
+    m_sizeCb->addItem(i18n("Full size"));		// index 0
+    m_sizeCb->addItem(i18n("(No selection)"));	// index 1
     for (int i = 0; sizes[i].name!=NULL; ++i)		// index 2 and upwards
     {							// only those that will fit
         if (sizes[i].width>bedWidth || sizes[i].height>bedHeight) continue;
-        m_sizeCb->insertItem(sizes[i].name);
+        m_sizeCb->addItem(sizes[i].name);
     }
-    m_sizeCb->setCurrentItem(0);
+    m_sizeCb->setCurrentIndex(0);
 
-    QButtonGroup *bg = new QButtonGroup(1,Qt::Vertical,this);
+    Q3ButtonGroup *bg = new Q3ButtonGroup(1,Qt::Vertical,this);
     bg->setFrameStyle(QFrame::NoFrame);
     connect(bg,SIGNAL(clicked(int)),SLOT(slotPortraitLandscape(int)));
 
@@ -80,7 +80,7 @@ ScanSizeSelector::ScanSizeSelector(QWidget *parent,const QSize &bedSize)
     m_landscapeRb->setEnabled(false);
 
     m_customSize = QRect();
-    m_prevSelected = m_sizeCb->currentItem();
+    m_prevSelected = m_sizeCb->currentIndex();
 }
 
 
@@ -125,9 +125,9 @@ void ScanSizeSelector::implementSizeSetting(const PaperSize *sp)
 {
     for (int i = 2; i<m_sizeCb->count(); ++i)		// search combo box by name
     {
-        if (m_sizeCb->text(i)==sp->name)
+        if (m_sizeCb->itemText(i)==sp->name)
         {
-            m_sizeCb->setCurrentItem(i);		// set combo box selection
+            m_sizeCb->setCurrentIndex(i);		// set combo box selection
             break;
         }
     }
@@ -148,17 +148,17 @@ void ScanSizeSelector::newScanSize(int width,int height)
     }
     else
     {
-        kdDebug(29000) << k_funcinfo << "no orientation appropriate!" << endl;
+        kDebug() << "no orientation appropriate!";
     }
 }
 
 
 void ScanSizeSelector::slotPortraitLandscape(int id)
 {
-    int idx = m_sizeCb->currentItem();
+    int idx = m_sizeCb->currentIndex();
     if (idx<2) return;					// "Full size" or "Custom"
 
-    const PaperSize *sp = findPaperSize(m_sizeCb->text(idx));
+    const PaperSize *sp = findPaperSize(m_sizeCb->itemText(idx));
     if (sp==NULL) return;
     newScanSize(sp->width,sp->height);
 }
@@ -177,7 +177,7 @@ void ScanSizeSelector::slotSizeSelected(int idx)
     {
         if (!m_customSize.isValid())			// is there a saved custom size?
         {
-            m_sizeCb->setCurrentItem(m_prevSelected);	// no, snap back to previous
+            m_sizeCb->setCurrentIndex(m_prevSelected);	// no, snap back to previous
         }
         else
         {
@@ -187,7 +187,7 @@ void ScanSizeSelector::slotSizeSelected(int idx)
     }
     else						// Named size
     {
-        const PaperSize *sp = findPaperSize(m_sizeCb->text(idx));
+        const PaperSize *sp = findPaperSize(m_sizeCb->itemText(idx));
         if (sp==NULL) return;
 
         implementPortraitLandscape(sp);
@@ -202,19 +202,19 @@ void ScanSizeSelector::selectCustomSize(const QRect &rect)
     m_portraitRb->setEnabled(false);
     m_landscapeRb->setEnabled(false);
 
-    if (!rect.isValid()) m_sizeCb->setCurrentItem(0);	// "Full Size"
+    if (!rect.isValid()) m_sizeCb->setCurrentIndex(0);	// "Full Size"
     else
     {
         m_customSize = rect;				// remember the custom size
-        m_sizeCb->changeItem(i18n("Selection"),1);	// now can use this option
-        m_sizeCb->setCurrentItem(1);			// "Custom"
+        m_sizeCb->setItemText(1,i18n("Selection"));	// now can use this option
+        m_sizeCb->setCurrentIndex(1);			// "Custom"
     }
 }
 
 
 void ScanSizeSelector::selectSize(const QRect &rect)
 {
-    kdDebug(29000) << k_funcinfo << "rect=" << rect << " valid=" << rect.isValid() << endl;
+    kDebug() << "rect" << rect << "valid" << rect.isValid();
 
     if (rect.isValid() && rect.left()==0 && rect.top()==0)
     {							// can this be a preset size?

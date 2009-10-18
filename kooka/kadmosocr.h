@@ -34,8 +34,6 @@
 #include <qobject.h>
 #include <qstring.h>
 
-#include "config.h"
-
 #ifdef HAVE_KADMOS
 /* class declarations */
 class QImage;
