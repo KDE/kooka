@@ -30,7 +30,8 @@
 #include <qfileinfo.h>
 #include <qgridlayout.h>
 #include <qlabel.h>
-#include <q3scrollview.h>
+#include <qscrollarea.h>
+#include <qstyle.h>
 
 #include <kfiledialog.h>
 #include <klocale.h>
@@ -156,7 +157,7 @@ bool ScanParams::connectDevice(KScanDevice *newScanDevice, bool galleryMode)
     }
 
     /* Now create Widgets for the important scan settings */
-    Q3ScrollView *sv = scannerParams();
+    QScrollArea *sv = createScannerParams();
     lay->addWidget(sv,3,0,1,2);
     lay->setRowStretch(3,9);
 
@@ -223,17 +224,15 @@ void ScanParams::initialise(KScanOption *so)
 
 
 
-Q3ScrollView *ScanParams::scannerParams()
+QScrollArea *ScanParams::createScannerParams()
 {
     KScanOption *so;
 
-    Q3ScrollView *sv = new Q3ScrollView(this);
-    sv->setHScrollBarMode(Q3ScrollView::AlwaysOff);
-    sv->setResizePolicy(Q3ScrollView::AutoOneFit);
+    QScrollArea *sv = new QScrollArea(this);
+    sv->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    sv->setWidgetResizable(false);
 
-    QWidget *frame = new QWidget(sv->viewport());
-
-    //frame->setBackgroundColor(sv->palette().background());
+    QWidget *frame = new QWidget(this);
 
     QGridLayout *lay = new QGridLayout(frame);
     lay->setSpacing(2*KDialog::spacingHint());
@@ -703,9 +702,10 @@ Q3ScrollView *ScanParams::scannerParams()
     lay->setRowStretch(row,1);				// dummy row for stretch
 
     frame->setMinimumWidth(frame->sizeHint().width());
-    sv->setMinimumWidth(frame->minimumWidth());
-    sv->addChild(frame);
-
+    sv->setWidget(frame);
+    sv->setMinimumWidth(frame->minimumWidth()+
+                        frame->style()->pixelMetric(QStyle::PM_LayoutRightMargin)+
+                        frame->style()->pixelMetric(QStyle::PM_ScrollBarExtent));
     return (sv);
 }
 

@@ -12,4 +12,6 @@ add_custom_target(clobber
 
 ########### install files ###############
 
+# TODO: these should go in an application-specific pixmap directory
+
 kde4_install_icons(${ICON_INSTALL_DIR})

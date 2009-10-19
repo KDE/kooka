@@ -209,8 +209,6 @@ QSize ImageCanvas::sizeHint() const
 
 KMenu *ImageCanvas::contextMenu()
 {
-    kDebug() << ((void*)this);
-
     if (mContextMenu==NULL)				// menu not created yet
     {
         mContextMenu = new KMenu(this);

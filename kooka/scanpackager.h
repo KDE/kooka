@@ -30,6 +30,7 @@
 
 #include <k3filetreeview.h>
 #include <kmimetypetrader.h>
+#include <qmap.h>
 
 
 /**
@@ -48,7 +49,7 @@ class KActionMenu;
 class KookaImage;
 class KookaImageMeta;
 
-
+class PackagerInfo;
 
 
 // TODO: into class
@@ -144,6 +145,11 @@ private:
    // int 	        readDir( Q3ListViewItem *parent, QString dir_to_read );
     void         showContextMenu( QPoint p, bool show_folder = true );
 
+
+    const PackagerInfo infoForUrl(const KUrl &url);
+    KookaImage *imageForItem(const K3FileTreeViewItem *item);
+
+
     QString      currSelectedDir;
     int          img_counter;
     KMenu    *m_contextMenu;
@@ -162,6 +168,9 @@ private:
 
    KFileTreeBranch *m_defaultBranch;
    bool          m_startup;
+
+    // PackagerInfo is fairly small, so this map stores values
+    QMap<KUrl, PackagerInfo> mInfoMap;
 };
 
 #endif							// SCANPACKAGER_H

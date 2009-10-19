@@ -64,12 +64,68 @@
 #include "kookaimagemeta.h"
 
 
-// TODO: K3FileTreeViewItem seems to be not the same as KDE3's KFileTreeViewItem
-// in that fileItem() used to return a KFileItem *, allowing the item to be
-// modified through the pointer.  Now it returns a KFileItem which is a copy of
-// the internal one, not a pointer to it - so the internal KFileItem cannot
-// be modified.  Need to check whether this is necessary, see the individual
-// functions below for those that try to modify the KFileItem.
+// TODO: port to KDE4, although from kdelibs/KDE4PORTING.html:
+//
+// "No replacement yet, apart from the more low-level KDirModel"
+//
+// K3FileTreeViewItem is not the same as KDE3's KFileTreeViewItem in that
+// fileItem() used to return a KFileItem *, allowing the item to be modified
+// through the pointer.  Now it returns a KFileItem which is a value copy of the
+// internal one, not a pointer to it - so the internal KFileItem cannot
+// be modified.  This means that we can't store information in the extra data
+// of the KFileItem of a K3FileTreeViewItem.  Including, unfortunately, our
+// KookaImage pointer :-(
+//
+// This is a consequence of commit 719513, "Making KFileItemList value based".
+//
+// We therefore maintain our own map of item URL -> item information.  There
+// is an entry in this map for each loaded image.
+
+
+
+// ------------------------------------------------------------------------
+
+class PackagerInfo
+{
+public:
+    PackagerInfo(KookaImage *img, K3FileTreeViewItem *it = NULL);
+
+    // Default constructor, needed to be able to use a value container.
+    // The compiler-generated copy constructor and assignment operators
+    // will be OK to use.
+    explicit PackagerInfo();
+
+    bool isValid() const { return (mValid); }
+
+    K3FileTreeViewItem *item() const { return (mItem); }
+    KookaImage *image() const { return (mImage); }
+
+private:
+    bool mValid;
+    KookaImage *mImage;
+    K3FileTreeViewItem *mItem;
+};
+
+
+PackagerInfo::PackagerInfo(KookaImage *img, K3FileTreeViewItem *it)
+{
+    mValid = true;
+    mImage = img;
+    mItem = it;
+}
+
+
+PackagerInfo::PackagerInfo()
+{
+    mValid = false;
+    mImage = NULL;
+    mItem = NULL;
+}
+
+
+
+
+// ------------------------------------------------------------------------
 
 ScanPackager::ScanPackager(QWidget *parent)
     : K3FileTreeView(parent)
@@ -117,7 +173,7 @@ ScanPackager::ScanPackager(QWidget *parent)
 
    /* Preload frequently used icons */
    KIconLoader *loader = KIconLoader::global();
-   m_floppyPixmap = loader->loadIcon( "3floppy_unmount", KIconLoader::Small );
+   m_floppyPixmap = loader->loadIcon( "media-floppy", KIconLoader::Small );
    m_grayPixmap   = loader->loadIcon( "palette_gray", KIconLoader::Small );
    m_bwPixmap     = loader->loadIcon( "palette_lineart", KIconLoader::Small );
    m_colorPixmap  = loader->loadIcon( "palette_color", KIconLoader::Small );
@@ -136,7 +192,43 @@ ScanPackager::ScanPackager(QWidget *parent)
 ScanPackager::~ScanPackager()
 {
     kDebug();
+    mInfoMap.clear();
 }
+
+
+
+
+const PackagerInfo ScanPackager::infoForUrl(const KUrl &url)
+{
+    if (!mInfoMap.contains(url))
+    {
+        kDebug() << "no info in map for" << url;
+        return (PackagerInfo());			// a null/invalid PackagerInfo
+    }
+
+    return (mInfoMap[url]);
+}
+
+
+
+KookaImage *ScanPackager::imageForItem(const K3FileTreeViewItem *item)
+{
+    if (item==NULL) return (NULL);
+
+    KookaImage *img = NULL;
+    KUrl u = item->url();
+    if (!mInfoMap.contains(u))
+    {
+        kDebug() << "no info in map for" << u;
+        return (NULL);
+    }
+
+    img = mInfoMap[u].image();
+    kDebug() << "got image" << img << "from map for for" << u;
+    return (img);
+}
+
+
 
 
 void ScanPackager::openRoots()
@@ -158,11 +250,11 @@ KFileTreeBranch *ScanPackager::openRoot(const KUrl &root, bool open)
 
    /* working on the global branch. FIXME */
    m_defaultBranch = addBranch( root, i18n("Kooka Gallery"),
-				loader->loadIcon( "folder_image", KIconLoader::Small ),
+				loader->loadIcon( "folder", KIconLoader::Small ),
 				false /* do not showHidden */ );
 
    // Q_CHECK_PTR( m_defaultBranch );
-   m_defaultBranch->setOpenPixmap( loader->loadIcon( "folder_blue_open", KIconLoader::Small ));
+   m_defaultBranch->setOpenPixmap( loader->loadIcon( "folder-image", KIconLoader::Small ));
 
    setDirOnlyMode( m_defaultBranch, false );
    m_defaultBranch->setShowExtensions( true ); // false );
@@ -261,9 +353,7 @@ void ScanPackager::slotDecorate(K3FileTreeViewItem *item)
         QString format = getImgFormat(item);		// this is safe for any file
         item->setText(2,(" "+format.toUpper()+" "));
 
-        KookaImage *img = NULL;
-        if (!kfi.isNull()) img = const_cast<KookaImage *>(static_cast<const KookaImage *>(kfi.extraData(this)));
-
+        const KookaImage *img = imageForItem(item);
         if (img!=NULL)					// image appears to be loaded
         {						// set image depth pixmap
             if (img->depth()==1) item->setPixmap(0,m_bwPixmap);
@@ -545,7 +635,10 @@ void ScanPackager::slotClicked(Q3ListViewItem *newItem)
 }
 
 
-// TODO: this modifies the KFileItem, see comment at top
+// TODO: this tries to modify the KFileItem, see comment at top
+// needs to be adapted for new URL->info map, if we do actually support subimages -
+// maybe create a URL for the subimage with its fragment ID being the subimage number,
+// and put that into the map as usual.
 void ScanPackager::loadImageForItem(K3FileTreeViewItem *item)
 {
     if (item==NULL) return;
@@ -562,7 +655,7 @@ void ScanPackager::loadImageForItem(K3FileTreeViewItem *item)
         return;
     }
 
-    KookaImage *img = const_cast<KookaImage *>(static_cast<const KookaImage *>(kfi.extraData(this)));
+    KookaImage *img = imageForItem(item);
     if (img==NULL)					// image not already loaded
     {
         // The image needs to be loaded. Possibly it is a multi-page image.
@@ -620,21 +713,16 @@ void ScanPackager::loadImageForItem(K3FileTreeViewItem *item)
 
 
 /* Hit this slot with a file for a kfiletreeviewitem. */
-// TODO: this modifies the KFileItem, see comment at top
 void ScanPackager::slotImageArrived(K3FileTreeViewItem *item, KookaImage *image)
 {
-    if (item!=NULL && image!=NULL)
-    {
-        /* Associate the image for the Scanpackager-Object. */
-        KFileItem kfi = item->fileItem();
-        if (!kfi.isNull())
-        {
-            kfi.setExtraData( (void*) this, (void*) image );
-        }
+    if (item==NULL || image==NULL) return;
 
-        slotDecorate(item);
-        emit showImage(image, false);
-    }
+    PackagerInfo pi(image, item);
+    kDebug() << "saving image" << image << "in map for" << item->url();
+    mInfoMap[item->url()] = pi;
+
+    slotDecorate(item);
+    emit showImage(image, false);
 }
 
 
@@ -644,15 +732,15 @@ const KookaImage *ScanPackager::getCurrImage(bool loadOnDemand)
     if (curr==NULL) return (NULL);			// no current item
     if (curr->isDir()) return (NULL);			// is a directory
 
-    KFileItem kfi = curr->fileItem();
-    if (kfi.isNull()) return (NULL);
-    if (kfi.extraData(this)==NULL)			// see if already loaded
+    KookaImage *img = imageForItem(curr);		// see if already loaded
+    if (img==NULL)					// no, try to do that
     {
         if (!loadOnDemand) return (NULL);		// not loaded, and don't want to
         slotClicked(curr);				// select/load this image
+        img = imageForItem(curr);			// and get image for it
     }
 
-    return (static_cast<const KookaImage *>(kfi.extraData(this)));
+    return (img);
 }
 
 
@@ -798,20 +886,6 @@ void ScanPackager::addImage(const QImage *img, KookaImageMeta *meta)
     m_nextUrlToShow = lurl;
 
     updateParent(curr);
-//   QString s;
-//   /* Count amount of children of the father */
-//   Q3ListViewItem *paps = curr->parent();
-//   if( curr->isDir() ) /* take only father if the is no directory */
-//      paps = curr;
-//
-//   if( paps )
-//   {
-//      int childcount = paps->childCount();
-//      s = i18n("%1 images").arg(childcount);
-//      paps->setText( 1, s);
-//      setOpen( paps, true );
-//   }
-
 }
 
 /* ----------------------------------------------------------------------- */
@@ -870,22 +944,17 @@ case UrlSearch:
 
     if (!kfi.isNull())					// found something
     {
-        // The const_cast here is bad, but it seems to be the only way to
-        // get the item from the found kfi.  The problem is that
-        // KFileItem::setExtraData() takes a 'void *' value, but
-        // KFileItem::extraData() gives back a 'const void *'.  Not sure
-        // whether this behavious was intended, but it's not possible to
-        // change in kdelibs now.
-        //
-        // The "extra data" facility is deprecated anyway (we're supposed
-        // to use model/view now).
-        //
-        // Not sure whether the argument to kfi.extraData() should really be
-        // 'branchloop' anyway - should it not be 'this'?
-
-        foundItem = const_cast<K3FileTreeViewItem *>(static_cast<const K3FileTreeViewItem *>(kfi.extraData(branchloop)));
-        if (foundItem==NULL) kDebug() << "could not get extra data!"; 
-        else kDebug() << "Success" << foundItem->path();
+        kDebug() << "found kfi for" << kfi.url();
+        PackagerInfo pi = infoForUrl(kfi.url());
+        if (!pi.isValid())
+        {
+            kDebug() << "could not get extra data!"; 
+        }
+        else
+        {
+            foundItem = pi.item();
+            kDebug() << "found path" << foundItem->path();
+        }
     }
 
     return (foundItem);
@@ -1010,7 +1079,6 @@ void ScanPackager::slotUnloadItems()
 }
 
 
-// TODO: this modifies the KFileItem, see comment at top
 void ScanPackager::slotUnloadItem(K3FileTreeViewItem *curr)
 {
     if (curr==NULL) return;
@@ -1027,8 +1095,7 @@ void ScanPackager::slotUnloadItem(K3FileTreeViewItem *curr)
     else						// is a file/image
     {
         KFileItem kfi = curr->fileItem();
-        const KookaImage *image = static_cast<const KookaImage*>(kfi.extraData(this));
-
+        const KookaImage *image = imageForItem(curr);
         if (image==NULL) return;			// ok, nothing to unload
 
         if (image->subImagesCount()>0)			// image with subimages
@@ -1046,7 +1113,9 @@ void ScanPackager::slotUnloadItem(K3FileTreeViewItem *curr)
 
         emit unloadImage(image);
         delete image;
-        kfi.removeExtraData(this);
+
+        mInfoMap.remove(curr->url());
+        kDebug() << "removed from map" << curr->url();
         slotDecorate(curr);
     }
 }

@@ -55,21 +55,7 @@ class KookaGallery;
 class OcrResEdit;
 class ScanPackager;
 
-
-
-
-class WidgetSite : public QWidget
-{
-    Q_OBJECT
-
-public:
-    WidgetSite(QWidget *parent, QWidget *widget = NULL);
-    void setWidget(QWidget *widget);
-
-private:
-    static int mCount;
-};
-
+class WidgetSite;
 
 
 

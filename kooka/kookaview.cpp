@@ -82,15 +82,35 @@
 
 // ---------------------------------------------------------------------------
 
-int WidgetSite::mCount = 0;
+
+// Some of the GUI elements (the gallery and the image viewer) are common
+// to more that one of the main task tabs.  This means that they can't simply
+// be added to the tabs/splitters in the normal way, as a widget can only be
+// a child of one parent at a time.
+//
+// This WidgetSite acts as a layout placeholder for such reassignable widgets.
+// It is assigned a new child widget when tabs are switched.
+
+class WidgetSite : public QWidget
+{
+public:
+    WidgetSite(QWidget *parent, QWidget *widget = NULL);
+    void setWidget(QWidget *widget);
+
+private:
+    static int sCount;
+};
+
+
+int WidgetSite::sCount = 0;
 
 
 WidgetSite::WidgetSite(QWidget *parent, QWidget *widget)
     : QWidget(parent)
 {
-    QString name = QString("WidgetSite-#%1").arg(++mCount);
+    QString name = QString("WidgetSite-#%1").arg(++sCount);
     setObjectName(name.toAscii());
-    kDebug() << name << ((void*)this);
+    kDebug() << name;
 
     QGridLayout* lay = new QGridLayout(this);
     lay->setRowStretch(0, 1);
@@ -103,26 +123,22 @@ WidgetSite::WidgetSite(QWidget *parent, QWidget *widget)
         widget = l;
     }
 
-kDebug() << "widget" << ((void*)widget) << "is a" << widget->metaObject()->className()
-<< "parent" << ((void*)widget->parent()) << "is a" << widget->parent()->metaObject()->className();
+    kDebug() << name
+             << "widget is a" << widget->metaObject()->className()
+             << "parent is a" << widget->parent()->metaObject()->className();
     lay->addWidget(widget, 0, 0);
-kDebug() << "after add parent" << ((void*)widget->parent()) << "children" << children().count();
-widget->show();
+    widget->show();
 }
 
 
 void WidgetSite::setWidget(QWidget *widget)
 {
-    kDebug() << objectName() << ((void*)this);
-
     QGridLayout *lay = static_cast<QGridLayout *>(layout());
 
     QObjectList childs = children();
-    kDebug() << "site has children" << childs.count();
     for (QObjectList::iterator it = childs.begin(); it!=childs.end(); ++it)
     {
         QObject *ch = (*it);
-        kDebug() << "child" << ((void*)(ch)) << "is a" << ch->metaObject()->className() << "widget" << ch->isWidgetType();
         if (ch->isWidgetType())
         {
             QWidget *w = static_cast<QWidget *>(ch);
@@ -130,13 +146,12 @@ void WidgetSite::setWidget(QWidget *widget)
             lay->removeWidget(w);
         }
     }
-    kDebug() << "now has children" << childs.count();
 
-kDebug() << "widget" << ((void*)widget) << "is a" << widget->metaObject()->className()
-<< "parent" << ((void*)widget->parent()) << "is a" << widget->parent()->metaObject()->className();
+    kDebug() << objectName()
+             << "widget is a" << widget->metaObject()->className()
+             << "parent is a" << widget->parent()->metaObject()->className();
     lay->addWidget(widget, 0, 0);
-kDebug() << "after add parent" << ((void*)widget->parent()) << "children" << children().count();
-widget->show();
+    widget->show();
 }
 
 
@@ -297,18 +312,18 @@ KookaView::KookaView(KMainWindow *parent, const QByteArray &deviceToUse)
     mScanPage->addWidget(preview_canvas);		// R
 
     // "Gallery" page: gallery left, viewer top right, thumbnails bottom right
-    mGalleryPage->addWidget(mGalleryGallerySite);
+    mGalleryPage->addWidget(mGalleryGallerySite);	// L
     s2 = new QSplitter(Qt::Vertical, mGalleryPage);
     s2->setChildrenCollapsible(false);
-    s2->addWidget(mGalleryImgviewSite);
-    s2->addWidget(m_thumbview);
+    s2->addWidget(mGalleryImgviewSite);			// TR
+    s2->addWidget(m_thumbview);				// BR
 
     // "OCR" page: gallery top left, viewer top right, results bottom
     s2 = new QSplitter(Qt::Horizontal, mOcrPage);
     s2->setChildrenCollapsible(false);
-    s2->addWidget(mOcrGallerySite);
-    s2->addWidget(mOcrImgviewSite);
-    mOcrPage->addWidget(m_ocrResEdit);
+    s2->addWidget(mOcrGallerySite);			// TL
+    s2->addWidget(mOcrImgviewSite);			// TR
+    mOcrPage->addWidget(m_ocrResEdit);			// B
 
     if (slotSelectDevice(deviceToUse, false)) slotTabChanged(KookaView::TabScan);
     else setCurrentIndex(KookaView::TabGallery);
@@ -1027,7 +1042,6 @@ void KookaView::slotOpenCurrInGraphApp()
 
 void KookaView::connectViewerAction(KAction *action)
 {
-kDebug();
     if (action==NULL) return;
     KMenu *popup = img_canvas->contextMenu();
     if (popup!=NULL) popup->addAction(action);

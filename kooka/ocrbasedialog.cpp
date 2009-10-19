@@ -206,6 +206,7 @@ void OcrBaseDialog::ocrIntro()
     gl->setRowMinimumHeight(1, KDialog::spacingHint());
 
     l = new QLabel(ocrEngineDesc(),topWid);
+    l->setWordWrap(true);
     l->setOpenExternalLinks(true);
     gl->addWidget(l, 2, 0, 1, 2);
 

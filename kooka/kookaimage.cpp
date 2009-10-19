@@ -243,41 +243,9 @@ bool KookaImage::loadTiffDir(const QString &filename, int no)
     QImage tmpImg(imgWidth, imgHeight, QImage::Format_RGB32);
     uint32 *data = (uint32 *) (tmpImg.bits());
     if (TIFFReadRGBAImage(tif, imgWidth, imgHeight, data, 0))
-    {							// Successfully read, now convert.
-        // (1) Swap red and blue
-#if 1
-        tmpImg = tmpImg.rgbSwapped();
-#else
-        for (int i = 0; i<(imgWidth*imgHeight); ++i)
-        {
-            uint32 red = (data[i] & 0x00FF0000) >> 16;
-            uint32 blue = (data[i] & 0x000000FF) << 16;
-            data[i] &= 0xFF00FF00;
-            data[i] |= red|blue;
-        }
-#endif
-        // (2) Reverse the image (it's upside down)
-#if 1
-        tmpImg = tmpImg.mirrored();
-#else
-        unsigned h = static_cast<unsigned>(imgHeight>>1);
-        for (unsigned ctr = 0; ctr<h; )
-        {
-            unsigned *line1 = (unsigned *) scanLine(ctr);
-            unsigned *line2 = (unsigned *) scanLine(imgHeight
-						       - ( ++ctr ) );
-
-	 unsigned w = unsigned(imgWidth);
-	 for( unsigned x = 0; x < w; x++ )
-	 {
-	    int temp = *line1;
-	    *line1 = *line2;
-	    *line2 = temp;
-	    line1++;
-	    line2++;
-	 }
-        }
-#endif
+    {							// Successfully read, now convert
+        tmpImg = tmpImg.rgbSwapped();			// swap red and blue
+        tmpImg = tmpImg.mirrored();			// reverse (it's upside down)
     }
     else
     {

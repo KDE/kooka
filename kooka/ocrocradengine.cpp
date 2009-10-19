@@ -264,6 +264,7 @@ QString OcrOcradEngine::readORF(const QString &fileName)
 
     kDebug() << "starting to analyse ORF" << fileName << "version" << ocradVersion;
 
+    // TODO: reindent
     while ( !stream.atEnd() )
     {
             line = stream.readLine().trimmed();		// line of text excluding '\n'

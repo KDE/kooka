@@ -33,7 +33,6 @@
 #include <kglobal.h>
 #include <kiconloader.h>
 #include <kdebug.h>
-#include <kwindowsystem.h>
 
 #include "kooka.h"
 #include "svnversion.h"
@@ -41,8 +40,7 @@
 
 static const char shortDesc[] = "Scanning, image gallery and OCR";
 
-static const char longDesc[] = "Kooka is a KDE application which provides "
-    "access to scanner hardware using the "
+static const char longDesc[] = "Kooka provides access to scanner hardware using the "
     "<a href=\"http://www.sane-project.org/\">SANE</a> library."
     "\n\n"
     "Kooka allows you to scan, save and view in any image format that KDE supports, "
@@ -70,7 +68,7 @@ static const char addLicense[] =
     "commercial Qt development licence.\n";
 
 static const char copyright[] =
-    "(C) 2000-2009 Klaas Freitag, Jonathan Marten";
+    "(C) 2000-2009, the Kooka developers and contributors";
 
 
 int main( int argc, char *argv[] )
@@ -105,7 +103,7 @@ int main( int argc, char *argv[] )
 
     KApplication app;
     KGlobal::locale()->insertCatalog("libkscan");
-//   KImageIO::registerFormats();
+    KApplication::setWindowIcon(KIconLoader::global()->loadIcon("scanner", KIconLoader::Desktop));
 
     KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
     QString devToUse = args->getOption("d");
@@ -123,11 +121,6 @@ int main( int argc, char *argv[] )
 //    }
 
     Kooka  *kooka = new Kooka(devToUse.toLocal8Bit());
-
-    KWindowSystem::setIcons(kooka->winId(),
-                            KIconLoader::global()->loadIcon("scanner", KIconLoader::Desktop),
-                            KIconLoader::global()->loadIcon("scanner", KIconLoader::Small));
-
     kooka->show();
     app.processEvents();
     kooka->startup();

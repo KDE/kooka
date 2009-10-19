@@ -78,7 +78,7 @@ KScanSlider::KScanSlider( QWidget *parent, const QString& text,
     if( haveStdButt )
     {
        m_stdButt = new QPushButton(this);
-       m_stdButt->setIcon(KIcon("undo"));
+       m_stdButt->setIcon(KIcon("edit-undo"));
 
        /* connect the button click to setting the value */
        connect( m_stdButt, SIGNAL(clicked()),

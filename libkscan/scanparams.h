@@ -32,7 +32,7 @@
   *@author Klaas Freitag
   */
 
-class Q3ScrollView;
+class QScrollArea;
 class QProgressDialog;
 class QPushButton;
 class QCheckBox;
@@ -150,7 +150,7 @@ private:
     void initialise(KScanOption *opt);
     void initStartupArea();
     void setEditCustomGammaTableState();
-    Q3ScrollView *scannerParams();
+    QScrollArea *createScannerParams();
 
     void applyRect(const QRect &rect);
 
