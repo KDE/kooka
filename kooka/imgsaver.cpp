@@ -27,8 +27,8 @@
 #include "imgsaver.h"
 //#include "imgsaver.moc"
 
-#include <qdir.h>
-#include <qregexp.h>
+#include <QtCore/QDir>
+#include <QtCore/QRegExp>
 
 #include <kglobal.h>
 #include <kconfig.h>
@@ -71,7 +71,7 @@ ImgSaver::ImgSaver(QWidget *parent, const KUrl &dir)
 void ImgSaver::createDir(const QString &dir)
 {
     KUrl url(dir);
-    if (!KIO::NetAccess::exists(url, false, 0))
+    if (!KIO::NetAccess::exists(url, KIO::NetAccess::DestinationSide, 0))
     {
         kDebug() << "directory" << dir << "does not exist, try to create";
         // if( mkdir( QFile::encodeName( dir ), S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH ) != 0 )
@@ -527,7 +527,7 @@ bool ImgSaver::renameImage(const KUrl &fromUrl, const KUrl &toUrl, bool askExt, 
         }
     }
 
-    if (KIO::NetAccess::exists(targetUrl, false, overWidget))
+    if (KIO::NetAccess::exists(targetUrl, KIO::NetAccess::DestinationSide, overWidget))
     {
         kDebug() << "Target already exists" << targetUrl;
         return (false);
@@ -582,5 +582,5 @@ bool ImgSaver::copyImage(const KUrl &fromUrl, const KUrl &toUrl, QWidget *overWi
    }
 
     // TODO: need an 'exists' overwrite check as above?
-    return (KIO::NetAccess::copy(fromUrl, targetUrl, overWidget));
+    return (KIO::NetAccess::file_copy(fromUrl, targetUrl, overWidget));
 }
