@@ -100,10 +100,11 @@ ScanParams::ScanParams( QWidget *parent)
     m_firstGTEdit = true;
 
     /* Preload icons */
-    pixColor = SmallIcon( "palette_color" );
-    pixGray  = SmallIcon( "palette_gray" );
-    pixLineArt = SmallIcon( "palette_lineart" );
-    pixHalftone = SmallIcon( "palette_halftone" );
+    KIconLoader::global()->addAppDir("libkscan");	// access to our icons
+    mIconColor = KIcon("palette-color");
+    mIconGray = KIcon("palette-gray");
+    mIconLineart = KIcon("palette-lineart");
+    mIconHalftone = KIcon("palette-halftone");
 
     /* intialise the default last save warnings */
     startupOptset = NULL;
@@ -285,14 +286,15 @@ QScrollArea *ScanParams::createScannerParams()
 
         // Having loaded the 'sane-backends' message catalogue, these strings
         // are now translatable.
-        cb->slotSetIcon( pixLineArt, i18n("Line art") );
-        cb->slotSetIcon( pixLineArt, i18n("Lineart") );
-        cb->slotSetIcon( pixLineArt, i18n("Binary") );
-        cb->slotSetIcon( pixGray, i18n("Gray") );
-        cb->slotSetIcon( pixGray, i18n("Grey") );
-        cb->slotSetIcon( pixColor, i18n("Color") );
-        cb->slotSetIcon( pixColor, i18n("Colour") );
-        cb->slotSetIcon( pixHalftone, i18n("Halftone") );
+
+        cb->slotSetIcon(mIconLineart, i18n("Line art"));
+        cb->slotSetIcon(mIconLineart, i18n("Lineart"));
+        cb->slotSetIcon(mIconLineart, i18n("Binary"));
+        cb->slotSetIcon(mIconGray, i18n("Gray"));
+        cb->slotSetIcon(mIconGray, i18n("Grey"));
+        cb->slotSetIcon(mIconColor, i18n("Color"));
+        cb->slotSetIcon(mIconColor, i18n("Colour"));
+        cb->slotSetIcon(mIconHalftone, i18n("Halftone"));
 
         initialise( so );
         connect( so, SIGNAL(guiChange(KScanOption*)),

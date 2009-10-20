@@ -28,9 +28,12 @@
 #ifndef SCANPACKAGER_H
 #define SCANPACKAGER_H
 
+#include <qmap.h>
+
 #include <k3filetreeview.h>
 #include <kmimetypetrader.h>
-#include <qmap.h>
+#include <kicon.h>
+
 
 
 /**
@@ -161,10 +164,10 @@ private:
     // like m_nextUrlToSelect in KFileTreeView but for our own purposes (showing the image)
     KUrl         m_nextUrlToShow;
 
-   QPixmap       m_floppyPixmap;
-   QPixmap       m_grayPixmap;
-   QPixmap       m_bwPixmap;
-   QPixmap       m_colorPixmap;
+    QPixmap mPixFloppy;
+    QPixmap mPixGray;
+    QPixmap mPixBw;
+    QPixmap mPixColor;
 
    KFileTreeBranch *m_defaultBranch;
    bool          m_startup;

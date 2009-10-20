@@ -31,7 +31,7 @@
   *@author Klaas Freitag
   */
 
-class QPushButton;
+class QToolButton;
 class QSpinBox;
 class QLabel;
 class QComboBox;
@@ -111,7 +111,7 @@ private:
    QLabel	*l1, *numdisp;
    QSpinBox     *m_spin;
    int          m_stdValue;
-   QPushButton  *m_stdButt;
+   QToolButton  *m_stdButt;
 };
 
 /**
@@ -216,7 +216,7 @@ public slots:
     * @param pix the pixmap to set.
     * @param str the string for which the pixmap should be set.
     */
-   void         slotSetIcon( const QPixmap& pix, const QString& str);
+   void slotSetIcon(const QIcon &pix, const QString &str);
 
    /**
     * set the current item of the combobox.

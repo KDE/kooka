@@ -21,7 +21,7 @@
 #include "kscancontrols.moc"
 
 #include <qlayout.h>
-#include <qpushbutton.h>
+#include <qtoolbutton.h>
 #include <qspinbox.h>
 #include <qcombobox.h>
 #include <qlabel.h>
@@ -77,7 +77,7 @@ KScanSlider::KScanSlider( QWidget *parent, const QString& text,
 
     if( haveStdButt )
     {
-       m_stdButt = new QPushButton(this);
+       m_stdButt = new QToolButton(this);
        m_stdButt->setIcon(KIcon("edit-undo"));
 
        /* connect the button click to setting the value */
@@ -267,10 +267,10 @@ void KScanCombo::slotComboChange(const QString &t)
 }
 
 
-void KScanCombo::slotSetIcon(const QPixmap &pix, const QString &str)
+void KScanCombo::slotSetIcon(const QIcon &icon, const QString &str)
 {
     int i = combo->findText(str);
-    if (i!=-1) combo->setItemIcon(i, pix);
+    if (i!=-1) combo->setItemIcon(i, icon);
 }
 
 

@@ -200,19 +200,22 @@ void Kooka::setupActions()
     connect(mirrorHorizontallyAction, SIGNAL(triggered()), SLOT(slotMirrorHorizontal()));
     actionCollection()->addAction("mirrorHorizontal", mirrorHorizontallyAction);
 
-    rotateCwAction = new KAction(KIcon("object-rotate-right"), i18n("Rotate Clockwise"), this);
+    // Standard KDE has icons for 'object-rotate-right' and 'object-rotate-left',
+    // but not for rotate by 180 degrees.  The 3 used here are copies of the 22x22
+    // icons from the old kdeclassic theme.
+    rotateCwAction = new KAction(KIcon("rotate-cw"), i18n("Rotate Clockwise"), this);
     rotateCwAction->setShortcut(Qt::CTRL+Qt::Key_9);
     connect(rotateCwAction, SIGNAL(triggered()), SLOT(slotRotateClockWise()));
     actionCollection()->addAction("rotateClockwise", rotateCwAction);
     m_view->connectViewerAction(rotateCwAction);
 
-    rotateAcwAction = new KAction(KIcon("object-rotate-left"), i18n("Rotate Counter-Clockwise"), this);
+    rotateAcwAction = new KAction(KIcon("rotate-acw"), i18n("Rotate Counter-Clockwise"), this);
     rotateAcwAction->setShortcut(Qt::CTRL+Qt::Key_7);
     connect(rotateAcwAction, SIGNAL(triggered()), SLOT(slotRotateCounterClockWise()));
     actionCollection()->addAction("rotateCounterClockwise", rotateAcwAction);
     m_view->connectViewerAction(rotateAcwAction);
 
-    rotate180Action = new KAction(KIcon("rotate180"), i18n("Rotate 180 Degrees"), this);
+    rotate180Action = new KAction(KIcon("rotate-180"), i18n("Rotate 180 Degrees"), this);
     rotate180Action->setShortcut(Qt::CTRL+Qt::Key_8);
     connect(rotate180Action, SIGNAL(triggered()), SLOT(slotRotate180()));
     actionCollection()->addAction("upsitedown", rotate180Action);

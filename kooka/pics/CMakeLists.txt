@@ -28,6 +28,9 @@ set(kooka_PICS
   scaletoheight.png
   scaletowidth.png
   thumbviewtile.png
+  rotate-acw.png
+  rotate-cw.png
+  rotate-180.png
 )
 
 kde4_install_icons(${ICON_INSTALL_DIR})

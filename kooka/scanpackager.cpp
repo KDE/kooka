@@ -171,12 +171,12 @@ ScanPackager::ScanPackager(QWidget *parent)
 
    img_counter = 1;
 
-   /* Preload frequently used icons */
-   KIconLoader *loader = KIconLoader::global();
-   m_floppyPixmap = loader->loadIcon( "media-floppy", KIconLoader::Small );
-   m_grayPixmap   = loader->loadIcon( "palette_gray", KIconLoader::Small );
-   m_bwPixmap     = loader->loadIcon( "palette_lineart", KIconLoader::Small );
-   m_colorPixmap  = loader->loadIcon( "palette_color", KIconLoader::Small );
+    /* Preload frequently used icons */
+    KIconLoader *loader = KIconLoader::global();
+    mPixFloppy = KIcon("media-floppy").pixmap(KIconLoader::SizeSmall);
+    mPixGray   = KIcon("palette-gray").pixmap(KIconLoader::SizeSmall);
+    mPixBw     = KIcon("palette-lineart").pixmap(KIconLoader::SizeSmall);
+    mPixColor  = KIcon("palette-color").pixmap(KIconLoader::SizeSmall);
 
    m_startup = true;
 
@@ -356,11 +356,11 @@ void ScanPackager::slotDecorate(K3FileTreeViewItem *item)
         const KookaImage *img = imageForItem(item);
         if (img!=NULL)					// image appears to be loaded
         {						// set image depth pixmap
-            if (img->depth()==1) item->setPixmap(0,m_bwPixmap);
+            if (img->depth()==1) item->setPixmap(0, mPixBw);
             else
             {
-                if (img->isGrayscale()) item->setPixmap(0,m_grayPixmap);
-                else item->setPixmap(0,m_colorPixmap);
+                if (img->isGrayscale()) item->setPixmap(0, mPixGray);
+                else item->setPixmap(0, mPixColor);
             }
 							// set image size column
             QString t = i18n("%1 x %2", img->width(), img->height());
@@ -370,7 +370,7 @@ void ScanPackager::slotDecorate(K3FileTreeViewItem *item)
         {
             if (!format.isEmpty())			// if a valid image file
             {
-                item->setPixmap(0, m_floppyPixmap);
+                item->setPixmap(0, mPixFloppy);
                 if (!kfi.isNull()) item->setText(1, KIO::convertSize(kfi.size()));
             }
             else

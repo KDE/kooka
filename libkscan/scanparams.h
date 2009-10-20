@@ -26,7 +26,8 @@
 #include "scansourcedialog.h"
 
 #include <qframe.h>
-#include <qpixmap.h>
+
+#include <kicon.h>
 
 /**
   *@author Klaas Freitag
@@ -173,6 +174,11 @@ private:
     QPixmap pixLineArt, pixGray, pixColor, pixHalftone;
     KLed *m_led;
     bool m_firstGTEdit;
+
+    KIcon mIconColor;
+    KIcon mIconGray;
+    KIcon mIconLineart;
+    KIcon mIconHalftone;
 };
 
 #endif							// SCANPARAMS_H

@@ -12,6 +12,12 @@ add_custom_target(clobber
 
 ########### install files ###############
 
-# TODO: these should go in an application-specific pixmap directory
+set(libkscan_PICS
+  palette-color.png
+  palette-gray.png
+  palette-halftone.png
+  palette-lineart.png
+)
 
-kde4_install_icons(${ICON_INSTALL_DIR})
+#kde4_install_icons(${ICON_INSTALL_DIR})
+install(FILES ${libkscan_PICS} DESTINATION ${DATA_INSTALL_DIR}/libkscan/pics)
