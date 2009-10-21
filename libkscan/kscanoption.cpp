@@ -187,26 +187,29 @@ const KScanOption &KScanOption::operator=(const KScanOption &so)
 
 void KScanOption::slotWidgetChange(const QByteArray &t)
 {
-    set( t );
-    emit( guiChange( this ) );
+    set(t);
+    emit guiChange(this);
 }
 
-void KScanOption::slotWidgetChange( void )
+
+void KScanOption::slotWidgetChange()
 {
     /* If Type is bool, the widget is a checkbox. */
-    if( type() == KScanOption::Bool )
+    if (type() == KScanOption::Bool)
     {
-	bool b = ((QCheckBox*) internal_widget)->isChecked();
-	set( b );
+	bool b = static_cast<QCheckBox *>(internal_widget)->isChecked();
+	set(b);
     }
-    emit( guiChange( this ) );
+    emit guiChange(this);
 }
 
-void KScanOption::slotWidgetChange( int i )
+
+void KScanOption::slotWidgetChange(int i)
 {
-    set( i );
-    emit( guiChange( this ) );
+    set(i);
+    emit guiChange(this);
 }
+
 
 // TODO: eliminate redundant 'so' parameter, see comment below!
 /* this slot is called on a widget change, if a widget was created.
@@ -989,7 +992,7 @@ default:
 inline QWidget *KScanOption::createToggleButton( QWidget *parent, const QString& text )
 {
     QWidget *cb = new QCheckBox( i18n(text.toUtf8()), parent);
-    connect( cb, SIGNAL(clicked()), SLOT(slWidgetChange()));
+    connect( cb, SIGNAL(clicked()), SLOT(slotWidgetChange()));
     return (cb);
 }
 
@@ -998,7 +1001,7 @@ inline QWidget *KScanOption::createComboBox( QWidget *parent, const QString& tex
 {
     QList<QByteArray> list = getList();
     KScanCombo *cb = new KScanCombo( parent, text, list);
-    connect(cb, SIGNAL(valueChanged(const QCString&)), SLOT(slWidgetChange(const QCString&)));
+    connect(cb, SIGNAL(valueChanged(const QByteArray &)), SLOT(slotWidgetChange(const QByteArray &)));
     return (cb);
 }
 
@@ -1006,7 +1009,7 @@ inline QWidget *KScanOption::createComboBox( QWidget *parent, const QString& tex
 inline QWidget *KScanOption::createEntryField( QWidget *parent, const QString& text )
 {
     KScanEntry *ent = new KScanEntry( parent, text );
-    connect(ent, SIGNAL(valueChanged(const QCString &)), SLOT(slWidgetChange(const QCString &)));
+    connect(ent, SIGNAL(valueChanged(const QByteArray &)), SLOT(slotWidgetChange(const QByteArray &)));
     return (ent);
 }
 
@@ -1017,7 +1020,7 @@ inline QWidget *KScanOption::createSlider( QWidget *parent, const QString& text 
     getRange( &min, &max, &quant );
 
     KScanSlider *slider = new KScanSlider( parent, text, min, max,true );
-    connect(slider, SIGNAL(valueChanged(int)), SLOT(slWidgetChange(int)));
+    connect(slider, SIGNAL(valueChanged(int)), SLOT(slotWidgetChange(int)));
     return (slider);
 }
 
@@ -1025,7 +1028,7 @@ inline QWidget *KScanOption::createSlider( QWidget *parent, const QString& text 
 inline QWidget *KScanOption::createFileField( QWidget *parent, const QString& text )
 {
     KScanFileRequester *req = new KScanFileRequester(parent,text);
-    connect( req, SIGNAL(valueChanged(const QCString &)), SLOT(slWidgetChange(const QCString &)));
+    connect( req, SIGNAL(valueChanged(const QByteArray &)), SLOT(slotWidgetChange(const QByteArray &)));
     return (req);
 }
 

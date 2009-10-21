@@ -33,6 +33,7 @@
 #include <qrect.h>
 
 #include <kurl.h>
+#include <kmimetype.h>
 
 #include <kfilemetainfo.h>
 
@@ -142,9 +143,12 @@ public:
 
 
     // Useful things now missing from KImageIO
+    static KMimeType::Ptr mimeForFormat(const QString &format);
     static QString extensionForFormat(const QString &format);
     // TODO: format handling seems to be a mix of QString and QByteArray
     static QString formatForUrl(const KUrl &url);
+    static bool canWriteFormat(const QString &format);
+    static QString iconForFormat(const QString &format);
 
 
 

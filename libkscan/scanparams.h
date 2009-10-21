@@ -146,6 +146,7 @@ signals:
 private:
     KScanStat prepareScan(QString *vfp);
     KScanStat performADFScan();
+    void startProgress();
 
     void createNoScannerMsg(bool galleryMode);
     void initialise(KScanOption *opt);

@@ -25,7 +25,6 @@
  ***************************************************************************/
 
 #include "imgsaver.h"
-//#include "imgsaver.moc"
 
 #include <QtCore/QDir>
 #include <QtCore/QRegExp>
@@ -48,12 +47,11 @@
 #include "formatdialog.h"
 
 
-ImgSaver::ImgSaver(QWidget *parent, const KUrl &dir)
-//    : QObject(parent)
+ImgSaver::ImgSaver(const KUrl &dir)
 {
     if (dir.isValid() && !dir.isEmpty() && dir.protocol()=="file")
     {							// can use specified place
-        m_saveDirectory = dir.directory(KUrl::IgnoreTrailingSlash);
+        m_saveDirectory = dir.directory(KUrl::ObeyTrailingSlash);
         kDebug() << "specified directory" << m_saveDirectory;
     }
     else						// cannot, so use default
@@ -151,12 +149,9 @@ ImgSaveStat ImgSaver::saveImage(const QImage *image)
              << "format=" << saveFormat
              << "subformat=" << saveSubformat;
 
-    QString fi = m_saveDirectory+"/"+saveFilename;	// full path to save
-#ifdef USE_KIMAGEIO
-    QString ext = KImageIO::suffix(saveFormat);		// extension it should have
-#else
-    QString ext = saveFormat.toLower();
-#endif
+    QString fi = m_saveDirectory+QDir::separator()+saveFilename;
+							// full path to save
+    QString ext = KookaImage::extensionForFormat(saveFormat);
     if (extension(fi)!=ext)				// already has correct extension?
     {
         fi +=  ".";					// no, add it on
@@ -225,13 +220,11 @@ ImgSaveStat ImgSaver::save(const QImage *image,
         return (ISS_ERR_PERM);
     }
 
-#ifdef USE_KIMAGEIO
-    if (!KImageIO::canWrite(format))			// check the format, is it writable?
+    if (!KookaImage::canWriteFormat(format))		// check the format, is it writable?
     {
         kDebug() << "Cannot write format" << format;
         return (ISS_ERR_FORMAT_NO_WRITE);
     }
-#endif
 
     bool result = image->save(filename, last_format);
     return (result ? ISS_OK : ISS_ERR_UNKNOWN);

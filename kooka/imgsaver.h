@@ -27,7 +27,6 @@
 #ifndef IMGSAVER_H
 #define IMGSAVER_H
 
-//#include <qobject.h>
 
 #include <kurl.h>
 
@@ -78,11 +77,8 @@ class KookaImage;
  *  and cares for database entries (later ;)
  **/
 
-// TODO: this doesn't need to be a QObject
-//class ImgSaver : public QObject
 class ImgSaver
 {
-//    Q_OBJECT
 
 public:
 
@@ -110,7 +106,7 @@ public:
 	 *  @param dir  Name of the save root directory
 	 *  @param name Name of a subdirectory in the saveroot.
 	 **/
-    ImgSaver(QWidget *parent, const KUrl &dir = KUrl());
+    ImgSaver(const KUrl &dir = KUrl());
 
     QString     errorString( ImgSaveStat );
 

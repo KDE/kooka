@@ -78,6 +78,14 @@
 
 #define STARTUP_IMG_SELECTION   "SelectedImageOnStartup"
 
+#define WCONF_TAB_INDEX		"TabIndex"
+
+#define WCONF_SCAN_LAYOUT1	"ScanLayout1"
+#define WCONF_SCAN_LAYOUT2	"ScanLayout2"
+#define WCONF_GALLERY_LAYOUT1	"GalleryLayout1"
+#define WCONF_GALLERY_LAYOUT2	"GalleryLayout2"
+#define WCONF_OCR_LAYOUT1	"OcrLayout1"
+#define WCONF_OCR_LAYOUT2	"OcrLayout2"
 
 
 // ---------------------------------------------------------------------------
@@ -153,11 +161,6 @@ void WidgetSite::setWidget(QWidget *widget)
     lay->addWidget(widget, 0, 0);
     widget->show();
 }
-
-
-
-
-
 
 
 
@@ -295,7 +298,6 @@ KookaView::KookaView(KMainWindow *parent, const QByteArray &deviceToUse)
 
     // TODO: make the splitter layouts and sizes configurable
 
-    // "Scan" page: gallery top left, scan parameters bottom left, preview right
     mParamsSite = new WidgetSite(this);
 
     mScanGallerySite = new WidgetSite(this);
@@ -305,25 +307,26 @@ KookaView::KookaView(KMainWindow *parent, const QByteArray &deviceToUse)
     mGalleryImgviewSite = new WidgetSite(this);
     mOcrImgviewSite = new WidgetSite(this);
 
-    QSplitter *s2 = new QSplitter(Qt::Vertical, mScanPage);
-    s2->setChildrenCollapsible(false);
-    s2->addWidget(mScanGallerySite);			// TL
-    s2->addWidget(mParamsSite);				// BL
-    mScanPage->addWidget(preview_canvas);		// R
+    // "Scan" page: gallery top left, scan parameters bottom left, preview right
+    mScanSubSplitter = new QSplitter(Qt::Vertical, mScanPage);
+    mScanSubSplitter->setChildrenCollapsible(false);
+    mScanSubSplitter->addWidget(mScanGallerySite);		// TL
+    mScanSubSplitter->addWidget(mParamsSite);			// BL
+    mScanPage->addWidget(preview_canvas);			// R
 
     // "Gallery" page: gallery left, viewer top right, thumbnails bottom right
-    mGalleryPage->addWidget(mGalleryGallerySite);	// L
-    s2 = new QSplitter(Qt::Vertical, mGalleryPage);
-    s2->setChildrenCollapsible(false);
-    s2->addWidget(mGalleryImgviewSite);			// TR
-    s2->addWidget(m_thumbview);				// BR
+    mGalleryPage->addWidget(mGalleryGallerySite);		// L
+    mGallerySubSplitter = new QSplitter(Qt::Vertical, mGalleryPage);
+    mGallerySubSplitter->setChildrenCollapsible(false);
+    mGallerySubSplitter->addWidget(mGalleryImgviewSite);	// TR
+    mGallerySubSplitter->addWidget(m_thumbview);		// BR
 
     // "OCR" page: gallery top left, viewer top right, results bottom
-    s2 = new QSplitter(Qt::Horizontal, mOcrPage);
-    s2->setChildrenCollapsible(false);
-    s2->addWidget(mOcrGallerySite);			// TL
-    s2->addWidget(mOcrImgviewSite);			// TR
-    mOcrPage->addWidget(m_ocrResEdit);			// B
+    mOcrSubSplitter = new QSplitter(Qt::Horizontal, mOcrPage);
+    mOcrSubSplitter->setChildrenCollapsible(false);
+    mOcrSubSplitter->addWidget(mOcrGallerySite);		// TL
+    mOcrSubSplitter->addWidget(mOcrImgviewSite);		// TR
+    mOcrPage->addWidget(m_ocrResEdit);				// B
 
     if (slotSelectDevice(deviceToUse, false)) slotTabChanged(KookaView::TabScan);
     else setCurrentIndex(KookaView::TabGallery);
@@ -334,14 +337,57 @@ KookaView::~KookaView()
 {
     kDebug();
 
-    KConfigGroup grp = KGlobal::config()->group(GROUP_STARTUP);
-    saveProperties(grp);
-
     delete preview_canvas;
     kDebug();
 }
 
 
+// this gets called via Kooka::closeEvent() at shutdown
+void KookaView::saveWindowSettings(KConfigGroup &grp)
+{
+    kDebug() << "to group" << grp.name();
+
+    grp.writeEntry(WCONF_TAB_INDEX, currentIndex());
+
+    grp.writeEntry(WCONF_SCAN_LAYOUT1, mScanPage->saveState().toBase64());
+    grp.writeEntry(WCONF_SCAN_LAYOUT2, mScanSubSplitter->saveState().toBase64());
+    grp.writeEntry(WCONF_GALLERY_LAYOUT1, mGalleryPage->saveState().toBase64());
+    grp.writeEntry(WCONF_GALLERY_LAYOUT2, mGallerySubSplitter->saveState().toBase64());
+    grp.writeEntry(WCONF_OCR_LAYOUT1, mOcrPage->saveState().toBase64());
+    grp.writeEntry(WCONF_OCR_LAYOUT2, mOcrSubSplitter->saveState().toBase64());
+}
+
+
+// this gets called by Kooka::applyMainWindowSettings() at startup
+void KookaView::applyWindowSettings(const KConfigGroup &grp)
+{
+    kDebug() << "from group" << grp.name();
+
+    QString set;
+
+    set = grp.readEntry(WCONF_SCAN_LAYOUT1, "");
+    if (!set.isEmpty()) mScanPage->restoreState(QByteArray::fromBase64(set.toLocal8Bit()));
+    set = grp.readEntry(WCONF_SCAN_LAYOUT2, "");
+    if (!set.isEmpty()) mScanSubSplitter->restoreState(QByteArray::fromBase64(set.toLocal8Bit()));
+
+    set = grp.readEntry(WCONF_GALLERY_LAYOUT1, "");
+    if (!set.isEmpty()) mGalleryPage->restoreState(QByteArray::fromBase64(set.toLocal8Bit()));
+    set = grp.readEntry(WCONF_GALLERY_LAYOUT2, "");
+    if (!set.isEmpty()) mGallerySubSplitter->restoreState(QByteArray::fromBase64(set.toLocal8Bit()));
+
+    set = grp.readEntry(WCONF_OCR_LAYOUT1, "");
+    if (!set.isEmpty()) mOcrPage->restoreState(QByteArray::fromBase64(set.toLocal8Bit()));
+    set = grp.readEntry(WCONF_OCR_LAYOUT2, "");
+    if (!set.isEmpty()) mOcrSubSplitter->restoreState(QByteArray::fromBase64(set.toLocal8Bit()));
+}
+
+
+// this gets called by Kooka::closeEvent() at shutdown
+void KookaView::saveProperties(KConfigGroup &grp)
+{
+    kDebug() << "to group" << grp.name();
+    grp.writePathEntry(STARTUP_IMG_SELECTION, gallery()->getCurrImageFileName(true));
+}
 
 
 void KookaView::slotTabChanged(int index)
@@ -460,9 +506,6 @@ The error reported was: <b>%1</b>", sane->lastErrorMessage(), selDevice.data());
             preview_canvas->connectScanner(sane);	// load its autosel options
         }
     }
-
-//    m_dockScanParam->setWidget(scan_params);
-//    m_dockScanParam->show();				// show the widget again
 
     if (!haveConnection)				// no scanner device available,
     {							// or starting in gallery mode
@@ -779,6 +822,7 @@ void KookaView::slotScanStart( )
       {
 	 led->setColor( Qt::red );
 	 led->setState( KLed::On );
+         qApp->processEvents();
       }
    }
 }
@@ -792,6 +836,7 @@ void KookaView::slotAcquireStart( )
       if( led )
       {
 	 led->setColor( Qt::green );
+         qApp->processEvents();
       }
    }
 }
@@ -1022,12 +1067,6 @@ void KookaView::updateCurrImage( QImage& img )
     }
 }
 
-
-void KookaView::saveProperties(KConfigGroup &grp)
-{
-    kDebug();
-    grp.writePathEntry(STARTUP_IMG_SELECTION, gallery()->getCurrImageFileName(true));
-}
 
 
 void KookaView::slotOpenCurrInGraphApp()

@@ -431,12 +431,13 @@ void FormatDialog::buildFormatList(bool recOnly)
     for (QStringList::const_iterator it = formatList.constBegin();
          it!=formatList.constEnd(); ++it)
     {
+        QString fmt = (*it);
 	if (recOnly)					// only want recommended
 	{
 	    bool formatOk = false;
 	    for (formatInfo *ip = &formats[0]; ip->format!=NULL; ++ip)
 	    {						// search for this format
-		if (ip->format!=(*it)) continue;
+		if (ip->format!=fmt) continue;
 
                 if (ip->recForTypes & imgType)		// recommended for this type?
 		{
@@ -447,9 +448,9 @@ void FormatDialog::buildFormatList(bool recOnly)
 
 	    if (!formatOk) continue;			// this format not to be shown
 	}
-
-// TODO: format item (text) could also have MIME type pixmap
-	lb_format->addItem((*it).toUpper());		// add format to list
+							// add format to list
+	lb_format->addItem(new QListWidgetItem(KIcon(KookaImage::iconForFormat(fmt)),
+                                               fmt.toUpper(), lb_format));
     }
 
     formatSelected(NULL);				// selection has been cleared

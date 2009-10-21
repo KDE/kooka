@@ -184,13 +184,14 @@ bool ScanParams::connectDevice(KScanDevice *newScanDevice, bool galleryMode)
     progressDialog->setModal(true);
     progressDialog->setAutoClose(true);
     progressDialog->setAutoReset(true);
+    progressDialog->setMinimumDuration(100);
     progressDialog->setWindowTitle(i18n("Scanning"));
 
     connect( sane_device, SIGNAL(sigScanProgress(int)),
-             progressDialog, SLOT(setProgress(int)));
+             progressDialog, SLOT(setValue(int)));
 
     /* Connect the Progress Dialogs cancel-Button */
-    connect( progressDialog, SIGNAL( cancelled() ), sane_device,
+    connect( progressDialog, SIGNAL( canceled() ), sane_device,
              SLOT( slotStopScanning() ) );
 
     return (true);
@@ -204,6 +205,7 @@ ScanParams::~ScanParams()
     delete startupOptset;  startupOptset = NULL;
     delete progressDialog; progressDialog = NULL;
 }
+
 
 
 
@@ -911,6 +913,14 @@ KScanStat ScanParams::prepareScan(QString *vfp)
 
 
 
+void ScanParams::startProgress()
+{
+    progressDialog->setValue(0);
+    if (progressDialog->isHidden()) progressDialog->show();
+}
+
+
+
 /* Slot called to start acquiring a preview */
 void ScanParams::slotAcquirePreview()
 {
@@ -932,6 +942,7 @@ void ScanParams::slotAcquirePreview()
     slotMaximalScanSize();				// always preview at maximal size
     area_sel->selectCustomSize(QRect());		// reset selector to reflect that
 
+    startProgress();					// show the progress dialog
     stat = sane_device->acquirePreview(gray_preview);
     if (stat!=KSCAN_OK) kDebug() << "Error, preview status " << stat;
 }
@@ -950,10 +961,8 @@ void ScanParams::slotStartScan()
     {
         if (adf==ADF_OFF)
         {
-	    /* Progress-Dialog */
-	    progressDialog->setValue(0);
-	    if (progressDialog->isHidden()) progressDialog->show();
 	    kDebug() << "Start to acquire image";
+            startProgress();				// show the progress dialog
 	    stat = sane_device->acquire();
         }
         else

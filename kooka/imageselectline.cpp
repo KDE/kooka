@@ -56,9 +56,13 @@ ImageSelectLine::ImageSelectLine(QWidget *parent, const QString &label)
 
    m_urlCombo       = new KUrlComboBox( KUrlComboBox::Files, this );
    m_urlCombo->setMaxItems(5);
+   // from KFileWidget::KFileWidget(const KUrl& _startDir,QWidget *parent)
+   m_urlCombo->setSizeAdjustPolicy(QComboBox::AdjustToMinimumContentsLength);
+
    connect( m_urlCombo, SIGNAL( urlActivated( const KUrl& )),
 	    SLOT( slotUrlActivated( const KUrl& )));
 
+   // TODO: should be a QToolButton
    m_buttFileSelect = new QPushButton(this);
    m_buttFileSelect->setIcon(KIcon("fileopen"));
    connect( m_buttFileSelect, SIGNAL( clicked() ),

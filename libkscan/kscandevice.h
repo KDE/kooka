@@ -468,15 +468,15 @@ private:
     QList<KScanOption *>  gui_elements;
     Q3AsciiDict<SANE_Device>  scannerDevices;
 
-    QSocketNotifier     *sn;
+    QSocketNotifier     *mSocketNotifier;
 
     KScanDevice::ScanStatus          scanStatus;
 
     /* Data for the scan process */
     /* This could/should go to  a small help object */
     QByteArray             scanner_name;
-    SANE_Byte           *data;
-    QImage              *img;
+    SANE_Byte           *mScanBuf;
+    QImage              *mScanImage;
     SANE_Parameters      sane_scan_param;
     long		      overall_bytes;
     int                 rest_bytes;

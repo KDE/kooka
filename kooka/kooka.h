@@ -91,6 +91,8 @@ protected:
      */
     void readProperties(const KConfigGroup &grp);
 
+    virtual void applyMainWindowSettings(const KConfigGroup &grp, bool forceGlobal);
+
 protected slots:
     void slotUpdateScannerActions(bool haveConnection);
     void slotUpdateRectangleActions(bool haveSelection);

@@ -112,6 +112,9 @@ public:
     void connectThumbnailAction(KAction *action);
 
     void saveProperties(KConfigGroup &grp);
+    void saveWindowSettings(KConfigGroup &grp);
+    void applyWindowSettings(const KConfigGroup &grp);
+
 
 public slots:
     void slotShowPreview()  {  }
@@ -269,8 +272,11 @@ private:
     KPrinter*   photoCopyPrinter;
 
     QSplitter *mScanPage;
+    QSplitter *mScanSubSplitter;
     QSplitter *mGalleryPage;
+    QSplitter *mGallerySubSplitter;
     QSplitter *mOcrPage;
+    QSplitter *mOcrSubSplitter;
 
     WidgetSite *mParamsSite;
 

@@ -38,9 +38,7 @@
 #endif
 #include <kstatusbar.h>
 #include <kurl.h>
-//#include <kedittoolbar.h>
 #include <kmessagebox.h>
-//#include <kstandardaccel.h>
 #include <kaction.h>
 #include <kactionmenu.h>
 #include <ktoggleaction.h>
@@ -83,14 +81,13 @@ Kooka::Kooka(const QByteArray &deviceToUse)
 
     setAcceptDrops(false); // Waba: Not (yet?) supported
 
-    setAutoSaveSettings();				// default group, do save
-//    readDockConfig(KGlobal::config().data(), DOCK_SIZES);
     readProperties(KGlobal::config()->group(autoSaveGroup()));
 
     // then, setup our actions
     setupActions();
 
     setupGUI(KXmlGuiWindow::Default, "kookaui.rc");
+    setAutoSaveSettings();				// default group, do save
 
     // allow the view to change the statusbar and caption
     connect(m_view, SIGNAL(signalChangeStatusbar(const QString&)),
@@ -125,7 +122,6 @@ Kooka::Kooka(const QByteArray &deviceToUse)
 Kooka::~Kooka()
 {
     m_view->closeScanDevice();
-//    writeDockConfig(KGlobal::config().data(), DOCK_SIZES);
     delete m_view;					// ensure its config saved
 #ifndef KDE4
     delete m_printer;
@@ -150,8 +146,6 @@ void Kooka::setupActions()
     //KStandardAction::configureToolbars(this,SLOT(optionsConfigureToolbars()),actionCollection());
     KStandardAction::preferences(this, SLOT(optionsPreferences()), actionCollection());
 
-//    m_view->createDockMenu(actionCollection(), this, "settings_show_docks");
-
     // Image Viewer
 
     scaleToWidthAction =  new KAction(KIcon("zoom-fit-width"), i18n("Scale to Width"), this);
@@ -174,7 +168,7 @@ void Kooka::setupActions()
 
     KToggleAction *tact = new KToggleAction(KIcon("lockzoom"), i18n("Keep Zoom Setting"), this);
     tact->setShortcut(Qt::CTRL+Qt::Key_Z);
-//    connect(tact, SIGNAL(toggled(bool)), m_view->getImageViewer(), SLOT(setKeepZoom(bool)));
+    connect(tact, SIGNAL(toggled(bool)), m_view->getImageViewer(), SLOT(setKeepZoom(bool)));
     actionCollection()->addAction("keepZoom", tact);
     m_view->connectViewerAction(tact);
 
@@ -185,7 +179,7 @@ void Kooka::setupActions()
     actionCollection()->addAction("showZoomDialog", act);
     m_view->connectViewerAction(act);
 
-    newFromSelectionAction = new KAction(KIcon("crop"), i18n("New Image From Selection"), this);
+    newFromSelectionAction = new KAction(KIcon("transform-crop"), i18n("New Image From Selection"), this);
     newFromSelectionAction->setShortcut(Qt::CTRL+Qt::Key_N);
     connect(newFromSelectionAction, SIGNAL(triggered()), m_view, SLOT(slotCreateNewImgFromSelection()));
     actionCollection()->addAction("createFromSelection", newFromSelectionAction);
@@ -331,14 +325,18 @@ void Kooka::closeEvent(QCloseEvent *ev)
 {
     KConfigGroup grp = KGlobal::config()->group(autoSaveGroup());
     saveProperties(grp);
-    KXmlGuiWindow::closeEvent(ev);
-}
 
+    if (autoSaveSettings())
+    {
+        saveAutoSaveSettings();
+        m_view->saveWindowSettings(grp);
+    }
+}
 
 
 void Kooka::saveProperties(KConfigGroup &grp)
 {
-    kDebug();
+    kDebug() << "to group" << grp.name();
 
     // the 'config' object points to the session managed
     // config file.  anything you write here will be available
@@ -351,9 +349,18 @@ void Kooka::saveProperties(KConfigGroup &grp)
 }
 
 
+void Kooka::applyMainWindowSettings(const KConfigGroup &grp, bool forceGlobal)
+{
+    kDebug() << "from group" << grp.name();
+
+    KXmlGuiWindow::applyMainWindowSettings(grp, forceGlobal);
+    m_view->applyWindowSettings(grp);
+}
+
+
 void Kooka::readProperties(const KConfigGroup &grp)
 {
-    kDebug();
+    kDebug() << "to group" << grp.name();
 
     // the 'config' object points to the session managed
     // config file.  this function is automatically called whenever

@@ -172,20 +172,20 @@ ScanPackager::ScanPackager(QWidget *parent)
    img_counter = 1;
 
     /* Preload frequently used icons */
-    KIconLoader *loader = KIconLoader::global();
-    mPixFloppy = KIcon("media-floppy").pixmap(KIconLoader::SizeSmall);
-    mPixGray   = KIcon("palette-gray").pixmap(KIconLoader::SizeSmall);
-    mPixBw     = KIcon("palette-lineart").pixmap(KIconLoader::SizeSmall);
-    mPixColor  = KIcon("palette-color").pixmap(KIconLoader::SizeSmall);
+    KIconLoader::global()->addAppDir("libkscan");	// access to our icons
 
-   m_startup = true;
+    mPixFloppy = KIconLoader::global()->loadIcon("media-floppy", KIconLoader::NoGroup, KIconLoader::SizeSmall);
+    mPixGray   = KIconLoader::global()->loadIcon("palette-gray", KIconLoader::NoGroup, KIconLoader::SizeSmall);
+    mPixBw     = KIconLoader::global()->loadIcon("palette-lineart", KIconLoader::NoGroup, KIconLoader::SizeSmall);
+    mPixColor  = KIconLoader::global()->loadIcon("palette-color", KIconLoader::NoGroup, KIconLoader::SizeSmall);
 
-   /* create a context menu and set the title */
-   m_contextMenu = new KMenu();
-   m_contextMenu->addTitle(i18n("Gallery"));
+    m_startup = true;
 
-   openWithMapper = NULL;
-//   openWithActions = NULL;
+    /* create a context menu and set the title */
+    m_contextMenu = new KMenu();
+    m_contextMenu->addTitle(i18n("Gallery"));
+
+    openWithMapper = NULL;
 }
 
 
@@ -529,7 +529,7 @@ QString ScanPackager::itemDirectory(const K3FileTreeViewItem* item, bool relativ
         return (QString::null);
     }
 
-    // TODO: can manupilate using KUrl?
+    // TODO: can manipulate using KUrl?
     QString relativUrl= (item->url()).prettyUrl();
 
    if( ! item->isDir() )
@@ -566,6 +566,7 @@ QString ScanPackager::itemDirectory(const K3FileTreeViewItem* item, bool relativ
 	 }
       }
    }
+
    return (relativUrl);
 }
 
@@ -822,7 +823,7 @@ void ScanPackager::slotCurrentImageChanged(const QImage *img)
         return;
     }
 
-    ImgSaver saver(this);
+    ImgSaver saver;
     ImgSaveStat is_stat = ISS_OK;
     is_stat = saver.saveImage(img, filename, format);
     if (is_stat!=ISS_OK)
@@ -867,7 +868,7 @@ void ScanPackager::addImage(const QImage *img, KookaImageMeta *meta)
     }
 
     KUrl dir(itemDirectory(curr));			// where new image will go
-    ImgSaver imgsaver(this, dir);
+    ImgSaver imgsaver(dir);
     is_stat = imgsaver.saveImage(img);			// try to save the image
     if (is_stat!=ISS_OK)				// image saving failed
     {
@@ -1324,9 +1325,6 @@ void ScanPackager::showOpenWithMenu(KActionMenu *menu)
         connect(openWithMapper, SIGNAL(mapped(int)), SLOT(slotOpenWith(int)));
     }
 
-//    if (openWithActions==NULL) openWithActions = new KActionCollection(this);
-							// separate from application's actions
-//    openWithActions->clear();				// delete any previous actions
     menu->menu()->clear();
 
     int i = 0;

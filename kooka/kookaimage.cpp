@@ -388,31 +388,53 @@ QRect KookaImage::getTileRect(int rowPos, int colPos) const
 
 
 
+// Get the MIME icon name for a Qt image format.
+
+QString KookaImage::iconForFormat(const QString &format)
+{
+    QString suf = format.toLower();
+
+    // work around returning "folder" for unknown types
+    QString name = KMimeType::iconNameForUrl("/tmp/x."+suf);
+    if (name=="folder") name = "unknown";
+    kDebug() << "for" << format << "returning" << name;
+    return (name);
+}
 
 
+// Get the MIME type for a Qt image format.  This assumes that the
+// KDE MIME type system will always recognise a file with the Qt
+// image format key as extension.
 
+KMimeType::Ptr KookaImage::mimeForFormat(const QString &format)
+{
+    QString suf = format.toLower();
+    KMimeType::Ptr mime = KMimeType::findByPath("/tmp/x."+suf, 0, true);
 
+    if (mime->isDefault())
+    {
+        kDebug() << "no MIME type for image format" << format;
+        return (KMimeType::Ptr());
+    }
+    else return (mime);
+}
 
 
 // KImageIO::suffix(format) seems to be no longer present, with no
 // equivalent available.  The lookup here is to get the preferred
 // file extension for the Qt image format.
 //
-// This assumes that the KDE MIME type system will always recognise
-// a file with the Qt image format key as extension.
-//
 // The dot is not included in the result, unlike KMimeType::mainExtension()
 
 QString KookaImage::extensionForFormat(const QString &format)
 {
     QString suf = format.toLower();
-    KMimeType::Ptr mime = KMimeType::findByPath("/tmp/x."+suf, 0, true);
-    if (!mime->isDefault())				// not application/octet-stream
+    KMimeType::Ptr mime = mimeForFormat(format);
+    if (!mime.isNull())
     {
         QString ext = mime->mainExtension();
         if (!ext.isEmpty()) suf = ext;
     }
-    else kDebug() << "no MIME type for image format" << format;
 
     if (suf.startsWith('.')) suf = suf.mid(1);
     kDebug() << "for" << format << "returning" << suf;
@@ -420,9 +442,9 @@ QString KookaImage::extensionForFormat(const QString &format)
 }
 
 
-// KImageIO::typeForMime returns a list of possible formats.  Normally
-// we assume that there will only be one, but possibly there may be
-// more.  This lookup just takes the first one.
+// KImageIO::typeForMime() returns a list of possible formats.
+// Normally we assume that there will only be one, but possibly
+// there may be more.  This lookup just takes the first one.
 
 QString KookaImage::formatForUrl(const KUrl &url)
 {
@@ -440,4 +462,15 @@ QString KookaImage::formatForUrl(const KUrl &url)
     }
 
     return (formats.first());
+}
+
+
+// Wrapper for KImageIO::isSupported() that takes a format name instead
+// of a MIME type.
+
+bool KookaImage::canWriteFormat(const QString &format)
+{
+    KMimeType::Ptr mime = mimeForFormat(format);
+    if (mime.isNull()) return (false);
+    else return (KImageIO::isSupported(mime->name(), KImageIO::Writing));
 }
