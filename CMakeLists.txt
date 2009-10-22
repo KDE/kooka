@@ -13,7 +13,6 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} /ws/trunk/kdepim/cmake/modules)
 ############### Build Options ###############
 
 
-
 ############### search packages used by KDE ###############
 
 find_package(KDE4 REQUIRED)
@@ -39,6 +38,37 @@ endif(WIN32)
 
 ############### Find the stuff we need ###############
 
+
+# Support for SANE
+option(SANECONFIG_BIN "Path to the sane-config(1) binary, needed to get SANE configuration" OFF)
+
+
+if (SANECONFIG_BIN)
+  set(SANECONFIG_PROG ${SANECONFIG_BIN})
+  message(STATUS "Specified sane-config(1), ${SANECONFIG_PROG}")
+else (SANECONFIG_BIN)
+  find_program(SANECONFIG_PROG NAMES sane-config)
+  message(STATUS "Found sane-config(1), ${SANECONFIG_PROG}")
+endif (SANECONFIG_BIN)
+
+if (SANECONFIG_PROG)
+  set(HAVE_SANE true)
+else (SANECONFIG_PROG)
+  message(SEND_ERROR "libkscan needs SANE (http://www.sane-project.org) - specify location of sane-config(1) with SANECONFIG_BIN")
+endif (SANECONFIG_PROG)
+
+
+
+if (HAVE_SANE)
+  execute_process(COMMAND ${SANECONFIG_PROG} --version OUTPUT_VARIABLE SANE_VERSION OUTPUT_STRIP_TRAILING_WHITESPACE)
+  message(STATUS "Found SANE, version ${SANE_VERSION}")
+
+  execute_process(COMMAND ${SANECONFIG_PROG} --libs OUTPUT_VARIABLE SANE_LIBRARIES OUTPUT_STRIP_TRAILING_WHITESPACE)
+  message(STATUS "SANE libraries: ${SANE_LIBRARIES}")
+
+  execute_process(COMMAND ${SANECONFIG_PROG} --cflags OUTPUT_VARIABLE SANE_INCLUDES OUTPUT_STRIP_TRAILING_WHITESPACE)
+  message(STATUS "SANE includes: ${SANE_INCLUDES}")
+endif (HAVE_SANE)
 
 ############### Needed commands before building anything ###############
 
@@ -94,9 +124,9 @@ add_custom_target(clobber
 
 ############### Now, we add the Kooka components ###############
 
-# These targets will always be built before anything else.
 add_subdirectory(libkscan)
 add_subdirectory(kooka)
+add_subdirectory(sanedump EXCLUDE_FROM_ALL)
 
 
 
