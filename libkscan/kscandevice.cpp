@@ -25,7 +25,6 @@
 
 #include <qwidget.h>
 #include <qobject.h>
-#include <q3asciidict.h>
 #include <qcombobox.h>
 #include <qslider.h>
 #include <qcheckbox.h>
@@ -191,8 +190,7 @@ KScanDevice::KScanDevice( QObject *parent )
 
     d = new KScanDevicePrivate();
     
-    option_dic = new Q3AsciiDict<int>;
-    option_dic->setAutoDelete( true );
+	option_dic = new QHash<QByteArray,int>;
 
     scanner_initialised = false;  /* stays false until openDevice. */
     scanStatus = SSTAT_SILENT;
@@ -221,11 +219,11 @@ KScanDevice::KScanDevice( QObject *parent )
         for( int devno = 0; sane_stat == SANE_STATUS_GOOD &&
 	      dev_list[ devno ]; ++devno )
         {
-	    if( dev_list[devno] )
- 	    {
-	        scanner_avail.append( dev_list[devno]->name );
-		scannerDevices.insert( dev_list[devno]->name, dev_list[devno] );
-	    	kDebug() << "Found scanner:" << dev_list[devno]->name;
+			if( dev_list[devno] )
+			{
+				scanner_avail.append( dev_list[devno]->name );
+				scannerDevices.insert( dev_list[devno]->name, dev_list[devno] );
+				kDebug() << "Found scanner:" << dev_list[devno]->name;
             }
         }
 
@@ -393,7 +391,7 @@ void KScanDevice::slotCloseDevice()
 QString KScanDevice::getScannerName(const QByteArray &name) const
 {
     QString ret = i18n("No scanner selected");
-    SANE_Device *scanner = NULL;
+	const SANE_Device *scanner = NULL;
 
     if (!scanner_name.isNull() && scanner_initialised && name.isEmpty())
     {
@@ -435,7 +433,6 @@ KScanStat KScanDevice::find_options()
    KScanStat 	stat = KSCAN_OK;
    SANE_Int 	n;
    SANE_Int 	opt;
-   int 	   	*new_opt;
 
   SANE_Option_Descriptor *d;
 
@@ -465,11 +462,9 @@ KScanStat KScanDevice::find_options()
 
 	      if( strlen( d->name ) > 0 )
 	      {
-		 new_opt = new int;
-		 *new_opt = i;
-		 kDebug() << "Inserting" << d->name << "as" << *new_opt;
+		 kDebug() << "Inserting" << d->name << "as" << i;
 		 /* create a new option in the set. */
-		 option_dic->insert ( (const char*)d->name, new_opt );
+		 option_dic->insert ( d->name, i );
 		 option_list.append( (const char*) d->name );
 #if 0
 		 KScanOption *newOpt = new KScanOption( d->name );
@@ -536,12 +531,12 @@ KScanStat KScanDevice::apply( KScanOption *opt, bool isGammaTable )
    if( !opt ) return( KSCAN_ERR_PARAM );
    int sane_result = 0;
 
-   int         *num = (*option_dic)[ opt->getName() ];
+   int         val = option_dic->value(opt->getName());
    sane_stat = SANE_STATUS_GOOD;
    const QByteArray& oname = opt->getName();
 
    if ( oname == "preview" || oname == "mode" ) {
-      sane_stat = sane_control_option( scanner_handle, *num,
+	  sane_stat = sane_control_option( scanner_handle, val,
 				       SANE_ACTION_SET_AUTO, 0,
 				       &sane_result );
       /* No return here, please ! Carsten, does it still work than for you ? */
@@ -555,7 +550,7 @@ KScanStat KScanDevice::apply( KScanOption *opt, bool isGammaTable )
       if( opt->autoSetable() )
       {
 	 kDebug() << "Setting option" << oname << "automatic";
-	 sane_stat = sane_control_option( scanner_handle, *num,
+	 sane_stat = sane_control_option( scanner_handle, val,
 					  SANE_ACTION_SET_AUTO, 0,
 					  &sane_result );
       }
@@ -580,7 +575,7 @@ KScanStat KScanDevice::apply( KScanOption *opt, bool isGammaTable )
       else
       {
 
-	 sane_stat = sane_control_option( scanner_handle, *num,
+	 sane_stat = sane_control_option( scanner_handle, val,
 					  SANE_ACTION_SET_VALUE,
 					  opt->getBuffer(),
 					  &sane_result );
@@ -641,16 +636,17 @@ KScanStat KScanDevice::apply( KScanOption *opt, bool isGammaTable )
 bool KScanDevice::optionExists( const QByteArray& name )
 {
    if( name.isEmpty() ) return false;
-   int *i = 0L;
+
+   bool ret = false;
 
    QByteArray altname = aliasName( name );
-
    if( ! altname.isNull() )
-       i = (*option_dic)[ altname ];
+   {
+	   int i = option_dic->value(altname, -1);
+	   ret = (i > -1);
+   }
 
-   if( !i )
-       return( false );
-   return( *i > -1 );
+   return ret;
 }
 
 
@@ -675,21 +671,18 @@ void KScanDevice::slotSetDirty(const QByteArray &name)
  */
 QByteArray KScanDevice::aliasName( const QByteArray& name )
 {
-    int *i = (*option_dic)[ name ];
-    QByteArray ret;
+	if (option_dic->contains(name))
+		return name;
 
-    if( i ) return( name );
-    ret = name;
-
+	QByteArray ret = name;
     if( name == SANE_NAME_CUSTOM_GAMMA )
     {
-	if((*option_dic)["gamma-correction"])
-	    ret = "gamma-correction";
-
+		if (option_dic->contains("gamma-correction"))
+			ret = "gamma-correction";
     }
 
     if( ret != name )
-	kDebug() << "Found alias for" << name << "which is" << ret;
+		kDebug() << "Found alias for" << name << "which is" << ret;
 
     return( ret );
 }
@@ -940,7 +933,7 @@ inline const char *optionNotifyString(int opt)
 
 void KScanDevice::prepareScan( void )
 {
-    Q3AsciiDictIterator<int> it( *option_dic ); // iterator for dict
+	QHash<QByteArray,int>::ConstIterator it = option_dic->begin(); // iterator for dict
 
     kDebug() << "######################################################################";
     kDebug() << "Scanner" << scanner_name << "=" << getScannerName();
@@ -948,10 +941,10 @@ void KScanDevice::prepareScan( void )
     kDebug() << " Option-Name                      |SSEL|HSEL|SDET|EMUL|AUTO|INAC|ADVA|";
     kDebug() << "----------------------------------+----+----+----+----+----+----+----+";
 
-    while ( it.current() )
+	while ( it != option_dic->end() )
     {
        // qDebug( "%s -> %d", it.currentKey().latin1(), *it.current() );
-       int descriptor = *it.current();
+	   int descriptor = it.value();
 
        const SANE_Option_Descriptor *d = sane_get_option_descriptor( scanner_handle, descriptor );
 
@@ -959,7 +952,7 @@ void KScanDevice::prepareScan( void )
        {
 	  int cap = d->cap;
 	  
-	  QString s = QString(it.currentKey()).leftJustified(32);
+	  QString s = QString(it.key()).leftJustified(32);
 	  kDebug() << s << "|" <<
 		 optionNotifyString( ((cap) & SANE_CAP_SOFT_SELECT)) << 
 		 optionNotifyString( ((cap) & SANE_CAP_HARD_SELECT)) << 
@@ -1599,5 +1592,5 @@ void KScanDevice::slotStoreConfig(const QString &key, const QString &val)
 bool KScanDevice::scanner_initialised = false;
 SANE_Handle KScanDevice::scanner_handle = NULL;
 SANE_Device const **KScanDevice::dev_list = NULL;
-Q3AsciiDict<int> *KScanDevice::option_dic = NULL;
+QHash<QByteArray,int> *KScanDevice::option_dic = NULL;
 KScanOptSet *KScanDevice::gammaTables = NULL;

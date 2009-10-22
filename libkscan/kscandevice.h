@@ -22,13 +22,13 @@
 
 #include "libkscanexport.h"
 
-#include <q3asciidict.h>
 #include <qsize.h>
 #include <qobject.h>
 #include <qstringlist.h>
 #include <qbytearray.h>
 #include <qimage.h>
 #include <qlist.h>
+#include <qhash.h>
 
 #include "kscanoption.h"
 #include "kscanoptset.h"
@@ -304,7 +304,7 @@ public:
 // TODO: public data!
     static bool        scanner_initialised;
     static SANE_Handle scanner_handle;
-    static Q3AsciiDict<int> *option_dic;
+	static QHash<QByteArray, int> *option_dic;
     static SANE_Device const **dev_list;
     static KScanOptSet *gammaTables;
 
@@ -466,7 +466,7 @@ private:
     QList<QByteArray>            dirtyList;     // option changes
 
     QList<KScanOption *>  gui_elements;
-    Q3AsciiDict<SANE_Device>  scannerDevices;
+	QHash<QByteArray, const SANE_Device *>  scannerDevices;
 
     QSocketNotifier     *mSocketNotifier;
 

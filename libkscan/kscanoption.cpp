@@ -59,12 +59,12 @@ static const int resList[] = { 50, 75, 100, 150, 200, 300, 600, 900, 1200, 1800,
 /** inline-access to the option descriptor, object to changes with global vars. **/
 inline const SANE_Option_Descriptor *getOptionDesc( const QByteArray &name )
 {
-   int *idx = KScanDevice::option_dic->find(name);
+   QHash<QByteArray,int>::ConstIterator idx = KScanDevice::option_dic->find(name);
    
    const SANE_Option_Descriptor *d = 0;
-   if ( idx && *idx > 0 )
+   if ( idx != KScanDevice::option_dic->end() && idx.value() > 0 )
    {
-      d = sane_get_option_descriptor( KScanDevice::scanner_handle, *idx );
+      d = sane_get_option_descriptor( KScanDevice::scanner_handle, idx.value() );
    }
    else
    {
@@ -88,10 +88,10 @@ KScanOption::KScanOption(const QByteArray &new_name)
         return;
     }
 
-    int *num = KScanDevice::option_dic->find(name);
-    if (num==NULL || buffer.isNull()) return;
+	QHash<QByteArray,int>::ConstIterator it = KScanDevice::option_dic->find(name);
+	if (it == KScanDevice::option_dic->end() || buffer.isNull()) return;
 
-    SANE_Status sane_stat = sane_control_option(KScanDevice::scanner_handle, *num,
+	SANE_Status sane_stat = sane_control_option(KScanDevice::scanner_handle, it.value(),
                                                 SANE_ACTION_GET_VALUE,
                                                 buffer.data(),NULL);
     if (sane_stat==SANE_STATUS_GOOD) buffer_untouched = false;
@@ -265,8 +265,8 @@ default:
 /* In this slot, the option queries the scanner for current values. */
 void KScanOption::slotReload()
 {
-    int *num = KScanDevice::option_dic->find(name);
-    if (!valid() || num==NULL) return;
+    QHash<QByteArray,int>::ConstIterator it = KScanDevice::option_dic->find(name);
+	if (!valid() || it == KScanDevice::option_dic->end()) return;
     desc = getOptionDesc(name);	
 		
     if (widget()!=NULL)
@@ -299,7 +299,7 @@ void KScanOption::slotReload()
        allocForDesc();					// grow the buffer
    }
 
-   SANE_Status sane_stat = sane_control_option(KScanDevice::scanner_handle,*num,
+   SANE_Status sane_stat = sane_control_option(KScanDevice::scanner_handle,it.value(),
                                                 SANE_ACTION_GET_VALUE,buffer.data(),NULL);
    if( sane_stat != SANE_STATUS_GOOD )
    {
