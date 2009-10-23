@@ -59,9 +59,9 @@ ScanParamsDialog::ScanParamsDialog(QWidget *parent,KScanDevice *scandev)
     paramsList->setSelectionMode(QAbstractItemView::SingleSelection);
     paramsList->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
     paramsList->setMinimumWidth(200);
-    connect(paramsList, SIGNAL(selectionChanged(QListWidgetItem *)),
+    connect(paramsList, SIGNAL(currentItemChanged(QListWidgetItem *,QListWidgetItem *)),
             SLOT(slotSelectionChanged(QListWidgetItem *)));
-    connect(paramsList, SIGNAL(doubleClicked(QListWidgetItem *)),
+    connect(paramsList, SIGNAL(itemDoubleClicked(QListWidgetItem *)),
             SLOT(slotLoadAndClose(QListWidgetItem *)));
     gl->addWidget(paramsList, 1, 0, 5, 1);
 
@@ -269,5 +269,5 @@ void ScanParamsDialog::slotDelete()
 
     KScanOptSet::deleteSet(name);
     delete paramsList->takeItem(paramsList->row(item));
-    slotSelectionChanged(NULL);
+    paramsList->setCurrentItem(NULL);			// clear selection
 }
