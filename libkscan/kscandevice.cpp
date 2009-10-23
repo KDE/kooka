@@ -49,7 +49,6 @@
 #include "kscanoptset.h"
 #include "devselector.h"
 #include "imgscaninfo.h"
-#include "previewer.h"
 
 
 #define MIN_PREVIEW_DPI		75
@@ -121,6 +120,8 @@ KScanOption *KScanDevice::getExistingGuiElement( const QByteArray& name )
 
    ------------------------------------------------------------------------- */
 
+// TODO: no need to pass desc and tooltip here, can get them from SANE
+// via the KScanOption
 KScanOption *KScanDevice::getGuiElement(const QByteArray &name,
                                         QWidget *parent,
                                         const QString &desc,
@@ -757,18 +758,15 @@ void KScanDevice::slotStopScanning( void )
 
 const QString KScanDevice::previewFile()
 {
-// TODO: this doesn't work if that directory doesn't exist,
-// and nothing ever creates that directory!
-// Save somewhere in the application directory instead.
-
-    QString dir = Previewer::galleryRoot();
-
-    QString fname = dir + QString::fromLatin1(".previews/");
+    // TODO: this doesn't work if that directory doesn't exist,
+    // and nothing ever creates that directory!
+    // Do we want this feature to work?  If so, remove the 'false' argument below.
+    QString dir = KGlobal::dirs()->saveLocation("data", "previews/", false);
     QString sname( getScannerName(shortScannerName()) );
     sname.replace( '/', "_");
-
-    return fname+sname;
+    return (dir+sname);
 }
+
 
 QImage KScanDevice::loadPreviewImage()
 {
@@ -1519,14 +1517,16 @@ default:    kDebug() << "Undefined sane_scan_param format" << sane_scan_param.fo
 
 
 // TODO: does this need to be a slot?
-void KScanDevice::slotSaveScanConfigSet(const QString &setName,const QString &descr)
+void KScanDevice::slotSaveScanConfigSet(const QString &setName, const QString &descr)
 {
-    if (setName.isEmpty()) return;
-    kDebug() << k_funcinfo << "Saving configuration" << setName;
+    if (setName.isEmpty()) return;			// do not save unnamed set
+ 							// do not save for no scanner
+    if (scanner_name.isEmpty() || scanner_name==UNDEF_SCANNERNAME) return;
 
+    kDebug() << "Saving configuration" << setName;
     KScanOptSet optSet(DEFAULT_OPTIONSET);
     getCurrentOptions(&optSet);
-    optSet.saveConfig(scanner_name,setName,descr);
+    optSet.saveConfig(scanner_name, setName, descr);
 }
 
 
@@ -1589,6 +1589,7 @@ void KScanDevice::slotStoreConfig(const QString &key, const QString &val)
 }
 
 
+// TODO: why do these need to be global?
 bool KScanDevice::scanner_initialised = false;
 SANE_Handle KScanDevice::scanner_handle = NULL;
 SANE_Device const **KScanDevice::dev_list = NULL;

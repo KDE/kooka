@@ -250,19 +250,6 @@ bool Previewer::setPreviewImage( const QImage &image )
 }
 
 
-// TODO: this doesn't belong here at all - move to kookapref or scanpackager?
-// also: not a good location, should use <KGlobalSettings::documentPath()>/ScanImages/
-// for a new user.  If the old root exists then nag the user on startup with
-// a "don't ask me again", suggest that they move/copy the gallery folder manually.
-QString Previewer::galleryRoot()
-{
-    QString dir = KGlobal::dirs()->saveLocation("data","ScanImages",true);
-
-    if (!dir.endsWith("/")) dir += "/";
-    return (dir);
-}
-
-
 void Previewer::newImage(const QImage *image)
 {
    kDebug() << "size" << image->size();

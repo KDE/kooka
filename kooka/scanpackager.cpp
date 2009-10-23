@@ -57,11 +57,10 @@
 #include <kio/global.h>
 #include <kio/netaccess.h>
 
-#include "libkscan/previewer.h"
-
 #include "imgsaver.h"
 #include "kookaimage.h"
 #include "kookaimagemeta.h"
+#include "kookapref.h"
 
 
 // TODO: port to KDE4, although from kdelibs/KDE4PORTING.html:
@@ -234,7 +233,7 @@ KookaImage *ScanPackager::imageForItem(const K3FileTreeViewItem *item)
 void ScanPackager::openRoots()
 {
    /* standard root always exists, ImgRoot creates it */
-   KUrl rootUrl(Previewer::galleryRoot());
+   KUrl rootUrl(KookaPref::galleryRoot());
    kDebug() << "Open standard root " << rootUrl.url();
 
    openRoot( rootUrl, true );

@@ -147,6 +147,9 @@ bool ScanParams::connectDevice(KScanDevice *newScanDevice, bool galleryMode)
     lay->addWidget(new KSeparator(Qt::Horizontal,this),2,0,1,-1);
 
     /* load the startup scanoptions */
+    // TODO: check whether the saved scanner options apply to the current scanner?
+    // They may be for a completely different one...
+    // Or update KScanDevice to save the startup options on a per-scanner basis.
     startupOptset = new KScanOptSet( DEFAULT_OPTIONSET );
     Q_CHECK_PTR( startupOptset );
 
@@ -226,7 +229,8 @@ void ScanParams::initialise(KScanOption *so)
 
 
 
-
+// TODO: this should take the TITLE and DESC from the backend (via KScanDevice
+// and KScanOption), if available
 QScrollArea *ScanParams::createScannerParams()
 {
     KScanOption *so;
@@ -570,6 +574,8 @@ QScrollArea *ScanParams::createScannerParams()
         ++row;
     }
 #endif
+
+// TODO: why do some of these not connect guiChange --> slotReloadAllGui?
 
     /* Speed-Setting - show only if active */
     KScanOption kso_speed( SANE_NAME_SCAN_SPEED );

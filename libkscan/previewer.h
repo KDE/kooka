@@ -49,11 +49,6 @@ public:
 
     ImageCanvas *getImageCanvas() const		{ return (img_canvas); }
 
-    /**
-     * Static function that returns the image gallery base dir.
-     */
-    static QString galleryRoot();
-
     bool setPreviewImage(const QImage &image);
     void newImage(const QImage *image);
     void setScannerBedSize(int w,int h);

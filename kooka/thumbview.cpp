@@ -43,9 +43,11 @@
 #include <kmenu.h>
 #include <kconfiggroup.h>
 
-#include "libkscan/previewer.h"
+//#include "libkscan/previewer.h"
 
 //#include "thumbviewdiroperator.h"
+
+#include "kookapref.h"
 
 
 // TODO: does this need to be a KVBox containing the DirOperator?
@@ -64,7 +66,7 @@ ThumbView::ThumbView(QWidget *parent)
     // The setupMenu() below should remove all of the standard actions
     // from the menu.
     //m_dirop = new ThumbViewDirOperator(KUrl(Previewer::galleryRoot()), this);
-    m_dirop = new KDirOperator(KUrl(Previewer::galleryRoot()), this);
+    m_dirop = new KDirOperator(KUrl(KookaPref::galleryRoot()), this);
     m_dirop->setObjectName("ThumbViewDirOperator");
     m_dirop->setView(KFile::Default);
     m_dirop->setView(KFile::PreviewContents);

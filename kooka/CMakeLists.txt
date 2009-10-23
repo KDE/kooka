@@ -2,6 +2,17 @@
 project(kooka4)
 
 
+include(CheckIncludeFile)
+include(CheckFunctionExists)
+
+check_function_exists(strerror HAVE_STRERROR)
+if (HAVE_STRERROR)
+  check_include_file(errno.h HAVE_ERRNO_H)		# pointless if no strerror()
+endif (HAVE_STRERROR)
+check_include_file(sys/stat.h HAVE_SYS_STAT_H)
+check_include_file(sys/types.h HAVE_SYS_TYPES_H)
+
+
 include(FindTIFF)
 if (TIFF_FOUND)
   message(STATUS "TIFF includes: ${TIFF_INCLUDE_DIR}")
@@ -38,11 +49,22 @@ if (WITH_KADMOS)
 endif (WITH_KADMOS)
 
 
-
 add_subdirectory(pics)
 add_subdirectory(desktop)
 
 
+if (HAVE_ERRNO_H)
+  add_definitions(-DHAVE_ERRNO_H)
+endif (HAVE_ERRNO_H)
+if (HAVE_STRERROR)
+  add_definitions(-DHAVE_STRERROR)
+endif (HAVE_STRERROR)
+if (HAVE_SYS_STAT_H)
+  add_definitions(-DHAVE_SYS_STAT_H)
+endif (HAVE_SYS_STAT_H)
+if (HAVE_SYS_TYPES_H)
+  add_definitions(-DHAVE_SYS_TYPES_H)
+endif (HAVE_SYS_TYPES_H)
 
 add_definitions(-DKDE4)
 add_definitions(-DKDE_DEFAULT_DEBUG_AREA=28000)
@@ -52,6 +74,7 @@ endif (HAVE_KADMOS)
 if (HAVE_TIFF)
   add_definitions(-DHAVE_TIFF)
 endif (HAVE_TIFF)
+
 
 include_directories(..)
 

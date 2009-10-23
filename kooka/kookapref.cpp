@@ -27,17 +27,32 @@
 #include "kookapref.h"
 #include "kookapref.moc"
 
+#ifdef HAVE_ERRNO_H
+#include <errno.h>
+#endif
+#ifdef HAVE_STRERROR
+#include <string.h>
+#endif
+#ifdef HAVE_SYS_STAT_H
+#include <sys/stat.h>
+#endif
+#ifdef HAVE_SYS_TYPES_H
+#include <sys/types.h>
+#endif
+
 #include <qlayout.h>
 #include <qtooltip.h>
 #include <q3vgroupbox.h>
 #include <qcheckbox.h>
 #include <qlabel.h>
 #include <qpushbutton.h>
+#include <qdir.h>
 
 #include <klocale.h>
 #include <kiconloader.h>
 #include <kconfig.h>
 #include <kglobal.h>
+#include <kglobalsettings.h>
 #include <kdebug.h>
 #include <knuminput.h>
 #include <kcolorbutton.h>
@@ -540,12 +555,6 @@ bool KookaPref::galleryAllowRename() const
 }
 
 
-//KookaGallery::Layout KookaPref::galleryLayout() const
-//{
-//    return (static_cast<KookaGallery::Layout>(layoutCB->currentIndex()));
-//}
-
-
 void KookaPref::slotEnableWarnings()
 {
     kDebug();
@@ -555,4 +564,149 @@ void KookaPref::slotEnableWarnings()
     KGlobal::config()->reparseConfiguration();
 
     pbEnableMsgs->setEnabled(false);			// show this has been done
+}
+
+
+// Support for the gallery location - moved here from Previewer class in libkscan
+
+QString KookaPref::sGalleryRoot = QString::null;	// global resolved location
+
+
+// The static variable above ensures that the user is only asked
+// at most once in an application run.
+
+QString KookaPref::galleryRoot()
+{
+    if (sGalleryRoot.isNull()) sGalleryRoot = findGalleryRoot();
+    return (sGalleryRoot);
+}
+
+
+// TODO: maybe save a .directory file there which shows a 'scanner' logo?
+static QString createGallery(const QDir &d, bool *success = NULL)
+{
+    if (!d.exists())					// does not already exist
+    {
+        if (mkdir(d.path().toLocal8Bit(), 0755)!=0)	// using mkdir(2) so that we can
+        {						// get the errno if it fails
+#ifdef HAVE_STRERROR
+            const char *reason = strerror(errno);
+#else
+            const char *reason = "";
+#endif
+            QString docs = QDir(KGlobalSettings::documentPath()).canonicalPath();
+            KMessageBox::error(NULL,
+                               i18n("<qt>"
+                                    "<p>Unable to create the directory<br>"
+                                    "<filename>%1</filename><br>"
+                                    "for the Kooka gallery"
+#ifdef HAVE_STRERROR
+                                    " - %3."
+#else
+                                    "."
+#endif
+                                    "<p>Your document directory,<br>"
+                                    "<filename>%2</filename><br>"
+                                    "will be used."
+                                    "<p>"
+                                    "Check the document directory setting and permissions.",
+                                    d.absolutePath(), docs, reason),
+                               i18n("Error creating gallery"));
+            if (success!=NULL) *success = false;
+            return (docs);
+        }
+    }
+
+    if (success!=NULL) *success = true;
+    return (d.absolutePath());
+}
+
+
+QString KookaPref::findGalleryRoot()
+{
+    const KConfigGroup grp = KGlobal::config()->group(GROUP_GALLERY);
+    QString galleryName = grp.readEntry(GALLERY_LOCATION, GALLERY_DEFAULT_LOC);
+    if (galleryName.isEmpty()) galleryName = GALLERY_DEFAULT_LOC;
+
+    QString oldloc = KGlobal::dirs()->saveLocation("data", "ScanImages", false);
+    QDir olddir(oldloc);
+    QString oldpath = olddir.absolutePath();
+    bool oldexists = (olddir.exists());
+
+    QString newloc = galleryName;
+
+    QDir newdir(newloc);
+    if (newdir.isRelative()) newdir.setPath(QDir(KGlobalSettings::documentPath()).canonicalPath()+
+                                            QDir::separator()+galleryName);
+    QString newpath = newdir.absolutePath();
+    bool newexists = (newdir.exists());
+
+    kDebug() << "old" << oldpath << "exists" << oldexists;
+    kDebug() << "new" << newpath << "exists" << newexists;
+
+    QString dir;
+
+    if (!oldexists && !newexists)			// no directories present
+    {
+        dir = createGallery(newdir);			// create and use new
+    }
+    else if (!oldexists && newexists)			// only new exists
+    {
+        dir = newpath;					// fine, just use that
+    }
+    else if (oldexists && !newexists)			// only old exists
+    {
+        if (KMessageBox::questionYesNo(NULL,
+                                       i18n("<qt>"
+                                            "<p>An old Kooka gallery was found at<br>"
+                                            "<filename>%1</filename>."
+                                            "<p>The preferred new location is now<br>"
+                                            "<filename>%2</filename>."
+                                            "<p>Do you want to create a new gallery at the new location?",
+                                            oldpath, newpath),
+                                       i18n("Create New Gallery"),
+                                       KStandardGuiItem::yes(), KStandardGuiItem::no(),
+                                       "GalleryNoMigrate")==KMessageBox::Yes)
+        {						// yes, create new
+            bool created;
+            dir = createGallery(newdir, &created);
+            if (created)				// new created OK
+            {
+                KMessageBox::information(NULL,
+                                         i18n("<qt>"
+                                              "<p>Kooka will use the new gallery,<br>"
+                                              "<a href=\"file:%1\"><filename>%1</filename></a>."
+                                              "<p>If you wish to add the images from your old gallery,<br>"
+                                              "<a href=\"file:%2\"><filename>%2</filename></a>,<br>"
+                                              "then you may do so by simply copying or moving the files.",
+                                              newpath, oldpath),
+                                         i18n("New Gallery Created"),
+                                         QString::null,
+                                         KMessageBox::Notify|KMessageBox::AllowLink);
+            }
+        }
+        else						// no, don't create
+        {
+            dir = oldpath;				// stay with old location
+        }
+    }
+    else						// both exist
+    {
+        KMessageBox::information(NULL,
+                                 i18n("<qt>"
+                                      "<p>Kooka will use the new gallery,<br>"
+                                      "<a href=\"file:%1\"><filename>%1</filename></a>."
+                                      "<p>If you wish to add the images from your old gallery,<br>"
+                                      "<a href=\"file:%2\"><filename>%2</filename></a>,<br>"
+                                      "then you may do so by simply copying or moving the files.",
+                                      newpath, oldpath),
+                                 i18n("Old Gallery Exists"),
+                                 "GalleryNoRemind",
+                                 KMessageBox::Notify|KMessageBox::AllowLink);
+        dir = newpath;					// just use new one
+    }
+
+    if (!dir.endsWith("/")) dir += "/";
+    kDebug() << "returning" << dir;
+    return (dir);
 }

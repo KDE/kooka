@@ -41,9 +41,8 @@
 #include <kio/job.h>
 #include <kio/netaccess.h>
 
-#include "libkscan/previewer.h"
-
 #include "kookaimage.h"
+#include "kookapref.h"
 #include "formatdialog.h"
 
 
@@ -56,7 +55,7 @@ ImgSaver::ImgSaver(const KUrl &dir)
     }
     else						// cannot, so use default
     {
-        m_saveDirectory = Previewer::galleryRoot();
+        m_saveDirectory = KookaPref::galleryRoot();
         kDebug() << "default directory" << m_saveDirectory;
     }
 

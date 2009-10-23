@@ -172,7 +172,7 @@ void ImageCanvas::newImage(const QImage *new_image,bool hold_zoom)
         if (!oldSelected.isNull())
         {
             selected = oldSelected;
-            kDebug() << k_funcinfo << "restored selection" << selected;
+            kDebug() << "restored selection" << selected;
             startMarqueeTimer();
         }
 #endif

@@ -1103,7 +1103,8 @@ bool KScanOption::applyVal( void )
 QLabel *KScanOption::getLabel(QWidget *parent) const
 {
     QString t = text;
-    if (QString::compare(internal_widget->metaObject()->className(),"QCheckBox")==0) t = QString::null;
+    //if (QString::compare(internal_widget->metaObject()->className(),"QCheckBox")==0) t = QString::null;
+    if (internal_widget->inherits("QCheckBox")) t = QString::null;
     return (new QLabel(t,parent));
 }
 

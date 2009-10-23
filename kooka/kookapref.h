@@ -32,15 +32,20 @@
 #include "kookagallery.h"
 #include "ocrengine.h"
 
+
 #define GROUP_GALLERY		"Gallery"
 #define GALLERY_ALLOW_RENAME	"AllowRename"
 #define GALLERY_LAYOUT		"Layout"
+
+#define GALLERY_LOCATION	"Location"
+#define GALLERY_DEFAULT_LOC	"KookaGallery"
 
 #define STARTUP_READ_IMAGE      "ReadImageOnStart"
 
 #define CFG_GROUP_OCR_DIA       "ocrDialog"
 #define CFG_OCRAD_BINARY        "ocradBinary"
 #define CFG_GOCR_BINARY         "gocrBinary"
+
 
 class QCheckBox;
 class QPushButton;
@@ -65,11 +70,15 @@ public:
     static QString tryFindOcrad();
 
     bool galleryAllowRename() const;
-    //KookaGallery::Layout galleryLayout() const;
 
     // TODO: reimplement for KDE4, used in Kooka::optionsPreferences()
     //void showPageIndex(int page);
     //int currentPageIndex(void);
+
+    /**
+     * Static function that returns the image gallery base dir.
+     */
+    static QString galleryRoot();
 
 protected slots:
     void slotSaveSettings();
@@ -88,6 +97,7 @@ private:
     void setupOCRPage();
 
     bool checkOCRBin(const QString &cmd,const QString &bin,bool showMsg);
+    static QString findGalleryRoot();
 
     KSharedConfig *konf;
     OcrEngine::EngineType originalEngine;
@@ -115,6 +125,8 @@ private:
     KUrlRequester *binaryReq;
     KComboBox *engineCB;
     QLabel *ocrDesc;
+
+    static QString sGalleryRoot;
 };
 
 #endif							// KOOKAPREF_H

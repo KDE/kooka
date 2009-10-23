@@ -58,61 +58,58 @@ public:
     *  Constructor to create  a new Container. Takes a string as a name, which
     *  has no special meaning yet ;)
     */
-   KScanOptSet( const QByteArray& );
-   ~KScanOptSet();
+    KScanOptSet(const QByteArray &setName);
+    ~KScanOptSet();
 
-   /**
-    *  function to store a deep copy of an option. Note that this class is inherited
-    *  from QAsciiDict and thus does no deep copies.  This method does.
-    *  @see insert
-    */
-   bool backupOption( const KScanOption& );
+    /**
+     *  function to store a deep copy of an option. Note that this class is inherited
+     *  from QAsciiDict and thus does no deep copies.  This method does.
+     *  @see insert
+     */
+    bool backupOption(const KScanOption &opt);
+    void backupOptionDict(const Q3AsciiDict<KScanOption> &dict); 
 
-   /**
-    *  returns a pointer to a stored option given by name.
-    */
-   KScanOption *get( const QByteArray &name ) const;
-   QByteArray      getValue( const QByteArray &name ) const;
+    /**
+     *  returns a pointer to a stored option given by name.
+     */
+    KScanOption *get(const QByteArray &optName) const;
+    QByteArray getValue(const QByteArray &optName) const;
 
-   void backupOptionDict( const Q3AsciiDict<KScanOption>& ); 
 
-   /**
-    * saves a configuration set to the configuration file 'ScanSettings'
-    * in the default dir config (@see KDir). It uses the group given
-    * in configName and stores the entire option set in that group.
-    * additionally, a description  is also saved.
-    *
-    * @param scannerName : the name of the scanner
-    * @param configName: The name of the config, e.g. Black and White
-    * @param descr : A description for the config.
-    */
-   void saveConfig( const QString&, const QString&, const QString&);
+    /**
+     * saves a configuration set to the configuration file 'ScanSettings'
+     * in the default dir config (@see KDir). It uses the group given
+     * in configName and stores the entire option set in that group.
+     * additionally, a description  is also saved.
+     *
+     * @param scannerName the name of the scanner
+     * @param configName The name of the config, e.g. Black and White
+     * @param desc A description for the config.
+     */
+    void saveConfig(const QString &scannerName, const QString &configName, const QString &desc);
 
-   /**
-    * allows to load a configuration. Simple create a optionSet with the
-    * approbiate name the config was called ( @see saveConfig ) and call
-    * load for the scanner you want.
-    * @param scannerName: A scanner's name
-    */
-   bool load(const QString &scannerName = QString::null);
+    /**
+     * allows to load a configuration. Simple create a optionSet with the
+     * approbiate name the config was called ( @see saveConfig ) and call
+     * load for the scanner you want.
+     * @param scannerName: A scanner's name
+     */
+    bool load(const QString &scannerName = QString::null);
 
     void setDescription(const QString &desc);
-    QString  getDescription() const { return (description); }
-    const QByteArray &optSetName() const { return (name); }
+    QString  getDescription() const { return (mSetDescription); }
+    const QByteArray &optSetName() const { return (mSetName); }
 
-
-   
-   static StringMap readList();
-   static void deleteSet(const QString &name);
+    static StringMap readList();
+    static void deleteSet(const QString &name);
 
 private:
-   QByteArray name;
+    QByteArray mSetName;
+    QString mSetDescription;
 
-   /* List to collect objects for which memory was allocated and must be freed */
-   QList<KScanOption *> strayCatsList;
-
-   QString description;
+    /* List to collect objects for which memory was allocated and must be freed */
+    QList<KScanOption *> strayCatsList;
 };
 
 
-#endif // KScanOptSet
+#endif							// KSCANOPTSET_H
