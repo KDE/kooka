@@ -26,12 +26,8 @@
 
 #include <kdialog.h>
 
-class Q3ButtonGroup;
-class QStringList;
-class QCheckBox;
-
 /**
-  *@author Klaas Freitag
+  * @author Klaas Freitag, Eduard Huguet
   */
 
 /* Configuration-file definitions */
@@ -96,12 +92,8 @@ public slots:
    void setScanSources(const QList<QByteArray> &sources, const QStringList &descs);
 
 private:
-   Q3ButtonGroup *selectBox;
-   mutable QStringList devices;
-   QCheckBox   *cbSkipDialog;
-   
-   class DeviceSelectorPrivate;
-   DeviceSelectorPrivate *d;
+	class DeviceSelectorPrivate;
+	DeviceSelectorPrivate *d;
 };
 
 #endif							// DEVSELECTOR_H

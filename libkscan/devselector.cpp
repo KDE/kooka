@@ -20,7 +20,8 @@
 #include "devselector.h"
 #include "devselector.moc"
 
-#include <q3buttongroup.h>
+#include <qgroupbox.h>
+#include <qbuttongroup.h>
 #include <qcheckbox.h>
 #include <qlayout.h>
 #include <qlabel.h>
@@ -34,12 +35,38 @@
 #include <kconfig.h>
 #include <kconfiggroup.h>
 
+/**
+  * Internal private class for DeviceSelector dialog.
+  */
+
+class DeviceSelector::DeviceSelectorPrivate
+{
+public:
+   QGroupBox      * selectBox;
+   QVBoxLayout    * selectBoxLayout;
+   QButtonGroup   * selectBoxGroup;
+   QStringList    deviceList;
+   QCheckBox      * cbSkipDialog;
+
+public:
+   DeviceSelectorPrivate()
+        : selectBox(0), selectBoxLayout(0), selectBoxGroup(0), cbSkipDialog(0)
+   { }
+};
+
+
+
+/**
+  * Constructs the DeviceSelector object
+  */
 
 DeviceSelector::DeviceSelector(QWidget *parent,
                                const QList<QByteArray> &sources,
                                const QStringList &descs )
     : KDialog(parent)
 {
+    d = new DeviceSelectorPrivate();
+
     setObjectName("DeviceSelector");
 
     kDebug();
@@ -60,26 +87,30 @@ DeviceSelector::DeviceSelector(QWidget *parent,
     label->resize( 100, 350 );
     topLayout->addWidget( label );
 
-    selectBox = new Q3ButtonGroup( 1, Qt::Horizontal, i18n( "Available Scanners" ),
-                                   page, "ButtonBox");
-    selectBox->setExclusive( true );
-    topLayout->addWidget( selectBox );
+    d->selectBox = new QGroupBox( i18n( "Available Scanners"), page);
+    d->selectBoxGroup = new QButtonGroup(d->selectBox);
+    d->selectBoxLayout = new QVBoxLayout();
+    d->selectBox->setLayout(d->selectBoxLayout);
+        setScanSources(sources, descs);
+    d->selectBoxLayout->addStretch();
+    topLayout->addWidget( d->selectBox );
 
-    setScanSources(sources, descs);
-
-    cbSkipDialog = new QCheckBox( i18n("Always use this &device at startup"), page );
-
+    d->cbSkipDialog = new QCheckBox( i18n("Always use this &device at startup"), this);
     const KSharedConfig *gcfg = KGlobal::config().data();
     const KConfigGroup grp = gcfg->group(GROUP_STARTUP);
     bool skipDialog = grp.readEntry(STARTUP_SKIP_ASK, false);
-    cbSkipDialog->setChecked( skipDialog );
-
-    topLayout->addWidget(cbSkipDialog);
+    d->cbSkipDialog->setChecked( skipDialog );
+    topLayout->addWidget(d->cbSkipDialog);
 }
 
 
 DeviceSelector::~DeviceSelector()
 {
+    if (d)
+    {
+        delete d;
+        d = NULL;
+    }
 }
 
 
@@ -100,7 +131,7 @@ QByteArray DeviceSelector::getDeviceFromConfig() const
     /* Now check if the scanner read from the config file is available !
      * if not, ask the user !
      */
-    if (skipDialog && devices.contains(result))
+	if (skipDialog && d->deviceList.contains(result))
     {
         kDebug() << "Using scanner from config" << result;
     }
@@ -115,62 +146,63 @@ QByteArray DeviceSelector::getDeviceFromConfig() const
 
 bool DeviceSelector::getShouldSkip() const
 {
-   return( cbSkipDialog->isChecked());
+   return( d->cbSkipDialog->isChecked());
 }
 
 QByteArray DeviceSelector::getSelectedDevice() const
 {
-   unsigned int selID = selectBox->id( selectBox->selected() );
+    int selID = d->selectBoxGroup->checkedId();
 
-   int dcount = devices.count();
-   kDebug() << "selected ID:" << selID << "of" << dcount;
+    int dcount = d->deviceList.count();
+    kDebug() << "selected ID:" << selID << "of" << dcount;
 
-   QByteArray dev = devices.at(selID).toLocal8Bit();
-   kDebug() << "selected device:" << dev;
+    QByteArray dev = d->deviceList.at(selID).toLocal8Bit();
+    kDebug() << "selected device:" << dev;
 
-   /* Store scanner selection settings */
-   KSharedConfig *gcfg = KGlobal::config().data();
-   KConfigGroup grp = gcfg->group(GROUP_STARTUP);
+    /* Store scanner selection settings */
+    KSharedConfig *gcfg = KGlobal::config().data();
+    KConfigGroup grp = gcfg->group(GROUP_STARTUP);
 
-   /* Write both the scan device and the skip-start-dialog flag as KDE global. */
-   grp.writeEntry(STARTUP_SCANDEV, dev, KConfigBase::Global);
-   grp.writeEntry(STARTUP_SKIP_ASK, getShouldSkip(), KConfigBase::Global);
-   grp.sync();
+    /* Write both the scan device and the skip-start-dialog flag as KDE global. */
+    grp.writeEntry(STARTUP_SCANDEV, dev, KConfigBase::Global);
+    grp.writeEntry(STARTUP_SKIP_ASK, getShouldSkip(), KConfigBase::Global);
+    grp.sync();
    
-   return (dev);
+    return (dev);
 }
 
 
 void DeviceSelector::setScanSources(const QList<QByteArray> &sources,
                                     const QStringList &descs)
 {
-   const KSharedConfig *gcfg = KGlobal::config().data();
-   const KConfigGroup grp = gcfg->group(GROUP_STARTUP);
-   QByteArray defstr = grp.readEntry(STARTUP_SCANDEV).toLocal8Bit();
+    const KSharedConfig *gcfg = KGlobal::config().data();
+    const KConfigGroup grp = gcfg->group(GROUP_STARTUP);
+    QByteArray defstr = grp.readEntry(STARTUP_SCANDEV).toLocal8Bit();
 
-   /* Selector-Stuff*/
-   uint nr = 0;
-   int  checkDefNo = 0;
+    /* Selector-Stuff*/
+    QRadioButton * rbDef = NULL;
+    int nr = 0;
 
-   QStringList::const_iterator it2 = descs.constBegin();
-   for (QList<QByteArray>::const_iterator it = sources.constBegin();
+    QStringList::const_iterator it2 = descs.constBegin();
+    for (QList<QByteArray>::const_iterator it = sources.constBegin();
         it!=sources.constEnd(); ++it, ++it2 )
-   {
-      QString text = QString("&%1. %2\n%3").arg(1+nr)
+    {
+        d->deviceList.append(*it);
+
+        QString text = QString("&%1. %2\n%3").arg(nr + 1)
                                            .arg(QString::fromLocal8Bit(*it))
                                            .arg(*it2);
-      QRadioButton *rb = new QRadioButton( text, selectBox );
-      selectBox->insert( rb );
+        QRadioButton *rb = new QRadioButton( text);
+        d->selectBoxGroup->addButton(rb, nr);
+        d->selectBoxLayout->addWidget(rb);
 
-      devices.append( *it );
+        // check this one either if it matches the default one, or else is the first one:
+        if (rbDef == NULL || *it == defstr )
+            rbDef = rb;
 
-      if( *it == defstr )
-	 checkDefNo = nr;
+        nr++;
+    }
 
-      nr++;
-   }
-
-   /* if no default found, set the first */
-   QRadioButton *rb = (QRadioButton*) selectBox->find( checkDefNo );
-   if (rb!=NULL) rb->setChecked(true);
+    if (rbDef)
+        rbDef->setChecked(true);
 }
