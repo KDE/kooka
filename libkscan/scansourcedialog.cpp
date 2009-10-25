@@ -22,7 +22,8 @@
 
 #include <qlabel.h>
 #include <qradiobutton.h>
-#include <q3buttongroup.h>
+#include <qgroupbox.h>
+#include <qlayout.h>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -39,10 +40,32 @@ extern "C"{
 #define SANE_NAME_DOCUMENT_FEEDER "Automatic Document Feeder"
 #endif
 
+/**
+  * Internal private class for ScanSourceDialog
+  */
+class ScanSourceDialogPrivate
+{
+public:
+    KScanCombo      * sources;
+    QGroupBox       * bgroup;
+    QVBoxLayout     * bgroupLayout;
+    QRadioButton    * rbADFTillEnd, *rbADFOnce;
+    AdfBehaviour adf;
+    bool adf_enabled;
+
+public:
+    ScanSourceDialogPrivate()
+    : sources(0), bgroup(0), bgroupLayout(0), rbADFTillEnd(0), rbADFOnce(0),
+      adf(ADF_OFF), adf_enabled(false)
+    {
+    }
+};
+
 
 ScanSourceDialog::ScanSourceDialog(QWidget *parent, const QList<QByteArray> list, AdfBehaviour adfBehave)
     : KDialog(parent)
 {
+    d = new ScanSourceDialogPrivate();
     setObjectName("ScanSourceDialog");
 
     setButtons(KDialog::Ok|KDialog::Cancel);
@@ -53,69 +76,91 @@ ScanSourceDialog::ScanSourceDialog(QWidget *parent, const QList<QByteArray> list
     KVBox *vbox = new KVBox(this);
     setMainWidget(vbox);
 
-   (void) new QLabel( i18n("<B>Source selection</B><P>"
+    (void) new QLabel( i18n("<B>Source selection</B><P>"
 			   "Note that you may see more sources than actually exist"), vbox );
 
-   /* Combo Box for sources */
-   sources = new KScanCombo( vbox,
+    /* Combo Box for sources */
+    d->sources = new KScanCombo( vbox,
 			     i18n("Select the Scanner document source:"),
 			     list);
-   connect( sources, SIGNAL( activated(int)), SLOT( slotChangeSource(int)));
+    connect( d->sources, SIGNAL( activated(int)), SLOT( slotChangeSource(int)));
 
 
-   /* Button Group for ADF-Behaviour */
-   bgroup = 0;
-   adf = ADF_OFF;
+    if( sourceAdfEntry() > -1 )
+    {
+        d->bgroup = new QGroupBox( i18n("Advanced ADF-Options"));
 
-   if( sourceAdfEntry() > -1 )
-   {
-      bgroup = new Q3VButtonGroup( i18n("Advanced ADF-Options"), vbox);
+        /* Two buttons inside */
+        d->bgroupLayout = new QVBoxLayout();
 
-      connect( bgroup, SIGNAL(clicked(int)), SLOT( slotNotifyADF(int)));
+            d->rbADFTillEnd = new QRadioButton( i18n("Scan until ADF reports out of paper"));
+            connect(d->rbADFTillEnd, SIGNAL(toggled(bool)), this, SLOT(slotNotifyADF(bool)));
+            d->bgroupLayout->addWidget( d->rbADFTillEnd );
 
-      /* Two buttons inside */
-      QRadioButton *rbADFTillEnd = new QRadioButton( i18n("Scan until ADF reports out of paper"),
-						  bgroup );
-      bgroup->insert( rbADFTillEnd, ADF_SCAN_ALONG );
+            d->rbADFOnce = new QRadioButton( i18n("Scan only one sheet of ADF per click"));
+            connect(d->rbADFOnce, SIGNAL(toggled(bool)), this, SLOT(slotNotifyADF(bool)));
+            d->bgroupLayout->addWidget( d->rbADFOnce );
 
-      QRadioButton *rbADFOnce = new QRadioButton( i18n("Scan only one sheet of ADF per click"),
-					       bgroup );
-      bgroup->insert( rbADFOnce, ADF_SCAN_ONCE );
+        d->bgroup->setLayout(d->bgroupLayout);
 
-      switch ( adfBehave )
-      {
-	 case ADF_OFF:
-	    bgroup->setButton( ADF_SCAN_ONCE );
-	    bgroup->setEnabled( false );
-	    adf = ADF_OFF;
-	    break;
-	 case ADF_SCAN_ONCE:
-	    bgroup->setButton( ADF_SCAN_ONCE );
-	    adf = ADF_SCAN_ONCE;
-	    break;
-	 case ADF_SCAN_ALONG:
-	    bgroup->setButton( ADF_SCAN_ALONG );
-	    adf = ADF_SCAN_ALONG;
-	    break;
-	 default:
-	    kDebug() << "Undefined Source!";
-	    // Hmmm.
-	    break;
-      }
-   }
+        switch ( adfBehave )
+        {
+        case ADF_OFF:
+            d->rbADFOnce->setChecked(true);
+            enableBGroup(false);
+            break;
+        case ADF_SCAN_ONCE:
+            d->rbADFOnce->setChecked(true);
+            break;
+        case ADF_SCAN_ALONG:
+            d->rbADFTillEnd->setChecked(true);
+            break;
+        default:
+            kDebug() << "Undefined Source!";
+            // Hmmm.
+            break;
+        }
+
+        d->adf = adfBehave;
+    }
 }
+
+ScanSourceDialog::~ScanSourceDialog()
+{
+    if (d)
+    {
+        delete d;
+        d = NULL;
+    }
+}
+
 
 QString  ScanSourceDialog::getText( void ) const
 {
-   return( sources->currentText() );
+   return( d->sources->currentText() );
 }
 
-void ScanSourceDialog::slotNotifyADF( int )
+AdfBehaviour ScanSourceDialog::getAdfBehave( void ) const
 {
+    return( d->adf );
+}
+
+void ScanSourceDialog::slotNotifyADF( bool checked )
+{
+    if (checked)
+    {
+        // check which one sent the event:
+        d->adf = ADF_OFF;
+        if (sender() == d->rbADFOnce)
+            d->adf = ADF_SCAN_ONCE;
+        else if (sender() == d->rbADFTillEnd)
+            d->adf = ADF_SCAN_ALONG;
+    }
+
+#if 0
    // debug( "reported adf-select %d", adf_group );
    /* this seems to be broken, adf_text is a visible string?
    *  needs rework if SANE 2 comes up which supports i18n */
-#if 0
   QString adf_text = getText();
 
   adf = ADF_OFF;
@@ -134,21 +179,22 @@ void ScanSourceDialog::slotNotifyADF( int )
 
 void ScanSourceDialog::slotChangeSource( int i )
 {
-   if( ! bgroup ) return;
+   if( d->bgroup == NULL)
+       return;
 
    if( i == sourceAdfEntry())
    {
       /* Adf was switched on */
-      bgroup->setEnabled(  true );
-      bgroup->setButton( 0 );
-      adf = ADF_SCAN_ALONG;
-      adf_enabled = true;
+      enableBGroup(true);
+      d->rbADFOnce->setChecked(true);
+      d->adf = ADF_SCAN_ALONG;
+      d->adf_enabled = true;
    }
    else
    {
-      bgroup->setEnabled( false );
-      // adf = ADF_OFF;
-      adf_enabled = false;
+      enableBGroup(false);
+      // d->adf = ADF_OFF;
+      d->adf_enabled = false;
    }
 }
 
@@ -156,13 +202,14 @@ void ScanSourceDialog::slotChangeSource( int i )
 
 int ScanSourceDialog::sourceAdfEntry() const
 {
-   if( ! sources ) return( -1 );
+   if( d->sources == NULL)
+       return( -1 );
 
-   int cou = sources->count();
+   int cou = d->sources->count();
 
    for( int i = 0; i < cou; i++ )
    {
-      QString q = sources->text( i );
+      QString q = d->sources->text( i );
 
 // TODO: this enables advanced ADF options, not implemented yet
 #if 0
@@ -178,24 +225,26 @@ int ScanSourceDialog::sourceAdfEntry() const
 
 void ScanSourceDialog::slotSetSource( const QString &source )
 {
-   if( !sources  ) return;
+   if( d->sources == NULL )
+       return;
+
    kDebug() << "Setting source to" << source;
 
-   if( bgroup )
-      bgroup->setEnabled( false );
-   adf_enabled = false ;
+   enableBGroup(false);
+   d->adf_enabled = false ;
 
 
-   for( int i = 0; i < sources->count(); i++ )
+   for( int i = 0; i < d->sources->count(); i++ )
    {
-      if( sources->text( i ) == source )
+      if( d->sources->text( i ) == source )
       {
-         sources->setCurrentItem( i );
+         d->sources->setCurrentItem( i );
          if( source == QString::number(sourceAdfEntry()) )
          {
-	    if( bgroup )
-	       bgroup->setEnabled( true );
-            adf_enabled = true;
+            if( d->bgroup )
+                enableBGroup(true);
+
+            d->adf_enabled = true;
          }
          break;
       }
@@ -204,6 +253,16 @@ void ScanSourceDialog::slotSetSource( const QString &source )
 }
 
 
-ScanSourceDialog::~ScanSourceDialog()
+/**
+  QGroupBox doesn't have a way to enable / disable all contained radio buttons, so we need to implement a
+  dedicated function for it.
+  */
+
+void ScanSourceDialog::enableBGroup(bool enable)
 {
+    if (d->bgroup)
+    {
+        d->rbADFOnce->setEnabled(enable);
+        d->rbADFTillEnd->setEnabled(enable);
+    }
 }

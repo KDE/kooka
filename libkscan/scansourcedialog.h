@@ -25,18 +25,15 @@
 #include <kdialog.h>
 
 /**
-  *@author Klaas Freitag
+  * @author Klaas Freitag
+  *     Initial implementation
+  * @author Eduard Huguet
+  *     Qt4/KDE4 port
   */
 
-
-// TODO: into class
 typedef enum { ADF_OFF, ADF_SCAN_ALONG, ADF_SCAN_ONCE } AdfBehaviour;
 
-class QRadioButton;
-class Q3ButtonGroup;
-
-class KScanCombo;
-
+class ScanSourceDialogPrivate;
 
 class KSCAN_EXPORT ScanSourceDialog : public KDialog
 {
@@ -46,26 +43,23 @@ public:
     ScanSourceDialog(QWidget *parent, const QList<QByteArray> list, AdfBehaviour adfBehave);
    ~ScanSourceDialog();
 
-   // void 	fillWithSources( QStrList *list );
-   QString 	getText( void ) const;
+    // void 	fillWithSources( QStrList *list );
+    QString 	getText( void ) const;
 
-   AdfBehaviour 	getAdfBehave( void ) const { return( adf ); }
-   int          sourceAdfEntry() const;
+    AdfBehaviour 	getAdfBehave( void ) const;
+    int sourceAdfEntry() const;
 
 
 public slots:
-   void         slotSetSource( const QString &source );
+   void slotSetSource( const QString &source );
 
 protected slots:
-   void        	slotNotifyADF( int );
-   void    	slotChangeSource( int );
+   void slotNotifyADF( bool );
+   void slotChangeSource( int );
+   void enableBGroup(bool enable);
 
 private:
-   KScanCombo    *sources;
-   Q3ButtonGroup  *bgroup;
-   QRadioButton  *rb0, *rb1;
-   AdfBehaviour    adf;
-   bool          adf_enabled;
+   ScanSourceDialogPrivate * d;
 };
 
 #endif							// SCANSOURCEDIALOG_H
