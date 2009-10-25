@@ -41,8 +41,6 @@ KScanOptSet::KScanOptSet(const QByteArray &setName)
 {
     mSetName = setName;
     mSetDescription = "";
-
-    setAutoDelete(false);
 }
 
 
@@ -56,7 +54,7 @@ KScanOptSet::~KScanOptSet()
 
 KScanOption *KScanOptSet::get(const QByteArray &optName) const
 {
-    return ((*this)[optName]);
+	return value(optName);
 }
 
 
@@ -81,7 +79,7 @@ bool KScanOptSet::backupOption(const KScanOption &opt)
 
     if (retval)
     {
-        KScanOption *newopt = find(optName);
+		KScanOption *newopt = value(optName);
 
         if (newopt!=NULL)
         {
@@ -100,7 +98,7 @@ bool KScanOptSet::backupOption(const KScanOption &opt)
 
             if (newopt!=NULL) insert(optName,newopt);
             else retval = false;
-	}
+		}
     }
 
     return (retval);
@@ -113,14 +111,14 @@ void KScanOptSet::setDescription(const QString &desc)
 }
 
 
-void KScanOptSet::backupOptionDict(const Q3AsciiDict<KScanOption> &dict)
+void KScanOptSet::backupOptionDict(const KScanOptSet &src)
 {
-    Q3AsciiDictIterator<KScanOption> it(dict);
+	ConstIterator it = src.begin();
 
-    while (it.current())
+	while (it != src.end())
     {
-        kDebug() << "option" << it.currentKey();
-        backupOption( *(it.current()));
+		kDebug() << "option" << it.key();
+		backupOption( *it.value());
         ++it;
     }
 }
@@ -140,13 +138,13 @@ void KScanOptSet::saveConfig(const QString &scannerName, const QString &setName,
     grp.writeEntry(SAVESET_KEY_SETDESC, desc);
     grp.writeEntry(SAVESET_KEY_SCANNER, scannerName);
 
-    Q3AsciiDictIterator<KScanOption> it(*this);
-    while (it.current()!=NULL)
+	ConstIterator it = begin();
+	while (it != end())
     {
-        const QString line = it.current()->configLine();
+		const QString line = it.value()->configLine();
         if (line!=PARAM_ERROR)
         {
-            const QString optName = it.current()->getName();
+			const QString optName = it.value()->getName();
             kDebug() << "writing" << optName << "=" << line;
             grp.writeEntry(optName,line);
         }

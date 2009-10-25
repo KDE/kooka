@@ -22,7 +22,7 @@
 
 #include "libkscanexport.h"
 
-#include <q3asciidict.h>
+#include <qhash.h>
 #include <qmap.h>
 #include <qbytearray.h>
 #include <qlist.h>
@@ -46,9 +46,7 @@ class KScanOption;
   * @version 0.1
   */
 
-
-
-class KSCAN_EXPORT KScanOptSet : public Q3AsciiDict<KScanOption>
+class KSCAN_EXPORT KScanOptSet : public QHash<QByteArray,KScanOption *>
 {
 
 public:
@@ -63,11 +61,11 @@ public:
 
     /**
      *  function to store a deep copy of an option. Note that this class is inherited
-     *  from QAsciiDict and thus does no deep copies.  This method does.
+	 *  from QHash and contains pointers to data, and thus does no deep copies.  This method does.
      *  @see insert
      */
     bool backupOption(const KScanOption &opt);
-    void backupOptionDict(const Q3AsciiDict<KScanOption> &dict); 
+	void backupOptionDict(const KScanOptSet &src);
 
     /**
      *  returns a pointer to a stored option given by name.

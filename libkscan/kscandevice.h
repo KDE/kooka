@@ -304,7 +304,8 @@ public:
 // TODO: public data!
     static bool        scanner_initialised;
     static SANE_Handle scanner_handle;
-	static QHash<QByteArray, int> *option_dic;
+	typedef QHash<QByteArray, int> OptionDict;
+	static OptionDict *option_dic;
     static SANE_Device const **dev_list;
     static KScanOptSet *gammaTables;
 
@@ -466,7 +467,9 @@ private:
     QList<QByteArray>            dirtyList;     // option changes
 
     QList<KScanOption *>  gui_elements;
-	QHash<QByteArray, const SANE_Device *>  scannerDevices;
+
+	typedef QHash<QByteArray, const SANE_Device *> DeviceDict;
+	DeviceDict scannerDevices;
 
     QSocketNotifier     *mSocketNotifier;
 

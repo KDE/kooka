@@ -191,7 +191,7 @@ KScanDevice::KScanDevice( QObject *parent )
 
     d = new KScanDevicePrivate();
     
-	option_dic = new QHash<QByteArray,int>;
+	option_dic = new OptionDict();
 
     scanner_initialised = false;  /* stays false until openDevice. */
     scanStatus = SSTAT_SILENT;
@@ -931,7 +931,7 @@ inline const char *optionNotifyString(int opt)
 
 void KScanDevice::prepareScan( void )
 {
-	QHash<QByteArray,int>::ConstIterator it = option_dic->begin(); // iterator for dict
+	OptionDict::ConstIterator it = option_dic->begin(); // iterator for dict
 
     kDebug() << "######################################################################";
     kDebug() << "Scanner" << scanner_name << "=" << getScannerName();
@@ -1215,10 +1215,10 @@ void KScanDevice::loadOptionSet( KScanOptSet *optSet )
 
    kDebug() << "Loading option set" << optSet->optSetName() << "with" << optSet->count() << "options";
 
-   Q3AsciiDictIterator<KScanOption> it(*optSet);
-   while( it.current() )
+   KScanOptSet::ConstIterator it = optSet->begin();
+   while( it != optSet->end() )
    {
-      KScanOption *so = it.current();
+	  KScanOption *so = it.value();
       if( ! so->initialised() )
 	 kDebug() << "Option" << so->getName() << "is not initialised";
 
@@ -1593,5 +1593,5 @@ void KScanDevice::slotStoreConfig(const QString &key, const QString &val)
 bool KScanDevice::scanner_initialised = false;
 SANE_Handle KScanDevice::scanner_handle = NULL;
 SANE_Device const **KScanDevice::dev_list = NULL;
-QHash<QByteArray,int> *KScanDevice::option_dic = NULL;
+KScanDevice::OptionDict *KScanDevice::option_dic = NULL;
 KScanOptSet *KScanDevice::gammaTables = NULL;
