@@ -20,22 +20,18 @@
 #include "previewer.h"
 #include "previewer.moc"
 
-#include <qtooltip.h>
 #include <qcombobox.h>
-#include <q3groupbox.h>
-#include <qlayout.h>
+#include <qgroupbox.h>
+#include <qgridlayout.h>
 #include <qslider.h>
-#include <qcheckbox.h>
 #include <qvector.h>
 
 #include <kdebug.h>
 #include <klocale.h>
 #include <kglobal.h>
 #include <kaction.h>
-#include <kstandarddirs.h>
 #include <kmessagebox.h>
 #include <kdialog.h>
-#include <khbox.h>
 #include <kmenu.h>
 
 #ifdef AUTOSEL_DEBUG
@@ -77,7 +73,6 @@ public:
         m_bgIsWhite(false),
         m_sliderThresh(0),
         m_sliderDust(0),
-        m_cbAutoSel(0),
         m_cbBackground(0),
         m_autoSelGroup(0),
         m_scanner(0)
@@ -91,9 +86,8 @@ public:
                                       * results in black or white */
     QSlider     *m_sliderThresh;
     QSlider     *m_sliderDust;
-    QCheckBox   *m_cbAutoSel;
     QComboBox   *m_cbBackground;
-    Q3GroupBox   *m_autoSelGroup;
+    QGroupBox   *m_autoSelGroup;
     KScanDevice *m_scanner;
 
     QVector<long> m_heightSum;
@@ -107,15 +101,7 @@ Previewer::Previewer(QWidget *parent)
     setObjectName("Previewer");
     d = new PreviewerPrivate();
 
-    // TODO: hardcoded margin/spacing
-    QVBoxLayout *top = new QVBoxLayout(this);
-    top->setSpacing(10);
-    QHBoxLayout *layout = new QHBoxLayout(NULL);
-    layout->setSpacing(2);
-    top->addLayout( layout, 9 );
-    QVBoxLayout *left = new QVBoxLayout(NULL);
-    left->setSpacing(2*KDialog::spacingHint());
-    layout->addLayout( left, 2 );
+    QGridLayout *gl = new QGridLayout(this);
 
     /* Units etc. TODO: get from Config */
     displayUnit = KRuler::Millimetres;
@@ -124,11 +110,16 @@ Previewer::Previewer(QWidget *parent)
     bedHeight = 297;					// for most A4/Letter scanners
     bedWidth = 215;
 
-    img_canvas  = new ImageCanvas( this );
-    img_canvas->setDefaultScaleKind( ImageCanvas::DYNAMIC );
+    /* Stuff for the preview-Notification */
+    gl->addWidget(new QLabel(i18n("<b>Preview</b>"), this), 0, 0);
+
+    // Image viewer
+    img_canvas  = new ImageCanvas(this);
+    img_canvas->setDefaultScaleKind(ImageCanvas::DYNAMIC);
     img_canvas->enableContextMenu(true);
     img_canvas->repaint();
-    layout->addWidget( img_canvas, 6 );
+    gl->addWidget(img_canvas, 0, 1, -1, 1);
+    gl->setColumnStretch(1, 1);
 
     /* Actions for the previewer zoom */
     KAction *act = new KAction(KIcon("scaletowidth"),i18n("Scale to Width"),this);
@@ -144,82 +135,100 @@ Previewer::Previewer(QWidget *parent)
     /*Signals: Control the custom-field and show size of selection */
     connect(img_canvas,SIGNAL(newRect(QRect)),SLOT(slotNewAreaSelected(QRect)));
 
-    /* Stuff for the preview-Notification */
-    left->addWidget( new QLabel( i18n("<B>Preview</B>"), this ), 1);
+    QLabel *l;
+    QVBoxLayout *vb;
 
-    /** Autoselection Box **/
-    d->m_autoSelGroup = new Q3GroupBox( 1, Qt::Horizontal, i18n("Auto-Select"), this);
+    // Selected area group box
+    QGroupBox *selGroup = new QGroupBox(i18n("Selection"), this);
+    vb = new QVBoxLayout(selGroup);
 
-    KHBox *hbox       = new KHBox(d->m_autoSelGroup);
-    d->m_cbAutoSel    = new QCheckBox( i18n("Active on"), hbox );
-    d->m_cbAutoSel->setToolTip(i18n("Check here if you want autodetection\n"
-                                    "of the document on the preview."));
+    // Dimensions
+    selSize1 = new QLabel(i18n("- mm" ), selGroup);
+    vb->addWidget(selSize1);
+    selSize2 = new QLabel(i18n("- pix" ), selGroup);
+    vb->addWidget(selSize2);
 
-    /* combobox to select if black or white background */
-    d->m_cbBackground = new QComboBox( hbox );
+    vb->addSpacing(KDialog::spacingHint());
+
+    // File size indicator
+    fileSize = new SizeIndicator(selGroup);
+    fileSize->setToolTip(i18n("This size field shows how large the uncompressed image will be.\n"
+                              "It tries to warn you if you try to produce too big an image by \n"
+                              "changing its background color."));
+    fileSize->setText("-");
+    vb->addWidget(fileSize);
+
+    gl->addWidget(selGroup, 1, 0);
+    gl->setRowMinimumHeight(2, 2*KDialog::spacingHint());
+
+    // Auto selection group box
+    d->m_autoSelGroup = new QGroupBox(i18n("Auto Select"), this);
+    d->m_autoSelGroup->setCheckable(true);
+    d->m_autoSelGroup->setToolTip(i18n("Select this option to automatically detect\n"
+                                       "the document scan area"));
+    connect(d->m_autoSelGroup, SIGNAL(toggled(bool)), SLOT(slotAutoSelToggled(bool)));
+
+    vb = new QVBoxLayout(d->m_autoSelGroup);
+
+    l = new QLabel(i18n("Background:"), d->m_autoSelGroup);
+    vb->addWidget(l);
+
+    // combobox to select if black or white background
+    d->m_cbBackground = new QComboBox(d->m_autoSelGroup);
     d->m_cbBackground->insertItem(BG_ITEM_BLACK, i18n("Black"));
     d->m_cbBackground->insertItem(BG_ITEM_WHITE, i18n("White"));
     d->m_cbBackground->setEnabled(false);
-    connect( d->m_cbBackground, SIGNAL(activated(int) ),
-             this, SLOT( slotScanBackgroundChanged( int )));
-    d->m_cbBackground->setToolTip(i18n("Select whether a scan of the empty\n"
-                                       "scanner glass results in a\n"
-                                       "black or a white image."));
-    connect( d->m_cbAutoSel, SIGNAL(toggled(bool) ), SLOT(slotAutoSelToggled(bool)));
+    d->m_cbBackground->setToolTip(i18n("Select whether a scan of the\n"
+                                       "empty scanner glass results in\n"
+                                       "a black or a white image."));
+    connect(d->m_cbBackground, SIGNAL(activated(int)), SLOT(slotScanBackgroundChanged(int)));
+    vb->addWidget(d->m_cbBackground);
+    vb->addSpacing(2*KDialog::spacingHint());
 
-    (void) new QLabel( i18n("scanner background"), d->m_autoSelGroup );
-    d->m_autoSelGroup->addSpace(2*KDialog::spacingHint());
+    l= new QLabel(i18n("Threshold:"), d->m_autoSelGroup);
+    vb->addWidget(l);
 
-    QLabel *l1= new QLabel( i18n("Threshold:"), d->m_autoSelGroup );
-    d->m_sliderThresh = new QSlider(d->m_autoSelGroup);
+    // autodetect threshold slider
+    d->m_sliderThresh = new QSlider(Qt::Horizontal, d->m_autoSelGroup);
     d->m_sliderThresh->setRange(0, 254);
     d->m_sliderThresh->setSingleStep(10);
     d->m_sliderThresh->setValue(d->m_autoSelThresh);
-    connect( d->m_sliderThresh, SIGNAL(valueChanged(int)), SLOT(slotSetAutoSelThresh(int)));
     d->m_sliderThresh->setToolTip(i18n("Threshold for autodetection.\n"
-                                       "All pixels lighter (on black background)\n"
-                                       "or darker (on white background)\n"
+                                       "All pixels lighter (on a black background)\n"
+                                       "or darker (on a white background)\n"
                                        "than this are considered to be part of the image."));
-    l1->setBuddy(d->m_sliderThresh);
     d->m_sliderThresh->setTickPosition(QSlider::TicksBelow);
     d->m_sliderThresh->setTickInterval(25);
 
+    connect( d->m_sliderThresh, SIGNAL(valueChanged(int)), SLOT(slotSetAutoSelThresh(int)));
+    vb->addWidget(d->m_sliderThresh);
+
+    l->setBuddy(d->m_sliderThresh);
+
 #ifdef AUTOSEL_DUSTSIZE
+    vb->addSpacing(KDialog::spacingHint());
+
     /** Dustsize-Slider: No deep impact on result **/
-    (void) new QLabel( i18n("Dust size:"), d->m_autoSelGroup);
-    d->m_sliderDust = new QSlider(Qt::Horizontal,d->m_autoSelGroup);
-    d->m_sliderDust ->setRange(0,50);
+    l = new QLabel( i18n("Dust size:"), d->m_autoSelGroup);
+    vb->addWidget(l);
+
+    d->m_sliderDust = new QSlider(Qt::Horizontal, d->m_autoSelGroup);
+    d->m_sliderDust ->setRange(0, 50);
     d->m_sliderDust ->setSingleStep(5);
     d->m_sliderDust ->setValue(d->m_dustsize);
+    d->m_sliderDust->setTickPosition(QSlider::TicksBelow);
+    d->m_sliderDust->setTickInterval(5);
+
     connect(d->m_sliderDust, SIGNAL(valueChanged(int)), SLOT(slotSetAutoSelDustsize(int)));
+    vb->addWidget(d->m_sliderDust);
 #endif
 
     /* disable Autoselbox as long as no scanner is connected */
     d->m_autoSelGroup->setEnabled(false);
 
-    left->addWidget(d->m_autoSelGroup);
+    gl->addWidget(d->m_autoSelGroup, 3, 0);
 
-    /* Labels for the dimension */
-    Q3GroupBox *gbox = new Q3GroupBox( 1, Qt::Horizontal, i18n("Selection"), this, "GROUPBOX" );
-
-    selSize1 = new QLabel( i18n("- mm" ), gbox );
-    selSize2 = new QLabel( i18n("- pix" ), gbox );
-
-    gbox->addSpace(KDialog::spacingHint());
-
-    /* size indicator */
-    KHBox *hb = new KHBox( gbox );
-    (void) new QLabel( i18n( "Size  "), hb );
-    fileSize = new SizeIndicator( hb );
-    fileSize->setToolTip(i18n("This size field shows how large the uncompressed image will be.\n"
-                              "It tries to warn you if you try to produce too big an image by \n"
-                              "changing its background color."));
-    fileSize->setText( i18n("-") );
-
-    left->addWidget( gbox, 1 );
-    left->addStretch( 6 );
-
-    top->activate();
+    gl->setRowStretch(4, 1);
 
     scanResX = -1;
     scanResY = -1;
@@ -228,6 +237,7 @@ Previewer::Previewer(QWidget *parent)
     selectionWidthMm = bedWidth;
     selectionHeightMm = bedHeight;
     updateSelectionDims();
+    slotAutoSelToggled(false);
 }
 
 
@@ -422,8 +432,11 @@ void Previewer::connectScanner(KScanDevice *scan)
     {
         d->m_autoSelGroup->setEnabled(true);		// enable the auto-select group
 							// set parameters from config
-        d->m_cbAutoSel->setChecked(scan->getConfig(CFG_AUTOSEL_DO,QString::null)=="on");
+
+        bool asel = (scan->getConfig(CFG_AUTOSEL_DO, QString::null)=="on");
 							// "white" is the best default
+        if (d->m_autoSelGroup!=NULL) d->m_autoSelGroup->setChecked(asel);
+
         bool isWhite = scan->getConfig(CFG_SCANNER_EMPTY_BG,"")!=SCANNER_EMPTY_BLACK;
         d->m_cbBackground->setCurrentIndex(isWhite ? BG_ITEM_WHITE : BG_ITEM_BLACK);
 
@@ -493,34 +506,31 @@ void Previewer::slotScanBackgroundChanged(int indx)
 
 void Previewer::slotAutoSelToggled(bool isOn )
 {
-    if (d->m_cbAutoSel)
+    if (isOn)
     {
-        if (isOn)
+        if (!checkForScannerBg())
         {
-            if (!checkForScannerBg())
-            {
-                d->m_cbAutoSel->setChecked(false);
-                return;
-            }
+            if (d->m_autoSelGroup!=NULL) d->m_autoSelGroup->setChecked(false);
+            return;
         }
+    }
 
-        QRect r = img_canvas->sel();
-        kDebug() << "rect is" << r;
+    QRect r = img_canvas->sel();
+    kDebug() << "rect is" << r;
 
-        /* Store configuration */
-        d->m_doAutoSelection = isOn;
-        if (d->m_scanner!=NULL) d->m_scanner->slotStoreConfig(CFG_AUTOSEL_DO,
-                                                              (isOn ? "on" : "off"));
+    /* Store configuration */
+    d->m_doAutoSelection = isOn;
+    if (d->m_scanner!=NULL) d->m_scanner->slotStoreConfig(CFG_AUTOSEL_DO,
+                                                          (isOn ? "on" : "off"));
 
-        if (isOn && r.width()<2 && r.height()<2)	/* There is no selection yet */
-        {
+    if (isOn && r.width()<2 && r.height()<2)	/* There is no selection yet */
+    {
             /* if there is already an image, check, if the bg-color is set already */
             if (img_canvas->rootImage())
             {
                 kDebug() << "No selection, try to find one";
                 findSelection();
             }
-        }
     }
 
     if (d->m_sliderThresh!=NULL) d->m_sliderThresh->setEnabled(isOn);

@@ -313,6 +313,7 @@ KookaView::KookaView(KMainWindow *parent, const QByteArray &deviceToUse)
     mScanSubSplitter->addWidget(mScanGallerySite);		// TL
     mScanSubSplitter->addWidget(mParamsSite);			// BL
     mScanPage->addWidget(preview_canvas);			// R
+    mScanPage->setStretchFactor(1, 1);
 
     // "Gallery" page: gallery left, viewer top right, thumbnails bottom right
     mGalleryPage->addWidget(mGalleryGallerySite);		// L
@@ -320,6 +321,7 @@ KookaView::KookaView(KMainWindow *parent, const QByteArray &deviceToUse)
     mGallerySubSplitter->setChildrenCollapsible(false);
     mGallerySubSplitter->addWidget(mGalleryImgviewSite);	// TR
     mGallerySubSplitter->addWidget(m_thumbview);		// BR
+    mGalleryPage->setStretchFactor(1, 1);
 
     // "OCR" page: gallery top left, viewer top right, results bottom
     mOcrSubSplitter = new QSplitter(Qt::Horizontal, mOcrPage);
@@ -327,6 +329,7 @@ KookaView::KookaView(KMainWindow *parent, const QByteArray &deviceToUse)
     mOcrSubSplitter->addWidget(mOcrGallerySite);		// TL
     mOcrSubSplitter->addWidget(mOcrImgviewSite);		// TR
     mOcrPage->addWidget(m_ocrResEdit);				// B
+    mOcrPage->setStretchFactor(1, 1);
 
     if (slotSelectDevice(deviceToUse, false)) slotTabChanged(KookaView::TabScan);
     else setCurrentIndex(KookaView::TabGallery);
