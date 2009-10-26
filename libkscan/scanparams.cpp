@@ -25,7 +25,8 @@
 #include <qtooltip.h>
 #include <qprogressdialog.h>
 #include <qcheckbox.h>
-#include <q3buttongroup.h>
+#include <qgroupbox.h>
+#include <qbuttongroup.h>
 #include <qradiobutton.h>
 #include <qfileinfo.h>
 #include <qgridlayout.h>
@@ -265,15 +266,25 @@ QScrollArea *ScanParams::createScannerParams()
         ++row;
 
         /* Selection for either virtual scanner or SANE debug */
-        Q3ButtonGroup *vbg = new Q3ButtonGroup( 2, Qt::Vertical, i18n("Testing Mode"),frame);
-        connect(vbg,SIGNAL(clicked(int)),SLOT(slotVirtScanModeSelect(int)));
+        QGroupBox *vbg = new QGroupBox( i18n("Testing Mode"),frame);
+        QVBoxLayout * vbgLayout = new QVBoxLayout();
+            QRadioButton *rb1 = new QRadioButton(i18n("SANE Debug (from PNM image)"));
+            vbgLayout->addWidget(rb1);
 
-        QRadioButton *rb1 = new QRadioButton(i18n("SANE Debug (from PNM image)"),vbg);
-        QRadioButton *rb2 = new QRadioButton(i18n("Virtual Scanner (any image format)"),vbg);
+            QRadioButton *rb2 = new QRadioButton(i18n("Virtual Scanner (any image format)"));
+            vbgLayout->addWidget(rb2);
+        vbg->setLayout(vbgLayout);
 
-        if (scan_mode==ID_SCAN) scan_mode = ID_SANE_DEBUG;
+        if (scan_mode==ID_SCAN)
+            scan_mode = ID_SANE_DEBUG;
         rb1->setChecked(scan_mode==ID_SANE_DEBUG);
         rb2->setChecked(scan_mode==ID_QT_IMGIO);
+
+        // needed for new 'buttonClicked' signal:
+        QButtonGroup * vbgGroup = new QButtonGroup(vbg);
+            vbgGroup->addButton(rb1, 0);
+            vbgGroup->addButton(rb2, 1);
+        connect(vbgGroup, SIGNAL(buttonClicked(int)), SLOT(slotVirtScanModeSelect(int)));
 
         lay->addWidget(vbg,row,2,1,-1);
         ++row;
