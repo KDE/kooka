@@ -83,10 +83,10 @@ public slots:
 
 
 protected:
-   /**
-    *  reimplemented to display the color
-    */
-   virtual void drawContents(QPainter *p);
+    /**
+     *  reimplemented to display the color
+     */
+    virtual void paintEvent(QPaintEvent *ev);
 
 private:
    long sizeInByte;
@@ -94,8 +94,8 @@ private:
 
    double devider;
 
-   class sizeIndicatorPrivate;
-   sizeIndicatorPrivate *d;
+   class SizeIndicatorPrivate;
+   SizeIndicatorPrivate *d;
 };
 
 #endif							// SIZEINDICATOR_H

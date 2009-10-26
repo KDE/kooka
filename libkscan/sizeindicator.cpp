@@ -21,7 +21,7 @@
 #include "sizeindicator.moc"
 
 #include <qpainter.h>
-#include <qpalette.h>
+#include <qevent.h>
 #include <QLinearGradient>
 
 #include <klocale.h>
@@ -29,11 +29,13 @@
 #include <kglobal.h>
 
 
-SizeIndicator::SizeIndicator( QWidget *parent, long  thres, long crit )
-   : QLabel( parent )
+
+
+SizeIndicator::SizeIndicator(QWidget *parent, long thres, long crit)
+    : QLabel(parent)
 {
-   setFrameStyle( QFrame::Box | QFrame::Sunken );
-   setMinimumWidth( fontMetrics().width( QString::fromLatin1("MMMM.MM MiB") ));
+    setFrameStyle( QFrame::Box | QFrame::Sunken );
+    setMinimumWidth(fontMetrics().width( QString::fromLatin1("MMMM.MM MiB")));
 
    threshold = thres;
    sizeInByte = -1;
@@ -71,26 +73,33 @@ void SizeIndicator::setSizeInByte(long newSize)
 }
 
 
-void SizeIndicator::drawContents( QPainter *p )
+// TODO: maybe use some more colours (green below, orange between
+// thresh and crit, red above crit, adjust gradient to indicate how
+// close to those thresholds)
+//
+// TODO: hardwired colours - get from colour scheme
+void SizeIndicator::paintEvent(QPaintEvent *ev)
 {
-   const QSize s = size();
-   int w = s.width();
-   int h = s.height();
+    QFrame::paintEvent(ev);				// draw the frame
+    QPainter p(this);
+    const QRect cr = contentsRect();
+    p.setClipRect(cr);					// paint the contents
 
-   if( sizeInByte >= threshold )
-   {
-      int c = int( double(sizeInByte) * devider );
-      if( c > 255 ) c = 255;
+    int w = cr.width();
+    int h = cr.height();
 
-      QColor warnColor;
-      warnColor.setHsv( 0, c, c );
+    if (sizeInByte>=threshold)
+    {
+        QColor warnColor;
+        int c = int(double(sizeInByte) * devider);
+        if (c>255) c = 255;
+        warnColor.setHsv( 0, c, c );
 
-      QLinearGradient g(0, h/2, w, h/2);
-      g.setColorAt(0, palette().background().color());
-      g.setColorAt(1, warnColor);
-      p->fillRect(0, 0, w, h, QBrush(g));
-   }
-
-   /* Displaying the text */
-   p->drawText( 0, 0, w, h, Qt::AlignHCenter|Qt::AlignVCenter, text());
+        QLinearGradient g(0, h/2, w, h/2);
+        g.setColorAt(0, palette().background().color());
+        g.setColorAt(1, warnColor);
+        p.fillRect(0, 0, w, h, QBrush(g));
+    }
+							// display the text
+    p.drawText(0, 0, w, h, Qt::AlignHCenter|Qt::AlignVCenter, text());
 }
