@@ -33,6 +33,7 @@
 #include <qlayout.h>
 #include <qsplitter.h>
 #include <qimage.h>
+#include <qapplication.h>
 
 #include <kurl.h>
 #include <krun.h>
@@ -53,10 +54,12 @@
 #include <kmenu.h>
 #include <ktabwidget.h>
 
+#include "libkscan/scanparams.h"
 #include "libkscan/kscandevice.h"
 #include "libkscan/imgscaninfo.h"
 #include "libkscan/devselector.h"
 #include "libkscan/adddevice.h"
+#include "libkscan/previewer.h"
 
 #include "imgsaver.h"
 #include "kookapref.h"
@@ -118,7 +121,6 @@ WidgetSite::WidgetSite(QWidget *parent, QWidget *widget)
 {
     QString name = QString("WidgetSite-#%1").arg(++sCount);
     setObjectName(name.toAscii());
-    kDebug() << name;
 
     QGridLayout* lay = new QGridLayout(this);
     lay->setRowStretch(0, 1);
@@ -176,7 +178,7 @@ KookaView::KookaView(KMainWindow *parent, const QByteArray &deviceToUse)
 
     m_mainWindow = parent;
     m_ocrResultImg = NULL;
-    scan_params = NULL;
+    mScanParams = NULL;
     ocrFabric = NULL;
 
     isPhotoCopyMode = false;
@@ -228,12 +230,12 @@ KookaView::KookaView(KMainWindow *parent, const QByteArray &deviceToUse)
 
     /* select the scan device, either user or from config, this creates and assembles
      * the complete scanner options dialog
-     * scan_params must be zero for that */
+     * mScanParams must be zero for that */
 
     /** Scan Preview **/
     preview_canvas = new Previewer(this);
     preview_canvas->setMinimumSize( 100,100);
-    /* since the scan_params will be created in slSelectDevice, do the
+    /* since the mScanParams will be created in slSelectDevice, do the
      * connections later
      */
 
@@ -246,11 +248,11 @@ KookaView::KookaView(KMainWindow *parent, const QByteArray &deviceToUse)
     connect(sane, SIGNAL(sigScanFinished(KScanStat)), SLOT(slotScanFinished(KScanStat)));
     connect(sane, SIGNAL(sigScanFinished(KScanStat)), SLOT(slotPhotoCopyScan(KScanStat)));
     /* New image created after scanning now call save dialog*/
-    connect(sane, SIGNAL(sigNewImage(QImage *,ImgScanInfo *)), SLOT(slotNewImageScanned(QImage *,ImgScanInfo *)));
+    connect(sane, SIGNAL(sigNewImage(const QImage *, const ImgScanInfo *)), SLOT(slotNewImageScanned(const QImage *,const ImgScanInfo *)));
     /* New image created after scanning now print it*/    
-    connect(sane, SIGNAL(sigNewImage(QImage *,ImgScanInfo *)), SLOT(slotPhotoCopyPrint(QImage *,ImgScanInfo *)));
+    connect(sane, SIGNAL(sigNewImage(const QImage *,const ImgScanInfo *)), SLOT(slotPhotoCopyPrint(const QImage *,const ImgScanInfo *)));
     /* New preview image */
-    connect(sane, SIGNAL(sigNewPreview(QImage *,ImgScanInfo *)), SLOT(slotNewPreview(QImage *,ImgScanInfo *)));
+    connect(sane, SIGNAL(sigNewPreview(const QImage *,const ImgScanInfo *)), SLOT(slotNewPreview(const QImage *,const ImgScanInfo *)));
 
     connect(sane, SIGNAL(sigScanStart()), SLOT(slotScanStart()));
     connect(sane, SIGNAL(sigAcquireStart()), SLOT(slotAcquireStart()));
@@ -338,9 +340,6 @@ KookaView::KookaView(KMainWindow *parent, const QByteArray &deviceToUse)
 
 KookaView::~KookaView()
 {
-    kDebug();
-
-    delete preview_canvas;
     kDebug();
 }
 
@@ -443,7 +442,7 @@ bool KookaView::slotSelectDevice(const QByteArray &useDevice, bool alwaysAsk)
 
         if (selDevice.isEmpty())			// dialogue cancelled
         {
-            if (scan_params!=NULL) return (false);	// have setup, do nothing
+            if (mScanParams!=NULL) return (false);	// have setup, do nothing
             gallery_mode = true;
         }
     }
@@ -454,11 +453,11 @@ bool KookaView::slotSelectDevice(const QByteArray &useDevice, bool alwaysAsk)
     //return( true );
     //}
 
-    if (scan_params!=NULL) closeScanDevice();		// remove existing GUI object
+    if (mScanParams!=NULL) closeScanDevice();		// remove existing GUI object
 
-    scan_params = new ScanParams(this);			// and create a new one
-    Q_CHECK_PTR(scan_params);
-    mParamsSite->setWidget(scan_params);
+    mScanParams = new ScanParams(this);			// and create a new one
+    Q_CHECK_PTR(mScanParams);
+    mParamsSite->setWidget(mScanParams);
 
     if (!selDevice.isEmpty())				// connect to the selected scanner
     {
@@ -490,18 +489,18 @@ The error reported was: <b>%1</b>", sane->lastErrorMessage(), selDevice.data());
             preview_canvas->setScannerBedSize(s.width(),s.height());
 
             // Connections ScanParams --> Previewer
-            connect(scan_params,SIGNAL(scanResolutionChanged(int,int)),
+            connect(mScanParams,SIGNAL(scanResolutionChanged(int,int)),
                     preview_canvas,SLOT(slotNewScanResolutions(int,int)));
-            connect(scan_params,SIGNAL(scanModeChanged(int)),
+            connect(mScanParams,SIGNAL(scanModeChanged(int)),
                     preview_canvas,SLOT(slotNewScanMode(int)));
-            connect(scan_params,SIGNAL(newCustomScanSize(QRect)),
+            connect(mScanParams,SIGNAL(newCustomScanSize(QRect)),
                     preview_canvas,SLOT(slotNewCustomScanSize(QRect)));
 
             // Connections Previewer --> ScanParams
             connect(preview_canvas,SIGNAL(newPreviewRect(QRect)),
-                    scan_params,SLOT(slotNewPreviewRect(QRect)));
+                    mScanParams,SLOT(slotNewPreviewRect(QRect)));
 
-            scan_params->connectDevice(sane);
+            mScanParams->connectDevice(sane);
             connectedDevice = selDevice;
 
             preview_canvas->setPreviewImage(sane->loadPreviewImage());
@@ -512,7 +511,7 @@ The error reported was: <b>%1</b>", sane->lastErrorMessage(), selDevice.data());
 
     if (!haveConnection)				// no scanner device available,
     {							// or starting in gallery mode
-        if (scan_params!=NULL) scan_params->connectDevice(NULL, gallery_mode);
+        if (mScanParams!=NULL) mScanParams->connectDevice(NULL, gallery_mode);
     }
 
     emit signalScannerChanged(haveConnection);
@@ -674,15 +673,14 @@ void KookaView::print()
 }
 
 
-void KookaView::slotNewPreview( QImage *new_img,ImgScanInfo *info)
+void KookaView::slotNewPreview(const QImage *newimg, const ImgScanInfo *info)
 {
-   if (!new_img) return;
+   if (newimg==NULL) return;
 
-   kDebug() << "new preview image, size" << new_img->size()
+   kDebug() << "new preview image, size" << newimg->size()
 		  << "res [" << info->getXResolution() << "x" << info->getYResolution() << "]";
-							// flip preview to front
-   //if (!new_img->isNull()) m_dockPreview->makeDockVisible();
-   preview_canvas->newImage(new_img);			// set new image and size
+
+   preview_canvas->newImage(newimg);			// set new image and size
 }
 
 
@@ -714,6 +712,8 @@ void KookaView::slotOcrSpellCheck()
 
     emit signalChangeStatusbar(i18n("OCR Spell Check"));
 
+    setCurrentIndex(KookaView::TabOcr);
+
     if (ocrFabric==NULL || !ocrFabric->engineValid())
     {
         KMessageBox::sorry(m_mainWindow,
@@ -733,6 +733,8 @@ void KookaView::startOCR(const KookaImage *img)
 {
     if (img==NULL || img->isNull()) return;
 
+    setCurrentIndex(KookaView::TabOcr);
+
     if (ocrFabric!=NULL && !ocrFabric->engineValid())	// exists, but needs to be changed?
     {
         delete ocrFabric;
@@ -741,7 +743,6 @@ void KookaView::startOCR(const KookaImage *img)
 
     if (ocrFabric==NULL)
     {
-        //ocrFabric = new OcrEngine( m_mainDock, KGlobal::config() );
         bool gotoPrefs = false;
         ocrFabric = OcrEngine::createEngine(this, &gotoPrefs);
         if (ocrFabric==NULL)
@@ -817,10 +818,10 @@ void KookaView::slotOCRResultImage(const QPixmap &pix)
 void KookaView::slotScanStart( )
 {
    kDebug() << "Scan starts";
-   if( scan_params )
+   if( mScanParams )
    {
-      scan_params->setEnabled( false );
-      KLed *led = scan_params->operationLED();
+      mScanParams->setEnabled( false );
+      KLed *led = mScanParams->operationLED();
       if( led )
       {
 	 led->setColor( Qt::red );
@@ -833,9 +834,9 @@ void KookaView::slotScanStart( )
 void KookaView::slotAcquireStart( )
 {
    kDebug() << "Acquire starts";
-   if( scan_params )
+   if( mScanParams )
    {
-      KLed *led = scan_params->operationLED();
+      KLed *led = mScanParams->operationLED();
       if( led )
       {
 	 led->setColor( Qt::green );
@@ -844,14 +845,15 @@ void KookaView::slotAcquireStart( )
    }
 }
 
-void KookaView::slotNewImageScanned( QImage* img, ImgScanInfo* si )
+
+void KookaView::slotNewImageScanned(const QImage *img, const ImgScanInfo *info)
 {
-    if ( isPhotoCopyMode ) return;
+    if (isPhotoCopyMode) return;
+
     KookaImageMeta *meta = new KookaImageMeta;
-    meta->setScanResolution(si->getXResolution(), si->getYResolution());
+    meta->setScanResolution(info->getXResolution(), info->getYResolution());
     gallery()->addImage(img, meta);
 }
-
 
 
 void KookaView::slotScanFinished( KScanStat stat )
@@ -875,10 +877,10 @@ void KookaView::slotScanFinished( KScanStat stat )
         KMessageBox::error(m_mainWindow, msg);
     }
 
-    if (scan_params!=NULL)
+    if (mScanParams!=NULL)
     {
-        scan_params->setEnabled( true );
-        KLed *led = scan_params->operationLED();
+        mScanParams->setEnabled( true );
+        KLed *led = mScanParams->operationLED();
         if (led!=NULL)
         {
             led->setColor(Qt::green);
@@ -891,12 +893,10 @@ void KookaView::slotScanFinished( KScanStat stat )
 void KookaView::closeScanDevice( )
 {
     kDebug() << "Scanner Device closes down";
-    if (scan_params!=NULL)
+    if (mScanParams!=NULL)
     {
-        delete scan_params;
-        scan_params = NULL;
-        //m_dockScanParam->setWidget(NULL);
-        //m_dockScanParam->hide();
+        delete mScanParams;
+        mScanParams = NULL;
     }
 
     sane->slotCloseDevice();
@@ -1045,13 +1045,6 @@ void KookaView::slotUnloadAImage(const KookaImage *img)
 void KookaView::slotStartLoading(const KUrl &url)
 {
     emit signalChangeStatusbar(i18n("Loading %1",url.prettyUrl()));
-
-    // TODO: why this commented out?
-   // if( m_stack->visibleWidget() != img_canvas )
-   // {
-   //    m_stack->raiseWidget( img_canvas );
-   // }
-
 }
 
 
@@ -1114,13 +1107,33 @@ void KookaView::slotApplySettings()
 }
 
 
+// Starting a scan or preview, switch tab and tell the scan device
+
+void KookaView::slotStartPreview()
+{
+    if (mScanParams==NULL) return;
+    setCurrentIndex(KookaView::TabScan);
+    qApp->processEvents();				// let the tab appear
+    mScanParams->slotAcquirePreview();
+}
+
+
+void KookaView::slotStartFinalScan()
+{
+    if (mScanParams==NULL) return;
+    setCurrentIndex(KookaView::TabScan);
+    qApp->processEvents();				// let the tab appear
+    mScanParams->slotStartScan();
+}
+
+
 /* Slot called to start copying to printer */
 void KookaView::slotStartPhotoCopy( )
 {
     kDebug();
 
 #ifndef KDE4
-    if ( scan_params == 0 ) return;
+    if ( mScanParams == 0 ) return;
     isPhotoCopyMode=true;
     photoCopyPrinter = new KPrinter( true, QPrinter::HighResolution ); 
 //    photoCopyPrinter->removeStandardPage( KPrinter::CopiesPage );
@@ -1131,7 +1144,8 @@ void KookaView::slotStartPhotoCopy( )
 #endif
 }
 
-void KookaView::slotPhotoCopyPrint( QImage* img, ImgScanInfo* si )
+
+void KookaView::slotPhotoCopyPrint(const QImage *img, const ImgScanInfo *info)
 {
     kDebug();
 
@@ -1143,6 +1157,7 @@ void KookaView::slotPhotoCopyPrint( QImage* img, ImgScanInfo* si )
 #endif
 
 }
+
 
 void KookaView::slotPhotoCopyScan(KScanStat status)
 {
@@ -1161,7 +1176,7 @@ void KookaView::slotPhotoCopyScan(KScanStat status)
 //    photoCopyPrinter->addDialogPage( new ImgPrintDialog( 0 ) );
     if( photoCopyPrinter->setup( 0, "Photocopy" )) {
         Q_CHECK_PTR( sane );
-        scan_params->slotStartScan( );
+        mScanParams->slotStartScan( );
     }
     else {
         isPhotoCopyMode=false;

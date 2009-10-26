@@ -387,15 +387,13 @@ signals:
      *  emitted if a new image was acquired. The image has to be
      *  copied in the signal handler.
      */
-// TODO: parameters
-    void sigNewImage( QImage*, ImgScanInfo* );
+    void sigNewImage(const QImage *img, const ImgScanInfo *info);
 
     /**
      *  emitted if a new preview was acquired. The image has to be
      *  copied in the signal handler.
      */
-// TODO: parameters
-    void sigNewPreview( QImage*, ImgScanInfo* );
+    void sigNewPreview(const QImage *img, const ImgScanInfo *info);
     
     /**
      * emitted to tell the application the start of scanning. That is

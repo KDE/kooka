@@ -28,25 +28,22 @@
 #define KOOKAVIEW_H
 
 #include <ktabwidget.h>
-//#include <kvbox.h>
 
+#include "libkscan/kscanoption.h"
 // TODO: inline functions into .cpp, then these includes not needed
-#include "libkscan/previewer.h"
-#include "libkscan/scanparams.h"
 #include "libkscan/img_canvas.h"
 
 class QPainter;
 class QPixmap;
 class QSplitter;
 
-//class K3DockWidget;
-//class K3DockMainWindow;
 class KConfigGroup;
 class KPrinter;
 class KAction;
 class KActionCollection;
 class K3FileTreeViewItem;
 class KMainWindow;
+class KUrl;
 
 class OcrEngine;
 class ThumbView;
@@ -54,6 +51,10 @@ class KookaImage;
 class KookaGallery;
 class OcrResEdit;
 class ScanPackager;
+class ScanParams;
+class ImgScanInfo;
+class Previewer;
+class KScanDevice;
 
 class WidgetSite;
 
@@ -95,11 +96,8 @@ public:
     void print( );
 
     void loadStartupImage();
-//    K3DockWidget *mainDockWidget() const	{ return (m_mainDock); }
     ScanPackager *gallery() const;
     ImageCanvas *getImageViewer() const	{ return (img_canvas); }
-
-//    void createDockMenu(KActionCollection *ac, K3DockMainWindow *mainWin, const char *actName);
 
     bool scannerConnected() const { return (haveConnection); }
     QString scannerName() const;
@@ -119,21 +117,15 @@ public:
 public slots:
     void slotShowPreview()  {  }
     void slotShowPackager() {  }
-    void slotNewPreview( QImage *, ImgScanInfo * );
-
-// TODO: members with code into .cpp file
-    void slotSetScanParamsVisible( bool v )
-        { if( v ) scan_params->show(); else scan_params->hide(); }
-    void slotSetTabWVisible( bool v )
-        { if( v ) preview_canvas->show(); else preview_canvas->hide(); }
+    void slotNewPreview(const QImage *newimg, const ImgScanInfo *info);
 
     void slotStartOcr();
     void slotStartOcrSelection();
     void slotOcrSpellCheck();
     void slotSaveOcrResult();
 
-    void slotStartPreview() { if( scan_params ) scan_params->slotAcquirePreview(); }
-    void slotStartFinalScan() { if( scan_params ) scan_params->slotStartScan(); }
+    void slotStartPreview();
+    void slotStartFinalScan();
 
     void slotCreateNewImgFromSelection();
 
@@ -141,6 +133,7 @@ public slots:
 
     void slotMirrorImage(KookaView::MirrorType type);
 
+// TODO: just make these a slot connection Kooka --> ImageCanvas
     void slotIVScaleToWidth()
         { if( img_canvas ) img_canvas->handlePopup(ImageCanvas::ID_FIT_WIDTH );}
     void slotIVScaleToHeight()
@@ -153,7 +146,6 @@ public slots:
     void slotOpenCurrInGraphApp();
 
 
-    //void slLoadScanParams( );
     void slotScanParams();
 
     void slotOCRResultImage( const QPixmap& );
@@ -185,7 +177,7 @@ public slots:
 protected slots:
 
     void slotStartPhotoCopy();
-    void slotPhotoCopyPrint(QImage* , ImgScanInfo* );
+    void slotPhotoCopyPrint(const QImage *img, const ImgScanInfo *info);
     void slotPhotoCopyScan( KScanStat );
 
     void slotShowAImage(const KookaImage *img);
@@ -195,7 +187,7 @@ protected slots:
      * called from the scandevice if a new Image was successfully scanned.
      * Needs to convert the one-page-QImage to a KookaImage
      */
-    void slotNewImageScanned(QImage*, ImgScanInfo*);
+    void slotNewImageScanned(const QImage *img, const ImgScanInfo *info);
 
     /**
      * called if an viewer image was set to read only or back to read write state.
@@ -245,7 +237,7 @@ private:
     Previewer    *preview_canvas;
     KookaGallery *m_gallery;
 
-    ScanParams   *scan_params;
+    ScanParams   *mScanParams;
     bool haveConnection;
 
     KScanDevice  *sane;
@@ -257,15 +249,6 @@ private:
     int 	 preview_id;
 
     OcrEngine *ocrFabric;
-
-//    K3DockWidget *m_mainDock;
-//    K3DockWidget *m_dockScanParam;
-//    K3DockWidget *m_dockThumbs;
-//    K3DockWidget *m_dockPackager;
-//    K3DockWidget *m_dockPreview;
-//    K3DockWidget *m_dockOCRText;
-
-
     OcrResEdit  *m_ocrResEdit;
 
     bool        isPhotoCopyMode;
