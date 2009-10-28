@@ -144,9 +144,9 @@ Previewer::Previewer(QWidget *parent)
 
     // Dimensions
     selSize1 = new QLabel(i18n("- mm" ), selGroup);
-    vb->addWidget(selSize1);
+    vb->addWidget(selSize1, 0, Qt::AlignHCenter);
     selSize2 = new QLabel(i18n("- pix" ), selGroup);
-    vb->addWidget(selSize2);
+    vb->addWidget(selSize2, 0, Qt::AlignHCenter);
 
     vb->addSpacing(KDialog::spacingHint());
 
@@ -373,6 +373,8 @@ void Previewer::slotNewAreaSelected(QRect rect)
 
 void Previewer::updateSelectionDims()
 {
+    if (d->m_scanner==NULL) return;			// no scanner connected
+
     selSize1->setText(i18n("%1 x %2 mm", selectionWidthMm, selectionHeightMm));
 
     /* Calculate file size */
@@ -445,6 +447,8 @@ void Previewer::connectScanner(KScanDevice *scan)
 
         h = scan->getConfig(CFG_AUTOSEL_THRESH,(isWhite ? DEF_THRESH_WHITE : DEF_THRESH_BLACK));
         d->m_sliderThresh->setValue(h.toInt());
+
+        updateSelectionDims();
     }
 }
 

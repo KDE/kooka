@@ -1161,12 +1161,16 @@ KScanStat KScanDevice::acquire_data( bool isPreview )
        *  this status might be changed by pressing Stop on a GUI-Dialog displayed during scan */
       scanStatus = SSTAT_IN_PROGRESS;
 
+      // TODO: if using the socket notifier, does sane_get_parameters()
+      // get called for each loop?
+
       int fd = 0;
       //  Don't assume that sane_get_select_fd will succeed even if sane_set_io_mode
       //  successfully sets I/O mode to noblocking - bug 159300
       if (sane_set_io_mode(scanner_handle,SANE_TRUE)==SANE_STATUS_GOOD &&
           sane_get_select_fd(scanner_handle,&fd)==SANE_STATUS_GOOD)
       {
+          kDebug() << "using read socket notifier";
           mSocketNotifier = new QSocketNotifier(fd, QSocketNotifier::Read, this);
           connect(mSocketNotifier, SIGNAL(activated(int)), SLOT(doProcessABlock()));
       }

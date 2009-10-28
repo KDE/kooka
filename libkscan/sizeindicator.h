@@ -22,12 +22,11 @@
 
 #include "libkscanexport.h"
 
-#define DEFAULT_CRITICAL (3*1024*1024)
-#define DEFAULT_THRESHOLD (1*1024*1024)
-
 #include <qlabel.h>
 
-class QPainter;
+
+#define DEFAULT_THRESHOLD	(1*1024*1024)		// 1Mb
+#define DEFAULT_CRITICAL	(4*1024*1024)		// 4Mb
 
 
 /**
@@ -41,61 +40,57 @@ class QPainter;
  *  user that he is doing something obvious.
  */
 
+
 class KSCAN_EXPORT SizeIndicator : public QLabel
 {
    Q_OBJECT
-   // Q_PROPERTY( KGammaTable *gt READ getGt WRITE setGt )
 
 public:
    /**
     *  Creates a size indicator widget.
-    *  @param thres: Threshold, value on that the widget starts to become red.
-    *  @param crit: Critical value, not yet used.
+    *
+    *  @param thres Threshold size, above which the widget starts to turn the warning colour.
+    *  @param crit Critical size, above which the widget starts to turn the error colour.
+    */
+   SizeIndicator(QWidget *parent,
+                 long thresh = DEFAULT_THRESHOLD,
+                 long crit = DEFAULT_CRITICAL);
 
-    */
-   SizeIndicator( QWidget *parent, long thres = DEFAULT_THRESHOLD,
-		  long crit = DEFAULT_CRITICAL );
-   /**
-    *  destructor does not really do much yet.
-    */
    ~SizeIndicator();
 
+   /**
+    * Sets the threshold size.
+    *
+    * @param thres the threshold size.
+    */
+   void setThreshold(long thresh = DEFAULT_THRESHOLD);
+
+   /**
+    * Sets the critical size.
+    *
+    * @param crit the critical size.
+    */
+   void setCritical(long crit = DEFAULT_CRITICAL);
+
 public slots:
-
    /**
-    * is the slot that sets the file size to display. The widget gets
-    * updated.
-    * @param sizeInByte: the size to set.
+    * Sets the file size to display. The widget gets updated.
+    *
+    * @param newSize the size to set.
     */
-   void setSizeInByte( long );
-
-   /**
-    * sets the critical size.
-    * @param crit: the critical value
-    */
-   void setCritical( long );
-
-   /**
-    * sets the threshold value.
-    * @param thres: the threshold bytesize
-    */
-   void setThreshold( long );
-
+   void setSizeInByte(long newSize);
 
 protected:
-    /**
-     *  reimplemented to display the color
-     */
-    virtual void paintEvent(QPaintEvent *ev);
+    void paintEvent(QPaintEvent *ev);
 
 private:
-   long sizeInByte;
-   long critical, threshold;
-
-   double devider;
+   long mThreshold;
+   long mCritical;
+   long mSizeInByte;
 
    class SizeIndicatorPrivate;
    SizeIndicatorPrivate *d;
 };
+
 
 #endif							// SIZEINDICATOR_H

@@ -286,14 +286,17 @@ KookaView::KookaView(KMainWindow *parent, const QByteArray &deviceToUse)
 
     mScanPage = new QSplitter(Qt::Horizontal, this);
     mScanPage->setChildrenCollapsible(false);
+    mScanPage->setContentsMargins(0, 0, 0, 0);
     addTab(mScanPage, KIcon("scanner"), i18n("Scan"));
 
     mGalleryPage = new QSplitter(Qt::Horizontal, this);
     mGalleryPage->setChildrenCollapsible(false);
+    mGalleryPage->setContentsMargins(0, 0, 0, 0);
     addTab(mGalleryPage, KIcon("image-x-generic"), i18n("Gallery"));
 
     mOcrPage = new QSplitter(Qt::Vertical, this);
     mOcrPage->setChildrenCollapsible(false);
+    mOcrPage->setContentsMargins(0, 0, 0, 0);
     addTab(mOcrPage, KIcon("ocr"), i18n("OCR"));
 
     connect(this, SIGNAL(currentChanged(int)), SLOT(slotTabChanged(int)));
@@ -312,6 +315,7 @@ KookaView::KookaView(KMainWindow *parent, const QByteArray &deviceToUse)
     // "Scan" page: gallery top left, scan parameters bottom left, preview right
     mScanSubSplitter = new QSplitter(Qt::Vertical, mScanPage);
     mScanSubSplitter->setChildrenCollapsible(false);
+    mScanSubSplitter->setContentsMargins(0, 0, 0, 0);
     mScanSubSplitter->addWidget(mScanGallerySite);		// TL
     mScanSubSplitter->addWidget(mParamsSite);			// BL
     mScanPage->addWidget(preview_canvas);			// R
@@ -321,6 +325,7 @@ KookaView::KookaView(KMainWindow *parent, const QByteArray &deviceToUse)
     mGalleryPage->addWidget(mGalleryGallerySite);		// L
     mGallerySubSplitter = new QSplitter(Qt::Vertical, mGalleryPage);
     mGallerySubSplitter->setChildrenCollapsible(false);
+    mGallerySubSplitter->setContentsMargins(0, 0, 0, 0);
     mGallerySubSplitter->addWidget(mGalleryImgviewSite);	// TR
     mGallerySubSplitter->addWidget(m_thumbview);		// BR
     mGalleryPage->setStretchFactor(1, 1);
@@ -328,6 +333,7 @@ KookaView::KookaView(KMainWindow *parent, const QByteArray &deviceToUse)
     // "OCR" page: gallery top left, viewer top right, results bottom
     mOcrSubSplitter = new QSplitter(Qt::Horizontal, mOcrPage);
     mOcrSubSplitter->setChildrenCollapsible(false);
+    mOcrSubSplitter->setContentsMargins(0, 0, 0, 0);
     mOcrSubSplitter->addWidget(mOcrGallerySite);		// TL
     mOcrSubSplitter->addWidget(mOcrImgviewSite);		// TR
     mOcrPage->addWidget(m_ocrResEdit);				// B

@@ -27,32 +27,18 @@
 #include <klocale.h>
 #include <kdebug.h>
 #include <kglobal.h>
+#include <kcolorscheme.h>
 
 
-
-
-SizeIndicator::SizeIndicator(QWidget *parent, long thres, long crit)
+SizeIndicator::SizeIndicator(QWidget *parent, long thresh, long crit)
     : QLabel(parent)
 {
-    setFrameStyle( QFrame::Box | QFrame::Sunken );
-    setMinimumWidth(fontMetrics().width( QString::fromLatin1("MMMM.MM MiB")));
+    setFrameStyle(QFrame::Box|QFrame::Sunken);
+    setMinimumWidth(fontMetrics().width("MMMM.MM MiB"));
 
-   threshold = thres;
-   sizeInByte = -1;
-   setCritical( crit );
-}
-
-
-void SizeIndicator::setCritical( long crit )
-{
-   critical = crit;
-   devider = 255.0 / double( critical );
-}
-
-
-void SizeIndicator::setThreshold( long thres )
-{
-   threshold = thres;
+    mThreshold = thresh;
+    mCritical = crit;
+    mSizeInByte = -1;
 }
 
 
@@ -61,11 +47,25 @@ SizeIndicator::~SizeIndicator()
 }
 
 
+void SizeIndicator::setCritical(long crit)
+{
+    mCritical = crit;
+    if (mSizeInByte>=0 && isVisible()) update();
+}
+
+
+void SizeIndicator::setThreshold(long thresh)
+{
+    mThreshold = thresh;
+    if (mSizeInByte>=0 && isVisible()) update();
+}
+
+
 void SizeIndicator::setSizeInByte(long newSize)
 {
     kDebug() << "New size" << newSize << "bytes";
 
-    sizeInByte = newSize;
+    mSizeInByte = newSize;
 
     if (newSize<0) setText("");
     else setText(KGlobal::locale()->formatByteSize(newSize));
@@ -73,32 +73,41 @@ void SizeIndicator::setSizeInByte(long newSize)
 }
 
 
-// TODO: maybe use some more colours (green below, orange between
-// thresh and crit, red above crit, adjust gradient to indicate how
-// close to those thresholds)
-//
-// TODO: hardwired colours - get from colour scheme
 void SizeIndicator::paintEvent(QPaintEvent *ev)
 {
     QFrame::paintEvent(ev);				// draw the frame
+
     QPainter p(this);
+
     const QRect cr = contentsRect();
     p.setClipRect(cr);					// paint the contents
-
     int w = cr.width();
     int h = cr.height();
 
-    if (sizeInByte>=threshold)
-    {
-        QColor warnColor;
-        int c = int(double(sizeInByte) * devider);
-        if (c>255) c = 255;
-        warnColor.setHsv( 0, c, c );
+    KColorScheme sch(QPalette::Normal, KColorScheme::Button);
 
-        QLinearGradient g(0, h/2, w, h/2);
-        g.setColorAt(0, palette().background().color());
-        g.setColorAt(1, warnColor);
+    QLinearGradient g;
+    g.setStart(0, h/2);
+
+    if (mSizeInByte<mThreshold)
+    {
+        g.setFinalStop(w*(1.0-(double(mSizeInByte)/mThreshold)), h/2);
+        g.setColorAt(0, sch.background(KColorScheme::PositiveBackground).color());
+        g.setColorAt(1, sch.background(KColorScheme::NeutralBackground).color());
+
         p.fillRect(0, 0, w, h, QBrush(g));
+    }
+    else if (mSizeInByte<mCritical)
+    {
+        g.setFinalStop(w*(1.0-(double(mSizeInByte-mThreshold)/(mCritical-mThreshold))), h/2);
+        g.setColorAt(0, sch.background(KColorScheme::NeutralBackground).color());
+        g.setColorAt(1, sch.background(KColorScheme::NegativeBackground).color());
+
+        p.fillRect(0, 0, w, h, QBrush(g));
+    }
+    else
+    {
+        p.fillRect(0, 0, w, h, sch.background(KColorScheme::NegativeBackground).color());
     }
 							// display the text
     p.drawText(0, 0, w, h, Qt::AlignHCenter|Qt::AlignVCenter, text());
