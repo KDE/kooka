@@ -287,7 +287,7 @@ KookaView::KookaView(KMainWindow *parent, const QByteArray &deviceToUse)
     mScanPage = new QSplitter(Qt::Horizontal, this);
     mScanPage->setChildrenCollapsible(false);
     mScanPage->setContentsMargins(0, 0, 0, 0);
-    addTab(mScanPage, KIcon("scanner"), i18n("Scan"));
+    addTab(mScanPage, KIcon("scan"), i18n("Scan"));
 
     mGalleryPage = new QSplitter(Qt::Horizontal, this);
     mGalleryPage->setChildrenCollapsible(false);

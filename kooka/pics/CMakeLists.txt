@@ -24,6 +24,9 @@ set(kooka_PICS
   ocrad.png
   photocopy.png
   preview.png
+  scan.png
+  scanadd.png
+  scanselect.png
   scaleorig.png
   scaletoheight.png
   scaletowidth.png
@@ -33,5 +36,4 @@ set(kooka_PICS
   rotate-180.png
 )
 
-kde4_install_icons(${ICON_INSTALL_DIR})
 install(FILES ${kooka_PICS} DESTINATION ${DATA_INSTALL_DIR}/kooka/pics)

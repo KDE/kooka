@@ -31,7 +31,6 @@
 #include <kcmdlineargs.h>
 #include <klocale.h>
 #include <kglobal.h>
-#include <kiconloader.h>
 #include <kdebug.h>
 
 #include "kooka.h"
@@ -97,13 +96,12 @@ int main( int argc, char *argv[] )
     KCmdLineArgs::init(argc, argv, &about);
 
     KCmdLineOptions options;
-    options.add("d <device>", ki18n("The SANE compatible device specification (e.g. umax:/dev/sg0)"));
+    options.add("d <device>", ki18n("The SANE device specification (e.g. umax:/dev/sg0)"));
     options.add("g", ki18n("Gallery mode - do not connect to scanner"));
     KCmdLineArgs::addCmdLineOptions(options);		// Add my own options
 
     KApplication app;
     KGlobal::locale()->insertCatalog("libkscan");
-    KApplication::setWindowIcon(KIconLoader::global()->loadIcon("scanner", KIconLoader::Desktop));
 
     KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
     QString devToUse = args->getOption("d");

@@ -15,4 +15,5 @@ add_custom_target(clobber
 
 ########### install files ###############
 
+kde4_install_icons(${ICON_INSTALL_DIR})
 install(FILES kooka.desktop DESTINATION ${XDG_APPS_INSTALL_DIR})

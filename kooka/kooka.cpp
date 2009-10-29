@@ -270,11 +270,11 @@ void Kooka::setupActions()
 
     // "Settings" menu
 
-    act = new KAction(KIcon("scanner"), i18n("Select Scan Device..."), this);
+    act = new KAction(KIcon("scanselect"), i18n("Select Scan Device..."), this);
     connect(act, SIGNAL(triggered()), m_view, SLOT(slotSelectDevice()));
     actionCollection()->addAction("selectsource", act);
 
-    act = new KAction(KIcon("list-add"), i18n("Add Scan Device..."), this);
+    act = new KAction(KIcon("scanadd"), i18n("Add Scan Device..."), this);
     connect(act, SIGNAL(triggered()), m_view, SLOT(slotAddDevice()));
     actionCollection()->addAction("addsource", act);
 
@@ -285,7 +285,7 @@ void Kooka::setupActions()
     connect(previewAction, SIGNAL(triggered()), m_view, SLOT(slotStartPreview()));
     actionCollection()->addAction("startPreview", previewAction);
 
-    scanAction = new KAction(KIcon("scanner"), i18n("Start Scan"), this);
+    scanAction = new KAction(KIcon("scan"), i18n("Start Scan"), this);
     scanAction->setShortcut(Qt::Key_F4);
     connect(scanAction, SIGNAL(triggered()), m_view, SLOT(slotStartFinalScan()));
     actionCollection()->addAction("startScan", scanAction);

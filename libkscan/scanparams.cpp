@@ -172,15 +172,15 @@ bool ScanParams::connectDevice(KScanDevice *newScanDevice, bool galleryMode)
     lay->addWidget(new KSeparator(Qt::Horizontal,this),4,0,1,-1);
 
     /* Create the Scan Buttons */
-    QPushButton* pb = new QPushButton(i18n("Pre&view"),this);
+    QPushButton *pb = new QPushButton(KIcon("preview"), i18n("Pre&view"), this);
     pb->setMinimumWidth(100);
-    connect( pb, SIGNAL(clicked()), SLOT(slotAcquirePreview()) );
-    lay->addWidget(pb,5,0,Qt::AlignLeft);
+    connect(pb, SIGNAL(clicked()), SLOT(slotAcquirePreview()));
+    lay->addWidget(pb, 5, 0, Qt::AlignLeft);
 
-    pb = new QPushButton(i18n("Star&t Scan"),this);
+    pb = new QPushButton(KIcon("scan"), i18n("Star&t Scan"), this);
     pb->setMinimumWidth(100);
-    connect( pb, SIGNAL(clicked()), SLOT(slotStartScan()) );
-    lay->addWidget(pb,5,1,Qt::AlignRight);
+    connect(pb, SIGNAL(clicked()), SLOT(slotStartScan()));
+    lay->addWidget(pb, 5, 1, Qt::AlignRight);
 
     /* Initialise the progress dialog */
     progressDialog = new QProgressDialog( i18n("Scanning in progress"),
@@ -206,8 +206,8 @@ ScanParams::~ScanParams()
 {
     kDebug();
 
-    delete startupOptset;  startupOptset = NULL;
-    delete progressDialog; progressDialog = NULL;
+    delete startupOptset;
+    delete progressDialog;
 }
 
 

@@ -2,7 +2,7 @@
 Encoding=UTF-8
 Type=Application
 Exec=kooka %i %m %U
-Icon=scanner
+Icon=kooka
 Path=
 Terminal=false
 DocPath=kooka/index.html
