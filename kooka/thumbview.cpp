@@ -57,7 +57,7 @@ ThumbView::ThumbView(QWidget *parent)
 {
     setObjectName("ThumbView");
 
-    setMargin(3);
+    setMargin(0);
     m_thumbSize = KIconLoader::SizeHuge;
     m_bgImg = QString::null;
     m_firstMenu = true;					// first time menu used

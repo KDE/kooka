@@ -85,8 +85,8 @@ extern "C"
 #endif
 
 
-ScanParams::ScanParams( QWidget *parent)
-   : QFrame( parent)
+ScanParams::ScanParams(QWidget *parent)
+    : QWidget(parent)
 {
     setObjectName("ScanParams");
 
@@ -114,12 +114,8 @@ ScanParams::ScanParams( QWidget *parent)
 
 bool ScanParams::connectDevice(KScanDevice *newScanDevice, bool galleryMode)
 {
-   /* Frame stuff for toplevel of scanparams - beautification */
-    setFrameStyle(QFrame::Panel|QFrame::Raised);
-    setLineWidth(1);
-
     QGridLayout *lay = new QGridLayout(this);
-    lay->setSpacing(KDialog::spacingHint());
+    lay->setMargin(0);
     lay->setColumnStretch(0,9);
 
     if (newScanDevice==NULL)				// no scanner device

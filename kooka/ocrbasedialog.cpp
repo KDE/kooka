@@ -187,7 +187,6 @@ void OcrBaseDialog::ocrIntro()
     // TODO: can topWid be combined with vb?
     QWidget *topWid = new QWidget(vb);			// engine title/logo/description
     QGridLayout *gl = new QGridLayout(topWid);
-    gl->setSpacing(KDialog::spacingHint());
 
     QLabel *l = new QLabel(i18n("<b>Optical Character Recognition using %1</b><br>", ocrEngineName()),topWid);
     gl->addWidget(l,0,0);
@@ -226,7 +225,6 @@ void OcrBaseDialog::ocrShowInfo(const QString &binary, const QString &version)
 
     QWidget *botWid = new QWidget(page);		// engine path/version/spinner
     QGridLayout *gl = new QGridLayout(botWid);
-    gl->setSpacing(KDialog::spacingHint());
     QLabel *l;
 
     if (!binary.isNull())
@@ -335,7 +333,6 @@ void OcrBaseDialog::introduceImage(const KookaImage *img)
         QWidget *nGrid = new QWidget(m_metaBox);
 
         QGridLayout *gl = new QGridLayout(nGrid);
-        gl->setSpacing(KDialog::spacingHint());
         int row = 0;					// row in grid layout
 
         const KFileMetaInfoGroupList groups = info.supportedGroups();
@@ -380,7 +377,6 @@ void OcrBaseDialog::introduceImage(const KookaImage *img)
         QWidget *nGrid = new QWidget(m_metaBox);
 
         QGridLayout *gl = new QGridLayout(nGrid);
-        gl->setSpacing(KDialog::spacingHint());
 
         QLabel *l = new QLabel(i18n("Selection"), m_metaBox);
         QPalette pal = l->palette();

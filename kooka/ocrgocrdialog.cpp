@@ -94,7 +94,6 @@ OcrEngine::EngineError OcrGocrDialog::setupGui()
 
     /* Sliders for OCR-Options */
     QGridLayout *gl = new QGridLayout(page);
-    gl->setSpacing(KDialog::spacingHint());
 
     QLabel *l = new QLabel(i18n("Gray level:"), page);
     gl->addWidget(l, 0, 0);

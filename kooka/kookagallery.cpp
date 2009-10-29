@@ -28,7 +28,6 @@
 #include <qlabel.h>
 
 #include <kdebug.h>
-#include <kdialog.h>
 #include <klocale.h>
 #include <kglobal.h>
 #include <khbox.h>
@@ -40,13 +39,14 @@
 
 
 KookaGallery::KookaGallery(QWidget *parent)
-    : QFrame(parent)
+    : QWidget(parent)
 {
     kDebug();
     m_layout = new QGridLayout(this);
+    m_layout->setMargin(0);
 
     m_recentBox = new KHBox(this);
-    m_recentBox->setMargin(KDialog::spacingHint());
+    //m_recentBox->setMargin(KDialog::spacingHint());
     QLabel *lab = new QLabel(i18n("Folder: "),m_recentBox);
     lab->setSizePolicy(QSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed));
 

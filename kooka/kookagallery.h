@@ -24,7 +24,7 @@
 #ifndef KOOKAGALLERY_H
 #define KOOKAGALLERY_H
 
-#include <qframe.h>
+#include <qwidget.h>
 
 #include "scanpackager.h"
 
@@ -36,7 +36,7 @@ class K3FileTreeViewItem;
 class ImageNameCombo;
 
 
-class KookaGallery : public QFrame
+class KookaGallery : public QWidget
 {
     Q_OBJECT
 

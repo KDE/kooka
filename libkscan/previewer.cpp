@@ -102,6 +102,7 @@ Previewer::Previewer(QWidget *parent)
     d = new PreviewerPrivate();
 
     QGridLayout *gl = new QGridLayout(this);
+    gl->setMargin(0);
 
     /* Units etc. TODO: get from Config */
     displayUnit = KRuler::Millimetres;

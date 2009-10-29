@@ -86,6 +86,7 @@ OcrEngine::EngineError OcrOcradDialog::setupGui()
     OcrBaseDialog::setupGui();
 
     KVBox *page = static_cast<KVBox *>(ocrPage()->widget());
+    page->setSpacing(KDialog::spacingHint());
 
     /* layout detection mode combo */
     KConfigGroup grp1 = KGlobal::config()->group(CFG_GROUP_OCRAD);

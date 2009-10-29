@@ -109,7 +109,6 @@ void KookaPref::setupOCRPage()
 
     QFrame *page = new QFrame(this);
     QGridLayout *lay = new QGridLayout(page);
-    lay->setSpacing(KDialog::spacingHint());
     lay->setRowStretch(6, 9);
     lay->setColumnStretch(1, 9);
 
@@ -270,7 +269,6 @@ void KookaPref::setupGeneralPage()
 
     QFrame *page = new QFrame(this);
     QVBoxLayout *top = new QVBoxLayout(page);
-    top->setSpacing(KDialog::spacingHint());
 
     /* Description-Label */
     top->addWidget(new QLabel(i18n("These options will take effect immediately."), page));
@@ -324,7 +322,6 @@ void KookaPref::setupStartupPage()
     /* startup options */
     QFrame *page = new QFrame(this);
     QVBoxLayout *top = new QVBoxLayout(page);
-    top->setSpacing(KDialog::spacingHint());
 
     /* Description-Label */
     top->addWidget(new QLabel(i18n("These options will take effect when Kooka is next started."), page));
@@ -364,7 +361,6 @@ void KookaPref::setupSaveFormatPage( )
     // TODO: needs to be a QFrame, or can be a QWidget?
     QFrame *page = new QFrame(this);
     QVBoxLayout *top = new QVBoxLayout(page);
-    top->setSpacing(KDialog::spacingHint());
 
     /* Description-Label */
     top->addWidget(new QLabel(i18n("These options will take effect immediately."), page));
@@ -395,8 +391,6 @@ void KookaPref::setupThumbnailPage()
 
     QFrame *page = new QFrame(this);
     QGridLayout *lay = new QGridLayout(page);
-    // TODO: is this necessary?
-    lay->setSpacing(KDialog::spacingHint());
     lay->setRowStretch(4, 9);
     lay->setColumnStretch(1, 9);
 

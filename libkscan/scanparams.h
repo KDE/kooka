@@ -25,7 +25,7 @@
 #include "kscandevice.h"
 #include "scansourcedialog.h"
 
-#include <qframe.h>
+#include <qwidget.h>
 
 #include <kicon.h>
 
@@ -50,12 +50,12 @@ class ScanSizeSelector;
 typedef enum { ID_SANE_DEBUG, ID_QT_IMGIO, ID_SCAN } ScanMode;
 
 
-class KSCAN_EXPORT ScanParams : public QFrame
+class KSCAN_EXPORT ScanParams : public QWidget
 {
     Q_OBJECT
 
 public:
-    ScanParams( QWidget *parent);
+    ScanParams(QWidget *parent);
     ~ScanParams();
 
     bool connectDevice(KScanDevice *newScanDevice, bool galleryMode = false);

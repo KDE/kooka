@@ -53,7 +53,6 @@ ScanParamsDialog::ScanParamsDialog(QWidget *parent,KScanDevice *scandev)
     QFrame *mf = new QFrame(this);
     setMainWidget(mf);
     QGridLayout *gl = new QGridLayout(mf);
-    gl->setSpacing(KDialog::spacingHint());
 
     paramsList = new QListWidget(mf);
     paramsList->setSelectionMode(QAbstractItemView::SingleSelection);

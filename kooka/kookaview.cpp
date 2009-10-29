@@ -93,16 +93,21 @@
 
 // ---------------------------------------------------------------------------
 
-
-// Some of the GUI elements (the gallery and the image viewer) are common
+// Some of the UI panels (the gallery and the image viewer) are common
 // to more that one of the main task tabs.  This means that they can't simply
 // be added to the tabs/splitters in the normal way, as a widget can only be
 // a child of one parent at a time.
 //
 // This WidgetSite acts as a layout placeholder for such reassignable widgets.
 // It is assigned a new child widget when tabs are switched.
+//
+// It also defines the frame style for the panels.  So, in order to maintain a
+// consistent look, all of those panels should derive from QWidget (or, if
+// from QFrame, do not set a frame style) and should set the margin of any
+// internal layout to 0.  (KHBox/KVBox do this automatically, but any other
+// layout needs the margin explicitly set).
 
-class WidgetSite : public QWidget
+class WidgetSite : public QFrame
 {
 public:
     WidgetSite(QWidget *parent, QWidget *widget = NULL);
@@ -117,10 +122,13 @@ int WidgetSite::sCount = 0;
 
 
 WidgetSite::WidgetSite(QWidget *parent, QWidget *widget)
-    : QWidget(parent)
+    : QFrame(parent)
 {
     QString name = QString("WidgetSite-#%1").arg(++sCount);
     setObjectName(name.toAscii());
+
+    setFrameStyle(QFrame::Panel|QFrame::Raised);	// from "scanparams.cpp"
+    setLineWidth(1);
 
     QGridLayout* lay = new QGridLayout(this);
     lay->setRowStretch(0, 1);
@@ -164,6 +172,25 @@ void WidgetSite::setWidget(QWidget *widget)
     widget->show();
 }
 
+
+// ---------------------------------------------------------------------------
+
+// Convenience class for layout splitter.
+
+class WidgetSplitter : public QSplitter
+{
+public:
+    WidgetSplitter(Qt::Orientation orientation, QWidget *parent = NULL);
+};
+
+
+WidgetSplitter::WidgetSplitter(Qt::Orientation orientation, QWidget *parent)
+    : QSplitter(orientation, parent)
+{
+    setChildrenCollapsible(false);
+    setContentsMargins(0, 0, 0, 0);
+    setStretchFactor(1, 1);
+}
 
 
 // ---------------------------------------------------------------------------
@@ -284,19 +311,13 @@ KookaView::KookaView(KMainWindow *parent, const QByteArray &deviceToUse)
     setTabPosition(QTabWidget::West);
     setTabsClosable(false);
 
-    mScanPage = new QSplitter(Qt::Horizontal, this);
-    mScanPage->setChildrenCollapsible(false);
-    mScanPage->setContentsMargins(0, 0, 0, 0);
+    mScanPage = new WidgetSplitter(Qt::Horizontal, this);
     addTab(mScanPage, KIcon("scan"), i18n("Scan"));
 
-    mGalleryPage = new QSplitter(Qt::Horizontal, this);
-    mGalleryPage->setChildrenCollapsible(false);
-    mGalleryPage->setContentsMargins(0, 0, 0, 0);
+    mGalleryPage = new WidgetSplitter(Qt::Horizontal, this);
     addTab(mGalleryPage, KIcon("image-x-generic"), i18n("Gallery"));
 
-    mOcrPage = new QSplitter(Qt::Vertical, this);
-    mOcrPage->setChildrenCollapsible(false);
-    mOcrPage->setContentsMargins(0, 0, 0, 0);
+    mOcrPage = new WidgetSplitter(Qt::Vertical, this);
     addTab(mOcrPage, KIcon("ocr"), i18n("OCR"));
 
     connect(this, SIGNAL(currentChanged(int)), SLOT(slotTabChanged(int)));
@@ -312,32 +333,26 @@ KookaView::KookaView(KMainWindow *parent, const QByteArray &deviceToUse)
     mGalleryImgviewSite = new WidgetSite(this);
     mOcrImgviewSite = new WidgetSite(this);
 
+    // Even widgets that are not shared between tabs are placed in a WidgetSite,
+    // to keep a consistent frame appearance.
+
     // "Scan" page: gallery top left, scan parameters bottom left, preview right
-    mScanSubSplitter = new QSplitter(Qt::Vertical, mScanPage);
-    mScanSubSplitter->setChildrenCollapsible(false);
-    mScanSubSplitter->setContentsMargins(0, 0, 0, 0);
-    mScanSubSplitter->addWidget(mScanGallerySite);		// TL
-    mScanSubSplitter->addWidget(mParamsSite);			// BL
-    mScanPage->addWidget(preview_canvas);			// R
-    mScanPage->setStretchFactor(1, 1);
+    mScanSubSplitter = new WidgetSplitter(Qt::Vertical, mScanPage);
+    mScanSubSplitter->addWidget(mScanGallerySite);			// TL
+    mScanSubSplitter->addWidget(mParamsSite);				// BL
+    mScanPage->addWidget(new WidgetSite(this, preview_canvas));		// R
 
     // "Gallery" page: gallery left, viewer top right, thumbnails bottom right
-    mGalleryPage->addWidget(mGalleryGallerySite);		// L
-    mGallerySubSplitter = new QSplitter(Qt::Vertical, mGalleryPage);
-    mGallerySubSplitter->setChildrenCollapsible(false);
-    mGallerySubSplitter->setContentsMargins(0, 0, 0, 0);
-    mGallerySubSplitter->addWidget(mGalleryImgviewSite);	// TR
-    mGallerySubSplitter->addWidget(m_thumbview);		// BR
-    mGalleryPage->setStretchFactor(1, 1);
+    mGalleryPage->addWidget(mGalleryGallerySite);			// L
+    mGallerySubSplitter = new WidgetSplitter(Qt::Vertical, mGalleryPage);
+    mGallerySubSplitter->addWidget(mGalleryImgviewSite);		// TR
+    mGallerySubSplitter->addWidget(new WidgetSite(this, m_thumbview));	// BR
 
     // "OCR" page: gallery top left, viewer top right, results bottom
-    mOcrSubSplitter = new QSplitter(Qt::Horizontal, mOcrPage);
-    mOcrSubSplitter->setChildrenCollapsible(false);
-    mOcrSubSplitter->setContentsMargins(0, 0, 0, 0);
-    mOcrSubSplitter->addWidget(mOcrGallerySite);		// TL
-    mOcrSubSplitter->addWidget(mOcrImgviewSite);		// TR
-    mOcrPage->addWidget(m_ocrResEdit);				// B
-    mOcrPage->setStretchFactor(1, 1);
+    mOcrSubSplitter = new WidgetSplitter(Qt::Horizontal, mOcrPage);
+    mOcrSubSplitter->addWidget(mOcrGallerySite);			// TL
+    mOcrSubSplitter->addWidget(mOcrImgviewSite);			// TR
+    mOcrPage->addWidget(new WidgetSite(this, m_ocrResEdit));		// B
 
     if (slotSelectDevice(deviceToUse, false)) slotTabChanged(KookaView::TabScan);
     else setCurrentIndex(KookaView::TabGallery);

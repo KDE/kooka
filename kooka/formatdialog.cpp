@@ -157,7 +157,8 @@ FormatDialog::FormatDialog(QWidget *parent, ImgSaver::ImageType type,
     setModal(true);
     setButtons(KDialog::Ok|KDialog::Cancel|KDialog::User1);
     setCaption(askForFormat ? i18n("Save Assistant") : i18n("Save Scan"));
-
+    showButtonSeparator(false);				// we'll add our own later,
+							// otherwise length isn't consistent
     QWidget *page = new QWidget(this);
     setMainWidget(page);
 
@@ -177,7 +178,6 @@ FormatDialog::FormatDialog(QWidget *parent, ImgSaver::ImageType type,
     m_wantAssistant = false;
 
     QGridLayout *gl = new QGridLayout(page);
-    gl->setSpacing(KDialog::spacingHint());
     int row = 0;
 
     QLabel *l1;
@@ -224,7 +224,6 @@ FormatDialog::FormatDialog(QWidget *parent, ImgSaver::ImageType type,
         l_help->setFrameStyle(QFrame::Panel|QFrame::Sunken);
         l_help->setAlignment(Qt::AlignLeft|Qt::AlignTop);
         l_help->setMinimumSize(230,200);
-        l_help->setMargin(4);
         l_help->setWordWrap(true);
         gl->addWidget(l_help, row, 1, 4, 2);
 
@@ -286,6 +285,10 @@ FormatDialog::FormatDialog(QWidget *parent, ImgSaver::ImageType type,
 
         if (!askForFormat) setButtonText(KDialog::User1, i18n("Select Format..."));
     }
+
+    sep = new KSeparator(Qt::Horizontal, page);
+    gl->addWidget(sep, row, 0, 1, 3);
+    ++row;
 
     if (lb_format!=NULL)				// have the format selector
     {							// preselect the remembered format
