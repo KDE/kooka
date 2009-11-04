@@ -25,6 +25,7 @@
 #include <qlabel.h>
 
 
+#define DEFAULT_SMALL		(1024)			// 1Kb
 #define DEFAULT_THRESHOLD	(1*1024*1024)		// 1Mb
 #define DEFAULT_CRITICAL	(4*1024*1024)		// 4Mb
 

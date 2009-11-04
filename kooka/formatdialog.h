@@ -22,14 +22,18 @@
 #include <qcheckbox.h>
 
 #include <kdialog.h>
+#include <kmimetype.h>
 
 #include "imgsaver.h"
+#include "imageformat.h"
+
 
 class QComboBox;
 class QLabel;
 class QLineEdit;
 class QListWidget;
 class QListWidgetItem;
+
 
 /**
  *  Class FormatDialog:
@@ -43,21 +47,21 @@ class FormatDialog : public KDialog
 
 public:
     FormatDialog(QWidget *parent, ImgSaver::ImageType type,
-                 bool askForFormat, const QString &format,
+                 bool askForFormat, const ImageFormat &format,
                  bool askForFilename, const QString &filename);
 
-    QString getFormat() const;
+    ImageFormat getFormat() const;
     QByteArray getSubFormat() const;
     QString getFilename() const;
-    bool alwaysUseFormat() const { return (cbDontAsk!=NULL ? cbDontAsk->isChecked() : false); }
-    bool useAssistant() const { return (m_wantAssistant); }
+    bool alwaysUseFormat() const { return (mDontAskCheck!=NULL ? mDontAskCheck->isChecked() : false); }
+    bool useAssistant() const { return (mWantAssistant); }
 
-    void setSelectedFormat(const QString &format);
+    void setSelectedFormat(const ImageFormat &format);
 
     static void forgetRemembered();
 
 protected:
-    virtual void show();
+    virtual void showEvent(QShowEvent *ev);
 
 protected slots:
     void slotOk();
@@ -69,25 +73,26 @@ private slots:
     void formatSelected(QListWidgetItem *item);
 
 private:
-    void check_subformat(const QString &format);
-    void showExtension(const QString &format);
+    void check_subformat(const ImageFormat &format);
+    void showExtension(const ImageFormat &format);
 
-    QStringList formatList;
-    ImgSaver::ImageType imgType;
+    KMimeType::List mMimeTypes;
 
-    QComboBox *cb_subf;
-    QListWidget *lb_format;
-    QCheckBox *cbDontAsk;
-    QCheckBox *cbRecOnly;
-    QLabel *l_help;
-    QLabel *l_subf;
+    ImgSaver::ImageType mImageType;
 
-    QLineEdit *le_filename;
-    QLabel *l_ext;
+    QComboBox *mSubformatCombo;
+    QListWidget *mFormatList;
+    QCheckBox *mDontAskCheck;
+    QCheckBox *mRecOnlyCheck;
+    QLabel *mHelpLabel;
+    QLabel *mSubformatLabel;
 
-    QString m_format;
-    QString m_filename;
-    bool m_wantAssistant;
+    QLineEdit *mFilenameEdit;
+    QLabel *mExtensionLabel;
+
+    ImageFormat mFormat;
+    QString mFilename;
+    bool mWantAssistant;
 };
 
 #endif							// FORMATDIALOG_H

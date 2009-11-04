@@ -28,16 +28,16 @@
 #define KOOKAIMAGE_H
 
 #include <qimage.h>
-#include <qlist.h>
 #include <qvector.h>
 #include <qrect.h>
 
 #include <kurl.h>
-#include <kmimetype.h>
 
 #include <kfilemetainfo.h>
 
 class KFileItem;
+class KUrl;
+
 
 /**
   * @author Klaas Freitag
@@ -92,7 +92,6 @@ public:
      */
     void extractNow();
 
-    KUrl url() const { return m_url; }
     QString localFileName() const;
 
     /**
@@ -112,6 +111,7 @@ public:
      * url automatically.
      */
     void setUrl(const KUrl &url) { m_url = url; }
+    KUrl url() const { return m_url; }
 
     /**
      * checks if the image is file bound ie. was loaded from file. If this
@@ -141,18 +141,6 @@ public:
     int subNumber() const { return m_subNo; }
 
 
-
-    // Useful things now missing from KImageIO
-    static KMimeType::Ptr mimeForFormat(const QString &format);
-    static QString extensionForFormat(const QString &format);
-    // TODO: format handling seems to be a mix of QString and QByteArray
-    static QString formatForUrl(const KUrl &url);
-    static bool canWriteFormat(const QString &format);
-    static QString iconForFormat(const QString &format);
-
-
-
-
 private:
     int 		m_subImages;
     bool                loadTiffDir( const QString&, int );
@@ -172,7 +160,5 @@ private:
     int                 m_tileCols;  /* number of tile columns  */
 };
 
-
-//typedef QList<KookaImage *> KookaImageList;
 
 #endif							// KOOKAIMAGE_H

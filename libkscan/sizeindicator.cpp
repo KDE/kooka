@@ -87,22 +87,27 @@ void SizeIndicator::paintEvent(QPaintEvent *ev)
     KColorScheme sch(QPalette::Normal, KColorScheme::Button);
 
     QLinearGradient g;
-    g.setStart(0, h/2);
 
-    if (mSizeInByte<mThreshold)
+    if (mSizeInByte<DEFAULT_SMALL)
     {
-        g.setFinalStop(w*(1.0-(double(mSizeInByte)/mThreshold)), h/2);
+        p.fillRect(0, 0, w, h, sch.background(KColorScheme::PositiveBackground).color());
+    }
+    else if (mSizeInByte<mThreshold)
+    {
+        int t = w*(1.0-(double(mSizeInByte-DEFAULT_SMALL)/(mThreshold-DEFAULT_SMALL)));
+        g.setStart(t-w/5, h/2);
+        g.setFinalStop(t+w/5, h/2);
         g.setColorAt(0, sch.background(KColorScheme::PositiveBackground).color());
         g.setColorAt(1, sch.background(KColorScheme::NeutralBackground).color());
-
         p.fillRect(0, 0, w, h, QBrush(g));
     }
     else if (mSizeInByte<mCritical)
     {
-        g.setFinalStop(w*(1.0-(double(mSizeInByte-mThreshold)/(mCritical-mThreshold))), h/2);
+        int t = w*(1.0-(double(mSizeInByte-mThreshold)/(mCritical-mThreshold)));
+        g.setStart(t-w/5, h/2);
+        g.setFinalStop(t+w/5, h/2);
         g.setColorAt(0, sch.background(KColorScheme::NeutralBackground).color());
         g.setColorAt(1, sch.background(KColorScheme::NegativeBackground).color());
-
         p.fillRect(0, 0, w, h, QBrush(g));
     }
     else

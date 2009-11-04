@@ -349,8 +349,8 @@ void ScanPackager::slotDecorate(K3FileTreeViewItem *item)
     {
         KFileItem kfi = item->fileItem();
 
-        QString format = getImgFormat(item);		// this is safe for any file
-        item->setText(2,(" "+format.toUpper()+" "));
+        ImageFormat format = getImgFormat(item);	// this is safe for any file
+        item->setText(2,(" "+format.name()+" "));
 
         const KookaImage *img = imageForItem(item);
         if (img!=NULL)					// image appears to be loaded
@@ -367,7 +367,7 @@ void ScanPackager::slotDecorate(K3FileTreeViewItem *item)
         }
         else						// not yet loaded, show file info
         {
-            if (!format.isEmpty())			// if a valid image file
+            if (format.isValid())			// if a valid image file
             {
                 item->setPixmap(0, mPixFloppy);
                 if (!kfi.isNull()) item->setText(1, KIO::convertSize(kfi.size()));
@@ -481,17 +481,17 @@ void ScanPackager::slotFileRename(Q3ListViewItem *it,const QString &newName)
  * Method that checks if the new filename a user enters while renaming an image is valid.
  * It checks for a proper extension.
  */
-QString ScanPackager::buildNewFilename(const QString &cmplFilename, const QString &currFormat ) const
+QString ScanPackager::buildNewFilename(const QString &cmplFilename, const ImageFormat &currFormat)
 {
    /* cmplFilename = new name the user wishes.
     * currFormat   = the current format of the image.
     * if the new filename has a valid extension, which is the same as the
     * format of the current, fine. A ''-String has to be returned.
     */
-   QFileInfo fiNew( cmplFilename );
+   QFileInfo fiNew(cmplFilename);
    QString base = fiNew.baseName();
    QString newExt = fiNew.suffix().toLower();
-   QString nowExt = KookaImage::extensionForFormat(currFormat);
+   QString nowExt = currFormat.extension();
    QString ext = "";
 
    kDebug() << "Filename wanted:"<< cmplFilename << "ext" << nowExt << "->" << newExt;
@@ -499,7 +499,7 @@ QString ScanPackager::buildNewFilename(const QString &cmplFilename, const QStrin
    if( newExt.isEmpty() )
    {
       /* ok, fine -> return the currFormat-Extension */
-      ext = base + "." + currFormat;
+      ext = base + "." + nowExt;
    }
    else if( newExt == nowExt )
    {
@@ -509,10 +509,10 @@ QString ScanPackager::buildNewFilename(const QString &cmplFilename, const QStrin
    else
    {
       /* new Ext. differs from the current extension. Later. */
-      KMessageBox::sorry( 0L, i18n( "You entered a file extension that differs from the existing one. That is not yet possible. Converting 'on the fly' is planned for a future release.\n"
+      KMessageBox::sorry(NULL, i18n( "You entered a file extension that differs from the existing one. That is not yet possible. Converting 'on the fly' is planned for a future release.\n"
 				      "Kooka corrects the extension."),
 			  i18n("On the Fly Conversion"));
-      ext = base + "." + currFormat;
+      ext = base + "." + nowExt;
    }
    return( ext );
 }
@@ -648,8 +648,8 @@ void ScanPackager::loadImageForItem(K3FileTreeViewItem *item)
 
     kDebug() << "loading" << item->url();
 
-    QString format = getImgFormat(item);		// check for valid image format
-    if (format.isEmpty())
+    ImageFormat format = getImgFormat(item);		// check for valid image format
+    if (!format.isValid())
     {
         kDebug() << "not a valid image format!";
         return;
@@ -770,19 +770,19 @@ QString ScanPackager::getCurrImageFileName( bool withPath = true ) const
 }
 
 
-QByteArray ScanPackager::getImgFormat(const K3FileTreeViewItem *item)
+ImageFormat ScanPackager::getImgFormat(const K3FileTreeViewItem *item)
 {
-    if (item==NULL) return ("");
+    if (item==NULL) return (ImageFormat(""));
 
     KFileItem kfi = item->fileItem();
-    if (kfi.isNull()) return ("");
+    if (kfi.isNull()) return (ImageFormat(""));
 
     // Check that this is a plausible image format (MIME type = "image/anything")
     // before trying to get the image type.
     QString mimetype = kfi.mimetype();
-    if (!mimetype.startsWith("image/")) return ("");
+    if (!mimetype.startsWith("image/")) return (ImageFormat(""));
 
-    return (KookaImage::formatForUrl(kfi.url()).toLocal8Bit());
+    return (ImageFormat::formatForUrl(kfi.url()));
 }
 
 
@@ -815,8 +815,8 @@ void ScanPackager::slotCurrentImageChanged(const QImage *img)
     slotUnloadItem(curr);
 
     const QString filename = localFileName(curr);
-    const QByteArray format = getImgFormat(curr);
-    if (format.isEmpty())				// not an image, should never happen
+    const ImageFormat format = getImgFormat(curr);
+    if (!format.isValid())				// not an image, should never happen
     {
         kDebug() << "not a valid image format!";
         return;
@@ -990,8 +990,8 @@ void ScanPackager::slotExportFile()
     KUrl fromUrl(curr->url());
 
     QString filter;
-    QByteArray format = getImgFormat(curr);
-    if (!format.isEmpty()) filter = "*."+KookaImage::extensionForFormat(format)+"\n";
+    ImageFormat format = getImgFormat(curr);
+    if (format.isValid()) filter = "*."+format.extension()+"\n";
     filter += "*|"+i18n("All Files");
 
     QString initial = "kfiledialog:///exportImage/"+fromUrl.fileName();
@@ -1252,17 +1252,6 @@ void ScanPackager::slotCreateFolder( )
 	    }
 	 }
    }
-}
-
-
-/* ----------------------------------------------------------------------- */
-QString ScanPackager::getImgName( QString name_on_disk )
-{
-   QString s;
-   (void) name_on_disk;
-
-   s = i18n("image %1", img_counter++);
-   return( s );
 }
 
 

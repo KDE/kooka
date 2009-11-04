@@ -26,8 +26,8 @@
 
 #include "imgsaver.h"
 
-#include <QtCore/QDir>
-#include <QtCore/QRegExp>
+#include <qdir.h>
+#include <qregexp.h>
 
 #include <kglobal.h>
 #include <kconfig.h>
@@ -41,6 +41,7 @@
 #include <kio/job.h>
 #include <kio/netaccess.h>
 
+#include "imageformat.h"
 #include "kookaimage.h"
 #include "kookapref.h"
 #include "formatdialog.h"
@@ -60,7 +61,6 @@ ImgSaver::ImgSaver(const KUrl &dir)
     }
 
     createDir(m_saveDirectory);				// ensure save location exists
-    last_format = "";					// nothing saved yet
 }
 
 
@@ -107,7 +107,7 @@ ImgSaveStat ImgSaver::saveImage(const QImage *image)
     }
 
     QString saveFilename = createFilename();		// find next unused filename
-    QString saveFormat = findFormat(imgType);		// find saved image format
+    ImageFormat saveFormat = findFormat(imgType);	// find saved image format
     QString saveSubformat = findSubFormat(saveFormat);	// currently not used
 							// get dialogue preferences
     const KConfigGroup grp = KGlobal::config()->group(OP_SAVER_GROUP);
@@ -121,7 +121,7 @@ ImgSaveStat ImgSaver::saveImage(const QImage *image)
              << "format=" << saveFormat
              << "subformat=" << saveSubformat;
 
-    while (saveFormat.isEmpty() || m_saveAskFormat || m_saveAskFilename)
+    while (!saveFormat.isValid() || m_saveAskFormat || m_saveAskFilename)
     {							// is a dialogue neeeded?
         FormatDialog fd(NULL,imgType,m_saveAskFormat,saveFormat,m_saveAskFilename,saveFilename);
         if (!fd.exec()) return (ISS_SAVE_CANCELED);	// do the dialogue
@@ -136,9 +136,9 @@ ImgSaveStat ImgSaver::saveImage(const QImage *image)
         saveFormat = fd.getFormat();			// get results from that
         saveSubformat = fd.getSubFormat();
 
-        if (!saveFormat.isEmpty())			// have a valid format
+        if (saveFormat.isValid())			// have a valid format
         {
-            if (fd.alwaysUseFormat()) storeFormatForType(imgType,saveFormat);
+            if (fd.alwaysUseFormat()) storeFormatForType(imgType, saveFormat);
             break;					// save format for future
         }
     }
@@ -150,7 +150,7 @@ ImgSaveStat ImgSaver::saveImage(const QImage *image)
 
     QString fi = m_saveDirectory+QDir::separator()+saveFilename;
 							// full path to save
-    QString ext = KookaImage::extensionForFormat(saveFormat);
+    QString ext = saveFormat.extension();
     if (extension(fi)!=ext)				// already has correct extension?
     {
         fi +=  ".";					// no, add it on
@@ -167,11 +167,8 @@ ImgSaveStat ImgSaver::saveImage(const QImage *image)
  **/
 ImgSaveStat ImgSaver::saveImage(const QImage *image,
                                 const KUrl &url,
-                                const QString &imgFormat)
+                                const ImageFormat &format)
 {
-    QString format = imgFormat;
-    if (format.isEmpty()) format = "BMP";
-
     return (save(image, url, format));
 }
 
@@ -182,15 +179,15 @@ ImgSaveStat ImgSaver::saveImage(const QImage *image,
 **/
 ImgSaveStat ImgSaver::save(const QImage *image,
                            const KUrl &url,
-                           const QString &format,
+                           const ImageFormat &format,
                            const QString &subformat)
 {
-    if (format.isEmpty() || image==NULL) return (ISS_ERR_PARAM);
+    if (image==NULL) return (ISS_ERR_PARAM);
 
     kDebug() << "to" << url.prettyUrl() << "format" << format << "subformat" << subformat;
 
-    last_format = format.toLatin1();			// save for error message later
-    last_url = url;
+    mLastFormat = format.name();			// save for error message later
+    mLastUrl = url;
 
     if (!url.isLocalFile())				// file must be local
     {
@@ -219,13 +216,13 @@ ImgSaveStat ImgSaver::save(const QImage *image,
         return (ISS_ERR_PERM);
     }
 
-    if (!KookaImage::canWriteFormat(format))		// check the format, is it writable?
+    if (!format.canWrite())				// check format, is it writable?
     {
         kDebug() << "Cannot write format" << format;
         return (ISS_ERR_FORMAT_NO_WRITE);
     }
 
-    bool result = image->save(filename, last_format);
+    bool result = image->save(filename, format.name());
     return (result ? ISS_OK : ISS_ERR_UNKNOWN);
 }
 
@@ -258,19 +255,15 @@ QString ImgSaver::createFilename()
  * the image type in question.
  */
 
-QString ImgSaver::findFormat(ImgSaver::ImageType type)
+ImageFormat ImgSaver::findFormat(ImgSaver::ImageType type)
 {
-    if (type==ImgSaver::ImgThumbnail) return ("BMP");	// thumbnail always this format
-    if (type==ImgSaver::ImgPreview) return ("BMP");	// preview always this format
-							// real images from here on
-    QString format = getFormatForType(type);
+    if (type==ImgSaver::ImgThumbnail) return (ImageFormat("BMP"));	// thumbnail always this format
+    if (type==ImgSaver::ImgPreview) return (ImageFormat("BMP"));	// preview always this format
+									// real images from here on
+    ImageFormat format = getFormatForType(type);
     kDebug() << "format for type" << type << "=" << format;
     return (format);
 }
-
-
-
-
 
 
 QString ImgSaver::picTypeAsString(ImgSaver::ImageType type)
@@ -304,18 +297,14 @@ default:
 }
 
 
-
-
 /*
  *  This method returns true if the image format given in format is remembered
  *  for that image type.
  */
-bool ImgSaver::isRememberedFormat(ImgSaver::ImageType type, const QString &format)
+bool ImgSaver::isRememberedFormat(ImgSaver::ImageType type, const ImageFormat &format)
 {
     return (getFormatForType(type)==format);
 }
-
-
 
 
 const char *configKeyFor(ImgSaver::ImageType type)
@@ -333,15 +322,14 @@ default:                    kDebug() << "unknown type" << type;
 }
 
 
-
-QString ImgSaver::getFormatForType(ImgSaver::ImageType type)
+ImageFormat ImgSaver::getFormatForType(ImgSaver::ImageType type)
 {
     const KConfigGroup grp = KGlobal::config()->group(OP_SAVER_GROUP);
-    return (grp.readEntry(configKeyFor(type), ""));
+    return (ImageFormat(grp.readEntry(configKeyFor(type), "").toLocal8Bit()));
 }
 
 
-void ImgSaver::storeFormatForType(ImgSaver::ImageType type,const QString &format)
+void ImgSaver::storeFormatForType(ImgSaver::ImageType type, const ImageFormat &format)
 {
     KConfigGroup grp = KGlobal::config()->group(OP_SAVER_GROUP);
 
@@ -360,18 +348,16 @@ void ImgSaver::storeFormatForType(ImgSaver::ImageType type,const QString &format
     //  konf->writeEntry( OP_FILE_ASK_FORMAT, ask );
     //  m_saveAskFormat = ask;
 
-    grp.writeEntry(configKeyFor(type), format);
+    grp.writeEntry(configKeyFor(type), format.name());
     grp.sync();
 }
 
 
-
-QString ImgSaver::findSubFormat(const QString &format)
+QString ImgSaver::findSubFormat(const ImageFormat &format)
 {
     kDebug() << "for" << format;
     return (QString::null);				// no subformats currently used
 }
-
 
 
 QString ImgSaver::errorString(ImgSaveStat stat)
@@ -383,9 +369,9 @@ case ISS_OK:			re = i18n("Save OK");			break;
 case ISS_ERR_PERM:		re = i18n("Permission denied");		break;
 case ISS_ERR_FILENAME:		re = i18n("Bad file name");		break;  // never used
 case ISS_ERR_NO_SPACE:		re = i18n("No space left on device");	break;	// never used
-case ISS_ERR_FORMAT_NO_WRITE:	re = i18n("Cannot write image format '%1'",last_format.data());
+case ISS_ERR_FORMAT_NO_WRITE:	re = i18n("Cannot write image format '%1'",mLastFormat.constData());
 									break;
-case ISS_ERR_PROTOCOL:		re = i18n("Cannot write using protocol '%1'",last_url.protocol());
+case ISS_ERR_PROTOCOL:		re = i18n("Cannot write using protocol '%1'",mLastUrl.protocol());
 									break;
 case ISS_SAVE_CANCELED:		re = i18n("User cancelled saving");	break;
 case ISS_ERR_MKDIR:		re = i18n("Cannot create directory");	break;
@@ -401,20 +387,15 @@ default:			re = i18n("Unknown status %1",stat);
 QString ImgSaver::extension(const KUrl &url)
 {
     return (KMimeType::extractKnownExtension(url.pathOrUrl()));
-//    QString extension = url.fileName();
-//    int dotPos = extension.findRev('.');		// find last separator
-//    if( dotPos>0) extension = extension.mid(dotPos+1);	// extract from filename
-//    else extension = QString::null;			// no extension
-//    return (extension);
 }
 
 
-QString ImgSaver::tempSaveImage(const KookaImage *img, const QString &format, int colors)
+QString ImgSaver::tempSaveImage(const KookaImage *img, const ImageFormat &format, int colors)
 {
     if (img==NULL) return (QString::null);
 
     KTemporaryFile tmpFile;
-    tmpFile.setSuffix("."+format.toLower());
+    tmpFile.setSuffix("."+format.extension());
     tmpFile.setAutoRemove(false);
 
     if (!tmpFile.open())
@@ -457,8 +438,8 @@ default:    kDebug() << "Error: Bad color depth requested" << colors;
         img = &tmpImg;
     }
 
-    kDebug() << "Saving to" << name << "in format" << format.toUpper();
-    if (!img->save(name, format.toLatin1()))
+    kDebug() << "Saving to" << name << "in format" << format;
+    if (!img->save(name, format.name()))
     {
         kDebug() << "Error saving to" << name;
         tmpFile.setAutoRemove(true);

@@ -114,6 +114,7 @@ set(kooka_SRCS
   formatdialog.cpp
   kookaimage.cpp
   kookaimagemeta.cpp
+  imageformat.cpp
   scanpackager.cpp		# -> ?
   imagenamecombo.cpp
   imageselectline.cpp

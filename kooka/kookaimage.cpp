@@ -29,7 +29,8 @@
 #include <kdebug.h>
 #include <kurl.h>
 #include <kfileitem.h>
-#include <kimageio.h>
+
+#include "imageformat.h"
 
 #ifdef HAVE_TIFF
 extern "C"
@@ -51,6 +52,7 @@ KookaImage::KookaImage()
     kDebug();
 }
 
+
 /* constructor for subimages */
 KookaImage::KookaImage(int subNo, KookaImage *p)
     : QImage(),
@@ -66,13 +68,15 @@ KookaImage::KookaImage(int subNo, KookaImage *p)
 
 
 KookaImage::KookaImage(const QImage &img)
-    : QImage(img)
-    // m_subImages( 1 )
+    : QImage(img),
+      m_subImages(0)
 {
     kDebug();
+}
 
-    /* Load one QImage, can not be Tiff yet. */
-    m_subImages = 0;
+
+KookaImage::~KookaImage()
+{
 }
 
 
@@ -145,15 +149,15 @@ bool KookaImage::loadFromUrl(const KUrl &url)
     }
 
     QString filename = localFileName();
-    QString format = KookaImage::formatForUrl(url);
+    ImageFormat format = ImageFormat::formatForUrl(url);
 
     KMimeType::Ptr mime = KMimeType::findByUrl(url, 0, true);
     if (mime->is("image/tiff"))				// check MIME for TIFF file
     {
         isTiff = true;					// note that for later
-        if (format.isEmpty())				// if format wasn't recognised,
+        if (!format.isValid())				// if format wasn't recognised,
         {
-            format = "TIF";				// set it now
+            format = ImageFormat("TIF");		// set it now
             kDebug() << "Setting format to TIFF by MIME type";
         }
     }
@@ -235,7 +239,7 @@ bool KookaImage::loadTiffDir(const QString &filename, int no)
     // and then read the TIFF image into the image data as returned by bits().
     //
     // This is not possible on Qt4, where the size/depth of a QImage is set in
-    // its constructor and cannot be subsequently changed.  Insteat we read
+    // its constructor and cannot be subsequently changed.  Instead we read
     // the TIFF file into a temporary image and then use QImage::operator=
     // to shallow copy that temporary image into ours.  After that temporary
     // image has been destroyed, we have the only copy of the TIFF read image.
@@ -293,11 +297,6 @@ bool KookaImage::loadTiffDir(const QString &filename, int no)
 int KookaImage::subImagesCount() const
 {
     return (m_subImages);
-}
-
-
-KookaImage::~KookaImage()
-{
 }
 
 
@@ -383,94 +382,4 @@ QRect KookaImage::getTileRect(int rowPos, int colPos) const
     int indx = rowPos*m_tileCols+colPos;
     kDebug() << "Tile index" << indx;
     return (m_tileVector[(rowPos)*m_tileCols + colPos]);
-}
-
-
-
-
-// Get the MIME icon name for a Qt image format.
-
-QString KookaImage::iconForFormat(const QString &format)
-{
-    QString suf = format.toLower();
-
-    // work around returning "folder" for unknown types
-    QString name = KMimeType::iconNameForUrl("/tmp/x."+suf);
-    if (name=="folder") name = "unknown";
-    kDebug() << "for" << format << "returning" << name;
-    return (name);
-}
-
-
-// Get the MIME type for a Qt image format.  This assumes that the
-// KDE MIME type system will always recognise a file with the Qt
-// image format key as extension.
-
-KMimeType::Ptr KookaImage::mimeForFormat(const QString &format)
-{
-    QString suf = format.toLower();
-    KMimeType::Ptr mime = KMimeType::findByPath("/tmp/x."+suf, 0, true);
-
-    if (mime->isDefault())
-    {
-        kDebug() << "no MIME type for image format" << format;
-        return (KMimeType::Ptr());
-    }
-    else return (mime);
-}
-
-
-// KImageIO::suffix(format) seems to be no longer present, with no
-// equivalent available.  The lookup here is to get the preferred
-// file extension for the Qt image format.
-//
-// The dot is not included in the result, unlike KMimeType::mainExtension()
-
-QString KookaImage::extensionForFormat(const QString &format)
-{
-    QString suf = format.toLower();
-    KMimeType::Ptr mime = mimeForFormat(format);
-    if (!mime.isNull())
-    {
-        QString ext = mime->mainExtension();
-        if (!ext.isEmpty()) suf = ext;
-    }
-
-    if (suf.startsWith('.')) suf = suf.mid(1);
-    kDebug() << "for" << format << "returning" << suf;
-    return (suf);
-}
-
-
-// KImageIO::typeForMime() returns a list of possible formats.
-// Normally we assume that there will only be one, but possibly
-// there may be more.  This lookup just takes the first one.
-
-QString KookaImage::formatForUrl(const KUrl &url)
-{
-    KMimeType::Ptr mime = KMimeType::findByUrl(url, 0, true);
-    QStringList formats = KImageIO::typeForMime(mime->name());
-    int fcount = formats.count();			// get format from file name
-    if (fcount==0)					// no MIME/Qt type found
-    {
-        kDebug() << "no format found for MIME type" << mime->name();
-        return (QString::null);
-    }
-    if (fcount>1)					// more than one type found
-    {
-        kDebug() << "found" << fcount << "formats for MIME type" << mime->name();
-    }
-
-    return (formats.first());
-}
-
-
-// Wrapper for KImageIO::isSupported() that takes a format name instead
-// of a MIME type.
-
-bool KookaImage::canWriteFormat(const QString &format)
-{
-    KMimeType::Ptr mime = mimeForFormat(format);
-    if (mime.isNull()) return (false);
-    else return (KImageIO::isSupported(mime->name(), KImageIO::Writing));
 }

@@ -37,6 +37,7 @@
 #include <kmessagebox.h>
 
 #include "imgsaver.h"
+#include "imageformat.h"
 #include "ocrocraddialog.h"
 
 
@@ -90,8 +91,8 @@ void OcrOcradEngine::startProcess(OcrBaseDialog *dia,KookaImage *img)
     ocradVersion = parentDialog->getNumVersion();
     const QString cmd = parentDialog->getOCRCmd();
 
-    m_ocrResultImage = ImgSaver::tempSaveImage(img,"BMP",8);
-    m_ocrImagePBM = ImgSaver::tempSaveImage(img,"PBM",1);
+    m_ocrResultImage = ImgSaver::tempSaveImage(img, ImageFormat("BMP"), 8);
+    m_ocrImagePBM = ImgSaver::tempSaveImage(img, ImageFormat("PBM"), 1);
 
     KTemporaryFile tmpOrf;				// temporary file for ORF result
     tmpOrf.setSuffix(".orf");
@@ -415,7 +416,8 @@ QString OcrOcradEngine::readORF(const QString &fileName)
 			}
 			if( lineNo<m_ocrPage.size() )
 			{
-			    kDebug() << "Store result line no" << lineNo << "=" << ocrLine.first();
+			    kDebug() << "Store result line no" << lineNo
+                                     << "=" << (ocrLine.isEmpty() ? OcrWord("(empty)") : ocrLine.first());
 			    m_ocrPage[lineNo] = ocrLine;
 			    lineNo++;
 			}

@@ -40,6 +40,7 @@
 
 #include "imgsaver.h"
 #include "kookaimage.h"
+#include "imageformat.h"
 #include "ocrgocrdialog.h"
 
 
@@ -88,13 +89,13 @@ void OcrGocrEngine::startProcess(OcrBaseDialog *dia,KookaImage *img)
     OcrGocrDialog *gocrDia = static_cast<OcrGocrDialog *>(dia);
     const QString cmd = gocrDia->getOCRCmd();
 
-    QString format;
+    const char *format;
     if (img->depth()== 1) format = "PBM";		// B&W bitmap
     else if (img->isGrayscale()) format = "PGM";	// greyscale
     else format = "PPM";				// colour
 
-    m_tempFile = ImgSaver::tempSaveImage(img,format);	// save image to a temp file
-
+    m_tempFile = ImgSaver::tempSaveImage(img,ImageFormat(format));
+							// save image to a temp file
     m_ocrResultImage = QString::null;			// don't know this until finished
 
     if (daemon!=NULL) delete daemon;			// kill old process if still there

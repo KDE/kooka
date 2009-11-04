@@ -12,6 +12,7 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} /ws/trunk/kdepim/cmake/modules)
 
 ############### Build Options ###############
 
+option(SANECONFIG_BIN "Path to the sane-config(1) binary, needed to get SANE configuration" OFF)
 
 ############### search packages used by KDE ###############
 
@@ -38,11 +39,7 @@ endif(WIN32)
 
 ############### Find the stuff we need ###############
 
-
-# Support for SANE
-option(SANECONFIG_BIN "Path to the sane-config(1) binary, needed to get SANE configuration" OFF)
-
-
+# Support for SANE, here because library and sanedump both need it
 if (SANECONFIG_BIN)
   set(SANECONFIG_PROG ${SANECONFIG_BIN})
   message(STATUS "Specified sane-config(1), ${SANECONFIG_PROG}")
@@ -56,8 +53,6 @@ if (SANECONFIG_PROG)
 else (SANECONFIG_PROG)
   message(SEND_ERROR "libkscan needs SANE (http://www.sane-project.org) - specify location of sane-config(1) with SANECONFIG_BIN")
 endif (SANECONFIG_PROG)
-
-
 
 if (HAVE_SANE)
   execute_process(COMMAND ${SANECONFIG_PROG} --version OUTPUT_VARIABLE SANE_VERSION OUTPUT_STRIP_TRAILING_WHITESPACE)
@@ -82,6 +77,7 @@ include_directories(${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR} ${KDE4_INCLUDES} ${Q
 
 
 ############### Support for the SVN revision number in svnversion.h ###############
+
 if (EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/.svn")
   if (NOT KdeSubversion_FOUND)
     find_package(KdeSubversion)
@@ -107,8 +103,6 @@ endif (EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/.svn")
 
 configure_file(svnversion.h.in ${CMAKE_CURRENT_BINARY_DIR}/svnversion.h)
 
-
-
 ########### clobbering ###############
 
 add_custom_target(clobber
@@ -120,13 +114,11 @@ add_custom_target(clobber
   COMMAND sh -c "rm -r -f CMakeFiles"
 )
 
-
-
 ############### Now, we add the Kooka components ###############
 
 add_subdirectory(libkscan)
 add_subdirectory(kooka)
-add_subdirectory(sanedump EXCLUDE_FROM_ALL)
+add_subdirectory(tools EXCLUDE_FROM_ALL)
 
 
 

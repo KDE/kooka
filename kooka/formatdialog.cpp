@@ -32,103 +32,112 @@
 #include <kconfig.h>
 #include <kimageio.h>
 
-//#include "imgsaver.h"
-#include "kookaimage.h"
+#include "imageformat.h"
 
 
 struct formatInfo
 {
-    const char *format;
+    const char *mime;
     const char *helpString;
     int recForTypes;
 };
 
 
-// TODO: there are more types now, this list needs extending.  Also the list
-// (even after cleaning up) includes some synonyms, e.g. TIF for TIFF.  Need
-// to get information for TIFF when TIF is requested, preferably without having
-// to duplicate the help strings.
 static struct formatInfo formats[] =
 {
-    { "BMP", I18N_NOOP(
+    { "image/bmp",					// BMP
+      I18N_NOOP(
 "<b>Bitmap Picture</b> is a widely used format for images under MS Windows. \
 It is suitable for color, grayscale and line art images.\
 <p>This format is widely supported but is not recommended, use an open format \
 instead."),
       ImgSaver::ImgNone },
 
-    { "PBM", I18N_NOOP(
+    { "image/x-portable-bitmap",			// PBM
+      I18N_NOOP(
 "<b>Portable Bitmap</b>, as used by Netpbm, is an uncompressed format for line art \
 (bitmap) images. Only 1 bit per pixel depth is supported."),
       ImgSaver::ImgBW },
 
-    { "PGM", I18N_NOOP(
+    { "image/x-portable-graymap",			// PGM
+      I18N_NOOP(
 "<b>Portable Greymap</b>, as used by Netpbm, is an uncompressed format for grayscale \
 images. Only 8 bit per pixel depth is supported."),
       ImgSaver::ImgGray },
 
-    { "PPM", I18N_NOOP(
+    { "image/x-portable-pixmap",			// PPM
+      I18N_NOOP(
 "<b>Portable Pixmap</b>, as used by Netpbm, is an uncompressed format for full color \
 images. Only 24 bit per pixel RGB is supported."),
       ImgSaver::ImgColor|ImgSaver::ImgHicolor },
 
-      { "PCX", I18N_NOOP(
+    { "image/x-pcx",					// PCX
+      I18N_NOOP(
 "This is a lossless compressed format which is often supported by PC imaging \
 applications, although it is rather old and unsophisticated.  It is suitable for \
 color and grayscale images.\
 <p>This format is not recommended, use an open format instead."),
-        ImgSaver::ImgNone },
+      ImgSaver::ImgNone },
 
-    { "XBM", I18N_NOOP(
+    { "image/x-xbitmap",				// XBM
+      I18N_NOOP(
 "<b>X Bitmap</b> is often used by the X Window System to store cursor and icon bitmaps.\
 <p>Unless required for this purpose, use a general purpose format instead."),
       ImgSaver::ImgNone },
 
-    { "XPM", I18N_NOOP(
+    { "image/x-xpixmap",				// XPM
+      I18N_NOOP(
 "<b>X Pixmap</b> is often used by the X Window System for color icons and other images.\
 <p>Unless required for this purpose, use a general purpose format instead."),
       ImgSaver::ImgNone },
 
-    { "PNG", I18N_NOOP(
+    { "image/png",					// PNG
+      I18N_NOOP(
 "<b>Portable Network Graphics</b> is a lossless compressed format designed to be \
 portable and extensible. It is suitable for any type of color or grayscale images, \
 indexed or true color.\
 <p>PNG is an open format which is widely supported."),
       ImgSaver::ImgBW|ImgSaver::ImgColor|ImgSaver::ImgGray|ImgSaver::ImgHicolor },
 
-    { "JPEG", I18N_NOOP(
+    { "image/jpeg",					// JPEG JPG
+      I18N_NOOP(
 "<b>JPEG</b> is a compressed format suitable for true color or grayscale images. \
 It is a lossy format, so it is not recommended for archiving or for repeated loading \
 and saving.\
 <p>This is an open format which is widely supported."),
       ImgSaver::ImgHicolor|ImgSaver::ImgGray },
 
-    { "JP2", I18N_NOOP(
+    { "image/jp2",					// JP2
+      I18N_NOOP(
 "<b>JPEG 2000</b> was intended as an update to the JPEG format, with the option of \
 lossless compression, but so far is not widely supported. It is suitable for true \
 color or grayscale images."),
       ImgSaver::ImgNone },
 
-    { "EPS", I18N_NOOP(
+    { "image/x-eps",					// EPS EPSF EPSI
+      I18N_NOOP(
 "<b>Encapsulated PostScript</b> is derived from the PostScript&trade; \
 page description language.  Use this format for importing into other \
 applications, or to use with (e.g.) TeX."),
       ImgSaver::ImgNone },
 
-    { "TGA", I18N_NOOP(
+    { "image/x-tga",					// TGA
+      I18N_NOOP(
 "<b>Truevision Targa</b> can store full colour images with an alpha channel, and is \
 used extensively by animation and video applications.\
 <p>This format is not recommended, use an open format instead."),
       ImgSaver::ImgNone },
 
-    { "GIF", I18N_NOOP(					// writing may not be supported
+    { "image/gif",					// GIF
+      I18N_NOOP(					// writing may not be supported
 "<b>Graphics Interchange Format</b> is a popular but patent-encumbered format often \
 used for web graphics.  It uses lossless compression with up to 256 colors and \
 optional transparency.\
 <p>For legal reasons this format is not recommended, use an open format instead."),
       ImgSaver::ImgNone },
 
-    { "TIFF", I18N_NOOP(				// writing may not be supported
+    { "image/tiff",					// TIF TIFF
+      I18N_NOOP(					// writing may not be supported
 "<b>Tagged Image File Format</b> is a versatile and extensible file format widely \
 supported by imaging and publishing applications. It supports indexed and true color \
 images with alpha transparency.\
@@ -136,9 +145,21 @@ images with alpha transparency.\
 Unless required for use with other applications, use an open format instead."),
       ImgSaver::ImgBW|ImgSaver::ImgColor|ImgSaver::ImgGray|ImgSaver::ImgHicolor },
 
-    { "XV", NULL, ImgSaver::ImgNone },
+    { "video/x-mng",					// MNG
+      I18N_NOOP(
+"<b>Multiple-image Network Graphics</b> is derived from the PNG standard and is \
+intended for animated images.  It is an open format suitable for all types of \
+images.\
+<p>Images produced by a scanner will not be animated, so unless specifically \
+required for use with other applications use PNG instead."),
+      ImgSaver::ImgNone },
 
-    { "RGB", NULL, ImgSaver::ImgNone },
+    { "image/x-sgi",					// SGI
+      I18N_NOOP(
+"This is the <b>Silicon Graphics</b> native image file format, supporting 24 bit \
+true colour images with optional lossless compression.\
+<p>Unless specifically required, use an open format instead."),
+      ImgSaver::ImgNone },
 
     { NULL, NULL, ImgSaver::ImgNone }
 };
@@ -146,9 +167,11 @@ Unless required for use with other applications, use an open format instead."),
 
 
 FormatDialog::FormatDialog(QWidget *parent, ImgSaver::ImageType type,
-                           bool askForFormat, const QString &format,
+                           bool askForFormat, const ImageFormat &format,
                            bool askForFilename, const QString &filename)
-    : KDialog(parent)
+    : KDialog(parent),
+      mFormat(format),					// save these to return, if
+      mFilename(filename)				// they are not requested
 {
     setObjectName("FormatDialog");
 
@@ -162,20 +185,18 @@ FormatDialog::FormatDialog(QWidget *parent, ImgSaver::ImageType type,
     QWidget *page = new QWidget(this);
     setMainWidget(page);
 
-    l_help = NULL;
-    cb_subf = NULL;
-    lb_format = NULL;
-    l_subf = NULL;
-    cbDontAsk = NULL;
-    cbRecOnly = NULL;
-    l_ext = NULL;
-    le_filename = NULL;
+    mHelpLabel = NULL;
+    mSubformatCombo = NULL;
+    mFormatList = NULL;
+    mSubformatLabel = NULL;
+    mDontAskCheck = NULL;
+    mRecOnlyCheck = NULL;
+    mExtensionLabel = NULL;
+    mFilenameEdit = NULL;
 
-    m_format = format;					// save these to return, if
-    m_filename = filename;				// they are not requested
-    if (m_format.isEmpty()) askForFormat = true;	// must ask if none
+    if (!mFormat.isValid()) askForFormat = true;	// must ask if none
 
-    m_wantAssistant = false;
+    mWantAssistant = false;
 
     QGridLayout *gl = new QGridLayout(page);
     int row = 0;
@@ -198,12 +219,13 @@ FormatDialog::FormatDialog(QWidget *parent, ImgSaver::ImageType type,
         l1 = new QLabel(i18n("Image file &format:"),page);
         gl->addWidget(l1,row,0,Qt::AlignLeft);
 
-        lb_format = new QListWidget(page);
+        mFormatList = new QListWidget(page);
 
         // Clean up the list that we get from KImageIO (=Qt).  The raw list
         // contains mixed case, spaces and duplicates.
         QStringList supportedTypes = KImageIO::types(KImageIO::Writing);
-        formatList.clear();
+
+        QStringList formatList;
         for (QStringList::const_iterator it = supportedTypes.constBegin();
              it!=supportedTypes.constEnd(); ++it)
         {
@@ -212,28 +234,63 @@ FormatDialog::FormatDialog(QWidget *parent, ImgSaver::ImageType type,
         }
         kDebug() << "have" << formatList.count() << "image types"
                  << "from" << supportedTypes.count() << "supported";
-							// list box is filled later
-        imgType = type;
-        connect(lb_format, SIGNAL(currentItemChanged(QListWidgetItem *,QListWidgetItem *)), SLOT(formatSelected(QListWidgetItem *)));
-        l1->setBuddy(lb_format);
-        gl->addWidget(lb_format,row+1,0);
+
+        // Even after filtering the list as above, there will be MIME type
+        // duplicates (e.g. JPG and JPEG both map to image/jpeg and produce
+        // the same results).  So the list is filtered again to eliminate
+        // duplicate MIME types.
+        //
+        // As a side effect, this completely eliminates any formats that do
+        // not have a defined KDE MIME type.  None of those affected (currently
+        // BW, RGBA, XV) seem to be of any use.
+        mMimeTypes.clear();
+        for (QStringList::const_iterator it = formatList.constBegin();
+             it!=formatList.constEnd(); ++it)
+        {
+            const KMimeType::Ptr mime = ImageFormat((*it).toLocal8Bit()).mime();
+            if (mime.isNull()) continue;
+            if (mime->isDefault()) continue;
+
+            bool seen = false;
+            for (KMimeType::List::const_iterator it = mMimeTypes.constBegin();
+                 it!=mMimeTypes.constEnd(); ++it)
+            {
+                KMimeType::Ptr p = (*it);
+                if (mime->is(p->name()))
+                {
+                    seen = true;
+                    break;
+                }
+            }
+
+            if (!seen) mMimeTypes.append(mime);
+        }
+        kDebug() << "have" << mMimeTypes.count() << "unique MIME types";
+
+        // The list box is filled later.
+
+        mImageType = type;
+        connect(mFormatList, SIGNAL(currentItemChanged(QListWidgetItem *,QListWidgetItem *)), SLOT(formatSelected(QListWidgetItem *)));
+        l1->setBuddy(mFormatList);
+        gl->addWidget(mFormatList,row+1,0);
         gl->setRowStretch(row+1,1);
 
         // Insert label for help text
-        l_help = new QLabel(page);
-        l_help->setFrameStyle(QFrame::Panel|QFrame::Sunken);
-        l_help->setAlignment(Qt::AlignLeft|Qt::AlignTop);
-        l_help->setMinimumSize(230,200);
-        l_help->setWordWrap(true);
-        gl->addWidget(l_help, row, 1, 4, 2);
+        mHelpLabel = new QLabel(page);
+        mHelpLabel->setFrameStyle(QFrame::Panel|QFrame::Sunken);
+        mHelpLabel->setAlignment(Qt::AlignLeft|Qt::AlignTop);
+        mHelpLabel->setMinimumSize(230,200);
+        mHelpLabel->setWordWrap(true);
+        mHelpLabel->setMargin(4);
+        gl->addWidget(mHelpLabel, row, 1, 4, 2);
 
         // Insert selection box for subformat
-        l_subf = new QLabel(i18n("Image sub-format:"),page);
-        gl->addWidget(l_subf,row+2,0,Qt::AlignLeft);
+        mSubformatLabel = new QLabel(i18n("Image sub-format:"),page);
+        gl->addWidget(mSubformatLabel,row+2,0,Qt::AlignLeft);
 
-        cb_subf = new QComboBox(page);
-        gl->addWidget(cb_subf,row+3,0);
-        l_subf->setBuddy(cb_subf);
+        mSubformatCombo = new QComboBox(page);
+        gl->addWidget(mSubformatCombo,row+3,0);
+        mSubformatLabel->setBuddy(mSubformatCombo);
         row += 4;
 
         sep = new KSeparator(Qt::Horizontal, page);
@@ -241,19 +298,19 @@ FormatDialog::FormatDialog(QWidget *parent, ImgSaver::ImageType type,
         ++row;
 
         // Checkbox to store setting
-        cbRecOnly = new QCheckBox(i18n("Only show recommended formats for this image type"),page);
-        gl->addWidget(cbRecOnly, row, 0, 1, 3, Qt::AlignLeft);
+        mRecOnlyCheck = new QCheckBox(i18n("Only show recommended formats for this image type"),page);
+        gl->addWidget(mRecOnlyCheck, row, 0, 1, 3, Qt::AlignLeft);
         ++row;
 
         KConfigGroup grp = KGlobal::config()->group(OP_SAVER_GROUP);
-        cbRecOnly->setChecked(grp.readEntry(OP_SAVER_REC_FMT, true));
-        connect(cbRecOnly, SIGNAL(toggled(bool)), SLOT(buildFormatList(bool)));
+        mRecOnlyCheck->setChecked(grp.readEntry(OP_SAVER_REC_FMT, true));
+        connect(mRecOnlyCheck, SIGNAL(toggled(bool)), SLOT(buildFormatList(bool)));
 
-        cbDontAsk  = new QCheckBox(i18n("Always use this save format for this image type"),page);
-        gl->addWidget(cbDontAsk, row, 0, 1, 3, Qt::AlignLeft);
+        mDontAskCheck  = new QCheckBox(i18n("Always use this save format for this image type"),page);
+        gl->addWidget(mDontAskCheck, row, 0, 1, 3, Qt::AlignLeft);
         ++row;
 
-        buildFormatList(cbRecOnly->isChecked());	// now have this setting
+        buildFormatList(mRecOnlyCheck->isChecked());	// now have this setting
 
         showButton(KDialog::User1, false);		// don't want this button
     }
@@ -274,13 +331,13 @@ FormatDialog::FormatDialog(QWidget *parent, ImgSaver::ImageType type,
         gl->addWidget(l1, row, 0, 1, 3);
         ++row;
 
-        le_filename = new QLineEdit(filename, page);
-        connect(le_filename, SIGNAL(textChanged(const QString &)), SLOT(checkValid()));
-        l1->setBuddy(le_filename);
-        gl->addWidget(le_filename, row, 0, 1, 2);
+        mFilenameEdit = new QLineEdit(filename, page);
+        connect(mFilenameEdit, SIGNAL(textChanged(const QString &)), SLOT(checkValid()));
+        l1->setBuddy(mFilenameEdit);
+        gl->addWidget(mFilenameEdit, row, 0, 1, 2);
 
-        l_ext = new QLabel("",page);
-        gl->addWidget(l_ext, row, 2, Qt::AlignLeft);
+        mExtensionLabel = new QLabel("",page);
+        gl->addWidget(mExtensionLabel, row, 2, Qt::AlignLeft);
         ++row;
 
         if (!askForFormat) setButtonText(KDialog::User1, i18n("Select Format..."));
@@ -290,14 +347,9 @@ FormatDialog::FormatDialog(QWidget *parent, ImgSaver::ImageType type,
     gl->addWidget(sep, row, 0, 1, 3);
     ++row;
 
-    if (lb_format!=NULL)				// have the format selector
+    if (mFormatList!=NULL)				// have the format selector
     {							// preselect the remembered format
-        QList<QListWidgetItem *> items = lb_format->findItems(format, Qt::MatchFixedString);
-        if (!items.isEmpty())
-        {
-            QListWidgetItem *format_item = items.first();
-            if (format_item!=NULL) lb_format->setCurrentItem(format_item);
-        }
+        setSelectedFormat(format);
     }
     else						// no format selector, but
     {							// asking for a file name
@@ -309,108 +361,129 @@ FormatDialog::FormatDialog(QWidget *parent, ImgSaver::ImageType type,
 }
 
 
-void FormatDialog::show()
+void FormatDialog::showEvent(QShowEvent *ev)
 {
-    KDialog::show();
+    KDialog::showEvent(ev);
 
-    if (le_filename!=NULL)				// asking for a file name
+    if (mFilenameEdit!=NULL)				// asking for a file name
     {
-        le_filename->setFocus();			// set focus to that
-        le_filename->selectAll();			// highight for editing
+        mFilenameEdit->setFocus();			// set focus to that
+        mFilenameEdit->selectAll();			// highight for editing
     }
 }
 
 
-void FormatDialog::showExtension(const QString &format)
+void FormatDialog::showExtension(const ImageFormat &format)
 {
-    if (l_ext==NULL) return;				// no UI for this
-    l_ext->setText("."+KookaImage::extensionForFormat(format));
-}							// show extension it will have
+    if (mExtensionLabel==NULL) return;			// not showing this
+    mExtensionLabel->setText("."+format.extension());	// show extension it will have
+}
 
 
 void FormatDialog::formatSelected(QListWidgetItem *item)
 {
-    if (l_help==NULL) return;				// not showing this
+    if (mHelpLabel==NULL) return;			// not showing this
 
     if (item==NULL)					// nothing is selected
     {
-	l_help->setText(i18n("No format selected."));
+	mHelpLabel->setText(i18n("No format selected."));
 	enableButtonOk(false);
 
-        lb_format->clearSelection();
-        if (l_ext!=NULL) l_ext->setText(".???");
+        mFormatList->clearSelection();
+        if (mExtensionLabel!=NULL) mExtensionLabel->setText(".???");
 	return;
     }
 
-    lb_format->setCurrentItem(item);			// focus highlight -> select
+    mFormatList->setCurrentItem(item);			// focus highlight -> select
 
-    QString itxt = item->text();
     const char *helptxt = NULL;
-    for (formatInfo *ip = &formats[0]; ip->format!=NULL; ++ip)
-    {							// locate help text for format
-	if (ip->format==itxt)
-	{
-	    helptxt = ip->helpString;
-	    break;
-	}
+
+    QString mimename = item->data(Qt::UserRole).toString();
+    KMimeType::Ptr mime = KMimeType::mimeType(mimename);
+    if (!mime.isNull())
+    {
+        QString imime = mime->name();
+        for (formatInfo *ip = &formats[0]; ip->mime!=NULL; ++ip)
+        {						// locate help text for format
+            if (ip->mime==mimename)
+            {
+                helptxt = ip->helpString;
+                break;
+            }
+        }
     }
+
+    ImageFormat format = ImageFormat::formatForMime(mime);
 
     if (helptxt!=NULL)					// found some help text
     {
-	l_help->setText(i18n(helptxt));			// set the hint
-	check_subformat(itxt);				// and check subformats
+	mHelpLabel->setText(i18n(helptxt));		// set the hint
+	check_subformat(format);			// and check subformats
     }
-    else l_help->setText(i18n("No information is available for this format."));
+    else mHelpLabel->setText(i18n("No information is available for this format."));
 
-    if (cbDontAsk!=NULL) cbDontAsk->setChecked(ImgSaver::isRememberedFormat(imgType,itxt));
+    if (mDontAskCheck!=NULL) mDontAskCheck->setChecked(ImgSaver::isRememberedFormat(mImageType, format));
 
-    showExtension(itxt);
+    showExtension(format);
     checkValid();
 }
 
 
-void FormatDialog::check_subformat(const QString &format)
+void FormatDialog::check_subformat(const ImageFormat &format)
 {
-    if (cb_subf==NULL) return;				// not showing this
-    // not yet implemented
-    //kdDebug(28000) << "This is format in check_subformat: " << format << endl;
-    cb_subf->setEnabled(false);
-    // l_subf = Label "select subformat" ->bad name :-|
-    l_subf->setEnabled(false);
+    if (mSubformatCombo==NULL) return;			// not showing this
+    mSubformatCombo->setEnabled(false);			// not yet implemented
+    mSubformatLabel->setEnabled(false);
 }
 
 
-void FormatDialog::setSelectedFormat(const QString &fo)
+void FormatDialog::setSelectedFormat(const ImageFormat &format)
 {
-    if (lb_format==NULL) return;			// not showing this
+    if (mFormatList==NULL) return;			// not showing this
 
-    QListWidgetItem *item = lb_format->findItems(fo, Qt::MatchFixedString).first();
-    if (item!=NULL) lb_format->setCurrentItem(item);
+    const KMimeType::Ptr ptr = format.mime();
+    if (ptr.isNull()) return;
+
+    for (int i = 0; i<mFormatList->count(); ++i)
+    {
+        QListWidgetItem *item = mFormatList->item(i);
+        if (item==NULL) continue;
+        QString mimename = item->data(Qt::UserRole).toString();
+        if (ptr->is(mimename))
+        {
+            mFormatList->setCurrentItem(item);
+            return;
+        }
+    }
 }
 
 
-QString FormatDialog::getFormat() const
+ImageFormat FormatDialog::getFormat() const
 {
-    if (lb_format==NULL) return (m_format);		// no UI for this
+    if (mFormatList==NULL) return (mFormat);		// no UI for this
 
-    const QListWidgetItem *item = lb_format->currentItem();
-    if (item!=NULL) return(item->text());
+    const QListWidgetItem *item = mFormatList->currentItem();
+    if (item!=NULL)
+    {
+        QString mimename = item->data(Qt::UserRole).toString();
+        const KMimeType::Ptr mime = KMimeType::mimeType(mimename);
+        if (!mime.isNull()) return (ImageFormat::formatForMime(mime));
+    }
 
-    return ("BMP");					// a sort of default
+    return (ImageFormat("PNG"));			// a sensible default
 }
 
 
 QString FormatDialog::getFilename() const
 {
-    if (le_filename==NULL) return (m_filename);		// no UI for this
-    return (le_filename->text());
+    if (mFilenameEdit==NULL) return (mFilename);	// no UI for this
+    return (mFilenameEdit->text());
 }
 
 
-QByteArray FormatDialog::getSubFormat( ) const
+QByteArray FormatDialog::getSubFormat() const
 {
-   // Not yet...
-   return( "" );
+   return ("");						// Not supported yet...
 }
 
 
@@ -418,31 +491,31 @@ void FormatDialog::checkValid()
 {
     bool ok = true;					// so far, anyway
 
-    if (lb_format!=NULL && lb_format->selectedItems().count()==0) ok = false;
-    if (le_filename!=NULL && le_filename->text().isEmpty()) ok = false;
+    if (mFormatList!=NULL && mFormatList->selectedItems().count()==0) ok = false;
+    if (mFilenameEdit!=NULL && mFilenameEdit->text().isEmpty()) ok = false;
     enableButtonOk(ok);
 }
 
 
 void FormatDialog::buildFormatList(bool recOnly)
 {
-    if (lb_format==NULL) return;			// not showing this
+    if (mFormatList==NULL) return;			// not showing this
 
-    kDebug() << "only" << recOnly << "type" << imgType;
+    kDebug() << "recOnly" << recOnly << "for type" << mImageType;
 
-    lb_format->clear();
-    for (QStringList::const_iterator it = formatList.constBegin();
-         it!=formatList.constEnd(); ++it)
+    mFormatList->clear();
+    for (KMimeType::List::const_iterator it = mMimeTypes.constBegin();
+         it!=mMimeTypes.constEnd(); ++it)
     {
-        QString fmt = (*it);
+        KMimeType::Ptr mime = (*it);
 	if (recOnly)					// only want recommended
 	{
 	    bool formatOk = false;
-	    for (formatInfo *ip = &formats[0]; ip->format!=NULL; ++ip)
+	    for (formatInfo *ip = &formats[0]; ip->mime!=NULL; ++ip)
 	    {						// search for this format
-		if (ip->format!=fmt) continue;
+		if (!mime->is(ip->mime)) continue;
 
-                if (ip->recForTypes & imgType)		// recommended for this type?
+                if (ip->recForTypes & mImageType)	// recommended for this type?
 		{
                     formatOk = true;			// this format to be shown
                     break;				// no more to do
@@ -452,8 +525,12 @@ void FormatDialog::buildFormatList(bool recOnly)
 	    if (!formatOk) continue;			// this format not to be shown
 	}
 							// add format to list
-	lb_format->addItem(new QListWidgetItem(KIcon(KookaImage::iconForFormat(fmt)),
-                                               fmt.toUpper(), lb_format));
+	QListWidgetItem *item = new QListWidgetItem(KIcon(mime->iconName()),
+                                                    mime->comment(), mFormatList);
+        // Not sure whether a KMimeType::Ptr can safely be stored in a
+        // QVariant, so storing the MIME type name instead.
+        item->setData(Qt::UserRole, mime->name());
+	mFormatList->addItem(item);
     }
 
     formatSelected(NULL);				// selection has been cleared
@@ -462,10 +539,10 @@ void FormatDialog::buildFormatList(bool recOnly)
 
 void FormatDialog::slotOk()
 {
-    if (cbRecOnly!=NULL)				// have UI for this
+    if (mRecOnlyCheck!=NULL)				// have UI for this
     {
         KConfigGroup grp = KGlobal::config()->group(OP_SAVER_GROUP);
-        grp.writeEntry(OP_SAVER_REC_FMT, cbRecOnly->isChecked());
+        grp.writeEntry(OP_SAVER_REC_FMT, mRecOnlyCheck->isChecked());
     }							// save state of this option
 
     accept();
@@ -474,10 +551,9 @@ void FormatDialog::slotOk()
 
 void FormatDialog::slotUser1()
 {
-    m_wantAssistant = true;
+    mWantAssistant = true;
     accept();
 }
-
 
 
 void FormatDialog::forgetRemembered()

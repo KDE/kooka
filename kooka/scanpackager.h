@@ -34,6 +34,8 @@
 #include <kmimetypetrader.h>
 #include <kicon.h>
 
+#include "imageformat.h"
+
 
 
 /**
@@ -47,7 +49,6 @@ class QSignalMapper;
 class KMenu;
 class KUrl;
 class KActionMenu;
-//class KActionCollection;
 
 class KookaImage;
 class KookaImageMeta;
@@ -66,7 +67,6 @@ class ScanPackager : public K3FileTreeView
 public:
     ScanPackager( QWidget *parent);
     ~ScanPackager();
-    virtual QString getImgName( QString name_on_disk );
 
     QString 	getCurrImageFileName( bool ) const;
     const KookaImage *getCurrImage(bool loadOnDemand = false);
@@ -135,12 +135,12 @@ signals:
 
 
 private:
-   static QString localFileName(const K3FileTreeViewItem *item);
-   static QByteArray getImgFormat(const K3FileTreeViewItem *item);
+    static QString localFileName(const K3FileTreeViewItem *item);
+    static ImageFormat getImgFormat(const K3FileTreeViewItem *item);
+    static QString buildNewFilename(const QString &cmplFilename, const ImageFormat &currFormat);
 
    void 	loadImageForItem( K3FileTreeViewItem* item );
 
-    QString 	 buildNewFilename(const QString &cmplFilename,const QString &currFormat) const;
    K3FileTreeViewItem *spFindItem(SearchType type,const QString &name,const KFileTreeBranch *branch = NULL);
    QString       itemDirectory( const K3FileTreeViewItem *item, bool relativ = false ) const;
    void updateParent(const K3FileTreeViewItem *curr);
@@ -159,7 +159,6 @@ private:
 
     KService::List openWithOffers;
     QSignalMapper *openWithMapper;
-//    KActionCollection *openWithActions;
 
     // like m_nextUrlToSelect in KFileTreeView but for our own purposes (showing the image)
     KUrl         m_nextUrlToShow;
