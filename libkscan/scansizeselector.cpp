@@ -22,7 +22,7 @@
 
 #include <qcombobox.h>
 #include <qradiobutton.h>
-#include <q3buttongroup.h>
+#include <qbuttongroup.h>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -70,15 +70,18 @@ ScanSizeSelector::ScanSizeSelector(QWidget *parent,const QSize &bedSize)
     }
     m_sizeCb->setCurrentIndex(0);
 
-    Q3ButtonGroup *bg = new Q3ButtonGroup(1,Qt::Vertical,this);
-    bg->setFrameStyle(QFrame::NoFrame);
-    connect(bg,SIGNAL(clicked(int)),SLOT(slotPortraitLandscape(int)));
-
-    m_portraitRb = new QRadioButton(i18n("Portrait"),bg);
-    m_portraitRb->setEnabled(false);
-    m_landscapeRb = new QRadioButton(i18n("Landscape"),bg);
-    m_landscapeRb->setEnabled(false);
-
+	QButtonGroup * bg = new QButtonGroup(this);
+	bg->setExclusive(true);
+    connect(bg,SIGNAL(buttonClicked(int)),SLOT(slotPortraitLandscape(int)));
+	
+	m_portraitRb = new QRadioButton(i18n("Portrait"),this);
+	m_portraitRb->setEnabled(false);
+	bg->addButton(m_portraitRb);
+	
+	m_landscapeRb = new QRadioButton(i18n("Landscape"),this);
+	m_landscapeRb->setEnabled(false);
+	bg->addButton(m_landscapeRb);
+	
     m_customSize = QRect();
     m_prevSelected = m_sizeCb->currentIndex();
 }

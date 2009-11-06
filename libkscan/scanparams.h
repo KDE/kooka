@@ -79,7 +79,7 @@ public slots:
      * connect this slot to KScanOptions Signal optionChanged to be informed
      * on a options change.
      */
-    void slotOptionNotify(const KScanOption *so);
+    void slotOptionNotify(KScanOption *so);
 
 protected slots:
     /**

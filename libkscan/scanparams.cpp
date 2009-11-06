@@ -792,7 +792,7 @@ for more information on SANE installation and setup.");
  * This is useful if the parameter - Gui has widgets in his own space, which depend
  * on widget controlled by the KScanOption.
  */
-void ScanParams::slotOptionNotify(const KScanOption *so)
+void ScanParams::slotOptionNotify(KScanOption *so)
 {
     if (so==NULL || !so->valid()) return;
     setEditCustomGammaTableState();
