@@ -1,3 +1,15 @@
+##########################################################################
+##									##
+##  This CMake file is part of Kooka, a KDE scanning/OCR application.	##
+##									##
+##  This file may be distributed and/or modified under the terms of	##
+##  the GNU General Public License version 2, as published by the	##
+##  Free Software Foundation and appearing in the file COPYING		##
+##  included in the packaging of this file.				##
+##									##
+##  Author:  Jonathan Marten <jjm AT keelhaul DOT me DOT uk>		##
+##									##
+##########################################################################
 
 project(kooka4)
 set(VERSION "0.60")
@@ -9,12 +21,11 @@ set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/modules")
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${KDE4_DATA_DIR}/cmake/modules)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} /ws/trunk/kdepim/cmake/modules)
 
-
 ############### Build Options ###############
 
 option(SANECONFIG_BIN "Path to the sane-config(1) binary, needed to get SANE configuration" OFF)
 
-############### search packages used by KDE ###############
+############### Packages used by KDE ###############
 
 find_package(KDE4 REQUIRED)
 include(KDE4Defaults)
@@ -58,11 +69,11 @@ if (HAVE_SANE)
   execute_process(COMMAND ${SANECONFIG_PROG} --version OUTPUT_VARIABLE SANE_VERSION OUTPUT_STRIP_TRAILING_WHITESPACE)
   message(STATUS "Found SANE, version ${SANE_VERSION}")
 
-  execute_process(COMMAND ${SANECONFIG_PROG} --libs OUTPUT_VARIABLE SANE_LIBRARIES OUTPUT_STRIP_TRAILING_WHITESPACE)
-  message(STATUS "SANE libraries: ${SANE_LIBRARIES}")
-
   execute_process(COMMAND ${SANECONFIG_PROG} --cflags OUTPUT_VARIABLE SANE_INCLUDES OUTPUT_STRIP_TRAILING_WHITESPACE)
   message(STATUS "SANE includes: ${SANE_INCLUDES}")
+
+  execute_process(COMMAND ${SANECONFIG_PROG} --libs OUTPUT_VARIABLE SANE_LIBRARIES OUTPUT_STRIP_TRAILING_WHITESPACE)
+  message(STATUS "SANE libraries: ${SANE_LIBRARIES}")
 endif (HAVE_SANE)
 
 ############### Needed commands before building anything ###############
@@ -71,37 +82,19 @@ add_definitions(${QT_DEFINITIONS} ${KDE4_DEFINITIONS})
 
 include_directories(${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR} ${KDE4_INCLUDES} ${QT_QTDBUS_INCLUDE_DIR})
 
-############### Macros ###############
+############### SVN revision number in svnversion.h ###############
 
+find_program(SVNCMD svn)
+if (NOT SVNCMD)
+  set(SVNCMD "")
+endif (NOT SVNCMD)
 
-
-
-############### Support for the SVN revision number in svnversion.h ###############
-
-if (EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/.svn")
-  if (NOT KdeSubversion_FOUND)
-    find_package(KdeSubversion)
-  endif (NOT KdeSubversion_FOUND)
-  if (KdeSubversion_FOUND)
-    KdeSubversion_WC_INFO(${PROJECT_SOURCE_DIR} k)
-    string(SUBSTRING "${k_WC_LAST_CHANGED_DATE}" 0 10 k_WC_LAST_CHANGED_DATE)
-    message(STATUS "Current SVN revision:           ${k_WC_REVISION}")
-    message(STATUS "Current SVN last changed date:  ${k_WC_LAST_CHANGED_DATE}")
-    set(svn_revision "${k_WC_REVISION}")
-    set(svn_last_change "${k_WC_LAST_CHANGED_DATE}")
-    set(svn_have_version 1)
-  else (KdeSubversion_FOUND)
-    set(svn_revision "Unknown")
-    set(svn_last_change "")
-    set(svn_have_version 1)
-  endif (KdeSubversion_FOUND)
-else (EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/.svn")
-    set(svn_revision "")
-    set(svn_last_change "")
-    set(svn_have_version 0)
-endif (EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/.svn")
-
-configure_file(svnversion.h.in ${CMAKE_CURRENT_BINARY_DIR}/svnversion.h)
+add_custom_target(svnversion
+  ALL
+  COMMENT "Checking SVN version"
+  VERBATIM
+  COMMAND sh ${CMAKE_CURRENT_SOURCE_DIR}/svnversion.sh ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${VERSION} ${SVNCMD}
+)
 
 ########### clobbering ###############
 

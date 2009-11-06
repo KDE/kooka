@@ -1,9 +1,24 @@
+##########################################################################
+##									##
+##  This CMake file is part of Kooka, a KDE scanning/OCR application.	##
+##									##
+##  This file may be distributed and/or modified under the terms of	##
+##  the GNU General Public License version 2, as published by the	##
+##  Free Software Foundation and appearing in the file COPYING		##
+##  included in the packaging of this file.				##
+##									##
+##  Author:  Jonathan Marten <jjm AT keelhaul DOT me DOT uk>		##
+##									##
+##########################################################################
 
 project(kooka4)
 
+############### Packages used by KDE ###############
 
 include(CheckIncludeFile)
 include(CheckFunctionExists)
+
+############### Find the stuff we need ###############
 
 check_function_exists(strerror HAVE_STRERROR)
 if (HAVE_STRERROR)
@@ -12,6 +27,7 @@ endif (HAVE_STRERROR)
 check_include_file(sys/stat.h HAVE_SYS_STAT_H)
 check_include_file(sys/types.h HAVE_SYS_TYPES_H)
 
+############### Support for multi-page TIFF images ###############
 
 include(FindTIFF)
 if (TIFF_FOUND)
@@ -22,10 +38,12 @@ else (TIFF_FOUND)
   message(STATUS "TIFF library not found, no multi-page image support")
 endif (TIFF_FOUND)
 
+############### Build Options ###############
 
-# Support for Kadmos
 option(WITH_KADMOS "Enable the Kadmos OCR engine" false)
 option(KADMOS_DIR "Path to Kadmos include and library files, default '/usr/local'" "/usr/local")
+
+############### Support for Kadmos OCR ###############
 
 if (WITH_KADMOS)
 
@@ -159,6 +177,8 @@ if (HAVE_TIFF)
   target_link_libraries(kooka ${TIFF_LIBRARIES})
 endif (HAVE_TIFF)
 
+add_dependencies(kooka svnversion)
+
 ########### clobbering ###############
 
 add_custom_target(clobber
@@ -173,15 +193,4 @@ add_custom_target(clobber
 ########### install files ###############
 
 install(TARGETS kooka ${INSTALL_TARGETS_DEFAULT_ARGS})
-#install(FILES
-#  ${CMAKE_CURRENT_BINARY_DIR}/kooka.kcfg  
-#  custommimeheader.kcfg
-#  DESTINATION ${KCFG_INSTALL_DIR}
-#)
-
-#install(FILES
-#  kooka_config_misc.desktop
-#  DESTINATION ${SERVICES_INSTALL_DIR}
-#)
-
 install(FILES kookaui.rc DESTINATION ${DATA_INSTALL_DIR}/kooka)
