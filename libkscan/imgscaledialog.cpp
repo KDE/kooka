@@ -20,7 +20,9 @@
 #include "imgscaledialog.h"
 #include "imgscaledialog.moc"
 
-#include <q3buttongroup.h>
+#include <qbuttongroup.h>
+#include <qgroupbox.h>
+#include <qlayout.h>
 #include <qradiobutton.h>
 
 #include <klocale.h>
@@ -44,80 +46,115 @@ ImgScaleDialog::ImgScaleDialog( QWidget *parent, int curr_sel)
    selected = curr_sel;
    int        one_is_selected = false;
 
-   Q3ButtonGroup *radios = new Q3ButtonGroup ( 2, Qt::Horizontal, this );
+   QGroupBox * radios = new QGroupBox(i18n("Select Image Zoom"), this);
    setMainWidget(radios);
-   radios->setTitle( i18n("Select Image Zoom") );
 
-   connect( radios, SIGNAL( clicked( int )),
-	    this, SLOT( slotSetSelValue( int )));
+   QButtonGroup * radiosGroup = new QButtonGroup(radios);
+   connect( radiosGroup, SIGNAL( buttonClicked( int )), this, SLOT( slotSetSelValue( int )));
 
-   // left gap: smaller Image
-   QRadioButton *rb25 = new QRadioButton (i18n ("25 %"), radios);
-   if( curr_sel == 25 ){
-      rb25->setChecked( true );
-      one_is_selected = true;
-   }
+   QVBoxLayout * radiosLayout = new QVBoxLayout(this);
 
-   QRadioButton *rb50 = new QRadioButton (i18n ("50 %"), radios );
-   if( curr_sel == 50 ){
-      rb50->setChecked( true );
-      one_is_selected = true;
-   }
+      // left column: smaller Image
+      QHBoxLayout * hbox = new QHBoxLayout();
+      QVBoxLayout * vbox = new QVBoxLayout();
 
-   QRadioButton *rb75 = new QRadioButton (i18n ("75 %"), radios );
-   if( curr_sel == 75 ) {
-      rb75->setChecked( true );
-      one_is_selected = true;
-   }
+      QRadioButton *rb25 = new QRadioButton (i18n ("25 %"));
+      if( curr_sel == 25 ){
+         rb25->setChecked( true );
+         one_is_selected = true;
+      }
+      vbox->addWidget(rb25);
+      radiosGroup->addButton(rb25);
 
-   QRadioButton *rb100 = new QRadioButton (i18n ("100 %"), radios);
-   if( curr_sel == 100 ) {
-      rb100->setChecked( true );
-      one_is_selected = true;
-   }
+      QRadioButton *rb50 = new QRadioButton (i18n ("50 %"));
+      if( curr_sel == 50 ){
+         rb50->setChecked( true );
+         one_is_selected = true;
+      }
+      vbox->addWidget(rb50);
+      radiosGroup->addButton(rb50);
 
-   QRadioButton *rb150 = new QRadioButton (i18n ("150 %"), radios);
-   if( curr_sel == 150 ) {
-      rb150->setChecked( true );
-      one_is_selected = true;
-   }
+      QRadioButton *rb75 = new QRadioButton (i18n ("75 %"));
+      if( curr_sel == 75 ) {
+         rb75->setChecked( true );
+         one_is_selected = true;
+      }
+      vbox->addWidget(rb75);
+      radiosGroup->addButton(rb75);
 
-   QRadioButton *rb200 = new QRadioButton (i18n ("200 %"), radios );
-   if( curr_sel == 200 ) {
-      rb200->setChecked( true );
-      one_is_selected = true;
-   }
+      QRadioButton *rb100 = new QRadioButton (i18n ("100 %"));
+      if( curr_sel == 100 ) {
+         rb100->setChecked( true );
+         one_is_selected = true;
+      }
+      vbox->addWidget(rb100);
+      radiosGroup->addButton(rb100);
 
-   QRadioButton *rb300 = new QRadioButton (i18n ("300 %"), radios );
-   if( curr_sel == 300 ) {
-      rb300->setChecked( true );
-      one_is_selected = true;
-   }
+      hbox->addLayout(vbox);
 
-   QRadioButton *rb400 = new QRadioButton (i18n ("400 %"), radios);
-   if( curr_sel == 400 ) {
-      rb400->setChecked( true );
-      one_is_selected = true;
-   }
+      // right column: bigger image:
+      vbox = new QVBoxLayout();
 
-   // Custom Scaler at the bottom
-   QRadioButton *rbCust = new QRadioButton (i18n ("Custom scale factor:"),
-					    radios);
-   connect( rbCust, SIGNAL( toggled( bool )),
-	    this, SLOT(slotEnableAndFocus(bool)));
-   if( ! one_is_selected )
-      rbCust->setChecked( true );
+      QRadioButton *rb150 = new QRadioButton (i18n ("150 %"));
+      if( curr_sel == 150 ) {
+         rb150->setChecked( true );
+         one_is_selected = true;
+      }
+      vbox->addWidget(rb150);
+      radiosGroup->addButton(rb150);
 
-   leCust = new KLineEdit( radios );
-   QString sn;
-   sn.setNum(curr_sel );
-   leCust->setValidator( new KIntValidator( leCust ) );
-   leCust->setText(sn );
-   connect( leCust, SIGNAL( textChanged( const QString& )),
-	    this, SLOT( slotCustomChanged( const QString& )));
-   leCust->setEnabled( rbCust->isChecked());
+      QRadioButton *rb200 = new QRadioButton (i18n ("200 %"));
+      if( curr_sel == 200 ) {
+         rb200->setChecked( true );
+         one_is_selected = true;
+      }
+      vbox->addWidget(rb200);
+      radiosGroup->addButton(rb200);
+
+      QRadioButton *rb300 = new QRadioButton (i18n ("300 %"));
+      if( curr_sel == 300 ) {
+         rb300->setChecked( true );
+         one_is_selected = true;
+      }
+      vbox->addWidget(rb300);
+      radiosGroup->addButton(rb300);
+
+      QRadioButton *rb400 = new QRadioButton (i18n ("400 %"));
+      if( curr_sel == 400 ) {
+         rb400->setChecked( true );
+         one_is_selected = true;
+      }
+      vbox->addWidget(rb400);
+      radiosGroup->addButton(rb400);
+
+      hbox->addLayout(vbox);
+      radiosLayout->addLayout(hbox);
 
 
+      // Custom Scaler at the bottom:
+      hbox = new QHBoxLayout();
+
+         QRadioButton *rbCust = new QRadioButton (i18n ("Custom scale factor:"));
+         connect( rbCust, SIGNAL( toggled( bool )), this, SLOT(slotEnableAndFocus(bool)));
+         if( ! one_is_selected )
+            rbCust->setChecked( true );
+
+         hbox->addWidget(rbCust);
+         radiosGroup->addButton(rbCust);
+
+         leCust = new KLineEdit();
+         QString sn;
+         sn.setNum(curr_sel );
+         leCust->setValidator( new KIntValidator( leCust ) );
+         leCust->setText(sn );
+         connect( leCust, SIGNAL( textChanged( const QString& )), this, SLOT( slotCustomChanged( const QString& )));
+         leCust->setEnabled( rbCust->isChecked());
+         hbox->addWidget(leCust);
+
+      radiosLayout->addLayout(hbox);
+      radiosLayout->addStretch();
+
+   radios->setLayout(radiosLayout);
 }
 
 
