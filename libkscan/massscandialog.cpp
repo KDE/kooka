@@ -23,7 +23,7 @@
 #include <qlayout.h>
 #include <qlabel.h>
 #include <qprogressbar.h>
-#include <q3groupbox.h>
+#include <qgroupbox.h>
 #include <qframe.h>
 
 #include <klocale.h>
@@ -74,26 +74,25 @@ MassScanDialog::MassScanDialog( QWidget *parent )
     l_main->addWidget( l_tofolder );
  	
     /* Scan Progress information */
-    Q3GroupBox *f2 = new Q3GroupBox( i18n("Scan Progress"), this );
-    //f2->setFrameStyle( QFrame::Box | QFrame::Sunken );
-    //f2->setMargin(15);
-    //f2->setLineWidth( 1 );
+    QGroupBox *f2 = new QGroupBox( i18n("Scan Progress"));
+    f2->setFlat(true);
 
-    //QVBoxLayout *l_pro = new QVBoxLayout( f2, f2->frameWidth()+3, 3 );
-    QVBoxLayout *l_pro = new QVBoxLayout(f2);
+    QVBoxLayout *l_pro = new QVBoxLayout();
     l_pro->setSpacing(3);
-    bigdad->addWidget( f2, 6 );
 
-    QHBoxLayout *l_scanp = new QHBoxLayout(f2);
-    l_pro->addLayout( l_scanp, 5 );
-    progress = i18n("Scanning page %1");
-    l_progress = new QLabel( progress, f2 );
-    l_scanp->addWidget( l_progress, 3 );
-    l_scanp->addStretch( 1 );
+       QHBoxLayout *l_scanp = new QHBoxLayout();
+          progress = i18n("Scanning page %1");
+          l_progress = new QLabel( progress, f2 );
+          l_scanp->addWidget( l_progress, 3 );
+          l_scanp->addStretch( 1 );
+       l_pro->addLayout( l_scanp, 5 );
 
-    progressbar = new QProgressBar(f2);
-    progressbar->setRange(0,1000);
-    l_pro->addWidget( progressbar, 3 );
+       progressbar = new QProgressBar();
+       progressbar->setRange(0,1000);
+       l_pro->addWidget( progressbar, 3 );
+
+    f2->setLayout(l_pro);
+    bigdad->addWidget(f2, 6);
 
     /* Buttons to start scanning and close the Window */
     bigdad->addLayout( l_but );
