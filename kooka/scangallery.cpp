@@ -799,8 +799,13 @@ void ScanGallery::slotCurrentImageChanged(const QImage *img)
     ImgSaver::ImageSaveStatus is_stat = saver.saveImage(img, filename, format);
     if (is_stat!=ImgSaver::SaveStatusOk)
     {
-        KMessageBox::sorry(this, i18n("The updated image could not be saved.\n%1.",
-                                      saver.errorString(is_stat)),
+        KMessageBox::sorry(this, i18n("<qt>"
+                                      "Unable to update the image<br>"
+                                      "<filename>%2</filename><br>"
+                                      "<br>"
+                                      "%1",
+                                      saver.errorString(is_stat),
+                                      curr->url().prettyUrl()),
                            i18n("Save Error"));
     }
 
