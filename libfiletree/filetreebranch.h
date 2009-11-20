@@ -103,7 +103,7 @@ public:
      * which is displayed if the branch is expanded.
      * The root item pixmap defaults to the icon for directories.
      * @see pixmap()
-     * Note that it depends on K3FileTreeView::showFolderOpenPximap weather
+     * Note that it depends on FileTreeView::showFolderOpenPximap weather
      * open pixmap are displayed or not.
      */
     QIcon openPixmap() const;

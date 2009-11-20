@@ -37,7 +37,7 @@ class FileTreeBranch;
 
 
 /**
- * An item for a K3FileTreeView that knows about its own KFileItem.
+ * An item for a FileTreeView that knows about its own KFileItem.
  */
 class FileTreeViewItem : public QTreeWidgetItem
 {

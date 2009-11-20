@@ -133,13 +133,12 @@ set(kooka_SRCS
   kookaimage.cpp
   kookaimagemeta.cpp
   imageformat.cpp
-  scanpackager.cpp		# -> ?
+  scangallery.cpp
   imagenamecombo.cpp
   imageselectline.cpp
   kookagallery.cpp
   thumbview.cpp
 #  thumbviewdiroperator.cpp
-#  dwmenuaction.cpp
   ocrengine.cpp			# -> ocrenginebase
   ocrgocrengine.cpp
   ocrocradengine.cpp
@@ -162,6 +161,7 @@ set(kooka_SRCS
 kde4_add_executable(kooka ${kooka_SRCS})
 target_link_libraries(kooka
   libkscan
+  libfiletree
   ${QT_QT3SUPPORT_LIBRARY}
   ${KDE4_KDE3SUPPORT_LIBS}
   ${KDE4_KDEUI_LIBS}

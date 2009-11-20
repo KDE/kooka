@@ -41,11 +41,11 @@ class QTimer;
  * The filetreeview offers a treeview on the file system which behaves like
  * a QTreeView showing files and/or directories in the file system.
  *
- * K3FileTreeView is able to handle more than one URL, represented by
+ * FileTreeView is able to handle more than one URL, represented by
  * KFileTreeBranch.
  *
  * Typical usage:
- * 1. create a K3FileTreeView fitting in your layout and add columns to it
+ * 1. create a FileTreeView fitting in your layout and add columns to it
  * 2. call addBranch to create one or more branches
  * 3. retrieve the root item with KFileTreeBranch::root() and set it open
  *    if desired. That starts the listing.

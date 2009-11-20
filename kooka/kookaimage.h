@@ -60,17 +60,17 @@ public:
      */
     KookaImage(int subNo, KookaImage *p);
     KookaImage(const QImage &img);
+    ~KookaImage();
 
     KookaImage& operator=(const KookaImage &src);
     KookaImage& operator=(const QImage &src);
 
     /**
      * load an image from a KURL. This method reads the entire file and sets
-     * the values for subimage count.
+     * the values for subimage count.  Returns a null string if succeeded,
+     * or an error message string if failed.
      */
-    bool loadFromUrl(const KUrl &url);
-
-    ~KookaImage();
+    QString loadFromUrl(const KUrl &url);
 
     /**
      * the number of subimages. This is 0 if there are no subimages.
@@ -98,8 +98,8 @@ public:
      *  Set and get the KFileItem of the image. Note that the KFileItem pointer returned
      *  may be NULL.
      */
-    KFileItem *fileItem() const;
-    void setFileItem(KFileItem *item);
+    const KFileItem *fileItem() const;
+    void setFileItem(const KFileItem *item);
 
     /**
      * @return the KFileMetaInfo
@@ -153,7 +153,7 @@ private:
     KookaImage          *m_parent;
     KUrl                m_url;
     /* Fileitem if available */
-    KFileItem           *m_fileItem;
+    const KFileItem           *m_fileItem;
     bool                m_fileBound;
 
     QVector<QRect> m_tileVector;

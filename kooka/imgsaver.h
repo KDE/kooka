@@ -46,27 +46,6 @@
 
 
 
-// TODO: enum into class
-/**
- *  enum ImgSaveStat:
- *  Errorflags for the save. These enums are returned by the
- *  all image save operations and the calling object my display
- *  a human readable Error-Message on this information
- **/
-typedef enum {
-   ISS_OK,         /* Image save OK      */
-   ISS_ERR_PERM,   /* permission Error   */
-   ISS_ERR_FILENAME,   /* bad filename       */
-   ISS_ERR_NO_SPACE,   /* no space on device */
-   ISS_ERR_FORMAT_NO_WRITE, /* Image format can not be written */
-   ISS_ERR_UNKNOWN,
-   ISS_ERR_PARAM,       /* Parameter wrong */
-   ISS_ERR_PROTOCOL,
-   ISS_ERR_MKDIR,
-   ISS_SAVE_CANCELED
-
-} ImgSaveStat;
-
 class KookaImage;
 class ImageFormat;
 
@@ -99,46 +78,54 @@ public:
         ImgBW         = 0x20
     };
 
-	/**
-	 *  constructor of the image-saver object.
-	 *  name is the name of a subdirectory of the save directory,
-	 *  which can be given in dir. If no dir is given, an
-	 *  dir ~/.ksane is created.
-	 *  @param dir  Name of the save root directory
-	 *  @param name Name of a subdirectory in the saveroot.
-	 **/
+    /**
+     *  enum ImageSaveStatus:
+     *  Errorflags for the save. These enums are returned by the
+     *  all image save operations and the calling object may display
+     *  a human readable Error-Message on this information.
+     *  See errorString() for what the flags mean.
+     **/
+    enum ImageSaveStatus
+    {
+        SaveStatusOk,
+        SaveStatusPermission,
+        SaveStatusBadFilename,
+        SaveStatusNoSpace,
+        SaveStatusFormatNoWrite,
+        SaveStatusUnknown,
+        SaveStatusParam,
+        SaveStatusProtocol,
+        SaveStatusMkdir,
+        SaveStatusCanceled
+    };
+
     ImgSaver(const KUrl &dir = KUrl());
 
-    QString     errorString( ImgSaveStat );
-
-    KUrl lastURL() const		{ return (mLastUrl); }
+    KUrl lastURL() const { return (mLastUrl); }
+    QString errorString(ImgSaver::ImageSaveStatus status);
 
     /* static functions used by the gallery operations */
-    static bool copyImage( const KUrl& fromUrl, const KUrl& toUrl, QWidget *overWidget=0 );
-    static bool renameImage( const KUrl& fromUrl, const KUrl& toUrl, bool askExt=false, QWidget *overWidget=0 );
+    static bool copyImage(const KUrl &fromUrl, const KUrl &toUrl, QWidget *overWidget = NULL);
+    static bool renameImage(const KUrl &fromUrl, const KUrl &toUrl, bool askExt = false, QWidget *overWidget = NULL);
     static QString tempSaveImage(const KookaImage *img, const ImageFormat &format, int colors = -1);
 
     static bool isRememberedFormat(ImgSaver::ImageType type, const ImageFormat &format);
     static QString picTypeAsString(ImgSaver::ImageType type);
 
-    ImgSaveStat saveImage(const QImage *image);
-    ImgSaveStat saveImage(const QImage *image, const KUrl &url, const ImageFormat &format);
+    ImgSaver::ImageSaveStatus saveImage(const QImage *image);
+    ImgSaver::ImageSaveStatus saveImage(const QImage *image, const KUrl &url, const ImageFormat &format);
 
 private:
     static ImageFormat findFormat(ImgSaver::ImageType type);
     static QString findSubFormat(const ImageFormat &format);
 
-    static ImageFormat getFormatForType(ImgSaver::ImageType);
-    static void storeFormatForType(ImgSaver::ImageType, const ImageFormat &format);
+    static ImageFormat getFormatForType(ImgSaver::ImageType type);
+    static void storeFormatForType(ImgSaver::ImageType type, const ImageFormat &format);
 
-    ImgSaveStat save(const QImage *image,const KUrl &url,
-                     const ImageFormat &format,const QString &subformat = QString::null);
+    ImgSaver::ImageSaveStatus save(const QImage *image, const KUrl &url,
+                                   const ImageFormat &format, const QString &subformat = QString::null);
 
-    static void createDir(const QString &dir);
     QString createFilename();
-
-    /* static function that returns the extension of an url */
-    static QString extension(const KUrl &url);
 
     QString m_saveDirectory;				// dir where the image should be saved
     QByteArray mLastFormat;

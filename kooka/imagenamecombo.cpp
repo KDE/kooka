@@ -31,9 +31,9 @@
 #include <kdebug.h>
 #include <klocale.h>
 #include <kcombobox.h>
-#include <k3filetreeview.h>
-#include <kfiletreebranch.h>
 
+#include "libfiletree/filetreeview.h"
+#include "libfiletree/filetreebranch.h"
 
 
 #define GALLERY_PATH_SEP	" - "
@@ -42,13 +42,13 @@
 ImageNameCombo::ImageNameCombo(QWidget *parent)
     : KComboBox(parent)
 {
-    connect(this,SIGNAL(activated(const QString &)),SLOT(slotActivated(const QString &)));
+    connect(this, SIGNAL(activated(const QString &)), SLOT(slotActivated(const QString &)));
 }
 
 
-QString itemName(KFileTreeBranch *branch,const QString &relPath)
+QString itemName(FileTreeBranch *branch, const QString &relPath)
 {
-    K3FileTreeView *view = static_cast<K3FileTreeView *>(branch->root()->listView());
+    FileTreeView *view = static_cast<FileTreeView *>(branch->root()->treeWidget());
     if (view==NULL) return (relPath);
 
     if (relPath=="/") return (branch->name());		// root => gallery name
@@ -57,7 +57,7 @@ QString itemName(KFileTreeBranch *branch,const QString &relPath)
 }
 
 
-void ImageNameCombo::slotPathRemoved(KFileTreeBranch *branch,const QString &relPath)
+void ImageNameCombo::slotPathRemoved(FileTreeBranch *branch,const QString &relPath)
 {
     QString removedEntry = itemName(branch,relPath);
     kDebug() << "removing " << removedEntry;
@@ -83,7 +83,7 @@ void ImageNameCombo::slotPathRemoved(KFileTreeBranch *branch,const QString &relP
 }
 
 
-void ImageNameCombo::slotPathChanged(KFileTreeBranch *branch,const QString &relPath)
+void ImageNameCombo::slotPathChanged(FileTreeBranch *branch,const QString &relPath)
 {
     QString newEntry = itemName(branch,relPath);
     kDebug() << "inserting " << newEntry;

@@ -33,7 +33,8 @@
   *@author Klaas Freitag
 */
 
-class KFileTreeBranch;
+class FileTreeBranch;
+
 
 class ImageNameCombo : public KComboBox
 {
@@ -43,11 +44,11 @@ public:
     ImageNameCombo(QWidget *parent);
 
 public slots:
-    void slotPathChanged(KFileTreeBranch *branch,const QString &relPath);
-    void slotPathRemoved(KFileTreeBranch *branch,const QString &relPath);
+    void slotPathChanged(FileTreeBranch *branch, const QString &relPath);
+    void slotPathRemoved(FileTreeBranch *branch, const QString &relPath);
 
 signals:
-    void pathSelected(const QString &branchName,const QString &relPath);
+    void pathSelected(const QString &branchName, const QString &relPath);
 
 protected slots:
     void slotActivated(const QString &itemText);
@@ -55,5 +56,6 @@ protected slots:
 private:
     QStringList items;
 };
+
 
 #endif							// IMAGENAMECOMBO_H

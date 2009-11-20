@@ -31,7 +31,6 @@ find_package(KDE4 REQUIRED)
 include(KDE4Defaults)
 include(MacroLibrary)
 include(CheckIncludeFiles)
-include(MacroBoolTo01)
 
 ############### Windows specific ###############
 
@@ -80,7 +79,7 @@ endif (HAVE_SANE)
 
 add_definitions(${QT_DEFINITIONS} ${KDE4_DEFINITIONS})
 
-include_directories(${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR} ${KDE4_INCLUDES} ${QT_QTDBUS_INCLUDE_DIR})
+include_directories(${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR} ${KDE4_INCLUDES})
 
 ############### SVN revision number in svnversion.h ###############
 
@@ -110,10 +109,16 @@ add_custom_target(clobber
 ############### Now, we add the Kooka components ###############
 
 add_subdirectory(libkscan)
+add_subdirectory(libfiletree)
 add_subdirectory(kooka)
+
 add_subdirectory(tools EXCLUDE_FROM_ALL)
+# Like macro_optional_add_subdirectory(), but with EXCLUDE_FROM_ALL
+get_filename_component(fullpath tests ABSOLUTE)
+if (EXISTS ${fullpath})
+  add_subdirectory(tests EXCLUDE_FROM_ALL)
+ENDIF (EXISTS ${fullpath})
 
-
-
+########### end ###############
 
 macro_display_feature_log()

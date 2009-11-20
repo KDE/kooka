@@ -96,7 +96,7 @@ int main( int argc, char *argv[] )
     KCmdLineArgs::init(argc, argv, &about);
 
     KCmdLineOptions options;
-    options.add("d <device>", ki18n("The SANE device specification (e.g. umax:/dev/sg0)"));
+    options.add("d <device>", ki18n("The SANE device specification (e.g. 'umax:/dev/sg0')"));
     options.add("g", ki18n("Gallery mode - do not connect to scanner"));
     KCmdLineArgs::addCmdLineOptions(options);		// Add my own options
 
@@ -118,7 +118,7 @@ int main( int argc, char *argv[] )
 //        // exit(-1);
 //    }
 
-    Kooka  *kooka = new Kooka(devToUse.toLocal8Bit());
+    Kooka *kooka = new Kooka(devToUse.toLocal8Bit());
     kooka->show();
     app.processEvents();
     kooka->startup();

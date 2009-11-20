@@ -32,7 +32,7 @@
 #include <kglobal.h>
 #include <khbox.h>
 
-#include "scanpackager.h"
+#include "scangallery.h"
 #include "imagenamecombo.h"
 #include "kookapref.h"
 
@@ -53,7 +53,7 @@ KookaGallery::KookaGallery(QWidget *parent)
     m_galleryRecent = new ImageNameCombo(m_recentBox);
     lab->setBuddy(m_galleryRecent);
 
-    m_galleryTree = new ScanPackager(this);
+    m_galleryTree = new ScanGallery(this);
 
     readSettings();
 }

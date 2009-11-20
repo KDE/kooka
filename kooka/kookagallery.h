@@ -26,13 +26,11 @@
 
 #include <qwidget.h>
 
-#include "scanpackager.h"
-
 class QGridLayout;
 
 class KHBox;
-class K3FileTreeViewItem;
 
+class ScanGallery;
 class ImageNameCombo;
 
 
@@ -52,8 +50,7 @@ public:
 
     void readSettings();
 
-    ScanPackager *galleryTree() const		{ return (m_galleryTree); }
-    K3FileTreeViewItem *currentItem() const	{ return (m_galleryTree->currentKFileTreeViewItem()); }
+    ScanGallery *galleryTree() const		{ return (m_galleryTree); }
     ImageNameCombo *galleryRecent() const	{ return (m_galleryRecent); }
 
 private:
@@ -63,7 +60,7 @@ private:
     KHBox *m_recentBox;
 
     ImageNameCombo *m_galleryRecent;
-    ScanPackager *m_galleryTree;
+    ScanGallery *m_galleryTree;
 };
 
 #endif							// KOOKAGALLERY_H

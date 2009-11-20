@@ -29,6 +29,7 @@
 #include <kdebug.h>
 #include <kurl.h>
 #include <kfileitem.h>
+#include <klocale.h>
 
 #include "imageformat.h"
 
@@ -102,13 +103,13 @@ KookaImage &KookaImage::operator=(const QImage &img)
 }
 
 
-KFileItem *KookaImage::fileItem() const
+const KFileItem *KookaImage::fileItem() const
 {
     return (m_fileItem);
 }
 
 
-void KookaImage::setFileItem(KFileItem* fi)
+void KookaImage::setFileItem(const KFileItem *fi)
 {
     m_fileItem = fi;
 }
@@ -125,6 +126,7 @@ const KFileMetaInfo KookaImage::fileMetaInfo() const
 }
 
 
+// TODO: KUrl can do this, also see ScanGallery::localFileName()
 QString KookaImage::localFileName( ) const
 {
 
@@ -135,18 +137,14 @@ QString KookaImage::localFileName( ) const
 }
 
 
-bool KookaImage::loadFromUrl(const KUrl &url)
+QString KookaImage::loadFromUrl(const KUrl &url)
 {
     bool ret = true;					// return status
     bool isTiff = false;				// do we have a TIFF file?
     bool haveTiff = false;				// can it be read via TIFF lib?
 
     m_url = url;
-    if (!m_url.isLocalFile())
-    {
-        kDebug() << "Error: Cannot load non-local images, not yet implemented!";
-        return (false);
-    }
+    if (!m_url.isLocalFile()) return (i18n("Loading non-local images is not yet implemented"));
 
     QString filename = localFileName();
     ImageFormat format = ImageFormat::formatForUrl(url);
@@ -181,11 +179,10 @@ bool KookaImage::loadFromUrl(const KUrl &url)
     if (!haveTiff)
     {
         ret = QImage::load(filename);			// Qt can only read one image
-        if (ret)					// image loaded OK
-        {
-            m_subImages = 0;
-            m_subNo = 0;
-        }
+        if (!ret) return (i18n("Image loading failed"));
+
+        m_subImages = 0;				// image loaded OK
+        m_subNo = 0;
     }
 #ifdef HAVE_TIFF
     else
@@ -194,8 +191,10 @@ bool KookaImage::loadFromUrl(const KUrl &url)
     }
 #endif
 
-    m_fileBound = ret;
-    return (ret);
+    m_url = url;
+    m_fileBound = true;
+
+    return (QString::null);				// loaded OK
 }
 
 

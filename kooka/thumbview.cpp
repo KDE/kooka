@@ -32,7 +32,6 @@
 #include <qsignalmapper.h>
 
 #include <kfileitem.h>
-#include <k3filetreeviewitem.h>
 #include <kglobal.h>
 #include <kstandarddirs.h>
 #include <kaction.h>
@@ -89,6 +88,7 @@ ThumbView::ThumbView(QWidget *parent)
 
     m_lastSelected = m_dirop->url();
     m_toSelect = QString::null;
+    m_toChangeTo = KUrl();
 
     readSettings();
 
@@ -191,12 +191,22 @@ void ThumbView::slotSetSize(int size)
 
 void ThumbView::slotFinishedLoading()
 {
-    if (m_toSelect.isNull()) return;			// nothing to do
+    if (m_toChangeTo.isValid())				// see if change deferred
+    {
+        kDebug() << "setting dirop url to" << m_toChangeTo;
+        m_dirop->setUrl(m_toChangeTo, true);		// change path and reload
+        m_toChangeTo = KUrl();				// have dealt with this now
+        return;
+    }
 
-    m_dirop->blockSignals(true);			// avoid signal loop
-    m_dirop->setCurrentItem(m_toSelect);
-    m_dirop->blockSignals(false);
-    m_toSelect = QString::null;				// have dealt with this now
+    if (!m_toSelect.isNull())				// see if something to select
+    {
+        kDebug() << "selecting" << m_toSelect;
+        m_dirop->blockSignals(true);			// avoid signal loop
+        m_dirop->setCurrentItem(m_toSelect);
+        m_dirop->blockSignals(false);
+        m_toSelect = QString::null;			// have dealt with this now
+    }
 }
 
 
@@ -213,7 +223,7 @@ void ThumbView::slotFileSelected(const KFileItem &kfi)
 }
 
 
-void ThumbView::slotSelectImage(const K3FileTreeViewItem *item)
+void ThumbView::slotSelectImage(const KFileItem *item)
 {
     kDebug() << "item url" << item->url().prettyUrl() << "isDir" << item->isDir();
 
@@ -227,7 +237,33 @@ void ThumbView::slotSelectImage(const K3FileTreeViewItem *item)
     {							// see if changing path
         if (!item->isDir()) m_toSelect = urlToShow.fileName();
 							// select that when loading finished
-        m_dirop->setUrl(dirToShow,true);		// change path and reload
+
+        // Need to check whether the KDirOperator's KDirLister is currently busy.
+        // If it is, then trying to set the KDirOperator to a new directory at this
+        // point is accepted but fails soon afterwards with an assertion such as:
+        //
+        //    kooka(7283)/kio (KDirModel): Items emitted in directory
+        //    KUrl("file:///home/jjm4/Documents/KookaGallery/a")
+        //    but that directory isn't in KDirModel!
+        //    Root directory: KUrl("file:///home/jjm4/Documents/KookaGallery/a/a")
+        //    ASSERT: "result" in file /ws/trunk/kdelibs/kio/kio/kdirmodel.cpp, line 372
+        //
+        // To fix this, if the KDirLister is busy we delay changing to the new
+        // directory until the it has finished, the finishedLoading() signal
+        // will then call our slotFinishedLoading() and do the setUrl() there.
+        //
+        // There are two possible (but extremely unlikely) race conditions here.
+
+        if (m_dirop->dirLister()->isFinished())		// idle, can do this now
+        {
+            kDebug() << "lister idle, changing dir to" << dirToShow;
+            m_dirop->setUrl(dirToShow,true);		// change path and reload
+        }
+        else
+        {
+            kDebug() << "lister busy, deferring change to" << dirToShow;
+            m_toChangeTo = dirToShow;
+        }
         return;
     }
 
@@ -301,7 +337,7 @@ void ThumbView::slotImageChanged(const KFileItem *kfi)
 }
 
 
-void ThumbView::slotImageRenamed(const K3FileTreeViewItem *item,const QString &newName)
+void ThumbView::slotImageRenamed(const KFileItem *item,const QString &newName)
 {
     kDebug() << item->url().prettyUrl() << "->" << newName;
 

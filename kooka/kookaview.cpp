@@ -48,11 +48,11 @@
 #include <kaction.h>
 #include <kactioncollection.h>
 #include <kactionmenu.h>
-#include <kiconloader.h>
 #include <kshortcut.h>
 #include <k3dockwidget.h>
 #include <kmenu.h>
 #include <ktabwidget.h>
+#include <kfileitem.h>
 
 #include "libkscan/scanparams.h"
 #include "libkscan/kscandevice.h"
@@ -70,7 +70,7 @@
 #include "ocrresedit.h"
 #include "scanparamsdialog.h"
 #include "kookagallery.h"
-#include "scanpackager.h"
+#include "scangallery.h"
 
 #ifndef KDE4
 #include "kookaprint.h"
@@ -89,6 +89,8 @@
 #define WCONF_GALLERY_LAYOUT2	"GalleryLayout2"
 #define WCONF_OCR_LAYOUT1	"OcrLayout1"
 #define WCONF_OCR_LAYOUT2	"OcrLayout2"
+
+#define COLUMN_STATES_KEY	"GalleryState%1"
 
 
 // ---------------------------------------------------------------------------
@@ -141,9 +143,9 @@ WidgetSite::WidgetSite(QWidget *parent, QWidget *widget)
         widget = l;
     }
 
-    kDebug() << name
-             << "widget is a" << widget->metaObject()->className()
-             << "parent is a" << widget->parent()->metaObject()->className();
+    //kDebug() << name
+    //         << "widget is a" << widget->metaObject()->className()
+    //         << "parent is a" << widget->parent()->metaObject()->className();
     lay->addWidget(widget, 0, 0);
     widget->show();
 }
@@ -165,9 +167,9 @@ void WidgetSite::setWidget(QWidget *widget)
         }
     }
 
-    kDebug() << objectName()
-             << "widget is a" << widget->metaObject()->className()
-             << "parent is a" << widget->parent()->metaObject()->className();
+    //kDebug() << objectName()
+    //         << "widget is a" << widget->metaObject()->className()
+    //         << "parent is a" << widget->parent()->metaObject()->className();
     lay->addWidget(widget, 0, 0);
     widget->show();
 }
@@ -201,12 +203,11 @@ KookaView::KookaView(KMainWindow *parent, const QByteArray &deviceToUse)
 {
     setObjectName("KookaView");
 
-    KIconLoader *loader = KIconLoader::global();
-
     m_mainWindow = parent;
     m_ocrResultImg = NULL;
     mScanParams = NULL;
     ocrFabric = NULL;
+    mPreviousTab = -1;
 
     isPhotoCopyMode = false;
 
@@ -227,25 +228,31 @@ KookaView::KookaView(KMainWindow *parent, const QByteArray &deviceToUse)
 
     /** Scan Gallery **/
     m_gallery = new KookaGallery(this);
-    ScanPackager *packager = m_gallery->galleryTree();
+    ScanGallery *packager = m_gallery->galleryTree();
 
-    // Connections ScanPackager <--> ThumbView
-    connect(packager, SIGNAL(showItem(const K3FileTreeViewItem *)),
-            m_thumbview, SLOT(slotSelectImage(const K3FileTreeViewItem *)));
-    connect(m_thumbview, SIGNAL(selectFromThumbnail(const KUrl&)),
+    // Connections ScanGallery --> ThumbView
+    connect(packager, SIGNAL(showItem(const KFileItem *)),
+            m_thumbview, SLOT(slotSelectImage(const KFileItem *)));
+    connect(packager, SIGNAL(imageChanged(const KFileItem *)),
+            m_thumbview, SLOT(slotImageChanged(const KFileItem *)));
+    connect(packager, SIGNAL(fileRenamed(const KFileItem *,const QString &)),
+            m_thumbview, SLOT(slotImageRenamed(const KFileItem *,const QString &)));
+
+    // Connections ThumbView --> ScanGallery
+    connect(m_thumbview, SIGNAL(selectFromThumbnail(const KUrl &)),
             packager, SLOT(slotSelectImage(const KUrl &)));
 
-    // Connections ScanPackager --> myself
-    connect(packager, SIGNAL(selectionChanged()), SLOT(slotGallerySelectionChanged()));
-    connect(packager,SIGNAL(showImage(const KookaImage *,bool)), SLOT(slotLoadedImageChanged(const KookaImage *,bool)));
+    // Connections ScanGallery --> myself
+    connect(packager, SIGNAL(itemSelectionChanged()), SLOT(slotGallerySelectionChanged()));
+    connect(packager, SIGNAL(showImage(const KookaImage *,bool)), SLOT(slotLoadedImageChanged(const KookaImage *,bool)));
 
     ImageNameCombo *recentFolder = m_gallery->galleryRecent();
 
-    // Connections ScanPackager <--> recent folder history
-    connect(packager, SIGNAL(galleryPathChanged( KFileTreeBranch *,const QString &)),
-            recentFolder, SLOT(slotPathChanged(KFileTreeBranch *,const QString &)));
-    connect(packager, SIGNAL(galleryDirectoryRemoved(KFileTreeBranch *,const QString &)),
-            recentFolder, SLOT(slotPathRemoved(KFileTreeBranch *,const QString &)));
+    // Connections ScanGallery <--> recent folder history
+    connect(packager, SIGNAL(galleryPathChanged(FileTreeBranch *,const QString &)),
+            recentFolder, SLOT(slotPathChanged(FileTreeBranch *,const QString &)));
+    connect(packager, SIGNAL(galleryDirectoryRemoved(FileTreeBranch *,const QString &)),
+            recentFolder, SLOT(slotPathRemoved(FileTreeBranch *,const QString &)));
     connect(recentFolder, SIGNAL(pathSelected(const QString &,const QString &)),
             packager, SLOT(slotSelectDirectory(const QString &,const QString &)));
 
@@ -261,7 +268,7 @@ KookaView::KookaView(KMainWindow *parent, const QByteArray &deviceToUse)
 
     /** Scan Preview **/
     preview_canvas = new Previewer(this);
-    preview_canvas->setMinimumSize( 100,100);
+    preview_canvas->setMinimumSize(100,100);
     /* since the mScanParams will be created in slSelectDevice, do the
      * connections later
      */
@@ -284,18 +291,10 @@ KookaView::KookaView(KMainWindow *parent, const QByteArray &deviceToUse)
     connect(sane, SIGNAL(sigScanStart()), SLOT(slotScanStart()));
     connect(sane, SIGNAL(sigAcquireStart()), SLOT(slotAcquireStart()));
 
-    // Connections ScanPackager --> myself
+    // Connections ScanGallery --> myself
     connect(packager, SIGNAL(showImage(const KookaImage *, bool)), SLOT(slotShowAImage(const KookaImage *)));
     connect(packager, SIGNAL(aboutToShowImage(const KUrl &)), SLOT(slotStartLoading(const KUrl &)));
     connect(packager, SIGNAL(unloadImage(const KookaImage *)), SLOT(slotUnloadAImage(const KookaImage *)));
-
-    // Connections ScanPackager --> ThumbView
-    connect(packager, SIGNAL(imageChanged(const KFileItem *)),
-            m_thumbview, SLOT(slotImageChanged(const KFileItem *)));
-    connect(packager, SIGNAL(fileRenamed(const K3FileTreeViewItem *,const QString &)),
-            m_thumbview, SLOT(slotImageRenamed(const K3FileTreeViewItem *,const QString &)));
-    connect(packager, SIGNAL(fileDeleted(const KFileItem *)),
-	    m_thumbview, SLOT(slotImageDeleted(const KFileItem *)));
 
     packager->openRoots();
 
@@ -304,7 +303,6 @@ KookaView::KookaView(KMainWindow *parent, const QByteArray &deviceToUse)
     statBar->insertPermanentFixedItem((img_canvas->imageInfoString(2000, 2000, 48)+"--"),
                                       KookaView::StatusImage);
     statBar->changeItem(QString::null, KookaView::StatusImage);
-
 
     /** Tabs **/
     // TODO: not sure which tab position is best, make this configurable
@@ -378,6 +376,8 @@ void KookaView::saveWindowSettings(KConfigGroup &grp)
     grp.writeEntry(WCONF_GALLERY_LAYOUT2, mGallerySubSplitter->saveState().toBase64());
     grp.writeEntry(WCONF_OCR_LAYOUT1, mOcrPage->saveState().toBase64());
     grp.writeEntry(WCONF_OCR_LAYOUT2, mOcrSubSplitter->saveState().toBase64());
+
+    saveGalleryState();					// for the current tab
 }
 
 
@@ -405,6 +405,20 @@ void KookaView::applyWindowSettings(const KConfigGroup &grp)
 }
 
 
+void KookaView::saveGalleryState(int index) const
+{
+    if (index==-1) index = currentIndex();
+    gallery()->saveHeaderState(QString(COLUMN_STATES_KEY).arg(index));
+}
+
+
+void KookaView::restoreGalleryState(int index)
+{
+    if (index==-1) index = currentIndex();
+    gallery()->restoreHeaderState(QString(COLUMN_STATES_KEY).arg(index));
+}
+
+
 // this gets called by Kooka::closeEvent() at shutdown
 void KookaView::saveProperties(KConfigGroup &grp)
 {
@@ -416,6 +430,8 @@ void KookaView::saveProperties(KConfigGroup &grp)
 void KookaView::slotTabChanged(int index)
 {
     kDebug() << index;
+    if (mPreviousTab!=-1) saveGalleryState(mPreviousTab);
+							// save state of previous tab
     switch (index)
     {
 case 0:							// Scan
@@ -433,9 +449,10 @@ case 2:							// OCR
         mOcrImgviewSite->setWidget(img_canvas);
         break;
     }
+
+    restoreGalleryState(index);				// restore state of new tab
+    mPreviousTab = index;				// note for next tab change
 }
-
-
 
 
 void KookaView::slotViewerReadOnly( bool )
@@ -540,8 +557,6 @@ The error reported was: <b>%1</b>", sane->lastErrorMessage(), selDevice.data());
 }
 
 
-
-
 void KookaView::slotAddDevice()
 {
     AddDeviceDialog d(m_mainWindow, i18n("Add Scan Device"));
@@ -554,7 +569,6 @@ void KookaView::slotAddDevice()
 	sane->addUserSpecifiedDevice(dev,dsc);
     }
 }
-
 
 
 QByteArray KookaView::userDeviceSelection(bool alwaysAsk)
@@ -604,7 +618,6 @@ information."), QString::null, KGuiItem(i18n("Add Scan Device...")))!=KMessageBo
 }
 
 
-
 QString KookaView::scannerName() const
 {
     if (connectedDevice=="") return (i18n("Gallery"));
@@ -613,19 +626,17 @@ QString KookaView::scannerName() const
 }
 
 
-
 void KookaView::slotSelectionChanged(QRect newSelection)
 {
     emit signalRectangleChanged(newSelection.isValid());
 }
 
 
-
 void KookaView::slotGallerySelectionChanged()
 {
-    K3FileTreeViewItem *fti = m_gallery->currentItem();
+    const KFileItem *fi = m_gallery->galleryTree()->currentFileItem();
 
-    if (fti==NULL)
+    if (fi==NULL || fi->isNull())
     {
         emit signalChangeStatusbar(i18n("No selection"));
 	emit signalGallerySelectionChanged(false,0);
@@ -633,10 +644,12 @@ void KookaView::slotGallerySelectionChanged()
     else
     {
         emit signalChangeStatusbar(i18n("Gallery %1 %2",
-                                        (fti->isDir() ? i18n("folder") : i18n("image")),
-                                        fti->url().pathOrUrl()));
-	emit signalGallerySelectionChanged(fti->isDir(),gallery()->selectedItems().count());
-        if (m_thumbview!=NULL) m_thumbview->slotSelectImage(fti);
+                                        (fi->isDir() ? i18n("folder") : i18n("image")),
+                                        fi->url().pathOrUrl()));
+	//emit signalGallerySelectionChanged(fi->isDir(), gallery()->selectedItems().count());
+        // TODO: can there be more than one selected?
+	emit signalGallerySelectionChanged(fi->isDir(), 1);
+        if (m_thumbview!=NULL) m_thumbview->slotSelectImage(fi);
     }
 }
 
@@ -650,9 +663,8 @@ void KookaView::slotLoadedImageChanged(const KookaImage *img,bool isDir)
 
 bool KookaView::galleryRootSelected() const
 {
-    K3FileTreeViewItem *tvi = m_gallery->currentItem();
-    if (tvi==NULL) return (true);
-    return (tvi==gallery()->branches().first()->root());
+    const FileTreeViewItem *curr = m_gallery->galleryTree()->currentFileTreeViewItem();
+    return (curr==NULL ? false : curr->isRoot());
 }
 
 
@@ -748,8 +760,6 @@ void KookaView::slotOcrSpellCheck()
 }
 
 
-
-
 void KookaView::startOCR(const KookaImage *img)
 {
     if (img==NULL || img->isNull()) return;
@@ -817,7 +827,6 @@ void KookaView::slotOcrResultText(const QString &text)
 }
 
 
-
 void KookaView::slotOCRResultImage(const QPixmap &pix)
 {
     kDebug();
@@ -851,6 +860,7 @@ void KookaView::slotScanStart( )
       }
    }
 }
+
 
 void KookaView::slotAcquireStart( )
 {
@@ -979,7 +989,6 @@ default:
 }
 
 
-
 void KookaView::slotMirrorImage(KookaView::MirrorType type)
 {
     const QImage *img = img_canvas->rootImage();
@@ -1002,7 +1011,7 @@ case MirrorHorizontal:
         break;
 
 case MirrorBoth:
-        emit signalChangeStatusbar(i18n("Mirroring image in both directions"));
+        emit signalChangeStatusbar(i18n("Mirroring image both directions"));
         resImg = img->mirrored(true, true);
         break;
 
@@ -1049,15 +1058,11 @@ void KookaView::slotShowAImage(const KookaImage *img)
 }
 
 
-
-
-
 void KookaView::slotUnloadAImage(const KookaImage *img)
 {
     kDebug() << "Unloading Image";
     if (img_canvas!=NULL) img_canvas->newImage(NULL);
 }
-
 
 
 /* this slot is called when the user clicks on an image in the packager
@@ -1085,13 +1090,12 @@ void KookaView::updateCurrImage( QImage& img )
 }
 
 
-
 void KookaView::slotOpenCurrInGraphApp()
 {
-    K3FileTreeViewItem *ftvi = m_gallery->currentItem();
-    if (ftvi==NULL) return;
+    const KFileItem *fi = m_gallery->galleryTree()->currentFileItem();
+    if (fi==NULL || fi->isNull()) return;
 
-    KUrl::List urllist(ftvi->url());
+    KUrl::List urllist(fi->url());
     KRun::displayOpenWithDialog(urllist, m_mainWindow);
 }
 
@@ -1207,7 +1211,7 @@ void KookaView::slotPhotoCopyScan(KScanStat status)
 }
 
 
-ScanPackager *KookaView::gallery() const
+ScanGallery *KookaView::gallery() const
 {
     return (m_gallery->galleryTree());
 }

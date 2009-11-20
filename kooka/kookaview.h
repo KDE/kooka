@@ -50,7 +50,7 @@ class ThumbView;
 class KookaImage;
 class KookaGallery;
 class OcrResEdit;
-class ScanPackager;
+class ScanGallery;
 class ScanParams;
 class ImgScanInfo;
 class Previewer;
@@ -96,7 +96,7 @@ public:
     void print( );
 
     void loadStartupImage();
-    ScanPackager *gallery() const;
+    ScanGallery *gallery() const;
     ImageCanvas *getImageViewer() const	{ return (img_canvas); }
 
     bool scannerConnected() const { return (haveConnection); }
@@ -228,6 +228,8 @@ private:
     QByteArray userDeviceSelection(bool alwaysAsk);
 
     void updateCurrImage( QImage& ) ;
+    void saveGalleryState(int index = -1) const;
+    void restoreGalleryState(int index = -1);
 
     KMainWindow *m_mainWindow;
 
@@ -253,6 +255,8 @@ private:
 
     bool        isPhotoCopyMode;
     KPrinter*   photoCopyPrinter;
+
+    int mPreviousTab;
 
     QSplitter *mScanPage;
     QSplitter *mScanSubSplitter;

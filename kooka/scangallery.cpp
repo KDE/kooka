@@ -1,12 +1,3 @@
-/***************************************************************************
-                          scanpackager.cpp  -  description
-                             -------------------
-    begin                : Fri Dec 17 1999
-    copyright            : (C) 1999 by Klaas Freitag
-    email                : freitag@suse.de
-
-    $Id$
- ***************************************************************************/
 
 /***************************************************************************
  *                                                                         *
@@ -26,18 +17,17 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "scanpackager.h"
-#include "scanpackager.moc"
+#include "scangallery.h"
+#include "scangallery.moc"
 
 #include <qfileinfo.h>
 #include <qsignalmapper.h>
-#include <q3listview.h>
 #include <qdir.h>
 #include <qevent.h>
 #include <qapplication.h>
+#include <qheaderview.h>
 
 #include <kmessagebox.h>
-#include <k3filetreeview.h>
 #include <kmimetypetrader.h>
 #include <krun.h>
 #include <kpropertiesdialog.h>
@@ -53,6 +43,7 @@
 #include <kmimetype.h>
 #include <kstandardguiitem.h>
 #include <kimageio.h>
+#include <kconfig.h>
 
 #include <kio/global.h>
 #include <kio/netaccess.h>
@@ -63,122 +54,79 @@
 #include "kookapref.h"
 
 
-// TODO: port to KDE4, although from kdelibs/KDE4PORTING.html:
-//
-// "No replacement yet, apart from the more low-level KDirModel"
-//
-// K3FileTreeViewItem is not the same as KDE3's KFileTreeViewItem in that
+#define COLUMN_STATES_GROUP	"GalleryColumns"
+
+
+
+// FileTreeViewItem is not the same as KDE3's KFileTreeViewItem in that
 // fileItem() used to return a KFileItem *, allowing the item to be modified
 // through the pointer.  Now it returns a KFileItem which is a value copy of the
 // internal one, not a pointer to it - so the internal KFileItem cannot
 // be modified.  This means that we can't store information in the extra data
-// of the KFileItem of a K3FileTreeViewItem.  Including, unfortunately, our
+// of the KFileItem of a FileTreeViewItem.  Including, unfortunately, our
 // KookaImage pointer :-(
 //
 // This is a consequence of commit 719513, "Making KFileItemList value based".
 //
-// We therefore maintain our own map of item URL -> item information.  There
-// is an entry in this map for each loaded image.
+// We store the image pointer in the 'clientData' of the item (of the ported
+// FileTreeView) instead.
 
 
-
-// ------------------------------------------------------------------------
-
-class PackagerInfo
+ScanGallery::ScanGallery(QWidget *parent)
+    : FileTreeView(parent)
 {
-public:
-    PackagerInfo(KookaImage *img, K3FileTreeViewItem *it = NULL);
+    setObjectName("ScanGallery");
 
-    // Default constructor, needed to be able to use a value container.
-    // The compiler-generated copy constructor and assignment operators
-    // will be OK to use.
-    explicit PackagerInfo();
+    //header()->setStretchEnabled(true,0);		// do we like this effect?
 
-    bool isValid() const { return (mValid); }
+    setColumnCount(3);
+    setRootIsDecorated(false);
+    //setSortingEnabled(true);
+    //sortByColumn(0, Qt::AscendingOrder);
+    setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
 
-    K3FileTreeViewItem *item() const { return (mItem); }
-    KookaImage *image() const { return (mImage); }
+    QStringList labels;
+    labels << i18n("Name");
+    labels << i18n("Size");
+    labels << i18n("Format");
+    setHeaderLabels(labels);
 
-private:
-    bool mValid;
-    KookaImage *mImage;
-    K3FileTreeViewItem *mItem;
-};
-
-
-PackagerInfo::PackagerInfo(KookaImage *img, K3FileTreeViewItem *it)
-{
-    mValid = true;
-    mImage = img;
-    mItem = it;
-}
-
-
-PackagerInfo::PackagerInfo()
-{
-    mValid = false;
-    mImage = NULL;
-    mItem = NULL;
-}
-
-
-
-
-// ------------------------------------------------------------------------
-
-ScanPackager::ScanPackager(QWidget *parent)
-    : K3FileTreeView(parent)
-{
-    setItemsRenameable(false);				// set later from config
-    setDefaultRenameAction(Q3ListView::Reject);
-
-   //header()->setStretchEnabled(true,0);		// do we like this effect?
-
-   addColumn( i18n("Image Name" ));
-   setColumnAlignment( 0, Qt::AlignLeft );
-   setRenameable ( 0, true );
-
-   addColumn( i18n("Size") );
-   setColumnAlignment( 1, Qt::AlignRight );
-   setRenameable ( 1, false );
-
-   addColumn( i18n("Format" ));
-   setColumnAlignment( 2, Qt::AlignRight );
-   setRenameable ( 2, false );
+    headerItem()->setTextAlignment(0, Qt::AlignLeft);
+    headerItem()->setTextAlignment(1, Qt::AlignLeft);
+    headerItem()->setTextAlignment(2, Qt::AlignLeft);
 
    /* Drag and Drop */
-   setDragEnabled( true );
+   setDragEnabled(true);
+#if 0
+   // TODO: port D&D
    setDropVisualizer(true);
    setAcceptDrops(true);
+#endif
 
-   connect(this,SIGNAL(dropped(K3FileTreeView *,QDropEvent *,Q3ListViewItem *,Q3ListViewItem *)),
-           SLOT(slotUrlsDropped(K3FileTreeView *,QDropEvent *,Q3ListViewItem *,Q3ListViewItem *)));
+   connect(this,SIGNAL(dropped(FileTreeView *,QDropEvent *,QTreeWidgetItem *,QTreeWidgetItem *)),
+           SLOT(slotUrlsDropped(FileTreeView *,QDropEvent *,QTreeWidgetItem *,QTreeWidgetItem *)));
 
-   setRootIsDecorated( false );
+   connect(this, SIGNAL(itemActivated(QTreeWidgetItem *,int)),
+           SLOT(slotClicked(QTreeWidgetItem *)));
 
-   connect( this, SIGNAL( clicked( Q3ListViewItem*)),
-	    SLOT( slotClicked(Q3ListViewItem*)));
+   connect(model(),SIGNAL(dataChanged(const QModelIndex &,const QModelIndex &)),
+           SLOT(slotDataChanged(const QModelIndex &,const QModelIndex &)));
 
-   connect( this, SIGNAL( rightButtonPressed( Q3ListViewItem *, const QPoint &, int )),
-	    SLOT( slotShowContextMenu(Q3ListViewItem *,const QPoint &)));
+   connect(this, SIGNAL(fileRenamed(FileTreeViewItem *,const QString &)),
+           SLOT(slotFileRenamed(FileTreeViewItem *,const QString &)));
 
-   connect( this, SIGNAL(itemRenamed (Q3ListViewItem*, const QString &, int ) ), this,
-	    SLOT(slotFileRename(Q3ListViewItem*,const QString&)));
-
-   connect(this,SIGNAL(expanded(Q3ListViewItem *)),SLOT(slotItemExpanded(Q3ListViewItem *)));
-
-
-   img_counter = 1;
+   connect(this, SIGNAL(itemExpanded(QTreeWidgetItem *)),
+           SLOT(slotItemExpanded(QTreeWidgetItem *)));
 
     /* Preload frequently used icons */
-    KIconLoader::global()->addAppDir("libkscan");	// access to our icons
-
+    KIconLoader::global()->addAppDir("libkscan");	// access to library icons
     mPixFloppy = KIconLoader::global()->loadIcon("media-floppy", KIconLoader::NoGroup, KIconLoader::SizeSmall);
     mPixGray   = KIconLoader::global()->loadIcon("palette-gray", KIconLoader::NoGroup, KIconLoader::SizeSmall);
     mPixBw     = KIconLoader::global()->loadIcon("palette-lineart", KIconLoader::NoGroup, KIconLoader::SizeSmall);
     mPixColor  = KIconLoader::global()->loadIcon("palette-color", KIconLoader::NoGroup, KIconLoader::SizeSmall);
 
     m_startup = true;
+    m_currSelectedDir = QString::null;
 
     /* create a context menu and set the title */
     m_contextMenu = new KMenu();
@@ -188,178 +136,221 @@ ScanPackager::ScanPackager(QWidget *parent)
 }
 
 
-ScanPackager::~ScanPackager()
+ScanGallery::~ScanGallery()
 {
     kDebug();
-    mInfoMap.clear();
 }
 
 
-
-
-const PackagerInfo ScanPackager::infoForUrl(const KUrl &url)
+void ScanGallery::saveHeaderState(const QString &key) const
 {
-    if (!mInfoMap.contains(url))
-    {
-        kDebug() << "no info in map for" << url;
-        return (PackagerInfo());			// a null/invalid PackagerInfo
-    }
-
-    return (mInfoMap[url]);
+    KConfigGroup grp = KGlobal::config()->group(COLUMN_STATES_GROUP);
+    kDebug() << "to" << key;
+    grp.writeEntry(key, header()->saveState().toBase64());
 }
 
 
-
-KookaImage *ScanPackager::imageForItem(const K3FileTreeViewItem *item)
+void ScanGallery::restoreHeaderState(const QString &key)
 {
-    if (item==NULL) return (NULL);
+    const KConfigGroup grp = KGlobal::config()->group(COLUMN_STATES_GROUP);
 
-    KookaImage *img = NULL;
-    KUrl u = item->url();
-    if (!mInfoMap.contains(u))
+    kDebug() << "from" << key;
+    QString state = grp.readEntry(key, "");
+    if (!state.isEmpty())
     {
-        kDebug() << "no info in map for" << u;
-        return (NULL);
+        QHeaderView *hdr = header();
+        // same workaround as needed in Akregator (even with Qt 4.6),
+        // see r918196 and r1001242 to kdepim/akregator/src/articlelistview.cpp
+        hdr->resizeSection(hdr->logicalIndex(hdr->count()-1), 1);
+        hdr->restoreState(QByteArray::fromBase64(state.toAscii()));
     }
-
-    img = mInfoMap[u].image();
-    kDebug() << "got image" << img << "from map for for" << u;
-    return (img);
 }
 
 
-
-
-void ScanPackager::openRoots()
+void ScanGallery::openRoots()
 {
    /* standard root always exists, ImgRoot creates it */
    KUrl rootUrl(KookaPref::galleryRoot());
-   kDebug() << "Open standard root " << rootUrl.url();
+   kDebug() << "Standard root" << rootUrl.url();
 
-   openRoot( rootUrl, true );
+   m_defaultBranch = openRoot(rootUrl, i18n("Kooka Gallery"));
    m_defaultBranch->setOpen(true);
 
    /* open more configurable image repositories TODO */
 }
 
 
-KFileTreeBranch *ScanPackager::openRoot(const KUrl &root, bool open)
+FileTreeBranch *ScanGallery::openRoot(const KUrl &root, const QString &title)
 {
-    KIconLoader *loader = KIconLoader::global();
+    FileTreeBranch *branch = addBranch(root, title);
 
-   /* working on the global branch. FIXME */
-   m_defaultBranch = addBranch( root, i18n("Kooka Gallery"),
-				loader->loadIcon( "folder", KIconLoader::Small ),
-				false /* do not showHidden */ );
+    branch->setOpenPixmap(KIconLoader::global()->loadIcon("folder-image", KIconLoader::Small));
+    branch->setShowExtensions(true);
 
-   // Q_CHECK_PTR( m_defaultBranch );
-   m_defaultBranch->setOpenPixmap( loader->loadIcon( "folder-image", KIconLoader::Small ));
+    setDirOnlyMode(branch, false);
 
-   setDirOnlyMode( m_defaultBranch, false );
-   m_defaultBranch->setShowExtensions( true ); // false );
+    connect(branch, SIGNAL(newTreeViewItems(FileTreeBranch *,const FileTreeViewItemList &)),
+            SLOT(slotDecorate(FileTreeBranch *,const FileTreeViewItemList &)));
 
-   connect( m_defaultBranch, SIGNAL( newTreeViewItems( KFileTreeBranch*, const K3FileTreeViewItemList& )),
-	    this, SLOT( slotDecorate(KFileTreeBranch*, const K3FileTreeViewItemList& )));
+    connect(branch, SIGNAL(changedTreeViewItems(FileTreeBranch *,const FileTreeViewItemList &)),
+            SLOT(slotDecorate(FileTreeBranch *,const FileTreeViewItemList &)));
 
-   connect( m_defaultBranch, SIGNAL( directoryChildCount( K3FileTreeViewItem* , int )),
-	    this, SLOT( slotDirCount( K3FileTreeViewItem *, int )));
+    connect(branch, SIGNAL(directoryChildCount(FileTreeViewItem *,int)),
+            SLOT(slotDirCount(FileTreeViewItem *,int)));
 
-   connect( m_defaultBranch, SIGNAL( deleteItem( KFileItem* )),
-	    this, SLOT( slotDeleteFromBranch(KFileItem*)));
+    connect(branch, SIGNAL(populateFinished(FileTreeViewItem *)),
+            SLOT(slotStartupFinished(FileTreeViewItem *)));
 
-   connect( m_defaultBranch, SIGNAL( populateFinished( K3FileTreeViewItem * )),
-	    this, SLOT( slotStartupFinished( K3FileTreeViewItem * )));
-
-
-   return( m_defaultBranch );
+    return (branch);
 }
 
-void ScanPackager::slotStartupFinished( K3FileTreeViewItem *it )
+
+void ScanGallery::slotStartupFinished(FileTreeViewItem *it)
 {
     if (m_startup && (it==m_defaultBranch->root()))
     {
         kDebug();
 
         /* If nothing is selected, select the root. */
-        if (currentKFileTreeViewItem()==NULL)
-        {
-            m_defaultBranch->root()->setSelected(true);
-        }
-
+        if (currentFileTreeViewItem()==NULL) m_defaultBranch->root()->setSelected(true);
         m_startup = false;
     }
 }
 
 
-void ScanPackager::slotDirCount(K3FileTreeViewItem* item,int cnt)
+void ScanGallery::contextMenuEvent(QContextMenuEvent *ev)
+{
+    FileTreeViewItem *item = static_cast<FileTreeViewItem *>(itemAt(ev->pos()));
+    ev->accept();
+    if (m_contextMenu!=NULL) m_contextMenu->exec(ev->globalPos());
+}
+
+
+// For a right-click (context menu), we want to select the clicked item but
+// not activate it (which would result in loading the image).  The activate
+// is emit'ed from QAbstractItemView::mouseReleaseEvent(), so filter out a
+// right button release here.
+
+void ScanGallery::mouseReleaseEvent(QMouseEvent *ev)
+{
+    if (ev->button()==Qt::RightButton)			// context menu button
+    {
+        ev->accept();					// ignore the event
+        return;
+    }
+
+    FileTreeView::mouseReleaseEvent(ev);		// process the event
+}
+
+
+static ImageFormat getImgFormat(const FileTreeViewItem *item)
+{
+    if (item==NULL) return (ImageFormat(""));
+
+    const KFileItem *kfi = item->fileItem();
+    if (kfi->isNull()) return (ImageFormat(""));
+
+    // Check that this is a plausible image format (MIME type = "image/anything")
+    // before trying to get the image type.
+    QString mimetype = kfi->mimetype();
+    if (!mimetype.startsWith("image/")) return (ImageFormat(""));
+
+    return (ImageFormat::formatForUrl(kfi->url()));
+}
+
+
+static QString localFileName(const FileTreeViewItem *item)
+{
+    if (item==NULL) return (QString::null);
+
+    bool isLocal = false;
+    KUrl u = item->fileItem()->mostLocalUrl(isLocal);
+    if (!isLocal) return (QString::null);
+
+    return (u.path());
+}
+
+
+static KookaImage *imageForItem(const FileTreeViewItem *item)
+{
+    if (item==NULL) return (NULL);			// get loaded image if any
+    return (static_cast<KookaImage *>(item->clientData()));
+}
+
+
+void ScanGallery::slotDirCount(FileTreeViewItem *item, int cnt)
 {
     if (item==NULL) return;
     if (!item->isDir()) return;
 
     int imgCount = 0;					// total these separately,
     int dirCount = 0;					// we want individual counts
-							// for files and subfolders
-    const Q3ListViewItem *ch = item->firstChild();
-    while (ch!=NULL)
+    int fileCount = 0;					// for files and subfolders
+
+    for (int i = 0; i<item->childCount(); ++i)
     {
-        const K3FileTreeViewItem *ci = static_cast<const K3FileTreeViewItem*>(ch);
+        FileTreeViewItem *ci = static_cast<FileTreeViewItem *>(item->child(i));
         if (ci->isDir()) ++dirCount;
-        else ++imgCount;
-        ch = ch->nextSibling();
+        else
+        {
+            if (ImageFormat::formatForMime(ci->fileItem()->mimeTypePtr()).isValid()) ++imgCount;
+            else ++fileCount;
+        }
     }
 
     QString cc = "";
     if (dirCount==0)
     {
-        if (imgCount==0) cc = i18n("empty");
-        else cc = i18np("one image","%1 images",imgCount);
+        if ((imgCount+fileCount)==0) cc = i18n("empty");
+        else
+        {
+            if (fileCount==0) cc = i18np("one image", "%1 images", imgCount);
+            else cc = i18np("one file", "%1 files", (imgCount+fileCount));
+
+        }
     }
     else
     {
-        if (imgCount>0) cc = i18np("one image, ","%1 images, ",imgCount);
-        cc += i18np("1 folder","%1 folders",dirCount);
+        if (fileCount>0) cc = i18np("one file, ", "%1 files, ", (imgCount+fileCount));
+        else if (imgCount>0) cc = i18np("one image, ", "%1 images, ", imgCount);
+
+        cc += i18np("1 folder", "%1 folders", dirCount);
     }
 
     item->setText(1," "+cc);
 }
 
 
-void ScanPackager::slotItemExpanded(Q3ListViewItem *item)
+void ScanGallery::slotItemExpanded(QTreeWidgetItem *item)
 {
     if (item==NULL) return;
+    if (!(static_cast<FileTreeViewItem *>(item))->isDir()) return;
 
-    K3FileTreeViewItem *it = static_cast<K3FileTreeViewItem*>(item);
-    if (!it->isDir()) return;
-
-    Q3ListViewItem *ch = item->firstChild();
-    while (ch!=NULL)
+    for (int i = 0; i<item->childCount(); ++i)
     {
-        K3FileTreeViewItem *ci = static_cast<K3FileTreeViewItem *>(ch);
-        if (ci->isDir() && !ci->alreadyListed()) ci->branch()->populate(ci->url(),ci);
-        ch = ch->nextSibling();
+        FileTreeViewItem *ci = static_cast<FileTreeViewItem *>(item->child(i));
+        if (ci->isDir() && !ci->alreadyListed()) ci->branch()->populate(ci->url(), ci);
     }
 }
 
 
-void ScanPackager::slotDecorate(K3FileTreeViewItem *item)
+void ScanGallery::slotDecorate(FileTreeViewItem *item)
 {
     if (item==NULL) return;
 
     if (!item->isDir())					// dir is done in another slot
     {
-        KFileItem kfi = item->fileItem();
-
         ImageFormat format = getImgFormat(item);	// this is safe for any file
         item->setText(2,(" "+format.name()+" "));
 
         const KookaImage *img = imageForItem(item);
         if (img!=NULL)					// image appears to be loaded
         {						// set image depth pixmap
-            if (img->depth()==1) item->setPixmap(0, mPixBw);
+            if (img->depth()==1) item->setIcon(0, mPixBw);
             else
             {
-                if (img->isGrayscale()) item->setPixmap(0, mPixGray);
-                else item->setPixmap(0, mPixColor);
+                if (img->isGrayscale()) item->setIcon(0, mPixGray);
+                else item->setIcon(0, mPixColor);
             }
 							// set image size column
             QString t = i18n("%1 x %2", img->width(), img->height());
@@ -369,19 +360,20 @@ void ScanPackager::slotDecorate(K3FileTreeViewItem *item)
         {
             if (format.isValid())			// if a valid image file
             {
-                item->setPixmap(0, mPixFloppy);
-                if (!kfi.isNull()) item->setText(1, KIO::convertSize(kfi.size()));
+                item->setIcon(0, mPixFloppy);
+                const KFileItem *kfi = item->fileItem();
+                if (!kfi->isNull()) item->setText(1, KIO::convertSize(kfi->size()));
             }
             else
             {
-                item->setPixmap(0, KIO::pixmapForUrl(item->url(), 0, KIconLoader::Small));
+                item->setIcon(0, KIO::pixmapForUrl(item->url(), 0, KIconLoader::Small));
             }
         }
     }
 
-    // This code is quite similar to m_nextUrlToSelect in K3FileTreeView::slotNewTreeViewItems
+    // This code is quite similar to m_nextUrlToSelect in FileTreeView::slotNewTreeViewItems
     // When scanning a new image, we wait for the KDirLister to notice the new file,
-    // and then we have the K3FileTreeViewItem that we need to display the image.
+    // and then we have the FileTreeViewItem that we need to display the image.
     if (!m_nextUrlToShow.isEmpty())
     {
         if (m_nextUrlToShow.equals(item->url(), KUrl::CompareWithoutTrailingSlash))
@@ -394,23 +386,22 @@ void ScanPackager::slotDecorate(K3FileTreeViewItem *item)
 }
 
 
-void ScanPackager::slotDecorate(KFileTreeBranch *branch, const K3FileTreeViewItemList &list)
+void ScanGallery::slotDecorate(FileTreeBranch *branch, const FileTreeViewItemList &list)
 {
-    K3FileTreeViewItemListIterator it(list);
-
-    while (it.current())
+    kDebug() << "count" << list.count();
+    for (FileTreeViewItemList::const_iterator it = list.constBegin();
+         it!=list.constEnd(); ++it)
     {
-        K3FileTreeViewItem *kftvi = *it;
-        slotDecorate(kftvi);
-        emit fileChanged(&kftvi->fileItem());
-        ++it;
+        FileTreeViewItem *ftvi = (*it);
+        slotDecorate(ftvi);
+        emit fileChanged(ftvi->fileItem());
     }
 }
 
 
-void ScanPackager::updateParent(const K3FileTreeViewItem *curr)
+void ScanGallery::updateParent(const FileTreeViewItem *curr)
 {
-    KFileTreeBranch *branch = branches().at(0);		/* There should be at least one */
+    FileTreeBranch *branch = branches().at(0);		/* There should be at least one */
     if (branch==NULL) return;
 
     QString strdir = itemDirectory(curr);
@@ -419,69 +410,71 @@ void ScanPackager::updateParent(const K3FileTreeViewItem *curr)
     KUrl dir(strdir);
     branch->updateDirectory(dir);
 
-    K3FileTreeViewItem *parent = branch->findTVIByUrl(dir);
-    if (parent!=NULL) parent->setOpen(true);		/* Ensure parent is expanded */
+    FileTreeViewItem *parent = branch->findItemByUrl(dir);
+    if (parent!=NULL) parent->setExpanded(true);	/* Ensure parent is expanded */
 }
 
 
-// TODO: this modifies the KFileItem, see comment at top
-void ScanPackager::slotFileRename(Q3ListViewItem *it,const QString &newName)
-{
-    if (it==NULL) return;
-    K3FileTreeViewItem *item = static_cast<K3FileTreeViewItem *>(it);
 
-    bool success = (!newName.isEmpty());
+
+// "Rename" action triggered in the GUI
+
+void ScanGallery::slotRenameItems()
+{
+    FileTreeViewItem *curr = currentFileTreeViewItem();
+    if (curr!=NULL) editItem(curr, 0);
+}
+
+
+
+// Renaming has finished
+
+bool ScanGallery::slotFileRenamed(FileTreeViewItem *item, const QString &newName)
+{
+    if (item->isRoot()) return (false);			// cannot rename root here
 
     KUrl urlFrom = item->url();
+    kDebug() << "url" << urlFrom << "->" << newName;
+    QString oldName = urlFrom.fileName();
+
     KUrl urlTo(urlFrom);
-//    urlTo.setFileName("");				/* clean filename, apply new name */
     urlTo.setFileName(newName);
 
-    if (success)
-    {
-        if (urlFrom==urlTo)
-        {
-            kDebug() << "Renaming to same!";
-            success = false;
-        }
-        else
-        {
-	 /* clear selection, because the renamed image comes in through
-	  * kdirlister again
-	  */
-            // slotUnloadItem(item);			// unnecessary, bug 68532
+    /* clear selection, because the renamed image comes in through
+     * kdirlister again
+     */
+    // slotUnloadItem(item);				// unnecessary, bug 68532
 							// because of "note new URL" below
-            kDebug() << "Renaming " << urlFrom.prettyUrl()
-                           << " -> " << urlTo.prettyUrl();
+    kDebug() << "Renaming " << urlFrom << "->" << urlTo;
 
-            //setSelected(item,false);
+    //setSelected(item,false);
 
-            success = ImgSaver::renameImage(urlFrom,urlTo,false,this);
-            if (success)				// rename the file
-            {
-                item->fileItem().setUrl(urlTo);	// note new URL
-                //emit fileRenamed(item->fileItem(),urlTo);
-                emit fileRenamed(item,urlTo.fileName());
-            }
-        }
+    bool success = ImgSaver::renameImage(urlFrom, urlTo, true, this);
+    if (success)					// rename the file
+    {
+        item->setUrl(urlTo);				// note new URL
+        emit fileRenamed(item->fileItem(), newName);
     }
-
-    if (!success)
+    else
     {
         kDebug() << "renaming failed";
-        item->setText(0,urlFrom.fileName());		// restore the name
+        item->setText(0, oldName);			// restore original name
     }
 
 //    setSelected(item,true);				// restore the selection
+    return (success);
 }
 
 
+
+// TODO: this function does not appear to be used
 /* ----------------------------------------------------------------------- */
 /*
  * Method that checks if the new filename a user enters while renaming an image is valid.
  * It checks for a proper extension.
  */
-QString ScanPackager::buildNewFilename(const QString &cmplFilename, const ImageFormat &currFormat)
+
+static QString buildNewFilename(const QString &cmplFilename, const ImageFormat &currFormat)
 {
    /* cmplFilename = new name the user wishes.
     * currFormat   = the current format of the image.
@@ -517,14 +510,15 @@ QString ScanPackager::buildNewFilename(const QString &cmplFilename, const ImageF
    return( ext );
 }
 
+
 /* ----------------------------------------------------------------------- */
 /* This method returns the directory of an image or directory.
  */
-QString ScanPackager::itemDirectory(const K3FileTreeViewItem* item, bool relativ) const
+QString ScanGallery::itemDirectory(const FileTreeViewItem* item, bool relativ) const
 {
     if (item==NULL)
     {
-        kDebug() << "Error: without item";
+        kDebug() << "no item";
         return (QString::null);
     }
 
@@ -543,11 +537,9 @@ QString ScanPackager::itemDirectory(const K3FileTreeViewItem* item, bool relativ
 	 relativUrl.append( "/" );
    }
 
-
-
    if (relativ)
    {
-      KFileTreeBranch *branch = item->branch();
+      FileTreeBranch *branch = item->branch();
       if (branch!=NULL)
       {
 	 kDebug() << "Relative URL:" << relativUrl;
@@ -573,35 +565,34 @@ QString ScanPackager::itemDirectory(const K3FileTreeViewItem* item, bool relativ
 /* ----------------------------------------------------------------------- */
 /* This slot receives a string from the gallery-path combobox shown under the
  * image gallery, the relative directory under the branch.  Now it is to assemble
- * a complete path from the data, find out which K3FileTreeViewItem is associated
+ * a complete path from the data, find out which FileTreeViewItem is associated
  * with it and call slotClicked with it.
  */
 
-void ScanPackager::slotSelectDirectory(const QString &branchName,const QString &relPath)
+void ScanGallery::slotSelectDirectory(const QString &branchName,const QString &relPath)
 {
     kDebug() << "branch" << branchName << "path" << relPath;
 
-    K3FileTreeViewItem *kfi;
-    if (!branchName.isEmpty()) kfi = findItem(branchName,relPath);
-    else kfi = findItem(branches().at(0),relPath);
-    if (kfi==NULL) return;
+    FileTreeViewItem *item;
+    if (!branchName.isEmpty()) item = findItemInBranch(branchName, relPath);
+    else item = findItemInBranch(branches().at(0), relPath);	// assume the 1st branch
+    if (item==NULL) return;
 
-    ensureItemVisible(kfi);
-    setCurrentItem(kfi);
-    slotClicked(kfi);					// load thumbnails, etc.
+    scrollToItem(item);
+    setCurrentItem(item);
+    slotClicked(item);					// load thumbnails, etc.
 }
 
 
 /* ----------------------------------------------------------------------- */
 /* This slot is called when clicking on an item.                           */
-void ScanPackager::slotClicked(Q3ListViewItem *newItem)
+void ScanGallery::slotClicked(QTreeWidgetItem *newItem)
 {
-    K3FileTreeViewItem *item = static_cast<K3FileTreeViewItem*>(newItem);
-
+    FileTreeViewItem *item = static_cast<FileTreeViewItem *>(newItem);
     if (item==NULL) return;				// can click over no item
 
     kDebug();
-    emit showItem(item);				// tell the (new) thumbnail view
+    emit showItem(item->fileItem());			// tell the (new) thumbnail view
 
     //  Check if directory, hide image for now, later show a thumb view?
     if (item->isDir())					// is it a directory?
@@ -620,9 +611,9 @@ void ScanPackager::slotClicked(Q3ListViewItem *newItem)
 
     //  Indicate the new directory if it has changed
     QString wholeDir = itemDirectory(item,false);	// not relative to root
-    if (currSelectedDir!=wholeDir)
+    if (m_currSelectedDir!=wholeDir)
     {
-        currSelectedDir = wholeDir;
+        m_currSelectedDir = wholeDir;
         QString relativUrl = itemDirectory(item,true);
         kDebug() << "Emitting" << relativUrl << "as new relative URL";
         //  Emit the signal with branch and the relative path
@@ -630,105 +621,114 @@ void ScanPackager::slotClicked(Q3ListViewItem *newItem)
 
         // Show new thumbnail directory
         if (item->isDir()) emit showThumbnails(item);
-        else emit showThumbnails(static_cast<K3FileTreeViewItem *>(item->parent()));
+        else emit showThumbnails(static_cast<FileTreeViewItem *>(item->parent()));
     }
 }
 
 
-// TODO: this tries to modify the KFileItem, see comment at top
-// needs to be adapted for new URL->info map, if we do actually support subimages -
-// maybe create a URL for the subimage with its fragment ID being the subimage number,
-// and put that into the map as usual.
-void ScanPackager::loadImageForItem(K3FileTreeViewItem *item)
+void ScanGallery::loadImageForItem(FileTreeViewItem *item)
 {
     if (item==NULL) return;
 
-    KFileItem kfi = item->fileItem();
-    if (kfi.isNull()) return;
+    const KFileItem *kfi = item->fileItem();
+    if (kfi->isNull()) return;
 
     kDebug() << "loading" << item->url();
+
+    QString ret = QString::null;			// no error so far
 
     ImageFormat format = getImgFormat(item);		// check for valid image format
     if (!format.isValid())
     {
-        kDebug() << "not a valid image format!";
-        return;
+        ret = i18n("Not a valid image format");
     }
-
-    KookaImage *img = imageForItem(item);
-    if (img==NULL)					// image not already loaded
+    else
     {
-        // The image needs to be loaded. Possibly it is a multi-page image.
-        // If it is, the kookaImage has a subImageCount larger than one. We
-        // create an subimage-item for every subimage, but do not yet load
-        // them.
-
-        img = new KookaImage();
-        if (img==NULL || !img->loadFromUrl(item->url()))
+        KookaImage *img = imageForItem(item);
+        if (img==NULL)					// image not already loaded
         {
-            kDebug() << "loading failed!";
-            return;
-        }
+            // The image needs to be loaded. Possibly it is a multi-page image.
+            // If it is, the kookaImage has a subImageCount larger than one. We
+            // create an subimage-item for every subimage, but do not yet load
+            // them.
 
-        img->setFileItem(&kfi);				// store the fileitem
-
-        kDebug() << "subImage-count" << img->subImagesCount();
-        if (img->subImagesCount()>1)			// look for subimages,
-        {						// create items for them
-            KIconLoader *loader = KIconLoader::global();
-
-            // Start at the image with index 1, that makes one less than
-            // are actually in the image. But image 0 was already created above.
-            K3FileTreeViewItem *prevItem = NULL;
-            for (int i = 1; i<img->subImagesCount(); i++)
+            img = new KookaImage();
+            ret = img->loadFromUrl(item->url());
+            if (ret.isEmpty())				// image loaded OK
             {
-                kDebug() << "Creating subimage" << i;
-                KFileItem newKfi(kfi);
-                K3FileTreeViewItem *subImgItem = new K3FileTreeViewItem(item,newKfi,item->branch());
+                img->setFileItem(kfi);			// store the fileitem
 
-                if (prevItem!=NULL) subImgItem->moveItem(prevItem);
-                prevItem = subImgItem;
+                kDebug() << "subImage-count" << img->subImagesCount();
+                if (img->subImagesCount()>1)		// look for subimages,
+                {					// create items for them
+                    KIconLoader *loader = KIconLoader::global();
 
-                subImgItem->setPixmap(0, loader->loadIcon("editcopy", KIconLoader::Small));
-                subImgItem->setText(0, i18n("Sub-image %1", i));
-                KookaImage *subImgImg = new KookaImage(i, img);
-                subImgImg->setFileItem(&newKfi);
-                newKfi.setExtraData(this, subImgImg);
+                    // Start at the image with index 1, that makes one less than
+                    // are actually in the image. But image 0 was already created above.
+                    FileTreeViewItem *prevItem = NULL;
+                    for (int i = 1; i<img->subImagesCount(); i++)
+                    {
+                        kDebug() << "Creating subimage" << i;
+                        KFileItem newKfi(*kfi);
+                        FileTreeViewItem *subImgItem = new FileTreeViewItem(item,newKfi,item->branch());
+
+                        // TODO: what's the equivalent?
+                        //if (prevItem!=NULL) subImgItem->moveItem(prevItem);
+                        prevItem = subImgItem;
+
+                        subImgItem->setIcon(0, loader->loadIcon("editcopy", KIconLoader::Small));
+                        subImgItem->setText(0, i18n("Sub-image %1", i));
+                        KookaImage *subImgImg = new KookaImage(i, img);
+                        subImgImg->setFileItem(&newKfi);
+                        subImgItem->setClientData(subImgImg);
+                    }
+                }
+
+                if (img->isSubImage())			// this is a subimage
+                {
+                    kDebug() << "it is a subimage";
+                    if (img->isNull())			// if not already loaded,
+                    {
+                        kDebug() << "extracting subimage";
+                        img->extractNow();		// load it now
+                    }
+                }
+
+                slotImageArrived(item, img);
+            }
+            else
+            {
+                delete img;				// nothing to load
             }
         }
     }
 
-    if (img->isSubImage())				// this is a subimage
-    {
-        kDebug() << "it is a subimage";
-        if (img->isNull())				// if not already loaded,
-        {
-            kDebug() << "extracting subimage";
-            img->extractNow();				// load it now
-        }
-    }
-
-    slotImageArrived(item, img);
+    if (!ret.isEmpty()) KMessageBox::error(this,	// image loading failed
+                                           i18n("<qt>"
+                                                "<p>Unable to load the image<br>"
+                                                "<filename>%2</filename><br>"
+                                                "<br>"
+                                                "%1",
+                                                ret,
+                                                item->url().prettyUrl()),
+                                           i18n("Image Load Error"));
 }
 
 
 /* Hit this slot with a file for a kfiletreeviewitem. */
-void ScanPackager::slotImageArrived(K3FileTreeViewItem *item, KookaImage *image)
+void ScanGallery::slotImageArrived(FileTreeViewItem *item, KookaImage *image)
 {
     if (item==NULL || image==NULL) return;
 
-    PackagerInfo pi(image, item);
-    kDebug() << "saving image" << image << "in map for" << item->url();
-    mInfoMap[item->url()] = pi;
-
+    item->setClientData(image);				// note image for item
     slotDecorate(item);
     emit showImage(image, false);
 }
 
 
-const KookaImage *ScanPackager::getCurrImage(bool loadOnDemand)
+const KookaImage *ScanGallery::getCurrImage(bool loadOnDemand)
 {
-    K3FileTreeViewItem *curr = currentKFileTreeViewItem();
+    FileTreeViewItem *curr = currentFileTreeViewItem();
     if (curr==NULL) return (NULL);			// no current item
     if (curr->isDir()) return (NULL);			// is a directory
 
@@ -744,11 +744,11 @@ const KookaImage *ScanPackager::getCurrImage(bool loadOnDemand)
 }
 
 
-QString ScanPackager::getCurrImageFileName( bool withPath = true ) const
+QString ScanGallery::getCurrImageFileName(bool withPath) const
 {
    QString result = "";
 
-   K3FileTreeViewItem *curr = currentKFileTreeViewItem();
+   FileTreeViewItem *curr = currentFileTreeViewItem();
    if( ! curr )
    {
       kDebug() << "nothing selected!";
@@ -761,6 +761,7 @@ QString ScanPackager::getCurrImageFileName( bool withPath = true ) const
       }
       else
       {
+          // TODO: the next 2 lines don't make sense
 	 KUrl url( localFileName(curr));
 	 url = curr->url();
 	 result = url.fileName();
@@ -770,38 +771,10 @@ QString ScanPackager::getCurrImageFileName( bool withPath = true ) const
 }
 
 
-ImageFormat ScanPackager::getImgFormat(const K3FileTreeViewItem *item)
-{
-    if (item==NULL) return (ImageFormat(""));
-
-    KFileItem kfi = item->fileItem();
-    if (kfi.isNull()) return (ImageFormat(""));
-
-    // Check that this is a plausible image format (MIME type = "image/anything")
-    // before trying to get the image type.
-    QString mimetype = kfi.mimetype();
-    if (!mimetype.startsWith("image/")) return (ImageFormat(""));
-
-    return (ImageFormat::formatForUrl(kfi.url()));
-}
-
-
-QString ScanPackager::localFileName(const K3FileTreeViewItem *item)
-{
-    if (item==NULL) return (QString::null);
-
-    bool isLocal = false;
-    KUrl u = item->fileItem().mostLocalUrl(isLocal);
-    if (!isLocal) return (QString::null);
-
-    return (u.path());
-}
-
-
 /* Called if the image exists but was changed by image manipulation func   */
-void ScanPackager::slotCurrentImageChanged(const QImage *img)
+void ScanGallery::slotCurrentImageChanged(const QImage *img)
 {
-    K3FileTreeViewItem *curr = currentKFileTreeViewItem();
+    FileTreeViewItem *curr = currentFileTreeViewItem();
     if (curr==NULL)
     {
         kDebug() << "nothing selected!";
@@ -823,9 +796,8 @@ void ScanPackager::slotCurrentImageChanged(const QImage *img)
     }
 
     ImgSaver saver;
-    ImgSaveStat is_stat = ISS_OK;
-    is_stat = saver.saveImage(img, filename, format);
-    if (is_stat!=ISS_OK)
+    ImgSaver::ImageSaveStatus is_stat = saver.saveImage(img, filename, format);
+    if (is_stat!=ImgSaver::SaveStatusOk)
     {
         KMessageBox::sorry(this, i18n("The updated image could not be saved.\n%1.",
                                       saver.errorString(is_stat)),
@@ -834,8 +806,7 @@ void ScanPackager::slotCurrentImageChanged(const QImage *img)
 
     if (img!=NULL && !img->isNull())
     {
-        KFileItem kfi = curr->fileItem();
-        emit imageChanged(&kfi);
+        emit imageChanged(curr->fileItem());
         KookaImage *newImage = new KookaImage(*img);
         slotImageArrived(curr, newImage);
     }
@@ -847,41 +818,41 @@ void ScanPackager::slotCurrentImageChanged(const QImage *img)
  * It urgently needs to make a deep copy of the image !
  */
 
-void ScanPackager::addImage(const QImage *img, KookaImageMeta *meta)
+void ScanGallery::addImage(const QImage *img, KookaImageMeta *meta)
 {
     if (img==NULL) return;
-    ImgSaveStat is_stat = ISS_OK;
+    ImgSaver::ImageSaveStatus is_stat = ImgSaver::SaveStatusOk;
 
-    K3FileTreeViewItem *curr = currentKFileTreeViewItem();
+    FileTreeViewItem *curr = currentFileTreeViewItem();
     if (curr==NULL)					// into root if nothing is selected
     {
-        KFileTreeBranch *branch = branches().at(0);	// there should be at least one
+        FileTreeBranch *branch = branches().at(0);	// there should be at least one
         if (branch!=NULL)
-        {
-            curr = findItem(branch, i18n("Incoming/"));	// if user has created this????
+        {						// if user has created this????
+            curr = findItemInBranch(branch, i18n("Incoming/"));
             if (curr==NULL) curr = branch->root();
         }
 
         if (curr==NULL) return;				// something very odd has happened!
-        setSelected(curr,true);
+        curr->setSelected(true);
     }
 
     KUrl dir(itemDirectory(curr));			// where new image will go
-    ImgSaver imgsaver(dir);
-    is_stat = imgsaver.saveImage(img);			// try to save the image
-    if (is_stat!=ISS_OK)				// image saving failed
+    ImgSaver saver(dir);
+    is_stat = saver.saveImage(img);			// try to save the image
+    if (is_stat!=ImgSaver::SaveStatusOk)				// image saving failed
     {
-        if (is_stat==ISS_SAVE_CANCELED) return;		// user cancelled, just ignore
-
+        if (is_stat==ImgSaver::SaveStatusCanceled) return;
+							// user cancelled, just ignore
         KMessageBox::error(this, i18n("<qt>Could not save the image<br><filename>%2</filename><br><br>%1",
-                                      imgsaver.errorString(is_stat),
-                                      imgsaver.lastURL().prettyUrl()),
+                                      saver.errorString(is_stat),
+                                      saver.lastURL().prettyUrl()),
                            i18n("Image Save Error"));
         return;
     }
 
     /* Add the new image to the list of new images */
-    KUrl lurl = imgsaver.lastURL();
+    KUrl lurl = saver.lastURL();
     slotSetNextUrlToSelect(lurl);
     m_nextUrlToShow = lurl;
 
@@ -890,70 +861,48 @@ void ScanPackager::addImage(const QImage *img, KookaImageMeta *meta)
 
 /* ----------------------------------------------------------------------- */
 /* selects and opens the file with the given name. This is used to restore the
- * last displayed image by its name.
+ * last displayed image by its name, and to select an image in the gallery
+ * when clicked in the thumbview.
  */
-void ScanPackager::slotSelectImage(const KUrl &name)
+void ScanGallery::slotSelectImage(const KUrl &url)
 {
-    K3FileTreeViewItem *found = spFindItem(UrlSearch,name.url());
+    FileTreeViewItem *found = findItemByUrl(url);
     if (found==NULL) found = m_defaultBranch->root();
 
-    ensureItemVisible(found);
+    scrollToItem(found);
     setCurrentItem(found);
     slotClicked(found);
 }
 
 
-K3FileTreeViewItem *ScanPackager::spFindItem(SearchType type, const QString &name, const KFileTreeBranch *branch)
+FileTreeViewItem *ScanGallery::findItemByUrl(const KUrl &url, FileTreeBranch *branch)
 {
-    /* Prepare a list of branches to go through. If the parameter branch is set, search
-     * only in the parameter branch. If it is zero, search all branches returned by
-     * kfiletreeview.branches()
-     */
+    KUrl u(url);
+    if (u.protocol()=="file")				// for local files,
+    {
+        QDir d(url.path());				// ensure path is canonical
+        u.setPath(d.canonicalPath());
+    }
+    kDebug() << "URL search for" << u;
 
-    KFileTreeBranchList branchList;
+    // Prepare a list of branches to search.  If the parameter 'branch'
+    // is set, search only in the specified branch. If it is NULL, search
+    // all branches.
+    FileTreeBranchList branchList;
     if (branch!=NULL) branchList.append(branch);
     else branchList = branches();
 
-    KFileItem kfi;					// a null KFileItem
-    K3FileTreeViewItem *foundItem = NULL;
-    KUrl url;
-
-    KFileTreeBranch *branchloop;			// Loop until kfi is defined
-    for (KFileTreeBranchList::const_iterator it = branchList.constBegin();
-         it!=branchList.constEnd() && kfi.isNull(); ++it)
+    FileTreeViewItem *foundItem = NULL;
+    for (FileTreeBranchList::const_iterator it = branchList.constBegin();
+         it!=branchList.constEnd(); ++it)
     {
-        branchloop = (*it);
-        switch (type)
+        FileTreeBranch *branchloop = (*it);
+        FileTreeViewItem *ftvi = branchloop->findItemByUrl(u);
+        if (ftvi!=NULL)
         {
-case Dummy:
-default:    break;
-
-case NameSearch:
-	    kDebug() << "name search for" << name;
-	    kfi = branchloop->findByName(name);
-	    break;
-
-case UrlSearch:
-            url = name;					// ensure canonical path
-            url.setPath(QDir(url.path()).canonicalPath());
-	    kDebug() << "URL search for" << url;
-	    kfi = branchloop->findByUrl(url);
-	    break;
-        }
-    }
-
-    if (!kfi.isNull())					// found something
-    {
-        kDebug() << "found kfi for" << kfi.url();
-        PackagerInfo pi = infoForUrl(kfi.url());
-        if (!pi.isValid())
-        {
-            kDebug() << "could not get extra data!"; 
-        }
-        else
-        {
-            foundItem = pi.item();
-            kDebug() << "found path" << foundItem->path();
+            foundItem = ftvi;
+            kDebug() << "found item for" << ftvi->url();
+            break;
         }
     }
 
@@ -961,24 +910,9 @@ case UrlSearch:
 }
 
 
-/* ----------------------------------------------------------------------- */
-void ScanPackager::slotShowContextMenu(Q3ListViewItem *lvi,const QPoint &p)
+void ScanGallery::slotExportFile()
 {
-    K3FileTreeViewItem *curr = NULL;
-
-    if (lvi!=NULL)
-    {
-        curr = currentKFileTreeViewItem();
-        if (curr->isDir()) setSelected(curr,true);
-    }
-
-    if (m_contextMenu!=NULL) m_contextMenu->exec(p);
-}
-
-
-void ScanPackager::slotExportFile()
-{
-    K3FileTreeViewItem *curr = currentKFileTreeViewItem();
+    FileTreeViewItem *curr = currentFileTreeViewItem();
     if (curr==NULL) return;
 
     if (curr->isDir())
@@ -1004,16 +938,16 @@ void ScanPackager::slotExportFile()
 }
 
 
-void ScanPackager::slotImportFile()
+void ScanGallery::slotImportFile()
 {
-    K3FileTreeViewItem *curr = currentKFileTreeViewItem();
+    FileTreeViewItem *curr = currentFileTreeViewItem();
     if( ! curr ) return;
 
     KUrl impTarget = curr->url();
 
     if( ! curr->isDir() )
     {
-        K3FileTreeViewItem *pa = static_cast<K3FileTreeViewItem*>(curr->parent());
+        FileTreeViewItem *pa = static_cast<FileTreeViewItem*>(curr->parent());
         impTarget = pa->url();
     }
     kDebug() << "Importing to" << impTarget;
@@ -1032,11 +966,11 @@ void ScanPackager::slotImportFile()
 //  Using this form of the drop signal so we can check whether the drop
 //  is on top of a directory (in which case we want to move/copy into it).
 
-void ScanPackager::slotUrlsDropped(K3FileTreeView *me, QDropEvent *ev,
-                                   Q3ListViewItem *parent, Q3ListViewItem *after)
+void ScanGallery::slotUrlsDropped(FileTreeView *me, QDropEvent *ev,
+                                   QTreeWidgetItem *parent, QTreeWidgetItem *after)
 {
-    K3FileTreeViewItem *pa = static_cast<K3FileTreeViewItem *>(parent);
-    K3FileTreeViewItem *af = static_cast<K3FileTreeViewItem *>(after);
+    FileTreeViewItem *pa = static_cast<FileTreeViewItem *>(parent);
+    FileTreeViewItem *af = static_cast<FileTreeViewItem *>(after);
 
     KUrl::List urls = KUrl::List::fromMimeData(ev->mimeData());
     if (urls.isEmpty()) return;
@@ -1045,7 +979,7 @@ void ScanPackager::slotUrlsDropped(K3FileTreeView *me, QDropEvent *ev,
     //         << "after" << (af==NULL ? "NULL" : af->url())
     //         << "srcs" << urls.count() << "first" << urls.first();
     
-    K3FileTreeViewItem *onto = (af!=NULL) ? af : pa;
+    FileTreeViewItem *onto = (af!=NULL) ? af : pa;
     if (onto==NULL) return;
 
     KUrl dest = onto->url();
@@ -1064,84 +998,77 @@ void ScanPackager::slotUrlsDropped(K3FileTreeView *me, QDropEvent *ev,
 }
 
 
-void ScanPackager::slotCanceled( KIO::Job* )
+void ScanGallery::slotCanceled( KIO::Job* )
 {
     kDebug();
 }
 
 
 /* ----------------------------------------------------------------------- */
-void ScanPackager::slotUnloadItems()
+void ScanGallery::slotUnloadItems()
 {
-    K3FileTreeViewItem *curr = currentKFileTreeViewItem();
+    FileTreeViewItem *curr = currentFileTreeViewItem();
     emit showImage(NULL,false);
     slotUnloadItem(curr);
 }
 
 
-void ScanPackager::slotUnloadItem(K3FileTreeViewItem *curr)
+void ScanGallery::slotUnloadItem(FileTreeViewItem *curr)
 {
     if (curr==NULL) return;
 
     if (curr->isDir())					// is a directory
     {
-        K3FileTreeViewItem *child = static_cast<K3FileTreeViewItem*>(curr->firstChild());
-        while (child!=NULL)
+        for (int i = 0; i<curr->childCount(); ++i)
         {
+            FileTreeViewItem *child = static_cast<FileTreeViewItem*>(curr->child(i));
             slotUnloadItem(child);			// recursively unload contents
-            child = static_cast<K3FileTreeViewItem*>(child->nextSibling());
         }
     }
     else						// is a file/image
     {
-        KFileItem kfi = curr->fileItem();
         const KookaImage *image = imageForItem(curr);
         if (image==NULL) return;			// ok, nothing to unload
 
         if (image->subImagesCount()>0)			// image with subimages
         {
-	    K3FileTreeViewItem *child = static_cast<K3FileTreeViewItem*>(curr->firstChild());
-	    while (child!=NULL)				// recursively unload subimages
+            while (curr->childCount()>0)		// recursively unload subimages
 	    {
-                K3FileTreeViewItem *nextChild = NULL;
+                FileTreeViewItem *child = static_cast<FileTreeViewItem*>(curr->takeChild(0));
                 slotUnloadItem(child);
-                nextChild = static_cast<K3FileTreeViewItem*>(child->nextSibling());
                 delete child;
-                child = nextChild;
 	    }
         }
 
         emit unloadImage(image);
         delete image;
 
-        mInfoMap.remove(curr->url());
-        kDebug() << "removed from map" << curr->url();
+        curr->setClientData(NULL);			// clear image from item
         slotDecorate(curr);
     }
 }
 
 
 
-void ScanPackager::slotItemProperties()
+void ScanGallery::slotItemProperties()
 {
-    K3FileTreeViewItem *curr = currentKFileTreeViewItem();
+    FileTreeViewItem *curr = currentFileTreeViewItem();
     if (curr==NULL) return;
-
-    (void) new KPropertiesDialog(curr->url(),this);
+    KPropertiesDialog::showDialog(curr->url(),this);
 }
 
 
 /* ----------------------------------------------------------------------- */
 
-void ScanPackager::slotDeleteItems()
+void ScanGallery::slotDeleteItems()
 {
-    K3FileTreeViewItem *curr = currentKFileTreeViewItem();
+    FileTreeViewItem *curr = currentFileTreeViewItem();
     if (curr==NULL) return;
 
     KUrl urlToDel = curr->url();			// item to be deleted
-    Q3ListViewItem *nextToSelect = curr->nextSibling();	// select this afterwards
-    bool isDir = (curr->fileItem().isDir());		// deleting a folder?
-
+    bool isDir = curr->isDir();				// deleting a folder?
+    QTreeWidgetItem *nextToSelect = curr->treeWidget()->itemBelow(curr);
+							// select this afterwards
     QString s;
     QString dontAskKey;
     if (isDir)
@@ -1192,26 +1119,17 @@ void ScanPackager::slotDeleteItems()
     //  in a folder (nothing is selected afterwards) and deleting anything
     //  else (the next image is selected and loaded).  So leaving this
     //  commented out for now.
-    curr = currentKFileTreeViewItem();
+    curr = currentFileTreeViewItem();
     kDebug() << "new selection after delete" << (curr==NULL ? "NULL" : curr->url().prettyURL());
-    if (curr!=NULL) emit showItem(curr);
+    if (curr!=NULL) emit showItem(curr->fileItem());
 #endif
 }
 
 
 
 
-void ScanPackager::slotRenameItems( )
-{
-   K3FileTreeViewItem *curr = currentKFileTreeViewItem();
-   if (curr!=NULL) rename(curr,0);
-}
-
-
-
-
 /* ----------------------------------------------------------------------- */
-void ScanPackager::slotCreateFolder( )
+void ScanGallery::slotCreateFolder( )
 {
    bool ok;
    QString folder = KInputDialog::getText( i18n( "New Folder" ),
@@ -1222,7 +1140,7 @@ void ScanPackager::slotCreateFolder( )
    {
 	 /* KIO create folder goes here */
 
-	 K3FileTreeViewItem *it = currentKFileTreeViewItem();
+	 FileTreeViewItem *it = currentFileTreeViewItem();
 	 if( it )
 	 {
 	    KUrl url = it->url();
@@ -1255,14 +1173,9 @@ void ScanPackager::slotCreateFolder( )
 }
 
 
-/* called whenever one branch detects a deleted file */
-void ScanPackager::slotDeleteFromBranch( KFileItem* kfi )
-{
-   emit fileDeleted( kfi );
-}
-
-
-void ScanPackager::contentsDragMoveEvent(QDragMoveEvent *ev)
+// TODO: port drag-and-drop
+#if 0
+void ScanGallery::contentsDragMoveEvent(QDragMoveEvent *ev)
 {
     if (!acceptDrag(ev))
     {
@@ -1270,38 +1183,39 @@ void ScanPackager::contentsDragMoveEvent(QDragMoveEvent *ev)
         return;
     }
 
-    Q3ListViewItem *afterme = NULL;
-    Q3ListViewItem *parent = NULL;
+    QTreeWidgetItem *afterme = NULL;
+    QTreeWidgetItem *parent = NULL;
 
     findDrop(ev->pos(), parent, afterme);
 
     // "afterme" is NULL when aiming at a directory itself
-    Q3ListViewItem *item = (afterme!=NULL) ? afterme : parent;
+    QTreeWidgetItem *item = (afterme!=NULL) ? afterme : parent;
     if (item!=NULL)
     {
-        bool isDir = static_cast<K3FileTreeViewItem*>(item)->isDir();
+        bool isDir = static_cast<FileTreeViewItem*>(item)->isDir();
         if (isDir)
         {						// for the autoopen code
-            K3FileTreeView::contentsDragMoveEvent(ev);
+            FileTreeView::contentsDragMoveEvent(ev);
             return;
         }
     }
 
    ev->accept();
 }
+#endif
 
 
-void ScanPackager::setAllowRename(bool on)
+void ScanGallery::setAllowRename(bool on)
 {
     kDebug() << "to" << on;
-    setItemsRenameable(on);
+    setEditTriggers(on ? QAbstractItemView::DoubleClicked : QAbstractItemView::NoEditTriggers);
 }
 
 
 
-void ScanPackager::showOpenWithMenu(KActionMenu *menu)
+void ScanGallery::showOpenWithMenu(KActionMenu *menu)
 {
-    K3FileTreeViewItem *curr = currentKFileTreeViewItem();
+    FileTreeViewItem *curr = currentFileTreeViewItem();
     QString mimeType = KMimeType::findByUrl(curr->url())->name();
     kDebug() << "Trying to open" << curr->url() << "which is" << mimeType;
 
@@ -1337,11 +1251,11 @@ void ScanPackager::showOpenWithMenu(KActionMenu *menu)
 }
 
 
-void ScanPackager::slotOpenWith(int idx)
+void ScanGallery::slotOpenWith(int idx)
 {
     kDebug() << "idx" << idx;
 
-    K3FileTreeViewItem *ftvi = currentKFileTreeViewItem();
+    FileTreeViewItem *ftvi = currentFileTreeViewItem();
     if (ftvi==NULL) return;
     KUrl::List urllist(ftvi->url());
 

@@ -43,7 +43,6 @@
 class QMenu;
 
 class KFileItem;
-class K3FileTreeViewItem;
 class KActionMenu;
 class KToggleAction;
 
@@ -71,8 +70,8 @@ public slots:
     void slotSetSize(int size);
     void slotImageDeleted(const KFileItem *kfi);
     void slotImageChanged(const KFileItem *kfi);
-    void slotImageRenamed(const K3FileTreeViewItem *item,const QString &newName);
-    void slotSelectImage(const K3FileTreeViewItem *item);
+    void slotImageRenamed(const KFileItem *kfi, const QString &newName);
+    void slotSelectImage(const KFileItem *kfi);
 
 protected:
     void saveConfig();
@@ -99,6 +98,7 @@ private:
     KDirOperator *m_dirop;
     KUrl m_lastSelected;
     QString m_toSelect;
+    KUrl m_toChangeTo;
 };
 
 #endif							// THUMBVIEW_H

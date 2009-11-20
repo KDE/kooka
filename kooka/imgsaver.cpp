@@ -47,6 +47,36 @@
 #include "formatdialog.h"
 
 
+/* Needs a full qualified directory name */
+void createDir(const QString &dir)
+{
+    KUrl url(dir);
+    if (!KIO::NetAccess::exists(url, KIO::NetAccess::DestinationSide, NULL))
+    {
+        kDebug() << "directory" << dir << "does not exist, try to create";
+        // if( mkdir( QFile::encodeName( dir ), S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH ) != 0 )
+        if (KIO::mkdir(url))
+        {
+            KMessageBox::sorry(NULL, i18n("<qt>"
+                                          "The folder<br>"
+                                          "<filename>%2</filename><br>"
+                                          "does not exist and could not be created.<br>"
+                                          "<br>"
+                                          "%1", 
+                                          KIO::NetAccess::lastErrorString(),
+                                          dir),
+                               i18n("Error creating directory"));
+        }
+    }
+#if 0
+    if (!fi.isWritable())
+    {
+        KMessageBox::sorry(NULL, i18n("<qt>The directory<br><filename>%1</filename><br> is not writeable, please check the permissions.", dir));
+    }
+#endif
+}
+
+
 ImgSaver::ImgSaver(const KUrl &dir)
 {
     if (dir.isValid() && !dir.isEmpty() && dir.protocol()=="file")
@@ -64,25 +94,9 @@ ImgSaver::ImgSaver(const KUrl &dir)
 }
 
 
-/* Needs a full qualified directory name */
-void ImgSaver::createDir(const QString &dir)
+QString extension(const KUrl &url)
 {
-    KUrl url(dir);
-    if (!KIO::NetAccess::exists(url, KIO::NetAccess::DestinationSide, 0))
-    {
-        kDebug() << "directory" << dir << "does not exist, try to create";
-        // if( mkdir( QFile::encodeName( dir ), S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH ) != 0 )
-        if (KIO::mkdir(url))
-        {
-            KMessageBox::sorry(NULL, i18n("<qt>The folder<br><filename>%1</filename><br>does not exist and could not be created", dir));
-        }
-    }
-#if 0
-    if (!fi.isWritable())
-    {
-        KMessageBox::sorry(NULL, i18n("<qt>The directory<br><filename>%1</filename><br> is not writeable, please check the permissions.", dir));
-    }
-#endif
+    return (KMimeType::extractKnownExtension(url.pathOrUrl()));
 }
 
 
@@ -90,9 +104,9 @@ void ImgSaver::createDir(const QString &dir)
  *   This function asks the user for a filename or creates
  *   one by itself, depending on the settings
  **/
-ImgSaveStat ImgSaver::saveImage(const QImage *image)
+ImgSaver::ImageSaveStatus ImgSaver::saveImage(const QImage *image)
 {
-    if (image==NULL) return (ISS_ERR_PARAM);
+    if (image==NULL) return (ImgSaver::SaveStatusParam);
 
     ImgSaver::ImageType imgType = ImgSaver::ImgNone;	// find out what kind of image it is
     if (image->depth()>8) imgType = ImgSaver::ImgHicolor;
@@ -124,8 +138,8 @@ ImgSaveStat ImgSaver::saveImage(const QImage *image)
     while (!saveFormat.isValid() || m_saveAskFormat || m_saveAskFilename)
     {							// is a dialogue neeeded?
         FormatDialog fd(NULL,imgType,m_saveAskFormat,saveFormat,m_saveAskFilename,saveFilename);
-        if (!fd.exec()) return (ISS_SAVE_CANCELED);	// do the dialogue
-
+        if (!fd.exec()) return (ImgSaver::SaveStatusCanceled);
+							// do the dialogue
         saveFilename = fd.getFilename();		// get filename as entered
         if (fd.useAssistant())				// redo with format options
         {
@@ -165,9 +179,9 @@ ImgSaveStat ImgSaver::saveImage(const QImage *image)
 /**
  *   This function uses a filename provided by the caller.
  **/
-ImgSaveStat ImgSaver::saveImage(const QImage *image,
-                                const KUrl &url,
-                                const ImageFormat &format)
+ImgSaver::ImageSaveStatus ImgSaver::saveImage(const QImage *image,
+                                              const KUrl &url,
+                                              const ImageFormat &format)
 {
     return (save(image, url, format));
 }
@@ -177,12 +191,12 @@ ImgSaveStat ImgSaver::saveImage(const QImage *image,
    private save() does the work to save the image.
    the filename must be complete and local.
 **/
-ImgSaveStat ImgSaver::save(const QImage *image,
-                           const KUrl &url,
-                           const ImageFormat &format,
-                           const QString &subformat)
+ImgSaver::ImageSaveStatus ImgSaver::save(const QImage *image,
+                                         const KUrl &url,
+                                         const ImageFormat &format,
+                                         const QString &subformat)
 {
-    if (image==NULL) return (ISS_ERR_PARAM);
+    if (image==NULL) return (ImgSaver::SaveStatusParam);
 
     kDebug() << "to" << url.prettyUrl() << "format" << format << "subformat" << subformat;
 
@@ -192,7 +206,7 @@ ImgSaveStat ImgSaver::save(const QImage *image,
     if (!url.isLocalFile())				// file must be local
     {
 	kDebug() << "Can only save local files";
-	return (ISS_ERR_PROTOCOL);
+	return (ImgSaver::SaveStatusProtocol);
     }
 
     QString filename = url.path();			// local file path
@@ -206,24 +220,24 @@ ImgSaveStat ImgSaver::save(const QImage *image,
         if (!dir.mkdir(dirPath))
         {
 	    kDebug() << "Could not create directory" << dirPath;
-            return (ISS_ERR_MKDIR);
+            return (ImgSaver::SaveStatusMkdir);
         }
     }
 
     if (fi.exists() && !fi.isWritable())
     {
         kDebug() << "Cannot overwrite existing file" << filename;
-        return (ISS_ERR_PERM);
+        return (ImgSaver::SaveStatusPermission);
     }
 
     if (!format.canWrite())				// check format, is it writable?
     {
         kDebug() << "Cannot write format" << format;
-        return (ISS_ERR_FORMAT_NO_WRITE);
+        return (ImgSaver::SaveStatusFormatNoWrite);
     }
 
     bool result = image->save(filename, format.name());
-    return (result ? ISS_OK : ISS_ERR_UNKNOWN);
+    return (result ? ImgSaver::SaveStatusOk : ImgSaver::SaveStatusUnknown);
 }
 
 
@@ -360,33 +374,35 @@ QString ImgSaver::findSubFormat(const ImageFormat &format)
 }
 
 
-QString ImgSaver::errorString(ImgSaveStat stat)
+QString ImgSaver::errorString(ImgSaver::ImageSaveStatus status)
 {
     QString re;
-    switch (stat)
+    switch (status)
     {
-case ISS_OK:			re = i18n("Save OK");			break;
-case ISS_ERR_PERM:		re = i18n("Permission denied");		break;
-case ISS_ERR_FILENAME:		re = i18n("Bad file name");		break;  // never used
-case ISS_ERR_NO_SPACE:		re = i18n("No space left on device");	break;	// never used
-case ISS_ERR_FORMAT_NO_WRITE:	re = i18n("Cannot write image format '%1'",mLastFormat.constData());
-									break;
-case ISS_ERR_PROTOCOL:		re = i18n("Cannot write using protocol '%1'",mLastUrl.protocol());
-									break;
-case ISS_SAVE_CANCELED:		re = i18n("User cancelled saving");	break;
-case ISS_ERR_MKDIR:		re = i18n("Cannot create directory");	break;
-case ISS_ERR_UNKNOWN:		re = i18n("Save failed");		break;
-case ISS_ERR_PARAM:		re = i18n("Bad parameter");		break;
-default:			re = i18n("Unknown status %1",stat);
-				break;
+case ImgSaver::SaveStatusOk:
+        re = i18n("Save OK");							break;
+case ImgSaver::SaveStatusPermission:
+        re = i18n("Permission denied");						break;
+case ImgSaver::SaveStatusBadFilename:			// never used
+        re = i18n("Bad file name");						break;
+case ImgSaver::SaveStatusNoSpace:			// never used
+        re = i18n("No space left on device");					break;
+case ImgSaver::SaveStatusFormatNoWrite:
+        re = i18n("Cannot write image format '%1'", mLastFormat.constData());	break;
+case ImgSaver::SaveStatusProtocol:
+        re = i18n("Cannot write using protocol '%1'", mLastUrl.protocol());	break;
+case ImgSaver::SaveStatusCanceled:
+        re = i18n("User cancelled saving");					break;
+case ImgSaver::SaveStatusMkdir:
+        re = i18n("Cannot create directory");					break;
+case ImgSaver::SaveStatusUnknown:
+        re = i18n("Save failed");						break;
+case ImgSaver::SaveStatusParam:
+        re = i18n("Bad parameter");						break;
+default:
+        re = i18n("Unknown status %1", status);					break;
     }
     return (re);
-}
-
-
-QString ImgSaver::extension(const KUrl &url)
-{
-    return (KMimeType::extractKnownExtension(url.pathOrUrl()));
 }
 
 
@@ -429,7 +445,7 @@ case 24:    newfmt = QImage::Format_RGB888;
 case 32:    newfmt = QImage::Format_RGB32;
             break;
 
-default:    kDebug() << "Error: Bad color depth requested" << colors;
+default:    kDebug() << "Error: Bad colour depth requested" << colors;
             tmpFile.setAutoRemove(true);
             return (QString::null);
         }
@@ -450,15 +466,14 @@ default:    kDebug() << "Error: Bad color depth requested" << colors;
 }
 
 
-
-
-// TODO: are copy/rename similar enough to merge?
-
-bool ImgSaver::renameImage(const KUrl &fromUrl, const KUrl &toUrl, bool askExt, QWidget *overWidget)
+bool copyRenameImage(bool isCopying, const KUrl &fromUrl, const KUrl &toUrl, bool askExt, QWidget *overWidget)
 {
+    QString errorString = QString::null;
+
     /* Check if the provided filename has a extension */
     QString extFrom = extension(fromUrl);
     QString extTo = extension(toUrl);
+
     KUrl targetUrl(toUrl);
 
     if (extTo.isEmpty() && !extFrom.isEmpty())
@@ -469,77 +484,15 @@ bool ImgSaver::renameImage(const KUrl &fromUrl, const KUrl &toUrl, bool askExt, 
         if (!fName.endsWith( "." )) fName += ".";
         fName += extFrom;
 
-        if (askExt)
-        {
-            result = KMessageBox::questionYesNo(overWidget,
-                                                i18n("<qt><p>The file name you supplied has no file extension."
-                                                     "<br>Should the original one be added?\n"
-                                                     "<p>That would result in the new file name <filename>%1</filename>", fName),
-                                                i18n("Extension Missing"),
-                                                KGuiItem(i18n("Add Extension")),
-                                                KGuiItem(i18n("Do Not Add")),
-                                                "AutoAddExtensions");
-      }
-
-      if (result == KMessageBox::Yes)
-      {
-          targetUrl.setFileName( fName );
-          kDebug() << "Rename file to" << targetUrl.prettyUrl();
-      }
-    }
-    else if(!extFrom.isEmpty() && extFrom!=extTo)
-    {
-        KMimeType::Ptr fromType = KMimeType::findByUrl(fromUrl);
-        KMimeType::Ptr toType = KMimeType::findByUrl(toUrl);
-        if (!toType->is(fromType->name()))
-        {
-            KMessageBox::error(overWidget,
-                               i18n("Format changes of images are currently not supported."),
-			       i18n("Wrong Extension"));
-            return (false);
-        }
-    }
-
-    if (KIO::NetAccess::exists(targetUrl, KIO::NetAccess::DestinationSide, overWidget))
-    {
-        kDebug() << "Target already exists" << targetUrl;
-        return (false);
-    }
-
-    return (KIO::NetAccess::move(fromUrl, targetUrl, overWidget));
-}
-
-
-
-
-
-bool ImgSaver::copyImage(const KUrl &fromUrl, const KUrl &toUrl, QWidget *overWidget)
-{
-    /* Check if the provided filename has a extension */
-    QString extFrom = extension(fromUrl);
-    QString extTo = extension(toUrl);
-    KUrl targetUrl(toUrl);
-
-    if (extTo.isEmpty() && !extFrom.isEmpty())
-    {
-        /* Ask if the extension should be added */
-        QString fName = toUrl.fileName();
-        if(!fName.endsWith(".")) fName += ".";
-        fName += extFrom;
-
-        int result = KMessageBox::questionYesNo(overWidget,
-                                                i18n("<qt><p>The file name you supplied has no file extension."
-                                                     "<br>Should the original one be added?\n"
-                                                     "<p>That would result in the new file name <filename>%1</filename>", fName),
-                                                i18n("Extension Missing"),
-                                                KGuiItem(i18n("Add Extension")),
-                                                KGuiItem(i18n("Do Not Add")),
-                                                "AutoAddExtensions");
-        if (result==KMessageBox::Yes)
-        {
-            targetUrl.setFileName(fName);
-            kDebug() << "Copy to" << targetUrl.prettyUrl();
-        }
+        if (askExt) result = KMessageBox::questionYesNo(overWidget,
+                                                        i18n("<qt><p>The file name you supplied has no file extension."
+                                                             "<br>Should the original one be added?\n"
+                                                             "<p>This would result in the new file name <filename>%1</filename>", fName),
+                                                        i18n("Extension Missing"),
+                                                        KGuiItem(i18n("Add Extension")),
+                                                        KGuiItem(i18n("Do Not Add")),
+                                                        "AutoAddExtensions");
+        if (result==KMessageBox::Yes) targetUrl.setFileName(fName);
     }
     else if (!extFrom.isEmpty() && extFrom!=extTo)
     {
@@ -547,13 +500,58 @@ bool ImgSaver::copyImage(const KUrl &fromUrl, const KUrl &toUrl, QWidget *overWi
         KMimeType::Ptr toType = KMimeType::findByUrl(toUrl);
         if (!toType->is(fromType->name()))
         {
-            KMessageBox::error(overWidget,
-                               i18n("Format changes of images are currently not supported."),
-			       i18n("Wrong Extension"));
-	   return (false);
-       }
-   }
+            errorString = "Changing the image format is not currently supported";
+        }
+    }
 
-    // TODO: need an 'exists' overwrite check as above?
-    return (KIO::NetAccess::file_copy(fromUrl, targetUrl, overWidget));
+    if (errorString.isEmpty())				// no problem so far
+    {
+        kDebug() << (isCopying ? "Copy" : "Rename") << "->" << targetUrl;
+
+        if (KIO::NetAccess::exists(targetUrl, KIO::NetAccess::DestinationSide, overWidget))
+        {						// see if destination exists
+            errorString = i18n("Target already exists");
+        }
+        else
+        {
+            bool success;
+            if (isCopying) success = KIO::NetAccess::file_copy(fromUrl, targetUrl, overWidget);
+            else success = KIO::NetAccess::move(fromUrl, targetUrl, overWidget);
+            if (!success)				// copy/rename the file
+            {
+                errorString = KIO::NetAccess::lastErrorString();
+            }
+        }
+    }
+
+    if (!errorString.isEmpty())				// file operation error
+    {
+        QString msg = (isCopying ? i18n("Unable to copy the file") :
+                                   i18n("Unable to rename the file"));
+        QString title = (isCopying ? i18n("Error copying file") :
+                                     i18n("Error renaming file"));
+        KMessageBox::sorry(overWidget,i18n("<qt>"
+                                           "<p>%1<br>"
+                                           "<filename>%3</filename><br>"
+                                           "<br>"
+                                           "%2",
+                                           msg,
+                                           errorString,
+                                           fromUrl.prettyUrl()), title);
+        return (false);
+    }
+
+    return (true);					// file operation succeeded
+}
+
+
+bool ImgSaver::renameImage(const KUrl &fromUrl, const KUrl &toUrl, bool askExt, QWidget *overWidget)
+{
+    return (copyRenameImage(false, fromUrl, toUrl, askExt, overWidget));
+}
+
+
+bool ImgSaver::copyImage(const KUrl &fromUrl, const KUrl &toUrl, QWidget *overWidget)
+{
+    return (copyRenameImage(true, fromUrl, toUrl, true, overWidget));
 }

@@ -47,7 +47,7 @@
 #include <kmenu.h>
 #include <kxmlguiwindow.h>
 
-#include "scanpackager.h"
+#include "scangallery.h"
 #include "kookapref.h"
 #include "kookaview.h"
 
