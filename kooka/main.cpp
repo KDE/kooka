@@ -76,7 +76,7 @@ int main( int argc, char *argv[] )
                      "",				// catalogName
                      ki18n("Kooka"),			// programName
 #if SVN_HAVE_VERSION
-                     (VERSION " (SVN " SVN_REVISION_STRING " of " SVN_LAST_CHANGE ")"),
+                     (VERSION " (SVN " SVN_REVISION_STRING ")"),
 #else
                      VERSION,				// version
 #endif

@@ -23,14 +23,11 @@ then
 	if [ -n "$SVN" ]				# SVN command available
 	then
 		SVNREV=`$SVN info $SRC 2>/dev/null | sed -n -e'/^Revision:/ { s/^[^:]*: *//;p;q }'`
-		SVNDATE=`$SVN info $SRC 2>/dev/null | sed -n -e'/^Last Changed Date:/ { s/^[^:]*: *//;s/  *[-+][0-9].*$//;p;q }'`
 	else						# SVN command not found
 		SVNREV="Unknown"
-		SVNDATE=
 	fi
 else							# source not under SVN
 	SVNREV=
-	SVNDATE=
 fi
 
 
@@ -41,7 +38,6 @@ TMPFILE="$BIN/svnversion.h.tmp"				# temporary header file
 	echo "#endif"
 	echo
 	echo "#define SVN_REVISION_STRING  \"${SVNREV}\""
-	echo "#define SVN_LAST_CHANGE      \"${SVNDATE}\""
 	if [ -n "$SVNREV" ]
 	then
 		echo "#define SVN_HAVE_VERSION     1"
@@ -69,6 +65,4 @@ fi
 
 mv $TMPFILE $OUTFILE					# update the header file
 echo "Current SVN revision:  $SVNREV"
-echo "Current SVN date:      $SVNDATE"
-
 exit 0
