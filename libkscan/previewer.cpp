@@ -462,7 +462,7 @@ void Previewer::setScannerBgIsWhite(bool isWhite)
         d->m_cbBackground->setCurrentIndex(isWhite ? BG_ITEM_WHITE : BG_ITEM_BLACK);
         d->m_cbBackground->setEnabled(true);
 
-        d->m_scanner->slotStoreConfig(CFG_SCANNER_EMPTY_BG,(isWhite ? SCANNER_EMPTY_WHITE : SCANNER_EMPTY_BLACK));
+        d->m_scanner->storeConfig(CFG_SCANNER_EMPTY_BG,(isWhite ? SCANNER_EMPTY_WHITE : SCANNER_EMPTY_BLACK));
     }
 }
 
@@ -525,7 +525,7 @@ void Previewer::slotAutoSelToggled(bool isOn )
 
     /* Store configuration */
     d->m_doAutoSelection = isOn;
-    if (d->m_scanner!=NULL) d->m_scanner->slotStoreConfig(CFG_AUTOSEL_DO,
+    if (d->m_scanner!=NULL) d->m_scanner->storeConfig(CFG_AUTOSEL_DO,
                                                           (isOn ? "on" : "off"));
 
     if (isOn && r.width()<2 && r.height()<2)	/* There is no selection yet */
@@ -549,7 +549,7 @@ void Previewer::slotSetAutoSelThresh(int t)
     d->m_autoSelThresh = t;
     kDebug() << "Setting threshold to" << t;
     if( d->m_scanner )
-        d->m_scanner->slotStoreConfig( CFG_AUTOSEL_THRESH, QString::number(t) );
+        d->m_scanner->storeConfig( CFG_AUTOSEL_THRESH, QString::number(t) );
     findSelection();
 }
 

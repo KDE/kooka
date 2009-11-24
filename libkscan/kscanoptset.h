@@ -65,7 +65,7 @@ public:
      *  @see insert
      */
     bool backupOption(const KScanOption &opt);
-	void backupOptionDict(const KScanOptSet &src);
+    void backupOptionDict(const KScanOptSet &src);
 
     /**
      *  returns a pointer to a stored option given by name.
@@ -95,7 +95,7 @@ public:
     bool load(const QString &scannerName = QString::null);
 
     void setDescription(const QString &desc);
-    QString  getDescription() const { return (mSetDescription); }
+    QString getDescription() const { return (mSetDescription); }
     const QByteArray &optSetName() const { return (mSetName); }
 
     static StringMap readList();

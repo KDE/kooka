@@ -63,7 +63,8 @@
 #include <kseparator.h>
 #include <kicontheme.h>
 
-#include "libkscan/devselector.h"
+#include "libkscan/kscandevice.h"
+#include "libkscan/scanglobal.h"
 
 #include "imgsaver.h"
 #include "thumbview.h"
@@ -317,7 +318,8 @@ void KookaPref::setupGeneralPage()
 
 void KookaPref::setupStartupPage()
 {
-    KConfigGroup grp = konf->group(GROUP_STARTUP);
+    const KConfigGroup grp1 = konf->group(GROUP_STARTUP);
+    const KConfigGroup grp2 = ScanGlobal::self()->configGroup();
 
     /* startup options */
     QFrame *page = new QFrame(this);
@@ -330,19 +332,19 @@ void KookaPref::setupStartupPage()
     /* Query for network scanner (Checkbox) */
     cbNetQuery = new QCheckBox(i18n("Query network for available scanners"), page);
     cbNetQuery->setToolTip(i18n("Check this if you want a network query for available scanners.\nNote that this does not mean a query over the entire network but only the stations configured for SANE."));
-    cbNetQuery->setChecked(!grp.readEntry(STARTUP_ONLY_LOCAL, false));
+    cbNetQuery->setChecked(!grp2.readEntry(STARTUP_ONLY_LOCAL, false));
     top->addWidget(cbNetQuery);
 
     /* Show scanner selection box on startup (Checkbox) */
     cbShowScannerSelection = new QCheckBox(i18n("Show the scanner selection dialog"), page);
     cbShowScannerSelection->setToolTip(i18n("Check this to show the scanner selection dialogue on startup."));
-    cbShowScannerSelection->setChecked(!grp.readEntry(STARTUP_SKIP_ASK, false));
+    cbShowScannerSelection->setChecked(!grp2.readEntry(STARTUP_SKIP_ASK, false));
     top->addWidget(cbShowScannerSelection);
 
     /* Read startup image on startup (Checkbox) */
     cbReadStartupImage = new QCheckBox(i18n("Load the last selected image into the viewer"), page);
     cbReadStartupImage->setToolTip(i18n("Check this if you want Kooka to load the last selected image into the viewer on startup.\nIf your images are large, that might slow down Kooka's startup."));
-    cbReadStartupImage->setChecked(grp.readEntry(STARTUP_READ_IMAGE, true));
+    cbReadStartupImage->setChecked(grp1.readEntry(STARTUP_READ_IMAGE, true));
     top->addWidget(cbReadStartupImage);
 
     top->addStretch(10);
@@ -457,17 +459,15 @@ void KookaPref::slotSaveSettings()
     grp.writeEntry(GALLERY_LAYOUT, layoutCB->currentIndex());
 
     /* ** startup options ** */
-   /** write the global one, to read from libkscan also */
-    grp = konf->group(GROUP_STARTUP);
-
-
-    // TODO: these next 2 entries should go to a global (or libkscan) config
+    /** write the global one, to read from libkscan also */
+    grp = ScanGlobal::self()->configGroup();
     bool cbVal = !cbShowScannerSelection->isChecked();
     kDebug() << "Writing" << STARTUP_SKIP_ASK << ":" << cbVal;
     grp.writeEntry(STARTUP_SKIP_ASK, cbVal);
     /* only search for local (=non-net) scanners ? */
     grp.writeEntry(STARTUP_ONLY_LOCAL, !cbNetQuery->isChecked());
 
+    grp = konf->group(GROUP_STARTUP);
     /* Should kooka open the last displayed image in the viewer ? */
     if (cbReadStartupImage) grp.writeEntry(STARTUP_READ_IMAGE, cbReadStartupImage->isChecked());
 

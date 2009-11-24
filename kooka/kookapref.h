@@ -40,6 +40,9 @@
 #define GALLERY_LOCATION	"Location"
 #define GALLERY_DEFAULT_LOC	"KookaGallery"
 
+// Note that this is not the same GROUP_STARTUP which is used in
+// libkscan/scanglobal!  Settings here are used by Kooka only.
+#define GROUP_STARTUP		"Startup"
 #define STARTUP_READ_IMAGE      "ReadImageOnStart"
 
 #define CFG_GROUP_OCR_DIA       "ocrDialog"

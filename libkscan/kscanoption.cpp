@@ -36,6 +36,7 @@ extern "C" {
 #include "kgammatable.h"
 #include "kscandevice.h"
 #include "kscancontrols.h"
+#include "kscanoptset.h"
 
 
 
@@ -64,7 +65,7 @@ inline const SANE_Option_Descriptor *getOptionDesc( const QByteArray &name )
    const SANE_Option_Descriptor *d = 0;
    if ( idx != KScanDevice::option_dic->end() && idx.value() > 0 )
    {
-      d = sane_get_option_descriptor( KScanDevice::scanner_handle, idx.value() );
+      d = sane_get_option_descriptor( KScanDevice::gScannerHandle, idx.value() );
    }
    else
    {
@@ -91,7 +92,7 @@ KScanOption::KScanOption(const QByteArray &new_name)
 	QHash<QByteArray,int>::ConstIterator it = KScanDevice::option_dic->find(name);
 	if (it == KScanDevice::option_dic->end() || buffer.isNull()) return;
 
-	SANE_Status sane_stat = sane_control_option(KScanDevice::scanner_handle, it.value(),
+	SANE_Status sane_stat = sane_control_option(KScanDevice::gScannerHandle, it.value(),
                                                 SANE_ACTION_GET_VALUE,
                                                 buffer.data(),NULL);
     if (sane_stat==SANE_STATUS_GOOD) buffer_untouched = false;
@@ -299,7 +300,7 @@ void KScanOption::slotReload()
        allocForDesc();					// grow the buffer
    }
 
-   SANE_Status sane_stat = sane_control_option(KScanDevice::scanner_handle,it.value(),
+   SANE_Status sane_stat = sane_control_option(KScanDevice::gScannerHandle,it.value(),
                                                 SANE_ACTION_GET_VALUE,buffer.data(),NULL);
    if( sane_stat != SANE_STATUS_GOOD )
    {
@@ -1083,7 +1084,7 @@ bool KScanOption::applyVal( void )
    if( *idx == 0 ) return( false );
    if(buffer.isNull() )  return( false );
 
-   SANE_Status stat = sane_control_option ( KScanDevice::scanner_handle, *idx,
+   SANE_Status stat = sane_control_option ( KScanDevice::gScannerHandle, *idx,
 					    SANE_ACTION_SET_VALUE, buffer.data(),
 					    NULL);
    if( stat != SANE_STATUS_GOOD )

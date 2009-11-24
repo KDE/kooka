@@ -95,9 +95,9 @@ void AddDeviceDialog::slotTextChanged()
 }
 
 
-QString AddDeviceDialog::getDevice() const
+QByteArray AddDeviceDialog::getDevice() const
 {
-    return (mDevEdit->text());
+    return (mDevEdit->text().toLocal8Bit());
 }
 
 

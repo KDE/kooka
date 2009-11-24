@@ -30,11 +30,11 @@
   * @author Klaas Freitag, Eduard Huguet
   */
 
-/* Configuration-file definitions */
-#define GROUP_STARTUP    "Scan Settings"
-#define STARTUP_SCANDEV  "ScanDevice"
-#define STARTUP_SKIP_ASK "SkipStartupAsk"
-#define STARTUP_ONLY_LOCAL "QueryLocalOnly"
+
+class QListWidget;
+class QCheckBox;
+
+class KGuiItem;
 
 
 /**
@@ -60,7 +60,7 @@ public:
     *  @param QStrList backends - a list of device names retrieved from the scan device
     *  @param QStrList scannerNames - a list of corresponding human readable sanner names.
     */
-   DeviceSelector(QWidget *parent, const QList<QByteArray> &sources, const QStringList &descs);
+   DeviceSelector(QWidget *parent, const QList<QByteArray> &backends, const KGuiItem &cancelGuiItem = KGuiItem());
    ~DeviceSelector();
 
    /**
@@ -74,7 +74,7 @@ public:
     *  returns the users selection if the dialog should be skipped in future.
     *  @return true for should be skipped.
     */
-   bool     getShouldSkip() const;
+   bool getShouldSkip() const;
 
    /**
     *  retrieval to get the device from the config file. The function reads the applications
@@ -86,14 +86,17 @@ public:
     */
    QByteArray getDeviceFromConfig() const;
 
-
-public slots:
-// TODO: does this need to be a slot?
-   void setScanSources(const QList<QByteArray> &sources, const QStringList &descs);
-
 private:
-	class DeviceSelectorPrivate;
-	DeviceSelectorPrivate *d;
+    void setScanSources(const QList<QByteArray> &backends);
+
+    QListWidget *mListBox;
+    QCheckBox *mSkipCheckbox;
+
+    QStringList mDeviceList;
+
+    class DeviceSelectorPrivate;
+    DeviceSelectorPrivate *d;
 };
+
 
 #endif							// DEVSELECTOR_H

@@ -54,10 +54,11 @@
 #include <ktabwidget.h>
 #include <kfileitem.h>
 
+#include "libkscan/scandevices.h"
 #include "libkscan/scanparams.h"
 #include "libkscan/kscandevice.h"
 #include "libkscan/imgscaninfo.h"
-#include "libkscan/devselector.h"
+#include "libkscan/deviceselector.h"
 #include "libkscan/adddevice.h"
 #include "libkscan/previewer.h"
 
@@ -257,10 +258,17 @@ KookaView::KookaView(KMainWindow *parent, const QByteArray &deviceToUse)
             packager, SLOT(slotSelectDirectory(const QString &,const QString &)));
 
     /** Scanner Settings **/
+
+    if (!deviceToUse.isEmpty() && deviceToUse!="gallery")
+    {
+        ScanDevices::self()->addUserSpecifiedDevice(deviceToUse,
+                                                    "on command line",
+                                                    "",
+                                                    true);
+    }
+
     sane = new KScanDevice(this);
     Q_CHECK_PTR(sane);
-    if (!deviceToUse.isEmpty() && deviceToUse!="gallery")
-        sane->addUserSpecifiedDevice(deviceToUse, "on command line", true);
 
     /* select the scan device, either user or from config, this creates and assembles
      * the complete scanner options dialog
@@ -296,7 +304,7 @@ KookaView::KookaView(KMainWindow *parent, const QByteArray &deviceToUse)
     connect(packager, SIGNAL(aboutToShowImage(const KUrl &)), SLOT(slotStartLoading(const KUrl &)));
     connect(packager, SIGNAL(unloadImage(const KookaImage *)), SLOT(slotUnloadAImage(const KookaImage *)));
 
-    packager->openRoots();
+    //packager->openRoots();
 
     /** Status Bar **/
     KStatusBar *statBar = m_mainWindow->statusBar();
@@ -422,8 +430,9 @@ void KookaView::restoreGalleryState(int index)
 // this gets called by Kooka::closeEvent() at shutdown
 void KookaView::saveProperties(KConfigGroup &grp)
 {
-    kDebug() << "to group" << grp.name();
-    grp.writePathEntry(STARTUP_IMG_SELECTION, gallery()->getCurrImageFileName(true));
+    KConfigGroup grp2 = grp.config()->group(GROUP_STARTUP);
+    kDebug() << "to group" << grp2.name();
+    grp2.writePathEntry(STARTUP_IMG_SELECTION, gallery()->getCurrImageFileName(true));
 }
 
 
@@ -562,23 +571,20 @@ void KookaView::slotAddDevice()
     AddDeviceDialog d(m_mainWindow, i18n("Add Scan Device"));
     if (d.exec())
     {
-	QString dev = d.getDevice();
+	QByteArray dev = d.getDevice();
 	QString dsc = d.getDescription();
 	kDebug() << "dev" << dev << "desc" << dsc;
 
-	sane->addUserSpecifiedDevice(dev,dsc);
+        // TODO: need 'type'
+	ScanDevices::self()->addUserSpecifiedDevice(dev, dsc);
     }
 }
 
 
 QByteArray KookaView::userDeviceSelection(bool alwaysAsk)
 {
-   /* Human readable scanner descriptions */
-   QStringList hrbackends;
-
    /* a list of backends the scan backend knows */
-   QList<QByteArray> backends = sane->getDevices();
-
+   QList<QByteArray> backends = ScanDevices::self()->allDevices();
    if (backends.count()==0)
    {
        if (KMessageBox::warningContinueCancel(m_mainWindow, i18n("<qt>\
@@ -591,21 +597,13 @@ option to enter the backend name and parameters, or see that dialogue for more \
 information."), QString::null, KGuiItem(i18n("Add Scan Device...")))!=KMessageBox::Continue) return ("");
 
        slotAddDevice();
-       backends = sane->getDevices();			// refresh the list
+       backends = ScanDevices::self()->allDevices();	// refresh the list
        if (backends.count()==0) return ("");		// give up this time
    }
 
    QByteArray selDevice;
-   for (QList<QByteArray>::const_iterator it = backends.constBegin();
-        it!=backends.constEnd(); ++it)
-   {
-       QByteArray backend = (*it);
-       kDebug() << "Found backend" << backend << "=" << sane->getScannerName(backend);
-       hrbackends.append(sane->getScannerName(backend));
-   }
-
-   /* allow the user to select one */
-   DeviceSelector ds(m_mainWindow, backends, hrbackends);
+   DeviceSelector ds(m_mainWindow, backends,
+                     (alwaysAsk ? KGuiItem() : KGuiItem(i18n("Gallery"), KIcon("image-x-generic"))));
    if (!alwaysAsk) selDevice = ds.getDeviceFromConfig();
 
    if (selDevice.isEmpty())
@@ -614,6 +612,7 @@ information."), QString::null, KGuiItem(i18n("Add Scan Device...")))!=KMessageBo
        if (ds.exec()==QDialog::Accepted) selDevice = ds.getSelectedDevice();
        kDebug() << "selector returned device" << selDevice;
    }
+
    return (selDevice);
 }
 
@@ -622,7 +621,7 @@ QString KookaView::scannerName() const
 {
     if (connectedDevice=="") return (i18n("Gallery"));
     if (!haveConnection) return (i18n("No scanner connected"));
-    return (sane->getScannerName(connectedDevice));
+    return (sane->scannerDescription());
 }
 
 

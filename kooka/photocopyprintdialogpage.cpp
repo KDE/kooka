@@ -84,7 +84,7 @@ PhotoCopyPrintDialogPage::PhotoCopyPrintDialogPage(KScanDevice *newScanDevice)
 
 // Scanner options
     QString str = i18n("Scanner Settings: ");
-    str += sane_device->getScannerName();
+    str += sane_device->scannerDescription();
     Q3VGroupBox *scangroup1 = new Q3VGroupBox( str, this );
 
     str = i18n("Scan size:  ");

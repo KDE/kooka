@@ -49,12 +49,14 @@ extern "C"
 #include <sane/saneopts.h>
 }
 
+#include "scanglobal.h"
 #include "scansourcedialog.h"
 #include "massscandialog.h"
 #include "gammadialog.h"
 #include "kgammatable.h"
 #include "kscancontrols.h"
 #include "scansizeselector.h"
+#include "kscanoptset.h"
 
 
 //  SANE testing options
@@ -138,7 +140,7 @@ bool ScanParams::connectDevice(KScanDevice *newScanDevice, bool galleryMode)
     m_led->setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed ));
     lay->addWidget(m_led,0,1,Qt::AlignRight);
 
-    lab = new QLabel(sane_device->getScannerName(),this);
+    lab = new QLabel(sane_device->scannerDescription(),this);
     lay->addWidget(lab,1,0,1,2,Qt::AlignLeft);
 
     lay->addWidget(new KSeparator(Qt::Horizontal,this),2,0,1,-1);
@@ -147,7 +149,7 @@ bool ScanParams::connectDevice(KScanDevice *newScanDevice, bool galleryMode)
     // TODO: check whether the saved scanner options apply to the current scanner?
     // They may be for a completely different one...
     // Or update KScanDevice to save the startup options on a per-scanner basis.
-    startupOptset = new KScanOptSet( DEFAULT_OPTIONSET );
+    startupOptset = new KScanOptSet(DEFAULT_OPTIONSET);
     Q_CHECK_PTR( startupOptset );
 
     if( !startupOptset->load( "Startup" ) )

@@ -27,8 +27,9 @@
 #include <kconfiggroup.h>
 #include <klocale.h>
 
-#include "kscandevice.h"
+//#include "kscandevice.h"
 #include "kscanoption.h"
+#include "scanglobal.h"
 
 
 
@@ -127,24 +128,20 @@ void KScanOptSet::backupOptionDict(const KScanOptSet &src)
 void KScanOptSet::saveConfig(const QString &scannerName, const QString &setName,
                              const QString &desc)
 {
-    QString confFile = SCANNER_DB_FILE;
-    kDebug() << "scanner" << scannerName << "set" << setName << "file" << confFile;
+    kDebug() << "scanner" << scannerName << "set" << setName;
 
-    KConfig scanConfig(confFile,KConfig::SimpleConfig);
-    QString cfgName = setName;
-    if (cfgName.isEmpty()) cfgName = "default";
-
-    KConfigGroup grp = scanConfig.group((QString("%1 %2").arg(SAVESET_GROUP, cfgName)));
+    QString cfgName = (!setName.isEmpty() ? setName : "default");
+    KConfigGroup grp = ScanGlobal::self()->configGroup(QString("%1 %2").arg(SAVESET_GROUP, cfgName));
     grp.writeEntry(SAVESET_KEY_SETDESC, desc);
     grp.writeEntry(SAVESET_KEY_SCANNER, scannerName);
 
-	ConstIterator it = begin();
-	while (it != end())
+    ConstIterator it = begin();
+    while (it != end())
     {
-		const QString line = it.value()->configLine();
+        const QString line = it.value()->configLine();
         if (line!=PARAM_ERROR)
         {
-			const QString optName = it.value()->getName();
+            const QString optName = it.value()->getName();
             kDebug() << "writing" << optName << "=" << line;
             grp.writeEntry(optName,line);
         }
@@ -158,19 +155,17 @@ void KScanOptSet::saveConfig(const QString &scannerName, const QString &setName,
 
 bool KScanOptSet::load(const QString &scannerName)
 {
-    kDebug() << "Reading" << mSetName << "from" << SCANNER_DB_FILE;
+    kDebug() << "Reading" << mSetName;;			// of the KScanOptSet, as constructed
 
-    const KConfig conf(SCANNER_DB_FILE, KConfig::SimpleConfig);
-
-    QString grpName = QString("%1 %2").arg(SAVESET_GROUP).arg(mSetName.data());
-    /* of the KScanOptSet, given in constructor */
-    if (!conf.hasGroup(grpName))
+    QString grpName = QString("%1 %2").arg(SAVESET_GROUP, mSetName.constData());
+    const KConfigGroup grp = ScanGlobal::self()->configGroup(grpName);
+    if (!grp.exists())
     {
         kDebug() << "Group" << grpName << "does not exist in configuration!";
         return (false);
     }
 
-    const StringMap strMap = conf.entryMap(grpName);
+    const StringMap strMap = grp.entryMap();
     for (StringMap::const_iterator it = strMap.constBegin(); it!=strMap.constEnd(); ++it)
     {
         QString optName = it.key().toLatin1();
@@ -191,14 +186,13 @@ bool KScanOptSet::load(const QString &scannerName)
 }
 
 
-
 KScanOptSet::StringMap KScanOptSet::readList()
 {
-    const KConfig conf(SCANNER_DB_FILE,KConfig::SimpleConfig);
     const QString groupName = SAVESET_GROUP;
     StringMap ret;
 
-    const QStringList groups = conf.groupList();
+    const KConfigGroup grp = ScanGlobal::self()->configGroup(groupName);
+    const QStringList groups = grp.config()->groupList();
     for (QStringList::const_iterator it = groups.constBegin(); it!=groups.constEnd(); ++it)
     {
         QString grp = (*it);
@@ -208,8 +202,8 @@ KScanOptSet::StringMap KScanOptSet::readList()
             QString set = grp.mid(groupName.length()+1);
             if (set==DEFAULT_OPTIONSET) continue;	// don't show this one
 
-            const KConfigGroup g = conf.group(grp);
-            ret[set] = g.readEntry(SAVESET_KEY_SETDESC,i18n("No description"));
+            const KConfigGroup g = ScanGlobal::self()->configGroup(grp);
+            ret[set] = g.readEntry(SAVESET_KEY_SETDESC, i18n("No description"));
         }
     }
 
@@ -219,8 +213,8 @@ KScanOptSet::StringMap KScanOptSet::readList()
 
 void KScanOptSet::deleteSet(const QString &setName)
 {
-    KConfig conf(SCANNER_DB_FILE, KConfig::SimpleConfig);
-    QString grpName = QString("%1 %2").arg(SAVESET_GROUP, setName);
-    conf.deleteGroup(grpName);
-    conf.sync();
+    const QString grpName = QString("%1 %2").arg(SAVESET_GROUP, setName);
+    KConfig *conf = ScanGlobal::self()->configGroup().config();
+    conf->deleteGroup(grpName);
+    conf->sync();
 }

@@ -31,20 +31,19 @@
 #include <qhash.h>
 
 #include "kscanoption.h"
-#include "kscanoptset.h"
-
-#define DEFAULT_OPTIONSET "saveSet"
-#define SCANNER_DB_FILE "scannerrc"
-
-class QWidget;
-class QSocketNotifier;
-
-class ImgScanInfo;
 
 extern "C" {
 #include <sane/sane.h>
 #include <sane/saneopts.h>
 }
+
+
+class QWidget;
+class QSocketNotifier;
+
+class KScanOptSet;
+class ImgScanInfo;
+
 
 /**
  *  This is KScanDevice, a class for accessing the SANE scanning functions under KDE
@@ -59,7 +58,6 @@ class KSCAN_EXPORT KScanDevice : public QObject
 {
     Q_OBJECT
 
-    /* Hmmm - No Q_PROPS ? */
 public:
 
     enum ScanStatus
@@ -78,8 +76,7 @@ public:
      *   @see openDevice
      *
      */
-
-    KScanDevice(QObject *parent = NULL);
+    explicit KScanDevice(QObject *parent = NULL);
 
     /**
      *  Destructor
@@ -87,15 +84,6 @@ public:
      *  releases internal allocated memory.
      */
     ~KScanDevice();
-
-    /**
-     *  Add an explicitly specified device to the list of known ones.
-     *   @param backend the device name+parameters of the backend to add
-     *   @param description a readable description for it
-     *   @param dontSave if @c true, don't save the new device in the permanent configuration
-     */
-    void addUserSpecifiedDevice(const QString &backend, const QString &description,
-				bool dontSave = false);
 
     /**
      *  Opens the device named @p backend.
@@ -111,29 +99,16 @@ public:
     QString lastErrorMessage() const;
 
     /**
-     *  returns the names of all existing Scan Devices in the system.
-     *  @return a list of available Scanners in the system
-     *  @see KScanDevice
-     */
-    QList<QByteArray> getDevices() const { return (scanner_avail); }
-
-    /**
      * Returns the short, technical name of the currently attached backend.
      * It is in the form 'umax:/dev/sg1'.
      */
-    QByteArray shortScannerName() const { return scanner_name; }
+    const QByteArray &scannerBackendName() const { return (mScannerName); }
 
     /**
-     *  Returns a long, human readable name of the scanner, like
-     * 'Mustek SP1200 Flatbed scanner'. The parameter @p name takes
-     * the name of a backend, what means something like "/dev/scanner".
-     * If the name of the backend is skipped, the selected backend is
-     * returned.
-     *
-     * @param name a backend name
-     * @return a human readable scanner name
+     * Returns a long, human readable name of the currently attached
+     * scanner backend, such as "Mustek SP1200 Flatbed scanner".
      **/
-    QString getScannerName(const QByteArray &name = "") const;
+    QString scannerDescription() const;
 
     /*
      *  ========= Preview Functions ==========
@@ -300,14 +275,24 @@ public:
      */
     QString getConfig(const QString &key, const QString &def = QString::null) const;
 
+    /**
+     * stores the info bit in a config file for the currently connected
+     * scanner. For this, the config file $KDEHOME/.kde/share/config/scannerrc
+     * is opened, a group is created that identifies the scanner and the
+     * device where it is connected. The information is stored into that group.
+     */
+    void storeConfig(const QString &key, const QString &val);
+
+
+
 
 // TODO: public data!
-    static bool        scanner_initialised;
-    static SANE_Handle scanner_handle;
-	typedef QHash<QByteArray, int> OptionDict;
-	static OptionDict *option_dic;
-    static SANE_Device const **dev_list;
+// Used by KScanOption, so either (a) every KScanOption object needs to link back
+// to its parent KScanDevice, or (b) KScanDevice needs to be a singleton class.
+    typedef QHash<QByteArray, int> OptionDict;
+    static OptionDict *option_dic;
     static KScanOptSet *gammaTables;
+    static SANE_Handle gScannerHandle;
 
 
 
@@ -358,15 +343,6 @@ public slots:
      * the system ready to open a new, other scanner.
      */
     void slotCloseDevice();
-
-    /**
-     * stores the info bit in a config file for the currently connected
-     * scanner. For this, the config file $KDEHOME/.kde/share/config/scannerrc
-     * is opened, a group is created that identifies the scanner and the
-     * device where it is connected. The information is stored into that group.
-     */
-// TODO: parameters
-    void slotStoreConfig( const QString&, const QString& );
 
 signals:
     /**
@@ -443,7 +419,7 @@ private slots:
     /**
      *  Slot to acquire a whole image
      */
-    void                doProcessABlock();
+    void doProcessABlock();
 
 
 private:
@@ -460,22 +436,18 @@ private:
     KScanStat           find_options(); // help fct. to process options
     KScanStat           acquire_data(bool isPreview = false);
 
-    QList<QByteArray> 	      scanner_avail;  // list of names of all scan dev.
     QList<QByteArray>	      option_list;    // list of names of all options
     QList<QByteArray>            dirtyList;     // option changes
 
     QList<KScanOption *>  gui_elements;
 
-	typedef QHash<QByteArray, const SANE_Device *> DeviceDict;
-	DeviceDict scannerDevices;
+    QSocketNotifier *mSocketNotifier;
 
-    QSocketNotifier     *mSocketNotifier;
-
-    KScanDevice::ScanStatus          scanStatus;
+    SANE_Status mSaneStatus;
+    KScanDevice::ScanStatus mScanStatus;
 
     /* Data for the scan process */
-    /* This could/should go to  a small help object */
-    QByteArray             scanner_name;
+    QByteArray             mScannerName;
     SANE_Byte           *mScanBuf;
     QImage              *mScanImage;
     SANE_Parameters      sane_scan_param;
@@ -486,10 +458,10 @@ private:
 
     KScanOptSet         *storeOptions;
 
+    bool mScannerInitialised;
+
     class KScanDevicePrivate;
     KScanDevicePrivate *d;
-
-    SANE_Status sane_stat;
 };
 
 #endif							// KSCANDEVICE_H

@@ -118,6 +118,10 @@ int main( int argc, char *argv[] )
 //        // exit(-1);
 //    }
 
+    // TODO: try ScanGlobal::init(), if that fails no point in carrying on
+    // so show an error box and give up (or can we carry on and run in
+    // gallery mode only?)
+
     Kooka *kooka = new Kooka(devToUse.toLocal8Bit());
     kooka->show();
     app.processEvents();

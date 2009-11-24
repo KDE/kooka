@@ -198,7 +198,7 @@ void ScanParamsDialog::slotSave()
         KScanOptSet optSet(newName.toLocal8Bit());
         sane->getCurrentOptions(&optSet);
 
-        optSet.saveConfig(sane->shortScannerName(),newName,newDesc);
+        optSet.saveConfig(sane->scannerBackendName(),newName,newDesc);
         sets[newName] = newDesc;
 
         // TODO: why?
@@ -241,7 +241,7 @@ void ScanParamsDialog::slotEdit()
         }
 
         KScanOptSet::deleteSet(oldName);		// do first, in case name not changed
-        optSet.saveConfig(sane->shortScannerName(),newName,newDesc);
+        optSet.saveConfig(sane->scannerBackendName(),newName,newDesc);
 
         sets.remove(oldName);				// do first, ditto
         sets[newName] = newDesc;

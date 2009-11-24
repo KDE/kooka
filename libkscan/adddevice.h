@@ -39,7 +39,7 @@ public:
 	AddDeviceDialog(QWidget *parent,const QString &caption);
 	virtual ~AddDeviceDialog() {};
 
-	QString getDevice() const;
+	QByteArray getDevice() const;
 	QString getDescription() const;
 
 protected slots:

@@ -47,6 +47,8 @@
 #include <kmenu.h>
 #include <kxmlguiwindow.h>
 
+#include "libkscan/scanglobal.h"
+
 #include "scangallery.h"
 #include "kookapref.h"
 #include "kookaview.h"
@@ -131,8 +133,11 @@ Kooka::~Kooka()
 
 void Kooka::startup()
 {
+    if (m_view==NULL) return;
+
     kDebug();
-    if (m_view!=NULL) m_view->loadStartupImage();
+    m_view->gallery()->openRoots();
+    m_view->loadStartupImage();
 }
 
 
@@ -270,13 +275,13 @@ void Kooka::setupActions()
 
     // "Settings" menu
 
-    act = new KAction(KIcon("scanselect"), i18n("Select Scan Device..."), this);
-    connect(act, SIGNAL(triggered()), m_view, SLOT(slotSelectDevice()));
-    actionCollection()->addAction("selectsource", act);
+    selectDeviceAction = new KAction(KIcon("scanselect"), i18n("Select Scan Device..."), this);
+    connect(selectDeviceAction, SIGNAL(triggered()), m_view, SLOT(slotSelectDevice()));
+    actionCollection()->addAction("selectsource", selectDeviceAction);
 
-    act = new KAction(KIcon("scanadd"), i18n("Add Scan Device..."), this);
-    connect(act, SIGNAL(triggered()), m_view, SLOT(slotAddDevice()));
-    actionCollection()->addAction("addsource", act);
+    addDeviceAction = new KAction(KIcon("scanadd"), i18n("Add Scan Device..."), this);
+    connect(addDeviceAction, SIGNAL(triggered()), m_view, SLOT(slotAddDevice()));
+    actionCollection()->addAction("addsource", addDeviceAction);
 
     // Scanning functions
 
@@ -484,6 +489,12 @@ void Kooka::slotUpdateScannerActions(bool haveConnection)
     previewAction->setEnabled(haveConnection);
     photocopyAction->setEnabled(haveConnection);
     paramsAction->setEnabled(haveConnection);
+
+    if (!ScanGlobal::self()->available())
+    {
+        selectDeviceAction->setEnabled(false);
+        addDeviceAction->setEnabled(false);
+    }
 
     setCaption(m_view->scannerName());
 }

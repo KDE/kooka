@@ -1,0 +1,15 @@
+[Devices]
+test=cpu
+pnm=image-x-generic
+
+[Types]
+film scanner=scanner
+flatbed scanner=scanner
+frame grabber=video-display
+handheld scanner=scanner
+multi-function peripheral=scanner
+sheetfed scanner=scanner
+still camera=camera-photo
+video camera=camera-web
+virtual device=cpu
+all-in-one=scanner

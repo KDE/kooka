@@ -63,10 +63,10 @@ public:
      */
     ~Kooka();
 
-   /**
-    * Startup, loads (at the moment) only the last displayed image
-    **/
-   void startup();
+    /**
+     * Startup, loads (at the moment) only the last displayed image
+     **/
+    void startup();
 
 
 protected:
@@ -102,71 +102,68 @@ protected slots:
     void slotOpenWithMenu();
 
 private slots:
+    void filePrint();
 
-//    void createMyGUI( KParts::Part* );
+    void optionsPreferences();
+    void optionsOcrPreferences();
 
-   void filePrint();
-   /* ImageViewer-Actions */
+    void changeStatusbar(const QString& text);
+    void cleanStatusbar(void) { changeStatusbar(""); }
+    void changeCaption(const QString& text);
 
-//   void optionsConfigureToolbars();
-   void optionsPreferences();
-   void optionsOcrPreferences();
+    void slotMirrorVertical( void );
+    void slotMirrorHorizontal( void );
 
-   void changeStatusbar(const QString& text);
-   void cleanStatusbar(void) { changeStatusbar(""); }
-   void changeCaption(const QString& text);
-//   void newToolbarConfig();
-
-   void slotMirrorVertical( void );
-   void slotMirrorHorizontal( void );
-
-   void slotRotateClockWise( void );
-   void slotRotateCounterClockWise( void );
-   void slotRotate180( void );
+    void slotRotateClockWise( void );
+    void slotRotateCounterClockWise( void );
+    void slotRotate180( void );
 
 private:
-   void setupAccel();
-   void setupActions();
+    void setupAccel();
+    void setupActions();
 
 private:
-   KookaView *m_view;
+    KookaView *m_view;
 
-   KPrinter   *m_printer;
-   KToggleAction *m_scanParamsAction;
-   KToggleAction *m_previewerAction;
-   KActionMenu   *m_settingsShowDocks;
+    KPrinter   *m_printer;
+    KToggleAction *m_scanParamsAction;
+    KToggleAction *m_previewerAction;
 
-    KAction      *m_saveOCRTextAction;
-   int m_prefDialogIndex;
+    KAction *m_saveOCRTextAction;
+    int m_prefDialogIndex;
 
-   KAction *scanAction;
-   KAction *previewAction;
-   KAction *photocopyAction;
-   KAction *paramsAction;
-   KAction *ocrAction;
-   KAction *ocrSelectAction;
-   KAction *ocrSpellAction;
+    KAction *scanAction;
+    KAction *previewAction;
+    KAction *photocopyAction;
+    KAction *paramsAction;
+    KAction *ocrAction;
+    KAction *ocrSelectAction;
+    KAction *ocrSpellAction;
 
-   KAction *newFromSelectionAction;
-   KAction *scaleToWidthAction;
-   KAction *scaleToHeightAction;
-   KAction *scaleToOriginalAction;
-   KAction *mirrorVerticallyAction;
-   KAction *mirrorHorizontallyAction;
-   KAction *rotateCwAction;
-   KAction *rotateAcwAction;
-   KAction *rotate180Action;
+    KAction *newFromSelectionAction;
+    KAction *scaleToWidthAction;
+    KAction *scaleToHeightAction;
+    KAction *scaleToOriginalAction;
+    KAction *mirrorVerticallyAction;
+    KAction *mirrorHorizontallyAction;
+    KAction *rotateCwAction;
+    KAction *rotateAcwAction;
+    KAction *rotate180Action;
 
-   KAction *createFolderAction;
-   KAction *saveImageAction;
-   KAction *printImageAction;
-   KAction *importImageAction;
-   KAction *deleteImageAction;
-   KAction *renameImageAction;
-   KAction *unloadImageAction;
-   KAction *propsImageAction;
+    KAction *createFolderAction;
+    KAction *saveImageAction;
+    KAction *printImageAction;
+    KAction *importImageAction;
+    KAction *deleteImageAction;
+    KAction *renameImageAction;
+    KAction *unloadImageAction;
+    KAction *propsImageAction;
 
-   KActionMenu *openWithMenu;
+    KAction *selectDeviceAction;
+    KAction *addDeviceAction;
+
+    KActionMenu *openWithMenu;
 };
 
-#endif // KOOKA_H
+
+#endif							// KOOKA_H

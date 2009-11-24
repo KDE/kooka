@@ -23,7 +23,9 @@ endif (HAVE_SANE)
 
 # TODO: rename some of these to match class name, others are obsolete
 set(libkscan_SRCS
+  scanglobal.cpp
   kscandevice.cpp
+  scandevices.cpp
   kscancontrols.cpp
   kgammatable.cpp
   kscanoption.cpp
@@ -33,7 +35,7 @@ set(libkscan_SRCS
   scansourcedialog.cpp
   scanparams.cpp
   massscandialog.cpp
-  devselector.cpp		# -> deviceselector
+  deviceselector.cpp
   adddevice.cpp			# -> adddevicedialog
   #scandialog.cpp		# not used by kooka
   img_canvas.cpp		# -> imagecanvas
@@ -73,3 +75,4 @@ add_custom_target(clobber
 
 install(TARGETS libkscan ${INSTALL_TARGETS_DEFAULT_ARGS})
 
+install(FILES scantypes.dat DESTINATION ${DATA_INSTALL_DIR}/libkscan)
