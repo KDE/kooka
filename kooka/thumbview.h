@@ -30,9 +30,9 @@
 
 #include <qmap.h>
 
+#include <kdiroperator.h>
 #include <kiconloader.h>
 #include <kurl.h>
-#include <kvbox.h>
 
 //  KConfig group definitions
 #define THUMB_GROUP		"thumbnailView"
@@ -40,18 +40,14 @@
 #define THUMB_BG_WALLPAPER	"BackGroundTile"
 #define THUMB_STD_TILE_IMG	"kooka/pics/thumbviewtile.png"
 
-class QMenu;
-
 class KAction;
 class KFileItem;
 class KMenu;
 class KActionMenu;
 class KToggleAction;
 
-class ThumbViewDirOperator;
 
-
-class ThumbView : public KVBox
+class ThumbView : public KDirOperator
 {
    Q_OBJECT
 
@@ -59,8 +55,7 @@ public:
     ThumbView(QWidget *parent);
     ~ThumbView();
 
-    KMenu *contextMenu() const;
-    void addContextMenuAction(KAction *action);
+    KMenu *contextMenu() const { return (mContextMenu); }
     bool readSettings();
 
     static QString standardBackground();
@@ -79,7 +74,7 @@ protected:
     void saveConfig();
 
 protected slots:
-    void slotAboutToShowMenu(const KFileItem &kfi, QMenu *menu);
+    void slotContextMenu(const QPoint &pos);
     void slotFileSelected(const KFileItem &kfi);
     void slotFinishedLoading();
     void slotEnsureVisible();
@@ -90,6 +85,7 @@ signals:
 private:
     void setBackground();
 
+    KMenu *mContextMenu;
     bool m_firstMenu;
     KActionMenu *m_sizeMenu;
     QMap<KIconLoader::StdSizes, KToggleAction *> m_sizeMap;
@@ -97,7 +93,6 @@ private:
     KIconLoader::StdSizes m_thumbSize;
     QString m_bgImg;
 
-    ThumbViewDirOperator *m_dirop;
     KUrl m_lastSelected;
     KUrl m_toSelect;
     KUrl m_toChangeTo;

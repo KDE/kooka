@@ -44,26 +44,17 @@
 #include <kmenu.h>
 #include <kconfiggroup.h>
 
-#include <kdirmodel.h>
-
-//#include "libkscan/previewer.h"
-
-#include "thumbviewdiroperator.h"
-
 #include "kookapref.h"
 
 
 #define PREVIEW_MAX_FILESIZE	(20*1024*1024LL)	// 20Mb, standard default is 5Mb
 
 
-// TODO: does this need to be a KVBox containing the DirOperator?
-// can it not just be the DirOperator itself?
 ThumbView::ThumbView(QWidget *parent)
-    : KVBox(parent)
+    : KDirOperator(KUrl(), parent)
 {
     setObjectName("ThumbView");
 
-    setMargin(0);
     m_thumbSize = KIconLoader::SizeHuge;
     m_bgImg = QString::null;
     m_firstMenu = true;
@@ -88,31 +79,33 @@ ThumbView::ThumbView(QWidget *parent)
         kDebug() << "Using maximum preview file size" << grp.readEntry("MaximumSize", 0);
     }
 
-    m_dirop = new ThumbViewDirOperator(KUrl(KookaPref::galleryRoot()), this);
-    //m_dirop = new KDirOperator(KUrl(KookaPref::galleryRoot()), this);
-    m_dirop->setObjectName("ThumbViewDirOperator");
-
-    m_dirop->setPreviewWidget(NULL);			// no preview at side
-    m_dirop->setMode(KFile::File);			// implies single selection mode
-    m_dirop->setInlinePreviewShown(true);		// show file previews
-    m_dirop->setView(KFile::Simple);			// simple icon view
-    m_dirop->dirLister()->setMimeExcludeFilter(QStringList("inode/directory"));
+    setUrl(KUrl(KookaPref::galleryRoot()), true);
+    setPreviewWidget(NULL);			// no preview at side
+    setMode(KFile::File);			// implies single selection mode
+    setInlinePreviewShown(true);		// show file previews
+    setView(KFile::Simple);			// simple icon view
+    dirLister()->setMimeExcludeFilter(QStringList("inode/directory"));
 							// only files, not directories
 
-//    connect(m_dirop, SIGNAL(fileHighlighted(const KFileItem &)),
-    connect(m_dirop, SIGNAL(fileSelected(const KFileItem &)),
+    connect(this, SIGNAL(fileSelected(const KFileItem &)),
             SLOT(slotFileSelected(const KFileItem &)));
-    connect(m_dirop, SIGNAL(contextMenuAboutToShow(const KFileItem &,QMenu *)),
-            SLOT(slotAboutToShowMenu(const KFileItem &,QMenu *)));
-    connect(m_dirop, SIGNAL(finishedLoading()),
-            SLOT(slotFinishedLoading()));
+    connect(this, SIGNAL(finishedLoading()), SLOT(slotFinishedLoading()));
+
+    // We want to provide our own context menu, not the one that
+    // KDirOperator has built in.
+    disconnect(view(), SIGNAL(customContextMenuRequested(const QPoint &)), NULL, NULL);
+    connect(view(), SIGNAL(customContextMenuRequested(const QPoint &)),
+            SLOT(slotContextMenu(const QPoint &)));
+
+    mContextMenu = new KMenu(this);
+    mContextMenu->addTitle(i18n("Thumbnails"));
 
     // Scrolling to the selected item only works after the KDirOperator's
     // KDirModel has received this signal.
-    connect(m_dirop->dirLister(), SIGNAL(refreshItems(const QList<QPair<KFileItem,KFileItem> > &)),
+    connect(dirLister(), SIGNAL(refreshItems(const QList<QPair<KFileItem,KFileItem> > &)),
             SLOT(slotEnsureVisible()));
 
-    m_lastSelected = m_dirop->url();
+    m_lastSelected = url();
     m_toSelect = KUrl();
     m_toChangeTo = KUrl();
 
@@ -164,30 +157,18 @@ ThumbView::~ThumbView()
 }
 
 
-
 QSize ThumbView::sizeHint() const
 {
     return (QSize(64, 64));				// sensible minimum size
 }
 
 
-KMenu *ThumbView::contextMenu() const
+void ThumbView::slotContextMenu(const QPoint &pos)
 {
-    return (m_dirop->contextMenu());
-}
-
-
-void ThumbView::slotAboutToShowMenu(const KFileItem &kfi, QMenu *menu)
-{
-    kDebug();
-
-    // TODO: is this necessary?
-    //slotFileSelected(kfi);
-
     if (m_firstMenu)					// first time menu activated
     {
-        menu->addSeparator();
-        menu->addAction(m_sizeMenu);			// append size menu at end
+        mContextMenu->addSeparator();
+        mContextMenu->addAction(m_sizeMenu);		// append size menu at end
         m_firstMenu = false;				// note this has been done
     }
 
@@ -196,6 +177,8 @@ void ThumbView::slotAboutToShowMenu(const KFileItem &kfi, QMenu *menu)
     {
         (*it)->setChecked(m_thumbSize==it.key());
     }
+
+    mContextMenu->exec(QCursor::pos());
 }
 
 
@@ -207,7 +190,7 @@ void ThumbView::slotSetSize(int size)
     int val = ((size-KIconLoader::SizeSmall)*100)/(KIconLoader::SizeEnormous-KIconLoader::SizeSmall);
 
     kDebug() << "size" << size << "-> val" << val;
-    m_dirop->setIconsZoom(val);
+    setIconsZoom(val);
 }
 
 
@@ -216,7 +199,7 @@ void ThumbView::slotFinishedLoading()
     if (m_toChangeTo.isValid())				// see if change deferred
     {
         kDebug() << "setting dirop url to" << m_toChangeTo;
-        m_dirop->setUrl(m_toChangeTo, true);		// change path and reload
+        setUrl(m_toChangeTo, true);		// change path and reload
         m_toChangeTo = KUrl();				// have dealt with this now
         return;
     }
@@ -224,9 +207,9 @@ void ThumbView::slotFinishedLoading()
     if (m_toSelect.isValid())				// see if something to select
     {
         kDebug() << "selecting" << m_toSelect;
-        bool blk = m_dirop->blockSignals(true);		// avoid signal loop
-        m_dirop->setCurrentItem(m_toSelect.url());
-        m_dirop->blockSignals(blk);
+        bool blk = blockSignals(true);		// avoid signal loop
+        setCurrentItem(m_toSelect.url());
+        blockSignals(blk);
         m_toSelect = KUrl();				// have dealt with this now
     }
 }
@@ -234,7 +217,7 @@ void ThumbView::slotFinishedLoading()
 
 void ThumbView::slotEnsureVisible()
 {
-    QListView *v = qobject_cast<QListView *>(m_dirop->view());
+    QListView *v = qobject_cast<QListView *>(view());
     if (v==NULL) return;
 
     // Ensure that the currently selected item is visible,
@@ -252,13 +235,13 @@ void ThumbView::slotEnsureVisible()
 
 void ThumbView::slotFileSelected(const KFileItem &kfi)
 {
-    KUrl url = (!kfi.isNull() ? kfi.url() : m_dirop->url());
-    kDebug() << url;
+    KUrl u = (!kfi.isNull() ? kfi.url() : url());
+    kDebug() << u;
 
-    if (url!=m_lastSelected)
+    if (u!=m_lastSelected)
     {
-        m_lastSelected = url;
-        emit selectFromThumbnail(url);
+        m_lastSelected = u;
+        emit selectFromThumbnail(u);
     }
 }
 
@@ -267,7 +250,7 @@ void ThumbView::slotSelectImage(const KFileItem *item)
 {
     kDebug() << "item url" << item->url() << "isDir" << item->isDir();
 
-    KUrl cur = m_dirop->url();				// directory currently showing
+    KUrl cur = url();				// directory currently showing
 
     KUrl urlToShow = item->url();			// new URL to show
     KUrl dirToShow = urlToShow;				// directory part of that
@@ -295,10 +278,10 @@ void ThumbView::slotSelectImage(const KFileItem *item)
         //
         // There are two possible (but extremely unlikely) race conditions here.
 
-        if (m_dirop->dirLister()->isFinished())		// idle, can do this now
+        if (dirLister()->isFinished())		// idle, can do this now
         {
             kDebug() << "lister idle, changing dir to" << dirToShow;
-            m_dirop->setUrl(dirToShow, true);		// change path and reload
+            setUrl(dirToShow, true);		// change path and reload
         }
         else
         {
@@ -308,16 +291,16 @@ void ThumbView::slotSelectImage(const KFileItem *item)
         return;
     }
 
-    KFileItemList selItems = m_dirop->selectedItems();
+    KFileItemList selItems = selectedItems();
     if (!selItems.isEmpty())				// the current selection
     {
         KFileItem curItem = selItems.first();
         if (curItem.url()==urlToShow) return;		// already selected
     }
 
-    m_dirop->blockSignals(true);			// avoid signal loop
-    m_dirop->setCurrentItem(item->isDir() ? QString::null : urlToShow.url());
-    m_dirop->blockSignals(false);
+    blockSignals(true);			// avoid signal loop
+    setCurrentItem(item->isDir() ? QString::null : urlToShow.url());
+    blockSignals(false);
 }
 
 
@@ -364,9 +347,9 @@ void ThumbView::setBackground()
         bgPix.fill(Qt::blue);
     }
 
-    QPalette pal = m_dirop->palette();
-    pal.setBrush(m_dirop->backgroundRole(), QBrush(bgPix));
-    m_dirop->setPalette(pal);
+    QPalette pal = palette();
+    pal.setBrush(backgroundRole(), QBrush(bgPix));
+    setPalette(pal);
 }
 
 
