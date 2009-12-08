@@ -61,8 +61,6 @@ public:
     static QString standardBackground();
     static QString sizeName(KIconLoader::StdSizes size);
 
-    QSize sizeHint() const;
-
 public slots:
     void slotSetSize(int size);
     void slotImageDeleted(const KFileItem *kfi);

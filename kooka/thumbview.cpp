@@ -79,11 +79,11 @@ ThumbView::ThumbView(QWidget *parent)
         kDebug() << "Using maximum preview file size" << grp.readEntry("MaximumSize", 0);
     }
 
-    setUrl(KUrl(KookaPref::galleryRoot()), true);
-    setPreviewWidget(NULL);			// no preview at side
-    setMode(KFile::File);			// implies single selection mode
-    setInlinePreviewShown(true);		// show file previews
-    setView(KFile::Simple);			// simple icon view
+    setUrl(KUrl(KookaPref::galleryRoot()), true);	// initial location
+    setPreviewWidget(NULL);				// no preview at side
+    setMode(KFile::File);				// implies single selection mode
+    setInlinePreviewShown(true);			// show file previews
+    setView(KFile::Simple);				// simple icon view
     dirLister()->setMimeExcludeFilter(QStringList("inode/directory"));
 							// only files, not directories
 
@@ -147,19 +147,13 @@ ThumbView::ThumbView(QWidget *parent)
 
     connect(mapper,SIGNAL(mapped(int)),SLOT(slotSetSize(int)));
 
-    setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
+    setMinimumSize(64, 64);				// sensible minimum size
 }
 
 
 ThumbView::~ThumbView()
 {
     saveConfig();
-}
-
-
-QSize ThumbView::sizeHint() const
-{
-    return (QSize(64, 64));				// sensible minimum size
 }
 
 
