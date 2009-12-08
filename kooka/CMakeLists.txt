@@ -138,7 +138,7 @@ set(kooka_SRCS
   imageselectline.cpp
   kookagallery.cpp
   thumbview.cpp
-#  thumbviewdiroperator.cpp
+  thumbviewdiroperator.cpp
   ocrengine.cpp			# -> ocrenginebase
   ocrgocrengine.cpp
   ocrocradengine.cpp

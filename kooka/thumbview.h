@@ -42,12 +42,13 @@
 
 class QMenu;
 
+class KAction;
 class KFileItem;
+class KMenu;
 class KActionMenu;
 class KToggleAction;
 
-//class ThumbViewDirOperator;
-class KDirOperator;
+class ThumbViewDirOperator;
 
 
 class ThumbView : public KVBox
@@ -58,7 +59,8 @@ public:
     ThumbView(QWidget *parent);
     ~ThumbView();
 
-    //KMenu *contextMenu() const;
+    KMenu *contextMenu() const;
+    void addContextMenuAction(KAction *action);
     bool readSettings();
 
     static QString standardBackground();
@@ -80,6 +82,7 @@ protected slots:
     void slotAboutToShowMenu(const KFileItem &kfi, QMenu *menu);
     void slotFileSelected(const KFileItem &kfi);
     void slotFinishedLoading();
+    void slotEnsureVisible();
 
 signals:
     void selectFromThumbnail(const KUrl &url);
@@ -87,17 +90,16 @@ signals:
 private:
     void setBackground();
 
-    KActionMenu *m_sizeMenu;
     bool m_firstMenu;
+    KActionMenu *m_sizeMenu;
     QMap<KIconLoader::StdSizes, KToggleAction *> m_sizeMap;
 
     KIconLoader::StdSizes m_thumbSize;
     QString m_bgImg;
 
-    //ThumbViewDirOperator *m_dirop;
-    KDirOperator *m_dirop;
+    ThumbViewDirOperator *m_dirop;
     KUrl m_lastSelected;
-    QString m_toSelect;
+    KUrl m_toSelect;
     KUrl m_toChangeTo;
 };
 

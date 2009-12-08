@@ -230,14 +230,18 @@ void ScanGallery::contextMenuEvent(QContextMenuEvent *ev)
 // not activate it (which would result in loading the image).  The activate
 // is emit'ed from QAbstractItemView::mouseReleaseEvent(), so filter out a
 // right button release here.
+//
+// Currently not doing this, because there doesn't seem to be a way of getting the
+// same behaviour in the thumbnail view (which is a KDirOperator).  For the sake
+// of consistency.
 
 void ScanGallery::mouseReleaseEvent(QMouseEvent *ev)
 {
-    if (ev->button()==Qt::RightButton)			// context menu button
-    {
-        ev->accept();					// ignore the event
-        return;
-    }
+//    if (ev->button()==Qt::RightButton)		// context menu button
+//    {
+//        ev->accept();					// ignore the event
+//        return;
+//    }
 
     FileTreeView::mouseReleaseEvent(ev);		// process the event
 }

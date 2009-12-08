@@ -1118,9 +1118,8 @@ void KookaView::connectGalleryAction(KAction *action)
 void KookaView::connectThumbnailAction(KAction *action)
 {
     if (action==NULL) return;
-    // TODO: fix this, maybe need the thumbview to keep a list of actions
-    //KMenu *popup = m_thumbview->contextMenu();
-    //if (popup!=NULL) popup->addAction(action);
+    KMenu *popup = m_thumbview->contextMenu();
+    if (popup!=NULL) popup->addAction(action);
 }
 
 

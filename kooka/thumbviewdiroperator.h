@@ -29,10 +29,10 @@
 #include <kdiroperator.h>
 
 class KFileItem;
-class KActionMenu;
+class KMenu;
 
-class QPopupMenu;
 class QPoint;
+class QMouseEvent;
 
 
 class ThumbViewDirOperator : public KDirOperator
@@ -43,13 +43,17 @@ public:
     ThumbViewDirOperator(const KUrl &url = KUrl(), QWidget *parent = NULL);
     virtual ~ThumbViewDirOperator() {};
 
-    QPopupMenu *contextMenu() const;
+    KMenu *contextMenu() const { return (m_menu); }
 
 protected slots:
-    void activatedMenu(const KFileItem *kfi,const QPoint &pos);
+    void activatedMenu(const KFileItem &kfi, const QPoint &pos);
+
+signals:
+    void contextMenuAboutToShow(const KFileItem &kfi, QMenu *menu);
 
 private:
-    KActionMenu *m_menu;
+    KMenu *m_menu;
 };
+
 
 #endif							// THUMBVIEWDIROPERATOR_H

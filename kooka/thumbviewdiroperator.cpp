@@ -3,6 +3,10 @@
     copyright            : (C) 2008 by Jonathan Marten
     email                : jjm@keelhaul.me.uk
 
+    This wrapper class is used so that the popup menu can be a KMenu (which
+    supports displaying a title) as opposed to a QMenu, and accessible from
+    outside.
+
  ***************************************************************************/
 
 
@@ -24,38 +28,30 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <kdebug.h>
-#include <kfileitem.h>
-#include <klocale.h>
-#include <kactionclasses.h>
-#include <kpopupmenu.h>
-#include <kdiroperator.h>
-
 #include "thumbviewdiroperator.h"
 #include "thumbviewdiroperator.moc"
 
+#include <qevent.h>
 
-ThumbViewDirOperator::ThumbViewDirOperator(const KURL &url,
-                                           QWidget *parent,const char *name)
-    : KDirOperator(url,parent,name)
+#include <kdebug.h>
+#include <klocale.h>
+#include <kmenu.h>
+#include <kdiroperator.h>
+
+
+ThumbViewDirOperator::ThumbViewDirOperator(const KUrl &url, QWidget *parent)
+    : KDirOperator(url, parent)
 {
-    kdDebug(28000) << k_funcinfo << endl;
+    kDebug();
 
-    setupMenu(0);					// don't want the built-in actions
-
-    m_menu = static_cast<KActionMenu*>(actionCollection()->action("popupMenu"));
-    if (m_menu==NULL) kdDebug(28000) << k_funcinfo << "no popup menu!" << endl;
-    else m_menu->popupMenu()->insertTitle(i18n("Thumbnails"));
+    m_menu = new KMenu(this);
+    m_menu->addTitle(i18n("Thumbnails"));
 }
 
 
-void ThumbViewDirOperator::activatedMenu(const KFileItem *kfi,const QPoint &pos)
+void ThumbViewDirOperator::activatedMenu(const KFileItem &kfi, const QPoint &pos)
 {
-    if (m_menu!=NULL) m_menu->popup(pos);
-}
-
-
-QPopupMenu *ThumbViewDirOperator::contextMenu() const
-{
-    return (m_menu!=NULL ? static_cast<QPopupMenu *>(m_menu->popupMenu()) : NULL);
+    updateSelectionDependentActions();
+    emit contextMenuAboutToShow(kfi, m_menu);
+    m_menu->exec(pos);
 }

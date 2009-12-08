@@ -81,6 +81,7 @@ public:
     /**
      * Static function that returns the image gallery base dir.
      */
+    // TODO: this should return a KUrl
     static QString galleryRoot();
 
 protected slots:

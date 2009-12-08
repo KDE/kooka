@@ -30,6 +30,8 @@
 #include "thumbview.moc"
 
 #include <qsignalmapper.h>
+#include <qabstractitemview.h>
+#include <qlistview.h>
 
 #include <kfileitem.h>
 #include <kglobal.h>
@@ -42,11 +44,16 @@
 #include <kmenu.h>
 #include <kconfiggroup.h>
 
+#include <kdirmodel.h>
+
 //#include "libkscan/previewer.h"
 
-//#include "thumbviewdiroperator.h"
+#include "thumbviewdiroperator.h"
 
 #include "kookapref.h"
+
+
+#define PREVIEW_MAX_FILESIZE	(20*1024*1024LL)	// 20Mb, standard default is 5Mb
 
 
 // TODO: does this need to be a KVBox containing the DirOperator?
@@ -59,35 +66,54 @@ ThumbView::ThumbView(QWidget *parent)
     setMargin(0);
     m_thumbSize = KIconLoader::SizeHuge;
     m_bgImg = QString::null;
-    m_firstMenu = true;					// first time menu used
+    m_firstMenu = true;
 
-    // TODO: does there need to be a special ThumbViewDirOperator?
-    // The setupMenu() below should remove all of the standard actions
-    // from the menu.
-    //m_dirop = new ThumbViewDirOperator(KUrl(Previewer::galleryRoot()), this);
-    m_dirop = new KDirOperator(KUrl(KookaPref::galleryRoot()), this);
+    // No way to set the maximum file size or to ignore it directly,
+    // the preview job with that setting is private to KFilePreviewGenerator.
+    // But we can set the size limit in the application config - this also has
+    // a useful side effect that the user can change the setting there if they
+    // so wish.
+    // See PreviewJob::maximumFileSize() in kdelibs/kio/kio/previewjob.cpp
+    const KSharedConfigPtr conf = KGlobal::config();
+    KConfig conf2(conf->name(), KConfig::NoGlobals);	// ensure setting goes to app config
+    KConfigGroup grp = conf2.group("PreviewSettings");
+    if (!grp.hasKey("MaximumSize"))
+    {
+        kDebug() << "Setting maximum preview file size to" << PREVIEW_MAX_FILESIZE;
+        grp.writeEntry("MaximumSize", PREVIEW_MAX_FILESIZE);
+        grp.sync();
+    }
+    else
+    {
+        kDebug() << "Using maximum preview file size" << grp.readEntry("MaximumSize", 0);
+    }
+
+    m_dirop = new ThumbViewDirOperator(KUrl(KookaPref::galleryRoot()), this);
+    //m_dirop = new KDirOperator(KUrl(KookaPref::galleryRoot()), this);
     m_dirop->setObjectName("ThumbViewDirOperator");
-    m_dirop->setView(KFile::Default);
-    m_dirop->setView(KFile::PreviewContents);
+
     m_dirop->setPreviewWidget(NULL);			// no preview at side
-    m_dirop->setupMenu(0);				// no standard menu entries
-
-    //m_fileview->setViewName(i18n("Thumbnails"));
-    //m_fileview->setSelectionMode(KFile::Single);
     m_dirop->setMode(KFile::File);			// implies single selection mode
-    // TODO: is there an equivalent?
-    //m_fileview->setIgnoreMaximumSize(true);
-    m_dirop->setInlinePreviewShown(true);
+    m_dirop->setInlinePreviewShown(true);		// show file previews
+    m_dirop->setView(KFile::Simple);			// simple icon view
+    m_dirop->dirLister()->setMimeExcludeFilter(QStringList("inode/directory"));
+							// only files, not directories
 
-    connect(m_dirop, SIGNAL(fileHighlighted(const KFileItem &)),
+//    connect(m_dirop, SIGNAL(fileHighlighted(const KFileItem &)),
+    connect(m_dirop, SIGNAL(fileSelected(const KFileItem &)),
             SLOT(slotFileSelected(const KFileItem &)));
-    connect(m_dirop, SIGNAL(contextMenuAboutToShow(const KFileItem &, QMenu *)),
-            SLOT(slotAboutToShowMenu(const KFileItem &, QMenu *)));
+    connect(m_dirop, SIGNAL(contextMenuAboutToShow(const KFileItem &,QMenu *)),
+            SLOT(slotAboutToShowMenu(const KFileItem &,QMenu *)));
+    connect(m_dirop, SIGNAL(finishedLoading()),
+            SLOT(slotFinishedLoading()));
 
-    connect(m_dirop,SIGNAL(finishedLoading()),SLOT(slotFinishedLoading()));
+    // Scrolling to the selected item only works after the KDirOperator's
+    // KDirModel has received this signal.
+    connect(m_dirop->dirLister(), SIGNAL(refreshItems(const QList<QPair<KFileItem,KFileItem> > &)),
+            SLOT(slotEnsureVisible()));
 
     m_lastSelected = m_dirop->url();
-    m_toSelect = QString::null;
+    m_toSelect = KUrl();
     m_toChangeTo = KUrl();
 
     readSettings();
@@ -127,13 +153,9 @@ ThumbView::ThumbView(QWidget *parent)
     m_sizeMenu->addAction(act);
 
     connect(mapper,SIGNAL(mapped(int)),SLOT(slotSetSize(int)));
-//    connect(contextMenu(),SIGNAL(aboutToShow()),SLOT(slotAboutToShowMenu()));
 
     setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
 }
-
-
-
 
 
 ThumbView::~ThumbView()
@@ -149,27 +171,24 @@ QSize ThumbView::sizeHint() const
 }
 
 
-
-//KMenu *ThumbView::contextMenu() const
-//{
-//    return (m_dirop->contextMenu());
-//}
+KMenu *ThumbView::contextMenu() const
+{
+    return (m_dirop->contextMenu());
+}
 
 
 void ThumbView::slotAboutToShowMenu(const KFileItem &kfi, QMenu *menu)
 {
-    // TODO: is this necessary?
-    slotFileSelected(kfi);
-
-    if (m_sizeMenu==NULL) return;
     kDebug();
 
-    if (m_firstMenu)					// popup for the first time
+    // TODO: is this necessary?
+    //slotFileSelected(kfi);
+
+    if (m_firstMenu)					// first time menu activated
     {
-        //KMenu *menu = contextMenu();
         menu->addSeparator();
         menu->addAction(m_sizeMenu);			// append size menu at end
-        m_firstMenu = false;				// don't do this again
+        m_firstMenu = false;				// note this has been done
     }
 
     for (QMap<KIconLoader::StdSizes, KToggleAction *>::const_iterator it = m_sizeMap.constBegin();
@@ -182,10 +201,13 @@ void ThumbView::slotAboutToShowMenu(const KFileItem &kfi, QMenu *menu)
 
 void ThumbView::slotSetSize(int size)
 {
-    kDebug() << "size" << size;
     m_thumbSize = static_cast<KIconLoader::StdSizes>(size);
-    // TODO: what's the equivalent, is it m_dirop->view()->seticonSize()
-    //m_fileview->setPreviewSize(m_thumbSize);
+
+    // see KDirOperator::setIconsZoom() in kdelibs/kfile/kdiroperator.cpp
+    int val = ((size-KIconLoader::SizeSmall)*100)/(KIconLoader::SizeEnormous-KIconLoader::SizeSmall);
+
+    kDebug() << "size" << size << "-> val" << val;
+    m_dirop->setIconsZoom(val);
 }
 
 
@@ -199,13 +221,31 @@ void ThumbView::slotFinishedLoading()
         return;
     }
 
-    if (!m_toSelect.isNull())				// see if something to select
+    if (m_toSelect.isValid())				// see if something to select
     {
         kDebug() << "selecting" << m_toSelect;
-        m_dirop->blockSignals(true);			// avoid signal loop
-        m_dirop->setCurrentItem(m_toSelect);
-        m_dirop->blockSignals(false);
-        m_toSelect = QString::null;			// have dealt with this now
+        bool blk = m_dirop->blockSignals(true);		// avoid signal loop
+        m_dirop->setCurrentItem(m_toSelect.url());
+        m_dirop->blockSignals(blk);
+        m_toSelect = KUrl();				// have dealt with this now
+    }
+}
+
+
+void ThumbView::slotEnsureVisible()
+{
+    QListView *v = qobject_cast<QListView *>(m_dirop->view());
+    if (v==NULL) return;
+
+    // Ensure that the currently selected item is visible,
+    // from KDirOperator::Private::_k_assureVisibleSelection()
+    // in kdelibs/kfile/kdiroperator.cpp
+    QItemSelectionModel *selModel = v->selectionModel();
+    if (selModel->hasSelection())
+    {
+        const QModelIndex index = selModel->currentIndex();
+        kDebug() << "ensuring visible" << index;
+        v->scrollTo(index, QAbstractItemView::EnsureVisible);
     }
 }
 
@@ -213,7 +253,7 @@ void ThumbView::slotFinishedLoading()
 void ThumbView::slotFileSelected(const KFileItem &kfi)
 {
     KUrl url = (!kfi.isNull() ? kfi.url() : m_dirop->url());
-    kDebug() << url.prettyUrl();
+    kDebug() << url;
 
     if (url!=m_lastSelected)
     {
@@ -225,7 +265,7 @@ void ThumbView::slotFileSelected(const KFileItem &kfi)
 
 void ThumbView::slotSelectImage(const KFileItem *item)
 {
-    kDebug() << "item url" << item->url().prettyUrl() << "isDir" << item->isDir();
+    kDebug() << "item url" << item->url() << "isDir" << item->isDir();
 
     KUrl cur = m_dirop->url();				// directory currently showing
 
@@ -235,12 +275,13 @@ void ThumbView::slotSelectImage(const KFileItem *item)
 
     if (cur.path(KUrl::AddTrailingSlash)!=dirToShow.path(KUrl::AddTrailingSlash))
     {							// see if changing path
-        if (!item->isDir()) m_toSelect = urlToShow.fileName();
+        if (!item->isDir()) m_toSelect = urlToShow;
 							// select that when loading finished
 
-        // Need to check whether the KDirOperator's KDirLister is currently busy.
-        // If it is, then trying to set the KDirOperator to a new directory at this
-        // point is accepted but fails soon afterwards with an assertion such as:
+        // Bug 216928: Need to check whether the KDirOperator's KDirLister is
+        // currently busy.  If it is, then trying to set the KDirOperator to a
+        // new directory at this point is accepted but fails soon afterwards
+        // with an assertion such as:
         //
         //    kooka(7283)/kio (KDirModel): Items emitted in directory
         //    KUrl("file:///home/jjm4/Documents/KookaGallery/a")
@@ -257,7 +298,7 @@ void ThumbView::slotSelectImage(const KFileItem *item)
         if (m_dirop->dirLister()->isFinished())		// idle, can do this now
         {
             kDebug() << "lister idle, changing dir to" << dirToShow;
-            m_dirop->setUrl(dirToShow,true);		// change path and reload
+            m_dirop->setUrl(dirToShow, true);		// change path and reload
         }
         else
         {
@@ -275,7 +316,7 @@ void ThumbView::slotSelectImage(const KFileItem *item)
     }
 
     m_dirop->blockSignals(true);			// avoid signal loop
-    m_dirop->setCurrentItem(item->isDir() ? QString::null : urlToShow.fileName());
+    m_dirop->setCurrentItem(item->isDir() ? QString::null : urlToShow.url());
     m_dirop->blockSignals(false);
 }
 
@@ -331,36 +372,31 @@ void ThumbView::setBackground()
 
 void ThumbView::slotImageChanged(const KFileItem *kfi)
 {
-    kDebug() << kfi->url().prettyUrl();
+    kDebug() << kfi->url();
     // TODO: is there an equivalent?
     //m_fileview->updateView(kfi);			// update that view item
 }
 
 
-void ThumbView::slotImageRenamed(const KFileItem *item,const QString &newName)
+void ThumbView::slotImageRenamed(const KFileItem *item, const QString &newName)
 {
-    kDebug() << item->url().prettyUrl() << "->" << newName;
+    kDebug() << item->url() << "->" << newName;
 
-    if (item->isDir()) return;				// directory rename, nothing to do
-
-    KUrl cur = m_dirop->url();				// check it's the one currently showing
-    if (item->url().directory(KUrl::AppendTrailingSlash)!=cur.path(KUrl::AddTrailingSlash)) return;
-
-    m_toSelect = newName;				// select new after update
-    // TODO: is there an equivalent?
-    //m_fileview->updateView(item->fileItem());		// update that view item
+    // Nothing to do here.
+    // KDirLister::refreshItems signal -> slotEnsureVisible()
+    // will scroll to the selected item.
 }
 
 
 void ThumbView::slotImageDeleted(const KFileItem *kfi)
 {
-    // No need to do anything, KDirOperator/KFileView handles all of that
+    // No need to do anything here.
 }
 
 
 QString ThumbView::standardBackground()
 {
-    return (KGlobal::dirs()->findResource("data",THUMB_STD_TILE_IMG));
+    return (KGlobal::dirs()->findResource("data", THUMB_STD_TILE_IMG));
 }
 
 
