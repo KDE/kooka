@@ -34,6 +34,9 @@
 #include "filetreeview.h"
 
 
+#undef DEBUG_MAPPING
+
+
 FileTreeBranch::FileTreeBranch(FileTreeView *parent,
                                const KUrl &url,
                                const QString &name,
@@ -218,17 +221,23 @@ FileTreeViewItem *FileTreeBranch::findItemByUrl(const KUrl &url)
 							// recalculate if needed
     if (p==m_lastFoundPath)				// do the most likely and
     {							// fastest lookup first
+#ifdef DEBUG_MAPPING
         kDebug() << "Found as last" << url;
+#endif
         return (m_lastFoundItem);			// no more to do
     }
     else if (p==m_startPath)				// see if is the root
     {
+#ifdef DEBUG_MAPPING
         kDebug() << "Found as root" << url;
+#endif
         resultItem = m_root;
     }
     else if (m_TVImap.contains(p))			// see if in our map
     {
+#ifdef DEBUG_MAPPING
         kDebug() << "Found in map" << url;
+#endif
         resultItem = m_TVImap[p];
     }
     else						// need to ask the lister
@@ -245,7 +254,9 @@ FileTreeViewItem *FileTreeBranch::findItemByUrl(const KUrl &url)
         //    resultItem = treeItemForFileItem(it);
         //}
 
+#ifdef DEBUG_MAPPING
         kDebug() << "Not found" << url;
+#endif
     }
 
     if (resultItem!=NULL)				// found something
@@ -290,7 +301,9 @@ FileTreeViewItem *FileTreeBranch::createTreeViewItem(FileTreeViewItem *parent,
     {
         tvi = new FileTreeViewItem(parent, fileItem, this);
         m_TVImap[fileItem.url().path(KUrl::RemoveTrailingSlash)] = tvi;
+#ifdef DEBUG_MAPPING
         kDebug() << "stored in map" << fileItem.url().path(KUrl::RemoveTrailingSlash);
+#endif
     }
     else kDebug() << "no parent/fileitem for new item!";
     return (tvi);
@@ -542,12 +555,15 @@ void FileTreeBranch::slotListerCompleted(const KUrl &url)
     {
         bool wantRecurseUrl = false;
         /* look if the url is in the list for url to recurse */
-        for ( KUrl::List::Iterator it = m_openChildrenURLs.begin();
-              it != m_openChildrenURLs.end(); ++it )
+        for (KUrl::List::const_iterator it = m_openChildrenURLs.constBegin();
+             it!=m_openChildrenURLs.constEnd(); ++it)
         {
             /* it is only interesting that the url _is_in_ the list. */
-          if( (*it).equals( url, KUrl::CompareWithoutTrailingSlash ) )
+            if ((*it).equals(url, KUrl::CompareWithoutTrailingSlash))
+            {
                 wantRecurseUrl = true;
+                break;
+            }
         }
 
         kDebug() << "Recurse for" << url << wantRecurseUrl;
@@ -601,25 +617,24 @@ bool FileTreeBranch::populate(const KUrl &url, FileTreeViewItem *currItem)
     bool ret = false;
     if (currItem==NULL) return (ret);
 
-    kDebug() << "Populating" << url;
+    kDebug() << "populating" << url;
 
     /* Add this url to the list of urls to recurse for children */
-    if( m_recurseChildren )
+    if (m_recurseChildren)
     {
-        m_openChildrenURLs.append( url );
-        kDebug() << "Appending to list of children";
+        m_openChildrenURLs.append(url);
+        kDebug() << "Adding as open child";
     }
 
-    if (!currItem->alreadyListed() )
+    if (!currItem->alreadyListed())
     {
-        /* start the lister */
-        kDebug() << "Starting to list" << url;
-        ret = openUrl( url, KDirLister::Keep );
+        kDebug() << "Starting to list";
+        ret = openUrl(url, KDirLister::Keep);		// start the lister
     }
     else
     {
         kDebug() << "Children already exist";
-        slotListerCompleted( url );
+        slotListerCompleted(url);
         ret = true;
     }
 
