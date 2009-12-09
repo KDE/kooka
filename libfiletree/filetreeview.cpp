@@ -548,6 +548,8 @@ QIcon FileTreeView::itemIcon(FileTreeViewItem *item, int gap) const
 }
 
 
+
+// TODO: does the animation actually work? is it useful?
 void FileTreeView::slotAnimation()
 {
     MapCurrentOpeningFolders::Iterator it = m_mapCurrentOpeningFolders.begin();
@@ -624,25 +626,44 @@ void FileTreeView::stopAnimation(FileTreeViewItem *item)
 }
 
 
-FileTreeViewItem *FileTreeView::currentFileTreeViewItem() const
+FileTreeViewItem *FileTreeView::selectedFileTreeViewItem() const
 {
     QList<QTreeWidgetItem *> items = selectedItems();
     return (items.count()>0 ? static_cast<FileTreeViewItem *>(items.first()) : NULL);
 }
 
 
-const KFileItem *FileTreeView::currentFileItem() const
+const KFileItem *FileTreeView::selectedFileItem() const
 {
-    FileTreeViewItem *item = currentFileTreeViewItem();
+    FileTreeViewItem *item = selectedFileTreeViewItem();
     return (item==NULL ? NULL : item->fileItem());
 }
 
 
-KUrl FileTreeView::currentUrl() const
+KUrl FileTreeView::selectedUrl() const
 {
-    FileTreeViewItem *item = currentFileTreeViewItem();
-    if (item==NULL) return (KUrl());
-    return (item->url());
+    FileTreeViewItem *item = selectedFileTreeViewItem();
+    return (item!=NULL ? item->url() : KUrl());
+}
+
+
+FileTreeViewItem *FileTreeView::highlightedFileTreeViewItem() const
+{
+    return (static_cast<FileTreeViewItem *>(currentItem()));
+}
+
+
+const KFileItem *FileTreeView::highlightedFileItem() const
+{
+    FileTreeViewItem *item = highlightedFileTreeViewItem();
+    return (item==NULL ? NULL : item->fileItem());
+}
+
+
+KUrl FileTreeView::highlightedUrl() const
+{
+    FileTreeViewItem *item = highlightedFileTreeViewItem();
+    return (item!=NULL ? item->url() : KUrl());
 }
 
 

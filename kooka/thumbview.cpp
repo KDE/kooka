@@ -89,7 +89,10 @@ ThumbView::ThumbView(QWidget *parent)
 
     connect(this, SIGNAL(fileSelected(const KFileItem &)),
             SLOT(slotFileSelected(const KFileItem &)));
-    connect(this, SIGNAL(finishedLoading()), SLOT(slotFinishedLoading()));
+    connect(this, SIGNAL(fileHighlighted(const KFileItem &)),
+            SLOT(slotFileHighlighted(const KFileItem &)));
+    connect(this, SIGNAL(finishedLoading()),
+            SLOT(slotFinishedLoading()));
 
     // We want to provide our own context menu, not the one that
     // KDirOperator has built in.
@@ -157,6 +160,63 @@ ThumbView::~ThumbView()
 }
 
 
+void ThumbView::slotHighlightItem(const KUrl &url, bool isDir)
+{
+    kDebug() << "url" << url << "isDir" << isDir;
+
+    KUrl cur = this->url();				// directory currently showing
+
+    KUrl urlToShow = url;				// new URL to show
+    KUrl dirToShow = urlToShow;				// directory part of that
+    if (!isDir) dirToShow.setFileName(QString::null);
+
+    if (cur.path(KUrl::AddTrailingSlash)!=dirToShow.path(KUrl::AddTrailingSlash))
+    {							// see if changing path
+        if (!isDir) m_toSelect = urlToShow;		// select that when loading finished
+
+        // Bug 216928: Need to check whether the KDirOperator's KDirLister is
+        // currently busy.  If it is, then trying to set the KDirOperator to a
+        // new directory at this point is accepted but fails soon afterwards
+        // with an assertion such as:
+        //
+        //    kooka(7283)/kio (KDirModel): Items emitted in directory
+        //    KUrl("file:///home/jjm4/Documents/KookaGallery/a")
+        //    but that directory isn't in KDirModel!
+        //    Root directory: KUrl("file:///home/jjm4/Documents/KookaGallery/a/a")
+        //    ASSERT: "result" in file /ws/trunk/kdelibs/kio/kio/kdirmodel.cpp, line 372
+        //
+        // To fix this, if the KDirLister is busy we delay changing to the new
+        // directory until the it has finished, the finishedLoading() signal
+        // will then call our slotFinishedLoading() and do the setUrl() there.
+        //
+        // There are two possible (but extremely unlikely) race conditions here.
+
+        if (dirLister()->isFinished())			// idle, can do this now
+        {
+            kDebug() << "lister idle, changing dir to" << dirToShow;
+            setUrl(dirToShow, true);			// change path and reload
+        }
+        else
+        {
+            kDebug() << "lister busy, deferring change to" << dirToShow;
+            m_toChangeTo = dirToShow;			// note to do later
+        }
+        return;
+    }
+
+    KFileItemList selItems = selectedItems();
+    if (!selItems.isEmpty())				// the current selection
+    {
+        KFileItem curItem = selItems.first();
+        if (curItem.url()==urlToShow) return;		// already selected
+    }
+
+    bool b = blockSignals(true);			// avoid signal loop
+    setCurrentItem(isDir ? QString::null : urlToShow.url());
+    blockSignals(b);
+}
+
+
 void ThumbView::slotContextMenu(const QPoint &pos)
 {
     if (m_firstMenu)					// first time menu activated
@@ -193,7 +253,7 @@ void ThumbView::slotFinishedLoading()
     if (m_toChangeTo.isValid())				// see if change deferred
     {
         kDebug() << "setting dirop url to" << m_toChangeTo;
-        setUrl(m_toChangeTo, true);		// change path and reload
+        setUrl(m_toChangeTo, true);			// change path and reload
         m_toChangeTo = KUrl();				// have dealt with this now
         return;
     }
@@ -201,7 +261,7 @@ void ThumbView::slotFinishedLoading()
     if (m_toSelect.isValid())				// see if something to select
     {
         kDebug() << "selecting" << m_toSelect;
-        bool blk = blockSignals(true);		// avoid signal loop
+        bool blk = blockSignals(true);			// avoid signal loop
         setCurrentItem(m_toSelect.url());
         blockSignals(blk);
         m_toSelect = KUrl();				// have dealt with this now
@@ -235,66 +295,16 @@ void ThumbView::slotFileSelected(const KFileItem &kfi)
     if (u!=m_lastSelected)
     {
         m_lastSelected = u;
-        emit selectFromThumbnail(u);
+        emit itemActivated(u);
     }
 }
 
 
-void ThumbView::slotSelectImage(const KFileItem *item)
+void ThumbView::slotFileHighlighted(const KFileItem &kfi)
 {
-    kDebug() << "item url" << item->url() << "isDir" << item->isDir();
-
-    KUrl cur = url();				// directory currently showing
-
-    KUrl urlToShow = item->url();			// new URL to show
-    KUrl dirToShow = urlToShow;				// directory part of that
-    if (!item->isDir()) dirToShow.setFileName(QString::null);
-
-    if (cur.path(KUrl::AddTrailingSlash)!=dirToShow.path(KUrl::AddTrailingSlash))
-    {							// see if changing path
-        if (!item->isDir()) m_toSelect = urlToShow;
-							// select that when loading finished
-
-        // Bug 216928: Need to check whether the KDirOperator's KDirLister is
-        // currently busy.  If it is, then trying to set the KDirOperator to a
-        // new directory at this point is accepted but fails soon afterwards
-        // with an assertion such as:
-        //
-        //    kooka(7283)/kio (KDirModel): Items emitted in directory
-        //    KUrl("file:///home/jjm4/Documents/KookaGallery/a")
-        //    but that directory isn't in KDirModel!
-        //    Root directory: KUrl("file:///home/jjm4/Documents/KookaGallery/a/a")
-        //    ASSERT: "result" in file /ws/trunk/kdelibs/kio/kio/kdirmodel.cpp, line 372
-        //
-        // To fix this, if the KDirLister is busy we delay changing to the new
-        // directory until the it has finished, the finishedLoading() signal
-        // will then call our slotFinishedLoading() and do the setUrl() there.
-        //
-        // There are two possible (but extremely unlikely) race conditions here.
-
-        if (dirLister()->isFinished())		// idle, can do this now
-        {
-            kDebug() << "lister idle, changing dir to" << dirToShow;
-            setUrl(dirToShow, true);		// change path and reload
-        }
-        else
-        {
-            kDebug() << "lister busy, deferring change to" << dirToShow;
-            m_toChangeTo = dirToShow;
-        }
-        return;
-    }
-
-    KFileItemList selItems = selectedItems();
-    if (!selItems.isEmpty())				// the current selection
-    {
-        KFileItem curItem = selItems.first();
-        if (curItem.url()==urlToShow) return;		// already selected
-    }
-
-    blockSignals(true);			// avoid signal loop
-    setCurrentItem(item->isDir() ? QString::null : urlToShow.url());
-    blockSignals(false);
+    KUrl u = (!kfi.isNull() ? kfi.url() : url());
+    kDebug() << u;
+    emit itemHighlighted(u);
 }
 
 

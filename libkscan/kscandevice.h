@@ -110,6 +110,12 @@ public:
      **/
     QString scannerDescription() const;
 
+    /**
+     * Checks whether a scanner device is set and connected (i.e.
+     * whether the previous openDevice() returned KSCAN_OK).
+     **/
+    bool isScannerConnected() const { return (mScannerInitialised); }
+
     /*
      *  ========= Preview Functions ==========
      */

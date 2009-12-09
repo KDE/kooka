@@ -62,11 +62,10 @@ public:
     static QString sizeName(KIconLoader::StdSizes size);
 
 public slots:
-    void slotSetSize(int size);
     void slotImageDeleted(const KFileItem *kfi);
     void slotImageChanged(const KFileItem *kfi);
     void slotImageRenamed(const KFileItem *kfi, const QString &newName);
-    void slotSelectImage(const KFileItem *kfi);
+    void slotHighlightItem(const KUrl &url, bool isDir);
 
 protected:
     void saveConfig();
@@ -74,11 +73,14 @@ protected:
 protected slots:
     void slotContextMenu(const QPoint &pos);
     void slotFileSelected(const KFileItem &kfi);
+    void slotFileHighlighted(const KFileItem &kfi);
     void slotFinishedLoading();
     void slotEnsureVisible();
+    void slotSetSize(int size);
 
 signals:
-    void selectFromThumbnail(const KUrl &url);
+    void itemHighlighted(const KUrl &url);
+    void itemActivated(const KUrl &url);
 
 private:
     void setBackground();
@@ -95,5 +97,6 @@ private:
     KUrl m_toSelect;
     KUrl m_toChangeTo;
 };
+
 
 #endif							// THUMBVIEW_H

@@ -101,20 +101,16 @@ ScanGallery::ScanGallery(QWidget *parent)
    // TODO: port D&D
    setDropVisualizer(true);
    setAcceptDrops(true);
-#endif
-
    connect(this,SIGNAL(dropped(FileTreeView *,QDropEvent *,QTreeWidgetItem *,QTreeWidgetItem *)),
            SLOT(slotUrlsDropped(FileTreeView *,QDropEvent *,QTreeWidgetItem *,QTreeWidgetItem *)));
+#endif
 
+   connect(this, SIGNAL(currentItemChanged(QTreeWidgetItem *,QTreeWidgetItem *)),
+           SLOT(slotItemHighlighted(QTreeWidgetItem *)));
    connect(this, SIGNAL(itemActivated(QTreeWidgetItem *,int)),
-           SLOT(slotClicked(QTreeWidgetItem *)));
-
-   connect(model(),SIGNAL(dataChanged(const QModelIndex &,const QModelIndex &)),
-           SLOT(slotDataChanged(const QModelIndex &,const QModelIndex &)));
-
+           SLOT(slotItemActivated(QTreeWidgetItem *)));
    connect(this, SIGNAL(fileRenamed(FileTreeViewItem *,const QString &)),
            SLOT(slotFileRenamed(FileTreeViewItem *,const QString &)));
-
    connect(this, SIGNAL(itemExpanded(QTreeWidgetItem *)),
            SLOT(slotItemExpanded(QTreeWidgetItem *)));
 
@@ -212,7 +208,7 @@ void ScanGallery::slotStartupFinished(FileTreeViewItem *it)
         kDebug();
 
         /* If nothing is selected, select the root. */
-        if (currentFileTreeViewItem()==NULL) m_defaultBranch->root()->setSelected(true);
+        if (highlightedFileTreeViewItem()==NULL) m_defaultBranch->root()->setSelected(true);
         m_startup = false;
     }
 }
@@ -220,30 +216,8 @@ void ScanGallery::slotStartupFinished(FileTreeViewItem *it)
 
 void ScanGallery::contextMenuEvent(QContextMenuEvent *ev)
 {
-    FileTreeViewItem *item = static_cast<FileTreeViewItem *>(itemAt(ev->pos()));
     ev->accept();
     if (m_contextMenu!=NULL) m_contextMenu->exec(ev->globalPos());
-}
-
-
-// For a right-click (context menu), we want to select the clicked item but
-// not activate it (which would result in loading the image).  The activate
-// is emit'ed from QAbstractItemView::mouseReleaseEvent(), so filter out a
-// right button release here.
-//
-// Currently not doing this, because there doesn't seem to be a way of getting the
-// same behaviour in the thumbnail view (which is a KDirOperator).  For the sake
-// of consistency.
-
-void ScanGallery::mouseReleaseEvent(QMouseEvent *ev)
-{
-//    if (ev->button()==Qt::RightButton)		// context menu button
-//    {
-//        ev->accept();					// ignore the event
-//        return;
-//    }
-
-    FileTreeView::mouseReleaseEvent(ev);		// process the event
 }
 
 
@@ -279,6 +253,87 @@ static KookaImage *imageForItem(const FileTreeViewItem *item)
 {
     if (item==NULL) return (NULL);			// get loaded image if any
     return (static_cast<KookaImage *>(item->clientData()));
+}
+
+
+void ScanGallery::slotItemHighlighted(QTreeWidgetItem *curr)
+{
+    FileTreeViewItem *item = static_cast<FileTreeViewItem *>(curr);
+    kDebug() << item->url();
+
+    if (item->isDir()) emit showImage(NULL, true);	// clear displayed image
+    else
+    {
+        KookaImage *img = imageForItem(item);
+        emit showImage(img, false);			// clear or redisplay image
+    }
+
+    emit itemHighlighted(item->url(), item->isDir());
+}
+
+
+void ScanGallery::slotItemActivated(QTreeWidgetItem *curr)
+{
+    FileTreeViewItem *item = static_cast<FileTreeViewItem *>(curr);
+    kDebug() << item->url();
+
+    //  Check if directory, hide image for now, later show a thumb view?
+    if (item->isDir())					// is it a directory?
+    {
+	 emit showImage(NULL, true);			// unload current image
+    }
+    else						// not a directory
+    {
+        //  Load the image if necessary. This is done by loadImageForItem,
+        //  which is async (TODO). The image finally arrives in slotImageArrived.
+        QApplication::setOverrideCursor(Qt::WaitCursor);
+        emit aboutToShowImage(item->url());
+        loadImageForItem(item);
+        QApplication::restoreOverrideCursor();
+    }
+
+    //  Indicate the new directory if it has changed
+    QString wholeDir = itemDirectory(item,false);	// not relative to root
+    if (m_currSelectedDir!=wholeDir)
+    {
+        m_currSelectedDir = wholeDir;
+        QString relativUrl = itemDirectory(item,true);
+        kDebug() << "Emitting" << relativUrl << "as new relative URL";
+        //  Emit the signal with branch and the relative path
+        emit galleryPathChanged(item->branch(),relativUrl);
+    }
+}
+
+
+// These 2 slots are called when an item is clicked/activated in the thumbnail view.
+
+void ScanGallery::slotHighlightItem(const KUrl &url)
+{
+    kDebug() << url;
+
+    FileTreeViewItem *found = findItemByUrl(url);
+    if (found==NULL) return;
+
+    bool b = blockSignals(true);
+    scrollToItem(found);
+    setCurrentItem(found);
+    blockSignals(b);
+
+    // Need to do this to update/clear the displayed image.  Causes a signal
+    // to be sent back to the thumbnail view, but this is benign and fortunately
+    // does not cause not a loop.
+    slotItemHighlighted(found);
+}
+
+
+void ScanGallery::slotActivateItem(const KUrl &url)
+{
+    kDebug() << url;
+
+    FileTreeViewItem *found = findItemByUrl(url);
+    if (found==NULL) return;
+
+    slotItemActivated(found);
 }
 
 
@@ -383,7 +438,7 @@ void ScanGallery::slotDecorate(FileTreeViewItem *item)
         if (m_nextUrlToShow.equals(item->url(), KUrl::CompareWithoutTrailingSlash))
         {
             m_nextUrlToShow = KUrl();			// do this first to prevent recursion
-            slotClicked(item);
+            slotItemActivated(item);
             setCurrentItem(item);			// neccessary in case of new file from D&D
         }
     }
@@ -425,7 +480,7 @@ void ScanGallery::updateParent(const FileTreeViewItem *curr)
 
 void ScanGallery::slotRenameItems()
 {
-    FileTreeViewItem *curr = currentFileTreeViewItem();
+    FileTreeViewItem *curr = highlightedFileTreeViewItem();
     if (curr!=NULL) editItem(curr, 0);
 }
 
@@ -584,49 +639,7 @@ void ScanGallery::slotSelectDirectory(const QString &branchName,const QString &r
 
     scrollToItem(item);
     setCurrentItem(item);
-    slotClicked(item);					// load thumbnails, etc.
-}
-
-
-/* ----------------------------------------------------------------------- */
-/* This slot is called when clicking on an item.                           */
-void ScanGallery::slotClicked(QTreeWidgetItem *newItem)
-{
-    FileTreeViewItem *item = static_cast<FileTreeViewItem *>(newItem);
-    if (item==NULL) return;				// can click over no item
-
-    kDebug();
-    emit showItem(item->fileItem());			// tell the (new) thumbnail view
-
-    //  Check if directory, hide image for now, later show a thumb view?
-    if (item->isDir())					// is it a directory?
-    {
-	 emit showImage(NULL,true);			// unload current image
-    }
-    else						// not a directory
-    {
-        //  Load the image if necessary. This is done by loadImageForItem,
-        //  which is async (TODO). The image finally arrives in slotImageArrived.
-        QApplication::setOverrideCursor(Qt::WaitCursor);
-        emit aboutToShowImage(item->url());
-        loadImageForItem(item);
-        QApplication::restoreOverrideCursor();
-    }
-
-    //  Indicate the new directory if it has changed
-    QString wholeDir = itemDirectory(item,false);	// not relative to root
-    if (m_currSelectedDir!=wholeDir)
-    {
-        m_currSelectedDir = wholeDir;
-        QString relativUrl = itemDirectory(item,true);
-        kDebug() << "Emitting" << relativUrl << "as new relative URL";
-        //  Emit the signal with branch and the relative path
-        emit galleryPathChanged(item->branch(),relativUrl);
-
-        // Show new thumbnail directory
-        if (item->isDir()) emit showThumbnails(item);
-        else emit showThumbnails(static_cast<FileTreeViewItem *>(item->parent()));
-    }
+    slotItemActivated(item);					// load thumbnails, etc.
 }
 
 
@@ -732,7 +745,7 @@ void ScanGallery::slotImageArrived(FileTreeViewItem *item, KookaImage *image)
 
 const KookaImage *ScanGallery::getCurrImage(bool loadOnDemand)
 {
-    FileTreeViewItem *curr = currentFileTreeViewItem();
+    FileTreeViewItem *curr = highlightedFileTreeViewItem();
     if (curr==NULL) return (NULL);			// no current item
     if (curr->isDir()) return (NULL);			// is a directory
 
@@ -740,7 +753,7 @@ const KookaImage *ScanGallery::getCurrImage(bool loadOnDemand)
     if (img==NULL)					// no, try to do that
     {
         if (!loadOnDemand) return (NULL);		// not loaded, and don't want to
-        slotClicked(curr);				// select/load this image
+        slotItemActivated(curr);			// select/load this image
         img = imageForItem(curr);			// and get image for it
     }
 
@@ -752,7 +765,7 @@ QString ScanGallery::getCurrImageFileName(bool withPath) const
 {
    QString result = "";
 
-   FileTreeViewItem *curr = currentFileTreeViewItem();
+   FileTreeViewItem *curr = highlightedFileTreeViewItem();
    if( ! curr )
    {
       kDebug() << "nothing selected!";
@@ -778,7 +791,7 @@ QString ScanGallery::getCurrImageFileName(bool withPath) const
 /* Called if the image exists but was changed by image manipulation func   */
 void ScanGallery::slotCurrentImageChanged(const QImage *img)
 {
-    FileTreeViewItem *curr = currentFileTreeViewItem();
+    FileTreeViewItem *curr = highlightedFileTreeViewItem();
     if (curr==NULL)
     {
         kDebug() << "nothing selected!";
@@ -832,7 +845,7 @@ void ScanGallery::addImage(const QImage *img, KookaImageMeta *meta)
     if (img==NULL) return;
     ImgSaver::ImageSaveStatus is_stat = ImgSaver::SaveStatusOk;
 
-    FileTreeViewItem *curr = currentFileTreeViewItem();
+    FileTreeViewItem *curr = highlightedFileTreeViewItem();
     if (curr==NULL)					// into root if nothing is selected
     {
         FileTreeBranch *branch = branches().at(0);	// there should be at least one
@@ -849,7 +862,7 @@ void ScanGallery::addImage(const QImage *img, KookaImageMeta *meta)
     KUrl dir(itemDirectory(curr));			// where new image will go
     ImgSaver saver(dir);
     is_stat = saver.saveImage(img);			// try to save the image
-    if (is_stat!=ImgSaver::SaveStatusOk)				// image saving failed
+    if (is_stat!=ImgSaver::SaveStatusOk)		// image saving failed
     {
         if (is_stat==ImgSaver::SaveStatusCanceled) return;
 							// user cancelled, just ignore
@@ -868,11 +881,10 @@ void ScanGallery::addImage(const QImage *img, KookaImageMeta *meta)
     updateParent(curr);
 }
 
-/* ----------------------------------------------------------------------- */
-/* selects and opens the file with the given name. This is used to restore the
- * last displayed image by its name, and to select an image in the gallery
- * when clicked in the thumbview.
- */
+
+// Selects and loads the image with the given URL. This is used to restore the
+// last displayed image on startup.
+
 void ScanGallery::slotSelectImage(const KUrl &url)
 {
     FileTreeViewItem *found = findItemByUrl(url);
@@ -880,7 +892,7 @@ void ScanGallery::slotSelectImage(const KUrl &url)
 
     scrollToItem(found);
     setCurrentItem(found);
-    slotClicked(found);
+    slotItemActivated(found);
 }
 
 
@@ -921,7 +933,7 @@ FileTreeViewItem *ScanGallery::findItemByUrl(const KUrl &url, FileTreeBranch *br
 
 void ScanGallery::slotExportFile()
 {
-    FileTreeViewItem *curr = currentFileTreeViewItem();
+    FileTreeViewItem *curr = highlightedFileTreeViewItem();
     if (curr==NULL) return;
 
     if (curr->isDir())
@@ -934,7 +946,7 @@ void ScanGallery::slotExportFile()
 
     QString filter;
     ImageFormat format = getImgFormat(curr);
-    if (format.isValid()) filter = "*."+format.extension()+"\n";
+    if (format.isValid()) filter = "*."+format.extension()+"|"+format.mime()->comment()+"\n";
     filter += "*|"+i18n("All Files");
 
     QString initial = "kfiledialog:///exportImage/"+fromUrl.fileName();
@@ -943,13 +955,13 @@ void ScanGallery::slotExportFile()
     if (fromUrl==fileName) return;			// can't save over myself
 
     /* Since it is asynchron, we will never know if it succeeded. */
-    ImgSaver::copyImage(fromUrl,fileName);
+    ImgSaver::copyImage(fromUrl, fileName);
 }
 
 
 void ScanGallery::slotImportFile()
 {
-    FileTreeViewItem *curr = currentFileTreeViewItem();
+    FileTreeViewItem *curr = highlightedFileTreeViewItem();
     if( ! curr ) return;
 
     KUrl impTarget = curr->url();
@@ -1007,7 +1019,7 @@ void ScanGallery::slotUrlsDropped(FileTreeView *me, QDropEvent *ev,
 }
 
 
-void ScanGallery::slotCanceled( KIO::Job* )
+void ScanGallery::slotCanceled(KIO::Job *job)
 {
     kDebug();
 }
@@ -1016,7 +1028,7 @@ void ScanGallery::slotCanceled( KIO::Job* )
 /* ----------------------------------------------------------------------- */
 void ScanGallery::slotUnloadItems()
 {
-    FileTreeViewItem *curr = currentFileTreeViewItem();
+    FileTreeViewItem *curr = highlightedFileTreeViewItem();
     emit showImage(NULL,false);
     slotUnloadItem(curr);
 }
@@ -1061,7 +1073,7 @@ void ScanGallery::slotUnloadItem(FileTreeViewItem *curr)
 
 void ScanGallery::slotItemProperties()
 {
-    FileTreeViewItem *curr = currentFileTreeViewItem();
+    FileTreeViewItem *curr = highlightedFileTreeViewItem();
     if (curr==NULL) return;
     KPropertiesDialog::showDialog(curr->url(),this);
 }
@@ -1071,7 +1083,7 @@ void ScanGallery::slotItemProperties()
 
 void ScanGallery::slotDeleteItems()
 {
-    FileTreeViewItem *curr = currentFileTreeViewItem();
+    FileTreeViewItem *curr = highlightedFileTreeViewItem();
     if (curr==NULL) return;
 
     KUrl urlToDel = curr->url();			// item to be deleted
@@ -1128,7 +1140,7 @@ void ScanGallery::slotDeleteItems()
     //  in a folder (nothing is selected afterwards) and deleting anything
     //  else (the next image is selected and loaded).  So leaving this
     //  commented out for now.
-    curr = currentFileTreeViewItem();
+    curr = highlightedFileTreeViewItem();
     kDebug() << "new selection after delete" << (curr==NULL ? "NULL" : curr->url().prettyURL());
     if (curr!=NULL) emit showItem(curr->fileItem());
 #endif
@@ -1149,7 +1161,7 @@ void ScanGallery::slotCreateFolder( )
    {
 	 /* KIO create folder goes here */
 
-	 FileTreeViewItem *it = currentFileTreeViewItem();
+	 FileTreeViewItem *it = highlightedFileTreeViewItem();
 	 if( it )
 	 {
 	    KUrl url = it->url();
@@ -1224,7 +1236,7 @@ void ScanGallery::setAllowRename(bool on)
 
 void ScanGallery::showOpenWithMenu(KActionMenu *menu)
 {
-    FileTreeViewItem *curr = currentFileTreeViewItem();
+    FileTreeViewItem *curr = highlightedFileTreeViewItem();
     QString mimeType = KMimeType::findByUrl(curr->url())->name();
     kDebug() << "Trying to open" << curr->url() << "which is" << mimeType;
 
@@ -1264,7 +1276,7 @@ void ScanGallery::slotOpenWith(int idx)
 {
     kDebug() << "idx" << idx;
 
-    FileTreeViewItem *ftvi = currentFileTreeViewItem();
+    FileTreeViewItem *ftvi = highlightedFileTreeViewItem();
     if (ftvi==NULL) return;
     KUrl::List urllist(ftvi->url());
 

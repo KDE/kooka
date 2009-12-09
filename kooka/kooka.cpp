@@ -113,7 +113,7 @@ Kooka::Kooka(const QByteArray &deviceToUse)
 
     changeCaption( i18n( "KDE Scanning" ));
 
-    slotUpdateScannerActions(m_view->scannerConnected());
+    slotUpdateScannerActions(m_view->isScannerConnected());
     slotUpdateRectangleActions(false);
     slotUpdateGalleryActions(true,0);
     slotUpdateOcrResultActions(false);

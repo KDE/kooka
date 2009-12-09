@@ -97,9 +97,9 @@ public:
 
     void loadStartupImage();
     ScanGallery *gallery() const;
-    ImageCanvas *getImageViewer() const	{ return (img_canvas); }
+    ImageCanvas *getImageViewer() const	{ return (mImageCanvas); }
 
-    bool scannerConnected() const { return (haveConnection); }
+    bool isScannerConnected() const;
     QString scannerName() const;
     void closeScanDevice();
 
@@ -135,13 +135,13 @@ public slots:
 
 // TODO: just make these a slot connection Kooka --> ImageCanvas
     void slotIVScaleToWidth()
-        { if( img_canvas ) img_canvas->handlePopup(ImageCanvas::ID_FIT_WIDTH );}
+        { if( mImageCanvas ) mImageCanvas->handlePopup(ImageCanvas::ID_FIT_WIDTH );}
     void slotIVScaleToHeight()
-        { if( img_canvas ) img_canvas->handlePopup(ImageCanvas::ID_FIT_HEIGHT );}
+        { if( mImageCanvas ) mImageCanvas->handlePopup(ImageCanvas::ID_FIT_HEIGHT );}
     void slotIVScaleOriginal()
-        { if( img_canvas ) img_canvas->handlePopup(ImageCanvas::ID_ORIG_SIZE ); }
+        { if( mImageCanvas ) mImageCanvas->handlePopup(ImageCanvas::ID_ORIG_SIZE ); }
     void slotIVShowZoomDialog( )
-        { if( img_canvas ) img_canvas->handlePopup(ImageCanvas::ID_POP_ZOOM ); }
+        { if( mImageCanvas ) mImageCanvas->handlePopup(ImageCanvas::ID_POP_ZOOM ); }
 
     void slotOpenCurrInGraphApp();
 
@@ -173,14 +173,12 @@ public slots:
     void slotScanFinished( KScanStat stat );
     void slotAcquireStart();
 
-
 protected slots:
-
     void slotStartPhotoCopy();
     void slotPhotoCopyPrint(const QImage *img, const ImgScanInfo *info);
     void slotPhotoCopyScan( KScanStat );
 
-    void slotShowAImage(const KookaImage *img);
+    void slotShowAImage(const KookaImage *img, bool isDir);
     void slotUnloadAImage(const KookaImage *img);
 
     /**
@@ -196,7 +194,6 @@ protected slots:
 
     void slotSelectionChanged(QRect newSelection);
     void slotGallerySelectionChanged();
-    void slotLoadedImageChanged(const KookaImage *img, bool isDir);
     void slotOcrResultText(const QString &text);
 
     void slotTabChanged(int index);
@@ -227,34 +224,26 @@ signals:
 private:
     QByteArray userDeviceSelection(bool alwaysAsk);
 
-    void updateCurrImage( QImage& ) ;
+    void updateCurrImage(const QImage &img);
     void saveGalleryState(int index = -1) const;
     void restoreGalleryState(int index = -1);
 
-    KMainWindow *m_mainWindow;
+    KMainWindow *mMainWindow;
 
-    ImageCanvas  *img_canvas;
-    ThumbView    *m_thumbview;
+    ImageCanvas *mImageCanvas;
+    ThumbView *mThumbView;
+    Previewer *mPreviewCanvas;
+    KookaGallery *mGallery;
+    ScanParams *mScanParams;
 
-    Previewer    *preview_canvas;
-    KookaGallery *m_gallery;
+    KScanDevice *mScanDevice;
 
-    ScanParams   *mScanParams;
-    bool haveConnection;
+    QImage *mOcrResultImg;
+    OcrEngine *mOcrEngine;
+    OcrResEdit *mOcrResEdit;
 
-    KScanDevice  *sane;
-
-    QByteArray     connectedDevice;
-
-    QImage       *m_ocrResultImg;
-    int          image_pool_id;
-    int 	 preview_id;
-
-    OcrEngine *ocrFabric;
-    OcrResEdit  *m_ocrResEdit;
-
-    bool        isPhotoCopyMode;
-    KPrinter*   photoCopyPrinter;
+    bool mIsPhotoCopyMode;
+    KPrinter* mPhotoCopyPrinter;
 
     int mPreviousTab;
 
@@ -274,5 +263,6 @@ private:
     WidgetSite *mGalleryImgviewSite;
     WidgetSite *mOcrImgviewSite;
 };
+
 
 #endif							// KOOKAVIEW_H

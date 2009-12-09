@@ -30,7 +30,6 @@
 #include "imageformat.h"
 
 
-
 class QImage;
 class QTreeWidgetItem;
 class QSignalMapper;
@@ -77,10 +76,8 @@ protected:
     //virtual void contentsDragMoveEvent( QDragMoveEvent *ev);
 
     void contextMenuEvent(QContextMenuEvent *ev);
-    void mouseReleaseEvent(QMouseEvent *ev);
 
 protected slots:
-    void slotClicked(QTreeWidgetItem *item);
     void slotImageArrived(FileTreeViewItem *item, KookaImage *image);
     void slotCreateFolder();
     void slotDeleteItems();
@@ -89,7 +86,6 @@ protected slots:
     void slotUnloadItem(FileTreeViewItem *curr);
     void slotDirCount(FileTreeViewItem *item, int cnt);
     void slotUrlsDropped(FileTreeView *me, QDropEvent *ev,QTreeWidgetItem *parent,QTreeWidgetItem *after);
-    //void slotDeleteFromBranch(KFileItem *kfi);
     void slotStartupFinished(FileTreeViewItem *item);
     void slotItemExpanded(QTreeWidgetItem *item);
     void slotOpenWith(int idx);
@@ -101,20 +97,25 @@ protected slots:
     void slotDecorate(FileTreeBranch *branch, const FileTreeViewItemList &list);
     void slotCanceled(KIO::Job *job);
 
+    void slotItemHighlighted(QTreeWidgetItem *curr);
+    void slotItemActivated(QTreeWidgetItem *curr);
+    void slotHighlightItem(const KUrl &url);
+    void slotActivateItem(const KUrl &url);
+
 signals:
+    void aboutToShowImage(const KUrl &url);
     void showImage(const KookaImage *img, bool isDir);
     void deleteImage(const KookaImage *img);
     void unloadImage(const KookaImage *img);
-    void galleryPathChanged(FileTreeBranch* branch, const QString &relativPath);
+    void galleryPathChanged(FileTreeBranch *branch, const QString &relativPath);
     void galleryDirectoryRemoved(FileTreeBranch *branch, const QString &relativPath);
-    void showThumbnails(FileTreeViewItem *item);
-
-    void aboutToShowImage(const KUrl &url);
 
     void imageChanged(const KFileItem *kfi);
     void fileChanged(const KFileItem *kfi);
     void fileRenamed(const KFileItem *item, const QString &newName);
     void showItem(const KFileItem *kfi);
+
+    void itemHighlighted(const KUrl &url, bool isDir);
 
 private:
     void loadImageForItem(FileTreeViewItem *item);

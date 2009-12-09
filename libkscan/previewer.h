@@ -23,6 +23,7 @@
 #include "libkscanexport.h"
 
 #include <qwidget.h>
+// TODO: params QRect -> const QRect &
 #include <qrect.h>
 #include <qvector.h>
 

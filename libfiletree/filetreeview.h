@@ -27,9 +27,9 @@
 #include <qicon.h>
 #include <qtreewidget.h>
 
-#include <kdirnotify.h>
+//#include <kdirnotify.h>
 
-#include <kio/job.h>
+//#include <kio/job.h>
 
 #include "filetreebranch.h"
 
@@ -60,15 +60,18 @@ public:
     virtual ~FileTreeView();
 
     /**
-     * @return the current (i.e. selected) item.
+     * @return the selected item.
      */
-    FileTreeViewItem *currentFileTreeViewItem() const;
-    const KFileItem *currentFileItem() const;
+    FileTreeViewItem *selectedFileTreeViewItem() const;
+    const KFileItem *selectedFileItem() const;
+    KUrl selectedUrl() const;
 
     /**
-     * @return the URL of the current selected item.
+     * @return the highlighted item.
      */
-    KUrl currentUrl() const;
+    FileTreeViewItem *highlightedFileTreeViewItem() const;
+    const KFileItem *highlightedFileItem() const;
+    KUrl highlightedUrl() const;
 
     /**
      *  Adds a branch to the treeview.

@@ -54,7 +54,6 @@
 
 
 #define MIN_PREVIEW_DPI		75
-#define UNDEF_SCANNERNAME	I18N_NOOP( "undefined" )
 #define MAX_PROGRESS		100
 
 
@@ -248,7 +247,7 @@ KScanStat KScanDevice::openDevice( const QByteArray& backend )
 	   mScannerName = backend;
    } else {
 	   stat = KSCAN_ERR_OPEN_DEV;
-	   mScannerName = UNDEF_SCANNERNAME;
+	   mScannerName = "";
    }
 
    if( stat == KSCAN_OK )
@@ -278,7 +277,7 @@ void KScanDevice::slotCloseDevice()
    slotSaveScanConfigSet( DEFAULT_OPTIONSET, i18n("the default startup setup"));
 
    /* After return, delete all related stuff */
-   mScannerName = UNDEF_SCANNERNAME;
+   mScannerName = "";
    if( gScannerHandle )
    {
       if( mScanStatus != SSTAT_SILENT )
@@ -1430,8 +1429,7 @@ default:    kDebug() << "Undefined sane_scan_param format" << sane_scan_param.fo
 void KScanDevice::slotSaveScanConfigSet(const QString &setName, const QString &descr)
 {
     if (setName.isEmpty()) return;			// do not save unnamed set
- 							// do not save for no scanner
-    if (mScannerName.isEmpty() || mScannerName==UNDEF_SCANNERNAME) return;
+    if (mScannerName.isNull()) return;			// do not save for no scanner
 
     kDebug() << "Saving configuration" << setName;
     KScanOptSet optSet(DEFAULT_OPTIONSET);
@@ -1480,9 +1478,9 @@ QString KScanDevice::getConfig(const QString &key, const QString &def) const
 // TODO: does this need to be a slot?
 void KScanDevice::storeConfig(const QString &key, const QString &val)
 {
-    if (mScannerName.isEmpty() || mScannerName==UNDEF_SCANNERNAME)
+    if (mScannerName.isNull())
     {
-        kDebug() << "Skipping config write, scanner name is empty!";
+        kDebug() << "Skipping config write, no scanner name!";
         return;
     }
 
