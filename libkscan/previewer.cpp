@@ -117,21 +117,23 @@ Previewer::Previewer(QWidget *parent)
     // Image viewer
     img_canvas  = new ImageCanvas(this);
     img_canvas->setDefaultScaleKind(ImageCanvas::DYNAMIC);
-    img_canvas->enableContextMenu(true);
+
+    KMenu *ctxtmenu = img_canvas->contextMenu();
+    if (ctxtmenu!=NULL) ctxtmenu->addTitle(i18n("Scan Preview"));
     img_canvas->repaint();
     gl->addWidget(img_canvas, 0, 1, -1, 1);
     gl->setColumnStretch(1, 1);
 
     /* Actions for the previewer zoom */
-    KAction *act = new KAction(KIcon("scaletowidth"),i18n("Scale to Width"),this);
+    KAction *act = new KAction(KIcon("zoom-fit-width"),i18n("Scale to Width"),this);
     act->setShortcut(Qt::CTRL+Qt::Key_I);
     connect(act, SIGNAL(triggered()), SLOT(slotScaleToWidth()));
-    img_canvas->contextMenu()->addAction(act);
+    ctxtmenu->addAction(act);
 
-    act = new KAction(KIcon("scaletoheight"),i18n("Scale to Height"),this);
+    act = new KAction(KIcon("zoom-fit-height"),i18n("Scale to Height"),this);
     act->setShortcut(Qt::CTRL+Qt::Key_H);
     connect(act, SIGNAL(triggered()), SLOT(slotScaleToHeight()));
-    img_canvas->contextMenu()->addAction(act);
+    ctxtmenu->addAction(act);
 
     /*Signals: Control the custom-field and show size of selection */
     connect(img_canvas,SIGNAL(newRect(QRect)),SLOT(slotNewAreaSelected(QRect)));
@@ -411,18 +413,13 @@ void Previewer::updateSelectionDims()
 
 void Previewer::slotScaleToWidth()
 {
-   if( img_canvas )
-   {
-      img_canvas->handlePopup( ImageCanvas::ID_FIT_WIDTH );
-   }
+    if (img_canvas!=NULL) img_canvas->slotUserAction(ImageCanvas::UserActionFitWidth);
 }
+
 
 void Previewer::slotScaleToHeight()
 {
-   if( img_canvas )
-   {
-      img_canvas->handlePopup( ImageCanvas::ID_FIT_HEIGHT);
-   }
+    if (img_canvas!=NULL) img_canvas->slotUserAction(ImageCanvas::UserActionFitHeight);
 }
 
 

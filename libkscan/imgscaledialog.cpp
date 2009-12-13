@@ -135,9 +135,9 @@ ImgScaleDialog::ImgScaleDialog( QWidget *parent, int curr_sel)
       hbox = new QHBoxLayout();
 
          QRadioButton *rbCust = new QRadioButton (i18n ("Custom scale factor:"));
-         connect( rbCust, SIGNAL( toggled( bool )), this, SLOT(slotEnableAndFocus(bool)));
          if( ! one_is_selected )
             rbCust->setChecked( true );
+         connect( rbCust, SIGNAL( toggled( bool )), this, SLOT(slotEnableAndFocus(bool)));
 
          hbox->addWidget(rbCust);
          radiosGroup->addButton(rbCust);
@@ -147,8 +147,8 @@ ImgScaleDialog::ImgScaleDialog( QWidget *parent, int curr_sel)
          sn.setNum(curr_sel );
          leCust->setValidator( new KIntValidator( leCust ) );
          leCust->setText(sn );
-         connect( leCust, SIGNAL( textChanged( const QString& )), this, SLOT( slotCustomChanged( const QString& )));
          leCust->setEnabled( rbCust->isChecked());
+         connect( leCust, SIGNAL( textChanged( const QString& )), this, SLOT( slotCustomChanged( const QString& )));
          hbox->addWidget(leCust);
 
       radiosLayout->addLayout(hbox);

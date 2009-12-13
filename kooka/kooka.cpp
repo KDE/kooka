@@ -28,6 +28,7 @@
 #include "kooka.moc"
 
 #include <qevent.h>
+#include <qsignalmapper.h>
 
 #include <kglobal.h>
 #include <klocale.h>
@@ -48,6 +49,7 @@
 #include <kxmlguiwindow.h>
 
 #include "libkscan/scanglobal.h"
+#include "libkscan/img_canvas.h"
 
 #include "scangallery.h"
 #include "kookapref.h"
@@ -147,42 +149,47 @@ void Kooka::setupActions()
     printImageAction = KStandardAction::print(this, SLOT(filePrint()), actionCollection());
 
     KStandardAction::quit(this, SLOT(close()), actionCollection());
-    //KStandardAction::keyBindings(guiFactory(),SLOT(configureShortcuts()),actionCollection());
-    //KStandardAction::configureToolbars(this,SLOT(optionsConfigureToolbars()),actionCollection());
     KStandardAction::preferences(this, SLOT(optionsPreferences()), actionCollection());
 
     // Image Viewer
 
+    QSignalMapper *mapper = new QSignalMapper(this);
+    connect(mapper, SIGNAL(mapped(int)), m_view->imageViewer(), SLOT(slotUserAction(int)));
+
     scaleToWidthAction =  new KAction(KIcon("zoom-fit-width"), i18n("Scale to Width"), this);
     scaleToWidthAction->setShortcut(Qt::CTRL+Qt::Key_I);
-    connect(scaleToWidthAction, SIGNAL(triggered()), m_view, SLOT(slotIVScaleToWidth()));
+    connect(scaleToWidthAction, SIGNAL(triggered()), mapper, SLOT(map()));
     actionCollection()->addAction("scaleToWidth", scaleToWidthAction);
     m_view->connectViewerAction(scaleToWidthAction);
+    mapper->setMapping(scaleToWidthAction, ImageCanvas::UserActionFitWidth);
 
     scaleToHeightAction = new KAction(KIcon("zoom-fit-height"), i18n("Scale to Height"), this);
     scaleToHeightAction->setShortcut(Qt::CTRL+Qt::Key_H);
-    connect(scaleToHeightAction, SIGNAL(triggered()), m_view, SLOT(slotIVScaleToHeight()));
-    actionCollection()->addAction("scaleToheight", scaleToHeightAction);
+    connect(scaleToHeightAction, SIGNAL(triggered()), mapper, SLOT(map()));
+    actionCollection()->addAction("scaleToHeight", scaleToHeightAction);
     m_view->connectViewerAction(scaleToHeightAction);
+    mapper->setMapping(scaleToHeightAction, ImageCanvas::UserActionFitHeight);
 
     scaleToOriginalAction = new KAction(KIcon("zoom-original"), i18n("Original Size"), this);
     scaleToOriginalAction->setShortcut(Qt::CTRL+Qt::Key_1);
-    connect(scaleToOriginalAction, SIGNAL(triggered()), m_view, SLOT(slotIVScaleOriginal()));
+    connect(scaleToOriginalAction, SIGNAL(triggered()), mapper, SLOT(map()));
     actionCollection()->addAction("scaleOriginal", scaleToOriginalAction);
     m_view->connectViewerAction(scaleToOriginalAction);
+    mapper->setMapping(scaleToOriginalAction, ImageCanvas::UserActionOrigSize);
+
+    scaleToZoomAction = new KAction(KIcon("page-zoom"), i18n("Set Zoom..."), this);
+    connect(scaleToZoomAction, SIGNAL(triggered()), mapper, SLOT(map()));
+    actionCollection()->addAction("showZoomDialog", scaleToZoomAction);
+    m_view->connectViewerAction(scaleToZoomAction);
+    mapper->setMapping(scaleToZoomAction, ImageCanvas::UserActionZoom);
 
     KToggleAction *tact = new KToggleAction(KIcon("lockzoom"), i18n("Keep Zoom Setting"), this);
     tact->setShortcut(Qt::CTRL+Qt::Key_Z);
-    connect(tact, SIGNAL(toggled(bool)), m_view->getImageViewer(), SLOT(setKeepZoom(bool)));
+    connect(tact, SIGNAL(toggled(bool)), m_view->imageViewer(), SLOT(setKeepZoom(bool)));
     actionCollection()->addAction("keepZoom", tact);
     m_view->connectViewerAction(tact);
 
     // Thumb view and gallery actions
-
-    KAction *act = new KAction(KIcon("page-zoom"), i18n("Set Zoom..."), this);
-    connect(act, SIGNAL(triggered()), m_view, SLOT(slotIVShowZoomDialog()));
-    actionCollection()->addAction("showZoomDialog", act);
-    m_view->connectViewerAction(act);
 
     newFromSelectionAction = new KAction(KIcon("transform-crop"), i18n("New Image From Selection"), this);
     newFromSelectionAction->setShortcut(Qt::CTRL+Qt::Key_N);
@@ -193,11 +200,13 @@ void Kooka::setupActions()
     mirrorVerticallyAction->setShortcut(Qt::CTRL+Qt::Key_V);
     connect(mirrorVerticallyAction, SIGNAL(triggered()), SLOT(slotMirrorVertical()));
     actionCollection()->addAction("mirrorVertical", mirrorVerticallyAction);
+    m_view->connectViewerAction(mirrorVerticallyAction, true);
 
     mirrorHorizontallyAction = new KAction(KIcon("object-flip-horizontal"), i18n("Mirror Horizontally"), this);
     mirrorHorizontallyAction->setShortcut(Qt::CTRL+Qt::Key_M);
     connect(mirrorHorizontallyAction, SIGNAL(triggered()), SLOT(slotMirrorHorizontal()));
     actionCollection()->addAction("mirrorHorizontal", mirrorHorizontallyAction);
+    m_view->connectViewerAction(mirrorHorizontallyAction);
 
     // Standard KDE has icons for 'object-rotate-right' and 'object-rotate-left',
     // but not for rotate by 180 degrees.  The 3 used here are copies of the 22x22
@@ -206,7 +215,7 @@ void Kooka::setupActions()
     rotateCwAction->setShortcut(Qt::CTRL+Qt::Key_9);
     connect(rotateCwAction, SIGNAL(triggered()), SLOT(slotRotateClockWise()));
     actionCollection()->addAction("rotateClockwise", rotateCwAction);
-    m_view->connectViewerAction(rotateCwAction);
+    m_view->connectViewerAction(rotateCwAction, true);
 
     rotateAcwAction = new KAction(KIcon("rotate-acw"), i18n("Rotate Counter-Clockwise"), this);
     rotateAcwAction->setShortcut(Qt::CTRL+Qt::Key_7);
@@ -230,7 +239,7 @@ void Kooka::setupActions()
     openWithMenu = new KActionMenu(KIcon("document-open"), i18n("Open With"), this);
     connect(openWithMenu->menu(), SIGNAL(aboutToShow()), SLOT(slotOpenWithMenu()));
     actionCollection()->addAction("openWidth", openWithMenu);
-    m_view->connectGalleryAction(openWithMenu);
+    m_view->connectGalleryAction(openWithMenu, true);
     m_view->connectThumbnailAction(openWithMenu);
 
     saveImageAction = new KAction(KIcon("document-save"), i18n("Save Image..."), this);
@@ -270,7 +279,7 @@ void Kooka::setupActions()
     propsImageAction->setShortcut(Qt::ALT+Qt::Key_Return);
     connect(propsImageAction, SIGNAL(triggered()), m_view->gallery(), SLOT(slotItemProperties()));
     actionCollection()->addAction("propsImage", propsImageAction);
-    m_view->connectGalleryAction(propsImageAction);
+    m_view->connectGalleryAction(propsImageAction, true);
     m_view->connectThumbnailAction(propsImageAction);
 
     // "Settings" menu
@@ -520,6 +529,7 @@ void Kooka::slotUpdateGalleryActions(bool isDir,int howmanySelected)
     scaleToWidthAction->setEnabled(singleImage);
     scaleToHeightAction->setEnabled(singleImage);
     scaleToOriginalAction->setEnabled(singleImage);
+    scaleToZoomAction->setEnabled(singleImage);
     mirrorVerticallyAction->setEnabled(singleImage);
     mirrorHorizontallyAction->setEnabled(singleImage);
     rotateCwAction->setEnabled(singleImage);

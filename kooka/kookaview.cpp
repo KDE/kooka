@@ -60,6 +60,7 @@
 #include "libkscan/deviceselector.h"
 #include "libkscan/adddevice.h"
 #include "libkscan/previewer.h"
+#include "libkscan/img_canvas.h"
 
 #include "imgsaver.h"
 #include "kookapref.h"
@@ -214,11 +215,13 @@ KookaView::KookaView(KMainWindow *parent, const QByteArray &deviceToUse)
     /** Image Viewer **/
     mImageCanvas = new ImageCanvas(this);
     mImageCanvas->setMinimumSize(100,200);
-    mImageCanvas->enableContextMenu(true);
-
     KMenu *ctxtmenu = mImageCanvas->contextMenu();
     if (ctxtmenu!=NULL) ctxtmenu->addTitle(i18n("Image View"));
 
+    // Connections ImageCanvas --> myself
+    connect(mImageCanvas, SIGNAL(imageReadOnly(bool)), SLOT(slotViewerReadOnly(bool)));
+    connect(mImageCanvas, SIGNAL(newRect(QRect)), SLOT(slotSelectionChanged(QRect)));
+   
     /** Thumbnail View **/
     mThumbView = new ThumbView(this);
 
@@ -226,10 +229,6 @@ KookaView::KookaView(KMainWindow *parent, const QByteArray &deviceToUse)
     mGallery = new KookaGallery(this);
     ScanGallery *packager = mGallery->galleryTree();
 
-    // Connections ImageCanvas --> myself
-    connect(mImageCanvas, SIGNAL(imageReadOnly(bool)), SLOT(slotViewerReadOnly(bool)));
-    connect(mImageCanvas, SIGNAL(newRect(QRect)), SLOT(slotSelectionChanged(QRect)));
-   
     // Connections ScanGallery --> myself
     connect(packager, SIGNAL(itemHighlighted(const KUrl &,bool)),
             SLOT(slotGallerySelectionChanged()));
@@ -274,24 +273,8 @@ KookaView::KookaView(KMainWindow *parent, const QByteArray &deviceToUse)
                                                     true);
     }
 
+    /** Scanner Device **/
     mScanDevice = new KScanDevice(this);
-    Q_CHECK_PTR(mScanDevice);
-
-    /* select the scan device, either user or from config, this creates and assembles
-     * the complete scanner options dialog
-     * mScanParams must be zero for that */
-
-    /** Scan Preview **/
-    mPreviewCanvas = new Previewer(this);
-    mPreviewCanvas->setMinimumSize(100,100);
-    /* since the mScanParams will be created in slSelectDevice, do the
-     * connections later
-     */
-
-    /** Ocr Result Text **/
-    mOcrResEdit  = new OcrResEdit(this);
-    mOcrResEdit->setTextFormat(Qt::PlainText);
-    mOcrResEdit->setWordWrap(Q3TextEdit::NoWrap);
 
     // Connections KScanDevice --> myself
     connect(mScanDevice, SIGNAL(sigScanFinished(KScanStat)), SLOT(slotScanFinished(KScanStat)));
@@ -305,6 +288,15 @@ KookaView::KookaView(KMainWindow *parent, const QByteArray &deviceToUse)
 
     connect(mScanDevice, SIGNAL(sigScanStart()), SLOT(slotScanStart()));
     connect(mScanDevice, SIGNAL(sigAcquireStart()), SLOT(slotAcquireStart()));
+
+    /** Scan Preview **/
+    mPreviewCanvas = new Previewer(this);
+    mPreviewCanvas->setMinimumSize(100,100);
+
+    /** Ocr Result Text **/
+    mOcrResEdit  = new OcrResEdit(this);
+    mOcrResEdit->setTextFormat(Qt::PlainText);
+    mOcrResEdit->setWordWrap(Q3TextEdit::NoWrap);
 
     /** Status Bar **/
     KStatusBar *statBar = mMainWindow->statusBar();
@@ -1092,19 +1084,25 @@ void KookaView::slotOpenCurrInGraphApp()
 }
 
 
-void KookaView::connectViewerAction(KAction *action)
+void KookaView::connectViewerAction(KAction *action, bool sepBefore)
 {
     if (action==NULL) return;
     KMenu *popup = mImageCanvas->contextMenu();
-    if (popup!=NULL) popup->addAction(action);
+    if (popup==NULL) return;
+
+    if (sepBefore) popup->addSeparator();
+    popup->addAction(action);
 }
 
 
-void KookaView::connectGalleryAction(KAction *action)
+void KookaView::connectGalleryAction(KAction *action, bool sepBefore)
 {
     if (action==NULL) return;
     KMenu *popup = gallery()->contextMenu();
-    if (popup!=NULL) popup->addAction(action);
+    if (popup==NULL) return;
+
+    if (sepBefore) popup->addSeparator();
+    popup->addAction(action);
 }
 
 

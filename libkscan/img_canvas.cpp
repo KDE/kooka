@@ -205,7 +205,7 @@ QSize ImageCanvas::sizeHint() const
 //  The menu is populated with the parent application's actions via
 //  KookaView::connectViewerAction(), and the application handles the
 //  triggered actions.  Those which need some work from us are passed to
-//  handlePopup() with the appropriate ID_ key.
+//  slotUserAction() with the appropriate UserAction key.
 
 KMenu *ImageCanvas::contextMenu()
 {
@@ -219,64 +219,52 @@ KMenu *ImageCanvas::contextMenu()
 }
 
 
-
-void ImageCanvas::enableContextMenu(bool wantContextMenu)
-{
-    if (!wantContextMenu) return;			// don't want a menu
-    (void) contextMenu();				// ensure menu created
-}
-
-
-
-
 void ImageCanvas::contentsContextMenuEvent(QContextMenuEvent *ev)
 {
     if (mContextMenu==NULL) return;			// menu not enabled
-    if (image==NULL) return;				// no image
-
+							// but allowed if no image loaded
     mContextMenu->popup(ev->globalPos());
     ev->accept();
 }
 
 
-void ImageCanvas::handlePopup(int item)
+void ImageCanvas::slotUserAction(int act)
 {
-   if( item < ID_POP_ZOOM || item > ID_ORIG_SIZE ) return;
+    if (image==NULL) return;				// no action if no image loaded
 
-   if( ! image ) return;
-   ImgScaleDialog *zoomDia  = 0;
-
-   switch( item )
-   {
-      case ID_POP_ZOOM:
-
-          zoomDia = new ImgScaleDialog( this, getScaleFactor() );
-          if( zoomDia->exec() )
-          {
-              int sf = zoomDia->getSelected();
-	      setScaleKind(ZOOM);
-              setScaleFactor( sf );
-          }
-         delete zoomDia;
-	  zoomDia = 0;
-	 break;
-     case ID_ORIG_SIZE:
-	 setScaleKind( FIT_ORIG );
+    switch (act)
+    {
+case ImageCanvas::UserActionZoom:
+        {
+            ImgScaleDialog zoomDia(this, getScaleFactor());
+            if (zoomDia.exec())
+            {
+                int sf = zoomDia.getSelected();
+                setScaleKind(ZOOM);
+                setScaleFactor(sf);
+            }
+        }
         break;
-     case ID_FIT_WIDTH:
-         setScaleKind( FIT_WIDTH );
-         break;
-     case ID_FIT_HEIGHT:
-         setScaleKind( FIT_HEIGHT );
-	 break;
-     case ID_POP_CLOSE:
-	 emit( closingRequested());
-	 break;
 
-     default: break;
-  }
-  update_scaled_pixmap();
-  repaint();
+case ImageCanvas::UserActionOrigSize:
+        setScaleKind(FIT_ORIG);
+        break;
+
+case ImageCanvas::UserActionFitWidth:
+        setScaleKind(FIT_WIDTH);
+        break;
+
+case ImageCanvas::UserActionFitHeight:
+        setScaleKind(FIT_HEIGHT);
+        break;
+
+case ImageCanvas::UserActionClose:
+        emit closingRequested();
+        break;
+    }
+
+    update_scaled_pixmap();
+    repaint();
 }
 
 

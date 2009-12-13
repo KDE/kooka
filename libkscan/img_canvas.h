@@ -73,6 +73,8 @@ public:
                  const QImage *start_image = NULL);
     virtual ~ImageCanvas();
 
+    KMenu *contextMenu();
+
     virtual QSize sizeHint() const;
 
     int getBrightness() const { return (brightness); };
@@ -83,13 +85,18 @@ public:
     const QImage *rootImage() const { return (image); };
 
     bool hasImage() const { return (acquired); }
-    KMenu *contextMenu();
     QRect sel() const;
 
     enum ScaleKinds { UNSPEC, DYNAMIC, FIT_ORIG, FIT_WIDTH, FIT_HEIGHT, ZOOM };
 
-    enum PopupIDs { ID_POP_ZOOM, ID_POP_CLOSE, ID_FIT_WIDTH,
-                    ID_FIT_HEIGHT, ID_ORIG_SIZE };
+    enum UserAction
+    {
+        UserActionZoom,
+        UserActionFitWidth,
+        UserActionFitHeight,
+        UserActionOrigSize,
+        UserActionClose,
+    };
 
 // TODO: parameter names
     bool selectedImage( QImage* );
@@ -119,9 +126,7 @@ public slots:
     void setScaleKind( ScaleKinds k );
     void setDefaultScaleKind( ScaleKinds k );
 
-    // TODO: does these need to be slots?
-    void enableContextMenu(bool wantContextMenu);
-    void handlePopup(int item );
+    void slotUserAction(int act);			// ImageCanvas::UserAction
 
     /**
      * Highlight a rectangular area on the current image using the given brush

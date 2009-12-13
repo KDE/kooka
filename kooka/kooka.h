@@ -144,6 +144,7 @@ private:
     KAction *scaleToWidthAction;
     KAction *scaleToHeightAction;
     KAction *scaleToOriginalAction;
+    KAction *scaleToZoomAction;
     KAction *mirrorVerticallyAction;
     KAction *mirrorHorizontallyAction;
     KAction *rotateCwAction;

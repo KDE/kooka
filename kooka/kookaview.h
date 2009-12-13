@@ -30,8 +30,7 @@
 #include <ktabwidget.h>
 
 #include "libkscan/kscanoption.h"
-// TODO: inline functions into .cpp, then these includes not needed
-#include "libkscan/img_canvas.h"
+
 
 class QPainter;
 class QPixmap;
@@ -41,7 +40,6 @@ class KConfigGroup;
 class KPrinter;
 class KAction;
 class KActionCollection;
-class K3FileTreeViewItem;
 class KMainWindow;
 class KUrl;
 
@@ -55,10 +53,9 @@ class ScanParams;
 class ImgScanInfo;
 class Previewer;
 class KScanDevice;
+class ImageCanvas;
 
 class WidgetSite;
-
-
 
 
 
@@ -97,7 +94,7 @@ public:
 
     void loadStartupImage();
     ScanGallery *gallery() const;
-    ImageCanvas *getImageViewer() const	{ return (mImageCanvas); }
+    ImageCanvas *imageViewer() const	{ return (mImageCanvas); }
 
     bool isScannerConnected() const;
     QString scannerName() const;
@@ -105,8 +102,8 @@ public:
 
     bool galleryRootSelected() const;
 
-    void connectViewerAction(KAction *action);
-    void connectGalleryAction(KAction *action);
+    void connectViewerAction(KAction *action, bool sepBefore = false);
+    void connectGalleryAction(KAction *action, bool sepBefore = false);
     void connectThumbnailAction(KAction *action);
 
     void saveProperties(KConfigGroup &grp);
@@ -133,18 +130,7 @@ public slots:
 
     void slotMirrorImage(KookaView::MirrorType type);
 
-// TODO: just make these a slot connection Kooka --> ImageCanvas
-    void slotIVScaleToWidth()
-        { if( mImageCanvas ) mImageCanvas->handlePopup(ImageCanvas::ID_FIT_WIDTH );}
-    void slotIVScaleToHeight()
-        { if( mImageCanvas ) mImageCanvas->handlePopup(ImageCanvas::ID_FIT_HEIGHT );}
-    void slotIVScaleOriginal()
-        { if( mImageCanvas ) mImageCanvas->handlePopup(ImageCanvas::ID_ORIG_SIZE ); }
-    void slotIVShowZoomDialog( )
-        { if( mImageCanvas ) mImageCanvas->handlePopup(ImageCanvas::ID_POP_ZOOM ); }
-
     void slotOpenCurrInGraphApp();
-
 
     void slotScanParams();
 
