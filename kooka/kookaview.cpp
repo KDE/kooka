@@ -60,7 +60,7 @@
 #include "libkscan/deviceselector.h"
 #include "libkscan/adddevice.h"
 #include "libkscan/previewer.h"
-#include "libkscan/img_canvas.h"
+#include "libkscan/imagecanvas.h"
 
 #include "imgsaver.h"
 #include "kookapref.h"
@@ -220,7 +220,7 @@ KookaView::KookaView(KMainWindow *parent, const QByteArray &deviceToUse)
 
     // Connections ImageCanvas --> myself
     connect(mImageCanvas, SIGNAL(imageReadOnly(bool)), SLOT(slotViewerReadOnly(bool)));
-    connect(mImageCanvas, SIGNAL(newRect(QRect)), SLOT(slotSelectionChanged(QRect)));
+    connect(mImageCanvas, SIGNAL(newRect(const QRect &)), SLOT(slotSelectionChanged(const QRect &)));
    
     /** Thumbnail View **/
     mThumbView = new ThumbView(this);
@@ -529,8 +529,8 @@ The error reported was: <b>%1</b>", mScanDevice->lastErrorMessage(), selDevice.d
                     mPreviewCanvas,SLOT(slotNewCustomScanSize(QRect)));
 
             // Connections Previewer --> ScanParams
-            connect(mPreviewCanvas,SIGNAL(newPreviewRect(QRect)),
-                    mScanParams,SLOT(slotNewPreviewRect(QRect)));
+            connect(mPreviewCanvas,SIGNAL(newPreviewRect(const QRect &)),
+                    mScanParams,SLOT(slotNewPreviewRect(const QRect &)));
 
             mScanParams->connectDevice(mScanDevice);	// create scanning options
 
@@ -616,7 +616,7 @@ bool KookaView::isScannerConnected() const
 }
 
 
-void KookaView::slotSelectionChanged(QRect newSelection)
+void KookaView::slotSelectionChanged(const QRect &newSelection)
 {
     emit signalRectangleChanged(newSelection.isValid());
 }
@@ -701,10 +701,8 @@ void KookaView::slotNewPreview(const QImage *newimg, const ImgScanInfo *info)
 void KookaView::slotStartOcrSelection()
 {
    emit signalChangeStatusbar(i18n("Starting OCR on selection"));
-
-   KookaImage img;
-   if (mImageCanvas->selectedImage(&img)) startOCR(&img);
-
+   KookaImage img = mImageCanvas->selectedImage();
+   if (!img.isNull()) startOCR(&img);
    emit signalCleanStatusbar();
 }
 
@@ -712,10 +710,8 @@ void KookaView::slotStartOcrSelection()
 void KookaView::slotStartOcr()
 {
    emit signalChangeStatusbar(i18n("Starting OCR on the image"));
-
    const KookaImage *img = gallery()->getCurrImage(true);
    startOCR(img);
-
    emit signalCleanStatusbar();
 }
 
@@ -917,17 +913,10 @@ void KookaView::closeScanDevice( )
 
 void KookaView::slotCreateNewImgFromSelection()
 {
-   if( mImageCanvas->rootImage() )
-   {
-      emit( signalChangeStatusbar( i18n("Create new image from selection" )));
-      QImage img;
-      if( mImageCanvas->selectedImage( &img ) )
-      {
-	 gallery()->addImage( &img );
-      }
-      emit( signalCleanStatusbar( ));
-   }
-
+    emit signalChangeStatusbar(i18n("Create new image from selection"));
+    QImage img = mImageCanvas->selectedImage();
+    if (!img.isNull()) gallery()->addImage(&img);
+    emit signalCleanStatusbar();
 }
 
 

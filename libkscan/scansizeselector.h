@@ -38,7 +38,7 @@ class KSCAN_EXPORT ScanSizeSelector : public KVBox
     Q_OBJECT
 
 public:
-    ScanSizeSelector(QWidget *parent,const QSize &bedSize);
+    ScanSizeSelector(QWidget *parent, const QSize &bedSize);
     ~ScanSizeSelector();
 
     void selectCustomSize(const QRect &rect);
@@ -49,10 +49,10 @@ protected slots:
     void slotPortraitLandscape(int id);
 
 signals:
-    void sizeSelected(QRect size);
+    void sizeSelected(const QRect &size);
 
 private:
-    void newScanSize(int width,int height);
+    void newScanSize(int width, int height);
     void implementPortraitLandscape(const PaperSize *sp);
     void implementSizeSetting(const PaperSize *sp);
 

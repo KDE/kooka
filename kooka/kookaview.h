@@ -178,7 +178,7 @@ protected slots:
      */
     void slotViewerReadOnly(bool ro);
 
-    void slotSelectionChanged(QRect newSelection);
+    void slotSelectionChanged(const QRect &newSelection);
     void slotGallerySelectionChanged();
     void slotOcrResultText(const QString &text);
 

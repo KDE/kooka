@@ -29,6 +29,7 @@
 #include <kvbox.h>
 
 
+// TODO: use libpaper [see paperconf(3)] to get this information
 struct PaperSize
 {
     const char *name;					// no I18N needed here?
@@ -62,7 +63,7 @@ ScanSizeSelector::ScanSizeSelector(QWidget *parent,const QSize &bedSize)
     setFocusProxy(m_sizeCb);
 
     m_sizeCb->addItem(i18n("Full size"));		// index 0
-    m_sizeCb->addItem(i18n("(No selection)"));	// index 1
+    m_sizeCb->addItem(i18n("(No selection)"));		// index 1
     for (int i = 0; sizes[i].name!=NULL; ++i)		// index 2 and upwards
     {							// only those that will fit
         if (sizes[i].width>bedWidth || sizes[i].height>bedHeight) continue;
@@ -219,6 +220,12 @@ void ScanSizeSelector::selectSize(const QRect &rect)
 {
     kDebug() << "rect" << rect << "valid" << rect.isValid();
 
+    bool found = false;
+
+    // TODO: replace with
+    //   if (rect.isValid())
+    // to not change size if rectangle moved around
+    // (but need to get 100% accuracy in the reported 'rect' first)
     if (rect.isValid() && rect.left()==0 && rect.top()==0)
     {							// can this be a preset size?
         for (int i = 0; sizes[i].name!=NULL; ++i)	// search for preset that size
@@ -228,6 +235,7 @@ void ScanSizeSelector::selectSize(const QRect &rect)
                 m_portraitRb->setChecked(true);
                 m_landscapeRb->setChecked(false);
                 implementSizeSetting(&sizes[i]);	// set up controls
+                found = true;
                 break;
             }
             else if (sizes[i].width==rect.height() && sizes[i].height==rect.width())
@@ -235,10 +243,12 @@ void ScanSizeSelector::selectSize(const QRect &rect)
                 m_portraitRb->setChecked(false);
                 m_landscapeRb->setChecked(true);
                 implementSizeSetting(&sizes[i]);
+                found = true;
                 break;
             }
         }
-
     }
-    else selectCustomSize(rect);
+
+
+    if (!found) selectCustomSize(rect);
 }

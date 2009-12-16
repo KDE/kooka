@@ -43,7 +43,7 @@
 #include <kdialog.h>
 #include <kvbox.h>
 
-#include "libkscan/img_canvas.h"
+#include "libkscan/imagecanvas.h"
 
 #include "kookaimage.h"
 #include "kookapref.h"
@@ -462,8 +462,9 @@ bool OcrEngine::eventFilter( QObject *object, QEvent *event )
             int y = mev->y();
             int scale = m_imgCanvas->getScaleFactor();
 
-	    m_imgCanvas->viewportToContents( mev->x(), mev->y(),
-					     x, y );
+// TODO: is this still needed?
+//	    m_imgCanvas->viewportToContents( mev->x(), mev->y(),
+//					     x, y );
 
             kDebug() << "Clicked to [" << x << "," << y << "] scale" << scale;
             if( scale != 100 )

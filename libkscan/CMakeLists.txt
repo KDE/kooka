@@ -38,7 +38,7 @@ set(libkscan_SRCS
   deviceselector.cpp
   adddevice.cpp			# -> adddevicedialog
   #scandialog.cpp		# not used by kooka
-  img_canvas.cpp		# -> imagecanvas
+  imagecanvas.cpp
   previewer.cpp
   imgscaledialog.cpp
   sizeindicator.cpp
@@ -48,7 +48,6 @@ set(libkscan_SRCS
 
 kde4_add_library(libkscan SHARED ${libkscan_SRCS})
 target_link_libraries(libkscan
-  ${QT_QT3SUPPORT_LIBRARY}
   ${KDE4_KIO_LIBS}
   ${KDE4_KDEUI_LIBS}
   ${KDE4_KDECORE_LIBS}

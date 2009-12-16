@@ -36,8 +36,6 @@
 #include <ktempdir.h>
 #include <klocale.h>
 
-#include "libkscan/img_canvas.h"
-
 #include "imgsaver.h"
 #include "kookaimage.h"
 #include "imageformat.h"

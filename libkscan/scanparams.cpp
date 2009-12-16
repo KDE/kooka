@@ -421,7 +421,7 @@ QScrollArea *ScanParams::createScannerParams()
 
     /* Scan size setting */
     area_sel = new ScanSizeSelector(frame,sane_device->getMaxScanSize());
-    connect(area_sel,SIGNAL(sizeSelected(QRect)),SLOT(slotScanSizeSelected(QRect)));
+    connect(area_sel,SIGNAL(sizeSelected(const QRect &)),SLOT(slotScanSizeSelected(const QRect &)));
     l = new QLabel("Scan &area:",frame);		// make sure it gets an accel
     lay->addWidget(l,row,0,Qt::AlignTop|Qt::AlignLeft);
     lay->addWidget(area_sel,row,2,1,-1,Qt::AlignTop);
@@ -1244,7 +1244,7 @@ void ScanParams::slotNewPreviewRect(const QRect &rect)
     kDebug() << "rect=" << rect;
 
     applyRect(rect);
-    area_sel->selectCustomSize(rect);
+    area_sel->selectSize(rect);
 }
 
 

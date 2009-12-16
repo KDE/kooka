@@ -39,7 +39,7 @@
 #include <qtextstream.h>
 #endif
 
-#include "img_canvas.h"
+#include "imagecanvas.h"
 #include "sizeindicator.h"
 #include "kscandevice.h"
 
@@ -116,7 +116,7 @@ Previewer::Previewer(QWidget *parent)
 
     // Image viewer
     img_canvas  = new ImageCanvas(this);
-    img_canvas->setDefaultScaleKind(ImageCanvas::DYNAMIC);
+    img_canvas->setDefaultScaleType(ImageCanvas::ScaleDynamic);
 
     KMenu *ctxtmenu = img_canvas->contextMenu();
     if (ctxtmenu!=NULL) ctxtmenu->addTitle(i18n("Scan Preview"));
@@ -136,7 +136,7 @@ Previewer::Previewer(QWidget *parent)
     ctxtmenu->addAction(act);
 
     /*Signals: Control the custom-field and show size of selection */
-    connect(img_canvas,SIGNAL(newRect(QRect)),SLOT(slotNewAreaSelected(QRect)));
+    connect(img_canvas,SIGNAL(newRect(const QRect &)),SLOT(slotNewAreaSelected(const QRect &)));
 
     QLabel *l;
     QVBoxLayout *vb;
@@ -346,21 +346,22 @@ void Previewer::slotNewScanMode(int bytes_per_pix)
  * size labels.
  */
 
-void Previewer::slotNewAreaSelected(QRect rect)
+void Previewer::slotNewAreaSelected(const QRect &rect)
 {
     kDebug() << "rect" << rect << "width" << bedWidth << "height" << bedHeight;
 
     if (rect.isValid())
     {							// convert bedsize/1000 -> mm
-        rect.setLeft(static_cast<int>(rect.left()/1000.0*bedWidth+0.5));
-        rect.setRight(static_cast<int>(rect.right()/1000.0*bedWidth+0.5));
-        rect.setTop(static_cast<int>(rect.top()/1000.0*bedHeight+0.5));
-        rect.setBottom(static_cast<int>(rect.bottom()/1000.0*bedHeight+0.5));
-        kDebug() << "new rect" << rect;
-        emit newPreviewRect(rect);
+        QRect r;
+        r.setLeft(static_cast<int>(rect.left()/1000.0*bedWidth+0.5));
+        r.setRight(static_cast<int>(rect.right()/1000.0*bedWidth+0.5));
+        r.setTop(static_cast<int>(rect.top()/1000.0*bedHeight+0.5));
+        r.setBottom(static_cast<int>(rect.bottom()/1000.0*bedHeight+0.5));
+        kDebug() << "new rect" << r;
+        emit newPreviewRect(r);
 
-        selectionWidthMm = rect.width();
-        selectionHeightMm = rect.height();
+        selectionWidthMm = r.width();
+        selectionHeightMm = r.height();
     }
     else
     {
@@ -517,7 +518,7 @@ void Previewer::slotAutoSelToggled(bool isOn )
         }
     }
 
-    QRect r = img_canvas->sel();
+    QRect r = img_canvas->selectedRect();
     kDebug() << "rect is" << r;
 
     /* Store configuration */

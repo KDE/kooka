@@ -57,7 +57,7 @@ public:
     void connectScanner(KScanDevice *scan);
 
 public slots:
-    void slotNewAreaSelected(QRect r);
+    void slotNewAreaSelected(const QRect &rect);
     void slotNewScanResolutions(int xres,int yres);
     void slotNewScanMode(int bytes_per_pix);
     void slotSetAutoSelThresh(int);
@@ -72,7 +72,7 @@ protected slots:
     void slotScanBackgroundChanged(int);
 
 signals:
-    void newPreviewRect(QRect rect);
+    void newPreviewRect(const QRect &rect);
 
 private:
     bool checkForScannerBg();

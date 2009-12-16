@@ -49,7 +49,7 @@
 #include <kxmlguiwindow.h>
 
 #include "libkscan/scanglobal.h"
-#include "libkscan/img_canvas.h"
+#include "libkscan/imagecanvas.h"
 
 #include "scangallery.h"
 #include "kookapref.h"
