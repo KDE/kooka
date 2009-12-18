@@ -63,7 +63,7 @@ ImageCanvas::ImageCanvas(QWidget *parent, const QImage *start_image)
     mReadOnly = false;
     mScaleType = ImageCanvas::ScaleUnspecified;
     mDefaultScaleType = ImageCanvas::ScaleOriginal;
-
+    mAcquired = false;					// no image yet
     mScaleFactor = 100;					// means original size
     mMaintainAspect = true;
 
@@ -76,13 +76,8 @@ ImageCanvas::ImageCanvas(QWidget *parent, const QImage *start_image)
 
     if (mImage!=NULL && !mImage->isNull())
     {
-        mScaledPixmap = QPixmap::fromImage(*mImage);
-	kDebug() << "size from image is" << mScaledPixmap.size();
+	kDebug() << "size of image is" << mImage->size();
         mAcquired = true;
-    }
-    else
-    {
-	kDebug() << "initial size is " << size();
     }
 
     mPixmapLabel = new QLabel(this);
@@ -94,7 +89,7 @@ ImageCanvas::ImageCanvas(QWidget *parent, const QImage *start_image)
     widget()->setMouseTracking(true);			// both of these are needed
     setMouseTracking(true);
 
-    // TODO: this required to draw the marching ants rectangle on its timer
+    // TODO: this is required to draw the marching ants rectangle on its timer
     // event, but is non-portable and not recommended.  Should do that in
     // a paint event instead.
     widget()->setAttribute(Qt::WA_PaintOutsidePaintEvent);
@@ -136,10 +131,6 @@ void ImageCanvas::newImage(const QImage *new_image, bool hold_zoom)
     if (mImage!=NULL)					// handle the new image
     {
         kDebug() << "new image size is" << mImage->size();
-
-        //if (image->depth()==1) mScaledPixmap = new QPixmap(image->size(),1);
-        //else mScaledPixmap = new QPixmap(image->size(),QPixmap::defaultDepth());
-        mScaledPixmap = QPixmap::fromImage(*mImage);
         mAcquired = true;
 
         if (!mKeepZoom && !hold_zoom) setScaleType(defaultScaleType());
@@ -603,7 +594,7 @@ default:				return (i18n("Unknown"));
 
 void ImageCanvas::updateScaledPixmap()
 {
-    if (mImage==NULL || mScaledPixmap.isNull()) return;
+    if (mImage==NULL || mImage->isNull()) return;
 
     QApplication::setOverrideCursor(Qt::WaitCursor);	// scaling can be slow
 
@@ -614,60 +605,62 @@ void ImageCanvas::updateScaledPixmap()
 							// width/height of scroll bar
     const int sbSize = kapp->style()->pixelMetric(QStyle::PM_ScrollBarExtent);
 
+    double xscale, yscale;				// calculated scale factors
+
     switch (scaleType())
     {
 case ImageCanvas::ScaleDynamic:
-        mUsedXscale = double(aw)/double(iw);
-        mUsedYscale = double(ah)/double(ih);
+        xscale = double(aw)/double(iw);
+        yscale = double(ah)/double(ih);
         mScaleFactor = 0;
 
         if (mMaintainAspect)
         {
-            mUsedXscale = mUsedYscale<mUsedXscale ? mUsedYscale : mUsedXscale;
-            mUsedYscale = mUsedXscale;
+            xscale = yscale<xscale ? yscale : xscale;
+            yscale = xscale;
         }
         break;
 
+default:
+        kDebug() << "Unknown scale type" << scaleType();
+							// fall through
 case ImageCanvas::ScaleOriginal:
-        mUsedYscale = mUsedXscale = 1.0;
+        yscale = xscale = 1.0;
         mScaleFactor = 100;
         break;
 
 case ImageCanvas::ScaleFitWidth:
-        mUsedXscale = mUsedYscale = double(aw)/double(iw);
-        if ((mUsedYscale*ih)>=ah)			// will there be a scroll bar?
+        xscale = yscale = double(aw)/double(iw);
+        if ((yscale*ih)>=ah)				// will there be a scroll bar?
         {
             // account for vertical scroll bar
-            mUsedXscale = mUsedYscale = double(aw-sbSize)/double(iw);
+            xscale = yscale = double(aw-sbSize)/double(iw);
             kDebug() << "FIT WIDTH scrollbar to subtract:" << sbSize;
         }
-        mScaleFactor = static_cast<int>(100*mUsedXscale);
+        mScaleFactor = static_cast<int>(100*xscale);
         break;
 
 case ImageCanvas::ScaleFitHeight:
-        mUsedYscale = mUsedXscale = double(ah)/double(ih);
-        if ((mUsedXscale*iw)>=aw)			// will there be a scroll bar?
+        yscale = xscale = double(ah)/double(ih);
+        if ((xscale*iw)>=aw)				// will there be a scroll bar?
         {
             // account for horizontal scroll bar
-            mUsedYscale = mUsedXscale = double(ah-sbSize)/double(ih);
+            yscale = xscale = double(ah-sbSize)/double(ih);
             kDebug() << "FIT HEIGHT scrollbar to subtract:" << sbSize;
         }
-        mScaleFactor = static_cast<int>(100*mUsedYscale);
+        mScaleFactor = static_cast<int>(100*yscale);
         break;
 
 case ImageCanvas::ScaleZoom:
-        mUsedXscale = mUsedYscale = double(mScaleFactor)/100.0;
-        mScaleFactor = static_cast<int>(100*mUsedXscale);
-        break;
-
-default:
+        xscale = yscale = double(mScaleFactor)/100.0;
+        mScaleFactor = static_cast<int>(100*xscale);
         break;
     }
 
     mSelected = mInvScaleMatrix.mapRect(mSelected);	// save selection in image pixels
 
     mScaleMatrix.reset();
-    mScaleMatrix.scale(mUsedXscale, mUsedYscale);	// to map image -> display
+    mScaleMatrix.scale(xscale, yscale);			// to map image -> display
     mInvScaleMatrix.reset();
     mInvScaleMatrix = mScaleMatrix.inverted();		// to map display -> image
 

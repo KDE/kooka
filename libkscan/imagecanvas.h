@@ -182,8 +182,6 @@ private:
 
     QMatrix mScaleMatrix;
     QMatrix mInvScaleMatrix;
-    double mUsedYscale;
-    double mUsedXscale;
     bool mMaintainAspect;
     QPixmap mScaledPixmap;
     QLabel *mPixmapLabel;
