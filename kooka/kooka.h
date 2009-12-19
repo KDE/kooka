@@ -96,7 +96,7 @@ protected:
 protected slots:
     void slotUpdateScannerActions(bool haveConnection);
     void slotUpdateRectangleActions(bool haveSelection);
-    void slotUpdateGalleryActions(bool isDir,int howmanySelected);
+    void slotUpdateGalleryActions(bool shown, bool isDir, int howmanySelected);
     void slotUpdateLoadedActions(bool isLoaded,bool isDir);
     void slotUpdateOcrResultActions(bool haveText);
     void slotOpenWithMenu();
@@ -145,6 +145,7 @@ private:
     KAction *scaleToHeightAction;
     KAction *scaleToOriginalAction;
     KAction *scaleToZoomAction;
+    KToggleAction *keepZoomAction;
     KAction *mirrorVerticallyAction;
     KAction *mirrorHorizontallyAction;
     KAction *rotateCwAction;

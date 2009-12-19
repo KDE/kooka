@@ -208,7 +208,7 @@ KookaView::KookaView(KMainWindow *parent, const QByteArray &deviceToUse)
     mOcrResultImg = NULL;
     mScanParams = NULL;
     mOcrEngine = NULL;
-    mPreviousTab = -1;
+    mCurrentTab = KookaView::TabNone;
 
     mIsPhotoCopyMode = false;
 
@@ -292,6 +292,8 @@ KookaView::KookaView(KMainWindow *parent, const QByteArray &deviceToUse)
     /** Scan Preview **/
     mPreviewCanvas = new Previewer(this);
     mPreviewCanvas->setMinimumSize(100,100);
+    ctxtmenu = mPreviewCanvas->getImageCanvas()->contextMenu();
+    if (ctxtmenu!=NULL) ctxtmenu->addTitle(i18n("Scan Preview"));
 
     /** Ocr Result Text **/
     mOcrResEdit  = new OcrResEdit(this);
@@ -431,28 +433,30 @@ void KookaView::saveProperties(KConfigGroup &grp)
 void KookaView::slotTabChanged(int index)
 {
     kDebug() << index;
-    if (mPreviousTab!=-1) saveGalleryState(mPreviousTab);
+    if (mCurrentTab!=KookaView::TabNone) saveGalleryState(mCurrentTab);
 							// save state of previous tab
     switch (index)
     {
-case 0:							// Scan
+case KookaView::TabScan:				// Scan
         mScanGallerySite->setWidget(mGallery);
         mGalleryImgviewSite->setWidget(mImageCanvas);	// somewhere to park it
         break;
 
-case 1:							// Gallery
+case KookaView::TabGallery:				// Gallery
         mGalleryGallerySite->setWidget(mGallery);
         mGalleryImgviewSite->setWidget(mImageCanvas);
         break;
 
-case 2:							// OCR
+case KookaView::TabOcr:					// OCR
         mOcrGallerySite->setWidget(mGallery);
         mOcrImgviewSite->setWidget(mImageCanvas);
         break;
     }
 
     restoreGalleryState(index);				// restore state of new tab
-    mPreviousTab = index;				// note for next tab change
+    mCurrentTab = static_cast<KookaView::TabPage>(index);
+							// note for next tab change
+    slotGallerySelectionChanged();			// update image action states
 }
 
 
@@ -624,20 +628,27 @@ void KookaView::slotSelectionChanged(const QRect &newSelection)
 
 void KookaView::slotGallerySelectionChanged()
 {
-    const KFileItem *fi = mGallery->galleryTree()->highlightedFileItem();
-
-    if (fi==NULL || fi->isNull())
+    if (mCurrentTab==KookaView::TabScan)		// Scan mode
     {
-        emit signalChangeStatusbar(i18n("No selection"));
-	emit signalGallerySelectionChanged(false,0);
+        emit signalGallerySelectionChanged(false, false, 
+                                           (mPreviewCanvas->getImageCanvas()->hasImage() ? 1 : 0));
     }
-    else
+    else						// Gallery/OCR mode
     {
-        emit signalChangeStatusbar(i18n("Gallery %1 %2",
-                                        (fi->isDir() ? i18n("folder") : i18n("image")),
-                                        fi->url().pathOrUrl()));
-        // TODO: can there be more than one selected?
-	emit signalGallerySelectionChanged(fi->isDir(), 1);
+        const KFileItem *fi = mGallery->galleryTree()->highlightedFileItem();
+        if (fi==NULL || fi->isNull())
+        {
+            emit signalChangeStatusbar(i18n("No selection"));
+            emit signalGallerySelectionChanged(true, false, 0);
+        }
+        else
+        {
+            emit signalChangeStatusbar(i18n("Gallery %1 %2",
+                                            (fi->isDir() ? i18n("folder") : i18n("image")),
+                                            fi->url().pathOrUrl()));
+            // TODO: can there be more than one selected?
+            emit signalGallerySelectionChanged(true, fi->isDir(), 1);
+        }
     }
 }
 
@@ -695,6 +706,7 @@ void KookaView::slotNewPreview(const QImage *newimg, const ImgScanInfo *info)
 		  << "res [" << info->getXResolution() << "x" << info->getYResolution() << "]";
 
    mPreviewCanvas->newImage(newimg);			// set new image and size
+   slotGallerySelectionChanged();
 }
 
 
@@ -1103,6 +1115,14 @@ void KookaView::connectThumbnailAction(KAction *action)
 }
 
 
+void KookaView::connectPreviewAction(KAction *action)
+{
+    if (action==NULL) return;
+    KMenu *popup = mPreviewCanvas->getImageCanvas()->contextMenu();
+    if (popup!=NULL) popup->addAction(action);
+}
+
+
 void KookaView::slotApplySettings()
 {
    if (mThumbView!=NULL) mThumbView->readSettings();	// size and background
@@ -1192,4 +1212,17 @@ void KookaView::slotPhotoCopyScan(KScanStat status)
 ScanGallery *KookaView::gallery() const
 {
     return (mGallery->galleryTree());
+}
+
+
+void KookaView::slotImageViewerAction(int act)
+{
+    if (mCurrentTab==KookaView::TabScan)		// Scan
+    {
+        mPreviewCanvas->getImageCanvas()->slotUserAction(act);
+    }
+    else						// Gallery or OCR
+    {
+        mImageCanvas->slotUserAction(act);
+    }
 }

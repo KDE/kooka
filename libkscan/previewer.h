@@ -66,8 +66,6 @@ public slots:
     void slotNewCustomScanSize(QRect rect);
 
 protected slots:
-    void slotScaleToWidth();
-    void slotScaleToHeight();
     void slotAutoSelToggled(bool);
     void slotScanBackgroundChanged(int);
 

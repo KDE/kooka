@@ -75,7 +75,7 @@ class KookaView : public KTabWidget
 public:
     enum MirrorType { MirrorVertical, MirrorHorizontal, MirrorBoth};
     enum StatusBarIDs { StatusTemp, StatusImage };
-    enum TabPage { TabScan = 0, TabGallery = 1, TabOcr = 2 };
+    enum TabPage { TabScan = 0, TabGallery = 1, TabOcr = 2, TabNone = 0xFF };
 
     /**
      * Default constructor
@@ -105,6 +105,7 @@ public:
     void connectViewerAction(KAction *action, bool sepBefore = false);
     void connectGalleryAction(KAction *action, bool sepBefore = false);
     void connectThumbnailAction(KAction *action);
+    void connectPreviewAction(KAction *action);
 
     void saveProperties(KConfigGroup &grp);
     void saveWindowSettings(KConfigGroup &grp);
@@ -183,6 +184,7 @@ protected slots:
     void slotOcrResultText(const QString &text);
 
     void slotTabChanged(int index);
+    void slotImageViewerAction(int act);
 
 signals:
     /**
@@ -202,7 +204,7 @@ signals:
 
     void signalScannerChanged(bool haveConnection);
     void signalRectangleChanged(bool haveSelection);
-    void signalGallerySelectionChanged(bool isDir, int howmanySelected);
+    void signalGallerySelectionChanged(bool shown, bool isDir, int howmanySelected);
     void signalLoadedImageChanged(bool isLoaded, bool isDir);
     void signalOcrResultAvailable(bool haveText);
     void signalOcrPrefs();
@@ -231,7 +233,7 @@ private:
     bool mIsPhotoCopyMode;
     KPrinter* mPhotoCopyPrinter;
 
-    int mPreviousTab;
+    KookaView::TabPage mCurrentTab;
 
     QSplitter *mScanPage;
     QSplitter *mScanSubSplitter;

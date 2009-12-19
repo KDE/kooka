@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="Kooka" version="5">
+<kpartgui name="Kooka" version="6">
 
  <MenuBar>
   <Menu name="file" noMerge="1"><text>&amp;File</text>
@@ -38,6 +38,7 @@
    <Action name="scaleToWidth"/>
    <Action name="scaleToHeight"/>
    <Action name="scaleOriginal"/>
+   <Action name="showZoomDialog"/>
    <Action name="keepZoom"/>
    <Separator/>
    <Action name="mirrorVertical"/>
@@ -64,7 +65,6 @@
   <Action name="scaleToWidth"/>
   <Action name="scaleToHeight"/>
   <Action name="scaleOriginal"/>
-  <Action name="keepZoom"/>
   <Separator/>
   <Action name="createFromSelection"/>
   <Separator/>

@@ -104,8 +104,8 @@ Kooka::Kooka(const QByteArray &deviceToUse)
             this,   SLOT(slotUpdateScannerActions(bool)));
     connect(m_view,SIGNAL(signalRectangleChanged(bool)),
             this,   SLOT(slotUpdateRectangleActions(bool)));
-    connect(m_view,SIGNAL(signalGallerySelectionChanged(bool,int)),
-            this,   SLOT(slotUpdateGalleryActions(bool,int)));
+    connect(m_view,SIGNAL(signalGallerySelectionChanged(bool,bool,int)),
+            this,   SLOT(slotUpdateGalleryActions(bool,bool,int)));
     connect(m_view,SIGNAL(signalLoadedImageChanged(bool,bool)),
             this,   SLOT(slotUpdateLoadedActions(bool,bool)));
     connect(m_view,SIGNAL(signalOcrResultAvailable(bool)),
@@ -117,7 +117,7 @@ Kooka::Kooka(const QByteArray &deviceToUse)
 
     slotUpdateScannerActions(m_view->isScannerConnected());
     slotUpdateRectangleActions(false);
-    slotUpdateGalleryActions(true,0);
+    slotUpdateGalleryActions(true,true,0);
     slotUpdateOcrResultActions(false);
 }
 
@@ -154,13 +154,14 @@ void Kooka::setupActions()
     // Image Viewer
 
     QSignalMapper *mapper = new QSignalMapper(this);
-    connect(mapper, SIGNAL(mapped(int)), m_view->imageViewer(), SLOT(slotUserAction(int)));
+    connect(mapper, SIGNAL(mapped(int)), m_view, SLOT(slotImageViewerAction(int)));
 
     scaleToWidthAction =  new KAction(KIcon("zoom-fit-width"), i18n("Scale to Width"), this);
     scaleToWidthAction->setShortcut(Qt::CTRL+Qt::Key_I);
     connect(scaleToWidthAction, SIGNAL(triggered()), mapper, SLOT(map()));
     actionCollection()->addAction("scaleToWidth", scaleToWidthAction);
     m_view->connectViewerAction(scaleToWidthAction);
+    m_view->connectPreviewAction(scaleToWidthAction);
     mapper->setMapping(scaleToWidthAction, ImageCanvas::UserActionFitWidth);
 
     scaleToHeightAction = new KAction(KIcon("zoom-fit-height"), i18n("Scale to Height"), this);
@@ -168,6 +169,7 @@ void Kooka::setupActions()
     connect(scaleToHeightAction, SIGNAL(triggered()), mapper, SLOT(map()));
     actionCollection()->addAction("scaleToHeight", scaleToHeightAction);
     m_view->connectViewerAction(scaleToHeightAction);
+    m_view->connectPreviewAction(scaleToHeightAction);
     mapper->setMapping(scaleToHeightAction, ImageCanvas::UserActionFitHeight);
 
     scaleToOriginalAction = new KAction(KIcon("zoom-original"), i18n("Original Size"), this);
@@ -178,16 +180,17 @@ void Kooka::setupActions()
     mapper->setMapping(scaleToOriginalAction, ImageCanvas::UserActionOrigSize);
 
     scaleToZoomAction = new KAction(KIcon("page-zoom"), i18n("Set Zoom..."), this);
+    scaleToZoomAction->setShortcut(KStandardShortcut::shortcut(KStandardShortcut::Zoom));
     connect(scaleToZoomAction, SIGNAL(triggered()), mapper, SLOT(map()));
     actionCollection()->addAction("showZoomDialog", scaleToZoomAction);
     m_view->connectViewerAction(scaleToZoomAction);
     mapper->setMapping(scaleToZoomAction, ImageCanvas::UserActionZoom);
 
-    KToggleAction *tact = new KToggleAction(KIcon("lockzoom"), i18n("Keep Zoom Setting"), this);
-    tact->setShortcut(Qt::CTRL+Qt::Key_Z);
-    connect(tact, SIGNAL(toggled(bool)), m_view->imageViewer(), SLOT(setKeepZoom(bool)));
-    actionCollection()->addAction("keepZoom", tact);
-    m_view->connectViewerAction(tact);
+    keepZoomAction = new KToggleAction(KIcon("lockzoom"), i18n("Keep Zoom Setting"), this);
+    keepZoomAction->setShortcut(Qt::CTRL+Qt::Key_Z);
+    connect(keepZoomAction, SIGNAL(toggled(bool)), m_view->imageViewer(), SLOT(setKeepZoom(bool)));
+    actionCollection()->addAction("keepZoom", keepZoomAction);
+    m_view->connectViewerAction(keepZoomAction);
 
     // Thumb view and gallery actions
 
@@ -211,17 +214,17 @@ void Kooka::setupActions()
     // Standard KDE has icons for 'object-rotate-right' and 'object-rotate-left',
     // but not for rotate by 180 degrees.  The 3 used here are copies of the 22x22
     // icons from the old kdeclassic theme.
-    rotateCwAction = new KAction(KIcon("rotate-cw"), i18n("Rotate Clockwise"), this);
-    rotateCwAction->setShortcut(Qt::CTRL+Qt::Key_9);
-    connect(rotateCwAction, SIGNAL(triggered()), SLOT(slotRotateClockWise()));
-    actionCollection()->addAction("rotateClockwise", rotateCwAction);
-    m_view->connectViewerAction(rotateCwAction, true);
-
     rotateAcwAction = new KAction(KIcon("rotate-acw"), i18n("Rotate Counter-Clockwise"), this);
     rotateAcwAction->setShortcut(Qt::CTRL+Qt::Key_7);
     connect(rotateAcwAction, SIGNAL(triggered()), SLOT(slotRotateCounterClockWise()));
     actionCollection()->addAction("rotateCounterClockwise", rotateAcwAction);
-    m_view->connectViewerAction(rotateAcwAction);
+    m_view->connectViewerAction(rotateAcwAction, true);
+
+    rotateCwAction = new KAction(KIcon("rotate-cw"), i18n("Rotate Clockwise"), this);
+    rotateCwAction->setShortcut(Qt::CTRL+Qt::Key_9);
+    connect(rotateCwAction, SIGNAL(triggered()), SLOT(slotRotateClockWise()));
+    actionCollection()->addAction("rotateClockwise", rotateCwAction);
+    m_view->connectViewerAction(rotateCwAction);
 
     rotate180Action = new KAction(KIcon("rotate-180"), i18n("Rotate 180 Degrees"), this);
     rotate180Action->setShortcut(Qt::CTRL+Qt::Key_8);
@@ -518,23 +521,24 @@ void Kooka::slotUpdateRectangleActions(bool haveSelection)
 }
 
 
-void Kooka::slotUpdateGalleryActions(bool isDir,int howmanySelected)
+void Kooka::slotUpdateGalleryActions(bool shown, bool isDir, int howmanySelected)
 {
-    kDebug() << "isdir" << isDir << "howmany" << howmanySelected;
+    kDebug() << "shown" << shown << "isdir" << isDir << "howmany" << howmanySelected;
 
-    const bool singleImage = howmanySelected==1 && !isDir;
+    const bool singleImage = (howmanySelected==1 && !isDir);
 
     ocrAction->setEnabled(singleImage);
 
     scaleToWidthAction->setEnabled(singleImage);
     scaleToHeightAction->setEnabled(singleImage);
-    scaleToOriginalAction->setEnabled(singleImage);
-    scaleToZoomAction->setEnabled(singleImage);
-    mirrorVerticallyAction->setEnabled(singleImage);
-    mirrorHorizontallyAction->setEnabled(singleImage);
-    rotateCwAction->setEnabled(singleImage);
-    rotateAcwAction->setEnabled(singleImage);
-    rotate180Action->setEnabled(singleImage);
+    scaleToOriginalAction->setEnabled(shown && singleImage);
+    scaleToZoomAction->setEnabled(shown && singleImage);
+    keepZoomAction->setEnabled(shown);
+    mirrorVerticallyAction->setEnabled(shown && singleImage);
+    mirrorHorizontallyAction->setEnabled(shown && singleImage);
+    rotateCwAction->setEnabled(shown && singleImage);
+    rotateAcwAction->setEnabled(shown && singleImage);
+    rotate180Action->setEnabled(shown && singleImage);
 
     if (howmanySelected==0) slotUpdateRectangleActions(false);
 

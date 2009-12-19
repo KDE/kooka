@@ -32,7 +32,6 @@
 #include <kaction.h>
 #include <kmessagebox.h>
 #include <kdialog.h>
-#include <kmenu.h>
 
 #ifdef AUTOSEL_DEBUG
 #include <qfile.h>
@@ -118,22 +117,9 @@ Previewer::Previewer(QWidget *parent)
     img_canvas  = new ImageCanvas(this);
     img_canvas->setDefaultScaleType(ImageCanvas::ScaleDynamic);
 
-    KMenu *ctxtmenu = img_canvas->contextMenu();
-    if (ctxtmenu!=NULL) ctxtmenu->addTitle(i18n("Scan Preview"));
-    img_canvas->repaint();
+    //img_canvas->repaint();
     gl->addWidget(img_canvas, 0, 1, -1, 1);
     gl->setColumnStretch(1, 1);
-
-    /* Actions for the previewer zoom */
-    KAction *act = new KAction(KIcon("zoom-fit-width"),i18n("Scale to Width"),this);
-    act->setShortcut(Qt::CTRL+Qt::Key_I);
-    connect(act, SIGNAL(triggered()), SLOT(slotScaleToWidth()));
-    ctxtmenu->addAction(act);
-
-    act = new KAction(KIcon("zoom-fit-height"),i18n("Scale to Height"),this);
-    act->setShortcut(Qt::CTRL+Qt::Key_H);
-    connect(act, SIGNAL(triggered()), SLOT(slotScaleToHeight()));
-    ctxtmenu->addAction(act);
 
     /*Signals: Control the custom-field and show size of selection */
     connect(img_canvas,SIGNAL(newRect(const QRect &)),SLOT(slotNewAreaSelected(const QRect &)));
@@ -409,18 +395,6 @@ void Previewer::updateSelectionDims()
         else fileSize->setSizeInByte(-1);		// depth not available
     }
     else selSize2->setText(QString::null);		// resolution not available
-}
-
-
-void Previewer::slotScaleToWidth()
-{
-    if (img_canvas!=NULL) img_canvas->slotUserAction(ImageCanvas::UserActionFitWidth);
-}
-
-
-void Previewer::slotScaleToHeight()
-{
-    if (img_canvas!=NULL) img_canvas->slotUserAction(ImageCanvas::UserActionFitHeight);
 }
 
 
