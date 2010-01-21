@@ -33,6 +33,7 @@
 #include <qsplitter.h>
 #include <qimage.h>
 #include <qapplication.h>
+#include <qsignalmapper.h>
 
 #include <kurl.h>
 #include <krun.h>
@@ -211,6 +212,8 @@ KookaView::KookaView(KMainWindow *parent, const QByteArray &deviceToUse)
     mCurrentTab = KookaView::TabNone;
 
     mIsPhotoCopyMode = false;
+
+    mOpenWithMapper = NULL;
 
     /** Image Viewer **/
     mImageCanvas = new ImageCanvas(this);
@@ -816,6 +819,7 @@ void KookaView::slotOcrResultText(const QString &text)
 }
 
 
+// TODO: this does not appear to be used!
 void KookaView::slotOCRResultImage(const QPixmap &pix)
 {
     kDebug();
@@ -1074,16 +1078,6 @@ void KookaView::updateCurrImage(const QImage &img)
 }
 
 
-void KookaView::slotOpenCurrInGraphApp()
-{
-    const KFileItem *fi = mGallery->galleryTree()->highlightedFileItem();
-    if (fi==NULL || fi->isNull()) return;
-
-    KUrl::List urllist(fi->url());
-    KRun::displayOpenWithDialog(urllist, mMainWindow);
-}
-
-
 void KookaView::connectViewerAction(KAction *action, bool sepBefore)
 {
     if (action==NULL) return;
@@ -1223,5 +1217,62 @@ void KookaView::slotImageViewerAction(int act)
     else						// Gallery or OCR
     {
         mImageCanvas->slotUserAction(act);
+    }
+}
+
+
+void KookaView::showOpenWithMenu(KActionMenu *menu)
+{
+    FileTreeViewItem *curr = gallery()->highlightedFileTreeViewItem();
+    QString mimeType = KMimeType::findByUrl(curr->url())->name();
+    kDebug() << "Trying to open" << curr->url() << "which is" << mimeType;
+
+    if (mOpenWithMapper==NULL)
+    {
+        mOpenWithMapper = new QSignalMapper(this);
+        connect(mOpenWithMapper, SIGNAL(mapped(int)), SLOT(slotOpenWith(int)));
+    }
+
+    menu->menu()->clear();
+
+    int i = 0;
+    mOpenWithOffers = KMimeTypeTrader::self()->query(mimeType);
+    for (KService::List::ConstIterator it = mOpenWithOffers.begin();
+         it!=mOpenWithOffers.end(); ++it, ++i)
+    {
+        KService::Ptr service = (*it);
+        kDebug() << "> offer:" << (*it)->name();
+
+        QString actionName((*it)->name().replace("&","&&"));
+        KAction *act = new KAction(KIcon((*it)->icon()), actionName, this);
+        connect(act, SIGNAL(triggered()), mOpenWithMapper, SLOT(map()));
+        mOpenWithMapper->setMapping(act, i);
+        menu->addAction(act);
+    }
+
+    menu->menu()->addSeparator();
+    KAction *act = new KAction(i18n("Other..."), this);
+    connect(act, SIGNAL(triggered()), mOpenWithMapper, SLOT(map()));
+    mOpenWithMapper->setMapping(act, i);
+    menu->addAction(act);
+}
+
+
+void KookaView::slotOpenWith(int idx)
+{
+    kDebug() << "idx" << idx;
+
+    FileTreeViewItem *ftvi = gallery()->highlightedFileTreeViewItem();
+    if (ftvi==NULL) return;
+    KUrl::List urllist(ftvi->url());
+
+    if (idx<mOpenWithOffers.count())			// application from the menu
+    {
+        KService::Ptr ptr = mOpenWithOffers[idx];
+        KRun::run(*ptr, urllist, mMainWindow);
+    }
+    else						// last item = "Other..."
+    {
+        KRun::displayOpenWithDialog(urllist, mMainWindow);
     }
 }

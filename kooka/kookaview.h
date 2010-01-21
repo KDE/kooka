@@ -28,6 +28,7 @@
 #define KOOKAVIEW_H
 
 #include <ktabwidget.h>
+#include <kmimetypetrader.h>
 
 #include "libkscan/kscanoption.h"
 
@@ -35,6 +36,7 @@
 class QPainter;
 class QPixmap;
 class QSplitter;
+class QSignalMapper;
 
 class KConfigGroup;
 class KPrinter;
@@ -42,6 +44,7 @@ class KAction;
 class KActionCollection;
 class KMainWindow;
 class KUrl;
+class KActionMenu;
 
 class OcrEngine;
 class ThumbView;
@@ -111,43 +114,22 @@ public:
     void saveWindowSettings(KConfigGroup &grp);
     void applyWindowSettings(const KConfigGroup &grp);
 
-
 public slots:
-    void slotShowPreview()  {  }
-    void slotShowPackager() {  }
-    void slotNewPreview(const QImage *newimg, const ImgScanInfo *info);
-
     void slotStartOcr();
     void slotStartOcrSelection();
     void slotOcrSpellCheck();
     void slotSaveOcrResult();
 
     void slotStartPreview();
+    void slotNewPreview(const QImage *newimg, const ImgScanInfo *info);
     void slotStartFinalScan();
 
     void slotCreateNewImgFromSelection();
-
     void slotRotateImage(int angle);
-
     void slotMirrorImage(KookaView::MirrorType type);
 
-    void slotOpenCurrInGraphApp();
-
     void slotScanParams();
-
-    void slotOCRResultImage( const QPixmap& );
-
-     void slotApplySettings();
-
-    /**
-     * slot that show the image viewer
-     */
-    void slotStartLoading(const KUrl &url);
-    /**
-     * starts ocr on the image the parameter is pointing to
-     **/
-    void startOCR(const KookaImage *img);
-
+    void slotApplySettings();
 
     /**
      * slot to select the scanner device. Does all the work with selection
@@ -159,6 +141,8 @@ public slots:
     void slotScanStart();
     void slotScanFinished( KScanStat stat );
     void slotAcquireStart();
+
+    void showOpenWithMenu(KActionMenu *menu);
 
 protected slots:
     void slotStartPhotoCopy();
@@ -181,7 +165,9 @@ protected slots:
 
     void slotSelectionChanged(const QRect &newSelection);
     void slotGallerySelectionChanged();
+
     void slotOcrResultText(const QString &text);
+    void slotOCRResultImage( const QPixmap& );
 
     void slotTabChanged(int index);
     void slotImageViewerAction(int act);
@@ -210,12 +196,19 @@ signals:
     void signalOcrPrefs();
 
 private:
+    void startOCR(const KookaImage *img);
+
     QByteArray userDeviceSelection(bool alwaysAsk);
 
     void updateCurrImage(const QImage &img);
     void saveGalleryState(int index = -1) const;
     void restoreGalleryState(int index = -1);
 
+private slots:
+    void slotStartLoading(const KUrl &url);
+    void slotOpenWith(int idx);
+
+private:
     KMainWindow *mMainWindow;
 
     ImageCanvas *mImageCanvas;
@@ -250,6 +243,9 @@ private:
 
     WidgetSite *mGalleryImgviewSite;
     WidgetSite *mOcrImgviewSite;
+
+    KService::List mOpenWithOffers;
+    QSignalMapper *mOpenWithMapper;
 };
 
 

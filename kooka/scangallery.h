@@ -24,7 +24,6 @@
 #include <qmap.h>
 
 #include <kmimetypetrader.h>
-#include <kicon.h>
 
 #include "libfiletree/filetreeview.h"
 #include "imageformat.h"
@@ -32,11 +31,9 @@
 
 class QImage;
 class QTreeWidgetItem;
-class QSignalMapper;
 
 class KMenu;
 class KUrl;
-class KActionMenu;
 
 class KookaImage;
 class KookaImageMeta;
@@ -57,7 +54,6 @@ public:
     void openRoots();
 
     void setAllowRename(bool on);
-    void showOpenWithMenu(KActionMenu *menu);
 
     void addImage(const QImage *img, KookaImageMeta *meta = NULL);
 
@@ -88,7 +84,6 @@ protected slots:
     void slotUrlsDropped(FileTreeView *me, QDropEvent *ev,QTreeWidgetItem *parent,QTreeWidgetItem *after);
     void slotStartupFinished(FileTreeViewItem *item);
     void slotItemExpanded(QTreeWidgetItem *item);
-    void slotOpenWith(int idx);
     void slotItemProperties();
 
     bool slotFileRenamed(FileTreeViewItem *item, const QString &newName);
@@ -128,9 +123,6 @@ private:
 
     KUrl m_currSelectedDir;
     KMenu *m_contextMenu;
-
-    KService::List openWithOffers;
-    QSignalMapper *openWithMapper;
 
     // like m_nextUrlToSelect in KFileTreeView,
     // but for our own purposes (showing the image)

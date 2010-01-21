@@ -21,19 +21,14 @@
 #include "scangallery.moc"
 
 #include <qfileinfo.h>
-#include <qsignalmapper.h>
 #include <qdir.h>
 #include <qevent.h>
 #include <qapplication.h>
 #include <qheaderview.h>
 
 #include <kmessagebox.h>
-#include <kmimetypetrader.h>
-#include <krun.h>
 #include <kpropertiesdialog.h>
 #include <kmenu.h>
-#include <kaction.h>
-#include <kactionmenu.h>
 #include <kinputdialog.h>
 #include <kiconloader.h>
 #include <kfiledialog.h>
@@ -127,8 +122,6 @@ ScanGallery::ScanGallery(QWidget *parent)
     /* create a context menu and set the title */
     m_contextMenu = new KMenu();
     m_contextMenu->addTitle(i18n("Gallery"));
-
-    openWithMapper = NULL;
 }
 
 
@@ -1231,61 +1224,4 @@ void ScanGallery::setAllowRename(bool on)
 {
     kDebug() << "to" << on;
     setEditTriggers(on ? QAbstractItemView::DoubleClicked : QAbstractItemView::NoEditTriggers);
-}
-
-
-
-void ScanGallery::showOpenWithMenu(KActionMenu *menu)
-{
-    FileTreeViewItem *curr = highlightedFileTreeViewItem();
-    QString mimeType = KMimeType::findByUrl(curr->url())->name();
-    kDebug() << "Trying to open" << curr->url() << "which is" << mimeType;
-
-    openWithOffers = KMimeTypeTrader::self()->query(mimeType);
-
-    if (openWithMapper==NULL)
-    {
-        openWithMapper = new QSignalMapper(this);
-        connect(openWithMapper, SIGNAL(mapped(int)), SLOT(slotOpenWith(int)));
-    }
-
-    menu->menu()->clear();
-
-    int i = 0;
-    for (KService::List::ConstIterator it = openWithOffers.begin();
-         it!=openWithOffers.end(); ++it, ++i)
-    {
-        KService::Ptr service = (*it);
-        kDebug() << "> offer:" << (*it)->name();
-
-        QString actionName((*it)->name().replace("&","&&"));
-        KAction *act = new KAction(KIcon((*it)->icon()), actionName, this);
-        connect(act, SIGNAL(triggered()), openWithMapper, SLOT(map()));
-        openWithMapper->setMapping(act, i);
-        menu->addAction(act);
-    }
-
-    menu->menu()->addSeparator();
-    KAction *act = new KAction(i18n("Other..."), this);
-    connect(act, SIGNAL(triggered()), openWithMapper, SLOT(map()));
-    openWithMapper->setMapping(act, i);
-    menu->addAction(act);
-}
-
-
-void ScanGallery::slotOpenWith(int idx)
-{
-    kDebug() << "idx" << idx;
-
-    FileTreeViewItem *ftvi = highlightedFileTreeViewItem();
-    if (ftvi==NULL) return;
-    KUrl::List urllist(ftvi->url());
-
-    if (idx<openWithOffers.count())			// application from the menu
-    {
-        KService::Ptr ptr = openWithOffers[idx];
-        // TODO: should the two KRun's have top level window as 3rd parameter?
-        KRun::run(*ptr, urllist, this);
-    }
-    else KRun::displayOpenWithDialog(urllist, this);	// last item = "Other..."
 }

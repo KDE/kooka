@@ -592,5 +592,5 @@ void Kooka::slotUpdateOcrResultActions(bool haveText)
 
 void Kooka::slotOpenWithMenu()
 {
-    m_view->gallery()->showOpenWithMenu(openWithMenu);
+    m_view->showOpenWithMenu(openWithMenu);
 }
