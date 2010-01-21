@@ -107,8 +107,8 @@ signals:
     void showImage(const KookaImage *img, bool isDir);
     void deleteImage(const KookaImage *img);
     void unloadImage(const KookaImage *img);
-    void galleryPathChanged(FileTreeBranch *branch, const QString &relativPath);
-    void galleryDirectoryRemoved(FileTreeBranch *branch, const QString &relativPath);
+    void galleryPathChanged(const FileTreeBranch *branch, const QString &relPath);
+    void galleryDirectoryRemoved(const FileTreeBranch *branch, const QString &relPath);
 
     void imageChanged(const KFileItem *kfi);
     void fileChanged(const KFileItem *kfi);
@@ -122,10 +122,11 @@ private:
     FileTreeBranch *openRoot(const KUrl &root, const QString &title = QString::null);
 
     FileTreeViewItem *findItemByUrl(const KUrl &url, FileTreeBranch *branch = NULL);
-    QString itemDirectory(const FileTreeViewItem *item, bool relativ = false) const;
+    KUrl itemDirectory(const FileTreeViewItem *item) const;
+    QString itemDirectoryRelative(const FileTreeViewItem *item) const;
     void updateParent(const FileTreeViewItem *curr);
 
-    QString m_currSelectedDir;
+    KUrl m_currSelectedDir;
     KMenu *m_contextMenu;
 
     KService::List openWithOffers;

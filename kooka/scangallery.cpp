@@ -122,7 +122,7 @@ ScanGallery::ScanGallery(QWidget *parent)
     mPixColor  = KIconLoader::global()->loadIcon("palette-color", KIconLoader::NoGroup, KIconLoader::SizeSmall);
 
     m_startup = true;
-    m_currSelectedDir = QString::null;
+    m_currSelectedDir = KUrl();
 
     /* create a context menu and set the title */
     m_contextMenu = new KMenu();
@@ -172,7 +172,8 @@ void ScanGallery::openRoots()
    m_defaultBranch = openRoot(rootUrl, i18n("Kooka Gallery"));
    m_defaultBranch->setOpen(true);
 
-   /* open more configurable image repositories TODO */
+   /* open more configurable image repositories, configuration TODO */
+   //openRoot(KUrl(getenv("HOME")), i18n("Home Directory"));
 }
 
 
@@ -201,16 +202,20 @@ FileTreeBranch *ScanGallery::openRoot(const KUrl &root, const QString &title)
 }
 
 
-void ScanGallery::slotStartupFinished(FileTreeViewItem *it)
+void ScanGallery::slotStartupFinished(FileTreeViewItem *item)
 {
-    if (m_startup && (it==m_defaultBranch->root()))
-    {
-        kDebug();
+    if (!m_startup) return;				// already done
+    if (item!=m_defaultBranch->root()) return;		// not the 1st branch root
 
-        /* If nothing is selected, select the root. */
-        if (highlightedFileTreeViewItem()==NULL) m_defaultBranch->root()->setSelected(true);
-        m_startup = false;
+    kDebug();
+
+    if (highlightedFileTreeViewItem()==NULL)		// nothing currently selected,
+    {							// select the branch root
+        item->setSelected(true);
+        emit galleryPathChanged(m_defaultBranch, "/");	// tell the history combo
     }
+
+    m_startup = false;					// don't do this again
 }
 
 
@@ -292,15 +297,12 @@ void ScanGallery::slotItemActivated(QTreeWidgetItem *curr)
         QApplication::restoreOverrideCursor();
     }
 
-    //  Indicate the new directory if it has changed
-    QString wholeDir = itemDirectory(item,false);	// not relative to root
-    if (m_currSelectedDir!=wholeDir)
+    //  Notify the new directory, if it has changed
+    KUrl newDir = itemDirectory(item);
+    if (m_currSelectedDir!=newDir)
     {
-        m_currSelectedDir = wholeDir;
-        QString relativUrl = itemDirectory(item,true);
-        kDebug() << "Emitting" << relativUrl << "as new relative URL";
-        //  Emit the signal with branch and the relative path
-        emit galleryPathChanged(item->branch(),relativUrl);
+        m_currSelectedDir = newDir;
+        emit galleryPathChanged(item->branch(), itemDirectoryRelative(item));
     }
 }
 
@@ -463,10 +465,8 @@ void ScanGallery::updateParent(const FileTreeViewItem *curr)
     FileTreeBranch *branch = branches().at(0);		/* There should be at least one */
     if (branch==NULL) return;
 
-    QString strdir = itemDirectory(curr);
-    // if(strdir.endsWith(QString("/"))) strdir.truncate( strdir.length() - 1 );
-    kDebug() << "Updating directory " << strdir;
-    KUrl dir(strdir);
+    KUrl dir = itemDirectory(curr);
+    kDebug() << "Updating directory" << dir;
     branch->updateDirectory(dir);
 
     FileTreeViewItem *parent = branch->findItemByUrl(dir);
@@ -571,75 +571,76 @@ static QString buildNewFilename(const QString &cmplFilename, const ImageFormat &
 
 
 /* ----------------------------------------------------------------------- */
-/* This method returns the directory of an image or directory.
- */
-QString ScanGallery::itemDirectory(const FileTreeViewItem* item, bool relativ) const
+/* The absolute URL of the item (if it is a directory), or its parent (if
+   it is a file).
+*/
+KUrl ScanGallery::itemDirectory(const FileTreeViewItem *item) const
 {
     if (item==NULL)
     {
         kDebug() << "no item";
-        return (QString::null);
+        return (KUrl());
     }
 
-    // TODO: can manipulate using KUrl?
-    QString relativUrl= (item->url()).prettyUrl();
+    KUrl u = item->url();
+    if (!item->isDir()) u.setFileName("");		// not a directory, remove file name
+    else u.adjustPath(KUrl::AddTrailingSlash);		// is a directory, ensure ends with "/"
+    return (u);
+}
 
-   if( ! item->isDir() )
-   {
-      // Cut off the filename in case it is not a dir
-      relativUrl.truncate( relativUrl.lastIndexOf( '/' )+1);
-   }
-   else
-   {
-      /* add a "/" to the directory if not there */
-      if( ! relativUrl.endsWith( "/" ) )
-	 relativUrl.append( "/" );
-   }
 
-   if (relativ)
-   {
-      FileTreeBranch *branch = item->branch();
-      if (branch!=NULL)
-      {
-	 kDebug() << "Relative URL:" << relativUrl;
-	 QString rootUrl = (branch->rootUrl()).prettyUrl();  // directory of branch root
+/* ----------------------------------------------------------------------- */
+/* As above, but relative to the root of its branch.  The result does not
+   begin with a leading slash, except that a single "/" means the root.
+   If there is some problem (no branch, or the root/item URLs do not match),
+   the full path is returned.
+*/
+QString ScanGallery::itemDirectoryRelative(const FileTreeViewItem *item) const
+{
+    const KUrl u = itemDirectory(item);
+    const FileTreeBranch *branch = item->branch();
+    if (branch==NULL) return (u.path());		// no branch, can this ever happen?
 
-	 if( relativUrl.startsWith( rootUrl ))
-	 {
-	    relativUrl.remove( 0, rootUrl.length() );
 
-	    if( relativUrl.isEmpty() ) relativUrl = "/"; // The root
-	 }
-	 else
-	 {
-	    kDebug() << "Error: Item URL does not start with root URL" << rootUrl;
-	 }
-      }
-   }
+    QString rootUrl = (branch->rootUrl()).prettyUrl(KUrl::AddTrailingSlash);
+    QString itemUrl = u.prettyUrl();
+kDebug() << "itemurl" << itemUrl << "rooturl" << rootUrl;
+    if (itemUrl.startsWith(rootUrl))
+    {
+        itemUrl.remove(0, rootUrl.length());		// remove root URL prefix
+kDebug() << "->" << itemUrl;
+        if (itemUrl.isEmpty()) itemUrl = "/";		// it is the root
+kDebug() << "->" << itemUrl;
+    }
+    else
+    {
+        kDebug() << "item URL" << itemUrl << "does not start with root URL" << rootUrl;
+    }
 
-   return (relativUrl);
+    return (itemUrl);
 }
 
 
 /* ----------------------------------------------------------------------- */
 /* This slot receives a string from the gallery-path combobox shown under the
  * image gallery, the relative directory under the branch.  Now it is to assemble
- * a complete path from the data, find out which FileTreeViewItem is associated
+ * a complete path from the data, find out the FileTreeViewItem associated
  * with it and call slotClicked with it.
  */
 
-void ScanGallery::slotSelectDirectory(const QString &branchName,const QString &relPath)
+void ScanGallery::slotSelectDirectory(const QString &branchName, const QString &relPath)
 {
     kDebug() << "branch" << branchName << "path" << relPath;
 
     FileTreeViewItem *item;
     if (!branchName.isEmpty()) item = findItemInBranch(branchName, relPath);
-    else item = findItemInBranch(branches().at(0), relPath);	// assume the 1st branch
+    else item = findItemInBranch(branches().at(0), relPath);
+							// assume the 1st/only branch
     if (item==NULL) return;
 
     scrollToItem(item);
     setCurrentItem(item);
-    slotItemActivated(item);					// load thumbnails, etc.
+    slotItemActivated(item);				// load thumbnails, etc.
 }
 
 
@@ -1128,7 +1129,7 @@ void ScanGallery::slotDeleteItems()
     updateParent(curr);					// update parent folder count
     if (isDir)						// remove from the name combo
     {
-        emit galleryDirectoryRemoved(curr->branch(),itemDirectory(curr,true));
+        emit galleryDirectoryRemoved(curr->branch(), itemDirectoryRelative(curr));
     }
 
 #if 0

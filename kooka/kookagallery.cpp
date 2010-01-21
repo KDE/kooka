@@ -33,7 +33,7 @@
 #include <khbox.h>
 
 #include "scangallery.h"
-#include "imagenamecombo.h"
+#include "galleryhistory.h"
 #include "kookapref.h"
 
 
@@ -50,7 +50,7 @@ KookaGallery::KookaGallery(QWidget *parent)
     QLabel *lab = new QLabel(i18n("Folder: "),m_recentBox);
     lab->setSizePolicy(QSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed));
 
-    m_galleryRecent = new ImageNameCombo(m_recentBox);
+    m_galleryRecent = new GalleryHistory(m_recentBox);
     lab->setBuddy(m_galleryRecent);
 
     m_galleryTree = new ScanGallery(this);

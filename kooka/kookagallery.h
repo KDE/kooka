@@ -31,7 +31,7 @@ class QGridLayout;
 class KHBox;
 
 class ScanGallery;
-class ImageNameCombo;
+class GalleryHistory;
 
 
 class KookaGallery : public QWidget
@@ -51,7 +51,7 @@ public:
     void readSettings();
 
     ScanGallery *galleryTree() const		{ return (m_galleryTree); }
-    ImageNameCombo *galleryRecent() const	{ return (m_galleryRecent); }
+    GalleryHistory *galleryRecent() const	{ return (m_galleryRecent); }
 
 private:
     void setLayout(KookaGallery::Layout option);
@@ -59,8 +59,8 @@ private:
     QGridLayout *m_layout;
     KHBox *m_recentBox;
 
-    ImageNameCombo *m_galleryRecent;
     ScanGallery *m_galleryTree;
+    GalleryHistory *m_galleryRecent;
 };
 
 #endif							// KOOKAGALLERY_H

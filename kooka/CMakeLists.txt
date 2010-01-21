@@ -134,7 +134,7 @@ set(kooka_SRCS
   kookaimagemeta.cpp
   imageformat.cpp
   scangallery.cpp
-  imagenamecombo.cpp
+  galleryhistory.cpp
   imageselectline.cpp
   kookagallery.cpp
   thumbview.cpp

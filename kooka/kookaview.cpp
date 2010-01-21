@@ -64,7 +64,7 @@
 
 #include "imgsaver.h"
 #include "kookapref.h"
-#include "imagenamecombo.h"
+#include "galleryhistory.h"
 #include "thumbview.h"
 #include "kookaimage.h"
 #include "kookaimagemeta.h"
@@ -253,13 +253,13 @@ KookaView::KookaView(KMainWindow *parent, const QByteArray &deviceToUse)
     connect(mThumbView, SIGNAL(itemActivated(const KUrl &)),
             packager, SLOT(slotActivateItem(const KUrl &)));
 
-    ImageNameCombo *recentFolder = mGallery->galleryRecent();
+    GalleryHistory *recentFolder = mGallery->galleryRecent();
 
     // Connections ScanGallery <--> recent folder history
-    connect(packager, SIGNAL(galleryPathChanged(FileTreeBranch *,const QString &)),
-            recentFolder, SLOT(slotPathChanged(FileTreeBranch *,const QString &)));
-    connect(packager, SIGNAL(galleryDirectoryRemoved(FileTreeBranch *,const QString &)),
-            recentFolder, SLOT(slotPathRemoved(FileTreeBranch *,const QString &)));
+    connect(packager, SIGNAL(galleryPathChanged(const FileTreeBranch *,const QString &)),
+            recentFolder, SLOT(slotPathChanged(const FileTreeBranch *,const QString &)));
+    connect(packager, SIGNAL(galleryDirectoryRemoved(const FileTreeBranch *,const QString &)),
+            recentFolder, SLOT(slotPathRemoved(const FileTreeBranch *,const QString &)));
     connect(recentFolder, SIGNAL(pathSelected(const QString &,const QString &)),
             packager, SLOT(slotSelectDirectory(const QString &,const QString &)));
 
@@ -1061,16 +1061,15 @@ void KookaView::slotStartLoading(const KUrl &url)
 
 void KookaView::updateCurrImage(const QImage &img)
 {
-    if( ! mImageCanvas->readOnly() )
+    if (!mImageCanvas->readOnly())
     {
-	emit( signalChangeStatusbar( i18n("Storing image changes" )));
-	gallery()->slotCurrentImageChanged( &img );
-	emit( signalCleanStatusbar());
+	emit signalChangeStatusbar(i18n("Updating image"));
+	gallery()->slotCurrentImageChanged(&img);
+	emit signalCleanStatusbar();
     }
     else
     {
-	emit( signalChangeStatusbar( i18n("Can not save image, it is write protected!")));
-	kDebug() << "Image is write protected, not saving!";
+	emit signalChangeStatusbar(i18n("Cannot update image, it is read only"));
     }
 }
 

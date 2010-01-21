@@ -693,7 +693,7 @@ FileTreeViewItem *FileTreeView::findItemInBranch(FileTreeBranch *branch, const Q
     FileTreeViewItem *ret = NULL;
     if (branch!=NULL)
     {
-        if (relUrl.isEmpty()) ret = branch->root();
+        if (relUrl.isEmpty() || relUrl=="/") ret = branch->root();
         else
         {
             QString partUrl(relUrl);

@@ -67,7 +67,7 @@ static const char addLicense[] =
     "commercial Qt development licence.\n";
 
 static const char copyright[] =
-    "(C) 2000-2009, the Kooka developers and contributors";
+    "(C) 2000-2010, the Kooka developers and contributors";
 
 
 int main( int argc, char *argv[] )

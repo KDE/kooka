@@ -1,5 +1,5 @@
 /***************************************************** -*- mode:c++; -*- ***
-                          imgnamecombo.h - combobox for image names
+                          GalleryHistory.h - combobox for image names
                              -------------------
     begin                : Tue Nov 13 2001
     copyright            : (C) 2001 by Klaas Freitag
@@ -24,8 +24,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef IMAGENAMECOMBO_H
-#define IMAGENAMECOMBO_H
+#ifndef GALLERYHISTORY_H
+#define GALLERYHISTORY_H
 
 #include <kcombobox.h>
 
@@ -36,26 +36,23 @@
 class FileTreeBranch;
 
 
-class ImageNameCombo : public KComboBox
+class GalleryHistory : public KComboBox
 {
     Q_OBJECT
 
 public:
-    ImageNameCombo(QWidget *parent);
+    GalleryHistory(QWidget *parent);
 
 public slots:
-    void slotPathChanged(FileTreeBranch *branch, const QString &relPath);
-    void slotPathRemoved(FileTreeBranch *branch, const QString &relPath);
+    void slotPathChanged(const FileTreeBranch *branch, const QString &relPath);
+    void slotPathRemoved(const FileTreeBranch *branch, const QString &relPath);
 
 signals:
     void pathSelected(const QString &branchName, const QString &relPath);
 
 protected slots:
-    void slotActivated(const QString &itemText);
-
-private:
-    QStringList items;
+    void slotActivated(int idx);
 };
 
 
-#endif							// IMAGENAMECOMBO_H
+#endif							// GALLERYHISTORY_H
