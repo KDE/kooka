@@ -191,6 +191,7 @@ void ThumbView::slotHighlightItem(const KUrl &url, bool isDir)
         //
         // There are two possible (but extremely unlikely) race conditions here.
 
+#ifdef WORKAROUND_216928
         if (dirLister()->isFinished())			// idle, can do this now
         {
             kDebug() << "lister idle, changing dir to" << dirToShow;
@@ -201,6 +202,10 @@ void ThumbView::slotHighlightItem(const KUrl &url, bool isDir)
             kDebug() << "lister busy, deferring change to" << dirToShow;
             m_toChangeTo = dirToShow;			// note to do later
         }
+#else
+            kDebug() << "changing dir to" << dirToShow;
+            setUrl(dirToShow, true);			// change path and reload
+#endif
         return;
     }
 
