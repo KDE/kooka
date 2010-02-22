@@ -34,9 +34,12 @@
 
 #include "ocrbasedialog.h"
 
+
 /**
   *@author Klaas Freitag
   */
+
+class QWidget;
 
 
 class OcrGocrDialog : public OcrBaseDialog
@@ -67,15 +70,17 @@ protected slots:
     void slotWriteConfig();
 
 private:
-    void version(const QString &exe);
+    QString version();
 
 private:
     KScanSlider *sliderGrayLevel;
     KScanSlider *sliderDustSize;
     KScanSlider *sliderSpace;
 
+    QWidget *m_setupWidget;
     QString m_ocrCmd;
     bool m_isBW;
 };
+
 
 #endif							// OCRGOCRDIALOG_H

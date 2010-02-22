@@ -29,8 +29,6 @@
 
 #include <kpagedialog.h>
 
-#include <kio/previewjob.h>
-
 #include "ocrengine.h"
 
 /**
@@ -41,17 +39,18 @@ class QLabel;
 class QSize;
 class QCheckBox;
 class QGroupBox;
+class QGridLayout;
+class QProgressBar;
 
-class KHBox;
-class KVBox;
-class KAnimatedButton;
 class KSpellConfig;
 class KPageWidgetItem;
+class KJob;
+class KFileItem;
 
 class KookaImage;
 
 
-class OcrBaseDialog: public KPageDialog
+class OcrBaseDialog : public KPageDialog
 {
     Q_OBJECT
 
@@ -83,9 +82,12 @@ public:
     bool wantSpellCheck() const		{ return (m_userWantsSpellCheck); }
     KSpellConfig* spellConfig() const	{ return (m_spellConfig); }
 
-public slots:
-    void slotStopOCR();
-    void slotStartOCR();
+    void enableGUI(bool running);
+
+signals:
+    void signalOcrStart();
+    void signalOcrStop();
+    void signalOcrClose();
 
 protected:
     /**
@@ -95,16 +97,20 @@ protected:
      */
     virtual void enableFields(bool enable) = 0;
 
-    KAnimatedButton *getAnimation(QWidget *parent);
-// TODO: can be private?
+    QProgressBar *progressBar() const { return (m_progress); }
 
     void ocrShowInfo(const QString &binary,const QString &version = QString::null);
     void ocrShowVersion(const QString &version);
 
-    KPageWidgetItem *ocrPage() const		{ return (m_ocrPage); }
+    QWidget *addExtraSetupWidget(QWidget *wid = NULL, bool stretchBefore = false);
+    QWidget *addExtraEngineWidget(QWidget *wid = NULL, bool stretchBefore = false);
+    QWidget *addExtraDebugWidget(QWidget *wid = NULL, bool stretchBefore = false);
 
 protected slots:
     virtual void slotWriteConfig();
+    void slotStopOCR();
+    void slotStartOCR();
+    void slotCloseOCR();
 
 private:
     /**
@@ -113,18 +119,24 @@ private:
      * It calls the virtual subs ocrEngineName, ocrEngineLogo and ocrEngineDesc which
      * must return the approbiate values for the engines.
      */
-    void ocrIntro();
+    void setupSetupPage();
 
     /**
      * This creates a a tab Image Info in the dialog and creates a image description
      * about the current image to ocr.
      */
-    void imgIntro();
+    void setupSourcePage();
+
+    void setupEnginePage();
 
     /**
      * This sets up the spellchecking configuration
      */
-    void spellCheckIntro();
+    void setupSpellPage();
+
+    void setupDebugPage();
+
+    QWidget *addExtraPageWidget(KPageWidgetItem *page, QWidget *wid, bool stretchBefore);
 
 private slots:
     /**
@@ -132,28 +144,32 @@ private slots:
      */
     void slotWantSpellcheck(bool wantIt);
 
-    void slotPreviewResult(KIO::Job *job);
-    void slotGotPreview(const KFileItem *item,const QPixmap &newPix);
+    void slotGotPreview(const KFileItem &item, const QPixmap &newPix);
     void stopAnimation();
     void startAnimation();
 
 private:
-    KAnimatedButton  *m_animation;
-    KPageWidgetItem        *m_ocrPage;
-    KPageWidgetItem        *m_imgPage;
-    KPageWidgetItem        *m_spellChkPage;
-    KVBox        *m_metaBox;
-    KHBox        *m_imgHBox;
-    QLabel       *m_previewPix;
+    KPageWidgetItem *m_setupPage;
+    KPageWidgetItem *m_sourcePage;
+    KPageWidgetItem *m_enginePage;
+    KPageWidgetItem *m_spellPage;
+    KPageWidgetItem *m_debugPage;
+
+    QLabel *m_previewPix;
+    QLabel *m_previewLabel;
 
     KSpellConfig *m_spellConfig;
-    bool          m_wantSpellCfg;         /* show the spellcheck options? */
+    bool m_wantSpellCfg;				// show the spellcheck options?
     bool          m_userWantsSpellCheck;  /* user has enabled/disabled spellcheck */
-    QSize         m_previewSize;
+    QSize m_previewSize;
+    bool m_wantDebugCfg;				// show the debug options?
 
     QCheckBox     *m_cbWantCheck;
     QGroupBox     *m_gbSpellOpts;
+    QCheckBox *m_cbRetainFiles;
+
     QLabel *m_lVersion;
+    QProgressBar *m_progress;
 };
 
 #endif							// OCRBASEDIALOG_H

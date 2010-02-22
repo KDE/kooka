@@ -166,10 +166,9 @@ protected:
     virtual OcrBaseDialog *createOCRDialog(QWidget *parent,KSpellConfig *spellConfig = NULL) = 0;
 
 protected:
-    KProcess *daemon;
-    QString m_ocrResultImage;
+    KProcess *m_ocrProcess;
+    QString m_ocrResultFile;
     QString m_ocrResultText;
-    KookaImage *m_introducedImage;
     QWidget *m_parent;
     rectList m_blocks;					// dimensions of recognised blocks
     bool m_unlinkORF;
@@ -192,7 +191,7 @@ protected slots:
 
 private:
     virtual void cleanUpFiles() = 0;
-    virtual void startProcess(OcrBaseDialog *dia,KookaImage *img) = 0;
+    virtual void startProcess(OcrBaseDialog *dia, const KookaImage *img) = 0;
 
     /**
      * checks after a ocr run if the line number exists in the result
@@ -214,9 +213,10 @@ private slots:
     void startOCRProcess();
 
 private:
-    OcrBaseDialog *m_ocrProcessDia;
-    bool visibleOCRRunning;
+    OcrBaseDialog *m_ocrDialog;
+    bool m_ocrRunning;
 
+    const KookaImage *m_introducedImage;
     QImage *m_resultImage;
     ImageCanvas *m_imgCanvas;
 
@@ -232,5 +232,6 @@ private:
     int m_currHighlight;
     bool m_applyFilter;
 };
+
 
 #endif							// OCRENGINE_H

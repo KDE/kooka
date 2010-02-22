@@ -46,6 +46,7 @@ class QRadioButton;
 class QComboBox;
 class Q3ButtonGroup;
 
+class KVBox;
 class KConfig;
 
 //class KScanCombo;

@@ -28,26 +28,25 @@
 #include "ocrbasedialog.moc"
 
 #include <qlabel.h>
-#include <qsizepolicy.h>
 #include <q3groupbox.h>
 #include <qcheckbox.h>
 #include <qlayout.h>
+#include <qfile.h>
+#include <qprogressbar.h>
+#include <qapplication.h>
 
 #include <kconfig.h>
 #include <kglobal.h>
 #include <kdebug.h>
 #include <klocale.h>
-#include <kanimatedbutton.h>
 #include <kstandarddirs.h>
 #ifndef KDE4
 #include <ksconfig.h>
 #endif
 #include <kseparator.h>
-#include <khbox.h>
 #include <kvbox.h>
 
 #include <kio/job.h>
-#include <kio/jobuidelegate.h>
 #include <kio/previewjob.h>
 
 #include "ocrengine.h"
@@ -70,16 +69,22 @@
 
 OcrBaseDialog::OcrBaseDialog(QWidget *parent, KSpellConfig *spellConfig)
     : KPageDialog(parent),
-      m_animation(NULL),
-      m_metaBox(NULL),
-      m_imgHBox(NULL),
+      m_setupPage(NULL),
+      m_sourcePage(NULL),
+      m_enginePage(NULL),
+      m_spellPage(NULL),
+      m_debugPage(NULL),
       m_previewPix(NULL),
+      m_previewLabel(NULL),
       m_spellConfig(spellConfig),
       m_wantSpellCfg(true),
       m_userWantsSpellCheck(true),
+      m_wantDebugCfg(true),
       m_cbWantCheck(NULL),
       m_gbSpellOpts(NULL),
-      m_lVersion(NULL)
+      m_cbRetainFiles(NULL),
+      m_lVersion(NULL),
+      m_progress(NULL)
 {
     kDebug();
 
@@ -109,141 +114,118 @@ OcrBaseDialog::OcrBaseDialog(QWidget *parent, KSpellConfig *spellConfig)
     }
 #endif
 
-    /* Connect signals which disable the fields and store the configuration */
-    connect(this, SIGNAL(user1Clicked()), SLOT(slotWriteConfig()));
+    // Signals which tell our caller what the user is doing
     connect(this, SIGNAL(user1Clicked()), SLOT(slotStartOCR()));
     connect(this, SIGNAL(user2Clicked()), SLOT(slotStopOCR()));
+    connect(this, SIGNAL(closeClicked()), SLOT(slotCloseOCR()));
 
-    m_previewSize.setWidth(200);
-    m_previewSize.setHeight(300);
+    m_previewSize.setWidth(380);			// minimum preview size
+    m_previewSize.setHeight(250);
 
-    enableButton(KDialog::User1, true);			/* Start OCR */
-    enableButton(KDialog::User2, false);		/* Stop OCR */
-    enableButton(KDialog::Close, true);			/* Close */
+    enableButton(KDialog::User1, true);			// Start OCR
+    enableButton(KDialog::User2, false);		// Stop OCR
+    enableButton(KDialog::Close, true);			// Close
 }
 
 
 OcrBaseDialog::~OcrBaseDialog()
 {
-}
-
-
-KAnimatedButton* OcrBaseDialog::getAnimation(QWidget *parent)
-{
-    if (m_animation==NULL) m_animation = new KAnimatedButton(parent);
-    m_animation->setIcons("process-working-kde");
-    // TODO: is this needed?
-    //m_animation->setIconSize(KIconLoader::SizeLarge);
-    m_animation->updateIcons();
-
-    return (m_animation);
+    kDebug();
 }
 
 
 OcrEngine::EngineError OcrBaseDialog::setupGui()
 {
-    ocrIntro();
-    imgIntro();
-    if (m_wantSpellCfg) spellCheckIntro();
+    setupSetupPage();
+    if (m_wantSpellCfg) setupSpellPage();
+    setupSourcePage();
+    setupEnginePage();
+    // TODO: preferences option for debug
+    if (m_wantDebugCfg) setupDebugPage();
+
     return (OcrEngine::ENG_OK);
 }
 
 
-void OcrBaseDialog::imgIntro()
+void OcrBaseDialog::setupSetupPage()
 {
-    KVBox *vb = new KVBox(this);
+    QWidget *w = new QWidget(this);
+    QGridLayout *gl = new QGridLayout(w);
 
-    new QLabel(i18n("<b>Source Image Information</b>"), vb);
+    m_progress = new QProgressBar(this);
+    m_progress->setVisible(false);
 
-    // Caption - Label and image
-    m_imgHBox = new KHBox(vb);
-    m_imgHBox->setSpacing(KDialog::spacingHint());
-
-    m_previewPix = new QLabel(m_imgHBox);
-    m_previewPix->setPixmap(QPixmap());
-    m_previewPix->setFixedSize(m_previewSize);
-    m_previewPix->setAlignment( Qt::AlignCenter );
-    m_previewPix->setFrameStyle( QFrame::Panel | QFrame::Sunken );
-    // m_previewPix->resize(m_previewSize);
-
-    /* See introduceImage where the meta box is filled with data from the
-     * incoming widget.
-     */
-    m_metaBox = new KVBox(m_imgHBox);
-
-    m_imgPage = addPage(vb, i18n("Source"));
+    m_setupPage = addPage(w, i18n("Setup"));
+    m_setupPage->setHeader(i18n("Optical Character Recognition using %1", ocrEngineName()));
+    m_setupPage->setIcon(KIcon("ocr"));
 }
 
 
-/*
- * This creates a Tab OCR
- */
-void OcrBaseDialog::ocrIntro()
+QWidget *OcrBaseDialog::addExtraPageWidget(KPageWidgetItem *page, QWidget *wid, bool stretchBefore)
 {
-    KVBox *vb = new KVBox(this);
+    QGridLayout *gl = static_cast<QGridLayout *>(page->widget()->layout());
+    int nextrow = gl->rowCount();
+    // rowCount() seems to return 1 even if the layout is empty...
+    if (gl->itemAtPosition(0,0)==NULL) nextrow = 0;
 
-    //new QLabel(i18n("<b>OCR Title</b><br>"), vb);
-
-    // TODO: can topWid be combined with vb?
-    QWidget *topWid = new QWidget(vb);			// engine title/logo/description
-    QGridLayout *gl = new QGridLayout(topWid);
-
-    QLabel *l = new QLabel(i18n("<b>Optical Character Recognition using %1</b><br>", ocrEngineName()),topWid);
-    gl->addWidget(l,0,0);
-
-    // Find the logo and display if available
-    KStandardDirs stdDir;
-    QString logoFile = KGlobal::dirs()->findResource("data","kooka/pics/"+ocrEngineLogo());
-    QPixmap pix(logoFile);
-    if (!pix.isNull())
+    if (stretchBefore)					// stretch before new row
     {
-        QLabel *imgLab = new QLabel(topWid);
-        imgLab->setPixmap(pix);
-        gl->addWidget(imgLab,0,1,Qt::AlignRight|Qt::AlignTop);
+        gl->setRowStretch(nextrow, 1);
+        ++nextrow;
+    }
+    else if (nextrow>0)					// something there already,
+    {							// add separator line
+        gl->addWidget(new KSeparator(Qt::Horizontal, this), nextrow, 0, 1, 2);
+        ++nextrow;
     }
 
-    gl->setRowMinimumHeight(1, KDialog::spacingHint());
+    if (wid==NULL) wid = new QWidget(this);
+    gl->addWidget(wid, nextrow, 0, 1, 2);
 
-    l = new QLabel(ocrEngineDesc(),topWid);
-    l->setWordWrap(true);
-    l->setOpenExternalLinks(true);
-    gl->addWidget(l, 2, 0, 1, 2);
-
-    gl->setRowStretch(2, 1);
-    gl->setColumnStretch(0, 1);
-
-    m_ocrPage = addPage(vb, i18n("OCR"));
+    return (wid);
 }
 
+
+
+QWidget *OcrBaseDialog::addExtraSetupWidget(QWidget *wid, bool stretchBefore)
+{
+    return (addExtraPageWidget(m_setupPage, wid, stretchBefore));
+}
 
 
 void OcrBaseDialog::ocrShowInfo(const QString &binary, const QString &version)
 {
-    QWidget *page = ocrPage()->widget();
-
-    new KSeparator(Qt::Horizontal, page);
-
-    QWidget *botWid = new QWidget(page);		// engine path/version/spinner
-    QGridLayout *gl = new QGridLayout(botWid);
-    QLabel *l;
+    QWidget *w = addExtraEngineWidget();		// engine path/version/icon
+    QGridLayout *gl = new QGridLayout(w);
 
     if (!binary.isNull())
     {
-        l = new QLabel(i18n("%1 binary:", ocrEngineName()), botWid);
-        gl->addWidget(l, 0, 0, Qt::AlignRight);
+        QLabel *l = new QLabel(i18n("Executable:"), w);
+        gl->addWidget(l, 0, 0, Qt::AlignLeft|Qt::AlignTop);
 
-        l = new QLabel(binary, botWid);
-        gl->addWidget(l, 0, 1, Qt::AlignLeft);
+        l = new QLabel(binary, w);
+        gl->addWidget(l, 0, 1, Qt::AlignLeft|Qt::AlignTop);
 
-        l = new QLabel(i18n("Version:"),botWid);
-        gl->addWidget(l, 1, 0, Qt::AlignRight);
+        l = new QLabel(i18n("Version:"), w);
+        gl->addWidget(l, 1, 0, Qt::AlignLeft|Qt::AlignTop);
 
-        m_lVersion = new QLabel((!version.isNull() ? version : i18n("unknown")),botWid);
-        gl->addWidget(m_lVersion, 1, 1,Qt::AlignLeft);
+        m_lVersion = new QLabel((!version.isEmpty() ? version : i18n("unknown")), w);
+        gl->addWidget(m_lVersion, 1, 1, Qt::AlignLeft|Qt::AlignTop);
     }
 
-    gl->addWidget(getAnimation(botWid), 0, 2, 3, 1, Qt::AlignTop|Qt::AlignRight);
-    gl->setColumnStretch(1, 1);
+    // Find the logo and display if available
+    KStandardDirs stdDir;
+    QString logoFile = KGlobal::dirs()->findResource("data", "kooka/pics/"+ocrEngineLogo());
+    QPixmap pix(logoFile);
+    if (!pix.isNull())
+    {
+        QLabel *l = new QLabel(w);
+        l->setPixmap(pix);
+        gl->addWidget(l, 0, 3, 2, 1, Qt::AlignRight);
+    }
+
+    gl->setColumnStretch(2, 1);
+
 }
 
 
@@ -254,11 +236,60 @@ void OcrBaseDialog::ocrShowVersion(const QString &version)
 
 
 
-void OcrBaseDialog::spellCheckIntro()
+void OcrBaseDialog::setupSourcePage()
+{
+    QWidget *w = new QWidget(this);
+    QGridLayout *gl = new QGridLayout(w);
+
+    // These labels are filled with the preview pixmap and image
+    // information in introduceImage()
+    m_previewPix = new QLabel(i18n("No preview available"), w);
+    m_previewPix->setPixmap(QPixmap());
+    m_previewPix->setMinimumSize(m_previewSize.width()+KDialog::marginHint(),
+                                 m_previewSize.height()+KDialog::marginHint());
+    m_previewPix->setAlignment(Qt::AlignCenter);
+    m_previewPix->setFrameStyle(QFrame::Panel|QFrame::Sunken);
+    gl->addWidget(m_previewPix, 0, 0);
+    gl->setRowStretch(0, 1);
+
+    m_previewLabel = new QLabel(i18n("No information available"), w);
+    gl->addWidget(m_previewLabel, 1, 0, Qt::AlignHCenter);
+
+    m_sourcePage = addPage(w, i18n("Source"));
+    m_sourcePage->setHeader(i18n("Source Image Information"));
+    m_sourcePage->setIcon(KIcon("dialog-information"));
+}
+
+
+void OcrBaseDialog::setupEnginePage()
+{
+    QWidget *w = new QWidget(this);			// engine title/logo/description
+    QGridLayout *gl = new QGridLayout(w);
+
+    // row 0: engine description
+    QLabel *l = new QLabel(ocrEngineDesc(), w);
+    l->setWordWrap(true);
+    l->setOpenExternalLinks(true);
+    gl->addWidget(l, 0, 0, 1, 2, Qt::AlignTop);
+
+    gl->setRowStretch(0, 1);
+    gl->setColumnStretch(0, 1);
+
+    m_enginePage = addPage(w, i18n("OCR Engine"));
+    m_enginePage->setHeader(i18n("OCR Engine Information"));
+    m_enginePage->setIcon(KIcon("application-x-executable"));
+}
+
+
+QWidget *OcrBaseDialog::addExtraEngineWidget(QWidget *wid, bool stretchBefore)
+{
+    return (addExtraPageWidget(m_enginePage, wid, stretchBefore));
+}
+
+
+void OcrBaseDialog::setupSpellPage()
 {
     KVBox *vb = new KVBox(this);
-
-    new QLabel(i18n("<b>OCR Post Processing</b><br>"), vb);
 
     /* Want the spell checking at all? Checkbox here */
     m_cbWantCheck = new QCheckBox( i18n("Spell-check the OCR results"),
@@ -279,143 +310,109 @@ void OcrBaseDialog::spellCheckIntro()
     QWidget *spaceEater = new QWidget(vb);
     spaceEater->setSizePolicy( QSizePolicy( QSizePolicy::Ignored, QSizePolicy::Ignored ));
 
-    m_spellChkPage = addPage(vb, i18n("Spell Check"));
+    m_spellPage = addPage(vb, i18n("Spell Check"));
+    m_spellPage->setHeader(i18n("OCR Result Spell Checking"));
+    m_spellPage->setIcon(KIcon("tools-check-spelling"));
+}
+
+
+
+void OcrBaseDialog::setupDebugPage()
+{
+    QWidget *w = new QWidget(this);
+    QGridLayout *gl = new QGridLayout(w);
+
+    m_cbRetainFiles = new QCheckBox(i18n("Retain temporary files"), w);
+    gl->addWidget(m_cbRetainFiles, 0, 0, Qt::AlignTop);
+
+
+
+    m_debugPage = addPage(w, i18n("Debugging"));
+    m_debugPage->setHeader(i18n("OCR Debugging"));
+    m_debugPage->setIcon(KIcon("tools-report-bug"));
 }
 
 
 void OcrBaseDialog::stopAnimation()
 {
-    if (m_animation!=NULL) m_animation->stop();
+    if (m_progress!=NULL) m_progress->setVisible(false);
 }
 
 
 void OcrBaseDialog::startAnimation()
 {
-    if (m_animation!=NULL) m_animation->start();
+    if (!m_progress->isVisible())			// progress bar not added yet
+    {
+        m_progress->setValue(0);
+        addExtraSetupWidget(m_progress, true);
+        m_progress->setVisible(true);
+    }
 }
 
+
+// Not sure why this uses an asynchronous preview job for the image thumbnail
+// (if it is possible, i.e. the image is file bound) as opposed to just scaling
+// the image (which is always loaded at this point, i.e. it is already in memory).
+// Possibly because scaling a potentially very large image could introduce a
+// significant delay in opening the dialogue box, so making the GUI appear
+// less responsive.  So we'll keep the preview job for now.
+//
+// What on earth happened to KFileMetaInfo in KDE4?  This used to have a fairly
+// reasonable API, returning a list of key-value pairs grouped into sensible
+// categories with readable strings available for each.  Now the groups have
+// gone (so for example methods such as preferredGroups(), albeit being marked as
+// 'deprecated', return an empty list!) and the key of each entry is an ontology
+// URL.  Not sure what to do with this URL (although I'm sure it must be of
+// interest to something), and it doesn't even return the minimal useful
+// information (e.g. the size/depth) for many image file types anyway.
+//
+// Could this be why the "Meta Info" tab of the file properties dialogue also
+// seems to have disappeared?
+//
+// So forget about KFileMetaInfo here, just display a simple label with the
+// image size and depth (which information we already have available).
 
 void OcrBaseDialog::introduceImage(const KookaImage *img)
 {
     if (img==NULL) return;
     kDebug() << "url" << img->url() << "filebound" << img->isFileBound();
 
-    delete m_metaBox;
-    m_metaBox = new KVBox(m_imgHBox);
-
     if (img->isFileBound())				// image backed by a file
     {
         /* Start to create a preview job for the thumb */
         KUrl::List li(img->url());
-        KIO::PreviewJob *m_job = KIO::filePreview(li,m_previewSize.width(),m_previewSize.height());
-        if (m_job!=NULL)
+        KIO::PreviewJob *job = KIO::filePreview(li, m_previewSize.width(), m_previewSize.height());
+        if (job!=NULL)
         {
-            m_job->setIgnoreMaximumSize();
-
-            connect(m_job,SIGNAL(result(KIO::Job *)),
-                    SLOT(slPreviewResult(KIO::Job *)));
-            connect(m_job,SIGNAL(gotPreview(const KFileItem *,const QPixmap &)),
-                    SLOT(slGotPreview(const KFileItem *,const QPixmap &)));
-            /* KIO::Job result is called in any way: Success, Failed, Error,
-             * thus connecting the failed is not really necessary.
-             */
+            job->setIgnoreMaximumSize();
+            connect(job, SIGNAL(gotPreview(const KFileItem &, const QPixmap &)),
+                    SLOT(slotGotPreview(const KFileItem &, const QPixmap &)));
         }
     }
-    else						// image only exists in memory
+    else						// selection only in memory,
     {							// do the preview ourselves
         QImage qimg = img->scaled(m_previewSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
-        slotGotPreview(NULL, QPixmap::fromImage(qimg));
+        slotGotPreview(KFileItem(), QPixmap::fromImage(qimg));
     }
 
-    KFileMetaInfo info = img->fileMetaInfo();
-    if (info.isValid())					// available from file
+    if (m_previewLabel!=NULL)
     {
-        QWidget *nGrid = new QWidget(m_metaBox);
-
-        QGridLayout *gl = new QGridLayout(nGrid);
-        int row = 0;					// row in grid layout
-
-        const KFileMetaInfoGroupList groups = info.supportedGroups();
-        for (KFileMetaInfoGroupList::const_iterator grpIt = groups.constBegin();
-             grpIt!=groups.constEnd(); ++grpIt)
-        {
-            const KFileMetaInfoGroup theGroup(*grpIt);
-            kDebug() << "group" << theGroup.name();
-
-            const KFileMetaInfoItemList theItems = theGroup.items();
-            if (!theItems.isEmpty())
-            {
-                QLabel *l = new QLabel(theGroup.name(), nGrid);
-                QPalette pal = l->palette();
-                pal.setColor(l->backgroundRole(), Qt::gray);
-                l->setPalette(pal);
-                l->setMargin(KDialog::spacingHint());
-                gl->addWidget(l, row, 0, 1, 2);
-                ++row;
-
-                for (KFileMetaInfoItemList::const_iterator itemIt = theItems.constBegin();
-                     itemIt!=theItems.constEnd(); ++itemIt)
-                {
-                    const KFileMetaInfoItem item = (*itemIt);
-                    QString itName = item.name();
-                    kDebug() << "item" << itName;
-
-                    if (!itName.isEmpty())
-                    {
-                        l = new QLabel(itName+": ",nGrid);
-                        gl->addWidget(l, row, 0);
-                        l = new QLabel(item.prefix()+item.value().toString()+item.suffix(), nGrid);
-                        gl->addWidget(l, row, 1);
-                        ++row;
-                    }
-                }
-            }
-        }
-    }
-    else						// basic information by hand
-    {
-        QWidget *nGrid = new QWidget(m_metaBox);
-
-        QGridLayout *gl = new QGridLayout(nGrid);
-
-        QLabel *l = new QLabel(i18n("Selection"), m_metaBox);
-        QPalette pal = l->palette();
-        pal.setColor(l->backgroundRole(), Qt::gray);
-        l->setPalette(pal);
-        l->setMargin(KDialog::spacingHint());
-        gl->addWidget(l, 0, 0, 1, 2);
-
-        l = new QLabel(i18n("Dimensions:"), nGrid);
-        gl->addWidget(l, 1, 0);
-        l = new QLabel(i18n("%1 x %2 pixels", img->width(), img->height()), nGrid);
-        gl->addWidget(l, 1, 1);
-
-        l = new QLabel(i18n("Bit Depth:"), nGrid);
-        gl->addWidget(l, 2, 0);
-        l = new QLabel(i18n("%1 bpp", img->depth()), nGrid);
-        gl->addWidget(l, 3, 1);
-    }
-
-    QWidget *spaceEater = new QWidget(m_metaBox);
-    spaceEater->setSizePolicy(QSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored));
-    m_metaBox->show();
-}
-
-
-void OcrBaseDialog::slotPreviewResult(KIO::Job *job)
-{
-    if (job!=NULL && job->error()>0)
-    {
-        job->ui()->setWindow(NULL);
-        job->ui()->showErrorMessage();
+        m_previewLabel->setText(i18n("%1: %2 x %3 pixels, %4 bpp",
+                                     (img->isFileBound() ? i18n("Image") : i18n("Selection")),
+                                     img->width(), img->height(),
+                                     img->depth()));
     }
 }
 
 
-void OcrBaseDialog::slotGotPreview(const KFileItem *item, const QPixmap &newPix)
+void OcrBaseDialog::slotGotPreview(const KFileItem &item, const QPixmap &newPix)
 {
-    kDebug();
-    if (m_previewPix!=NULL) m_previewPix->setPixmap(newPix);
+    kDebug() << "pixmap" << newPix.size();
+    if (m_previewPix!=NULL)
+    {
+        m_previewPix->setText(QString::null);
+        m_previewPix->setPixmap(newPix);
+    }
 }
 
 
@@ -444,23 +441,43 @@ void OcrBaseDialog::slotWriteConfig()
 
 void OcrBaseDialog::slotStartOCR()
 {
-    enableFields(false);
-    startAnimation();
+    setCurrentPage(m_setupPage);			// force back to first page
+    enableGUI(true);					// disable while running
 
-    enableButton(KDialog::User1,false);			/* Start OCR */
-    enableButton(KDialog::User2,true);			/* Stop OCR */
-    enableButton(KDialog::Close,false);			/* Close */
+    slotWriteConfig();					// save configuration
+    emit signalOcrStart();				// start the OCR process
 }
 
 
 void OcrBaseDialog::slotStopOCR()
 {
-    enableFields(true);
-    stopAnimation();
+    emit signalOcrStop();				// stop the OCR process
+    enableGUI(false);					// enable everything again
+}
 
-    enableButton(KDialog::User1,true);
-    enableButton(KDialog::User2,false);
-    enableButton(KDialog::Close,true);
+
+void OcrBaseDialog::slotCloseOCR()
+{
+    emit signalOcrClose();				// indicate we're closed
+}
+
+
+void OcrBaseDialog::enableGUI(bool running)
+{
+    m_sourcePage->setEnabled(!running);
+    m_enginePage->setEnabled(!running);
+    if (m_spellPage!=NULL) m_spellPage->setEnabled(!running);
+    if (m_debugPage!=NULL) m_debugPage->setEnabled(!running);
+    enableFields(!running);				// engine's GUI widgets
+
+    if (running) startAnimation();			// start our progress bar
+    else stopAnimation();				// stop our progress bar
+
+    enableButton(KDialog::User1, !running);		// Start OCR
+    enableButton(KDialog::User2, running);		// Stop OCR
+    enableButton(KDialog::Close, !running);		// Close
+
+    QApplication::processEvents();			// ensure GUI up-to-date
 }
 
 

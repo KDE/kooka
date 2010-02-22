@@ -31,6 +31,7 @@
 #include <qtooltip.h>
 #include <qregexp.h>
 #include <qgridlayout.h>
+#include <qprogressbar.h>
 
 #include <kvbox.h>
 #include <kconfig.h>
@@ -87,42 +88,39 @@ OcrEngine::EngineError OcrGocrDialog::setupGui()
 {
     OcrBaseDialog::setupGui();
 
-    KVBox *page = static_cast<KVBox *>(ocrPage()->widget());
-    new KSeparator(Qt::Horizontal, page);
-
     KConfigGroup grp1 = KGlobal::config()->group(CFG_GROUP_GOCR);
 
-    /* Sliders for OCR-Options */
-    QGridLayout *gl = new QGridLayout(page);
+    QWidget *w = addExtraSetupWidget();
+    QGridLayout *gl = new QGridLayout(w);
 
-    QLabel *l = new QLabel(i18n("Gray level:"), page);
+    QLabel *l = new QLabel(i18n("Gray level:"), w);
     gl->addWidget(l, 0, 0);
-    sliderGrayLevel = new KScanSlider(page, QString::null, 0, 254, true, 160 );
+    sliderGrayLevel = new KScanSlider(w, QString::null, 0, 254, true, 160 );
     int numdefault = grp1.readEntry(CFG_GOCR_GRAYLEVEL, 160);
     sliderGrayLevel->slotSetSlider(numdefault);
     sliderGrayLevel->setToolTip(i18n("The threshold value below which gray pixels are\nconsidered to be black.\n\nThe default is 160."));
     l->setBuddy(sliderGrayLevel);
     gl->addWidget(sliderGrayLevel, 0, 1);
 
-    l = new QLabel(i18n("Dust size:"), page);
+    l = new QLabel(i18n("Dust size:"), w);
     gl->addWidget(l, 1, 0);
-    sliderDustSize = new KScanSlider(page, QString::null, 0, 60, true, 10 );
+    sliderDustSize = new KScanSlider(w, QString::null, 0, 60, true, 10 );
     numdefault = grp1.readEntry(CFG_GOCR_DUSTSIZE, 10);
     sliderDustSize->slotSetSlider(numdefault);
     sliderDustSize->setToolTip(i18n("Clusters smaller than this value\nwill be considered to be dust, and\nremoved from the image.\n\nThe default is 10."));
     l->setBuddy(sliderDustSize);
     gl->addWidget(sliderDustSize, 1, 1);
 
-    l = new QLabel(i18n("Space width:"), page);
+    l = new QLabel(i18n("Space width:"), w);
     gl->addWidget(l, 2, 0);
-    sliderSpace = new KScanSlider(page, QString::null, 0, 60, true, 0 );
+    sliderSpace = new KScanSlider(w, QString::null, 0, 60, true, 0 );
     numdefault = grp1.readEntry(CFG_GOCR_SPACEWIDTH, 0);
     sliderSpace->slotSetSlider(numdefault);
     sliderSpace->setToolTip(i18n("Spacing between characters.\n\nThe default is 0 which means autodetection."));
     l->setBuddy(sliderSpace);
     gl->addWidget(sliderSpace, 2, 1);
 
-    gl->setRowStretch(3, 1);
+    gl->setRowStretch(3, 1);				// for top alignment
 
     /* find the GOCR binary */
     KConfigGroup grp2 = KGlobal::config()->group(CFG_GROUP_OCR_DIA);
@@ -142,13 +140,12 @@ OcrEngine::EngineError OcrGocrDialog::setupGui()
 
     /* retrieve program version and display */
     if (res.isEmpty()) res = i18n("Not found");
-    else
-    {
-        m_ocrCmd = res;
-        version(m_ocrCmd);				// start process to get version
-    }
-    ocrShowInfo(res);					// show binary, ready for version
+    else m_ocrCmd = res;
+    ocrShowInfo(res, version());			// show binary and version
 
+    progressBar()->setMaximum(0);			// animation only
+
+    m_setupWidget = w;
     return (OcrEngine::ENG_OK);
 }
 
@@ -188,25 +185,24 @@ void OcrGocrDialog::slotWriteConfig( void )
 
 void OcrGocrDialog::enableFields(bool enable)
 {
-    sliderGrayLevel->setEnabled(enable && m_isBW);
-    sliderDustSize->setEnabled(enable);
-    sliderSpace->setEnabled(enable);
+    m_setupWidget->setEnabled(enable);
 }
 
 
-void OcrGocrDialog::version(const QString &exe)
+QString OcrGocrDialog::version()
 {
-    kDebug() << "of" << exe;
+    kDebug() << "of" << m_ocrCmd;
 
     QString vers;
 
     KProcess proc;
-    proc << exe << "-h";
+    proc.setOutputChannelMode(KProcess::MergedChannels);
+    proc << m_ocrCmd << "-h";
 
     int status = proc.execute(5000);
     if (status==0)
     {
-        QByteArray output = proc.readAllStandardError();
+        QByteArray output = proc.readAllStandardOutput();
         QRegExp rx("-- gocr ([\\d\\.\\s]+)");
         if (rx.indexIn(output)>-1) vers = rx.cap(1);
         else vers = i18n("Unknown");
@@ -217,5 +213,5 @@ void OcrGocrDialog::version(const QString &exe)
         vers = i18n("Error");
     }
 
-    ocrShowVersion(vers);
+    return (vers);
 }

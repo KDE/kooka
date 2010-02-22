@@ -41,6 +41,7 @@
   *@author Klaas Freitag
   */
 
+class QWidget;
 class QComboBox;
 
 class KUrlRequester;
@@ -78,13 +79,17 @@ protected slots:
     void slotWriteConfig();
 
 private:
-    void version(const QString &exe);
+    QString version();
 
 private:
-    QString         m_ocrCmd;
-    KUrlRequester  *m_orfUrlRequester;
-    QComboBox      *m_layoutMode;
-    int             m_version;
+    QWidget *m_setupWidget;
+    KUrlRequester *m_orfUrlRequester;
+    QComboBox *m_layoutMode;
+
+    QString m_ocrCmd;
+
+    int m_version;
 };
+
 
 #endif							// OCROCRADDIALOG_H

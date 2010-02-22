@@ -257,10 +257,7 @@ OcrEngine::EngineError KadmosDialog::setupGui()
     // setupClassification( addVBoxPage( i18n("Classification")));
 
     /* continue page setup on the first page */
-    KVBox *page = static_cast<KVBox *>(ocrPage()->widget());
-
-    // Horizontal line
-    new KSeparator(Qt::Horizontal, page);
+    KVBox *page = new KVBox(this);
 
     // FIXME: dynamic classifier reading.
 
@@ -291,7 +288,7 @@ OcrEngine::EngineError KadmosDialog::setupGui()
     m_cbNoise = new QCheckBox( i18n( "Enable automatic noise reduction" ), cbGroup );
     m_cbAutoscale = new QCheckBox( i18n( "Enable automatic scaling"), cbGroup );
 
-    getAnimation(innerBox);
+    addExtraSetupWidget(page);
 
     if( err != OcrEngine::ENG_OK )
     {
@@ -320,6 +317,8 @@ OcrEngine::EngineError KadmosDialog::setupGui()
     }
     else
         slotFontChanged( 0 ); // Load machine print font language list
+
+    ocrShowInfo(QString::null);
     return err;
 }
 

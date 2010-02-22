@@ -53,7 +53,7 @@ protected slots:
     void slotKadmosResult();
 
 private:
-    void startProcess(OcrBaseDialog *dia,KookaImage *img);
+    void startProcess(OcrBaseDialog *dia, const KookaImage *img);
     void cleanUpFiles();
 
 private:

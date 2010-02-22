@@ -86,7 +86,7 @@ QString OcrKadmosEngine::engineDesc()
 }
 
 
-void OcrKadmosEngine::startProcess(OcrBaseDialog *dia, KookaImage *img)
+void OcrKadmosEngine::startProcess(OcrBaseDialog *dia, const KookaImage *img)
 {
     kDebug();
 

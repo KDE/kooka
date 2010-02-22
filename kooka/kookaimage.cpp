@@ -115,14 +115,15 @@ void KookaImage::setFileItem(const KFileItem *fi)
 }
 
 
-// Only used/displayed by OCR.  Get the "TechnicalInfo".
+// Only used/displayed by OCR, but not particulary useful - see comments
+// on OcrBaseDialog::introduceImage()
 const KFileMetaInfo KookaImage::fileMetaInfo() const
 {
     QString filename = localFileName();
     if (filename.isEmpty()) return (KFileMetaInfo());
 
     kDebug() << "Fetching metainfo for" << filename;
-    return (KFileMetaInfo(filename, QString::null, KFileMetaInfo::TechnicalInfo));
+    return (KFileMetaInfo(filename, QString::null, KFileMetaInfo::Everything));
 }
 
 

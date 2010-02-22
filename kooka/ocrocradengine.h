@@ -52,7 +52,7 @@ protected slots:
     void slotOcradExited(int exitCode, QProcess::ExitStatus exitStatus);
 
 private:
-    void startProcess(OcrBaseDialog *dia, KookaImage *img);
+    void startProcess(OcrBaseDialog *dia, const KookaImage *img);
     void cleanUpFiles();
     QString readORF(const QString &fileName);
 

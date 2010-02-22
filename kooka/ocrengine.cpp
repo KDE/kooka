@@ -69,13 +69,13 @@
 
 
 OcrEngine::OcrEngine(QWidget *parent)
-    : daemon(NULL),
+    : m_ocrProcess(NULL),
       m_unlinkORF(true),
-      m_ocrProcessDia(NULL),
-      visibleOCRRunning(false),
+      m_ocrDialog(NULL),
+      m_ocrRunning(false),
       m_resultImage(0),
-      m_imgCanvas(0L),
-      m_spell(0L),
+      m_imgCanvas(NULL),
+      m_spell(NULL),
       m_wantKSpell(true),
       m_kspellVisible(true),
       m_hideDiaWhileSpellcheck(true),
@@ -85,7 +85,7 @@ OcrEngine::OcrEngine(QWidget *parent)
       m_applyFilter(false)
 {
     m_introducedImage = NULL;
-    m_ocrResultImage = QString::null;
+    m_ocrResultFile = QString::null;
     m_parent = NULL;
 
     /*
@@ -106,8 +106,8 @@ OcrEngine::OcrEngine(QWidget *parent)
 
 OcrEngine::~OcrEngine()
 {
-   if (daemon!=NULL) delete daemon;
-   if (m_introducedImage!=NULL) delete m_introducedImage;
+   if (m_ocrProcess!=NULL) delete m_ocrProcess;
+   if (m_ocrDialog!=NULL) delete m_ocrDialog;
 #ifndef KDE4
    if (m_spellInitialConfig!=NULL) delete m_spellInitialConfig;
 #endif
@@ -177,19 +177,11 @@ bool OcrEngine::engineValid() const
  */
 void OcrEngine::setImage(const KookaImage *img)
 {
-   if( ! img ) return           ;
+   if (img==NULL) return;
 
-   if( m_introducedImage )
-       delete m_introducedImage;
+   m_introducedImage = img;				// just refer to original
 
-   // FIXME: copy all the image is bad.
-   m_introducedImage = new KookaImage(*img);
-
-   if( m_ocrProcessDia )
-   {
-       m_ocrProcessDia->introduceImage( m_introducedImage );
-   }
-
+   if (m_ocrDialog!=NULL) m_ocrDialog->introduceImage(m_introducedImage);
    m_applyFilter = false;
 }
 
@@ -200,7 +192,7 @@ void OcrEngine::setImage(const KookaImage *img)
  */
 bool OcrEngine::startOCRVisible(QWidget *parent)
 {
-    if (visibleOCRRunning)
+    if (m_ocrRunning)
     {
         KMessageBox::sorry(parent, i18n("An OCR process is already running"));
         return (false);
@@ -208,18 +200,18 @@ bool OcrEngine::startOCRVisible(QWidget *parent)
 
     m_parent = parent;
 
-    m_ocrProcessDia = createOCRDialog(parent,m_spellInitialConfig);
-    if (m_ocrProcessDia==NULL) return (false);
+    m_ocrDialog = createOCRDialog(parent, m_spellInitialConfig);
+    if (m_ocrDialog==NULL) return (false);
 
-    m_ocrProcessDia->setupGui();
-    m_ocrProcessDia->introduceImage(m_introducedImage);
-    visibleOCRRunning = true;
+    m_ocrDialog->setupGui();
+    m_ocrDialog->introduceImage(m_introducedImage);
 
-    connect( m_ocrProcessDia,SIGNAL(user1Clicked()),SLOT(startOCRProcess()));
-    connect( m_ocrProcessDia,SIGNAL(closeClicked()),SLOT(slotClose()));
-    connect( m_ocrProcessDia,SIGNAL(user2Clicked()),SLOT(slotStopOCR()));
-    m_ocrProcessDia->show();
+    connect(m_ocrDialog, SIGNAL(signalOcrStart()), SLOT(startOCRProcess()));
+    connect(m_ocrDialog, SIGNAL(signalOcrStop()), SLOT(slotStopOCR()));
+    connect(m_ocrDialog, SIGNAL(signalOcrClose()), SLOT(slotClose()));
+    m_ocrDialog->show();
 
+    m_ocrRunning = true;
     return (true);
 }
 
@@ -228,14 +220,14 @@ bool OcrEngine::startOCRVisible(QWidget *parent)
  * It does the not engine dependant cleanups like re-enabling buttons etc.
  */
 
-void OcrEngine::finishedOCRVisible( bool success )
+void OcrEngine::finishedOCRVisible(bool success)
 {
     bool doSpellcheck = m_wantKSpell;
 
-    if (m_ocrProcessDia)
+    if (m_ocrDialog!=NULL)
     {
-        m_ocrProcessDia->slotStopOCR();
-        doSpellcheck = m_ocrProcessDia->wantSpellCheck();
+        m_ocrDialog->enableGUI(false);
+        doSpellcheck = m_ocrDialog->wantSpellCheck();
     }
 
     if (success)
@@ -247,8 +239,8 @@ void OcrEngine::finishedOCRVisible( bool success )
         {
             if (m_resultImage!=NULL) delete m_resultImage;
 
-            m_resultImage = new QImage(m_ocrResultImage);
-            kDebug() << "Result image" << m_ocrResultImage
+            m_resultImage = new QImage(m_ocrResultFile);
+            kDebug() << "Result image" << m_ocrResultFile
                      << "dimensions [" << m_resultImage->width()
                      << "x" << m_resultImage->height() << "]";
 
@@ -264,11 +256,11 @@ void OcrEngine::finishedOCRVisible( bool success )
         emit readOnlyEditor(false);
         if (doSpellcheck) performSpellCheck();
 
-        delete m_ocrProcessDia;				// close the dialogue
     }
-    m_ocrProcessDia = NULL;				// no longer using dialogue
 
-    visibleOCRRunning = false;
+    m_ocrDialog->hide();				// close the dialogue
+
+    m_ocrRunning = false;
     cleanUpFiles();
 
     kDebug() << "OCR finished";
@@ -288,7 +280,7 @@ void OcrEngine::performSpellCheck()
 							// so leaving 'spconf' as a
 							// dangling pointer...
    KSpellConfig *spconf;
-   if (m_ocrProcessDia==NULL)				// not called by OCR dialogue
+   if (m_ocrDialog==NULL)				// not called by OCR dialogue
    {							// get spell check options
        soloDialog = new KDialog(m_parent);
        soloDialog->setObjectName("SoloDialog");
@@ -306,7 +298,7 @@ void OcrEngine::performSpellCheck()
        if (!soloDialog->exec()) return;
        soloDialog->hide();
    }
-   else spconf = m_ocrProcessDia->spellConfig();	// options from OCR dialogue
+   else spconf = m_ocrDialog->spellConfig();	// options from OCR dialogue
 
    m_ocrCurrLine = 0;					// start at beginning of text
 #ifndef KDE4
@@ -366,10 +358,10 @@ void OcrEngine::startLineSpellCheck()
 
 void OcrEngine::stopOCRProcess(bool tellUser)
 {
-    if (daemon!=NULL && daemon->state()==QProcess::Running)
+    if (m_ocrProcess!=NULL && m_ocrProcess->state()==QProcess::Running)
     {
         kDebug() << "Killing daemon";
-        daemon->kill();
+        m_ocrProcess->kill();
         if (tellUser) KMessageBox::error(m_parent,i18n("The OCR process was stopped"));
     }
 
@@ -385,7 +377,7 @@ void OcrEngine::slotClose()
 }
 
 
-/* Called by "Cancel" used while OCR is in progress */
+/* Called by "Stop" used while OCR is in progress */
 void OcrEngine::slotStopOCR()
 {
     kDebug();
@@ -396,17 +388,11 @@ void OcrEngine::slotStopOCR()
 /* This slot is fired if the user clicks on the "Start" button of the GUI */
 void OcrEngine::startOCRProcess()
 {
-    if (m_ocrProcessDia==NULL) return;
-
-    m_ocrProcessDia->slotStartOCR();			// start the animation,
-							// set fields disabled
-    kapp->processEvents();
+    if (m_ocrDialog==NULL) return;
 
     m_ocrResultText = "";
-    startProcess(m_ocrProcessDia,m_introducedImage);
+    startProcess(m_ocrDialog, m_introducedImage);
 }
-
-
 
 
 /*
@@ -691,8 +677,8 @@ void OcrEngine::slotSpellReady( KSpell *spell )
 
     kDebug() << "Spellcheck available";
 
-    if( m_ocrProcessDia && m_hideDiaWhileSpellcheck )
-        m_ocrProcessDia->hide();
+    if( m_ocrDialog && m_hideDiaWhileSpellcheck )
+        m_ocrDialog->hide();
     emit readOnlyEditor( true );
     startLineSpellCheck();
 #endif
@@ -744,7 +730,7 @@ void OcrEngine::slotSpellDead()
 
         /* save the current config */
         delete m_spell;
-        m_spell = 0L;
+        m_spell = NULL;
 
         /* reset values */
         m_checkStrings.clear();
@@ -753,8 +739,8 @@ void OcrEngine::slotSpellDead()
             m_imgCanvas->removeHighlight( m_currHighlight );
 
     }
-    if( m_ocrProcessDia )
-        m_ocrProcessDia->show();
+    if( m_ocrDialog )
+        m_ocrDialog->show();
     emit readOnlyEditor( false );
 #endif
 }

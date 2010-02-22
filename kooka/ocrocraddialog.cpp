@@ -30,6 +30,8 @@
 #include <qlabel.h>
 #include <qregexp.h>
 #include <qcombobox.h>
+#include <qlayout.h>
+#include <qprogressbar.h>
 
 #include <kglobal.h>
 #include <kdebug.h>
@@ -50,9 +52,10 @@
 
 OcrOcradDialog::OcrOcradDialog(QWidget *parent, KSpellConfig *spellConfig)
     : OcrBaseDialog(parent, spellConfig),
-      m_ocrCmd(QString::null),
+      m_setupWidget(NULL),
       m_orfUrlRequester(NULL),
       m_layoutMode(0),
+      m_ocrCmd(QString::null),
       m_version(0)
 {
 }
@@ -85,24 +88,24 @@ OcrEngine::EngineError OcrOcradDialog::setupGui()
 {
     OcrBaseDialog::setupGui();
 
-    KVBox *page = static_cast<KVBox *>(ocrPage()->widget());
-    page->setSpacing(KDialog::spacingHint());
+    QWidget *w = addExtraSetupWidget();
+    QGridLayout *gl = new QGridLayout(w);
 
     /* layout detection mode combo */
     KConfigGroup grp1 = KGlobal::config()->group(CFG_GROUP_OCRAD);
     int layoutDetect = grp1.readEntry(CFG_OCRAD_LAYOUT_DETECTION, 0);
 
-    new KSeparator(Qt::Horizontal, page);
-    KHBox *hb1 = new KHBox(page);
-    hb1->setSpacing(KDialog::spacingHint());
+    gl->addWidget(new QLabel(i18n("Layout analysis mode:"), w), 0, 0);
 
-    new QLabel(i18n("Layout analysis mode:"),hb1);
-
-    m_layoutMode = new QComboBox(hb1);
-    m_layoutMode->addItem(i18n("No Layout Detection"),0);
-    m_layoutMode->addItem(i18n("Column Detection"),1);
-    m_layoutMode->addItem(i18n("Full Layout Detection"),2);
+    m_layoutMode = new QComboBox(w);
+    m_layoutMode->addItem(i18n("No Layout Detection"), 0);
+    m_layoutMode->addItem(i18n("Column Detection"), 1);
+    m_layoutMode->addItem(i18n("Full Layout Detection"), 2);
     m_layoutMode->setCurrentIndex(layoutDetect);
+    gl->addWidget(m_layoutMode, 0, 1, Qt::AlignLeft);
+
+    gl->setRowStretch(1, 1);				// for top alignment
+    gl->setColumnStretch(1, 1);
 
     /* find the OCRAD binary */
     KConfigGroup grp2 = KGlobal::config()->group(CFG_GROUP_OCR_DIA);
@@ -122,13 +125,12 @@ OcrEngine::EngineError OcrOcradDialog::setupGui()
 
     /* retrieve program version and display */
     if (res.isEmpty()) res = i18n("Not found");
-    else
-    {
-        m_ocrCmd = res;
-        version(m_ocrCmd);				// start process to get version
-    }
-    ocrShowInfo(res);					// show binary, ready for version
+    else m_ocrCmd = res;
+    ocrShowInfo(res, version());			// show binary, get/show version
 
+    progressBar()->setMaximum(0);			// animation only
+
+    m_setupWidget = w;
     return (OcrEngine::ENG_OK);
 }
 
@@ -149,7 +151,7 @@ void OcrOcradDialog::slotWriteConfig()
 
 void OcrOcradDialog::enableFields(bool enable)
 {
-    m_layoutMode->setEnabled(enable);
+    m_setupWidget->setEnabled(enable);
 }
 
 
@@ -169,14 +171,16 @@ QString OcrOcradDialog::orfUrl() const
 }
 
 
-void OcrOcradDialog::version(const QString &exe)
+QString OcrOcradDialog::version()
 {
-    kDebug() << "of" << exe;
+    kDebug() << "of" << m_ocrCmd;
+    if (m_ocrCmd.isEmpty()) return (QString::null);
 
     QString vers;
 
     KProcess proc;
-    proc << exe << "-V";
+    proc.setOutputChannelMode(KProcess::MergedChannels);
+    proc << m_ocrCmd << "-V";
 
     int status = proc.execute(5000);
     if (status==0)
@@ -189,7 +193,6 @@ void OcrOcradDialog::version(const QString &exe)
             m_version = vers.mid(2).toInt();
         }
         else vers = i18n("Unknown");
-
     }
     else
     {
@@ -197,5 +200,5 @@ void OcrOcradDialog::version(const QString &exe)
         vers = i18n("Error");
     }
 
-    ocrShowVersion(vers);
+    return (vers);
 }

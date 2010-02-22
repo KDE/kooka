@@ -47,7 +47,7 @@ static const char UndetectedChar = '_';
 OcrOcradEngine::OcrOcradEngine(QWidget *parent)
     : OcrEngine(parent)
 {
-    m_ocrResultImage = QString::null;
+    m_ocrResultFile = QString::null;
     m_ocrImagePBM = QString::null;
     m_tempOrfName = QString::null;
     ocradVersion = 0;
@@ -56,7 +56,6 @@ OcrOcradEngine::OcrOcradEngine(QWidget *parent)
 
 OcrOcradEngine::~OcrOcradEngine()
 {
-   cleanUpFiles();
 }
 
 
@@ -83,7 +82,7 @@ QString OcrOcradEngine::engineDesc()
 }
 
 
-void OcrOcradEngine::startProcess(OcrBaseDialog *dia,KookaImage *img)
+void OcrOcradEngine::startProcess(OcrBaseDialog *dia, const KookaImage *img)
 {
     const KConfigGroup grp = KGlobal::config()->group(CFG_GROUP_OCRAD);
 
@@ -91,7 +90,7 @@ void OcrOcradEngine::startProcess(OcrBaseDialog *dia,KookaImage *img)
     ocradVersion = parentDialog->getNumVersion();
     const QString cmd = parentDialog->getOCRCmd();
 
-    m_ocrResultImage = ImgSaver::tempSaveImage(img, ImageFormat("BMP"), 8);
+    m_ocrResultFile = ImgSaver::tempSaveImage(img, ImageFormat("BMP"), 8);
     m_ocrImagePBM = ImgSaver::tempSaveImage(img, ImageFormat("PBM"), 1);
 
     KTemporaryFile tmpOrf;				// temporary file for ORF result
@@ -105,13 +104,13 @@ void OcrOcradEngine::startProcess(OcrBaseDialog *dia,KookaImage *img)
     m_tmpOrfName = QFile::encodeName(tmpOrf.fileName());
     tmpOrf.close();					// just want its name
 
-    if (daemon!=NULL) delete daemon;			// kill old process if still there
-    daemon = new KProcess();				// start new OCRAD process
-    Q_CHECK_PTR(daemon);
+    if (m_ocrProcess!=NULL) delete m_ocrProcess;			// kill old process if still there
+    m_ocrProcess = new KProcess();				// start new OCRAD process
+    Q_CHECK_PTR(m_ocrProcess);
 
-    connect(daemon, SIGNAL(finished(int, QProcess::ExitStatus)), SLOT(slotOcradExited(int, QProcess::ExitStatus)));
-    connect(daemon, SIGNAL(readyReadStandardOutput()), SLOT(slotOcradStdout()));
-    connect(daemon, SIGNAL(readyReadStandardError()), SLOT(slotOcradStderr()));
+    connect(m_ocrProcess, SIGNAL(finished(int, QProcess::ExitStatus)), SLOT(slotOcradExited(int, QProcess::ExitStatus)));
+    connect(m_ocrProcess, SIGNAL(readyReadStandardOutput()), SLOT(slotOcradStdout()));
+    connect(m_ocrProcess, SIGNAL(readyReadStandardError()), SLOT(slotOcradStderr()));
 
     QStringList args;					// arguments for process
     args << "-x" << m_tmpOrfName;			// the ORF result file
@@ -131,12 +130,12 @@ void OcrOcradEngine::startProcess(OcrBaseDialog *dia,KookaImage *img)
 
     kDebug() << "Running OCRAD as [" << cmd << args.join(" ") << "]";
 
-    daemon->setProgram(QFile::encodeName(cmd), args);
-    daemon->setNextOpenMode(QIODevice::ReadOnly);
-    daemon->setOutputChannelMode(KProcess::SeparateChannels);
+    m_ocrProcess->setProgram(QFile::encodeName(cmd), args);
+    m_ocrProcess->setNextOpenMode(QIODevice::ReadOnly);
+    m_ocrProcess->setOutputChannelMode(KProcess::SeparateChannels);
 
-    daemon->start();
-    if (!daemon->waitForStarted(5000))
+    m_ocrProcess->start();
+    if (!m_ocrProcess->waitForStarted(5000))
     {
         kDebug() << "Error starting OCRAD process!";
     }
@@ -146,11 +145,11 @@ void OcrOcradEngine::startProcess(OcrBaseDialog *dia,KookaImage *img)
 
 void OcrOcradEngine::cleanUpFiles()
 {
-    if (!m_ocrResultImage.isNull())
+    if (!m_ocrResultFile.isNull())
     {
-        kDebug() << "Removing result file" << m_ocrResultImage;
-        QFile::remove(m_ocrResultImage);
-        m_ocrResultImage = QString::null;
+        kDebug() << "Removing result file" << m_ocrResultFile;
+        QFile::remove(m_ocrResultFile);
+        m_ocrResultFile = QString::null;
     }
 
     if (!m_ocrImagePBM.isNull())
@@ -193,10 +192,10 @@ void OcrOcradEngine::slotOcradExited(int exitCode, QProcess::ExitStatus exitStat
 // TODO: send this to a log for viewing
 void OcrOcradEngine::slotOcradStderr()
 {
-    daemon->setReadChannel(QProcess::StandardError);
+    m_ocrProcess->setReadChannel(QProcess::StandardError);
     while (true)
     {
-        QByteArray line = daemon->readLine();
+        QByteArray line = m_ocrProcess->readLine();
         if (line.isEmpty()) break;
         kDebug() << "OCRAD stderr:" << line;
     }
@@ -205,10 +204,10 @@ void OcrOcradEngine::slotOcradStderr()
 
 void OcrOcradEngine::slotOcradStdout()
 {
-    daemon->setReadChannel(QProcess::StandardOutput);
+    m_ocrProcess->setReadChannel(QProcess::StandardOutput);
     while (true)
     {
-        QByteArray line = daemon->readLine();
+        QByteArray line = m_ocrProcess->readLine();
         if (line.isEmpty()) break;
         kDebug() << "OCRAD stdout:" << line;
     }

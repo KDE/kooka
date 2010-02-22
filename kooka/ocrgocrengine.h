@@ -54,7 +54,7 @@ protected slots:
     void slotGOcrExited(int exitCode, QProcess::ExitStatus exitStatus);
 
 private:
-    void startProcess(OcrBaseDialog *dia,KookaImage *img);
+    void startProcess(OcrBaseDialog *dia, const KookaImage *img);
     void cleanUpFiles();
 
 private:
