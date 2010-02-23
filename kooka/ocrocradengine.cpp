@@ -101,11 +101,11 @@ void OcrOcradEngine::startProcess(OcrBaseDialog *dia, const KookaImage *img)
         kDebug() << "error creating temporary file";
         return;
     }
-    m_tmpOrfName = QFile::encodeName(tmpOrf.fileName());
+    m_tempOrfName = QFile::encodeName(tmpOrf.fileName());
     tmpOrf.close();					// just want its name
 
-    if (m_ocrProcess!=NULL) delete m_ocrProcess;			// kill old process if still there
-    m_ocrProcess = new KProcess();				// start new OCRAD process
+    if (m_ocrProcess!=NULL) delete m_ocrProcess;	// kill old process if still there
+    m_ocrProcess = new KProcess();			// start new OCRAD process
     Q_CHECK_PTR(m_ocrProcess);
 
     connect(m_ocrProcess, SIGNAL(finished(int, QProcess::ExitStatus)), SLOT(slotOcradExited(int, QProcess::ExitStatus)));
@@ -113,7 +113,7 @@ void OcrOcradEngine::startProcess(OcrBaseDialog *dia, const KookaImage *img)
     connect(m_ocrProcess, SIGNAL(readyReadStandardError()), SLOT(slotOcradStderr()));
 
     QStringList args;					// arguments for process
-    args << "-x" << m_tmpOrfName;			// the ORF result file
+    args << "-x" << m_tempOrfName;			// the ORF result file
 
     args << QFile::encodeName(m_ocrImagePBM);		// name of the input image
 
@@ -143,28 +143,29 @@ void OcrOcradEngine::startProcess(OcrBaseDialog *dia, const KookaImage *img)
 }
 
 
-void OcrOcradEngine::cleanUpFiles()
+QStringList OcrOcradEngine::tempFiles(bool retain)
 {
+    QStringList result;
+
     if (!m_ocrResultFile.isNull())
     {
-        kDebug() << "Removing result file" << m_ocrResultFile;
-        QFile::remove(m_ocrResultFile);
+        result << m_ocrResultFile;
         m_ocrResultFile = QString::null;
     }
 
     if (!m_ocrImagePBM.isNull())
     {
-        kDebug() << "Removing result file" << m_ocrImagePBM;
-        QFile::remove(m_ocrImagePBM);
+        result << m_ocrImagePBM;
         m_ocrImagePBM = QString::null;
     }
 
-    if (!m_tempOrfName.isNull() && m_unlinkORF)
+    if (!m_tempOrfName.isNull())
     {
-        kDebug() << "Removing ORF file" << m_tempOrfName;
-        QFile::remove(m_tempOrfName);
+        result << m_tempOrfName;
         m_tempOrfName = QString::null;
     }
+
+    return (result);
 }
 
 
@@ -176,7 +177,7 @@ void OcrOcradEngine::slotOcradExited(int exitCode, QProcess::ExitStatus exitStat
     slotOcradStderr();
 
     bool parseRes = true;
-    QString errStr = readORF(m_tmpOrfName);
+    QString errStr = readORF(m_tempOrfName);
     if (!errStr.isNull())
     {
         KMessageBox::error(m_parent,

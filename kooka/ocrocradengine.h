@@ -46,6 +46,9 @@ public:
     OcrEngine::EngineType engineType() const { return (OcrEngine::EngineOcrad); }
     static QString engineDesc();
 
+protected:
+    QStringList tempFiles(bool retain);
+
 protected slots:
     void slotOcradStdout();
     void slotOcradStderr();
@@ -53,13 +56,11 @@ protected slots:
 
 private:
     void startProcess(OcrBaseDialog *dia, const KookaImage *img);
-    void cleanUpFiles();
     QString readORF(const QString &fileName);
 
 private:
     QString m_tempOrfName;
     QString m_ocrImagePBM;
-    QString m_tmpOrfName;
     int ocradVersion;
 };
 

@@ -29,6 +29,7 @@
 #include <qpen.h>
 #include <qvector.h>
 #include <qevent.h>
+#include <qfileinfo.h>
 
 #include <kdebug.h>
 #include <kmessagebox.h>
@@ -42,6 +43,8 @@
 #include <klocale.h>
 #include <kdialog.h>
 #include <kvbox.h>
+
+#include <kio/deletejob.h>
 
 #include "libkscan/imagecanvas.h"
 
@@ -70,7 +73,6 @@
 
 OcrEngine::OcrEngine(QWidget *parent)
     : m_ocrProcess(NULL),
-      m_unlinkORF(true),
       m_ocrDialog(NULL),
       m_ocrRunning(false),
       m_resultImage(0),
@@ -98,7 +100,6 @@ OcrEngine::OcrEngine(QWidget *parent)
 							// OCR dialog information
     KConfigGroup grp = KGlobal::config()->group(CFG_GROUP_OCR_DIA);
     m_hideDiaWhileSpellcheck = grp.readEntry(HIDE_BASE_DIALOG, true);
-    m_unlinkORF = grp.readEntry(CFG_OCR_CLEANUP, true);
 
     m_blocks.resize(1);					// there is at least one block
 }
@@ -261,11 +262,58 @@ void OcrEngine::finishedOCRVisible(bool success)
     m_ocrDialog->hide();				// close the dialogue
 
     m_ocrRunning = false;
-    cleanUpFiles();
+    removeTempFiles();
 
     kDebug() << "OCR finished";
 }
 
+
+void OcrEngine::removeTempFiles()
+{
+    bool retain = m_ocrDialog->keepTempFiles();
+    kDebug() << "retain=" << retain;
+
+    const QStringList temps = tempFiles(retain);
+    if (retain)
+    {
+        QString s = i18n("<qt>The following OCR temporary files are retained for debugging:<p>");
+        for (QStringList::const_iterator it = temps.constBegin(); it!=temps.constEnd(); ++it)
+        {
+            KUrl u(*it);
+            s += i18n("<filename><a href=\"%1\">%2</a></filename><br>", u.url(), u.pathOrUrl());
+        }
+
+        if (KMessageBox::questionYesNo(NULL, s,
+                                       i18n("OCR Temporary Files"),
+                                       KStandardGuiItem::del(),
+                                       KStandardGuiItem::close(),
+                                       QString::null,
+                                       KMessageBox::AllowLink)==KMessageBox::Yes) retain = false;
+    }
+
+    if (!retain)
+    {
+        for (QStringList::const_iterator it = temps.constBegin(); it!=temps.constEnd(); ++it)
+        {
+            QString tf = (*it);
+            QFileInfo fi(tf);
+            if (!fi.exists())				// what happened?
+            {
+                kDebug() << "does not exist:" << tf;
+            }
+            else if (fi.isDir())
+            {
+                kDebug() << "temp dir:" << tf;
+                KIO::del(tf, KIO::HideProgressInfo);	// for recursive deletion
+            }
+            else
+            {
+                kDebug() << "temp file:" << tf;
+                QFile::remove(tf);			// just a simple file
+            }
+        }
+    }
+}
 
 
 void OcrEngine::performSpellCheck()

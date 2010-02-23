@@ -165,13 +165,14 @@ protected:
     void finishedOCRVisible(bool success);
     virtual OcrBaseDialog *createOCRDialog(QWidget *parent,KSpellConfig *spellConfig = NULL) = 0;
 
+    virtual QStringList tempFiles(bool retain) = 0;
+
 protected:
     KProcess *m_ocrProcess;
     QString m_ocrResultFile;
     QString m_ocrResultText;
     QWidget *m_parent;
     rectList m_blocks;					// dimensions of recognised blocks
-    bool m_unlinkORF;
 
     ocrBlock m_ocrPage;					// wordLists for every line of OCR results
 							// one block contains all lines of the page
@@ -190,7 +191,6 @@ protected slots:
     bool slotUpdateWord(int line,int spellWordIndx,const QString &origWord,const QString &newWord);
 
 private:
-    virtual void cleanUpFiles() = 0;
     virtual void startProcess(OcrBaseDialog *dia, const KookaImage *img) = 0;
 
     /**
@@ -208,6 +208,7 @@ private:
     QString ocrResultText();
 
     void stopOCRProcess(bool tellUser);
+    void removeTempFiles();
 
 private slots:
     void startOCRProcess();

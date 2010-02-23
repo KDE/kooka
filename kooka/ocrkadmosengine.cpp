@@ -57,7 +57,6 @@ OcrKadmosEngine::OcrKadmosEngine(QWidget *parent)
 
 OcrKadmosEngine::~OcrKadmosEngine()
 {
-    cleanUpFiles();
 }
 
 
@@ -223,14 +222,17 @@ void OcrKadmosEngine::slotKadmosResult()
 }
 
 
-void OcrKadmosEngine::cleanUpFiles()
+QStringList OcrKadmosEngine::tempFiles(bool retain)
 {
+    QStringList result;
+
 #ifdef USE_KADMOS_FILEOP
     if (!m_tmpFile.isNull())
     {
-        kDebug() << "Removing temporary file" << m_tmpFile;
-        QFile::remove(m_tmpFile);
+        result << m_tmpFile;
         m_tmpFile = QString::null;
     }
 #endif
+
+    return (result);
 }

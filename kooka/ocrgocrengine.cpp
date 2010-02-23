@@ -102,7 +102,6 @@ void OcrGocrEngine::startProcess(OcrBaseDialog *dia, const KookaImage *img)
     m_ocrResultText = QString::null;			// clear buffer for capturing
 
     m_tempDir = new KTempDir();				// new unique temporary directory
-    m_tempDir->setAutoRemove(true);			// clear it when finished
     m_ocrProcess->setWorkingDirectory(m_tempDir->name());	// run process in there
 
     connect(m_ocrProcess, SIGNAL(finished(int, QProcess::ExitStatus)), SLOT(slotGOcrExited(int, QProcess::ExitStatus)));
@@ -216,28 +215,31 @@ void OcrGocrEngine::slotGOcrExited(int exitCode, QProcess::ExitStatus exitStatus
 
 
 
-void OcrGocrEngine::cleanUpFiles()
+QStringList OcrGocrEngine::tempFiles(bool retain)
 {
+    QStringList result;
+
     if (!m_ocrResultFile.isNull())
     {
-        kDebug() << "Removing result file" << m_ocrResultFile;
-        QFile::remove(m_ocrResultFile);
+        result << m_ocrResultFile;
         m_ocrResultFile = QString::null;
     }
 
     if (!m_tempFile.isNull())
     {
-        kDebug() << "Removing input file" << m_tempFile;
-        QFile::remove(m_tempFile);
+        result << m_tempFile;
         m_tempFile = QString::null;
     }
 
     if (m_tempDir!=NULL)
     {
-        kDebug() << "Removing temp directory" << m_tempDir->name();
-        delete m_tempDir;				// autoDelete will do the rest
+        result << m_tempDir->name();
+        m_tempDir->setAutoRemove(!retain);
+        delete m_tempDir;				// autoRemove will do the rest
         m_tempDir = NULL;
     }
+
+    return (result);
 }
 
 

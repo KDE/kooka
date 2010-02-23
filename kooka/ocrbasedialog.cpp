@@ -486,3 +486,9 @@ void OcrBaseDialog::slotWantSpellcheck(bool wantIt)
     m_gbSpellOpts->setEnabled(wantIt);
     m_userWantsSpellCheck = wantIt;
 }
+
+
+bool OcrBaseDialog::keepTempFiles() const
+{
+    return (m_cbRetainFiles!=NULL && m_cbRetainFiles->isChecked());
+}

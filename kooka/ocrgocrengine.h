@@ -48,6 +48,9 @@ public:
     OcrEngine::EngineType engineType() const { return (OcrEngine::EngineGocr); }
     static QString engineDesc();
 
+protected:
+    QStringList tempFiles(bool retain);
+
 protected slots:
     void slotGOcrStdout();
     void slotGOcrStderr();
@@ -55,7 +58,6 @@ protected slots:
 
 private:
     void startProcess(OcrBaseDialog *dia, const KookaImage *img);
-    void cleanUpFiles();
 
 private:
     QString m_tempFile;

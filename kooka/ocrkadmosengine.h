@@ -49,12 +49,14 @@ public:
     OcrEngine::EngineType engineType() const { return (OcrEngine::EngineKadmos); }
     static QString engineDesc();
 
+protected:
+    QStringList tempFiles(bool retain);
+
 protected slots:
     void slotKadmosResult();
 
 private:
     void startProcess(OcrBaseDialog *dia, const KookaImage *img);
-    void cleanUpFiles();
 
 private:
     QString m_tmpFile;

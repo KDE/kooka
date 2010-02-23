@@ -81,6 +81,7 @@ public:
 
     bool wantSpellCheck() const		{ return (m_userWantsSpellCheck); }
     KSpellConfig* spellConfig() const	{ return (m_spellConfig); }
+    bool keepTempFiles() const;
 
     void enableGUI(bool running);
 
