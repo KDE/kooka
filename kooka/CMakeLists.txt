@@ -165,7 +165,6 @@ target_link_libraries(kooka
   libkscan
   libfiletree
   ${QT_QT3SUPPORT_LIBRARY}
-  ${KDE4_KDE3SUPPORT_LIBS}
   ${KDE4_KDEUI_LIBS}
   ${KDE4_KFILE_LIBS}
   ${KDE4_KDECORE_LIBS}
