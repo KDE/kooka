@@ -25,12 +25,15 @@
 #include <qrect.h>
 #include <qmatrix.h>
 #include <qscrollarea.h>
+#include <qpen.h>
 
 
 class QPixmap;
 class QLabel;
 
 class KMenu;
+
+class ImageCanvasWidget;
 
 
 class KSCAN_EXPORT ImageCanvas : public QScrollArea
@@ -66,6 +69,12 @@ public:
         UserActionClose,
     };
 
+    enum HighlightStyle
+    {
+        Box,
+        Underline
+    };
+
     KMenu *contextMenu();
 
     int getBrightness() const		{ return (mBrightness); }
@@ -82,12 +91,12 @@ public:
     void setDefaultScaleType(ImageCanvas::ScaleType k)	{ mDefaultScaleType = k; }
 
     const QImage *rootImage() const	{ return (mImage); }
-    QImage selectedImage() const;
     bool hasImage() const		{ return (mAcquired); }
     bool readOnly() const		{ return (mReadOnly); }
 
     QRect selectedRect() const;
     void setSelectionRect(const QRect &rect);
+    QImage selectedImage() const;
 
     ImageCanvas::ScaleType scaleType() const;
     void setScaleType(ImageCanvas::ScaleType type);
@@ -103,12 +112,15 @@ public:
      * and pen.
      * The function returns a id that needs to be given to the remove method.
      */
-    int highlight(const QRect &rect, const QPen &pen, const QBrush &brush, bool ensureVis = false);
+    int highlight(const QRect &rect, bool ensureVis = false);
 
     /**
      * reverts the highlighted region back to normal view.
      */
     void removeHighlight(int idx = -1);
+
+    void setHighlightStyle(ImageCanvas::HighlightStyle style, const QPen &pen = QPen(), const QBrush &brush = QBrush());
+    void scrollTo(const QRect &rect);
 
 public slots:
     void setKeepZoom(bool k)		{ mKeepZoom = k; }
@@ -184,7 +196,7 @@ private:
     QMatrix mInvScaleMatrix;
     bool mMaintainAspect;
     QPixmap mScaledPixmap;
-    QLabel *mPixmapLabel;
+    ImageCanvasWidget *mPixmapLabel;
 
     QRect mSelected;
     ImageCanvas::MoveState mMoving;
@@ -200,8 +212,6 @@ private:
 
     ImageCanvas::ScaleType mScaleType;
     ImageCanvas::ScaleType mDefaultScaleType;
-
-    QList<QRect> mHighlightRects;
 
     class ImageCanvasPrivate;
     ImageCanvasPrivate *d;

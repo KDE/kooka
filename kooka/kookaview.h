@@ -117,7 +117,8 @@ public:
 public slots:
     void slotStartOcr();
     void slotStartOcrSelection();
-    void slotOcrSpellCheck();
+    void slotSetOcrSpellConfig(const QString &configFile);
+    void slotOcrSpellCheck(bool interactive = true, bool background = false);
     void slotSaveOcrResult();
 
     void slotStartPreview();
@@ -158,16 +159,10 @@ protected slots:
      */
     void slotNewImageScanned(const QImage *img, const ImgScanInfo *info);
 
-    /**
-     * called if an viewer image was set to read only or back to read write state.
-     */
-    void slotViewerReadOnly(bool ro);
-
     void slotSelectionChanged(const QRect &newSelection);
     void slotGallerySelectionChanged();
 
-    void slotOcrResultText(const QString &text);
-    void slotOCRResultImage( const QPixmap& );
+    void slotOcrResultAvailable();
 
     void slotTabChanged(int index);
     void slotImageViewerAction(int act);
@@ -176,7 +171,7 @@ signals:
     /**
      * Use this signal to change the content of the statusbar
      */
-    void signalChangeStatusbar(const QString& text);
+    void signalChangeStatusbar(const QString &text);
 
     /**
      * Use this signal to clean up the statusbar
@@ -196,7 +191,7 @@ signals:
     void signalOcrPrefs();
 
 private:
-    void startOCR(const KookaImage *img);
+    void startOCR(const KookaImage img);
 
     QByteArray userDeviceSelection(bool alwaysAsk);
 

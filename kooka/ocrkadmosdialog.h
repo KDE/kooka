@@ -75,7 +75,7 @@ class KadmosDialog: public OcrBaseDialog
     Q_OBJECT
 
 public:
-    KadmosDialog(QWidget *parent, KSpellConfig *spellConfig = NULL);
+    KadmosDialog(QWidget *parent);
     ~KadmosDialog();
 
     typedef QMap<QString, QString> StrMap;

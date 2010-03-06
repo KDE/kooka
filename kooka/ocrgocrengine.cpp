@@ -62,9 +62,9 @@ OcrGocrEngine::~OcrGocrEngine()
 }
 
 
-OcrBaseDialog *OcrGocrEngine::createOCRDialog(QWidget *parent,KSpellConfig *spellConfig)
+OcrBaseDialog *OcrGocrEngine::createOCRDialog(QWidget *parent)
 {
-    return (new OcrGocrDialog(parent,spellConfig));
+    return (new OcrGocrDialog(parent));
 }
 
 
@@ -91,7 +91,9 @@ void OcrGocrEngine::startProcess(OcrBaseDialog *dia, const KookaImage *img)
     else if (img->isGrayscale()) format = "PGM";	// greyscale
     else format = "PPM";				// colour
 
-    m_tempFile = ImgSaver::tempSaveImage(img,ImageFormat(format));
+    // TODO: if the input file is local and is readable by GOCR,
+    // can use it directly (but don't delete it afterwards!)
+    m_tempFile = ImgSaver::tempSaveImage(img, ImageFormat(format));
 							// save image to a temp file
     m_ocrResultFile = QString::null;			// don't know this until finished
 
@@ -138,81 +140,73 @@ void OcrGocrEngine::startProcess(OcrBaseDialog *dia, const KookaImage *img)
 }
 
 
-
-
-
 void OcrGocrEngine::slotGOcrExited(int exitCode, QProcess::ExitStatus exitStatus)
 {
-   kDebug() << "exit code" << exitCode << "status" << exitStatus;
+    kDebug() << "exit code" << exitCode << "status" << exitStatus;
 
-   slotGOcrStdout();					// read anything remaining
-   slotGOcrStderr();
+    slotGOcrStdout();					// read anything remaining
+    slotGOcrStderr();
 
-   /* Now all the text of gocr is in the member m_ocrResultText. This one must
-    * be split up now to m_ocrPage. First break up the lines, resize m_ocrPage
-    * accordingly and than go through every line and create ocrwords for every
+    /* Now all the text of gocr is in the member m_ocrResultText. This one must
+     * be split up now to m_ocrPage. First break up the lines, resize m_ocrPage
+     * accordingly and than go through every line and create ocrwords for every
     * word.
     */
-   QStringList lines = m_ocrResultText.split('\n', QString::SkipEmptyParts);
+    QStringList lines = m_ocrResultText.split('\n', QString::SkipEmptyParts);
+    kDebug() << "RESULT" << m_ocrResultText << "split to" << lines.count() << "lines";
 
-   m_ocrPage.clear();
-   m_ocrPage.resize( lines.count() );
+    startResultDocument();
 
-   kDebug() << "RESULT" << m_ocrResultText << "split to" << lines.count() << "lines";
+    for (QStringList::const_iterator itLine = lines.constBegin(); itLine!=lines.constEnd(); ++itLine)
+    {
+        startLine();
+        QStringList words = (*itLine).split(QRegExp("\\s+"), QString::SkipEmptyParts);
+        for (QStringList::const_iterator itWord = words.constBegin(); itWord!=words.constEnd(); ++itWord )
+        {
+            OcrWordData wd;
+            addWord((*itWord), wd);
+        }
+        finishLine();
+    }
 
-   unsigned int lineCnt = 0;
+    finishResultDocument();
+    kDebug() << "Finished splitting";
 
-   for ( QStringList::Iterator it = lines.begin(); it != lines.end(); ++it )
-   {
-       OcrWordList ocrLine;
+    // Find the GOCR result image
+    QDir dir(m_tempDir->name());
+    const char **prf = possibleResultFiles;
+    while (*prf!=NULL)					// search for result files
+    {
+        QString rf = dir.absoluteFilePath(*prf);
+        if (QFile::exists(rf))				// take first one that matches
+        {
+            kDebug() << "found result image" << rf;
+            m_ocrResultFile = rf;
+            break;
+        }
+        ++prf;
+    }
 
-       QStringList words = (*it).split(QRegExp("\\s+"), QString::SkipEmptyParts);
-       for ( QStringList::Iterator itWord = words.begin(); itWord != words.end(); ++itWord )
-       {
-           ocrLine.append( OcrWord( *itWord ));
-       }
-       m_ocrPage[lineCnt] = ocrLine;
-       lineCnt++;
-   }
-   kDebug() << "Finished splitting";
+    // This used to replace the introduced image with the result file, having
+    // been cleared above:
+    //
+    //   if (m_introducedImage!=NULL) delete m_introducedImage;
+    //   m_introducedImage = new KookaImage();
+    //   ...
+    //   if (!m_ocrResultFile.isNull()) m_introducedImage->load(m_ocrResultFile);
+    //   else kDebug() << "cannot find result image in" << dir.absolutePath();
+    //
+    // But that seems pointless - the replaced m_introducedImage was not
+    // subsequently used anywhere (although would it be reused if "Start OCR"
+    // were done again without closing the dialogue?).  Not doing this means
+    // that m_introducedImage can be const, which in turn means that it can
+    // refer to the viewed image directly - i.e. there is no need to take a
+    // copy in OcrEngine::setImage().  The result image is still displayed in
+    // the image viewer in OcrEngine::finishedOCRVisible().
+    if (m_ocrResultFile.isNull()) kDebug() << "cannot find result image in" << dir.absolutePath();
 
-   // Find the GOCR result image
-   QDir dir(m_tempDir->name());
-   const char **prf = possibleResultFiles;
-   while (*prf!=NULL)					// search for result files
-   {
-       QString rf = dir.absoluteFilePath(*prf);
-       if (QFile::exists(rf))				// take first one that matches
-       {
-           kDebug() << "found result image" << rf;
-           m_ocrResultFile = rf;
-           break;
-       }
-       ++prf;
-   }
-
-   // This used to replace the introduced image with the result file, having
-   // been cleared above:
-   //
-   //   if (m_introducedImage!=NULL) delete m_introducedImage;
-   //   m_introducedImage = new KookaImage();
-   //   ...
-   //   if (!m_ocrResultFile.isNull()) m_introducedImage->load(m_ocrResultFile);
-   //   else kDebug() << "cannot find result image in" << dir.absolutePath();
-   //
-   // But that seems pointless - the replaced m_introducedImage is not
-   // subsequently used anywhere (although would it be reused if "Start OCR"
-   // were done again without closing the dialogue?).  Not doing this means
-   // that m_introducedImage can be const, which in turn means that it can
-   // refer to the viewed image directly - i.e. there is no need to take a
-   // copy in OcrEngine::setImage().  The result image is still displayed in
-   // the image viewer in OcrEngine::finishedOCRVisible().
-   if (m_ocrResultFile.isNull()) kDebug() << "cannot find result image in" << dir.absolutePath();
-
-   finishedOCRVisible(m_ocrProcess->exitStatus()==QProcess::NormalExit);
+    finishedOCRVisible(m_ocrProcess->exitStatus()==QProcess::NormalExit);
 }
-
-
 
 
 QStringList OcrGocrEngine::tempFiles(bool retain)

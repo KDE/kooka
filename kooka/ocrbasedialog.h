@@ -39,10 +39,11 @@ class QLabel;
 class QSize;
 class QCheckBox;
 class QGroupBox;
+class QPushButton;
+class QRadioButton;
 class QGridLayout;
 class QProgressBar;
 
-class KSpellConfig;
 class KPageWidgetItem;
 class KJob;
 class KFileItem;
@@ -55,8 +56,7 @@ class OcrBaseDialog : public KPageDialog
     Q_OBJECT
 
 public:
-    OcrBaseDialog(QWidget *parent,
-                  KSpellConfig *spellConfig = NULL);
+    OcrBaseDialog(QWidget *parent);
     virtual ~OcrBaseDialog();
 
     virtual OcrEngine::EngineError setupGui();
@@ -79,11 +79,14 @@ public:
 
     virtual void introduceImage(const KookaImage *img);
 
-    bool wantSpellCheck() const		{ return (m_userWantsSpellCheck); }
-    KSpellConfig* spellConfig() const	{ return (m_spellConfig); }
-    bool keepTempFiles() const;
+    bool keepTempFiles() const		{ return (m_retainFiles); }
+    bool verboseDebug() const		{ return (m_verboseDebug); }
 
     void enableGUI(bool running);
+
+    bool wantInteractiveSpellCheck() const;
+    bool wantBackgroundSpellCheck() const;
+    QString customSpellConfigFile() const;
 
 signals:
     void signalOcrStart();
@@ -112,39 +115,18 @@ protected slots:
     void slotStopOCR();
     void slotStartOCR();
     void slotCloseOCR();
+    void slotCustomSpellDialog();
 
 private:
-    /**
-     * This creates a a tab OCR in the dialog and creates a small intro about the
-     * ocr engine used.
-     * It calls the virtual subs ocrEngineName, ocrEngineLogo and ocrEngineDesc which
-     * must return the approbiate values for the engines.
-     */
     void setupSetupPage();
-
-    /**
-     * This creates a a tab Image Info in the dialog and creates a image description
-     * about the current image to ocr.
-     */
     void setupSourcePage();
-
     void setupEnginePage();
-
-    /**
-     * This sets up the spellchecking configuration
-     */
     void setupSpellPage();
-
     void setupDebugPage();
 
     QWidget *addExtraPageWidget(KPageWidgetItem *page, QWidget *wid, bool stretchBefore);
 
 private slots:
-    /**
-     * hit if the user toggles the want-spellcheck checkbox
-     */
-    void slotWantSpellcheck(bool wantIt);
-
     void slotGotPreview(const KFileItem &item, const QPixmap &newPix);
     void stopAnimation();
     void startAnimation();
@@ -159,15 +141,19 @@ private:
     QLabel *m_previewPix;
     QLabel *m_previewLabel;
 
-    KSpellConfig *m_spellConfig;
-    bool m_wantSpellCfg;				// show the spellcheck options?
-    bool          m_userWantsSpellCheck;  /* user has enabled/disabled spellcheck */
+    QRadioButton *m_rbGlobalSpellSettings;
+    QRadioButton *m_rbCustomSpellSettings;
+    QPushButton *m_pbCustomSpellDialog;
+    QGroupBox *m_gbBackgroundCheck;
+    QGroupBox *m_gbInteractiveCheck;
+
     QSize m_previewSize;
     bool m_wantDebugCfg;				// show the debug options?
 
-    QCheckBox     *m_cbWantCheck;
-    QGroupBox     *m_gbSpellOpts;
     QCheckBox *m_cbRetainFiles;
+    QCheckBox *m_cbVerboseDebug;
+    bool m_retainFiles;
+    bool m_verboseDebug;
 
     QLabel *m_lVersion;
     QProgressBar *m_progress;

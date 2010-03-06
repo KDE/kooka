@@ -44,7 +44,7 @@ public:
     OcrKadmosEngine(QWidget *parent = NULL);
     ~OcrKadmosEngine();
 
-    OcrBaseDialog *createOCRDialog(QWidget *parent,KSpellConfig *spellConfig = NULL);
+    OcrBaseDialog *createOCRDialog(QWidget *parent);
 
     OcrEngine::EngineType engineType() const { return (OcrEngine::EngineKadmos); }
     static QString engineDesc();

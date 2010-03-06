@@ -55,8 +55,8 @@
 #define CFG_GOCR_SPACEWIDTH "gocrSpaceWidth"
 
 
-OcrGocrDialog::OcrGocrDialog(QWidget *parent, KSpellConfig *spellConfig)
-    : OcrBaseDialog(parent, spellConfig),
+OcrGocrDialog::OcrGocrDialog(QWidget *parent)
+    : OcrBaseDialog(parent),
       m_ocrCmd(QString::null),
       m_isBW(false)
 {
@@ -152,11 +152,11 @@ OcrEngine::EngineError OcrGocrDialog::setupGui()
 
 void OcrGocrDialog::introduceImage(const KookaImage *img)
 {
-    if (img==NULL) return;
     OcrBaseDialog::introduceImage(img);
+    if (img==NULL || img->isNull()) return;
 
     m_isBW = true;
-    if (img->numColors()>0 && img->numColors()<3)
+    if (img->numColors()>0 && img->numColors()<=2)
     {
         kDebug() << "Have" << img->numColors() << "colors on depth" << img->depth();
         /* that means it is a black-and-white image. Thus we do not need the GrayLevel slider */

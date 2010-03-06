@@ -52,7 +52,7 @@ class OcrOcradDialog : public OcrBaseDialog
     Q_OBJECT
 
 public:
-    OcrOcradDialog(QWidget *parent, KSpellConfig *spellConfig = NULL);
+    OcrOcradDialog(QWidget *parent);
     ~OcrOcradDialog();
 
     OcrEngine::EngineError setupGui();

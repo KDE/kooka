@@ -50,8 +50,8 @@
 #include "ocrocradengine.h"
 
 
-OcrOcradDialog::OcrOcradDialog(QWidget *parent, KSpellConfig *spellConfig)
-    : OcrBaseDialog(parent, spellConfig),
+OcrOcradDialog::OcrOcradDialog(QWidget *parent)
+    : OcrBaseDialog(parent),
       m_setupWidget(NULL),
       m_orfUrlRequester(NULL),
       m_layoutMode(0),
@@ -84,6 +84,9 @@ QString OcrOcradDialog::ocrEngineDesc() const
 }
 
 
+// TODO: support for other OCRAD options
+// --charset, --filter, --invert, --format, --transform
+
 OcrEngine::EngineError OcrOcradDialog::setupGui()
 {
     OcrBaseDialog::setupGui();
@@ -95,6 +98,7 @@ OcrEngine::EngineError OcrOcradDialog::setupGui()
     KConfigGroup grp1 = KGlobal::config()->group(CFG_GROUP_OCRAD);
     int layoutDetect = grp1.readEntry(CFG_OCRAD_LAYOUT_DETECTION, 0);
 
+    // TODO: buddy
     gl->addWidget(new QLabel(i18n("Layout analysis mode:"), w), 0, 0);
 
     m_layoutMode = new QComboBox(w);

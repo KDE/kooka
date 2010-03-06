@@ -46,8 +46,130 @@ const int TIMER_INTERVAL = 100;
 
 
 
-//  Constructor/destructor
-//  ----------------------
+//  ImageCanvasWidget -- Displays a scaled pixmap and any number of
+//  highlight rectangles over the top of it.
+
+class ImageCanvasWidget : public QWidget
+{
+public:
+    ImageCanvasWidget(QWidget *parent);
+
+    void setScaleMatrix(const QMatrix &m)	{ mScaleMatrix = m; };
+    void setPixmap(const QPixmap &p)		{ mPixmap = p; };
+
+    int addHighlightRect(const QRect &r);
+    void removeHighlightRect(int idx);
+    void removeHighlightRect(const QRect &r);
+    void removeAllHighlights();
+    void setHighlightStyle(ImageCanvas::HighlightStyle style, const QPen &pen, const QBrush &brush);
+
+    QSize sizeHint() const			{ return (mPixmap.size()); };
+
+protected:
+    void paintEvent(QPaintEvent *ev);
+
+private:
+    QList<QRect> mHighlightRects;
+    QMatrix mScaleMatrix;
+    QPixmap mPixmap;
+    QPen mPen;
+    QBrush mBrush;
+    ImageCanvas::HighlightStyle mStyle;
+};
+
+
+ImageCanvasWidget::ImageCanvasWidget(QWidget *parent)
+    : QWidget(parent)
+{
+}
+
+
+int ImageCanvasWidget::addHighlightRect(const QRect &r)
+{
+    int idx = mHighlightRects.indexOf(r);
+    if (idx>-1) return (idx);				// already present
+
+    mHighlightRects.append(r);
+    update();
+
+    return (mHighlightRects.count()-1);			// index of just added
+}
+
+
+void ImageCanvasWidget::removeHighlightRect(int idx)
+{
+    if (idx>=mHighlightRects.count())
+    {
+        kDebug() << "Invalid index" << idx;
+        return;
+    }
+
+    mHighlightRects.removeAt(idx);
+    update();
+}
+
+
+void ImageCanvasWidget::removeHighlightRect(const QRect &r)
+{
+    mHighlightRects.removeOne(r);
+    update();
+}
+
+
+void ImageCanvasWidget::removeAllHighlights()
+{
+    mHighlightRects.clear();
+    update();
+}
+
+
+void ImageCanvasWidget::setHighlightStyle(ImageCanvas::HighlightStyle style,
+                                          const QPen &pen, const QBrush &brush)
+{
+    mStyle = style;
+    mPen = pen;
+    mBrush = brush;
+}
+
+
+void ImageCanvasWidget::paintEvent(QPaintEvent *ev)
+{
+    kDebug();
+
+    QPainter p(this);
+
+    style()->drawItemPixmap(&p, contentsRect(), Qt::AlignLeft|Qt::AlignTop, mPixmap);
+
+    //kDebug() << "painting" << mHighlightRects.count() << "highlights";
+    if (!mHighlightRects.isEmpty())
+    {
+        for (QList<QRect>::const_iterator it = mHighlightRects.constBegin();
+             it!=mHighlightRects.constEnd(); ++it)
+        {
+            QRect r = (*it);
+            r.adjust(-4, -4, 4, 4);			// expand a bit before scaling
+            QRect targetRect = mScaleMatrix.mapRect(r);
+
+            p.setPen(mPen);
+            p.setBrush(mBrush);
+            switch (mStyle)
+            {
+case ImageCanvas::Box:
+                p.drawRect(targetRect);
+                break;
+
+case ImageCanvas::Underline:
+                p.drawLine(targetRect.left(), targetRect.bottom(), targetRect.right(), targetRect.bottom());
+                break;
+            }
+        }
+    }
+}
+
+
+
+//  ImageCanvas -- Scrolling area containing the pixmap/highlight widget.
+//  Selected areas are drawn over the top of that.
 
 ImageCanvas::ImageCanvas(QWidget *parent, const QImage *start_image)
     : QScrollArea(parent)
@@ -80,7 +202,7 @@ ImageCanvas::ImageCanvas(QWidget *parent, const QImage *start_image)
         mAcquired = true;
     }
 
-    mPixmapLabel = new QLabel(this);
+    mPixmapLabel = new ImageCanvasWidget(this);
     setWidget(mPixmapLabel);
     updateScaledPixmap();
 
@@ -126,7 +248,7 @@ void ImageCanvas::newImage(const QImage *new_image, bool hold_zoom)
 #endif
 
     stopMarqueeTimer();					// also clears selection
-    mHighlightRects.clear();				// throw away all highlights
+    mPixmapLabel->removeAllHighlights();		// throw away all highlights
 
     if (mImage!=NULL)					// handle the new image
     {
@@ -668,6 +790,7 @@ case ImageCanvas::ScaleZoom:
 
     mScaledPixmap = QPixmap::fromImage(mImage->transformed(mScaleMatrix));
     mPixmapLabel->setPixmap(mScaledPixmap);		// set new pixmap to display
+    mPixmapLabel->setScaleMatrix(mScaleMatrix);		// set scale for highlights
     mPixmapLabel->adjustSize();
 
     QApplication::restoreOverrideCursor();
@@ -867,8 +990,8 @@ const QString ImageCanvas::imageInfoString(int w, int h, int d) const
 }
 
 
-//  Multiple views and highlight areas
-//  ----------------------------------
+//  Multiple views
+//  --------------
 //
 //  Not used by Kooka.
 
@@ -882,56 +1005,36 @@ void ImageCanvas::deleteView(const QImage *delimage)
 }
 
 
-int ImageCanvas::highlight(const QRect &rect, const QPen &pen, const QBrush &brush, bool ensureVis)
+//  Highlight areas
+//  ---------------
+
+int ImageCanvas::highlight(const QRect &rect, bool ensureVis)
 {
-    QRect saveRect;
-    saveRect.setRect( rect.x()-2, rect.y()-2, rect.width()+4, rect.height()+4 );
-    mHighlightRects.append( saveRect );
+    int idx = mPixmapLabel->addHighlightRect(rect);
+    kDebug() << "added highlight" << idx;
 
-    int idx = mHighlightRects.indexOf(saveRect);
-
-    QRect targetRect = mScaleMatrix.mapRect(rect);
-
-    QPainter p(&mScaledPixmap);
-
-    p.setPen(pen);
-    p.drawLine( targetRect.x(), targetRect.y()+targetRect.height(),
-                targetRect.x()+targetRect.width(), targetRect.y()+targetRect.height() );
-
-//    updateContents(targetRect.x()-1, targetRect.y()-1,
-//                   targetRect.width()+2, targetRect.height()+2 );
-
-    if( ensureVis )
-    {
-        QPoint p = targetRect.center();
-        ensureVisible( p.x(), p.y(), 10+targetRect.width()/2, 10+targetRect.height()/2 );
-    }
-
-    return idx;
+    if (ensureVis) scrollTo(rect);
+    return (idx);
 }
 
 
 void ImageCanvas::removeHighlight(int idx)
 {
-    if (idx>=mHighlightRects.count())
-    {
-        kDebug() << "Invalid index" << idx;
-        return;
-    }
+    mPixmapLabel->removeHighlightRect(idx);
+}
 
-    /* take the rectangle from the stored highlight rects and map it to the viewer scaling */
-    QRect sourceRect = mHighlightRects.takeAt(idx);
-    QRect targetRect = mScaleMatrix.mapRect(sourceRect);
 
-    // Create a small pixmap with a copy of the region in question of the original
-    // image.  More efficient to do the transformation on a QImage, and convert
-    // to QPixmap afterwards.
-    QPixmap scaledPix = QPixmap::fromImage(mImage->copy(sourceRect).transformed(mScaleMatrix));
-    /* and finally draw it */
-    QPainter p(&mScaledPixmap);
-    p.drawPixmap( targetRect, scaledPix );
+void ImageCanvas::scrollTo(const QRect &rect)
+{
+    if (!rect.isValid()) return;
+    QRect targetRect = mScaleMatrix.mapRect(rect);
+    QPoint p = targetRect.center();
+    ensureVisible(p.x(), p.y(), 10+targetRect.width()/2, 10+targetRect.height()/2);
+}
 
-    /* update the viewers contents */
-//    updateContents(targetRect.x()-1, targetRect.y()-1,
-//                   targetRect.width()+2, targetRect.height()+2 );
+
+void ImageCanvas::setHighlightStyle(ImageCanvas::HighlightStyle style,
+                                    const QPen &pen, const QBrush &brush)
+{
+    mPixmapLabel->setHighlightStyle(style, pen, brush);
 }

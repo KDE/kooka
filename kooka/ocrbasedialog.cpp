@@ -28,46 +28,39 @@
 #include "ocrbasedialog.moc"
 
 #include <qlabel.h>
-#include <q3groupbox.h>
+#include <qgroupbox.h>
 #include <qcheckbox.h>
 #include <qlayout.h>
-#include <qfile.h>
 #include <qprogressbar.h>
 #include <qapplication.h>
+#include <qradiobutton.h>
+#include <qpushbutton.h>
 
 #include <kconfig.h>
 #include <kglobal.h>
 #include <kdebug.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
-#ifndef KDE4
-#include <ksconfig.h>
-#endif
+#include <kstandardguiitem.h>
 #include <kseparator.h>
-#include <kvbox.h>
 
 #include <kio/job.h>
 #include <kio/previewjob.h>
+
+#include <sonnet/configdialog.h>
 
 #include "ocrengine.h"
 #include "kookaimage.h"
 
 
+#define CFG_OCR_SPELL    	"OcrSpellSettings"
 
-#define CFG_OCR_SPELL    "ocrSpellSettings"
-#define CFG_WANT_KSPELL   "ocrKSpellEnabled"
-
-#define CFG_OCR_KSPELL    "KSpellSettings"
-#define CFG_KS_NOROOTAFFIX  "KSpell_NoRootAffix"
-#define CFG_KS_RUNTOGETHER  "KSpell_RunTogether"
-#define CFG_KS_DICTIONARY   "KSpell_Dictionary"
-#define CFG_KS_DICTFROMLIST "KSpell_DictFromList"
-#define CFG_KS_ENCODING     "KSpell_Encoding"
-#define CFG_KS_CLIENT       "KSpell_Client"
+#define CFG_SPELL_BGND		"backgroundCheck"
+#define CFG_SPELL_INTER		"interactiveCheck"
+#define CFG_SPELL_CUSTOM	"customSettings"
 
 
-
-OcrBaseDialog::OcrBaseDialog(QWidget *parent, KSpellConfig *spellConfig)
+OcrBaseDialog::OcrBaseDialog(QWidget *parent)
     : KPageDialog(parent),
       m_setupPage(NULL),
       m_sourcePage(NULL),
@@ -76,13 +69,9 @@ OcrBaseDialog::OcrBaseDialog(QWidget *parent, KSpellConfig *spellConfig)
       m_debugPage(NULL),
       m_previewPix(NULL),
       m_previewLabel(NULL),
-      m_spellConfig(spellConfig),
-      m_wantSpellCfg(true),
-      m_userWantsSpellCheck(true),
       m_wantDebugCfg(true),
-      m_cbWantCheck(NULL),
-      m_gbSpellOpts(NULL),
       m_cbRetainFiles(NULL),
+      m_cbVerboseDebug(NULL),
       m_lVersion(NULL),
       m_progress(NULL)
 {
@@ -94,25 +83,8 @@ OcrBaseDialog::OcrBaseDialog(QWidget *parent, KSpellConfig *spellConfig)
     setButtons(KDialog::User1|KDialog::User2|KDialog::Close);
     setDefaultButton(KDialog::User1);
     setCaption(i18n("Optical Character Recognition"));
-    setButtonGuiItem(KDialog::User1, KGuiItem(i18n("Start OCR"), "launch", i18n("Start the Optical Character Recognition process")));
-    setButtonGuiItem(KDialog::User2, KGuiItem(i18n("Stop OCR"), "cancel", i18n("Stop the Optical Character Recognition process")));
-
-    const KConfigGroup grp1 = KGlobal::config()->group(CFG_OCR_SPELL);
-    m_userWantsSpellCheck = grp1.readEntry(CFG_WANT_KSPELL, true);
-
-#ifndef KDE4
-    if (m_spellConfig!=NULL && KGlobal::config()->hasGroup(CFG_OCR_KSPELL))
-    {
-        const KConfigGroup grp2 = KGlobal::config()->group(CFG_OCR_KSPELL);
-        // from kdelibs/kdeui/ksconfig.cpp KSpellConfig:readGlobalSettings()
-        m_spellConfig->setNoRootAffix(grp2.readEntry(CFG_KS_NOROOTAFFIX, 0));
-        m_spellConfig->setRunTogether(grp2.readEntry(CFG_KS_RUNTOGETHER, 0));
-        m_spellConfig->setDictionary(grp2.readEntry(CFG_KS_DICTIONARY));
-        m_spellConfig->setDictFromList(grp2.readEntry(CFG_KS_DICTFROMLIST, false));
-        m_spellConfig->setEncoding(grp2.readEntry(CFG_KS_ENCODING, 0));	// ASCII
-        m_spellConfig->setClient(grp2.readEntry(CFG_KS_CLIENT, 0));	// ISpell
-    }
-#endif
+    setButtonGuiItem(KDialog::User1, KGuiItem(i18n("Start OCR"), "system-run", i18n("Start the Optical Character Recognition process")));
+    setButtonGuiItem(KDialog::User2, KGuiItem(i18n("Stop OCR"), "process-stop", i18n("Stop the Optical Character Recognition process")));
 
     // Signals which tell our caller what the user is doing
     connect(this, SIGNAL(user1Clicked()), SLOT(slotStartOCR()));
@@ -137,10 +109,10 @@ OcrBaseDialog::~OcrBaseDialog()
 OcrEngine::EngineError OcrBaseDialog::setupGui()
 {
     setupSetupPage();
-    if (m_wantSpellCfg) setupSpellPage();
+    setupSpellPage();
     setupSourcePage();
     setupEnginePage();
-    // TODO: preferences option for debug
+    // TODO: preferences option for whether debug is shown
     if (m_wantDebugCfg) setupDebugPage();
 
     return (OcrEngine::ENG_OK);
@@ -214,7 +186,6 @@ void OcrBaseDialog::ocrShowInfo(const QString &binary, const QString &version)
     }
 
     // Find the logo and display if available
-    KStandardDirs stdDir;
     QString logoFile = KGlobal::dirs()->findResource("data", "kooka/pics/"+ocrEngineLogo());
     QPixmap pix(logoFile);
     if (!pix.isNull())
@@ -289,28 +260,59 @@ QWidget *OcrBaseDialog::addExtraEngineWidget(QWidget *wid, bool stretchBefore)
 
 void OcrBaseDialog::setupSpellPage()
 {
-    KVBox *vb = new KVBox(this);
+    QWidget *w = new QWidget(this);
+    QGridLayout *gl = new QGridLayout(w);
 
-    /* Want the spell checking at all? Checkbox here */
-    m_cbWantCheck = new QCheckBox( i18n("Spell-check the OCR results"),
-                                   vb);
-    /* Spellcheck options */
-    m_gbSpellOpts = new Q3GroupBox( 1, Qt::Horizontal, i18n("Spell-check Options"),
-                                   vb );
-#ifndef KDE4
-    KSpellConfig *sCfg = new KSpellConfig(m_gbSpellOpts,NULL,m_spellConfig,false);
-    m_spellConfig = sCfg;				// use our copy from now on
-#endif
-    /* connect toggle button */
-    connect(m_cbWantCheck,SIGNAL(toggled(bool)),SLOT(slWantSpellcheck(bool)));
-    m_cbWantCheck->setChecked(m_userWantsSpellCheck);
-    m_gbSpellOpts->setEnabled(m_userWantsSpellCheck);
+    // row 0: background checking group box
+    m_gbBackgroundCheck = new QGroupBox(i18n("Highlight misspelled words"), w);
+    m_gbBackgroundCheck->setCheckable(true);
 
-    /* A space eater */
-    QWidget *spaceEater = new QWidget(vb);
-    spaceEater->setSizePolicy( QSizePolicy( QSizePolicy::Ignored, QSizePolicy::Ignored ));
+    QGridLayout *gl1 = new QGridLayout(m_gbBackgroundCheck);
+    m_gbBackgroundCheck->setLayout(gl1);
 
-    m_spellPage = addPage(vb, i18n("Spell Check"));
+    m_rbGlobalSpellSettings = new QRadioButton(i18n("Use the global spell configuration"), w);
+    gl1->addWidget(m_rbGlobalSpellSettings, 0, 0);
+    m_rbCustomSpellSettings = new QRadioButton(i18n("Use custom spell configuration"), w);
+    gl1->addWidget(m_rbCustomSpellSettings, 1, 0);
+    m_pbCustomSpellDialog = new QPushButton(i18n("Custom Spell Configuration..."), w);
+    gl1->addWidget(m_pbCustomSpellDialog, 2, 0, Qt::AlignRight);
+    connect(m_rbCustomSpellSettings, SIGNAL(toggled(bool)),
+            m_pbCustomSpellDialog, SLOT(setEnabled(bool)));
+    connect(m_pbCustomSpellDialog, SIGNAL(clicked()),
+            SLOT(slotCustomSpellDialog()));
+    gl->addWidget(m_gbBackgroundCheck, 0, 0);
+
+    // row 1: space
+    gl->setRowMinimumHeight(1, 2*KDialog::spacingHint());
+
+    // row 2: interactive checking group box
+    m_gbInteractiveCheck = new QGroupBox(i18n("Start interactive spell check"), w);
+    m_gbInteractiveCheck->setCheckable(true);
+
+    QGridLayout *gl2 = new QGridLayout(m_gbInteractiveCheck);
+    m_gbInteractiveCheck->setLayout(gl2);
+
+    QLabel *l = new QLabel(i18n("Custom spell settings above do not affect this spelling check, use the language setting in the dialogue to change the dictionary language."), w);
+    l->setWordWrap(true);
+    gl2->addWidget(l, 0, 0);
+
+    gl->addWidget(m_gbInteractiveCheck, 2, 0);
+
+    // row 3: stretch
+    gl->setRowStretch(3, 1);
+
+
+    // Apply settings
+    const KConfigGroup grp = KGlobal::config()->group(CFG_OCR_SPELL);
+
+    m_gbBackgroundCheck->setChecked(grp.readEntry(CFG_SPELL_BGND, true));
+    m_gbInteractiveCheck->setChecked(grp.readEntry(CFG_SPELL_INTER, true));
+
+    m_rbGlobalSpellSettings->setChecked(!grp.readEntry(CFG_SPELL_CUSTOM, false));
+    m_rbCustomSpellSettings->setChecked(!m_rbGlobalSpellSettings->isChecked());
+    m_pbCustomSpellDialog->setEnabled(m_rbCustomSpellSettings->isChecked());
+
+    m_spellPage = addPage(w, i18n("Spell Check"));
     m_spellPage->setHeader(i18n("OCR Result Spell Checking"));
     m_spellPage->setIcon(KIcon("tools-check-spelling"));
 }
@@ -325,7 +327,10 @@ void OcrBaseDialog::setupDebugPage()
     m_cbRetainFiles = new QCheckBox(i18n("Retain temporary files"), w);
     gl->addWidget(m_cbRetainFiles, 0, 0, Qt::AlignTop);
 
+    m_cbVerboseDebug = new QCheckBox(i18n("Verbose message output"), w);
+    gl->addWidget(m_cbVerboseDebug, 1, 0, Qt::AlignTop);
 
+    gl->setRowStretch(2, 1);
 
     m_debugPage = addPage(w, i18n("Debugging"));
     m_debugPage->setHeader(i18n("OCR Debugging"));
@@ -357,6 +362,8 @@ void OcrBaseDialog::startAnimation()
 // significant delay in opening the dialogue box, so making the GUI appear
 // less responsive.  So we'll keep the preview job for now.
 //
+// We now bring you a mild rant...
+//
 // What on earth happened to KFileMetaInfo in KDE4?  This used to have a fairly
 // reasonable API, returning a list of key-value pairs grouped into sensible
 // categories with readable strings available for each.  Now the groups have
@@ -374,7 +381,12 @@ void OcrBaseDialog::startAnimation()
 
 void OcrBaseDialog::introduceImage(const KookaImage *img)
 {
-    if (img==NULL) return;
+    if (img==NULL)
+    {
+        if (m_previewLabel!=NULL) m_previewLabel->setText(i18n("No image"));
+        return;
+    }
+
     kDebug() << "url" << img->url() << "filebound" << img->isFileBound();
 
     if (img->isFileBound())				// image backed by a file
@@ -397,7 +409,8 @@ void OcrBaseDialog::introduceImage(const KookaImage *img)
 
     if (m_previewLabel!=NULL)
     {
-        m_previewLabel->setText(i18n("%1: %2 x %3 pixels, %4 bpp",
+        // TODO: very similar to ImageCanvas::imageInfoString()
+        m_previewLabel->setText(i18n("%1: %2x%3 pixels, %4 bpp",
                                      (img->isFileBound() ? i18n("Image") : i18n("Selection")),
                                      img->width(), img->height(),
                                      img->depth()));
@@ -420,22 +433,12 @@ void OcrBaseDialog::slotWriteConfig()
 {
     kDebug();
 
-    KConfigGroup grp1 = KGlobal::config()->group(CFG_OCR_SPELL);
-    grp1.writeEntry(CFG_WANT_KSPELL, m_cbWantCheck->isChecked());
+    KConfigGroup grp = KGlobal::config()->group(CFG_OCR_SPELL);
+    grp.writeEntry(CFG_SPELL_BGND, m_gbBackgroundCheck->isChecked());
+    grp.writeEntry(CFG_SPELL_INTER, m_gbInteractiveCheck->isChecked());
+    grp.writeEntry(CFG_SPELL_CUSTOM, m_rbCustomSpellSettings->isChecked());
 
-#ifndef KDE4
-    if (m_spellConfig!=NULL)
-    {
-        KConfigGroup grp2 = KGlobal::config()->group(CFG_OCR_KSPELL);
-        // from kdelibs/kdeui/ksconfig.cpp KSpellConfig::writeGlobalSettings()
-        grp2.writeEntry(CFG_KS_NOROOTAFFIX, (int) m_spellConfig->noRootAffix());
-        grp2.writeEntry(CFG_KS_RUNTOGETHER, (int) m_spellConfig->runTogether());
-        grp2.writeEntry(CFG_KS_DICTIONARY, m_spellConfig->dictionary());
-        grp2.writeEntry(CFG_KS_DICTFROMLIST, (int) m_spellConfig->dictFromList());
-        grp2.writeEntry(CFG_KS_ENCODING, (int) m_spellConfig->encoding());
-        grp2.writeEntry(CFG_KS_CLIENT, m_spellConfig->client());
-    }
-#endif
+    // deliberately not writing the OCR debug config
 }
 
 
@@ -443,6 +446,9 @@ void OcrBaseDialog::slotStartOCR()
 {
     setCurrentPage(m_setupPage);			// force back to first page
     enableGUI(true);					// disable while running
+
+    m_retainFiles = (m_cbRetainFiles!=NULL && m_cbRetainFiles->isChecked());
+    m_verboseDebug = (m_cbVerboseDebug!=NULL && m_cbVerboseDebug->isChecked());
 
     slotWriteConfig();					// save configuration
     emit signalOcrStart();				// start the OCR process
@@ -481,14 +487,28 @@ void OcrBaseDialog::enableGUI(bool running)
 }
 
 
-void OcrBaseDialog::slotWantSpellcheck(bool wantIt)
+bool OcrBaseDialog::wantInteractiveSpellCheck() const
 {
-    m_gbSpellOpts->setEnabled(wantIt);
-    m_userWantsSpellCheck = wantIt;
+    return (m_gbInteractiveCheck->isChecked());
 }
 
 
-bool OcrBaseDialog::keepTempFiles() const
+bool OcrBaseDialog::wantBackgroundSpellCheck() const
 {
-    return (m_cbRetainFiles!=NULL && m_cbRetainFiles->isChecked());
+    return (m_gbBackgroundCheck->isChecked());
+}
+
+
+QString OcrBaseDialog::customSpellConfigFile() const
+{
+    if (m_rbCustomSpellSettings->isChecked()) return (KGlobal::config()->name());
+							// our application config
+    return ("sonnetrc");				// Sonnet global settings
+}
+
+
+void OcrBaseDialog::slotCustomSpellDialog()
+{
+    Sonnet::ConfigDialog d(KGlobal::config().data(), this);
+    d.exec();						// save to our application config
 }

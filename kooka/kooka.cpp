@@ -113,14 +113,17 @@ Kooka::Kooka(const QByteArray &deviceToUse)
     connect(m_view,SIGNAL(signalOcrPrefs()),
             this,   SLOT(optionsOcrPreferences()));
 
+    connect(m_view->imageViewer(), SIGNAL(imageReadOnly(bool)),
+            this, SLOT(slotUpdateReadOnlyActions(bool)));
+
     changeCaption( i18n( "KDE Scanning" ));
 
     slotUpdateScannerActions(m_view->isScannerConnected());
     slotUpdateRectangleActions(false);
     slotUpdateGalleryActions(true,true,0);
     slotUpdateOcrResultActions(false);
+    slotUpdateReadOnlyActions(true);
 }
-
 
 
 Kooka::~Kooka()
@@ -534,11 +537,13 @@ void Kooka::slotUpdateGalleryActions(bool shown, bool isDir, int howmanySelected
     scaleToOriginalAction->setEnabled(shown && singleImage);
     scaleToZoomAction->setEnabled(shown && singleImage);
     keepZoomAction->setEnabled(shown);
-    mirrorVerticallyAction->setEnabled(shown && singleImage);
-    mirrorHorizontallyAction->setEnabled(shown && singleImage);
-    rotateCwAction->setEnabled(shown && singleImage);
-    rotateAcwAction->setEnabled(shown && singleImage);
-    rotate180Action->setEnabled(shown && singleImage);
+
+    m_imageChangeAllowed = (shown && singleImage);
+    mirrorVerticallyAction->setEnabled(m_imageChangeAllowed);
+    mirrorHorizontallyAction->setEnabled(m_imageChangeAllowed);
+    rotateCwAction->setEnabled(m_imageChangeAllowed);
+    rotateAcwAction->setEnabled(m_imageChangeAllowed);
+    rotate180Action->setEnabled(m_imageChangeAllowed);
 
     if (howmanySelected==0) slotUpdateRectangleActions(false);
 
@@ -587,6 +592,18 @@ void Kooka::slotUpdateOcrResultActions(bool haveText)
     kDebug() << "haveText" << haveText;
     m_saveOCRTextAction->setEnabled(haveText);
     ocrSpellAction->setEnabled(haveText);
+}
+
+
+void Kooka::slotUpdateReadOnlyActions(bool ro)
+{
+    bool enable = (m_imageChangeAllowed && !ro);	// also check gallery state
+
+    mirrorVerticallyAction->setEnabled(enable);
+    mirrorHorizontallyAction->setEnabled(enable);
+    rotateCwAction->setEnabled(enable);
+    rotateAcwAction->setEnabled(enable);
+    rotate180Action->setEnabled(enable);
 }
 
 

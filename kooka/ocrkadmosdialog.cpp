@@ -61,8 +61,8 @@
 #define CNTRY_GB i18n( "Great Britain, USA" )
 
 
-KadmosDialog::KadmosDialog(QWidget *parent, KSpellConfig *spellConfig)
-    : OcrBaseDialog(parent, spellConfig),
+KadmosDialog::KadmosDialog(QWidget *parent)
+    : OcrBaseDialog(parent),
       m_cbNoise(0),
       m_cbAutoscale(0),
       m_haveNorm(false)

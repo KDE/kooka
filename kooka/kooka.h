@@ -100,6 +100,7 @@ protected slots:
     void slotUpdateLoadedActions(bool isLoaded,bool isDir);
     void slotUpdateOcrResultActions(bool haveText);
     void slotOpenWithMenu();
+    void slotUpdateReadOnlyActions(bool ro);
 
 private slots:
     void filePrint();
@@ -165,6 +166,8 @@ private:
     KAction *addDeviceAction;
 
     KActionMenu *openWithMenu;
+
+    bool m_imageChangeAllowed;
 };
 
 

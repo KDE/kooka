@@ -222,7 +222,6 @@ KookaView::KookaView(KMainWindow *parent, const QByteArray &deviceToUse)
     if (ctxtmenu!=NULL) ctxtmenu->addTitle(i18n("Image View"));
 
     // Connections ImageCanvas --> myself
-    connect(mImageCanvas, SIGNAL(imageReadOnly(bool)), SLOT(slotViewerReadOnly(bool)));
     connect(mImageCanvas, SIGNAL(newRect(const QRect &)), SLOT(slotSelectionChanged(const QRect &)));
    
     /** Thumbnail View **/
@@ -300,8 +299,11 @@ KookaView::KookaView(KMainWindow *parent, const QByteArray &deviceToUse)
 
     /** Ocr Result Text **/
     mOcrResEdit  = new OcrResEdit(this);
-    mOcrResEdit->setTextFormat(Qt::PlainText);
-    mOcrResEdit->setWordWrap(Q3TextEdit::NoWrap);
+    mOcrResEdit->setAcceptRichText(false);
+    mOcrResEdit->setWordWrapMode(QTextOption::NoWrap);
+    mOcrResEdit->setClickMessage(i18n("OCR results will appear here"));
+    connect(mOcrResEdit, SIGNAL(spellCheckStatus(const QString &)),
+            this, SIGNAL(signalChangeStatusbar(const QString &)));
 
     /** Status Bar **/
     KStatusBar *statBar = mMainWindow->statusBar();
@@ -460,12 +462,6 @@ case KookaView::TabOcr:					// OCR
     mCurrentTab = static_cast<KookaView::TabPage>(index);
 							// note for next tab change
     slotGallerySelectionChanged();			// update image action states
-}
-
-
-void KookaView::slotViewerReadOnly( bool )
-{
-    /* retrieve actions that could change the image */
 }
 
 
@@ -716,8 +712,7 @@ void KookaView::slotNewPreview(const QImage *newimg, const ImgScanInfo *info)
 void KookaView::slotStartOcrSelection()
 {
    emit signalChangeStatusbar(i18n("Starting OCR on selection"));
-   KookaImage img = mImageCanvas->selectedImage();
-   if (!img.isNull()) startOCR(&img);
+   startOCR(mImageCanvas->selectedImage());
    emit signalCleanStatusbar();
 }
 
@@ -725,21 +720,27 @@ void KookaView::slotStartOcrSelection()
 void KookaView::slotStartOcr()
 {
    emit signalChangeStatusbar(i18n("Starting OCR on the image"));
-   const KookaImage *img = gallery()->getCurrImage(true);
-   startOCR(img);
+   startOCR(*gallery()->getCurrImage(true));
    emit signalCleanStatusbar();
 }
 
 
-void KookaView::slotOcrSpellCheck()
+void KookaView::slotSetOcrSpellConfig(const QString &configFile)
 {
-    kDebug();
+    kDebug() << configFile;
+    if (mOcrResEdit!=NULL) mOcrResEdit->setSpellCheckingConfigFileName(configFile);
+}
 
-    emit signalChangeStatusbar(i18n("OCR Spell Check"));
 
-    setCurrentIndex(KookaView::TabOcr);
+void KookaView::slotOcrSpellCheck(bool interactive, bool background)
+{
+    if (!interactive && !background)			// not doing anything
+    {
+        emit signalChangeStatusbar(i18n("OCR finished"));
+        return;
+    }
 
-    if (mOcrEngine==NULL || !mOcrEngine->engineValid())
+    if (mOcrEngine==NULL || !mOcrEngine->engineValid() || mOcrResEdit==NULL)
     {
         KMessageBox::sorry(mMainWindow,
                            i18n("OCR has not been performed yet, or the engine has been changed"),
@@ -747,19 +748,21 @@ void KookaView::slotOcrSpellCheck()
         return;
     }
 
-    mOcrEngine->performSpellCheck();
-    emit signalCleanStatusbar();
+    setCurrentIndex(KookaView::TabOcr);
+    emit signalChangeStatusbar(i18n("OCR Spell Check"));
+    if (background) mOcrResEdit->setCheckSpellingEnabled(true);
+    if (interactive) mOcrResEdit->checkSpelling();
 }
 
 
-void KookaView::startOCR(const KookaImage *img)
+void KookaView::startOCR(const KookaImage img)
 {
-    if (img==NULL || img->isNull()) return;
+    if (img.isNull()) return;
 
     setCurrentIndex(KookaView::TabOcr);
 
-    if (mOcrEngine!=NULL && !mOcrEngine->engineValid())	// exists, but needs to be changed?
-    {
+    if (mOcrEngine!=NULL && !mOcrEngine->engineValid())	// engine already exists,
+    {							// but needs to be changed?
         delete mOcrEngine;
         mOcrEngine = NULL;
     }
@@ -775,36 +778,29 @@ void KookaView::startOCR(const KookaImage *img)
             return;
         }
 
-        mOcrEngine->setImageCanvas( mImageCanvas );
+        mOcrEngine->setImageCanvas(mImageCanvas);
+        mOcrEngine->setTextDocument(mOcrResEdit->document());
 
         // Connections OcrEngine --> myself
-        connect( mOcrEngine, SIGNAL( newOCRResultText( const QString& )),
-                 SLOT(slotOcrResultText( const QString& )));
-//        connect( mOcrEngine, SIGNAL( newOCRResultText( const QString& )),
-//                 m_dockOCRText, SLOT( show() ));
+        connect(mOcrEngine, SIGNAL(newOCRResultText()),
+                SLOT(slotOcrResultAvailable()));
+        connect(mOcrEngine, SIGNAL(setSpellCheckConfig(const QString &)),
+                SLOT(slotSetOcrSpellConfig(const QString &)));
+        connect(mOcrEngine, SIGNAL(startSpellCheck(bool,bool)),
+                SLOT(slotOcrSpellCheck(bool,bool)));
 	  
-        // Connections OcrEngine --> ImageCanvas
-        connect( mOcrEngine, SIGNAL( repaintOCRResImage( )),
-                 mImageCanvas, SLOT(repaint()));
+        // Connections OCR Results --> OCR Engine
+        connect(mOcrResEdit, SIGNAL(highlightWord(const QRect &)),
+                mOcrEngine, SLOT(slotHighlightWord(const QRect &)));
+        connect(mOcrResEdit, SIGNAL(scrollToWord(const QRect &)),
+                mOcrEngine, SLOT(slotScrollToWord(const QRect &)));
 
         // Connections OcrEngine --> OCR Results
-        connect( mOcrEngine, SIGNAL( clearOCRResultText()),
-                 mOcrResEdit, SLOT(clear()));
+        connect(mOcrEngine, SIGNAL(readOnlyEditor(bool)),
+                mOcrResEdit, SLOT(slotSetReadOnly(bool)));
 
-        connect( mOcrEngine,    SIGNAL( updateWord(int, const QString&, const QString& )),
-                 mOcrResEdit, SLOT( slUpdateOCRResult( int, const QString&, const QString& )));
-
-        connect( mOcrEngine,    SIGNAL( ignoreWord(int, const ocrWord&)),
-                 mOcrResEdit, SLOT( slIgnoreWrongWord( int, const ocrWord& )));
-
-        connect( mOcrEngine, SIGNAL( markWordWrong(int, const ocrWord& )),
-                 mOcrResEdit, SLOT( slMarkWordWrong( int, const ocrWord& )));
-
-        connect( mOcrEngine,    SIGNAL( readOnlyEditor( bool )),
-                 mOcrResEdit, SLOT( setReadOnly( bool )));
-
-        connect( mOcrEngine,    SIGNAL( selectWord( int, const ocrWord& )),
-                 mOcrResEdit, SLOT( slSelectWord( int, const ocrWord& )));
+        //connect( mOcrEngine,    SIGNAL( selectWord( int, const ocrWord& )),
+        //mOcrResEdit, SLOT( slotSelectWord( int, const ocrWord& )));
     }
 
     mOcrEngine->setImage(img);
@@ -812,29 +808,10 @@ void KookaView::startOCR(const KookaImage *img)
 }
 
 
-void KookaView::slotOcrResultText(const QString &text)
+void KookaView::slotOcrResultAvailable()
 {
-    mOcrResEdit->setText(text);
-    emit signalOcrResultAvailable(!text.isEmpty());
-}
+    emit signalOcrResultAvailable(mOcrResEdit->document()->characterCount()>0);
 
-
-// TODO: this does not appear to be used!
-void KookaView::slotOCRResultImage(const QPixmap &pix)
-{
-    kDebug();
-    if (mImageCanvas==NULL) return;
-
-    if (mOcrResultImg!=NULL)
-    {
-        mImageCanvas->newImage(NULL);
-        delete mOcrResultImg;
-    }
-
-    mOcrResultImg = new QImage();
-    *mOcrResultImg = pix.toImage();
-    mImageCanvas->newImage(mOcrResultImg);
-    mImageCanvas->setReadOnly(true);			// OCR result images should be read only
 }
 
 
@@ -1037,8 +1014,8 @@ void KookaView::slotShowAImage(const KookaImage *img, bool isDir)
         mImageCanvas->setReadOnly(false);
     }
 
-    if (mOcrEngine!=NULL) mOcrEngine->setImage(img);	// tell OCR about it
-
+    if (mOcrEngine!=NULL) mOcrEngine->setImage(img!=NULL ? *img : KookaImage());
+							// tell OCR about it
     KStatusBar *statBar = mMainWindow->statusBar();	// show status bar info
     if (mImageCanvas!=NULL) statBar->changeItem(mImageCanvas->imageInfoString(), KookaView::StatusImage);
 

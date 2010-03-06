@@ -27,41 +27,30 @@
 #ifndef OCRRESEDIT_H
 #define OCRRESEDIT_H
 
-#include <q3textedit.h>
-
-class QString;
-class QColor;
-
-class OcrWord;
+#include <ktextedit.h>
 
 
-class OcrResEdit : public Q3TextEdit
+class OcrResEdit : public KTextEdit
 {
     Q_OBJECT
+
 public:
     OcrResEdit(QWidget *parent);
 
 public slots:
-    void slotUpdateOCRResult( int line, const QString& wordFrom,
-                            const QString& wordTo );
-
-    void slotMarkWordWrong( int line, const OcrWord& word );
-
-    void slotIgnoreWrongWord( int line, const OcrWord& word );
-
-    void slotSelectWord( int line, const OcrWord& word );
+// TODO: still needs to be ported
+//    void slotSelectWord( int line, const OcrWord& word );
 
     void slotSaveText();
+    void slotSetReadOnly(bool isRO);
 
-protected slots:
-    void slotReplaceWord( int line, const QString& wordFrom,
-                        const QString& wordTo, const QColor& color );
+signals:
+    void highlightWord(const QRect &r);
+    void scrollToWord(const QRect &r);
 
-private:
-    QColor      m_updateColor;
-    QColor      m_ignoreColor;
-    QColor      m_wrnColor;
-
+private slots:
+    void slotUpdateHighlight();
 };
+
 
 #endif							// OCRRESEDIT_H

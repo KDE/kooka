@@ -43,7 +43,7 @@ public:
     OcrGocrEngine(QWidget *parent = NULL);
     ~OcrGocrEngine();
 
-    OcrBaseDialog *createOCRDialog(QWidget *parent, KSpellConfig *spellConfig = NULL);
+    OcrBaseDialog *createOCRDialog(QWidget *parent);
 
     OcrEngine::EngineType engineType() const { return (OcrEngine::EngineGocr); }
     static QString engineDesc();

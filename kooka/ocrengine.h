@@ -27,29 +27,45 @@
 #define OCRENGINE_H
 
 #include <qobject.h>
+#include <qtextformat.h>
 
-#include "ocrword.h"
+#include "kookaimage.h"
 
 #define CFG_OCR_ENGINE    "ocrEngine"
 #define CFG_OCR_ENGINE2   "ocrEngine2"
-#define CFG_OCR_CLEANUP   "unlinkORF"  /* delete orf file? */
 
 /**
   *@author Klaas Freitag
   */
 
 class QRect;
-class QPixmap;
 class QStringList;
 class QImage;
+class QTextDocument;
 
 class KProcess;
-class KSpell;
-class KSpellConfig;
 
 class KookaImage;
 class ImageCanvas;
 class OcrBaseDialog;
+
+
+// Using a QTextDocument for the OCR results, with the source image rectangle
+// and other OCR information held as text properties.
+
+class OcrWordData : public QTextCharFormat
+{
+public:
+    enum DataType
+    {
+        Rectangle = QTextFormat::UserProperty,		// QRect
+        Alternatives,					// QStringList
+        KNode						// int
+    };
+
+    OcrWordData() : QTextCharFormat()	{}
+};
+
 
 
 class OcrEngine : public QObject
@@ -77,12 +93,6 @@ public:
     virtual ~OcrEngine();
 
     bool startOCRVisible(QWidget *parent = NULL);
-    void performSpellCheck();
-
-    /**
-     * @return the current spell config.
-     */
-    KSpellConfig* ocrSpellConfig() const { return (m_spellInitialConfig); }
 
     /**
      * Sets an image Canvas that displays the result image of OCR. If this
@@ -91,19 +101,19 @@ public:
      * the image to OCR.
      */
     void setImageCanvas(ImageCanvas *canvas);
-    void setImage(const KookaImage *img);
-
-    bool engineValid() const;
-
-    virtual OcrEngine::EngineType engineType() const = 0;
+    void setImage(const KookaImage img);
+    void setTextDocument(QTextDocument *doc);
 
     static const QString engineName(OcrEngine::EngineType eng);
     static OcrEngine *createEngine(QWidget *parent,bool *gotoPrefs = NULL);
+    bool engineValid() const;
+
+public slots:
+    void slotHighlightWord(const QRect &r);
+    void slotScrollToWord(const QRect &r);
 
 signals:
-    void newOCRResultText(const QString &text);
-    void clearOCRResultText();
-    void newOCRResultPixmap(const QPixmap &pix);
+    void newOCRResultText();
 
     /**
      * progress of the ocr process. The first integer is the main progress,
@@ -113,40 +123,12 @@ signals:
      * Note that this signal may not be emitted if the engine does not support
      * progress.
      */
-    void ocrProgress(int progress,int subprogress);
+    void ocrProgress(int progress, int subprogress);
 
     /**
      * select a word in the editor in line line.
      */
-    void selectWord(int line,const OcrWord &word);
-
-    /**
-     * signal to indicate that a ocr text must be updated due to better results
-     * retrieved from spell check. The internal ocr data structure is already
-     * updated when this signal is fired.
-     *
-     * @param line      the line in which the word must be changed (start at 0)
-     * @param wordFrom  the original word
-     * @param wordTo    the new word(s).
-     */
-    void updateWord(int line,const QString &wordFrom,const QString &wordTo);
-
-    /**
-     * signal to indicate that word word was ignored by the user. This should result
-     * in a special coloring in the editor.
-     */
-    void ignoreWord(int line,const OcrWord &word);
-
-    /**
-     * signal that comes if a word is considered to be wrong in the editor.
-     * The word should be marked in any way, e.g. with a signal color.
-     **/
-    void markWordWrong(int line,const OcrWord &word);
-
-    /**
-     * signal the tells that the result image was modified.
-     */
-    void repaintOCRResImage();
+///    void selectWord(int line,const OcrWord &word);
 
     /**
      * indicates that the text editor holding the text that came through
@@ -154,6 +136,9 @@ signals:
      * to QTextEdit::setReadOnly directly.
      */
     void readOnlyEditor(bool isReadOnly);
+
+    void setSpellCheckConfig(const QString &configFile);
+    void startSpellCheck(bool interactive, bool background);
 
 protected:
     /**
@@ -163,49 +148,32 @@ protected:
     bool eventFilter(QObject *object,QEvent *event);
 
     void finishedOCRVisible(bool success);
-    virtual OcrBaseDialog *createOCRDialog(QWidget *parent,KSpellConfig *spellConfig = NULL) = 0;
+    virtual OcrBaseDialog *createOCRDialog(QWidget *parent) = 0;
 
     virtual QStringList tempFiles(bool retain) = 0;
+
+    virtual OcrEngine::EngineType engineType() const = 0;
+
+
+    QTextDocument *startResultDocument();
+    void finishResultDocument();
+
+    void startLine();
+    void addWord(const QString &word, const OcrWordData &data);
+    void finishLine();
 
 protected:
     KProcess *m_ocrProcess;
     QString m_ocrResultFile;
     QString m_ocrResultText;
     QWidget *m_parent;
-    rectList m_blocks;					// dimensions of recognised blocks
-
-    ocrBlock m_ocrPage;					// wordLists for every line of OCR results
 							// one block contains all lines of the page
 protected slots:
     void slotClose();
     void slotStopOCR();
 
-    void slotSpellReady(KSpell *spell);
-    void slotSpellDead();
-
-    void slotMisspelling(const QString &originalword,const QStringList &suggestions,int pos);
-    void slotSpellCorrected(const QString &originalword,const QString &newword,int pos);
-    void slotSpellIgnoreWord(const QString &word);
-
-    void slotCheckListDone(bool shouldUpdate);
-    bool slotUpdateWord(int line,int spellWordIndx,const QString &origWord,const QString &newWord);
-
 private:
     virtual void startProcess(OcrBaseDialog *dia, const KookaImage *img) = 0;
-
-    /**
-     * checks after a ocr run if the line number exists in the result
-     */
-    bool lineValid(int line) const;
-
-    /**
-     *  Start spell checking on a specific line that is stored in m_ocrCurrLine.
-     *  This method starts the spell checking.
-     **/
-    void startLineSpellCheck();
-    OcrWord OcrWordFromKSpellWord(int line,const QString &word);
-
-    QString ocrResultText();
 
     void stopOCRProcess(bool tellUser);
     void removeTempFiles();
@@ -217,21 +185,16 @@ private:
     OcrBaseDialog *m_ocrDialog;
     bool m_ocrRunning;
 
-    const KookaImage *m_introducedImage;
+    KookaImage m_introducedImage;
     QImage *m_resultImage;
     ImageCanvas *m_imgCanvas;
 
-    KSpell *m_spell;
-    bool m_wantKSpell;
-    bool m_kspellVisible;
-    bool m_hideDiaWhileSpellcheck;
-    KSpellConfig *m_spellInitialConfig;
-
-    unsigned m_ocrCurrLine;				// current processed line to speed kspell correction
-    QStringList m_checkStrings;
-
     int m_currHighlight;
-    bool m_applyFilter;
+    bool m_trackingActive;
+
+    QTextDocument *m_document;
+    QTextCursor *m_cursor;
+    int m_wordCount;
 };
 
 

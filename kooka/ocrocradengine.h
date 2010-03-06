@@ -41,7 +41,7 @@ public:
     OcrOcradEngine(QWidget *parent = NULL);
     ~OcrOcradEngine();
 
-    OcrBaseDialog *createOCRDialog(QWidget *parent,KSpellConfig *spellConfig = NULL);
+    OcrBaseDialog *createOCRDialog(QWidget *parent);
 
     OcrEngine::EngineType engineType() const { return (OcrEngine::EngineOcrad); }
     static QString engineDesc();
@@ -62,6 +62,7 @@ private:
     QString m_tempOrfName;
     QString m_ocrImagePBM;
     int ocradVersion;
+    bool m_verboseDebug;
 };
 
 

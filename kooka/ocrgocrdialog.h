@@ -47,7 +47,7 @@ class OcrGocrDialog : public OcrBaseDialog
     Q_OBJECT
 
 public:
-    OcrGocrDialog(QWidget *parent,KSpellConfig *spellConfig = NULL);
+    OcrGocrDialog(QWidget *parent);
     ~OcrGocrDialog();
 
     OcrEngine::EngineError setupGui();

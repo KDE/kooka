@@ -60,9 +60,9 @@ OcrKadmosEngine::~OcrKadmosEngine()
 }
 
 
-OcrBaseDialog *OcrKadmosEngine::createOCRDialog(QWidget *parent,KSpellConfig *spellConfig)
+OcrBaseDialog *OcrKadmosEngine::createOCRDialog(QWidget *parent)
 {
-    return (new KadmosDialog(parent,spellConfig));
+    return (new KadmosDialog(parent));
 }
 
 

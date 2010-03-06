@@ -425,7 +425,7 @@ QString ImgSaver::tempSaveImage(const KookaImage *img, const ImageFormat &format
     tmpFile.close();
 
     KookaImage tmpImg;
-    if (colors!=-1 && img->numColors()!=colors)
+    if (colors!=-1 && img->depth()!=colors)
     {
 	// Need to convert image
         QImage::Format newfmt;
