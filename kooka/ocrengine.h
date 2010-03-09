@@ -126,9 +126,10 @@ signals:
     void ocrProgress(int progress, int subprogress);
 
     /**
-     * select a word in the editor in line line.
+     * Select a word in the editor corresponding to the position within
+     * the result image.
      */
-///    void selectWord(int line,const OcrWord &word);
+    void selectWord(const QPoint &p);
 
     /**
      * indicates that the text editor holding the text that came through

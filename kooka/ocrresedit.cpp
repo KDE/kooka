@@ -47,10 +47,10 @@
 
 
 //  The OCR results are stored in our text document.  Each OCR'ed word has
-//  properties stored in is QTextCharFormat recording its word rectangle
-//  (if the OCR engine has this information) and possibly other details also.
-//  We can read out those properties again to highlight the relevant part of
-//  the result image when a cursor move or selection is made.
+//  properties stored in its QTextCharFormat recording the word rectangle
+//  (if the OCR engine provides this information) and possibly other details
+//  also.  We can read out those properties again to highlight the relevant
+//  part of the result image when a cursor move or selection is made.
 //
 //  Spell checking mostly uses KTextEdit's built in spell checking support
 //  (which uses Sonnet).
@@ -70,28 +70,81 @@ OcrResEdit::OcrResEdit(QWidget *parent)
     slotSetReadOnly(true);				// initially, anyway
 
     connect(this, SIGNAL(cursorPositionChanged()), SLOT(slotUpdateHighlight()));
+
+// TODO: monitor textChanged() signal, if document emptied (cleared)
+// then tell OCR engine to stop tracking and double clicks
+// then ImageCanvas can disable selection if tracking active (because it
+// doesn't paint properly).
 }
 
 
-// TODO: still needs to be ported
-#if 0
-void OcrResEdit::slotSelectWord(int line, const OcrWord &word)
+static void moveForward(QTextCursor &curs, bool once = true)
 {
-   if( line < paragraphs() )
-   {
-      QString editLine = text(line);
-      int pos = editLine.indexOf(word);
-      if (pos>-1)
-      {
-          QTextCursor curs(document());
-
-	 setCursorPosition(line, pos);
-	 setSelection( line, pos, line, pos + word.length());
-         ensureCursorVisible();
-      }
-   }
+    if (once) curs.movePosition(QTextCursor::NextCharacter);
+    while (curs.atBlockStart()) curs.movePosition(QTextCursor::NextCharacter);
 }
-#endif
+
+
+void OcrResEdit::slotSelectWord(const QPoint &pos)
+{
+    if (document()->isEmpty()) return;			// nothing to search
+
+    kDebug() << pos;
+
+    QTextCursor curs(document());			// start of document
+    QRect wordRect;
+
+    // First find the start of the word corresponding to the clicked point
+
+    moveForward(curs, false);
+    while (!curs.atEnd())
+    {
+        QTextCharFormat fmt = curs.charFormat();
+        QRect rect = fmt.property(OcrWordData::Rectangle).toRect();
+        //kDebug() << "at" << curs.position() << "rect" << rect;
+        if (rect.isValid() && rect.contains(pos, true))
+        {
+            wordRect = rect;
+            break;
+        }
+        moveForward(curs);
+    }
+
+    kDebug() << "found rect" << wordRect << "at" << curs.position();
+
+    if (!wordRect.isValid()) return;			// no word found
+
+    // Then find the end of the word.  That is an OCR result word, i.e. a
+    // span with the same character format, not a text word ended by whitespace.
+
+    QTextCursor wordStart = curs;
+    QTextCharFormat ref = wordStart.charFormat();
+
+    moveForward(curs);
+    while (!curs.atEnd())
+    {
+        QTextCharFormat fmt = curs.charFormat();
+        //kDebug() << "at" << curs.position() << "rect" << fmt.property(OcrWordData::Rectangle).toRect();
+        if (fmt!=ref)
+        {
+            //kDebug() << "mismatch at" << curs.position();
+            break;
+        }
+        moveForward(curs);
+    }
+
+    curs.movePosition(QTextCursor::PreviousCharacter);
+    kDebug() << "word start" << wordStart.position() << "end" << curs.position();
+    int pos1 = wordStart.position();
+    int pos2 = curs.position();
+    if (pos1==pos2) return;				// no word found
+
+    QTextCursor wc(document());
+    wc.setPosition(wordStart.position()-1, QTextCursor::MoveAnchor);
+    wc.setPosition(curs.position(), QTextCursor::KeepAnchor);
+    setTextCursor(wc);
+    ensureCursorVisible();
+}
 
 
 void OcrResEdit::slotSaveText()

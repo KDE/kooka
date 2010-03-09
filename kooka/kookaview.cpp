@@ -798,9 +798,8 @@ void KookaView::startOCR(const KookaImage img)
         // Connections OcrEngine --> OCR Results
         connect(mOcrEngine, SIGNAL(readOnlyEditor(bool)),
                 mOcrResEdit, SLOT(slotSetReadOnly(bool)));
-
-        //connect( mOcrEngine,    SIGNAL( selectWord( int, const ocrWord& )),
-        //mOcrResEdit, SLOT( slotSelectWord( int, const ocrWord& )));
+        connect(mOcrEngine, SIGNAL(selectWord(const QPoint &)),
+                mOcrResEdit, SLOT(slotSelectWord(const QPoint &)));
     }
 
     mOcrEngine->setImage(img);

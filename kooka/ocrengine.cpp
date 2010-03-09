@@ -343,100 +343,40 @@ void OcrEngine::startOCRProcess()
 
 //  Filtering mouse events on the image viewer
 //  ------------------------------------------
-// TODO: still needs to be ported
 
 void OcrEngine::setImageCanvas(ImageCanvas *canvas)
 {
     m_imgCanvas = canvas;
-    m_imgCanvas->installEventFilter(this);
+    m_imgCanvas->widget()->installEventFilter(this);	// filter on the scrolled widget
 }
 
 
-bool OcrEngine::eventFilter( QObject *object, QEvent *event )
+bool OcrEngine::eventFilter(QObject *object, QEvent *event)
 {
-#if 0
-    QWidget *w = (QWidget*) object;
+    if (!m_trackingActive) return (false);		// not interested
+    if (m_imgCanvas==NULL) return (false);		// no image canvas
+							// not a double click
+    if (event->type()!=QEvent::MouseButtonDblClick) return (false);
 
-    if( m_trackingActive && m_imgCanvas && w == m_imgCanvas )
+    QWidget *w = static_cast<QWidget *>(object);
+    if (w!=m_imgCanvas->widget()) return (false);	// not on our image
+
+    QMouseEvent *mev = static_cast<QMouseEvent *>(event);
+    QPoint p = mev->pos();
+
+    int scale = m_imgCanvas->getScaleFactor();
+    //kDebug() << "On image at at" << p << "scale" << scale;
+    if (scale!=100)					// not at actual size
     {
-        if( event->type() == QEvent::MouseButtonDblClick )
-        {
-            QMouseEvent *mev = static_cast<QMouseEvent*>(event);
-
-            int x = mev->x();
-            int y = mev->y();
-            int scale = m_imgCanvas->getScaleFactor();
-
-// TODO: is this still needed?
-//	    m_imgCanvas->viewportToContents( mev->x(), mev->y(),
-//					     x, y );
-
-            kDebug() << "Clicked to [" << x << "," << y << "] scale" << scale;
-            if( scale != 100 )
-            {
-                // Scale is e.g. 50 that means tha the image is only half of size.
-                // thus the clicked coords must be multiplied with 2
-                y = int(double(y)*100/scale);
-                x = int(double(x)*100/scale);
-            }
-
-            /* now search the word that was clicked on */
-	    int line = 0;
-	    bool valid = false;
-	    OcrWord wordToFind;
-
-            QVector<OcrWordList>::const_iterator pageIt = m_ocrPage.constBegin();
-            for ( ; pageIt != m_ocrPage.constEnd(); ++pageIt )
-            {
-                QRect r = (*pageIt).wordListRect();
-
-                if( y > r.top() && y < r.bottom() )
-                {
-		   kDebug() << "It is in between [" << r.top() << "," << r.bottom()
-                            << "] line " << line;
-		   valid = true;
-		   break;
-                }
-		line++;
-            }
-
-	    /*
-	     * If valid, we have the line into which the user clicked. Now we
-	     * have to find out the actual word
-	     */
-	    if( valid )
-	    {
-	       valid = false;
-	       /* find the word in the line and mark it */
-	       OcrWordList words = *pageIt;
-	       OcrWordList::iterator wordIt;
-
-	       for( wordIt = words.begin(); wordIt != words.end() && !valid; ++wordIt )
-	       {
-		  QRect r = (*wordIt).rect();
-		  if( x > r.left() && x < r.right() )
-		  {
-		     wordToFind = *wordIt;
-		     valid = true;
-		  }
-	       }
-
-	    }
-
-	    /*
-	     * if valid, the wordToFind contains the correct word now.
-	     */
-	    if( valid )
-	    {
-	       kDebug() << "Found clicked word" << wordToFind;
-	       emit selectWord( line, wordToFind );
-	    }
-
-            return true;
-        }
+        // Scale is e.g. 50 that means tha the image is only displayed at
+        // half size, thus the clicked coordinates must be multiplied by 2
+        // to get the image coordinates.
+        p *= (100.0/scale);				// rounds to nearest
     }
-#endif
-    return false;
+
+    // OcrResEdit does all of the rest of the work.
+    emit selectWord(p);
+    return (true);					// event was handled
 }
 
 
@@ -455,10 +395,7 @@ void OcrEngine::slotHighlightWord(const QRect &r)
 
     KColorScheme sch(QPalette::Active, KColorScheme::Selection);
     QColor col = sch.background(KColorScheme::NegativeBackground).color();
-    QPen pen(col, 2);
-    QBrush brush(col, Qt::Dense7Pattern);
-
-    m_imgCanvas->setHighlightStyle(ImageCanvas::Box, pen, brush);
+    m_imgCanvas->setHighlightStyle(ImageCanvas::Box, QPen(col, 2));
     m_currHighlight = m_imgCanvas->highlight(r, true);
 }
 
@@ -474,9 +411,7 @@ void OcrEngine::slotScrollToWord(const QRect &r)
 
     KColorScheme sch(QPalette::Active, KColorScheme::Selection);
     QColor col = sch.background(KColorScheme::NeutralBackground).color();
-    QPen pen(col, 2);
-
-    m_imgCanvas->setHighlightStyle(ImageCanvas::Underline, pen);
+    m_imgCanvas->setHighlightStyle(ImageCanvas::Underline, QPen(col, 2));
     m_currHighlight = m_imgCanvas->highlight(r, true);
 }
 
@@ -521,7 +456,7 @@ void OcrEngine::finishResultDocument()
 void OcrEngine::startLine()
 {
     if (m_ocrDialog->verboseDebug()) kDebug();
-    m_cursor->insertBlock();
+    if (!m_cursor->atStart()) m_cursor->insertBlock(QTextBlockFormat(), QTextCharFormat());
 }
 
 
@@ -534,7 +469,7 @@ void OcrEngine::addWord(const QString &word, const OcrWordData &data)
 {
     if (m_ocrDialog->verboseDebug())
     {
-        kDebug() << "word" << word
+        kDebug() << "word" << word << "len" << word.length()
                  << "rect" << data.property(OcrWordData::Rectangle)
                  << "alts" << data.property(OcrWordData::Alternatives);
     }

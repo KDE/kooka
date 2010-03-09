@@ -49,6 +49,11 @@ const int TIMER_INTERVAL = 100;
 //  ImageCanvasWidget -- Displays a scaled pixmap and any number of
 //  highlight rectangles over the top of it.
 
+// TODO: this needs to handle the selection rectangle too, as otherwise it
+// erases the highlights (see ImageCanvas::draw*AreaBorder() for why).  Also
+// needs to be done in a paint event, so that the Qt::WA_PaintOutsidePaintEvent
+// can be eliminated.
+
 class ImageCanvasWidget : public QWidget
 {
 public:
@@ -134,8 +139,6 @@ void ImageCanvasWidget::setHighlightStyle(ImageCanvas::HighlightStyle style,
 
 void ImageCanvasWidget::paintEvent(QPaintEvent *ev)
 {
-    kDebug();
-
     QPainter p(this);
 
     style()->drawItemPixmap(&p, contentsRect(), Qt::AlignLeft|Qt::AlignTop, mPixmap);
@@ -1011,8 +1014,6 @@ void ImageCanvas::deleteView(const QImage *delimage)
 int ImageCanvas::highlight(const QRect &rect, bool ensureVis)
 {
     int idx = mPixmapLabel->addHighlightRect(rect);
-    kDebug() << "added highlight" << idx;
-
     if (ensureVis) scrollTo(rect);
     return (idx);
 }

@@ -30,6 +30,10 @@
 #include <ktextedit.h>
 
 
+class QPoint;
+class QRect;
+
+
 class OcrResEdit : public KTextEdit
 {
     Q_OBJECT
@@ -38,8 +42,7 @@ public:
     OcrResEdit(QWidget *parent);
 
 public slots:
-// TODO: still needs to be ported
-//    void slotSelectWord( int line, const OcrWord& word );
+    void slotSelectWord(const QPoint &pos);
 
     void slotSaveText();
     void slotSetReadOnly(bool isRO);
