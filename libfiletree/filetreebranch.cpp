@@ -168,6 +168,9 @@ void FileTreeBranch::setOpenPixmap(const QIcon &pix)
 void FileTreeBranch::slotListerStarted(const KUrl &url)
 {
     kDebug() << "lister started for" << url;
+
+    FileTreeViewItem *item = findItemByUrl(url);
+    if (item!=NULL) emit populateStarted(item);
 }
 
 
@@ -477,14 +480,14 @@ void FileTreeBranch::itemDeleted(const KFileItem *fi)
 
 void FileTreeBranch::slotListerCanceled(const KUrl &url)
 {
-    // ### anything else to do?
-    // remove the url from the childrento-recurse-list
-    m_openChildrenURLs.removeAll( url);
+    kDebug() << "lister cancelled for" << url;
 
-    // stop animations etc.
+    // remove the URL from the children-to-recurse list
+    m_openChildrenURLs.removeAll(url);
+
+    // stop animations, etc.
     FileTreeViewItem *item = findItemByUrl(url);
-    if (item==NULL) return; // Uh oh...
-    emit populateFinished(item);
+    if (item!=NULL) emit populateFinished(item);
 }
 
 
@@ -527,7 +530,7 @@ void FileTreeBranch::slotRedirect(const KUrl &oldUrl, const KUrl &newUrl)
 
 void FileTreeBranch::slotListerCompleted(const KUrl &url)
 {
-    kDebug() << "for" << url;
+    kDebug() << "lister completed for" << url;
     FileTreeViewItem *currParent = findItemByUrl( url );
     if (currParent==NULL) return;
 

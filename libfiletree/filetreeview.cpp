@@ -23,7 +23,6 @@
 #include <stdlib.h>
 
 #include <qevent.h>
-#include <qtimer.h>
 #include <qdir.h>
 #include <qapplication.h>
 
@@ -52,13 +51,10 @@ FileTreeView::FileTreeView(QWidget *parent)
     setExpandsOnDoubleClick(false);			// we'll handle this ourselves
     setEditTriggers(QAbstractItemView::NoEditTriggers);	// maybe changed later
 
-    m_animationTimer = new QTimer( this );
-    connect( m_animationTimer, SIGNAL( timeout() ),
-             this, SLOT( slotAnimation() ) );
-
     m_wantOpenFolderPixmaps = true;
     m_currentBeforeDropItem = NULL;
     m_dropItem = NULL;
+    m_busyCount = 0;
 
     m_autoOpenTimer = new QTimer( this );
     connect( m_autoOpenTimer, SIGNAL( timeout() ),
@@ -296,36 +292,27 @@ void FileTreeView::slotCollapsed(QTreeWidgetItem *tvi)
 }
 
 
-void FileTreeView::slotExpanded(QTreeWidgetItem *item)
+void FileTreeView::slotExpanded(QTreeWidgetItem *tvi)
 {
-   kDebug();
+    FileTreeViewItem *item = static_cast<FileTreeViewItem *>(tvi);
+    if (item==NULL) return;
 
-   if (item==NULL) return;
+    kDebug() << item->text(0);
 
-   FileTreeViewItem *it = static_cast<FileTreeViewItem*>(item);
-   FileTreeBranch *branch = it->branch();
+    FileTreeBranch *branch = item->branch();
 
-   /* Start the animation for the branch object */
-   if( it->isDir() && branch && item->childCount() == 0 )
-   {
-      /* check here if the branch really needs to be populated again */
-      kDebug() << "starting to open" << it->url().prettyUrl();
-      startAnimation( it );
-      bool branchAnswer = branch->populate( it->url(), it );
-      kDebug() << "Branches answer" << branchAnswer;
-      if( ! branchAnswer )
-      {
-	 kDebug() << "Could not populate!";
-	 stopAnimation( it );
-      }
-   }
+    // Check if the branch needs to be populated now
+    if (item->isDir() && branch!=NULL && item->childCount()==0)
+    {
+        kDebug() << "need to populate" << item->url();
+        if (!branch->populate(item->url(), item))
+        {
+            kDebug() << "Branch populate failed!";
+        }
+    }
 
-   /* set a pixmap 'open folder' */
-   if( it->isDir() && item->isExpanded() )
-   {
-      kDebug()<< "Setting open pixmap";
-      item->setIcon( 0, itemIcon( it ));
-   }
+    // set pixmap for open folders
+    if (item->isDir() && item->isExpanded()) item->setIcon(0, itemIcon(item));
 }
 
 
@@ -417,15 +404,15 @@ FileTreeBranch *FileTreeView::addBranch(const KUrl &path, const QString &name,
 
 FileTreeBranch *FileTreeView::addBranch(FileTreeBranch *newBranch)
 {
-    connect( newBranch, SIGNAL(populateFinished( FileTreeViewItem* )),
-             this, SLOT( slotPopulateFinished( FileTreeViewItem* )));
+    connect(newBranch, SIGNAL(populateStarted(FileTreeViewItem *)),
+            SLOT(slotStartAnimation(FileTreeViewItem *)));
+    connect(newBranch, SIGNAL(populateFinished(FileTreeViewItem *)),
+            SLOT(slotStopAnimation(FileTreeViewItem *)));
 
-    connect( newBranch, SIGNAL( newTreeViewItems( FileTreeBranch*,
-                                                  const FileTreeViewItemList& )),
-             this, SLOT( slotNewTreeViewItems( FileTreeBranch*,
-                                               const FileTreeViewItemList& )));
+    connect(newBranch, SIGNAL(newTreeViewItems(FileTreeBranch *,const FileTreeViewItemList &)),
+            SLOT(slotNewTreeViewItems(FileTreeBranch *,const FileTreeViewItemList &)));
 
-    m_branches.append( newBranch );
+    m_branches.append(newBranch);
     return (newBranch);
 }
 
@@ -476,12 +463,6 @@ void FileTreeView::setDirOnlyMode(FileTreeBranch *branch, bool bom)
 }
 
 
-void FileTreeView::slotPopulateFinished(FileTreeViewItem *item)
-{
-    if (item!=NULL && item->isDir()) stopAnimation(item);
-}
-
-
 void FileTreeView::slotNewTreeViewItems(FileTreeBranch *branch, const FileTreeViewItemList &items)
 {
     if (branch==NULL) return;
@@ -512,16 +493,15 @@ void FileTreeView::slotNewTreeViewItems(FileTreeBranch *branch, const FileTreeVi
 }
 
 
-QIcon FileTreeView::itemIcon(FileTreeViewItem *item, int gap) const
+QIcon FileTreeView::itemIcon(FileTreeViewItem *item) const
 {
     QIcon pix;
-    kDebug() << "Setting icon for column" << gap;
 
     if (item!=NULL)
     {
-        /* Check if it is a branch root */
+        /* Check whether it is a branch root */
         FileTreeBranch *branch = item->branch();
-        if (item == branch->root())
+        if (item==branch->root())
         {
             pix = branch->pixmap();
             if (m_wantOpenFolderPixmaps && branch->root()->isExpanded())
@@ -532,14 +512,13 @@ QIcon FileTreeView::itemIcon(FileTreeViewItem *item, int gap) const
         else
         {
             // TODO: different modes, user Pixmaps ?
-            pix = item->fileItem()->pixmap( KIconLoader::SizeSmall ); // , KIconLoader::DefaultState);
+            pix = item->fileItem()->pixmap(KIconLoader::SizeSmall);
 
             /* Only if it is a dir and the user wants open dir pixmap and it is open,
              * change the fileitem's pixmap to the open folder pixmap. */
-            if( item->isDir() && m_wantOpenFolderPixmaps )
+            if (item->isDir() && m_wantOpenFolderPixmaps)
             {
-                if ((static_cast<QTreeWidgetItem *>(item))->isExpanded())
-                    pix = m_openFolderPixmap;
+                if (item->isExpanded()) pix = m_openFolderPixmap;
             }
         }
     }
@@ -548,81 +527,24 @@ QIcon FileTreeView::itemIcon(FileTreeViewItem *item, int gap) const
 }
 
 
-
-// TODO: does the animation actually work? is it useful?
-void FileTreeView::slotAnimation()
-{
-    MapCurrentOpeningFolders::Iterator it = m_mapCurrentOpeningFolders.begin();
-    MapCurrentOpeningFolders::Iterator end = m_mapCurrentOpeningFolders.end();
-    for (; it != end;)
-    {
-        FileTreeViewItem *item = it.key();
-        if (!isValidItem(item))
-        {
-            ++it;
-            m_mapCurrentOpeningFolders.remove(item);
-            continue;
-        }
-
-        uint &iconNumber = it.value().iconNumber;
-        QString icon = QString::fromLatin1( it.value().iconBaseName ).append( QString::number( iconNumber ) );
-        // kDebug(250) << "Loading icon " << icon;
-        item->setIcon( 0, DesktopIcon( icon,KIconLoader::SizeSmall,KIconLoader::ActiveState )); // FileTreeViewFactory::instance() ) );
-
-        iconNumber++;
-        if ( iconNumber > it.value().iconCount ) iconNumber = 1;
-        ++it;
-    }
-}
-
-
-void FileTreeView::startAnimation(FileTreeViewItem *item, const char *iconBaseName, uint iconCount)
-{
-    /* TODO: allow specific icons */
-    if (item==NULL)
-    {
-        kDebug() << "without valid item";
-        return;
-    }
-
-    m_mapCurrentOpeningFolders.insert( item,
-                                       AnimationInfo( iconBaseName,
-                                                      iconCount,
-                                                      itemIcon(item, 0) ) );
-    if ( !m_animationTimer->isActive() )
-        m_animationTimer->start( 50 );
-}
-
-
-void FileTreeView::stopAnimation(FileTreeViewItem *item)
+void FileTreeView::slotStartAnimation(FileTreeViewItem *item)
 {
     if (item==NULL) return;
+    kDebug() << "for" << item->text(0);
 
-    kDebug();
+    ++m_busyCount;
+    setCursor(Qt::BusyCursor);
+}
 
-    MapCurrentOpeningFolders::Iterator it = m_mapCurrentOpeningFolders.find(item);
-    if (it!=m_mapCurrentOpeningFolders.end())
-    {
-        if (item->isDir() && item->isExpanded())
-        {
-            kDebug() << "Setting folder open pixmap";
-            item->setIcon( 0, itemIcon( item ));
-        }
-        else
-        {
-            item->setIcon( 0, it.value().originalPixmap );
-        }
-        m_mapCurrentOpeningFolders.remove(item);
-    }
-    else
-    {
-        if (item!=NULL)
-            kDebug()<< "could not find item" << item->url().prettyUrl();
-        else
-            kDebug()<< "item is NULL";
-    }
-    if (m_mapCurrentOpeningFolders.isEmpty())
-        m_animationTimer->stop();
+
+void FileTreeView::slotStopAnimation(FileTreeViewItem *item)
+{
+    if (item==NULL) return;
+    kDebug() << "for" << item->text(0);
+    if (m_busyCount<=0) return;
+
+    --m_busyCount;
+    if (m_busyCount==0) unsetCursor();
 }
 
 

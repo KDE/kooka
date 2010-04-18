@@ -158,9 +158,6 @@ public slots:
     virtual void setShowFolderOpenPixmap(bool showIt = true);
 
 protected:
-    virtual void startAnimation(FileTreeViewItem *item, const char *iconBaseName = "kde", uint iconCount = 6);
-    virtual void stopAnimation(FileTreeViewItem *item);
-
     // TODO: port D&D
     /**
      * @returns true if we can decode the drag and support the action
@@ -174,14 +171,12 @@ protected:
 
 
 protected slots:
+    // TODO: does anything here need to be virtual?
     virtual void slotNewTreeViewItems(FileTreeBranch *branch,
                                       const FileTreeViewItemList &newItems);
 
     virtual void slotSetNextUrlToSelect(const KUrl &url);
     virtual void slotDataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight);
-
-    // TODO: does this need to be a slot?
-    virtual QIcon itemIcon(FileTreeViewItem *item, int gap = 0) const;
 
 private slots:
     void slotExecuted(QTreeWidgetItem *item);
@@ -191,13 +186,12 @@ private slots:
 
     void slotSelectionChanged();
 
-    void slotAnimation();
-
     void slotAutoOpenFolder();
 
     void slotOnItem(QTreeWidgetItem *item);
 
-    void slotPopulateFinished(FileTreeViewItem *item);
+    void slotStartAnimation(FileTreeViewItem *item);
+    void slotStopAnimation(FileTreeViewItem *item);
 
 signals:
     void onItem(const QString &path);
@@ -223,27 +217,12 @@ private:
     // Returns whether item is still a valid item in the tree
     bool isValidItem(QTreeWidgetItem *item);
     void clearTree();
+    QIcon itemIcon(FileTreeViewItem *item) const;
 
     /* List that holds the branches */
     FileTreeBranchList m_branches;
 
-    struct AnimationInfo
-    {
-        AnimationInfo(const char *p_iconBaseName, uint p_iconCount, const QIcon &p_originalPixmap)
-            : iconBaseName(p_iconBaseName),
-              iconCount(p_iconCount),
-              iconNumber(1),
-              originalPixmap(p_originalPixmap) {}
-        AnimationInfo() : iconCount(0) {}
-        QByteArray iconBaseName;
-        uint iconCount;
-        uint iconNumber;
-        QIcon originalPixmap;
-    };
-
-    typedef QMap<FileTreeViewItem *, AnimationInfo> MapCurrentOpeningFolders;
-    MapCurrentOpeningFolders m_mapCurrentOpeningFolders;
-    QTimer *m_animationTimer;
+    int m_busyCount;
 
     QPoint m_dragPos;
     bool m_bDrag;

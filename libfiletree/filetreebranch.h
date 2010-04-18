@@ -161,8 +161,9 @@ protected:
 
 signals:
     /**
-     * emitted with the item of a directory which was finished to populate
+     * indicates start/finish lister activity 
      */
+    void populateStarted(FileTreeViewItem *item);
     void populateFinished(FileTreeViewItem *item);
 
     /**
