@@ -371,7 +371,7 @@ void ScanGallery::slotDirCount(FileTreeViewItem *item, int cnt)
         cc += i18np("1 folder", "%1 folders", dirCount);
     }
 
-    item->setText(1," "+cc);
+    item->setText(1,(" "+cc));
 }
 
 
@@ -407,7 +407,7 @@ void ScanGallery::slotDecorate(FileTreeViewItem *item)
                 else item->setIcon(0, mPixColor);
             }
 							// set image size column
-            QString t = i18n("%1 x %2", img->width(), img->height());
+            QString t = i18n(" %1 x %2", img->width(), img->height());
             item->setText(1,t);
         }
         else						// not yet loaded, show file info
@@ -416,7 +416,7 @@ void ScanGallery::slotDecorate(FileTreeViewItem *item)
             {
                 item->setIcon(0, mPixFloppy);
                 const KFileItem *kfi = item->fileItem();
-                if (!kfi->isNull()) item->setText(1, KIO::convertSize(kfi->size()));
+                if (!kfi->isNull()) item->setText(1, (" "+KIO::convertSize(kfi->size())));
             }
             else
             {
