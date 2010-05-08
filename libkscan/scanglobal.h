@@ -26,25 +26,19 @@
 #include <qstring.h>
 
 
-/* Configuration-file definitions */
+// Configuration file definitions
+
 #define DEFAULT_OPTIONSET	"saveSet"
 
-// Note that this is not the same GROUP_STARTUP which is used in kookapref!
-// That uses Kooka's config file 'kookarc', libkscan uses the global scanner
-// config file 'scannerrc'.
-#define GROUP_STARTUP		"Startup"
 #define STARTUP_SCANDEV		"ScanDevice"
 #define STARTUP_SKIP_ASK	"SkipStartupAsk"
 #define STARTUP_ONLY_LOCAL	"QueryLocalOnly"
 
-#define USERDEV_GROUP		"User Specified Scanners"
-#define USERDEV_DEVS		"Devices"
-#define USERDEV_DESC		"Description"
-#define USERDEV_TYPE		"Type"
-
 
 class KConfig;
 class KConfigGroup;
+
+class KScanDevice;
 
 
 class KSCAN_EXPORT ScanGlobal
@@ -60,6 +54,7 @@ public:
      * Calls sane_init() to initialise the SANE library, the first time this
      * function is called.  Subsequent calls are ignored.  Sets up to call
      * sane_exit() when the application exits.
+     *
      * @return true if SANE intialisation was OK
      */
     bool init();
@@ -71,8 +66,16 @@ public:
     bool available() const;
 
     /**
+     * Set the scanner device in use.  If authentication is required, its
+     * @c authenticate() function will be called which is expected to supply
+     * or prompt for a username/password.
+     */
+    void setScanDevice(KScanDevice *device);
+
+    /**
      * Get a config group in the global scanner configuration file (named by
-     * SCANNER_DB_FILE).
+     * SCANNER_DB_FILE).  If the @c groupName parameter is null or not
+     * specified, it defaults to the general group (GROUP_GENERAL).
      */
     KConfigGroup configGroup(const QString &groupName = QString::null);
 

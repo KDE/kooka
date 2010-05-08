@@ -42,6 +42,7 @@
 #include <kglobal.h>
 #include <kconfig.h>
 #include <kstandarddirs.h>
+#include <kpassworddialog.h>
 
 #include "scanglobal.h"
 #include "scandevices.h"
@@ -219,45 +220,51 @@ KScanDevice::~KScanDevice()
 {
     kDebug();
 
+    ScanGlobal::self()->setScanDevice(NULL);		// going away, don't call me
+
     delete storeOptions;
     delete d;
 }
 
 
-
-KScanStat KScanDevice::openDevice( const QByteArray& backend )
+KScanStat KScanDevice::openDevice(const QByteArray &backend)
 {
-   KScanStat    stat      = KSCAN_OK;
+    KScanStat stat = KSCAN_OK;
 
-   kDebug() << "backend" << backend;
+    kDebug() << "backend" << backend;
 
-   mSaneStatus = SANE_STATUS_UNSUPPORTED;
-   if( backend.isEmpty() ) return (KSCAN_ERR_PARAM);
+    mSaneStatus = SANE_STATUS_UNSUPPORTED;
+    if (backend.isEmpty()) return (KSCAN_ERR_PARAM);
 
-   // search for scanner
-   if (ScanDevices::self()->deviceInfo(backend)==NULL) return (KSCAN_ERR_NO_DEVICE);
+    // search for scanner
+    if (ScanDevices::self()->deviceInfo(backend)==NULL) return (KSCAN_ERR_NO_DEVICE);
 
-   QApplication::setOverrideCursor(Qt::WaitCursor);	// potential lengthy operation
-   // if available, build lists of properties
-   mSaneStatus = sane_open( backend, &gScannerHandle );
-   if( mSaneStatus == SANE_STATUS_GOOD )
-   {
-	     // fill description dic with names and numbers
-	   stat = find_options();
-	   mScannerName = backend;
-   } else {
-	   stat = KSCAN_ERR_OPEN_DEV;
-	   mScannerName = "";
-   }
+    mScannerName = backend;				// set now for authentication
+    QApplication::setOverrideCursor(Qt::WaitCursor);	// potential lengthy operation
+    ScanGlobal::self()->setScanDevice(this);		// for possible authentication
+    mSaneStatus = sane_open(backend, &gScannerHandle);
 
-   if( stat == KSCAN_OK )
-      mScannerInitialised = true;
+    if (mSaneStatus==SANE_STATUS_ACCESS_DENIED)		// authentication failed?
+    {
+        clearSavedAuth();				// clear any saved password
+        kDebug() << "retrying authentication";		// try again once more
+        mSaneStatus = sane_open(backend, &gScannerHandle);
+    }
 
-   QApplication::restoreOverrideCursor();
-   return( stat );
+    if (mSaneStatus==SANE_STATUS_GOOD)
+    {
+        stat = find_options();				// fill dictionary with options
+        mScannerInitialised = true;			// note scanner opened OK
+    }
+    else
+    {
+        stat = KSCAN_ERR_OPEN_DEV;
+        mScannerName = "";
+    }
+
+    QApplication::restoreOverrideCursor();
+    return (stat);
 }
-
-
 
 
 QString KScanDevice::lastErrorMessage() const
@@ -985,128 +992,129 @@ KScanStat KScanDevice::createNewImage(const SANE_Parameters *p)
 }
 
 
-KScanStat KScanDevice::acquire_data( bool isPreview )
+KScanStat KScanDevice::acquire_data(bool isPreview)
 {
-   mSaneStatus = SANE_STATUS_GOOD;
-   KScanStat       stat = KSCAN_OK;
+    mSaneStatus = SANE_STATUS_GOOD;
+    KScanStat stat = KSCAN_OK;
 
-   scanningPreview = isPreview;
+    scanningPreview = isPreview;
 
-   emit sigScanStart();
+    emit sigScanStart();
 
-   QApplication::setOverrideCursor(Qt::WaitCursor);	// potential lengthy operation
-   mSaneStatus = sane_start( gScannerHandle );
-   if( mSaneStatus == SANE_STATUS_GOOD )
-   {
-      mSaneStatus = sane_get_parameters( gScannerHandle, &sane_scan_param );
+    QApplication::setOverrideCursor(Qt::WaitCursor);	// potential lengthy operation
+    ScanGlobal::self()->setScanDevice(this);		// for possible authentication
+    mSaneStatus = sane_start(gScannerHandle);
 
-      if( mSaneStatus == SANE_STATUS_GOOD )
-      {
-	 kDebug() << "Pre-Loop...";
-	 kDebug() << "  format:          " << sane_scan_param.format;
-	 kDebug() << "  last_frame:      " << sane_scan_param.last_frame;
-	 kDebug() << "  lines:           " << sane_scan_param.lines;
-	 kDebug() << "  depth:           " << sane_scan_param.depth;
-	 kDebug() << "  pixels_per_line: " << sane_scan_param.pixels_per_line;
-	 kDebug() << "  bytes_per_line:  " << sane_scan_param.bytes_per_line;
+    if (mSaneStatus==SANE_STATUS_ACCESS_DENIED)		// authentication failed?
+    {
+        clearSavedAuth();				// clear any saved password
+        kDebug() << "retrying authentication";		// try again once more
+        mSaneStatus = sane_start(gScannerHandle);
+    }
 
-         if( sane_scan_param.pixels_per_line == 0 || sane_scan_param.lines < 1 )
-         {
-             kDebug() << "Error: Acquiring empty picture!";
-             stat = KSCAN_ERR_EMPTY_PIC;
-         }
-      }
-      else
-      {
-	 stat = KSCAN_ERR_OPEN_DEV;
-	 kDebug() << "sane_get_parameters() error:" << lastErrorMessage();
-      }
-   }
-   else
-   {
-	 stat = KSCAN_ERR_OPEN_DEV;
-	 kDebug() << "sane_start() error:" << lastErrorMessage();
-   }
-   QApplication::restoreOverrideCursor();
+    if (mSaneStatus==SANE_STATUS_GOOD)
+    {
+        mSaneStatus = sane_get_parameters(gScannerHandle, &sane_scan_param);
+        if (mSaneStatus==SANE_STATUS_GOOD)
+        {
+            kDebug() << "Initial parameters...";
+            kDebug() << "  format:          " << sane_scan_param.format;
+            kDebug() << "  last_frame:      " << sane_scan_param.last_frame;
+            kDebug() << "  lines:           " << sane_scan_param.lines;
+            kDebug() << "  depth:           " << sane_scan_param.depth;
+            kDebug() << "  pixels_per_line: " << sane_scan_param.pixels_per_line;
+            kDebug() << "  bytes_per_line:  " << sane_scan_param.bytes_per_line;
 
-   /* Create new Image from SANE-Parameters */
-   if( stat == KSCAN_OK )
-   {
-      stat = createNewImage( &sane_scan_param );
-   }
+            if (sane_scan_param.pixels_per_line==0 || sane_scan_param.lines<1)
+            {
+                kDebug() << "Nothing to acquire!";
+                stat = KSCAN_ERR_EMPTY_PIC;
+            }
+        }
+        else
+        {
+            stat = KSCAN_ERR_OPEN_DEV;
+            kDebug() << "sane_get_parameters() error" << lastErrorMessage();
+        }
+    }
+    else
+    {
+        stat = KSCAN_ERR_OPEN_DEV;
+        kDebug() << "sane_start() error" << lastErrorMessage();
+    }
+    QApplication::restoreOverrideCursor();
 
+    // Create image to receive scan, based on SANE parameters
+    if (stat==KSCAN_OK) stat = createNewImage(&sane_scan_param);
+
+    // Create/reinitialise buffer for scanning one line
     if (stat==KSCAN_OK)
     {
-        /* new buffer for scanning one line */
         if (mScanBuf!=NULL) delete [] mScanBuf;
         mScanBuf = new SANE_Byte[sane_scan_param.bytes_per_line+4];
         if (mScanBuf==NULL) stat = KSCAN_ERR_MEMORY;	// can this ever happen?
    }
 
-   QApplication::setOverrideCursor(Qt::BusyCursor);	// display this while scanning
-   /* Signal for a progress dialog */
-   emit( sigScanProgress( 0 ) );
-   emit( sigAcquireStart() );
+    QApplication::setOverrideCursor(Qt::BusyCursor);	// display this while scanning
+    emit sigScanProgress(0);				// signal the progress dialog
+    emit sigAcquireStart();
 
-   if( stat == KSCAN_OK )
-   {
-      /* initiates Redraw of the Progress-Window */
-      qApp->processEvents();
+    if (stat==KSCAN_OK)
+    {
+        qApp->processEvents();				// update the progress window
+
+        pixel_x = 0;
+        pixel_y = 0;
+        overall_bytes = 0;
+        rest_bytes = 0;
+
+        // Set internal status to indicate scanning in progress.
+        // This status might be changed, e.g. by pressing Stop on a
+        // GUI dialog displayed during scanning.
+        mScanStatus = SSTAT_IN_PROGRESS;
+
+        // TODO: if using the socket notifier, does sane_get_parameters()
+        // get called for each loop?  Does it need to be?
+
+        int fd = 0;
+        //  Don't assume that sane_get_select_fd will succeed even if sane_set_io_mode
+        //  successfully sets I/O mode to noblocking - bug 159300
+        if (sane_set_io_mode(gScannerHandle, SANE_TRUE)==SANE_STATUS_GOOD &&
+            sane_get_select_fd(gScannerHandle, &fd)==SANE_STATUS_GOOD)
+        {
+            kDebug() << "using read socket notifier";
+            mSocketNotifier = new QSocketNotifier(fd, QSocketNotifier::Read, this);
+            connect(mSocketNotifier, SIGNAL(activated(int)), SLOT(doProcessABlock()));
+        }
+        else
+        {
+            do
+            {
+                doProcessABlock();
+                if (mScanStatus!=SSTAT_SILENT)
+                {
+                    mSaneStatus = sane_get_parameters(gScannerHandle, &sane_scan_param);
+
+                    kDebug() << "Polling loop...";
+                    kDebug() << "  format:          " << sane_scan_param.format;
+                    kDebug() << "  last_frame:      " << sane_scan_param.last_frame;
+                    kDebug() << "  lines:           " << sane_scan_param.lines;
+                    kDebug() << "  depth:           " << sane_scan_param.depth;
+                    kDebug() << "  pixels_per_line: " << sane_scan_param.pixels_per_line;
+                    kDebug() << "  bytes_per_line:  " << sane_scan_param.bytes_per_line;
+                }
+            } while (mScanStatus!=SSTAT_SILENT);
+        }
+    }
+
+    if (stat!=KSCAN_OK)					// some problem with scanning
+    {
+        // Scanning was disturbed in any way - end it
+        kDebug() << "Scanning failed, status" << stat;
+        emit sigScanFinished(stat);
    }
 
-   if( stat == KSCAN_OK )
-   {
-      overall_bytes 	= 0;
-      pixel_x 		    = 0;
-      pixel_y 		    = 0;
-      overall_bytes         = 0;
-      rest_bytes            = 0;
-
-      /* internal status to indicate Scanning in progress
-       *  this status might be changed by pressing Stop on a GUI-Dialog displayed during scan */
-      mScanStatus = SSTAT_IN_PROGRESS;
-
-      // TODO: if using the socket notifier, does sane_get_parameters()
-      // get called for each loop?
-
-      int fd = 0;
-      //  Don't assume that sane_get_select_fd will succeed even if sane_set_io_mode
-      //  successfully sets I/O mode to noblocking - bug 159300
-      if (sane_set_io_mode(gScannerHandle,SANE_TRUE)==SANE_STATUS_GOOD &&
-          sane_get_select_fd(gScannerHandle,&fd)==SANE_STATUS_GOOD)
-      {
-          kDebug() << "using read socket notifier";
-          mSocketNotifier = new QSocketNotifier(fd, QSocketNotifier::Read, this);
-          connect(mSocketNotifier, SIGNAL(activated(int)), SLOT(doProcessABlock()));
-      }
-      else
-      {
-	 do
-	 {
-	    doProcessABlock();
-	    if( mScanStatus != SSTAT_SILENT )
-	    {
-	       mSaneStatus = sane_get_parameters( gScannerHandle, &sane_scan_param );
-
-               kDebug() << "Process a Block loop...";
-               kDebug() << "  format:          " << sane_scan_param.format;
-               kDebug() << "  last_frame:      " << sane_scan_param.last_frame;
-               kDebug() << "  lines:           " << sane_scan_param.lines;
-               kDebug() << "  depth:           " << sane_scan_param.depth;
-               kDebug() << "  pixels_per_line: " << sane_scan_param.pixels_per_line;
-               kDebug() << "  bytes_per_line:  " << sane_scan_param.bytes_per_line;
-	    }
-	 } while ( mScanStatus != SSTAT_SILENT );
-      }
-   }
-
-   if( stat != KSCAN_OK )
-   {
-      /* Scanning was disturbed in any way - end it */
-      kDebug() << "Scanning was disturbed";
-      emit( sigScanFinished( stat ));
-   }
-   return( stat );
+   return (stat);
 }
 
 
@@ -1145,17 +1153,15 @@ void KScanDevice::loadOptionSet( KScanOptSet *optSet )
 }
 
 
-void KScanDevice::slotScanFinished( KScanStat status )
+void KScanDevice::slotScanFinished(KScanStat status)
 {
-    // clean up
-    if (mSocketNotifier!=NULL)
+    if (mSocketNotifier!=NULL)				// clean up if in use
     {
-	mSocketNotifier->setEnabled(false);
 	delete mSocketNotifier;
 	mSocketNotifier = NULL;
     }
 
-    emit( sigScanProgress( MAX_PROGRESS ));
+    emit sigScanProgress(MAX_PROGRESS);
     QApplication::restoreOverrideCursor();
 
     kDebug() << "status" <<  status;
@@ -1166,7 +1172,7 @@ void KScanDevice::slotScanFinished( KScanStat status )
 	mScanBuf = NULL;
     }
 
-    if( status == KSCAN_OK && mScanImage!=NULL)
+    if (status==KSCAN_OK && mScanImage!=NULL)
     {
 	ImgScanInfo info;
 	info.setXResolution(d->currScanResolutionX);
@@ -1177,20 +1183,18 @@ void KScanDevice::slotScanFinished( KScanStat status )
 	mScanImage->setDotsPerMeterX(static_cast<int>(d->currScanResolutionX / 0.0254 + 0.5));
 	mScanImage->setDotsPerMeterY(static_cast<int>(d->currScanResolutionY / 0.0254 + 0.5));
 
-	if( scanningPreview )
+	if (scanningPreview)
 	{
 	    savePreviewImage(*mScanImage);
-	    emit( sigNewPreview( mScanImage, &info ));
+	    emit sigNewPreview(mScanImage, &info);
 
-	    /* The old settings need to be redefined */
-	    loadOptionSet( storeOptions );
+	    loadOptionSet(storeOptions);		// restore original scan settings
 	}
 	else
 	{
-	    emit( sigNewImage( mScanImage, &info ));
+	    emit sigNewImage(mScanImage, &info);
 	}
     }
-
 
     sane_cancel(gScannerHandle);
 
@@ -1201,12 +1205,7 @@ void KScanDevice::slotScanFinished( KScanStat status )
 	mScanImage = NULL;
     }
 
-    /* delete the socket notifier */
-    if (mSocketNotifier!=NULL)
-    {
-	delete mSocketNotifier;
-	mSocketNotifier = NULL;
-    }
+    mScanStatus = SSTAT_SILENT;
 }
 
 
@@ -1230,24 +1229,23 @@ void KScanDevice::doProcessABlock()
     mSaneStatus = SANE_STATUS_GOOD;
     uchar eight_pix = 0;
 
+    if (mScanStatus==SSTAT_SILENT) return;		// scan finished, no more to do
+							// block notifications while working
+    if (mSocketNotifier!=NULL) mSocketNotifier->setEnabled(false);
+
     while (true)
     {
         mSaneStatus = sane_read(gScannerHandle,
                               (mScanBuf+rest_bytes),
                               sane_scan_param.bytes_per_line,
                               &bytes_read);
-        int red = 0;
-        int green = 0;
-        int blue = 0;
-
         if (mSaneStatus!=SANE_STATUS_GOOD)
         {
             if (mSaneStatus!=SANE_STATUS_EOF)		// this is OK, just stop
             {						// any other error
-                kDebug() << "sane_read() error:" << lastErrorMessage()
+                kDebug() << "sane_read() error" << lastErrorMessage()
                          << "bytes read" << bytes_read;
             }
-
             break;
         }
 
@@ -1255,6 +1253,10 @@ void KScanDevice::doProcessABlock()
 
 	overall_bytes += bytes_read;
 	// qDebug( "Bytes read: %d, bytes written: %d", bytes_read, rest_bytes );
+
+        int red = 0;
+        int green = 0;
+        int blue = 0;
 
 	rptr = mScanBuf;				// start of scan data
 	switch (sane_scan_param.format)
@@ -1398,7 +1400,6 @@ default:    kDebug() << "Undefined sane_scan_param format" << sane_scan_param.fo
         }
     }							// end of main loop
 
-
     // Here when scanning is finished or has had an error
     if (mSaneStatus==SANE_STATUS_EOF)			// end of scan pass
     {
@@ -1422,6 +1423,8 @@ default:    kDebug() << "Undefined sane_scan_param format" << sane_scan_param.fo
         mScanStatus = SSTAT_STOP_NOW;
         kDebug() << "Scan was cancelled";
     }
+
+    if (mSocketNotifier!=NULL) mSocketNotifier->setEnabled(true);
 }
 
 
@@ -1490,6 +1493,84 @@ void KScanDevice::storeConfig(const QString &key, const QString &val)
     grp.writeEntry(key, val);
     grp.sync();
 }
+
+
+
+//  SANE Authentication
+//  -------------------
+//
+//  According to the SANE documentation, this may be requested for any use of
+//  sane_open(), sane_control_option() or sane_start() on a scanner device
+//  that requires authentication.
+//
+//  The only uses of sane_open() and sane_start() are here in this file, and
+//  they set the current scanner using setScanDevice() before performing the
+//  SANE operation.
+//
+//  This does not happen for all uses of sane_control_option(), either here or
+//  in KScanOption, so there is a slight possibility that if authentication is
+//  needed for those (and has not been previously requested by sane_open() or
+//  sane_start()) then it will use the wrong scanner device or will not prompt
+//  at all.  However, Kooka only supports one scanner open at a time, and does
+//  sane_open() before any use of sane_control_option().  So hopefully this
+//  will not be a problem.
+
+bool KScanDevice::authenticate(QByteArray *retuser, QByteArray *retpass)
+{
+    kDebug() << "for" << mScannerName;
+
+    // TODO: use KWallet for username/password?
+    KConfigGroup grp = ScanGlobal::self()->configGroup(mScannerName);
+    QByteArray user = QByteArray::fromBase64(grp.readEntry("user", QString()).toLocal8Bit());
+    QByteArray pass = QByteArray::fromBase64(grp.readEntry("pass", QString()).toLocal8Bit());
+
+    if (!user.isEmpty() && !pass.isEmpty())
+    {
+        kDebug() << "have saved username/password";
+    }
+    else
+    {
+        kDebug() << "asking for username/password";
+
+        KPasswordDialog dlg(NULL, KPasswordDialog::ShowKeepPassword|KPasswordDialog::ShowUsernameLine);
+        dlg.setPrompt(i18n("<qt>The scanner<br><b>%1</b><br>requires authentication.", mScannerName.constData()));
+        dlg.setCaption(i18n("Scanner Authentication"));
+
+        if (!user.isEmpty()) dlg.setUsername(user);
+        if (!pass.isEmpty()) dlg.setPassword(pass);
+
+        if (!dlg.exec()) return (false);
+
+        user = dlg.username().toLocal8Bit();
+        pass = dlg.password().toLocal8Bit();
+        if (dlg.keepPassword())
+        {
+            grp.writeEntry("user", user.toBase64());
+            grp.writeEntry("pass", pass.toBase64());
+        }
+    }
+
+    *retuser = user;
+    *retpass = pass;
+    return (true);
+}
+
+
+
+void KScanDevice::clearSavedAuth()
+{
+    KConfigGroup grp = ScanGlobal::self()->configGroup(mScannerName);
+
+    grp.deleteEntry("user");
+    grp.deleteEntry("pass");
+    grp.sync();
+}
+
+
+
+
+
+
 
 
 // TODO: why do these need to be global?

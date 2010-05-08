@@ -29,6 +29,12 @@
 #include "scanglobal.h"
 
 
+#define USERDEV_GROUP		"User Specified Scanners"
+#define USERDEV_DEVS		"Devices"
+#define USERDEV_DESC		"Description"
+#define USERDEV_TYPE		"Type"
+
+
 ScanDevices *sInstance = NULL;
 
 
@@ -45,7 +51,7 @@ ScanDevices::ScanDevices()
 
     if (!ScanGlobal::self()->init()) return;		// do sane_init() if necessary
 
-    const KConfigGroup grp1 = ScanGlobal::self()->configGroup(GROUP_STARTUP);
+    const KConfigGroup grp1 = ScanGlobal::self()->configGroup();
     bool netaccess = grp1.readEntry(STARTUP_ONLY_LOCAL, false);
     kDebug() << "Query for network scanners" << (netaccess ? "not enabled" : "enabled");
 

@@ -66,7 +66,7 @@ public:
         SSTAT_IN_PROGRESS,
         SSTAT_NEXT_FRAME,
         SSTAT_STOP_NOW,
-        STTAT_STOP_ADF_FINISHED
+        SSTAT_STOP_ADF_FINISHED
     };
 
     /**
@@ -289,10 +289,17 @@ public:
      */
     void storeConfig(const QString &key, const QString &val);
 
+    /**
+     * Retrieve or prompt for a username/password to authenticate the scanner.
+     */
+    bool authenticate(QByteArray *retuser, QByteArray *retpass);
 
 
 
-// TODO: public data!
+
+
+
+// TODO: public global data!
 // Used by KScanOption, so either (a) every KScanOption object needs to link back
 // to its parent KScanDevice, or (b) KScanDevice needs to be a singleton class.
     typedef QHash<QByteArray, int> OptionDict;
@@ -442,6 +449,14 @@ private:
     KScanStat           find_options(); // help fct. to process options
     KScanStat           acquire_data(bool isPreview = false);
 
+    /**
+     * Clear any saved authentication for this scanner, to ensure that the
+     * user is prompted next time.
+     */
+    void clearSavedAuth();
+
+
+
     QList<QByteArray>	      option_list;    // list of names of all options
     QList<QByteArray>            dirtyList;     // option changes
 
@@ -469,5 +484,6 @@ private:
     class KScanDevicePrivate;
     KScanDevicePrivate *d;
 };
+
 
 #endif							// KSCANDEVICE_H

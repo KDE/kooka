@@ -76,7 +76,7 @@ DeviceSelector::DeviceSelector(QWidget *parent,
     mSkipCheckbox = new QCheckBox( i18n("Always use this device at startup"), vb);
     vlay->addWidget(mSkipCheckbox);
 
-    const KConfigGroup grp = ScanGlobal::self()->configGroup(GROUP_STARTUP);
+    const KConfigGroup grp = ScanGlobal::self()->configGroup();
     bool skipDialog = grp.readEntry(STARTUP_SKIP_ASK, false);
     mSkipCheckbox->setChecked(skipDialog);
 
@@ -93,7 +93,7 @@ DeviceSelector::~DeviceSelector()
 
 QByteArray DeviceSelector::getDeviceFromConfig() const
 {
-    const KConfigGroup grp = ScanGlobal::self()->configGroup(GROUP_STARTUP);
+    const KConfigGroup grp = ScanGlobal::self()->configGroup();
     bool skipDialog = grp.readEntry(STARTUP_SKIP_ASK, false);
 
     QByteArray result;
@@ -142,7 +142,7 @@ QByteArray DeviceSelector::getSelectedDevice() const
 
     // Save both the scan device and the skip-start-dialog flag
     // in the global "scannerrc" file.
-    KConfigGroup grp = ScanGlobal::self()->configGroup(GROUP_STARTUP);
+    KConfigGroup grp = ScanGlobal::self()->configGroup();
     grp.writeEntry(STARTUP_SCANDEV, dev);
     grp.writeEntry(STARTUP_SKIP_ASK, getShouldSkip());
     grp.sync();
@@ -158,7 +158,7 @@ void DeviceSelector::setScanSources(const QList<QByteArray> &backends)
     kDebug() << "Scanner type file" << typeFile;
     if (!typeFile.isEmpty()) typeConf = new KConfig(typeFile, KConfig::SimpleConfig);
 
-    const KConfigGroup grp = ScanGlobal::self()->configGroup(GROUP_STARTUP);
+    const KConfigGroup grp = ScanGlobal::self()->configGroup();
     QByteArray defstr = grp.readEntry(STARTUP_SCANDEV).toLocal8Bit();
 
     QListWidgetItem *defItem = NULL;

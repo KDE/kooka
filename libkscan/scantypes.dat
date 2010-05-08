@@ -1,6 +1,7 @@
 [Devices]
 test=cpu
 pnm=image-x-generic
+net=network-server
 
 [Types]
 film scanner=scanner
