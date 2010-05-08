@@ -30,15 +30,6 @@ extern "C" {
 }
 
 
-// TODO: class enum, see comment on KScanOption::errorMessage()
-typedef enum { KSCAN_OK, KSCAN_ERROR, KSCAN_ERR_NO_DEVICE,
-	       KSCAN_ERR_BLOCKED, KSCAN_ERR_NO_DOC, KSCAN_ERR_PARAM,
-               KSCAN_ERR_OPEN_DEV, KSCAN_ERR_CONTROL, KSCAN_ERR_EMPTY_PIC,
-               KSCAN_ERR_MEMORY, KSCAN_ERR_SCAN, KSCAN_UNSUPPORTED,
-               KSCAN_RELOAD, KSCAN_CANCELLED, KSCAN_OPT_NOT_ACTIVE }
-KScanStat;
-
-
 class QLabel;
 
 class KGammaTable;
@@ -210,8 +201,6 @@ public:
    ###  not implemented at all?
    **/
   //QString unitOf( const QByteArray& name );
-
-    static QString errorMessage(KScanStat stat);
 
 
 public slots:

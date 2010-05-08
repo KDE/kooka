@@ -1108,30 +1108,3 @@ QLabel *KScanOption::getLabel(QWidget *parent) const
     if (internal_widget->inherits("QCheckBox")) t = QString::null;
     return (new QLabel(t,parent));
 }
-
-
-
-// TODO: This and the KSCAN_* enum really belongs to kscandevice
-QString KScanOption::errorMessage(KScanStat stat)
-{
-    kDebug() << "stat=" << stat;
-    switch (stat)
-    {
-case KSCAN_OK:			return (i18n("OK"));		// shouldn't be reported
-case KSCAN_ERROR:		return (i18n("ERROR"));		// not used
-case KSCAN_ERR_NO_DEVICE:	return (i18n("No device"));	// never during scanning
-case KSCAN_ERR_BLOCKED:		return (i18n("BLOCKED"));  	// not used
-case KSCAN_ERR_NO_DOC:		return (i18n("NO_DOC"));	// not used
-case KSCAN_ERR_PARAM:		return (i18n("Bad parameter"));
-case KSCAN_ERR_OPEN_DEV:	return (i18n("Cannot open device"));
-case KSCAN_ERR_CONTROL:		return (i18n("sane_control_option() failed"));
-case KSCAN_ERR_EMPTY_PIC:	return (i18n("Empty picture"));
-case KSCAN_ERR_MEMORY:		return (i18n("Out of memory"));
-case KSCAN_ERR_SCAN:		return (i18n("SCAN"));		// not used
-case KSCAN_UNSUPPORTED:		return (i18n("UNSUPPORTED"));	// not used
-case KSCAN_RELOAD:		return (i18n("Needs reload"));	// never during scanning
-case KSCAN_CANCELLED:		return (i18n("Cancelled"));	// shouldn't be reported
-case KSCAN_OPT_NOT_ACTIVE:	return (i18n("Not active"));	// never during scanning
-default:			return (i18n("Unknown status %1", stat));
-    }
-}

@@ -279,8 +279,8 @@ KookaView::KookaView(KMainWindow *parent, const QByteArray &deviceToUse)
     mScanDevice = new KScanDevice(this);
 
     // Connections KScanDevice --> myself
-    connect(mScanDevice, SIGNAL(sigScanFinished(KScanStat)), SLOT(slotScanFinished(KScanStat)));
-    connect(mScanDevice, SIGNAL(sigScanFinished(KScanStat)), SLOT(slotPhotoCopyScan(KScanStat)));
+    connect(mScanDevice, SIGNAL(sigScanFinished(KScanDevice::Status)), SLOT(slotScanFinished(KScanDevice::Status)));
+    connect(mScanDevice, SIGNAL(sigScanFinished(KScanDevice::Status)), SLOT(slotPhotoCopyScan(KScanDevice::Status)));
     /* New image created after scanning now call save dialog*/
     connect(mScanDevice, SIGNAL(sigNewImage(const QImage *, const ImgScanInfo *)), SLOT(slotNewImageScanned(const QImage *,const ImgScanInfo *)));
     /* New image created after scanning now print it*/    
@@ -499,17 +499,19 @@ bool KookaView::slotSelectDevice(const QByteArray &useDevice, bool alwaysAsk)
         while (!haveConnection)
         {
             kDebug() << "Opening device" << selDevice;
-            if (mScanDevice->openDevice(selDevice)==KSCAN_OK) haveConnection = true;
+            if (mScanDevice->openDevice(selDevice)==KScanDevice::Ok) haveConnection = true;
             else
             {
-                QString msg = i18n("<qt><p>\
-There was a problem opening the scanner device. \
-Check that the scanner is connected and switched on, and that SANE support for it \
-is correctly configured.\
-<p>\
-Trying to use scanner device: <b>%2</b>\
-<br>\
-The error reported was: <b>%1</b>", mScanDevice->lastErrorMessage(), selDevice.data());
+                QString msg = i18n("<qt><p>"
+                                   "There was a problem opening the scanner device."
+                                   "<br>"
+                                   "Check that the scanner is connected and switched on, "
+                                   "and that SANE support for it is correctly configured."
+                                   "<p>"
+                                   "Trying to use scanner device: <b>%2</b><br>"
+                                   "The error reported was: <b>%1</b>",
+                                   mScanDevice->lastSaneErrorMessage(),
+                                   selDevice.constData());
 
                 int tryAgain = KMessageBox::warningContinueCancel(mMainWindow, msg, QString::null,
                                                        KGuiItem("Retry"));
@@ -856,11 +858,11 @@ void KookaView::slotNewImageScanned(const QImage *img, const ImgScanInfo *info)
 }
 
 
-void KookaView::slotScanFinished( KScanStat stat )
+void KookaView::slotScanFinished(KScanDevice::Status stat)
 {
     kDebug() << "Scan finished with status" << stat;
 
-    if (stat!=KSCAN_OK && stat!=KSCAN_CANCELLED)
+    if (stat!=KScanDevice::Ok && stat!=KScanDevice::Cancelled)
     {
         QString msg = i18n("<qt><p>"
                            "There was a problem during preview or scanning."
@@ -871,8 +873,8 @@ void KookaView::slotScanFinished( KScanStat stat )
                            "Trying to use scanner device: <b>%3</b><br>"
                            "SANE reported error: <b>%1</b><br>"
                            "libkscan reported error: <b>%2</b>",
-                           mScanDevice->lastErrorMessage(),
-                           KScanOption::errorMessage(stat),
+                           mScanDevice->lastSaneErrorMessage(),
+                           KScanDevice::errorMessage(stat),
                            mScanDevice->scannerBackendName().constData());
         KMessageBox::error(mMainWindow, msg);
     }
@@ -1132,7 +1134,7 @@ void KookaView::slotStartPhotoCopy( )
     mPhotoCopyPrinter->setUsePrinterResolution(true);
     mPhotoCopyPrinter->setOption( OPT_SCALING, "scan");
     mPhotoCopyPrinter->setFullPage(true);
-    slotPhotoCopyScan( KSCAN_OK );
+    slotPhotoCopyScan( KScanDevice::Ok );
 #endif
 }
 
@@ -1151,7 +1153,7 @@ void KookaView::slotPhotoCopyPrint(const QImage *img, const ImgScanInfo *info)
 }
 
 
-void KookaView::slotPhotoCopyScan(KScanStat status)
+void KookaView::slotPhotoCopyScan(KScanDevice::Status status)
 {
     kDebug();
 

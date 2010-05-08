@@ -60,13 +60,21 @@ class KSCAN_EXPORT KScanDevice : public QObject
 
 public:
 
-    enum ScanStatus
+    /**
+     * Scanning/control status
+     */
+    enum Status
     {
-        SSTAT_SILENT,
-        SSTAT_IN_PROGRESS,
-        SSTAT_NEXT_FRAME,
-        SSTAT_STOP_NOW,
-        SSTAT_STOP_ADF_FINISHED
+        Ok,
+        NoDevice,
+        ParamError,
+        OpenDevice,
+        ControlError,
+        EmptyPic,
+        NoMemory,
+        Reload,
+        Cancelled,
+        OptionNotActive
     };
 
     /**
@@ -90,13 +98,13 @@ public:
      *   @return the state of the operation
      *   @param backend the name of the backend to open
      */
-    KScanStat openDevice(const QByteArray &backend);
+    KScanDevice::Status openDevice(const QByteArray &backend);
 
     /**
      *  Get an error message for the last SANE operation.
      *   @return the error message string
      */
-    QString lastErrorMessage() const;
+    QString lastSaneErrorMessage() const;
 
     /**
      * Returns the short, technical name of the currently attached backend.
@@ -112,41 +120,35 @@ public:
 
     /**
      * Checks whether a scanner device is set and connected (i.e.
-     * whether the previous openDevice() returned KSCAN_OK).
+     * whether the previous openDevice() returned KScanDevice::Ok).
      **/
     bool isScannerConnected() const { return (mScannerInitialised); }
 
     /*
-     *  ========= Preview Functions ==========
+     *  ========= Preview/Scan Functions ==========
      */
 
     /**
-     *  QImage * acquirePreview( bool forceGray = 0, int dpi = 0 )
+     *  Acquires a preview on the selected device.  Allocates
+     *  mScanImage as the QImage returned.  This image remains valid
+     *  until the next call to acquirePreview() or acquire(), or until
+     *  the KScanDevice is destructed.
      *
-     *  acquires a preview on the selected device. KScanDevice allocs
-     *  memory for the qimage returned. This qimage remains valid
-     *  until the next call to acquirePreview or until KScanDevice is
-     *  destructed.
-     *
-     *   @return a pointer to a qimage or null on error
-     *	@param  bool forceGray if true, acquire a preview in gray
-
-     *	@param  int dpi        dpi setting. If 0, the dpi setting is
-     *	        elected by the object, e.g. is the smallest possible
-     *           resolution.
-
-    */
-    KScanStat acquirePreview(bool forceGray = false, int dpi = 0);
-
-// TODO: this description doesn't make sense
-    /** acquires a qimage on the given settings.
-     *  the Parameter image needs to point to a object qimage,
-     *  which is filled by the SANE-Dev. After the function returns,
-     *  the qimage is valid, if the returnvalue is OK.
-     *  @param QImage *image - Pointer to a reserved image
-     *  @return the state of the operation in KScanStat
+     *	@param forceGray if @c true, acquire a preview in gray
+     *	@param dpi       DPI setting. If 0, the DPI setting is
+     *	                 selected by the object, e.g. the lowest possible
+     *                   resolution.
+     *  @return the status of the operation
      */
-    KScanStat acquire(const QString &filename = QString::null);
+    KScanDevice::Status acquirePreview(bool forceGray = false, int dpi = 0);
+
+    /**
+     *  Acquires a scan.  mScanImage is allocated as for acquirePreview().
+     *
+     *  @param filename File name for virtual scanner testing
+     *  @return the status of the operation
+     */
+    KScanDevice::Status acquire(const QString &filename = QString::null);
 
     /**
      *  returns the default filename of the preview image of this scanner.
@@ -222,7 +224,7 @@ public:
      *  an optional boolean parameter if it is a gamma table.
      **/
 
-    KScanStat apply(KScanOption *opt, bool isGammaTable = false);
+    KScanDevice::Status apply(KScanOption *opt, bool isGammaTable = false);
 
     /**
      *  returns true if the option exists in that device.
@@ -294,7 +296,10 @@ public:
      */
     bool authenticate(QByteArray *retuser, QByteArray *retpass);
 
-
+    /*
+     * Return an error message for the specified scan result status.
+     */
+    static QString errorMessage(KScanDevice::Status stat);
 
 
 
@@ -339,7 +344,7 @@ public slots:
     /**
      *  Image ready-slot in asynchronous scanning
      */
-    void slotScanFinished(KScanStat status);
+    void slotScanFinished(KScanDevice::Status status);
 
     /**
      * Save the current configuration parameter set. Only changed options are saved.
@@ -415,7 +420,7 @@ signals:
      *  the scan finished.
      */
 // TODO: parameters
-    void sigScanFinished( KScanStat );
+    void sigScanFinished( KScanDevice::Status );
 
 
     /**
@@ -444,10 +449,10 @@ private:
      **/
     void                prepareScan();
 
-    KScanStat           createNewImage(const SANE_Parameters *p);
+    KScanDevice::Status           createNewImage(const SANE_Parameters *p);
 
-    KScanStat           find_options(); // help fct. to process options
-    KScanStat           acquire_data(bool isPreview = false);
+    KScanDevice::Status           find_options(); // help fct. to process options
+    KScanDevice::Status           acquire_data(bool isPreview = false);
 
     /**
      * Clear any saved authentication for this scanner, to ensure that the
@@ -455,6 +460,15 @@ private:
      */
     void clearSavedAuth();
 
+
+    enum ScanningState					// only used by KScanDevice
+    {
+        ScanIdle,
+        ScanInProgress,
+        ScanNextFrame,
+        ScanStopNow,
+        ScanStopAdfFinished
+    };
 
 
     QList<QByteArray>	      option_list;    // list of names of all options
@@ -465,7 +479,7 @@ private:
     QSocketNotifier *mSocketNotifier;
 
     SANE_Status mSaneStatus;
-    KScanDevice::ScanStatus mScanStatus;
+    KScanDevice::ScanningState mScanningState;
 
     /* Data for the scan process */
     QByteArray             mScannerName;

@@ -30,7 +30,7 @@
 #include <ktabwidget.h>
 #include <kmimetypetrader.h>
 
-#include "libkscan/kscanoption.h"
+#include "libkscan/kscandevice.h"
 
 
 class QPainter;
@@ -140,7 +140,7 @@ public slots:
     void slotAddDevice();
 
     void slotScanStart();
-    void slotScanFinished( KScanStat stat );
+    void slotScanFinished( KScanDevice::Status stat );
     void slotAcquireStart();
 
     void showOpenWithMenu(KActionMenu *menu);
@@ -148,7 +148,7 @@ public slots:
 protected slots:
     void slotStartPhotoCopy();
     void slotPhotoCopyPrint(const QImage *img, const ImgScanInfo *info);
-    void slotPhotoCopyScan( KScanStat );
+    void slotPhotoCopyScan( KScanDevice::Status );
 
     void slotShowAImage(const KookaImage *img, bool isDir);
     void slotUnloadAImage(const KookaImage *img);

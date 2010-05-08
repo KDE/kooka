@@ -144,8 +144,8 @@ signals:
     void newCustomScanSize(const QRect &rect);
 
 private:
-    KScanStat prepareScan(QString *vfp);
-    KScanStat performADFScan();
+    KScanDevice::Status prepareScan(QString *vfp);
+    KScanDevice::Status performADFScan();
     void startProgress();
 
     void createNoScannerMsg(bool galleryMode);

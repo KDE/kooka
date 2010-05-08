@@ -879,11 +879,11 @@ void ScanParams::slotVirtScanModeSelect(int id)
 
 
 
-KScanStat ScanParams::prepareScan(QString *vfp)
+KScanDevice::Status ScanParams::prepareScan(QString *vfp)
 {
     kDebug() << "scan mode=" << scan_mode;
 
-    KScanStat stat = KSCAN_OK;
+    KScanDevice::Status stat = KScanDevice::Ok;
     QString virtfile;
 
     if (scan_mode==ID_SANE_DEBUG || scan_mode==ID_QT_IMGIO)
@@ -892,20 +892,20 @@ KScanStat ScanParams::prepareScan(QString *vfp)
         if (virtfile.isEmpty())
         {
             KMessageBox::sorry(this,i18n("A file must be entered for testing or virtual scanning"));
-            stat = KSCAN_ERR_PARAM;
+            stat = KScanDevice::ParamError;
         }
 
-        if (stat==KSCAN_OK)
+        if (stat==KScanDevice::Ok)
         {
             QFileInfo fi(virtfile);
             if (!fi.exists())
             {
                 KMessageBox::sorry(this,i18n("<qt>The testing or virtual file<br><filename>%1</filename><br>was not found or is not readable", virtfile));
-                stat = KSCAN_ERR_PARAM;
+                stat = KScanDevice::ParamError;
             }
         }
 
-        if (stat==KSCAN_OK)
+        if (stat==KScanDevice::Ok)
         {
             if (scan_mode==ID_SANE_DEBUG)
             {
@@ -916,7 +916,7 @@ KScanStat ScanParams::prepareScan(QString *vfp)
                 {
                     KMessageBox::sorry(this,i18n("<qt>SANE Debug can only read PNM files.<br>"
                                                  "This file is type <b>%1</b>.", mimetype->name()));
-                    stat = KSCAN_ERR_PARAM;
+                    stat = KScanDevice::ParamError;
                 }
             }
         }
@@ -946,8 +946,8 @@ void ScanParams::slotAcquirePreview()
     }
 
     QString virtfile;
-    KScanStat stat = prepareScan(&virtfile);
-    if (stat!=KSCAN_OK) return;
+    KScanDevice::Status stat = prepareScan(&virtfile);
+    if (stat!=KScanDevice::Ok) return;
 
     kDebug() << "scan mode=" << scan_mode << "virtfile" << virtfile;
 
@@ -959,7 +959,7 @@ void ScanParams::slotAcquirePreview()
 
     startProgress();					// show the progress dialog
     stat = sane_device->acquirePreview(gray_preview);
-    if (stat!=KSCAN_OK) kDebug() << "Error, preview status " << stat;
+    if (stat!=KScanDevice::Ok) kDebug() << "Error, preview status " << stat;
 }
 
 
@@ -967,8 +967,8 @@ void ScanParams::slotAcquirePreview()
 void ScanParams::slotStartScan()
 {
     QString virtfile;
-    KScanStat stat = prepareScan(&virtfile);
-    if (stat!=KSCAN_OK) return;
+    KScanDevice::Status stat = prepareScan(&virtfile);
+    if (stat!=KScanDevice::Ok) return;
 
     kDebug() << "scan mode=" << scan_mode << "virtfile" << virtfile;
 
@@ -992,7 +992,7 @@ void ScanParams::slotStartScan()
         stat = sane_device->acquire(virtfile);
     }
 
-    if (stat!=KSCAN_OK) kDebug() << "Error, scan status " << stat;
+    if (stat!=KScanDevice::Ok) kDebug() << "Error, scan status " << stat;
 }
 
 
@@ -1335,9 +1335,9 @@ void ScanParams::slotNewScanMode()
 }
 
 
-KScanStat ScanParams::performADFScan( void )
+KScanDevice::Status ScanParams::performADFScan( void )
 {
-   KScanStat stat = KSCAN_OK;
+   KScanDevice::Status stat = KScanDevice::Ok;
    bool 		 scan_on = true;
 
    MassScanDialog *msd = new MassScanDialog( this );
