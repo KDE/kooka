@@ -102,6 +102,10 @@ ScanParams::ScanParams(QWidget *parent)
 
     m_firstGTEdit = true;
 
+    // TODO: may be able to use action-* from kdegraphics/libs/libksane/libksane,
+    // if kdegraphics is installed (so need to check success and use our icons
+    // as a fallback).
+
     /* Preload icons */
     KIconLoader::global()->addAppDir("libkscan");	// access to our icons
     mIconColor = KIcon("palette-color");
@@ -978,7 +982,7 @@ void ScanParams::slotStartScan()
         {
 	    kDebug() << "Start to acquire image";
             startProgress();				// show the progress dialog
-	    stat = sane_device->acquire();
+	    stat = sane_device->acquireScan();
         }
         else
         {
@@ -989,7 +993,7 @@ void ScanParams::slotStartScan()
     else						// acquire via Qt-IMGIO
     {
         kDebug() << "Acquiring from virtual file";
-        stat = sane_device->acquire(virtfile);
+        stat = sane_device->acquireScan(virtfile);
     }
 
     if (stat!=KScanDevice::Ok) kDebug() << "Error, scan status " << stat;

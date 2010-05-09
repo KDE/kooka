@@ -174,6 +174,8 @@ Previewer::Previewer(QWidget *parent)
     vb->addWidget(d->m_cbBackground);
     vb->addSpacing(2*KDialog::spacingHint());
 
+    l->setBuddy(d->m_cbBackground);
+
     l= new QLabel(i18n("Threshold:"), d->m_autoSelGroup);
     vb->addWidget(l);
 

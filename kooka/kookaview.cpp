@@ -874,7 +874,7 @@ void KookaView::slotScanFinished(KScanDevice::Status stat)
                            "SANE reported error: <b>%1</b><br>"
                            "libkscan reported error: <b>%2</b>",
                            mScanDevice->lastSaneErrorMessage(),
-                           KScanDevice::errorMessage(stat),
+                           KScanDevice::statusMessage(stat),
                            mScanDevice->scannerBackendName().constData());
         KMessageBox::error(mMainWindow, msg);
     }

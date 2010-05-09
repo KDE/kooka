@@ -917,6 +917,10 @@ bool KScanOption::getRange(double *min,double *max,double *quant) const
 
 
 
+// TODO: specify no accelerator (use KAcceleratorManager::setNoAccel) for
+// the widget of an 'advanced' option - so as not to soak up too many of
+// the available accelerators for controls that are rarely going to be used.
+
 QWidget *KScanOption::createWidget( QWidget *parent, const QString& w_desc,
                                     const QString& tooltip )
 {

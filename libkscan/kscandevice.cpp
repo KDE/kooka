@@ -20,18 +20,6 @@
 #include "kscandevice.h"
 #include "kscandevice.moc"
 
-#include <stdlib.h>
-#include <unistd.h>
-
-#include <qwidget.h>
-#include <qobject.h>
-#include <qcombobox.h>
-#include <qslider.h>
-#include <qcheckbox.h>
-#include <qlineedit.h>
-#include <qlabel.h>
-#include <qlayout.h>
-#include <qtooltip.h>
 #include <qimage.h>
 #include <qfileinfo.h>
 #include <qapplication.h>
@@ -56,6 +44,8 @@
 
 #define MIN_PREVIEW_DPI		75
 #define MAX_PROGRESS		100
+
+#undef DEBUG_OPTIONS					// define to show before scan
 
 
 // global data, see TODO in kscandevice.h
@@ -108,8 +98,8 @@ KScanOption *KScanDevice::getExistingGuiElement( const QByteArray& name )
     KScanOption *ret = NULL;
     QByteArray alias = aliasName(name);
 
-    for (QList<KScanOption *>::const_iterator it = gui_elements.constBegin();
-         it!=gui_elements.constEnd(); ++it)
+    for (QList<KScanOption *>::const_iterator it = mGuiElements.constBegin();
+         it!=mGuiElements.constEnd(); ++it)
     {
         KScanOption *opt = (*it);
         if (opt->getName()==alias)
@@ -150,7 +140,7 @@ KScanOption *KScanDevice::getGuiElement(const QByteArray &name,
    if( so->valid() && so->softwareSetable())
    {
       /** store new gui-elem in list of all gui-elements */
-      gui_elements.append( so );
+      mGuiElements.append( so );
 
       QWidget *w = so->createWidget( parent, desc, tooltip );
       if( w )
@@ -180,7 +170,8 @@ KScanOption *KScanDevice::getGuiElement(const QByteArray &name,
 }
 
 
-// ---------------------------------------------------------------------------
+//  Constructor/destructor
+//  ----------------------
 
 KScanDevice::KScanDevice(QObject *parent)
    : QObject(parent)
@@ -198,17 +189,17 @@ KScanDevice::KScanDevice(QObject *parent)
     option_dic = new OptionDict();
 
     gScannerHandle = NULL;
-    mScannerInitialised = false;  /* stays false until openDevice. */
+    mScannerInitialised = false;			// is device opened yet?
     mScanningState = KScanDevice::ScanIdle;
 
-    mScanBuf        = NULL; /* temporary image data buffer while scanning */
-    mSocketNotifier           = NULL; /* socket notifier for async scanning         */
-    mScanImage          = NULL; /* temporary image to scan in                 */
-    storeOptions = NULL; /* list of options to store during preview    */
-    overall_bytes = 0;
-    rest_bytes = 0;
-    pixel_x = 0;
-    pixel_y = 0;
+    mScanBuf = NULL;					// image data buffer while scanning
+    mScanImage = NULL;					// temporary image to scan into
+    mSocketNotifier = NULL;				// socket notifier for async scanning
+    mSavedOptions = NULL;				// options to save during preview
+    mBytesRead = 0;
+    mBytesUsed = 0;
+    mPixelX = 0;
+    mPixelY = 0;
 
     mScannerName = "";
 
@@ -224,10 +215,13 @@ KScanDevice::~KScanDevice()
 
     ScanGlobal::self()->setScanDevice(NULL);		// going away, don't call me
 
-    delete storeOptions;
+    delete mSavedOptions;
     delete d;
 }
 
+
+//  Opening/closing the scanner device
+//  ----------------------------------
 
 KScanDevice::Status KScanDevice::openDevice(const QByteArray &backend)
 {
@@ -269,11 +263,6 @@ KScanDevice::Status KScanDevice::openDevice(const QByteArray &backend)
 }
 
 
-QString KScanDevice::lastSaneErrorMessage() const
-{
-    return (sane_strstatus(mSaneStatus));
-}
-
 
 
 // TODO: does this need to be a slot?
@@ -298,13 +287,16 @@ void KScanDevice::slotCloseDevice()
       gScannerHandle = NULL;
    }
 
-   qDeleteAll(gui_elements);
-   gui_elements.clear();
+   qDeleteAll(mGuiElements);
+   mGuiElements.clear();
 
    option_dic->clear();
    mScannerInitialised = false;
 }
 
+
+//  Scanner and image information
+//  -----------------------------
 
 QString KScanDevice::scannerDescription() const
 {
@@ -343,6 +335,17 @@ QSize KScanDevice::getMaxScanSize( void ) const
 }
 
 
+void KScanDevice::getCurrentFormat(int *format, int *depth)
+{
+    sane_get_parameters(gScannerHandle, &mSaneParameters);
+    *format = mSaneParameters.format;
+    *depth = mSaneParameters.depth;
+}
+
+
+//  Listing the available options
+//  -----------------------------
+
 KScanDevice::Status KScanDevice::find_options()
 {
    KScanDevice::Status 	stat = KScanDevice::Ok;
@@ -380,7 +383,7 @@ KScanDevice::Status KScanDevice::find_options()
 		 kDebug() << "Inserting" << d->name << "as" << i;
 		 /* create a new option in the set. */
 		 option_dic->insert ( d->name, i );
-		 option_list.append( (const char*) d->name );
+		 mOptionList.append( (const char*) d->name );
 #if 0
 		 KScanOption *newOpt = new KScanOption( d->name );
 		 const QString qq = newOpt->get();
@@ -404,7 +407,7 @@ KScanDevice::Status KScanDevice::find_options()
 
 QList<QByteArray> KScanDevice::getAllOptions()
 {
-    return (option_list);
+    return (mOptionList);
 }
 
 
@@ -412,8 +415,8 @@ QList<QByteArray> KScanDevice::getCommonOptions()
 {
     QList<QByteArray> opts;
 
-    for (QList<QByteArray>::const_iterator it = option_list.constBegin();
-         it!=option_list.constEnd(); ++it)
+    for (QList<QByteArray>::const_iterator it = mOptionList.constBegin();
+         it!=mOptionList.constEnd(); ++it)
     {
         const QByteArray optname = (*it);
         KScanOption opt(optname);
@@ -428,8 +431,8 @@ QList<QByteArray> KScanDevice::getAdvancedOptions()
 {
     QList<QByteArray> opts;
 
-    for (QList<QByteArray>::const_iterator it = option_list.constBegin();
-         it!=option_list.constEnd(); ++it)
+    for (QList<QByteArray>::const_iterator it = mOptionList.constBegin();
+         it!=mOptionList.constEnd(); ++it)
     {
         const QByteArray optname = (*it);
         KScanOption opt(optname);
@@ -439,6 +442,9 @@ QList<QByteArray> KScanDevice::getAdvancedOptions()
     return (opts);
 }
 
+
+//  Controlling options
+//  -------------------
 
 KScanDevice::Status KScanDevice::apply( KScanOption *opt, bool isGammaTable )
 {
@@ -570,10 +576,10 @@ void KScanDevice::slotSetDirty(const QByteArray &name)
 {
     if (optionExists(name))
     {
-        if (!dirtyList.contains(name))
+        if (!mDirtyList.contains(name))
         {
             kDebug() << "Setting dirty" << name;
-            dirtyList.append(name);
+            mDirtyList.append(name);
         }
     }
 }
@@ -626,8 +632,8 @@ void KScanDevice::slotReloadAllBut(KScanOption *not_opt)
     /* Make sure it's applied */
     apply(not_opt);
 
-    for (QList<KScanOption *>::const_iterator it = gui_elements.constBegin();
-         it!=gui_elements.constEnd(); ++it)
+    for (QList<KScanOption *>::const_iterator it = mGuiElements.constBegin();
+         it!=mGuiElements.constEnd(); ++it)
     {
         KScanOption *so = (*it);
         if (so!=not_opt)
@@ -648,8 +654,8 @@ void KScanDevice::slotReloadAll()
 {
     kDebug();
 
-    for (QList<KScanOption *>::const_iterator it = gui_elements.constBegin();
-         it!=gui_elements.constEnd(); ++it)
+    for (QList<KScanOption *>::const_iterator it = mGuiElements.constBegin();
+         it!=mGuiElements.constEnd(); ++it)
     {
         KScanOption *so = (*it);
         so->slotReload();
@@ -658,6 +664,9 @@ void KScanDevice::slotReloadAll()
 }
 
 
+//  Scanning control
+//  ----------------
+
 void KScanDevice::slotStopScanning()
 {
     kDebug() << "Attempt to stop scanning";
@@ -665,6 +674,9 @@ void KScanDevice::slotStopScanning()
     mScanningState = KScanDevice::ScanStopNow;
 }
 
+
+//  Preview image
+//  -------------
 
 const QString KScanDevice::previewFile()
 {
@@ -698,252 +710,67 @@ bool KScanDevice::savePreviewImage(const QImage &image)
 }
 
 
-KScanDevice::Status KScanDevice::acquirePreview( bool forceGray, int dpi )
-{
-   double min, max, q;
+//  Displaying scan options
+//  -----------------------
+//
+//  For debugging.  Originally showOptions() was called prepareScan() and had
+//  the comment:
+//
+//    prepareScan tries to set as much as parameters as possible.
+//
+//    Function which applies all Options which need to be applied.
+//    See SANE-Documentation Table 4.5, description for SANE_CAP_SOFT_DETECT.
+//    The function sets the options which have SANE_CAP_AUTOMATIC set
+//    to automatic adjust.
+//
+//  But this wasn't true - it only reports the current state of the options.
 
-   (void) forceGray;
-
-    if (storeOptions!=NULL) storeOptions->clear();
-    else storeOptions = new KScanOptSet("TempStore");
-
-   /* set Preview = ON if exists */
-   if( optionExists( SANE_NAME_PREVIEW ) )
-   {
-      KScanOption prev( aliasName(SANE_NAME_PREVIEW) );
-
-      prev.set( true );
-      apply( &prev );
-
-      /* after having applied, save set to false to switch preview mode off after
-	 scanning */
-      prev.set( false );
-      storeOptions->backupOption( prev );
-   }
-
-   /* Gray-Preview only  done by widget ? */
-   if( optionExists( SANE_NAME_GRAY_PREVIEW ))
-   {
-     KScanOption *so = getExistingGuiElement( SANE_NAME_GRAY_PREVIEW );
-     if( so )
-     {
-       if( so->get() == "true" )
-       {
-	 /* Gray preview on */
-	 so->set( true );
-	 kDebug() << "Setting GrayPreview ON";
-       }
-       else
-       {
-	 so->set(false );
-	 kDebug() << "Setting GrayPreview OFF";
-       }
-     }
-     apply( so );
-   }
-
-
-   if( optionExists( SANE_NAME_SCAN_MODE ) )
-   {
-      KScanOption mode( SANE_NAME_SCAN_MODE );
-      const QString kk = mode.get();
-      kDebug() << "Scan Mode is" << kk;
-      storeOptions->backupOption( mode );
-      /* apply if it has a widget, or apply always ? */
-      if( mode.widget() ) apply( &mode );
-   }
-
-   /** Scan Resolution should always exist. **/
-   KScanOption res ( SANE_NAME_SCAN_RESOLUTION );
-   const QString p = res.get();
-
-   kDebug() << "Scan Resolution (pre-preview) is" << p;
-   storeOptions->backupOption( res );
-
-   int set_dpi = dpi;
-
-   if( dpi == 0 )
-   {
-       /* No resolution argument */
-       if( ! res.getRange( &min, &max, &q ) )
-       {
-	   if( ! res.getRangeFromList ( &min, &max, &q ) )
-	   {
-	       kDebug() << "Could not retrieve resolution range!";
-	       min = 75.0; // Hope that every scanner can 75
-	   }
-       }
-       kDebug() << "Minimum Range" << min << "Maximum Range" << max;
-
-      if( min > MIN_PREVIEW_DPI )
-	 set_dpi = (int) min;
-      else
-	 set_dpi = MIN_PREVIEW_DPI;
-   }
-
-   /* Set scan resolution for preview. */
-   if( !optionExists( SANE_NAME_SCAN_Y_RESOLUTION ) )
-      d->currScanResolutionY = 0;
-   else
-   {
-      KScanOption yres ( SANE_NAME_SCAN_Y_RESOLUTION );
-      /* if active ? */
-      storeOptions->backupOption( yres );
-      yres.set( set_dpi );
-      apply( &yres );
-      yres.get( &d->currScanResolutionY );
-
-      /* Resolution bind switch ? */
-      if( optionExists( SANE_NAME_RESOLUTION_BIND ) )
-      {
-	 KScanOption bind_so( SANE_NAME_RESOLUTION_BIND );
-	 /* Switch binding on if available */
-	 storeOptions->backupOption( bind_so );
-	 bind_so.set( true );
-	 apply( &bind_so );
-      }
-   }
-
-   res.set( set_dpi );
-   apply( &res );
-
-   /* Store the resulting preview for additional image information */
-   res.get( &d->currScanResolutionX );
-
-   if ( d->currScanResolutionY == 0 )
-      d->currScanResolutionY = d->currScanResolutionX;
-
-   /* Start scanning */
-   KScanDevice::Status stat = acquire_data( true );
-
-   /* Restauration of the previous values must take place in the scanfinished slot,
-    *  because scanning works asynchron now.
-    */
-
-   return( stat );
-}
-
-
-
-/**
- * prepareScan tries to set as much as parameters as possible.
- *
- **/
+#ifdef DEBUG_OPTIONS
 
 inline const char *optionNotifyString(int opt)
 {
-    return (opt>0 ? "X  |" : "-  |");
+    return (opt!=0 ? "X  |" : "-  |");
 }
 
 
-void KScanDevice::prepareScan( void )
+void KScanDevice::showOptions()
 {
-	OptionDict::ConstIterator it = option_dic->begin(); // iterator for dict
-
     kDebug() << "######################################################################";
     kDebug() << "Scanner" << mScannerName;
     kDebug() << "----------------------------------+----+----+----+----+----+----+----+";
     kDebug() << " Option-Name                      |SSEL|HSEL|SDET|EMUL|AUTO|INAC|ADVA|";
     kDebug() << "----------------------------------+----+----+----+----+----+----+----+";
 
-	while ( it != option_dic->end() )
+    for (OptionDict::const_iterator it = option_dic->constBegin();
+         it!=option_dic->constEnd(); ++it)
     {
-       // qDebug( "%s -> %d", it.currentKey().latin1(), *it.current() );
-	   int descriptor = it.value();
+        int idx = it.value();
+        const SANE_Option_Descriptor *desc = sane_get_option_descriptor(gScannerHandle, idx);
+        if (desc!=NULL) continue;
 
-       const SANE_Option_Descriptor *d = sane_get_option_descriptor( gScannerHandle, descriptor );
-
-       if( d )
-       {
-	  int cap = d->cap;
-	  
-	  QString s = QString(it.key()).leftJustified(32);
-	  kDebug() << s << "|" <<
-		 optionNotifyString( ((cap) & SANE_CAP_SOFT_SELECT)) << 
-		 optionNotifyString( ((cap) & SANE_CAP_HARD_SELECT)) << 
-		 optionNotifyString( ((cap) & SANE_CAP_SOFT_DETECT)) << 
-		 optionNotifyString( ((cap) & SANE_CAP_EMULATED)   ) << 
-		 optionNotifyString( ((cap) & SANE_CAP_AUTOMATIC)  ) << 
-		 optionNotifyString( ((cap) & SANE_CAP_INACTIVE)   ) << 
-		 optionNotifyString( ((cap) & SANE_CAP_ADVANCED )  );
-
-       }
-       ++it;
+        int cap = desc->cap;
+        QString s = QString(it.key()).leftJustified(32);
+        kDebug() << s << "|" <<
+            optionNotifyString((cap & SANE_CAP_SOFT_SELECT)) << 
+            optionNotifyString((cap & SANE_CAP_HARD_SELECT)) << 
+            optionNotifyString((cap & SANE_CAP_SOFT_DETECT)) << 
+            optionNotifyString((cap & SANE_CAP_EMULATED)) << 
+            optionNotifyString((cap & SANE_CAP_AUTOMATIC)) << 
+            optionNotifyString((cap & SANE_CAP_INACTIVE)) << 
+            optionNotifyString((cap & SANE_CAP_ADVANCED));
     }
     kDebug() << "----------------------------------+----+----+----+----+----+----+----+";
 
-    KScanOption pso( SANE_NAME_PREVIEW );
+    KScanOption pso(SANE_NAME_PREVIEW);
     kDebug() << "Preview-Switch is" << pso.get();
 }
 
-/** Starts scanning
- *  depending on if a filename is given or not, the function tries to open
- *  the file using the Qt-Image-IO or really scans the image.
- **/
-KScanDevice::Status KScanDevice::acquire( const QString& filename )
-{
-    if( filename.isEmpty() )
-    {
- 	/* *real* scanning - apply all Options and go for it */
- 	prepareScan();
-
-        for (QList<KScanOption *>::const_iterator it = gui_elements.constBegin();
-             it!=gui_elements.constEnd(); ++it)
-        {
-            KScanOption *so = (*it);
- 	    if (so->active())
- 	    {
- 	         kDebug() << "apply" << so->getName();
- 	         apply( so );
- 	    }
- 	    else
- 	    {
- 	        kDebug() << "Option" << so->getName() << "is not active";
- 	    }
- 	}
-
-	/** Scan Resolution should always exist. **/
-	KScanOption res( SANE_NAME_SCAN_RESOLUTION );
-	res.get( &d->currScanResolutionX );
-        if ( !optionExists( SANE_NAME_SCAN_Y_RESOLUTION ) )
-           d->currScanResolutionY = d->currScanResolutionX;
-        else
-        {
-           KScanOption yres( SANE_NAME_SCAN_Y_RESOLUTION );
-           yres.get( &d->currScanResolutionY );
-        }
-
-	return( acquire_data( false ));
-    }
-    else
-    {
-   	/* a filename is in the parameter */
-	QFileInfo file( filename );
-	if( file.exists() )
-	{
-	     QImage i;
-	     ImgScanInfo info;
-	     if( i.load( filename ))
-	     {
-		info.setXResolution(i.dotsPerMeterX()); // TODO: *2.54/100
-		info.setYResolution(i.dotsPerMeterY()); // TODO: *2.54/100
-		info.setScannerName(filename);
-		emit( sigNewImage( &i, &info ));
-	     }
-	}
-        else
-        {
-            return KScanDevice::ParamError;
-        }
-    }
-
-    return KScanDevice::Ok;
-}
+#endif							// DEBUG_OPTIONS
 
 
-/**
- *  Creates a new QImage from the retrieved Image Options
- **/
+//  Creating a new image to receive the scan/preview
+//  ------------------------------------------------
+
 KScanDevice::Status KScanDevice::createNewImage(const SANE_Parameters *p)
 {
     if (p==NULL) return (KScanDevice::ParamError);
@@ -987,162 +814,579 @@ KScanDevice::Status KScanDevice::createNewImage(const SANE_Parameters *p)
 }
 
 
-KScanDevice::Status KScanDevice::acquire_data(bool isPreview)
+//  Acquiring preview/scan image
+//  ----------------------------
+
+KScanDevice::Status KScanDevice::acquirePreview( bool forceGray, int dpi )
 {
-    mSaneStatus = SANE_STATUS_GOOD;
-    KScanDevice::Status stat = KScanDevice::Ok;
+   double min, max, q;
 
-    scanningPreview = isPreview;
+   (void) forceGray;
 
-    emit sigScanStart();
+    if (mSavedOptions!=NULL) mSavedOptions->clear();
+    else mSavedOptions = new KScanOptSet("TempStore");
 
-    QApplication::setOverrideCursor(Qt::WaitCursor);	// potential lengthy operation
-    ScanGlobal::self()->setScanDevice(this);		// for possible authentication
-    mSaneStatus = sane_start(gScannerHandle);
+   /* set Preview = ON if exists */
+   if( optionExists( SANE_NAME_PREVIEW ) )
+   {
+      KScanOption prev( aliasName(SANE_NAME_PREVIEW) );
 
-    if (mSaneStatus==SANE_STATUS_ACCESS_DENIED)		// authentication failed?
+      prev.set( true );
+      apply( &prev );
+
+      /* after having applied, save set to false to switch preview mode off after
+	 scanning */
+      prev.set( false );
+      mSavedOptions->backupOption( prev );
+   }
+
+   /* Gray-Preview only  done by widget ? */
+   if( optionExists( SANE_NAME_GRAY_PREVIEW ))
+   {
+     KScanOption *so = getExistingGuiElement( SANE_NAME_GRAY_PREVIEW );
+     if( so )
+     {
+       if( so->get() == "true" )
+       {
+	 /* Gray preview on */
+	 so->set( true );
+	 kDebug() << "Setting GrayPreview ON";
+       }
+       else
+       {
+	 so->set(false );
+	 kDebug() << "Setting GrayPreview OFF";
+       }
+     }
+     apply( so );
+   }
+
+
+   if( optionExists( SANE_NAME_SCAN_MODE ) )
+   {
+      KScanOption mode( SANE_NAME_SCAN_MODE );
+      const QString kk = mode.get();
+      kDebug() << "Scan Mode is" << kk;
+      mSavedOptions->backupOption( mode );
+      /* apply if it has a widget, or apply always ? */
+      if( mode.widget() ) apply( &mode );
+   }
+
+   /** Scan Resolution should always exist. **/
+   KScanOption res ( SANE_NAME_SCAN_RESOLUTION );
+   const QString p = res.get();
+
+   kDebug() << "Scan Resolution (pre-preview) is" << p;
+   mSavedOptions->backupOption( res );
+
+   int set_dpi = dpi;
+
+   if( dpi == 0 )
+   {
+       /* No resolution argument */
+       if( ! res.getRange( &min, &max, &q ) )
+       {
+	   if( ! res.getRangeFromList ( &min, &max, &q ) )
+	   {
+	       kDebug() << "Could not retrieve resolution range!";
+	       min = 75.0; // Hope that every scanner can 75
+	   }
+       }
+       kDebug() << "Minimum Range" << min << "Maximum Range" << max;
+
+      if( min > MIN_PREVIEW_DPI )
+	 set_dpi = (int) min;
+      else
+	 set_dpi = MIN_PREVIEW_DPI;
+   }
+
+   /* Set scan resolution for preview. */
+   if( !optionExists( SANE_NAME_SCAN_Y_RESOLUTION ) )
+      d->currScanResolutionY = 0;
+   else
+   {
+      KScanOption yres ( SANE_NAME_SCAN_Y_RESOLUTION );
+      /* if active ? */
+      mSavedOptions->backupOption( yres );
+      yres.set( set_dpi );
+      apply( &yres );
+      yres.get( &d->currScanResolutionY );
+
+      /* Resolution bind switch ? */
+      if( optionExists( SANE_NAME_RESOLUTION_BIND ) )
+      {
+	 KScanOption bind_so( SANE_NAME_RESOLUTION_BIND );
+	 /* Switch binding on if available */
+	 mSavedOptions->backupOption( bind_so );
+	 bind_so.set( true );
+	 apply( &bind_so );
+      }
+   }
+
+   res.set( set_dpi );
+   apply( &res );
+
+   /* Store the resulting preview for additional image information */
+   res.get( &d->currScanResolutionX );
+
+   if ( d->currScanResolutionY == 0 )
+      d->currScanResolutionY = d->currScanResolutionX;
+
+   /* Start scanning */
+   KScanDevice::Status stat = acquireData( true );
+
+   /* Restauration of the previous values must take place in the scanfinished slot,
+    *  because scanning works asynchron now.
+    */
+
+   return( stat );
+}
+
+
+/** Starts scanning
+ *  depending on if a filename is given or not, the function tries to open
+ *  the file using the Qt-Image-IO or really scans the image.
+ **/
+KScanDevice::Status KScanDevice::acquireScan(const QString &filename)
+{
+    if( filename.isEmpty() )
     {
-        clearSavedAuth();				// clear any saved password
-        kDebug() << "retrying authentication";		// try again once more
-        mSaneStatus = sane_start(gScannerHandle);
+ 	/* *real* scanning - apply all Options and go for it */
+#ifdef DEBUG_OPTIONS
+ 	showOptions();
+#endif
+        for (QList<KScanOption *>::const_iterator it = mGuiElements.constBegin();
+             it!=mGuiElements.constEnd(); ++it)
+        {
+            KScanOption *so = (*it);
+ 	    if (so->active())
+ 	    {
+ 	         kDebug() << "apply" << so->getName();
+ 	         apply( so );
+ 	    }
+ 	    else
+ 	    {
+ 	        kDebug() << "Option" << so->getName() << "is not active";
+ 	    }
+ 	}
+
+	/** Scan Resolution should always exist. **/
+	KScanOption res( SANE_NAME_SCAN_RESOLUTION );
+	res.get( &d->currScanResolutionX );
+        if ( !optionExists( SANE_NAME_SCAN_Y_RESOLUTION ) )
+           d->currScanResolutionY = d->currScanResolutionX;
+        else
+        {
+           KScanOption yres( SANE_NAME_SCAN_Y_RESOLUTION );
+           yres.get( &d->currScanResolutionY );
+        }
+
+	return( acquireData( false ));
+    }
+    else
+    {
+   	/* a filename is in the parameter */
+	QFileInfo file( filename );
+	if( file.exists() )
+	{
+	     QImage i;
+	     ImgScanInfo info;
+	     if( i.load( filename ))
+	     {
+		info.setXResolution(i.dotsPerMeterX()); // TODO: *2.54/100
+		info.setYResolution(i.dotsPerMeterY()); // TODO: *2.54/100
+		info.setScannerName(filename);
+		emit( sigNewImage( &i, &info ));
+	     }
+	}
+        else
+        {
+            return KScanDevice::ParamError;
+        }
     }
 
-    if (mSaneStatus==SANE_STATUS_GOOD)
+    return KScanDevice::Ok;
+}
+
+
+KScanDevice::Status KScanDevice::acquireData(bool isPreview)
+{
+    KScanDevice::Status stat = KScanDevice::Ok;
+    int frames = 0;
+
+    mScanningPreview = isPreview;
+    mScanningState = KScanDevice::ScanStarting;
+    mBytesRead = 0;
+
+    emit sigScanStart();
+    QApplication::setOverrideCursor(Qt::WaitCursor);	// potential lengthy operation
+
+    ScanGlobal::self()->setScanDevice(this);		// for possible authentication
+
+    while (true)					// loop while frames available
     {
-        mSaneStatus = sane_get_parameters(gScannerHandle, &sane_scan_param);
+        ++frames;					// count up how many
+
+        mSaneStatus = sane_start(gScannerHandle);
+        if (mSaneStatus==SANE_STATUS_ACCESS_DENIED)	// authentication failed?
+        {
+            kDebug() << "retrying authentication";
+            clearSavedAuth();				// clear any saved password
+            mSaneStatus = sane_start(gScannerHandle);	// try again once more
+        }
+
         if (mSaneStatus==SANE_STATUS_GOOD)
         {
-            kDebug() << "Initial parameters...";
-            kDebug() << "  format:          " << sane_scan_param.format;
-            kDebug() << "  last_frame:      " << sane_scan_param.last_frame;
-            kDebug() << "  lines:           " << sane_scan_param.lines;
-            kDebug() << "  depth:           " << sane_scan_param.depth;
-            kDebug() << "  pixels_per_line: " << sane_scan_param.pixels_per_line;
-            kDebug() << "  bytes_per_line:  " << sane_scan_param.bytes_per_line;
-
-            if (sane_scan_param.pixels_per_line==0 || sane_scan_param.lines<1)
+            mSaneStatus = sane_get_parameters(gScannerHandle, &mSaneParameters);
+            if (mSaneStatus==SANE_STATUS_GOOD)
             {
-                kDebug() << "Nothing to acquire!";
-                stat = KScanDevice::EmptyPic;
+                kDebug() << "Scan parameters... frame" << frames;
+                kDebug() << "  format:          " << mSaneParameters.format;
+                kDebug() << "  last_frame:      " << mSaneParameters.last_frame;
+                kDebug() << "  lines:           " << mSaneParameters.lines;
+                kDebug() << "  depth:           " << mSaneParameters.depth;
+                kDebug() << "  pixels_per_line: " << mSaneParameters.pixels_per_line;
+                kDebug() << "  bytes_per_line:  " << mSaneParameters.bytes_per_line;
+
+                // TODO: implement "Hand Scanner" support
+                if (mSaneParameters.lines<1)
+                {
+                    kDebug() << "Hand Scanner not supported";
+                    stat = KScanDevice::NotSupported;
+                }
+                else if (mSaneParameters.pixels_per_line==0)
+                {
+                    kDebug() << "Nothing to acquire!";
+                    stat = KScanDevice::EmptyPic;
+                }
+            }
+            else
+            {
+                stat = KScanDevice::OpenDevice;
+                kDebug() << "sane_get_parameters() error" << lastSaneErrorMessage();
             }
         }
         else
         {
             stat = KScanDevice::OpenDevice;
-            kDebug() << "sane_get_parameters() error" << lastSaneErrorMessage();
+            kDebug() << "sane_start() error" << lastSaneErrorMessage();
         }
-    }
-    else
-    {
-        stat = KScanDevice::OpenDevice;
-        kDebug() << "sane_start() error" << lastSaneErrorMessage();
-    }
-    QApplication::restoreOverrideCursor();
+        QApplication::restoreOverrideCursor();
 
-    // Create image to receive scan, based on SANE parameters
-    if (stat==KScanDevice::Ok) stat = createNewImage(&sane_scan_param);
+        if (mScanningState==KScanDevice::ScanStarting)	// first time through loop
+        {
+            // Create image to receive scan, based on SANE parameters
+            if (stat==KScanDevice::Ok) stat = createNewImage(&mSaneParameters);
 
-    // Create/reinitialise buffer for scanning one line
-    if (stat==KScanDevice::Ok)
-    {
-        if (mScanBuf!=NULL) delete [] mScanBuf;
-        mScanBuf = new SANE_Byte[sane_scan_param.bytes_per_line+4];
-        if (mScanBuf==NULL) stat = KScanDevice::NoMemory;	// can this ever happen?
-   }
+            // Create/reinitialise buffer for scanning one line
+            if (stat==KScanDevice::Ok)
+            {
+                if (mScanBuf!=NULL) delete [] mScanBuf;
+                mScanBuf = new SANE_Byte[mSaneParameters.bytes_per_line+4];
+                if (mScanBuf==NULL) stat = KScanDevice::NoMemory;
+            }						// can this ever happen?
 
-    QApplication::setOverrideCursor(Qt::BusyCursor);	// display this while scanning
-    emit sigScanProgress(0);				// signal the progress dialog
-    emit sigAcquireStart();
+            int fd = 0;
+            // Don't assume that sane_get_select_fd() will succeed even if
+            // sane_set_io_mode() successfully sets I/O mode to noblocking -
+            // bug 159300
+            if (sane_set_io_mode(gScannerHandle, SANE_TRUE)==SANE_STATUS_GOOD &&
+                sane_get_select_fd(gScannerHandle, &fd)==SANE_STATUS_GOOD)
+            {
+                kDebug() << "using read socket notifier";
+                mSocketNotifier = new QSocketNotifier(fd, QSocketNotifier::Read, this);
+                connect(mSocketNotifier, SIGNAL(activated(int)), SLOT(doProcessABlock()));
+            }
+            // TODO: report which SANE function above failed, so we can
+            // identify noncooperating scanners
+        }
 
-    if (stat==KScanDevice::Ok)
-    {
+        if (stat!=KScanDevice::Ok)			// some problem getting started
+        {
+            // Scanning could not start - give up now
+            kDebug() << "Scanning failed to start, status" << stat;
+            emit sigScanFinished(stat);
+            return (stat);
+        }
+
+        if (mScanningState==KScanDevice::ScanStarting)	// first time through loop
+        {
+            QApplication::setOverrideCursor(Qt::BusyCursor);
+            emit sigAcquireStart();
+        }
+
+        emit sigScanProgress(0);			// signal the progress dialog
         qApp->processEvents();				// update the progress window
 
-        pixel_x = 0;
-        pixel_y = 0;
-        overall_bytes = 0;
-        rest_bytes = 0;
+        mPixelX = 0;
+        mPixelY = 0;
+        mBytesUsed = 0;
 
         // Set internal status to indicate scanning in progress.
         // This status might be changed, e.g. by pressing Stop on a
         // GUI dialog displayed during scanning.
         mScanningState = KScanDevice::ScanInProgress;
 
-        // TODO: if using the socket notifier, does sane_get_parameters()
-        // get called for each loop?  Does it need to be?
+        // As originally coded, if using the socket notifier
+        // sane_get_parameters() was only called once at the beginning of
+        // the scan - just after sane_start() above.  If not using the socket
+        // notifier on the other hand, sane_get_parameters() was called after
+        // each doProcessABlock() in the loop below.
+        //
+        // According to the SANE documentation text, sane_get_parameters()
+        // needs to be called once after sane_start() to get the exact
+        // parameters, but not necessarily in the reading loop that just
+        // needs to call sane_read() repeatedly).  The diagram above, though,
+        // seems to imply that sane_get_parameters() should be done in the
+        // reading loop.
+        //
+        // Doing the sane_get_parameters() just once seems to work with all
+        // of the scanners that I have available to test, both using the
+        // socket notifier and not.  So that is what we now do, in this
+        // much simpler loop.
 
-        int fd = 0;
-        //  Don't assume that sane_get_select_fd will succeed even if sane_set_io_mode
-        //  successfully sets I/O mode to noblocking - bug 159300
-        if (sane_set_io_mode(gScannerHandle, SANE_TRUE)==SANE_STATUS_GOOD &&
-            sane_get_select_fd(gScannerHandle, &fd)==SANE_STATUS_GOOD)
+        while (true)					// loop for one scanned frame
         {
-            kDebug() << "using read socket notifier";
-            mSocketNotifier = new QSocketNotifier(fd, QSocketNotifier::Read, this);
-            connect(mSocketNotifier, SIGNAL(activated(int)), SLOT(doProcessABlock()));
+            if (mSocketNotifier!=NULL)			// using the socket notifier
+            {
+                qApp->processEvents();			// let it fire away
+            }
+            else					// not using socket notifier
+            {
+                doProcessABlock();			// may block while reading
+            }
+							// exit loop when frame done
+            if (mScanningState==KScanDevice::ScanIdle ||
+                mScanningState==KScanDevice::ScanNextFrame) break;
+        }
+							// exit loop when scan done
+        if (mScanningState==KScanDevice::ScanIdle) break;
+    }
+
+    kDebug() << "Scan read" << mBytesRead << "bytes in" << frames << "frames";
+
+    emit sigScanFinished(stat);				// scan is now finished
+    return (stat);
+}
+
+
+/* This function calls at least sane_read and converts the read data from the scanner
+ * to the qimage.
+ * The function needs:
+ * QImage img valid
+ * the data-buffer  set to a appropriate size
+ **/
+
+// TODO: probably needs to be extended for 16-bit scanner support
+
+void KScanDevice::doProcessABlock()
+{
+    int val,i;
+    QRgb col, newCol;
+
+    SANE_Byte *rptr = NULL;
+    SANE_Int bytes_read = 0;
+    int chan = 0;
+    mSaneStatus = SANE_STATUS_GOOD;
+    uchar eight_pix = 0;
+
+    if (mScanningState==KScanDevice::ScanIdle) return;	// scan finished, no more to do
+							// block notifications while working
+    if (mSocketNotifier!=NULL) mSocketNotifier->setEnabled(false);
+
+    while (true)
+    {
+        mSaneStatus = sane_read(gScannerHandle,
+                              (mScanBuf+mBytesUsed),
+                              mSaneParameters.bytes_per_line,
+                              &bytes_read);
+        if (mSaneStatus!=SANE_STATUS_GOOD)
+        {
+            if (mSaneStatus!=SANE_STATUS_EOF)		// this is OK, just stop
+            {						// any other error
+                kDebug() << "sane_read() error" << lastSaneErrorMessage()
+                         << "bytes read" << bytes_read;
+            }
+            break;
+        }
+
+        if (bytes_read<1) break;			// no data, finish loop
+
+	mBytesRead += bytes_read;
+	// qDebug( "Bytes read: %d, bytes written: %d", bytes_read, mBytesUsed );
+
+        int red = 0;
+        int green = 0;
+        int blue = 0;
+
+	rptr = mScanBuf;				// start of scan data
+	switch (mSaneParameters.format)
+	{
+case SANE_FRAME_RGB:
+            if (mSaneParameters.lines<1) break;
+            bytes_read += mBytesUsed;			// die übergebliebenen Bytes dazu
+            mBytesUsed = bytes_read % 3;
+
+            for (val = 0; val<((bytes_read-mBytesUsed)/3); val++)
+            {
+                red   = *rptr++;
+                green = *rptr++;
+                blue  = *rptr++;
+
+                if (mPixelX>=mSaneParameters.pixels_per_line)
+                {					// reached end of a row
+                    mPixelX = 0;
+                    mPixelY++;
+                }
+                if (mPixelY<mScanImage->height())	// within image height
+                {
+		    mScanImage->setPixel(mPixelX, mPixelY, qRgb(red, green, blue));
+                }
+                mPixelX++;
+            }
+
+            for (val = 0; val<mBytesUsed; val++)	// Copy the remaining bytes down
+            {						// to the beginning of the block
+                *(mScanBuf+val) = *rptr++;
+            }
+            break;
+
+case SANE_FRAME_GRAY:
+            for (val = 0; val<bytes_read ; val++)
+            {
+                if (mPixelY>=mSaneParameters.lines) break;
+                if (mSaneParameters.depth==8)		// Greyscale
+                {
+		    if (mPixelX>=mSaneParameters.pixels_per_line)
+                    {					// reached end of a row
+                        mPixelX = 0;
+                        mPixelY++;
+                    }
+		    mScanImage->setPixel(mPixelX, mPixelY, *rptr++);
+		    mPixelX++;
+                }
+                else					// Lineart (bitmap)
+                {					// needs to be converted to byte
+		    eight_pix = *rptr++;
+		    for (i = 0; i<8; i++)
+		    {
+                        if (mPixelY<mSaneParameters.lines)
+                        {
+                            chan = (eight_pix & 0x80)>0 ? 0 : 1;
+                            eight_pix = eight_pix << 1;
+                            mScanImage->setPixel(mPixelX, mPixelY, chan);
+                            mPixelX++;
+                            if( mPixelX>=mSaneParameters.pixels_per_line)
+                            {
+                                mPixelX = 0;
+                                mPixelY++;
+                                break;
+                            }
+                        }
+		    }
+                }
+            }
+            break;
+
+case SANE_FRAME_RED:
+case SANE_FRAME_GREEN:
+case SANE_FRAME_BLUE:
+            for (val = 0; val<bytes_read ; val++)
+            {
+                if (mPixelX>=mSaneParameters.pixels_per_line)
+                {					// reached end of a row
+                    mPixelX = 0;
+		    mPixelY++;
+                }
+
+                if (mPixelY<mSaneParameters.lines)
+                {
+		    col = mScanImage->pixel(mPixelX, mPixelY);
+
+		    red   = qRed(col);
+		    green = qGreen(col);
+		    blue  = qBlue(col);
+		    chan  = *rptr++;
+
+		    switch (mSaneParameters.format)
+		    {
+case SANE_FRAME_RED:    newCol = qRgba(chan, green, blue, 0xFF);
+                        break;
+
+case SANE_FRAME_GREEN:  newCol = qRgba(red, chan, blue, 0xFF);
+                        break;
+
+case SANE_FRAME_BLUE:   newCol = qRgba(red, green, chan, 0xFF);
+                        break;
+
+default:                newCol = qRgba(0xFF, 0xFF, 0xFF, 0xFF);
+                        break;
+		    }
+		    mScanImage->setPixel(mPixelX, mPixelY, newCol);
+		    mPixelX++;
+                }
+            }
+            break;
+
+default:    kDebug() << "Undefined SANE format" << mSaneParameters.format;
+            break;
+	}						// switch of scan format
+
+	if ((mSaneParameters.lines>0) && ((mSaneParameters.lines*mPixelY)>0))
+	{
+            int progress =  (int)(((double)MAX_PROGRESS)/mSaneParameters.lines*mPixelY);
+            if (progress<MAX_PROGRESS) emit sigScanProgress(progress);
+	}
+
+        // cannot get here, bytes_read and EOF tested above
+	//if( bytes_read == 0 || mSaneStatus == SANE_STATUS_EOF )
+	//{
+	//   kDebug() << "mSaneStatus not OK:" << sane_stat;
+	//   break;
+	//}
+
+        if (mScanningState==KScanDevice::ScanStopNow)
+        {
+            /* mScanningState is set to ScanStopNow due to hitting slStopScanning   */
+            /* Mostly that one is fired by the STOP-Button in the progress dialog. */
+
+            /* This is also hit after the normal finish of the scan. Most probably,
+             * the QSocketnotifier fires for a few times after the scan has been
+             * cancelled.  Does it matter ? To see it, just uncomment the qDebug msg.
+             */
+            kDebug() << "Stopping the scan progress";
+            mScanningState = KScanDevice::ScanIdle;
+//            emit sigScanFinished(KScanDevice::Ok);
+            break;
+        }
+    }							// end of main loop
+
+    // Here when scanning is finished or has had an error
+    if (mSaneStatus==SANE_STATUS_EOF)			// end of scan pass
+    {
+        if (mSaneParameters.last_frame)			// end of scanning run
+        {
+            /** Everythings okay, the picture is ready **/
+            kDebug() << "Last frame reached, scan successful";
+            mScanningState = KScanDevice::ScanIdle;
+//            emit sigScanFinished(KScanDevice::Ok);
         }
         else
         {
-            while (true)
-            {
-                doProcessABlock();
-                if (mScanningState==KScanDevice::ScanIdle) break;
-
-                mSaneStatus = sane_get_parameters(gScannerHandle, &sane_scan_param);
-                kDebug() << "Polling loop...";
-                kDebug() << "  format:          " << sane_scan_param.format;
-                kDebug() << "  last_frame:      " << sane_scan_param.last_frame;
-                kDebug() << "  lines:           " << sane_scan_param.lines;
-                kDebug() << "  depth:           " << sane_scan_param.depth;
-                kDebug() << "  pixels_per_line: " << sane_scan_param.pixels_per_line;
-                kDebug() << "  bytes_per_line:  " << sane_scan_param.bytes_per_line;
-            }
+            // TODO: nothing ever looks for ScanNextFrame!
+            /** EOF und nicht letzter Frame -> Parameter neu belegen und neu starten **/
+            mScanningState = KScanDevice::ScanNextFrame;
+            kDebug() << "EOF, but another frame to scan";
         }
     }
 
-    if (stat!=KScanDevice::Ok)					// some problem with scanning
+    if (mSaneStatus==SANE_STATUS_CANCELLED)
     {
-        // Scanning was disturbed in any way - end it
-        kDebug() << "Scanning failed, status" << stat;
-        emit sigScanFinished(stat);
-   }
+        mScanningState = KScanDevice::ScanStopNow;
+        kDebug() << "Scan was cancelled";
+    }
 
-   return (stat);
-}
-
-
-void KScanDevice::getCurrentFormat(int *format,int *depth)
-{
-    sane_get_parameters(gScannerHandle,&sane_scan_param );
-    *format = sane_scan_param.format;
-    *depth = sane_scan_param.depth;
-}
-
-
-void KScanDevice::loadOptionSet( KScanOptSet *optSet )
-{
-   if (optSet==NULL) return;
-
-   kDebug() << "Loading option set" << optSet->optSetName() << "with" << optSet->count() << "options";
-
-   KScanOptSet::ConstIterator it = optSet->begin();
-   while( it != optSet->end() )
-   {
-	  KScanOption *so = it.value();
-      if( ! so->initialised() )
-	 kDebug() << "Option" << so->getName() << "is not initialised";
-
-      if( ! so->active() )
-	 kDebug() << "Option" << so->getName() << "is not active";
-
-      if( so && so->active() && so->initialised())
-      {
-	 kDebug() << "Option" << so->getName() << "set to" << so->get();
-	 apply( so );
-      }
-      ++it;
-   }
-
+    if (mSocketNotifier!=NULL) mSocketNotifier->setEnabled(true);
 }
 
 
@@ -1176,12 +1420,12 @@ void KScanDevice::slotScanFinished(KScanDevice::Status status)
 	mScanImage->setDotsPerMeterX(static_cast<int>(d->currScanResolutionX / 0.0254 + 0.5));
 	mScanImage->setDotsPerMeterY(static_cast<int>(d->currScanResolutionY / 0.0254 + 0.5));
 
-	if (scanningPreview)
+	if (mScanningPreview)
 	{
 	    savePreviewImage(*mScanImage);
 	    emit sigNewPreview(mScanImage, &info);
 
-	    loadOptionSet(storeOptions);		// restore original scan settings
+	    loadOptionSet(mSavedOptions);		// restore original scan settings
 	}
 	else
 	{
@@ -1202,225 +1446,8 @@ void KScanDevice::slotScanFinished(KScanDevice::Status status)
 }
 
 
-/* This function calls at least sane_read and converts the read data from the scanner
- * to the qimage.
- * The function needs:
- * QImage img valid
- * the data-buffer  set to a appropriate size
- **/
-
-// TODO: probably needs to be extended for 16-bit scanner support
-
-void KScanDevice::doProcessABlock()
-{
-    int val,i;
-    QRgb col, newCol;
-
-    SANE_Byte *rptr = NULL;
-    SANE_Int bytes_read = 0;
-    int chan = 0;
-    mSaneStatus = SANE_STATUS_GOOD;
-    uchar eight_pix = 0;
-
-    if (mScanningState==KScanDevice::ScanIdle) return;	// scan finished, no more to do
-							// block notifications while working
-    if (mSocketNotifier!=NULL) mSocketNotifier->setEnabled(false);
-
-    while (true)
-    {
-        mSaneStatus = sane_read(gScannerHandle,
-                              (mScanBuf+rest_bytes),
-                              sane_scan_param.bytes_per_line,
-                              &bytes_read);
-        if (mSaneStatus!=SANE_STATUS_GOOD)
-        {
-            if (mSaneStatus!=SANE_STATUS_EOF)		// this is OK, just stop
-            {						// any other error
-                kDebug() << "sane_read() error" << lastSaneErrorMessage()
-                         << "bytes read" << bytes_read;
-            }
-            break;
-        }
-
-        if (bytes_read<1) break;			// no data, finish loop
-
-	overall_bytes += bytes_read;
-	// qDebug( "Bytes read: %d, bytes written: %d", bytes_read, rest_bytes );
-
-        int red = 0;
-        int green = 0;
-        int blue = 0;
-
-	rptr = mScanBuf;				// start of scan data
-	switch (sane_scan_param.format)
-	{
-case SANE_FRAME_RGB:
-            if (sane_scan_param.lines<1) break;
-            bytes_read += rest_bytes;			// die übergebliebenen Bytes dazu
-            rest_bytes = bytes_read % 3;
-
-            for (val = 0; val<((bytes_read-rest_bytes)/3); val++)
-            {
-                red   = *rptr++;
-                green = *rptr++;
-                blue  = *rptr++;
-
-                if (pixel_x>=sane_scan_param.pixels_per_line)
-                {					// reached end of a row
-                    pixel_x = 0;
-                    pixel_y++;
-                }
-                if (pixel_y<mScanImage->height())	// within image height
-                {
-		    mScanImage->setPixel(pixel_x, pixel_y, qRgb(red, green, blue));
-                }
-                pixel_x++;
-            }
-
-            for (val = 0; val<rest_bytes; val++)	// Copy the remaining bytes down
-            {						// to the beginning of the block
-                *(mScanBuf+val) = *rptr++;
-            }
-            break;
-
-case SANE_FRAME_GRAY:
-            for (val = 0; val<bytes_read ; val++)
-            {
-                if (pixel_y>=sane_scan_param.lines) break;
-                if (sane_scan_param.depth==8)		// Greyscale
-                {
-		    if (pixel_x>=sane_scan_param.pixels_per_line)
-                    {					// reached end of a row
-                        pixel_x = 0;
-                        pixel_y++;
-                    }
-		    mScanImage->setPixel(pixel_x, pixel_y, *rptr++);
-		    pixel_x++;
-                }
-                else					// Lineart (bitmap)
-                {					// needs to be converted to byte
-		    eight_pix = *rptr++;
-		    for (i = 0; i<8; i++)
-		    {
-                        if (pixel_y<sane_scan_param.lines)
-                        {
-                            chan = (eight_pix & 0x80)>0 ? 0 : 1;
-                            eight_pix = eight_pix << 1;
-                            mScanImage->setPixel(pixel_x, pixel_y, chan);
-                            pixel_x++;
-                            if( pixel_x>=sane_scan_param.pixels_per_line)
-                            {
-                                pixel_x = 0;
-                                pixel_y++;
-                                break;
-                            }
-                        }
-		    }
-                }
-            }
-            break;
-
-case SANE_FRAME_RED:
-case SANE_FRAME_GREEN:
-case SANE_FRAME_BLUE:
-            for (val = 0; val<bytes_read ; val++)
-            {
-                if (pixel_x>=sane_scan_param.pixels_per_line)
-                {					// reached end of a row
-                    pixel_x = 0;
-		    pixel_y++;
-                }
-
-                if (pixel_y<sane_scan_param.lines)
-                {
-		    col = mScanImage->pixel(pixel_x, pixel_y);
-
-		    red   = qRed(col);
-		    green = qGreen(col);
-		    blue  = qBlue(col);
-		    chan  = *rptr++;
-
-		    switch (sane_scan_param.format)
-		    {
-case SANE_FRAME_RED:    newCol = qRgba(chan, green, blue, 0xFF);
-                        break;
-
-case SANE_FRAME_GREEN:  newCol = qRgba(red, chan, blue, 0xFF);
-                        break;
-
-case SANE_FRAME_BLUE:   newCol = qRgba(red, green, chan, 0xFF);
-                        break;
-
-default:                newCol = qRgba(0xFF, 0xFF, 0xFF, 0xFF);
-                        break;
-		    }
-		    mScanImage->setPixel(pixel_x, pixel_y, newCol);
-		    pixel_x++;
-                }
-            }
-            break;
-
-default:    kDebug() << "Undefined sane_scan_param format" << sane_scan_param.format;
-            break;
-	}						// switch of scan format
-
-	if ((sane_scan_param.lines>0) && ((sane_scan_param.lines*pixel_y)>0))
-	{
-            int progress =  (int)(((double)MAX_PROGRESS)/sane_scan_param.lines*pixel_y);
-            if (progress<MAX_PROGRESS) emit sigScanProgress(progress);
-	}
-
-        // cannot get here, bytes_read and EOF tested above
-	//if( bytes_read == 0 || mSaneStatus == SANE_STATUS_EOF )
-	//{
-	//   kDebug() << "mSaneStatus not OK:" << sane_stat;
-	//   break;
-	//}
-
-        if (mScanningState==KScanDevice::ScanStopNow)
-        {
-            /* mScanningState is set to ScanStopNow due to hitting slStopScanning   */
-            /* Mostly that one is fired by the STOP-Button in the progress dialog. */
-
-            /* This is also hit after the normal finish of the scan. Most probably,
-             * the QSocketnotifier fires for a few times after the scan has been
-             * cancelled.  Does it matter ? To see it, just uncomment the qDebug msg.
-             */
-            kDebug() << "Stopping the scan progress";
-            mScanningState = KScanDevice::ScanIdle;
-            emit sigScanFinished(KScanDevice::Ok);
-            break;
-        }
-    }							// end of main loop
-
-    // Here when scanning is finished or has had an error
-    if (mSaneStatus==SANE_STATUS_EOF)			// end of scan pass
-    {
-        if (sane_scan_param.last_frame)			// end of scanning run
-        {
-            /** Everythings okay, the picture is ready **/
-            kDebug() << "Last frame reached, scan successful";
-            mScanningState = KScanDevice::ScanIdle;
-            emit sigScanFinished(KScanDevice::Ok);
-        }
-        else
-        {
-            // TODO: nothing ever looks for ScanNextFrame!
-            /** EOF und nicht letzter Frame -> Parameter neu belegen und neu starten **/
-            mScanningState = KScanDevice::ScanNextFrame;
-            kDebug() << "EOF, but another frame to scan";
-        }
-    }
-
-    if (mSaneStatus==SANE_STATUS_CANCELLED)
-    {
-        mScanningState = KScanDevice::ScanStopNow;
-        kDebug() << "Scan was cancelled";
-    }
-
-    if (mSocketNotifier!=NULL) mSocketNotifier->setEnabled(true);
-}
-
+//  Configuration
+//  -------------
 
 // TODO: does this need to be a slot?
 void KScanDevice::slotSaveScanConfigSet(const QString &setName, const QString &descr)
@@ -1435,12 +1462,39 @@ void KScanDevice::slotSaveScanConfigSet(const QString &setName, const QString &d
 }
 
 
+void KScanDevice::loadOptionSet( KScanOptSet *optSet )
+{
+   if (optSet==NULL) return;
+
+   kDebug() << "Loading option set" << optSet->optSetName() << "with" << optSet->count() << "options";
+
+   KScanOptSet::ConstIterator it = optSet->begin();
+   while( it != optSet->end() )
+   {
+	  KScanOption *so = it.value();
+      if( ! so->initialised() )
+	 kDebug() << "Option" << so->getName() << "is not initialised";
+
+      if( ! so->active() )
+	 kDebug() << "Option" << so->getName() << "is not active";
+
+      if( so && so->active() && so->initialised())
+      {
+	 kDebug() << "Option" << so->getName() << "set to" << so->get();
+	 apply( so );
+      }
+      ++it;
+   }
+
+}
+
+
 void KScanDevice::getCurrentOptions(KScanOptSet *optSet)
 {
     if (optSet==NULL) return;
 
-    for (QList<KScanOption *>::const_iterator it = gui_elements.constBegin();
-         it!=gui_elements.constEnd(); ++it)
+    for (QList<KScanOption *>::const_iterator it = mGuiElements.constBegin();
+         it!=mGuiElements.constEnd(); ++it)
     {
         KScanOption *so = (*it);
         if (so==NULL) continue;
@@ -1453,11 +1507,11 @@ void KScanDevice::getCurrentOptions(KScanOptSet *optSet)
         }
 
         /* drop the thing from the dirty-list */
-        dirtyList.removeOne(so->getName());
+        mDirtyList.removeOne(so->getName());
     }
 
-    for (QList<QByteArray>::const_iterator it = dirtyList.constBegin();
-         it!=dirtyList.constEnd(); ++it)
+    for (QList<QByteArray>::const_iterator it = mDirtyList.constBegin();
+         it!=mDirtyList.constEnd(); ++it)
     {
         KScanOption so(*it);
         optSet->backupOption(so);
@@ -1560,7 +1614,16 @@ void KScanDevice::clearSavedAuth()
 }
 
 
-QString KScanDevice::errorMessage(KScanDevice::Status stat)
+//  Error reporting
+//  ---------------
+
+QString KScanDevice::lastSaneErrorMessage() const
+{
+    return (sane_strstatus(mSaneStatus));
+}
+
+
+QString KScanDevice::statusMessage(KScanDevice::Status stat)
 {
     switch (stat)
     {
@@ -1574,6 +1637,7 @@ case KScanDevice::NoMemory:		return (i18n("Out of memory"));
 case KScanDevice::Reload:		return (i18n("Needs reload"));	// never during scanning
 case KScanDevice::Cancelled:		return (i18n("Cancelled"));	// shouldn't be reported
 case KScanDevice::OptionNotActive:	return (i18n("Not active"));	// never during scanning
+case KScanDevice::NotSupported:		return (i18n("Not supported"));
 default:				return (i18n("Unknown status %1", stat));
     }
 }

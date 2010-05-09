@@ -22,9 +22,7 @@
 
 #include "libkscanexport.h"
 
-#include <qsize.h>
 #include <qobject.h>
-#include <qstringlist.h>
 #include <qbytearray.h>
 #include <qimage.h>
 #include <qlist.h>
@@ -74,7 +72,8 @@ public:
         NoMemory,
         Reload,
         Cancelled,
-        OptionNotActive
+        OptionNotActive,
+        NotSupported
     };
 
     /**
@@ -99,12 +98,6 @@ public:
      *   @param backend the name of the backend to open
      */
     KScanDevice::Status openDevice(const QByteArray &backend);
-
-    /**
-     *  Get an error message for the last SANE operation.
-     *   @return the error message string
-     */
-    QString lastSaneErrorMessage() const;
 
     /**
      * Returns the short, technical name of the currently attached backend.
@@ -148,7 +141,7 @@ public:
      *  @param filename File name for virtual scanner testing
      *  @return the status of the operation
      */
-    KScanDevice::Status acquire(const QString &filename = QString::null);
+    KScanDevice::Status acquireScan(const QString &filename = QString::null);
 
     /**
      *  returns the default filename of the preview image of this scanner.
@@ -223,7 +216,6 @@ public:
      *  @param  a scan-option object with the scanner option to set and
      *  an optional boolean parameter if it is a gamma table.
      **/
-
     KScanDevice::Status apply(KScanOption *opt, bool isGammaTable = false);
 
     /**
@@ -296,10 +288,17 @@ public:
      */
     bool authenticate(QByteArray *retuser, QByteArray *retpass);
 
-    /*
-     * Return an error message for the specified scan result status.
+    /**
+     *  Get an error message for the last SANE operation.
+     *  @return the error message string
      */
-    static QString errorMessage(KScanDevice::Status stat);
+    QString lastSaneErrorMessage() const;
+
+    /*
+     *  Get an error message for the specified scan result status.
+     *  @return the error message string
+     */
+    static QString statusMessage(KScanDevice::Status stat);
 
 
 
@@ -307,6 +306,10 @@ public:
 // TODO: public global data!
 // Used by KScanOption, so either (a) every KScanOption object needs to link back
 // to its parent KScanDevice, or (b) KScanDevice needs to be a singleton class.
+
+// TODO: combine option_dic (name -> index) and mOptionList (ordered names)
+// as a QMap (ordered keys name -> index).
+
     typedef QHash<QByteArray, int> OptionDict;
     static OptionDict *option_dic;
     static KScanOptSet *gammaTables;
@@ -316,6 +319,7 @@ public:
 
 public slots:
     /**
+       // TODO: never used, see KScanOption
      **/
     void slotOptChanged(KScanOption *opt);
 
@@ -422,7 +426,6 @@ signals:
 // TODO: parameters
     void sigScanFinished( KScanDevice::Status );
 
-
     /**
      *  emitted to give all objects using this device to free all dependencies
      *  on the scan device, because this signal means, that the scan device is
@@ -441,18 +444,12 @@ private slots:
 
 
 private:
-    /**
-     *  Function which applies all Options which need to be applied.
-     *  See SANE-Documentation Table 4.5, description for SANE_CAP_SOFT_DETECT.
-     *  The function sets the options which have SANE_CAP_AUTOMATIC set,
-     *  to automatic adjust.
-     **/
-    void                prepareScan();
+    KScanDevice::Status find_options();
+    void showOptions();
 
-    KScanDevice::Status           createNewImage(const SANE_Parameters *p);
+    KScanDevice::Status createNewImage(const SANE_Parameters *p);
 
-    KScanDevice::Status           find_options(); // help fct. to process options
-    KScanDevice::Status           acquire_data(bool isPreview = false);
+    KScanDevice::Status acquireData(bool isPreview = false);
 
     /**
      * Clear any saved authentication for this scanner, to ensure that the
@@ -460,40 +457,36 @@ private:
      */
     void clearSavedAuth();
 
-
     enum ScanningState					// only used by KScanDevice
     {
         ScanIdle,
+        ScanStarting,
         ScanInProgress,
         ScanNextFrame,
         ScanStopNow,
         ScanStopAdfFinished
     };
 
+    QList<QByteArray> mOptionList;			// names of all known options
+    QList<QByteArray> mDirtyList;			// options that were changed
+    QList<KScanOption *> mGuiElements;
 
-    QList<QByteArray>	      option_list;    // list of names of all options
-    QList<QByteArray>            dirtyList;     // option changes
+    KScanOptSet *mSavedOptions;
 
-    QList<KScanOption *>  gui_elements;
-
-    QSocketNotifier *mSocketNotifier;
-
-    SANE_Status mSaneStatus;
-    KScanDevice::ScanningState mScanningState;
-
-    /* Data for the scan process */
-    QByteArray             mScannerName;
-    SANE_Byte           *mScanBuf;
-    QImage              *mScanImage;
-    SANE_Parameters      sane_scan_param;
-    long		      overall_bytes;
-    int                 rest_bytes;
-    int                 pixel_x, pixel_y;
-    bool 		      scanningPreview;
-
-    KScanOptSet         *storeOptions;
-
+    QByteArray mScannerName;
     bool mScannerInitialised;
+
+    KScanDevice::ScanningState mScanningState;
+    SANE_Status mSaneStatus;
+
+    SANE_Byte *mScanBuf;
+    QImage *mScanImage;
+    SANE_Parameters mSaneParameters;
+    long mBytesRead;
+    int mBytesUsed;
+    int mPixelX, mPixelY;
+    bool mScanningPreview;
+    QSocketNotifier *mSocketNotifier;
 
     class KScanDevicePrivate;
     KScanDevicePrivate *d;
