@@ -22,12 +22,13 @@
 
 #include <qlabel.h>
 #include <qlayout.h>
+#include <qcombobox.h>
 
 #include <klocale.h>
 #include <klineedit.h>
 
 
-AddDeviceDialog::AddDeviceDialog(QWidget *parent,const QString &caption)
+AddDeviceDialog::AddDeviceDialog(QWidget *parent, const QString &caption)
 	: KDialog(parent)
 {
     setObjectName("AddDeviceDialog");
@@ -38,9 +39,8 @@ AddDeviceDialog::AddDeviceDialog(QWidget *parent,const QString &caption)
     showButtonSeparator(true);
 
     QWidget *w = new QWidget(this);
-    setMainWidget(w);
-
     QVBoxLayout *vl = new QVBoxLayout(w);
+    setMainWidget(w);
 
     QLabel *lab = new QLabel(i18n("<qt>"
 "<p>"
@@ -48,7 +48,7 @@ AddDeviceDialog::AddDeviceDialog(QWidget *parent,const QString &caption)
 "The <b>Scanner device name</b> should be a backend name (with optional parameters) "
 "that is understood by SANE, see <a href=\"man:/sane\">sane(7)</a> or "
 "<a href=\"man:/sane-dll\">sane-dll(5)</a> for more information on available backends. "
-"The <b>Description</b> may be any string that you can use to identify the scanner later."
+"The <b>Type</b> and <b>Description</b> can be used to identify the scanner later."
 "<p>"
 "For the information that needs to be entered here, try to locate the device using the "
 "<a href=\"man:/sane-find-scanner\">sane-find-scanner(1)</a> command. For a "
@@ -67,22 +67,40 @@ AddDeviceDialog::AddDeviceDialog(QWidget *parent,const QString &caption)
     vl->addWidget(lab);
 
     vl->addSpacing(KDialog::spacingHint());
+    vl->addStretch(1);
 
-    lab = new QLabel(i18n("Scanner device name:"),w);
+    lab = new QLabel(i18n("Scanner device name:"), w);
     vl->addWidget(lab);
 
     mDevEdit = new KLineEdit(w);
-    connect(mDevEdit,SIGNAL(textChanged(const QString &)),SLOT(slotTextChanged()));
+    connect(mDevEdit, SIGNAL(textChanged(const QString &)), SLOT(slotTextChanged()));
     vl->addWidget(mDevEdit);
     lab->setBuddy(mDevEdit);
 
-    lab = new QLabel(i18n("Description:"),w);
+    lab = new QLabel(i18n("Device type:"), w);
+    vl->addWidget(lab);
+
+    mTypeCombo = new QComboBox(w);
+    vl->addWidget(mTypeCombo);
+    lab->setBuddy(mTypeCombo);
+
+    lab = new QLabel(i18n("Description:"), w);
     vl->addWidget(lab);
 
     mDescEdit = new KLineEdit(w);
-    connect(mDescEdit,SIGNAL(textChanged(const QString &)),SLOT(slotTextChanged()));
+    connect(mDescEdit, SIGNAL(textChanged(const QString &)), SLOT(slotTextChanged()));
     vl->addWidget(mDescEdit);
     lab->setBuddy(mDescEdit);
+
+    w->setMinimumSize(QSize(450, 420));
+
+    // This list from http://www.sane-project.org/html/doc011.html#s4.2.8
+    QStringList types;
+    types << "scanner" << "film scanner" << "flatbed scanner"
+          << "frame grabber" << "handheld scanner" << "multi-function peripheral"
+          << "sheetfed scanner" << "still camera" << "video camera"
+          << "virtual device";
+    mTypeCombo->addItems(types);
 
     slotTextChanged();
 }
@@ -104,4 +122,10 @@ QByteArray AddDeviceDialog::getDevice() const
 QString AddDeviceDialog::getDescription() const
 {
     return (mDescEdit->text());
+}
+
+
+QByteArray AddDeviceDialog::getType() const
+{
+    return (mTypeCombo->currentText().toLocal8Bit());
 }

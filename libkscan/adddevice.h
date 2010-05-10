@@ -24,6 +24,8 @@
 
 #include <kdialog.h>
 
+
+class QComboBox;
 class KLineEdit;
 
 /**
@@ -36,11 +38,12 @@ class KSCAN_EXPORT AddDeviceDialog : public KDialog
 	Q_OBJECT
 
 public:
-	AddDeviceDialog(QWidget *parent,const QString &caption);
+	AddDeviceDialog(QWidget *parent, const QString &caption);
 	virtual ~AddDeviceDialog() {};
 
 	QByteArray getDevice() const;
 	QString getDescription() const;
+	QByteArray getType() const;
 
 protected slots:
 	void slotTextChanged();
@@ -48,6 +51,8 @@ protected slots:
 private:
 	KLineEdit *mDevEdit;
 	KLineEdit *mDescEdit;
+	QComboBox *mTypeCombo;
 };
+
 
 #endif							// ADDDEVICE_H

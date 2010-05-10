@@ -366,6 +366,8 @@ KookaView::KookaView(KMainWindow *parent, const QByteArray &deviceToUse)
 
 KookaView::~KookaView()
 {
+    delete mScanDevice;
+
     kDebug();
 }
 
@@ -563,10 +565,10 @@ void KookaView::slotAddDevice()
     {
 	QByteArray dev = d.getDevice();
 	QString dsc = d.getDescription();
-	kDebug() << "dev" << dev << "desc" << dsc;
+	QByteArray type = d.getType();
+	kDebug() << "dev" << dev << "type" << type << "desc" << dsc;
 
-        // TODO: need 'type'
-	ScanDevices::self()->addUserSpecifiedDevice(dev, dsc);
+	ScanDevices::self()->addUserSpecifiedDevice(dev, dsc, type);
     }
 }
 

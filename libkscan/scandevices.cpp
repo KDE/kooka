@@ -115,6 +115,12 @@ void ScanDevices::addUserSpecifiedDevice(const QByteArray &backend,
 {
     if (backend.isEmpty()) return;
 
+    if (mScannerNames.contains(backend))
+    {
+        kDebug() << "device" << backend << "already exists, not adding";
+        return;
+    }
+
     QByteArray devtype = (!type.isEmpty() ? type : "scanner");
     kDebug() << "adding" << backend << "desc" << description
              << "type" << devtype << "dontSave" << dontSave;
