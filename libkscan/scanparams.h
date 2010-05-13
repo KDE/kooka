@@ -46,40 +46,29 @@ class KLed;
 class ScanSizeSelector;
 
 
-// TODO: into class
-typedef enum { ID_SANE_DEBUG, ID_QT_IMGIO, ID_SCAN } ScanMode;
-
-
 class KSCAN_EXPORT ScanParams : public QWidget
 {
     Q_OBJECT
 
 public:
+
+    enum ScanMode
+    {
+        SaneDebugMode = 0,				// order fixed by GUI buttons
+        VirtualScannerMode = 1,
+        NormalMode = 2
+    };
+
     ScanParams(QWidget *parent);
     ~ScanParams();
 
     bool connectDevice(KScanDevice *newScanDevice, bool galleryMode = false);
 
-    KLed *operationLED() { return m_led; }
+    KLed *operationLED() const { return (mLed); }
 
 public slots:
-    /**
-     * sets the scan area to the default, which is the whole area.
-     */
-    void slotMaximalScanSize();
-
-    /**
-     * starts acquireing a preview image.
-     * This ends up in a preview-signal of the scan-device object
-     */
     void slotAcquirePreview();
     void slotStartScan();
-
-    /**
-     * connect this slot to KScanOptions Signal optionChanged to be informed
-     * on a options change.
-     */
-    void slotOptionNotify(KScanOption *so);
 
 protected slots:
     /**
@@ -90,7 +79,7 @@ protected slots:
     /**
      *  Slot to call if the virtual scanner mode is changed
      */
-    void slotVirtScanModeSelect( int id );
+    void slotVirtScanModeSelect(int but);
 
     /**
      *  Slot for result on an edit-Custom Gamma Table request.
@@ -133,15 +122,21 @@ protected slots:
 
 signals:
     /**
-     *  emitted if the resolution to scan changes. This signal may be connected
-     *  to slots calculating the size of the image size etc.
-     *
-     *  As parameters the resolutions in x- and y-direction are coming.
+     *  Emitted if the resolution to scan or the scan mode/depth changes.
+     *  These signals may be used to recalculate the image size, etc.
      */
-    void scanResolutionChanged(int xres,int yres);
+    void scanResolutionChanged(int xres, int yres);
     void scanModeChanged(int bytes_per_pix);
 
     void newCustomScanSize(const QRect &rect);
+
+private slots:
+    /**
+     * Connected to a KScanOption's guiChange() signal.
+     * Useful if the parameter GUI has widgets in its own space, which depend
+     * on widgets controlled by the KScanOption.
+     */
+    void slotOptionNotify(KScanOption *so);
 
 private:
     KScanDevice::Status prepareScan(QString *vfp);
@@ -155,16 +150,16 @@ private:
     QScrollArea *createScannerParams();
 
     void applyRect(const QRect &rect);
+    void setMaximalScanSize();
 
-    KScanDevice *sane_device;
+    KScanDevice *mSaneDevice;
     KScanOption *virt_filename;
 
-    QCheckBox *cb_gray_preview;
     QPushButton *pb_edit_gtable;
-    QProgressDialog *progressDialog;
+    QProgressDialog *mProgressDialog;
 
     AdfBehaviour adf;
-    ScanMode scan_mode;
+    ScanParams::ScanMode mScanMode;
     ScanSizeSelector *area_sel;
 
     KScanOption *xy_resolution_bind;
@@ -173,8 +168,8 @@ private:
     KScanOptSet *startupOptset;
 
     QPixmap pixLineArt, pixGray, pixColor, pixHalftone;
-    KLed *m_led;
-    bool m_firstGTEdit;
+    KLed *mLed;
+    bool mFirstGTEdit;
 
     KIcon mIconColor;
     KIcon mIconGray;

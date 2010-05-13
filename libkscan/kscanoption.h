@@ -30,12 +30,14 @@ extern "C" {
 }
 
 
+#define PARAM_ERROR	"parametererror"
+
+
 class QLabel;
 
 class KGammaTable;
+class KScanControl;
 
-
-#define PARAM_ERROR	"parametererror"
 
 /**
  *  This is KScanOption, a class which holds a single scanner option.
@@ -44,9 +46,7 @@ class KGammaTable;
  *  @author Klaas Freitag
  *  @version 0.1alpha
  *
- *  is a help class for accessing the scanner options.
  **/
-
 
 class KSCAN_EXPORT KScanOption : public QObject
 {
@@ -67,205 +67,156 @@ public:
         File
     };
 
-  /**
-   * creates a new option object for the named option. After that, the
-   * option is valid and contains the correct value retrieved from the
-   * scanner.
-   **/
-  KScanOption( const QByteArray& new_name );
+    /**
+     * Creates a new option object for the named option. After that, the
+     * option is valid and contains the current value retrieved from the
+     * scanner.
+     **/
+    KScanOption(const QByteArray &name);
 
-  /**
-   * creates a KScanOption from another
-   **/
-  KScanOption( const KScanOption& so );
+    /**
+     * Copy constructor
+     **/
+    KScanOption(const KScanOption &so);
 
-  ~KScanOption();
+    /**
+     * Destructor
+     **/
+    ~KScanOption();
 
-   /**
-    * tests if the option is initialised. It is initialised, if the value
-    * for the option was once read from the scanner
+    /**
+     * Assignment operator
+     **/
+    const KScanOption &operator=(const KScanOption &so);
+
+    /**
+     * Check whether the option is valid, i.e. the option is known
+     * by the scanner.
+     **/
+    bool valid() const		{ return (mDesc!=NULL); }
+
+    /**
+     * Check whether the option is initialised, i.e. if the setting
+     * for the option has been read from the scanner.
+     **/
+    bool initialised() const	{ return (!mBufferClean); }
+
+    /**
+     * Check whether the option is auto setable (SANE_CAP_AUTOMATIC),
+     * i.e. the scanner can choose a setting for the option automatically.
     **/
-    bool initialised( void ) const { return( ! buffer_untouched );}
+    bool autoSetable() const;
 
-   /**
-    * checks if the option is valid, means that the option is known by the scanner
-    **/
-    bool valid( void ) const { return (desc!=NULL); }
+    /**
+     * Check whether the option is a common option (not SANE_CAP_ADVANCED).
+     **/
+    bool commonOption() const;
 
-   /**
-    * checks if the option is auto setable, what means, the scanner can cope
-    * with the option automatically.
-    **/
-  bool autoSetable( void );
+    /**
+     * Check whether the option is currently active (SANE_OPTION_IS_ACTIVE).
+     * This may change at runtime due to the settings of mode, resolutions etc.
+     **/
+    bool active() const;
 
-   /**
-    * checks if the option is a so called common option. All frontends should
-    * provide gui elements to change them.
-    **/
-  bool commonOption( void );
+    /**
+     * Check whether the option is setable by software (SANE_OPTION_IS_SETTABLE).
+     * Some scanner options can not be set by software.
+     **/
+    bool softwareSetable() const;
 
-   /**
-    * checks if the option is active at the moment. Note that this changes
-    * on runtime due to the settings of mode, resolutions etc.
-    **/
-  bool active( void );
+    /**
+     * Return the type of the option.
+     **/
+    KScanOption::WidgetType type() const;
 
-   /**
-    * checks if the option is setable by software. Some scanner options can not
-    * be set by software.
-    **/
-  bool softwareSetable();
+    /**
+     * Set the option value, depending on its type.
+     **/
+    bool set(int val);
+    bool set(double val);
+    bool set(const int *p_val, int size );
+    bool set(const QByteArray &c_string);
+    bool set(bool b)		{ return (set(b ? 1 : 0)); }
+    bool set(KGammaTable *gt);
 
-   /**
-    * returns the type the option is.
-    **/
-  KScanOption::WidgetType type( void ) const;
+    /**
+     * Retrieve the option value, depending on its type.
+     **/
+    bool get(int *val) const;
+    bool get(KGammaTable *gt) const;
+    QByteArray get() const;
 
-   /**
-    * set the option depending on the type
-    **/
-  bool set( int val );
-  bool set( double val );
-  bool set( int *p_val, int size );
-  bool set( const QByteArray& );
-  bool set( bool b ){ return (set(b ? 1 : 0)); }
-  bool set( KGammaTable  *gt );
-
-   /**
-    * retrieves the option value, depending on the type.
-    **/
-  bool get( int* ) const;
-  bool get( KGammaTable* ) const;
-  QByteArray get() const;
-
-   /**
-    * This function creates a widget for the scanner option depending
-    * on the type of the option.
-    *
-    * For boolean options, a checkbox is generated. For ranges, a KSaneSlider
-    * is generated.
-    *
-    * For a String list such as mode etc., a KScanCombo is generated.
-    *
-    * For option type string and gamma table, no widget is generated yet.
-    *
-    * The widget is maintained completely by the kscanoption object.
-    *
-    **/
-
-  QWidget *createWidget( QWidget *parent,
-			 const QString& w_desc = QString::null,
-			 const QString& tooltip = QString::null );
-
-    QLabel *getLabel(QWidget *parent) const;
-
-
-  /* Operators */
-  const KScanOption& operator= (const KScanOption& so );
-
-   const QString configLine( void );
-
+    /**
+     * Creates a widget for the scanner option, depending on its type.
+     *
+     * For boolean options, a checkbox is generated.
+     *
+     * For ranges, a KSaneSlider is generated, except for the special case of
+     * a resolution option which generates a KScanCombo.
+     *
+     * For a String list such as mode etc., a KScanCombo is generated.
+     *
+     * For the option types string and gamma table, no widget is generated.
+     *
+     * The widget is maintained completely by the KScanOption object, so it
+     * should not be deleted.
+     *
+     **/
+    KScanControl *createWidget(QWidget *parent, const QString &descr = QString::null);
+    QLabel *getLabel(QWidget *parent, bool alwaysBuddy = false) const;
    
-  // Possible Values
-  QList<QByteArray>    getList() const;
-  bool        getRangeFromList(double *max,double *min,double *quant = NULL) const;
-  bool        getRange(double *max,double *min,double *quant = NULL) const;
+    // Possible Values
+    QList<QByteArray> getList() const;
+    bool getRange(double *minp, double *maxp, double *quantp = NULL) const;
 
-  QByteArray    getName() const { return( name ); }
-  void *      getBuffer() { return( buffer.data() ); }
-  QWidget     *widget() const { return( internal_widget ); }
-  /**
-   *  returns the type of the selected option.
-   *
-   *  You may use the information returned to decide, in which way
-   *  the option is to set.
-   *
-   *  A SINGLE_VAL is returned in case the value is represented by a
-   *  single number, e.g. the resoltion.
-   *
-   *  A VAL_LIST is returned in case the value needs to be set by
-   *  a list of numbers. You need to check the size to find out,
-   *  how many numbers you have to
-   *  @param name: the name of a option from a returned option-List
-   *  return a option type.
+    QByteArray getName() const		{ return (mName); }
+    void *getBuffer()			{ return (mBuffer.data()); }
+    KScanControl *widget() const	{ return (mControl); }
+    QString configLine() const		{ return (get()); }
 
-   ### not implemented at all?
-   **/
-  //KScanOption::WidgetType typeToSet( const QByteArray& name );
-
-  /**
-   *  returns a string describing the unit of given the option.
-   *  @return the unit description, e.g. mm
-   *  @param name: the name of a option from a returned option-List
-
-   ###  not implemented at all?
-   **/
-  //QString unitOf( const QByteArray& name );
-
-
-public slots:
-  void       slotRedrawWidget(KScanOption *so);
-  /**
-   *	 that slot makes the option to reload the buffer from the scanner.
-   */
-  void       slotReload( void );
+    void redrawWidget();
+    void reload();
 
 protected slots:
-  /**
-   *  this slot is called if an option has a gui element (not all have)
-   *  and if the value of the widget is changed.
-   *  This is an internal slot.
-   **/
-  void		  slotWidgetChange( void );
-  void		  slotWidgetChange( const QByteArray& );
-  void		  slotWidgetChange( int );
+    /**
+     *  These slots are called if an option has a GUI element (not all have)
+     *  and if the setting of the widget is changed.
+     **/
+    void slotWidgetChange(const QString &t);
+    void slotWidgetChange(int i);
 	
 signals:
-
-
-// TODO: eliminate, this signal is not used and is never emit'ted!!!!!!!!
-  /**
-   *  Signal emitted if a option changed for different reasons.
-   *  The signal should be connected by outside objects.
-   **/
-  void      optionChanged( KScanOption*);
-  /**
-   *  Signal emitted if the option is set by a call to the set()
-   *  member of the option. In the slot needs to be checked, if
-   *  a widget exists, it needs to be set to the new value.
-   *  This is a more internal signal
-   **/
-  //void      optionSet( void );
-
-  /**
-   *  Signal called when user changes a gui - element
-   */
-  void      guiChange( KScanOption* );
+    /**
+     *  User has changed a GUI setting
+     */
+    void guiChange(KScanOption *so);
 
 private:
 #ifdef APPLY_IN_SITU
-  bool       applyVal( void );
+    bool applyVal();
 #endif
-  bool       initOption( const QByteArray& new_name );
-  void       allocForDesc();
-  void       allocBuffer( long );
+    bool initOption(const QByteArray &name);
+    void allocForDesc();
+    void allocBuffer(long size);
 
-  QWidget    *createToggleButton( QWidget *parent, const QString& text );
-  QWidget    *createEntryField ( QWidget *parent, const QString& text );
-  QWidget    *createSlider( QWidget *parent, const QString& text );
-  QWidget    *createComboBox   ( QWidget *parent, const QString& text );
-  QWidget    *createFileField( QWidget *parent, const QString& text );
+    KScanControl *createToggleButton(QWidget *parent, const QString &text);
+    KScanControl *createEntryField(QWidget *parent, const QString &text);
+    KScanControl *createSlider(QWidget *parent, const QString &text);
+    KScanControl *createComboBox(QWidget *parent, const QString &text);
+    KScanControl *createFileField(QWidget *parent, const QString &text);
 	
-  const      SANE_Option_Descriptor *desc;
-  QByteArray   name;
-  QString    text;
+    int mIndex;
+    const SANE_Option_Descriptor *mDesc;
+    QByteArray mName;
+    QString mText;
 
-  QByteArray buffer;
-  bool       buffer_untouched;
-  QWidget    *internal_widget;
+    KScanControl *mControl;
 
-  /* For gamma-Tables remember gamma, brightness, contrast */
-  int        gamma, brightness, contrast;
+    QByteArray mBuffer;
+    bool mBufferClean;
+
+    /* For gamma-Tables remember gamma, brightness, contrast */
+    int gamma, brightness, contrast;
 };
 
 

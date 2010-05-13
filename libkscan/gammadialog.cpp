@@ -70,20 +70,22 @@ GammaDialog::GammaDialog(QWidget *parent)
     lhMiddle->addWidget( gtDisp, 2 );
 
     /* Slider Widgets for gamma, brightness, contrast */
+// TODO: need to make the labels ourselves (KScanSlider doesn't)
+// using KScanSlider::label()
     wBright   = new KScanSlider ( page, i18n("Brightness"), -50.0, 50.0 );
     Q_CHECK_PTR(wBright);
-    wBright->slotSetSlider( 0 );
-    connect( wBright, SIGNAL(valueChanged(int)), gt, SLOT(setBrightness(int)));
+    wBright->setValue( 0 );
+    connect( wBright, SIGNAL(settingChanged(int)), gt, SLOT(setBrightness(int)));
 
     wContrast = new KScanSlider ( page, i18n("Contrast") , -50.0, 50.0 );
     Q_CHECK_PTR(wContrast);
-    wContrast->slotSetSlider( 0 );
-    connect( wContrast, SIGNAL(valueChanged(int)), gt, SLOT(setContrast(int)));
+    wContrast->setValue( 0 );
+    connect( wContrast, SIGNAL(settingChanged(int)), gt, SLOT(setContrast(int)));
 
     wGamma    = new KScanSlider ( page, i18n("Gamma"),  30.0, 300.0 );
     Q_CHECK_PTR(wGamma);
-    wGamma->slotSetSlider(100);
-    connect( wGamma, SIGNAL(valueChanged(int)), gt, SLOT(setGamma(int)));
+    wGamma->setValue(100);
+    connect( wGamma, SIGNAL(settingChanged(int)), gt, SLOT(setGamma(int)));
 
     /* and add the Sliders */
     lvSliders->addWidget( wBright,   1 );
@@ -103,9 +105,9 @@ void GammaDialog::setGt(KGammaTable& ngt)
 {
    *gt = ngt;
 
-   if( wBright ) wBright->slotSetSlider( gt->getBrightness() );
-   if( wContrast ) wContrast->slotSetSlider( gt->getContrast() );
-   if( wGamma ) wGamma->slotSetSlider( gt->getGamma() );
+   if( wBright ) wBright->setValue( gt->getBrightness() );
+   if( wContrast ) wContrast->setValue( gt->getContrast() );
+   if( wGamma ) wGamma->setValue( gt->getGamma() );
 
 }
 

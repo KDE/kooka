@@ -1,5 +1,6 @@
 /* This file is part of the KDE Project
    Copyright (C) 2000 Klaas Freitag <freitag@suse.de>
+   Copyright (C) 2010 Jonathan Marten <jjm@keelhaul.me.uk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -22,273 +23,324 @@
 
 #include "libkscanexport.h"
 
-#include <qframe.h>
-#include <qstringlist.h>
+#include <qwidget.h>
 
-#include <khbox.h>
 
-/**
-  *@author Klaas Freitag
-  */
-
+class QHBoxLayout;
 class QToolButton;
 class QSpinBox;
-class QLabel;
 class QComboBox;
+class QCheckBox;
 class QSlider;
 class QLineEdit;
+class QStringList;
 
 class KUrlRequester;
 
 
 /**
- * a kind of extended slider which has a spinbox beside the slider offering
- * the possibility to enter an exact numeric value to the slider. If
- * desired, the slider has a neutral button by the side. A descriptional
- * text is handled automatically.
+ * An abstract base class representing a GUI for a single scan
+ * parameter control.  All scanner controls are one of the subclasses
+ * of this, their precise appearance and operation depending on the
+ * SANE type of the parameter.
+ */
+
+class KScanControl : public QWidget
+{
+    Q_OBJECT
+
+public:
+    /**
+     * The internal type of the control (regardless of GUI appearance).
+     *
+     * A @c Text control maintains a string value, a @Number control a
+     * numeric value.
+     */
+    enum ControlType
+    {
+        Text,
+        Number
+    };
+
+    /**
+     * Creates a control.
+     *
+     * @param parent The parent widget
+     * @param text Text label for control
+     */
+    KScanControl(QWidget *parent, const QString &text);
+
+    /**
+     * Destructs the control and any child widgets that it uses.
+     */
+    virtual ~KScanControl();
+
+    /**
+     * Control type.
+     *
+     * @return the control type
+     * @see ControlType
+     */
+    virtual KScanControl::ControlType type() const = 0;
+
+    /**
+     * Set the control's text value, for controls of type @c Text.
+     * Ignored for controls of type @c Number.
+     *
+     * @param text The new text value
+     */
+    virtual void setText(const QString &text);
+
+    /**
+     * Get the control's current text value.
+     *
+     * @return the text value, or @c QString::null for a @c Number control.
+     */
+    virtual QString text() const;
+
+    /**
+     * Set the control's numeric value, for controls of type @c Number.
+     * Ignored for controls of type @c Text.
+     *
+     * @param val The new numeric value
+     */
+    virtual void setValue(int val);
+
+    /**
+     * Get the control's current numeric value.
+     *
+     * @return the numeric value, or @c 0 for a @c Text control.
+     */
+    virtual int value() const;
+
+    /**
+     * Get a descriptive label text for the control.
+     *
+     * For all controls except check boxes, this is the original @p text
+     * parameter to the constructor with a ":" appended.  For a check box,
+     * this is null (a check box has its own label in the usual place,
+     * on the right).
+     *
+     * @return the label string
+     */
+    virtual QString label() const;
+
+protected:
+    QHBoxLayout *mLayout;
+    QString mText;
+
+signals:
+    /**
+     * The setting of a @c Text control has changed.
+     *
+     * @param text The new text setting
+     */
+    void settingChanged(const QString &text);
+
+    /**
+     * The setting of a @c Number control has changed.
+     *
+     * @param val The new numeric setting
+     */
+    void settingChanged(int val);
+
+    /**
+     * The Return/Enter key has been pressed in an entry field.
+     *
+     * Not all control types provide this signal.
+     */
+    void returnPressed();
+};
+
+
+/**
+ * A slider combined with a spin box, providing the possibility of either
+ * selecting a value with the slider or entering a precise value in the
+ * spin box.  There can also optionally be a 'reset' button which returns
+ * the setting to a default value.
  *
- * @author Klaas Freitag <freitag@suse.de>
+ * @see QSlider, QSpinBox
  */
-class KSCAN_EXPORT KScanSlider : public QFrame
+
+class KSCAN_EXPORT KScanSlider : public KScanControl
 {
-   Q_OBJECT
-   Q_PROPERTY( int slider_val READ value WRITE slotSetSlider )
+    Q_OBJECT
 
 public:
-   /**
-    * Create the slider.
-    *
-    * @param parent parent widget
-    * @param text is the text describing the the slider value. If the text
-    *        contains a '&', a buddy for the slider will be created.
-    * @param min minimum slider value
-    * @param max maximum slider value
-    * @param haveStdButt make a 'set to standard'-button visible. The button
-    *        appears on the left of the slider.
-    * @param stdValue the value to which the standard button resets the slider.
-    */
-   KScanSlider( QWidget *parent, const QString& text,
-		double min, double max, bool haveStdButt=false,
-		int stdValue=0);
-   /**
-    * Destructor
-    */
-   ~KScanSlider();
-
-   /**
-    * @return the current slider value
-    */
-   int value( ) const;
-
-public slots:
-  /**
-   * sets the slider value
-   */
-   void		slotSetSlider( int );
-
-   /**
-    * enables the complete slider.
-    */
-   void		setEnabled( bool b );
-
-protected slots:
     /**
-     * reverts the slider back to the standard value given in the constructor
+     * Creates the control.
+     *
+     * @param parent parent widget
+     * @param text descriptive label for the control
+     * @param min minimum slider value
+     * @param max maximum slider value
+     * @param haveStdButt if @c true, the 'reset' button will be present
+     * @param stdValue the value to which the 'reset' button resets the setting
      */
-     void         slotRevertValue();
+    KScanSlider(QWidget *parent, const QString &text,
+		double min, double max,
+                bool haveStdButt = false, int stdValue = 0);
 
-   signals:
+    KScanControl::ControlType type() const { return (KScanControl::Number); }
+
+    int value() const;
+    void setValue(int val);
+
+protected slots:
+    void slotValueChange(int val);
+    void slotRevertValue();
+
+private:
+    QSlider *mSlider;
+    QSpinBox *mSpinbox;
+    int mStdValue;
+    QToolButton *mStdButt;
+};
+
+
+/**
+ * A free text entry field.
+ *
+ * @see QLineEdit
+ */
+
+class KSCAN_EXPORT KScanEntry : public KScanControl
+{
+    Q_OBJECT
+
+public:
     /**
-     * emitted if the slider value changes
+     * Creates the control.
+     *
+     * @param parent parent widget
+     * @param text descriptive label for the control
      */
-     void	  valueChanged( int );
+    KScanEntry(QWidget *parent, const QString &text);
 
-private slots:
-   void		slotSliderChange( int );
+    KScanControl::ControlType type() const { return (KScanControl::Text); }
 
-private:
-   QSlider	*slider;
-   QLabel	*l1, *numdisp;
-   QSpinBox     *m_spin;
-   int          m_stdValue;
-   QToolButton  *m_stdButt;
-};
-
-/**
- * a entry field with a prefix text for description.
- */
-class KSCAN_EXPORT KScanEntry : public KHBox
-{
-   Q_OBJECT
-   Q_PROPERTY( QString text READ text WRITE slotSetEntry )
-
-public:
-   /**
-    * create a new entry field prepended by text.
-    * @param parent the parent widget
-    * @text the prefix text
-    */
-   KScanEntry( QWidget *parent, const QString& text );
-   // ~KScanEntry();
-
-   /**
-    * @return the current entry field contents.
-    */
-   QString text( ) const;
-
-public slots:
-   /**
-    * set the current text
-    * @param t the new string
-    */
-   void		slotSetEntry( const QString& t );
-   /**
-    * enable or disable the text entry.
-    * @param b set enabled if true, else disabled.
-    */
-   void		setEnabled( bool b );
-
-protected slots:
-   void         slotReturnPressed( void );
-
-signals:
-   void		valueChanged( const QByteArray& );
-   void         returnPressed( const QByteArray& );
-
-private slots:
-   void		slotEntryChange( const QString& );
+    QString text() const;
+    void setText(const QString& text);
 
 private:
-   QLineEdit 	*entry;
+    QLineEdit *mEntry;
 };
 
 
 /**
- * a combobox filled with a decriptional text.
+ * A check box for an on/off option.
+ *
+ * @see QCheckBox
  */
-class KSCAN_EXPORT KScanCombo : public KHBox
+
+class KSCAN_EXPORT KScanCheckbox : public KScanControl
 {
-   Q_OBJECT
-   Q_PROPERTY( QString cbEntry READ currentText WRITE slotSetEntry )
+    Q_OBJECT
 
 public:
-   /**
-    * create a combobox with prepended text.
-    *
-    * @param parent parent widget
-    * @param text the text the combobox is prepended by
-    * @param list a stringlist with values the list should contain.
-    */
-   KScanCombo( QWidget *parent, const QString& text, const QList<QByteArray> &list );
-   KScanCombo( QWidget *parent, const QString& text, const QStringList &list );
-   // ~KScanCombo();
+    /**
+     * Creates the control.
+     *
+     * @param parent parent widget
+     * @param text descriptive label for the control
+     */
+    KScanCheckbox(QWidget *parent, const QString &text);
 
-   /**
-    * @return the current selected text
-    */
-   QString      currentText( ) const;
+    KScanControl::ControlType type() const { return (KScanControl::Number); }
 
-   /**
-    * @return the text a position i
-    */
-   QString      text( int i ) const;
+    int value() const;
+    void setValue(int i);
 
-   /**
-    * @return the amount of list entries.
-    */
-   int  	count( ) const;
-
-public slots:
-   /**
-    * set the current entry to the given string if it is member of the list.
-    * if not, the entry is not changed.
-    */
-   void		slotSetEntry( const QString &);
-
-   /**
-    * enable or disable the combobox.
-    * @param b enables the combobox if true.
-    */
-   void		setEnabled( bool b);
-
-   /**
-    * set an icon for a string in the combobox
-    * @param pix the pixmap to set.
-    * @param str the string for which the pixmap should be set.
-    */
-   void slotSetIcon(const QIcon &pix, const QString &str);
-
-   /**
-    * set the current item of the combobox.
-    */
-   void         setCurrentItem( int i );
-
-private slots:
-   void         slotFireActivated( int);
-   void		slotComboChange( const QString & );
-
-signals:
-   void		valueChanged( const QByteArray& );
-   void         activated(int);
+    QString label() const;
 
 private:
-    void createCombo( const QString& text );
-   QComboBox	*combo;
-   QList<QByteArray>	combolist;
+    QCheckBox *mCheckbox;
 };
-
-
-
-
-
 
 
 /**
- * a entry field with a prefix text for description.
+ * A combo box for a list of options.
+ *
+ * @see QComboBox
  */
-class KSCAN_EXPORT KScanFileRequester : public KHBox
+
+class KSCAN_EXPORT KScanCombo : public KScanControl
 {
-   Q_OBJECT
-   Q_PROPERTY( QString text READ text WRITE slotSetEntry )
+    Q_OBJECT
 
 public:
-   /**
-    * create a new entry field prepended by text.
-    * @param parent the parent widget
-    * @text the prefix text
-    */
-   KScanFileRequester( QWidget *parent, const QString& text );
-   // ~KScanFileRequester();
+    /**
+     * Creates the control.
+     *
+     * @param parent parent widget
+     * @param text descriptive label for the control
+     * *param list list of options to fill the combo box
+     */
+    KScanCombo(QWidget *parent, const QString &text, const QList<QByteArray> &list);
+    KScanCombo(QWidget *parent, const QString &text, const QStringList &list);
 
-   /**
-    * @return the current entry field contents.
-    */
-   QString text( ) const;
+    KScanControl::ControlType type() const { return (KScanControl::Text); }
 
-public slots:
-   /**
-    * set the current text
-    * @param t the new string
-    */
-   void		slotSetEntry( const QString& t );
-   /**
-    * enable or disable the text entry.
-    * @param b set enabled if true, else disabled.
-    */
-   void		setEnabled( bool b );
+    QString text() const;
+    void setText(const QString &text);
+    void setValue(int i);
 
-protected slots:
-   void         slotReturnPressed( void );
+    /**
+     * Get the text at a specified index in the combo box.
+     *
+     * @param i the requested index
+     * @return the text at that index
+     */
+    QString textAt(int i) const;
 
-signals:
-   void		valueChanged( const QByteArray& );
-   void         returnPressed( const QByteArray& );
+    /**
+     * Count how many combo box entries there are.
+     *
+     * @return the number of entries
+     */
+    int count() const;
 
-private slots:
-   void		slotEntryChange( const QString& );
+    /**
+     * Set an icon for an item in the combo box.
+     *
+     * @param pix the pixmap to set
+     * @param ent the entry for which the pixmap should be set
+     */
+    void setIcon(const QIcon &pix, const QString &ent);
 
 private:
-   KUrlRequester 	*entry;
+    void init();
+    QComboBox *mCombo;
 };
+
+
+/**
+ * A standard URL requester for a file name.
+ *
+ * @see KUrlRequester
+ */
+
+class KSCAN_EXPORT KScanFileRequester : public KScanControl
+{
+    Q_OBJECT
+
+public:
+    /**
+     * Creates the control.
+     *
+     * @param parent parent widget
+     * @param text descriptive label for the control
+     */
+    KScanFileRequester(QWidget *parent, const QString &text);
+
+    KScanControl::ControlType type() const { return (KScanControl::Text); }
+
+    QString text() const;
+    void setText(const QString &text);
+
+private:
+    KUrlRequester *mEntry;
+};
+
 
 #endif							// KSCANCONTROLS_H

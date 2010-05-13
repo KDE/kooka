@@ -33,6 +33,10 @@
 #include <kmessagebox.h>
 #include <kstandardguiitem.h>
 
+extern "C" {
+#include <sane/saneopts.h>
+}
+
 #include "libkscan/kscandevice.h"
 #include "libkscan/kscanoptset.h"
 

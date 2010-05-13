@@ -55,7 +55,7 @@ public slots:
    void       setBrightness ( int bri )   { b = bri; dirty = true; emit( tableChanged() );}
    void       setGamma      ( int gam )   { g = gam; dirty = true; emit( tableChanged() );}
 
-   int        tableSize()      { return gt.size(); }
+   int        tableSize() const      { return gt.size(); }
    SANE_Word  *getTable();
 
 

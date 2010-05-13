@@ -34,16 +34,16 @@
 #include <knuminput.h>
 #include <kdialog.h>
 
+extern "C" {
+#include <sane/saneopts.h>
+}
+
 #include "kookaimage.h"
 
 #define ID_SCREEN 0
 #define ID_ORIG   1
 #define ID_CUSTOM 2
 #define ID_FIT_PAGE 3
-#define SANE_NAME_SCAN_TL_X             "tl-x"
-#define SANE_NAME_SCAN_TL_Y             "tl-y"
-#define SANE_NAME_SCAN_BR_X             "br-x"
-#define SANE_NAME_SCAN_BR_Y             "br-y"
 
 PhotoCopyPrintDialogPage::PhotoCopyPrintDialogPage(KScanDevice *newScanDevice)
 #ifndef KDE4

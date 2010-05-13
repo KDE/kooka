@@ -276,7 +276,7 @@ KookaView::KookaView(KMainWindow *parent, const QByteArray &deviceToUse)
     }
 
     /** Scanner Device **/
-    mScanDevice = new KScanDevice(this);
+    mScanDevice = KScanDevice::create(this);
 
     // Connections KScanDevice --> myself
     connect(mScanDevice, SIGNAL(sigScanFinished(KScanDevice::Status)), SLOT(slotScanFinished(KScanDevice::Status)));
@@ -903,7 +903,7 @@ void KookaView::closeScanDevice( )
         mScanParams = NULL;
     }
 
-    mScanDevice->slotCloseDevice();
+    mScanDevice->closeDevice();
 }
 
 

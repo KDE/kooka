@@ -1,5 +1,6 @@
 /* This file is part of the KDE Project
    Copyright (C) 2000 Klaas Freitag <freitag@suse.de>
+   Copyright (C) 2010 Jonathan Marten <jjm@keelhaul.me.uk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -24,6 +25,7 @@
 #include <qtoolbutton.h>
 #include <qspinbox.h>
 #include <qcombobox.h>
+#include <qcheckbox.h>
 #include <qlabel.h>
 #include <qslider.h>
 #include <qlineedit.h>
@@ -34,334 +36,277 @@
 #include <kimageio.h>
 
 
+//  KScanControl - base class
+//  -------------------------
 
-// TODO: a better way to implement these would be as a subclass of an abstract base
-// class.  May eliminate some of the switch'es in kscanoption.cpp!
-
-
-KScanSlider::KScanSlider( QWidget *parent, const QString& text,
-			  double min, double max, bool haveStdButt,
-			  int stdValue )
-   : QFrame( parent ),
-     m_stdValue( stdValue ),
-     m_stdButt(0)
+KScanControl::KScanControl(QWidget *parent, const QString &text)
+    : QWidget(parent)
 {
-    QHBoxLayout *hb = new QHBoxLayout( this );
+    mLayout = new QHBoxLayout(this);
+    mLayout->setMargin(0);
 
-    slider = new QSlider(Qt::Horizontal, this);
-    slider->setRange(((int) min),((int) max));
-    slider->setTickPosition(QSlider::TicksBelow );
-    slider->setTickInterval(qMax(((int)((max-min)/10)),1));
-    slider->setSingleStep(qMax(((int)((max-min)/20)),1));
-    slider->setPageStep(qMax(((int)((max-min)/10)),1));
-    slider->setMinimumWidth( 140 );
+    mText = text;
+    if (mText.isEmpty()) mText = i18n("(Unknown)");
+}
 
-    /* create a spinbox for displaying the values */
-    m_spin = new QSpinBox(this);
-    m_spin->setRange((int) min, (int) max);
-    m_spin->setSingleStep(1);
 
-    /* make spin box changes change the slider */
-    connect( m_spin, SIGNAL(valueChanged(int)), this, SLOT(slotSliderChange(int)));
+KScanControl::~KScanControl()				{}
 
-    /* Handle internal number display */
-    connect(slider, SIGNAL(valueChanged(int)), this, SLOT( slotSliderChange(int) ));
+QString KScanControl::text() const			{ return (QString::null); }
+void KScanControl::setText(const QString &text)		{}
 
-    /* set Value 0 to the widget */
-    slider->setValue( (int) min -1 );
+int KScanControl::value() const				{ return (0); }
+void KScanControl::setValue(int val)			{}
 
-    /* Add to layout widget and activate */
-    hb->addWidget( slider, 36 );
-    hb->addSpacing( 4 );
-    hb->addWidget( m_spin, 0 );
+QString KScanControl::label() const			{ return (mText+":"); }
 
-    if( haveStdButt )
+
+//  KScanSlider - slider, spin box and optional reset button
+//  --------------------------------------------------------
+
+KScanSlider::KScanSlider(QWidget *parent, const QString &text,
+                         double min, double max,
+                         bool haveStdButt, int stdValue)
+    : KScanControl(parent,text),
+      mStdValue(stdValue),
+      mStdButt(NULL)
+{
+    mSlider = new QSlider(Qt::Horizontal, this);	// slider
+    mSlider->setRange(((int) min), ((int) max));
+    mSlider->setTickPosition(QSlider::TicksBelow );
+    mSlider->setTickInterval(qMax(((int)((max-min)/10)), 1));
+    mSlider->setSingleStep(qMax(((int)((max-min)/20)), 1));
+    mSlider->setPageStep(qMax(((int)((max-min)/10)), 1));
+    mSlider->setMinimumWidth(140);
+    mSlider->setValue(((int) min)-1);			// set to initial value
+    mLayout->addWidget(mSlider, 1);
+
+    mSpinbox = new QSpinBox(this);			// spin box
+    mSpinbox->setRange((int) min, (int) max);
+    mSpinbox->setSingleStep(1);
+    mLayout->addWidget(mSpinbox);
+
+    if (haveStdButt)
     {
-       m_stdButt = new QToolButton(this);
-       m_stdButt->setIcon(KIcon("edit-undo"));
-
-       /* connect the button click to setting the value */
-       connect( m_stdButt, SIGNAL(clicked()),
-		this, SLOT(slotRevertValue()));
-
-       m_stdButt->setToolTip(i18n("Reset this setting to its standard value, %1",stdValue ));
-       hb->addSpacing( 4 );
-       hb->addWidget( m_stdButt, 0 );
+        mStdButt = new QToolButton(this);		// reset button
+        mStdButt->setIcon(KIcon("edit-undo"));
+        mStdButt->setToolTip(i18n("Reset this setting to its standard value, %1", stdValue));
+        mLayout->addWidget(mStdButt);
     }
 
-    hb->activate();
+    connect(mSlider, SIGNAL(valueChanged(int)), SLOT(slotValueChange(int)));
+    connect(mSpinbox, SIGNAL(valueChanged(int)), SLOT(slotValueChange(int)));
+    if (mStdButt!=NULL) connect(mStdButt, SIGNAL(clicked()), SLOT(slotRevertValue()));
+
+    setFocusProxy(mSlider);
 }
 
-void KScanSlider::setEnabled( bool b )
+
+void KScanSlider::setValue(int val)
 {
-    if( slider )
-	slider->setEnabled( b );
-    if( m_spin )
-	m_spin->setEnabled( b );
-    if( m_stdButt )
-       m_stdButt->setEnabled( b );
+    if (val==mSlider->value()) return;			// avoid recursive signals
+    slotValueChange(val);
 }
 
-void KScanSlider::slotSetSlider( int value )
+
+int KScanSlider::value() const
 {
-    kDebug() << "setting slider to" << value;
-    /* Important to check value to avoid recursive signals ;) */
-    if (value == slider->value()) return;
-
-    slider->setValue( value );
-    slotSliderChange( value );
+    return (mSlider->value());
 }
 
-void KScanSlider::slotSliderChange( int v )
+
+void KScanSlider::slotValueChange(int val)
 {
-    // slider_val = v;
-    int spin = m_spin->value();
-    if( v != spin )
-       m_spin->setValue(v);
-    int slid = slider->value();
-    if( v != slid )
-       slider->setValue(v);
+    int spin = mSpinbox->value();
+    if (spin!=val) mSpinbox->setValue(val);		// track in spin box
+    int slid = mSlider->value();
+    if (slid!=val) mSlider->setValue(val);		// track in slider
 
-    emit( valueChanged( v ));
+    emit settingChanged(val);
 }
+
 
 void KScanSlider::slotRevertValue()
-{
-   if( m_stdButt )
-   {
-      /* Only if stdButt is non-zero, the default value is valid */
-      slotSetSlider( m_stdValue );
-   }
+{							// only connected if button exists
+    slotValueChange(mStdValue);
 }
 
 
-int KScanSlider::value( ) const
+//  KScanEntry - free text entry field
+//  ----------------------------------
+
+KScanEntry::KScanEntry(QWidget *parent, const QString &text)
+    : KScanControl(parent, text)
 {
-    return( slider->value());
+    mEntry = new QLineEdit(this);
+    mLayout->addWidget(mEntry);
+
+    connect(mEntry, SIGNAL(textChanged(const QString &)), SIGNAL(settingChanged(const QString &)));
+    connect(mEntry, SIGNAL(returnPressed()), SIGNAL(returnPressed()));
+
+    setFocusProxy(mEntry);
 }
 
 
-
-KScanSlider::~KScanSlider()
+QString KScanEntry::text() const
 {
-}
-
-/* ====================================================================== */
-
-KScanEntry::KScanEntry( QWidget *parent, const QString& text )
- : KHBox( parent )
-{
-    entry = new QLineEdit( this);
-    connect( entry, SIGNAL( textChanged(const QString& )),
-	     this, SLOT( slotEntryChange(const QString&)));
-    connect( entry, SIGNAL( returnPressed()),
-	     this,  SLOT( slotReturnPressed()));
-}
-
-QString  KScanEntry::text( void ) const
-{
-   QString str = QString::null;
-   if(entry) str = entry->text();
-   return ( str );
-}
-
-void KScanEntry::slotSetEntry( const QString& t )
-{
-    if( t == entry->text() )
-	return;
-    /* Important to check value to avoid recursive signals ;) */
-
-    entry->setText( t );
+    return (mEntry->text());
 }
 
 
-void KScanEntry::slotEntryChange(const QString &t)
+void KScanEntry::setText(const QString &text)
 {
-    emit valueChanged(t.toLatin1());
+    if (text==mEntry->text()) return;			// avoid recursive signals
+    mEntry->setText(text);
 }
 
 
-void KScanEntry::slotReturnPressed()
+//  KScanCheckbox - on/off option
+//  -----------------------------
+
+KScanCheckbox::KScanCheckbox(QWidget *parent, const QString &text)
+    : KScanControl(parent, text)
 {
-   QString t = text();
-   emit returnPressed(t.toLatin1());
+    mCheckbox = new QCheckBox(text, this);
+    mLayout->addWidget(mCheckbox);
+
+    connect(mCheckbox, SIGNAL(stateChanged(int)), SIGNAL(settingChanged(int)));
+
+    setFocusProxy(mCheckbox);
 }
 
-void KScanEntry::setEnabled( bool b )
+
+int KScanCheckbox::value() const
 {
-    if( entry) entry->setEnabled( b );
+    return ((int) mCheckbox->isChecked());
 }
 
 
+void KScanCheckbox::setValue(int i)
+{
+    mCheckbox->setChecked((bool) i);
+}
 
 
+QString KScanCheckbox::label() const
+{
+    return (QString::null);
+}
 
+
+//  KScanCombo - combo box with list of options
+//  -------------------------------------------
 
 KScanCombo::KScanCombo(QWidget *parent, const QString &text,
                        const QList<QByteArray> &list)
-    : KHBox(parent),
-      combo(NULL)
+    : KScanControl(parent, text)
 {
-    createCombo( text );
-    if (combo!=NULL)
-    {
-	for ( QList<QByteArray>::const_iterator it = list.constBegin();
-              it != list.constEnd(); ++it )
-	{
-	    combo->addItem(i18n(*it));
-	}
-    }
+    init();
 
-    combolist = list;
-    setFocusProxy(combo);
+    for (QList<QByteArray>::const_iterator it = list.constBegin();
+         it!=list.constEnd(); ++it)
+    {
+        mCombo->addItem(*it);
+    }
 }
 
 
 KScanCombo::KScanCombo(QWidget *parent, const QString &text,
                        const QStringList &list)
-    : KHBox(parent),
-      combo(NULL)
+    : KScanControl(parent, text)
 {
-    createCombo( text );
+    init();
 
-    for (QStringList::ConstIterator it = list.constBegin();
-         it != list.constEnd(); ++it )
+    for (QStringList::const_iterator it = list.constBegin();
+         it!=list.constEnd(); ++it)
     {
-	if (combo!=NULL) combo->addItem(i18n( (*it).toUtf8()));
-        combolist.append((*it).toLocal8Bit());
+	mCombo->addItem(*it);
     }
-
-    setFocusProxy(combo);
 }
 
 
-void KScanCombo::createCombo( const QString& text )
+void KScanCombo::init()
 {
-    combo = new QComboBox(this);
+    mCombo = new QComboBox(this);
+    mLayout->addWidget(mCombo);
 
-    connect( combo, SIGNAL(activated( const QString &)), this,
-             SLOT(slotComboChange( const QString &)));
-    connect( combo, SIGNAL(activated( int )),
-	     this,  SLOT(slotFireActivated(int)));
+    connect(mCombo, SIGNAL(activated( const QString &)), SIGNAL(settingChanged(const QString &)));
+    connect(mCombo, SIGNAL(activated(int)), SIGNAL(settingChanged(int)));
+
+    setFocusProxy(mCombo);
 }
 
 
-void KScanCombo::slotSetEntry( const QString &t )
+void KScanCombo::setText(const QString &text)
 {
-    if( t.isNull() ) 	return;
-    int i = combolist.indexOf( t.toLocal8Bit() );
+    int i = mCombo->findText(text);			// find item with that text
+    if (i==-1) return;					// ignore if not present
 
-    /* Important to check value to avoid recursive signals ;) */
-    if( i == combo->currentIndex() )
-	return;
-
-    if( i > -1 )
-	combo->setCurrentIndex( i );
-    else
-	kDebug() << "Combo item not in list!";
+    if (i==mCombo->currentIndex()) return;		// avoid recursive signals
+    mCombo->setCurrentIndex(i);
 }
 
-void KScanCombo::slotComboChange(const QString &t)
+
+void KScanCombo::setIcon(const QIcon &icon, const QString &ent)
 {
-    emit valueChanged(t.toLatin1());
+    int i = mCombo->findText(ent);
+    if (i!=-1) mCombo->setItemIcon(i, icon);
 }
 
 
-void KScanCombo::slotSetIcon(const QIcon &icon, const QString &str)
+QString KScanCombo::text() const
 {
-    int i = combo->findText(str);
-    if (i!=-1) combo->setItemIcon(i, icon);
+    return (mCombo->currentText());
 }
 
 
-QString KScanCombo::currentText() const
+void KScanCombo::setValue(int i)
 {
-    return (combo->currentText());
+    mCombo->setCurrentIndex(i);
 }
 
 
-QString KScanCombo::text( int i ) const
+QString KScanCombo::textAt(int i) const
 {
-   return( combo->itemText(i) );
+    return (mCombo->itemText(i));
 }
 
-void    KScanCombo::setCurrentItem( int i )
-{
-   combo->setCurrentIndex( i );
-}
 
 int KScanCombo::count() const
 {
-    return (combo->count());
-}
-
-void KScanCombo::slotFireActivated( int i )
-{
-   emit( activated( i ));
+    return (mCombo->count());
 }
 
 
-void KScanCombo::setEnabled( bool b)
+//  KScanFileRequester - standard URL requester 
+//  -------------------------------------------
+
+KScanFileRequester::KScanFileRequester(QWidget *parent, const QString &text)
+    : KScanControl(parent, text)
 {
-    if(combo) combo->setEnabled( b );
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-/* ====================================================================== */
-
-KScanFileRequester::KScanFileRequester( QWidget *parent, const QString& text )
- : KHBox( parent )
-{
-    entry = new KUrlRequester( this );
+    mEntry = new KUrlRequester(this);
+    mLayout->addWidget(mEntry);
 
     QString fileSelector = "*.pnm *.PNM *.pbm *.PBM *.pgm *.PGM *.ppm *.PPM|PNM Image Files (*.pnm,*.pbm,*.pgm,*.ppm)\n";
     fileSelector += KImageIO::pattern()+"\n";
-    fileSelector += i18n("*|All Files\n");
-    entry->setFilter(fileSelector);
+    fileSelector += i18n("*|All Files");
+    mEntry->setFilter(fileSelector);
 
-    connect( entry, SIGNAL( textChanged(const QString& )),
-	     SLOT( slotEntryChange(const QString&)));
-    connect( entry, SIGNAL( returnPressed()),
-	     SLOT( slotReturnPressed()));
+    connect(mEntry, SIGNAL(textChanged(const QString& )), SIGNAL(settingChanged(const QString&)));
+    connect(mEntry, SIGNAL(returnPressed()), SIGNAL(returnPressed()));
+
+    setFocusProxy(mEntry);
 }
 
-QString  KScanFileRequester::text( void ) const
+
+QString KScanFileRequester::text() const
 {
-   QString str = QString::null;
-   if(entry) str = entry->url().url();
-   return ( str );
+    return (mEntry->url().url());
 }
 
-void KScanFileRequester::slotSetEntry( const QString& t )
+
+void KScanFileRequester::setText(const QString &text)
 {
-    if( t == entry->url().url() )
-	return;
-    /* Important to check value to avoid recursive signals ;) */
-
-    entry->setUrl( t );
+    if (text==mEntry->url().url()) return;		// avoid recursive signals
+    mEntry->setUrl(text);
 }
-
-void KScanFileRequester::slotEntryChange( const QString& t )
-{
-    emit valueChanged( t.toLatin1()  );
-}
-
-void KScanFileRequester::slotReturnPressed( void )
-{
-   QString t = text();
-   emit returnPressed(t.toLatin1());
-}
-
-void KScanFileRequester::setEnabled( bool b )
-{ if( entry) entry->setEnabled( b ); }

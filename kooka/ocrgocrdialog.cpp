@@ -97,7 +97,7 @@ OcrEngine::EngineError OcrGocrDialog::setupGui()
     gl->addWidget(l, 0, 0);
     sliderGrayLevel = new KScanSlider(w, QString::null, 0, 254, true, 160 );
     int numdefault = grp1.readEntry(CFG_GOCR_GRAYLEVEL, 160);
-    sliderGrayLevel->slotSetSlider(numdefault);
+    sliderGrayLevel->setValue(numdefault);
     sliderGrayLevel->setToolTip(i18n("The threshold value below which gray pixels are\nconsidered to be black.\n\nThe default is 160."));
     l->setBuddy(sliderGrayLevel);
     gl->addWidget(sliderGrayLevel, 0, 1);
@@ -106,7 +106,7 @@ OcrEngine::EngineError OcrGocrDialog::setupGui()
     gl->addWidget(l, 1, 0);
     sliderDustSize = new KScanSlider(w, QString::null, 0, 60, true, 10 );
     numdefault = grp1.readEntry(CFG_GOCR_DUSTSIZE, 10);
-    sliderDustSize->slotSetSlider(numdefault);
+    sliderDustSize->setValue(numdefault);
     sliderDustSize->setToolTip(i18n("Clusters smaller than this value\nwill be considered to be dust, and\nremoved from the image.\n\nThe default is 10."));
     l->setBuddy(sliderDustSize);
     gl->addWidget(sliderDustSize, 1, 1);
@@ -115,7 +115,7 @@ OcrEngine::EngineError OcrGocrDialog::setupGui()
     gl->addWidget(l, 2, 0);
     sliderSpace = new KScanSlider(w, QString::null, 0, 60, true, 0 );
     numdefault = grp1.readEntry(CFG_GOCR_SPACEWIDTH, 0);
-    sliderSpace->slotSetSlider(numdefault);
+    sliderSpace->setValue(numdefault);
     sliderSpace->setToolTip(i18n("Spacing between characters.\n\nThe default is 0 which means autodetection."));
     l->setBuddy(sliderSpace);
     gl->addWidget(sliderSpace, 2, 1);

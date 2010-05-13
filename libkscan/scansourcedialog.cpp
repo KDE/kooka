@@ -81,7 +81,7 @@ ScanSourceDialog::ScanSourceDialog(QWidget *parent, const QList<QByteArray> list
 
     /* Combo Box for sources */
     d->sources = new KScanCombo( vbox,
-			     i18n("Select the Scanner document source:"),
+			     QString::null,
 			     list);
     connect( d->sources, SIGNAL( activated(int)), SLOT( slotChangeSource(int)));
 
@@ -137,7 +137,7 @@ ScanSourceDialog::~ScanSourceDialog()
 
 QString  ScanSourceDialog::getText( void ) const
 {
-   return( d->sources->currentText() );
+   return( d->sources->text() );
 }
 
 AdfBehaviour ScanSourceDialog::getAdfBehave( void ) const
@@ -209,7 +209,7 @@ int ScanSourceDialog::sourceAdfEntry() const
 
    for( int i = 0; i < cou; i++ )
    {
-      QString q = d->sources->text( i );
+      QString q = d->sources->textAt( i );
 
 // TODO: this enables advanced ADF options, not implemented yet
 #if 0
@@ -236,9 +236,9 @@ void ScanSourceDialog::slotSetSource( const QString &source )
 
    for( int i = 0; i < d->sources->count(); i++ )
    {
-      if( d->sources->text( i ) == source )
+      if( d->sources->textAt( i ) == source )
       {
-         d->sources->setCurrentItem( i );
+         d->sources->setValue( i );
          if( source == QString::number(sourceAdfEntry()) )
          {
             if( d->bgroup )
