@@ -77,7 +77,7 @@ OcrEngine::OcrEngine(QWidget *parent)
       m_document(NULL),
       m_cursor(NULL)
 {
-    m_introducedImage = QImage();
+    m_introducedImage = KookaImage();
     m_ocrResultFile = QString::null;
     m_parent = NULL;
 }

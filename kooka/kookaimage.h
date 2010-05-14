@@ -63,7 +63,6 @@ public:
     ~KookaImage();
 
     KookaImage& operator=(const KookaImage &src);
-    KookaImage& operator=(const QImage &src);
 
     /**
      * load an image from a KURL. This method reads the entire file and sets

@@ -83,22 +83,18 @@ KookaImage::~KookaImage()
 
 KookaImage &KookaImage::operator=(const KookaImage &img)
 {
-    QImage::operator=(img);
+    if (this!=&img)					// ignore self-assignment
+    {
+        QImage::operator=(img);
 
-    m_subImages = img.subImagesCount();
-    m_subNo     = img.m_subNo;
-    m_parent    = img.m_parent;
-    m_url       = img.m_url;
-    m_fileItem  = img.m_fileItem;
+        m_subImages = img.subImagesCount();
+        m_subNo     = img.m_subNo;
+        m_parent    = img.m_parent;
+        m_url       = img.m_url;
+        m_fileItem  = img.m_fileItem;
+        m_fileBound = img.m_fileBound;
+    }
     
-    return (*this);
-}
-
-
-KookaImage &KookaImage::operator=(const QImage &img)
-{
-    QImage::operator=(img);
-    // TODO: does this initialise the rest?
     return (*this);
 }
 
@@ -144,8 +140,7 @@ QString KookaImage::loadFromUrl(const KUrl &url)
     bool isTiff = false;				// do we have a TIFF file?
     bool haveTiff = false;				// can it be read via TIFF lib?
 
-    m_url = url;
-    if (!m_url.isLocalFile()) return (i18n("Loading non-local images is not yet implemented"));
+    if (!url.isLocalFile()) return (i18n("Loading non-local images is not yet implemented"));
 
     QString filename = localFileName();
     ImageFormat format = ImageFormat::formatForUrl(url);
@@ -192,8 +187,8 @@ QString KookaImage::loadFromUrl(const KUrl &url)
     }
 #endif
 
-    m_url = url;
-    m_fileBound = true;
+    m_url = url;					// record image source
+    m_fileBound = true;					// note loaded from file
 
     return (QString::null);				// loaded OK
 }

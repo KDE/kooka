@@ -424,10 +424,9 @@ QString ImgSaver::tempSaveImage(const KookaImage *img, const ImageFormat &format
     QString name = tmpFile.fileName();
     tmpFile.close();
 
-    KookaImage tmpImg;
-    if (colors!=-1 && img->depth()!=colors)
+    const KookaImage *tmpImg = NULL;
+    if (colors!=-1 && img->depth()!=colors)		// Need to convert image
     {
-	// Need to convert image
         QImage::Format newfmt;
         switch (colors)
         {
@@ -450,8 +449,8 @@ default:    kDebug() << "Error: Bad colour depth requested" << colors;
             return (QString::null);
         }
 
-        tmpImg = img->convertToFormat(newfmt);
-        img = &tmpImg;
+        tmpImg = new KookaImage(img->convertToFormat(newfmt));
+        img = tmpImg;
     }
 
     kDebug() << "Saving to" << name << "in format" << format;
@@ -459,9 +458,10 @@ default:    kDebug() << "Error: Bad colour depth requested" << colors;
     {
         kDebug() << "Error saving to" << name;
         tmpFile.setAutoRemove(true);
-        return (QString::null);
+        name = QString::null;
     }
 
+    if (tmpImg!=NULL) delete tmpImg;
     return (name);
 }
 

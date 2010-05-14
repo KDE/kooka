@@ -635,6 +635,8 @@ void KookaView::slotGallerySelectionChanged()
     {
         emit signalGallerySelectionChanged(false, false, 
                                            (mPreviewCanvas->getImageCanvas()->hasImage() ? 1 : 0));
+// TODO: this means that, e.g. OCR, save, print etc. are disabled in scan mode
+// need 2 flags 'preview image valid' and 'gallery selection valid'
     }
     else						// Gallery/OCR mode
     {
