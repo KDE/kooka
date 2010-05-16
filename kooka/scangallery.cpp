@@ -243,7 +243,7 @@ static QString localFileName(const FileTreeViewItem *item)
     KUrl u = item->fileItem()->mostLocalUrl(isLocal);
     if (!isLocal) return (QString::null);
 
-    return (u.path());
+    return (u.toLocalFile());
 }
 
 

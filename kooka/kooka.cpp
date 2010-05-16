@@ -95,32 +95,32 @@ Kooka::Kooka(const QByteArray &deviceToUse)
 
     // allow the view to change the statusbar and caption
     connect(m_view, SIGNAL(signalChangeStatusbar(const QString&)),
-            this,   SLOT(changeStatusbar(const QString&)));
+            SLOT(changeStatusbar(const QString&)));
     connect(m_view, SIGNAL(signalCleanStatusbar(void)),
-            this, SLOT(cleanStatusbar()));
+            SLOT(cleanStatusbar()));
     connect(m_view, SIGNAL(signalChangeCaption(const QString&)),
-            this,   SLOT(changeCaption(const QString&)));
+            SLOT(changeCaption(const QString&)));
     connect(m_view, SIGNAL(signalScannerChanged(bool)),
-            this,   SLOT(slotUpdateScannerActions(bool)));
-    connect(m_view,SIGNAL(signalRectangleChanged(bool)),
-            this,   SLOT(slotUpdateRectangleActions(bool)));
-    connect(m_view,SIGNAL(signalGallerySelectionChanged(bool,bool,int)),
-            this,   SLOT(slotUpdateGalleryActions(bool,bool,int)));
-    connect(m_view,SIGNAL(signalLoadedImageChanged(bool,bool)),
-            this,   SLOT(slotUpdateLoadedActions(bool,bool)));
-    connect(m_view,SIGNAL(signalOcrResultAvailable(bool)),
-            this,   SLOT(slotUpdateOcrResultActions(bool)));
-    connect(m_view,SIGNAL(signalOcrPrefs()),
-            this,   SLOT(optionsOcrPreferences()));
+            SLOT(slotUpdateScannerActions(bool)));
+    connect(m_view, SIGNAL(signalRectangleChanged(bool)),
+            SLOT(slotUpdateRectangleActions(bool)));
+    connect(m_view, SIGNAL(signalGallerySelectionChanged(KookaView::StateFlags)),
+            SLOT(slotUpdateGalleryActions(KookaView::StateFlags)));
+    connect(m_view, SIGNAL(signalLoadedImageChanged(KookaView::StateFlags)),
+            SLOT(slotUpdateLoadedActions(KookaView::StateFlags)));
+    connect(m_view, SIGNAL(signalOcrResultAvailable(bool)),
+            SLOT(slotUpdateOcrResultActions(bool)));
+    connect(m_view, SIGNAL(signalOcrPrefs()),
+            SLOT(optionsOcrPreferences()));
 
     connect(m_view->imageViewer(), SIGNAL(imageReadOnly(bool)),
-            this, SLOT(slotUpdateReadOnlyActions(bool)));
+            SLOT(slotUpdateReadOnlyActions(bool)));
 
     changeCaption( i18n( "KDE Scanning" ));
 
     slotUpdateScannerActions(m_view->isScannerConnected());
     slotUpdateRectangleActions(false);
-    slotUpdateGalleryActions(true,true,0);
+    slotUpdateGalleryActions(KookaView::GalleryShown|KookaView::IsDirectory|KookaView::RootSelected);
     slotUpdateOcrResultActions(false);
     slotUpdateReadOnlyActions(true);
 }
@@ -524,66 +524,147 @@ void Kooka::slotUpdateRectangleActions(bool haveSelection)
 }
 
 
-void Kooka::slotUpdateGalleryActions(bool shown, bool isDir, int howmanySelected)
+//  This is the most complex action update, depending on the operation
+//  mode (i.e. the tab selected), the gallery selection, and whether the
+//  (two) image viewers have an image loaded.  The actions controlled
+//  here and the conditions for enabling them are:
+//
+//  +========================+==================+======================+
+//  | Action/Operation       | Scan mode        | Gallery/OCR mode     |
+//  +========================+==================+======================+
+//  | scale width/height     | preview valid    | image loaded         |
+//  +------------------------+------------------+----------------------+
+//  | (!GalleryShown && PreviewValid) || (GalleryShown && ImageValid)  |
+//  +========================+==================+======================+
+//  | scale original/zoom    | no               | image loaded         |
+//  +------------------------+------------------+----------------------+
+//  | GalleryShown && ImageValid                                       |
+//  +========================+==================+======================+
+//  | keep zoom              | no               | yes                  |
+//  +------------------------+------------------+----------------------+
+//  | GalleryShown                                                     |
+//  +========================+==================+======================+
+//  | mirror/rotate          | no               | 1 image              |
+//  +------------------------+------------------+----------------------+
+//  | GalleryShown && FileSelected                                     |
+//  +========================+==================+======================+
+//  | create folder          | directory        | directory            |
+//  +------------------------+------------------+----------------------+
+//  | IsDirectory                                                      |
+//  +========================+==================+======================+
+//  | import                 | no               | directory            |
+//  +------------------------+------------------+----------------------+
+//  | GalleryShown && IsDirectory                                      |
+//  +========================+==================+======================+
+//  | OCR/save/print         | 1                | 1                    |
+//  +------------------------+------------------+----------------------+
+//  | FileSelected                                                     |
+//  +========================+==================+======================+
+//  | unload (dir)           | yes              | yes                  |
+//  | unload (not dir)       | image loaded     | image loaded         |
+//  +------------------------+------------------+----------------------+
+//  | IsDirectory | ((FileSelected | ManySelected) & ImageValid)       |
+//  +========================+==================+======================+
+//  | delete (dir)           | 1 not root       | 1 not root           |
+//  | delete (not dir)       | >1               | >1                   |
+//  +------------------------+------------------+----------------------+
+//  | (IsDirectory & !RootSelected) | (FileSelected | ManySelected)    |
+//  +========================+==================+======================+
+//  | rename (dir)           | not root         | not root             |
+//  | rename (not dir)       | 1 image          | 1 image              |
+//  +------------------------+------------------+----------------------+
+//  | (IsDirectory & !RootSelected) | FileSelected                     |
+//  +========================+==================+======================+
+//  | props (dir)            | yes              | yes                  |
+//  | props (not dir)        | 1 image          | 1 image              |
+//  +------------------------+------------------+----------------------+
+//  | IsDirectory | FileSelected                                       |
+//  +==================================================================+
+//
+//  It is assumed that only one directory may be selected at a time in
+//  the gallery, but multiple files/images may be.  Currently, though,
+//  the Kooka gallery allows single selection only.
+//
+//  The source of the 'state' is KookaView::slotGallerySelectionChanged().
+
+void Kooka::slotUpdateGalleryActions(KookaView::StateFlags state)
 {
-    kDebug() << "shown" << shown << "isdir" << isDir << "howmany" << howmanySelected;
+    kDebug() << "state" << state;
 
-    const bool singleImage = (howmanySelected==1 && !isDir);
+    bool e;
 
-    ocrAction->setEnabled(singleImage);
+    e = (!(state & KookaView::GalleryShown) && (state & KookaView::PreviewValid)) ||
+        ((state & KookaView::GalleryShown) && (state & KookaView::ImageValid));
+    scaleToWidthAction->setEnabled(e);
+    scaleToHeightAction->setEnabled(e);
 
-    scaleToWidthAction->setEnabled(singleImage);
-    scaleToHeightAction->setEnabled(singleImage);
-    scaleToOriginalAction->setEnabled(shown && singleImage);
-    scaleToZoomAction->setEnabled(shown && singleImage);
-    keepZoomAction->setEnabled(shown);
+    e = (state & KookaView::GalleryShown) && (state & KookaView::ImageValid);
+    scaleToOriginalAction->setEnabled(e);
+    scaleToZoomAction->setEnabled(e);
 
-    m_imageChangeAllowed = (shown && singleImage);
-    mirrorVerticallyAction->setEnabled(m_imageChangeAllowed);
-    mirrorHorizontallyAction->setEnabled(m_imageChangeAllowed);
-    rotateCwAction->setEnabled(m_imageChangeAllowed);
-    rotateAcwAction->setEnabled(m_imageChangeAllowed);
-    rotate180Action->setEnabled(m_imageChangeAllowed);
+    e = (state & KookaView::GalleryShown);
+    keepZoomAction->setEnabled(e);
 
-    if (howmanySelected==0) slotUpdateRectangleActions(false);
+    e = (state & KookaView::GalleryShown) && (state & KookaView::FileSelected);
+    m_imageChangeAllowed = e;
+    mirrorVerticallyAction->setEnabled(e);
+    mirrorHorizontallyAction->setEnabled(e);
+    rotateCwAction->setEnabled(e);
+    rotateAcwAction->setEnabled(e);
+    rotate180Action->setEnabled(e);
 
-    createFolderAction->setEnabled(isDir);
-    importImageAction->setEnabled(isDir);
+    e = (state & KookaView::IsDirectory);
+    createFolderAction->setEnabled(e);
 
-    saveImageAction->setEnabled(singleImage);
-    printImageAction->setEnabled(singleImage);
+    e = (state & KookaView::GalleryShown) && (state & KookaView::IsDirectory);
+    importImageAction->setEnabled(e);
 
-    if (isDir)
+    e = (state & KookaView::FileSelected);
+    ocrAction->setEnabled(e);
+    saveImageAction->setEnabled(e);
+    printImageAction->setEnabled(e);
+
+    if (state & KookaView::IsDirectory)
     {
         unloadImageAction->setText(i18n("Unload Folder"));
-        unloadImageAction->setEnabled(true);
-
         deleteImageAction->setText(i18n("Delete Folder"));
         renameImageAction->setText(i18n("Rename Folder"));
-        bool rs = m_view->galleryRootSelected();
-        deleteImageAction->setEnabled(!rs);
-        renameImageAction->setEnabled(!rs);
-        propsImageAction->setEnabled(!rs);
+
+        unloadImageAction->setEnabled(true);
+
+        e = !(state & KookaView::RootSelected);
+        deleteImageAction->setEnabled(e);
+        renameImageAction->setEnabled(e);
+
+        propsImageAction->setEnabled(true);
     }
     else
     {
         unloadImageAction->setText(i18n("Unload Image"));
-        unloadImageAction->setEnabled(singleImage &&
-                                      m_view->gallery()->getCurrImage()!=NULL);
-
         deleteImageAction->setText(i18n("Delete Image"));
         renameImageAction->setText(i18n("Rename Image"));
-        deleteImageAction->setEnabled(singleImage);
-        renameImageAction->setEnabled(singleImage);
-        propsImageAction->setEnabled(singleImage);
+
+        e = (state & (KookaView::FileSelected|KookaView::ManySelected)) &&
+            (state & KookaView::ImageValid);
+        unloadImageAction->setEnabled(e);
+
+        e = (state & (KookaView::FileSelected|KookaView::ManySelected));
+        deleteImageAction->setEnabled(e);
+
+        e = (state & KookaView::FileSelected);
+        renameImageAction->setEnabled(e);
+        propsImageAction->setEnabled(e);
     }
+
+    if (!(state & (KookaView::IsDirectory|KookaView::FileSelected|KookaView::ManySelected)))
+        slotUpdateRectangleActions(false);
 }
 
 
-void Kooka::slotUpdateLoadedActions(bool isLoaded,bool isDir)
+void Kooka::slotUpdateLoadedActions(KookaView::StateFlags state)
 {
-    kDebug() << "loaded" << isLoaded << "isDir" << isDir;
-    unloadImageAction->setEnabled(isLoaded || isDir);
+    kDebug() << "state" << state;
+    unloadImageAction->setEnabled(state & (KookaView::ImageValid|KookaView::IsDirectory));
 }
 
 

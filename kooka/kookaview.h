@@ -81,6 +81,22 @@ public:
     enum TabPage { TabScan = 0, TabGallery = 1, TabOcr = 2, TabNone = 0xFF };
 
     /**
+     * To avoid a proliferation of boolean parameters, these flags are
+     * used to indicate the state of the gallery and image viewers.
+     */
+    enum StateFlag
+    {
+        GalleryShown = 0x01,				// in Gallery/OCR mode
+        PreviewValid = 0x02,				// scan preview valid
+        ImageValid   = 0x04,				// viewer image loaded
+        IsDirectory  = 0x08,				// directory selected
+        FileSelected = 0x10,				// 1 file selected
+        ManySelected = 0x20,				// multiple selection
+        RootSelected = 0x40				// root is selected
+    };
+    Q_DECLARE_FLAGS(StateFlags, StateFlag);
+
+    /**
      * Default constructor
      */
     KookaView(KMainWindow *parent, const QByteArray &deviceToUse);
@@ -102,8 +118,6 @@ public:
     bool isScannerConnected() const;
     QString scannerName() const;
     void closeScanDevice();
-
-    bool galleryRootSelected() const;
 
     void connectViewerAction(KAction *action, bool sepBefore = false);
     void connectGalleryAction(KAction *action, bool sepBefore = false);
@@ -185,8 +199,8 @@ signals:
 
     void signalScannerChanged(bool haveConnection);
     void signalRectangleChanged(bool haveSelection);
-    void signalGallerySelectionChanged(bool shown, bool isDir, int howmanySelected);
-    void signalLoadedImageChanged(bool isLoaded, bool isDir);
+    void signalGallerySelectionChanged(KookaView::StateFlags state);
+    void signalLoadedImageChanged(KookaView::StateFlags state);
     void signalOcrResultAvailable(bool haveText);
     void signalOcrPrefs();
 
@@ -242,6 +256,8 @@ private:
     KService::List mOpenWithOffers;
     QSignalMapper *mOpenWithMapper;
 };
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(KookaView::StateFlags);
 
 
 #endif							// KOOKAVIEW_H

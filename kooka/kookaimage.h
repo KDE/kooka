@@ -91,8 +91,6 @@ public:
      */
     void extractNow();
 
-    QString localFileName() const;
-
     /**
      *  Set and get the KFileItem of the image. Note that the KFileItem pointer returned
      *  may be NULL.

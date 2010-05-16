@@ -29,8 +29,12 @@
 
 #include <kxmlguiwindow.h>
 
+#include "kookaview.h"
+
+
 #define KOOKA_STATE_GROUP "State"
 #define PREFERENCE_DIA_TAB "PreferencesTab"
+
 
 class KConfigGroup;
 class KPrinter;
@@ -38,7 +42,6 @@ class KToggleAction;
 class KAction;
 class KActionMenu;
 
-class KookaView;
 
 /**
  * This class serves as the main window for Kooka.  It handles the
@@ -96,8 +99,8 @@ protected:
 protected slots:
     void slotUpdateScannerActions(bool haveConnection);
     void slotUpdateRectangleActions(bool haveSelection);
-    void slotUpdateGalleryActions(bool shown, bool isDir, int howmanySelected);
-    void slotUpdateLoadedActions(bool isLoaded,bool isDir);
+    void slotUpdateGalleryActions(KookaView::StateFlags state);
+    void slotUpdateLoadedActions(KookaView::StateFlags state);
     void slotUpdateOcrResultActions(bool haveText);
     void slotOpenWithMenu();
     void slotUpdateReadOnlyActions(bool ro);

@@ -629,39 +629,42 @@ void KookaView::slotSelectionChanged(const QRect &newSelection)
 }
 
 
+//  The 'state' generated here is used by Kooka::slotUpdateGalleryActions().
+
 void KookaView::slotGallerySelectionChanged()
 {
-    if (mCurrentTab==KookaView::TabScan)		// Scan mode
+    KookaView::StateFlags state = 0;
+    const FileTreeViewItem *ftvi = mGallery->galleryTree()->highlightedFileTreeViewItem();
+    const KFileItem *fi = (ftvi!=NULL ? ftvi->fileItem() : NULL);
+    const bool scanmode = (mCurrentTab==KookaView::TabScan);
+
+    if (scanmode)					// Scan mode
     {
-        emit signalGallerySelectionChanged(false, false, 
-                                           (mPreviewCanvas->getImageCanvas()->hasImage() ? 1 : 0));
-// TODO: this means that, e.g. OCR, save, print etc. are disabled in scan mode
-// need 2 flags 'preview image valid' and 'gallery selection valid'
+        if (mPreviewCanvas->getImageCanvas()->hasImage()) state |= KookaView::PreviewValid;
     }
     else						// Gallery/OCR mode
     {
-        const KFileItem *fi = mGallery->galleryTree()->highlightedFileItem();
-        if (fi==NULL || fi->isNull())
-        {
-            emit signalChangeStatusbar(i18n("No selection"));
-            emit signalGallerySelectionChanged(true, false, 0);
-        }
-        else
-        {
-            emit signalChangeStatusbar(i18n("Gallery %1 %2",
-                                            (fi->isDir() ? i18n("folder") : i18n("image")),
-                                            fi->url().pathOrUrl()));
-            // TODO: can there be more than one selected?
-            emit signalGallerySelectionChanged(true, fi->isDir(), 1);
-        }
+        state |= KookaView::GalleryShown;
     }
-}
 
+    if (fi==NULL || fi->isNull())			// no gallery selection
+    {
+        if (!scanmode) emit signalChangeStatusbar(i18n("No selection"));
+    }
+    else						// have a gallery selection
+    {
+        if (!scanmode) emit signalChangeStatusbar(i18n("Gallery %1 %2",
+                                                       (fi->isDir() ? i18n("folder") : i18n("image")),
+                                                       fi->url().pathOrUrl()));
 
-bool KookaView::galleryRootSelected() const
-{
-    const FileTreeViewItem *curr = mGallery->galleryTree()->highlightedFileTreeViewItem();
-    return (curr==NULL ? false : curr->isRoot());
+        if (fi->isDir()) state |= KookaView::IsDirectory;
+        else state |= KookaView::FileSelected;
+    }
+
+    if (ftvi!=NULL && ftvi->isRoot()) state |= KookaView::RootSelected;
+    if (gallery()->getCurrImage()!=NULL) state |= KookaView::ImageValid;
+
+    emit signalGallerySelectionChanged(state);
 }
 
 
@@ -1011,7 +1014,11 @@ void KookaView::slotScanParams()
 
 void KookaView::slotShowAImage(const KookaImage *img, bool isDir)
 {
-    emit signalLoadedImageChanged(img!=NULL, isDir);
+    KookaView::StateFlags state = 0;
+
+    if (img!=NULL) state |= KookaView::ImageValid;
+    if (isDir) state |= KookaView::IsDirectory;
+    emit signalLoadedImageChanged(state);
 
     if (mImageCanvas!=NULL)				// load into image viewer
     {

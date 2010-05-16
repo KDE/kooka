@@ -115,22 +115,11 @@ void KookaImage::setFileItem(const KFileItem *fi)
 // on OcrBaseDialog::introduceImage()
 const KFileMetaInfo KookaImage::fileMetaInfo() const
 {
-    QString filename = localFileName();
+    QString filename = m_url.toLocalFile();
     if (filename.isEmpty()) return (KFileMetaInfo());
 
     kDebug() << "Fetching metainfo for" << filename;
     return (KFileMetaInfo(filename, QString::null, KFileMetaInfo::Everything));
-}
-
-
-// TODO: KUrl can do this, also see ScanGallery::localFileName()
-QString KookaImage::localFileName( ) const
-{
-
-    if( ! m_url.isEmpty() )
-        return( m_url.directory() + "/" + m_url.fileName());
-    else
-        return QString();
 }
 
 
@@ -142,7 +131,7 @@ QString KookaImage::loadFromUrl(const KUrl &url)
 
     if (!url.isLocalFile()) return (i18n("Loading non-local images is not yet implemented"));
 
-    QString filename = localFileName();
+    QString filename = url.toLocalFile();
     ImageFormat format = ImageFormat::formatForUrl(url);
 
     KMimeType::Ptr mime = KMimeType::findByUrl(url, 0, true);
@@ -200,8 +189,13 @@ void KookaImage::extractNow()
     kDebug() << "extracting subimage number" << m_subNo;
 
     KookaImage *parent = parentImage();
-    if (parent!=NULL) loadTiffDir(parent->localFileName(), m_subNo);
-    else kDebug() << "Error: No parent, cannot load subimage";
+    if (parent==NULL || !parent->isFileBound())
+    {
+        kDebug() << "Error: No parent, cannot load subimage";
+        return;
+    }
+
+    loadTiffDir(parent->url().toLocalFile(), m_subNo);
 }
 
 
