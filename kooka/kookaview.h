@@ -197,12 +197,12 @@ signals:
      */
     void signalChangeCaption(const QString &text);
 
+    void signalViewSelectionState(KookaView::StateFlags state);
     void signalScannerChanged(bool haveConnection);
     void signalRectangleChanged(bool haveSelection);
-    void signalGallerySelectionChanged(KookaView::StateFlags state);
-    void signalLoadedImageChanged(KookaView::StateFlags state);
     void signalOcrResultAvailable(bool haveText);
     void signalOcrPrefs();
+
 
 private:
     void startOCR(const KookaImage img);
@@ -212,6 +212,8 @@ private:
     void updateCurrImage(const QImage &img);
     void saveGalleryState(int index = -1) const;
     void restoreGalleryState(int index = -1);
+
+    void updateSelectionState();
 
 private slots:
     void slotStartLoading(const KUrl &url);

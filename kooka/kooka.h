@@ -99,8 +99,7 @@ protected:
 protected slots:
     void slotUpdateScannerActions(bool haveConnection);
     void slotUpdateRectangleActions(bool haveSelection);
-    void slotUpdateGalleryActions(KookaView::StateFlags state);
-    void slotUpdateLoadedActions(KookaView::StateFlags state);
+    void slotUpdateViewActions(KookaView::StateFlags state);
     void slotUpdateOcrResultActions(bool haveText);
     void slotOpenWithMenu();
     void slotUpdateReadOnlyActions(bool ro);

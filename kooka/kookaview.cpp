@@ -629,9 +629,9 @@ void KookaView::slotSelectionChanged(const QRect &newSelection)
 }
 
 
-//  The 'state' generated here is used by Kooka::slotUpdateGalleryActions().
+//  The 'state' generated here is used by Kooka::slotUpdateViewActions().
 
-void KookaView::slotGallerySelectionChanged()
+void KookaView::updateSelectionState()
 {
     KookaView::StateFlags state = 0;
     const FileTreeViewItem *ftvi = mGallery->galleryTree()->highlightedFileTreeViewItem();
@@ -647,6 +647,25 @@ void KookaView::slotGallerySelectionChanged()
         state |= KookaView::GalleryShown;
     }
 
+    if (fi!=NULL && !fi->isNull())			// have a gallery selection
+    {
+        if (fi->isDir()) state |= KookaView::IsDirectory;
+        else state |= KookaView::FileSelected;
+    }
+
+    if (ftvi!=NULL && ftvi->isRoot()) state |= KookaView::RootSelected;
+    if (imageViewer()->hasImage()) state |= KookaView::ImageValid;
+
+    emit signalViewSelectionState(state);
+}
+
+
+void KookaView::slotGallerySelectionChanged()
+{
+    const FileTreeViewItem *ftvi = mGallery->galleryTree()->highlightedFileTreeViewItem();
+    const KFileItem *fi = (ftvi!=NULL ? ftvi->fileItem() : NULL);
+    const bool scanmode = (mCurrentTab==KookaView::TabScan);
+
     if (fi==NULL || fi->isNull())			// no gallery selection
     {
         if (!scanmode) emit signalChangeStatusbar(i18n("No selection"));
@@ -656,15 +675,9 @@ void KookaView::slotGallerySelectionChanged()
         if (!scanmode) emit signalChangeStatusbar(i18n("Gallery %1 %2",
                                                        (fi->isDir() ? i18n("folder") : i18n("image")),
                                                        fi->url().pathOrUrl()));
-
-        if (fi->isDir()) state |= KookaView::IsDirectory;
-        else state |= KookaView::FileSelected;
     }
 
-    if (ftvi!=NULL && ftvi->isRoot()) state |= KookaView::RootSelected;
-    if (gallery()->getCurrImage()!=NULL) state |= KookaView::ImageValid;
-
-    emit signalGallerySelectionChanged(state);
+    updateSelectionState();
 }
 
 
@@ -921,9 +934,13 @@ void KookaView::slotCreateNewImgFromSelection()
 }
 
 
+//  This and slotMirrorImage() below work even if the selected image is
+//  not currently loaded, hence the getCurrImage(true) which automatically
+//  loads it if necessary.
+
 void KookaView::slotRotateImage(int angle)
 {
-    const KookaImage *img = gallery()->getCurrImage();
+    const KookaImage *img = gallery()->getCurrImage(true);
     if (img==NULL) return;
 
     bool doUpdate = true;
@@ -962,7 +979,7 @@ default:
 
 void KookaView::slotMirrorImage(KookaView::MirrorType type)
 {
-    const QImage *img = mImageCanvas->rootImage();
+    const KookaImage *img = gallery()->getCurrImage(true);
     if (img==NULL) return;
 
     bool doUpdate = true;
@@ -1014,12 +1031,6 @@ void KookaView::slotScanParams()
 
 void KookaView::slotShowAImage(const KookaImage *img, bool isDir)
 {
-    KookaView::StateFlags state = 0;
-
-    if (img!=NULL) state |= KookaView::ImageValid;
-    if (isDir) state |= KookaView::IsDirectory;
-    emit signalLoadedImageChanged(state);
-
     if (mImageCanvas!=NULL)				// load into image viewer
     {
         mImageCanvas->newImage(img);
@@ -1033,6 +1044,7 @@ void KookaView::slotShowAImage(const KookaImage *img, bool isDir)
 
     if (img!=NULL) emit signalChangeStatusbar(i18n("Loaded image %1", img->url().pathOrUrl()));
     else if (!isDir) emit signalChangeStatusbar(i18n("Unloaded image"));
+    updateSelectionState();
 }
 
 
@@ -1040,6 +1052,7 @@ void KookaView::slotUnloadAImage(const KookaImage *img)
 {
     kDebug() << "Unloading Image";
     if (mImageCanvas!=NULL) mImageCanvas->newImage(NULL);
+    updateSelectionState();
 }
 
 

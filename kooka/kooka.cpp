@@ -104,10 +104,8 @@ Kooka::Kooka(const QByteArray &deviceToUse)
             SLOT(slotUpdateScannerActions(bool)));
     connect(m_view, SIGNAL(signalRectangleChanged(bool)),
             SLOT(slotUpdateRectangleActions(bool)));
-    connect(m_view, SIGNAL(signalGallerySelectionChanged(KookaView::StateFlags)),
-            SLOT(slotUpdateGalleryActions(KookaView::StateFlags)));
-    connect(m_view, SIGNAL(signalLoadedImageChanged(KookaView::StateFlags)),
-            SLOT(slotUpdateLoadedActions(KookaView::StateFlags)));
+    connect(m_view, SIGNAL(signalViewSelectionState(KookaView::StateFlags)),
+            SLOT(slotUpdateViewAeGalleryActions(KookaView::StateFlags)));
     connect(m_view, SIGNAL(signalOcrResultAvailable(bool)),
             SLOT(slotUpdateOcrResultActions(bool)));
     connect(m_view, SIGNAL(signalOcrPrefs()),
@@ -120,7 +118,7 @@ Kooka::Kooka(const QByteArray &deviceToUse)
 
     slotUpdateScannerActions(m_view->isScannerConnected());
     slotUpdateRectangleActions(false);
-    slotUpdateGalleryActions(KookaView::GalleryShown|KookaView::IsDirectory|KookaView::RootSelected);
+    slotUpdateViewActions(KookaView::GalleryShown|KookaView::IsDirectory|KookaView::RootSelected);
     slotUpdateOcrResultActions(false);
     slotUpdateReadOnlyActions(true);
 }
@@ -585,11 +583,11 @@ void Kooka::slotUpdateRectangleActions(bool haveSelection)
 //  the gallery, but multiple files/images may be.  Currently, though,
 //  the Kooka gallery allows single selection only.
 //
-//  The source of the 'state' is KookaView::slotGallerySelectionChanged().
+//  The source of the 'state' is KookaView::updateSelectionState().
 
-void Kooka::slotUpdateGalleryActions(KookaView::StateFlags state)
+void Kooka::slotUpdateViewActions(KookaView::StateFlags state)
 {
-    kDebug() << "state" << state;
+    kDebug() << "state" << hex << state;
 
     bool e;
 
@@ -658,13 +656,6 @@ void Kooka::slotUpdateGalleryActions(KookaView::StateFlags state)
 
     if (!(state & (KookaView::IsDirectory|KookaView::FileSelected|KookaView::ManySelected)))
         slotUpdateRectangleActions(false);
-}
-
-
-void Kooka::slotUpdateLoadedActions(KookaView::StateFlags state)
-{
-    kDebug() << "state" << state;
-    unloadImageAction->setEnabled(state & (KookaView::ImageValid|KookaView::IsDirectory));
 }
 
 
