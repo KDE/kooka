@@ -1016,21 +1016,24 @@ KScanDevice::Status KScanDevice::acquireData(bool isPreview)
                 if (mScanBuf==NULL) stat = KScanDevice::NoMemory;
             }						// can this ever happen?
 
-            int fd = 0;
-            // Don't assume that sane_get_select_fd() will succeed even if
-            // sane_set_io_mode() successfully sets I/O mode to noblocking -
-            // bug 159300
-            if (sane_set_io_mode(mScannerHandle, SANE_TRUE)==SANE_STATUS_GOOD)
+            if (stat==KScanDevice::Ok)
             {
-                if (sane_get_select_fd(mScannerHandle, &fd)==SANE_STATUS_GOOD)
+                int fd = 0;
+                // Don't assume that sane_get_select_fd() will succeed even if
+                // sane_set_io_mode() successfully sets I/O mode to noblocking -
+                // bug 159300
+                if (sane_set_io_mode(mScannerHandle, SANE_TRUE)==SANE_STATUS_GOOD)
                 {
-                    kDebug() << "using read socket notifier";
-                    mSocketNotifier = new QSocketNotifier(fd, QSocketNotifier::Read, this);
-                    connect(mSocketNotifier, SIGNAL(activated(int)), SLOT(doProcessABlock()));
+                    if (sane_get_select_fd(mScannerHandle, &fd)==SANE_STATUS_GOOD)
+                    {
+                        kDebug() << "using read socket notifier";
+                        mSocketNotifier = new QSocketNotifier(fd, QSocketNotifier::Read, this);
+                        connect(mSocketNotifier, SIGNAL(activated(int)), SLOT(doProcessABlock()));
+                    }
+                    else kDebug() << "not using socket notifier (sane_get_select_fd() failed)";
                 }
-                else kDebug() << "not using socket notifier (sane_get_select_fd() failed)";
+                else kDebug() << "not using socket notifier (sane_set_io_mode() failed)";
             }
-            else kDebug() << "not using socket notifier (sane_set_io_mode() failed)";
         }
 
         if (stat!=KScanDevice::Ok)			// some problem getting started

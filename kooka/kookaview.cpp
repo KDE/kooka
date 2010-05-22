@@ -463,7 +463,7 @@ case KookaView::TabOcr:					// OCR
     restoreGalleryState(index);				// restore state of new tab
     mCurrentTab = static_cast<KookaView::TabPage>(index);
 							// note for next tab change
-    slotGallerySelectionChanged();			// update image action states
+    updateSelectionState();				// update image action states
 }
 
 
@@ -656,6 +656,7 @@ void KookaView::updateSelectionState()
     if (ftvi!=NULL && ftvi->isRoot()) state |= KookaView::RootSelected;
     if (imageViewer()->hasImage()) state |= KookaView::ImageValid;
 
+    //kDebug() << "state" << state;
     emit signalViewSelectionState(state);
 }
 
@@ -727,7 +728,7 @@ void KookaView::slotNewPreview(const QImage *newimg, const ImgScanInfo *info)
 		  << "res [" << info->getXResolution() << "x" << info->getYResolution() << "]";
 
    mPreviewCanvas->newImage(newimg);			// set new image and size
-   slotGallerySelectionChanged();
+   updateSelectionState();
 }
 
 
@@ -888,6 +889,7 @@ void KookaView::slotScanFinished(KScanDevice::Status stat)
                            "There was a problem during preview or scanning."
                            "<br>"
                            "Check that the scanner is still connected and switched on, "
+                           "<br>"
                            "and that media is loaded if required."
                            "<p>"
                            "Trying to use scanner device: <b>%3</b><br>"

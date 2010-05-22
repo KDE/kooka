@@ -105,7 +105,7 @@ Kooka::Kooka(const QByteArray &deviceToUse)
     connect(m_view, SIGNAL(signalRectangleChanged(bool)),
             SLOT(slotUpdateRectangleActions(bool)));
     connect(m_view, SIGNAL(signalViewSelectionState(KookaView::StateFlags)),
-            SLOT(slotUpdateViewAeGalleryActions(KookaView::StateFlags)));
+            SLOT(slotUpdateViewActions(KookaView::StateFlags)));
     connect(m_view, SIGNAL(signalOcrResultAvailable(bool)),
             SLOT(slotUpdateOcrResultActions(bool)));
     connect(m_view, SIGNAL(signalOcrPrefs()),
