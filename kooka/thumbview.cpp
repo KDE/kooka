@@ -43,6 +43,7 @@
 #include <kdebug.h>
 #include <kmenu.h>
 #include <kconfiggroup.h>
+#include <kcolorscheme.h>
 
 #include "kookapref.h"
 
@@ -56,6 +57,7 @@ ThumbView::ThumbView(QWidget *parent)
     setObjectName("ThumbView");
 
     m_thumbSize = KIconLoader::SizeHuge;
+    m_customBg = false;
     m_bgImg = QString::null;
     m_firstMenu = true;
 
@@ -326,9 +328,11 @@ bool ThumbView::readSettings()
         changed = true;
     }
 
+    bool newCustomBg = grp.readEntry(THUMB_CUSTOM_BGND, false);
     QString newBgImg = grp.readEntry(THUMB_BG_WALLPAPER, standardBackground());
-    if (newBgImg!=m_bgImg )
+    if (newCustomBg!=m_customBg || newBgImg!=m_bgImg)
     {
+        m_customBg = newCustomBg;
         m_bgImg = newBgImg;
         setBackground();
         changed = true;
@@ -348,17 +352,23 @@ void ThumbView::saveConfig()
 void ThumbView::setBackground()
 {
     QPixmap bgPix;
+    kDebug() << "custom" << m_customBg << "img" << m_bgImg;
 
-    if (!m_bgImg.isEmpty()) bgPix.load(m_bgImg);
-    else
+    QWidget *iv = view()->viewport();			// go down to the icon view
+    QPalette pal = iv->palette();
+
+    if (m_customBg && !m_bgImg.isEmpty())		// set custom background
     {
-        bgPix = QPixmap(16,16);
-        bgPix.fill(Qt::blue);
+        if (bgPix.load(m_bgImg)) pal.setBrush(iv->backgroundRole(), QBrush(bgPix));
+        else kDebug() << "Failed to load background image" << m_bgImg;
+    }
+    else						// reset to default
+    {
+        KColorScheme sch(QPalette::Normal);
+        pal.setBrush(iv->backgroundRole(), sch.background());
     }
 
-    QPalette pal = palette();
-    pal.setBrush(backgroundRole(), QBrush(bgPix));
-    setPalette(pal);
+    iv->setPalette(pal);
 }
 
 

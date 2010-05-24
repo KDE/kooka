@@ -68,7 +68,6 @@
 
 #include "imgsaver.h"
 #include "thumbview.h"
-#include "imageselectline.h"
 #include "formatdialog.h"
 #include "ocrgocrengine.h"
 #include "ocrocradengine.h"
@@ -393,30 +392,38 @@ void KookaPref::setupThumbnailPage()
 
     QFrame *page = new QFrame(this);
     QGridLayout *lay = new QGridLayout(page);
-    lay->setRowStretch(4, 9);
     lay->setColumnStretch(1, 9);
 
     QLabel *title = new QLabel(i18n("Here you can configure the appearance of the scan gallery thumbnail view."), page);
     lay->addWidget(title, 0, 0, 1, -1);
     lay->setRowMinimumHeight(1, 2*KDialog::spacingHint());
 
+    // Do we want a background image?
+    cbCustomThumbBgnd = new QCheckBox(i18n("Use a custom background image"), page);
+    cbCustomThumbBgnd->setChecked(grp.readEntry(THUMB_CUSTOM_BGND, false));
+    connect(cbCustomThumbBgnd, SIGNAL(toggled(bool)), SLOT(slotCustomThumbBgndToggled(bool)));
+    lay->addWidget(cbCustomThumbBgnd, 2, 0, 1, 2);
+
     /* Background image */
     QString bgImg = grp.readPathEntry(THUMB_BG_WALLPAPER, ThumbView::standardBackground());
 
-    QLabel *l = new QLabel(i18n("Background:"), page);
-    lay->addWidget(l, 2, 0, Qt::AlignRight);
+    QLabel *l = new QLabel(i18n("Image:"), page);
+    lay->addWidget(l, 3, 0, Qt::AlignRight);
 
-    // TODO: replace with KUrlRequester
-    /* image file selector */
-    m_tileSelector = new ImageSelectLine(page, QString::null);
+    /* Image file selector */
+    m_tileSelector = new KUrlRequester(page);
+    m_tileSelector->setMode(KFile::File|KFile::ExistingOnly|KFile::LocalOnly);
     kDebug() << "Setting tile URL" << bgImg;
-    m_tileSelector->setURL(bgImg);
-    lay->addWidget(m_tileSelector, 2, 1);
+    m_tileSelector->setUrl(bgImg);
+
+    lay->addWidget(m_tileSelector, 3, 1);
     l->setBuddy(m_tileSelector);
+
+    lay->setRowMinimumHeight(4, 2*KDialog::spacingHint());
 
     /* Preview size */
     l = new QLabel(i18n("Preview size:"), page);
-    lay->addWidget(l, 3, 0, Qt::AlignRight);
+    lay->addWidget(l, 5, 0, Qt::AlignRight);
 
     m_thumbSizeCb = new KComboBox(page);
     m_thumbSizeCb->addItem(ThumbView::sizeName(KIconLoader::SizeEnormous));	// 0
@@ -439,12 +446,22 @@ case KIconLoader::SizeSmallMedium:	sel = 4;	break;
     }
     m_thumbSizeCb->setCurrentIndex(sel);
 
-    lay->addWidget(m_thumbSizeCb,3,1);
+    lay->addWidget(m_thumbSizeCb, 5, 1);
     l->setBuddy(m_thumbSizeCb);
+
+    lay->setRowStretch(6, 1);
+
+    slotCustomThumbBgndToggled(cbCustomThumbBgnd->isChecked());
 
     KPageWidgetItem *item = addPage(page, i18n("Thumbnail View"));
     item->setHeader(i18n("Thumbnail Gallery View"));
     item->setIcon(KIcon("view-list-icons"));
+}
+
+
+void KookaPref::slotCustomThumbBgndToggled(bool state)
+{
+    m_tileSelector->setEnabled(state);
 }
 
 
@@ -479,10 +496,10 @@ void KookaPref::slotSaveSettings()
     /* ** Thumbnail options ** */
     grp = konf->group(THUMB_GROUP);
 
-    KUrl bgUrl = m_tileSelector->selectedURL().url();
+    KUrl bgUrl = m_tileSelector->url();
     bgUrl.setProtocol("");
-    kDebug() << "Writing tile-pixmap" << bgUrl.prettyUrl();
     grp.writePathEntry(THUMB_BG_WALLPAPER, bgUrl.url());
+    grp.writeEntry(THUMB_CUSTOM_BGND, cbCustomThumbBgnd->isChecked());
 
     KIconLoader::StdSizes size;
     switch (m_thumbSizeCb->currentIndex())
@@ -536,9 +553,12 @@ void KookaPref::slotSetDefaults()
     cbReadStartupImage->setChecked( true);
     cbSkipFormatAsk->setChecked( true  );
 
-    m_tileSelector->setURL(ThumbView::standardBackground());
+
+    cbCustomThumbBgnd->setChecked(false);
+    m_tileSelector->setUrl(ThumbView::standardBackground());
     m_thumbSizeCb->setCurrentIndex(1);			// "Very Large"
 
+    slotCustomThumbBgndToggled(cbCustomThumbBgnd->isChecked());
     slotEngineSelected(OcrEngine::EngineNone);
 }
 
@@ -576,6 +596,19 @@ QString KookaPref::galleryRoot()
 }
 
 
+// Get the user's configured KDE documents path.  It may not exist yet, in
+// which case QDir::canonicalPath() will fail.  Use QDir::absolutePath() in
+// this case.  If all else fails then the last resort is the home directory.
+
+static QString docsPath()
+{
+    QString docpath = QDir(KGlobalSettings::documentPath()).canonicalPath();
+    if (docpath.isEmpty()) docpath = QDir(KGlobalSettings::documentPath()).absolutePath();
+    if (docpath.isEmpty()) docpath = getenv("HOME");
+    return (docpath);
+}
+
+
 // TODO: maybe save a .directory file there which shows a 'scanner' logo?
 static QString createGallery(const QDir &d, bool *success = NULL)
 {
@@ -588,7 +621,7 @@ static QString createGallery(const QDir &d, bool *success = NULL)
 #else
             const char *reason = "";
 #endif
-            QString docs = QDir(KGlobalSettings::documentPath()).canonicalPath();
+            QString docs = docsPath();
             KMessageBox::error(NULL,
                                i18n("<qt>"
                                     "<p>Unable to create the directory<br>"
@@ -628,10 +661,8 @@ QString KookaPref::findGalleryRoot()
     bool oldexists = (olddir.exists());
 
     QString newloc = galleryName;
-
     QDir newdir(newloc);
-    if (newdir.isRelative()) newdir.setPath(QDir(KGlobalSettings::documentPath()).canonicalPath()+
-                                            QDir::separator()+galleryName);
+    if (newdir.isRelative()) newdir.setPath(docsPath()+QDir::separator()+galleryName);
     QString newpath = newdir.absolutePath();
     bool newexists = (newdir.exists());
 

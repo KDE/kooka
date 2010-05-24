@@ -135,7 +135,6 @@ set(kooka_SRCS
   imageformat.cpp
   scangallery.cpp
   galleryhistory.cpp
-  imageselectline.cpp
   kookagallery.cpp
   thumbview.cpp
   ocrengine.cpp			# -> ocrenginebase

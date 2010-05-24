@@ -37,6 +37,7 @@
 //  KConfig group definitions
 #define THUMB_GROUP		"thumbnailView"
 #define THUMB_PREVIEW_SIZE	"previewSize"
+#define THUMB_CUSTOM_BGND	"customBackground"
 #define THUMB_BG_WALLPAPER	"BackGroundTile"
 #define THUMB_STD_TILE_IMG	"kooka/pics/thumbviewtile.png"
 
@@ -92,6 +93,7 @@ private:
 
     KIconLoader::StdSizes m_thumbSize;
     QString m_bgImg;
+    bool m_customBg;
 
     KUrl m_lastSelected;
     KUrl m_toSelect;

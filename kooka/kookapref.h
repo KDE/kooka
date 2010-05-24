@@ -59,8 +59,6 @@ class KColorButton;
 class KUrlRequester;
 class KComboBox;
 
-class ImageSelectLine;
-
 
 class KookaPref : public KPageDialog
 {
@@ -93,6 +91,9 @@ protected slots:
 signals:
     void dataSaved();
 
+private slots:
+    void slotCustomThumbBgndToggled(bool state);
+
 private:
     void setupGeneralPage();
     void setupStartupPage();
@@ -122,8 +123,9 @@ private:
     QCheckBox *cbFilenameAsk;
 
     // Thumbnail View
-    ImageSelectLine *m_tileSelector;
+    KUrlRequester *m_tileSelector;
     KComboBox *m_thumbSizeCb;
+    QCheckBox *cbCustomThumbBgnd;
 
     // OCR
     KUrlRequester *binaryReq;
