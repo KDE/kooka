@@ -59,9 +59,8 @@
 #include <qlabel.h>
 
 
-
-
-#define DOCK_SIZES "DockSizes"
+#define GROUP_GENERAL		"General"
+#define DOCK_SIZES		"DockSizes"
 
 
 Kooka::Kooka(const QByteArray &deviceToUse)
@@ -360,9 +359,10 @@ void Kooka::saveProperties(KConfigGroup &grp)
     // config file.  anything you write here will be available
     // later when this app is restored
 
-    //if (!m_view->currentURL().isNull())
-    //     config->writePathEntry("lastURL", m_view->currentURL());
-    grp.writeEntry(PREFERENCE_DIA_TAB, m_prefDialogIndex);
+    // See comments in readProperties() below.
+    KConfigGroup grp2(grp.config()->group(GROUP_GENERAL));
+    grp2.writeEntry(PREFERENCE_DIA_TAB, m_prefDialogIndex);
+
     m_view->saveProperties(grp);
 }
 
@@ -378,14 +378,18 @@ void Kooka::applyMainWindowSettings(const KConfigGroup &grp, bool forceGlobal)
 
 void Kooka::readProperties(const KConfigGroup &grp)
 {
-    kDebug() << "to group" << grp.name();
+    kDebug() << "from group" << grp.name();
 
     // the 'config' object points to the session managed
     // config file.  this function is automatically called whenever
     // the app is being restored.  read in here whatever you wrote
     // in 'saveProperties'
-    m_prefDialogIndex = grp.readEntry(PREFERENCE_DIA_TAB, 0);
-    // QString url = grp.readPathEntry("lastURL");
+
+    // The 'grp' passed in here seems to be the "<default>" group,
+    // not the "MainWindow" as passed to saveProperties().
+    // Select the group explicitly.
+    KConfigGroup grp2(grp.config()->group(GROUP_GENERAL));
+    m_prefDialogIndex = grp2.readEntry(PREFERENCE_DIA_TAB, 0);
 }
 
 
@@ -427,16 +431,9 @@ void Kooka::optionsPreferences()
 {
     KookaPref dlg;
 
-#ifndef KDE4
     dlg.showPageIndex(m_prefDialogIndex);
-#endif
     connect(&dlg, SIGNAL(dataSaved()), m_view, SLOT(slotApplySettings()));
-#ifndef KDE4
     if (dlg.exec()) m_prefDialogIndex = dlg.currentPageIndex();
-#else
-    dlg.exec();
-#endif
-
 }
 
 

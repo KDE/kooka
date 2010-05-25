@@ -69,6 +69,7 @@
 #include "thumbview.h"
 #include "kookaimage.h"
 #include "kookaimagemeta.h"
+#include "ocrengine.h"
 #include "ocrresedit.h"
 #include "scanparamsdialog.h"
 #include "kookagallery.h"

@@ -128,6 +128,7 @@ set(kooka_SRCS
   kooka.cpp			# -> kookamainwindow
   kookaview.cpp
   kookapref.cpp			# -> kookaprefs
+  prefspages.cpp
   imgsaver.cpp			# -> imagesaver
   formatdialog.cpp
   kookaimage.cpp

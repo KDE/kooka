@@ -1,36 +1,35 @@
-/***************************************************** -*- mode:c++; -*- ***
-                          kookapref.h  - Preferences
-                             -------------------
-    begin                : Sun Jan 16 2000
-    copyright            : (C) 2000 by Klaas Freitag
-    email                : freitag@suse.de
- ***************************************************************************/
+/* This file is part of the KDE Project				-*- mode:c++ -*-
 
-/***************************************************************************
- *                                                                         *
- *  This file may be distributed and/or modified under the terms of the    *
- *  GNU General Public License version 2 as published by the Free Software *
- *  Foundation and appearing in the file COPYING included in the           *
- *  packaging of this file.                                                *
- *
- *  As a special exception, permission is given to link this program       *
- *  with any version of the KADMOS ocr/icr engine of reRecognition GmbH,   *
- *  Kreuzlingen and distribute the resulting executable without            *
- *  including the source code for KADMOS in the source distribution.       *
- *
- *  As a special exception, permission is given to link this program       *
- *  with any edition of Qt, and distribute the resulting executable,       *
- *  without including the source code for Qt in the source distribution.   *
- *                                                                         *
- ***************************************************************************/
+   Copyright (C) 2000 Klaas Freitag <freitag@suse.de>
+   Copyright (C) 2010 Jonathan Marten <jjm@keelhaul.me.uk>  
+
+   This library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Library General Public
+   License as published by the Free Software Foundation; either
+   version 2 of the License, or (at your option) any later version.
+
+   As a special exception, permission is given to link this program
+   with any version of the KADMOS ocr/icr engine of reRecognition GmbH,
+   Kreuzlingen and distribute the resulting executable without
+   including the source code for KADMOS in the source distribution.
+
+   This library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Library General Public License for more details.
+
+   You should have received a copy of the GNU Library General Public License
+   along with this library; see the file COPYING.LIB.  If not, write to
+   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+   Boston, MA 02110-1301, USA.
+
+*/
+
 
 #ifndef KOOKAPREF_H
 #define KOOKAPREF_H
 
 #include <kpagedialog.h>
-
-#include "kookagallery.h"
-#include "ocrengine.h"
 
 
 #define GROUP_GALLERY		"Gallery"
@@ -50,14 +49,9 @@
 #define CFG_GOCR_BINARY         "gocrBinary"
 
 
-class QCheckBox;
-class QPushButton;
-class QLabel;
+class QVBoxLayout;
 
-class KIntNumInput;
-class KColorButton;
-class KUrlRequester;
-class KComboBox;
+class KookaPrefsPage;
 
 
 class KookaPref : public KPageDialog
@@ -67,14 +61,14 @@ class KookaPref : public KPageDialog
 public:
     KookaPref(QWidget *parent = NULL);
 
+    int createPage(KookaPrefsPage *page, const QString &name,
+                   const QString &header, const char *icon);
+
     static QString tryFindGocr();
     static QString tryFindOcrad();
 
-    bool galleryAllowRename() const;
-
-    // TODO: reimplement for KDE4, used in Kooka::optionsPreferences()
-    //void showPageIndex(int page);
-    //int currentPageIndex(void);
+    void showPageIndex(int page);
+    int currentPageIndex();
 
     /**
      * Static function that returns the image gallery base dir.
@@ -85,52 +79,14 @@ public:
 protected slots:
     void slotSaveSettings();
     void slotSetDefaults();
-    void slotEngineSelected(int i);
-    void slotEnableWarnings();
 
 signals:
     void dataSaved();
 
-private slots:
-    void slotCustomThumbBgndToggled(bool state);
-
 private:
-    void setupGeneralPage();
-    void setupStartupPage();
-    void setupSaveFormatPage();
-    void setupThumbnailPage();
-    void setupOCRPage();
+    QVector<KPageWidgetItem *> mPages;
 
-    bool checkOCRBin(const QString &cmd,const QString &bin,bool showMsg);
     static QString findGalleryRoot();
-
-    KSharedConfig *konf;
-    OcrEngine::EngineType originalEngine;
-    OcrEngine::EngineType selectedEngine;
-
-    // General
-    QCheckBox *cbAllowRename;
-    QPushButton *pbEnableMsgs;
-    KComboBox *layoutCB;
-
-    // Startup
-    QCheckBox *cbNetQuery;
-    QCheckBox *cbShowScannerSelection;
-    QCheckBox *cbReadStartupImage;
-
-    // Image Saving
-    QCheckBox *cbSkipFormatAsk;
-    QCheckBox *cbFilenameAsk;
-
-    // Thumbnail View
-    KUrlRequester *m_tileSelector;
-    KComboBox *m_thumbSizeCb;
-    QCheckBox *cbCustomThumbBgnd;
-
-    // OCR
-    KUrlRequester *binaryReq;
-    KComboBox *engineCB;
-    QLabel *ocrDesc;
 
     static QString sGalleryRoot;
 };
