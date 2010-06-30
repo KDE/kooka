@@ -194,4 +194,3 @@ add_custom_target(clobber
 ########### install files ###############
 
 install(TARGETS kooka ${INSTALL_TARGETS_DEFAULT_ARGS})
-install(FILES kookaui.rc DESTINATION ${DATA_INSTALL_DIR}/kooka)
