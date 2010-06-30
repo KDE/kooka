@@ -26,8 +26,7 @@
 #include "scansourcedialog.h"
 
 #include <qwidget.h>
-
-#include <kicon.h>
+#include <qicon.h>
 
 /**
   *@author Klaas Freitag
@@ -171,10 +170,10 @@ private:
     KLed *mLed;
     bool mFirstGTEdit;
 
-    KIcon mIconColor;
-    KIcon mIconGray;
-    KIcon mIconLineart;
-    KIcon mIconHalftone;
+    QIcon mIconColor;
+    QIcon mIconGray;
+    QIcon mIconLineart;
+    QIcon mIconHalftone;
 };
 
 #endif							// SCANPARAMS_H

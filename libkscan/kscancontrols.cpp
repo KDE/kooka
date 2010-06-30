@@ -206,7 +206,7 @@ KScanCombo::KScanCombo(QWidget *parent, const QString &text,
     for (QList<QByteArray>::const_iterator it = list.constBegin();
          it!=list.constEnd(); ++it)
     {
-        mCombo->addItem(*it);
+	mCombo->addItem(i18n(*it));
     }
 }
 
@@ -220,7 +220,7 @@ KScanCombo::KScanCombo(QWidget *parent, const QString &text,
     for (QStringList::const_iterator it = list.constBegin();
          it!=list.constEnd(); ++it)
     {
-	mCombo->addItem(*it);
+        mCombo->addItem(*it);
     }
 }
 
@@ -247,9 +247,11 @@ void KScanCombo::setText(const QString &text)
 }
 
 
-void KScanCombo::setIcon(const QIcon &icon, const QString &ent)
+void KScanCombo::setIcon(const QIcon &icon, const char *ent)
 {
     int i = mCombo->findText(ent);
+    if (i!=-1) mCombo->setItemIcon(i, icon);
+    i = mCombo->findText(i18n(ent));
     if (i!=-1) mCombo->setItemIcon(i, icon);
 }
 

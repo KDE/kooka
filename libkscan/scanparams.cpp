@@ -90,16 +90,29 @@ ScanParams::ScanParams(QWidget *parent)
 
     mFirstGTEdit = true;
 
-    // TODO: may be able to use action-* from kdegraphics/libs/libksane/libksane,
-    // if kdegraphics is installed (so need to check success and use our icons
-    // as a fallback).
+    // Preload the scan mode icons.  The ones from libksane, which will be
+    // available if kdegraphics is installed, look better than our rather
+    // ancient ones, so use those if possible.  Set canReturnNull to true
+    // when looking up those, so the returned path will be empty if they
+    // are not installed.
 
-    /* Preload icons */
     KIconLoader::global()->addAppDir("libkscan");	// access to our icons
-    mIconColor = KIcon("palette-color");
-    mIconGray = KIcon("palette-gray");
-    mIconLineart = KIcon("palette-lineart");
-    mIconHalftone = KIcon("palette-halftone");
+
+    QString ip = KIconLoader::global()->iconPath("color", KIconLoader::Small, true);
+    if (ip.isEmpty()) ip = KIconLoader::global()->iconPath("palette-color", KIconLoader::Small);
+    mIconColor = QIcon(ip);
+
+    ip = KIconLoader::global()->iconPath("gray-scale", KIconLoader::Small, true);
+    if (ip.isEmpty()) ip = KIconLoader::global()->iconPath("palette-gray", KIconLoader::Small);
+    mIconGray = QIcon(ip);
+
+    ip = KIconLoader::global()->iconPath("black-white", KIconLoader::Small, true);
+    if (ip.isEmpty()) ip = KIconLoader::global()->iconPath("palette-lineart", KIconLoader::Small);
+    mIconLineart = QIcon(ip);
+
+    ip = KIconLoader::global()->iconPath("halftone", KIconLoader::Small, true);
+    if (ip.isEmpty()) ip = KIconLoader::global()->iconPath("palette-halftone", KIconLoader::Small);
+    mIconHalftone = QIcon(ip);
 
     /* intialise the default last save warnings */
     startupOptset = NULL;
@@ -281,19 +294,21 @@ QScrollArea *ScanParams::createScannerParams()
     so = mSaneDevice->getGuiElement(SANE_NAME_SCAN_MODE, frame);
     if (so!=NULL)
     {
-        KScanCombo *cb = (KScanCombo*) so->widget();
+        KScanCombo *cb = (KScanCombo *) so->widget();
 
         // Having loaded the 'sane-backends' message catalogue, these strings
-        // are now translatable.
+        // are now translatable.  But we also have to set the untranslated strings
+        // just in case there is no translation there (sane-backends does not have
+        // translations for the en_GB locale, for example).
 
-        cb->setIcon(mIconLineart, i18n("Line art"));
-        cb->setIcon(mIconLineart, i18n("Lineart"));
-        cb->setIcon(mIconLineart, i18n("Binary"));
-        cb->setIcon(mIconGray, i18n("Gray"));
-        cb->setIcon(mIconGray, i18n("Grey"));
-        cb->setIcon(mIconColor, i18n("Color"));
-        cb->setIcon(mIconColor, i18n("Colour"));
-        cb->setIcon(mIconHalftone, i18n("Halftone"));
+        cb->setIcon(mIconLineart, I18N_NOOP("Line art"));
+        cb->setIcon(mIconLineart, I18N_NOOP("Lineart"));
+        cb->setIcon(mIconLineart, I18N_NOOP("Binary"));
+        cb->setIcon(mIconGray, I18N_NOOP("Gray"));
+        cb->setIcon(mIconGray, I18N_NOOP("Grey"));
+        cb->setIcon(mIconColor, I18N_NOOP("Color"));
+        cb->setIcon(mIconColor, I18N_NOOP("Colour"));
+        cb->setIcon(mIconHalftone, I18N_NOOP("Halftone"));
 
         initialise( so );
         connect( so, SIGNAL(guiChange(KScanOption*)),

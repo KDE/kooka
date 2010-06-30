@@ -276,7 +276,12 @@ public:
      *
      * @param parent parent widget
      * @param text descriptive label for the control
-     * *param list list of options to fill the combo box
+     * @param list list of options to fill the combo box
+     *
+     * @note If the @p list parameter is a QStringList, then this is assumed
+     * to be already I18N'ed.  If this is a QList of QByteArray's, then they
+     * are assumed to be untranslated (i.e. the result of an I18N_NOOP) and
+     * each is passed to i18n() before populating the combo box.
      */
     KScanCombo(QWidget *parent, const QString &text, const QList<QByteArray> &list);
     KScanCombo(QWidget *parent, const QString &text, const QStringList &list);
@@ -308,7 +313,7 @@ public:
      * @param pix the pixmap to set
      * @param ent the entry for which the pixmap should be set
      */
-    void setIcon(const QIcon &pix, const QString &ent);
+    void setIcon(const QIcon &pix, const char *ent);
 
 private:
     void init();
