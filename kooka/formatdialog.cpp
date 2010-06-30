@@ -216,7 +216,7 @@ FormatDialog::FormatDialog(QWidget *parent, ImgSaver::ImageType type,
         ++row;
 
         // Insert scrolled list for formats
-        l1 = new QLabel(i18n("Image file &format:"),page);
+        l1 = new QLabel(i18n("File format:"),page);
         gl->addWidget(l1,row,0,Qt::AlignLeft);
 
         mFormatList = new QListWidget(page);
@@ -286,9 +286,11 @@ FormatDialog::FormatDialog(QWidget *parent, ImgSaver::ImageType type,
 
         // Insert selection box for subformat
         mSubformatLabel = new QLabel(i18n("Image sub-format:"),page);
+        mSubformatLabel->setEnabled(false);
         gl->addWidget(mSubformatLabel,row+2,0,Qt::AlignLeft);
 
         mSubformatCombo = new QComboBox(page);
+        mSubformatCombo->setEnabled(false);		// not yet implemented
         gl->addWidget(mSubformatCombo,row+3,0);
         mSubformatLabel->setBuddy(mSubformatCombo);
         row += 4;
@@ -327,7 +329,7 @@ FormatDialog::FormatDialog(QWidget *parent, ImgSaver::ImageType type,
 
     if (askForFilename)					// file name section
     {
-        l1 = new QLabel(i18n("&Image file name:"), page);
+        l1 = new QLabel(i18n("File name:"), page);
         gl->addWidget(l1, row, 0, 1, 3);
         ++row;
 
