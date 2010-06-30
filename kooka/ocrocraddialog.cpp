@@ -30,6 +30,8 @@
 #include <qlabel.h>
 #include <qregexp.h>
 #include <qcombobox.h>
+#include <qcheckbox.h>
+#include <qspinbox.h>
 #include <qlayout.h>
 #include <qprogressbar.h>
 
@@ -46,6 +48,7 @@
 
 #include "kookaimage.h"
 #include "kookapref.h"
+#include "libkscan/kscancontrols.h"
 
 #include "ocrocradengine.h"
 
@@ -56,7 +59,8 @@ OcrOcradDialog::OcrOcradDialog(QWidget *parent)
       m_orfUrlRequester(NULL),
       m_layoutMode(0),
       m_ocrCmd(QString::null),
-      m_version(0)
+      m_versionNum(0),
+      m_versionStr(QString::null)
 {
 }
 
@@ -84,54 +88,148 @@ QString OcrOcradDialog::ocrEngineDesc() const
 }
 
 
-// TODO: support for other OCRAD options
-// --charset, --filter, --invert, --format, --transform
-
 OcrEngine::EngineError OcrOcradDialog::setupGui()
 {
-    OcrBaseDialog::setupGui();
+    // Options available vary with the OCRAD version.  So we need to find
+    // the OCRAD binary and get its version before creating the GUI.
+
+    // No need to read the config here, KookaPref::tryFindBinary() does that
+    //KConfigGroup grp2 = KGlobal::config()->group(CFG_GROUP_OCR_DIA);
+    //QString res = grp2.readPathEntry(CFG_OCRAD_BINARY, "");
+
+    QString res = KookaPref::tryFindOcrad();		// read config or search
+    if (res.isEmpty())					// not found or invalid
+    {
+        KMessageBox::sorry(this, i18n("The path to the OCRAD binary is not configured or is not valid.\n"
+                                      "Please enter or check the path in the Kooka configuration."),
+                           i18n("OCRAD Binary Not Found"));
+        enableButton(KDialog::User1, false);
+    }
+    else getVersion(res);
+
+    OcrBaseDialog::setupGui();				// now can build the GUI
 
     QWidget *w = addExtraSetupWidget();
     QGridLayout *gl = new QGridLayout(w);
+    KConfigGroup grp = KGlobal::config()->group(CFG_GROUP_OCRAD);
 
-    /* layout detection mode combo */
-    KConfigGroup grp1 = KGlobal::config()->group(CFG_GROUP_OCRAD);
-    int layoutDetect = grp1.readEntry(CFG_OCRAD_LAYOUT_DETECTION, 0);
-
-    // TODO: buddy
-    gl->addWidget(new QLabel(i18n("Layout analysis mode:"), w), 0, 0);
+    // Layout detection mode, dependent on OCRAD version
+    QLabel *l = new QLabel(i18n("Layout analysis mode:"), w);
+    gl->addWidget(l, 0, 0);
 
     m_layoutMode = new QComboBox(w);
     m_layoutMode->addItem(i18n("No Layout Detection"), 0);
-    m_layoutMode->addItem(i18n("Column Detection"), 1);
-    m_layoutMode->addItem(i18n("Full Layout Detection"), 2);
-    m_layoutMode->setCurrentIndex(layoutDetect);
-    gl->addWidget(m_layoutMode, 0, 1, Qt::AlignLeft);
-
-    gl->setRowStretch(1, 1);				// for top alignment
-    gl->setColumnStretch(1, 1);
-
-    /* find the OCRAD binary */
-    KConfigGroup grp2 = KGlobal::config()->group(CFG_GROUP_OCR_DIA);
-    QString res = grp2.readPathEntry(CFG_OCRAD_BINARY, "");
-    if (res.isEmpty())
-    {
-        res = KookaPref::tryFindOcrad();
-        if (res.isEmpty())
-        {
-            /* Popup here telling that the config needs to be called */
-            KMessageBox::sorry(this,i18n("The path to the OCRAD binary is not configured or is not valid.\n"
-                                         "Please enter or check the path in the Kooka configuration."),
-                               i18n("OCRAD Software Not Found"));
-            enableButton(KDialog::User1, false);
-        }
+    if (m_versionNum>=18)				// OCRAD 0.18 or later
+    {							// has only on/off
+        m_layoutMode->addItem(i18n("Layout Detection"), 1);
+    }
+    else						// OCRAD 0.17 or earlier
+    {							// had these 3 options
+        m_layoutMode->addItem(i18n("Column Detection"), 1);
+        m_layoutMode->addItem(i18n("Full Layout Detection"), 2);
     }
 
-    /* retrieve program version and display */
-    if (res.isEmpty()) res = i18n("Not found");
-    else m_ocrCmd = res;
-    ocrShowInfo(res, version());			// show binary, get/show version
+    m_layoutMode->setCurrentIndex(grp.readEntry(CFG_OCRAD_LAYOUT_DETECTION, 0));
+    gl->addWidget(m_layoutMode, 0, 1);
+    l->setBuddy(m_layoutMode);
 
+    gl->setRowMinimumHeight(1, KDialog::spacingHint());
+
+    // Character set, auto detected values
+    QStringList vals = getValidValues("charset");
+
+    l = new QLabel(i18n("Character set:"), w);
+    gl->addWidget(l, 2, 0);
+    m_characterSet = new QComboBox(w);
+    m_characterSet->addItem(i18n("(default)"), false);
+    for (QStringList::const_iterator it = vals.begin(); it!=vals.end(); ++it)
+    {
+        m_characterSet->addItem(*it, true);
+    }
+
+    if (vals.count()==0) m_characterSet->setEnabled(false);
+    else
+    {
+        int ix = m_characterSet->findText(grp.readEntry(CFG_OCRAD_CHARSET, ""));
+        if (ix!=-1) m_characterSet->setCurrentIndex(ix);
+    }
+    gl->addWidget(m_characterSet, 2, 1);
+    l->setBuddy(m_characterSet);
+
+    // Filter, auto detected values
+    vals = getValidValues("filter");
+
+    l = new QLabel(i18n("Filter:"), w);
+    gl->addWidget(l, 3, 0);
+    m_filter = new QComboBox(w);
+    m_filter->addItem(i18n("(default)"), false);
+    for (QStringList::const_iterator it = vals.begin(); it!=vals.end(); ++it)
+    {
+        m_filter->addItem(*it, true);
+    }
+
+    if (vals.count()==0) m_filter->setEnabled(false);
+    else
+    {
+        int ix = m_filter->findText(grp.readEntry(CFG_OCRAD_FILTER, ""));
+        if (ix!=-1) m_filter->setCurrentIndex(ix);
+    }
+    gl->addWidget(m_filter, 3, 1);
+    l->setBuddy(m_filter);
+
+    // Transform, auto detected values
+    vals = getValidValues("transform");
+
+    l = new QLabel(i18n("Transform:"), w);
+    gl->addWidget(l, 4, 0);
+    m_transform = new QComboBox(w);
+    m_transform->addItem(i18n("(default)"), false);
+    for (QStringList::const_iterator it = vals.begin(); it!=vals.end(); ++it)
+    {
+        m_transform->addItem(*it, true);
+    }
+
+    if (vals.count()==0) m_transform->setEnabled(false);
+    else
+    {
+        int ix = m_transform->findText(grp.readEntry(CFG_OCRAD_TRANSFORM, ""));
+        if (ix!=-1) m_transform->setCurrentIndex(ix);
+    }
+    gl->addWidget(m_transform, 4, 1);
+    l->setBuddy(m_transform);
+
+    gl->setRowMinimumHeight(5, KDialog::spacingHint());
+
+    // Invert option, on/off
+    m_invert = new QCheckBox(i18n("Invert input"), w);
+    m_invert->setChecked(grp.readEntry(CFG_OCRAD_INVERT, false));
+    gl->addWidget(m_invert, 6, 1, Qt::AlignLeft);
+
+    gl->setRowMinimumHeight(7, KDialog::spacingHint());
+
+    // Threshold, on/off and slider
+    m_thresholdEnable = new QCheckBox(i18n("Set threshold"), w);
+    m_thresholdEnable->setChecked(grp.readEntry(CFG_OCRAD_THRESHOLD_ENABLE, false));
+    gl->addWidget(m_thresholdEnable, 8, 1, Qt::AlignLeft);
+
+    m_thresholdSlider = new KScanSlider(w, i18n("Threshold"), 0, 100);
+    m_thresholdSlider->setValue(grp.readEntry(CFG_OCRAD_THRESHOLD_VALUE, 50));
+    gl->addWidget(m_thresholdSlider, 9, 1);
+    m_thresholdSlider->spinBox()->setSuffix("%");
+
+    l = new QLabel(m_thresholdSlider->label(), w);
+    gl->addWidget(l, 9, 0);
+    l->setBuddy(m_thresholdSlider);
+
+    connect(m_thresholdEnable, SIGNAL(toggled(bool)), m_thresholdSlider, SLOT(setEnabled(bool)));
+    m_thresholdSlider->setEnabled(m_thresholdEnable->isChecked());
+
+    gl->setRowStretch(10, 1);				// for top alignment
+    gl->setColumnStretch(1, 1);
+
+    ocrShowInfo((!m_ocrCmd.isEmpty() ? m_ocrCmd : i18n("Not found")),
+                (!m_versionStr.isEmpty() ? m_versionStr : i18n("Unknown")));
+							// show binary and version
     progressBar()->setMaximum(0);			// animation only
 
     m_setupWidget = w;
@@ -149,19 +247,30 @@ void OcrOcradDialog::slotWriteConfig()
     grp1.writePathEntry(CFG_OCRAD_BINARY, getOCRCmd());
 
     KConfigGroup grp2 = KGlobal::config()->group(CFG_GROUP_OCRAD);
-    grp2.writeEntry(CFG_OCRAD_LAYOUT_DETECTION,layoutDetectionMode());
+    grp2.writeEntry(CFG_OCRAD_LAYOUT_DETECTION, m_layoutMode->currentIndex());
+
+    int ix = m_characterSet->currentIndex();
+    if (m_characterSet->itemData(ix).toBool()) grp2.writeEntry(CFG_OCRAD_CHARSET, m_characterSet->currentText());
+    else grp2.deleteEntry(CFG_OCRAD_CHARSET);
+
+    ix = m_filter->currentIndex();
+    if (m_filter->itemData(ix).toBool()) grp2.writeEntry(CFG_OCRAD_FILTER, m_filter->currentText());
+    else grp2.deleteEntry(CFG_OCRAD_FILTER);
+
+    ix = m_transform->currentIndex();
+    if (m_transform->itemData(ix).toBool()) grp2.writeEntry(CFG_OCRAD_TRANSFORM, m_transform->currentText());
+    else grp2.deleteEntry(CFG_OCRAD_TRANSFORM);
+
+    grp2.writeEntry(CFG_OCRAD_INVERT, m_invert->isChecked());
+
+    grp2.writeEntry(CFG_OCRAD_THRESHOLD_ENABLE, m_thresholdEnable->isChecked());
+    grp2.writeEntry(CFG_OCRAD_THRESHOLD_VALUE, m_thresholdSlider->value());
 }
 
 
 void OcrOcradDialog::enableFields(bool enable)
 {
     m_setupWidget->setEnabled(enable);
-}
-
-
-int OcrOcradDialog::layoutDetectionMode() const
-{
-    return (m_layoutMode->currentIndex());
 }
 
 
@@ -175,16 +284,14 @@ QString OcrOcradDialog::orfUrl() const
 }
 
 
-QString OcrOcradDialog::version()
+void OcrOcradDialog::getVersion(const QString &bin)
 {
-    kDebug() << "of" << m_ocrCmd;
-    if (m_ocrCmd.isEmpty()) return (QString::null);
-
-    QString vers;
+    kDebug() << "of" << bin;
+    if (bin.isEmpty()) return;
 
     KProcess proc;
     proc.setOutputChannelMode(KProcess::MergedChannels);
-    proc << m_ocrCmd << "-V";
+    proc << bin << "-V";
 
     int status = proc.execute(5000);
     if (status==0)
@@ -193,16 +300,56 @@ QString OcrOcradDialog::version()
         QRegExp rx("GNU Ocrad (version )?([\\d\\.]+)");
         if (rx.indexIn(output)>-1)
         {
-            vers = rx.cap(2);
-            m_version = vers.mid(2).toInt();
+            m_ocrCmd = bin;
+            m_versionStr = rx.cap(2);
+            m_versionNum = m_versionStr.mid(2).toInt();
+            kDebug() << "version" << m_versionStr << "=" << m_versionNum;
         }
-        else vers = i18n("Unknown");
     }
     else
     {
         kDebug() << "failed with status" << status;
-        vers = i18n("Error");
+        m_versionStr = i18n("Error");
+    }
+}
+
+
+QStringList OcrOcradDialog::getValidValues(const QString &opt)
+{
+    QStringList result;
+
+    QString groupName = QString("%1_v%2").arg(CFG_GROUP_OCRAD).arg(m_versionStr);
+    KConfigGroup grp = KGlobal::config()->group(groupName);
+
+    if (grp.hasKey(opt))				// values in config already
+    {
+        kDebug() << "option" << opt << "already in config";
+        result = grp.readEntry(opt, QStringList());
+    }
+    else						// not in config, need to extract
+    {
+        if (!m_ocrCmd.isEmpty())
+        {
+            KProcess proc;
+            proc.setOutputChannelMode(KProcess::MergedChannels);
+            proc << m_ocrCmd << QString("--%1=help").arg(opt);
+
+            proc.execute(5000);
+            // Ignore return status, because '--OPTION=help' returns exit code 1
+            QByteArray output = proc.readAllStandardOutput();
+            QRegExp rx("Valid .*are:([^\n]+)");
+            if (rx.indexIn(output)>-1)
+            {
+                QString values = rx.cap(1);
+                result = rx.cap(1).split(QRegExp("\\s+"), QString::SkipEmptyParts);
+            }
+            else kDebug() << "cannot get values, no match in" << output;
+        }
+        else kDebug() << "cannot get values, no binary";
     }
 
-    return (vers);
+    kDebug() << "values for" << opt << "=" << result.join(",");
+    if (!result.isEmpty()) grp.writeEntry(opt, result);	// save for next time
+
+    return (result);
 }

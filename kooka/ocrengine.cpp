@@ -260,27 +260,36 @@ void OcrEngine::removeTempFiles()
     const QStringList temps = tempFiles(retain);
     if (temps.isEmpty()) return;
 
+    bool haveSome = false;
     if (retain)
     {
         QString s = i18n("<qt>The following OCR temporary files are retained for debugging:<p>");
         for (QStringList::const_iterator it = temps.constBegin(); it!=temps.constEnd(); ++it)
         {
+            if ((*it).isEmpty()) continue;
+
             KUrl u(*it);
             s += i18n("<filename><a href=\"%1\">%2</a></filename><br>", u.url(), u.pathOrUrl());
+            haveSome = true;
         }
 
-        if (KMessageBox::questionYesNo(NULL, s,
-                                       i18n("OCR Temporary Files"),
-                                       KStandardGuiItem::del(),
-                                       KStandardGuiItem::close(),
-                                       QString::null,
-                                       KMessageBox::AllowLink)==KMessageBox::Yes) retain = false;
+        if (haveSome)
+        {
+            if (KMessageBox::questionYesNo(NULL, s,
+                                           i18n("OCR Temporary Files"),
+                                           KStandardGuiItem::del(),
+                                           KStandardGuiItem::close(),
+                                           QString::null,
+                                           KMessageBox::AllowLink)==KMessageBox::Yes) retain = false;
+        }
     }
 
     if (!retain)
     {
         for (QStringList::const_iterator it = temps.constBegin(); it!=temps.constEnd(); ++it)
         {
+            if ((*it).isEmpty()) continue;
+
             QString tf = (*it);
             QFileInfo fi(tf);
             if (!fi.exists())				// what happened?

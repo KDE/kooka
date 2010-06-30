@@ -186,6 +186,8 @@ public:
     int value() const;
     void setValue(int val);
 
+    QSpinBox *spinBox() const { return (mSpinbox); }
+
 protected slots:
     void slotValueChange(int val);
     void slotRevertValue();

@@ -50,8 +50,6 @@ protected:
     QStringList tempFiles(bool retain);
 
 protected slots:
-    void slotOcradStdout();
-    void slotOcradStderr();
     void slotOcradExited(int exitCode, QProcess::ExitStatus exitStatus);
 
 private:
@@ -59,8 +57,11 @@ private:
     QString readORF(const QString &fileName);
 
 private:
-    QString m_tempOrfName;
     QString m_ocrImagePBM;
+    QString m_tempOrfName;
+    QString m_tempStdoutLog;
+    QString m_tempStderrLog;
+
     int ocradVersion;
     bool m_verboseDebug;
 };

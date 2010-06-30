@@ -141,7 +141,7 @@ QString tryFindBinary(const QString &bin, const QString &configKey)
     KConfigGroup grp = KGlobal::config()->group(CFG_GROUP_OCR_DIA);
 
     /* First check the config files for an entry */
-    QString exe = grp.readPathEntry(configKey, QString::null);	// try from config file
+    QString exe = grp.readPathEntry(configKey, "");	// try from config file
 
     // Why do we do the second test here?  checkOcrBinary() does the same, why also?
     if (!exe.isEmpty() && exe.contains(bin))

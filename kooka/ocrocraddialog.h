@@ -30,11 +30,18 @@
 
 #include "ocrbasedialog.h"
 
-#define CFG_GROUP_OCRAD "ocrad"
-#define CFG_OCRAD_LAYOUT_DETECTION "layoutDetection"
-#define CFG_OCRAD_EXTRA_ARGUMENTS  "extraArguments"
-#define CFG_OCRAD_FORMAT "format"
-#define CFG_OCRAD_CHARSET "charset"
+
+#define CFG_GROUP_OCRAD			"ocrad"
+
+#define CFG_OCRAD_LAYOUT_DETECTION	"layoutDetection"
+#define CFG_OCRAD_EXTRA_ARGUMENTS	"extraArguments"
+#define CFG_OCRAD_FORMAT		"format"
+#define CFG_OCRAD_CHARSET		"charset"
+#define CFG_OCRAD_FILTER		"filter"
+#define CFG_OCRAD_TRANSFORM		"transform"
+#define CFG_OCRAD_INVERT		"invert"
+#define CFG_OCRAD_THRESHOLD_ENABLE	"thresholdEnable"
+#define CFG_OCRAD_THRESHOLD_VALUE	"thresholdValue"
 
 
 /**
@@ -45,6 +52,8 @@ class QWidget;
 class QComboBox;
 
 class KUrlRequester;
+
+class KScanSlider;
 
 
 class OcrOcradDialog : public OcrBaseDialog
@@ -67,10 +76,9 @@ public:
      * returns the numeric version of the ocrad program.
      * Attention: This method returns 10 for ocrad v. 0.10 and 8 for ocrad-0.8
      */
-    int getNumVersion() const	{ return (m_version); }
+    int getNumVersion() const	{ return (m_versionNum); }
 
     QString orfUrl() const;
-    int layoutDetectionMode() const;
 
 protected:
     void enableFields(bool enable);
@@ -79,16 +87,23 @@ protected slots:
     void slotWriteConfig();
 
 private:
-    QString version();
+    void getVersion(const QString &bin);
+    QStringList getValidValues(const QString &opt);
 
 private:
     QWidget *m_setupWidget;
     KUrlRequester *m_orfUrlRequester;
     QComboBox *m_layoutMode;
+    QComboBox *m_characterSet;
+    QComboBox *m_filter;
+    QComboBox *m_transform;
+    QCheckBox *m_invert;
+    QCheckBox *m_thresholdEnable;
+    KScanSlider *m_thresholdSlider;
 
     QString m_ocrCmd;
-
-    int m_version;
+    int m_versionNum;
+    QString m_versionStr;
 };
 
 

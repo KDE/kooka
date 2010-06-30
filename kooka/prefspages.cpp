@@ -68,7 +68,6 @@ KookaPrefsPage::KookaPrefsPage(KPageDialog *parent, const char *configGroup, con
 }
 
 
-
 KookaPrefsPage::~KookaPrefsPage()
 {
 }
@@ -457,7 +456,7 @@ default:
 
 bool KookaOcrPage::checkOcrBinary(const QString &cmd, const QString &bin, bool show_msg)
 {
-    // Why do we do this test?  See above.
+    // Why do we do this test?  See KookaPref::tryFindBinary().
     if (!cmd.contains(bin)) return (false);
 
     QFileInfo fi(cmd);
