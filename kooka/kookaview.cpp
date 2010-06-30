@@ -388,6 +388,7 @@ void KookaView::saveWindowSettings(KConfigGroup &grp)
     grp.writeEntry(WCONF_OCR_LAYOUT2, mOcrSubSplitter->saveState().toBase64());
 
     saveGalleryState();					// for the current tab
+    grp.sync();
 }
 
 
