@@ -37,11 +37,12 @@
 #define READ		0x01
 #define WRITE		0x02
 
-#define FMT		"%1    %2  %3      %4    %5"
+#define FMT		"%1  %2 %3    %4   %5    %6"
 #define FIELD1		(-8)
 #define FIELD23		(-5)
 #define FIELD4		(-30)
-#define FIELD5		(-5)
+#define FIELD5		(-9)
+#define FIELD6		(-5)
 
 #define YESNO(b)	((b) ? " Y" : " -")
 
@@ -89,14 +90,16 @@ int main(int argc, char **argv)
         .arg("Read",FIELD23)
         .arg("Write",FIELD23)
         .arg("MIME type",FIELD4)
-        .arg("Extension",FIELD5)
+        .arg("Reverse",FIELD5)
+        .arg("Extension",FIELD6)
        << endl;
     ts << QString(FMT)
         .arg("------",FIELD1)
         .arg("----",FIELD23)
         .arg("-----",FIELD23)
         .arg("---------",FIELD4)
-        .arg("---------",FIELD5)
+        .arg("-------",FIELD5)
+        .arg("---------",FIELD6)
        << endl;
 
     for (QStringList::const_iterator it = formats.constBegin();
@@ -107,15 +110,26 @@ int main(int argc, char **argv)
 
         KMimeType::Ptr mime = KMimeType::findByPath("/tmp/x."+format.toLower(), 0, true);
         QString type = (mime->isDefault() ? "(none)" : mime->name());
+        mime->patterns();				// needed for below to work!
         QString ext = (mime->isDefault() ? "" : mime->mainExtension());
         QString icon = mime->iconName();
+
+        QString backfmt = "(none)";
+        QStringList formats = KImageIO::typeForMime(mime->name());
+        int fcount = formats.count();			// get format from file name
+        if (fcount>0)
+        {
+            backfmt = formats.first().trimmed().toUpper().toLocal8Bit();
+            if (fcount>1) backfmt += QString(" (+%1)").arg(fcount-1);
+        }
 
         ts << QString(FMT)
             .arg(format,FIELD1)
             .arg(YESNO(sup & READ),FIELD23)
             .arg(YESNO(sup & WRITE),FIELD23)
             .arg(type,FIELD4)
-            .arg(ext,FIELD5)
+            .arg(backfmt,FIELD5)
+            .arg(ext,FIELD6)
            << endl;
     }
 

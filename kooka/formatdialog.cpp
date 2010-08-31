@@ -251,6 +251,15 @@ FormatDialog::FormatDialog(QWidget *parent, ImgSaver::ImageType type,
             if (mime.isNull()) continue;
             if (mime->isDefault()) continue;
 
+            // ImageFormat::formatForMime() should now work even in the presence
+            // of MIME aliases, but double check that it works at this stage.
+            ImageFormat fmt = ImageFormat::formatForMime(mime);
+            if (!fmt.isValid())
+            {
+                kDebug() << "Cannot use format" << (*it) << "- MIME type" << mime->name() << "does not map back to format";
+                continue;
+            }
+
             bool seen = false;
             for (KMimeType::List::const_iterator it = mMimeTypes.constBegin();
                  it!=mMimeTypes.constEnd(); ++it)

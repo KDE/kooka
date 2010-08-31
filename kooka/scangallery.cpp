@@ -941,6 +941,7 @@ void ScanGallery::slotExportFile()
     QString filter;
     ImageFormat format = getImgFormat(curr);
     if (format.isValid()) filter = "*."+format.extension()+"|"+format.mime()->comment()+"\n";
+// TODO: do we need the below?
     filter += "*|"+i18n("All Files");
 
     QString initial = "kfiledialog:///exportImage/"+fromUrl.fileName();

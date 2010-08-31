@@ -22,6 +22,7 @@
 
 #include <kurl.h>
 #include <kmimetype.h>
+#include <kservice.h>
 
 class QDebug;
 
@@ -49,6 +50,7 @@ protected:
     explicit ImageFormat();
 
 private:
+    KService::Ptr service() const;
 
     QByteArray mFormat;
 };

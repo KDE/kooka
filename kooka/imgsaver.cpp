@@ -191,6 +191,7 @@ ImgSaver::ImageSaveStatus ImgSaver::saveImage(const QImage *image,
    private save() does the work to save the image.
    the filename must be complete and local.
 **/
+// TODO: this is essentially the same as the previous function
 ImgSaver::ImageSaveStatus ImgSaver::save(const QImage *image,
                                          const KUrl &url,
                                          const ImageFormat &format,
