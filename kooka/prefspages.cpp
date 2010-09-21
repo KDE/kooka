@@ -79,6 +79,11 @@ KookaGeneralPage::KookaGeneralPage(KPageDialog *parent)
     : KookaPrefsPage(parent, GROUP_GALLERY,
                     i18n("These options will take effect immediately."))
 {
+
+
+    // TODO: move gallery options to "Thumbnail View" tab and rename that
+    // to "Image Gallery" (same icon)
+
     /* Gallery options */
     QGroupBox *gb = new QGroupBox(i18n("Image Gallery"), this);
     QGridLayout *gl = new QGridLayout(gb);

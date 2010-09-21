@@ -572,11 +572,7 @@ QByteArray KScanDevice::aliasName( const QByteArray& name )
 /* This might result in a endless recursion ! */
 void KScanDevice::slotReloadAllBut(KScanOption *not_opt)
 {
-    if (not_opt==NULL)
-    {
-        kDebug() << "called with invalid argument";
-        return;
-    }
+    if (not_opt==NULL) return;
 
     kDebug() << "Reload of all except" << not_opt->getName() << "forced";
     /* Make sure it's applied */
@@ -947,6 +943,7 @@ KScanDevice::Status KScanDevice::acquireData(bool isPreview)
     mScanningPreview = isPreview;
     mScanningState = KScanDevice::ScanStarting;
     mBytesRead = 0;
+    mBlocksRead = 0;
 
     emit sigScanStart();
     QApplication::setOverrideCursor(Qt::WaitCursor);	// potential lengthy operation
@@ -1098,7 +1095,8 @@ KScanDevice::Status KScanDevice::acquireData(bool isPreview)
         if (mScanningState==KScanDevice::ScanIdle) break;
     }
 
-    kDebug() << "Scan read" << mBytesRead << "bytes in" << frames << "frames";
+    kDebug() << "Scan read" << mBytesRead << "bytes in"
+             << mBlocksRead << "blocks," << frames << "frames";
 
     emit sigScanFinished(stat);				// scan is now finished
     return (stat);
@@ -1141,12 +1139,15 @@ void KScanDevice::doProcessABlock()
             {						// any other error
                 kDebug() << "sane_read() error" << lastSaneErrorMessage()
                          << "bytes read" << bytes_read;
+
+                // TODO: this does not stop for other errors, e.g. SANE_STATUS_JAMMED!
             }
             break;
         }
 
         if (bytes_read<1) break;			// no data, finish loop
 
+        ++mBlocksRead;
 	mBytesRead += bytes_read;
 	// qDebug( "Bytes read: %d, bytes written: %d", bytes_read, mBytesUsed );
 

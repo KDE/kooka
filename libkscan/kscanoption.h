@@ -164,6 +164,7 @@ public:
      **/
     KScanControl *createWidget(QWidget *parent, const QString &descr = QString::null);
     QLabel *getLabel(QWidget *parent, bool alwaysBuddy = false) const;
+    QLabel *getUnit(QWidget *parent) const;
    
     // Possible Values
     QList<QByteArray> getList() const;

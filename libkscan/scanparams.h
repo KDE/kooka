@@ -22,11 +22,11 @@
 
 #include "libkscanexport.h"
 
-#include "kscandevice.h"
-#include "scansourcedialog.h"
-
 #include <qwidget.h>
 #include <qicon.h>
+
+#include "kscandevice.h"
+#include "scansourcedialog.h"
 
 /**
   *@author Klaas Freitag
@@ -41,7 +41,9 @@ class KScanOption;
 class KGammaTable;
 class KScanOptSet;
 class KLed;
+class KTabWidget;
 
+class ScanParamsPage;
 class ScanSizeSelector;
 
 
@@ -50,7 +52,6 @@ class KSCAN_EXPORT ScanParams : public QWidget
     Q_OBJECT
 
 public:
-
     enum ScanMode
     {
         SaneDebugMode = 0,				// order fixed by GUI buttons
@@ -100,19 +101,11 @@ protected slots:
     void slotApplyGamma(const KGammaTable *gt);
 
     /**
-     *  internal slot called when the slider for x resolution changes.
-     *  In the slot, the signal scanResolutionChanged will be emitted, which
-     *  is visible outside the scanparam-object to notify that the resolutions
-     *  changed.
-     *
-     *  That is e.g. useful for size calculations
+     *  Internal slot called when the setting for X or Y resolution changes.
+     *  The signal scanResolutionChanged() will be emitted, which notifies
+     *  that the resolutions have changed.  Useful e.g. for size calculations.
      */
-    void slotNewXResolution(KScanOption *so);
-
-    /**
-     *  the same slot as @see slNewXResolution but for y resolution changes.
-     */
-    void slotNewYResolution(KScanOption *so);
+    void slotNewResolution(KScanOption *so);
 
     void slotNewScanMode();
 
@@ -129,14 +122,6 @@ signals:
 
     void newCustomScanSize(const QRect &rect);
 
-private slots:
-    /**
-     * Connected to a KScanOption's guiChange() signal.
-     * Useful if the parameter GUI has widgets in its own space, which depend
-     * on widgets controlled by the KScanOption.
-     */
-    void slotOptionNotify(KScanOption *so);
-
 private:
     KScanDevice::Status prepareScan(QString *vfp);
     KScanDevice::Status performADFScan();
@@ -146,23 +131,25 @@ private:
     void initialise(KScanOption *opt);
     void initStartupArea();
     void setEditCustomGammaTableState();
-    QScrollArea *createScannerParams();
+
+    QWidget *createScannerParams();
+    ScanParamsPage *createTab(KTabWidget *tw, const QString &title, const char *name = NULL);
 
     void applyRect(const QRect &rect);
     void setMaximalScanSize();
 
     KScanDevice *mSaneDevice;
-    KScanOption *virt_filename;
+    KScanOption *mVirtualFile;
 
-    QPushButton *pb_edit_gtable;
+    QPushButton *mGammaEditButt;
     QProgressDialog *mProgressDialog;
 
     AdfBehaviour adf;
     ScanParams::ScanMode mScanMode;
     ScanSizeSelector *area_sel;
 
-    KScanOption *xy_resolution_bind;
-    KScanOption *source_sel;
+    KScanOption *mResolutionBind;
+    KScanOption *mSourceSelect;
 
     KScanOptSet *startupOptset;
 

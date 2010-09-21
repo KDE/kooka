@@ -476,6 +476,7 @@ private:
     QImage *mScanImage;
     SANE_Parameters mSaneParameters;
     long mBytesRead;
+    long mBlocksRead;
     int mBytesUsed;
     int mPixelX, mPixelY;
     bool mScanningPreview;

@@ -189,14 +189,16 @@ public:
     QSpinBox *spinBox() const { return (mSpinbox); }
 
 protected slots:
-    void slotValueChange(int val);
+    void slotSliderSpinboxChange(int val);
     void slotRevertValue();
 
 private:
     QSlider *mSlider;
     QSpinBox *mSpinbox;
-    int mStdValue;
     QToolButton *mStdButt;
+
+    int mValue;
+    int mStdValue;
 };
 
 

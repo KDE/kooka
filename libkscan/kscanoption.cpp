@@ -29,6 +29,7 @@
 #include <kdebug.h>
 #include <klocale.h>
 #include <kacceleratormanager.h>
+#include <ksqueezedtextlabel.h>
 
 extern "C" {
 #include <sane/sane.h>
@@ -222,33 +223,33 @@ void KScanOption::reload()
         }
         else mControl->setEnabled(true);
     }
-	
+
     if (mBuffer.isNull())				// first get mem if needed
-   {
-       kDebug() << "need to allocate now";
-       allocForDesc();					// allocate the buffer now
-   }
+    {
+        kDebug() << "need to allocate now";
+        allocForDesc();					// allocate the buffer now
+    }
 
-   if (!active()) return;
+    if (!active()) return;
 
-   if (mDesc->size>mBuffer.size())
-   {
-       kDebug() << "buffer too small for" << mName << "type" << mDesc->type
-                << "size" << mBuffer.size() << "need" << mDesc->size;
-       allocForDesc();					// grow the buffer
-   }
+    if (mDesc->size>mBuffer.size())
+    {
+        kDebug() << "buffer too small for" << mName << "type" << mDesc->type
+                 << "size" << mBuffer.size() << "need" << mDesc->size;
+        allocForDesc();					// grow the buffer
+    }
 
-   SANE_Status sane_stat = sane_control_option(KScanDevice::instance()->scannerHandle(),
-                                               mIndex,
-                                               SANE_ACTION_GET_VALUE,
-                                               mBuffer.data(), NULL);
-   if( sane_stat != SANE_STATUS_GOOD )
-   {
-       kDebug() << "Error: Can't get value for" << mName << "status" << sane_strstatus( sane_stat );
-       return;
-   }
+    SANE_Status sane_stat = sane_control_option(KScanDevice::instance()->scannerHandle(),
+                                                mIndex,
+                                                SANE_ACTION_GET_VALUE,
+                                                mBuffer.data(), NULL);
+    if (sane_stat!=SANE_STATUS_GOOD)
+    {
+        kDebug() << "Error: Can't get value for" << mName << "status" << sane_strstatus( sane_stat );
+        return;
+    }
 
-   mBufferClean = false;
+    mBufferClean = false;
 }
 
 
@@ -321,7 +322,8 @@ case SANE_TYPE_STRING:
 	    else ret = KScanOption::String;
 	    break;
 
-default:    ret = KScanOption::Invalid;
+default:    kDebug() << "unsupported SANE type" << mDesc->type;
+	    ret = KScanOption::Invalid;
 	    break;
         }
     }
@@ -825,7 +827,7 @@ KScanControl *KScanOption::createWidget(QWidget *parent, const QString &descr)
     if (mText.isEmpty() && mDesc!=NULL) mText = QString::fromLocal8Bit(mDesc->title);
 
     kDebug() << "type" << type() << "text" << mText;
- 	
+
     KScanControl *w = NULL;
     switch (type())
     {
@@ -934,8 +936,32 @@ inline KScanControl *KScanOption::createFileField(QWidget *parent, const QString
 
 QLabel *KScanOption::getLabel(QWidget *parent, bool alwaysBuddy) const
 {
-    QLabel *l = new QLabel(mControl->label(), parent);
+    if (mControl==NULL) return (NULL);
+    KSqueezedTextLabel *l = new KSqueezedTextLabel(mControl->label(), parent);
     if (commonOption() || alwaysBuddy) l->setBuddy(mControl->focusProxy());
+    return (l);
+}
+
+
+QLabel *KScanOption::getUnit(QWidget *parent) const
+{
+    if (mControl==NULL) return (NULL);
+
+    QString s;
+    switch (mDesc->unit)
+    {
+case SANE_UNIT_NONE:						break;
+case SANE_UNIT_PIXEL:		s = i18n("pixels");		break;
+case SANE_UNIT_BIT:		s = i18n("bits");		break;
+case SANE_UNIT_MM:		s = i18n("mm");			break;
+case SANE_UNIT_DPI:		s = i18n("dpi");		break;
+case SANE_UNIT_PERCENT:		s = i18n("%");			break;
+case SANE_UNIT_MICROSECOND:	s = i18n("\302\265sec");	break;
+default:							break;
+    }
+
+    if (s.isEmpty()) return (NULL);			// no unit label
+    QLabel *l = new QLabel(s, parent);
     return (l);
 }
 

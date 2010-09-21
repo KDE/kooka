@@ -67,10 +67,11 @@ QString KScanControl::label() const			{ return (mText+":"); }
 KScanSlider::KScanSlider(QWidget *parent, const QString &text,
                          double min, double max,
                          bool haveStdButt, int stdValue)
-    : KScanControl(parent,text),
-      mStdValue(stdValue),
-      mStdButt(NULL)
+    : KScanControl(parent, text)
 {
+    mValue = mStdValue = stdValue;
+    mStdButt = NULL;
+
     mSlider = new QSlider(Qt::Horizontal, this);	// slider
     mSlider->setRange(((int) min), ((int) max));
     mSlider->setTickPosition(QSlider::TicksBelow );
@@ -94,8 +95,8 @@ KScanSlider::KScanSlider(QWidget *parent, const QString &text,
         mLayout->addWidget(mStdButt);
     }
 
-    connect(mSlider, SIGNAL(valueChanged(int)), SLOT(slotValueChange(int)));
-    connect(mSpinbox, SIGNAL(valueChanged(int)), SLOT(slotValueChange(int)));
+    connect(mSlider, SIGNAL(valueChanged(int)), SLOT(slotSliderSpinboxChange(int)));
+    connect(mSpinbox, SIGNAL(valueChanged(int)), SLOT(slotSliderSpinboxChange(int)));
     if (mStdButt!=NULL) connect(mStdButt, SIGNAL(clicked()), SLOT(slotRevertValue()));
 
     setFocusProxy(mSlider);
@@ -104,31 +105,44 @@ KScanSlider::KScanSlider(QWidget *parent, const QString &text,
 
 void KScanSlider::setValue(int val)
 {
-    if (val==mSlider->value()) return;			// avoid recursive signals
-    slotValueChange(val);
+    if (val==mValue) return;				// avoid recursive signals
+    mValue = val;
+
+    int spin = mSpinbox->value();
+    if (spin!=val)
+    {
+        mSpinbox->blockSignals(true);
+        mSpinbox->setValue(val);			// track in spin box
+        mSpinbox->blockSignals(false);
+    }
+
+    int slid = mSlider->value();
+    if (slid!=val)
+    {
+        mSlider->blockSignals(true);
+        mSlider->setValue(val);				// track in slider
+        mSlider->blockSignals(false);
+    }
 }
 
 
 int KScanSlider::value() const
 {
-    return (mSlider->value());
+    return (mValue);
 }
 
 
-void KScanSlider::slotValueChange(int val)
+void KScanSlider::slotSliderSpinboxChange(int val)
 {
-    int spin = mSpinbox->value();
-    if (spin!=val) mSpinbox->setValue(val);		// track in spin box
-    int slid = mSlider->value();
-    if (slid!=val) mSlider->setValue(val);		// track in slider
-
+    setValue(val);
     emit settingChanged(val);
 }
 
 
+
 void KScanSlider::slotRevertValue()
 {							// only connected if button exists
-    slotValueChange(mStdValue);
+    slotSliderSpinboxChange(mStdValue);
 }
 
 
