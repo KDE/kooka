@@ -165,6 +165,9 @@ true colour images with optional lossless compression.\
 };
 
 
+static QString sLastFormat = QString::null;		// format last used, whether
+							// remembered or not
+
 
 FormatDialog::FormatDialog(QWidget *parent, ImgSaver::ImageType type,
                            bool askForFormat, const ImageFormat &format,
@@ -451,19 +454,45 @@ void FormatDialog::check_subformat(const ImageFormat &format)
 void FormatDialog::setSelectedFormat(const ImageFormat &format)
 {
     if (mFormatList==NULL) return;			// not showing this
-
-    const KMimeType::Ptr ptr = format.mime();
-    if (ptr.isNull()) return;
-
-    for (int i = 0; i<mFormatList->count(); ++i)
+    if (format.isValid())				// valid format to select
     {
-        QListWidgetItem *item = mFormatList->item(i);
-        if (item==NULL) continue;
-        QString mimename = item->data(Qt::UserRole).toString();
-        if (ptr->is(mimename))
+        const KMimeType::Ptr ptr = format.mime();
+        if (ptr.isNull()) return;
+
+        for (int i = 0; i<mFormatList->count(); ++i)
         {
-            mFormatList->setCurrentItem(item);
-            return;
+            QListWidgetItem *item = mFormatList->item(i);
+            if (item==NULL) continue;
+            QString mimename = item->data(Qt::UserRole).toString();
+            if (ptr->is(mimename))
+            {
+                mFormatList->setCurrentItem(item);
+                return;
+            }
+        }
+    }
+
+    // If that selected nothing, then select the last-used format (regardless
+    // of the "always use" option setting).  The last-used format is saved
+    // in getFormat() for that purpose.  This helps when scanning a series of
+    // similar images yet where the user doesn't want to permanently save the
+    // format for some reason.
+    //
+    // This is safe if the last-used format is not applicable to and so is not
+    // displayed for the current image type - it just does nothing.
+    if (!sLastFormat.isEmpty())
+    {
+        for (int i = 0; i<mFormatList->count(); ++i)
+        {
+            QListWidgetItem *item = mFormatList->item(i);
+            if (item==NULL) continue;
+            QString mimename = item->data(Qt::UserRole).toString();
+            // We know the MIME name is canonical here, so can use string compare
+            if (mimename==sLastFormat)
+            {
+                mFormatList->setCurrentItem(item);
+                return;
+            }
         }
     }
 }
@@ -478,7 +507,11 @@ ImageFormat FormatDialog::getFormat() const
     {
         QString mimename = item->data(Qt::UserRole).toString();
         const KMimeType::Ptr mime = KMimeType::mimeType(mimename);
-        if (!mime.isNull()) return (ImageFormat::formatForMime(mime));
+        if (!mime.isNull())
+        {
+            sLastFormat = mime->name();
+            return (ImageFormat::formatForMime(mime));
+        }
     }
 
     return (ImageFormat("PNG"));			// a sensible default

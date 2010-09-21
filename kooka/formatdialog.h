@@ -56,8 +56,6 @@ public:
     bool alwaysUseFormat() const { return (mDontAskCheck!=NULL ? mDontAskCheck->isChecked() : false); }
     bool useAssistant() const { return (mWantAssistant); }
 
-    void setSelectedFormat(const ImageFormat &format);
-
     static void forgetRemembered();
 
 protected:
@@ -73,6 +71,7 @@ private slots:
     void formatSelected(QListWidgetItem *item);
 
 private:
+    void setSelectedFormat(const ImageFormat &format);
     void check_subformat(const ImageFormat &format);
     void showExtension(const ImageFormat &format);
 
