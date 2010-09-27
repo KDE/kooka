@@ -861,11 +861,7 @@ KScanDevice::Status KScanDevice::acquirePreview( bool forceGray, int dpi )
     res.get(&mCurrScanResolutionX);
     if (mCurrScanResolutionY==0) mCurrScanResolutionY = mCurrScanResolutionX;
 
-    /* Start scanning */
-    KScanDevice::Status stat = acquireData(true);
-
-    // The saved values are eventually restored in slotScanFinished().
-    return (stat);
+    return (acquireData(true));				// perform the preview
 }
 
 
@@ -907,7 +903,7 @@ KScanDevice::Status KScanDevice::acquireScan(const QString &filename)
            yres.get( &mCurrScanResolutionY );
         }
 
-	return( acquireData( false ));
+        return (acquireData(false));			// perform the scan
     }
     else
     {
@@ -1089,10 +1085,18 @@ KScanDevice::Status KScanDevice::acquireData(bool isPreview)
             }
 							// exit loop when frame done
             if (mScanningState==KScanDevice::ScanIdle ||
+                mScanningState==KScanDevice::ScanStopNow ||
                 mScanningState==KScanDevice::ScanNextFrame) break;
         }
 							// exit loop when scan done
-        if (mScanningState==KScanDevice::ScanIdle) break;
+        if (mScanningState==KScanDevice::ScanIdle ||
+            mScanningState==KScanDevice::ScanStopNow) break;
+    }
+
+    if (mSaneStatus!=SANE_STATUS_GOOD && mSaneStatus!=SANE_STATUS_EOF)
+    {
+        stat = KScanDevice::ScanError;
+        kDebug() << "Error while scanning, status" << mSaneStatus;
     }
 
     kDebug() << "Scan read" << mBytesRead << "bytes in"
@@ -1139,8 +1143,6 @@ void KScanDevice::doProcessABlock()
             {						// any other error
                 kDebug() << "sane_read() error" << lastSaneErrorMessage()
                          << "bytes read" << bytes_read;
-
-                // TODO: this does not stop for other errors, e.g. SANE_STATUS_JAMMED!
             }
             break;
         }
@@ -1312,11 +1314,10 @@ default:    kDebug() << "Undefined SANE format" << mSaneParameters.format;
             kDebug() << "EOF, but another frame to scan";
         }
     }
-
-    if (mSaneStatus==SANE_STATUS_CANCELLED)
+    else if (mSaneStatus!=SANE_STATUS_GOOD)
     {
         mScanningState = KScanDevice::ScanStopNow;
-        kDebug() << "Scan was cancelled";
+        kDebug() << "Scan error or cancelled, status" << mSaneStatus;
     }
 
     if (mSocketNotifier!=NULL) mSocketNotifier->setEnabled(true);
@@ -1561,6 +1562,7 @@ case KScanDevice::NoDevice:		return (i18n("No device"));	// never during scannin
 case KScanDevice::ParamError:		return (i18n("Bad parameter"));
 case KScanDevice::OpenDevice:		return (i18n("Cannot open device"));
 case KScanDevice::ControlError:		return (i18n("sane_control_option() failed"));
+case KScanDevice::ScanError:		return (i18n("Error while scanning"));
 case KScanDevice::EmptyPic:		return (i18n("Empty picture"));
 case KScanDevice::NoMemory:		return (i18n("Out of memory"));
 case KScanDevice::Reload:		return (i18n("Needs reload"));	// never during scanning

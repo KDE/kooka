@@ -67,6 +67,7 @@ public:
         ParamError,
         OpenDevice,
         ControlError,
+        ScanError,
         EmptyPic,
         NoMemory,
         Reload,

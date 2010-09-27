@@ -503,7 +503,8 @@ bool KookaView::slotSelectDevice(const QByteArray &useDevice, bool alwaysAsk)
         while (!haveConnection)
         {
             kDebug() << "Opening device" << selDevice;
-            if (mScanDevice->openDevice(selDevice)==KScanDevice::Ok) haveConnection = true;
+            KScanDevice::Status stat = mScanDevice->openDevice(selDevice);
+            if (stat==KScanDevice::Ok) haveConnection = true;
             else
             {
                 QString msg = i18n("<qt><p>"
@@ -512,9 +513,11 @@ bool KookaView::slotSelectDevice(const QByteArray &useDevice, bool alwaysAsk)
                                    "Check that the scanner is connected and switched on, "
                                    "and that SANE support for it is correctly configured."
                                    "<p>"
-                                   "Trying to use scanner device: <b>%2</b><br>"
-                                   "The error reported was: <b>%1</b>",
+                                   "Trying to use scanner device: <b>%3</b><br>"
+                                   "libkscan reported error: <b>%2</b><br>"
+                                   "SANE reported error: <b>%1</b>",
                                    mScanDevice->lastSaneErrorMessage(),
+                                   KScanDevice::statusMessage(stat),
                                    selDevice.constData());
 
                 int tryAgain = KMessageBox::warningContinueCancel(mMainWindow, msg, QString::null,
@@ -895,8 +898,8 @@ void KookaView::slotScanFinished(KScanDevice::Status stat)
                            "and that media is loaded if required."
                            "<p>"
                            "Trying to use scanner device: <b>%3</b><br>"
-                           "SANE reported error: <b>%1</b><br>"
-                           "libkscan reported error: <b>%2</b>",
+                           "libkscan reported error: <b>%2</b><br>"
+                           "SANE reported error: <b>%1</b>",
                            mScanDevice->lastSaneErrorMessage(),
                            KScanDevice::statusMessage(stat),
                            mScanDevice->scannerBackendName().constData());
