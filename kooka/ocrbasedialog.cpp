@@ -52,6 +52,8 @@
 #include "ocrengine.h"
 #include "kookaimage.h"
 
+#include "libkscan/imagecanvas.h"
+
 
 #define CFG_OCR_SPELL    	"OcrSpellSettings"
 
@@ -409,11 +411,9 @@ void OcrBaseDialog::introduceImage(const KookaImage *img)
 
     if (m_previewLabel!=NULL)
     {
-        // TODO: very similar to ImageCanvas::imageInfoString()
-        m_previewLabel->setText(i18n("%1: %2x%3 pixels, %4 bpp",
+        m_previewLabel->setText(i18n("%1: %2",
                                      (img->isFileBound() ? i18n("Image") : i18n("Selection")),
-                                     img->width(), img->height(),
-                                     img->depth()));
+                                     ImageCanvas::imageInfoString(img)));
     }
 }
 

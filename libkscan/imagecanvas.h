@@ -101,7 +101,10 @@ public:
     ImageCanvas::ScaleType scaleType() const;
     void setScaleType(ImageCanvas::ScaleType type);
     const QString scaleTypeString() const;
-    const QString imageInfoString(int w = 0, int h = 0, int d = 0) const;
+
+    static const QString imageInfoString(int w, int h, int d);
+    static const QString imageInfoString(const QImage *img);
+    const QString imageInfoString() const;
 
     void newImage(const QImage *new_image, bool hold_zoom = false);
     void newImageHoldZoom(const QImage *new_image);

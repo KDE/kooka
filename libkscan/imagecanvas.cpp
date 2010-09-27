@@ -979,17 +979,22 @@ void ImageCanvas::setMaintainAspect(bool ma)
 }
 
 
-const QString ImageCanvas::imageInfoString(int w, int h, int d) const
+const QString ImageCanvas::imageInfoString(int w, int h, int d)		// static
 {
-    if (w==0 && h==0 && d==0)
-    {
-        if (mImage==NULL) return ("-");
-        w = mImage->width();
-        h = mImage->height();
-        d = mImage->depth();
-    }
+    return (i18n("%1x%2 pixels, %3 bpp", w, h, d));
+}
 
-    return (i18n("%1x%2 pixel, %3 bit", w, h, d));
+
+const QString ImageCanvas::imageInfoString(const QImage *img)		// static
+{
+    if (img==NULL) return ("-");
+    else return (imageInfoString(img->width(), img->height(), img->depth()));
+}
+
+
+const QString ImageCanvas::imageInfoString() const			// member
+{
+    return (imageInfoString(mImage));
 }
 
 

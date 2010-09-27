@@ -308,7 +308,7 @@ KookaView::KookaView(KMainWindow *parent, const QByteArray &deviceToUse)
 
     /** Status Bar **/
     KStatusBar *statBar = mMainWindow->statusBar();
-    statBar->insertPermanentFixedItem((mImageCanvas->imageInfoString(2000, 2000, 48)+"--"),
+    statBar->insertPermanentFixedItem((ImageCanvas::imageInfoString(2000, 2000, 48)+"--"),
                                       KookaView::StatusImage);
     statBar->changeItem(QString::null, KookaView::StatusImage);
 
