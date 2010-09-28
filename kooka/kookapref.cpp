@@ -70,7 +70,7 @@ KookaPref::KookaPref(QWidget *parent)
     createPage(new KookaGeneralPage(this), i18n("General"), i18n("General Options"), "configure");
     createPage(new KookaStartupPage(this), i18n("Startup"), i18n("Startup Options"), "system-run");
     createPage(new KookaSavingPage(this), i18n("Image Saving"), i18n("Image Saving Options"), "document-save");
-    createPage(new KookaThumbnailPage(this), i18n("Thumbnail View"), i18n("Thumbnail Gallery View"), "view-list-icons");
+    createPage(new KookaThumbnailPage(this), i18n("Gallery & Thumbnails"), i18n("Image Gallery and Thumbnail View"), "view-list-icons");
     createPage(new KookaOcrPage(this), i18n("OCR"), i18n("Optical Character Recognition"), "ocr");
 
     connect(this, SIGNAL(okClicked()), SLOT(slotSaveSettings()));
@@ -87,7 +87,7 @@ int KookaPref::createPage(KookaPrefsPage *page,
                           const char *icon)
 {
     QVBoxLayout *top = static_cast<QVBoxLayout *>(page->layout());
-    if (top!=NULL) top->addStretch(10);
+    if (top!=NULL) top->addStretch(1);
 
     KPageWidgetItem *item = addPage(page, name);
     item->setHeader(header);

@@ -49,9 +49,7 @@ class KookaPrefsPage : public QWidget
     Q_OBJECT
 
 public:
-    KookaPrefsPage(KPageDialog *parent,
-                   const char *configGroup = NULL,
-                   const QString &topLabel = QString::null);
+    KookaPrefsPage(KPageDialog *parent, const char *configGroup = NULL);
     virtual ~KookaPrefsPage();
 
     virtual void saveSettings() = 0;
@@ -77,9 +75,7 @@ private slots:
     void slotEnableWarnings();
 
 private:
-    QCheckBox *mAllowRenameCheck;
     QPushButton *mEnableMessagesButton;
-    KComboBox *mGalleryLayoutCombo;
 };
 
 
@@ -130,6 +126,8 @@ private slots:
     void slotCustomThumbBgndToggled(bool state);
 
 private:
+    QCheckBox *mAllowRenameCheck;
+    KComboBox *mGalleryLayoutCombo;
     KUrlRequester *mTileSelector;
     KComboBox *mThumbSizeCombo;
     QCheckBox *mCustomBackgroundCheck;

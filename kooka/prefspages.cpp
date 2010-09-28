@@ -54,15 +54,10 @@
 
 //  Abstract base
 
-KookaPrefsPage::KookaPrefsPage(KPageDialog *parent, const char *configGroup, const QString &topLabel)
+KookaPrefsPage::KookaPrefsPage(KPageDialog *parent, const char *configGroup)
     : QWidget(parent)
 {
     mLayout = new QVBoxLayout(this);
-    if (!topLabel.isEmpty())
-    {
-        mLayout->addWidget(new QLabel("<qt><small>"+topLabel, this));  // description label
-        mLayout->addSpacing(2*KDialog::spacingHint());
-    }
 
     if (configGroup!=NULL) mConfig = KGlobal::config()->group(configGroup);
 }
@@ -76,46 +71,15 @@ KookaPrefsPage::~KookaPrefsPage()
 //  "General" page
 
 KookaGeneralPage::KookaGeneralPage(KPageDialog *parent)
-    : KookaPrefsPage(parent, GROUP_GALLERY,
-                    i18n("These options will take effect immediately."))
+    : KookaPrefsPage(parent, GROUP_GALLERY)
 {
+    mLayout->addStretch(9);				// push down to bottom
 
-
-    // TODO: move gallery options to "Thumbnail View" tab and rename that
-    // to "Image Gallery" (same icon)
-
-    /* Gallery options */
-    QGroupBox *gb = new QGroupBox(i18n("Image Gallery"), this);
+    QGroupBox *gb = new QGroupBox(i18n("Hidden Messages"), this);
     QGridLayout *gl = new QGridLayout(gb);
-    gl->setColumnStretch(1, 1);
-
-    /* Layout */
-    QLabel *lab = new QLabel(i18n("Show recent folders:"), gb);
-    gl->addWidget(lab, 0, 0, Qt::AlignRight);
-
-    mGalleryLayoutCombo = new KComboBox(gb);
-    mGalleryLayoutCombo->addItem(i18n("Not shown"), KookaGallery::NoRecent);
-    mGalleryLayoutCombo->addItem(i18n("At top"), KookaGallery::RecentAtTop);
-    mGalleryLayoutCombo->addItem(i18n("At bottom"), KookaGallery::RecentAtBottom);
-    mGalleryLayoutCombo->setCurrentIndex(mConfig.readEntry(GALLERY_LAYOUT, static_cast<int>(KookaGallery::RecentAtTop)));
-    lab->setBuddy(mGalleryLayoutCombo);
-    gl->addWidget(mGalleryLayoutCombo, 0, 1);
-
-    /* Allow renaming */
-    mAllowRenameCheck = new QCheckBox(i18n("Allow click-to-rename"), gb);
-    mAllowRenameCheck->setToolTip(i18n("Check this if you want to be able to rename gallery items by clicking on them (otherwise, use the \"Rename\" menu option)"));
-    mAllowRenameCheck->setChecked(mConfig.readEntry(GALLERY_ALLOW_RENAME, false));
-    gl->addWidget(mAllowRenameCheck, 1, 0, 1, 2);
-
-    mLayout->addWidget(gb);
-
-    mLayout->addSpacing(2*KDialog::marginHint());
-
-    gb = new QGroupBox(i18n("Hidden Messages"), this);
-    gl = new QGridLayout(gb);
 
     /* Enable messages and questions */
-    lab = new QLabel(i18n("Use this button to reenable all messages and questions which\nhave been hidden by using \"Don't ask me again\"."), gb);
+    QLabel *lab = new QLabel(i18n("Use this button to reenable all messages and questions which\nhave been hidden by using \"Don't ask me again\"."), gb);
     gl->addWidget(lab, 0, 0);
 
     mEnableMessagesButton = new QPushButton(i18n("Enable Messages/Questions"), gb);
@@ -128,15 +92,11 @@ KookaGeneralPage::KookaGeneralPage(KPageDialog *parent)
 
 void KookaGeneralPage::saveSettings()
 {
-    mConfig.writeEntry(GALLERY_ALLOW_RENAME, mAllowRenameCheck->isChecked());
-    mConfig.writeEntry(GALLERY_LAYOUT, mGalleryLayoutCombo->currentIndex());
 }
 
 
 void KookaGeneralPage::defaultSettings()
 {
-    mAllowRenameCheck->setChecked(false);
-    mGalleryLayoutCombo->setCurrentIndex(KookaGallery::RecentAtTop);
 }
 
 
@@ -155,8 +115,7 @@ void KookaGeneralPage::slotEnableWarnings()
 //  "Startup" page
 
 KookaStartupPage::KookaStartupPage(KPageDialog *parent)
-    : KookaPrefsPage(parent, GROUP_STARTUP,
-                    i18n("These options will take effect when Kooka is next started."))
+    : KookaPrefsPage(parent, GROUP_STARTUP)
 {
     const KConfigGroup grp2 = ScanGlobal::self()->configGroup();
 
@@ -204,8 +163,7 @@ void KookaStartupPage::defaultSettings()
 //  "Saving" page
 
 KookaSavingPage::KookaSavingPage(KPageDialog *parent)
-    : KookaPrefsPage(parent, OP_SAVER_GROUP,
-                    i18n("These options will take effect for subsequent scans."))
+    : KookaPrefsPage(parent, OP_SAVER_GROUP)
 {
     mAskSaveFormat = new QCheckBox(i18n("Always use the Save Assistant"), this);
     mAskSaveFormat->setChecked(mConfig.readEntry(OP_SAVER_ASK_FORMAT, false));
@@ -233,26 +191,52 @@ void KookaSavingPage::defaultSettings()
 }
 
 
-//  "Thumbnail" page
+//  "Gallery/Thumbnail" page
 
 KookaThumbnailPage::KookaThumbnailPage(KPageDialog *parent)
-    : KookaPrefsPage(parent, THUMB_GROUP,
-                    i18n("These options will take effect immediately."))
+    : KookaPrefsPage(parent, THUMB_GROUP)
 {
-    QGridLayout *lay = new QGridLayout;
-    lay->setColumnStretch(1, 9);
+    // Gallery options
+    QGroupBox *gb = new QGroupBox(i18n("Image Gallery"), this);
+    QGridLayout *gl = new QGridLayout(gb);
+    gl->setColumnStretch(1, 1);
+
+    /* Layout */
+    QLabel *lab = new QLabel(i18n("Show recent folders:"), gb);
+    gl->addWidget(lab, 0, 0, Qt::AlignRight);
+
+    mGalleryLayoutCombo = new KComboBox(gb);
+    mGalleryLayoutCombo->addItem(i18n("Not shown"), KookaGallery::NoRecent);
+    mGalleryLayoutCombo->addItem(i18n("At top"), KookaGallery::RecentAtTop);
+    mGalleryLayoutCombo->addItem(i18n("At bottom"), KookaGallery::RecentAtBottom);
+    mGalleryLayoutCombo->setCurrentIndex(mConfig.readEntry(GALLERY_LAYOUT, static_cast<int>(KookaGallery::RecentAtTop)));
+    lab->setBuddy(mGalleryLayoutCombo);
+    gl->addWidget(mGalleryLayoutCombo, 0, 1);
+
+    /* Allow renaming */
+    mAllowRenameCheck = new QCheckBox(i18n("Allow click-to-rename"), gb);
+    mAllowRenameCheck->setToolTip(i18n("Check this if you want to be able to rename gallery items by clicking on them (otherwise, use the \"Rename\" menu option)"));
+    mAllowRenameCheck->setChecked(mConfig.readEntry(GALLERY_ALLOW_RENAME, false));
+    gl->addWidget(mAllowRenameCheck, 1, 0, 1, 2);
+
+    mLayout->addWidget(gb);
+
+    // Thumbnail View options
+    gb = new QGroupBox(i18n("Thumbnail View"), this);
+    gl = new QGridLayout(gb);
+    gl->setColumnStretch(1, 1);
 
     // Do we want a background image?
     mCustomBackgroundCheck = new QCheckBox(i18n("Use a custom background image"), this);
     mCustomBackgroundCheck->setChecked(mConfig.readEntry(THUMB_CUSTOM_BGND, false));
     connect(mCustomBackgroundCheck, SIGNAL(toggled(bool)), SLOT(slotCustomThumbBgndToggled(bool)));
-    lay->addWidget(mCustomBackgroundCheck, 2, 0, 1, 2);
+    gl->addWidget(mCustomBackgroundCheck, 2, 0, 1, 2);
 
     /* Background image */
     QString bgImg = mConfig.readPathEntry(THUMB_BG_WALLPAPER, ThumbView::standardBackground());
 
     QLabel *l = new QLabel(i18n("Image:"), this);
-    lay->addWidget(l, 3, 0, Qt::AlignRight);
+    gl->addWidget(l, 3, 0, Qt::AlignRight);
 
     /* Image file selector */
     mTileSelector = new KUrlRequester(this);
@@ -260,14 +244,14 @@ KookaThumbnailPage::KookaThumbnailPage(KPageDialog *parent)
     kDebug() << "Setting tile URL" << bgImg;
     mTileSelector->setUrl(bgImg);
 
-    lay->addWidget(mTileSelector, 3, 1);
+    gl->addWidget(mTileSelector, 3, 1);
     l->setBuddy(mTileSelector);
 
-    lay->setRowMinimumHeight(4, 2*KDialog::spacingHint());
+    gl->setRowMinimumHeight(4, 2*KDialog::spacingHint());
 
     /* Preview size */
     l = new QLabel(i18n("Preview size:"), this);
-    lay->addWidget(l, 5, 0, Qt::AlignRight);
+    gl->addWidget(l, 5, 0, Qt::AlignRight);
 
     mThumbSizeCombo = new KComboBox(this);
     mThumbSizeCombo->addItem(ThumbView::sizeName(KIconLoader::SizeEnormous));		// 0
@@ -290,10 +274,10 @@ case KIconLoader::SizeSmallMedium:	sel = 4;	break;
     }
     mThumbSizeCombo->setCurrentIndex(sel);
 
-    lay->addWidget(mThumbSizeCombo, 5, 1);
+    gl->addWidget(mThumbSizeCombo, 5, 1);
     l->setBuddy(mThumbSizeCombo);
 
-    mLayout->addLayout(lay);
+    mLayout->addWidget(gb);
 
     slotCustomThumbBgndToggled(mCustomBackgroundCheck->isChecked());
 }
@@ -301,6 +285,9 @@ case KIconLoader::SizeSmallMedium:	sel = 4;	break;
 
 void KookaThumbnailPage::saveSettings()
 {
+    mConfig.writeEntry(GALLERY_ALLOW_RENAME, mAllowRenameCheck->isChecked());
+    mConfig.writeEntry(GALLERY_LAYOUT, mGalleryLayoutCombo->currentIndex());
+
     mConfig.writePathEntry(THUMB_BG_WALLPAPER, mTileSelector->url().pathOrUrl());
     mConfig.writeEntry(THUMB_CUSTOM_BGND, mCustomBackgroundCheck->isChecked());
 
@@ -320,6 +307,9 @@ case 4:		size = KIconLoader::SizeSmallMedium;	break;
 
 void KookaThumbnailPage::defaultSettings()
 {
+    mAllowRenameCheck->setChecked(false);
+    mGalleryLayoutCombo->setCurrentIndex(KookaGallery::RecentAtTop);
+
     mCustomBackgroundCheck->setChecked(false);
     slotCustomThumbBgndToggled(false);
     mTileSelector->setUrl(ThumbView::standardBackground());
@@ -336,8 +326,7 @@ void KookaThumbnailPage::slotCustomThumbBgndToggled(bool state)
 //  "OCR" page
 
 KookaOcrPage::KookaOcrPage(KPageDialog *parent)
-    : KookaPrefsPage(parent, CFG_GROUP_OCR_DIA,
-                    i18n("These options will take effect for subsequent OCR runs."))
+    : KookaPrefsPage(parent, CFG_GROUP_OCR_DIA)
 {
     QGridLayout *lay = new QGridLayout;
     lay->setColumnStretch(1, 9);
