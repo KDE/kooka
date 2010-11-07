@@ -79,21 +79,20 @@ KScanDevice *KScanDevice::instance()
 //  Accessing GUI options
 //  ---------------------
 
-void KScanDevice::guiSetEnabled( const QByteArray& name, bool state )
+// Used only by ScanParams::slotVirtScanModeSelect()
+void KScanDevice::guiSetEnabled(const QByteArray &name, bool state)
 {
-    KScanOption *so = getExistingGuiElement( name );
+    KScanOption *so = getExistingGuiElement(name);
+    if (so==NULL) return;
 
-    if( so )
-    {
-	QWidget *w = so->widget();
+    QWidget *w = so->widget();
+    if (w==NULL) return;
 
-	if( w )
-	    w->setEnabled( state );
-    }
+    w->setEnabled(state && so->softwareSetable());
 }
 
 
-KScanOption *KScanDevice::getExistingGuiElement( const QByteArray& name )
+KScanOption *KScanDevice::getExistingGuiElement(const QByteArray &name)
 {
     KScanOption *ret = NULL;
     QByteArray alias = aliasName(name);
@@ -120,31 +119,25 @@ KScanOption *KScanDevice::getGuiElement(const QByteArray &name,
     if (name.isEmpty()) return (NULL);
     if (!optionExists(name)) return (NULL);
 
-    QByteArray alias = aliasName(name);
+    QByteArray alias = aliasName(name);			// resolve name alias
     if (alias!=name) kDebug() << "for name" << name << "alias" << alias;
     else kDebug() << "for name" << name;
 
-    /* Check if already exists */
-    KScanOption *so = getExistingGuiElement(name);
-    if (so!=NULL) return (so);
+    KScanOption *so = getExistingGuiElement(name);	// see if already exists
+    if (so!=NULL) return (so);				// if so, just return that
 
-    /* ...else create a new one */
-    so = new KScanOption(alias);
-
-    if (so->valid() && so->softwareSetable())
+    so = new KScanOption(alias);			// create a new scan option
+    if (so->valid())					// option was created
     {
-        /** store new gui-elem in list of all gui-elements */
-        mGuiElements.append(so);
+        mGuiElements.append(so);			// add to list of GUI elements
 
-        QWidget *w = so->createWidget(parent, descr);
-        if (w!=NULL) w->setEnabled( so->active() );
+        QWidget *w = so->createWidget(parent, descr);	// create widget for option
+        if (w!=NULL) w->setEnabled(so->active() && so->softwareSetable());
         else kDebug() << "No widget created for" << name;
     }
-    else
-    {
-        if (!so->valid()) kDebug() << "option" << alias << "is not valid";
-        else if (!so->softwareSetable()) kDebug() << "option" << alias << "is not Software Settable";
-
+    else						//  option not created
+    {							// (not known by scanner)
+        kDebug() << "option" << alias << "is not valid";
         delete so;
         so = NULL;
     }
