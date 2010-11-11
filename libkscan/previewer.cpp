@@ -285,19 +285,20 @@ void Previewer::setDisplayUnit(KRuler::MetricStyle unit)
 
 
 // sent from ScanParams, selection chosen by user
-void Previewer::slotNewCustomScanSize(QRect rect)
+void Previewer::slotNewCustomScanSize(const QRect &rect)
 {
     kDebug() << "rect" << rect;
 
-    if (rect.isValid())
+    QRect r = rect;
+    if (r.isValid())
     {
-        selectionWidthMm = rect.width();
-        selectionHeightMm = rect.height();
+        selectionWidthMm = r.width();
+        selectionHeightMm = r.height();
 							// convert mm -> bedsize/1000
-        rect.setLeft(static_cast<int>(1000.0*rect.left()/bedWidth+0.5));
-        rect.setRight(static_cast<int>(1000.0*rect.right()/bedWidth+0.5));
-        rect.setTop(static_cast<int>(1000.0*rect.top()/bedHeight+0.5));
-        rect.setBottom(static_cast<int>(1000.0*rect.bottom()/bedHeight+0.5));
+        r.setLeft(static_cast<int>(1000.0*r.left()/bedWidth+0.5));
+        r.setRight(static_cast<int>(1000.0*r.right()/bedWidth+0.5));
+        r.setTop(static_cast<int>(1000.0*r.top()/bedHeight+0.5));
+        r.setBottom(static_cast<int>(1000.0*r.bottom()/bedHeight+0.5));
     }
     else
     {
@@ -305,7 +306,7 @@ void Previewer::slotNewCustomScanSize(QRect rect)
         selectionHeightMm = bedHeight;
     }
 
-    img_canvas->setSelectionRect(rect);
+    img_canvas->setSelectionRect(r);
     updateSelectionDims();
 }
 

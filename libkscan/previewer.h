@@ -23,7 +23,6 @@
 #include "libkscanexport.h"
 
 #include <qwidget.h>
-// TODO: params QRect -> const QRect &
 #include <qrect.h>
 #include <qvector.h>
 
@@ -63,7 +62,7 @@ public slots:
     void slotSetAutoSelThresh(int);
     void slotSetAutoSelDustsize(int);
 
-    void slotNewCustomScanSize(QRect rect);
+    void slotNewCustomScanSize(const QRect &rect);
 
 protected slots:
     void slotAutoSelToggled(bool);

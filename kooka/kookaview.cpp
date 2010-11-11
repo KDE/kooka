@@ -537,8 +537,8 @@ bool KookaView::slotSelectDevice(const QByteArray &useDevice, bool alwaysAsk)
                     mPreviewCanvas,SLOT(slotNewScanResolutions(int,int)));
             connect(mScanParams,SIGNAL(scanModeChanged(int)),
                     mPreviewCanvas,SLOT(slotNewScanMode(int)));
-            connect(mScanParams,SIGNAL(newCustomScanSize(QRect)),
-                    mPreviewCanvas,SLOT(slotNewCustomScanSize(QRect)));
+            connect(mScanParams,SIGNAL(newCustomScanSize(const QRect &)),
+                    mPreviewCanvas,SLOT(slotNewCustomScanSize(const QRect &)));
 
             // Connections Previewer --> ScanParams
             connect(mPreviewCanvas,SIGNAL(newPreviewRect(const QRect &)),
