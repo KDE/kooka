@@ -35,6 +35,7 @@ class QSlider;
 class QLineEdit;
 class QStringList;
 class QGroupBox;
+class QPushButton;
 
 class KUrlRequester;
 
@@ -54,14 +55,15 @@ public:
     /**
      * The internal type of the control (regardless of GUI appearance).
      *
-     * A @c Text control maintains a string value, a @Number control a
-     * numeric value.
+     * A @c Text control maintains a string value, a @c Number control a
+     * numeric value.  @c Group and @c Button controls do not have values.
      */
     enum ControlType
     {
         Text,
         Number,
-        Group
+        Group,
+        Button
     };
 
     /**
@@ -149,9 +151,10 @@ signals:
     void settingChanged(int val);
 
     /**
-     * The Return/Enter key has been pressed in an entry field.
-     *
-     * Not all control types provide this signal.
+     * The Return/Enter key has been pressed in a @c Text or
+     * @c Number entry field, or a @c Button control has been pressed.
+     * @c Group control types do not provide this signal (nor either of
+     * the above).
      */
     void returnPressed();
 };
@@ -408,6 +411,34 @@ public:
 
 private:
     QGroupBox *mGroup;
+};
+
+
+/**
+ * A button to perform an action.
+ *
+ * @see QPushButton
+ */
+
+class KSCAN_EXPORT KScanPushButton : public KScanControl
+{
+    Q_OBJECT
+
+public:
+    /**
+     * Creates the control.
+     *
+     * @param parent parent widget
+     * @param text descriptive label for the control
+     */
+    KScanPushButton(QWidget *parent, const QString &text);
+
+    KScanControl::ControlType type() const { return (KScanControl::Button); }
+
+    QString label() const;
+
+private:
+    QPushButton *mButton;
 };
 
 

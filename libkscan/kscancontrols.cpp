@@ -377,3 +377,22 @@ QString KScanGroup::label() const
 {
     return (QString::null);
 }
+
+
+//  KScanPushButton - action button
+//  -------------------------------
+
+KScanPushButton::KScanPushButton(QWidget *parent, const QString &text)
+    : KScanControl(parent, text)
+{
+    mButton = new QPushButton(text, this);
+    mLayout->addWidget(mButton);
+
+    connect(mButton, SIGNAL(clicked()), SIGNAL(returnPressed()));
+}
+
+
+QString KScanPushButton::label() const
+{
+    return (QString::null);
+}

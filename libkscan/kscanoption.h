@@ -65,7 +65,8 @@ public:
         String,
         Resolution,
         File,
-        Group
+        Group,
+        Button
     };
 
     /**
@@ -200,6 +201,7 @@ protected slots:
      **/
     void slotWidgetChange(const QString &t);
     void slotWidgetChange(int i);
+    void slotWidgetChange();
 	
 signals:
     /**
@@ -222,6 +224,7 @@ private:
     KScanControl *createComboBox(QWidget *parent, const QString &text);
     KScanControl *createFileField(QWidget *parent, const QString &text);
     KScanControl *createGroupSeparator(QWidget *parent, const QString &text);
+    KScanControl *createActionButton(QWidget *parent, const QString &text);
 	
     int mIndex;
     const SANE_Option_Descriptor *mDesc;

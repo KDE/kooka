@@ -218,7 +218,8 @@ void ScanParams::initialise(KScanOption *so)
 {
     if (so==NULL) return;
     if (startupOptset==NULL) return;
-    if (so->isGroup()) return;
+    if (!so->isReadable()) return;
+    if (!so->isSoftwareSettable()) return;
 
     QByteArray name = so->getName();
     if (!name.isEmpty())
@@ -409,7 +410,7 @@ QWidget *ScanParams::createScannerParams()
         initialise(mSourceSelect);
         connect(mSourceSelect, SIGNAL(guiChange(KScanOption *)), SLOT(slotReloadAllGui( KScanOption *)));
 
-        l = mSourceSelect->getLabel(frame);
+        l = mSourceSelect->getLabel(frame, true);
         w = mSourceSelect->widget();
         frame->addRow(l, w);
 
@@ -464,7 +465,7 @@ QWidget *ScanParams::createScannerParams()
             if (so->isGroup()) frame->addGroup(w);
             else
             {
-                l = so->getLabel(frame, true);
+                l = so->getLabel(frame);
                 u = so->getUnit(frame);
                 frame->addRow(l, w, u);
             }
@@ -883,6 +884,10 @@ void ScanParams::slotApplyGamma(const KGammaTable *gt)
 
 // The user has changed an option.  Reload every other scanner option
 // apart from this one.
+
+// TODO: is it necessary to do this on every widget change?
+// sane_control_option() in KScanDevice::apply() will return
+// SANE_INFO_RELOAD_OPTIONS to indicate that this is necessary.
 
 void ScanParams::slotReloadAllGui(KScanOption *so)
 {

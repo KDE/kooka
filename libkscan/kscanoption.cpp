@@ -44,7 +44,7 @@ extern "C" {
 //  Debugging options
 #undef DEBUG_MEM
 #undef DEBUG_GETSET
-#define DEBUG_RELOAD
+#undef DEBUG_RELOAD
 
 #undef APPLY_IN_SITU
 
@@ -195,6 +195,13 @@ void KScanOption::slotWidgetChange(const QString &t)
 void KScanOption::slotWidgetChange(int i)
 {
     set(i);
+    emit guiChange(this);
+}
+
+
+void KScanOption::slotWidgetChange()
+{
+    set(1);
     emit guiChange(this);
 }
 
@@ -352,6 +359,10 @@ case SANE_TYPE_STRING:
 	    else ret = KScanOption::String;
 	    break;
 
+case SANE_TYPE_BUTTON:
+            ret = KScanOption::Button;
+            break;
+
 case SANE_TYPE_GROUP:
 	    ret = KScanOption::Group;
 	    break;
@@ -382,6 +393,7 @@ bool KScanOption::set(int val)
 
     switch (mDesc->type)
     {
+case SANE_TYPE_BUTTON:					// Activate a button
 case SANE_TYPE_BOOL:					// Assign a Boolean value
         sw = (val ? SANE_TRUE : SANE_FALSE);
         mBuffer = QByteArray(((const char *) &sw),sizeof(SANE_Word));
@@ -901,6 +913,10 @@ case KScanOption::Group:
 	w = createGroupSeparator(parent, mText);	// group separator
         break;
 
+case KScanOption::Button:
+	w = createActionButton(parent, mText);		// button to do action
+        break;
+
 default:
 	kDebug() << "unknown control type " << type();
 	break;
@@ -910,16 +926,22 @@ default:
     {
         mControl = w;
 
-        KScanControl::ControlType type = w->type();
-        if (type==KScanControl::Number)			// numeric control
+        switch (w->type())
         {
-            connect(w, SIGNAL(settingChanged(int)),
-                    SLOT(slotWidgetChange(int)));
-        }
-        else if (type==KScanControl::Text)		// text control
-        {
-            connect(w, SIGNAL(settingChanged(const QString &)),
-                    SLOT(slotWidgetChange(const QString &)));
+case KScanControl::Number:				// numeric control
+            connect(w, SIGNAL(settingChanged(int)), SLOT(slotWidgetChange(int)));
+            break;
+
+case KScanControl::Text:				// text control
+            connect(w, SIGNAL(settingChanged(const QString &)), SLOT(slotWidgetChange(const QString &)));
+            break;
+
+case KScanControl::Button:				// push button
+            connect(w, SIGNAL(returnPressed()), SLOT(slotWidgetChange()));
+            break;
+
+case KScanControl::Group:				// group separator
+            break;					// nothing to do here
         }
 
 	if (mDesc!=NULL)				// set tool tip
@@ -982,6 +1004,12 @@ inline KScanControl *KScanOption::createFileField(QWidget *parent, const QString
 inline KScanControl *KScanOption::createGroupSeparator(QWidget *parent, const QString &text)
 {
     return (new KScanGroup(parent, text));
+}
+
+
+inline KScanControl *KScanOption::createActionButton(QWidget *parent, const QString &text)
+{
+    return (new KScanPushButton(parent, text));
 }
 
 

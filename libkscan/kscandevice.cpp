@@ -48,7 +48,11 @@ extern "C" {
 #define MIN_PREVIEW_DPI		75
 #define MAX_PROGRESS		100
 
-#undef DEBUG_OPTIONS					// define to show before scan
+
+// Debugging options
+#undef DEBUG_OPTIONS
+#undef DEBUG_APPLY
+#undef DEBUG_RELOAD
 
 
 //  Single instance and creation
@@ -402,140 +406,137 @@ int KScanDevice::getOptionIndex(const QByteArray &name) const
 }
 
 
-KScanDevice::Status KScanDevice::apply( KScanOption *opt, bool isGammaTable )
+KScanDevice::Status KScanDevice::apply(KScanOption *opt, bool isGammaTable)
 {
-   KScanDevice::Status   stat = KScanDevice::Ok;
-   if( !opt ) return( KScanDevice::ParamError );
-   int sane_result = 0;
+    if (opt==NULL) return (KScanDevice::ParamError);
 
-   int         val = mOptionDict.value(opt->getName());
-   mSaneStatus = SANE_STATUS_GOOD;
-   const QByteArray& oname = opt->getName();
+    KScanDevice::Status stat = KScanDevice::Ok;
+    int sane_result = 0;
 
-   if ( oname == "preview" || oname == "mode" ) {
-	  mSaneStatus = sane_control_option( mScannerHandle, val,
-				       SANE_ACTION_SET_AUTO, 0,
-				       &sane_result );
-      /* No return here, please ! Carsten, does it still work than for you ? */
-   }
+    int val = mOptionDict.value(opt->getName());
+    mSaneStatus = SANE_STATUS_GOOD;
+    const QByteArray &oname = opt->getName();
 
+    if (oname==SANE_NAME_PREVIEW || oname==SANE_NAME_SCAN_MODE)
+    {
+        mSaneStatus = sane_control_option(mScannerHandle, val,
+                                          SANE_ACTION_SET_AUTO, 0,
+                                          &sane_result );
+        /* No return here, please! Carsten, does it still work than for you? */
+    }
 
-   if( ! opt->isInitialised() || opt->getBuffer() == 0 )
-   {
-      kDebug() << "Attempt to set uninit/null buffer of" << oname << "-> skipping!";
+    if (!opt->isInitialised() || opt->getBuffer()==NULL)
+    {
+        kDebug() << "Attempt to set uninit/null buffer of" << oname;
 
-      if( opt->isAutoSettable() )
-      {
-	 kDebug() << "Setting option" << oname << "automatic";
-	 mSaneStatus = sane_control_option( mScannerHandle, val,
-					  SANE_ACTION_SET_AUTO, 0,
-					  &sane_result );
-      }
-      else
-      {
-	 mSaneStatus = SANE_STATUS_INVAL;
-      }
-      stat = KScanDevice::ParamError;
-   }
-   else
-   {
-      if( ! opt->isActive() )
-      {
-	 kDebug() << "Option" << oname << "is not active";
-	 stat = KScanDevice::OptionNotActive;
-      }
-      else if( ! opt->isSoftwareSettable() )
-      {
-	 kDebug() << "Option" << oname << "is not Software Settable";
-	 stat = KScanDevice::OptionNotActive;
-      }
-      else
-      {
+        if (opt->isAutoSettable())
+        {
+            kDebug() << "Setting option" << oname << "automatic";
+            mSaneStatus = sane_control_option(mScannerHandle, val,
+                                              SANE_ACTION_SET_AUTO, 0,
+                                              &sane_result );
+        }
+        else mSaneStatus = SANE_STATUS_INVAL;
+        stat = KScanDevice::ParamError;
+    }
+    else
+    {
+        if (!opt->isActive())
+        {
+#ifdef DEBUG_APPLY
+            kDebug() << "not active" << oname;
+#endif // DEBUG_APPLY
+            stat = KScanDevice::OptionNotActive;
+        }
+        else if (!opt->isSoftwareSettable())
+        {
+#ifdef DEBUG_APPLY
+            kDebug() << "not software settable" << oname;
+#endif // DEBUG_APPLY
+            stat = KScanDevice::OptionNotActive;
+        }
+        else
+        {
+            mSaneStatus = sane_control_option(mScannerHandle, val,
+                                              SANE_ACTION_SET_VALUE,
+                                              opt->getBuffer(),
+                                              &sane_result );
+        }
+    }
 
-	 mSaneStatus = sane_control_option( mScannerHandle, val,
-					  SANE_ACTION_SET_VALUE,
-					  opt->getBuffer(),
-					  &sane_result );
-      }
-   }
+    if (stat==KScanDevice::Ok)
+    {
+        if (mSaneStatus==SANE_STATUS_GOOD)
+        {
+#ifdef DEBUG_APPLY
+            kDebug() << "Applied" << oname;
+#endif // DEBUG_APPLY
 
-   if( stat == KScanDevice::Ok )
-   {
-      if( mSaneStatus == SANE_STATUS_GOOD )
-      {
-	 kDebug() << "Applied" << oname << "successfully";
+            if (sane_result & SANE_INFO_RELOAD_OPTIONS)
+            {
+#ifdef DEBUG_APPLY
+                kDebug() << "Setting status to reload options";
+#endif // DEBUG_APPLY
+                stat = KScanDevice::Reload;
+            }
 
-	 if( sane_result & SANE_INFO_RELOAD_OPTIONS )
-	 {
-	    kDebug() << "Setting status to reload options";
-	    stat = KScanDevice::Reload;
 #if 0
-	    qDebug( "Emitting sigOptionChanged()" );
-	    emit( sigOptionsChanged() );
+            if( sane_result & SANE_INFO_RELOAD_PARAMS )
+                emit( sigScanParamsChanged() );
 #endif
-	 }
+            if (sane_result & SANE_INFO_INEXACT)
+            {
+                kDebug() << "Was set inexact" << oname;
+            }
 
-#if 0
-	 if( sane_result & SANE_INFO_RELOAD_PARAMS )
-	    emit( sigScanParamsChanged() );
-#endif
-	 if( sane_result & SANE_INFO_INEXACT )
-	 {
-	    kDebug() << "Option" << oname << "was set inexact";
-	 }
+            /* If it is a gamma table, the gamma values must be stored */
+            if (isGammaTable)
+            {
+                mGammaTables->backupOption(*opt);
+                kDebug() << "GammaTable stored" << opt->getName();
+            }
+        }
+        else
+        {
+            kDebug() << "Setting option" << oname << "failed, SANE status" << lastSaneErrorMessage();
+        }
+    }
+    else
+    {
+        kDebug() << "Setting option" << oname << "failed, status" << stat;
+    }
 
-	 /* if it is a gamma table, the gamma values must be stored */
-	 if( isGammaTable )
-	 {
-	    mGammaTables->backupOption( *opt );
-	    kDebug() << "GammaTable stored:" << opt->getName();
-	 }
-      }
-      else
-      {
-	 kDebug() << "Bad SANE status" << lastSaneErrorMessage() << "for option" << oname;
-
-      }
-   }
-   else
-   {
-      kDebug() << "Setting option" << oname << "failed";
-   }
-
-   if( stat == KScanDevice::Ok )
-   {
-      setDirty( oname );
-   }
-
-   return( stat );
+    if (stat==KScanDevice::Ok) setDirty(oname);
+    return (stat);
 }
 
-bool KScanDevice::optionExists( const QByteArray& name )
-{
-   if( name.isEmpty() ) return false;
 
+bool KScanDevice::optionExists(const QByteArray &name)
+{
    bool ret = false;
 
-   QByteArray altname = aliasName( name );
-   if( ! altname.isNull() )
+   if (!name.isEmpty())
    {
+       QByteArray altname = aliasName(name);
+       if (!altname.isNull())
+       {
 	   int i = mOptionDict.value(altname, -1);
-	   ret = (i > -1);
+	   ret = (i>-1);
+       }
    }
 
-   return ret;
+   return (ret);
 }
 
 
 void KScanDevice::setDirty(const QByteArray &name)
 {
-    if (optionExists(name))
+    if (optionExists(name) && !mDirtyList.contains(name))
     {
-        if (!mDirtyList.contains(name))
-        {
-            kDebug() << "Setting dirty" << name;
-            mDirtyList.append(name);
-        }
+#ifdef DEBUG_APPLY
+        kDebug() << "Setting dirty" << name;
+#endif // DEBUG_APPLY
+        mDirtyList.append(name);
     }
 }
 
@@ -570,7 +571,7 @@ void KScanDevice::slotReloadAllBut(KScanOption *not_opt)
 {
     if (not_opt==NULL) return;
 
-    kDebug() << "Reload of all except" << not_opt->getName() << "forced";
+    kDebug() << "except" << not_opt->getName();
     /* Make sure it's applied */
     apply(not_opt);
 
@@ -580,13 +581,17 @@ void KScanDevice::slotReloadAllBut(KScanOption *not_opt)
         KScanOption *so = (*it);
         if (so!=not_opt)
         {
-            //kDebug() << "Reloading" << so->getName();
+#ifdef DEBUG_RELOAD
+            kDebug() << "Reloading" << so->getName();
+#endif // DEBUG_RELOAD
             so->reload();
             so->redrawWidget();
         }
     }
 
+#ifdef DEBUG_RELOAD
     kDebug() << "Finished";
+#endif // DEBUG_RELOAD
 }
 
 
@@ -594,7 +599,9 @@ void KScanDevice::slotReloadAllBut(KScanOption *not_opt)
 /* This might result in a endless recursion ! */
 void KScanDevice::slotReloadAll()
 {
+#ifdef DEBUG_RELOAD
     kDebug();
+#endif // DEBUG_RELOAD
 
     for (QList<KScanOption *>::const_iterator it = mGuiElements.constBegin();
          it!=mGuiElements.constEnd(); ++it)
