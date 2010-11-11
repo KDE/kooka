@@ -91,9 +91,21 @@ public:
      */
     bool lastRow();
 
+    /**
+     * Add a group separator to the layout.  Because of the widget sorting there
+     * may be nothing following, or another group, so the group is retained as
+     * "pending" and added just before the next row.
+     *
+     * @param wid    The widget to add.
+     */
+    void addGroup(QWidget *wid);
+
 private:
+    void checkPendingGroup();
+
     QGridLayout *mLayout;
     int mNextRow;
+    QWidget *mPendingGroup;
 };
 
 
@@ -108,6 +120,7 @@ ScanParamsPage::ScanParamsPage(QWidget *parent, const char *name)
     mLayout->setColumnMinimumWidth(1, KDialog::marginHint());
 
     mNextRow = 0;
+    mPendingGroup = NULL;
 }
 
 
@@ -116,9 +129,22 @@ ScanParamsPage::~ScanParamsPage()
 }
 
 
+void ScanParamsPage::checkPendingGroup()
+{
+    if (mPendingGroup!=NULL)				// separator to add first?
+    {
+        QWidget *w = mPendingGroup;
+        mPendingGroup = NULL;				// avoid recursion!
+        addRow(w);
+    }
+}
+
+
 void ScanParamsPage::addRow(QWidget *wid)
 {
     if (wid==NULL) return;				// must have one
+
+    checkPendingGroup();				// add separator if needed
     mLayout->addWidget(wid, mNextRow, 0, 1, -1);
     ++mNextRow;
 }
@@ -128,6 +154,8 @@ void ScanParamsPage::addRow(QLabel *lab, QWidget *wid, QLabel *unit, Qt::Alignme
 {
     if (wid==NULL) return;				// must have one
     wid->setMaximumWidth(MAX_CONTROL_WIDTH);
+
+    checkPendingGroup();				// add separator if needed
 
     if (lab!=NULL)
     {
@@ -152,10 +180,20 @@ void ScanParamsPage::addRow(QLabel *lab, QWidget *wid, QLabel *unit, Qt::Alignme
 
 bool ScanParamsPage::lastRow()
 {
+    addGroup(NULL);					// hide last if present
+
     mLayout->addWidget(new QLabel(QString::null, this), mNextRow, 0, 1, -1, Qt::AlignTop);
     mLayout->setRowStretch(mNextRow, 9);
 
     return (mNextRow>0);
+}
+
+
+void ScanParamsPage::addGroup(QWidget *wid)
+{
+    if (mPendingGroup!=NULL) mPendingGroup->hide();	// dont't need this after all
+
+    mPendingGroup = wid;
 }
 
 #endif							// SCANPARAMS_P_H

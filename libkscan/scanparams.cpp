@@ -41,7 +41,6 @@
 #include <kdebug.h>
 #include <kiconloader.h>
 #include <kled.h>
-#include <kseparator.h>
 #include <kmessagebox.h>
 #include <kmimetype.h>
 #include <khbox.h>
@@ -60,6 +59,10 @@ extern "C"
 #include "kscancontrols.h"
 #include "scansizeselector.h"
 #include "kscanoptset.h"
+
+
+//  Debugging options
+#undef DEBUG_ADF
 
 
 //  SANE testing options
@@ -215,6 +218,7 @@ void ScanParams::initialise(KScanOption *so)
 {
     if (so==NULL) return;
     if (startupOptset==NULL) return;
+    if (so->isGroup()) return;
 
     QByteArray name = so->getName();
     if (!name.isEmpty())
@@ -293,7 +297,10 @@ QWidget *ScanParams::createScannerParams()
         connect(vbgGroup, SIGNAL(buttonClicked(int)), SLOT(slotVirtScanModeSelect(int)));
 
         frame->addRow(NULL, vbg);
-        frame->addRow(new KSeparator(Qt::Horizontal, frame));
+
+        // Separator line after these.  Using a KScanGroup with a null text,
+        // so that it looks the same as any real group separators following.
+        frame->addGroup(new KScanGroup(frame, QString::null));
     }
 
     // Mode setting
@@ -366,7 +373,7 @@ QWidget *ScanParams::createScannerParams()
         if (so!=NULL)
         {
             initialise(so);
-            if (so->active()) so->get(&y_res);
+            if (so->isActive()) so->get(&y_res);
             so->redrawWidget();
 
             // Connection that passes the resolution to the previewer
@@ -393,7 +400,7 @@ QWidget *ScanParams::createScannerParams()
     frame->addRow(l, area_sel, NULL, Qt::AlignTop);
 
     // Insert another beautification line
-    frame->addRow(new KSeparator(Qt::Horizontal, frame));
+    frame->addGroup(new KScanGroup(frame, QString::null));
 
     // Source selection
     mSourceSelect = mSaneDevice->getGuiElement(SANE_NAME_SCAN_SOURCE, frame);
@@ -446,17 +453,21 @@ QWidget *ScanParams::createScannerParams()
         so = mSaneDevice->getGuiElement(opt, frame);
         if (so!=NULL)
         {
-            kDebug() << "creating" << (so->commonOption() ? "OTHER" : "ADVANCED") << "option" << opt;
+            kDebug() << "creating" << (so->isCommonOption() ? "OTHER" : "ADVANCED") << "option" << opt;
             initialise(so);
             connect(so, SIGNAL(guiChange(KScanOption *)), SLOT(slotReloadAllGui(KScanOption *)));
 
-            if (so->commonOption()) frame = otherFrame;
+            if (so->isCommonOption()) frame = otherFrame;
             else frame = advancedFrame;
 
-            l = so->getLabel(frame, true);
             w = so->widget();
-            u = so->getUnit(frame);
-            frame->addRow(l, w, u);
+            if (so->isGroup()) frame->addGroup(w);
+            else
+            {
+                l = so->getLabel(frame, true);
+                u = so->getUnit(frame);
+                frame->addRow(l, w, u);
+            }
 
             // Some special things to do for particular options
             if (opt==SANE_NAME_BIT_DEPTH)
@@ -558,14 +569,13 @@ void ScanParams::slotSourceSelect()
     AdfBehaviour adf = ADF_OFF;
 
     if (mSourceSelect==NULL) return;			// no source selection GUI
-    if (!mSourceSelect->valid()) return;		// no option on scanner
+    if (!mSourceSelect->isValid()) return;		// no option on scanner
 
     const QByteArray &currSource = mSourceSelect->get();
     kDebug() << "Current source is" << currSource;
 
     QList<QByteArray> sources = mSourceSelect->getList();
-#undef CHEAT_FOR_DEBUGGING
-#ifdef CHEAT_FOR_DEBUGGING
+#ifdef DEBUG_ADF
     if (!sources.contains("Automatic Document Feeder"))
         sources.append("Automatic Document Feeder");
 #endif
@@ -835,7 +845,7 @@ void ScanParams::slotApplyGamma(const KGammaTable *gt)
       KScanOption grayGt( SANE_NAME_GAMMA_VECTOR );
 
       /* Now find out, which gamma-Tables are active. */
-      if( grayGt.active() )
+      if( grayGt.isActive() )
       {
 	 grayGt.set( gt );
 	 mSaneDevice->apply( &grayGt, true );
@@ -844,7 +854,7 @@ void ScanParams::slotApplyGamma(const KGammaTable *gt)
 
    if( mSaneDevice->optionExists( SANE_NAME_GAMMA_VECTOR_R )) {
       KScanOption rGt( SANE_NAME_GAMMA_VECTOR_R );
-      if( rGt.active() )
+      if( rGt.isActive() )
       {
 	 rGt.set( gt );
 	 mSaneDevice->apply( &rGt, true );
@@ -853,7 +863,7 @@ void ScanParams::slotApplyGamma(const KGammaTable *gt)
 
    if( mSaneDevice->optionExists( SANE_NAME_GAMMA_VECTOR_G )) {
       KScanOption gGt( SANE_NAME_GAMMA_VECTOR_G );
-      if( gGt.active() )
+      if( gGt.isActive() )
       {
 	 gGt.set( gt );
 	 mSaneDevice->apply( &gGt, true );
@@ -862,7 +872,7 @@ void ScanParams::slotApplyGamma(const KGammaTable *gt)
 
    if( mSaneDevice->optionExists( SANE_NAME_GAMMA_VECTOR_B )) {
       KScanOption bGt( SANE_NAME_GAMMA_VECTOR_B );
-      if( bGt.active() )
+      if( bGt.isActive() )
       {
 	 bGt.set( gt );
 	 mSaneDevice->apply( &bGt, true );
@@ -899,28 +909,28 @@ void ScanParams::setEditCustomGammaTableState()
     {
 // TODO: should this and similar use KScanDevice::getExistingGuiElement()?
         KScanOption kso(SANE_NAME_CUSTOM_GAMMA);
-        butState = kso.active();
+        butState = kso.isActive();
         //kDebug() << "CustomGamma is active=" << butState;
     }
 
     if (!butState && mSaneDevice->optionExists(SANE_NAME_GAMMA_VECTOR_R))
     {
         KScanOption kso(SANE_NAME_GAMMA_VECTOR_R);
-        butState = kso.active();
+        butState = kso.isActive();
         //kDebug() << "CustomGamma Red is active=" << butState;
     }
 
     if (!butState && mSaneDevice->optionExists(SANE_NAME_GAMMA_VECTOR_G))
     {
         KScanOption kso(SANE_NAME_GAMMA_VECTOR_G);
-        butState = kso.active();
+        butState = kso.isActive();
         //kDebug() << "CustomGamma Green is active=" << butState;
     }
 
     if (!butState && mSaneDevice->optionExists(SANE_NAME_GAMMA_VECTOR_B))
     {
         KScanOption kso( SANE_NAME_GAMMA_VECTOR_B );
-        butState = kso.active();
+        butState = kso.isActive();
         //kDebug() << "CustomGamma blue is active=" << butState;
     }
 
@@ -1026,9 +1036,9 @@ void ScanParams::slotNewResolution(KScanOption *opt)
 
     int y_res = x_res;					// assume Y same as X
 
-    if (opt_y!=NULL && opt_y->valid())			// have separate X/Y settings
+    if (opt_y!=NULL && opt_y->isValid())		// have separate X/Y settings
     {
-        if (mResolutionBind!=NULL && mResolutionBind->active())
+        if (mResolutionBind!=NULL && mResolutionBind->isActive())
         {						// settings may be different
             opt_y->get(&y_res);				// so read Y setting too
         }

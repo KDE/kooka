@@ -42,8 +42,9 @@ extern "C" {
 
 
 //  Debugging options
-#undef MEM_DEBUG
-#undef GETSET_DEBUG
+#undef DEBUG_MEM
+#undef DEBUG_GETSET
+#define DEBUG_RELOAD
 
 #undef APPLY_IN_SITU
 
@@ -75,6 +76,8 @@ bool KScanOption::initOption(const QByteArray &name)
 {
     mDesc = NULL;
     mControl = NULL;
+    mIsGroup = false;
+    mIsReadable = true;
 
     if (name.isEmpty()) return (false);
     mName = name;
@@ -98,6 +101,10 @@ bool KScanOption::initOption(const QByteArray &name)
     mBuffer.resize(0);
     mBufferClean = true;
 
+    if (mDesc->type==SANE_TYPE_GROUP) mIsGroup = true;
+    if (mIsGroup || mDesc->type==SANE_TYPE_BUTTON) mIsReadable = false;
+    if (!(mDesc->cap & SANE_CAP_SOFT_DETECT)) mIsReadable = false;
+
     /* Gamma-Table - initial values */
     gamma = 0; /* marks as unvalid */
     brightness = 0;
@@ -118,7 +125,7 @@ bool KScanOption::initOption(const QByteArray &name)
         brightness = gt.getBrightness();
     }
 
-   return (true);
+    return (true);
 }
 
 
@@ -127,6 +134,8 @@ KScanOption::KScanOption(const KScanOption &so)
 {
     mDesc = so.mDesc;					// stored by sane-lib -> may be copied
     mName = so.mName;					// QCString explicit sharing -> shallow copy
+    mIsGroup = so.mIsGroup;
+    mIsReadable = so.mIsReadable;
     mControl = NULL;					// the widget is not copied!
 
     gamma = so.gamma;
@@ -150,6 +159,8 @@ const KScanOption &KScanOption::operator=(const KScanOption &so)
 
     mDesc = so.mDesc;					// stored by sane-lib -> may be copied
     mName = so.mName;					// QCString explicit sharing -> shallow copy
+    mIsGroup = so.mIsGroup;
+    mIsReadable = so.mIsReadable;
 
     gamma = so.gamma;
     brightness = so.brightness;
@@ -168,7 +179,7 @@ const KScanOption &KScanOption::operator=(const KScanOption &so)
 
 KScanOption::~KScanOption()
 {
-#ifdef MEM_DEBUG
+#ifdef DEBUG_MEM
     if (!mBuffer.isNull()) kDebug() << "Freeing" << mBuffer.size() << "bytes for" << mName;
 #endif
 }
@@ -192,14 +203,15 @@ void KScanOption::slotWidgetChange(int i)
  */
 void KScanOption::redrawWidget()
 {
-    if (!valid() || mControl==NULL || getBuffer()==NULL) return;
+    if (!isValid() || !isReadable() || mControl==NULL || getBuffer()==NULL) return;
 
-    if (mControl->type()==KScanControl::Number)		// numeric control
+    KScanControl::ControlType type = mControl->type();
+    if (type==KScanControl::Number)			// numeric control
     {
         int i = 0;
         if (get(&i)) mControl->setValue(i);
     }
-    else						// text control
+    else if (type==KScanControl::Text)			// text control
     {
         mControl->setText(get());
     }
@@ -211,17 +223,35 @@ void KScanOption::reload()
 {
     if (mControl!=NULL)
     {
-        if (!active())
+        if (isGroup())
         {
-            kDebug() << "not active" << mDesc->name;
+            mControl->setEnabled(true);			// always enabled
+            return;					// no more to do
+        }
+
+        if (!isActive())
+        {
+#ifdef DEBUG_RELOAD
+            kDebug() << "not active" << mName;
+#endif
             mControl->setEnabled(false);
         }
-        else if (!softwareSetable())
+        else if (!isSoftwareSettable())
         {
-            kDebug() << "not software settable" << mDesc->name;
+#ifdef DEBUG_RELOAD
+            kDebug() << "not settable" << mName;
+#endif
             mControl->setEnabled(false);
         }
         else mControl->setEnabled(true);
+    }
+
+    if (!isReadable())
+    {
+#ifdef DEBUG_RELOAD
+        kDebug() << "not readable" << mName;
+#endif
+        return;
     }
 
     if (mBuffer.isNull())				// first get mem if needed
@@ -230,7 +260,7 @@ void KScanOption::reload()
         allocForDesc();					// allocate the buffer now
     }
 
-    if (!active()) return;
+    if (!isActive()) return;
 
     if (mDesc->size>mBuffer.size())
     {
@@ -253,25 +283,25 @@ void KScanOption::reload()
 }
 
 
-bool KScanOption::autoSetable() const
+bool KScanOption::isAutoSettable() const
 {
     return (mDesc!=NULL && (mDesc->cap & SANE_CAP_AUTOMATIC));
 }
 
 
-bool KScanOption::commonOption() const
+bool KScanOption::isCommonOption() const
 {
-    return (mDesc!=NULL && (mDesc->cap & SANE_CAP_ADVANCED));
+    return (mDesc!=NULL && !(mDesc->cap & SANE_CAP_ADVANCED));
 }
 
 
-bool KScanOption::active() const
+bool KScanOption::isActive() const
 {
     return (mDesc!=NULL && SANE_OPTION_IS_ACTIVE(mDesc->cap));
 }
 
 
-bool KScanOption::softwareSetable() const
+bool KScanOption::isSoftwareSettable() const
 {
     return (mDesc!=NULL && SANE_OPTION_IS_SETTABLE(mDesc->cap));
 }
@@ -281,7 +311,7 @@ KScanOption::WidgetType KScanOption::type() const
 {
     KScanOption::WidgetType ret = KScanOption::Invalid;
 	
-    if (valid())
+    if (isValid())
     {
         switch (mDesc->type)
         {	
@@ -322,13 +352,17 @@ case SANE_TYPE_STRING:
 	    else ret = KScanOption::String;
 	    break;
 
+case SANE_TYPE_GROUP:
+	    ret = KScanOption::Group;
+	    break;
+
 default:    kDebug() << "unsupported SANE type" << mDesc->type;
 	    ret = KScanOption::Invalid;
 	    break;
         }
     }
 
-#ifdef GETSET_DEBUG
+#ifdef DEBUG_GETSET
     kDebug() << "for SANE type" << (mDesc ? mDesc->type : -1) << "returning" << ret;
 #endif
     return (ret);
@@ -337,8 +371,8 @@ default:    kDebug() << "unsupported SANE type" << mDesc->type;
 
 bool KScanOption::set(int val)
 {
-    if (!valid() || mBuffer.isNull()) return (false);
-#ifdef GETSET_DEBUG
+    if (!isValid() || mBuffer.isNull()) return (false);
+#ifdef DEBUG_GETSET
     kDebug() << "Setting" << mName << "to" << val;
 #endif
 
@@ -386,8 +420,8 @@ default:
 
 bool KScanOption::set(double val)
 {
-    if (!valid() || mBuffer.isNull()) return (false);
-#ifdef GETSET_DEBUG
+    if (!isValid() || mBuffer.isNull()) return (false);
+#ifdef DEBUG_GETSET
     kDebug() << "Setting" << mName << "to" << val;
 #endif
 
@@ -433,9 +467,9 @@ default:
 
 bool KScanOption::set(const int *val, int size)
 {
-    if (!valid() || mBuffer.isNull()) return (false);
+    if (!isValid() || mBuffer.isNull()) return (false);
     if (val==NULL) return (false);
-#ifdef GETSET_DEBUG
+#ifdef DEBUG_GETSET
     kDebug() << "Setting" << mName << "to" << size;
 #endif
 
@@ -493,8 +527,8 @@ default:
 
 bool KScanOption::set(const QByteArray &c_string)
 {
-    if (!valid() || mBuffer.isNull()) return (false);
-#ifdef GETSET_DEBUG
+    if (!isValid() || mBuffer.isNull()) return (false);
+#ifdef DEBUG_GETSET
     kDebug() << "Setting" << mName << "to" << c_string;
 #endif
 
@@ -562,8 +596,8 @@ default:
 
 bool KScanOption::set(KGammaTable *gt)
 {
-    if (!valid() || mBuffer.isNull()) return (false);
-#ifdef GETSET_DEBUG
+    if (!isValid() || mBuffer.isNull()) return (false);
+#ifdef DEBUG_GETSET
     kDebug() << "Setting gamma table for" << mName;
 #endif
 
@@ -612,7 +646,7 @@ default:
 
 bool KScanOption::get(int *val) const
 {
-    if (!valid() || mBuffer.isNull()) return (false);
+    if (!isValid() || mBuffer.isNull()) return (false);
 
     SANE_Word sane_word;
     double d;
@@ -639,7 +673,7 @@ default:
         return (false);
     }
 
-#ifdef GETSET_DEBUG
+#ifdef DEBUG_GETSET
     kDebug() << "Returning" << mName << "as" << *val;
 #endif
     return (true);
@@ -648,7 +682,7 @@ default:
 
 QByteArray KScanOption::get() const
 {
-    if (!valid() || mBuffer.isNull()) return (PARAM_ERROR);
+    if (!isValid() || mBuffer.isNull()) return (PARAM_ERROR);
 
     QByteArray retstr;
     SANE_Word sane_word;
@@ -656,7 +690,7 @@ QByteArray KScanOption::get() const
     /* Handle gamma-table correctly */
     if (type()==KScanOption::GammaTable)
     {
-        retstr = QString("%1,%2,%3").arg(gamma, brightness, contrast).toLocal8Bit();
+        retstr = QString("%1,%2,%3").arg(gamma).arg(brightness).arg(contrast).toLocal8Bit();
     }
     else
     {
@@ -688,7 +722,7 @@ default:
         }
     }
 
-#ifdef GETSET_DEBUG
+#ifdef DEBUG_GETSET
     kDebug() << "Returning" << mName << "as" << retstr;
 #endif
     return (retstr);
@@ -815,7 +849,7 @@ bool KScanOption::getRange(double *minp, double *maxp, double *quantp) const
 
 KScanControl *KScanOption::createWidget(QWidget *parent, const QString &descr)
 {
-    if (!valid())
+    if (!isValid())
     {
         kDebug() << "Option is not valid!";
 	return (NULL);
@@ -831,36 +865,40 @@ KScanControl *KScanOption::createWidget(QWidget *parent, const QString &descr)
     KScanControl *w = NULL;
     switch (type())
     {
-case KScanOption::Bool:					/* Widget Type is ToggleButton */
-	w = createToggleButton(parent, mText);
+case KScanOption::Bool:
+	w = createToggleButton(parent, mText);		// toggle button
 	break;
 
-case KScanOption::SingleValue:				/* Widget Type is Entry-Field */
-	kDebug() << "SingleValue not implemented yet";
+case KScanOption::SingleValue:
+	w = createNumberEntry(parent, mText);		// numeric entry
 	break;
 
-case KScanOption::Range:				/* Widget Type is Slider */
-	w = createSlider(parent, mText);
+case KScanOption::Range:
+	w = createSlider(parent, mText);		// slider and spinbox
 	break;
 
-case KScanOption::Resolution:				/* Widget Type is Resolution */
-	w = createComboBox(parent, mText);
+case KScanOption::Resolution:
+	w = createComboBox(parent, mText);		// special resolution combo
 	break;
 
-case KScanOption::GammaTable:				/* Widget Type is Gamma Table */
+case KScanOption::GammaTable:
 	kDebug() << "GammaTable not implemented here";
-	break;						// No widget, needs to be a set!
+	break;						// no widget for this
 
 case KScanOption::StringList:	 		
-	w = createComboBox(parent, mText);		/* Widget Type is Selection Box */
+	w = createComboBox(parent, mText);		// string list combo
 	break;
 
 case KScanOption::String:
-	w = createEntryField(parent, mText);		/* Widget Type is String Entry */
+	w = createStringEntry(parent, mText);		// free text entry
 	break;
 
 case KScanOption::File:
-	w = createFileField(parent, mText);		/* Widget Type is Filename */
+	w = createFileField(parent, mText);		// file name requester
+        break;
+
+case KScanOption::Group:
+	w = createGroupSeparator(parent, mText);	// group separator
         break;
 
 default:
@@ -872,12 +910,13 @@ default:
     {
         mControl = w;
 
-        if (w->type()==KScanControl::Number)		// numeric control
+        KScanControl::ControlType type = w->type();
+        if (type==KScanControl::Number)			// numeric control
         {
             connect(w, SIGNAL(settingChanged(int)),
                     SLOT(slotWidgetChange(int)));
         }
-        else						// text control
+        else if (type==KScanControl::Text)		// text control
         {
             connect(w, SIGNAL(settingChanged(const QString &)),
                     SLOT(slotWidgetChange(const QString &)));
@@ -892,7 +931,7 @@ default:
         // No accelerators for advanced options, so as not to soak up
         // too many of the available accelerators for controls that are
         // rarely going to be used.  See also getLabel().
-        if (!commonOption()) KAcceleratorManager::setNoAccel(w);
+        if (!isCommonOption()) KAcceleratorManager::setNoAccel(w);
     }
  	
     reload();						// check if active, enabled etc.
@@ -914,9 +953,15 @@ inline KScanControl *KScanOption::createComboBox(QWidget *parent, const QString 
 }
 
 
-inline KScanControl *KScanOption::createEntryField(QWidget *parent, const QString &text)
+inline KScanControl *KScanOption::createStringEntry(QWidget *parent, const QString &text)
 {
-    return (new KScanEntry(parent, text));
+    return (new KScanStringEntry(parent, text));
+}
+
+
+inline KScanControl *KScanOption::createNumberEntry(QWidget *parent, const QString &text)
+{
+    return (new KScanNumberEntry(parent, text));
 }
 
 
@@ -934,11 +979,17 @@ inline KScanControl *KScanOption::createFileField(QWidget *parent, const QString
 }
 
 
+inline KScanControl *KScanOption::createGroupSeparator(QWidget *parent, const QString &text)
+{
+    return (new KScanGroup(parent, text));
+}
+
+
 QLabel *KScanOption::getLabel(QWidget *parent, bool alwaysBuddy) const
 {
     if (mControl==NULL) return (NULL);
     KSqueezedTextLabel *l = new KSqueezedTextLabel(mControl->label(), parent);
-    if (commonOption() || alwaysBuddy) l->setBuddy(mControl->focusProxy());
+    if (isCommonOption() || alwaysBuddy) l->setBuddy(mControl->focusProxy());
     return (l);
 }
 
@@ -993,7 +1044,7 @@ void KScanOption::allocBuffer(long size)
 {
     if (size<1) return;
 
-#ifdef MEM_DEBUG
+#ifdef DEBUG_MEM
     kDebug() << "Allocating" << size << "bytes for" << name;
 #endif
 

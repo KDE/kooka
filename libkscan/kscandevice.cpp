@@ -88,7 +88,7 @@ void KScanDevice::guiSetEnabled(const QByteArray &name, bool state)
     QWidget *w = so->widget();
     if (w==NULL) return;
 
-    w->setEnabled(state && so->softwareSetable());
+    w->setEnabled(state && so->isSoftwareSettable());
 }
 
 
@@ -127,12 +127,12 @@ KScanOption *KScanDevice::getGuiElement(const QByteArray &name,
     if (so!=NULL) return (so);				// if so, just return that
 
     so = new KScanOption(alias);			// create a new scan option
-    if (so->valid())					// option was created
+    if (so->isValid())					// option was created
     {
         mGuiElements.append(so);			// add to list of GUI elements
 
         QWidget *w = so->createWidget(parent, descr);	// create widget for option
-        if (w!=NULL) w->setEnabled(so->active() && so->softwareSetable());
+        if (w!=NULL) w->setEnabled(so->isActive() && so->isSoftwareSettable());
         else kDebug() << "No widget created for" << name;
     }
     else						//  option not created
@@ -333,19 +333,22 @@ KScanDevice::Status KScanDevice::findOptions()
         const SANE_Option_Descriptor *d = sane_get_option_descriptor(mScannerHandle, i);
         if (d==NULL) continue;				// could not get descriptor
 
+        QByteArray name;
+        if (d->name!=NULL && strlen(d->name)>0) name = d->name;
+
         if (d->type==SANE_TYPE_GROUP)			// option is a group,
-        {						// not currently supported
-            kDebug() << "Option" << i << "group" << QString(d->title);
-            continue;
+        {						// give it a dummy name
+            name = "group-";
+            name += QByteArray::number(i);
         }
 
-        if (d->name!=NULL && strlen(d->name)>0)		// must have a name
+        if (!name.isEmpty())				// must now have a name
         {
-            kDebug() << "Option" << i << "is" << QString(d->name);
-            mOptionDict.insert(d->name, i);
-            mOptionList.append(d->name);
+            kDebug() << "Option" << i << "is" << name;
+            mOptionDict.insert(name, i);
+            mOptionList.append(name);
         }
-        else kDebug() << "Invalid option (no name and not a group)";
+        else kDebug() << "Invalid option" << i << "(no name and not a group)";
     }
 
     return (KScanDevice::Ok);
@@ -367,7 +370,7 @@ QList<QByteArray> KScanDevice::getCommonOptions()
     {
         const QByteArray optname = (*it);
         KScanOption opt(optname);
-        if (opt.commonOption()) opts.append(optname);
+        if (opt.isCommonOption()) opts.append(optname);
     }
 
     return (opts);
@@ -383,7 +386,7 @@ QList<QByteArray> KScanDevice::getAdvancedOptions()
     {
         const QByteArray optname = (*it);
         KScanOption opt(optname);
-        if (!opt.commonOption()) opts.append(optname);
+        if (!opt.isCommonOption()) opts.append(optname);
     }
 
     return (opts);
@@ -417,11 +420,11 @@ KScanDevice::Status KScanDevice::apply( KScanOption *opt, bool isGammaTable )
    }
 
 
-   if( ! opt->initialised() || opt->getBuffer() == 0 )
+   if( ! opt->isInitialised() || opt->getBuffer() == 0 )
    {
       kDebug() << "Attempt to set uninit/null buffer of" << oname << "-> skipping!";
 
-      if( opt->autoSetable() )
+      if( opt->isAutoSettable() )
       {
 	 kDebug() << "Setting option" << oname << "automatic";
 	 mSaneStatus = sane_control_option( mScannerHandle, val,
@@ -436,12 +439,12 @@ KScanDevice::Status KScanDevice::apply( KScanOption *opt, bool isGammaTable )
    }
    else
    {
-      if( ! opt->active() )
+      if( ! opt->isActive() )
       {
 	 kDebug() << "Option" << oname << "is not active";
 	 stat = KScanDevice::OptionNotActive;
       }
-      else if( ! opt->softwareSetable() )
+      else if( ! opt->isSoftwareSettable() )
       {
 	 kDebug() << "Option" << oname << "is not Software Settable";
 	 stat = KScanDevice::OptionNotActive;
@@ -577,7 +580,7 @@ void KScanDevice::slotReloadAllBut(KScanOption *not_opt)
         KScanOption *so = (*it);
         if (so!=not_opt)
         {
-            kDebug() << "Reloading" << so->getName();
+            //kDebug() << "Reloading" << so->getName();
             so->reload();
             so->redrawWidget();
         }
@@ -874,7 +877,7 @@ KScanDevice::Status KScanDevice::acquireScan(const QString &filename)
              it!=mGuiElements.constEnd(); ++it)
         {
             KScanOption *so = (*it);
- 	    if (so->active())
+ 	    if (so->isActive())
  	    {
  	         kDebug() << "apply" << so->getName();
  	         apply( so );
@@ -1396,13 +1399,13 @@ void KScanDevice::loadOptionSet( KScanOptSet *optSet )
    while( it != optSet->end() )
    {
 	  KScanOption *so = it.value();
-      if( ! so->initialised() )
+      if( ! so->isInitialised() )
 	 kDebug() << "Option" << so->getName() << "is not initialised";
 
-      if( ! so->active() )
+      if( ! so->isActive() )
 	 kDebug() << "Option" << so->getName() << "is not active";
 
-      if( so && so->active() && so->initialised())
+      if( so && so->isActive() && so->isInitialised())
       {
 	 kDebug() << "Option" << so->getName() << "set to" << so->get();
 	 apply( so );
@@ -1424,7 +1427,7 @@ void KScanDevice::getCurrentOptions(KScanOptSet *optSet)
         if (so==NULL) continue;
 
         kDebug() << "Storing" << so->getName();
-        if (so->active())
+        if (so->isActive())
         {
             apply(so);
             optSet->backupOption(*so);

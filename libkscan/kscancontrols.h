@@ -34,6 +34,7 @@ class QCheckBox;
 class QSlider;
 class QLineEdit;
 class QStringList;
+class QGroupBox;
 
 class KUrlRequester;
 
@@ -59,7 +60,8 @@ public:
     enum ControlType
     {
         Text,
-        Number
+        Number,
+        Group
     };
 
     /**
@@ -85,7 +87,7 @@ public:
 
     /**
      * Set the control's text value, for controls of type @c Text.
-     * Ignored for controls of type @c Number.
+     * Ignored for controls of type @c Number or @c Group.
      *
      * @param text The new text value
      */
@@ -94,13 +96,14 @@ public:
     /**
      * Get the control's current text value.
      *
-     * @return the text value, or @c QString::null for a @c Number control.
+     * @return the text value, or @c QString::null for a @c Number
+     * or @c Group control.
      */
     virtual QString text() const;
 
     /**
      * Set the control's numeric value, for controls of type @c Number.
-     * Ignored for controls of type @c Text.
+     * Ignored for controls of type @c Text or @c Group.
      *
      * @param val The new numeric value
      */
@@ -109,7 +112,8 @@ public:
     /**
      * Get the control's current numeric value.
      *
-     * @return the numeric value, or @c 0 for a @c Text control.
+     * @return the numeric value, or @c 0 for a @c Text
+     * or @c Group control.
      */
     virtual int value() const;
 
@@ -208,7 +212,7 @@ private:
  * @see QLineEdit
  */
 
-class KSCAN_EXPORT KScanEntry : public KScanControl
+class KSCAN_EXPORT KScanStringEntry : public KScanControl
 {
     Q_OBJECT
 
@@ -219,12 +223,44 @@ public:
      * @param parent parent widget
      * @param text descriptive label for the control
      */
-    KScanEntry(QWidget *parent, const QString &text);
+    KScanStringEntry(QWidget *parent, const QString &text);
 
     KScanControl::ControlType type() const { return (KScanControl::Text); }
 
     QString text() const;
     void setText(const QString& text);
+
+private:
+    QLineEdit *mEntry;
+};
+
+
+/**
+ * A numeric entry field.
+ *
+ * @see QLineEdit
+ */
+
+class KSCAN_EXPORT KScanNumberEntry : public KScanControl
+{
+    Q_OBJECT
+
+public:
+    /**
+     * Creates the control.
+     *
+     * @param parent parent widget
+     * @param text descriptive label for the control
+     */
+    KScanNumberEntry(QWidget *parent, const QString &text);
+
+    KScanControl::ControlType type() const { return (KScanControl::Number); }
+
+    int value() const;
+    void setValue(int i);
+
+protected slots:
+    void slotTextChanged(const QString &s);
 
 private:
     QLineEdit *mEntry;
@@ -344,6 +380,34 @@ public:
 
 private:
     KUrlRequester *mEntry;
+};
+
+
+/**
+ * A line separator between option groups.
+ *
+ * @see QGroupBox
+ */
+
+class KSCAN_EXPORT KScanGroup : public KScanControl
+{
+    Q_OBJECT
+
+public:
+    /**
+     * Creates the control.
+     *
+     * @param parent parent widget
+     * @param text descriptive label for the control
+     */
+    KScanGroup(QWidget *parent, const QString &text);
+
+    KScanControl::ControlType type() const { return (KScanControl::Group); }
+
+    QString label() const;
+
+private:
+    QGroupBox *mGroup;
 };
 
 

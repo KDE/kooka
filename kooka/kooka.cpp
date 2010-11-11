@@ -258,7 +258,6 @@ void Kooka::setupActions()
     //m_view->connectGalleryAction( importImageAction );
 
     deleteImageAction = new KAction(KIcon("edit-delete"), i18n("Delete Image"), this);
-    // TODO: can get standard accel?
     deleteImageAction->setShortcut(Qt::SHIFT+Qt::Key_Delete);
     connect(deleteImageAction, SIGNAL(triggered()), m_view->gallery(), SLOT(slotDeleteItems()));
     actionCollection()->addAction("deleteImage", deleteImageAction);

@@ -79,6 +79,11 @@ endif (HAVE_SANE)
 
 add_definitions(${QT_DEFINITIONS} ${KDE4_DEFINITIONS})
 
+# TODO: One day...
+#add_definitions(-DQT_NO_CAST_FROM_BYTEARRAY)
+#add_definitions(-DQT_NO_CAST_TO_ASCII)
+#add_definitions(-DQT_NO_CAST_FROM_ASCII)
+
 include_directories(${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR} ${KDE4_INCLUDES})
 
 ############### SVN revision number in svnversion.h ###############

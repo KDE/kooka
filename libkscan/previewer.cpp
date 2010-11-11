@@ -33,7 +33,7 @@
 #include <kmessagebox.h>
 #include <kdialog.h>
 
-#ifdef AUTOSEL_DEBUG
+#ifdef DEBUG_AUTOSEL
 #include <qfile.h>
 #include <qtextstream.h>
 #endif
@@ -597,7 +597,7 @@ void  Previewer::findSelection( )
     }
     /* Now try to find values in arrays that have grayAdds higher or lower
      * than threshold */
-#ifdef AUTOSEL_DEBUG
+#ifdef DEBUG_AUTOSEL
     /* debug output */
     {
         QFile fi( "/tmp/thheight.dat");

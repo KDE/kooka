@@ -146,10 +146,10 @@ void KScanSlider::slotRevertValue()
 }
 
 
-//  KScanEntry - free text entry field
-//  ----------------------------------
+//  KScanStringEntry - free text entry field
+//  ----------------------------------------
 
-KScanEntry::KScanEntry(QWidget *parent, const QString &text)
+KScanStringEntry::KScanStringEntry(QWidget *parent, const QString &text)
     : KScanControl(parent, text)
 {
     mEntry = new QLineEdit(this);
@@ -162,16 +162,51 @@ KScanEntry::KScanEntry(QWidget *parent, const QString &text)
 }
 
 
-QString KScanEntry::text() const
+QString KScanStringEntry::text() const
 {
     return (mEntry->text());
 }
 
 
-void KScanEntry::setText(const QString &text)
+void KScanStringEntry::setText(const QString &text)
 {
     if (text==mEntry->text()) return;			// avoid recursive signals
     mEntry->setText(text);
+}
+
+
+//  KScanNumberEntry - number entry field
+//  -------------------------------------
+
+KScanNumberEntry::KScanNumberEntry(QWidget *parent, const QString &text)
+    : KScanControl(parent, text)
+{
+    mEntry = new QLineEdit(this);
+    mEntry->setValidator(new QIntValidator);
+    mLayout->addWidget(mEntry);
+
+    connect(mEntry, SIGNAL(textChanged(const QString &)), SLOT(slotTextChanged(const QString &)));
+    connect(mEntry, SIGNAL(returnPressed()), SIGNAL(returnPressed()));
+
+    setFocusProxy(mEntry);
+}
+
+
+int KScanNumberEntry::value() const
+{
+    return (mEntry->text().toInt());
+}
+
+
+void KScanNumberEntry::setValue(int i)
+{
+    mEntry->setText(QString::number(i));
+}
+
+
+void KScanNumberEntry::slotTextChanged(const QString &s)
+{
+    emit settingChanged(s.toInt());
 }
 
 
@@ -323,4 +358,22 @@ void KScanFileRequester::setText(const QString &text)
 {
     if (text==mEntry->url().url()) return;		// avoid recursive signals
     mEntry->setUrl(text);
+}
+
+
+//  KScanGroup - group separator
+//  ----------------------------
+
+KScanGroup::KScanGroup(QWidget *parent, const QString &text)
+    : KScanControl(parent, text)
+{
+    mGroup = new QGroupBox(text, this);
+    mGroup->setFlat(true);
+    mLayout->addWidget(mGroup);
+}
+
+
+QString KScanGroup::label() const
+{
+    return (QString::null);
 }
