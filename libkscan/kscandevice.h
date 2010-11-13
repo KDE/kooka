@@ -222,7 +222,7 @@ public:
      * load scanner parameter sets. All options stored in @param optSet
      * are loaded into the scan device.
      */
-    void loadOptionSet(KScanOptSet *optSet);
+    void loadOptionSet(const KScanOptSet *optSet);
 
     /**
      *  applys the values in an scan-option object. The value to
@@ -233,21 +233,21 @@ public:
      *  @param  a scan-option object with the scanner option to set and
      *  an optional boolean parameter if it is a gamma table.
      **/
-    KScanDevice::Status apply(KScanOption *opt, bool isGammaTable = false);
+    KScanDevice::Status apply(const KScanOption *opt, bool isGammaTable = false);
 
     /**
      *  returns true if the option exists in that device.
      *  @param name: the name of a option from a returned option-List
      *  @return true, if the option exists
      */
-    bool optionExists(const QByteArray &name);
+    bool optionExists(const QByteArray &name) const;
 
     /**
      *  checks if the backend knows the option with the required name under
      *  a different name, like some backends do. If it does, the known name
      *  is returned, otherwise a null QByteArray.
      */
-    QByteArray aliasName(const QByteArray &name);
+    QByteArray aliasName(const QByteArray &name) const;
 
     /**
      *  returns a Widget suitable for the selected Option and creates the
@@ -265,7 +265,7 @@ public:
      *  returns the pointer to an already created KScanOption from the
      *  gui element list. Cares for option name aliases.
      */
-    KScanOption *getExistingGuiElement(const QByteArray &name);
+    KScanOption *getExistingGuiElement(const QByteArray &name) const;
 
     /**
      *  sets an widget of the named option enabled/disabled
@@ -354,6 +354,7 @@ signals:
      *  options changed. The application may connect a slot to this
      *  signal to see, if other options became active/inactive.
      **/
+    // TODO: not used
     void sigOptionsChanged();
 
     /**
@@ -361,6 +362,7 @@ signals:
      *  scan parameters change. The parameters need to be reread
      *  by sane_get_parameters().
      **/
+    // TODO: emitted but never used
     void sigScanParamsChanged();
 
     /**
@@ -414,7 +416,6 @@ signals:
      *  the device is still open and valid.
      */
     void sigCloseDevice();
-
 
 private slots:
     /**

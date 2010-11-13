@@ -187,7 +187,7 @@ public:
     bool getRange(double *minp, double *maxp, double *quantp = NULL) const;
 
     QByteArray getName() const		{ return (mName); }
-    void *getBuffer()			{ return (mBuffer.data()); }
+    const void *getBuffer() const	{ return (mBuffer.constData()); }
     KScanControl *widget() const	{ return (mControl); }
     QString configLine() const		{ return (get()); }
 

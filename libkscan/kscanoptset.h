@@ -73,7 +73,6 @@ public:
     KScanOption *get(const QByteArray &optName) const;
     QByteArray getValue(const QByteArray &optName) const;
 
-
     /**
      * saves a configuration set to the configuration file 'ScanSettings'
      * in the default dir config (@see KDir). It uses the group given
@@ -84,7 +83,7 @@ public:
      * @param configName The name of the config, e.g. Black and White
      * @param desc A description for the config.
      */
-    void saveConfig(const QString &scannerName, const QString &configName, const QString &desc);
+    void saveConfig(const QString &scannerName, const QString &configName, const QString &desc) const;
 
     /**
      * allows to load a configuration. Simple create a optionSet with the

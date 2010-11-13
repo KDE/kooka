@@ -96,7 +96,7 @@ void KScanDevice::guiSetEnabled(const QByteArray &name, bool state)
 }
 
 
-KScanOption *KScanDevice::getExistingGuiElement(const QByteArray &name)
+KScanOption *KScanDevice::getExistingGuiElement(const QByteArray &name) const
 {
     KScanOption *ret = NULL;
     QByteArray alias = aliasName(name);
@@ -406,7 +406,7 @@ int KScanDevice::getOptionIndex(const QByteArray &name) const
 }
 
 
-KScanDevice::Status KScanDevice::apply(KScanOption *opt, bool isGammaTable)
+KScanDevice::Status KScanDevice::apply(const KScanOption *opt, bool isGammaTable)
 {
     if (opt==NULL) return (KScanDevice::ParamError);
 
@@ -421,7 +421,7 @@ KScanDevice::Status KScanDevice::apply(KScanOption *opt, bool isGammaTable)
     {
         mSaneStatus = sane_control_option(mScannerHandle, val,
                                           SANE_ACTION_SET_AUTO, 0,
-                                          &sane_result );
+                                          &sane_result);
         /* No return here, please! Carsten, does it still work than for you? */
     }
 
@@ -434,7 +434,7 @@ KScanDevice::Status KScanDevice::apply(KScanOption *opt, bool isGammaTable)
             kDebug() << "Setting option" << oname << "automatic";
             mSaneStatus = sane_control_option(mScannerHandle, val,
                                               SANE_ACTION_SET_AUTO, 0,
-                                              &sane_result );
+                                              &sane_result);
         }
         else mSaneStatus = SANE_STATUS_INVAL;
         stat = KScanDevice::ParamError;
@@ -459,8 +459,8 @@ KScanDevice::Status KScanDevice::apply(KScanOption *opt, bool isGammaTable)
         {
             mSaneStatus = sane_control_option(mScannerHandle, val,
                                               SANE_ACTION_SET_VALUE,
-                                              opt->getBuffer(),
-                                              &sane_result );
+                                              const_cast<void *>(opt->getBuffer()),
+                                              &sane_result);
         }
     }
 
@@ -511,7 +511,7 @@ KScanDevice::Status KScanDevice::apply(KScanOption *opt, bool isGammaTable)
 }
 
 
-bool KScanDevice::optionExists(const QByteArray &name)
+bool KScanDevice::optionExists(const QByteArray &name) const
 {
    bool ret = false;
 
@@ -546,7 +546,7 @@ void KScanDevice::setDirty(const QByteArray &name)
  *  cool thing :-|
  *  Maybe this helps us out ?
  */
-QByteArray KScanDevice::aliasName( const QByteArray& name )
+QByteArray KScanDevice::aliasName( const QByteArray& name ) const
 {
 	if (mOptionDict.contains(name))
 		return name;
@@ -768,6 +768,7 @@ KScanDevice::Status KScanDevice::createNewImage(const SANE_Parameters *p)
 
 KScanDevice::Status KScanDevice::acquirePreview( bool forceGray, int dpi )
 {
+    // TODO: memory leak, see comments in kscanoptset.cpp
     if (mSavedOptions!=NULL) mSavedOptions->clear();
     else mSavedOptions = new KScanOptSet("TempStore");
 
@@ -1396,16 +1397,16 @@ void KScanDevice::saveStartupConfig()
 }
 
 
-void KScanDevice::loadOptionSet( KScanOptSet *optSet )
+void KScanDevice::loadOptionSet(const KScanOptSet *optSet)
 {
-   if (optSet==NULL) return;
+    if (optSet==NULL) return;
 
-   kDebug() << "Loading option set" << optSet->optSetName() << "with" << optSet->count() << "options";
+    kDebug() << "Loading option set" << optSet->optSetName() << "with" << optSet->count() << "options";
 
-   KScanOptSet::ConstIterator it = optSet->begin();
-   while( it != optSet->end() )
-   {
-	  KScanOption *so = it.value();
+    for (KScanOptSet::ConstIterator it = optSet->constBegin();
+         it!=optSet->constEnd(); ++it)
+    {
+        const KScanOption *so = it.value();
       if( ! so->isInitialised() )
 	 kDebug() << "Option" << so->getName() << "is not initialised";
 
@@ -1417,11 +1418,26 @@ void KScanDevice::loadOptionSet( KScanOptSet *optSet )
 	 kDebug() << "Option" << so->getName() << "set to" << so->get();
 	 apply( so );
       }
-      ++it;
    }
 
 }
 
+
+// TODO: does this function make sense?
+//
+// In the first loop here, the active options are apply()'ed and saved
+// and then removed from the mDirtyList.  But we know that the mDirtyList
+// can only contain at most a single instance of a known option (see
+// setDirty() above), and that after the apply() - assuming that it was
+// successful - the option will have been setDirty()'ed.  It will then
+// immediately be removed again by the removeOne().
+//
+// So after the end of the first loop, mDirtyList is empty and the
+// second loop will do nothing.
+//
+// The conclusion seems to be that mDirtyList doesn't do anything.
+// And do we need the apply() here? - surely just a backupOption()
+// of the (readable && active) options would do.
 
 void KScanDevice::getCurrentOptions(KScanOptSet *optSet)
 {
@@ -1432,6 +1448,7 @@ void KScanDevice::getCurrentOptions(KScanOptSet *optSet)
     {
         KScanOption *so = (*it);
         if (so==NULL) continue;
+        if (!so->isReadable()) continue;
 
         kDebug() << "Storing" << so->getName();
         if (so->isActive())
