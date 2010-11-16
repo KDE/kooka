@@ -60,7 +60,7 @@ public:
     };
 
     ScanParams(QWidget *parent);
-    ~ScanParams();
+    virtual ~ScanParams();
 
     bool connectDevice(KScanDevice *newScanDevice, bool galleryMode = false);
 
@@ -69,6 +69,38 @@ public:
 public slots:
     void slotAcquirePreview();
     void slotStartScan();
+
+protected:
+    /**
+     * Create a widget (e.g. a QLabel showing an appropriate message)
+     * which is displayed if no scanner is selected.  This happens if
+     * the @c newScanDevice parameter to @c connectDevice() is NULL and
+     * the @c galleryMode parameter is @c true.
+     *
+     * @return the created widget
+     *
+     * @note The returned widget is added to the GUI, so it will be deleted
+     * when the ScanParams object is deleted.
+     *
+     * @see messageScannerProblem
+     */
+    virtual QWidget *messageScannerNotSelected();
+
+    /**
+     * Create a widget (e.g. a QLabel showing an appropriate message)
+     * which is displayed if a scanner is selected but there is an error
+     * opening or connecting to it.  This happens if the @c newScanDevice
+     * parameter to @c connectDevice() is NULL but the @c galleryMode
+     * parameter is @c false (the default).
+     *
+     * @return the created widget
+     *
+     * @note The returned widget is added to the GUI, so it will be deleted
+     * when the ScanParams object is deleted.
+     *
+     * @see messageScannerNotSelected
+     */
+    virtual QWidget *messageScannerProblem();
 
 protected slots:
     /**
@@ -161,6 +193,9 @@ private:
     QIcon mIconGray;
     QIcon mIconLineart;
     QIcon mIconHalftone;
+
+    QLabel *mProblemMessage;
+    QLabel *mNoScannerMessage;
 };
 
 #endif							// SCANPARAMS_H

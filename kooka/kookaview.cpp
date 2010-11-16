@@ -55,7 +55,6 @@
 #include <kmainwindow.h>
 
 #include "libkscan/scandevices.h"
-#include "libkscan/scanparams.h"
 #include "libkscan/kscandevice.h"
 #include "libkscan/imgscaninfo.h"
 #include "libkscan/deviceselector.h"
@@ -73,6 +72,7 @@
 #include "ocrresedit.h"
 #include "scanparamsdialog.h"
 #include "kookagallery.h"
+#include "kookascanparams.h"
 #include "scangallery.h"
 
 #ifndef KDE4
@@ -494,8 +494,10 @@ bool KookaView::slotSelectDevice(const QByteArray &useDevice, bool alwaysAsk)
 
     if (mScanParams!=NULL) closeScanDevice();		// remove existing GUI object
 
-    mScanParams = new ScanParams(this);			// and create a new one
-    Q_CHECK_PTR(mScanParams);
+    mScanParams = new KookaScanParams(this);		// and create a new one
+    connect(mScanParams, SIGNAL(actionSelectScanner()), SLOT(slotSelectDevice()));
+    connect(mScanParams, SIGNAL(actionAddScanner()), SLOT(slotAddDevice()));
+
     mParamsSite->setWidget(mScanParams);
 
     if (!selDevice.isEmpty())				// connect to the selected scanner

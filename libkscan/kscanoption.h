@@ -79,6 +79,8 @@ public:
     /**
      * Copy constructor
      **/
+    // TODO: try to eliminate
+    // used only by KScanOptSet::backupOption(const KScanOption &opt)
     KScanOption(const KScanOption &so);
 
     /**

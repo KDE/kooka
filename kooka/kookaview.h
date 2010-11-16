@@ -52,6 +52,7 @@ class KookaImage;
 class KookaGallery;
 class OcrResEdit;
 class ScanGallery;
+class KookaScanParams;
 class ScanParams;
 class ImgScanInfo;
 class Previewer;
@@ -226,7 +227,7 @@ private:
     ThumbView *mThumbView;
     Previewer *mPreviewCanvas;
     KookaGallery *mGallery;
-    ScanParams *mScanParams;
+    KookaScanParams *mScanParams;
 
     KScanDevice *mScanDevice;
 

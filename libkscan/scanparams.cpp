@@ -94,6 +94,9 @@ ScanParams::ScanParams(QWidget *parent)
 
     mFirstGTEdit = true;
 
+    mProblemMessage = NULL;
+    mNoScannerMessage = NULL;
+
     // Preload the scan mode icons.  The ones from libksane, which will be
     // available if kdegraphics is installed, look better than our rather
     // ancient ones, so use those if possible.  Set canReturnNull to true
@@ -524,44 +527,58 @@ void ScanParams::initStartupArea()
 }
 
 
-// TODO: this is Kooka-specific, add a setNoScannerMessage() or make it protected
-// so that an application's class can override it
 void ScanParams::createNoScannerMsg(bool galleryMode)
 {
-    QString msg;
-    if (galleryMode)
-    {
-        msg = i18n("<qt>\
-<b>Gallery Mode: No scanner selected</b>\
-<p>\
-In this mode you can browse, manipulate and OCR images already in the gallery.\
-<p>\
-Select a scanner device \
-(use the menu option <i>Settings&nbsp;- Select Scan&nbsp;Device</i>) \
-to perform scanning.");
-    }
-    else
-    {
-        msg = i18n("<qt>\
-<b>Problem: No scanner found, or unable to access it</b>\
-<p>\
-There was a problem using the SANE (Scanner Access Now Easy) library to access \
-the scanner device.  There may be a problem with your SANE installation, or it \
-may not be configured to support your scanner.\
-<p>\
-Check that SANE is correctly installed and configured on your system, and \
-also that the scanner device name and settings are correct.\
-<p>\
-See the SANE project home page \
-(<a href=\"http://www.sane-project.org\">www.sane-project.org</a>) \
-for more information on SANE installation and setup.");
-    }
+    QWidget *lab;
+    if (galleryMode) lab = messageScannerNotSelected();
+    else lab = messageScannerProblem();
 
-    QLabel *lab = new QLabel(msg, this);
-    lab->setWordWrap(true);
-    lab->setOpenExternalLinks(true);
     QGridLayout *lay = dynamic_cast<QGridLayout *>(layout());
     if (lay!=NULL) lay->addWidget(lab, 0, 0, Qt::AlignTop);
+}
+
+
+QWidget *ScanParams::messageScannerNotSelected()
+{
+    if (mNoScannerMessage==NULL)
+    {
+        mNoScannerMessage = new QLabel(
+            i18n("<qt>"
+                 "<b>No scanner selected</b>"
+                 "<p>"
+                 "Select a scanner device to perform scanning."));
+
+        mNoScannerMessage->setWordWrap(true);
+    }
+
+    return (mNoScannerMessage);
+}
+
+
+QWidget *ScanParams::messageScannerProblem()
+{
+    if (mProblemMessage==NULL)
+    {
+        mProblemMessage = new QLabel(
+            i18n("<qt>"
+                 "<b>Problem: No scanner found, or unable to access it</b>"
+                 "<p>"
+                 "There was a problem using the SANE (Scanner Access Now Easy) library to access "
+                 "the scanner device.  There may be a problem with your SANE installation, or it "
+                 "may not be configured to support your scanner."
+                 "<p>"
+                 "Check that SANE is correctly installed and configured on your system, and "
+                 "also that the scanner device name and settings are correct."
+                 "<p>"
+                 "See the SANE project home page "
+                 "(<a href=\"http://www.sane-project.org\">www.sane-project.org</a>) "
+                 "for more information on SANE installation and setup."));
+
+        mProblemMessage->setWordWrap(true);
+        mProblemMessage->setOpenExternalLinks(true);
+    }
+
+    return (mProblemMessage);
 }
 
 
