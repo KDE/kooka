@@ -34,7 +34,7 @@
 #include <kdebug.h>
 
 #include "kooka.h"
-#include "svnversion.h"
+#include "vcsversion.h"
 
 
 static const char shortDesc[] = "Scanning, image gallery and OCR";
@@ -75,8 +75,8 @@ int main( int argc, char *argv[] )
     KAboutData about("kooka",				// appName
                      "",				// catalogName
                      ki18n("Kooka"),			// programName
-#if SVN_HAVE_VERSION
-                     (VERSION " (SVN " SVN_REVISION_STRING ")"),
+#if VCS_AVAILABLE
+                     (VERSION " (" VCS_TYPE " " VCS_REVISION ")"),
 #else
                      VERSION,				// version
 #endif

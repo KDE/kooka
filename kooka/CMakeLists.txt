@@ -179,7 +179,7 @@ if (HAVE_TIFF)
   target_link_libraries(kooka ${TIFF_LIBRARIES})
 endif (HAVE_TIFF)
 
-add_dependencies(kooka svnversion)
+add_dependencies(kooka vcsversion)
 
 ########### clobbering ###############
 

@@ -86,18 +86,13 @@ add_definitions(${QT_DEFINITIONS} ${KDE4_DEFINITIONS})
 
 include_directories(${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR} ${KDE4_INCLUDES})
 
-############### SVN revision number in svnversion.h ###############
+############### VCS revision number in vcsversion.h ###############
 
-find_program(SVNCMD svn)
-if (NOT SVNCMD)
-  set(SVNCMD "")
-endif (NOT SVNCMD)
-
-add_custom_target(svnversion
+add_custom_target(vcsversion
   ALL
-  COMMENT "Checking SVN version"
+  COMMENT "Checking VCS version"
   VERBATIM
-  COMMAND sh ${CMAKE_CURRENT_SOURCE_DIR}/svnversion.sh ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${VERSION} ${SVNCMD}
+  COMMAND sh ${CMAKE_CURRENT_SOURCE_DIR}/vcsversion.sh ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${VERSION}
 )
 
 ########### clobbering ###############
@@ -106,7 +101,7 @@ add_custom_target(clobber
   COMMENT "Clobber in ${CMAKE_CURRENT_BINARY_DIR}..."
   VERBATIM
   COMMAND sh -c "rm -r -f CMakeTmp *.cmake"
-  COMMAND sh -c "rm -f svnversion.h"
+  COMMAND sh -c "rm -f vcsversion.h"
   COMMAND sh -c "rm -r -f bin lib"
   COMMAND sh -c "rm -r -f CMakeFiles"
 )
