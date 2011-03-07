@@ -335,8 +335,10 @@ QWidget *ScanParams::createScannerParams()
         frame->addRow(l, cb);
     }
 
-    // Resolution setting.  Try "X-Resolution" setting first, this is
-    // normally the same option as "Resolution" (according to saneopts.h).
+    // Resolution setting.  Try "X-Resolution" setting first, this is the
+    // option we want if the resolutions are split up.  If there is no such
+    // option then try just "Resolution", this may not be the same as
+    // "X-Resolution" even though this was the case in SANE<=1.0.19.
     so = mSaneDevice->getGuiElement(SANE_NAME_SCAN_X_RESOLUTION, frame);
     if (so==NULL) so = mSaneDevice->getGuiElement(SANE_NAME_SCAN_RESOLUTION, frame);
     if (so!=NULL)
@@ -1048,25 +1050,23 @@ void ScanParams::setMaximalScanSize()
 
 void ScanParams::slotNewResolution(KScanOption *opt)
 {
-    if (opt==NULL) return;
-
     KScanOption *opt_x = mSaneDevice->getExistingGuiElement(SANE_NAME_SCAN_X_RESOLUTION);
+    if (opt_x==NULL) opt_x = mSaneDevice->getExistingGuiElement(SANE_NAME_SCAN_RESOLUTION);
     KScanOption *opt_y = mSaneDevice->getExistingGuiElement(SANE_NAME_SCAN_Y_RESOLUTION);
 
-    int x_res = 0;
-    opt_x->get(&x_res);					// get the X resolution
+    int x_res = 0;                                      // get the X resolution
+    if (opt_x!=NULL && opt_x->isValid()) opt_x->get(&x_res);
 
-    int y_res = x_res;					// assume Y same as X
+    int y_res = 0;                                      // get the Y resolution
+    if (opt_y!=NULL && opt_y->isValid()) opt_y->get(&y_res);
 
-    if (opt_y!=NULL && opt_y->isValid())		// have separate X/Y settings
-    {
-        if (mResolutionBind!=NULL && mResolutionBind->isActive())
-        {						// settings may be different
-            opt_y->get(&y_res);				// so read Y setting too
-        }
-    }
+    kDebug() << "X/Y resolution" << x_res << y_res;
 
-    emit scanResolutionChanged(x_res, y_res);
+    if (y_res==0) y_res = x_res;                        // use X res if Y unavailable
+    if (x_res==0) x_res = y_res;                        // unlikely, but orthogonal
+
+    if (x_res==0 && y_res==0) kDebug() << "resolution not available!";
+    else emit scanResolutionChanged(x_res, y_res);
 }
 
 

@@ -817,15 +817,17 @@ KScanDevice::Status KScanDevice::acquirePreview( bool forceGray, int dpi )
     }
 
     /* Some sort of Scan Resolution option should always exist */
-    KScanOption res(SANE_NAME_SCAN_RESOLUTION);
-    kDebug() << "Scan resolution (before preview) is" << QString(res.get());
-    mSavedOptions->backupOption(res);
+    KScanOption *xres = getExistingGuiElement(SANE_NAME_SCAN_X_RESOLUTION);
+    if (xres==NULL) xres = getExistingGuiElement(SANE_NAME_SCAN_RESOLUTION);
+
+    kDebug() << "Scan resolution (before preview) is" << QString(xres->get());
+    mSavedOptions->backupOption(*xres);
 
     int preview_dpi = dpi;
     if (dpi==0)						// preview DPI not specified
     {
         double min, max;
-        if (!res.getRange(&min, &max))
+        if (!xres->getRange(&min, &max))
         {
             kDebug() << "Could not retrieve resolution range!";
             min = 75.0;					// hope every scanner can do this
@@ -837,15 +839,15 @@ KScanDevice::Status KScanDevice::acquirePreview( bool forceGray, int dpi )
     }
 
     /* Set scan resolution for preview */
-    if (!optionExists(SANE_NAME_SCAN_Y_RESOLUTION)) mCurrScanResolutionY = 0;
+    KScanOption *yres = getExistingGuiElement(SANE_NAME_SCAN_Y_RESOLUTION);
+    if (yres==NULL) mCurrScanResolutionY = 0;
     else
     {
-        KScanOption yres(SANE_NAME_SCAN_Y_RESOLUTION);
         /* if active ? */
-        mSavedOptions->backupOption(yres);
-        yres.set(preview_dpi);
-        apply(&yres);
-        yres.get(&mCurrScanResolutionY);
+        mSavedOptions->backupOption(*yres);
+        yres->set(preview_dpi);
+        apply(yres);
+        yres->get(&mCurrScanResolutionY);
 
         /* Resolution bind switch? */
         if (optionExists(SANE_NAME_RESOLUTION_BIND))
@@ -858,11 +860,11 @@ KScanDevice::Status KScanDevice::acquirePreview( bool forceGray, int dpi )
         }
     }
 
-    res.set(preview_dpi);
-    apply(&res);
+    xres->set(preview_dpi);
+    apply(xres);
 
     /* Store the resulting preview for additional image information */
-    res.get(&mCurrScanResolutionX);
+    xres->get(&mCurrScanResolutionX);
     if (mCurrScanResolutionY==0) mCurrScanResolutionY = mCurrScanResolutionX;
 
     return (acquireData(true));				// perform the preview
