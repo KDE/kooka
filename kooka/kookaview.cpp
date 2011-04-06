@@ -1248,8 +1248,8 @@ void KookaView::showOpenWithMenu(KActionMenu *menu)
 
     int i = 0;
     mOpenWithOffers = KMimeTypeTrader::self()->query(mimeType);
-    for (KService::List::ConstIterator it = mOpenWithOffers.begin();
-         it!=mOpenWithOffers.end(); ++it, ++i)
+    for (KService::List::ConstIterator it = mOpenWithOffers.constBegin();
+         it!=mOpenWithOffers.constEnd(); ++it, ++i)
     {
         KService::Ptr service = (*it);
         kDebug() << "> offer:" << (*it)->name();

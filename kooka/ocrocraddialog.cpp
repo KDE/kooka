@@ -142,7 +142,7 @@ OcrEngine::EngineError OcrOcradDialog::setupGui()
     gl->addWidget(l, 2, 0);
     m_characterSet = new QComboBox(w);
     m_characterSet->addItem(i18n("(default)"), false);
-    for (QStringList::const_iterator it = vals.begin(); it!=vals.end(); ++it)
+    for (QStringList::const_iterator it = vals.constBegin(); it!=vals.constEnd(); ++it)
     {
         m_characterSet->addItem(*it, true);
     }
@@ -163,7 +163,7 @@ OcrEngine::EngineError OcrOcradDialog::setupGui()
     gl->addWidget(l, 3, 0);
     m_filter = new QComboBox(w);
     m_filter->addItem(i18n("(default)"), false);
-    for (QStringList::const_iterator it = vals.begin(); it!=vals.end(); ++it)
+    for (QStringList::const_iterator it = vals.constBegin(); it!=vals.constEnd(); ++it)
     {
         m_filter->addItem(*it, true);
     }
@@ -184,7 +184,7 @@ OcrEngine::EngineError OcrOcradDialog::setupGui()
     gl->addWidget(l, 4, 0);
     m_transform = new QComboBox(w);
     m_transform->addItem(i18n("(default)"), false);
-    for (QStringList::const_iterator it = vals.begin(); it!=vals.end(); ++it)
+    for (QStringList::const_iterator it = vals.constBegin(); it!=vals.constEnd(); ++it)
     {
         m_transform->addItem(*it, true);
     }

@@ -89,8 +89,8 @@ ScanDevices::ScanDevices()
             grp2.writeEntry(USERDEV_TYPE, types);
         }
 
-        QStringList::const_iterator it2 = descs.begin();
-        QStringList::const_iterator it3 = types.begin();
+        QStringList::const_iterator it2 = descs.constBegin();
+        QStringList::const_iterator it3 = types.constBegin();
         for (QStringList::const_iterator it1 = devs.constBegin();
              it1!=devs.constEnd(); ++it1,++it2,++it3)
         {						// avoid duplication
