@@ -38,6 +38,8 @@ extern "C" {
 #include <sane/saneopts.h>
 }
 
+#include "libkscan/kscanoption.h"
+
 #include "kookaimage.h"
 
 #define ID_SCREEN 0
@@ -92,17 +94,11 @@ PhotoCopyPrintDialogPage::PhotoCopyPrintDialogPage(KScanDevice *newScanDevice)
     QString strBR_Y;
 
 
-    if( sane_device->optionExists( SANE_NAME_SCAN_MODE ) )
-    {
-        KScanOption res ( SANE_NAME_SCAN_BR_X );
-        strBR_X = res.get();
-    }
+    KScanOption *res = sane_device->getOption(SANE_NAME_SCAN_BR_X, true);
+    if (res!=NULL) strBR_X = res->get();
 
-    if( sane_device->optionExists( SANE_NAME_SCAN_MODE ) )
-    {
-        KScanOption res ( SANE_NAME_SCAN_BR_Y );
-        strBR_Y = res.get();
-    }
+    res = sane_device->getOption(SANE_NAME_SCAN_BR_Y, true);
+    if (res!=NULL) strBR_Y = res->get();
 
     QString str1 = strBR_Y+"x"+strBR_X;
 //if (strBR_X == "215" && strBR_Y == "295") str1 ="Letter";
@@ -153,8 +149,8 @@ bool PhotoCopyPrintDialogPage::isValid(QString& msg)
 
 QLabel *PhotoCopyPrintDialogPage::constructLabel(Q3VGroupBox *group, const char *strTitle, const QByteArray &strSaneOption)
 {
-    KScanOption res (strSaneOption);
-    QString str = i18n(strTitle)+": "+"\t"+res.get();
+    KScanOption *res = sane_device->getOption(strSaneOption, true);
+    QString str = i18n(strTitle)+": "+"\t"+(res!=NULL ? res->get() : "?");
     QLabel* lbl = new QLabel(group);
     lbl->setText(str);
     return (lbl);

@@ -27,8 +27,7 @@
 #include <qimage.h>
 #include <qlist.h>
 #include <qhash.h>
-
-#include "kscanoption.h"
+#include <qmap.h>
 
 extern "C" {
 #include <sane/sane.h>
@@ -38,18 +37,28 @@ extern "C" {
 class QWidget;
 class QSocketNotifier;
 
+class KScanOption;
 class KScanOptSet;
 class ImgScanInfo;
 
 
 /**
- *  This is KScanDevice, a class for accessing the SANE scanning functions under KDE
+ * @short Access and control a scanner.
  *
- *  @short KScanDevice
- *  @author Klaas Freitag
- *  @version 0.1alpha
+ * After constructing a @c KScanDevice, a scanner may be opened
+ * via @c openDevice() by specifying its SANE backend name.  Having
+ * done so, the scanner options supported by the scanner may be set
+ * and read individually using a @c KScanOption.
  *
- */
+ * A scan or preview may be initiated, once the scan is finished the
+ * scanned image data is made available via a signal.
+ *
+ * The scan device may be closed (using @c closeDevice()) and opened
+ * again to change the scanner that is accessed.
+ *
+ * @author Klaas Freitag
+ * @author Jonathan Marten
+ **/
 
 class KSCAN_EXPORT KScanDevice : public QObject
 {
@@ -58,8 +67,8 @@ class KSCAN_EXPORT KScanDevice : public QObject
 public:
 
     /**
-     * Scanning/control status
-     */
+     * Scanning/control status.
+     **/
     enum Status
     {
         Ok,
@@ -77,363 +86,447 @@ public:
     };
 
     /**
-     *  Create a KScanDevice.  Only one of these may exist in the application
-     *  at any time;  attempting to create a second one will fail and return
-     *  NULL.
-     */
-    static KScanDevice *create(QObject *parent = NULL);
+     * Construct a new scanner device object.
+     *
+     * @param parent The parent object
+     **/
+    KScanDevice(QObject *parent);
 
     /**
-     *  Access the scan device, or NULL if none currently exists.
-     */
-    static KScanDevice *instance();
-
-    /**
-     *  The caller may delete the returned device when required.
-     */
+     * Destructor.
+     **/
     ~KScanDevice();
 
     /**
-     *  Opens the device named @p backend.
-     *  @param backend the name of the backend to open
-     *  @return the state of the operation
-     */
+     * Open a scanner device.
+     *
+     * @param backend SANE name of the backend to open
+     * @return The status of the operation
+     *
+     * @note This operation may prompt for SANE authentication if
+     * it is required.
+     **/
     KScanDevice::Status openDevice(const QByteArray &backend);
 
     /**
-     * Closes the scan device and frees all related data, makes
-     * the system ready to open a new, other scanner.
-     */
+     * Close the scanner device and frees all related data.
+     * After doing so, a new scanner may be opened.
+     **/
     void closeDevice();
 
     /**
-     *  Returns the short, technical name of the currently attached backend.
-     *  It is in the form 'umax:/dev/sg1'.
-     */
+     * Get the device name of the current scanner backend.
+     * It has the format, for example, "umax:/dev/sg1".
+     *
+     * @return The scanner backend name, or a null string if no scanner
+     * is currently open.
+     **/
     const QByteArray &scannerBackendName() const { return (mScannerName); }
 
     /**
-     *  Returns a long, human readable name of the currently attached
-     *  scanner backend, such as "Mustek SP1200 Flatbed scanner".
+     * Get a readable name/description of the current scanner
+     * backend.  It may read, for example, "Mustek SP1200 Flatbed scanner".
+     *
+     * @return The scanner description.  If no scanner is currently open,
+     * the (I18N'ed) string "No scanner connected" is returned.
      **/
     QString scannerDescription() const;
 
     /**
-     *  Checks whether a scanner device is set and connected (i.e.
-     *  whether the previous openDevice() returned KScanDevice::Ok).
+     * Check whether a scanner device is opened and connected: that is,
+     * whether the @c openDevice() returned @c KScanDevice::Ok).
      **/
     bool isScannerConnected() const	{ return (mScannerInitialised); }
 
     /**
-     *  Get the SANE scanner handle of the currently open scanner.
-     */
+     * Get the SANE scanner handle of the current scanner.
+     *
+     * @return The scanner handle, or @c NULL if no scanner is
+     * currently open.
+     **/
     SANE_Handle scannerHandle() const	{ return (mScannerHandle); }
 
     /**
-     *  Get the KScanOptSet used to store the scanner's gamma tables.
-     */
-    KScanOptSet *gammaTables() const	{ return (mGammaTables); }
-
-
-    /*
-     *  ========= Preview/Scan Functions ==========
-     */
-
-    /**
-     *  Acquires a preview on the selected device.  Allocates
-     *  mScanImage as the QImage returned.  This image remains valid
-     *  until the next call to acquirePreview() or acquire(), or until
-     *  the KScanDevice is destructed.
+     * Acquires a preview from the current scanner device.
+     * When the scan is complete, a result image will be sent by
+     * @c sigNewPreview.
      *
-     *	@param forceGray if @c true, acquire a preview in gray.
-     *	@param dpi       DPI setting for preview. If 0, a suitable low
-     *                   resolution is selected.
-     *  @return the status of the operation
-     */
+     * @param forceGray If this is @c true, the preview is acquired
+     * in greyscale regardless of any other settings.
+     * @param dpi Resolution setting for the preview. If this is 0,
+     * a suitable low resolution is selected.
+     * @return The status of the operation
+     **/
     KScanDevice::Status acquirePreview(bool forceGray = false, int dpi = 0);
 
     /**
-     *  Acquires a scan.  mScanImage is allocated as for acquirePreview().
+     * Acquires a scan from the current scanner device.
+     * When the scan is complete, a result image will be sent by
+     * @c sigNewImage.
      *
-     *  @param filename File name for virtual scanner testing
-     *  @return the status of the operation
-     */
+     * @param filename File name to load, for virtual scanner test mode.
+     * If this is a null or empty string, a real scan is performed.
+     * @return The status of the operation
+     **/
     KScanDevice::Status acquireScan(const QString &filename = QString::null);
 
     /**
-     *  returns the default filename of the preview image of this scanner.
-     *	@return default filename
+     * Get the standard file name for saving the preview image for the
+     * current scanner.
+     *
+     * @return Preview file name
+     *
+     * @note Saving the preview image this does not actually work unless a
+     * subdirectory called @c previews exists within the calling application's
+     * @c data resource directory.
+     * @see loadPreviewImage
+     * @see savePreviewImage
+     * @see KStandardDirs
      **/
-    const QString previewFile();
+    const QString previewFile() const;
 
     /**
-     *  Loads the last saved previewed image on this device from the default file
-     *	@return a bitmap as QImage
+     * Load the last saved preview image for this device from the saved file.
+     *
+     * @return The preview image, or a null image if none could be loaded.
+     *
+     * @see previewFile
+     * @see savePreviewImage
      **/
     QImage loadPreviewImage();
 
     /**
-     *  Saves current previewed image from this device to the default file
-     *  @param image current preview image which should be saved
-     *	@return @c true if the saving was sucessful
+     * Saves a preview image for this device to the standard save file.
+     *
+     * @param image Preview image which is to be saved
+     * @return @c true if the saving was successful
+     *
+     * @see previewFile
+     * @see loadPreviewImage
+     * @note For historical reasons, the image is saved in BMP format.
      **/
-    bool savePreviewImage(const QImage &image);
-
-
-    /*
-     *  ========= List Functions ==========
-     */
+    bool savePreviewImage(const QImage &image) const;
 
     /**
-     *  Returns all existing options of the selected device.
-     *  @see openDevice
-     *	@return a list with the names of all options
+     * Get the names of all of the parameters supported by the
+     * current scanner device.
+     *
+     * @return A list of all known parameter names, in order of their SANE
+     * index.
+     * @see getCommonOptions
+     * @see getAdvancedOptions
      **/
-    QList<QByteArray> getAllOptions();
+    QList<QByteArray> getAllOptions() const;
 
     /**
-     *  Returns the common options of the device. A frontend should
-     *  display the returned options in a convinient way and easy to
-     *  use.
-     *  @see getAllOptions
-     *  @see getAdvancedOptions
-     *  @return a list with with names of the common options
-     */
-    QList<QByteArray> getCommonOptions();
+     * Get the common options of the device. An application will normally
+     * display these options in a convenient and easy to access way.
+     *
+     * @return A list of the names of the common options.
+     * @see getAllOptions
+     * @see getAdvancedOptions
+     **/
+    QList<QByteArray> getCommonOptions() const;
 
     /**
-     *  Returns a list of advanced scan options. A frontend should
-     *  display these options in a special dialog.
-     *  @see getAllOptions
-     *  @see getCommonOptions
-     *  @return a list with names of advanced scan options
-     */
-    QList<QByteArray> getAdvancedOptions();
+     * Get the advanced options of the device. An application may hide
+     * these options away in a less obvious place.
+     *
+     * @return A list of the names of the advanced options.
+     * @see getAllOptions
+     * @see getCommonOptions
+     **/
+    QList<QByteArray> getAdvancedOptions() const;
 
     /**
-     * retrieves a set of the current scan options and writes them
-     * to the object pointed to by parameter optSet
-     * @see KScanOptSet
-     * @param optSet the option set object
-     */
-    void getCurrentOptions(KScanOptSet *optSet);
+     * Retrieve the currently active parameters from the scanner.
+     * This includes all of those that have an associated GUI element,
+     * and also any others (e.g. the TL_X and 3 other scan area settings)
+     * that have been @c apply()'ed but do not have a GUI.
+     *
+     * @param optSet An option set which will receive the options
+     **/
+    void getCurrentOptions(KScanOptSet *optSet) const;
 
     /**
-     * load scanner parameter sets. All options stored in @param optSet
-     * are loaded into the scan device.
-     */
+     * Load a saved parameter set. All options that exist in the set
+     * and which the current scanner supports will be @c set()
+     * with the values from the @c KScanOptSet and @c apply()'ed.
+     *
+     * @param optSet An option set with the options to be loaded
+     **/
     void loadOptionSet(const KScanOptSet *optSet);
 
     /**
-     *  applys the values in an scan-option object. The value to
-     *  set must be set in the KScanOption object prior. However,
-     *  it takes effect after being applied with this function.
-     *  @see KScanOption
-     *  @return the status of the operation
-     *  @param  a scan-option object with the scanner option to set and
-     *  an optional boolean parameter if it is a gamma table.
+     * Check whether the current scanner device supports an option.
+     *
+     * @param name The name of a scanner parameter
+     * @return @c true if the option is known by this scanner
      **/
-    KScanDevice::Status apply(const KScanOption *opt, bool isGammaTable = false);
-
-    /**
-     *  returns true if the option exists in that device.
-     *  @param name: the name of a option from a returned option-List
-     *  @return true, if the option exists
-     */
     bool optionExists(const QByteArray &name) const;
 
     /**
-     *  checks if the backend knows the option with the required name under
-     *  a different name, like some backends do. If it does, the known name
-     *  is returned, otherwise a null QByteArray.
-     */
+     * Resolve a backend-specific option name into a generally known
+     * SANE option name.  See the source code for those names supported.
+     *
+     * @param name The backend-specific parameter name
+     * @return The generally known SANE name, or the input @p name
+     * unchanged if it has no known alias.
+     **/
     QByteArray aliasName(const QByteArray &name) const;
 
     /**
-     *  returns a Widget suitable for the selected Option and creates the
-     *  KScanOption. It is internally connected to the scan device, every
-     *  change to the widget is automaticly considered by the scan device.
-     *  @param name Name of the SANE Option
-     *  @param parent pointer to the parent widget
-     *  @param descr pointer to the text appearing as widget text
+     * Create a @c KScanOption and GUI widget suitable for the specified
+     * scanner parameter.
+     *
+     * @param name Name of the SANE parameter.
+     * @param parent Parent for widget.
+     * @param descr Text description for the GUI label, if this is not
+     * specified or empty then the parameter's SANE @c title is used.
+     * @return A @c KScanOption for the parameter, or @c NULL if none
+     * could be created.
+     *
+     * @see KScanOption::createWidget
+     * @see KScanOption::widget
+     * @see getExistingGuiElement
      **/
     KScanOption *getGuiElement(const QByteArray &name,
                                QWidget *parent,
                                const QString &descr = QString::null);
 
     /**
-     *  returns the pointer to an already created KScanOption from the
-     *  gui element list. Cares for option name aliases.
-     */
+     * Find the @c KScanOption for an existing scanner parameter.
+     *
+     * @param name Name of the SANE parameter.
+     * @return The @c KScanOption for the parameter, or @c NULL if the
+     * parameter does not exist or it has not been created yet.
+     **/
     KScanOption *getExistingGuiElement(const QByteArray &name) const;
 
     /**
-     *  sets an widget of the named option enabled/disabled
+     * Create or retrieve a @c KScanOption for the specified scanner
+     * parameter.
+     *
+     * @param name Name of the SANE parameter.
+     * @param create If the option does not yet exist, then create it if
+     * this is @c true (the default).  If this is @c false, then do not
+     * create the option if it does not already exist but return NULL
+     * instead.
+     * @return The existing or created option, or @c NULL if @p create
+     * is @c false and the option does not currently exist.
+     * @note This is the only means for a calling library or application
+     * to create or obtain a @c KScanOption.
+     * @note The returned pointer is valid until the scanner device is
+     * closed or the @c KScanDevice object is destroyed.
      **/
-    void guiSetEnabled(const QByteArray& name, bool state);
+    KScanOption *getOption(const QByteArray &name, bool create = true);
 
     /**
-     *  returns the maximum scan size. This is interesting e.g. for the
-     *  preview widget etc.
-     *  The unit of the return value is millimeter, if the sane backend
-     *  returns millimeter. (TODO)
+     * Set the enabled/disabled state of the GUI widget for an option.
+     *
+     * @param name Name of the SANE parameter.
+     * @param state @c true to enable the widget, @c false to disable it.
+     *
+     * @note If the option is not software settable, it will be disabled
+     * regardless of the @p state parameter.
+     * @see KScanOption::isSoftwareSettable
      **/
-    QSize getMaxScanSize() const;
+    void guiSetEnabled(const QByteArray &name, bool state);
 
     /**
+     * Get the maximum scan area size.  This can be used, for example, to
+     * set the size of a preview widget.
+     *
+     * @return The width and height of the scan area, in SANE units
+     * as returned by the backend.
+     * @note Currently it is assumed that these units are always
+     * millimetres, although according to the SANE documentation it is
+     * possible that the unit may be pixels instead.
+     **/
+    QSize getMaxScanSize();
+
+    /**
+     * Get the current scan image format and bit depth.
+     *
+     * @param format An integer to receive the format, this is a
+     * @c SANE_Frame value.
+     * @param depth An integer to receive the bit depth (the number of bits
+     * per sample).
      **/
     void getCurrentFormat(int *format, int *depth);
 
     /**
-     *  returns the information bit stored for the currently attached scanner
-     *  identified by the key.
-     */
+     * Read a configuration setting for the current scanner
+     * from the global scanner configuration file.
+     *
+     * @param key Configuration key
+     * @param def Default value
+     * @return The configuration setting, or the @p def parameter if
+     * no @p key is saved in the configuration.
+     *
+     * @see storeConfig
+     **/
     QString getConfig(const QString &key, const QString &def = QString::null) const;
 
     /**
-     *  stores the info bit in a config file for the currently connected
-     *  scanner. For this, the config file $KDEHOME/.kde/share/config/scannerrc
-     *  is opened, a group is created that identifies the scanner and the
-     *  device where it is connected. The information is stored into that group.
-     */
+     * Save a configuration setting for the current scanner
+     * to the global scanner configuration file.
+     *
+     * @param key Configuration key
+     * @param val Value to store
+     *
+     * @see getConfig
+     **/
     void storeConfig(const QString &key, const QString &val);
 
     /**
-     *  Retrieve or prompt for a username/password to authenticate the scanner.
-     */
+     * Retrieve or prompt for a username/password to authenticate access
+     * to the scanner.  If there is a saved username/password pair for
+     * the current scanner, these will be returned.  Otherwise,
+     * the user is prompted to enter a username/password (via a
+     * @c KPasswordDialog) and the entries are saved in the global
+     * scanner configuration file.
+     *
+     * @param retuser String to receive the user name
+     * @param retpass String to receive the password
+     * @return @c true if a saved username/password was available or
+     * the user entered them, @c false if no saved username/password
+     * was available and the user cancelled the password dialogue.
+     *
+     * @note This will normally be called by @c KScanGlobal::authCallback()
+     * when a SANE operation requires authentication.
+     **/
     bool authenticate(QByteArray *retuser, QByteArray *retpass);
 
     /**
-     *  Get an error message for the last SANE operation.
-     *  @return the error message string
-     */
+     * Get an error message for the last SANE operation, if it failed.
+     *
+     * @return the error message string
+     **/
     QString lastSaneErrorMessage() const;
 
-    /*
-     *  Get an error message for the specified scan result status.
-     *  @return the error message string
-     */
+    /**
+     * Get an error message for the specified scan result status.
+     *
+     * @return the error message string
+     **/
     static QString statusMessage(KScanDevice::Status stat);
 
-    /*
-     *  Find the SANE option index of an existing option.
+    /**
+     * Find the SANE index of an option.
      *
-     *  @param name Name of the option
-     *  @return Option indx, or 0 if not known
-     */
+     * @param name Name of the SANE parameter.
+     * @return Its option index, or 0 if tyhe option is not known by the scanner.
+     **/
     int getOptionIndex(const QByteArray &name) const;
 
+    /**
+     * Update the scanner with the value of the specified option (using
+     * @c KScanOption::apply()), then reload and update the GUI widget
+     * of all of the other options.  Their value or state may have
+     * changed due to the change in this option.
+     *
+     * @param opt The option to @c apply() but to not @c reload().  If
+     * this is @c NULL, this function is equivalent to @c reloadAll().
+     *
+     * @note This does the same as @c reloadAll(), but it does not
+     * reload the scanner option given as the @p opt parameter. This is
+     * useful to ensure that no recursion takes place while reloading
+     * the options.
+     * @see reloadAll
+     **/
+    void reloadAllBut(KScanOption *opt);
+
+    /**
+     * Reload all of the scanner options and update their GUI widgets.
+     *
+     * @see reloadAllBut
+     **/
+    void reloadAll();
 
 public slots:
     /**
-     *  The setting of some options require a complete reload of all
-     *  options, because they might have changed. In that case, this
-     *  slot is called.
+     * Request the scan device to stop the scan currently in progress.
+     * The scan may continue until the current data block has been
+     * read and processed.
      **/
-    void slotReloadAll();
-
-    /**
-     *  This slot does the same as ReloadAll, but it does not reload
-     *  the scanner option given as parameter. This is useful to make
-     *  sure that no recursion takes places during reload of options.
-     **/
-    void slotReloadAllBut(KScanOption *opt);
-
-    /**
-     *   Notifies the scan device to stop the current scanning.
-     *   This slot only makes sense, if a scan is in progress.
-     *   Note that if the slot is called, it can take a few moments
-     *   to stop the scanning
-     */
     void slotStopScanning();
-
 
 signals:
     /**
-     *  emitted, if an option change was applied, which made other
-     *  options changed. The application may connect a slot to this
-     *  signal to see, if other options became active/inactive.
+     * Emitted to indicate that a scan is about to start.
+     * Depending on the scanner, there may be a delay (for example,
+     * while the lamp warms up) between this signal and the
+     * @c sigAcquireStart.
+     * @see sigAcquireStart
      **/
-    // TODO: not used
-    void sigOptionsChanged();
-
-    /**
-     *  emitted, if an option change was applied, which made the
-     *  scan parameters change. The parameters need to be reread
-     *  by sane_get_parameters().
-     **/
-    // TODO: emitted but never used
-    void sigScanParamsChanged();
-
-    /**
-     *  emitted if a new image was acquired. The image has to be
-     *  copied in the signal handler.
-     */
-    void sigNewImage(const QImage *img, const ImgScanInfo *info);
-
-    /**
-     *  emitted if a new preview was acquired. The image has to be
-     *  copied in the signal handler.
-     */
-    void sigNewPreview(const QImage *img, const ImgScanInfo *info);
-    
-    /**
-     * emitted to tell the application the start of scanning. That is
-     * before the enquiry of the scanner starts. Between this signal
-     * and @see sigScanProgress(0) can be some time consumed by a scanner
-     * warming up etc.
-     */
     void sigScanStart();
 
     /**
-     * signal to indicate the start of acquiring data. It is equal
-     * to @see sigScanProgress emitted with value 0 and thus it is sent
-     * after sigScanStart.
-     * The time between sigScanStart and sigAcquireStart differs very much
-     * from scanner to scanner.
-     */
+     * Emitted to indicate that a scan is starting to acquire data.
+     * The first @c sigScanProgress will be emitted with progress value 0
+     * immediately after this signal.
+     * @see sigScanStart
+     **/
     void sigAcquireStart();
 
     /**
-     *  emitted to tell the application the progress of the scanning
-     *  of one page. The final value is always 100. The signal is
-     *  emitted for zero to give the change to initialize the progress
-     *  dialog.
+     * Emitted to indicate the scanning progress. The first value sent
+     * is always 0 and the final value is always 100. If the scan results
+     * in multiple frames (for a 3-pass scanner) the sequence will
+     * repeat.
+     *
+     * @param progress The scan progress as a percentage
      **/
     void sigScanProgress(int progress);
 
     /**
-     *  emitted to show that a scan finished and provides a status how
-     *  the scan finished.
-     */
+     * Emitted when a new scan image has been acquired.
+     * The receiver should take a deep copy of the image, as it will
+     * be destroyed after this signal has been delivered.
+     *
+     * @param img The acquired scan image
+     * @param info Additional information for the image
+     * @see sigNewPreview
+     **/
+    void sigNewImage(const QImage *img, const ImgScanInfo *info);
+
+    /**
+     * Emitted when a new preview image has been acquired.
+     * The receiver should take a deep copy of the image, as it will
+     * be destroyed after this signal has been delivered.
+     *
+     * @param img The acquired preview image
+     * @param info Additional information for the image
+     * @see sigNewImage
+     **/
+    void sigNewPreview(const QImage *img, const ImgScanInfo *info);
+    
+    /**
+     * Emitted to indicate that a scan or preview has finished.
+     * This signal is always emitted, even if the scan failed with
+     * an error or was cancelled, and before the @c sigNewImage or
+     * the @c sigNewPreview.
+     *
+     * @param stat Status of the scan
+     **/
     void sigScanFinished(KScanDevice::Status stat);
 
     /**
-     *  emitted to give all objects using this device to free all dependencies
-     *  on the scan device, because this signal means, that the scan device is
-     *  going to be closed. The can not be stopped. All receiving objects have
-     *  to free their stuff using the device and pray. While handling the signal,
-     *  the device is still open and valid.
-     */
+     * Emitted when the device is about to be closed by @c closeDevice().
+     * This gives any callers using this device a chance to give up any
+     * dependencies on it.  While this signal is being emitted, the
+     * scanner device is still open and valid.
+     **/
     void sigCloseDevice();
 
 private slots:
-    /**
-     *  Slot to acquire a whole image
-     */
     void doProcessABlock();
-
-    /**
-     *  Image ready-slot in asynchronous scanning
-     */
     void slotScanFinished(KScanDevice::Status status);
 
 private:
-    explicit KScanDevice(QObject *parent);
-
     KScanDevice::Status findOptions();
     void showOptions();
-    void setDirty(const QByteArray &name);
 
     KScanDevice::Status createNewImage(const SANE_Parameters *p);
 
@@ -441,15 +534,19 @@ private:
 
     /**
      * Clear any saved authentication for this scanner, to ensure that the
-     * user is prompted next time.
-     */
+     * user is prompted again next time.
+     **/
     void clearSavedAuth();
 
     /**
-     * Save the current configuration parameter set. Only active options are saved.
+     * Save the current option parameter set.
+     * Only active and GUI options are saved.
      **/
     void saveStartupConfig();
 
+    /**
+     * Scanning progress state.
+     **/
     enum ScanningState					// only used by KScanDevice
     {
         ScanIdle,
@@ -460,10 +557,11 @@ private:
         ScanStopAdfFinished
     };
 
-    QHash<QByteArray, int> mOptionDict;			// option name -> SANE index
-    QList<QByteArray> mOptionList;			// ordered list of known options
-    QList<QByteArray> mDirtyList;			// options that were changed
-    QList<KScanOption *> mGuiElements;
+    typedef QHash<QByteArray,KScanOption *> OptionHash;
+    typedef QMap<int,QByteArray> IndexMap;
+
+    OptionHash mCreatedOptions;				// option name -> KScanOption
+    IndexMap mKnownOptions;				// SANE index -> option name
 
     KScanOptSet *mSavedOptions;
 
@@ -484,13 +582,8 @@ private:
     bool mScanningPreview;
     QSocketNotifier *mSocketNotifier;
 
-    KScanOptSet *mGammaTables;
-
     int mCurrScanResolutionX;
     int mCurrScanResolutionY;
-
-    class KScanDevicePrivate;
-    KScanDevicePrivate *d;
 };
 
 

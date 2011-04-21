@@ -33,6 +33,7 @@
 
 extern "C" {
 #include <sane/sane.h>
+#include <sane/saneopts.h>
 }
 
 #include "kgammatable.h"
@@ -44,9 +45,8 @@ extern "C" {
 //  Debugging options
 #undef DEBUG_MEM
 #undef DEBUG_GETSET
-#undef DEBUG_RELOAD
-
-#undef APPLY_IN_SITU
+#define DEBUG_APPLY
+#define DEBUG_RELOAD
 
 
 //  This defines the possible resolutions that will be shown by the combo.
@@ -55,16 +55,21 @@ extern "C" {
 static const int resList[] = { 50, 75, 100, 150, 200, 300, 600, 900, 1200, 1800, 2400, 4800, 9600, 0 };
 
 
-KScanOption::KScanOption(const QByteArray &name)
+KScanOption::KScanOption(const QByteArray &name, KScanDevice *scandev)
 {
+    mScanDevice = scandev;
+
     if (!initOption(name))
     {
         kDebug() << "initOption for" << name << "failed!";
         return;
     }
 
-    if (mBuffer.isNull()) return;
-    SANE_Status sane_stat = sane_control_option(KScanDevice::instance()->scannerHandle(),
+    if (!mIsReadable) return;				// no value to read
+    if (mBuffer.isNull()) return;			// no buffer for value
+
+    // read initial value from the scanner
+    SANE_Status sane_stat = sane_control_option(mScanDevice->scannerHandle(),
                                                 mIndex,
                                                 SANE_ACTION_GET_VALUE,
                                                 mBuffer.data(), NULL);
@@ -87,19 +92,19 @@ bool KScanOption::initOption(const QByteArray &name)
     // The default-constructed index is 0 for an invalid option, this is OK
     // because although a SANE option with that index exists it is never
     // requested by name.
-    mIndex = KScanDevice::instance()->getOptionIndex(mName);
+    mIndex = mScanDevice->getOptionIndex(mName);
     if (mIndex<=0)
     {
         kDebug() << "no option descriptor for" << mName;
         return (false);
     }
 
-    mDesc = sane_get_option_descriptor(KScanDevice::instance()->scannerHandle(),
-                                       mIndex);
+    mDesc = sane_get_option_descriptor(mScanDevice->scannerHandle(), mIndex);
     if (mDesc==NULL) return (false);
 
     mBuffer.resize(0);
     mBufferClean = true;
+    mApplied = false;
 
     if (mDesc->type==SANE_TYPE_GROUP) mIsGroup = true;
     if (mIsGroup || mDesc->type==SANE_TYPE_BUTTON) mIsReadable = false;
@@ -112,68 +117,7 @@ bool KScanOption::initOption(const QByteArray &name)
     gamma = 100;
 	
     allocForDesc();
-
-    KScanOption *gtOption = KScanDevice::instance()->gammaTables()->get(name);
-    if( gtOption!=NULL)
-    {
-        kDebug() << "Is older GammaTable!";
-        KGammaTable gt;
-        gtOption->get( &gt );
-	
-        gamma = gt.getGamma();
-        contrast = gt.getContrast();
-        brightness = gt.getBrightness();
-    }
-
     return (true);
-}
-
-
-KScanOption::KScanOption(const KScanOption &so)
-    : QObject()
-{
-    mDesc = so.mDesc;					// stored by sane-lib -> may be copied
-    mName = so.mName;					// QCString explicit sharing -> shallow copy
-    mIsGroup = so.mIsGroup;
-    mIsReadable = so.mIsReadable;
-    mControl = NULL;					// the widget is not copied!
-
-    gamma = so.gamma;
-    brightness = so.brightness;
-    contrast = so.contrast;
-
-    if (mDesc==NULL && mName.isNull())
-    {
-        kWarning() << "Trying to copy a not healthy option (no name nor desc)";
-        return;
-    }
-
-    mBuffer = so.mBuffer;				// QByteArray -> deep copy
-    mBufferClean = so.mBufferClean;
-}
-
-
-const KScanOption &KScanOption::operator=(const KScanOption &so)
-{
-    if (this==&so) return (*this);
-
-    mDesc = so.mDesc;					// stored by sane-lib -> may be copied
-    mName = so.mName;					// QCString explicit sharing -> shallow copy
-    mIsGroup = so.mIsGroup;
-    mIsReadable = so.mIsReadable;
-
-    gamma = so.gamma;
-    brightness = so.brightness;
-    contrast = so.contrast;
-
-    delete mControl;					// widget *is* copied here
-    mControl = so.mControl;
-
-    mBuffer.resize(0);					// throw away old buffer
-    mBuffer = so.mBuffer;				// QByteArray -> deep copy
-    mBufferClean = so.mBufferClean;
-
-    return (*this);
 }
 
 
@@ -182,6 +126,7 @@ KScanOption::~KScanOption()
 #ifdef DEBUG_MEM
     if (!mBuffer.isNull()) kDebug() << "Freeing" << mBuffer.size() << "bytes for" << mName;
 #endif
+    // TODO: need to delete mControl here?
 }
 
 
@@ -210,7 +155,7 @@ void KScanOption::slotWidgetChange()
  */
 void KScanOption::redrawWidget()
 {
-    if (!isValid() || !isReadable() || mControl==NULL || getBuffer()==NULL) return;
+    if (!isValid() || !isReadable() || mControl==NULL || mBuffer.isNull()) return;
 
     KScanControl::ControlType type = mControl->type();
     if (type==KScanControl::Number)			// numeric control
@@ -276,7 +221,7 @@ void KScanOption::reload()
         allocForDesc();					// grow the buffer
     }
 
-    SANE_Status sane_stat = sane_control_option(KScanDevice::instance()->scannerHandle(),
+    SANE_Status sane_stat = sane_control_option(mScanDevice->scannerHandle(),
                                                 mIndex,
                                                 SANE_ACTION_GET_VALUE,
                                                 mBuffer.data(), NULL);
@@ -286,7 +231,99 @@ void KScanOption::reload()
         return;
     }
 
+#ifdef DEBUG_RELOAD
+    kDebug() << "reloaded" << mName;
+#endif
     mBufferClean = false;
+}
+
+
+bool KScanOption::apply()
+{
+    int sane_result = 0;
+    bool reload = false;
+#ifdef DEBUG_APPLY
+    QByteArray debug = QString("option '%1'").arg(mName.constData()).toLatin1();
+#endif // DEBUG_APPLY
+
+    SANE_Status sanestat = SANE_STATUS_GOOD;
+
+    if (mName==SANE_NAME_PREVIEW || mName==SANE_NAME_SCAN_MODE)
+    {
+        sanestat = sane_control_option(mScanDevice->scannerHandle(), mIndex,
+                                       SANE_ACTION_SET_AUTO, 0,
+                                       &sane_result);
+        /* No return here, please! Carsten, does it still work than for you? */
+    }
+
+    if (!isInitialised() || mBuffer.isNull())
+    {
+#ifdef DEBUG_APPLY
+        debug += "nobuffer";
+#endif // DEBUG_APPLY
+
+        if (!isAutoSettable()) goto ret;
+
+#ifdef DEBUG_APPLY
+        debug += " auto";
+#endif // DEBUG_APPLY
+        sanestat = sane_control_option(mScanDevice->scannerHandle(), mIndex,
+                                       SANE_ACTION_SET_AUTO, 0,
+                                       &sane_result);
+    }
+    else
+    {
+        if (!isActive())
+        {
+#ifdef DEBUG_APPLY
+            debug += " notactive";
+#endif // DEBUG_APPLY
+            goto ret;
+        }
+        else if (!isSoftwareSettable())
+        {
+#ifdef DEBUG_APPLY
+            debug += " notsettable";
+#endif // DEBUG_APPLY
+            goto ret;
+        }
+        else
+        {
+            sanestat = sane_control_option(mScanDevice->scannerHandle(), mIndex,
+                                           SANE_ACTION_SET_VALUE,
+                                           mBuffer.data(),
+                                           &sane_result);
+        }
+    }
+
+    if (sanestat!=SANE_STATUS_GOOD)
+    {
+        kDebug() << "apply" << mName << "failed, SANE status" << mScanDevice->lastSaneErrorMessage();
+        return (false);
+    }
+
+#ifdef DEBUG_APPLY
+    debug += " applied";
+#endif // DEBUG_APPLY
+
+    if (sane_result & SANE_INFO_RELOAD_OPTIONS)
+    {
+#ifdef DEBUG_APPLY
+        debug += " reload";
+#endif // DEBUG_APPLY
+        reload = true;
+    }
+
+#ifdef DEBUG_APPLY
+    if (sane_result & SANE_INFO_INEXACT) debug += " inexact";
+#endif // DEBUG_APPLY
+
+    mApplied = true;
+ret:
+#ifdef DEBUG_APPLY
+    kDebug() << debug.constData();			// no quotes, please
+#endif // DEBUG_APPLY
+    return (reload);
 }
 
 
@@ -314,6 +351,19 @@ bool KScanOption::isSoftwareSettable() const
 }
 
 
+// Some heuristics are used here to determine whether the type of a numeric
+// (SANE_TYPE_INT or SANE_TYPE_FIXED) option needs to be further refined.
+// If the constraint is SANE_TYPE_RANGE and the unit is SANE_UNIT_DPI then
+// it is assumed to be a resolution;  otherwise, if it is an array then
+// it is assumed to be a gamma table.  The comment below suggests that
+// this guess (for the gamma table) may not be reliable.
+//
+// TODO: May be better to hardwire the option names here, especially for the
+// gamma table (and maybe also for resolution, it does give a false positive
+// for the 'test' device option "int-constraint-array-constraint-range").
+// ScanParams::slotApplyGamma() has the complete repertoire of gamma table
+// names.
+
 KScanOption::WidgetType KScanOption::type() const
 {
     KScanOption::WidgetType ret = KScanOption::Invalid;
@@ -339,13 +389,13 @@ case SANE_TYPE_FIXED:
                     else ret = KScanOption::GammaTable;
                 }
             }
-	    else if(mDesc->constraint_type==SANE_CONSTRAINT_NONE)
-	    {
-                ret = KScanOption::SingleValue;
-	    }
 	    else if (mDesc->constraint_type==SANE_CONSTRAINT_WORD_LIST)
 	    {
 		ret = KScanOption::StringList;
+	    }
+	    else if(mDesc->constraint_type==SANE_CONSTRAINT_NONE)
+	    {
+                ret = KScanOption::SingleValue;
 	    }
 	    else
 	    {
@@ -354,7 +404,7 @@ case SANE_TYPE_FIXED:
 	    break;
 
 case SANE_TYPE_STRING:
-            if (QString::compare(mDesc->name,"filename")==0) ret = KScanOption::File;
+            if (QString::compare(mDesc->name, SANE_NAME_FILE)==0) ret = KScanOption::File;
             else if (mDesc->constraint_type==SANE_CONSTRAINT_STRING_LIST) ret = KScanOption::StringList;
 	    else ret = KScanOption::String;
 	    break;
@@ -418,16 +468,11 @@ case SANE_TYPE_FIXED:					// Fill the whole buffer with that value
 default:
 	kDebug() << "Can't set" << mName << "with this type";
         return (false);
-        break;
     }
 
     mBufferClean = false;
-#ifdef APPLY_IN_SITU
-    applyVal();
-#endif
     return (true);
 }
-
 
 
 bool KScanOption::set(double val)
@@ -470,9 +515,6 @@ default:
    }
 
     mBufferClean = false;
-#ifdef APPLY_IN_SITU
-    applyVal();
-#endif
     return (true);
 }
 
@@ -482,7 +524,7 @@ bool KScanOption::set(const int *val, int size)
     if (!isValid() || mBuffer.isNull()) return (false);
     if (val==NULL) return (false);
 #ifdef DEBUG_GETSET
-    kDebug() << "Setting" << mName << "to" << size;
+    kDebug() << "Setting" << mName << "of size" << size;
 #endif
 
     int offset = 0;
@@ -521,7 +563,6 @@ case SANE_TYPE_FIXED:
 default:
 	kDebug() << "Can't set" << mName << "with this type";
         return (false);
-        break;
     }
 
     int copybyte = mDesc->size;
@@ -530,39 +571,36 @@ default:
     //kdDebug(29000) << "Copying " << copybyte << " byte to options buffer" << endl;
     mBuffer = QByteArray(((const char *) qa.data()),copybyte);
     mBufferClean = false;
-#ifdef APPLY_IN_SITU
-    applyVal();
-#endif
     return (true);
 }
 
 
-bool KScanOption::set(const QByteArray &c_string)
+bool KScanOption::set(const QByteArray &buf)
 {
     if (!isValid() || mBuffer.isNull()) return (false);
 #ifdef DEBUG_GETSET
-    kDebug() << "Setting" << mName << "to" << c_string;
+    kDebug() << "Setting" << mName << "to" << buf;
 #endif
 
     int val;
     int origSize;
 
     /* Check if it is a gammatable. If it is, convert to KGammaTable and call
-     *  the approbiate set method.
+     *  the appropriate set method.
      */
     QRegExp re( "\\d+,\\d+,\\d+" );
     re.setMinimal(true);
-    QString s(c_string);
+    QString s(buf);
     if (s.contains(re))
     {
         QStringList relist = s.split(",");
 
-        int brig = (relist[0]).toInt();
-        int contr = (relist[1]).toInt();
-        int gamm = (relist[2]).toInt();
+        int gamm = (relist[0]).toInt();
+        int brig = (relist[1]).toInt();
+        int contr = (relist[2]).toInt();
 
-        KGammaTable gt( brig, contr, gamm );
-        kDebug() << "Setting GammaTable with int vals" << brig << contr << gamm;
+        KGammaTable gt( gamm, brig, contr);
+        kDebug() << "Setting GammaTable with int vals" << gamm << brig << contr;
         return (set(&gt));
     }
 
@@ -571,37 +609,33 @@ bool KScanOption::set(const QByteArray &c_string)
     {
 case SANE_TYPE_STRING:
         origSize = mBuffer.size();
-        mBuffer = QByteArray(c_string.data(),(c_string.length()+1));
+        mBuffer = QByteArray(buf.data(),(buf.length()+1));
         mBuffer.resize(origSize);			// restore original size
         break;
 
 case SANE_TYPE_INT:
 case SANE_TYPE_FIXED:
         bool ok;
-        val = c_string.toInt(&ok);
+        val = buf.toInt(&ok);
         if (ok) set(&val,1);
         else
         {
-            kDebug() << "Conversion of string value" << c_string << "failed!";
+            kDebug() << "Conversion of string value" << buf << "failed!";
             return (false);
         }
         break;
 
 case SANE_TYPE_BOOL:
-        val = (c_string=="true") ? 1 : 0;
+        val = (buf=="true") ? 1 : 0;
         set(val);
         break;
 
 default:
 	kDebug() << "Can't set" << mName << "with this type";
         return (false);
-        break;
     }
 
     mBufferClean = false;
-#ifdef APPLY_IN_SITU
-    applyVal();
-#endif
     return (true);
 }
 
@@ -649,9 +683,6 @@ default:
 
     mBuffer = QByteArray(((const char *) qa.data()),mDesc->size);
     mBufferClean = false;
-#ifdef APPLY_IN_SITU
-    applyVal();
-#endif
     return (true);
 }
 
@@ -694,7 +725,7 @@ default:
 
 QByteArray KScanOption::get() const
 {
-    if (!isValid() || mBuffer.isNull()) return (PARAM_ERROR);
+    if (!isValid() || mBuffer.isNull()) return ("");
 
     QByteArray retstr;
     SANE_Word sane_word;
@@ -702,6 +733,8 @@ QByteArray KScanOption::get() const
     /* Handle gamma-table correctly */
     if (type()==KScanOption::GammaTable)
     {
+// TODO: centralise this formatting, and the reverse in set(const QByteArray &),
+// in KGammaTable
         retstr = QString("%1,%2,%3").arg(gamma).arg(brightness).arg(contrast).toLocal8Bit();
     }
     else
@@ -714,7 +747,7 @@ case SANE_TYPE_BOOL:
             break;
 
 case SANE_TYPE_STRING:
-            retstr = (const char*) mBuffer.data();
+            retstr = (const char *) mBuffer.data();
             break;
 
 case SANE_TYPE_INT:
@@ -727,9 +760,8 @@ case SANE_TYPE_FIXED:
             retstr.setNum(sane_word);
             break;
 	
-default:
-            kDebug() << "Can't get" << mName << "as this type";
-            retstr = "unknown";
+default:    kDebug() << "Can't get" << mName << "as this type";
+            retstr = "?";
             break;
         }
     }
@@ -971,7 +1003,7 @@ inline KScanControl *KScanOption::createToggleButton(QWidget *parent, const QStr
 inline KScanControl *KScanOption::createComboBox(QWidget *parent, const QString &text)
 {
     QList<QByteArray> list = getList();
-    return (new KScanCombo( parent, text, list));
+    return (new KScanCombo(parent, text, list));
 }
 
 
@@ -1085,29 +1117,3 @@ void KScanOption::allocBuffer(long size)
 
     mBuffer.fill(0);					// clear allocated buffer
 }
-
-
-#ifdef APPLY_IN_SITU
-//  This seems to be done by KScanDevice::apply() instead
-bool KScanOption::applyVal()
-{
-    if (mIndex<=0 || mBuffer.isNull()) return (false);
-
-    SANE_Status stat = sane_control_option(KScanDevice::gScannerHandle,
-                                           mIndex,
-                                           SANE_ACTION_SET_VALUE,
-                                           mBuffer.data(), NULL);
-    if (stat!=SANE_STATUS_GOOD)
-    {
-        kDebug() << "Error applying" << mName << "status" << sane_strstatus(stat);
-        return (false);
-    }
-
-    kDebug() << "Applied" << mName;
-    return (true);
-}	
-#endif
-
-
-
-

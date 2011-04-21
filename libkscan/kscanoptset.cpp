@@ -30,111 +30,84 @@
 #include "scanglobal.h"
 
 
-// TODO: is this class more complex than it needs to be?
-//
-// It's used for (a) saving and loading option sets in the config files,
-// either the default or explicitly named "Scan Parameters";  (b) backing
-// up and restoring the current scan options while previewing.  Both
-// of these just need to store option names and values - it should not
-// be necessary to copy the entire KScanOption with its complications of
-// deep copying or not, needing a KScanOption assignment operator, and
-// the "strays" list maintained here.  Not having to do opt.get() or
-// opt.set() here may, just possibly, go some way towards eliminating
-// the KScanDevice global data.
-//
-// There's a memory leak here too!  KScanDevice uses a KScanOptSet to save
-// the current scanner values while they are changed for previewing; this
-// is allocated with 'new' the first time that it is required and reused
-// subsequently.  Before each preview the set is clear()'ed which does indeed
-// clear the saved options in it - but it doesn't delete them if they were
-// allocated by us, in the second branch of backupOption().  So the
-// strayCatsList will grow without bounds, and the options within it will
-// stay around for ever.
+// Configuration file keys
+#define SAVESET_GROUP_PREFIX		"Save Set"
+#define SAVESET_GROUP_PREFIX_LENGTH	8
 
-#define SAVESET_GROUP		"Save Set"
-#define SAVESET_KEY_SETDESC	"SetDesc"
-#define SAVESET_KEY_SCANNER	"ScannerName"
+#define SAVESET_KEY_SETDESC		"SetDesc"
+#define SAVESET_KEY_SCANNER		"ScannerName"
 
 
 // Debugging options
 #define DEBUG_BACKUP
 
 
-KScanOptSet::KScanOptSet(const QByteArray &setName)
+// Mappings between a save set name and a configuration file group name
+static QString groupName(const QString &setName)
 {
-    kDebug() << setName;
+    return (QString("%1 %2").arg(SAVESET_GROUP_PREFIX, setName));
+}
 
+static QString groupSetName(const QString &grpName)
+{
+    if (!grpName.startsWith(SAVESET_GROUP_PREFIX)) return (QString::null);
+    return (grpName.mid(SAVESET_GROUP_PREFIX_LENGTH+1));
+}
+
+
+KScanOptSet::KScanOptSet(const QString &setName)
+{
     mSetName = setName;
     mSetDescription = "";
+
+    if (mSetName.isEmpty()) mSetName = "default";
+    kDebug() << mSetName;
 }
 
 
 KScanOptSet::~KScanOptSet()
 {
-    kDebug() << mSetName << strayCatsList.count() << "strays of" << count() << "total";
-    qDeleteAll(strayCatsList);
-    strayCatsList.clear();				/* deep copies from backupOption */
-}
-
-
-KScanOption *KScanOptSet::get(const QByteArray &optName) const
-{
-    return (value(optName));
+    kDebug() << mSetName << "with" << count() << "options";
 }
 
 
 QByteArray KScanOptSet::getValue(const QByteArray &optName) const
 {
-    const KScanOption *re = get(optName);
-
-    QByteArray retStr;
-    if (re!=NULL) retStr = re->get();
-    else kDebug() << "option" << optName << "not available";
-    return (retStr);
+    return (value(optName));
 }
 
 
-/** Allocate a new option and store it **/
-bool KScanOptSet::backupOption(const KScanOption &opt)
+bool KScanOptSet::backupOption(const KScanOption *opt)
 {
-    const QByteArray &optName = opt.getName();
-#ifdef DEBUG_BACKUP
-    kDebug() << "set" << mSetName << "option" << optName;
-#endif // DEBUG_BACKUP
-    bool retval = true;
+    if (opt==NULL || !opt->isValid()) return (false);
 
-    if (optName.isNull()) retval = false;
-    else 
+    const QByteArray optName = opt->getName();
+    if (optName.isNull())
     {
-        KScanOption *newopt = value(optName);
-        if (newopt!=NULL)
-        {
-            /** The option already exists **/
-            /* Copy the new one into the old one.
-               TODO: checken Zuweisungoperatoren OK ?
-               = check assignment operator OK? */
-#ifdef DEBUG_BACKUP
-            kDebug() << "already exists";
-#endif // DEBUG_BACKUP
-            *newopt = opt;
-        }
-        else
-        {
-#ifdef DEBUG_BACKUP
-            const QByteArray &qq = opt.get();
-            kDebug() << "new with value" << qq;
-#endif // DEBUG_BACKUP
-            KScanOption *newopt = new KScanOption(opt);
-            if (newopt!=NULL)
-            {
-                insert(optName,newopt);
-                strayCatsList.append(newopt);
-            }
-            else retval = false;
-        }
+        kDebug() << "option has no name";
+        return (false);
     }
 
-    return (retval);
+    if (!opt->isReadable())
+    {
+        kDebug() << "option is not readable" << optName;
+        return (false);
+    }
+
+    const QByteArray val = opt->get();
+#ifdef DEBUG_BACKUP
+    if (contains(optName)) kDebug() << "replace" << optName << "with value" << QString(val);
+    else kDebug() << "add" << optName << "with value" << QString(val);
+#endif // DEBUG_BACKUP
+    insert(optName, val);
+    return (true);
+}
+
+
+void KScanOptSet::setSetName(const QString &newName)
+{
+    kDebug() << "renaming" << mSetName << "->" << newName;
+    mSetName = newName;
 }
 
 
@@ -144,50 +117,22 @@ void KScanOptSet::setDescription(const QString &desc)
 }
 
 
-void KScanOptSet::backupOptionDict(const KScanOptSet &src)
-{
-#ifdef DEBUG_BACKUP
-    kDebug() << "set" << mSetName;
-#endif // DEBUG_BACKUP
-
-    for (ConstIterator it = src.constBegin(); it!=src.constEnd(); ++it)
-    {
-#ifdef DEBUG_BACKUP
-        kDebug() << "option" << it.key();
-#endif // DEBUG_BACKUP
-        backupOption( *it.value());
-    }
-#ifdef DEBUG_BACKUP
-    kDebug() << "done";
-#endif // DEBUG_BACKUP
-}
-
-
-void KScanOptSet::saveConfig(const QString &scannerName,
-                             const QString &setName,
+void KScanOptSet::saveConfig(const QByteArray &scannerName,
                              const QString &desc) const
 {
-    kDebug() << "Saving set" << setName << "for scanner" << scannerName
+    kDebug() << "Saving set" << mSetName << "for scanner" << scannerName
              << "with" << count() << "options";
 
-    QString cfgName = (!setName.isEmpty() ? setName : "default");
-    KConfigGroup grp = ScanGlobal::self()->configGroup(QString("%1 %2").arg(SAVESET_GROUP, cfgName));
+    QString grpName = groupName(mSetName);
+    KConfigGroup grp = ScanGlobal::self()->configGroup(grpName);
     grp.writeEntry(SAVESET_KEY_SETDESC, desc);
     grp.writeEntry(SAVESET_KEY_SCANNER, scannerName);
 
     for (KScanOptSet::const_iterator it = constBegin();
          it!=constEnd(); ++it)
     {
-        KScanOption *so = (*it);
-        if (!so->isReadable()) continue;
-
-        const QString line = so->configLine();
-        if (line!=PARAM_ERROR)
-        {
-            const QString optName = so->getName();
-            kDebug() << optName << "=" << line;
-            grp.writeEntry(optName,line);
-        }
+        kDebug() << " " << it.key() << "=" << it.value();
+        grp.writeEntry(QString(it.key()), it.value());
     }
 
     grp.sync();
@@ -195,13 +140,11 @@ void KScanOptSet::saveConfig(const QString &scannerName,
 }
 
 
-bool KScanOptSet::load(const QString &scannerName)
+bool KScanOptSet::loadConfig(const QByteArray &scannerName)
 {
-    kDebug() << "Reading into" << mSetName		// our name, as constructed
-             << "-" << count() << "options"
-             << strayCatsList.count() << "strays";
+    kDebug() << "Loading set" << mSetName << "for scanner" << scannerName;
 
-    QString grpName = QString("%1 %2").arg(SAVESET_GROUP, mSetName.constData());
+    QString grpName = groupName(mSetName);
     const KConfigGroup grp = ScanGlobal::self()->configGroup(grpName);
     if (!grp.exists())
     {
@@ -209,36 +152,33 @@ bool KScanOptSet::load(const QString &scannerName)
         return (false);
     }
 
-    const StringMap emap = grp.entryMap();
-    for (StringMap::const_iterator it = emap.constBegin();
+    const QMap<QString, QString> emap = grp.entryMap();
+    for (QMap<QString, QString>::const_iterator it = emap.constBegin();
          it!=emap.constEnd(); ++it)
     {
-        QString optName = it.key().toLatin1();
-        if (optName==SAVESET_KEY_SETDESC) continue;
-        if (optName==SAVESET_KEY_SCANNER) continue;
+        QString optName = it.key();
+        if (optName==SAVESET_KEY_SETDESC) continue;	// ignore this as saved
+        if (optName==SAVESET_KEY_SCANNER)		// check this but ignore
+        {
+            if (!scannerName.isEmpty() && scannerName!=it.value())
+            {
+                kDebug() << "was saved for scanner" << it.value();
+            }
+            continue;
+        }
 
-        KScanOption optset(optName.toLatin1());
-        if (!optset.isValid()) continue;
-        if (!optset.isSoftwareSettable()) continue;
-
-        QByteArray val = it.value().toLatin1();
-        kDebug() << optName << "=" << val;
-
-        optset.set(val);
-        backupOption(optset);
+        kDebug() << " " << it.key() << "=" << it.value();
+        insert(it.key().toLatin1(), it.value().toLatin1());
     }
 
-    kDebug() << "done"
-             << "-" << count() << "options"
-             << strayCatsList.count() << "strays";
-
+    kDebug() << "done with" << count() << "options";
     return (true);
 }
 
 
 KScanOptSet::StringMap KScanOptSet::readList()
 {
-    const QString groupName = SAVESET_GROUP;
+    const QString groupName = SAVESET_GROUP_PREFIX;
     StringMap ret;
 
     const KConfigGroup grp = ScanGlobal::self()->configGroup(groupName);
@@ -246,12 +186,11 @@ KScanOptSet::StringMap KScanOptSet::readList()
     for (QStringList::const_iterator it = groups.constBegin(); it!=groups.constEnd(); ++it)
     {
         QString grp = (*it);
-        kDebug() << "group" << grp;
-        if (grp.startsWith(groupName))
+        QString set = groupSetName(grp);
+        if (!set.isEmpty())
         {
-            QString set = grp.mid(groupName.length()+1);
             if (set==DEFAULT_OPTIONSET) continue;	// don't show this one
-
+            kDebug() << "group" << grp  << "-> set" << set;
             const KConfigGroup g = ScanGlobal::self()->configGroup(grp);
             ret[set] = g.readEntry(SAVESET_KEY_SETDESC, i18n("No description"));
         }
@@ -263,7 +202,7 @@ KScanOptSet::StringMap KScanOptSet::readList()
 
 void KScanOptSet::deleteSet(const QString &setName)
 {
-    const QString grpName = QString("%1 %2").arg(SAVESET_GROUP, setName);
+    const QString grpName = groupName(setName);
     KConfig *conf = ScanGlobal::self()->configGroup().config();
     conf->deleteGroup(grpName);
     conf->sync();

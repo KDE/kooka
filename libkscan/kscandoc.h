@@ -18,7 +18,7 @@
 */
 
 /**
-\mainpage The KScan Library.
+\Xmainpage The KScan Library.
 
    The KScan Library provides an interface for the SANE-lib (see http://www.sane-project.org for more information) for KDE2 applications.
 

@@ -25,35 +25,62 @@
 #include <qobject.h>
 #include <qbytearray.h>
 
+#include "kscandevice.h"
+
 extern "C" {
 #include <sane/sane.h>
 }
-
-
-#define PARAM_ERROR	"parametererror"
 
 
 class QLabel;
 
 class KGammaTable;
 class KScanControl;
+class KScanDevice;
 
 
 /**
- *  This is KScanOption, a class which holds a single scanner option.
+ * @short A single scanner parameter.
  *
- *  @short KScanOption
+ * A scanner may support any number of these parameters, some are are
+ * well-known and common to almost all scanners while others may be
+ * model-specific.
+ *
+ * Most options have an associated GUI element (a @c KScanControl), precisely
+ * which sort of control depending on the type and constraint of the
+ * scanner parameter.
+ *
+ * Only one KScanOption for each scanner parameter may exist.  All options
+ * for a particular scanner are owned by a KScanDevice, and options may only
+ * be created by KScanDevice::getOption().  This ensures that all accesses
+ * to a scanner parameter are consistent.
+ *
+ * KScanOption implements an internal memory buffer as an intermediary between
+ * the scanner and its caller.  There are four basic operations implemented to
+ * access and control the scanner parameters:
+ *
+ * - @c set    - Copy data from a variable or structure of an appropriate type
+ *               into the internal memory buffer.
+ *
+ * - @c apply  - Send the data from the internal memory buffer to the scanner.
+ *
+ * - @c reload - Fetch the scanner data into the internal memory buffer.
+ *
+ * - @c get    - Read the data from the internal memory buffer into a variable
+ *               or structure of an appropriate type.
+ *
  *  @author Klaas Freitag
- *  @version 0.1alpha
- *
+ *  @author Jonathan Marten
  **/
 
 class KSCAN_EXPORT KScanOption : public QObject
 {
     Q_OBJECT
-
 public:
 
+    /**
+     * The type of an associated GUI widget (if there is one).
+     **/
     enum WidgetType
     {
         Invalid,
@@ -70,151 +97,364 @@ public:
     };
 
     /**
-     * Creates a new option object for the named option. After that, the
-     * option is valid and contains the current value retrieved from the
-     * scanner.
-     **/
-    KScanOption(const QByteArray &name);
-
-    /**
-     * Copy constructor
-     **/
-    // TODO: try to eliminate
-    // used only by KScanOptSet::backupOption(const KScanOption &opt)
-    KScanOption(const KScanOption &so);
-
-    /**
-     * Destructor
-     **/
-    ~KScanOption();
-
-    /**
-     * Assignment operator
-     **/
-    // TODO: try to eliminate
-    // used only by KScanOptSet::backupOption(const KScanOption &opt)
-    const KScanOption &operator=(const KScanOption &so);
-
-    /**
-     * Check whether the option is valid, i.e. the option is known
+     * Check whether the option is valid: that is, the parameter is known
      * by the scanner.
+     *
+     * @return @c true if the option is valid
      **/
     bool isValid() const		{ return (mDesc!=NULL); }
 
     /**
-     * Check whether the option is initialised, i.e. if the setting
-     * for the option has been read from the scanner.
+     * Check whether the option is initialised: that is, if the initial
+     * value of the parameter has been read from the scanner.
+     *
+     * @return @c true if the option has been initialised
      **/
     bool isInitialised() const		{ return (!mBufferClean); }
 
     /**
-     * Check whether the option is a group, this is a title only
-     * and many of the operations are not available.
+     * Check whether the option is a group, if so this is a title only
+     * and many of the operations will not be available.
+     *
+     * @return @c true if the option is a group
      **/
     bool isGroup() const		{ return (mIsGroup); }
 
     /**
-     * Check whether the option is can be read from the scanner
-     * (SANE_CAP_SOFT_SELECT with some special exceptions).
-    **/
+     * Check whether the option value can be read from the scanner
+     * (SANE_CAP_SOFT_SELECT with some special exceptions).  Some
+     * options that cannot be read may still be able to be set,
+     * use @c isSoftwareSettable() to check.
+     *
+     * @return @c true if the option is readable
+     * @see isSoftwareSettable
+     **/
     bool isReadable() const		{ return (mIsReadable); }
 
     /**
-     * Check whether the option is auto setable (SANE_CAP_AUTOMATIC),
-     * i.e. the scanner can choose a setting for the option automatically.
-    **/
+     * Check whether the option is auto settable (SANE_CAP_AUTOMATIC):
+     * that is, if the scanner can choose a setting for the option
+     * automatically.
+     *
+     * @return @c true if the option can be set automatically
+     **/
     bool isAutoSettable() const;
 
     /**
      * Check whether the option is a common option (not SANE_CAP_ADVANCED).
+     *
+     * @return @c true if the option is a common option,
+     *         @c false if it is an advanced option.
      **/
     bool isCommonOption() const;
 
     /**
      * Check whether the option is currently active (SANE_OPTION_IS_ACTIVE).
-     * This may change at runtime due to the settings of mode, resolutions etc.
+     * This may change at runtime depending on the settings of other options.
+     *
+     * @return @c true if the option is currently active
      **/
     bool isActive() const;
 
     /**
-     * Check whether the option is setable by software (SANE_OPTION_IS_SETTABLE).
-     * Some scanner options can not be set by software.
+     * Check whether the option is can be set by software
+     * (SANE_OPTION_IS_SETTABLE).  Some scanner options cannot be set,
+     * use @c isReadable() to check if they can be read.
+     *
+     * @return @c true if the option can be set
+     * @see isReadable
      **/
     bool isSoftwareSettable() const;
 
     /**
-     * Return the type of the option.
+     * Check whether the option has an associated GUI element
+     * (not all types of options do).
+     *
+     * @return @c true if the option has a GUI widget
+     **/
+    bool isGuiElement() const		{ return (mControl!=NULL); }
+
+    /**
+     * Check whether the option value has been sent to the scanner:
+     * that is, whether @c apply() has been used.  This is used by
+     * @c KScanDevice to maintain its list of "dirty" options.
+     *
+     * @return @c true if the option has been applied
+     * @see KScanDevice
+     * @see setApplied
+     **/
+    bool isApplied() const		{ return (mApplied); }
+
+    /**
+     * Set or clear the "applied" flag.
+     *
+     * @param app New value for the flag
+     * @see isApplied
+     * @see apply
+     **/
+    void setApplied(bool app = true)	{ mApplied = app; }
+
+    /**
+     * Get the widget type for the option.  This is deduced from the
+     * scanner parameter type and constraint.
+     *
+     * @return the widget type
      **/
     KScanOption::WidgetType type() const;
 
     /**
-     * Set the option value, depending on its type.
+     * Set the option value.
+     *
+     * @param val A new integer value
+     * @return @c true if the value was set successfully
      **/
     bool set(int val);
+
+    /**
+     * Set the option value.
+     *
+     * @param val A new @c double floating point value
+     * @return @c true if the value was set successfully
+     **/
     bool set(double val);
-    bool set(const int *p_val, int size );
-    bool set(const QByteArray &c_string);
-    bool set(bool b)		{ return (set(b ? 1 : 0)); }
+
+    /**
+     * Set the option value.
+     *
+     * @param val A new array of integer values
+     * @param size The length of the array
+     * @return @c true if the value was set successfully
+     **/
+    bool set(const int *val, int size);
+
+    /**
+     * Set the option value.
+     *
+     * @param val A new formatted string value
+     * @return @c true if the value was set successfully
+     **/
+    bool set(const QByteArray &val);
+
+    /**
+     * Set the option value.
+     *
+     * @param val A new boolean value
+     * @return @c true if the value was set successfully
+     **/
+    bool set(bool val)			{ return (set(val ? 1 : 0)); }
+
+    /**
+     * Set the option value.
+     *
+     * @param gt A new gamma table
+     * @return @c true if the value was set successfully
+     **/
     bool set(KGammaTable *gt);
 
     /**
-     * Retrieve the option value, depending on its type.
+     * Retrieve the option value.
+     *
+     * @param val An integer to receive the value read
+     * @return @c true if the value was read successfully
+     *
+     * @note If the scanner parameter is an array, only the first value
+     * is retrieved from it.
      **/
     bool get(int *val) const;
+
+    /**
+     * Retrieve the option value.
+     *
+     * @param gt A gamma table to receive the value read
+     * @return @c true in all cases (unless the @p gt parameter is @c NULL)
+     **/
     bool get(KGammaTable *gt) const;
+
+    /**
+     * Retrieve the option value.
+     *
+     * @return The formatted string value, or @c "?" if the value could
+     * not be read.
+     **/
     QByteArray get() const;
 
     /**
-     * Creates a widget for the scanner option, depending on its type.
+     * Retrieve a list of all possible option values.
      *
-     * For boolean options, a checkbox is generated.
+     * @return A list of formatted string values (as would be returned
+     * by @c get())
      *
-     * For ranges, a KSaneSlider is generated, except for the special case of
-     * a resolution option which generates a KScanCombo.
-     *
-     * For a String list such as mode etc., a KScanCombo is generated.
-     *
-     * For the option types string and gamma table, no widget is generated.
-     *
-     * The widget is maintained completely by the KScanOption object, so it
-     * should not be deleted.
-     *
+     * @note This works for options with SANE_CONSTRAINT_STRING_LIST,
+     * SANE_CONSTRAINT_WORD_LIST and for a SANE_CONSTRAINT_RANGE which is a
+     * resolution setting.  To retrieve the range for other constraint
+     * types, use @c getRange().
      **/
-    KScanControl *createWidget(QWidget *parent, const QString &descr = QString::null);
-    QLabel *getLabel(QWidget *parent, bool alwaysBuddy = false) const;
-    QLabel *getUnit(QWidget *parent) const;
-   
-    // Possible Values
     QList<QByteArray> getList() const;
+
+    /**
+     * Retrieve the range of possible numeric values.
+     *
+     * @param minp A @c double to receive the minimum value
+     * @param maxp A @c double to receive the maximum value
+     * @param quantp A @c double to receive the step, if it is not @c NULL.
+     * @return @c true if the option is a range type
+     *
+     * @note For an option with SANE_CONSTRAINT_WORD_LIST, the minimum
+     * and maximum values are those found in the word list and the step
+     * is the range divided by the number of possible values.  This does
+     * not imply that any intermediate values calculated from these are valid.
+     **/
     bool getRange(double *minp, double *maxp, double *quantp = NULL) const;
 
-    QByteArray getName() const		{ return (mName); }
-    const void *getBuffer() const	{ return (mBuffer.constData()); }
-    KScanControl *widget() const	{ return (mControl); }
-    QString configLine() const		{ return (get()); }
+    /**
+     * Send the data (previously set by @c set()) to the scanner, if this
+     * is possible - if the option is initialised, software settable and
+     * active.
+     *
+     * @return @c true if a reload of other parameters is required
+     * (@c sane_control_option() returned SANE_INFO_RELOAD_OPTIONS).
+     **/
+    bool apply();
 
-    void redrawWidget();
+    /**
+     * Retrieve the current data from the scanner, so that it can be
+     * accessed by @c get().  If the option has an associated GUI control,
+     * the enabled/disabled state of that is set appropriately.
+     **/
     void reload();
+
+    /**
+     * Create a GUI widget for the scanner option, depending on its type.
+     *
+     * - Boolean options have a check box (a @c KScanCheckbox).
+     * - Numeric ranges have a slider/spinbox combination (a @c KScanSlider),
+     *   except for the special case of a resolution option which generates
+     *   a combo box (@c KScanCombo) - this is done for user convenience.
+     * - String and numeric lists generate a combo box (@c KScanCombo).
+     * - Unconstrained string and numeric options generate an entry box
+     *   (@c KScanStringEntry or @c KScanNumberEntry respectively).
+     * - An option which is a file name (present in the SANE "pnm" test device)
+     *   generates a file requester (@c KScanFileRequester).
+     * - Group options generate a separator line (@c KScanGroup), although
+     *   obviously no interaction is allowed.
+     * - Button options generate a clickable button (@c KScanPushButton).
+     *
+     * Ownership of the widget is retained by the @c KScanOption object, so it
+     * should not be deleted by the caller.
+     *
+     * @param parent Parent for the created widget.
+     * @param descr Text description, if this is not specified or empty then
+     * the parameter's SANE @c title is used.
+     * @return The created widget, or @c NULL if it could not be created.
+     **/
+    KScanControl *createWidget(QWidget *parent, const QString &descr = QString::null);
+
+    /**
+     * Create a label widget for the scanner option.  @c createWidget() must
+     * have been used to create the control first.
+     *
+     * If the option is a common option (i.e. not advanced), then the label's
+     * buddy will be set to the control.
+
+     * @param parent Parent widget for the created label.
+     * @param alwaysBuddy If this is @c true, the label's buddy will always
+     * be set even if this is an advanced option.
+     * @return The created label widget.
+     **/
+    QLabel *getLabel(QWidget *parent, bool alwaysBuddy = false) const;
+
+    /**
+     * Create a label widget for the SANE unit of this option.
+     * @c createWidget() must have been used to create the control first.
+     *
+     * @param parent Parent widget for the created label.
+     * @return The created label widget, or @c NULL if no unit is
+     * applicable.
+     **/
+    QLabel *getUnit(QWidget *parent) const;
+   
+    /**
+     * Get the name of the option.
+     *
+     * @return The name of the option
+     **/
+    QByteArray getName() const		{ return (mName); }
+
+    /**
+     * Get the GUI widget for the option, if applicable and one has been
+     * created by @c createWidget()).
+     *
+     * @return The widget, or @c NULL if there is none.
+     **/
+    KScanControl *widget() const	{ return (mControl); }
+
+    /**
+     * Update the GUI widget to reflect the current value of the option.
+     **/
+    void redrawWidget();
 
 protected slots:
     /**
-     *  These slots are called if an option has a GUI element (not all have)
-     *  and if the setting of the widget is changed.
+     * Called when the contents of the GUI widget has changed, if the
+     * option has a GUI element (not all have).  This slot is used for
+     * options that have a @c KScanControl of type @c KScanControl::Text.
+     *
+     * @param t New string contents of the widget
      **/
     void slotWidgetChange(const QString &t);
+
+    /**
+     * Called when the contents of the GUI widget has changed, if the
+     * option has a GUI element (not all have).  This slot is used for
+     * options that have a @c KScanControl of type @c KScanControl::Number.
+     *
+     * @param i New index or setting of the widget
+     **/
     void slotWidgetChange(int i);
+
+    /**
+     * Called when a GUI widget is activated, if the option has a GUI
+     * element (not all have).  This slot is used for options that have
+     * a @c KScanControl of type @c KScanControl::Button.
+     **/
     void slotWidgetChange();
 	
 signals:
     /**
-     *  User has changed a GUI setting
-     */
+     * Emitted when the user changes the GUI setting of the option.
+     * The new setting will have been @c set(), but not yet @c apply()'ed.
+     *
+     * @param so The @c KScanOption which has changed
+     **/
     void guiChange(KScanOption *so);
 
 private:
-#ifdef APPLY_IN_SITU
-    bool applyVal();
-#endif
+    /**
+     * Create a new object for the named option belonging to the
+     * specified scanner device. After construction, if the option
+     * is valid it will initally contain the current parameter value
+     * retrieved from the scanner.
+     *
+     * @param name Name of the scanner option
+     * @param scandev Scanner device
+     *
+     * @note This constructor is private.  All @c KScanOption's are
+     * created by @c KScanDevice; a new or existing @c KScanOption can
+     * be obtained via @c KScanDevice::getOption().
+     **/
+    KScanOption(const QByteArray &name, KScanDevice *scandev);
+    friend KScanOption *KScanDevice::getOption(const QByteArray &, bool);
+
+    /**
+     * Destructor.
+     *
+     * @note This destructor is private.  All @c KScanOption's are
+     * owned by @c KScanDevice, and are deleted when the scan device
+     * is closed.
+     **/
+    ~KScanOption();
+    friend void KScanDevice::closeDevice();
+
     bool initOption(const QByteArray &name);
     void allocForDesc();
     void allocBuffer(long size);
@@ -228,6 +468,7 @@ private:
     KScanControl *createGroupSeparator(QWidget *parent, const QString &text);
     KScanControl *createActionButton(QWidget *parent, const QString &text);
 	
+    KScanDevice *mScanDevice;
     int mIndex;
     const SANE_Option_Descriptor *mDesc;
     QByteArray mName;
@@ -240,10 +481,10 @@ private:
 
     QByteArray mBuffer;
     bool mBufferClean;
+    bool mApplied;
 
     /* For gamma-Tables remember gamma, brightness, contrast */
     int gamma, brightness, contrast;
 };
-
 
 #endif							// KSCANOPTION_H

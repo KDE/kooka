@@ -38,6 +38,7 @@ extern "C" {
 }
 
 #include "libkscan/kscandevice.h"
+#include "libkscan/kscanoption.h"
 #include "libkscan/kscanoptset.h"
 
 #include "newscanparams.h"
@@ -151,15 +152,15 @@ void ScanParamsDialog::slotLoad()
     QString name = item->text();
     kDebug() << "set" << name;
 
-    KScanOptSet optSet(name.toLocal8Bit());
-    if (!optSet.load())
+    KScanOptSet optSet(name);
+    if (!optSet.loadConfig())
     {
         kDebug() << "Failed to load set" << name;
         return;
     }
 
     sane->loadOptionSet(&optSet);
-    sane->slotReloadAll();
+    sane->reloadAll();
 }
 
 
@@ -188,7 +189,9 @@ void ScanParamsDialog::slotSave()
     {
         const KScanOption *sm = sane->getExistingGuiElement(SANE_NAME_SCAN_MODE);
         const KScanOption *sr = sane->getExistingGuiElement(SANE_NAME_SCAN_RESOLUTION);
-        if (sm!=NULL && sr!=NULL) newdesc = i18n("%1, %2 dpi", sm->get().data(), sr->get().data());
+        if (sm!=NULL && sr!=NULL) newdesc = i18n("%1, %2 dpi",
+                                                 sm->get().constData(),
+                                                 sr->get().constData());
     }
 
     NewScanParams d(this,name,newdesc,false);
@@ -199,10 +202,10 @@ void ScanParamsDialog::slotSave()
 
         kDebug() << "name" << newName << "desc" << newDesc;
 
-        KScanOptSet optSet(newName.toLocal8Bit());
+        KScanOptSet optSet(newName);
         sane->getCurrentOptions(&optSet);
 
-        optSet.saveConfig(sane->scannerBackendName(),newName,newDesc);
+        optSet.saveConfig(sane->scannerBackendName(), newDesc);
         sets[newName] = newDesc;
 
         // TODO: why?
@@ -238,14 +241,15 @@ void ScanParamsDialog::slotEdit()
         kDebug() << "new name" << newName << "desc" << newDesc;
 
         KScanOptSet optSet(oldName.toLocal8Bit());
-        if (!optSet.load())
+        if (!optSet.loadConfig())
         {
             kDebug() << "Failed to load set" << oldName;
             return;
         }
 
         KScanOptSet::deleteSet(oldName);		// do first, in case name not changed
-        optSet.saveConfig(sane->scannerBackendName(),newName,newDesc);
+        optSet.setSetName(newName);
+        optSet.saveConfig(sane->scannerBackendName(), newDesc);
 
         sets.remove(oldName);				// do first, ditto
         sets[newName] = newDesc;

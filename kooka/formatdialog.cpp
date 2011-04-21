@@ -73,7 +73,7 @@ images. Only 24 bit per pixel RGB is supported."),
 
     { "image/x-pcx",					// PCX
       I18N_NOOP(
-"This is a lossless compressed format which is often supported by PC imaging \
+"<b>PCX</b> is a lossless compressed format which is often supported by PC imaging \
 applications, although it is rather old and unsophisticated.  It is suitable for \
 color and grayscale images.\
 <p>This format is not recommended, use an open format instead."),

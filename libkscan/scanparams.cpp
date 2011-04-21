@@ -58,6 +58,7 @@ extern "C"
 #include "kgammatable.h"
 #include "kscancontrols.h"
 #include "scansizeselector.h"
+#include "kscanoption.h"
 #include "kscanoptset.h"
 
 
@@ -91,6 +92,7 @@ ScanParams::ScanParams(QWidget *parent)
     mResolutionBind = NULL;
     mProgressDialog = NULL;
     mSourceSelect = NULL;
+    mLed = NULL;
 
     mFirstGTEdit = true;
 
@@ -122,7 +124,7 @@ ScanParams::ScanParams(QWidget *parent)
     mIconHalftone = QIcon(ip);
 
     /* intialise the default last save warnings */
-    startupOptset = NULL;
+    mStartupOptions = NULL;
 }
 
 
@@ -130,7 +132,7 @@ ScanParams::~ScanParams()
 {
     kDebug();
 
-    delete startupOptset;
+    delete mStartupOptions;
     delete mProgressDialog;
 }
 
@@ -167,15 +169,14 @@ bool ScanParams::connectDevice(KScanDevice *newScanDevice, bool galleryMode)
     /* load the startup scanoptions */
     // TODO: check whether the saved scanner options apply to the current scanner?
     // They may be for a completely different one...
-    // Or update KScanDevice to save the startup options on a per-scanner basis.
-    startupOptset = new KScanOptSet(DEFAULT_OPTIONSET);
-    Q_CHECK_PTR( startupOptset );
-
-    if( !startupOptset->load( "Startup" ) )
+    // Or update KScanDevice and here to save/load the startup options
+    // on a per-scanner basis.
+    mStartupOptions = new KScanOptSet(DEFAULT_OPTIONSET);
+    if (!mStartupOptions->loadConfig(mSaneDevice->scannerBackendName()))
     {
-        kDebug() << "Could not load Startup-Options";
-        delete startupOptset;
-        startupOptset = NULL;
+        kDebug() << "Could not load startup options";
+        delete mStartupOptions;
+        mStartupOptions = NULL;
     }
 
     /* Now create Widgets for the important scan settings */
@@ -184,7 +185,7 @@ bool ScanParams::connectDevice(KScanDevice *newScanDevice, bool galleryMode)
     lay->setRowStretch(3, 9);
 
     /* Reload all options to care for inactive options */
-    mSaneDevice->slotReloadAll();
+    mSaneDevice->reloadAll();
 
     /* Create the Scan Buttons */
     QPushButton *pb = new QPushButton(KIcon("preview"), i18n("Pre&view"), this);
@@ -220,17 +221,17 @@ bool ScanParams::connectDevice(KScanDevice *newScanDevice, bool galleryMode)
 void ScanParams::initialise(KScanOption *so)
 {
     if (so==NULL) return;
-    if (startupOptset==NULL) return;
+    if (mStartupOptions==NULL) return;
     if (!so->isReadable()) return;
     if (!so->isSoftwareSettable()) return;
 
     QByteArray name = so->getName();
     if (!name.isEmpty())
     {
-        QByteArray val = startupOptset->getValue(name);
+        QByteArray val = mStartupOptions->getValue(name);
         kDebug() << "Initialising" << name << "with value" << val;
         so->set(val);
-        mSaneDevice->apply(so);
+        so->apply();
     }
 }
 
@@ -510,19 +511,24 @@ QWidget *ScanParams::createScannerParams()
 
 void ScanParams::initStartupArea()
 {
-    if (startupOptset==NULL) return;
+    if (mStartupOptions==NULL) return;
 							// set scan area from saved
-    KScanOption tl_x(SANE_NAME_SCAN_TL_X); initialise(&tl_x);
-    KScanOption tl_y(SANE_NAME_SCAN_TL_Y); initialise(&tl_y);
-    KScanOption br_x(SANE_NAME_SCAN_BR_X); initialise(&br_x);
-    KScanOption br_y(SANE_NAME_SCAN_BR_Y); initialise(&br_y);
+    KScanOption *tl_x = mSaneDevice->getOption(SANE_NAME_SCAN_TL_X);
+    KScanOption *tl_y = mSaneDevice->getOption(SANE_NAME_SCAN_TL_Y);
+    KScanOption *br_x = mSaneDevice->getOption(SANE_NAME_SCAN_BR_X);
+    KScanOption *br_y = mSaneDevice->getOption(SANE_NAME_SCAN_BR_Y);
+
+    initialise(tl_x);
+    initialise(tl_y);
+    initialise(br_x);
+    initialise(br_y);
 
     QRect rect;
     int val1,val2;
-    tl_x.get(&val1); rect.setLeft(val1);		// pass area to previewer
-    br_x.get(&val2); rect.setWidth(val2-val1);
-    tl_y.get(&val1); rect.setTop(val1);
-    br_y.get(&val2); rect.setHeight(val2-val1);
+    tl_x->get(&val1); rect.setLeft(val1);		// pass area to previewer
+    br_x->get(&val2); rect.setWidth(val2-val1);
+    tl_y->get(&val1); rect.setTop(val1);
+    br_y->get(&val2); rect.setHeight(val2-val1);
     emit newCustomScanSize(rect);
 
     area_sel->selectSize(rect);				// set selector to match
@@ -614,13 +620,13 @@ void ScanParams::slotSourceSelect()
 
     /* set the selected Document source, the behavior is stored in a membervar */
     mSourceSelect->set(sel_source.toLatin1());		// TODO: FIX in ScanSourceDialog, then here
-    mSaneDevice->apply(mSourceSelect);
+    mSourceSelect->apply();
     mSourceSelect->reload();
     mSourceSelect->redrawWidget();
 }
 
 
-/** Slot which is called if the user switches in the gui between
+/* Slot which is called if the user switches in the gui between
  *  the SANE-Debug-Mode and the qt image reading
  */
 void ScanParams::slotVirtScanModeSelect(int but)
@@ -780,21 +786,27 @@ void ScanParams::slotEditCustGamma( void )
     kDebug();
     KGammaTable old_gt;
 
-
+#warning Check and port gamma table editing
+// TODO: check handling of gamma tables
+//
+// Maybe need to have a GUI widget for them - a little preview of the
+// gamma curve (a DispGamma) with an edit button.  Will avoid the special-case
+// for the SANE_NAME_CUSTOM_GAMMA button followed by the edit button, and
+// will allow separate editing of the R/G/B gamma tables if the scanner has them.
+// Then the gamma will be initialised correctly along with all the others,
+// avoiding the special case here.
+#if 0
     /* Since gammatable options are not set in the default gui, it must be
      * checked if it is the first edit. If it is, take from loaded default
      * set if available there */
-    if( mFirstGTEdit && startupOptset )
+    if( mFirstGTEdit && mStartupOptions!=NULL)
     {
        mFirstGTEdit = false;
-       KScanOption *gt = startupOptset->get(SANE_NAME_GAMMA_VECTOR);
-       if( !gt )
-       {
+       QByteArray gtValue = mStartupOptions->getOption(SANE_NAME_GAMMA_VECTOR);
 	  /* If it  not gray, it should be one color. */
-	  gt = startupOptset->get( SANE_NAME_GAMMA_VECTOR_R );
-       }
-
-       if( gt )
+       if (gtValue.isNull()) gt = mStartupOptions->getOption(SANE_NAME_GAMMA_VECTOR_R);
+       if (!gtValue.isNull())
+       {
 	  gt->get( &old_gt );
     }
     else
@@ -803,7 +815,7 @@ void ScanParams::slotEditCustGamma( void )
        if( mSaneDevice->optionExists( SANE_NAME_GAMMA_VECTOR ) )
        {
 // TODO: should this and similar use KScanDevice::getExistingGuiElement()?
-	  KScanOption grayGt( SANE_NAME_GAMMA_VECTOR );
+	  KScanOption grayGt( SANE_NAME_GAMMA_VECTOR, mSaneDevice );
 	  /* This will be fine for all color gt's. */
 	  grayGt.get( &old_gt );
 	  kDebug() << "Gray Gamma Table is active ";
@@ -816,7 +828,7 @@ void ScanParams::slotEditCustGamma( void )
 	   */
 	  if( mSaneDevice->optionExists( SANE_NAME_GAMMA_VECTOR_R ))
 	  {
-	     KScanOption redGt( SANE_NAME_GAMMA_VECTOR_R );
+	     KScanOption redGt( SANE_NAME_GAMMA_VECTOR_R, mSaneDevice);
 	     redGt.get( &old_gt );
 	     kDebug() << "Getting old gamma table from Red channel";
 	  }
@@ -829,6 +841,7 @@ void ScanParams::slotEditCustGamma( void )
 	  }
        }
     }
+#endif
 
     kDebug() << "Old gamma table:" << old_gt.getGamma() << old_gt.getBrightness() << old_gt.getContrast();
 
@@ -855,49 +868,37 @@ void ScanParams::slotEditCustGamma( void )
 
 void ScanParams::slotApplyGamma(const KGammaTable *gt)
 {
-   if( ! gt ) return;
+    if (gt==NULL) return;
 
-   kDebug() << "Applying gamma table:" << gt->getGamma() << gt->getBrightness() << gt->getContrast();
+    kDebug() << "Applying gamma table:" << gt->getGamma() << gt->getBrightness() << gt->getContrast();
 
+    KScanOption *so = mSaneDevice->getOption(SANE_NAME_GAMMA_VECTOR, false);
+    if (so!=NULL && so->isActive())
+    {
+        so->set(gt);
+        so->apply();
+    }
 
-   if( mSaneDevice->optionExists( SANE_NAME_GAMMA_VECTOR ) )
-   {
-      KScanOption grayGt( SANE_NAME_GAMMA_VECTOR );
+    so = mSaneDevice->getOption(SANE_NAME_GAMMA_VECTOR_R, false);
+    if (so!=NULL && so->isActive())
+    {
+        so->set(gt);
+        so->apply();
+    }
 
-      /* Now find out, which gamma-Tables are active. */
-      if( grayGt.isActive() )
-      {
-	 grayGt.set( gt );
-	 mSaneDevice->apply( &grayGt, true );
-      }
-   }
+    so = mSaneDevice->getOption(SANE_NAME_GAMMA_VECTOR_G, false);
+    if (so!=NULL && so->isActive())
+    {
+        so->set(gt);
+        so->apply();
+    }
 
-   if( mSaneDevice->optionExists( SANE_NAME_GAMMA_VECTOR_R )) {
-      KScanOption rGt( SANE_NAME_GAMMA_VECTOR_R );
-      if( rGt.isActive() )
-      {
-	 rGt.set( gt );
-	 mSaneDevice->apply( &rGt, true );
-      }
-   }
-
-   if( mSaneDevice->optionExists( SANE_NAME_GAMMA_VECTOR_G )) {
-      KScanOption gGt( SANE_NAME_GAMMA_VECTOR_G );
-      if( gGt.isActive() )
-      {
-	 gGt.set( gt );
-	 mSaneDevice->apply( &gGt, true );
-      }
-   }
-
-   if( mSaneDevice->optionExists( SANE_NAME_GAMMA_VECTOR_B )) {
-      KScanOption bGt( SANE_NAME_GAMMA_VECTOR_B );
-      if( bGt.isActive() )
-      {
-	 bGt.set( gt );
-	 mSaneDevice->apply( &bGt, true );
-      }
-   }
+    so = mSaneDevice->getOption(SANE_NAME_GAMMA_VECTOR_B, false);
+    if (so!=NULL && so->isActive())
+    {
+        so->set(gt);
+        so->apply();
+    }
 }
 
 
@@ -905,13 +906,13 @@ void ScanParams::slotApplyGamma(const KGammaTable *gt)
 // apart from this one.
 
 // TODO: is it necessary to do this on every widget change?
-// sane_control_option() in KScanDevice::apply() will return
+// sane_control_option() in KScanOption::apply() will return
 // SANE_INFO_RELOAD_OPTIONS to indicate that this is necessary.
 
 void ScanParams::slotReloadAllGui(KScanOption *so)
 {
     if (so==NULL || mSaneDevice==NULL) return;
-    mSaneDevice->slotReloadAllBut(so);
+    mSaneDevice->reloadAllBut(so);
 
     // Update the gamma edit button state, if the option exists
     setEditCustomGammaTableState();
@@ -929,32 +930,30 @@ void ScanParams::setEditCustomGammaTableState()
 
     bool butState = false;
 
-    if (mSaneDevice->optionExists(SANE_NAME_CUSTOM_GAMMA))
-    {
-// TODO: should this and similar use KScanDevice::getExistingGuiElement()?
-        KScanOption kso(SANE_NAME_CUSTOM_GAMMA);
-        butState = kso.isActive();
-        //kDebug() << "CustomGamma is active=" << butState;
-    }
+    // TODO: should this be SANE_NAME_GAMMA_VECTOR to match 
+    // slotApplyGamma() above?
+    KScanOption *so = mSaneDevice->getOption(SANE_NAME_CUSTOM_GAMMA, false);
+    if (so!=NULL) butState = so->isActive();
+    //kDebug() << "CustomGamma is active=" << butState;
 
-    if (!butState && mSaneDevice->optionExists(SANE_NAME_GAMMA_VECTOR_R))
+    if (!butState)
     {
-        KScanOption kso(SANE_NAME_GAMMA_VECTOR_R);
-        butState = kso.isActive();
+        KScanOption *so = mSaneDevice->getOption(SANE_NAME_GAMMA_VECTOR_R, false);
+        if (so!=NULL) butState = so->isActive();
         //kDebug() << "CustomGamma Red is active=" << butState;
     }
 
-    if (!butState && mSaneDevice->optionExists(SANE_NAME_GAMMA_VECTOR_G))
+    if (!butState)
     {
-        KScanOption kso(SANE_NAME_GAMMA_VECTOR_G);
-        butState = kso.isActive();
+        KScanOption *so = mSaneDevice->getOption(SANE_NAME_GAMMA_VECTOR_G, false);
+        if (so!=NULL) butState = so->isActive();
         //kDebug() << "CustomGamma Green is active=" << butState;
     }
 
-    if (!butState && mSaneDevice->optionExists(SANE_NAME_GAMMA_VECTOR_B))
+    if (!butState)
     {
-        KScanOption kso( SANE_NAME_GAMMA_VECTOR_B );
-        butState = kso.isActive();
+        KScanOption *so = mSaneDevice->getOption(SANE_NAME_GAMMA_VECTOR_B, false);
+        if (so!=NULL) butState = so->isActive();
         //kDebug() << "CustomGamma blue is active=" << butState;
     }
 
@@ -967,20 +966,20 @@ void ScanParams::applyRect(const QRect &rect)
 {
     kDebug() << "rect=" << rect;
 
-    KScanOption tl_x(SANE_NAME_SCAN_TL_X);
-    KScanOption tl_y(SANE_NAME_SCAN_TL_Y);
-    KScanOption br_x(SANE_NAME_SCAN_BR_X);
-    KScanOption br_y(SANE_NAME_SCAN_BR_Y);
+    KScanOption *tl_x = mSaneDevice->getOption(SANE_NAME_SCAN_TL_X);
+    KScanOption *tl_y = mSaneDevice->getOption(SANE_NAME_SCAN_TL_Y);
+    KScanOption *br_x = mSaneDevice->getOption(SANE_NAME_SCAN_BR_X);
+    KScanOption *br_y = mSaneDevice->getOption(SANE_NAME_SCAN_BR_Y);
 
     double min1,max1;
     double min2,max2;
 
     if (!rect.isValid())				// set full scan area
     {
-        tl_x.getRange(&min1,&max1); tl_x.set(min1);
-        br_x.getRange(&min1,&max1); br_x.set(max1);
-        tl_y.getRange(&min2,&max2); tl_y.set(min2);
-        br_y.getRange(&min2,&max2); br_y.set(max2);
+        tl_x->getRange(&min1, &max1); tl_x->set(min1);
+        br_x->getRange(&min1, &max1); br_x->set(max1);
+        tl_y->getRange(&min2, &max2); tl_y->set(min2);
+        br_y->getRange(&min2, &max2); br_y->set(max2);
 
         kDebug() << "setting full area" << min1 << min2 << "-" << max1 << max2;
     }
@@ -991,29 +990,29 @@ void ScanParams::applyRect(const QRect &rect)
         double brx = rect.right();
         double bry = rect.bottom();
 
-        tl_x.getRange(&min1,&max1);
+        tl_x->getRange(&min1, &max1);
         if (tlx<min1)
         {
             brx += (min1-tlx);
             tlx = min1;
         }
-        tl_x.set(tlx); br_x.set(brx);
+        tl_x->set(tlx); br_x->set(brx);
 
-        tl_y.getRange(&min2,&max2);
+        tl_y->getRange(&min2,&max2);
         if (tly<min2)
         {
             bry += (min2-tly);
             tly = min2;
         }
-        tl_y.set(tly); br_y.set(bry);
+        tl_y->set(tly); br_y->set(bry);
 
         kDebug() << "setting area" << tlx << tly << "-" << brx << bry;
     }
 
-    mSaneDevice->apply(&tl_x);
-    mSaneDevice->apply(&tl_y);
-    mSaneDevice->apply(&br_x);
-    mSaneDevice->apply(&br_y);
+    tl_x->apply();
+    tl_y->apply();
+    br_x->apply();
+    br_y->apply();
 }
 
 
@@ -1038,7 +1037,7 @@ void ScanParams::slotScanSizeSelected(const QRect &rect)
 }
 
 
-/**
+/*
  * sets the scan area to the default, which is the whole area.
  */
 void ScanParams::setMaximalScanSize()
