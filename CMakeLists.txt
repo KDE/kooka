@@ -12,7 +12,7 @@
 ##########################################################################
 
 project(kooka4)
-set(VERSION "0.60")
+set(VERSION "0.61")
 message(STATUS "Configuring for Kooka/libkscan version ${VERSION}")
 
 # where to look first for cmake modules. This line must be the first one or cmake will use the system's FindFoo.cmake
