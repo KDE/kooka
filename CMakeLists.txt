@@ -19,11 +19,11 @@ message(STATUS "Configuring for Kooka/libkscan version ${VERSION}")
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/modules")
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${KDE4_DATA_DIR}/cmake/modules)
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} /ws/trunk/kdepim/cmake/modules)
 
 ############### Build Options ###############
 
 option(SANECONFIG_BIN "Path to the sane-config(1) binary, needed to get SANE configuration" OFF)
+option(KDELIBS_SOURCE_DIR "Path to the kdelibs sources, needed to build API documentation" OFF)
 
 ############### Packages used by KDE ###############
 
@@ -75,6 +75,18 @@ if (HAVE_SANE)
   message(STATUS "SANE libraries: ${SANE_LIBRARIES}")
 endif (HAVE_SANE)
 
+if (KDELIBS_SOURCE_DIR)
+  message(STATUS "kdelibs sources: ${KDELIBS_SOURCE_DIR}")
+  if (EXISTS "${KDELIBS_SOURCE_DIR}/doc/api/doxygen.sh")
+    message(STATUS "kdelibs Doxygen script found, API documentation can be built (use 'make apidox')")
+    set(HAVE_APIDOX true)
+  else (EXISTS "${KDELIBS_SOURCE_DIR}/doc/api/doxygen.sh")
+    message(STATUS "kdelibs Doxygen script not found, API documentation cannot be built")
+  endif (EXISTS "${KDELIBS_SOURCE_DIR}/doc/api/doxygen.sh")
+else (KDELIBS_SOURCE_DIR)
+  message(STATUS "kdelibs sources not specified, API documentation cannot be built")
+endif (KDELIBS_SOURCE_DIR)
+
 ############### Needed commands before building anything ###############
 
 add_definitions(${QT_DEFINITIONS} ${KDE4_DEFINITIONS})
@@ -105,6 +117,15 @@ add_custom_target(clobber
   COMMAND sh -c "rm -r -f bin lib"
   COMMAND sh -c "rm -r -f CMakeFiles"
 )
+
+########### documentation ###############
+
+if (HAVE_APIDOX)
+  add_custom_target(apidox
+    COMMENT "Generating API documentation in ${CMAKE_CURRENT_BINARY_DIR}..."
+    VERBATIM
+    COMMAND sh -c "${KDELIBS_SOURCE_DIR}/doc/api/doxygen.sh --no-modulename --recurse --doxdatadir=${KDELIBS_SOURCE_DIR}/doc/common ${CMAKE_CURRENT_SOURCE_DIR}")
+endif (HAVE_APIDOX)
 
 ############### Now, we add the Kooka components ###############
 

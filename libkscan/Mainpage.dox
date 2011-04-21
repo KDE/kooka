@@ -1,0 +1,13 @@
+/*!
+ * @mainpage The KScan Library API Reference
+ *
+ * <b>This is the reference for the current development version of
+ * the KScan scanning library, as used within the Kooka application.</b>
+ *
+ * For further information on Kooka see the
+ * <a href="http://techbase.kde.org/Projects/Kooka">Kooka Project Page on Techbase</a>.
+ */
+
+// DOXYGEN_NAME="KScan Library"
+// DOXYGEN_ENABLE=YES
+// EXTRACT_PRIVATE=YES

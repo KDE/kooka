@@ -1,0 +1,17 @@
+/*!
+ * @mainpage The Kooka Libraries API Reference
+ *
+ * <b>This is the reference for the current development version of
+ * the libraries, as used within the Kooka scanning application.</b>
+ *
+ * The libraries included here are:
+ *
+ * - <a href="libkscan/html/index.html"><b>libkscan</b></a>
+ *   <i>Scanner access library.</i>
+ *
+ * For further information on Kooka see the
+ * <a href="http://techbase.kde.org/Projects/Kooka">Kooka Project Page on Techbase</a>.
+ */
+
+// DOXYGEN_NAME="Kooka Libraries"
+// DOXYGEN_ENABLE=YES
