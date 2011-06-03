@@ -132,6 +132,7 @@ endif (HAVE_APIDOX)
 add_subdirectory(libkscan)
 add_subdirectory(libfiletree)
 add_subdirectory(kooka)
+add_subdirectory(doc)
 
 add_subdirectory(tools EXCLUDE_FROM_ALL)
 # Like macro_optional_add_subdirectory(), but with EXCLUDE_FROM_ALL
