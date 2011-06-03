@@ -74,4 +74,4 @@ Name[ta]=கூக்கா
 Name[zh_TW]=Kooka 掃描器
 
 X-DCOP-ServiceType=Multi
-Categories=Qt;KDE;Graphics;
+Categories=Qt;KDE;Graphics;Scanning;
