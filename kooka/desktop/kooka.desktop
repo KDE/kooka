@@ -1,11 +1,9 @@
 [Desktop Entry]
-Encoding=UTF-8
 Type=Application
-Exec=kooka %i %m %U
+Exec=kooka %i %U
 Icon=kooka
-Path=
 Terminal=false
-DocPath=kooka/index.html
+X-DocPath=kooka/index.html
 GenericName=Scan & OCR Program
 GenericName[af]=Skandeer & Optiese karakter herkenning Program
 GenericName[ar]=برنامج للمسح الضوئي
