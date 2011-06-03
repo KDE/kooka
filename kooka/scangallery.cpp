@@ -1005,7 +1005,7 @@ void ScanGallery::slotUrlsDropped(FileTreeView *me, QDropEvent *ev,
 
     /* first make the last url to copy to the one to select next */
     KUrl nextSel = dest;
-    nextSel.addPath(urls.back().fileName(false));
+    nextSel.addPath(urls.back().fileName(KUrl::ObeyTrailingSlash));
     m_nextUrlToShow = nextSel;
 
     // TODO: top level window as 3rd parameter?
