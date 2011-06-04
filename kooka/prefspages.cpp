@@ -440,7 +440,7 @@ default:
         mOcrBinaryReq->setEnabled(false);
         mOcrBinaryReq->clear();
 
-        msg = i18n("Unknown engine %1!", mSelectedEngine);
+        msg = i18n("Unknown engine %1.", mSelectedEngine);
         break;
     }
 

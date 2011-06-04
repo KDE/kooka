@@ -773,7 +773,7 @@ void KookaView::slotOcrSpellCheck(bool interactive, bool background)
     if (mOcrEngine==NULL || !mOcrEngine->engineValid() || mOcrResEdit==NULL)
     {
         KMessageBox::sorry(mMainWindow,
-                           i18n("OCR has not been performed yet, or the engine has been changed"),
+                           i18n("OCR has not been performed yet, or the engine has been changed."),
                            i18n("OCR Spell Check not possible"));
         return;
     }

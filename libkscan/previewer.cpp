@@ -380,7 +380,7 @@ void Previewer::updateSelectionDims()
         int pix_w = static_cast<int>(w_inch*scanResX+0.5);
         int pix_h = static_cast<int>(h_inch*scanResY+0.5);
 
-        selSize2->setText(i18n("%1 x %2 pix", pix_w, pix_h));
+        selSize2->setText(i18n("%1 x %2 pixel", pix_w, pix_h));
 
         if (m_bytesPerPix!=-1)				// depth of scan available
         {

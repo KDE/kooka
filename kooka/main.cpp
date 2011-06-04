@@ -37,16 +37,16 @@
 #include "vcsversion.h"
 
 
-static const char shortDesc[] = "Scanning, image gallery and OCR";
+static const char shortDesc[] = I18N_NOOP("Scanning, image gallery and OCR");
 
-static const char longDesc[] = "Kooka provides access to scanner hardware using the "
+static const char longDesc[] = I18N_NOOP("Kooka provides access to scanner hardware using the "
     "<a href=\"http://www.sane-project.org/\">SANE</a> library."
     "\n\n"
     "Kooka allows you to scan, save and view in any image format that KDE supports, "
     "and can perform Optical Character Recognition using the open source "
     "<a href=\"http://jocr.sourceforge.net/\">GOCR</a> or "
     "<a href=\"http://www.gnu.org/software/ocrad/ocrad.html\">OCRAD</a> programs, "
-    "or the commercial <a href=\"http://www.rerecognition.com/\">KADMOS</a> library.";
+    "or the commercial <a href=\"http://www.rerecognition.com/\">KADMOS</a> library.");
 
 // TODO: is the second paragraph of this licence needed with GPL Qt?
 static const char addLicense[] =
@@ -67,7 +67,7 @@ static const char addLicense[] =
     "commercial Qt development licence.\n";
 
 static const char copyright[] =
-    "(C) 2000-2010, the Kooka developers and contributors";
+    I18N_NOOP("(C) 2000-2010, the Kooka developers and contributors");
 
 
 int main( int argc, char *argv[] )

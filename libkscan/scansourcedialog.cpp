@@ -76,7 +76,7 @@ ScanSourceDialog::ScanSourceDialog(QWidget *parent, const QList<QByteArray> list
     KVBox *vbox = new KVBox(this);
     setMainWidget(vbox);
 
-    (void) new QLabel( i18n("<B>Source selection</B><P>"
+    (void) new QLabel( i18n("<b>Source selection</b><br />"
 			   "Note that you may see more sources than actually exist"), vbox );
 
     /* Combo Box for sources */
@@ -88,7 +88,7 @@ ScanSourceDialog::ScanSourceDialog(QWidget *parent, const QList<QByteArray> list
 
     if( sourceAdfEntry() > -1 )
     {
-        d->bgroup = new QGroupBox( i18n("Advanced ADF-Options"));
+        d->bgroup = new QGroupBox( i18n("Advanced ADF Options"));
 
         /* Two buttons inside */
         d->bgroupLayout = new QVBoxLayout();

@@ -113,7 +113,7 @@ ImgPrintDialog::ImgPrintDialog(const KookaImage *img, QWidget *parent)
 
     /* Scan resolution of the image */
     m_dpi = new KIntNumInput( group1 );
-    m_dpi->setLabel( i18n("Scan resolution (dpi) " ), Qt::AlignVCenter );
+    m_dpi->setLabel( i18n("Scan resolution (dpi):" ), Qt::AlignVCenter );
     m_dpi->setValue( 300 );
     m_dpi->setSuffix( i18n(" dpi"));
 

@@ -85,11 +85,10 @@ PhotoCopyPrintDialogPage::PhotoCopyPrintDialogPage(KScanDevice *newScanDevice)
     prtHBox->addStretch(1);
 
 // Scanner options
-    QString str = i18n("Scanner Settings: ");
-    str += sane_device->scannerDescription();
+    QString str = i18n("Scanner Settings: %1", sane_device->scannerDescription());
     Q3VGroupBox *scangroup1 = new Q3VGroupBox( str, this );
 
-    str = i18n("Scan size:  ");
+    str = i18n("Scan size:");
     QString strBR_X;
     QString strBR_Y;
 

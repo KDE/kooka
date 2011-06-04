@@ -310,7 +310,7 @@ OcrEngine::EngineError KadmosDialog::setupGui()
     if( (m_ttfClassifier.count() + m_handClassifier.count()) == 0 && ! m_haveNorm )
     {
         KMessageBox::error(0, i18n("The classifier files for KADMOS could not be found.\n"
-                                   "OCR with KADMOS will not be possible!\n\n"
+                                   "OCR with KADMOS will not be possible.\n\n"
                                    "Change the OCR engine in the preferences dialog."),
                            i18n("Installation Error") );
         err = OcrEngine::ENG_BAD_SETUP;

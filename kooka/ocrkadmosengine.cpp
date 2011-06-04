@@ -96,8 +96,8 @@ void OcrKadmosEngine::startProcess(OcrBaseDialog *dia, const KookaImage *img)
     {
         KMessageBox::error( m_parent,
                             i18n("The classifier file necessary for OCR cannot be loaded: %1;\n"
-                                 "OCR with the KADMOS engine is not possible." ).
-                            arg(clasPath), i18n("KADMOS Installation Problem"));
+                                 "OCR with the KADMOS engine is not possible.",
+                                 clasPath), i18n("KADMOS Installation Problem"));
         finishedOCRVisible(false);
         return;
     }
@@ -109,9 +109,10 @@ void OcrKadmosEngine::startProcess(OcrBaseDialog *dia, const KookaImage *img)
     if( m_rep.kadmosError() ) /* check if kadmos initialised OK */
     {
         KMessageBox::error( m_parent,
-                            i18n("The KADMOS OCR system could not be started:\n") +
-                            m_rep.getErrorText()+
-                            i18n("\nPlease check the configuration." ),
+                            i18n("The KADMOS OCR system could not be started:\n"
+                                 "%1\n"
+                                 "Please check the configuration.",
+                                 m_rep.getErrorText()),
                             i18n("KADMOS Failure") );
     }
     else

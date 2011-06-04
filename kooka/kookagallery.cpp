@@ -47,7 +47,7 @@ KookaGallery::KookaGallery(QWidget *parent)
 
     m_recentBox = new KHBox(this);
     //m_recentBox->setMargin(KDialog::spacingHint());
-    QLabel *lab = new QLabel(i18n("Folder: "),m_recentBox);
+    QLabel *lab = new QLabel(i18n("Folder:"),m_recentBox);
     lab->setSizePolicy(QSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed));
 
     m_galleryRecent = new GalleryHistory(m_recentBox);

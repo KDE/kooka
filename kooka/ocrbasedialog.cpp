@@ -411,9 +411,8 @@ void OcrBaseDialog::introduceImage(const KookaImage *img)
 
     if (m_previewLabel!=NULL)
     {
-        m_previewLabel->setText(i18n("%1: %2",
-                                     (img->isFileBound() ? i18n("Image") : i18n("Selection")),
-                                     ImageCanvas::imageInfoString(img)));
+        KLocalizedString str = img->isFileBound() ? ki18n("Image: %1") : ki18n("Selection: %1");
+        m_previewLabel->setText(str.subs(ImageCanvas::imageInfoString(img)).toString());
     }
 }
 
