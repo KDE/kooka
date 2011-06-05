@@ -233,7 +233,7 @@ OcrEngine::EngineError KadmosDialog::findClassifierPath()
     {
         /* Wants the classifiers from the standard kde paths */
        KMessageBox::error(0, i18n("The classifier files for KADMOS could not be found.\n"
-				  "OCR with KADMOS will not be possible!\n\n"
+				  "OCR with KADMOS will not be possible.\n\n"
 				  "Change the OCR engine in the preferences dialog."),
 			  i18n("Installation Error") );
     }

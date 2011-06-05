@@ -680,9 +680,11 @@ void KookaView::slotGallerySelectionChanged()
     }
     else						// have a gallery selection
     {
-        if (!scanmode) emit signalChangeStatusbar(i18n("Gallery %1 %2",
-                                                       (fi->isDir() ? i18n("folder") : i18n("image")),
-                                                       fi->url().pathOrUrl()));
+        if (!scanmode)
+        {
+            KLocalizedString str = fi->isDir() ? ki18n("Gallery folder %1") : ki18n("Gallery image %1");
+            emit signalChangeStatusbar(str.subs(fi->url().pathOrUrl()).toString());
+        }
     }
 
     updateSelectionState();

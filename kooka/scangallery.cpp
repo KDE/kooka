@@ -1091,14 +1091,14 @@ void ScanGallery::slotDeleteItems()
     {
         s = i18n("<qt>Do you really want to permanently delete the folder<br>"
                  "<filename>%1</filename><br>"
-                 "and all of its contents? It cannot be restored!", urlToDel.pathOrUrl());
+                 "and all of its contents? It cannot be restored.", urlToDel.pathOrUrl());
         dontAskKey = "AskForDeleteDirs";
     }
     else
     {
         s = i18n("<qt>Do you really want to permanently delete the image<br>"
                  "<filename>%1</filename>?<br>"
-                 "It cannot be restored!", urlToDel.pathOrUrl());
+                 "It cannot be restored.", urlToDel.pathOrUrl());
         dontAskKey = "AskForDeleteFiles";
     }
 
