@@ -385,7 +385,7 @@ default:			printf("%d",desc->constraint_type);
 /*  Main -- Handle command line and options			 	*/
 /************************************************************************/
 
-int main(int argc,const char **argv)
+int main(int argc, char **argv)
 {
 	int opt;
 	int i;
