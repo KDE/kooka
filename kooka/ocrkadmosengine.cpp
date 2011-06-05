@@ -68,20 +68,21 @@ OcrBaseDialog *OcrKadmosEngine::createOCRDialog(QWidget *parent)
 
 QString OcrKadmosEngine::engineDesc()
 {
-    return (i18n("<qt>"
-                 "<p>"
-                 "<b>Kadmos</b> is a commercial OCR/ICR library produced by reRecognition&nbsp;AG. "
-                 "<p>"
+    return (i18nc("%1 is one of the two following messages",
+                  "<qt>"
+                  "<p><b>Kadmos</b> is a commercial OCR/ICR library produced by reRecognition&nbsp;AG.</p>"
+                  "<p>%1</p>"
+                  "<p>See <a href=\"http://www.rerecognition.com\">www.rerecognition.com</a> "
+                  "for more information on Kadmos.</p>"
+                  "</qt>",
 #ifdef HAVE_KADMOS
-                 "This version of Kooka is configured to use the Kadmos engine."
+                 i18n("This version of Kooka is configured to use the Kadmos engine.")
 #else
-                 "This version of Kooka is not configured for Kadmos.  The Kadmos "
-                 "libraries need to be installed, and Kooka needs to be rebuilt with "
-                 "the '--with-kadmos' option."
+                 i18n("This version of Kooka is not configured for Kadmos.  The Kadmos "
+                      "libraries need to be installed, and Kooka needs to be rebuilt with "
+                      "the '--with-kadmos' option.")
 #endif
-                 "<p>"
-                 "See <a href=\"http://www.rerecognition.com\">www.rerecognition.com</a> "
-                 "for more information on Kadmos."));
+                 ));
 }
 
 
