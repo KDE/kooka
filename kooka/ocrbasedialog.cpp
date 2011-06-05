@@ -294,7 +294,7 @@ void OcrBaseDialog::setupSpellPage()
     QGridLayout *gl2 = new QGridLayout(m_gbInteractiveCheck);
     m_gbInteractiveCheck->setLayout(gl2);
 
-    QLabel *l = new QLabel(i18n("Custom spell settings above do not affect this spelling check, use the language setting in the dialogue to change the dictionary language."), w);
+    QLabel *l = new QLabel(i18n("Custom spell settings above do not affect this spelling check, use the language setting in the dialog to change the dictionary language."), w);
     l->setWordWrap(true);
     gl2->addWidget(l, 0, 0);
 

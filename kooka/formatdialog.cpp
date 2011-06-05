@@ -123,7 +123,7 @@ applications, or to use with (e.g.) TeX."),
 
     { "image/x-tga",					// TGA
       I18N_NOOP(
-"<b>Truevision Targa</b> can store full colour images with an alpha channel, and is \
+"<b>Truevision Targa</b> can store full color images with an alpha channel, and is \
 used extensively by animation and video applications.\
 <p>This format is not recommended, use an open format instead."),
       ImgSaver::ImgNone },
@@ -157,7 +157,7 @@ required for use with other applications use PNG instead."),
     { "image/x-sgi",					// SGI
       I18N_NOOP(
 "This is the <b>Silicon Graphics</b> native image file format, supporting 24 bit \
-true colour images with optional lossless compression.\
+true color images with optional lossless compression.\
 <p>Unless specifically required, use an open format instead."),
       ImgSaver::ImgNone },
 

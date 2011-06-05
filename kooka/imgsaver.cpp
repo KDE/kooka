@@ -71,7 +71,7 @@ void createDir(const QString &dir)
 #if 0
     if (!fi.isWritable())
     {
-        KMessageBox::sorry(NULL, i18n("<qt>The directory<br><filename>%1</filename><br> is not writeable, please check the permissions.", dir));
+        KMessageBox::sorry(NULL, i18n("<qt>The directory<br><filename>%1</filename><br> is not writable, please check the permissions.", dir));
     }
 #endif
 }

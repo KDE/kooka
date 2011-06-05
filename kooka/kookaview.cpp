@@ -592,7 +592,7 @@ QByteArray KookaView::userDeviceSelection(bool alwaysAsk)
 is connected, switched on and configured correctly.\
 <p>If the scanner cannot be auto-detected by SANE (this includes some network \
 scanners), you need to specify the device to use.  Use the \"Add Scan Device\" \
-option to enter the backend name and parameters, or see that dialogue for more \
+option to enter the backend name and parameters, or see that dialog for more \
 information."), QString::null, KGuiItem(i18n("Add Scan Device...")))!=KMessageBox::Continue) return ("");
 
        slotAddDevice();

@@ -126,8 +126,8 @@ KookaStartupPage::KookaStartupPage(KPageDialog *parent)
     mLayout->addWidget(mNetQueryCheck);
 
     /* Show scanner selection box on startup (Checkbox) */
-    mSelectScannerCheck = new QCheckBox(i18n("Show the scanner selection dialogue"), this);
-    mSelectScannerCheck->setToolTip(i18n("Check this to show the scanner selection dialogue on startup."));
+    mSelectScannerCheck = new QCheckBox(i18n("Show the scanner selection dialog"), this);
+    mSelectScannerCheck->setToolTip(i18n("Check this to show the scanner selection dialog on startup."));
     mSelectScannerCheck->setChecked(!grp2.readEntry(STARTUP_SKIP_ASK, false));
     mLayout->addWidget(mSelectScannerCheck);
 
@@ -458,7 +458,7 @@ bool KookaOcrPage::checkOcrBinary(const QString &cmd, const QString &bin, bool s
     {
         if (show_msg) KMessageBox::sorry(this,i18n("<qt>"
                                                    "The path <filename>%1</filename> is not a valid binary.\n"
-                                                   "Please check the path and and install the program if necessary.", cmd),
+                                                   "Please check the path and install the program if necessary.", cmd),
                                          i18n("OCR Engine Not Found"));
         return (false);
     }
