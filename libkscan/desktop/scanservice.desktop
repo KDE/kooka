@@ -2,6 +2,11 @@
 Encoding=UTF-8
 Type=Service
 Name=KDE Scan Service
+Name[nl]=KDE Scannerdiensten
+Name[pt]=Serviço de Digitalização do KDE
+Name[pt_BR]=Serviço de digitalização do KDE
+Name[uk]=Служба сканування KDE
+Name[x-test]=xxKDE Scan Servicexx
 X-KDE-Library=libkscan
 InitialPreference=2
 ServiceTypes=KScan/KScanDialog
