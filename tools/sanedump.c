@@ -295,7 +295,9 @@ default:			printf("%d",desc->unit);	break;
 			if (desc->cap & SANE_CAP_AUTOMATIC) printf("AUTOMATIC ");
 			if (desc->cap & SANE_CAP_INACTIVE) printf("INACTIVE ");
 			if (desc->cap & SANE_CAP_ADVANCED) printf("ADVANCED ");
+#ifdef SANE_CAP_ALWAYS_SETTABLE
 			if (desc->cap & SANE_CAP_ALWAYS_SETTABLE) printf("ALWAYS_SETTABLE ");
+#endif
 			printf("\n");
 		}
 
