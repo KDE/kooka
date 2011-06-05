@@ -141,7 +141,7 @@ optional transparency.\
 "<b>Tagged Image File Format</b> is a versatile and extensible file format widely \
 supported by imaging and publishing applications. It supports indexed and true color \
 images with alpha transparency.\
-<p>Because there are many variations, there may sometimes be compatibility problems.\
+<p>Because there are many variations, there may sometimes be compatibility problems. \
 Unless required for use with other applications, use an open format instead."),
       ImgSaver::ImgBW|ImgSaver::ImgColor|ImgSaver::ImgGray|ImgSaver::ImgHicolor },
 
