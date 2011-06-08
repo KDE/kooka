@@ -5,6 +5,7 @@ Icon=kooka
 Terminal=false
 X-DocPath=kooka/index.html
 GenericName=Scan & OCR Program
+GenericName[cs]=Program pro skenování a OCR
 GenericName[el]=Πρόγραμμα σάρωσης και OCR
 GenericName[en_GB]=Scan & OCR Program
 GenericName[es]=Programa de escáner y OCR
