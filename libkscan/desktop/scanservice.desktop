@@ -3,6 +3,7 @@ Encoding=UTF-8
 Type=Service
 Name=KDE Scan Service
 Name[cs]=Skenovací služba pro KDE
+Name[nds]=Bildinleesdeenst för KDE
 Name[nl]=KDE Scannerdiensten
 Name[nn]=KDE Skanningsteneste
 Name[pt]=Serviço de Digitalização do KDE
