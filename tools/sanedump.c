@@ -199,7 +199,7 @@ void do_listmode()
 
 void do_describe(const char *dev)
 {
-	SANE_Handle *hand;
+	SANE_Handle hand;
 	const SANE_Option_Descriptor *desc;
 	SANE_Int numopt;
 	int opt;
