@@ -234,13 +234,8 @@ void KScanOption::reload()
     // I'm hoping that this is not in general an expensive operation - it certainly
     // is not so for the 'test' device and a sample of others - so it should not be
     // necessary to conditionalise it for that device only.
-
     const SANE_Option_Descriptor *desc = sane_get_option_descriptor(mScanDevice->scannerHandle(), mIndex);
-    if (desc==NULL)					// should never happen
-    {
-        kDebug() << "sane_get_option_descriptor returned NULL for" << mName;
-        return;
-    }
+    if (desc==NULL) return;				// should never happen
 
     SANE_Status sanestat = sane_control_option(mScanDevice->scannerHandle(),
                                                 mIndex,
@@ -268,6 +263,10 @@ bool KScanOption::apply()
 #endif // DEBUG_APPLY
 
     SANE_Status sanestat = SANE_STATUS_GOOD;
+
+    // See comment in reload() above
+    const SANE_Option_Descriptor *desc = sane_get_option_descriptor(mScanDevice->scannerHandle(), mIndex);
+    if (desc==NULL) return (false);			// should never happen
 
     if (mName==SANE_NAME_PREVIEW || mName==SANE_NAME_SCAN_MODE)
     {
