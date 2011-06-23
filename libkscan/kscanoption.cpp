@@ -69,11 +69,11 @@ KScanOption::KScanOption(const QByteArray &name, KScanDevice *scandev)
     if (mBuffer.isNull()) return;			// no buffer for value
 
     // read initial value from the scanner
-    SANE_Status sane_stat = sane_control_option(mScanDevice->scannerHandle(),
+    SANE_Status sanestat = sane_control_option(mScanDevice->scannerHandle(),
                                                 mIndex,
                                                 SANE_ACTION_GET_VALUE,
                                                 mBuffer.data(), NULL);
-    if (sane_stat==SANE_STATUS_GOOD) mBufferClean = false;
+    if (sanestat==SANE_STATUS_GOOD) mBufferClean = false;
 }
 
 
@@ -221,13 +221,34 @@ void KScanOption::reload()
         allocForDesc();					// grow the buffer
     }
 
-    SANE_Status sane_stat = sane_control_option(mScanDevice->scannerHandle(),
+    // Starting with SANE 1.0.20, the 'test' device needs this dummy call of
+    // sane_get_option_descriptor() before any use of sane_control_option(),
+    // otherwise the latter fails with a SANE_STATUS_INVAL.  From the master
+    // repository at http://anonscm.debian.org/gitweb/?p=sane/sane-backends.git:
+    //
+    //   author  m. allan noah <kitno455@gmail.com>
+    //   Thu, 26 Jun 2008 13:14:23 +0000 (13:14 +0000)
+    //   commit 8733651c4b07ac6ccbcee0d39eccca0c08057729
+    //   test backend checks for options that have not been loaded before being controlled
+    //
+    // I'm hoping that this is not in general an expensive operation - it certainly
+    // is not so for the 'test' device and a sample of others - so it should not be
+    // necessary to conditionalise it for that device only.
+
+    const SANE_Option_Descriptor *desc = sane_get_option_descriptor(mScanDevice->scannerHandle(), mIndex);
+    if (desc==NULL)					// should never happen
+    {
+        kDebug() << "sane_get_option_descriptor returned NULL for" << mName;
+        return;
+    }
+
+    SANE_Status sanestat = sane_control_option(mScanDevice->scannerHandle(),
                                                 mIndex,
                                                 SANE_ACTION_GET_VALUE,
                                                 mBuffer.data(), NULL);
-    if (sane_stat!=SANE_STATUS_GOOD)
+    if (sanestat!=SANE_STATUS_GOOD)
     {
-        kDebug() << "Error: Can't get value for" << mName << "status" << sane_strstatus( sane_stat );
+        kDebug() << "Error: Can't get value for" << mName << "status" << sane_strstatus(sanestat);
         return;
     }
 
@@ -298,7 +319,7 @@ bool KScanOption::apply()
 
     if (sanestat!=SANE_STATUS_GOOD)
     {
-        kDebug() << "apply" << mName << "failed, SANE status" << mScanDevice->lastSaneErrorMessage();
+        kDebug() << "apply" << mName << "failed, SANE status" << sane_strstatus(sanestat);
         return (false);
     }
 
