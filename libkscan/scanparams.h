@@ -185,7 +185,7 @@ protected slots:
      *
      * @param so The option that has changed.
      **/
-    void slotReloadAllGui(KScanOption *so);
+    void slotOptionChanged(KScanOption *so);
 
     /**
      * The gamma table has been edited via the gamma table edit dialogue.

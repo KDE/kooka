@@ -160,7 +160,7 @@ void ScanParamsDialog::slotLoad()
     }
 
     sane->loadOptionSet(&optSet);
-    sane->reloadAll();
+    sane->reloadAllOptions();
 }
 
 

@@ -185,7 +185,7 @@ bool ScanParams::connectDevice(KScanDevice *newScanDevice, bool galleryMode)
     lay->setRowStretch(3, 9);
 
     /* Reload all options to care for inactive options */
-    mSaneDevice->reloadAll();
+    mSaneDevice->reloadAllOptions();
 
     /* Create the Scan Buttons */
     QPushButton *pb = new QPushButton(KIcon("preview"), i18n("Pre&view"), this);
@@ -275,7 +275,7 @@ QWidget *ScanParams::createScannerParams()
     if (mVirtualFile!=NULL)
     {
         initialise(mVirtualFile);
-        connect(mVirtualFile, SIGNAL(guiChange(KScanOption *)), SLOT(slotReloadAllGui(KScanOption *)));
+        connect(mVirtualFile, SIGNAL(guiChange(KScanOption *)), SLOT(slotOptionChanged(KScanOption *)));
 
         l = mVirtualFile->getLabel(frame, true);
         w = mVirtualFile->widget();
@@ -329,7 +329,7 @@ QWidget *ScanParams::createScannerParams()
         cb->setIcon(mIconHalftone, I18N_NOOP("Halftone"));
 
         initialise(so);
-        connect(so, SIGNAL(guiChange(KScanOption *)), SLOT(slotReloadAllGui(KScanOption *)));
+        connect(so, SIGNAL(guiChange(KScanOption *)), SLOT(slotOptionChanged(KScanOption *)));
         connect(so, SIGNAL(guiChange(KScanOption *)), SLOT(slotNewScanMode()));
 
         l = so->getLabel(frame, true);
@@ -350,7 +350,7 @@ QWidget *ScanParams::createScannerParams()
         so->get(&x_res);
         so->redrawWidget();
 
-        connect(so, SIGNAL(guiChange(KScanOption *)), SLOT(slotReloadAllGui(KScanOption *)));
+        connect(so, SIGNAL(guiChange(KScanOption *)), SLOT(slotOptionChanged(KScanOption *)));
         // Connection that passes the resolution to the previewer
         connect(so, SIGNAL(guiChange(KScanOption *)), SLOT(slotNewResolution(KScanOption *)));
 
@@ -366,7 +366,7 @@ QWidget *ScanParams::createScannerParams()
             initialise(mResolutionBind);
             mResolutionBind->redrawWidget();
 
-            connect(mResolutionBind, SIGNAL(guiChange(KScanOption *)), SLOT(slotReloadAllGui(KScanOption *)));
+            connect(mResolutionBind, SIGNAL(guiChange(KScanOption *)), SLOT(slotOptionChanged(KScanOption *)));
 
             l = so->getLabel(frame, true);
             w = so->widget();
@@ -414,7 +414,7 @@ QWidget *ScanParams::createScannerParams()
     if (mSourceSelect!=NULL)
     {
         initialise(mSourceSelect);
-        connect(mSourceSelect, SIGNAL(guiChange(KScanOption *)), SLOT(slotReloadAllGui( KScanOption *)));
+        connect(mSourceSelect, SIGNAL(guiChange(KScanOption *)), SLOT(slotOptionChanged( KScanOption *)));
 
         l = mSourceSelect->getLabel(frame, true);
         w = mSourceSelect->widget();
@@ -434,7 +434,7 @@ QWidget *ScanParams::createScannerParams()
     if (so!=NULL)
     {
         initialise(so);
-        connect(so, SIGNAL(guiChange(KScanOption *)), SLOT(slotReloadAllGui( KScanOption *)));
+        connect(so, SIGNAL(guiChange(KScanOption *)), SLOT(slotOptionChanged( KScanOption *)));
 
         l = so->getLabel(frame);
         w = so->widget();
@@ -462,7 +462,7 @@ QWidget *ScanParams::createScannerParams()
         {
             kDebug() << "creating" << (so->isCommonOption() ? "OTHER" : "ADVANCED") << "option" << opt;
             initialise(so);
-            connect(so, SIGNAL(guiChange(KScanOption *)), SLOT(slotReloadAllGui(KScanOption *)));
+            connect(so, SIGNAL(guiChange(KScanOption *)), SLOT(slotOptionChanged(KScanOption *)));
 
             if (so->isCommonOption()) frame = otherFrame;
             else frame = advancedFrame;
@@ -484,7 +484,7 @@ QWidget *ScanParams::createScannerParams()
             else if (opt==SANE_NAME_CUSTOM_GAMMA)
             {
                 // Enabling/disabling the edit button is handled by
-                // slotReloadAllGui() calling setEditCustomGammaTableState()
+                // slotOptionChanged() calling setEditCustomGammaTableState()
                 //connect(so, SIGNAL(guiChange(KScanOption *)), SLOT(slotOptionNotify(KScanOption *)));
 
                 mGammaEditButt = new QPushButton(i18n("Edit Gamma Table..."), this);
@@ -902,17 +902,14 @@ void ScanParams::slotApplyGamma(const KGammaTable *gt)
 }
 
 
-// The user has changed an option.  Reload every other scanner option
-// apart from this one.
+// The user has changed an option.  Apply that;  as a result of doing so,
+// it may be necessary to reload every other scanner option apart from
+// this one.
 
-// TODO: is it necessary to do this on every widget change?
-// sane_control_option() in KScanOption::apply() will return
-// SANE_INFO_RELOAD_OPTIONS to indicate that this is necessary.
-
-void ScanParams::slotReloadAllGui(KScanOption *so)
+void ScanParams::slotOptionChanged(KScanOption *so)
 {
     if (so==NULL || mSaneDevice==NULL) return;
-    mSaneDevice->reloadAllBut(so);
+    mSaneDevice->applyOption(so);
 
     // Update the gamma edit button state, if the option exists
     setEditCustomGammaTableState();

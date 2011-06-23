@@ -416,33 +416,33 @@ public:
      * Find the SANE index of an option.
      *
      * @param name Name of the SANE parameter.
-     * @return Its option index, or 0 if tyhe option is not known by the scanner.
+     * @return Its option index, or 0 if the option is not known by the scanner.
      **/
     int getOptionIndex(const QByteArray &name) const;
 
     /**
      * Update the scanner with the value of the specified option (using
      * @c KScanOption::apply()), then reload and update the GUI widget
-     * of all of the other options.  Their value or state may have
-     * changed due to the change in this option.
+     * of all of the other options if necessary.  Their value or state
+     * may have changed due to the change in this option; if so, SANE
+     * will tell us to reload them.
      *
-     * @param opt The option to @c apply() but to not @c reload().  If
-     * this is @c NULL, this function is equivalent to @c reloadAll().
+     * @param opt The option to @c apply().  If this is @c NULL, this
+     * function is equivalent to @c reloadAllOptions().
      *
-     * @note This does the same as @c reloadAll(), but it does not
-     * reload the scanner option given as the @p opt parameter. This is
-     * useful to ensure that no recursion takes place while reloading
-     * the options.
-     * @see reloadAll
+     * @note Even if a reload is needed, the scanner option given as the
+     * @p opt parameter is not reloaded. This is ensures that no recursion
+     * happens while reloading the options.
+     * @see reloadAllOptions
      **/
-    void reloadAllBut(KScanOption *opt);
+    void applyOption(KScanOption *opt);
 
     /**
      * Reload all of the scanner options and update their GUI widgets.
      *
-     * @see reloadAllBut
+     * @see applyOption
      **/
-    void reloadAll();
+    void reloadAllOptions();
 
 public slots:
     /**

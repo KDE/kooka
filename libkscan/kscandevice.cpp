@@ -52,6 +52,7 @@ extern "C" {
 // Debugging options
 #undef DEBUG_OPTIONS
 #undef DEBUG_RELOAD
+#define DEBUG_RELOAD
 #define DEBUG_CREATE
 
 
@@ -431,24 +432,30 @@ QByteArray KScanDevice::aliasName( const QByteArray& name ) const
 }
 
 
-
-/* This might result in a endless recursion ! */
-void KScanDevice::reloadAllBut(KScanOption *not_opt)
+void KScanDevice::applyOption(KScanOption *opt)
 {
-    if (not_opt!=NULL)
+    bool reload = true;					// is a reload needed?
+
+    if (opt!=NULL)					// an option is specified
     {
-        kDebug() << "except" << not_opt->getName();
-        not_opt->apply();				// Apply this option
-    // TODO: this is the point where we can check if a reload is really
-    // necessary, via the result of apply() above.
+        kDebug() << "option" << opt->getName();
+        reload = opt->apply();				// apply this option
     }
 
+    if (!reload)					// need to reload now?
+    {
+#ifdef DEBUG_RELOAD
+        kDebug() << "Reload of others not needed";
+#endif // DEBUG_RELOAD
+        return;
+    }
+							// reload of all others needed
     for (OptionHash::const_iterator it = mCreatedOptions.constBegin();
          it!=mCreatedOptions.constEnd(); ++it)
     {
         KScanOption *so = it.value();
         if (!so->isGuiElement()) continue;
-        if (not_opt==NULL || so!=not_opt)
+        if (opt==NULL || so!=opt)
         {
 #ifdef DEBUG_RELOAD
             kDebug() << "Reloading" << so->getName();
@@ -464,14 +471,12 @@ void KScanDevice::reloadAllBut(KScanOption *not_opt)
 }
 
 
-
-/* This might result in a endless recursion ! */
-void KScanDevice::reloadAll()
+void KScanDevice::reloadAllOptions()
 {
 #ifdef DEBUG_RELOAD
     kDebug();
 #endif // DEBUG_RELOAD
-    reloadAllBut(NULL);
+    applyOption(NULL);
 }
 
 
