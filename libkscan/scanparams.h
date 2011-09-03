@@ -266,6 +266,9 @@ signals:
      **/
     void newCustomScanSize(const QRect &rect);
 
+private slots:
+    void slotScanProgress(int value);
+
 private:
 
     enum ScanMode					// order fixed by GUI buttons
@@ -277,7 +280,6 @@ private:
 
     KScanDevice::Status prepareScan(QString *vfp);
     KScanDevice::Status performADFScan();
-    void startProgress();
 
     void createNoScannerMsg(bool galleryMode);
     void initialise(KScanOption *opt);

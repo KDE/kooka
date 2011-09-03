@@ -54,6 +54,7 @@ extern "C" {
 #undef DEBUG_RELOAD
 #define DEBUG_RELOAD
 #define DEBUG_CREATE
+#define DEBUG_PARAMS
 
 
 //  Accessing GUI options
@@ -173,8 +174,11 @@ KScanDevice::KScanDevice(QObject *parent)
 
     mScanBuf = NULL;					// image data buffer while scanning
     mScanImage = NULL;					// temporary image to scan into
+    mImageInfo = NULL;					// scanned image information
+
     mSocketNotifier = NULL;				// socket notifier for async scanning
     mSavedOptions = NULL;				// options to save during preview
+
     mBytesRead = 0;
     mBytesUsed = 0;
     mPixelX = 0;
@@ -189,6 +193,7 @@ KScanDevice::KScanDevice(QObject *parent)
 KScanDevice::~KScanDevice()
 {
     delete mSavedOptions;
+    delete mImageInfo;
 // TODO: need to check and do closeDevice() here?
     ScanGlobal::self()->setScanDevice(NULL);		// going away, don't call me
 
@@ -590,47 +595,75 @@ void KScanDevice::showOptions()
 //  Creating a new image to receive the scan/preview
 //  ------------------------------------------------
 
-KScanDevice::Status KScanDevice::createNewImage(const SANE_Parameters *p)
+
+
+
+static KScanDevice::Status getImageFormat(const SANE_Parameters *p,
+                                          QImage::Format *format,
+                                          bool *greyscale)
 {
     if (p==NULL) return (KScanDevice::ParamError);
-    KScanDevice::Status stat = KScanDevice::Ok;
 
-    delete mScanImage;
-    mScanImage = NULL;
+    *greyscale = true;					// for now, anyway
 
-    if (p->depth==1)					//  Line art (bitmap)
+    if (p->depth==1)					// Line art (bitmap)
     {
-        mScanImage = new QImage(p->pixels_per_line,p->lines,QImage::Format_Mono);
-        if (mScanImage!=NULL)
-        {
-            mScanImage->setColor(0,qRgb(0x00,0x00,0x00));
-            mScanImage->setColor(1,qRgb(0xFF,0xFF,0xFF));
-        }
+        *format = QImage::Format_Mono;
     }
     else if (p->depth==8)				// 8 bit RGB
     {
         if (p->format==SANE_FRAME_GRAY)			// Grey scale
         {
-            mScanImage = new QImage(p->pixels_per_line,p->lines,QImage::Format_Indexed8);
-            if (mScanImage!=NULL)
-            {
-                for (int i = 0; i<256; i++) mScanImage->setColor(i,qRgb(i,i,i));
-            }
+            *format = QImage::Format_Indexed8;
         }
         else						// True colour
         {
-            mScanImage = new QImage(p->pixels_per_line,p->lines,QImage::Format_RGB32);
+            *format = QImage::Format_RGB32;
+            *greyscale = false;
         }
     }
     else						// Error, no others supported
     {
         kDebug() << "Only bit depths 1 or 8 supported!";
-        stat = KScanDevice::ParamError;
+        return (KScanDevice::ParamError);
     }
 
-    if (stat==KScanDevice::Ok && mScanImage==NULL) stat = KScanDevice::NoMemory;
+    return (KScanDevice::Ok);
+}
+
+
+
+
+
+KScanDevice::Status KScanDevice::createNewImage(const SANE_Parameters *p)
+{
+    QImage::Format format;
+    bool grey;
+
+    KScanDevice::Status stat = getImageFormat(p, &format, &grey);
+    if (stat!=KScanDevice::Ok) return (stat);		// what format should this be?
+
+    delete mScanImage;					// recreate new image
+    mScanImage = new QImage(p->pixels_per_line,p->lines,format);
+    if (mScanImage==NULL) return (KScanDevice::NoMemory);
+
+    if (format==QImage::Format_Mono)			// Line art (bitmap)
+    {
+        mScanImage->setColor(0,qRgb(0x00,0x00,0x00));	// set black/white palette
+        mScanImage->setColor(1,qRgb(0xFF,0xFF,0xFF));
+    }
+    else if (format==QImage::Format_Indexed8 && grey)	// 8 bit grey
+    {							// set grey scale palette
+        for (int i = 0; i<256; i++) mScanImage->setColor(i,qRgb(i,i,i));
+    }
+
     return (stat);
 }
+
+
+
+
+
 
 
 //  Acquiring preview/scan image
@@ -796,6 +829,20 @@ KScanDevice::Status KScanDevice::acquireScan(const QString &filename)
 }
 
 
+#ifdef DEBUG_PARAMS
+static void dumpParams(const QString &msg, const SANE_Parameters *p)
+{
+    kDebug() << msg.toLatin1().constData();
+    kDebug() << "  format:          " << p->format;
+    kDebug() << "  last_frame:      " << p->last_frame;
+    kDebug() << "  lines:           " << p->lines;
+    kDebug() << "  depth:           " << p->depth;
+    kDebug() << "  pixels_per_line: " << p->pixels_per_line;
+    kDebug() << "  bytes_per_line:  " << p->bytes_per_line;
+}
+#endif // DEBUG_PARAMS
+
+
 KScanDevice::Status KScanDevice::acquireData(bool isPreview)
 {
     KScanDevice::Status stat = KScanDevice::Ok;
@@ -806,13 +853,58 @@ KScanDevice::Status KScanDevice::acquireData(bool isPreview)
     mBytesRead = 0;
     mBlocksRead = 0;
 
-    emit sigScanStart();
-    QApplication::setOverrideCursor(Qt::WaitCursor);	// potential lengthy operation
-
     ScanGlobal::self()->setScanDevice(this);		// for possible authentication
+
+    if (mImageInfo!=NULL) delete mImageInfo;		// start with this clean
+    mImageInfo = NULL;
+
+    if (!isPreview)					// scanning to eventually save
+    {
+        mImageInfo = new ImgScanInfo;			// create for image information
+
+        mSaneStatus = sane_get_parameters(mScannerHandle, &mSaneParameters);
+        if (mSaneStatus==SANE_STATUS_GOOD)		// get pre-scan parameters
+        {
+#ifdef DEBUG_PARAMS
+            dumpParams("Before scan:", &mSaneParameters);
+#endif // DEBUG_PARAMS
+
+            if (mSaneParameters.lines>=1 && mSaneParameters.pixels_per_line>0)
+            {						// check for a plausible image
+                QImage::Format format;
+                bool grey;				// find format it will have
+                KScanDevice::Status stat = getImageFormat(&mSaneParameters, &format, &grey);
+
+                if (stat!=KScanDevice::Ok)		// scan format not recognised?
+                {					// no point starting scan
+                    emit sigScanFinished(stat);		// scan is now finished
+                    return (stat);
+                }
+
+                mImageInfo->setFormat(format, grey);	// save info for later
+            }
+        }
+    }
+
+    // Tell the application that scanning is about to start.
+    emit sigScanStart(mImageInfo);
+
+    // If the image information was available, the application may have
+    // prompted for a filename.  If the user cancelled that, it will have
+    // called our slotStopScanning() which set mScanningState to
+    // KScanDevice::ScanStopNow.  If that is the case, then finish here.
+    if (mScanningState==KScanDevice::ScanStopNow)
+    {							// user cancelled save dialogue
+        kDebug() << "user cancelled before start";
+        stat = KScanDevice::Cancelled;
+        emit sigScanFinished(stat);
+        return (stat);
+    }
 
     while (true)					// loop while frames available
     {
+        QApplication::setOverrideCursor(Qt::WaitCursor);
+							// potential lengthy operation
         mSaneStatus = sane_start(mScannerHandle);
         if (mSaneStatus==SANE_STATUS_ACCESS_DENIED)	// authentication failed?
         {
@@ -826,13 +918,9 @@ KScanDevice::Status KScanDevice::acquireData(bool isPreview)
             mSaneStatus = sane_get_parameters(mScannerHandle, &mSaneParameters);
             if (mSaneStatus==SANE_STATUS_GOOD)
             {
-                kDebug() << "Scan parameters... frame" << (frames+1);
-                kDebug() << "  format:          " << mSaneParameters.format;
-                kDebug() << "  last_frame:      " << mSaneParameters.last_frame;
-                kDebug() << "  lines:           " << mSaneParameters.lines;
-                kDebug() << "  depth:           " << mSaneParameters.depth;
-                kDebug() << "  pixels_per_line: " << mSaneParameters.pixels_per_line;
-                kDebug() << "  bytes_per_line:  " << mSaneParameters.bytes_per_line;
+#ifdef DEBUG_PARAMS
+                dumpParams(QString("For frame %1:").arg(frames+1), &mSaneParameters);
+#endif // DEBUG_PARAMS
 
                 // TODO: implement "Hand Scanner" support
                 if (mSaneParameters.lines<1)
@@ -859,10 +947,10 @@ KScanDevice::Status KScanDevice::acquireData(bool isPreview)
         }
         QApplication::restoreOverrideCursor();
 
-        if (mScanningState==KScanDevice::ScanStarting)	// first time through loop
-        {
-            // Create image to receive scan, based on SANE parameters
-            if (stat==KScanDevice::Ok) stat = createNewImage(&mSaneParameters);
+        if (stat==KScanDevice::Ok && mScanningState==KScanDevice::ScanStarting)
+        {						// first time through loop
+            // Create image to receive scan, based on real SANE parameters
+            stat = createNewImage(&mSaneParameters);
 
             // Create/reinitialise buffer for scanning one line
             if (stat==KScanDevice::Ok)
@@ -927,7 +1015,7 @@ KScanDevice::Status KScanDevice::acquireData(bool isPreview)
         // According to the SANE documentation text, sane_get_parameters()
         // needs to be called once after sane_start() to get the exact
         // parameters, but not necessarily in the reading loop that just
-        // needs to call sane_read() repeatedly).  The diagram above, though,
+        // needs to call sane_read() repeatedly.  The diagram above, though,
         // seems to imply that sane_get_parameters() should be done in the
         // reading loop.
         //
@@ -967,12 +1055,11 @@ KScanDevice::Status KScanDevice::acquireData(bool isPreview)
         if (mSaneStatus!=SANE_STATUS_GOOD && mSaneStatus!=SANE_STATUS_EOF)
         {
             stat = KScanDevice::ScanError;
-            kDebug() << "Error while scanning, status" << mSaneStatus;
         }
     }
 
     kDebug() << "Scan read" << mBytesRead << "bytes in"
-             << mBlocksRead << "blocks," << frames << "frames";
+             << mBlocksRead << "blocks," << frames << "frames - status" << stat;
 
     emit sigScanFinished(stat);				// scan is now finished
     return (stat);

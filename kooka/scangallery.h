@@ -35,9 +35,10 @@ class QTreeWidgetItem;
 class KMenu;
 class KUrl;
 
+class ImgSaver;
+class ImgScanInfo;
 class KookaImage;
 class KookaImageMeta;
-
 
 class ScanGallery : public FileTreeView
 {
@@ -55,6 +56,7 @@ public:
 
     void setAllowRename(bool on);
 
+    bool prepareToSave(const ImgScanInfo *info);
     void addImage(const QImage *img, KookaImageMeta *meta = NULL);
 
     void saveHeaderState(const QString &key) const;
@@ -123,6 +125,9 @@ private:
 
     KUrl m_currSelectedDir;
     KMenu *m_contextMenu;
+
+    ImgSaver *mSaver;
+    FileTreeViewItem *mSavedTo;
 
     // like m_nextUrlToSelect in KFileTreeView,
     // but for our own purposes (showing the image)

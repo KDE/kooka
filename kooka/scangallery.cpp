@@ -48,6 +48,8 @@
 #include "kookaimagemeta.h"
 #include "kookapref.h"
 
+#include "libkscan/imgscaninfo.h"
+
 
 #define COLUMN_STATES_GROUP	"GalleryColumns"
 
@@ -118,6 +120,8 @@ ScanGallery::ScanGallery(QWidget *parent)
 
     m_startup = true;
     m_currSelectedDir = KUrl();
+    mSaver = NULL;
+    mSavedTo = NULL;
 
     /* create a context menu and set the title */
     m_contextMenu = new KMenu();
@@ -127,6 +131,7 @@ ScanGallery::ScanGallery(QWidget *parent)
 
 ScanGallery::~ScanGallery()
 {
+    delete mSaver;
     kDebug();
 }
 
@@ -829,16 +834,19 @@ void ScanGallery::slotCurrentImageChanged(const QImage *img)
 }
 
 
-/* ----------------------------------------------------------------------- */
-/* This slot takes a new scanned Picture and saves it.
- * It urgently needs to make a deep copy of the image !
- */
 
-void ScanGallery::addImage(const QImage *img, KookaImageMeta *meta)
+
+
+
+
+bool ScanGallery::prepareToSave(const ImgScanInfo *info)
 {
-    if (img==NULL) return;
-    ImgSaver::ImageSaveStatus is_stat = ImgSaver::SaveStatusOk;
+    if (info==NULL) kDebug() << "no image info";
+    else kDebug() << "format" << info->getFormat() << "grey" << info->getIsGrey();
 
+    delete mSaver; mSaver = NULL;			// recreate with clean info
+
+    // Resolve where to save the new image when it arrives
     FileTreeViewItem *curr = highlightedFileTreeViewItem();
     if (curr==NULL)					// into root if nothing is selected
     {
@@ -849,30 +857,60 @@ void ScanGallery::addImage(const QImage *img, KookaImageMeta *meta)
             if (curr==NULL) curr = branch->root();
         }
 
-        if (curr==NULL) return;				// something very odd has happened!
+        if (curr==NULL) return (false);			// should never happen
         curr->setSelected(true);
     }
 
+    mSavedTo = curr;					// note for selecting later
+
+    // Create the ImgSaver to use later
     KUrl dir(itemDirectory(curr));			// where new image will go
-    ImgSaver saver(dir);
-    is_stat = saver.saveImage(img);			// try to save the image
-    if (is_stat!=ImgSaver::SaveStatusOk)		// image saving failed
-    {
-        if (is_stat==ImgSaver::SaveStatusCanceled) return;
-							// user cancelled, just ignore
-        KMessageBox::error(this, i18n("<qt>Could not save the image<br><filename>%2</filename><br><br>%1",
-                                      saver.errorString(is_stat),
-                                      saver.lastURL().prettyUrl()),
-                           i18n("Image Save Error"));
-        return;
+    mSaver = new ImgSaver(dir);				// create saver to use later
+
+    if (info!=NULL)					// have image information,
+    {							// tell saver about it
+        ImgSaver::ImageSaveStatus stat = mSaver->setImageInfo(info);
+        if (stat!=ImgSaver::SaveStatusOk) return (false);
     }
 
-    /* Add the new image to the list of new images */
-    KUrl lurl = saver.lastURL();
-    slotSetNextUrlToSelect(lurl);
-    m_nextUrlToShow = lurl;
+    return (true);					// all ready to save
+}
 
-    updateParent(curr);
+
+
+
+/* ----------------------------------------------------------------------- */
+/* This slot takes a new scanned Picture and saves it.  */
+
+void ScanGallery::addImage(const QImage *img, KookaImageMeta *meta)
+{
+    if (img==NULL) return;				// nothing to save!
+    kDebug() << "size" << img->size() << "depth" << img->depth();
+
+    if (mSaver==NULL) prepareToSave(NULL);		// if not done already
+    if (mSaver==NULL) return;				// should never happen
+
+    ImgSaver::ImageSaveStatus isstat = mSaver->saveImage(img);
+							// try to save the image
+    KUrl lurl = mSaver->lastURL();			// record where it ended up
+
+    if (isstat!=ImgSaver::SaveStatusOk &&		// image saving failed
+        isstat!=ImgSaver::SaveStatusCanceled)		// user cancelled, just ignore
+    {
+        KMessageBox::error(this, i18n("<qt>Could not save the image<br><filename>%2</filename><br><br>%1",
+                                      mSaver->errorString(isstat),
+                                      lurl.prettyUrl()),
+                           i18n("Image Save Error"));
+    }
+
+    delete mSaver; mSaver = NULL;			// now finished with this
+
+    if (isstat==ImgSaver::SaveStatusOk)			// image was saved OK,
+    {							// select the new image
+        slotSetNextUrlToSelect(lurl);
+        m_nextUrlToShow = lurl;
+        if (mSavedTo!=NULL) updateParent(mSavedTo);
+    }
 }
 
 

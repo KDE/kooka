@@ -458,9 +458,14 @@ signals:
      * Depending on the scanner, there may be a delay (for example,
      * while the lamp warms up) between this signal and the
      * @c sigAcquireStart.
+     *
+     * @param info Image information, if it is currently available
      * @see sigAcquireStart
+     *
+     * @note The @p info parameter may be NULL, or it may not contain
+     * any useful format information.
      **/
-    void sigScanStart();
+    void sigScanStart(const ImgScanInfo *info);
 
     /**
      * Emitted to indicate that a scan is starting to acquire data.
@@ -574,6 +579,7 @@ private:
 
     SANE_Byte *mScanBuf;
     QImage *mScanImage;
+    ImgScanInfo *mImageInfo;
     SANE_Parameters mSaneParameters;
     long mBytesRead;
     long mBlocksRead;

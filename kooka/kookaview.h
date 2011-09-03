@@ -154,7 +154,7 @@ public slots:
     bool slotSelectDevice(const QByteArray &useDevice = "", bool alwaysAsk = true);
     void slotAddDevice();
 
-    void slotScanStart();
+    void slotScanStart(const ImgScanInfo *info);
     void slotScanFinished( KScanDevice::Status stat );
     void slotAcquireStart();
 

@@ -84,7 +84,7 @@ ScanDialog::ScanDialog( QWidget *parent, const char *name, bool modal )
     connect(m_device, SIGNAL(sigNewImage(QImage *, ImgScanInfo*)),
             this, SLOT(slotFinalImage(QImage *, ImgScanInfo *)));
 
-    connect( m_device, SIGNAL(sigScanStart()), this, SLOT(slotScanStart()));
+    connect( m_device, SIGNAL(sigScanStart(const ImgScanInfo *)), this, SLOT(slotScanStart()));
     connect( m_device, SIGNAL(sigScanFinished(KScanStat)),
 	     this, SLOT(slotScanFinished(KScanStat)));
     connect( m_device, SIGNAL(sigAcquireStart()), this, SLOT(slotAcquireStart()));

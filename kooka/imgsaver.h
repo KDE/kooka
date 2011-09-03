@@ -30,6 +30,8 @@
 
 #include <kurl.h>
 
+#include "imageformat.h"
+
 
 #define OP_SAVER_GROUP         "Files"
 
@@ -48,6 +50,7 @@
 
 class KookaImage;
 class ImageFormat;
+class ImgScanInfo;
 
 /**
  *  Class ImgSaver:
@@ -112,6 +115,7 @@ public:
     static bool isRememberedFormat(ImgSaver::ImageType type, const ImageFormat &format);
     static QString picTypeAsString(ImgSaver::ImageType type);
 
+    ImgSaver::ImageSaveStatus setImageInfo(const ImgScanInfo *info);
     ImgSaver::ImageSaveStatus saveImage(const QImage *image);
     ImgSaver::ImageSaveStatus saveImage(const QImage *image, const KUrl &url, const ImageFormat &format);
 
@@ -124,8 +128,10 @@ private:
 
     ImgSaver::ImageSaveStatus save(const QImage *image, const KUrl &url,
                                    const ImageFormat &format, const QString &subformat = QString::null);
-
     QString createFilename();
+
+    ImgSaver::ImageSaveStatus getFilenameAndFormat(ImgSaver::ImageType type);
+    ImgSaver::ImageSaveStatus getFormatForImage(const QImage *image);
 
     QString m_saveDirectory;				// dir where the image should be saved
     QByteArray mLastFormat;
@@ -133,6 +139,10 @@ private:
 
     bool m_saveAskFormat;
     bool m_saveAskFilename;
+
+    KUrl mSaveUrl;
+    ImageFormat mSaveFormat;
+    QString mSaveSubformat;
 };
 
 

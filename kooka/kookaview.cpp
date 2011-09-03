@@ -289,7 +289,7 @@ KookaView::KookaView(KMainWindow *parent, const QByteArray &deviceToUse)
     /* New preview image */
     connect(mScanDevice, SIGNAL(sigNewPreview(const QImage *,const ImgScanInfo *)), SLOT(slotNewPreview(const QImage *,const ImgScanInfo *)));
 
-    connect(mScanDevice, SIGNAL(sigScanStart()), SLOT(slotScanStart()));
+    connect(mScanDevice, SIGNAL(sigScanStart(const ImgScanInfo *)), SLOT(slotScanStart(const ImgScanInfo *)));
     connect(mScanDevice, SIGNAL(sigAcquireStart()), SLOT(slotAcquireStart()));
 
     /** Scan Preview **/
@@ -846,35 +846,49 @@ void KookaView::slotOcrResultAvailable()
 }
 
 
-void KookaView::slotScanStart( )
+void KookaView::slotScanStart(const ImgScanInfo *info)
 {
-   kDebug() << "Scan starts";
-   if( mScanParams )
-   {
-      mScanParams->setEnabled( false );
-      KLed *led = mScanParams->operationLED();
-      if( led )
-      {
-	 led->setColor( Qt::red );
-	 led->setState( KLed::On );
-         qApp->processEvents();
-      }
-   }
+    kDebug() << "Scan starts...";
+
+// TODO: option for prompt at start or end of scan
+// if the latter, don't do this block
+    if (info!=NULL)					// have initial image information
+    {
+        kDebug() << "format" << info->getFormat() << "grey" << info->getIsGrey();
+        if (!gallery()->prepareToSave(info))		// get ready to save
+        {						// user cancelled file prompt
+            mScanDevice->slotStopScanning();		// abort the scan now
+            return;
+        }
+    }
+
+    if (mScanParams!=NULL)
+    {
+        mScanParams->setEnabled(false);
+
+        KLed *led = mScanParams->operationLED();
+        if (led!=NULL)
+        {
+            led->setColor(Qt::red);			// scanner warming up
+            led->setState(KLed::On);
+            qApp->processEvents();			// let the change show
+        }
+    }
 }
 
 
-void KookaView::slotAcquireStart( )
+void KookaView::slotAcquireStart()
 {
-   kDebug() << "Acquire starts";
-   if( mScanParams )
-   {
-      KLed *led = mScanParams->operationLED();
-      if( led )
-      {
-	 led->setColor( Qt::green );
-         qApp->processEvents();
-      }
-   }
+    kDebug() << "Acquire starts";
+    if (mScanParams!=NULL)
+    {
+        KLed *led = mScanParams->operationLED();
+        if (led!=NULL)
+        {
+            led->setColor(Qt::green);			// scanning active
+            qApp->processEvents();			// let the change show
+        }
+    }
 }
 
 

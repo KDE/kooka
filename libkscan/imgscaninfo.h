@@ -23,33 +23,44 @@
 #include "libkscanexport.h"
 
 #include <qstring.h>
+#include <qimage.h>
 
-/* ----------------------------------------------------------------------
- *
- */
+
+
+
+
+/////////// TODO: have an enum here for the image type
+// (avoid having to have 2 parameters format/grey)
+// getFormat => return that
+// ImageSaver type = that plus extras
+
+
+
 class KSCAN_EXPORT ImgScanInfo
 {
 public:
     ImgScanInfo();
 
-    int getXResolution() const;
-    int getYResolution() const;
-    QString getMode() const;
-    QString getScannerName() const;
+    int getXResolution() const				{ return (m_xRes); }
+    int getYResolution() const				{ return (m_yRes); }
+    QString getMode() const				{ return (m_mode); }
+    QString getScannerName() const			{ return (m_scanner); }
+    QImage::Format getFormat() const			{ return (m_format); }
+    bool getIsGrey() const				{ return (m_isgrey); }
 
-    void setXResolution( int );
-    void setYResolution( int );
-    void setMode( const QString& );
-    void setScannerName( const QString& );
+    void setXResolution(int xres)			{ m_xRes = xres; }
+    void setYResolution(int yres)			{ m_yRes = yres; }
+    void setMode(const QString &mode)			{ m_mode = mode; }
+    void setScannerName(const QString &scanner)		{ m_scanner = scanner; }
+    void setFormat(QImage::Format fmt, bool grey)	{ m_format = fmt; m_isgrey = grey; }
 
 private:
     int m_xRes;
     int m_yRes;
     QString m_mode;
     QString m_scanner;
-
-    class ImgScanInfoPrivate;
-    ImgScanInfoPrivate *d;
+    QImage::Format m_format;
+    bool m_isgrey;
 };
 
 #endif							// IMGSCANINFO_H

@@ -46,6 +46,8 @@
 #include "kookapref.h"
 #include "formatdialog.h"
 
+#include "libkscan/imgscaninfo.h"
+
 
 /* Needs a full qualified directory name */
 void createDir(const QString &dir)
@@ -78,6 +80,8 @@ void createDir(const QString &dir)
 
 
 ImgSaver::ImgSaver(const KUrl &dir)
+    : mSaveUrl(KUrl()),
+      mSaveFormat("")
 {
     if (dir.isValid() && !dir.isEmpty() && dir.protocol()=="file")
     {							// can use specified place
@@ -100,28 +104,21 @@ QString extension(const KUrl &url)
 }
 
 
-/**
- *   This function asks the user for a filename or creates
- *   one by itself, depending on the settings
- **/
-ImgSaver::ImageSaveStatus ImgSaver::saveImage(const QImage *image)
-{
-    if (image==NULL) return (ImgSaver::SaveStatusParam);
 
-    ImgSaver::ImageType imgType = ImgSaver::ImgNone;	// find out what kind of image it is
-    if (image->depth()>8) imgType = ImgSaver::ImgHicolor;
-    else
-    {
-        if (image->depth()==1 || image->numColors()==2) imgType = ImgSaver::ImgBW;
-        else
-        {
-            if (image->allGray()) imgType = ImgSaver::ImgGray;
-            else imgType = ImgSaver::ImgColor;
-        }
-    }
+
+
+
+
+
+
+
+
+ImgSaver::ImageSaveStatus ImgSaver::getFilenameAndFormat(ImgSaver::ImageType type)
+{
+    kDebug() << "type=" << hex << type;
 
     QString saveFilename = createFilename();		// find next unused filename
-    ImageFormat saveFormat = findFormat(imgType);	// find saved image format
+    ImageFormat saveFormat = findFormat(type);		// find saved image format
     QString saveSubformat = findSubFormat(saveFormat);	// currently not used
 							// get dialogue preferences
     const KConfigGroup grp = KGlobal::config()->group(OP_SAVER_GROUP);
@@ -137,7 +134,7 @@ ImgSaver::ImageSaveStatus ImgSaver::saveImage(const QImage *image)
 
     while (!saveFormat.isValid() || m_saveAskFormat || m_saveAskFilename)
     {							// is a dialogue neeeded?
-        FormatDialog fd(NULL,imgType,m_saveAskFormat,saveFormat,m_saveAskFilename,saveFilename);
+        FormatDialog fd(NULL,type,m_saveAskFormat,saveFormat,m_saveAskFilename,saveFilename);
         if (!fd.exec()) return (ImgSaver::SaveStatusCanceled);
 							// do the dialogue
         saveFilename = fd.getFilename();		// get filename as entered
@@ -152,15 +149,10 @@ ImgSaver::ImageSaveStatus ImgSaver::saveImage(const QImage *image)
 
         if (saveFormat.isValid())			// have a valid format
         {
-            if (fd.alwaysUseFormat()) storeFormatForType(imgType, saveFormat);
+            if (fd.alwaysUseFormat()) storeFormatForType(type, saveFormat);
             break;					// save format for future
         }
     }
-
-    kDebug() << "after dialogue,"
-             << "filename=" << saveFilename
-             << "format=" << saveFormat
-             << "subformat=" << saveSubformat;
 
     QString fi = m_saveDirectory+QDir::separator()+saveFilename;
 							// full path to save
@@ -170,8 +162,106 @@ ImgSaver::ImageSaveStatus ImgSaver::saveImage(const QImage *image)
         fi +=  ".";					// no, add it on
         fi += ext;
     }
-							// save image to that file
-    return (save(image, fi, saveFormat, saveSubformat));
+
+    mSaveUrl = fi;
+    mSaveFormat = saveFormat;
+    mSaveSubformat = saveSubformat;
+
+    kDebug() << "after dialogue,"
+             << "filename=" << saveFilename
+             << "format=" << mSaveFormat
+             << "subformat=" << mSaveSubformat
+             << "url=" << mSaveUrl;
+    return (ImgSaver::SaveStatusOk);
+}
+
+
+
+
+ImgSaver::ImageSaveStatus ImgSaver::getFormatForImage(const QImage *image)
+{
+    ImgSaver::ImageType type = ImgSaver::ImgNone;
+    if (image->depth()>8) type = ImgSaver::ImgHicolor;
+    else
+    {
+        if (image->depth()==1 || image->numColors()==2) type = ImgSaver::ImgBW;
+        else
+        {
+            if (image->allGray()) type = ImgSaver::ImgGray;
+            else type = ImgSaver::ImgColor;
+        }
+    }
+
+    return (getFilenameAndFormat(type));
+}
+
+
+
+
+
+// This tells us the image information available at the start of a scan.
+// If it is of any use, then resolve the filename and format to use
+// and save them for when they are needed.
+
+ImgSaver::ImageSaveStatus ImgSaver::setImageInfo(const ImgScanInfo *info)
+{
+    if (info==NULL) return (ImgSaver::SaveStatusParam);
+    QImage::Format fmt = info->getFormat();
+    kDebug() << "format" << fmt << "grey" << info->getIsGrey();
+
+    ImgSaver::ImageType type = ImgSaver::ImgNone;
+    switch (fmt)
+    {
+default:
+case QImage::Format_Invalid:
+        return (ImgSaver::SaveStatusParam);
+
+case QImage::Format_Mono:
+        type = ImgSaver::ImgBW;
+        break;
+
+case QImage::Format_Indexed8:
+        if (info->getIsGrey()) type = ImgSaver::ImgGray;
+        else type = ImgSaver::ImgColor;
+        break;
+
+case QImage::Format_RGB32:
+        type = ImgSaver::ImgHicolor;
+        break;
+    }
+
+    return (getFilenameAndFormat(type));
+}
+
+
+
+
+
+
+
+
+/**
+ *   This function asks the user for a filename or creates
+ *   one by itself, depending on the settings
+ **/
+ImgSaver::ImageSaveStatus ImgSaver::saveImage(const QImage *image)
+{
+    if (image==NULL) return (ImgSaver::SaveStatusParam);
+
+    if (!mSaveFormat.isValid())				// see if have this already
+    {							// if not, get from image now
+        kDebug() << "format not resolved yet";
+        ImgSaver::ImageSaveStatus stat = getFormatForImage(image);
+        if (stat!=ImgSaver::SaveStatusOk) return (stat);
+    }
+
+    if (!mSaveUrl.isValid() || !mSaveFormat.isValid())	// must have these now
+    {
+        kDebug() << "format not resolved!";
+        return (ImgSaver::SaveStatusParam);
+    }
+							// save image to file
+    return (save(image, mSaveUrl, mSaveFormat, mSaveSubformat));
 }
 
 

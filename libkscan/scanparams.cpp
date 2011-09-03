@@ -199,7 +199,7 @@ bool ScanParams::connectDevice(KScanDevice *newScanDevice, bool galleryMode)
     lay->addWidget(pb, 5, 1, Qt::AlignRight);
 
     /* Initialise the progress dialog */
-    mProgressDialog = new QProgressDialog( i18n("Scanning in progress"),
+    mProgressDialog = new QProgressDialog(i18n("Scanning in progress"),
                                           i18n("Stop"), 0, 100, NULL);
     mProgressDialog->setModal(true);
     mProgressDialog->setAutoClose(true);
@@ -207,12 +207,8 @@ bool ScanParams::connectDevice(KScanDevice *newScanDevice, bool galleryMode)
     mProgressDialog->setMinimumDuration(100);
     mProgressDialog->setWindowTitle(i18n("Scanning"));
 
-    connect( mSaneDevice, SIGNAL(sigScanProgress(int)),
-             mProgressDialog, SLOT(setValue(int)));
-
-    /* Connect the Progress Dialogs cancel-Button */
-    connect( mProgressDialog, SIGNAL( canceled() ), mSaneDevice,
-             SLOT( slotStopScanning() ) );
+    connect(mProgressDialog, SIGNAL(canceled()), mSaneDevice, SLOT(slotStopScanning()));
+    connect(mSaneDevice, SIGNAL(sigScanProgress(int)), SLOT(slotScanProgress(int)));
 
     return (true);
 }
@@ -318,7 +314,6 @@ QWidget *ScanParams::createScannerParams()
         // are now translatable.  But we also have to set the untranslated strings
         // just in case there is no translation there (sane-backends does not have
         // translations for the en_GB locale, for example).
-
         cb->setIcon(mIconLineart, I18N_NOOP("Line art"));
         cb->setIcon(mIconLineart, I18N_NOOP("Lineart"));
         cb->setIcon(mIconLineart, I18N_NOOP("Binary"));
@@ -703,13 +698,11 @@ KScanDevice::Status ScanParams::prepareScan(QString *vfp)
 }
 
 
-
-void ScanParams::startProgress()
+void ScanParams::slotScanProgress(int value)
 {
-    mProgressDialog->setValue(0);
-    if (mProgressDialog->isHidden()) mProgressDialog->show();
+    mProgressDialog->setValue(value);
+    if (value==0 && !mProgressDialog->isVisible()) mProgressDialog->show();
 }
-
 
 
 /* Slot called to start acquiring a preview */
@@ -739,7 +732,6 @@ void ScanParams::slotAcquirePreview()
     setMaximalScanSize();				// always preview at maximal size
     area_sel->selectCustomSize(QRect());		// reset selector to reflect that
 
-    startProgress();					// show the progress dialog
     stat = mSaneDevice->acquirePreview(gp);
     if (stat!=KScanDevice::Ok) kDebug() << "Error, preview status " << stat;
 }
@@ -759,7 +751,6 @@ void ScanParams::slotStartScan()
         if (adf==ADF_OFF)
         {
 	    kDebug() << "Start to acquire image";
-            startProgress();				// show the progress dialog
 	    stat = mSaneDevice->acquireScan();
         }
         else

@@ -26,6 +26,11 @@
 
 #include "kookaimagemeta.h"
 
+
+////////////// TODO: unify this with libkscan's ImgScanInfo
+
+
+
 KookaImageMeta::KookaImageMeta( ) :
     m_scanResolution(-1),
     m_scanResolutionY(-1)
