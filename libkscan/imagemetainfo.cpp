@@ -1,5 +1,6 @@
 /* This file is part of the KDE Project
    Copyright (C) 2004 Klaas Freitag <freitag@suse.de>
+   Copyright (C) 2011 Jonathan Marten <jjm@keelhaul.me.uk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -17,15 +18,30 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "imgscaninfo.h"
+#include "imagemetainfo.h"
 
-#include <klocale.h>
-#include <kdebug.h>
+#include <qimage.h>
 
 
-ImgScanInfo::ImgScanInfo()
+ImageMetaInfo::ImageMetaInfo()
     : m_xRes(-1), m_yRes(-1),
-      m_format(QImage::Format_Invalid),
-      m_isgrey(false)
+      m_type(ImageMetaInfo::Unknown)
 {
+}
+
+
+ImageMetaInfo::ImageType ImageMetaInfo::findImageType(const QImage *image)
+{
+    if (image==NULL || image->isNull()) return (ImageMetaInfo::Unknown);
+
+    if (image->depth()==1 || image->numColors()==2) return (ImageMetaInfo::BlackWhite);
+    else
+    {
+        if (image->depth()>8) return (ImageMetaInfo::HighColour);
+        else
+        {
+            if (image->allGray()) return (ImageMetaInfo::Greyscale);
+            else return (ImageMetaInfo::LowColour);
+        }
+    }
 }

@@ -42,7 +42,7 @@ set(libkscan_SRCS
   previewer.cpp
   imgscaledialog.cpp
   sizeindicator.cpp
-  imgscaninfo.cpp
+  imagemetainfo.cpp
   scansizeselector.cpp
 )
 

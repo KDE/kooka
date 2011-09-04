@@ -133,7 +133,6 @@ set(kooka_SRCS
   imgsaver.cpp			# -> imagesaver
   formatdialog.cpp
   kookaimage.cpp
-  kookaimagemeta.cpp
   imageformat.cpp
   scangallery.cpp
   galleryhistory.cpp

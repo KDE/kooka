@@ -51,25 +51,25 @@ static struct formatInfo formats[] =
 It is suitable for color, grayscale and line art images.\
 <p>This format is widely supported but is not recommended, use an open format \
 instead."),
-      ImgSaver::ImgNone },
+      0 },
 
     { "image/x-portable-bitmap",			// PBM
       I18N_NOOP(
 "<b>Portable Bitmap</b>, as used by Netpbm, is an uncompressed format for line art \
 (bitmap) images. Only 1 bit per pixel depth is supported."),
-      ImgSaver::ImgBW },
+      ImageMetaInfo::BlackWhite },
 
     { "image/x-portable-graymap",			// PGM
       I18N_NOOP(
 "<b>Portable Greymap</b>, as used by Netpbm, is an uncompressed format for grayscale \
 images. Only 8 bit per pixel depth is supported."),
-      ImgSaver::ImgGray },
+      ImageMetaInfo::Greyscale },
 
     { "image/x-portable-pixmap",			// PPM
       I18N_NOOP(
 "<b>Portable Pixmap</b>, as used by Netpbm, is an uncompressed format for full color \
 images. Only 24 bit per pixel RGB is supported."),
-      ImgSaver::ImgColor|ImgSaver::ImgHicolor },
+      ImageMetaInfo::LowColour|ImageMetaInfo::HighColour },
 
     { "image/x-pcx",					// PCX
       I18N_NOOP(
@@ -77,19 +77,19 @@ images. Only 24 bit per pixel RGB is supported."),
 applications, although it is rather old and unsophisticated.  It is suitable for \
 color and grayscale images.\
 <p>This format is not recommended, use an open format instead."),
-      ImgSaver::ImgNone },
+      0 },
 
     { "image/x-xbitmap",				// XBM
       I18N_NOOP(
 "<b>X Bitmap</b> is often used by the X Window System to store cursor and icon bitmaps.\
 <p>Unless required for this purpose, use a general purpose format instead."),
-      ImgSaver::ImgNone },
+      0 },
 
     { "image/x-xpixmap",				// XPM
       I18N_NOOP(
 "<b>X Pixmap</b> is often used by the X Window System for color icons and other images.\
 <p>Unless required for this purpose, use a general purpose format instead."),
-      ImgSaver::ImgNone },
+      0 },
 
     { "image/png",					// PNG
       I18N_NOOP(
@@ -97,7 +97,7 @@ color and grayscale images.\
 portable and extensible. It is suitable for any type of color or grayscale images, \
 indexed or true color.\
 <p>PNG is an open format which is widely supported."),
-      ImgSaver::ImgBW|ImgSaver::ImgColor|ImgSaver::ImgGray|ImgSaver::ImgHicolor },
+      ImageMetaInfo::BlackWhite|ImageMetaInfo::LowColour|ImageMetaInfo::Greyscale|ImageMetaInfo::HighColour },
 
     { "image/jpeg",					// JPEG JPG
       I18N_NOOP(
@@ -105,28 +105,28 @@ indexed or true color.\
 It is a lossy format, so it is not recommended for archiving or for repeated loading \
 and saving.\
 <p>This is an open format which is widely supported."),
-      ImgSaver::ImgHicolor|ImgSaver::ImgGray },
+      ImageMetaInfo::HighColour|ImageMetaInfo::Greyscale },
 
     { "image/jp2",					// JP2
       I18N_NOOP(
 "<b>JPEG 2000</b> was intended as an update to the JPEG format, with the option of \
 lossless compression, but so far is not widely supported. It is suitable for true \
 color or grayscale images."),
-      ImgSaver::ImgNone },
+      0 },
 
     { "image/x-eps",					// EPS EPSF EPSI
       I18N_NOOP(
 "<b>Encapsulated PostScript</b> is derived from the PostScript&trade; \
 page description language.  Use this format for importing into other \
 applications, or to use with (e.g.) TeX."),
-      ImgSaver::ImgNone },
+      0 },
 
     { "image/x-tga",					// TGA
       I18N_NOOP(
 "<b>Truevision Targa</b> can store full color images with an alpha channel, and is \
 used extensively by animation and video applications.\
 <p>This format is not recommended, use an open format instead."),
-      ImgSaver::ImgNone },
+      0 },
 
     { "image/gif",					// GIF
       I18N_NOOP(					// writing may not be supported
@@ -134,7 +134,7 @@ used extensively by animation and video applications.\
 used for web graphics.  It uses lossless compression with up to 256 colors and \
 optional transparency.\
 <p>For legal reasons this format is not recommended, use an open format instead."),
-      ImgSaver::ImgNone },
+      0 },
 
     { "image/tiff",					// TIF TIFF
       I18N_NOOP(					// writing may not be supported
@@ -143,7 +143,7 @@ supported by imaging and publishing applications. It supports indexed and true c
 images with alpha transparency.\
 <p>Because there are many variations, there may sometimes be compatibility problems. \
 Unless required for use with other applications, use an open format instead."),
-      ImgSaver::ImgBW|ImgSaver::ImgColor|ImgSaver::ImgGray|ImgSaver::ImgHicolor },
+      ImageMetaInfo::BlackWhite|ImageMetaInfo::LowColour|ImageMetaInfo::Greyscale|ImageMetaInfo::HighColour },
 
     { "video/x-mng",					// MNG
       I18N_NOOP(
@@ -152,16 +152,16 @@ intended for animated images.  It is an open format suitable for all types of \
 images.\
 <p>Images produced by a scanner will not be animated, so unless specifically \
 required for use with other applications use PNG instead."),
-      ImgSaver::ImgNone },
+      0 },
 
     { "image/x-sgi",					// SGI
       I18N_NOOP(
 "This is the <b>Silicon Graphics</b> native image file format, supporting 24 bit \
 true color images with optional lossless compression.\
 <p>Unless specifically required, use an open format instead."),
-      ImgSaver::ImgNone },
+      0 },
 
-    { NULL, NULL, ImgSaver::ImgNone }
+    { NULL, NULL, 0 }
 };
 
 
@@ -169,7 +169,7 @@ static QString sLastFormat = QString::null;		// format last used, whether
 							// remembered or not
 
 
-FormatDialog::FormatDialog(QWidget *parent, ImgSaver::ImageType type,
+FormatDialog::FormatDialog(QWidget *parent, ImageMetaInfo::ImageType type,
                            bool askForFormat, const ImageFormat &format,
                            bool askForFilename, const QString &filename)
     : KDialog(parent),

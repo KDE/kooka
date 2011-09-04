@@ -56,7 +56,7 @@
 
 #include "libkscan/scandevices.h"
 #include "libkscan/kscandevice.h"
-#include "libkscan/imgscaninfo.h"
+#include "libkscan/imagemetainfo.h"
 #include "libkscan/deviceselector.h"
 #include "libkscan/adddevice.h"
 #include "libkscan/previewer.h"
@@ -67,7 +67,6 @@
 #include "galleryhistory.h"
 #include "thumbview.h"
 #include "kookaimage.h"
-#include "kookaimagemeta.h"
 #include "ocrengine.h"
 #include "ocrresedit.h"
 #include "scanparamsdialog.h"
@@ -283,13 +282,13 @@ KookaView::KookaView(KMainWindow *parent, const QByteArray &deviceToUse)
     connect(mScanDevice, SIGNAL(sigScanFinished(KScanDevice::Status)), SLOT(slotScanFinished(KScanDevice::Status)));
     connect(mScanDevice, SIGNAL(sigScanFinished(KScanDevice::Status)), SLOT(slotPhotoCopyScan(KScanDevice::Status)));
     /* New image created after scanning now call save dialog*/
-    connect(mScanDevice, SIGNAL(sigNewImage(const QImage *, const ImgScanInfo *)), SLOT(slotNewImageScanned(const QImage *,const ImgScanInfo *)));
+    connect(mScanDevice, SIGNAL(sigNewImage(const QImage *, const ImageMetaInfo *)), SLOT(slotNewImageScanned(const QImage *,const ImageMetaInfo *)));
     /* New image created after scanning now print it*/    
-    connect(mScanDevice, SIGNAL(sigNewImage(const QImage *,const ImgScanInfo *)), SLOT(slotPhotoCopyPrint(const QImage *,const ImgScanInfo *)));
+    connect(mScanDevice, SIGNAL(sigNewImage(const QImage *,const ImageMetaInfo *)), SLOT(slotPhotoCopyPrint(const QImage *,const ImageMetaInfo *)));
     /* New preview image */
-    connect(mScanDevice, SIGNAL(sigNewPreview(const QImage *,const ImgScanInfo *)), SLOT(slotNewPreview(const QImage *,const ImgScanInfo *)));
+    connect(mScanDevice, SIGNAL(sigNewPreview(const QImage *,const ImageMetaInfo *)), SLOT(slotNewPreview(const QImage *,const ImageMetaInfo *)));
 
-    connect(mScanDevice, SIGNAL(sigScanStart(const ImgScanInfo *)), SLOT(slotScanStart(const ImgScanInfo *)));
+    connect(mScanDevice, SIGNAL(sigScanStart(const ImageMetaInfo *)), SLOT(slotScanStart(const ImageMetaInfo *)));
     connect(mScanDevice, SIGNAL(sigAcquireStart()), SLOT(slotAcquireStart()));
 
     /** Scan Preview **/
@@ -729,7 +728,7 @@ void KookaView::print()
 }
 
 
-void KookaView::slotNewPreview(const QImage *newimg, const ImgScanInfo *info)
+void KookaView::slotNewPreview(const QImage *newimg, const ImageMetaInfo *info)
 {
    if (newimg==NULL) return;
 
@@ -846,7 +845,7 @@ void KookaView::slotOcrResultAvailable()
 }
 
 
-void KookaView::slotScanStart(const ImgScanInfo *info)
+void KookaView::slotScanStart(const ImageMetaInfo *info)
 {
     kDebug() << "Scan starts...";
 
@@ -854,7 +853,7 @@ void KookaView::slotScanStart(const ImgScanInfo *info)
 // if the latter, don't do this block
     if (info!=NULL)					// have initial image information
     {
-        kDebug() << "format" << info->getFormat() << "grey" << info->getIsGrey();
+        kDebug() << "imgtype" << info->getImageType();
         if (!gallery()->prepareToSave(info))		// get ready to save
         {						// user cancelled file prompt
             mScanDevice->slotStopScanning();		// abort the scan now
@@ -892,13 +891,11 @@ void KookaView::slotAcquireStart()
 }
 
 
-void KookaView::slotNewImageScanned(const QImage *img, const ImgScanInfo *info)
+void KookaView::slotNewImageScanned(const QImage *img, const ImageMetaInfo *info)
 {
     if (mIsPhotoCopyMode) return;
 
-    KookaImageMeta *meta = new KookaImageMeta;
-    meta->setScanResolution(info->getXResolution(), info->getYResolution());
-    gallery()->addImage(img, meta);
+    gallery()->addImage(img, info);
 }
 
 
@@ -1188,7 +1185,7 @@ void KookaView::slotStartPhotoCopy( )
 }
 
 
-void KookaView::slotPhotoCopyPrint(const QImage *img, const ImgScanInfo *info)
+void KookaView::slotPhotoCopyPrint(const QImage *img, const ImageMetaInfo *info)
 {
     kDebug();
 

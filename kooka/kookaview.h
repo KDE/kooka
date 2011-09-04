@@ -54,7 +54,7 @@ class OcrResEdit;
 class ScanGallery;
 class KookaScanParams;
 class ScanParams;
-class ImgScanInfo;
+class ImageMetaInfo;
 class Previewer;
 class KScanDevice;
 class ImageCanvas;
@@ -137,7 +137,7 @@ public slots:
     void slotSaveOcrResult();
 
     void slotStartPreview();
-    void slotNewPreview(const QImage *newimg, const ImgScanInfo *info);
+    void slotNewPreview(const QImage *newimg, const ImageMetaInfo *info);
     void slotStartFinalScan();
 
     void slotCreateNewImgFromSelection();
@@ -154,7 +154,7 @@ public slots:
     bool slotSelectDevice(const QByteArray &useDevice = "", bool alwaysAsk = true);
     void slotAddDevice();
 
-    void slotScanStart(const ImgScanInfo *info);
+    void slotScanStart(const ImageMetaInfo *info);
     void slotScanFinished( KScanDevice::Status stat );
     void slotAcquireStart();
 
@@ -162,7 +162,7 @@ public slots:
 
 protected slots:
     void slotStartPhotoCopy();
-    void slotPhotoCopyPrint(const QImage *img, const ImgScanInfo *info);
+    void slotPhotoCopyPrint(const QImage *img, const ImageMetaInfo *info);
     void slotPhotoCopyScan( KScanDevice::Status );
 
     void slotShowAImage(const KookaImage *img, bool isDir);
@@ -172,7 +172,7 @@ protected slots:
      * called from the scandevice if a new Image was successfully scanned.
      * Needs to convert the one-page-QImage to a KookaImage
      */
-    void slotNewImageScanned(const QImage *img, const ImgScanInfo *info);
+    void slotNewImageScanned(const QImage *img, const ImageMetaInfo *info);
 
     void slotSelectionChanged(const QRect &newSelection);
     void slotGallerySelectionChanged();

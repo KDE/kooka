@@ -36,9 +36,9 @@ class KMenu;
 class KUrl;
 
 class ImgSaver;
-class ImgScanInfo;
+class ImageMetaInfo;
 class KookaImage;
-class KookaImageMeta;
+
 
 class ScanGallery : public FileTreeView
 {
@@ -56,8 +56,8 @@ public:
 
     void setAllowRename(bool on);
 
-    bool prepareToSave(const ImgScanInfo *info);
-    void addImage(const QImage *img, KookaImageMeta *meta = NULL);
+    bool prepareToSave(const ImageMetaInfo *info);
+    void addImage(const QImage *img, const ImageMetaInfo *info = NULL);
 
     void saveHeaderState(const QString &key) const;
     void restoreHeaderState(const QString &key);

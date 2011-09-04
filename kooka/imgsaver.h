@@ -31,6 +31,7 @@
 #include <kurl.h>
 
 #include "imageformat.h"
+#include "libkscan/imagemetainfo.h"
 
 
 #define OP_SAVER_GROUP         "Files"
@@ -47,10 +48,8 @@
 #define OP_FORMAT_UNKNOWN      "UnknownFormat"
 
 
-
 class KookaImage;
-class ImageFormat;
-class ImgScanInfo;
+
 
 /**
  *  Class ImgSaver:
@@ -64,22 +63,6 @@ class ImgSaver
 {
 
 public:
-
-    /**
-     *  enum ImageType:
-     *  Specifies the type of the image to save. This is important for
-     *  getting the format.
-     **/
-    enum ImageType
-    {
-        ImgNone       = 0x00,
-        ImgPreview    = 0x01,
-        ImgThumbnail  = 0x02,
-        ImgHicolor    = 0x04,
-        ImgColor      = 0x08,
-        ImgGray       = 0x10,
-        ImgBW         = 0x20
-    };
 
     /**
      *  enum ImageSaveStatus:
@@ -112,26 +95,25 @@ public:
     static bool renameImage(const KUrl &fromUrl, const KUrl &toUrl, bool askExt = false, QWidget *overWidget = NULL);
     static QString tempSaveImage(const KookaImage *img, const ImageFormat &format, int colors = -1);
 
-    static bool isRememberedFormat(ImgSaver::ImageType type, const ImageFormat &format);
-    static QString picTypeAsString(ImgSaver::ImageType type);
+    static bool isRememberedFormat(ImageMetaInfo::ImageType type, const ImageFormat &format);
+    static QString picTypeAsString(ImageMetaInfo::ImageType type);
 
-    ImgSaver::ImageSaveStatus setImageInfo(const ImgScanInfo *info);
+    ImgSaver::ImageSaveStatus setImageInfo(const ImageMetaInfo *info);
     ImgSaver::ImageSaveStatus saveImage(const QImage *image);
     ImgSaver::ImageSaveStatus saveImage(const QImage *image, const KUrl &url, const ImageFormat &format);
 
 private:
-    static ImageFormat findFormat(ImgSaver::ImageType type);
+    static ImageFormat findFormat(ImageMetaInfo::ImageType type);
     static QString findSubFormat(const ImageFormat &format);
 
-    static ImageFormat getFormatForType(ImgSaver::ImageType type);
-    static void storeFormatForType(ImgSaver::ImageType type, const ImageFormat &format);
+    static ImageFormat getFormatForType(ImageMetaInfo::ImageType type);
+    static void storeFormatForType(ImageMetaInfo::ImageType type, const ImageFormat &format);
 
     ImgSaver::ImageSaveStatus save(const QImage *image, const KUrl &url,
                                    const ImageFormat &format, const QString &subformat = QString::null);
     QString createFilename();
 
-    ImgSaver::ImageSaveStatus getFilenameAndFormat(ImgSaver::ImageType type);
-    ImgSaver::ImageSaveStatus getFormatForImage(const QImage *image);
+    ImgSaver::ImageSaveStatus getFilenameAndFormat(ImageMetaInfo::ImageType type);
 
     QString m_saveDirectory;				// dir where the image should be saved
     QByteArray mLastFormat;

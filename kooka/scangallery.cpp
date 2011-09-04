@@ -45,10 +45,9 @@
 
 #include "imgsaver.h"
 #include "kookaimage.h"
-#include "kookaimagemeta.h"
 #include "kookapref.h"
 
-#include "libkscan/imgscaninfo.h"
+#include "libkscan/imagemetainfo.h"
 
 
 #define COLUMN_STATES_GROUP	"GalleryColumns"
@@ -834,15 +833,10 @@ void ScanGallery::slotCurrentImageChanged(const QImage *img)
 }
 
 
-
-
-
-
-
-bool ScanGallery::prepareToSave(const ImgScanInfo *info)
+bool ScanGallery::prepareToSave(const ImageMetaInfo *info)
 {
     if (info==NULL) kDebug() << "no image info";
-    else kDebug() << "format" << info->getFormat() << "grey" << info->getIsGrey();
+    else kDebug() << "type" << info->getImageType();
 
     delete mSaver; mSaver = NULL;			// recreate with clean info
 
@@ -870,19 +864,17 @@ bool ScanGallery::prepareToSave(const ImgScanInfo *info)
     if (info!=NULL)					// have image information,
     {							// tell saver about it
         ImgSaver::ImageSaveStatus stat = mSaver->setImageInfo(info);
-        if (stat!=ImgSaver::SaveStatusOk) return (false);
+        if (stat==ImgSaver::SaveStatusCanceled) return (false);
     }
 
     return (true);					// all ready to save
 }
 
 
-
-
 /* ----------------------------------------------------------------------- */
 /* This slot takes a new scanned Picture and saves it.  */
 
-void ScanGallery::addImage(const QImage *img, KookaImageMeta *meta)
+void ScanGallery::addImage(const QImage *img, const ImageMetaInfo *info)
 {
     if (img==NULL) return;				// nothing to save!
     kDebug() << "size" << img->size() << "depth" << img->depth();

@@ -46,7 +46,7 @@
 #include "kookapref.h"
 #include "formatdialog.h"
 
-#include "libkscan/imgscaninfo.h"
+#include "libkscan/imagemetainfo.h"
 
 
 /* Needs a full qualified directory name */
@@ -104,18 +104,11 @@ QString extension(const KUrl &url)
 }
 
 
-
-
-
-
-
-
-
-
-
-ImgSaver::ImageSaveStatus ImgSaver::getFilenameAndFormat(ImgSaver::ImageType type)
+ImgSaver::ImageSaveStatus ImgSaver::getFilenameAndFormat(ImageMetaInfo::ImageType type)
 {
-    kDebug() << "type=" << hex << type;
+    kDebug() << "for type=" << type;
+
+    if (type==ImageMetaInfo::Unknown) return (ImgSaver::SaveStatusParam);
 
     QString saveFilename = createFilename();		// find next unused filename
     ImageFormat saveFormat = findFormat(type);		// find saved image format
@@ -176,68 +169,15 @@ ImgSaver::ImageSaveStatus ImgSaver::getFilenameAndFormat(ImgSaver::ImageType typ
 }
 
 
-
-
-ImgSaver::ImageSaveStatus ImgSaver::getFormatForImage(const QImage *image)
-{
-    ImgSaver::ImageType type = ImgSaver::ImgNone;
-    if (image->depth()>8) type = ImgSaver::ImgHicolor;
-    else
-    {
-        if (image->depth()==1 || image->numColors()==2) type = ImgSaver::ImgBW;
-        else
-        {
-            if (image->allGray()) type = ImgSaver::ImgGray;
-            else type = ImgSaver::ImgColor;
-        }
-    }
-
-    return (getFilenameAndFormat(type));
-}
-
-
-
-
-
 // This tells us the image information available at the start of a scan.
 // If it is of any use, then resolve the filename and format to use
 // and save them for when they are needed.
 
-ImgSaver::ImageSaveStatus ImgSaver::setImageInfo(const ImgScanInfo *info)
+ImgSaver::ImageSaveStatus ImgSaver::setImageInfo(const ImageMetaInfo *info)
 {
     if (info==NULL) return (ImgSaver::SaveStatusParam);
-    QImage::Format fmt = info->getFormat();
-    kDebug() << "format" << fmt << "grey" << info->getIsGrey();
-
-    ImgSaver::ImageType type = ImgSaver::ImgNone;
-    switch (fmt)
-    {
-default:
-case QImage::Format_Invalid:
-        return (ImgSaver::SaveStatusParam);
-
-case QImage::Format_Mono:
-        type = ImgSaver::ImgBW;
-        break;
-
-case QImage::Format_Indexed8:
-        if (info->getIsGrey()) type = ImgSaver::ImgGray;
-        else type = ImgSaver::ImgColor;
-        break;
-
-case QImage::Format_RGB32:
-        type = ImgSaver::ImgHicolor;
-        break;
-    }
-
-    return (getFilenameAndFormat(type));
+    return (getFilenameAndFormat(info->getImageType()));
 }
-
-
-
-
-
-
 
 
 /**
@@ -251,7 +191,7 @@ ImgSaver::ImageSaveStatus ImgSaver::saveImage(const QImage *image)
     if (!mSaveFormat.isValid())				// see if have this already
     {							// if not, get from image now
         kDebug() << "format not resolved yet";
-        ImgSaver::ImageSaveStatus stat = getFormatForImage(image);
+        ImgSaver::ImageSaveStatus stat = getFilenameAndFormat(ImageMetaInfo::findImageType(image));
         if (stat!=ImgSaver::SaveStatusOk) return (stat);
     }
 
@@ -360,10 +300,10 @@ QString ImgSaver::createFilename()
  * the image type in question.
  */
 
-ImageFormat ImgSaver::findFormat(ImgSaver::ImageType type)
+ImageFormat ImgSaver::findFormat(ImageMetaInfo::ImageType type)
 {
-    if (type==ImgSaver::ImgThumbnail) return (ImageFormat("BMP"));	// thumbnail always this format
-    if (type==ImgSaver::ImgPreview) return (ImageFormat("BMP"));	// preview always this format
+    if (type==ImageMetaInfo::Thumbnail) return (ImageFormat("BMP"));	// thumbnail always this format
+    if (type==ImageMetaInfo::Preview) return (ImageFormat("BMP"));	// preview always this format
 									// real images from here on
     ImageFormat format = getFormatForType(type);
     kDebug() << "format for type" << type << "=" << format;
@@ -371,25 +311,25 @@ ImageFormat ImgSaver::findFormat(ImgSaver::ImageType type)
 }
 
 
-QString ImgSaver::picTypeAsString(ImgSaver::ImageType type)
+QString ImgSaver::picTypeAsString(ImageMetaInfo::ImageType type)
 {
     QString res;
 
     switch (type)
     {
-case ImgSaver::ImgColor:
+case ImageMetaInfo::LowColour:
         res = i18n("indexed color image (up to 8 bit depth)");
 	break;
 
-case ImgSaver::ImgGray:
+case ImageMetaInfo::Greyscale:
 	res = i18n("gray scale image (up to 8 bit depth)");
 	break;
 
-case ImgSaver::ImgBW:
+case ImageMetaInfo::BlackWhite:
 	res = i18n("lineart image (black and white, 1 bit depth)");
 	break;
 
-case ImgSaver::ImgHicolor:
+case ImageMetaInfo::HighColour:
 	res = i18n("high/true color image (more than 8 bit depth)");
 	break;
 
@@ -406,35 +346,35 @@ default:
  *  This method returns true if the image format given in format is remembered
  *  for that image type.
  */
-bool ImgSaver::isRememberedFormat(ImgSaver::ImageType type, const ImageFormat &format)
+bool ImgSaver::isRememberedFormat(ImageMetaInfo::ImageType type, const ImageFormat &format)
 {
     return (getFormatForType(type)==format);
 }
 
 
-const char *configKeyFor(ImgSaver::ImageType type)
+const char *configKeyFor(ImageMetaInfo::ImageType type)
 {
     switch (type)
     {
-case ImgSaver::ImgColor:    return (OP_FORMAT_COLOR);
-case ImgSaver::ImgGray:     return (OP_FORMAT_GRAY);
-case ImgSaver::ImgBW:       return (OP_FORMAT_BW);
-case ImgSaver::ImgHicolor:  return (OP_FORMAT_HICOLOR);
+case ImageMetaInfo::LowColour:	return (OP_FORMAT_COLOR);
+case ImageMetaInfo::Greyscale:	return (OP_FORMAT_GRAY);
+case ImageMetaInfo::BlackWhite:	return (OP_FORMAT_BW);
+case ImageMetaInfo::HighColour:	return (OP_FORMAT_HICOLOR);
 
-default:                    kDebug() << "unknown type" << type;
-                            return (OP_FORMAT_UNKNOWN);
+default:			kDebug() << "unknown type" << type;
+				return (OP_FORMAT_UNKNOWN);
     }
 }
 
 
-ImageFormat ImgSaver::getFormatForType(ImgSaver::ImageType type)
+ImageFormat ImgSaver::getFormatForType(ImageMetaInfo::ImageType type)
 {
     const KConfigGroup grp = KGlobal::config()->group(OP_SAVER_GROUP);
     return (ImageFormat(grp.readEntry(configKeyFor(type), "").toLocal8Bit()));
 }
 
 
-void ImgSaver::storeFormatForType(ImgSaver::ImageType type, const ImageFormat &format)
+void ImgSaver::storeFormatForType(ImageMetaInfo::ImageType type, const ImageFormat &format)
 {
     KConfigGroup grp = KGlobal::config()->group(OP_SAVER_GROUP);
 

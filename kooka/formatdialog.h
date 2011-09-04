@@ -46,7 +46,7 @@ class FormatDialog : public KDialog
     Q_OBJECT
 
 public:
-    FormatDialog(QWidget *parent, ImgSaver::ImageType type,
+    FormatDialog(QWidget *parent, ImageMetaInfo::ImageType type,
                  bool askForFormat, const ImageFormat &format,
                  bool askForFilename, const QString &filename);
 
@@ -77,7 +77,7 @@ private:
 
     KMimeType::List mMimeTypes;
 
-    ImgSaver::ImageType mImageType;
+    ImageMetaInfo::ImageType mImageType;
 
     QComboBox *mSubformatCombo;
     QListWidget *mFormatList;

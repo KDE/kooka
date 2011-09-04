@@ -39,7 +39,7 @@ class QSocketNotifier;
 
 class KScanOption;
 class KScanOptSet;
-class ImgScanInfo;
+class ImageMetaInfo;
 
 
 /**
@@ -465,7 +465,7 @@ signals:
      * @note The @p info parameter may be NULL, or it may not contain
      * any useful format information.
      **/
-    void sigScanStart(const ImgScanInfo *info);
+    void sigScanStart(const ImageMetaInfo *info);
 
     /**
      * Emitted to indicate that a scan is starting to acquire data.
@@ -494,7 +494,7 @@ signals:
      * @param info Additional information for the image
      * @see sigNewPreview
      **/
-    void sigNewImage(const QImage *img, const ImgScanInfo *info);
+    void sigNewImage(const QImage *img, const ImageMetaInfo *info);
 
     /**
      * Emitted when a new preview image has been acquired.
@@ -505,7 +505,7 @@ signals:
      * @param info Additional information for the image
      * @see sigNewImage
      **/
-    void sigNewPreview(const QImage *img, const ImgScanInfo *info);
+    void sigNewPreview(const QImage *img, const ImageMetaInfo *info);
     
     /**
      * Emitted to indicate that a scan or preview has finished.
@@ -579,7 +579,7 @@ private:
 
     SANE_Byte *mScanBuf;
     QImage *mScanImage;
-    ImgScanInfo *mImageInfo;
+    ImageMetaInfo *mImageInfo;
     SANE_Parameters mSaneParameters;
     long mBytesRead;
     long mBlocksRead;
