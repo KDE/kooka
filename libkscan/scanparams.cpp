@@ -495,9 +495,7 @@ QWidget *ScanParams::createScannerParams()
     if (!otherFrame->lastRow()) tw->setTabEnabled(1, false);
     if (!advancedFrame->lastRow()) tw->setTabEnabled(2, false);
 
-#ifdef RESTORE_AREA
     initStartupArea();					// set up and tell previewer
-#endif
     slotNewScanMode();					// tell previewer this too
 
     return (tw);					// top-level (tab) widget
@@ -506,7 +504,14 @@ QWidget *ScanParams::createScannerParams()
 
 void ScanParams::initStartupArea()
 {
-    if (mStartupOptions==NULL) return;
+// TODO: restore area a user preference
+#ifdef RESTORE_AREA
+    if (mStartupOptions==NULL)				// no saved options available
+#endif
+    {
+        applyRect(QRect());				// set maximum scan area
+        return;
+    }
 							// set scan area from saved
     KScanOption *tl_x = mSaneDevice->getOption(SANE_NAME_SCAN_TL_X);
     KScanOption *tl_y = mSaneDevice->getOption(SANE_NAME_SCAN_TL_Y);
