@@ -169,10 +169,6 @@ ImgSaver::ImageSaveStatus ImgSaver::getFilenameAndFormat(ImageMetaInfo::ImageTyp
 }
 
 
-// This tells us the image information available at the start of a scan.
-// If it is of any use, then resolve the filename and format to use
-// and save them for when they are needed.
-
 ImgSaver::ImageSaveStatus ImgSaver::setImageInfo(const ImageMetaInfo *info)
 {
     if (info==NULL) return (ImgSaver::SaveStatusParam);
@@ -180,10 +176,6 @@ ImgSaver::ImageSaveStatus ImgSaver::setImageInfo(const ImageMetaInfo *info)
 }
 
 
-/**
- *   This function asks the user for a filename or creates
- *   one by itself, depending on the settings
- **/
 ImgSaver::ImageSaveStatus ImgSaver::saveImage(const QImage *image)
 {
     if (image==NULL) return (ImgSaver::SaveStatusParam);
@@ -201,31 +193,14 @@ ImgSaver::ImageSaveStatus ImgSaver::saveImage(const QImage *image)
         return (ImgSaver::SaveStatusParam);
     }
 							// save image to file
-    return (save(image, mSaveUrl, mSaveFormat, mSaveSubformat));
+    return (saveImage(image, mSaveUrl, mSaveFormat, mSaveSubformat));
 }
 
 
-
-/**
- *   This function uses a filename provided by the caller.
- **/
 ImgSaver::ImageSaveStatus ImgSaver::saveImage(const QImage *image,
                                               const KUrl &url,
-                                              const ImageFormat &format)
-{
-    return (save(image, url, format));
-}
-
-
-/**
-   private save() does the work to save the image.
-   the filename must be complete and local.
-**/
-// TODO: this is essentially the same as the previous function
-ImgSaver::ImageSaveStatus ImgSaver::save(const QImage *image,
-                                         const KUrl &url,
-                                         const ImageFormat &format,
-                                         const QString &subformat)
+                                              const ImageFormat &format,
+                                              const QString &subformat)
 {
     if (image==NULL) return (ImgSaver::SaveStatusParam);
 
@@ -268,7 +243,7 @@ ImgSaver::ImageSaveStatus ImgSaver::save(const QImage *image,
     }
 
     bool result = image->save(filename, format.name());
-    return (result ? ImgSaver::SaveStatusOk : ImgSaver::SaveStatusUnknown);
+    return (result ? ImgSaver::SaveStatusOk : ImgSaver::SaveStatusFailed);
 }
 
 
@@ -299,7 +274,6 @@ QString ImgSaver::createFilename()
  * findFormat looks to see if there is a previously saved file format for
  * the image type in question.
  */
-
 ImageFormat ImgSaver::findFormat(ImageMetaInfo::ImageType type)
 {
     if (type==ImageMetaInfo::Thumbnail) return (ImageFormat("BMP"));	// thumbnail always this format
@@ -405,7 +379,7 @@ QString ImgSaver::findSubFormat(const ImageFormat &format)
 }
 
 
-QString ImgSaver::errorString(ImgSaver::ImageSaveStatus status)
+QString ImgSaver::errorString(ImgSaver::ImageSaveStatus status) const
 {
     QString re;
     switch (status)
@@ -426,7 +400,7 @@ case ImgSaver::SaveStatusCanceled:
         re = i18n("User cancelled saving");					break;
 case ImgSaver::SaveStatusMkdir:
         re = i18n("Cannot create directory");					break;
-case ImgSaver::SaveStatusUnknown:
+case ImgSaver::SaveStatusFailed:
         re = i18n("Save failed");						break;
 case ImgSaver::SaveStatusParam:
         re = i18n("Bad parameter");						break;
@@ -467,10 +441,8 @@ case 1:     newfmt = QImage::Format_Mono;
 case 8:     newfmt = QImage::Format_Indexed8;
             break;
 
-
 case 24:    newfmt = QImage::Format_RGB888;
             break;
-
 
 case 32:    newfmt = QImage::Format_RGB32;
             break;

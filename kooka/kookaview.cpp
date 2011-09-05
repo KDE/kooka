@@ -62,7 +62,6 @@
 #include "libkscan/previewer.h"
 #include "libkscan/imagecanvas.h"
 
-#include "imgsaver.h"
 #include "kookapref.h"
 #include "galleryhistory.h"
 #include "thumbview.h"
