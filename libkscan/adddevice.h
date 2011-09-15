@@ -28,30 +28,63 @@
 class QComboBox;
 class KLineEdit;
 
+
 /**
- *  A dialogue to allow the user to manually enter a scan device, in
- *  the case where it cannot be automatically detected by SANE.
+ * @short A dialogue to allow the user to manually enter a scan device.
+ *
+ * Intended to be used in the case where the scanner device cannot be
+ * automatically detected by SANE.
+ *
+ * @author Jonathan Marten
  */
 
 class KSCAN_EXPORT AddDeviceDialog : public KDialog
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	AddDeviceDialog(QWidget *parent, const QString &caption);
-	virtual ~AddDeviceDialog() {};
+    /**
+     * Constructor.
+     *
+     * @param parent Parent widget
+     * @param caption Caption for the dialogue
+     **/
+    AddDeviceDialog(QWidget *parent, const QString &caption);
 
-	QByteArray getDevice() const;
-	QString getDescription() const;
-	QByteArray getType() const;
+    /**
+     * Destructor.
+     *
+     **/
+    virtual ~AddDeviceDialog() {};
+
+    /**
+     * Get the entered value from the "Scanner device name" field.
+     *
+     * @return The SANE device name as entered by the user.
+     **/
+    QByteArray getDevice() const;
+
+    /**
+     * Get the entered value from the "Description" field.
+     *
+     * @return The device description as entered by the user.
+     **/
+    QString getDescription() const;
+
+    /**
+     * Get the selected value from the "Device type" combo box.
+     *
+     * @return The device type as selected by the user.
+     **/
+    QByteArray getType() const;
 
 protected slots:
-	void slotTextChanged();
+    void slotTextChanged();
 
 private:
-	KLineEdit *mDevEdit;
-	KLineEdit *mDescEdit;
-	QComboBox *mTypeCombo;
+    KLineEdit *mDevEdit;
+    KLineEdit *mDescEdit;
+    QComboBox *mTypeCombo;
 };
 
 

@@ -36,10 +36,6 @@
 #include "scandevices.h"
 
 
-/**
-  * Constructs the DeviceSelector object
-  */
-
 DeviceSelector::DeviceSelector(QWidget *parent,
                                const QList<QByteArray> &backends,
                                const KGuiItem &cancelGuiItem)
@@ -94,19 +90,10 @@ DeviceSelector::~DeviceSelector()
 QByteArray DeviceSelector::getDeviceFromConfig() const
 {
     const KConfigGroup grp = ScanGlobal::self()->configGroup();
-    bool skipDialog = grp.readEntry(STARTUP_SKIP_ASK, false);
-
-    QByteArray result;
-
-    /* in this case, the user has checked 'Do not ask me again' and does not
-     * want to be bothered any more.
-     */
-    result = grp.readEntry(STARTUP_SCANDEV).toLocal8Bit();
+    QByteArray result = grp.readEntry(STARTUP_SCANDEV).toLocal8Bit();
     kDebug() << "Scanner from config" << result;
    
-    /* Now check if the scanner read from the config file is available !
-     * if not, ask the user !
-     */
+    bool skipDialog = grp.readEntry(STARTUP_SKIP_ASK, false);
     if (skipDialog && !result.isEmpty() && mDeviceList.contains(result))
     {
         kDebug() << "Using scanner from config";

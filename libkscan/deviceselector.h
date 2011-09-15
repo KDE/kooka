@@ -26,10 +26,6 @@
 
 #include <kdialog.h>
 
-/**
-  * @author Klaas Freitag, Eduard Huguet
-  */
-
 
 class QListWidget;
 class QCheckBox;
@@ -38,53 +34,73 @@ class KGuiItem;
 
 
 /**
- *  A utitlity class that lets the user select a scan device.
+ * @short A dialogue to allow the user to select a scan device.
  *
- *  This class provides functions to get the scan device to use for an 
- *  application with scan support.
+ * It is possible, depending on the application preferences and
+ * the user's previous choices, that user interaction may not be
+ * needed.  The dialogue should therefore be used in this way:
  *
- *  Its main purpose is to display a selection dialog, but it also reads
- *  and writes config entries to store the users selection and handles
- *  a field 'do not ask me again'.
+ * @code
+ * QByteArray selDevice;
+ * DeviceSelector ds(parent, ScanDevices::self()->allDevices());
+ * selDevice = ds.getDeviceFromConfig();
+ * if (selDevice.isEmpty())
+ * {
+ *     if (ds.exec()==QDialog::Accepted) selDevice = ds.getSelectedDevice();
+ * }
+ * @endcode
  *
- */
+ * If the user checks the "Always use this device at startup" option,
+ * this is stored in the global scanner configuration.
+ *
+ * @author Klaas Freitag
+ * @author Eduard Huguet
+ * @author Jonathan Marten
+ **/
 
 class KSCAN_EXPORT DeviceSelector : public KDialog
 {
-   Q_OBJECT
+    Q_OBJECT
 
 public:
-   /**
-    *  constructs the dialog class
-    *  @param QWidget *parent - the parent
-    *  @param QStrList backends - a list of device names retrieved from the scan device
-    *  @param QStrList scannerNames - a list of corresponding human readable sanner names.
-    */
-   DeviceSelector(QWidget *parent, const QList<QByteArray> &backends, const KGuiItem &cancelGuiItem = KGuiItem());
-   ~DeviceSelector();
+    /**
+     * Constructor.
+     *
+     * @param parent Parent widget.
+     * @param backends a list of SANE device names.
+     * @param cancelGuiItem GUI item for the "Cancel" button, if required
+     * to replace the default.
+     **/
+    DeviceSelector(QWidget *parent, const QList<QByteArray> &backends, const KGuiItem &cancelGuiItem = KGuiItem());
 
-   /**
-    *  returns the device the user selected.
-    *  @return a CString containing the technical name of the selected device (taken from
-    *          the backends-list from the constructor)
-    */
-   QByteArray getSelectedDevice() const;
+    /**
+     * Destructor.
+     **/
+    ~DeviceSelector();
 
-   /**
-    *  returns the users selection if the dialog should be skipped in future.
-    *  @return true for should be skipped.
-    */
-   bool getShouldSkip() const;
+    /**
+     * Get the device that the user selected.
+     *
+     * @return The SANE device name
+     **/
+    QByteArray getSelectedDevice() const;
 
-   /**
-    *  retrieval to get the device from the config file. The function reads the applications
-    *  config file, cares for the 'do not ask me again'-settings and checks if the scandevice
-    *  specified in the config file is present at the current configuration.
-    *  If this function returns null, the DeviceSelector should be opened for a user selection.
-    *  @return a string containing the device to open or null if no device is specified or the
-    *  one specified is not valid.
-    */
-   QByteArray getDeviceFromConfig() const;
+    /**
+     * Check whether the user want to skip this dialogue in future.
+     *
+     * @return @c true if the dialogue should be skipped
+     **/
+    bool getShouldSkip() const;
+
+    /**
+     * Get the selected device from the global scanner configuration file,
+     * if there is a valid device and the user has requested that it
+     * should be used by default.
+     *
+     * @return The SANE device name, or a null string if it is not
+     * available or the user does not want to use it.
+     **/
+    QByteArray getDeviceFromConfig() const;
 
 private:
     void setScanSources(const QList<QByteArray> &backends);
