@@ -58,7 +58,7 @@
 #include "libkscan/kscandevice.h"
 #include "libkscan/imagemetainfo.h"
 #include "libkscan/deviceselector.h"
-#include "libkscan/adddevice.h"
+#include "libkscan/adddevicedialog.h"
 #include "libkscan/previewer.h"
 #include "libkscan/imagecanvas.h"
 

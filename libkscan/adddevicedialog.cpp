@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "adddevice.h"
-#include "adddevice.moc"
+#include "adddevicedialog.h"
+#include "adddevicedialog.moc"
 
 #include <qlabel.h>
 #include <qlayout.h>

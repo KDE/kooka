@@ -36,8 +36,7 @@ set(libkscan_SRCS
   scanparams.cpp
   massscandialog.cpp
   deviceselector.cpp
-  adddevice.cpp			# -> adddevicedialog
-  #scandialog.cpp		# not used by kooka
+  adddevicedialog.cpp
   imagecanvas.cpp
   previewer.cpp
   imgscaledialog.cpp
