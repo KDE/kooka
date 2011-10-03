@@ -45,6 +45,8 @@
 #include "previewer.h"
 #include "scandialog.h"
 
+static const KCatalogLoader loader("libkscan");
+
 #define SCANDIA_SPLITTER_SIZES "ScanDialogSplitter %1"
 
 extern "C" {
@@ -57,7 +59,6 @@ ScanDialogFactory::ScanDialogFactory( QObject *parent, const char *name )
     : KScanDialogFactory( parent, name )
 {
     setName( "ScanDialogFactory" );
-    KGlobal::locale()->insertCatalogue( QString::fromLatin1("libkscan") );
 }
 
 KScanDialog * ScanDialogFactory::createDialog( QWidget *parent,
