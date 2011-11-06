@@ -72,5 +72,3 @@ add_custom_target(clobber
 ########### install files ###############
 
 install(TARGETS libkscan ${INSTALL_TARGETS_DEFAULT_ARGS})
-
-install(FILES scantypes.dat DESTINATION ${DATA_INSTALL_DIR}/libkscan)
