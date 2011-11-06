@@ -32,6 +32,8 @@
 #include <qcheckbox.h>
 #include <qlabel.h>
 #include <qfileinfo.h>
+#include <qradiobutton.h>
+#include <qbuttongroup.h>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -170,10 +172,37 @@ KookaSavingPage::KookaSavingPage(KPageDialog *parent)
     mAskSaveFormat->setToolTip(i18n("Check this if you want to always use the image save assistant, even if there is a default format for the image type."));
     mLayout->addWidget(mAskSaveFormat);
 
+    mLayout->addSpacing(2*KDialog::spacingHint());
+
     mAskFileName = new QCheckBox(i18n("Ask for filename when saving"), this);
     mAskFileName->setChecked(mConfig.readEntry(OP_SAVER_ASK_FILENAME, false));
-    mAskFileName->setToolTip(i18n("Check this if you want to enter a filename when an image has been scanned."));
+    mAskFileName->setToolTip(i18n("Check this if you want to enter a file name when scanning an image."));
     mLayout->addWidget(mAskFileName);
+
+    QButtonGroup *bg = new QButtonGroup(this);
+    QGridLayout *gl = new QGridLayout(this);
+    gl->setVerticalSpacing(0);
+    gl->setColumnMinimumWidth(0, 2*KDialog::marginHint());
+
+    bool askBefore = mConfig.readEntry(OP_SAVER_ASK_BEFORE, true);
+
+    mAskBeforeScan = new QRadioButton(i18n("Before the scan starts"), this);
+    mAskBeforeScan->setChecked(askBefore);
+    mAskBeforeScan->setEnabled(mAskFileName->isChecked());
+    mAskBeforeScan->setToolTip(i18n("Check this if you want to enter the file name before scanning starts."));
+    connect(mAskFileName, SIGNAL(toggled(bool)), mAskBeforeScan, SLOT(setEnabled(bool)));
+    bg->addButton(mAskBeforeScan);
+    gl->addWidget(mAskBeforeScan, 0, 1);
+
+    mAskAfterScan = new QRadioButton(i18n("After the scan is finished"), this);
+    mAskAfterScan->setChecked(!askBefore);
+    mAskAfterScan->setEnabled(mAskFileName->isChecked());
+    mAskAfterScan->setToolTip(i18n("Check this if you want to enter the file name after scanning has finished."));
+    connect(mAskFileName, SIGNAL(toggled(bool)), mAskAfterScan, SLOT(setEnabled(bool)));
+    bg->addButton(mAskAfterScan);
+    gl->addWidget(mAskAfterScan, 1, 1);
+
+    mLayout->addLayout(gl);
 }
 
 
@@ -181,6 +210,7 @@ void KookaSavingPage::saveSettings()
 {
     mConfig.writeEntry(OP_SAVER_ASK_FORMAT, mAskSaveFormat->isChecked());
     mConfig.writeEntry(OP_SAVER_ASK_FILENAME, mAskFileName->isChecked());
+    mConfig.writeEntry(OP_SAVER_ASK_BEFORE, mAskBeforeScan->isChecked());
 }
 
 
@@ -188,6 +218,8 @@ void KookaSavingPage::defaultSettings()
 {
     mAskSaveFormat->setChecked(true);
     mAskFileName->setChecked(true);
+    mAskBeforeScan->setChecked(true);
+    mAskAfterScan->setChecked(false);
 }
 
 

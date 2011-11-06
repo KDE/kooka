@@ -34,18 +34,19 @@
 #include "libkscan/imagemetainfo.h"
 
 
-#define OP_SAVER_GROUP         "Files"
+#define OP_SAVER_GROUP		"Files"
 
-#define OP_SAVER_ASK_FORMAT    "AskForSaveFormat"
-#define OP_SAVER_ASK_FILENAME  "AskForFilename"
-#define OP_SAVER_REC_FMT       "OnlyRecommended"
+#define OP_SAVER_ASK_FORMAT	"AskForSaveFormat"
+#define OP_SAVER_ASK_FILENAME	"AskForFilename"
+#define OP_SAVER_ASK_BEFORE	"AskBeforeScan"
+#define OP_SAVER_REC_FMT	"OnlyRecommended"
 
-#define OP_FORMAT_HICOLOR      "HiColorSaveFormat"
-#define OP_FORMAT_COLOR        "ColorSaveFormat"
-#define OP_FORMAT_GRAY         "GraySaveFormat"
-#define OP_FORMAT_BW           "BWSaveFormat"
-#define OP_FORMAT_THUMBNAIL    "ThumbnailFormat"
-#define OP_FORMAT_UNKNOWN      "UnknownFormat"
+#define OP_FORMAT_HICOLOR	"HiColorSaveFormat"
+#define OP_FORMAT_COLOR		"ColorSaveFormat"
+#define OP_FORMAT_GRAY		"GraySaveFormat"
+#define OP_FORMAT_BW		"BWSaveFormat"
+#define OP_FORMAT_THUMBNAIL	"ThumbnailFormat"
+#define OP_FORMAT_UNKNOWN	"UnknownFormat"
 
 
 class KookaImage;

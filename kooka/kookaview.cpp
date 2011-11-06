@@ -72,6 +72,7 @@
 #include "kookagallery.h"
 #include "kookascanparams.h"
 #include "scangallery.h"
+#include "imgsaver.h"
 
 #ifndef KDE4
 #include "kookaprint.h"
@@ -848,15 +849,17 @@ void KookaView::slotScanStart(const ImageMetaInfo *info)
 {
     kDebug() << "Scan starts...";
 
-// TODO: option for prompt at start or end of scan
-// if the latter, don't do this block
-    if (info!=NULL)					// have initial image information
+    const KConfigGroup grp = KGlobal::config()->group(OP_SAVER_GROUP);
+    if (grp.readEntry(OP_SAVER_ASK_BEFORE, true))
     {
-        kDebug() << "imgtype" << info->getImageType();
-        if (!gallery()->prepareToSave(info))		// get ready to save
-        {						// user cancelled file prompt
-            mScanDevice->slotStopScanning();		// abort the scan now
-            return;
+        if (info!=NULL)					// have initial image information
+        {
+            kDebug() << "imgtype" << info->getImageType();
+            if (!gallery()->prepareToSave(info))	// get ready to save
+            {						// user cancelled file prompt
+                mScanDevice->slotStopScanning();	// abort the scan now
+                return;
+            }
         }
     }
 
