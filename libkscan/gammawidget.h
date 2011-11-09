@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef DISPGAMMA_H
-#define DISPGAMMA_H
+#ifndef GAMMAWIDGET_H
+#define GAMMAWIDGET_H
 
 #include "libkscanexport.h"
 
@@ -40,13 +40,13 @@ class QVector<class T>;
   *@author Klaas Freitag
   */
 
-class KSCAN_EXPORT DispGamma : public QWidget
+class KSCAN_EXPORT GammaWidget : public QWidget
 {
     Q_OBJECT
 
 public: 
-    DispGamma( QWidget *parent );
-    ~DispGamma();
+    GammaWidget( QWidget *parent );
+    ~GammaWidget();
 
     QSize sizeHint() const;
     QSizePolicy sizePolicy();
@@ -62,4 +62,4 @@ private:
     int margin;
 };
 
-#endif							// DISPGAMMA_H
+#endif							// GAMMAWIDGET_H

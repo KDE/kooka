@@ -28,6 +28,7 @@
 #include <kgammatable.h>
 
 #include "kscancontrols.h"
+#include "gammawidget.h"
 
 
 GammaDialog::GammaDialog(QWidget *parent)
@@ -49,7 +50,7 @@ GammaDialog::GammaDialog(QWidget *parent)
      * Bright., Contrast or Gamma-Value is set */
     connect( gt, SIGNAL(tableChanged()), gt, SLOT(getTable()));
 
-    gtDisp = new DispGamma( page );
+    gtDisp = new GammaWidget( page );
     gtDisp->setValueRef( gt->getArrayPtr() );
     gtDisp->resize( 280, 280 );
 

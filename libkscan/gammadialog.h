@@ -26,7 +26,7 @@
 
 #include <kdialog.h>
 
-#include "dispgamma.h"
+
 
 
 /**
@@ -35,6 +35,7 @@
 
 class KScanSlider;
 class KGammaTable;
+class GammaWidget;
 
 class KSCAN_EXPORT GammaDialog : public KDialog
 {
@@ -55,7 +56,7 @@ signals:
    
 private:
    KGammaTable *gt;
-   DispGamma   *gtDisp;
+   GammaWidget   *gtDisp;
 
    KScanSlider *wGamma;
    KScanSlider *wBright;

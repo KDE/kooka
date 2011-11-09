@@ -31,7 +31,7 @@ set(libkscan_SRCS
   kscanoption.cpp
   kscanoptset.cpp
   gammadialog.cpp
-  dispgamma.cpp
+  gammawidget.cpp
   scansourcedialog.cpp
   scanparams.cpp
   massscandialog.cpp

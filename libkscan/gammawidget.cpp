@@ -17,31 +17,31 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "dispgamma.h"
-#include "dispgamma.moc"
+#include "gammawidget.h"
+#include "gammawidget.moc"
 
 #include <qpainter.h>
 #include <qpixmap.h>
 #include <qevent.h>
 
 
-DispGamma::DispGamma( QWidget *parent )
+GammaWidget::GammaWidget( QWidget *parent )
     : QWidget( parent )
 {
     vals = NULL;
     margin = 10;
 }
 
-DispGamma::~DispGamma()
+GammaWidget::~GammaWidget()
 {
 }
 
-void DispGamma::resizeEvent (QResizeEvent*ev )
+void GammaWidget::resizeEvent (QResizeEvent*ev )
 {
     repaint();
 }
 
-void DispGamma::paintEvent( QPaintEvent *ev )
+void GammaWidget::paintEvent( QPaintEvent *ev )
 {
     QPainter p(this);
     int w = vals->size()+1;
@@ -79,12 +79,12 @@ void DispGamma::paintEvent( QPaintEvent *ev )
 }
 
 
-QSize DispGamma::sizeHint() const
+QSize GammaWidget::sizeHint() const
 {
     return QSize( 256 + 2*margin,256 + 2 * margin );
 }
 
-QSizePolicy DispGamma::sizePolicy()
+QSizePolicy GammaWidget::sizePolicy()
 {
     return QSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding );
 }
