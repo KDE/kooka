@@ -110,12 +110,8 @@ bool KScanOption::initOption(const QByteArray &name)
     if (mIsGroup || mDesc->type==SANE_TYPE_BUTTON) mIsReadable = false;
     if (!(mDesc->cap & SANE_CAP_SOFT_DETECT)) mIsReadable = false;
 
-    /* Gamma-Table - initial values */
-    gamma = 0; /* marks as unvalid */
-    brightness = 0;
-    contrast = 0;
-    gamma = 100;
-	
+    mGammaTable = NULL;					// for recording gamma values
+
     allocForDesc();
     return (true);
 }
@@ -279,7 +275,7 @@ bool KScanOption::apply()
     if (!isInitialised() || mBuffer.isNull())
     {
 #ifdef DEBUG_APPLY
-        debug += "nobuffer";
+        debug += " nobuffer";
 #endif // DEBUG_APPLY
 
         if (!isAutoSettable()) goto ret;
@@ -605,22 +601,14 @@ bool KScanOption::set(const QByteArray &buf)
     int val;
     int origSize;
 
-    /* Check if it is a gammatable. If it is, convert to KGammaTable and call
-     *  the appropriate set method.
-     */
-    QRegExp re( "\\d+,\\d+,\\d+" );
-    re.setMinimal(true);
-    QString s(buf);
-    if (s.contains(re))
+    // Check whether the string value looks like a gamma table specification.
+    // If it is, then convert it to a gamma table and set that.
+    KGammaTable gt;
+    if (gt.setFromString(buf))
     {
-        QStringList relist = s.split(",");
-
-        int gamm = (relist[0]).toInt();
-        int brig = (relist[1]).toInt();
-        int contr = (relist[2]).toInt();
-
-        KGammaTable gt( gamm, brig, contr);
-        kDebug() << "Setting GammaTable with int vals" << gamm << brig << contr;
+#ifdef DEBUG_GETSET
+        kDebug() << "is a gamma table";
+#endif
         return (set(&gt));
     }
 
@@ -660,35 +648,32 @@ default:
 }
 
 
-bool KScanOption::set(KGammaTable *gt)
+// The parameter here must be 'const'.
+// Otherwise, a call of set() with a 'const KGammaTable *' argument appears
+// to be silently resolved to a call of set(int) without warning.
+bool KScanOption::set(const KGammaTable *gt)
 {
     if (!isValid() || mBuffer.isNull()) return (false);
+
+    // Remember the set values
+    if (mGammaTable!=NULL) delete mGammaTable;
+    mGammaTable = new KGammaTable(*gt);
+
+    int size = mDesc->size/sizeof(SANE_Word);		// size of scanner gamma table
 #ifdef DEBUG_GETSET
-    kDebug() << "Setting gamma table for" << mName;
+    kDebug() << "Setting gamma table for" << mName << "size" << size << "to" << gt->toString();
 #endif
-
-    int size = gt->tableSize();
-    SANE_Word *run = gt->getTable();
-
-    int word_size = mDesc->size/sizeof(SANE_Word);
-    QVector<SANE_Word> qa(word_size);
+    const int *run = mGammaTable->getTable(size);	// get table of that size
+    QVector<SANE_Word> qa(size);			// converted to SANE values
 
     switch (mDesc->type)
     {
 case SANE_TYPE_INT:
-        for (int i = 0; i<word_size; i++)
-        {
-	    if (i<size) qa[i] = *run++;
-	    else qa[i] = *run;
-        }
+        for (int i = 0; i<size; ++i) qa[i] = static_cast<SANE_Word>(run[i]);
         break;
 
 case SANE_TYPE_FIXED:
-        for (int i = 0; i<word_size; i++)
-        {
-	    if (i<size) qa[i] = SANE_FIX((double) *(run++));
-	    else qa[i] = SANE_FIX((double) *run);
-        }
+        for (int i = 0; i<size; ++i) qa[i] = SANE_FIX(static_cast<double>(run[i]));
         break;
 
 default:
@@ -696,12 +681,7 @@ default:
         return (false);
     }
 
-    /* Remember raw values */
-    gamma      = gt->getGamma();
-    brightness = gt->getBrightness();
-    contrast   = gt->getContrast();
-
-    mBuffer = QByteArray(((const char *) qa.data()),mDesc->size);
+    mBuffer = QByteArray(((const char *) (qa.constData())), mDesc->size);
     mBufferClean = false;
     return (true);
 }
@@ -753,9 +733,7 @@ QByteArray KScanOption::get() const
     /* Handle gamma-table correctly */
     if (type()==KScanOption::GammaTable)
     {
-// TODO: centralise this formatting, and the reverse in set(const QByteArray &),
-// in KGammaTable
-        retstr = QString("%1,%2,%3").arg(gamma).arg(brightness).arg(contrast).toLocal8Bit();
+        if (mGammaTable!=NULL) retstr = mGammaTable->toString().toLocal8Bit();
     }
     else
     {
@@ -793,16 +771,16 @@ default:    kDebug() << "Can't get" << mName << "as this type";
 }
 
 
-/* Caller needs to have the space ;) */
-bool KScanOption::get( KGammaTable *gt ) const
+bool KScanOption::get(KGammaTable *gt) const
 {
-    if (gt==NULL) return (false);
+    if (mGammaTable==NULL) return (false);		// has not been set
 
-    gt->setAll( gamma, brightness, contrast );
-    // gt->calcTable();
+    gt->setAll(mGammaTable->getGamma(), mGammaTable->getBrightness(), mGammaTable->getContrast());
+#ifdef DEBUG_GETSET
+    kDebug() << "Returning" << mName << "as" << gt->toString();
+#endif
     return (true);
 }
-
 
 
 QList<QByteArray> KScanOption::getList() const

@@ -26,40 +26,55 @@
 #include <qsizepolicy.h>
 #include <qsize.h>
 
-extern "C"
-{
-#include <sane/sane.h>
-#include <sane/saneopts.h>
-}
 
 class QPaintEvent;
-class QVector<class T>;
+class KGammaTable;
 
 
 /**
-  *@author Klaas Freitag
-  */
+ * @short A widget to display a gamma table.
+ *
+ * The table is displayed in a square, regardless of the aspect ratio
+ * of the widget, and aligned to the top left.  Grid lines are
+ * automatically displayed.
+ *
+ * The display is redrawn whenever the associated gamma table changes.
+ *
+ * @author Klaas Freitag
+ * @author Jonathan Marten
+ **/
 
 class KSCAN_EXPORT GammaWidget : public QWidget
 {
     Q_OBJECT
 
 public: 
-    GammaWidget( QWidget *parent );
-    ~GammaWidget();
+    /**
+     * Constructor.
+     *
+     * @param table The gamma table to display
+     * @param parent Parent widget
+     **/
+    GammaWidget(KGammaTable *table, QWidget *parent = NULL);
 
+    /**
+     * Destructor.
+     **/
+    virtual ~GammaWidget() {}
+
+    /**
+     * Reimplemented
+     **/
     QSize sizeHint() const;
-    QSizePolicy sizePolicy();
-
-    void setValueRef(QVector<SANE_Word> *newVals) { vals = newVals; }
 
 protected:
+    /**
+     * Reimplemented
+     **/
     void paintEvent(QPaintEvent *ev);
-    void resizeEvent(QResizeEvent *ev);
 
 private:
-    QVector<SANE_Word> *vals;
-    int margin;
+    KGammaTable *mTable;
 };
 
 #endif							// GAMMAWIDGET_H

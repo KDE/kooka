@@ -22,74 +22,152 @@
 
 #include <math.h>
 
+#include <qregexp.h>
+
 #include <kdebug.h>
 
 
-KGammaTable::KGammaTable( int gamma, int brightness, int contrast  ) 
+KGammaTable::KGammaTable(int gamma, int brightness, int contrast) 
     : QObject()
 {
-   g = gamma < 1 ? 1 : gamma;
-   b = brightness;
-   c = contrast;
-   gt.resize(256);
-   calcTable();
-}
-
-const KGammaTable& KGammaTable::operator=(const KGammaTable& gt)
-{
-   if( this != &gt )
-   {
-      g = gt.g;
-      b = gt.b;
-      c = gt.c;
-
-      calcTable();
-   }
-
-   return( *this );
-}
-
-inline SANE_Word adjust( SANE_Word x, int gl,int bl,int cl)
-{
-   //printf("x : %d, x/256 : %lg, g : %d, 100/g : %lg",
-   //       x,(double)x/256.0,g,100.0/(double)g);
-   x = ( SANE_Int )(256*pow((double)x/256.0,100.0/(double)gl));
-   x = ((65536/(128-cl)-256)*(x-128)>>8)+128+bl;
-   if(x<0) x = 0; else if(x>255) x = 255;
-   //printf(" -> %d\n",x);
-   return x;
-}
-
-void KGammaTable::calcTable( )
-{
-   int br = (b<<8)/(128-c);
-   int gr = g;
-   int cr = c;
-
-   if( gr == 0 )
-   {
-      kDebug() << "Can't calculate table, division by zero!";
-      return;
-   }
-   
-   for( SANE_Word i = 0; i<256; i++)
-      gt[i] = adjust(i, gr, br, cr );
-
-   dirty = false;
-}
-
-void KGammaTable::setAll( int gamma, int brightness, int contrast )
-{
-    g = gamma < 1 ? 1 : gamma;
-    b = brightness;
-    c = contrast;
-
-    dirty = true;
+    mGamma = (gamma<1) ? 1 : gamma;
+    mBrightness = brightness;
+    mContrast = contrast;
+    init();
 }
 
 
-SANE_Word* KGammaTable::getTable()
+KGammaTable::KGammaTable(const KGammaTable &other)
+    : QObject()
 {
-    if( dirty ) calcTable();
-    return( gt.data());
+    mGamma = other.mGamma;
+    mBrightness = other.mBrightness;
+    mContrast = other.mContrast;
+    init();
+}
+
+
+void KGammaTable::init()
+{
+    mDirty = true;
+}
+
+
+// Adapted from LabeledGamma::calculateGT()
+// in kdegraphics/libksane/libksane/widgets/labeled_gamma.cpp
+//
+// Input values are expected to be:
+//   brightness     -50 ... +50
+//   contrast       -50 ... +50
+//   gamma           30 ... 300 = 0.3 ... 3.0
+//
+void KGammaTable::calcTable()
+{
+    if (mGamma<1.0)					// impossibly small
+    {
+        kDebug() << "invalid gamma" << mGamma;
+        mDirty = false;					// pointless, but don't repeat
+        return;
+    }
+
+    if (mData.isEmpty())				// not allocated yet
+    {
+        mData.resize(256);				// do it now
+        kDebug() << "allocated table size" << mData.size();
+    }
+
+    //kDebug() << "b=" << mBrightness << "c=" << mContrast << "g=" << mGamma;
+
+    const double maxval = (KGammaTable::valueRange-1);
+    double gam = 100.0/mGamma;
+    double con = (200.0/(100.0 - mContrast))-1;
+    double halfmax = maxval/2.0;
+    double bri = (mBrightness/halfmax) * maxval;
+    //kDebug() << "bri=" << bri << "con=" << con << "gam=" << gam;
+
+    for (int i = 0; i<mData.size(); ++i)
+    {
+        double x = pow(i/maxval, gam) * maxval;		// apply gamma
+        x = (con*(x-halfmax)) + halfmax;		// apply contrast
+        x += bri;					// apply brightness
+        x += 0.5;					// apply rounding
+
+        if (x>maxval) x = maxval;			// limit value
+        if (x<0) x = 0;
+        mData[i] = (int) x;				// save in table
+        //kDebug() << "  " << i << "->" << mData[i];
+    }
+
+    mDirty = false;					// table now calculated
+}
+
+
+void KGammaTable::setBrightness(int brightness)		// slot
+{
+    mBrightness = brightness;
+    mDirty = true;
+    emit tableChanged();
+}
+
+
+void KGammaTable::setContrast(int contrast)		// slot
+{
+    mContrast = contrast;
+    mDirty = true;
+    emit tableChanged();
+}
+
+
+void KGammaTable::setGamma(int gamma)			// slot
+{
+    mGamma = gamma;
+    mDirty = true;
+    emit tableChanged();
+}
+
+
+void KGammaTable::setAll(int gamma, int brightness, int contrast)
+{
+    mGamma = gamma < 1 ? 1 : gamma;
+    mBrightness = brightness;
+    mContrast = contrast;
+
+    mDirty = true;
+    emit tableChanged();
+}
+
+
+const int *KGammaTable::getTable(int size)
+{
+    if (size>0 && size!=mData.size())
+    {
+        kDebug() << "resize from" << mData.size() << "to" << size;
+        mData.resize(size);
+        mDirty = true;
+    }
+
+    if (mDirty) calcTable();
+    return (mData.constData());
+}
+
+
+// originally done in KScanOption::set(const QByteArray &)
+bool KGammaTable::setFromString(const QString &str)
+{
+    QRegExp re("(\\d+),(\\d+),(\\d+)");
+    if (!re.exactMatch(str)) return (false);		// unrecognised format
+
+    int g = re.cap(1).toInt();
+    int b = re.cap(2).toInt();
+    int c = re.cap(3).toInt();
+
+    setAll(g, b, c);
+    return (true);					// matched and set
+}
+
+
+// originally done in KScanOption::get()
+QString KGammaTable::toString() const
+{
+    return (QString("%1,%2,%3").arg(mGamma).arg(mBrightness).arg(mContrast));
 }

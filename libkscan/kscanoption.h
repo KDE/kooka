@@ -69,8 +69,8 @@ class KScanDevice;
  * - @c get    - Read the data from the internal memory buffer into a variable
  *               or structure of an appropriate type.
  *
- *  @author Klaas Freitag
- *  @author Jonathan Marten
+ * @author Klaas Freitag
+ * @author Jonathan Marten
  **/
 
 class KSCAN_EXPORT KScanOption : public QObject
@@ -249,7 +249,7 @@ public:
      * @param gt A new gamma table
      * @return @c true if the value was set successfully
      **/
-    bool set(KGammaTable *gt);
+    bool set(const KGammaTable *gt);
 
     /**
      * Retrieve the option value.
@@ -483,8 +483,7 @@ private:
     bool mBufferClean;
     bool mApplied;
 
-    /* For gamma-Tables remember gamma, brightness, contrast */
-    int gamma, brightness, contrast;
+    KGammaTable *mGammaTable;
 };
 
 #endif							// KSCANOPTION_H

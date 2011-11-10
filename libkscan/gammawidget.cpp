@@ -24,56 +24,65 @@
 #include <qpixmap.h>
 #include <qevent.h>
 
+#include <kdebug.h>
 
-GammaWidget::GammaWidget( QWidget *parent )
-    : QWidget( parent )
+#include "kgammatable.h"
+
+
+static const int MARGIN = 5;				// margin aroung display
+static const int NGRID = 4;				// number of grid lines
+
+
+GammaWidget::GammaWidget(KGammaTable *table, QWidget *parent)
+    : QWidget(parent)
 {
-    vals = NULL;
-    margin = 10;
+    mTable = table;
+    connect(mTable, SIGNAL(tableChanged()), SLOT(repaint()));
+
+    QSizePolicy pol(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
+    setSizePolicy(pol);
 }
 
-GammaWidget::~GammaWidget()
-{
-}
 
-void GammaWidget::resizeEvent (QResizeEvent*ev )
-{
-    repaint();
-}
-
-void GammaWidget::paintEvent( QPaintEvent *ev )
+void GammaWidget::paintEvent(QPaintEvent *ev)
 {
     QPainter p(this);
-    int w = vals->size()+1;
 
-    // Viewport auf margin setzen.
-    p.setViewport( margin, margin, width() - margin, height() - margin );
-    p.setWindow( 0, 255, w, -256 );
+    // Calculate the minimum display size
+    int size = qMin(width(), height())-2*MARGIN;
 
-    p.setClipRect( ev->rect());
+    // Limit the painting area to a square of that size
+    p.setViewport(MARGIN, MARGIN, size, size);
+    p.setWindow(0, 0, size, size);
 
-    p.setPen(palette().highlight().color());
+    // background and outer frame
     p.setBrush(palette().base());
-    // Background
-    p.drawRect( 0,0, w, 256 );
+    p.setPen(palette().windowText().color());
+    p.drawRect(0, 0, size, size);
 
-    p.setPen(QPen(palette().midlight(), 1, Qt::DotLine));
-    // horizontal Grid
-    for( int l = 1; l < 5; l++ )
-            p.drawLine( 1, l*51, 255, l*51 );
-
-    // vertical Grid
-    for( int l = 1; l < 5; l++ )
-            p.drawLine( l*51, 2, l*51, 255 );
-
-    // draw gamma-Line
-    p.setPen(palette().highlight().color());
-
-    int py = vals->at(1);
-    for( int x = 2; x<w-1; x++)
+    // grid lines
+    p.setPen(QPen(palette().mid().color(), 0, Qt::DotLine));
+    int step = size/(NGRID+1);
+    for (int l = 1; l<=NGRID; ++l)
     {
-        int y = vals->at(x);
-        p.drawLine(x-1,py,x,y);
+        p.drawLine(1, l*step, size-1, l*step);		// horizontal line
+        p.drawLine(l*step, 1, l*step, size-1);		// vertical line
+    }
+
+    if (mTable==NULL) return;				// no values to draw
+
+    // the gamma curve
+    p.setPen(palette().highlight().color());
+    const int *vals = mTable->getTable();
+    int nvals = mTable->tableSize();
+    int maxval = KGammaTable::valueRange;
+    int py = (maxval-1)-((size-1)*vals[0])/maxval;
+    for (int v = 1; v<nvals; ++v)
+    {
+        int x = (size*v)/nvals;
+        int y = (maxval-1)-((size-1)*vals[v])/maxval;
+
+        p.drawLine(x-1, py, x, y);
         py = y;
     }
 }
@@ -81,10 +90,5 @@ void GammaWidget::paintEvent( QPaintEvent *ev )
 
 QSize GammaWidget::sizeHint() const
 {
-    return QSize( 256 + 2*margin,256 + 2 * margin );
-}
-
-QSizePolicy GammaWidget::sizePolicy()
-{
-    return QSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding );
+    return (QSize(256+2*MARGIN, 256+2*MARGIN));
 }

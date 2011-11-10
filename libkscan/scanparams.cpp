@@ -94,8 +94,6 @@ ScanParams::ScanParams(QWidget *parent)
     mSourceSelect = NULL;
     mLed = NULL;
 
-    mFirstGTEdit = true;
-
     mProblemMessage = NULL;
     mNoScannerMessage = NULL;
 
@@ -774,91 +772,62 @@ void ScanParams::slotStartScan()
 }
 
 
-
-/* Slot called to start the Custom Gamma Table Edit dialog */
-
-void ScanParams::slotEditCustGamma( void )
+bool ScanParams::getGammaTableFrom(const QByteArray &opt, KGammaTable *gt)
 {
-    kDebug();
-    KGammaTable old_gt;
+    KScanOption *so = mSaneDevice->getOption(opt, false);
+    if (so==NULL) return (false);
 
-#warning Check and port gamma table editing
-// TODO: check handling of gamma tables
-//
-// Maybe need to have a GUI widget for them - a little preview of the
-// gamma curve (a DispGamma) with an edit button.  Will avoid the special-case
-// for the SANE_NAME_CUSTOM_GAMMA button followed by the edit button, and
-// will allow separate editing of the R/G/B gamma tables if the scanner has them.
-// Then the gamma will be initialised correctly along with all the others,
-// avoiding the special case here.
-#if 0
-    /* Since gammatable options are not set in the default gui, it must be
-     * checked if it is the first edit. If it is, take from loaded default
-     * set if available there */
-    if( mFirstGTEdit && mStartupOptions!=NULL)
+    if (!so->get(gt)) return (false);
+    kDebug() << "got from" << so->getName() << "=" << gt->toString();
+    return (true);
+}
+
+
+bool ScanParams::setGammaTableTo(const QByteArray &opt, const KGammaTable *gt)
+{
+    KScanOption *so = mSaneDevice->getOption(opt, false);
+    if (so==NULL) return (false);
+
+    kDebug() << "set" << so->getName() << "=" << gt->toString();
+    so->set(gt);
+    return (so->apply());
+}
+
+
+void ScanParams::slotEditCustGamma()
+{
+    KGammaTable gt;					// start with default values
+
+    // Get the current gamma table from either the combined gamma table
+    // option, or any one of the colour channel gamma tables.
+    if (!getGammaTableFrom(SANE_NAME_GAMMA_VECTOR, &gt))
     {
-       mFirstGTEdit = false;
-       QByteArray gtValue = mStartupOptions->getOption(SANE_NAME_GAMMA_VECTOR);
-	  /* If it  not gray, it should be one color. */
-       if (gtValue.isNull()) gt = mStartupOptions->getOption(SANE_NAME_GAMMA_VECTOR_R);
-       if (!gtValue.isNull())
-       {
-	  gt->get( &old_gt );
+        if (!getGammaTableFrom(SANE_NAME_GAMMA_VECTOR_R, &gt))
+        {
+            if (!getGammaTableFrom(SANE_NAME_GAMMA_VECTOR_G, &gt))
+            {
+                if (!getGammaTableFrom(SANE_NAME_GAMMA_VECTOR_B, &gt))
+                {
+                    // Should not happen... but if it does, no problem
+                    // the dialogue will just use the default values
+                    // for an empty gamma table.
+                    kDebug() << "no existing/active gamma option!";
+                }
+            }
+        }
     }
-    else
-    {
-       /* it is not the first edit, use older values */
-       if( mSaneDevice->optionExists( SANE_NAME_GAMMA_VECTOR ) )
-       {
-// TODO: should this and similar use KScanDevice::getExistingGuiElement()?
-	  KScanOption grayGt( SANE_NAME_GAMMA_VECTOR, mSaneDevice );
-	  /* This will be fine for all color gt's. */
-	  grayGt.get( &old_gt );
-	  kDebug() << "Gray Gamma Table is active ";
-       }
-       else
-       {
-	  /* Gray is not active, but at the current implementation without
-	   * red/green/blue gammatables, but one for all, all gammatables
-	   * are equally. So taking the red one should be fine. TODO
-	   */
-	  if( mSaneDevice->optionExists( SANE_NAME_GAMMA_VECTOR_R ))
-	  {
-	     KScanOption redGt( SANE_NAME_GAMMA_VECTOR_R, mSaneDevice);
-	     redGt.get( &old_gt );
-	     kDebug() << "Getting old gamma table from Red channel";
-	  }
-	  else
-	  {
-	     /* uh ! No current gammatable could be retrieved. Use the 100/0/0 gt
-	      * created by KGammaTable's constructor. Nothing to do for that.
-	      */
-	     kDebug() << "Could not retrieve a gamma table";
-	  }
-       }
-    }
-#endif
+    kDebug() << "initial gamma table" << gt.toString();
 
-    kDebug() << "Old gamma table:" << old_gt.getGamma() << old_gt.getBrightness() << old_gt.getContrast();
+// TODO; Maybe need to have a separate GUI widget for each gamma table, a
+// little preview of the gamma curve (a GammaWidget) with an edit button.
+// Will avoid the special case for the SANE_NAME_CUSTOM_GAMMA button followed
+// by the edit button, and will allow separate editing of the R/G/B gamma
+// tables if the scanner has them.
 
-    GammaDialog gdiag( this );
-    connect( &gdiag, SIGNAL( gammaToApply(KGammaTable*) ),
-	     this,     SLOT( slotApplyGamma(const KGammaTable *) ) );
-
-    gdiag.setGt( old_gt );
-
-    if( gdiag.exec() == QDialog::Accepted  )
-    {
-       slotApplyGamma( gdiag.getGt() );
-       kDebug() << "Applied new Gamma Table";
-    }
-    else
-    {
-       /* reset to old values */
-       slotApplyGamma( &old_gt );
-       kDebug() << "Cancelled, reverted to old Gamma Table";
-    }
-
+    GammaDialog gdiag(&gt, this);
+    connect(&gdiag, SIGNAL(gammaToApply(const KGammaTable *)),
+            SLOT(slotApplyGamma(const KGammaTable *)));
+    gdiag.exec();
 }
 
 
@@ -866,35 +835,27 @@ void ScanParams::slotApplyGamma(const KGammaTable *gt)
 {
     if (gt==NULL) return;
 
-    kDebug() << "Applying gamma table:" << gt->getGamma() << gt->getBrightness() << gt->getContrast();
+    bool reload = false;
 
-    KScanOption *so = mSaneDevice->getOption(SANE_NAME_GAMMA_VECTOR, false);
-    if (so!=NULL && so->isActive())
+    KScanOption *so = mSaneDevice->getOption(SANE_NAME_CUSTOM_GAMMA);
+    if (so!=NULL)					// do we have a gamma switch?
     {
-        so->set(gt);
-        so->apply();
+        int cg = 0;
+        if (so->get(&cg) && !cg)			// yes, see if already on
+        {						// if not, set it on now
+            kDebug() << "Setting gamma switch on";
+            so->set(true);
+            reload = so->apply();
+        }
     }
 
-    so = mSaneDevice->getOption(SANE_NAME_GAMMA_VECTOR_R, false);
-    if (so!=NULL && so->isActive())
-    {
-        so->set(gt);
-        so->apply();
-    }
+    kDebug() << "Applying gamma table" << gt->toString();
+    reload |= setGammaTableTo(SANE_NAME_GAMMA_VECTOR, gt);
+    reload |= setGammaTableTo(SANE_NAME_GAMMA_VECTOR_R, gt);
+    reload |= setGammaTableTo(SANE_NAME_GAMMA_VECTOR_G, gt);
+    reload |= setGammaTableTo(SANE_NAME_GAMMA_VECTOR_B, gt);
 
-    so = mSaneDevice->getOption(SANE_NAME_GAMMA_VECTOR_G, false);
-    if (so!=NULL && so->isActive())
-    {
-        so->set(gt);
-        so->apply();
-    }
-
-    so = mSaneDevice->getOption(SANE_NAME_GAMMA_VECTOR_B, false);
-    if (so!=NULL && so->isActive())
-    {
-        so->set(gt);
-        so->apply();
-    }
+    if (reload) mSaneDevice->reloadAllOptions();	// reload is needed
 }
 
 
@@ -912,10 +873,9 @@ void ScanParams::slotOptionChanged(KScanOption *so)
 }
 
 
-/*
- * enable editing of the gamma tables if one of the gamma tables
- * exists and is active at the moment
- */
+// Enable editing of the gamma tables if any one of the gamma tables
+// exists and is currently active.
+
 void ScanParams::setEditCustomGammaTableState()
 {
     if (mSaneDevice==NULL) return;
@@ -923,31 +883,31 @@ void ScanParams::setEditCustomGammaTableState()
 
     bool butState = false;
 
-    // TODO: should this be SANE_NAME_GAMMA_VECTOR to match 
-    // slotApplyGamma() above?
     KScanOption *so = mSaneDevice->getOption(SANE_NAME_CUSTOM_GAMMA, false);
     if (so!=NULL) butState = so->isActive();
-    //kDebug() << "CustomGamma is active=" << butState;
+
+    if (!butState)
+    {
+        KScanOption *so = mSaneDevice->getOption(SANE_NAME_GAMMA_VECTOR, false);
+        if (so!=NULL) butState = so->isActive();
+    }
 
     if (!butState)
     {
         KScanOption *so = mSaneDevice->getOption(SANE_NAME_GAMMA_VECTOR_R, false);
         if (so!=NULL) butState = so->isActive();
-        //kDebug() << "CustomGamma Red is active=" << butState;
     }
 
     if (!butState)
     {
         KScanOption *so = mSaneDevice->getOption(SANE_NAME_GAMMA_VECTOR_G, false);
         if (so!=NULL) butState = so->isActive();
-        //kDebug() << "CustomGamma Green is active=" << butState;
     }
 
     if (!butState)
     {
         KScanOption *so = mSaneDevice->getOption(SANE_NAME_GAMMA_VECTOR_B, false);
         if (so!=NULL) butState = so->isActive();
-        //kDebug() << "CustomGamma blue is active=" << butState;
     }
 
     kDebug() << "State of edit custom gamma button=" << butState;

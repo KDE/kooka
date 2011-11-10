@@ -74,17 +74,18 @@ KScanSlider::KScanSlider(QWidget *parent, const QString &text,
 
     mSlider = new QSlider(Qt::Horizontal, this);	// slider
     mSlider->setRange(((int) min), ((int) max));
-    mSlider->setTickPosition(QSlider::TicksBelow );
+    mSlider->setTickPosition(QSlider::TicksBelow);
     mSlider->setTickInterval(qMax(((int)((max-min)/10)), 1));
     mSlider->setSingleStep(qMax(((int)((max-min)/20)), 1));
     mSlider->setPageStep(qMax(((int)((max-min)/10)), 1));
     mSlider->setMinimumWidth(140);
-    mSlider->setValue(((int) min)-1);			// set to initial value
+    mSlider->setValue(mValue);				// initial value
     mLayout->addWidget(mSlider, 1);
 
     mSpinbox = new QSpinBox(this);			// spin box
     mSpinbox->setRange((int) min, (int) max);
     mSpinbox->setSingleStep(1);
+    mSlider->setValue(mValue);				// initial value
     mLayout->addWidget(mSpinbox);
 
     if (haveStdButt)

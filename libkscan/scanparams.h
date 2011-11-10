@@ -292,6 +292,9 @@ private:
     void applyRect(const QRect &rect);
     void setMaximalScanSize();
 
+    bool getGammaTableFrom(const QByteArray &opt, KGammaTable *gt);
+    bool setGammaTableTo(const QByteArray &opt, const KGammaTable *gt);
+
     KScanDevice *mSaneDevice;
     KScanOption *mVirtualFile;
 
@@ -309,7 +312,6 @@ private:
     KScanOptSet *mStartupOptions;
 
     QPixmap pixLineArt, pixGray, pixColor, pixHalftone;
-    bool mFirstGTEdit;
 
     QIcon mIconColor;
     QIcon mIconGray;
