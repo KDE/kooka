@@ -124,7 +124,7 @@ if (HAVE_APIDOX)
   add_custom_target(apidox
     COMMENT "Generating API documentation in ${CMAKE_CURRENT_BINARY_DIR}..."
     VERBATIM
-    COMMAND sh -c "${KDELIBS_SOURCE_DIR}/doc/api/doxygen.sh --no-modulename --recurse --doxdatadir=${KDELIBS_SOURCE_DIR}/doc/common ${CMAKE_CURRENT_SOURCE_DIR}")
+    COMMAND sh -c "${KDELIBS_SOURCE_DIR}/doc/api/doxygen.sh --no-modulename --recurse --doxdatadir=${KDELIBS_SOURCE_DIR}/doc/common ${CMAKE_CURRENT_SOURCE_DIR}; echo 'API documentation at file://${CMAKE_CURRENT_BINARY_DIR}/apidocs/index.html';")
 endif (HAVE_APIDOX)
 
 ############### Now, we add the Kooka components ###############

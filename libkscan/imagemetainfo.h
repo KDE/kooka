@@ -25,6 +25,9 @@
 #include <qstring.h>
 
 
+class QImage;
+
+
 /**
  * @short Image meta-information.
  *
@@ -34,10 +37,6 @@
  * @author Klaas Freitag
  * @author Jonathan Marten
  **/
-
-
-class QImage;
-
 
 class KSCAN_EXPORT ImageMetaInfo
 {
