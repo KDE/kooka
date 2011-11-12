@@ -24,6 +24,7 @@
 #include <kglobal.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
+#include <kstandarddirs.h>
 
 #include "kscandevice.h"
 
@@ -56,6 +57,10 @@ ScanGlobal::ScanGlobal()
     mSaneInitError = false;
 
     mScanConfig = NULL;
+
+    // Get SANE translations - bug 98150
+    KGlobal::dirs()->addResourceDir("locale", "/usr/share/locale/");
+    KGlobal::locale()->insertCatalog("sane-backends");
 }
 
 

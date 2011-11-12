@@ -159,11 +159,6 @@ KScanDevice::KScanDevice(QObject *parent)
 {
     kDebug();
 
-    // TODO: probably belongs in ScanGlobal
-    /* Get SANE translations - bug 98150 */
-    KGlobal::dirs()->addResourceDir( "locale", QString::fromLatin1("/usr/share/locale/") );
-    KGlobal::locale()->insertCatalog(QString::fromLatin1("sane-backends"));
-
     ScanGlobal::self()->init();				// do sane_init() first of all
 
     mScannerHandle = NULL;
