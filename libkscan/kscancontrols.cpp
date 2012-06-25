@@ -85,7 +85,7 @@ KScanSlider::KScanSlider(QWidget *parent, const QString &text,
     mSpinbox = new QSpinBox(this);			// spin box
     mSpinbox->setRange((int) min, (int) max);
     mSpinbox->setSingleStep(1);
-    mSlider->setValue(mValue);				// initial value
+    mSpinbox->setValue(mValue);				// initial value
     mLayout->addWidget(mSpinbox);
 
     if (haveStdButt)

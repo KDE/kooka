@@ -53,15 +53,16 @@ protected:
 
 protected slots:
     void slotGOcrStdout();
-    void slotGOcrStderr();
     void slotGOcrExited(int exitCode, QProcess::ExitStatus exitStatus);
 
 private:
     void startProcess(OcrBaseDialog *dia, const KookaImage *img);
 
 private:
-    QString m_tempFile;
     KTempDir *m_tempDir;
+    QString m_inputFile;
+    QString m_resultFile;
+    QString m_stderrFile;
 };
 
 #endif							// OCRGOCRENGINE_H
