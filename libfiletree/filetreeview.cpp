@@ -109,6 +109,24 @@ bool FileTreeView::isValidItem(QTreeWidgetItem *item)
 }
 
 
+// This is used when dragging and dropping out of the view to somewhere else.
+QMimeData *FileTreeView::mimeData(const QList<QTreeWidgetItem *> items) const
+{
+    QMimeData *mimeData = new QMimeData();
+    QList<QUrl> urlList;
+
+    for (QList<QTreeWidgetItem*>::const_iterator it = items.constBegin();
+         it!=items.constEnd(); ++it)
+    {
+        FileTreeViewItem *item = static_cast<FileTreeViewItem *>(*it);
+        kDebug() << item->url();
+        urlList.append(item->url());
+    }
+
+    mimeData->setUrls(urlList);
+    return (mimeData);
+}
+
 
 // TODO: port drag and drop
 #if 0
@@ -253,34 +271,6 @@ bool FileTreeView::acceptDrag(QDropEvent *ev) const
       ( ev->dropAction() == Qt::CopyAction
      || ev->dropAction() == Qt::MoveAction
      || ev->dropAction() == Qt::LinkAction );
-}
-
-
-Q3DragObject * FileTreeView::dragObject()
-{
-
-   KUrl::List urls;
-   const QList<QTreeWidgetItem *> fileList = selectedItems();
-   for (int i = 0; i < fileList.size(); ++i)
-   {
-      urls.append( static_cast<FileTreeViewItem*>(fileList.at(i))->url() );
-   }
-   QPoint hotspot;
-   QPixmap pixmap;
-   if( urls.count() > 1 ){
-      pixmap = DesktopIcon( "kmultiple", 16 );
-   }
-   if( pixmap.isNull() )
-      pixmap = currentFileTreeViewItem()->fileItem().pixmap( 16 );
-   hotspot.setX( pixmap.width() / 2 );
-   hotspot.setY( pixmap.height() / 2 );
-#if 0 // there is no more kurldrag, this should use urls.setInMimeData( mimeData ) instead
-   Q3DragObject* dragObject = new KUrlDrag( urls, this );
-   if( dragObject )
-      dragObject->setPixmap( pixmap, hotspot );
-   return dragObject;
-#endif
-   return 0;
 }
 #endif
 

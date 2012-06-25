@@ -93,6 +93,7 @@ ScanGallery::ScanGallery(QWidget *parent)
 
    /* Drag and Drop */
    setDragEnabled(true);
+   model()->setSupportedDragActions(Qt::CopyAction|Qt::MoveAction|Qt::LinkAction);
 #if 0
    // TODO: port D&D
    setDropVisualizer(true);

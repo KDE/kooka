@@ -162,13 +162,12 @@ protected:
     /**
      * @returns true if we can decode the drag and support the action
      */
-    //virtual Q3DragObject *dragObject();
     //virtual bool acceptDrag(QDropEvent *ev) const;
     //virtual void contentsDragEnterEvent(QDragEnterEvent *ev);
     //virtual void contentsDragMoveEvent(QDragMoveEvent *ev);
     //virtual void contentsDragLeaveEvent(QDragLeaveEvent *ev);
     //virtual void contentsDropEvent(QDropEvent *ev);
-
+    virtual QMimeData *mimeData(const QList<QTreeWidgetItem *> items) const;
 
 protected slots:
     // TODO: does anything here need to be virtual?
