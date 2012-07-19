@@ -83,16 +83,16 @@ protected slots:
     void slotUnloadItems();
     void slotUnloadItem(FileTreeViewItem *curr);
     void slotDirCount(FileTreeViewItem *item, int cnt);
-    void slotUrlsDropped(FileTreeView *me, QDropEvent *ev,QTreeWidgetItem *parent,QTreeWidgetItem *after);
     void slotStartupFinished(FileTreeViewItem *item);
     void slotItemExpanded(QTreeWidgetItem *item);
     void slotItemProperties();
 
+    void slotUrlsDropped(QDropEvent *ev,FileTreeViewItem *item);
+    void slotJobResult(KJob *job);
     bool slotFileRenamed(FileTreeViewItem *item, const QString &newName);
 
     void slotDecorate(FileTreeViewItem *item);
     void slotDecorate(FileTreeBranch *branch, const FileTreeViewItemList &list);
-    void slotCanceled(KIO::Job *job);
 
     void slotItemHighlighted(QTreeWidgetItem *curr);
     void slotItemActivated(QTreeWidgetItem *curr);

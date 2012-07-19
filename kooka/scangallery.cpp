@@ -41,6 +41,9 @@
 #include <kconfig.h>
 
 #include <kio/global.h>
+#include <kio/copyjob.h>
+#include <kio/jobuidelegate.h>
+// TODO: eliminate the below (deprecated)
 #include <kio/netaccess.h>
 
 #include "imgsaver.h"
@@ -91,16 +94,13 @@ ScanGallery::ScanGallery(QWidget *parent)
     headerItem()->setTextAlignment(1, Qt::AlignLeft);
     headerItem()->setTextAlignment(2, Qt::AlignLeft);
 
-   /* Drag and Drop */
-   setDragEnabled(true);
-   model()->setSupportedDragActions(Qt::CopyAction|Qt::MoveAction|Qt::LinkAction);
-#if 0
-   // TODO: port D&D
-   setDropVisualizer(true);
-   setAcceptDrops(true);
-   connect(this,SIGNAL(dropped(FileTreeView *,QDropEvent *,QTreeWidgetItem *,QTreeWidgetItem *)),
-           SLOT(slotUrlsDropped(FileTreeView *,QDropEvent *,QTreeWidgetItem *,QTreeWidgetItem *)));
-#endif
+    // Drag and Drop
+    setDragEnabled(true);				// allow drags out
+    model()->setSupportedDragActions(Qt::CopyAction|Qt::MoveAction);
+
+    setAcceptDrops(true);				// allow drops in
+    connect(this, SIGNAL(dropped(QDropEvent *,FileTreeViewItem *)),
+            SLOT(slotUrlsDropped(QDropEvent *,FileTreeViewItem *)));
 
    connect(this, SIGNAL(currentItemChanged(QTreeWidgetItem *,QTreeWidgetItem *)),
            SLOT(slotItemHighlighted(QTreeWidgetItem *)));
@@ -1008,46 +1008,41 @@ void ScanGallery::slotImportFile()
 }
 
 
-
-
-//  Using this form of the drop signal so we can check whether the drop
-//  is on top of a directory (in which case we want to move/copy into it).
-
-void ScanGallery::slotUrlsDropped(FileTreeView *me, QDropEvent *ev,
-                                   QTreeWidgetItem *parent, QTreeWidgetItem *after)
+void ScanGallery::slotUrlsDropped(QDropEvent *ev, FileTreeViewItem *item)
 {
-    FileTreeViewItem *pa = static_cast<FileTreeViewItem *>(parent);
-    FileTreeViewItem *af = static_cast<FileTreeViewItem *>(after);
-
-    KUrl::List urls = KUrl::List::fromMimeData(ev->mimeData());
+    KUrl::List urls = ev->mimeData()->urls();
     if (urls.isEmpty()) return;
 
-    //kDebug() << "parent" << (pa==NULL ? "NULL" : pa->url())
-    //         << "after" << (af==NULL ? "NULL" : af->url())
-    //         << "srcs" << urls.count() << "first" << urls.first();
+    kDebug() << "onto" << (item==NULL ? "NULL" : item->url().prettyUrl())
+             << "srcs" << urls.count() << "first" << urls.first();
     
-    FileTreeViewItem *onto = (af!=NULL) ? af : pa;
-    if (onto==NULL) return;
+    if (item==NULL) return;
+    KUrl dest = item->url();
 
-    KUrl dest = onto->url();
-    if (!onto->isDir()) dest.setFileName(QString::null);
+    // Check whether the drop is on top of a directory (in which case we
+    // want to move/copy into it) or a file (move/copy into its containing
+    // directory).
+    if (!item->isDir()) dest.setFileName(QString::null);
     dest.adjustPath(KUrl::AddTrailingSlash);
     kDebug() << "resolved destination" << dest;
 
-    /* first make the last url to copy to the one to select next */
+    // Make the last URL to copy the one to select next
     KUrl nextSel = dest;
     nextSel.addPath(urls.back().fileName(KUrl::ObeyTrailingSlash));
     m_nextUrlToShow = nextSel;
 
+    KIO::Job *job;
     // TODO: top level window as 3rd parameter?
-    if (ev->dropAction()==Qt::MoveAction) KIO::NetAccess::move(urls, dest, this);
-    else KIO::NetAccess::dircopy(urls, dest, this);
+    if (ev->dropAction()==Qt::MoveAction) job = KIO::move(urls, dest);
+    else job = KIO::copy(urls, dest);
+    connect(job, SIGNAL(result(KJob *)), SLOT(slotJobResult(KJob *)));
 }
 
 
-void ScanGallery::slotCanceled(KIO::Job *job)
+void ScanGallery::slotJobResult(KJob *job)
 {
-    kDebug();
+    kDebug() << "error" << job->error();
+    if (job->error()) job->uiDelegate()->showErrorMessage();
 }
 
 
@@ -1218,38 +1213,6 @@ void ScanGallery::slotCreateFolder( )
 	 }
    }
 }
-
-
-// TODO: port drag-and-drop
-#if 0
-void ScanGallery::contentsDragMoveEvent(QDragMoveEvent *ev)
-{
-    if (!acceptDrag(ev))
-    {
-        ev->ignore();
-        return;
-    }
-
-    QTreeWidgetItem *afterme = NULL;
-    QTreeWidgetItem *parent = NULL;
-
-    findDrop(ev->pos(), parent, afterme);
-
-    // "afterme" is NULL when aiming at a directory itself
-    QTreeWidgetItem *item = (afterme!=NULL) ? afterme : parent;
-    if (item!=NULL)
-    {
-        bool isDir = static_cast<FileTreeViewItem*>(item)->isDir();
-        if (isDir)
-        {						// for the autoopen code
-            FileTreeView::contentsDragMoveEvent(ev);
-            return;
-        }
-    }
-
-   ev->accept();
-}
-#endif
 
 
 void ScanGallery::setAllowRename(bool on)

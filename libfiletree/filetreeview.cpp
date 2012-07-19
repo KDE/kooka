@@ -46,7 +46,6 @@ FileTreeView::FileTreeView(QWidget *parent)
     setObjectName("FileTreeView");
     kDebug();
 
-    setDragEnabled(true);
     setSelectionMode(QAbstractItemView::SingleSelection);
     setExpandsOnDoubleClick(false);			// we'll handle this ourselves
     setEditTriggers(QAbstractItemView::NoEditTriggers);	// maybe changed later
@@ -56,9 +55,9 @@ FileTreeView::FileTreeView(QWidget *parent)
     m_dropItem = NULL;
     m_busyCount = 0;
 
-    m_autoOpenTimer = new QTimer( this );
-    connect( m_autoOpenTimer, SIGNAL( timeout() ),
-             this, SLOT( slotAutoOpenFolder() ) );
+    m_autoOpenTimer = new QTimer(this);
+    m_autoOpenTimer->setInterval((QApplication::startDragTime()*3)/2);
+    connect(m_autoOpenTimer, SIGNAL(timeout()), SLOT(slotAutoOpenFolder()));
 
     /* The executed-Slot only opens  a path, while the expanded-Slot populates it */
     connect(this, SIGNAL(itemActivated( QTreeWidgetItem *, int)),
@@ -78,8 +77,6 @@ FileTreeView::FileTreeView(QWidget *parent)
             SLOT(slotSelectionChanged()));
     connect(this, SIGNAL(itemEntered(QTreeWidgetItem *, int)),
             SLOT(slotOnItem(QTreeWidgetItem *)));
-
-    m_bDrag = false;
 
     m_openFolderPixmap = KIconLoader::global()->loadIcon("folder-open",
                                                          KIconLoader::Desktop,
@@ -102,13 +99,6 @@ FileTreeView::~FileTreeView()
 }
 
 
-bool FileTreeView::isValidItem(QTreeWidgetItem *item)
-{
-    if (item==NULL) return (false);
-    return (indexOfTopLevelItem(item)!=-1);
-}
-
-
 // This is used when dragging and dropping out of the view to somewhere else.
 QMimeData *FileTreeView::mimeData(const QList<QTreeWidgetItem *> items) const
 {
@@ -128,151 +118,98 @@ QMimeData *FileTreeView::mimeData(const QList<QTreeWidgetItem *> items) const
 }
 
 
-// TODO: port drag and drop
-#if 0
-void FileTreeView::contentsDragEnterEvent(QDragEnterEvent *ev)
+// Dragging and dropping into the view.
+void FileTreeView::setDropItem(QTreeWidgetItem *item)
 {
-   if ( ! acceptDrag( ev ) )
-   {
-      ev->ignore();
-      return;
-   }
-   ev->acceptProposedAction();
-   m_currentBeforeDropItem = selectedItem();
-
-   QTreeWidgetItem *item = itemAt( contentsToViewport( ev->pos() ) );
-   if( item )
-   {
-      m_dropItem = item;
-      m_autoOpenTimer->start( (QApplication::startDragTime() * 3) / 2 );
-   }
-   else
-   {
-       m_dropItem = NULL;
-   }
+    if (item!=NULL)
+    {
+        m_dropItem = item;
+        // TODO: make auto-open an option, don't start timer if not enabled
+        m_autoOpenTimer->start();
+    }
+    else
+    {
+        m_dropItem = NULL;
+        m_autoOpenTimer->stop();
+    }
 }
 
 
-void FileTreeView::contentsDragMoveEvent( QDragMoveEvent *ev)
+void FileTreeView::dragEnterEvent(QDragEnterEvent *ev)
 {
-   if( ! acceptDrag( ev) )
-   {
-      ev->ignore();
-      return;
-   }
-   ev->acceptProposedAction();
-
-   QTreeWidgetItem *afterme;
-   QTreeWidgetItem *parent;
-   findDrop( e->pos(), parent, afterme );
-
-   // "afterme" is 0 when aiming at a directory itself
-   QTreeWidgetItem *item = afterme ? afterme : parent;
-
-   if( item!=NULL && item->isSelectable() )
-   {
-      setSelected( item, true );
-      if( item != m_dropItem ) {
-         m_autoOpenTimer->stop();
-         m_dropItem = item;
-         m_autoOpenTimer->start( (QApplication::startDragTime() * 3) / 2 );
-      }
-   }
-   else
-   {
-      m_autoOpenTimer->stop();
-      m_dropItem = NULL;
-   }
-}
-
-
-void FileTreeView::contentsDragLeaveEvent(QDragLeaveEvent *ev)
-{
-   // Restore the current item to what it was before the dragging (#17070)
-   if ( isValidItem(m_currentBeforeDropItem) )
-   {
-      setSelected( m_currentBeforeDropItem, true );
-      ensureItemVisible( m_currentBeforeDropItem );
-   }
-   else if ( isValidItem(m_dropItem) )
-      setSelected( m_dropItem, false ); // no item selected
-   m_currentBeforeDropItem = NULL;
-   m_dropItem = NULL;
-
-}
-
-
-void FileTreeView::contentsDropEvent(QDropEvent *ev)
-{
-
-    m_autoOpenTimer->stop();
-    m_dropItem = NULL;
-
-    kDebug();
-    if( ! acceptDrag( ev) ) {
-       ev->ignore();
-       return;
+    if (!ev->mimeData()->hasUrls())			// not an URL drag
+    {
+        ev->ignore();
+        return;
     }
 
     ev->acceptProposedAction();
 
-    QTreeWidgetItem *afterme;
-    QTreeWidgetItem *parent;
-    findDrop(ev->pos(), parent, afterme);
-
-    //kDebug(250) << " parent=" << (parent?parent->text(0):QString())
-    //             << " afterme=" << (afterme?afterme->text(0):QString()) << endl;
-
-    if (ev->source() == viewport() && itemsMovable())
-        movableDropEvent(parent, afterme);
-    else
-    {
-       emit dropped(ev, afterme);
-       emit dropped(this, ev, afterme);
-       emit dropped(ev, parent, afterme);
-       emit dropped(this, ev, parent, afterme);
-
-       KUrl::List urls = KUrl::List::fromMimeData( ev->mimeData() );
-       if ( urls.isEmpty() )
-           return;
-       emit dropped(this, ev, urls );
-
-       KUrl parentURL;
-       if( parent )
-           parentURL = static_cast<FileTreeViewItem*>(parent)->url();
-       else
-           // can happen when dropping above the root item
-           // Should we choose the first branch in such a case ??
-           return;
-
-       emit dropped(urls, parentURL );
-       emit dropped(this , ev, urls, parentURL );
-    }
+    QList<QTreeWidgetItem *> items = selectedItems();
+    m_currentBeforeDropItem = (items.count()>0 ? items.first() : NULL);
+    setDropItem(itemAt(ev->pos()));
 }
 
 
-bool FileTreeView::acceptDrag(QDropEvent *ev) const
+void FileTreeView::dragMoveEvent(QDragMoveEvent *ev)
 {
+    if (!ev->mimeData()->hasUrls())			// not an URL drag
+    {
+        ev->ignore();
+        return;
+    }
 
-   bool ancestOK= acceptDrops();
-   // kDebug(250) << "Do accept drops: " << ancestOK;
-   ancestOK = ancestOK && itemsMovable();
-   // kDebug(250) << "acceptDrag: " << ancestOK;
-   // kDebug(250) << "canDecode: " << KUrl::List::canDecode(e->mimeData());
-   // kDebug(250) << "action: " << e->action();
+    QTreeWidgetItem *item = itemAt(ev->pos());
+    if (item==NULL || item->isDisabled())		// over a valid item?
+    {							// no, ignore drops on it
+        setDropItem(NULL);				// clear drop item
+        return;
+    }
 
-   /*  K3ListView::acceptDrag(e);  */
-   /* this is what K3ListView does:
-    * acceptDrops() && itemsMovable() && (e->source()==viewport());
-    * ask acceptDrops and itemsMovable, but not the third
-    */
-   return ancestOK && KUrl::List::canDecode( ev->mimeData() ) &&
-       // Why this test? All DnDs are one of those AFAIK (DF)
-      ( ev->dropAction() == Qt::CopyAction
-     || ev->dropAction() == Qt::MoveAction
-     || ev->dropAction() == Qt::LinkAction );
+    FileTreeViewItem *ftvi = static_cast<FileTreeViewItem *>(item);
+    //if (!ftvi->isDir()) item = item->parent();	// if file, highlight parent dir
+
+    setCurrentItem(item);				// temporarily select it
+    if (item!=m_dropItem) setDropItem(item);		// changed, update drop item
+
+    ev->accept();
 }
-#endif
+
+
+void FileTreeView::dragLeaveEvent(QDragLeaveEvent *ev)
+{
+    if (m_currentBeforeDropItem!=NULL)			// there was a current item
+    {							// before the drag started
+        setCurrentItem(m_currentBeforeDropItem);	// restore its selection
+        scrollToItem(m_currentBeforeDropItem);
+    }
+    else if (m_dropItem!=NULL)				// item selected by drag
+    {
+        m_dropItem->setSelected(false);			// clear that selection
+    }
+
+    m_currentBeforeDropItem = NULL;
+    setDropItem(NULL);
+}
+
+
+void FileTreeView::dropEvent(QDropEvent *ev)
+{
+    if (!ev->mimeData()->hasUrls())			// not an URL drag
+    {
+        ev->ignore();
+        return;
+    }
+
+    if (m_dropItem==NULL) return;			// invalid drop target
+
+    FileTreeViewItem *item = static_cast<FileTreeViewItem *>(m_dropItem);
+    kDebug() << "onto" << item->url();
+    setDropItem(NULL);					// stop timer now
+							// also clears m_dropItem!
+    emit dropped(ev, item);
+    ev->accept();
+}
 
 
 void FileTreeView::slotCollapsed(QTreeWidgetItem *tvi)
@@ -331,15 +268,15 @@ void FileTreeView::slotDoubleClicked(QTreeWidgetItem *item)
 }
 
 
-// TODO: needed? QTreeWidget does this automatically
 void FileTreeView::slotAutoOpenFolder()
 {
     m_autoOpenTimer->stop();
 
-    if (!isValidItem(m_dropItem) || m_dropItem->isExpanded()) return;
+    kDebug() << "children" << m_dropItem->childCount() << "expanded" << m_dropItem->isExpanded();
+    if (m_dropItem->childCount()==0) return;		// nothing to expand
+    if (m_dropItem->isExpanded()) return;		// already expanded
 
-    m_dropItem->setExpanded(true);
-    //m_dropItem->repaint();
+    m_dropItem->setExpanded(true);			// expand the item
 }
 
 
@@ -407,7 +344,7 @@ FileTreeBranch *FileTreeView::addBranch(FileTreeBranch *newBranch)
 }
 
 
-FileTreeBranch *FileTreeView::branch(const QString &searchName)
+FileTreeBranch *FileTreeView::branch(const QString &searchName) const
 {
     for (FileTreeBranchList::const_iterator it = m_branches.constBegin();
              it!=m_branches.constEnd(); ++it)
@@ -426,7 +363,7 @@ FileTreeBranch *FileTreeView::branch(const QString &searchName)
 }
 
 
-FileTreeBranchList &FileTreeView::branches()
+const FileTreeBranchList &FileTreeView::branches() const
 {
     return (m_branches);
 }
@@ -593,14 +530,14 @@ void FileTreeView::slotOnItem(QTreeWidgetItem *item)
 }
 
 
-FileTreeViewItem *FileTreeView::findItemInBranch(const QString &branchName, const QString &relUrl)
+FileTreeViewItem *FileTreeView::findItemInBranch(const QString &branchName, const QString &relUrl) const
 {
     FileTreeBranch *br = branch(branchName);
     return (findItemInBranch(br, relUrl));
 }
 
 
-FileTreeViewItem *FileTreeView::findItemInBranch(FileTreeBranch *branch, const QString &relUrl)
+FileTreeViewItem *FileTreeView::findItemInBranch(FileTreeBranch *branch, const QString &relUrl) const
 {
     FileTreeViewItem *ret = NULL;
     if (branch!=NULL)
