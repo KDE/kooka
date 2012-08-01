@@ -473,47 +473,8 @@ crop tool.</para>
 <guimenu>Settings</guimenu><guimenuitem>Configure Shortcuts...</guimenuitem></menuchoice>
 allows you to specify key bindings</para>
 
-
-<para>Below is an example of how to configure a short cut for deleting
-an image.</para>
-
-<screenshot>
-<screeninfo>Picture of shortcut dialog</screeninfo>
-	<mediaobject>
-	  <imageobject>
-	    <imagedata fileref="shortcut0.png" format="PNG"/>
-	  </imageobject>
-	</mediaobject>
-</screenshot>
-
-<itemizedlist>
-<listitem><para>
-Click on the custom button.
-</para></listitem>
-
-<listitem><para>
-Next click on the primary button.
-</para></listitem>
-
-<listitem><para>
-Do <userinput><keycombo
-action="seq"><keycap>CTRL</keycap><keycap>X</keycap></keycombo></userinput>
-and the dialog should disappear. The keybinding is now entered. 
-</para></listitem>
-</itemizedlist>
-
-<screenshot>
-<screeninfo>Picture of keybinding  dialog</screeninfo>
-	<mediaobject>
-	  <imageobject>
-	    <imagedata fileref="shortcut1.png" format="PNG"/>
-	  </imageobject>
-	</mediaobject>
-</screenshot>
-
-<para>Pressing the keys <userinput><keycombo
-action="seq"><keycap>CTRL</keycap><keycap>X</keycap></keycombo></userinput>
-now deletes the image selected underneath <guilabel>Kooka Gallery</guilabel>.
+<para>For more information read the section about <ulink url="help:/fundamentals/config.html#shortcuts"
+>Using and Customizing Shortcuts</ulink> of the &kde; Fundamentals.
 </para>
 </sect2>
 
@@ -523,61 +484,8 @@ now deletes the image selected underneath <guilabel>Kooka Gallery</guilabel>.
 <guimenu>Settings</guimenu><guimenuitem>Configure Toolbars...</guimenuitem></menuchoice>
 Is used to add additional buttons to the toolbars.</para>
 
-<screenshot>
-<screeninfo>Picture of toolbars dialog</screeninfo>
-	<mediaobject>
-	  <imageobject>
-	    <imagedata fileref="toolbar.png" format="PNG"/>
-	  </imageobject>
-	</mediaobject>
-</screenshot>
-
-
-<itemizedlist>
-
-<listitem>
-<para>To add a button to the File toolbar, 
-</para>
-
-<screenshot>
-<screeninfo>Picture of toolbars dialog</screeninfo>
-	<mediaobject>
-	  <imageobject>
-	    <imagedata fileref="toolbar1.png" format="PNG"/>
-	  </imageobject>
-	</mediaobject>
-</screenshot>
-
-<para>  make sure <guilabel>Main Toolbar</guilabel> is displayed in
-the top combo box.
-</para></listitem>
-
-<listitem><para>
-Click on one of the items in the left hand pane. This item will now have a
-blue background showing that it has been selected.
-</para></listitem>
-
-<listitem><para>
-Next click on the <keysym>Right arrow</keysym> button to place it in
-the right pane.
-</para></listitem>
-
-<listitem><para>
-Click on <userinput><guilabel>Apply</guilabel></userinput> and then
-click on <userinput><guilabel>OK</guilabel></userinput>
-</para></listitem>
-</itemizedlist>
-
-
-<para>The new Item should be in the toolbar. 
-<screenshot>
-<screeninfo>Picture of toolbars dialog</screeninfo>
-	<mediaobject>
-	  <imageobject>
-	    <imagedata fileref="toolbar2.png" format="PNG"/>
-	  </imageobject>
-	</mediaobject>
-</screenshot>
+<para>For more information read the section about <ulink url="help:/fundamentals/config.html#toolbars"
+>Customizing Toolbars</ulink> of the &kde; Fundamentals.
 </para>
 </sect2>
 
