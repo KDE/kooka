@@ -321,7 +321,7 @@ Save OCR Result Text... Ctrl+U
 <sect2>
 <title>The <guimenu>Image</guimenu> Menu</title>
 
-<para>The actions in this menu are also available in the contect menu 
+<para>The actions in this menu are also available in the context menu 
 of the preview window.</para>
 
 <variablelist> 
