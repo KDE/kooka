@@ -111,6 +111,7 @@ switch between the <guilabel>Scan</guilabel>, <guilabel>OCR</guilabel> and the i
 file browser called the <guilabel>Gallery</guilabel>.  The working
 folder is displayed in the lower part of the window along with the
 folder where the scan will be saved.</para> 
+<!--FIXME-->
 </listitem>
 
 <listitem>
@@ -156,7 +157,7 @@ scan.</para>
 
 <sect1 id="kooka-toolbar">
 <title>The main &kooka; Toolbar</title>
-
+<!--FIXME-->
 
 <sect2>
 <title>The <guimenu>File</guimenu> Menu</title>
@@ -239,6 +240,7 @@ crop tool.</para>
 <listitem>
 <para>Remove the image displayed in the <guilabel>Image
 Viewer</guilabel>.
+  <!--FIXME no guilabel Image Viewer-->
 </para>
 </listitem> 
 </varlistentry>
@@ -306,6 +308,7 @@ starts the character recognition for the preview image.</para>
 <guimenuitem>OCR Selection...</guimenuitem>
 </menuchoice></term> 
 <listitem>
+  <!--FIXME A window will reappear ???-->
 <para>A window will reappear for the character recognition. Here,
 however, the character recognition is only for the area highlighted in
 the final scan.</para>
@@ -571,6 +574,7 @@ than in many other applications. Click the
 the folder <filename
 class="directory">~/Documents/KookaGallery</filename>. In the
 lower portion of the window, your current subfolder in the gallery
+  <!--FIXME ~/Documents-> Systemsettings Path  and  lower?-->
 is shown. This is where all scanned images are first saved as
 files. When starting &kooka; for the first time, you will only see the
 <filename class="directory">KookaGallery</filename>.  Create
@@ -629,9 +633,11 @@ the document itself. </para>
 <screenshot> <screeninfo>The gocr Window</screeninfo> <mediaobject>
 <imageobject><imagedata fileref="kooka_gocr.png"
 format="PNG"/></imageobject> </mediaobject> </screenshot>
-<!-- FIXME wrong -->
-<para>The text can now be opened by clicking the button with the
-&kate; editor. After the final scan, mark a selection in the image
+<para>After character recognition is complete, a spellcheck
+is automatically started for the recognized material. You can edit the content
+in the <guilabel>OCR</guilabel> window and export it as plain text.
+</para>
+<para>After the final scan, mark a selection in the image
 display to the right to load just a part of the text or image to the
 <acronym>OCR</acronym>.  Next, in the toolbar, click the 
 <inlinemediaobject><imageobject><imagedata fileref="ocr-select.png" format="PNG"/>
