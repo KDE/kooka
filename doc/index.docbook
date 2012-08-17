@@ -54,7 +54,7 @@ and can perform optical character recognition.</para></abstract>
 <title>Introduction</title>
 
 <para>&kooka; is a &kde; application that provides access to scanner hardware 
-using the <ulink url="http://www.sane-project.org/">SANE</ulink> library
+using the <ulink url="http://www.sane-project.org/">SANE</ulink> library. 
 Therefore, the <acronym>SANE</acronym> package must be installed to use &kooka;.</para>
 
 <para>&kooka; allows you to scan, save and view in any image format that &kde; supports.</para>
