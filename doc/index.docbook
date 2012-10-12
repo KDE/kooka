@@ -6,9 +6,9 @@
   <!ENTITY % English "INCLUDE"> <!-- change language only here --> 
 ]>
 
-<book lang="&language;">
+<book id="kooka" lang="&language;">
 
-<bookinfo>
+<book id="kooka"info>
 <title>The &kooka; Manual</title>
 
 <authorgroup>
