@@ -56,7 +56,7 @@ AddDeviceDialog::AddDeviceDialog(QWidget *parent, const QString &caption)
 "try using the <u>hp-probe</u> command to locate it, for example "
 "'hp-probe&nbsp;-b&nbsp;usb' or 'hp-probe&nbsp;-b&nbsp;net'. "
 "If the scanner is found, then enter the device name displayed by these commands; note "
-"that if using HPLIP then \"hp:\" needs to be be replaced by \"hpaio:\"."
+"that if using HPLIP then \"hp:\" needs to be replaced by \"hpaio:\"."
 "<p>"
 "If these commands fail to locate your scanner, then it may not be supported "
 "by SANE. Check the SANE documentation for a "
