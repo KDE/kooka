@@ -337,6 +337,23 @@ void ScanGallery::slotActivateItem(const KUrl &url)
 }
 
 
+// This slot is called when an image has been changed by some external means
+// (e.g. an image transformation).  The item image is reloaded only if it
+// is still currently selected.
+
+void ScanGallery::slotUpdatedItem(const KUrl &url)
+{
+    FileTreeViewItem *found = findItemByUrl(url);
+    if (found==NULL) return;
+
+    if (found->isSelected())				// only if still selected
+    {
+        slotUnloadItem(found);				// ensure unloaded for updating
+        slotItemActivated(found);			// load the new image
+    }
+}
+
+
 void ScanGallery::slotDirCount(FileTreeViewItem *item, int cnt)
 {
     if (item==NULL) return;
@@ -784,53 +801,6 @@ QString ScanGallery::getCurrImageFileName(bool withPath) const
       }
    }
    return( result );
-}
-
-
-/* Called if the image exists but was changed by image manipulation func   */
-void ScanGallery::slotCurrentImageChanged(const QImage *img)
-{
-    FileTreeViewItem *curr = highlightedFileTreeViewItem();
-    if (curr==NULL)
-    {
-        kDebug() << "nothing selected!";
-        return;
-    }
-
-    /* Not applicable to directories */
-    if (curr->isDir()) return;
-
-    /* unload image and free memory */
-    slotUnloadItem(curr);
-
-    const QString filename = localFileName(curr);
-    const ImageFormat format = getImgFormat(curr);
-    if (!format.isValid())				// not an image, should never happen
-    {
-        kDebug() << "not a valid image format!";
-        return;
-    }
-
-    ImgSaver saver;
-    ImgSaver::ImageSaveStatus is_stat = saver.saveImage(img, filename, format);
-    if (is_stat!=ImgSaver::SaveStatusOk)
-    {
-        KMessageBox::sorry(this, i18n("<qt>"
-                                      "Unable to update the image<br>"
-                                      "<filename>%2</filename><br>"
-                                      "<br>"
-                                      "%1",
-                                      saver.errorString(is_stat),
-                                      curr->url().prettyUrl()),
-                           i18n("Save Error"));
-    }
-
-    if (img!=NULL && !img->isNull())
-    {
-        emit imageChanged(curr->fileItem());
-        KookaImage *newImage = new KookaImage(*img);
-        slotImageArrived(curr, newImage);
-    }
 }
 
 

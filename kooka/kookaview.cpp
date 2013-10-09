@@ -73,6 +73,7 @@
 #include "kookascanparams.h"
 #include "scangallery.h"
 #include "imgsaver.h"
+#include "imagetransform.h"
 
 #ifndef KDE4
 #include "kookaprint.h"
@@ -958,84 +959,34 @@ void KookaView::slotCreateNewImgFromSelection()
 }
 
 
-//  This and slotMirrorImage() below work even if the selected image is
-//  not currently loaded, hence the getCurrImage(true) which automatically
-//  loads it if necessary.
-
-void KookaView::slotRotateImage(int angle)
+void KookaView::slotTransformImage()
 {
-    const KookaImage *img = gallery()->getCurrImage(true);
-    if (img==NULL) return;
-
-    bool doUpdate = true;
-
-    QImage resImg;
-    QMatrix m;
-
-    QApplication::setOverrideCursor(Qt::WaitCursor);
-    switch (angle)
+    if (imageViewer()->readOnly())
     {
-case 90:
-        emit signalChangeStatusbar(i18n("Rotate image 90 degrees"));
-        m.rotate(+90);
-        resImg = img->transformed(m);
-        break;
-
-case 270:
-case -90:
-        emit signalChangeStatusbar(i18n("Rotate image -90 degrees"));
-        m.rotate(-90);
-        resImg = img->transformed(m);
-        break;
-
-default:
-        kDebug() << "Angle" << angle << "not supported!";
-        doUpdate = false;
-        break;
+        emit signalChangeStatusbar(i18n("Cannot transform, image is read-only"));
+        return;
     }
-    QApplication::restoreOverrideCursor();
 
-    /* updateCurrImage does the status-bar cleanup */
-    if (doUpdate) updateCurrImage(resImg);
-    else emit signalCleanStatusbar();
-}
+    // Get operation code from action that was triggered
+    QAction *act = static_cast<QAction *>(sender());
+    if (act==NULL) return;
+    ImageTransform::Operation op = static_cast<ImageTransform::Operation>(act->data().toInt());
 
+    // This may appear to be a waste, since we are immediately unloading the image.
+    // But we need a copy of the image anyway, so there will still be a load needed.
+    const KookaImage *loadedImage = gallery()->getCurrImage(true);
+    if (loadedImage==NULL) return;
+    const QImage img = *loadedImage;			// get a copy of the image
 
-void KookaView::slotMirrorImage(KookaView::MirrorType type)
-{
-    const KookaImage *img = gallery()->getCurrImage(true);
-    if (img==NULL) return;
+    QString imageFile = gallery()->getCurrImageFileName(true);
+    if (imageFile.isEmpty()) return;			// get file to save back to
+    gallery()->slotUnloadItems();			// unload original from memory
 
-    bool doUpdate = true;
-    QImage resImg;
-
-    QApplication::setOverrideCursor(Qt::WaitCursor);
-    switch (type)
-    {
-case MirrorVertical:
-        emit signalChangeStatusbar(i18n("Mirroring image vertically"));
-        resImg = img->mirrored();
-        break;
-
-case MirrorHorizontal:
-        emit signalChangeStatusbar(i18n("Mirroring image horizontally"));
-        resImg = img->mirrored(true, false);
-        break;
-
-case MirrorBoth:
-        emit signalChangeStatusbar(i18n("Mirroring image both directions"));
-        resImg = img->mirrored(true, true);
-        break;
-
-default:
-        kDebug() << "Mirror type" << type << "not supported!";
-        doUpdate = false;
-    }
-    QApplication::restoreOverrideCursor();
-
-    /* updateCurrImage does the status-bar cleanup */
-    if (doUpdate) updateCurrImage(resImg);
-    else emit signalCleanStatusbar();
+    QThread *transformer = new ImageTransform(img, op, imageFile, this);
+    connect(transformer, SIGNAL(done(const KUrl &)), gallery(), SLOT(slotUpdatedItem(const KUrl &)));
+    connect(transformer, SIGNAL(statusMessage(const QString &)), SIGNAL(signalChangeStatusbar(const QString &)));
+    connect(transformer, SIGNAL(finished()), transformer, SLOT(deleteLater()));
+    transformer->start();
 }
 
 
@@ -1086,21 +1037,6 @@ void KookaView::slotUnloadAImage(const KookaImage *img)
 void KookaView::slotStartLoading(const KUrl &url)
 {
     emit signalChangeStatusbar(i18n("Loading %1",url.prettyUrl()));
-}
-
-
-void KookaView::updateCurrImage(const QImage &img)
-{
-    if (!mImageCanvas->readOnly())
-    {
-	emit signalChangeStatusbar(i18n("Updating image"));
-	gallery()->slotCurrentImageChanged(&img);
-	emit signalCleanStatusbar();
-    }
-    else
-    {
-	emit signalChangeStatusbar(i18n("Cannot update image, it is read only"));
-    }
 }
 
 

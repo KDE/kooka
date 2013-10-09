@@ -114,13 +114,6 @@ private slots:
     void cleanStatusbar(void) { changeStatusbar(""); }
     void changeCaption(const QString& text);
 
-    void slotMirrorVertical( void );
-    void slotMirrorHorizontal( void );
-
-    void slotRotateClockWise( void );
-    void slotRotateCounterClockWise( void );
-    void slotRotate180( void );
-
 private:
     void setupAccel();
     void setupActions();

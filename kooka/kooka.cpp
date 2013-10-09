@@ -54,6 +54,7 @@
 #include "scangallery.h"
 #include "kookapref.h"
 #include "kookaview.h"
+#include "imagetransform.h"
 
 #include <kvbox.h>
 #include <qlabel.h>
@@ -201,13 +202,15 @@ void Kooka::setupActions()
 
     mirrorVerticallyAction = new KAction(KIcon("object-flip-vertical"), i18n("Mirror Vertically"), this);
     mirrorVerticallyAction->setShortcut(Qt::CTRL+Qt::Key_V);
-    connect(mirrorVerticallyAction, SIGNAL(triggered()), SLOT(slotMirrorVertical()));
+    mirrorVerticallyAction->setData(ImageTransform::MirrorVertical);
+    connect(mirrorVerticallyAction, SIGNAL(triggered()), m_view, SLOT(slotTransformImage()));
     actionCollection()->addAction("mirrorVertical", mirrorVerticallyAction);
     m_view->connectViewerAction(mirrorVerticallyAction, true);
 
     mirrorHorizontallyAction = new KAction(KIcon("object-flip-horizontal"), i18n("Mirror Horizontally"), this);
     mirrorHorizontallyAction->setShortcut(Qt::CTRL+Qt::Key_M);
-    connect(mirrorHorizontallyAction, SIGNAL(triggered()), SLOT(slotMirrorHorizontal()));
+    mirrorHorizontallyAction->setData(ImageTransform::MirrorHorizontal);
+    connect(mirrorHorizontallyAction, SIGNAL(triggered()), m_view, SLOT(slotTransformImage()));
     actionCollection()->addAction("mirrorHorizontal", mirrorHorizontallyAction);
     m_view->connectViewerAction(mirrorHorizontallyAction);
 
@@ -216,19 +219,22 @@ void Kooka::setupActions()
     // icons from the old kdeclassic theme.
     rotateAcwAction = new KAction(KIcon("rotate-acw"), i18n("Rotate Counter-Clockwise"), this);
     rotateAcwAction->setShortcut(Qt::CTRL+Qt::Key_7);
-    connect(rotateAcwAction, SIGNAL(triggered()), SLOT(slotRotateCounterClockWise()));
+    rotateAcwAction->setData(ImageTransform::Rotate270);
+    connect(rotateAcwAction, SIGNAL(triggered()), m_view, SLOT(slotTransformImage()));
     actionCollection()->addAction("rotateCounterClockwise", rotateAcwAction);
     m_view->connectViewerAction(rotateAcwAction, true);
 
     rotateCwAction = new KAction(KIcon("rotate-cw"), i18n("Rotate Clockwise"), this);
     rotateCwAction->setShortcut(Qt::CTRL+Qt::Key_9);
-    connect(rotateCwAction, SIGNAL(triggered()), SLOT(slotRotateClockWise()));
+    rotateCwAction->setData(ImageTransform::Rotate90);
+    connect(rotateCwAction, SIGNAL(triggered()), m_view, SLOT(slotTransformImage()));
     actionCollection()->addAction("rotateClockwise", rotateCwAction);
     m_view->connectViewerAction(rotateCwAction);
 
     rotate180Action = new KAction(KIcon("rotate-180"), i18n("Rotate 180 Degrees"), this);
     rotate180Action->setShortcut(Qt::CTRL+Qt::Key_8);
-    connect(rotate180Action, SIGNAL(triggered()), SLOT(slotRotate180()));
+    rotate180Action->setData(ImageTransform::Rotate180);
+    connect(rotate180Action, SIGNAL(triggered()), m_view, SLOT(slotTransformImage()));
     actionCollection()->addAction("upsitedown", rotate180Action);
     m_view->connectViewerAction(rotate180Action);
 
@@ -455,31 +461,6 @@ void Kooka::changeCaption(const QString& text)
     setCaption(text);
 }
 
-void Kooka::slotMirrorVertical( void )
-{
-   m_view->slotMirrorImage( KookaView::MirrorVertical );
-}
-
-void Kooka::slotMirrorHorizontal( void )
-{
-    m_view->slotMirrorImage( KookaView::MirrorHorizontal );
-}
-
-void Kooka::slotRotateClockWise( void )
-{
-   m_view->slotRotateImage( 90 );
-}
-
-void Kooka::slotRotateCounterClockWise( void )
-{
-   m_view->slotRotateImage( -90 );
-}
-
-void Kooka::slotRotate180( void )
-{
-    m_view->slotMirrorImage( KookaView::MirrorBoth );
-    //m_view->slRotateImage( 180 );
-}
 
 //void Kooka::slEnableWarnings( )
 //{

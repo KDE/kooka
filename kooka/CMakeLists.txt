@@ -134,6 +134,7 @@ set(kooka_SRCS
   formatdialog.cpp
   kookaimage.cpp
   imageformat.cpp
+  imagetransform.cpp
   scangallery.cpp
   galleryhistory.cpp
   kookagallery.cpp

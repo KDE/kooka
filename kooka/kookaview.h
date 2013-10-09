@@ -141,8 +141,7 @@ public slots:
     void slotStartFinalScan();
 
     void slotCreateNewImgFromSelection();
-    void slotRotateImage(int angle);
-    void slotMirrorImage(KookaView::MirrorType type);
+    void slotTransformImage();
 
     void slotScanParams();
     void slotApplySettings();
@@ -210,7 +209,6 @@ private:
 
     QByteArray userDeviceSelection(bool alwaysAsk);
 
-    void updateCurrImage(const QImage &img);
     void saveGalleryState(int index = -1) const;
     void restoreGalleryState(int index = -1);
 
