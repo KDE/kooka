@@ -281,8 +281,6 @@ public:
      *
      * @param name Name of the SANE parameter.
      * @param parent Parent for widget.
-     * @param descr Text description for the GUI label, if this is not
-     * specified or empty then the parameter's SANE @c title is used.
      * @return A @c KScanOption for the parameter, or @c NULL if none
      * could be created.
      *
@@ -290,9 +288,7 @@ public:
      * @see KScanOption::widget
      * @see getExistingGuiElement
      **/
-    KScanOption *getGuiElement(const QByteArray &name,
-                               QWidget *parent,
-                               const QString &descr = QString::null);
+    KScanOption *getGuiElement(const QByteArray &name, QWidget *parent);
 
     /**
      * Find the @c KScanOption for an existing scanner parameter.

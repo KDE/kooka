@@ -343,11 +343,9 @@ public:
      * should not be deleted by the caller.
      *
      * @param parent Parent for the created widget.
-     * @param descr Text description, if this is not specified or empty then
-     * the parameter's SANE @c title is used.
      * @return The created widget, or @c NULL if it could not be created.
      **/
-    KScanControl *createWidget(QWidget *parent, const QString &descr = QString::null);
+    KScanControl *createWidget(QWidget *parent);
 
     /**
      * Create a label widget for the scanner option.  @c createWidget() must

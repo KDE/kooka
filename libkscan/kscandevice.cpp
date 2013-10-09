@@ -122,9 +122,7 @@ KScanOption *KScanDevice::getExistingGuiElement(const QByteArray &name) const
 }
 
 
-KScanOption *KScanDevice::getGuiElement(const QByteArray &name,
-                                        QWidget *parent,
-                                        const QString &descr)
+KScanOption *KScanDevice::getGuiElement(const QByteArray &name, QWidget *parent)
 {
     if (name.isEmpty()) return (NULL);
     if (!optionExists(name)) return (NULL);
@@ -137,7 +135,7 @@ KScanOption *KScanDevice::getGuiElement(const QByteArray &name,
     so = getOption(name);				// create a new scan option
     if (so->isValid())					// option was created
     {
-        QWidget *w = so->createWidget(parent, descr);	// create widget for option
+        QWidget *w = so->createWidget(parent);		// create widget for option
         if (w!=NULL) w->setEnabled(so->isActive() && so->isSoftwareSettable());
         else kDebug() << "no widget created for" << name;
     }

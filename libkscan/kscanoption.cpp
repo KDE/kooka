@@ -889,7 +889,7 @@ bool KScanOption::getRange(double *minp, double *maxp, double *quantp) const
 }
 
 
-KScanControl *KScanOption::createWidget(QWidget *parent, const QString &descr)
+KScanControl *KScanOption::createWidget(QWidget *parent)
 {
     if (!isValid())
     {
@@ -899,8 +899,7 @@ KScanControl *KScanOption::createWidget(QWidget *parent, const QString &descr)
 
     delete mControl; mControl = NULL;			// dispose of the old control
  	
-    mText = descr;
-    if (mText.isEmpty() && mDesc!=NULL) mText = QString::fromLocal8Bit(mDesc->title);
+    if (mDesc!=NULL) mText = i18n(mDesc->title);
 
     kDebug() << "type" << type() << "text" << mText;
 
@@ -976,8 +975,8 @@ case KScanControl::Group:				// group separator
 
 	if (mDesc!=NULL)				// set tool tip
         {
-            QString tt = QString::fromLocal8Bit(mDesc->desc);
-            if (!tt.isEmpty()) w->setToolTip(tt);
+            const QByteArray tt = mDesc->desc;
+            if (!tt.isEmpty()) w->setToolTip(i18n(tt));
         }
 
         // No accelerators for advanced options, so as not to soak up
