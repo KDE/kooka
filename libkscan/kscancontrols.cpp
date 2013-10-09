@@ -246,6 +246,13 @@ QString KScanCheckbox::label() const
 
 //  KScanCombo - combo box with list of options
 //  -------------------------------------------
+//
+//  This control (and currently only this control) is special, because the
+//  item text is set to the translated value of the option values.  But these
+//  values need to reported back unchanged, so the untranslated form is stored
+//  in the itemData and the translated form is seen by the user as itemText.
+//  Any access needs to only set or report the itemData, never the itemText,
+//  which is why the activated(QString) signal cannot be used directly.
 
 KScanCombo::KScanCombo(QWidget *parent, const QString &text,
                        const QList<QByteArray> &list)
@@ -256,21 +263,8 @@ KScanCombo::KScanCombo(QWidget *parent, const QString &text,
     for (QList<QByteArray>::const_iterator it = list.constBegin();
          it!=list.constEnd(); ++it)
     {
-	mCombo->addItem(*it);
-    }
-}
-
-
-KScanCombo::KScanCombo(QWidget *parent, const QString &text,
-                       const QStringList &list)
-    : KScanControl(parent, text)
-{
-    init();
-
-    for (QStringList::const_iterator it = list.constBegin();
-         it!=list.constEnd(); ++it)
-    {
-        mCombo->addItem(*it);
+        const QByteArray item = (*it);
+        mCombo->addItem(i18n(item), item);
     }
 }
 
@@ -280,8 +274,7 @@ void KScanCombo::init()
     mCombo = new QComboBox(this);
     mLayout->addWidget(mCombo);
 
-    connect(mCombo, SIGNAL(activated( const QString &)), SIGNAL(settingChanged(const QString &)));
-    connect(mCombo, SIGNAL(activated(int)), SIGNAL(settingChanged(int)));
+    connect(mCombo, SIGNAL(activated(int)), SLOT(slotActivated(int)));
 
     setFocusProxy(mCombo);
 }
@@ -289,7 +282,7 @@ void KScanCombo::init()
 
 void KScanCombo::setText(const QString &text)
 {
-    int i = mCombo->findText(text);			// find item with that text
+    int i = mCombo->findData(text);			// find item with that text
     if (i==-1) return;					// ignore if not present
 
     if (i==mCombo->currentIndex()) return;		// avoid recursive signals
@@ -299,14 +292,14 @@ void KScanCombo::setText(const QString &text)
 
 void KScanCombo::setIcon(const QIcon &icon, const char *ent)
 {
-    int i = mCombo->findText(ent);			// find item with that text
+    int i = mCombo->findData(ent);			// find item with that text
     if (i!=-1) mCombo->setItemIcon(i, icon);
 }
 
 
 QString KScanCombo::text() const
 {
-    return (mCombo->currentText());
+    return (textAt(mCombo->currentIndex()));
 }
 
 
@@ -318,13 +311,20 @@ void KScanCombo::setValue(int i)
 
 QString KScanCombo::textAt(int i) const
 {
-    return (mCombo->itemText(i));
+    return (i==-1 ? QString::null : mCombo->itemData(i).toString());
 }
 
 
 int KScanCombo::count() const
 {
     return (mCombo->count());
+}
+
+
+void KScanCombo::slotActivated(int i)
+{
+    emit settingChanged(i);
+    emit settingChanged(textAt(i));
 }
 
 

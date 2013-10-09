@@ -320,7 +320,6 @@ public:
      * @param list list of options to fill the combo box
      *     */
     KScanCombo(QWidget *parent, const QString &text, const QList<QByteArray> &list);
-    KScanCombo(QWidget *parent, const QString &text, const QStringList &list);
 
     KScanControl::ControlType type() const { return (KScanControl::Text); }
 
@@ -350,6 +349,9 @@ public:
      * @param ent the entry for which the pixmap should be set
      */
     void setIcon(const QIcon &pix, const char *ent);
+
+protected slots:
+    void slotActivated(int i);
 
 private:
     void init();
