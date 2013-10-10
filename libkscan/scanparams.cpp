@@ -309,16 +309,13 @@ QWidget *ScanParams::createScannerParams()
         KScanCombo *cb = (KScanCombo *) so->widget();
 
         // Having loaded the 'sane-backends' message catalogue, these strings
-        // are now translatable.  But we also have to set the untranslated strings
-        // just in case there is no translation there (sane-backends does not have
-        // translations for the en_GB locale, for example).
-        cb->setIcon(mIconLineart, I18N_NOOP("Line art"));
+        // are now translatable.  But KScanCombo::setIcon() works on the
+        // untranslated strings.
         cb->setIcon(mIconLineart, I18N_NOOP("Lineart"));
         cb->setIcon(mIconLineart, I18N_NOOP("Binary"));
         cb->setIcon(mIconGray, I18N_NOOP("Gray"));
-        cb->setIcon(mIconGray, I18N_NOOP("Grey"));
+        cb->setIcon(mIconGray, I18N_NOOP("Grayscale"));
         cb->setIcon(mIconColor, I18N_NOOP("Color"));
-        cb->setIcon(mIconColor, I18N_NOOP("Colour"));
         cb->setIcon(mIconHalftone, I18N_NOOP("Halftone"));
 
         initialise(so);

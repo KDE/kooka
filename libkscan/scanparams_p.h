@@ -87,7 +87,7 @@ public:
      * parameters are aligned to the top), and check whether any widgets have
      * been added.
      *
-     * @return @c true if any paramater widgets are present
+     * @return @c true if any parameter widgets are present
      */
     bool lastRow();
 
