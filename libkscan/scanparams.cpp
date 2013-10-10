@@ -652,47 +652,54 @@ KScanDevice::Status ScanParams::prepareScan(QString *vfp)
 
     setScanDestination(QString::null);			// reset progress display
 
-    KScanDevice::Status stat = KScanDevice::Ok;
-    QString virtfile;
+    // Check compatibility of scan settings
+    int format;
+    int depth;
+    mSaneDevice->getCurrentFormat(&format, &depth);
+    if (depth==1 && format!=SANE_FRAME_GRAY)		// 1-bit scan depth in colour?
+    {
+        KMessageBox::sorry(this, i18n("1-bit depth scan cannot be done in colour"));
+        return (KScanDevice::ParamError);
+    }
+    else if (depth==16)
+    {
+        KMessageBox::sorry(this, i18n("16-bit depth scans are not supported"));
+        return (KScanDevice::ParamError);
+    }
 
+    QString virtfile;
     if (mScanMode==ScanParams::SaneDebugMode || mScanMode==ScanParams::VirtualScannerMode)
     {
         if (mVirtualFile!=NULL) virtfile = mVirtualFile->get();
         if (virtfile.isEmpty())
         {
             KMessageBox::sorry(this,i18n("A file must be entered for testing or virtual scanning"));
-            stat = KScanDevice::ParamError;
+            return (KScanDevice::ParamError);
         }
 
-        if (stat==KScanDevice::Ok)
+        QFileInfo fi(virtfile);
+        if (!fi.exists())
         {
-            QFileInfo fi(virtfile);
-            if (!fi.exists())
-            {
-                KMessageBox::sorry(this,i18n("<qt>The testing or virtual file<br><filename>%1</filename><br>was not found or is not readable", virtfile));
-                stat = KScanDevice::ParamError;
-            }
+            KMessageBox::sorry(this,i18n("<qt>The testing or virtual file<br><filename>%1</filename><br>was not found or is not readable", virtfile));
+            return (KScanDevice::ParamError);
         }
 
-        if (stat==KScanDevice::Ok)
+        if (mScanMode==ScanParams::SaneDebugMode)
         {
-            if (mScanMode==ScanParams::SaneDebugMode)
+            KMimeType::Ptr mimetype = KMimeType::findByPath(virtfile);
+            if (!(mimetype->is("image/x-portable-bitmap") ||
+                  mimetype->is("image/x-portable-greymap") ||
+                  mimetype->is("image/x-portable-pixmap")))
             {
-                KMimeType::Ptr mimetype = KMimeType::findByPath(virtfile);
-                if (!(mimetype->is("image/x-portable-bitmap") ||
-                      mimetype->is("image/x-portable-greymap") ||
-                      mimetype->is("image/x-portable-pixmap")))
-                {
-                    KMessageBox::sorry(this,i18n("<qt>SANE Debug can only read PNM files.<br>"
-                                                 "This file is type <b>%1</b>.", mimetype->name()));
-                    stat = KScanDevice::ParamError;
-                }
+                KMessageBox::sorry(this,i18n("<qt>SANE Debug can only read PNM files.<br>"
+                                             "This file is type <b>%1</b>.", mimetype->name()));
+                return (KScanDevice::ParamError);
             }
         }
     }
 
     if (vfp!=NULL) *vfp = virtfile;
-    return (stat);
+    return (KScanDevice::Ok);
 }
 
 

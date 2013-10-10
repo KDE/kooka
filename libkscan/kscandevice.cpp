@@ -812,8 +812,18 @@ KScanDevice::Status KScanDevice::acquireScan(const QString &filename)
 #ifdef DEBUG_PARAMS
 static void dumpParams(const QString &msg, const SANE_Parameters *p)
 {
+    QByteArray formatName("UNKNOWN");
+    switch (p->format)
+    {
+case SANE_FRAME_GRAY:	formatName = "GREY";	break;
+case SANE_FRAME_RGB:	formatName = "RGB";	break;
+case SANE_FRAME_RED:	formatName = "RED";	break;
+case SANE_FRAME_GREEN:	formatName = "GREEN";	break;
+case SANE_FRAME_BLUE:	formatName = "BLUE";	break;
+    }
+
     kDebug() << msg.toLatin1().constData();
-    kDebug() << "  format:          " << p->format;
+    kDebug() << "  format:          " << p->format << "=" << formatName.constData();
     kDebug() << "  last_frame:      " << p->last_frame;
     kDebug() << "  lines:           " << p->lines;
     kDebug() << "  depth:           " << p->depth;
