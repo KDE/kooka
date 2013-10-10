@@ -975,8 +975,18 @@ case KScanControl::Group:				// group separator
 
 	if (mDesc!=NULL)				// set tool tip
         {
-            const QByteArray tt = mDesc->desc;
-            if (!tt.isEmpty()) w->setToolTip(i18n(tt));
+            if (qstrlen(mDesc->desc)>0)			// if there is a SANE description
+            {
+                QString tt = i18n(mDesc->desc);
+                // KDE tooltips do not normally end with a full stop, unless
+                // they are multi-sentence.  But the SANE descriptions often do,
+                // so trim it off for consistency.  Is this a good thing to do
+                // in non-western languages?
+                if (tt.endsWith('.') && tt.count(". ")==0) tt.chop(1);
+                // Force the format to be rich text so that it will be word wrapped
+                // at a sensible width, see documentation for QToolTip.
+                w->setToolTip("<qt>"+tt);
+            }
         }
 
         // No accelerators for advanced options, so as not to soak up

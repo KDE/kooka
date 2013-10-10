@@ -59,6 +59,7 @@ ScanSizeSelector::ScanSizeSelector(QWidget *parent,const QSize &bedSize)
     bedHeight = bedSize.height();
 
     m_sizeCb = new QComboBox(this);
+    m_sizeCb->setToolTip(i18n("<qt>Set the size of the scanned area"));
     connect(m_sizeCb,SIGNAL(activated(int)),SLOT(slotSizeSelected(int)));
     setFocusProxy(m_sizeCb);
 
@@ -71,20 +72,22 @@ ScanSizeSelector::ScanSizeSelector(QWidget *parent,const QSize &bedSize)
     }
     m_sizeCb->setCurrentIndex(0);
 
-	QButtonGroup * bg = new QButtonGroup(this);
-	bg->setExclusive(true);
+    QButtonGroup * bg = new QButtonGroup(this);
+    bg->setExclusive(true);
     connect(bg,SIGNAL(buttonClicked(int)),SLOT(slotPortraitLandscape(int)));
+
+    m_portraitRb = new QRadioButton(i18n("Portrait"),this);
+    m_portraitRb->setEnabled(false);
+    bg->addButton(m_portraitRb);
 	
-	m_portraitRb = new QRadioButton(i18n("Portrait"),this);
-	m_portraitRb->setEnabled(false);
-	bg->addButton(m_portraitRb);
-	
-	m_landscapeRb = new QRadioButton(i18n("Landscape"),this);
-	m_landscapeRb->setEnabled(false);
-	bg->addButton(m_landscapeRb);
+    m_landscapeRb = new QRadioButton(i18n("Landscape"),this);
+    m_landscapeRb->setEnabled(false);
+    bg->addButton(m_landscapeRb);
 	
     m_customSize = QRect();
     m_prevSelected = m_sizeCb->currentIndex();
+
+    setToolTip(i18n("<qt>Set the orientation for a preset size of the scanned area"));
 }
 
 

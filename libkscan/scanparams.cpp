@@ -187,11 +187,13 @@ bool ScanParams::connectDevice(KScanDevice *newScanDevice, bool galleryMode)
 
     /* Create the Scan Buttons */
     QPushButton *pb = new QPushButton(KIcon("preview"), i18n("Pre&view"), this);
+    pb->setToolTip(i18n("<qt>Start a preview scan and show the preview image"));
     pb->setMinimumWidth(100);
     connect(pb, SIGNAL(clicked()), SLOT(slotAcquirePreview()));
     lay->addWidget(pb, 5, 0, Qt::AlignLeft);
 
     pb = new QPushButton(KIcon("scan"), i18n("Star&t Scan"), this);
+    pb->setToolTip(i18n("<qt>Start a scan and save the scanned image"));
     pb->setMinimumWidth(100);
     connect(pb, SIGNAL(clicked()), SLOT(slotStartScan()));
     lay->addWidget(pb, 5, 1, Qt::AlignRight);
@@ -276,14 +278,12 @@ QWidget *ScanParams::createScannerParams()
         frame->addRow(l, w);
 
         // Selection for either virtual scanner or SANE debug
-        QGroupBox *vbg = new QGroupBox(i18n("Testing Mode"), frame);
-        QVBoxLayout *vbgLayout = new QVBoxLayout();
-        vbg->setLayout(vbgLayout);
+        KVBox *vbg = new KVBox( frame);
 
-        QRadioButton *rb1 = new QRadioButton(i18n("SANE Debug (from PNM image)"));
-        vbgLayout->addWidget(rb1);
-        QRadioButton *rb2 = new QRadioButton(i18n("Virtual Scanner (any image format)"));
-        vbgLayout->addWidget(rb2);
+        QRadioButton *rb1 = new QRadioButton(i18n("SANE Debug (from PNM image)"), vbg);
+        rb1->setToolTip(i18n("<qt>Operate in the same way that a real scanner does (including scan area, image processing etc.), but reading from the specified image file. See <a href=\"man:sane-pnm(5)\">sane-pnm(5)</a> for more information."));
+        QRadioButton *rb2 = new QRadioButton(i18n("Virtual Scanner (any image format)"), vbg);
+        rb2->setToolTip(i18n("<qt>Do not perform any scanning or processing, but simply read the speficied image file. This is for testing the image saving, etc."));
 
         if (mScanMode==ScanParams::NormalMode) mScanMode = ScanParams::SaneDebugMode;
         rb1->setChecked(mScanMode==ScanParams::SaneDebugMode);
@@ -295,7 +295,8 @@ QWidget *ScanParams::createScannerParams()
         vbgGroup->addButton(rb2, 1);
         connect(vbgGroup, SIGNAL(buttonClicked(int)), SLOT(slotVirtScanModeSelect(int)));
 
-        frame->addRow(NULL, vbg);
+        l = new QLabel(i18n("Reading mode:"), frame);
+        frame->addRow(l, vbg, NULL, Qt::AlignTop);
 
         // Separator line after these.  Using a KScanGroup with a null text,
         // so that it looks the same as any real group separators following.
@@ -390,11 +391,11 @@ QWidget *ScanParams::createScannerParams()
     }
 
     // Scan size setting
-    area_sel = new ScanSizeSelector(frame, mSaneDevice->getMaxScanSize());
-    connect(area_sel, SIGNAL(sizeSelected(const QRect &)), SLOT(slotScanSizeSelected(const QRect &)));
+    mAreaSelect = new ScanSizeSelector(frame, mSaneDevice->getMaxScanSize());
+    connect(mAreaSelect, SIGNAL(sizeSelected(const QRect &)), SLOT(slotScanSizeSelected(const QRect &)));
     l = new QLabel("Scan &area:", frame);		// make sure it gets an accel
-    l->setBuddy(area_sel->focusProxy());
-    frame->addRow(l, area_sel, NULL, Qt::AlignTop);
+    l->setBuddy(mAreaSelect->focusProxy());
+    frame->addRow(l, mAreaSelect, NULL, Qt::AlignTop);
 
     // Insert another beautification line
     frame->addGroup(new KScanGroup(frame, QString::null));
@@ -526,7 +527,7 @@ void ScanParams::initStartupArea()
     br_y->get(&val2); rect.setHeight(val2-val1);
     emit newCustomScanSize(rect);
 
-    area_sel->selectSize(rect);				// set selector to match
+    mAreaSelect->selectSize(rect);			// set selector to match
 }
 
 
@@ -626,26 +627,21 @@ void ScanParams::slotSourceSelect()
  */
 void ScanParams::slotVirtScanModeSelect(int but)
 {
-    ScanParams::ScanMode mode = static_cast<ScanParams::ScanMode>(but);
+    ScanParams::ScanMode mode;
+    if (but==0) mScanMode = ScanParams::SaneDebugMode;	// SANE Debug
+    else mScanMode = ScanParams::VirtualScannerMode;	// Virtual Scanner
+    const bool enable = (mScanMode==ScanParams::SaneDebugMode);
 
-    if (mode==ScanParams::SaneDebugMode)		// SANE Debug
-    {
-        mScanMode = mode;
-        mSaneDevice->guiSetEnabled( SANE_NAME_HAND_SCANNER, true );
-        mSaneDevice->guiSetEnabled( SANE_NAME_THREE_PASS, true );
-        mSaneDevice->guiSetEnabled( SANE_NAME_GRAYIFY, true );
-        mSaneDevice->guiSetEnabled( SANE_NAME_CONTRAST, true );
-        mSaneDevice->guiSetEnabled( SANE_NAME_BRIGHTNESS, true );
-    }
-    else						// Virtual Scanner
-    {
-        mScanMode = ScanParams::VirtualScannerMode;
-        mSaneDevice->guiSetEnabled( SANE_NAME_HAND_SCANNER, false );
-        mSaneDevice->guiSetEnabled( SANE_NAME_THREE_PASS, false );
-        mSaneDevice->guiSetEnabled( SANE_NAME_GRAYIFY, false );
-        mSaneDevice->guiSetEnabled( SANE_NAME_CONTRAST, false );
-        mSaneDevice->guiSetEnabled( SANE_NAME_BRIGHTNESS, false );
-    }
+    mSaneDevice->guiSetEnabled(SANE_NAME_HAND_SCANNER, enable);
+    mSaneDevice->guiSetEnabled(SANE_NAME_THREE_PASS, enable);
+    mSaneDevice->guiSetEnabled(SANE_NAME_GRAYIFY, enable);
+    mSaneDevice->guiSetEnabled(SANE_NAME_CONTRAST, enable);
+    mSaneDevice->guiSetEnabled(SANE_NAME_BRIGHTNESS, enable);
+    mSaneDevice->guiSetEnabled(SANE_NAME_SCAN_RESOLUTION, enable);
+    mSaneDevice->guiSetEnabled(SANE_NAME_SCAN_X_RESOLUTION, enable);
+    mSaneDevice->guiSetEnabled(SANE_NAME_SCAN_Y_RESOLUTION, enable);
+
+    mAreaSelect->setEnabled(enable);
 }
 
 
@@ -730,7 +726,7 @@ void ScanParams::slotAcquirePreview()
     if (greyPreview!=NULL) greyPreview->get(&gp);
 
     setMaximalScanSize();				// always preview at maximal size
-    area_sel->selectCustomSize(QRect());		// reset selector to reflect that
+    mAreaSelect->selectCustomSize(QRect());		// reset selector to reflect that
 
     stat = mSaneDevice->acquirePreview(gp);
     if (stat!=KScanDevice::Ok) kDebug() << "Error, preview status " << stat;
@@ -973,7 +969,7 @@ void ScanParams::slotNewPreviewRect(const QRect &rect)
     kDebug() << "rect=" << rect;
 
     applyRect(rect);
-    area_sel->selectSize(rect);
+    mAreaSelect->selectSize(rect);
 }
 
 

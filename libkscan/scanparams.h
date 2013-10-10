@@ -304,7 +304,7 @@ private:
 
     AdfBehaviour adf;
     ScanParams::ScanMode mScanMode;
-    ScanSizeSelector *area_sel;
+    ScanSizeSelector *mAreaSelect;
 
     KScanOption *mResolutionBind;
     KScanOption *mSourceSelect;
