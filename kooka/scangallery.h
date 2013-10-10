@@ -61,6 +61,7 @@ public:
 
     void saveHeaderState(const QString &key) const;
     void restoreHeaderState(const QString &key);
+    KUrl saveURL() const;
 
 public slots:
     void slotExportFile();

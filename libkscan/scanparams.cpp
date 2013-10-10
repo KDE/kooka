@@ -199,13 +199,13 @@ bool ScanParams::connectDevice(KScanDevice *newScanDevice, bool galleryMode)
     lay->addWidget(pb, 5, 1, Qt::AlignRight);
 
     /* Initialise the progress dialog */
-    mProgressDialog = new QProgressDialog(i18n("Scanning in progress"),
-                                          i18n("Stop"), 0, 100, NULL);
+    mProgressDialog = new QProgressDialog(QString::null, i18n("Stop"), 0, 100, NULL);
     mProgressDialog->setModal(true);
     mProgressDialog->setAutoClose(true);
     mProgressDialog->setAutoReset(true);
     mProgressDialog->setMinimumDuration(100);
     mProgressDialog->setWindowTitle(i18n("Scanning"));
+    setScanDestination(QString::null);			// reset destination display
 
     connect(mProgressDialog, SIGNAL(canceled()), mSaneDevice, SLOT(slotStopScanning()));
     connect(mSaneDevice, SIGNAL(sigScanProgress(int)), SLOT(slotScanProgress(int)));
@@ -650,6 +650,8 @@ KScanDevice::Status ScanParams::prepareScan(QString *vfp)
 {
     kDebug() << "scan mode=" << mScanMode;
 
+    setScanDestination(QString::null);			// reset progress display
+
     KScanDevice::Status stat = KScanDevice::Ok;
     QString virtfile;
 
@@ -691,6 +693,14 @@ KScanDevice::Status ScanParams::prepareScan(QString *vfp)
 
     if (vfp!=NULL) *vfp = virtfile;
     return (stat);
+}
+
+
+void ScanParams::setScanDestination(const QString &dest)
+{
+    //kDebug() << "scan destination is" << dest;
+    if (dest.isEmpty()) mProgressDialog->setLabelText(i18n("Scan in progress"));
+    else mProgressDialog->setLabelText(i18n("Scan in progress<br><br><filename>%1</filename>", dest));
 }
 
 

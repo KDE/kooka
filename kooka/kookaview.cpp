@@ -875,6 +875,8 @@ void KookaView::slotScanStart(const ImageMetaInfo *info)
             led->setState(KLed::On);
             qApp->processEvents();			// let the change show
         }
+
+        mScanParams->setScanDestination(gallery()->saveURL().pathOrUrl());
     }
 }
 

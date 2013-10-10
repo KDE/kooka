@@ -842,6 +842,14 @@ bool ScanGallery::prepareToSave(const ImageMetaInfo *info)
 }
 
 
+KUrl ScanGallery::saveURL() const
+{
+    if (mSaver==NULL) return (KUrl());
+    // TODO: relative to root
+    return (mSaver->saveURL());
+}
+
+
 /* ----------------------------------------------------------------------- */
 /* This slot takes a new scanned Picture and saves it.  */
 

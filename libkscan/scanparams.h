@@ -108,6 +108,13 @@ public:
      **/
     KLed *operationLED() const		{ return (mLed); }
 
+    /**
+     * Set the scan destination to be displayed in the progress dialogue.
+     *
+     * @param dest Destination to be shown
+     **/
+    void setScanDestination(const QString &dest);
+
 public slots:
     /**
      * Start to acquire a scan preview.  This is internally connected

@@ -230,7 +230,14 @@ public:
     static QString picTypeAsString(ImageMetaInfo::ImageType type);
 
     /**
-     * Get the location where the image was saved to.
+     * Get the location where the image will be saved to.
+     *
+     * @return Save location
+     **/
+    KUrl saveURL() const			{ return (mSaveUrl); }
+
+    /**
+     * Get the location where the previous image was saved to.
      *
      * @return Save location
      **/
