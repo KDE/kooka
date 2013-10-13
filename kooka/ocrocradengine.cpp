@@ -248,7 +248,7 @@ export of the OCR results into a so called ORF, which simply means Ocr Result Fi
 The ORF Format is a special file format that contains OCR results like the detected
 characters and their position on the source image in a simply parseable format.
 Frontend programs can read the file and retrieve information about the OCR engine
-run and show up the the results visually. 
+run and show up the results visually. 
 
 All lines starting with '#' are ignored.
 
