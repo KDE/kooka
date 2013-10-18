@@ -283,7 +283,7 @@ QWidget *ScanParams::createScannerParams()
         QRadioButton *rb1 = new QRadioButton(i18n("SANE Debug (from PNM image)"), vbg);
         rb1->setToolTip(i18n("<qt>Operate in the same way that a real scanner does (including scan area, image processing etc.), but reading from the specified image file. See <a href=\"man:sane-pnm(5)\">sane-pnm(5)</a> for more information."));
         QRadioButton *rb2 = new QRadioButton(i18n("Virtual Scanner (any image format)"), vbg);
-        rb2->setToolTip(i18n("<qt>Do not perform any scanning or processing, but simply read the speficied image file. This is for testing the image saving, etc."));
+        rb2->setToolTip(i18n("<qt>Do not perform any scanning or processing, but simply read the specified image file. This is for testing the image saving, etc."));
 
         if (mScanMode==ScanParams::NormalMode) mScanMode = ScanParams::SaneDebugMode;
         rb1->setChecked(mScanMode==ScanParams::SaneDebugMode);
@@ -658,7 +658,7 @@ KScanDevice::Status ScanParams::prepareScan(QString *vfp)
     mSaneDevice->getCurrentFormat(&format, &depth);
     if (depth==1 && format!=SANE_FRAME_GRAY)		// 1-bit scan depth in colour?
     {
-        KMessageBox::sorry(this, i18n("1-bit depth scan cannot be done in colour"));
+        KMessageBox::sorry(this, i18n("1-bit depth scan cannot be done in color"));
         return (KScanDevice::ParamError);
     }
     else if (depth==16)
