@@ -139,6 +139,9 @@ public:
 
 
 private:
+    void init();
+
+private:
     int 		m_subImages;
     bool                loadTiffDir( const QString&, int );
 

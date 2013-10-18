@@ -43,41 +43,45 @@ extern "C"
 
 
 KookaImage::KookaImage()
-    : QImage(),
-      m_subImages(-1),
-      m_subNo(0),
-      m_parent(NULL),
-      m_fileBound(false),
-      m_tileCols(0)
+    : QImage()
 {
+    init();
     kDebug();
 }
 
 
 /* constructor for subimages */
 KookaImage::KookaImage(int subNo, KookaImage *p)
-    : QImage(),
-      m_subImages(-1),
-      m_subNo(subNo),
-      m_parent(p),
-      m_fileItem(NULL),
-      m_fileBound(false),
-      m_tileCols(0)
+    : QImage()
 {
+    init();
     kDebug() << "subimageNo" << subNo;
+    m_parent = p;
+    m_subNo = subNo;
 }
 
 
 KookaImage::KookaImage(const QImage &img)
-    : QImage(img),
-      m_subImages(0)
+    : QImage(img)
 {
-    kDebug();
+    init();
+    kDebug() << "image" << img.size();
 }
 
 
 KookaImage::~KookaImage()
 {
+}
+
+
+void KookaImage::init()
+{
+    m_subImages = 0;
+    m_subNo = 0;
+    m_parent = NULL;
+    m_fileItem = NULL;
+    m_fileBound = false;
+    m_tileCols = 0;
 }
 
 
