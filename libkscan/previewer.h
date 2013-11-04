@@ -23,7 +23,6 @@
 #include "libkscanexport.h"
 
 #include <qwidget.h>
-#include <qrect.h>
 #include <qvector.h>
 
 #include <kruler.h>
@@ -32,6 +31,9 @@
   *@author Klaas Freitag
   */
 class QLabel;
+class QGroupBox;
+class QSlider;
+class QComboBox;
 
 class KScanDevice;
 
@@ -45,9 +47,9 @@ class KSCAN_EXPORT Previewer : public QWidget
 
 public:
     Previewer(QWidget *parent = NULL);
-    ~Previewer();
+    virtual ~Previewer();
 
-    ImageCanvas *getImageCanvas() const		{ return (img_canvas); }
+    ImageCanvas *getImageCanvas() const		{ return (mCanvas); }
 
     bool setPreviewImage(const QImage &image);
     void newImage(const QImage *image);
@@ -76,27 +78,39 @@ private:
     void setScannerBgIsWhite(bool isWhite);
 
     void updateSelectionDims();
-    void findSelection();
 
-    bool imagePiece(QVector<long> src,int &start,int &end);
+    void findAutoSelection();
+    void resetAutoSelection();
+    void setAutoSelection(bool on);
+    bool imagePiece(const QVector<long> &src, int *start, int *end);
 
-    QLabel *selSize1;
-    QLabel *selSize2;
-    SizeIndicator *fileSize;
+private:
+    ImageCanvas *mCanvas;
+    QImage mPreviewImage;
 
-    ImageCanvas *img_canvas;
-    QImage m_previewImage;
+    int mBedWidth,mBedHeight;
+    int mScanResX,mScanResY;
+    int mBytesPerPix;
+    double mSelectionWidthMm,mSelectionHeightMm;
+    KRuler::MetricStyle mDisplayUnit;
 
-    KRuler::MetricStyle displayUnit;
-    int bedWidth,bedHeight;
+    QLabel *mSelSizeLabel1;
+    QLabel *mSelSizeLabel2;
+    SizeIndicator *mFileSizeLabel;
+    QSlider *mSliderThresh;
+    QSlider *mSliderDust;
+    QComboBox *mBackgroundCombo;
+    QGroupBox *mAutoSelGroup;
 
-    int  scanResX, scanResY;
-    int  m_bytesPerPix;
-    double selectionWidthMm;
-    double selectionHeightMm;
+    KScanDevice *mScanDevice;
 
-    class PreviewerPrivate;
-    PreviewerPrivate *d;
+    bool mDoAutoSelection;
+    int mAutoSelThresh;
+    int mAutoSelDustsize;
+    bool mBgIsWhite;
+
+    QVector<long> mHeightSum;
+    QVector<long> mWidthSum;
 };
 
 #endif							// PREVIEWER_H
