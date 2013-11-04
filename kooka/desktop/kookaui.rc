@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="Kooka" version="6">
+<kpartgui name="Kooka" version="7">
 
  <MenuBar>
   <Menu name="file" noMerge="1"><text>&amp;File</text>
@@ -50,7 +50,7 @@
    <Action name="upsitedown"/>
   </Menu>
 
-  <Menu name="settings"><text>S&amp;ettings</text>
+  <Menu name="settings"><text>&amp;Settings</text>
    <Action name="settings_show_docks" append="show_merge"/>
    <Separator/>
    <Action name="enable_msgs" append="save_merge"/>
@@ -85,6 +85,5 @@
   <Action name="ocrImage"/>
   <Action name="ocrImageSelect"/>
  </ToolBar>
-
 
 </kpartgui>
