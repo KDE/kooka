@@ -23,20 +23,28 @@
 #include <qcombobox.h>
 #include <qradiobutton.h>
 #include <qbuttongroup.h>
+#ifdef HAVE_LIBPAPER
+#include <qvector.h>
+#endif
 
 #include <klocale.h>
 #include <kdebug.h>
 #include <kvbox.h>
 
+#ifdef HAVE_LIBPAPER
+extern "C" {
+#include <paper.h>
+}
+#endif
 
-// TODO: use libpaper [see paperconf(3)] to get this information
+
 struct PaperSize
 {
     const char *name;					// no I18N needed here?
     int width,height;					// in portrait orientation
 };
 
-static const PaperSize sizes[] =
+static const PaperSize defaultSizes[] =
 {
     { "ISO A3",		297,420 },
     { "ISO A4",		210,297 },
@@ -49,14 +57,54 @@ static const PaperSize sizes[] =
     { NULL,		  0,  0 }
 };
 
+static const PaperSize *sizes = NULL;
+#ifdef HAVE_LIBPAPER
+static QVector<PaperSize> papers;
+#endif
 
-ScanSizeSelector::ScanSizeSelector(QWidget *parent,const QSize &bedSize)
+
+ScanSizeSelector::ScanSizeSelector(QWidget *parent, const QSize &bedSize)
     : KVBox(parent)
 {
     kDebug() << "bed size" << bedSize;
 
     bedWidth = bedSize.width();
     bedHeight = bedSize.height();
+
+    if (sizes==NULL)					// initialise paper data
+    {
+#ifdef HAVE_LIBPAPER
+        paperinit();					// start to access library
+
+        PaperSize ps;
+        for (const struct paper *p = paperfirst(); p!=NULL; p = papernext(p))
+        {						// iterate over defined papers
+            //kDebug() << "paper at" << ((void*) p)
+            //         << "name" << papername(p)
+            //         << "width" << paperpswidth(p)
+            //         << "height" << paperpsheight(p);
+
+            // The next line is safe, because a unique pointer (presumably
+            // into libpaper's internally allocated data) is returned for
+            // each paper size.
+            ps.name = papername(p);
+            // These sizes are in PostScript points (1/72 inch).
+            ps.width = int(paperpswidth(p)/72*25.4+0.5);
+            ps.height = int(paperpsheight(p)/72*25.4+0.5);
+            papers.append(ps);
+        }
+
+        kDebug() << "got" << papers.size() << "paper sizes from libpaper";
+
+        ps.name = NULL;					// finish with null terminator
+        papers.append(ps);
+
+        paperdone();					// finished accessing library
+        sizes = papers.data();				// set pointer to data
+#else
+        sizes = defaultSizes;				// set pointer to defaults
+#endif
+    }
 
     m_sizeCb = new QComboBox(this);
     m_sizeCb->setToolTip(i18n("<qt>Set the size of the scanned area"));
@@ -96,7 +144,7 @@ ScanSizeSelector::~ScanSizeSelector()
 }
 
 
-const PaperSize *findPaperSize(QString sizename)
+static const PaperSize *findPaperSize(const QString &sizename)
 {
     for (int i = 0; sizes[i].name!=NULL; ++i)		// search for that size
     {

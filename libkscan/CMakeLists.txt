@@ -1,8 +1,26 @@
 
 project(kooka4)
 
+########### dependencies ###############
+
+# libpaper (at least in Gentoo Linux) provides neither a
+# Find<package>.cmake or a pkg-config file.
+find_library(LIBPAPER_LIB NAMES "libpaper" "libpaper.so")
+find_file(LIBPAPER_HDR "paper.h")
+if (LIBPAPER_LIB AND LIBPAPER_HDR)
+  message(STATUS "libpaper library: ${LIBPAPER_LIB}")
+  message(STATUS "libpaper header: ${LIBPAPER_HDR}")
+  set(HAVE_LIBPAPER 1)
+else (LIBPAPER_LIB AND LIBPAPER_HDR)
+  message(STATUS "libpaper library not found, using built-in list of paper sizes")
+endif (LIBPAPER_LIB AND LIBPAPER_HDR)
+
+########### subdirectories ###############
+
 add_subdirectory(pics)
 add_subdirectory(desktop)
+
+########### setup ###############
 
 add_definitions(-DMAKE_KSCAN_LIB)
 add_definitions(-DKDE4)
@@ -10,14 +28,13 @@ add_definitions(-DKDE_DEFAULT_DEBUG_AREA=29000)
 if (HAVE_SANE)
   add_definitions(-DHAVE_SANE)
   add_definitions(-DSANE_VERSION=\"${SANE_VERSION}\")
-endif (HAVE_SANE)
-
-include_directories(..)
-
-if (HAVE_SANE)
   include_directories(${SANE_INCLUDES})
 endif (HAVE_SANE)
-
+if (HAVE_LIBPAPER)
+  add_definitions(-DHAVE_LIBPAPER)
+  get_filename_component(LIBPAPER_INCLUDES ${LIBPAPER_HDR} PATH)
+  include_directories(${LIBPAPER_INCLUDES})
+endif (HAVE_LIBPAPER)
 
 ########### library ###############
 
@@ -54,6 +71,9 @@ target_link_libraries(libkscan
 if (HAVE_SANE)
   target_link_libraries(libkscan ${SANE_LIBRARIES})
 endif (HAVE_SANE)
+if (HAVE_LIBPAPER)
+  target_link_libraries(libkscan ${LIBPAPER_LIB})
+endif (HAVE_LIBPAPER)
 
 # libkscan in kdegraphics 3.5 was version 1, SVN work/kooka-kde3 was version 2
 set_target_properties(libkscan PROPERTIES VERSION 3.0.0 SOVERSION 3)
@@ -69,6 +89,6 @@ add_custom_target(clobber
   COMMAND sh -c "rm -f config-*.h"
 )
 
-########### install files ###############
+########### installation ###############
 
 install(TARGETS libkscan ${INSTALL_TARGETS_DEFAULT_ARGS})
