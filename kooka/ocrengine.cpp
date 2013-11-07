@@ -223,7 +223,7 @@ void OcrEngine::finishedOCRVisible(bool success)
                      << "size" << m_resultImage->size();
 
             /* The image canvas is present. Set it to our image */
-            m_imgCanvas->newImageHoldZoom(m_resultImage);
+            m_imgCanvas->newImage(m_resultImage, true);
             m_imgCanvas->setReadOnly(true);
 
             /* now handle double clicks to jump to the word */
@@ -356,36 +356,16 @@ void OcrEngine::startOCRProcess()
 void OcrEngine::setImageCanvas(ImageCanvas *canvas)
 {
     m_imgCanvas = canvas;
-    m_imgCanvas->widget()->installEventFilter(this);	// filter on the scrolled widget
+    connect(m_imgCanvas, SIGNAL(doubleClicked(const QPoint &)), SLOT(slotImagePosition(const QPoint &)));
 }
 
 
-bool OcrEngine::eventFilter(QObject *object, QEvent *event)
+void OcrEngine::slotImagePosition(const QPoint &p)
 {
-    if (!m_trackingActive) return (false);		// not interested
-    if (m_imgCanvas==NULL) return (false);		// no image canvas
-							// not a double click
-    if (event->type()!=QEvent::MouseButtonDblClick) return (false);
-
-    QWidget *w = static_cast<QWidget *>(object);
-    if (w!=m_imgCanvas->widget()) return (false);	// not on our image
-
-    QMouseEvent *mev = static_cast<QMouseEvent *>(event);
-    QPoint p = mev->pos();
-
-    int scale = m_imgCanvas->getScaleFactor();
-    //kDebug() << "On image at at" << p << "scale" << scale;
-    if (scale!=100)					// not at actual size
-    {
-        // Scale is e.g. 50 that means tha the image is only displayed at
-        // half size, thus the clicked coordinates must be multiplied by 2
-        // to get the image coordinates.
-        p *= (100.0/scale);				// rounds to nearest
-    }
-
+    if (!m_trackingActive) return;			// not interested
+    // ImageCanvas did the coordinate conversion.
     // OcrResEdit does all of the rest of the work.
     emit selectWord(p);
-    return (true);					// event was handled
 }
 
 
@@ -404,8 +384,8 @@ void OcrEngine::slotHighlightWord(const QRect &r)
 
     KColorScheme sch(QPalette::Active, KColorScheme::Selection);
     QColor col = sch.background(KColorScheme::NegativeBackground).color();
-    m_imgCanvas->setHighlightStyle(ImageCanvas::Box, QPen(col, 2));
-    m_currHighlight = m_imgCanvas->highlight(r, true);
+    m_imgCanvas->setHighlightStyle(ImageCanvas::HighlightBox, QPen(col, 2));
+    m_currHighlight = m_imgCanvas->addHighlight(r, true);
 }
 
 
@@ -420,8 +400,8 @@ void OcrEngine::slotScrollToWord(const QRect &r)
 
     KColorScheme sch(QPalette::Active, KColorScheme::Selection);
     QColor col = sch.background(KColorScheme::NeutralBackground).color();
-    m_imgCanvas->setHighlightStyle(ImageCanvas::Underline, QPen(col, 2));
-    m_currHighlight = m_imgCanvas->highlight(r, true);
+    m_imgCanvas->setHighlightStyle(ImageCanvas::HighlightUnderline, QPen(col, 2));
+    m_currHighlight = m_imgCanvas->addHighlight(r, true);
 }
 
 

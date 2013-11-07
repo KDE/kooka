@@ -963,7 +963,7 @@ void KookaView::slotCreateNewImgFromSelection()
 
 void KookaView::slotTransformImage()
 {
-    if (imageViewer()->readOnly())
+    if (imageViewer()->isReadOnly())
     {
         emit signalChangeStatusbar(i18n("Cannot transform, image is read-only"));
         return;
@@ -1176,11 +1176,11 @@ void KookaView::slotImageViewerAction(int act)
 {
     if (mCurrentTab==KookaView::TabScan)		// Scan
     {
-        mPreviewCanvas->getImageCanvas()->slotUserAction(act);
+        mPreviewCanvas->getImageCanvas()->performUserAction(static_cast<ImageCanvas::UserAction>(act));
     }
     else						// Gallery or OCR
     {
-        mImageCanvas->slotUserAction(act);
+        mImageCanvas->performUserAction(static_cast<ImageCanvas::UserAction>(act));
     }
 }
 

@@ -273,11 +273,13 @@ void ScanSizeSelector::selectSize(const QRect &rect)
 
     bool found = false;
 
-    // TODO: replace with
-    //   if (rect.isValid())
-    // to not change size if rectangle moved around
-    // (but need to get 100% accuracy in the reported 'rect' first)
-    if (rect.isValid() && rect.left()==0 && rect.top()==0)
+    // Originally the test was:
+    //
+    //   if (rect.isValid() && rect.left()==0 && rect.top()==0)
+    //
+    // but this one allows the size to be detected even if the rectangle
+    // is moved around (assuming that the size reported is 100% accurate).
+    if (rect.isValid())
     {							// can this be a preset size?
         for (int i = 0; sizes[i].name!=NULL; ++i)	// search for preset that size
         {

@@ -91,7 +91,7 @@ Previewer::Previewer(QWidget *parent)
     gl->setColumnStretch(1, 1);
 
     /*Signals: Control the custom-field and show size of selection */
-    connect(mCanvas,SIGNAL(newRect(const QRect &)),SLOT(slotNewAreaSelected(const QRect &)));
+    connect(mCanvas, SIGNAL(newRect(const QRectF &)), SLOT(slotNewAreaSelected(const QRectF &)));
 
     QLabel *l;
     QVBoxLayout *vb;
@@ -247,21 +247,23 @@ void Previewer::setDisplayUnit(KRuler::MetricStyle unit)
 }
 
 
-// sent from ScanParams, selection chosen by user
+// Signal sent from ScanParams, selection chosen by user
+// from scan size combo (specified in integer millimetres)
 void Previewer::slotNewCustomScanSize(const QRect &rect)
 {
     kDebug() << "rect" << rect;
 
     QRect r = rect;
+    QRectF newRect;
     if (r.isValid())
     {
         mSelectionWidthMm = r.width();
         mSelectionHeightMm = r.height();
-							// convert mm -> bedsize/1000
-        r.setLeft(static_cast<int>(1000.0*r.left()/mBedWidth+0.5));
-        r.setRight(static_cast<int>(1000.0*r.right()/mBedWidth+0.5));
-        r.setTop(static_cast<int>(1000.0*r.top()/mBedHeight+0.5));
-        r.setBottom(static_cast<int>(1000.0*r.bottom()/mBedHeight+0.5));
+
+        newRect.setLeft(double(r.left())/mBedWidth);	// convert mm -> bedsize factor
+        newRect.setRight(double(r.right())/mBedWidth);
+        newRect.setTop(double(r.top())/mBedHeight);
+        newRect.setBottom(double(r.bottom())/mBedHeight);
     }
     else
     {
@@ -269,7 +271,7 @@ void Previewer::slotNewCustomScanSize(const QRect &rect)
         mSelectionHeightMm = mBedHeight;
     }
 
-    mCanvas->setSelectionRect(r);
+    mCanvas->setSelectionRect(newRect);
     updateSelectionDims();
 }
 
@@ -293,22 +295,20 @@ void Previewer::slotNewScanMode(int bytes_per_pix)
 }
 
 
-/* This slot is called with the new dimension for the selection
- * in values between 0..1000. It emits signals, that redraw the
- * size labels.
- */
-
-void Previewer::slotNewAreaSelected(const QRect &rect)
+//  Signal sent from ImageCanvas, the user has drawn a new selection box
+//  (specified relative to the preview image size).  This is converted
+//  to millimetres and re-emitted as signal newPreviewRect().
+void Previewer::slotNewAreaSelected(const QRectF &rect)
 {
     kDebug() << "rect" << rect << "width" << mBedWidth << "height" << mBedHeight;
 
     if (rect.isValid())
-    {							// convert bedsize/1000 -> mm
+    {							// convert bedsize -> mm
         QRect r;
-        r.setLeft(static_cast<int>(rect.left()/1000.0*mBedWidth+0.5));
-        r.setRight(static_cast<int>(rect.right()/1000.0*mBedWidth+0.5));
-        r.setTop(static_cast<int>(rect.top()/1000.0*mBedHeight+0.5));
-        r.setBottom(static_cast<int>(rect.bottom()/1000.0*mBedHeight+0.5));
+        r.setLeft(int(rect.left()*mBedWidth+0.5));
+        r.setRight(int(rect.right()*mBedWidth+0.5));
+        r.setTop(int(rect.top()*mBedHeight+0.5));
+        r.setBottom(int(rect.bottom()*mBedHeight+0.5));
         kDebug() << "new rect" << r;
         emit newPreviewRect(r);
 
@@ -491,15 +491,14 @@ void Previewer::slotAutoSelToggled(bool isOn)
         }
     }
 
-    setAutoSelection(isOn);				// set GUI appropriately
-
-    // TODO: don't need rect, use hasSelection() with new ImageCanvas
-    QRect r = mCanvas->selectedRect();
-    kDebug() << "rect is" << r;
-    if (isOn && r.width()<2 && r.height()<2)	/* There is no selection yet */
+    /* Store configuration */
+    mDoAutoSelection = isOn;
+    if (mScanDevice!=NULL) mScanDevice->storeConfig(CFG_AUTOSEL_ON,
+                                                    (isOn ? "on" : "off"));
+    if (isOn && !mCanvas->hasSelectedRect())		// no selection yet?
     {
             /* if there is already an image, check, if the bg-color is set already */
-            if (mCanvas->rootImage())
+            if (mCanvas->hasImage())
             {
                 kDebug() << "No selection, try to find one";
                 findAutoSelection();
@@ -625,19 +624,18 @@ void Previewer::findAutoSelection()
 #endif
     int start;
     int end;
-    QRect r;
+    QRectF r;
 
-    /** scale to 0..1000 range **/
     if (imagePiece(mHeightSum, &start, &end))
     {
-        r.setTop(1000*start/iHeight);
-        r.setBottom(1000*end/iHeight);
+        r.setTop(double(start)/iHeight);
+        r.setBottom(double(end)/iHeight);
     }
 
     if (imagePiece(mWidthSum, &start, &end))
     {
-        r.setLeft(1000*start/iWidth);
-        r.setRight(1000*end/iWidth);
+        r.setLeft(double(start)/iWidth);
+        r.setRight(double(end)/iWidth);
     }
 
     kDebug() << "Autodetection result" << r;

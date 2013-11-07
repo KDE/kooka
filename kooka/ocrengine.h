@@ -142,12 +142,6 @@ signals:
     void startSpellCheck(bool interactive, bool background);
 
 protected:
-    /**
-     * Event handler to handle the mouse events to the image viewer showing the
-     * ocr result image
-     */
-    bool eventFilter(QObject *object,QEvent *event);
-
     void finishedOCRVisible(bool success);
     virtual OcrBaseDialog *createOCRDialog(QWidget *parent) = 0;
 
@@ -172,6 +166,12 @@ protected:
 protected slots:
     void slotClose();
     void slotStopOCR();
+
+    /**
+     * Handle mouse double clicks on the image viewer showing the
+     * OCR result image.
+     */
+    void slotImagePosition(const QPoint &p);
 
 private:
     virtual void startProcess(OcrBaseDialog *dia, const KookaImage *img) = 0;

@@ -925,6 +925,8 @@ void ScanParams::setEditCustomGammaTableState()
 }
 
 
+// This assumes that the SANE unit for the scan area is millimetres.
+// All scanners out there appear to do this.
 void ScanParams::applyRect(const QRect &rect)
 {
     kDebug() << "rect=" << rect;
@@ -980,7 +982,7 @@ void ScanParams::applyRect(const QRect &rect)
 
 
 //  The previewer is telling us that the user has drawn or auto-selected a
-//  new preview area.
+//  new preview area (specified in millimetres).
 void ScanParams::slotNewPreviewRect(const QRect &rect)
 {
     kDebug() << "rect=" << rect;

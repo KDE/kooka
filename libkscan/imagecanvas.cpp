@@ -1,181 +1,213 @@
-/* This file is part of the KDE Project
-   Copyright (C) 1999 Klaas Freitag <freitag@suse.de>
-
-   This library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Library General Public
-   License as published by the Free Software Foundation; either
-   version 2 of the License, or (at your option) any later version.
-
-   This library is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   Library General Public License for more details.
-
-   You should have received a copy of the GNU Library General Public License
-   along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
-   Boston, MA 02110-1301, USA.
-*/
+/************************************************************************
+ *									*
+ *  This file is part of libkscan, a KDE scanning library.		*
+ *									*
+ *  Copyright (C) 2013 Jonathan Marten <jjm@keelhaul.me.uk>		*
+ *  Copyright (C) 1999 Klaas Freitag <freitag@suse.de>			*
+ *									*
+ *  This library is free software; you can redistribute it and/or	*
+ *  modify it under the terms of the GNU Library General Public		*
+ *  License as published by the Free Software Foundation and appearing	*
+ *  in the file COPYING included in the packaging of this file;		*
+ *  either version 2 of the License, or (at your option) any later	*
+ *  version.								*
+ *									*
+ *  This program is distributed in the hope that it will be useful,	*
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of	*
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the	*
+ *  GNU General Public License for more details.			*
+ *									*
+ *  You should have received a copy of the GNU General Public License	*
+ *  along with this program;  see the file COPYING.  If not, write to	*
+ *  the Free Software Foundation, Inc., 51 Franklin Street,		*
+ *  Fifth Floor, Boston, MA 02110-1301, USA.				*
+ *									*
+ ************************************************************************/
 
 #include "imagecanvas.h"
 #include "imagecanvas.moc"
 
+#include <QGraphicsScene>
+#include <QGraphicsPixmapItem>
+#include <QTransform>
+
 #include <qimage.h>
 #include <qpainter.h>
-#include <qpixmap.h>
 #include <qstyle.h>
 #include <qevent.h>
-#include <qlabel.h>
-#include <qscrollbar.h>
+#include <qapplication.h>
 
 #include <klocale.h>
-#include <kapplication.h>
 #include <kdebug.h>
 #include <kmenu.h>
 
 #include "imgscaledialog.h"
 
 
-#undef HOLD_SELECTION
+//  Parameters for display and selection
+//  ------------------------------------
+
+#undef HOLD_SELECTION					// hold selection over new image
+
+const int MIN_AREA_WIDTH = 2;				// minimum size of selection area
+const int MIN_AREA_HEIGHT = 2;
+const int DELTA = 3;					// tolerance for mouse hits
+const int TIMER_INTERVAL = 100;				// animation timer interval
+
+const int DASH_DASH = 4;				// length of drawn dashes
+const int DASH_SPACE = 4;				// length of drawn spaces
+
+const int DASH_LENGTH = (DASH_DASH+DASH_SPACE);
 
 
-const int MIN_AREA_WIDTH = 3;
-const int MIN_AREA_HEIGHT = 3;
-const int DELTA = 3;
-const int TIMER_INTERVAL = 100;
+//  HighlightItem -- A graphics item to maintain and draw a single
+//  highlight rectangle.
 
-
-
-//  ImageCanvasWidget -- Displays a scaled pixmap and any number of
-//  highlight rectangles over the top of it.
-
-// TODO: this needs to handle the selection rectangle too, as otherwise it
-// erases the highlights (see ImageCanvas::draw*AreaBorder() for why).  Also
-// needs to be done in a paint event, so that the Qt::WA_PaintOutsidePaintEvent
-// can be eliminated.
-
-class ImageCanvasWidget : public QWidget
+class HighlightItem : public QGraphicsItem
 {
 public:
-    ImageCanvasWidget(QWidget *parent);
+    HighlightItem(const QRect &rect,
+                  ImageCanvas::HighlightStyle style,
+                  const QPen &pen, const QBrush &brush,
+                  QGraphicsItem *parent = NULL);
+    virtual ~HighlightItem()				{}
 
-    void setScaleMatrix(const QMatrix &m)	{ mScaleMatrix = m; };
-    void setPixmap(const QPixmap &p)		{ mPixmap = p; };
+    virtual QRectF boundingRect() const;
 
-    int addHighlightRect(const QRect &r);
-    void removeHighlightRect(int idx);
-    void removeHighlightRect(const QRect &r);
-    void removeAllHighlights();
-    void setHighlightStyle(ImageCanvas::HighlightStyle style, const QPen &pen, const QBrush &brush);
-
-    QSize sizeHint() const			{ return (mPixmap.size()); };
-
-protected:
-    void paintEvent(QPaintEvent *ev);
+    virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
+                       QWidget *widget = NULL);
 
 private:
-    QList<QRect> mHighlightRects;
-    QMatrix mScaleMatrix;
-    QPixmap mPixmap;
+    QRectF mRectangle;
+
+    ImageCanvas::HighlightStyle mStyle;
     QPen mPen;
     QBrush mBrush;
-    ImageCanvas::HighlightStyle mStyle;
 };
 
 
-ImageCanvasWidget::ImageCanvasWidget(QWidget *parent)
-    : QWidget(parent)
+HighlightItem::HighlightItem(const QRect &rect,
+                             ImageCanvas::HighlightStyle style,
+                             const QPen &pen, const QBrush &brush,
+                             QGraphicsItem *parent)
+    : QGraphicsItem(parent)
 {
-}
-
-
-int ImageCanvasWidget::addHighlightRect(const QRect &r)
-{
-    int idx = mHighlightRects.indexOf(r);
-    if (idx>-1) return (idx);				// already present
-
-    mHighlightRects.append(r);
-    update();
-
-    return (mHighlightRects.count()-1);			// index of just added
-}
-
-
-void ImageCanvasWidget::removeHighlightRect(int idx)
-{
-    if (idx>=mHighlightRects.count())
-    {
-        kDebug() << "Invalid index" << idx;
-        return;
-    }
-
-    mHighlightRects.removeAt(idx);
-    update();
-}
-
-
-void ImageCanvasWidget::removeHighlightRect(const QRect &r)
-{
-    mHighlightRects.removeOne(r);
-    update();
-}
-
-
-void ImageCanvasWidget::removeAllHighlights()
-{
-    mHighlightRects.clear();
-    update();
-}
-
-
-void ImageCanvasWidget::setHighlightStyle(ImageCanvas::HighlightStyle style,
-                                          const QPen &pen, const QBrush &brush)
-{
+    mRectangle = rect;
     mStyle = style;
     mPen = pen;
     mBrush = brush;
+
+    mPen.setCosmetic(true);
 }
 
 
-void ImageCanvasWidget::paintEvent(QPaintEvent *ev)
+QRectF HighlightItem::boundingRect() const
 {
-    QPainter p(this);
-
-    style()->drawItemPixmap(&p, contentsRect(), Qt::AlignLeft|Qt::AlignTop, mPixmap);
-
-    //kDebug() << "painting" << mHighlightRects.count() << "highlights";
-    if (!mHighlightRects.isEmpty())
-    {
-        for (QList<QRect>::const_iterator it = mHighlightRects.constBegin();
-             it!=mHighlightRects.constEnd(); ++it)
-        {
-            QRect r = (*it);
-            r.adjust(-4, -4, 4, 4);			// expand a bit before scaling
-            QRect targetRect = mScaleMatrix.mapRect(r);
-
-            p.setPen(mPen);
-            p.setBrush(mBrush);
-            switch (mStyle)
-            {
-case ImageCanvas::Box:
-                p.drawRect(targetRect);
-                break;
-
-case ImageCanvas::Underline:
-                p.drawLine(targetRect.left(), targetRect.bottom(), targetRect.right(), targetRect.bottom());
-                break;
-            }
-        }
-    }
+    return (mRectangle);
 }
 
+
+void HighlightItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+{
+    painter->setPen(mPen);
+    painter->setBrush(mBrush);
+
+    if (mStyle==ImageCanvas::HighlightBox) painter->drawRect(mRectangle);
+    else painter->drawLine(mRectangle.left(), mRectangle.bottom(),
+                           mRectangle.right(), mRectangle.bottom());
+}
+
+
+//  SelectionItem -- A graphics item to maintain and draw the
+//  selection rectangle.
+//
+//  There is only one of these items on the canvas.  Its bounding
+//  rectangle, stored here in scene coordinates (i.e. image pixels)
+//  is the master reference for the selection rectangle.
+
+class SelectionItem : public QGraphicsItem
+{
+public:
+    SelectionItem(QGraphicsItem *parent = NULL);
+    virtual ~SelectionItem()				{}
+
+    virtual QRectF boundingRect() const;
+    void setRect(const QRectF &rect);
+
+    void stepDashPattern();
+    void resetDashPattern();
+
+    virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
+                       QWidget *widget = NULL);
+
+private:
+    QRectF mRectangle;
+    int mDashOffset;
+};
+
+
+SelectionItem::SelectionItem(QGraphicsItem *parent)
+    : QGraphicsItem(parent)
+{
+    kDebug();
+
+    mDashOffset = 0;
+}
+
+
+QRectF SelectionItem::boundingRect() const
+{
+    return (mRectangle);
+}
+
+
+void SelectionItem::setRect(const QRectF &rect)
+{
+    prepareGeometryChange();
+    mRectangle = rect;
+}
+
+
+void SelectionItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+{
+    painter->setBrush(QBrush());
+
+    QPen pen1(Qt::white);				// solid white box behind
+    painter->setPen(pen1);
+    painter->drawRect(mRectangle);
+
+    QPen pen2(Qt::CustomDashLine);			// dashed black box on top
+    QVector<qreal> dashes(2);
+    dashes[0] = DASH_DASH;
+    dashes[1] = DASH_SPACE;
+    pen2.setDashPattern(dashes);
+    pen2.setDashOffset(mDashOffset);
+    painter->setPen(pen2);
+    painter->drawRect(mRectangle);
+}
+
+
+// Counting backwards so that the "ants" march clockwise
+// (at least with the current Qt painting implementation)
+void SelectionItem::stepDashPattern()
+{
+    --mDashOffset;
+    if (mDashOffset<0) mDashOffset = (DASH_LENGTH-1);
+    update();
+}
+
+
+void SelectionItem::resetDashPattern()
+{
+    mDashOffset = 0;
+}
 
 
 //  ImageCanvas -- Scrolling area containing the pixmap/highlight widget.
 //  Selected areas are drawn over the top of that.
 
 ImageCanvas::ImageCanvas(QWidget *parent, const QImage *start_image)
-    : QScrollArea(parent)
+    : QGraphicsView(parent)
 {
     setObjectName("ImageCanvas");
 
@@ -188,36 +220,29 @@ ImageCanvas::ImageCanvas(QWidget *parent, const QImage *start_image)
     mReadOnly = false;
     mScaleType = ImageCanvas::ScaleUnspecified;
     mDefaultScaleType = ImageCanvas::ScaleOriginal;
-    mAcquired = false;					// no image yet
     mScaleFactor = 100;					// means original size
     mMaintainAspect = true;
 
-    mSelected.setWidth(0);
-    mSelected.setHeight(0);
+    setAlignment(Qt::AlignLeft|Qt::AlignTop);
 
-    mImage = start_image;
+    mScene = new QGraphicsScene(this);
+    setScene(mScene);
+
+    mPixmapItem = new QGraphicsPixmapItem;
+    mPixmapItem->setShapeMode(QGraphicsPixmapItem::BoundingRectShape);
+    mScene->addItem(mPixmapItem);
+
+    mSelectionItem = new SelectionItem;
+    mSelectionItem->setVisible(false);			// not displayed yet
+    mScene->addItem(mSelectionItem);
+
     mMoving = ImageCanvas::MoveNone;
     mCurrentCursor = Qt::ArrowCursor;
 
-    if (mImage!=NULL && !mImage->isNull())
-    {
-	kDebug() << "size of image is" << mImage->size();
-        mAcquired = true;
-    }
-
-    mPixmapLabel = new ImageCanvasWidget(this);
-    setWidget(mPixmapLabel);
-    updateScaledPixmap();
+    newImage(start_image);
 
     setCursorShape(Qt::CrossCursor);
-    mAreaState1 = mAreaState2 = 0;
-    widget()->setMouseTracking(true);			// both of these are needed
     setMouseTracking(true);
-
-    // TODO: this is required to draw the marching ants rectangle on its timer
-    // event, but is non-portable and not recommended.  Should do that in
-    // a paint event instead.
-    widget()->setAttribute(Qt::WA_PaintOutsidePaintEvent);
 
     setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
     show();
@@ -234,12 +259,6 @@ ImageCanvas::~ImageCanvas()
 //  Setting the image
 //  -----------------
 
-void ImageCanvas::newImageHoldZoom(const QImage *new_image)
-{
-    newImage(new_image, true);
-}
-
-
 void ImageCanvas::newImage(const QImage *new_image, bool hold_zoom)
 {
     mImage = new_image;					// don't free old image, not ours
@@ -251,16 +270,15 @@ void ImageCanvas::newImage(const QImage *new_image, bool hold_zoom)
 #endif
 
     stopMarqueeTimer();					// also clears selection
-    mPixmapLabel->removeAllHighlights();		// throw away all highlights
 
     if (mImage!=NULL)					// handle the new image
     {
         kDebug() << "new image size is" << mImage->size();
-        mAcquired = true;
+        mPixmapItem->setPixmap(QPixmap::fromImage(*mImage));
+        setSceneRect(mPixmapItem->boundingRect());	// image always defines size
 
         if (!mKeepZoom && !hold_zoom) setScaleType(defaultScaleType());
     
-        updateScaledPixmap();
 #ifdef HOLD_SELECTION
         if (!oldSelected.isNull())
         {
@@ -273,13 +291,10 @@ void ImageCanvas::newImage(const QImage *new_image, bool hold_zoom)
     else
     {
         kDebug() << "no new image";
-        mAcquired = false;
-        mScaledPixmap = QPixmap();			// ensure old image disappears
-        mPixmapLabel->setPixmap(mScaledPixmap);
-        mPixmapLabel->adjustSize();
+        mPixmapItem->setPixmap(QPixmap());
     }
 
-    repaint();
+    recalculateViewScale();
 }
 
 
@@ -313,7 +328,7 @@ void ImageCanvas::contextMenuEvent(QContextMenuEvent *ev)
 }
 
 
-void ImageCanvas::slotUserAction(int act)
+void ImageCanvas::performUserAction(ImageCanvas::UserAction act)
 {
     if (mImage==NULL) return;				// no action if no image loaded
 
@@ -345,80 +360,77 @@ case ImageCanvas::UserActionFitHeight:
 
 case ImageCanvas::UserActionClose:
         emit closingRequested();
-        break;
+        return;
     }
 
-    updateScaledPixmap();
-    repaint();
+    recalculateViewScale();
 }
 
 
 //  Selected rectangle
 //  ------------------
-//
-//  The rectangle is returned and set in units of 1/10 of a percent,
-//  not in absolute sizes - eg. 500 means 50.0% of original width/height.
-//  That makes it easier to work with different scales and units
 
-//  TODO: these conversions, though, are introducing some inaccuracy somewhere.
-//  May need to work in pixels instead.
-
-QRect ImageCanvas::selectedRect() const
+bool ImageCanvas::hasSelectedRect() const
 {
-    QRect retval;
-    retval.setCoords(0, 0, 0, 0);
-
-    if (mImage!=NULL && mSelected.width()>MIN_AREA_WIDTH
-        && mSelected.height()>MIN_AREA_HEIGHT )
-    {
-	/* Get the size in real image pixels */
-
-   	QRect mapped = mInvScaleMatrix.mapRect(mSelected);
-   	if( mapped.x() > 0 )
-	    retval.setLeft((int) (1000.0/( (double)mImage->width() / (double)mapped.x())));
-
-	if( mapped.y() > 0 )
-	    retval.setTop((int) (1000.0/( (double)mImage->height() / (double)mapped.y())));
-
-	if( mapped.width() > 0 )
-	    retval.setWidth((int) (1000.0/( (double)mImage->width() / (double)mapped.width())));
-
-	if( mapped.height() > 0 )
-	    retval.setHeight((int)(1000.0/( (double)mImage->height() / (double)mapped.height())));
-     }
-
-     return (retval);
+    if (!hasImage()) return (false);
+    return (mSelectionItem->isVisible() && mSelectionItem->boundingRect().isValid());
 }
 
 
+// Get the selected area in absolute image pixels.
+QRect ImageCanvas::selectedRect() const
+{
+    if (!hasSelectedRect()) return (QRect());
+    return (mSelectionItem->boundingRect().toRect());
+}
+
+
+// Get the selected area as a proportion of the image size.
+QRectF ImageCanvas::selectedRectF() const
+{
+    if (!hasSelectedRect()) return (QRectF());
+    const QRectF r = mSelectionItem->boundingRect();
+
+    QRectF retval;
+    retval.setLeft(r.left()/mImage->width());
+    retval.setRight(r.right()/mImage->width());
+    retval.setTop(r.top()/mImage->height());
+    retval.setBottom(r.bottom()/mImage->height());
+    return (retval);
+}
+
+
+// Set the selected area in absolute image pixels.
 void ImageCanvas::setSelectionRect(const QRect &rect)
 {
    kDebug() << "rect=" << rect;
+   if (!hasImage()) return;
 
-   QRect to_map;
-   QPainter p(widget());
-   drawAreaBorder(&p,true);
-   stopMarqueeTimer();					// also clears selection
+   if (!rect.isValid()) stopMarqueeTimer();		// clear the selection
+   else							// set the selection
+   {
+       mSelectionItem->setRect(rect);
+       startMarqueeTimer();
+   }
+}
 
-   if (!rect.isValid()) return;				// no (i.e. full) selection
 
-   if (mImage!=NULL)					// have got an image,
-   {							// so set the selection
-       int rx, ry, rw, rh;
-       int w = mImage->width();
-       int h = mImage->height();
+// Set the selected area as a proportion of the image size.
+void ImageCanvas::setSelectionRect(const QRectF &rect)
+{
+   kDebug() << "rect=" << rect;
+   if (!hasImage()) return;
 
-       kDebug() << "Image size is" << w << "x" << h;
+   if (!rect.isValid()) stopMarqueeTimer();		// clear the selection
+   else							// set the selection
+   {
+       QRectF setval;
+       setval.setLeft(rect.left()*mImage->width());
+       setval.setRight(rect.right()*mImage->width());
+       setval.setTop(rect.top()*mImage->height());
+       setval.setBottom(rect.bottom()*mImage->height());
 
-       rw = static_cast<int>(w*rect.width()/1000.0+0.5);
-       rx = static_cast<int>(w*rect.x()/1000.0+0.5);
-       ry = static_cast<int>(h*rect.y()/1000.0+0.5);
-       rh = static_cast<int>(h*rect.height()/1000.0+0.5);
-       to_map.setRect(rx,ry,rw,rh);
-
-       mSelected = mScaleMatrix.mapRect(to_map);
-       kDebug() << "to_map=" << to_map << "selected=" << mSelected;
-
+       mSelectionItem->setRect(setval);
        startMarqueeTimer();
    }
 }
@@ -429,18 +441,11 @@ void ImageCanvas::setSelectionRect(const QRect &rect)
 
 QImage ImageCanvas::selectedImage() const
 {
-    if (!mAcquired || mImage==NULL || mImage->isNull()) return (QImage());
+    if (!hasImage()) return (QImage());
 							// no image available
     const QRect r = selectedRect();
-    const QSize s = mImage->size();
-
-    int w = (s.width()*r.width())/1000;
-    int h = (s.height()*r.height())/1000;
-    if (w<=0 || h<=0) return (QImage());		// null selection
-
-    int x = (s.width()*r.x())/1000;
-    int y = (s.height()*r.y())/1000;
-    return (mImage->copy(x, y, w, h));			// extract and return selection
+    if (!r.isValid()) return (QImage());		// no selection
+    return (mImage->copy(r));				// extract and return selection
 }
 
 
@@ -449,19 +454,18 @@ QImage ImageCanvas::selectedImage() const
 
 void ImageCanvas::timerEvent(QTimerEvent *)
 {
+   if (!hasImage()) return;				// no image acquired
    if (!isVisible()) return;				// we're not visible
-   if (!mAcquired) return;				// no image acquired
    if (mMoving!=ImageCanvas::MoveNone) return;		// mouse operation in progress
 
-   mAreaState1++;
-   QPainter p(widget());
-   drawAreaBorder(&p);
+   mSelectionItem->stepDashPattern();
 }
 
 
 void ImageCanvas::startMarqueeTimer()
 {
     if (mTimerId==0) mTimerId = startTimer(TIMER_INTERVAL);
+    mSelectionItem->setVisible(true);
 }
 
 
@@ -473,68 +477,63 @@ void ImageCanvas::stopMarqueeTimer()
         mTimerId = 0;
     }
 
-    mSelected = QRect();				// clear the selection
+    mSelectionItem->setVisible(false);			// clear the selection
+    mSelectionItem->resetDashPattern();
 }
 
 
 //  Mouse events
 //  ------------
 
-inline int ImageCanvas::contentsX() const { return (horizontalScrollBar()->value()); }
-inline int ImageCanvas::contentsY() const { return (verticalScrollBar()->value());   }
-
-
 void ImageCanvas::mousePressEvent(QMouseEvent *ev)
 {
-    if (!mAcquired || mImage==NULL) return;
-    if (ev->button()!=Qt::LeftButton) return;
+    if (mReadOnly) return;				// only if permitted
+    if (ev->button()!=Qt::LeftButton) return;		// only action this button
+    if (mMoving!=ImageCanvas::MoveNone) return;		// something already in progress
+    if (!hasImage()) return;				// no image displayed
 
-    int x = ev->x()+contentsX();			// pixmap coordinates
-    int y = ev->y()+contentsY();
-							// ignore unless within pixmap
-    if (x<0 || x>mScaledPixmap.width() || y<0 || y>mScaledPixmap.height()) return;
+    const QList<QGraphicsItem *> its = items(ev->pos());
+    if (its.isEmpty()) return;				// not over any item
+    if (its.last()!=mPixmapItem) return;		// not within the image
 
-    mLastX = x;
-    mLastY = y;
-    if (mMoving!=ImageCanvas::MoveNone) return;
-
-    QPainter p(widget());
-    drawAreaBorder(&p, true);
-
-    mMoving = classifyPoint(x, y);
+    mMoving = classifyPoint(ev->pos());			// see where hit happened
     if (mMoving==ImageCanvas::MoveNone)			// starting new area
     {
-        mSelected.setCoords(x, y, x, y);
+        QPoint p = mapToScene(ev->pos()).toPoint();	// position in scene coords
+        mStartPoint = p;
+        mLastPoint = p;
+
+        mSelectionItem->setRect(QRectF(p.x(), p.y(), 0, 0));
+        mSelectionItem->setVisible(true);
         mMoving = ImageCanvas::MoveNew;
     }
-
-    drawAreaBorder(&p);
 }
 
 
 void ImageCanvas::mouseReleaseEvent(QMouseEvent *ev)
 {
-    if (ev->button()!=Qt::LeftButton || !mAcquired) return;
-    if (mMoving==ImageCanvas::MoveNone) return;
+    if (mReadOnly) return;				// only if permitted
+    if (ev->button()!=Qt::LeftButton) return;		// only action this button
+    if (mMoving==ImageCanvas::MoveNone) return;		// nothing in progress
+    if (!hasImage()) return;				// no image displayed
 
-    QPainter p(widget());
-    drawAreaBorder(&p, true);
     mMoving = ImageCanvas::MoveNone;
 
-    mSelected = mSelected.normalized();
-    if (mSelected.width()<MIN_AREA_WIDTH || mSelected.height()<MIN_AREA_HEIGHT)
+    QRect selected = selectedRect();
+    kDebug() << "selected rect" << selected;
+    if (selected.width()<MIN_AREA_WIDTH || selected.height()<MIN_AREA_HEIGHT)
     {
-        stopMarqueeTimer();				// also clears selection
         kDebug() << "no selection";
+        stopMarqueeTimer();				// also hides selection
         emit newRect(QRect());
+        emit newRect(QRectF());
     }
     else
     {
-        drawAreaBorder(&p);
-
-        kDebug() << "new selection" << selectedRect();
-        emit newRect(selectedRect());
+        kDebug() << "have selection";
         startMarqueeTimer();
+        emit newRect(selectedRect());
+        emit newRect(selectedRectF());
     }
 
     mouseMoveEvent(ev);					// update cursor shape
@@ -543,13 +542,18 @@ void ImageCanvas::mouseReleaseEvent(QMouseEvent *ev)
 
 void ImageCanvas::mouseMoveEvent(QMouseEvent *ev)
 {
-    if (!mAcquired || mImage==NULL) return;
+    if (mReadOnly) return;				// only if permitted
+    if (!hasImage()) return;				// no image displayed
 
-    int x = ev->x()+contentsX();			// pixmap coordinates
-    int y = ev->y()+contentsY();
+    int x = ev->pos().x();				// mouse position
+    int y = ev->pos().y();				// in view coordinates
 
-    int ix = mScaledPixmap.width();			// pixmap overall size
-    int iy = mScaledPixmap.height();
+    int lx = mImage->width();				// limits for moved rectangle
+    int ly = mImage->height();				// in scene coordinates
+
+    QPoint pixExtent = mapFromScene(lx, ly);		// those same limits
+    int ix = pixExtent.x();				// in view coordinates
+    int iy = pixExtent.y();
 
     // Limit drag rectangle to the scaled pixmap
     if (x<0) x = 0;
@@ -557,7 +561,14 @@ void ImageCanvas::mouseMoveEvent(QMouseEvent *ev)
     if (y<0) y = 0;
     if (y>=iy) y = iy-1;
 
-    switch (mMoving!=ImageCanvas::MoveNone ? mMoving : classifyPoint(x, y))
+    QPoint scenePos = mapToScene(x, y).toPoint();	// that limited position
+    int sx = scenePos.x();				// in scene coordinates
+    int sy = scenePos.y();
+
+    //kDebug() << x << y << "moving" << mMoving;
+
+    // Set the cursor shape appropriately
+    switch (mMoving!=ImageCanvas::MoveNone ? mMoving : classifyPoint(QPoint(x, y)))
     {
 case ImageCanvas::MoveNone:
         setCursorShape(Qt::CrossCursor);
@@ -595,78 +606,107 @@ case ImageCanvas::MoveNew:
     // Update the selection rectangle
     if (mMoving!=ImageCanvas::MoveNone)
     {
-         QPainter p(widget());
-         drawAreaBorder(&p, true);
-
-         switch (mMoving)
-         {
+        const QRectF originalRect = mSelectionItem->boundingRect();
+        QRectF updatedRect = originalRect;
+        switch (mMoving)
+        {
 case ImageCanvas::MoveNone:
-             break;
+            break;
 
 case ImageCanvas::MoveTopLeft:
-             mSelected.setLeft(x);
-							// fall through
+            if (sx<originalRect.right()) updatedRect.setLeft(sx);
+            if (sy<originalRect.bottom()) updatedRect.setTop(sy);
+            break;
+
 case ImageCanvas::MoveTop:
-             mSelected.setTop(y);
-             break;
+            if (sy<originalRect.bottom()) updatedRect.setTop(sy);
+            break;
 
 case ImageCanvas::MoveTopRight:
-             mSelected.setTop(y);
-							// fall through
+            if (sx>originalRect.left()) updatedRect.setRight(sx);
+            if (sy<originalRect.bottom()) updatedRect.setTop(sy);
+            break;
+
 case ImageCanvas::MoveRight:
-             mSelected.setRight(x);
-             break;
+            if (sx>originalRect.left()) updatedRect.setRight(sx);
+            break;
+
+case ImageCanvas::MoveBottomRight:
+            if (sx>originalRect.left()) updatedRect.setRight(sx);
+            if (sy>originalRect.top()) updatedRect.setBottom(sy);
+            break;
+
+case ImageCanvas::MoveBottom:
+            if (sy>originalRect.top()) updatedRect.setBottom(sy);
+            break;
 
 case ImageCanvas::MoveBottomLeft:
-             mSelected.setBottom(y);
-							// fall through
+            if (sx<originalRect.right()) updatedRect.setLeft(sx);
+            if (sy>originalRect.top()) updatedRect.setBottom(sy);
+            break;
+
 case ImageCanvas::MoveLeft:
-             mSelected.setLeft(x);
-             break;
+            if (sx<originalRect.right()) updatedRect.setLeft(sx);
+            break;
 
 case ImageCanvas::MoveNew:
-case ImageCanvas::MoveBottomRight:
-             mSelected.setRight(x);
-							// fall through
-case ImageCanvas::MoveBottom:
-             mSelected.setBottom(y);
-             break;
+            if (sx>mStartPoint.x())			// drag to the right
+            {
+                updatedRect.setLeft(mStartPoint.x());
+                updatedRect.setRight(sx);
+            }
+            else					// drag to the left
+            {
+                updatedRect.setRight(mStartPoint.x());
+                updatedRect.setLeft(sx);
+            }
+
+            if (sy>mStartPoint.y())			// drag down
+            {
+                updatedRect.setTop(mStartPoint.y());
+                updatedRect.setBottom(sy);
+            }
+            else					// drag up
+            {
+                updatedRect.setBottom(mStartPoint.y());
+                updatedRect.setTop(sy);
+            }
+            break;
 
 case ImageCanvas::MoveWhole:
-             // mLastX/Y are the last coordinates from the event before
-             int mx = x-mLastX;
-             int my = y-mLastY;
+            int dx = sx-mLastPoint.x();
+            int dy = sy-mLastPoint.y();
 
-             // Check if rectangle would be outside the image on right/bottom
-             if ((mSelected.x()+mSelected.width()+mx)>=ix)
-             {
-                 mx = ix-mSelected.width()-mSelected.x();
-             }
-             if ((mSelected.y()+mSelected.height()+my)>=iy)
-             {
-                 my = iy-mSelected.height()-mSelected.y();
-             }
+            QRectF r = updatedRect.translated(dx, dy);	// prospective new rectangle
 
-             // Check if rectangle would be outside the image on left/top
-             if ((mSelected.x()+mx)<0) mx = -mSelected.x();
-             if ((mSelected.y()+my)<0) my = -mSelected.y();
+            if (r.left()<0) dx -= r.left();		// limit to edges
+            if (r.right()>=lx) dx -= (r.right()-lx+1);
+            if (r.top()<0) dy -= r.top();
+            if (r.bottom()>=ly) dy -= (r.bottom()-ly+1);
 
-             x = mx+mLastX;
-             y = my+mLastY;
-             mSelected.translate(mx, my);
-         }
+            updatedRect.translate(dx, dy);
+            break;
+        }
 
-         drawAreaBorder(&p);
-         mLastX = x;
-         mLastY = y;
+        if (updatedRect!=originalRect) mSelectionItem->setRect(updatedRect);
     }
+
+    mLastPoint = scenePos;
+}
+
+
+void ImageCanvas::mouseDoubleClickEvent(QMouseEvent *ev)
+{
+    if (!hasImage()) return;				// no image displayed
+							// convert to image pixels
+    emit doubleClicked(mapToScene(ev->pos()).toPoint());
 }
 
 
 void ImageCanvas::resizeEvent(QResizeEvent *ev)
 {
-    QScrollArea::resizeEvent(ev);
-    updateScaledPixmap();
+    QGraphicsView::resizeEvent(ev);
+    recalculateViewScale();
 }
 
 
@@ -679,7 +719,7 @@ void ImageCanvas::setScaleFactor(int i)
    mScaleFactor = i;
    if (i==0) setScaleType(ImageCanvas::ScaleDynamic);
 
-   updateScaledPixmap();
+   recalculateViewScale();
 }
 
 
@@ -708,27 +748,25 @@ case ImageCanvas::ScaleDynamic:		return (i18n("Fit Best"));
 case ImageCanvas::ScaleOriginal:	return (i18n("Original size"));
 case ImageCanvas::ScaleFitWidth:	return (i18n("Fit Width"));
 case ImageCanvas::ScaleFitHeight:	return (i18n("Fit Height"));
-case ImageCanvas::ScaleZoom:	        return (i18n("Zoom to %1%%", mScaleFactor));
+case ImageCanvas::ScaleZoom:	        return (i18n("Zoom %1%", mScaleFactor));
 default:				return (i18n("Unknown"));
     }
 }
 
 
-//  Scale the image to a pixmap for display
-//  ---------------------------------------
+//  Calculate an appropriate scale (i.e. view transform) for displaying the image
+//  -----------------------------------------------------------------------------
 
-void ImageCanvas::updateScaledPixmap()
+void ImageCanvas::recalculateViewScale()
 {
-    if (mImage==NULL || mImage->isNull()) return;
-
-    QApplication::setOverrideCursor(Qt::WaitCursor);	// scaling can be slow
+    if (!hasImage()) return;
 
     const int iw = mImage->width();			// original image size
     const int ih = mImage->height();
     const int aw = width()-2*frameWidth();		// available display size
     const int ah = height()-2*frameWidth();
 							// width/height of scroll bar
-    const int sbSize = kapp->style()->pixelMetric(QStyle::PM_ScrollBarExtent);
+    const int sbSize = QApplication::style()->pixelMetric(QStyle::PM_ScrollBarExtent);
 
     double xscale, yscale;				// calculated scale factors
 
@@ -782,200 +820,35 @@ case ImageCanvas::ScaleZoom:
         break;
     }
 
-    mSelected = mInvScaleMatrix.mapRect(mSelected);	// save selection in image pixels
-
-    mScaleMatrix.reset();
-    mScaleMatrix.scale(xscale, yscale);			// to map image -> display
-    mInvScaleMatrix.reset();
-    mInvScaleMatrix = mScaleMatrix.inverted();		// to map display -> image
-
-    mSelected = mScaleMatrix.mapRect(mSelected);	// restore selection at new scale
-
-    mScaledPixmap = QPixmap::fromImage(mImage->transformed(mScaleMatrix));
-    mPixmapLabel->setPixmap(mScaledPixmap);		// set new pixmap to display
-    mPixmapLabel->setScaleMatrix(mScaleMatrix);		// set scale for highlights
-    mPixmapLabel->adjustSize();
-
-    QApplication::restoreOverrideCursor();
-}
-
-
-//  Drawing the selection area
-//  --------------------------
-
-void ImageCanvas::drawHAreaBorder(QPainter *p,int x1,int x2,int y,bool remove)
-{
-    if (!mAcquired || mImage==NULL) return;
-
-  if(mMoving!=ImageCanvas::MoveNone) mAreaState2 = 0;
-  int inc = 1;
-  if(x2 < x1) inc = -1;
-
-  if(!remove) {
-    if(mAreaState2 & 4) p->setPen(Qt::black);
-    else p->setPen(Qt::white);
-  } else if(!mAcquired) p->setPen(QPen(QColor(150,150,150)));
-
-  for(;;) {
-      if( remove && mAcquired ) {
-	int re_x1, re_y;
-	mInvScaleMatrix.map( x1, y, &re_x1, &re_y );
-	re_x1 = qMin( mImage->width()-1, re_x1 );
-	re_y = qMin( mImage->height()-1, re_y );
-
-	p->setPen( QPen( QColor( mImage->pixel(re_x1, re_y))));
-      }
-      p->drawPoint(x1,y);
-    if(!remove) {
-      mAreaState2++;
-      mAreaState2 &= 7;
-      if(!(mAreaState2&3)) {
-			if(mAreaState2&4) p->setPen(Qt::black);
-			else p->setPen(Qt::white);
-      }
-    }
-    if(x1==x2) break;
-    x1 += inc;
-  }
-
-}
-
-
-void ImageCanvas::drawVAreaBorder(QPainter *p, int x, int y1, int y2, bool remove )
-{
-    if (!mAcquired || mImage==NULL) return;
-
-  if( mMoving!=ImageCanvas::MoveNone ) mAreaState2 = 0;
-  int inc = 1;
-  if( y2 < y1 ) inc = -1;
-
-  if( !remove ) {
-    if( mAreaState2 & 4 ) p->setPen(Qt::black);
-    else
-      p->setPen(Qt::white);
-  } else
-    if( !mAcquired ) p->setPen( QPen( QColor(150,150,150) ) );
-
-  for(;;) {
-      if( remove && mAcquired ) {
-	int re_y1, re_x;
-	mInvScaleMatrix.map( x, y1, &re_x, &re_y1 );
-	re_x = qMin( mImage->width()-1, re_x );
-	re_y1 = qMin( mImage->height()-1, re_y1 );
-
-	p->setPen( QPen( QColor( mImage->pixel( re_x, re_y1) )));
-      }
-      p->drawPoint(x,y1);
-
-    if(!remove) {
-      mAreaState2++;
-      mAreaState2 &= 7;
-      if(!(mAreaState2&3)) {
-			if(mAreaState2&4) p->setPen(Qt::black);
-			else p->setPen(Qt::white);
-      }
-    }
-    if(y1==y2) break;
-    y1 += inc;
-  }
-}
-
-
-void ImageCanvas::drawAreaBorder(QPainter *p, bool remove)
-{
-   if(mSelected.isNull()) return;
-
-   mAreaState2 = mAreaState1;
-   QRect r = mSelected.normalized();
-
-   if (r.width()>0)
-   {							// top line
-       drawHAreaBorder(p, r.left(), r.right(), r.top(), remove);
-   }
-
-   if (r.height()>0)
-   {							// right line
-       drawVAreaBorder(p, r.right(), r.top()+1, r.bottom(), remove);
-       if (r.width()>0)
-       {						// bottom line
-           drawHAreaBorder(p, r.right()-1, r.left(), r.bottom(), remove);
-							// left line
-           drawVAreaBorder(p, r.left(), r.bottom()-1, r.top()+1, remove);
-      }
-   }
-}
-
-
-//  Mouse position on the selection rectangle
-//  -----------------------------------------
-//
-//  x and y here are coordinates on the scaled pixmap.
-
-ImageCanvas::MoveState ImageCanvas::classifyPoint(int x, int y) const
-{
-    if (mSelected.isEmpty()) return (ImageCanvas::MoveNone);
-
-  QRect a = mSelected.normalized();
-
-  int top = 0,left = 0,right = 0,bottom = 0;
-  int lx = a.left()-x, rx = x-a.right();
-  int ty = a.top()-y, by = y-a.bottom();
-
-  if( a.width() > DELTA*2+2 )
-    lx = abs(lx), rx = abs(rx);
-
-  if(a.height()>DELTA*2+2)
-    ty = abs(ty), by = abs(by);
-
-  if( lx>=0 && lx<=DELTA ) left++;
-  if( rx>=0 && rx<=DELTA ) right++;
-  if( ty>=0 && ty<=DELTA ) top++;
-  if( by>=0 && by<=DELTA ) bottom++;
-  if( y>=a.top() &&y<=a.bottom() ) {
-    if(left) {
-      if(top) return ImageCanvas::MoveTopLeft;
-      if(bottom) return ImageCanvas::MoveBottomLeft;
-      return ImageCanvas::MoveLeft;
-    }
-    if(right) {
-      if(top) return ImageCanvas::MoveTopRight;
-      if(bottom) return ImageCanvas::MoveBottomRight;
-      return ImageCanvas::MoveRight;
-    }
-  }
-  if(x>=a.left()&&x<=a.right()) {
-    if(top) return ImageCanvas::MoveTop;
-    if(bottom) return ImageCanvas::MoveBottom;
-    if(mSelected.contains(QPoint(x,y))) return ImageCanvas::MoveWhole;
-  }
-  return ImageCanvas::MoveNone;
-}
-
-
-void ImageCanvas::setCursorShape(Qt::CursorShape cs)
-{
-    if (mCurrentCursor!=cs)				// optimise no-change
-    {
-        widget()->setCursor(cs);
-        mCurrentCursor = cs;
-    }
+    QTransform trans;
+    trans.scale(xscale, yscale);
+    kDebug() << "setting transform to" << trans;
+    setTransform(trans);
 }
 
 
 //  Miscellaneous settings and information
 //  --------------------------------------
 
-void ImageCanvas::setReadOnly(bool ro)
+void ImageCanvas::setCursorShape(Qt::CursorShape cs)
 {
-    mReadOnly = ro;
-    emit imageReadOnly(ro);
+    if (mCurrentCursor!=cs)				// optimise no-change
+    {
+        setCursor(cs);
+        mCurrentCursor = cs;
+    }
 }
 
 
-void ImageCanvas::setMaintainAspect(bool ma)
+void ImageCanvas::setReadOnly(bool ro)
 {
-    mMaintainAspect = ma;
-    repaint();
+    mReadOnly = ro;
+    if (mReadOnly)
+    {
+        stopMarqueeTimer();				// clear selection
+        setCursorShape(Qt::CrossCursor);		// ensure cursor is reset
+    }
+    emit imageReadOnly(ro);
 }
 
 
@@ -998,49 +871,103 @@ const QString ImageCanvas::imageInfoString() const			// member
 }
 
 
-//  Multiple views
-//  --------------
-//
-//  Not used by Kooka.
-
-void ImageCanvas::deleteView(const QImage *delimage)
+bool ImageCanvas::hasImage() const
 {
-    if (delimage==rootImage())
-    {
-        kDebug();
-        newImage(NULL);
-   }
+    return (mImage!=NULL && !mImage->isNull());
 }
 
 
 //  Highlight areas
 //  ---------------
 
-int ImageCanvas::highlight(const QRect &rect, bool ensureVis)
+int ImageCanvas::addHighlight(const QRect &rect, bool ensureVis)
 {
-    int idx = mPixmapLabel->addHighlightRect(rect);
+    HighlightItem *item = new HighlightItem(rect, mHighlightStyle,
+                                            mHighlightPen, mHighlightBrush);
+
+    int idx = mHighlights.indexOf(NULL);		// any empty slots?
+    if (idx!=-1) mHighlights[idx] = item;		// yes, reuse that
+    else						// no, append new item
+    {
+        idx = mHighlights.size();
+        mHighlights.append(item);
+    }
+
+    mScene->addItem(item);
     if (ensureVis) scrollTo(rect);
     return (idx);
 }
 
 
+void ImageCanvas::removeAllHighlights()
+{
+    for (int idx = 0; idx<mHighlights.size(); ++idx) removeHighlight(idx);
+}
+
+
 void ImageCanvas::removeHighlight(int idx)
 {
-    mPixmapLabel->removeHighlightRect(idx);
+    if (idx<0 || idx>mHighlights.size()) return;
+
+    QGraphicsItem *item = mHighlights[idx];
+    if (item==NULL) return;
+
+    mScene->removeItem(item);
+    delete item;
+    mHighlights[idx] = NULL;
 }
 
 
 void ImageCanvas::scrollTo(const QRect &rect)
 {
-    if (!rect.isValid()) return;
-    QRect targetRect = mScaleMatrix.mapRect(rect);
-    QPoint p = targetRect.center();
-    ensureVisible(p.x(), p.y(), 10+targetRect.width()/2, 10+targetRect.height()/2);
+    if (rect.isValid()) ensureVisible(rect);
 }
 
 
 void ImageCanvas::setHighlightStyle(ImageCanvas::HighlightStyle style,
                                     const QPen &pen, const QBrush &brush)
 {
-    mPixmapLabel->setHighlightStyle(style, pen, brush);
+    mHighlightStyle = style;
+    mHighlightPen = pen;
+    mHighlightBrush = brush;
+}
+
+
+//  Mouse position on the selection rectangle
+//  -----------------------------------------
+
+// This works in view coordinates, in order that the DELTA tolerance
+// is consistent regardless of the view scale.
+
+ImageCanvas::MoveState ImageCanvas::classifyPoint(const QPoint &p) const
+{
+    if (!mSelectionItem->isVisible()) return (ImageCanvas::MoveNone);
+
+    const QRect r = mapFromScene(mSelectionItem->boundingRect()).boundingRect().normalized();
+    //kDebug() << p << "for rect" << r;
+    if (r.isEmpty()) return (ImageCanvas::MoveNone);
+
+    const bool onLeft = (abs(p.x()-r.left())<DELTA);
+    const bool onRight = (abs(p.x()-r.right())<DELTA);
+
+    const bool onTop = (abs(p.y()-r.top())<DELTA);
+    const bool onBottom = (abs(p.y()-r.bottom())<DELTA);
+
+    const bool withinRect = r.contains(p);
+    const bool overRect= r.adjusted(-DELTA, -DELTA, DELTA, DELTA).contains(p);
+
+    if (onLeft && onTop) return (ImageCanvas::MoveTopLeft);
+    if (onLeft && onBottom) return (ImageCanvas::MoveBottomLeft);
+
+    if (onRight && onTop) return (ImageCanvas::MoveTopRight);
+    if (onRight && onBottom) return (ImageCanvas::MoveBottomRight);
+
+    if (onLeft && overRect) return (ImageCanvas::MoveLeft);
+    if (onRight && overRect) return (ImageCanvas::MoveRight);
+    if (onTop && overRect) return (ImageCanvas::MoveTop);
+    if (onBottom && overRect) return (ImageCanvas::MoveBottom);
+
+    if (withinRect) return (ImageCanvas::MoveWhole);
+
+    return (ImageCanvas::MoveNone);
 }
