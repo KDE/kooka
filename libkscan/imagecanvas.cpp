@@ -854,7 +854,7 @@ void ImageCanvas::setReadOnly(bool ro)
 
 const QString ImageCanvas::imageInfoString(int w, int h, int d)		// static
 {
-    return (i18n("%1x%2 pixels, %3 bpp", w, h, d));
+    return (i18n("%1x%2 pix, %3 bpp", w, h, d));
 }
 
 

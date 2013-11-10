@@ -34,6 +34,7 @@ set(kooka_PICS
   rotate-acw.png
   rotate-cw.png
   rotate-180.png
+  autoselect.png
 )
 
 install(FILES ${kooka_PICS} DESTINATION ${DATA_INSTALL_DIR}/kooka/pics)

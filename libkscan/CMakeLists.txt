@@ -60,6 +60,8 @@ set(libkscan_SRCS
   sizeindicator.cpp
   imagemetainfo.cpp
   scansizeselector.cpp
+  autoselectbar.cpp
+  autoselectdialog.cpp
 )
 
 kde4_add_library(libkscan SHARED ${libkscan_SRCS})

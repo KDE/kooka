@@ -37,7 +37,6 @@
 #ifndef KDE4
 #include <kprinter.h>
 #endif
-#include <kstatusbar.h>
 #include <kurl.h>
 #include <kmessagebox.h>
 #include <kaction.h>
@@ -50,6 +49,7 @@
 
 #include "libkscan/scanglobal.h"
 #include "libkscan/imagecanvas.h"
+#include "libkscan/previewer.h"
 
 #include "scangallery.h"
 #include "kookapref.h"
@@ -73,11 +73,8 @@ Kooka::Kooka(const QByteArray &deviceToUse)
 {
     setObjectName("Kooka");
 
-    // Set the status bar up first, so that this item is leftmost
-    KStatusBar *statBar = statusBar();
-    statBar->insertItem(i18n("Ready"), KookaView::StatusTemp, 1);
-    statBar->setItemAlignment(KookaView::StatusTemp, Qt::AlignLeft);
-    statBar->show();
+    // Set up the status bar
+    StatusBarManager *sbm = new StatusBarManager(this);
 
     /* Start to create the main view framework */
     m_view = new KookaView(this, deviceToUse);
@@ -93,13 +90,13 @@ Kooka::Kooka(const QByteArray &deviceToUse)
     setupGUI(KXmlGuiWindow::Default, "kookaui.rc");
     setAutoSaveSettings();				// default group, do save
 
-    // allow the view to change the statusbar and caption
-    connect(m_view, SIGNAL(signalChangeStatusbar(const QString&)),
-            SLOT(changeStatusbar(const QString&)));
-    connect(m_view, SIGNAL(signalCleanStatusbar(void)),
-            SLOT(cleanStatusbar()));
+    // Allow the view to change the status bar and caption
+    connect(m_view, SIGNAL(changeStatus(const QString &,StatusBarManager::Item)),
+            sbm, SLOT(setStatus(const QString &,StatusBarManager::Item)));
+    connect(m_view, SIGNAL(clearStatus(StatusBarManager::Item)),
+            sbm, SLOT(clearStatus(StatusBarManager::Item)));
     connect(m_view, SIGNAL(signalChangeCaption(const QString&)),
-            SLOT(changeCaption(const QString&)));
+            SLOT(setCaption(const QString &)));
     connect(m_view, SIGNAL(signalScannerChanged(bool)),
             SLOT(slotUpdateScannerActions(bool)));
     connect(m_view, SIGNAL(signalRectangleChanged(bool)),
@@ -114,7 +111,12 @@ Kooka::Kooka(const QByteArray &deviceToUse)
     connect(m_view->imageViewer(), SIGNAL(imageReadOnly(bool)),
             SLOT(slotUpdateReadOnlyActions(bool)));
 
-    changeCaption( i18n( "KDE Scanning" ));
+    connect(m_view->previewer(), SIGNAL(autoSelectStateChanged(bool,bool)),
+            SLOT(slotUpdateAutoSelectActions(bool,bool)));
+    connect(m_view->previewer(), SIGNAL(previewFileSizeChanged(long)),
+            sbm, SLOT(setFileSize(long)));
+
+    setCaption(i18n("KDE Scanning"));
 
     slotUpdateScannerActions(m_view->isScannerConnected());
     slotUpdateRectangleActions(false);
@@ -322,6 +324,12 @@ void Kooka::setupActions()
     connect(paramsAction, SIGNAL(triggered()), m_view, SLOT(slotScanParams()));
     actionCollection()->addAction("scanparam", paramsAction);
 
+    autoselAction = new KToggleAction(KIcon("autoselect"), i18n("Auto Select"), this);
+    autoselAction->setShortcut(Qt::CTRL+Qt::Key_A);
+    connect(autoselAction, SIGNAL(toggled(bool)), m_view, SLOT(slotAutoSelect(bool)));
+    actionCollection()->addAction("autoselect", autoselAction);
+    m_view->connectPreviewAction(autoselAction);
+
     // OCR functions
 
     ocrAction = new KAction(KIcon("ocr"), i18n("OCR Image..."), this);
@@ -446,19 +454,6 @@ void Kooka::optionsOcrPreferences()
 {
     m_prefDialogIndex = 4;				// go to OCR page
     optionsPreferences();
-}
-
-
-void Kooka::changeStatusbar(const QString& text)
-{
-    // display the text on the statusbar
-    statusBar()->changeItem(text, KookaView::StatusTemp);
-}
-
-void Kooka::changeCaption(const QString& text)
-{
-    // display the text on the caption
-    setCaption(text);
 }
 
 
@@ -653,6 +648,15 @@ void Kooka::slotUpdateReadOnlyActions(bool ro)
     rotateCwAction->setEnabled(enable);
     rotateAcwAction->setEnabled(enable);
     rotate180Action->setEnabled(enable);
+}
+
+
+void Kooka::slotUpdateAutoSelectActions(bool isAvailable, bool isOn)
+{
+    kDebug() << "available" << isAvailable << "on" << isOn;
+
+    autoselAction->setEnabled(isAvailable);
+    autoselAction->setChecked(isOn);
 }
 
 

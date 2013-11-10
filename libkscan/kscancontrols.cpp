@@ -101,6 +101,7 @@ KScanSlider::KScanSlider(QWidget *parent, const QString &text,
     if (mStdButt!=NULL) connect(mStdButt, SIGNAL(clicked()), SLOT(slotRevertValue()));
 
     setFocusProxy(mSlider);
+    setFocusPolicy(Qt::StrongFocus);
 }
 
 
@@ -160,6 +161,7 @@ KScanStringEntry::KScanStringEntry(QWidget *parent, const QString &text)
     connect(mEntry, SIGNAL(returnPressed()), SIGNAL(returnPressed()));
 
     setFocusProxy(mEntry);
+    setFocusPolicy(Qt::StrongFocus);
 }
 
 
@@ -190,6 +192,7 @@ KScanNumberEntry::KScanNumberEntry(QWidget *parent, const QString &text)
     connect(mEntry, SIGNAL(returnPressed()), SIGNAL(returnPressed()));
 
     setFocusProxy(mEntry);
+    setFocusPolicy(Qt::StrongFocus);
 }
 
 
@@ -223,6 +226,7 @@ KScanCheckbox::KScanCheckbox(QWidget *parent, const QString &text)
     connect(mCheckbox, SIGNAL(stateChanged(int)), SIGNAL(settingChanged(int)));
 
     setFocusProxy(mCheckbox);
+    setFocusPolicy(Qt::StrongFocus);
 }
 
 
@@ -277,6 +281,7 @@ void KScanCombo::init()
     connect(mCombo, SIGNAL(activated(int)), SLOT(slotActivated(int)));
 
     setFocusProxy(mCombo);
+    setFocusPolicy(Qt::StrongFocus);
 }
 
 
@@ -346,6 +351,7 @@ KScanFileRequester::KScanFileRequester(QWidget *parent, const QString &text)
     connect(mEntry, SIGNAL(returnPressed()), SIGNAL(returnPressed()));
 
     setFocusProxy(mEntry);
+    setFocusPolicy(Qt::StrongFocus);
 }
 
 

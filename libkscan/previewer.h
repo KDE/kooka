@@ -22,9 +22,9 @@
 
 #include "libkscanexport.h"
 
-#include <qwidget.h>
 #include <qvector.h>
 
+#include <kvbox.h>
 #include <kruler.h>
 
 /**
@@ -33,15 +33,14 @@
 class QLabel;
 class QGroupBox;
 class QSlider;
-class QComboBox;
 
 class KScanDevice;
 
 class ImageCanvas;
-class SizeIndicator;
+class AutoSelectBar;
 
 
-class KSCAN_EXPORT Previewer : public QWidget
+class KSCAN_EXPORT Previewer : public KVBox
 {
     Q_OBJECT
 
@@ -57,32 +56,38 @@ public:
     void setDisplayUnit(KRuler::MetricStyle unit);
     void connectScanner(KScanDevice *scan);
 
+    static QString previewInfoString(double widthMm, double heightMm, int resX, int resY);
+
 public slots:
     void slotNewAreaSelected(const QRectF &rect);
     void slotNewScanResolutions(int xres,int yres);
     void slotNewScanMode(int bytes_per_pix);
     void slotSetAutoSelThresh(int);
-    void slotSetAutoSelDustsize(int);
+    void slotAutoSelToggled(bool);
 
     void slotNewCustomScanSize(const QRect &rect);
 
 protected slots:
-    void slotAutoSelToggled(bool);
-    void slotScanBackgroundChanged(int);
+    void slotAutoSelectSettingsChanged(int margin, bool bgIsWhite, int dustsize);
 
 signals:
     void newPreviewRect(const QRect &rect);
+    void autoSelectStateChanged(bool isAvailable, bool isOn);
+    void previewDimsChanged(const QString &dims);
+    void previewFileSizeChanged(long size);
 
 private:
     bool checkForScannerBg();
-    void setScannerBgIsWhite(bool isWhite);
 
     void updateSelectionDims();
 
-    void findAutoSelection();
     void resetAutoSelection();
     void setAutoSelection(bool on);
     bool imagePiece(const QVector<long> &src, int *start, int *end);
+
+private slots:
+    void slotNotifyAutoSelectChanged();
+    void slotFindAutoSelection();
 
 private:
     ImageCanvas *mCanvas;
@@ -94,17 +99,12 @@ private:
     double mSelectionWidthMm,mSelectionHeightMm;
     KRuler::MetricStyle mDisplayUnit;
 
-    QLabel *mSelSizeLabel1;
-    QLabel *mSelSizeLabel2;
-    SizeIndicator *mFileSizeLabel;
-    QSlider *mSliderThresh;
-    QSlider *mSliderDust;
-    QComboBox *mBackgroundCombo;
-    QGroupBox *mAutoSelGroup;
+    AutoSelectBar *mAutoSelectBar;
 
     KScanDevice *mScanDevice;
 
     bool mDoAutoSelection;
+    int mAutoSelMargin;
     int mAutoSelThresh;
     int mAutoSelDustsize;
     bool mBgIsWhite;

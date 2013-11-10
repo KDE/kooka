@@ -89,8 +89,8 @@ ScanSizeSelector::ScanSizeSelector(QWidget *parent, const QSize &bedSize)
             // each paper size.
             ps.name = papername(p);
             // These sizes are in PostScript points (1/72 inch).
-            ps.width = int(paperpswidth(p)/72*25.4+0.5);
-            ps.height = int(paperpsheight(p)/72*25.4+0.5);
+            ps.width = qRound(paperpswidth(p)/72.0*25.4);
+            ps.height = qRound(paperpsheight(p)/72.0*25.4);
             papers.append(ps);
         }
 

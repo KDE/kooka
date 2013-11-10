@@ -30,6 +30,8 @@
 #include <ktabwidget.h>
 #include <kmimetypetrader.h>
 
+#include "statusbarmanager.h"
+
 #include "libkscan/kscandevice.h"
 
 
@@ -78,7 +80,6 @@ class KookaView : public KTabWidget
 
 public:
     enum MirrorType { MirrorVertical, MirrorHorizontal, MirrorBoth};
-    enum StatusBarIDs { StatusTemp, StatusImage };
     enum TabPage { TabScan = 0, TabGallery = 1, TabOcr = 2, TabNone = 0xFF };
 
     /**
@@ -115,6 +116,7 @@ public:
     void loadStartupImage();
     ScanGallery *gallery() const;
     ImageCanvas *imageViewer() const	{ return (mImageCanvas); }
+    Previewer *previewer() const	{ return (mPreviewCanvas); }
 
     bool isScannerConnected() const;
     QString scannerName() const;
@@ -139,6 +141,7 @@ public slots:
     void slotStartPreview();
     void slotNewPreview(const QImage *newimg, const ImageMetaInfo *info);
     void slotStartFinalScan();
+    void slotAutoSelect(bool on);
 
     void slotCreateNewImgFromSelection();
     void slotTransformImage();
@@ -183,14 +186,14 @@ protected slots:
 
 signals:
     /**
-     * Use this signal to change the content of the statusbar
+     * Change the content of the statusbar
      */
-    void signalChangeStatusbar(const QString &text);
+    void changeStatus(const QString &text, StatusBarManager::Item item = StatusBarManager::Message);
 
     /**
-     * Use this signal to clean up the statusbar
+     * Clean up the statusbar
      */
-    void signalCleanStatusbar();
+    void clearStatus(StatusBarManager::Item item = StatusBarManager::Message);
 
     /**
      * Use this signal to change the content of the caption
@@ -217,6 +220,7 @@ private:
 private slots:
     void slotStartLoading(const KUrl &url);
     void slotOpenWith(int idx);
+    void slotPreviewDimsChanged(const QString &dims);
 
 private:
     KMainWindow *mMainWindow;

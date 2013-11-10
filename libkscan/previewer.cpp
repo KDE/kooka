@@ -20,18 +20,13 @@
 #include "previewer.h"
 #include "previewer.moc"
 
-#include <qcombobox.h>
-#include <qgroupbox.h>
-#include <qgridlayout.h>
-#include <qslider.h>
 #include <qvector.h>
+#include <qtimer.h>
 
 #include <kdebug.h>
 #include <klocale.h>
-#include <kglobal.h>
-#include <kaction.h>
 #include <kmessagebox.h>
-#include <kdialog.h>
+#include <kvbox.h>
 
 #ifdef DEBUG_AUTOSEL
 #include <qfile.h>
@@ -39,153 +34,43 @@
 #endif
 
 #include "imagecanvas.h"
-#include "sizeindicator.h"
 #include "kscandevice.h"
+#include "autoselectbar.h"
+#include "autoselectdata.h"
 
 
-/** Config tags for autoselection **/
-#define CFG_AUTOSEL_ON		"doAutoselection"   /* do it or not */
-#define CFG_AUTOSEL_THRESHOLD	"autoselThreshold"  /* threshold    */
-#define CFG_AUTOSEL_DUSTSIZE	"autoselDustsize"   /* dust size    */
-
-/* tag if a scan of the empty scanner results in black or white image */
-#define CFG_SCANNER_EMPTY_BG	"scannerBackground"
-#define SCANNER_EMPTY_WHITE	"white"
-#define SCANNER_EMPTY_BLACK	"black"
-
-/* Defaultvalues for the threshold for the autodetection */
-#define DEF_THRESHOLD		"25"
-#define DEF_DUSTSIZE		"5"
-#define MAX_THRESHOLD		50
-
-/* Items for the combobox to set the color of an empty scan */
-#define BG_ITEM_BLACK		0
-#define BG_ITEM_WHITE		1
+//  Configuration tags for auto-selection
+#define CFG_AUTOSEL_ON		"doAutoselection"
+#define CFG_AUTOSEL_THRESHOLD	"autoselThreshold"
+#define CFG_AUTOSEL_DUSTSIZE	"autoselDustsize"
+#define CFG_AUTOSEL_MARGIN	"autoselMargin"
+#define CFG_AUTOSEL_BG		"scannerBackground"
 
 
 Previewer::Previewer(QWidget *parent)
-    : QWidget(parent)
+    : KVBox(parent)
 {
     setObjectName("Previewer");
 
-    QGridLayout *gl = new QGridLayout(this);
-    gl->setMargin(0);
-
     /* Units etc. TODO: get from Config */
     mDisplayUnit = KRuler::Millimetres;
-    mAutoSelThresh = 240;
+    mAutoSelThresh = AutoSelectData::DefaultThreshold;
 
     mScanDevice = NULL;					// no scanner connected yet
     mBedHeight = 297;					// for most A4/Letter scanners
     mBedWidth = 215;
 
-    /* Stuff for the preview-Notification */
-    gl->addWidget(new QLabel(i18n("<b>Preview</b>"), this), 0, 0);
-
     // Image viewer
     mCanvas  = new ImageCanvas(this);
     mCanvas->setDefaultScaleType(ImageCanvas::ScaleDynamic);
 
-    //mCanvas->repaint();
-    gl->addWidget(mCanvas, 0, 1, -1, 1);
-    gl->setColumnStretch(1, 1);
-
     /*Signals: Control the custom-field and show size of selection */
     connect(mCanvas, SIGNAL(newRect(const QRectF &)), SLOT(slotNewAreaSelected(const QRectF &)));
 
-    QLabel *l;
-    QVBoxLayout *vb;
-
-    // Selected area group box
-    QGroupBox *selGroup = new QGroupBox(i18n("Selection"), this);
-    vb = new QVBoxLayout(selGroup);
-
-    // Dimensions
-    mSelSizeLabel1 = new QLabel(i18n("- mm" ), selGroup);
-    vb->addWidget(mSelSizeLabel1, 0, Qt::AlignHCenter);
-    mSelSizeLabel2 = new QLabel(i18n("- pix" ), selGroup);
-    vb->addWidget(mSelSizeLabel2, 0, Qt::AlignHCenter);
-
-    vb->addSpacing(KDialog::spacingHint());
-
-    // File size indicator
-    mFileSizeLabel = new SizeIndicator(selGroup);
-    mFileSizeLabel->setToolTip(i18n("This size field shows how large the uncompressed image will be.\n"
-                                    "It tries to warn you if you try to produce too big an image by \n"
-                                    "changing its background color."));
-    mFileSizeLabel->setText("-");
-    vb->addWidget(mFileSizeLabel);
-
-    gl->addWidget(selGroup, 1, 0);
-    gl->setRowMinimumHeight(2, 2*KDialog::spacingHint());
-
-    // Auto selection group box
-    mAutoSelGroup = new QGroupBox(i18n("Auto Select"), this);
-    mAutoSelGroup->setCheckable(true);
-    mAutoSelGroup->setEnabled(false);			// initially, no scanner
-    mAutoSelGroup->setToolTip(i18n("Select this option to automatically detect\n"
-                                   "the document scan area"));
-    connect(mAutoSelGroup, SIGNAL(toggled(bool)), SLOT(slotAutoSelToggled(bool)));
-
-    vb = new QVBoxLayout(mAutoSelGroup);
-
-    l = new QLabel(i18n("Background:"), mAutoSelGroup);
-    vb->addWidget(l);
-
-    // combobox to select if black or white background
-    mBackgroundCombo = new QComboBox(mAutoSelGroup);
-    mBackgroundCombo->insertItem(BG_ITEM_BLACK, i18n("Black"));
-    mBackgroundCombo->insertItem(BG_ITEM_WHITE, i18n("White"));
-    mBackgroundCombo->setToolTip(i18n("Select whether a scan of the\n"
-                                       "empty scanner glass results in\n"
-                                       "a black or a white image."));
-    connect(mBackgroundCombo, SIGNAL(activated(int)), SLOT(slotScanBackgroundChanged(int)));
-    vb->addWidget(mBackgroundCombo);
-    vb->addSpacing(2*KDialog::spacingHint());
-
-    l->setBuddy(mBackgroundCombo);
-
-    l= new QLabel(i18n("Threshold:"), mAutoSelGroup);
-    vb->addWidget(l);
-
-    // autodetect threshold slider
-    mSliderThresh = new QSlider(Qt::Horizontal, mAutoSelGroup);
-    mSliderThresh->setRange(0, MAX_THRESHOLD);
-    mSliderThresh->setSingleStep(5);
-    mSliderThresh->setValue(mAutoSelThresh);
-    mSliderThresh->setToolTip(i18n("Threshold for autodetection.\n"
-                                   "All pixels lighter (on a black background)\n"
-                                   "or darker (on a white background)\n"
-                                   "than this are considered to be part of the image."));
-    mSliderThresh->setTickPosition(QSlider::TicksBelow);
-    mSliderThresh->setTickInterval(10);
-
-    connect( mSliderThresh, SIGNAL(valueChanged(int)), SLOT(slotSetAutoSelThresh(int)));
-    vb->addWidget(mSliderThresh);
-
-    l->setBuddy(mSliderThresh);
-
-#ifdef AUTOSEL_DUSTSIZE_GUI
-    vb->addSpacing(KDialog::spacingHint());
-
-    /** Dustsize-Slider: No deep impact on result **/
-    l = new QLabel( i18n("Dust size:"), mAutoSelGroup);
-    vb->addWidget(l);
-
-    mSliderDust = new QSlider(Qt::Horizontal, mAutoSelGroup);
-    mSliderDust ->setRange(0, 50);
-    mSliderDust ->setSingleStep(5);
-    mSliderDust ->setValue(mAutoSelDustsize);
-    mSliderDust->setTickPosition(QSlider::TicksBelow);
-    mSliderDust->setTickInterval(5);
-
-    connect(mSliderDust, SIGNAL(valueChanged(int)), SLOT(slotSetAutoSelDustsize(int)));
-    vb->addWidget(mSliderDust);
-#endif
-
-    gl->addWidget(mAutoSelGroup, 3, 0);
-
-    gl->setRowStretch(4, 1);
+    mAutoSelectBar = new AutoSelectBar(mAutoSelThresh, this);
+    connect(mAutoSelectBar, SIGNAL(thresholdChanged(int)), SLOT(slotSetAutoSelThresh(int)));
+    connect(mAutoSelectBar, SIGNAL(advancedSettingsChanged(int,bool,int)), SLOT(slotAutoSelectSettingsChanged(int,bool,int)));
+    connect(mAutoSelectBar, SIGNAL(performSelection()), SLOT(slotFindAutoSelection()));
 
     mScanResX = -1;
     mScanResY = -1;
@@ -225,7 +110,8 @@ void Previewer::newImage(const QImage *image)
 
    resetAutoSelection();				// reset for new image
    mCanvas->newImage(&mPreviewImage);			// set image on canvas
-   findAutoSelection();					// auto-select if required
+   slotFindAutoSelection();				// auto-select if required
+   slotNotifyAutoSelectChanged();			// tell the GUI
 }
 
 
@@ -261,9 +147,9 @@ void Previewer::slotNewCustomScanSize(const QRect &rect)
         mSelectionHeightMm = r.height();
 
         newRect.setLeft(double(r.left())/mBedWidth);	// convert mm -> bedsize factor
-        newRect.setRight(double(r.right())/mBedWidth);
+        newRect.setWidth(double(r.width())/mBedWidth);
         newRect.setTop(double(r.top())/mBedHeight);
-        newRect.setBottom(double(r.bottom())/mBedHeight);
+        newRect.setHeight(double(r.height())/mBedHeight);
     }
     else
     {
@@ -305,10 +191,10 @@ void Previewer::slotNewAreaSelected(const QRectF &rect)
     if (rect.isValid())
     {							// convert bedsize -> mm
         QRect r;
-        r.setLeft(int(rect.left()*mBedWidth+0.5));
-        r.setRight(int(rect.right()*mBedWidth+0.5));
-        r.setTop(int(rect.top()*mBedHeight+0.5));
-        r.setBottom(int(rect.bottom()*mBedHeight+0.5));
+        r.setLeft(qRound(rect.left()*mBedWidth));
+        r.setWidth(qRound(rect.width()*mBedWidth));
+        r.setTop(qRound(rect.top()*mBedHeight));
+        r.setHeight(qRound(rect.height()*mBedHeight));
         kDebug() << "new rect" << r;
         emit newPreviewRect(r);
 
@@ -327,40 +213,56 @@ void Previewer::slotNewAreaSelected(const QRectF &rect)
 }
 
 
+static inline int mmToPixels(double mm, int res)
+{
+    return (qRound(mm/25.4*res));
+}
+
+
 void Previewer::updateSelectionDims()
 {
     if (mScanDevice==NULL) return;			// no scanner connected
 
-    mSelSizeLabel1->setText(i18n("%1 x %2 mm", mSelectionWidthMm, mSelectionHeightMm));
-
     /* Calculate file size */
-    long size_in_byte = 0;
     if (mScanResX>1 && mScanResY>1)			// if resolution available
     {
-        double w_inch = ((double) mSelectionWidthMm)/25.4;
-        double h_inch = ((double) mSelectionHeightMm)/25.4;
-
-        int pix_w = static_cast<int>(w_inch*mScanResX+0.5);
-        int pix_h = static_cast<int>(h_inch*mScanResY+0.5);
-
-        mSelSizeLabel2->setText(i18n("%1 x %2 pixel", pix_w, pix_h));
-
-        if (mBytesPerPix!=-1)				// depth of scan available
+        if (mBytesPerPix!=-1)				// depth of scan available?
         {
+            int wPix = mmToPixels(mSelectionWidthMm, mScanResX);
+            int hPix = mmToPixels(mSelectionHeightMm, mScanResY);
+
+            long size_in_byte;
             if (mBytesPerPix==0)			// bitmap scan
             {
-                size_in_byte = pix_w*pix_h/8;
+                size_in_byte = wPix*hPix/8;
             }
             else					// grey or colour scan
             {
-                size_in_byte = pix_w*pix_h*mBytesPerPix;
+                size_in_byte = wPix*hPix*mBytesPerPix;
             }
 
-            mFileSizeLabel->setSizeInByte(size_in_byte);
+            emit previewFileSizeChanged(size_in_byte);
         }
-        else mFileSizeLabel->setSizeInByte(-1);		// depth not available
+        else emit previewFileSizeChanged(-1);		// depth not available
     }
-    else mSelSizeLabel2->setText(QString::null);	// resolution not available
+
+    QString result = previewInfoString(mSelectionWidthMm, mSelectionHeightMm, mScanResX, mScanResY);
+    emit previewDimsChanged(result);
+}
+
+
+QString Previewer::previewInfoString(double widthMm, double heightMm, int resX, int resY)
+{
+    if (resX>1 && resY>1)				// resolution available
+    {
+        int wPix = mmToPixels(widthMm, resX);
+        int hPix = mmToPixels(heightMm, resY);
+        return (i18nc("@info:status", "%1x%2mm, %3x%4pix", widthMm, heightMm, wPix, hPix));
+    }
+    else						// resolution not available
+    {
+        return (i18nc("@info:status", "%1x%2mm", widthMm, heightMm));
+    }
 }
 
 
@@ -368,42 +270,36 @@ void Previewer::connectScanner(KScanDevice *scan)
 {
     kDebug();
     mScanDevice = scan;
+    mCanvas->newImage(NULL);				// remove previous preview
 
     if (scan!=NULL)
     {
-        mAutoSelGroup->setEnabled(true);		// enable the auto-select group
         setAutoSelection(false);			// initially off, disregard config
 							// but get other saved values
-        bool isWhite = scan->getConfig(CFG_SCANNER_EMPTY_BG, "")!=SCANNER_EMPTY_BLACK;
-        mBackgroundCombo->setCurrentIndex(isWhite ? BG_ITEM_WHITE : BG_ITEM_BLACK);
-        mBgIsWhite = isWhite;
+        mBgIsWhite = (scan->getConfig(CFG_AUTOSEL_BG, "")!=AutoSelectData::ConfigValueBlack);
 
-        int val = scan->getConfig(CFG_AUTOSEL_DUSTSIZE, DEF_DUSTSIZE).toInt();
-#ifdef AUTOSEL_DUSTSIZE_GUI
-        mSliderDust->setValue(val);
-#else
+        // TODO: make getConfig a template, eliminate QString::number
+        int val = scan->getConfig(CFG_AUTOSEL_THRESHOLD, QString::number(AutoSelectData::DefaultThreshold)).toInt();
+        mAutoSelThresh = val;
+        mAutoSelectBar->setThreshold(val);
+        val = scan->getConfig(CFG_AUTOSEL_DUSTSIZE, QString::number(AutoSelectData::DefaultDustsize)).toInt();
         mAutoSelDustsize = val;
-#endif
-        val = scan->getConfig(CFG_AUTOSEL_THRESHOLD, DEF_THRESHOLD).toInt();
-        mSliderThresh->setValue(val);
+        val = scan->getConfig(CFG_AUTOSEL_MARGIN, QString::number(AutoSelectData::DefaultMargin)).toInt();
+        mAutoSelMargin = val;
+
+        kDebug() << "margin" << mAutoSelMargin << "white?" << mBgIsWhite << "dust" << mAutoSelDustsize;
+        mAutoSelectBar->setAdvancedSettings(mAutoSelMargin, mBgIsWhite, mAutoSelDustsize);
 
         updateSelectionDims();
     }
 }
 
 
-void Previewer::setScannerBgIsWhite(bool isWhite)
+void Previewer::slotNotifyAutoSelectChanged()
 {
-    mBgIsWhite = isWhite;
-    resetAutoSelection();				// invalidate image data
-
-    if (mScanDevice!=NULL)
-    {
-        mBackgroundCombo->setCurrentIndex(isWhite ? BG_ITEM_WHITE : BG_ITEM_BLACK);
-        mBackgroundCombo->setEnabled(true);
-
-        mScanDevice->storeConfig(CFG_SCANNER_EMPTY_BG,(isWhite ? SCANNER_EMPTY_WHITE : SCANNER_EMPTY_BLACK));
-    }
+    const bool isAvailable = mCanvas->hasImage();
+    const bool isOn = mDoAutoSelection;
+    emit autoSelectStateChanged(isAvailable, isOn);
 }
 
 
@@ -425,15 +321,11 @@ void Previewer::setAutoSelection(bool isOn)
     }
 
     mDoAutoSelection = isOn;
-    if (mAutoSelGroup!=NULL) mAutoSelGroup->setChecked(isOn);
-    if (mSliderThresh!=NULL) mSliderThresh->setEnabled(isOn);
-#ifdef AUTOSEL_DUSTSIZE_GUI
-    if (mSliderDust!=NULL) mSliderDust->setEnabled(isOn);
-#endif
-    if (mBackgroundCombo!=NULL) mBackgroundCombo->setEnabled(isOn);
-
+    if (mAutoSelectBar!=NULL) mAutoSelectBar->setVisible(isOn);
     if (mScanDevice!=NULL) mScanDevice->storeConfig(CFG_AUTOSEL_ON,
-                                                    (isOn ? "on" : "off"));
+                                                    (isOn ? AutoSelectData::ConfigValueOn : AutoSelectData::ConfigValueOff));
+							// tell the GUI
+    QTimer::singleShot(0, this, SLOT(slotNotifyAutoSelectChanged()));
 }
 
 
@@ -445,38 +337,32 @@ void Previewer::setAutoSelection(bool isOn)
 
 bool Previewer::checkForScannerBg()
 {
-    if (mScanDevice!=NULL)				// scan device already known?
+    if (mScanDevice==NULL) return (true);		// no scan device
+
+    QString curWhite = mScanDevice->getConfig(CFG_AUTOSEL_BG, "");
+    bool goWhite = false;
+
+    if (curWhite.isEmpty())				// not yet known, ask the user
     {
-        QString curWhite = mScanDevice->getConfig(CFG_SCANNER_EMPTY_BG, "");
-        bool goWhite = false;
-
-        if (curWhite.isEmpty())				// not yet known, should ask the user
-        {
-            kDebug() << "Don't know the scanner background yet!";
-
-            int res = KMessageBox::questionYesNoCancel(this,
-                                                       i18n("The autodetection of images on the preview depends on the background color of the preview image (the result of scanning with no document loaded).\n\nPlease select whether the background of the preview image is black or white."),
-                                                       i18n("Autodetection Background"),
-                                                       KGuiItem(i18n("White")), KGuiItem(i18n("Black")));
-            if (res==KMessageBox::Cancel) return (false);
-            goWhite = (res==KMessageBox::Yes);
-        }
-        else
-        {
-            if (curWhite==SCANNER_EMPTY_WHITE) goWhite = true;
-        }
-
-        setScannerBgIsWhite(goWhite);			// set and save that value
+        kDebug() << "Don't know the scanner background yet";
+        int res = KMessageBox::questionYesNoCancel(this,
+                                                   i18n("The autodetection of images on the preview depends on the background color of the preview image (the result of scanning with no document loaded).\n\nPlease select whether the background of the preview image is black or white."),
+                                                   i18nc("@title:window", "Autodetection Background"),
+                                                   KGuiItem(i18nc("@action:button Name of colour", "White")),
+                                                   KGuiItem(i18nc("@action:button Name of colour", "Black")));
+        if (res==KMessageBox::Cancel) return (false);
+        goWhite = (res==KMessageBox::Yes);
+    }
+    else
+    {
+        if (curWhite==AutoSelectData::ConfigValueWhite) goWhite = true;
     }
 
+    mBgIsWhite = goWhite;				// set and save that value
+    mScanDevice->storeConfig(CFG_AUTOSEL_BG,(goWhite ? AutoSelectData::ConfigValueWhite : AutoSelectData::ConfigValueBlack));
+    resetAutoSelection();				// invalidate image data
+
     return (true);
-}
-
-
-void Previewer::slotScanBackgroundChanged(int indx)
-{
-    setScannerBgIsWhite(indx==BG_ITEM_WHITE);
-    findAutoSelection();				// with new setting
 }
 
 
@@ -491,18 +377,14 @@ void Previewer::slotAutoSelToggled(bool isOn)
         }
     }
 
-    /* Store configuration */
-    mDoAutoSelection = isOn;
-    if (mScanDevice!=NULL) mScanDevice->storeConfig(CFG_AUTOSEL_ON,
-                                                    (isOn ? "on" : "off"));
+    setAutoSelection(isOn);				// set and store setting
     if (isOn && !mCanvas->hasSelectedRect())		// no selection yet?
     {
-            /* if there is already an image, check, if the bg-color is set already */
-            if (mCanvas->hasImage())
-            {
-                kDebug() << "No selection, try to find one";
-                findAutoSelection();
-            }
+        if (mCanvas->hasImage())			// is there a preview?
+        {
+            kDebug() << "No selection, try to find one";
+            slotFindAutoSelection();
+        }
     }
 }
 
@@ -513,18 +395,31 @@ void Previewer::slotSetAutoSelThresh(int t)
     kDebug() << "Setting threshold to" << t;
     // TODO: make storeConfig/getConfig templates, then no need for string conversion
     if (mScanDevice!=NULL) mScanDevice->storeConfig(CFG_AUTOSEL_THRESHOLD, QString::number(t));
-    findAutoSelection();				// with new setting
+    slotFindAutoSelection();				// with new setting
 }
 
 
-void Previewer::slotSetAutoSelDustsize(int dSize)
+void Previewer::slotAutoSelectSettingsChanged(int margin, bool bgIsWhite, int dustsize)
 {
-    mAutoSelDustsize = dSize;
-    kDebug() << "Setting dustsize to" << dSize;
-#ifdef AUTOSEL_DUSTSIZE_GUI
-    if (mScanDevice!=NULL) mScanDevice->storeConfig(CFG_AUTOSEL_DUSTSIZE, QString::number(dSize));
-    findAutoSelection();				// with new setting
-#endif
+    kDebug() << "margin" << margin << "white?" << bgIsWhite << "dust" << dustsize;
+
+    if (mScanDevice!=NULL)				// save settings for scanner
+    {
+        mScanDevice->storeConfig(CFG_AUTOSEL_MARGIN, QString::number(margin));
+        mScanDevice->storeConfig(CFG_AUTOSEL_BG,(bgIsWhite ? AutoSelectData::ConfigValueWhite : AutoSelectData::ConfigValueBlack));
+        mScanDevice->storeConfig(CFG_AUTOSEL_DUSTSIZE, QString::number(dustsize));
+    }
+
+    mAutoSelMargin = margin;				// set area margin
+    mAutoSelDustsize = dustsize;			// set dust size
+
+    if (bgIsWhite!=mBgIsWhite)				// changing this setting?
+    {
+        mBgIsWhite = bgIsWhite;				// set background colour
+        resetAutoSelection();				// invalidate image data
+    }
+
+    slotFindAutoSelection();				// find with new settings
 }
 
 
@@ -539,7 +434,7 @@ void Previewer::slotSetAutoSelDustsize(int dSize)
 //  background) areas which are longer than the dust size setting.
 //  The longest of those found becomes the auto-selected area.
 
-void Previewer::findAutoSelection()
+void Previewer::slotFindAutoSelection()
 {
     if (!mDoAutoSelection) return;			// not doing auto selection
 
@@ -628,14 +523,16 @@ void Previewer::findAutoSelection()
 
     if (imagePiece(mHeightSum, &start, &end))
     {
-        r.setTop(double(start)/iHeight);
-        r.setBottom(double(end)/iHeight);
+        double margin = double(mAutoSelMargin)/mBedHeight;
+        r.setTop(qMax(((double(start)/iHeight)-margin), 0.0));
+        r.setBottom(qMin(((double(end)/iHeight)+margin), 0.999999));
     }
 
     if (imagePiece(mWidthSum, &start, &end))
     {
-        r.setLeft(double(start)/iWidth);
-        r.setRight(double(end)/iWidth);
+        double margin = double(mAutoSelMargin)/mBedWidth;
+        r.setLeft(qMax(((double(start)/iWidth)-margin), 0.0));
+        r.setRight(qMin(((double(end)/iWidth)+margin), 0.999999));;
     }
 
     kDebug() << "Autodetection result" << r;

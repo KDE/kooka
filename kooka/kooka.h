@@ -103,16 +103,13 @@ protected slots:
     void slotUpdateOcrResultActions(bool haveText);
     void slotOpenWithMenu();
     void slotUpdateReadOnlyActions(bool ro);
+    void slotUpdateAutoSelectActions(bool isAvailable, bool isOn);
 
 private slots:
     void filePrint();
 
     void optionsPreferences();
     void optionsOcrPreferences();
-
-    void changeStatusbar(const QString& text);
-    void cleanStatusbar(void) { changeStatusbar(""); }
-    void changeCaption(const QString& text);
 
 private:
     void setupAccel();
@@ -132,6 +129,7 @@ private:
     KAction *previewAction;
     KAction *photocopyAction;
     KAction *paramsAction;
+    KToggleAction *autoselAction;
     KAction *ocrAction;
     KAction *ocrSelectAction;
     KAction *ocrSpellAction;

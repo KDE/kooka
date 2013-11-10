@@ -90,11 +90,7 @@ void KGammaTable::calcTable()
         double x = pow(i/maxval, gam) * maxval;		// apply gamma
         x = (con*(x-halfmax)) + halfmax;		// apply contrast
         x += bri;					// apply brightness
-        x += 0.5;					// apply rounding
-
-        if (x>maxval) x = maxval;			// limit value
-        if (x<0) x = 0;
-        mData[i] = (int) x;				// save in table
+        mData[i] = qRound(qBound(0.0, x, maxval));	// limit value, save in table
         //kDebug() << "  " << i << "->" << mData[i];
     }
 

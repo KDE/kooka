@@ -127,6 +127,7 @@ set(kooka_SRCS
   main.cpp
   kooka.cpp			# -> kookamainwindow
   kookaview.cpp
+  statusbarmanager.cpp
   kookapref.cpp			# -> kookaprefs
   prefspages.cpp
   kookascanparams.cpp

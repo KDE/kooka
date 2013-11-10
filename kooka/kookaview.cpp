@@ -38,7 +38,6 @@
 #include <kurl.h>
 #include <krun.h>
 #include <kapplication.h>
-#include <kstatusbar.h>
 #include <kconfig.h>
 #include <kdebug.h>
 #include <ktrader.h>
@@ -74,6 +73,7 @@
 #include "scangallery.h"
 #include "imgsaver.h"
 #include "imagetransform.h"
+#include "statusbarmanager.h"
 
 #ifndef KDE4
 #include "kookaprint.h"
@@ -298,19 +298,16 @@ KookaView::KookaView(KMainWindow *parent, const QByteArray &deviceToUse)
     ctxtmenu = mPreviewCanvas->getImageCanvas()->contextMenu();
     if (ctxtmenu!=NULL) ctxtmenu->addTitle(i18n("Scan Preview"));
 
+    // Connections Previewer --> myself
+    connect(mPreviewCanvas, SIGNAL(previewDimsChanged(const QString &)), SLOT(slotPreviewDimsChanged(const QString &)));
+
     /** Ocr Result Text **/
     mOcrResEdit  = new OcrResEdit(this);
     mOcrResEdit->setAcceptRichText(false);
     mOcrResEdit->setWordWrapMode(QTextOption::NoWrap);
     mOcrResEdit->setClickMessage(i18n("OCR results will appear here"));
     connect(mOcrResEdit, SIGNAL(spellCheckStatus(const QString &)),
-            this, SIGNAL(signalChangeStatusbar(const QString &)));
-
-    /** Status Bar **/
-    KStatusBar *statBar = mMainWindow->statusBar();
-    statBar->insertPermanentFixedItem((ImageCanvas::imageInfoString(2000, 2000, 48)+"--"),
-                                      KookaView::StatusImage);
-    statBar->changeItem(QString::null, KookaView::StatusImage);
+            this, SIGNAL(changeStatus(const QString &)));
 
     /** Tabs **/
     // TODO: not sure which tab position is best, make this configurable
@@ -449,16 +446,19 @@ void KookaView::slotTabChanged(int index)
 case KookaView::TabScan:				// Scan
         mScanGallerySite->setWidget(mGallery);
         mGalleryImgviewSite->setWidget(mImageCanvas);	// somewhere to park it
+        emit clearStatus(StatusBarManager::ImageDims);
         break;
 
 case KookaView::TabGallery:				// Gallery
         mGalleryGallerySite->setWidget(mGallery);
         mGalleryImgviewSite->setWidget(mImageCanvas);
+        emit clearStatus(StatusBarManager::PreviewDims);
         break;
 
 case KookaView::TabOcr:					// OCR
         mOcrGallerySite->setWidget(mGallery);
         mOcrImgviewSite->setWidget(mImageCanvas);
+        emit clearStatus(StatusBarManager::PreviewDims);
         break;
     }
 
@@ -676,14 +676,14 @@ void KookaView::slotGallerySelectionChanged()
 
     if (fi==NULL || fi->isNull())			// no gallery selection
     {
-        if (!scanmode) emit signalChangeStatusbar(i18n("No selection"));
+        if (!scanmode) emit changeStatus(i18n("No selection"));
     }
     else						// have a gallery selection
     {
         if (!scanmode)
         {
             KLocalizedString str = fi->isDir() ? ki18n("Gallery folder %1") : ki18n("Gallery image %1");
-            emit signalChangeStatusbar(str.subs(fi->url().pathOrUrl()).toString());
+            emit changeStatus(str.subs(fi->url().pathOrUrl()).toString());
         }
     }
 
@@ -743,17 +743,17 @@ void KookaView::slotNewPreview(const QImage *newimg, const ImageMetaInfo *info)
 
 void KookaView::slotStartOcrSelection()
 {
-   emit signalChangeStatusbar(i18n("Starting OCR on selection"));
+   emit changeStatus(i18n("Starting OCR on selection"));
    startOCR(mImageCanvas->selectedImage());
-   emit signalCleanStatusbar();
+   emit clearStatus();
 }
 
 
 void KookaView::slotStartOcr()
 {
-   emit signalChangeStatusbar(i18n("Starting OCR on the image"));
+   emit changeStatus(i18n("Starting OCR on the image"));
    startOCR(*gallery()->getCurrImage(true));
-   emit signalCleanStatusbar();
+   emit clearStatus();
 }
 
 
@@ -768,7 +768,7 @@ void KookaView::slotOcrSpellCheck(bool interactive, bool background)
 {
     if (!interactive && !background)			// not doing anything
     {
-        emit signalChangeStatusbar(i18n("OCR finished"));
+        emit changeStatus(i18n("OCR finished"));
         return;
     }
 
@@ -781,7 +781,7 @@ void KookaView::slotOcrSpellCheck(bool interactive, bool background)
     }
 
     setCurrentIndex(KookaView::TabOcr);
-    emit signalChangeStatusbar(i18n("OCR Spell Check"));
+    emit changeStatus(i18n("OCR Spell Check"));
     if (background) mOcrResEdit->setCheckSpellingEnabled(true);
     if (interactive) mOcrResEdit->checkSpelling();
 }
@@ -813,7 +813,7 @@ void KookaView::startOCR(const KookaImage img)
         mOcrEngine->setImageCanvas(mImageCanvas);
         mOcrEngine->setTextDocument(mOcrResEdit->document());
 
-        // Connections OcrEngine --> myself
+        // Connections OCR Engine --> myself
         connect(mOcrEngine, SIGNAL(newOCRResultText()),
                 SLOT(slotOcrResultAvailable()));
         connect(mOcrEngine, SIGNAL(setSpellCheckConfig(const QString &)),
@@ -827,7 +827,7 @@ void KookaView::startOCR(const KookaImage img)
         connect(mOcrResEdit, SIGNAL(scrollToWord(const QRect &)),
                 mOcrEngine, SLOT(slotScrollToWord(const QRect &)));
 
-        // Connections OcrEngine --> OCR Results
+        // Connections OCR Engine --> OCR Results
         connect(mOcrEngine, SIGNAL(readOnlyEditor(bool)),
                 mOcrResEdit, SLOT(slotSetReadOnly(bool)));
         connect(mOcrEngine, SIGNAL(selectWord(const QPoint &)),
@@ -954,10 +954,10 @@ void KookaView::closeScanDevice( )
 
 void KookaView::slotCreateNewImgFromSelection()
 {
-    emit signalChangeStatusbar(i18n("Create new image from selection"));
+    emit changeStatus(i18n("Create new image from selection"));
     QImage img = mImageCanvas->selectedImage();
     if (!img.isNull()) gallery()->addImage(&img);
-    emit signalCleanStatusbar();
+    emit clearStatus();
 }
 
 
@@ -965,7 +965,7 @@ void KookaView::slotTransformImage()
 {
     if (imageViewer()->isReadOnly())
     {
-        emit signalChangeStatusbar(i18n("Cannot transform, image is read-only"));
+        emit changeStatus(i18n("Cannot transform, image is read-only"));
         return;
     }
 
@@ -1016,11 +1016,9 @@ void KookaView::slotShowAImage(const KookaImage *img, bool isDir)
 
     if (mOcrEngine!=NULL) mOcrEngine->setImage(img!=NULL ? *img : KookaImage());
 							// tell OCR about it
-    KStatusBar *statBar = mMainWindow->statusBar();	// show status bar info
-    if (mImageCanvas!=NULL) statBar->changeItem(mImageCanvas->imageInfoString(), KookaView::StatusImage);
-
-    if (img!=NULL) emit signalChangeStatusbar(i18n("Loaded image %1", img->url().pathOrUrl()));
-    else if (!isDir) emit signalChangeStatusbar(i18n("Unloaded image"));
+    if (mImageCanvas!=NULL) emit changeStatus(mImageCanvas->imageInfoString(), StatusBarManager::ImageDims);
+    if (img!=NULL) emit changeStatus(i18n("Loaded image %1", img->url().pathOrUrl()));
+    else if (!isDir) emit changeStatus(i18n("Unloaded image"));
     updateSelectionState();
 }
 
@@ -1038,7 +1036,7 @@ void KookaView::slotUnloadAImage(const KookaImage *img)
  */
 void KookaView::slotStartLoading(const KUrl &url)
 {
-    emit signalChangeStatusbar(i18n("Loading %1",url.prettyUrl()));
+    emit changeStatus(i18n("Loading %1...",url.pathOrUrl()));
 }
 
 
@@ -1104,6 +1102,15 @@ void KookaView::slotStartFinalScan()
     setCurrentIndex(KookaView::TabScan);
     qApp->processEvents();				// let the tab appear
     mScanParams->slotStartScan();
+}
+
+
+void KookaView::slotAutoSelect(bool on)
+{
+    if (mPreviewCanvas==NULL) return;
+    setCurrentIndex(KookaView::TabScan);
+    qApp->processEvents();				// let the tab appear
+    mPreviewCanvas->slotAutoSelToggled(on);
 }
 
 
@@ -1239,4 +1246,10 @@ void KookaView::slotOpenWith(int idx)
     {
         KRun::displayOpenWithDialog(urllist, mMainWindow);
     }
+}
+
+
+void KookaView::slotPreviewDimsChanged(const QString &dims)
+{
+    emit changeStatus(dims, StatusBarManager::PreviewDims);
 }

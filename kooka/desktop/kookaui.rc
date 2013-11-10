@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="Kooka" version="7">
+<kpartgui name="Kooka" version="8">
 
  <MenuBar>
   <Menu name="file" noMerge="1"><text>&amp;File</text>
@@ -23,6 +23,8 @@
    <Action name="startPreview"/>
    <Action name="startScan"/>
    <Action name="startPhotoCopy"/>
+   <Separator/>
+   <Action name="autoselect"/>
    <Separator/>
    <Action name="loadscanparam"/>
    <Action name="savescanparam"/>
@@ -81,6 +83,7 @@
   <text>Scanning Toolbar</text>
   <Action name="startPreview"/>
   <Action name="startScan"/>
+  <Action name="autoselect"/>
   <Separator/>
   <Action name="ocrImage"/>
   <Action name="ocrImageSelect"/>
