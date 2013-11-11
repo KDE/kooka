@@ -257,10 +257,12 @@ QString Previewer::previewInfoString(double widthMm, double heightMm, int resX, 
     {
         int wPix = mmToPixels(widthMm, resX);
         int hPix = mmToPixels(heightMm, resY);
+	// xgettext:no-c-format
         return (i18nc("@info:status", "%1x%2mm, %3x%4pix", widthMm, heightMm, wPix, hPix));
     }
     else						// resolution not available
     {
+        // xgettext:no-c-format
         return (i18nc("@info:status", "%1x%2mm", widthMm, heightMm));
     }
 }
