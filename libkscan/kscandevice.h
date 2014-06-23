@@ -29,6 +29,8 @@
 #include <qhash.h>
 #include <qmap.h>
 
+#include <kconfigskeleton.h>
+
 extern "C" {
 #include <sane/sane.h>
 }
@@ -36,6 +38,8 @@ extern "C" {
 
 class QWidget;
 class QSocketNotifier;
+
+class KConfigSkeletonItem;
 
 class KScanOption;
 class KScanOptSet;
@@ -352,28 +356,57 @@ public:
     void getCurrentFormat(int *format, int *depth);
 
     /**
+     * Access a group in the global scanner configuration file.
+     *
+     * @param groupName The group name
+     * @return the group
+     */
+    static KConfigGroup configGroup(const QString &groupName);
+
+    /**
+     * Get the global default value for a scanner configuration setting.
+     *
+     * @param item The settings template item
+     * @return The default value
+     **/
+    template <class T> static T getDefault(const KConfigSkeletonItem *item)
+    {
+        return (static_cast<const KConfigSkeletonGenericItem<T> *>(item)->value());
+    }
+
+    /**
      * Read a configuration setting for the current scanner
      * from the global scanner configuration file.
      *
-     * @param key Configuration key
-     * @param def Default value
-     * @return The configuration setting, or the @p def parameter if
-     * no @p key is saved in the configuration.
+     * @param item The settings template item
+     * @return The configuration setting, or its default value if none i
+     * saved in the configuration.
      *
      * @see storeConfig
      **/
-    QString getConfig(const QString &key, const QString &def = QString::null) const;
+    template <class T> T getConfig(const KConfigSkeletonItem *item) const
+    {
+        const KConfigGroup grp = configGroup(mScannerName);
+        return (grp.readEntry(item->key(), getDefault<T>(item)));
+    }
 
     /**
      * Save a configuration setting for the current scanner
      * to the global scanner configuration file.
      *
-     * @param key Configuration key
+     * @param item The settings template item
      * @param val Value to store
      *
      * @see getConfig
      **/
-    void storeConfig(const QString &key, const QString &val);
+    template <class T> void storeConfig(const KConfigSkeletonItem *item, const T &val)
+    {
+        if (mScannerName.isNull()) return;
+        //kDebug() << "Storing config" << key << "in group" << mScannerName;
+        KConfigGroup grp = configGroup(mScannerName);
+        grp.writeEntry(item->key(), val);
+        grp.sync();
+    }
 
     /**
      * Retrieve or prompt for a username/password to authenticate access

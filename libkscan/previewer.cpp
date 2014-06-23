@@ -36,15 +36,7 @@
 #include "imagecanvas.h"
 #include "kscandevice.h"
 #include "autoselectbar.h"
-#include "autoselectdata.h"
-
-
-//  Configuration tags for auto-selection
-#define CFG_AUTOSEL_ON		"doAutoselection"
-#define CFG_AUTOSEL_THRESHOLD	"autoselThreshold"
-#define CFG_AUTOSEL_DUSTSIZE	"autoselDustsize"
-#define CFG_AUTOSEL_MARGIN	"autoselMargin"
-#define CFG_AUTOSEL_BG		"scannerBackground"
+#include "scansettings.h"
 
 
 Previewer::Previewer(QWidget *parent)
@@ -54,7 +46,7 @@ Previewer::Previewer(QWidget *parent)
 
     /* Units etc. TODO: get from Config */
     mDisplayUnit = KRuler::Millimetres;
-    mAutoSelThresh = AutoSelectData::DefaultThreshold;
+    mAutoSelThresh = 25;				// not used until scanner connected
 
     mScanDevice = NULL;					// no scanner connected yet
     mBedHeight = 297;					// for most A4/Letter scanners
@@ -276,15 +268,20 @@ void Previewer::connectScanner(KScanDevice *scan)
     {
         setAutoSelection(false);			// initially off, disregard config
 							// but get other saved values
-        mBgIsWhite = (scan->getConfig(CFG_AUTOSEL_BG, "")!=AutoSelectData::ConfigValueBlack);
+        const KConfigSkeletonItem *item = ScanSettings::self()->previewAutoselBackgroundItem();
+        mBgIsWhite = (scan->getConfig<int>(item)!=ScanSettings::BackgroundBlack);
 
-        // TODO: make getConfig a template, eliminate QString::number
-        int val = scan->getConfig(CFG_AUTOSEL_THRESHOLD, QString::number(AutoSelectData::DefaultThreshold)).toInt();
+        item = ScanSettings::self()->previewAutoselThresholdItem();
+        int val = scan->getConfig<int>(item);
         mAutoSelThresh = val;
         mAutoSelectBar->setThreshold(val);
-        val = scan->getConfig(CFG_AUTOSEL_DUSTSIZE, QString::number(AutoSelectData::DefaultDustsize)).toInt();
+
+        item = ScanSettings::self()->previewAutoselDustsizeItem();
+        val = scan->getConfig<int>(item);
         mAutoSelDustsize = val;
-        val = scan->getConfig(CFG_AUTOSEL_MARGIN, QString::number(AutoSelectData::DefaultMargin)).toInt();
+
+        item = ScanSettings::self()->previewAutoselMarginItem();
+        val = scan->getConfig<int>(item);
         mAutoSelMargin = val;
 
         kDebug() << "margin" << mAutoSelMargin << "white?" << mBgIsWhite << "dust" << mAutoSelDustsize;
@@ -322,9 +319,11 @@ void Previewer::setAutoSelection(bool isOn)
 
     mDoAutoSelection = isOn;
     if (mAutoSelectBar!=NULL) mAutoSelectBar->setVisible(isOn);
-    if (mScanDevice!=NULL) mScanDevice->storeConfig(CFG_AUTOSEL_ON,
-                                                    (isOn ? AutoSelectData::ConfigValueOn : AutoSelectData::ConfigValueOff));
-							// tell the GUI
+    if (mScanDevice!=NULL)
+    {
+        const KConfigSkeletonItem *item = ScanSettings::self()->previewAutoselOnItem();
+        mScanDevice->storeConfig<bool>(item, isOn);
+    }							// tell the GUI
     QTimer::singleShot(0, this, SLOT(slotNotifyAutoSelectChanged()));
 }
 
@@ -339,10 +338,10 @@ bool Previewer::checkForScannerBg()
 {
     if (mScanDevice==NULL) return (true);		// no scan device
 
-    QString curWhite = mScanDevice->getConfig(CFG_AUTOSEL_BG, "");
+    int curWhite = mScanDevice->getConfig<int>(ScanSettings::self()->previewAutoselBackgroundItem());
     bool goWhite = false;
 
-    if (curWhite.isEmpty())				// not yet known, ask the user
+    if (curWhite==ScanSettings::BackgroundUnknown)	// not yet known, ask the user
     {
         kDebug() << "Don't know the scanner background yet";
         int res = KMessageBox::questionYesNoCancel(this,
@@ -353,15 +352,14 @@ bool Previewer::checkForScannerBg()
         if (res==KMessageBox::Cancel) return (false);
         goWhite = (res==KMessageBox::Yes);
     }
-    else
-    {
-        if (curWhite==AutoSelectData::ConfigValueWhite) goWhite = true;
-    }
+    else if (curWhite==ScanSettings::BackgroundWhite) goWhite = true;
 
     mBgIsWhite = goWhite;				// set and save that value
-    mScanDevice->storeConfig(CFG_AUTOSEL_BG,(goWhite ? AutoSelectData::ConfigValueWhite : AutoSelectData::ConfigValueBlack));
-    resetAutoSelection();				// invalidate image data
 
+    const KConfigSkeletonItem *item = ScanSettings::self()->previewAutoselBackgroundItem();
+    mScanDevice->storeConfig<int>(item, (goWhite ? ScanSettings::BackgroundWhite : ScanSettings::BackgroundBlack));
+
+    resetAutoSelection();				// invalidate image data
     return (true);
 }
 
@@ -393,8 +391,13 @@ void Previewer::slotSetAutoSelThresh(int t)
 {
     mAutoSelThresh = t;
     kDebug() << "Setting threshold to" << t;
-    // TODO: make storeConfig/getConfig templates, then no need for string conversion
-    if (mScanDevice!=NULL) mScanDevice->storeConfig(CFG_AUTOSEL_THRESHOLD, QString::number(t));
+
+    if (mScanDevice!=NULL)
+    {
+        const KConfigSkeletonItem *item = ScanSettings::self()->previewAutoselThresholdItem();
+        mScanDevice->storeConfig<int>(item, t);
+    }
+
     slotFindAutoSelection();				// with new setting
 }
 
@@ -405,9 +408,14 @@ void Previewer::slotAutoSelectSettingsChanged(int margin, bool bgIsWhite, int du
 
     if (mScanDevice!=NULL)				// save settings for scanner
     {
-        mScanDevice->storeConfig(CFG_AUTOSEL_MARGIN, QString::number(margin));
-        mScanDevice->storeConfig(CFG_AUTOSEL_BG,(bgIsWhite ? AutoSelectData::ConfigValueWhite : AutoSelectData::ConfigValueBlack));
-        mScanDevice->storeConfig(CFG_AUTOSEL_DUSTSIZE, QString::number(dustsize));
+        const KConfigSkeletonItem *item = ScanSettings::self()->previewAutoselMarginItem();
+        mScanDevice->storeConfig<int>(item, margin);
+
+        item = ScanSettings::self()->previewAutoselBackgroundItem();
+        mScanDevice->storeConfig<int>(item, (bgIsWhite ? ScanSettings::BackgroundWhite : ScanSettings::BackgroundBlack));
+
+        item = ScanSettings::self()->previewAutoselDustsizeItem();
+        mScanDevice->storeConfig<int>(item, dustsize);
     }
 
     mAutoSelMargin = margin;				// set area margin

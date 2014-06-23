@@ -27,15 +27,11 @@
 #include <kstandarddirs.h>
 
 #include "kscandevice.h"
+#include "scansettings.h"
 
 extern "C" {
 #include <sane/sane.h>
 }
-
-
-/* Configuration-file definitions */
-#define SCANNER_DB_FILE		"scannerrc"
-#define GROUP_GENERAL		"Startup"		// for historical reasons
 
 
 static ScanGlobal *sInstance = NULL;
@@ -56,8 +52,6 @@ ScanGlobal::ScanGlobal()
     mSaneInitDone = false;
     mSaneInitError = false;
 
-    mScanConfig = NULL;
-
     // Get SANE translations - bug 98150
     KGlobal::dirs()->addResourceDir("locale", "/usr/share/locale/");
     KGlobal::locale()->insertCatalog("sane-backends");
@@ -70,12 +64,6 @@ ScanGlobal::~ScanGlobal()
     {
         kDebug() << "calling sane_exit()";
         sane_exit();
-    }
-
-    if (mScanConfig!=NULL)
-    {
-        mScanConfig->sync();
-        delete mScanConfig;
     }
 }
 
@@ -144,11 +132,4 @@ bool ScanGlobal::init()
 bool ScanGlobal::available() const
 {
     return (mSaneInitDone && !mSaneInitError);
-}
-
-
-KConfigGroup ScanGlobal::configGroup(const QString &groupName)
-{
-    if (mScanConfig==NULL) mScanConfig = new KConfig(SCANNER_DB_FILE, KConfig::SimpleConfig);
-    return (mScanConfig->group(!groupName.isEmpty() ? groupName : GROUP_GENERAL));
 }

@@ -41,8 +41,11 @@
 #include <kmessagebox.h>
 #include <kurlrequester.h>
 #include <kseparator.h>
+#include <kconfigskeleton.h>
+#include <kimageio.h>
+#include <kfiledialog.h>
 
-#include "libkscan/scanglobal.h"
+#include "libkscan/scansettings.h"
 
 #include "kookapref.h"
 #include "kookagallery.h"
@@ -52,6 +55,7 @@
 #include "ocrgocrengine.h"
 #include "ocrocradengine.h"
 #include "ocrkadmosengine.h"
+#include "kookasettings.h"
 
 
 //  Abstract base
@@ -119,47 +123,60 @@ void KookaGeneralPage::slotEnableWarnings()
 KookaStartupPage::KookaStartupPage(KPageDialog *parent)
     : KookaPrefsPage(parent, GROUP_STARTUP)
 {
-    const KConfigGroup grp2 = ScanGlobal::self()->configGroup();
-
     /* Query for network scanner (Checkbox) */
-    mNetQueryCheck = new QCheckBox(i18n("Query network for available scanners"), this);
-    mNetQueryCheck->setToolTip(i18n("Check this if you want a network query for available scanners.\nNote that this does not mean a query over the entire network but only the stations configured for SANE."));
-    mNetQueryCheck->setChecked(!grp2.readEntry(STARTUP_ONLY_LOCAL, false));
+    const KConfigSkeletonItem *item = ScanSettings::self()->startupOnlyLocalItem();
+    mNetQueryCheck = new QCheckBox(item->label(), this);
+    mNetQueryCheck->setToolTip(item->toolTip());
     mLayout->addWidget(mNetQueryCheck);
 
     /* Show scanner selection box on startup (Checkbox) */
-    mSelectScannerCheck = new QCheckBox(i18n("Show the scanner selection dialog"), this);
-    mSelectScannerCheck->setToolTip(i18n("Check this to show the scanner selection dialog on startup."));
-    mSelectScannerCheck->setChecked(!grp2.readEntry(STARTUP_SKIP_ASK, false));
+    item = ScanSettings::self()->startupSkipAskItem();
+    mSelectScannerCheck = new QCheckBox(item->label(), this);
+    mSelectScannerCheck->setToolTip(item->toolTip());
     mLayout->addWidget(mSelectScannerCheck);
 
     /* Read startup image on startup (Checkbox) */
-    mRestoreImageCheck = new QCheckBox(i18n("Load the last selected image into the viewer"), this);
-    mRestoreImageCheck->setToolTip(i18n("Check this if you want Kooka to load the last selected image into the viewer on startup.\nIf your images are large, that might slow down Kooka's startup."));
-    mRestoreImageCheck->setChecked(mConfig.readEntry(STARTUP_READ_IMAGE, true));
+    item = KookaSettings::self()->startupReadImageItem();
+    mRestoreImageCheck = new QCheckBox(item->label(), this);
+    mRestoreImageCheck->setToolTip(item->toolTip());
     mLayout->addWidget(mRestoreImageCheck);
+
+    applySettings();
 }
 
 
 void KookaStartupPage::saveSettings()
 {
-    KConfigGroup grp2 = ScanGlobal::self()->configGroup();  // global, for libkscan also
+    ScanSettings::setStartupSkipAsk(!mSelectScannerCheck->isChecked());
+    ScanSettings::setStartupOnlyLocal(!mNetQueryCheck->isChecked());
+    ScanSettings::self()->writeConfig();
 
-    bool cbVal = !mSelectScannerCheck->isChecked();
-    kDebug() << "Writing" << STARTUP_SKIP_ASK << "as" << cbVal;
-    grp2.writeEntry(STARTUP_SKIP_ASK, cbVal);
-    grp2.writeEntry(STARTUP_ONLY_LOCAL, !mNetQueryCheck->isChecked());
-							// Kooka startup options
-    mConfig.writeEntry(STARTUP_READ_IMAGE, mRestoreImageCheck->isChecked());
+    KookaSettings::setStartupReadImage(mRestoreImageCheck->isChecked());
+    KookaSettings::self()->writeConfig();
 }
 
 
 void KookaStartupPage::defaultSettings()
 {
-    mNetQueryCheck->setChecked(true);
-    mSelectScannerCheck->setChecked(true);
-    mRestoreImageCheck->setChecked(false);
+    ScanSettings::self()->startupSkipAskItem()->setDefault();
+    ScanSettings::self()->startupOnlyLocalItem()->setDefault();
+    KookaSettings::self()->startupReadImageItem()->setDefault();
+    applySettings();
 }
+
+
+void KookaStartupPage::applySettings()
+{
+    mSelectScannerCheck->setChecked(!ScanSettings::startupSkipAsk());
+    mNetQueryCheck->setChecked(!ScanSettings::startupOnlyLocal());
+    mRestoreImageCheck->setChecked(KookaSettings::startupReadImage());
+}
+
+
+
+
+
+
 
 
 //  "Saving" page
@@ -167,16 +184,16 @@ void KookaStartupPage::defaultSettings()
 KookaSavingPage::KookaSavingPage(KPageDialog *parent)
     : KookaPrefsPage(parent, OP_SAVER_GROUP)
 {
-    mAskSaveFormat = new QCheckBox(i18n("Always use the Save Assistant"), this);
-    mAskSaveFormat->setChecked(mConfig.readEntry(OP_SAVER_ASK_FORMAT, false));
-    mAskSaveFormat->setToolTip(i18n("Check this if you want to always use the image save assistant, even if there is a default format for the image type."));
+    const KConfigSkeletonItem *item = KookaSettings::self()->saverAskForFormatItem();
+    mAskSaveFormat = new QCheckBox(item->label(), this);
+    mAskSaveFormat->setToolTip(item->toolTip());
     mLayout->addWidget(mAskSaveFormat);
 
     mLayout->addSpacing(2*KDialog::spacingHint());
 
-    mAskFileName = new QCheckBox(i18n("Ask for filename when saving"), this);
-    mAskFileName->setChecked(mConfig.readEntry(OP_SAVER_ASK_FILENAME, false));
-    mAskFileName->setToolTip(i18n("Check this if you want to enter a file name when scanning an image."));
+    item = KookaSettings::self()->saverAskForFilenameItem();
+    mAskFileName = new QCheckBox(item->label(), this);
+    mAskFileName->setToolTip(item->toolTip());
     mLayout->addWidget(mAskFileName);
 
     QButtonGroup *bg = new QButtonGroup(this);
@@ -184,42 +201,53 @@ KookaSavingPage::KookaSavingPage(KPageDialog *parent)
     gl->setVerticalSpacing(0);
     gl->setColumnMinimumWidth(0, 2*KDialog::marginHint());
 
-    bool askBefore = mConfig.readEntry(OP_SAVER_ASK_BEFORE, true);
-
-    mAskBeforeScan = new QRadioButton(i18n("Before the scan starts"), this);
-    mAskBeforeScan->setChecked(askBefore);
+    item = KookaSettings::self()->saverAskBeforeScanItem();
+    mAskBeforeScan = new QRadioButton(item->label(), this);
     mAskBeforeScan->setEnabled(mAskFileName->isChecked());
-    mAskBeforeScan->setToolTip(i18n("Check this if you want to enter the file name before scanning starts."));
+    mAskBeforeScan->setToolTip(item->toolTip());
     connect(mAskFileName, SIGNAL(toggled(bool)), mAskBeforeScan, SLOT(setEnabled(bool)));
     bg->addButton(mAskBeforeScan);
     gl->addWidget(mAskBeforeScan, 0, 1);
 
-    mAskAfterScan = new QRadioButton(i18n("After the scan is finished"), this);
-    mAskAfterScan->setChecked(!askBefore);
+    item = KookaSettings::self()->saverAskAfterScanItem();
+    mAskAfterScan = new QRadioButton(item->label(), this);
     mAskAfterScan->setEnabled(mAskFileName->isChecked());
-    mAskAfterScan->setToolTip(i18n("Check this if you want to enter the file name after scanning has finished."));
+    mAskAfterScan->setToolTip(item->toolTip());
     connect(mAskFileName, SIGNAL(toggled(bool)), mAskAfterScan, SLOT(setEnabled(bool)));
     bg->addButton(mAskAfterScan);
     gl->addWidget(mAskAfterScan, 1, 1);
 
     mLayout->addLayout(gl);
+
+    applySettings();
 }
 
 
 void KookaSavingPage::saveSettings()
 {
-    mConfig.writeEntry(OP_SAVER_ASK_FORMAT, mAskSaveFormat->isChecked());
-    mConfig.writeEntry(OP_SAVER_ASK_FILENAME, mAskFileName->isChecked());
-    mConfig.writeEntry(OP_SAVER_ASK_BEFORE, mAskBeforeScan->isChecked());
+    KookaSettings::setSaverAskForFormat(mAskSaveFormat->isChecked());
+    KookaSettings::setSaverAskForFilename(mAskFileName->isChecked());
+    KookaSettings::setSaverAskBeforeScan(mAskBeforeScan->isChecked());
+    KookaSettings::self()->writeConfig();
 }
 
 
 void KookaSavingPage::defaultSettings()
 {
-    mAskSaveFormat->setChecked(true);
-    mAskFileName->setChecked(true);
-    mAskBeforeScan->setChecked(true);
-    mAskAfterScan->setChecked(false);
+    KookaSettings::self()->saverAskForFormatItem()->setDefault();
+    KookaSettings::self()->saverAskForFilenameItem()->setDefault();
+    KookaSettings::self()->saverAskBeforeScanItem()->setDefault();
+    applySettings();
+}
+
+
+void KookaSavingPage::applySettings()
+{
+    mAskSaveFormat->setChecked(KookaSettings::saverAskForFormat());
+    mAskFileName->setChecked(KookaSettings::saverAskForFilename());
+    bool askBefore = KookaSettings::saverAskBeforeScan();
+    mAskBeforeScan->setChecked(askBefore);
+    mAskAfterScan->setChecked(!askBefore);
 }
 
 
@@ -234,20 +262,25 @@ KookaThumbnailPage::KookaThumbnailPage(KPageDialog *parent)
     gl->setColumnStretch(1, 1);
 
     /* Layout */
-    QLabel *lab = new QLabel(i18n("Show recent folders:"), gb);
+    const KConfigSkeletonItem *item = KookaSettings::self()->galleryLayoutItem();
+    QLabel *lab = new QLabel(item->label(), gb);
+    lab->setToolTip(item->toolTip());
     gl->addWidget(lab, 0, 0, Qt::AlignRight);
 
     mGalleryLayoutCombo = new KComboBox(gb);
-    mGalleryLayoutCombo->addItem(i18n("Not shown"), KookaGallery::NoRecent);
-    mGalleryLayoutCombo->addItem(i18n("At top"), KookaGallery::RecentAtTop);
-    mGalleryLayoutCombo->addItem(i18n("At bottom"), KookaGallery::RecentAtBottom);
-    mGalleryLayoutCombo->setCurrentIndex(mConfig.readEntry(GALLERY_LAYOUT, static_cast<int>(KookaGallery::RecentAtTop)));
+    mGalleryLayoutCombo->setToolTip(item->toolTip());
+// TODO: eliminate former enums
+    mGalleryLayoutCombo->addItem(i18n("Not shown"), KookaSettings::RecentNone);
+    mGalleryLayoutCombo->addItem(i18n("At top"), KookaSettings::RecentAtTop);
+    mGalleryLayoutCombo->addItem(i18n("At bottom"), KookaSettings::RecentAtBottom);
+
     lab->setBuddy(mGalleryLayoutCombo);
     gl->addWidget(mGalleryLayoutCombo, 0, 1);
 
     /* Allow renaming */
-    mAllowRenameCheck = new QCheckBox(i18n("Allow click-to-rename"), gb);
-    mAllowRenameCheck->setToolTip(i18n("Check this if you want to be able to rename gallery items by clicking on them (otherwise, use the \"Rename\" menu option)"));
+    item = KookaSettings::self()->galleryAllowRenameItem();
+    mAllowRenameCheck = new QCheckBox(item->label(), gb);
+    mAllowRenameCheck->setToolTip(item->toolTip());
     mAllowRenameCheck->setChecked(mConfig.readEntry(GALLERY_ALLOW_RENAME, false));
     gl->addWidget(mAllowRenameCheck, 1, 0, 1, 2);
 
@@ -259,93 +292,91 @@ KookaThumbnailPage::KookaThumbnailPage(KPageDialog *parent)
     gl->setColumnStretch(1, 1);
 
     // Do we want a background image?
-    mCustomBackgroundCheck = new QCheckBox(i18n("Use a custom background image"), this);
-    mCustomBackgroundCheck->setChecked(mConfig.readEntry(THUMB_CUSTOM_BGND, false));
+    item = KookaSettings::self()->thumbnailCustomBackgroundItem();
+    mCustomBackgroundCheck = new QCheckBox(item->label(), this);
+    mCustomBackgroundCheck->setToolTip(item->toolTip());
     connect(mCustomBackgroundCheck, SIGNAL(toggled(bool)), SLOT(slotCustomThumbBgndToggled(bool)));
     gl->addWidget(mCustomBackgroundCheck, 2, 0, 1, 2);
 
     /* Background image */
-    QString bgImg = mConfig.readPathEntry(THUMB_BG_WALLPAPER, ThumbView::standardBackground());
-
-    QLabel *l = new QLabel(i18n("Image:"), this);
-    gl->addWidget(l, 3, 0, Qt::AlignRight);
+    item = KookaSettings::self()->thumbnailBackgroundPathItem();
+    lab = new QLabel(item->label(), this);
+    lab->setToolTip(item->toolTip());
+    gl->addWidget(lab, 3, 0, Qt::AlignRight);
 
     /* Image file selector */
     mTileSelector = new KUrlRequester(this);
+    mTileSelector->setToolTip(item->toolTip());
     mTileSelector->setMode(KFile::File|KFile::ExistingOnly|KFile::LocalOnly);
-    kDebug() << "Setting tile URL" << bgImg;
-    mTileSelector->setUrl(bgImg);
-
+    mTileSelector->fileDialog()->setMimeFilter(KImageIO::mimeTypes(KImageIO::Reading));
     gl->addWidget(mTileSelector, 3, 1);
-    l->setBuddy(mTileSelector);
+    lab->setBuddy(mTileSelector);
 
     gl->setRowMinimumHeight(4, 2*KDialog::spacingHint());
 
     /* Preview size */
-    l = new QLabel(i18n("Preview size:"), this);
-    gl->addWidget(l, 5, 0, Qt::AlignRight);
+    item = KookaSettings::self()->thumbnailPreviewSizeItem();
+    lab = new QLabel(item->label(), this);
+    lab->setToolTip(item->toolTip());
+    gl->addWidget(lab, 5, 0, Qt::AlignRight);
 
     mThumbSizeCombo = new KComboBox(this);
-    mThumbSizeCombo->addItem(ThumbView::sizeName(KIconLoader::SizeEnormous));		// 0
-    mThumbSizeCombo->addItem(ThumbView::sizeName(KIconLoader::SizeHuge));		// 1
-    mThumbSizeCombo->addItem(ThumbView::sizeName(KIconLoader::SizeLarge));		// 2
-    mThumbSizeCombo->addItem(ThumbView::sizeName(KIconLoader::SizeMedium));		// 3
-    mThumbSizeCombo->addItem(ThumbView::sizeName(KIconLoader::SizeSmallMedium));	// 4
-
-    KIconLoader::StdSizes size = static_cast<KIconLoader::StdSizes>(mConfig.readEntry(THUMB_PREVIEW_SIZE,
-                                                                                      static_cast<int>(KIconLoader::SizeHuge)));
-    int sel;
-    switch (size)
-    {
-case KIconLoader::SizeEnormous:		sel = 0;	break;
-default:
-case KIconLoader::SizeHuge:		sel = 1;	break;
-case KIconLoader::SizeLarge:		sel = 2;	break;
-case KIconLoader::SizeMedium:		sel = 3;	break;
-case KIconLoader::SizeSmallMedium:	sel = 4;	break;
-    }
-    mThumbSizeCombo->setCurrentIndex(sel);
-
+    mThumbSizeCombo->addItem(ThumbView::sizeName(KIconLoader::SizeEnormous), KIconLoader::SizeEnormous);
+    mThumbSizeCombo->addItem(ThumbView::sizeName(KIconLoader::SizeHuge), KIconLoader::SizeHuge);
+    mThumbSizeCombo->addItem(ThumbView::sizeName(KIconLoader::SizeLarge), KIconLoader::SizeLarge);
+    mThumbSizeCombo->addItem(ThumbView::sizeName(KIconLoader::SizeMedium), KIconLoader::SizeMedium);
+    mThumbSizeCombo->addItem(ThumbView::sizeName(KIconLoader::SizeSmallMedium), KIconLoader::SizeSmallMedium);
     gl->addWidget(mThumbSizeCombo, 5, 1);
-    l->setBuddy(mThumbSizeCombo);
+    lab->setBuddy(mThumbSizeCombo);
 
     mLayout->addWidget(gb);
 
+    applySettings();
     slotCustomThumbBgndToggled(mCustomBackgroundCheck->isChecked());
 }
 
 
 void KookaThumbnailPage::saveSettings()
 {
-    mConfig.writeEntry(GALLERY_ALLOW_RENAME, mAllowRenameCheck->isChecked());
-    mConfig.writeEntry(GALLERY_LAYOUT, mGalleryLayoutCombo->currentIndex());
+    KookaSettings::setGalleryAllowRename(mAllowRenameCheck->isChecked());
+    KookaSettings::setGalleryLayout(mGalleryLayoutCombo->itemData(mGalleryLayoutCombo->currentIndex()).toInt());
 
-    mConfig.writePathEntry(THUMB_BG_WALLPAPER, mTileSelector->url().pathOrUrl());
-    mConfig.writeEntry(THUMB_CUSTOM_BGND, mCustomBackgroundCheck->isChecked());
+    KookaSettings::setThumbnailCustomBackground(mCustomBackgroundCheck->isChecked());
+    KookaSettings::setThumbnailBackgroundPath(mTileSelector->url().pathOrUrl());
 
-    KIconLoader::StdSizes size;
-    switch (mThumbSizeCombo->currentIndex())
-    {
-case 0:		size = KIconLoader::SizeEnormous;	break;
-default:
-case 1:		size = KIconLoader::SizeHuge;		break;
-case 2:		size = KIconLoader::SizeLarge;		break;
-case 3:		size = KIconLoader::SizeMedium;		break;
-case 4:		size = KIconLoader::SizeSmallMedium;	break;
-    }
-    mConfig.writeEntry(THUMB_PREVIEW_SIZE, static_cast<int>(size));
+    int size = mThumbSizeCombo->itemData(mThumbSizeCombo->currentIndex()).toInt();
+    if (size>0) KookaSettings::setThumbnailPreviewSize(size);
+    else kWarning() << "Invalid size" << size << "for combo index" << mThumbSizeCombo->currentIndex();
+
+    KookaSettings::self()->writeConfig();
 }
 
 
 void KookaThumbnailPage::defaultSettings()
 {
-    mAllowRenameCheck->setChecked(false);
-    mGalleryLayoutCombo->setCurrentIndex(KookaGallery::RecentAtTop);
+    KookaSettings::self()->galleryLayoutItem()->setDefault();
+    KookaSettings::self()->galleryAllowRenameItem()->setDefault();
+    KookaSettings::self()->thumbnailCustomBackgroundItem()->setDefault();
+    KookaSettings::self()->thumbnailBackgroundPathItem()->setDefault();
+    KookaSettings::self()->thumbnailPreviewSizeItem()->setDefault();
 
-    mCustomBackgroundCheck->setChecked(false);
+    applySettings();
     slotCustomThumbBgndToggled(false);
-    mTileSelector->setUrl(ThumbView::standardBackground());
-    mThumbSizeCombo->setCurrentIndex(1);			// "Very Large"
+}
+
+
+void KookaThumbnailPage::applySettings()
+{
+    mGalleryLayoutCombo->setCurrentIndex(KookaSettings::galleryLayout());
+    mAllowRenameCheck->setChecked(KookaSettings::galleryAllowRename());
+    mCustomBackgroundCheck->setChecked(KookaSettings::thumbnailCustomBackground());
+
+    mTileSelector->setUrl(KookaSettings::thumbnailBackgroundPath());
+
+    KIconLoader::StdSizes size = static_cast<KIconLoader::StdSizes>(KookaSettings::thumbnailPreviewSize());
+    int sel = mThumbSizeCombo->findData(size, Qt::UserRole, Qt::MatchExactly);
+    if (sel!=-1) mThumbSizeCombo->setCurrentIndex(sel);
+    else kWarning() << "Cannot find combo index for size" << size;
 }
 
 

@@ -151,7 +151,7 @@ public:
      *
      * @return The option set description
      **/
-    QString getDescription() const	{ return (mSetDescription); }
+    QString getDescription() const		{ return (mSetDescription); }
 
     /**
      * Set a new name for the option set.
@@ -165,7 +165,7 @@ public:
      *
      * @return The option set name
      **/
-    const QString &getSetName() const	{ return (mSetName); }
+    const QString &getSetName() const		{ return (mSetName); }
 
     /**
      * Read all of the available saved option set names and descriptions
@@ -181,6 +181,13 @@ public:
      * @param setName The name of the set to delete
      **/
     static void deleteSet(const QString &setName);
+
+    /**
+     * Get the name of the default startup option set.
+     *
+     * @return The set name
+     **/
+    static QString startupSetName()		{ return ("saveSet"); }
 
 private:
     QString mSetName;

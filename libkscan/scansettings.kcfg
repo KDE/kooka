@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kcfg xmlns="http://www.kde.org/standards/kcfg/1.0"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.kde.org/standards/kcfg/1.0
+                          http://www.kde.org/standards/kcfg/1.0/kcfg.xsd" >
+  <kcfgfile name="scannerrc"></kcfgfile>
+
+  <group name="Startup">
+
+    <!-- Inversion between key/value and function/text -->
+    <entry name="StartupOnlyLocal" key="QueryLocalOnly" type="Bool">
+      <label>Query network for available scanners</label>
+      <tooltip>&lt;div&gt;Check this if you want a network query for available scanners.&lt;br/&gt;&lt;br/&gt;Note that this does not mean a query over the entire network, but only those hosts configured for SANE.&lt;/div&gt;</tooltip>
+      <default>true</default>
+    </entry>
+
+    <entry name="StartupScanDevice" key="ScanDevice" type="String">
+    </entry>
+
+    <!-- Inversion between key/value/function and text -->
+    <entry name="StartupSkipAsk" key="SkipStartupAsk" type="Bool">
+      <label>Show the scanner selection dialog</label>
+      <tooltip>&lt;div&gt;Check this to show the scanner selection dialog on startup.&lt;/div&gt;</tooltip>
+      <default>true</default>
+    </entry>
+
+  </group>
+
+  <group name="User Specified Scanners">
+    <entry name="UserDevices" key="Devices" type="StringList">
+    </entry>
+    <entry name="UserDescriptions" key="Description" type="StringList">
+    </entry>
+    <entry name="UserTypes" key="Type" type="StringList">
+    </entry>
+  </group>
+
+  <!-- Only used as a template -->
+  <group name="Save Set">
+    <entry name="SaveSetDesc" key="SetDesc" type="String">
+    </entry>
+    <entry name="SaveSetScanner" key="ScannerName" type="String">
+    </entry>
+  </group>
+
+  <!-- Only used as a template, default/limit values and GUI strings -->
+  <group name="Scanner Name">
+    <entry name="PreviewAutoselOn" key="doAutoselection" type="Bool">
+      <default>false</default>
+    </entry>
+
+    <entry name="PreviewAutoselThreshold" key="autoselThreshold" type="Int">
+      <label>Threshold:</label>
+      <tooltip>&lt;div&gt;Threshold for auto-detection. All pixels lighter (on a black background) or darker (on a white background) than this are considered to be part of the image.&lt;/div&gt;</tooltip>
+      <default>25</default>
+      <min>0</min>
+      <max>100</max>
+    </entry>
+
+    <entry name="PreviewAutoselDustsize" key="autoselDustsize" type="Int">
+      <label>Dust size (pixels):</label>
+      <tooltip>&lt;div&gt;Set the dust size; dark or light areas smaller than this will be ignored&lt;/div&gt;</tooltip>
+      <default>5</default>
+      <min>0</min>
+      <max>20</max>
+    </entry>
+
+    <entry name="PreviewAutoselMargin" key="autoselMargin" type="Int">
+      <label>Add/subtract margin (mm):</label>
+      <tooltip>&lt;div&gt;Set a margin to be added to or subtracted from the detected area&lt;/div&gt;</tooltip>
+      <default>0</default>
+      <min>-20</min>
+      <max>20</max>
+    </entry>
+
+    <entry name="PreviewAutoselBackground" key="scannerBackground" type="Enum">
+      <label>Scanner background:</label>
+      <tooltip>&lt;div&gt;Select whether a scan of the empty scanner glass results in a black or a white image&lt;/div&gt;</tooltip>
+      <choices name="PreviewAutoselBackgrounds" prefix="Background">
+        <choice name="Unknown"></choice>
+        <choice name="Black"></choice>
+        <choice name="White"></choice>
+      </choices>
+      <default>ScanSettings::BackgroundUnknown</default>
+    </entry>
+  </group>
+
+  <group name="MainWindow">
+    <entry name="MainWindowSplitterState" key="SplitterState" type="String">
+    </entry>
+  </group>
+
+</kcfg>

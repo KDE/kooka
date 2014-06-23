@@ -91,6 +91,8 @@ public:
     void defaultSettings();
 
 private:
+    void applySettings();
+
     QCheckBox *mNetQueryCheck;
     QCheckBox *mSelectScannerCheck;
     QCheckBox *mRestoreImageCheck;
@@ -108,6 +110,8 @@ public:
     void defaultSettings();
 
 private:
+    void applySettings();
+
     QCheckBox *mAskSaveFormat;
     QCheckBox *mAskFileName;
     QRadioButton *mAskBeforeScan;
@@ -129,6 +133,8 @@ private slots:
     void slotCustomThumbBgndToggled(bool state);
 
 private:
+    void applySettings();
+
     QCheckBox *mAllowRenameCheck;
     KComboBox *mGalleryLayoutCombo;
     KUrlRequester *mTileSelector;
@@ -151,6 +157,7 @@ private slots:
     void slotEngineSelected(int i);
 
 private:
+    void applySettings();
     bool checkOcrBinary(const QString &cmd, const QString &bin, bool showMsg);
 
     KUrlRequester *mOcrBinaryReq;

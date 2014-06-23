@@ -39,7 +39,7 @@
 
 #include "autoselectdialog.h"
 #include "kscancontrols.h"
-#include "autoselectdata.h"
+#include "scansettings.h"
 
 
 AutoSelectBar::AutoSelectBar(int initialValue, QWidget *parent)
@@ -56,16 +56,15 @@ AutoSelectBar::AutoSelectBar(int initialValue, QWidget *parent)
     hbl->addSpacing(2*KDialog::spacingHint());
 
     // Threshold setting label
-    l = new QLabel(i18nc("@label:slider", "Threshold:"));
+    const KConfigSkeletonItem *item = ScanSettings::self()->previewAutoselThresholdItem();
+    l = new QLabel(item->label());
     hbl->addWidget(l);
 
     // Threshold setting slider/spinbox
-    mThresholdSlider = new KScanSlider(NULL, QString::null, 0, AutoSelectData::MaximumThreshold);
+    int maxThresh = item->maxValue().toInt();
+    mThresholdSlider = new KScanSlider(NULL, QString::null, 0, maxThresh);
     mThresholdSlider->setValue(initialValue);
-    mThresholdSlider->setToolTip(i18nc("@info:tooltip", "Threshold for auto-detection.\n"
-                                       "All pixels lighter (on a black background)\n"
-                                       "or darker (on a white background)\n"
-                                       "than this are considered to be part of the image."));
+    mThresholdSlider->setToolTip(item->toolTip());
     l->setBuddy(mThresholdSlider);
 
     connect(mThresholdSlider, SIGNAL(settingChanged(int)), SLOT(slotThresholdChanged(int)));

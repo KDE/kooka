@@ -169,7 +169,7 @@ bool ScanParams::connectDevice(KScanDevice *newScanDevice, bool galleryMode)
     // They may be for a completely different one...
     // Or update KScanDevice and here to save/load the startup options
     // on a per-scanner basis.
-    mStartupOptions = new KScanOptSet(DEFAULT_OPTIONSET);
+    mStartupOptions = new KScanOptSet(KScanOptSet::startupSetName());
     if (!mStartupOptions->loadConfig(mSaneDevice->scannerBackendName()))
     {
         kDebug() << "Could not load startup options";

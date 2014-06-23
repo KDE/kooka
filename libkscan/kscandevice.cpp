@@ -40,6 +40,7 @@
 #include "kscanoptset.h"
 #include "deviceselector.h"
 #include "imagemetainfo.h"
+#include "scansettings.h"
 
 extern "C" {
 #include <sane/saneopts.h>
@@ -1334,7 +1335,7 @@ void KScanDevice::saveStartupConfig()
 {
     if (mScannerName.isNull()) return;			// do not save for no scanner
 
-    KScanOptSet optSet(DEFAULT_OPTIONSET);
+    KScanOptSet optSet(KScanOptSet::startupSetName());
     getCurrentOptions(&optSet);
     optSet.saveConfig(mScannerName, i18n("Default startup configuration"));
 }
@@ -1395,29 +1396,11 @@ void KScanDevice::getCurrentOptions(KScanOptSet *optSet) const
 }
 
 
-QString KScanDevice::getConfig(const QString &key, const QString &def) const
+KConfigGroup KScanDevice::configGroup(const QString &groupName)
 {
-    const KConfigGroup grp = ScanGlobal::self()->configGroup(mScannerName);
-    return (grp.readEntry(key, def));
+    Q_ASSERT(!groupName.isEmpty());
+    return (ScanSettings::self()->config()->group(groupName));
 }
-
-
-void KScanDevice::storeConfig(const QString &key, const QString &val)
-{
-    if (mScannerName.isNull())
-    {
-        kDebug() << "Skipping config write, no scanner name!";
-        return;
-    }
-
-    kDebug() << "Storing config" << key << "in group" << mScannerName;
-
-    KConfigGroup grp = ScanGlobal::self()->configGroup(mScannerName);
-    grp.writeEntry(key, val);
-    grp.sync();
-}
-
-
 
 //  SANE Authentication
 //  -------------------
@@ -1443,7 +1426,7 @@ bool KScanDevice::authenticate(QByteArray *retuser, QByteArray *retpass)
     kDebug() << "for" << mScannerName;
 
     // TODO: use KWallet for username/password?
-    KConfigGroup grp = ScanGlobal::self()->configGroup(mScannerName);
+    KConfigGroup grp = configGroup(mScannerName);
     QByteArray user = QByteArray::fromBase64(grp.readEntry("user", QString()).toLocal8Bit());
     QByteArray pass = QByteArray::fromBase64(grp.readEntry("pass", QString()).toLocal8Bit());
 
@@ -1481,8 +1464,7 @@ bool KScanDevice::authenticate(QByteArray *retuser, QByteArray *retpass)
 
 void KScanDevice::clearSavedAuth()
 {
-    KConfigGroup grp = ScanGlobal::self()->configGroup(mScannerName);
-
+    KConfigGroup grp = configGroup(mScannerName);
     grp.deleteEntry("user");
     grp.deleteEntry("pass");
     grp.sync();

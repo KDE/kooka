@@ -23,16 +23,9 @@
 #include <kdebug.h>
 #include <klocale.h>
 #include <kglobal.h>
-#include <kconfig.h>
-#include <kconfiggroup.h>
 
 #include "scanglobal.h"
-
-
-#define USERDEV_GROUP		"User Specified Scanners"
-#define USERDEV_DEVS		"Devices"
-#define USERDEV_DESC		"Description"
-#define USERDEV_TYPE		"Type"
+#include "scansettings.h"
 
 
 ScanDevices *sInstance = NULL;
@@ -51,8 +44,7 @@ ScanDevices::ScanDevices()
 
     if (!ScanGlobal::self()->init()) return;		// do sane_init() if necessary
 
-    const KConfigGroup grp1 = ScanGlobal::self()->configGroup();
-    bool netaccess = grp1.readEntry(STARTUP_ONLY_LOCAL, false);
+    bool netaccess = ScanSettings::startupOnlyLocal();
     kDebug() << "Query for network scanners" << (netaccess ? "not enabled" : "enabled");
 
     SANE_Device const **dev_list = NULL;
@@ -71,22 +63,23 @@ ScanDevices::ScanDevices()
         kDebug() << "SANE found scanner:" << dev->name << "=" << deviceDescription(dev->name);
     }
 
-    KConfigGroup grp2 = ScanGlobal::self()->configGroup(USERDEV_GROUP);
-    QStringList devs = grp2.readEntry(USERDEV_DEVS, QStringList());
-    if (devs.count()>0)
+    QStringList devs = ScanSettings::userDevices();
+    if (!devs.isEmpty())
     {
-        QStringList descs = grp2.readEntry(USERDEV_DESC, QStringList());
+        QStringList descs = ScanSettings::userDescriptions();
         if (descs.count()<devs.count())			// ensure list corrent length
         {
             for (int i = descs.count(); i<devs.count(); ++i) descs.append("Unknown");
-            grp2.writeEntry(USERDEV_DESC, descs);
+            ScanSettings::setUserDescriptions(descs);
+            ScanSettings::self()->writeConfig();
         }
 
-        QStringList types = grp2.readEntry(USERDEV_TYPE, QStringList());
+        QStringList types = ScanSettings::userTypes();
         if (types.count()<devs.count())			// ensure list correct length
         {
             for (int i = types.count(); i<devs.count(); ++i) types.append("scanner");
-            grp2.writeEntry(USERDEV_TYPE, types);
+            ScanSettings::setUserTypes(types);
+            ScanSettings::self()->writeConfig();
         }
 
         QStringList::const_iterator it2 = descs.constBegin();
@@ -127,10 +120,9 @@ void ScanDevices::addUserSpecifiedDevice(const QByteArray &backend,
 
     if (!dontSave)					// add new device to config
     {							// get existing device lists
-        KConfigGroup grp = ScanGlobal::self()->configGroup(USERDEV_GROUP);
-        QStringList devs = grp.readEntry(USERDEV_DEVS, QStringList());
-        QStringList descs = grp.readEntry(USERDEV_DESC, QStringList());
-        QStringList types = grp.readEntry(USERDEV_TYPE, QStringList());
+        QStringList devs = ScanSettings::userDevices();
+        QStringList descs = ScanSettings::userDescriptions();
+        QStringList types = ScanSettings::userTypes();
 
         int i = devs.indexOf(backend);
         if (i>=0)					// see if already in list
@@ -145,10 +137,10 @@ void ScanDevices::addUserSpecifiedDevice(const QByteArray &backend,
             types.append(devtype);
         }
 
-        grp.writeEntry(USERDEV_DEVS, devs);
-        grp.writeEntry(USERDEV_DESC, descs);
-        grp.writeEntry(USERDEV_TYPE, types);
-        grp.sync();
+        ScanSettings::setUserDevices(devs);
+        ScanSettings::setUserDescriptions(descs);
+        ScanSettings::setUserTypes(types);
+        ScanSettings::self()->writeConfig();
     }
 
     SANE_Device *userdev = new SANE_Device;

@@ -64,6 +64,8 @@ set(libkscan_SRCS
   autoselectdialog.cpp
 )
 
+kde4_add_kcfg_files(libkscan_SRCS scansettings.kcfgc)
+
 kde4_add_library(libkscan SHARED ${libkscan_SRCS})
 target_link_libraries(libkscan
   ${KDE4_KIO_LIBS}
@@ -94,3 +96,4 @@ add_custom_target(clobber
 ########### installation ###############
 
 install(TARGETS libkscan ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(FILES scansettings.kcfg DESTINATION ${KCFG_INSTALL_DIR})
