@@ -35,7 +35,6 @@
 #include <qimage.h>
 
 class KUrl;
-class KookaView;
 
 class ImageTransform : public QThread
 {

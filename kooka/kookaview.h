@@ -34,15 +34,12 @@
 
 #include "libkscan/kscandevice.h"
 
-class QPainter;
-class QPixmap;
 class QSplitter;
 class QSignalMapper;
 
 class KConfigGroup;
 class KPrinter;
 class QAction;
-class KActionCollection;
 class KMainWindow;
 class KUrl;
 class KActionMenu;

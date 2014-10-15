@@ -49,7 +49,6 @@ class KIntNumInput;
 
 class KookaImage;
 class KScanDevice;
-class Previewer;
 
 #ifndef KDE4
 class PhotoCopyPrintDialogPage: public KPrintDialogPage

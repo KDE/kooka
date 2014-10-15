@@ -46,7 +46,6 @@
 #define CFG_OCRAD_BINARY        "ocradBinary"
 #define CFG_GOCR_BINARY         "gocrBinary"
 
-class QVBoxLayout;
 
 class KookaPrefsPage;
 

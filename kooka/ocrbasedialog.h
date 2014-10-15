@@ -41,11 +41,9 @@ class QCheckBox;
 class QGroupBox;
 class QPushButton;
 class QRadioButton;
-class QGridLayout;
 class QProgressBar;
 
 class KPageWidgetItem;
-class KJob;
 class KFileItem;
 
 class KookaImage;

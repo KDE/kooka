@@ -33,7 +33,6 @@
 #endif
 
 class OcrBaseDialog;
-class KTempFile;
 
 class OcrKadmosEngine : public OcrEngine
 {

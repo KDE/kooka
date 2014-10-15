@@ -41,7 +41,6 @@
 #define THUMB_BG_WALLPAPER  "BackGroundTile"
 #define THUMB_STD_TILE_IMG  "kooka/pics/thumbviewtile.png"
 
-class QAction;
 class KFileItem;
 class QMenu;
 class KActionMenu;

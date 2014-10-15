@@ -30,7 +30,6 @@
 
 #include "ocrengine.h"
 
-class KProcess;
 
 class OcrOcradEngine : public OcrEngine
 {
