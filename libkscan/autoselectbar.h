@@ -32,7 +32,6 @@
 
 class KColorPatch;
 class KScanSlider;
-class AutoSelectDialog;
 
 class KSCAN_EXPORT AutoSelectBar : public QWidget
 {

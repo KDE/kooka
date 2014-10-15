@@ -28,10 +28,8 @@
 #include "kscandevice.h"
 #include "scansourcedialog.h"
 
-class QScrollArea;
 class QProgressDialog;
 class QPushButton;
-class QCheckBox;
 class QLabel;
 
 class KScanOption;

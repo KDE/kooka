@@ -30,9 +30,6 @@
 /**
   *@author Klaas Freitag
   */
-class QLabel;
-class QGroupBox;
-class QSlider;
 
 class KScanDevice;
 

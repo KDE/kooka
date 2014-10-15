@@ -38,7 +38,6 @@ class QGraphicsPixmapItem;
 class QMenu;
 
 class SelectionItem;
-class ImageCanvasWidget;
 
 /**
  * @short Image display canvas widget.
