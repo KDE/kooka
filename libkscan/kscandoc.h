@@ -1,5 +1,5 @@
 /* This file is part of the KDE Project
-   Copyright (C) 2002 Klaas Freitag <freitag@suse.de>  
+   Copyright (C) 2002 Klaas Freitag <freitag@suse.de>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -34,10 +34,6 @@ Libkscan provides a dialog for you to include scan functionality to your applica
    - An option tab to edit basically scan options.
 The scan dialog works completely as KPart and allows the user to scan a preview, select the interesting part on the preview scan, and than start the final scan. Your application will be notified by a signal finalImage that informs you that a new image is available from the scanner.
 
-
-
-
-
 \section objectOverview Abstract KScan Objects
 
 The KScan Library defines the following classes which are responsible for managing the scanner's parameters:
@@ -70,7 +66,7 @@ Provides an entry field preceded by text.
 Slider preceded by text. Range values are transferred with the data type double.
 
 - KScanCombo \n(defined in kscanslider.h)\n
-Combobox widget which precedes description text and can represent icons. 
+Combobox widget which precedes description text and can represent icons.
 
 - DispGamma \n(defined in dispgamma.h)\n
 Widget for displaying gamma tables.
@@ -107,8 +103,6 @@ The ScanParams class is the actual core of the
     <li> Gamma table
     <li> Preview scanning
  </ul>
- 
-
 
 \author Klaas Freitag <freitag@suse.de>
 

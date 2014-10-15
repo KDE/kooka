@@ -11,9 +11,82 @@
 ##									##
 ##########################################################################
 
+cmake_minimum_required(VERSION 2.8.12)
+
 project(kooka4)
-set(VERSION "0.61")
+set(VERSION "0.80")
 message(STATUS "Configuring for Kooka/libkscan version ${VERSION}")
+
+
+# Start new check here
+# ECM setup (Extended Cmake Modules)
+find_package(ECM 1.2.0 REQUIRED NO_MODULE)
+set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR} ${CMAKE_SOURCE_DIR}/cmake-modules)
+
+include(FeatureSummary)
+include(ECMSetupVersion)
+include(ECMGenerateHeaders)
+include(CMakePackageConfigHelpers)
+include(CheckFunctionExists)
+include(KDEInstallDirs)
+include(KDEFrameworkCompilerSettings)
+include(KDECMakeSettings)
+include(GenerateExportHeader)
+include(ECMInstallIcons)
+
+
+set(KF5_VERSION "5.2.0")
+
+# Dependencies
+set(REQUIRED_QT_VERSION "5.2.0")
+
+# Required Qt5 components to build this framework
+find_package(Qt5 ${REQUIRED_QT_VERSION} NO_MODULE REQUIRED Core Widgets)
+
+find_package(KF5DocTools REQUIRED)
+find_package(KF5KDELibs4Support REQUIRED)
+
+# REMOVE IT
+remove_definitions(-DQT_NO_CAST_FROM_BYTEARRAY)
+remove_definitions(-DQT_NO_CAST_TO_ASCII)
+remove_definitions(-DQT_NO_CAST_FROM_ASCII)
+
+# Support for SANE, here because library and sanedump both need it
+if (SANECONFIG_BIN)
+  set(SANECONFIG_PROG ${SANECONFIG_BIN})
+  message(STATUS "Specified sane-config(1), ${SANECONFIG_PROG}")
+else (SANECONFIG_BIN)
+  find_program(SANECONFIG_PROG NAMES sane-config)
+  message(STATUS "Found sane-config(1), ${SANECONFIG_PROG}")
+endif (SANECONFIG_BIN)
+
+if (SANECONFIG_PROG)
+  set(HAVE_SANE true)
+else (SANECONFIG_PROG)
+  message(SEND_ERROR "libkscan needs SANE (http://www.sane-project.org) - specify location of sane-config(1) with SANECONFIG_BIN")
+endif (SANECONFIG_PROG)
+
+if (HAVE_SANE)
+  execute_process(COMMAND ${SANECONFIG_PROG} --version OUTPUT_VARIABLE SANE_VERSION OUTPUT_STRIP_TRAILING_WHITESPACE)
+  message(STATUS "Found SANE, version ${SANE_VERSION}")
+
+  execute_process(COMMAND ${SANECONFIG_PROG} --cflags OUTPUT_VARIABLE SANE_INCLUDES OUTPUT_STRIP_TRAILING_WHITESPACE)
+  message(STATUS "SANE includes: ${SANE_INCLUDES}")
+
+  execute_process(COMMAND ${SANECONFIG_PROG} --libs OUTPUT_VARIABLE SANE_LIBRARIES OUTPUT_STRIP_TRAILING_WHITESPACE)
+  message(STATUS "SANE libraries: ${SANE_LIBRARIES}")
+endif (HAVE_SANE)
+
+
+
+add_subdirectory(libkscan)
+add_subdirectory(libfiletree)
+add_subdirectory(kooka)
+add_subdirectory(doc)
+
+
+
+if (false)
 
 # where to look first for cmake modules. This line must be the first one or cmake will use the system's FindFoo.cmake
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/modules")
@@ -144,3 +217,4 @@ ENDIF (EXISTS ${fullpath})
 ########### end ###############
 
 macro_display_feature_log()
+endif()

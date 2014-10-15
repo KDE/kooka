@@ -18,15 +18,16 @@
 */
 
 #include "filetreeview.h"
-#include "filetreeview.moc"
 
 #include <stdlib.h>
 
 #include <qevent.h>
 #include <qdir.h>
 #include <qapplication.h>
+#include <QTimer>
+#include <QMimeData>
 
-#include <kdebug.h>
+#include <QDebug>
 #include <kglobalsettings.h>
 #include <kfileitem.h>
 #include <kmimetype.h>
@@ -39,16 +40,15 @@
 #include "filetreeviewitem.h"
 #include "filetreebranch.h"
 
-
 FileTreeView::FileTreeView(QWidget *parent)
     : QTreeWidget(parent)
 {
     setObjectName("FileTreeView");
-    kDebug();
+    //qDebug();
 
     setSelectionMode(QAbstractItemView::SingleSelection);
-    setExpandsOnDoubleClick(false);			// we'll handle this ourselves
-    setEditTriggers(QAbstractItemView::NoEditTriggers);	// maybe changed later
+    setExpandsOnDoubleClick(false);         // we'll handle this ourselves
+    setEditTriggers(QAbstractItemView::NoEditTriggers); // maybe changed later
 
     m_wantOpenFolderPixmaps = true;
     m_currentBeforeDropItem = NULL;
@@ -56,11 +56,11 @@ FileTreeView::FileTreeView(QWidget *parent)
     m_busyCount = 0;
 
     m_autoOpenTimer = new QTimer(this);
-    m_autoOpenTimer->setInterval((QApplication::startDragTime()*3)/2);
+    m_autoOpenTimer->setInterval((QApplication::startDragTime() * 3) / 2);
     connect(m_autoOpenTimer, SIGNAL(timeout()), SLOT(slotAutoOpenFolder()));
 
     /* The executed-Slot only opens  a path, while the expanded-Slot populates it */
-    connect(this, SIGNAL(itemActivated( QTreeWidgetItem *, int)),
+    connect(this, SIGNAL(itemActivated(QTreeWidgetItem *, int)),
             SLOT(slotExecuted(QTreeWidgetItem *)));
     connect(this, SIGNAL(itemExpanded(QTreeWidgetItem *)),
             SLOT(slotExpanded(QTreeWidgetItem *)));
@@ -69,8 +69,8 @@ FileTreeView::FileTreeView(QWidget *parent)
     connect(this, SIGNAL(itemDoubleClicked(QTreeWidgetItem *, int)),
             SLOT(slotDoubleClicked(QTreeWidgetItem *)));
 
-    connect(model(), SIGNAL(dataChanged(const QModelIndex &,const QModelIndex &)),
-            SLOT(slotDataChanged(const QModelIndex &,const QModelIndex &)));
+    connect(model(), SIGNAL(dataChanged(const QModelIndex &, const QModelIndex &)),
+            SLOT(slotDataChanged(const QModelIndex &, const QModelIndex &)));
 
     /* connections from the konqtree widget */
     connect(this, SIGNAL(itemSelectionChanged()),
@@ -79,12 +79,11 @@ FileTreeView::FileTreeView(QWidget *parent)
             SLOT(slotOnItem(QTreeWidgetItem *)));
 
     m_openFolderPixmap = KIconLoader::global()->loadIcon("folder-open",
-                                                         KIconLoader::Desktop,
-                                                         KIconLoader::SizeSmall,
-                                                         KIconLoader::ActiveState);
-    kDebug() << "done";
+                         KIconLoader::Desktop,
+                         KIconLoader::SizeSmall,
+                         KIconLoader::ActiveState);
+    //qDebug() << "done";
 }
-
 
 FileTreeView::~FileTreeView()
 {
@@ -98,18 +97,16 @@ FileTreeView::~FileTreeView()
     m_branches.clear();
 }
 
-
 // This is used when dragging and dropping out of the view to somewhere else.
 QMimeData *FileTreeView::mimeData(const QList<QTreeWidgetItem *> items) const
 {
     QMimeData *mimeData = new QMimeData();
     QList<QUrl> urlList;
 
-    for (QList<QTreeWidgetItem*>::const_iterator it = items.constBegin();
-         it!=items.constEnd(); ++it)
-    {
+    for (QList<QTreeWidgetItem *>::const_iterator it = items.constBegin();
+            it != items.constEnd(); ++it) {
         FileTreeViewItem *item = static_cast<FileTreeViewItem *>(*it);
-        kDebug() << item->url();
+        //qDebug() << item->url();
         urlList.append(item->url());
     }
 
@@ -117,28 +114,22 @@ QMimeData *FileTreeView::mimeData(const QList<QTreeWidgetItem *> items) const
     return (mimeData);
 }
 
-
 // Dragging and dropping into the view.
 void FileTreeView::setDropItem(QTreeWidgetItem *item)
 {
-    if (item!=NULL)
-    {
+    if (item != NULL) {
         m_dropItem = item;
         // TODO: make auto-open an option, don't start timer if not enabled
         m_autoOpenTimer->start();
-    }
-    else
-    {
+    } else {
         m_dropItem = NULL;
         m_autoOpenTimer->stop();
     }
 }
 
-
 void FileTreeView::dragEnterEvent(QDragEnterEvent *ev)
 {
-    if (!ev->mimeData()->hasUrls())			// not an URL drag
-    {
+    if (!ev->mimeData()->hasUrls()) {       // not an URL drag
         ev->ignore();
         return;
     }
@@ -146,102 +137,100 @@ void FileTreeView::dragEnterEvent(QDragEnterEvent *ev)
     ev->acceptProposedAction();
 
     QList<QTreeWidgetItem *> items = selectedItems();
-    m_currentBeforeDropItem = (items.count()>0 ? items.first() : NULL);
+    m_currentBeforeDropItem = (items.count() > 0 ? items.first() : NULL);
     setDropItem(itemAt(ev->pos()));
 }
 
-
 void FileTreeView::dragMoveEvent(QDragMoveEvent *ev)
 {
-    if (!ev->mimeData()->hasUrls())			// not an URL drag
-    {
+    if (!ev->mimeData()->hasUrls()) {       // not an URL drag
         ev->ignore();
         return;
     }
 
     QTreeWidgetItem *item = itemAt(ev->pos());
-    if (item==NULL || item->isDisabled())		// over a valid item?
-    {							// no, ignore drops on it
-        setDropItem(NULL);				// clear drop item
+    if (item == NULL || item->isDisabled()) {   // over a valid item?
+        // no, ignore drops on it
+        setDropItem(NULL);              // clear drop item
         return;
     }
 
     FileTreeViewItem *ftvi = static_cast<FileTreeViewItem *>(item);
-    //if (!ftvi->isDir()) item = item->parent();	// if file, highlight parent dir
+    //if (!ftvi->isDir()) item = item->parent();    // if file, highlight parent dir
 
-    setCurrentItem(item);				// temporarily select it
-    if (item!=m_dropItem) setDropItem(item);		// changed, update drop item
+    setCurrentItem(item);               // temporarily select it
+    if (item != m_dropItem) {
+        setDropItem(item);    // changed, update drop item
+    }
 
     ev->accept();
 }
 
-
 void FileTreeView::dragLeaveEvent(QDragLeaveEvent *ev)
 {
-    if (m_currentBeforeDropItem!=NULL)			// there was a current item
-    {							// before the drag started
-        setCurrentItem(m_currentBeforeDropItem);	// restore its selection
+    if (m_currentBeforeDropItem != NULL) {      // there was a current item
+        // before the drag started
+        setCurrentItem(m_currentBeforeDropItem);    // restore its selection
         scrollToItem(m_currentBeforeDropItem);
-    }
-    else if (m_dropItem!=NULL)				// item selected by drag
-    {
-        m_dropItem->setSelected(false);			// clear that selection
+    } else if (m_dropItem != NULL) {        // item selected by drag
+        m_dropItem->setSelected(false);         // clear that selection
     }
 
     m_currentBeforeDropItem = NULL;
     setDropItem(NULL);
 }
 
-
 void FileTreeView::dropEvent(QDropEvent *ev)
 {
-    if (!ev->mimeData()->hasUrls())			// not an URL drag
-    {
+    if (!ev->mimeData()->hasUrls()) {       // not an URL drag
         ev->ignore();
         return;
     }
 
-    if (m_dropItem==NULL) return;			// invalid drop target
+    if (m_dropItem == NULL) {
+        return;    // invalid drop target
+    }
 
     FileTreeViewItem *item = static_cast<FileTreeViewItem *>(m_dropItem);
-    kDebug() << "onto" << item->url();
-    setDropItem(NULL);					// stop timer now
-							// also clears m_dropItem!
+    //qDebug() << "onto" << item->url();
+    setDropItem(NULL);                  // stop timer now
+    // also clears m_dropItem!
     emit dropped(ev, item);
     ev->accept();
 }
 
-
 void FileTreeView::slotCollapsed(QTreeWidgetItem *tvi)
 {
     FileTreeViewItem *item = static_cast<FileTreeViewItem *>(tvi);
-    if (item!=NULL && item->isDir()) item->setIcon(0, itemIcon(item));
+    if (item != NULL && item->isDir()) {
+        item->setIcon(0, itemIcon(item));
+    }
 }
-
 
 void FileTreeView::slotExpanded(QTreeWidgetItem *tvi)
 {
     FileTreeViewItem *item = static_cast<FileTreeViewItem *>(tvi);
-    if (item==NULL) return;
+    if (item == NULL) {
+        return;
+    }
 
-    kDebug() << item->text(0);
+    //qDebug() << item->text(0);
 
     FileTreeBranch *branch = item->branch();
 
     // Check if the branch needs to be populated now
-    if (item->isDir() && branch!=NULL && item->childCount()==0)
-    {
-        kDebug() << "need to populate" << item->url();
-        if (!branch->populate(item->url(), item))
-        {
-            kDebug() << "Branch populate failed!";
+    if (item->isDir() && branch != NULL && item->childCount() == 0) {
+        //qDebug() << "need to populate" << item->url();
+        if (!branch->populate(item->url(), item)) {
+            //qDebug() << "Branch populate failed!";
         }
     }
 
     // set pixmap for open folders
-    if (item->isDir() && item->isExpanded()) item->setIcon(0, itemIcon(item));
+    if (item->isDir() && item->isExpanded()) {
+        item->setIcon(0, itemIcon(item));
+    }
 }
-
 
 // Called when an item is single- or double-clicked, according to the
 // configured selection model.
@@ -252,82 +241,98 @@ void FileTreeView::slotExpanded(QTreeWidgetItem *tvi)
 
 void FileTreeView::slotExecuted(QTreeWidgetItem *item)
 {
-    if (item==NULL) return;
+    if (item == NULL) {
+        return;
+    }
 
     FileTreeViewItem *ftvi = static_cast<FileTreeViewItem *>(item);
-    if (ftvi!=NULL && ftvi->isDir() && !ftvi->isRoot()) item->setExpanded(!item->isExpanded());
+    if (ftvi != NULL && ftvi->isDir() && !ftvi->isRoot()) {
+        item->setExpanded(!item->isExpanded());
+    }
 }
-
 
 void FileTreeView::slotDoubleClicked(QTreeWidgetItem *item)
 {
-    if (item==NULL) return;
+    if (item == NULL) {
+        return;
+    }
 
     FileTreeViewItem *ftvi = static_cast<FileTreeViewItem *>(item);
-    if (ftvi!=NULL && ftvi->isRoot()) item->setExpanded(!item->isExpanded());
+    if (ftvi != NULL && ftvi->isRoot()) {
+        item->setExpanded(!item->isExpanded());
+    }
 }
-
 
 void FileTreeView::slotAutoOpenFolder()
 {
     m_autoOpenTimer->stop();
 
-    kDebug() << "children" << m_dropItem->childCount() << "expanded" << m_dropItem->isExpanded();
-    if (m_dropItem->childCount()==0) return;		// nothing to expand
-    if (m_dropItem->isExpanded()) return;		// already expanded
+    //qDebug() << "children" << m_dropItem->childCount() << "expanded" << m_dropItem->isExpanded();
+    if (m_dropItem->childCount() == 0) {
+        return;    // nothing to expand
+    }
+    if (m_dropItem->isExpanded()) {
+        return;    // already expanded
+    }
 
-    m_dropItem->setExpanded(true);			// expand the item
+    m_dropItem->setExpanded(true);          // expand the item
 }
-
 
 void FileTreeView::slotSelectionChanged()
 {
-    if (m_dropItem!=NULL)				// don't do this during the dragmove
-    {
+    if (m_dropItem != NULL) {           // don't do this during the dragmove
     }
 }
 
-
 void FileTreeView::slotDataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight)
 {
-    if (topLeft.column()!=0) return;			// not the file name
-    if (topLeft.row()!=bottomRight.row()) return;	// not a single row
-    if (topLeft.column()!=bottomRight.column()) return;	// not a single column
+    if (topLeft.column() != 0) {
+        return;    // not the file name
+    }
+    if (topLeft.row() != bottomRight.row()) {
+        return;    // not a single row
+    }
+    if (topLeft.column() != bottomRight.column()) {
+        return;    // not a single column
+    }
 
     QTreeWidgetItem *twi = itemFromIndex(topLeft);
-    if (twi==NULL) return;
+    if (twi == NULL) {
+        return;
+    }
     FileTreeViewItem *item = static_cast<FileTreeViewItem *>(twi);
 
     QString oldName = item->url().fileName();
     QString newName = item->text(0);
-    if (oldName==newName) return;			// no change
-    if (newName.isEmpty()) return;			// no new name
+    if (oldName == newName) {
+        return;    // no change
+    }
+    if (newName.isEmpty()) {
+        return;    // no new name
+    }
 
     emit fileRenamed(item, newName);
-    item->branch()->itemRenamed(item);			// update branch's item map
+    item->branch()->itemRenamed(item);          // update branch's item map
 }
 
-
 FileTreeBranch *FileTreeView::addBranch(const KUrl &path, const QString &name,
-                              bool showHidden)
+                                        bool showHidden)
 {
-    const QIcon &folderPix = KIconLoader::global()->loadMimeTypeIcon( KMimeType::mimeType("inode/directory")->iconName(),
-                                                                        KIconLoader::Desktop, KIconLoader::SizeSmall );
+    const QIcon &folderPix = KIconLoader::global()->loadMimeTypeIcon(KMimeType::mimeType("inode/directory")->iconName(),
+                             KIconLoader::Desktop, KIconLoader::SizeSmall);
     return (addBranch(path, name, folderPix, showHidden));
 }
 
-
 FileTreeBranch *FileTreeView::addBranch(const KUrl &path, const QString &name,
-                              const QIcon &pix, bool showHidden )
+                                        const QIcon &pix, bool showHidden)
 {
-    kDebug() << path;
+    //qDebug() << path;
 
     /* Open a new branch */
-    FileTreeBranch *newBranch = new FileTreeBranch( this, path, name, pix,
-                                                     showHidden );
+    FileTreeBranch *newBranch = new FileTreeBranch(this, path, name, pix,
+            showHidden);
     return (addBranch(newBranch));
 }
-
 
 FileTreeBranch *FileTreeView::addBranch(FileTreeBranch *newBranch)
 {
@@ -336,25 +341,22 @@ FileTreeBranch *FileTreeView::addBranch(FileTreeBranch *newBranch)
     connect(newBranch, SIGNAL(populateFinished(FileTreeViewItem *)),
             SLOT(slotStopAnimation(FileTreeViewItem *)));
 
-    connect(newBranch, SIGNAL(newTreeViewItems(FileTreeBranch *,const FileTreeViewItemList &)),
-            SLOT(slotNewTreeViewItems(FileTreeBranch *,const FileTreeViewItemList &)));
+    connect(newBranch, SIGNAL(newTreeViewItems(FileTreeBranch *, const FileTreeViewItemList &)),
+            SLOT(slotNewTreeViewItems(FileTreeBranch *, const FileTreeViewItemList &)));
 
     m_branches.append(newBranch);
     return (newBranch);
 }
 
-
 FileTreeBranch *FileTreeView::branch(const QString &searchName) const
 {
     for (FileTreeBranchList::const_iterator it = m_branches.constBegin();
-             it!=m_branches.constEnd(); ++it)
-    {
+            it != m_branches.constEnd(); ++it) {
         FileTreeBranch *branch = (*it);
         QString bname = branch->name();
-        kDebug() << "branch" << bname;
-        if (bname==searchName)
-        {
-            kDebug() << "Found requested branch";
+        //qDebug() << "branch" << bname;
+        if (bname == searchName) {
+            //qDebug() << "Found requested branch";
             return (branch);
         }
     }
@@ -362,38 +364,35 @@ FileTreeBranch *FileTreeView::branch(const QString &searchName) const
     return (NULL);
 }
 
-
 const FileTreeBranchList &FileTreeView::branches() const
 {
     return (m_branches);
 }
 
-
 bool FileTreeView::removeBranch(FileTreeBranch *branch)
 {
-    if (m_branches.contains(branch))
-    {
+    if (m_branches.contains(branch)) {
         delete branch->root();
         m_branches.removeOne(branch);
         return (true);
-    }
-    else
-    {
+    } else {
         return (false);
     }
 }
 
-
 void FileTreeView::setDirOnlyMode(FileTreeBranch *branch, bool bom)
 {
-    if (branch!=NULL) branch->setDirOnlyMode(bom);
+    if (branch != NULL) {
+        branch->setDirOnlyMode(bom);
+    }
 }
-
 
 void FileTreeView::slotNewTreeViewItems(FileTreeBranch *branch, const FileTreeViewItemList &items)
 {
-    if (branch==NULL) return;
-    kDebug();
+    if (branch == NULL) {
+        return;
+    }
+    //qDebug();
 
     /* Sometimes it happens that new items should become selected, i.e. if the user
      * creates a new dir, he probably wants it to be selected. This can not be done
@@ -402,15 +401,12 @@ void FileTreeView::slotNewTreeViewItems(FileTreeBranch *branch, const FileTreeVi
      * m_neUrlToSelect to the required url. If this url appears here, the item becomes
      * selected and the member nextUrlToSelect will be cleared.
      */
-    if (!m_nextUrlToSelect.isEmpty())
-    {
+    if (!m_nextUrlToSelect.isEmpty()) {
         for (FileTreeViewItemList::const_iterator it = items.constBegin();
-             it!=items.constEnd(); ++it)
-        {
+                it != items.constEnd(); ++it) {
             KUrl url = (*it)->url();
 
-            if (m_nextUrlToSelect.equals(url, KUrl::CompareWithoutTrailingSlash))
-            {
+            if (m_nextUrlToSelect.equals(url, KUrl::CompareWithoutTrailingSlash)) {
                 setCurrentItem(static_cast<QTreeWidgetItem *>(*it));
                 m_nextUrlToSelect = KUrl();
                 break;
@@ -419,33 +415,28 @@ void FileTreeView::slotNewTreeViewItems(FileTreeBranch *branch, const FileTreeVi
     }
 }
 
-
 QIcon FileTreeView::itemIcon(FileTreeViewItem *item) const
 {
     QIcon pix;
 
-    if (item!=NULL)
-    {
+    if (item != NULL) {
         /* Check whether it is a branch root */
         FileTreeBranch *branch = item->branch();
-        if (item==branch->root())
-        {
+        if (item == branch->root()) {
             pix = branch->pixmap();
-            if (m_wantOpenFolderPixmaps && branch->root()->isExpanded())
-            {
+            if (m_wantOpenFolderPixmaps && branch->root()->isExpanded()) {
                 pix = branch->openPixmap();
             }
-        }
-        else
-        {
+        } else {
             // TODO: different modes, user Pixmaps ?
-            pix = item->fileItem()->pixmap(KIconLoader::SizeSmall);
+            //PORT QT5 pix = item->fileItem()->pixmap(KIconLoader::SizeSmall);
 
             /* Only if it is a dir and the user wants open dir pixmap and it is open,
              * change the fileitem's pixmap to the open folder pixmap. */
-            if (item->isDir() && m_wantOpenFolderPixmaps)
-            {
-                if (item->isExpanded()) pix = m_openFolderPixmap;
+            if (item->isDir() && m_wantOpenFolderPixmaps) {
+                if (item->isExpanded()) {
+                    pix = m_openFolderPixmap;
+                }
             }
         }
     }
@@ -453,82 +444,80 @@ QIcon FileTreeView::itemIcon(FileTreeViewItem *item) const
     return (pix);
 }
 
-
 void FileTreeView::slotStartAnimation(FileTreeViewItem *item)
 {
-    if (item==NULL) return;
-    kDebug() << "for" << item->text(0);
+    if (item == NULL) {
+        return;
+    }
+    //qDebug() << "for" << item->text(0);
 
     ++m_busyCount;
     setCursor(Qt::BusyCursor);
 }
 
-
 void FileTreeView::slotStopAnimation(FileTreeViewItem *item)
 {
-    if (item==NULL) return;
-    kDebug() << "for" << item->text(0);
-    if (m_busyCount<=0) return;
+    if (item == NULL) {
+        return;
+    }
+    //qDebug() << "for" << item->text(0);
+    if (m_busyCount <= 0) {
+        return;
+    }
 
     --m_busyCount;
-    if (m_busyCount==0) unsetCursor();
+    if (m_busyCount == 0) {
+        unsetCursor();
+    }
 }
-
 
 FileTreeViewItem *FileTreeView::selectedFileTreeViewItem() const
 {
     QList<QTreeWidgetItem *> items = selectedItems();
-    return (items.count()>0 ? static_cast<FileTreeViewItem *>(items.first()) : NULL);
+    return (items.count() > 0 ? static_cast<FileTreeViewItem *>(items.first()) : NULL);
 }
-
 
 const KFileItem *FileTreeView::selectedFileItem() const
 {
     FileTreeViewItem *item = selectedFileTreeViewItem();
-    return (item==NULL ? NULL : item->fileItem());
+    return (item == NULL ? NULL : item->fileItem());
 }
-
 
 KUrl FileTreeView::selectedUrl() const
 {
     FileTreeViewItem *item = selectedFileTreeViewItem();
-    return (item!=NULL ? item->url() : KUrl());
+    return (item != NULL ? item->url() : KUrl());
 }
-
 
 FileTreeViewItem *FileTreeView::highlightedFileTreeViewItem() const
 {
     return (static_cast<FileTreeViewItem *>(currentItem()));
 }
 
-
 const KFileItem *FileTreeView::highlightedFileItem() const
 {
     FileTreeViewItem *item = highlightedFileTreeViewItem();
-    return (item==NULL ? NULL : item->fileItem());
+    return (item == NULL ? NULL : item->fileItem());
 }
-
 
 KUrl FileTreeView::highlightedUrl() const
 {
     FileTreeViewItem *item = highlightedFileTreeViewItem();
-    return (item!=NULL ? item->url() : KUrl());
+    return (item != NULL ? item->url() : KUrl());
 }
-
 
 void FileTreeView::slotOnItem(QTreeWidgetItem *item)
 {
-    FileTreeViewItem *i = static_cast<FileTreeViewItem *>( item );
-    if (i!=NULL)
-    {
+    FileTreeViewItem *i = static_cast<FileTreeViewItem *>(item);
+    if (i != NULL) {
         const KUrl url = i->url();
-        if ( url.isLocalFile() )
-            emit onItem( url.toLocalFile() );
-        else
-            emit onItem( url.prettyUrl() );
+        if (url.isLocalFile()) {
+            emit onItem(url.toLocalFile());
+        } else {
+            emit onItem(url.prettyUrl());
+        }
     }
 }
-
 
 FileTreeViewItem *FileTreeView::findItemInBranch(const QString &branchName, const QString &relUrl) const
 {
@@ -536,22 +525,25 @@ FileTreeViewItem *FileTreeView::findItemInBranch(const QString &branchName, cons
     return (findItemInBranch(br, relUrl));
 }
 
-
 FileTreeViewItem *FileTreeView::findItemInBranch(FileTreeBranch *branch, const QString &relUrl) const
 {
     FileTreeViewItem *ret = NULL;
-    if (branch!=NULL)
-    {
-        if (relUrl.isEmpty() || relUrl=="/") ret = branch->root();
-        else
-        {
+    if (branch != NULL) {
+        if (relUrl.isEmpty() || relUrl == "/") {
+            ret = branch->root();
+        } else {
             QString partUrl(relUrl);
-            if (partUrl.endsWith('/')) partUrl.chop(1);
+            if (partUrl.endsWith('/')) {
+                partUrl.chop(1);
+            }
 
             KUrl url = branch->rootUrl();
-            if (QDir::isRelativePath(relUrl)) url.addPath(partUrl);
-            else url.setPath(partUrl);
-            kDebug() << "searching for" << url;
+            if (QDir::isRelativePath(relUrl)) {
+                url.addPath(partUrl);
+            } else {
+                url.setPath(partUrl);
+            }
+            //qDebug() << "searching for" << url;
             ret = branch->findItemByUrl(url);
         }
     }
@@ -559,18 +551,15 @@ FileTreeViewItem *FileTreeView::findItemInBranch(FileTreeBranch *branch, const Q
     return (ret);
 }
 
-
 bool FileTreeView::showFolderOpenPixmap() const
 {
     return (m_wantOpenFolderPixmaps);
 }
 
-
 void FileTreeView::setShowFolderOpenPixmap(bool showIt)
 {
     m_wantOpenFolderPixmaps = showIt;
 }
-
 
 void FileTreeView::slotSetNextUrlToSelect(const KUrl &url)
 {

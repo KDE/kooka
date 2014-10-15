@@ -1,5 +1,5 @@
 /* This file is part of the KDE Project
-   Copyright (C) 2000 Jonathan Marten <jjm@keelhaul.me.uk>  
+   Copyright (C) 2000 Jonathan Marten <jjm@keelhaul.me.uk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -18,7 +18,6 @@
 */
 
 #include "adddevicedialog.h"
-#include "adddevicedialog.moc"
 
 #include <qlabel.h>
 #include <qlayout.h>
@@ -27,14 +26,13 @@
 #include <klocale.h>
 #include <klineedit.h>
 
-
 AddDeviceDialog::AddDeviceDialog(QWidget *parent, const QString &caption)
-	: KDialog(parent)
+    : KDialog(parent)
 {
     setObjectName("AddDeviceDialog");
 
     setModal(true);
-    setButtons(KDialog::Ok|KDialog::Cancel);
+    setButtons(KDialog::Ok | KDialog::Cancel);
     setCaption(caption);
     showButtonSeparator(true);
 
@@ -43,25 +41,25 @@ AddDeviceDialog::AddDeviceDialog(QWidget *parent, const QString &caption)
     setMainWidget(w);
 
     QLabel *lab = new QLabel(i18n("<qt>"
-"<p>"
-"If your scanner has not been automatically detected, you can specify it here. "
-"The <b>Scanner device name</b> should be a backend name (with optional parameters) "
-"that is understood by SANE, see <a href=\"man:/sane\">sane(7)</a> or "
-"<a href=\"man:/sane-dll\">sane-dll(5)</a> for more information on available backends. "
-"The <b>Type</b> and <b>Description</b> can be used to identify the scanner later."
-"<p>"
-"For the information that needs to be entered here, try to locate the device using the "
-"<a href=\"man:/sane-find-scanner\">sane-find-scanner(1)</a> command. For a "
-"USB or networked HP scanner using <a href=\"http://hplip.sourceforge.net/\">HPLIP</a>, "
-"try using the <u>hp-probe</u> command to locate it, for example "
-"'hp-probe&nbsp;-b&nbsp;usb' or 'hp-probe&nbsp;-b&nbsp;net'. "
-"If the scanner is found, then enter the device name displayed by these commands; note "
-"that if using HPLIP then \"hp:\" needs to be replaced by \"hpaio:\"."
-"<p>"
-"If these commands fail to locate your scanner, then it may not be supported "
-"by SANE. Check the SANE documentation for a "
-"<a href=\"http://www.sane-project.org/sane-supported-devices.html\">list of supported devices</a>."
-"<br>"),w);
+                                  "<p>"
+                                  "If your scanner has not been automatically detected, you can specify it here. "
+                                  "The <b>Scanner device name</b> should be a backend name (with optional parameters) "
+                                  "that is understood by SANE, see <a href=\"man:/sane\">sane(7)</a> or "
+                                  "<a href=\"man:/sane-dll\">sane-dll(5)</a> for more information on available backends. "
+                                  "The <b>Type</b> and <b>Description</b> can be used to identify the scanner later."
+                                  "<p>"
+                                  "For the information that needs to be entered here, try to locate the device using the "
+                                  "<a href=\"man:/sane-find-scanner\">sane-find-scanner(1)</a> command. For a "
+                                  "USB or networked HP scanner using <a href=\"http://hplip.sourceforge.net/\">HPLIP</a>, "
+                                  "try using the <u>hp-probe</u> command to locate it, for example "
+                                  "'hp-probe&nbsp;-b&nbsp;usb' or 'hp-probe&nbsp;-b&nbsp;net'. "
+                                  "If the scanner is found, then enter the device name displayed by these commands; note "
+                                  "that if using HPLIP then \"hp:\" needs to be replaced by \"hpaio:\"."
+                                  "<p>"
+                                  "If these commands fail to locate your scanner, then it may not be supported "
+                                  "by SANE. Check the SANE documentation for a "
+                                  "<a href=\"http://www.sane-project.org/sane-supported-devices.html\">list of supported devices</a>."
+                                  "<br>"), w);
     lab->setWordWrap(true);
     lab->setOpenExternalLinks(true);
     vl->addWidget(lab);
@@ -105,25 +103,21 @@ AddDeviceDialog::AddDeviceDialog(QWidget *parent, const QString &caption)
     slotTextChanged();
 }
 
-
 void AddDeviceDialog::slotTextChanged()
 {
     enableButtonOk(!mDevEdit->text().trimmed().isEmpty() &&
                    !mDescEdit->text().trimmed().isEmpty());
 }
 
-
 QByteArray AddDeviceDialog::getDevice() const
 {
     return (mDevEdit->text().toLocal8Bit());
 }
 
-
 QString AddDeviceDialog::getDescription() const
 {
     return (mDescEdit->text());
 }
-
 
 QByteArray AddDeviceDialog::getType() const
 {

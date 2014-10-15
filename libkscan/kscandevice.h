@@ -1,4 +1,4 @@
-/* This file is part of the KDE Project			-*- mode:c++; -*-
+/* This file is part of the KDE Project         -*- mode:c++; -*-
    Copyright (C) 1999 Klaas Freitag <freitag@suse.de>
 
    This library is free software; you can redistribute it and/or
@@ -33,14 +33,12 @@ extern "C" {
 #include <sane/sane.h>
 }
 
-
 class QWidget;
 class QSocketNotifier;
 
 class KScanOption;
 class KScanOptSet;
 class ImageMetaInfo;
-
 
 /**
  * @short Access and control a scanner.
@@ -69,8 +67,7 @@ public:
     /**
      * Scanning/control status.
      **/
-    enum Status
-    {
+    enum Status {
         Ok,
         NoDevice,
         ParamError,
@@ -121,7 +118,10 @@ public:
      * @return The scanner backend name, or a null string if no scanner
      * is currently open.
      **/
-    const QByteArray &scannerBackendName() const { return (mScannerName); }
+    const QByteArray &scannerBackendName() const
+    {
+        return (mScannerName);
+    }
 
     /**
      * Get a readable name/description of the current scanner
@@ -136,7 +136,10 @@ public:
      * Check whether a scanner device is opened and connected: that is,
      * whether the @c openDevice() returned @c KScanDevice::Ok).
      **/
-    bool isScannerConnected() const	{ return (mScannerInitialised); }
+    bool isScannerConnected() const
+    {
+        return (mScannerInitialised);
+    }
 
     /**
      * Get the SANE scanner handle of the current scanner.
@@ -144,7 +147,10 @@ public:
      * @return The scanner handle, or @c NULL if no scanner is
      * currently open.
      **/
-    SANE_Handle scannerHandle() const	{ return (mScannerHandle); }
+    SANE_Handle scannerHandle() const
+    {
+        return (mScannerHandle);
+    }
 
     /**
      * Acquires a preview from the current scanner device.
@@ -502,7 +508,7 @@ signals:
      * @see sigNewImage
      **/
     void sigNewPreview(const QImage *img, const ImageMetaInfo *info);
-    
+
     /**
      * Emitted to indicate that a scan or preview has finished.
      * This signal is always emitted, even if the scan failed with
@@ -548,8 +554,7 @@ private:
     /**
      * Scanning progress state.
      **/
-    enum ScanningState					// only used by KScanDevice
-    {
+    enum ScanningState {                // only used by KScanDevice
         ScanIdle,
         ScanStarting,
         ScanInProgress,
@@ -558,11 +563,11 @@ private:
         ScanStopAdfFinished
     };
 
-    typedef QHash<QByteArray,KScanOption *> OptionHash;
-    typedef QMap<int,QByteArray> IndexMap;
+    typedef QHash<QByteArray, KScanOption *> OptionHash;
+    typedef QMap<int, QByteArray> IndexMap;
 
-    OptionHash mCreatedOptions;				// option name -> KScanOption
-    IndexMap mKnownOptions;				// SANE index -> option name
+    OptionHash mCreatedOptions;             // option name -> KScanOption
+    IndexMap mKnownOptions;             // SANE index -> option name
 
     KScanOptSet *mSavedOptions;
 
@@ -588,5 +593,4 @@ private:
     int mCurrScanResolutionY;
 };
 
-
-#endif							// KSCANDEVICE_H
+#endif                          // KSCANDEVICE_H

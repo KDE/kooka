@@ -1,5 +1,5 @@
 /* This file is part of the KDE Project
-   Copyright (C) 2000 Jonathan Marten <jjm@keelhaul.me.uk>  
+   Copyright (C) 2000 Jonathan Marten <jjm@keelhaul.me.uk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -18,7 +18,6 @@
 */
 
 #include "scanparamsdialog.h"
-#include "scanparamsdialog.moc"
 
 #include <qlabel.h>
 #include <qframe.h>
@@ -43,8 +42,7 @@ extern "C" {
 
 #include "newscanparams.h"
 
-
-ScanParamsDialog::ScanParamsDialog(QWidget *parent,KScanDevice *scandev)
+ScanParamsDialog::ScanParamsDialog(QWidget *parent, KScanDevice *scandev)
     : KDialog(parent)
 {
     setObjectName("ScanParamsDialog");
@@ -63,7 +61,7 @@ ScanParamsDialog::ScanParamsDialog(QWidget *parent,KScanDevice *scandev)
     paramsList->setSelectionMode(QAbstractItemView::SingleSelection);
     paramsList->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
     paramsList->setMinimumWidth(200);
-    connect(paramsList, SIGNAL(currentItemChanged(QListWidgetItem *,QListWidgetItem *)),
+    connect(paramsList, SIGNAL(currentItemChanged(QListWidgetItem *, QListWidgetItem *)),
             SLOT(slotSelectionChanged(QListWidgetItem *)));
     connect(paramsList, SIGNAL(itemDoubleClicked(QListWidgetItem *)),
             SLOT(slotLoadAndClose(QListWidgetItem *)));
@@ -108,28 +106,25 @@ ScanParamsDialog::ScanParamsDialog(QWidget *parent,KScanDevice *scandev)
     slotSelectionChanged(NULL);
 }
 
-
 void ScanParamsDialog::populateList()
 {
     paramsList->clear();
     sets = KScanOptSet::readList();
 
-    for (KScanOptSet::StringMap::const_iterator it = sets.constBegin(); it!=sets.constEnd(); ++it)
-    {
+    for (KScanOptSet::StringMap::const_iterator it = sets.constBegin(); it != sets.constEnd(); ++it) {
         kDebug() << "saveset" << it.key();
         paramsList->addItem(it.key());
     }
 }
-
 
 void ScanParamsDialog::slotSelectionChanged(QListWidgetItem *item)
 {
     QString desc;
     bool enable = false;
 
-    if (item==NULL) desc = i18n("No save set selected.");
-    else						// something getting selected
-    {
+    if (item == NULL) {
+        desc = i18n("No save set selected.");
+    } else {                    // something getting selected
         desc = sets[item->text()];
         enable = true;
     }
@@ -139,22 +134,24 @@ void ScanParamsDialog::slotSelectionChanged(QListWidgetItem *item)
     buttonDelete->setEnabled(enable);
     buttonEdit->setEnabled(enable);
 
-    if (enable) buttonLoad->setDefault(true);
-    else setDefaultButton(KDialog::Close);
+    if (enable) {
+        buttonLoad->setDefault(true);
+    } else {
+        setDefaultButton(KDialog::Close);
+    }
 }
-
-
 
 void ScanParamsDialog::slotLoad()
 {
     QListWidgetItem *item = paramsList->currentItem();
-    if (item==NULL) return;
+    if (item == NULL) {
+        return;
+    }
     QString name = item->text();
     kDebug() << "set" << name;
 
     KScanOptSet optSet(name);
-    if (!optSet.loadConfig())
-    {
+    if (!optSet.loadConfig()) {
         kDebug() << "Failed to load set" << name;
         return;
     }
@@ -163,10 +160,11 @@ void ScanParamsDialog::slotLoad()
     sane->reloadAllOptions();
 }
 
-
 void ScanParamsDialog::slotLoadAndClose(QListWidgetItem *item)
 {
-    if (item==NULL) return;
+    if (item == NULL) {
+        return;
+    }
 
     kDebug() << "set" << item->text();
 
@@ -175,28 +173,28 @@ void ScanParamsDialog::slotLoadAndClose(QListWidgetItem *item)
     accept();
 }
 
-
 void ScanParamsDialog::slotSave()
 {
     QString name = QString::null;
     QListWidgetItem *item = paramsList->currentItem();
-    if (item!=NULL) name = item->text();
+    if (item != NULL) {
+        name = item->text();
+    }
     kDebug() << "selected set" << name;
 
     QString newdesc = QString::null;
-    if (sets.contains(name)) newdesc = sets[name];
-    else
-    {
+    if (sets.contains(name)) {
+        newdesc = sets[name];
+    } else {
         const KScanOption *sm = sane->getExistingGuiElement(SANE_NAME_SCAN_MODE);
         const KScanOption *sr = sane->getExistingGuiElement(SANE_NAME_SCAN_RESOLUTION);
-        if (sm!=NULL && sr!=NULL) newdesc = i18n("%1, %2 dpi",
-                                                 sm->get().constData(),
-                                                 sr->get().constData());
+        if (sm != NULL && sr != NULL) newdesc = i18n("%1, %2 dpi",
+                                                    sm->get().constData(),
+                                                    sr->get().constData());
     }
 
-    NewScanParams d(this,name,newdesc,false);
-    if (d.exec())
-    {
+    NewScanParams d(this, name, newdesc, false);
+    if (d.exec()) {
         QString newName = d.getName();
         QString newDesc = d.getDescription();
 
@@ -210,71 +208,75 @@ void ScanParamsDialog::slotSave()
 
         // TODO: why?
         paramsList->setCurrentItem(NULL);
-        QList<QListWidgetItem *> found = paramsList->findItems(newName, Qt::MatchFixedString|Qt::MatchCaseSensitive);
-        if (found.count()==0)
-        {
+        QList<QListWidgetItem *> found = paramsList->findItems(newName, Qt::MatchFixedString | Qt::MatchCaseSensitive);
+        if (found.count() == 0) {
             paramsList->addItem(newName);
-            item = paramsList->item(paramsList->count()-1);
+            item = paramsList->item(paramsList->count() - 1);
+        } else {
+            item = found.first();
         }
-        else item = found.first();
 
         paramsList->setCurrentItem(item);
         slotSelectionChanged(item);
     }
 }
 
-
 void ScanParamsDialog::slotEdit()
 {
     QListWidgetItem *item = paramsList->currentItem();
-    if (item==NULL) return;
+    if (item == NULL) {
+        return;
+    }
     QString oldName = item->text();
     kDebug() << "selected set" << oldName;
 
-    NewScanParams d(this,oldName,sets[oldName],true);
-    if (d.exec())
-    {
+    NewScanParams d(this, oldName, sets[oldName], true);
+    if (d.exec()) {
         QString newName = d.getName();
         QString newDesc = d.getDescription();
-        if (newName==oldName && newDesc==sets[oldName]) return;
+        if (newName == oldName && newDesc == sets[oldName]) {
+            return;
+        }
 
         kDebug() << "new name" << newName << "desc" << newDesc;
 
         KScanOptSet optSet(oldName.toLocal8Bit());
-        if (!optSet.loadConfig())
-        {
+        if (!optSet.loadConfig()) {
             kDebug() << "Failed to load set" << oldName;
             return;
         }
 
-        KScanOptSet::deleteSet(oldName);		// do first, in case name not changed
+        KScanOptSet::deleteSet(oldName);        // do first, in case name not changed
         optSet.setSetName(newName);
         optSet.saveConfig(sane->scannerBackendName(), newDesc);
 
-        sets.remove(oldName);				// do first, ditto
+        sets.remove(oldName);               // do first, ditto
         sets[newName] = newDesc;
 
         int ix = paramsList->row(item);
         item->setText(newName);
-        slotSelectionChanged(paramsList->item(ix));	// recalculate 'item', it may change
+        slotSelectionChanged(paramsList->item(ix)); // recalculate 'item', it may change
     }
 }
-
 
 void ScanParamsDialog::slotDelete()
 {
     QListWidgetItem *item = paramsList->currentItem();
-    if (item==NULL) return;
+    if (item == NULL) {
+        return;
+    }
     QString name = item->text();
     kDebug() << "set" << name;
 
-    if (KMessageBox::warningContinueCancel(this,i18n("<qt>Do you really want to delete the set '<b>%1</b>'?", name),
+    if (KMessageBox::warningContinueCancel(this, i18n("<qt>Do you really want to delete the set '<b>%1</b>'?", name),
                                            i18n("Delete Scan Parameter Set"),
                                            KStandardGuiItem::del(),
                                            KStandardGuiItem::cancel(),
-                                           "deleteSaveSet")!=KMessageBox::Continue) return;
+                                           "deleteSaveSet") != KMessageBox::Continue) {
+        return;
+    }
 
     KScanOptSet::deleteSet(name);
     delete paramsList->takeItem(paramsList->row(item));
-    paramsList->setCurrentItem(NULL);			// clear selection
+    paramsList->setCurrentItem(NULL);           // clear selection
 }

@@ -1,30 +1,29 @@
 /************************************************************************
- *									*
- *  This file is part of libkscan, a KDE scanning library.		*
- *									*
- *  Copyright (C) 2013 Jonathan Marten <jjm@keelhaul.me.uk>		*
- *									*
- *  This library is free software; you can redistribute it and/or	*
- *  modify it under the terms of the GNU Library General Public		*
- *  License as published by the Free Software Foundation and appearing	*
- *  in the file COPYING included in the packaging of this file;		*
- *  either version 2 of the License, or (at your option) any later	*
- *  version.								*
- *									*
- *  This program is distributed in the hope that it will be useful,	*
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of	*
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the	*
- *  GNU General Public License for more details.			*
- *									*
- *  You should have received a copy of the GNU General Public License	*
- *  along with this program;  see the file COPYING.  If not, write to	*
- *  the Free Software Foundation, Inc., 51 Franklin Street,		*
- *  Fifth Floor, Boston, MA 02110-1301, USA.				*
- *									*
+ *                                  *
+ *  This file is part of libkscan, a KDE scanning library.      *
+ *                                  *
+ *  Copyright (C) 2013 Jonathan Marten <jjm@keelhaul.me.uk>     *
+ *                                  *
+ *  This library is free software; you can redistribute it and/or   *
+ *  modify it under the terms of the GNU Library General Public     *
+ *  License as published by the Free Software Foundation and appearing  *
+ *  in the file COPYING included in the packaging of this file;     *
+ *  either version 2 of the License, or (at your option) any later  *
+ *  version.                                *
+ *                                  *
+ *  This program is distributed in the hope that it will be useful, *
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of  *
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the   *
+ *  GNU General Public License for more details.            *
+ *                                  *
+ *  You should have received a copy of the GNU General Public License   *
+ *  along with this program;  see the file COPYING.  If not, write to   *
+ *  the Free Software Foundation, Inc., 51 Franklin Street,     *
+ *  Fifth Floor, Boston, MA 02110-1301, USA.                *
+ *                                  *
  ************************************************************************/
 
 #include "autoselectdialog.h"
-#include "autoselectdialog.moc"
 
 #include <qcombobox.h>
 #include <qformlayout.h>
@@ -32,23 +31,22 @@
 #include <qslider.h>
 
 #include <klocale.h>
-#include <kdebug.h>
+#include <QDebug>
 
 #include "kscancontrols.h"
 #include "autoselectdata.h"
 
-
 AutoSelectDialog::AutoSelectDialog(QWidget *parent)
     : KDialog(parent)
 {
-    kDebug();
+    //qDebug();
     setObjectName("AutoSelectDialog");
 
     setCaption(i18nc("@title:window", "Autoselect Settings"));
-    setButtons(KDialog::Ok|KDialog::Apply|KDialog::Cancel);
+    setButtons(KDialog::Ok | KDialog::Apply | KDialog::Cancel);
     showButtonSeparator(true);
 
-    QFormLayout *fl = new QFormLayout;			// looks better with combo expanded
+    QFormLayout *fl = new QFormLayout;          // looks better with combo expanded
     fl->setFieldGrowthPolicy(QFormLayout::AllNonFixedFieldsGrow);
 
     // slider for add/subtract margin
@@ -90,27 +88,23 @@ AutoSelectDialog::AutoSelectDialog(QWidget *parent)
     enableButtonApply(false);
 }
 
-
 AutoSelectDialog::~AutoSelectDialog()
 {
 }
-
 
 void AutoSelectDialog::slotControlChanged()
 {
     enableButtonApply(true);
 }
 
-
 void AutoSelectDialog::slotApplySettings()
 {
     int margin = mMarginSlider->value();
-    bool bgIsWhite = (mBackgroundCombo->currentIndex()==AutoSelectData::ItemIndexWhite);
+    bool bgIsWhite = (mBackgroundCombo->currentIndex() == AutoSelectData::ItemIndexWhite);
     int dustsize = mDustsizeSlider->value();
     emit settingsChanged(margin, bgIsWhite, dustsize);
     enableButtonApply(false);
 }
-
 
 void AutoSelectDialog::setSettings(int margin, bool bgIsWhite, int dustsize)
 {

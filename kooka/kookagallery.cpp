@@ -22,7 +22,6 @@
  ***************************************************************************/
 
 #include "kookagallery.h"
-#include "kookagallery.moc"
 
 #include <qlayout.h>
 #include <qlabel.h>
@@ -31,12 +30,10 @@
 #include <klocale.h>
 #include <kglobal.h>
 #include <khbox.h>
-
+#include <KConfigGroup>
 #include "scangallery.h"
 #include "galleryhistory.h"
 #include "kookapref.h"
-
-
 
 KookaGallery::KookaGallery(QWidget *parent)
     : QWidget(parent)
@@ -47,8 +44,8 @@ KookaGallery::KookaGallery(QWidget *parent)
 
     m_recentBox = new KHBox(this);
     //m_recentBox->setMargin(KDialog::spacingHint());
-    QLabel *lab = new QLabel(i18n("Folder:"),m_recentBox);
-    lab->setSizePolicy(QSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed));
+    QLabel *lab = new QLabel(i18n("Folder:"), m_recentBox);
+    lab->setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed));
 
     m_galleryRecent = new GalleryHistory(m_recentBox);
     lab->setBuddy(m_galleryRecent);
@@ -58,35 +55,32 @@ KookaGallery::KookaGallery(QWidget *parent)
     readSettings();
 }
 
-
 void KookaGallery::readSettings()
 {
-    KConfigGroup grp = KGlobal::config()->group(GROUP_GALLERY);
+    KConfigGroup grp = KSharedConfig::openConfig()->group(GROUP_GALLERY);
 
     m_galleryTree->setAllowRename(grp.readEntry(GALLERY_ALLOW_RENAME, false));
     setLayout(static_cast<KookaGallery::Layout>(grp.readEntry(GALLERY_LAYOUT, static_cast<int>(KookaGallery::RecentAtTop))));
 }
-
 
 void KookaGallery::setLayout(KookaGallery::Layout option)
 {
     m_layout->removeWidget(m_galleryTree);
     m_layout->removeWidget(m_recentBox);
 
-    switch (option)
-    {
-case KookaGallery::RecentAtTop:
-        m_layout->addWidget(m_recentBox,0,0);
-        m_layout->addWidget(m_galleryTree,1,0);
+    switch (option) {
+    case KookaGallery::RecentAtTop:
+        m_layout->addWidget(m_recentBox, 0, 0);
+        m_layout->addWidget(m_galleryTree, 1, 0);
         break;
 
-case KookaGallery::RecentAtBottom:
-        m_layout->addWidget(m_galleryTree,0,0);
-        m_layout->addWidget(m_recentBox,1,0);
+    case KookaGallery::RecentAtBottom:
+        m_layout->addWidget(m_galleryTree, 0, 0);
+        m_layout->addWidget(m_recentBox, 1, 0);
         break;
 
-case KookaGallery::NoRecent:
-        m_layout->addWidget(m_galleryTree,0,0);
+    case KookaGallery::NoRecent:
+        m_layout->addWidget(m_galleryTree, 0, 0);
         break;
     }
 }

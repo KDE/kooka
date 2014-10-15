@@ -18,22 +18,20 @@
 */
 
 #include "sizeindicator.h"
-#include "sizeindicator.moc"
 
 #include <qpainter.h>
 #include <qevent.h>
 #include <QLinearGradient>
 
 #include <klocale.h>
-#include <kdebug.h>
+#include <QDebug>
 #include <kglobal.h>
 #include <kcolorscheme.h>
-
 
 SizeIndicator::SizeIndicator(QWidget *parent, long thresh, long crit)
     : QLabel(parent)
 {
-    setFrameStyle(QFrame::Box|QFrame::Sunken);
+    setFrameStyle(QFrame::Box | QFrame::Sunken);
     setMinimumWidth(fontMetrics().width("MMMM.MM MiB"));
 
     mThreshold = thresh;
@@ -41,46 +39,48 @@ SizeIndicator::SizeIndicator(QWidget *parent, long thresh, long crit)
     mSizeInByte = -1;
 }
 
-
 SizeIndicator::~SizeIndicator()
 {
 }
 
-
 void SizeIndicator::setCritical(long crit)
 {
     mCritical = crit;
-    if (mSizeInByte>=0 && isVisible()) update();
+    if (mSizeInByte >= 0 && isVisible()) {
+        update();
+    }
 }
-
 
 void SizeIndicator::setThreshold(long thresh)
 {
     mThreshold = thresh;
-    if (mSizeInByte>=0 && isVisible()) update();
+    if (mSizeInByte >= 0 && isVisible()) {
+        update();
+    }
 }
-
 
 void SizeIndicator::setSizeInByte(long newSize)
 {
-    kDebug() << "New size" << newSize << "bytes";
+    //qDebug() << "New size" << newSize << "bytes";
 
     mSizeInByte = newSize;
 
-    if (newSize<0) setText("");
-    else setText(KGlobal::locale()->formatByteSize(newSize));
+    if (newSize < 0) {
+        setText("");
+    } else {
+        setText(KGlobal::locale()->formatByteSize(newSize));
+    }
     // TODO: do we want JEDEC units here?
 }
 
-
 void SizeIndicator::paintEvent(QPaintEvent *ev)
 {
-    QFrame::paintEvent(ev);				// draw the frame
+    QFrame::paintEvent(ev);             // draw the frame
 
     QPainter p(this);
 
     const QRect cr = contentsRect();
-    p.setClipRect(cr);					// paint the contents
+    p.setClipRect(cr);                  // paint the contents
     int w = cr.width();
     int h = cr.height();
 
@@ -88,32 +88,25 @@ void SizeIndicator::paintEvent(QPaintEvent *ev)
 
     QLinearGradient g;
 
-    if (mSizeInByte<DEFAULT_SMALL)
-    {
+    if (mSizeInByte < DEFAULT_SMALL) {
         p.fillRect(0, 0, w, h, sch.background(KColorScheme::PositiveBackground).color());
-    }
-    else if (mSizeInByte<mThreshold)
-    {
-        int t = w*(1.0-(double(mSizeInByte-DEFAULT_SMALL)/(mThreshold-DEFAULT_SMALL)));
-        g.setStart(t-w/5, h/2);
-        g.setFinalStop(t+w/5, h/2);
+    } else if (mSizeInByte < mThreshold) {
+        int t = w * (1.0 - (double(mSizeInByte - DEFAULT_SMALL) / (mThreshold - DEFAULT_SMALL)));
+        g.setStart(t - w / 5, h / 2);
+        g.setFinalStop(t + w / 5, h / 2);
         g.setColorAt(0, sch.background(KColorScheme::PositiveBackground).color());
         g.setColorAt(1, sch.background(KColorScheme::NeutralBackground).color());
         p.fillRect(0, 0, w, h, QBrush(g));
-    }
-    else if (mSizeInByte<mCritical)
-    {
-        int t = w*(1.0-(double(mSizeInByte-mThreshold)/(mCritical-mThreshold)));
-        g.setStart(t-w/5, h/2);
-        g.setFinalStop(t+w/5, h/2);
+    } else if (mSizeInByte < mCritical) {
+        int t = w * (1.0 - (double(mSizeInByte - mThreshold) / (mCritical - mThreshold)));
+        g.setStart(t - w / 5, h / 2);
+        g.setFinalStop(t + w / 5, h / 2);
         g.setColorAt(0, sch.background(KColorScheme::NeutralBackground).color());
         g.setColorAt(1, sch.background(KColorScheme::NegativeBackground).color());
         p.fillRect(0, 0, w, h, QBrush(g));
-    }
-    else
-    {
+    } else {
         p.fillRect(0, 0, w, h, sch.background(KColorScheme::NegativeBackground).color());
     }
-							// display the text
-    p.drawText(0, 0, w, h, Qt::AlignHCenter|Qt::AlignVCenter, text());
+    // display the text
+    p.drawText(0, 0, w, h, Qt::AlignHCenter | Qt::AlignVCenter, text());
 }

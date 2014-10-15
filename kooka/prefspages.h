@@ -1,7 +1,7 @@
-/* This file is part of the KDE Project				-*- mode:c++ -*-
+/* This file is part of the KDE Project             -*- mode:c++ -*-
 
    Copyright (C) 2000 Klaas Freitag <freitag@suse.de>
-   Copyright (C) 2010 Jonathan Marten <jjm@keelhaul.me.uk>  
+   Copyright (C) 2010 Jonathan Marten <jjm@keelhaul.me.uk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -44,7 +44,6 @@ class KUrlRequester;
 class KComboBox;
 class KPageDialog;
 
-
 class KookaPrefsPage : public QWidget
 {
     Q_OBJECT
@@ -60,7 +59,6 @@ protected:
     KConfigGroup mConfig;
     QVBoxLayout *mLayout;
 };
-
 
 class KookaGeneralPage : public KookaPrefsPage
 {
@@ -79,7 +77,6 @@ private:
     QPushButton *mEnableMessagesButton;
 };
 
-
 class KookaStartupPage : public KookaPrefsPage
 {
     Q_OBJECT
@@ -95,7 +92,6 @@ private:
     QCheckBox *mSelectScannerCheck;
     QCheckBox *mRestoreImageCheck;
 };
-
 
 class KookaSavingPage : public KookaPrefsPage
 {
@@ -113,7 +109,6 @@ private:
     QRadioButton *mAskBeforeScan;
     QRadioButton *mAskAfterScan;
 };
-
 
 class KookaThumbnailPage : public KookaPrefsPage
 {
@@ -135,7 +130,6 @@ private:
     KComboBox *mThumbSizeCombo;
     QCheckBox *mCustomBackgroundCheck;
 };
-
 
 class KookaOcrPage : public KookaPrefsPage
 {
@@ -160,5 +154,4 @@ private:
     OcrEngine::EngineType mSelectedEngine;
 };
 
-
-#endif							// PREFSPAGES_H
+#endif                          // PREFSPAGES_H

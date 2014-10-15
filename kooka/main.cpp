@@ -7,7 +7,6 @@
     email                : freitag@suse.de
  ***************************************************************************/
 
-
 /***************************************************************************
  *                                                                         *
  *  This file may be distributed and/or modified under the terms of the    *
@@ -27,26 +26,25 @@
  ***************************************************************************/
 
 #include <kapplication.h>
-#include <kaboutdata.h>
+#include <K4AboutData>
 #include <kcmdlineargs.h>
 #include <klocale.h>
 #include <kglobal.h>
 #include <kdebug.h>
 
 #include "kooka.h"
-#include "vcsversion.h"
-
+//QT5 #include "vcsversion.h"
 
 static const char shortDesc[] = I18N_NOOP("Scanning, image gallery and OCR");
 
 static const char longDesc[] = I18N_NOOP("Kooka provides access to scanner hardware using the "
-    "<a href=\"http://www.sane-project.org/\">SANE</a> library."
-    "\n\n"
-    "Kooka allows you to scan, save and view in any image format that KDE supports, "
-    "and can perform Optical Character Recognition using the open source "
-    "<a href=\"http://jocr.sourceforge.net/\">GOCR</a> or "
-    "<a href=\"http://www.gnu.org/software/ocrad/ocrad.html\">OCRAD</a> programs, "
-    "or the commercial <a href=\"http://www.rerecognition.com/\">KADMOS</a> library.");
+                               "<a href=\"http://www.sane-project.org/\">SANE</a> library."
+                               "\n\n"
+                               "Kooka allows you to scan, save and view in any image format that KDE supports, "
+                               "and can perform Optical Character Recognition using the open source "
+                               "<a href=\"http://jocr.sourceforge.net/\">GOCR</a> or "
+                               "<a href=\"http://www.gnu.org/software/ocrad/ocrad.html\">OCRAD</a> programs, "
+                               "or the commercial <a href=\"http://www.rerecognition.com/\">KADMOS</a> library.");
 
 // TODO: is the second paragraph of this licence needed with GPL Qt?
 static const char addLicense[] =
@@ -69,22 +67,22 @@ static const char addLicense[] =
 static const char copyright[] =
     I18N_NOOP("(C) 2000-2010, the Kooka developers and contributors");
 
-
-int main( int argc, char *argv[] )
+int main(int argc, char *argv[])
 {
-    KAboutData about("kooka",				// appName
-                     "",				// catalogName
-                     ki18n("Kooka"),			// programName
+    K4AboutData about("kooka",              // appName
+                      "",                // catalogName
+                      ki18n("Kooka"),            // programName
 #if VCS_AVAILABLE
-                     (VERSION " (" VCS_TYPE " " VCS_REVISION ")"),
+                      (VERSION " (" VCS_TYPE " " VCS_REVISION ")"),
 #else
-                     VERSION,				// version
+//QT5 fix me
+                      "VERSION",             // version
 #endif
-                     ki18n(shortDesc),			// shortDescription
-                     KAboutData::License_GPL_V2,	// licenseType
-                     ki18n(copyright),			// copyrightStatement
-                     ki18n(longDesc),			// text
-                     "http://techbase.kde.org/Projects/Kooka");
+                      ki18n(shortDesc),          // shortDescription
+                      K4AboutData::License_GPL_V2,   // licenseType
+                      ki18n(copyright),          // copyrightStatement
+                      ki18n(longDesc),           // text
+                      "http://techbase.kde.org/Projects/Kooka");
 
     about.addAuthor(ki18n("Jonathan Marten"), ki18n("Current maintainer, KDE4 port"), "jjm@keelhaul.me.uk");
     about.addAuthor(ki18n("Klaas Freitag"), ki18n("Developer"), "freitag@suse.de");
@@ -98,15 +96,15 @@ int main( int argc, char *argv[] )
     KCmdLineOptions options;
     options.add("d <device>", ki18n("The SANE device specification (e.g. 'umax:/dev/sg0')"));
     options.add("g", ki18n("Gallery mode - do not connect to scanner"));
-    KCmdLineArgs::addCmdLineOptions(options);		// Add my own options
+    KCmdLineArgs::addCmdLineOptions(options);       // Add my own options
 
     KApplication app;
-    KGlobal::locale()->insertCatalog("libkscan");
+    //KF5 port: remove this line and define TRANSLATION_DOMAIN in CMakeLists.txt instead
+//KLocale::global()->insertCatalog("libkscan");
 
     KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
     QString devToUse = args->getOption("d");
-    if (args->isSet("g"))
-    {
+    if (args->isSet("g")) {
         devToUse = "gallery";
     }
     kDebug() << "DevToUse is" << devToUse;

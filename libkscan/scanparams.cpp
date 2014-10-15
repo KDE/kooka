@@ -18,10 +18,8 @@
 */
 
 #include "scanparams.h"
-#include "scanparams.moc"
 
 #include "scanparams_p.h"
-#include "scanparams_p.moc"
 
 #include <qpushbutton.h>
 #include <qimage.h>
@@ -38,13 +36,14 @@
 
 #include <kfiledialog.h>
 #include <klocale.h>
-#include <kdebug.h>
+#include <QDebug>
 #include <kiconloader.h>
 #include <kled.h>
 #include <kmessagebox.h>
 #include <kmimetype.h>
 #include <khbox.h>
 #include <ktabwidget.h>
+#include <KIcon>
 
 extern "C"
 {
@@ -61,25 +60,104 @@ extern "C"
 #include "kscanoption.h"
 #include "kscanoptset.h"
 
-
 //  Debugging options
 #undef DEBUG_ADF
 
-
 //  SANE testing options
 #ifndef SANE_NAME_TEST_PICTURE
-#define SANE_NAME_TEST_PICTURE		"test-picture"
+#define SANE_NAME_TEST_PICTURE      "test-picture"
 #endif
 #ifndef SANE_NAME_THREE_PASS
-#define SANE_NAME_THREE_PASS		"three-pass"
+#define SANE_NAME_THREE_PASS        "three-pass"
 #endif
 #ifndef SANE_NAME_HAND_SCANNER
-#define SANE_NAME_HAND_SCANNER		"hand-scanner"
+#define SANE_NAME_HAND_SCANNER      "hand-scanner"
 #endif
 #ifndef SANE_NAME_GRAYIFY
-#define SANE_NAME_GRAYIFY		"grayify"
+#define SANE_NAME_GRAYIFY       "grayify"
 #endif
 
+ScanParamsPage::ScanParamsPage(QWidget *parent, const char *name)
+    : QWidget(parent)
+{
+    setObjectName(name);
+
+    mLayout = new QGridLayout(this);
+    mLayout->setSpacing(2 * KDialog::spacingHint());
+    mLayout->setColumnStretch(2, 1);
+    mLayout->setColumnMinimumWidth(1, KDialog::marginHint());
+
+    mNextRow = 0;
+    mPendingGroup = NULL;
+}
+
+ScanParamsPage::~ScanParamsPage()
+{
+}
+
+void ScanParamsPage::checkPendingGroup()
+{
+    if (mPendingGroup != NULL) {            // separator to add first?
+        QWidget *w = mPendingGroup;
+        mPendingGroup = NULL;               // avoid recursion!
+        addRow(w);
+    }
+}
+
+void ScanParamsPage::addRow(QWidget *wid)
+{
+    if (wid == NULL) {
+        return;    // must have one
+    }
+
+    checkPendingGroup();                // add separator if needed
+    mLayout->addWidget(wid, mNextRow, 0, 1, -1);
+    ++mNextRow;
+}
+
+void ScanParamsPage::addRow(QLabel *lab, QWidget *wid, QLabel *unit, Qt::Alignment align)
+{
+    if (wid == NULL) {
+        return;    // must have one
+    }
+    wid->setMaximumWidth(MAX_CONTROL_WIDTH);
+
+    checkPendingGroup();                // add separator if needed
+
+    if (lab != NULL) {
+        lab->setMaximumWidth(MAX_LABEL_WIDTH);
+        lab->setMinimumWidth(MIN_LABEL_WIDTH);
+        mLayout->addWidget(lab, mNextRow, 0, Qt::AlignLeft | align);
+    }
+
+    if (unit != NULL) {
+        mLayout->addWidget(wid, mNextRow, 2, align);
+        mLayout->addWidget(unit, mNextRow, 3, Qt::AlignLeft | align);
+    } else {
+        mLayout->addWidget(wid, mNextRow, 2, 1, 2, align);
+    }
+
+    ++mNextRow;
+}
+
+bool ScanParamsPage::lastRow()
+{
+    addGroup(NULL);                 // hide last if present
+
+    mLayout->addWidget(new QLabel(QString::null, this), mNextRow, 0, 1, -1, Qt::AlignTop);
+    mLayout->setRowStretch(mNextRow, 9);
+
+    return (mNextRow > 0);
+}
+
+void ScanParamsPage::addGroup(QWidget *wid)
+{
+    if (mPendingGroup != NULL) {
+        mPendingGroup->hide();    // dont't need this after all
+    }
+
+    mPendingGroup = wid;
+}
 
 ScanParams::ScanParams(QWidget *parent)
     : QWidget(parent)
@@ -103,47 +181,52 @@ ScanParams::ScanParams(QWidget *parent)
     // when looking up those, so the returned path will be empty if they
     // are not installed.
 
-    KIconLoader::global()->addAppDir("libkscan");	// access to our icons
+    KIconLoader::global()->addAppDir("libkscan");   // access to our icons
 
     QString ip = KIconLoader::global()->iconPath("color", KIconLoader::Small, true);
-    if (ip.isEmpty()) ip = KIconLoader::global()->iconPath("palette-color", KIconLoader::Small);
+    if (ip.isEmpty()) {
+        ip = KIconLoader::global()->iconPath("palette-color", KIconLoader::Small);
+    }
     mIconColor = QIcon(ip);
 
     ip = KIconLoader::global()->iconPath("gray-scale", KIconLoader::Small, true);
-    if (ip.isEmpty()) ip = KIconLoader::global()->iconPath("palette-gray", KIconLoader::Small);
+    if (ip.isEmpty()) {
+        ip = KIconLoader::global()->iconPath("palette-gray", KIconLoader::Small);
+    }
     mIconGray = QIcon(ip);
 
     ip = KIconLoader::global()->iconPath("black-white", KIconLoader::Small, true);
-    if (ip.isEmpty()) ip = KIconLoader::global()->iconPath("palette-lineart", KIconLoader::Small);
+    if (ip.isEmpty()) {
+        ip = KIconLoader::global()->iconPath("palette-lineart", KIconLoader::Small);
+    }
     mIconLineart = QIcon(ip);
 
     ip = KIconLoader::global()->iconPath("halftone", KIconLoader::Small, true);
-    if (ip.isEmpty()) ip = KIconLoader::global()->iconPath("palette-halftone", KIconLoader::Small);
+    if (ip.isEmpty()) {
+        ip = KIconLoader::global()->iconPath("palette-halftone", KIconLoader::Small);
+    }
     mIconHalftone = QIcon(ip);
 
     /* intialise the default last save warnings */
     mStartupOptions = NULL;
 }
 
-
 ScanParams::~ScanParams()
 {
-    kDebug();
+    //qDebug();
 
     delete mStartupOptions;
     delete mProgressDialog;
 }
 
-
 bool ScanParams::connectDevice(KScanDevice *newScanDevice, bool galleryMode)
 {
     QGridLayout *lay = new QGridLayout(this);
     lay->setMargin(0);
-    lay->setColumnStretch(0,9);
+    lay->setColumnStretch(0, 9);
 
-    if (newScanDevice==NULL)				// no scanner device
-    {
-        kDebug() << "No scan device, gallery=" << galleryMode;
+    if (newScanDevice == NULL) {            // no scanner device
+        //qDebug() << "No scan device, gallery=" << galleryMode;
         mSaneDevice = NULL;
         createNoScannerMsg(galleryMode);
         return (true);
@@ -153,16 +236,16 @@ bool ScanParams::connectDevice(KScanDevice *newScanDevice, bool galleryMode)
     mScanMode = ScanParams::NormalMode;
     adf = ADF_OFF;
 
-    QLabel *lab = new QLabel(i18n("<qt><b>Scanner&nbsp;Settings</b>"),this);
-    lay->addWidget(lab,0,0,Qt::AlignLeft);
+    QLabel *lab = new QLabel(i18n("<qt><b>Scanner&nbsp;Settings</b>"), this);
+    lay->addWidget(lab, 0, 0, Qt::AlignLeft);
 
     mLed = new KLed(this);
-    mLed->setState( KLed::Off );
-    mLed->setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed ));
-    lay->addWidget(mLed,0,1,Qt::AlignRight);
+    mLed->setState(KLed::Off);
+    mLed->setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed));
+    lay->addWidget(mLed, 0, 1, Qt::AlignRight);
 
-    lab = new QLabel(mSaneDevice->scannerDescription(),this);
-    lay->addWidget(lab,1,0,1,2,Qt::AlignLeft);
+    lab = new QLabel(mSaneDevice->scannerDescription(), this);
+    lay->addWidget(lab, 1, 0, 1, 2, Qt::AlignLeft);
 
     /* load the startup scanoptions */
     // TODO: check whether the saved scanner options apply to the current scanner?
@@ -170,9 +253,8 @@ bool ScanParams::connectDevice(KScanDevice *newScanDevice, bool galleryMode)
     // Or update KScanDevice and here to save/load the startup options
     // on a per-scanner basis.
     mStartupOptions = new KScanOptSet(DEFAULT_OPTIONSET);
-    if (!mStartupOptions->loadConfig(mSaneDevice->scannerBackendName()))
-    {
-        kDebug() << "Could not load startup options";
+    if (!mStartupOptions->loadConfig(mSaneDevice->scannerBackendName())) {
+        //qDebug() << "Could not load startup options";
         delete mStartupOptions;
         mStartupOptions = NULL;
     }
@@ -205,7 +287,7 @@ bool ScanParams::connectDevice(KScanDevice *newScanDevice, bool galleryMode)
     mProgressDialog->setAutoReset(true);
     mProgressDialog->setMinimumDuration(100);
     mProgressDialog->setWindowTitle(i18n("Scanning"));
-    setScanDestination(QString::null);			// reset destination display
+    setScanDestination(QString::null);          // reset destination display
 
     connect(mProgressDialog, SIGNAL(canceled()), mSaneDevice, SLOT(slotStopScanning()));
     connect(mSaneDevice, SIGNAL(sigScanProgress(int)), SLOT(slotScanProgress(int)));
@@ -213,30 +295,35 @@ bool ScanParams::connectDevice(KScanDevice *newScanDevice, bool galleryMode)
     return (true);
 }
 
-
 void ScanParams::initialise(KScanOption *so)
 {
-    if (so==NULL) return;
-    if (mStartupOptions==NULL) return;
-    if (!so->isReadable()) return;
-    if (!so->isSoftwareSettable()) return;
+    if (so == NULL) {
+        return;
+    }
+    if (mStartupOptions == NULL) {
+        return;
+    }
+    if (!so->isReadable()) {
+        return;
+    }
+    if (!so->isSoftwareSettable()) {
+        return;
+    }
 
     QByteArray name = so->getName();
-    if (!name.isEmpty())
-    {
+    if (!name.isEmpty()) {
         QByteArray val = mStartupOptions->getValue(name);
-        kDebug() << "Initialising" << name << "with value" << val;
+        //qDebug() << "Initialising" << name << "with value" << val;
         so->set(val);
         so->apply();
     }
 }
 
-
 ScanParamsPage *ScanParams::createTab(KTabWidget *tw, const QString &title, const char *name)
 {
     QScrollArea *scroll = new QScrollArea(this);
     scroll->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
-    scroll->setWidgetResizable(true);			// stretch to width
+    scroll->setWidgetResizable(true);           // stretch to width
     scroll->setFrameStyle(QFrame::NoFrame);
 
     ScanParamsPage *frame = new ScanParamsPage(this, name);
@@ -245,7 +332,6 @@ ScanParamsPage *ScanParams::createTab(KTabWidget *tw, const QString &title, cons
 
     return (frame);
 }
-
 
 QWidget *ScanParams::createScannerParams()
 {
@@ -268,8 +354,7 @@ QWidget *ScanParams::createScannerParams()
 
     // Virtual/debug image file
     mVirtualFile = mSaneDevice->getGuiElement(SANE_NAME_FILE, frame);
-    if (mVirtualFile!=NULL)
-    {
+    if (mVirtualFile != NULL) {
         initialise(mVirtualFile);
         connect(mVirtualFile, SIGNAL(guiChange(KScanOption *)), SLOT(slotOptionChanged(KScanOption *)));
 
@@ -278,16 +363,18 @@ QWidget *ScanParams::createScannerParams()
         frame->addRow(l, w);
 
         // Selection for either virtual scanner or SANE debug
-        KVBox *vbg = new KVBox( frame);
+        KVBox *vbg = new KVBox(frame);
 
         QRadioButton *rb1 = new QRadioButton(i18n("SANE Debug (from PNM image)"), vbg);
         rb1->setToolTip(i18n("<qt>Operate in the same way that a real scanner does (including scan area, image processing etc.), but reading from the specified image file. See <a href=\"man:sane-pnm(5)\">sane-pnm(5)</a> for more information."));
         QRadioButton *rb2 = new QRadioButton(i18n("Virtual Scanner (any image format)"), vbg);
         rb2->setToolTip(i18n("<qt>Do not perform any scanning or processing, but simply read the specified image file. This is for testing the image saving, etc."));
 
-        if (mScanMode==ScanParams::NormalMode) mScanMode = ScanParams::SaneDebugMode;
-        rb1->setChecked(mScanMode==ScanParams::SaneDebugMode);
-        rb2->setChecked(mScanMode==ScanParams::VirtualScannerMode);
+        if (mScanMode == ScanParams::NormalMode) {
+            mScanMode = ScanParams::SaneDebugMode;
+        }
+        rb1->setChecked(mScanMode == ScanParams::SaneDebugMode);
+        rb2->setChecked(mScanMode == ScanParams::VirtualScannerMode);
 
         // needed for new 'buttonClicked' signal:
         QButtonGroup *vbgGroup = new QButtonGroup(vbg);
@@ -305,8 +392,7 @@ QWidget *ScanParams::createScannerParams()
 
     // Mode setting
     so = mSaneDevice->getGuiElement(SANE_NAME_SCAN_MODE, frame);
-    if (so!=NULL)
-    {
+    if (so != NULL) {
         KScanCombo *cb = (KScanCombo *) so->widget();
 
         // Having loaded the 'sane-backends' message catalogue, these strings
@@ -332,9 +418,10 @@ QWidget *ScanParams::createScannerParams()
     // option then try just "Resolution", this may not be the same as
     // "X-Resolution" even though this was the case in SANE<=1.0.19.
     so = mSaneDevice->getGuiElement(SANE_NAME_SCAN_X_RESOLUTION, frame);
-    if (so==NULL) so = mSaneDevice->getGuiElement(SANE_NAME_SCAN_RESOLUTION, frame);
-    if (so!=NULL)
-    {
+    if (so == NULL) {
+        so = mSaneDevice->getGuiElement(SANE_NAME_SCAN_RESOLUTION, frame);
+    }
+    if (so != NULL) {
         initialise(so);
 
         int x_res;
@@ -352,8 +439,7 @@ QWidget *ScanParams::createScannerParams()
 
         // Same X/Y resolution option (if present)
         mResolutionBind = mSaneDevice->getGuiElement(SANE_NAME_RESOLUTION_BIND, frame);
-        if (mResolutionBind!=NULL)
-        {
+        if (mResolutionBind != NULL) {
             initialise(mResolutionBind);
             mResolutionBind->redrawWidget();
 
@@ -368,10 +454,11 @@ QWidget *ScanParams::createScannerParams()
         so = mSaneDevice->getGuiElement(SANE_NAME_SCAN_Y_RESOLUTION, frame);
         int y_res = x_res;
 
-        if (so!=NULL)
-        {
+        if (so != NULL) {
             initialise(so);
-            if (so->isActive()) so->get(&y_res);
+            if (so->isActive()) {
+                so->get(&y_res);
+            }
             so->redrawWidget();
 
             // Connection that passes the resolution to the previewer
@@ -383,17 +470,15 @@ QWidget *ScanParams::createScannerParams()
             frame->addRow(l, w, u);
         }
 
-        emit scanResolutionChanged(x_res, y_res);	// initialise the previewer
-    }
-    else
-    {
-        kDebug() << "Serious: No resolution option available!";
+        emit scanResolutionChanged(x_res, y_res);   // initialise the previewer
+    } else {
+        //qDebug() << "Serious: No resolution option available!";
     }
 
     // Scan size setting
     mAreaSelect = new ScanSizeSelector(frame, mSaneDevice->getMaxScanSize());
     connect(mAreaSelect, SIGNAL(sizeSelected(const QRect &)), SLOT(slotScanSizeSelected(const QRect &)));
-    l = new QLabel("Scan &area:", frame);		// make sure it gets an accel
+    l = new QLabel("Scan &area:", frame);       // make sure it gets an accel
     l->setBuddy(mAreaSelect->focusProxy());
     frame->addRow(l, mAreaSelect, NULL, Qt::AlignTop);
 
@@ -402,10 +487,9 @@ QWidget *ScanParams::createScannerParams()
 
     // Source selection
     mSourceSelect = mSaneDevice->getGuiElement(SANE_NAME_SCAN_SOURCE, frame);
-    if (mSourceSelect!=NULL)
-    {
+    if (mSourceSelect != NULL) {
         initialise(mSourceSelect);
-        connect(mSourceSelect, SIGNAL(guiChange(KScanOption *)), SLOT(slotOptionChanged( KScanOption *)));
+        connect(mSourceSelect, SIGNAL(guiChange(KScanOption *)), SLOT(slotOptionChanged(KScanOption *)));
 
         l = mSourceSelect->getLabel(frame, true);
         w = mSourceSelect->widget();
@@ -422,10 +506,9 @@ QWidget *ScanParams::createScannerParams()
 
     // SANE testing options, for the "test" device
     so = mSaneDevice->getGuiElement(SANE_NAME_TEST_PICTURE, frame);
-    if (so!=NULL)
-    {
+    if (so != NULL) {
         initialise(so);
-        connect(so, SIGNAL(guiChange(KScanOption *)), SLOT(slotOptionChanged( KScanOption *)));
+        connect(so, SIGNAL(guiChange(KScanOption *)), SLOT(slotOptionChanged(KScanOption *)));
 
         l = so->getLabel(frame);
         w = so->widget();
@@ -436,44 +519,46 @@ QWidget *ScanParams::createScannerParams()
     // Split them up into "Other" and "Advanced".
     const QList<QByteArray> opts = mSaneDevice->getAllOptions();
     for (QList<QByteArray>::const_iterator it = opts.constBegin();
-         it!=opts.constEnd(); ++it)
-    {
+            it != opts.constEnd(); ++it) {
         const QByteArray opt = (*it);
 
-        if (opt==SANE_NAME_SCAN_TL_X ||			// ignore these (scan area)
-            opt==SANE_NAME_SCAN_TL_Y ||
-            opt==SANE_NAME_SCAN_BR_X ||
-            opt==SANE_NAME_SCAN_BR_Y) continue;
+        if (opt == SANE_NAME_SCAN_TL_X ||       // ignore these (scan area)
+                opt == SANE_NAME_SCAN_TL_Y ||
+                opt == SANE_NAME_SCAN_BR_X ||
+                opt == SANE_NAME_SCAN_BR_Y) {
+            continue;
+        }
 
-        so = mSaneDevice->getExistingGuiElement(opt);	// see if already created
-        if (so!=NULL) continue;				// if so ignore, don't duplicate
+        so = mSaneDevice->getExistingGuiElement(opt);   // see if already created
+        if (so != NULL) {
+            continue;    // if so ignore, don't duplicate
+        }
 
         so = mSaneDevice->getGuiElement(opt, frame);
-        if (so!=NULL)
-        {
-            kDebug() << "creating" << (so->isCommonOption() ? "OTHER" : "ADVANCED") << "option" << opt;
+        if (so != NULL) {
+            //qDebug() << "creating" << (so->isCommonOption() ? "OTHER" : "ADVANCED") << "option" << opt;
             initialise(so);
             connect(so, SIGNAL(guiChange(KScanOption *)), SLOT(slotOptionChanged(KScanOption *)));
 
-            if (so->isCommonOption()) frame = otherFrame;
-            else frame = advancedFrame;
+            if (so->isCommonOption()) {
+                frame = otherFrame;
+            } else {
+                frame = advancedFrame;
+            }
 
             w = so->widget();
-            if (so->isGroup()) frame->addGroup(w);
-            else
-            {
+            if (so->isGroup()) {
+                frame->addGroup(w);
+            } else {
                 l = so->getLabel(frame);
                 u = so->getUnit(frame);
                 frame->addRow(l, w, u);
             }
 
             // Some special things to do for particular options
-            if (opt==SANE_NAME_BIT_DEPTH)
-            {
+            if (opt == SANE_NAME_BIT_DEPTH) {
                 connect(so, SIGNAL(guiChange(KScanOption *)), SLOT(slotNewScanMode()));
-            }
-            else if (opt==SANE_NAME_CUSTOM_GAMMA)
-            {
+            } else if (opt == SANE_NAME_CUSTOM_GAMMA) {
                 // Enabling/disabling the edit button is handled by
                 // slotOptionChanged() calling setEditCustomGammaTableState()
                 //connect(so, SIGNAL(guiChange(KScanOption *)), SLOT(slotOptionNotify(KScanOption *)));
@@ -487,28 +572,31 @@ QWidget *ScanParams::createScannerParams()
         }
     }
 
-    basicFrame->lastRow();				// final stretch row
-    if (!otherFrame->lastRow()) tw->setTabEnabled(1, false);
-    if (!advancedFrame->lastRow()) tw->setTabEnabled(2, false);
+    basicFrame->lastRow();              // final stretch row
+    if (!otherFrame->lastRow()) {
+        tw->setTabEnabled(1, false);
+    }
+    if (!advancedFrame->lastRow()) {
+        tw->setTabEnabled(2, false);
+    }
 
-    initStartupArea();					// set up and tell previewer
-    slotNewScanMode();					// tell previewer this too
+    initStartupArea();                  // set up and tell previewer
+    slotNewScanMode();                  // tell previewer this too
 
-    return (tw);					// top-level (tab) widget
+    return (tw);                    // top-level (tab) widget
 }
-
 
 void ScanParams::initStartupArea()
 {
 // TODO: restore area a user preference
 #ifdef RESTORE_AREA
-    if (mStartupOptions==NULL)				// no saved options available
+    if (mStartupOptions == NULL)            // no saved options available
 #endif
     {
-        applyRect(QRect());				// set maximum scan area
+        applyRect(QRect());             // set maximum scan area
         return;
     }
-							// set scan area from saved
+    // set scan area from saved
     KScanOption *tl_x = mSaneDevice->getOption(SANE_NAME_SCAN_TL_X);
     KScanOption *tl_y = mSaneDevice->getOption(SANE_NAME_SCAN_TL_Y);
     KScanOption *br_x = mSaneDevice->getOption(SANE_NAME_SCAN_BR_X);
@@ -520,32 +608,34 @@ void ScanParams::initStartupArea()
     initialise(br_y);
 
     QRect rect;
-    int val1,val2;
-    tl_x->get(&val1); rect.setLeft(val1);		// pass area to previewer
-    br_x->get(&val2); rect.setWidth(val2-val1);
+    int val1, val2;
+    tl_x->get(&val1); rect.setLeft(val1);       // pass area to previewer
+    br_x->get(&val2); rect.setWidth(val2 - val1);
     tl_y->get(&val1); rect.setTop(val1);
-    br_y->get(&val2); rect.setHeight(val2-val1);
+    br_y->get(&val2); rect.setHeight(val2 - val1);
     emit newCustomScanSize(rect);
 
-    mAreaSelect->selectSize(rect);			// set selector to match
+    mAreaSelect->selectSize(rect);          // set selector to match
 }
-
 
 void ScanParams::createNoScannerMsg(bool galleryMode)
 {
     QWidget *lab;
-    if (galleryMode) lab = messageScannerNotSelected();
-    else lab = messageScannerProblem();
+    if (galleryMode) {
+        lab = messageScannerNotSelected();
+    } else {
+        lab = messageScannerProblem();
+    }
 
     QGridLayout *lay = dynamic_cast<QGridLayout *>(layout());
-    if (lay!=NULL) lay->addWidget(lab, 0, 0, Qt::AlignTop);
+    if (lay != NULL) {
+        lay->addWidget(lab, 0, 0, Qt::AlignTop);
+    }
 }
-
 
 QWidget *ScanParams::messageScannerNotSelected()
 {
-    if (mNoScannerMessage==NULL)
-    {
+    if (mNoScannerMessage == NULL) {
         mNoScannerMessage = new QLabel(
             i18n("<qt>"
                  "<b>No scanner selected</b>"
@@ -558,11 +648,9 @@ QWidget *ScanParams::messageScannerNotSelected()
     return (mNoScannerMessage);
 }
 
-
 QWidget *ScanParams::messageScannerProblem()
 {
-    if (mProblemMessage==NULL)
-    {
+    if (mProblemMessage == NULL) {
         mProblemMessage = new QLabel(
             i18n("<qt>"
                  "<b>Problem: No scanner found, or unable to access it</b>"
@@ -585,21 +673,25 @@ QWidget *ScanParams::messageScannerProblem()
     return (mProblemMessage);
 }
 
-
 void ScanParams::slotSourceSelect()
 {
     AdfBehaviour adf = ADF_OFF;
 
-    if (mSourceSelect==NULL) return;			// no source selection GUI
-    if (!mSourceSelect->isValid()) return;		// no option on scanner
+    if (mSourceSelect == NULL) {
+        return;    // no source selection GUI
+    }
+    if (!mSourceSelect->isValid()) {
+        return;    // no option on scanner
+    }
 
     const QByteArray &currSource = mSourceSelect->get();
-    kDebug() << "Current source is" << currSource;
+    //qDebug() << "Current source is" << currSource;
 
     QList<QByteArray> sources = mSourceSelect->getList();
 #ifdef DEBUG_ADF
-    if (!sources.contains("Automatic Document Feeder"))
+    if (!sources.contains("Automatic Document Feeder")) {
         sources.append("Automatic Document Feeder");
+    }
 #endif
 
     // TODO: the 'sources' list has exactly the same options as the
@@ -608,19 +700,20 @@ void ScanParams::slotSourceSelect()
     ScanSourceDialog d(this, sources, adf);
     d.slotSetSource(currSource);
 
-    if (d.exec()!=QDialog::Accepted) return;
+    if (d.exec() != QDialog::Accepted) {
+        return;
+    }
 
     QString sel_source = d.getText();
     adf = d.getAdfBehave();
-    kDebug() << "new source" << sel_source << "ADF" << adf;
+    //qDebug() << "new source" << sel_source << "ADF" << adf;
 
     /* set the selected Document source, the behavior is stored in a membervar */
-    mSourceSelect->set(sel_source.toLatin1());		// TODO: FIX in ScanSourceDialog, then here
+    mSourceSelect->set(sel_source.toLatin1());      // TODO: FIX in ScanSourceDialog, then here
     mSourceSelect->apply();
     mSourceSelect->reload();
     mSourceSelect->redrawWidget();
 }
-
 
 /* Slot which is called if the user switches in the gui between
  *  the SANE-Debug-Mode and the qt image reading
@@ -628,9 +721,12 @@ void ScanParams::slotSourceSelect()
 void ScanParams::slotVirtScanModeSelect(int but)
 {
     ScanParams::ScanMode mode;
-    if (but==0) mScanMode = ScanParams::SaneDebugMode;	// SANE Debug
-    else mScanMode = ScanParams::VirtualScannerMode;	// Virtual Scanner
-    const bool enable = (mScanMode==ScanParams::SaneDebugMode);
+    if (but == 0) {
+        mScanMode = ScanParams::SaneDebugMode;    // SANE Debug
+    } else {
+        mScanMode = ScanParams::VirtualScannerMode;    // Virtual Scanner
+    }
+    const bool enable = (mScanMode == ScanParams::SaneDebugMode);
 
     mSaneDevice->guiSetEnabled(SANE_NAME_HAND_SCANNER, enable);
     mSaneDevice->guiSetEnabled(SANE_NAME_THREE_PASS, enable);
@@ -644,79 +740,75 @@ void ScanParams::slotVirtScanModeSelect(int but)
     mAreaSelect->setEnabled(enable);
 }
 
-
-
 KScanDevice::Status ScanParams::prepareScan(QString *vfp)
 {
-    kDebug() << "scan mode=" << mScanMode;
+    //qDebug() << "scan mode=" << mScanMode;
 
-    setScanDestination(QString::null);			// reset progress display
+    setScanDestination(QString::null);          // reset progress display
 
     // Check compatibility of scan settings
     int format;
     int depth;
     mSaneDevice->getCurrentFormat(&format, &depth);
-    if (depth==1 && format!=SANE_FRAME_GRAY)		// 1-bit scan depth in colour?
-    {
+    if (depth == 1 && format != SANE_FRAME_GRAY) {  // 1-bit scan depth in colour?
         KMessageBox::sorry(this, i18n("1-bit depth scan cannot be done in color"));
         return (KScanDevice::ParamError);
-    }
-    else if (depth==16)
-    {
+    } else if (depth == 16) {
         KMessageBox::sorry(this, i18n("16-bit depth scans are not supported"));
         return (KScanDevice::ParamError);
     }
 
     QString virtfile;
-    if (mScanMode==ScanParams::SaneDebugMode || mScanMode==ScanParams::VirtualScannerMode)
-    {
-        if (mVirtualFile!=NULL) virtfile = mVirtualFile->get();
-        if (virtfile.isEmpty())
-        {
-            KMessageBox::sorry(this,i18n("A file must be entered for testing or virtual scanning"));
+    if (mScanMode == ScanParams::SaneDebugMode || mScanMode == ScanParams::VirtualScannerMode) {
+        if (mVirtualFile != NULL) {
+            virtfile = mVirtualFile->get();
+        }
+        if (virtfile.isEmpty()) {
+            KMessageBox::sorry(this, i18n("A file must be entered for testing or virtual scanning"));
             return (KScanDevice::ParamError);
         }
 
         QFileInfo fi(virtfile);
-        if (!fi.exists())
-        {
-            KMessageBox::sorry(this,i18n("<qt>The testing or virtual file<br><filename>%1</filename><br>was not found or is not readable", virtfile));
+        if (!fi.exists()) {
+            KMessageBox::sorry(this, i18n("<qt>The testing or virtual file<br><filename>%1</filename><br>was not found or is not readable", virtfile));
             return (KScanDevice::ParamError);
         }
 
-        if (mScanMode==ScanParams::SaneDebugMode)
-        {
+        if (mScanMode == ScanParams::SaneDebugMode) {
             KMimeType::Ptr mimetype = KMimeType::findByPath(virtfile);
             if (!(mimetype->is("image/x-portable-bitmap") ||
-                  mimetype->is("image/x-portable-greymap") ||
-                  mimetype->is("image/x-portable-pixmap")))
-            {
-                KMessageBox::sorry(this,i18n("<qt>SANE Debug can only read PNM files.<br>"
-                                             "This file is type <b>%1</b>.", mimetype->name()));
+                    mimetype->is("image/x-portable-greymap") ||
+                    mimetype->is("image/x-portable-pixmap"))) {
+                KMessageBox::sorry(this, i18n("<qt>SANE Debug can only read PNM files.<br>"
+                                              "This file is type <b>%1</b>.", mimetype->name()));
                 return (KScanDevice::ParamError);
             }
         }
     }
 
-    if (vfp!=NULL) *vfp = virtfile;
+    if (vfp != NULL) {
+        *vfp = virtfile;
+    }
     return (KScanDevice::Ok);
 }
 
-
 void ScanParams::setScanDestination(const QString &dest)
 {
-    //kDebug() << "scan destination is" << dest;
-    if (dest.isEmpty()) mProgressDialog->setLabelText(i18n("Scan in progress"));
-    else mProgressDialog->setLabelText(i18n("Scan in progress<br><br><filename>%1</filename>", dest));
+    ////qDebug() << "scan destination is" << dest;
+    if (dest.isEmpty()) {
+        mProgressDialog->setLabelText(i18n("Scan in progress"));
+    } else {
+        mProgressDialog->setLabelText(i18n("Scan in progress<br><br><filename>%1</filename>", dest));
+    }
 }
-
 
 void ScanParams::slotScanProgress(int value)
 {
     mProgressDialog->setValue(value);
-    if (value==0 && !mProgressDialog->isVisible()) mProgressDialog->show();
+    if (value == 0 && !mProgressDialog->isVisible()) {
+        mProgressDialog->show();
+    }
 }
-
 
 /* Slot called to start acquiring a preview */
 void ScanParams::slotAcquirePreview()
@@ -726,107 +818,108 @@ void ScanParams::slotAcquirePreview()
     // that the preview image will be the same size as the final image (which
     // doesn't matter).
 
-    if (mScanMode==ScanParams::VirtualScannerMode)
-    {
-        KMessageBox::sorry(this,i18n("Cannot preview in Virtual Scanner mode"));
+    if (mScanMode == ScanParams::VirtualScannerMode) {
+        KMessageBox::sorry(this, i18n("Cannot preview in Virtual Scanner mode"));
         return;
     }
 
     QString virtfile;
     KScanDevice::Status stat = prepareScan(&virtfile);
-    if (stat!=KScanDevice::Ok) return;
+    if (stat != KScanDevice::Ok) {
+        return;
+    }
 
-    kDebug() << "scan mode=" << mScanMode << "virtfile" << virtfile;
+    //qDebug() << "scan mode=" << mScanMode << "virtfile" << virtfile;
 
     KScanOption *greyPreview = mSaneDevice->getExistingGuiElement(SANE_NAME_GRAY_PREVIEW);
     int gp = 0;
-    if (greyPreview!=NULL) greyPreview->get(&gp);
+    if (greyPreview != NULL) {
+        greyPreview->get(&gp);
+    }
 
-    setMaximalScanSize();				// always preview at maximal size
-    mAreaSelect->selectCustomSize(QRect());		// reset selector to reflect that
+    setMaximalScanSize();               // always preview at maximal size
+    mAreaSelect->selectCustomSize(QRect());     // reset selector to reflect that
 
     stat = mSaneDevice->acquirePreview(gp);
-    if (stat!=KScanDevice::Ok) kDebug() << "Error, preview status " << stat;
+    if (stat != KScanDevice::Ok) {
+        //qDebug() << "Error, preview status " << stat;
+    }
 }
-
 
 /* Slot called to start scanning */
 void ScanParams::slotStartScan()
 {
     QString virtfile;
     KScanDevice::Status stat = prepareScan(&virtfile);
-    if (stat!=KScanDevice::Ok) return;
-
-    kDebug() << "scan mode=" << mScanMode << "virtfile" << virtfile;
-
-    if (mScanMode!=ScanParams::VirtualScannerMode)	// acquire via SANE
-    {
-        if (adf==ADF_OFF)
-        {
-	    kDebug() << "Start to acquire image";
-	    stat = mSaneDevice->acquireScan();
-        }
-        else
-        {
-	    kDebug() << "ADF Scan not yet implemented :-/";
-	    // stat = performADFScan();
-        }
+    if (stat != KScanDevice::Ok) {
+        return;
     }
-    else						// acquire via Qt-IMGIO
-    {
-        kDebug() << "Acquiring from virtual file";
+
+    //qDebug() << "scan mode=" << mScanMode << "virtfile" << virtfile;
+
+    if (mScanMode != ScanParams::VirtualScannerMode) { // acquire via SANE
+        if (adf == ADF_OFF) {
+            //qDebug() << "Start to acquire image";
+            stat = mSaneDevice->acquireScan();
+        } else {
+            //qDebug() << "ADF Scan not yet implemented :-/";
+            // stat = performADFScan();
+        }
+    } else {                    // acquire via Qt-IMGIO
+        //qDebug() << "Acquiring from virtual file";
         stat = mSaneDevice->acquireScan(virtfile);
     }
 
-    if (stat!=KScanDevice::Ok) kDebug() << "Error, scan status " << stat;
+    if (stat != KScanDevice::Ok) {
+        //qDebug() << "Error, scan status " << stat;
+    }
 }
-
 
 bool ScanParams::getGammaTableFrom(const QByteArray &opt, KGammaTable *gt)
 {
     KScanOption *so = mSaneDevice->getOption(opt, false);
-    if (so==NULL) return (false);
+    if (so == NULL) {
+        return (false);
+    }
 
-    if (!so->get(gt)) return (false);
-    kDebug() << "got from" << so->getName() << "=" << gt->toString();
+    if (!so->get(gt)) {
+        return (false);
+    }
+    //qDebug() << "got from" << so->getName() << "=" << gt->toString();
     return (true);
 }
-
 
 bool ScanParams::setGammaTableTo(const QByteArray &opt, const KGammaTable *gt)
 {
     KScanOption *so = mSaneDevice->getOption(opt, false);
-    if (so==NULL) return (false);
+    if (so == NULL) {
+        return (false);
+    }
 
-    kDebug() << "set" << so->getName() << "=" << gt->toString();
+    //qDebug() << "set" << so->getName() << "=" << gt->toString();
     so->set(gt);
     return (so->apply());
 }
 
-
 void ScanParams::slotEditCustGamma()
 {
-    KGammaTable gt;					// start with default values
+    KGammaTable gt;                 // start with default values
 
     // Get the current gamma table from either the combined gamma table
     // option, or any one of the colour channel gamma tables.
-    if (!getGammaTableFrom(SANE_NAME_GAMMA_VECTOR, &gt))
-    {
-        if (!getGammaTableFrom(SANE_NAME_GAMMA_VECTOR_R, &gt))
-        {
-            if (!getGammaTableFrom(SANE_NAME_GAMMA_VECTOR_G, &gt))
-            {
-                if (!getGammaTableFrom(SANE_NAME_GAMMA_VECTOR_B, &gt))
-                {
+    if (!getGammaTableFrom(SANE_NAME_GAMMA_VECTOR, &gt)) {
+        if (!getGammaTableFrom(SANE_NAME_GAMMA_VECTOR_R, &gt)) {
+            if (!getGammaTableFrom(SANE_NAME_GAMMA_VECTOR_G, &gt)) {
+                if (!getGammaTableFrom(SANE_NAME_GAMMA_VECTOR_B, &gt)) {
                     // Should not happen... but if it does, no problem
                     // the dialogue will just use the default values
                     // for an empty gamma table.
-                    kDebug() << "no existing/active gamma option!";
+                    //qDebug() << "no existing/active gamma option!";
                 }
             }
         }
     }
-    kDebug() << "initial gamma table" << gt.toString();
+    //qDebug() << "initial gamma table" << gt.toString();
 
 // TODO; Maybe need to have a separate GUI widget for each gamma table, a
 // little preview of the gamma curve (a GammaWidget) with an edit button.
@@ -840,34 +933,35 @@ void ScanParams::slotEditCustGamma()
     gdiag.exec();
 }
 
-
 void ScanParams::slotApplyGamma(const KGammaTable *gt)
 {
-    if (gt==NULL) return;
+    if (gt == NULL) {
+        return;
+    }
 
     bool reload = false;
 
     KScanOption *so = mSaneDevice->getOption(SANE_NAME_CUSTOM_GAMMA);
-    if (so!=NULL)					// do we have a gamma switch?
-    {
+    if (so != NULL) {               // do we have a gamma switch?
         int cg = 0;
-        if (so->get(&cg) && !cg)			// yes, see if already on
-        {						// if not, set it on now
-            kDebug() << "Setting gamma switch on";
+        if (so->get(&cg) && !cg) {          // yes, see if already on
+            // if not, set it on now
+            //qDebug() << "Setting gamma switch on";
             so->set(true);
             reload = so->apply();
         }
     }
 
-    kDebug() << "Applying gamma table" << gt->toString();
+    //qDebug() << "Applying gamma table" << gt->toString();
     reload |= setGammaTableTo(SANE_NAME_GAMMA_VECTOR, gt);
     reload |= setGammaTableTo(SANE_NAME_GAMMA_VECTOR_R, gt);
     reload |= setGammaTableTo(SANE_NAME_GAMMA_VECTOR_G, gt);
     reload |= setGammaTableTo(SANE_NAME_GAMMA_VECTOR_B, gt);
 
-    if (reload) mSaneDevice->reloadAllOptions();	// reload is needed
+    if (reload) {
+        mSaneDevice->reloadAllOptions();    // reload is needed
+    }
 }
-
 
 // The user has changed an option.  Apply that;  as a result of doing so,
 // it may be necessary to reload every other scanner option apart from
@@ -875,103 +969,108 @@ void ScanParams::slotApplyGamma(const KGammaTable *gt)
 
 void ScanParams::slotOptionChanged(KScanOption *so)
 {
-    if (so==NULL || mSaneDevice==NULL) return;
+    if (so == NULL || mSaneDevice == NULL) {
+        return;
+    }
     mSaneDevice->applyOption(so);
 
     // Update the gamma edit button state, if the option exists
     setEditCustomGammaTableState();
 }
 
-
 // Enable editing of the gamma tables if any one of the gamma tables
 // exists and is currently active.
 
 void ScanParams::setEditCustomGammaTableState()
 {
-    if (mSaneDevice==NULL) return;
-    if (mGammaEditButt==NULL) return;
+    if (mSaneDevice == NULL) {
+        return;
+    }
+    if (mGammaEditButt == NULL) {
+        return;
+    }
 
     bool butState = false;
 
     KScanOption *so = mSaneDevice->getOption(SANE_NAME_CUSTOM_GAMMA, false);
-    if (so!=NULL) butState = so->isActive();
+    if (so != NULL) {
+        butState = so->isActive();
+    }
 
-    if (!butState)
-    {
+    if (!butState) {
         KScanOption *so = mSaneDevice->getOption(SANE_NAME_GAMMA_VECTOR, false);
-        if (so!=NULL) butState = so->isActive();
+        if (so != NULL) {
+            butState = so->isActive();
+        }
     }
 
-    if (!butState)
-    {
+    if (!butState) {
         KScanOption *so = mSaneDevice->getOption(SANE_NAME_GAMMA_VECTOR_R, false);
-        if (so!=NULL) butState = so->isActive();
+        if (so != NULL) {
+            butState = so->isActive();
+        }
     }
 
-    if (!butState)
-    {
+    if (!butState) {
         KScanOption *so = mSaneDevice->getOption(SANE_NAME_GAMMA_VECTOR_G, false);
-        if (so!=NULL) butState = so->isActive();
+        if (so != NULL) {
+            butState = so->isActive();
+        }
     }
 
-    if (!butState)
-    {
+    if (!butState) {
         KScanOption *so = mSaneDevice->getOption(SANE_NAME_GAMMA_VECTOR_B, false);
-        if (so!=NULL) butState = so->isActive();
+        if (so != NULL) {
+            butState = so->isActive();
+        }
     }
 
-    kDebug() << "State of edit custom gamma button=" << butState;
+    //qDebug() << "State of edit custom gamma button=" << butState;
     mGammaEditButt->setEnabled(butState);
 }
-
 
 // This assumes that the SANE unit for the scan area is millimetres.
 // All scanners out there appear to do this.
 void ScanParams::applyRect(const QRect &rect)
 {
-    kDebug() << "rect=" << rect;
+    //qDebug() << "rect=" << rect;
 
     KScanOption *tl_x = mSaneDevice->getOption(SANE_NAME_SCAN_TL_X);
     KScanOption *tl_y = mSaneDevice->getOption(SANE_NAME_SCAN_TL_Y);
     KScanOption *br_x = mSaneDevice->getOption(SANE_NAME_SCAN_BR_X);
     KScanOption *br_y = mSaneDevice->getOption(SANE_NAME_SCAN_BR_Y);
 
-    double min1,max1;
-    double min2,max2;
+    double min1, max1;
+    double min2, max2;
 
-    if (!rect.isValid())				// set full scan area
-    {
+    if (!rect.isValid()) {              // set full scan area
         tl_x->getRange(&min1, &max1); tl_x->set(min1);
         br_x->getRange(&min1, &max1); br_x->set(max1);
         tl_y->getRange(&min2, &max2); tl_y->set(min2);
         br_y->getRange(&min2, &max2); br_y->set(max2);
 
-        kDebug() << "setting full area" << min1 << min2 << "-" << max1 << max2;
-    }
-    else
-    {
+        //qDebug() << "setting full area" << min1 << min2 << "-" << max1 << max2;
+    } else {
         double tlx = rect.left();
         double tly = rect.top();
         double brx = rect.right();
         double bry = rect.bottom();
 
         tl_x->getRange(&min1, &max1);
-        if (tlx<min1)
-        {
-            brx += (min1-tlx);
+        if (tlx < min1) {
+            brx += (min1 - tlx);
             tlx = min1;
         }
         tl_x->set(tlx); br_x->set(brx);
 
-        tl_y->getRange(&min2,&max2);
-        if (tly<min2)
-        {
-            bry += (min2-tly);
+        tl_y->getRange(&min2, &max2);
+        if (tly < min2) {
+            bry += (min2 - tly);
             tly = min2;
         }
         tl_y->set(tly); br_y->set(bry);
 
-        kDebug() << "setting area" << tlx << tly << "-" << brx << bry;
+        //qDebug() << "setting area" << tlx << tly << "-" << brx << bry;
     }
 
     tl_x->apply();
@@ -980,94 +1079,98 @@ void ScanParams::applyRect(const QRect &rect)
     br_y->apply();
 }
 
-
 //  The previewer is telling us that the user has drawn or auto-selected a
 //  new preview area (specified in millimetres).
 void ScanParams::slotNewPreviewRect(const QRect &rect)
 {
-    kDebug() << "rect=" << rect;
+    //qDebug() << "rect=" << rect;
 
     applyRect(rect);
     mAreaSelect->selectSize(rect);
 }
 
-
 //  A new preset scan size or orientation chosen by the user
 void ScanParams::slotScanSizeSelected(const QRect &rect)
 {
-    kDebug() << "rect=" << rect << "full=" << !rect.isValid();
+    //qDebug() << "rect=" << rect << "full=" << !rect.isValid();
 
     applyRect(rect);
     emit newCustomScanSize(rect);
 }
-
 
 /*
  * sets the scan area to the default, which is the whole area.
  */
 void ScanParams::setMaximalScanSize()
 {
-    kDebug() << "Setting to default";
+    //qDebug() << "Setting to default";
     slotScanSizeSelected(QRect());
 }
-
 
 void ScanParams::slotNewResolution(KScanOption *opt)
 {
     KScanOption *opt_x = mSaneDevice->getExistingGuiElement(SANE_NAME_SCAN_X_RESOLUTION);
-    if (opt_x==NULL) opt_x = mSaneDevice->getExistingGuiElement(SANE_NAME_SCAN_RESOLUTION);
+    if (opt_x == NULL) {
+        opt_x = mSaneDevice->getExistingGuiElement(SANE_NAME_SCAN_RESOLUTION);
+    }
     KScanOption *opt_y = mSaneDevice->getExistingGuiElement(SANE_NAME_SCAN_Y_RESOLUTION);
 
     int x_res = 0;                                      // get the X resolution
-    if (opt_x!=NULL && opt_x->isValid()) opt_x->get(&x_res);
+    if (opt_x != NULL && opt_x->isValid()) {
+        opt_x->get(&x_res);
+    }
 
     int y_res = 0;                                      // get the Y resolution
-    if (opt_y!=NULL && opt_y->isValid()) opt_y->get(&y_res);
+    if (opt_y != NULL && opt_y->isValid()) {
+        opt_y->get(&y_res);
+    }
 
-    kDebug() << "X/Y resolution" << x_res << y_res;
+    //qDebug() << "X/Y resolution" << x_res << y_res;
 
-    if (y_res==0) y_res = x_res;                        // use X res if Y unavailable
-    if (x_res==0) x_res = y_res;                        // unlikely, but orthogonal
+    if (y_res == 0) {
+        y_res = x_res;    // use X res if Y unavailable
+    }
+    if (x_res == 0) {
+        x_res = y_res;    // unlikely, but orthogonal
+    }
 
-    if (x_res==0 && y_res==0) kDebug() << "resolution not available!";
-    else emit scanResolutionChanged(x_res, y_res);
+    if (x_res == 0 && y_res == 0) {
+        //qDebug() << "resolution not available!";
+    } else {
+        emit scanResolutionChanged(x_res, y_res);
+    }
 }
-
 
 void ScanParams::slotNewScanMode()
 {
     int format = SANE_FRAME_RGB;
     int depth = 8;
-    mSaneDevice->getCurrentFormat(&format,&depth);
+    mSaneDevice->getCurrentFormat(&format, &depth);
 
-    int strips = (format==SANE_FRAME_GRAY ? 1 : 3);
+    int strips = (format == SANE_FRAME_GRAY ? 1 : 3);
 
-    kDebug() << "format" << format << "depth" << depth << "-> strips " << strips;
+    //qDebug() << "format" << format << "depth" << depth << "-> strips " << strips;
 
-    if (strips==1 && depth==1)				// bitmap scan
-    {
-        emit scanModeChanged(0);			// 8 pixels per byte
-    }
-    else
-    {							// bytes per pixel
-        emit scanModeChanged(strips*(depth==16 ? 2 : 1));
+    if (strips == 1 && depth == 1) {        // bitmap scan
+        emit scanModeChanged(0);            // 8 pixels per byte
+    } else {
+        // bytes per pixel
+        emit scanModeChanged(strips * (depth == 16 ? 2 : 1));
     }
 }
 
-
-KScanDevice::Status ScanParams::performADFScan( void )
+KScanDevice::Status ScanParams::performADFScan(void)
 {
-   KScanDevice::Status stat = KScanDevice::Ok;
-   bool 		 scan_on = true;
+    KScanDevice::Status stat = KScanDevice::Ok;
+    bool          scan_on = true;
 
-   MassScanDialog *msd = new MassScanDialog( this );
-   msd->show();
+    MassScanDialog *msd = new MassScanDialog(this);
+    msd->show();
 
-   /* The scan source should be set to ADF by the SourceSelect-Dialog */
+    /* The scan source should be set to ADF by the SourceSelect-Dialog */
 
-   while( scan_on )
-   {
-      scan_on = false;
-   }
-   return( stat );
+    while (scan_on) {
+        scan_on = false;
+    }
+    return (stat);
 }

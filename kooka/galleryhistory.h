@@ -35,7 +35,6 @@
 
 class FileTreeBranch;
 
-
 class GalleryHistory : public KComboBox
 {
     Q_OBJECT
@@ -54,5 +53,4 @@ protected slots:
     void slotActivated(int idx);
 };
 
-
-#endif							// GALLERYHISTORY_H
+#endif                          // GALLERYHISTORY_H

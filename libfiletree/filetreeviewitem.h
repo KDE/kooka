@@ -20,7 +20,6 @@
 #ifndef FILETREEVIEWITEM_H
 #define FILETREEVIEWITEM_H
 
-
 #include <qtreewidget.h>
 
 #include <kfileitem.h>
@@ -29,12 +28,10 @@
 #include <kio/global.h>
 #include <kio/job.h>
 
-
 class KUrl;
 
 class FileTreeView;
 class FileTreeBranch;
-
 
 /**
  * An item for a FileTreeView that knows about its own KFileItem.
@@ -49,14 +46,20 @@ public:
     /**
      * @return the KFileTreeBranch the item is sorted in.
      */
-    FileTreeBranch *branch() const { return (m_branch); }
+    FileTreeBranch *branch() const
+    {
+        return (m_branch);
+    }
 
     /**
      * @return the KFileItem the viewitem is representing.
      * A copy of the original (provided by the KDirLister), so not
      * much point in trying to modify it.
      */
-    const KFileItem *fileItem() const { return (&m_kfileitem); }
+    const KFileItem *fileItem() const
+    {
+        return (&m_kfileitem);
+    }
 
     /**
      * @return the path of the item.
@@ -108,11 +111,9 @@ private:
     FileTreeViewItemPrivate *d;
 };
 
-
 /**
  * List of KFileTreeViewItems
  */
 typedef QList<FileTreeViewItem *> FileTreeViewItemList;
 
-
-#endif							// FILETREEVIEWITEM_H
+#endif                          // FILETREEVIEWITEM_H

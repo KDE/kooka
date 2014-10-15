@@ -24,9 +24,7 @@
 
 #include <qstring.h>
 
-
 class QImage;
-
 
 /**
  * @short Image meta-information.
@@ -47,15 +45,14 @@ public:
      * data (which is available via @c QImage::Format), but a general
      * category which an application or its user will be interested in.
      **/
-    enum ImageType
-    {
-        Unknown     = 0x00,		///< Unknown or not resolved yet
-        BlackWhite  = 0x01,		///< Black/white bitmap
-        Greyscale   = 0x02,		///< Grey scale (indexed with palette)
-        LowColour   = 0x04,		///< Low colour (indexed with palette)
-        HighColour  = 0x08,		///< High colour (RGB)
-        Preview     = 0x10,		///< A preview image (application defined)
-        Thumbnail   = 0x20		///< A thumbnail image (application defined)
+    enum ImageType {
+        Unknown     = 0x00,     ///< Unknown or not resolved yet
+        BlackWhite  = 0x01,     ///< Black/white bitmap
+        Greyscale   = 0x02,     ///< Grey scale (indexed with palette)
+        LowColour   = 0x04,     ///< Low colour (indexed with palette)
+        HighColour  = 0x08,     ///< High colour (RGB)
+        Preview     = 0x10,     ///< A preview image (application defined)
+        Thumbnail   = 0x20      ///< A thumbnail image (application defined)
     };
 
     /**
@@ -72,7 +69,10 @@ public:
      * @param res The new X resolution
      * @see getXResolution
      **/
-    void setXResolution(int res)			{ m_xRes = res; }
+    void setXResolution(int res)
+    {
+        m_xRes = res;
+    }
 
     /**
      * Set the Y resolution of the image.
@@ -80,7 +80,10 @@ public:
      * @param res The new Y resolution
      * @see getYResolution
      **/
-    void setYResolution(int res)			{ m_yRes = res; }
+    void setYResolution(int res)
+    {
+        m_yRes = res;
+    }
 
     /**
      * Set the mode of the image.
@@ -90,7 +93,10 @@ public:
      * @param mode The new mode string
      * @see getMode
      **/
-    void setMode(const QString &mode)			{ m_mode = mode; }
+    void setMode(const QString &mode)
+    {
+        m_mode = mode;
+    }
 
     /**
      * Set the name of the scanner that was used to generate the image.
@@ -98,7 +104,10 @@ public:
      * @param scanner The new scanner name
      * @see getScannerName
      **/
-    void setScannerName(const QString &scanner)		{ m_scanner = scanner; }
+    void setScannerName(const QString &scanner)
+    {
+        m_scanner = scanner;
+    }
 
     /**
      * Set the image type.
@@ -106,7 +115,10 @@ public:
      * @param type The new image type
      * @see getImageType
      **/
-    void setImageType(ImageMetaInfo::ImageType type)	{ m_type = type; }
+    void setImageType(ImageMetaInfo::ImageType type)
+    {
+        m_type = type;
+    }
 
     /**
      * Get the X resolution of the image.
@@ -114,7 +126,10 @@ public:
      * @return The X resolution, or -1 if it has not been set.
      * @see setXResolution
      **/
-    int getXResolution() const				{ return (m_xRes); }
+    int getXResolution() const
+    {
+        return (m_xRes);
+    }
 
     /**
      * Get the Y resolution of the image.
@@ -122,7 +137,10 @@ public:
      * @return The Y resolution, or -1 if it has not been set.
      * @see setYResolution
      **/
-    int getYResolution() const				{ return (m_yRes); }
+    int getYResolution() const
+    {
+        return (m_yRes);
+    }
 
     /**
      * Get the mode description of the image.
@@ -130,7 +148,10 @@ public:
      * @return The mode string
      * @see setMode
      **/
-    QString getMode() const				{ return (m_mode); }
+    QString getMode() const
+    {
+        return (m_mode);
+    }
 
     /**
      * Get the scanner name for the image.
@@ -138,7 +159,10 @@ public:
      * @return The scanner name
      * @see setScannerName
      **/
-    QString getScannerName() const			{ return (m_scanner); }
+    QString getScannerName() const
+    {
+        return (m_scanner);
+    }
 
     /**
      * Get the image type.
@@ -146,7 +170,10 @@ public:
      * @return The set image type.
      * @see setImageType
      **/
-    ImageMetaInfo::ImageType getImageType() const	{ return (m_type); }
+    ImageMetaInfo::ImageType getImageType() const
+    {
+        return (m_type);
+    }
 
     /**
      * Deduce the image type for an image.
@@ -166,4 +193,4 @@ private:
     ImageMetaInfo::ImageType m_type;
 };
 
-#endif							// IMAGEMETAINFO_H
+#endif                          // IMAGEMETAINFO_H

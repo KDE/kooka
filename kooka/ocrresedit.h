@@ -29,10 +29,8 @@
 
 #include <ktextedit.h>
 
-
 class QPoint;
 class QRect;
-
 
 class OcrResEdit : public KTextEdit
 {
@@ -55,5 +53,4 @@ private slots:
     void slotUpdateHighlight();
 };
 
-
-#endif							// OCRRESEDIT_H
+#endif                          // OCRRESEDIT_H

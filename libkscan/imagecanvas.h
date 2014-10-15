@@ -1,27 +1,27 @@
 /************************************************** -*- mode:c++; -*- ***
- *									*
- *  This file is part of libkscan, a KDE scanning library.		*
- *									*
- *  Copyright (C) 2013 Jonathan Marten <jjm@keelhaul.me.uk>		*
- *  Copyright (C) 1999 Klaas Freitag <freitag@suse.de>			*
- *									*
- *  This library is free software; you can redistribute it and/or	*
- *  modify it under the terms of the GNU Library General Public		*
- *  License as published by the Free Software Foundation and appearing	*
- *  in the file COPYING included in the packaging of this file;		*
- *  either version 2 of the License, or (at your option) any later	*
- *  version.								*
- *									*
- *  This program is distributed in the hope that it will be useful,	*
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of	*
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the	*
- *  GNU General Public License for more details.			*
- *									*
- *  You should have received a copy of the GNU General Public License	*
- *  along with this program;  see the file COPYING.  If not, write to	*
- *  the Free Software Foundation, Inc., 51 Franklin Street,		*
- *  Fifth Floor, Boston, MA 02110-1301, USA.				*
- *									*
+ *                                  *
+ *  This file is part of libkscan, a KDE scanning library.      *
+ *                                  *
+ *  Copyright (C) 2013 Jonathan Marten <jjm@keelhaul.me.uk>     *
+ *  Copyright (C) 1999 Klaas Freitag <freitag@suse.de>          *
+ *                                  *
+ *  This library is free software; you can redistribute it and/or   *
+ *  modify it under the terms of the GNU Library General Public     *
+ *  License as published by the Free Software Foundation and appearing  *
+ *  in the file COPYING included in the packaging of this file;     *
+ *  either version 2 of the License, or (at your option) any later  *
+ *  version.                                *
+ *                                  *
+ *  This program is distributed in the hope that it will be useful, *
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of  *
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the   *
+ *  GNU General Public License for more details.            *
+ *                                  *
+ *  You should have received a copy of the GNU General Public License   *
+ *  along with this program;  see the file COPYING.  If not, write to   *
+ *  the Free Software Foundation, Inc., 51 Franklin Street,     *
+ *  Fifth Floor, Boston, MA 02110-1301, USA.                *
+ *                                  *
  ************************************************************************/
 
 #ifndef IMAGECANVAS_H
@@ -35,11 +35,10 @@
 class QGraphicsScene;
 class QGraphicsPixmapItem;
 
-class KMenu;
+class QMenu;
 
 class SelectionItem;
 class ImageCanvasWidget;
-
 
 /**
  * @short Image display canvas widget.
@@ -78,14 +77,13 @@ public:
     /**
      * Scaling types for the image as displayed on the canvas.
      **/
-    enum ScaleType
-    {
-        ScaleUnspecified,			/**< No scale specified */
-        ScaleDynamic,				/**< Best fit */
-        ScaleOriginal,				/**< Original size */
-        ScaleFitWidth,				/**< Fit to width */
-        ScaleFitHeight,				/**< Fit to height */
-        ScaleZoom				/**< Fit to arbitrary zoom */
+    enum ScaleType {
+        ScaleUnspecified,           /**< No scale specified */
+        ScaleDynamic,               /**< Best fit */
+        ScaleOriginal,              /**< Original size */
+        ScaleFitWidth,              /**< Fit to width */
+        ScaleFitHeight,             /**< Fit to height */
+        ScaleZoom               /**< Fit to arbitrary zoom */
     };
 
     /**
@@ -94,22 +92,20 @@ public:
      *
      * @see ImgScaleDialog
      **/
-    enum UserAction
-    {
-        UserActionZoom,				/**< Display an @c ImgScaleDialog to set a zoom factor */
-        UserActionFitWidth,			/**< Scale the image to fit the width */
-        UserActionFitHeight,			/**< Scale the image to fit the height */
-        UserActionOrigSize,			/**< Reset the scale to the original image size */
-        UserActionClose,			/**< Emit the @c closingRequested() signal */
+    enum UserAction {
+        UserActionZoom,             /**< Display an @c ImgScaleDialog to set a zoom factor */
+        UserActionFitWidth,         /**< Scale the image to fit the width */
+        UserActionFitHeight,            /**< Scale the image to fit the height */
+        UserActionOrigSize,         /**< Reset the scale to the original image size */
+        UserActionClose,            /**< Emit the @c closingRequested() signal */
     };
 
     /**
      * The style used to draw a highlight box.
      **/
-    enum HighlightStyle
-    {
-        HighlightBox,				/**< A rectangular box */
-        HighlightUnderline			/**< A line along the bottom box edge */
+    enum HighlightStyle {
+        HighlightBox,               /**< A rectangular box */
+        HighlightUnderline          /**< A line along the bottom box edge */
     };
 
     /**
@@ -125,7 +121,7 @@ public:
      * @return The context menu
      * @see slotUserAction
      **/
-    KMenu *contextMenu();
+    QMenu *contextMenu();
 
     /**
      * Set the brightness of the displayed image.
@@ -133,7 +129,10 @@ public:
      * @param b The new brightness value
      * @note Not currently implemented, the value specified will be ignored.
      **/
-    void setBrightness(int b)		{ mBrightness = b; }
+    void setBrightness(int b)
+    {
+        mBrightness = b;
+    }
 
     /**
      * Set the contrast of the displayed image.
@@ -141,7 +140,10 @@ public:
      * @param c The new contrast value
      * @note Not currently implemented, the value specified will be ignored.
      **/
-    void setContrast(int c)		{ mContrast = c; }
+    void setContrast(int c)
+    {
+        mContrast = c;
+    }
 
     /**
      * Set the gamma of the displayed image.
@@ -149,7 +151,10 @@ public:
      * @param g The new gamma value
      * @note Not currently implemented, the value specified will be ignored.
      **/
-    void setGamma(int g)		{ mGamma = g; }
+    void setGamma(int g)
+    {
+        mGamma = g;
+    }
 
     /**
      * Get the current brightness setting.
@@ -157,7 +162,10 @@ public:
      * @return The brightness value
      * @note Not currently implemented, an undefined value will be returned.
      **/
-    int getBrightness() const		{ return (mBrightness); }
+    int getBrightness() const
+    {
+        return (mBrightness);
+    }
 
     /**
      * Get the current contrast setting.
@@ -165,7 +173,10 @@ public:
      * @return The contrast value
      * @note Not currently implemented, an undefined value will be returned.
      **/
-    int getContrast() const		{ return (mContrast); }
+    int getContrast() const
+    {
+        return (mContrast);
+    }
 
     /**
      * Get the current gamma setting.
@@ -173,7 +184,10 @@ public:
      * @return The gamma value
      * @note Not currently implemented, an undefined value will be returned.
      **/
-    int getGamma() const		{ return (mGamma); }
+    int getGamma() const
+    {
+        return (mGamma);
+    }
 
     /**
      * Set the scale factor to be used for display.  The image is immediately
@@ -191,7 +205,10 @@ public:
      * Original size scaling returns a value of 100, dynamic
      * scaling returns a value of 0.
      **/
-    int getScaleFactor() const		{ return (mScaleFactor); }
+    int getScaleFactor() const
+    {
+        return (mScaleFactor);
+    }
 
     /**
      * Set the scale type to be used for display.  The image is immediately
@@ -228,21 +245,30 @@ public:
      * @note If this function is not used. the default scaling type is @c Original.
      * @note It is not useful to use this function to set a @p type of @c ScaleZoom.
      **/
-    void setDefaultScaleType(ImageCanvas::ScaleType type)	{ mDefaultScaleType = type; }
+    void setDefaultScaleType(ImageCanvas::ScaleType type)
+    {
+        mDefaultScaleType = type;
+    }
 
     /**
      * Get the default scaling type that will be applied to a new image.
      *
      * @return The default scale type
      **/
-    ImageCanvas::ScaleType defaultScaleType() const	{ return (mDefaultScaleType); }
+    ImageCanvas::ScaleType defaultScaleType() const
+    {
+        return (mDefaultScaleType);
+    }
 
     /**
      * Access the image displayed.
      *
      * @return The image, or @c NULL if no image is currently set.
      **/
-    const QImage *rootImage() const	{ return (mImage); }
+    const QImage *rootImage() const
+    {
+        return (mImage);
+    }
 
     /**
      * Check whether an image is currently set and displayed
@@ -258,7 +284,10 @@ public:
      * @see setReadOnly
      * @see imageReadOnly
      **/
-    bool isReadOnly() const		{ return (mReadOnly); }
+    bool isReadOnly() const
+    {
+        return (mReadOnly);
+    }
 
     /**
      * Get the bounds of the currently selected area, in absolute image pixels.
@@ -426,7 +455,10 @@ public slots:
      * parameter to @c newImage().  The default is @c false.
      * @see newImage
      **/
-    void setKeepZoom(bool k)		{ mKeepZoom = k; }
+    void setKeepZoom(bool k)
+    {
+        mKeepZoom = k;
+    }
 
     /**
      * Set whether the aspect ratio of the image is maintained for
@@ -436,7 +468,10 @@ public slots:
      * image will be maintained;  if @c false, the width and height will
      * be scaled independently for the best fit.  The default is @c true.
      **/
-    void setMaintainAspect(bool ma)	{ mMaintainAspect = ma; }
+    void setMaintainAspect(bool ma)
+    {
+        mMaintainAspect = ma;
+    }
 
     /**
      * Set whether the image is considered to be read-only or whether
@@ -581,8 +616,7 @@ protected:
     void mouseDoubleClickEvent(QMouseEvent *ev);
 
 private:
-    enum MoveState
-    {
+    enum MoveState {
         MoveNone,
         MoveTopLeft,
         MoveTopRight,
@@ -603,7 +637,7 @@ private:
     void setCursorShape(Qt::CursorShape cs);
     void recalculateViewScale();
 
-    KMenu *mContextMenu;
+    QMenu *mContextMenu;
     int mTimerId;
 
     const QImage *mImage;
@@ -618,24 +652,24 @@ private:
     ImageCanvas::MoveState mMoving;
     Qt::CursorShape mCurrentCursor;
 
-    bool mKeepZoom;					// keep zoom setting if image changes
+    bool mKeepZoom;                 // keep zoom setting if image changes
     bool mReadOnly;
 
     ImageCanvas::ScaleType mScaleType;
     ImageCanvas::ScaleType mDefaultScaleType;
 
-    QGraphicsScene *mScene;				// internal graphics scene
-    QGraphicsPixmapItem *mPixmapItem;			// item for background pixmap
-    SelectionItem *mSelectionItem;			// item for selection box
+    QGraphicsScene *mScene;             // internal graphics scene
+    QGraphicsPixmapItem *mPixmapItem;           // item for background pixmap
+    SelectionItem *mSelectionItem;          // item for selection box
 
-    QPoint mStartPoint;					// start point of drag
-    QPoint mLastPoint;					// previous point of drag
+    QPoint mStartPoint;                 // start point of drag
+    QPoint mLastPoint;                  // previous point of drag
 
-    QVector<QGraphicsItem *> mHighlights;		// list of highlight rectangles
+    QVector<QGraphicsItem *> mHighlights;       // list of highlight rectangles
 
-    ImageCanvas::HighlightStyle mHighlightStyle;	// for newly created highlights
+    ImageCanvas::HighlightStyle mHighlightStyle;    // for newly created highlights
     QPen mHighlightPen;
     QBrush mHighlightBrush;
 };
 
-#endif							// IMAGECANVAS_H
+#endif                          // IMAGECANVAS_H

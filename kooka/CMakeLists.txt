@@ -96,7 +96,7 @@ endif (HAVE_TIFF)
 
 include_directories(..)
 
-#qt4_generate_dbus_interface(kooka.h org.kde.kooka.kooka.xml OPTIONS -a)
+#qt5_generate_dbus_interface(kooka.h org.kde.kooka.kooka.xml OPTIONS -a)
 
 if (HAVE_KADMOS)
   if (KADMOS_INCLUDE_DIR)
@@ -115,7 +115,7 @@ endif (HAVE_TIFF)
 
 ##configure_file(kooka.kcfg.cmake ${CMAKE_CURRENT_BINARY_DIR}/kooka.kcfg)
 
-##kde4_add_kcfg_files(kookaprivate_LIB_SRCS
+##kconfig_add_kcfg_files(kookaprivate_LIB_SRCS
 ##  globalsettings_base.kcfgc
 ##)
 
@@ -147,13 +147,13 @@ set(kooka_SRCS
   ocrbasedialog.cpp		# -> ocrdialogbase
   ocrgocrdialog.cpp
   ocrocraddialog.cpp
-  ocrkadmosdialog.cpp
+  #QT5 ocrkadmosdialog.cpp
   ocrresedit.cpp
   kookaprint.cpp
-  imgprintdialog.cpp
+  #QT5 imgprintdialog.cpp
   scanparamsdialog.cpp
   newscanparams.cpp		# -> newscaparamsdialog
-  photocopyprintdialogpage.cpp
+  #QT5 photocopyprintdialogpage.cpp
 )
 
 if (WITH_KADMOS)
@@ -162,14 +162,11 @@ endif (WITH_KADMOS)
 
 
 #kde4_add_app_icon(kooka_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/icons/hi*-apps-kooka.png")
-kde4_add_executable(kooka ${kooka_SRCS})
+add_executable(kooka ${kooka_SRCS})
 target_link_libraries(kooka
   libkscan
   libfiletree
-  ${QT_QT3SUPPORT_LIBRARY}
-  ${KDE4_KDEUI_LIBS}
-  ${KDE4_KFILE_LIBS}
-  ${KDE4_KDECORE_LIBS}
+  KF5::KDELibs4Support
 )
 
 if (HAVE_KADMOS)
@@ -184,14 +181,14 @@ add_dependencies(kooka vcsversion)
 
 ########### clobbering ###############
 
-add_custom_target(clobber
-  COMMENT "Clobber in ${CMAKE_CURRENT_BINARY_DIR}..."
-  VERBATIM
-  COMMAND sh -c "rm -f *.moc"
-  COMMAND sh -c "rm -f *_automoc.cpp *_automoc.cpp.files"
-  COMMAND sh -c "rm -r -f CMakeFiles *.cmake"
-  COMMAND sh -c "rm -f config-*.h"
-)
+#add_custom_target(clobber
+#  COMMENT "Clobber in ${CMAKE_CURRENT_BINARY_DIR}..."
+#  VERBATIM
+#  COMMAND sh -c "rm -f *.moc"
+#  COMMAND sh -c "rm -f *_automoc.cpp *_automoc.cpp.files"
+#  COMMAND sh -c "rm -r -f CMakeFiles *.cmake"
+#  COMMAND sh -c "rm -f config-*.h"
+#)
 
 ########### install files ###############
 

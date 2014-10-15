@@ -1,7 +1,7 @@
-/* This file is part of the KDE Project				-*- mode:c++ -*-
+/* This file is part of the KDE Project             -*- mode:c++ -*-
 
    Copyright (C) 2000 Klaas Freitag <freitag@suse.de>
-   Copyright (C) 2010 Jonathan Marten <jjm@keelhaul.me.uk>  
+   Copyright (C) 2010 Jonathan Marten <jjm@keelhaul.me.uk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -25,34 +25,30 @@
 
 */
 
-
 #ifndef KOOKAPREF_H
 #define KOOKAPREF_H
 
 #include <kpagedialog.h>
 
+#define GROUP_GALLERY       "Gallery"
+#define GALLERY_ALLOW_RENAME    "AllowRename"
+#define GALLERY_LAYOUT      "Layout"
 
-#define GROUP_GALLERY		"Gallery"
-#define GALLERY_ALLOW_RENAME	"AllowRename"
-#define GALLERY_LAYOUT		"Layout"
-
-#define GALLERY_LOCATION	"Location"
-#define GALLERY_DEFAULT_LOC	"KookaGallery"
+#define GALLERY_LOCATION    "Location"
+#define GALLERY_DEFAULT_LOC "KookaGallery"
 
 // Note that this is not the same GROUP_STARTUP which is used in
 // libkscan/scanglobal!  Settings here are used by Kooka only.
-#define GROUP_STARTUP		"Startup"
+#define GROUP_STARTUP       "Startup"
 #define STARTUP_READ_IMAGE      "ReadImageOnStart"
 
 #define CFG_GROUP_OCR_DIA       "ocrDialog"
 #define CFG_OCRAD_BINARY        "ocradBinary"
 #define CFG_GOCR_BINARY         "gocrBinary"
 
-
 class QVBoxLayout;
 
 class KookaPrefsPage;
-
 
 class KookaPref : public KPageDialog
 {
@@ -91,4 +87,4 @@ private:
     static QString sGalleryRoot;
 };
 
-#endif							// KOOKAPREF_H
+#endif                          // KOOKAPREF_H

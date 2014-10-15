@@ -1,5 +1,5 @@
 /* This file is part of the KDE Project
-   Copyright (C) 2000 Klaas Freitag <freitag@suse.de>  
+   Copyright (C) 2000 Klaas Freitag <freitag@suse.de>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -26,12 +26,10 @@
 
 #include <kdialog.h>
 
-
 class QListWidget;
 class QCheckBox;
 
 class KGuiItem;
-
 
 /**
  * @short A dialogue to allow the user to select a scan device.
@@ -114,5 +112,4 @@ private:
     DeviceSelectorPrivate *d;
 };
 
-
-#endif							// DEVSELECTOR_H
+#endif                          // DEVSELECTOR_H

@@ -24,7 +24,6 @@
  *                                                                         *
  ***************************************************************************/
 
-
 #ifndef OCRGOCRDIALOG_H
 #define OCRGOCRDIALOG_H
 
@@ -34,13 +33,11 @@
 
 #include "ocrbasedialog.h"
 
-
 /**
   *@author Klaas Freitag
   */
 
 class QWidget;
-
 
 class OcrGocrDialog : public OcrBaseDialog
 {
@@ -52,10 +49,22 @@ public:
 
     OcrEngine::EngineError setupGui();
 
-    QString getOCRCmd() const	{ return (m_ocrCmd); }
-    int getGraylevel() const	{ return (sliderGrayLevel->value()); }
-    int getDustsize() const	{ return (sliderDustSize->value()); }
-    int getSpaceWidth() const	{ return (sliderSpace->value()); }
+    QString getOCRCmd() const
+    {
+        return (m_ocrCmd);
+    }
+    int getGraylevel() const
+    {
+        return (sliderGrayLevel->value());
+    }
+    int getDustsize() const
+    {
+        return (sliderDustSize->value());
+    }
+    int getSpaceWidth() const
+    {
+        return (sliderSpace->value());
+    }
 
     QString ocrEngineLogo() const;
     QString ocrEngineName() const;
@@ -82,5 +91,4 @@ private:
     bool m_isBW;
 };
 
-
-#endif							// OCRGOCRDIALOG_H
+#endif                          // OCRGOCRDIALOG_H

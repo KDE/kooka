@@ -1,4 +1,4 @@
-/* This file is part of the KDE Project			-*- mode:c++; -*-
+/* This file is part of the KDE Project         -*- mode:c++; -*-
    Copyright (C) 2008 Jonathan Marten <jjm@keelhaul.me.uk>
 
    This library is free software; you can redistribute it and/or
@@ -32,7 +32,6 @@ class QRadioButton;
 
 class PaperSize;
 
-
 class KSCAN_EXPORT ScanSizeSelector : public KVBox
 {
     Q_OBJECT
@@ -56,7 +55,7 @@ private:
     void implementPortraitLandscape(const PaperSize *sp);
     void implementSizeSetting(const PaperSize *sp);
 
-    int bedWidth,bedHeight;
+    int bedWidth, bedHeight;
 
     QRect m_customSize;
     int m_prevSelected;
@@ -66,5 +65,4 @@ private:
     QRadioButton *m_landscapeRb;
 };
 
-
-#endif							// SCANSIZESELECTOR_H
+#endif                          // SCANSIZESELECTOR_H

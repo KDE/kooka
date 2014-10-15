@@ -1,5 +1,5 @@
 /* This file is part of the KDE Project
-   Copyright (C) 2000 Klaas Freitag <freitag@suse.de>  
+   Copyright (C) 2000 Klaas Freitag <freitag@suse.de>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -27,39 +27,38 @@
 class QProgressBar;
 class QLabel;
 
-
 /**
   *@author Klaas Freitag
   */
 
 class KSCAN_EXPORT MassScanDialog : public KDialog
 {
-   Q_OBJECT
+    Q_OBJECT
 
-public: 
-   MassScanDialog( QWidget *parent);
-   ~MassScanDialog();
-	
+public:
+    MassScanDialog(QWidget *parent);
+    ~MassScanDialog();
+
 public slots:
 
-   void slotStartScan();
-   void slotStopScan();
-   void slotFinished();	
+    void slotStartScan();
+    void slotStopScan();
+    void slotFinished();
 
     // TODO: needs to be a slot?
-   void setPageProgress( int p );
-		
+    void setPageProgress(int p);
+
 private:
-   QString     scanopts;
-   QLabel      *l_scanopts;	
+    QString     scanopts;
+    QLabel      *l_scanopts;
 
-   QString     tofolder;
-   QLabel      *l_tofolder;	
+    QString     tofolder;
+    QLabel      *l_tofolder;
 
-   QString     progress;
-   QLabel      *l_progress;	
+    QString     progress;
+    QLabel      *l_progress;
 
-   QProgressBar *progressbar;
+    QProgressBar *progressbar;
 };
 
-#endif							// MASSSCANDIALOG_H
+#endif                          // MASSSCANDIALOG_H

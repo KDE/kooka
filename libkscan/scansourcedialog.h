@@ -41,25 +41,24 @@ class KSCAN_EXPORT ScanSourceDialog : public KDialog
 
 public:
     ScanSourceDialog(QWidget *parent, const QList<QByteArray> list, AdfBehaviour adfBehave);
-   ~ScanSourceDialog();
+    ~ScanSourceDialog();
 
-    // void 	fillWithSources( QStrList *list );
-    QString 	getText( void ) const;
+    // void     fillWithSources( QStrList *list );
+    QString     getText(void) const;
 
-    AdfBehaviour 	getAdfBehave( void ) const;
+    AdfBehaviour    getAdfBehave(void) const;
     int sourceAdfEntry() const;
 
-
 public slots:
-   void slotSetSource( const QString &source );
+    void slotSetSource(const QString &source);
 
 protected slots:
-   void slotNotifyADF( bool );
-   void slotChangeSource( int );
-   void enableBGroup(bool enable);
+    void slotNotifyADF(bool);
+    void slotChangeSource(int);
+    void enableBGroup(bool enable);
 
 private:
-   ScanSourceDialogPrivate * d;
+    ScanSourceDialogPrivate *d;
 };
 
-#endif							// SCANSOURCEDIALOG_H
+#endif                          // SCANSOURCEDIALOG_H

@@ -1,5 +1,5 @@
 /* This file is part of the KDE Project
-   Copyright (C) 2000 Klaas Freitag <freitag@suse.de>  
+   Copyright (C) 2000 Klaas Freitag <freitag@suse.de>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -28,7 +28,6 @@
 
 class KScanOption;
 
-
 /**
  * @short A set of scanner parameters.
  *
@@ -48,14 +47,14 @@ class KScanOption;
  *  @author Jonathan Marten
  **/
 
-class KSCAN_EXPORT KScanOptSet : public QHash<QByteArray,QByteArray>
+class KSCAN_EXPORT KScanOptSet : public QHash<QByteArray, QByteArray>
 {
 
 public:
     /**
      * A map as returned by @c readList().
      */
-    typedef QMap<QString,QString> StringMap;
+    typedef QMap<QString, QString> StringMap;
 
     /**
      * Create a new option set container.
@@ -151,7 +150,10 @@ public:
      *
      * @return The option set description
      **/
-    QString getDescription() const	{ return (mSetDescription); }
+    QString getDescription() const
+    {
+        return (mSetDescription);
+    }
 
     /**
      * Set a new name for the option set.
@@ -165,7 +167,10 @@ public:
      *
      * @return The option set name
      **/
-    const QString &getSetName() const	{ return (mSetName); }
+    const QString &getSetName() const
+    {
+        return (mSetName);
+    }
 
     /**
      * Read all of the available saved option set names and descriptions
@@ -187,5 +192,4 @@ private:
     QString mSetDescription;
 };
 
-
-#endif							// KSCANOPTSET_H
+#endif                          // KSCANOPTSET_H

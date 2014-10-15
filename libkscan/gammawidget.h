@@ -1,5 +1,5 @@
 /* This file is part of the KDE Project
-   Copyright (C) 2000 Klaas Freitag <freitag@suse.de>  
+   Copyright (C) 2000 Klaas Freitag <freitag@suse.de>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -26,10 +26,8 @@
 #include <qsizepolicy.h>
 #include <qsize.h>
 
-
 class QPaintEvent;
 class KGammaTable;
-
 
 /**
  * @short A widget to display a gamma table.
@@ -48,7 +46,7 @@ class KSCAN_EXPORT GammaWidget : public QWidget
 {
     Q_OBJECT
 
-public: 
+public:
     /**
      * Constructor.
      *
@@ -77,4 +75,4 @@ private:
     KGammaTable *mTable;
 };
 
-#endif							// GAMMAWIDGET_H
+#endif                          // GAMMAWIDGET_H

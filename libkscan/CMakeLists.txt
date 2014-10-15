@@ -64,11 +64,10 @@ set(libkscan_SRCS
   autoselectdialog.cpp
 )
 
-kde4_add_library(libkscan SHARED ${libkscan_SRCS})
+add_library(libkscan SHARED ${libkscan_SRCS})
 target_link_libraries(libkscan
-  ${KDE4_KIO_LIBS}
-  ${KDE4_KDEUI_LIBS}
-  ${KDE4_KDECORE_LIBS}
+  KF5::KIOCore
+  KF5::KDELibs4Support
 )
 if (HAVE_SANE)
   target_link_libraries(libkscan ${SANE_LIBRARIES})
@@ -82,14 +81,14 @@ set_target_properties(libkscan PROPERTIES VERSION 3.0.0 SOVERSION 3)
 
 ########### clobbering ###############
 
-add_custom_target(clobber
-  COMMENT "Clobber in ${CMAKE_CURRENT_BINARY_DIR}..."
-  VERBATIM
-  COMMAND sh -c "rm -f *.moc"
-  COMMAND sh -c "rm -f *_automoc.cpp *_automoc.cpp.files"
-  COMMAND sh -c "rm -r -f CMakeFiles *.cmake"
-  COMMAND sh -c "rm -f config-*.h"
-)
+#add_custom_target(clobber
+#  COMMENT "Clobber in ${CMAKE_CURRENT_BINARY_DIR}..."
+#  VERBATIM
+#  COMMAND sh -c "rm -f *.moc"
+#  COMMAND sh -c "rm -f *_automoc.cpp *_automoc.cpp.files"
+#  COMMAND sh -c "rm -r -f CMakeFiles *.cmake"
+#  COMMAND sh -c "rm -f config-*.h"
+#)
 
 ########### installation ###############
 

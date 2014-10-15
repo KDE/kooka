@@ -1,4 +1,4 @@
-/* This file is part of the KDE Project			-*- mode:c++; -*-
+/* This file is part of the KDE Project         -*- mode:c++; -*-
    Copyright (C) 1999 Klaas Freitag <freitag@suse.de>
    Copyright (C) 2009 Jonathan Marten <jjm@keelhaul.me.uk>
 
@@ -28,9 +28,8 @@
 #include <qhash.h>
 
 extern "C" {
-#include <sane/sane.h>					// to define SANE_Device
+#include <sane/sane.h>                  // to define SANE_Device
 }
-
 
 class KSCAN_EXPORT ScanDevices
 {
@@ -40,7 +39,10 @@ public:
     /**
      *  returns the names of all existing Scan Devices in the system.
      */
-    const QList<QByteArray> &allDevices() const { return (mScannerNames); }
+    const QList<QByteArray> &allDevices() const
+    {
+        return (mScannerNames);
+    }
 
     /**
      *  returns the SANE device information for a Scan Device.
@@ -61,7 +63,7 @@ public:
     void addUserSpecifiedDevice(const QByteArray &backend,
                                 const QString &description,
                                 const QByteArray &type = "",
-				bool dontSave = false);
+                                bool dontSave = false);
 
 private:
     explicit ScanDevices();
@@ -69,11 +71,10 @@ private:
 
 private:
     QList<QByteArray> mScannerNames;
-    QHash<QByteArray,const SANE_Device *> mScannerDevices;
+    QHash<QByteArray, const SANE_Device *> mScannerDevices;
 
     class ScanDevicesPrivate;
     ScanDevicesPrivate *d;
 };
 
-
-#endif							// SCANDEVICES_H
+#endif                          // SCANDEVICES_H

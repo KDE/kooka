@@ -24,11 +24,9 @@
 
 #include <qlabel.h>
 
-
-#define DEFAULT_SMALL		(1024)			// 1Kb
-#define DEFAULT_THRESHOLD	(1*1024*1024)		// 1Mb
-#define DEFAULT_CRITICAL	(4*1024*1024)		// 4Mb
-
+#define DEFAULT_SMALL       (1024)          // 1Kb
+#define DEFAULT_THRESHOLD   (1*1024*1024)       // 1Mb
+#define DEFAULT_CRITICAL    (4*1024*1024)       // 4Mb
 
 /**
  *  @short  small size indication widget for file sizes
@@ -41,57 +39,55 @@
  *  user that he is doing something obvious.
  */
 
-
 class KSCAN_EXPORT SizeIndicator : public QLabel
 {
-   Q_OBJECT
+    Q_OBJECT
 
 public:
-   /**
-    *  Creates a size indicator widget.
-    *
-    *  @param thres Threshold size, above which the widget starts to turn the warning colour.
-    *  @param crit Critical size, above which the widget starts to turn the error colour.
-    */
-   SizeIndicator(QWidget *parent,
-                 long thresh = DEFAULT_THRESHOLD,
-                 long crit = DEFAULT_CRITICAL);
+    /**
+     *  Creates a size indicator widget.
+     *
+     *  @param thres Threshold size, above which the widget starts to turn the warning colour.
+     *  @param crit Critical size, above which the widget starts to turn the error colour.
+     */
+    SizeIndicator(QWidget *parent,
+                  long thresh = DEFAULT_THRESHOLD,
+                  long crit = DEFAULT_CRITICAL);
 
-   ~SizeIndicator();
+    ~SizeIndicator();
 
-   /**
-    * Sets the threshold size.
-    *
-    * @param thres the threshold size.
-    */
-   void setThreshold(long thresh = DEFAULT_THRESHOLD);
+    /**
+     * Sets the threshold size.
+     *
+     * @param thres the threshold size.
+     */
+    void setThreshold(long thresh = DEFAULT_THRESHOLD);
 
-   /**
-    * Sets the critical size.
-    *
-    * @param crit the critical size.
-    */
-   void setCritical(long crit = DEFAULT_CRITICAL);
+    /**
+     * Sets the critical size.
+     *
+     * @param crit the critical size.
+     */
+    void setCritical(long crit = DEFAULT_CRITICAL);
 
 public slots:
-   /**
-    * Sets the file size to display. The widget gets updated.
-    *
-    * @param newSize the size to set.
-    */
-   void setSizeInByte(long newSize);
+    /**
+     * Sets the file size to display. The widget gets updated.
+     *
+     * @param newSize the size to set.
+     */
+    void setSizeInByte(long newSize);
 
 protected:
     void paintEvent(QPaintEvent *ev);
 
 private:
-   long mThreshold;
-   long mCritical;
-   long mSizeInByte;
+    long mThreshold;
+    long mCritical;
+    long mSizeInByte;
 
-   class SizeIndicatorPrivate;
-   SizeIndicatorPrivate *d;
+    class SizeIndicatorPrivate;
+    SizeIndicatorPrivate *d;
 };
 
-
-#endif							// SIZEINDICATOR_H
+#endif                          // SIZEINDICATOR_H

@@ -1,5 +1,5 @@
 /* This file is part of the KDE Project
-   Copyright (C) 2008 Alex Kempshall <mcmurchy1917-kooka@yahoo.co.uk>  
+   Copyright (C) 2008 Alex Kempshall <mcmurchy1917-kooka@yahoo.co.uk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -31,7 +31,6 @@
 
 #include "kookaimage.h"
 
-
 #define OPT_SCALING  "kde-kooka-scaling"
 #define OPT_SCAN_RES "kde-kooka-scanres"
 #define OPT_SCREEN_RES "kde-kooka-screenres"
@@ -40,7 +39,6 @@
 #define OPT_PSGEN_DRAFT  "kde-kooka-psdraft"
 #define OPT_RATIO    "kde-kooka-ratio"
 #define OPT_FITPAGE  "kde-kooka-fitpage"
-
 
 class QWidget;
 class QString;
@@ -65,20 +63,20 @@ public:
     PhotoCopyPrintDialogPage(KScanDevice *newScanDevice);
     ~PhotoCopyPrintDialogPage();
 
-    void setOptions(const QMap<QString,QString> &opts);
-    void getOptions(QMap<QString,QString> &opts, bool include_def = false);
-    bool isValid(QString& msg);
+    void setOptions(const QMap<QString, QString> &opts);
+    void getOptions(QMap<QString, QString> &opts, bool include_def = false);
+    bool isValid(QString &msg);
 
 private:
     QLabel *constructLabel(Q3VGroupBox *group, const char *strTitle, const QByteArray &strSaneOption);
     QLabel *constructLabel(Q3VGroupBox *group, const char *strTitle, const QString *strContents);
 
     KIntNumInput *m_copies;
-    KScanDevice*  sane_device;
+    KScanDevice  *sane_device;
 
     KookaImage *m_image;
     QLabel     *m_screenRes;
     bool        m_ignoreSignal;
 };
 
-#endif							// PHOTOCOPYPRINTDIALOGPAGE_H
+#endif                          // PHOTOCOPYPRINTDIALOGPAGE_H

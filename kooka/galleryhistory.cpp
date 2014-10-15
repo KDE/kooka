@@ -2,10 +2,9 @@
                           galleryhistory.cpp - combobox for gallery folder history
                           -------------------
     begin                : Tue Nov 13 2001
-    copyright            : (C) 2001 by Klaas Freitag                         
+    copyright            : (C) 2001 by Klaas Freitag
     email                : freitag@suse.de
  ***************************************************************************/
-
 
 /***************************************************************************
  *                                                                         *
@@ -26,7 +25,6 @@
  ***************************************************************************/
 
 #include "galleryhistory.h"
-#include "galleryhistory.moc"
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -35,24 +33,20 @@
 #include "libfiletree/filetreeview.h"
 #include "libfiletree/filetreebranch.h"
 
-
-#define GALLERY_PATH_SEP	" - "
-
+#define GALLERY_PATH_SEP    " - "
 
 GalleryHistory::GalleryHistory(QWidget *parent)
     : KComboBox(parent)
 {
     connect(this, SIGNAL(activated(int)), SLOT(slotActivated(int)));
-    setEnabled(false);					// no items added yet
+    setEnabled(false);                  // no items added yet
 }
-
 
 // Data used for retrieving branch name and path - fixed format
 static QString entryData(const FileTreeBranch *branch, const QString &relPath)
 {
-    return (branch->name()+GALLERY_PATH_SEP+relPath);
+    return (branch->name() + GALLERY_PATH_SEP + relPath);
 }
-
 
 // Data for display - what the user sees
 static QString entryName(const FileTreeBranch *branch, const QString &relPath)
@@ -60,22 +54,26 @@ static QString entryName(const FileTreeBranch *branch, const QString &relPath)
     QString name = QString::null;
 
     FileTreeView *view = static_cast<FileTreeView *>(branch->root()->treeWidget());
-    if (view==NULL) return (relPath);			// get view that this belongs to
-
-    if (view->branches().count()>1 || relPath=="/")	// multiple galleries, or
-    {							// at the branch root
-        name = branch->name();				// start with branch name
-        if (relPath!="/") name += GALLERY_PATH_SEP;	// add separator if path
+    if (view == NULL) {
+        return (relPath);    // get view that this belongs to
     }
 
-    if (relPath!="/")
-    {
-        name += relPath;				// not root, add relative name
-        if (name.endsWith("/")) name.chop(1);		// without trailing slash
+    if (view->branches().count() > 1 || relPath == "/") { // multiple galleries, or
+        // at the branch root
+        name = branch->name();              // start with branch name
+        if (relPath != "/") {
+            name += GALLERY_PATH_SEP;    // add separator if path
+        }
+    }
+
+    if (relPath != "/") {
+        name += relPath;                // not root, add relative name
+        if (name.endsWith("/")) {
+            name.chop(1);    // without trailing slash
+        }
     }
     return (name);
 }
-
 
 void GalleryHistory::slotPathRemoved(const FileTreeBranch *branch, const QString &relPath)
 {
@@ -83,44 +81,46 @@ void GalleryHistory::slotPathRemoved(const FileTreeBranch *branch, const QString
     kDebug() << "removing" << removeEntry;
 
     int idx = findData(removeEntry);
-    if (idx==-1) return;				// not present, nothing to do
+    if (idx == -1) {
+        return;    // not present, nothing to do
+    }
 
-    QString select = currentText();			// save current selection
-    removeItem(idx);					// remove that item
-    setCurrentIndex(findText(select));			// restore current selection
-    setEnabled(count()>0);				// was the last removed?
+    QString select = currentText();         // save current selection
+    removeItem(idx);                    // remove that item
+    setCurrentIndex(findText(select));          // restore current selection
+    setEnabled(count() > 0);            // was the last removed?
 }
-
 
 void GalleryHistory::slotPathChanged(const FileTreeBranch *branch, const QString &relPath)
 {
     QString newData = entryData(branch, relPath);
     kDebug() << "inserting" << newData;
 
-    int idx = findData(newData);			// see if exists already
-    if (idx!=-1) setCurrentIndex(idx);			// if so, just select that
-    else						// if not already present,
-    {							// insert at top
+    int idx = findData(newData);            // see if exists already
+    if (idx != -1) {
+        setCurrentIndex(idx);    // if so, just select that
+    } else {                    // if not already present,
+        // insert at top
         insertItem(0, entryName(branch, relPath), newData);
         setCurrentIndex(0);
     }
 
-    setEnabled(true);					// now have at least 1 item
+    setEnabled(true);                   // now have at least 1 item
 }
-
 
 void GalleryHistory::slotActivated(int idx)
 {
     QString branchName = QString::null;
 
     QString relPath = itemData(idx).toString();
-    int ix = relPath.indexOf(GALLERY_PATH_SEP);		// is the separator present?
-    if (ix>0)						// (multiple gallery roots)
-    {
-        branchName = relPath.left(ix);			// split into root and path
-        relPath = relPath.mid(ix+3);
+    int ix = relPath.indexOf(GALLERY_PATH_SEP);     // is the separator present?
+    if (ix > 0) {                   // (multiple gallery roots)
+        branchName = relPath.left(ix);          // split into root and path
+        relPath = relPath.mid(ix + 3);
     }
 
-    if (!relPath.endsWith("/")) relPath = "/";		// it's the root
+    if (!relPath.endsWith("/")) {
+        relPath = "/";    // it's the root
+    }
     emit pathSelected(branchName, relPath);
 }

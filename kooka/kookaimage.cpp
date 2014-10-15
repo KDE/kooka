@@ -41,14 +41,12 @@ extern "C"
 }
 #endif
 
-
 KookaImage::KookaImage()
     : QImage()
 {
     init();
     kDebug();
 }
-
 
 /* constructor for subimages */
 KookaImage::KookaImage(int subNo, KookaImage *p)
@@ -60,7 +58,6 @@ KookaImage::KookaImage(int subNo, KookaImage *p)
     m_subNo = subNo;
 }
 
-
 KookaImage::KookaImage(const QImage &img)
     : QImage(img)
 {
@@ -68,11 +65,9 @@ KookaImage::KookaImage(const QImage &img)
     kDebug() << "image" << img.size();
 }
 
-
 KookaImage::~KookaImage()
 {
 }
-
 
 void KookaImage::init()
 {
@@ -84,11 +79,9 @@ void KookaImage::init()
     m_tileCols = 0;
 }
 
-
 KookaImage &KookaImage::operator=(const KookaImage &img)
 {
-    if (this!=&img)					// ignore self-assignment
-    {
+    if (this != &img) {             // ignore self-assignment
         QImage::operator=(img);
 
         m_subImages = img.subImagesCount();
@@ -98,53 +91,51 @@ KookaImage &KookaImage::operator=(const KookaImage &img)
         m_fileItem  = img.m_fileItem;
         m_fileBound = img.m_fileBound;
     }
-    
+
     return (*this);
 }
-
 
 const KFileItem *KookaImage::fileItem() const
 {
     return (m_fileItem);
 }
 
-
 void KookaImage::setFileItem(const KFileItem *fi)
 {
     m_fileItem = fi;
 }
-
 
 // Only used/displayed by OCR, but not particulary useful - see comments
 // on OcrBaseDialog::introduceImage()
 const KFileMetaInfo KookaImage::fileMetaInfo() const
 {
     QString filename = m_url.toLocalFile();
-    if (filename.isEmpty()) return (KFileMetaInfo());
+    if (filename.isEmpty()) {
+        return (KFileMetaInfo());
+    }
 
     kDebug() << "Fetching metainfo for" << filename;
     return (KFileMetaInfo(filename, QString::null, KFileMetaInfo::Everything));
 }
 
-
 QString KookaImage::loadFromUrl(const KUrl &url)
 {
-    bool ret = true;					// return status
-    bool isTiff = false;				// do we have a TIFF file?
-    bool haveTiff = false;				// can it be read via TIFF lib?
+    bool ret = true;                    // return status
+    bool isTiff = false;                // do we have a TIFF file?
+    bool haveTiff = false;              // can it be read via TIFF lib?
 
-    if (!url.isLocalFile()) return (i18n("Loading non-local images is not yet implemented"));
+    if (!url.isLocalFile()) {
+        return (i18n("Loading non-local images is not yet implemented"));
+    }
 
     QString filename = url.toLocalFile();
     ImageFormat format = ImageFormat::formatForUrl(url);
 
     KMimeType::Ptr mime = KMimeType::findByUrl(url, 0, true);
-    if (mime->is("image/tiff"))				// check MIME for TIFF file
-    {
-        isTiff = true;					// note that for later
-        if (!format.isValid())				// if format wasn't recognised,
-        {
-            format = ImageFormat("TIF");		// set it now
+    if (mime->is("image/tiff")) {           // check MIME for TIFF file
+        isTiff = true;                  // note that for later
+        if (!format.isValid()) {            // if format wasn't recognised,
+            format = ImageFormat("TIF");        // set it now
             kDebug() << "Setting format to TIFF by MIME type";
         }
     }
@@ -152,40 +143,40 @@ QString KookaImage::loadFromUrl(const KUrl &url)
     kDebug() << "Image format to load:" << format << "from file" << filename;
 
 #ifdef HAVE_TIFF
-    if (isTiff)						// if it is TIFF, check
-    {							// for multiple images
-        m_subImages = 0;				// no subimages found yet
+    if (isTiff) {                   // if it is TIFF, check
+        // for multiple images
+        m_subImages = 0;                // no subimages found yet
         kDebug() << "Trying to load TIFF...";
         TIFF *tif = TIFFOpen(filename.toLatin1(), "r");
-        if (tif!=NULL)
-        {
-            do { ++m_subImages; } while (TIFFReadDirectory(tif));
+        if (tif != NULL) {
+            do {
+                ++m_subImages;
+            } while (TIFFReadDirectory(tif));
             kDebug() << "found" << m_subImages << "TIFF-directories";
             haveTiff = true;
         }
     }
 #endif
-    if (!haveTiff)
-    {
-        ret = QImage::load(filename);			// Qt can only read one image
-        if (!ret) return (i18n("Image loading failed"));
+    if (!haveTiff) {
+        ret = QImage::load(filename);           // Qt can only read one image
+        if (!ret) {
+            return (i18n("Image loading failed"));
+        }
 
-        m_subImages = 0;				// image loaded OK
+        m_subImages = 0;                // image loaded OK
         m_subNo = 0;
     }
 #ifdef HAVE_TIFF
-    else
-    {
-        loadTiffDir(filename, 0);			// read by TIFFlib directly
+    else {
+        loadTiffDir(filename, 0);           // read by TIFFlib directly
     }
 #endif
 
-    m_url = url;					// record image source
-    m_fileBound = true;					// note loaded from file
+    m_url = url;                    // record image source
+    m_fileBound = true;                 // note loaded from file
 
-    return (QString::null);				// loaded OK
+    return (QString::null);             // loaded OK
 }
-
 
 /* loads the number stored in m_subNo */
 void KookaImage::extractNow()
@@ -193,8 +184,7 @@ void KookaImage::extractNow()
     kDebug() << "extracting subimage number" << m_subNo;
 
     KookaImage *parent = parentImage();
-    if (parent==NULL || !parent->isFileBound())
-    {
+    if (parent == NULL || !parent->isFileBound()) {
         kDebug() << "Error: No parent, cannot load subimage";
         return;
     }
@@ -202,24 +192,24 @@ void KookaImage::extractNow()
     loadTiffDir(parent->url().toLocalFile(), m_subNo);
 }
 
-
 bool KookaImage::loadTiffDir(const QString &filename, int no)
 {
 #ifdef HAVE_TIFF
-    int imgWidth,imgHeight;
+    int imgWidth, imgHeight;
 
     // if it is TIFF, check with TIFFlib if it is multiple images
     kDebug() << "Trying to load TIFF, subimage number" << no;
     TIFF *tif = TIFFOpen(filename.toLatin1(), "r");
-    if (tif==NULL) return (false);
+    if (tif == NULL) {
+        return (false);
+    }
 
-    if (!TIFFSetDirectory(tif, no))
-    {
+    if (!TIFFSetDirectory(tif, no)) {
         kDebug() << "Error: TIFFSetDirectory failed";
         TIFFClose(tif);
         return (false);
     }
-   
+
     TIFFGetField(tif, TIFFTAG_IMAGEWIDTH,  &imgWidth);
     TIFFGetField(tif, TIFFTAG_IMAGELENGTH, &imgHeight);
 
@@ -238,89 +228,77 @@ bool KookaImage::loadTiffDir(const QString &filename, int no)
     // image has been destroyed, we have the only copy of the TIFF read image.
     //
     QImage tmpImg(imgWidth, imgHeight, QImage::Format_RGB32);
-    uint32 *data = (uint32 *) (tmpImg.bits());
-    if (TIFFReadRGBAImage(tif, imgWidth, imgHeight, data, 0))
-    {							// Successfully read, now convert
-        tmpImg = tmpImg.rgbSwapped();			// swap red and blue
-        tmpImg = tmpImg.mirrored();			// reverse (it's upside down)
-    }
-    else
-    {
+    uint32 *data = (uint32 *)(tmpImg.bits());
+    if (TIFFReadRGBAImage(tif, imgWidth, imgHeight, data, 0)) {
+        // Successfully read, now convert
+        tmpImg = tmpImg.rgbSwapped();           // swap red and blue
+        tmpImg = tmpImg.mirrored();         // reverse (it's upside down)
+    } else {
         kDebug() << "Error: TIFFReadRGBAImage failed";
         TIFFClose(tif);
         return (false);
     }
 
     // Fetch the x- and y-resolutions to adjust images
-    float xReso,yReso;
+    float xReso, yReso;
     bool resosFound = TIFFGetField(tif, TIFFTAG_XRESOLUTION, &xReso) &&
                       TIFFGetField(tif, TIFFTAG_YRESOLUTION, &yReso);
     kDebug() << "TIFF image: X-Res" << xReso << "Y-Res" << yReso;
 
-    TIFFClose(tif);					// finished with TIFF file
+    TIFFClose(tif);                 // finished with TIFF file
 
     // Check now if resolution in x- and y-directions differ.
     // If so, stretch the image accordingly.
-    if (resosFound && xReso!=yReso)
-    {
-        if (xReso>yReso)
-        {
-            float yScalefactor = xReso/yReso;
+    if (resosFound && xReso != yReso) {
+        if (xReso > yReso) {
+            float yScalefactor = xReso / yReso;
             kDebug() << "Different resolution X/Y, rescaling Y with factor" << yScalefactor;
             /* rescale the image */
-            tmpImg = tmpImg.scaled(imgWidth, int(imgHeight*yScalefactor),
+            tmpImg = tmpImg.scaled(imgWidth, int(imgHeight * yScalefactor),
                                    Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
-        }
-        else
-        {
-            float xScalefactor = yReso/xReso;
+        } else {
+            float xScalefactor = yReso / xReso;
             kDebug() << "Different resolution X/Y, rescaling X with factor" << xScalefactor;
-            tmpImg = tmpImg.scaled(int(imgWidth*xScalefactor), imgHeight,
+            tmpImg = tmpImg.scaled(int(imgWidth * xScalefactor), imgHeight,
                                    Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
         }
     }
 
-    QImage::operator=(tmpImg);				// copy as our image
-#endif							// HAVE_TIFF
+    QImage::operator=(tmpImg);              // copy as our image
+#endif                          // HAVE_TIFF
 
-   return (true);
+    return (true);
 }
-
 
 int KookaImage::subImagesCount() const
 {
     return (m_subImages);
 }
 
-
-KookaImage* KookaImage::parentImage() const
+KookaImage *KookaImage::parentImage() const
 {
     return (m_parent);
 }
 
-
 bool KookaImage::isSubImage() const
 {
-    return (subImagesCount()>0);
+    return (subImagesCount() > 0);
 }
-
 
 /*
  * tiling
  */
-int KookaImage::cutToTiles( const QSize maxSize, int& rows, int& cols, TileMode  )
+int KookaImage::cutToTiles(const QSize maxSize, int &rows, int &cols, TileMode)
 {
     QSize imgSize = size();
 
     int w = imgSize.width();
-    if( w > maxSize.width() )
-    {
+    if (w > maxSize.width()) {
         // image is wider than paper
         w = maxSize.width();
     }
     int h = imgSize.height();
-    if( h > maxSize.height() )
-    {
+    if (h > maxSize.height()) {
         // image is wider than paper
         h = maxSize.height();
     }
@@ -329,50 +307,54 @@ int KookaImage::cutToTiles( const QSize maxSize, int& rows, int& cols, TileMode 
     int absY = 0;  // on the image, left top corner of the part to print
     rows = 0;
 
-    while( h )  // Loop over height, cut in vertical direction
-    {
+    while (h) { // Loop over height, cut in vertical direction
         rows++;
         cols = 0;
-        while( w ) // Loop over width, cut in horizontal direction
-        {
+        while (w) { // Loop over width, cut in horizontal direction
             cols++;
-            m_tileVector.append( QRect( absX, absY, w, h ));
+            m_tileVector.append(QRect(absX, absY, w, h));
 
-            absX += w+1;
+            absX += w + 1;
             w = imgSize.width() - absX;
 
             // if w < 0, this was the last loop, set w to zero to stop loop
-            if( w < 0 ) w = 0;
+            if (w < 0) {
+                w = 0;
+            }
 
             // if > 0 here, a new page is required
-            if( w > 0 )
-            {
-                if( w > maxSize.width() ) w = maxSize.width();
+            if (w > 0) {
+                if (w > maxSize.width()) {
+                    w = maxSize.width();
+                }
             }
         }
         // Reset the X-values to start on the left border again
         absX = 0;
         // start with full width again
         w = imgSize.width();
-        if( w > maxSize.width() )
+        if (w > maxSize.width()) {
             w = maxSize.width();
+        }
 
-        absY += h+1;
+        absY += h + 1;
         h = imgSize.height() - absY;
 
-        if( h < 0 ) h = 0;  // be sure to meet the break condition
-        if( h > maxSize.height()) h = maxSize.height();  // limit to page height
+        if (h < 0) {
+            h = 0;    // be sure to meet the break condition
+        }
+        if (h > maxSize.height()) {
+            h = maxSize.height();    // limit to page height
+        }
     }
     m_tileCols = cols;
 
     return m_tileVector.count();
 }
 
-
-
 QRect KookaImage::getTileRect(int rowPos, int colPos) const
 {
-    int indx = rowPos*m_tileCols+colPos;
+    int indx = rowPos * m_tileCols + colPos;
     kDebug() << "Tile index" << indx;
-    return (m_tileVector[(rowPos)*m_tileCols + colPos]);
+    return (m_tileVector[(rowPos) * m_tileCols + colPos]);
 }

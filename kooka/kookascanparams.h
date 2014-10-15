@@ -23,9 +23,7 @@
 
 #include <libkscan/scanparams.h>
 
-
 class QLabel;
-
 
 class KookaScanParams : public ScanParams
 {
@@ -33,7 +31,7 @@ class KookaScanParams : public ScanParams
 
 public:
     KookaScanParams(QWidget *parent);
-    virtual ~KookaScanParams()		{}
+    virtual ~KookaScanParams()      {}
 
 protected:
     /**
@@ -54,4 +52,4 @@ private:
     QLabel *mNoScannerMessage;
 };
 
-#endif							// KOOKASCANPARAMS_H
+#endif                          // KOOKASCANPARAMS_H

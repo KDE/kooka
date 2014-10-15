@@ -19,7 +19,7 @@
 
 #include "scanglobal.h"
 
-#include <kdebug.h>
+#include <QDebug>
 #include <klocale.h>
 #include <kglobal.h>
 #include <kconfig.h>
@@ -32,26 +32,24 @@ extern "C" {
 #include <sane/sane.h>
 }
 
-
 /* Configuration-file definitions */
-#define SCANNER_DB_FILE		"scannerrc"
-#define GROUP_GENERAL		"Startup"		// for historical reasons
-
+#define SCANNER_DB_FILE     "scannerrc"
+#define GROUP_GENERAL       "Startup"       // for historical reasons
 
 static ScanGlobal *sInstance = NULL;
 static KScanDevice *sScanDevice = NULL;
 
-
 ScanGlobal *ScanGlobal::self()
 {
-    if (sInstance==NULL) sInstance = new ScanGlobal();
+    if (sInstance == NULL) {
+        sInstance = new ScanGlobal();
+    }
     return (sInstance);
 }
 
-
 ScanGlobal::ScanGlobal()
 {
-    kDebug();
+    //qDebug();
 
     mSaneInitDone = false;
     mSaneInitError = false;
@@ -63,22 +61,18 @@ ScanGlobal::ScanGlobal()
     KGlobal::locale()->insertCatalog("sane-backends");
 }
 
-
 ScanGlobal::~ScanGlobal()
 {
-    if (mSaneInitDone)
-    {
-        kDebug() << "calling sane_exit()";
+    if (mSaneInitDone) {
+        //qDebug() << "calling sane_exit()";
         sane_exit();
     }
 
-    if (mScanConfig!=NULL)
-    {
+    if (mScanConfig != NULL) {
         mScanConfig->sync();
         delete mScanConfig;
     }
 }
-
 
 //  SANE authorisation callback for scanner access.
 //
@@ -99,56 +93,56 @@ extern "C" void authCallback(SANE_String_Const resource,
                              SANE_Char username[SANE_MAX_USERNAME_LEN],
                              SANE_Char password[SANE_MAX_PASSWORD_LEN])
 {
-    kDebug() << "for resource" << resource;
+    //qDebug() << "for resource" << resource;
 
-    if (sScanDevice==NULL)				// no device set
-    {
-        kDebug() << "cannot authenticate, no device";
+    if (sScanDevice == NULL) {          // no device set
+        //qDebug() << "cannot authenticate, no device";
         return;
     }
 
     QByteArray user;
     QByteArray pass;
-    if (sScanDevice->authenticate(&user, &pass))
-    {
+    if (sScanDevice->authenticate(&user, &pass)) {
         qstrncpy(username, user.constData(), SANE_MAX_USERNAME_LEN);
         qstrncpy(password, pass.constData(), SANE_MAX_PASSWORD_LEN);
     }
 }
-
 
 void ScanGlobal::setScanDevice(KScanDevice *device)
 {
     sScanDevice = device;
 }
 
-
 bool ScanGlobal::init()
 {
-    if (mSaneInitDone) return (true);			// already done, no more to do
-    if (mSaneInitError) return (false);			// error happened, no point
-
-    kDebug() << "calling sane_init()";
-    SANE_Status status = sane_init(NULL, &authCallback);
-    if (status!=SANE_STATUS_GOOD)
-    {
-        mSaneInitError = true;
-        kDebug() << "sane_init() failed, status" << status;
+    if (mSaneInitDone) {
+        return (true);    // already done, no more to do
     }
-    else mSaneInitDone = true;
+    if (mSaneInitError) {
+        return (false);    // error happened, no point
+    }
+
+    //qDebug() << "calling sane_init()";
+    SANE_Status status = sane_init(NULL, &authCallback);
+    if (status != SANE_STATUS_GOOD) {
+        mSaneInitError = true;
+        //qDebug() << "sane_init() failed, status" << status;
+    } else {
+        mSaneInitDone = true;
+    }
 
     return (mSaneInitDone);
 }
-
 
 bool ScanGlobal::available() const
 {
     return (mSaneInitDone && !mSaneInitError);
 }
 
-
 KConfigGroup ScanGlobal::configGroup(const QString &groupName)
 {
-    if (mScanConfig==NULL) mScanConfig = new KConfig(SCANNER_DB_FILE, KConfig::SimpleConfig);
+    if (mScanConfig == NULL) {
+        mScanConfig = new KConfig(SCANNER_DB_FILE, KConfig::SimpleConfig);
+    }
     return (mScanConfig->group(!groupName.isEmpty() ? groupName : GROUP_GENERAL));
 }

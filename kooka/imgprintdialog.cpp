@@ -25,7 +25,6 @@
  ***************************************************************************/
 
 #include "imgprintdialog.h"
-#include "imgprintdialog.moc"
 
 #include <qstring.h>
 #include <qmap.h>
@@ -46,16 +45,14 @@
 
 #include "kookaimage.h"
 
-
 #define ID_SCREEN 0
 #define ID_ORIG   1
 #define ID_CUSTOM 2
 #define ID_FIT_PAGE 3
 
-
 ImgPrintDialog::ImgPrintDialog(const KookaImage *img, QWidget *parent)
 #ifndef KDE4
-    : KPrintDialogPage( parent, name ),
+    : KPrintDialogPage(parent, name),
 #else
     : QWidget(parent),
 #endif
@@ -67,133 +64,138 @@ ImgPrintDialog::ImgPrintDialog(const KookaImage *img, QWidget *parent)
     setTitle(i18n("Image Printing"));
 #endif
 
-    QVBoxLayout *layout = new QVBoxLayout( this );
+    QVBoxLayout *layout = new QVBoxLayout(this);
     // layout->setMargin( KDialog::marginHint() );
     // layout->setSpacing( KDialog::spacingHint() );
 
-    m_scaleRadios = new Q3ButtonGroup( 2, Qt::Vertical, i18n("Image Print Size"), this );
+    m_scaleRadios = new Q3ButtonGroup(2, Qt::Vertical, i18n("Image Print Size"), this);
     m_scaleRadios->setRadioButtonExclusive(true);
-    connect( m_scaleRadios, SIGNAL(clicked(int)), SLOT(slScaleChanged(int)));
+    connect(m_scaleRadios, SIGNAL(clicked(int)), SLOT(slScaleChanged(int)));
 
-    m_rbScreen = new QRadioButton( i18n("Scale to same size as on screen"),
-                                       m_scaleRadios );
+    m_rbScreen = new QRadioButton(i18n("Scale to same size as on screen"),
+                                  m_scaleRadios);
     m_rbScreen->setToolTip(i18n("Screen scaling. That prints according to the screen resolution."));
 
-    m_scaleRadios->insert( m_rbScreen, ID_SCREEN );
+    m_scaleRadios->insert(m_rbScreen, ID_SCREEN);
 
-    m_rbOrigSize = new QRadioButton( i18n("Original size (calculate from scan resolution)"),
-                                     m_scaleRadios );
+    m_rbOrigSize = new QRadioButton(i18n("Original size (calculate from scan resolution)"),
+                                    m_scaleRadios);
     m_rbOrigSize->setToolTip(i18n("Calculates the print size from the scan resolution. Enter the scan resolution in the dialog field below."));
-    m_scaleRadios->insert( m_rbOrigSize, ID_ORIG );
+    m_scaleRadios->insert(m_rbOrigSize, ID_ORIG);
 
-
-    m_rbScale    = new QRadioButton( i18n("Scale image to custom dimension"), m_scaleRadios );
+    m_rbScale    = new QRadioButton(i18n("Scale image to custom dimension"), m_scaleRadios);
     m_rbScale->setToolTip(i18n("Set the print size yourself in the dialog below. The image is centered on the paper."));
-    
-    m_scaleRadios->insert( m_rbScale, ID_CUSTOM );
 
-    m_rbFitPage = new QRadioButton( i18n("Scale image to fit to page"), m_scaleRadios );
+    m_scaleRadios->insert(m_rbScale, ID_CUSTOM);
+
+    m_rbFitPage = new QRadioButton(i18n("Scale image to fit to page"), m_scaleRadios);
     m_rbFitPage->setToolTip(i18n("Printout uses maximum space on the selected pager. Aspect ratio is maintained."));
-    m_scaleRadios->insert( m_rbFitPage, ID_FIT_PAGE );
+    m_scaleRadios->insert(m_rbFitPage, ID_FIT_PAGE);
 
-    layout->addWidget( m_scaleRadios );
+    layout->addWidget(m_scaleRadios);
 
-
-    QHBoxLayout *hbox = new QHBoxLayout( this );
-    layout->addLayout( hbox );
+    QHBoxLayout *hbox = new QHBoxLayout(this);
+    layout->addLayout(hbox);
 
     /** Box for Image Resolutions **/
-    Q3VGroupBox *group1 = new Q3VGroupBox( i18n("Resolutions"), this );
-    hbox->addWidget( group1 );
+    Q3VGroupBox *group1 = new Q3VGroupBox(i18n("Resolutions"), this);
+    hbox->addWidget(group1);
 
     /* Postscript generation resolution  */
     m_psDraft = new QCheckBox(i18n("Generate low resolution PostScript (fast draft print)"), group1);
-    m_psDraft->setChecked( false );
-
+    m_psDraft->setChecked(false);
 
     /* Scan resolution of the image */
-    m_dpi = new KIntNumInput( group1 );
-    m_dpi->setLabel( i18n("Scan resolution (dpi):" ), Qt::AlignVCenter );
-    m_dpi->setValue( 300 );
-    m_dpi->setSuffix( i18n(" dpi"));
+    m_dpi = new KIntNumInput(group1);
+    m_dpi->setLabel(i18n("Scan resolution (dpi):"), Qt::AlignVCenter);
+    m_dpi->setValue(300);
+    m_dpi->setSuffix(i18n(" dpi"));
 
     /* Label for displaying the screen Resolution */
-    m_screenRes = new QLabel( group1 );
+    m_screenRes = new QLabel(group1);
 
     /** Box for Image Print Size **/
-    Q3VGroupBox *group = new Q3VGroupBox( i18n("Image Print Size"), this );
-    hbox->addWidget( group );
+    Q3VGroupBox *group = new Q3VGroupBox(i18n("Image Print Size"), this);
+    hbox->addWidget(group);
 
-    m_sizeW = new KIntNumInput( group );
-    m_sizeW->setLabel( i18n("Image width:"), Qt::AlignVCenter );
-    m_sizeW->setSuffix( i18n(" mm"));
-    connect( m_sizeW, SIGNAL(valueChanged(int)), SLOT(slCustomWidthChanged(int)));
-    m_sizeH = new KIntNumInput( m_sizeW, Qt::AlignVCenter, group  );
-    m_sizeH->setLabel( i18n("Image height:"), Qt::AlignVCenter);
-    m_sizeH->setSuffix( i18n(" mm"));
-    connect( m_sizeH, SIGNAL(valueChanged(int)), SLOT(slCustomHeightChanged(int)));
+    m_sizeW = new KIntNumInput(group);
+    m_sizeW->setLabel(i18n("Image width:"), Qt::AlignVCenter);
+    m_sizeW->setSuffix(i18n(" mm"));
+    connect(m_sizeW, SIGNAL(valueChanged(int)), SLOT(slCustomWidthChanged(int)));
+    m_sizeH = new KIntNumInput(m_sizeW, Qt::AlignVCenter, group);
+    m_sizeH->setLabel(i18n("Image height:"), Qt::AlignVCenter);
+    m_sizeH->setSuffix(i18n(" mm"));
+    connect(m_sizeH, SIGNAL(valueChanged(int)), SLOT(slCustomHeightChanged(int)));
 
     m_ratio = new QCheckBox(i18n("Maintain aspect ratio"), group);
     m_ratio->setChecked(true);
 
-    QWidget *spaceEater = new QWidget( this );
-    spaceEater->setSizePolicy( QSizePolicy( QSizePolicy::Ignored, QSizePolicy::Ignored ));
-    layout->addWidget( spaceEater );
+    QWidget *spaceEater = new QWidget(this);
+    spaceEater->setSizePolicy(QSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored));
+    layout->addWidget(spaceEater);
 
     /* Set start values */
     m_rbScreen->setChecked(true);
-    slotScaleChanged( ID_SCREEN );
+    slotScaleChanged(ID_SCREEN);
 }
-
 
 void ImgPrintDialog::setImage(const KookaImage *img)
 {
-    if (img==NULL) return;
+    if (img == NULL) {
+        return;
+    }
 
     // TODO: get scan resolution out of the image
 }
 
-
-void ImgPrintDialog::setOptions(const QMap<QString,QString> &opts)
+void ImgPrintDialog::setOptions(const QMap<QString, QString> &opts)
 {
     kDebug();
 
     // m_autofit->setChecked(opts["app-img-autofit"] == "1");
     QString scale = opts[OPT_SCALING];
-    if (scale=="scan") m_rbOrigSize->setChecked(true);
-    else if (scale=="custom") m_rbScale->setChecked(true);
-    else if (scale=="fitpage") m_rbFitPage->setChecked(true);
-    else m_rbScreen->setChecked(true);
+    if (scale == "scan") {
+        m_rbOrigSize->setChecked(true);
+    } else if (scale == "custom") {
+        m_rbScale->setChecked(true);
+    } else if (scale == "fitpage") {
+        m_rbFitPage->setChecked(true);
+    } else {
+        m_rbScreen->setChecked(true);
+    }
 
     int help  = opts[OPT_SCAN_RES].toInt();
-    m_dpi->setValue( help );
+    m_dpi->setValue(help);
 
     help = opts[OPT_WIDTH].toInt();
-    m_sizeW->setValue( help );
+    m_sizeW->setValue(help);
 
     help = opts[OPT_HEIGHT].toInt();
-    m_sizeH->setValue( help );
+    m_sizeH->setValue(help);
 
     help = opts[OPT_SCREEN_RES].toInt();
-    m_screenRes->setText(i18n( "Screen resolution: %1 dpi").arg(help));
+    m_screenRes->setText(i18n("Screen resolution: %1 dpi").arg(help));
 
     help = opts[OPT_PSGEN_DRAFT].toInt();
-    m_psDraft->setChecked( help == 1 );
+    m_psDraft->setChecked(help == 1);
 
     help = opts[OPT_RATIO].toInt();
-    m_ratio->setChecked( help == 1 );
+    m_ratio->setChecked(help == 1);
 }
 
-
-void ImgPrintDialog::getOptions(QMap<QString,QString> &opts, bool include_def)
+void ImgPrintDialog::getOptions(QMap<QString, QString> &opts, bool include_def)
 {
     // TODO: Check for meaning of include_def !
     // kDebug() << "In getOption with include_def: "  << include_def << endl;
 
     QString scale = "screen";
-    if (m_rbOrigSize->isChecked()) scale = "scan";
-    else if (m_rbScale->isChecked()) scale = "custom";
-    else if (m_rbFitPage->isChecked()) scale = "fitpage";
+    if (m_rbOrigSize->isChecked()) {
+        scale = "scan";
+    } else if (m_rbScale->isChecked()) {
+        scale = "custom";
+    } else if (m_rbFitPage->isChecked()) {
+        scale = "fitpage";
+    }
 
     opts[OPT_SCALING]     = scale;
 
@@ -206,18 +208,14 @@ void ImgPrintDialog::getOptions(QMap<QString,QString> &opts, bool include_def)
     opts[OPT_SCREEN_RES]  = QString::number(this->logicalDpiX());
 }
 
-
-bool ImgPrintDialog::isValid(QString& msg)
+bool ImgPrintDialog::isValid(QString &msg)
 {
     /* check if scan reso is higher than 0 in case its needed */
-    int id = m_scaleRadios->id( m_scaleRadios->selected());
-    if( id == ID_ORIG && m_dpi->value() == 0 )
-    {
+    int id = m_scaleRadios->id(m_scaleRadios->selected());
+    if (id == ID_ORIG && m_dpi->value() == 0) {
         msg = i18n("Please specify a scan resolution larger than 0");
         return false;
-    }
-    else if( id == ID_CUSTOM && (m_sizeW->value() == 0 || m_sizeH->value() == 0 )  )
-    {
+    } else if (id == ID_CUSTOM && (m_sizeW->value() == 0 || m_sizeH->value() == 0)) {
         msg = i18n("For custom printing, a valid size should be specified.\n"
                    "At least one dimension is zero.");
     }
@@ -225,79 +223,77 @@ bool ImgPrintDialog::isValid(QString& msg)
     return true;
 }
 
-
-void ImgPrintDialog::slotScaleChanged( int id )
+void ImgPrintDialog::slotScaleChanged(int id)
 {
-    if( id == ID_SCREEN )
-    {
-	/* disalbe size, scan res. */
-	m_dpi->setEnabled(false);
+    if (id == ID_SCREEN) {
+        /* disalbe size, scan res. */
+        m_dpi->setEnabled(false);
         m_ratio->setEnabled(false);
         m_sizeW->setEnabled(false);
         m_sizeH->setEnabled(false);
-    }
-    else if( id == ID_ORIG )
-    {
-	/* disable size */
-	m_dpi->setEnabled(true);
+    } else if (id == ID_ORIG) {
+        /* disable size */
+        m_dpi->setEnabled(true);
         m_ratio->setEnabled(false);
         m_sizeW->setEnabled(false);
         m_sizeH->setEnabled(false);
-    }
-    else if( id == ID_CUSTOM )
-    {
-	m_dpi->setEnabled(false);
+    } else if (id == ID_CUSTOM) {
+        m_dpi->setEnabled(false);
         m_ratio->setEnabled(true);
         m_sizeW->setEnabled(true);
         m_sizeH->setEnabled(true);
-    }
-    else if( id == ID_FIT_PAGE )
-    {
-	m_dpi->setEnabled(false);
+    } else if (id == ID_FIT_PAGE) {
+        m_dpi->setEnabled(false);
         m_ratio->setEnabled(true);
         m_sizeW->setEnabled(false);
-        m_sizeH->setEnabled(false);	
+        m_sizeH->setEnabled(false);
     }
 }
 
-void ImgPrintDialog::slotCustomWidthChanged( int val )
+void ImgPrintDialog::slotCustomWidthChanged(int val)
 {
-    if( m_ignoreSignal )
-    {
+    if (m_ignoreSignal) {
         m_ignoreSignal = false;
         return;
     }
 
     /* go out here if scaling is not custom */
-    if( m_scaleRadios->id( m_scaleRadios->selected()) != ID_CUSTOM ) return;
+    if (m_scaleRadios->id(m_scaleRadios->selected()) != ID_CUSTOM) {
+        return;
+    }
 
     /* go out here if maintain aspect ration is off */
-    if( ! m_ratio->isChecked() ) return;
+    if (! m_ratio->isChecked()) {
+        return;
+    }
 
     m_ignoreSignal = true;
     kDebug() << "Setting value to horizontal size";
-    m_sizeH->setValue( int( double(val) *
-                            double(m_image->height())/double(m_image->width()) ) );
+    m_sizeH->setValue(int(double(val) *
+                          double(m_image->height()) / double(m_image->width())));
 
 }
 
-void ImgPrintDialog::slotCustomHeightChanged( int val )
+void ImgPrintDialog::slotCustomHeightChanged(int val)
 {
-    if( m_ignoreSignal )
-    {
+    if (m_ignoreSignal) {
         m_ignoreSignal = false;
         return;
     }
 
     /* go out here if scaling is not custom */
-    if( m_scaleRadios->id( m_scaleRadios->selected()) != ID_CUSTOM ) return;
+    if (m_scaleRadios->id(m_scaleRadios->selected()) != ID_CUSTOM) {
+        return;
+    }
 
     /* go out here if maintain aspect ration is off */
-    if( ! m_ratio->isChecked() ) return;
+    if (! m_ratio->isChecked()) {
+        return;
+    }
 
     m_ignoreSignal = true;
     kDebug() << "Setting value to vertical size";
-    m_sizeW->setValue( int( double(val) *
-                            double(m_image->width())/double(m_image->height()) ) );
+    m_sizeW->setValue(int(double(val) *
+                          double(m_image->width()) / double(m_image->height())));
 
 }

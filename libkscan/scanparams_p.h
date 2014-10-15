@@ -1,4 +1,4 @@
-/* This file is part of the KDE Project			-*- mode:c++; -*-
+/* This file is part of the KDE Project         -*- mode:c++; -*-
    Copyright (C) 2010 Jonathan Marten <jjm@keelhaul.me.uk>
 
    This library is free software; you can redistribute it and/or
@@ -26,12 +26,10 @@
 
 #include <kdialog.h>
 
-
 //  Limits for the scan option and label, to keep them to reasonable sizes
-#define MAX_CONTROL_WIDTH		300
-#define MAX_LABEL_WIDTH			150
-#define MIN_LABEL_WIDTH			50
-
+#define MAX_CONTROL_WIDTH       300
+#define MAX_LABEL_WIDTH         150
+#define MIN_LABEL_WIDTH         50
 
 /**
  * This class represents a single options page (Basic, Other or Advanced)
@@ -108,92 +106,4 @@ private:
     QWidget *mPendingGroup;
 };
 
-
-ScanParamsPage::ScanParamsPage(QWidget *parent, const char *name)
-    : QWidget(parent)
-{
-    setObjectName(name);
-
-    mLayout = new QGridLayout(this);
-    mLayout->setSpacing(2*KDialog::spacingHint());
-    mLayout->setColumnStretch(2, 1);
-    mLayout->setColumnMinimumWidth(1, KDialog::marginHint());
-
-    mNextRow = 0;
-    mPendingGroup = NULL;
-}
-
-
-ScanParamsPage::~ScanParamsPage()
-{
-}
-
-
-void ScanParamsPage::checkPendingGroup()
-{
-    if (mPendingGroup!=NULL)				// separator to add first?
-    {
-        QWidget *w = mPendingGroup;
-        mPendingGroup = NULL;				// avoid recursion!
-        addRow(w);
-    }
-}
-
-
-void ScanParamsPage::addRow(QWidget *wid)
-{
-    if (wid==NULL) return;				// must have one
-
-    checkPendingGroup();				// add separator if needed
-    mLayout->addWidget(wid, mNextRow, 0, 1, -1);
-    ++mNextRow;
-}
-
-
-void ScanParamsPage::addRow(QLabel *lab, QWidget *wid, QLabel *unit, Qt::Alignment align)
-{
-    if (wid==NULL) return;				// must have one
-    wid->setMaximumWidth(MAX_CONTROL_WIDTH);
-
-    checkPendingGroup();				// add separator if needed
-
-    if (lab!=NULL)
-    {
-        lab->setMaximumWidth(MAX_LABEL_WIDTH);
-        lab->setMinimumWidth(MIN_LABEL_WIDTH);
-        mLayout->addWidget(lab, mNextRow, 0, Qt::AlignLeft|align);
-    }
-
-    if (unit!=NULL)
-    {
-        mLayout->addWidget(wid, mNextRow, 2, align);
-        mLayout->addWidget(unit, mNextRow, 3, Qt::AlignLeft|align);
-    }
-    else
-    {
-        mLayout->addWidget(wid, mNextRow, 2, 1, 2, align);
-    }
-
-    ++mNextRow;
-}
-
-
-bool ScanParamsPage::lastRow()
-{
-    addGroup(NULL);					// hide last if present
-
-    mLayout->addWidget(new QLabel(QString::null, this), mNextRow, 0, 1, -1, Qt::AlignTop);
-    mLayout->setRowStretch(mNextRow, 9);
-
-    return (mNextRow>0);
-}
-
-
-void ScanParamsPage::addGroup(QWidget *wid)
-{
-    if (mPendingGroup!=NULL) mPendingGroup->hide();	// dont't need this after all
-
-    mPendingGroup = wid;
-}
-
-#endif							// SCANPARAMS_P_H
+#endif                          // SCANPARAMS_P_H

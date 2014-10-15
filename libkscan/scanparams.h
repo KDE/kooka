@@ -1,4 +1,4 @@
-/* This file is part of the KDE Project			-*- mode:c++; -*-
+/* This file is part of the KDE Project         -*- mode:c++; -*-
    Copyright (C) 1999 Klaas Freitag <freitag@suse.de>
 
    This library is free software; you can redistribute it and/or
@@ -28,7 +28,6 @@
 #include "kscandevice.h"
 #include "scansourcedialog.h"
 
-
 class QScrollArea;
 class QProgressDialog;
 class QPushButton;
@@ -43,7 +42,6 @@ class KTabWidget;
 
 class ScanParamsPage;
 class ScanSizeSelector;
-
 
 /**
  * @short Scanner settings GUI.
@@ -106,7 +104,10 @@ public:
      * @return The widget, or @c NULL if it has not been created yet.
      * Do not delete this, it is owned by the @c ScanParams object.
      **/
-    KLed *operationLED() const		{ return (mLed); }
+    KLed *operationLED() const
+    {
+        return (mLed);
+    }
 
     /**
      * Set the scan destination to be displayed in the progress dialogue.
@@ -278,8 +279,7 @@ private slots:
 
 private:
 
-    enum ScanMode					// order fixed by GUI buttons
-    {
+    enum ScanMode {                 // order fixed by GUI buttons
         SaneDebugMode = 0,
         VirtualScannerMode = 1,
         NormalMode = 2
@@ -329,4 +329,4 @@ private:
     QLabel *mNoScannerMessage;
 };
 
-#endif							// SCANPARAMS_H
+#endif                          // SCANPARAMS_H

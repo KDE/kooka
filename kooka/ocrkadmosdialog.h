@@ -24,7 +24,6 @@
  *                                                                         *
  ***************************************************************************/
 
-
 #ifndef OCRKADMOSDIALOG_H
 #define OCRKADMOSDIALOG_H
 
@@ -32,12 +31,9 @@
 
 #include "ocrbasedialog.h"
 
-
 /**
   *@author Klaas Freitag
   */
-
-
 
 class QWidget;
 class Q3GroupBox;
@@ -51,24 +47,34 @@ class KConfig;
 
 //class KScanCombo;
 
-
 class KadmosClassifier   /* Not yet used FIXME */
 {
 public:
-   KadmosClassifier( QString lang, QString filename );
+    KadmosClassifier(QString lang, QString filename);
 
-   QString getCmplFilename() const { return path+filename; }
-   QString getFilename()     const { return filename; }
-   QString language()        const { return languagesName; }
+    QString getCmplFilename() const
+    {
+        return path + filename;
+    }
+    QString getFilename()     const
+    {
+        return filename;
+    }
+    QString language()        const
+    {
+        return languagesName;
+    }
 
-   void setPath( const QString& p ) { path=p; }
+    void setPath(const QString &p)
+    {
+        path = p;
+    }
 
 private:
-   QString filename;
-   QString path;
-   QString languagesName;
+    QString filename;
+    QString path;
+    QString languagesName;
 };
-
 
 class KadmosDialog: public OcrBaseDialog
 {
@@ -83,7 +89,7 @@ public:
     OcrEngine::EngineError setupGui();
     bool getAutoScale();
     bool getNoiseReduction();
-    bool getSelClassifier(QString&) const;
+    bool getSelClassifier(QString &) const;
     QString getSelClassifierName() const;
 
     QString ocrEngineName() const;
@@ -114,13 +120,13 @@ private:
     QCheckBox             *m_cbAutoscale;
     QString                m_customClassifierPath;
 
-    Q3ButtonGroup	  *m_bbFont;
+    Q3ButtonGroup     *m_bbFont;
 
     QRadioButton          *m_rbMachine;
     QRadioButton          *m_rbHand;
     QRadioButton          *m_rbNorm;
 
-    Q3GroupBox      	  *m_gbLang;
+    Q3GroupBox            *m_gbLang;
 
     QComboBox             *m_cbLang;
 
@@ -134,4 +140,4 @@ private:
     StringMap m_longCountry2short;
 };
 
-#endif							// OCRKADMOSDIALOG_H
+#endif                          // OCRKADMOSDIALOG_H

@@ -34,7 +34,6 @@
 
 #include "libkscan/kscandevice.h"
 
-
 class QPainter;
 class QPixmap;
 class QSplitter;
@@ -42,7 +41,7 @@ class QSignalMapper;
 
 class KConfigGroup;
 class KPrinter;
-class KAction;
+class QAction;
 class KActionCollection;
 class KMainWindow;
 class KUrl;
@@ -62,8 +61,6 @@ class KScanDevice;
 class ImageCanvas;
 
 class WidgetSite;
-
-
 
 /**
  * This is the main view class for Kooka.  Most of the non-menu,
@@ -86,15 +83,14 @@ public:
      * To avoid a proliferation of boolean parameters, these flags are
      * used to indicate the state of the gallery and image viewers.
      */
-    enum StateFlag
-    {
-        GalleryShown = 0x01,				// in Gallery/OCR mode
-        PreviewValid = 0x02,				// scan preview valid
-        ImageValid   = 0x04,				// viewer image loaded
-        IsDirectory  = 0x08,				// directory selected
-        FileSelected = 0x10,				// 1 file selected
-        ManySelected = 0x20,				// multiple selection
-        RootSelected = 0x40				// root is selected
+    enum StateFlag {
+        GalleryShown = 0x01,                // in Gallery/OCR mode
+        PreviewValid = 0x02,                // scan preview valid
+        ImageValid   = 0x04,                // viewer image loaded
+        IsDirectory  = 0x08,                // directory selected
+        FileSelected = 0x10,                // 1 file selected
+        ManySelected = 0x20,                // multiple selection
+        RootSelected = 0x40             // root is selected
     };
     Q_DECLARE_FLAGS(StateFlags, StateFlag);
 
@@ -111,21 +107,27 @@ public:
     /**
      * Print this view to any medium -- paper or not
      */
-    void print( );
+    void print();
 
     void loadStartupImage();
     ScanGallery *gallery() const;
-    ImageCanvas *imageViewer() const	{ return (mImageCanvas); }
-    Previewer *previewer() const	{ return (mPreviewCanvas); }
+    ImageCanvas *imageViewer() const
+    {
+        return (mImageCanvas);
+    }
+    Previewer *previewer() const
+    {
+        return (mPreviewCanvas);
+    }
 
     bool isScannerConnected() const;
     QString scannerName() const;
     void closeScanDevice();
 
-    void connectViewerAction(KAction *action, bool sepBefore = false);
-    void connectGalleryAction(KAction *action, bool sepBefore = false);
-    void connectThumbnailAction(KAction *action);
-    void connectPreviewAction(KAction *action);
+    void connectViewerAction(QAction *action, bool sepBefore = false);
+    void connectGalleryAction(QAction *action, bool sepBefore = false);
+    void connectThumbnailAction(QAction *action);
+    void connectPreviewAction(QAction *action);
 
     void saveProperties(KConfigGroup &grp);
     void saveWindowSettings(KConfigGroup &grp);
@@ -157,7 +159,7 @@ public slots:
     void slotAddDevice();
 
     void slotScanStart(const ImageMetaInfo *info);
-    void slotScanFinished( KScanDevice::Status stat );
+    void slotScanFinished(KScanDevice::Status stat);
     void slotAcquireStart();
 
     void showOpenWithMenu(KActionMenu *menu);
@@ -165,7 +167,7 @@ public slots:
 protected slots:
     void slotStartPhotoCopy();
     void slotPhotoCopyPrint(const QImage *img, const ImageMetaInfo *info);
-    void slotPhotoCopyScan( KScanDevice::Status );
+    void slotPhotoCopyScan(KScanDevice::Status);
 
     void slotShowAImage(const KookaImage *img, bool isDir);
     void slotUnloadAImage(const KookaImage *img);
@@ -206,7 +208,6 @@ signals:
     void signalOcrResultAvailable(bool haveText);
     void signalOcrPrefs();
 
-
 private:
     void startOCR(const KookaImage img);
 
@@ -238,7 +239,7 @@ private:
     OcrResEdit *mOcrResEdit;
 
     bool mIsPhotoCopyMode;
-    KPrinter* mPhotoCopyPrinter;
+    KPrinter *mPhotoCopyPrinter;
 
     KookaView::TabPage mCurrentTab;
 
@@ -264,5 +265,4 @@ private:
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(KookaView::StateFlags);
 
-
-#endif							// KOOKAVIEW_H
+#endif                          // KOOKAVIEW_H

@@ -42,11 +42,11 @@ class QColor;
 class QStringList;
 class QRect;
 
-
 class ocrWord;
 class ocrWordList;
 
-namespace Kadmos {
+namespace Kadmos
+{
 
 /* include files */
 
@@ -55,84 +55,86 @@ namespace Kadmos {
 
 /* ---------------------------------------- REP ---------------------------------------- */
 //! Maximum number of lines in a paragraph
-    const int LINE_MAX_LEN  = 100;
-    const int GRID_MAX_LEN  =  50;   //!< Maximum number of grid elements in a line
-    const int GRAPH_MAX_LEN = 500;   //!< Maximum number of graph elements in a line
-    const int CHAR_MAX_LEN  = 500;   //!< Maximum number of characters in a line
+const int LINE_MAX_LEN  = 100;
+const int GRID_MAX_LEN  =  50;   //!< Maximum number of grid elements in a line
+const int GRAPH_MAX_LEN = 500;   //!< Maximum number of graph elements in a line
+const int CHAR_MAX_LEN  = 500;   //!< Maximum number of characters in a line
 
-    /* Error handling */
-    const char CPP_ERROR[] = "Kadmos CPP interface error";
+/* Error handling */
+const char CPP_ERROR[] = "Kadmos CPP interface error";
 
-    /* ==== CRep ========================================= */
-    class CRep : public QObject
+/* ==== CRep ========================================= */
+class CRep : public QObject
+{
+    Q_OBJECT
+public:
+    CRep();
+    virtual ~CRep();
+
+    RepResult  *getRepResult(int line = 0);
+    RelGraph   *getGraphKnode(int line, int offset = 0);
+    RelResult  *getRelResult(int line, Kadmos::RelGraph *graph, int alternative = 0);
+
+    /**
+       @param ClassifierFilename is a name of a classifier file (*.rec)
+    */
+    KADMOS_ERROR Init(const char *ClassifierFile);
+
+    virtual void run();
+    virtual bool finished()
     {
-        Q_OBJECT
-    public:
-        CRep();
-        virtual ~CRep();
+        return true;
+    }
+    // KADMOS_ERROR Recognize();
+    KADMOS_ERROR End();
 
-        RepResult*  getRepResult(int line=0);
-        RelGraph*   getGraphKnode(int line, int offset=0);
-        RelResult*  getRelResult(int line, Kadmos::RelGraph* graph, int alternative=0);
+    /**
+      @param Image is an image object
+    */
+    KADMOS_ERROR SetImage(QImage *Image);
+    KADMOS_ERROR SetImage(const QString);
+    int GetMaxLine();
 
+    ocrWordList getLineWords(int line);
 
-        /**
-           @param ClassifierFilename is a name of a classifier file (*.rec)
-        */
-        KADMOS_ERROR Init(const char* ClassifierFile);
-	
-        virtual void run();
-        virtual bool finished() { return true; }
-        // KADMOS_ERROR Recognize();
-        KADMOS_ERROR End();
+    const char *RepTextLine(int Line, unsigned char RejectLevel = 128,
+                            int RejectChar = '~', long Format = TEXT_FORMAT_ANSI);
 
-        /**
-          @param Image is an image object
-        */
-        KADMOS_ERROR SetImage(QImage* Image);
-        KADMOS_ERROR SetImage( const QString );
-        int GetMaxLine();
+    void analyseLine(int, QPixmap *);
+    /** Enable/disable noise reduction
+      @param TRUE(enable)/FALSE(disable) noise reduction
+    */
+    void SetNoiseReduction(bool bNoiseReduction);
 
-        ocrWordList getLineWords( int line );
+    /** Enable/disable scaling (size normalization)
+         @param TRUE(enable)/FALSE(disable) scaling (size normalization)
+    */
+    void SetScaling(bool bScaling);
 
-        const char* RepTextLine(int Line, unsigned char RejectLevel=128,
-                                int RejectChar='~', long Format=TEXT_FORMAT_ANSI);
+    /* draw graphic visualiser into the pixmap pointed to */
+    virtual void drawLineBox(QPixmap *, const QRect &);
+    virtual void drawCharBox(QPixmap *, const QRect &);
+    virtual void drawBox(QPixmap *, const QRect &, const QColor &);
 
-        void analyseLine(int, QPixmap* );
-        /** Enable/disable noise reduction
-          @param TRUE(enable)/FALSE(disable) noise reduction
-        */
-        void SetNoiseReduction(bool bNoiseReduction);
+    int nextBestWord(int line, int knode, QString &theWord, QRect &brect);
 
-        /** Enable/disable scaling (size normalization)
-             @param TRUE(enable)/FALSE(disable) scaling (size normalization)
-        */
-        void SetScaling(bool bScaling);
+    /* Error text in QString */
+    QString getErrorText() const;
+    bool    kadmosError();
+private:
+    void partStrings(int line, int graphKnode, QString soFar);
+    void CheckError();
 
-        /* draw graphic visualiser into the pixmap pointed to */
-        virtual void drawLineBox( QPixmap*, const QRect& );
-        virtual void drawCharBox( QPixmap*, const QRect& );
-        virtual void drawBox( QPixmap*, const QRect&, const QColor& );
+    RepData       m_RepData;
+    KADMOS_ERROR  m_Error;
+    char m_Line[2 * CHAR_MAX_LEN];
+    int  m_currLine;
+    QStringList m_parts;
+    QString m_theWord;
+    int m_recurse;
 
-        int nextBestWord( int line, int knode, QString& theWord, QRect& brect );
-
-	/* Error text in QString */
-	QString getErrorText() const;
-	bool    kadmosError();
-    private:
-        void partStrings( int line, int graphKnode, QString soFar );
-        void CheckError();
-        
-        RepData       m_RepData;
-        KADMOS_ERROR  m_Error;
-        char m_Line[2*CHAR_MAX_LEN];
-        int  m_currLine;
-        QStringList m_parts;
-        QString m_theWord;
-        int m_recurse;
-
-        QChar m_undetectChar;
-    };
+    QChar m_undetectChar;
+};
 
 } /* End of Kadmos namespace */
 

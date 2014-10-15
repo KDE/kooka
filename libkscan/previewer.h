@@ -1,4 +1,4 @@
-/* This file is part of the KDE Project			-*- mode:c++; -*-
+/* This file is part of the KDE Project         -*- mode:c++; -*-
    Copyright (C) 2000 Klaas Freitag <freitag@suse.de>
 
    This library is free software; you can redistribute it and/or
@@ -39,7 +39,6 @@ class KScanDevice;
 class ImageCanvas;
 class AutoSelectBar;
 
-
 class KSCAN_EXPORT Previewer : public KVBox
 {
     Q_OBJECT
@@ -48,11 +47,14 @@ public:
     Previewer(QWidget *parent = NULL);
     virtual ~Previewer();
 
-    ImageCanvas *getImageCanvas() const		{ return (mCanvas); }
+    ImageCanvas *getImageCanvas() const
+    {
+        return (mCanvas);
+    }
 
     bool setPreviewImage(const QImage &image);
     void newImage(const QImage *image);
-    void setScannerBedSize(int w,int h);
+    void setScannerBedSize(int w, int h);
     void setDisplayUnit(KRuler::MetricStyle unit);
     void connectScanner(KScanDevice *scan);
 
@@ -60,7 +62,7 @@ public:
 
 public slots:
     void slotNewAreaSelected(const QRectF &rect);
-    void slotNewScanResolutions(int xres,int yres);
+    void slotNewScanResolutions(int xres, int yres);
     void slotNewScanMode(int bytes_per_pix);
     void slotSetAutoSelThresh(int);
     void slotAutoSelToggled(bool);
@@ -93,10 +95,10 @@ private:
     ImageCanvas *mCanvas;
     QImage mPreviewImage;
 
-    int mBedWidth,mBedHeight;
-    int mScanResX,mScanResY;
+    int mBedWidth, mBedHeight;
+    int mScanResX, mScanResY;
     int mBytesPerPix;
-    double mSelectionWidthMm,mSelectionHeightMm;
+    double mSelectionWidthMm, mSelectionHeightMm;
     KRuler::MetricStyle mDisplayUnit;
 
     AutoSelectBar *mAutoSelectBar;
@@ -113,4 +115,4 @@ private:
     QVector<long> mWidthSum;
 };
 
-#endif							// PREVIEWER_H
+#endif                          // PREVIEWER_H

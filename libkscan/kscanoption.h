@@ -1,5 +1,5 @@
-/* This file is part of the KDE Project			-*- mode:c++; -*-
-   Copyright (C) 2000 Klaas Freitag <freitag@suse.de>  
+/* This file is part of the KDE Project         -*- mode:c++; -*-
+   Copyright (C) 2000 Klaas Freitag <freitag@suse.de>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -31,13 +31,11 @@ extern "C" {
 #include <sane/sane.h>
 }
 
-
 class QLabel;
 
 class KGammaTable;
 class KScanControl;
 class KScanDevice;
-
 
 /**
  * @short A single scanner parameter.
@@ -81,8 +79,7 @@ public:
     /**
      * The type of an associated GUI widget (if there is one).
      **/
-    enum WidgetType
-    {
+    enum WidgetType {
         Invalid,
         Bool,
         SingleValue,
@@ -102,7 +99,10 @@ public:
      *
      * @return @c true if the option is valid
      **/
-    bool isValid() const		{ return (mDesc!=NULL); }
+    bool isValid() const
+    {
+        return (mDesc != NULL);
+    }
 
     /**
      * Check whether the option is initialised: that is, if the initial
@@ -110,7 +110,10 @@ public:
      *
      * @return @c true if the option has been initialised
      **/
-    bool isInitialised() const		{ return (!mBufferClean); }
+    bool isInitialised() const
+    {
+        return (!mBufferClean);
+    }
 
     /**
      * Check whether the option is a group, if so this is a title only
@@ -118,7 +121,10 @@ public:
      *
      * @return @c true if the option is a group
      **/
-    bool isGroup() const		{ return (mIsGroup); }
+    bool isGroup() const
+    {
+        return (mIsGroup);
+    }
 
     /**
      * Check whether the option value can be read from the scanner
@@ -129,7 +135,10 @@ public:
      * @return @c true if the option is readable
      * @see isSoftwareSettable
      **/
-    bool isReadable() const		{ return (mIsReadable); }
+    bool isReadable() const
+    {
+        return (mIsReadable);
+    }
 
     /**
      * Check whether the option is auto settable (SANE_CAP_AUTOMATIC):
@@ -172,7 +181,10 @@ public:
      *
      * @return @c true if the option has a GUI widget
      **/
-    bool isGuiElement() const		{ return (mControl!=NULL); }
+    bool isGuiElement() const
+    {
+        return (mControl != NULL);
+    }
 
     /**
      * Check whether the option value has been sent to the scanner:
@@ -183,7 +195,10 @@ public:
      * @see KScanDevice
      * @see setApplied
      **/
-    bool isApplied() const		{ return (mApplied); }
+    bool isApplied() const
+    {
+        return (mApplied);
+    }
 
     /**
      * Set or clear the "applied" flag.
@@ -192,7 +207,10 @@ public:
      * @see isApplied
      * @see apply
      **/
-    void setApplied(bool app = true)	{ mApplied = app; }
+    void setApplied(bool app = true)
+    {
+        mApplied = app;
+    }
 
     /**
      * Get the widget type for the option.  This is deduced from the
@@ -241,7 +259,10 @@ public:
      * @param val A new boolean value
      * @return @c true if the value was set successfully
      **/
-    bool set(bool val)			{ return (set(val ? 1 : 0)); }
+    bool set(bool val)
+    {
+        return (set(val ? 1 : 0));
+    }
 
     /**
      * Set the option value.
@@ -370,13 +391,16 @@ public:
      * applicable.
      **/
     QLabel *getUnit(QWidget *parent) const;
-   
+
     /**
      * Get the name of the option.
      *
      * @return The name of the option
      **/
-    QByteArray getName() const		{ return (mName); }
+    QByteArray getName() const
+    {
+        return (mName);
+    }
 
     /**
      * Get the GUI widget for the option, if applicable and one has been
@@ -384,7 +408,10 @@ public:
      *
      * @return The widget, or @c NULL if there is none.
      **/
-    KScanControl *widget() const	{ return (mControl); }
+    KScanControl *widget() const
+    {
+        return (mControl);
+    }
 
     /**
      * Update the GUI widget to reflect the current value of the option.
@@ -416,7 +443,7 @@ protected slots:
      * a @c KScanControl of type @c KScanControl::Button.
      **/
     void slotWidgetChange();
-	
+
 signals:
     /**
      * Emitted when the user changes the GUI setting of the option.
@@ -465,7 +492,7 @@ private:
     KScanControl *createFileField(QWidget *parent, const QString &text);
     KScanControl *createGroupSeparator(QWidget *parent, const QString &text);
     KScanControl *createActionButton(QWidget *parent, const QString &text);
-	
+
     KScanDevice *mScanDevice;
     int mIndex;
     const SANE_Option_Descriptor *mDesc;
@@ -484,4 +511,4 @@ private:
     KGammaTable *mGammaTable;
 };
 
-#endif							// KSCANOPTION_H
+#endif                          // KSCANOPTION_H

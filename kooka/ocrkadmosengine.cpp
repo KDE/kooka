@@ -24,7 +24,6 @@
  ***************************************************************************/
 
 #include "ocrkadmosengine.h"
-#include "ocrkadmosengine.moc"
 
 #ifdef QT_THREAD_SUPPORT
 #include <qtimer.h>
@@ -38,15 +37,12 @@
 #include "kookaimage.h"
 #include "ocrkadmosdialog.h"
 
-
 #define USE_KADMOS_FILEOP /* use a save-file for OCR instead of filling the reImage struct manually */
-
 
 /*
  * Thread support is disabled here because the kadmos lib seems not to be
  * thread safe, unfortunately. See slotKadmosResult-comments for more information
  */
-
 
 OcrKadmosEngine::OcrKadmosEngine(QWidget *parent)
     : OcrEngine(parent)
@@ -54,17 +50,15 @@ OcrKadmosEngine::OcrKadmosEngine(QWidget *parent)
     m_tmpFile = QString::null;
 }
 
-
 OcrKadmosEngine::~OcrKadmosEngine()
 {
 }
 
-
 OcrBaseDialog *OcrKadmosEngine::createOCRDialog(QWidget *parent)
 {
-    return (new KadmosDialog(parent));
+    //QT5 return (new KadmosDialog(parent));
+    return 0;
 }
-
 
 QString OcrKadmosEngine::engineDesc()
 {
@@ -76,29 +70,27 @@ QString OcrKadmosEngine::engineDesc()
                   "for more information on Kadmos.</p>"
                   "</qt>",
 #ifdef HAVE_KADMOS
-                 i18n("This version of Kooka is configured to use the Kadmos engine.")
+                  i18n("This version of Kooka is configured to use the Kadmos engine.")
 #else
-                 i18n("This version of Kooka is not configured for Kadmos.  The Kadmos "
-                      "libraries need to be installed, and Kooka needs to be rebuilt with "
-                      "the '--with-kadmos' option.")
+                  i18n("This version of Kooka is not configured for Kadmos.  The Kadmos "
+                       "libraries need to be installed, and Kooka needs to be rebuilt with "
+                       "the '--with-kadmos' option.")
 #endif
                  ));
 }
 
-
 void OcrKadmosEngine::startProcess(OcrBaseDialog *dia, const KookaImage *img)
 {
     kDebug();
-
+#if 0 //QT5
     KadmosDialog *kadDia = static_cast<KadmosDialog *>(dia);
 
-    QString clasPath;					/* target where the clasPath is written in */
-    if( ! kadDia->getSelClassifier( clasPath ) )
-    {
-        KMessageBox::error( m_parent,
-                            i18n("The classifier file necessary for OCR cannot be loaded: %1;\n"
-                                 "OCR with the KADMOS engine is not possible.",
-                                 clasPath), i18n("KADMOS Installation Problem"));
+    QString clasPath;                   /* target where the clasPath is written in */
+    if (! kadDia->getSelClassifier(clasPath)) {
+        KMessageBox::error(m_parent,
+                           i18n("The classifier file necessary for OCR cannot be loaded: %1;\n"
+                                "OCR with the KADMOS engine is not possible.",
+                                clasPath), i18n("KADMOS Installation Problem"));
         finishedOCRVisible(false);
         return;
     }
@@ -106,21 +98,18 @@ void OcrKadmosEngine::startProcess(OcrBaseDialog *dia, const KookaImage *img)
 
     kDebug() << "Using classifier" << c;
 #ifdef HAVE_KADMOS
-    m_rep.Init( c );
-    if( m_rep.kadmosError() ) /* check if kadmos initialised OK */
-    {
-        KMessageBox::error( m_parent,
-                            i18n("The KADMOS OCR system could not be started:\n"
-                                 "%1\n"
-                                 "Please check the configuration.",
-                                 m_rep.getErrorText()),
-                            i18n("KADMOS Failure") );
-    }
-    else
-    {
+    m_rep.Init(c);
+    if (m_rep.kadmosError()) { /* check if kadmos initialised OK */
+        KMessageBox::error(m_parent,
+                           i18n("The KADMOS OCR system could not be started:\n"
+                                "%1\n"
+                                "Please check the configuration.",
+                                m_rep.getErrorText()),
+                           i18n("KADMOS Failure"));
+    } else {
         /** Since initialising succeeded, we start the ocr here **/
-        m_rep.SetNoiseReduction( kadDia->getNoiseReduction() );
-        m_rep.SetScaling( kadDia->getAutoScale() );
+        m_rep.SetNoiseReduction(kadDia->getNoiseReduction());
+        m_rep.SetScaling(kadDia->getAutoScale());
         kDebug() << "Image size [" << img->width() << " x " << img->height() << "]";
         kDebug() << "Image depth" << img->depth() << "colors" << img->numColors();
 #ifdef USE_KADMOS_FILEOP
@@ -128,20 +117,19 @@ void OcrKadmosEngine::startProcess(OcrBaseDialog *dia, const KookaImage *img)
         tmpFile.setSuffix(".bmp");
         tmpFile.setAutoRemove(false);
 
-        if (!tmpFile.open())
-        {
+        if (!tmpFile.open()) {
             kDebug() << "error creating temporary file";
             return;
         }
         m_tmpFile = QFile::encodeName(tmpFile.fileName());
 
         kDebug() << "Saving to file" << m_tmpFile;
-        img->save(&tmpFile,"BMP");			// save to temp file
+        img->save(&tmpFile, "BMP");         // save to temp file
         tmpFile.close();
         m_rep.SetImage(tmpFile);
-#else							// USE_KADMOS_FILEOP
+#else                           // USE_KADMOS_FILEOP
         m_rep.SetImage(img);
-#endif							// USE_KADMOS_FILEOP
+#endif                          // USE_KADMOS_FILEOP
         m_rep.run();
 
         /* Dealing with threads or no threads (using QT_THREAD_SUPPORT to distinguish)
@@ -160,19 +148,16 @@ void OcrKadmosEngine::startProcess(OcrBaseDialog *dia, const KookaImage *img)
          * It does not :( That is why it is not used here. Maybe some day...
          */
     }
-#endif							// HAVE_KADMOS
+#endif                          // HAVE_KADMOS
 #ifdef QT_THREAD_SUPPORT
     /* start a timer and wait until it fires. */
     QTimer::singleShot(500, this, SLOT(slotKadmosResult()));
-#else							// QT_THREAD_SUPPORT
+#else                           // QT_THREAD_SUPPORT
     slotKadmosResult();
-#endif							// QT_THREAD_SUPPORT
-
+#endif                          // QT_THREAD_SUPPORT
+#endif
     kDebug() << "done";
 }
-
-
-
 
 /*
  * This method is called to check if the kadmos process was already finished, if
@@ -187,50 +172,43 @@ void OcrKadmosEngine::slotKadmosResult()
     kDebug();
 
 #ifdef HAVE_KADMOS
-    if( m_rep.finished() )
-    {
+    if (m_rep.finished()) {
         /* The recognition thread is finished. */
         kDebug() << "Kadmos is finished";
 
         m_ocrResultText = "";
-	if( ! m_rep.kadmosError() )
-	{
-	    int lines = m_rep.GetMaxLine();
-	    kDebug() << "Count lines" << lines;
-	    m_ocrPage.clear();
-	    m_ocrPage.resize( lines );
+        if (! m_rep.kadmosError()) {
+            int lines = m_rep.GetMaxLine();
+            kDebug() << "Count lines" << lines;
+            m_ocrPage.clear();
+            m_ocrPage.resize(lines);
 
-	    for( int line = 0; line < m_rep.GetMaxLine(); line++ )
-	    {
-		// ocrWordList wordList = m_rep.getLineWords(line);
-		/* call an ocr engine independent method to use the spellbook */
-		ocrWordList words = m_rep.getLineWords(line);
-		kDebug() << "Have" << words.count() << "entries in list";
-		m_ocrPage[line]=words;
-	    }
+            for (int line = 0; line < m_rep.GetMaxLine(); line++) {
+                // ocrWordList wordList = m_rep.getLineWords(line);
+                /* call an ocr engine independent method to use the spellbook */
+                ocrWordList words = m_rep.getLineWords(line);
+                kDebug() << "Have" << words.count() << "entries in list";
+                m_ocrPage[line] = words;
+            }
 
-	    /* show results of ocr */
-	    m_rep.End();
-	}
-	finishedOCRVisible( !m_rep.kadmosError() );
-    }
-    else
-    {
+            /* show results of ocr */
+            m_rep.End();
+        }
+        finishedOCRVisible(!m_rep.kadmosError());
+    } else {
         /* recognition thread is not yet finished. Wait another half a second. */
-        QTimer::singleShot( 500, this, SLOT( slotKadmosResult() ));
-	/* Never comes here if no threads exist on the system */
+        QTimer::singleShot(500, this, SLOT(slotKadmosResult()));
+        /* Never comes here if no threads exist on the system */
     }
 #endif
 }
-
 
 QStringList OcrKadmosEngine::tempFiles(bool retain)
 {
     QStringList result;
 
 #ifdef USE_KADMOS_FILEOP
-    if (!m_tmpFile.isNull())
-    {
+    if (!m_tmpFile.isNull()) {
         result << m_tmpFile;
         m_tmpFile = QString::null;
     }

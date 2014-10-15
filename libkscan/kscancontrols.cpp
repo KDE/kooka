@@ -19,8 +19,8 @@
 */
 
 #include "kscancontrols.h"
-#include "kscancontrols.moc"
 
+#include <QGroupBox>
 #include <qlayout.h>
 #include <qtoolbutton.h>
 #include <qspinbox.h>
@@ -31,10 +31,10 @@
 #include <qlineedit.h>
 
 #include <klocale.h>
-#include <kdebug.h>
+#include <QDebug>
 #include <kurlrequester.h>
 #include <kimageio.h>
-
+#include <KIcon>
 
 //  KScanControl - base class
 //  -------------------------
@@ -46,20 +46,29 @@ KScanControl::KScanControl(QWidget *parent, const QString &text)
     mLayout->setMargin(0);
 
     mText = text;
-    if (mText.isEmpty()) mText = i18n("(Unknown)");
+    if (mText.isEmpty()) {
+        mText = i18n("(Unknown)");
+    }
 }
 
+KScanControl::~KScanControl()               {}
 
-KScanControl::~KScanControl()				{}
+QString KScanControl::text() const
+{
+    return (QString::null);
+}
+void KScanControl::setText(const QString &text)     {}
 
-QString KScanControl::text() const			{ return (QString::null); }
-void KScanControl::setText(const QString &text)		{}
+int KScanControl::value() const
+{
+    return (0);
+}
+void KScanControl::setValue(int val)            {}
 
-int KScanControl::value() const				{ return (0); }
-void KScanControl::setValue(int val)			{}
-
-QString KScanControl::label() const			{ return (mText+":"); }
-
+QString KScanControl::label() const
+{
+    return (mText + ":");
+}
 
 //  KScanSlider - slider, spin box and optional reset button
 //  --------------------------------------------------------
@@ -72,25 +81,24 @@ KScanSlider::KScanSlider(QWidget *parent, const QString &text,
     mValue = mStdValue = stdValue;
     mStdButt = NULL;
 
-    mSlider = new QSlider(Qt::Horizontal, this);	// slider
+    mSlider = new QSlider(Qt::Horizontal, this);    // slider
     mSlider->setRange(((int) min), ((int) max));
     mSlider->setTickPosition(QSlider::TicksBelow);
-    mSlider->setTickInterval(qMax(((int)((max-min)/10)), 1));
-    mSlider->setSingleStep(qMax(((int)((max-min)/20)), 1));
-    mSlider->setPageStep(qMax(((int)((max-min)/10)), 1));
+    mSlider->setTickInterval(qMax(((int)((max - min) / 10)), 1));
+    mSlider->setSingleStep(qMax(((int)((max - min) / 20)), 1));
+    mSlider->setPageStep(qMax(((int)((max - min) / 10)), 1));
     mSlider->setMinimumWidth(140);
-    mSlider->setValue(mValue);				// initial value
+    mSlider->setValue(mValue);              // initial value
     mLayout->addWidget(mSlider, 1);
 
-    mSpinbox = new QSpinBox(this);			// spin box
+    mSpinbox = new QSpinBox(this);          // spin box
     mSpinbox->setRange((int) min, (int) max);
     mSpinbox->setSingleStep(1);
-    mSpinbox->setValue(mValue);				// initial value
+    mSpinbox->setValue(mValue);             // initial value
     mLayout->addWidget(mSpinbox);
 
-    if (haveStdButt)
-    {
-        mStdButt = new QToolButton(this);		// reset button
+    if (haveStdButt) {
+        mStdButt = new QToolButton(this);       // reset button
         mStdButt->setIcon(KIcon("edit-undo"));
         mStdButt->setToolTip(i18n("Reset this setting to its standard value, %1", stdValue));
         mLayout->addWidget(mStdButt);
@@ -98,41 +106,40 @@ KScanSlider::KScanSlider(QWidget *parent, const QString &text,
 
     connect(mSlider, SIGNAL(valueChanged(int)), SLOT(slotSliderSpinboxChange(int)));
     connect(mSpinbox, SIGNAL(valueChanged(int)), SLOT(slotSliderSpinboxChange(int)));
-    if (mStdButt!=NULL) connect(mStdButt, SIGNAL(clicked()), SLOT(slotRevertValue()));
+    if (mStdButt != NULL) {
+        connect(mStdButt, SIGNAL(clicked()), SLOT(slotRevertValue()));
+    }
 
     setFocusProxy(mSlider);
     setFocusPolicy(Qt::StrongFocus);
 }
 
-
 void KScanSlider::setValue(int val)
 {
-    if (val==mValue) return;				// avoid recursive signals
+    if (val == mValue) {
+        return;    // avoid recursive signals
+    }
     mValue = val;
 
     int spin = mSpinbox->value();
-    if (spin!=val)
-    {
+    if (spin != val) {
         mSpinbox->blockSignals(true);
-        mSpinbox->setValue(val);			// track in spin box
+        mSpinbox->setValue(val);            // track in spin box
         mSpinbox->blockSignals(false);
     }
 
     int slid = mSlider->value();
-    if (slid!=val)
-    {
+    if (slid != val) {
         mSlider->blockSignals(true);
-        mSlider->setValue(val);				// track in slider
+        mSlider->setValue(val);             // track in slider
         mSlider->blockSignals(false);
     }
 }
-
 
 int KScanSlider::value() const
 {
     return (mValue);
 }
-
 
 void KScanSlider::slotSliderSpinboxChange(int val)
 {
@@ -140,13 +147,11 @@ void KScanSlider::slotSliderSpinboxChange(int val)
     emit settingChanged(val);
 }
 
-
-
 void KScanSlider::slotRevertValue()
-{							// only connected if button exists
+{
+    // only connected if button exists
     slotSliderSpinboxChange(mStdValue);
 }
-
 
 //  KScanStringEntry - free text entry field
 //  ----------------------------------------
@@ -164,19 +169,18 @@ KScanStringEntry::KScanStringEntry(QWidget *parent, const QString &text)
     setFocusPolicy(Qt::StrongFocus);
 }
 
-
 QString KScanStringEntry::text() const
 {
     return (mEntry->text());
 }
 
-
 void KScanStringEntry::setText(const QString &text)
 {
-    if (text==mEntry->text()) return;			// avoid recursive signals
+    if (text == mEntry->text()) {
+        return;    // avoid recursive signals
+    }
     mEntry->setText(text);
 }
-
 
 //  KScanNumberEntry - number entry field
 //  -------------------------------------
@@ -195,24 +199,20 @@ KScanNumberEntry::KScanNumberEntry(QWidget *parent, const QString &text)
     setFocusPolicy(Qt::StrongFocus);
 }
 
-
 int KScanNumberEntry::value() const
 {
     return (mEntry->text().toInt());
 }
-
 
 void KScanNumberEntry::setValue(int i)
 {
     mEntry->setText(QString::number(i));
 }
 
-
 void KScanNumberEntry::slotTextChanged(const QString &s)
 {
     emit settingChanged(s.toInt());
 }
-
 
 //  KScanCheckbox - on/off option
 //  -----------------------------
@@ -229,24 +229,20 @@ KScanCheckbox::KScanCheckbox(QWidget *parent, const QString &text)
     setFocusPolicy(Qt::StrongFocus);
 }
 
-
 int KScanCheckbox::value() const
 {
     return ((int) mCheckbox->isChecked());
 }
-
 
 void KScanCheckbox::setValue(int i)
 {
     mCheckbox->setChecked((bool) i);
 }
 
-
 QString KScanCheckbox::label() const
 {
     return (QString::null);
 }
-
 
 //  KScanCombo - combo box with list of options
 //  -------------------------------------------
@@ -265,13 +261,11 @@ KScanCombo::KScanCombo(QWidget *parent, const QString &text,
     init();
 
     for (QList<QByteArray>::const_iterator it = list.constBegin();
-         it!=list.constEnd(); ++it)
-    {
+            it != list.constEnd(); ++it) {
         const QByteArray item = (*it);
         mCombo->addItem(i18n(item), item);
     }
 }
-
 
 void KScanCombo::init()
 {
@@ -284,47 +278,46 @@ void KScanCombo::init()
     setFocusPolicy(Qt::StrongFocus);
 }
 
-
 void KScanCombo::setText(const QString &text)
 {
-    int i = mCombo->findData(text);			// find item with that text
-    if (i==-1) return;					// ignore if not present
+    int i = mCombo->findData(text);         // find item with that text
+    if (i == -1) {
+        return;    // ignore if not present
+    }
 
-    if (i==mCombo->currentIndex()) return;		// avoid recursive signals
+    if (i == mCombo->currentIndex()) {
+        return;    // avoid recursive signals
+    }
     mCombo->setCurrentIndex(i);
 }
 
-
 void KScanCombo::setIcon(const QIcon &icon, const char *ent)
 {
-    int i = mCombo->findData(ent);			// find item with that text
-    if (i!=-1) mCombo->setItemIcon(i, icon);
+    int i = mCombo->findData(ent);          // find item with that text
+    if (i != -1) {
+        mCombo->setItemIcon(i, icon);
+    }
 }
-
 
 QString KScanCombo::text() const
 {
     return (textAt(mCombo->currentIndex()));
 }
 
-
 void KScanCombo::setValue(int i)
 {
     mCombo->setCurrentIndex(i);
 }
 
-
 QString KScanCombo::textAt(int i) const
 {
-    return (i==-1 ? QString::null : mCombo->itemData(i).toString());
+    return (i == -1 ? QString::null : mCombo->itemData(i).toString());
 }
-
 
 int KScanCombo::count() const
 {
     return (mCombo->count());
 }
-
 
 void KScanCombo::slotActivated(int i)
 {
@@ -332,8 +325,7 @@ void KScanCombo::slotActivated(int i)
     emit settingChanged(textAt(i));
 }
 
-
-//  KScanFileRequester - standard URL requester 
+//  KScanFileRequester - standard URL requester
 //  -------------------------------------------
 
 KScanFileRequester::KScanFileRequester(QWidget *parent, const QString &text)
@@ -343,30 +335,29 @@ KScanFileRequester::KScanFileRequester(QWidget *parent, const QString &text)
     mLayout->addWidget(mEntry);
 
     QString fileSelector = "*.pnm *.PNM *.pbm *.PBM *.pgm *.PGM *.ppm *.PPM|PNM Image Files (*.pnm,*.pbm,*.pgm,*.ppm)\n";
-    fileSelector += KImageIO::pattern()+"\n";
+    fileSelector += KImageIO::pattern() + "\n";
     fileSelector += i18n("*|All Files");
     mEntry->setFilter(fileSelector);
 
-    connect(mEntry, SIGNAL(textChanged(const QString& )), SIGNAL(settingChanged(const QString&)));
+    connect(mEntry, SIGNAL(textChanged(const QString &)), SIGNAL(settingChanged(const QString &)));
     connect(mEntry, SIGNAL(returnPressed()), SIGNAL(returnPressed()));
 
     setFocusProxy(mEntry);
     setFocusPolicy(Qt::StrongFocus);
 }
 
-
 QString KScanFileRequester::text() const
 {
     return (mEntry->url().url());
 }
 
-
 void KScanFileRequester::setText(const QString &text)
 {
-    if (text==mEntry->url().url()) return;		// avoid recursive signals
-    mEntry->setUrl(text);
+    if (text == mEntry->url().url()) {
+        return;    // avoid recursive signals
+    }
+    mEntry->setUrl(QUrl::fromLocalFile(text));
 }
-
 
 //  KScanGroup - group separator
 //  ----------------------------
@@ -379,12 +370,10 @@ KScanGroup::KScanGroup(QWidget *parent, const QString &text)
     mLayout->addWidget(mGroup);
 }
 
-
 QString KScanGroup::label() const
 {
     return (QString::null);
 }
-
 
 //  KScanPushButton - action button
 //  -------------------------------
@@ -397,7 +386,6 @@ KScanPushButton::KScanPushButton(QWidget *parent, const QString &text)
 
     connect(mButton, SIGNAL(clicked()), SIGNAL(returnPressed()));
 }
-
 
 QString KScanPushButton::label() const
 {

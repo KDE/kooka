@@ -1,5 +1,5 @@
-/* This file is part of the KDE Project				-*- mode:c++ -*-
-   Copyright (C) 2008 Jonathan Marten <jjm@keelhaul.me.uk>  
+/* This file is part of the KDE Project             -*- mode:c++ -*-
+   Copyright (C) 2008 Jonathan Marten <jjm@keelhaul.me.uk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -47,4 +47,4 @@ private:
     QLineEdit *mDescEdit;
 };
 
-#endif							// NEWSCANPARAMS_H
+#endif                          // NEWSCANPARAMS_H

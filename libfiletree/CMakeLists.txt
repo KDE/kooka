@@ -11,23 +11,22 @@ set(libfiletree_SRCS
   filetreeviewitem.cpp
 )
 
-kde4_add_library(libfiletree STATIC ${libfiletree_SRCS})
+add_library(libfiletree STATIC ${libfiletree_SRCS})
 target_link_libraries(libfiletree
-  ${KDE4_KIO_LIBS}
-  ${KDE4_KDEUI_LIBS}
-  ${KDE4_KDECORE_LIBS}
+  KF5::KIOCore
+  KF5::KDELibs4Support
 )
 
 ########### clobbering ###############
 
-add_custom_target(clobber
-  COMMENT "Clobber in ${CMAKE_CURRENT_BINARY_DIR}..."
-  VERBATIM
-  COMMAND sh -c "rm -f *.moc"
-  COMMAND sh -c "rm -f *_automoc.cpp *_automoc.cpp.files"
-  COMMAND sh -c "rm -r -f CMakeFiles *.cmake"
-  COMMAND sh -c "rm -f config-*.h"
-)
+#add_custom_target(clobber
+#  COMMENT "Clobber in ${CMAKE_CURRENT_BINARY_DIR}..."
+#  VERBATIM
+#  COMMAND sh -c "rm -f *.moc"
+#  COMMAND sh -c "rm -f *_automoc.cpp *_automoc.cpp.files"
+#  COMMAND sh -c "rm -r -f CMakeFiles *.cmake"
+#  COMMAND sh -c "rm -f config-*.h"
+#)
 
 ########### install files ###############
 

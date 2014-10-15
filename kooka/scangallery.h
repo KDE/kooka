@@ -17,7 +17,6 @@
  *                                                                         *
  ***************************************************************************/
 
-
 #ifndef SCANGALLERY_H
 #define SCANGALLERY_H
 
@@ -28,17 +27,15 @@
 #include "libfiletree/filetreeview.h"
 #include "imageformat.h"
 
-
 class QImage;
 class QTreeWidgetItem;
 
-class KMenu;
+class QMenu;
 class KUrl;
 
 class ImgSaver;
 class ImageMetaInfo;
 class KookaImage;
-
 
 class ScanGallery : public FileTreeView
 {
@@ -51,7 +48,10 @@ public:
     QString getCurrImageFileName(bool withPath = true) const;
     const KookaImage *getCurrImage(bool loadOnDemand = false);
 
-    KMenu *contextMenu() const { return m_contextMenu; }
+    QMenu *contextMenu() const
+    {
+        return m_contextMenu;
+    }
     void openRoots();
 
     void setAllowRename(bool on);
@@ -87,7 +87,7 @@ protected slots:
     void slotItemExpanded(QTreeWidgetItem *item);
     void slotItemProperties();
 
-    void slotUrlsDropped(QDropEvent *ev,FileTreeViewItem *item);
+    void slotUrlsDropped(QDropEvent *ev, FileTreeViewItem *item);
     void slotJobResult(KJob *job);
     bool slotFileRenamed(FileTreeViewItem *item, const QString &newName);
 
@@ -125,7 +125,7 @@ private:
     void updateParent(const FileTreeViewItem *curr);
 
     KUrl m_currSelectedDir;
-    KMenu *m_contextMenu;
+    QMenu *m_contextMenu;
 
     ImgSaver *mSaver;
     FileTreeViewItem *mSavedTo;
@@ -143,5 +143,4 @@ private:
     bool m_startup;
 };
 
-
-#endif							// SCANGALLERY_H
+#endif                          // SCANGALLERY_H

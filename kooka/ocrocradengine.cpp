@@ -24,7 +24,6 @@
  ***************************************************************************/
 
 #include "ocrocradengine.h"
-#include "ocrocradengine.moc"
 
 #include <qregexp.h>
 #include <qfile.h>
@@ -35,14 +34,13 @@
 #include <ktemporaryfile.h>
 #include <klocale.h>
 #include <kmessagebox.h>
+#include <KConfigGroup>
 
 #include "imgsaver.h"
 #include "imageformat.h"
 #include "ocrocraddialog.h"
 
-
 static const char UndetectedChar = '_';
-
 
 OcrOcradEngine::OcrOcradEngine(QWidget *parent)
     : OcrEngine(parent)
@@ -53,17 +51,14 @@ OcrOcradEngine::OcrOcradEngine(QWidget *parent)
     ocradVersion = 0;
 }
 
-
 OcrOcradEngine::~OcrOcradEngine()
 {
 }
-
 
 OcrBaseDialog *OcrOcradEngine::createOCRDialog(QWidget *parent)
 {
     return (new OcrOcradDialog(parent));
 }
-
 
 QString OcrOcradEngine::engineDesc()
 {
@@ -81,27 +76,24 @@ QString OcrOcradEngine::engineDesc()
                  "for more information on OCRAD."));
 }
 
-
 QString getTempFileName(const QString &suffix)
 {
-    KTemporaryFile tmpFile;				// temporary file for results
+    KTemporaryFile tmpFile;             // temporary file for results
     tmpFile.setSuffix(suffix);
     tmpFile.setAutoRemove(false);
-    if (!tmpFile.open())
-    {
+    if (!tmpFile.open()) {
         kDebug() << "error creating temporary file for" << suffix;
         return (QString::null);
     }
 
     QString tmpName = QFile::encodeName(tmpFile.fileName());
-    tmpFile.close();					// just want its name
+    tmpFile.close();                    // just want its name
     return (tmpName);
 }
 
-
 void OcrOcradEngine::startProcess(OcrBaseDialog *dia, const KookaImage *img)
 {
-    const KConfigGroup grp = KGlobal::config()->group(CFG_GROUP_OCRAD);
+    const KConfigGroup grp = KSharedConfig::openConfig()->group(CFG_GROUP_OCRAD);
 
     OcrOcradDialog *parentDialog = static_cast<OcrOcradDialog *>(dia);
     ocradVersion = parentDialog->getNumVersion();
@@ -113,24 +105,27 @@ void OcrOcradEngine::startProcess(OcrBaseDialog *dia, const KookaImage *img)
     // can use it directly (but don't delete it afterwards!)
     m_ocrImagePBM = ImgSaver::tempSaveImage(img, ImageFormat("PBM"), 1);
 
-    if (m_ocrProcess!=NULL) delete m_ocrProcess;	// kill old process if still there
-    m_ocrProcess = new KProcess();			// start new OCRAD process
+    if (m_ocrProcess != NULL) {
+        delete m_ocrProcess;    // kill old process if still there
+    }
+    m_ocrProcess = new KProcess();          // start new OCRAD process
     Q_CHECK_PTR(m_ocrProcess);
-    QStringList args;					// arguments for process
+    QStringList args;                   // arguments for process
 
     m_tempOrfName = getTempFileName(".orf");
-    args << "-x" << m_tempOrfName;			// the ORF result file
+    args << "-x" << m_tempOrfName;          // the ORF result file
 
-    args << QFile::encodeName(m_ocrImagePBM);		// name of the input image
+    args << QFile::encodeName(m_ocrImagePBM);       // name of the input image
 
     // Layout Detection
     int layoutMode = grp.readEntry(CFG_OCRAD_LAYOUT_DETECTION, 0);
-    if (ocradVersion>=18)				// OCRAD 0.18 or later
-    {							// has only on/off
-        if (layoutMode!=0) args << "-l";
-    }
-    else						// OCRAD 0.17 or earlier
-    {							// had 3 options
+    if (ocradVersion >= 18) {           // OCRAD 0.18 or later
+        // has only on/off
+        if (layoutMode != 0) {
+            args << "-l";
+        }
+    } else {                    // OCRAD 0.17 or earlier
+        // had 3 options
         args << "-l" << QString::number(layoutMode);
     }
 
@@ -138,26 +133,39 @@ void OcrOcradEngine::startProcess(OcrBaseDialog *dia, const KookaImage *img)
     args << "-F" << s;
 
     s = grp.readEntry(CFG_OCRAD_CHARSET, "");
-    if (!s.isEmpty()) args << "-c" << s;
-
-    s = grp.readEntry(CFG_OCRAD_FILTER, "");
-    if (!s.isEmpty()) args << "-e" << s;
-
-    s = grp.readEntry(CFG_OCRAD_TRANSFORM, "");
-    if (!s.isEmpty()) args << "-t" << s;
-
-    if (grp.readEntry(CFG_OCRAD_INVERT, false)) args << "-i";
-
-    if (grp.readEntry(CFG_OCRAD_THRESHOLD_ENABLE, false))
-    {
-        s = grp.readEntry(CFG_OCRAD_THRESHOLD_VALUE, "");
-        if (!s.isEmpty()) args << "-T" << (s+"%");
+    if (!s.isEmpty()) {
+        args << "-c" << s;
     }
 
-    if (m_verboseDebug) args << "-v";
+    s = grp.readEntry(CFG_OCRAD_FILTER, "");
+    if (!s.isEmpty()) {
+        args << "-e" << s;
+    }
+
+    s = grp.readEntry(CFG_OCRAD_TRANSFORM, "");
+    if (!s.isEmpty()) {
+        args << "-t" << s;
+    }
+
+    if (grp.readEntry(CFG_OCRAD_INVERT, false)) {
+        args << "-i";
+    }
+
+    if (grp.readEntry(CFG_OCRAD_THRESHOLD_ENABLE, false)) {
+        s = grp.readEntry(CFG_OCRAD_THRESHOLD_VALUE, "");
+        if (!s.isEmpty()) {
+            args << "-T" << (s + "%");
+        }
+    }
+
+    if (m_verboseDebug) {
+        args << "-v";
+    }
 
     s = grp.readEntry(CFG_OCRAD_EXTRA_ARGUMENTS);
-    if (!s.isEmpty()) args << s;
+    if (!s.isEmpty()) {
+        args << s;
+    }
 
     kDebug() << "Running OCRAD as" << cmd << args;
 
@@ -173,13 +181,12 @@ void OcrOcradEngine::startProcess(OcrBaseDialog *dia, const KookaImage *img)
     connect(m_ocrProcess, SIGNAL(finished(int, QProcess::ExitStatus)), SLOT(slotOcradExited(int, QProcess::ExitStatus)));
 
     m_ocrProcess->start();
-    if (!m_ocrProcess->waitForStarted(5000))
-    {
+    if (!m_ocrProcess->waitForStarted(5000)) {
         kDebug() << "Error starting OCRAD process!";
+    } else {
+        kDebug() << "OCRAD process started";
     }
-    else kDebug() << "OCRAD process started";
 }
-
 
 QStringList OcrOcradEngine::tempFiles(bool retain)
 {
@@ -193,15 +200,13 @@ QStringList OcrOcradEngine::tempFiles(bool retain)
     return (result);
 }
 
-
 void OcrOcradEngine::slotOcradExited(int exitCode, QProcess::ExitStatus exitStatus)
 {
     kDebug() << "exit code" << exitCode << "status" << exitStatus;
 
     bool parseRes = true;
 
-    if (exitStatus!=QProcess::NormalExit || exitCode!=0)
-    {
+    if (exitStatus != QProcess::NormalExit || exitCode != 0) {
         KMessageBox::sorry(m_parent,
                            i18n("<qt>"
                                 "Running the OCRAD process (<filename>%1</filename>) %2 with exit status %3."
@@ -210,7 +215,7 @@ void OcrOcradEngine::slotOcradExited(int exitCode, QProcess::ExitStatus exitStat
                                 "<A HREF=\"%4\">standard output</A> or "
                                 "<A HREF=\"%5\">standard error</A> log files.",
                                 m_ocrProcess->program().first(),
-                                (exitStatus==QProcess::CrashExit ? i18n("crashed") : i18n("failed")),
+                                (exitStatus == QProcess::CrashExit ? i18n("crashed") : i18n("failed")),
                                 exitCode,
                                 KUrl(m_tempStdoutLog).url(),
                                 KUrl(m_tempStderrLog).url()),
@@ -219,11 +224,9 @@ void OcrOcradEngine::slotOcradExited(int exitCode, QProcess::ExitStatus exitStat
         parseRes = false;
     }
 
-    if (parseRes)
-    {
+    if (parseRes) {
         QString errStr = readORF(m_tempOrfName);
-        if (!errStr.isNull())
-        {
+        if (!errStr.isNull()) {
             KMessageBox::error(m_parent,
                                i18n("Parsing the OCRAD result file failed\n%1", errStr),
                                i18n("OCR Result Parse Problem"));
@@ -234,21 +237,20 @@ void OcrOcradEngine::slotOcradExited(int exitCode, QProcess::ExitStatus exitStat
     finishedOCRVisible(parseRes);
 }
 
-
 /*
   From http://kooka.kde.org/news/
 
-ORF Proposal: Ocr Result File    August 20, 2003 
+ORF Proposal: Ocr Result File    August 20, 2003
 
 Ocrad is the first OCR (Optical Character Recognition) application that implements
 output of OCR results in a special file format that could be easily processed by
 frontend programs.  To provide a proper frontend connection, ocrad implements the
-export of the OCR results into a so called ORF, which simply means Ocr Result File. 
+export of the OCR results into a so called ORF, which simply means Ocr Result File.
 
 The ORF Format is a special file format that contains OCR results like the detected
 characters and their position on the source image in a simply parseable format.
 Frontend programs can read the file and retrieve information about the OCR engine
-run and show up the results visually. 
+run and show up the results visually.
 
 All lines starting with '#' are ignored.
 
@@ -258,14 +260,14 @@ name of the PBM file being processed.
 The second valid line has the form 'total blocks n', where 'n' is the total number
 of text blocks in the source image.
 
-For each text block in the source image, the following data follows: 
+For each text block in the source image, the following data follows:
 
   A line in the form 'block i x y w h', where 'i' is the block number and 'x y w h'
   are the block position and size as described below for character boxes.
 
   A line in the form 'lines n', where 'n' is the number of lines in this block.
 
-For each line in every text block, the following data follows: 
+For each line in every text block, the following data follows:
 
   A line in the form 'line i chars n height h', where 'i' is the line number,
   'n' is the number of characters in this line,
@@ -284,7 +286,7 @@ For each line in every text block, the following data follows:
   char enclosed in single quotes, followed by the confidence value without
   space between them.
 
-See the following snippet (the beginning of an orf) as a sample ORF: 
+See the following snippet (the beginning of an orf) as a sample ORF:
 
   # Ocr Results File. Created by GNU ocrad version 0.4
   source file test1.pbm
@@ -308,18 +310,24 @@ See the following snippet (the beginning of an orf) as a sample ORF:
   ...
 
 The ORF format was defined by Antonio Diaz and Klaas Freitag. Comments are very
-welcome. 
+welcome.
 */
 
 QString OcrOcradEngine::readORF(const QString &fileName)
 {
     QFile file(fileName);
     // some checks on the ORF
-    if (!file.exists()) return (i18n("File '%1' does not exist", fileName));
+    if (!file.exists()) {
+        return (i18n("File '%1' does not exist", fileName));
+    }
     QFileInfo fi(fileName);
-    if (!fi.isReadable()) return (i18n("File '%1' unreadable", fileName));
+    if (!fi.isReadable()) {
+        return (i18n("File '%1' unreadable", fileName));
+    }
 
-    if (!file.open(QIODevice::ReadOnly)) return (i18n("Cannot open file '%1'", fileName));
+    if (!file.open(QIODevice::ReadOnly)) {
+        return (i18n("Cannot open file '%1'", fileName));
+    }
     QTextStream stream(&file);
 
     kDebug() << "Starting to analyse ORF" << fileName << "version" << ocradVersion;
@@ -337,72 +345,68 @@ QString OcrOcradEngine::readORF(const QString &fileName)
      * starts at 0 for every block, but we want line-no counting page global here.
      */
     int lineNo = 0;
-    int	blockCnt = 0;
+    int blockCnt = 0;
     int currBlock = -1;
     QString line;
     QRect blockRect;
 
     startResultDocument();
 
-    while (!stream.atEnd())
-    {
-        line = stream.readLine().trimmed();		// line of text excluding '\n'
+    while (!stream.atEnd()) {
+        line = stream.readLine().trimmed();     // line of text excluding '\n'
 
-        if (line.startsWith("#")) continue;		// ignore comments
+        if (line.startsWith("#")) {
+            continue;    // ignore comments
+        }
 
-        if (m_verboseDebug) kDebug() << "# Line" << line;
-        if (line.startsWith("source file ")) continue;	// source file name, ignore
-        else if (line.startsWith("total blocks "))	// total count of blocks,
-        {						// must be first line
+        if (m_verboseDebug) {
+            kDebug() << "# Line" << line;
+        }
+        if (line.startsWith("source file ")) {
+            continue;    // source file name, ignore
+        } else if (line.startsWith("total blocks ")) { // total count of blocks,
+            // must be first line
             blockCnt = line.mid(13).toInt();
             kDebug() << "Block count (V<10)" << blockCnt;
-        }
-        else if (line.startsWith("total text blocks "))
-        {
+        } else if (line.startsWith("total text blocks ")) {
             blockCnt = line.mid(18).toInt();
             kDebug() << "Block count (V>10)" << blockCnt;
-        }
-        else if (line.startsWith("block ") || line.startsWith("text block "))
-        {						// start of text block
+        } else if (line.startsWith("block ") || line.startsWith("text block ")) {
+            // start of text block
             // matching "block 1 0 0 560 792"
-            if (rx1.indexIn(line)==-1)
-            {
+            if (rx1.indexIn(line) == -1) {
                 kDebug() << "Failed to match 'block' line" << line;
                 continue;
             }
 
-            currBlock = (rx1.cap(1).toInt())-1;
+            currBlock = (rx1.cap(1).toInt()) - 1;
             blockRect.setRect(rx1.cap(2).toInt(), rx1.cap(3).toInt(),
                               rx1.cap(4).toInt(), rx1.cap(5).toInt());
             kDebug() << "Current block" << currBlock << "rect" << blockRect;
-        }
-        else if (line.startsWith("lines "))		// lines in this block
-        {
+        } else if (line.startsWith("lines ")) { // lines in this block
             int lineCnt = line.mid(6).toInt();
             kDebug() << "Block line count" << lineCnt;
-        }
-        else if (line.startsWith("line "))		// start of text line
-        {
+        } else if (line.startsWith("line ")) {  // start of text line
             startLine();
 
-            if (rx2.indexIn(line)==-1)
-            {
+            if (rx2.indexIn(line) == -1) {
                 kDebug() << "Failed to match 'line' line" << line;
                 continue;
             }
 
             int charCount = rx2.cap(2).toInt();
-            if (m_verboseDebug) kDebug() << "Expecting" << charCount << "chars for line" << lineNo;
+            if (m_verboseDebug) {
+                kDebug() << "Expecting" << charCount << "chars for line" << lineNo;
+            }
 
             QString word;
             QRect wordRect;
 
-            for (int c = 0; c<charCount && !stream.atEnd(); ++c)
-            {						// read one line per character
+            for (int c = 0; c < charCount && !stream.atEnd(); ++c) {
+                // read one line per character
                 QString charLine = stream.readLine();
                 int semiPos = charLine.indexOf(';');
-                if (semiPos==-1)
-                {
+                if (semiPos == -1) {
                     kDebug() << "No ';' in 'char' line" << charLine;
                     continue;
                 }
@@ -410,40 +414,36 @@ QString OcrOcradEngine::readORF(const QString &fileName)
                 // rectStr contains the rectangle of the character
                 QString rectStr = charLine.left(semiPos);
                 // resultStr contains the OCRed result character(s)
-                QString resultStr = charLine.mid(semiPos+1);
+                QString resultStr = charLine.mid(semiPos + 1);
 
                 QChar detectedChar = UndetectedChar;
 
                 // find how many alternatives, matching " 1, 'r'0"
-                if (rx3.indexIn(resultStr)==-1)
-                {
+                if (rx3.indexIn(resultStr) == -1) {
                     kDebug() << "Failed to match" << resultStr << "in 'char' line" << charLine;
                     continue;
                 }
 
                 int altCount = rx3.cap(1).toInt();
-                if (altCount==0)			// no alternatives,
-                {					// undecipherable character
-                    if (m_verboseDebug) kDebug() << "Undecipherable character in 'char' line" << charLine;
-                }
-                else
-                {
+                if (altCount == 0) {        // no alternatives,
+                    // undecipherable character
+                    if (m_verboseDebug) {
+                        kDebug() << "Undecipherable character in 'char' line" << charLine;
+                    }
+                } else {
                     int h = resultStr.indexOf(',');
-                    if (h==-1)
-                    {
+                    if (h == -1) {
                         kDebug() << "No ',' in" << resultStr << "in 'char' line" << charLine;
                         continue;
                     }
-                    resultStr = resultStr.remove(0, h+1).trimmed();
+                    resultStr = resultStr.remove(0, h + 1).trimmed();
 
                     // TODO: this only uses the first alternative
                     detectedChar = resultStr.at(1);
 
                     // Analyse the result rectangle
-                    if (detectedChar!=' ')
-                    {
-                        if (rx4.indexIn(rectStr)==-1)
-                        {
+                    if (detectedChar != ' ') {
+                        if (rx4.indexIn(rectStr) == -1) {
                             kDebug() << "Failed to match" << rectStr << "in 'char' line" << charLine;
                             continue;
                         }
@@ -454,10 +454,8 @@ QString OcrOcradEngine::readORF(const QString &fileName)
                     }
                 }
 
-                if (detectedChar==' ')			// space terminates the word
-                {
-                    if (ocradVersion<10)		// offset is relative to block
-                    {
+                if (detectedChar == ' ') {      // space terminates the word
+                    if (ocradVersion < 10) {    // offset is relative to block
                         wordRect.translate(blockRect.x(), blockRect.y());
                     }
 
@@ -465,17 +463,16 @@ QString OcrOcradEngine::readORF(const QString &fileName)
                     wd.setProperty(OcrWordData::Rectangle, wordRect);
                     addWord(word, wd);
 
-                    word = QString::null;		// reset for next time
+                    word = QString::null;       // reset for next time
                     wordRect = QRect();
+                } else {
+                    word.append(detectedChar);    // append char to word
                 }
-                else word.append(detectedChar);		// append char to word
-            }						// end of text line loop
+            }                       // end of text line loop
             ++lineNo;
 
-            if (!word.isEmpty())			// last word in line
-            {
-                if (ocradVersion<10)			// offset is relative to block
-                {
+            if (!word.isEmpty()) {          // last word in line
+                if (ocradVersion < 10) {        // offset is relative to block
                     wordRect.translate(blockRect.x(), blockRect.y());
                 }
 
@@ -483,18 +480,19 @@ QString OcrOcradEngine::readORF(const QString &fileName)
                 wd.setProperty(OcrWordData::Rectangle, wordRect);
                 addWord(word, wd);
 
-                word = QString::null;			// reset for next time
+                word = QString::null;           // reset for next time
                 wordRect = QRect();
             }
 
             finishLine();
+        } else {
+            kDebug() << "Unknown line format" << line;
         }
-        else kDebug() << "Unknown line format" << line;
     }
 
-    file.close();					// finished with ORF file
+    file.close();                   // finished with ORF file
     finishResultDocument();
     kDebug() << "Finished analysing ORF";
 
-    return (QString::null);				// no error detected
+    return (QString::null);             // no error detected
 }

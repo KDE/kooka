@@ -1,5 +1,5 @@
 /* This file is part of the KDE Project
-   Copyright (C) 2000 Jonathan Marten <jjm@keelhaul.me.uk>  
+   Copyright (C) 2000 Jonathan Marten <jjm@keelhaul.me.uk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -18,7 +18,6 @@
 */
 
 #include "newscanparams.h"
-#include "newscanparams.moc"
 
 #include <qlabel.h>
 #include <qlineedit.h>
@@ -28,8 +27,6 @@
 #include <kdebug.h>
 #include <kvbox.h>
 
-
-
 NewScanParams::NewScanParams(QWidget *parent,
                              const QString &name, const QString &desc, bool renaming)
     : KDialog(parent)
@@ -37,7 +34,7 @@ NewScanParams::NewScanParams(QWidget *parent,
     setObjectName("NewScanParams");
 
     setModal(true);
-    setButtons(KDialog::Ok|KDialog::Cancel);
+    setButtons(KDialog::Ok | KDialog::Cancel);
     showButtonSeparator(true);
 
     KVBox *vb = new KVBox(this);
@@ -45,32 +42,28 @@ NewScanParams::NewScanParams(QWidget *parent,
     vb->setSpacing(KDialog::spacingHint());
     setMainWidget(vb);
 
-    if (renaming)
-    {
+    if (renaming) {
         setCaption(i18n("Edit Scan Parameters"));
-        new QLabel(i18n("Change the name and/or description of the scan parameter set."),vb);
-    }
-    else
-    {
+        new QLabel(i18n("Change the name and/or description of the scan parameter set."), vb);
+    } else {
         setCaption(i18n("Save Scan Parameters"));
-        new QLabel(i18n("Enter a name and description for the new scan parameter set."),vb);
+        new QLabel(i18n("Enter a name and description for the new scan parameter set."), vb);
     }
-    new QLabel("",vb);
+    new QLabel("", vb);
 
-    QLabel *l = new QLabel(i18n("Set name:"),vb);
-    mNameEdit = new QLineEdit(name,vb);
-    connect(mNameEdit,SIGNAL(textChanged(const QString &)),SLOT(slotTextChanged()));
+    QLabel *l = new QLabel(i18n("Set name:"), vb);
+    mNameEdit = new QLineEdit(name, vb);
+    connect(mNameEdit, SIGNAL(textChanged(const QString &)), SLOT(slotTextChanged()));
     l->setBuddy(mNameEdit);
 
-    l = new QLabel(i18n("Description:"),vb);
-    mDescEdit = new QLineEdit(desc,vb);
-    connect(mDescEdit,SIGNAL(textChanged(const QString &)),SLOT(slotTextChanged()));
+    l = new QLabel(i18n("Description:"), vb);
+    mDescEdit = new QLineEdit(desc, vb);
+    connect(mDescEdit, SIGNAL(textChanged(const QString &)), SLOT(slotTextChanged()));
     l->setBuddy(mDescEdit);
 
     slotTextChanged();
     mNameEdit->setFocus();
 }
-
 
 void NewScanParams::slotTextChanged()
 {
@@ -79,12 +72,10 @@ void NewScanParams::slotTextChanged()
     enableButtonOk(ok);
 }
 
-
 QString NewScanParams::getName() const
 {
     return (mNameEdit->text());
 }
-
 
 QString NewScanParams::getDescription() const
 {

@@ -38,7 +38,6 @@
 class KFileItem;
 class KUrl;
 
-
 /**
   * @author Klaas Freitag
   *
@@ -62,7 +61,7 @@ public:
     KookaImage(const QImage &img);
     ~KookaImage();
 
-    KookaImage& operator=(const KookaImage &src);
+    KookaImage &operator=(const KookaImage &src);
 
     /**
      * load an image from a KURL. This method reads the entire file and sets
@@ -107,14 +106,23 @@ public:
      * set the url of the kooka image. Note that loadFromUrl sets this
      * url automatically.
      */
-    void setUrl(const KUrl &url) { m_url = url; }
-    KUrl url() const { return m_url; }
+    void setUrl(const KUrl &url)
+    {
+        m_url = url;
+    }
+    KUrl url() const
+    {
+        return m_url;
+    }
 
     /**
      * checks if the image is file bound ie. was loaded from file. If this
      * method returns false, fileMetaInfo and FileItem are undefined.
      */
-    bool isFileBound() const { return m_fileBound; }
+    bool isFileBound() const
+    {
+        return m_fileBound;
+    }
 
     /**
      * Create tiles on the given image. That is just cut the image in parts
@@ -135,15 +143,17 @@ public:
     /**
      * retrieve the sub number of this image.
      */
-    int subNumber() const { return m_subNo; }
-
+    int subNumber() const
+    {
+        return m_subNo;
+    }
 
 private:
     void init();
 
 private:
-    int 		m_subImages;
-    bool                loadTiffDir( const QString&, int );
+    int         m_subImages;
+    bool                loadTiffDir(const QString &, int);
 
     /* if subNo is 0, the image is the one and only. If it is larger than 0, the
      * parent contains the filename */
@@ -160,5 +170,4 @@ private:
     int                 m_tileCols;  /* number of tile columns  */
 };
 
-
-#endif							// KOOKAIMAGE_H
+#endif                          // KOOKAIMAGE_H

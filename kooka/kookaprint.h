@@ -45,21 +45,19 @@ class KLineEdit;
 
 class KookaImage;
 
-
 // TODO: this seems to be unused
 #ifndef KDE4
 class ImageSettings : public KPrintDialogPage
 {
 public:
-    void setOptions( const QMap<QString, QString>& opts );
-    void getOptions( QMap<QString, QString>& opts, bool include_def = false );
-    bool isValid( QString& msg );
+    void setOptions(const QMap<QString, QString> &opts);
+    void getOptions(QMap<QString, QString> &opts, bool include_def = false);
+    bool isValid(QString &msg);
 
 private:
     KLineEdit *m_width, *m_height;
 };
 #endif
-
 
 class KookaPrint : public QObject
 {
@@ -71,10 +69,10 @@ public:
     /**
      * The top left edge of the required print position
      */
-    virtual QPoint printPosTopLeft(const QSize&) const;
-    virtual QPoint printPosTopRight(const QSize&) const;
-    virtual QPoint printPosBottomLeft(const QSize&) const;
-    virtual QPoint printPosBottomRight(const QSize&) const;
+    virtual QPoint printPosTopLeft(const QSize &) const;
+    virtual QPoint printPosTopRight(const QSize &) const;
+    virtual QPoint printPosBottomLeft(const QSize &) const;
+    virtual QPoint printPosBottomRight(const QSize &) const;
 
     virtual int extraMarginPix() const;
 
@@ -82,7 +80,7 @@ public:
      * The maximum pixel size of the image (or imagepart) on
      * the current page
      */
-    virtual QSize maxPageSize( int extraShrinkPercent = 0 ) const;
+    virtual QSize maxPageSize(int extraShrinkPercent = 0) const;
 
 // TODO: do these need to be slots?
 public slots:
@@ -92,15 +90,15 @@ public slots:
 protected:
     typedef enum { SW, NW, NO, SO } MarkerDirection;
 
-    virtual void drawMarkerAroundPoint( const QPoint& );
-    virtual void drawCutSign( const QPoint&, int, MarkerDirection );
-    virtual void drawCornerMarker( const QSize&, int, int, int, int );
+    virtual void drawMarkerAroundPoint(const QPoint &);
+    virtual void drawCutSign(const QPoint &, int, MarkerDirection);
+    virtual void drawCornerMarker(const QSize &, int, int, int, int);
 
 private:
 
-    KPrinter 	*m_printer;
+    KPrinter    *m_printer;
     QPainter    *m_painter;
     int          m_extraMarginPercent;
 };
 
-#endif							// KOOKAPRINT_H
+#endif                          // KOOKAPRINT_H

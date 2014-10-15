@@ -33,14 +33,12 @@ class KHBox;
 class ScanGallery;
 class GalleryHistory;
 
-
 class KookaGallery : public QWidget
 {
     Q_OBJECT
 
 public:
-    enum Layout
-    {
+    enum Layout {
         NoRecent,
         RecentAtTop,
         RecentAtBottom
@@ -50,8 +48,14 @@ public:
 
     void readSettings();
 
-    ScanGallery *galleryTree() const		{ return (m_galleryTree); }
-    GalleryHistory *galleryRecent() const	{ return (m_galleryRecent); }
+    ScanGallery *galleryTree() const
+    {
+        return (m_galleryTree);
+    }
+    GalleryHistory *galleryRecent() const
+    {
+        return (m_galleryRecent);
+    }
 
 private:
     void setLayout(KookaGallery::Layout option);
@@ -63,4 +67,4 @@ private:
     GalleryHistory *m_galleryRecent;
 };
 
-#endif							// KOOKAGALLERY_H
+#endif                          // KOOKAGALLERY_H

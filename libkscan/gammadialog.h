@@ -1,5 +1,5 @@
 /* This file is part of the KDE Project
-   Copyright (C) 2000 Klaas Freitag <freitag@suse.de>  
+   Copyright (C) 2000 Klaas Freitag <freitag@suse.de>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -24,11 +24,9 @@
 
 #include <kdialog.h>
 
-
 class KScanSlider;
 class KGammaTable;
 class GammaWidget;
-
 
 /**
  * @short A dialogue to allow editing of a gamma table.
@@ -67,7 +65,10 @@ public:
      *
      * @return The gamma table
      **/
-    const KGammaTable *gammaTable() const	{ return (mTable); }
+    const KGammaTable *gammaTable() const
+    {
+        return (mTable);
+    }
 
 protected slots:
     /**
@@ -88,7 +89,7 @@ signals:
      * @param table The new gamma table
      **/
     void gammaToApply(const KGammaTable *table);
-   
+
 private:
     KGammaTable *mTable;
     GammaWidget *mGtDisplay;

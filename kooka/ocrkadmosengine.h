@@ -32,7 +32,6 @@
 #include "kadmosocr.h"
 #endif
 
-
 class OcrBaseDialog;
 class KTempFile;
 
@@ -46,7 +45,10 @@ public:
 
     OcrBaseDialog *createOCRDialog(QWidget *parent);
 
-    OcrEngine::EngineType engineType() const { return (OcrEngine::EngineKadmos); }
+    OcrEngine::EngineType engineType() const
+    {
+        return (OcrEngine::EngineKadmos);
+    }
     static QString engineDesc();
 
 protected:
@@ -65,4 +67,4 @@ private:
 #endif
 };
 
-#endif							// OCRKADMOSENGINE_H
+#endif                          // OCRKADMOSENGINE_H

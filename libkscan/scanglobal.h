@@ -1,4 +1,4 @@
-/* This file is part of the KDE Project			-*- mode:c++; -*-
+/* This file is part of the KDE Project         -*- mode:c++; -*-
    Copyright (C) 1999 Klaas Freitag <freitag@suse.de>
    Copyright (C) 2009 Jonathan Marten <jjm@keelhaul.me.uk>
 
@@ -25,21 +25,18 @@
 
 #include <qstring.h>
 
-
 // Configuration file definitions
 
-#define DEFAULT_OPTIONSET	"saveSet"
+#define DEFAULT_OPTIONSET   "saveSet"
 
-#define STARTUP_SCANDEV		"ScanDevice"
-#define STARTUP_SKIP_ASK	"SkipStartupAsk"
-#define STARTUP_ONLY_LOCAL	"QueryLocalOnly"
-
+#define STARTUP_SCANDEV     "ScanDevice"
+#define STARTUP_SKIP_ASK    "SkipStartupAsk"
+#define STARTUP_ONLY_LOCAL  "QueryLocalOnly"
 
 class KConfig;
 class KConfigGroup;
 
 class KScanDevice;
-
 
 class KSCAN_EXPORT ScanGlobal
 {
@@ -92,5 +89,4 @@ private:
     ScanGlobalPrivate *d;
 };
 
-
-#endif							// SCANGLOBAL_H
+#endif                          // SCANGLOBAL_H

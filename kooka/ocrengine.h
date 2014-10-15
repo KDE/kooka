@@ -49,40 +49,34 @@ class KookaImage;
 class ImageCanvas;
 class OcrBaseDialog;
 
-
 // Using a QTextDocument for the OCR results, with the source image rectangle
 // and other OCR information held as text properties.
 
 class OcrWordData : public QTextCharFormat
 {
 public:
-    enum DataType
-    {
-        Rectangle = QTextFormat::UserProperty,		// QRect
-        Alternatives,					// QStringList
-        KNode						// int
+    enum DataType {
+        Rectangle = QTextFormat::UserProperty,      // QRect
+        Alternatives,                   // QStringList
+        KNode                       // int
     };
 
-    OcrWordData() : QTextCharFormat()	{}
+    OcrWordData() : QTextCharFormat()   {}
 };
-
-
 
 class OcrEngine : public QObject
 {
     Q_OBJECT
 
 public:
-    enum EngineError					// OCR Engine setup errors
-    {
+    enum EngineError {                  // OCR Engine setup errors
         ENG_ERROR,
         ENG_OK,
         ENG_DATA_MISSING,
         ENG_BAD_SETUP
     };
 
-    enum EngineType					// OCR Engine configured type
-    {
+    enum EngineType {               // OCR Engine configured type
         EngineNone,
         EngineGocr,
         EngineOcrad,
@@ -105,7 +99,7 @@ public:
     void setTextDocument(QTextDocument *doc);
 
     static const QString engineName(OcrEngine::EngineType eng);
-    static OcrEngine *createEngine(QWidget *parent,bool *gotoPrefs = NULL);
+    static OcrEngine *createEngine(QWidget *parent, bool *gotoPrefs = NULL);
     bool engineValid() const;
 
 public slots:
@@ -149,7 +143,6 @@ protected:
 
     virtual OcrEngine::EngineType engineType() const = 0;
 
-
     QTextDocument *startResultDocument();
     void finishResultDocument();
 
@@ -162,7 +155,7 @@ protected:
     QString m_ocrResultFile;
     QString m_ocrResultText;
     QWidget *m_parent;
-							// one block contains all lines of the page
+    // one block contains all lines of the page
 protected slots:
     void slotClose();
     void slotStopOCR();
@@ -198,5 +191,4 @@ private:
     int m_wordCount;
 };
 
-
-#endif							// OCRENGINE_H
+#endif                          // OCRENGINE_H

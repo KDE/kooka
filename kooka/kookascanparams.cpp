@@ -21,12 +21,10 @@
  ***************************************************************************/
 
 #include "kookascanparams.h"
-#include "kookascanparams.moc"
 
 #include <qlabel.h>
 
 #include <klocale.h>
-
 
 KookaScanParams::KookaScanParams(QWidget *parent)
     : ScanParams(parent)
@@ -34,11 +32,9 @@ KookaScanParams::KookaScanParams(QWidget *parent)
     mNoScannerMessage = NULL;
 }
 
-
 QWidget *KookaScanParams::messageScannerNotSelected()
 {
-    if (mNoScannerMessage==NULL)
-    {
+    if (mNoScannerMessage == NULL) {
         mNoScannerMessage = new QLabel(
             i18n("<qt>"
                  "<b>Gallery Mode - No scanner selected</b>"
@@ -58,9 +54,11 @@ QWidget *KookaScanParams::messageScannerNotSelected()
     return (mNoScannerMessage);
 }
 
-
 void KookaScanParams::slotLinkActivated(const QString &link)
 {
-    if (link=="a:1") emit actionSelectScanner();
-    else if (link=="a:2") emit actionAddScanner();
+    if (link == "a:1") {
+        emit actionSelectScanner();
+    } else if (link == "a:2") {
+        emit actionAddScanner();
+    }
 }

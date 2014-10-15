@@ -22,26 +22,29 @@
 
 #include <qimage.h>
 
-
 ImageMetaInfo::ImageMetaInfo()
     : m_xRes(-1), m_yRes(-1),
       m_type(ImageMetaInfo::Unknown)
 {
 }
 
-
 ImageMetaInfo::ImageType ImageMetaInfo::findImageType(const QImage *image)
 {
-    if (image==NULL || image->isNull()) return (ImageMetaInfo::Unknown);
+    if (image == NULL || image->isNull()) {
+        return (ImageMetaInfo::Unknown);
+    }
 
-    if (image->depth()==1 || image->numColors()==2) return (ImageMetaInfo::BlackWhite);
-    else
-    {
-        if (image->depth()>8) return (ImageMetaInfo::HighColour);
-        else
-        {
-            if (image->allGray()) return (ImageMetaInfo::Greyscale);
-            else return (ImageMetaInfo::LowColour);
+    if (image->depth() == 1 || image->numColors() == 2) {
+        return (ImageMetaInfo::BlackWhite);
+    } else {
+        if (image->depth() > 8) {
+            return (ImageMetaInfo::HighColour);
+        } else {
+            if (image->allGray()) {
+                return (ImageMetaInfo::Greyscale);
+            } else {
+                return (ImageMetaInfo::LowColour);
+            }
         }
     }
 }

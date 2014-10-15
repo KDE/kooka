@@ -26,15 +26,20 @@
 
 class QDebug;
 
-
 class ImageFormat
 {
 
 public:
     ImageFormat(const QByteArray &format);
 
-    bool isValid() const { return (!mFormat.isEmpty()); }
-    QByteArray name() const { return (mFormat); }
+    bool isValid() const
+    {
+        return (!mFormat.isEmpty());
+    }
+    QByteArray name() const
+    {
+        return (mFormat);
+    }
 
     KMimeType::Ptr mime() const;
     QString extension() const;
@@ -55,5 +60,4 @@ private:
     QByteArray mFormat;
 };
 
-
-#endif							// IMAGEFORMAT_H
+#endif                          // IMAGEFORMAT_H

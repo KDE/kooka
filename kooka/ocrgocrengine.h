@@ -31,9 +31,7 @@
 
 #include "ocrengine.h"
 
-
 class KTempDir;
-
 
 class OcrGocrEngine : public OcrEngine
 {
@@ -45,7 +43,10 @@ public:
 
     OcrBaseDialog *createOCRDialog(QWidget *parent);
 
-    OcrEngine::EngineType engineType() const { return (OcrEngine::EngineGocr); }
+    OcrEngine::EngineType engineType() const
+    {
+        return (OcrEngine::EngineGocr);
+    }
     static QString engineDesc();
 
 protected:
@@ -65,4 +66,4 @@ private:
     QString m_stderrFile;
 };
 
-#endif							// OCRGOCRENGINE_H
+#endif                          // OCRGOCRENGINE_H

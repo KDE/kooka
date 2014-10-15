@@ -25,7 +25,6 @@
 
 #include <qwidget.h>
 
-
 class QHBoxLayout;
 class QToolButton;
 class QSpinBox;
@@ -38,7 +37,6 @@ class QGroupBox;
 class QPushButton;
 
 class KUrlRequester;
-
 
 /**
  * An abstract base class representing a GUI for a single scan
@@ -58,8 +56,7 @@ public:
      * A @c Text control maintains a string value, a @c Number control a
      * numeric value.  @c Group and @c Button controls do not have values.
      */
-    enum ControlType
-    {
+    enum ControlType {
         Text,
         Number,
         Group,
@@ -159,7 +156,6 @@ signals:
     void returnPressed();
 };
 
-
 /**
  * A slider combined with a spin box, providing the possibility of either
  * selecting a value with the slider or entering a precise value in the
@@ -185,15 +181,21 @@ public:
      * @param stdValue the value to which the 'reset' button resets the setting
      */
     KScanSlider(QWidget *parent, const QString &text,
-		double min, double max,
+                double min, double max,
                 bool haveStdButt = false, int stdValue = 0);
 
-    KScanControl::ControlType type() const { return (KScanControl::Number); }
+    KScanControl::ControlType type() const
+    {
+        return (KScanControl::Number);
+    }
 
     int value() const;
     void setValue(int val);
 
-    QSpinBox *spinBox() const { return (mSpinbox); }
+    QSpinBox *spinBox() const
+    {
+        return (mSpinbox);
+    }
 
 protected slots:
     void slotSliderSpinboxChange(int val);
@@ -207,7 +209,6 @@ private:
     int mValue;
     int mStdValue;
 };
-
 
 /**
  * A free text entry field.
@@ -228,15 +229,17 @@ public:
      */
     KScanStringEntry(QWidget *parent, const QString &text);
 
-    KScanControl::ControlType type() const { return (KScanControl::Text); }
+    KScanControl::ControlType type() const
+    {
+        return (KScanControl::Text);
+    }
 
     QString text() const;
-    void setText(const QString& text);
+    void setText(const QString &text);
 
 private:
     QLineEdit *mEntry;
 };
-
 
 /**
  * A numeric entry field.
@@ -257,7 +260,10 @@ public:
      */
     KScanNumberEntry(QWidget *parent, const QString &text);
 
-    KScanControl::ControlType type() const { return (KScanControl::Number); }
+    KScanControl::ControlType type() const
+    {
+        return (KScanControl::Number);
+    }
 
     int value() const;
     void setValue(int i);
@@ -268,7 +274,6 @@ protected slots:
 private:
     QLineEdit *mEntry;
 };
-
 
 /**
  * A check box for an on/off option.
@@ -289,7 +294,10 @@ public:
      */
     KScanCheckbox(QWidget *parent, const QString &text);
 
-    KScanControl::ControlType type() const { return (KScanControl::Number); }
+    KScanControl::ControlType type() const
+    {
+        return (KScanControl::Number);
+    }
 
     int value() const;
     void setValue(int i);
@@ -299,7 +307,6 @@ public:
 private:
     QCheckBox *mCheckbox;
 };
-
 
 /**
  * A combo box for a list of options.
@@ -321,7 +328,10 @@ public:
      *     */
     KScanCombo(QWidget *parent, const QString &text, const QList<QByteArray> &list);
 
-    KScanControl::ControlType type() const { return (KScanControl::Text); }
+    KScanControl::ControlType type() const
+    {
+        return (KScanControl::Text);
+    }
 
     QString text() const;
     void setText(const QString &text);
@@ -358,7 +368,6 @@ private:
     QComboBox *mCombo;
 };
 
-
 /**
  * A standard URL requester for a file name.
  *
@@ -378,7 +387,10 @@ public:
      */
     KScanFileRequester(QWidget *parent, const QString &text);
 
-    KScanControl::ControlType type() const { return (KScanControl::Text); }
+    KScanControl::ControlType type() const
+    {
+        return (KScanControl::Text);
+    }
 
     QString text() const;
     void setText(const QString &text);
@@ -386,7 +398,6 @@ public:
 private:
     KUrlRequester *mEntry;
 };
-
 
 /**
  * A line separator between option groups.
@@ -407,14 +418,16 @@ public:
      */
     KScanGroup(QWidget *parent, const QString &text);
 
-    KScanControl::ControlType type() const { return (KScanControl::Group); }
+    KScanControl::ControlType type() const
+    {
+        return (KScanControl::Group);
+    }
 
     QString label() const;
 
 private:
     QGroupBox *mGroup;
 };
-
 
 /**
  * A button to perform an action.
@@ -435,7 +448,10 @@ public:
      */
     KScanPushButton(QWidget *parent, const QString &text);
 
-    KScanControl::ControlType type() const { return (KScanControl::Button); }
+    KScanControl::ControlType type() const
+    {
+        return (KScanControl::Button);
+    }
 
     QString label() const;
 
@@ -443,5 +459,4 @@ private:
     QPushButton *mButton;
 };
 
-
-#endif							// KSCANCONTROLS_H
+#endif                          // KSCANCONTROLS_H

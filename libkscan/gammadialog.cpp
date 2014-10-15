@@ -18,30 +18,28 @@
 */
 
 #include "gammadialog.h"
-#include "gammadialog.moc"
 
 #include <qlabel.h>
 #include <qgridlayout.h>
 
 #include <klocale.h>
-#include <kdebug.h>
+#include <QDebug>
 #include <kgammatable.h>
 
 #include "kscancontrols.h"
 #include "gammawidget.h"
-
 
 GammaDialog::GammaDialog(const KGammaTable *table, QWidget *parent)
     : KDialog(parent)
 {
     setObjectName("GammaDialog");
 
-    setButtons(KDialog::Ok|KDialog::Cancel|KDialog::Apply|KDialog::Reset);
+    setButtons(KDialog::Ok | KDialog::Cancel | KDialog::Apply | KDialog::Reset);
     setCaption(i18n("Edit Gamma Table"));
     setModal(true);
     showButtonSeparator(true);
 
-    mTable = new KGammaTable(*table);			// take our own copy
+    mTable = new KGammaTable(*table);           // take our own copy
 
     QWidget *page = new QWidget(this);
     setMainWidget(page);
@@ -95,17 +93,15 @@ GammaDialog::GammaDialog(const KGammaTable *table, QWidget *parent)
     connect(this, SIGNAL(resetClicked()), SLOT(slotReset()));
 }
 
-
 void GammaDialog::slotApply()
 {
-   emit gammaToApply(gammaTable());
+    emit gammaToApply(gammaTable());
 }
-
 
 void GammaDialog::slotReset()
 {
-    KGammaTable defaultGamma;				// construct with default values
-    int b = defaultGamma.getBrightness();		// retrieve those values
+    KGammaTable defaultGamma;               // construct with default values
+    int b = defaultGamma.getBrightness();       // retrieve those values
     int c = defaultGamma.getContrast();
     int g = defaultGamma.getGamma();
 

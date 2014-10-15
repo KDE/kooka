@@ -1,5 +1,5 @@
 /* This file is part of the KDE Project
-   Copyright (C) 2002 Klaas Freitag <freitag@suse.de>  
+   Copyright (C) 2002 Klaas Freitag <freitag@suse.de>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -24,7 +24,6 @@
 
 #include <qobject.h>
 #include <qvector.h>
-
 
 /**
  * @short A gamma table.
@@ -119,21 +118,30 @@ public:
      *
      * @return The gamma value
      **/
-    int getGamma() const		{ return (mGamma);		}
+    int getGamma() const
+    {
+        return (mGamma);
+    }
 
     /**
      * Get the current brightness value.
      *
      * @return The brightness value
      **/
-    int getBrightness() const		{ return (mBrightness);		}
+    int getBrightness() const
+    {
+        return (mBrightness);
+    }
 
     /**
      * Get the current contrast value.
      *
      * @return The contrast value
      **/
-    int getContrast() const		{ return (mContrast);		}
+    int getContrast() const
+    {
+        return (mContrast);
+    }
 
     /**
      * Get the currently allocated table size.
@@ -146,7 +154,10 @@ public:
      *
      * @see getTable
      **/
-    int tableSize() const		{ return (mData.size());	}
+    int tableSize() const
+    {
+        return (mData.size());
+    }
 
     /**
      * Calculate the gamma table values.
@@ -205,4 +216,4 @@ private:
     QVector<int> mData;
 };
 
-#endif							// KGAMMATABLE_H
+#endif                          // KGAMMATABLE_H

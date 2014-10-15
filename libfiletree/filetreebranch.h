@@ -22,7 +22,6 @@
 #ifndef FILETREEBRANCH_H
 #define FILETREEBRANCH_H
 
-
 #include <qicon.h>
 #include <qhash.h>
 
@@ -33,10 +32,9 @@
 #include <kio/job.h>
 
 #include "filetreeviewitem.h"
-
+#include <KUrl>
 class KUrl;
 class FileTreeView;
-
 
 /**
  * This is the branch class of the FileTreeView, which represents one
@@ -157,11 +155,11 @@ protected:
      * allocates a FileTreeViewItem for a new item in the branch.
      */
     virtual FileTreeViewItem *createTreeViewItem(FileTreeViewItem *parent,
-                                                 const KFileItem &fileItem);
+            const KFileItem &fileItem);
 
 signals:
     /**
-     * indicates start/finish lister activity 
+     * indicates start/finish lister activity
      */
     void populateStarted(FileTreeViewItem *item);
     void populateFinished(FileTreeViewItem *item);
@@ -180,7 +178,7 @@ signals:
     void directoryChildCount(FileTreeViewItem *item, int count);
 
 private slots:
-    void slotRefreshItems(const QList<QPair<KFileItem,KFileItem> > &items);
+    void slotRefreshItems(const QList<QPair<KFileItem, KFileItem> > &items);
     void slotListerCompleted(const KUrl &url);
     void slotListerCanceled(const KUrl &url);
     void slotListerStarted(const KUrl &url);
@@ -218,11 +216,9 @@ private:
     QHash<QString, FileTreeViewItem *> m_TVImap;
 };
 
-
 /**
  * List of KFileTreeBranches
  */
 typedef QList<FileTreeBranch *> FileTreeBranchList;
 
-
-#endif							// FILETREEBRANCH_H
+#endif                          // FILETREEBRANCH_H

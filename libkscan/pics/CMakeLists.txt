@@ -19,5 +19,5 @@ set(libkscan_PICS
   palette-lineart.png
 )
 
-#kde4_install_icons(${ICON_INSTALL_DIR})
+#ecm_install_icons(${ICON_INSTALL_DIR})
 install(FILES ${libkscan_PICS} DESTINATION ${DATA_INSTALL_DIR}/libkscan/pics)

@@ -1,5 +1,5 @@
-/* This file is part of the KDE Project				-*- mode:c++ -*-
-   Copyright (C) 2008 Jonathan Marten <jjm@keelhaul.me.uk>  
+/* This file is part of the KDE Project             -*- mode:c++ -*-
+   Copyright (C) 2008 Jonathan Marten <jjm@keelhaul.me.uk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -29,7 +29,6 @@ class QListWidget;
 class QListWidgetItem;
 
 class KScanDevice;
-
 
 /**
  *  A dialogue to allow the user to enter a name and description for
@@ -65,5 +64,4 @@ private:
     KScanDevice *sane;
 };
 
-
-#endif							// SCANPARAMSDIALOG_H
+#endif                          // SCANPARAMSDIALOG_H

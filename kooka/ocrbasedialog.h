@@ -50,7 +50,6 @@ class KFileItem;
 
 class KookaImage;
 
-
 class OcrBaseDialog : public KPageDialog
 {
     Q_OBJECT
@@ -79,8 +78,14 @@ public:
 
     virtual void introduceImage(const KookaImage *img);
 
-    bool keepTempFiles() const		{ return (m_retainFiles); }
-    bool verboseDebug() const		{ return (m_verboseDebug); }
+    bool keepTempFiles() const
+    {
+        return (m_retainFiles);
+    }
+    bool verboseDebug() const
+    {
+        return (m_verboseDebug);
+    }
 
     void enableGUI(bool running);
 
@@ -101,9 +106,12 @@ protected:
      */
     virtual void enableFields(bool enable) = 0;
 
-    QProgressBar *progressBar() const { return (m_progress); }
+    QProgressBar *progressBar() const
+    {
+        return (m_progress);
+    }
 
-    void ocrShowInfo(const QString &binary,const QString &version = QString::null);
+    void ocrShowInfo(const QString &binary, const QString &version = QString::null);
     void ocrShowVersion(const QString &version);
 
     QWidget *addExtraSetupWidget(QWidget *wid = NULL, bool stretchBefore = false);
@@ -148,7 +156,7 @@ private:
     QGroupBox *m_gbInteractiveCheck;
 
     QSize m_previewSize;
-    bool m_wantDebugCfg;				// show the debug options?
+    bool m_wantDebugCfg;                // show the debug options?
 
     QCheckBox *m_cbRetainFiles;
     QCheckBox *m_cbVerboseDebug;
@@ -159,4 +167,4 @@ private:
     QProgressBar *m_progress;
 };
 
-#endif							// OCRBASEDIALOG_H
+#endif                          // OCRBASEDIALOG_H

@@ -25,7 +25,6 @@
  ***************************************************************************/
 
 #include "ocrresedit.h"
-#include "ocrresedit.moc"
 
 #ifdef HAVE_ERRNO_H
 #include <errno.h>
@@ -45,7 +44,6 @@
 
 #include "ocrengine.h"
 
-
 //  The OCR results are stored in our text document.  Each OCR'ed word has
 //  properties stored in its QTextCharFormat recording the word rectangle
 //  (if the OCR engine provides this information) and possibly other details
@@ -60,14 +58,13 @@
 //  the result image will be highlighted no matter where in the text the
 //  cursor or selection is.  This is bug 229150, hopefully fixed in KDE SC 4.5.
 
-
 OcrResEdit::OcrResEdit(QWidget *parent)
     : KTextEdit(parent)
 {
     setObjectName("OcrResEdit");
 
-    setTabChangesFocus(true);				// will never OCR these
-    slotSetReadOnly(true);				// initially, anyway
+    setTabChangesFocus(true);               // will never OCR these
+    slotSetReadOnly(true);              // initially, anyway
 
     connect(this, SIGNAL(cursorPositionChanged()), SLOT(slotUpdateHighlight()));
 
@@ -77,33 +74,35 @@ OcrResEdit::OcrResEdit(QWidget *parent)
 // doesn't paint properly).
 }
 
-
 static void moveForward(QTextCursor &curs, bool once = true)
 {
-    if (once) curs.movePosition(QTextCursor::NextCharacter);
-    while (curs.atBlockStart()) curs.movePosition(QTextCursor::NextCharacter);
+    if (once) {
+        curs.movePosition(QTextCursor::NextCharacter);
+    }
+    while (curs.atBlockStart()) {
+        curs.movePosition(QTextCursor::NextCharacter);
+    }
 }
-
 
 void OcrResEdit::slotSelectWord(const QPoint &pos)
 {
-    if (document()->isEmpty()) return;			// nothing to search
+    if (document()->isEmpty()) {
+        return;    // nothing to search
+    }
 
     kDebug() << pos;
 
-    QTextCursor curs(document());			// start of document
+    QTextCursor curs(document());           // start of document
     QRect wordRect;
 
     // First find the start of the word corresponding to the clicked point
 
     moveForward(curs, false);
-    while (!curs.atEnd())
-    {
+    while (!curs.atEnd()) {
         QTextCharFormat fmt = curs.charFormat();
         QRect rect = fmt.property(OcrWordData::Rectangle).toRect();
         //kDebug() << "at" << curs.position() << "rect" << rect;
-        if (rect.isValid() && rect.contains(pos, true))
-        {
+        if (rect.isValid() && rect.contains(pos, true)) {
             wordRect = rect;
             break;
         }
@@ -112,7 +111,9 @@ void OcrResEdit::slotSelectWord(const QPoint &pos)
 
     kDebug() << "found rect" << wordRect << "at" << curs.position();
 
-    if (!wordRect.isValid()) return;			// no word found
+    if (!wordRect.isValid()) {
+        return;    // no word found
+    }
 
     // Then find the end of the word.  That is an OCR result word, i.e. a
     // span with the same character format, not a text word ended by whitespace.
@@ -121,12 +122,10 @@ void OcrResEdit::slotSelectWord(const QPoint &pos)
     QTextCharFormat ref = wordStart.charFormat();
 
     moveForward(curs);
-    while (!curs.atEnd())
-    {
+    while (!curs.atEnd()) {
         QTextCharFormat fmt = curs.charFormat();
         //kDebug() << "at" << curs.position() << "rect" << fmt.property(OcrWordData::Rectangle).toRect();
-        if (fmt!=ref)
-        {
+        if (fmt != ref) {
             //kDebug() << "mismatch at" << curs.position();
             break;
         }
@@ -137,27 +136,29 @@ void OcrResEdit::slotSelectWord(const QPoint &pos)
     kDebug() << "word start" << wordStart.position() << "end" << curs.position();
     int pos1 = wordStart.position();
     int pos2 = curs.position();
-    if (pos1==pos2) return;				// no word found
+    if (pos1 == pos2) {
+        return;    // no word found
+    }
 
     QTextCursor wc(document());
-    wc.setPosition(wordStart.position()-1, QTextCursor::MoveAnchor);
+    wc.setPosition(wordStart.position() - 1, QTextCursor::MoveAnchor);
     wc.setPosition(curs.position(), QTextCursor::KeepAnchor);
     setTextCursor(wc);
     ensureCursorVisible();
 }
 
-
 void OcrResEdit::slotSaveText()
 {
     QString fileName = KFileDialog::getSaveFileName(KUrl("kfiledialog:///saveOCR"),
-                                                    "text/plain",
-                                                    this,
-                                                    i18n("Save OCR Result Text"));
-    if (fileName.isEmpty()) return;
+                       "text/plain",
+                       this,
+                       i18n("Save OCR Result Text"));
+    if (fileName.isEmpty()) {
+        return;
+    }
 
     QFile file(fileName);
-    if (!file.open(QIODevice::WriteOnly))
-    {
+    if (!file.open(QIODevice::WriteOnly)) {
         QString msg = i18n("<qt>Unable to save the OCR results file<br><filename>%1</filename>", fileName);
 #ifdef HAVE_STRERROR
         msg += i18n("<br>%1", strerror(errno));
@@ -171,17 +172,17 @@ void OcrResEdit::slotSaveText()
     file.close();
 }
 
-
 void OcrResEdit::slotUpdateHighlight()
 {
-    if (isReadOnly()) return;
+    if (isReadOnly()) {
+        return;
+    }
     //kDebug() << "pos" << textCursor().position() << "hassel" << textCursor().hasSelection()
     //         << "start" << textCursor().selectionStart() << "end" << textCursor().selectionEnd();
 
-    QTextCursor curs = textCursor();			// will not move cursor, see
-							// QTextEdit::textCursor() doc
-    if (curs.hasSelection())
-    {
+    QTextCursor curs = textCursor();            // will not move cursor, see
+    // QTextEdit::textCursor() doc
+    if (curs.hasSelection()) {
         //kDebug() << "sel start" << curs.selectionStart() << "end" << curs.selectionEnd();
 
         int send = curs.selectionEnd();
@@ -191,13 +192,11 @@ void OcrResEdit::slotUpdateHighlight()
         //kDebug() << "at" << curs.position() << "format rect" << ref.property(OcrWordData::Rectangle).toRect();
         bool same = true;
 
-        while (curs.position()!=send)
-        {
+        while (curs.position() != send) {
             curs.movePosition(QTextCursor::NextCharacter);
             QTextCharFormat fmt = curs.charFormat();
             //kDebug() << "at" << curs.position() << "format rect" << fmt.property(OcrWordData::Rectangle).toRect();
-            if (fmt!=ref)
-            {
+            if (fmt != ref) {
                 //kDebug() << "mismatch at" << curs.position();
                 same = false;
                 break;
@@ -205,8 +204,7 @@ void OcrResEdit::slotUpdateHighlight()
         }
 
         //kDebug() << "range same format?" << same;
-        if (same)					// valid word selection
-        {
+        if (same) {                 // valid word selection
             QRect r = ref.property(OcrWordData::Rectangle).toRect();
             //kDebug() << "rect" << r;
             emit highlightWord(r);
@@ -214,18 +212,20 @@ void OcrResEdit::slotUpdateHighlight()
         }
     }
 
-    emit highlightWord(QRect());			// no valid word selection,
- 							// clear highlight
+    emit highlightWord(QRect());            // no valid word selection,
+    // clear highlight
     QTextCharFormat fmt = textCursor().charFormat();
     QRect r = fmt.property(OcrWordData::Rectangle).toRect();
-    if (r.isValid()) emit scrollToWord(r);		// scroll to cursor position
+    if (r.isValid()) {
+        emit scrollToWord(r);    // scroll to cursor position
+    }
 }
-
-
 
 // QTextEdit::setReadOnly() is no longer a slot in Qt4!
 void OcrResEdit::slotSetReadOnly(bool isRO)
 {
     setReadOnly(isRO);
-    if (isRO) setCheckSpellingEnabled(false);
+    if (isRO) {
+        setCheckSpellingEnabled(false);
+    }
 }

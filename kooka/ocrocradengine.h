@@ -30,7 +30,6 @@
 
 #include "ocrengine.h"
 
-
 class KProcess;
 
 class OcrOcradEngine : public OcrEngine
@@ -43,7 +42,10 @@ public:
 
     OcrBaseDialog *createOCRDialog(QWidget *parent);
 
-    OcrEngine::EngineType engineType() const { return (OcrEngine::EngineOcrad); }
+    OcrEngine::EngineType engineType() const
+    {
+        return (OcrEngine::EngineOcrad);
+    }
     static QString engineDesc();
 
 protected:
@@ -66,5 +68,4 @@ private:
     bool m_verboseDebug;
 };
 
-
-#endif							// OCROCRADENGINE_H
+#endif                          // OCROCRADENGINE_H

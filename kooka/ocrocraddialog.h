@@ -24,25 +24,22 @@
  *                                                                         *
  ***************************************************************************/
 
-
 #ifndef OCROCRADDIALOG_H
 #define OCROCRADDIALOG_H
 
 #include "ocrbasedialog.h"
 
+#define CFG_GROUP_OCRAD         "ocrad"
 
-#define CFG_GROUP_OCRAD			"ocrad"
-
-#define CFG_OCRAD_LAYOUT_DETECTION	"layoutDetection"
-#define CFG_OCRAD_EXTRA_ARGUMENTS	"extraArguments"
-#define CFG_OCRAD_FORMAT		"format"
-#define CFG_OCRAD_CHARSET		"charset"
-#define CFG_OCRAD_FILTER		"filter"
-#define CFG_OCRAD_TRANSFORM		"transform"
-#define CFG_OCRAD_INVERT		"invert"
-#define CFG_OCRAD_THRESHOLD_ENABLE	"thresholdEnable"
-#define CFG_OCRAD_THRESHOLD_VALUE	"thresholdValue"
-
+#define CFG_OCRAD_LAYOUT_DETECTION  "layoutDetection"
+#define CFG_OCRAD_EXTRA_ARGUMENTS   "extraArguments"
+#define CFG_OCRAD_FORMAT        "format"
+#define CFG_OCRAD_CHARSET       "charset"
+#define CFG_OCRAD_FILTER        "filter"
+#define CFG_OCRAD_TRANSFORM     "transform"
+#define CFG_OCRAD_INVERT        "invert"
+#define CFG_OCRAD_THRESHOLD_ENABLE  "thresholdEnable"
+#define CFG_OCRAD_THRESHOLD_VALUE   "thresholdValue"
 
 /**
   *@author Klaas Freitag
@@ -54,7 +51,6 @@ class QComboBox;
 class KUrlRequester;
 
 class KScanSlider;
-
 
 class OcrOcradDialog : public OcrBaseDialog
 {
@@ -70,13 +66,19 @@ public:
     QString ocrEngineDesc() const;
     QString ocrEngineLogo() const;
 
-    QString getOCRCmd() const	{ return (m_ocrCmd); }
+    QString getOCRCmd() const
+    {
+        return (m_ocrCmd);
+    }
 
     /*
      * returns the numeric version of the ocrad program.
      * Attention: This method returns 10 for ocrad v. 0.10 and 8 for ocrad-0.8
      */
-    int getNumVersion() const	{ return (m_versionNum); }
+    int getNumVersion() const
+    {
+        return (m_versionNum);
+    }
 
     QString orfUrl() const;
 
@@ -106,5 +108,4 @@ private:
     QString m_versionStr;
 };
 
-
-#endif							// OCROCRADDIALOG_H
+#endif                          // OCROCRADDIALOG_H

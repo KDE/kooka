@@ -24,7 +24,6 @@
  ***************************************************************************/
 
 #include "ocrengine.h"
-#include "ocrengine.moc"
 
 #include <qpen.h>
 #include <qvector.h>
@@ -42,6 +41,7 @@
 #include <kdialog.h>
 #include <kvbox.h>
 #include <kcolorscheme.h>
+#include <KGlobal>
 
 #include <kio/deletejob.h>
 
@@ -60,8 +60,6 @@
 #include "ocrkadmosengine.h"
 #include "ocrkadmosdialog.h"
 #endif
-
-
 
 //  Constructor/destructor and external engine creation
 //  ---------------------------------------------------
@@ -82,81 +80,79 @@ OcrEngine::OcrEngine(QWidget *parent)
     m_parent = NULL;
 }
 
-
 OcrEngine::~OcrEngine()
 {
-   if (m_ocrProcess!=NULL) delete m_ocrProcess;
-   if (m_ocrDialog!=NULL) delete m_ocrDialog;
+    if (m_ocrProcess != NULL) {
+        delete m_ocrProcess;
+    }
+    if (m_ocrDialog != NULL) {
+        delete m_ocrDialog;
+    }
 }
 
-
-OcrEngine *OcrEngine::createEngine(QWidget *parent,bool *gotoPrefs)
+OcrEngine *OcrEngine::createEngine(QWidget *parent, bool *gotoPrefs)
 {
-    KConfigGroup grp = KGlobal::config()->group(CFG_GROUP_OCR_DIA);
+    KConfigGroup grp = KSharedConfig::openConfig()->group(CFG_GROUP_OCR_DIA);
 
     OcrEngine::EngineType eng = static_cast<OcrEngine::EngineType>(grp.readEntry(CFG_OCR_ENGINE2,
-                                                                                 static_cast<int>(OcrEngine::EngineNone)));
+                                static_cast<int>(OcrEngine::EngineNone)));
     kDebug() << "configured OCR engine is" << eng << "=" << engineName(eng);
 
     QString msg = QString::null;
-    switch (eng)
-    {
-case OcrEngine::EngineGocr:	return (new OcrGocrEngine(parent));
-case OcrEngine::EngineOcrad:	return (new OcrOcradEngine(parent));
+    switch (eng) {
+    case OcrEngine::EngineGocr: return (new OcrGocrEngine(parent));
+    case OcrEngine::EngineOcrad:    return (new OcrOcradEngine(parent));
 
-case OcrEngine::EngineKadmos:
+    case OcrEngine::EngineKadmos:
 #ifdef HAVE_KADMOS
-				return (new OcrKadmosEngine(parent));
-#else							// HAVE_KADMOS
-                                msg = i18n("This version of Kooka is not compiled with KADMOS support.\n"
-                                           "Please select another OCR engine in the configuration dialog.");
-                                break;
-#endif							// HAVE_KADMOS
+        return (new OcrKadmosEngine(parent));
+#else                           // HAVE_KADMOS
+        msg = i18n("This version of Kooka is not compiled with KADMOS support.\n"
+                   "Please select another OCR engine in the configuration dialog.");
+        break;
+#endif                          // HAVE_KADMOS
 
-case OcrEngine::EngineNone:     msg = i18n("No OCR engine is configured.\n"
-                                           "Please select and configure one in the OCR configuration dialog.");
-                                break;
+    case OcrEngine::EngineNone:     msg = i18n("No OCR engine is configured.\n"
+                                              "Please select and configure one in the OCR configuration dialog.");
+        break;
 
-default:			kDebug() << "Cannot create engine of type" << eng;
-				return (NULL);
+    default:            kDebug() << "Cannot create engine of type" << eng;
+        return (NULL);
     }
 
-    if (!msg.isNull())					// failed, tell the user
-    {
-        int result = KMessageBox::warningContinueCancel(parent,msg,QString::null,
-                                                        KGuiItem(i18n("Configure OCR...")));
-        if (gotoPrefs!=NULL) *gotoPrefs = (result==KMessageBox::Continue);
+    if (!msg.isNull()) {                // failed, tell the user
+        int result = KMessageBox::warningContinueCancel(parent, msg, QString::null,
+                     KGuiItem(i18n("Configure OCR...")));
+        if (gotoPrefs != NULL) {
+            *gotoPrefs = (result == KMessageBox::Continue);
+        }
     }
 
     return (NULL);
 }
 
-
 bool OcrEngine::engineValid() const
 {
     OcrEngine::EngineType curEngine = engineType();
 
-    KConfigGroup grp = KGlobal::config()->group(CFG_GROUP_OCR_DIA);
+    KConfigGroup grp = KSharedConfig::openConfig()->group(CFG_GROUP_OCR_DIA);
     OcrEngine::EngineType confEngine = static_cast<OcrEngine::EngineType>(grp.readEntry(CFG_OCR_ENGINE2,
-                                                                                        static_cast<int>(OcrEngine::EngineNone)));
+                                       static_cast<int>(OcrEngine::EngineNone)));
 
     kDebug() << "cur" << curEngine << "conf" << confEngine;
-    return (curEngine==confEngine);
+    return (curEngine == confEngine);
 }
-
 
 const QString OcrEngine::engineName(OcrEngine::EngineType eng)
 {
-    switch (eng)
-    {
-case OcrEngine::EngineNone:	return (i18n("None"));
-case OcrEngine::EngineGocr:	return (i18n("GOCR"));
-case OcrEngine::EngineOcrad:	return (i18n("OCRAD"));
-case OcrEngine::EngineKadmos:	return (i18n("Kadmos"));
-default:        		return (i18n("Unknown"));
+    switch (eng) {
+    case OcrEngine::EngineNone: return (i18n("None"));
+    case OcrEngine::EngineGocr: return (i18n("GOCR"));
+    case OcrEngine::EngineOcrad:    return (i18n("OCRAD"));
+    case OcrEngine::EngineKadmos:   return (i18n("Kadmos"));
+    default:                return (i18n("Unknown"));
     }
 }
-
 
 /*
  * This is called to introduce a new image, usually if the user clicks on a
@@ -164,12 +160,13 @@ default:        		return (i18n("Unknown"));
  */
 void OcrEngine::setImage(const KookaImage img)
 {
-   m_introducedImage = img;				// shallow copy of original
+    m_introducedImage = img;             // shallow copy of original
 
-   if (m_ocrDialog!=NULL) m_ocrDialog->introduceImage(&m_introducedImage);
-   m_trackingActive = false;
+    if (m_ocrDialog != NULL) {
+        m_ocrDialog->introduceImage(&m_introducedImage);
+    }
+    m_trackingActive = false;
 }
-
 
 /*
  * starts visual ocr process. Depending on the ocr engine, this function creates
@@ -177,8 +174,7 @@ void OcrEngine::setImage(const KookaImage img)
  */
 bool OcrEngine::startOCRVisible(QWidget *parent)
 {
-    if (m_ocrRunning)
-    {
+    if (m_ocrRunning) {
         KMessageBox::sorry(parent, i18n("OCR is already running"));
         return (false);
     }
@@ -186,7 +182,9 @@ bool OcrEngine::startOCRVisible(QWidget *parent)
     m_parent = parent;
 
     m_ocrDialog = createOCRDialog(parent);
-    if (m_ocrDialog==NULL) return (false);
+    if (m_ocrDialog == NULL) {
+        return (false);
+    }
 
     m_ocrDialog->setupGui();
     m_ocrDialog->introduceImage(&m_introducedImage);
@@ -200,7 +198,6 @@ bool OcrEngine::startOCRVisible(QWidget *parent)
     return (true);
 }
 
-
 /**
  * This method should be called by the engine specific finish slots.
  * It does the engine independent cleanups like re-enabling buttons etc.
@@ -208,15 +205,17 @@ bool OcrEngine::startOCRVisible(QWidget *parent)
 
 void OcrEngine::finishedOCRVisible(bool success)
 {
-    if (m_ocrDialog!=NULL) m_ocrDialog->enableGUI(false);
+    if (m_ocrDialog != NULL) {
+        m_ocrDialog->enableGUI(false);
+    }
 
-    if (success)
-    {
+    if (success) {
         emit newOCRResultText();
 
-        if (m_imgCanvas!=NULL)
-        {
-            if (m_resultImage!=NULL) delete m_resultImage;
+        if (m_imgCanvas != NULL) {
+            if (m_resultImage != NULL) {
+                delete m_resultImage;
+            }
 
             m_resultImage = new QImage(m_ocrResultFile);
             kDebug() << "Result image" << m_ocrResultFile
@@ -232,9 +231,8 @@ void OcrEngine::finishedOCRVisible(bool success)
 
         /* now it is time to invoke the dictionary if required */
         // TODO: readOnlyEditor needed here? Also done in finishResultDocument()
-        emit readOnlyEditor(false);			// user can now edit
-        if (m_ocrDialog!=NULL)
-        {
+        emit readOnlyEditor(false);         // user can now edit
+        if (m_ocrDialog != NULL) {
             emit setSpellCheckConfig(m_ocrDialog->customSpellConfigFile());
 
             bool doSpellcheck = m_ocrDialog->wantInteractiveSpellCheck();
@@ -243,7 +241,9 @@ void OcrEngine::finishedOCRVisible(bool success)
         }
     }
 
-    if (m_ocrDialog!=NULL) m_ocrDialog->hide();		// close the dialogue
+    if (m_ocrDialog != NULL) {
+        m_ocrDialog->hide();    // close the dialogue
+    }
 
     m_ocrRunning = false;
     removeTempFiles();
@@ -251,78 +251,74 @@ void OcrEngine::finishedOCRVisible(bool success)
     kDebug() << "OCR finished";
 }
 
-
 void OcrEngine::removeTempFiles()
 {
     bool retain = m_ocrDialog->keepTempFiles();
     kDebug() << "retain=" << retain;
 
     const QStringList temps = tempFiles(retain);
-    if (temps.isEmpty()) return;
+    if (temps.isEmpty()) {
+        return;
+    }
 
     bool haveSome = false;
-    if (retain)
-    {
+    if (retain) {
         QString s = i18n("<qt>The following OCR temporary files are retained for debugging:<p>");
-        for (QStringList::const_iterator it = temps.constBegin(); it!=temps.constEnd(); ++it)
-        {
-            if ((*it).isEmpty()) continue;
+        for (QStringList::const_iterator it = temps.constBegin(); it != temps.constEnd(); ++it) {
+            if ((*it).isEmpty()) {
+                continue;
+            }
 
             KUrl u(*it);
             s += i18n("<filename><a href=\"%1\">%2</a></filename><br>", u.url(), u.pathOrUrl());
             haveSome = true;
         }
 
-        if (haveSome)
-        {
+        if (haveSome) {
             if (KMessageBox::questionYesNo(NULL, s,
                                            i18n("OCR Temporary Files"),
                                            KStandardGuiItem::del(),
                                            KStandardGuiItem::close(),
                                            QString::null,
-                                           KMessageBox::AllowLink)==KMessageBox::Yes) retain = false;
+                                           KMessageBox::AllowLink) == KMessageBox::Yes) {
+                retain = false;
+            }
         }
     }
 
-    if (!retain)
-    {
-        for (QStringList::const_iterator it = temps.constBegin(); it!=temps.constEnd(); ++it)
-        {
-            if ((*it).isEmpty()) continue;
+    if (!retain) {
+        for (QStringList::const_iterator it = temps.constBegin(); it != temps.constEnd(); ++it) {
+            if ((*it).isEmpty()) {
+                continue;
+            }
 
             QString tf = (*it);
             QFileInfo fi(tf);
-            if (!fi.exists())				// what happened?
-            {
+            if (!fi.exists()) {             // what happened?
                 kDebug() << "does not exist:" << tf;
-            }
-            else if (fi.isDir())
-            {
+            } else if (fi.isDir()) {
                 kDebug() << "temp dir:" << tf;
-                KIO::del(tf, KIO::HideProgressInfo);	// for recursive deletion
-            }
-            else
-            {
+                //QT5 KIO::del(tf, KIO::HideProgressInfo);  // for recursive deletion
+            } else {
                 kDebug() << "temp file:" << tf;
-                QFile::remove(tf);			// just a simple file
+                QFile::remove(tf);          // just a simple file
             }
         }
     }
 }
 
-
 void OcrEngine::stopOCRProcess(bool tellUser)
 {
-    if (m_ocrProcess!=NULL && m_ocrProcess->state()==QProcess::Running)
-    {
+    if (m_ocrProcess != NULL && m_ocrProcess->state() == QProcess::Running) {
         kDebug() << "Killing daemon";
         m_ocrProcess->kill();
-        if (tellUser) KMessageBox::error(m_parent,i18n("The OCR process was stopped"));
+        if (tellUser) {
+            KMessageBox::error(m_parent, i18n("The OCR process was stopped"));
+        }
     }
 
     finishedOCRVisible(false);
 }
-
 
 /* Called by "Close" used while OCR is not in progress */
 void OcrEngine::slotClose()
@@ -331,7 +327,6 @@ void OcrEngine::slotClose()
     stopOCRProcess(false);
 }
 
-
 /* Called by "Stop" used while OCR is in progress */
 void OcrEngine::slotStopOCR()
 {
@@ -339,16 +334,16 @@ void OcrEngine::slotStopOCR()
     stopOCRProcess(true);
 }
 
-
 /* Called by "Start" used while OCR is not in progress */
 void OcrEngine::startOCRProcess()
 {
-    if (m_ocrDialog==NULL) return;
+    if (m_ocrDialog == NULL) {
+        return;
+    }
 
     m_ocrResultText = "";
     startProcess(m_ocrDialog, &m_introducedImage);
 }
-
 
 //  Filtering mouse events on the image viewer
 //  ------------------------------------------
@@ -359,28 +354,36 @@ void OcrEngine::setImageCanvas(ImageCanvas *canvas)
     connect(m_imgCanvas, SIGNAL(doubleClicked(const QPoint &)), SLOT(slotImagePosition(const QPoint &)));
 }
 
-
 void OcrEngine::slotImagePosition(const QPoint &p)
 {
-    if (!m_trackingActive) return;			// not interested
+    if (!m_trackingActive) {
+        return;    // not interested
+    }
     // ImageCanvas did the coordinate conversion.
     // OcrResEdit does all of the rest of the work.
     emit selectWord(p);
 }
-
 
 //  Highlighting/scrolling the result text
 //  --------------------------------------
 
 void OcrEngine::slotHighlightWord(const QRect &r)
 {
-    if (m_imgCanvas==NULL) return;
+    if (m_imgCanvas == NULL) {
+        return;
+    }
 
-    if (m_currHighlight>-1) m_imgCanvas->removeHighlight(m_currHighlight);
+    if (m_currHighlight > -1) {
+        m_imgCanvas->removeHighlight(m_currHighlight);
+    }
     m_currHighlight = -1;
 
-    if (!m_trackingActive) return;			// not highlighting
-    if (!r.isValid()) return;				// word rectangle invalid
+    if (!m_trackingActive) {
+        return;    // not highlighting
+    }
+    if (!r.isValid()) {
+        return;    // word rectangle invalid
+    }
 
     KColorScheme sch(QPalette::Active, KColorScheme::Selection);
     QColor col = sch.background(KColorScheme::NegativeBackground).color();
@@ -388,22 +391,26 @@ void OcrEngine::slotHighlightWord(const QRect &r)
     m_currHighlight = m_imgCanvas->addHighlight(r, true);
 }
 
-
 void OcrEngine::slotScrollToWord(const QRect &r)
 {
-    if (m_imgCanvas==NULL) return;
+    if (m_imgCanvas == NULL) {
+        return;
+    }
 
-    if (m_currHighlight>-1) m_imgCanvas->removeHighlight(m_currHighlight);
+    if (m_currHighlight > -1) {
+        m_imgCanvas->removeHighlight(m_currHighlight);
+    }
     m_currHighlight = -1;
 
-    if (!m_trackingActive) return;			// not highlighting
+    if (!m_trackingActive) {
+        return;    // not highlighting
+    }
 
     KColorScheme sch(QPalette::Active, KColorScheme::Selection);
     QColor col = sch.background(KColorScheme::NeutralBackground).color();
     m_imgCanvas->setHighlightStyle(ImageCanvas::HighlightUnderline, QPen(col, 2));
     m_currHighlight = m_imgCanvas->addHighlight(r, true);
 }
-
 
 //  Assembling the OCR results
 //  --------------------------
@@ -412,7 +419,6 @@ void OcrEngine::setTextDocument(QTextDocument *doc)
 {
     m_document = doc;
 }
-
 
 QTextDocument *OcrEngine::startResultDocument()
 {
@@ -424,11 +430,10 @@ QTextDocument *OcrEngine::startResultDocument()
 
     m_cursor = new QTextCursor(m_document);
 
-    emit readOnlyEditor(true);				// read only while updating
+    emit readOnlyEditor(true);              // read only while updating
 
     return (m_document);
 }
-
 
 void OcrEngine::finishResultDocument()
 {
@@ -436,34 +441,38 @@ void OcrEngine::finishResultDocument()
              << "lines" << m_document->blockCount()
              << "chars" << m_document->characterCount();
 
-    if (m_cursor!=NULL) delete m_cursor;
+    if (m_cursor != NULL) {
+        delete m_cursor;
+    }
 
-    emit readOnlyEditor(false);				// now let user edit it
+    emit readOnlyEditor(false);             // now let user edit it
 }
-
 
 void OcrEngine::startLine()
 {
-    if (m_ocrDialog->verboseDebug()) kDebug();
-    if (!m_cursor->atStart()) m_cursor->insertBlock(QTextBlockFormat(), QTextCharFormat());
+    if (m_ocrDialog->verboseDebug()) {
+        kDebug();
+    }
+    if (!m_cursor->atStart()) {
+        m_cursor->insertBlock(QTextBlockFormat(), QTextCharFormat());
+    }
 }
-
 
 void OcrEngine::finishLine()
 {
 }
 
-
 void OcrEngine::addWord(const QString &word, const OcrWordData &data)
 {
-    if (m_ocrDialog->verboseDebug())
-    {
+    if (m_ocrDialog->verboseDebug()) {
         kDebug() << "word" << word << "len" << word.length()
                  << "rect" << data.property(OcrWordData::Rectangle)
                  << "alts" << data.property(OcrWordData::Alternatives);
     }
 
-    if (!m_cursor->atBlockStart()) m_cursor->insertText(" ", QTextCharFormat());
+    if (!m_cursor->atBlockStart()) {
+        m_cursor->insertText(" ", QTextCharFormat());
+    }
     m_cursor->insertText(word, data);
     ++m_wordCount;
 }

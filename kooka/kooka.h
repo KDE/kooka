@@ -1,5 +1,5 @@
 /**************************************************************************
-			kooka.h  -  Main program class
+            kooka.h  -  Main program class
                              -------------------
     begin                : Sun Jan 16 2000
     copyright            : (C) 2000 by Klaas Freitag
@@ -31,17 +31,14 @@
 
 #include "kookaview.h"
 
-
 #define KOOKA_STATE_GROUP "State"
 #define PREFERENCE_DIA_TAB "PreferencesTab"
-
 
 class KConfigGroup;
 class KPrinter;
 class KToggleAction;
-class KAction;
+class QAction;
 class KActionMenu;
-
 
 /**
  * This class serves as the main window for Kooka.  It handles the
@@ -70,7 +67,6 @@ public:
      * Startup, loads (at the moment) only the last displayed image
      **/
     void startup();
-
 
 protected:
     virtual void closeEvent(QCloseEvent *ev);
@@ -122,46 +118,45 @@ private:
     KToggleAction *m_scanParamsAction;
     KToggleAction *m_previewerAction;
 
-    KAction *m_saveOCRTextAction;
+    QAction *m_saveOCRTextAction;
     int m_prefDialogIndex;
 
-    KAction *scanAction;
-    KAction *previewAction;
-    KAction *photocopyAction;
-    KAction *paramsAction;
+    QAction *scanAction;
+    QAction *previewAction;
+    QAction *photocopyAction;
+    QAction *paramsAction;
     KToggleAction *autoselAction;
-    KAction *ocrAction;
-    KAction *ocrSelectAction;
-    KAction *ocrSpellAction;
+    QAction *ocrAction;
+    QAction *ocrSelectAction;
+    QAction *ocrSpellAction;
 
-    KAction *newFromSelectionAction;
-    KAction *scaleToWidthAction;
-    KAction *scaleToHeightAction;
-    KAction *scaleToOriginalAction;
-    KAction *scaleToZoomAction;
+    QAction *newFromSelectionAction;
+    QAction *scaleToWidthAction;
+    QAction *scaleToHeightAction;
+    QAction *scaleToOriginalAction;
+    QAction *scaleToZoomAction;
     KToggleAction *keepZoomAction;
-    KAction *mirrorVerticallyAction;
-    KAction *mirrorHorizontallyAction;
-    KAction *rotateCwAction;
-    KAction *rotateAcwAction;
-    KAction *rotate180Action;
+    QAction *mirrorVerticallyAction;
+    QAction *mirrorHorizontallyAction;
+    QAction *rotateCwAction;
+    QAction *rotateAcwAction;
+    QAction *rotate180Action;
 
-    KAction *createFolderAction;
-    KAction *saveImageAction;
-    KAction *printImageAction;
-    KAction *importImageAction;
-    KAction *deleteImageAction;
-    KAction *renameImageAction;
-    KAction *unloadImageAction;
-    KAction *propsImageAction;
+    QAction *createFolderAction;
+    QAction *saveImageAction;
+    QAction *printImageAction;
+    QAction *importImageAction;
+    QAction *deleteImageAction;
+    QAction *renameImageAction;
+    QAction *unloadImageAction;
+    QAction *propsImageAction;
 
-    KAction *selectDeviceAction;
-    KAction *addDeviceAction;
+    QAction *selectDeviceAction;
+    QAction *addDeviceAction;
 
     KActionMenu *openWithMenu;
 
     bool m_imageChangeAllowed;
 };
 
-
-#endif							// KOOKA_H
+#endif                          // KOOKA_H

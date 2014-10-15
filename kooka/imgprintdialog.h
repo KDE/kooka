@@ -70,14 +70,14 @@ class ImgPrintDialog : public QWidget
 public:
     ImgPrintDialog(const KookaImage *img, QWidget *parent = NULL);
 
-    void setOptions(const QMap<QString,QString>& opts);
-    void getOptions(QMap<QString,QString>& opts, bool include_def = false);
-    bool isValid(QString& msg);
+    void setOptions(const QMap<QString, QString> &opts);
+    void getOptions(QMap<QString, QString> &opts, bool include_def = false);
+    bool isValid(QString &msg);
 
-    void setImage(const KookaImage *img );
+    void setImage(const KookaImage *img);
 
 protected slots:
-    void slotScaleChanged( int id );
+    void slotScaleChanged(int id);
     void slotCustomWidthChanged(int);
     void slotCustomHeightChanged(int);
 
@@ -87,7 +87,7 @@ private:
     QRadioButton  *m_rbScale;
     QRadioButton  *m_rbScreen;
     QRadioButton  *m_rbFitPage;
-    
+
     KIntNumInput *m_sizeW;
     KIntNumInput *m_sizeH;
     KIntNumInput *m_dpi;
@@ -100,4 +100,4 @@ private:
     bool        m_ignoreSignal;
 };
 
-#endif							// IMGPRINTDIALOG_H
+#endif                          // IMGPRINTDIALOG_H

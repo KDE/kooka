@@ -1,7 +1,7 @@
-/* This file is part of the KDE Project			-*- mode:c++; -*-
+/* This file is part of the KDE Project         -*- mode:c++; -*-
    Copyright (C) 2000 David Faure <faure@kde.org>
                  2000 Carsten Pfeiffer <pfeiffer@kde.org>
-		 2002 Klaas Freitag <freitag@suse.de>
+         2002 Klaas Freitag <freitag@suse.de>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -21,14 +21,11 @@
 #ifndef FILETREEVIEW_H
 #define FILETREEVIEW_H
 
-
 #include <qtreewidget.h>
 
 #include "filetreebranch.h"
 
-
 class QTimer;
-
 
 /**
  * @short A tree view on the file system.
@@ -347,17 +344,16 @@ private:
     QIcon itemIcon(FileTreeViewItem *item) const;
     void setDropItem(QTreeWidgetItem *item);
 
-    FileTreeBranchList m_branches;			// list of the branches
-    int m_busyCount;					// branches currently listing
-    KUrl m_nextUrlToSelect;				// next item to select
-    bool m_wantOpenFolderPixmaps;			// want open-folder pixmaps?
+    FileTreeBranchList m_branches;          // list of the branches
+    int m_busyCount;                    // branches currently listing
+    KUrl m_nextUrlToSelect;             // next item to select
+    bool m_wantOpenFolderPixmaps;           // want open-folder pixmaps?
 
-    QTreeWidgetItem *m_currentBeforeDropItem;		// current item before drag
-    QTreeWidgetItem *m_dropItem;			// item mouse is over
+    QTreeWidgetItem *m_currentBeforeDropItem;       // current item before drag
+    QTreeWidgetItem *m_dropItem;            // item mouse is over
 
-    QIcon m_openFolderPixmap;				// pixmap for open folders
-    QTimer *m_autoOpenTimer;				// timer for auto open
+    QIcon m_openFolderPixmap;               // pixmap for open folders
+    QTimer *m_autoOpenTimer;                // timer for auto open
 };
 
-
-#endif							// FILETREEVIEW_H
+#endif                          // FILETREEVIEW_H

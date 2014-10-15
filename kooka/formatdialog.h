@@ -27,13 +27,11 @@
 #include "imgsaver.h"
 #include "imageformat.h"
 
-
 class QComboBox;
 class QLabel;
 class QLineEdit;
 class QListWidget;
 class QListWidgetItem;
-
 
 /**
  *  Class FormatDialog:
@@ -53,8 +51,14 @@ public:
     ImageFormat getFormat() const;
     QByteArray getSubFormat() const;
     QString getFilename() const;
-    bool alwaysUseFormat() const { return (mDontAskCheck!=NULL ? mDontAskCheck->isChecked() : false); }
-    bool useAssistant() const { return (mWantAssistant); }
+    bool alwaysUseFormat() const
+    {
+        return (mDontAskCheck != NULL ? mDontAskCheck->isChecked() : false);
+    }
+    bool useAssistant() const
+    {
+        return (mWantAssistant);
+    }
 
     static void forgetRemembered();
 
@@ -94,4 +98,4 @@ private:
     bool mWantAssistant;
 };
 
-#endif							// FORMATDIALOG_H
+#endif                          // FORMATDIALOG_H

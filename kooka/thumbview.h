@@ -35,28 +35,30 @@
 #include <kurl.h>
 
 //  KConfig group definitions
-#define THUMB_GROUP		"thumbnailView"
-#define THUMB_PREVIEW_SIZE	"previewSize"
-#define THUMB_CUSTOM_BGND	"customBackground"
-#define THUMB_BG_WALLPAPER	"BackGroundTile"
-#define THUMB_STD_TILE_IMG	"kooka/pics/thumbviewtile.png"
+#define THUMB_GROUP     "thumbnailView"
+#define THUMB_PREVIEW_SIZE  "previewSize"
+#define THUMB_CUSTOM_BGND   "customBackground"
+#define THUMB_BG_WALLPAPER  "BackGroundTile"
+#define THUMB_STD_TILE_IMG  "kooka/pics/thumbviewtile.png"
 
-class KAction;
+class QAction;
 class KFileItem;
-class KMenu;
+class QMenu;
 class KActionMenu;
 class KToggleAction;
 
-
 class ThumbView : public KDirOperator
 {
-   Q_OBJECT
+    Q_OBJECT
 
 public:
     ThumbView(QWidget *parent);
     ~ThumbView();
 
-    KMenu *contextMenu() const { return (mContextMenu); }
+    QMenu *contextMenu() const
+    {
+        return (mContextMenu);
+    }
     bool readSettings();
 
     static QString standardBackground();
@@ -86,7 +88,7 @@ signals:
 private:
     void setBackground();
 
-    KMenu *mContextMenu;
+    QMenu *mContextMenu;
     bool m_firstMenu;
     KActionMenu *m_sizeMenu;
     QMap<KIconLoader::StdSizes, KToggleAction *> m_sizeMap;
@@ -100,5 +102,4 @@ private:
     KUrl m_toChangeTo;
 };
 
-
-#endif							// THUMBVIEW_H
+#endif                          // THUMBVIEW_H

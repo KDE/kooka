@@ -20,7 +20,7 @@
 
 #include "scandevices.h"
 
-#include <kdebug.h>
+#include <QDebug>
 #include <klocale.h>
 #include <kglobal.h>
 #include <kconfig.h>
@@ -28,119 +28,116 @@
 
 #include "scanglobal.h"
 
-
-#define USERDEV_GROUP		"User Specified Scanners"
-#define USERDEV_DEVS		"Devices"
-#define USERDEV_DESC		"Description"
-#define USERDEV_TYPE		"Type"
-
+#define USERDEV_GROUP       "User Specified Scanners"
+#define USERDEV_DEVS        "Devices"
+#define USERDEV_DESC        "Description"
+#define USERDEV_TYPE        "Type"
 
 ScanDevices *sInstance = NULL;
 
-
 ScanDevices *ScanDevices::self()
 {
-    if (sInstance==NULL) sInstance = new ScanDevices();
+    if (sInstance == NULL) {
+        sInstance = new ScanDevices();
+    }
     return (sInstance);
 }
 
-
 ScanDevices::ScanDevices()
 {
-    kDebug();
+    //qDebug();
 
-    if (!ScanGlobal::self()->init()) return;		// do sane_init() if necessary
+    if (!ScanGlobal::self()->init()) {
+        return;    // do sane_init() if necessary
+    }
 
     const KConfigGroup grp1 = ScanGlobal::self()->configGroup();
     bool netaccess = grp1.readEntry(STARTUP_ONLY_LOCAL, false);
-    kDebug() << "Query for network scanners" << (netaccess ? "not enabled" : "enabled");
+    //qDebug() << "Query for network scanners" << (netaccess ? "not enabled" : "enabled");
 
     SANE_Device const **dev_list = NULL;
     SANE_Status status = sane_get_devices(&dev_list, (netaccess ? SANE_TRUE : SANE_FALSE));
-    if (status!=SANE_STATUS_GOOD)
-    {
-        kDebug() << "sane_get_devices() failed, status" << status;
-        return;						// no point carrying on
+    if (status != SANE_STATUS_GOOD) {
+        //qDebug() << "sane_get_devices() failed, status" << status;
+        return;                     // no point carrying on
     }
 
     const SANE_Device *dev;
-    for (int devno = 0; (dev = dev_list[devno])!=NULL; ++devno)
-    {
+    for (int devno = 0; (dev = dev_list[devno]) != NULL; ++devno) {
         mScannerNames.append(dev->name);
         mScannerDevices.insert(dev->name, dev);
-        kDebug() << "SANE found scanner:" << dev->name << "=" << deviceDescription(dev->name);
+        //qDebug() << "SANE found scanner:" << dev->name << "=" << deviceDescription(dev->name);
     }
 
     KConfigGroup grp2 = ScanGlobal::self()->configGroup(USERDEV_GROUP);
     QStringList devs = grp2.readEntry(USERDEV_DEVS, QStringList());
-    if (devs.count()>0)
-    {
+    if (devs.count() > 0) {
         QStringList descs = grp2.readEntry(USERDEV_DESC, QStringList());
-        if (descs.count()<devs.count())			// ensure list corrent length
-        {
-            for (int i = descs.count(); i<devs.count(); ++i) descs.append("Unknown");
+        if (descs.count() < devs.count()) {     // ensure list corrent length
+            for (int i = descs.count(); i < devs.count(); ++i) {
+                descs.append("Unknown");
+            }
             grp2.writeEntry(USERDEV_DESC, descs);
         }
 
         QStringList types = grp2.readEntry(USERDEV_TYPE, QStringList());
-        if (types.count()<devs.count())			// ensure list correct length
-        {
-            for (int i = types.count(); i<devs.count(); ++i) types.append("scanner");
+        if (types.count() < devs.count()) {     // ensure list correct length
+            for (int i = types.count(); i < devs.count(); ++i) {
+                types.append("scanner");
+            }
             grp2.writeEntry(USERDEV_TYPE, types);
         }
 
         QStringList::const_iterator it2 = descs.constBegin();
         QStringList::const_iterator it3 = types.constBegin();
         for (QStringList::const_iterator it1 = devs.constBegin();
-             it1!=devs.constEnd(); ++it1,++it2,++it3)
-        {						// avoid duplication
+                it1 != devs.constEnd(); ++it1, ++it2, ++it3) {
+            // avoid duplication
             QByteArray name = (*it1).toLocal8Bit();
-            if (mScannerNames.contains(name)) continue;
+            if (mScannerNames.contains(name)) {
+                continue;
+            }
             addUserSpecifiedDevice(name, (*it2), (*it3).toLocal8Bit(), true);
-            kDebug() << "Configured scanner:" << name << "=" << deviceDescription(name);
+            //qDebug() << "Configured scanner:" << name << "=" << deviceDescription(name);
         }
     }
 }
-
 
 ScanDevices::~ScanDevices()
 {
 }
 
-
 void ScanDevices::addUserSpecifiedDevice(const QByteArray &backend,
-                                         const QString &description,
-                                         const QByteArray &type,
-                                         bool dontSave)
+        const QString &description,
+        const QByteArray &type,
+        bool dontSave)
 {
-    if (backend.isEmpty()) return;
+    if (backend.isEmpty()) {
+        return;
+    }
 
-    if (mScannerNames.contains(backend))
-    {
-        kDebug() << "device" << backend << "already exists, not adding";
+    if (mScannerNames.contains(backend)) {
+        //qDebug() << "device" << backend << "already exists, not adding";
         return;
     }
 
     QByteArray devtype = (!type.isEmpty() ? type : "scanner");
-    kDebug() << "adding" << backend << "desc" << description
-             << "type" << devtype << "dontSave" << dontSave;
+    //qDebug() << "adding" << backend << "desc" << description
+             //<< "type" << devtype << "dontSave" << dontSave;
 
-    if (!dontSave)					// add new device to config
-    {							// get existing device lists
+    if (!dontSave) {                // add new device to config
+        // get existing device lists
         KConfigGroup grp = ScanGlobal::self()->configGroup(USERDEV_GROUP);
         QStringList devs = grp.readEntry(USERDEV_DEVS, QStringList());
         QStringList descs = grp.readEntry(USERDEV_DESC, QStringList());
         QStringList types = grp.readEntry(USERDEV_TYPE, QStringList());
 
         int i = devs.indexOf(backend);
-        if (i>=0)					// see if already in list
-        {
-            descs[i] = description;			// if so just update
+        if (i >= 0) {               // see if already in list
+            descs[i] = description;         // if so just update
             types[i] = devtype;
-        }
-        else
-        {
-            devs.append(backend);			// add new entry to lists
+        } else {
+            devs.append(backend);           // add new entry to lists
             descs.append(description);
             types.append(devtype);
         }
@@ -168,17 +165,19 @@ void ScanDevices::addUserSpecifiedDevice(const QByteArray &backend,
     mScannerDevices.insert(backend, userdev);
 }
 
-
 const SANE_Device *ScanDevices::deviceInfo(const QByteArray &backend) const
 {
-    if (!mScannerNames.contains(backend)) return (NULL);
+    if (!mScannerNames.contains(backend)) {
+        return (NULL);
+    }
     return (mScannerDevices[backend]);
 }
 
-
 QString ScanDevices::deviceDescription(const QByteArray &backend) const
 {
-    if (!mScannerNames.contains(backend)) return (i18n("Unknown device '%1'", backend.constData()));
+    if (!mScannerNames.contains(backend)) {
+        return (i18n("Unknown device '%1'", backend.constData()));
+    }
 
     const SANE_Device *scanner = mScannerDevices[backend];
     return (QString("%1 %2").arg(scanner->vendor, scanner->model));

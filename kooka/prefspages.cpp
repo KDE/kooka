@@ -1,7 +1,7 @@
 /* This file is part of the KDE Project
 
    Copyright (C) 2000 Klaas Freitag <freitag@suse.de>
-   Copyright (C) 2010 Jonathan Marten <jjm@keelhaul.me.uk>  
+   Copyright (C) 2010 Jonathan Marten <jjm@keelhaul.me.uk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -26,7 +26,6 @@
 */
 
 #include "prefspages.h"
-#include "prefspages.moc"
 
 #include <qlayout.h>
 #include <qcheckbox.h>
@@ -34,6 +33,7 @@
 #include <qfileinfo.h>
 #include <qradiobutton.h>
 #include <qbuttongroup.h>
+#include <QGroupBox>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -41,6 +41,7 @@
 #include <kmessagebox.h>
 #include <kurlrequester.h>
 #include <kseparator.h>
+#include <KGlobal>
 
 #include "libkscan/scanglobal.h"
 
@@ -53,7 +54,6 @@
 #include "ocrocradengine.h"
 #include "ocrkadmosengine.h"
 
-
 //  Abstract base
 
 KookaPrefsPage::KookaPrefsPage(KPageDialog *parent, const char *configGroup)
@@ -61,21 +61,21 @@ KookaPrefsPage::KookaPrefsPage(KPageDialog *parent, const char *configGroup)
 {
     mLayout = new QVBoxLayout(this);
 
-    if (configGroup!=NULL) mConfig = KGlobal::config()->group(configGroup);
+    if (configGroup != NULL) {
+        mConfig = KSharedConfig::openConfig()->group(configGroup);
+    }
 }
-
 
 KookaPrefsPage::~KookaPrefsPage()
 {
 }
-
 
 //  "General" page
 
 KookaGeneralPage::KookaGeneralPage(KPageDialog *parent)
     : KookaPrefsPage(parent, GROUP_GALLERY)
 {
-    mLayout->addStretch(9);				// push down to bottom
+    mLayout->addStretch(9);             // push down to bottom
 
     QGroupBox *gb = new QGroupBox(i18n("Hidden Messages"), this);
     QGridLayout *gl = new QGridLayout(gb);
@@ -91,16 +91,13 @@ KookaGeneralPage::KookaGeneralPage(KPageDialog *parent)
     mLayout->addWidget(gb);
 }
 
-
 void KookaGeneralPage::saveSettings()
 {
 }
 
-
 void KookaGeneralPage::defaultSettings()
 {
 }
-
 
 void KookaGeneralPage::slotEnableWarnings()
 {
@@ -108,11 +105,10 @@ void KookaGeneralPage::slotEnableWarnings()
 
     KMessageBox::enableAllMessages();
     FormatDialog::forgetRemembered();
-    KGlobal::config()->reparseConfiguration();
+    KSharedConfig::openConfig()->reparseConfiguration();
 
-    mEnableMessagesButton->setEnabled(false);			// show this has been done
+    mEnableMessagesButton->setEnabled(false);           // show this has been done
 }
-
 
 //  "Startup" page
 
@@ -140,7 +136,6 @@ KookaStartupPage::KookaStartupPage(KPageDialog *parent)
     mLayout->addWidget(mRestoreImageCheck);
 }
 
-
 void KookaStartupPage::saveSettings()
 {
     KConfigGroup grp2 = ScanGlobal::self()->configGroup();  // global, for libkscan also
@@ -149,10 +144,9 @@ void KookaStartupPage::saveSettings()
     kDebug() << "Writing" << STARTUP_SKIP_ASK << "as" << cbVal;
     grp2.writeEntry(STARTUP_SKIP_ASK, cbVal);
     grp2.writeEntry(STARTUP_ONLY_LOCAL, !mNetQueryCheck->isChecked());
-							// Kooka startup options
+    // Kooka startup options
     mConfig.writeEntry(STARTUP_READ_IMAGE, mRestoreImageCheck->isChecked());
 }
-
 
 void KookaStartupPage::defaultSettings()
 {
@@ -160,7 +154,6 @@ void KookaStartupPage::defaultSettings()
     mSelectScannerCheck->setChecked(true);
     mRestoreImageCheck->setChecked(false);
 }
-
 
 //  "Saving" page
 
@@ -172,7 +165,7 @@ KookaSavingPage::KookaSavingPage(KPageDialog *parent)
     mAskSaveFormat->setToolTip(i18n("Check this if you want to always use the image save assistant, even if there is a default format for the image type."));
     mLayout->addWidget(mAskSaveFormat);
 
-    mLayout->addSpacing(2*KDialog::spacingHint());
+    mLayout->addSpacing(2 * KDialog::spacingHint());
 
     mAskFileName = new QCheckBox(i18n("Ask for filename when saving"), this);
     mAskFileName->setChecked(mConfig.readEntry(OP_SAVER_ASK_FILENAME, false));
@@ -182,7 +175,7 @@ KookaSavingPage::KookaSavingPage(KPageDialog *parent)
     QButtonGroup *bg = new QButtonGroup(this);
     QGridLayout *gl = new QGridLayout(this);
     gl->setVerticalSpacing(0);
-    gl->setColumnMinimumWidth(0, 2*KDialog::marginHint());
+    gl->setColumnMinimumWidth(0, 2 * KDialog::marginHint());
 
     bool askBefore = mConfig.readEntry(OP_SAVER_ASK_BEFORE, true);
 
@@ -205,14 +198,12 @@ KookaSavingPage::KookaSavingPage(KPageDialog *parent)
     mLayout->addLayout(gl);
 }
 
-
 void KookaSavingPage::saveSettings()
 {
     mConfig.writeEntry(OP_SAVER_ASK_FORMAT, mAskSaveFormat->isChecked());
     mConfig.writeEntry(OP_SAVER_ASK_FILENAME, mAskFileName->isChecked());
     mConfig.writeEntry(OP_SAVER_ASK_BEFORE, mAskBeforeScan->isChecked());
 }
-
 
 void KookaSavingPage::defaultSettings()
 {
@@ -221,7 +212,6 @@ void KookaSavingPage::defaultSettings()
     mAskBeforeScan->setChecked(true);
     mAskAfterScan->setChecked(false);
 }
-
 
 //  "Gallery/Thumbnail" page
 
@@ -272,37 +262,36 @@ KookaThumbnailPage::KookaThumbnailPage(KPageDialog *parent)
 
     /* Image file selector */
     mTileSelector = new KUrlRequester(this);
-    mTileSelector->setMode(KFile::File|KFile::ExistingOnly|KFile::LocalOnly);
+    mTileSelector->setMode(KFile::File | KFile::ExistingOnly | KFile::LocalOnly);
     kDebug() << "Setting tile URL" << bgImg;
-    mTileSelector->setUrl(bgImg);
+    mTileSelector->setUrl(QUrl::fromLocalFile(bgImg));
 
     gl->addWidget(mTileSelector, 3, 1);
     l->setBuddy(mTileSelector);
 
-    gl->setRowMinimumHeight(4, 2*KDialog::spacingHint());
+    gl->setRowMinimumHeight(4, 2 * KDialog::spacingHint());
 
     /* Preview size */
     l = new QLabel(i18n("Preview size:"), this);
     gl->addWidget(l, 5, 0, Qt::AlignRight);
 
     mThumbSizeCombo = new KComboBox(this);
-    mThumbSizeCombo->addItem(ThumbView::sizeName(KIconLoader::SizeEnormous));		// 0
-    mThumbSizeCombo->addItem(ThumbView::sizeName(KIconLoader::SizeHuge));		// 1
-    mThumbSizeCombo->addItem(ThumbView::sizeName(KIconLoader::SizeLarge));		// 2
-    mThumbSizeCombo->addItem(ThumbView::sizeName(KIconLoader::SizeMedium));		// 3
-    mThumbSizeCombo->addItem(ThumbView::sizeName(KIconLoader::SizeSmallMedium));	// 4
+    mThumbSizeCombo->addItem(ThumbView::sizeName(KIconLoader::SizeEnormous));       // 0
+    mThumbSizeCombo->addItem(ThumbView::sizeName(KIconLoader::SizeHuge));       // 1
+    mThumbSizeCombo->addItem(ThumbView::sizeName(KIconLoader::SizeLarge));      // 2
+    mThumbSizeCombo->addItem(ThumbView::sizeName(KIconLoader::SizeMedium));     // 3
+    mThumbSizeCombo->addItem(ThumbView::sizeName(KIconLoader::SizeSmallMedium));    // 4
 
     KIconLoader::StdSizes size = static_cast<KIconLoader::StdSizes>(mConfig.readEntry(THUMB_PREVIEW_SIZE,
-                                                                                      static_cast<int>(KIconLoader::SizeHuge)));
+                                 static_cast<int>(KIconLoader::SizeHuge)));
     int sel;
-    switch (size)
-    {
-case KIconLoader::SizeEnormous:		sel = 0;	break;
-default:
-case KIconLoader::SizeHuge:		sel = 1;	break;
-case KIconLoader::SizeLarge:		sel = 2;	break;
-case KIconLoader::SizeMedium:		sel = 3;	break;
-case KIconLoader::SizeSmallMedium:	sel = 4;	break;
+    switch (size) {
+    case KIconLoader::SizeEnormous:     sel = 0;    break;
+    default:
+    case KIconLoader::SizeHuge:     sel = 1;    break;
+    case KIconLoader::SizeLarge:        sel = 2;    break;
+    case KIconLoader::SizeMedium:       sel = 3;    break;
+    case KIconLoader::SizeSmallMedium:  sel = 4;    break;
     }
     mThumbSizeCombo->setCurrentIndex(sel);
 
@@ -314,28 +303,25 @@ case KIconLoader::SizeSmallMedium:	sel = 4;	break;
     slotCustomThumbBgndToggled(mCustomBackgroundCheck->isChecked());
 }
 
-
 void KookaThumbnailPage::saveSettings()
 {
     mConfig.writeEntry(GALLERY_ALLOW_RENAME, mAllowRenameCheck->isChecked());
     mConfig.writeEntry(GALLERY_LAYOUT, mGalleryLayoutCombo->currentIndex());
 
-    mConfig.writePathEntry(THUMB_BG_WALLPAPER, mTileSelector->url().pathOrUrl());
+    //QT5 mConfig.writePathEntry(THUMB_BG_WALLPAPER, mTileSelector->url().pathOrUrl());
     mConfig.writeEntry(THUMB_CUSTOM_BGND, mCustomBackgroundCheck->isChecked());
 
     KIconLoader::StdSizes size;
-    switch (mThumbSizeCombo->currentIndex())
-    {
-case 0:		size = KIconLoader::SizeEnormous;	break;
-default:
-case 1:		size = KIconLoader::SizeHuge;		break;
-case 2:		size = KIconLoader::SizeLarge;		break;
-case 3:		size = KIconLoader::SizeMedium;		break;
-case 4:		size = KIconLoader::SizeSmallMedium;	break;
+    switch (mThumbSizeCombo->currentIndex()) {
+    case 0:     size = KIconLoader::SizeEnormous;   break;
+    default:
+    case 1:     size = KIconLoader::SizeHuge;       break;
+    case 2:     size = KIconLoader::SizeLarge;      break;
+    case 3:     size = KIconLoader::SizeMedium;     break;
+    case 4:     size = KIconLoader::SizeSmallMedium;    break;
     }
     mConfig.writeEntry(THUMB_PREVIEW_SIZE, static_cast<int>(size));
 }
-
 
 void KookaThumbnailPage::defaultSettings()
 {
@@ -344,16 +330,14 @@ void KookaThumbnailPage::defaultSettings()
 
     mCustomBackgroundCheck->setChecked(false);
     slotCustomThumbBgndToggled(false);
-    mTileSelector->setUrl(ThumbView::standardBackground());
-    mThumbSizeCombo->setCurrentIndex(1);			// "Very Large"
+    mTileSelector->setUrl(QUrl::fromLocalFile(ThumbView::standardBackground()));
+    mThumbSizeCombo->setCurrentIndex(1);            // "Very Large"
 }
-
 
 void KookaThumbnailPage::slotCustomThumbBgndToggled(bool state)
 {
     mTileSelector->setEnabled(state);
 }
-
 
 //  "OCR" page
 
@@ -379,8 +363,8 @@ KookaOcrPage::KookaOcrPage(KPageDialog *parent)
     lay->setRowMinimumHeight(1, KDialog::marginHint());
 
     mOcrBinaryReq = new KUrlRequester(this);
-    mOcrBinaryReq->setMode(KFile::File|KFile::ExistingOnly|KFile::LocalOnly);
-    lay->addWidget(mOcrBinaryReq,2,1);
+    mOcrBinaryReq->setMode(KFile::File | KFile::ExistingOnly | KFile::LocalOnly);
+    lay->addWidget(mOcrBinaryReq, 2, 1);
 
     lab = new QLabel(i18n("Engine executable:"), this);
     lab->setBuddy(mOcrBinaryReq);
@@ -405,29 +389,29 @@ KookaOcrPage::KookaOcrPage(KPageDialog *parent)
     slotEngineSelected(originalEngine);
 }
 
-
 void KookaOcrPage::saveSettings()
 {
     mConfig.writeEntry(CFG_OCR_ENGINE2, static_cast<int>(mSelectedEngine));
 
     QString path = mOcrBinaryReq->url().path();
-    if (!path.isEmpty())
-    {
-        switch (mSelectedEngine)
-        {
-case OcrEngine::EngineGocr:
-            if (checkOcrBinary(path, "gocr", true)) mConfig.writePathEntry(CFG_GOCR_BINARY, path);
+    if (!path.isEmpty()) {
+        switch (mSelectedEngine) {
+        case OcrEngine::EngineGocr:
+            if (checkOcrBinary(path, "gocr", true)) {
+                mConfig.writePathEntry(CFG_GOCR_BINARY, path);
+            }
             break;
 
-case OcrEngine::EngineOcrad:
-            if (checkOcrBinary(path, "ocrad", true)) mConfig.writePathEntry(CFG_OCRAD_BINARY, path);
+        case OcrEngine::EngineOcrad:
+            if (checkOcrBinary(path, "ocrad", true)) {
+                mConfig.writePathEntry(CFG_OCRAD_BINARY, path);
+            }
             break;
 
-default:    break;
+        default:    break;
         }
     }
 }
-
 
 void KookaOcrPage::defaultSettings()
 {
@@ -435,40 +419,38 @@ void KookaOcrPage::defaultSettings()
     slotEngineSelected(OcrEngine::EngineNone);
 }
 
-
 void KookaOcrPage::slotEngineSelected(int i)
 {
     mSelectedEngine = static_cast<OcrEngine::EngineType>(i);
     kDebug() << "engine is" << mSelectedEngine;
 
     QString msg;
-    switch (mSelectedEngine)
-    {
-case OcrEngine::EngineNone:
+    switch (mSelectedEngine) {
+    case OcrEngine::EngineNone:
         mOcrBinaryReq->setEnabled(false);
         mOcrBinaryReq->clear();
         msg = i18n("No OCR engine is selected. Select and configure one to perform OCR.");
         break;
 
-case OcrEngine::EngineGocr:
+    case OcrEngine::EngineGocr:
         mOcrBinaryReq->setEnabled(true);
-        mOcrBinaryReq->setUrl(KookaPref::tryFindGocr());
+        //QT5 mOcrBinaryReq->setUrl(KookaPref::tryFindGocr());
         msg = OcrGocrEngine::engineDesc();
         break;
 
-case OcrEngine::EngineOcrad:
+    case OcrEngine::EngineOcrad:
         mOcrBinaryReq->setEnabled(true);
-        mOcrBinaryReq->setUrl(KookaPref::tryFindOcrad());
+        //QT5 mOcrBinaryReq->setUrl(KookaPref::tryFindOcrad());
         msg = OcrOcradEngine::engineDesc();
         break;
 
-case OcrEngine::EngineKadmos:
+    case OcrEngine::EngineKadmos:
         mOcrBinaryReq->setEnabled(false);
         mOcrBinaryReq->clear();
         msg = OcrKadmosEngine::engineDesc();
         break;
 
-default:
+    default:
         mOcrBinaryReq->setEnabled(false);
         mOcrBinaryReq->clear();
 
@@ -479,30 +461,27 @@ default:
     mDescLabel->setText(msg);
 }
 
-
 bool KookaOcrPage::checkOcrBinary(const QString &cmd, const QString &bin, bool show_msg)
 {
     // Why do we do this test?  See KookaPref::tryFindBinary().
-    if (!cmd.contains(bin)) return (false);
-
-    QFileInfo fi(cmd);
-    if (!fi.exists())
-    {
-        if (show_msg) KMessageBox::sorry(this,i18n("<qt>"
-                                                   "The path <filename>%1</filename> is not a valid binary.\n"
-                                                   "Please check the path and install the program if necessary.", cmd),
-                                         i18n("OCR Engine Not Found"));
+    if (!cmd.contains(bin)) {
         return (false);
     }
-    else
-    {
+
+    QFileInfo fi(cmd);
+    if (!fi.exists()) {
+        if (show_msg) KMessageBox::sorry(this, i18n("<qt>"
+                                             "The path <filename>%1</filename> is not a valid binary.\n"
+                                             "Please check the path and install the program if necessary.", cmd),
+                                             i18n("OCR Engine Not Found"));
+        return (false);
+    } else {
         /* File exists, check if not dir and executable */
-        if (fi.isDir() || (!fi.isExecutable()))
-        {
-            if (show_msg) KMessageBox::sorry(this,i18n("<qt>"
-                                                       "The program <filename>%1</filename> exists, but is not executable.\n"
-                                                       "Please check the path and permissions, and/or reinstall the program if necessary.", cmd),
-                                             i18n("OCR Engine Not Executable"));
+        if (fi.isDir() || (!fi.isExecutable())) {
+            if (show_msg) KMessageBox::sorry(this, i18n("<qt>"
+                                                 "The program <filename>%1</filename> exists, but is not executable.\n"
+                                                 "Please check the path and permissions, and/or reinstall the program if necessary.", cmd),
+                                                 i18n("OCR Engine Not Executable"));
             return (false);
         }
     }

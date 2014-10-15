@@ -1,7 +1,7 @@
 /* This file is part of the KDE Project
 
    Copyright (C) 2000 Klaas Freitag <freitag@suse.de>
-   Copyright (C) 2010 Jonathan Marten <jjm@keelhaul.me.uk>  
+   Copyright (C) 2010 Jonathan Marten <jjm@keelhaul.me.uk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -26,7 +26,6 @@
 */
 
 #include "kookapref.h"
-#include "kookapref.moc"
 
 #ifdef HAVE_ERRNO_H
 #include <errno.h>
@@ -43,7 +42,7 @@
 
 #include <qlayout.h>
 #include <qdir.h>
-
+#include <QIcon>
 #include <klocale.h>
 #include <kconfig.h>
 #include <kglobal.h>
@@ -52,9 +51,9 @@
 #include <kstandarddirs.h>
 #include <kmessagebox.h>
 #include <kstandardguiitem.h>
-
+#include <KDialog>
+#include <QStandardPaths>
 #include "prefspages.h"
-
 
 KookaPref::KookaPref(QWidget *parent)
     : KPageDialog(parent)
@@ -62,10 +61,10 @@ KookaPref::KookaPref(QWidget *parent)
     setObjectName("KookaPref");
 
     setModal(true);
-    setButtons(KDialog::Help|KDialog::Default|KDialog::Ok|KDialog::Apply|KDialog::Cancel);
-    setDefaultButton(KDialog::Ok);
-    setCaption(i18n("Preferences"));
-    showButtonSeparator(true);
+    //QT5 setButtons(KDialog::Help|KDialog::Default|KDialog::Ok|KDialog::Apply|KDialog::Cancel);
+    //QT5 setDefaultButton(KDialog::Ok);
+    setWindowTitle(i18n("Preferences"));
+    //QT5 showButtonSeparator(true);
 
     createPage(new KookaGeneralPage(this), i18n("General"), i18n("General Options"), "configure");
     createPage(new KookaStartupPage(this), i18n("Startup"), i18n("Startup Options"), "system-run");
@@ -80,107 +79,101 @@ KookaPref::KookaPref(QWidget *parent)
     setMinimumSize(670, 380);
 }
 
-
 int KookaPref::createPage(KookaPrefsPage *page,
                           const QString &name,
                           const QString &header,
                           const char *icon)
 {
     QVBoxLayout *top = static_cast<QVBoxLayout *>(page->layout());
-    if (top!=NULL) top->addStretch(1);
+    if (top != NULL) {
+        top->addStretch(1);
+    }
 
     KPageWidgetItem *item = addPage(page, name);
     item->setHeader(header);
-    item->setIcon(KIcon(icon));
+    item->setIcon(QIcon::fromTheme(icon));
 
-    int idx = mPages.count();				// index of new item
+    int idx = mPages.count();               // index of new item
     mPages.append(item);
-    return (idx);					// index of item added
+    return (idx);                   // index of item added
 }
-
 
 void KookaPref::slotSaveSettings()
 {
     kDebug();
-    for (int i = 0; i<mPages.size(); ++i)
-    {
+    for (int i = 0; i < mPages.size(); ++i) {
         KookaPrefsPage *page = static_cast<KookaPrefsPage *>(mPages[i]->widget());
         page->saveSettings();
     }
 
-    KGlobal::config()->sync();
+    KSharedConfig::openConfig()->sync();
     emit dataSaved();
 }
-
 
 void KookaPref::slotSetDefaults()
 {
     kDebug();
-    for (int i = 0; i<mPages.size(); ++i)
-    {
+    for (int i = 0; i < mPages.size(); ++i) {
         KookaPrefsPage *page = static_cast<KookaPrefsPage *>(mPages[i]->widget());
         page->defaultSettings();
     }
 }
 
-
 void KookaPref::showPageIndex(int page)
 {
-    if (page>=0 && page<mPages.size()) setCurrentPage(mPages[page]);
+    if (page >= 0 && page < mPages.size()) {
+        setCurrentPage(mPages[page]);
+    }
 }
-
 
 int KookaPref::currentPageIndex()
 {
     return (mPages.indexOf(currentPage()));
 }
 
-
 QString tryFindBinary(const QString &bin, const QString &configKey)
 {
-    KConfigGroup grp = KGlobal::config()->group(CFG_GROUP_OCR_DIA);
+    KConfigGroup grp = KSharedConfig::openConfig()->group(CFG_GROUP_OCR_DIA);
 
     /* First check the config files for an entry */
-    QString exe = grp.readPathEntry(configKey, "");	// try from config file
+    QString exe = grp.readPathEntry(configKey, ""); // try from config file
 
     // Why do we do the second test here?  checkOcrBinary() does the same, why also?
-    if (!exe.isEmpty() && exe.contains(bin))
-    {
-        QFileInfo fi(exe);				// check for valid executable
-        if (fi.exists() && fi.isExecutable() && !fi.isDir()) return (exe);
+    if (!exe.isEmpty() && exe.contains(bin)) {
+        QFileInfo fi(exe);              // check for valid executable
+        if (fi.exists() && fi.isExecutable() && !fi.isDir()) {
+            return (exe);
+        }
     }
 
     /* Otherwise find the program on the user's search path */
-    return (KGlobal::dirs()->findExe(bin));		// search using $PATH
+    return (KGlobal::dirs()->findExe(bin));     // search using $PATH
 }
-
 
 QString KookaPref::tryFindGocr()
 {
     return (tryFindBinary("gocr", CFG_GOCR_BINARY));
 }
 
-
-QString KookaPref::tryFindOcrad( void )
+QString KookaPref::tryFindOcrad(void)
 {
     return (tryFindBinary("ocrad", CFG_OCRAD_BINARY));
 }
 
-
 // Support for the gallery location - moved here from Previewer class in libkscan
 
-QString KookaPref::sGalleryRoot = QString::null;	// global resolved location
-
+QString KookaPref::sGalleryRoot = QString::null;    // global resolved location
 
 // The static variable above ensures that the user is only asked
 // at most once in an application run.
 
 QString KookaPref::galleryRoot()
 {
-    if (sGalleryRoot.isNull()) sGalleryRoot = findGalleryRoot();
+    if (sGalleryRoot.isNull()) {
+        sGalleryRoot = findGalleryRoot();
+    }
     return (sGalleryRoot);
 }
-
 
 // Get the user's configured KDE documents path.  It may not exist yet, in
 // which case QDir::canonicalPath() will fail - try QDir::absolutePath() in
@@ -188,20 +181,22 @@ QString KookaPref::galleryRoot()
 
 static QString docsPath()
 {
-    QString docpath = QDir(KGlobalSettings::documentPath()).canonicalPath();
-    if (docpath.isEmpty()) docpath = QDir(KGlobalSettings::documentPath()).absolutePath();
-    if (docpath.isEmpty()) docpath = getenv("HOME");
+    QString docpath = QDir(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)).canonicalPath();
+    if (docpath.isEmpty()) {
+        docpath = QDir(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)).absolutePath();
+    }
+    if (docpath.isEmpty()) {
+        docpath = getenv("HOME");
+    }
     return (docpath);
 }
-
 
 // TODO: maybe save a .directory file there which shows a 'scanner' logo?
 static QString createGallery(const QDir &d, bool *success = NULL)
 {
-    if (!d.exists())					// does not already exist
-    {
-        if (mkdir(d.path().toLocal8Bit(), 0755)!=0)	// using mkdir(2) so that we can
-        {						// get the errno if it fails
+    if (!d.exists()) {                  // does not already exist
+        if (mkdir(d.path().toLocal8Bit(), 0755) != 0) { // using mkdir(2) so that we can
+            // get the errno if it fails
 #ifdef HAVE_STRERROR
             const char *reason = strerror(errno);
 #else
@@ -225,21 +220,26 @@ static QString createGallery(const QDir &d, bool *success = NULL)
                                     "Check the document directory setting and permissions.",
                                     d.absolutePath(), docs, reason),
                                i18n("Error creating gallery"));
-            if (success!=NULL) *success = false;
+            if (success != NULL) {
+                *success = false;
+            }
             return (docs);
         }
     }
 
-    if (success!=NULL) *success = true;
+    if (success != NULL) {
+        *success = true;
+    }
     return (d.absolutePath());
 }
 
-
 QString KookaPref::findGalleryRoot()
 {
-    const KConfigGroup grp = KGlobal::config()->group(GROUP_GALLERY);
+    const KConfigGroup grp = KSharedConfig::openConfig()->group(GROUP_GALLERY);
     QString galleryName = grp.readEntry(GALLERY_LOCATION, GALLERY_DEFAULT_LOC);
-    if (galleryName.isEmpty()) galleryName = GALLERY_DEFAULT_LOC;
+    if (galleryName.isEmpty()) {
+        galleryName = GALLERY_DEFAULT_LOC;
+    }
 
     QString oldloc = KGlobal::dirs()->saveLocation("data", "ScanImages", false);
     QDir olddir(oldloc);
@@ -248,7 +248,9 @@ QString KookaPref::findGalleryRoot()
 
     QString newloc = galleryName;
     QDir newdir(newloc);
-    if (newdir.isRelative()) newdir.setPath(docsPath()+QDir::separator()+galleryName);
+    if (newdir.isRelative()) {
+        newdir.setPath(docsPath() + QDir::separator() + galleryName);
+    }
     QString newpath = newdir.absolutePath();
     bool newexists = (newdir.exists());
 
@@ -257,16 +259,11 @@ QString KookaPref::findGalleryRoot()
 
     QString dir;
 
-    if (!oldexists && !newexists)			// no directories present
-    {
-        dir = createGallery(newdir);			// create and use new
-    }
-    else if (!oldexists && newexists)			// only new exists
-    {
-        dir = newpath;					// fine, just use that
-    }
-    else if (oldexists && !newexists)			// only old exists
-    {
+    if (!oldexists && !newexists) {         // no directories present
+        dir = createGallery(newdir);            // create and use new
+    } else if (!oldexists && newexists) {       // only new exists
+        dir = newpath;                  // fine, just use that
+    } else if (oldexists && !newexists) {       // only old exists
         if (KMessageBox::questionYesNo(NULL,
                                        i18n("<qt>"
                                             "<p>An old Kooka gallery was found at<br>"
@@ -277,12 +274,11 @@ QString KookaPref::findGalleryRoot()
                                             oldpath, newpath),
                                        i18n("Create New Gallery"),
                                        KStandardGuiItem::yes(), KStandardGuiItem::no(),
-                                       "GalleryNoMigrate")==KMessageBox::Yes)
-        {						// yes, create new
+                                       "GalleryNoMigrate") == KMessageBox::Yes) {
+            // yes, create new
             bool created;
             dir = createGallery(newdir, &created);
-            if (created)				// new created OK
-            {
+            if (created) {              // new created OK
                 KMessageBox::information(NULL,
                                          i18n("<qt>"
                                               "<p>Kooka will use the new gallery,<br>"
@@ -293,16 +289,12 @@ QString KookaPref::findGalleryRoot()
                                               newpath, oldpath),
                                          i18n("New Gallery Created"),
                                          QString::null,
-                                         KMessageBox::Notify|KMessageBox::AllowLink);
+                                         KMessageBox::Notify | KMessageBox::AllowLink);
             }
+        } else {                    // no, don't create
+            dir = oldpath;              // stay with old location
         }
-        else						// no, don't create
-        {
-            dir = oldpath;				// stay with old location
-        }
-    }
-    else						// both exist
-    {
+    } else {                    // both exist
         KMessageBox::information(NULL,
                                  i18n("<qt>"
                                       "<p>Kooka will use the new gallery,<br>"
@@ -313,11 +305,13 @@ QString KookaPref::findGalleryRoot()
                                       newpath, oldpath),
                                  i18n("Old Gallery Exists"),
                                  "GalleryNoRemind",
-                                 KMessageBox::Notify|KMessageBox::AllowLink);
-        dir = newpath;					// just use new one
+                                 KMessageBox::Notify | KMessageBox::AllowLink);
+        dir = newpath;                  // just use new one
     }
 
-    if (!dir.endsWith("/")) dir += "/";
+    if (!dir.endsWith("/")) {
+        dir += "/";
+    }
     kDebug() << "returning" << dir;
     return (dir);
 }

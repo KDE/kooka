@@ -1,5 +1,5 @@
-/* This file is part of the KDE Project				-*- mode:c++ -*-
-   Copyright (C) 2008 Jonathan Marten <jjm@keelhaul.me.uk>  
+/* This file is part of the KDE Project             -*- mode:c++ -*-
+   Copyright (C) 2008 Jonathan Marten <jjm@keelhaul.me.uk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -24,10 +24,8 @@
 
 #include <kdialog.h>
 
-
 class QComboBox;
 class KLineEdit;
-
 
 /**
  * @short A dialogue to allow the user to manually enter a scan device.
@@ -87,5 +85,4 @@ private:
     QComboBox *mTypeCombo;
 };
 
-
-#endif							// ADDDEVICE_H
+#endif                          // ADDDEVICE_H

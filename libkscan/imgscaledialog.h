@@ -1,5 +1,5 @@
 /* This file is part of the KDE Project
-   Copyright (C) 1999 Klaas Freitag <freitag@suse.de>  
+   Copyright (C) 1999 Klaas Freitag <freitag@suse.de>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -33,27 +33,27 @@ class KLineEdit;
  */
 class KSCAN_EXPORT ImgScaleDialog : public KDialog
 {
-   Q_OBJECT
-      
-public:
-   ImgScaleDialog( QWidget *parent, int curr_sel = 100);
+    Q_OBJECT
 
-   int getSelected() const;
+public:
+    ImgScaleDialog(QWidget *parent, int curr_sel = 100);
+
+    int getSelected() const;
 
 signals:
-   void customScaleChange(int scale);
+    void customScaleChange(int scale);
 
 protected slots:
-   void slotSetSelValue(int val);
-   void slotEnableAndFocus(bool b);
-   void slotCustomChanged(const QString &text);
+    void slotSetSelValue(int val);
+    void slotEnableAndFocus(bool b);
+    void slotCustomChanged(const QString &text);
 
 private:
-   KLineEdit *leCust;
-   int selected;
+    KLineEdit *leCust;
+    int selected;
 
-   class ImgScaleDialogPrivate;
-   ImgScaleDialogPrivate *d;
+    class ImgScaleDialogPrivate;
+    ImgScaleDialogPrivate *d;
 };
 
-#endif							// IMGSCALEDIALOG_H
+#endif                          // IMGSCALEDIALOG_H

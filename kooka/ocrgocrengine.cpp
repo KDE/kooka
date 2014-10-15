@@ -24,7 +24,6 @@
  ***************************************************************************/
 
 #include "ocrgocrengine.h"
-#include "ocrgocrengine.moc"
 
 #ifdef HAVE_ERRNO_H
 #include <errno.h>
@@ -50,34 +49,26 @@
 #include "imageformat.h"
 #include "ocrgocrdialog.h"
 
-
-
-
 static const char *possibleResultFiles[] = { "out30.png", "out20.png", "out30.bmp", "out20.bmp", NULL };
-
-
 
 OcrGocrEngine::OcrGocrEngine(QWidget *parent)
     : OcrEngine(parent)
 {
     m_tempDir = NULL;
-    m_inputFile = QString::null;			// input image file
-    m_resultFile = QString::null;			// OCR result text file
-    m_stderrFile = QString::null;			// stderr log/debug output
-    m_ocrResultFile = QString::null;			// OCR result image
+    m_inputFile = QString::null;            // input image file
+    m_resultFile = QString::null;           // OCR result text file
+    m_stderrFile = QString::null;           // stderr log/debug output
+    m_ocrResultFile = QString::null;            // OCR result image
 }
-
 
 OcrGocrEngine::~OcrGocrEngine()
 {
 }
 
-
 OcrBaseDialog *OcrGocrEngine::createOCRDialog(QWidget *parent)
 {
     return (new OcrGocrDialog(parent));
 }
-
 
 QString OcrGocrEngine::engineDesc()
 {
@@ -91,18 +82,16 @@ QString OcrGocrEngine::engineDesc()
                  "for more information on GOCR."));
 }
 
-
 static QString newTempFile(const QString &suffix)
 {
     KTemporaryFile tf;
     tf.setSuffix(suffix);
-    tf.setAutoRemove(false);				// we will do this later
-    tf.open();						// create the file
-    QString result = tf.fileName();			// save its assigned name
-    tf.close();						// don't need it any more
+    tf.setAutoRemove(false);                // we will do this later
+    tf.open();                      // create the file
+    QString result = tf.fileName();         // save its assigned name
+    tf.close();                     // don't need it any more
     return (result);
 }
-
 
 void OcrGocrEngine::startProcess(OcrBaseDialog *dia, const KookaImage *img)
 {
@@ -110,38 +99,43 @@ void OcrGocrEngine::startProcess(OcrBaseDialog *dia, const KookaImage *img)
     const QString cmd = gocrDia->getOCRCmd();
 
     const char *format;
-    if (img->depth()== 1) format = "PBM";		// B&W bitmap
-    else if (img->isGrayscale()) format = "PGM";	// greyscale
-    else format = "PPM";				// colour
+    if (img->depth() == 1) {
+        format = "PBM";    // B&W bitmap
+    } else if (img->isGrayscale()) {
+        format = "PGM";    // greyscale
+    } else {
+        format = "PPM";    // colour
+    }
 
     // TODO: if the input file is local and is readable by GOCR,
     // can use it directly (but don't delete it afterwards!)
     m_inputFile = ImgSaver::tempSaveImage(img, ImageFormat(format));
-							// save image to a temp file
-    m_ocrResultFile = QString::null;			// don't know this until finished
+    // save image to a temp file
+    m_ocrResultFile = QString::null;            // don't know this until finished
 
-    if (m_ocrProcess!=NULL) delete m_ocrProcess;	// kill old process if still there
-    m_ocrProcess = new KProcess();			// start new GOCR process
+    if (m_ocrProcess != NULL) {
+        delete m_ocrProcess;    // kill old process if still there
+    }
+    m_ocrProcess = new KProcess();          // start new GOCR process
     Q_CHECK_PTR(m_ocrProcess);
 
-    m_ocrResultText = QString::null;			// clear buffer for capturing
+    m_ocrResultText = QString::null;            // clear buffer for capturing
 
-    m_tempDir = new KTempDir();				// new unique temporary directory
+    m_tempDir = new KTempDir();             // new unique temporary directory
     m_ocrProcess->setWorkingDirectory(m_tempDir->name());
-							// run process in there
+    // run process in there
     connect(m_ocrProcess, SIGNAL(finished(int, QProcess::ExitStatus)), SLOT(slotGOcrExited(int, QProcess::ExitStatus)));
     connect(m_ocrProcess, SIGNAL(readyReadStandardOutput()), SLOT(slotGOcrStdout()));
 
-    QStringList args;					// arguments for process
+    QStringList args;                   // arguments for process
 
-    if (img->numColors()<0 || img->numColors()>3)	// Not a B&W image
-    {
+    if (img->numColors() < 0 || img->numColors() > 3) { // Not a B&W image
         args << "-l" << QString::number(gocrDia->getGraylevel());
     }
     args << "-s" << QString::number(gocrDia->getSpaceWidth());
     args << "-d" << QString::number(gocrDia->getDustsize());
 
-    args << "-v" << "32";				// write a result image
+    args << "-v" << "32";               // write a result image
 
     // Specify this explicitly, because "-" does not mean the same
     // as "/dev/stdout".  The former interleaves the progress outout
@@ -155,15 +149,15 @@ void OcrGocrEngine::startProcess(OcrBaseDialog *dia, const KookaImage *img)
     // Even for OCR processing which takes longer than that, it is still
     // not very useful because Kooka doesn't use the progress result - nothing
     // connects to the ocrProgress() signal :-(
-    args << "-x" << "/dev/stdout";			// progress to stdout
+    args << "-x" << "/dev/stdout";          // progress to stdout
 
-    m_resultFile = newTempFile(".gocrout.txt");		// OCR result text file
+    m_resultFile = newTempFile(".gocrout.txt");     // OCR result text file
     args << "-o" << QFile::encodeName(m_resultFile);
 
-    m_stderrFile = newTempFile(".gocrerr.txt");		// stderr log/debug output
+    m_stderrFile = newTempFile(".gocrerr.txt");     // stderr log/debug output
     args << "-e" << QFile::encodeName(m_stderrFile);
 
-    args << "-i" << QFile::encodeName(m_inputFile);	// input image file
+    args << "-i" << QFile::encodeName(m_inputFile); // input image file
 
     kDebug() << "Running GOCR on" << format << "file"
              << "as [" << cmd << args.join(" ") << "]";
@@ -173,21 +167,19 @@ void OcrGocrEngine::startProcess(OcrBaseDialog *dia, const KookaImage *img)
     m_ocrProcess->setOutputChannelMode(KProcess::OnlyStdoutChannel);
 
     m_ocrProcess->start();
-    if (!m_ocrProcess->waitForStarted(5000))
-    {
+    if (!m_ocrProcess->waitForStarted(5000)) {
         kDebug() << "Error starting GOCR process!";
+    } else {
+        kDebug() << "GOCR process started";
     }
-    else kDebug() << "GOCR process started";
 }
-
 
 void OcrGocrEngine::slotGOcrExited(int exitCode, QProcess::ExitStatus exitStatus)
 {
     kDebug() << "exit code" << exitCode << "status" << exitStatus;
 
     QFile rf(m_resultFile);
-    if (!rf.open(QIODevice::ReadOnly))
-    {
+    if (!rf.open(QIODevice::ReadOnly)) {
 #ifdef HAVE_STRERROR
         const char *reason = strerror(errno);
 #else
@@ -201,8 +193,8 @@ void OcrGocrEngine::slotGOcrExited(int exitCode, QProcess::ExitStatus exitStatus
         return;
     }
 
-    m_ocrResultText = rf.readAll();			// read all the result text
-    rf.close();						// finished with result file
+    m_ocrResultText = rf.readAll();         // read all the result text
+    rf.close();                     // finished with result file
 
     // Now all the text output by GOCR is in m_ocrResultText. Split this up
     // first into lines and then into words, and save this as the OCR results.
@@ -211,12 +203,10 @@ void OcrGocrEngine::slotGOcrExited(int exitCode, QProcess::ExitStatus exitStatus
 
     startResultDocument();
 
-    for (QStringList::const_iterator itLine = lines.constBegin(); itLine!=lines.constEnd(); ++itLine)
-    {
+    for (QStringList::const_iterator itLine = lines.constBegin(); itLine != lines.constEnd(); ++itLine) {
         startLine();
         QStringList words = (*itLine).split(QRegExp("\\s+"), QString::SkipEmptyParts);
-        for (QStringList::const_iterator itWord = words.constBegin(); itWord!=words.constEnd(); ++itWord )
-        {
+        for (QStringList::const_iterator itWord = words.constBegin(); itWord != words.constEnd(); ++itWord) {
             OcrWordData wd;
             addWord((*itWord), wd);
         }
@@ -229,11 +219,9 @@ void OcrGocrEngine::slotGOcrExited(int exitCode, QProcess::ExitStatus exitStatus
     // Find the GOCR result image
     QDir dir(m_tempDir->name());
     const char **prf = possibleResultFiles;
-    while (*prf!=NULL)					// search for result files
-    {
+    while (*prf != NULL) {              // search for result files
         QString ri = dir.absoluteFilePath(*prf);
-        if (QFile::exists(ri))				// take first one that matches
-        {
+        if (QFile::exists(ri)) {            // take first one that matches
             kDebug() << "found result image" << ri;
             m_ocrResultFile = ri;
             break;
@@ -257,11 +245,12 @@ void OcrGocrEngine::slotGOcrExited(int exitCode, QProcess::ExitStatus exitStatus
     // refer to the viewed image directly - i.e. there is no need to take a
     // copy in OcrEngine::setImage().  The result image is still displayed in
     // the image viewer in OcrEngine::finishedOCRVisible().
-    if (m_ocrResultFile.isNull()) kDebug() << "cannot find result image in" << dir.absolutePath();
+    if (m_ocrResultFile.isNull()) {
+        kDebug() << "cannot find result image in" << dir.absolutePath();
+    }
 
-    finishedOCRVisible(m_ocrProcess->exitStatus()==QProcess::NormalExit);
+    finishedOCRVisible(m_ocrProcess->exitStatus() == QProcess::NormalExit);
 }
-
 
 QStringList OcrGocrEngine::tempFiles(bool retain)
 {
@@ -269,17 +258,15 @@ QStringList OcrGocrEngine::tempFiles(bool retain)
 
     result << m_inputFile << m_resultFile << m_stderrFile << m_ocrResultFile;
 
-    if (m_tempDir!=NULL)
-    {
+    if (m_tempDir != NULL) {
         result << m_tempDir->name();
         m_tempDir->setAutoRemove(!retain);
-        delete m_tempDir;				// autoRemove will do the rest
+        delete m_tempDir;               // autoRemove will do the rest
         m_tempDir = NULL;
     }
 
     return (result);
 }
-
 
 void OcrGocrEngine::slotGOcrStdout()
 {
@@ -300,21 +287,19 @@ void OcrGocrEngine::slotGOcrStdout()
 
     m_ocrProcess->setReadChannel(QProcess::StandardOutput);
     QByteArray line;
-    while (!(line = m_ocrProcess->readLine()).isEmpty())
-    {
+    while (!(line = m_ocrProcess->readLine()).isEmpty()) {
         kDebug() << "GOCR stdout:" << line;
         // Calculate OCR progress
-        if (rx1.indexIn(line)>-1)
-        {
+        if (rx1.indexIn(line) > -1) {
             progress = rx1.capturedTexts()[1].toInt();
             subProgress = rx1.capturedTexts()[2].toInt();
-        }
-        else if (rx2a.indexIn(line)>-1 && rx2b.indexIn(line)>-1)
-        {
+        } else if (rx2a.indexIn(line) > -1 && rx2b.indexIn(line) > -1) {
             progress = rx2b.capturedTexts()[1].toInt();
             subProgress = rx2b.capturedTexts()[2].toInt();
         }
 
-        if (progress>0) emit ocrProgress(progress, subProgress);
+        if (progress > 0) {
+            emit ocrProgress(progress, subProgress);
+        }
     }
 }
