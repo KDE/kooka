@@ -74,5 +74,5 @@ Name[uk]=Kooka
 Name[x-test]=xxKookaxx
 Name[zh_CN]=Kooka
 
-X-DCOP-ServiceType=Multi
 Categories=Qt;KDE;Graphics;Scanning;
+X-DBUS-ServiceName=org.kde.kooka
