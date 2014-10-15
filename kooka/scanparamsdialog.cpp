@@ -28,7 +28,7 @@
 #include <klineedit.h>
 #include <klocale.h>
 #include <kconfig.h>
-#include <kdebug.h>
+#include <QDebug>
 #include <kmessagebox.h>
 #include <kstandardguiitem.h>
 
@@ -112,7 +112,7 @@ void ScanParamsDialog::populateList()
     sets = KScanOptSet::readList();
 
     for (KScanOptSet::StringMap::const_iterator it = sets.constBegin(); it != sets.constEnd(); ++it) {
-        kDebug() << "saveset" << it.key();
+        //qDebug() << "saveset" << it.key();
         paramsList->addItem(it.key());
     }
 }
@@ -148,11 +148,11 @@ void ScanParamsDialog::slotLoad()
         return;
     }
     QString name = item->text();
-    kDebug() << "set" << name;
+    //qDebug() << "set" << name;
 
     KScanOptSet optSet(name);
     if (!optSet.loadConfig()) {
-        kDebug() << "Failed to load set" << name;
+        //qDebug() << "Failed to load set" << name;
         return;
     }
 
@@ -166,7 +166,7 @@ void ScanParamsDialog::slotLoadAndClose(QListWidgetItem *item)
         return;
     }
 
-    kDebug() << "set" << item->text();
+    //qDebug() << "set" << item->text();
 
     paramsList->setCurrentItem(item);
     slotLoad();
@@ -180,7 +180,7 @@ void ScanParamsDialog::slotSave()
     if (item != NULL) {
         name = item->text();
     }
-    kDebug() << "selected set" << name;
+    //qDebug() << "selected set" << name;
 
     QString newdesc = QString::null;
     if (sets.contains(name)) {
@@ -198,7 +198,7 @@ void ScanParamsDialog::slotSave()
         QString newName = d.getName();
         QString newDesc = d.getDescription();
 
-        kDebug() << "name" << newName << "desc" << newDesc;
+        //qDebug() << "name" << newName << "desc" << newDesc;
 
         KScanOptSet optSet(newName);
         sane->getCurrentOptions(&optSet);
@@ -228,7 +228,7 @@ void ScanParamsDialog::slotEdit()
         return;
     }
     QString oldName = item->text();
-    kDebug() << "selected set" << oldName;
+    //qDebug() << "selected set" << oldName;
 
     NewScanParams d(this, oldName, sets[oldName], true);
     if (d.exec()) {
@@ -238,11 +238,11 @@ void ScanParamsDialog::slotEdit()
             return;
         }
 
-        kDebug() << "new name" << newName << "desc" << newDesc;
+        //qDebug() << "new name" << newName << "desc" << newDesc;
 
         KScanOptSet optSet(oldName.toLocal8Bit());
         if (!optSet.loadConfig()) {
-            kDebug() << "Failed to load set" << oldName;
+            //qDebug() << "Failed to load set" << oldName;
             return;
         }
 
@@ -266,7 +266,7 @@ void ScanParamsDialog::slotDelete()
         return;
     }
     QString name = item->text();
-    kDebug() << "set" << name;
+    //qDebug() << "set" << name;
 
     if (KMessageBox::warningContinueCancel(this, i18n("<qt>Do you really want to delete the set '<b>%1</b>'?", name),
                                            i18n("Delete Scan Parameter Set"),

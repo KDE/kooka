@@ -43,7 +43,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <memory.h>
-#include <kdebug.h>
+#include <QDebug>
 
 #include "kadmosocr.h"
 #include "ocrword.h"
@@ -104,13 +104,13 @@ KADMOS_ERROR CRep::Init(const char *ClassifierFilename)
                                                sizeof(RelResult));
     m_RepData.init.rep_memory = malloc(m_RepData.init.rep_memory_size);
     if (!m_RepData.init.rep_memory) {
-        CheckError();
+        ChecqCritical();
         return m_Error;
     }
     strcpy(m_RepData.init.version, INC_KADMOS);
 
     m_Error = rep_init(&m_RepData, (char *)ClassifierFilename);
-    CheckError();
+    ChecqCritical();
     return m_Error;
 }
 
@@ -118,13 +118,13 @@ void CRep::run() // KADMOS_ERROR CRep::Recognize()
 {
     kdDebug(28000) << "ooo Locked and ocr!" << endl;
     m_Error = rep_do(&m_RepData);
-    CheckError();
+    ChecqCritical();
 }
 
 KADMOS_ERROR CRep::End()
 {
     m_Error = rep_end(&m_RepData);
-    CheckError();
+    ChecqCritical();
     return m_Error;
 }
 
@@ -137,7 +137,7 @@ const char *CRep::RepTextLine(int nLine, unsigned char RejectLevel, int RejectCh
 {
     m_Error = rep_textline(&m_RepData, nLine, m_Line,
                            2 * CHAR_MAX_LEN, RejectLevel, RejectChar, Format);
-    CheckError();
+    ChecqCritical();
     return m_Line;
 }
 
@@ -310,7 +310,7 @@ KADMOS_ERROR CRep::SetImage(const QString file)
     if (! image_handle) {
         kdDebug(28000) << "Can not load input file" << endl;
     }
-    CheckError();
+    ChecqCritical();
     return RE_SUCCESS;
 
 }
@@ -349,7 +349,7 @@ KADMOS_ERROR CRep::SetImage(QImage *Image)
     m_RepData.image.xresolution = 200;
     m_RepData.image.yresolution = 200;
 
-    CheckError();
+    ChecqCritical();
 
     return RE_SUCCESS;
 }
@@ -372,7 +372,7 @@ void CRep::SetScaling(bool bScaling)
     }
 }
 
-void CRep::CheckError()
+void CRep::ChecqCritical()
 {
     if (kadmosError()) {
         kdDebug(28000) << "KADMOS ERROR: " << getErrorText() << endl;

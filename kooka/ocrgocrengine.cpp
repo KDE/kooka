@@ -37,7 +37,7 @@
 #include <qdir.h>
 #include <qstringlist.h>
 
-#include <kdebug.h>
+#include <QDebug>
 #include <kprocess.h>
 #include <ktempdir.h>
 #include <klocale.h>
@@ -159,8 +159,8 @@ void OcrGocrEngine::startProcess(OcrBaseDialog *dia, const KookaImage *img)
 
     args << "-i" << QFile::encodeName(m_inputFile); // input image file
 
-    kDebug() << "Running GOCR on" << format << "file"
-             << "as [" << cmd << args.join(" ") << "]";
+    //qDebug() << "Running GOCR on" << format << "file"
+             //<< "as [" << cmd << args.join(" ") << "]";
 
     m_ocrProcess->setProgram(QFile::encodeName(cmd), args);
     m_ocrProcess->setNextOpenMode(QIODevice::ReadOnly);
@@ -168,15 +168,15 @@ void OcrGocrEngine::startProcess(OcrBaseDialog *dia, const KookaImage *img)
 
     m_ocrProcess->start();
     if (!m_ocrProcess->waitForStarted(5000)) {
-        kDebug() << "Error starting GOCR process!";
+        //qDebug() << "Error starting GOCR process!";
     } else {
-        kDebug() << "GOCR process started";
+        //qDebug() << "GOCR process started";
     }
 }
 
 void OcrGocrEngine::slotGOcrExited(int exitCode, QProcess::ExitStatus exitStatus)
 {
-    kDebug() << "exit code" << exitCode << "status" << exitStatus;
+    //qDebug() << "exit code" << exitCode << "status" << exitStatus;
 
     QFile rf(m_resultFile);
     if (!rf.open(QIODevice::ReadOnly)) {
@@ -199,7 +199,7 @@ void OcrGocrEngine::slotGOcrExited(int exitCode, QProcess::ExitStatus exitStatus
     // Now all the text output by GOCR is in m_ocrResultText. Split this up
     // first into lines and then into words, and save this as the OCR results.
     QStringList lines = m_ocrResultText.split('\n', QString::SkipEmptyParts);
-    kDebug() << "RESULT" << m_ocrResultText << "split to" << lines.count() << "lines";
+    //qDebug() << "RESULT" << m_ocrResultText << "split to" << lines.count() << "lines";
 
     startResultDocument();
 
@@ -214,7 +214,7 @@ void OcrGocrEngine::slotGOcrExited(int exitCode, QProcess::ExitStatus exitStatus
     }
 
     finishResultDocument();
-    kDebug() << "Finished splitting";
+    //qDebug() << "Finished splitting";
 
     // Find the GOCR result image
     QDir dir(m_tempDir->name());
@@ -222,7 +222,7 @@ void OcrGocrEngine::slotGOcrExited(int exitCode, QProcess::ExitStatus exitStatus
     while (*prf != NULL) {              // search for result files
         QString ri = dir.absoluteFilePath(*prf);
         if (QFile::exists(ri)) {            // take first one that matches
-            kDebug() << "found result image" << ri;
+            //qDebug() << "found result image" << ri;
             m_ocrResultFile = ri;
             break;
         }
@@ -236,7 +236,7 @@ void OcrGocrEngine::slotGOcrExited(int exitCode, QProcess::ExitStatus exitStatus
     //   m_introducedImage = new KookaImage();
     //   ...
     //   if (!m_ocrResultFile.isNull()) m_introducedImage->load(m_ocrResultFile);
-    //   else kDebug() << "cannot find result image in" << dir.absolutePath();
+    //   else //qDebug() << "cannot find result image in" << dir.absolutePath();
     //
     // But that seems pointless - the replaced m_introducedImage was not
     // subsequently used anywhere (although would it be reused if "Start OCR"
@@ -246,7 +246,7 @@ void OcrGocrEngine::slotGOcrExited(int exitCode, QProcess::ExitStatus exitStatus
     // copy in OcrEngine::setImage().  The result image is still displayed in
     // the image viewer in OcrEngine::finishedOCRVisible().
     if (m_ocrResultFile.isNull()) {
-        kDebug() << "cannot find result image in" << dir.absolutePath();
+        //qDebug() << "cannot find result image in" << dir.absolutePath();
     }
 
     finishedOCRVisible(m_ocrProcess->exitStatus() == QProcess::NormalExit);
@@ -288,7 +288,7 @@ void OcrGocrEngine::slotGOcrStdout()
     m_ocrProcess->setReadChannel(QProcess::StandardOutput);
     QByteArray line;
     while (!(line = m_ocrProcess->readLine()).isEmpty()) {
-        kDebug() << "GOCR stdout:" << line;
+        //qDebug() << "GOCR stdout:" << line;
         // Calculate OCR progress
         if (rx1.indexIn(line) > -1) {
             progress = rx1.capturedTexts()[1].toInt();

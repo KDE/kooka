@@ -26,7 +26,7 @@
 
 #include "galleryhistory.h"
 
-#include <kdebug.h>
+#include <QDebug>
 #include <klocale.h>
 #include <kcombobox.h>
 
@@ -78,7 +78,7 @@ static QString entryName(const FileTreeBranch *branch, const QString &relPath)
 void GalleryHistory::slotPathRemoved(const FileTreeBranch *branch, const QString &relPath)
 {
     QString removeEntry = entryData(branch, relPath);
-    kDebug() << "removing" << removeEntry;
+    //qDebug() << "removing" << removeEntry;
 
     int idx = findData(removeEntry);
     if (idx == -1) {
@@ -94,7 +94,7 @@ void GalleryHistory::slotPathRemoved(const FileTreeBranch *branch, const QString
 void GalleryHistory::slotPathChanged(const FileTreeBranch *branch, const QString &relPath)
 {
     QString newData = entryData(branch, relPath);
-    kDebug() << "inserting" << newData;
+    //qDebug() << "inserting" << newData;
 
     int idx = findData(newData);            // see if exists already
     if (idx != -1) {

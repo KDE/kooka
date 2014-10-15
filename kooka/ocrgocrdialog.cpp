@@ -35,7 +35,7 @@
 #include <kvbox.h>
 #include <kconfig.h>
 #include <kglobal.h>
-#include <kdebug.h>
+#include <QDebug>
 #include <klocale.h>
 #include <kseparator.h>
 #include <kmessagebox.h>
@@ -154,7 +154,7 @@ void OcrGocrDialog::introduceImage(const KookaImage *img)
 
     m_isBW = true;
     if (img->numColors() > 0 && img->numColors() <= 2) {
-        kDebug() << "Have" << img->numColors() << "colors on depth" << img->depth();
+        //qDebug() << "Have" << img->numColors() << "colors on depth" << img->depth();
         /* that means it is a black-and-white image. Thus we do not need the GrayLevel slider */
         m_isBW = false;
     }
@@ -166,7 +166,7 @@ void OcrGocrDialog::introduceImage(const KookaImage *img)
 
 void OcrGocrDialog::slotWriteConfig(void)
 {
-    kDebug();
+    //qDebug();
 
     OcrBaseDialog::slotWriteConfig();
 
@@ -186,7 +186,7 @@ void OcrGocrDialog::enableFields(bool enable)
 
 QString OcrGocrDialog::version()
 {
-    kDebug() << "of" << m_ocrCmd;
+    //qDebug() << "of" << m_ocrCmd;
 
     QString vers;
 
@@ -204,7 +204,7 @@ QString OcrGocrDialog::version()
             vers = i18n("Unknown");
         }
     } else {
-        kDebug() << "failed with status" << status;
+        //qDebug() << "failed with status" << status;
         vers = i18n("Error");
     }
 

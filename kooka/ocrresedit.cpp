@@ -37,7 +37,7 @@
 #include <qfile.h>
 #include <qtextstream.h>
 
-#include <kdebug.h>
+#include <QDebug>
 #include <kfiledialog.h>
 #include <klocale.h>
 #include <kmessagebox.h>
@@ -90,7 +90,7 @@ void OcrResEdit::slotSelectWord(const QPoint &pos)
         return;    // nothing to search
     }
 
-    kDebug() << pos;
+    //qDebug() << pos;
 
     QTextCursor curs(document());           // start of document
     QRect wordRect;
@@ -101,7 +101,7 @@ void OcrResEdit::slotSelectWord(const QPoint &pos)
     while (!curs.atEnd()) {
         QTextCharFormat fmt = curs.charFormat();
         QRect rect = fmt.property(OcrWordData::Rectangle).toRect();
-        //kDebug() << "at" << curs.position() << "rect" << rect;
+        ////qDebug() << "at" << curs.position() << "rect" << rect;
         if (rect.isValid() && rect.contains(pos, true)) {
             wordRect = rect;
             break;
@@ -109,7 +109,7 @@ void OcrResEdit::slotSelectWord(const QPoint &pos)
         moveForward(curs);
     }
 
-    kDebug() << "found rect" << wordRect << "at" << curs.position();
+    //qDebug() << "found rect" << wordRect << "at" << curs.position();
 
     if (!wordRect.isValid()) {
         return;    // no word found
@@ -124,16 +124,16 @@ void OcrResEdit::slotSelectWord(const QPoint &pos)
     moveForward(curs);
     while (!curs.atEnd()) {
         QTextCharFormat fmt = curs.charFormat();
-        //kDebug() << "at" << curs.position() << "rect" << fmt.property(OcrWordData::Rectangle).toRect();
+        ////qDebug() << "at" << curs.position() << "rect" << fmt.property(OcrWordData::Rectangle).toRect();
         if (fmt != ref) {
-            //kDebug() << "mismatch at" << curs.position();
+            ////qDebug() << "mismatch at" << curs.position();
             break;
         }
         moveForward(curs);
     }
 
     curs.movePosition(QTextCursor::PreviousCharacter);
-    kDebug() << "word start" << wordStart.position() << "end" << curs.position();
+    //qDebug() << "word start" << wordStart.position() << "end" << curs.position();
     int pos1 = wordStart.position();
     int pos2 = curs.position();
     if (pos1 == pos2) {
@@ -177,36 +177,36 @@ void OcrResEdit::slotUpdateHighlight()
     if (isReadOnly()) {
         return;
     }
-    //kDebug() << "pos" << textCursor().position() << "hassel" << textCursor().hasSelection()
+    ////qDebug() << "pos" << textCursor().position() << "hassel" << textCursor().hasSelection()
     //         << "start" << textCursor().selectionStart() << "end" << textCursor().selectionEnd();
 
     QTextCursor curs = textCursor();            // will not move cursor, see
     // QTextEdit::textCursor() doc
     if (curs.hasSelection()) {
-        //kDebug() << "sel start" << curs.selectionStart() << "end" << curs.selectionEnd();
+        ////qDebug() << "sel start" << curs.selectionStart() << "end" << curs.selectionEnd();
 
         int send = curs.selectionEnd();
         curs.setPosition(curs.selectionStart());
         curs.movePosition(QTextCursor::NextCharacter);
         QTextCharFormat ref = curs.charFormat();
-        //kDebug() << "at" << curs.position() << "format rect" << ref.property(OcrWordData::Rectangle).toRect();
+        ////qDebug() << "at" << curs.position() << "format rect" << ref.property(OcrWordData::Rectangle).toRect();
         bool same = true;
 
         while (curs.position() != send) {
             curs.movePosition(QTextCursor::NextCharacter);
             QTextCharFormat fmt = curs.charFormat();
-            //kDebug() << "at" << curs.position() << "format rect" << fmt.property(OcrWordData::Rectangle).toRect();
+            ////qDebug() << "at" << curs.position() << "format rect" << fmt.property(OcrWordData::Rectangle).toRect();
             if (fmt != ref) {
-                //kDebug() << "mismatch at" << curs.position();
+                ////qDebug() << "mismatch at" << curs.position();
                 same = false;
                 break;
             }
         }
 
-        //kDebug() << "range same format?" << same;
+        ////qDebug() << "range same format?" << same;
         if (same) {                 // valid word selection
             QRect r = ref.property(OcrWordData::Rectangle).toRect();
-            //kDebug() << "rect" << r;
+            ////qDebug() << "rect" << r;
             emit highlightWord(r);
             return;
         }

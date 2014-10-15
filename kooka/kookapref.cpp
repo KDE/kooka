@@ -47,7 +47,7 @@
 #include <kconfig.h>
 #include <kglobal.h>
 #include <kglobalsettings.h>
-#include <kdebug.h>
+#include <QDebug>
 #include <kstandarddirs.h>
 #include <kmessagebox.h>
 #include <kstandardguiitem.h>
@@ -100,7 +100,7 @@ int KookaPref::createPage(KookaPrefsPage *page,
 
 void KookaPref::slotSaveSettings()
 {
-    kDebug();
+    //qDebug();
     for (int i = 0; i < mPages.size(); ++i) {
         KookaPrefsPage *page = static_cast<KookaPrefsPage *>(mPages[i]->widget());
         page->saveSettings();
@@ -112,7 +112,7 @@ void KookaPref::slotSaveSettings()
 
 void KookaPref::slotSetDefaults()
 {
-    kDebug();
+    //qDebug();
     for (int i = 0; i < mPages.size(); ++i) {
         KookaPrefsPage *page = static_cast<KookaPrefsPage *>(mPages[i]->widget());
         page->defaultSettings();
@@ -254,8 +254,8 @@ QString KookaPref::findGalleryRoot()
     QString newpath = newdir.absolutePath();
     bool newexists = (newdir.exists());
 
-    kDebug() << "old" << oldpath << "exists" << oldexists;
-    kDebug() << "new" << newpath << "exists" << newexists;
+    //qDebug() << "old" << oldpath << "exists" << oldexists;
+    //qDebug() << "new" << newpath << "exists" << newexists;
 
     QString dir;
 
@@ -312,6 +312,6 @@ QString KookaPref::findGalleryRoot()
     if (!dir.endsWith("/")) {
         dir += "/";
     }
-    kDebug() << "returning" << dir;
+    //qDebug() << "returning" << dir;
     return (dir);
 }

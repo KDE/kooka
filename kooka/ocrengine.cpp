@@ -33,7 +33,7 @@
 #include <qtextdocument.h>
 #include <qtextcursor.h>
 
-#include <kdebug.h>
+#include <QDebug>
 #include <kmessagebox.h>
 #include <kapplication.h>
 #include <kprocess.h>
@@ -96,7 +96,7 @@ OcrEngine *OcrEngine::createEngine(QWidget *parent, bool *gotoPrefs)
 
     OcrEngine::EngineType eng = static_cast<OcrEngine::EngineType>(grp.readEntry(CFG_OCR_ENGINE2,
                                 static_cast<int>(OcrEngine::EngineNone)));
-    kDebug() << "configured OCR engine is" << eng << "=" << engineName(eng);
+    //qDebug() << "configured OCR engine is" << eng << "=" << engineName(eng);
 
     QString msg = QString::null;
     switch (eng) {
@@ -116,7 +116,7 @@ OcrEngine *OcrEngine::createEngine(QWidget *parent, bool *gotoPrefs)
                                               "Please select and configure one in the OCR configuration dialog.");
         break;
 
-    default:            kDebug() << "Cannot create engine of type" << eng;
+    default:            //qDebug() << "Cannot create engine of type" << eng;
         return (NULL);
     }
 
@@ -139,7 +139,7 @@ bool OcrEngine::engineValid() const
     OcrEngine::EngineType confEngine = static_cast<OcrEngine::EngineType>(grp.readEntry(CFG_OCR_ENGINE2,
                                        static_cast<int>(OcrEngine::EngineNone)));
 
-    kDebug() << "cur" << curEngine << "conf" << confEngine;
+    //qDebug() << "cur" << curEngine << "conf" << confEngine;
     return (curEngine == confEngine);
 }
 
@@ -218,8 +218,8 @@ void OcrEngine::finishedOCRVisible(bool success)
             }
 
             m_resultImage = new QImage(m_ocrResultFile);
-            kDebug() << "Result image" << m_ocrResultFile
-                     << "size" << m_resultImage->size();
+            //qDebug() << "Result image" << m_ocrResultFile
+                     //<< "size" << m_resultImage->size();
 
             /* The image canvas is present. Set it to our image */
             m_imgCanvas->newImage(m_resultImage, true);
@@ -248,13 +248,13 @@ void OcrEngine::finishedOCRVisible(bool success)
     m_ocrRunning = false;
     removeTempFiles();
 
-    kDebug() << "OCR finished";
+    //qDebug() << "OCR finished";
 }
 
 void OcrEngine::removeTempFiles()
 {
     bool retain = m_ocrDialog->keepTempFiles();
-    kDebug() << "retain=" << retain;
+    //qDebug() << "retain=" << retain;
 
     const QStringList temps = tempFiles(retain);
     if (temps.isEmpty()) {
@@ -295,12 +295,12 @@ void OcrEngine::removeTempFiles()
             QString tf = (*it);
             QFileInfo fi(tf);
             if (!fi.exists()) {             // what happened?
-                kDebug() << "does not exist:" << tf;
+                //qDebug() << "does not exist:" << tf;
             } else if (fi.isDir()) {
-                kDebug() << "temp dir:" << tf;
+                //qDebug() << "temp dir:" << tf;
                 //QT5 KIO::del(tf, KIO::HideProgressInfo);  // for recursive deletion
             } else {
-                kDebug() << "temp file:" << tf;
+                //qDebug() << "temp file:" << tf;
                 QFile::remove(tf);          // just a simple file
             }
         }
@@ -310,7 +310,7 @@ void OcrEngine::removeTempFiles()
 void OcrEngine::stopOCRProcess(bool tellUser)
 {
     if (m_ocrProcess != NULL && m_ocrProcess->state() == QProcess::Running) {
-        kDebug() << "Killing daemon";
+        //qDebug() << "Killing daemon";
         m_ocrProcess->kill();
         if (tellUser) {
             KMessageBox::error(m_parent, i18n("The OCR process was stopped"));
@@ -323,14 +323,14 @@ void OcrEngine::stopOCRProcess(bool tellUser)
 /* Called by "Close" used while OCR is not in progress */
 void OcrEngine::slotClose()
 {
-    kDebug();
+    //qDebug();
     stopOCRProcess(false);
 }
 
 /* Called by "Stop" used while OCR is in progress */
 void OcrEngine::slotStopOCR()
 {
-    kDebug();
+    //qDebug();
     stopOCRProcess(true);
 }
 
@@ -422,7 +422,7 @@ void OcrEngine::setTextDocument(QTextDocument *doc)
 
 QTextDocument *OcrEngine::startResultDocument()
 {
-    kDebug();
+    //qDebug();
 
     m_document->setUndoRedoEnabled(false);
     m_document->clear();
@@ -437,9 +437,9 @@ QTextDocument *OcrEngine::startResultDocument()
 
 void OcrEngine::finishResultDocument()
 {
-    kDebug() << "words" << m_wordCount
-             << "lines" << m_document->blockCount()
-             << "chars" << m_document->characterCount();
+    //qDebug() << "words" << m_wordCount
+             //<< "lines" << m_document->blockCount()
+             //<< "chars" << m_document->characterCount();
 
     if (m_cursor != NULL) {
         delete m_cursor;
@@ -451,7 +451,7 @@ void OcrEngine::finishResultDocument()
 void OcrEngine::startLine()
 {
     if (m_ocrDialog->verboseDebug()) {
-        kDebug();
+        //qDebug();
     }
     if (!m_cursor->atStart()) {
         m_cursor->insertBlock(QTextBlockFormat(), QTextCharFormat());
@@ -465,9 +465,9 @@ void OcrEngine::finishLine()
 void OcrEngine::addWord(const QString &word, const OcrWordData &data)
 {
     if (m_ocrDialog->verboseDebug()) {
-        kDebug() << "word" << word << "len" << word.length()
-                 << "rect" << data.property(OcrWordData::Rectangle)
-                 << "alts" << data.property(OcrWordData::Alternatives);
+        //qDebug() << "word" << word << "len" << word.length()
+                 //<< "rect" << data.property(OcrWordData::Rectangle)
+                 //<< "alts" << data.property(OcrWordData::Alternatives);
     }
 
     if (!m_cursor->atBlockStart()) {

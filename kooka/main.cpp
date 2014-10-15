@@ -30,7 +30,7 @@
 #include <kcmdlineargs.h>
 #include <klocale.h>
 #include <kglobal.h>
-#include <kdebug.h>
+#include <QDebug>
 
 #include "kooka.h"
 //QT5 #include "vcsversion.h"
@@ -107,7 +107,7 @@ int main(int argc, char *argv[])
     if (args->isSet("g")) {
         devToUse = "gallery";
     }
-    kDebug() << "DevToUse is" << devToUse;
+    //qDebug() << "DevToUse is" << devToUse;
 
 // TODO: not sure what this did
 //    if (args->count()==1)

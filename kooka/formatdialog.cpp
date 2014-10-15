@@ -27,7 +27,7 @@
 #include <kdialog.h>
 #include <kseparator.h>
 #include <klocale.h>
-#include <kdebug.h>
+#include <QDebug>
 #include <kconfig.h>
 #include <kimageio.h>
 #include <KGlobal>
@@ -204,7 +204,7 @@ FormatDialog::FormatDialog(QWidget *parent, ImageMetaInfo::ImageType type,
 {
     setObjectName("FormatDialog");
 
-    kDebug();
+    //qDebug();
 
     setModal(true);
     setButtons(KDialog::Ok | KDialog::Cancel | KDialog::User1);
@@ -263,8 +263,8 @@ FormatDialog::FormatDialog(QWidget *parent, ImageMetaInfo::ImageType type,
                 formatList.append(type);
             }
         }
-        kDebug() << "have" << formatList.count() << "image types"
-                 << "from" << supportedTypes.count() << "supported";
+        //qDebug() << "have" << formatList.count() << "image types"
+                 //<< "from" << supportedTypes.count() << "supported";
 
         // Even after filtering the list as above, there will be MIME type
         // duplicates (e.g. JPG and JPEG both map to image/jpeg and produce
@@ -289,7 +289,7 @@ FormatDialog::FormatDialog(QWidget *parent, ImageMetaInfo::ImageType type,
             // of MIME aliases, but double check that it works at this stage.
             ImageFormat fmt = ImageFormat::formatForMime(mime);
             if (!fmt.isValid()) {
-                kDebug() << "Cannot use format" << (*it) << "- MIME type" << mime->name() << "does not map back to format";
+                //qDebug() << "Cannot use format" << (*it) << "- MIME type" << mime->name() << "does not map back to format";
                 continue;
             }
 
@@ -307,7 +307,7 @@ FormatDialog::FormatDialog(QWidget *parent, ImageMetaInfo::ImageType type,
                 mMimeTypes.append(mime);
             }
         }
-        kDebug() << "have" << mMimeTypes.count() << "unique MIME types";
+        //qDebug() << "have" << mMimeTypes.count() << "unique MIME types";
 
         // The list box is filled later.
 
@@ -580,7 +580,7 @@ void FormatDialog::buildFormatList(bool recOnly)
         return;    // not showing this
     }
 
-    kDebug() << "recOnly" << recOnly << "for type" << mImageType;
+    //qDebug() << "recOnly" << recOnly << "for type" << mImageType;
 
     mFormatList->clear();
     for (KMimeType::List::const_iterator it = mMimeTypes.constBegin();

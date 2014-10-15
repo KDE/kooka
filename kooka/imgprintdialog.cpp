@@ -38,7 +38,7 @@
 #endif
 #include <qlabel.h>
 
-#include <kdebug.h>
+#include <QDebug>
 #include <klocale.h>
 #include <knuminput.h>
 #include <kdialog.h>
@@ -150,7 +150,7 @@ void ImgPrintDialog::setImage(const KookaImage *img)
 
 void ImgPrintDialog::setOptions(const QMap<QString, QString> &opts)
 {
-    kDebug();
+    //qDebug();
 
     // m_autofit->setChecked(opts["app-img-autofit"] == "1");
     QString scale = opts[OPT_SCALING];
@@ -186,7 +186,7 @@ void ImgPrintDialog::setOptions(const QMap<QString, QString> &opts)
 void ImgPrintDialog::getOptions(QMap<QString, QString> &opts, bool include_def)
 {
     // TODO: Check for meaning of include_def !
-    // kDebug() << "In getOption with include_def: "  << include_def << endl;
+    // //qDebug() << "In getOption with include_def: "  << include_def << endl;
 
     QString scale = "screen";
     if (m_rbOrigSize->isChecked()) {
@@ -268,7 +268,7 @@ void ImgPrintDialog::slotCustomWidthChanged(int val)
     }
 
     m_ignoreSignal = true;
-    kDebug() << "Setting value to horizontal size";
+    //qDebug() << "Setting value to horizontal size";
     m_sizeH->setValue(int(double(val) *
                           double(m_image->height()) / double(m_image->width())));
 
@@ -292,7 +292,7 @@ void ImgPrintDialog::slotCustomHeightChanged(int val)
     }
 
     m_ignoreSignal = true;
-    kDebug() << "Setting value to vertical size";
+    //qDebug() << "Setting value to vertical size";
     m_sizeW->setValue(int(double(val) *
                           double(m_image->width()) / double(m_image->height())));
 

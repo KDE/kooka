@@ -34,7 +34,7 @@
 #include <kimageio.h>
 #include <klocale.h>
 #include <kmessagebox.h>
-#include <kdebug.h>
+#include <QDebug>
 #include <ktemporaryfile.h>
 #include <kmimetype.h>
 
@@ -54,7 +54,7 @@ void createDir(const QString &dir)
 {
     KUrl url(dir);
     if (!KIO::NetAccess::exists(url, KIO::NetAccess::DestinationSide, NULL)) {
-        kDebug() << "directory" << dir << "does not exist, try to create";
+        //qDebug() << "directory" << dir << "does not exist, try to create";
         // if( mkdir( QFile::encodeName( dir ), S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH ) != 0 )
         if (KIO::mkdir(url)) {
             KMessageBox::sorry(NULL, i18n("<qt>"
@@ -82,10 +82,10 @@ ImgSaver::ImgSaver(const KUrl &dir)
     if (dir.isValid() && !dir.isEmpty() && dir.protocol() == "file") {
         // can use specified place
         m_saveDirectory = dir.directory(KUrl::ObeyTrailingSlash);
-        kDebug() << "specified directory" << m_saveDirectory;
+        //qDebug() << "specified directory" << m_saveDirectory;
     } else {                    // cannot, so use default
         m_saveDirectory = KookaPref::galleryRoot();
-        kDebug() << "default directory" << m_saveDirectory;
+        //qDebug() << "default directory" << m_saveDirectory;
     }
 
     createDir(m_saveDirectory);             // ensure save location exists
@@ -99,7 +99,7 @@ QString extension(const KUrl &url)
 
 ImgSaver::ImageSaveStatus ImgSaver::getFilenameAndFormat(ImageMetaInfo::ImageType type)
 {
-    kDebug() << "for type=" << type;
+    //qDebug() << "for type=" << type;
 
     if (type == ImageMetaInfo::Unknown) {
         return (ImgSaver::SaveStatusParam);
@@ -113,12 +113,12 @@ ImgSaver::ImageSaveStatus ImgSaver::getFilenameAndFormat(ImageMetaInfo::ImageTyp
     m_saveAskFilename = grp.readEntry(OP_SAVER_ASK_FILENAME, false);
     m_saveAskFormat = grp.readEntry(OP_SAVER_ASK_FORMAT, false);
 
-    kDebug() << "before dialogue,"
-             << "ask_filename=" << m_saveAskFilename
-             << "ask_format=" << m_saveAskFormat
-             << "filename=" << saveFilename
-             << "format=" << saveFormat
-             << "subformat=" << saveSubformat;
+    //qDebug() << "before dialogue,"
+             //<< "ask_filename=" << m_saveAskFilename
+             //<< "ask_format=" << m_saveAskFormat
+             //<< "filename=" << saveFilename
+             //<< "format=" << saveFormat
+             //<< "subformat=" << saveSubformat;
 
     while (!saveFormat.isValid() || m_saveAskFormat || m_saveAskFilename) {
         // is a dialogue neeeded?
@@ -156,11 +156,11 @@ ImgSaver::ImageSaveStatus ImgSaver::getFilenameAndFormat(ImageMetaInfo::ImageTyp
     mSaveFormat = saveFormat;
     mSaveSubformat = saveSubformat;
 
-    kDebug() << "after dialogue,"
-             << "filename=" << saveFilename
-             << "format=" << mSaveFormat
-             << "subformat=" << mSaveSubformat
-             << "url=" << mSaveUrl;
+    //qDebug() << "after dialogue,"
+             //<< "filename=" << saveFilename
+             //<< "format=" << mSaveFormat
+             //<< "subformat=" << mSaveSubformat
+             //<< "url=" << mSaveUrl;
     return (ImgSaver::SaveStatusOk);
 }
 
@@ -180,7 +180,7 @@ ImgSaver::ImageSaveStatus ImgSaver::saveImage(const QImage *image)
 
     if (!mSaveFormat.isValid()) {           // see if have this already
         // if not, get from image now
-        kDebug() << "format not resolved yet";
+        //qDebug() << "format not resolved yet";
         ImgSaver::ImageSaveStatus stat = getFilenameAndFormat(ImageMetaInfo::findImageType(image));
         if (stat != ImgSaver::SaveStatusOk) {
             return (stat);
@@ -188,7 +188,7 @@ ImgSaver::ImageSaveStatus ImgSaver::saveImage(const QImage *image)
     }
 
     if (!mSaveUrl.isValid() || !mSaveFormat.isValid()) { // must have these now
-        kDebug() << "format not resolved!";
+        //qDebug() << "format not resolved!";
         return (ImgSaver::SaveStatusParam);
     }
     // save image to file
@@ -204,13 +204,13 @@ ImgSaver::ImageSaveStatus ImgSaver::saveImage(const QImage *image,
         return (ImgSaver::SaveStatusParam);
     }
 
-    kDebug() << "to" << url.prettyUrl() << "format" << format << "subformat" << subformat;
+    //qDebug() << "to" << url.prettyUrl() << "format" << format << "subformat" << subformat;
 
     mLastFormat = format.name();            // save for error message later
     mLastUrl = url;
 
     if (!url.isLocalFile()) {           // file must be local
-        kDebug() << "Can only save local files";
+        //qDebug() << "Can only save local files";
         return (ImgSaver::SaveStatusProtocol);
     }
 
@@ -221,20 +221,20 @@ ImgSaver::ImageSaveStatus ImgSaver::saveImage(const QImage *image,
     QDir dir(dirPath);
     if (!dir.exists()) {                // should always exist, except
         // for first preview save
-        kDebug() << "Creating directory" << dirPath;
+        //qDebug() << "Creating directory" << dirPath;
         if (!dir.mkdir(dirPath)) {
-            kDebug() << "Could not create directory" << dirPath;
+            //qDebug() << "Could not create directory" << dirPath;
             return (ImgSaver::SaveStatusMkdir);
         }
     }
 
     if (fi.exists() && !fi.isWritable()) {
-        kDebug() << "Cannot overwrite existing file" << filename;
+        //qDebug() << "Cannot overwrite existing file" << filename;
         return (ImgSaver::SaveStatusPermission);
     }
 
     if (!format.canWrite()) {           // check format, is it writable?
-        kDebug() << "Cannot write format" << format;
+        //qDebug() << "Cannot write format" << format;
         return (ImgSaver::SaveStatusFormatNoWrite);
     }
 
@@ -261,7 +261,7 @@ QString ImgSaver::createFilename()
         }
     }
 
-    kDebug() << "returning" << fname;
+    //qDebug() << "returning" << fname;
     return (fname);
 }
 
@@ -279,7 +279,7 @@ ImageFormat ImgSaver::findFormat(ImageMetaInfo::ImageType type)
     }
     // real images from here on
     ImageFormat format = getFormatForType(type);
-    kDebug() << "format for type" << type << "=" << format;
+    //qDebug() << "format for type" << type << "=" << format;
     return (format);
 }
 
@@ -329,7 +329,7 @@ const char *configKeyFor(ImageMetaInfo::ImageType type)
     case ImageMetaInfo::BlackWhite: return (OP_FORMAT_BW);
     case ImageMetaInfo::HighColour: return (OP_FORMAT_HICOLOR);
 
-    default:            kDebug() << "unknown type" << type;
+    default:            //qDebug() << "unknown type" << type;
         return (OP_FORMAT_UNKNOWN);
     }
 }
@@ -365,7 +365,7 @@ void ImgSaver::storeFormatForType(ImageMetaInfo::ImageType type, const ImageForm
 
 QString ImgSaver::findSubFormat(const ImageFormat &format)
 {
-    kDebug() << "for" << format;
+    //qDebug() << "for" << format;
     return (QString::null);             // no subformats currently used
 }
 
@@ -410,7 +410,7 @@ QString ImgSaver::tempSaveImage(const KookaImage *img, const ImageFormat &format
     tmpFile.setAutoRemove(false);
 
     if (!tmpFile.open()) {
-        kDebug() << "Error opening temp file" << tmpFile.fileName();
+        //qDebug() << "Error opening temp file" << tmpFile.fileName();
         tmpFile.setAutoRemove(true);
         return (QString::null);
     }
@@ -434,7 +434,7 @@ QString ImgSaver::tempSaveImage(const KookaImage *img, const ImageFormat &format
         case 32:    newfmt = QImage::Format_RGB32;
             break;
 
-        default:    kDebug() << "Error: Bad colour depth requested" << colors;
+        default:    //qDebug() << "Error: Bad colour depth requested" << colors;
             tmpFile.setAutoRemove(true);
             return (QString::null);
         }
@@ -443,9 +443,9 @@ QString ImgSaver::tempSaveImage(const KookaImage *img, const ImageFormat &format
         img = tmpImg;
     }
 
-    kDebug() << "Saving to" << name << "in format" << format;
+    //qDebug() << "Saving to" << name << "in format" << format;
     if (!img->save(name, format.name())) {
-        kDebug() << "Error saving to" << name;
+        //qDebug() << "Error saving to" << name;
         tmpFile.setAutoRemove(true);
         name = QString::null;
     }
@@ -495,7 +495,7 @@ bool copyRenameImage(bool isCopying, const KUrl &fromUrl, const KUrl &toUrl, boo
     }
 
     if (errorString.isEmpty()) {            // no problem so far
-        kDebug() << (isCopying ? "Copy" : "Rename") << "->" << targetUrl;
+        //qDebug() << (isCopying ? "Copy" : "Rename") << "->" << targetUrl;
 
         if (KIO::NetAccess::exists(targetUrl, KIO::NetAccess::DestinationSide, overWidget)) {
             // see if destination exists

@@ -31,7 +31,7 @@
 #include "imagetransform.h"
 
 #include <kurl.h>
-#include <kdebug.h>
+#include <QDebug>
 #include <klocale.h>
 
 ImageTransform::ImageTransform(const QImage &img, ImageTransform::Operation op,
@@ -41,7 +41,7 @@ ImageTransform::ImageTransform(const QImage &img, ImageTransform::Operation op,
     mImage = img;
     mOperation = op;
     mFileName = fileName;
-    kDebug() << "for operation" << mOperation;
+    //qDebug() << "for operation" << mOperation;
 }
 
 ImageTransform::~ImageTransform()
@@ -50,7 +50,7 @@ ImageTransform::~ImageTransform()
 
 void ImageTransform::run()
 {
-    kDebug() << "thread started for operation" << mOperation;
+    //qDebug() << "thread started for operation" << mOperation;
 
     QImage resultImg;
     QMatrix m;
@@ -85,7 +85,7 @@ void ImageTransform::run()
         break;
 
     default:
-        kDebug() << "Unknown operation" << mOperation;
+        //qDebug() << "Unknown operation" << mOperation;
         break;
     }
 
@@ -95,5 +95,5 @@ void ImageTransform::run()
         emit statusMessage(i18n("Error updating image %1", mFileName));
     }
 
-    kDebug() << "thread finished";
+    //qDebug() << "thread finished";
 }

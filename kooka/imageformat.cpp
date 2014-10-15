@@ -20,7 +20,7 @@
 
 #include <qdebug.h>
 
-#include <kdebug.h>
+#include <QDebug>
 #include <kurl.h>
 #include <kservice.h>
 #include <kservicetypetrader.h>
@@ -85,7 +85,7 @@ KService::Ptr ImageFormat::service() const
                                         "QImageIOPlugins",
                                         QString("'%1' ~in [X-KDE-ImageFormat]").arg(mFormat.constData()));
     if (services.count() == 0) {
-        kDebug() << "no service found for image format" << *this;
+        //qDebug() << "no service found for image format" << *this;
         return (KService::Ptr());
     }
 
@@ -106,11 +106,11 @@ KMimeType::Ptr ImageFormat::mime() const
     QString name = srv->property("X-KDE-MimeType").toString();
     KMimeType::Ptr mime = KMimeType::mimeType(name);
     if (mime.isNull()) {
-        kDebug() << "no MIME type for image format" << *this;
+        //qDebug() << "no MIME type for image format" << *this;
         return (KMimeType::Ptr());
     }
 
-    kDebug() << "for" << *this << "returning" << mime->name();
+    //qDebug() << "for" << *this << "returning" << mime->name();
     return (mime);
 }
 
@@ -134,7 +134,7 @@ QString ImageFormat::extension() const
     if (suf.startsWith('.')) {
         suf = suf.mid(1);
     }
-    kDebug() << "for" << *this << "returning" << suf;
+    //qDebug() << "for" << *this << "returning" << suf;
     return (suf);
 }
 
@@ -175,11 +175,11 @@ ImageFormat ImageFormat::formatForMime(const KMimeType::Ptr &mime)
 
     int fcount = formats.count();           // how many formats found?
     if (fcount == 0) {              // no image format found
-        //kDebug() << "no format found for MIME type" << mime->name();
+        ////qDebug() << "no format found for MIME type" << mime->name();
         return (ImageFormat());
     }
     if (fcount > 1) {               // more than one type found
-        //kDebug() << "found" << fcount << "formats for MIME type" << mime->name();
+        ////qDebug() << "found" << fcount << "formats for MIME type" << mime->name();
     }
 
     return (ImageFormat(formats.first().toLocal8Bit().trimmed()));

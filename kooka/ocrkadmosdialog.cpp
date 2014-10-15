@@ -41,7 +41,7 @@
 
 #include <kconfig.h>
 #include <kglobal.h>
-#include <kdebug.h>
+#include <QDebug>
 #include <klocale.h>
 #include <kseparator.h>
 #include <kmessagebox.h>
@@ -64,7 +64,7 @@ KadmosDialog::KadmosDialog(QWidget *parent)
       m_cbAutoscale(0),
       m_haveNorm(false)
 {
-    kDebug();
+    //qDebug();
     // Layout-Boxes
     findClassifiers();
 }
@@ -124,7 +124,7 @@ OcrEngine::EngineError KadmosDialog::findClassifiers()
     } else {
         /* standard location */
         KStandardDirs stdDir;
-        kDebug() << "Starting to read resources";
+        //qDebug() << "Starting to read resources";
 
         lst = stdDir.findAllResources("data",
                                       "kooka/classifiers/*.rec",
@@ -133,7 +133,7 @@ OcrEngine::EngineError KadmosDialog::findClassifiers()
 
     /* no go through lst and sort out hand-, ttf- and norm classifier */
     for (QStringList::Iterator it = lst.begin(); it != lst.end(); ++it) {
-        kDebug() << "Checking file:" << (*it);
+        //qDebug() << "Checking file:" << (*it);
         QFileInfo fi(*it);
         QString name = fi.fileName().toLower();
 
@@ -145,14 +145,14 @@ OcrEngine::EngineError KadmosDialog::findClassifiers()
                     lngCountry = name;
                 }
                 m_ttfClassifier << lngCountry;
-                kDebug() << "TTF: Insert country" << lngCountry;
+                //qDebug() << "TTF: Insert country" << lngCountry;
             } else if (lang == "cz") {
                 m_ttfClassifier << CNTRY_CZ;
             } else if (lang == "us") {
                 m_ttfClassifier << CNTRY_GB;
             } else {
                 m_ttfClassifier << name;
-                kDebug() << "TTF: Unknown country";
+                //qDebug() << "TTF: Unknown country";
             }
         } else if (name.startsWith("hand")) {
             QString lang = name.mid(4, 2);
@@ -167,14 +167,14 @@ OcrEngine::EngineError KadmosDialog::findClassifiers()
             } else if (lang == "us") {
                 m_handClassifier << i18n("Great Britain, USA");
             } else {
-                kDebug() << "HAND: Unknown country" << lang;
+                //qDebug() << "HAND: Unknown country" << lang;
                 m_handClassifier << name;
             }
         } else if (name.startsWith("norm")) {
             m_haveNorm = true;
         }
 
-        kDebug() << "Found classifier:" << (*it);
+        //qDebug() << "Found classifier:" << (*it);
         m_classifierPath << *it;
     }
 
@@ -339,20 +339,20 @@ bool KadmosDialog::getSelClassifier(QString &path) const
 
     if (cmplPath.isEmpty()) {
         /* hm, no path was found */
-        kDebug() << "Error: The entire path is empty";
+        //qDebug() << "Error: The entire path is empty";
         res = false;
     } else {
         /* Check if the classifier exists on the HD. If not, return an empty string */
         QFileInfo fi(cmplPath);
 
         if (res && ! fi.exists()) {
-            kDebug() << "Classifier file does not exist";
+            //qDebug() << "Classifier file does not exist";
             path = i18n("Classifier file %1 does not exist", classifier);
             res = false;
         }
 
         if (res && ! fi.isReadable()) {
-            kDebug() << "Classifier file could not be read";
+            //qDebug() << "Classifier file could not be read";
             path = i18n("Classifier file %1 is not readable", classifier);
             res = false;
         }
@@ -379,7 +379,7 @@ QString KadmosDialog::getSelClassifierName() const
         } else if (fontTypeID == 2) {
             fType = "norm";
         } else {
-            kDebug() << "Error: Wrong font type ID";
+            //qDebug() << "Error: Wrong font type ID";
         }
     }
 
@@ -396,10 +396,10 @@ QString KadmosDialog::getSelClassifierName() const
         } else if (fType == "norm") {
             trans = "norm.rec";
         } else {
-            kDebug() << "Error: Not a valid classifier";
+            //qDebug() << "Error: Not a valid classifier";
         }
     }
-    kDebug() << "Returning" << trans;
+    //qDebug() << "Returning" << trans;
     return (trans);
 }
 
@@ -421,7 +421,7 @@ KadmosDialog::~KadmosDialog()
 
 void KadmosDialog::slotWriteConfig()
 {
-    kDebug();
+    //qDebug();
 
     OcrBaseDialog::slotWriteConfig();
 

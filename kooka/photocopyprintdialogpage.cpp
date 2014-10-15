@@ -28,7 +28,7 @@
 #include <q3hgroupbox.h>
 #include <qlabel.h>
 
-#include <kdebug.h>
+#include <QDebug>
 #include <klocale.h>
 #include <knuminput.h>
 #include <kdialog.h>
@@ -53,7 +53,7 @@ PhotoCopyPrintDialogPage::PhotoCopyPrintDialogPage(KScanDevice *newScanDevice)
     : QWidget()
 #endif
 {
-    kDebug();
+    //qDebug();
 
 #ifndef KDE4
     setTitle(i18n("PhotoCopier"));
@@ -125,17 +125,17 @@ PhotoCopyPrintDialogPage::PhotoCopyPrintDialogPage(KScanDevice *newScanDevice)
 
 PhotoCopyPrintDialogPage::~PhotoCopyPrintDialogPage()
 {
-    kDebug();
+    //qDebug();
 }
 
 void PhotoCopyPrintDialogPage::setOptions(const QMap<QString, QString> &opts)
 {
-    kDebug();
+    //qDebug();
 }
 
 void PhotoCopyPrintDialogPage::getOptions(QMap<QString, QString> &opts, bool)
 {
-    kDebug();
+    //qDebug();
 }
 
 bool PhotoCopyPrintDialogPage::isValid(QString &msg)

@@ -32,7 +32,7 @@
 #include <qpaintdevicemetrics.h>
 #endif
 
-#include <kdebug.h>
+#include <QDebug>
 #include <klocale.h>
 #ifndef KDE4
 #include <kprinter.h>
@@ -59,7 +59,7 @@ bool KookaPrint::printImage(const KookaImage *img, int intextraMarginPercent)
 #ifndef KDE4
     m_extraMarginPercent = intextraMarginPercent;
     QString psMode = m_printer->option(OPT_PSGEN_DRAFT);
-    kDebug() << "User setting for quality:" << psMode;
+    //qDebug() << "User setting for quality:" << psMode;
 
 #if 0
     if (psMode == "1") {
@@ -86,22 +86,22 @@ bool KookaPrint::printImage(const KookaImage *img, int intextraMarginPercent)
         /* Scale to original size */
         reso = m_printer->option(OPT_SCAN_RES).toInt();
     } else if (scale == "custom") {
-        // kDebug() << "Not yet implemented: Custom scale";
+        // //qDebug() << "Not yet implemented: Custom scale";
         double userWidthInch = (m_printer->option(OPT_WIDTH).toDouble() / 25.4);
         reso = int(double(img->width()) / userWidthInch);
 
-        kDebug() << "Custom resolution:" << reso;
+        //qDebug() << "Custom resolution:" << reso;
 
     } else if (scale == "fitpage") {
-        kDebug() << "Printing using maximum space on page";
+        //qDebug() << "Printing using maximum space on page";
         printFittingToPage(img);
         reso = 0;  // to skip the printing on this page.
     }
 
     /* Scale the image for printing */
-    kDebug() << "Printer-Resolution:" << printerRes << "scale-reso:" << reso;
+    //qDebug() << "Printer-Resolution:" << printerRes << "scale-reso:" << reso;
     QSize margins = m_printer->margins();
-    kDebug() << "Printer-Margins left:" << margins.width() << "top" << margins.height();
+    //qDebug() << "Printer-Margins left:" << margins.width() << "top" << margins.height();
 
     if (reso > 0) {
         double sizeInch = double(img->width()) / double(reso);
@@ -111,7 +111,7 @@ bool KookaPrint::printImage(const KookaImage *img, int intextraMarginPercent)
         sizeInch = double(img->height()) / double(reso);
         int newHeight = int(sizeInch * printerRes);
 
-        kDebug() << "Scaling to printer size [" << newWidth << "x" << newHeight << "]";
+        //qDebug() << "Scaling to printer size [" << newWidth << "x" << newHeight << "]";
 
         tmpImg = img->scaled(newWidth, newHeight, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
 
@@ -121,7 +121,7 @@ bool KookaPrint::printImage(const KookaImage *img, int intextraMarginPercent)
         int maxRows, maxCols;
         int subpagesCnt = tmpImg.cutToTiles(maxOnPage, maxRows, maxCols);
 
-        kDebug() << "Subpages count:" << subpagesCnt
+        //qDebug() << "Subpages count:" << subpagesCnt
                  << "Columns:" << maxCols << "Rows:" << maxRows;
 
         int cnt = 0;
@@ -131,7 +131,7 @@ bool KookaPrint::printImage(const KookaImage *img, int intextraMarginPercent)
                 const QRect part = tmpImg.getTileRect(row, col);
                 const QSize imgSize = part.size();
 
-                kDebug() << "Printing part from [" << part.x() << "," << part.y() << "]"
+                //qDebug() << "Printing part from [" << part.x() << "," << part.y() << "]"
                          << "width:" << part.width() << "height:" << part.height();
                 QImage tileImg = tmpImg.copy(part);
 
@@ -264,7 +264,7 @@ void KookaPrint::drawCutSign(const QPoint &p, int num, MarkerDirection dir)
     int textY = p.y() + tAway * toffY + textYOff;
 
     // m_painter->drawRect( textX, textY, bRect.width(), bRect.height() );
-    kDebug() << "Drawing to position [" << textX << "," << textY << "]";
+    //qDebug() << "Drawing to position [" << textX << "," << textY << "]";
     m_painter->drawText(textX,
                         textY,
                         QString::number(num));
@@ -283,7 +283,7 @@ void KookaPrint::drawCornerMarker(const QSize &imgSize, int row, int col, int ma
 {
     QPoint p;
 
-    kDebug() << "Marker: Row" << row << "col" << col << "from max" << maxRows << "x" << maxCols;
+    //qDebug() << "Marker: Row" << row << "col" << col << "from max" << maxRows << "x" << maxCols;
 
     // Top left.
     p = printPosTopLeft(imgSize);

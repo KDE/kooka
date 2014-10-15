@@ -31,7 +31,7 @@
 #include <KConfigGroup>
 #include <kglobal.h>
 #include <klocale.h>
-#include <kdebug.h>
+#include <QDebug>
 #include <KToggleAction>
 #include <QAction>
 #include <QIcon>
@@ -141,7 +141,7 @@ void Kooka::startup()
         return;
     }
 
-    kDebug();
+    //qDebug();
     m_view->gallery()->openRoots();
     m_view->loadStartupImage();
 }
@@ -363,7 +363,7 @@ void Kooka::closeEvent(QCloseEvent *ev)
 
 void Kooka::saveProperties(KConfigGroup &grp)
 {
-    kDebug() << "to group" << grp.name();
+    //qDebug() << "to group" << grp.name();
 
     // the 'config' object points to the session managed
     // config file.  anything you write here will be available
@@ -378,7 +378,7 @@ void Kooka::saveProperties(KConfigGroup &grp)
 
 void Kooka::applyMainWindowSettings(const KConfigGroup &grp, bool forceGlobal)
 {
-    kDebug() << "from group" << grp.name();
+    //qDebug() << "from group" << grp.name();
 
     //QT5 KXmlGuiWindow::applyMainWindowSettings(grp, forceGlobal);
     m_view->applyWindowSettings(grp);
@@ -386,7 +386,7 @@ void Kooka::applyMainWindowSettings(const KConfigGroup &grp, bool forceGlobal)
 
 void Kooka::readProperties(const KConfigGroup &grp)
 {
-    kDebug() << "from group" << grp.name();
+    //qDebug() << "from group" << grp.name();
 
     // the 'config' object points to the session managed
     // config file.  this function is automatically called whenever
@@ -460,7 +460,7 @@ void Kooka::optionsOcrPreferences()
 
 void Kooka::slotUpdateScannerActions(bool haveConnection)
 {
-    kDebug() << "haveConnection" << haveConnection;
+    //qDebug() << "haveConnection" << haveConnection;
 
     scanAction->setEnabled(haveConnection);
     previewAction->setEnabled(haveConnection);
@@ -477,7 +477,7 @@ void Kooka::slotUpdateScannerActions(bool haveConnection)
 
 void Kooka::slotUpdateRectangleActions(bool haveSelection)
 {
-    kDebug() << "haveSelection" << haveSelection;
+    //qDebug() << "haveSelection" << haveSelection;
 
     ocrSelectAction->setEnabled(haveSelection);
     newFromSelectionAction->setEnabled(haveSelection);
@@ -548,7 +548,7 @@ void Kooka::slotUpdateRectangleActions(bool haveSelection)
 
 void Kooka::slotUpdateViewActions(KookaView::StateFlags state)
 {
-    kDebug() << "state" << hex << state;
+    //qDebug() << "state" << hex << state;
 
     bool e;
 
@@ -619,7 +619,7 @@ void Kooka::slotUpdateViewActions(KookaView::StateFlags state)
 
 void Kooka::slotUpdateOcrResultActions(bool haveText)
 {
-    kDebug() << "haveText" << haveText;
+    //qDebug() << "haveText" << haveText;
     m_saveOCRTextAction->setEnabled(haveText);
     ocrSpellAction->setEnabled(haveText);
 }
@@ -637,7 +637,7 @@ void Kooka::slotUpdateReadOnlyActions(bool ro)
 
 void Kooka::slotUpdateAutoSelectActions(bool isAvailable, bool isOn)
 {
-    kDebug() << "available" << isAvailable << "on" << isOn;
+    //qDebug() << "available" << isAvailable << "on" << isOn;
 
     autoselAction->setEnabled(isAvailable);
     autoselAction->setChecked(isOn);

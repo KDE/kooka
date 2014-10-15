@@ -37,7 +37,7 @@
 #include <KConfigGroup>
 #include <kconfig.h>
 #include <kglobal.h>
-#include <kdebug.h>
+#include <QDebug>
 #include <klocale.h>
 #include <kstandarddirs.h>
 #include <kstandardguiitem.h>
@@ -75,7 +75,7 @@ OcrBaseDialog::OcrBaseDialog(QWidget *parent)
       m_lVersion(NULL),
       m_progress(NULL)
 {
-    kDebug();
+    //qDebug();
 
     setObjectName("OcrBaseDialog");
 
@@ -101,7 +101,7 @@ OcrBaseDialog::OcrBaseDialog(QWidget *parent)
 
 OcrBaseDialog::~OcrBaseDialog()
 {
-    kDebug();
+    //qDebug();
 }
 
 OcrEngine::EngineError OcrBaseDialog::setupGui()
@@ -374,7 +374,7 @@ void OcrBaseDialog::introduceImage(const KookaImage *img)
         return;
     }
 
-    kDebug() << "url" << img->url() << "filebound" << img->isFileBound();
+    //qDebug() << "url" << img->url() << "filebound" << img->isFileBound();
 
     if (img->isFileBound()) {           // image backed by a file
         /* Start to create a preview job for the thumb */
@@ -399,7 +399,7 @@ void OcrBaseDialog::introduceImage(const KookaImage *img)
 
 void OcrBaseDialog::slotGotPreview(const KFileItem &item, const QPixmap &newPix)
 {
-    kDebug() << "pixmap" << newPix.size();
+    //qDebug() << "pixmap" << newPix.size();
     if (m_previewPix != NULL) {
         m_previewPix->setText(QString::null);
         m_previewPix->setPixmap(newPix);
@@ -408,7 +408,7 @@ void OcrBaseDialog::slotGotPreview(const KFileItem &item, const QPixmap &newPix)
 
 void OcrBaseDialog::slotWriteConfig()
 {
-    kDebug();
+    //qDebug();
 
     KConfigGroup grp = KSharedConfig::openConfig()->group(CFG_OCR_SPELL);
     grp.writeEntry(CFG_SPELL_BGND, m_gbBackgroundCheck->isChecked());

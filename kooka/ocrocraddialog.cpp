@@ -35,7 +35,7 @@
 #include <qprogressbar.h>
 
 #include <kglobal.h>
-#include <kdebug.h>
+#include <QDebug>
 #include <klocale.h>
 #include <kanimatedbutton.h>
 #include <kseparator.h>
@@ -234,7 +234,7 @@ OcrEngine::EngineError OcrOcradDialog::setupGui()
 
 void OcrOcradDialog::slotWriteConfig()
 {
-    kDebug();
+    //qDebug();
 
     OcrBaseDialog::slotWriteConfig();
 
@@ -290,7 +290,7 @@ QString OcrOcradDialog::orfUrl() const
 
 void OcrOcradDialog::getVersion(const QString &bin)
 {
-    kDebug() << "of" << bin;
+    //qDebug() << "of" << bin;
     if (bin.isEmpty()) {
         return;
     }
@@ -307,10 +307,10 @@ void OcrOcradDialog::getVersion(const QString &bin)
             m_ocrCmd = bin;
             m_versionStr = rx.cap(2);
             m_versionNum = m_versionStr.mid(2).toInt();
-            kDebug() << "version" << m_versionStr << "=" << m_versionNum;
+            //qDebug() << "version" << m_versionStr << "=" << m_versionNum;
         }
     } else {
-        kDebug() << "failed with status" << status;
+        //qDebug() << "failed with status" << status;
         m_versionStr = i18n("Error");
     }
 }
@@ -323,7 +323,7 @@ QStringList OcrOcradDialog::getValidValues(const QString &opt)
     KConfigGroup grp = KSharedConfig::openConfig()->group(groupName);
 
     if (grp.hasKey(opt)) {              // values in config already
-        kDebug() << "option" << opt << "already in config";
+        //qDebug() << "option" << opt << "already in config";
         result = grp.readEntry(opt, QStringList());
     } else {                    // not in config, need to extract
         if (!m_ocrCmd.isEmpty()) {
@@ -339,14 +339,14 @@ QStringList OcrOcradDialog::getValidValues(const QString &opt)
                 QString values = rx.cap(1);
                 result = rx.cap(1).split(QRegExp("\\s+"), QString::SkipEmptyParts);
             } else {
-                kDebug() << "cannot get values, no match in" << output;
+                //qDebug() << "cannot get values, no match in" << output;
             }
         } else {
-            kDebug() << "cannot get values, no binary";
+            //qDebug() << "cannot get values, no binary";
         }
     }
 
-    kDebug() << "values for" << opt << "=" << result.join(",");
+    //qDebug() << "values for" << opt << "=" << result.join(",");
     if (!result.isEmpty()) {
         grp.writeEntry(opt, result);    // save for next time
     }

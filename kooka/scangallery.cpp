@@ -33,7 +33,7 @@
 #include <kiconloader.h>
 #include <kfiledialog.h>
 #include <kurl.h>
-#include <kdebug.h>
+#include <QDebug>
 #include <klocale.h>
 #include <kmimetype.h>
 #include <kstandardguiitem.h>
@@ -129,13 +129,13 @@ ScanGallery::ScanGallery(QWidget *parent)
 ScanGallery::~ScanGallery()
 {
     delete mSaver;
-    kDebug();
+    //qDebug();
 }
 
 void ScanGallery::saveHeaderState(const QString &key) const
 {
     KConfigGroup grp = KSharedConfig::openConfig()->group(COLUMN_STATES_GROUP);
-    kDebug() << "to" << key;
+    //qDebug() << "to" << key;
     grp.writeEntry(key, header()->saveState().toBase64());
 }
 
@@ -143,7 +143,7 @@ void ScanGallery::restoreHeaderState(const QString &key)
 {
     const KConfigGroup grp = KSharedConfig::openConfig()->group(COLUMN_STATES_GROUP);
 
-    kDebug() << "from" << key;
+    //qDebug() << "from" << key;
     QString state = grp.readEntry(key, "");
     if (!state.isEmpty()) {
         QHeaderView *hdr = header();
@@ -158,7 +158,7 @@ void ScanGallery::openRoots()
 {
     /* standard root always exists, ImgRoot creates it */
     KUrl rootUrl(KookaPref::galleryRoot());
-    kDebug() << "Standard root" << rootUrl.url();
+    //qDebug() << "Standard root" << rootUrl.url();
 
     m_defaultBranch = openRoot(rootUrl, i18n("Kooka Gallery"));
     m_defaultBranch->setOpen(true);
@@ -200,7 +200,7 @@ void ScanGallery::slotStartupFinished(FileTreeViewItem *item)
         return;    // not the 1st branch root
     }
 
-    kDebug();
+    //qDebug();
 
     if (highlightedFileTreeViewItem() == NULL) {    // nothing currently selected,
         // select the branch root
@@ -266,7 +266,7 @@ static KookaImage *imageForItem(const FileTreeViewItem *item)
 void ScanGallery::slotItemHighlighted(QTreeWidgetItem *curr)
 {
     FileTreeViewItem *item = static_cast<FileTreeViewItem *>(curr);
-    kDebug() << item->url();
+    //qDebug() << item->url();
 
     if (item->isDir()) {
         emit showImage(NULL, true);    // clear displayed image
@@ -281,7 +281,7 @@ void ScanGallery::slotItemHighlighted(QTreeWidgetItem *curr)
 void ScanGallery::slotItemActivated(QTreeWidgetItem *curr)
 {
     FileTreeViewItem *item = static_cast<FileTreeViewItem *>(curr);
-    kDebug() << item->url();
+    //qDebug() << item->url();
 
     //  Check if directory, hide image for now, later show a thumb view?
     if (item->isDir()) {                // is it a directory?
@@ -307,7 +307,7 @@ void ScanGallery::slotItemActivated(QTreeWidgetItem *curr)
 
 void ScanGallery::slotHighlightItem(const KUrl &url)
 {
-    kDebug() << url;
+    //qDebug() << url;
 
     FileTreeViewItem *found = findItemByUrl(url);
     if (found == NULL) {
@@ -327,7 +327,7 @@ void ScanGallery::slotHighlightItem(const KUrl &url)
 
 void ScanGallery::slotActivateItem(const KUrl &url)
 {
-    kDebug() << url;
+    //qDebug() << url;
 
     FileTreeViewItem *found = findItemByUrl(url);
     if (found == NULL) {
@@ -477,7 +477,7 @@ void ScanGallery::slotDecorate(FileTreeViewItem *item)
 
 void ScanGallery::slotDecorate(FileTreeBranch *branch, const FileTreeViewItemList &list)
 {
-    kDebug() << "count" << list.count();
+    //qDebug() << "count" << list.count();
     for (FileTreeViewItemList::const_iterator it = list.constBegin();
             it != list.constEnd(); ++it) {
         FileTreeViewItem *ftvi = (*it);
@@ -494,7 +494,7 @@ void ScanGallery::updateParent(const FileTreeViewItem *curr)
     }
 
     KUrl dir = itemDirectory(curr);
-    kDebug() << "Updating directory" << dir;
+    //qDebug() << "Updating directory" << dir;
     branch->updateDirectory(dir);
 
     FileTreeViewItem *parent = branch->findItemByUrl(dir);
@@ -522,7 +522,7 @@ bool ScanGallery::slotFileRenamed(FileTreeViewItem *item, const QString &newName
     }
 
     KUrl urlFrom = item->url();
-    kDebug() << "url" << urlFrom << "->" << newName;
+    //qDebug() << "url" << urlFrom << "->" << newName;
     QString oldName = urlFrom.fileName();
 
     KUrl urlTo(urlFrom);
@@ -533,7 +533,7 @@ bool ScanGallery::slotFileRenamed(FileTreeViewItem *item, const QString &newName
      */
     // slotUnloadItem(item);                // unnecessary, bug 68532
     // because of "note new URL" below
-    kDebug() << "Renaming " << urlFrom << "->" << urlTo;
+    //qDebug() << "Renaming " << urlFrom << "->" << urlTo;
 
     //setSelected(item,false);
 
@@ -542,7 +542,7 @@ bool ScanGallery::slotFileRenamed(FileTreeViewItem *item, const QString &newName
         item->setUrl(urlTo);                // note new URL
         emit fileRenamed(item->fileItem(), newName);
     } else {
-        kDebug() << "renaming failed";
+        //qDebug() << "renaming failed";
         item->setText(0, oldName);          // restore original name
     }
 
@@ -570,7 +570,7 @@ static QString buildNewFilename(const QString &cmplFilename, const ImageFormat &
     QString nowExt = currFormat.extension();
     QString ext = "";
 
-    kDebug() << "Filename wanted:" << cmplFilename << "ext" << nowExt << "->" << newExt;
+    //qDebug() << "Filename wanted:" << cmplFilename << "ext" << nowExt << "->" << newExt;
 
     if (newExt.isEmpty()) {
         /* ok, fine -> return the currFormat-Extension */
@@ -595,7 +595,7 @@ static QString buildNewFilename(const QString &cmplFilename, const ImageFormat &
 KUrl ScanGallery::itemDirectory(const FileTreeViewItem *item) const
 {
     if (item == NULL) {
-        kDebug() << "no item";
+        //qDebug() << "no item";
         return (KUrl());
     }
 
@@ -624,16 +624,16 @@ QString ScanGallery::itemDirectoryRelative(const FileTreeViewItem *item) const
 
     QString rootUrl = (branch->rootUrl()).prettyUrl(KUrl::AddTrailingSlash);
     QString itemUrl = u.prettyUrl();
-    kDebug() << "itemurl" << itemUrl << "rooturl" << rootUrl;
+    //qDebug() << "itemurl" << itemUrl << "rooturl" << rootUrl;
     if (itemUrl.startsWith(rootUrl)) {
         itemUrl.remove(0, rootUrl.length());        // remove root URL prefix
-        kDebug() << "->" << itemUrl;
+        //qDebug() << "->" << itemUrl;
         if (itemUrl.isEmpty()) {
             itemUrl = "/";    // it is the root
         }
-        kDebug() << "->" << itemUrl;
+        //qDebug() << "->" << itemUrl;
     } else {
-        kDebug() << "item URL" << itemUrl << "does not start with root URL" << rootUrl;
+        //qDebug() << "item URL" << itemUrl << "does not start with root URL" << rootUrl;
     }
 
     return (itemUrl);
@@ -648,7 +648,7 @@ QString ScanGallery::itemDirectoryRelative(const FileTreeViewItem *item) const
 
 void ScanGallery::slotSelectDirectory(const QString &branchName, const QString &relPath)
 {
-    kDebug() << "branch" << branchName << "path" << relPath;
+    //qDebug() << "branch" << branchName << "path" << relPath;
 
     FileTreeViewItem *item;
     if (!branchName.isEmpty()) {
@@ -677,7 +677,7 @@ void ScanGallery::loadImageForItem(FileTreeViewItem *item)
         return;
     }
 
-    kDebug() << "loading" << item->url();
+    //qDebug() << "loading" << item->url();
 
     QString ret = QString::null;            // no error so far
 
@@ -697,7 +697,7 @@ void ScanGallery::loadImageForItem(FileTreeViewItem *item)
             if (ret.isEmpty()) {            // image loaded OK
                 img->setFileItem(kfi);          // store the fileitem
 
-                kDebug() << "subImage-count" << img->subImagesCount();
+                //qDebug() << "subImage-count" << img->subImagesCount();
                 if (img->subImagesCount() > 1) {    // look for subimages,
                     // create items for them
                     KIconLoader *loader = KIconLoader::global();
@@ -706,7 +706,7 @@ void ScanGallery::loadImageForItem(FileTreeViewItem *item)
                     // are actually in the image. But image 0 was already created above.
                     FileTreeViewItem *prevItem = NULL;
                     for (int i = 1; i < img->subImagesCount(); i++) {
-                        kDebug() << "Creating subimage" << i;
+                        //qDebug() << "Creating subimage" << i;
                         KFileItem newKfi(*kfi);
                         FileTreeViewItem *subImgItem = new FileTreeViewItem(item, newKfi, item->branch());
 
@@ -723,9 +723,9 @@ void ScanGallery::loadImageForItem(FileTreeViewItem *item)
                 }
 
                 if (img->isSubImage()) {        // this is a subimage
-                    kDebug() << "it is a subimage";
+                    //qDebug() << "it is a subimage";
                     if (img->isNull()) {        // if not already loaded,
-                        kDebug() << "extracting subimage";
+                        //qDebug() << "extracting subimage";
                         img->extractNow();      // load it now
                     }
                 }
@@ -788,7 +788,7 @@ QString ScanGallery::getCurrImageFileName(bool withPath) const
 
     FileTreeViewItem *curr = highlightedFileTreeViewItem();
     if (! curr) {
-        kDebug() << "nothing selected!";
+        //qDebug() << "nothing selected!";
     } else {
         if (withPath) {
             result = localFileName(curr);
@@ -805,9 +805,9 @@ QString ScanGallery::getCurrImageFileName(bool withPath) const
 bool ScanGallery::prepareToSave(const ImageMetaInfo *info)
 {
     if (info == NULL) {
-        kDebug() << "no image info";
+        //qDebug() << "no image info";
     } else {
-        kDebug() << "type" << info->getImageType();
+        //qDebug() << "type" << info->getImageType();
     }
 
     delete mSaver; mSaver = NULL;           // recreate with clean info
@@ -864,7 +864,7 @@ void ScanGallery::addImage(const QImage *img, const ImageMetaInfo *info)
     if (img == NULL) {
         return;    // nothing to save!
     }
-    kDebug() << "size" << img->size() << "depth" << img->depth();
+    //qDebug() << "size" << img->size() << "depth" << img->depth();
 
     if (mSaver == NULL) {
         prepareToSave(NULL);    // if not done already
@@ -919,7 +919,7 @@ FileTreeViewItem *ScanGallery::findItemByUrl(const KUrl &url, FileTreeBranch *br
         QDir d(url.path());             // ensure path is canonical
         u.setPath(d.canonicalPath());
     }
-    kDebug() << "URL search for" << u;
+    //qDebug() << "URL search for" << u;
 
     // Prepare a list of branches to search.  If the parameter 'branch'
     // is set, search only in the specified branch. If it is NULL, search
@@ -938,7 +938,7 @@ FileTreeViewItem *ScanGallery::findItemByUrl(const KUrl &url, FileTreeBranch *br
         FileTreeViewItem *ftvi = branchloop->findItemByUrl(u);
         if (ftvi != NULL) {
             foundItem = ftvi;
-            kDebug() << "found item for" << ftvi->url();
+            //qDebug() << "found item for" << ftvi->url();
             break;
         }
     }
@@ -954,7 +954,7 @@ void ScanGallery::slotExportFile()
     }
 
     if (curr->isDir()) {
-        kDebug() << "Not yet implemented!";
+        //qDebug() << "Not yet implemented!";
         return;
     }
 
@@ -994,7 +994,7 @@ void ScanGallery::slotImportFile()
         FileTreeViewItem *pa = static_cast<FileTreeViewItem *>(curr->parent());
         impTarget = pa->url();
     }
-    kDebug() << "Importing to" << impTarget;
+    //qDebug() << "Importing to" << impTarget;
 
     KUrl impUrl = KFileDialog::getImageOpenUrl(KUrl("kfiledialog:///importImage"), this, i18n("Import Image File to Gallery"));
     if (impUrl.isEmpty()) {
@@ -1013,8 +1013,8 @@ void ScanGallery::slotUrlsDropped(QDropEvent *ev, FileTreeViewItem *item)
         return;
     }
 
-    kDebug() << "onto" << (item == NULL ? "NULL" : item->url().prettyUrl())
-             << "srcs" << urls.count() << "first" << urls.first();
+    //qDebug() << "onto" << (item == NULL ? "NULL" : item->url().prettyUrl())
+             //<< "srcs" << urls.count() << "first" << urls.first();
 
     if (item == NULL) {
         return;
@@ -1028,7 +1028,7 @@ void ScanGallery::slotUrlsDropped(QDropEvent *ev, FileTreeViewItem *item)
         dest.setFileName(QString::null);
     }
     dest.adjustPath(KUrl::AddTrailingSlash);
-    kDebug() << "resolved destination" << dest;
+    //qDebug() << "resolved destination" << dest;
 
     // Make the last URL to copy the one to select next
     KUrl nextSel = dest;
@@ -1047,7 +1047,7 @@ void ScanGallery::slotUrlsDropped(QDropEvent *ev, FileTreeViewItem *item)
 
 void ScanGallery::slotJobResult(KJob *job)
 {
-    kDebug() << "error" << job->error();
+    //qDebug() << "error" << job->error();
     if (job->error()) {
         job->uiDelegate()->showErrorMessage();
     }
@@ -1139,7 +1139,7 @@ void ScanGallery::slotDeleteItems()
     }
 
     slotUnloadItem(curr);
-    kDebug() << "Deleting" << urlToDel;
+    //qDebug() << "Deleting" << urlToDel;
     /* Since we are currently talking about local files here, NetAccess is OK */
     if (!KIO::NetAccess::del(urlToDel, NULL)) {
         KMessageBox::error(this, i18n("<qt>Could not delete the image or folder<br><filename>%2</filename><br><br>%1",
@@ -1166,7 +1166,7 @@ void ScanGallery::slotDeleteItems()
     //  else (the next image is selected and loaded).  So leaving this
     //  commented out for now.
     curr = highlightedFileTreeViewItem();
-    kDebug() << "new selection after delete" << (curr == NULL ? "NULL" : curr->url().prettyURL());
+    //qDebug() << "new selection after delete" << (curr == NULL ? "NULL" : curr->url().prettyURL());
     if (curr != NULL) {
         emit showItem(curr->fileItem());
     }
@@ -1194,7 +1194,7 @@ void ScanGallery::slotCreateFolder()
             }
             /* add the folder name from user input */
             url.addPath(folder);
-            kDebug() << "Creating folder" << url;
+            //qDebug() << "Creating folder" << url;
 
             /* Since the new directory arrives in the packager in the newItems-slot, we set a
              * variable urlToSelectOnArrive here. The newItems-slot will honor it and select
@@ -1203,7 +1203,7 @@ void ScanGallery::slotCreateFolder()
             slotSetNextUrlToSelect(url);
 
             if (! KIO::NetAccess::mkdir(url, 0, -1)) {
-                kDebug() << "Error: creation of" << url << "failed!";
+                //qDebug() << "Error: creation of" << url << "failed!";
             } else {
                 /* created successfully */
                 /* open the branch if necessary and select the new folder */
@@ -1215,6 +1215,6 @@ void ScanGallery::slotCreateFolder()
 
 void ScanGallery::setAllowRename(bool on)
 {
-    kDebug() << "to" << on;
+    //qDebug() << "to" << on;
     setEditTriggers(on ? QAbstractItemView::DoubleClicked : QAbstractItemView::NoEditTriggers);
 }

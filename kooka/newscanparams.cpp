@@ -24,7 +24,7 @@
 
 #include <klineedit.h>
 #include <klocale.h>
-#include <kdebug.h>
+#include <QDebug>
 #include <kvbox.h>
 
 NewScanParams::NewScanParams(QWidget *parent,

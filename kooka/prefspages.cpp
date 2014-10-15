@@ -36,7 +36,7 @@
 #include <QGroupBox>
 
 #include <klocale.h>
-#include <kdebug.h>
+#include <QDebug>
 #include <kcombobox.h>
 #include <kmessagebox.h>
 #include <kurlrequester.h>
@@ -101,7 +101,7 @@ void KookaGeneralPage::defaultSettings()
 
 void KookaGeneralPage::slotEnableWarnings()
 {
-    kDebug();
+    //qDebug();
 
     KMessageBox::enableAllMessages();
     FormatDialog::forgetRemembered();
@@ -141,7 +141,7 @@ void KookaStartupPage::saveSettings()
     KConfigGroup grp2 = ScanGlobal::self()->configGroup();  // global, for libkscan also
 
     bool cbVal = !mSelectScannerCheck->isChecked();
-    kDebug() << "Writing" << STARTUP_SKIP_ASK << "as" << cbVal;
+    //qDebug() << "Writing" << STARTUP_SKIP_ASK << "as" << cbVal;
     grp2.writeEntry(STARTUP_SKIP_ASK, cbVal);
     grp2.writeEntry(STARTUP_ONLY_LOCAL, !mNetQueryCheck->isChecked());
     // Kooka startup options
@@ -263,7 +263,7 @@ KookaThumbnailPage::KookaThumbnailPage(KPageDialog *parent)
     /* Image file selector */
     mTileSelector = new KUrlRequester(this);
     mTileSelector->setMode(KFile::File | KFile::ExistingOnly | KFile::LocalOnly);
-    kDebug() << "Setting tile URL" << bgImg;
+    //qDebug() << "Setting tile URL" << bgImg;
     mTileSelector->setUrl(QUrl::fromLocalFile(bgImg));
 
     gl->addWidget(mTileSelector, 3, 1);
@@ -422,7 +422,7 @@ void KookaOcrPage::defaultSettings()
 void KookaOcrPage::slotEngineSelected(int i)
 {
     mSelectedEngine = static_cast<OcrEngine::EngineType>(i);
-    kDebug() << "engine is" << mSelectedEngine;
+    //qDebug() << "engine is" << mSelectedEngine;
 
     QString msg;
     switch (mSelectedEngine) {

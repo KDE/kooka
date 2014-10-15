@@ -26,7 +26,7 @@
 #include <qlayout.h>
 #include <qlabel.h>
 
-#include <kdebug.h>
+#include <QDebug>
 #include <klocale.h>
 #include <kglobal.h>
 #include <khbox.h>
@@ -38,7 +38,7 @@
 KookaGallery::KookaGallery(QWidget *parent)
     : QWidget(parent)
 {
-    kDebug();
+    //qDebug();
     m_layout = new QGridLayout(this);
     m_layout->setMargin(0);
 
