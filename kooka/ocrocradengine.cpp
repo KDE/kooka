@@ -178,7 +178,7 @@ void OcrOcradEngine::startProcess(OcrBaseDialog *dia, const KookaImage *img)
     m_tempStderrLog = getTempFileName(".log");
     m_ocrProcess->setStandardErrorFile(m_tempStderrLog);
 
-    connect(m_ocrProcess, SIGNAL(finished(int, QProcess::ExitStatus)), SLOT(slotOcradExited(int, QProcess::ExitStatus)));
+    connect(m_ocrProcess, SIGNAL(finished(int,QProcess::ExitStatus)), SLOT(slotOcradExited(int,QProcess::ExitStatus)));
 
     m_ocrProcess->start();
     if (!m_ocrProcess->waitForStarted(5000)) {

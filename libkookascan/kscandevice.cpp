@@ -179,7 +179,7 @@ KScanDevice::KScanDevice(QObject *parent)
 
 // TODO: make this just a function call, for predictable order
 // (sigScanFinished before sigNewImage)
-    connect(this, SIGNAL(sigScanFinished(KScanDevice::Status)), SLOT(slotScanFinished(KScanDevice::Status)));
+    connect(this, &KScanDevice::sigScanFinished, this, &KScanDevice::slotScanFinished);
 }
 
 KScanDevice::~KScanDevice()
@@ -934,7 +934,7 @@ KScanDevice::Status KScanDevice::acquireData(bool isPreview)
                     if (sane_get_select_fd(mScannerHandle, &fd) == SANE_STATUS_GOOD) {
                         //qDebug() << "using read socket notifier";
                         mSocketNotifier = new QSocketNotifier(fd, QSocketNotifier::Read, this);
-                        connect(mSocketNotifier, SIGNAL(activated(int)), SLOT(doProcessABlock()));
+                        connect(mSocketNotifier, &QSocketNotifier::activated, this, &KScanDevice::doProcessABlock);
                     } else {
                         //qDebug() << "not using socket notifier (sane_get_select_fd() failed)";
                     }

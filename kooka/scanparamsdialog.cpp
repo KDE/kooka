@@ -61,10 +61,8 @@ ScanParamsDialog::ScanParamsDialog(QWidget *parent, KScanDevice *scandev)
     paramsList->setSelectionMode(QAbstractItemView::SingleSelection);
     paramsList->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
     paramsList->setMinimumWidth(200);
-    connect(paramsList, SIGNAL(currentItemChanged(QListWidgetItem *, QListWidgetItem *)),
-            SLOT(slotSelectionChanged(QListWidgetItem *)));
-    connect(paramsList, SIGNAL(itemDoubleClicked(QListWidgetItem *)),
-            SLOT(slotLoadAndClose(QListWidgetItem *)));
+    connect(paramsList, &QListWidget::currentItemChanged, this, &ScanParamsDialog::slotSelectionChanged);
+    connect(paramsList, &QListWidget::itemDoubleClicked, this, &ScanParamsDialog::slotLoadAndClose);
     gl->addWidget(paramsList, 1, 0, 5, 1);
 
     QLabel *l = new QLabel(i18n("Saved scan parameter sets:"), mf);
@@ -72,22 +70,22 @@ ScanParamsDialog::ScanParamsDialog(QWidget *parent, KScanDevice *scandev)
     l->setBuddy(paramsList);
 
     buttonLoad = new QPushButton(i18n("Load"), mf);
-    connect(buttonLoad, SIGNAL(clicked()), SLOT(slotLoad()));
+    connect(buttonLoad, &QPushButton::clicked, this, &ScanParamsDialog::slotLoad);
     buttonLoad->setToolTip(i18n("Load the selected scan parameter set to use as scanner settings"));
     gl->addWidget(buttonLoad, 1, 2);
 
     buttonSave = new QPushButton(i18n("Save..."), mf);
-    connect(buttonSave, SIGNAL(clicked()), SLOT(slotSave()));
+    connect(buttonSave, &QPushButton::clicked, this, &ScanParamsDialog::slotSave);
     buttonSave->setToolTip(i18n("Save the current scanner settings as a new scan parameter set"));
     gl->addWidget(buttonSave, 2, 2);
 
     buttonDelete = new QPushButton(i18n("Delete"), mf);
-    connect(buttonDelete, SIGNAL(clicked()), SLOT(slotDelete()));
+    connect(buttonDelete, &QPushButton::clicked, this, &ScanParamsDialog::slotDelete);
     buttonDelete->setToolTip(i18n("Delete the selected scan parameter set"));
     gl->addWidget(buttonDelete, 3, 2);
 
     buttonEdit = new QPushButton(i18n("Edit..."), mf);
-    connect(buttonEdit, SIGNAL(clicked()), SLOT(slotEdit()));
+    connect(buttonEdit, &QPushButton::clicked, this, &ScanParamsDialog::slotEdit);
     buttonEdit->setToolTip(i18n("Change the name or description of the selected scan parameter set"));
     gl->addWidget(buttonEdit, 4, 2);
 

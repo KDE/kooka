@@ -102,10 +102,7 @@ public:
      * @return The widget, or @c NULL if it has not been created yet.
      * Do not delete this, it is owned by the @c ScanParams object.
      **/
-    KLed *operationLED() const
-    {
-        return (mLed);
-    }
+    KLed *operationLED() const;
 
     /**
      * Set the scan destination to be displayed in the progress dialogue.

@@ -382,8 +382,8 @@ void OcrBaseDialog::introduceImage(const KookaImage *img)
         KIO::PreviewJob *job = KIO::filePreview(li, m_previewSize.width(), m_previewSize.height());
         if (job != NULL) {
             job->setIgnoreMaximumSize();
-            connect(job, SIGNAL(gotPreview(const KFileItem &, const QPixmap &)),
-                    SLOT(slotGotPreview(const KFileItem &, const QPixmap &)));
+            connect(job, SIGNAL(gotPreview(KFileItem,QPixmap)),
+                    SLOT(slotGotPreview(KFileItem,QPixmap)));
         }
     } else {                    // selection only in memory,
         // do the preview ourselves

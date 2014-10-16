@@ -102,7 +102,7 @@ ScanSizeSelector::ScanSizeSelector(QWidget *parent, const QSize &bedSize)
 
     m_sizeCb = new QComboBox(this);
     m_sizeCb->setToolTip(i18n("<qt>Set the size of the scanned area"));
-    connect(m_sizeCb, SIGNAL(activated(int)), SLOT(slotSizeSelected(int)));
+    connect(m_sizeCb, static_cast<void (QComboBox::*)(int)>(&QComboBox::activated), this, &ScanSizeSelector::slotSizeSelected);
     setFocusProxy(m_sizeCb);
 
     m_sizeCb->addItem(i18n("Full size"));       // index 0
@@ -118,7 +118,7 @@ ScanSizeSelector::ScanSizeSelector(QWidget *parent, const QSize &bedSize)
 
     QButtonGroup *bg = new QButtonGroup(this);
     bg->setExclusive(true);
-    connect(bg, SIGNAL(buttonClicked(int)), SLOT(slotPortraitLandscape(int)));
+    connect(bg, static_cast<void (QButtonGroup::*)(int)>(&QButtonGroup::buttonClicked), this, &ScanSizeSelector::slotPortraitLandscape);
 
     m_portraitRb = new QRadioButton(i18n("Portrait"), this);
     m_portraitRb->setEnabled(false);

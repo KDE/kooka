@@ -27,14 +27,14 @@
 #include <klocale.h>
 
 KookaScanParams::KookaScanParams(QWidget *parent)
-    : ScanParams(parent)
+    : ScanParams(parent),
+      mNoScannerMessage(0)
 {
-    mNoScannerMessage = NULL;
 }
 
 QWidget *KookaScanParams::messageScannerNotSelected()
 {
-    if (mNoScannerMessage == NULL) {
+    if (!mNoScannerMessage) {
         mNoScannerMessage = new QLabel(
             i18n("<qt>"
                  "<b>Gallery Mode - No scanner selected</b>"
@@ -47,18 +47,17 @@ QWidget *KookaScanParams::messageScannerNotSelected()
                  "if a scanner is not automatically detected."));
 
         mNoScannerMessage->setWordWrap(true);
-        connect(mNoScannerMessage, SIGNAL(linkActivated(const QString &)),
-                SLOT(slotLinkActivated(const QString &)));
+        connect(mNoScannerMessage, &QLabel::linkActivated, this, &KookaScanParams::slotLinkActivated);
     }
 
-    return (mNoScannerMessage);
+    return mNoScannerMessage;
 }
 
 void KookaScanParams::slotLinkActivated(const QString &link)
 {
-    if (link == "a:1") {
+    if (link == QLatin1String("a:1")) {
         emit actionSelectScanner();
-    } else if (link == "a:2") {
+    } else if (link == QLatin1String("a:2")) {
         emit actionAddScanner();
     }
 }

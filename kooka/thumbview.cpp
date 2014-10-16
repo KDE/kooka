@@ -82,25 +82,25 @@ ThumbView::ThumbView(QWidget *parent)
     dirLister()->setMimeExcludeFilter(QStringList("inode/directory"));
     // only files, not directories
 
-    connect(this, SIGNAL(fileSelected(const KFileItem &)),
-            SLOT(slotFileSelected(const KFileItem &)));
-    connect(this, SIGNAL(fileHighlighted(const KFileItem &)),
-            SLOT(slotFileHighlighted(const KFileItem &)));
+    connect(this, SIGNAL(fileSelected(KFileItem)),
+            SLOT(slotFileSelected(KFileItem)));
+    connect(this, SIGNAL(fileHighlighted(KFileItem)),
+            SLOT(slotFileHighlighted(KFileItem)));
     connect(this, SIGNAL(finishedLoading()),
             SLOT(slotFinishedLoading()));
 
     // We want to provide our own context menu, not the one that
     // KDirOperator has built in.
-    disconnect(view(), SIGNAL(customContextMenuRequested(const QPoint &)), NULL, NULL);
-    connect(view(), SIGNAL(customContextMenuRequested(const QPoint &)),
-            SLOT(slotContextMenu(const QPoint &)));
+    disconnect(view(), SIGNAL(customContextMenuRequested(QPoint)), NULL, NULL);
+    connect(view(), SIGNAL(customContextMenuRequested(QPoint)),
+            SLOT(slotContextMenu(QPoint)));
 
     mContextMenu = new QMenu(this);
     mContextMenu->addSection(i18n("Thumbnails"));
 
     // Scrolling to the selected item only works after the KDirOperator's
     // KDirModel has received this signal.
-    connect(dirLister(), SIGNAL(refreshItems(const QList<QPair<KFileItem, KFileItem> > &)),
+    connect(dirLister(), SIGNAL(refreshItems(QList<QPair<KFileItem,KFileItem> >)),
             SLOT(slotEnsureVisible()));
 
     m_lastSelected = url();

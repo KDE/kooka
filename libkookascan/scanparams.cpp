@@ -271,13 +271,13 @@ bool ScanParams::connectDevice(KScanDevice *newScanDevice, bool galleryMode)
     QPushButton *pb = new QPushButton(QIcon::fromTheme("preview"), i18n("Pre&view"), this);
     pb->setToolTip(i18n("<qt>Start a preview scan and show the preview image"));
     pb->setMinimumWidth(100);
-    connect(pb, SIGNAL(clicked()), SLOT(slotAcquirePreview()));
+    connect(pb, &QPushButton::clicked, this, &ScanParams::slotAcquirePreview);
     lay->addWidget(pb, 5, 0, Qt::AlignLeft);
 
     pb = new QPushButton(QIcon::fromTheme("scan"), i18n("Star&t Scan"), this);
     pb->setToolTip(i18n("<qt>Start a scan and save the scanned image"));
     pb->setMinimumWidth(100);
-    connect(pb, SIGNAL(clicked()), SLOT(slotStartScan()));
+    connect(pb, &QPushButton::clicked, this, &ScanParams::slotStartScan);
     lay->addWidget(pb, 5, 1, Qt::AlignRight);
 
     /* Initialise the progress dialog */
@@ -289,10 +289,15 @@ bool ScanParams::connectDevice(KScanDevice *newScanDevice, bool galleryMode)
     mProgressDialog->setWindowTitle(i18n("Scanning"));
     setScanDestination(QString::null);          // reset destination display
 
-    connect(mProgressDialog, SIGNAL(canceled()), mSaneDevice, SLOT(slotStopScanning()));
-    connect(mSaneDevice, SIGNAL(sigScanProgress(int)), SLOT(slotScanProgress(int)));
+    connect(mProgressDialog, &QProgressDialog::canceled, mSaneDevice, &KScanDevice::slotStopScanning);
+    connect(mSaneDevice, &KScanDevice::sigScanProgress, this, &ScanParams::slotScanProgress);
 
     return (true);
+}
+
+KLed *ScanParams::operationLED() const
+{
+    return (mLed);
 }
 
 void ScanParams::initialise(KScanOption *so)
@@ -356,7 +361,7 @@ QWidget *ScanParams::createScannerParams()
     mVirtualFile = mSaneDevice->getGuiElement(SANE_NAME_FILE, frame);
     if (mVirtualFile != NULL) {
         initialise(mVirtualFile);
-        connect(mVirtualFile, SIGNAL(guiChange(KScanOption *)), SLOT(slotOptionChanged(KScanOption *)));
+        connect(mVirtualFile, &KScanOption::guiChange, this, &ScanParams::slotOptionChanged);
 
         l = mVirtualFile->getLabel(frame, true);
         w = mVirtualFile->widget();
@@ -380,7 +385,7 @@ QWidget *ScanParams::createScannerParams()
         QButtonGroup *vbgGroup = new QButtonGroup(vbg);
         vbgGroup->addButton(rb1, 0);
         vbgGroup->addButton(rb2, 1);
-        connect(vbgGroup, SIGNAL(buttonClicked(int)), SLOT(slotVirtScanModeSelect(int)));
+        connect(vbgGroup, static_cast<void (QButtonGroup::*)(int)>(&QButtonGroup::buttonClicked), this, &ScanParams::slotVirtScanModeSelect);
 
         l = new QLabel(i18n("Reading mode:"), frame);
         frame->addRow(l, vbg, NULL, Qt::AlignTop);
@@ -406,8 +411,8 @@ QWidget *ScanParams::createScannerParams()
         cb->setIcon(mIconHalftone, I18N_NOOP("Halftone"));
 
         initialise(so);
-        connect(so, SIGNAL(guiChange(KScanOption *)), SLOT(slotOptionChanged(KScanOption *)));
-        connect(so, SIGNAL(guiChange(KScanOption *)), SLOT(slotNewScanMode()));
+        connect(so, &KScanOption::guiChange, this, &ScanParams::slotOptionChanged);
+        connect(so, &KScanOption::guiChange, this, &ScanParams::slotNewScanMode);
 
         l = so->getLabel(frame, true);
         frame->addRow(l, cb);
@@ -428,9 +433,9 @@ QWidget *ScanParams::createScannerParams()
         so->get(&x_res);
         so->redrawWidget();
 
-        connect(so, SIGNAL(guiChange(KScanOption *)), SLOT(slotOptionChanged(KScanOption *)));
+        connect(so, &KScanOption::guiChange, this, &ScanParams::slotOptionChanged);
         // Connection that passes the resolution to the previewer
-        connect(so, SIGNAL(guiChange(KScanOption *)), SLOT(slotNewResolution(KScanOption *)));
+        connect(so, &KScanOption::guiChange, this, &ScanParams::slotNewResolution);
 
         l = so->getLabel(frame, true);
         w = so->widget();
@@ -443,7 +448,7 @@ QWidget *ScanParams::createScannerParams()
             initialise(mResolutionBind);
             mResolutionBind->redrawWidget();
 
-            connect(mResolutionBind, SIGNAL(guiChange(KScanOption *)), SLOT(slotOptionChanged(KScanOption *)));
+            connect(mResolutionBind, &KScanOption::guiChange, this, &ScanParams::slotOptionChanged);
 
             l = so->getLabel(frame, true);
             w = so->widget();
@@ -462,7 +467,7 @@ QWidget *ScanParams::createScannerParams()
             so->redrawWidget();
 
             // Connection that passes the resolution to the previewer
-            connect(so, SIGNAL(guiChange(KScanOption *)), SLOT(slotNewResolution(KScanOption *)));
+            connect(so, &KScanOption::guiChange, this, &ScanParams::slotNewResolution);
 
             l = so->getLabel(frame, true);
             w = so->widget();
@@ -477,7 +482,7 @@ QWidget *ScanParams::createScannerParams()
 
     // Scan size setting
     mAreaSelect = new ScanSizeSelector(frame, mSaneDevice->getMaxScanSize());
-    connect(mAreaSelect, SIGNAL(sizeSelected(const QRect &)), SLOT(slotScanSizeSelected(const QRect &)));
+    connect(mAreaSelect, &ScanSizeSelector::sizeSelected, this, &ScanParams::slotScanSizeSelected);
     l = new QLabel("Scan &area:", frame);       // make sure it gets an accel
     l->setBuddy(mAreaSelect->focusProxy());
     frame->addRow(l, mAreaSelect, NULL, Qt::AlignTop);
@@ -489,7 +494,7 @@ QWidget *ScanParams::createScannerParams()
     mSourceSelect = mSaneDevice->getGuiElement(SANE_NAME_SCAN_SOURCE, frame);
     if (mSourceSelect != NULL) {
         initialise(mSourceSelect);
-        connect(mSourceSelect, SIGNAL(guiChange(KScanOption *)), SLOT(slotOptionChanged(KScanOption *)));
+        connect(mSourceSelect, &KScanOption::guiChange, this, &ScanParams::slotOptionChanged);
 
         l = mSourceSelect->getLabel(frame, true);
         w = mSourceSelect->widget();
@@ -508,7 +513,7 @@ QWidget *ScanParams::createScannerParams()
     so = mSaneDevice->getGuiElement(SANE_NAME_TEST_PICTURE, frame);
     if (so != NULL) {
         initialise(so);
-        connect(so, SIGNAL(guiChange(KScanOption *)), SLOT(slotOptionChanged(KScanOption *)));
+        connect(so, &KScanOption::guiChange, this, &ScanParams::slotOptionChanged);
 
         l = so->getLabel(frame);
         w = so->widget();
@@ -538,7 +543,7 @@ QWidget *ScanParams::createScannerParams()
         if (so != NULL) {
             //qDebug() << "creating" << (so->isCommonOption() ? "OTHER" : "ADVANCED") << "option" << opt;
             initialise(so);
-            connect(so, SIGNAL(guiChange(KScanOption *)), SLOT(slotOptionChanged(KScanOption *)));
+            connect(so, &KScanOption::guiChange, this, &ScanParams::slotOptionChanged);
 
             if (so->isCommonOption()) {
                 frame = otherFrame;
@@ -557,14 +562,14 @@ QWidget *ScanParams::createScannerParams()
 
             // Some special things to do for particular options
             if (opt == SANE_NAME_BIT_DEPTH) {
-                connect(so, SIGNAL(guiChange(KScanOption *)), SLOT(slotNewScanMode()));
+                connect(so, &KScanOption::guiChange, this, &ScanParams::slotNewScanMode);
             } else if (opt == SANE_NAME_CUSTOM_GAMMA) {
                 // Enabling/disabling the edit button is handled by
                 // slotOptionChanged() calling setEditCustomGammaTableState()
-                //connect(so, SIGNAL(guiChange(KScanOption *)), SLOT(slotOptionNotify(KScanOption *)));
+                //connect(so, SIGNAL(guiChange(KScanOption*)), SLOT(slotOptionNotify(KScanOption*)));
 
                 mGammaEditButt = new QPushButton(i18n("Edit Gamma Table..."), this);
-                connect(mGammaEditButt, SIGNAL(clicked()), SLOT(slotEditCustGamma()));
+                connect(mGammaEditButt, &QPushButton::clicked, this, &ScanParams::slotEditCustGamma);
                 setEditCustomGammaTableState();
 
                 frame->addRow(NULL, mGammaEditButt, NULL, Qt::AlignRight);
@@ -928,8 +933,7 @@ void ScanParams::slotEditCustGamma()
 // tables if the scanner has them.
 
     GammaDialog gdiag(&gt, this);
-    connect(&gdiag, SIGNAL(gammaToApply(const KGammaTable *)),
-            SLOT(slotApplyGamma(const KGammaTable *)));
+    connect(&gdiag, &GammaDialog::gammaToApply, this, &ScanParams::slotApplyGamma);
     gdiag.exec();
 }
 

@@ -42,8 +42,8 @@ AddDeviceDialog::AddDeviceDialog(QWidget *parent, const QString &caption)
     mOkButton = buttonBox->button(QDialogButtonBox::Ok);
     mOkButton->setDefault(true);
     mOkButton->setShortcut(Qt::CTRL | Qt::Key_Return);
-    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
-    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+    connect(buttonBox, &QDialogButtonBox::accepted, this, &AddDeviceDialog::accept);
+    connect(buttonBox, &QDialogButtonBox::rejected, this, &AddDeviceDialog::reject);
     setWindowTitle(caption);
 
     QWidget *w = new QWidget(this);
@@ -84,7 +84,7 @@ AddDeviceDialog::AddDeviceDialog(QWidget *parent, const QString &caption)
 
     mDevEdit = new KLineEdit(w);
     mainLayout->addWidget(mDevEdit);
-    connect(mDevEdit, SIGNAL(textChanged(const QString &)), SLOT(slotTextChanged()));
+    connect(mDevEdit, &KLineEdit::textChanged, this, &AddDeviceDialog::slotTextChanged);
     vl->addWidget(mDevEdit);
     lab->setBuddy(mDevEdit);
 
@@ -103,7 +103,7 @@ AddDeviceDialog::AddDeviceDialog(QWidget *parent, const QString &caption)
 
     mDescEdit = new KLineEdit(w);
     mainLayout->addWidget(mDescEdit);
-    connect(mDescEdit, SIGNAL(textChanged(const QString &)), SLOT(slotTextChanged()));
+    connect(mDescEdit, &KLineEdit::textChanged, this, &AddDeviceDialog::slotTextChanged);
     vl->addWidget(mDescEdit);
     lab->setBuddy(mDescEdit);
 

@@ -963,7 +963,7 @@ KScanControl *KScanOption::createWidget(QWidget *parent)
             break;
 
         case KScanControl::Text:                // text control
-            connect(w, SIGNAL(settingChanged(const QString &)), SLOT(slotWidgetChange(const QString &)));
+            connect(w, SIGNAL(settingChanged(QString)), SLOT(slotWidgetChange(QString)));
             break;
 
         case KScanControl::Button:              // push button

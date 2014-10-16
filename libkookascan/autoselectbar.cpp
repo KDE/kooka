@@ -114,8 +114,8 @@ void AutoSelectBar::slotShowSettings()
 {
     AutoSelectDialog *d = new AutoSelectDialog(this);
     d->setSettings(mMargin, mBgIsWhite, mDustsize);
-    connect(d, SIGNAL(settingsChanged(int, bool, int)), SLOT(setAdvancedSettings(int, bool, int)));
-    connect(d, SIGNAL(settingsChanged(int, bool, int)), SIGNAL(advancedSettingsChanged(int, bool, int)));
+    connect(d, SIGNAL(settingsChanged(int,bool,int)), SLOT(setAdvancedSettings(int,bool,int)));
+    connect(d, SIGNAL(settingsChanged(int,bool,int)), SIGNAL(advancedSettingsChanged(int,bool,int)));
     d->show();
 }
 

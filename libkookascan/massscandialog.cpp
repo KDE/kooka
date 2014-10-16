@@ -96,11 +96,11 @@ MassScanDialog::MassScanDialog(QWidget *parent)
     bigdad->addLayout(l_but);
 
     // User1 = Start Scan
-    connect(this, SIGNAL(user1Clicked()), SLOT(slotStartScan()));
+    connect(this, &MassScanDialog::user1Clicked, this, &MassScanDialog::slotStartScan);
     // User2 = Finish
-    connect(this, SIGNAL(user2Clicked()), SLOT(slotStopScan()));
+    connect(this, &MassScanDialog::user2Clicked, this, &MassScanDialog::slotStopScan);
     // Cancel
-    connect(this, SIGNAL(cancelClicked()), SLOT(slotFinished()));
+    connect(this, &MassScanDialog::cancelClicked, this, &MassScanDialog::slotFinished);
 
     bigdad->activate();
     show();

@@ -75,32 +75,32 @@ FileTreeBranch::FileTreeBranch(FileTreeView *parent,
 
     setShowingDotFiles(showHidden);
 
-    connect(this, SIGNAL(itemsAdded(const KUrl &, const KFileItemList &)),
-            SLOT(slotItemsAdded(const KUrl &, const KFileItemList &)));
+    connect(this, SIGNAL(itemsAdded(KUrl,KFileItemList)),
+            SLOT(slotItemsAdded(KUrl,KFileItemList)));
 
-    connect(this, SIGNAL(itemsDeleted(const KFileItemList &)),
-            SLOT(slotItemsDeleted(const KFileItemList &)));
+    connect(this, SIGNAL(itemsDeleted(KFileItemList)),
+            SLOT(slotItemsDeleted(KFileItemList)));
 
-    connect(this, SIGNAL(refreshItems(const QList<QPair<KFileItem, KFileItem> > &)),
-            SLOT(slotRefreshItems(const QList<QPair<KFileItem, KFileItem> > &)));
+    connect(this, SIGNAL(refreshItems(QList<QPair<KFileItem,KFileItem> >)),
+            SLOT(slotRefreshItems(QList<QPair<KFileItem,KFileItem> >)));
 
-    connect(this, SIGNAL(started(const KUrl &)),
-            SLOT(slotListerStarted(const KUrl &)));
+    connect(this, SIGNAL(started(KUrl)),
+            SLOT(slotListerStarted(KUrl)));
 
-    connect(this, SIGNAL(completed(const KUrl &)),
-            SLOT(slotListerCompleted(const KUrl &)));
+    connect(this, SIGNAL(completed(KUrl)),
+            SLOT(slotListerCompleted(KUrl)));
 
-    connect(this, SIGNAL(canceled(const KUrl &)),
-            SLOT(slotListerCanceled(const KUrl &)));
+    connect(this, SIGNAL(canceled(KUrl)),
+            SLOT(slotListerCanceled(KUrl)));
 
     connect(this, SIGNAL(clear()),
             SLOT(slotListerClear()));
 
-    connect(this, SIGNAL(clear(const KUrl &)),
-            SLOT(slotListerClearUrl(const KUrl &)));
+    connect(this, SIGNAL(clear(KUrl)),
+            SLOT(slotListerClearUrl(KUrl)));
 
-    connect(this, SIGNAL(redirection(const KUrl &, const KUrl &)),
-            SLOT(slotRedirect(const KUrl &, const KUrl &)));
+    connect(this, SIGNAL(redirection(KUrl,KUrl)),
+            SLOT(slotRedirect(KUrl,KUrl)));
 
     m_openChildrenURLs.append(u);
 }

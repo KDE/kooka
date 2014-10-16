@@ -66,7 +66,7 @@ OcrResEdit::OcrResEdit(QWidget *parent)
     setTabChangesFocus(true);               // will never OCR these
     slotSetReadOnly(true);              // initially, anyway
 
-    connect(this, SIGNAL(cursorPositionChanged()), SLOT(slotUpdateHighlight()));
+    connect(this, &OcrResEdit::cursorPositionChanged, this, &OcrResEdit::slotUpdateHighlight);
 
 // TODO: monitor textChanged() signal, if document emptied (cleared)
 // then tell OCR engine to stop tracking and double clicks

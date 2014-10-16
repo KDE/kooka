@@ -47,7 +47,7 @@ ImgScaleDialog::ImgScaleDialog(QWidget *parent, int curr_sel)
     setMainWidget(radios);
 
     QButtonGroup *radiosGroup = new QButtonGroup(radios);
-    connect(radiosGroup, SIGNAL(buttonClicked(int)), this, SLOT(slotSetSelValue(int)));
+    connect(radiosGroup, static_cast<void (QButtonGroup::*)(int)>(&QButtonGroup::buttonClicked), this, &ImgScaleDialog::slotSetSelValue);
 
     QVBoxLayout *radiosLayout = new QVBoxLayout(this);
 
@@ -128,7 +128,7 @@ ImgScaleDialog::ImgScaleDialog(QWidget *parent, int curr_sel)
     if (radiosGroup->checkedId() < 0) {
         rbCust->setChecked(true);
     }
-    connect(rbCust, SIGNAL(toggled(bool)), this, SLOT(slotEnableAndFocus(bool)));
+    connect(rbCust, &QRadioButton::toggled, this, &ImgScaleDialog::slotEnableAndFocus);
 
     hbox->addWidget(rbCust);
     radiosGroup->addButton(rbCust, 8);
@@ -138,7 +138,7 @@ ImgScaleDialog::ImgScaleDialog(QWidget *parent, int curr_sel)
     sn.setNum(curr_sel);
     leCust->setValidator(new KIntValidator(leCust));
     leCust->setText(sn);
-    connect(leCust, SIGNAL(textChanged(const QString &)), this, SLOT(slotCustomChanged(const QString &)));
+    connect(leCust, &KLineEdit::textChanged, this, &ImgScaleDialog::slotCustomChanged);
     hbox->addWidget(leCust);
     hbox->setStretchFactor(leCust, 1);
 

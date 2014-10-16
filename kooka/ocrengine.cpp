@@ -189,9 +189,9 @@ bool OcrEngine::startOCRVisible(QWidget *parent)
     m_ocrDialog->setupGui();
     m_ocrDialog->introduceImage(&m_introducedImage);
 
-    connect(m_ocrDialog, SIGNAL(signalOcrStart()), SLOT(startOCRProcess()));
-    connect(m_ocrDialog, SIGNAL(signalOcrStop()), SLOT(slotStopOCR()));
-    connect(m_ocrDialog, SIGNAL(signalOcrClose()), SLOT(slotClose()));
+    connect(m_ocrDialog, &OcrBaseDialog::signalOcrStart, this, &OcrEngine::startOCRProcess);
+    connect(m_ocrDialog, &OcrBaseDialog::signalOcrStop, this, &OcrEngine::slotStopOCR);
+    connect(m_ocrDialog, &OcrBaseDialog::signalOcrClose, this, &OcrEngine::slotClose);
     m_ocrDialog->show();
 
     m_ocrRunning = true;
@@ -351,7 +351,7 @@ void OcrEngine::startOCRProcess()
 void OcrEngine::setImageCanvas(ImageCanvas *canvas)
 {
     m_imgCanvas = canvas;
-    connect(m_imgCanvas, SIGNAL(doubleClicked(const QPoint &)), SLOT(slotImagePosition(const QPoint &)));
+    connect(m_imgCanvas, &ImageCanvas::doubleClicked, this, &OcrEngine::slotImagePosition);
 }
 
 void OcrEngine::slotImagePosition(const QPoint &p)

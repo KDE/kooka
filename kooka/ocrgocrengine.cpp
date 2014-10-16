@@ -124,7 +124,7 @@ void OcrGocrEngine::startProcess(OcrBaseDialog *dia, const KookaImage *img)
     m_tempDir = new KTempDir();             // new unique temporary directory
     m_ocrProcess->setWorkingDirectory(m_tempDir->name());
     // run process in there
-    connect(m_ocrProcess, SIGNAL(finished(int, QProcess::ExitStatus)), SLOT(slotGOcrExited(int, QProcess::ExitStatus)));
+    connect(m_ocrProcess, SIGNAL(finished(int,QProcess::ExitStatus)), SLOT(slotGOcrExited(int,QProcess::ExitStatus)));
     connect(m_ocrProcess, SIGNAL(readyReadStandardOutput()), SLOT(slotGOcrStdout()));
 
     QStringList args;                   // arguments for process

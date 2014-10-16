@@ -52,6 +52,7 @@
 #include <kmessagebox.h>
 #include <kstandardguiitem.h>
 #include <KDialog>
+#include <QPushButton>
 #include <QStandardPaths>
 #include "prefspages.h"
 
@@ -61,10 +62,9 @@ KookaPref::KookaPref(QWidget *parent)
     setObjectName("KookaPref");
 
     setModal(true);
-    //QT5 setButtons(KDialog::Help|KDialog::Default|KDialog::Ok|KDialog::Apply|KDialog::Cancel);
-    //QT5 setDefaultButton(KDialog::Ok);
+    setStandardButtons(QDialogButtonBox::Help|QDialogButtonBox::Ok|QDialogButtonBox::Apply|QDialogButtonBox::Cancel|QDialogButtonBox::RestoreDefaults);
+    buttonBox()->button(QDialogButtonBox::Ok)->setDefault(true);
     setWindowTitle(i18n("Preferences"));
-    //QT5 showButtonSeparator(true);
 
     createPage(new KookaGeneralPage(this), i18n("General"), i18n("General Options"), "configure");
     createPage(new KookaStartupPage(this), i18n("Startup"), i18n("Startup Options"), "system-run");

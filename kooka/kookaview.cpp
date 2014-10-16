@@ -214,7 +214,7 @@ KookaView::KookaView(KMainWindow *parent, const QByteArray &deviceToUse)
     }
 
     // Connections ImageCanvas --> myself
-    connect(mImageCanvas, SIGNAL(newRect(const QRect &)), SLOT(slotSelectionChanged(const QRect &)));
+    connect(mImageCanvas, SIGNAL(newRect(QRect)), SLOT(slotSelectionChanged(QRect)));
 
     /** Thumbnail View **/
     mThumbView = new ThumbView(this);
@@ -224,38 +224,38 @@ KookaView::KookaView(KMainWindow *parent, const QByteArray &deviceToUse)
     ScanGallery *packager = mGallery->galleryTree();
 
     // Connections ScanGallery --> myself
-    connect(packager, SIGNAL(itemHighlighted(const KUrl &, bool)),
+    connect(packager, SIGNAL(itemHighlighted(KUrl,bool)),
             SLOT(slotGallerySelectionChanged()));
-    connect(packager, SIGNAL(showImage(const KookaImage *, bool)),
-            SLOT(slotShowAImage(const KookaImage *, bool)));
-    connect(packager, SIGNAL(aboutToShowImage(const KUrl &)),
-            SLOT(slotStartLoading(const KUrl &)));
-    connect(packager, SIGNAL(unloadImage(const KookaImage *)),
-            SLOT(slotUnloadAImage(const KookaImage *)));
+    connect(packager, SIGNAL(showImage(const KookaImage*,bool)),
+            SLOT(slotShowAImage(const KookaImage*,bool)));
+    connect(packager, SIGNAL(aboutToShowImage(KUrl)),
+            SLOT(slotStartLoading(KUrl)));
+    connect(packager, SIGNAL(unloadImage(const KookaImage*)),
+            SLOT(slotUnloadAImage(const KookaImage*)));
 
     // Connections ScanGallery --> ThumbView
-    connect(packager, SIGNAL(itemHighlighted(const KUrl &, bool)),
-            mThumbView, SLOT(slotHighlightItem(const KUrl &, bool)));
-    connect(packager, SIGNAL(imageChanged(const KFileItem *)),
-            mThumbView, SLOT(slotImageChanged(const KFileItem *)));
-    connect(packager, SIGNAL(fileRenamed(const KFileItem *, const QString &)),
-            mThumbView, SLOT(slotImageRenamed(const KFileItem *, const QString &)));
+    connect(packager, SIGNAL(itemHighlighted(KUrl,bool)),
+            mThumbView, SLOT(slotHighlightItem(KUrl,bool)));
+    connect(packager, SIGNAL(imageChanged(const KFileItem*)),
+            mThumbView, SLOT(slotImageChanged(const KFileItem*)));
+    connect(packager, SIGNAL(fileRenamed(const KFileItem*,QString)),
+            mThumbView, SLOT(slotImageRenamed(const KFileItem*,QString)));
 
     // Connections ThumbView --> ScanGallery
-    connect(mThumbView, SIGNAL(itemHighlighted(const KUrl &)),
-            packager, SLOT(slotHighlightItem(const KUrl &)));
-    connect(mThumbView, SIGNAL(itemActivated(const KUrl &)),
-            packager, SLOT(slotActivateItem(const KUrl &)));
+    connect(mThumbView, SIGNAL(itemHighlighted(KUrl)),
+            packager, SLOT(slotHighlightItem(KUrl)));
+    connect(mThumbView, SIGNAL(itemActivated(KUrl)),
+            packager, SLOT(slotActivateItem(KUrl)));
 
     GalleryHistory *recentFolder = mGallery->galleryRecent();
 
     // Connections ScanGallery <--> recent folder history
-    connect(packager, SIGNAL(galleryPathChanged(const FileTreeBranch *, const QString &)),
-            recentFolder, SLOT(slotPathChanged(const FileTreeBranch *, const QString &)));
-    connect(packager, SIGNAL(galleryDirectoryRemoved(const FileTreeBranch *, const QString &)),
-            recentFolder, SLOT(slotPathRemoved(const FileTreeBranch *, const QString &)));
-    connect(recentFolder, SIGNAL(pathSelected(const QString &, const QString &)),
-            packager, SLOT(slotSelectDirectory(const QString &, const QString &)));
+    connect(packager, SIGNAL(galleryPathChanged(const FileTreeBranch*,QString)),
+            recentFolder, SLOT(slotPathChanged(const FileTreeBranch*,QString)));
+    connect(packager, SIGNAL(galleryDirectoryRemoved(const FileTreeBranch*,QString)),
+            recentFolder, SLOT(slotPathRemoved(const FileTreeBranch*,QString)));
+    connect(recentFolder, SIGNAL(pathSelected(QString,QString)),
+            packager, SLOT(slotSelectDirectory(QString,QString)));
 
     /** Scanner Settings **/
 
@@ -273,13 +273,13 @@ KookaView::KookaView(KMainWindow *parent, const QByteArray &deviceToUse)
     connect(mScanDevice, SIGNAL(sigScanFinished(KScanDevice::Status)), SLOT(slotScanFinished(KScanDevice::Status)));
     connect(mScanDevice, SIGNAL(sigScanFinished(KScanDevice::Status)), SLOT(slotPhotoCopyScan(KScanDevice::Status)));
     /* New image created after scanning now call save dialog*/
-    connect(mScanDevice, SIGNAL(sigNewImage(const QImage *, const ImageMetaInfo *)), SLOT(slotNewImageScanned(const QImage *, const ImageMetaInfo *)));
+    connect(mScanDevice, SIGNAL(sigNewImage(const QImage*,const ImageMetaInfo*)), SLOT(slotNewImageScanned(const QImage*,const ImageMetaInfo*)));
     /* New image created after scanning now print it*/
-    connect(mScanDevice, SIGNAL(sigNewImage(const QImage *, const ImageMetaInfo *)), SLOT(slotPhotoCopyPrint(const QImage *, const ImageMetaInfo *)));
+    connect(mScanDevice, SIGNAL(sigNewImage(const QImage*,const ImageMetaInfo*)), SLOT(slotPhotoCopyPrint(const QImage*,const ImageMetaInfo*)));
     /* New preview image */
-    connect(mScanDevice, SIGNAL(sigNewPreview(const QImage *, const ImageMetaInfo *)), SLOT(slotNewPreview(const QImage *, const ImageMetaInfo *)));
+    connect(mScanDevice, SIGNAL(sigNewPreview(const QImage*,const ImageMetaInfo*)), SLOT(slotNewPreview(const QImage*,const ImageMetaInfo*)));
 
-    connect(mScanDevice, SIGNAL(sigScanStart(const ImageMetaInfo *)), SLOT(slotScanStart(const ImageMetaInfo *)));
+    connect(mScanDevice, SIGNAL(sigScanStart(const ImageMetaInfo*)), SLOT(slotScanStart(const ImageMetaInfo*)));
     connect(mScanDevice, SIGNAL(sigAcquireStart()), SLOT(slotAcquireStart()));
 
     /** Scan Preview **/
@@ -291,15 +291,15 @@ KookaView::KookaView(KMainWindow *parent, const QByteArray &deviceToUse)
     }
 
     // Connections Previewer --> myself
-    connect(mPreviewCanvas, SIGNAL(previewDimsChanged(const QString &)), SLOT(slotPreviewDimsChanged(const QString &)));
+    connect(mPreviewCanvas, SIGNAL(previewDimsChanged(QString)), SLOT(slotPreviewDimsChanged(QString)));
 
     /** Ocr Result Text **/
     mOcrResEdit  = new OcrResEdit(this);
     mOcrResEdit->setAcceptRichText(false);
     mOcrResEdit->setWordWrapMode(QTextOption::NoWrap);
     mOcrResEdit->setClickMessage(i18n("OCR results will appear here"));
-    connect(mOcrResEdit, SIGNAL(spellCheckStatus(const QString &)),
-            this, SIGNAL(changeStatus(const QString &)));
+    connect(mOcrResEdit, SIGNAL(spellCheckStatus(QString)),
+            this, SIGNAL(changeStatus(QString)));
 
     /** Tabs **/
     // TODO: not sure which tab position is best, make this configurable
@@ -542,16 +542,16 @@ bool KookaView::slotSelectDevice(const QByteArray &useDevice, bool alwaysAsk)
             mPreviewCanvas->setScannerBedSize(s.width(), s.height());
 
             // Connections ScanParams --> Previewer
-            connect(mScanParams, SIGNAL(scanResolutionChanged(int, int)),
-                    mPreviewCanvas, SLOT(slotNewScanResolutions(int, int)));
+            connect(mScanParams, SIGNAL(scanResolutionChanged(int,int)),
+                    mPreviewCanvas, SLOT(slotNewScanResolutions(int,int)));
             connect(mScanParams, SIGNAL(scanModeChanged(int)),
                     mPreviewCanvas, SLOT(slotNewScanMode(int)));
-            connect(mScanParams, SIGNAL(newCustomScanSize(const QRect &)),
-                    mPreviewCanvas, SLOT(slotNewCustomScanSize(const QRect &)));
+            connect(mScanParams, SIGNAL(newCustomScanSize(QRect)),
+                    mPreviewCanvas, SLOT(slotNewCustomScanSize(QRect)));
 
             // Connections Previewer --> ScanParams
-            connect(mPreviewCanvas, SIGNAL(newPreviewRect(const QRect &)),
-                    mScanParams, SLOT(slotNewPreviewRect(const QRect &)));
+            connect(mPreviewCanvas, SIGNAL(newPreviewRect(QRect)),
+                    mScanParams, SLOT(slotNewPreviewRect(QRect)));
 
             mScanParams->connectDevice(mScanDevice);    // create scanning options
 
@@ -831,22 +831,22 @@ void KookaView::startOCR(const KookaImage img)
         // Connections OCR Engine --> myself
         connect(mOcrEngine, SIGNAL(newOCRResultText()),
                 SLOT(slotOcrResultAvailable()));
-        connect(mOcrEngine, SIGNAL(setSpellCheckConfig(const QString &)),
-                SLOT(slotSetOcrSpellConfig(const QString &)));
-        connect(mOcrEngine, SIGNAL(startSpellCheck(bool, bool)),
-                SLOT(slotOcrSpellCheck(bool, bool)));
+        connect(mOcrEngine, SIGNAL(setSpellCheckConfig(QString)),
+                SLOT(slotSetOcrSpellConfig(QString)));
+        connect(mOcrEngine, SIGNAL(startSpellCheck(bool,bool)),
+                SLOT(slotOcrSpellCheck(bool,bool)));
 
         // Connections OCR Results --> OCR Engine
-        connect(mOcrResEdit, SIGNAL(highlightWord(const QRect &)),
-                mOcrEngine, SLOT(slotHighlightWord(const QRect &)));
-        connect(mOcrResEdit, SIGNAL(scrollToWord(const QRect &)),
-                mOcrEngine, SLOT(slotScrollToWord(const QRect &)));
+        connect(mOcrResEdit, SIGNAL(highlightWord(QRect)),
+                mOcrEngine, SLOT(slotHighlightWord(QRect)));
+        connect(mOcrResEdit, SIGNAL(scrollToWord(QRect)),
+                mOcrEngine, SLOT(slotScrollToWord(QRect)));
 
         // Connections OCR Engine --> OCR Results
         connect(mOcrEngine, SIGNAL(readOnlyEditor(bool)),
                 mOcrResEdit, SLOT(slotSetReadOnly(bool)));
-        connect(mOcrEngine, SIGNAL(selectWord(const QPoint &)),
-                mOcrResEdit, SLOT(slotSelectWord(const QPoint &)));
+        connect(mOcrEngine, SIGNAL(selectWord(QPoint)),
+                mOcrResEdit, SLOT(slotSelectWord(QPoint)));
     }
 
     mOcrEngine->setImage(img);
@@ -991,8 +991,8 @@ void KookaView::slotTransformImage()
     gallery()->slotUnloadItems();           // unload original from memory
 
     QThread *transformer = new ImageTransform(img, op, imageFile, this);
-    connect(transformer, SIGNAL(done(const KUrl &)), gallery(), SLOT(slotUpdatedItem(const KUrl &)));
-    connect(transformer, SIGNAL(statusMessage(const QString &)), SIGNAL(signalChangeStatusbar(const QString &)));
+    connect(transformer, SIGNAL(done(KUrl)), gallery(), SLOT(slotUpdatedItem(KUrl)));
+    connect(transformer, SIGNAL(statusMessage(QString)), SIGNAL(signalChangeStatusbar(QString)));
     connect(transformer, SIGNAL(finished()), transformer, SLOT(deleteLater()));
     transformer->start();
 }

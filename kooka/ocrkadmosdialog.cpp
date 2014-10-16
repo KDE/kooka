@@ -236,7 +236,7 @@ OcrEngine::EngineError KadmosDialog::setupGui()
     m_cbLang = new QComboBox(m_gbLang);
     m_cbLang->setItemText(m_cbLang->currentIndex(), KLocale::defaultCountry());
 
-    connect(m_bbFont, SIGNAL(clicked(int)), this, SLOT(slFontChanged(int)));
+    connect(m_bbFont, &Q3ButtonGroup::clicked, this, &KadmosDialog::slFontChanged);
     m_rbMachine->setChecked(true);
 
     /* --- */

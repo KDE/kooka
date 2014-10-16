@@ -85,7 +85,7 @@ KookaGeneralPage::KookaGeneralPage(KPageDialog *parent)
     gl->addWidget(lab, 0, 0);
 
     mEnableMessagesButton = new QPushButton(i18n("Enable Messages/Questions"), gb);
-    connect(mEnableMessagesButton, SIGNAL(clicked()), SLOT(slotEnableWarnings()));
+    connect(mEnableMessagesButton, &QPushButton::clicked, this, &KookaGeneralPage::slotEnableWarnings);
     gl->addWidget(mEnableMessagesButton, 1, 0, Qt::AlignRight);
 
     mLayout->addWidget(gb);
@@ -183,7 +183,7 @@ KookaSavingPage::KookaSavingPage(KPageDialog *parent)
     mAskBeforeScan->setChecked(askBefore);
     mAskBeforeScan->setEnabled(mAskFileName->isChecked());
     mAskBeforeScan->setToolTip(i18n("Check this if you want to enter the file name before scanning starts."));
-    connect(mAskFileName, SIGNAL(toggled(bool)), mAskBeforeScan, SLOT(setEnabled(bool)));
+    connect(mAskFileName, &QCheckBox::toggled, mAskBeforeScan, &QRadioButton::setEnabled);
     bg->addButton(mAskBeforeScan);
     gl->addWidget(mAskBeforeScan, 0, 1);
 
@@ -191,7 +191,7 @@ KookaSavingPage::KookaSavingPage(KPageDialog *parent)
     mAskAfterScan->setChecked(!askBefore);
     mAskAfterScan->setEnabled(mAskFileName->isChecked());
     mAskAfterScan->setToolTip(i18n("Check this if you want to enter the file name after scanning has finished."));
-    connect(mAskFileName, SIGNAL(toggled(bool)), mAskAfterScan, SLOT(setEnabled(bool)));
+    connect(mAskFileName, &QCheckBox::toggled, mAskAfterScan, &QRadioButton::setEnabled);
     bg->addButton(mAskAfterScan);
     gl->addWidget(mAskAfterScan, 1, 1);
 
@@ -251,7 +251,7 @@ KookaThumbnailPage::KookaThumbnailPage(KPageDialog *parent)
     // Do we want a background image?
     mCustomBackgroundCheck = new QCheckBox(i18n("Use a custom background image"), this);
     mCustomBackgroundCheck->setChecked(mConfig.readEntry(THUMB_CUSTOM_BGND, false));
-    connect(mCustomBackgroundCheck, SIGNAL(toggled(bool)), SLOT(slotCustomThumbBgndToggled(bool)));
+    connect(mCustomBackgroundCheck, &QCheckBox::toggled, this, &KookaThumbnailPage::slotCustomThumbBgndToggled);
     gl->addWidget(mCustomBackgroundCheck, 2, 0, 1, 2);
 
     /* Background image */
@@ -353,7 +353,7 @@ KookaOcrPage::KookaOcrPage(KPageDialog *parent)
     mEngineCombo->addItem(OcrEngine::engineName(OcrEngine::EngineOcrad), OcrEngine::EngineOcrad);
     mEngineCombo->addItem(OcrEngine::engineName(OcrEngine::EngineKadmos), OcrEngine::EngineKadmos);
 
-    connect(mEngineCombo, SIGNAL(activated(int)), SLOT(slotEngineSelected(int)));
+    connect(mEngineCombo, static_cast<void (KComboBox::*)(int)>(&KComboBox::activated), this, &KookaOcrPage::slotEngineSelected);
     lay->addWidget(mEngineCombo, 0, 1);
 
     QLabel *lab = new QLabel(i18n("OCR Engine:"), this);

@@ -62,11 +62,11 @@ Previewer::Previewer(QWidget *parent)
     mCanvas->setDefaultScaleType(ImageCanvas::ScaleDynamic);
 
     /*Signals: Control the custom-field and show size of selection */
-    connect(mCanvas, SIGNAL(newRect(const QRectF &)), SLOT(slotNewAreaSelected(const QRectF &)));
+    connect(mCanvas, SIGNAL(newRect(QRectF)), SLOT(slotNewAreaSelected(QRectF)));
 
     mAutoSelectBar = new AutoSelectBar(mAutoSelThresh, this);
     connect(mAutoSelectBar, SIGNAL(thresholdChanged(int)), SLOT(slotSetAutoSelThresh(int)));
-    connect(mAutoSelectBar, SIGNAL(advancedSettingsChanged(int, bool, int)), SLOT(slotAutoSelectSettingsChanged(int, bool, int)));
+    connect(mAutoSelectBar, SIGNAL(advancedSettingsChanged(int,bool,int)), SLOT(slotAutoSelectSettingsChanged(int,bool,int)));
     connect(mAutoSelectBar, SIGNAL(performSelection()), SLOT(slotFindAutoSelection()));
 
     mScanResX = -1;

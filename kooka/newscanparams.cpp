@@ -44,8 +44,8 @@ NewScanParams::NewScanParams(QWidget *parent,
     mOkButton = buttonBox->button(QDialogButtonBox::Ok);
     mOkButton->setDefault(true);
     mOkButton->setShortcut(Qt::CTRL | Qt::Key_Return);
-    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
-    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+    connect(buttonBox, &QDialogButtonBox::accepted, this, &NewScanParams::accept);
+    connect(buttonBox, &QDialogButtonBox::rejected, this, &NewScanParams::reject);
 
     KVBox *vb = new KVBox(this);
 //TODO PORT QT5     vb->setMargin(QDialog::marginHint());
@@ -66,14 +66,14 @@ NewScanParams::NewScanParams(QWidget *parent,
     mainLayout->addWidget(l);
     mNameEdit = new QLineEdit(name, vb);
     mainLayout->addWidget(mNameEdit);
-    connect(mNameEdit, SIGNAL(textChanged(const QString &)), SLOT(slotTextChanged()));
+    connect(mNameEdit, &QLineEdit::textChanged, this, &NewScanParams::slotTextChanged);
     l->setBuddy(mNameEdit);
 
     l = new QLabel(i18n("Description:"), vb);
     mainLayout->addWidget(l);
     mDescEdit = new QLineEdit(desc, vb);
     mainLayout->addWidget(mDescEdit);
-    connect(mDescEdit, SIGNAL(textChanged(const QString &)), SLOT(slotTextChanged()));
+    connect(mDescEdit, &QLineEdit::textChanged, this, &NewScanParams::slotTextChanged);
     l->setBuddy(mDescEdit);
 
     slotTextChanged();

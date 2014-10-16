@@ -162,7 +162,7 @@ KScanStringEntry::KScanStringEntry(QWidget *parent, const QString &text)
     mEntry = new QLineEdit(this);
     mLayout->addWidget(mEntry);
 
-    connect(mEntry, SIGNAL(textChanged(const QString &)), SIGNAL(settingChanged(const QString &)));
+    connect(mEntry, SIGNAL(textChanged(QString)), SIGNAL(settingChanged(QString)));
     connect(mEntry, SIGNAL(returnPressed()), SIGNAL(returnPressed()));
 
     setFocusProxy(mEntry);
@@ -192,7 +192,7 @@ KScanNumberEntry::KScanNumberEntry(QWidget *parent, const QString &text)
     mEntry->setValidator(new QIntValidator);
     mLayout->addWidget(mEntry);
 
-    connect(mEntry, SIGNAL(textChanged(const QString &)), SLOT(slotTextChanged(const QString &)));
+    connect(mEntry, SIGNAL(textChanged(QString)), SLOT(slotTextChanged(QString)));
     connect(mEntry, SIGNAL(returnPressed()), SIGNAL(returnPressed()));
 
     setFocusProxy(mEntry);
@@ -339,7 +339,7 @@ KScanFileRequester::KScanFileRequester(QWidget *parent, const QString &text)
     fileSelector += i18n("*|All Files");
     mEntry->setFilter(fileSelector);
 
-    connect(mEntry, SIGNAL(textChanged(const QString &)), SIGNAL(settingChanged(const QString &)));
+    connect(mEntry, SIGNAL(textChanged(QString)), SIGNAL(settingChanged(QString)));
     connect(mEntry, SIGNAL(returnPressed()), SIGNAL(returnPressed()));
 
     setFocusProxy(mEntry);

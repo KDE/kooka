@@ -217,7 +217,7 @@ OcrEngine::EngineError OcrOcradDialog::setupGui()
     gl->addWidget(l, 9, 0);
     l->setBuddy(m_thresholdSlider);
 
-    connect(m_thresholdEnable, SIGNAL(toggled(bool)), m_thresholdSlider, SLOT(setEnabled(bool)));
+    connect(m_thresholdEnable, &QCheckBox::toggled, m_thresholdSlider, &KScanSlider::setEnabled);
     m_thresholdSlider->setEnabled(m_thresholdEnable->isChecked());
 
     gl->setRowStretch(10, 1);               // for top alignment

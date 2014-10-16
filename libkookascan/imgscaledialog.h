@@ -51,9 +51,6 @@ protected slots:
 private:
     KLineEdit *leCust;
     int selected;
-
-    class ImgScaleDialogPrivate;
-    ImgScaleDialogPrivate *d;
 };
 
 #endif                          // IMGSCALEDIALOG_H

@@ -188,7 +188,7 @@ void DeviceSelector::setScanSources(const QList<QByteArray> &backends)
         hlay->addSpacing(KDialog::spacingHint());
         hlay->addWidget(label);
 
-        label = new QLabel(QString("<qt><b>%1 %2</b><br>%3").arg(dev->vendor)
+        label = new QLabel(QString::fromLatin1("<qt><b>%1 %2</b><br>%3").arg(dev->vendor)
                            .arg(dev->model)
                            .arg(devName.constData()), hbox);
         label->setTextInteractionFlags(Qt::NoTextInteraction);

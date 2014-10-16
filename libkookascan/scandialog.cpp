@@ -83,13 +83,11 @@ ScanDialog::ScanDialog(QWidget *parent, const char *name, bool modal)
 
     m_scanParams = 0;
     m_device = new KScanDevice(this);
-    connect(m_device, SIGNAL(sigNewImage(QImage *, ImgScanInfo *)),
-            this, SLOT(slotFinalImage(QImage *, ImgScanInfo *)));
+    connect(m_device, &KScanDevice::sigNewImage, this, &ScanDialog::slotFinalImage);
 
-    connect(m_device, SIGNAL(sigScanStart(const ImgScanInfo *)), this, SLOT(slotScanStart()));
-    connect(m_device, SIGNAL(sigScanFinished(KScanStat)),
-            this, SLOT(slotScanFinished(KScanStat)));
-    connect(m_device, SIGNAL(sigAcquireStart()), this, SLOT(slotAcquireStart()));
+    connect(m_device, &KScanDevice::sigScanStart, this, &ScanDialog::slotScanStart);
+    connect(m_device, &KScanDevice::sigScanFinished, this, &ScanDialog::slotScanFinished);
+    connect(m_device, &KScanDevice::sigAcquireStart, this, &ScanDialog::slotAcquireStart);
     /* Create a preview widget to the right side of the splitter */
     m_previewer = new Previewer(splitter);
     Q_CHECK_PTR(m_previewer);
@@ -97,8 +95,7 @@ ScanDialog::ScanDialog(QWidget *parent, const char *name, bool modal)
     /* ... and connect to the selector-slots. They communicate user's
      * selection to the scanner parameter engine */
     /* a new preview signal */
-    connect(m_device, SIGNAL(sigNewPreview(QImage *, ImgScanInfo *)),
-            this, SLOT(slotNewPreview(QImage *)));
+    connect(m_device, &KScanDevice::sigNewPreview, this, &ScanDialog::slotNewPreview);
 
     m_previewer->setEnabled(false);   // will be enabled in setup()
 
@@ -138,10 +135,10 @@ void ScanDialog::createOptionsTab(void)
 
     /* Note: flag must be inverted because of question is 'the other way round' */
     cb_askOnStart->setChecked(!skipDialog);
-    connect(cb_askOnStart, SIGNAL(toggled(bool)), this, SLOT(slotAskOnStartToggle(bool)));
+    connect(cb_askOnStart, &QCheckBox::toggled, this, &ScanDialog::slotAskOnStartToggle);
 
     cb_network->setChecked(!onlyLocal);
-    connect(cb_network, SIGNAL(toggled(bool)), this, SLOT(slotNetworkToggle(bool)));
+    connect(cb_network, &QCheckBox::toggled, this, &ScanDialog::slotNetworkToggle);
 
     QWidget *spaceEater = new QWidget(page);
     Q_CHECK_PTR(spaceEater);
@@ -228,8 +225,7 @@ bool ScanDialog::setup()
     connect(m_previewer->getImageCanvas(), SIGNAL(noRect()),
             m_scanParams, SLOT(slMaximalScanSize()));
 
-    connect(m_scanParams, SIGNAL(scanResolutionChanged(int, int)),
-            m_previewer, SLOT(slNewScanResolutions(int, int)));
+    connect(m_scanParams, &ScanParams::scanResolutionChanged, m_previewer, &Previewer::slNewScanResolutions);
 
     /* continue to attach a real scanner */
     /* first, get the list of available devices from libkscan */

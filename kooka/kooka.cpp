@@ -92,12 +92,12 @@ Kooka::Kooka(const QByteArray &deviceToUse)
     setAutoSaveSettings();              // default group, do save
 
     // Allow the view to change the status bar and caption
-    connect(m_view, SIGNAL(changeStatus(const QString &, StatusBarManager::Item)),
-            sbm, SLOT(setStatus(const QString &, StatusBarManager::Item)));
+    connect(m_view, SIGNAL(changeStatus(QString,StatusBarManager::Item)),
+            sbm, SLOT(setStatus(QString,StatusBarManager::Item)));
     connect(m_view, SIGNAL(clearStatus(StatusBarManager::Item)),
             sbm, SLOT(clearStatus(StatusBarManager::Item)));
-    connect(m_view, SIGNAL(signalChangeCaption(const QString &)),
-            SLOT(setCaption(const QString &)));
+    connect(m_view, SIGNAL(signalChangeCaption(QString)),
+            SLOT(setCaption(QString)));
     connect(m_view, SIGNAL(signalScannerChanged(bool)),
             SLOT(slotUpdateScannerActions(bool)));
     connect(m_view, SIGNAL(signalRectangleChanged(bool)),
@@ -112,8 +112,8 @@ Kooka::Kooka(const QByteArray &deviceToUse)
     connect(m_view->imageViewer(), SIGNAL(imageReadOnly(bool)),
             SLOT(slotUpdateReadOnlyActions(bool)));
 
-    connect(m_view->previewer(), SIGNAL(autoSelectStateChanged(bool, bool)),
-            SLOT(slotUpdateAutoSelectActions(bool, bool)));
+    connect(m_view->previewer(), SIGNAL(autoSelectStateChanged(bool,bool)),
+            SLOT(slotUpdateAutoSelectActions(bool,bool)));
     connect(m_view->previewer(), SIGNAL(previewFileSizeChanged(long)),
             sbm, SLOT(setFileSize(long)));
 
@@ -149,7 +149,7 @@ void Kooka::startup()
 // TODO: use KStandardShortcut wherever available
 void Kooka::setupActions()
 {
-    //QT5 printImageAction = KStandardAction::print(this, SLOT(filePrint()), actionCollection());
+    printImageAction = KStandardAction::print(this, SLOT(filePrint()), actionCollection());
 
     KStandardAction::quit(this, SLOT(close()), actionCollection());
     KStandardAction::preferences(this, SLOT(optionsPreferences()), actionCollection());
@@ -581,7 +581,7 @@ void Kooka::slotUpdateViewActions(KookaView::StateFlags state)
     e = (state & KookaView::FileSelected);
     ocrAction->setEnabled(e);
     saveImageAction->setEnabled(e);
-    //QT5 printImageAction->setEnabled(e);
+    printImageAction->setEnabled(e);
 
     if (state & KookaView::IsDirectory) {
         unloadImageAction->setText(i18n("Unload Folder"));

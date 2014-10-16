@@ -60,23 +60,23 @@ FileTreeView::FileTreeView(QWidget *parent)
     connect(m_autoOpenTimer, SIGNAL(timeout()), SLOT(slotAutoOpenFolder()));
 
     /* The executed-Slot only opens  a path, while the expanded-Slot populates it */
-    connect(this, SIGNAL(itemActivated(QTreeWidgetItem *, int)),
-            SLOT(slotExecuted(QTreeWidgetItem *)));
-    connect(this, SIGNAL(itemExpanded(QTreeWidgetItem *)),
-            SLOT(slotExpanded(QTreeWidgetItem *)));
-    connect(this, SIGNAL(itemCollapsed(QTreeWidgetItem *)),
-            SLOT(slotCollapsed(QTreeWidgetItem *)));
-    connect(this, SIGNAL(itemDoubleClicked(QTreeWidgetItem *, int)),
-            SLOT(slotDoubleClicked(QTreeWidgetItem *)));
+    connect(this, SIGNAL(itemActivated(QTreeWidgetItem*,int)),
+            SLOT(slotExecuted(QTreeWidgetItem*)));
+    connect(this, SIGNAL(itemExpanded(QTreeWidgetItem*)),
+            SLOT(slotExpanded(QTreeWidgetItem*)));
+    connect(this, SIGNAL(itemCollapsed(QTreeWidgetItem*)),
+            SLOT(slotCollapsed(QTreeWidgetItem*)));
+    connect(this, SIGNAL(itemDoubleClicked(QTreeWidgetItem*,int)),
+            SLOT(slotDoubleClicked(QTreeWidgetItem*)));
 
-    connect(model(), SIGNAL(dataChanged(const QModelIndex &, const QModelIndex &)),
-            SLOT(slotDataChanged(const QModelIndex &, const QModelIndex &)));
+    connect(model(), SIGNAL(dataChanged(QModelIndex,QModelIndex)),
+            SLOT(slotDataChanged(QModelIndex,QModelIndex)));
 
     /* connections from the konqtree widget */
     connect(this, SIGNAL(itemSelectionChanged()),
             SLOT(slotSelectionChanged()));
-    connect(this, SIGNAL(itemEntered(QTreeWidgetItem *, int)),
-            SLOT(slotOnItem(QTreeWidgetItem *)));
+    connect(this, SIGNAL(itemEntered(QTreeWidgetItem*,int)),
+            SLOT(slotOnItem(QTreeWidgetItem*)));
 
     m_openFolderPixmap = KIconLoader::global()->loadIcon("folder-open",
                          KIconLoader::Desktop,
@@ -336,13 +336,13 @@ FileTreeBranch *FileTreeView::addBranch(const KUrl &path, const QString &name,
 
 FileTreeBranch *FileTreeView::addBranch(FileTreeBranch *newBranch)
 {
-    connect(newBranch, SIGNAL(populateStarted(FileTreeViewItem *)),
-            SLOT(slotStartAnimation(FileTreeViewItem *)));
-    connect(newBranch, SIGNAL(populateFinished(FileTreeViewItem *)),
-            SLOT(slotStopAnimation(FileTreeViewItem *)));
+    connect(newBranch, SIGNAL(populateStarted(FileTreeViewItem*)),
+            SLOT(slotStartAnimation(FileTreeViewItem*)));
+    connect(newBranch, SIGNAL(populateFinished(FileTreeViewItem*)),
+            SLOT(slotStopAnimation(FileTreeViewItem*)));
 
-    connect(newBranch, SIGNAL(newTreeViewItems(FileTreeBranch *, const FileTreeViewItemList &)),
-            SLOT(slotNewTreeViewItems(FileTreeBranch *, const FileTreeViewItemList &)));
+    connect(newBranch, SIGNAL(newTreeViewItems(FileTreeBranch*,FileTreeViewItemList)),
+            SLOT(slotNewTreeViewItems(FileTreeBranch*,FileTreeViewItemList)));
 
     m_branches.append(newBranch);
     return (newBranch);

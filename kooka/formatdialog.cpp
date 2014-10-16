@@ -312,7 +312,7 @@ FormatDialog::FormatDialog(QWidget *parent, ImageMetaInfo::ImageType type,
         // The list box is filled later.
 
         mImageType = type;
-        connect(mFormatList, SIGNAL(currentItemChanged(QListWidgetItem *, QListWidgetItem *)), SLOT(formatSelected(QListWidgetItem *)));
+        connect(mFormatList, &QListWidget::currentItemChanged, this, &FormatDialog::formatSelected);
         l1->setBuddy(mFormatList);
         gl->addWidget(mFormatList, row + 1, 0);
         gl->setRowStretch(row + 1, 1);
@@ -348,7 +348,7 @@ FormatDialog::FormatDialog(QWidget *parent, ImageMetaInfo::ImageType type,
 
         KConfigGroup grp = KSharedConfig::openConfig()->group(OP_SAVER_GROUP);
         mRecOnlyCheck->setChecked(grp.readEntry(OP_SAVER_REC_FMT, true));
-        connect(mRecOnlyCheck, SIGNAL(toggled(bool)), SLOT(buildFormatList(bool)));
+        connect(mRecOnlyCheck, &QCheckBox::toggled, this, &FormatDialog::buildFormatList);
 
         mDontAskCheck  = new QCheckBox(i18n("Always use this save format for this image type"), page);
         gl->addWidget(mDontAskCheck, row, 0, 1, 3, Qt::AlignLeft);
@@ -374,7 +374,7 @@ FormatDialog::FormatDialog(QWidget *parent, ImageMetaInfo::ImageType type,
         ++row;
 
         mFilenameEdit = new QLineEdit(filename, page);
-        connect(mFilenameEdit, SIGNAL(textChanged(const QString &)), SLOT(checkValid()));
+        connect(mFilenameEdit, &QLineEdit::textChanged, this, &FormatDialog::checkValid);
         l1->setBuddy(mFilenameEdit);
         gl->addWidget(mFilenameEdit, row, 0, 1, 2);
 
@@ -399,8 +399,8 @@ FormatDialog::FormatDialog(QWidget *parent, ImageMetaInfo::ImageType type,
         showExtension(format);              // show extension it will have
     }
 
-    connect(this, SIGNAL(okClicked()), SLOT(slotOk()));
-    connect(this, SIGNAL(user1Clicked()), SLOT(slotUser1()));
+    connect(this, &FormatDialog::okClicked, this, &FormatDialog::slotOk);
+    connect(this, &FormatDialog::user1Clicked, this, &FormatDialog::slotUser1);
 }
 
 void FormatDialog::showEvent(QShowEvent *ev)

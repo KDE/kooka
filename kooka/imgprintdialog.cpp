@@ -70,7 +70,7 @@ ImgPrintDialog::ImgPrintDialog(const KookaImage *img, QWidget *parent)
 
     m_scaleRadios = new Q3ButtonGroup(2, Qt::Vertical, i18n("Image Print Size"), this);
     m_scaleRadios->setRadioButtonExclusive(true);
-    connect(m_scaleRadios, SIGNAL(clicked(int)), SLOT(slScaleChanged(int)));
+    connect(m_scaleRadios, &Q3ButtonGroup::clicked, this, &ImgPrintDialog::slScaleChanged);
 
     m_rbScreen = new QRadioButton(i18n("Scale to same size as on screen"),
                                   m_scaleRadios);
@@ -121,11 +121,11 @@ ImgPrintDialog::ImgPrintDialog(const KookaImage *img, QWidget *parent)
     m_sizeW = new KIntNumInput(group);
     m_sizeW->setLabel(i18n("Image width:"), Qt::AlignVCenter);
     m_sizeW->setSuffix(i18n(" mm"));
-    connect(m_sizeW, SIGNAL(valueChanged(int)), SLOT(slCustomWidthChanged(int)));
+    connect(m_sizeW, &KIntNumInput::valueChanged, this, &ImgPrintDialog::slCustomWidthChanged);
     m_sizeH = new KIntNumInput(m_sizeW, Qt::AlignVCenter, group);
     m_sizeH->setLabel(i18n("Image height:"), Qt::AlignVCenter);
     m_sizeH->setSuffix(i18n(" mm"));
-    connect(m_sizeH, SIGNAL(valueChanged(int)), SLOT(slCustomHeightChanged(int)));
+    connect(m_sizeH, &KIntNumInput::valueChanged, this, &ImgPrintDialog::slCustomHeightChanged);
 
     m_ratio = new QCheckBox(i18n("Maintain aspect ratio"), group);
     m_ratio->setChecked(true);
