@@ -37,7 +37,7 @@ extern "C" {
 #include <sane/saneopts.h>
 }
 
-#include "libkscan/kscanoption.h"
+#include "kscanoption.h"
 
 #include "kookaimage.h"
 

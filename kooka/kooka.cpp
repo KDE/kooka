@@ -50,9 +50,9 @@
 #include <kmenu.h>
 #include <kxmlguiwindow.h>
 
-#include "libkscan/scanglobal.h"
-#include "libkscan/imagecanvas.h"
-#include "libkscan/previewer.h"
+#include "scanglobal.h"
+#include "imagecanvas.h"
+#include "previewer.h"
 
 #include "scangallery.h"
 #include "kookapref.h"

@@ -32,7 +32,7 @@
 
 #include "statusbarmanager.h"
 
-#include "libkscan/kscandevice.h"
+#include "kscandevice.h"
 
 class QSplitter;
 class QSignalMapper;

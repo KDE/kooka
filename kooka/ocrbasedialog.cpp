@@ -52,7 +52,7 @@
 #include "ocrengine.h"
 #include "kookaimage.h"
 
-#include "libkscan/imagecanvas.h"
+#include "imagecanvas.h"
 
 #define CFG_OCR_SPELL       "OcrSpellSettings"
 

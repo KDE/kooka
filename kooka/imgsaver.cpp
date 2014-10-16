@@ -47,7 +47,7 @@
 #include "kookapref.h"
 #include "formatdialog.h"
 
-#include "libkscan/imagemetainfo.h"
+#include "imagemetainfo.h"
 
 /* Needs a full qualified directory name */
 void createDir(const QString &dir)

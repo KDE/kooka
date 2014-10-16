@@ -52,7 +52,7 @@
 #include "kookaimage.h"
 #include "kookapref.h"
 
-#include "libkscan/imagemetainfo.h"
+#include "imagemetainfo.h"
 
 #define COLUMN_STATES_GROUP "GalleryColumns"
 

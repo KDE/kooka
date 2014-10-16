@@ -54,13 +54,13 @@
 #include <kfileitem.h>
 #include <kmainwindow.h>
 
-#include "libkscan/scandevices.h"
-#include "libkscan/kscandevice.h"
-#include "libkscan/imagemetainfo.h"
-#include "libkscan/deviceselector.h"
-#include "libkscan/adddevicedialog.h"
-#include "libkscan/previewer.h"
-#include "libkscan/imagecanvas.h"
+#include "scandevices.h"
+#include "kscandevice.h"
+#include "imagemetainfo.h"
+#include "deviceselector.h"
+#include "adddevicedialog.h"
+#include "previewer.h"
+#include "imagecanvas.h"
 
 #include "kookapref.h"
 #include "galleryhistory.h"

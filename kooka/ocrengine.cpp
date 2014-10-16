@@ -45,7 +45,7 @@
 
 #include <kio/deletejob.h>
 
-#include "libkscan/imagecanvas.h"
+#include "imagecanvas.h"
 
 #include "kookaimage.h"
 #include "kookapref.h"

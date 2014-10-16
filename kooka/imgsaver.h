@@ -30,7 +30,7 @@
 #include <kurl.h>
 
 #include "imageformat.h"
-#include "libkscan/imagemetainfo.h"
+#include "imagemetainfo.h"
 
 #define OP_SAVER_GROUP      "Files"
 

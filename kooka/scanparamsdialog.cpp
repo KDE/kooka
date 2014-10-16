@@ -36,9 +36,9 @@ extern "C" {
 #include <sane/saneopts.h>
 }
 
-#include "libkscan/kscandevice.h"
-#include "libkscan/kscanoption.h"
-#include "libkscan/kscanoptset.h"
+#include "kscandevice.h"
+#include "kscanoption.h"
+#include "kscanoptset.h"
 
 #include "newscanparams.h"
 

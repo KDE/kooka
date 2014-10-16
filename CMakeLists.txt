@@ -79,7 +79,7 @@ endif (HAVE_SANE)
 
 
 
-add_subdirectory(libkscan)
+add_subdirectory(libkookascan)
 add_subdirectory(libfiletree)
 add_subdirectory(kooka)
 add_subdirectory(doc)

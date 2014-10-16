@@ -37,9 +37,9 @@
 #include <kstatusbar.h>
 #include <kxmlguiwindow.h>
 
-#include "libkscan/imagecanvas.h"
-#include "libkscan/previewer.h"
-#include "libkscan/sizeindicator.h"
+#include "imagecanvas.h"
+#include "previewer.h"
+#include "sizeindicator.h"
 
 StatusBarManager::StatusBarManager(KXmlGuiWindow *mainWindow)
     : QObject(mainWindow)

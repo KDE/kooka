@@ -48,7 +48,7 @@
 #include <KDialog>
 #include "kookaimage.h"
 #include "kookapref.h"
-#include "libkscan/kscancontrols.h"
+#include "kscancontrols.h"
 
 #include "ocrocradengine.h"
 

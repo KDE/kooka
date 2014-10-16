@@ -43,7 +43,7 @@
 #include <kseparator.h>
 #include <KGlobal>
 
-#include "libkscan/scanglobal.h"
+#include "scanglobal.h"
 
 #include "kookapref.h"
 #include "kookagallery.h"

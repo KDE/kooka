@@ -27,7 +27,7 @@
 #include <kdeprint/kprintdialogpage.h>
 #endif
 
-#include "libkscan/scanparams.h"
+#include "scanparams.h"
 
 #include "kookaimage.h"
 

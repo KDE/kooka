@@ -29,7 +29,7 @@
 
 #include <kdialog.h>
 
-#include "libkscan/kscancontrols.h"
+#include "kscancontrols.h"
 
 #include "ocrbasedialog.h"
 

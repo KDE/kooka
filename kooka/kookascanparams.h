@@ -21,7 +21,7 @@
 #ifndef KOOKASCANPARAMS_H
 #define KOOKASCANPARAMS_H
 
-#include <libkscan/scanparams.h>
+#include <scanparams.h>
 
 class QLabel;
 

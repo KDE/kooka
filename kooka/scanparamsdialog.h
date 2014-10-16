@@ -22,7 +22,7 @@
 
 #include <kdialog.h>
 
-#include "libkscan/kscanoptset.h"
+#include "kscanoptset.h"
 
 class QLabel;
 class QListWidget;
