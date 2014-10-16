@@ -65,7 +65,7 @@ static const char addLicense[] =
     "commercial Qt development licence.\n";
 
 static const char copyright[] =
-    I18N_NOOP("(C) 2000-2010, the Kooka developers and contributors");
+    I18N_NOOP("(C) 2000-2014, the Kooka developers and contributors");
 
 int main(int argc, char *argv[])
 {
