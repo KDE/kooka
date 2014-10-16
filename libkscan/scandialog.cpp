@@ -37,6 +37,8 @@
 #include <kled.h>
 #include <kglobalsettings.h>
 #include <kscandevice.h>
+#include <QApplication>
+#include <QDesktopWidget>
 
 // libkscan stuff
 #include "scanparams.h"
@@ -129,7 +131,7 @@ void ScanDialog::createOptionsTab(void)
     Q_CHECK_PTR(cb_network);
 
     /* Read settings for startup behavior */
-    KConfig *gcfg = KGlobal::config();
+    KConfig *gcfg = KSharedConfig::openConfig();
     gcfg->setGroup(QString::fromLatin1(GROUP_STARTUP));
     bool skipDialog  = gcfg->readBoolEntry(STARTUP_SKIP_ASK, false);
     bool onlyLocal   = gcfg->readBoolEntry(STARTUP_ONLY_LOCAL, false);
@@ -152,7 +154,7 @@ void ScanDialog::slotNetworkToggle(bool state)
     bool writestate = !state;
 
     kdDebug(29000) << "slotNetworkToggle: Writing state " << writestate << endl;
-    KConfig *c = KGlobal::config();
+    KConfig *c = KSharedConfig::openConfig();
     c->setGroup(QString::fromLatin1(GROUP_STARTUP));
     c->writeEntry(STARTUP_ONLY_LOCAL, writestate, true, true);
 }
@@ -162,7 +164,7 @@ void ScanDialog::slotAskOnStartToggle(bool state)
     bool writestate = !state;
 
     kdDebug(29000) << "slotAskOnStartToggle: Writing state " << writestate << endl;
-    KConfig *c = KGlobal::config();
+    KConfig *c = KSharedConfig::openConfig();
     c->setGroup(QString::fromLatin1(GROUP_STARTUP));
     c->writeEntry(STARTUP_SKIP_ASK, writestate, true, true);
 }
@@ -291,9 +293,9 @@ bool ScanDialog::setup()
     /* set initial sizes */
     setInitialSize(configDialogSize(GROUP_STARTUP));
 
-    KConfig *kfg = KGlobal::config();
+    KConfig *kfg = KSharedConfig::openConfig();
     if (kfg) {
-        QRect r = KGlobalSettings::desktopGeometry(this);
+        QRect r = QApplication::desktop()->screenGeometry(this);
 
         kfg->setGroup(GROUP_STARTUP);
         /* Since this is a vertical splitter, only the width is important */
@@ -311,9 +313,9 @@ void ScanDialog::slotClose()
     saveDialogSize(GROUP_STARTUP, true);
 
     if (splitter) {
-        KConfig *kfg = KGlobal::config();
+        KConfig *kfg = KSharedConfig::openConfig();
         if (kfg) {
-            QRect r = KGlobalSettings::desktopGeometry(this);
+            QRect r = QApplication::desktop()->screenGeometry(this);
 
             kfg->setGroup(GROUP_STARTUP);
             /* Since this is a vertical splitter, only the width is important */

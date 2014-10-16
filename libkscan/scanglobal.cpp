@@ -58,7 +58,8 @@ ScanGlobal::ScanGlobal()
 
     // Get SANE translations - bug 98150
     KGlobal::dirs()->addResourceDir("locale", "/usr/share/locale/");
-    KGlobal::locale()->insertCatalog("sane-backends");
+    //KF5 port: remove this line and define TRANSLATION_DOMAIN in CMakeLists.txt instead
+//KLocale::global()->insertCatalog("sane-backends");
 }
 
 ScanGlobal::~ScanGlobal()

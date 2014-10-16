@@ -27,6 +27,7 @@
 #include <QDebug>
 #include <kglobal.h>
 #include <kcolorscheme.h>
+#include <KFormat>
 
 SizeIndicator::SizeIndicator(QWidget *parent, long thresh, long crit)
     : QLabel(parent)
@@ -68,7 +69,7 @@ void SizeIndicator::setSizeInByte(long newSize)
     if (newSize < 0) {
         setText("");
     } else {
-        setText(KGlobal::locale()->formatByteSize(newSize));
+        setText(KFormat().formatByteSize(newSize));
     }
     // TODO: do we want JEDEC units here?
 }
