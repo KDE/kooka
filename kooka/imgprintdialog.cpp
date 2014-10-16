@@ -39,7 +39,7 @@
 #include <qlabel.h>
 
 #include <QDebug>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <knuminput.h>
 #include <kdialog.h>
 

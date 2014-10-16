@@ -24,7 +24,7 @@
 #include <qgroupbox.h>
 #include <qlayout.h>
 
-#include <klocale.h>
+#include <KLocalizedString>
 #include <QDebug>
 #include <kvbox.h>
 

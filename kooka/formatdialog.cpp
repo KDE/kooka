@@ -26,7 +26,7 @@
 
 #include <kdialog.h>
 #include <kseparator.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <QDebug>
 #include <kconfig.h>
 #include <kimageio.h>

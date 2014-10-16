@@ -30,7 +30,7 @@
 #endif
 
 #include <QDebug>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <ktemporaryfile.h>
 #include <kmessagebox.h>
 

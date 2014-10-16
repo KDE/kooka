@@ -38,7 +38,7 @@
 #include <kconfig.h>
 #include <kglobal.h>
 #include <QDebug>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kstandarddirs.h>
 #include <kstandardguiitem.h>
 #include <kseparator.h>

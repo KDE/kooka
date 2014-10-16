@@ -26,7 +26,7 @@
 #include <qvector.h>
 #endif
 
-#include <klocale.h>
+#include <KLocalizedString>
 #include <QDebug>
 #include <kvbox.h>
 

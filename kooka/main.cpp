@@ -28,7 +28,7 @@
 #include <kapplication.h>
 #include <K4AboutData>
 #include <kcmdlineargs.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kglobal.h>
 #include <QDebug>
 

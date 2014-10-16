@@ -21,7 +21,7 @@
 #include "scandevices.h"
 
 #include <QDebug>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kglobal.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>

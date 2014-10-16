@@ -39,7 +39,7 @@
 
 #include <QDebug>
 #include <kfiledialog.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kmessagebox.h>
 
 #include "ocrengine.h"

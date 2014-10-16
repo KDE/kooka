@@ -37,7 +37,7 @@
 #include <kmessagebox.h>
 #include <kapplication.h>
 #include <kprocess.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kdialog.h>
 #include <kvbox.h>
 #include <kcolorscheme.h>

@@ -27,7 +27,7 @@
 #include "galleryhistory.h"
 
 #include <QDebug>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kcombobox.h>
 
 #include "libfiletree/filetreeview.h"

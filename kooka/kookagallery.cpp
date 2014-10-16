@@ -27,7 +27,7 @@
 #include <qlabel.h>
 
 #include <QDebug>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kglobal.h>
 #include <khbox.h>
 #include <KConfigGroup>

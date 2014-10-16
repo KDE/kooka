@@ -30,7 +30,7 @@
 #include <qlabel.h>
 #include <qslider.h>
 
-#include <klocale.h>
+#include <KLocalizedString>
 #include <QDebug>
 #include <KConfigGroup>
 #include <QDialogButtonBox>

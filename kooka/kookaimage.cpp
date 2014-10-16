@@ -29,7 +29,7 @@
 #include <QDebug>
 #include <kurl.h>
 #include <kfileitem.h>
-#include <klocale.h>
+#include <KLocalizedString>
 
 #include "imageformat.h"
 

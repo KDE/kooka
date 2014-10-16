@@ -30,7 +30,7 @@
 #include <qslider.h>
 #include <qlineedit.h>
 
-#include <klocale.h>
+#include <KLocalizedString>
 #include <QDebug>
 #include <kurlrequester.h>
 #include <kimageio.h>

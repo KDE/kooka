@@ -25,7 +25,7 @@
 #include <qsocketnotifier.h>
 
 #include <QDebug>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kglobal.h>
 #include <kconfig.h>
 #include <kstandarddirs.h>

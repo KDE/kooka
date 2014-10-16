@@ -32,7 +32,7 @@
 
 #include <kurl.h>
 #include <QDebug>
-#include <klocale.h>
+#include <KLocalizedString>
 
 ImageTransform::ImageTransform(const QImage &img, ImageTransform::Operation op,
                                QString fileName, QObject *parent)

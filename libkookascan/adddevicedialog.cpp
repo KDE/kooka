@@ -23,7 +23,7 @@
 #include <qlayout.h>
 #include <qcombobox.h>
 
-#include <klocale.h>
+#include <KLocalizedString>
 #include <klineedit.h>
 #include <KConfigGroup>
 #include <QDialogButtonBox>

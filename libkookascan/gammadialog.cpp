@@ -22,7 +22,7 @@
 #include <qlabel.h>
 #include <qgridlayout.h>
 
-#include <klocale.h>
+#include <KLocalizedString>
 #include <QDebug>
 #include <kgammatable.h>
 #include <KConfigGroup>

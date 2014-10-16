@@ -24,7 +24,7 @@
 
 #include <qlabel.h>
 
-#include <klocale.h>
+#include <KLocalizedString>
 
 KookaScanParams::KookaScanParams(QWidget *parent)
     : ScanParams(parent),

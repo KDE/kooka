@@ -25,7 +25,7 @@
 #include <qgroupbox.h>
 #include <qframe.h>
 
-#include <klocale.h>
+#include <KLocalizedString>
 #include <QDebug>
 #include <kpushbutton.h>
 #include <kstandardguiitem.h>

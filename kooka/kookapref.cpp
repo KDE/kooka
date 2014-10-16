@@ -43,7 +43,7 @@
 #include <qlayout.h>
 #include <qdir.h>
 #include <QIcon>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kconfig.h>
 #include <kglobal.h>
 #include <kglobalsettings.h>

@@ -33,7 +33,7 @@
 #include <qlabel.h>
 
 #include <QDebug>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kstatusbar.h>
 #include <kxmlguiwindow.h>
 

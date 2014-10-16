@@ -23,7 +23,7 @@
 #include <qtimer.h>
 
 #include <QDebug>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kmessagebox.h>
 #include <kvbox.h>
 

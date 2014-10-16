@@ -24,7 +24,7 @@
 #include <qradiobutton.h>
 #include <qlabel.h>
 
-#include <klocale.h>
+#include <KLocalizedString>
 #include <QDebug>
 #include <knumvalidator.h>
 #include <klineedit.h>

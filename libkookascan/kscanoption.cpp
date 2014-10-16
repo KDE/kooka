@@ -26,7 +26,7 @@
 #include <qregexp.h>
 
 #include <QDebug>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kacceleratormanager.h>
 #include <ksqueezedtextlabel.h>
 

@@ -26,7 +26,7 @@
 #include <qlistwidget.h>
 
 #include <klineedit.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kconfig.h>
 #include <QDebug>
 #include <kmessagebox.h>

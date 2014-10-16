@@ -36,7 +36,7 @@
 
 #include <kglobal.h>
 #include <QDebug>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kanimatedbutton.h>
 #include <kseparator.h>
 #include <kmessagebox.h>

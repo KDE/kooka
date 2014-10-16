@@ -40,7 +40,7 @@
 #include <QDebug>
 #include <kprocess.h>
 #include <ktempdir.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <ktemporaryfile.h>
 #include <kmessagebox.h>
 

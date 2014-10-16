@@ -34,7 +34,7 @@
 #include <kfiledialog.h>
 #include <kurl.h>
 #include <QDebug>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kmimetype.h>
 #include <kstandardguiitem.h>
 #include <kimageio.h>

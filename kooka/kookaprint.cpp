@@ -33,7 +33,7 @@
 #endif
 
 #include <QDebug>
-#include <klocale.h>
+#include <KLocalizedString>
 #ifndef KDE4
 #include <kprinter.h>
 #endif

@@ -42,7 +42,7 @@
 #include <kconfig.h>
 #include <kglobal.h>
 #include <QDebug>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kseparator.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>

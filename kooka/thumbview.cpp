@@ -37,7 +37,7 @@
 #include <QAction>
 #include <kactionmenu.h>
 #include <kdiroperator.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <QDebug>
 #include <QMenu>
 #include <kconfiggroup.h>

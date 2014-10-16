@@ -30,7 +30,7 @@
 #include <qsignalmapper.h>
 #include <KConfigGroup>
 #include <kglobal.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <QDebug>
 #include <KToggleAction>
 #include <QAction>

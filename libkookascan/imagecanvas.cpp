@@ -36,7 +36,7 @@
 #include <qevent.h>
 #include <qapplication.h>
 
-#include <klocale.h>
+#include <KLocalizedString>
 #include <QDebug>
 #include <QMenu>
 

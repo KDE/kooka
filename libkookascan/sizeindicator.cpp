@@ -23,7 +23,7 @@
 #include <qevent.h>
 #include <QLinearGradient>
 
-#include <klocale.h>
+#include <KLocalizedString>
 #include <QDebug>
 #include <kglobal.h>
 #include <kcolorscheme.h>

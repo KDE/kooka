@@ -35,7 +35,7 @@
 #include <qbuttongroup.h>
 #include <QGroupBox>
 
-#include <klocale.h>
+#include <KLocalizedString>
 #include <QDebug>
 #include <kcombobox.h>
 #include <kmessagebox.h>

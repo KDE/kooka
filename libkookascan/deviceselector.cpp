@@ -26,7 +26,7 @@
 
 #include <kconfig.h>
 #include <QDebug>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kvbox.h>
 #include <kstandarddirs.h>
 #include <kguiitem.h>

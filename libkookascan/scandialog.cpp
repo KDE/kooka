@@ -30,7 +30,7 @@
 #include <qvbox.h>
 
 #include <kglobal.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <QDebug>
 #include <kconfig.h>
 #include <ksimpleconfig.h>

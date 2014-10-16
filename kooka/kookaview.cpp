@@ -42,7 +42,7 @@
 #include <QIcon>
 #include <KGlobal>
 //#include <ktrader.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kmessagebox.h>
 #include <kled.h>
 #include <QAction>

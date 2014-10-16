@@ -32,7 +32,7 @@
 #include <kglobal.h>
 #include <kconfig.h>
 #include <kimageio.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kmessagebox.h>
 #include <QDebug>
 #include <ktemporaryfile.h>

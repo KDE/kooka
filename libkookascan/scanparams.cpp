@@ -35,7 +35,7 @@
 #include <qscrollarea.h>
 
 #include <kfiledialog.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <QDebug>
 #include <kiconloader.h>
 #include <kled.h>

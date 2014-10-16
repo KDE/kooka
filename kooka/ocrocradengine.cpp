@@ -32,7 +32,7 @@
 #include <QDebug>
 #include <kprocess.h>
 #include <ktemporaryfile.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kmessagebox.h>
 #include <KConfigGroup>
 
