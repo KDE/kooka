@@ -211,7 +211,5 @@ void DeviceSelector::setScanSources(const QList<QByteArray> &backends)
     if (defItem != NULL) {
         defItem->setSelected(true);
     }
-    if (typeConf != NULL) {
-        delete typeConf;
-    }
+    delete typeConf;
 }

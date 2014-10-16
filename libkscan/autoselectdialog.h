@@ -28,12 +28,13 @@
 
 #include "libkscanexport.h"
 
-#include <kdialog.h>
+#include <QDialog>
 
 class QComboBox;
 class KScanSlider;
+class QDialogButtonBox;
 
-class KSCAN_EXPORT AutoSelectDialog : public KDialog
+class KSCAN_EXPORT AutoSelectDialog : public QDialog
 {
     Q_OBJECT
 
@@ -54,6 +55,7 @@ private:
     KScanSlider *mMarginSlider;
     QComboBox *mBackgroundCombo;
     KScanSlider *mDustsizeSlider;
+    QDialogButtonBox *mButtonBox;
 };
 
 #endif                          // AUTOSELECTDIALOG_H

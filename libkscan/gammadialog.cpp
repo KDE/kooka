@@ -25,24 +25,34 @@
 #include <klocale.h>
 #include <QDebug>
 #include <kgammatable.h>
+#include <KConfigGroup>
+#include <QDialogButtonBox>
+#include <QPushButton>
+#include <QVBoxLayout>
 
 #include "kscancontrols.h"
 #include "gammawidget.h"
 
 GammaDialog::GammaDialog(const KGammaTable *table, QWidget *parent)
-    : KDialog(parent)
+    : QDialog(parent)
 {
     setObjectName("GammaDialog");
 
-    setButtons(KDialog::Ok | KDialog::Cancel | KDialog::Apply | KDialog::Reset);
-    setCaption(i18n("Edit Gamma Table"));
+    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel|QDialogButtonBox::Apply|QDialogButtonBox::Reset);
+    QVBoxLayout *mainLayout = new QVBoxLayout;
+    setLayout(mainLayout);
+    QPushButton *okButton = buttonBox->button(QDialogButtonBox::Ok);
+    okButton->setDefault(true);
+    okButton->setShortcut(Qt::CTRL | Qt::Key_Return);
+    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+    setWindowTitle(i18n("Edit Gamma Table"));
     setModal(true);
-    showButtonSeparator(true);
 
     mTable = new KGammaTable(*table);           // take our own copy
 
     QWidget *page = new QWidget(this);
-    setMainWidget(page);
+    mainLayout->addWidget(page);
     QGridLayout *gl = new QGridLayout(page);
 
     // Sliders for brightness, contrast, gamma
@@ -50,8 +60,9 @@ GammaDialog::GammaDialog(const KGammaTable *table, QWidget *parent)
     mSetBright->setValue(mTable->getBrightness());
     connect(mSetBright, SIGNAL(settingChanged(int)), mTable, SLOT(setBrightness(int)));
     QLabel *l = new QLabel(mSetBright->label(), page);
+    mainLayout->addWidget(l);
     l->setBuddy(mSetBright);
-    gl->setRowMinimumHeight(0, KDialog::marginHint());
+//TODO PORT QT5     gl->setRowMinimumHeight(0, QDialog::marginHint());
     gl->addWidget(l, 1, 0, Qt::AlignRight);
     gl->addWidget(mSetBright, 1, 1);
 
@@ -59,8 +70,9 @@ GammaDialog::GammaDialog(const KGammaTable *table, QWidget *parent)
     mSetContrast->setValue(mTable->getContrast());
     connect(mSetContrast, SIGNAL(settingChanged(int)), mTable, SLOT(setContrast(int)));
     l = new QLabel(mSetContrast->label(), page);
+    mainLayout->addWidget(l);
     l->setBuddy(mSetContrast);
-    gl->setRowMinimumHeight(2, KDialog::marginHint());
+//TODO PORT QT5     gl->setRowMinimumHeight(2, QDialog::marginHint());
     gl->addWidget(l, 3, 0, Qt::AlignRight);
     gl->addWidget(mSetContrast, 3, 1);
 
@@ -68,29 +80,34 @@ GammaDialog::GammaDialog(const KGammaTable *table, QWidget *parent)
     mSetGamma->setValue(mTable->getGamma());
     connect(mSetGamma, SIGNAL(settingChanged(int)), mTable, SLOT(setGamma(int)));
     l = new QLabel(mSetGamma->label(), page);
+    mainLayout->addWidget(l);
     l->setBuddy(mSetGamma);
-    gl->setRowMinimumHeight(4, KDialog::marginHint());
+//TODO PORT QT5     gl->setRowMinimumHeight(4, QDialog::marginHint());
     gl->addWidget(l, 5, 0, Qt::AlignRight);
     gl->addWidget(mSetGamma, 5, 1);
 
     // Explanation label
-    gl->setRowMinimumHeight(6, KDialog::marginHint());
+//TODO PORT QT5     gl->setRowMinimumHeight(6, QDialog::marginHint());
     gl->setRowStretch(7, 1);
 
     l = new QLabel(i18n("This gamma table is passed to the scanner hardware."), page);
+    mainLayout->addWidget(l);
     l->setWordWrap(true);
     gl->addWidget(l, 8, 0, 1, 2, Qt::AlignLeft);
 
     // Gamma curve display
     mGtDisplay = new GammaWidget(mTable, page);
+    mainLayout->addWidget(mGtDisplay);
     mGtDisplay->resize(280, 280);
-    gl->setColumnMinimumWidth(2, KDialog::marginHint());
+//TODO PORT QT5     gl->setColumnMinimumWidth(2, QDialog::marginHint());
     gl->addWidget(mGtDisplay, 0, 3, 9, 1);
     gl->setColumnStretch(3, 1);
 
-    connect(this, SIGNAL(okClicked()), SLOT(slotApply()));
-    connect(this, SIGNAL(applyClicked()), SLOT(slotApply()));
+    connect(okButton, SIGNAL(clicked()), SLOT(slotApply()));
+    connect(buttonBox->button(QDialogButtonBox::Apply), SIGNAL(clicked()), SLOT(slotApply()));
     connect(this, SIGNAL(resetClicked()), SLOT(slotReset()));
+    mainLayout->addWidget(buttonBox);
+
 }
 
 void GammaDialog::slotApply()

@@ -118,10 +118,7 @@ public:
      * @return The scanner backend name, or a null string if no scanner
      * is currently open.
      **/
-    const QByteArray &scannerBackendName() const
-    {
-        return (mScannerName);
-    }
+    const QByteArray &scannerBackendName() const;
 
     /**
      * Get a readable name/description of the current scanner

@@ -32,19 +32,29 @@
 
 #include <klocale.h>
 #include <QDebug>
+#include <KConfigGroup>
+#include <QDialogButtonBox>
+#include <QPushButton>
+#include <QVBoxLayout>
 
 #include "kscancontrols.h"
 #include "autoselectdata.h"
 
 AutoSelectDialog::AutoSelectDialog(QWidget *parent)
-    : KDialog(parent)
+    : QDialog(parent)
 {
     //qDebug();
     setObjectName("AutoSelectDialog");
 
-    setCaption(i18nc("@title:window", "Autoselect Settings"));
-    setButtons(KDialog::Ok | KDialog::Apply | KDialog::Cancel);
-    showButtonSeparator(true);
+    setWindowTitle(i18nc("@title:window", "Autoselect Settings"));
+    mButtonBox = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel|QDialogButtonBox::Apply);
+    QVBoxLayout *mainLayout = new QVBoxLayout;
+    setLayout(mainLayout);
+    QPushButton *okButton = mButtonBox->button(QDialogButtonBox::Ok);
+    okButton->setDefault(true);
+    okButton->setShortcut(Qt::CTRL | Qt::Key_Return);
+    connect(mButtonBox, SIGNAL(accepted()), this, SLOT(accept()));
+    connect(mButtonBox, SIGNAL(rejected()), this, SLOT(reject()));
 
     QFormLayout *fl = new QFormLayout;          // looks better with combo expanded
     fl->setFieldGrowthPolicy(QFormLayout::AllNonFixedFieldsGrow);
@@ -57,7 +67,7 @@ AutoSelectDialog::AutoSelectDialog(QWidget *parent)
     connect(mMarginSlider, SIGNAL(settingChanged(int)), SLOT(slotControlChanged()));
     fl->addRow(i18nc("@label:slider", "Add/subtract margin (mm):"), mMarginSlider);
 
-    fl->addItem(new QSpacerItem(1, KDialog::marginHint()));
+//TODO PORT QT5     fl->addItem(new QSpacerItem(1, QDialog::marginHint()));
 
     // combobox to select whether black or white background
     mBackgroundCombo = new QComboBox;
@@ -80,12 +90,13 @@ AutoSelectDialog::AutoSelectDialog(QWidget *parent)
 
     QWidget *w = new QWidget;
     w->setLayout(fl);
-    setMainWidget(w);
+    mainLayout->addWidget(w);
+    mainLayout->addWidget(mButtonBox);
 
-    connect(this, SIGNAL(applyClicked()), SLOT(slotApplySettings()));
-    connect(this, SIGNAL(okClicked()), SLOT(slotApplySettings()));
-    connect(this, SIGNAL(okClicked()), SLOT(accept()));
-    enableButtonApply(false);
+    connect(mButtonBox->button(QDialogButtonBox::Apply), SIGNAL(clicked()), SLOT(slotApplySettings()));
+    connect(okButton, SIGNAL(clicked()), SLOT(slotApplySettings()));
+    connect(okButton, SIGNAL(clicked()), SLOT(accept()));
+    mButtonBox->button(QDialogButtonBox::Apply)->setEnabled(false);
 }
 
 AutoSelectDialog::~AutoSelectDialog()
@@ -94,16 +105,16 @@ AutoSelectDialog::~AutoSelectDialog()
 
 void AutoSelectDialog::slotControlChanged()
 {
-    enableButtonApply(true);
+    mButtonBox->button(QDialogButtonBox::Apply)->setEnabled(true);
 }
 
 void AutoSelectDialog::slotApplySettings()
 {
-    int margin = mMarginSlider->value();
-    bool bgIsWhite = (mBackgroundCombo->currentIndex() == AutoSelectData::ItemIndexWhite);
-    int dustsize = mDustsizeSlider->value();
+    const int margin = mMarginSlider->value();
+    const bool bgIsWhite = (mBackgroundCombo->currentIndex() == AutoSelectData::ItemIndexWhite);
+    const int dustsize = mDustsizeSlider->value();
     emit settingsChanged(margin, bgIsWhite, dustsize);
-    enableButtonApply(false);
+    mButtonBox->button(QDialogButtonBox::Apply)->setEnabled(false);
 }
 
 void AutoSelectDialog::setSettings(int margin, bool bgIsWhite, int dustsize)

@@ -22,7 +22,7 @@
 
 #include "libkscanexport.h"
 
-#include <kdialog.h>
+#include <QDialog>
 
 class KScanSlider;
 class KGammaTable;
@@ -39,7 +39,7 @@ class GammaWidget;
  * @author Jonathan Marten
  **/
 
-class KSCAN_EXPORT GammaDialog : public KDialog
+class KSCAN_EXPORT GammaDialog : public QDialog
 {
     Q_OBJECT
 
