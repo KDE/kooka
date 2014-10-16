@@ -20,7 +20,7 @@
 #ifndef KGAMMATABLE_H
 #define KGAMMATABLE_H
 
-#include "libkscanexport.h"
+#include "libkscanexport_export.h"
 
 #include <qobject.h>
 #include <qvector.h>
@@ -48,7 +48,7 @@
  * @author Jonathan Marten
  **/
 
-class KSCAN_EXPORT KGammaTable : public QObject
+class LIBKSCANEXPORT_EXPORT KGammaTable : public QObject
 {
     Q_OBJECT
 

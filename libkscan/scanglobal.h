@@ -21,7 +21,7 @@
 #ifndef SCANGLOBAL_H
 #define SCANGLOBAL_H
 
-#include "libkscanexport.h"
+#include "libkscanexport_export.h"
 
 #include <qstring.h>
 
@@ -38,7 +38,7 @@ class KConfigGroup;
 
 class KScanDevice;
 
-class KSCAN_EXPORT ScanGlobal
+class LIBKSCANEXPORT_EXPORT ScanGlobal
 {
 
 public:

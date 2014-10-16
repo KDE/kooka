@@ -20,7 +20,7 @@
 #ifndef SCANSOURCEDIALOG_H
 #define SCANSOURCEDIALOG_H
 
-#include "libkscanexport.h"
+#include "libkscanexport_export.h"
 
 #include <kdialog.h>
 
@@ -35,7 +35,7 @@ typedef enum { ADF_OFF, ADF_SCAN_ALONG, ADF_SCAN_ONCE } AdfBehaviour;
 
 class ScanSourceDialogPrivate;
 
-class KSCAN_EXPORT ScanSourceDialog : public KDialog
+class LIBKSCANEXPORT_EXPORT ScanSourceDialog : public KDialog
 {
     Q_OBJECT
 

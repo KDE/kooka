@@ -65,6 +65,7 @@ set(libkscan_SRCS
 )
 
 add_library(libkscan SHARED ${libkscan_SRCS})
+generate_export_header(libkscan BASE_NAME libkscanexport)
 target_link_libraries(libkscan
   KF5::KIOCore
   KF5::KDELibs4Support

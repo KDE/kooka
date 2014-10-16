@@ -27,7 +27,7 @@
 #ifndef IMAGECANVAS_H
 #define IMAGECANVAS_H
 
-#include "libkscanexport.h"
+#include "libkscanexport_export.h"
 
 #include <qgraphicsview.h>
 #include <qvector.h>
@@ -53,7 +53,7 @@ class SelectionItem;
  * @author Jonathan Marten
  **/
 
-class KSCAN_EXPORT ImageCanvas : public QGraphicsView
+class LIBKSCANEXPORT_EXPORT ImageCanvas : public QGraphicsView
 {
     Q_OBJECT
 

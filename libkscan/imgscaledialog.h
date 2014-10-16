@@ -20,7 +20,7 @@
 #ifndef IMGSCALEDIALOG_H
 #define IMGSCALEDIALOG_H
 
-#include "libkscanexport.h"
+#include "libkscanexport_export.h"
 
 #include <kdialog.h>
 
@@ -31,7 +31,7 @@ class KLineEdit;
  * allows the user to select a zoom factor in percent, either in steps
  * or as a custom value.
  */
-class KSCAN_EXPORT ImgScaleDialog : public KDialog
+class LIBKSCANEXPORT_EXPORT ImgScaleDialog : public KDialog
 {
     Q_OBJECT
 

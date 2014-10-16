@@ -21,7 +21,7 @@
 #ifndef SCAN_H
 #define SCAN_H
 
-#include "libkscanexport.h"
+#include "libkscanexport_export.h"
 
 #include <qimage.h>
 #include <kscan.h>
@@ -31,7 +31,7 @@ class KScanDevice;
 class Previewer;
 class QSplitter;
 
-class KSCAN_EXPORT ScanDialog : public KScanDialog
+class LIBKSCANEXPORT_EXPORT ScanDialog : public KScanDialog
 {
     Q_OBJECT
 

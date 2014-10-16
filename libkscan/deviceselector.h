@@ -20,7 +20,7 @@
 #ifndef DEVSELECTOR_H
 #define DEVSELECTOR_H
 
-#include "libkscanexport.h"
+#include "libkscanexport_export.h"
 
 #include <qbytearray.h>
 
@@ -56,7 +56,7 @@ class KGuiItem;
  * @author Jonathan Marten
  **/
 
-class KSCAN_EXPORT DeviceSelector : public KDialog
+class LIBKSCANEXPORT_EXPORT DeviceSelector : public KDialog
 {
     Q_OBJECT
 

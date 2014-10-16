@@ -21,7 +21,7 @@
 #ifndef SCANDEVICES_H
 #define SCANDEVICES_H
 
-#include "libkscanexport.h"
+#include "libkscanexport_export.h"
 
 #include <qbytearray.h>
 #include <qlist.h>
@@ -31,7 +31,7 @@ extern "C" {
 #include <sane/sane.h>                  // to define SANE_Device
 }
 
-class KSCAN_EXPORT ScanDevices
+class LIBKSCANEXPORT_EXPORT ScanDevices
 {
 public:
     static ScanDevices *self();

@@ -21,7 +21,7 @@
 #ifndef KSCANCONTROLS_H
 #define KSCANCONTROLS_H
 
-#include "libkscanexport.h"
+#include "libkscanexport_export.h"
 
 #include <qwidget.h>
 
@@ -164,7 +164,7 @@ signals:
  * @see QSlider, QSpinBox
  */
 
-class KSCAN_EXPORT KScanSlider : public KScanControl
+class LIBKSCANEXPORT_EXPORT KScanSlider : public KScanControl
 {
     Q_OBJECT
 
@@ -215,7 +215,7 @@ private:
  * @see QLineEdit
  */
 
-class KSCAN_EXPORT KScanStringEntry : public KScanControl
+class LIBKSCANEXPORT_EXPORT KScanStringEntry : public KScanControl
 {
     Q_OBJECT
 
@@ -246,7 +246,7 @@ private:
  * @see QLineEdit
  */
 
-class KSCAN_EXPORT KScanNumberEntry : public KScanControl
+class LIBKSCANEXPORT_EXPORT KScanNumberEntry : public KScanControl
 {
     Q_OBJECT
 
@@ -280,7 +280,7 @@ private:
  * @see QCheckBox
  */
 
-class KSCAN_EXPORT KScanCheckbox : public KScanControl
+class LIBKSCANEXPORT_EXPORT KScanCheckbox : public KScanControl
 {
     Q_OBJECT
 
@@ -313,7 +313,7 @@ private:
  * @see QComboBox
  */
 
-class KSCAN_EXPORT KScanCombo : public KScanControl
+class LIBKSCANEXPORT_EXPORT KScanCombo : public KScanControl
 {
     Q_OBJECT
 
@@ -373,7 +373,7 @@ private:
  * @see KUrlRequester
  */
 
-class KSCAN_EXPORT KScanFileRequester : public KScanControl
+class LIBKSCANEXPORT_EXPORT KScanFileRequester : public KScanControl
 {
     Q_OBJECT
 
@@ -404,7 +404,7 @@ private:
  * @see QGroupBox
  */
 
-class KSCAN_EXPORT KScanGroup : public KScanControl
+class LIBKSCANEXPORT_EXPORT KScanGroup : public KScanControl
 {
     Q_OBJECT
 
@@ -434,7 +434,7 @@ private:
  * @see QPushButton
  */
 
-class KSCAN_EXPORT KScanPushButton : public KScanControl
+class LIBKSCANEXPORT_EXPORT KScanPushButton : public KScanControl
 {
     Q_OBJECT
 

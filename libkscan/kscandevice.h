@@ -20,7 +20,7 @@
 #ifndef KSCANDEVICE_H
 #define KSCANDEVICE_H
 
-#include "libkscanexport.h"
+#include "libkscanexport_export.h"
 
 #include <qobject.h>
 #include <qbytearray.h>
@@ -58,7 +58,7 @@ class ImageMetaInfo;
  * @author Jonathan Marten
  **/
 
-class KSCAN_EXPORT KScanDevice : public QObject
+class LIBKSCANEXPORT_EXPORT KScanDevice : public QObject
 {
     Q_OBJECT
 

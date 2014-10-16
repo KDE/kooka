@@ -20,7 +20,7 @@
 #ifndef KSCANOPTION_H
 #define KSCANOPTION_H
 
-#include "libkscanexport.h"
+#include "libkscanexport_export.h"
 
 #include <qobject.h>
 #include <qbytearray.h>
@@ -71,7 +71,7 @@ class KScanDevice;
  * @author Jonathan Marten
  **/
 
-class KSCAN_EXPORT KScanOption : public QObject
+class LIBKSCANEXPORT_EXPORT KScanOption : public QObject
 {
     Q_OBJECT
 public:
