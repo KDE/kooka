@@ -25,20 +25,31 @@
 
 #include <klocale.h>
 #include <klineedit.h>
+#include <KConfigGroup>
+#include <QDialogButtonBox>
+#include <QPushButton>
+#include <QVBoxLayout>
 
 AddDeviceDialog::AddDeviceDialog(QWidget *parent, const QString &caption)
-    : KDialog(parent)
+    : QDialog(parent)
 {
     setObjectName("AddDeviceDialog");
 
     setModal(true);
-    setButtons(KDialog::Ok | KDialog::Cancel);
-    setCaption(caption);
-    showButtonSeparator(true);
+    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel);
+    QVBoxLayout *mainLayout = new QVBoxLayout;
+    setLayout(mainLayout);
+    mOkButton = buttonBox->button(QDialogButtonBox::Ok);
+    mOkButton->setDefault(true);
+    mOkButton->setShortcut(Qt::CTRL | Qt::Key_Return);
+    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+    setWindowTitle(caption);
 
     QWidget *w = new QWidget(this);
     QVBoxLayout *vl = new QVBoxLayout(w);
-    setMainWidget(w);
+    mainLayout->addWidget(w);
+    mainLayout->addWidget(buttonBox);
 
     QLabel *lab = new QLabel(i18n("<qt>"
                                   "<p>"
@@ -64,28 +75,34 @@ AddDeviceDialog::AddDeviceDialog(QWidget *parent, const QString &caption)
     lab->setOpenExternalLinks(true);
     vl->addWidget(lab);
 
-    vl->addSpacing(KDialog::spacingHint());
+//TODO PORT QT5     vl->addSpacing(QDialog::spacingHint());
     vl->addStretch(1);
 
     lab = new QLabel(i18n("Scanner device name:"), w);
+    mainLayout->addWidget(lab);
     vl->addWidget(lab);
 
     mDevEdit = new KLineEdit(w);
+    mainLayout->addWidget(mDevEdit);
     connect(mDevEdit, SIGNAL(textChanged(const QString &)), SLOT(slotTextChanged()));
     vl->addWidget(mDevEdit);
     lab->setBuddy(mDevEdit);
 
     lab = new QLabel(i18n("Device type:"), w);
+    mainLayout->addWidget(lab);
     vl->addWidget(lab);
 
     mTypeCombo = new QComboBox(w);
+    mainLayout->addWidget(mTypeCombo);
     vl->addWidget(mTypeCombo);
     lab->setBuddy(mTypeCombo);
 
     lab = new QLabel(i18n("Description:"), w);
+    mainLayout->addWidget(lab);
     vl->addWidget(lab);
 
     mDescEdit = new KLineEdit(w);
+    mainLayout->addWidget(mDescEdit);
     connect(mDescEdit, SIGNAL(textChanged(const QString &)), SLOT(slotTextChanged()));
     vl->addWidget(mDescEdit);
     lab->setBuddy(mDescEdit);
@@ -105,21 +122,21 @@ AddDeviceDialog::AddDeviceDialog(QWidget *parent, const QString &caption)
 
 void AddDeviceDialog::slotTextChanged()
 {
-    enableButtonOk(!mDevEdit->text().trimmed().isEmpty() &&
+    mOkButton->setEnabled(!mDevEdit->text().trimmed().isEmpty() &&
                    !mDescEdit->text().trimmed().isEmpty());
 }
 
 QByteArray AddDeviceDialog::getDevice() const
 {
-    return (mDevEdit->text().toLocal8Bit());
+    return mDevEdit->text().toLocal8Bit();
 }
 
 QString AddDeviceDialog::getDescription() const
 {
-    return (mDescEdit->text());
+    return mDescEdit->text();
 }
 
 QByteArray AddDeviceDialog::getType() const
 {
-    return (mTypeCombo->currentText().toLocal8Bit());
+    return mTypeCombo->currentText().toLocal8Bit();
 }

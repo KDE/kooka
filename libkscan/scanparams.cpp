@@ -43,7 +43,7 @@
 #include <kmimetype.h>
 #include <khbox.h>
 #include <ktabwidget.h>
-#include <KIcon>
+#include <QIcon>
 
 extern "C"
 {
@@ -268,13 +268,13 @@ bool ScanParams::connectDevice(KScanDevice *newScanDevice, bool galleryMode)
     mSaneDevice->reloadAllOptions();
 
     /* Create the Scan Buttons */
-    QPushButton *pb = new QPushButton(KIcon("preview"), i18n("Pre&view"), this);
+    QPushButton *pb = new QPushButton(QIcon::fromTheme("preview"), i18n("Pre&view"), this);
     pb->setToolTip(i18n("<qt>Start a preview scan and show the preview image"));
     pb->setMinimumWidth(100);
     connect(pb, SIGNAL(clicked()), SLOT(slotAcquirePreview()));
     lay->addWidget(pb, 5, 0, Qt::AlignLeft);
 
-    pb = new QPushButton(KIcon("scan"), i18n("Star&t Scan"), this);
+    pb = new QPushButton(QIcon::fromTheme("scan"), i18n("Star&t Scan"), this);
     pb->setToolTip(i18n("<qt>Start a scan and save the scanned image"));
     pb->setMinimumWidth(100);
     connect(pb, SIGNAL(clicked()), SLOT(slotStartScan()));

@@ -34,7 +34,7 @@
 #include <QDebug>
 #include <kurlrequester.h>
 #include <kimageio.h>
-#include <KIcon>
+#include <QIcon>
 
 //  KScanControl - base class
 //  -------------------------
@@ -99,7 +99,7 @@ KScanSlider::KScanSlider(QWidget *parent, const QString &text,
 
     if (haveStdButt) {
         mStdButt = new QToolButton(this);       // reset button
-        mStdButt->setIcon(KIcon("edit-undo"));
+        mStdButt->setIcon(QIcon::fromTheme("edit-undo"));
         mStdButt->setToolTip(i18n("Reset this setting to its standard value, %1", stdValue));
         mLayout->addWidget(mStdButt);
     }

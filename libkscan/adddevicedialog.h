@@ -22,10 +22,11 @@
 
 #include "libkscanexport.h"
 
-#include <kdialog.h>
+#include <QDialog>
 
 class QComboBox;
 class KLineEdit;
+class QPushButton;
 
 /**
  * @short A dialogue to allow the user to manually enter a scan device.
@@ -36,7 +37,7 @@ class KLineEdit;
  * @author Jonathan Marten
  */
 
-class KSCAN_EXPORT AddDeviceDialog : public KDialog
+class KSCAN_EXPORT AddDeviceDialog : public QDialog
 {
     Q_OBJECT
 
@@ -83,6 +84,7 @@ private:
     KLineEdit *mDevEdit;
     KLineEdit *mDescEdit;
     QComboBox *mTypeCombo;
+    QPushButton *mOkButton;
 };
 
 #endif                          // ADDDEVICE_H

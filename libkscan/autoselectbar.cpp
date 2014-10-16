@@ -33,7 +33,7 @@
 #include <klocale.h>
 #include <QDebug>
 #include <kdialog.h>
-#include <kicon.h>
+#include <QIcon>
 #include <kcolordialog.h>
 
 #include "autoselectdialog.h"
@@ -79,14 +79,14 @@ AutoSelectBar::AutoSelectBar(int initialValue, QWidget *parent)
 
     // Refresh/recalculate button
     QToolButton *but = new QToolButton;
-    but->setIcon(KIcon("view-refresh"));
+    but->setIcon(QIcon::fromTheme("view-refresh"));
     but->setToolTip(i18nc("@info:tooltip", "Perform the auto-detection again"));
     connect(but, SIGNAL(clicked()), SIGNAL(performSelection()));
     hbl->addWidget(but);
 
     // Advanced settings button
     but = new QToolButton;
-    but->setIcon(KIcon("configure"));
+    but->setIcon(QIcon::fromTheme("configure"));
     but->setToolTip(i18nc("@info:tooltip", "Advanced settings for auto-detection"));
     connect(but, SIGNAL(clicked()), SLOT(slotShowSettings()));
     hbl->addWidget(but);
