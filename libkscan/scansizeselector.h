@@ -20,7 +20,7 @@
 #ifndef SCANSIZESELECTOR_H
 #define SCANSIZESELECTOR_H
 
-#include "libkscanexport_export.h"
+#include "kookascan_export.h"
 
 #include <qsize.h>
 #include <qrect.h>
@@ -32,7 +32,7 @@ class QRadioButton;
 
 class PaperSize;
 
-class LIBKSCANEXPORT_EXPORT ScanSizeSelector : public KVBox
+class KOOKASCAN_EXPORT ScanSizeSelector : public KVBox
 {
     Q_OBJECT
 

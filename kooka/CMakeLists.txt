@@ -164,7 +164,7 @@ endif (WITH_KADMOS)
 #kde4_add_app_icon(kooka_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/icons/hi*-apps-kooka.png")
 add_executable(kooka ${kooka_SRCS})
 target_link_libraries(kooka
-  libkscan
+  kookascan
   libfiletree
   KF5::KDELibs4Support
 )

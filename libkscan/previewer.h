@@ -20,7 +20,7 @@
 #ifndef PREVIEWER_H
 #define PREVIEWER_H
 
-#include "libkscanexport_export.h"
+#include "kookascan_export.h"
 
 #include <qvector.h>
 
@@ -36,7 +36,7 @@ class KScanDevice;
 class ImageCanvas;
 class AutoSelectBar;
 
-class LIBKSCANEXPORT_EXPORT Previewer : public KVBox
+class KOOKASCAN_EXPORT Previewer : public KVBox
 {
     Q_OBJECT
 

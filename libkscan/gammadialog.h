@@ -20,7 +20,7 @@
 #ifndef GAMMADIALOG_H
 #define GAMMADIALOG_H
 
-#include "libkscanexport_export.h"
+#include "kookascan_export.h"
 
 #include <QDialog>
 
@@ -39,7 +39,7 @@ class GammaWidget;
  * @author Jonathan Marten
  **/
 
-class LIBKSCANEXPORT_EXPORT GammaDialog : public QDialog
+class KOOKASCAN_EXPORT GammaDialog : public QDialog
 {
     Q_OBJECT
 

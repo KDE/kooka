@@ -20,7 +20,7 @@
 #ifndef MASSSCANDIALOG_H
 #define MASSSCANDIALOG_H
 
-#include "libkscanexport_export.h"
+#include "kookascan_export.h"
 
 #include <kdialog.h>
 
@@ -31,7 +31,7 @@ class QLabel;
   *@author Klaas Freitag
   */
 
-class LIBKSCANEXPORT_EXPORT MassScanDialog : public KDialog
+class KOOKASCAN_EXPORT MassScanDialog : public KDialog
 {
     Q_OBJECT
 

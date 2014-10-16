@@ -26,7 +26,7 @@
 #ifndef AUTOSELECTDIALOG_H
 #define AUTOSELECTDIALOG_H
 
-#include "libkscanexport_export.h"
+#include "kookascan_export.h"
 
 #include <QDialog>
 
@@ -34,7 +34,7 @@ class QComboBox;
 class KScanSlider;
 class QDialogButtonBox;
 
-class LIBKSCANEXPORT_EXPORT AutoSelectDialog : public QDialog
+class KOOKASCAN_EXPORT AutoSelectDialog : public QDialog
 {
     Q_OBJECT
 

@@ -20,7 +20,7 @@
 #ifndef GAMMAWIDGET_H
 #define GAMMAWIDGET_H
 
-#include "libkscanexport_export.h"
+#include "kookascan_export.h"
 
 #include <qwidget.h>
 #include <qsizepolicy.h>
@@ -42,7 +42,7 @@ class KGammaTable;
  * @author Jonathan Marten
  **/
 
-class LIBKSCANEXPORT_EXPORT GammaWidget : public QWidget
+class KOOKASCAN_EXPORT GammaWidget : public QWidget
 {
     Q_OBJECT
 

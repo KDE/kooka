@@ -20,7 +20,7 @@
 #ifndef SCANPARAMS_H
 #define SCANPARAMS_H
 
-#include "libkscanexport_export.h"
+#include "kookascan_export.h"
 
 #include <qwidget.h>
 #include <qicon.h>
@@ -61,7 +61,7 @@ class ScanSizeSelector;
  * @author Jonathan Marten
  **/
 
-class LIBKSCANEXPORT_EXPORT ScanParams : public QWidget
+class KOOKASCAN_EXPORT ScanParams : public QWidget
 {
     Q_OBJECT
 

@@ -20,7 +20,7 @@
 #ifndef KSCANOPTSET_H
 #define KSCANOPTSET_H
 
-#include "libkscanexport_export.h"
+#include "kookascan_export.h"
 
 #include <qhash.h>
 #include <qmap.h>
@@ -47,7 +47,7 @@ class KScanOption;
  *  @author Jonathan Marten
  **/
 
-class LIBKSCANEXPORT_EXPORT KScanOptSet : public QHash<QByteArray, QByteArray>
+class KOOKASCAN_EXPORT KScanOptSet : public QHash<QByteArray, QByteArray>
 {
 
 public:

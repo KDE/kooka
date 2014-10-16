@@ -20,7 +20,7 @@
 #ifndef SIZEINDICATOR_H
 #define SIZEINDICATOR_H
 
-#include "libkscanexport_export.h"
+#include "kookascan_export.h"
 
 #include <qlabel.h>
 
@@ -39,7 +39,7 @@
  *  user that he is doing something obvious.
  */
 
-class LIBKSCANEXPORT_EXPORT SizeIndicator : public QLabel
+class KOOKASCAN_EXPORT SizeIndicator : public QLabel
 {
     Q_OBJECT
 

@@ -26,14 +26,14 @@
 #ifndef AUTOSELECTBAR_H
 #define AUTOSELECTBAR_H
 
-#include "libkscanexport_export.h"
+#include "kookascan_export.h"
 
 #include <qwidget.h>
 
 class KColorPatch;
 class KScanSlider;
 
-class LIBKSCANEXPORT_EXPORT AutoSelectBar : public QWidget
+class KOOKASCAN_EXPORT AutoSelectBar : public QWidget
 {
     Q_OBJECT
 

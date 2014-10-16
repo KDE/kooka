@@ -20,7 +20,7 @@
 #ifndef IMAGEMETAINFO_H
 #define IMAGEMETAINFO_H
 
-#include "libkscanexport_export.h"
+#include "kookascan_export.h"
 
 #include <qstring.h>
 
@@ -36,7 +36,7 @@ class QImage;
  * @author Jonathan Marten
  **/
 
-class LIBKSCANEXPORT_EXPORT ImageMetaInfo
+class KOOKASCAN_EXPORT ImageMetaInfo
 {
 public:
 

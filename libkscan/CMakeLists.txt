@@ -39,7 +39,7 @@ endif (HAVE_LIBPAPER)
 ########### library ###############
 
 # TODO: rename some of these to match class name, others are obsolete
-set(libkscan_SRCS
+set(kookascan_SRCS
   scanglobal.cpp
   kscandevice.cpp
   scandevices.cpp
@@ -64,21 +64,20 @@ set(libkscan_SRCS
   autoselectdialog.cpp
 )
 
-add_library(libkscan SHARED ${libkscan_SRCS})
-generate_export_header(libkscan BASE_NAME libkscanexport)
-target_link_libraries(libkscan
+add_library(kookascan SHARED ${libkscan_SRCS})
+generate_export_header(kookascan BASE_NAME kookascan)
+target_link_libraries(kookascan
   KF5::KIOCore
   KF5::KDELibs4Support
 )
 if (HAVE_SANE)
-  target_link_libraries(libkscan ${SANE_LIBRARIES})
+  target_link_libraries(kookascan ${SANE_LIBRARIES})
 endif (HAVE_SANE)
 if (HAVE_LIBPAPER)
-  target_link_libraries(libkscan ${LIBPAPER_LIB})
+  target_link_libraries(kookascan ${LIBPAPER_LIB})
 endif (HAVE_LIBPAPER)
 
-# libkscan in kdegraphics 3.5 was version 1, SVN work/kooka-kde3 was version 2
-set_target_properties(libkscan PROPERTIES VERSION 3.0.0 SOVERSION 3)
+set_target_properties(kookascan PROPERTIES VERSION 1.0.0 SOVERSION 1)
 
 ########### clobbering ###############
 
@@ -93,4 +92,4 @@ set_target_properties(libkscan PROPERTIES VERSION 3.0.0 SOVERSION 3)
 
 ########### installation ###############
 
-install(TARGETS libkscan ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS kookascan ${INSTALL_TARGETS_DEFAULT_ARGS})

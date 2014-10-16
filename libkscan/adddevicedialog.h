@@ -20,7 +20,7 @@
 #ifndef ADDDEVICE_H
 #define ADDDEVICE_H
 
-#include "libkscanexport_export.h"
+#include "kookascan_export.h"
 
 #include <QDialog>
 
@@ -37,7 +37,7 @@ class QPushButton;
  * @author Jonathan Marten
  */
 
-class LIBKSCANEXPORT_EXPORT AddDeviceDialog : public QDialog
+class KOOKASCAN_EXPORT AddDeviceDialog : public QDialog
 {
     Q_OBJECT
 
