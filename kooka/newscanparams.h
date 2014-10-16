@@ -20,16 +20,16 @@
 #ifndef NEWSCANPARAMS_H
 #define NEWSCANPARAMS_H
 
-#include <kdialog.h>
+#include <QDialog>
 
 class QLineEdit;
-
+class QPushButton;
 /**
  *  A dialogue to allow the user to enter a name and description for
  *  a set of saved scan parameters.
  */
 
-class NewScanParams : public KDialog
+class NewScanParams : public QDialog
 {
     Q_OBJECT
 
@@ -45,6 +45,7 @@ protected slots:
 private:
     QLineEdit *mNameEdit;
     QLineEdit *mDescEdit;
+    QPushButton *mOkButton;
 };
 
 #endif                          // NEWSCANPARAMS_H

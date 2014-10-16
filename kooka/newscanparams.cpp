@@ -26,38 +26,53 @@
 #include <klocale.h>
 #include <QDebug>
 #include <kvbox.h>
+#include <KConfigGroup>
+#include <QDialogButtonBox>
+#include <QPushButton>
+#include <QVBoxLayout>
 
 NewScanParams::NewScanParams(QWidget *parent,
                              const QString &name, const QString &desc, bool renaming)
-    : KDialog(parent)
+    : QDialog(parent)
 {
     setObjectName("NewScanParams");
 
     setModal(true);
-    setButtons(KDialog::Ok | KDialog::Cancel);
-    showButtonSeparator(true);
+    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel);
+    QVBoxLayout *mainLayout = new QVBoxLayout;
+    setLayout(mainLayout);
+    mOkButton = buttonBox->button(QDialogButtonBox::Ok);
+    mOkButton->setDefault(true);
+    mOkButton->setShortcut(Qt::CTRL | Qt::Key_Return);
+    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
 
     KVBox *vb = new KVBox(this);
-    vb->setMargin(KDialog::marginHint());
-    vb->setSpacing(KDialog::spacingHint());
-    setMainWidget(vb);
+//TODO PORT QT5     vb->setMargin(QDialog::marginHint());
+//TODO PORT QT5     vb->setSpacing(QDialog::spacingHint());
+    mainLayout->addWidget(vb);
+    mainLayout->addWidget(buttonBox);
 
     if (renaming) {
-        setCaption(i18n("Edit Scan Parameters"));
+        setWindowTitle(i18n("Edit Scan Parameters"));
         new QLabel(i18n("Change the name and/or description of the scan parameter set."), vb);
     } else {
-        setCaption(i18n("Save Scan Parameters"));
+        setWindowTitle(i18n("Save Scan Parameters"));
         new QLabel(i18n("Enter a name and description for the new scan parameter set."), vb);
     }
     new QLabel("", vb);
 
     QLabel *l = new QLabel(i18n("Set name:"), vb);
+    mainLayout->addWidget(l);
     mNameEdit = new QLineEdit(name, vb);
+    mainLayout->addWidget(mNameEdit);
     connect(mNameEdit, SIGNAL(textChanged(const QString &)), SLOT(slotTextChanged()));
     l->setBuddy(mNameEdit);
 
     l = new QLabel(i18n("Description:"), vb);
+    mainLayout->addWidget(l);
     mDescEdit = new QLineEdit(desc, vb);
+    mainLayout->addWidget(mDescEdit);
     connect(mDescEdit, SIGNAL(textChanged(const QString &)), SLOT(slotTextChanged()));
     l->setBuddy(mDescEdit);
 
@@ -69,7 +84,7 @@ void NewScanParams::slotTextChanged()
 {
     bool ok = !mNameEdit->text().trimmed().isEmpty() &&
               !mDescEdit->text().trimmed().isEmpty();
-    enableButtonOk(ok);
+    mOkButton->setEnabled(ok);
 }
 
 QString NewScanParams::getName() const
