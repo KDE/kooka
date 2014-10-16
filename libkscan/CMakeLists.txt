@@ -1,5 +1,5 @@
 
-project(kooka4)
+project(kookascan)
 
 ########### dependencies ###############
 
@@ -22,7 +22,6 @@ add_subdirectory(desktop)
 
 ########### setup ###############
 
-add_definitions(-DMAKE_KSCAN_LIB)
 add_definitions(-DKDE4)
 add_definitions(-DKDE_DEFAULT_DEBUG_AREA=29000)
 if (HAVE_SANE)
@@ -64,7 +63,8 @@ set(kookascan_SRCS
   autoselectdialog.cpp
 )
 
-add_library(kookascan SHARED ${libkscan_SRCS})
+
+add_library(kookascan SHARED ${kookascan_SRCS})
 generate_export_header(kookascan BASE_NAME kookascan)
 target_link_libraries(kookascan
   KF5::KIOCore
