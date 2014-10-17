@@ -25,7 +25,7 @@
 #include <klineedit.h>
 #include <KLocalizedString>
 #include <QDebug>
-#include <kvbox.h>
+#include <QVBoxLayout>
 #include <KConfigGroup>
 #include <QDialogButtonBox>
 #include <QPushButton>
@@ -47,9 +47,11 @@ NewScanParams::NewScanParams(QWidget *parent,
     connect(buttonBox, &QDialogButtonBox::accepted, this, &NewScanParams::accept);
     connect(buttonBox, &QDialogButtonBox::rejected, this, &NewScanParams::reject);
 
-    KVBox *vb = new KVBox(this);
-//TODO PORT QT5     vb->setMargin(QDialog::marginHint());
-//TODO PORT QT5     vb->setSpacing(QDialog::spacingHint());
+    QWidget *vb = new QWidget(this);
+    QVBoxLayout *vbVBoxLayout = new QVBoxLayout(vb);
+    vbVBoxLayout->setMargin(0);
+//TODO PORT QT5     vbVBoxLayout->setMargin(QDialog::marginHint());
+//TODO PORT QT5     vbVBoxLayout->setSpacing(QDialog::spacingHint());
     mainLayout->addWidget(vb);
     mainLayout->addWidget(buttonBox);
 
@@ -63,15 +65,19 @@ NewScanParams::NewScanParams(QWidget *parent,
     new QLabel("", vb);
 
     QLabel *l = new QLabel(i18n("Set name:"), vb);
+    vbVBoxLayout->addWidget(l);
     mainLayout->addWidget(l);
     mNameEdit = new QLineEdit(name, vb);
+    vbVBoxLayout->addWidget(mNameEdit);
     mainLayout->addWidget(mNameEdit);
     connect(mNameEdit, &QLineEdit::textChanged, this, &NewScanParams::slotTextChanged);
     l->setBuddy(mNameEdit);
 
     l = new QLabel(i18n("Description:"), vb);
+    vbVBoxLayout->addWidget(l);
     mainLayout->addWidget(l);
     mDescEdit = new QLineEdit(desc, vb);
+    vbVBoxLayout->addWidget(mDescEdit);
     mainLayout->addWidget(mDescEdit);
     connect(mDescEdit, &QLineEdit::textChanged, this, &NewScanParams::slotTextChanged);
     l->setBuddy(mDescEdit);

@@ -46,7 +46,8 @@
 #include <kseparator.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
-#include <kvbox.h>
+#include <QVBoxLayout>
+#include <QHBoxLayout>
 
 #include "ocrkadmosengine.h"
 
@@ -219,19 +220,26 @@ OcrEngine::EngineError KadmosDialog::setupGui()
     // setupClassification( addVBoxPage( i18n("Classification")));
 
     /* continue page setup on the first page */
-    KVBox *page = new KVBox(this);
+    QWidget *page = new QWidget(this);
+    QVBoxLayout *pageVBoxLayout = new QVBoxLayout(page);
+    pageVBoxLayout->setMargin(0);
 
     // FIXME: dynamic classifier reading.
 
     new QLabel(i18n("Please classify the font type and language of the text on the image:"), page);
-    KHBox *locBox = new KHBox(page);
+    QWidget *locBox = new QWidget(page);
+    QHBoxLayout *locBoxHBoxLayout = new QHBoxLayout(locBox);
+    locBoxHBoxLayout->setMargin(0);
+    pageVBoxLayout->addWidget(locBox);
     m_bbFont = new Q3ButtonGroup(1, Qt::Horizontal, i18n("Font Type Selection"), locBox);
+    locBoxHBoxLayout->addWidget(m_bbFont);
 
     m_rbMachine = new QRadioButton(i18n("Machine print"), m_bbFont);
     m_rbHand    = new QRadioButton(i18n("Hand writing"),  m_bbFont);
     m_rbNorm    = new QRadioButton(i18n("Norm font"),     m_bbFont);
 
     m_gbLang = new Q3GroupBox(1, Qt::Horizontal, i18n("Country"), locBox);
+    locBoxHBoxLayout->addWidget(m_gbLang);
 
     m_cbLang = new QComboBox(m_gbLang);
     m_cbLang->setItemText(m_cbLang->currentIndex(), KLocale::defaultCountry());
@@ -240,10 +248,14 @@ OcrEngine::EngineError KadmosDialog::setupGui()
     m_rbMachine->setChecked(true);
 
     /* --- */
-    KHBox *innerBox = new KHBox(page);
-    innerBox->setSpacing(KDialog::spacingHint());
+    QWidget *innerBox = new QWidget(page);
+    QHBoxLayout *innerBoxHBoxLayout = new QHBoxLayout(innerBox);
+    innerBoxHBoxLayout->setMargin(0);
+    pageVBoxLayout->addWidget(innerBox);
+    innerBoxHBoxLayout->setSpacing(KDialog::spacingHint());
 
     Q3ButtonGroup *cbGroup = new Q3ButtonGroup(1, Qt::Horizontal, i18n("OCR Modifier"), innerBox);
+    innerBoxHBoxLayout->addWidget(cbGroup);
     Q_CHECK_PTR(cbGroup);
 
     m_cbNoise = new QCheckBox(i18n("Enable automatic noise reduction"), cbGroup);
@@ -299,15 +311,15 @@ void KadmosDialog::slotFontChanged(int id)
     m_cbLang->setEnabled(enable);
 }
 
-void KadmosDialog::setupPreprocessing(KVBox *box)
+void KadmosDialog::setupPreprocessing(QWidget *box)
 {
 }
 
-void KadmosDialog::setupSegmentation(KVBox *box)
+void KadmosDialog::setupSegmentation(QWidget *box)
 {
 }
 
-void KadmosDialog::setupClassification(KVBox *box)
+void KadmosDialog::setupClassification(QWidget *box)
 {
 }
 

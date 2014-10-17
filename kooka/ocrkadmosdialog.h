@@ -42,7 +42,7 @@ class QRadioButton;
 class QComboBox;
 class Q3ButtonGroup;
 
-class KVBox;
+
 
 //class KScanCombo;
 
@@ -99,9 +99,9 @@ public slots:
     void enableFields(bool);
 
 protected:
-    void setupPreprocessing(KVBox *box);
-    void setupSegmentation(KVBox *box);
-    void setupClassification(KVBox *box);
+    void setupPreprocessing(QWidget *box);
+    void setupSegmentation(QWidget *box);
+    void setupClassification(QWidget *box);
 
     OcrEngine::EngineError findClassifiers();
     OcrEngine::EngineError findClassifierPath();
