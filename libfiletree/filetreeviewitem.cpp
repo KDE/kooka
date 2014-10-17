@@ -19,7 +19,6 @@
 
 #include "filetreeviewitem.h"
 
-#include <QDebug>
 #include <kfileitem.h>
 #include <kiconloader.h>
 
