@@ -17,4 +17,5 @@ project(kooka4)
 
 ecm_install_icons(ICONS hi48-apps-kooka.png DESTINATION ${ICON_INSTALL_DIR})
 install(FILES org.kde.kooka.desktop DESTINATION ${XDG_APPS_INSTALL_DIR})
-install(FILES kookaui.rc DESTINATION ${DATA_INSTALL_DIR}/kooka)
+install(FILES kookaui.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/kooka)
+
