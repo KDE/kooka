@@ -39,7 +39,6 @@
 #include <kprocess.h>
 #include <KLocalizedString>
 #include <kdialog.h>
-#include <kvbox.h>
 #include <kcolorscheme.h>
 #include <KGlobal>
 

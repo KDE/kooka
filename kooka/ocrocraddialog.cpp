@@ -42,8 +42,6 @@
 #include <kmessagebox.h>
 #include <kurlrequester.h>
 #include <kprocess.h>
-#include <kvbox.h>
-#include <khbox.h>
 #include <KConfigGroup>
 #include <KDialog>
 #include "kookaimage.h"
