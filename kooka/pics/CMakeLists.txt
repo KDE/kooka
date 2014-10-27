@@ -1,6 +1,3 @@
-
-project(kooka4)
-
 ########### clobbering ###############
 
 #add_custom_target(clobber
