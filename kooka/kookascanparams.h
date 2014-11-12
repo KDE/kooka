@@ -30,7 +30,7 @@ class KookaScanParams : public ScanParams
     Q_OBJECT
 
 public:
-    KookaScanParams(QWidget *parent);
+    explicit KookaScanParams(QWidget *parent);
     virtual ~KookaScanParams()      {}
 
 protected:

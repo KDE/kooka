@@ -94,7 +94,7 @@ if (HAVE_TIFF)
 endif (HAVE_TIFF)
 
 
-include_directories(..)
+include_directories(.. ./ocr/)
 
 #qt5_generate_dbus_interface(kooka.h org.kde.kooka.kooka.xml OPTIONS -a)
 
@@ -140,15 +140,6 @@ set(kooka_SRCS
   galleryhistory.cpp
   kookagallery.cpp
   thumbview.cpp
-  ocrengine.cpp			# -> ocrenginebase
-  ocrgocrengine.cpp
-  ocrocradengine.cpp
-  ocrkadmosengine.cpp
-  ocrbasedialog.cpp		# -> ocrdialogbase
-  ocrgocrdialog.cpp
-  ocrocraddialog.cpp
-  #QT5 ocrkadmosdialog.cpp
-  ocrresedit.cpp
   kookaprint.cpp
   #QT5 imgprintdialog.cpp
   scanparamsdialog.cpp
@@ -156,13 +147,27 @@ set(kooka_SRCS
   #QT5 photocopyprintdialogpage.cpp
 )
 
+set(kooka_ocr_SRCS
+ocr/ocrbasedialog.cpp
+ocr/ocrengine.cpp
+ocr/ocrgocrdialog.cpp
+ocr/ocrgocrengine.cpp
+#QT5 ocr/ocrkadmosdialog.cpp
+ocr/ocrkadmosengine.cpp
+ocr/ocrocraddialog.cpp
+ocr/ocrocradengine.cpp
+ocr/ocrresedit.cpp
+)
+
+
+
 if (WITH_KADMOS)
   set(kooka_SRCS ${kooka_SRCS} kadmosocr.cpp)
 endif (WITH_KADMOS)
 
 
 #kde4_add_app_icon(kooka_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/icons/hi*-apps-kooka.png")
-add_executable(kooka ${kooka_SRCS})
+add_executable(kooka ${kooka_SRCS} ${kooka_ocr_SRCS})
 target_link_libraries(kooka
   kookascan
   libfiletree
