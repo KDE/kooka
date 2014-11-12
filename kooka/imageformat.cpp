@@ -166,7 +166,7 @@ ImageFormat ImageFormat::formatForMime(const KMimeType::Ptr &mime)
 
     QStringList formats;
     const KService::List services = KServiceTypeTrader::self()->query("QImageIOPlugins");
-    foreach(const KService::Ptr & service, services) {
+    foreach (const KService::Ptr &service, services) {
         if (mime->is(service->property("X-KDE-MimeType").toString())) {
             formats = service->property("X-KDE-ImageFormat").toStringList();
             break;

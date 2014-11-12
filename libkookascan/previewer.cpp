@@ -415,9 +415,9 @@ void Previewer::slotFindAutoSelection()
     }
 
     //qDebug() << "image size" << img->size()
-             //<< "threshold" << mAutoSelThresh
-             //<< "dustsize" << mAutoSelDustsize
-             //<< "isWhite" << mBgIsWhite;
+    //<< "threshold" << mAutoSelThresh
+    //<< "dustsize" << mAutoSelDustsize
+    //<< "isWhite" << mBgIsWhite;
 
     const long iWidth  = img->width();          // cheap copies
     const long iHeight = img->height();

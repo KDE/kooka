@@ -30,7 +30,6 @@
 
 #include "ocrengine.h"
 
-
 class OcrOcradEngine : public OcrEngine
 {
     Q_OBJECT

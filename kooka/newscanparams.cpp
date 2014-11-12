@@ -38,7 +38,7 @@ NewScanParams::NewScanParams(QWidget *parent,
     setObjectName("NewScanParams");
 
     setModal(true);
-    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel);
+    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
     QVBoxLayout *mainLayout = new QVBoxLayout;
     setLayout(mainLayout);
     mOkButton = buttonBox->button(QDialogButtonBox::Ok);

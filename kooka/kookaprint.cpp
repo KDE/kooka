@@ -122,7 +122,7 @@ bool KookaPrint::printImage(const KookaImage *img, int intextraMarginPercent)
         int subpagesCnt = tmpImg.cutToTiles(maxOnPage, maxRows, maxCols);
 
         //qDebug() << "Subpages count:" << subpagesCnt
-                 << "Columns:" << maxCols << "Rows:" << maxRows;
+                << "Columns:" << maxCols << "Rows:" << maxRows;
 
         int cnt = 0;
 
@@ -132,7 +132,7 @@ bool KookaPrint::printImage(const KookaImage *img, int intextraMarginPercent)
                 const QSize imgSize = part.size();
 
                 //qDebug() << "Printing part from [" << part.x() << "," << part.y() << "]"
-                         << "width:" << part.width() << "height:" << part.height();
+                        << "width:" << part.width() << "height:" << part.height();
                 QImage tileImg = tmpImg.copy(part);
 
                 m_painter->drawImage(printPosTopLeft(imgSize), tileImg);

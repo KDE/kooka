@@ -830,7 +830,7 @@ void ImageCanvas::recalculateViewScale()
         break;
 
     default:
-        //qDebug() << "Unknown scale type" << scaleType();
+    //qDebug() << "Unknown scale type" << scaleType();
     // fall through
     case ImageCanvas::ScaleOriginal:
         yscale = xscale = 1.0;

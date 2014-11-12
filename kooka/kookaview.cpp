@@ -591,14 +591,7 @@ QByteArray KookaView::userDeviceSelection(bool alwaysAsk)
     /* a list of backends the scan backend knows */
     QList<QByteArray> backends = ScanDevices::self()->allDevices();
     if (backends.count() == 0) {
-        if (KMessageBox::warningContinueCancel(mMainWindow, i18n("<qt>\
-<p>No scanner devices are available.\
-<p>If your scanner is a type that can be auto-detected by SANE, check that it \
-is connected, switched on and configured correctly.\
-<p>If the scanner cannot be auto-detected by SANE (this includes some network \
-scanners), you need to specify the device to use.  Use the \"Add Scan Device\" \
-option to enter the backend name and parameters, or see that dialog for more \
-information."), QString::null, KGuiItem(i18n("Add Scan Device..."))) != KMessageBox::Continue) {
+        if (KMessageBox::warningContinueCancel(mMainWindow, i18n("<qt><p>No scanner devices are available.<p>If your scanner is a type that can be auto-detected by SANE, check that it is connected, switched on and configured correctly.<p>If the scanner cannot be auto-detected by SANE (this includes some network scanners), you need to specify the device to use.  Use the \"Add Scan Device\" option to enter the backend name and parameters, or see that dialog for more information."), QString::null, KGuiItem(i18n("Add Scan Device..."))) != KMessageBox::Continue) {
             return ("");
         }
 
@@ -750,7 +743,7 @@ void KookaView::slotNewPreview(const QImage *newimg, const ImageMetaInfo *info)
     }
 
     //qDebug() << "new preview image, size" << newimg->size()
-             //<< "res [" << info->getXResolution() << "x" << info->getYResolution() << "]";
+    //<< "res [" << info->getXResolution() << "x" << info->getYResolution() << "]";
 
     mPreviewCanvas->newImage(newimg);            // set new image and size
     updateSelectionState();

@@ -123,7 +123,7 @@ void ScanDevices::addUserSpecifiedDevice(const QByteArray &backend,
 
     QByteArray devtype = (!type.isEmpty() ? type : "scanner");
     //qDebug() << "adding" << backend << "desc" << description
-             //<< "type" << devtype << "dontSave" << dontSave;
+    //<< "type" << devtype << "dontSave" << dontSave;
 
     if (!dontSave) {                // add new device to config
         // get existing device lists

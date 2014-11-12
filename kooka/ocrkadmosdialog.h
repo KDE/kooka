@@ -42,8 +42,6 @@ class QRadioButton;
 class QComboBox;
 class Q3ButtonGroup;
 
-
-
 //class KScanCombo;
 
 class KadmosClassifier   /* Not yet used FIXME */

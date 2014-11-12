@@ -264,7 +264,7 @@ FormatDialog::FormatDialog(QWidget *parent, ImageMetaInfo::ImageType type,
             }
         }
         //qDebug() << "have" << formatList.count() << "image types"
-                 //<< "from" << supportedTypes.count() << "supported";
+        //<< "from" << supportedTypes.count() << "supported";
 
         // Even after filtering the list as above, there will be MIME type
         // duplicates (e.g. JPG and JPEG both map to image/jpeg and produce

@@ -218,7 +218,7 @@ void OcrEngine::finishedOCRVisible(bool success)
 
             m_resultImage = new QImage(m_ocrResultFile);
             //qDebug() << "Result image" << m_ocrResultFile
-                     //<< "size" << m_resultImage->size();
+            //<< "size" << m_resultImage->size();
 
             /* The image canvas is present. Set it to our image */
             m_imgCanvas->newImage(m_resultImage, true);
@@ -437,8 +437,8 @@ QTextDocument *OcrEngine::startResultDocument()
 void OcrEngine::finishResultDocument()
 {
     //qDebug() << "words" << m_wordCount
-             //<< "lines" << m_document->blockCount()
-             //<< "chars" << m_document->characterCount();
+    //<< "lines" << m_document->blockCount()
+    //<< "chars" << m_document->characterCount();
 
     if (m_cursor != NULL) {
         delete m_cursor;
@@ -465,8 +465,8 @@ void OcrEngine::addWord(const QString &word, const OcrWordData &data)
 {
     if (m_ocrDialog->verboseDebug()) {
         //qDebug() << "word" << word << "len" << word.length()
-                 //<< "rect" << data.property(OcrWordData::Rectangle)
-                 //<< "alts" << data.property(OcrWordData::Alternatives);
+        //<< "rect" << data.property(OcrWordData::Rectangle)
+        //<< "alts" << data.property(OcrWordData::Alternatives);
     }
 
     if (!m_cursor->atBlockStart()) {

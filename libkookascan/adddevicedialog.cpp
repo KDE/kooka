@@ -36,7 +36,7 @@ AddDeviceDialog::AddDeviceDialog(QWidget *parent, const QString &caption)
     setObjectName("AddDeviceDialog");
 
     setModal(true);
-    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel);
+    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
     QVBoxLayout *mainLayout = new QVBoxLayout;
     setLayout(mainLayout);
     mOkButton = buttonBox->button(QDialogButtonBox::Ok);
@@ -123,7 +123,7 @@ AddDeviceDialog::AddDeviceDialog(QWidget *parent, const QString &caption)
 void AddDeviceDialog::slotTextChanged()
 {
     mOkButton->setEnabled(!mDevEdit->text().trimmed().isEmpty() &&
-                   !mDescEdit->text().trimmed().isEmpty());
+                          !mDescEdit->text().trimmed().isEmpty());
 }
 
 QByteArray AddDeviceDialog::getDevice() const

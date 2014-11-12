@@ -118,7 +118,7 @@ void KScanOptSet::saveConfig(const QByteArray &scannerName,
                              const QString &desc) const
 {
     //qDebug() << "Saving set" << mSetName << "for scanner" << scannerName
-             //<< "with" << count() << "options";
+    //<< "with" << count() << "options";
 
     QString grpName = groupName(mSetName);
     KConfigGroup grp = ScanGlobal::self()->configGroup(grpName);

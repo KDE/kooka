@@ -47,7 +47,7 @@ AutoSelectDialog::AutoSelectDialog(QWidget *parent)
     setObjectName("AutoSelectDialog");
 
     setWindowTitle(i18nc("@title:window", "Autoselect Settings"));
-    mButtonBox = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel|QDialogButtonBox::Apply);
+    mButtonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel | QDialogButtonBox::Apply);
     QVBoxLayout *mainLayout = new QVBoxLayout;
     setLayout(mainLayout);
     QPushButton *okButton = mButtonBox->button(QDialogButtonBox::Ok);

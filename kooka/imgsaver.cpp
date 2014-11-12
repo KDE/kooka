@@ -114,11 +114,11 @@ ImgSaver::ImageSaveStatus ImgSaver::getFilenameAndFormat(ImageMetaInfo::ImageTyp
     m_saveAskFormat = grp.readEntry(OP_SAVER_ASK_FORMAT, false);
 
     //qDebug() << "before dialogue,"
-             //<< "ask_filename=" << m_saveAskFilename
-             //<< "ask_format=" << m_saveAskFormat
-             //<< "filename=" << saveFilename
-             //<< "format=" << saveFormat
-             //<< "subformat=" << saveSubformat;
+    //<< "ask_filename=" << m_saveAskFilename
+    //<< "ask_format=" << m_saveAskFormat
+    //<< "filename=" << saveFilename
+    //<< "format=" << saveFormat
+    //<< "subformat=" << saveSubformat;
 
     while (!saveFormat.isValid() || m_saveAskFormat || m_saveAskFilename) {
         // is a dialogue neeeded?
@@ -157,10 +157,10 @@ ImgSaver::ImageSaveStatus ImgSaver::getFilenameAndFormat(ImageMetaInfo::ImageTyp
     mSaveSubformat = saveSubformat;
 
     //qDebug() << "after dialogue,"
-             //<< "filename=" << saveFilename
-             //<< "format=" << mSaveFormat
-             //<< "subformat=" << mSaveSubformat
-             //<< "url=" << mSaveUrl;
+    //<< "filename=" << saveFilename
+    //<< "format=" << mSaveFormat
+    //<< "subformat=" << mSaveSubformat
+    //<< "url=" << mSaveUrl;
     return (ImgSaver::SaveStatusOk);
 }
 

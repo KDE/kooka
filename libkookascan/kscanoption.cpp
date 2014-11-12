@@ -214,7 +214,7 @@ void KScanOption::reload()
 
     if (mDesc->size > mBuffer.size()) {
         //qDebug() << "buffer too small for" << mName << "type" << mDesc->type
-                 //<< "size" << mBuffer.size() << "need" << mDesc->size;
+        //<< "size" << mBuffer.size() << "need" << mDesc->size;
         allocForDesc();                 // grow the buffer
     }
 

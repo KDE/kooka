@@ -561,13 +561,13 @@ void KScanDevice::showOptions()
         int cap = desc->cap;
         QString s = QString(it.key()).leftJustified(32);
         //qDebug() << s << "|" <<
-                 optionNotifyString((cap & SANE_CAP_SOFT_SELECT)) <<
-                 optionNotifyString((cap & SANE_CAP_HARD_SELECT)) <<
-                 optionNotifyString((cap & SANE_CAP_SOFT_DETECT)) <<
-                 optionNotifyString((cap & SANE_CAP_EMULATED)) <<
-                 optionNotifyString((cap & SANE_CAP_AUTOMATIC)) <<
-                 optionNotifyString((cap & SANE_CAP_INACTIVE)) <<
-                 optionNotifyString((cap & SANE_CAP_ADVANCED));
+        optionNotifyString((cap & SANE_CAP_SOFT_SELECT)) <<
+                optionNotifyString((cap & SANE_CAP_HARD_SELECT)) <<
+                optionNotifyString((cap & SANE_CAP_SOFT_DETECT)) <<
+                optionNotifyString((cap & SANE_CAP_EMULATED)) <<
+                optionNotifyString((cap & SANE_CAP_AUTOMATIC)) <<
+                optionNotifyString((cap & SANE_CAP_INACTIVE)) <<
+                optionNotifyString((cap & SANE_CAP_ADVANCED));
     }
     //qDebug() << "----------------------------------+----+----+----+----+----+----+----+";
 
@@ -1017,8 +1017,7 @@ KScanDevice::Status KScanDevice::acquireData(bool isPreview)
     }
 
     //qDebug() << "Scan read" << mBytesRead << "bytes in"
-             //<< mBlocksRead << "blocks," << frames << "frames - status" << stat;
-
+    //<< mBlocksRead << "blocks," << frames << "frames - status" << stat;
 
     emit sigScanFinished(stat);             // scan is now finished
     return (stat);
@@ -1061,7 +1060,7 @@ void KScanDevice::doProcessABlock()
             if (mSaneStatus != SANE_STATUS_EOF) {   // this is OK, just stop
                 // any other error
                 //qDebug() << "sane_read() error" << lastSaneErrorMessage()
-                         //<< "bytes read" << bytes_read;
+                //<< "bytes read" << bytes_read;
             }
             break;
         }

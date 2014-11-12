@@ -62,7 +62,7 @@ KookaPref::KookaPref(QWidget *parent)
     setObjectName("KookaPref");
 
     setModal(true);
-    setStandardButtons(QDialogButtonBox::Help|QDialogButtonBox::Ok|QDialogButtonBox::Apply|QDialogButtonBox::Cancel|QDialogButtonBox::RestoreDefaults);
+    setStandardButtons(QDialogButtonBox::Help | QDialogButtonBox::Ok | QDialogButtonBox::Apply | QDialogButtonBox::Cancel | QDialogButtonBox::RestoreDefaults);
     buttonBox()->button(QDialogButtonBox::Ok)->setDefault(true);
     setWindowTitle(i18n("Preferences"));
 

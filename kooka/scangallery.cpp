@@ -1014,7 +1014,7 @@ void ScanGallery::slotUrlsDropped(QDropEvent *ev, FileTreeViewItem *item)
     }
 
     //qDebug() << "onto" << (item == NULL ? "NULL" : item->url().prettyUrl())
-             //<< "srcs" << urls.count() << "first" << urls.first();
+    //<< "srcs" << urls.count() << "first" << urls.first();
 
     if (item == NULL) {
         return;
