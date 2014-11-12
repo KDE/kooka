@@ -89,7 +89,7 @@ public:
         ManySelected = 0x20,                // multiple selection
         RootSelected = 0x40             // root is selected
     };
-    Q_DECLARE_FLAGS(StateFlags, StateFlag);
+    Q_DECLARE_FLAGS(StateFlags, StateFlag)
 
     /**
      * Default constructor
@@ -108,14 +108,8 @@ public:
 
     void loadStartupImage();
     ScanGallery *gallery() const;
-    ImageCanvas *imageViewer() const
-    {
-        return (mImageCanvas);
-    }
-    Previewer *previewer() const
-    {
-        return (mPreviewCanvas);
-    }
+    ImageCanvas *imageViewer() const;
+    Previewer *previewer() const;
 
     bool isScannerConnected() const;
     QString scannerName() const;

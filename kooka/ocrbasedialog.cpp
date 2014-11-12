@@ -397,6 +397,16 @@ void OcrBaseDialog::introduceImage(const KookaImage *img)
     }
 }
 
+bool OcrBaseDialog::keepTempFiles() const
+{
+    return (m_retainFiles);
+}
+
+bool OcrBaseDialog::verboseDebug() const
+{
+    return (m_verboseDebug);
+}
+
 void OcrBaseDialog::slotGotPreview(const KFileItem &item, const QPixmap &newPix)
 {
     //qDebug() << "pixmap" << newPix.size();
@@ -483,6 +493,11 @@ QString OcrBaseDialog::customSpellConfigFile() const
     }
     // our application config
     return ("sonnetrc");                // Sonnet global settings
+}
+
+QProgressBar *OcrBaseDialog::progressBar() const
+{
+    return (m_progress);
 }
 
 void OcrBaseDialog::slotCustomSpellDialog()

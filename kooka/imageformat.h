@@ -32,14 +32,8 @@ class ImageFormat
 public:
     ImageFormat(const QByteArray &format);
 
-    bool isValid() const
-    {
-        return (!mFormat.isEmpty());
-    }
-    QByteArray name() const
-    {
-        return (mFormat);
-    }
+    bool isValid() const;
+    QByteArray name() const;
 
     KMimeType::Ptr mime() const;
     QString extension() const;

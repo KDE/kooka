@@ -1207,6 +1207,16 @@ ScanGallery *KookaView::gallery() const
     return (mGallery->galleryTree());
 }
 
+ImageCanvas *KookaView::imageViewer() const
+{
+    return (mImageCanvas);
+}
+
+Previewer *KookaView::previewer() const
+{
+    return (mPreviewCanvas);
+}
+
 void KookaView::slotImageViewerAction(int act)
 {
     if (mCurrentTab == KookaView::TabScan) {    // Scan

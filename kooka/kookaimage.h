@@ -106,23 +106,14 @@ public:
      * set the url of the kooka image. Note that loadFromUrl sets this
      * url automatically.
      */
-    void setUrl(const KUrl &url)
-    {
-        m_url = url;
-    }
-    KUrl url() const
-    {
-        return m_url;
-    }
+    void setUrl(const KUrl &url);
+    KUrl url() const;
 
     /**
      * checks if the image is file bound ie. was loaded from file. If this
      * method returns false, fileMetaInfo and FileItem are undefined.
      */
-    bool isFileBound() const
-    {
-        return m_fileBound;
-    }
+    bool isFileBound() const;
 
     /**
      * Create tiles on the given image. That is just cut the image in parts
@@ -143,10 +134,7 @@ public:
     /**
      * retrieve the sub number of this image.
      */
-    int subNumber() const
-    {
-        return m_subNo;
-    }
+    int subNumber() const;
 
 private:
     void init();

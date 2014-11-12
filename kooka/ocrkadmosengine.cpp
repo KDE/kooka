@@ -60,6 +60,11 @@ OcrBaseDialog *OcrKadmosEngine::createOCRDialog(QWidget *parent)
     return 0;
 }
 
+OcrEngine::EngineType OcrKadmosEngine::engineType() const
+{
+    return (OcrEngine::EngineKadmos);
+}
+
 QString OcrKadmosEngine::engineDesc()
 {
     return (i18nc("%1 is one of the two following messages",

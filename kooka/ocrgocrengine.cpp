@@ -70,6 +70,11 @@ OcrBaseDialog *OcrGocrEngine::createOCRDialog(QWidget *parent)
     return (new OcrGocrDialog(parent));
 }
 
+OcrEngine::EngineType OcrGocrEngine::engineType() const
+{
+    return (OcrEngine::EngineGocr);
+}
+
 QString OcrGocrEngine::engineDesc()
 {
     return (i18n("<qt>"

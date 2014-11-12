@@ -53,7 +53,7 @@ class OcrBaseDialog : public KPageDialog
     Q_OBJECT
 
 public:
-    OcrBaseDialog(QWidget *parent);
+    explicit OcrBaseDialog(QWidget *parent=0);
     virtual ~OcrBaseDialog();
 
     virtual OcrEngine::EngineError setupGui();
@@ -76,14 +76,8 @@ public:
 
     virtual void introduceImage(const KookaImage *img);
 
-    bool keepTempFiles() const
-    {
-        return (m_retainFiles);
-    }
-    bool verboseDebug() const
-    {
-        return (m_verboseDebug);
-    }
+    bool keepTempFiles() const;
+    bool verboseDebug() const;
 
     void enableGUI(bool running);
 
@@ -104,10 +98,7 @@ protected:
      */
     virtual void enableFields(bool enable) = 0;
 
-    QProgressBar *progressBar() const
-    {
-        return (m_progress);
-    }
+    QProgressBar *progressBar() const;
 
     void ocrShowInfo(const QString &binary, const QString &version = QString::null);
     void ocrShowVersion(const QString &version);

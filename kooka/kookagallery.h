@@ -48,14 +48,8 @@ public:
 
     void readSettings();
 
-    ScanGallery *galleryTree() const
-    {
-        return (m_galleryTree);
-    }
-    GalleryHistory *galleryRecent() const
-    {
-        return (m_galleryRecent);
-    }
+    ScanGallery *galleryTree() const;
+    GalleryHistory *galleryRecent() const;
 
 private:
     void setLayout(KookaGallery::Layout option);

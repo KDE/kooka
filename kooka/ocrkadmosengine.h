@@ -39,15 +39,12 @@ class OcrKadmosEngine : public OcrEngine
     Q_OBJECT
 
 public:
-    OcrKadmosEngine(QWidget *parent = NULL);
+    explicit OcrKadmosEngine(QWidget *parent = NULL);
     ~OcrKadmosEngine();
 
     OcrBaseDialog *createOCRDialog(QWidget *parent);
 
-    OcrEngine::EngineType engineType() const
-    {
-        return (OcrEngine::EngineKadmos);
-    }
+    OcrEngine::EngineType engineType() const;
     static QString engineDesc();
 
 protected:

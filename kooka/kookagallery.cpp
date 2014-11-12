@@ -63,6 +63,16 @@ void KookaGallery::readSettings()
     setLayout(static_cast<KookaGallery::Layout>(grp.readEntry(GALLERY_LAYOUT, static_cast<int>(KookaGallery::RecentAtTop))));
 }
 
+ScanGallery *KookaGallery::galleryTree() const
+{
+    return (m_galleryTree);
+}
+
+GalleryHistory *KookaGallery::galleryRecent() const
+{
+    return (m_galleryRecent);
+}
+
 void KookaGallery::setLayout(KookaGallery::Layout option)
 {
     m_layout->removeWidget(m_galleryTree);

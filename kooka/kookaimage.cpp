@@ -118,6 +118,21 @@ const KFileMetaInfo KookaImage::fileMetaInfo() const
     return (KFileMetaInfo(filename, QString::null, KFileMetaInfo::Everything));
 }
 
+void KookaImage::setUrl(const KUrl &url)
+{
+    m_url = url;
+}
+
+KUrl KookaImage::url() const
+{
+    return m_url;
+}
+
+bool KookaImage::isFileBound() const
+{
+    return m_fileBound;
+}
+
 QString KookaImage::loadFromUrl(const KUrl &url)
 {
     bool ret = true;                    // return status
@@ -357,4 +372,9 @@ QRect KookaImage::getTileRect(int rowPos, int colPos) const
     int indx = rowPos * m_tileCols + colPos;
     //qDebug() << "Tile index" << indx;
     return (m_tileVector[(rowPos) * m_tileCols + colPos]);
+}
+
+int KookaImage::subNumber() const
+{
+    return m_subNo;
 }

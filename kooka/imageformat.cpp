@@ -58,6 +58,16 @@ ImageFormat::ImageFormat(const QByteArray &format)
     mFormat = format.toUpper();
 }
 
+bool ImageFormat::isValid() const
+{
+    return (!mFormat.isEmpty());
+}
+
+QByteArray ImageFormat::name() const
+{
+    return (mFormat);
+}
+
 ImageFormat::ImageFormat()
 {
     mFormat.clear();

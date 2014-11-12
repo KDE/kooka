@@ -37,7 +37,7 @@ class OcrResEdit : public KTextEdit
     Q_OBJECT
 
 public:
-    OcrResEdit(QWidget *parent);
+    explicit OcrResEdit(QWidget *parent);
 
 public slots:
     void slotSelectWord(const QPoint &pos);
