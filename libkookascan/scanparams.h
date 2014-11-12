@@ -73,7 +73,7 @@ public:
      *
      * @param parent The parent widget
      **/
-    ScanParams(QWidget *parent);
+    explicit ScanParams(QWidget *parent);
 
     /**
      * Destructor.

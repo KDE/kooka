@@ -87,7 +87,7 @@ public:
      *
      * @param parent The parent object
      **/
-    KScanDevice(QObject *parent);
+    explicit KScanDevice(QObject *parent);
 
     /**
      * Destructor.

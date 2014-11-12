@@ -54,7 +54,7 @@ public:
      * Destructor.
      *
      **/
-    virtual ~AddDeviceDialog() {};
+    virtual ~AddDeviceDialog() {}
 
     /**
      * Get the entered value from the "Scanner device name" field.

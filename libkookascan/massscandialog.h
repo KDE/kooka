@@ -36,7 +36,7 @@ class KOOKASCAN_EXPORT MassScanDialog : public KDialog
     Q_OBJECT
 
 public:
-    MassScanDialog(QWidget *parent);
+    explicit MassScanDialog(QWidget *parent=0);
     ~MassScanDialog();
 
 public slots:
