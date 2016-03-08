@@ -37,7 +37,6 @@ class QLabel;
 
 class KScanOption;
 class KGammaTable;
-class KScanOptSet;
 class KLed;
 class KTabWidget;
 
@@ -289,8 +288,7 @@ private:
     KScanDevice::Status performADFScan();
 
     void createNoScannerMsg(bool galleryMode);
-    void initialise(KScanOption *opt);
-    void initStartupArea();
+    void initStartupArea(bool dontRestore);
     void setEditCustomGammaTableState();
 
     QWidget *createScannerParams();
@@ -315,8 +313,6 @@ private:
 
     KScanOption *mResolutionBind;
     KScanOption *mSourceSelect;
-
-    KScanOptSet *mStartupOptions;
 
     QPixmap pixLineArt, pixGray, pixColor, pixHalftone;
 

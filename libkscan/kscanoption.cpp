@@ -77,12 +77,19 @@ KScanOption::KScanOption(const QByteArray &name, KScanDevice *scandev)
 }
 
 
+static bool shouldBePriorityOption(const QByteArray &name)
+{
+    return (name=="source");
+}
+
+
 bool KScanOption::initOption(const QByteArray &name)
 {
     mDesc = NULL;
     mControl = NULL;
     mIsGroup = false;
     mIsReadable = true;
+    mIsPriority = shouldBePriorityOption(name);
 
     if (name.isEmpty()) return (false);
     mName = name;
@@ -255,7 +262,7 @@ bool KScanOption::apply()
     int sane_result = 0;
     bool reload = false;
 #ifdef DEBUG_APPLY
-    QByteArray debug = QString("option '%1'").arg(mName.constData()).toLatin1();
+    QString debug = QString("option '%1'").arg(mName.constData());
 #endif // DEBUG_APPLY
 
     SANE_Status sanestat = SANE_STATUS_GOOD;
@@ -319,7 +326,7 @@ bool KScanOption::apply()
     }
 
 #ifdef DEBUG_APPLY
-    debug += " applied";
+    debug += QString(" set '%1'").arg(get().constData());
 #endif // DEBUG_APPLY
 
     if (sane_result & SANE_INFO_RELOAD_OPTIONS)
@@ -337,33 +344,9 @@ bool KScanOption::apply()
     mApplied = true;
 ret:
 #ifdef DEBUG_APPLY
-    kDebug() << debug.constData();			// no quotes, please
+    kDebug() << qPrintable(debug);			// no quotes, please
 #endif // DEBUG_APPLY
     return (reload);
-}
-
-
-bool KScanOption::isAutoSettable() const
-{
-    return (mDesc!=NULL && (mDesc->cap & SANE_CAP_AUTOMATIC));
-}
-
-
-bool KScanOption::isCommonOption() const
-{
-    return (mDesc!=NULL && !(mDesc->cap & SANE_CAP_ADVANCED));
-}
-
-
-bool KScanOption::isActive() const
-{
-    return (mDesc!=NULL && SANE_OPTION_IS_ACTIVE(mDesc->cap));
-}
-
-
-bool KScanOption::isSoftwareSettable() const
-{
-    return (mDesc!=NULL && SANE_OPTION_IS_SETTABLE(mDesc->cap));
 }
 
 

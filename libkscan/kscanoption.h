@@ -138,7 +138,7 @@ public:
      *
      * @return @c true if the option can be set automatically
      **/
-    bool isAutoSettable() const;
+    bool isAutoSettable() const		{ return (mDesc!=NULL && (mDesc->cap & SANE_CAP_AUTOMATIC)); }
 
     /**
      * Check whether the option is a common option (not SANE_CAP_ADVANCED).
@@ -146,7 +146,14 @@ public:
      * @return @c true if the option is a common option,
      *         @c false if it is an advanced option.
      **/
-    bool isCommonOption() const;
+    bool isCommonOption() const		{ return (mDesc!=NULL && !(mDesc->cap & SANE_CAP_ADVANCED)); }
+
+    /**
+     * Check whether the option should be set as a priority, before any
+     * other non-priority options.  This a workaround for some scanners
+     * which may reset other options when this option is changed.
+     **/
+    bool isPriorityOption() const	{ return (mIsPriority); }
 
     /**
      * Check whether the option is currently active (SANE_OPTION_IS_ACTIVE).
@@ -154,7 +161,7 @@ public:
      *
      * @return @c true if the option is currently active
      **/
-    bool isActive() const;
+    bool isActive() const		{ return (mDesc!=NULL && SANE_OPTION_IS_ACTIVE(mDesc->cap)); }
 
     /**
      * Check whether the option is can be set by software
@@ -164,7 +171,7 @@ public:
      * @return @c true if the option can be set
      * @see isReadable
      **/
-    bool isSoftwareSettable() const;
+    bool isSoftwareSettable() const	 { return (mDesc!=NULL && SANE_OPTION_IS_SETTABLE(mDesc->cap)); }
 
     /**
      * Check whether the option has an associated GUI element
@@ -379,6 +386,13 @@ public:
     QByteArray getName() const		{ return (mName); }
 
     /**
+     * Get the SANE capabilities for the option.
+     *
+     * @return The capabilities, or 0 if the option is not valid
+     **/
+    int getCapabilities() const		{ return (mDesc!=NULL ? mDesc->cap : 0); }
+
+    /**
      * Get the GUI widget for the option, if applicable and one has been
      * created by @c createWidget()).
      *
@@ -474,6 +488,7 @@ private:
 
     bool mIsGroup;
     bool mIsReadable;
+    bool mIsPriority;
 
     KScanControl *mControl;
 

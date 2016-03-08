@@ -120,9 +120,6 @@ ScanParams::ScanParams(QWidget *parent)
     ip = KIconLoader::global()->iconPath("halftone", KIconLoader::Small, true);
     if (ip.isEmpty()) ip = KIconLoader::global()->iconPath("palette-halftone", KIconLoader::Small);
     mIconHalftone = QIcon(ip);
-
-    /* intialise the default last save warnings */
-    mStartupOptions = NULL;
 }
 
 
@@ -130,7 +127,6 @@ ScanParams::~ScanParams()
 {
     kDebug();
 
-    delete mStartupOptions;
     delete mProgressDialog;
 }
 
@@ -165,25 +161,34 @@ bool ScanParams::connectDevice(KScanDevice *newScanDevice, bool galleryMode)
     lay->addWidget(lab,1,0,1,2,Qt::AlignLeft);
 
     /* load the startup scanoptions */
-    // TODO: check whether the saved scanner options apply to the current scanner?
-    // They may be for a completely different one...
-    // Or update KScanDevice and here to save/load the startup options
-    // on a per-scanner basis.
-    mStartupOptions = new KScanOptSet(KScanOptSet::startupSetName());
-    if (!mStartupOptions->loadConfig(mSaneDevice->scannerBackendName()))
-    {
-        kDebug() << "Could not load startup options";
-        delete mStartupOptions;
-        mStartupOptions = NULL;
-    }
 
     /* Now create Widgets for the important scan settings */
     QWidget *sv = createScannerParams();
     lay->addWidget(sv, 3, 0, 1, 2);
     lay->setRowStretch(3, 9);
 
-    /* Reload all options to care for inactive options */
+    // Load the startup options
+    // TODO: check whether the saved scanner options apply to the current scanner?
+    // They may be for a completely different one...
+    // Or update KScanDevice and here to save/load the startup options
+    // on a per-scanner basis.
+    kDebug() << "looking for startup options";
+    KScanOptSet startupOptions(KScanOptSet::startupSetName());
+    if (startupOptions.loadConfig(mSaneDevice->scannerBackendName()))
+    {
+        kDebug() << "loading startup options";
+        mSaneDevice->loadOptionSet(&startupOptions);
+
+    }
+    else kDebug() << "Could not load startup options";
+
+    // Reload all options, to take account of inactive ones
     mSaneDevice->reloadAllOptions();
+
+    // Send the current settings to the previewer
+    initStartupArea(startupOptions.isEmpty());		// signal newCustomScanSize()
+    slotNewScanMode();					// signal scanModeChanged()
+    slotNewResolution(NULL);				// signal scanResolutionChanged
 
     /* Create the Scan Buttons */
     QPushButton *pb = new QPushButton(KIcon("preview"), i18n("Pre&view"), this);
@@ -211,24 +216,6 @@ bool ScanParams::connectDevice(KScanDevice *newScanDevice, bool galleryMode)
     connect(mSaneDevice, SIGNAL(sigScanProgress(int)), SLOT(slotScanProgress(int)));
 
     return (true);
-}
-
-
-void ScanParams::initialise(KScanOption *so)
-{
-    if (so==NULL) return;
-    if (mStartupOptions==NULL) return;
-    if (!so->isReadable()) return;
-    if (!so->isSoftwareSettable()) return;
-
-    QByteArray name = so->getName();
-    if (!name.isEmpty())
-    {
-        QByteArray val = mStartupOptions->getValue(name);
-        kDebug() << "Initialising" << name << "with value" << val;
-        so->set(val);
-        so->apply();
-    }
 }
 
 
@@ -270,7 +257,6 @@ QWidget *ScanParams::createScannerParams()
     mVirtualFile = mSaneDevice->getGuiElement(SANE_NAME_FILE, frame);
     if (mVirtualFile!=NULL)
     {
-        initialise(mVirtualFile);
         connect(mVirtualFile, SIGNAL(guiChange(KScanOption *)), SLOT(slotOptionChanged(KScanOption *)));
 
         l = mVirtualFile->getLabel(frame, true);
@@ -319,7 +305,6 @@ QWidget *ScanParams::createScannerParams()
         cb->setIcon(mIconColor, I18N_NOOP("Color"));
         cb->setIcon(mIconHalftone, I18N_NOOP("Halftone"));
 
-        initialise(so);
         connect(so, SIGNAL(guiChange(KScanOption *)), SLOT(slotOptionChanged(KScanOption *)));
         connect(so, SIGNAL(guiChange(KScanOption *)), SLOT(slotNewScanMode()));
 
@@ -335,12 +320,6 @@ QWidget *ScanParams::createScannerParams()
     if (so==NULL) so = mSaneDevice->getGuiElement(SANE_NAME_SCAN_RESOLUTION, frame);
     if (so!=NULL)
     {
-        initialise(so);
-
-        int x_res;
-        so->get(&x_res);
-        so->redrawWidget();
-
         connect(so, SIGNAL(guiChange(KScanOption *)), SLOT(slotOptionChanged(KScanOption *)));
         // Connection that passes the resolution to the previewer
         connect(so, SIGNAL(guiChange(KScanOption *)), SLOT(slotNewResolution(KScanOption *)));
@@ -354,9 +333,6 @@ QWidget *ScanParams::createScannerParams()
         mResolutionBind = mSaneDevice->getGuiElement(SANE_NAME_RESOLUTION_BIND, frame);
         if (mResolutionBind!=NULL)
         {
-            initialise(mResolutionBind);
-            mResolutionBind->redrawWidget();
-
             connect(mResolutionBind, SIGNAL(guiChange(KScanOption *)), SLOT(slotOptionChanged(KScanOption *)));
 
             l = so->getLabel(frame, true);
@@ -366,14 +342,8 @@ QWidget *ScanParams::createScannerParams()
 
         // Now the "Y-Resolution" setting, if there is a separate one
         so = mSaneDevice->getGuiElement(SANE_NAME_SCAN_Y_RESOLUTION, frame);
-        int y_res = x_res;
-
         if (so!=NULL)
         {
-            initialise(so);
-            if (so->isActive()) so->get(&y_res);
-            so->redrawWidget();
-
             // Connection that passes the resolution to the previewer
             connect(so, SIGNAL(guiChange(KScanOption *)), SLOT(slotNewResolution(KScanOption *)));
 
@@ -382,8 +352,6 @@ QWidget *ScanParams::createScannerParams()
             u = so->getUnit(frame);
             frame->addRow(l, w, u);
         }
-
-        emit scanResolutionChanged(x_res, y_res);	// initialise the previewer
     }
     else
     {
@@ -404,7 +372,6 @@ QWidget *ScanParams::createScannerParams()
     mSourceSelect = mSaneDevice->getGuiElement(SANE_NAME_SCAN_SOURCE, frame);
     if (mSourceSelect!=NULL)
     {
-        initialise(mSourceSelect);
         connect(mSourceSelect, SIGNAL(guiChange(KScanOption *)), SLOT(slotOptionChanged( KScanOption *)));
 
         l = mSourceSelect->getLabel(frame, true);
@@ -424,7 +391,6 @@ QWidget *ScanParams::createScannerParams()
     so = mSaneDevice->getGuiElement(SANE_NAME_TEST_PICTURE, frame);
     if (so!=NULL)
     {
-        initialise(so);
         connect(so, SIGNAL(guiChange(KScanOption *)), SLOT(slotOptionChanged( KScanOption *)));
 
         l = so->getLabel(frame);
@@ -452,7 +418,6 @@ QWidget *ScanParams::createScannerParams()
         if (so!=NULL)
         {
             kDebug() << "creating" << (so->isCommonOption() ? "OTHER" : "ADVANCED") << "option" << opt;
-            initialise(so);
             connect(so, SIGNAL(guiChange(KScanOption *)), SLOT(slotOptionChanged(KScanOption *)));
 
             if (so->isCommonOption()) frame = otherFrame;
@@ -491,18 +456,15 @@ QWidget *ScanParams::createScannerParams()
     if (!otherFrame->lastRow()) tw->setTabEnabled(1, false);
     if (!advancedFrame->lastRow()) tw->setTabEnabled(2, false);
 
-    initStartupArea();					// set up and tell previewer
-    slotNewScanMode();					// tell previewer this too
-
     return (tw);					// top-level (tab) widget
 }
 
 
-void ScanParams::initStartupArea()
+void ScanParams::initStartupArea(bool dontRestore)
 {
 // TODO: restore area a user preference
 #ifdef RESTORE_AREA
-    if (mStartupOptions==NULL)				// no saved options available
+    if (dontRestore)					// no saved options available
 #endif
     {
         applyRect(QRect());				// set maximum scan area
@@ -513,11 +475,6 @@ void ScanParams::initStartupArea()
     KScanOption *tl_y = mSaneDevice->getOption(SANE_NAME_SCAN_TL_Y);
     KScanOption *br_x = mSaneDevice->getOption(SANE_NAME_SCAN_BR_X);
     KScanOption *br_y = mSaneDevice->getOption(SANE_NAME_SCAN_BR_Y);
-
-    initialise(tl_x);
-    initialise(tl_y);
-    initialise(br_x);
-    initialise(br_y);
 
     QRect rect;
     int val1,val2;

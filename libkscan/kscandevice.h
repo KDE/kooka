@@ -561,6 +561,8 @@ private slots:
 private:
     KScanDevice::Status findOptions();
     void showOptions();
+    void loadOptionSetInternal(const KScanOptSet *optSet, bool prio);
+    void applyAllOptions(bool prio);
 
     KScanDevice::Status createNewImage(const SANE_Parameters *p);
 

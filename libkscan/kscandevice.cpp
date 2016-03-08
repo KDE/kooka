@@ -54,8 +54,15 @@ extern "C" {
 #undef DEBUG_OPTIONS
 #undef DEBUG_RELOAD
 #define DEBUG_RELOAD
-#define DEBUG_CREATE
+#undef DEBUG_CREATE
 #define DEBUG_PARAMS
+
+#define DEBUG_OPTIONS
+//#define DEBUG_CREATE
+
+#ifdef DEBUG_OPTIONS
+#include <iostream>
+#endif // DEBUG_OPTIONS
 
 
 //  Accessing GUI options
@@ -90,8 +97,8 @@ KScanOption *KScanDevice::getOption(const QByteArray &name, bool create)
     {
 #ifdef DEBUG_CREATE
         kDebug() << "does not exist" << alias;
-        return (NULL);
 #endif // DEBUG_CREATE
+        return (NULL);
     }
 
 #ifdef DEBUG_CREATE
@@ -547,40 +554,39 @@ bool KScanDevice::savePreviewImage(const QImage &image) const
 
 inline const char *optionNotifyString(int opt)
 {
-    return (opt!=0 ? "X  |" : "-  |");
+    return (opt!=0 ? " X |" : " - |");
 }
 
 
 void KScanDevice::showOptions()
 {
-    kDebug() << "######################################################################";
-    kDebug() << "Scanner" << mScannerName;
-    kDebug() << "----------------------------------+----+----+----+----+----+----+----+";
-    kDebug() << " Option-Name                      |SSEL|HSEL|SDET|EMUL|AUTO|INAC|ADVA|";
-    kDebug() << "----------------------------------+----+----+----+----+----+----+----+";
+    kDebug() << "for" << mScannerName;
 
-    for (OptionDict::const_iterator it = mOptionDict.constBegin();
-         it!=mOptionDict.constEnd(); ++it)
+    std::cerr << "----------------------------------+---+---+---+---+---+---+---+---+-------" << std::endl;
+    std::cerr << " Option                           |SSL|HSL|SDT|EMU|AUT|INA|ADV|PRI| Value" << std::endl;
+    std::cerr << "----------------------------------+---+---+---+---+---+---+---+---+-------" << std::endl;
+
+    for (OptionHash::const_iterator it = mCreatedOptions.constBegin();
+         it!=mCreatedOptions.constEnd(); ++it)
     {
-        int idx = it.value();
-        const SANE_Option_Descriptor *desc = sane_get_option_descriptor(mScannerHandle, idx);
-        if (desc!=NULL) continue;
+        const KScanOption *so = it.value();
+        if (so->isGroup()) continue;
 
-        int cap = desc->cap;
+        int cap = so->getCapabilities();
         QString s = QString(it.key()).leftJustified(32);
-        kDebug() << s << "|" <<
+        std::cerr <<
+            " " << qPrintable(s) << " |" <<
             optionNotifyString((cap & SANE_CAP_SOFT_SELECT)) << 
             optionNotifyString((cap & SANE_CAP_HARD_SELECT)) << 
             optionNotifyString((cap & SANE_CAP_SOFT_DETECT)) << 
             optionNotifyString((cap & SANE_CAP_EMULATED)) << 
             optionNotifyString((cap & SANE_CAP_AUTOMATIC)) << 
             optionNotifyString((cap & SANE_CAP_INACTIVE)) << 
-            optionNotifyString((cap & SANE_CAP_ADVANCED));
+            optionNotifyString((cap & SANE_CAP_ADVANCED)) <<
+            optionNotifyString(so->isPriorityOption()) <<
+            " " << qPrintable(so->get()) << std::endl;
     }
-    kDebug() << "----------------------------------+----+----+----+----+----+----+----+";
-
-    KScanOption pso(SANE_NAME_PREVIEW);
-    kDebug() << "Preview-Switch is" << pso.get();
+    std::cerr << "----------------------------------+---+---+---+---+---+---+---+---+-------" << std::endl;
 }
 
 #endif							// DEBUG_OPTIONS
@@ -699,7 +705,7 @@ KScanDevice::Status KScanDevice::acquirePreview( bool forceGray, int dpi )
     if (xres==NULL) xres = getOption(SANE_NAME_SCAN_RESOLUTION, false);
     if (xres!=NULL)
     {
-        kDebug() << "Scan resolution (before preview) is" << xres->get();
+        kDebug() << "Scan resolution before preview is" << xres->get();
         mSavedOptions->backupOption(xres);
 
         int preview_dpi = dpi;
@@ -750,25 +756,29 @@ KScanDevice::Status KScanDevice::acquirePreview( bool forceGray, int dpi )
 }
 
 
+void KScanDevice::applyAllOptions(bool prio)
+{
+    for (OptionHash::const_iterator it = mCreatedOptions.constBegin();
+         it!=mCreatedOptions.constEnd(); ++it)
+    {
+            KScanOption *so = it.value();
+            if (!so->isGuiElement()) continue;
+            if (so->isPriorityOption() ^ prio) continue;
+            if (so->isActive() && so->isSoftwareSettable()) so->apply();
+    }
+}
+
+
 /* Starts scanning
  *  depending on if a filename is given or not, the function tries to open
  *  the file using the Qt-Image-IO or really scans the image.
  */
 KScanDevice::Status KScanDevice::acquireScan(const QString &filename)
 {
-    if( filename.isEmpty())
+    if (filename.isEmpty())				// real scan
     {
- 	/* *real* scanning - apply all Options and go for it */
-#ifdef DEBUG_OPTIONS
- 	showOptions();
-#endif
-        for (OptionHash::const_iterator it = mCreatedOptions.constBegin();
-             it!=mCreatedOptions.constEnd(); ++it)
-        {						// ensure all options applied
-            KScanOption *so = it.value();
-            if (!so->isGuiElement()) continue;
-            if (so->isActive() && so->isSoftwareSettable()) so->apply();
-        }
+        applyAllOptions(true);				// apply priority options
+        applyAllOptions(false);				// apply non-priority options
 
         // One of the Scan Resolution parameters should always exist
         KScanOption *xres = getOption(SANE_NAME_SCAN_X_RESOLUTION, false);
@@ -838,6 +848,10 @@ KScanDevice::Status KScanDevice::acquireData(bool isPreview)
 {
     KScanDevice::Status stat = KScanDevice::Ok;
     int frames = 0;
+
+#ifdef DEBUG_OPTIONS
+    showOptions();					// dump the current noptions
+#endif
 
     mScanningPreview = isPreview;
     mScanningState = KScanDevice::ScanStarting;
@@ -1341,34 +1355,32 @@ void KScanDevice::saveStartupConfig()
 }
 
 
-void KScanDevice::loadOptionSet(const KScanOptSet *optSet)
+void KScanDevice::loadOptionSetInternal(const KScanOptSet *optSet, bool prio)
 {
-    if (optSet==NULL) return;
-
-    kDebug() << "Loading set" << optSet->getSetName() << "with" << optSet->count() << "options";
-
     for (KScanOptSet::const_iterator it = optSet->constBegin();
          it!=optSet->constEnd(); ++it)
     {
-        KScanOption *so = getOption(it.key(), false);
+        const QByteArray name = it.key();
+        if (!optionExists(name)) continue;		// only for options that exist
+
+        KScanOption *so = getOption(name, false);
         if (so==NULL) continue;				// we don't have this option
+        if (so->isGroup()) continue;			// nothing to do here
+        if (so->isPriorityOption() ^ prio) continue;	// check whether requested priority
 
         so->set(it.value());
-
-        if (!so->isInitialised())
-        {
-            kDebug() << "Option" << so->getName() << "is not initialised";
-        }
-        else if(!so->isActive())
-        {
-            kDebug() << "Option" << so->getName() << "is not active";
-        }
-        else
-        {
-            kDebug() << "Option" << so->getName() << "set to" << so->get();
-            so->apply();
-        }
+        if (so->isInitialised() && so->isSoftwareSettable() && so->isActive()) so->apply();
     }
+}
+
+
+void KScanDevice::loadOptionSet(const KScanOptSet *optSet)
+{
+    if (optSet==NULL) return;
+    kDebug() << "Loading set" << optSet->getSetName() << "with" << optSet->count() << "options";
+
+    loadOptionSetInternal(optSet, true);
+    loadOptionSetInternal(optSet, false);
 }
 
 

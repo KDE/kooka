@@ -137,15 +137,15 @@ void KScanOptSet::saveConfig(const QByteArray &scannerName,
 
 bool KScanOptSet::loadConfig(const QByteArray &scannerName)
 {
-    kDebug() << "Loading set" << mSetName << "for scanner" << scannerName;
-
     QString grpName = groupName(mSetName);
     const KConfigGroup grp = KScanDevice::configGroup(grpName);
     if (!grp.exists())
     {
-        kDebug() << "Group" << grpName << "does not exist in configuration!";
+        kDebug() << "No saved group" << grpName;
         return (false);
     }
+
+    kDebug() << "Loading set" << mSetName << "for scanner" << scannerName;
 
     const QMap<QString, QString> emap = grp.entryMap();
     for (QMap<QString, QString>::const_iterator it = emap.constBegin();
