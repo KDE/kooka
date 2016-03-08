@@ -317,15 +317,21 @@ public:
      *
      * @param parent parent widget
      * @param text descriptive label for the control
-     * @param list list of options to fill the combo box
-     *     */
-    KScanCombo(QWidget *parent, const QString &text, const QList<QByteArray> &list);
+     */
+    KScanCombo(QWidget *parent, const QString &text);
 
     KScanControl::ControlType type() const { return (KScanControl::Text); }
 
     QString text() const;
     void setText(const QString &text);
     void setValue(int i);
+
+    /**
+     * Populate the combo box with a list of values.
+     *
+     * @param list list of options to fill the combo box
+     */
+    void setList(const QList<QByteArray> &list);
 
     /**
      * Get the text at a specified index in the combo box.
@@ -354,7 +360,6 @@ protected slots:
     void slotActivated(int i);
 
 private:
-    void init();
     QComboBox *mCombo;
 };
 

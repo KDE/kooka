@@ -76,26 +76,8 @@ class KScanDevice;
 class KSCAN_EXPORT KScanOption : public QObject
 {
     Q_OBJECT
+
 public:
-
-    /**
-     * The type of an associated GUI widget (if there is one).
-     **/
-    enum WidgetType
-    {
-        Invalid,
-        Bool,
-        SingleValue,
-        Range,
-        GammaTable,
-        StringList,
-        String,
-        Resolution,
-        File,
-        Group,
-        Button
-    };
-
     /**
      * Check whether the option is valid: that is, the parameter is known
      * by the scanner.
@@ -200,14 +182,6 @@ public:
      * @see apply
      **/
     void setApplied(bool app = true)	{ mApplied = app; }
-
-    /**
-     * Get the widget type for the option.  This is deduced from the
-     * scanner parameter type and constraint.
-     *
-     * @return the widget type
-     **/
-    KScanOption::WidgetType type() const;
 
     /**
      * Set the option value.
@@ -467,9 +441,29 @@ private:
     ~KScanOption();
     friend void KScanDevice::closeDevice();
 
+    /**
+     * The type of an associated GUI widget (if there is one).
+     **/
+    enum WidgetType
+    {
+        Invalid,
+        Bool,
+        SingleValue,
+        Range,
+        GammaTable,
+        StringList,
+        String,
+        Resolution,
+        File,
+        Group,
+        Button
+    };
+
     bool initOption(const QByteArray &name);
+    KScanOption::WidgetType resolveWidgetType() const;
     void allocForDesc();
     void allocBuffer(long size);
+    void updateList();
 
     KScanControl *createToggleButton(QWidget *parent, const QString &text);
     KScanControl *createStringEntry(QWidget *parent, const QString &text);
@@ -491,6 +485,7 @@ private:
     bool mIsPriority;
 
     KScanControl *mControl;
+    KScanOption::WidgetType mWidgetType;
 
     QByteArray mBuffer;
     bool mBufferClean;

@@ -90,6 +90,7 @@ bool KScanOption::initOption(const QByteArray &name)
     mIsGroup = false;
     mIsReadable = true;
     mIsPriority = shouldBePriorityOption(name);
+    mWidgetType = KScanOption::Invalid;
 
     if (name.isEmpty()) return (false);
     mName = name;
@@ -119,7 +120,8 @@ bool KScanOption::initOption(const QByteArray &name)
 
     mGammaTable = NULL;					// for recording gamma values
 
-    allocForDesc();
+    mWidgetType = resolveWidgetType();			// work out the type of widget
+    allocForDesc();					// allocate initial buffer
     return (true);
 }
 
@@ -151,6 +153,16 @@ void KScanOption::slotWidgetChange()
 {
     set(1);
     emit guiChange(this);
+}
+
+
+void KScanOption::updateList()
+{
+    KScanCombo *combo = qobject_cast<KScanCombo *>(mControl);
+    if (combo==NULL) return;
+
+    QList<QByteArray> list = getList();
+    combo->setList(list);
 }
 
 
@@ -249,6 +261,8 @@ void KScanOption::reload()
         kDebug() << "Error: Can't get value for" << mName << "status" << sane_strstatus(sanestat);
         return;
     }
+
+    updateList();					// if range changed, update GUI
 
 #ifdef DEBUG_RELOAD
     kDebug() << "reloaded" << mName;
@@ -350,80 +364,66 @@ ret:
 }
 
 
-// Some heuristics are used here to determine whether the type of a numeric
-// (SANE_TYPE_INT or SANE_TYPE_FIXED) option needs to be further refined.
-// If the constraint is SANE_TYPE_RANGE and the unit is SANE_UNIT_DPI then
-// it is assumed to be a resolution;  otherwise, if it is an array then
-// it is assumed to be a gamma table.  The comment below suggests that
-// this guess (for the gamma table) may not be reliable.
-//
-// TODO: May be better to hardwire the option names here, especially for the
-// gamma table (and maybe also for resolution, it does give a false positive
-// for the 'test' device option "int-constraint-array-constraint-range").
-// ScanParams::slotApplyGamma() has the complete repertoire of gamma table
-// names.
-
-KScanOption::WidgetType KScanOption::type() const
+// The name of the option is checked here to detect options which are
+// a resolution or a gamma table, and therefore are to be treated
+// specially.  This should hopefully be more reliable then the earlier
+// heuristics.
+KScanOption::WidgetType KScanOption::resolveWidgetType() const
 {
-    KScanOption::WidgetType ret = KScanOption::Invalid;
-	
-    if (isValid())
+    if (!isValid()) return (KScanOption::Invalid);
+
+    KScanOption::WidgetType ret;
+    switch (mDesc->type)
     {
-        switch (mDesc->type)
-        {	
 case SANE_TYPE_BOOL:
-            ret = KScanOption::Bool;
-            break;
+        ret = KScanOption::Bool;
+        break;
 
 case SANE_TYPE_INT:
 case SANE_TYPE_FIXED:
-            if (mDesc->constraint_type == SANE_CONSTRAINT_RANGE)
-	    {
-                if (mDesc->unit==SANE_UNIT_DPI) ret = KScanOption::Resolution;
-                else
-                {
-                    /* FIXME ! Dies scheint nicht wirklich so zu sein */
-                    /* in other words: This does not really seem to be the case */
-                    if (mDesc->size==sizeof(SANE_Word)) ret = KScanOption::Range;
-                    else ret = KScanOption::GammaTable;
-                }
-            }
-	    else if (mDesc->constraint_type==SANE_CONSTRAINT_WORD_LIST)
-	    {
-		ret = KScanOption::StringList;
-	    }
-	    else if(mDesc->constraint_type==SANE_CONSTRAINT_NONE)
-	    {
-                ret = KScanOption::SingleValue;
-	    }
-	    else
-	    {
-                ret = KScanOption::Invalid;
-	    }
-	    break;
+        if (QString::compare(mDesc->name, SANE_NAME_SCAN_RESOLUTION)==0 ||
+            QString::compare(mDesc->name, SANE_NAME_SCAN_X_RESOLUTION)==0 ||
+            QString::compare(mDesc->name, SANE_NAME_SCAN_Y_RESOLUTION)==0)
+        {
+            ret = KScanOption::Resolution;
+            if (mDesc->unit!=SANE_UNIT_DPI) kDebug() << "expected" << mName << "unit" << mDesc->unit << "to be DPI";
+        }
+        else if (QString::compare(mDesc->name, SANE_NAME_GAMMA_VECTOR)==0 ||
+                 QString::compare(mDesc->name, SANE_NAME_GAMMA_VECTOR_R)==0 ||
+                 QString::compare(mDesc->name, SANE_NAME_GAMMA_VECTOR_G)==0 ||
+                 QString::compare(mDesc->name, SANE_NAME_GAMMA_VECTOR_B)==0)
+        {
+            ret = KScanOption::GammaTable;
+            if (mDesc->size!=sizeof(SANE_Byte)) kDebug() << "expected" << mName << "size" << mDesc->size << "to be BYTE";
+        }
+        else if (mDesc->constraint_type==SANE_CONSTRAINT_RANGE) ret = KScanOption::Range;
+        else if (mDesc->constraint_type==SANE_CONSTRAINT_WORD_LIST) ret = KScanOption::StringList;
+        else if (mDesc->constraint_type==SANE_CONSTRAINT_NONE) ret = KScanOption::SingleValue;
+        else ret = KScanOption::Invalid;
+        break;
 
 case SANE_TYPE_STRING:
-            if (QString::compare(mDesc->name, SANE_NAME_FILE)==0) ret = KScanOption::File;
-            else if (mDesc->constraint_type==SANE_CONSTRAINT_STRING_LIST) ret = KScanOption::StringList;
-	    else ret = KScanOption::String;
-	    break;
+        if (QString::compare(mDesc->name, SANE_NAME_FILE)==0) ret = KScanOption::File;
+        else if (mDesc->constraint_type==SANE_CONSTRAINT_STRING_LIST) ret = KScanOption::StringList;
+        else ret = KScanOption::String;
+        break;
 
 case SANE_TYPE_BUTTON:
-            ret = KScanOption::Button;
-            break;
+        ret = KScanOption::Button;
+        break;
 
 case SANE_TYPE_GROUP:
-	    ret = KScanOption::Group;
-	    break;
+        ret = KScanOption::Group;
+        break;
 
-default:    kDebug() << "unsupported SANE type" << mDesc->type;
-	    ret = KScanOption::Invalid;
-	    break;
-        }
+default:
+        kDebug() << "unsupported SANE type" << mDesc->type;
+        ret = KScanOption::Invalid;
+        break;
     }
 
 #ifdef DEBUG_GETSET
-    kDebug() << "for SANE type" << (mDesc ? mDesc->type : -1) << "returning" << ret;
+    kDebug() << "for SANE type" << mDesc->type << "returning" << ret;
 #endif
     return (ret);
 }
@@ -714,7 +714,7 @@ QByteArray KScanOption::get() const
     SANE_Word sane_word;
 
     /* Handle gamma-table correctly */
-    if (type()==KScanOption::GammaTable)
+    if (mWidgetType==KScanOption::GammaTable)
     {
         if (mGammaTable!=NULL) retstr = mGammaTable->toString().toLocal8Bit();
     }
@@ -797,7 +797,7 @@ QList<QByteArray> KScanOption::getList() const
            strList.append(s.toLocal8Bit());
        }
    }
-   else if (mDesc->constraint_type==SANE_CONSTRAINT_RANGE && type()==KScanOption::Resolution)
+   else if (mDesc->constraint_type==SANE_CONSTRAINT_RANGE && mWidgetType==KScanOption::Resolution)
    {
        double min,max;
        int imin,imax;
@@ -884,10 +884,10 @@ KScanControl *KScanOption::createWidget(QWidget *parent)
  	
     if (mDesc!=NULL) mText = i18n(mDesc->title);
 
-    kDebug() << "type" << type() << "text" << mText;
+    kDebug() << "type" << mWidgetType << "text" << mText;
 
     KScanControl *w = NULL;
-    switch (type())
+    switch (mWidgetType)
     {
 case KScanOption::Bool:
 	w = createToggleButton(parent, mText);		// toggle button
@@ -930,13 +930,14 @@ case KScanOption::Button:
         break;
 
 default:
-	kDebug() << "unknown control type " << type();
+	kDebug() << "unknown control type " << mWidgetType;
 	break;
     }
  	
     if (w!=NULL)
     {
         mControl = w;
+        updateList();					// set list for combo box
 
         switch (w->type())
         {
@@ -992,8 +993,7 @@ inline KScanControl *KScanOption::createToggleButton(QWidget *parent, const QStr
 
 inline KScanControl *KScanOption::createComboBox(QWidget *parent, const QString &text)
 {
-    QList<QByteArray> list = getList();
-    return (new KScanCombo(parent, text, list));
+    return (new KScanCombo(parent, text));
 }
 
 

@@ -81,8 +81,8 @@ ScanSourceDialog::ScanSourceDialog(QWidget *parent, const QList<QByteArray> list
 
     /* Combo Box for sources */
     d->sources = new KScanCombo( vbox,
-			     QString::null,
-			     list);
+			     QString::null);
+d->sources->setList(			     list);
     connect( d->sources, SIGNAL( activated(int)), SLOT( slotChangeSource(int)));
 
 
