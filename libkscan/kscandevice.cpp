@@ -53,12 +53,8 @@ extern "C" {
 // Debugging options
 #undef DEBUG_OPTIONS
 #undef DEBUG_RELOAD
-#define DEBUG_RELOAD
 #undef DEBUG_CREATE
 #define DEBUG_PARAMS
-
-#define DEBUG_OPTIONS
-//#define DEBUG_CREATE
 
 #ifdef DEBUG_OPTIONS
 #include <iostream>
