@@ -40,6 +40,9 @@
 #include "filetreebranch.h"
 
 
+#undef DEBUG_LISTING
+
+
 FileTreeView::FileTreeView(QWidget *parent)
     : QTreeWidget(parent)
 {
@@ -82,7 +85,6 @@ FileTreeView::FileTreeView(QWidget *parent)
                                                          KIconLoader::Desktop,
                                                          KIconLoader::SizeSmall,
                                                          KIconLoader::ActiveState);
-    kDebug() << "done";
 }
 
 
@@ -109,7 +111,9 @@ QMimeData *FileTreeView::mimeData(const QList<QTreeWidgetItem *> items) const
          it!=items.constEnd(); ++it)
     {
         FileTreeViewItem *item = static_cast<FileTreeViewItem *>(*it);
+#ifdef DEBUG_LISTING
         kDebug() << item->url();
+#endif // DEBUG_LISTING
         urlList.append(item->url());
     }
 
@@ -204,7 +208,9 @@ void FileTreeView::dropEvent(QDropEvent *ev)
     if (m_dropItem==NULL) return;			// invalid drop target
 
     FileTreeViewItem *item = static_cast<FileTreeViewItem *>(m_dropItem);
+#ifdef DEBUG_LISTING
     kDebug() << "onto" << item->url();
+#endif // DEBUG_LISTING
     setDropItem(NULL);					// stop timer now
 							// also clears m_dropItem!
     emit dropped(ev, item);
@@ -224,14 +230,18 @@ void FileTreeView::slotExpanded(QTreeWidgetItem *tvi)
     FileTreeViewItem *item = static_cast<FileTreeViewItem *>(tvi);
     if (item==NULL) return;
 
+#ifdef DEBUG_LISTING
     kDebug() << item->text(0);
+#endif // DEBUG_LISTING
 
     FileTreeBranch *branch = item->branch();
 
     // Check if the branch needs to be populated now
     if (item->isDir() && branch!=NULL && item->childCount()==0)
     {
+#ifdef DEBUG_LISTING
         kDebug() << "need to populate" << item->url();
+#endif // DEBUG_LISTING
         if (!branch->populate(item->url(), item))
         {
             kDebug() << "Branch populate failed!";
@@ -272,7 +282,9 @@ void FileTreeView::slotAutoOpenFolder()
 {
     m_autoOpenTimer->stop();
 
+#ifdef DEBUG_LISTING
     kDebug() << "children" << m_dropItem->childCount() << "expanded" << m_dropItem->isExpanded();
+#endif // DEBUG_LISTING
     if (m_dropItem->childCount()==0) return;		// nothing to expand
     if (m_dropItem->isExpanded()) return;		// already expanded
 
@@ -351,10 +363,14 @@ FileTreeBranch *FileTreeView::branch(const QString &searchName) const
     {
         FileTreeBranch *branch = (*it);
         QString bname = branch->name();
+#ifdef DEBUG_LISTING
         kDebug() << "branch" << bname;
+#endif // DEBUG_LISTING
         if (bname==searchName)
         {
+#ifdef DEBUG_LISTING
             kDebug() << "Found requested branch";
+#endif // DEBUG_LISTING
             return (branch);
         }
     }
@@ -393,7 +409,9 @@ void FileTreeView::setDirOnlyMode(FileTreeBranch *branch, bool bom)
 void FileTreeView::slotNewTreeViewItems(FileTreeBranch *branch, const FileTreeViewItemList &items)
 {
     if (branch==NULL) return;
+#ifdef DEBUG_LISTING
     kDebug();
+#endif // DEBUG_LISTING
 
     /* Sometimes it happens that new items should become selected, i.e. if the user
      * creates a new dir, he probably wants it to be selected. This can not be done
@@ -457,7 +475,9 @@ QIcon FileTreeView::itemIcon(FileTreeViewItem *item) const
 void FileTreeView::slotStartAnimation(FileTreeViewItem *item)
 {
     if (item==NULL) return;
+#ifdef DEBUG_LISTING
     kDebug() << "for" << item->text(0);
+#endif // DEBUG_LISTING
 
     ++m_busyCount;
     setCursor(Qt::BusyCursor);
@@ -467,7 +487,9 @@ void FileTreeView::slotStartAnimation(FileTreeViewItem *item)
 void FileTreeView::slotStopAnimation(FileTreeViewItem *item)
 {
     if (item==NULL) return;
+#ifdef DEBUG_LISTING
     kDebug() << "for" << item->text(0);
+#endif // DEBUG_LISTING
     if (m_busyCount<=0) return;
 
     --m_busyCount;
@@ -551,7 +573,9 @@ FileTreeViewItem *FileTreeView::findItemInBranch(FileTreeBranch *branch, const Q
             KUrl url = branch->rootUrl();
             if (QDir::isRelativePath(relUrl)) url.addPath(partUrl);
             else url.setPath(partUrl);
+#ifdef DEBUG_LISTING
             kDebug() << "searching for" << url;
+#endif // DEBUG_LISTING
             ret = branch->findItemByUrl(url);
         }
     }

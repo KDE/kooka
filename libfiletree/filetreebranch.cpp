@@ -34,6 +34,7 @@
 #include "filetreeview.h"
 
 
+#undef DEBUG_LISTING
 #undef DEBUG_MAPPING
 
 
@@ -167,7 +168,9 @@ void FileTreeBranch::setOpenPixmap(const QIcon &pix)
 
 void FileTreeBranch::slotListerStarted(const KUrl &url)
 {
+#ifdef DEBUG_LISTING
     kDebug() << "lister started for" << url;
+#endif // DEBUG_LISTING
 
     FileTreeViewItem *item = findItemByUrl(url);
     if (item!=NULL) emit populateStarted(item);
@@ -179,13 +182,17 @@ void FileTreeBranch::slotListerStarted(const KUrl &url)
 
 void FileTreeBranch::slotRefreshItems(const QList<QPair<KFileItem,KFileItem> > &list)
 {
+#ifdef DEBUG_LISTING
     kDebug() << "Refreshing" << list.count() << "items";
+#endif // DEBUG_LISTING
 
     FileTreeViewItemList treeViewItList;		// tree view items updated
     for (int i = 0; i < list.count(); ++i)
     {
         const KFileItem fi2 = list[i].second;		// not interested in the first
+#ifdef DEBUG_LISTING
         kDebug() << fi2.url();
+#endif // DEBUG_LISTING
         FileTreeViewItem *item = findItemByUrl(fi2.url());
         if (item!=NULL)
         {
@@ -362,12 +369,16 @@ void FileTreeBranch::slotItemsAdded(const KUrl &parent, const KFileItemList &ite
             /* do the stat trick of Carsten. The problem is, that the hardlink
              *  count only contains directory links. Thus, this method only seem
              * to work in dir-only mode */
+#ifdef DEBUG_LISTING
             kDebug() << "Doing stat on" << filename;
+#endif // DEBUG_LISTING
             struct stat statBuf;
             if (stat(filename.toLocal8Bit(), &statBuf )==0)
             {
                 int hardLinks = statBuf.st_nlink;  /* Count of dirs */
+#ifdef DEBUG_LISTING
                 kDebug() << "stat succeeded, hardlinks: " << hardLinks;
+#endif // DEBUG_LISTING
                 // If the link count is > 2, the directory likely has subdirs. If it's < 2
                 // it's something weird like a mounted SMB share. In that case we don't know
                 // if there are subdirs, thus show it as expandable.
@@ -384,7 +395,9 @@ void FileTreeBranch::slotItemsAdded(const KUrl &parent, const KFileItemList &ite
                 if (hardLinks>=2) // "Normal" directory with subdirs
                 {
                     hardLinks -= 2;
+#ifdef DEBUG_LISTING
                     kDebug() << "Emitting directoryChildCount" << hardLinks << "for" << url;
+#endif // DEBUG_LISTING
                     emit directoryChildCount(newItem, hardLinks);
                 }
             }
@@ -458,7 +471,9 @@ void FileTreeBranch::itemDeleted(const KFileItem *fi)
     int nChildren = ftvi->childCount();
     if (nChildren>0)
     {
+#ifdef DEBUG_LISTING
         kDebug() << "child count" << nChildren;
+#endif // DEBUG_LISTING
         for (int i = 0; i<nChildren; ++i)
         {
             FileTreeViewItem *ch = static_cast<FileTreeViewItem *>(ftvi->child(i));
@@ -480,7 +495,9 @@ void FileTreeBranch::itemDeleted(const KFileItem *fi)
 
 void FileTreeBranch::slotListerCanceled(const KUrl &url)
 {
+#ifdef DEBUG_LISTING
     kDebug() << "lister cancelled for" << url;
+#endif // DEBUG_LISTING
 
     // remove the URL from the children-to-recurse list
     m_openChildrenURLs.removeAll(url);
@@ -493,7 +510,9 @@ void FileTreeBranch::slotListerCanceled(const KUrl &url)
 
 void FileTreeBranch::slotListerClear()
 {
+#ifdef DEBUG_LISTING
     kDebug();
+#endif // DEBUG_LISTING
     /* this slots needs to clear all listed items, but NOT the root item */
     if (m_root!=NULL) deleteChildrenOf(m_root);
 }
@@ -501,7 +520,9 @@ void FileTreeBranch::slotListerClear()
 
 void FileTreeBranch::slotListerClearUrl(const KUrl &url)
 {
+#ifdef DEBUG_LISTING
     kDebug() << "for" << url;
+#endif // DEBUG_LISTING
     FileTreeViewItem *ftvi = findItemByUrl(url);
     if (ftvi!=NULL) deleteChildrenOf(ftvi);
 }
@@ -530,12 +551,16 @@ void FileTreeBranch::slotRedirect(const KUrl &oldUrl, const KUrl &newUrl)
 
 void FileTreeBranch::slotListerCompleted(const KUrl &url)
 {
+#ifdef DEBUG_LISTING
     kDebug() << "lister completed for" << url;
+#endif // DEBUG_LISTING
     FileTreeViewItem *currParent = findItemByUrl( url );
     if (currParent==NULL) return;
 
+#ifdef DEBUG_LISTING
     kDebug() << "current parent" << currParent
              << "already listed?" << currParent->alreadyListed();
+#endif // DEBUG_LISTING
 
     emit populateFinished(currParent);
     emit directoryChildCount(currParent, currParent->childCount());
@@ -550,9 +575,11 @@ void FileTreeBranch::slotListerCompleted(const KUrl &url)
     /* Set bit that the parent dir was listed completely */
     currParent->setListed(true);
 
+#ifdef DEBUG_LISTING
     kDebug() << "recurseChildren" << m_recurseChildren
              << "isLocalFile" << m_startURL.isLocalFile()
              << "dirOnlyMode" << dirOnlyMode();
+#endif // DEBUG_LISTING
 
     if (m_recurseChildren && (!m_startURL.isLocalFile() || !dirOnlyMode()))
     {
@@ -569,7 +596,9 @@ void FileTreeBranch::slotListerCompleted(const KUrl &url)
             }
         }
 
+#ifdef DEBUG_LISTING
         kDebug() << "Recurse for" << url << wantRecurseUrl;
+#endif // DEBUG_LISTING
         int nChildren = 0;
 
         if (wantRecurseUrl && currParent!=NULL)
@@ -581,7 +610,9 @@ void FileTreeBranch::slotListerCompleted(const KUrl &url)
             if (nChildren==0)
             {
                 /* This happens if there is no child at all */
+#ifdef DEBUG_LISTING
                 kDebug() << "No children to recurse";
+#endif // DEBUG_LISTING
             }
 
             /* Since we have listed the children to recurse, we can remove the entry
@@ -604,13 +635,17 @@ void FileTreeBranch::slotListerCompleted(const KUrl &url)
                 if (!fi->isNull() && fi->isReadable())
                 {
                     KUrl recurseUrl = fi->url();
+#ifdef DEBUG_LISTING
                     kDebug() << "Starting to list" << recurseUrl;
+#endif // DEBUG_LISTING
                     openUrl(recurseUrl, KDirLister::Keep);
                 }
             }
         }
     }
+#ifdef DEBUG_LISTING
     else kDebug() << "no need to recurse";
+#endif // DEBUG_LISTING
 }
 
 
@@ -620,23 +655,31 @@ bool FileTreeBranch::populate(const KUrl &url, FileTreeViewItem *currItem)
     bool ret = false;
     if (currItem==NULL) return (ret);
 
+#ifdef DEBUG_LISTING
     kDebug() << "populating" << url;
+#endif // DEBUG_LISTING
 
     /* Add this url to the list of urls to recurse for children */
     if (m_recurseChildren)
     {
         m_openChildrenURLs.append(url);
+#ifdef DEBUG_LISTING
         kDebug() << "Adding as open child";
+#endif // DEBUG_LISTING
     }
 
     if (!currItem->alreadyListed())
     {
+#ifdef DEBUG_LISTING
         kDebug() << "Starting to list";
+#endif // DEBUG_LISTING
         ret = openUrl(url, KDirLister::Keep);		// start the lister
     }
     else
     {
+#ifdef DEBUG_LISTING
         kDebug() << "Children already exist";
+#endif // DEBUG_LISTING
         slotListerCompleted(url);
         ret = true;
     }
