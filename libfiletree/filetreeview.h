@@ -92,7 +92,7 @@ public:
      * @return the URL of the selected item,
      * or an invalid URL if there is no selected item.
      **/
-    KUrl selectedUrl() const;
+    QUrl selectedUrl() const;
 
     /**
      * Get the currently highlighted item.
@@ -116,7 +116,7 @@ public:
      * @return the URL of the highlighted item,
      * or an invalid URL if there is no highlighted item.
      **/
-    KUrl highlightedUrl() const;
+    QUrl highlightedUrl() const;
 
     /**
      * Add a branch to the view.
@@ -133,7 +133,7 @@ public:
      * either by the user opening the root item or by calling @c setExpanded()
      * on the root item.
      **/
-    virtual FileTreeBranch *addBranch(const KUrl &path, const QString &name, bool showHidden = false);
+    virtual FileTreeBranch *addBranch(const QUrl &path, const QString &name, bool showHidden = false);
 
     /**
      * Add a branch to the view, with a specified pixmap.
@@ -147,7 +147,7 @@ public:
      * @param showHidden if @c true, hidden files and directories will be visible
      * @return the new branch, or @c NULL if the branch could not be created
      **/
-    virtual FileTreeBranch *addBranch(const KUrl &path, const QString &name,
+    virtual FileTreeBranch *addBranch(const QUrl &path, const QString &name,
                                       const QIcon &pix, bool showHidden = false);
 
     /**
@@ -283,7 +283,7 @@ protected slots:
      *
      * @param url the URL of the item to select
      **/
-    void slotSetNextUrlToSelect(const KUrl &url);
+    void slotSetNextUrlToSelect(const QUrl &url);
 
     /**
      * Model data has changed.  Used to detect the renaming of an item.
@@ -346,7 +346,7 @@ private:
 
     FileTreeBranchList m_branches;          // list of the branches
     int m_busyCount;                    // branches currently listing
-    KUrl m_nextUrlToSelect;             // next item to select
+    QUrl m_nextUrlToSelect;             // next item to select
     bool m_wantOpenFolderPixmaps;           // want open-folder pixmaps?
 
     QTreeWidgetItem *m_currentBeforeDropItem;       // current item before drag

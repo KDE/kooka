@@ -623,8 +623,8 @@ QString ScanGallery::itemDirectoryRelative(const FileTreeViewItem *item) const
         return (u.path());    // no branch, can this ever happen?
     }
 
-    QString rootUrl = (branch->rootUrl()).prettyUrl(KUrl::AddTrailingSlash);
-    QString itemUrl = u.prettyUrl();
+    QString rootUrl = branch->rootUrl().url(QUrl::StripTrailingSlash)+'/';
+    QString itemUrl = u.url();
     //qDebug() << "itemurl" << itemUrl << "rooturl" << rootUrl;
     if (itemUrl.startsWith(rootUrl)) {
         itemUrl.remove(0, rootUrl.length());        // remove root URL prefix
@@ -745,7 +745,7 @@ void ScanGallery::loadImageForItem(FileTreeViewItem *item)
                                                        "<br>"
                                                        "%1",
                                                        ret,
-                                                       item->url().prettyUrl()),
+                                                       item->url().url(QUrl::PreferLocalFile)),
                                                i18n("Image Load Error"));
 }
 

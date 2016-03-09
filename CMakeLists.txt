@@ -51,6 +51,8 @@ remove_definitions(-DQT_NO_CAST_FROM_BYTEARRAY)
 remove_definitions(-DQT_NO_CAST_TO_ASCII)
 remove_definitions(-DQT_NO_CAST_FROM_ASCII)
 
+add_definitions(-DQT_NO_URL_CAST_FROM_STRING)
+
 # Support for SANE, here because library and sanedump both need it
 if (SANECONFIG_BIN)
   set(SANECONFIG_PROG ${SANECONFIG_BIN})

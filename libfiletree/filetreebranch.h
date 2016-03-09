@@ -24,6 +24,7 @@
 
 #include <qicon.h>
 #include <qhash.h>
+#include <qurl.h>
 
 #include <kfileitem.h>
 #include <kdirlister.h>
@@ -32,8 +33,7 @@
 #include <kio/job.h>
 
 #include "filetreeviewitem.h"
-#include <KUrl>
-class KUrl;
+
 class FileTreeView;
 
 /**
@@ -61,14 +61,14 @@ public:
      *        branch, with the default NULL meaning to let FileTreeBranch create
      *        it for you.
      */
-    FileTreeBranch(FileTreeView *parent, const KUrl &url, const QString &name,
+    FileTreeBranch(FileTreeView *parent, const QUrl &url, const QString &name,
                    const QIcon &pix, bool showHidden = false,
                    FileTreeViewItem *branchRoot = NULL);
 
     /**
      * @returns the root url of the branch.
      */
-    KUrl rootUrl() const;
+    QUrl rootUrl() const;
 
     /**
      * sets a FileTreeViewItem as root widget for the branch.
@@ -137,7 +137,7 @@ public:
     /**
      * find the according FileTreeViewItem for a url
      */
-    virtual FileTreeViewItem *findItemByUrl(const KUrl &url);
+    virtual FileTreeViewItem *findItemByUrl(const QUrl &url);
 
     virtual void itemRenamed(FileTreeViewItem *item);
 
@@ -148,7 +148,7 @@ public slots:
      * @param url is the url of the root item where the branch starts.
      * @param currItem is the current parent.
      */
-    virtual bool populate(const KUrl &url, FileTreeViewItem *currItem);
+    virtual bool populate(const QUrl &url, FileTreeViewItem *currItem);
 
 protected:
     /**
@@ -179,14 +179,14 @@ signals:
 
 private slots:
     void slotRefreshItems(const QList<QPair<KFileItem, KFileItem> > &items);
-    void slotListerCompleted(const KUrl &url);
-    void slotListerCanceled(const KUrl &url);
-    void slotListerStarted(const KUrl &url);
+    void slotListerCompleted(const QUrl &url);
+    void slotListerCanceled(const QUrl &url);
+    void slotListerStarted(const QUrl &url);
     void slotListerClear();
-    void slotListerClearUrl(const KUrl &url);
-    void slotRedirect(const KUrl &oldUrl, const KUrl &newUrl);
+    void slotListerClearUrl(const QUrl &url);
+    void slotRedirect(const QUrl &oldUrl, const QUrl &newUrl);
     void slotItemsDeleted(const KFileItemList &items);
-    void slotItemsAdded(const KUrl &parent, const KFileItemList &items);
+    void slotItemsAdded(const QUrl &parent, const KFileItemList &items);
 
 private:
     void itemDeleted(const KFileItem *fi);
@@ -194,14 +194,14 @@ private:
     static void deleteChildrenOf(QTreeWidgetItem *parent);
 
     FileTreeViewItem *m_root;
-    KUrl m_startURL;
+    QUrl m_startURL;
     QString m_startPath;
     QString m_name;
     QIcon m_rootIcon;
     QIcon m_openRootIcon;
 
     /* this list holds the url's which children are opened. */
-    KUrl::List m_openChildrenURLs;
+    QList<QUrl> m_openChildrenURLs;
 
     /* Used for caching purposes in findTVIByURL() */
     QString m_lastFoundPath;

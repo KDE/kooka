@@ -28,7 +28,7 @@
 #include <kio/global.h>
 #include <kio/job.h>
 
-class KUrl;
+class QUrl;
 
 class FileTreeView;
 class FileTreeBranch;
@@ -68,10 +68,10 @@ public:
     QString path() const;
 
     /**
-     * @return the items KUrl
+     * @return the items QUrl
      */
-    KUrl url() const;
-    void setUrl(const KUrl &url);
+    QUrl url() const;
+    void setUrl(const QUrl &url);
 
     /**
      * @return if the item represents a directory

@@ -66,12 +66,12 @@ void FileTreeViewItem::setListed(bool wasListed)
     m_wasListed = wasListed;
 }
 
-KUrl FileTreeViewItem::url() const
+QUrl FileTreeViewItem::url() const
 {
-    return (!m_kfileitem.isNull() ? m_kfileitem.url() : KUrl());
+    return (!m_kfileitem.isNull() ? m_kfileitem.url() : QUrl());
 }
 
-void FileTreeViewItem::setUrl(const KUrl &url)
+void FileTreeViewItem::setUrl(const QUrl &url)
 {
     if (!m_kfileitem.isNull()) {
         m_kfileitem.setUrl(url);

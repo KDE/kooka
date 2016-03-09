@@ -39,7 +39,7 @@
 
 
 FileTreeBranch::FileTreeBranch(FileTreeView *parent,
-                               const KUrl &url,
+                               const QUrl &url,
                                const QString &name,
                                const QIcon &pix,
                                bool showHidden,
@@ -56,9 +56,9 @@ FileTreeBranch::FileTreeBranch(FileTreeView *parent,
 {
     setObjectName("FileTreeBranch");
 
-    KUrl u(url);
-    if (u.protocol() == "file") {           // for local files,
-        QDir d(u.path());               // ensure path is canonical
+    QUrl u(url);
+    if (u.isLocalFile()) {				// for local files,
+        QDir d(u.path());				// ensure path is canonical
         u.setPath(d.canonicalPath());
     }
     m_startURL = u;
@@ -74,42 +74,35 @@ FileTreeBranch::FileTreeBranch(FileTreeView *parent,
     bool sb = blockSignals(true);           // don't want setText() to signal
     m_root->setIcon(0, pix);
     m_root->setText(0, name);
-    m_root->setToolTip(0, QString("%1 - %2").arg(name, u.prettyUrl()));
+    m_root->setToolTip(0, QString("%1 - %2").arg(name, u.url(QUrl::PreferLocalFile)));
     blockSignals(sb);
 
     setShowingDotFiles(showHidden);
 
-    connect(this, SIGNAL(itemsAdded(KUrl,KFileItemList)),
-            SLOT(slotItemsAdded(KUrl,KFileItemList)));
+    connect(this, &FileTreeBranch::itemsAdded, this, &FileTreeBranch::slotItemsAdded);
+    connect(this, &FileTreeBranch::itemsDeleted, this, &FileTreeBranch::slotItemsDeleted);
+    connect(this, &FileTreeBranch::refreshItems, this, &FileTreeBranch::slotRefreshItems);
+    connect(this, &FileTreeBranch::started, this, &FileTreeBranch::slotListerStarted);
 
-    connect(this, SIGNAL(itemsDeleted(KFileItemList)),
-            SLOT(slotItemsDeleted(KFileItemList)));
+    connect(this, static_cast<void (FileTreeBranch::*)(const QUrl &)>(&FileTreeBranch::completed),
+            this, &FileTreeBranch::slotListerCompleted);
 
-    connect(this, SIGNAL(refreshItems(QList<QPair<KFileItem,KFileItem> >)),
-            SLOT(slotRefreshItems(QList<QPair<KFileItem,KFileItem> >)));
+    connect(this, static_cast<void (FileTreeBranch::*)(const QUrl &)>(&FileTreeBranch::canceled),
+            this, &FileTreeBranch::slotListerCanceled);
 
-    connect(this, SIGNAL(started(KUrl)),
-            SLOT(slotListerStarted(KUrl)));
+    connect(this, static_cast<void (FileTreeBranch::*)()>(&FileTreeBranch::clear),
+            this, &FileTreeBranch::slotListerClear);
 
-    connect(this, SIGNAL(completed(KUrl)),
-            SLOT(slotListerCompleted(KUrl)));
+    connect(this, static_cast<void (FileTreeBranch::*)(const QUrl &)>(&FileTreeBranch::clear),
+            this, &FileTreeBranch::slotListerClearUrl);
 
-    connect(this, SIGNAL(canceled(KUrl)),
-            SLOT(slotListerCanceled(KUrl)));
-
-    connect(this, SIGNAL(clear()),
-            SLOT(slotListerClear()));
-
-    connect(this, SIGNAL(clear(KUrl)),
-            SLOT(slotListerClearUrl(KUrl)));
-
-    connect(this, SIGNAL(redirection(KUrl,KUrl)),
-            SLOT(slotRedirect(KUrl,KUrl)));
+    connect(this, static_cast<void (FileTreeBranch::*)(const QUrl &, const QUrl &)>(&FileTreeBranch::redirection),
+            this, &FileTreeBranch::slotRedirect);
 
     m_openChildrenURLs.append(u);
 }
 
-KUrl FileTreeBranch::rootUrl() const
+QUrl FileTreeBranch::rootUrl() const
 {
     return (m_startURL);
 }
@@ -159,7 +152,7 @@ void FileTreeBranch::setOpenPixmap(const QIcon &pix)
     }
 }
 
-void FileTreeBranch::slotListerStarted(const KUrl &url)
+void FileTreeBranch::slotListerStarted(const QUrl &url)
 {
 #ifdef DEBUG_LISTING
     qDebug() << "lister started for" << url;
@@ -214,13 +207,13 @@ void FileTreeBranch::slotRefreshItems(const QList<QPair<KFileItem, KFileItem> > 
 //    return (ftvi);
 //}
 
-FileTreeViewItem *FileTreeBranch::findItemByUrl(const KUrl &url)
+FileTreeViewItem *FileTreeBranch::findItemByUrl(const QUrl &url)
 {
     FileTreeViewItem *resultItem = NULL;
-    QString p = url.path(KUrl::RemoveTrailingSlash);
+    QString p = url.adjusted(QUrl::StripTrailingSlash).path();
 
     if (m_startPath.isEmpty()) {
-        m_startPath = m_startURL.path(KUrl::RemoveTrailingSlash);
+        m_startPath = m_startURL.adjusted(QUrl::StripTrailingSlash).path();
     }
     // recalculate if needed
     if (p == m_lastFoundPath) {         // do the most likely and
@@ -273,7 +266,7 @@ void FileTreeBranch::itemRenamed(FileTreeViewItem *item)
     }
 
     m_TVImap.remove(p);                 // remove old key from map
-    p = item->url().path(KUrl::RemoveTrailingSlash);    // make key for new name
+    p = item->url().adjusted(QUrl::StripTrailingSlash).path();    // make key for new name
     m_TVImap[p] = item;                 // save new item in map
 }
 
@@ -282,7 +275,7 @@ void FileTreeBranch::itemRenamed(FileTreeViewItem *item)
 //{
 //    if (fi.isNull()) return (NULL);
 //
-//    KUrl url = fi.url();
+//    QUrl url = fi.url();
 //    //qDebug() << "for" << url;
 //    url.setFileName(QString::null);
 //    return (findItemByUrl(url));
@@ -295,22 +288,22 @@ FileTreeViewItem *FileTreeBranch::createTreeViewItem(FileTreeViewItem *parent,
 
     if (parent != NULL && !fileItem.isNull()) {
         tvi = new FileTreeViewItem(parent, fileItem, this);
-        //QT5 m_TVImap[fileItem.url().path(KUrl::RemoveTrailingSlash)] = tvi;
+        //QT5 m_TVImap[fileItem.url().path(QUrl::RemoveTrailingSlash)] = tvi;
 #ifdef DEBUG_MAPPING
-        //qDebug() << "stored in map" << fileItem.url().path(KUrl::RemoveTrailingSlash);
+        //qDebug() << "stored in map" << fileItem.url().path(QUrl::RemoveTrailingSlash);
 #endif
     } else { //qDebug() << "no parent/fileitem for new item!";
     }
     return (tvi);
 }
 
-void FileTreeBranch::slotItemsAdded(const KUrl &parent, const KFileItemList &items)
+void FileTreeBranch::slotItemsAdded(const QUrl &parent, const KFileItemList &items)
 {
     //qDebug() << "Adding" << items.count() << "items";
 
     FileTreeViewItem *parentItem = findItemByUrl(parent);
-    if (parent == NULL) {
-        //qDebug() << "parent item not found" << parent;
+    if (parentItem == NULL) {
+        //qDebug() << "parent item not found for" << parent;
         return;
     }
 
@@ -346,8 +339,8 @@ void FileTreeBranch::slotItemsAdded(const KUrl &parent, const KFileItemList &ite
         /* This stats a directory on the local file system and checks the */
         /* hardlink entry in the stat-buf. This works only for local directories. */
         if (dirOnlyMode() && !m_recurseChildren && currItem.isLocalFile() && currItem.isDir()) {
-            KUrl url = currItem.url();
-            QString filename = url.directory(KUrl::ObeyTrailingSlash) + url.fileName();
+            QUrl url = currItem.url();
+            QString filename = url.toLocalFile();
             /* do the stat trick of Carsten. The problem is, that the hardlink
              *  count only contains directory links. Thus, this method only seem
              * to work in dir-only mode */
@@ -459,7 +452,7 @@ void FileTreeBranch::itemDeleted(const KFileItem *fi)
         }
     }
 #if 0 //PORT QT5
-    QString p = fi->url().path(KUrl::RemoveTrailingSlash);
+    QString p = fi->url().path(QUrl::RemoveTrailingSlash);
     if (m_lastFoundPath == p) {
         m_lastFoundPath = QString::null;        // invalidate last-found cache
         m_lastFoundItem = NULL;
@@ -469,7 +462,7 @@ void FileTreeBranch::itemDeleted(const KFileItem *fi)
     delete ftvi;                    // finally remove view item
 }
 
-void FileTreeBranch::slotListerCanceled(const KUrl &url)
+void FileTreeBranch::slotListerCanceled(const QUrl &url)
 {
 #ifdef DEBUG_LISTING
     qDebug() << "lister cancelled for" << url;
@@ -496,7 +489,7 @@ void FileTreeBranch::slotListerClear()
     }
 }
 
-void FileTreeBranch::slotListerClearUrl(const KUrl &url)
+void FileTreeBranch::slotListerClearUrl(const QUrl &url)
 {
 #ifdef DEBUG_LISTING
     qDebug() << "for" << url;
@@ -519,15 +512,16 @@ void FileTreeBranch::deleteChildrenOf(QTreeWidgetItem *parent)
     qDeleteAll(childs);
 }
 
-void FileTreeBranch::slotRedirect(const KUrl &oldUrl, const KUrl &newUrl)
+void FileTreeBranch::slotRedirect(const QUrl &oldUrl, const QUrl &newUrl)
 {
-    if (oldUrl.equals(m_startURL, KUrl::CompareWithoutTrailingSlash)) {
+    if (oldUrl.adjusted(QUrl::StripTrailingSlash) ==
+        m_startURL.adjusted(QUrl::StripTrailingSlash)) {
         m_startURL = newUrl;
         m_startPath = QString::null;            // recalculate when next needed
     }
 }
 
-void FileTreeBranch::slotListerCompleted(const KUrl &url)
+void FileTreeBranch::slotListerCompleted(const QUrl &url)
 {
 #ifdef DEBUG_LISTING
     qDebug() << "lister completed for" << url;
@@ -564,10 +558,9 @@ void FileTreeBranch::slotListerCompleted(const KUrl &url)
     if (m_recurseChildren && (!m_startURL.isLocalFile() || !dirOnlyMode())) {
         bool wantRecurseUrl = false;
         /* look if the url is in the list for url to recurse */
-        for (KUrl::List::const_iterator it = m_openChildrenURLs.constBegin();
-                it != m_openChildrenURLs.constEnd(); ++it) {
+        foreach (const QUrl &u, m_openChildrenURLs) {
             /* it is only interesting that the url _is_in_ the list. */
-            if ((*it).equals(url, KUrl::CompareWithoutTrailingSlash)) {
+            if (u.adjusted(QUrl::StripTrailingSlash) == url.adjusted(QUrl::StripTrailingSlash)) {
                 wantRecurseUrl = true;
                 break;
             }
@@ -606,7 +599,7 @@ void FileTreeBranch::slotListerCompleted(const KUrl &url)
             if (ch->isDir() && !ch->alreadyListed()) {
                 const KFileItem *fi = ch->fileItem();
                 if (!fi->isNull() && fi->isReadable()) {
-                    KUrl recurseUrl = fi->url();
+                    QUrl recurseUrl = fi->url();
 #ifdef DEBUG_LISTING
                     qDebug() << "Starting to list" << recurseUrl;
 #endif // DEBUG_LISTING
@@ -623,7 +616,7 @@ void FileTreeBranch::slotListerCompleted(const KUrl &url)
 }
 
 /* This slot is called when a tree view item is expanded in the GUI */
-bool FileTreeBranch::populate(const KUrl &url, FileTreeViewItem *currItem)
+bool FileTreeBranch::populate(const QUrl &url, FileTreeViewItem *currItem)
 {
     bool ret = false;
     if (currItem == NULL) {

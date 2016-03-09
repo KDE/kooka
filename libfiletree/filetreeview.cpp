@@ -328,7 +328,7 @@ void FileTreeView::slotDataChanged(const QModelIndex &topLeft, const QModelIndex
     item->branch()->itemRenamed(item);          // update branch's item map
 }
 
-FileTreeBranch *FileTreeView::addBranch(const KUrl &path, const QString &name,
+FileTreeBranch *FileTreeView::addBranch(const QUrl &path, const QString &name,
                                         bool showHidden)
 {
     const QIcon &folderPix = KIconLoader::global()->loadMimeTypeIcon(KMimeType::mimeType("inode/directory")->iconName(),
@@ -336,7 +336,7 @@ FileTreeBranch *FileTreeView::addBranch(const KUrl &path, const QString &name,
     return (addBranch(path, name, folderPix, showHidden));
 }
 
-FileTreeBranch *FileTreeView::addBranch(const KUrl &path, const QString &name,
+FileTreeBranch *FileTreeView::addBranch(const QUrl &path, const QString &name,
                                         const QIcon &pix, bool showHidden)
 {
     //qDebug() << path;
@@ -423,11 +423,12 @@ void FileTreeView::slotNewTreeViewItems(FileTreeBranch *branch, const FileTreeVi
     if (!m_nextUrlToSelect.isEmpty()) {
         for (FileTreeViewItemList::const_iterator it = items.constBegin();
                 it != items.constEnd(); ++it) {
-            KUrl url = (*it)->url();
+            QUrl url = (*it)->url();
 
-            if (m_nextUrlToSelect.equals(url, KUrl::CompareWithoutTrailingSlash)) {
+            if (m_nextUrlToSelect.adjusted(QUrl::StripTrailingSlash|QUrl::NormalizePathSegments) ==
+                url.adjusted(QUrl::StripTrailingSlash|QUrl::NormalizePathSegments)) {
                 setCurrentItem(static_cast<QTreeWidgetItem *>(*it));
-                m_nextUrlToSelect = KUrl();
+                m_nextUrlToSelect = QUrl();
                 break;
             }
         }
@@ -506,10 +507,10 @@ const KFileItem *FileTreeView::selectedFileItem() const
     return (item == NULL ? NULL : item->fileItem());
 }
 
-KUrl FileTreeView::selectedUrl() const
+QUrl FileTreeView::selectedUrl() const
 {
     FileTreeViewItem *item = selectedFileTreeViewItem();
-    return (item != NULL ? item->url() : KUrl());
+    return (item != NULL ? item->url() : QUrl());
 }
 
 FileTreeViewItem *FileTreeView::highlightedFileTreeViewItem() const
@@ -523,23 +524,16 @@ const KFileItem *FileTreeView::highlightedFileItem() const
     return (item == NULL ? NULL : item->fileItem());
 }
 
-KUrl FileTreeView::highlightedUrl() const
+QUrl FileTreeView::highlightedUrl() const
 {
     FileTreeViewItem *item = highlightedFileTreeViewItem();
-    return (item != NULL ? item->url() : KUrl());
+    return (item != NULL ? item->url() : QUrl());
 }
 
 void FileTreeView::slotOnItem(QTreeWidgetItem *item)
 {
     FileTreeViewItem *i = static_cast<FileTreeViewItem *>(item);
-    if (i != NULL) {
-        const KUrl url = i->url();
-        if (url.isLocalFile()) {
-            emit onItem(url.toLocalFile());
-        } else {
-            emit onItem(url.prettyUrl());
-        }
-    }
+    if (i != NULL) emit onItem(i->url().url(QUrl::PreferLocalFile));
 }
 
 FileTreeViewItem *FileTreeView::findItemInBranch(const QString &branchName, const QString &relUrl) const
@@ -560,12 +554,7 @@ FileTreeViewItem *FileTreeView::findItemInBranch(FileTreeBranch *branch, const Q
                 partUrl.chop(1);
             }
 
-            KUrl url = branch->rootUrl();
-            if (QDir::isRelativePath(relUrl)) {
-                url.addPath(partUrl);
-            } else {
-                url.setPath(partUrl);
-            }
+            QUrl url = branch->rootUrl().resolved(QUrl::fromUserInput(relUrl));
 #ifdef DEBUG_LISTING
             qDebug() << "searching for" << url;
 #endif // DEBUG_LISTING
@@ -586,7 +575,7 @@ void FileTreeView::setShowFolderOpenPixmap(bool showIt)
     m_wantOpenFolderPixmaps = showIt;
 }
 
-void FileTreeView::slotSetNextUrlToSelect(const KUrl &url)
+void FileTreeView::slotSetNextUrlToSelect(const QUrl &url)
 {
     m_nextUrlToSelect = url;
 }
