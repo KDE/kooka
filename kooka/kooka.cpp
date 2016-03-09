@@ -365,9 +365,9 @@ void Kooka::saveProperties(KConfigGroup &grp)
 {
     //qDebug() << "to group" << grp.name();
 
-    // the 'config' object points to the session managed
-    // config file.  anything you write here will be available
-    // later when this app is restored
+    // The group object points to the session managed
+    // config file.  Anything you write here will be available
+    // later when this app is restored.
 
     // See comments in readProperties() below.
     KConfigGroup grp2(grp.config()->group(GROUP_GENERAL));
@@ -376,11 +376,10 @@ void Kooka::saveProperties(KConfigGroup &grp)
     m_view->saveProperties(grp);
 }
 
-void Kooka::applyMainWindowSettings(const KConfigGroup &grp, bool forceGlobal)
+void Kooka::applyMainWindowSettings(const KConfigGroup &grp)
 {
     //qDebug() << "from group" << grp.name();
-
-    //QT5 KXmlGuiWindow::applyMainWindowSettings(grp, forceGlobal);
+    KXmlGuiWindow::applyMainWindowSettings(grp);
     m_view->applyWindowSettings(grp);
 }
 
@@ -388,10 +387,10 @@ void Kooka::readProperties(const KConfigGroup &grp)
 {
     //qDebug() << "from group" << grp.name();
 
-    // the 'config' object points to the session managed
-    // config file.  this function is automatically called whenever
-    // the app is being restored.  read in here whatever you wrote
-    // in 'saveProperties'
+    // The group object points to the session managed
+    // config file.  This function is automatically called whenever
+    // the app is being restored.  Read in here whatever you wrote
+    // in 'saveProperties'.
 
     // The 'grp' passed in here seems to be the "<default>" group,
     // not the "MainWindow" as passed to saveProperties().

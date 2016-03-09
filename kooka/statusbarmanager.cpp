@@ -69,6 +69,8 @@ StatusBarManager::StatusBarManager(KXmlGuiWindow *mainWindow)
                                 "changing its background color."));
     mStatusBar->addPermanentWidget(mFileSize);
 #endif
+
+    mStatusBar->setSizeGripEnabled(false);
     mStatusBar->show();
 }
 

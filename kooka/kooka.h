@@ -90,7 +90,7 @@ protected:
      */
     void readProperties(const KConfigGroup &grp);
 
-    virtual void applyMainWindowSettings(const KConfigGroup &grp, bool forceGlobal);
+    virtual void applyMainWindowSettings(const KConfigGroup &grp) Q_DECL_OVERRIDE;
 
 protected slots:
     void slotUpdateScannerActions(bool haveConnection);
