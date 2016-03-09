@@ -254,20 +254,8 @@ QString KScanCheckbox::label() const
 //  Any access needs to only set or report the itemData, never the itemText,
 //  which is why the activated(QString) signal cannot be used directly.
 
-KScanCombo::KScanCombo(QWidget *parent, const QString &text,
-                       const QList<QByteArray> &list)
+KScanCombo::KScanCombo(QWidget *parent, const QString &text)
     : KScanControl(parent, text)
-{
-    init();
-
-    for (QList<QByteArray>::const_iterator it = list.constBegin();
-            it != list.constEnd(); ++it) {
-        const QByteArray item = (*it);
-        mCombo->addItem(i18n(item), item);
-    }
-}
-
-void KScanCombo::init()
 {
     mCombo = new QComboBox(this);
     mLayout->addWidget(mCombo);
@@ -276,6 +264,26 @@ void KScanCombo::init()
 
     setFocusProxy(mCombo);
     setFocusPolicy(Qt::StrongFocus);
+}
+
+
+void KScanCombo::setList(const QList<QByteArray> &list)
+{
+    // An optimisation, which may turn out to be not a valid one:
+    // only update the combo box if the number of items has changed.
+    if (list.count()==mCombo->count()) return;
+    //qDebug() << "count" << mCombo->count() << "->" << list.count() << "=" << list;
+
+    const QString cur = text();				// get current setting
+
+    mCombo->blockSignals(true);
+    mCombo->clear();
+
+    for (QList<QByteArray>::const_iterator it = list.constBegin();
+            it != list.constEnd(); ++it) {
+        const QByteArray item = (*it);
+        mCombo->addItem(i18n(item), item);
+    }
 }
 
 void KScanCombo::setText(const QString &text)

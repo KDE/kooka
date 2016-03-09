@@ -22,8 +22,6 @@
 
 #include "kookascan_export.h"
 
-#include <qbytearray.h>
-
 #include <kdialog.h>
 
 class QListWidget;
@@ -84,7 +82,7 @@ public:
     QByteArray getSelectedDevice() const;
 
     /**
-     * Check whether the user want to skip this dialogue in future.
+     * Check whether the user wants to skip this dialogue in future.
      *
      * @return @c true if the dialogue should be skipped
      **/
@@ -107,9 +105,6 @@ private:
     QCheckBox *mSkipCheckbox;
 
     QStringList mDeviceList;
-
-    class DeviceSelectorPrivate;
-    DeviceSelectorPrivate *d;
 };
 
 #endif                          // DEVSELECTOR_H

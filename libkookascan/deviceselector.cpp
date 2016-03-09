@@ -23,17 +23,19 @@
 #include <qlayout.h>
 #include <qlabel.h>
 #include <qlistwidget.h>
+#include <qdebug.h>
 
 #include <kconfig.h>
-#include <QDebug>
-#include <KLocalizedString>
+#include <klocalizedstring.h>
 #include <kvbox.h>
 #include <kstandarddirs.h>
 #include <kguiitem.h>
 #include <KIconLoader>
 #include <KGlobal>
+
 #include "scanglobal.h"
 #include "scandevices.h"
+#include "scansettings.h"
 
 DeviceSelector::DeviceSelector(QWidget *parent,
                                const QList<QByteArray> &backends,
@@ -70,8 +72,7 @@ DeviceSelector::DeviceSelector(QWidget *parent,
     mSkipCheckbox = new QCheckBox(i18n("Always use this device at startup"), vb);
     vlay->addWidget(mSkipCheckbox);
 
-    const KConfigGroup grp = ScanGlobal::self()->configGroup();
-    bool skipDialog = grp.readEntry(STARTUP_SKIP_ASK, false);
+    bool skipDialog = ScanSettings::startupSkipAsk();
     mSkipCheckbox->setChecked(skipDialog);
 
     setMinimumSize(QSize(450, 200));
@@ -85,11 +86,10 @@ DeviceSelector::~DeviceSelector()
 
 QByteArray DeviceSelector::getDeviceFromConfig() const
 {
-    const KConfigGroup grp = ScanGlobal::self()->configGroup();
-    QByteArray result = grp.readEntry(STARTUP_SCANDEV).toLocal8Bit();
+    QByteArray result = ScanSettings::startupScanDevice().toLocal8Bit();
     //qDebug() << "Scanner from config" << result;
 
-    bool skipDialog = grp.readEntry(STARTUP_SKIP_ASK, false);
+    bool skipDialog = ScanSettings::startupSkipAsk();
     if (skipDialog && !result.isEmpty() && mDeviceList.contains(result)) {
         //qDebug() << "Using scanner from config";
     } else {
@@ -124,11 +124,10 @@ QByteArray DeviceSelector::getSelectedDevice() const
 
     // Save both the scan device and the skip-start-dialog flag
     // in the global "scannerrc" file.
-    KConfigGroup grp = ScanGlobal::self()->configGroup();
-    grp.writeEntry(STARTUP_SCANDEV, dev);
-    grp.writeEntry(STARTUP_SKIP_ASK, getShouldSkip());
-    grp.sync();
-
+    ScanSettings::setStartupScanDevice(dev);
+    ScanSettings::setStartupSkipAsk(getShouldSkip());
+    ScanSettings::self()->writeConfig();
+   
     return (dev);
 }
 
@@ -141,9 +140,7 @@ void DeviceSelector::setScanSources(const QList<QByteArray> &backends)
         typeConf = new KConfig(typeFile, KConfig::SimpleConfig);
     }
 
-    const KConfigGroup grp = ScanGlobal::self()->configGroup();
-    QByteArray defstr = grp.readEntry(STARTUP_SCANDEV).toLocal8Bit();
-
+    QByteArray defstr = ScanSettings::startupScanDevice().toLocal8Bit();
     QListWidgetItem *defItem = NULL;
 
     for (QList<QByteArray>::const_iterator it = backends.constBegin();

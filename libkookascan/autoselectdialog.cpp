@@ -38,7 +38,13 @@
 #include <QVBoxLayout>
 
 #include "kscancontrols.h"
-#include "autoselectdata.h"
+#include "kscandevice.h"
+#include "scansettings.h"
+
+
+// Combo box indexes
+#define INDEX_BLACK		0
+#define INDEX_WHITE		1
 
 AutoSelectDialog::AutoSelectDialog(QWidget *parent)
     : QDialog(parent)
@@ -60,33 +66,39 @@ AutoSelectDialog::AutoSelectDialog(QWidget *parent)
     fl->setFieldGrowthPolicy(QFormLayout::AllNonFixedFieldsGrow);
 
     // slider for add/subtract margin
-    mMarginSlider = new KScanSlider(NULL, QString::null, -AutoSelectData::MaximumMargin, AutoSelectData::MaximumMargin, true, AutoSelectData::DefaultMargin);
-    mMarginSlider->setValue(AutoSelectData::DefaultMargin);
-    mMarginSlider->setToolTip(i18nc("@info:tooltip", "<qt>Set a margin to be added to "
-                                    "or subtracted from the detected area"));
+    const KConfigSkeletonItem *item = ScanSettings::self()->previewAutoselMarginItem();
+    int defaultVal = KScanDevice::getDefault<int>(item);
+    int maxVal = item->maxValue().toInt();
+    int minVal = item->minValue().toInt();
+
+    mMarginSlider = new KScanSlider(NULL, QString::null, minVal, maxVal, true, defaultVal);
+    mMarginSlider->setValue(defaultVal);
+    mMarginSlider->setToolTip(item->toolTip());
     connect(mMarginSlider, SIGNAL(settingChanged(int)), SLOT(slotControlChanged()));
-    fl->addRow(i18nc("@label:slider", "Add/subtract margin (mm):"), mMarginSlider);
+    fl->addRow(item->label(), mMarginSlider);
 
 //TODO PORT QT5     fl->addItem(new QSpacerItem(1, QDialog::marginHint()));
 
     // combobox to select whether black or white background
+    item = ScanSettings::self()->previewAutoselBackgroundItem();
     mBackgroundCombo = new QComboBox;
-    mBackgroundCombo->insertItem(AutoSelectData::ItemIndexBlack, i18n("Black"));
-    mBackgroundCombo->insertItem(AutoSelectData::ItemIndexWhite, i18n("White"));
-    mBackgroundCombo->setCurrentIndex(AutoSelectData::DefaultBackground);
-    mBackgroundCombo->setToolTip(i18nc("@info:tooltip", "<qt>Select whether a scan of "
-                                       "the empty scanner glass results in "
-                                       "a black or a white image"));
+    mBackgroundCombo->insertItem(INDEX_BLACK, i18n("Black"));
+    mBackgroundCombo->insertItem(INDEX_WHITE, i18n("White"));
+    mBackgroundCombo->setToolTip(item->toolTip());
     connect(mBackgroundCombo, SIGNAL(currentIndexChanged(int)), SLOT(slotControlChanged()));
-    fl->addRow(i18nc("@label:listbox", "Scanner background:"), mBackgroundCombo);
+    fl->addRow(item->label(), mBackgroundCombo);
 
     // slider for dust size - apparently not really much impact on the result
-    mDustsizeSlider = new KScanSlider(NULL, QString::null, 0, AutoSelectData::MaximumDustsize, true, AutoSelectData::DefaultDustsize);
-    mDustsizeSlider->setValue(AutoSelectData::DefaultDustsize);
-    mDustsizeSlider->setToolTip(i18nc("@info:tooltip", "<qt>Set the dust size; dark or "
-                                      "light areas smaller than this will be ignored"));
+    item = ScanSettings::self()->previewAutoselDustsizeItem();
+    defaultVal = KScanDevice::getDefault<int>(item);
+    maxVal = item->maxValue().toInt();
+    minVal = item->minValue().toInt();
+
+    mDustsizeSlider = new KScanSlider(NULL, QString::null, minVal, maxVal, true, defaultVal);
+    mDustsizeSlider->setValue(defaultVal);
+    mDustsizeSlider->setToolTip(item->toolTip());
     connect(mDustsizeSlider, SIGNAL(settingChanged(int)), SLOT(slotControlChanged()));
-    fl->addRow(i18nc("@label:slider", "Dust size (pixels):"), mDustsizeSlider);
+    fl->addRow(item->label(), mDustsizeSlider);
 
     QWidget *w = new QWidget;
     w->setLayout(fl);
@@ -111,7 +123,7 @@ void AutoSelectDialog::slotControlChanged()
 void AutoSelectDialog::slotApplySettings()
 {
     const int margin = mMarginSlider->value();
-    const bool bgIsWhite = (mBackgroundCombo->currentIndex() == AutoSelectData::ItemIndexWhite);
+    const bool bgIsWhite = (mBackgroundCombo->currentIndex()==INDEX_WHITE);
     const int dustsize = mDustsizeSlider->value();
     emit settingsChanged(margin, bgIsWhite, dustsize);
     mButtonBox->button(QDialogButtonBox::Apply)->setEnabled(false);
@@ -120,6 +132,6 @@ void AutoSelectDialog::slotApplySettings()
 void AutoSelectDialog::setSettings(int margin, bool bgIsWhite, int dustsize)
 {
     mMarginSlider->setValue(margin);
-    mBackgroundCombo->setCurrentIndex(bgIsWhite ? AutoSelectData::ItemIndexWhite : AutoSelectData::ItemIndexBlack);
+    mBackgroundCombo->setCurrentIndex(bgIsWhite ? INDEX_WHITE : INDEX_BLACK);
     mDustsizeSlider->setValue(dustsize);
 }

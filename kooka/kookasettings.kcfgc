@@ -1,0 +1,10 @@
+File=kookasettings.kcfg
+ClassName=KookaSettings
+Singleton=true
+
+ItemAccessors=true
+Mutators=true
+SetUserTexts=true
+UseEnumTypes=false
+
+IncludeFiles=thumbview.h,kiconloader.h

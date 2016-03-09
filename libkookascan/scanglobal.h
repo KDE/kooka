@@ -25,18 +25,9 @@
 
 #include <qstring.h>
 
-// Configuration file definitions
-
-#define DEFAULT_OPTIONSET   "saveSet"
-
-#define STARTUP_SCANDEV     "ScanDevice"
-#define STARTUP_SKIP_ASK    "SkipStartupAsk"
-#define STARTUP_ONLY_LOCAL  "QueryLocalOnly"
-
-class KConfig;
 class KConfigGroup;
-
 class KScanDevice;
+
 
 class KOOKASCAN_EXPORT ScanGlobal
 {
@@ -52,13 +43,15 @@ public:
      * function is called.  Subsequent calls are ignored.  Sets up to call
      * sane_exit() when the application exits.
      *
-     * @return true if SANE intialisation was OK
+     * @return @c true if SANE intialisation succeeded
      */
     bool init();
 
     /**
-     * Checks whether sane_init() succeeded, returns @c true if that is so.
-     * If not, @c false is returned and no other scanning functions are available.
+     * Checks whether SANE initialisation succeeded.
+     *
+     * @return @c true if @c init() has been called and it did, @c false if it did not. 
+     * @see init
      */
     bool available() const;
 
@@ -69,24 +62,12 @@ public:
      */
     void setScanDevice(KScanDevice *device);
 
-    /**
-     * Get a config group in the global scanner configuration file (named by
-     * SCANNER_DB_FILE).  If the @c groupName parameter is null or not
-     * specified, it defaults to the general group (GROUP_GENERAL).
-     */
-    KConfigGroup configGroup(const QString &groupName = QString::null);
-
 private:
-    explicit ScanGlobal();
+    ScanGlobal();
     ~ScanGlobal();
 
     bool mSaneInitDone;
     bool mSaneInitError;
-
-    KConfig *mScanConfig;
-
-    class ScanGlobalPrivate;
-    ScanGlobalPrivate *d;
 };
 
 #endif                          // SCANGLOBAL_H

@@ -62,7 +62,7 @@ set(kookascan_SRCS
   autoselectbar.cpp
   autoselectdialog.cpp
 )
-
+kconfig_add_kcfg_files(kookascan_SRCS scansettings.kcfgc)
 
 add_library(kookascan SHARED ${kookascan_SRCS})
 generate_export_header(kookascan BASE_NAME kookascan)
@@ -70,6 +70,7 @@ target_link_libraries(kookascan
   KF5::KIOCore
   KF5::KDELibs4Support
 )
+
 if (HAVE_SANE)
   target_link_libraries(kookascan ${SANE_LIBRARIES})
 endif (HAVE_SANE)
@@ -93,3 +94,4 @@ set_target_properties(kookascan PROPERTIES VERSION 1.0.0 SOVERSION 1)
 ########### installation ###############
 
 install(TARGETS kookascan ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(FILES scansettings.kcfg DESTINATION ${KDE_INSTALL_KCFGDIR})

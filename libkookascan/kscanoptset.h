@@ -187,6 +187,13 @@ public:
      **/
     static void deleteSet(const QString &setName);
 
+    /**
+     * Get the name of the default startup option set.
+     *
+     * @return The set name
+     **/
+    static QString startupSetName()		{ return ("saveSet"); }
+
 private:
     QString mSetName;
     QString mSetDescription;

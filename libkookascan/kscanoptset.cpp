@@ -20,18 +20,15 @@
 #include "kscanoptset.h"
 
 #include <qstring.h>
+#include <qdebug.h>
 
-#include <QDebug>
 #include <kconfig.h>
 #include <kconfiggroup.h>
-#include <KLocalizedString>
+#include <klocalizedstring.h>
 
 #include "kscanoption.h"
-#include "scanglobal.h"
-
-// Configuration file keys
-#define SAVESET_GROUP_PREFIX        "Save Set"
-#define SAVESET_GROUP_PREFIX_LENGTH 8
+#include "kscandevice.h"
+#include "scansettings.h"
 
 #define SAVESET_KEY_SETDESC     "SetDesc"
 #define SAVESET_KEY_SCANNER     "ScannerName"
@@ -42,15 +39,15 @@
 // Mappings between a save set name and a configuration file group name
 static QString groupName(const QString &setName)
 {
-    return (QString("%1 %2").arg(SAVESET_GROUP_PREFIX, setName));
+    return (ScanSettings::self()->saveSetDescItem()->group()+" "+setName);
 }
+
 
 static QString groupSetName(const QString &grpName)
 {
-    if (!grpName.startsWith(SAVESET_GROUP_PREFIX)) {
-        return (QString::null);
-    }
-    return (grpName.mid(SAVESET_GROUP_PREFIX_LENGTH + 1));
+    QString prefix = ScanSettings::self()->saveSetDescItem()->group();
+    if (!grpName.startsWith(prefix)) return (QString::null);
+    return (grpName.mid(prefix.length()+1));
 }
 
 KScanOptSet::KScanOptSet(const QString &setName)
@@ -121,9 +118,9 @@ void KScanOptSet::saveConfig(const QByteArray &scannerName,
     //<< "with" << count() << "options";
 
     QString grpName = groupName(mSetName);
-    KConfigGroup grp = ScanGlobal::self()->configGroup(grpName);
-    grp.writeEntry(SAVESET_KEY_SETDESC, desc);
-    grp.writeEntry(SAVESET_KEY_SCANNER, scannerName);
+    KConfigGroup grp = KScanDevice::configGroup(grpName);
+    grp.writeEntry(ScanSettings::self()->saveSetDescItem()->key(), desc);
+    grp.writeEntry(ScanSettings::self()->saveSetScannerItem()->key(), scannerName);
 
     for (KScanOptSet::const_iterator it = constBegin();
             it != constEnd(); ++it) {
@@ -137,24 +134,25 @@ void KScanOptSet::saveConfig(const QByteArray &scannerName,
 
 bool KScanOptSet::loadConfig(const QByteArray &scannerName)
 {
-    //qDebug() << "Loading set" << mSetName << "for scanner" << scannerName;
-
     QString grpName = groupName(mSetName);
-    const KConfigGroup grp = ScanGlobal::self()->configGroup(grpName);
+    const KConfigGroup grp = KScanDevice::configGroup(grpName);
     if (!grp.exists()) {
         //qDebug() << "Group" << grpName << "does not exist in configuration!";
         return (false);
     }
 
+    //qDebug() << "Loading set" << mSetName << "for scanner" << scannerName;
+
     const QMap<QString, QString> emap = grp.entryMap();
     for (QMap<QString, QString>::const_iterator it = emap.constBegin();
             it != emap.constEnd(); ++it) {
         QString optName = it.key();
-        if (optName == SAVESET_KEY_SETDESC) {
-            continue;    // ignore this as saved
-        }
-        if (optName == SAVESET_KEY_SCANNER) {   // check this but ignore
-            if (!scannerName.isEmpty() && scannerName != it.value()) {
+        if (optName==ScanSettings::self()->saveSetDescItem()->key()) continue;
+							// ignore this as saved
+        if (optName==ScanSettings::self()->saveSetScannerItem()->key())
+        {						// check this but ignore
+            if (!scannerName.isEmpty() && scannerName!=it.value())
+            {
                 //qDebug() << "was saved for scanner" << it.value();
             }
             continue;
@@ -170,21 +168,19 @@ bool KScanOptSet::loadConfig(const QByteArray &scannerName)
 
 KScanOptSet::StringMap KScanOptSet::readList()
 {
-    const QString groupName = SAVESET_GROUP_PREFIX;
     StringMap ret;
 
-    const KConfigGroup grp = ScanGlobal::self()->configGroup(groupName);
-    const QStringList groups = grp.config()->groupList();
-    for (QStringList::const_iterator it = groups.constBegin(); it != groups.constEnd(); ++it) {
+    const QStringList groups = ScanSettings::self()->config()->groupList();
+    for (QStringList::const_iterator it = groups.constBegin(); it!=groups.constEnd(); ++it)
+    {
         QString grp = (*it);
         QString set = groupSetName(grp);
-        if (!set.isEmpty()) {
-            if (set == DEFAULT_OPTIONSET) {
-                continue;    // don't show this one
-            }
+        if (!set.isEmpty())
+        {
+            if (set==startupSetName()) continue;	// don't return this one
             //qDebug() << "group" << grp  << "-> set" << set;
-            const KConfigGroup g = ScanGlobal::self()->configGroup(grp);
-            ret[set] = g.readEntry(SAVESET_KEY_SETDESC, i18n("No description"));
+            const KConfigGroup g = KScanDevice::configGroup(grp);
+            ret[set] = g.readEntry(ScanSettings::self()->saveSetDescItem()->key(), i18n("No description"));
         }
     }
 
@@ -194,7 +190,7 @@ KScanOptSet::StringMap KScanOptSet::readList()
 void KScanOptSet::deleteSet(const QString &setName)
 {
     const QString grpName = groupName(setName);
-    KConfig *conf = ScanGlobal::self()->configGroup().config();
+    KConfig *conf = ScanSettings::self()->config();
     conf->deleteGroup(grpName);
     conf->sync();
 }

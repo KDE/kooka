@@ -40,6 +40,10 @@
 #include "filetreeviewitem.h"
 #include "filetreebranch.h"
 
+
+#undef DEBUG_LISTING
+
+
 FileTreeView::FileTreeView(QWidget *parent)
     : QTreeWidget(parent)
 {
@@ -79,10 +83,9 @@ FileTreeView::FileTreeView(QWidget *parent)
             SLOT(slotOnItem(QTreeWidgetItem*)));
 
     m_openFolderPixmap = KIconLoader::global()->loadIcon("folder-open",
-                         KIconLoader::Desktop,
-                         KIconLoader::SizeSmall,
-                         KIconLoader::ActiveState);
-    //qDebug() << "done";
+                                                         KIconLoader::Desktop,
+                                                         KIconLoader::SizeSmall,
+                                                         KIconLoader::ActiveState);
 }
 
 FileTreeView::~FileTreeView()
@@ -106,7 +109,9 @@ QMimeData *FileTreeView::mimeData(const QList<QTreeWidgetItem *> items) const
     for (QList<QTreeWidgetItem *>::const_iterator it = items.constBegin();
             it != items.constEnd(); ++it) {
         FileTreeViewItem *item = static_cast<FileTreeViewItem *>(*it);
-        //qDebug() << item->url();
+#ifdef DEBUG_LISTING
+        qDebug() << item->url();
+#endif // DEBUG_LISTING
         urlList.append(item->url());
     }
 
@@ -192,9 +197,11 @@ void FileTreeView::dropEvent(QDropEvent *ev)
     }
 
     FileTreeViewItem *item = static_cast<FileTreeViewItem *>(m_dropItem);
-    //qDebug() << "onto" << item->url();
-    setDropItem(NULL);                  // stop timer now
-    // also clears m_dropItem!
+#ifdef DEBUG_LISTING
+    qDebug() << "onto" << item->url();
+#endif // DEBUG_LISTING
+    setDropItem(NULL);					// stop timer now
+							// also clears m_dropItem!
     emit dropped(ev, item);
     ev->accept();
 }
@@ -214,13 +221,17 @@ void FileTreeView::slotExpanded(QTreeWidgetItem *tvi)
         return;
     }
 
-    //qDebug() << item->text(0);
+#ifdef DEBUG_LISTING
+    qDebug() << item->text(0);
+#endif // DEBUG_LISTING
 
     FileTreeBranch *branch = item->branch();
 
     // Check if the branch needs to be populated now
     if (item->isDir() && branch != NULL && item->childCount() == 0) {
-        //qDebug() << "need to populate" << item->url();
+#ifdef DEBUG_LISTING
+        qDebug() << "need to populate" << item->url();
+#endif // DEBUG_LISTING
         if (!branch->populate(item->url(), item)) {
             //qDebug() << "Branch populate failed!";
         }
@@ -267,15 +278,17 @@ void FileTreeView::slotAutoOpenFolder()
 {
     m_autoOpenTimer->stop();
 
-    //qDebug() << "children" << m_dropItem->childCount() << "expanded" << m_dropItem->isExpanded();
+#ifdef DEBUG_LISTING
+    qDebug() << "children" << m_dropItem->childCount() << "expanded" << m_dropItem->isExpanded();
+#endif // DEBUG_LISTING
     if (m_dropItem->childCount() == 0) {
-        return;    // nothing to expand
+        return;						// nothing to expand
     }
     if (m_dropItem->isExpanded()) {
-        return;    // already expanded
+        return;						// already expanded
     }
 
-    m_dropItem->setExpanded(true);          // expand the item
+    m_dropItem->setExpanded(true);			// expand the item
 }
 
 void FileTreeView::slotSelectionChanged()
@@ -354,9 +367,13 @@ FileTreeBranch *FileTreeView::branch(const QString &searchName) const
             it != m_branches.constEnd(); ++it) {
         FileTreeBranch *branch = (*it);
         QString bname = branch->name();
-        //qDebug() << "branch" << bname;
+#ifdef DEBUG_LISTING
+        qDebug() << "branch" << bname;
+#endif // DEBUG_LISTING
         if (bname == searchName) {
-            //qDebug() << "Found requested branch";
+#ifdef DEBUG_LISTING
+            qDebug() << "Found requested branch";
+#endif // DEBUG_LISTING
             return (branch);
         }
     }
@@ -392,7 +409,9 @@ void FileTreeView::slotNewTreeViewItems(FileTreeBranch *branch, const FileTreeVi
     if (branch == NULL) {
         return;
     }
-    //qDebug();
+#ifdef DEBUG_LISTING
+    qDebug();
+#endif // DEBUG_LISTING
 
     /* Sometimes it happens that new items should become selected, i.e. if the user
      * creates a new dir, he probably wants it to be selected. This can not be done
@@ -449,7 +468,9 @@ void FileTreeView::slotStartAnimation(FileTreeViewItem *item)
     if (item == NULL) {
         return;
     }
-    //qDebug() << "for" << item->text(0);
+#ifdef DEBUG_LISTING
+    qDebug() << "for" << item->text(0);
+#endif // DEBUG_LISTING
 
     ++m_busyCount;
     setCursor(Qt::BusyCursor);
@@ -460,7 +481,9 @@ void FileTreeView::slotStopAnimation(FileTreeViewItem *item)
     if (item == NULL) {
         return;
     }
-    //qDebug() << "for" << item->text(0);
+#ifdef DEBUG_LISTING
+    qDebug() << "for" << item->text(0);
+#endif // DEBUG_LISTING
     if (m_busyCount <= 0) {
         return;
     }
@@ -543,7 +566,9 @@ FileTreeViewItem *FileTreeView::findItemInBranch(FileTreeBranch *branch, const Q
             } else {
                 url.setPath(partUrl);
             }
-            //qDebug() << "searching for" << url;
+#ifdef DEBUG_LISTING
+            qDebug() << "searching for" << url;
+#endif // DEBUG_LISTING
             ret = branch->findItemByUrl(url);
         }
     }

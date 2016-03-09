@@ -165,6 +165,7 @@ if (WITH_KADMOS)
   set(kooka_SRCS ${kooka_SRCS} kadmosocr.cpp)
 endif (WITH_KADMOS)
 
+kde4_add_kcfg_files(kooka_SRCS kookasettings.kcfgc)
 
 #kde4_add_app_icon(kooka_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/icons/hi*-apps-kooka.png")
 add_executable(kooka ${kooka_SRCS} ${kooka_ocr_SRCS})
@@ -198,3 +199,4 @@ add_dependencies(kooka vcsversion)
 ########### install files ###############
 
 install(TARGETS kooka ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(FILES kookasettings.kcfg DESTINATION ${KCFG_INSTALL_DIR})

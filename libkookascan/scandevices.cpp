@@ -20,18 +20,14 @@
 
 #include "scandevices.h"
 
-#include <QDebug>
-#include <KLocalizedString>
+#include <qdebug.h>
+
+#include <klocalizedstring.h>
 #include <kglobal.h>
-#include <kconfig.h>
-#include <kconfiggroup.h>
 
 #include "scanglobal.h"
+#include "scansettings.h"
 
-#define USERDEV_GROUP       "User Specified Scanners"
-#define USERDEV_DEVS        "Devices"
-#define USERDEV_DESC        "Description"
-#define USERDEV_TYPE        "Type"
 
 ScanDevices *sInstance = NULL;
 
@@ -51,8 +47,7 @@ ScanDevices::ScanDevices()
         return;    // do sane_init() if necessary
     }
 
-    const KConfigGroup grp1 = ScanGlobal::self()->configGroup();
-    bool netaccess = grp1.readEntry(STARTUP_ONLY_LOCAL, false);
+    bool netaccess = ScanSettings::startupOnlyLocal();
     //qDebug() << "Query for network scanners" << (netaccess ? "not enabled" : "enabled");
 
     SANE_Device const **dev_list = NULL;
@@ -69,23 +64,23 @@ ScanDevices::ScanDevices()
         //qDebug() << "SANE found scanner:" << dev->name << "=" << deviceDescription(dev->name);
     }
 
-    KConfigGroup grp2 = ScanGlobal::self()->configGroup(USERDEV_GROUP);
-    QStringList devs = grp2.readEntry(USERDEV_DEVS, QStringList());
-    if (devs.count() > 0) {
-        QStringList descs = grp2.readEntry(USERDEV_DESC, QStringList());
-        if (descs.count() < devs.count()) {     // ensure list corrent length
-            for (int i = descs.count(); i < devs.count(); ++i) {
-                descs.append("Unknown");
-            }
-            grp2.writeEntry(USERDEV_DESC, descs);
+    QStringList devs = ScanSettings::userDevices();
+    if (!devs.isEmpty())
+    {
+        QStringList descs = ScanSettings::userDescriptions();
+        if (descs.count()<devs.count())			// ensure list corrent length
+        {
+            for (int i = descs.count(); i<devs.count(); ++i) descs.append("Unknown");
+            ScanSettings::setUserDescriptions(descs);
+            ScanSettings::self()->writeConfig();
         }
 
-        QStringList types = grp2.readEntry(USERDEV_TYPE, QStringList());
-        if (types.count() < devs.count()) {     // ensure list correct length
-            for (int i = types.count(); i < devs.count(); ++i) {
-                types.append("scanner");
-            }
-            grp2.writeEntry(USERDEV_TYPE, types);
+        QStringList types = ScanSettings::userTypes();
+        if (types.count()<devs.count())			// ensure list correct length
+        {
+            for (int i = types.count(); i<devs.count(); ++i) types.append("scanner");
+            ScanSettings::setUserTypes(types);
+            ScanSettings::self()->writeConfig();
         }
 
         QStringList::const_iterator it2 = descs.constBegin();
@@ -125,27 +120,26 @@ void ScanDevices::addUserSpecifiedDevice(const QByteArray &backend,
     //qDebug() << "adding" << backend << "desc" << description
     //<< "type" << devtype << "dontSave" << dontSave;
 
-    if (!dontSave) {                // add new device to config
-        // get existing device lists
-        KConfigGroup grp = ScanGlobal::self()->configGroup(USERDEV_GROUP);
-        QStringList devs = grp.readEntry(USERDEV_DEVS, QStringList());
-        QStringList descs = grp.readEntry(USERDEV_DESC, QStringList());
-        QStringList types = grp.readEntry(USERDEV_TYPE, QStringList());
+    if (!dontSave)					// add new device to config
+    {							// get existing device lists
+        QStringList devs = ScanSettings::userDevices();
+        QStringList descs = ScanSettings::userDescriptions();
+        QStringList types = ScanSettings::userTypes();
 
         int i = devs.indexOf(backend);
-        if (i >= 0) {               // see if already in list
-            descs[i] = description;         // if so just update
+        if (i >= 0) {					// see if already in list
+            descs[i] = description;			// if so just update
             types[i] = devtype;
         } else {
-            devs.append(backend);           // add new entry to lists
+            devs.append(backend);			// add new entry to lists
             descs.append(description);
             types.append(devtype);
         }
 
-        grp.writeEntry(USERDEV_DEVS, devs);
-        grp.writeEntry(USERDEV_DESC, descs);
-        grp.writeEntry(USERDEV_TYPE, types);
-        grp.sync();
+        ScanSettings::setUserDevices(devs);
+        ScanSettings::setUserDescriptions(descs);
+        ScanSettings::setUserTypes(types);
+        ScanSettings::self()->writeConfig();
     }
 
     SANE_Device *userdev = new SANE_Device;
