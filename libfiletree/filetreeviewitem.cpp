@@ -19,10 +19,12 @@
 
 #include "filetreeviewitem.h"
 
+#include <qdebug.h>
+
 #include <kfileitem.h>
-#include <kiconloader.h>
 
 #include "filetreeview.h"
+
 
 FileTreeViewItem::FileTreeViewItem(FileTreeViewItem *parent,
                                    const KFileItem &fi,
@@ -30,7 +32,7 @@ FileTreeViewItem::FileTreeViewItem(FileTreeViewItem *parent,
     : QTreeWidgetItem(parent)
 {
     init(fi, branch);
-    setFlags(flags() | Qt::ItemIsEditable);     // non-top level items are editable
+    setFlags(flags() | Qt::ItemIsEditable);		// non-top level items are editable
 }
 
 FileTreeViewItem::FileTreeViewItem(FileTreeView *parent,
@@ -39,7 +41,7 @@ FileTreeViewItem::FileTreeViewItem(FileTreeView *parent,
     : QTreeWidgetItem(parent)
 {
     init(fi, branch);
-}                           // top level item not editable
+}							// top level item is not editable
 
 void FileTreeViewItem::init(const KFileItem &fi, FileTreeBranch *branch)
 {
@@ -48,7 +50,7 @@ void FileTreeViewItem::init(const KFileItem &fi, FileTreeBranch *branch)
     m_wasListed = false;
     m_clientData = NULL;
 
-    //QT5 setIcon(0, fi.pixmap(KIconLoader::SizeSmall));
+    setIcon(0, QIcon::fromTheme(fi.iconName()));
     setText(0, fi.text());
 }
 

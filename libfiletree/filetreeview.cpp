@@ -24,15 +24,14 @@
 #include <qevent.h>
 #include <qdir.h>
 #include <qapplication.h>
-#include <QTimer>
-#include <QMimeData>
+#include <qtimer.h>
+#include <qmimedata.h>
+#include <qdebug.h>
 
-#include <QDebug>
 #include <kglobalsettings.h>
 #include <kfileitem.h>
 #include <kmimetype.h>
 #include <kstandarddirs.h>
-#include <kiconloader.h>
 
 #include <kio/job.h>
 #include <kio/global.h>
@@ -82,10 +81,7 @@ FileTreeView::FileTreeView(QWidget *parent)
     connect(this, SIGNAL(itemEntered(QTreeWidgetItem*,int)),
             SLOT(slotOnItem(QTreeWidgetItem*)));
 
-    m_openFolderPixmap = KIconLoader::global()->loadIcon("folder-open",
-                                                         KIconLoader::Desktop,
-                                                         KIconLoader::SizeSmall,
-                                                         KIconLoader::ActiveState);
+    m_openFolderPixmap = QIcon::fromTheme("folder-open");
 }
 
 FileTreeView::~FileTreeView()
@@ -331,8 +327,7 @@ void FileTreeView::slotDataChanged(const QModelIndex &topLeft, const QModelIndex
 FileTreeBranch *FileTreeView::addBranch(const QUrl &path, const QString &name,
                                         bool showHidden)
 {
-    const QIcon &folderPix = KIconLoader::global()->loadMimeTypeIcon(KMimeType::mimeType("inode/directory")->iconName(),
-                             KIconLoader::Desktop, KIconLoader::SizeSmall);
+    const QIcon &folderPix = QIcon::fromTheme(KMimeType::mimeType("inode/directory")->iconName());
     return (addBranch(path, name, folderPix, showHidden));
 }
 
@@ -449,8 +444,7 @@ QIcon FileTreeView::itemIcon(FileTreeViewItem *item) const
             }
         } else {
             // TODO: different modes, user Pixmaps ?
-            //PORT QT5 pix = item->fileItem()->pixmap(KIconLoader::SizeSmall);
-
+            pix = QIcon::fromTheme(item->fileItem()->iconName());
             /* Only if it is a dir and the user wants open dir pixmap and it is open,
              * change the fileitem's pixmap to the open folder pixmap. */
             if (item->isDir() && m_wantOpenFolderPixmaps) {

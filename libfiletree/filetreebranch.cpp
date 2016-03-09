@@ -28,8 +28,7 @@
 #include <qdebug.h>
 
 #include <kfileitem.h>
-#include <KIconLoader>
-#include <KMimeType>
+#include <kmimetype.h>
 
 #include "filetreeview.h"
 
@@ -49,7 +48,6 @@ FileTreeBranch::FileTreeBranch(FileTreeView *parent,
       m_name(name),
       m_rootIcon(pix),
       m_openRootIcon(pix),
-      m_lastFoundPath(QString::null),
       m_lastFoundItem(NULL),
       m_recurseChildren(true),
       m_showExtensions(true)
@@ -62,7 +60,6 @@ FileTreeBranch::FileTreeBranch(FileTreeView *parent,
         u.setPath(d.canonicalPath());
     }
     m_startURL = u;
-    m_startPath = QString::null;            // recalculate when needed
     //qDebug() << "for" << u;
 
     // if no root is specified, create a new one
@@ -182,7 +179,7 @@ void FileTreeBranch::slotRefreshItems(const QList<QPair<KFileItem, KFileItem> > 
         FileTreeViewItem *item = findItemByUrl(fi2.url());
         if (item != NULL) {
             treeViewItList.append(item);
-            //PORT QT5 item->setIcon(0, fi2.pixmap(KIconLoader::SizeSmall));
+            item->setIcon(0, QIcon::fromTheme(fi2.iconName()));
             item->setText(0, fi2.text());
         }
     }
@@ -210,29 +207,23 @@ void FileTreeBranch::slotRefreshItems(const QList<QPair<KFileItem, KFileItem> > 
 FileTreeViewItem *FileTreeBranch::findItemByUrl(const QUrl &url)
 {
     FileTreeViewItem *resultItem = NULL;
-    QString p = url.adjusted(QUrl::StripTrailingSlash).path();
 
-    if (m_startPath.isEmpty()) {
-        m_startPath = m_startURL.adjusted(QUrl::StripTrailingSlash).path();
-    }
-    // recalculate if needed
-    if (p == m_lastFoundPath) {         // do the most likely and
-        // fastest lookup first
+    if (url == m_lastFoundUrl) {			// most likely and fastest first
 #ifdef DEBUG_MAPPING
-        //qDebug() << "Found as last" << url;
+        qDebug() << "Found as last" << url;
 #endif
-        return (m_lastFoundItem);           // no more to do
-    } else if (p == m_startPath) {          // see if is the root
+        return (m_lastFoundItem);			// no more to do
+    } else if (url == m_startURL) {			// see if is the root
 #ifdef DEBUG_MAPPING
-        //qDebug() << "Found as root" << url;
+        qDebug() << "Found as root" << url;
 #endif
         resultItem = m_root;
-    } else if (m_TVImap.contains(p)) {      // see if in our map
+    } else if (m_itemMap.contains(url)) {		// see if in our map
 #ifdef DEBUG_MAPPING
-        //qDebug() << "Found in map" << url;
+        qDebug() << "Found in map" << url;
 #endif
-        resultItem = m_TVImap[p];
-    } else {                    // need to ask the lister
+        resultItem = m_itemMap[url];
+    } else {						// need to ask the lister
         // See comments on the removed treeItemForFileItem() above.
         // We should never get here, the TVImap should have the data for
         // every item that we create.
@@ -246,13 +237,13 @@ FileTreeViewItem *FileTreeBranch::findItemByUrl(const QUrl &url)
         //}
 
 #ifdef DEBUG_MAPPING
-        //qDebug() << "Not found" << url;
+        qDebug() << "Not found" << url;
 #endif
     }
 
-    if (resultItem != NULL) {           // found something
-        m_lastFoundItem = resultItem;           // cache for next time
-        m_lastFoundPath = p;                // path this applies to
+    if (resultItem != NULL) {				// found something
+        m_lastFoundItem = resultItem;			// cache for next time
+        m_lastFoundUrl = url;				// path this applies to
     }
 
     return (resultItem);
@@ -260,14 +251,10 @@ FileTreeViewItem *FileTreeBranch::findItemByUrl(const QUrl &url)
 
 void FileTreeBranch::itemRenamed(FileTreeViewItem *item)
 {
-    QString p = m_TVImap.key(item);         // find key for that item
-    if (p.isEmpty()) {
-        return;    // not in map, ignore
-    }
-
-    m_TVImap.remove(p);                 // remove old key from map
-    p = item->url().adjusted(QUrl::StripTrailingSlash).path();    // make key for new name
-    m_TVImap[p] = item;                 // save new item in map
+    QUrl u = m_itemMap.key(item);			// find key for that item
+    if (u.isEmpty()) return;				// not in map, ignore
+    m_itemMap.remove(u);				// remove old from map
+    m_itemMap[item->url()] = item;			// save new item in map
 }
 
 // No longer needed, itemsAdded signal passes parent URL
@@ -288,11 +275,15 @@ FileTreeViewItem *FileTreeBranch::createTreeViewItem(FileTreeViewItem *parent,
 
     if (parent != NULL && !fileItem.isNull()) {
         tvi = new FileTreeViewItem(parent, fileItem, this);
-        //QT5 m_TVImap[fileItem.url().path(QUrl::RemoveTrailingSlash)] = tvi;
+        const QString p = fileItem.url().url(QUrl::PreferLocalFile|QUrl::StripTrailingSlash);
+        m_itemMap[fileItem.url()] = tvi;
 #ifdef DEBUG_MAPPING
-        //qDebug() << "stored in map" << fileItem.url().path(QUrl::RemoveTrailingSlash);
+        qDebug() << "stored in map" << fileItem.url();
 #endif
-    } else { //qDebug() << "no parent/fileitem for new item!";
+    } else {
+#ifdef DEBUG_MAPPING
+        qDebug() << "no parent/fileitem for new item!";
+#endif
     }
     return (tvi);
 }
@@ -451,15 +442,15 @@ void FileTreeBranch::itemDeleted(const KFileItem *fi)
             }
         }
     }
-#if 0 //PORT QT5
-    QString p = fi->url().path(QUrl::RemoveTrailingSlash);
-    if (m_lastFoundPath == p) {
-        m_lastFoundPath = QString::null;        // invalidate last-found cache
+
+    QUrl u = fi->url();
+    if (u == m_lastFoundUrl) {
+        m_lastFoundUrl = QUrl();			// invalidate last-found cache
         m_lastFoundItem = NULL;
     }
-    m_TVImap.remove(p);                 // remove from item map
-#endif
-    delete ftvi;                    // finally remove view item
+    m_itemMap.remove(u);				// remove from item map
+
+    delete ftvi;					// finally remove view item
 }
 
 void FileTreeBranch::slotListerCanceled(const QUrl &url)
@@ -517,7 +508,6 @@ void FileTreeBranch::slotRedirect(const QUrl &oldUrl, const QUrl &newUrl)
     if (oldUrl.adjusted(QUrl::StripTrailingSlash) ==
         m_startURL.adjusted(QUrl::StripTrailingSlash)) {
         m_startURL = newUrl;
-        m_startPath = QString::null;            // recalculate when next needed
     }
 }
 

@@ -195,7 +195,6 @@ private:
 
     FileTreeViewItem *m_root;
     QUrl m_startURL;
-    QString m_startPath;
     QString m_name;
     QIcon m_rootIcon;
     QIcon m_openRootIcon;
@@ -203,17 +202,14 @@ private:
     /* this list holds the url's which children are opened. */
     QList<QUrl> m_openChildrenURLs;
 
-    /* Used for caching purposes in findTVIByURL() */
-    QString m_lastFoundPath;
+    /* Used for caching purposes in findItemByURL() */
+    QUrl m_lastFoundUrl;
     FileTreeViewItem *m_lastFoundItem;
 
     bool m_recurseChildren;
     bool m_showExtensions;
 
-    class FileTreeBranchPrivate;
-    FileTreeBranchPrivate *d;
-
-    QHash<QString, FileTreeViewItem *> m_TVImap;
+    QHash<QUrl, FileTreeViewItem *> m_itemMap;
 };
 
 /**
