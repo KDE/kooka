@@ -985,7 +985,7 @@ void KookaView::slotTransformImage()
 
     QThread *transformer = new ImageTransform(img, op, imageFile, this);
     connect(transformer, SIGNAL(done(KUrl)), gallery(), SLOT(slotUpdatedItem(KUrl)));
-    connect(transformer, SIGNAL(statusMessage(QString)), SIGNAL(signalChangeStatusbar(QString)));
+    connect(transformer, SIGNAL(statusMessage(QString)), SIGNAL(changeStatus(QString)));
     connect(transformer, SIGNAL(finished()), transformer, SLOT(deleteLater()));
     transformer->start();
 }
