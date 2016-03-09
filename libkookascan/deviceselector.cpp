@@ -134,7 +134,7 @@ QByteArray DeviceSelector::getSelectedDevice() const
 void DeviceSelector::setScanSources(const QList<QByteArray> &backends)
 {
     const KConfig *typeConf = NULL;
-    QString typeFile = KGlobal::dirs()->findResource("data", "libkscan/scantypes.dat");
+    QString typeFile = KGlobal::dirs()->findResource("data", "libkookascan/scantypes.dat");
     //qDebug() << "Scanner type file" << typeFile;
     if (!typeFile.isEmpty()) {
         typeConf = new KConfig(typeFile, KConfig::SimpleConfig);

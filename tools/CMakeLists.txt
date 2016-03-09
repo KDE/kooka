@@ -30,17 +30,6 @@ target_link_libraries(kimageioinfo
     ${KDE4_KIO_LIBRARY}
 )
 
-########### clobbering ###############
-
-add_custom_target(clobber
-  COMMENT "Clobber in ${CMAKE_CURRENT_BINARY_DIR}..."
-  VERBATIM
-  COMMAND sh -c "rm -f *.moc"
-  COMMAND sh -c "rm -f *_automoc.cpp *_automoc.cpp.files"
-  COMMAND sh -c "rm -r -f CMakeFiles *.cmake"
-  COMMAND sh -c "rm -f config-*.h"
-)
-
 ########### install files ###############
 
 install(TARGETS sanedump ${INSTALL_TARGETS_DEFAULT_ARGS})

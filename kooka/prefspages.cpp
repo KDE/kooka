@@ -292,7 +292,7 @@ KookaThumbnailPage::KookaThumbnailPage(KPageDialog *parent)
     mTileSelector = new KUrlRequester(this);
     mTileSelector->setToolTip(item->toolTip());
     mTileSelector->setMode(KFile::File|KFile::ExistingOnly|KFile::LocalOnly);
-    mTileSelector->fileDialog()->setMimeFilter(KImageIO::mimeTypes(KImageIO::Reading));
+    mTileSelector->fileDialog()->setMimeTypeFilters(KImageIO::mimeTypes(KImageIO::Reading));
     gl->addWidget(mTileSelector, 3, 1);
     lab->setBuddy(mTileSelector);
 
@@ -325,11 +325,11 @@ void KookaThumbnailPage::saveSettings()
     KookaSettings::setGalleryLayout(mGalleryLayoutCombo->itemData(mGalleryLayoutCombo->currentIndex()).toInt());
 
     KookaSettings::setThumbnailCustomBackground(mCustomBackgroundCheck->isChecked());
-    KookaSettings::setThumbnailBackgroundPath(mTileSelector->url().pathOrUrl());
+    KookaSettings::setThumbnailBackgroundPath(mTileSelector->url().url(QUrl::PreferLocalFile));
 
     int size = mThumbSizeCombo->itemData(mThumbSizeCombo->currentIndex()).toInt();
     if (size>0) KookaSettings::setThumbnailPreviewSize(size);
-    else kWarning() << "Invalid size" << size << "for combo index" << mThumbSizeCombo->currentIndex();
+    //else qWarning() << "Invalid size" << size << "for combo index" << mThumbSizeCombo->currentIndex();
 
     KookaSettings::self()->writeConfig();
 }
@@ -353,12 +353,12 @@ void KookaThumbnailPage::applySettings()
     mAllowRenameCheck->setChecked(KookaSettings::galleryAllowRename());
     mCustomBackgroundCheck->setChecked(KookaSettings::thumbnailCustomBackground());
 
-    mTileSelector->setUrl(KookaSettings::thumbnailBackgroundPath());
+    mTileSelector->setUrl(QUrl::fromLocalFile(KookaSettings::thumbnailBackgroundPath()));
 
     KIconLoader::StdSizes size = static_cast<KIconLoader::StdSizes>(KookaSettings::thumbnailPreviewSize());
     int sel = mThumbSizeCombo->findData(size, Qt::UserRole, Qt::MatchExactly);
     if (sel!=-1) mThumbSizeCombo->setCurrentIndex(sel);
-    else kWarning() << "Cannot find combo index for size" << size;
+    //else kWarning() << "Cannot find combo index for size" << size;
 }
 
 void KookaThumbnailPage::slotCustomThumbBgndToggled(bool state)

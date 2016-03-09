@@ -1,5 +1,5 @@
 
-project(kooka4)
+project(kookascan)
 
 ########### clobbering ###############
 
@@ -13,4 +13,4 @@ project(kooka4)
 ########### install files ###############
 
 install(FILES scanservice.desktop DESTINATION ${SERVICES_INSTALL_DIR})
-install(FILES scantypes.dat DESTINATION ${DATA_INSTALL_DIR}/libkscan)
+install(FILES scantypes.dat DESTINATION ${DATA_INSTALL_DIR}/libkookascan)

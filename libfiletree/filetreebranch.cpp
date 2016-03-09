@@ -637,7 +637,6 @@ bool FileTreeBranch::populate(const KUrl &url, FileTreeViewItem *currItem)
     /* Add this url to the list of urls to recurse for children */
     if (m_recurseChildren) {
         m_openChildrenURLs.append(url);
-<<<<<<< HEAD
 #ifdef DEBUG_LISTING
         qDebug() << "Adding as open child";
 #endif // DEBUG_LISTING

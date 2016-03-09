@@ -181,7 +181,8 @@ ScanParams::ScanParams(QWidget *parent)
     // when looking up those, so the returned path will be empty if they
     // are not installed.
 
-    KIconLoader::global()->addAppDir("libkscan");   // access to our icons
+    // KF5 PORT
+    KIconLoader::global()->addAppDir("libkookascan");   // access to our icons
 
     QString ip = KIconLoader::global()->iconPath("color", KIconLoader::Small, true);
     if (ip.isEmpty()) {
@@ -342,7 +343,6 @@ QWidget *ScanParams::createScannerParams()
     // Virtual/debug image file
     mVirtualFile = mSaneDevice->getGuiElement(SANE_NAME_FILE, frame);
     if (mVirtualFile != NULL) {
-        initialise(mVirtualFile);
         connect(mVirtualFile, &KScanOption::guiChange, this, &ScanParams::slotOptionChanged);
 
         l = mVirtualFile->getLabel(frame, true);
@@ -545,9 +545,6 @@ QWidget *ScanParams::createScannerParams()
     if (!advancedFrame->lastRow()) {
         tw->setTabEnabled(2, false);
     }
-
-    initStartupArea();					// set up and tell previewer
-    slotNewScanMode();					// tell previewer this too
 
     return (tw);					// top-level (tab) widget
 }

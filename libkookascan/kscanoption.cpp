@@ -231,7 +231,7 @@ void KScanOption::reload()
     if (mDesc->size>mBuffer.size())
     {
         //qDebug() << "buffer too small for" << mName << "type" << mDesc->type
-                 << "size" << mBuffer.size() << "need" << mDesc->size;
+        //<< "size" << mBuffer.size() << "need" << mDesc->size;
         allocForDesc();					// grow the buffer
     }
 
@@ -385,7 +385,7 @@ case SANE_TYPE_FIXED:
             QString::compare(mDesc->name, SANE_NAME_SCAN_Y_RESOLUTION)==0)
         {
             ret = KScanOption::Resolution;
-            if (mDesc->unit!=SANE_UNIT_DPI) //qDebug() << "expected" << mName << "unit" << mDesc->unit << "to be DPI";
+            if (mDesc->unit!=SANE_UNIT_DPI) qDebug() << "expected" << mName << "unit" << mDesc->unit << "to be DPI";
         }
         else if (QString::compare(mDesc->name, SANE_NAME_GAMMA_VECTOR)==0 ||
                  QString::compare(mDesc->name, SANE_NAME_GAMMA_VECTOR_R)==0 ||
@@ -393,7 +393,7 @@ case SANE_TYPE_FIXED:
                  QString::compare(mDesc->name, SANE_NAME_GAMMA_VECTOR_B)==0)
         {
             ret = KScanOption::GammaTable;
-            if (mDesc->size!=sizeof(SANE_Byte)) //qDebug() << "expected" << mName << "size" << mDesc->size << "to be BYTE";
+            if (mDesc->size!=sizeof(SANE_Byte)) qDebug() << "expected" << mName << "size" << mDesc->size << "to be BYTE";
         }
         else if (mDesc->constraint_type==SANE_CONSTRAINT_RANGE) ret = KScanOption::Range;
         else if (mDesc->constraint_type==SANE_CONSTRAINT_WORD_LIST) ret = KScanOption::StringList;

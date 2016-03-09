@@ -33,7 +33,7 @@
 #include <QDebug>
 
 #include "kooka.h"
-//QT5 #include "vcsversion.h"
+#include "vcsversion.h"
 
 static const char shortDesc[] = I18N_NOOP("Scanning, image gallery and OCR");
 
@@ -100,7 +100,7 @@ int main(int argc, char *argv[])
 
     KApplication app;
     //KF5 port: remove this line and define TRANSLATION_DOMAIN in CMakeLists.txt instead
-//KLocale::global()->insertCatalog("libkscan");
+//KLocale::global()->insertCatalog("libkookascan");
 
     KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
     QString devToUse = args->getOption("d");

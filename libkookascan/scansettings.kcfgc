@@ -7,5 +7,5 @@ Mutators=true
 SetUserTexts=true
 UseEnumTypes=false
 
-IncludeFiles=libkscan/libkscanexport.h
-Visibility=KSCAN_EXPORT
+IncludeFiles=kookascan_export.h
+Visibility=KOOKASCAN_EXPORT

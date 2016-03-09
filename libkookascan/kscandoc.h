@@ -26,9 +26,9 @@
 
 The KScan Library furnishes each KDE2 application with an object which can connect to a scanner set up by SANE, as well as read out and manage the scanner's parameters. The difficulty with this is that SANE scanners do not have a uniform set of  options. The scanners support various scan options. An interface for establishing contact to the scanners has to be set up  dynamically after the decision is made as to which available device in the system should be used (dynamic GUI).
 
-\section usage How to use libkscan
+\section usage How to use libkookascan
 
-Libkscan provides a dialog for you to include scan functionality to your application. This includes on the main page of the dialog
+The library provides a dialog for you to include scan functionality to your application. This includes on the main page of the dialog
    - The scanner setting parts with dynamically generated controls of scan parameters and the buttons to start scanning
    - A preview window to select the scan area
    - An option tab to edit basically scan options.

@@ -426,8 +426,8 @@ QByteArray KScanDevice::aliasName( const QByteArray& name ) const
 			ret = "gamma-correction";
     }
 
-    if( ret != name )
-		//qDebug() << "Found alias for" << name << "which is" << ret;
+    //if( ret != name )
+    //qDebug() << "Found alias for" << name << "which is" << ret;
 
     return( ret );
 }
@@ -828,13 +828,13 @@ case SANE_FRAME_GREEN:	formatName = "GREEN";	break;
 case SANE_FRAME_BLUE:	formatName = "BLUE";	break;
     }
 
-    //qDebug() << msg.toLatin1().constData();
-    //qDebug() << "  format:          " << p->format << "=" << formatName.constData();
-    //qDebug() << "  last_frame:      " << p->last_frame;
-    //qDebug() << "  lines:           " << p->lines;
-    //qDebug() << "  depth:           " << p->depth;
-    //qDebug() << "  pixels_per_line: " << p->pixels_per_line;
-    //qDebug() << "  bytes_per_line:  " << p->bytes_per_line;
+    qDebug() << msg.toLatin1().constData();
+    qDebug() << "  format:          " << p->format << "=" << formatName.constData();
+    qDebug() << "  last_frame:      " << p->last_frame;
+    qDebug() << "  lines:           " << p->lines;
+    qDebug() << "  depth:           " << p->depth;
+    qDebug() << "  pixels_per_line: " << p->pixels_per_line;
+    qDebug() << "  bytes_per_line:  " << p->bytes_per_line;
 }
 #endif // DEBUG_PARAMS
 
@@ -1057,7 +1057,7 @@ KScanDevice::Status KScanDevice::acquireData(bool isPreview)
     }
 
     //qDebug() << "Scan read" << mBytesRead << "bytes in"
-             << mBlocksRead << "blocks," << frames << "frames - status" << stat;
+    //<< mBlocksRead << "blocks," << frames << "frames - status" << stat;
 
     emit sigScanFinished(stat);				// scan is now finished
     return (stat);
@@ -1099,7 +1099,7 @@ void KScanDevice::doProcessABlock()
             if (mSaneStatus!=SANE_STATUS_EOF)		// this is OK, just stop
             {						// any other error
                 //qDebug() << "sane_read() error" << lastSaneErrorMessage()
-                         << "bytes read" << bytes_read;
+                //<< "bytes read" << bytes_read;
             }
             break;
         }
@@ -1447,7 +1447,7 @@ bool KScanDevice::authenticate(QByteArray *retuser, QByteArray *retpass)
 
         KPasswordDialog dlg(NULL, KPasswordDialog::ShowKeepPassword|KPasswordDialog::ShowUsernameLine);
         dlg.setPrompt(i18n("<qt>The scanner<br><b>%1</b><br>requires authentication.", mScannerName.constData()));
-        dlg.setCaption(i18n("Scanner Authentication"));
+        dlg.setWindowTitle(i18n("Scanner Authentication"));
 
         if (!user.isEmpty()) dlg.setUsername(user);
         if (!pass.isEmpty()) dlg.setPassword(pass);

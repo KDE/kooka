@@ -93,8 +93,8 @@ if (HAVE_TIFF)
   add_definitions(-DHAVE_TIFF)
 endif (HAVE_TIFF)
 
-
-include_directories(.. ./ocr/)
+include_directories(..)
+include_directories(./ocr/)
 
 #qt5_generate_dbus_interface(kooka.h org.kde.kooka.kooka.xml OPTIONS -a)
 
@@ -148,18 +148,16 @@ set(kooka_SRCS
 )
 
 set(kooka_ocr_SRCS
-ocr/ocrbasedialog.cpp
-ocr/ocrengine.cpp
-ocr/ocrgocrdialog.cpp
-ocr/ocrgocrengine.cpp
-#QT5 ocr/ocrkadmosdialog.cpp
-ocr/ocrkadmosengine.cpp
-ocr/ocrocraddialog.cpp
-ocr/ocrocradengine.cpp
-ocr/ocrresedit.cpp
+  ocr/ocrbasedialog.cpp
+  ocr/ocrengine.cpp
+  ocr/ocrgocrdialog.cpp
+  ocr/ocrgocrengine.cpp
+  #QT5 ocr/ocrkadmosdialog.cpp
+  ocr/ocrkadmosengine.cpp
+  ocr/ocrocraddialog.cpp
+  ocr/ocrocradengine.cpp
+  ocr/ocrresedit.cpp
 )
-
-
 
 if (WITH_KADMOS)
   set(kooka_SRCS ${kooka_SRCS} kadmosocr.cpp)
@@ -183,6 +181,7 @@ if (HAVE_TIFF)
   target_link_libraries(kooka ${TIFF_LIBRARIES})
 endif (HAVE_TIFF)
 
+include_directories(${CMAKE_CURRENT_BINARY_DIR}/..)
 add_dependencies(kooka vcsversion)
 
 ########### clobbering ###############

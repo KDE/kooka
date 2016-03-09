@@ -110,7 +110,8 @@ ScanGallery::ScanGallery(QWidget *parent)
             SLOT(slotItemExpanded(QTreeWidgetItem*)));
 
     /* Preload frequently used icons */
-    KIconLoader::global()->addAppDir("libkscan");   // access to library icons
+    // KF5 PORT: check
+    KIconLoader::global()->addAppDir("libkookascan");   // access to library icons
     mPixFloppy = KIconLoader::global()->loadIcon("media-floppy", KIconLoader::NoGroup, KIconLoader::SizeSmall);
     mPixGray   = KIconLoader::global()->loadIcon("palette-gray", KIconLoader::NoGroup, KIconLoader::SizeSmall);
     mPixBw     = KIconLoader::global()->loadIcon("palette-lineart", KIconLoader::NoGroup, KIconLoader::SizeSmall);

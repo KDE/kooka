@@ -1,2 +1,2 @@
 #! /bin/sh
-$XGETTEXT *.cpp *.kcfg -o $podir/libkscan.pot
+$XGETTEXT *.cpp *.kcfg -o $podir/libkookascan.pot
