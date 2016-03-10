@@ -32,7 +32,8 @@
 #ifndef KOOKAVIEW_H
 #define KOOKAVIEW_H
 
-#include <ktabwidget.h>
+#include <qtabwidget.h>
+
 #include <kservice.h>
 
 #include "statusbarmanager.h"
@@ -73,7 +74,7 @@ class WidgetSite;
  * @author Klaas Freitag <freitag@suse.de>
  * @version 0.1
  */
-class KookaView : public KTabWidget
+class KookaView : public QTabWidget
 {
     Q_OBJECT
 

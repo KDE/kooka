@@ -54,7 +54,6 @@
 #include <kactioncollection.h>
 #include <kactionmenu.h>
 #include <kshortcut.h>
-#include <ktabwidget.h>
 #include <kfileitem.h>
 #include <kmainwindow.h>
 
@@ -195,7 +194,7 @@ WidgetSplitter::WidgetSplitter(Qt::Orientation orientation, QWidget *parent)
 // ---------------------------------------------------------------------------
 
 KookaView::KookaView(KMainWindow *parent, const QByteArray &deviceToUse)
-    : KTabWidget(parent)
+    : QTabWidget(parent)
 {
     setObjectName("KookaView");
 
