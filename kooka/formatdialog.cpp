@@ -1,20 +1,32 @@
-/***************************************************************************
- *                                                                         *
- *  This file may be distributed and/or modified under the terms of the    *
- *  GNU General Public License version 2 as published by the Free Software *
- *  Foundation and appearing in the file COPYING included in the           *
- *  packaging of this file.                                                *
- *
- *  As a special exception, permission is given to link this program       *
- *  with any version of the KADMOS ocr/icr engine of reRecognition GmbH,   *
- *  Kreuzlingen and distribute the resulting executable without            *
- *  including the source code for KADMOS in the source distribution.       *
- *
- *  As a special exception, permission is given to link this program       *
- *  with any edition of Qt, and distribute the resulting executable,       *
- *  without including the source code for Qt in the source distribution.   *
- *                                                                         *
- ***************************************************************************/
+/************************************************************************
+ *									*
+ *  This file is part of Kooka, a scanning/OCR application using	*
+ *  Qt <http://www.qt.io> and KDE Frameworks <http://www.kde.org>.	*
+ *									*
+ *  Copyright (C) 2008-2016 Jonathan Marten <jjm@keelhaul.me.uk>	*
+ *									*
+ *  Kooka is free software; you can redistribute it and/or modify it	*
+ *  under the terms of the GNU Library General Public License as	*
+ *  published by the Free Software Foundation and appearing in the	*
+ *  file COPYING included in the packaging of this file;  either	*
+ *  version 2 of the License, or (at your option) any later version.	*
+ *									*
+ *  As a special exception, permission is given to link this program	*
+ *  with any version of the KADMOS OCR/ICR engine (a product of		*
+ *  reRecognition GmbH, Kreuzlingen), and distribute the resulting	*
+ *  executable without including the source code for KADMOS in the	*
+ *  source distribution.						*
+ *									*
+ *  This program is distributed in the hope that it will be useful,	*
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of	*
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the	*
+ *  GNU General Public License for more details.			*
+ *									*
+ *  You should have received a copy of the GNU General Public		*
+ *  License along with this program;  see the file COPYING.  If		*
+ *  not, see <http://www.gnu.org/licenses/>.				*
+ *									*
+ ************************************************************************/
 
 #include "formatdialog.h"
 
@@ -23,16 +35,20 @@
 #include <qcombobox.h>
 #include <qlineedit.h>
 #include <qlistwidget.h>
+#include <qdebug.h>
+#include <qicon.h>
+#include <qmimetype.h>
+#include <qmimedatabase.h>
 
 #include <kdialog.h>
 #include <kseparator.h>
-#include <KLocalizedString>
-#include <QDebug>
+#include <klocalizedstring.h>
 #include <kconfig.h>
 #include <kimageio.h>
-#include <KGlobal>
-#include <QIcon>
+#include <kglobal.h>
+
 #include "imageformat.h"
+
 
 struct formatInfo {
     const char *mime;
@@ -263,8 +279,8 @@ FormatDialog::FormatDialog(QWidget *parent, ImageMetaInfo::ImageType type,
                 formatList.append(type);
             }
         }
-        //qDebug() << "have" << formatList.count() << "image types"
-        //<< "from" << supportedTypes.count() << "supported";
+        qDebug() << "have" << formatList.count() << "image types"
+                 << "from" << supportedTypes.count() << "supported";
 
         // Even after filtering the list as above, there will be MIME type
         // duplicates (e.g. JPG and JPEG both map to image/jpeg and produce
@@ -275,39 +291,33 @@ FormatDialog::FormatDialog(QWidget *parent, ImageMetaInfo::ImageType type,
         // not have a defined KDE MIME type.  None of those affected (currently
         // BW, RGBA, XV) seem to be of any use.
         mMimeTypes.clear();
-        for (QStringList::const_iterator it = formatList.constBegin();
-                it != formatList.constEnd(); ++it) {
-            const KMimeType::Ptr mime = ImageFormat((*it).toLocal8Bit()).mime();
-            if (mime.isNull()) {
-                continue;
-            }
-            if (mime->isDefault()) {
-                continue;
-            }
+        foreach (const QString &format, formatList)
+        {
+            QMimeType mime = ImageFormat(format.toLocal8Bit()).mime();
+            if (!mime.isValid()) continue;
+            if (mime.isDefault()) continue;
 
             // ImageFormat::formatForMime() should now work even in the presence
             // of MIME aliases, but double check that it works at this stage.
             ImageFormat fmt = ImageFormat::formatForMime(mime);
             if (!fmt.isValid()) {
-                //qDebug() << "Cannot use format" << (*it) << "- MIME type" << mime->name() << "does not map back to format";
+                qDebug() << "Cannot use format" << format << "- MIME type" << mime.name() << "does not map back to format";
                 continue;
             }
 
             bool seen = false;
-            for (KMimeType::List::const_iterator it = mMimeTypes.constBegin();
-                    it != mMimeTypes.constEnd(); ++it) {
-                KMimeType::Ptr p = (*it);
-                if (mime->is(p->name())) {
+            foreach (const QMimeType &mt, mMimeTypes)
+            {
+                if (mime.inherits(mt.name()))
+                {
                     seen = true;
                     break;
                 }
             }
 
-            if (!seen) {
-                mMimeTypes.append(mime);
-            }
+            if (!seen) mMimeTypes.append(mime);
         }
-        //qDebug() << "have" << mMimeTypes.count() << "unique MIME types";
+        qDebug() << "have" << mMimeTypes.count() << "unique MIME types";
 
         // The list box is filled later.
 
@@ -423,11 +433,9 @@ void FormatDialog::showExtension(const ImageFormat &format)
 
 void FormatDialog::formatSelected(QListWidgetItem *item)
 {
-    if (mHelpLabel == NULL) {
-        return;    // not showing this
-    }
+    if (mHelpLabel == NULL) return;			// not showing this
 
-    if (item == NULL) {             // nothing is selected
+    if (item == NULL) {					// nothing is selected
         mHelpLabel->setText(i18n("No format selected."));
         enableButtonOk(false);
 
@@ -438,28 +446,25 @@ void FormatDialog::formatSelected(QListWidgetItem *item)
         return;
     }
 
-    mFormatList->setCurrentItem(item);          // focus highlight -> select
+    mFormatList->setCurrentItem(item);			// focus highlight -> select
 
     const char *helptxt = NULL;
-
-    QString mimename = item->data(Qt::UserRole).toString();
-    KMimeType::Ptr mime = KMimeType::mimeType(mimename);
-    if (!mime.isNull()) {
-        QString imime = mime->name();
-        for (formatInfo *ip = &formats[0]; ip->mime != NULL; ++ip) {
-            // locate help text for format
-            if (ip->mime == mimename) {
-                helptxt = ip->helpString;
-                break;
-            }
+    const QString mimename = item->data(Qt::UserRole).toString();
+    for (formatInfo *ip = &formats[0]; ip->mime != NULL; ++ip) {
+        // locate help text for format
+        if (ip->mime == mimename) {
+            helptxt = ip->helpString;
+            break;
         }
     }
 
+    QMimeDatabase db;
+    QMimeType mime = db.mimeTypeForName(mimename);
     ImageFormat format = ImageFormat::formatForMime(mime);
 
-    if (helptxt != NULL) {              // found some help text
-        mHelpLabel->setText(i18n(helptxt));     // set the hint
-        check_subformat(format);            // and check subformats
+    if (helptxt != NULL) {				// found some help text
+        mHelpLabel->setText(i18n(helptxt));		// set the hint
+        check_subformat(format);			// and check subformats
     } else {
         mHelpLabel->setText(i18n("No information is available for this format."));
     }
@@ -483,14 +488,11 @@ void FormatDialog::check_subformat(const ImageFormat &format)
 
 void FormatDialog::setSelectedFormat(const ImageFormat &format)
 {
-    if (mFormatList == NULL) {
-        return;    // not showing this
-    }
-    if (format.isValid()) {             // valid format to select
-        const KMimeType::Ptr ptr = format.mime();
-        if (ptr.isNull()) {
-            return;
-        }
+    if (mFormatList == NULL) return;			// not showing this
+
+    if (format.isValid()) {				// valid format to select
+        const QMimeType mime = format.mime();
+        if (!mime.isValid()) return;
 
         for (int i = 0; i < mFormatList->count(); ++i) {
             QListWidgetItem *item = mFormatList->item(i);
@@ -498,7 +500,7 @@ void FormatDialog::setSelectedFormat(const ImageFormat &format)
                 continue;
             }
             QString mimename = item->data(Qt::UserRole).toString();
-            if (ptr->is(mimename)) {
+            if (mime.inherits(mimename)) {
                 mFormatList->setCurrentItem(item);
                 return;
             }
@@ -531,28 +533,25 @@ void FormatDialog::setSelectedFormat(const ImageFormat &format)
 
 ImageFormat FormatDialog::getFormat() const
 {
-    if (mFormatList == NULL) {
-        return (mFormat);    // no UI for this
-    }
+    if (mFormatList == NULL) return (mFormat);		// no UI for this
 
+    QMimeDatabase db;
     const QListWidgetItem *item = mFormatList->currentItem();
     if (item != NULL) {
         QString mimename = item->data(Qt::UserRole).toString();
-        const KMimeType::Ptr mime = KMimeType::mimeType(mimename);
-        if (!mime.isNull()) {
-            sLastFormat = mime->name();
+        const QMimeType mime = db.mimeTypeForName(mimename);
+        if (mime.isValid()) {
+            sLastFormat = mime.name();
             return (ImageFormat::formatForMime(mime));
         }
     }
 
-    return (ImageFormat("PNG"));            // a sensible default
+    return (ImageFormat("PNG"));			// a sensible default
 }
 
 QString FormatDialog::getFilename() const
 {
-    if (mFilenameEdit == NULL) {
-        return (mFilename);    // no UI for this
-    }
+    if (mFilenameEdit == NULL) return (mFilename);	// no UI for this
     return (mFilenameEdit->text());
 }
 
@@ -576,40 +575,32 @@ void FormatDialog::checkValid()
 
 void FormatDialog::buildFormatList(bool recOnly)
 {
-    if (mFormatList == NULL) {
-        return;    // not showing this
-    }
-
+    if (mFormatList == NULL) return;			// not showing this
     //qDebug() << "recOnly" << recOnly << "for type" << mImageType;
 
     mFormatList->clear();
-    for (KMimeType::List::const_iterator it = mMimeTypes.constBegin();
-            it != mMimeTypes.constEnd(); ++it) {
-        KMimeType::Ptr mime = (*it);
-        if (recOnly) {                  // only want recommended
+    foreach (const QMimeType &mime, mMimeTypes)
+    {
+        if (recOnly) {					// only want recommended
             bool formatOk = false;
             for (formatInfo *ip = &formats[0]; ip->mime != NULL; ++ip) {
                 // search for this format
-                if (!mime->is(ip->mime)) {
-                    continue;
-                }
+                if (!mime.inherits(ip->mime)) continue;
 
-                if (ip->recForTypes & mImageType) { // recommended for this type?
-                    formatOk = true;            // this format to be shown
-                    break;              // no more to do
+                if (ip->recForTypes & mImageType) {	// recommended for this type?
+                    formatOk = true;			// this format to be shown
+                    break;				// no more to do
                 }
             }
 
-            if (!formatOk) {
-                continue;    // this format not to be shown
-            }
+            if (!formatOk) continue;			// this format not to be shown
         }
         // add format to list
-        QListWidgetItem *item = new QListWidgetItem(QIcon::fromTheme(mime->iconName()),
-                mime->comment(), mFormatList);
-        // Not sure whether a KMimeType::Ptr can safely be stored in a
+        QListWidgetItem *item = new QListWidgetItem(QIcon::fromTheme(mime.iconName()),
+                mime.comment(), mFormatList);
+        // Not sure whether a QMimeType can safely be stored in a
         // QVariant, so storing the MIME type name instead.
-        item->setData(Qt::UserRole, mime->name());
+        item->setData(Qt::UserRole, mime.name());
         mFormatList->addItem(item);
     }
 

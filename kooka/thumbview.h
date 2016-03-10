@@ -1,39 +1,44 @@
-/***************************************************** -*- mode:c++; -*- ***
-               thumbview.h  - Class to display thumbnailed images
-                             -------------------
-    begin                : Tue Apr 18 2002
-    copyright            : (C) 2002 by Klaas Freitag
-    email                : freitag@suse.de
-
- ***************************************************************************/
-
-/***************************************************************************
- *                                                                         *
- *  This file may be distributed and/or modified under the terms of the    *
- *  GNU General Public License version 2 as published by the Free Software *
- *  Foundation and appearing in the file COPYING included in the           *
- *  packaging of this file.                                                *
- *
- *  As a special exception, permission is given to link this program       *
- *  with any version of the KADMOS ocr/icr engine of reRecognition GmbH,   *
- *  Kreuzlingen and distribute the resulting executable without            *
- *  including the source code for KADMOS in the source distribution.       *
- *
- *  As a special exception, permission is given to link this program       *
- *  with any edition of Qt, and distribute the resulting executable,       *
- *  without including the source code for Qt in the source distribution.   *
- *                                                                         *
- ***************************************************************************/
+/************************************************************************
+ *									*
+ *  This file is part of Kooka, a scanning/OCR application using	*
+ *  Qt <http://www.qt.io> and KDE Frameworks <http://www.kde.org>.	*
+ *									*
+ *  Copyright (C) 2002-2016 Klaas Freitag <freitag@suse.de>		*
+ *                          Jonathan Marten <jjm@keelhaul.me.uk>	*
+ *									*
+ *  Kooka is free software; you can redistribute it and/or modify it	*
+ *  under the terms of the GNU Library General Public License as	*
+ *  published by the Free Software Foundation and appearing in the	*
+ *  file COPYING included in the packaging of this file;  either	*
+ *  version 2 of the License, or (at your option) any later version.	*
+ *									*
+ *  As a special exception, permission is given to link this program	*
+ *  with any version of the KADMOS OCR/ICR engine (a product of		*
+ *  reRecognition GmbH, Kreuzlingen), and distribute the resulting	*
+ *  executable without including the source code for KADMOS in the	*
+ *  source distribution.						*
+ *									*
+ *  This program is distributed in the hope that it will be useful,	*
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of	*
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the	*
+ *  GNU General Public License for more details.			*
+ *									*
+ *  You should have received a copy of the GNU General Public		*
+ *  License along with this program;  see the file COPYING.  If		*
+ *  not, see <http://www.gnu.org/licenses/>.				*
+ *									*
+ ************************************************************************/
 
 #ifndef THUMBVIEW_H
 #define THUMBVIEW_H
 
 #include <qmap.h>
+#include <qurl.h>
 
 #include <kdiroperator.h>
 #include <kiconloader.h>
-#include <kurl.h>
 
+// TODO: use KConfigXT
 //  KConfig group definitions
 #define THUMB_GROUP     "thumbnailView"
 #define THUMB_PREVIEW_SIZE  "previewSize"
@@ -41,8 +46,8 @@
 #define THUMB_BG_WALLPAPER  "BackGroundTile"
 #define THUMB_STD_TILE_IMG  "kooka/pics/thumbviewtile.png"
 
-class KFileItem;
 class QMenu;
+class KFileItem;
 class KActionMenu;
 class KToggleAction;
 
@@ -67,7 +72,7 @@ public slots:
     void slotImageDeleted(const KFileItem *kfi);
     void slotImageChanged(const KFileItem *kfi);
     void slotImageRenamed(const KFileItem *kfi, const QString &newName);
-    void slotHighlightItem(const KUrl &url, bool isDir);
+    void slotHighlightItem(const QUrl &url, bool isDir);
 
 protected:
     void saveConfig();
@@ -81,8 +86,8 @@ protected slots:
     void slotSetSize(int size);
 
 signals:
-    void itemHighlighted(const KUrl &url);
-    void itemActivated(const KUrl &url);
+    void itemHighlighted(const QUrl &url);
+    void itemActivated(const QUrl &url);
 
 private:
     void setBackground();
@@ -96,9 +101,9 @@ private:
     QString m_bgImg;
     bool m_customBg;
 
-    KUrl m_lastSelected;
-    KUrl m_toSelect;
-    KUrl m_toChangeTo;
+    QUrl m_lastSelected;
+    QUrl m_toSelect;
+    QUrl m_toChangeTo;
 };
 
 #endif                          // THUMBVIEW_H

@@ -1,54 +1,60 @@
-/***************************************************************************
-               thumbview.cpp  - Class to display thumbnailed images
-                             -------------------
-    begin                : Tue Apr 18 2002
-    copyright            : (C) 2002 by Klaas Freitag
-    email                : freitag@suse.de
-
- ***************************************************************************/
-
-/***************************************************************************
- *                                                                         *
- *  This file may be distributed and/or modified under the terms of the    *
- *  GNU General Public License version 2 as published by the Free Software *
- *  Foundation and appearing in the file COPYING included in the           *
- *  packaging of this file.                                                *
- *
- *  As a special exception, permission is given to link this program       *
- *  with any version of the KADMOS ocr/icr engine of reRecognition GmbH,   *
- *  Kreuzlingen and distribute the resulting executable without            *
- *  including the source code for KADMOS in the source distribution.       *
- *
- *  As a special exception, permission is given to link this program       *
- *  with any edition of Qt, and distribute the resulting executable,       *
- *  without including the source code for Qt in the source distribution.   *
- *                                                                         *
- ***************************************************************************/
+/************************************************************************
+ *									*
+ *  This file is part of Kooka, a scanning/OCR application using	*
+ *  Qt <http://www.qt.io> and KDE Frameworks <http://www.kde.org>.	*
+ *									*
+ *  Copyright (C) 2002-2016 Klaas Freitag <freitag@suse.de>		*
+ *                          Jonathan Marten <jjm@keelhaul.me.uk>	*
+ *									*
+ *  Kooka is free software; you can redistribute it and/or modify it	*
+ *  under the terms of the GNU Library General Public License as	*
+ *  published by the Free Software Foundation and appearing in the	*
+ *  file COPYING included in the packaging of this file;  either	*
+ *  version 2 of the License, or (at your option) any later version.	*
+ *									*
+ *  As a special exception, permission is given to link this program	*
+ *  with any version of the KADMOS OCR/ICR engine (a product of		*
+ *  reRecognition GmbH, Kreuzlingen), and distribute the resulting	*
+ *  executable without including the source code for KADMOS in the	*
+ *  source distribution.						*
+ *									*
+ *  This program is distributed in the hope that it will be useful,	*
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of	*
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the	*
+ *  GNU General Public License for more details.			*
+ *									*
+ *  You should have received a copy of the GNU General Public		*
+ *  License along with this program;  see the file COPYING.  If		*
+ *  not, see <http://www.gnu.org/licenses/>.				*
+ *									*
+ ************************************************************************/
 
 #include "thumbview.h"
 
 #include <qsignalmapper.h>
 #include <qabstractitemview.h>
 #include <qlistview.h>
+#include <qaction.h>
+#include <qdebug.h>
+#include <qmenu.h>
 
 #include <kfileitem.h>
 #include <kglobal.h>
 #include <kstandarddirs.h>
-#include <QAction>
 #include <kactionmenu.h>
 #include <kdiroperator.h>
-#include <KLocalizedString>
-#include <QDebug>
-#include <QMenu>
+#include <klocalizedstring.h>
 #include <kconfiggroup.h>
 #include <kcolorscheme.h>
 
 #include "kookapref.h"
 
-#define PREVIEW_MAX_FILESIZE    (20*1024*1024LL)    // 20Mb, standard default is 5Mb
+
+#define PREVIEW_MAX_FILESIZE    (20*1024*1024LL)	// 20Mb, standard default is 5Mb
+
 
 ThumbView::ThumbView(QWidget *parent)
-    : KDirOperator(KUrl(), parent)
+    : KDirOperator(QUrl(), parent)
 {
     setObjectName("ThumbView");
 
@@ -57,12 +63,13 @@ ThumbView::ThumbView(QWidget *parent)
     m_bgImg = QString::null;
     m_firstMenu = true;
 
-    // No way to set the maximum file size or to ignore it directly,
+    // There seems to be no way to set the maximum file size or to ignore it directly,
     // the preview job with that setting is private to KFilePreviewGenerator.
     // But we can set the size limit in the application config - this also has
     // a useful side effect that the user can change the setting there if they
     // so wish.
     // See PreviewJob::maximumFileSize() in kdelibs/kio/kio/previewjob.cpp
+    // TODO: use KConfigXT
     const KSharedConfigPtr conf = KSharedConfig::openConfig();
     KConfig conf2(conf->name(), KConfig::NoGlobals);    // ensure setting goes to app config
     KConfigGroup grp = conf2.group("PreviewSettings");
@@ -74,7 +81,7 @@ ThumbView::ThumbView(QWidget *parent)
         //qDebug() << "Using maximum preview file size" << grp.readEntry("MaximumSize", 0);
     }
 
-    setUrl(KUrl(KookaPref::galleryRoot()), true);   // initial location
+    setUrl(QUrl::fromUserInput(KookaPref::galleryRoot()), true); // initial location
     setPreviewWidget(NULL);             // no preview at side
     setMode(KFile::File);               // implies single selection mode
     setInlinePreviewShown(true);            // show file previews
@@ -104,8 +111,8 @@ ThumbView::ThumbView(QWidget *parent)
             SLOT(slotEnsureVisible()));
 
     m_lastSelected = url();
-    m_toSelect = KUrl();
-    m_toChangeTo = KUrl();
+    m_toSelect = QUrl();
+    m_toChangeTo = QUrl();
 
     readSettings();
 
@@ -153,23 +160,16 @@ ThumbView::~ThumbView()
     saveConfig();
 }
 
-void ThumbView::slotHighlightItem(const KUrl &url, bool isDir)
+void ThumbView::slotHighlightItem(const QUrl &url, bool isDir)
 {
-    //qDebug() << "url" << url << "isDir" << isDir;
+    QUrl cur = this->url();				// directory currently showing
+    QUrl urlToShow = url;				// new URL to show
+    QUrl dirToShow = urlToShow;				// directory part of that
+    if (!isDir) dirToShow = dirToShow.adjusted(QUrl::RemoveFilename);
 
-    KUrl cur = this->url();             // directory currently showing
-
-    KUrl urlToShow = url;               // new URL to show
-    KUrl dirToShow = urlToShow;             // directory part of that
-    if (!isDir) {
-        dirToShow.setFileName(QString::null);
-    }
-
-    if (cur.path(KUrl::AddTrailingSlash) != dirToShow.path(KUrl::AddTrailingSlash)) {
-        // see if changing path
-        if (!isDir) {
-            m_toSelect = urlToShow;    // select that when loading finished
-        }
+    if (cur.adjusted(QUrl::StripTrailingSlash).path() != dirToShow.adjusted(QUrl::StripTrailingSlash).path())
+    {							// see if changing path
+        if (!isDir) m_toSelect = urlToShow;		// select that when loading finished
 
         // Bug 216928: Need to check whether the KDirOperator's KDirLister is
         // currently busy.  If it is, then trying to set the KDirOperator to a
@@ -212,7 +212,7 @@ void ThumbView::slotHighlightItem(const KUrl &url, bool isDir)
     }
 
     bool b = blockSignals(true);            // avoid signal loop
-    //QT5 setCurrentItem(isDir ? QString::null : urlToShow.url());
+    setCurrentItem(isDir ? QUrl() : urlToShow);
     blockSignals(b);
 }
 
@@ -248,16 +248,16 @@ void ThumbView::slotFinishedLoading()
     if (m_toChangeTo.isValid()) {           // see if change deferred
         //qDebug() << "setting dirop url to" << m_toChangeTo;
         setUrl(m_toChangeTo, true);         // change path and reload
-        m_toChangeTo = KUrl();              // have dealt with this now
+        m_toChangeTo = QUrl();              // have dealt with this now
         return;
     }
 
     if (m_toSelect.isValid()) {             // see if something to select
         //qDebug() << "selecting" << m_toSelect;
         bool blk = blockSignals(true);          // avoid signal loop
-        //QT5 setCurrentItem(m_toSelect.url());
+        setCurrentItem(m_toSelect);
         blockSignals(blk);
-        m_toSelect = KUrl();                // have dealt with this now
+        m_toSelect = QUrl();                // have dealt with this now
     }
 }
 
@@ -281,7 +281,7 @@ void ThumbView::slotEnsureVisible()
 
 void ThumbView::slotFileSelected(const KFileItem &kfi)
 {
-    KUrl u = (!kfi.isNull() ? kfi.url() : url());
+    QUrl u = (!kfi.isNull() ? kfi.url() : url());
     //qDebug() << u;
 
     if (u != m_lastSelected) {
@@ -292,7 +292,7 @@ void ThumbView::slotFileSelected(const KFileItem &kfi)
 
 void ThumbView::slotFileHighlighted(const KFileItem &kfi)
 {
-    KUrl u = (!kfi.isNull() ? kfi.url() : url());
+    QUrl u = (!kfi.isNull() ? kfi.url() : url());
     //qDebug() << u;
     emit itemHighlighted(u);
 }

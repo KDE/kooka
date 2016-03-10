@@ -30,7 +30,6 @@
 
 #include <kglobalsettings.h>
 #include <kfileitem.h>
-#include <kmimetype.h>
 #include <kstandarddirs.h>
 
 #include <kio/job.h>
@@ -327,7 +326,7 @@ void FileTreeView::slotDataChanged(const QModelIndex &topLeft, const QModelIndex
 FileTreeBranch *FileTreeView::addBranch(const QUrl &path, const QString &name,
                                         bool showHidden)
 {
-    const QIcon &folderPix = QIcon::fromTheme(KMimeType::mimeType("inode/directory")->iconName());
+    const QIcon &folderPix = QIcon::fromTheme("inode-directory");
     return (addBranch(path, name, folderPix, showHidden));
 }
 

@@ -1,41 +1,51 @@
-
-/***************************************************************************
- *                                                                         *
- *  This file may be distributed and/or modified under the terms of the    *
- *  GNU General Public License version 2 as published by the Free Software *
- *  Foundation and appearing in the file COPYING included in the           *
- *  packaging of this file.                                                *
- *
- *  As a special exception, permission is given to link this program       *
- *  with any version of the KADMOS ocr/icr engine of reRecognition GmbH,   *
- *  Kreuzlingen and distribute the resulting executable without            *
- *  including the source code for KADMOS in the source distribution.       *
- *
- *  As a special exception, permission is given to link this program       *
- *  with any edition of Qt, and distribute the resulting executable,       *
- *  without including the source code for Qt in the source distribution.   *
- *                                                                         *
- ***************************************************************************/
+/************************************************************************
+ *									*
+ *  This file is part of Kooka, a scanning/OCR application using	*
+ *  Qt <http://www.qt.io> and KDE Frameworks <http://www.kde.org>.	*
+ *									*
+ *  Copyright (C) 1999-2016 Klaas Freitag <Klaas.Freitag@gmx.de>	*
+ *                          Jonathan Marten <jjm@keelhaul.me.uk>	*
+ *									*
+ *  Kooka is free software; you can redistribute it and/or modify it	*
+ *  under the terms of the GNU Library General Public License as	*
+ *  published by the Free Software Foundation and appearing in the	*
+ *  file COPYING included in the packaging of this file;  either	*
+ *  version 2 of the License, or (at your option) any later version.	*
+ *									*
+ *  As a special exception, permission is given to link this program	*
+ *  with any version of the KADMOS OCR/ICR engine (a product of		*
+ *  reRecognition GmbH, Kreuzlingen), and distribute the resulting	*
+ *  executable without including the source code for KADMOS in the	*
+ *  source distribution.						*
+ *									*
+ *  This program is distributed in the hope that it will be useful,	*
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of	*
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the	*
+ *  GNU General Public License for more details.			*
+ *									*
+ *  You should have received a copy of the GNU General Public		*
+ *  License along with this program;  see the file COPYING.  If		*
+ *  not, see <http://www.gnu.org/licenses/>.				*
+ *									*
+ ************************************************************************/
 
 #ifndef SCANGALLERY_H
 #define SCANGALLERY_H
 
 #include <qmap.h>
 
-#include <kmimetypetrader.h>
-
 #include "libfiletree/filetreeview.h"
 #include "imageformat.h"
 
 class QImage;
 class QTreeWidgetItem;
-
 class QMenu;
-class KUrl;
+class QUrl;
 
 class ImgSaver;
 class ImageMetaInfo;
 class KookaImage;
+
 
 class ScanGallery : public FileTreeView
 {
@@ -61,12 +71,12 @@ public:
 
     void saveHeaderState(const QString &key) const;
     void restoreHeaderState(const QString &key);
-    KUrl saveURL() const;
+    QUrl saveURL() const;
 
 public slots:
     void slotExportFile();
     void slotImportFile();
-    void slotSelectImage(const KUrl &url);
+    void slotSelectImage(const QUrl &url);
     void slotSelectDirectory(const QString &branchName, const QString &relPath);
     void slotUnloadItems();
 
@@ -96,12 +106,12 @@ protected slots:
 
     void slotItemHighlighted(QTreeWidgetItem *curr);
     void slotItemActivated(QTreeWidgetItem *curr);
-    void slotHighlightItem(const KUrl &url);
-    void slotActivateItem(const KUrl &url);
-    void slotUpdatedItem(const KUrl &url);
+    void slotHighlightItem(const QUrl &url);
+    void slotActivateItem(const QUrl &url);
+    void slotUpdatedItem(const QUrl &url);
 
 signals:
-    void aboutToShowImage(const KUrl &url);
+    void aboutToShowImage(const QUrl &url);
     void showImage(const KookaImage *img, bool isDir);
     void deleteImage(const KookaImage *img);
     void unloadImage(const KookaImage *img);
@@ -113,18 +123,18 @@ signals:
     void fileRenamed(const KFileItem *item, const QString &newName);
     void showItem(const KFileItem *kfi);
 
-    void itemHighlighted(const KUrl &url, bool isDir);
+    void itemHighlighted(const QUrl &url, bool isDir);
 
 private:
     void loadImageForItem(FileTreeViewItem *item);
-    FileTreeBranch *openRoot(const KUrl &root, const QString &title = QString::null);
+    FileTreeBranch *openRoot(const QUrl &root, const QString &title = QString::null);
 
-    FileTreeViewItem *findItemByUrl(const KUrl &url, FileTreeBranch *branch = NULL);
-    KUrl itemDirectory(const FileTreeViewItem *item) const;
+    FileTreeViewItem *findItemByUrl(const QUrl &url, FileTreeBranch *branch = NULL);
+    QUrl itemDirectory(const FileTreeViewItem *item) const;
     QString itemDirectoryRelative(const FileTreeViewItem *item) const;
     void updateParent(const FileTreeViewItem *curr);
 
-    KUrl m_currSelectedDir;
+    QUrl m_currSelectedDir;
     QMenu *m_contextMenu;
 
     ImgSaver *mSaver;
@@ -132,7 +142,7 @@ private:
 
     // like m_nextUrlToSelect in KFileTreeView,
     // but for our own purposes (showing the image)
-    KUrl m_nextUrlToShow;
+    QUrl m_nextUrlToShow;
 
     QPixmap mPixFloppy;
     QPixmap mPixGray;

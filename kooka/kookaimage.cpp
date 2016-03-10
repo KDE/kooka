@@ -26,10 +26,13 @@
 
 #include "kookaimage.h"
 
-#include <QDebug>
+#include <qdebug.h>
+#include <qmimetype.h>
+#include <qmimedatabase.h>
+
 #include <kurl.h>
 #include <kfileitem.h>
-#include <KLocalizedString>
+#include <klocalizedstring.h>
 
 #include "imageformat.h"
 
@@ -40,6 +43,7 @@ extern "C"
 #include <tiff.h>
 }
 #endif
+
 
 KookaImage::KookaImage()
     : QImage()
@@ -135,9 +139,9 @@ bool KookaImage::isFileBound() const
 
 QString KookaImage::loadFromUrl(const KUrl &url)
 {
-    bool ret = true;                    // return status
-    bool isTiff = false;                // do we have a TIFF file?
-    bool haveTiff = false;              // can it be read via TIFF lib?
+    bool ret = true;					// return status
+    bool isTiff = false;				// do we have a TIFF file?
+    bool haveTiff = false;				// can it be read via TIFF lib?
 
     if (!url.isLocalFile()) {
         return (i18n("Loading non-local images is not yet implemented"));
@@ -146,11 +150,12 @@ QString KookaImage::loadFromUrl(const KUrl &url)
     QString filename = url.toLocalFile();
     ImageFormat format = ImageFormat::formatForUrl(url);
 
-    KMimeType::Ptr mime = KMimeType::findByUrl(url, 0, true);
-    if (mime->is("image/tiff")) {           // check MIME for TIFF file
-        isTiff = true;                  // note that for later
-        if (!format.isValid()) {            // if format wasn't recognised,
-            format = ImageFormat("TIF");        // set it now
+    QMimeDatabase db;
+    QMimeType mime = db.mimeTypeForUrl(url);
+    if (mime.inherits("image/tiff")) {			// check MIME for TIFF file
+        isTiff = true;					// note that for later
+        if (!format.isValid()) {			// if format wasn't recognised,
+            format = ImageFormat("TIF");		// set it now
             //qDebug() << "Setting format to TIFF by MIME type";
         }
     }

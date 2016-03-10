@@ -1,21 +1,33 @@
-
-/***************************************************************************
- *                                                                         *
- *  This file may be distributed and/or modified under the terms of the    *
- *  GNU General Public License version 2 as published by the Free Software *
- *  Foundation and appearing in the file COPYING included in the           *
- *  packaging of this file.                                                *
- *
- *  As a special exception, permission is given to link this program       *
- *  with any version of the KADMOS ocr/icr engine of reRecognition GmbH,   *
- *  Kreuzlingen and distribute the resulting executable without            *
- *  including the source code for KADMOS in the source distribution.       *
- *
- *  As a special exception, permission is given to link this program       *
- *  with any edition of Qt, and distribute the resulting executable,       *
- *  without including the source code for Qt in the source distribution.   *
- *                                                                         *
- ***************************************************************************/
+/************************************************************************
+ *									*
+ *  This file is part of Kooka, a scanning/OCR application using	*
+ *  Qt <http://www.qt.io> and KDE Frameworks <http://www.kde.org>.	*
+ *									*
+ *  Copyright (C) 1999-2016 Klaas Freitag <Klaas.Freitag@gmx.de>	*
+ *                          Jonathan Marten <jjm@keelhaul.me.uk>	*
+ *									*
+ *  Kooka is free software; you can redistribute it and/or modify it	*
+ *  under the terms of the GNU Library General Public License as	*
+ *  published by the Free Software Foundation and appearing in the	*
+ *  file COPYING included in the packaging of this file;  either	*
+ *  version 2 of the License, or (at your option) any later version.	*
+ *									*
+ *  As a special exception, permission is given to link this program	*
+ *  with any version of the KADMOS OCR/ICR engine (a product of		*
+ *  reRecognition GmbH, Kreuzlingen), and distribute the resulting	*
+ *  executable without including the source code for KADMOS in the	*
+ *  source distribution.						*
+ *									*
+ *  This program is distributed in the hope that it will be useful,	*
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of	*
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the	*
+ *  GNU General Public License for more details.			*
+ *									*
+ *  You should have received a copy of the GNU General Public		*
+ *  License along with this program;  see the file COPYING.  If		*
+ *  not, see <http://www.gnu.org/licenses/>.				*
+ *									*
+ ************************************************************************/
 
 #include "scangallery.h"
 
@@ -24,23 +36,20 @@
 #include <qevent.h>
 #include <qapplication.h>
 #include <qheaderview.h>
+#include <qmenu.h>
+#include <qdebug.h>
 
-#include <KGlobal>
+#include <kglobal.h>
 #include <kmessagebox.h>
 #include <kpropertiesdialog.h>
-#include <QMenu>
 #include <kinputdialog.h>
 #include <kiconloader.h>
 #include <kfiledialog.h>
-#include <kurl.h>
-#include <QDebug>
-#include <KLocalizedString>
-#include <kmimetype.h>
+#include <klocalizedstring.h>
 #include <kstandardguiitem.h>
 #include <kimageio.h>
 #include <kconfig.h>
 #include <KConfigGroup>
-#include <QMimeData>
 
 #include <kio/global.h>
 #include <kio/copyjob.h>
@@ -54,6 +63,7 @@
 
 #include "imagemetainfo.h"
 
+// TODO: use KConfigXT
 #define COLUMN_STATES_GROUP "GalleryColumns"
 
 // FileTreeViewItem is not the same as KDE3's KFileTreeViewItem in that
@@ -68,6 +78,7 @@
 //
 // We store the image pointer in the 'clientData' of the item (of the ported
 // FileTreeView) instead.
+// TODO: use FileTreeViewItem->data(Qt::UserRole)
 
 ScanGallery::ScanGallery(QWidget *parent)
     : FileTreeView(parent)
@@ -118,7 +129,7 @@ ScanGallery::ScanGallery(QWidget *parent)
     mPixColor  = KIconLoader::global()->loadIcon("palette-color", KIconLoader::NoGroup, KIconLoader::SizeSmall);
 
     m_startup = true;
-    m_currSelectedDir = KUrl();
+    m_currSelectedDir = QUrl();
     mSaver = NULL;
     mSavedTo = NULL;
 
@@ -168,7 +179,7 @@ void ScanGallery::openRoots()
     //openRoot(KUrl(getenv("HOME")), i18n("Home Directory"));
 }
 
-FileTreeBranch *ScanGallery::openRoot(const KUrl &root, const QString &title)
+FileTreeBranch *ScanGallery::openRoot(const QUrl &root, const QString &title)
 {
     FileTreeBranch *branch = addBranch(root, title);
 
@@ -258,9 +269,7 @@ static QString localFileName(const FileTreeViewItem *item)
 
 static KookaImage *imageForItem(const FileTreeViewItem *item)
 {
-    if (item == NULL) {
-        return (NULL);    // get loaded image if any
-    }
+    if (item == NULL) return (NULL);			// get loaded image if any
     return (static_cast<KookaImage *>(item->clientData()));
 }
 
@@ -306,7 +315,7 @@ void ScanGallery::slotItemActivated(QTreeWidgetItem *curr)
 
 // These 2 slots are called when an item is clicked/activated in the thumbnail view.
 
-void ScanGallery::slotHighlightItem(const KUrl &url)
+void ScanGallery::slotHighlightItem(const QUrl &url)
 {
     //qDebug() << url;
 
@@ -326,7 +335,7 @@ void ScanGallery::slotHighlightItem(const KUrl &url)
     slotItemHighlighted(found);
 }
 
-void ScanGallery::slotActivateItem(const KUrl &url)
+void ScanGallery::slotActivateItem(const QUrl &url)
 {
     //qDebug() << url;
 
@@ -342,7 +351,7 @@ void ScanGallery::slotActivateItem(const KUrl &url)
 // (e.g. an image transformation).  The item image is reloaded only if it
 // is still currently selected.
 
-void ScanGallery::slotUpdatedItem(const KUrl &url)
+void ScanGallery::slotUpdatedItem(const QUrl &url)
 {
     FileTreeViewItem *found = findItemByUrl(url);
     if (found == NULL) {
@@ -373,14 +382,11 @@ void ScanGallery::slotDirCount(FileTreeViewItem *item, int cnt)
         if (ci->isDir()) {
             ++dirCount;
         } else {
-//QT5
-#if 0
-            if (ImageFormat::formatForMime(ci->fileItem()->mimeTypePtr()).isValid()) {
+            if (ImageFormat::formatForMime(ci->fileItem()->determineMimeType()).isValid()) {
                 ++imgCount;
             } else {
                 ++fileCount;
             }
-#endif
         }
     }
 
@@ -468,8 +474,9 @@ void ScanGallery::slotDecorate(FileTreeViewItem *item)
     // When scanning a new image, we wait for the KDirLister to notice the new file,
     // and then we have the FileTreeViewItem that we need to display the image.
     if (!m_nextUrlToShow.isEmpty()) {
-        if (m_nextUrlToShow.equals(item->url(), KUrl::CompareWithoutTrailingSlash)) {
-            m_nextUrlToShow = KUrl();           // do this first to prevent recursion
+        if (m_nextUrlToShow.adjusted(QUrl::StripTrailingSlash) ==
+            item->url().adjusted(QUrl::StripTrailingSlash)) {
+            m_nextUrlToShow = QUrl();           // do this first to prevent recursion
             slotItemActivated(item);
             setCurrentItem(item);           // neccessary in case of new file from D&D
         }
@@ -593,18 +600,19 @@ static QString buildNewFilename(const QString &cmplFilename, const ImageFormat &
 /* The absolute URL of the item (if it is a directory), or its parent (if
    it is a file).
 */
-KUrl ScanGallery::itemDirectory(const FileTreeViewItem *item) const
+QUrl ScanGallery::itemDirectory(const FileTreeViewItem *item) const
 {
     if (item == NULL) {
         //qDebug() << "no item";
-        return (KUrl());
+        return (QUrl());
     }
 
-    KUrl u = item->url();
+    QUrl u = item->url();
     if (!item->isDir()) {
-        u.setFileName("");    // not a directory, remove file name
+        u = u.adjusted(QUrl::RemoveFilename);		// not a directory, remove file name
     } else {
-        u.adjustPath(KUrl::AddTrailingSlash);    // is a directory, ensure ends with "/"
+        u = u.adjusted(QUrl::StripTrailingSlash);	// is a directory, ensure ends with "/"
+        u.setPath(u.path()+'/');
     }
     return (u);
 }
@@ -848,10 +856,10 @@ bool ScanGallery::prepareToSave(const ImageMetaInfo *info)
     return (true);                  // all ready to save
 }
 
-KUrl ScanGallery::saveURL() const
+QUrl ScanGallery::saveURL() const
 {
     if (mSaver == NULL) {
-        return (KUrl());
+        return (QUrl());
     }
     // TODO: relative to root
     return (mSaver->saveURL());
@@ -901,7 +909,7 @@ void ScanGallery::addImage(const QImage *img, const ImageMetaInfo *info)
 // Selects and loads the image with the given URL. This is used to restore the
 // last displayed image on startup.
 
-void ScanGallery::slotSelectImage(const KUrl &url)
+void ScanGallery::slotSelectImage(const QUrl &url)
 {
     FileTreeViewItem *found = findItemByUrl(url);
     if (found == NULL) {
@@ -913,11 +921,11 @@ void ScanGallery::slotSelectImage(const KUrl &url)
     slotItemActivated(found);
 }
 
-FileTreeViewItem *ScanGallery::findItemByUrl(const KUrl &url, FileTreeBranch *branch)
+FileTreeViewItem *ScanGallery::findItemByUrl(const QUrl &url, FileTreeBranch *branch)
 {
-    KUrl u(url);
-    if (u.protocol() == "file") {           // for local files,
-        QDir d(url.path());             // ensure path is canonical
+    QUrl u(url);
+    if (u.scheme() == "file") {				// for local files,
+        QDir d(url.path());				// ensure path is canonical
         u.setPath(d.canonicalPath());
     }
     //qDebug() << "URL search for" << u;
@@ -964,7 +972,7 @@ void ScanGallery::slotExportFile()
     QString filter;
     ImageFormat format = getImgFormat(curr);
     if (format.isValid()) {
-        filter = "*." + format.extension() + "|" + format.mime()->comment() + "\n";
+        filter = "*." + format.extension() + "|" + format.mime().comment() + "\n";
     }
 // TODO: do we need the below?
     filter += "*|" + i18n("All Files");

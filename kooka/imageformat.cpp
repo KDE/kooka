@@ -1,27 +1,39 @@
-/***************************************************************************
- *                                                                         *
- *  This file may be distributed and/or modified under the terms of the    *
- *  GNU General Public License version 2 as published by the Free Software *
- *  Foundation and appearing in the file COPYING included in the           *
- *  packaging of this file.                                                *
- *
- *  As a special exception, permission is given to link this program       *
- *  with any version of the KADMOS ocr/icr engine of reRecognition GmbH,   *
- *  Kreuzlingen and distribute the resulting executable without            *
- *  including the source code for KADMOS in the source distribution.       *
- *
- *  As a special exception, permission is given to link this program       *
- *  with any edition of Qt, and distribute the resulting executable,       *
- *  without including the source code for Qt in the source distribution.   *
- *                                                                         *
- ***************************************************************************/
+/************************************************************************
+ *									*
+ *  This file is part of Kooka, a scanning/OCR application using	*
+ *  Qt <http://www.qt.io> and KDE Frameworks <http://www.kde.org>.	*
+ *									*
+ *  Copyright (C) 2009-2016 Jonathan Marten <jjm@keelhaul.me.uk>	*
+ *									*
+ *  Kooka is free software; you can redistribute it and/or modify it	*
+ *  under the terms of the GNU Library General Public License as	*
+ *  published by the Free Software Foundation and appearing in the	*
+ *  file COPYING included in the packaging of this file;  either	*
+ *  version 2 of the License, or (at your option) any later version.	*
+ *									*
+ *  As a special exception, permission is given to link this program	*
+ *  with any version of the KADMOS OCR/ICR engine (a product of		*
+ *  reRecognition GmbH, Kreuzlingen), and distribute the resulting	*
+ *  executable without including the source code for KADMOS in the	*
+ *  source distribution.						*
+ *									*
+ *  This program is distributed in the hope that it will be useful,	*
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of	*
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the	*
+ *  GNU General Public License for more details.			*
+ *									*
+ *  You should have received a copy of the GNU General Public		*
+ *  License along with this program;  see the file COPYING.  If		*
+ *  not, see <http://www.gnu.org/licenses/>.				*
+ *									*
+ ************************************************************************/
 
 #include "imageformat.h"
 
 #include <qdebug.h>
+#include <qmimetype.h>
+#include <qmimedatabase.h>
 
-#include <QDebug>
-#include <kurl.h>
 #include <kservice.h>
 #include <kservicetypetrader.h>
 
@@ -89,11 +101,11 @@ QDebug operator<<(QDebug stream, const ImageFormat &format)
 // Note that the X-KDE-ImageFormat property can be a list with its entries
 // in indeterminate case, therefore using the '~in' operator.
 
-KService::Ptr ImageFormat::service() const
+static KService::Ptr service(const QByteArray &format)
 {
     const KService::List services = KServiceTypeTrader::self()->query(
                                         "QImageIOPlugins",
-                                        QString("'%1' ~in [X-KDE-ImageFormat]").arg(mFormat.constData()));
+                                        QString("'%1' ~in [X-KDE-ImageFormat]").arg(format.constData()));
     if (services.count() == 0) {
         //qDebug() << "no service found for image format" << *this;
         return (KService::Ptr());
@@ -106,19 +118,17 @@ KService::Ptr ImageFormat::service() const
 // operation to KImageIO::typeForMime(), which really ought to be provided by
 // KImageIO but isn't.
 
-KMimeType::Ptr ImageFormat::mime() const
+QMimeType ImageFormat::mime() const
 {
-    KService::Ptr srv = service();
-    if (!srv) {
-        return (KMimeType::Ptr());
-    }
+    KService::Ptr srv = service(mFormat);
+    if (!srv) return (QMimeType());
 
     QString name = srv->property("X-KDE-MimeType").toString();
-    KMimeType::Ptr mime = KMimeType::mimeType(name);
-    if (mime.isNull()) {
+    QMimeDatabase db;
+    QMimeType mime = db.mimeTypeForName(name);
+    //if (!mime.isValid()) {
         //qDebug() << "no MIME type for image format" << *this;
-        return (KMimeType::Ptr());
-    }
+    //}
 
     //qDebug() << "for" << *this << "returning" << mime->name();
     return (mime);
@@ -133,17 +143,13 @@ KMimeType::Ptr ImageFormat::mime() const
 QString ImageFormat::extension() const
 {
     QString suf = mFormat.toLower();
-    KMimeType::Ptr mp = mime();
-    if (!mp.isNull()) {
-        QString ext = mp->mainExtension();
-        if (!ext.isEmpty()) {
-            suf = ext;
-        }
+    QMimeType mp = mime();
+    if (mp.isValid()) {
+        QString ext = mp.preferredSuffix();
+        if (!ext.isEmpty()) suf = ext;
     }
 
-    if (suf.startsWith('.')) {
-        suf = suf.mid(1);
-    }
+    if (suf.startsWith('.')) suf = suf.mid(1);
     //qDebug() << "for" << *this << "returning" << suf;
     return (suf);
 }
@@ -153,10 +159,8 @@ QString ImageFormat::extension() const
 
 bool ImageFormat::canWrite() const
 {
-    KService::Ptr srv = service();
-    if (!srv) {
-        return (false);
-    }
+    KService::Ptr srv = service(mFormat);
+    if (!srv) return (false);
     return (srv->property("X-KDE-Write").toBool());
 }
 
@@ -168,16 +172,14 @@ bool ImageFormat::canWrite() const
 // Normally we assume that there will only be one, but possibly
 // there may be more.  This lookup just takes the first one.
 
-ImageFormat ImageFormat::formatForMime(const KMimeType::Ptr &mime)
+ImageFormat ImageFormat::formatForMime(const QMimeType &mime)
 {
-    if (mime.isNull()) {
-        return (ImageFormat());
-    }
+    if (!mime.isValid()) return (ImageFormat());
 
     QStringList formats;
     const KService::List services = KServiceTypeTrader::self()->query("QImageIOPlugins");
     foreach (const KService::Ptr &service, services) {
-        if (mime->is(service->property("X-KDE-MimeType").toString())) {
+        if (mime.inherits(service->property("X-KDE-MimeType").toString())) {
             formats = service->property("X-KDE-ImageFormat").toStringList();
             break;
         }
@@ -195,8 +197,9 @@ ImageFormat ImageFormat::formatForMime(const KMimeType::Ptr &mime)
     return (ImageFormat(formats.first().toLocal8Bit().trimmed()));
 }
 
-ImageFormat ImageFormat::formatForUrl(const KUrl &url)
+ImageFormat ImageFormat::formatForUrl(const QUrl &url)
 {
-    KMimeType::Ptr mime = KMimeType::findByUrl(url, 0, true);
+    QMimeDatabase db;
+    QMimeType mime = db.mimeTypeForUrl(url);
     return (formatForMime(mime));
 }

@@ -1,7 +1,7 @@
 /************************************************************************
  *									*
  *  This file is part of Kooka, a scanning/OCR application using	*
- *  Qt (http://www.qt.io) and KDE Frameworks (http://www.kde.org).	*
+ *  Qt <http://www.qt.io> and KDE Frameworks <http://www.kde.org>.	*
  *									*
  *  Copyright (C) 2013-2016 Jonathan Marten <jjm@keelhaul.me.uk>	*
  *									*
@@ -22,10 +22,9 @@
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the	*
  *  GNU General Public License for more details.			*
  *									*
- *  You should have received a copy of the GNU General Public License	*
- *  along with this program;  see the file COPYING.  If not, write to	*
- *  the Free Software Foundation, Inc., 51 Franklin Street,		*
- *  Fifth Floor, Boston, MA 02110-1301, USA.				*
+ *  You should have received a copy of the GNU General Public		*
+ *  License along with this program;  see the file COPYING.  If		*
+ *  not, see <http://www.gnu.org/licenses/>.				*
  *									*
  ************************************************************************/
 

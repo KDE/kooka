@@ -26,9 +26,9 @@
 
 #include <qdir.h>
 #include <qdebug.h>
+#include <qmimedatabase.h>
 
 #include <kfileitem.h>
-#include <kmimetype.h>
 
 #include "filetreeview.h"
 
@@ -321,7 +321,14 @@ void FileTreeBranch::slotItemsAdded(const QUrl &parent, const KFileItemList &ite
             QString name = currItem.text();
             //int mPoint = name.lastIndexOf('.');
             //if (mPoint>0) name = name.left(mPoint);
-            newItem->setText(0, KMimeType::extractKnownExtension(name));
+
+            QMimeDatabase db;
+            QString ext = db.suffixForFileName(name);
+            if (!ext.isEmpty())
+            {
+                name.chop(ext.length()+1);
+                newItem->setText(0, name);
+            }
         }
 
         // TODO: is this useful (for local dirs) even in non-dirOnlyMode?

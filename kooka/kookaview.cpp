@@ -1,29 +1,33 @@
-/**************************************************************************
-              kookaview.cpp  -  kookas visible stuff
-                             -------------------
-    begin                : ?
-    copyright            : (C) 1999 by Klaas Freitag
-    email                : freitag@suse.de
-
- ***************************************************************************/
-
-/***************************************************************************
- *                                                                         *
- *  This file may be distributed and/or modified under the terms of the    *
- *  GNU General Public License version 2 as published by the Free Software *
- *  Foundation and appearing in the file COPYING included in the           *
- *  packaging of this file.                                                *
- *
- *  As a special exception, permission is given to link this program       *
- *  with any version of the KADMOS ocr/icr engine of reRecognition GmbH,   *
- *  Kreuzlingen and distribute the resulting executable without            *
- *  including the source code for KADMOS in the source distribution.       *
- *
- *  As a special exception, permission is given to link this program       *
- *  with any edition of Qt, and distribute the resulting executable,       *
- *  without including the source code for Qt in the source distribution.   *
- *                                                                         *
- ***************************************************************************/
+/************************************************************************
+ *									*
+ *  This file is part of Kooka, a scanning/OCR application using	*
+ *  Qt <http://www.qt.io> and KDE Frameworks <http://www.kde.org>.	*
+ *									*
+ *  Copyright (C) 1999-2016 Klaas Freitag <freitag@suse.de>		*
+ *                          Jonathan Marten <jjm@keelhaul.me.uk>	*
+ *									*
+ *  Kooka is free software; you can redistribute it and/or modify it	*
+ *  under the terms of the GNU Library General Public License as	*
+ *  published by the Free Software Foundation and appearing in the	*
+ *  file COPYING included in the packaging of this file;  either	*
+ *  version 2 of the License, or (at your option) any later version.	*
+ *									*
+ *  As a special exception, permission is given to link this program	*
+ *  with any version of the KADMOS OCR/ICR engine (a product of		*
+ *  reRecognition GmbH, Kreuzlingen), and distribute the resulting	*
+ *  executable without including the source code for KADMOS in the	*
+ *  source distribution.						*
+ *									*
+ *  This program is distributed in the hope that it will be useful,	*
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of	*
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the	*
+ *  GNU General Public License for more details.			*
+ *									*
+ *  You should have received a copy of the GNU General Public		*
+ *  License along with this program;  see the file COPYING.  If		*
+ *  not, see <http://www.gnu.org/licenses/>.				*
+ *									*
+ ************************************************************************/
 
 #include "kookaview.h"
 
@@ -33,23 +37,23 @@
 #include <qimage.h>
 #include <qapplication.h>
 #include <qsignalmapper.h>
+#include <qdebug.h>
+#include <qicon.h>
+#include <qaction.h>
+#include <qmenu.h>
 
 #include <kurl.h>
 #include <krun.h>
 #include <kapplication.h>
 #include <kconfig.h>
-#include <QDebug>
-#include <QIcon>
 #include <KGlobal>
-//#include <ktrader.h>
-#include <KLocalizedString>
+#include <kmimetypetrader.h>
+#include <klocalizedstring.h>
 #include <kmessagebox.h>
 #include <kled.h>
-#include <QAction>
 #include <kactioncollection.h>
 #include <kactionmenu.h>
 #include <kshortcut.h>
-#include <QMenu>
 #include <ktabwidget.h>
 #include <kfileitem.h>
 #include <kmainwindow.h>
@@ -224,28 +228,28 @@ KookaView::KookaView(KMainWindow *parent, const QByteArray &deviceToUse)
     ScanGallery *packager = mGallery->galleryTree();
 
     // Connections ScanGallery --> myself
-    connect(packager, SIGNAL(itemHighlighted(KUrl,bool)),
+    connect(packager, SIGNAL(itemHighlighted(QUrl,bool)),
             SLOT(slotGallerySelectionChanged()));
     connect(packager, SIGNAL(showImage(const KookaImage*,bool)),
             SLOT(slotShowAImage(const KookaImage*,bool)));
-    connect(packager, SIGNAL(aboutToShowImage(KUrl)),
-            SLOT(slotStartLoading(KUrl)));
+    connect(packager, SIGNAL(aboutToShowImage(QUrl)),
+            SLOT(slotStartLoading(QUrl)));
     connect(packager, SIGNAL(unloadImage(const KookaImage*)),
             SLOT(slotUnloadAImage(const KookaImage*)));
 
     // Connections ScanGallery --> ThumbView
-    connect(packager, SIGNAL(itemHighlighted(KUrl,bool)),
-            mThumbView, SLOT(slotHighlightItem(KUrl,bool)));
+    connect(packager, SIGNAL(itemHighlighted(QUrl,bool)),
+            mThumbView, SLOT(slotHighlightItem(QUrl,bool)));
     connect(packager, SIGNAL(imageChanged(const KFileItem*)),
             mThumbView, SLOT(slotImageChanged(const KFileItem*)));
     connect(packager, SIGNAL(fileRenamed(const KFileItem*,QString)),
             mThumbView, SLOT(slotImageRenamed(const KFileItem*,QString)));
 
     // Connections ThumbView --> ScanGallery
-    connect(mThumbView, SIGNAL(itemHighlighted(KUrl)),
-            packager, SLOT(slotHighlightItem(KUrl)));
-    connect(mThumbView, SIGNAL(itemActivated(KUrl)),
-            packager, SLOT(slotActivateItem(KUrl)));
+    connect(mThumbView, SIGNAL(itemHighlighted(QUrl)),
+            packager, SLOT(slotHighlightItem(QUrl)));
+    connect(mThumbView, SIGNAL(itemActivated(QUrl)),
+            packager, SLOT(slotActivateItem(QUrl)));
 
     GalleryHistory *recentFolder = mGallery->galleryRecent();
 
@@ -707,7 +711,7 @@ void KookaView::loadStartupImage()
         QString startup = grp.readPathEntry(STARTUP_IMG_SELECTION, "");
         //qDebug() << "load startup image" << startup;
         if (!startup.isEmpty()) {
-            gallery()->slotSelectImage(startup);
+            gallery()->slotSelectImage(QUrl::fromLocalFile(startup));
         }
     } else {
         //qDebug() << "do not load startup image";
@@ -878,7 +882,7 @@ void KookaView::slotScanStart(const ImageMetaInfo *info)
             qApp->processEvents();          // let the change show
         }
 
-        mScanParams->setScanDestination(gallery()->saveURL().pathOrUrl());
+        mScanParams->setScanDestination(gallery()->saveURL().url(QUrl::PreferLocalFile));
     }
 }
 
@@ -1040,9 +1044,9 @@ void KookaView::slotUnloadAImage(const KookaImage *img)
 /* this slot is called when the user clicks on an image in the packager
  * and loading of the image starts
  */
-void KookaView::slotStartLoading(const KUrl &url)
+void KookaView::slotStartLoading(const QUrl &url)
 {
-    emit changeStatus(i18n("Loading %1...", url.pathOrUrl()));
+    emit changeStatus(i18n("Loading %1...", url.url(QUrl::PreferLocalFile)));
 }
 
 void KookaView::connectViewerAction(QAction *action, bool sepBefore)
@@ -1229,7 +1233,7 @@ void KookaView::slotImageViewerAction(int act)
 void KookaView::showOpenWithMenu(KActionMenu *menu)
 {
     FileTreeViewItem *curr = gallery()->highlightedFileTreeViewItem();
-    QString mimeType = KMimeType::findByUrl(curr->url())->name();
+    QString mimeType = curr->fileItem()->mimetype();
     //qDebug() << "Trying to open" << curr->url() << "which is" << mimeType;
 
     if (mOpenWithMapper == NULL) {
