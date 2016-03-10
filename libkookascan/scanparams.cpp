@@ -304,9 +304,13 @@ bool ScanParams::connectDevice(KScanDevice *newScanDevice, bool galleryMode)
     mProgressDialog->setModal(true);
     mProgressDialog->setAutoClose(true);
     mProgressDialog->setAutoReset(true);
-    mProgressDialog->setMinimumDuration(100);
     mProgressDialog->setWindowTitle(i18n("Scanning"));
-    setScanDestination(QString::null);          // reset destination display
+    mProgressDialog->setMinimumDuration(100);
+    // Qt5: The next is necessary, as otherwise the progress dialogue will show
+    // itself after the default 'minimumDuration' (= 4 seconds), even despite
+    // the previous and no 'value' being set.
+    mProgressDialog->reset();
+    setScanDestination(QString::null);			// reset destination display
 
     connect(mProgressDialog, &QProgressDialog::canceled, mSaneDevice, &KScanDevice::slotStopScanning);
     connect(mSaneDevice, &KScanDevice::sigScanProgress, this, &ScanParams::slotScanProgress);
@@ -766,7 +770,7 @@ KScanDevice::Status ScanParams::prepareScan(QString *vfp)
 
 void ScanParams::setScanDestination(const QString &dest)
 {
-    ////qDebug() << "scan destination is" << dest;
+    //qDebug() << "scan destination is" << dest;
     if (dest.isEmpty()) {
         mProgressDialog->setLabelText(i18n("Scan in progress"));
     } else {
@@ -777,9 +781,6 @@ void ScanParams::setScanDestination(const QString &dest)
 void ScanParams::slotScanProgress(int value)
 {
     mProgressDialog->setValue(value);
-    if (value == 0 && !mProgressDialog->isVisible()) {
-        mProgressDialog->show();
-    }
 }
 
 /* Slot called to start acquiring a preview */
