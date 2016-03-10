@@ -37,22 +37,8 @@
 #include "imageformat.h"
 #include "imagemetainfo.h"
 
-// TODO: use KConfigXT
-#define OP_SAVER_GROUP      "Files"
-
-#define OP_SAVER_ASK_FORMAT "AskForSaveFormat"
-#define OP_SAVER_ASK_FILENAME   "AskForFilename"
-#define OP_SAVER_ASK_BEFORE "AskBeforeScan"
-#define OP_SAVER_REC_FMT    "OnlyRecommended"
-
-#define OP_FORMAT_HICOLOR   "HiColorSaveFormat"
-#define OP_FORMAT_COLOR     "ColorSaveFormat"
-#define OP_FORMAT_GRAY      "GraySaveFormat"
-#define OP_FORMAT_BW        "BWSaveFormat"
-#define OP_FORMAT_THUMBNAIL "ThumbnailFormat"
-#define OP_FORMAT_UNKNOWN   "UnknownFormat"
-
 class KookaImage;
+
 
 /**
  * @short Manages the saving of images.
@@ -75,17 +61,18 @@ public:
      *
      * @see errorString
      **/
-    enum ImageSaveStatus {
-        SaveStatusOk,               ///< Success
-        SaveStatusPermission,           ///< Permission denied
-        SaveStatusBadFilename,          ///< Bad file name
-        SaveStatusNoSpace,          ///< No space left on device
-        SaveStatusFormatNoWrite,        ///< Cannot write this image format
-        SaveStatusFailed,           ///< Image save failed
-        SaveStatusParam,            ///< Bad parameter
-        SaveStatusProtocol,         ///< Cannot write to this protocol
-        SaveStatusMkdir,            ///< Cannot create directory
-        SaveStatusCanceled          ///< User cancelled
+    enum ImageSaveStatus
+    {
+        SaveStatusOk,					///< Success
+        SaveStatusPermission,				///< Permission denied
+        SaveStatusBadFilename,				///< Bad file name
+        SaveStatusNoSpace,				///< No space left on device
+        SaveStatusFormatNoWrite,			///< Cannot write this image format
+        SaveStatusFailed,				///< Image save failed
+        SaveStatusParam,				///< Bad parameter
+        SaveStatusProtocol,				///< Cannot write to this protocol
+        SaveStatusMkdir,				///< Cannot create directory
+        SaveStatusCanceled				///< User cancelled
     };
 
     /**
@@ -273,4 +260,4 @@ private:
     QString mSaveSubformat;
 };
 
-#endif                          // IMGSAVER_H
+#endif							// IMGSAVER_H

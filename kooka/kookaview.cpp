@@ -45,8 +45,6 @@
 #include <kurl.h>
 #include <krun.h>
 #include <kapplication.h>
-#include <kconfig.h>
-#include <KGlobal>
 #include <kmimetypetrader.h>
 #include <klocalizedstring.h>
 #include <kmessagebox.h>
@@ -75,9 +73,9 @@
 #include "kookagallery.h"
 #include "kookascanparams.h"
 #include "scangallery.h"
-#include "imgsaver.h"
 #include "imagetransform.h"
 #include "statusbarmanager.h"
+#include "kookasettings.h"
 
 #ifndef KDE4
 #include "kookaprint.h"
@@ -858,14 +856,14 @@ void KookaView::slotOcrResultAvailable()
 void KookaView::slotScanStart(const ImageMetaInfo *info)
 {
     //qDebug() << "Scan starts...";
-
-    const KConfigGroup grp = KSharedConfig::openConfig()->group(OP_SAVER_GROUP);
-    if (grp.readEntry(OP_SAVER_ASK_BEFORE, true)) {
-        if (info != NULL) {             // have initial image information
+    if (KookaSettings::saverAskBeforeScan())		// ask for filename first?
+    {
+        if (info != NULL)				// if we have initial image info
+        {
             //qDebug() << "imgtype" << info->getImageType();
-            if (!gallery()->prepareToSave(info)) {  // get ready to save
-                // user cancelled file prompt
-                mScanDevice->slotStopScanning();    // abort the scan now
+            if (!gallery()->prepareToSave(info))	// get ready to save
+            {						// user cancelled file prompt
+                mScanDevice->slotStopScanning();	// abort the scan now
                 return;
             }
         }

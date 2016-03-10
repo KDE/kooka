@@ -43,11 +43,11 @@
 #include <kdialog.h>
 #include <kseparator.h>
 #include <klocalizedstring.h>
-#include <kconfig.h>
 #include <kimageio.h>
-#include <kglobal.h>
+#include <kconfigskeleton.h>
 
 #include "imageformat.h"
+#include "kookasettings.h"
 
 
 struct formatInfo {
@@ -352,15 +352,19 @@ FormatDialog::FormatDialog(QWidget *parent, ImageMetaInfo::ImageType type,
         ++row;
 
         // Checkbox to store setting
-        mRecOnlyCheck = new QCheckBox(i18n("Only show recommended formats for this image type"), page);
+        const KConfigSkeletonItem *ski = KookaSettings::self()->saverOnlyRecommendedTypesItem();
+        Q_ASSERT(ski!=NULL);
+        mRecOnlyCheck = new QCheckBox(ski->label(), page);
+        mRecOnlyCheck->setToolTip(ski->toolTip());
+        mRecOnlyCheck->setChecked(KookaSettings::saverOnlyRecommendedTypes());
+        connect(mRecOnlyCheck, &QCheckBox::toggled, this, &FormatDialog::buildFormatList);
         gl->addWidget(mRecOnlyCheck, row, 0, 1, 3, Qt::AlignLeft);
         ++row;
 
-        KConfigGroup grp = KSharedConfig::openConfig()->group(OP_SAVER_GROUP);
-        mRecOnlyCheck->setChecked(grp.readEntry(OP_SAVER_REC_FMT, true));
-        connect(mRecOnlyCheck, &QCheckBox::toggled, this, &FormatDialog::buildFormatList);
-
-        mDontAskCheck  = new QCheckBox(i18n("Always use this save format for this image type"), page);
+        ski = KookaSettings::self()->saverAlwaysUseFormatItem();
+        Q_ASSERT(ski!=NULL);
+        mDontAskCheck  = new QCheckBox(ski->label(), page);
+        mDontAskCheck->setToolTip(ski->toolTip());
         gl->addWidget(mDontAskCheck, row, 0, 1, 3, Qt::AlignLeft);
         ++row;
 
@@ -609,10 +613,10 @@ void FormatDialog::buildFormatList(bool recOnly)
 
 void FormatDialog::slotOk()
 {
-    if (mRecOnlyCheck != NULL) {            // have UI for this
-        KConfigGroup grp = KSharedConfig::openConfig()->group(OP_SAVER_GROUP);
-        grp.writeEntry(OP_SAVER_REC_FMT, mRecOnlyCheck->isChecked());
-    }                           // save state of this option
+    if (mRecOnlyCheck != NULL) {			// have UI for this
+        KookaSettings::setSaverOnlyRecommendedTypes(mRecOnlyCheck->isChecked());
+        KookaSettings::self()->save();			// save state of this option
+    }
 
     accept();
 }
@@ -625,14 +629,9 @@ void FormatDialog::slotUser1()
 
 void FormatDialog::forgetRemembered()
 {
-    KConfigGroup grp = KSharedConfig::openConfig()->group(OP_SAVER_GROUP);
-    // reset all options to default
-    grp.deleteEntry(OP_SAVER_REC_FMT);
-    grp.deleteEntry(OP_SAVER_ASK_FORMAT);
-    grp.deleteEntry(OP_SAVER_ASK_FILENAME);
-    grp.deleteEntry(OP_FORMAT_HICOLOR);
-    grp.deleteEntry(OP_FORMAT_COLOR);
-    grp.deleteEntry(OP_FORMAT_GRAY);
-    grp.deleteEntry(OP_FORMAT_BW);
+    const KConfigSkeletonItem *ski = KookaSettings::self()->saverOnlyRecommendedTypesItem();
+    Q_ASSERT(ski!=NULL);
+    KConfigGroup grp = KookaSettings::self()->config()->group(ski->group());
+    grp.deleteGroup();
     grp.sync();
 }

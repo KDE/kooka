@@ -147,10 +147,10 @@ void KookaStartupPage::saveSettings()
 {
     ScanSettings::setStartupSkipAsk(!mSelectScannerCheck->isChecked());
     ScanSettings::setStartupOnlyLocal(!mNetQueryCheck->isChecked());
-    ScanSettings::self()->writeConfig();
+    ScanSettings::self()->save();
 
     KookaSettings::setStartupReadImage(mRestoreImageCheck->isChecked());
-    KookaSettings::self()->writeConfig();
+    KookaSettings::self()->save();
 }
 
 void KookaStartupPage::defaultSettings()
@@ -173,7 +173,7 @@ void KookaStartupPage::applySettings()
 //  "Saving" page
 
 KookaSavingPage::KookaSavingPage(KPageDialog *parent)
-    : KookaPrefsPage(parent, OP_SAVER_GROUP)
+    : KookaPrefsPage(parent)
 {
     const KConfigSkeletonItem *item = KookaSettings::self()->saverAskForFormatItem();
     mAskSaveFormat = new QCheckBox(item->label(), this);
@@ -218,7 +218,7 @@ void KookaSavingPage::saveSettings()
     KookaSettings::setSaverAskForFormat(mAskSaveFormat->isChecked());
     KookaSettings::setSaverAskForFilename(mAskFileName->isChecked());
     KookaSettings::setSaverAskBeforeScan(mAskBeforeScan->isChecked());
-    KookaSettings::self()->writeConfig();
+    KookaSettings::self()->save();
 }
 
 void KookaSavingPage::defaultSettings()
@@ -335,7 +335,7 @@ void KookaThumbnailPage::saveSettings()
     if (size>0) KookaSettings::setThumbnailPreviewSize(size);
     //else qWarning() << "Invalid size" << size << "for combo index" << mThumbSizeCombo->currentIndex();
 
-    KookaSettings::self()->writeConfig();
+    KookaSettings::self()->save();
 }
 
 void KookaThumbnailPage::defaultSettings()

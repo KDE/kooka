@@ -36,12 +36,11 @@
 #include <qdebug.h>
 #include <qmimedatabase.h>
 
-#include <kglobal.h>
-#include <kconfig.h>
 #include <kimageio.h>
 #include <klocalizedstring.h>
 #include <kmessagebox.h>
 #include <ktemporaryfile.h>
+#include <kconfigskeleton.h>
 
 #include <kio/job.h>
 #include <kio/netaccess.h>
@@ -49,6 +48,7 @@
 #include "imageformat.h"
 #include "kookaimage.h"
 #include "kookapref.h"
+#include "kookasettings.h"
 #include "formatdialog.h"
 
 #include "imagemetainfo.h"
@@ -104,18 +104,14 @@ QString extension(const KUrl &url)
 ImgSaver::ImageSaveStatus ImgSaver::getFilenameAndFormat(ImageMetaInfo::ImageType type)
 {
     //qDebug() << "for type=" << type;
+    if (type == ImageMetaInfo::Unknown) return (ImgSaver::SaveStatusParam);
 
-    if (type == ImageMetaInfo::Unknown) {
-        return (ImgSaver::SaveStatusParam);
-    }
-
-    QString saveFilename = createFilename();        // find next unused filename
-    ImageFormat saveFormat = findFormat(type);      // find saved image format
-    QString saveSubformat = findSubFormat(saveFormat);  // currently not used
+    QString saveFilename = createFilename();		// find next unused filename
+    ImageFormat saveFormat = findFormat(type);		// find saved image format
+    QString saveSubformat = findSubFormat(saveFormat);	// currently not used
     // get dialogue preferences
-    const KConfigGroup grp = KSharedConfig::openConfig()->group(OP_SAVER_GROUP);
-    m_saveAskFilename = grp.readEntry(OP_SAVER_ASK_FILENAME, false);
-    m_saveAskFormat = grp.readEntry(OP_SAVER_ASK_FORMAT, false);
+    m_saveAskFilename = KookaSettings::saverAskForFilename();
+    m_saveAskFormat = KookaSettings::saverAskForFormat();
 
     //qDebug() << "before dialogue,"
     //<< "ask_filename=" << m_saveAskFilename
@@ -152,7 +148,7 @@ ImgSaver::ImageSaveStatus ImgSaver::getFilenameAndFormat(ImageMetaInfo::ImageTyp
     // full path to save
     QString ext = saveFormat.extension();
     if (extension(fi) != ext) {         // already has correct extension?
-        fi +=  ".";                 // no, add it on
+        fi +=  '.';                 // no, add it on
         fi += ext;
     }
 
@@ -325,29 +321,27 @@ bool ImgSaver::isRememberedFormat(ImageMetaInfo::ImageType type, const ImageForm
     return (getFormatForType(type) == format);
 }
 
-const char *configKeyFor(ImageMetaInfo::ImageType type)
+static KConfigSkeleton::ItemString *configItemForType(ImageMetaInfo::ImageType type)
 {
-    switch (type) {
-    case ImageMetaInfo::LowColour:  return (OP_FORMAT_COLOR);
-    case ImageMetaInfo::Greyscale:  return (OP_FORMAT_GRAY);
-    case ImageMetaInfo::BlackWhite: return (OP_FORMAT_BW);
-    case ImageMetaInfo::HighColour: return (OP_FORMAT_HICOLOR);
-
-    default:            //qDebug() << "unknown type" << type;
-        return (OP_FORMAT_UNKNOWN);
+    switch (type)
+    {
+case ImageMetaInfo::LowColour:	return (KookaSettings::self()->formatLowColourItem());
+case ImageMetaInfo::Greyscale:	return (KookaSettings::self()->formatGreyscaleItem());
+case ImageMetaInfo::BlackWhite:	return (KookaSettings::self()->formatBlackWhiteItem());
+case ImageMetaInfo::HighColour:	return (KookaSettings::self()->formatHighColourItem());
+default:			return (KookaSettings::self()->formatUnknownItem());
     }
 }
 
 ImageFormat ImgSaver::getFormatForType(ImageMetaInfo::ImageType type)
 {
-    const KConfigGroup grp = KSharedConfig::openConfig()->group(OP_SAVER_GROUP);
-    return (ImageFormat(grp.readEntry(configKeyFor(type), "").toLocal8Bit()));
+    const KConfigSkeleton::ItemString *ski = configItemForType(type);
+    Q_ASSERT(ski!=NULL);
+    return (ImageFormat(ski->value().toLocal8Bit()));
 }
 
 void ImgSaver::storeFormatForType(ImageMetaInfo::ImageType type, const ImageFormat &format)
 {
-    KConfigGroup grp = KSharedConfig::openConfig()->group(OP_SAVER_GROUP);
-
     //  We don't save OP_FILE_ASK_FORMAT here, this is the global setting
     //  "Always use the Save Assistant" from the Kooka configuration which
     //  is a preference option affecting all image types.  To get automatic
@@ -359,12 +353,11 @@ void ImgSaver::storeFormatForType(ImageMetaInfo::ImageType type, const ImageForm
     //
     //  This means that turning on the "Always use the Save Assistant" option
     //  will do exactly what it says.
-    //
-    //  konf->writeEntry( OP_FILE_ASK_FORMAT, ask );
-    //  m_saveAskFormat = ask;
 
-    grp.writeEntry(configKeyFor(type), format.name());
-    grp.sync();
+    KConfigSkeleton::ItemString *ski = configItemForType(type);
+    Q_ASSERT(ski!=NULL);
+    ski->setValue(format.name());
+    KookaSettings::self()->save();
 }
 
 QString ImgSaver::findSubFormat(const ImageFormat &format)

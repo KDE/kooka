@@ -21,13 +21,13 @@
       <default>false</default>
     </entry>
 
-    <entry name="SaverAskForFilename" type="Bool">
+    <entry name="SaverAskForFilename" key="AskForFilename" type="Bool">
       <label>Ask for filename when saving</label>
       <tooltip>&lt;div&gt;Check this if you want to enter a file name when scanning an image.&lt;/div&gt;</tooltip>
       <default>false</default>
     </entry>
 
-    <entry name="SaverAskBeforeScan" type="Bool">
+    <entry name="SaverAskBeforeScan" key="AskBeforeScan" type="Bool">
       <label>Before the scan starts</label>
       <tooltip>&lt;div&gt;Check this if you want to enter the file name before scanning starts.&lt;/div&gt;</tooltip>
       <default>true</default>
@@ -39,12 +39,30 @@
       <default>false</default>
     </entry>
 
-    <entry name="SaverOnlyRecommenedTypes" key="OnlyRecommended" type="Bool">
-      <label></label>
-
-      <tooltip>&lt;div&gt;
-&lt;/div&gt;</tooltip>
+    <entry name="SaverOnlyRecommendedTypes" key="OnlyRecommended" type="Bool">
+      <label>Only show recommended formats for this image type</label>
+      <tooltip>&lt;div&gt;Check this to only show recommended file formats for the scan type. Uncheck it to show all compatible formats.&lt;/div&gt;</tooltip>
       <default>false</default>
+    </entry>
+
+    <entry name="SaverAlwaysUseFormat" type="Bool">
+      <label>Always use this save format for this image type</label>
+      <tooltip>&lt;div&gt;Check this to remember the selected file format for the scanned image type and not ask for it again.&lt;/div&gt;</tooltip>
+    </entry>
+
+    <entry name="FormatLowColour" key="ColorSaveFormat" type="String">
+    </entry>
+
+    <entry name="FormatGreyscale" key="GraySaveFormat" type="String">
+    </entry>
+
+    <entry name="FormatBlackWhite" key="BWSaveFormat" type="String">
+    </entry>
+
+    <entry name="FormatHighColour" key="HiColorSaveFormat" type="String">
+    </entry>
+
+    <entry name="FormatUnknown" key="UnknownFormat" type="String">
     </entry>
 
   </group>
