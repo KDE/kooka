@@ -42,8 +42,7 @@
 // (a) The opaque ImageFormat data type, which is used throughout to represent
 //     a KImageIO/Qt image format name.  It is a separate type from standard
 //     strings so that it does not get confused with a MIME type (always passed
-//     around as a KMimeType::Ptr) or a file extension (always handled as
-//     a QString).
+//     around as a QMimeType) or a file extension (always handled as a QString).
 //
 // (b) Its static functions provide some useful lookups not available from
 //     KImageIO.
@@ -164,9 +163,9 @@ bool ImageFormat::canWrite() const
     return (srv->property("X-KDE-Write").toBool());
 }
 
-// Similar to KImageIO::typeForMime(), but uses KMimeType::is() for the
-// MIME type comparison instead of textual names.  See the top of this
-// file for why.
+// Similar to KImageIO::typeForMime(), but uses QMimeType::inherits()
+// for the MIME type comparison instead of textual names.  See the top
+// of this file for why.
 //
 // The X-KDE-ImageFormat property is a list of possible formats.
 // Normally we assume that there will only be one, but possibly

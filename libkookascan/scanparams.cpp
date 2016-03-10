@@ -47,13 +47,14 @@
 #include <qtabwidget.h>
 #include <qdebug.h>
 #include <qicon.h>
+#include <qmimetype.h>
+#include <qmimedatabase.h>
 
 #include <kfiledialog.h>
 #include <klocalizedstring.h>
 #include <kiconloader.h>
 #include <kled.h>
 #include <kmessagebox.h>
-#include <kmimetype.h>
 #include <khbox.h>
 
 extern "C"
@@ -745,12 +746,13 @@ KScanDevice::Status ScanParams::prepareScan(QString *vfp)
         }
 
         if (mScanMode == ScanParams::SaneDebugMode) {
-            KMimeType::Ptr mimetype = KMimeType::findByPath(virtfile);
-            if (!(mimetype->is("image/x-portable-bitmap") ||
-                    mimetype->is("image/x-portable-greymap") ||
-                    mimetype->is("image/x-portable-pixmap"))) {
+            QMimeDatabase db;
+            QMimeType mime = db.mimeTypeForFile(virtfile);
+            if (!(mime.inherits("image/x-portable-bitmap") ||
+                  mime.inherits("image/x-portable-greymap") ||
+                  mime.inherits("image/x-portable-pixmap"))) {
                 KMessageBox::sorry(this, i18n("<qt>SANE Debug can only read PNM files.<br>"
-                                              "This file is type <b>%1</b>.", mimetype->name()));
+                                              "This file is type <b>%1</b>.", mime.name()));
                 return (KScanDevice::ParamError);
             }
         }
