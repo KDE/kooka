@@ -1,5 +1,5 @@
 
-project(kooka4)
+project(kooka5)
 
 ########### sanedump ###############
 
@@ -22,12 +22,10 @@ set(kimageioinfo_SRCS
   kimageioinfo.cpp
 )
 
-kde4_add_executable(kimageioinfo ${kimageioinfo_SRCS})
+add_executable(kimageioinfo ${kimageioinfo_SRCS})
 target_link_libraries(kimageioinfo 
-    ${QT_QTCORE_LIBRARY}
-    ${KDE4_KDECORE_LIBRARY}
-    ${KDE4_KDEUI_LIBRARY}
-    ${KDE4_KIO_LIBRARY}
+  Qt5::Core
+  KF5::KDELibs4Support
 )
 
 ########### install files ###############
