@@ -80,17 +80,6 @@ endif (HAVE_LIBPAPER)
 
 set_target_properties(kookascan PROPERTIES VERSION 1.0.0 SOVERSION 1)
 
-########### clobbering ###############
-
-#add_custom_target(clobber
-#  COMMENT "Clobber in ${CMAKE_CURRENT_BINARY_DIR}..."
-#  VERBATIM
-#  COMMAND sh -c "rm -f *.moc"
-#  COMMAND sh -c "rm -f *_automoc.cpp *_automoc.cpp.files"
-#  COMMAND sh -c "rm -r -f CMakeFiles *.cmake"
-#  COMMAND sh -c "rm -f config-*.h"
-#)
-
 ########### installation ###############
 
 install(TARGETS kookascan ${INSTALL_TARGETS_DEFAULT_ARGS})

@@ -13,8 +13,8 @@
 
 cmake_minimum_required(VERSION 2.8.12)
 
-project(kooka4)
-set(VERSION "0.80")
+project(kooka5)
+set(VERSION "0.90")
 message(STATUS "Configuring for Kooka/libkookascan version ${VERSION}")
 
 

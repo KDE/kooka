@@ -11,7 +11,7 @@
 ##									##
 ##########################################################################
 
-project(kooka4)
+project(kooka5)
 
 ############### Packages used by KDE ###############
 
@@ -184,18 +184,7 @@ endif (HAVE_TIFF)
 include_directories(${CMAKE_CURRENT_BINARY_DIR}/..)
 add_dependencies(kooka vcsversion)
 
-########### clobbering ###############
-
-#add_custom_target(clobber
-#  COMMENT "Clobber in ${CMAKE_CURRENT_BINARY_DIR}..."
-#  VERBATIM
-#  COMMAND sh -c "rm -f *.moc"
-#  COMMAND sh -c "rm -f *_automoc.cpp *_automoc.cpp.files"
-#  COMMAND sh -c "rm -r -f CMakeFiles *.cmake"
-#  COMMAND sh -c "rm -f config-*.h"
-#)
-
 ########### install files ###############
 
 install(TARGETS kooka ${INSTALL_TARGETS_DEFAULT_ARGS})
-install(FILES kookasettings.kcfg DESTINATION ${KCFG_INSTALL_DIR})
+install(FILES kookasettings.kcfg DESTINATION ${KDE_INSTALL_KCFGDIR})
