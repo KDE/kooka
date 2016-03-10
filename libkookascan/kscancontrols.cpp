@@ -276,7 +276,7 @@ void KScanCombo::setList(const QList<QByteArray> &list)
 
     const QString cur = text();				// get current setting
 
-    mCombo->blockSignals(true);
+    const bool bs = mCombo->blockSignals(true);
     mCombo->clear();
 
     for (QList<QByteArray>::const_iterator it = list.constBegin();
@@ -284,6 +284,7 @@ void KScanCombo::setList(const QList<QByteArray> &list)
         const QByteArray item = (*it);
         mCombo->addItem(i18n(item), item);
     }
+    mCombo->blockSignals(bs);
 }
 
 void KScanCombo::setText(const QString &text)
