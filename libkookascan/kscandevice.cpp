@@ -50,7 +50,7 @@ extern "C" {
 
 
 // Debugging options
-#undef DEBUG_OPTIONS
+#define DEBUG_OPTIONS
 #undef DEBUG_RELOAD
 #undef DEBUG_CREATE
 #define DEBUG_PARAMS
@@ -83,7 +83,7 @@ KScanOption *KScanDevice::getOption(const QByteArray &name, bool create)
     if (mCreatedOptions.contains(alias))
     {
 #ifdef DEBUG_CREATE
-        //qDebug() << "already exists" << alias;
+        qDebug() << "already exists" << alias;
 #endif // DEBUG_CREATE
         return (mCreatedOptions.value(alias));
     }
@@ -91,13 +91,13 @@ KScanOption *KScanDevice::getOption(const QByteArray &name, bool create)
     if (!create)
     {
 #ifdef DEBUG_CREATE
-        //qDebug() << "does not exist" << alias;
+        qDebug() << "does not exist" << alias;
 #endif // DEBUG_CREATE
         return (NULL);
     }
 
 #ifdef DEBUG_CREATE
-    //qDebug() << "creating new" << alias;
+    qDebug() << "creating new" << alias;
 #endif // DEBUG_CREATE
     KScanOption *so = new KScanOption(alias, this);
     mCreatedOptions.insert(alias, so);
@@ -326,7 +326,7 @@ KScanDevice::Status KScanDevice::findOptions()
     if (sane_control_option(mScannerHandle, 0, SANE_ACTION_GET_VALUE,
                             &n, &opt)!=SANE_STATUS_GOOD)
     {
-        //qDebug() << "cannot read option 0 (count)";
+        qWarning() << "cannot read option 0 (count)";
         return (KScanDevice::ControlError);
     }
 
@@ -347,10 +347,12 @@ KScanDevice::Status KScanDevice::findOptions()
 
         if (!name.isEmpty())				// must now have a name
         {
-            //qDebug() << "Option" << i << "is" << name;
+#ifdef DEBUG_OPTIONS
+            qDebug() << "Option" << i << "is" << name;
+#endif // DEBUG_OPTIONS
             mKnownOptions.insert(i, name);
         }
-        //else qDebug() << "Invalid option" << i << "(no name and not a group)";
+        else qWarning() << "Invalid option" << i << "(no name and not a group)";
     }
 
     return (KScanDevice::Ok);
@@ -439,14 +441,16 @@ void KScanDevice::applyOption(KScanOption *opt)
 
     if (opt!=NULL)					// an option is specified
     {
-        //qDebug() << "option" << opt->getName();
+#ifdef DEBUG_RELOAD
+        qDebug() << "option" << opt->getName();
+#endif // DEBUG_APPLY
         reload = opt->apply();				// apply this option
     }
 
     if (!reload)					// need to reload now?
     {
 #ifdef DEBUG_RELOAD
-        //qDebug() << "Reload of others not needed";
+        qDebug() << "Reload of others not needed";
 #endif // DEBUG_RELOAD
         return;
     }
@@ -459,7 +463,7 @@ void KScanDevice::applyOption(KScanOption *opt)
         if (opt==NULL || so!=opt)
         {
 #ifdef DEBUG_RELOAD
-            //qDebug() << "Reloading" << so->getName();
+            qDebug() << "Reloading" << so->getName();
 #endif // DEBUG_RELOAD
             so->reload();
             so->redrawWidget();
@@ -467,7 +471,7 @@ void KScanDevice::applyOption(KScanOption *opt)
     }
 
 #ifdef DEBUG_RELOAD
-    //qDebug() << "Finished";
+    qDebug() << "Finished";
 #endif // DEBUG_RELOAD
 }
 
@@ -475,7 +479,7 @@ void KScanDevice::applyOption(KScanOption *opt)
 void KScanDevice::reloadAllOptions()
 {
 #ifdef DEBUG_RELOAD
-    //qDebug();
+    qDebug();
 #endif // DEBUG_RELOAD
     applyOption(NULL);
 }
@@ -555,8 +559,7 @@ inline const char *optionNotifyString(int opt)
 
 void KScanDevice::showOptions()
 {
-    //qDebug() << "for" << mScannerName;
-
+    qDebug() << "for" << mScannerName;
     std::cerr << "----------------------------------+---+---+---+---+---+---+---+---+-------" << std::endl;
     std::cerr << " Option                           |SSL|HSL|SDT|EMU|AUT|INA|ADV|PRI| Value" << std::endl;
     std::cerr << "----------------------------------+---+---+---+---+---+---+---+---+-------" << std::endl;
@@ -568,7 +571,7 @@ void KScanDevice::showOptions()
         if (so->isGroup()) continue;
 
         int cap = so->getCapabilities();
-        QString s = QString(it.key()).leftJustified(32);
+        QString s = QString(it.key()).left(31).leftJustified(32);
         std::cerr <<
             " " << qPrintable(s) << " |" <<
             optionNotifyString((cap & SANE_CAP_SOFT_SELECT)) << 
@@ -584,7 +587,7 @@ void KScanDevice::showOptions()
     std::cerr << "----------------------------------+---+---+---+---+---+---+---+---+-------" << std::endl;
 }
 
-#endif							// DEBUG_OPTIONS
+#endif // DEBUG_OPTIONS
 
 
 //  Creating a new image to receive the scan/preview

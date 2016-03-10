@@ -77,16 +77,16 @@ extern "C"
 
 //  SANE testing options
 #ifndef SANE_NAME_TEST_PICTURE
-#define SANE_NAME_TEST_PICTURE      "test-picture"
+#define SANE_NAME_TEST_PICTURE		"test-picture"
 #endif
 #ifndef SANE_NAME_THREE_PASS
-#define SANE_NAME_THREE_PASS        "three-pass"
+#define SANE_NAME_THREE_PASS		"three-pass"
 #endif
 #ifndef SANE_NAME_HAND_SCANNER
-#define SANE_NAME_HAND_SCANNER      "hand-scanner"
+#define SANE_NAME_HAND_SCANNER		"hand-scanner"
 #endif
 #ifndef SANE_NAME_GRAYIFY
-#define SANE_NAME_GRAYIFY       "grayify"
+#define SANE_NAME_GRAYIFY		"grayify"
 #endif
 
 ScanParamsPage::ScanParamsPage(QWidget *parent, const char *name)
@@ -1121,7 +1121,7 @@ void ScanParams::slotNewScanMode()
 
     int strips = (format == SANE_FRAME_GRAY ? 1 : 3);
 
-    //qDebug() << "format" << format << "depth" << depth << "-> strips " << strips;
+    qDebug() << "format" << format << "depth" << depth << "-> strips " << strips;
 
     if (strips == 1 && depth == 1) {        // bitmap scan
         emit scanModeChanged(0);            // 8 pixels per byte

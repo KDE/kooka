@@ -44,7 +44,7 @@ extern "C" {
 //  Debugging options
 #undef DEBUG_MEM
 #undef DEBUG_GETSET
-#undef DEBUG_APPLY
+#define DEBUG_APPLY
 #undef DEBUG_RELOAD
 
 
@@ -198,14 +198,14 @@ void KScanOption::reload()
         if (!isActive())
         {
 #ifdef DEBUG_RELOAD
-            //qDebug() << "not active" << mName;
+            qDebug() << "not active" << mName;
 #endif
             mControl->setEnabled(false);
         }
         else if (!isSoftwareSettable())
         {
 #ifdef DEBUG_RELOAD
-            //qDebug() << "not settable" << mName;
+            qDebug() << "not settable" << mName;
 #endif
             mControl->setEnabled(false);
         }
@@ -215,14 +215,14 @@ void KScanOption::reload()
     if (!isReadable())
     {
 #ifdef DEBUG_RELOAD
-        //qDebug() << "not readable" << mName;
+        qDebug() << "not readable" << mName;
 #endif
         return;
     }
 
     if (mBuffer.isNull())				// first get mem if needed
     {
-        //qDebug() << "need to allocate now";
+        qDebug() << "need to allocate now";
         allocForDesc();					// allocate the buffer now
     }
 
@@ -257,14 +257,14 @@ void KScanOption::reload()
                                                 mBuffer.data(), NULL);
     if (sanestat!=SANE_STATUS_GOOD)
     {
-        //qDebug() << "Error: Can't get value for" << mName << "status" << sane_strstatus(sanestat);
+        qWarning() << "Can't get value for" << mName << "status" << sane_strstatus(sanestat);
         return;
     }
 
     updateList();					// if range changed, update GUI
 
 #ifdef DEBUG_RELOAD
-    //qDebug() << "reloaded" << mName;
+    qDebug() << "reloaded" << mName;
 #endif
     mBufferClean = false;
 }
@@ -339,7 +339,7 @@ bool KScanOption::apply()
     }
 
 #ifdef DEBUG_APPLY
-    debug += QString(" set '%1'").arg(get().constData());
+    debug += QString(" -> '%1'").arg(get().constData());
 #endif // DEBUG_APPLY
 
     if (sane_result & SANE_INFO_RELOAD_OPTIONS)
@@ -357,7 +357,7 @@ bool KScanOption::apply()
     mApplied = true;
 ret:
 #ifdef DEBUG_APPLY
-    //qDebug() << qPrintable(debug);			// no quotes, please
+    qDebug() << qPrintable(debug);			// no quotes, please
 #endif // DEBUG_APPLY
     return (reload);
 }
@@ -416,13 +416,13 @@ case SANE_TYPE_GROUP:
         break;
 
 default:
-        //qDebug() << "unsupported SANE type" << mDesc->type;
+        qDebug() << "unsupported SANE type" << mDesc->type;
         ret = KScanOption::Invalid;
         break;
     }
 
 #ifdef DEBUG_GETSET
-    //qDebug() << "for SANE type" << mDesc->type << "returning" << ret;
+    qDebug() << "for SANE type" << mDesc->type << "returning" << ret;
 #endif
     return (ret);
 }
@@ -432,7 +432,7 @@ bool KScanOption::set(int val)
 {
     if (!isValid() || mBuffer.isNull()) return (false);
 #ifdef DEBUG_GETSET
-    //qDebug() << "Setting" << mName << "to" << val;
+    qDebug() << "Setting" << mName << "to" << val;
 #endif
 
     int word_size;
@@ -477,7 +477,7 @@ bool KScanOption::set(double val)
 {
     if (!isValid() || mBuffer.isNull()) return (false);
 #ifdef DEBUG_GETSET
-    //qDebug() << "Setting" << mName << "to" << val;
+    qDebug() << "Setting" << mName << "to" << val;
 #endif
 
     int word_size;
@@ -522,7 +522,7 @@ bool KScanOption::set(const int *val, int size)
     if (!isValid() || mBuffer.isNull()) return (false);
     if (val==NULL) return (false);
 #ifdef DEBUG_GETSET
-    //qDebug() << "Setting" << mName << "of size" << size;
+    qDebug() << "Setting" << mName << "of size" << size;
 #endif
 
     int offset = 0;
@@ -577,7 +577,7 @@ bool KScanOption::set(const QByteArray &buf)
 {
     if (!isValid() || mBuffer.isNull()) return (false);
 #ifdef DEBUG_GETSET
-    //qDebug() << "Setting" << mName << "to" << buf;
+    qDebug() << "Setting" << mName << "to" << buf;
 #endif
 
     int val;
@@ -589,7 +589,7 @@ bool KScanOption::set(const QByteArray &buf)
     if (gt.setFromString(buf))
     {
 #ifdef DEBUG_GETSET
-        //qDebug() << "is a gamma table";
+        qDebug() << "is a gamma table";
 #endif
         return (set(&gt));
     }
@@ -643,7 +643,7 @@ bool KScanOption::set(const KGammaTable *gt)
 
     int size = mDesc->size/sizeof(SANE_Word);		// size of scanner gamma table
 #ifdef DEBUG_GETSET
-    //qDebug() << "Setting gamma table for" << mName << "size" << size << "to" << gt->toString();
+    qDebug() << "Setting gamma table for" << mName << "size" << size << "to" << gt->toString();
 #endif
     const int *run = mGammaTable->getTable(size);	// get table of that size
     QVector<SANE_Word> qa(size);			// converted to SANE values
@@ -699,7 +699,7 @@ default:
     }
 
 #ifdef DEBUG_GETSET
-    //qDebug() << "Returning" << mName << "as" << *val;
+    qDebug() << "Returning" << mName << "as" << *val;
 #endif
     return (true);
 }
@@ -747,7 +747,7 @@ default:    //qDebug() << "Can't get" << mName << "as this type";
     }
 
 #ifdef DEBUG_GETSET
-    //qDebug() << "Returning" << mName << "as" << retstr;
+    qDebug() << "Returning" << mName << "as" << retstr;
 #endif
     return (retstr);
 }
@@ -759,7 +759,7 @@ bool KScanOption::get(KGammaTable *gt) const
 
     gt->setAll(mGammaTable->getGamma(), mGammaTable->getBrightness(), mGammaTable->getContrast());
 #ifdef DEBUG_GETSET
-    //qDebug() << "Returning" << mName << "as" << gt->toString();
+    qDebug() << "Returning" << mName << "as" << gt->toString();
 #endif
     return (true);
 }
