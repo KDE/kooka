@@ -83,7 +83,6 @@
 #include "photocopyprintdialogpage.h"
 #endif
 
-#define STARTUP_IMG_SELECTION   "SelectedImageOnStartup"
 
 #define WCONF_TAB_INDEX     "TabIndex"
 
@@ -436,9 +435,8 @@ void KookaView::restoreGalleryState(int index)
 // this gets called by Kooka::closeEvent() at shutdown
 void KookaView::saveProperties(KConfigGroup &grp)
 {
-    KConfigGroup grp2 = grp.config()->group(GROUP_STARTUP);
-    //qDebug() << "to group" << grp2.name();
-    grp2.writePathEntry(STARTUP_IMG_SELECTION, gallery()->getCurrImageFileName(true));
+    KookaSettings::setStartupSelectedImage(gallery()->getCurrImageFileName(true));
+    KookaSettings::self()->save();
 }
 
 void KookaView::slotTabChanged(int index)
@@ -700,16 +698,11 @@ void KookaView::slotGallerySelectionChanged()
 
 void KookaView::loadStartupImage()
 {
-    const KSharedConfig *konf = KSharedConfig::openConfig().data();
-    const KConfigGroup grp = konf->group(GROUP_STARTUP);
-    bool wantReadOnStart = grp.readEntry(STARTUP_READ_IMAGE, true);
-
+    const bool wantReadOnStart = KookaSettings::startupReadImage();
     if (wantReadOnStart) {
-        QString startup = grp.readPathEntry(STARTUP_IMG_SELECTION, "");
+        QString startup = KookaSettings::startupSelectedImage();
         //qDebug() << "load startup image" << startup;
-        if (!startup.isEmpty()) {
-            gallery()->slotSelectImage(QUrl::fromLocalFile(startup));
-        }
+        if (!startup.isEmpty()) gallery()->slotSelectImage(QUrl::fromLocalFile(startup));
     } else {
         //qDebug() << "do not load startup image";
     }

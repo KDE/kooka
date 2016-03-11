@@ -1,39 +1,47 @@
-/**************************************************************************
-              kookagallery.cpp  -  scan gallery and history
-                             -------------------
- ***************************************************************************/
-
-/***************************************************************************
- *                                                                         *
- *  This file may be distributed and/or modified under the terms of the    *
- *  GNU General Public License version 2 as published by the Free Software *
- *  Foundation and appearing in the file COPYING included in the           *
- *  packaging of this file.                                                *
- *
- *  As a special exception, permission is given to link this program       *
- *  with any version of the KADMOS ocr/icr engine of reRecognition GmbH,   *
- *  Kreuzlingen and distribute the resulting executable without            *
- *  including the source code for KADMOS in the source distribution.       *
- *
- *  As a special exception, permission is given to link this program       *
- *  with any edition of Qt, and distribute the resulting executable,       *
- *  without including the source code for Qt in the source distribution.   *
- *                                                                         *
- ***************************************************************************/
+/************************************************************************
+ *									*
+ *  This file is part of Kooka, a scanning/OCR application using	*
+ *  Qt <http://www.qt.io> and KDE Frameworks <http://www.kde.org>.	*
+ *									*
+ *  Copyright (C) 2000-2016 Klaas Freitag <freitag@suse.de>		*
+ *                          Jonathan Marten <jjm@keelhaul.me.uk>	*
+ *									*
+ *  Kooka is free software; you can redistribute it and/or modify it	*
+ *  under the terms of the GNU Library General Public License as	*
+ *  published by the Free Software Foundation and appearing in the	*
+ *  file COPYING included in the packaging of this file;  either	*
+ *  version 2 of the License, or (at your option) any later version.	*
+ *									*
+ *  As a special exception, permission is given to link this program	*
+ *  with any version of the KADMOS OCR/ICR engine (a product of		*
+ *  reRecognition GmbH, Kreuzlingen), and distribute the resulting	*
+ *  executable without including the source code for KADMOS in the	*
+ *  source distribution.						*
+ *									*
+ *  This program is distributed in the hope that it will be useful,	*
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of	*
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the	*
+ *  GNU General Public License for more details.			*
+ *									*
+ *  You should have received a copy of the GNU General Public		*
+ *  License along with this program;  see the file COPYING.  If		*
+ *  not, see <http://www.gnu.org/licenses/>.				*
+ *									*
+ ************************************************************************/
 
 #include "kookagallery.h"
 
 #include <qlayout.h>
 #include <qlabel.h>
+#include <qdebug.h>
 
-#include <QDebug>
-#include <KLocalizedString>
-#include <kglobal.h>
+#include <klocalizedstring.h>
 #include <khbox.h>
-#include <KConfigGroup>
+
 #include "scangallery.h"
 #include "galleryhistory.h"
-#include "kookapref.h"
+#include "kookasettings.h"
+
 
 KookaGallery::KookaGallery(QWidget *parent)
     : QWidget(parent)
@@ -57,10 +65,8 @@ KookaGallery::KookaGallery(QWidget *parent)
 
 void KookaGallery::readSettings()
 {
-    KConfigGroup grp = KSharedConfig::openConfig()->group(GROUP_GALLERY);
-
-    m_galleryTree->setAllowRename(grp.readEntry(GALLERY_ALLOW_RENAME, false));
-    setLayout(static_cast<KookaGallery::Layout>(grp.readEntry(GALLERY_LAYOUT, static_cast<int>(KookaGallery::RecentAtTop))));
+    m_galleryTree->setAllowRename(KookaSettings::galleryAllowRename());
+    setLayout(static_cast<KookaGallery::Layout>(KookaSettings::galleryLayout()));
 }
 
 ScanGallery *KookaGallery::galleryTree() const

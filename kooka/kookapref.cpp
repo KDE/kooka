@@ -58,8 +58,10 @@
 #include <kstandarddirs.h>
 #include <kmessagebox.h>
 #include <kstandardguiitem.h>
+#include <kconfigskeleton.h>
 
 #include "prefspages.h"
+#include "kookasettings.h"
 
 
 KookaPref::KookaPref(QWidget *parent)
@@ -241,35 +243,36 @@ static QString createGallery(const QDir &d, bool *success = NULL)
 
 QString KookaPref::findGalleryRoot()
 {
-    const KConfigGroup grp = KSharedConfig::openConfig()->group(GROUP_GALLERY);
-    QString galleryName = grp.readEntry(GALLERY_LOCATION, GALLERY_DEFAULT_LOC);
-    if (galleryName.isEmpty()) {
-        galleryName = GALLERY_DEFAULT_LOC;
+    QString galleryName = KookaSettings::galleryName();	// may be base name or absolute path
+    if (galleryName.isEmpty())
+    {
+        qWarning() << "Gallery name not configured";
+        return (QString::null);
     }
 
-    QString oldloc = KGlobal::dirs()->saveLocation("data", "ScanImages", false);
-    QDir olddir(oldloc);
-    QString oldpath = olddir.absolutePath();
-    bool oldexists = (olddir.exists());
+    QString oldpath = QStandardPaths::locate(QStandardPaths::AppDataLocation, "ScanImages", QStandardPaths::LocateDirectory);
+    bool oldexists = !oldpath.isEmpty();
 
-    QString newloc = galleryName;
-    QDir newdir(newloc);
-    if (newdir.isRelative()) {
-        newdir.setPath(docsPath() + QDir::separator() + galleryName);
+    QString newpath(galleryName);
+    if (!QDir::isAbsolutePath(galleryName))
+    {
+        QString docpath = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
+        newpath = QDir(docpath+'/'+galleryName).canonicalPath();
     }
-    QString newpath = newdir.absolutePath();
-    bool newexists = (newdir.exists());
+
+    QDir newdir(newpath);
+    bool newexists = newdir.exists();
 
     qDebug() << "old" << oldpath << "exists" << oldexists;
     qDebug() << "new" << newpath << "exists" << newexists;
 
     QString dir;
 
-    if (!oldexists && !newexists) {         // no directories present
-        dir = createGallery(newdir);            // create and use new
-    } else if (!oldexists && newexists) {       // only new exists
-        dir = newpath;                  // fine, just use that
-    } else if (oldexists && !newexists) {       // only old exists
+    if (!oldexists && !newexists) {			// no directories present
+        dir = createGallery(newdir);			// create and use new
+    } else if (!oldexists && newexists) {		// only new exists
+        dir = newpath;					// fine, just use that
+    } else if (oldexists && !newexists) {		// only old exists
         if (KMessageBox::questionYesNo(NULL,
                                        i18n("<qt>"
                                             "<p>An old Kooka gallery was found at<br>"
@@ -284,7 +287,7 @@ QString KookaPref::findGalleryRoot()
             // yes, create new
             bool created;
             dir = createGallery(newdir, &created);
-            if (created) {              // new created OK
+            if (created) {				// new created OK
                 KMessageBox::information(NULL,
                                          i18n("<qt>"
                                               "<p>Kooka will use the new gallery,<br>"
@@ -297,10 +300,10 @@ QString KookaPref::findGalleryRoot()
                                          QString::null,
                                          KMessageBox::Notify | KMessageBox::AllowLink);
             }
-        } else {                    // no, don't create
-            dir = oldpath;              // stay with old location
+        } else {					// no, don't create
+            dir = oldpath;				// stay with old location
         }
-    } else {                    // both exist
+    } else {						// both exist
         KMessageBox::information(NULL,
                                  i18n("<qt>"
                                       "<p>Kooka will use the new gallery,<br>"
@@ -312,13 +315,10 @@ QString KookaPref::findGalleryRoot()
                                  i18n("Old Gallery Exists"),
                                  "GalleryNoRemind",
                                  KMessageBox::Notify | KMessageBox::AllowLink);
-        dir = newpath;                  // just use new one
+        dir = newpath;					// just use new one
     }
 
-    if (!dir.endsWith("/")) {
-        dir += "/";
-    }
-
-    qDebug() << "returning" << dir;
+    if (!dir.endsWith("/")) dir += "/";
+    qDebug() << "using" << dir;
     return (dir);
 }

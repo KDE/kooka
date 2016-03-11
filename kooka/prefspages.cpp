@@ -49,7 +49,7 @@
 #include <kimageio.h>
 #include <kfiledialog.h>
 
-#include "libkookascan/scansettings.h"
+#include "scansettings.h"
 
 #include "kookapref.h"
 #include "kookagallery.h"
@@ -58,6 +58,7 @@
 #include "ocrocradengine.h"
 #include "ocrkadmosengine.h"
 #include "kookasettings.h"
+
 
 //  Abstract base
 
@@ -78,7 +79,7 @@ KookaPrefsPage::~KookaPrefsPage()
 //  "General" page
 
 KookaGeneralPage::KookaGeneralPage(KPageDialog *parent)
-    : KookaPrefsPage(parent, GROUP_GALLERY)
+    : KookaPrefsPage(parent)
 {
     mLayout->addStretch(9);             // push down to bottom
 
@@ -118,22 +119,25 @@ void KookaGeneralPage::slotEnableWarnings()
 //  "Startup" page
 
 KookaStartupPage::KookaStartupPage(KPageDialog *parent)
-    : KookaPrefsPage(parent, GROUP_STARTUP)
+    : KookaPrefsPage(parent)
 {
     /* Query for network scanner (Checkbox) */
     const KConfigSkeletonItem *item = ScanSettings::self()->startupOnlyLocalItem();
+    Q_ASSERT(item!=NULL);
     mNetQueryCheck = new QCheckBox(item->label(), this);
     mNetQueryCheck->setToolTip(item->toolTip());
     mLayout->addWidget(mNetQueryCheck);
 
     /* Show scanner selection box on startup (Checkbox) */
     item = ScanSettings::self()->startupSkipAskItem();
+    Q_ASSERT(item!=NULL);
     mSelectScannerCheck = new QCheckBox(item->label(), this);
     mSelectScannerCheck->setToolTip(item->toolTip());
     mLayout->addWidget(mSelectScannerCheck);
 
     /* Read startup image on startup (Checkbox) */
     item = KookaSettings::self()->startupReadImageItem();
+    Q_ASSERT(item!=NULL);
     mRestoreImageCheck = new QCheckBox(item->label(), this);
     mRestoreImageCheck->setToolTip(item->toolTip());
     mLayout->addWidget(mRestoreImageCheck);
@@ -174,6 +178,7 @@ KookaSavingPage::KookaSavingPage(KPageDialog *parent)
     : KookaPrefsPage(parent)
 {
     const KConfigSkeletonItem *item = KookaSettings::self()->saverAskForFormatItem();
+    Q_ASSERT(item!=NULL);
     mAskSaveFormat = new QCheckBox(item->label(), this);
     mAskSaveFormat->setToolTip(item->toolTip());
     mLayout->addWidget(mAskSaveFormat);
@@ -191,6 +196,7 @@ KookaSavingPage::KookaSavingPage(KPageDialog *parent)
     gl->setColumnMinimumWidth(0, 2 * KDialog::marginHint());
 
     item = KookaSettings::self()->saverAskBeforeScanItem();
+    Q_ASSERT(item!=NULL);
     mAskBeforeScan = new QRadioButton(item->label(), this);
     mAskBeforeScan->setEnabled(mAskFileName->isChecked());
     mAskBeforeScan->setToolTip(item->toolTip());
@@ -199,6 +205,7 @@ KookaSavingPage::KookaSavingPage(KPageDialog *parent)
     gl->addWidget(mAskBeforeScan, 0, 1);
 
     item = KookaSettings::self()->saverAskAfterScanItem();
+    Q_ASSERT(item!=NULL);
     mAskAfterScan = new QRadioButton(item->label(), this);
     mAskAfterScan->setEnabled(mAskFileName->isChecked());
     mAskAfterScan->setToolTip(item->toolTip());
@@ -249,6 +256,7 @@ KookaThumbnailPage::KookaThumbnailPage(KPageDialog *parent)
 
     /* Layout */
     const KConfigSkeletonItem *item = KookaSettings::self()->galleryLayoutItem();
+    Q_ASSERT(item!=NULL);
     QLabel *lab = new QLabel(item->label(), gb);
     lab->setToolTip(item->toolTip());
     gl->addWidget(lab, 0, 0, Qt::AlignRight);
@@ -265,6 +273,7 @@ KookaThumbnailPage::KookaThumbnailPage(KPageDialog *parent)
 
     /* Allow renaming */
     item = KookaSettings::self()->galleryAllowRenameItem();
+    Q_ASSERT(item!=NULL);
     mAllowRenameCheck = new QCheckBox(item->label(), gb);
     mAllowRenameCheck->setToolTip(item->toolTip());
     gl->addWidget(mAllowRenameCheck, 1, 0, 1, 2);
@@ -278,6 +287,7 @@ KookaThumbnailPage::KookaThumbnailPage(KPageDialog *parent)
 
     // Do we want a background image?
     item = KookaSettings::self()->thumbnailCustomBackgroundItem();
+    Q_ASSERT(item!=NULL);
     mCustomBackgroundCheck = new QCheckBox(item->label(), this);
     mCustomBackgroundCheck->setToolTip(item->toolTip());
     connect(mCustomBackgroundCheck, &QCheckBox::toggled, this, &KookaThumbnailPage::slotCustomThumbBgndToggled);
@@ -285,6 +295,7 @@ KookaThumbnailPage::KookaThumbnailPage(KPageDialog *parent)
 
     /* Background image */
     item = KookaSettings::self()->thumbnailBackgroundPathItem();
+    Q_ASSERT(item!=NULL);
     lab = new QLabel(item->label(), this);
     lab->setToolTip(item->toolTip());
     gl->addWidget(lab, 3, 0, Qt::AlignRight);
@@ -301,6 +312,7 @@ KookaThumbnailPage::KookaThumbnailPage(KPageDialog *parent)
 
     /* Preview size */
     item = KookaSettings::self()->thumbnailPreviewSizeItem();
+    Q_ASSERT(item!=NULL);
     lab = new QLabel(item->label(), this);
     lab->setToolTip(item->toolTip());
     gl->addWidget(lab, 5, 0, Qt::AlignRight);
@@ -371,6 +383,7 @@ void KookaThumbnailPage::slotCustomThumbBgndToggled(bool state)
 
 KookaOcrPage::KookaOcrPage(KPageDialog *parent)
     : KookaPrefsPage(parent, CFG_GROUP_OCR_DIA)
+// TODO: when this converted to KConfigXT, remove 2nd parameter to above
 {
     QGridLayout *lay = new QGridLayout;
     lay->setColumnStretch(1, 9);

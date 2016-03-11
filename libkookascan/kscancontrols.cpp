@@ -293,7 +293,7 @@ void KScanCombo::setList(const QList<QByteArray> &list)
 
     foreach (const QByteArray &item, list)
     {
-        // see http://api.kde.org/frameworks-api/frameworks5-apidocs/ki18n/html/prg_guide.html#link_cat
+        // See the KI18N Programmer's Guide, "Connecting to Catalogs in Library Code"
         mCombo->addItem(ki18n(item).toString("sane-backends"), item);
     }
 

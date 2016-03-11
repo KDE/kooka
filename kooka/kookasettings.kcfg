@@ -6,11 +6,16 @@
   <kcfgfile></kcfgfile>
 
   <group name="Startup">
+
     <entry name="StartupReadImage" key="ReadImageOnStart" type="Bool">
       <label>Load the last selected image into the viewer</label>
       <tooltip>&lt;div&gt;Check this if you want Kooka to load the last selected image into the viewer on startup.&lt;br/&gt;&lt;br/&gt;If your images are large, that might slow down Kooka's startup.&lt;/div&gt;</tooltip>
       <default>false</default>
     </entry>
+
+    <entry name="StartupSelectedImage" key="SelectedImageOnStartup" type="Path">
+    </entry>
+
   </group>
 
   <group name="Files">
@@ -74,7 +79,14 @@
     </entry>
   </group>
 
-  <group name="thumbnailView">
+  <group name="Gallery">
+
+    <entry name="GalleryAllowRename" key="AllowRename" type="Bool">
+      <label>Allow click-to-rename</label>
+      <tooltip>&lt;div&gt;Check this if you want to be able to rename gallery items by clicking on them (otherwise, use the "Rename" menu option).&lt;/div&gt;</tooltip>
+      <default>false</default>
+    </entry>
+
     <entry name="GalleryLayout" key="Layout" type="Enum">
       <label>Show recent folders:</label>
       <tooltip>&lt;div&gt;Select whether and where a list of recently accessed gallery folders will be shown.&lt;/div&gt;</tooltip>
@@ -86,11 +98,14 @@
       <default>KookaSettings::RecentAtTop</default>
     </entry>
 
-    <entry name="GalleryAllowRename" key="AllowRename" type="Bool">
-      <label>Allow click-to-rename</label>
-      <tooltip>&lt;div&gt;Check this if you want to be able to rename gallery items by clicking on them (otherwise, use the "Rename" menu option).&lt;/div&gt;</tooltip>
-      <default>false</default>
+    <entry name="GalleryName" key="Location" type="String">
+      <default>KookaGallery</default>
     </entry>
+
+  </group>
+
+
+  <group name="thumbnailView">
 
     <entry name="ThumbnailCustomBackground" key="customBackground" type="Bool">
       <label>Use a custom background image</label>

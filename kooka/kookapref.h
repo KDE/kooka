@@ -1,52 +1,46 @@
-/* This file is part of the KDE Project             -*- mode:c++ -*-
-
-   Copyright (C) 2000 Klaas Freitag <freitag@suse.de>
-   Copyright (C) 2010 Jonathan Marten <jjm@keelhaul.me.uk>
-
-   This library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Library General Public
-   License as published by the Free Software Foundation; either
-   version 2 of the License, or (at your option) any later version.
-
-   As a special exception, permission is given to link this program
-   with any version of the KADMOS ocr/icr engine of reRecognition GmbH,
-   Kreuzlingen and distribute the resulting executable without
-   including the source code for KADMOS in the source distribution.
-
-   This library is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   Library General Public License for more details.
-
-   You should have received a copy of the GNU Library General Public License
-   along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
-   Boston, MA 02110-1301, USA.
-
-*/
+/************************************************************************
+ *									*
+ *  This file is part of Kooka, a scanning/OCR application using	*
+ *  Qt <http://www.qt.io> and KDE Frameworks <http://www.kde.org>.	*
+ *									*
+ *  Copyright (C) 2000-2016 Klaas Freitag <freitag@suse.de>		*
+ *                          Jonathan Marten <jjm@keelhaul.me.uk>	*
+ *									*
+ *  Kooka is free software; you can redistribute it and/or modify it	*
+ *  under the terms of the GNU Library General Public License as	*
+ *  published by the Free Software Foundation and appearing in the	*
+ *  file COPYING included in the packaging of this file;  either	*
+ *  version 2 of the License, or (at your option) any later version.	*
+ *									*
+ *  As a special exception, permission is given to link this program	*
+ *  with any version of the KADMOS OCR/ICR engine (a product of		*
+ *  reRecognition GmbH, Kreuzlingen), and distribute the resulting	*
+ *  executable without including the source code for KADMOS in the	*
+ *  source distribution.						*
+ *									*
+ *  This program is distributed in the hope that it will be useful,	*
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of	*
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the	*
+ *  GNU General Public License for more details.			*
+ *									*
+ *  You should have received a copy of the GNU General Public		*
+ *  License along with this program;  see the file COPYING.  If		*
+ *  not, see <http://www.gnu.org/licenses/>.				*
+ *									*
+ ************************************************************************/
 
 #ifndef KOOKAPREF_H
 #define KOOKAPREF_H
 
 #include <kpagedialog.h>
 
-#define GROUP_GALLERY       "Gallery"
-#define GALLERY_ALLOW_RENAME    "AllowRename"
-#define GALLERY_LAYOUT      "Layout"
-
-#define GALLERY_LOCATION    "Location"
-#define GALLERY_DEFAULT_LOC "KookaGallery"
-
-// Note that this is not the same GROUP_STARTUP which is used in
-// libkscan/scanglobal!  Settings here are used by Kooka only.
-#define GROUP_STARTUP       "Startup"
-#define STARTUP_READ_IMAGE      "ReadImageOnStart"
 
 #define CFG_GROUP_OCR_DIA       "ocrDialog"
 #define CFG_OCRAD_BINARY        "ocradBinary"
 #define CFG_GOCR_BINARY         "gocrBinary"
 
 class KookaPrefsPage;
+
 
 class KookaPref : public KPageDialog
 {
@@ -85,4 +79,4 @@ private:
     static QString sGalleryRoot;
 };
 
-#endif                          // KOOKAPREF_H
+#endif							// KOOKAPREF_H
