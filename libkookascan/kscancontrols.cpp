@@ -284,28 +284,24 @@ void KScanCombo::setList(const QList<QByteArray> &list)
         const QByteArray item = (*it);
         mCombo->addItem(i18n(item), item);
     }
+
     mCombo->blockSignals(bs);
+    if (!cur.isEmpty()) setText(cur);                   // try to restore old setting
 }
 
 void KScanCombo::setText(const QString &text)
 {
-    int i = mCombo->findData(text);         // find item with that text
-    if (i == -1) {
-        return;    // ignore if not present
-    }
+    int i = mCombo->findData(text);			// find item with that text
+    if (i == -1) return;				// ignore if not present
 
-    if (i == mCombo->currentIndex()) {
-        return;    // avoid recursive signals
-    }
+    if (i == mCombo->currentIndex()) return;		// avoid recursive signals
     mCombo->setCurrentIndex(i);
 }
 
 void KScanCombo::setIcon(const QIcon &icon, const char *ent)
 {
-    int i = mCombo->findData(ent);          // find item with that text
-    if (i != -1) {
-        mCombo->setItemIcon(i, icon);
-    }
+    int i = mCombo->findData(ent);			// find item with that text
+    if (i != -1) mCombo->setItemIcon(i, icon);
 }
 
 QString KScanCombo::text() const
