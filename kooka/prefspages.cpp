@@ -53,8 +53,6 @@
 
 #include "kookapref.h"
 #include "kookagallery.h"
-#include "imgsaver.h"
-#include "thumbview.h"
 #include "formatdialog.h"
 #include "ocrgocrengine.h"
 #include "ocrocradengine.h"
@@ -242,7 +240,7 @@ void KookaSavingPage::applySettings()
 //  "Gallery/Thumbnail" page
 
 KookaThumbnailPage::KookaThumbnailPage(KPageDialog *parent)
-    : KookaPrefsPage(parent, THUMB_GROUP)
+    : KookaPrefsPage(parent)
 {
     // Gallery options
     QGroupBox *gb = new QGroupBox(i18n("Image Gallery"), this);
@@ -269,7 +267,6 @@ KookaThumbnailPage::KookaThumbnailPage(KPageDialog *parent)
     item = KookaSettings::self()->galleryAllowRenameItem();
     mAllowRenameCheck = new QCheckBox(item->label(), gb);
     mAllowRenameCheck->setToolTip(item->toolTip());
-    mAllowRenameCheck->setChecked(mConfig.readEntry(GALLERY_ALLOW_RENAME, false));
     gl->addWidget(mAllowRenameCheck, 1, 0, 1, 2);
 
     mLayout->addWidget(gb);
@@ -309,6 +306,7 @@ KookaThumbnailPage::KookaThumbnailPage(KPageDialog *parent)
     gl->addWidget(lab, 5, 0, Qt::AlignRight);
 
     mThumbSizeCombo = new KComboBox(this);
+    mThumbSizeCombo->setToolTip(item->toolTip());
     mThumbSizeCombo->addItem(ThumbView::sizeName(KIconLoader::SizeEnormous), KIconLoader::SizeEnormous);
     mThumbSizeCombo->addItem(ThumbView::sizeName(KIconLoader::SizeHuge), KIconLoader::SizeHuge);
     mThumbSizeCombo->addItem(ThumbView::sizeName(KIconLoader::SizeLarge), KIconLoader::SizeLarge);
@@ -333,7 +331,6 @@ void KookaThumbnailPage::saveSettings()
 
     int size = mThumbSizeCombo->itemData(mThumbSizeCombo->currentIndex()).toInt();
     if (size>0) KookaSettings::setThumbnailPreviewSize(size);
-    //else qWarning() << "Invalid size" << size << "for combo index" << mThumbSizeCombo->currentIndex();
 
     KookaSettings::self()->save();
 }

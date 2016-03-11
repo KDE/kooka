@@ -67,6 +67,12 @@
 
   </group>
 
+  <!--  This setting is used by KIO::PreviewJob, see ThumbView::ThumbView()  -->
+  <group name="PreviewSettings">
+    <entry name="PreviewMaximumSize" key="MaximumSize" type="UInt">
+      <default code="true">(20*1024*1024LL)</default>
+    </entry>
+  </group>
 
   <group name="thumbnailView">
     <entry name="GalleryLayout" key="Layout" type="Enum">
@@ -103,14 +109,6 @@
       <tooltip>&lt;div&gt;Select the default preview size for the thumbnail view.&lt;/div&gt;</tooltip>
       <default>KIconLoader::SizeHuge</default>
     </entry>
-
-
-
-
-
-
-
-
 
   </group>
 

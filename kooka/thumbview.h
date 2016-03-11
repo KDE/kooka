@@ -38,18 +38,12 @@
 #include <kdiroperator.h>
 #include <kiconloader.h>
 
-// TODO: use KConfigXT
-//  KConfig group definitions
-#define THUMB_GROUP     "thumbnailView"
-#define THUMB_PREVIEW_SIZE  "previewSize"
-#define THUMB_CUSTOM_BGND   "customBackground"
-#define THUMB_BG_WALLPAPER  "BackGroundTile"
-#define THUMB_STD_TILE_IMG  "kooka/pics/thumbviewtile.png"
 
 class QMenu;
 class KFileItem;
 class KActionMenu;
 class KToggleAction;
+
 
 class ThumbView : public KDirOperator
 {
@@ -63,7 +57,7 @@ public:
     {
         return (mContextMenu);
     }
-    bool readSettings();
+    void readSettings();
 
     static QString standardBackground();
     static QString sizeName(KIconLoader::StdSizes size);
@@ -97,9 +91,9 @@ private:
     KActionMenu *m_sizeMenu;
     QMap<KIconLoader::StdSizes, KToggleAction *> m_sizeMap;
 
-    KIconLoader::StdSizes m_thumbSize;
-    QString m_bgImg;
-    bool m_customBg;
+    // This is really a KIconLoader::StdSizes, but it has to be an int because
+    // of the signal from QSignalMapper.
+    int m_thumbSize;
 
     QUrl m_lastSelected;
     QUrl m_toSelect;

@@ -37,20 +37,16 @@
 #include <qaction.h>
 #include <qdebug.h>
 #include <qmenu.h>
+#include <qstandardpaths.h>
 
 #include <kfileitem.h>
-#include <kglobal.h>
-#include <kstandarddirs.h>
 #include <kactionmenu.h>
 #include <kdiroperator.h>
 #include <klocalizedstring.h>
-#include <kconfiggroup.h>
 #include <kcolorscheme.h>
 
 #include "kookapref.h"
-
-
-#define PREVIEW_MAX_FILESIZE    (20*1024*1024LL)	// 20Mb, standard default is 5Mb
+#include "kookasettings.h"
 
 
 ThumbView::ThumbView(QWidget *parent)
@@ -59,35 +55,24 @@ ThumbView::ThumbView(QWidget *parent)
     setObjectName("ThumbView");
 
     m_thumbSize = KIconLoader::SizeHuge;
-    m_customBg = false;
-    m_bgImg = QString::null;
     m_firstMenu = true;
 
-    // There seems to be no way to set the maximum file size or to ignore it directly,
-    // the preview job with that setting is private to KFilePreviewGenerator.
-    // But we can set the size limit in the application config - this also has
-    // a useful side effect that the user can change the setting there if they
-    // so wish.
-    // See PreviewJob::maximumFileSize() in kdelibs/kio/kio/previewjob.cpp
-    // TODO: use KConfigXT
-    const KSharedConfigPtr conf = KSharedConfig::openConfig();
-    KConfig conf2(conf->name(), KConfig::NoGlobals);    // ensure setting goes to app config
-    KConfigGroup grp = conf2.group("PreviewSettings");
-    if (!grp.hasKey("MaximumSize")) {
-        //qDebug() << "Setting maximum preview file size to" << PREVIEW_MAX_FILESIZE;
-        grp.writeEntry("MaximumSize", PREVIEW_MAX_FILESIZE);
-        grp.sync();
-    } else {
-        //qDebug() << "Using maximum preview file size" << grp.readEntry("MaximumSize", 0);
-    }
+    // There seems to be no way to set the maximum preview file size or to
+    // ignore it directly, the preview job with that setting is private to
+    // KFilePreviewGenerator.  But we can set the size limit in our application's
+    // configuration - this also has a useful side effect that the user can
+    // change the setting there if they so wish.
+    // See PreviewJob::startPreview() in kio/src/widgets/previewjob.cpp
+    qDebug() << "Maximum preview file size is" << KookaSettings::previewMaximumSize();
 
-    setUrl(QUrl::fromUserInput(KookaPref::galleryRoot()), true); // initial location
-    setPreviewWidget(NULL);             // no preview at side
-    setMode(KFile::File);               // implies single selection mode
-    setInlinePreviewShown(true);            // show file previews
-    setView(KFile::Simple);             // simple icon view
+    setUrl(QUrl::fromUserInput(KookaPref::galleryRoot()), true);
+							// initial location
+    setPreviewWidget(NULL);				// no preview at side
+    setMode(KFile::File);				// implies single selection mode
+    setInlinePreviewShown(true);			// show file previews
+    setView(KFile::Simple);				// simple icon view
     dirLister()->setMimeExcludeFilter(QStringList("inode/directory"));
-    // only files, not directories
+							// only files, not directories
 
     connect(this, SIGNAL(fileSelected(KFileItem)),
             SLOT(slotFileSelected(KFileItem)));
@@ -234,9 +219,9 @@ void ThumbView::slotContextMenu(const QPoint &pos)
 
 void ThumbView::slotSetSize(int size)
 {
-    m_thumbSize = static_cast<KIconLoader::StdSizes>(size);
+    m_thumbSize = size;
 
-    // see KDirOperator::setIconsZoom() in kdelibs/kfile/kdiroperator.cpp
+    // see KDirOperator::setIconsZoom() in kio/src/kfilewidgets/kdiroperator.cpp
     int val = ((size - KIconLoader::SizeSmall) * 100) / (KIconLoader::SizeEnormous - KIconLoader::SizeSmall);
 
     //qDebug() << "size" << size << "-> val" << val;
@@ -297,28 +282,10 @@ void ThumbView::slotFileHighlighted(const KFileItem &kfi)
     emit itemHighlighted(u);
 }
 
-bool ThumbView::readSettings()
+void ThumbView::readSettings()
 {
-    KConfigGroup grp = KSharedConfig::openConfig()->group(THUMB_GROUP);
-    bool changed = false;
-
-    KIconLoader::StdSizes size = static_cast<KIconLoader::StdSizes>(grp.readEntry(THUMB_PREVIEW_SIZE,
-                                 static_cast<int>(KIconLoader::SizeHuge)));
-    if (size != m_thumbSize) {
-        slotSetSize(size);
-        changed = true;
-    }
-
-    bool newCustomBg = grp.readEntry(THUMB_CUSTOM_BGND, false);
-    QString newBgImg = grp.readEntry(THUMB_BG_WALLPAPER, standardBackground());
-    if (newCustomBg != m_customBg || newBgImg != m_bgImg) {
-        m_customBg = newCustomBg;
-        m_bgImg = newBgImg;
-        setBackground();
-        changed = true;
-    }
-
-    return (changed);
+    slotSetSize(KookaSettings::thumbnailPreviewSize());
+    setBackground();
 }
 
 void ThumbView::saveConfig()
@@ -330,18 +297,20 @@ void ThumbView::saveConfig()
 void ThumbView::setBackground()
 {
     QPixmap bgPix;
-    //qDebug() << "custom" << m_customBg << "img" << m_bgImg;
-
-    QWidget *iv = view()->viewport();           // go down to the icon view
+    QWidget *iv = view()->viewport();			// go down to the icon view
     QPalette pal = iv->palette();
 
-    if (m_customBg && !m_bgImg.isEmpty()) {     // set custom background
-        if (bgPix.load(m_bgImg)) {
+    QString newBgImg = KookaSettings::thumbnailBackgroundPath();
+    bool newCustomBg = KookaSettings::thumbnailCustomBackground();
+    //qDebug() << "custom" << newCustomBg << "img" << newBgImg;
+
+    if (newCustomBg && !newBgImg.isEmpty()) {		// can set custom background
+        if (bgPix.load(newBgImg)) {
             pal.setBrush(iv->backgroundRole(), QBrush(bgPix));
         } else {
-            //qDebug() << "Failed to load background image" << m_bgImg;
+            qWarning() << "Failed to load background image" << newBgImg;
         }
-    } else {                    // reset to default
+    } else {						// reset to default
         KColorScheme sch(QPalette::Normal);
         pal.setBrush(iv->backgroundRole(), sch.background());
     }
@@ -372,18 +341,18 @@ void ThumbView::slotImageDeleted(const KFileItem *kfi)
 
 QString ThumbView::standardBackground()
 {
-    return (KGlobal::dirs()->findResource("data", THUMB_STD_TILE_IMG));
+    return (QStandardPaths::locate(QStandardPaths::AppDataLocation, "pics/thumbviewtile.png"));
 }
 
 QString ThumbView::sizeName(KIconLoader::StdSizes size)
 {
     switch (size) {
-    case KIconLoader::SizeEnormous:     return (i18n("Very Large"));
-    case KIconLoader::SizeHuge:     return (i18n("Large"));
-    case KIconLoader::SizeLarge:        return (i18n("Medium"));
-    case KIconLoader::SizeMedium:       return (i18n("Small"));
-    case KIconLoader::SizeSmallMedium:  return (i18n("Very Small"));
-    case KIconLoader::SizeSmall:        return (i18n("Tiny"));
-    default:                return ("?");
+    case KIconLoader::SizeEnormous:	return (i18n("Very Large"));
+    case KIconLoader::SizeHuge:		return (i18n("Large"));
+    case KIconLoader::SizeLarge:	return (i18n("Medium"));
+    case KIconLoader::SizeMedium:	return (i18n("Small"));
+    case KIconLoader::SizeSmallMedium:	return (i18n("Very Small"));
+    case KIconLoader::SizeSmall:	return (i18n("Tiny"));
+    default:				return ("?");
     }
 }
