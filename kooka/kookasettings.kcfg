@@ -5,6 +5,40 @@
                           http://www.kde.org/standards/kcfg/1.0/kcfg.xsd" >
   <kcfgfile></kcfgfile>
 
+  <group name="General">
+
+    <entry name="PreferencesTab" type="Int">
+      <default>0</default>
+    </entry>
+
+  </group>
+
+  <group name="MainWindow">
+
+    <entry name="LayoutTabIndex" key="TabIndex" type="Int">
+      <default>0</default>
+    </entry>
+
+    <entry name="LayoutScan1" key="ScanLayout1" type="String">
+    </entry>
+    <entry name="LayoutScan2" key="ScanLayout2" type="String">
+    </entry>
+    <entry name="LayoutGallery1" key="GalleryLayout1" type="String">
+    </entry>
+    <entry name="LayoutGallery2" key="GalleryLayout2" type="String">
+    </entry>
+    <entry name="LayoutOcr1" key="OcrLayout1" type="String">
+    </entry>
+    <entry name="LayoutOcr2" key="OcrLayout2" type="String">
+    </entry>
+
+    <!--  Dummy entry just to be able to find this group, see			-->
+    <!--  ScanGallery::saveHeaderState() and ScanGallery::restoreHeaderState()	-->
+    <entry name="ColumnStates" type="String">
+    </entry>
+
+  </group>
+
   <group name="Startup">
 
     <entry name="StartupReadImage" key="ReadImageOnStart" type="Bool">
@@ -98,12 +132,12 @@
       <default>KookaSettings::RecentAtTop</default>
     </entry>
 
+    <!--  Internal setting, no GUI (although the user can edit if required) -->
     <entry name="GalleryName" key="Location" type="String">
       <default>KookaGallery</default>
     </entry>
 
   </group>
-
 
   <group name="thumbnailView">
 
@@ -126,7 +160,5 @@
     </entry>
 
   </group>
-
-
 
 </kcfg>

@@ -126,7 +126,6 @@ public:
     void connectThumbnailAction(QAction *action);
     void connectPreviewAction(QAction *action);
 
-    void saveProperties(KConfigGroup &grp);
     void saveWindowSettings(KConfigGroup &grp);
     void applyWindowSettings(const KConfigGroup &grp);
 

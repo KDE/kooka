@@ -84,17 +84,6 @@
 #endif
 
 
-#define WCONF_TAB_INDEX     "TabIndex"
-
-#define WCONF_SCAN_LAYOUT1  "ScanLayout1"
-#define WCONF_SCAN_LAYOUT2  "ScanLayout2"
-#define WCONF_GALLERY_LAYOUT1   "GalleryLayout1"
-#define WCONF_GALLERY_LAYOUT2   "GalleryLayout2"
-#define WCONF_OCR_LAYOUT1   "OcrLayout1"
-#define WCONF_OCR_LAYOUT2   "OcrLayout2"
-
-#define COLUMN_STATES_KEY   "GalleryState%1"
-
 // ---------------------------------------------------------------------------
 
 // Some of the UI panels (the gallery and the image viewer) are common
@@ -367,15 +356,13 @@ KookaView::~KookaView()
 void KookaView::saveWindowSettings(KConfigGroup &grp)
 {
     //qDebug() << "to group" << grp.name();
-
-    grp.writeEntry(WCONF_TAB_INDEX, currentIndex());
-
-    grp.writeEntry(WCONF_SCAN_LAYOUT1, mScanPage->saveState().toBase64());
-    grp.writeEntry(WCONF_SCAN_LAYOUT2, mScanSubSplitter->saveState().toBase64());
-    grp.writeEntry(WCONF_GALLERY_LAYOUT1, mGalleryPage->saveState().toBase64());
-    grp.writeEntry(WCONF_GALLERY_LAYOUT2, mGallerySubSplitter->saveState().toBase64());
-    grp.writeEntry(WCONF_OCR_LAYOUT1, mOcrPage->saveState().toBase64());
-    grp.writeEntry(WCONF_OCR_LAYOUT2, mOcrSubSplitter->saveState().toBase64());
+    KookaSettings::setLayoutTabIndex(currentIndex());
+    KookaSettings::setLayoutScan1(mScanPage->saveState().toBase64());
+    KookaSettings::setLayoutScan2(mScanSubSplitter->saveState().toBase64());
+    KookaSettings::setLayoutGallery1(mGalleryPage->saveState().toBase64());
+    KookaSettings::setLayoutGallery2(mGallerySubSplitter->saveState().toBase64());
+    KookaSettings::setLayoutOcr1(mOcrPage->saveState().toBase64());
+    KookaSettings::setLayoutOcr2(mOcrSubSplitter->saveState().toBase64());
 
     saveGalleryState();					// for the current tab
     grp.sync();
@@ -386,57 +373,32 @@ void KookaView::applyWindowSettings(const KConfigGroup &grp)
 {
     //qDebug() << "from group" << grp.name();
 
-    QString set;
+    QString set = KookaSettings::layoutScan1();
+    if (!set.isEmpty()) mScanPage->restoreState(QByteArray::fromBase64(set.toLocal8Bit()));
+    set = KookaSettings::layoutScan2();
+    if (!set.isEmpty()) mScanSubSplitter->restoreState(QByteArray::fromBase64(set.toLocal8Bit()));
 
-    set = grp.readEntry(WCONF_SCAN_LAYOUT1, "");
-    if (!set.isEmpty()) {
-        mScanPage->restoreState(QByteArray::fromBase64(set.toLocal8Bit()));
-    }
-    set = grp.readEntry(WCONF_SCAN_LAYOUT2, "");
-    if (!set.isEmpty()) {
-        mScanSubSplitter->restoreState(QByteArray::fromBase64(set.toLocal8Bit()));
-    }
+    set = KookaSettings::layoutGallery1();
+    if (!set.isEmpty()) mGalleryPage->restoreState(QByteArray::fromBase64(set.toLocal8Bit()));
+    set = KookaSettings::layoutGallery2();
+    if (!set.isEmpty()) mGallerySubSplitter->restoreState(QByteArray::fromBase64(set.toLocal8Bit()));
 
-    set = grp.readEntry(WCONF_GALLERY_LAYOUT1, "");
-    if (!set.isEmpty()) {
-        mGalleryPage->restoreState(QByteArray::fromBase64(set.toLocal8Bit()));
-    }
-    set = grp.readEntry(WCONF_GALLERY_LAYOUT2, "");
-    if (!set.isEmpty()) {
-        mGallerySubSplitter->restoreState(QByteArray::fromBase64(set.toLocal8Bit()));
-    }
-
-    set = grp.readEntry(WCONF_OCR_LAYOUT1, "");
-    if (!set.isEmpty()) {
-        mOcrPage->restoreState(QByteArray::fromBase64(set.toLocal8Bit()));
-    }
-    set = grp.readEntry(WCONF_OCR_LAYOUT2, "");
-    if (!set.isEmpty()) {
-        mOcrSubSplitter->restoreState(QByteArray::fromBase64(set.toLocal8Bit()));
-    }
+    set = KookaSettings::layoutOcr1();
+    if (!set.isEmpty()) mOcrPage->restoreState(QByteArray::fromBase64(set.toLocal8Bit()));
+    set = KookaSettings::layoutOcr2();
+    if (!set.isEmpty()) mOcrSubSplitter->restoreState(QByteArray::fromBase64(set.toLocal8Bit()));
 }
 
 void KookaView::saveGalleryState(int index) const
 {
-    if (index == -1) {
-        index = currentIndex();
-    }
-    gallery()->saveHeaderState(QString(COLUMN_STATES_KEY).arg(index));
+    if (index == -1) index = currentIndex();
+    gallery()->saveHeaderState(index);
 }
 
 void KookaView::restoreGalleryState(int index)
 {
-    if (index == -1) {
-        index = currentIndex();
-    }
-    gallery()->restoreHeaderState(QString(COLUMN_STATES_KEY).arg(index));
-}
-
-// this gets called by Kooka::closeEvent() at shutdown
-void KookaView::saveProperties(KConfigGroup &grp)
-{
-    KookaSettings::setStartupSelectedImage(gallery()->getCurrImageFileName(true));
-    KookaSettings::self()->save();
+    if (index == -1) index = currentIndex();
+    gallery()->restoreHeaderState(index);
 }
 
 void KookaView::slotTabChanged(int index)

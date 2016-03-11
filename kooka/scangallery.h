@@ -69,8 +69,8 @@ public:
     bool prepareToSave(const ImageMetaInfo *info);
     void addImage(const QImage *img, const ImageMetaInfo *info = NULL);
 
-    void saveHeaderState(const QString &key) const;
-    void restoreHeaderState(const QString &key);
+    void saveHeaderState(int forIndex) const;
+    void restoreHeaderState(int forIndex);
     QUrl saveURL() const;
 
 public slots:

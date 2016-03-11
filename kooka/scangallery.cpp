@@ -48,8 +48,7 @@
 #include <klocalizedstring.h>
 #include <kstandardguiitem.h>
 #include <kimageio.h>
-#include <kconfig.h>
-#include <KConfigGroup>
+#include <kconfigskeleton.h>
 
 #include <kio/global.h>
 #include <kio/copyjob.h>
@@ -60,11 +59,10 @@
 #include "imgsaver.h"
 #include "kookaimage.h"
 #include "kookapref.h"
+#include "kookasettings.h"
 
 #include "imagemetainfo.h"
 
-// TODO: use KConfigXT
-#define COLUMN_STATES_GROUP "GalleryColumns"
 
 // FileTreeViewItem is not the same as KDE3's KFileTreeViewItem in that
 // fileItem() used to return a KFileItem *, allowing the item to be modified
@@ -144,26 +142,38 @@ ScanGallery::~ScanGallery()
     //qDebug();
 }
 
-void ScanGallery::saveHeaderState(const QString &key) const
+static QString columnStatesKey(int forIndex)
 {
-    KConfigGroup grp = KSharedConfig::openConfig()->group(COLUMN_STATES_GROUP);
-    //qDebug() << "to" << key;
-    grp.writeEntry(key, header()->saveState().toBase64());
+    return (QString("GalleryState%1").arg(forIndex));
 }
 
-void ScanGallery::restoreHeaderState(const QString &key)
+void ScanGallery::saveHeaderState(int forIndex) const
 {
-    const KConfigGroup grp = KSharedConfig::openConfig()->group(COLUMN_STATES_GROUP);
+    QString key = columnStatesKey(forIndex);
+    qDebug() << "to" << key;
+    const KConfigSkeletonItem *ski = KookaSettings::self()->columnStatesItem();
+    Q_ASSERT(ski!=NULL);
+    KConfigGroup grp = KookaSettings::self()->config()->group(ski->group());
+    grp.writeEntry(key, header()->saveState().toBase64());
+    grp.sync();
+}
 
-    //qDebug() << "from" << key;
+void ScanGallery::restoreHeaderState(int forIndex)
+{
+    QString key = columnStatesKey(forIndex);
+    qDebug() << "from" << key;
+    const KConfigSkeletonItem *ski = KookaSettings::self()->columnStatesItem();
+    Q_ASSERT(ski!=NULL);
+    const KConfigGroup grp = KookaSettings::self()->config()->group(ski->group());
+
     QString state = grp.readEntry(key, "");
-    if (!state.isEmpty()) {
-        QHeaderView *hdr = header();
-        // same workaround as needed in Akregator (even with Qt 4.6),
-        // see r918196 and r1001242 to kdepim/akregator/src/articlelistview.cpp
-        hdr->resizeSection(hdr->logicalIndex(hdr->count() - 1), 1);
-        hdr->restoreState(QByteArray::fromBase64(state.toAscii()));
-    }
+    if (state.isEmpty()) return;
+
+    QHeaderView *hdr = header();
+    // same workaround as needed in Akregator (even with Qt 4.6),
+    // see r918196 and r1001242 to kdepim/akregator/src/articlelistview.cpp
+    hdr->resizeSection(hdr->logicalIndex(hdr->count() - 1), 1);
+    hdr->restoreState(QByteArray::fromBase64(state.toAscii()));
 }
 
 void ScanGallery::openRoots()

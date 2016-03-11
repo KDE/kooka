@@ -157,7 +157,7 @@ set(kooka_ocr_SRCS
 )
 
 if (WITH_KADMOS)
-  set(kooka_SRCS ${kooka_SRCS} kadmosocr.cpp)
+  set(kooka_SRCS ${kooka_SRCS} ocr/kadmosocr.cpp)
 endif (WITH_KADMOS)
 
 kde4_add_kcfg_files(kooka_SRCS kookasettings.kcfgc)
