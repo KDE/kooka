@@ -66,10 +66,12 @@ if (WITH_KADMOS)
   set(HAVE_KADMOS true)
 endif (WITH_KADMOS)
 
+########### subdirectories ###############
 
 add_subdirectory(pics)
 add_subdirectory(desktop)
 
+########### setup ###############
 
 if (HAVE_ERRNO_H)
   add_definitions(-DHAVE_ERRNO_H)
@@ -111,14 +113,9 @@ if (HAVE_TIFF)
   include_directories(${TIFF_INCLUDE_DIR})
 endif (HAVE_TIFF)
 
-# KCFG files.
+########### i18n ###############
 
-##configure_file(kooka.kcfg.cmake ${CMAKE_CURRENT_BINARY_DIR}/kooka.kcfg)
-
-##kconfig_add_kcfg_files(kookaprivate_LIB_SRCS
-##  globalsettings_base.kcfgc
-##)
-
+add_definitions(-DTRANSLATION_DOMAIN="kooka")
 
 ########### executable ###############
 
@@ -165,7 +162,6 @@ endif (WITH_KADMOS)
 
 kde4_add_kcfg_files(kooka_SRCS kookasettings.kcfgc)
 
-#kde4_add_app_icon(kooka_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/icons/hi*-apps-kooka.png")
 add_executable(kooka ${kooka_SRCS} ${kooka_ocr_SRCS})
 target_link_libraries(kooka
   kookascan

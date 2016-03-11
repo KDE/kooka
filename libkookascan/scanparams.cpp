@@ -398,15 +398,25 @@ QWidget *ScanParams::createScannerParams()
     if (so != NULL) {
         KScanCombo *cb = (KScanCombo *) so->widget();
 
-        // Having loaded the 'sane-backends' message catalogue, these strings
-        // are now translatable.  But KScanCombo::setIcon() works on the
-        // untranslated strings.
-        cb->setIcon(mIconLineart, I18N_NOOP("Lineart"));
-        cb->setIcon(mIconLineart, I18N_NOOP("Binary"));
-        cb->setIcon(mIconGray, I18N_NOOP("Gray"));
-        cb->setIcon(mIconGray, I18N_NOOP("Grayscale"));
-        cb->setIcon(mIconColor, I18N_NOOP("Color"));
-        cb->setIcon(mIconHalftone, I18N_NOOP("Halftone"));
+        // The option display strings are translated via the 'sane-backends' message
+        // catalogue, see KScanCombo::setList().  But KScanCombo::setIcon() works on
+        // the untranslated strings, which are really SANE values.  So the strings
+        // here need to cover the full set of possible SANE values for all backends
+        // (extra ones which a particular SANE backend doesn't support don't matter).
+        //
+        // So don't translate these strings or wrap them in any sort of i18n().
+        //
+        // The combo has already been populated with the current list of SANE values
+        // at the KScanOption initialisation (by KScanOption::updateList() calling
+        // KScanOption::getList() which reads the list values from SANE).  But
+        // this may not work properly if the list of scan modes changes at runtime!
+
+        cb->setIcon(mIconLineart, "Lineart");
+        cb->setIcon(mIconLineart, "Binary");
+        cb->setIcon(mIconGray, "Gray");
+        cb->setIcon(mIconGray, "Grayscale");
+        cb->setIcon(mIconColor, "Color");
+        cb->setIcon(mIconHalftone, "Halftone");
 
         connect(so, &KScanOption::guiChange, this, &ScanParams::slotOptionChanged);
         connect(so, &KScanOption::guiChange, this, &ScanParams::slotNewScanMode);

@@ -35,6 +35,10 @@ if (HAVE_LIBPAPER)
   include_directories(${LIBPAPER_INCLUDES})
 endif (HAVE_LIBPAPER)
 
+########### i18n ###############
+
+add_definitions(-DTRANSLATION_DOMAIN="libkookascan")
+
 ########### library ###############
 
 # TODO: rename some of these to match class name, others are obsolete
