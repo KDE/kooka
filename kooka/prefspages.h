@@ -34,8 +34,6 @@
 
 #include <qwidget.h>
 
-#include <kconfiggroup.h>
-
 #include "ocrengine.h"
 
 class QCheckBox;
@@ -53,14 +51,13 @@ class KookaPrefsPage : public QWidget
     Q_OBJECT
 
 public:
-    KookaPrefsPage(KPageDialog *parent, const char *configGroup = NULL);
+    KookaPrefsPage(KPageDialog *parent);
     virtual ~KookaPrefsPage();
 
     virtual void saveSettings() = 0;
     virtual void defaultSettings() = 0;
 
 protected:
-    KConfigGroup mConfig;
     QVBoxLayout *mLayout;
 };
 

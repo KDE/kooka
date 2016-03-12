@@ -34,11 +34,6 @@
 
 #include <kpagedialog.h>
 
-
-#define CFG_GROUP_OCR_DIA       "ocrDialog"
-#define CFG_OCRAD_BINARY        "ocradBinary"
-#define CFG_GOCR_BINARY         "gocrBinary"
-
 class KookaPrefsPage;
 
 

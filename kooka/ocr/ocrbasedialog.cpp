@@ -1,28 +1,33 @@
-/***************************************************************************
-                     kocrbase.cpp - base dialog for ocr
-                             -------------------
-    begin                : Fri Now 10 2000
-    copyright            : (C) 2000 by Klaas Freitag
-    email                : freitag@suse.de
- ***************************************************************************/
-
-/***************************************************************************
- *                                                                         *
- *  This file may be distributed and/or modified under the terms of the    *
- *  GNU General Public License version 2 as published by the Free Software *
- *  Foundation and appearing in the file COPYING included in the           *
- *  packaging of this file.                                                *
- *
- *  As a special exception, permission is given to link this program       *
- *  with any version of the KADMOS ocr/icr engine of reRecognition GmbH,   *
- *  Kreuzlingen and distribute the resulting executable without            *
- *  including the source code for KADMOS in the source distribution.       *
- *
- *  As a special exception, permission is given to link this program       *
- *  with any edition of Qt, and distribute the resulting executable,       *
- *  without including the source code for Qt in the source distribution.   *
- *                                                                         *
- ***************************************************************************/
+/************************************************************************
+ *									*
+ *  This file is part of Kooka, a scanning/OCR application using	*
+ *  Qt <http://www.qt.io> and KDE Frameworks <http://www.kde.org>.	*
+ *									*
+ *  Copyright (C) 2000-2016 Klaas Freitag <freitag@suse.de>		*
+ *                          Jonathan Marten <jjm@keelhaul.me.uk>	*
+ *									*
+ *  Kooka is free software; you can redistribute it and/or modify it	*
+ *  under the terms of the GNU Library General Public License as	*
+ *  published by the Free Software Foundation and appearing in the	*
+ *  file COPYING included in the packaging of this file;  either	*
+ *  version 2 of the License, or (at your option) any later version.	*
+ *									*
+ *  As a special exception, permission is given to link this program	*
+ *  with any version of the KADMOS OCR/ICR engine (a product of		*
+ *  reRecognition GmbH, Kreuzlingen), and distribute the resulting	*
+ *  executable without including the source code for KADMOS in the	*
+ *  source distribution.						*
+ *									*
+ *  This program is distributed in the hope that it will be useful,	*
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of	*
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the	*
+ *  GNU General Public License for more details.			*
+ *									*
+ *  You should have received a copy of the GNU General Public		*
+ *  License along with this program;  see the file COPYING.  If		*
+ *  not, see <http://www.gnu.org/licenses/>.				*
+ *									*
+ ************************************************************************/
 
 #include "ocrbasedialog.h"
 
@@ -34,16 +39,16 @@
 #include <qapplication.h>
 #include <qradiobutton.h>
 #include <qpushbutton.h>
-#include <KConfigGroup>
-#include <kconfig.h>
+#include <qdebug.h>
+#include <qicon.h>
+
 #include <kglobal.h>
-#include <QDebug>
-#include <KLocalizedString>
+#include <klocalizedstring.h>
 #include <kstandarddirs.h>
 #include <kstandardguiitem.h>
 #include <kseparator.h>
-#include <QIcon>
 #include <KDialog>
+
 #include <kio/job.h>
 #include <kio/previewjob.h>
 
@@ -51,14 +56,10 @@
 
 #include "ocrengine.h"
 #include "kookaimage.h"
+#include "kookasettings.h"
 
 #include "imagecanvas.h"
 
-#define CFG_OCR_SPELL       "OcrSpellSettings"
-
-#define CFG_SPELL_BGND      "backgroundCheck"
-#define CFG_SPELL_INTER     "interactiveCheck"
-#define CFG_SPELL_CUSTOM    "customSettings"
 
 OcrBaseDialog::OcrBaseDialog(QWidget *parent)
     : KPageDialog(parent),
@@ -293,14 +294,13 @@ void OcrBaseDialog::setupSpellPage()
     gl->setRowStretch(3, 1);
 
     // Apply settings
-    const KConfigGroup grp = KSharedConfig::openConfig()->group(CFG_OCR_SPELL);
+    m_gbBackgroundCheck->setChecked(KookaSettings::ocrSpellBackgroundCheck());
+    m_gbInteractiveCheck->setChecked(KookaSettings::ocrSpellInteractiveCheck());
 
-    m_gbBackgroundCheck->setChecked(grp.readEntry(CFG_SPELL_BGND, true));
-    m_gbInteractiveCheck->setChecked(grp.readEntry(CFG_SPELL_INTER, true));
-
-    m_rbGlobalSpellSettings->setChecked(!grp.readEntry(CFG_SPELL_CUSTOM, false));
-    m_rbCustomSpellSettings->setChecked(!m_rbGlobalSpellSettings->isChecked());
-    m_pbCustomSpellDialog->setEnabled(m_rbCustomSpellSettings->isChecked());
+    const bool customSettings = KookaSettings::ocrSpellCustomSettings();
+    m_rbGlobalSpellSettings->setChecked(!customSettings);
+    m_rbCustomSpellSettings->setChecked(customSettings);
+    m_pbCustomSpellDialog->setEnabled(customSettings);
 
     m_spellPage = addPage(w, i18n("Spell Check"));
     m_spellPage->setHeader(i18n("OCR Result Spell Checking"));
@@ -418,12 +418,10 @@ void OcrBaseDialog::slotGotPreview(const KFileItem &item, const QPixmap &newPix)
 
 void OcrBaseDialog::slotWriteConfig()
 {
-    //qDebug();
-
-    KConfigGroup grp = KSharedConfig::openConfig()->group(CFG_OCR_SPELL);
-    grp.writeEntry(CFG_SPELL_BGND, m_gbBackgroundCheck->isChecked());
-    grp.writeEntry(CFG_SPELL_INTER, m_gbInteractiveCheck->isChecked());
-    grp.writeEntry(CFG_SPELL_CUSTOM, m_rbCustomSpellSettings->isChecked());
+    KookaSettings::setOcrSpellBackgroundCheck(m_gbBackgroundCheck->isChecked());
+    KookaSettings::setOcrSpellInteractiveCheck(m_gbInteractiveCheck->isChecked());
+    KookaSettings::setOcrSpellCustomSettings(m_rbCustomSpellSettings->isChecked());
+    KookaSettings::self()->save();
 
     // deliberately not writing the OCR debug config
 }

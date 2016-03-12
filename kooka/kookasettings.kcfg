@@ -5,6 +5,7 @@
                           http://www.kde.org/standards/kcfg/1.0/kcfg.xsd" >
   <kcfgfile></kcfgfile>
 
+
   <group name="General">
 
     <entry name="PreferencesTab" type="Int">
@@ -12,6 +13,7 @@
     </entry>
 
   </group>
+
 
   <group name="MainWindow">
 
@@ -39,6 +41,7 @@
 
   </group>
 
+
   <group name="Startup">
 
     <entry name="StartupReadImage" key="ReadImageOnStart" type="Bool">
@@ -51,6 +54,7 @@
     </entry>
 
   </group>
+
 
   <group name="Files">
 
@@ -106,12 +110,14 @@
 
   </group>
 
+
   <!--  This setting is used by KIO::PreviewJob, see ThumbView::ThumbView()  -->
   <group name="PreviewSettings">
     <entry name="PreviewMaximumSize" key="MaximumSize" type="UInt">
       <default code="true">(20*1024*1024LL)</default>
     </entry>
   </group>
+
 
   <group name="Gallery">
 
@@ -139,6 +145,7 @@
 
   </group>
 
+
   <group name="thumbnailView">
 
     <entry name="ThumbnailCustomBackground" key="customBackground" type="Bool">
@@ -157,6 +164,110 @@
       <label>Preview size:</label>
       <tooltip>&lt;div&gt;Select the default preview size for the thumbnail view.&lt;/div&gt;</tooltip>
       <default>KIconLoader::SizeHuge</default>
+    </entry>
+
+  </group>
+
+
+  <group name="ocrDialog">
+
+    <entry name="OcrGocrBinary" key="gocrBinary" type="Path">
+    </entry>
+
+    <entry name="OcrOcradBinary" key="ocradBinary" type="Path">
+    </entry>
+
+    <entry name="OcrEngine" key="ocrEngine2" type="Int">
+      <default>0</default>
+    </entry>
+
+  </group>
+
+
+  <group name="OcrSpellSettings">
+    <entry name="ocrSpellBackgroundCheck" key="backgroundCheck" type="bool">
+      <default>true</default>
+    </entry>
+
+    <entry name="ocrSpellInteractiveCheck" key="interactiveCheck" type="bool">
+      <default>false</default>
+    </entry>
+
+    <entry name="ocrSpellCustomSettings" key="customSettings" type="bool">
+      <default>false</default>
+    </entry>
+
+  </group>
+
+
+  <group name="gocr">
+
+    <entry name="OcrGocrDustSize" key="gocrDustSize" type="Int">
+      <label>Dust size:</label>
+      <tooltip>&lt;div&gt;Clusters smaller than this size will be considered to be noise, and ignored. The default is 10.&lt;/div&gt;</tooltip>
+      <default>10</default>
+    </entry>
+
+    <entry name="OcrGocrGrayLevel" key="gocrGrayLevel" type="Int">
+      <label>Gray level:</label>
+      <tooltip>&lt;div&gt;The threshold value below which gray pixels are considered to be black. The default is 160.&lt;/div&gt;</tooltip>
+      <default>160</default>
+    </entry>
+
+    <entry name="OcrGocrSpaceWidth" key="gocrSpaceWidth" type="Int">
+      <label>Space width:</label>
+      <tooltip>&lt;div&gt;Spacing between characters. The default is 0 which means autodetection.&lt;/div&gt;</tooltip>
+      <default>0</default>
+    </entry>
+
+  </group>
+
+
+  <group name="ocrad">
+
+    <entry name="ocrOcradLayoutDetection" key="layoutDetection" type="Int">
+      <label>Layout analysis mode:</label>
+      <default>0</default>
+    </entry>
+
+    <!--  No GUI (although the user can edit if required) -->
+    <entry name="ocrOcradExtraArguments" key="extraArguments" type="String">
+    </entry>
+
+    <entry name="ocrOcradFormat" key="format" type="String">
+      <default>utf8</default>
+    </entry>
+
+    <entry name="ocrOcradCharset" key="charset" type="String">
+      <label>Character set:</label>
+    </entry>
+
+    <entry name="ocrOcradFilter" key="filter" type="String">
+      <label>Filter:</label>
+    </entry>
+
+    <entry name="ocrOcradTransform" key="transform" type="String">
+      <label>Transform:</label>
+    </entry>
+
+    <entry name="ocrOcradInvert" key="invert" type="Bool">
+      <label>Invert input</label>
+      <default>false</default>
+    </entry>
+
+    <entry name="ocrOcradThresholdEnable" key="thresholdEnable" type="Bool">
+      <label>Set threshold</label>
+      <default>false</default>
+    </entry>
+
+    <entry name="ocrOcradThresholdValue" key="thresholdValue" type="Int">
+      <label>Threshold:</label>
+      <default>50</default>
+    </entry>
+
+    <!--  Dummy entry just to be able to find this group, see			-->
+    <!--  OcrOcradDialog::getValidValues()					-->
+    <entry name="ocrOcradValidValues" type="StringList">
     </entry>
 
   </group>

@@ -53,8 +53,6 @@
 
 #include <klocalizedstring.h>
 #include <kconfig.h>
-#include <kglobal.h>
-#include <kglobalsettings.h>
 #include <kstandarddirs.h>
 #include <kmessagebox.h>
 #include <kstandardguiitem.h>
@@ -138,34 +136,28 @@ int KookaPref::currentPageIndex()
     return (mPages.indexOf(currentPage()));
 }
 
-QString tryFindBinary(const QString &bin, const QString &configKey)
+static QString tryFindBinary(const QString &bin, const QString &configPath)
 {
-    // TODO: use KConfigXT
-    KConfigGroup grp = KSharedConfig::openConfig()->group(CFG_GROUP_OCR_DIA);
-
-    /* First check the config files for an entry */
-    QString exe = grp.readPathEntry(configKey, ""); // try from config file
-
-    // Why do we do the second test here?  checkOcrBinary() does the same, why also?
-    if (!exe.isEmpty() && exe.contains(bin)) {
-        QFileInfo fi(exe);              // check for valid executable
-        if (fi.exists() && fi.isExecutable() && !fi.isDir()) {
-            return (exe);
-        }
+    // First check for a full path in the config file.
+    // Not sure what the point of the 'contains' test is here.
+    if (!configPath.isEmpty() && configPath.contains(bin))
+    {
+        QFileInfo fi(configPath);			// check for valid executable
+        if (fi.exists() && fi.isExecutable() && !fi.isDir()) return (fi.absoluteFilePath());
     }
 
-    /* Otherwise find the program on the user's search path */
-    return (KGlobal::dirs()->findExe(bin));     // search using $PATH
+    // Otherwise try to find the program on the user's search PATH
+    return (QStandardPaths::findExecutable(bin));
 }
 
 QString KookaPref::tryFindGocr()
 {
-    return (tryFindBinary("gocr", CFG_GOCR_BINARY));
+    return (tryFindBinary("gocr", KookaSettings::ocrGocrBinary()));
 }
 
 QString KookaPref::tryFindOcrad(void)
 {
-    return (tryFindBinary("ocrad", CFG_OCRAD_BINARY));
+    return (tryFindBinary("ocrad", KookaSettings::ocrOcradBinary()));
 }
 
 // Support for the gallery location - moved here from Previewer class in libkscan

@@ -1,27 +1,33 @@
-/***************************************************************************
-                             -------------------
-    begin                : Fri Jun 30 2000
-    copyright            : (C) 2000 by Klaas Freitag
-    email                : freitag@suse.de
- ***************************************************************************/
-
-/***************************************************************************
- *                                                                         *
- *  This file may be distributed and/or modified under the terms of the    *
- *  GNU General Public License version 2 as published by the Free Software *
- *  Foundation and appearing in the file COPYING included in the           *
- *  packaging of this file.                                                *
- *
- *  As a special exception, permission is given to link this program       *
- *  with any version of the KADMOS ocr/icr engine of reRecognition GmbH,   *
- *  Kreuzlingen and distribute the resulting executable without            *
- *  including the source code for KADMOS in the source distribution.       *
- *
- *  As a special exception, permission is given to link this program       *
- *  with any edition of Qt, and distribute the resulting executable,       *
- *  without including the source code for Qt in the source distribution.   *
- *                                                                         *
- ***************************************************************************/
+/************************************************************************
+ *									*
+ *  This file is part of Kooka, a scanning/OCR application using	*
+ *  Qt <http://www.qt.io> and KDE Frameworks <http://www.kde.org>.	*
+ *									*
+ *  Copyright (C) 2000-2016 Klaas Freitag <freitag@suse.de>		*
+ *                          Jonathan Marten <jjm@keelhaul.me.uk>	*
+ *									*
+ *  Kooka is free software; you can redistribute it and/or modify it	*
+ *  under the terms of the GNU Library General Public License as	*
+ *  published by the Free Software Foundation and appearing in the	*
+ *  file COPYING included in the packaging of this file;  either	*
+ *  version 2 of the License, or (at your option) any later version.	*
+ *									*
+ *  As a special exception, permission is given to link this program	*
+ *  with any version of the KADMOS OCR/ICR engine (a product of		*
+ *  reRecognition GmbH, Kreuzlingen), and distribute the resulting	*
+ *  executable without including the source code for KADMOS in the	*
+ *  source distribution.						*
+ *									*
+ *  This program is distributed in the hope that it will be useful,	*
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of	*
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the	*
+ *  GNU General Public License for more details.			*
+ *									*
+ *  You should have received a copy of the GNU General Public		*
+ *  License along with this program;  see the file COPYING.  If		*
+ *  not, see <http://www.gnu.org/licenses/>.				*
+ *									*
+ ************************************************************************/
 
 #include "ocrengine.h"
 
@@ -29,25 +35,24 @@
 #include <qvector.h>
 #include <qevent.h>
 #include <qfileinfo.h>
+#include <qdebug.h>
 
 #include <qtextdocument.h>
 #include <qtextcursor.h>
 
-#include <QDebug>
 #include <kmessagebox.h>
 #include <kapplication.h>
 #include <kprocess.h>
-#include <KLocalizedString>
+#include <klocalizedstring.h>
 #include <kdialog.h>
 #include <kcolorscheme.h>
-#include <KGlobal>
 
 #include <kio/deletejob.h>
 
 #include "imagecanvas.h"
 
 #include "kookaimage.h"
-#include "kookapref.h"
+#include "kookasettings.h"
 
 #include "ocrbasedialog.h"
 #include "ocrocraddialog.h"
@@ -91,40 +96,38 @@ OcrEngine::~OcrEngine()
 
 OcrEngine *OcrEngine::createEngine(QWidget *parent, bool *gotoPrefs)
 {
-    KConfigGroup grp = KSharedConfig::openConfig()->group(CFG_GROUP_OCR_DIA);
-
-    OcrEngine::EngineType eng = static_cast<OcrEngine::EngineType>(grp.readEntry(CFG_OCR_ENGINE2,
-                                static_cast<int>(OcrEngine::EngineNone)));
-    //qDebug() << "configured OCR engine is" << eng << "=" << engineName(eng);
+    OcrEngine::EngineType eng = static_cast<OcrEngine::EngineType>(KookaSettings::ocrEngine());
+    qDebug() << "configured OCR engine is" << eng << "=" << engineName(eng);
 
     QString msg = QString::null;
-    switch (eng) {
-    case OcrEngine::EngineGocr: return (new OcrGocrEngine(parent));
-    case OcrEngine::EngineOcrad:    return (new OcrOcradEngine(parent));
+    switch (eng)
+    {
+case OcrEngine::EngineGocr:	return (new OcrGocrEngine(parent));
+case OcrEngine::EngineOcrad:	return (new OcrOcradEngine(parent));
 
-    case OcrEngine::EngineKadmos:
+case OcrEngine::EngineKadmos:
 #ifdef HAVE_KADMOS
         return (new OcrKadmosEngine(parent));
-#else                           // HAVE_KADMOS
+#else							// HAVE_KADMOS
         msg = i18n("This version of Kooka is not compiled with KADMOS support.\n"
                    "Please select another OCR engine in the configuration dialog.");
         break;
-#endif                          // HAVE_KADMOS
+#endif							// HAVE_KADMOS
 
-    case OcrEngine::EngineNone:     msg = i18n("No OCR engine is configured.\n"
-                                              "Please select and configure one in the OCR configuration dialog.");
+case OcrEngine::EngineNone:
+        msg = i18n("No OCR engine is configured.\n"
+                   "Please select and configure one in the OCR configuration dialog.");
         break;
 
-    default:            //qDebug() << "Cannot create engine of type" << eng;
+default:
+        qDebug() << "Unknown engine type" << eng;
         return (NULL);
     }
 
-    if (!msg.isNull()) {                // failed, tell the user
+    if (!msg.isNull()) {				// failed, tell the user
         int result = KMessageBox::warningContinueCancel(parent, msg, QString::null,
-                     KGuiItem(i18n("Configure OCR...")));
-        if (gotoPrefs != NULL) {
-            *gotoPrefs = (result == KMessageBox::Continue);
-        }
+                                                        KGuiItem(i18n("Configure OCR...")));
+        if (gotoPrefs != NULL) *gotoPrefs = (result == KMessageBox::Continue);
     }
 
     return (NULL);
@@ -133,11 +136,7 @@ OcrEngine *OcrEngine::createEngine(QWidget *parent, bool *gotoPrefs)
 bool OcrEngine::engineValid() const
 {
     OcrEngine::EngineType curEngine = engineType();
-
-    KConfigGroup grp = KSharedConfig::openConfig()->group(CFG_GROUP_OCR_DIA);
-    OcrEngine::EngineType confEngine = static_cast<OcrEngine::EngineType>(grp.readEntry(CFG_OCR_ENGINE2,
-                                       static_cast<int>(OcrEngine::EngineNone)));
-
+    OcrEngine::EngineType confEngine = static_cast<OcrEngine::EngineType>(KookaSettings::ocrEngine());
     //qDebug() << "cur" << curEngine << "conf" << confEngine;
     return (curEngine == confEngine);
 }
@@ -145,11 +144,11 @@ bool OcrEngine::engineValid() const
 const QString OcrEngine::engineName(OcrEngine::EngineType eng)
 {
     switch (eng) {
-    case OcrEngine::EngineNone: return (i18n("None"));
-    case OcrEngine::EngineGocr: return (i18n("GOCR"));
-    case OcrEngine::EngineOcrad:    return (i18n("OCRAD"));
-    case OcrEngine::EngineKadmos:   return (i18n("Kadmos"));
-    default:                return (i18n("Unknown"));
+case OcrEngine::EngineNone:	return (i18n("None"));
+case OcrEngine::EngineGocr:	return (i18n("GOCR"));
+case OcrEngine::EngineOcrad:	return (i18n("OCRAD"));
+case OcrEngine::EngineKadmos:	return (i18n("Kadmos"));
+default:			return (i18n("Unknown"));
     }
 }
 

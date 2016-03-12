@@ -62,14 +62,10 @@
 
 //  Abstract base
 
-KookaPrefsPage::KookaPrefsPage(KPageDialog *parent, const char *configGroup)
+KookaPrefsPage::KookaPrefsPage(KPageDialog *parent)
     : QWidget(parent)
 {
     mLayout = new QVBoxLayout(this);
-
-    if (configGroup != NULL) {
-        mConfig = KSharedConfig::openConfig()->group(configGroup);
-    }
 }
 
 KookaPrefsPage::~KookaPrefsPage()
@@ -382,8 +378,7 @@ void KookaThumbnailPage::slotCustomThumbBgndToggled(bool state)
 //  "OCR" page
 
 KookaOcrPage::KookaOcrPage(KPageDialog *parent)
-    : KookaPrefsPage(parent, CFG_GROUP_OCR_DIA)
-// TODO: when this converted to KConfigXT, remove 2nd parameter to above
+    : KookaPrefsPage(parent)
 {
     QGridLayout *lay = new QGridLayout;
     lay->setColumnStretch(1, 9);
@@ -425,31 +420,27 @@ KookaOcrPage::KookaOcrPage(KPageDialog *parent)
 
     mLayout->addLayout(lay);
 
-    OcrEngine::EngineType originalEngine = static_cast<OcrEngine::EngineType>(mConfig.readEntry(CFG_OCR_ENGINE2, static_cast<int>(OcrEngine::EngineNone)));
+    OcrEngine::EngineType originalEngine = static_cast<OcrEngine::EngineType>(KookaSettings::ocrEngine());
     mEngineCombo->setCurrentIndex(originalEngine);
     slotEngineSelected(originalEngine);
 }
 
 void KookaOcrPage::saveSettings()
 {
-    mConfig.writeEntry(CFG_OCR_ENGINE2, static_cast<int>(mSelectedEngine));
+    KookaSettings::setOcrEngine(static_cast<int>(mSelectedEngine));
 
     QString path = mOcrBinaryReq->url().path();
     if (!path.isEmpty()) {
         switch (mSelectedEngine) {
-        case OcrEngine::EngineGocr:
-            if (checkOcrBinary(path, "gocr", true)) {
-                mConfig.writePathEntry(CFG_GOCR_BINARY, path);
-            }
+case OcrEngine::EngineGocr:
+            if (checkOcrBinary(path, "gocr", true)) KookaSettings::setOcrGocrBinary(path);
             break;
 
-        case OcrEngine::EngineOcrad:
-            if (checkOcrBinary(path, "ocrad", true)) {
-                mConfig.writePathEntry(CFG_OCRAD_BINARY, path);
-            }
+case OcrEngine::EngineOcrad:
+            if (checkOcrBinary(path, "ocrad", true)) KookaSettings::setOcrOcradBinary(path);
             break;
 
-        default:    break;
+default:    break;
         }
     }
 }
@@ -494,7 +485,6 @@ void KookaOcrPage::slotEngineSelected(int i)
     default:
         mOcrBinaryReq->setEnabled(false);
         mOcrBinaryReq->clear();
-
         msg = i18n("Unknown engine %1.", mSelectedEngine);
         break;
     }

@@ -1,46 +1,54 @@
-/***************************************************************************
-                             -------------------
-    begin                : Fri Jun 30 2000
-    copyright            : (C) 2000 by Klaas Freitag
-    email                : freitag@suse.de
- ***************************************************************************/
-
-/***************************************************************************
- *                                                                         *
- *  This file may be distributed and/or modified under the terms of the    *
- *  GNU General Public License version 2 as published by the Free Software *
- *  Foundation and appearing in the file COPYING included in the           *
- *  packaging of this file.                                                *
- *
- *  As a special exception, permission is given to link this program       *
- *  with any version of the KADMOS ocr/icr engine of reRecognition GmbH,   *
- *  Kreuzlingen and distribute the resulting executable without            *
- *  including the source code for KADMOS in the source distribution.       *
- *
- *  As a special exception, permission is given to link this program       *
- *  with any edition of Qt, and distribute the resulting executable,       *
- *  without including the source code for Qt in the source distribution.   *
- *                                                                         *
- ***************************************************************************/
+/************************************************************************
+ *									*
+ *  This file is part of Kooka, a scanning/OCR application using	*
+ *  Qt <http://www.qt.io> and KDE Frameworks <http://www.kde.org>.	*
+ *									*
+ *  Copyright (C) 2000-2016 Klaas Freitag <freitag@suse.de>		*
+ *                          Jonathan Marten <jjm@keelhaul.me.uk>	*
+ *									*
+ *  Kooka is free software; you can redistribute it and/or modify it	*
+ *  under the terms of the GNU Library General Public License as	*
+ *  published by the Free Software Foundation and appearing in the	*
+ *  file COPYING included in the packaging of this file;  either	*
+ *  version 2 of the License, or (at your option) any later version.	*
+ *									*
+ *  As a special exception, permission is given to link this program	*
+ *  with any version of the KADMOS OCR/ICR engine (a product of		*
+ *  reRecognition GmbH, Kreuzlingen), and distribute the resulting	*
+ *  executable without including the source code for KADMOS in the	*
+ *  source distribution.						*
+ *									*
+ *  This program is distributed in the hope that it will be useful,	*
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of	*
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the	*
+ *  GNU General Public License for more details.			*
+ *									*
+ *  You should have received a copy of the GNU General Public		*
+ *  License along with this program;  see the file COPYING.  If		*
+ *  not, see <http://www.gnu.org/licenses/>.				*
+ *									*
+ ************************************************************************/
 
 #include "ocrocradengine.h"
 
 #include <qregexp.h>
 #include <qfile.h>
 #include <qfileinfo.h>
+#include <qdebug.h>
 
-#include <QDebug>
 #include <kprocess.h>
 #include <ktemporaryfile.h>
-#include <KLocalizedString>
+#include <klocalizedstring.h>
 #include <kmessagebox.h>
-#include <KConfigGroup>
+//#include <KConfigGroup>
 
 #include "imgsaver.h"
 #include "imageformat.h"
 #include "ocrocraddialog.h"
+#include "kookasettings.h"
 
 static const char UndetectedChar = '_';
+
 
 OcrOcradEngine::OcrOcradEngine(QWidget *parent)
     : OcrEngine(parent)
@@ -93,8 +101,6 @@ QString getTempFileName(const QString &suffix)
 
 void OcrOcradEngine::startProcess(OcrBaseDialog *dia, const KookaImage *img)
 {
-    const KConfigGroup grp = KSharedConfig::openConfig()->group(CFG_GROUP_OCRAD);
-
     OcrOcradDialog *parentDialog = static_cast<OcrOcradDialog *>(dia);
     ocradVersion = parentDialog->getNumVersion();
     const QString cmd = parentDialog->getOCRCmd();
@@ -105,67 +111,50 @@ void OcrOcradEngine::startProcess(OcrBaseDialog *dia, const KookaImage *img)
     // can use it directly (but don't delete it afterwards!)
     m_ocrImagePBM = ImgSaver::tempSaveImage(img, ImageFormat("PBM"), 1);
 
-    if (m_ocrProcess != NULL) {
-        delete m_ocrProcess;    // kill old process if still there
-    }
-    m_ocrProcess = new KProcess();          // start new OCRAD process
+    if (m_ocrProcess != NULL) delete m_ocrProcess;	// kill old process if still there
+    m_ocrProcess = new KProcess();			// start new OCRAD process
     Q_CHECK_PTR(m_ocrProcess);
-    QStringList args;                   // arguments for process
+    QStringList args;					// arguments for process
 
     m_tempOrfName = getTempFileName(".orf");
-    args << "-x" << m_tempOrfName;          // the ORF result file
+    args << "-x" << m_tempOrfName;			// the ORF result file
 
-    args << QFile::encodeName(m_ocrImagePBM);       // name of the input image
+    args << QFile::encodeName(m_ocrImagePBM);		// name of the input image
 
     // Layout Detection
-    int layoutMode = grp.readEntry(CFG_OCRAD_LAYOUT_DETECTION, 0);
-    if (ocradVersion >= 18) {           // OCRAD 0.18 or later
-        // has only on/off
-        if (layoutMode != 0) {
-            args << "-l";
-        }
-    } else {                    // OCRAD 0.17 or earlier
-        // had 3 options
+    int layoutMode = KookaSettings::ocrOcradLayoutDetection();
+    if (ocradVersion >= 18)				// OCRAD 0.18 or later
+    {							// has only on/off
+        if (layoutMode != 0) args << "-l";
+    }
+    else						// OCRAD 0.17 or earlier
+    {							// had 3 options
         args << "-l" << QString::number(layoutMode);
     }
 
-    QString s = grp.readEntry(CFG_OCRAD_FORMAT, "utf8");
-    args << "-F" << s;
+    QString s = KookaSettings::ocrOcradFormat();
+    if (!s.isEmpty()) args << "-F" << s;
 
-    s = grp.readEntry(CFG_OCRAD_CHARSET, "");
-    if (!s.isEmpty()) {
-        args << "-c" << s;
+    s = KookaSettings::ocrOcradCharset();
+    if (!s.isEmpty()) args << "-c" << s;
+
+    s = KookaSettings::ocrOcradFilter();
+    if (!s.isEmpty()) args << "-e" << s;
+
+    s = KookaSettings::ocrOcradTransform();
+    if (!s.isEmpty()) args << "-t" << s;
+
+    if (KookaSettings::ocrOcradInvert()) args << "-i";
+
+    if (KookaSettings::ocrOcradThresholdEnable()) {
+        s = KookaSettings::ocrOcradThresholdValue();
+        if (!s.isEmpty()) args << "-T" << (s + "%");
     }
 
-    s = grp.readEntry(CFG_OCRAD_FILTER, "");
-    if (!s.isEmpty()) {
-        args << "-e" << s;
-    }
+    if (m_verboseDebug) args << "-v";
 
-    s = grp.readEntry(CFG_OCRAD_TRANSFORM, "");
-    if (!s.isEmpty()) {
-        args << "-t" << s;
-    }
-
-    if (grp.readEntry(CFG_OCRAD_INVERT, false)) {
-        args << "-i";
-    }
-
-    if (grp.readEntry(CFG_OCRAD_THRESHOLD_ENABLE, false)) {
-        s = grp.readEntry(CFG_OCRAD_THRESHOLD_VALUE, "");
-        if (!s.isEmpty()) {
-            args << "-T" << (s + "%");
-        }
-    }
-
-    if (m_verboseDebug) {
-        args << "-v";
-    }
-
-    s = grp.readEntry(CFG_OCRAD_EXTRA_ARGUMENTS);
-    if (!s.isEmpty()) {
-        args << s;
-    }
+    s = KookaSettings::ocrOcradExtraArguments();
+    if (!s.isEmpty()) args << s;
 
     //qDebug() << "Running OCRAD as" << cmd << args;
 
