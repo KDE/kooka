@@ -60,6 +60,7 @@
 
 #include "prefspages.h"
 #include "kookasettings.h"
+#include "dialogstatesaver.h"
 
 
 KookaPref::KookaPref(QWidget *parent)
@@ -84,6 +85,7 @@ KookaPref::KookaPref(QWidget *parent)
     connect(buttonBox()->button(QDialogButtonBox::RestoreDefaults), &QPushButton::clicked, this, &KookaPref::slotSetDefaults);
 
     setMinimumSize(670, 380);
+    new DialogStateSaver(this);
 }
 
 int KookaPref::createPage(KookaPrefsPage *page,

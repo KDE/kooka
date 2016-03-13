@@ -1,21 +1,32 @@
-/* This file is part of the KDE Project
-   Copyright (C) 2000 Jonathan Marten <jjm@keelhaul.me.uk>
-
-   This library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Library General Public
-   License as published by the Free Software Foundation; either
-   version 2 of the License, or (at your option) any later version.
-
-   This library is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   Library General Public License for more details.
-
-   You should have received a copy of the GNU Library General Public License
-   along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
-   Boston, MA 02110-1301, USA.
-*/
+/************************************************************************
+ *									*
+ *  This file is part of Kooka, a scanning/OCR application using	*
+ *  Qt <http://www.qt.io> and KDE Frameworks <http://www.kde.org>.	*
+ *									*
+ *  Copyright (C) 2008-2016 Jonathan Marten <jjm@keelhaul.me.uk>	*
+ *									*
+ *  Kooka is free software; you can redistribute it and/or modify it	*
+ *  under the terms of the GNU Library General Public License as	*
+ *  published by the Free Software Foundation and appearing in the	*
+ *  file COPYING included in the packaging of this file;  either	*
+ *  version 2 of the License, or (at your option) any later version.	*
+ *									*
+ *  As a special exception, permission is given to link this program	*
+ *  with any version of the KADMOS OCR/ICR engine (a product of		*
+ *  reRecognition GmbH, Kreuzlingen), and distribute the resulting	*
+ *  executable without including the source code for KADMOS in the	*
+ *  source distribution.						*
+ *									*
+ *  This program is distributed in the hope that it will be useful,	*
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of	*
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the	*
+ *  GNU General Public License for more details.			*
+ *									*
+ *  You should have received a copy of the GNU General Public		*
+ *  License along with this program;  see the file COPYING.  If		*
+ *  not, see <http://www.gnu.org/licenses/>.				*
+ *									*
+ ************************************************************************/
 
 #include "adddevicedialog.h"
 
@@ -23,33 +34,20 @@
 #include <qlayout.h>
 #include <qcombobox.h>
 
-#include <KLocalizedString>
+#include <klocalizedstring.h>
 #include <klineedit.h>
-#include <KConfigGroup>
-#include <QDialogButtonBox>
-#include <QPushButton>
-#include <QVBoxLayout>
+
 
 AddDeviceDialog::AddDeviceDialog(QWidget *parent, const QString &caption)
-    : QDialog(parent)
+    : DialogBase(parent)
 {
     setObjectName("AddDeviceDialog");
 
-    setModal(true);
-    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
-    QVBoxLayout *mainLayout = new QVBoxLayout;
-    setLayout(mainLayout);
-    mOkButton = buttonBox->button(QDialogButtonBox::Ok);
-    mOkButton->setDefault(true);
-    mOkButton->setShortcut(Qt::CTRL | Qt::Key_Return);
-    connect(buttonBox, &QDialogButtonBox::accepted, this, &AddDeviceDialog::accept);
-    connect(buttonBox, &QDialogButtonBox::rejected, this, &AddDeviceDialog::reject);
+    setButtons(QDialogButtonBox::Ok|QDialogButtonBox::Cancel);
     setWindowTitle(caption);
 
     QWidget *w = new QWidget(this);
     QVBoxLayout *vl = new QVBoxLayout(w);
-    mainLayout->addWidget(w);
-    mainLayout->addWidget(buttonBox);
 
     QLabel *lab = new QLabel(i18n("<qt>"
                                   "<p>"
@@ -75,39 +73,34 @@ AddDeviceDialog::AddDeviceDialog(QWidget *parent, const QString &caption)
     lab->setOpenExternalLinks(true);
     vl->addWidget(lab);
 
-//TODO PORT QT5     vl->addSpacing(QDialog::spacingHint());
+    vl->addSpacing(spacingHint());
     vl->addStretch(1);
 
     lab = new QLabel(i18n("Scanner device name:"), w);
-    mainLayout->addWidget(lab);
     vl->addWidget(lab);
 
     mDevEdit = new KLineEdit(w);
-    mainLayout->addWidget(mDevEdit);
     connect(mDevEdit, &KLineEdit::textChanged, this, &AddDeviceDialog::slotTextChanged);
     vl->addWidget(mDevEdit);
     lab->setBuddy(mDevEdit);
 
     lab = new QLabel(i18n("Device type:"), w);
-    mainLayout->addWidget(lab);
     vl->addWidget(lab);
 
     mTypeCombo = new QComboBox(w);
-    mainLayout->addWidget(mTypeCombo);
     vl->addWidget(mTypeCombo);
     lab->setBuddy(mTypeCombo);
 
     lab = new QLabel(i18n("Description:"), w);
-    mainLayout->addWidget(lab);
     vl->addWidget(lab);
 
     mDescEdit = new KLineEdit(w);
-    mainLayout->addWidget(mDescEdit);
     connect(mDescEdit, &KLineEdit::textChanged, this, &AddDeviceDialog::slotTextChanged);
     vl->addWidget(mDescEdit);
     lab->setBuddy(mDescEdit);
 
     w->setMinimumSize(QSize(450, 420));
+    setMainWidget(w);
 
     // This list from http://www.sane-project.org/html/doc011.html#s4.2.8
     QStringList types;
@@ -122,8 +115,9 @@ AddDeviceDialog::AddDeviceDialog(QWidget *parent, const QString &caption)
 
 void AddDeviceDialog::slotTextChanged()
 {
-    mOkButton->setEnabled(!mDevEdit->text().trimmed().isEmpty() &&
-                          !mDescEdit->text().trimmed().isEmpty());
+    setButtonEnabled(QDialogButtonBox::Ok,
+                     !mDevEdit->text().trimmed().isEmpty() &&
+                     !mDescEdit->text().trimmed().isEmpty());
 }
 
 QByteArray AddDeviceDialog::getDevice() const

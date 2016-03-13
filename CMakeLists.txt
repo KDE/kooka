@@ -18,10 +18,17 @@ set(VERSION "0.90")
 message(STATUS "Configuring for Kooka/libkookascan version ${VERSION}")
 
 
+
+cmake_minimum_required (VERSION 2.8.12 FATAL_ERROR)
+set(QT_MIN_VERSION "5.4.0")
+set(KF5_MIN_VERSION "5.10.0")
+set(ECM_MIN_VERSION "1.2.0")
+
+
 # Start new check here
 # ECM setup (Extended Cmake Modules)
-find_package(ECM 1.2.0 REQUIRED NO_MODULE)
-set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR} ${CMAKE_SOURCE_DIR}/cmake-modules)
+find_package(ECM ${ECM_MIN_VERSION} REQUIRED NO_MODULE)
+set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR})
 
 include(FeatureSummary)
 include(ECMSetupVersion)
@@ -41,7 +48,7 @@ set(KF5_VERSION "5.2.0")
 set(REQUIRED_QT_VERSION "5.2.0")
 
 # Required Qt5 components to build this framework
-find_package(Qt5 ${REQUIRED_QT_VERSION} NO_MODULE REQUIRED Core Widgets)
+find_package(Qt5 ${QT_MIN_VERSION} NO_MODULE REQUIRED Core Widgets)
 
 find_package(KF5DocTools REQUIRED)
 find_package(KF5KDELibs4Support REQUIRED)
@@ -81,6 +88,7 @@ endif (HAVE_SANE)
 
 ############### Now, we add the Kooka components ###############
 
+add_subdirectory(libdialogutil)
 add_subdirectory(libkookascan)
 add_subdirectory(libfiletree)
 add_subdirectory(kooka)

@@ -30,6 +30,7 @@
  ************************************************************************/
 
 #include <qdebug.h>
+#include <qapplication.h>
 
 #include <kapplication.h>
 #include <K4AboutData>
@@ -106,6 +107,7 @@ int main(int argc, char *argv[])
     KCmdLineArgs::addCmdLineOptions(options);       // Add my own options
 
     KApplication app;
+    QCoreApplication::setApplicationName(about.appName());
 
     KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
     QString devToUse = args->getOption("d");

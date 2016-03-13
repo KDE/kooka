@@ -71,6 +71,7 @@ kconfig_add_kcfg_files(kookascan_SRCS scansettings.kcfgc)
 add_library(kookascan SHARED ${kookascan_SRCS})
 generate_export_header(kookascan BASE_NAME kookascan)
 target_link_libraries(kookascan
+  dialogutil
   KF5::KIOCore
   KF5::KDELibs4Support
 )
