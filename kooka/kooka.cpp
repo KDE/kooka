@@ -164,194 +164,195 @@ void Kooka::setupActions()
     connect(mapper, SIGNAL(mapped(int)), m_view, SLOT(slotImageViewerAction(int)));
 
     scaleToWidthAction =  new QAction(QIcon::fromTheme("zoom-fit-width"), i18n("Scale to Width"), this);
-    actionCollection()->setDefaultShortcut(scaleToWidthAction,Qt::CTRL + Qt::Key_I);
-    connect(scaleToWidthAction, SIGNAL(triggered()), mapper, SLOT(map()));
     actionCollection()->addAction("scaleToWidth", scaleToWidthAction);
+    actionCollection()->setDefaultShortcut(scaleToWidthAction, Qt::CTRL + Qt::Key_I);
+    connect(scaleToWidthAction, SIGNAL(triggered()), mapper, SLOT(map()));
     m_view->connectViewerAction(scaleToWidthAction);
     m_view->connectPreviewAction(scaleToWidthAction);
     mapper->setMapping(scaleToWidthAction, ImageCanvas::UserActionFitWidth);
 
     scaleToHeightAction = new QAction(QIcon::fromTheme("zoom-fit-height"), i18n("Scale to Height"), this);
-    actionCollection()->setDefaultShortcut(scaleToHeightAction,Qt::CTRL + Qt::Key_H);
-    connect(scaleToHeightAction, SIGNAL(triggered()), mapper, SLOT(map()));
     actionCollection()->addAction("scaleToHeight", scaleToHeightAction);
+    actionCollection()->setDefaultShortcut(scaleToHeightAction, Qt::CTRL + Qt::Key_H);
+    connect(scaleToHeightAction, SIGNAL(triggered()), mapper, SLOT(map()));
     m_view->connectViewerAction(scaleToHeightAction);
     m_view->connectPreviewAction(scaleToHeightAction);
     mapper->setMapping(scaleToHeightAction, ImageCanvas::UserActionFitHeight);
 
     scaleToOriginalAction = new QAction(QIcon::fromTheme("zoom-original"), i18n("Original Size"), this);
-    actionCollection()->setDefaultShortcut(scaleToOriginalAction,Qt::CTRL + Qt::Key_1);
-    connect(scaleToOriginalAction, SIGNAL(triggered()), mapper, SLOT(map()));
     actionCollection()->addAction("scaleOriginal", scaleToOriginalAction);
+    actionCollection()->setDefaultShortcut(scaleToOriginalAction, Qt::CTRL + Qt::Key_1);
+    connect(scaleToOriginalAction, SIGNAL(triggered()), mapper, SLOT(map()));
     m_view->connectViewerAction(scaleToOriginalAction);
     mapper->setMapping(scaleToOriginalAction, ImageCanvas::UserActionOrigSize);
 
     scaleToZoomAction = new QAction(QIcon::fromTheme("page-zoom"), i18n("Set Zoom..."), this);
-    //QT5 scaleToZoomAction->setShortcut(KStandardShortcut::shortcut(KStandardShortcut::Zoom));
-    connect(scaleToZoomAction, SIGNAL(triggered()), mapper, SLOT(map()));
     actionCollection()->addAction("showZoomDialog", scaleToZoomAction);
+    // No shortcut.  There wasn't a standard shortcut for "Zoom" in KDE4,
+    // and there is no KStandardShortcut::Zoom in KF5.
+    connect(scaleToZoomAction, SIGNAL(triggered()), mapper, SLOT(map()));
     m_view->connectViewerAction(scaleToZoomAction);
     mapper->setMapping(scaleToZoomAction, ImageCanvas::UserActionZoom);
 
     keepZoomAction = new KToggleAction(QIcon::fromTheme("lockzoom"), i18n("Keep Zoom Setting"), this);
-    actionCollection()->setDefaultShortcut(keepZoomAction,Qt::CTRL + Qt::Key_Z);
-    connect(keepZoomAction, SIGNAL(toggled(bool)), m_view->imageViewer(), SLOT(setKeepZoom(bool)));
     actionCollection()->addAction("keepZoom", keepZoomAction);
-    //QT5 m_view->connectViewerAction(keepZoomAction);
+    actionCollection()->setDefaultShortcut(keepZoomAction, Qt::CTRL + Qt::Key_Z);
+    connect(keepZoomAction, SIGNAL(toggled(bool)), m_view->imageViewer(), SLOT(setKeepZoom(bool)));
+    m_view->connectViewerAction(keepZoomAction);
 
     // Thumb view and gallery actions
 
     newFromSelectionAction = new QAction(QIcon::fromTheme("transform-crop"), i18n("New Image From Selection"), this);
+    actionCollection()->addAction("createFromSelection", newFromSelectionAction);
     actionCollection()->setDefaultShortcut(newFromSelectionAction, Qt::CTRL + Qt::Key_N);
     connect(newFromSelectionAction, SIGNAL(triggered()), m_view, SLOT(slotCreateNewImgFromSelection()));
-    actionCollection()->addAction("createFromSelection", newFromSelectionAction);
 
     mirrorVerticallyAction = new QAction(QIcon::fromTheme("object-flip-vertical"), i18n("Mirror Vertically"), this);
-    actionCollection()->setDefaultShortcut(mirrorVerticallyAction,Qt::CTRL + Qt::Key_V);
     mirrorVerticallyAction->setData(ImageTransform::MirrorVertical);
-    connect(mirrorVerticallyAction, SIGNAL(triggered()), m_view, SLOT(slotTransformImage()));
     actionCollection()->addAction("mirrorVertical", mirrorVerticallyAction);
+    actionCollection()->setDefaultShortcut(mirrorVerticallyAction, Qt::CTRL + Qt::Key_V);
+    connect(mirrorVerticallyAction, SIGNAL(triggered()), m_view, SLOT(slotTransformImage()));
     m_view->connectViewerAction(mirrorVerticallyAction, true);
 
     mirrorHorizontallyAction = new QAction(QIcon::fromTheme("object-flip-horizontal"), i18n("Mirror Horizontally"), this);
-    actionCollection()->setDefaultShortcut(mirrorHorizontallyAction, Qt::CTRL + Qt::Key_M);
     mirrorHorizontallyAction->setData(ImageTransform::MirrorHorizontal);
-    connect(mirrorHorizontallyAction, SIGNAL(triggered()), m_view, SLOT(slotTransformImage()));
     actionCollection()->addAction("mirrorHorizontal", mirrorHorizontallyAction);
+    actionCollection()->setDefaultShortcut(mirrorHorizontallyAction, Qt::CTRL + Qt::Key_M);
+    connect(mirrorHorizontallyAction, SIGNAL(triggered()), m_view, SLOT(slotTransformImage()));
     m_view->connectViewerAction(mirrorHorizontallyAction);
 
     // Standard KDE has icons for 'object-rotate-right' and 'object-rotate-left',
     // but not for rotate by 180 degrees.  The 3 used here are copies of the 22x22
     // icons from the old kdeclassic theme.
     rotateAcwAction = new QAction(QIcon::fromTheme("rotate-acw"), i18n("Rotate Counter-Clockwise"), this);
-    actionCollection()->setDefaultShortcut(rotateAcwAction,Qt::CTRL + Qt::Key_7);
     rotateAcwAction->setData(ImageTransform::Rotate270);
-    connect(rotateAcwAction, SIGNAL(triggered()), m_view, SLOT(slotTransformImage()));
     actionCollection()->addAction("rotateCounterClockwise", rotateAcwAction);
+    actionCollection()->setDefaultShortcut(rotateAcwAction, Qt::CTRL + Qt::Key_7);
+    connect(rotateAcwAction, SIGNAL(triggered()), m_view, SLOT(slotTransformImage()));
     m_view->connectViewerAction(rotateAcwAction, true);
 
     rotateCwAction = new QAction(QIcon::fromTheme("rotate-cw"), i18n("Rotate Clockwise"), this);
-    actionCollection()->setDefaultShortcut(rotateCwAction,Qt::CTRL + Qt::Key_9);
     rotateCwAction->setData(ImageTransform::Rotate90);
-    connect(rotateCwAction, SIGNAL(triggered()), m_view, SLOT(slotTransformImage()));
     actionCollection()->addAction("rotateClockwise", rotateCwAction);
+    actionCollection()->setDefaultShortcut(rotateCwAction, Qt::CTRL + Qt::Key_9);
+    connect(rotateCwAction, SIGNAL(triggered()), m_view, SLOT(slotTransformImage()));
     m_view->connectViewerAction(rotateCwAction);
 
     rotate180Action = new QAction(QIcon::fromTheme("rotate-180"), i18n("Rotate 180 Degrees"), this);
-    actionCollection()->setDefaultShortcut(rotate180Action,Qt::CTRL + Qt::Key_8);
     rotate180Action->setData(ImageTransform::Rotate180);
-    connect(rotate180Action, SIGNAL(triggered()), m_view, SLOT(slotTransformImage()));
     actionCollection()->addAction("upsitedown", rotate180Action);
+    actionCollection()->setDefaultShortcut(rotate180Action, Qt::CTRL + Qt::Key_8);
+    connect(rotate180Action, SIGNAL(triggered()), m_view, SLOT(slotTransformImage()));
     m_view->connectViewerAction(rotate180Action);
 
     // Gallery actions
 
-    createFolderAction = new QAction(QIcon::fromTheme("folder-new"), i18n("Create Folder..."), this);
-    connect(createFolderAction, SIGNAL(triggered()), m_view->gallery(), SLOT(slotCreateFolder()));
+    createFolderAction = new QAction(QIcon::fromTheme("folder-new"), i18n("New Folder..."), this);
     actionCollection()->addAction("foldernew", createFolderAction);
+    connect(createFolderAction, SIGNAL(triggered()), m_view->gallery(), SLOT(slotCreateFolder()));
     m_view->connectGalleryAction(createFolderAction);
 
     openWithMenu = new KActionMenu(QIcon::fromTheme("document-open"), i18n("Open With"), this);
-    connect(openWithMenu->menu(), SIGNAL(aboutToShow()), SLOT(slotOpenWithMenu()));
     actionCollection()->addAction("openWidth", openWithMenu);
-    //QT5 m_view->connectGalleryAction(openWithMenu, true);
-    //QT5 m_view->connectThumbnailAction(openWithMenu);
+    connect(openWithMenu->menu(), SIGNAL(aboutToShow()), SLOT(slotOpenWithMenu()));
+    m_view->connectGalleryAction(openWithMenu, true);
+    m_view->connectThumbnailAction(openWithMenu);
 
     saveImageAction = new QAction(QIcon::fromTheme("document-save"), i18n("Save Image..."), this);
-    //QT5 saveImageAction->setShortcut(KStandardShortcut::save());
-    connect(saveImageAction, SIGNAL(triggered()), m_view->gallery(), SLOT(slotExportFile()));
     actionCollection()->addAction("saveImage", saveImageAction);
+    actionCollection()->setDefaultShortcuts(saveImageAction, KStandardShortcut::save());
+    connect(saveImageAction, SIGNAL(triggered()), m_view->gallery(), SLOT(slotExportFile()));
     m_view->connectGalleryAction(saveImageAction);
     m_view->connectThumbnailAction(saveImageAction);
 
     importImageAction = new QAction(QIcon::fromTheme("document-import"), i18n("Import Image..."), this);
-    connect(importImageAction, SIGNAL(triggered()), m_view->gallery(), SLOT(slotImportFile()));
     actionCollection()->addAction("importImage", importImageAction);
-    //m_view->connectGalleryAction( importImageAction );
+    connect(importImageAction, SIGNAL(triggered()), m_view->gallery(), SLOT(slotImportFile()));
+    m_view->connectGalleryAction(importImageAction);
 
     deleteImageAction = new QAction(QIcon::fromTheme("edit-delete"), i18n("Delete Image"), this);
-    actionCollection()->setDefaultShortcut(deleteImageAction,Qt::SHIFT + Qt::Key_Delete);
-    connect(deleteImageAction, SIGNAL(triggered()), m_view->gallery(), SLOT(slotDeleteItems()));
     actionCollection()->addAction("deleteImage", deleteImageAction);
+    actionCollection()->setDefaultShortcut(deleteImageAction, Qt::SHIFT + Qt::Key_Delete);
+    connect(deleteImageAction, SIGNAL(triggered()), m_view->gallery(), SLOT(slotDeleteItems()));
     m_view->connectGalleryAction(deleteImageAction);
     m_view->connectThumbnailAction(deleteImageAction);
 
     renameImageAction = new QAction(QIcon::fromTheme("edit-rename"), i18n("Rename Image"), this);
-    actionCollection()->setDefaultShortcut(renameImageAction,Qt::Key_F2);
-    connect(renameImageAction, SIGNAL(triggered()), m_view->gallery(), SLOT(slotRenameItems()));
     actionCollection()->addAction("renameImage", renameImageAction);
+    actionCollection()->setDefaultShortcut(renameImageAction, Qt::Key_F2);
+    connect(renameImageAction, SIGNAL(triggered()), m_view->gallery(), SLOT(slotRenameItems()));
     m_view->connectGalleryAction(renameImageAction);
 
     unloadImageAction = new QAction(QIcon::fromTheme("document-close"), i18n("Unload Image"), this);
-    actionCollection()->setDefaultShortcut(unloadImageAction,Qt::CTRL + Qt::SHIFT + Qt::Key_U);
-    connect(unloadImageAction, SIGNAL(triggered()), m_view->gallery(), SLOT(slotUnloadItems()));
     actionCollection()->addAction("unloadImage", unloadImageAction);
+    actionCollection()->setDefaultShortcut(unloadImageAction, Qt::CTRL + Qt::SHIFT + Qt::Key_U);
+    connect(unloadImageAction, SIGNAL(triggered()), m_view->gallery(), SLOT(slotUnloadItems()));
     m_view->connectGalleryAction(unloadImageAction);
     m_view->connectThumbnailAction(unloadImageAction);
 
     propsImageAction = new QAction(QIcon::fromTheme("document-properties"), i18n("Properties..."), this);
-    actionCollection()->setDefaultShortcut(propsImageAction,Qt::ALT + Qt::Key_Return);
-    connect(propsImageAction, SIGNAL(triggered()), m_view->gallery(), SLOT(slotItemProperties()));
     actionCollection()->addAction("propsImage", propsImageAction);
+    actionCollection()->setDefaultShortcut(propsImageAction, Qt::ALT + Qt::Key_Return);
+    connect(propsImageAction, SIGNAL(triggered()), m_view->gallery(), SLOT(slotItemProperties()));
     m_view->connectGalleryAction(propsImageAction, true);
     m_view->connectThumbnailAction(propsImageAction);
 
     // "Settings" menu
 
     selectDeviceAction = new QAction(QIcon::fromTheme("scanselect"), i18n("Select Scan Device..."), this);
-    connect(selectDeviceAction, SIGNAL(triggered()), m_view, SLOT(slotSelectDevice()));
     actionCollection()->addAction("selectsource", selectDeviceAction);
+    connect(selectDeviceAction, SIGNAL(triggered()), m_view, SLOT(slotSelectDevice()));
 
     addDeviceAction = new QAction(QIcon::fromTheme("scanadd"), i18n("Add Scan Device..."), this);
-    connect(addDeviceAction, SIGNAL(triggered()), m_view, SLOT(slotAddDevice()));
     actionCollection()->addAction("addsource", addDeviceAction);
+    connect(addDeviceAction, SIGNAL(triggered()), m_view, SLOT(slotAddDevice()));
 
     // Scanning functions
 
     previewAction = new QAction(QIcon::fromTheme("preview"), i18n("Preview"), this);
-    actionCollection()->setDefaultShortcut(previewAction,Qt::Key_F3);
-    connect(previewAction, SIGNAL(triggered()), m_view, SLOT(slotStartPreview()));
     actionCollection()->addAction("startPreview", previewAction);
+    actionCollection()->setDefaultShortcut(previewAction, Qt::Key_F3);
+    connect(previewAction, SIGNAL(triggered()), m_view, SLOT(slotStartPreview()));
 
     scanAction = new QAction(QIcon::fromTheme("scan"), i18n("Start Scan"), this);
-    actionCollection()->setDefaultShortcut(scanAction,Qt::Key_F4);
-    connect(scanAction, SIGNAL(triggered()), m_view, SLOT(slotStartFinalScan()));
     actionCollection()->addAction("startScan", scanAction);
+    actionCollection()->setDefaultShortcut(scanAction, Qt::Key_F4);
+    connect(scanAction, SIGNAL(triggered()), m_view, SLOT(slotStartFinalScan()));
 
     photocopyAction = new QAction(QIcon::fromTheme("photocopy"), i18n("Photocopy..."), this);
-    actionCollection()->setDefaultShortcut(photocopyAction,Qt::CTRL + Qt::Key_F);
-    connect(photocopyAction, SIGNAL(triggered()), m_view, SLOT(slotStartPhotoCopy()));
     actionCollection()->addAction("startPhotoCopy", photocopyAction);
+    actionCollection()->setDefaultShortcut(photocopyAction, Qt::CTRL + Qt::Key_F);
+    connect(photocopyAction, SIGNAL(triggered()), m_view, SLOT(slotStartPhotoCopy()));
 
     paramsAction = new QAction(QIcon::fromTheme("bookmark-new"), i18n("Scan Parameters..."), this);
-    actionCollection()->setDefaultShortcut(paramsAction,Qt::CTRL + Qt::SHIFT + Qt::Key_S);
-    connect(paramsAction, SIGNAL(triggered()), m_view, SLOT(slotScanParams()));
     actionCollection()->addAction("scanparam", paramsAction);
+    actionCollection()->setDefaultShortcut(paramsAction, Qt::CTRL + Qt::SHIFT + Qt::Key_S);
+    connect(paramsAction, SIGNAL(triggered()), m_view, SLOT(slotScanParams()));
 
     autoselAction = new KToggleAction(QIcon::fromTheme("autoselect"), i18n("Auto Select"), this);
-    actionCollection()->setDefaultShortcut(autoselAction,Qt::CTRL + Qt::Key_A);
-    connect(autoselAction, SIGNAL(toggled(bool)), m_view, SLOT(slotAutoSelect(bool)));
     actionCollection()->addAction("autoselect", autoselAction);
-    //QT5 m_view->connectPreviewAction(autoselAction);
+    actionCollection()->setDefaultShortcut(autoselAction, Qt::CTRL + Qt::Key_A);
+    connect(autoselAction, SIGNAL(toggled(bool)), m_view, SLOT(slotAutoSelect(bool)));
+    m_view->connectPreviewAction(autoselAction);
 
     // OCR functions
 
     ocrAction = new QAction(QIcon::fromTheme("ocr"), i18n("OCR Image..."), this);
-    connect(ocrAction, SIGNAL(triggered()), m_view, SLOT(slotStartOcr()));
     actionCollection()->addAction("ocrImage", ocrAction);
+    connect(ocrAction, SIGNAL(triggered()), m_view, SLOT(slotStartOcr()));
 
     ocrSelectAction = new QAction(QIcon::fromTheme("ocr-select"), i18n("OCR Selection..."), this);
-    connect(ocrSelectAction, SIGNAL(triggered()), m_view, SLOT(slotStartOcrSelection()));
     actionCollection()->addAction("ocrImageSelect", ocrSelectAction);
+    connect(ocrSelectAction, SIGNAL(triggered()), m_view, SLOT(slotStartOcrSelection()));
 
     m_saveOCRTextAction = new QAction(QIcon::fromTheme("document-save-as"), i18n("Save OCR Result Text..."), this);
-    actionCollection()->setDefaultShortcut(m_saveOCRTextAction,Qt::CTRL + Qt::Key_U);
-    connect(m_saveOCRTextAction, SIGNAL(triggered()), m_view, SLOT(slotSaveOcrResult()));
     actionCollection()->addAction("saveOCRResult", m_saveOCRTextAction);
+    actionCollection()->setDefaultShortcut(m_saveOCRTextAction, Qt::CTRL + Qt::Key_U);
+    connect(m_saveOCRTextAction, SIGNAL(triggered()), m_view, SLOT(slotSaveOcrResult()));
 
     ocrSpellAction = new QAction(QIcon::fromTheme("tools-check-spelling"), i18n("Spell Check OCR Result..."), this);
-    connect(ocrSpellAction, SIGNAL(triggered()), m_view, SLOT(slotOcrSpellCheck()));
     actionCollection()->addAction("ocrSpellCheck", ocrSpellAction);
+    connect(ocrSpellAction, SIGNAL(triggered()), m_view, SLOT(slotOcrSpellCheck()));
 }
 
 void Kooka::closeEvent(QCloseEvent *ev)

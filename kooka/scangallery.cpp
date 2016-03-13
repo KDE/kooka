@@ -150,7 +150,7 @@ static QString columnStatesKey(int forIndex)
 void ScanGallery::saveHeaderState(int forIndex) const
 {
     QString key = columnStatesKey(forIndex);
-    qDebug() << "to" << key;
+    //qDebug() << "to" << key;
     const KConfigSkeletonItem *ski = KookaSettings::self()->columnStatesItem();
     Q_ASSERT(ski!=NULL);
     KConfigGroup grp = KookaSettings::self()->config()->group(ski->group());
@@ -161,7 +161,7 @@ void ScanGallery::saveHeaderState(int forIndex) const
 void ScanGallery::restoreHeaderState(int forIndex)
 {
     QString key = columnStatesKey(forIndex);
-    qDebug() << "from" << key;
+    //qDebug() << "from" << key;
     const KConfigSkeletonItem *ski = KookaSettings::self()->columnStatesItem();
     Q_ASSERT(ski!=NULL);
     const KConfigGroup grp = KookaSettings::self()->config()->group(ski->group());
