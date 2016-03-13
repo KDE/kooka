@@ -1,21 +1,33 @@
-/* This file is part of the KDE Project
-   Copyright (C) 2000 Klaas Freitag <freitag@suse.de>
-
-   This library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Library General Public
-   License as published by the Free Software Foundation; either
-   version 2 of the License, or (at your option) any later version.
-
-   This library is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   Library General Public License for more details.
-
-   You should have received a copy of the GNU Library General Public License
-   along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
-   Boston, MA 02110-1301, USA.
-*/
+/************************************************************************
+ *									*
+ *  This file is part of Kooka, a scanning/OCR application using	*
+ *  Qt <http://www.qt.io> and KDE Frameworks <http://www.kde.org>.	*
+ *									*
+ *  Copyright (C) 2000-2016 Klaas Freitag <freitag@suse.de>		*
+ *                          Jonathan Marten <jjm@keelhaul.me.uk>	*
+ *									*
+ *  Kooka is free software; you can redistribute it and/or modify it	*
+ *  under the terms of the GNU Library General Public License as	*
+ *  published by the Free Software Foundation and appearing in the	*
+ *  file COPYING included in the packaging of this file;  either	*
+ *  version 2 of the License, or (at your option) any later version.	*
+ *									*
+ *  As a special exception, permission is given to link this program	*
+ *  with any version of the KADMOS OCR/ICR engine (a product of		*
+ *  reRecognition GmbH, Kreuzlingen), and distribute the resulting	*
+ *  executable without including the source code for KADMOS in the	*
+ *  source distribution.						*
+ *									*
+ *  This program is distributed in the hope that it will be useful,	*
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of	*
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the	*
+ *  GNU General Public License for more details.			*
+ *									*
+ *  You should have received a copy of the GNU General Public		*
+ *  License along with this program;  see the file COPYING.  If		*
+ *  not, see <http://www.gnu.org/licenses/>.				*
+ *									*
+ ************************************************************************/
 
 #include "deviceselector.h"
 
@@ -25,38 +37,38 @@
 #include <qlistwidget.h>
 #include <qdebug.h>
 
-#include <kconfig.h>
 #include <klocalizedstring.h>
 #include <kvbox.h>
 #include <kstandarddirs.h>
 #include <kguiitem.h>
-#include <KIconLoader>
-#include <KGlobal>
+#include <kiconloader.h>
+#include <kglobal.h>
 
 #include "scanglobal.h"
 #include "scandevices.h"
 #include "scansettings.h"
 
-DeviceSelector::DeviceSelector(QWidget *parent,
+
+DeviceSelector::DeviceSelector(QWidget *pnt,
                                const QList<QByteArray> &backends,
                                const KGuiItem &cancelGuiItem)
-    : KDialog(parent)
+    : DialogBase(pnt)
 {
     setObjectName("DeviceSelector");
 
-    setModal(true);
-    setButtons(KDialog::Ok | KDialog::Cancel);
-    setButtonText(KDialog::Ok, i18n("Select"));
-    setCaption(i18n("Select Scan Device"));
-    showButtonSeparator(true);
+    setButtons(QDialogButtonBox::Ok|QDialogButtonBox::Cancel);
+    setButtonText(QDialogButtonBox::Ok, i18n("Select"));
+    setWindowTitle(i18n("Select Scan Device"));
     if (!cancelGuiItem.text().isEmpty()) {      // special GUI item provided
-        setButtonGuiItem(KDialog::Cancel, cancelGuiItem);
+        setButtonGuiItem(QDialogButtonBox::Cancel, cancelGuiItem);
     }
 
     // Layout-Boxes
     QWidget *vb = new QWidget(this);
-    QVBoxLayout *vlay = new QVBoxLayout(vb);
+    vb->setMinimumSize(QSize(450, 180));
     setMainWidget(vb);
+
+    QVBoxLayout *vlay = new QVBoxLayout(vb);
 
     QLabel *l = new QLabel(i18n("Available Scanners:"), vb);
     vlay->addWidget(l);
@@ -67,7 +79,7 @@ DeviceSelector::DeviceSelector(QWidget *parent,
     vlay->addWidget(mListBox, 1);
     l->setBuddy(mListBox);
 
-    vlay->addSpacing(KDialog::spacingHint());
+    vlay->addSpacing(verticalSpacing());
 
     mSkipCheckbox = new QCheckBox(i18n("Always use this device at startup"), vb);
     vlay->addWidget(mSkipCheckbox);
@@ -75,7 +87,6 @@ DeviceSelector::DeviceSelector(QWidget *parent,
     bool skipDialog = ScanSettings::startupSkipAsk();
     mSkipCheckbox->setChecked(skipDialog);
 
-    setMinimumSize(QSize(450, 200));
 
     setScanSources(backends);
 }
@@ -160,7 +171,7 @@ void DeviceSelector::setScanSources(const QList<QByteArray> &backends)
         QHBoxLayout *hlay = new QHBoxLayout(hbox);
         hlay->setMargin(0);
 
-        hlay->setSpacing(KDialog::spacingHint());
+        hlay->setSpacing(horizontalSpacing());
 
         QString itemIcon = "scanner";
         if (typeConf != NULL) {         // type config file available
@@ -182,14 +193,14 @@ void DeviceSelector::setScanSources(const QList<QByteArray> &backends)
         label->setPixmap(KIconLoader::global()->loadIcon(itemIcon,
                          KIconLoader::NoGroup,
                          KIconLoader::SizeMedium));
-        hlay->addSpacing(KDialog::spacingHint());
+        hlay->addSpacing(horizontalSpacing());
         hlay->addWidget(label);
 
         label = new QLabel(QString::fromLatin1("<qt><b>%1 %2</b><br>%3").arg(dev->vendor)
                            .arg(dev->model)
                            .arg(devName.constData()), hbox);
         label->setTextInteractionFlags(Qt::NoTextInteraction);
-        hlay->addSpacing(KDialog::spacingHint());
+        hlay->addSpacing(horizontalSpacing());
         hlay->addWidget(label);
 
         hlay->addStretch(1);

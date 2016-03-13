@@ -1,5 +1,5 @@
 
-project(kooka4)
+project(libfiletree)
 
 ########### libfiletree ###############
 
@@ -16,17 +16,3 @@ target_link_libraries(libfiletree
   KF5::KIOCore
   KF5::KDELibs4Support
 )
-
-########### clobbering ###############
-
-#add_custom_target(clobber
-#  COMMENT "Clobber in ${CMAKE_CURRENT_BINARY_DIR}..."
-#  VERBATIM
-#  COMMAND sh -c "rm -f *.moc"
-#  COMMAND sh -c "rm -f *_automoc.cpp *_automoc.cpp.files"
-#  COMMAND sh -c "rm -r -f CMakeFiles *.cmake"
-#  COMMAND sh -c "rm -f config-*.h"
-#)
-
-########### install files ###############
-
