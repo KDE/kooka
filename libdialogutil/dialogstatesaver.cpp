@@ -48,7 +48,6 @@ DialogStateSaver::DialogStateSaver(QDialog *pnt)
 {
     mParent = pnt;
     Q_ASSERT(mParent!=NULL);
-    qDebug() << "for" << mParent->objectName() << "which is a" << mParent->metaObject()->className();
     mParent->installEventFilter(this);
     connect(mParent, &QDialog::accepted, this, &DialogStateSaver::saveConfigInternal);
 }
@@ -75,6 +74,7 @@ void DialogStateSaver::restoreConfigInternal()
     if (!sSaveSettings) return;
 
     QString objName = mParent->objectName();
+    qDebug() << "for" << objName << "which is a" << mParent->metaObject()->className();
     if (objName.isEmpty())
     {
         objName = mParent->metaObject()->className();

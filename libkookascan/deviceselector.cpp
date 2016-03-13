@@ -79,7 +79,7 @@ DeviceSelector::DeviceSelector(QWidget *pnt,
     vlay->addWidget(mListBox, 1);
     l->setBuddy(mListBox);
 
-    vlay->addSpacing(spacingHint());
+    vlay->addSpacing(verticalSpacing());
 
     mSkipCheckbox = new QCheckBox(i18n("Always use this device at startup"), vb);
     vlay->addWidget(mSkipCheckbox);
@@ -171,7 +171,7 @@ void DeviceSelector::setScanSources(const QList<QByteArray> &backends)
         QHBoxLayout *hlay = new QHBoxLayout(hbox);
         hlay->setMargin(0);
 
-        hlay->setSpacing(spacingHint());
+        hlay->setSpacing(horizontalSpacing());
 
         QString itemIcon = "scanner";
         if (typeConf != NULL) {         // type config file available
@@ -193,14 +193,14 @@ void DeviceSelector::setScanSources(const QList<QByteArray> &backends)
         label->setPixmap(KIconLoader::global()->loadIcon(itemIcon,
                          KIconLoader::NoGroup,
                          KIconLoader::SizeMedium));
-        hlay->addSpacing(spacingHint());
+        hlay->addSpacing(horizontalSpacing());
         hlay->addWidget(label);
 
         label = new QLabel(QString::fromLatin1("<qt><b>%1 %2</b><br>%3").arg(dev->vendor)
                            .arg(dev->model)
                            .arg(devName.constData()), hbox);
         label->setTextInteractionFlags(Qt::NoTextInteraction);
-        hlay->addSpacing(spacingHint());
+        hlay->addSpacing(horizontalSpacing());
         hlay->addWidget(label);
 
         hlay->addStretch(1);

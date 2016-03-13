@@ -73,7 +73,7 @@ AddDeviceDialog::AddDeviceDialog(QWidget *parent, const QString &caption)
     lab->setOpenExternalLinks(true);
     vl->addWidget(lab);
 
-    vl->addSpacing(spacingHint());
+    vl->addSpacing(verticalSpacing());
     vl->addStretch(1);
 
     lab = new QLabel(i18n("Scanner device name:"), w);
