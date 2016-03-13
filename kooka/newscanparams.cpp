@@ -1,96 +1,93 @@
-/* This file is part of the KDE Project
-   Copyright (C) 2000 Jonathan Marten <jjm@keelhaul.me.uk>
-
-   This library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Library General Public
-   License as published by the Free Software Foundation; either
-   version 2 of the License, or (at your option) any later version.
-
-   This library is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   Library General Public License for more details.
-
-   You should have received a copy of the GNU Library General Public License
-   along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
-   Boston, MA 02110-1301, USA.
-*/
+/************************************************************************
+ *									*
+ *  This file is part of Kooka, a scanning/OCR application using	*
+ *  Qt <http://www.qt.io> and KDE Frameworks <http://www.kde.org>.	*
+ *									*
+ *  Copyright (C) 2008-2016 Jonathan Marten <jjm@keelhaul.me.uk>	*
+ *									*
+ *  Kooka is free software; you can redistribute it and/or modify it	*
+ *  under the terms of the GNU Library General Public License as	*
+ *  published by the Free Software Foundation and appearing in the	*
+ *  file COPYING included in the packaging of this file;  either	*
+ *  version 2 of the License, or (at your option) any later version.	*
+ *									*
+ *  As a special exception, permission is given to link this program	*
+ *  with any version of the KADMOS OCR/ICR engine (a product of		*
+ *  reRecognition GmbH, Kreuzlingen), and distribute the resulting	*
+ *  executable without including the source code for KADMOS in the	*
+ *  source distribution.						*
+ *									*
+ *  This program is distributed in the hope that it will be useful,	*
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of	*
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the	*
+ *  GNU General Public License for more details.			*
+ *									*
+ *  You should have received a copy of the GNU General Public		*
+ *  License along with this program;  see the file COPYING.  If		*
+ *  not, see <http://www.gnu.org/licenses/>.				*
+ *									*
+ ************************************************************************/
 
 #include "newscanparams.h"
 
 #include <qlabel.h>
 #include <qlineedit.h>
+#include <qlayout.h>
+#include <qdebug.h>
 
-#include <klineedit.h>
-#include <KLocalizedString>
-#include <QDebug>
-#include <QVBoxLayout>
-#include <KConfigGroup>
-#include <QDialogButtonBox>
-#include <QPushButton>
-#include <QVBoxLayout>
+#include <klocalizedstring.h>
+
 
 NewScanParams::NewScanParams(QWidget *parent,
                              const QString &name, const QString &desc, bool renaming)
-    : QDialog(parent)
+    : DialogBase(parent)
 {
     setObjectName("NewScanParams");
 
-    setModal(true);
-    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
-    QVBoxLayout *mainLayout = new QVBoxLayout;
-    setLayout(mainLayout);
-    mOkButton = buttonBox->button(QDialogButtonBox::Ok);
-    mOkButton->setDefault(true);
-    mOkButton->setShortcut(Qt::CTRL | Qt::Key_Return);
-    connect(buttonBox, &QDialogButtonBox::accepted, this, &NewScanParams::accept);
-    connect(buttonBox, &QDialogButtonBox::rejected, this, &NewScanParams::reject);
+    setButtons(QDialogButtonBox::Ok|QDialogButtonBox::Cancel);
 
     QWidget *vb = new QWidget(this);
     QVBoxLayout *vbVBoxLayout = new QVBoxLayout(vb);
-    vbVBoxLayout->setMargin(0);
-//TODO PORT QT5     vbVBoxLayout->setMargin(QDialog::marginHint());
-//TODO PORT QT5     vbVBoxLayout->setSpacing(QDialog::spacingHint());
-    mainLayout->addWidget(vb);
-    mainLayout->addWidget(buttonBox);
 
-    if (renaming) {
+    QLabel *l;
+    if (renaming)
+    {
         setWindowTitle(i18n("Edit Scan Parameters"));
-        new QLabel(i18n("Change the name and/or description of the scan parameter set."), vb);
-    } else {
-        setWindowTitle(i18n("Save Scan Parameters"));
-        new QLabel(i18n("Enter a name and description for the new scan parameter set."), vb);
+        l = new QLabel(i18n("Change the name and/or description of the scan parameter set."), vb);
     }
-    new QLabel("", vb);
-
-    QLabel *l = new QLabel(i18n("Set name:"), vb);
+    else
+    {
+        setWindowTitle(i18n("Save Scan Parameters"));
+        l = new QLabel(i18n("Enter a name and description for the new scan parameter set."), vb);
+    }
     vbVBoxLayout->addWidget(l);
-    mainLayout->addWidget(l);
+
+    l = new QLabel("", vb);
+    vbVBoxLayout->addWidget(l);
+
+    l = new QLabel(i18n("Set name:"), vb);
+    vbVBoxLayout->addWidget(l);
     mNameEdit = new QLineEdit(name, vb);
     vbVBoxLayout->addWidget(mNameEdit);
-    mainLayout->addWidget(mNameEdit);
     connect(mNameEdit, &QLineEdit::textChanged, this, &NewScanParams::slotTextChanged);
     l->setBuddy(mNameEdit);
 
     l = new QLabel(i18n("Description:"), vb);
     vbVBoxLayout->addWidget(l);
-    mainLayout->addWidget(l);
     mDescEdit = new QLineEdit(desc, vb);
     vbVBoxLayout->addWidget(mDescEdit);
-    mainLayout->addWidget(mDescEdit);
     connect(mDescEdit, &QLineEdit::textChanged, this, &NewScanParams::slotTextChanged);
     l->setBuddy(mDescEdit);
 
+    setMainWidget(vb);
     slotTextChanged();
     mNameEdit->setFocus();
 }
 
 void NewScanParams::slotTextChanged()
 {
-    bool ok = !mNameEdit->text().trimmed().isEmpty() &&
-              !mDescEdit->text().trimmed().isEmpty();
-    mOkButton->setEnabled(ok);
+    setButtonEnabled(QDialogButtonBox::Ok, !mNameEdit->text().trimmed().isEmpty() &&
+                                           !mDescEdit->text().trimmed().isEmpty());
 }
 
 QString NewScanParams::getName() const

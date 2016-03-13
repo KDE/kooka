@@ -1,34 +1,42 @@
-/* This file is part of the KDE Project
-   Copyright (C) 2000 Jonathan Marten <jjm@keelhaul.me.uk>
-
-   This library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Library General Public
-   License as published by the Free Software Foundation; either
-   version 2 of the License, or (at your option) any later version.
-
-   This library is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   Library General Public License for more details.
-
-   You should have received a copy of the GNU Library General Public License
-   along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
-   Boston, MA 02110-1301, USA.
-*/
+/************************************************************************
+ *									*
+ *  This file is part of Kooka, a scanning/OCR application using	*
+ *  Qt <http://www.qt.io> and KDE Frameworks <http://www.kde.org>.	*
+ *									*
+ *  Copyright (C) 2008-2016 Jonathan Marten <jjm@keelhaul.me.uk>	*
+ *									*
+ *  Kooka is free software; you can redistribute it and/or modify it	*
+ *  under the terms of the GNU Library General Public License as	*
+ *  published by the Free Software Foundation and appearing in the	*
+ *  file COPYING included in the packaging of this file;  either	*
+ *  version 2 of the License, or (at your option) any later version.	*
+ *									*
+ *  As a special exception, permission is given to link this program	*
+ *  with any version of the KADMOS OCR/ICR engine (a product of		*
+ *  reRecognition GmbH, Kreuzlingen), and distribute the resulting	*
+ *  executable without including the source code for KADMOS in the	*
+ *  source distribution.						*
+ *									*
+ *  This program is distributed in the hope that it will be useful,	*
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of	*
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the	*
+ *  GNU General Public License for more details.			*
+ *									*
+ *  You should have received a copy of the GNU General Public		*
+ *  License along with this program;  see the file COPYING.  If		*
+ *  not, see <http://www.gnu.org/licenses/>.				*
+ *									*
+ ************************************************************************/
 
 #include "scanparamsdialog.h"
 
 #include <qlabel.h>
-#include <qframe.h>
 #include <qlayout.h>
 #include <qpushbutton.h>
 #include <qlistwidget.h>
+#include <qdebug.h>
 
-#include <klineedit.h>
-#include <KLocalizedString>
-#include <kconfig.h>
-#include <QDebug>
+#include <klocalizedstring.h>
 #include <kmessagebox.h>
 #include <kstandardguiitem.h>
 
@@ -42,66 +50,66 @@ extern "C" {
 
 #include "newscanparams.h"
 
+
+// TODO: also associate an icon, default the "color"/"grey" etc
+
 ScanParamsDialog::ScanParamsDialog(QWidget *parent, KScanDevice *scandev)
-    : KDialog(parent)
+    : DialogBase(parent)
 {
     setObjectName("ScanParamsDialog");
 
-    setModal(true);
-    setButtons(KDialog::Close);
-    setCaption(i18n("Scan Parameters"));
-    showButtonSeparator(true);
+    setButtons(QDialogButtonBox::Close);
+    setWindowTitle(i18n("Scan Parameters"));
 
-    // TODO: can this be just a QWidget?
-    QFrame *mf = new QFrame(this);
-    setMainWidget(mf);
-    QGridLayout *gl = new QGridLayout(mf);
+    QWidget *w = new QWidget(this);
+    QGridLayout *gl = new QGridLayout(w);
 
-    paramsList = new QListWidget(mf);
+    paramsList = new QListWidget(w);
     paramsList->setSelectionMode(QAbstractItemView::SingleSelection);
     paramsList->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
     paramsList->setMinimumWidth(200);
-    connect(paramsList, &QListWidget::currentItemChanged, this, &ScanParamsDialog::slotSelectionChanged);
+    connect(paramsList, &QListWidget::itemSelectionChanged, this, &ScanParamsDialog::slotSelectionChanged);
     connect(paramsList, &QListWidget::itemDoubleClicked, this, &ScanParamsDialog::slotLoadAndClose);
     gl->addWidget(paramsList, 1, 0, 5, 1);
 
-    QLabel *l = new QLabel(i18n("Saved scan parameter sets:"), mf);
+    QLabel *l = new QLabel(i18n("Saved scan parameter sets:"), w);
     gl->addWidget(l, 0, 0, Qt::AlignLeft);
     l->setBuddy(paramsList);
 
-    buttonLoad = new QPushButton(i18n("Load"), mf);
+    buttonLoad = new QPushButton(i18n("Load"), w);
     connect(buttonLoad, &QPushButton::clicked, this, &ScanParamsDialog::slotLoad);
     buttonLoad->setToolTip(i18n("Load the selected scan parameter set to use as scanner settings"));
     gl->addWidget(buttonLoad, 1, 2);
 
-    buttonSave = new QPushButton(i18n("Save..."), mf);
+    buttonSave = new QPushButton(i18n("Save..."), w);
     connect(buttonSave, &QPushButton::clicked, this, &ScanParamsDialog::slotSave);
     buttonSave->setToolTip(i18n("Save the current scanner settings as a new scan parameter set"));
     gl->addWidget(buttonSave, 2, 2);
 
-    buttonDelete = new QPushButton(i18n("Delete"), mf);
+    buttonDelete = new QPushButton(i18n("Delete"), w);
     connect(buttonDelete, &QPushButton::clicked, this, &ScanParamsDialog::slotDelete);
     buttonDelete->setToolTip(i18n("Delete the selected scan parameter set"));
     gl->addWidget(buttonDelete, 3, 2);
 
-    buttonEdit = new QPushButton(i18n("Edit..."), mf);
+    buttonEdit = new QPushButton(i18n("Edit..."), w);
     connect(buttonEdit, &QPushButton::clicked, this, &ScanParamsDialog::slotEdit);
     buttonEdit->setToolTip(i18n("Change the name or description of the selected scan parameter set"));
     gl->addWidget(buttonEdit, 4, 2);
 
     gl->setRowStretch(5, 9);
-    gl->setRowMinimumHeight(6, KDialog::marginHint());
+    gl->setRowMinimumHeight(6, 2*verticalSpacing());
 
     gl->setColumnStretch(0, 9);
-    gl->setColumnMinimumWidth(1, KDialog::marginHint());
+    gl->setColumnMinimumWidth(1, 2*horizontalSpacing());
 
-    descLabel = new QLabel(i18n("-"), mf);
+    descLabel = new QLabel(i18n("-"), w);
     gl->addWidget(descLabel, 7, 0, 1, 3);
 
     sane = scandev;
 
+    setMainWidget(w);
     populateList();
-    slotSelectionChanged(NULL);
+    slotSelectionChanged();
 }
 
 void ScanParamsDialog::populateList()
@@ -115,11 +123,12 @@ void ScanParamsDialog::populateList()
     }
 }
 
-void ScanParamsDialog::slotSelectionChanged(QListWidgetItem *item)
+void ScanParamsDialog::slotSelectionChanged()
 {
     QString desc;
     bool enable = false;
 
+    QListWidgetItem *item = paramsList->currentItem();
     if (item == NULL) {
         desc = i18n("No save set selected.");
     } else {                    // something getting selected
@@ -132,19 +141,15 @@ void ScanParamsDialog::slotSelectionChanged(QListWidgetItem *item)
     buttonDelete->setEnabled(enable);
     buttonEdit->setEnabled(enable);
 
-    if (enable) {
-        buttonLoad->setDefault(true);
-    } else {
-        setDefaultButton(KDialog::Close);
-    }
+    if (enable) buttonLoad->setDefault(true);
+    else buttonBox()->button(QDialogButtonBox::Close)->setDefault(true);
 }
 
 void ScanParamsDialog::slotLoad()
 {
     QListWidgetItem *item = paramsList->currentItem();
-    if (item == NULL) {
-        return;
-    }
+    if (item == NULL) return;
+
     QString name = item->text();
     //qDebug() << "set" << name;
 
@@ -160,12 +165,9 @@ void ScanParamsDialog::slotLoad()
 
 void ScanParamsDialog::slotLoadAndClose(QListWidgetItem *item)
 {
-    if (item == NULL) {
-        return;
-    }
+    if (item == NULL) return;
 
     //qDebug() << "set" << item->text();
-
     paramsList->setCurrentItem(item);
     slotLoad();
     accept();
@@ -175,9 +177,7 @@ void ScanParamsDialog::slotSave()
 {
     QString name = QString::null;
     QListWidgetItem *item = paramsList->currentItem();
-    if (item != NULL) {
-        name = item->text();
-    }
+    if (item != NULL) name = item->text();
     //qDebug() << "selected set" << name;
 
     QString newdesc = QString::null;
@@ -215,7 +215,7 @@ void ScanParamsDialog::slotSave()
         }
 
         paramsList->setCurrentItem(item);
-        slotSelectionChanged(item);
+        slotSelectionChanged();
     }
 }
 
@@ -244,28 +244,25 @@ void ScanParamsDialog::slotEdit()
             return;
         }
 
-        KScanOptSet::deleteSet(oldName);        // do first, in case name not changed
+        KScanOptSet::deleteSet(oldName);		// do first, in case name not changed
         optSet.setSetName(newName);
         optSet.saveConfig(sane->scannerBackendName(), newDesc);
 
-        sets.remove(oldName);               // do first, ditto
+        sets.remove(oldName);				// do first, ditto
         sets[newName] = newDesc;
 
-        int ix = paramsList->row(item);
         item->setText(newName);
-        slotSelectionChanged(paramsList->item(ix)); // recalculate 'item', it may change
+        slotSelectionChanged();				// recalculate 'item', it may change
     }
 }
 
 void ScanParamsDialog::slotDelete()
 {
     QListWidgetItem *item = paramsList->currentItem();
-    if (item == NULL) {
-        return;
-    }
+    if (item == NULL) return;
+
     QString name = item->text();
     //qDebug() << "set" << name;
-
     if (KMessageBox::warningContinueCancel(this, i18n("<qt>Do you really want to delete the set '<b>%1</b>'?", name),
                                            i18n("Delete Scan Parameter Set"),
                                            KStandardGuiItem::del(),
@@ -276,5 +273,5 @@ void ScanParamsDialog::slotDelete()
 
     KScanOptSet::deleteSet(name);
     delete paramsList->takeItem(paramsList->row(item));
-    paramsList->setCurrentItem(NULL);           // clear selection
+    paramsList->setCurrentItem(NULL);			// clear selection
 }
