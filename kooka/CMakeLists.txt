@@ -87,6 +87,7 @@ if (HAVE_SYS_TYPES_H)
 endif (HAVE_SYS_TYPES_H)
 
 add_definitions(-DKDE4)
+add_definitions(-DKF5)
 add_definitions(-DKDE_DEFAULT_DEBUG_AREA=28000)
 if (HAVE_KADMOS)
   add_definitions(-DHAVE_KADMOS)

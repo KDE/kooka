@@ -40,7 +40,6 @@
 #include <ktemporaryfile.h>
 #include <klocalizedstring.h>
 #include <kmessagebox.h>
-//#include <KConfigGroup>
 
 #include "imgsaver.h"
 #include "imageformat.h"
@@ -156,7 +155,7 @@ void OcrOcradEngine::startProcess(OcrBaseDialog *dia, const KookaImage *img)
     s = KookaSettings::ocrOcradExtraArguments();
     if (!s.isEmpty()) args << s;
 
-    //qDebug() << "Running OCRAD as" << cmd << args;
+    qDebug() << "Running OCRAD as" << cmd << args;
 
     m_ocrProcess->setProgram(QFile::encodeName(cmd), args);
     m_ocrProcess->setNextOpenMode(QIODevice::ReadOnly);
@@ -170,11 +169,7 @@ void OcrOcradEngine::startProcess(OcrBaseDialog *dia, const KookaImage *img)
     connect(m_ocrProcess, SIGNAL(finished(int,QProcess::ExitStatus)), SLOT(slotOcradExited(int,QProcess::ExitStatus)));
 
     m_ocrProcess->start();
-    if (!m_ocrProcess->waitForStarted(5000)) {
-        //qDebug() << "Error starting OCRAD process!";
-    } else {
-        //qDebug() << "OCRAD process started";
-    }
+    if (!m_ocrProcess->waitForStarted(5000)) qWarning() << "Error starting OCRAD process!";
 }
 
 QStringList OcrOcradEngine::tempFiles(bool retain)
@@ -191,7 +186,7 @@ QStringList OcrOcradEngine::tempFiles(bool retain)
 
 void OcrOcradEngine::slotOcradExited(int exitCode, QProcess::ExitStatus exitStatus)
 {
-    //qDebug() << "exit code" << exitCode << "status" << exitStatus;
+    qDebug() << "exit code" << exitCode << "status" << exitStatus;
 
     bool parseRes = true;
 
@@ -319,7 +314,7 @@ QString OcrOcradEngine::readORF(const QString &fileName)
     }
     QTextStream stream(&file);
 
-    //qDebug() << "Starting to analyse ORF" << fileName << "version" << ocradVersion;
+    qDebug() << "Starting to analyse ORF" << fileName << "version" << ocradVersion;
 
     // to match "block 1 0 0 560 792"
     const QRegExp rx1("^.*block\\s+(\\d+)\\s+(\\d+)\\s+(\\d+)\\s+(\\d+)\\s+(\\d+)");
@@ -356,10 +351,10 @@ QString OcrOcradEngine::readORF(const QString &fileName)
         } else if (line.startsWith("total blocks ")) { // total count of blocks,
             // must be first line
             blockCnt = line.mid(13).toInt();
-            //qDebug() << "Block count (V<10)" << blockCnt;
+            qDebug() << "Block count (V<10)" << blockCnt;
         } else if (line.startsWith("total text blocks ")) {
             blockCnt = line.mid(18).toInt();
-            //qDebug() << "Block count (V>10)" << blockCnt;
+            qDebug() << "Block count (V>10)" << blockCnt;
         } else if (line.startsWith("block ") || line.startsWith("text block ")) {
             // start of text block
             // matching "block 1 0 0 560 792"
@@ -481,7 +476,7 @@ QString OcrOcradEngine::readORF(const QString &fileName)
 
     file.close();                   // finished with ORF file
     finishResultDocument();
-    //qDebug() << "Finished analysing ORF";
+    qDebug() << "Finished analysing ORF";
 
     return (QString::null);             // no error detected
 }

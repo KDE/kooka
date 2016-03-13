@@ -216,8 +216,7 @@ void OcrEngine::finishedOCRVisible(bool success)
             }
 
             m_resultImage = new QImage(m_ocrResultFile);
-            //qDebug() << "Result image" << m_ocrResultFile
-            //<< "size" << m_resultImage->size();
+            qDebug() << "Result image" << m_ocrResultFile << "size" << m_resultImage->size();
 
             /* The image canvas is present. Set it to our image */
             m_imgCanvas->newImage(m_resultImage, true);
@@ -246,13 +245,13 @@ void OcrEngine::finishedOCRVisible(bool success)
     m_ocrRunning = false;
     removeTempFiles();
 
-    //qDebug() << "OCR finished";
+    qDebug() << "OCR finished";
 }
 
 void OcrEngine::removeTempFiles()
 {
     bool retain = m_ocrDialog->keepTempFiles();
-    //qDebug() << "retain=" << retain;
+    qDebug() << "retain=" << retain;
 
     const QStringList temps = tempFiles(retain);
     if (temps.isEmpty()) {
@@ -308,7 +307,7 @@ void OcrEngine::removeTempFiles()
 void OcrEngine::stopOCRProcess(bool tellUser)
 {
     if (m_ocrProcess != NULL && m_ocrProcess->state() == QProcess::Running) {
-        //qDebug() << "Killing daemon";
+        qDebug() << "Killing OCR process" << m_ocrProcess->pid();
         m_ocrProcess->kill();
         if (tellUser) {
             KMessageBox::error(m_parent, i18n("The OCR process was stopped"));
@@ -335,9 +334,7 @@ void OcrEngine::slotStopOCR()
 /* Called by "Start" used while OCR is not in progress */
 void OcrEngine::startOCRProcess()
 {
-    if (m_ocrDialog == NULL) {
-        return;
-    }
+    if (m_ocrDialog == NULL) return;
 
     m_ocrResultText = "";
     startProcess(m_ocrDialog, &m_introducedImage);
@@ -428,22 +425,16 @@ QTextDocument *OcrEngine::startResultDocument()
 
     m_cursor = new QTextCursor(m_document);
 
-    emit readOnlyEditor(true);              // read only while updating
-
+    emit readOnlyEditor(true);				// read only while updating
     return (m_document);
 }
 
 void OcrEngine::finishResultDocument()
 {
-    //qDebug() << "words" << m_wordCount
-    //<< "lines" << m_document->blockCount()
-    //<< "chars" << m_document->characterCount();
+    qDebug() << "words" << m_wordCount << "lines" << m_document->blockCount() << "chars" << m_document->characterCount();
 
-    if (m_cursor != NULL) {
-        delete m_cursor;
-    }
-
-    emit readOnlyEditor(false);             // now let user edit it
+    if (m_cursor != NULL) delete m_cursor;
+    emit readOnlyEditor(false);				// now let user edit it
 }
 
 void OcrEngine::startLine()

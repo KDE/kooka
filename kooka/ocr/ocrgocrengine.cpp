@@ -164,24 +164,19 @@ void OcrGocrEngine::startProcess(OcrBaseDialog *dia, const KookaImage *img)
 
     args << "-i" << QFile::encodeName(m_inputFile); // input image file
 
-    //qDebug() << "Running GOCR on" << format << "file"
-    //<< "as [" << cmd << args.join(" ") << "]";
+    qDebug() << "Running GOCR on" << format << "file as" << cmd << args.join(" ");
 
     m_ocrProcess->setProgram(QFile::encodeName(cmd), args);
     m_ocrProcess->setNextOpenMode(QIODevice::ReadOnly);
     m_ocrProcess->setOutputChannelMode(KProcess::OnlyStdoutChannel);
 
     m_ocrProcess->start();
-    if (!m_ocrProcess->waitForStarted(5000)) {
-        //qDebug() << "Error starting GOCR process!";
-    } else {
-        //qDebug() << "GOCR process started";
-    }
+    if (!m_ocrProcess->waitForStarted(5000)) qWarning() << "Error starting GOCR process!";
 }
 
 void OcrGocrEngine::slotGOcrExited(int exitCode, QProcess::ExitStatus exitStatus)
 {
-    //qDebug() << "exit code" << exitCode << "status" << exitStatus;
+    qDebug() << "exit code" << exitCode << "status" << exitStatus;
 
     QFile rf(m_resultFile);
     if (!rf.open(QIODevice::ReadOnly)) {
@@ -227,7 +222,7 @@ void OcrGocrEngine::slotGOcrExited(int exitCode, QProcess::ExitStatus exitStatus
     while (*prf != NULL) {              // search for result files
         QString ri = dir.absoluteFilePath(*prf);
         if (QFile::exists(ri)) {            // take first one that matches
-            //qDebug() << "found result image" << ri;
+            qDebug() << "found result image" << ri;
             m_ocrResultFile = ri;
             break;
         }
@@ -251,7 +246,7 @@ void OcrGocrEngine::slotGOcrExited(int exitCode, QProcess::ExitStatus exitStatus
     // copy in OcrEngine::setImage().  The result image is still displayed in
     // the image viewer in OcrEngine::finishedOCRVisible().
     if (m_ocrResultFile.isNull()) {
-        //qDebug() << "cannot find result image in" << dir.absolutePath();
+        qDebug() << "cannot find result image in" << dir.absolutePath();
     }
 
     finishedOCRVisible(m_ocrProcess->exitStatus() == QProcess::NormalExit);

@@ -47,7 +47,7 @@
 #include <kstandarddirs.h>
 #include <kstandardguiitem.h>
 #include <kseparator.h>
-#include <KDialog>
+#include <kdialog.h>
 
 #include <kio/job.h>
 #include <kio/previewjob.h>
@@ -81,23 +81,27 @@ OcrBaseDialog::OcrBaseDialog(QWidget *parent)
     setObjectName("OcrBaseDialog");
 
     setModal(true);
-    //QT5 setButtons(KDialog::User1|KDialog::User2|KDialog::Close);
-    //QT5 setDefaultButton(KDialog::User1);
+    // original KDE4 buttons: User1=Start User2=Stop Close
+    // new Qt5 buttons:       Yes=Start   No=Stop    Close
+    QDialogButtonBox *bb = buttonBox();
+    setStandardButtons(QDialogButtonBox::Yes|QDialogButtonBox::No|QDialogButtonBox::Close);
+    bb->button(QDialogButtonBox::Yes)->setDefault(true);
     setWindowTitle(i18n("Optical Character Recognition"));
-    //QT5 setButtonGuiItem(KDialog::User1, KGuiItem(i18n("Start OCR"), "system-run", i18n("Start the Optical Character Recognition process")));
-    //QT5 setButtonGuiItem(KDialog::User2, KGuiItem(i18n("Stop OCR"), "process-stop", i18n("Stop the Optical Character Recognition process")));
+
+    KGuiItem::assign(bb->button(QDialogButtonBox::Yes), KGuiItem(i18n("Start OCR"), "system-run", i18n("Start the Optical Character Recognition process")));
+    KGuiItem::assign(bb->button(QDialogButtonBox::No), KGuiItem(i18n("Stop OCR"), "process-stop", i18n("Stop the Optical Character Recognition process")));
 
     // Signals which tell our caller what the user is doing
-    connect(this, SIGNAL(user1Clicked()), SLOT(slotStartOCR()));
-    connect(this, SIGNAL(user2Clicked()), SLOT(slotStopOCR()));
-    connect(this, SIGNAL(closeClicked()), SLOT(slotCloseOCR()));
+    connect(bb->button(QDialogButtonBox::Yes), &QAbstractButton::clicked, this, &OcrBaseDialog::slotStartOCR);
+    connect(bb->button(QDialogButtonBox::No), &QAbstractButton::clicked, this, &OcrBaseDialog::slotStopOCR);
+    connect(bb->button(QDialogButtonBox::Close), &QAbstractButton::clicked, this, &OcrBaseDialog::slotCloseOCR);
 
-    m_previewSize.setWidth(380);            // minimum preview size
+    m_previewSize.setWidth(380);			// minimum preview size
     m_previewSize.setHeight(250);
 
-    //QT5 enableButton(KDialog::User1, true);           // Start OCR
-    //QT5 enableButton(KDialog::User2, false);      // Stop OCR
-    //QT5 enableButton(KDialog::Close, true);           // Close
+    bb->button(QDialogButtonBox::Yes)->setEnabled(true);  	// Start OCR
+    bb->button(QDialogButtonBox::No)->setEnabled(false);	// Stop OCR
+    bb->button(QDialogButtonBox::Close)->setEnabled(true);	// Close
 }
 
 OcrBaseDialog::~OcrBaseDialog()
@@ -262,7 +266,7 @@ void OcrBaseDialog::setupSpellPage()
     QGridLayout *gl1 = new QGridLayout(m_gbBackgroundCheck);
     m_gbBackgroundCheck->setLayout(gl1);
 
-    m_rbGlobalSpellSettings = new QRadioButton(i18n("Use the global spell configuration"), w);
+    m_rbGlobalSpellSettings = new QRadioButton(i18n("Use the system spell configuration"), w);
     gl1->addWidget(m_rbGlobalSpellSettings, 0, 0);
     m_rbCustomSpellSettings = new QRadioButton(i18n("Use custom spell configuration"), w);
     gl1->addWidget(m_rbCustomSpellSettings, 1, 0);
@@ -297,7 +301,12 @@ void OcrBaseDialog::setupSpellPage()
     m_gbBackgroundCheck->setChecked(KookaSettings::ocrSpellBackgroundCheck());
     m_gbInteractiveCheck->setChecked(KookaSettings::ocrSpellInteractiveCheck());
 
+#ifndef KF5
     const bool customSettings = KookaSettings::ocrSpellCustomSettings();
+#else
+    const bool customSettings = false;
+    m_rbCustomSpellSettings->setEnabled(false);
+#endif
     m_rbGlobalSpellSettings->setChecked(!customSettings);
     m_rbCustomSpellSettings->setChecked(customSettings);
     m_pbCustomSpellDialog->setEnabled(customSettings);
@@ -459,19 +468,17 @@ void OcrBaseDialog::enableGUI(bool running)
     if (m_debugPage != NULL) {
         m_debugPage->setEnabled(!running);
     }
-    enableFields(!running);             // engine's GUI widgets
+    enableFields(!running);				// engine's GUI widgets
 
-    if (running) {
-        startAnimation();    // start our progress bar
-    } else {
-        stopAnimation();    // stop our progress bar
-    }
+    if (running) startAnimation();			// start our progress bar
+    else stopAnimation();				// stop our progress bar
 
-    //QT5 enableButton(KDialog::User1, !running);       // Start OCR
-    //QT5 enableButton(KDialog::User2, running);        // Stop OCR
-    //QT5 enableButton(KDialog::Close, !running);       // Close
+    QDialogButtonBox *bb = buttonBox();
+    bb->button(QDialogButtonBox::Yes)->setEnabled(!running);  	// Start OCR
+    bb->button(QDialogButtonBox::No)->setEnabled(running);	// Stop OCR
+    bb->button(QDialogButtonBox::Close)->setEnabled(!running);	// Close
 
-    QApplication::processEvents();          // ensure GUI up-to-date
+    QApplication::processEvents();			// ensure GUI up-to-date
 }
 
 bool OcrBaseDialog::wantInteractiveSpellCheck() const
@@ -486,11 +493,10 @@ bool OcrBaseDialog::wantBackgroundSpellCheck() const
 
 QString OcrBaseDialog::customSpellConfigFile() const
 {
-    if (m_rbCustomSpellSettings->isChecked()) {
+    if (m_rbCustomSpellSettings->isChecked()) {		// our application config
         return (KSharedConfig::openConfig()->name());
     }
-    // our application config
-    return ("sonnetrc");                // Sonnet global settings
+    return ("sonnetrc");				// Sonnet global settings
 }
 
 QProgressBar *OcrBaseDialog::progressBar() const
@@ -500,6 +506,11 @@ QProgressBar *OcrBaseDialog::progressBar() const
 
 void OcrBaseDialog::slotCustomSpellDialog()
 {
-    //QT5 Sonnet::ConfigDialog d(KSharedConfig::openConfig().data(), this);
-    //QT5 d.exec();                     // save to our application config
+#ifndef KF5
+    // TODO: Sonnet in KF5 appears to no longer allow a custom configuration,
+    // QSettings("KDE","Sonnet") is hardwired in Settings::restore() in
+    // sonnet/src/core/settings.cpp
+    Sonnet::ConfigDialog d(KSharedConfig::openConfig().data(), this);
+    d.exec();						// save to our application config
+#endif
 }
