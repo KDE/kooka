@@ -43,7 +43,6 @@
 #include <kmessagebox.h>
 #include <kpropertiesdialog.h>
 #include <kinputdialog.h>
-#include <kiconloader.h>
 #include <kfiledialog.h>
 #include <klocalizedstring.h>
 #include <kstandardguiitem.h>
@@ -63,6 +62,7 @@
 #include "kookasettings.h"
 
 #include "imagemetainfo.h"
+#include "scanicons.h"
 
 
 // FileTreeViewItem is not the same as KDE3's KFileTreeViewItem in that
@@ -118,14 +118,6 @@ ScanGallery::ScanGallery(QWidget *parent)
             SLOT(slotFileRenamed(FileTreeViewItem*,QString)));
     connect(this, SIGNAL(itemExpanded(QTreeWidgetItem*)),
             SLOT(slotItemExpanded(QTreeWidgetItem*)));
-
-    /* Preload frequently used icons */
-    // KF5 PORT: check
-    KIconLoader::global()->addAppDir("libkookascan");   // access to library icons
-    mPixFloppy = KIconLoader::global()->loadIcon("media-floppy", KIconLoader::NoGroup, KIconLoader::SizeSmall);
-    mPixGray   = KIconLoader::global()->loadIcon("palette-gray", KIconLoader::NoGroup, KIconLoader::SizeSmall);
-    mPixBw     = KIconLoader::global()->loadIcon("palette-lineart", KIconLoader::NoGroup, KIconLoader::SizeSmall);
-    mPixColor  = KIconLoader::global()->loadIcon("palette-color", KIconLoader::NoGroup, KIconLoader::SizeSmall);
 
     m_startup = true;
     m_currSelectedDir = QUrl();
@@ -457,12 +449,12 @@ void ScanGallery::slotDecorate(FileTreeViewItem *item)
         if (img != NULL) {              // image appears to be loaded
             // set image depth pixmap
             if (img->depth() == 1) {
-                item->setIcon(0, mPixBw);
+                item->setIcon(0, ScanIcons::self()->icon(ScanIcons::BlackWhite));
             } else {
                 if (img->isGrayscale()) {
-                    item->setIcon(0, mPixGray);
+                    item->setIcon(0, ScanIcons::self()->icon(ScanIcons::Greyscale));
                 } else {
-                    item->setIcon(0, mPixColor);
+                    item->setIcon(0, ScanIcons::self()->icon(ScanIcons::Colour));
                 }
             }
             // set image size column
@@ -470,7 +462,7 @@ void ScanGallery::slotDecorate(FileTreeViewItem *item)
             item->setText(1, t);
         } else {                    // not yet loaded, show file info
             if (format.isValid()) {         // if a valid image file
-                item->setIcon(0, mPixFloppy);
+                item->setIcon(0, QIcon::fromTheme("media-floppy"));
                 const KFileItem *kfi = item->fileItem();
                 if (!kfi->isNull()) {
                     item->setText(1, (" " + KIO::convertSize(kfi->size())));
@@ -720,7 +712,7 @@ void ScanGallery::loadImageForItem(FileTreeViewItem *item)
                 //qDebug() << "subImage-count" << img->subImagesCount();
                 if (img->subImagesCount() > 1) {    // look for subimages,
                     // create items for them
-                    KIconLoader *loader = KIconLoader::global();
+                    QIcon subImgIcon = QIcon::fromTheme("edit-copy");
 
                     // Start at the image with index 1, that makes one less than
                     // are actually in the image. But image 0 was already created above.
@@ -734,8 +726,8 @@ void ScanGallery::loadImageForItem(FileTreeViewItem *item)
                         //if (prevItem!=NULL) subImgItem->moveItem(prevItem);
                         prevItem = subImgItem;
 
-                        subImgItem->setIcon(0, loader->loadIcon("editcopy", KIconLoader::Small));
                         subImgItem->setText(0, i18n("Sub-image %1", i));
+                        subImgItem->setIcon(0, subImgIcon);
                         KookaImage *subImgImg = new KookaImage(i, img);
                         subImgImg->setFileItem(&newKfi);
                         subImgItem->setClientData(subImgImg);

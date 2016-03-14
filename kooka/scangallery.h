@@ -144,11 +144,6 @@ private:
     // but for our own purposes (showing the image)
     QUrl m_nextUrlToShow;
 
-    QPixmap mPixFloppy;
-    QPixmap mPixGray;
-    QPixmap mPixBw;
-    QPixmap mPixColor;
-
     FileTreeBranch *m_defaultBranch;
     bool m_startup;
 };

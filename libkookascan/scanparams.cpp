@@ -46,13 +46,11 @@
 #include <qscrollarea.h>
 #include <qtabwidget.h>
 #include <qdebug.h>
-#include <qicon.h>
 #include <qmimetype.h>
 #include <qmimedatabase.h>
 
 #include <kfiledialog.h>
 #include <klocalizedstring.h>
-#include <kiconloader.h>
 #include <kled.h>
 #include <kmessagebox.h>
 #include <khbox.h>
@@ -71,6 +69,7 @@ extern "C"
 #include "scansizeselector.h"
 #include "kscanoption.h"
 #include "kscanoptset.h"
+#include "scanicons.h"
 
 //  Debugging options
 #undef DEBUG_ADF
@@ -186,45 +185,11 @@ ScanParams::ScanParams(QWidget *parent)
 
     mProblemMessage = NULL;
     mNoScannerMessage = NULL;
-
-    // Preload the scan mode icons.  The ones from libksane, which will be
-    // available if kdegraphics is installed, look better than our rather
-    // ancient ones, so use those if possible.  Set canReturnNull to true
-    // when looking up those, so the returned path will be empty if they
-    // are not installed.
-
-    // KF5 PORT
-    KIconLoader::global()->addAppDir("libkookascan");   // access to our icons
-
-    QString ip = KIconLoader::global()->iconPath("color", KIconLoader::Small, true);
-    if (ip.isEmpty()) {
-        ip = KIconLoader::global()->iconPath("palette-color", KIconLoader::Small);
-    }
-    mIconColor = QIcon(ip);
-
-    ip = KIconLoader::global()->iconPath("gray-scale", KIconLoader::Small, true);
-    if (ip.isEmpty()) {
-        ip = KIconLoader::global()->iconPath("palette-gray", KIconLoader::Small);
-    }
-    mIconGray = QIcon(ip);
-
-    ip = KIconLoader::global()->iconPath("black-white", KIconLoader::Small, true);
-    if (ip.isEmpty()) {
-        ip = KIconLoader::global()->iconPath("palette-lineart", KIconLoader::Small);
-    }
-    mIconLineart = QIcon(ip);
-
-    ip = KIconLoader::global()->iconPath("halftone", KIconLoader::Small, true);
-    if (ip.isEmpty()) {
-        ip = KIconLoader::global()->iconPath("palette-halftone", KIconLoader::Small);
-    }
-    mIconHalftone = QIcon(ip);
 }
 
 ScanParams::~ScanParams()
 {
     //qDebug();
-
     delete mProgressDialog;
 }
 
@@ -411,12 +376,12 @@ QWidget *ScanParams::createScannerParams()
         // KScanOption::getList() which reads the list values from SANE).  But
         // this may not work properly if the list of scan modes changes at runtime!
 
-        cb->setIcon(mIconLineart, "Lineart");
-        cb->setIcon(mIconLineart, "Binary");
-        cb->setIcon(mIconGray, "Gray");
-        cb->setIcon(mIconGray, "Grayscale");
-        cb->setIcon(mIconColor, "Color");
-        cb->setIcon(mIconHalftone, "Halftone");
+        cb->setIcon(ScanIcons::self()->icon(ScanIcons::BlackWhite), "Lineart");
+        cb->setIcon(ScanIcons::self()->icon(ScanIcons::BlackWhite), "Binary");
+        cb->setIcon(ScanIcons::self()->icon(ScanIcons::Greyscale), "Gray");
+        cb->setIcon(ScanIcons::self()->icon(ScanIcons::Greyscale), "Grayscale");
+        cb->setIcon(ScanIcons::self()->icon(ScanIcons::Colour), "Color");
+        cb->setIcon(ScanIcons::self()->icon(ScanIcons::Halftone), "Halftone");
 
         connect(so, &KScanOption::guiChange, this, &ScanParams::slotOptionChanged);
         connect(so, &KScanOption::guiChange, this, &ScanParams::slotNewScanMode);

@@ -65,6 +65,7 @@ set(kookascan_SRCS
   scansizeselector.cpp
   autoselectbar.cpp
   autoselectdialog.cpp
+  scanicons.cpp
 )
 kconfig_add_kcfg_files(kookascan_SRCS scansettings.kcfgc)
 

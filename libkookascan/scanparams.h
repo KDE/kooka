@@ -35,7 +35,6 @@
 #include "kookascan_export.h"
 
 #include <qwidget.h>
-#include <qicon.h>
 
 #include "kscandevice.h"
 #include "scansourcedialog.h"
@@ -320,13 +319,6 @@ private:
 
     KScanOption *mResolutionBind;
     KScanOption *mSourceSelect;
-
-    QPixmap pixLineArt, pixGray, pixColor, pixHalftone;
-
-    QIcon mIconColor;
-    QIcon mIconGray;
-    QIcon mIconLineart;
-    QIcon mIconHalftone;
 
     QLabel *mProblemMessage;
     QLabel *mNoScannerMessage;
