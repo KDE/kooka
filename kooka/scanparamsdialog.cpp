@@ -76,24 +76,28 @@ ScanParamsDialog::ScanParamsDialog(QWidget *parent, KScanDevice *scandev)
     gl->addWidget(l, 0, 0, Qt::AlignLeft);
     l->setBuddy(paramsList);
 
-    buttonLoad = new QPushButton(i18n("Load"), w);
-    connect(buttonLoad, &QPushButton::clicked, this, &ScanParamsDialog::slotLoad);
+    buttonLoad = new QPushButton(i18n("Select"), w);
+    buttonLoad->setIcon(QIcon::fromTheme("dialog-ok-apply"));
     buttonLoad->setToolTip(i18n("Load the selected scan parameter set to use as scanner settings"));
+    connect(buttonLoad, &QPushButton::clicked, this, &ScanParamsDialog::slotLoad);
     gl->addWidget(buttonLoad, 1, 2);
 
     buttonSave = new QPushButton(i18n("Save..."), w);
-    connect(buttonSave, &QPushButton::clicked, this, &ScanParamsDialog::slotSave);
+    buttonSave->setIcon(QIcon::fromTheme("bookmark-new"));
     buttonSave->setToolTip(i18n("Save the current scanner settings as a new scan parameter set"));
+    connect(buttonSave, &QPushButton::clicked, this, &ScanParamsDialog::slotSave);
     gl->addWidget(buttonSave, 2, 2);
 
-    buttonDelete = new QPushButton(i18n("Delete"), w);
-    connect(buttonDelete, &QPushButton::clicked, this, &ScanParamsDialog::slotDelete);
+    buttonDelete = new QPushButton(w);
+    KGuiItem::assign(buttonDelete, KStandardGuiItem::del());
     buttonDelete->setToolTip(i18n("Delete the selected scan parameter set"));
+    connect(buttonDelete, &QPushButton::clicked, this, &ScanParamsDialog::slotDelete);
     gl->addWidget(buttonDelete, 3, 2);
 
     buttonEdit = new QPushButton(i18n("Edit..."), w);
-    connect(buttonEdit, &QPushButton::clicked, this, &ScanParamsDialog::slotEdit);
+    buttonEdit->setIcon(QIcon::fromTheme("document-edit"));
     buttonEdit->setToolTip(i18n("Change the name or description of the selected scan parameter set"));
+    connect(buttonEdit, &QPushButton::clicked, this, &ScanParamsDialog::slotEdit);
     gl->addWidget(buttonEdit, 4, 2);
 
     gl->setRowStretch(5, 9);
@@ -102,7 +106,7 @@ ScanParamsDialog::ScanParamsDialog(QWidget *parent, KScanDevice *scandev)
     gl->setColumnStretch(0, 9);
     gl->setColumnMinimumWidth(1, 2*horizontalSpacing());
 
-    descLabel = new QLabel(i18n("-"), w);
+    descLabel = new QLabel(w);
     gl->addWidget(descLabel, 7, 0, 1, 3);
 
     sane = scandev;
@@ -141,8 +145,8 @@ void ScanParamsDialog::slotSelectionChanged()
     buttonDelete->setEnabled(enable);
     buttonEdit->setEnabled(enable);
 
-    if (enable) buttonLoad->setDefault(true);
-    else buttonBox()->button(QDialogButtonBox::Close)->setDefault(true);
+    buttonLoad->setDefault(enable);
+    buttonBox()->button(QDialogButtonBox::Close)->setDefault(!enable);
 }
 
 void ScanParamsDialog::slotLoad()
