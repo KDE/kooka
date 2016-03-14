@@ -651,7 +651,7 @@ void KookaView::slotGallerySelectionChanged()
     } else {                    // have a gallery selection
         if (!scanmode) {
             KLocalizedString str = fi->isDir() ? ki18n("Gallery folder %1") : ki18n("Gallery image %1");
-            //QT5 emit changeStatus(str.subs(fi->url().pathOrUrl()).toString());
+            emit changeStatus(str.subs(fi->url().url(QUrl::PreferLocalFile)).toString());
         }
     }
 
@@ -721,8 +721,10 @@ void KookaView::slotStartOcr()
 
 void KookaView::slotSetOcrSpellConfig(const QString &configFile)
 {
+#ifndef KF5
     //qDebug() << configFile;
-    //QT5 if (mOcrResEdit!=NULL) mOcrResEdit->setSpellCheckingConfigFileName(configFile);
+    if (mOcrResEdit!=NULL) mOcrResEdit->setSpellCheckingConfigFileName(configFile);
+#endif
 }
 
 void KookaView::slotOcrSpellCheck(bool interactive, bool background)

@@ -47,8 +47,6 @@
 #include <kdialog.h>
 #include <kcolorscheme.h>
 
-#include <kio/deletejob.h>
-
 #include "imagecanvas.h"
 
 #include "kookaimage.h"
@@ -291,14 +289,14 @@ void OcrEngine::removeTempFiles()
 
             QString tf = (*it);
             QFileInfo fi(tf);
-            if (!fi.exists()) {             // what happened?
+            if (!fi.exists()) {				// what happened?
                 //qDebug() << "does not exist:" << tf;
             } else if (fi.isDir()) {
-                //qDebug() << "temp dir:" << tf;
-                //QT5 KIO::del(tf, KIO::HideProgressInfo);  // for recursive deletion
+                //qDebug() << "temp dir" << tf;
+                QDir(tf).removeRecursively();		// recursive deletion
             } else {
-                //qDebug() << "temp file:" << tf;
-                QFile::remove(tf);          // just a simple file
+                //qDebug() << "temp file" << tf;
+                QFile::remove(tf);			// just a simple file
             }
         }
     }

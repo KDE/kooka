@@ -52,6 +52,7 @@
 
 #include <kio/global.h>
 #include <kio/copyjob.h>
+#include <kio/pixmaploader.h>
 #include <kio/jobuidelegate.h>
 // TODO: eliminate the below (deprecated)
 #include <kio/netaccess.h>
@@ -475,7 +476,7 @@ void ScanGallery::slotDecorate(FileTreeViewItem *item)
                     item->setText(1, (" " + KIO::convertSize(kfi->size())));
                 }
             } else {
-                //QT5 item->setIcon(0, KIO::pixmapForUrl(item->url(), 0, KIconLoader::Small));
+                item->setIcon(0, KIO::pixmapForUrl(item->url(), 0, KIconLoader::Small));
             }
         }
     }

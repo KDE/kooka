@@ -306,9 +306,9 @@ bool ScanParams::connectDevice(KScanDevice *newScanDevice, bool galleryMode)
     mProgressDialog->setAutoReset(true);
     mProgressDialog->setWindowTitle(i18n("Scanning"));
     mProgressDialog->setMinimumDuration(100);
-    // Qt5: The next is necessary, as otherwise the progress dialogue will show
-    // itself after the default 'minimumDuration' (= 4 seconds), even despite
-    // the previous and no 'value' being set.
+    // The next is necessary with Qt5, as otherwise the progress dialogue
+    // appears to show itself after the default 'minimumDuration' (= 4 seconds),
+    // even despite the previous and no 'value' being set.
     mProgressDialog->reset();
     setScanDestination(QString::null);			// reset destination display
 

@@ -510,6 +510,9 @@ void OcrBaseDialog::slotCustomSpellDialog()
     // TODO: Sonnet in KF5 appears to no longer allow a custom configuration,
     // QSettings("KDE","Sonnet") is hardwired in Settings::restore() in
     // sonnet/src/core/settings.cpp
+    // See also KookaView::slotSetOcrSpellConfig()
+    // It may be possible, though, to configure only the language;
+    // see http://api.kde.org/frameworks-api/frameworks5-apidocs/sonnet/html/classSonnet_1_1ConfigDialog.html
     Sonnet::ConfigDialog d(KSharedConfig::openConfig().data(), this);
     d.exec();						// save to our application config
 #endif
