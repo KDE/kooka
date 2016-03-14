@@ -163,53 +163,56 @@ QString KookaImage::loadFromUrl(const KUrl &url)
     //qDebug() << "Image format to load:" << format << "from file" << filename;
 
 #ifdef HAVE_TIFF
-    if (isTiff) {                   // if it is TIFF, check
-        // for multiple images
-        m_subImages = 0;                // no subimages found yet
-        //qDebug() << "Trying to load TIFF...";
+    if (isTiff)						// if it is TIFF, check
+    {							// for multiple images
+        m_subImages = 0;				// no subimages found yet
+        qDebug() << "Checking for multi-page TIFF";
         TIFF *tif = TIFFOpen(filename.toLatin1(), "r");
-        if (tif != NULL) {
-            do {
+        if (tif != NULL)
+        {
+            do
+            {
                 ++m_subImages;
             } while (TIFFReadDirectory(tif));
-            //qDebug() << "found" << m_subImages << "TIFF-directories";
-            haveTiff = true;
+            qDebug() << "found" << m_subImages << "TIFF directories";
+            if (m_subImages>1) haveTiff = true;
         }
     }
 #endif
-    if (!haveTiff) {
-        ret = QImage::load(filename);           // Qt can only read one image
-        if (!ret) {
-            return (i18n("Image loading failed"));
-        }
+    if (!haveTiff)					// not TIFF, or not multi-page
+    {
+        ret = QImage::load(filename);			// Qt can only read one image
+        if (!ret) return (i18n("Image loading failed"));
 
-        m_subImages = 0;                // image loaded OK
+        m_subImages = 0;				// image loaded OK
         m_subNo = 0;
     }
 #ifdef HAVE_TIFF
-    else {
-        loadTiffDir(filename, 0);           // read by TIFFlib directly
+    else						// really a multi-page TIFF
+    {
+        loadTiffDir(filename, 0);			// read by TIFFlib directly
     }
 #endif
 
-    m_url = url;                    // record image source
-    m_fileBound = true;                 // note loaded from file
+    m_url = url;					// record image source
+    m_fileBound = true;					// note loaded from file
 
-    return (QString::null);             // loaded OK
+    return (QString::null);				// loaded OK
 }
 
 /* loads the number stored in m_subNo */
 void KookaImage::extractNow()
 {
-    //qDebug() << "extracting subimage number" << m_subNo;
-
     KookaImage *parent = parentImage();
-    if (parent == NULL || !parent->isFileBound()) {
+    if (parent == NULL || !parent->isFileBound())
+    {
         //qDebug() << "Error: No parent, cannot load subimage";
         return;
     }
 
-    loadTiffDir(parent->url().toLocalFile(), m_subNo);
+    const QString fileName = parent->url().toLocalFile();
+    qDebug() << "subimage" << m_subNo << "from" << fileName;
+    loadTiffDir(fileName, m_subNo);
 }
 
 bool KookaImage::loadTiffDir(const QString &filename, int no)
@@ -224,7 +227,7 @@ bool KookaImage::loadTiffDir(const QString &filename, int no)
         return (false);
     }
 
-    if (!TIFFSetDirectory(tif, no)) {
+    if (!TIFFSetDirectory(tif, no-1)) {
         //qDebug() << "Error: TIFFSetDirectory failed";
         TIFFClose(tif);
         return (false);
@@ -302,7 +305,7 @@ KookaImage *KookaImage::parentImage() const
 
 bool KookaImage::isSubImage() const
 {
-    return (subImagesCount() > 0);
+    return (m_subNo>0);
 }
 
 /*

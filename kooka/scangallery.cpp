@@ -437,37 +437,56 @@ void ScanGallery::slotItemExpanded(QTreeWidgetItem *item)
 
 void ScanGallery::slotDecorate(FileTreeViewItem *item)
 {
-    if (item == NULL) {
-        return;
-    }
+    if (item == NULL) return;
 
-    if (!item->isDir()) {               // dir is done in another slot
-        ImageFormat format = getImgFormat(item);    // this is safe for any file
-        item->setText(2, (QString(" " + format.name() + " ")));
+    //qDebug() << item->url();
+    const bool isSubImage = item->url().hasFragment();	// is this a sub-image?
+
+    if (!item->isDir())					// directories are done elsewhere
+    {
+        ImageFormat format = getImgFormat(item);	// this is safe for any file
+        if (!isSubImage)				// no format for subimages
+        {
+            item->setText(2, (QString(" " + format.name() + " ")));
+        }
 
         const KookaImage *img = imageForItem(item);
-        if (img != NULL) {              // image appears to be loaded
-            // set image depth pixmap
-            if (img->depth() == 1) {
-                item->setIcon(0, ScanIcons::self()->icon(ScanIcons::BlackWhite));
-            } else {
-                if (img->isGrayscale()) {
-                    item->setIcon(0, ScanIcons::self()->icon(ScanIcons::Greyscale));
-                } else {
-                    item->setIcon(0, ScanIcons::self()->icon(ScanIcons::Colour));
+        if (img != NULL)				// image is loaded
+        {
+            // set image depth pixmap as appropriate
+            QIcon icon;
+            if (img->depth() == 1) icon = ScanIcons::self()->icon(ScanIcons::BlackWhite);
+            else
+            {
+                if (img->isGrayscale()) icon = ScanIcons::self()->icon(ScanIcons::Greyscale);
+                else icon = ScanIcons::self()->icon(ScanIcons::Colour);
+            }
+            item->setIcon(0, icon);
+
+            if (img->subImagesCount() == 0)		// size except for containers
+            {
+                QString t = i18n(" %1 x %2", img->width(), img->height());
+                item->setText(1, t);
+            }
+        }
+        else						// image not loaded, show file info
+        {
+            if (format.isValid())			// if a valid image file
+            {
+                if (isSubImage)				// subimages don't show size
+                {
+                    item->setIcon(0, QIcon::fromTheme("edit-copy"));
+                    item->setText(1, QString::null);
+                }
+                else
+                {
+                    item->setIcon(0, QIcon::fromTheme("media-floppy"));
+                    const KFileItem *kfi = item->fileItem();
+                    if (!kfi->isNull()) item->setText(1, (" " + KIO::convertSize(kfi->size())));
                 }
             }
-            // set image size column
-            QString t = i18n(" %1 x %2", img->width(), img->height());
-            item->setText(1, t);
-        } else {                    // not yet loaded, show file info
-            if (format.isValid()) {         // if a valid image file
-                item->setIcon(0, QIcon::fromTheme("media-floppy"));
-                const KFileItem *kfi = item->fileItem();
-                if (!kfi->isNull()) {
-                    item->setText(1, (" " + KIO::convertSize(kfi->size())));
-                }
-            } else {
+            else					// not an image file
+            {						// show its standard MIME type
                 item->setIcon(0, KIO::pixmapForUrl(item->url(), 0, KIconLoader::Small));
             }
         }
@@ -680,84 +699,100 @@ void ScanGallery::slotSelectDirectory(const QString &branchName, const QString &
 
 void ScanGallery::loadImageForItem(FileTreeViewItem *item)
 {
-    if (item == NULL) {
-        return;
-    }
-
+    if (item == NULL) return;
     const KFileItem *kfi = item->fileItem();
-    if (kfi->isNull()) {
-        return;
-    }
+    if (kfi->isNull()) return;
 
     //qDebug() << "loading" << item->url();
+    QString ret = QString::null;			// no error so far
 
-    QString ret = QString::null;            // no error so far
-
-    ImageFormat format = getImgFormat(item);        // check for valid image format
-    if (!format.isValid()) {
+    ImageFormat format = getImgFormat(item);		// check for valid image format
+    if (!format.isValid())
+    {
         ret = i18n("Not a valid image format");
-    } else {
+    }
+    else						// valid image
+    {
         KookaImage *img = imageForItem(item);
-        if (img == NULL) {              // image not already loaded
+        if (img == NULL)				// image not already loaded
+        {
             // The image needs to be loaded. Possibly it is a multi-page image.
-            // If it is, the kookaImage has a subImageCount larger than one. We
-            // create an subimage-item for every subimage, but do not yet load
+            // If it is, the KookaImage has a subImageCount larger than one. We
+            // create an subimage item for every subimage, but do not yet load
             // them.
 
             img = new KookaImage();
             ret = img->loadFromUrl(item->url());
-            if (ret.isEmpty()) {            // image loaded OK
-                img->setFileItem(kfi);          // store the fileitem
+            if (ret.isEmpty())				// image loaded OK
+            {
+                img->setFileItem(kfi);			// store the KFileItem
 
-                //qDebug() << "subImage-count" << img->subImagesCount();
-                if (img->subImagesCount() > 1) {    // look for subimages,
-                    // create items for them
-                    QIcon subImgIcon = QIcon::fromTheme("edit-copy");
+                if (img->subImagesCount() > 1)		// see if it has subimages
+                {
+                    qDebug() << "subimage count" << img->subImagesCount();
+                    if (item->childCount()==0)		// check not already created
+                    {
+                        // Create items for each subimage
+                        QIcon subImgIcon = QIcon::fromTheme("edit-copy");
 
-                    // Start at the image with index 1, that makes one less than
-                    // are actually in the image. But image 0 was already created above.
-                    FileTreeViewItem *prevItem = NULL;
-                    for (int i = 1; i < img->subImagesCount(); i++) {
-                        //qDebug() << "Creating subimage" << i;
-                        KFileItem newKfi(*kfi);
-                        FileTreeViewItem *subImgItem = new FileTreeViewItem(item, newKfi, item->branch());
+                        // Sub-images start counting from 1, KookaImage adjusts
+                        // adjusts that back to the 0-based TIFF directory index.
+                        for (int i = 1; i<=img->subImagesCount(); i++)
+                        {
+                            //qDebug() << "Creating subimage" << i;
+                            KFileItem newKfi(*kfi);
 
-                        // TODO: what's the equivalent?
-                        //if (prevItem!=NULL) subImgItem->moveItem(prevItem);
-                        prevItem = subImgItem;
+                            QUrl u = newKfi.url();	// set URL to mark as a subimage
+                            u.setFragment(QString::number(i));
+                            newKfi.setUrl(u);
 
-                        subImgItem->setText(0, i18n("Sub-image %1", i));
-                        subImgItem->setIcon(0, subImgIcon);
-                        KookaImage *subImgImg = new KookaImage(i, img);
-                        subImgImg->setFileItem(&newKfi);
-                        subImgItem->setClientData(subImgImg);
+                            // Create the item without a parent and then
+                            // add it to the parent item later, so that
+                            // the setText() below does not trigger a rename.
+                            FileTreeViewItem *subImgItem = new FileTreeViewItem(
+                                static_cast<FileTreeViewItem *>(NULL), newKfi, item->branch());
+
+                            subImgItem->setText(0, i18n("Sub-image %1", i));
+                            subImgItem->setIcon(0, subImgIcon);
+                            KookaImage *subImgImg = new KookaImage(i, img);
+                            subImgImg->setFileItem(&newKfi);
+                            subImgItem->setClientData(subImgImg);
+                            item->addChild(subImgItem);
+                        }
                     }
                 }
-
-                if (img->isSubImage()) {        // this is a subimage
-                    //qDebug() << "it is a subimage";
-                    if (img->isNull()) {        // if not already loaded,
-                        //qDebug() << "extracting subimage";
-                        img->extractNow();      // load it now
-                    }
-                }
-
-                slotImageArrived(item, img);
-            } else {
-                delete img;             // nothing to load
             }
+            else delete img;				// image loading failed
+        }
+
+        if (img!=NULL)					// already loaded, or loaded above
+        {
+            if (img->isSubImage())			// this is a subimage
+            {
+                //qDebug() << "this is a subimage";
+                if (img->isNull())			// if not already loaded,
+                {
+                    //qDebug() << "extracting subimage";
+                    img->extractNow();			// extract it from parent
+                }
+            }
+
+            slotImageArrived(item, img);		// display the image
         }
     }
 
-    if (!ret.isEmpty()) KMessageBox::error(this,    // image loading failed
-                                               i18n("<qt>"
-                                                       "<p>Unable to load the image<br>"
-                                                       "<filename>%2</filename><br>"
-                                                       "<br>"
-                                                       "%1",
-                                                       ret,
-                                                       item->url().url(QUrl::PreferLocalFile)),
-                                               i18n("Image Load Error"));
+    if (!ret.isEmpty())					// image loading failed
+    {
+        KMessageBox::error(this,
+                           i18n("<qt>"
+                                "<p>Unable to load the image<br>"
+                                "<filename>%2</filename><br>"
+                                "<br>"
+                                "%1",
+                                ret,
+                                item->url().url(QUrl::PreferLocalFile)),
+                           i18n("Image Load Error"));
+    }
 }
 
 /* Hit this slot with a file for a kfiletreeviewitem. */
@@ -766,6 +801,8 @@ void ScanGallery::slotImageArrived(FileTreeViewItem *item, KookaImage *image)
     if (item == NULL || image == NULL) {
         return;
     }
+
+    //qDebug() << item->text(0);
 
     item->setClientData(image);             // note image for item
     slotDecorate(item);

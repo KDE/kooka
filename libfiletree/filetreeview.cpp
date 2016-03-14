@@ -294,33 +294,21 @@ void FileTreeView::slotSelectionChanged()
 
 void FileTreeView::slotDataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight)
 {
-    if (topLeft.column() != 0) {
-        return;    // not the file name
-    }
-    if (topLeft.row() != bottomRight.row()) {
-        return;    // not a single row
-    }
-    if (topLeft.column() != bottomRight.column()) {
-        return;    // not a single column
-    }
+    if (topLeft.column() != 0) return;				// not the file name
+    if (topLeft.row() != bottomRight.row()) return;		// not a single row
+    if (topLeft.column() != bottomRight.column()) return;	// not a single column
 
-    QTreeWidgetItem *twi = itemFromIndex(topLeft);
-    if (twi == NULL) {
-        return;
-    }
-    FileTreeViewItem *item = static_cast<FileTreeViewItem *>(twi);
+    FileTreeViewItem *item = static_cast<FileTreeViewItem *>(itemFromIndex(topLeft));
+    if (item->url().hasFragment()) return;		// ignore for sub-images
 
     QString oldName = item->url().fileName();
     QString newName = item->text(0);
-    if (oldName == newName) {
-        return;    // no change
-    }
-    if (newName.isEmpty()) {
-        return;    // no new name
-    }
+
+    if (oldName == newName) return;			// no change of name
+    if (newName.isEmpty()) return;			// no new name
 
     emit fileRenamed(item, newName);
-    item->branch()->itemRenamed(item);          // update branch's item map
+    item->branch()->itemRenamed(item);			// update branch's item map
 }
 
 FileTreeBranch *FileTreeView::addBranch(const QUrl &path, const QString &name,
