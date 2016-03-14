@@ -36,6 +36,7 @@
 #include <qregexp.h>
 #include <qgridlayout.h>
 #include <qprogressbar.h>
+#include <qpushbutton.h>
 #include <qdebug.h>
 
 #include <kvbox.h>
@@ -130,7 +131,7 @@ OcrEngine::EngineError OcrGocrDialog::setupGui()
             KMessageBox::sorry(this, i18n("The path to the GOCR binary is not configured or is not valid.\n"
                                           "Please enter or check the path in the Kooka configuration."),
                                i18n("GOCR Software Not Found"));
-            //QT5 enableButton(KDialog::User1, false);
+            buttonBox()->button(QDialogButtonBox::Yes)->setEnabled(false);
         }
     }
 

@@ -38,6 +38,7 @@
 #include <qspinbox.h>
 #include <qlayout.h>
 #include <qprogressbar.h>
+#include <qpushbutton.h>
 #include <qdebug.h>
 
 #include <klocalizedstring.h>
@@ -98,7 +99,7 @@ OcrEngine::EngineError OcrOcradDialog::setupGui()
         KMessageBox::sorry(this, i18n("The path to the OCRAD binary is not configured or is not valid.\n"
                                       "Please enter or check the path in the Kooka configuration."),
                            i18n("OCRAD Binary Not Found"));
-        //QT5 enableButton(KDialog::User1, false);
+        buttonBox()->button(QDialogButtonBox::Yes)->setEnabled(false);
     } else {
         getVersion(res);
     }

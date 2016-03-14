@@ -466,13 +466,13 @@ void KookaOcrPage::slotEngineSelected(int i)
 
     case OcrEngine::EngineGocr:
         mOcrBinaryReq->setEnabled(true);
-        //QT5 mOcrBinaryReq->setUrl(KookaPref::tryFindGocr());
+        mOcrBinaryReq->setUrl(QUrl::fromLocalFile(KookaPref::tryFindGocr()));
         msg = OcrGocrEngine::engineDesc();
         break;
 
     case OcrEngine::EngineOcrad:
         mOcrBinaryReq->setEnabled(true);
-        //QT5 mOcrBinaryReq->setUrl(KookaPref::tryFindOcrad());
+        mOcrBinaryReq->setUrl(QUrl::fromLocalFile(KookaPref::tryFindOcrad()));
         msg = OcrOcradEngine::engineDesc();
         break;
 
