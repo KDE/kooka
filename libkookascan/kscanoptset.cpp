@@ -1,21 +1,33 @@
-/* This file is part of the KDE Project
-   Copyright (C) 2000 Klaas Freitag <freitag@suse.de>
-
-   This library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Library General Public
-   License as published by the Free Software Foundation; either
-   version 2 of the License, or (at your option) any later version.
-
-   This library is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   Library General Public License for more details.
-
-   You should have received a copy of the GNU Library General Public License
-   along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
-   Boston, MA 02110-1301, USA.
-*/
+/************************************************************************
+ *									*
+ *  This file is part of Kooka, a scanning/OCR application using	*
+ *  Qt <http://www.qt.io> and KDE Frameworks <http://www.kde.org>.	*
+ *									*
+ *  Copyright (C) 2000-2016 Klaas Freitag <freitag@suse.de>		*
+ *                          Jonathan Marten <jjm@keelhaul.me.uk>	*
+ *									*
+ *  Kooka is free software; you can redistribute it and/or modify it	*
+ *  under the terms of the GNU Library General Public License as	*
+ *  published by the Free Software Foundation and appearing in the	*
+ *  file COPYING included in the packaging of this file;  either	*
+ *  version 2 of the License, or (at your option) any later version.	*
+ *									*
+ *  As a special exception, permission is given to link this program	*
+ *  with any version of the KADMOS OCR/ICR engine (a product of		*
+ *  reRecognition GmbH, Kreuzlingen), and distribute the resulting	*
+ *  executable without including the source code for KADMOS in the	*
+ *  source distribution.						*
+ *									*
+ *  This program is distributed in the hope that it will be useful,	*
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of	*
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the	*
+ *  GNU General Public License for more details.			*
+ *									*
+ *  You should have received a copy of the GNU General Public		*
+ *  License along with this program;  see the file COPYING.  If		*
+ *  not, see <http://www.gnu.org/licenses/>.				*
+ *									*
+ ************************************************************************/
 
 #include "kscanoptset.h"
 
@@ -30,20 +42,19 @@
 #include "kscandevice.h"
 #include "scansettings.h"
 
-#define SAVESET_KEY_SETDESC     "SetDesc"
-#define SAVESET_KEY_SCANNER     "ScannerName"
 
 // Debugging options
-#define DEBUG_BACKUP
+#undef DEBUG_BACKUP
+
 
 // Mappings between a save set name and a configuration file group name
-static QString groupName(const QString &setName)
+static QString groupForSet(const QString &setName)
 {
     return (ScanSettings::self()->saveSetDescItem()->group()+" "+setName);
 }
 
 
-static QString groupSetName(const QString &grpName)
+static QString setNameFromGroup(const QString &grpName)
 {
     QString prefix = ScanSettings::self()->saveSetDescItem()->group();
     if (!grpName.startsWith(prefix)) return (QString::null);
@@ -55,9 +66,7 @@ KScanOptSet::KScanOptSet(const QString &setName)
     mSetName = setName;
     mSetDescription = "";
 
-    if (mSetName.isEmpty()) {
-        mSetName = "default";
-    }
+    if (mSetName.isEmpty()) mSetName = "default";
     //qDebug() << mSetName;
 }
 
@@ -90,11 +99,8 @@ bool KScanOptSet::backupOption(const KScanOption *opt)
 
     const QByteArray val = opt->get();
 #ifdef DEBUG_BACKUP
-    if (contains(optName)) {
-        //qDebug() << "replace" << optName << "with value" << QString(val);
-    } else {
-        //qDebug() << "add" << optName << "with value" << QString(val);
-    }
+    if (contains(optName)) qDebug() << "replace" << optName << "with value" << QString(val);
+    else qDebug() << "add" << optName << "with value" << QString(val);
 #endif // DEBUG_BACKUP
     insert(optName, val);
     return (true);
@@ -117,7 +123,7 @@ void KScanOptSet::saveConfig(const QByteArray &scannerName,
     //qDebug() << "Saving set" << mSetName << "for scanner" << scannerName
     //<< "with" << count() << "options";
 
-    QString grpName = groupName(mSetName);
+    QString grpName = groupForSet(mSetName);
     KConfigGroup grp = KScanDevice::configGroup(grpName);
     grp.writeEntry(ScanSettings::self()->saveSetDescItem()->key(), desc);
     grp.writeEntry(ScanSettings::self()->saveSetScannerItem()->key(), scannerName);
@@ -134,7 +140,7 @@ void KScanOptSet::saveConfig(const QByteArray &scannerName,
 
 bool KScanOptSet::loadConfig(const QByteArray &scannerName)
 {
-    QString grpName = groupName(mSetName);
+    QString grpName = groupForSet(mSetName);
     const KConfigGroup grp = KScanDevice::configGroup(grpName);
     if (!grp.exists()) {
         //qDebug() << "Group" << grpName << "does not exist in configuration!";
@@ -170,15 +176,17 @@ KScanOptSet::StringMap KScanOptSet::readList()
 {
     StringMap ret;
 
-    const QStringList groups = ScanSettings::self()->config()->groupList();
-    for (QStringList::const_iterator it = groups.constBegin(); it!=groups.constEnd(); ++it)
+    ScanSettings::self()->load();			// ensure refreshed
+    KConfig *conf = ScanSettings::self()->config();
+    QStringList groups = conf->groupList();
+    //groups.sort(); qDebug() << groups;
+    foreach (const QString &grp, groups)
     {
-        QString grp = (*it);
-        QString set = groupSetName(grp);
+        QString set = setNameFromGroup(grp);
         if (!set.isEmpty())
         {
             if (set==startupSetName()) continue;	// don't return this one
-            //qDebug() << "group" << grp  << "-> set" << set;
+            qDebug() << "found group" << grp  << "-> set" << set;
             const KConfigGroup g = KScanDevice::configGroup(grp);
             ret[set] = g.readEntry(ScanSettings::self()->saveSetDescItem()->key(), i18n("No description"));
         }
@@ -189,7 +197,8 @@ KScanOptSet::StringMap KScanOptSet::readList()
 
 void KScanOptSet::deleteSet(const QString &setName)
 {
-    const QString grpName = groupName(setName);
+    const QString grpName = groupForSet(setName);
+    //qDebug() << grpName;
     KConfig *conf = ScanSettings::self()->config();
     conf->deleteGroup(grpName);
     conf->sync();
