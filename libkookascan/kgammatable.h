@@ -166,7 +166,7 @@ public:
      * the previous size requested for the table is retained.  If no
      * explicit size has ever been requested, then 256 is assumed.
      *
-     * @return A pointer to the array op values
+     * @return A pointer to the array of values
      **/
     const int *getTable(int size = -1);
 

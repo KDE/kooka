@@ -556,6 +556,7 @@ QWidget *ScanParams::createScannerParams()
                 //connect(so, SIGNAL(guiChange(KScanOption*)), SLOT(slotOptionNotify(KScanOption*)));
 
                 mGammaEditButt = new QPushButton(i18n("Edit Gamma Table..."), this);
+                mGammaEditButt->setIcon(QIcon::fromTheme("document-edit"));
                 connect(mGammaEditButt, &QPushButton::clicked, this, &ScanParams::slotEditCustGamma);
                 setEditCustomGammaTableState();
 
