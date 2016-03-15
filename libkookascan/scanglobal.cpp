@@ -33,10 +33,6 @@
 #include <qdebug.h>
 
 #include <klocalizedstring.h>
-#include <kglobal.h>
-#include <kconfig.h>
-#include <kconfiggroup.h>
-#include <kstandarddirs.h>
 
 #include "kscandevice.h"
 #include "scansettings.h"
@@ -125,7 +121,7 @@ bool ScanGlobal::init()
     SANE_Status status = sane_init(NULL, &authCallback);
     if (status != SANE_STATUS_GOOD) {
         mSaneInitError = true;
-        //qDebug() << "sane_init() failed, status" << status;
+        qDebug() << "sane_init() failed, status" << status;
     } else {
         mSaneInitDone = true;
     }

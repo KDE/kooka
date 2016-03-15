@@ -35,14 +35,13 @@
 #include <qlayout.h>
 #include <qlabel.h>
 #include <qlistwidget.h>
+#include <qstandardpaths.h>
 #include <qdebug.h>
 
 #include <klocalizedstring.h>
 #include <kvbox.h>
-#include <kstandarddirs.h>
 #include <kguiitem.h>
 #include <kiconloader.h>
-#include <kglobal.h>
 
 #include "scanglobal.h"
 #include "scandevices.h"
@@ -137,7 +136,7 @@ QByteArray DeviceSelector::getSelectedDevice() const
     // in the global "scannerrc" file.
     ScanSettings::setStartupScanDevice(dev);
     ScanSettings::setStartupSkipAsk(getShouldSkip());
-    ScanSettings::self()->writeConfig();
+    ScanSettings::self()->save();
    
     return (dev);
 }
@@ -145,7 +144,8 @@ QByteArray DeviceSelector::getSelectedDevice() const
 void DeviceSelector::setScanSources(const QList<QByteArray> &backends)
 {
     const KConfig *typeConf = NULL;
-    QString typeFile = KGlobal::dirs()->findResource("data", "libkookascan/scantypes.dat");
+
+    QString typeFile = QStandardPaths::locate(QStandardPaths::GenericDataLocation, "libkookascan/scantypes.dat");
     //qDebug() << "Scanner type file" << typeFile;
     if (!typeFile.isEmpty()) {
         typeConf = new KConfig(typeFile, KConfig::SimpleConfig);

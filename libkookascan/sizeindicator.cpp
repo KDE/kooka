@@ -21,13 +21,12 @@
 
 #include <qpainter.h>
 #include <qevent.h>
+#include <qdebug.h>
 #include <QLinearGradient>
 
-#include <KLocalizedString>
-#include <QDebug>
-#include <kglobal.h>
+#include <klocalizedstring.h>
 #include <kcolorscheme.h>
-#include <KFormat>
+#include <kformat.h>
 
 SizeIndicator::SizeIndicator(QWidget *parent, long thresh, long crit)
     : QLabel(parent)

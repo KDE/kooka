@@ -48,12 +48,12 @@
 #include <qdebug.h>
 #include <qmimetype.h>
 #include <qmimedatabase.h>
+#include <qlayout.h>
 
 #include <kfiledialog.h>
 #include <klocalizedstring.h>
 #include <kled.h>
 #include <kmessagebox.h>
-#include <khbox.h>
 
 extern "C"
 {
@@ -331,16 +331,19 @@ QWidget *ScanParams::createScannerParams()
         frame->addRow(l, w);
 
         // Selection for either virtual scanner or SANE debug
-        KVBox *vbg = new KVBox(frame);
+
+        QWidget *vbg = new QWidget(frame);
+        QVBoxLayout *vbl = new QVBoxLayout(vbg);
+        vbl->setMargin(0);
 
         QRadioButton *rb1 = new QRadioButton(i18n("SANE Debug (from PNM image)"), vbg);
         rb1->setToolTip(i18n("<qt>Operate in the same way that a real scanner does (including scan area, image processing etc.), but reading from the specified image file. See <a href=\"man:sane-pnm(5)\">sane-pnm(5)</a> for more information."));
+        vbl->addWidget(rb1);
         QRadioButton *rb2 = new QRadioButton(i18n("Virtual Scanner (any image format)"), vbg);
         rb2->setToolTip(i18n("<qt>Do not perform any scanning or processing, but simply read the specified image file. This is for testing the image saving, etc."));
+        vbl->addWidget(rb2);
 
-        if (mScanMode == ScanParams::NormalMode) {
-            mScanMode = ScanParams::SaneDebugMode;
-        }
+        if (mScanMode == ScanParams::NormalMode) mScanMode = ScanParams::SaneDebugMode;
         rb1->setChecked(mScanMode == ScanParams::SaneDebugMode);
         rb2->setChecked(mScanMode == ScanParams::VirtualScannerMode);
 
@@ -671,12 +674,8 @@ void ScanParams::slotSourceSelect()
  */
 void ScanParams::slotVirtScanModeSelect(int but)
 {
-    ScanParams::ScanMode mode;
-    if (but == 0) {
-        mScanMode = ScanParams::SaneDebugMode;    // SANE Debug
-    } else {
-        mScanMode = ScanParams::VirtualScannerMode;    // Virtual Scanner
-    }
+    if (but == 0) mScanMode = ScanParams::SaneDebugMode;	// SANE Debug
+    else mScanMode = ScanParams::VirtualScannerMode;		// Virtual Scanner
     const bool enable = (mScanMode == ScanParams::SaneDebugMode);
 
     mSaneDevice->guiSetEnabled(SANE_NAME_HAND_SCANNER, enable);

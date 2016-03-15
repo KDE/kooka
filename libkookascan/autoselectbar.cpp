@@ -1,26 +1,31 @@
 /************************************************************************
- *                                  *
- *  This file is part of libkscan, a KDE scanning library.      *
- *                                  *
- *  Copyright (C) 2013 Jonathan Marten <jjm@keelhaul.me.uk>     *
- *                                  *
- *  This library is free software; you can redistribute it and/or   *
- *  modify it under the terms of the GNU Library General Public     *
- *  License as published by the Free Software Foundation and appearing  *
- *  in the file COPYING included in the packaging of this file;     *
- *  either version 2 of the License, or (at your option) any later  *
- *  version.                                *
- *                                  *
- *  This program is distributed in the hope that it will be useful, *
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of  *
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the   *
- *  GNU General Public License for more details.            *
- *                                  *
- *  You should have received a copy of the GNU General Public License   *
- *  along with this program;  see the file COPYING.  If not, write to   *
- *  the Free Software Foundation, Inc., 51 Franklin Street,     *
- *  Fifth Floor, Boston, MA 02110-1301, USA.                *
- *                                  *
+ *									*
+ *  This file is part of Kooka, a scanning/OCR application using	*
+ *  Qt <http://www.qt.io> and KDE Frameworks <http://www.kde.org>.	*
+ *									*
+ *  Copyright (C) 2013-2016 Jonathan Marten <jjm@keelhaul.me.uk>	*
+ *									*
+ *  Kooka is free software; you can redistribute it and/or modify it	*
+ *  under the terms of the GNU Library General Public License as	*
+ *  published by the Free Software Foundation and appearing in the	*
+ *  file COPYING included in the packaging of this file;  either	*
+ *  version 2 of the License, or (at your option) any later version.	*
+ *									*
+ *  As a special exception, permission is given to link this program	*
+ *  with any version of the KADMOS OCR/ICR engine (a product of		*
+ *  reRecognition GmbH, Kreuzlingen), and distribute the resulting	*
+ *  executable without including the source code for KADMOS in the	*
+ *  source distribution.						*
+ *									*
+ *  This program is distributed in the hope that it will be useful,	*
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of	*
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the	*
+ *  GNU General Public License for more details.			*
+ *									*
+ *  You should have received a copy of the GNU General Public		*
+ *  License along with this program;  see the file COPYING.  If		*
+ *  not, see <http://www.gnu.org/licenses/>.				*
+ *									*
  ************************************************************************/
 
 #include "autoselectbar.h"
@@ -29,16 +34,18 @@
 #include <qlayout.h>
 #include <qlabel.h>
 #include <qslider.h>
+#include <qdebug.h>
+#include <qicon.h>
+#include <qframe.h>
+#include <qpalette.h>
 
-#include <KLocalizedString>
-#include <QDebug>
-#include <kdialog.h>
-#include <QIcon>
-#include <kcolordialog.h>
+#include <klocalizedstring.h>
 
 #include "autoselectdialog.h"
 #include "kscancontrols.h"
 #include "scansettings.h"
+#include "dialogbase.h"
+
 
 AutoSelectBar::AutoSelectBar(int initialValue, QWidget *parent)
     : QWidget(parent)
@@ -51,7 +58,7 @@ AutoSelectBar::AutoSelectBar(int initialValue, QWidget *parent)
     QLabel *l = new QLabel(i18nc("@title:window", "<qt><b>Auto Select</b>"));
     hbl->addWidget(l);
 
-    hbl->addSpacing(2 * KDialog::spacingHint());
+    hbl->addSpacing(2*DialogBase::horizontalSpacing());
 
     // Threshold setting label
     const KConfigSkeletonItem *item = ScanSettings::self()->previewAutoselThresholdItem();
@@ -69,12 +76,15 @@ AutoSelectBar::AutoSelectBar(int initialValue, QWidget *parent)
     hbl->addWidget(mThresholdSlider);
     hbl->setStretchFactor(mThresholdSlider, 1);
 
-    mColourPatch = new KColorPatch(this);
+    mColourPatch = new QFrame(this);
+    // from kdelibs4support/src/kdeui/kcolordialog.cpp
+    mColourPatch->setFrameStyle(QFrame::StyledPanel|QFrame::Sunken);
     mColourPatch->setMinimumWidth(32);
+    mColourPatch->setAutoFillBackground(true);
     mColourPatch->setToolTip(i18nc("@info:tooltip", "This is the grayscale value of the selected threshold"));
     hbl->addWidget(mColourPatch);
 
-    hbl->addSpacing(KDialog::spacingHint());
+    hbl->addSpacing(DialogBase::horizontalSpacing());
 
     // Refresh/recalculate button
     QToolButton *but = new QToolButton;
@@ -105,7 +115,10 @@ void AutoSelectBar::slotThresholdChanged(int value)
     if (mBgIsWhite) {
         colValue = 255 - colValue;
     }
-    mColourPatch->setColor(qRgb(colValue, colValue, colValue));
+
+    QPalette pal = mColourPatch->palette();
+    pal.setColor(QPalette::Normal, QPalette::Window, qRgb(colValue, colValue, colValue));
+    mColourPatch->setPalette(pal);
     emit thresholdChanged(value);
 }
 

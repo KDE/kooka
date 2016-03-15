@@ -42,10 +42,12 @@
 #include <qlineedit.h>
 #include <qdebug.h>
 #include <qicon.h>
+#include <qimagereader.h>
+#include <qmimetype.h>
+#include <qmimedatabase.h>
 
 #include <klocalizedstring.h>
 #include <kurlrequester.h>
-#include <kimageio.h>
 
 
 //  KScanControl - base class
@@ -351,10 +353,26 @@ KScanFileRequester::KScanFileRequester(QWidget *parent, const QString &text)
     mEntry = new KUrlRequester(this);
     mLayout->addWidget(mEntry);
 
-    QString fileSelector = "*.pnm *.PNM *.pbm *.PBM *.pgm *.PGM *.ppm *.PPM|PNM Image Files (*.pnm,*.pbm,*.pgm,*.ppm)\n";
-    fileSelector += KImageIO::pattern() + "\n";
-    fileSelector += i18n("*|All Files");
-    mEntry->setFilter(fileSelector);
+    QStringList fileSelector;
+    fileSelector.append(i18n("*.pnm *.pbm *.pgm *.ppm|PNM Image Files"));
+
+    QMimeDatabase db;
+    QList<QByteArray> mimeTypes = QImageReader::supportedMimeTypes();
+    foreach (const QByteArray &mimeType, mimeTypes)
+    {
+        QMimeType mime = db.mimeTypeForName(mimeType);
+        if (!mime.isValid()) continue;
+
+        // KF5: Can't use QMimeType::filterString() here, because that returns
+        // an QT format filter string but KUrlRequester::setFilter() expects
+        // a KDE format filter.  It is possible to set a list of MIME type
+        // filters using KUrlRequester::fileDialog()->setMimeTypeFilters(), but
+        // that produces a "deprecated" warning.
+        fileSelector.append(mime.globPatterns().join(' ')+'|'+mime.comment());
+    }
+
+    fileSelector.append(i18n("*|All Files"));
+    mEntry->setFilter(fileSelector.join("\n"));
 
     connect(mEntry, SIGNAL(textChanged(QString)), SIGNAL(settingChanged(QString)));
     connect(mEntry, SIGNAL(returnPressed()), SIGNAL(returnPressed()));

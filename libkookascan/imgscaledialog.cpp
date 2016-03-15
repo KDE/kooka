@@ -1,21 +1,33 @@
-/* This file is part of the KDE Project
-   Copyright (C) 1999 Klaas Freitag <freitag@suse.de>
-
-   This library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Library General Public
-   License as published by the Free Software Foundation; either
-   version 2 of the License, or (at your option) any later version.
-
-   This library is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   Library General Public License for more details.
-
-   You should have received a copy of the GNU Library General Public License
-   along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
-   Boston, MA 02110-1301, USA.
-*/
+/************************************************************************
+ *									*
+ *  This file is part of Kooka, a scanning/OCR application using	*
+ *  Qt <http://www.qt.io> and KDE Frameworks <http://www.kde.org>.	*
+ *									*
+ *  Copyright (C) 1999-2016 Klaas Freitag <freitag@suse.de>		*
+ *                          Jonathan Marten <jjm@keelhaul.me.uk>	*
+ *									*
+ *  Kooka is free software; you can redistribute it and/or modify it	*
+ *  under the terms of the GNU Library General Public License as	*
+ *  published by the Free Software Foundation and appearing in the	*
+ *  file COPYING included in the packaging of this file;  either	*
+ *  version 2 of the License, or (at your option) any later version.	*
+ *									*
+ *  As a special exception, permission is given to link this program	*
+ *  with any version of the KADMOS OCR/ICR engine (a product of		*
+ *  reRecognition GmbH, Kreuzlingen), and distribute the resulting	*
+ *  executable without including the source code for KADMOS in the	*
+ *  source distribution.						*
+ *									*
+ *  This program is distributed in the hope that it will be useful,	*
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of	*
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the	*
+ *  GNU General Public License for more details.			*
+ *									*
+ *  You should have received a copy of the GNU General Public		*
+ *  License along with this program;  see the file COPYING.  If		*
+ *  not, see <http://www.gnu.org/licenses/>.				*
+ *									*
+ ************************************************************************/
 
 #include "imgscaledialog.h"
 
@@ -23,23 +35,21 @@
 #include <qlayout.h>
 #include <qradiobutton.h>
 #include <qlabel.h>
+#include <qlineedit.h>
+#include <qvalidator.h>
 
-#include <KLocalizedString>
-#include <QDebug>
-#include <knumvalidator.h>
-#include <klineedit.h>
+#include <klocalizedstring.h>
 
 /* ############################################################################## */
 
 ImgScaleDialog::ImgScaleDialog(QWidget *parent, int curr_sel)
-    : KDialog(parent)
+    : DialogBase(parent)
 {
     setObjectName("ImgScaleDialog");
 
-    setButtons(KDialog::Ok | KDialog::Cancel);
-    setCaption(i18n("Image Zoom"));
+    setButtons(QDialogButtonBox::Ok|QDialogButtonBox::Cancel);
+    setWindowTitle(i18n("Image Zoom"));
     setModal(true);
-    showButtonSeparator(true);
 
     selected = curr_sel;
 
@@ -119,7 +129,7 @@ ImgScaleDialog::ImgScaleDialog(QWidget *parent, int curr_sel)
     hbox->addLayout(vbox);
     radiosLayout->addLayout(hbox);
 
-    radiosLayout->addSpacing(KDialog::spacingHint());
+    radiosLayout->addSpacing(verticalSpacing());
 
     // Custom Scaler at the bottom:
     hbox = new QHBoxLayout();
@@ -133,12 +143,12 @@ ImgScaleDialog::ImgScaleDialog(QWidget *parent, int curr_sel)
     hbox->addWidget(rbCust);
     radiosGroup->addButton(rbCust, 8);
 
-    leCust = new KLineEdit();
+    leCust = new QLineEdit();
     QString sn;
     sn.setNum(curr_sel);
-    leCust->setValidator(new KIntValidator(leCust));
+    leCust->setValidator(new QIntValidator(5, 1000, leCust));
     leCust->setText(sn);
-    connect(leCust, &KLineEdit::textChanged, this, &ImgScaleDialog::slotCustomChanged);
+    connect(leCust, &QLineEdit::textChanged, this, &ImgScaleDialog::slotCustomChanged);
     hbox->addWidget(leCust);
     hbox->setStretchFactor(leCust, 1);
 
@@ -158,10 +168,10 @@ void ImgScaleDialog::slotCustomChanged(const QString &s)
     int okval = s.toInt(&ok);
     if (ok && okval >= 5 && okval <= 1000) {
         selected = okval;
-        enableButtonOk(true);
+        setButtonEnabled(QDialogButtonBox::Ok, true);
         emit customScaleChange(okval);
     } else {
-        enableButtonOk(false);
+        setButtonEnabled(QDialogButtonBox::Ok, false);
     }
 }
 
