@@ -28,12 +28,7 @@
 #include <qmimedata.h>
 #include <qdebug.h>
 
-#include <kglobalsettings.h>
 #include <kfileitem.h>
-#include <kstandarddirs.h>
-
-#include <kio/job.h>
-#include <kio/global.h>
 
 #include "filetreeviewitem.h"
 #include "filetreebranch.h"

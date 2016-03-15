@@ -13,6 +13,7 @@ set(libfiletree_SRCS
 
 add_library(libfiletree STATIC ${libfiletree_SRCS})
 target_link_libraries(libfiletree
+  Qt5::Widgets
   KF5::KIOCore
-  KF5::KDELibs4Support
+  KF5::KIOWidgets
 )
