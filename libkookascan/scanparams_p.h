@@ -24,8 +24,6 @@
 #include <qlabel.h>
 #include <qgridlayout.h>
 
-#include <kdialog.h>
-
 //  Limits for the scan option and label, to keep them to reasonable sizes
 #define MAX_CONTROL_WIDTH       300
 #define MAX_LABEL_WIDTH         150

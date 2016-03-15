@@ -37,7 +37,7 @@
 #include <qwidget.h>
 
 #include "kscandevice.h"
-#include "scansourcedialog.h"
+//#include "scansourcedialog.h"
 
 class QProgressDialog;
 class QPushButton;
@@ -313,7 +313,7 @@ private:
     QProgressDialog *mProgressDialog;
     KLed *mLed;
 
-    AdfBehaviour adf;
+//    AdfBehaviour adf;
     ScanParams::ScanMode mScanMode;
     ScanSizeSelector *mAreaSelect;
 

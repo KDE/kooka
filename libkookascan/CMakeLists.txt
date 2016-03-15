@@ -52,9 +52,9 @@ set(kookascan_SRCS
   kscanoptset.cpp
   gammadialog.cpp
   gammawidget.cpp
-  scansourcedialog.cpp
+  #scansourcedialog.cpp
   scanparams.cpp
-  massscandialog.cpp
+  #massscandialog.cpp
   deviceselector.cpp
   adddevicedialog.cpp
   imagecanvas.cpp
@@ -73,8 +73,13 @@ add_library(kookascan SHARED ${kookascan_SRCS})
 generate_export_header(kookascan BASE_NAME kookascan)
 target_link_libraries(kookascan
   dialogutil
+  KF5::I18n
+  KF5::ConfigCore
+  KF5::ConfigGui
+  KF5::ConfigWidgets
   KF5::KIOCore
-  KF5::KDELibs4Support
+  KF5::KIOWidgets
+  KF5::IconThemes
 )
 
 if (HAVE_SANE)

@@ -39,7 +39,6 @@
 #include <qdebug.h>
 
 #include <klocalizedstring.h>
-#include <kvbox.h>
 #include <kguiitem.h>
 #include <kiconloader.h>
 

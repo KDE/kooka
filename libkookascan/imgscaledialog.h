@@ -34,7 +34,7 @@
 
 #include "kookascan_export.h"
 
-#include <dialogbase.h>
+#include "dialogbase.h"
 
 class QLineEdit;
 

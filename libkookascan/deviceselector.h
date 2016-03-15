@@ -34,7 +34,8 @@
 
 #include "kookascan_export.h"
 
-#include <dialogbase.h>
+#include "dialogbase.h"
+
 #include <kguiitem.h>
 
 class QListWidget;

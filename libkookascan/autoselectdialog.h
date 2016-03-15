@@ -33,7 +33,7 @@
 
 #include "kookascan_export.h"
 
-#include <dialogbase.h>
+#include "dialogbase.h"
 
 class QComboBox;
 class KScanSlider;

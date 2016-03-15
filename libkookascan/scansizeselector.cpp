@@ -1,34 +1,45 @@
-/* This file is part of the KDE Project
-   Copyright (C) 2008 Jonathan Marten <jjm@keelhaul.me.uk>
-
-   This library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Library General Public
-   License as published by the Free Software Foundation; either
-   version 2 of the License, or (at your option) any later version.
-
-   This library is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   Library General Public License for more details.
-
-   You should have received a copy of the GNU Library General Public License
-   along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
-   Boston, MA 02110-1301, USA.
-*/
+/************************************************************************
+ *									*
+ *  This file is part of Kooka, a scanning/OCR application using	*
+ *  Qt <http://www.qt.io> and KDE Frameworks <http://www.kde.org>.	*
+ *									*
+ *  Copyright (C) 2008-2016 Jonathan Marten <jjm@keelhaul.me.uk>	*
+ *									*
+ *  Kooka is free software; you can redistribute it and/or modify it	*
+ *  under the terms of the GNU Library General Public License as	*
+ *  published by the Free Software Foundation and appearing in the	*
+ *  file COPYING included in the packaging of this file;  either	*
+ *  version 2 of the License, or (at your option) any later version.	*
+ *									*
+ *  As a special exception, permission is given to link this program	*
+ *  with any version of the KADMOS OCR/ICR engine (a product of		*
+ *  reRecognition GmbH, Kreuzlingen), and distribute the resulting	*
+ *  executable without including the source code for KADMOS in the	*
+ *  source distribution.						*
+ *									*
+ *  This program is distributed in the hope that it will be useful,	*
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of	*
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the	*
+ *  GNU General Public License for more details.			*
+ *									*
+ *  You should have received a copy of the GNU General Public		*
+ *  License along with this program;  see the file COPYING.  If		*
+ *  not, see <http://www.gnu.org/licenses/>.				*
+ *									*
+ ************************************************************************/
 
 #include "scansizeselector.h"
 
 #include <qcombobox.h>
 #include <qradiobutton.h>
 #include <qbuttongroup.h>
+#include <qdebug.h>
+#include <qlayout.h>
 #ifdef HAVE_LIBPAPER
 #include <qvector.h>
 #endif
 
-#include <KLocalizedString>
-#include <QDebug>
-#include <kvbox.h>
+#include <klocalizedstring.h>
 
 #ifdef HAVE_LIBPAPER
 extern "C" {
@@ -59,9 +70,9 @@ static QVector<PaperSize> papers;
 #endif
 
 ScanSizeSelector::ScanSizeSelector(QWidget *parent, const QSize &bedSize)
-    : KVBox(parent)
+    : QFrame(parent)
 {
-    //qDebug() << "bed size" << bedSize;
+    qDebug() << "bed size" << bedSize;
 
     bedWidth = bedSize.width();
     bedHeight = bedSize.height();
@@ -100,14 +111,17 @@ ScanSizeSelector::ScanSizeSelector(QWidget *parent, const QSize &bedSize)
 #endif
     }
 
+    QVBoxLayout *vbl = new QVBoxLayout(this);
+
     m_sizeCb = new QComboBox(this);
     m_sizeCb->setToolTip(i18n("<qt>Set the size of the scanned area"));
     connect(m_sizeCb, static_cast<void (QComboBox::*)(int)>(&QComboBox::activated), this, &ScanSizeSelector::slotSizeSelected);
     setFocusProxy(m_sizeCb);
+    vbl->addWidget(m_sizeCb);
 
-    m_sizeCb->addItem(i18n("Full size"));       // index 0
-    m_sizeCb->addItem(i18n("(No selection)"));      // index 1
-    for (int i = 0; sizes[i].name != NULL; ++i) {   // index 2 and upwards
+    m_sizeCb->addItem(i18n("Full size"));		// index 0
+    m_sizeCb->addItem(i18n("(No selection)"));		// index 1
+    for (int i = 0; sizes[i].name != NULL; ++i) {	// index 2 and upwards
         // only those that will fit
         if (sizes[i].width > bedWidth || sizes[i].height > bedHeight) {
             continue;
@@ -123,10 +137,12 @@ ScanSizeSelector::ScanSizeSelector(QWidget *parent, const QSize &bedSize)
     m_portraitRb = new QRadioButton(i18n("Portrait"), this);
     m_portraitRb->setEnabled(false);
     bg->addButton(m_portraitRb);
+    vbl->addWidget(m_portraitRb);
 
     m_landscapeRb = new QRadioButton(i18n("Landscape"), this);
     m_landscapeRb->setEnabled(false);
     bg->addButton(m_landscapeRb);
+    vbl->addWidget(m_landscapeRb);
 
     m_customSize = QRect();
     m_prevSelected = m_sizeCb->currentIndex();

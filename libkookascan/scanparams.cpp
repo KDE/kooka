@@ -50,7 +50,6 @@
 #include <qmimedatabase.h>
 #include <qlayout.h>
 
-#include <kfiledialog.h>
 #include <klocalizedstring.h>
 #include <kled.h>
 #include <kmessagebox.h>
@@ -61,8 +60,8 @@ extern "C"
 }
 
 #include "scanglobal.h"
-#include "scansourcedialog.h"
-#include "massscandialog.h"
+//#include "scansourcedialog.h"
+//#include "massscandialog.h"
 #include "gammadialog.h"
 #include "kgammatable.h"
 #include "kscancontrols.h"
@@ -70,6 +69,7 @@ extern "C"
 #include "kscanoption.h"
 #include "kscanoptset.h"
 #include "scanicons.h"
+#include "dialogbase.h"
 
 //  Debugging options
 #undef DEBUG_ADF
@@ -94,9 +94,9 @@ ScanParamsPage::ScanParamsPage(QWidget *parent, const char *name)
     setObjectName(name);
 
     mLayout = new QGridLayout(this);
-    mLayout->setSpacing(2 * KDialog::spacingHint());
+    mLayout->setSpacing(2*DialogBase::verticalSpacing());
     mLayout->setColumnStretch(2, 1);
-    mLayout->setColumnMinimumWidth(1, KDialog::marginHint());
+    mLayout->setColumnMinimumWidth(1, 2*DialogBase::horizontalSpacing());
 
     mNextRow = 0;
     mPendingGroup = NULL;
@@ -208,8 +208,10 @@ bool ScanParams::connectDevice(KScanDevice *newScanDevice, bool galleryMode)
 
     mSaneDevice = newScanDevice;
     mScanMode = ScanParams::NormalMode;
+#if 0
+    // TOTO: port/update
     adf = ADF_OFF;
-
+#endif
     QLabel *lab = new QLabel(i18n("<qt><b>Scanner&nbsp;Settings</b>"), this);
     lay->addWidget(lab, 0, 0, Qt::AlignLeft);
 
@@ -629,6 +631,8 @@ QWidget *ScanParams::messageScannerProblem()
 
 void ScanParams::slotSourceSelect()
 {
+#if 0
+// TODO: port/update
     AdfBehaviour adf = ADF_OFF;
 
     if (mSourceSelect == NULL) {
@@ -667,6 +671,7 @@ void ScanParams::slotSourceSelect()
     mSourceSelect->apply();
     mSourceSelect->reload();
     mSourceSelect->redrawWidget();
+#endif
 }
 
 /* Slot which is called if the user switches in the gui between
@@ -806,13 +811,18 @@ void ScanParams::slotStartScan()
     //qDebug() << "scan mode=" << mScanMode << "virtfile" << virtfile;
 
     if (mScanMode != ScanParams::VirtualScannerMode) { // acquire via SANE
+#if 0
+// TODO: port/update
         if (adf == ADF_OFF) {
+#endif
             //qDebug() << "Start to acquire image";
             stat = mSaneDevice->acquireScan();
+#if 0
         } else {
             //qDebug() << "ADF Scan not yet implemented :-/";
             // stat = performADFScan();
         }
+#endif
     } else {                    // acquire via Qt-IMGIO
         //qDebug() << "Acquiring from virtual file";
         stat = mSaneDevice->acquireScan(virtfile);
@@ -1111,8 +1121,11 @@ KScanDevice::Status ScanParams::performADFScan(void)
     KScanDevice::Status stat = KScanDevice::Ok;
     bool          scan_on = true;
 
+#if 0
+// TODO: port/update
     MassScanDialog *msd = new MassScanDialog(this);
     msd->show();
+#endif
 
     /* The scan source should be set to ADF by the SourceSelect-Dialog */
 
