@@ -479,7 +479,7 @@ void Kooka::slotUpdateRectangleActions(bool haveSelection)
 //  +========================+==================+======================+
 //  | mirror/rotate          | no               | 1 image              |
 //  +------------------------+------------------+----------------------+
-//  | GalleryShown && FileSelected                                     |
+//  | GalleryShown && FileSelected && !IsSubImage && !HasSubImages     |
 //  +========================+==================+======================+
 //  | create folder          | directory        | directory            |
 //  +------------------------+------------------+----------------------+
@@ -489,29 +489,39 @@ void Kooka::slotUpdateRectangleActions(bool haveSelection)
 //  +------------------------+------------------+----------------------+
 //  | GalleryShown && IsDirectory                                      |
 //  +========================+==================+======================+
-//  | OCR/save/print         | 1                | 1                    |
+//  | OCR/print              | 1                | 1                    |
 //  +------------------------+------------------+----------------------+
-//  | FileSelected                                                     |
+//  | FileSelected && !HasSubImages                                    |
+//  +========================+==================+======================+
+//  | Save                   | 1                | 1                    |
+//  +------------------------+------------------+----------------------+
+//  | FileSelected && !IsSubImage                                      |
 //  +========================+==================+======================+
 //  | unload (dir)           | yes              | yes                  |
 //  | unload (not dir)       | image loaded     | image loaded         |
 //  +------------------------+------------------+----------------------+
-//  | IsDirectory | ((FileSelected | ManySelected) & ImageValid)       |
+//  | IsDirectory | HasSubImages |                                     |
+//  |                    ((FileSelected | ManySelected) & ImageValid)  |
 //  +========================+==================+======================+
 //  | delete (dir)           | 1 not root       | 1 not root           |
 //  | delete (not dir)       | >1               | >1                   |
 //  +------------------------+------------------+----------------------+
-//  | (IsDirectory & !RootSelected) | (FileSelected | ManySelected)    |
+//  | (IsDirectory & !RootSelected) | ((FileSelected | ManySelected)   |
+//  |                                                   & !IsSubImage  |
 //  +========================+==================+======================+
 //  | rename (dir)           | not root         | not root             |
 //  | rename (not dir)       | 1 image          | 1 image              |
 //  +------------------------+------------------+----------------------+
-//  | (IsDirectory & !RootSelected) | FileSelected                     |
+//  | (IsDirectory & !RootSelected) | (FileSelected & !IsSubImage)     |
 //  +========================+==================+======================+
 //  | props (dir)            | yes              | yes                  |
 //  | props (not dir)        | 1 image          | 1 image              |
 //  +------------------------+------------------+----------------------+
 //  | IsDirectory | FileSelected                                       |
+//  +========================+==================+======================+
+//  | Open with              | yes              | not subimage         |
+//  +------------------------+------------------+----------------------+
+//  | !IsSubImage                                                      |
 //  +==================================================================+
 //
 //  It is assumed that only one directory may be selected at a time in
@@ -538,7 +548,7 @@ void Kooka::slotUpdateViewActions(KookaView::StateFlags state)
     e = (state & KookaView::GalleryShown);
     keepZoomAction->setEnabled(e);
 
-    e = (state & KookaView::GalleryShown) && (state & KookaView::FileSelected);
+    e = (state & KookaView::GalleryShown) && (state & KookaView::FileSelected) && !(state & (KookaView::IsSubImage|KookaView::HasSubImages));
     m_imageChangeAllowed = e;
     mirrorVerticallyAction->setEnabled(e);
     mirrorHorizontallyAction->setEnabled(e);
@@ -552,10 +562,13 @@ void Kooka::slotUpdateViewActions(KookaView::StateFlags state)
     e = (state & KookaView::GalleryShown) && (state & KookaView::IsDirectory);
     importImageAction->setEnabled(e);
 
-    e = (state & KookaView::FileSelected);
+    e = (state & KookaView::FileSelected) && !(state & KookaView::HasSubImages);
     ocrAction->setEnabled(e);
-    saveImageAction->setEnabled(e);
     printImageAction->setEnabled(e);
+
+    // TODO: allow this for sub-images (page extraction)
+    e = (state & KookaView::FileSelected) && !(state & KookaView::IsSubImage);
+    saveImageAction->setEnabled(e);
 
     if (state & KookaView::IsDirectory) {
         unloadImageAction->setText(i18n("Unload Folder"));
@@ -574,17 +587,20 @@ void Kooka::slotUpdateViewActions(KookaView::StateFlags state)
         deleteImageAction->setText(i18n("Delete Image"));
         renameImageAction->setText(i18n("Rename Image"));
 
-        e = (state & (KookaView::FileSelected | KookaView::ManySelected)) &&
-            (state & KookaView::ImageValid);
+        e = ((state & (KookaView::FileSelected | KookaView::ManySelected)) &&
+            (state & KookaView::ImageValid)) || (state & KookaView::HasSubImages);
         unloadImageAction->setEnabled(e);
 
-        e = (state & (KookaView::FileSelected | KookaView::ManySelected));
+        e = (state & (KookaView::FileSelected | KookaView::ManySelected)) && !(state & KookaView::IsSubImage);
         deleteImageAction->setEnabled(e);
 
-        e = (state & KookaView::FileSelected);
+        e = (state & KookaView::FileSelected) && !(state & KookaView::IsSubImage);
         renameImageAction->setEnabled(e);
         propsImageAction->setEnabled(e);
     }
+
+    // TODO: allow this for sub-images
+    openWithMenu->setEnabled(!(state & KookaView::IsSubImage));
 
     if (!(state & (KookaView::IsDirectory | KookaView::FileSelected | KookaView::ManySelected))) {
         slotUpdateRectangleActions(false);

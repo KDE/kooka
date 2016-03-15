@@ -143,6 +143,7 @@ QString KookaImage::loadFromUrl(const KUrl &url)
     bool isTiff = false;				// do we have a TIFF file?
     bool haveTiff = false;				// can it be read via TIFF lib?
 
+    //qDebug() << url;
     if (!url.isLocalFile()) {
         return (i18n("Loading non-local images is not yet implemented"));
     }

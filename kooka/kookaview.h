@@ -79,21 +79,24 @@ class KookaView : public QTabWidget
     Q_OBJECT
 
 public:
-    enum MirrorType { MirrorVertical, MirrorHorizontal, MirrorBoth};
+    enum MirrorType { MirrorVertical, MirrorHorizontal, MirrorBoth };
     enum TabPage { TabScan = 0, TabGallery = 1, TabOcr = 2, TabNone = 0xFF };
 
     /**
      * To avoid a proliferation of boolean parameters, these flags are
      * used to indicate the state of the gallery and image viewers.
      */
-    enum StateFlag {
-        GalleryShown = 0x01,                // in Gallery/OCR mode
-        PreviewValid = 0x02,                // scan preview valid
-        ImageValid   = 0x04,                // viewer image loaded
-        IsDirectory  = 0x08,                // directory selected
-        FileSelected = 0x10,                // 1 file selected
-        ManySelected = 0x20,                // multiple selection
-        RootSelected = 0x40             // root is selected
+    enum StateFlag
+    {
+        GalleryShown = 0x001,				// in Gallery/OCR mode
+        PreviewValid = 0x002,				// scan preview valid
+        ImageValid   = 0x004,				// viewer image loaded
+        IsDirectory  = 0x008,				// directory selected
+        FileSelected = 0x010,				// 1 file selected
+        ManySelected = 0x020,				// multiple selection
+        RootSelected = 0x040,				// root is selected
+        IsSubImage   = 0x080,				// a subimage selected
+        HasSubImages = 0x100				// contains subimages
     };
     Q_DECLARE_FLAGS(StateFlags, StateFlag)
 

@@ -65,6 +65,9 @@
 #include "scanicons.h"
 
 
+#undef DEBUG_LOADING
+
+
 // FileTreeViewItem is not the same as KDE3's KFileTreeViewItem in that
 // fileItem() used to return a KFileItem *, allowing the item to be modified
 // through the pointer.  Now it returns a KFileItem which is a value copy of the
@@ -439,7 +442,9 @@ void ScanGallery::slotDecorate(FileTreeViewItem *item)
 {
     if (item == NULL) return;
 
-    //qDebug() << item->url();
+#ifdef DEBUG_LOADING
+    qDebug() << item->url();
+#endif // DEBUG_LOADING
     const bool isSubImage = item->url().hasFragment();	// is this a sub-image?
 
     if (!item->isDir())					// directories are done elsewhere
@@ -703,7 +708,9 @@ void ScanGallery::loadImageForItem(FileTreeViewItem *item)
     const KFileItem *kfi = item->fileItem();
     if (kfi->isNull()) return;
 
-    //qDebug() << "loading" << item->url();
+#ifdef DEBUG_LOADING
+    qDebug() << "loading" << item->url();
+#endif // DEBUG_LOADING
     QString ret = QString::null;			// no error so far
 
     ImageFormat format = getImgFormat(item);		// check for valid image format
@@ -716,6 +723,10 @@ void ScanGallery::loadImageForItem(FileTreeViewItem *item)
         KookaImage *img = imageForItem(item);
         if (img == NULL)				// image not already loaded
         {
+#ifdef DEBUG_LOADING
+            qDebug() << "need to load image";
+#endif // DEBUG_LOADING
+
             // The image needs to be loaded. Possibly it is a multi-page image.
             // If it is, the KookaImage has a subImageCount larger than one. We
             // create an subimage item for every subimage, but do not yet load
@@ -729,9 +740,15 @@ void ScanGallery::loadImageForItem(FileTreeViewItem *item)
 
                 if (img->subImagesCount() > 1)		// see if it has subimages
                 {
+#ifdef DEBUG_LOADING
                     qDebug() << "subimage count" << img->subImagesCount();
+#endif // DEBUG_LOADING
                     if (item->childCount()==0)		// check not already created
                     {
+#ifdef DEBUG_LOADING
+                        qDebug() << "need to create subimages";
+#endif // DEBUG_LOADING
+
                         // Create items for each subimage
                         QIcon subImgIcon = QIcon::fromTheme("edit-copy");
 
@@ -754,9 +771,24 @@ void ScanGallery::loadImageForItem(FileTreeViewItem *item)
 
                             subImgItem->setText(0, i18n("Sub-image %1", i));
                             subImgItem->setIcon(0, subImgIcon);
+
+                            // TODO: this gives wrong results in the case where a subimage
+                            // is loaded, then unloaded, then clicked on again.  We rely
+                            // on the subImgImg's created here to identify the item as
+                            // being a subimage, but on unload that information is lost
+                            // and the result is loading the subimages as a child of this
+                            // subimage (a grandchild of the container).
+                            //
+                            // Maybe a better approach: create the FTVIs as here, but
+                            // simply set the URL to identify them as subimages using
+                            // the fragment.  Make KookaImage::loadFromUrl() understand
+                            // a fragment and extractNow() the subimage there instead of
+                            // below.  slotImageArrived() will then do the equivalent of
+                            // the 3 lines below.
                             KookaImage *subImgImg = new KookaImage(i, img);
                             subImgImg->setFileItem(&newKfi);
                             subImgItem->setClientData(subImgImg);
+
                             item->addChild(subImgItem);
                         }
                     }
@@ -764,15 +796,22 @@ void ScanGallery::loadImageForItem(FileTreeViewItem *item)
             }
             else delete img;				// image loading failed
         }
+#ifdef DEBUG_LOADING
+        else qDebug() << "have an image already";
+#endif // DEBUG_LOADING
 
         if (img!=NULL)					// already loaded, or loaded above
         {
             if (img->isSubImage())			// this is a subimage
             {
-                //qDebug() << "this is a subimage";
+#ifdef DEBUG_LOADING
+                qDebug() << "this is a subimage";
+#endif // DEBUG_LOADING
                 if (img->isNull())			// if not already loaded,
                 {
-                    //qDebug() << "extracting subimage";
+#ifdef DEBUG_LOADING
+                    qDebug() << "extracting subimage";
+#endif // DEBUG_LOADING
                     img->extractNow();			// extract it from parent
                 }
             }

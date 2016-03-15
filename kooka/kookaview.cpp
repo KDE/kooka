@@ -611,28 +611,28 @@ void KookaView::updateSelectionState()
     const KFileItem *fi = (ftvi != NULL ? ftvi->fileItem() : NULL);
     const bool scanmode = (mCurrentTab == KookaView::TabScan);
 
-    if (scanmode) {                 // Scan mode
-        if (mPreviewCanvas->getImageCanvas()->hasImage()) {
-            state |= KookaView::PreviewValid;
-        }
-    } else {                    // Gallery/OCR mode
+    if (scanmode)					// Scan mode
+    {
+        if (mPreviewCanvas->getImageCanvas()->hasImage()) state |= KookaView::PreviewValid;
+    }
+    else						// Gallery/OCR mode
+    {
         state |= KookaView::GalleryShown;
     }
 
-    if (fi != NULL && !fi->isNull()) {      // have a gallery selection
-        if (fi->isDir()) {
-            state |= KookaView::IsDirectory;
-        } else {
+    if (fi != NULL && !fi->isNull())			// have a gallery selection
+    {
+        if (fi->isDir()) state |= KookaView::IsDirectory;
+        else
+        {
             state |= KookaView::FileSelected;
+            if (fi->url().hasFragment()) state |= KookaView::IsSubImage;
+            if (ftvi->childCount()>0) state |= KookaView::HasSubImages;
         }
     }
 
-    if (ftvi != NULL && ftvi->isRoot()) {
-        state |= KookaView::RootSelected;
-    }
-    if (imageViewer()->hasImage()) {
-        state |= KookaView::ImageValid;
-    }
+    if (ftvi != NULL && ftvi->isRoot()) state |= KookaView::RootSelected;
+    if (imageViewer()->hasImage()) state |= KookaView::ImageValid;
 
     ////qDebug() << "state" << state;
     emit signalViewSelectionState(state);
