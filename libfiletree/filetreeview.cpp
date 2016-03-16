@@ -491,7 +491,9 @@ QUrl FileTreeView::selectedUrl() const
 
 FileTreeViewItem *FileTreeView::highlightedFileTreeViewItem() const
 {
-    return (static_cast<FileTreeViewItem *>(currentItem()));
+    QList<QTreeWidgetItem *> items = selectedItems();
+    if (items.isEmpty()) return (NULL);
+    return (static_cast<FileTreeViewItem *>(items.first()));
 }
 
 const KFileItem *FileTreeView::highlightedFileItem() const
