@@ -56,7 +56,7 @@ DialogBase::DialogBase(QWidget *pnt)
     mMainWidget = NULL;					// caller not provided yet
     mStateSaver = new DialogStateSaver(this);		// use our own as default
 
-    mButtonBox = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel);
+    mButtonBox = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel, this);
     connect(mButtonBox, &QDialogButtonBox::accepted, this, &DialogBase::accept);
     connect(mButtonBox, &QDialogButtonBox::rejected, this, &DialogBase::reject);
 
@@ -66,7 +66,7 @@ DialogBase::DialogBase(QWidget *pnt)
 
 DialogBase::~DialogBase()
 {
-    qDebug() << "done";
+    //qDebug() << "done";
 }
 
 
