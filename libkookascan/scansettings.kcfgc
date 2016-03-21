@@ -9,3 +9,5 @@ UseEnumTypes=false
 
 IncludeFiles=kookascan_export.h
 Visibility=KOOKASCAN_EXPORT
+TranslationSystem=kde
+TranslationDomain=libkookascan
