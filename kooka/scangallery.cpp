@@ -47,6 +47,7 @@
 #include <klocalizedstring.h>
 #include <kstandardguiitem.h>
 #include <kconfigskeleton.h>
+#include <krecentdirs.h>
 
 #include <kio/global.h>
 #include <kio/copyjob.h>
@@ -1051,21 +1052,27 @@ void ScanGallery::slotExportFile()
 
     QString filter;
     ImageFormat format = getImgFormat(curr);
-    if (format.isValid()) filter = format.mime().comment() + "(*."+format.extension()+")";
-// TODO: do we need the below?
-//     filter += "*|" + i18n("All Files");
+    if (format.isValid()) filter = format.mime().filterString();
+    else filter = i18n("All Files (*)");
 
-// TODO: recent dirs
-//    QString initial = "kfiledialog:///exportImage/" + fromUrl.fileName();
+    const QString recentClass(":exportImage");
+    QString recentDir = KRecentDirs::dir(recentClass);
+    if (!recentDir.isEmpty() && !recentDir.endsWith('/')) recentDir += '/';
+    recentDir += fromUrl.fileName();
+
     QUrl fileName = QFileDialog::getSaveFileUrl(this, i18nc("@title:window", "Export Image"),
-                                                QUrl(), filter);
-
-
-
+                                                QUrl::fromLocalFile(recentDir), filter);
     if (!fileName.isValid()) return;			// didn't get a file name
-    if (fromUrl == fileName) return;			// can't save over myself
+    if (fileName==fromUrl) return;			// can't save over myself
 
-    /* Since it is asynchron, we will never know if it succeeded. */
+    if (fileName.isLocalFile())
+    {
+        QString rd = fileName.adjusted(QUrl::RemoveFilename).path();
+        KRecentDirs::add(recentClass, rd);
+    }
+
+    // Since the copy operation is asynchronous,
+    // we will never know if it succeeds.
     ImgSaver::copyImage(fromUrl, fileName);
 }
 
@@ -1080,11 +1087,20 @@ void ScanGallery::slotImportFile()
         impTarget = pa->url();
     }
 
-// TODO: recent dirs
+    QString filter = ImageFilter::qtFilterString(ImageFilter::Reading, ImageFilter::AllImages|ImageFilter::AllFiles);
+
+    const QString recentClass(":importImage");
+    QString recentDir = KRecentDirs::dir(recentClass);
+    if (!recentDir.isEmpty() && !recentDir.endsWith('/')) recentDir += '/';
+
     QUrl impUrl = QFileDialog::getOpenFileUrl(this, i18n("Import Image File to Gallery"),
-                                              QUrl(), ImageFilter::qtFilterString(ImageFilter::Reading, ImageFilter::AllImages|ImageFilter::AllFiles));
-//	QUrl("kfiledialog:///importImage"), this, i18n("Import Image File to Gallery"));
+                                              QUrl::fromLocalFile(recentDir), filter);
     if (!impUrl.isValid()) return;
+    if (impUrl.isLocalFile())
+    {
+        QString rd = impUrl.adjusted(QUrl::RemoveFilename).path();
+        KRecentDirs::add(recentClass, rd);
+    }
 							// use the name of the source file
     impTarget = impTarget.resolved(QUrl(impUrl.fileName()));
     m_nextUrlToShow = impTarget;

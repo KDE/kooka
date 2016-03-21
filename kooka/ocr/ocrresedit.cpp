@@ -46,6 +46,7 @@
 
 #include <klocalizedstring.h>
 #include <kmessagebox.h>
+#include <krecentdirs.h>
 
 #include "ocrengine.h"
 
@@ -154,13 +155,20 @@ void OcrResEdit::slotSelectWord(const QPoint &pos)
 
 void OcrResEdit::slotSaveText()
 {
-    // TODO: recent dirs
+
+    const QString recentClass(":saveOCR");
+    QString recentDir = KRecentDirs::dir(recentClass);
+    if (!recentDir.isEmpty() && !recentDir.endsWith('/')) recentDir += '/';
+
     QString fileName = QFileDialog::getSaveFileName(this, i18n("Save OCR Result Text"),
-                                                    QString::null, i18n("Text File (*.txt)"));
+                                                    recentDir, i18n("Text File (*.txt)"));
 //     KUrl("kfiledialog:///saveOCR"),
 //                        "text/plain",
 //                        this,
     if (fileName.isEmpty()) return;
+
+    QString rd = QFileInfo(fileName).path();
+    KRecentDirs::add(recentClass, rd);
 
     QFile file(fileName);
     if (!file.open(QIODevice::WriteOnly)) {
