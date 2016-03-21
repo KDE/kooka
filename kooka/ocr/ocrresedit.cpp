@@ -46,9 +46,9 @@
 
 #include <klocalizedstring.h>
 #include <kmessagebox.h>
-#include <krecentdirs.h>
 
 #include "ocrengine.h"
+#include "recentsaver.h"
 
 //  The OCR results are stored in our text document.  Each OCR'ed word has
 //  properties stored in its QTextCharFormat recording the word rectangle
@@ -155,20 +155,11 @@ void OcrResEdit::slotSelectWord(const QPoint &pos)
 
 void OcrResEdit::slotSaveText()
 {
-
-    const QString recentClass(":saveOCR");
-    QString recentDir = KRecentDirs::dir(recentClass);
-    if (!recentDir.isEmpty() && !recentDir.endsWith('/')) recentDir += '/';
-
+    RecentSaver saver("saveOCR");
     QString fileName = QFileDialog::getSaveFileName(this, i18n("Save OCR Result Text"),
-                                                    recentDir, i18n("Text File (*.txt)"));
-//     KUrl("kfiledialog:///saveOCR"),
-//                        "text/plain",
-//                        this,
+                                                    saver.recentPath(), i18n("Text File (*.txt)"));
     if (fileName.isEmpty()) return;
-
-    QString rd = QFileInfo(fileName).path();
-    KRecentDirs::add(recentClass, rd);
+    saver.save(fileName);
 
     QFile file(fileName);
     if (!file.open(QIODevice::WriteOnly)) {
