@@ -35,9 +35,9 @@
 #include <qfile.h>
 #include <qfileinfo.h>
 #include <qdebug.h>
+#include <qtemporaryfile.h>
 
 #include <kprocess.h>
-#include <ktemporaryfile.h>
 #include <klocalizedstring.h>
 #include <kmessagebox.h>
 
@@ -85,8 +85,7 @@ QString OcrOcradEngine::engineDesc()
 
 QString getTempFileName(const QString &suffix)
 {
-    KTemporaryFile tmpFile;             // temporary file for results
-    tmpFile.setSuffix(suffix);
+    QTemporaryFile tmpFile(QDir::tempPath()+"/ocrocradtemp_XXXXXX"+suffix);
     tmpFile.setAutoRemove(false);
     if (!tmpFile.open()) {
         //qDebug() << "error creating temporary file for" << suffix;
@@ -94,7 +93,7 @@ QString getTempFileName(const QString &suffix)
     }
 
     QString tmpName = QFile::encodeName(tmpFile.fileName());
-    tmpFile.close();                    // just want its name
+    tmpFile.close();					// just want its name
     return (tmpName);
 }
 
@@ -201,8 +200,8 @@ void OcrOcradEngine::slotOcradExited(int exitCode, QProcess::ExitStatus exitStat
                                 m_ocrProcess->program().first(),
                                 (exitStatus == QProcess::CrashExit ? i18n("crashed") : i18n("failed")),
                                 exitCode,
-                                KUrl(m_tempStdoutLog).url(),
-                                KUrl(m_tempStderrLog).url()),
+                                QUrl::fromLocalFile(m_tempStdoutLog).url(),
+                                QUrl::fromLocalFile(m_tempStderrLog).url()),
                            i18n("OCR Command Failed"),
                            KMessageBox::AllowLink);
         parseRes = false;
@@ -368,8 +367,7 @@ QString OcrOcradEngine::readORF(const QString &fileName)
                               rx1.cap(4).toInt(), rx1.cap(5).toInt());
             //qDebug() << "Current block" << currBlock << "rect" << blockRect;
         } else if (line.startsWith("lines ")) { // lines in this block
-            int lineCnt = line.mid(6).toInt();
-            //qDebug() << "Block line count" << lineCnt;
+            //qDebug() << "Block line count" << line.mid(6).toInt();
         } else if (line.startsWith("line ")) {  // start of text line
             startLine();
 

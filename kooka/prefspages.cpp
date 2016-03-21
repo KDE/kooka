@@ -46,10 +46,9 @@
 #include <kurlrequester.h>
 #include <kseparator.h>
 #include <kconfigskeleton.h>
-#include <kimageio.h>
-#include <kfiledialog.h>
 
 #include "scansettings.h"
+#include "imagefilter.h"
 
 #include "kookapref.h"
 #include "kookagallery.h"
@@ -179,7 +178,7 @@ KookaSavingPage::KookaSavingPage(KPageDialog *parent)
     mAskSaveFormat->setToolTip(item->toolTip());
     mLayout->addWidget(mAskSaveFormat);
 
-    mLayout->addSpacing(2 * KDialog::spacingHint());
+    mLayout->addSpacing(2 * DialogBase::verticalSpacing());
 
     item = KookaSettings::self()->saverAskForFilenameItem();
     mAskFileName = new QCheckBox(item->label(), this);
@@ -189,7 +188,7 @@ KookaSavingPage::KookaSavingPage(KPageDialog *parent)
     QButtonGroup *bg = new QButtonGroup(this);
     QGridLayout *gl = new QGridLayout;
     gl->setVerticalSpacing(0);
-    gl->setColumnMinimumWidth(0, 2 * KDialog::marginHint());
+    gl->setColumnMinimumWidth(0, 3*DialogBase::verticalSpacing());
 
     item = KookaSettings::self()->saverAskBeforeScanItem();
     Q_ASSERT(item!=NULL);
@@ -300,11 +299,11 @@ KookaThumbnailPage::KookaThumbnailPage(KPageDialog *parent)
     mTileSelector = new KUrlRequester(this);
     mTileSelector->setToolTip(item->toolTip());
     mTileSelector->setMode(KFile::File|KFile::ExistingOnly|KFile::LocalOnly);
-    mTileSelector->fileDialog()->setMimeTypeFilters(KImageIO::mimeTypes(KImageIO::Reading));
+    mTileSelector->setFilter(ImageFilter::kdeFilter(ImageFilter::Reading));
     gl->addWidget(mTileSelector, 3, 1);
     lab->setBuddy(mTileSelector);
 
-    gl->setRowMinimumHeight(4, 2 * KDialog::spacingHint());
+    gl->setRowMinimumHeight(4, 2*DialogBase::verticalSpacing());
 
     /* Preview size */
     item = KookaSettings::self()->thumbnailPreviewSizeItem();
@@ -396,7 +395,7 @@ KookaOcrPage::KookaOcrPage(KPageDialog *parent)
     lab->setBuddy(mEngineCombo);
     lay->addWidget(lab, 0, 0, Qt::AlignRight);
 
-    lay->setRowMinimumHeight(1, KDialog::marginHint());
+    lay->setRowMinimumHeight(1, 2*DialogBase::verticalSpacing());
 
     mOcrBinaryReq = new KUrlRequester(this);
     mOcrBinaryReq->setMode(KFile::File | KFile::ExistingOnly | KFile::LocalOnly);
@@ -406,11 +405,11 @@ KookaOcrPage::KookaOcrPage(KPageDialog *parent)
     lab->setBuddy(mOcrBinaryReq);
     lay->addWidget(lab, 2, 0, Qt::AlignRight);
 
-    lay->setRowMinimumHeight(3, KDialog::marginHint());
+    lay->setRowMinimumHeight(3, 2*DialogBase::verticalSpacing());
 
     KSeparator *sep = new KSeparator(Qt::Horizontal, this);
     lay->addWidget(sep, 4, 0, 1, 2);
-    lay->setRowMinimumHeight(5, KDialog::marginHint());
+    lay->setRowMinimumHeight(5, 2*DialogBase::verticalSpacing());
 
     mDescLabel = new QLabel("?", this);
     mDescLabel->setOpenExternalLinks(true);

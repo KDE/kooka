@@ -32,11 +32,12 @@
 #ifndef IMGSAVER_H
 #define IMGSAVER_H
 
-#include <kurl.h>
+#include <qurl.h>
 
 #include "imageformat.h"
 #include "imagemetainfo.h"
 
+class QWidget;
 class KookaImage;
 
 
@@ -82,7 +83,7 @@ public:
      * be saved.  If it does not exist, it will be created at this point.
      * The default is the current gallery root.
      **/
-    ImgSaver(const KUrl &dir = KUrl());
+    ImgSaver(const QUrl &dir = QUrl());
 
     /**
      * Save an image.
@@ -98,7 +99,7 @@ public:
      * @note The @c dir parameter to the constructor is ignored.
      **/
     ImgSaver::ImageSaveStatus saveImage(const QImage *image,
-                                        const KUrl &url,
+                                        const QUrl &url,
                                         const ImageFormat &format,
                                         const QString &subformat = QString::null);
 
@@ -161,7 +162,7 @@ public:
      * @note If the @p toUrl and the @p fromurl both do have a file name
      * extensions, then they must resolve to the same MIME type.
      **/
-    static bool copyImage(const KUrl &fromUrl, const KUrl &toUrl, QWidget *overWidget = NULL);
+    static bool copyImage(const QUrl &fromUrl, const QUrl &toUrl, QWidget *overWidget = NULL);
 
     /**
      * Rename a image file.
@@ -183,7 +184,7 @@ public:
      * @note If the @p toUrl and the @p fromurl both do have a file name
      * extensions, then they must resolve to the same MIME type.
      **/
-    static bool renameImage(const KUrl &fromUrl, const KUrl &toUrl, bool askExt = false, QWidget *overWidget = NULL);
+    static bool renameImage(const QUrl &fromUrl, const QUrl &toUrl, bool askExt = false, QWidget *overWidget = NULL);
 
     /**
      * Save an image to a temporary file.
@@ -222,7 +223,7 @@ public:
      *
      * @return Save location
      **/
-    KUrl saveURL() const
+    QUrl saveURL() const
     {
         return (mSaveUrl);
     }
@@ -232,7 +233,7 @@ public:
      *
      * @return Save location
      **/
-    KUrl lastURL() const
+    QUrl lastURL() const
     {
         return (mLastUrl);
     }
@@ -248,14 +249,14 @@ private:
 
     ImgSaver::ImageSaveStatus getFilenameAndFormat(ImageMetaInfo::ImageType type);
 
-    QString m_saveDirectory;                // dir where the image should be saved
+    QUrl m_saveDirectory;				// dir where the image should be saved
     QByteArray mLastFormat;
-    KUrl mLastUrl;
+    QUrl mLastUrl;
 
     bool m_saveAskFormat;
     bool m_saveAskFilename;
 
-    KUrl mSaveUrl;
+    QUrl mSaveUrl;
     ImageFormat mSaveFormat;
     QString mSaveSubformat;
 };

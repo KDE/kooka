@@ -38,23 +38,22 @@
 #include <qheaderview.h>
 #include <qmenu.h>
 #include <qdebug.h>
+#include <qinputdialog.h>
+#include <qfiledialog.h>
+#include <qmimedata.h>
 
-#include <kglobal.h>
 #include <kmessagebox.h>
 #include <kpropertiesdialog.h>
-#include <kinputdialog.h>
-#include <kfiledialog.h>
 #include <klocalizedstring.h>
 #include <kstandardguiitem.h>
-#include <kimageio.h>
 #include <kconfigskeleton.h>
 
 #include <kio/global.h>
 #include <kio/copyjob.h>
+#include <kio/deletejob.h>
+#include <kio/mkdirjob.h>
 #include <kio/pixmaploader.h>
 #include <kio/jobuidelegate.h>
-// TODO: eliminate the below (deprecated)
-#include <kio/netaccess.h>
 
 #include "imgsaver.h"
 #include "kookaimage.h"
@@ -62,6 +61,7 @@
 #include "kookasettings.h"
 
 #include "imagemetainfo.h"
+#include "imagefilter.h"
 #include "scanicons.h"
 
 
@@ -113,8 +113,10 @@ ScanGallery::ScanGallery(QWidget *parent)
     connect(this, SIGNAL(dropped(QDropEvent*,FileTreeViewItem*)),
             SLOT(slotUrlsDropped(QDropEvent*,FileTreeViewItem*)));
 
-    connect(this, SIGNAL(currentItemChanged(QTreeWidgetItem*,QTreeWidgetItem*)),
-            SLOT(slotItemHighlighted(QTreeWidgetItem*)));
+//     connect(this, SIGNAL(currentItemChanged(QTreeWidgetItem*,QTreeWidgetItem*)),
+//             SLOT(slotItemHighlighted(QTreeWidgetItem*)));
+     connect(this, SIGNAL(itemSelectionChanged()),
+             SLOT(slotItemHighlighted()));
     connect(this, SIGNAL(itemActivated(QTreeWidgetItem*,int)),
             SLOT(slotItemActivated(QTreeWidgetItem*)));
     connect(this, SIGNAL(fileRenamed(FileTreeViewItem*,QString)),
@@ -175,7 +177,7 @@ void ScanGallery::restoreHeaderState(int forIndex)
 void ScanGallery::openRoots()
 {
     /* standard root always exists, ImgRoot creates it */
-    KUrl rootUrl(KookaPref::galleryRoot());
+    QUrl rootUrl = QUrl::fromLocalFile(KookaPref::galleryRoot());
     //qDebug() << "Standard root" << rootUrl.url();
 
     m_defaultBranch = openRoot(rootUrl, i18n("Kooka Gallery"));
@@ -265,7 +267,7 @@ static QString localFileName(const FileTreeViewItem *item)
     }
 
     bool isLocal = false;
-    KUrl u = item->fileItem()->mostLocalUrl(isLocal);
+    QUrl u = item->fileItem()->mostLocalUrl(isLocal);
     if (!isLocal) {
         return (QString::null);
     }
@@ -281,7 +283,14 @@ static KookaImage *imageForItem(const FileTreeViewItem *item)
 
 void ScanGallery::slotItemHighlighted(QTreeWidgetItem *curr)
 {
+    if (curr==NULL)
+    {
+        QList<QTreeWidgetItem *> selItems = selectedItems();
+        if (!selItems.isEmpty()) curr = selItems.first();
+    }
     FileTreeViewItem *item = static_cast<FileTreeViewItem *>(curr);
+    if (item==NULL) return;
+
     //qDebug() << item->url();
 
     if (item->isDir()) {
@@ -312,7 +321,7 @@ void ScanGallery::slotItemActivated(QTreeWidgetItem *curr)
     }
 
     //  Notify the new directory, if it has changed
-    KUrl newDir = itemDirectory(item);
+    QUrl newDir = itemDirectory(item);
     if (m_currSelectedDir != newDir) {
         m_currSelectedDir = newDir;
         emit galleryPathChanged(item->branch(), itemDirectoryRelative(item));
@@ -528,7 +537,7 @@ void ScanGallery::updateParent(const FileTreeViewItem *curr)
         return;
     }
 
-    KUrl dir = itemDirectory(curr);
+    QUrl dir = itemDirectory(curr);
     //qDebug() << "Updating directory" << dir;
     branch->updateDirectory(dir);
 
@@ -552,23 +561,20 @@ void ScanGallery::slotRenameItems()
 
 bool ScanGallery::slotFileRenamed(FileTreeViewItem *item, const QString &newName)
 {
-    if (item->isRoot()) {
-        return (false);    // cannot rename root here
-    }
+    if (item->isRoot()) return (false);			// cannot rename root here
 
-    KUrl urlFrom = item->url();
+    QUrl urlFrom = item->url();
     //qDebug() << "url" << urlFrom << "->" << newName;
     QString oldName = urlFrom.fileName();
 
-    KUrl urlTo(urlFrom);
-    urlTo.setFileName(newName);
+    QUrl urlTo(urlFrom.resolved(QUrl(newName)));
 
     /* clear selection, because the renamed image comes in through
      * kdirlister again
      */
     // slotUnloadItem(item);                // unnecessary, bug 68532
     // because of "note new URL" below
-    //qDebug() << "Renaming " << urlFrom << "->" << urlTo;
+    qDebug() << "Renaming " << urlFrom << "->" << urlTo;
 
     //setSelected(item,false);
 
@@ -652,7 +658,7 @@ QUrl ScanGallery::itemDirectory(const FileTreeViewItem *item) const
 */
 QString ScanGallery::itemDirectoryRelative(const FileTreeViewItem *item) const
 {
-    const KUrl u = itemDirectory(item);
+    const QUrl u = itemDirectory(item);
     const FileTreeBranch *branch = item->branch();
     if (branch == NULL) {
         return (u.path());    // no branch, can this ever happen?
@@ -687,19 +693,19 @@ void ScanGallery::slotSelectDirectory(const QString &branchName, const QString &
     //qDebug() << "branch" << branchName << "path" << relPath;
 
     FileTreeViewItem *item;
-    if (!branchName.isEmpty()) {
+    if (!branchName.isEmpty())				// find in specified branch
+    {
         item = findItemInBranch(branchName, relPath);
-    } else {
+    }
+    else						// assume the 1st/only branch
+    {
         item = findItemInBranch(branches().at(0), relPath);
     }
-    // assume the 1st/only branch
-    if (item == NULL) {
-        return;
-    }
+    if (item == NULL) return;				// not found in branch
 
     scrollToItem(item);
     setCurrentItem(item);
-    slotItemActivated(item);                // load thumbnails, etc.
+    slotItemActivated(item);				// load thumbnails, etc.
 }
 
 void ScanGallery::loadImageForItem(FileTreeViewItem *item)
@@ -882,7 +888,7 @@ QString ScanGallery::getCurrImageFileName(bool withPath) const
             result = localFileName(curr);
         } else {
             // TODO: the next 2 lines don't make sense
-            KUrl url(localFileName(curr));
+            QUrl url(localFileName(curr));
             url = curr->url();
             result = url.fileName();
         }
@@ -921,7 +927,7 @@ bool ScanGallery::prepareToSave(const ImageMetaInfo *info)
     mSavedTo = curr;                    // note for selecting later
 
     // Create the ImgSaver to use later
-    KUrl dir(itemDirectory(curr));          // where new image will go
+    QUrl dir(itemDirectory(curr));          // where new image will go
     mSaver = new ImgSaver(dir);             // create saver to use later
 
     if (info != NULL) {             // have image information,
@@ -963,13 +969,13 @@ void ScanGallery::addImage(const QImage *img, const ImageMetaInfo *info)
 
     ImgSaver::ImageSaveStatus isstat = mSaver->saveImage(img);
     // try to save the image
-    KUrl lurl = mSaver->lastURL();          // record where it ended up
+    QUrl lurl = mSaver->lastURL();          // record where it ended up
 
     if (isstat != ImgSaver::SaveStatusOk &&     // image saving failed
             isstat != ImgSaver::SaveStatusCanceled) {   // user cancelled, just ignore
         KMessageBox::error(this, i18n("<qt>Could not save the image<br><filename>%2</filename><br><br>%1",
                                       mSaver->errorString(isstat),
-                                      lurl.prettyUrl()),
+                                      lurl.url(QUrl::PreferLocalFile)),
                            i18n("Image Save Error"));
     }
 
@@ -1046,24 +1052,23 @@ void ScanGallery::slotExportFile()
         return;
     }
 
-    KUrl fromUrl(curr->url());
+    QUrl fromUrl(curr->url());
 
     QString filter;
     ImageFormat format = getImgFormat(curr);
-    if (format.isValid()) {
-        filter = "*." + format.extension() + "|" + format.mime().comment() + "\n";
-    }
+    if (format.isValid()) filter = format.mime().comment() + "(*."+format.extension()+")";
 // TODO: do we need the below?
-    filter += "*|" + i18n("All Files");
+//     filter += "*|" + i18n("All Files");
 
-    QString initial = "kfiledialog:///exportImage/" + fromUrl.fileName();
-    KUrl fileName = KFileDialog::getSaveUrl(KUrl(initial), filter, this);
-    if (!fileName.isValid()) {
-        return;    // didn't get a file name
-    }
-    if (fromUrl == fileName) {
-        return;    // can't save over myself
-    }
+// TODO: recent dirs
+//    QString initial = "kfiledialog:///exportImage/" + fromUrl.fileName();
+    QUrl fileName = QFileDialog::getSaveFileUrl(this, i18nc("@title:window", "Export Image"),
+                                                QUrl(), filter);
+
+
+
+    if (!fileName.isValid()) return;			// didn't get a file name
+    if (fromUrl == fileName) return;			// can't save over myself
 
     /* Since it is asynchron, we will never know if it succeeded. */
     ImgSaver::copyImage(fromUrl, fileName);
@@ -1072,31 +1077,29 @@ void ScanGallery::slotExportFile()
 void ScanGallery::slotImportFile()
 {
     FileTreeViewItem *curr = highlightedFileTreeViewItem();
-    if (! curr) {
-        return;
-    }
+    if (curr==NULL) return;
 
-    KUrl impTarget = curr->url();
-
-    if (! curr->isDir()) {
+    QUrl impTarget = curr->url();
+    if (!curr->isDir()) {
         FileTreeViewItem *pa = static_cast<FileTreeViewItem *>(curr->parent());
         impTarget = pa->url();
     }
-    //qDebug() << "Importing to" << impTarget;
 
-    KUrl impUrl = KFileDialog::getImageOpenUrl(KUrl("kfiledialog:///importImage"), this, i18n("Import Image File to Gallery"));
-    if (impUrl.isEmpty()) {
-        return;
-    }
-
-    impTarget.addPath(impUrl.fileName());       // append the name of the sourcefile to the path
+// TODO: recent dirs
+    QUrl impUrl = QFileDialog::getOpenFileUrl(this, i18n("Import Image File to Gallery"),
+                                              QUrl(), ImageFilter::qtFilterString(ImageFilter::Reading, ImageFilter::AllImages|ImageFilter::AllFiles));
+//	QUrl("kfiledialog:///importImage"), this, i18n("Import Image File to Gallery"));
+    if (!impUrl.isValid()) return;
+							// use the name of the source file
+    impTarget = impTarget.resolved(QUrl(impUrl.fileName()));
     m_nextUrlToShow = impTarget;
+    qDebug() << "Importing" << impUrl << "->" << impTarget;
     ImgSaver::copyImage(impUrl, impTarget);
 }
 
 void ScanGallery::slotUrlsDropped(QDropEvent *ev, FileTreeViewItem *item)
 {
-    KUrl::List urls = ev->mimeData()->urls();
+    QList<QUrl> urls = ev->mimeData()->urls();
     if (urls.isEmpty()) {
         return;
     }
@@ -1104,23 +1107,17 @@ void ScanGallery::slotUrlsDropped(QDropEvent *ev, FileTreeViewItem *item)
     //qDebug() << "onto" << (item == NULL ? "NULL" : item->url().prettyUrl())
     //<< "srcs" << urls.count() << "first" << urls.first();
 
-    if (item == NULL) {
-        return;
-    }
-    KUrl dest = item->url();
+    if (item == NULL) return;
+    QUrl dest = item->url();
 
     // Check whether the drop is on top of a directory (in which case we
     // want to move/copy into it) or a file (move/copy into its containing
     // directory).
-    if (!item->isDir()) {
-        dest.setFileName(QString::null);
-    }
-    dest.adjustPath(KUrl::AddTrailingSlash);
-    //qDebug() << "resolved destination" << dest;
+    if (!item->isDir()) dest = dest.adjusted(QUrl::RemoveFilename);
+    qDebug() << "resolved destination" << dest;
 
     // Make the last URL to copy the one to select next
-    KUrl nextSel = dest;
-    nextSel.addPath(urls.back().fileName(KUrl::ObeyTrailingSlash));
+    QUrl nextSel = dest.resolved(QUrl(urls.back().fileName()));
     m_nextUrlToShow = nextSel;
 
     KIO::Job *job;
@@ -1200,7 +1197,7 @@ void ScanGallery::slotDeleteItems()
         return;
     }
 
-    KUrl urlToDel = curr->url();            // item to be deleted
+    QUrl urlToDel = curr->url();            // item to be deleted
     bool isDir = curr->isDir();             // deleting a folder?
     QTreeWidgetItem *nextToSelect = curr->treeWidget()->itemBelow(curr);
     // select this afterwards
@@ -1209,12 +1206,12 @@ void ScanGallery::slotDeleteItems()
     if (isDir) {
         s = i18n("<qt>Do you really want to permanently delete the folder<br>"
                  "<filename>%1</filename><br>"
-                 "and all of its contents? It cannot be restored.", urlToDel.pathOrUrl());
+                 "and all of its contents? It cannot be restored.", urlToDel.url(QUrl::PreferLocalFile));
         dontAskKey = "AskForDeleteDirs";
     } else {
         s = i18n("<qt>Do you really want to permanently delete the image<br>"
                  "<filename>%1</filename>?<br>"
-                 "It cannot be restored.", urlToDel.pathOrUrl());
+                 "It cannot be restored.", urlToDel.url(QUrl::PreferLocalFile));
         dontAskKey = "AskForDeleteFiles";
     }
 
@@ -1227,12 +1224,13 @@ void ScanGallery::slotDeleteItems()
     }
 
     slotUnloadItem(curr);
-    //qDebug() << "Deleting" << urlToDel;
-    /* Since we are currently talking about local files here, NetAccess is OK */
-    if (!KIO::NetAccess::del(urlToDel, NULL)) {
+    qDebug() << "Deleting" << urlToDel;
+    KIO::DeleteJob *job = KIO::del(urlToDel);
+    if (!job->exec())
+    {
         KMessageBox::error(this, i18n("<qt>Could not delete the image or folder<br><filename>%2</filename><br><br>%1",
-                                      KIO::NetAccess::lastErrorString(),
-                                      urlToDel.prettyUrl()),
+                                      job->errorString(),
+                                      urlToDel.url(QUrl::PreferLocalFile)),
                            i18n("File Delete Error"));
         return;
     }
@@ -1264,40 +1262,34 @@ void ScanGallery::slotDeleteItems()
 /* ----------------------------------------------------------------------- */
 void ScanGallery::slotCreateFolder()
 {
-    bool ok;
-    QString folder = KInputDialog::getText(i18n("New Folder"),
-                                           i18n("Name for the new folder:"), QString::null,
-                                           &ok, this);
+    QString folder = QInputDialog::getText(this, i18n("New Folder"),
+                                           i18n("Name for the new folder:"));
+    if (folder.isEmpty()) return;
 
-    if (ok) {
-        /* KIO create folder goes here */
+    FileTreeViewItem *item = highlightedFileTreeViewItem();
+    if (item==NULL) return;
 
-        FileTreeViewItem *it = highlightedFileTreeViewItem();
-        if (it) {
-            KUrl url = it->url();
+    // The GUI ensures that the action is only enabled if the current
+    // item is a directory.  Hence, we can assume that it is and ensure
+    // that its path ends with a slash before setting the file name.
+    QUrl url = item->url().adjusted(QUrl::StripTrailingSlash);
+    url.setPath(url.path()+'/');
+    url = url.resolved(QUrl(folder));
+    qDebug() << "Creating folder" << url;
 
-            /* If a directory is selected, the filename needs not to be deleted */
-            if (! it->isDir()) {
-                url.setFileName("");
-            }
-            /* add the folder name from user input */
-            url.addPath(folder);
-            //qDebug() << "Creating folder" << url;
+    /* Since the new directory arrives in the packager in the newItems-slot, we set a
+     * variable urlToSelectOnArrive here. The newItems-slot will honor it and select
+     * the treeviewitem with that url.
+     */
+    slotSetNextUrlToSelect(url);
 
-            /* Since the new directory arrives in the packager in the newItems-slot, we set a
-             * variable urlToSelectOnArrive here. The newItems-slot will honor it and select
-             * the treeviewitem with that url.
-             */
-            slotSetNextUrlToSelect(url);
-
-            if (! KIO::NetAccess::mkdir(url, 0, -1)) {
-                //qDebug() << "Error: creation of" << url << "failed!";
-            } else {
-                /* created successfully */
-                /* open the branch if necessary and select the new folder */
-
-            }
-        }
+    KIO::MkdirJob *job = KIO::mkdir(url);
+    if (!job->exec())
+    {
+        KMessageBox::error(this, i18n("<qt>Could not create the folder<br><filename>%2</filename><br><br>%1",
+                                      job->errorString(),
+                                      url.url(QUrl::PreferLocalFile)),
+                           i18n("Folder Create Error"));
     }
 }
 

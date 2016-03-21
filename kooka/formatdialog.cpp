@@ -32,18 +32,19 @@
 
 #include <qlayout.h>
 #include <qlabel.h>
+#include <qcheckbox.h>
 #include <qcombobox.h>
+#include <qpushbutton.h>
 #include <qlineedit.h>
 #include <qlistwidget.h>
 #include <qdebug.h>
 #include <qicon.h>
 #include <qmimetype.h>
 #include <qmimedatabase.h>
+#include <qimagewriter.h>
 
-#include <kdialog.h>
 #include <kseparator.h>
 #include <klocalizedstring.h>
-#include <kimageio.h>
 #include <kconfigskeleton.h>
 
 #include "imageformat.h"
@@ -54,6 +55,9 @@ struct formatInfo {
     const char *mime;
     const char *helpString;
     int recForTypes;
+// TODO: also need an "allowed for types" field (a superset of recForTypes),
+// so that, e.g. PGM or PPM will not be shown for a 1-bit image.
+// Make recForTypes and this a QFlags
 };
 
 static struct formatInfo formats[] = {
@@ -208,25 +212,28 @@ true color images with optional lossless compression.\
     { NULL, NULL, 0 }
 };
 
-static QString sLastFormat = QString::null;     // format last used, whether
-// remembered or not
+static QString sLastFormat = QString::null;		// format last used, whether
+							// remembered or not
 
 FormatDialog::FormatDialog(QWidget *parent, ImageMetaInfo::ImageType type,
                            bool askForFormat, const ImageFormat &format,
                            bool askForFilename, const QString &filename)
-    : KDialog(parent),
-      mFormat(format),                  // save these to return, if
-      mFilename(filename)               // they are not requested
+    : DialogBase(parent),
+      mFormat(format),					// save these to return, if
+      mFilename(filename)				// they are not requested
 {
     setObjectName("FormatDialog");
 
     //qDebug();
 
     setModal(true);
-    setButtons(KDialog::Ok | KDialog::Cancel | KDialog::User1);
-    setCaption(askForFormat ? i18n("Save Assistant") : i18n("Save Scan"));
-    showButtonSeparator(false);             // we'll add our own later,
-    // otherwise length isn't consistent
+    // KDE4 buttons: Ok  Cancel  User1=Select Format
+    // KF5 buttons:  Ok  Cancel  Yes=SelectFormat
+    setButtons(QDialogButtonBox::Ok|QDialogButtonBox::Cancel|QDialogButtonBox::Yes);
+    setWindowTitle(askForFormat ? i18n("Save Assistant") : i18n("Save Scan"));
+
+    setButtonSeparatorShown(false);			// we'll add our own later,
+							// otherwise length isn't consistent
     QWidget *page = new QWidget(this);
     setMainWidget(page);
 
@@ -239,19 +246,18 @@ FormatDialog::FormatDialog(QWidget *parent, ImageMetaInfo::ImageType type,
     mExtensionLabel = NULL;
     mFilenameEdit = NULL;
 
-    if (!mFormat.isValid()) {
-        askForFormat = true;    // must ask if none
-    }
-
+    if (!mFormat.isValid()) askForFormat = true;	// must ask if none
     mWantAssistant = false;
 
     QGridLayout *gl = new QGridLayout(page);
+    gl->setMargin(0);
     int row = 0;
 
     QLabel *l1;
     KSeparator *sep;
 
-    if (askForFormat) {                 // format selector section
+    if (askForFormat)					// format selector section
+    {
         l1 = new QLabel(i18n("<qt>Select a format to save the scanned image.<br>This is a <b>%1</b>.",
                              ImgSaver::picTypeAsString(type)), page);
         gl->addWidget(l1, row, 0, 1, 3);
@@ -267,20 +273,36 @@ FormatDialog::FormatDialog(QWidget *parent, ImageMetaInfo::ImageType type,
 
         mFormatList = new QListWidget(page);
 
-        // Clean up the list that we get from KImageIO (=Qt).  The raw list
-        // contains mixed case, spaces and duplicates.
-        QStringList supportedTypes = KImageIO::types(KImageIO::Writing);
+        // TODO: the output from all this is mMimeTypes, so move to ImageFormat
+        // and make it a once-only initialisation.
 
-        QStringList formatList;
-        for (QStringList::const_iterator it = supportedTypes.constBegin();
-                it != supportedTypes.constEnd(); ++it) {
-            QString type = (*it).toUpper().trimmed();
-            if (!formatList.contains(type)) {
-                formatList.append(type);
-            }
+        // Each of the lists that we get from Qt (supported image formats and
+        // supported MIME types) is sorted alphabetically.  That means that
+        // there is no correlation between the two lists.  The formats list
+        // may also contain duplicates, e.g. "jpeg" and "jpg" both correspond
+        // to MIME type image/jpeg.
+        //
+        // However, it appears that the Qt image format is actually a file
+        // name extension.  That means that we can obtain the MIME type by
+        // finding the type for a file with that extension.
+
+        QList<QByteArray> supportedFormats = QImageWriter::supportedImageFormats();
+        //qDebug() << "have" << supportedFormats.count() << "image formats:" << supportedFormats;
+        QList<QByteArray> supportedTypes = QImageWriter::supportedMimeTypes();
+        //qDebug() << "have" << supportedTypes.count() << "mime types:" << supportedTypes;
+
+        // Although the format list from standard Qt 5 (unlike Qt 4) does not
+        // appear to contain any duplicates or mixed case, it is always possible
+        // that a plugin could introduce some.  So the apparently pointless loop
+        // here filters the list.
+        QList<QByteArray> formatList;
+        foreach (const QByteArray &format, supportedFormats)
+        {
+            const QByteArray f = format.toLower();
+            if (!formatList.contains(f)) formatList.append(f);
         }
         qDebug() << "have" << formatList.count() << "image types"
-                 << "from" << supportedTypes.count() << "supported";
+                 << "from" << supportedFormats.count() << "supported";
 
         // Even after filtering the list as above, there will be MIME type
         // duplicates (e.g. JPG and JPEG both map to image/jpeg and produce
@@ -288,20 +310,26 @@ FormatDialog::FormatDialog(QWidget *parent, ImageMetaInfo::ImageType type,
         // duplicate MIME types.
         //
         // As a side effect, this completely eliminates any formats that do
-        // not have a defined KDE MIME type.  None of those affected (currently
+        // not have a defined MIME type.  None of those affected (currently
         // BW, RGBA, XV) seem to be of any use.
+
+        QMimeDatabase db;
         mMimeTypes.clear();
-        foreach (const QString &format, formatList)
+        foreach (const QByteArray &format, formatList)
         {
-            QMimeType mime = ImageFormat(format.toLocal8Bit()).mime();
-            if (!mime.isValid()) continue;
-            if (mime.isDefault()) continue;
+            QMimeType mime = db.mimeTypeForFile(QString("a.")+format, QMimeDatabase::MatchExtension);
+            if (!mime.isValid() || mime.isDefault())
+            {
+                qDebug() << "No MIME type for format" << format;
+                continue;
+            }
 
             // ImageFormat::formatForMime() should now work even in the presence
             // of MIME aliases, but double check that it works at this stage.
             ImageFormat fmt = ImageFormat::formatForMime(mime);
-            if (!fmt.isValid()) {
-                qDebug() << "Cannot use format" << format << "- MIME type" << mime.name() << "does not map back to format";
+            if (!fmt.isValid())
+            {
+                qDebug() << "MIME type" << mime.name() << "does not map back to format" << format;
                 continue;
             }
 
@@ -368,13 +396,13 @@ FormatDialog::FormatDialog(QWidget *parent, ImageMetaInfo::ImageType type,
         gl->addWidget(mDontAskCheck, row, 0, 1, 3, Qt::AlignLeft);
         ++row;
 
-        buildFormatList(mRecOnlyCheck->isChecked());    // now have this setting
-
-        showButton(KDialog::User1, false);      // don't want this button
+        buildFormatList(mRecOnlyCheck->isChecked());	// now have this setting
+							// don't want this button
+        buttonBox()->button(QDialogButtonBox::Yes)->setVisible(false);
     }
 
     gl->setColumnStretch(1, 1);
-    gl->setColumnMinimumWidth(1, KDialog::marginHint());
+    gl->setColumnMinimumWidth(1, horizontalSpacing());
 
     if (askForFormat && askForFilename) {
         sep = new KSeparator(Qt::Horizontal, page);
@@ -382,7 +410,7 @@ FormatDialog::FormatDialog(QWidget *parent, ImageMetaInfo::ImageType type,
         ++row;
     }
 
-    if (askForFilename) {               // file name section
+    if (askForFilename) {				// file name section
         l1 = new QLabel(i18n("File name:"), page);
         gl->addWidget(l1, row, 0, 1, 3);
         ++row;
@@ -397,7 +425,7 @@ FormatDialog::FormatDialog(QWidget *parent, ImageMetaInfo::ImageType type,
         ++row;
 
         if (!askForFormat) {
-            setButtonText(KDialog::User1, i18n("Select Format..."));
+            buttonBox()->button(QDialogButtonBox::Yes)->setText(i18n("Select Format..."));
         }
     }
 
@@ -405,34 +433,33 @@ FormatDialog::FormatDialog(QWidget *parent, ImageMetaInfo::ImageType type,
     gl->addWidget(sep, row, 0, 1, 3);
     ++row;
 
-    if (mFormatList != NULL) {          // have the format selector
-        // preselect the remembered format
-        setSelectedFormat(format);
-    } else {                    // no format selector, but
-        // asking for a file name
-        showExtension(format);              // show extension it will have
+    if (mFormatList != NULL)				// have the format selector
+    {
+        setSelectedFormat(format);			// preselect the remembered format
+    }
+    else						// no format selector, but
+    {							// asking for a file name
+        showExtension(format);				// show extension it will have
     }
 
-    connect(this, &FormatDialog::okClicked, this, &FormatDialog::slotOk);
-    connect(this, &FormatDialog::user1Clicked, this, &FormatDialog::slotUser1);
+    connect(buttonBox()->button(QDialogButtonBox::Ok), &QPushButton::clicked, this, &FormatDialog::slotOk);
+    connect(buttonBox()->button(QDialogButtonBox::Yes), &QPushButton::clicked, this, &FormatDialog::slotUser1);
 }
 
 void FormatDialog::showEvent(QShowEvent *ev)
 {
-    KDialog::showEvent(ev);
+    DialogBase::showEvent(ev);
 
-    if (mFilenameEdit != NULL) {            // asking for a file name
-        mFilenameEdit->setFocus();          // set focus to that
-        mFilenameEdit->selectAll();         // highight for editing
+    if (mFilenameEdit != NULL) {			// asking for a file name
+        mFilenameEdit->setFocus();			// set focus to that
+        mFilenameEdit->selectAll();			// highight for editing
     }
 }
 
 void FormatDialog::showExtension(const ImageFormat &format)
 {
-    if (mExtensionLabel == NULL) {
-        return;    // not showing this
-    }
-    mExtensionLabel->setText("." + format.extension()); // show extension it will have
+    if (mExtensionLabel == NULL) return;		// not showing this
+    mExtensionLabel->setText("." + format.extension());	// show extension it will have
 }
 
 void FormatDialog::formatSelected(QListWidgetItem *item)
@@ -441,7 +468,7 @@ void FormatDialog::formatSelected(QListWidgetItem *item)
 
     if (item == NULL) {					// nothing is selected
         mHelpLabel->setText(i18n("No format selected."));
-        enableButtonOk(false);
+        setButtonEnabled(QDialogButtonBox::Ok, false);
 
         mFormatList->clearSelection();
         if (mExtensionLabel != NULL) {
@@ -483,10 +510,9 @@ void FormatDialog::formatSelected(QListWidgetItem *item)
 
 void FormatDialog::check_subformat(const ImageFormat &format)
 {
-    if (mSubformatCombo == NULL) {
-        return;    // not showing this
-    }
-    mSubformatCombo->setEnabled(false);         // not yet implemented
+    if (mSubformatCombo == NULL) return;		// not showing this
+
+    mSubformatCombo->setEnabled(false);			// not yet implemented
     mSubformatLabel->setEnabled(false);
 }
 
@@ -561,26 +587,22 @@ QString FormatDialog::getFilename() const
 
 QByteArray FormatDialog::getSubFormat() const
 {
-    return ("");                     // Not supported yet...
+    return ("");					// Not supported yet...
 }
 
 void FormatDialog::checkValid()
 {
-    bool ok = true;                 // so far, anyway
+    bool ok = true;					// so far, anyway
 
-    if (mFormatList != NULL && mFormatList->selectedItems().count() == 0) {
-        ok = false;
-    }
-    if (mFilenameEdit != NULL && mFilenameEdit->text().isEmpty()) {
-        ok = false;
-    }
-    enableButtonOk(ok);
+    if (mFormatList != NULL && mFormatList->selectedItems().count() == 0) ok = false;
+    if (mFilenameEdit != NULL && mFilenameEdit->text().isEmpty()) ok = false;
+    setButtonEnabled(QDialogButtonBox::Ok, ok);
 }
 
 void FormatDialog::buildFormatList(bool recOnly)
 {
     if (mFormatList == NULL) return;			// not showing this
-    //qDebug() << "recOnly" << recOnly << "for type" << mImageType;
+    qDebug() << "recOnly" << recOnly << "for type" << mImageType;
 
     mFormatList->clear();
     foreach (const QMimeType &mime, mMimeTypes)
@@ -599,6 +621,7 @@ void FormatDialog::buildFormatList(bool recOnly)
 
             if (!formatOk) continue;			// this format not to be shown
         }
+
         // add format to list
         QListWidgetItem *item = new QListWidgetItem(QIcon::fromTheme(mime.iconName()),
                 mime.comment(), mFormatList);
@@ -608,7 +631,7 @@ void FormatDialog::buildFormatList(bool recOnly)
         mFormatList->addItem(item);
     }
 
-    formatSelected(NULL);               // selection has been cleared
+    formatSelected(NULL);				// selection has been cleared
 }
 
 void FormatDialog::slotOk()
@@ -617,8 +640,6 @@ void FormatDialog::slotOk()
         KookaSettings::setSaverOnlyRecommendedTypes(mRecOnlyCheck->isChecked());
         KookaSettings::self()->save();			// save state of this option
     }
-
-    accept();
 }
 
 void FormatDialog::slotUser1()
@@ -634,4 +655,10 @@ void FormatDialog::forgetRemembered()
     KConfigGroup grp = KookaSettings::self()->config()->group(ski->group());
     grp.deleteGroup();
     grp.sync();
+}
+
+
+bool FormatDialog::alwaysUseFormat() const
+{
+    return (mDontAskCheck != NULL ? mDontAskCheck->isChecked() : false);
 }

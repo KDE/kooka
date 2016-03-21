@@ -1,27 +1,33 @@
-/***************************************************************************
-                             -------------------
-    begin                : Fri Jun 30 2000
-    copyright            : (C) 2000 by Klaas Freitag
-    email                : freitag@suse.de
- ***************************************************************************/
-
-/***************************************************************************
- *                                                                         *
- *  This file may be distributed and/or modified under the terms of the    *
- *  GNU General Public License version 2 as published by the Free Software *
- *  Foundation and appearing in the file COPYING included in the           *
- *  packaging of this file.                                                *
- *
- *  As a special exception, permission is given to link this program       *
- *  with any version of the KADMOS ocr/icr engine of reRecognition GmbH,   *
- *  Kreuzlingen and distribute the resulting executable without            *
- *  including the source code for KADMOS in the source distribution.       *
- *
- *  As a special exception, permission is given to link this program       *
- *  with any edition of Qt, and distribute the resulting executable,       *
- *  without including the source code for Qt in the source distribution.   *
- *                                                                         *
- ***************************************************************************/
+/************************************************************************
+ *									*
+ *  This file is part of Kooka, a scanning/OCR application using	*
+ *  Qt <http://www.qt.io> and KDE Frameworks <http://www.kde.org>.	*
+ *									*
+ *  Copyright (C) 2000-2016 Klaas Freitag <freitag@suse.de>		*
+ *                          Jonathan Marten <jjm@keelhaul.me.uk>	*
+ *									*
+ *  Kooka is free software; you can redistribute it and/or modify it	*
+ *  under the terms of the GNU Library General Public License as	*
+ *  published by the Free Software Foundation and appearing in the	*
+ *  file COPYING included in the packaging of this file;  either	*
+ *  version 2 of the License, or (at your option) any later version.	*
+ *									*
+ *  As a special exception, permission is given to link this program	*
+ *  with any version of the KADMOS OCR/ICR engine (a product of		*
+ *  reRecognition GmbH, Kreuzlingen), and distribute the resulting	*
+ *  executable without including the source code for KADMOS in the	*
+ *  source distribution.						*
+ *									*
+ *  This program is distributed in the hope that it will be useful,	*
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of	*
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the	*
+ *  GNU General Public License for more details.			*
+ *									*
+ *  You should have received a copy of the GNU General Public		*
+ *  License along with this program;  see the file COPYING.  If		*
+ *  not, see <http://www.gnu.org/licenses/>.				*
+ *									*
+ ************************************************************************/
 
 #include "ocrgocrengine.h"
 
@@ -35,13 +41,12 @@
 #include <qregexp.h>
 #include <qfile.h>
 #include <qdir.h>
-#include <qstringlist.h>
+#include <qtemporaryfile.h>
+#include <qtemporarydir.h>
+#include <qdebug.h>
 
-#include <QDebug>
 #include <kprocess.h>
-#include <ktempdir.h>
-#include <KLocalizedString>
-#include <ktemporaryfile.h>
+#include <klocalizedstring.h>
 #include <kmessagebox.h>
 
 #include "imgsaver.h"
@@ -50,6 +55,7 @@
 #include "ocrgocrdialog.h"
 
 static const char *possibleResultFiles[] = { "out30.png", "out20.png", "out30.bmp", "out20.bmp", NULL };
+
 
 OcrGocrEngine::OcrGocrEngine(QWidget *parent)
     : OcrEngine(parent)
@@ -87,14 +93,14 @@ QString OcrGocrEngine::engineDesc()
                  "for more information on GOCR."));
 }
 
+// TODO: similar function used for GOCR and OCRAD
 static QString newTempFile(const QString &suffix)
 {
-    KTemporaryFile tf;
-    tf.setSuffix(suffix);
-    tf.setAutoRemove(false);                // we will do this later
-    tf.open();                      // create the file
-    QString result = tf.fileName();         // save its assigned name
-    tf.close();                     // don't need it any more
+    QTemporaryFile tf(QDir::tempPath()+"/ocrgocrtemp_XXXXXX"+suffix);
+    tf.setAutoRemove(false);				// we will do this later
+    tf.open();						// create the file
+    QString result = tf.fileName();			// save its assigned name
+    tf.close();						// don't need it any more
     return (result);
 }
 
@@ -124,11 +130,11 @@ void OcrGocrEngine::startProcess(OcrBaseDialog *dia, const KookaImage *img)
     m_ocrProcess = new KProcess();          // start new GOCR process
     Q_CHECK_PTR(m_ocrProcess);
 
-    m_ocrResultText = QString::null;            // clear buffer for capturing
-
-    m_tempDir = new KTempDir();             // new unique temporary directory
-    m_ocrProcess->setWorkingDirectory(m_tempDir->name());
-    // run process in there
+    m_ocrResultText = QString::null;			// clear buffer for capturing
+							// new unique temporary directory
+    m_tempDir = new QTemporaryDir(QDir::tempPath()+"/ocrgocrdir_XXXXXX");
+    m_ocrProcess->setWorkingDirectory(m_tempDir->path());
+							// run process in there
     connect(m_ocrProcess, SIGNAL(finished(int,QProcess::ExitStatus)), SLOT(slotGOcrExited(int,QProcess::ExitStatus)));
     connect(m_ocrProcess, SIGNAL(readyReadStandardOutput()), SLOT(slotGOcrStdout()));
 
@@ -217,7 +223,7 @@ void OcrGocrEngine::slotGOcrExited(int exitCode, QProcess::ExitStatus exitStatus
     //qDebug() << "Finished splitting";
 
     // Find the GOCR result image
-    QDir dir(m_tempDir->name());
+    QDir dir(m_tempDir->path());
     const char **prf = possibleResultFiles;
     while (*prf != NULL) {              // search for result files
         QString ri = dir.absoluteFilePath(*prf);
@@ -259,7 +265,7 @@ QStringList OcrGocrEngine::tempFiles(bool retain)
     result << m_inputFile << m_resultFile << m_stderrFile << m_ocrResultFile;
 
     if (m_tempDir != NULL) {
-        result << m_tempDir->name();
+        result << m_tempDir->path();
         m_tempDir->setAutoRemove(!retain);
         delete m_tempDir;               // autoRemove will do the rest
         m_tempDir = NULL;
@@ -298,8 +304,6 @@ void OcrGocrEngine::slotGOcrStdout()
             subProgress = rx2b.capturedTexts()[2].toInt();
         }
 
-        if (progress > 0) {
-            emit ocrProgress(progress, subProgress);
-        }
+        if (progress > 0) emit ocrProgress(progress, subProgress);
     }
 }

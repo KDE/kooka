@@ -101,7 +101,9 @@ FileTreeBranch::FileTreeBranch(FileTreeView *parent,
 
 QUrl FileTreeBranch::rootUrl() const
 {
-    return (m_startURL);
+    QUrl u = m_startURL.adjusted(QUrl::StripTrailingSlash);
+    u.setPath(u.path()+'/');
+    return (u);
 }
 
 void FileTreeBranch::setRoot(FileTreeViewItem *r)
@@ -247,6 +249,47 @@ FileTreeViewItem *FileTreeBranch::findItemByUrl(const QUrl &url)
     }
 
     return (resultItem);
+}
+
+// Find an item by a relative path.  If the branch is known, this
+// saves having to convert an input path into an URL and then doing
+// lots of comparisons on it as above.
+FileTreeViewItem *FileTreeBranch::findItemByPath(const QString &path)
+{
+#ifdef DEBUG_MAPPING
+    qDebug() << path;
+#endif
+    const QStringList pathSplit = path.split('/', QString::SkipEmptyParts);
+    FileTreeViewItem *item = m_root;
+
+    foreach (const QString &part, pathSplit)
+    {
+        FileTreeViewItem *foundItem = NULL;
+        for (int i = 0; i<item->childCount(); ++i)
+        {
+            FileTreeViewItem *child = static_cast<FileTreeViewItem *>(item->child(i));
+            if (child->text(0)==part)
+            {
+                foundItem = child;
+                break;
+            }
+        }
+
+        if (foundItem==NULL)
+        {            
+#ifdef DEBUG_MAPPING
+            qDebug() << "didn't find" << part << "under" << item->url();
+#endif
+            return (NULL);				// no child with that name
+        }
+
+        item = foundItem;
+    }
+
+#ifdef DEBUG_MAPPING
+    qDebug() << "found" << item->url();
+#endif
+    return (item);
 }
 
 void FileTreeBranch::itemRenamed(FileTreeViewItem *item)

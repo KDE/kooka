@@ -44,7 +44,6 @@ class QSplitter;
 class QSignalMapper;
 class QUrl;
 
-class KConfigGroup;
 class KPrinter;
 class QAction;
 class KMainWindow;
@@ -57,13 +56,13 @@ class KookaGallery;
 class OcrResEdit;
 class ScanGallery;
 class KookaScanParams;
-class ScanParams;
 class ImageMetaInfo;
 class Previewer;
 class KScanDevice;
 class ImageCanvas;
 
 class WidgetSite;
+
 
 /**
  * This is the main view class for Kooka.  Most of the non-menu,
@@ -264,4 +263,4 @@ private:
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(KookaView::StateFlags);
 
-#endif                          // KOOKAVIEW_H
+#endif							// KOOKAVIEW_H

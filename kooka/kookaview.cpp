@@ -42,16 +42,13 @@
 #include <qaction.h>
 #include <qmenu.h>
 
-#include <kurl.h>
 #include <krun.h>
-#include <kapplication.h>
 #include <kmimetypetrader.h>
 #include <klocalizedstring.h>
 #include <kmessagebox.h>
 #include <kled.h>
 #include <kactioncollection.h>
 #include <kactionmenu.h>
-#include <kshortcut.h>
 #include <kfileitem.h>
 #include <kmainwindow.h>
 
@@ -286,7 +283,7 @@ KookaView::KookaView(KMainWindow *parent, const QByteArray &deviceToUse)
     mOcrResEdit  = new OcrResEdit(this);
     mOcrResEdit->setAcceptRichText(false);
     mOcrResEdit->setWordWrapMode(QTextOption::NoWrap);
-    mOcrResEdit->setClickMessage(i18n("OCR results will appear here"));
+    mOcrResEdit->setPlaceholderText(i18n("OCR results will appear here"));
     connect(mOcrResEdit, SIGNAL(spellCheckStatus(QString)),
             this, SIGNAL(changeStatus(QString)));
 
@@ -979,7 +976,7 @@ void KookaView::slotShowAImage(const KookaImage *img, bool isDir)
         emit changeStatus(mImageCanvas->imageInfoString(), StatusBarManager::ImageDims);
     }
     if (img != NULL) {
-        emit changeStatus(i18n("Loaded image %1", img->url().pathOrUrl()));
+        emit changeStatus(i18n("Loaded image %1", img->url().url(QUrl::PreferLocalFile)));
     } else if (!isDir) {
         emit changeStatus(i18n("Unloaded image"));
     }
@@ -1226,12 +1223,13 @@ void KookaView::slotOpenWith(int idx)
     if (ftvi == NULL) {
         return;
     }
-    KUrl::List urllist(ftvi->url());
+    QList<QUrl> urllist;
+    urllist.append(ftvi->url());
 
-    if (idx < mOpenWithOffers.count()) {        // application from the menu
+    if (idx < mOpenWithOffers.count()) {		// application from the menu
         KService::Ptr ptr = mOpenWithOffers[idx];
-        KRun::run(*ptr, urllist, mMainWindow);
-    } else {                    // last item = "Other..."
+        KRun::runService(*ptr, urllist, mMainWindow);
+    } else {						// last item = "Other..."
         KRun::displayOpenWithDialog(urllist, mMainWindow);
     }
 }

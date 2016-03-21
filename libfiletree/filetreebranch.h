@@ -139,6 +139,11 @@ public:
      */
     virtual FileTreeViewItem *findItemByUrl(const QUrl &url);
 
+    /**
+     * find the according FileTreeViewItem for a relative path
+     */
+    virtual FileTreeViewItem *findItemByPath(const QString &path);
+
     virtual void itemRenamed(FileTreeViewItem *item);
 
 public slots:
@@ -217,4 +222,4 @@ private:
  */
 typedef QList<FileTreeBranch *> FileTreeBranchList;
 
-#endif                          // FILETREEBRANCH_H
+#endif							// FILETREEBRANCH_H

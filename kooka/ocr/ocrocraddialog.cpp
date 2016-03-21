@@ -47,12 +47,12 @@
 #include <kmessagebox.h>
 #include <kurlrequester.h>
 #include <kprocess.h>
-#include <kdialog.h>
 
 #include "kookaimage.h"
 #include "kookapref.h"
 #include "kookasettings.h"
 #include "kscancontrols.h"
+#include "dialogbase.h"
 
 #include "ocrocradengine.h"
 
@@ -131,7 +131,7 @@ OcrEngine::EngineError OcrOcradDialog::setupGui()
     gl->addWidget(m_layoutMode, 0, 1);
     l->setBuddy(m_layoutMode);
 
-    gl->setRowMinimumHeight(1, KDialog::spacingHint());
+    gl->setRowMinimumHeight(1, DialogBase::verticalSpacing());
 
     // Character set, auto detected values
     QStringList vals = getValidValues("charset");
@@ -196,7 +196,7 @@ OcrEngine::EngineError OcrOcradDialog::setupGui()
     gl->addWidget(m_transform, 4, 1);
     l->setBuddy(m_transform);
 
-    gl->setRowMinimumHeight(5, KDialog::spacingHint());
+    gl->setRowMinimumHeight(5, DialogBase::verticalSpacing());
 
     // Invert option, on/off
     ski = KookaSettings::self()->ocrOcradInvertItem();
@@ -206,7 +206,7 @@ OcrEngine::EngineError OcrOcradDialog::setupGui()
     m_invert->setToolTip(ski->toolTip());
     gl->addWidget(m_invert, 6, 1, Qt::AlignLeft);
 
-    gl->setRowMinimumHeight(7, KDialog::spacingHint());
+    gl->setRowMinimumHeight(7, DialogBase::verticalSpacing());
 
     // Threshold, on/off and slider
     ski = KookaSettings::self()->ocrOcradThresholdEnableItem();

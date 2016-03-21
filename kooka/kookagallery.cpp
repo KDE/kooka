@@ -36,7 +36,6 @@
 #include <qdebug.h>
 
 #include <klocalizedstring.h>
-#include <khbox.h>
 
 #include "scangallery.h"
 #include "galleryhistory.h"
@@ -50,13 +49,17 @@ KookaGallery::KookaGallery(QWidget *parent)
     m_layout = new QGridLayout(this);
     m_layout->setMargin(0);
 
-    m_recentBox = new KHBox(this);
-    //m_recentBox->setMargin(KDialog::spacingHint());
+    m_recentBox = new QWidget(this);
+    QHBoxLayout *hbl = new QHBoxLayout(m_recentBox);
+    hbl->setMargin(0);
+
     QLabel *lab = new QLabel(i18n("Folder:"), m_recentBox);
     lab->setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed));
+    hbl->addWidget(lab);
 
     m_galleryRecent = new GalleryHistory(m_recentBox);
     lab->setBuddy(m_galleryRecent);
+    hbl->addWidget(m_galleryRecent);
 
     m_galleryTree = new ScanGallery(this);
 

@@ -88,7 +88,6 @@ endif (HAVE_SYS_TYPES_H)
 
 add_definitions(-DKDE4)
 add_definitions(-DKF5)
-add_definitions(-DKDE_DEFAULT_DEBUG_AREA=28000)
 if (HAVE_KADMOS)
   add_definitions(-DHAVE_KADMOS)
 endif (HAVE_KADMOS)
@@ -98,8 +97,6 @@ endif (HAVE_TIFF)
 
 include_directories(..)
 include_directories(./ocr/)
-
-#qt5_generate_dbus_interface(kooka.h org.kde.kooka.kooka.xml OPTIONS -a)
 
 if (HAVE_KADMOS)
   if (KADMOS_INCLUDE_DIR)
@@ -168,7 +165,11 @@ target_link_libraries(kooka
   dialogutil
   kookascan
   libfiletree
-  KF5::KDELibs4Support
+  KF5::KIOCore
+  KF5::KIOFileWidgets
+  KF5::KIOWidgets
+  KF5::XmlGui
+  KF5::TextWidgets
 )
 
 if (HAVE_KADMOS)

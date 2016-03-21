@@ -25,13 +25,13 @@
 
 #include "ocrkadmosengine.h"
 
+#include <qdebug.h>
+#include <qtemporaryfile.h>
 #ifdef QT_THREAD_SUPPORT
 #include <qtimer.h>
 #endif
 
-#include <QDebug>
-#include <KLocalizedString>
-#include <ktemporaryfile.h>
+#include <klocalizedstring.h>
 #include <kmessagebox.h>
 
 #include "kookaimage.h"
@@ -118,8 +118,7 @@ void OcrKadmosEngine::startProcess(OcrBaseDialog *dia, const KookaImage *img)
         //qDebug() << "Image size [" << img->width() << " x " << img->height() << "]";
         //qDebug() << "Image depth" << img->depth() << "colors" << img->numColors();
 #ifdef USE_KADMOS_FILEOP
-        KTemporaryFile tmpFile;
-        tmpFile.setSuffix(".bmp");
+        QTemporaryFile tmpFile(QDir::tempPath()+"/ocrkadmos_XXXXXX.bmp");
         tmpFile.setAutoRemove(false);
 
         if (!tmpFile.open()) {

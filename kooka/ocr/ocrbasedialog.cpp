@@ -41,13 +41,11 @@
 #include <qpushbutton.h>
 #include <qdebug.h>
 #include <qicon.h>
+#include <qstandardpaths.h>
 
-#include <kglobal.h>
 #include <klocalizedstring.h>
-#include <kstandarddirs.h>
 #include <kstandardguiitem.h>
 #include <kseparator.h>
-#include <kdialog.h>
 
 #include <kio/job.h>
 #include <kio/previewjob.h>
@@ -59,6 +57,7 @@
 #include "kookasettings.h"
 
 #include "imagecanvas.h"
+#include "dialogbase.h"
 
 
 OcrBaseDialog::OcrBaseDialog(QWidget *parent)
@@ -187,9 +186,10 @@ void OcrBaseDialog::ocrShowInfo(const QString &binary, const QString &version)
     }
 
     // Find the logo and display if available
-    QString logoFile = KGlobal::dirs()->findResource("data", "kooka/pics/" + ocrEngineLogo());
-    QPixmap pix(logoFile);
-    if (!pix.isNull()) {
+    QString logoFile = QStandardPaths::locate(QStandardPaths::AppDataLocation, "pics/"+ocrEngineLogo());
+    if (!logoFile.isEmpty())
+    {
+        QPixmap pix(logoFile);
         QLabel *l = new QLabel(w);
         l->setPixmap(pix);
         gl->addWidget(l, 0, 3, 2, 1, Qt::AlignRight);
@@ -215,8 +215,8 @@ void OcrBaseDialog::setupSourcePage()
     // information in introduceImage()
     m_previewPix = new QLabel(i18n("No preview available"), w);
     m_previewPix->setPixmap(QPixmap());
-    m_previewPix->setMinimumSize(m_previewSize.width() + KDialog::marginHint(),
-                                 m_previewSize.height() + KDialog::marginHint());
+    m_previewPix->setMinimumSize(m_previewSize.width() + 2*DialogBase::horizontalSpacing(),
+                                 m_previewSize.height() + 2*DialogBase::verticalSpacing());
     m_previewPix->setAlignment(Qt::AlignCenter);
     m_previewPix->setFrameStyle(QFrame::Panel | QFrame::Sunken);
     gl->addWidget(m_previewPix, 0, 0);
@@ -279,7 +279,7 @@ void OcrBaseDialog::setupSpellPage()
     gl->addWidget(m_gbBackgroundCheck, 0, 0);
 
     // row 1: space
-    gl->setRowMinimumHeight(1, 2 * KDialog::spacingHint());
+    gl->setRowMinimumHeight(1, 2*DialogBase::verticalSpacing());
 
     // row 2: interactive checking group box
     m_gbInteractiveCheck = new QGroupBox(i18n("Start interactive spell check"), w);
@@ -387,9 +387,11 @@ void OcrBaseDialog::introduceImage(const KookaImage *img)
 
     if (img->isFileBound()) {           // image backed by a file
         /* Start to create a preview job for the thumb */
-        KUrl::List li(img->url());
-        KIO::PreviewJob *job = KIO::filePreview(li, m_previewSize.width(), m_previewSize.height());
-        if (job != NULL) {
+        KFileItemList fileItems;
+        fileItems.append(KFileItem(img->url()));
+
+        KIO::PreviewJob *job = KIO::filePreview(fileItems, QSize(m_previewSize.width(), m_previewSize.height()));
+        if (job!=NULL) {
             job->setIgnoreMaximumSize();
             connect(job, SIGNAL(gotPreview(KFileItem,QPixmap)),
                     SLOT(slotGotPreview(KFileItem,QPixmap)));

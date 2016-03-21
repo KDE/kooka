@@ -33,27 +33,24 @@
 
 #include <qevent.h>
 #include <qsignalmapper.h>
-#include <KConfigGroup>
-#include <kglobal.h>
-#include <KLocalizedString>
-#include <QDebug>
-#include <KToggleAction>
-#include <QAction>
-#include <QIcon>
-#include <KActionMenu>
+#include <qaction.h>
+#include <qicon.h>
+#include <qmenu.h>
+#include <qdebug.h>
+#include <qlabel.h>
+#include <qmimedata.h>
+
+#include <klocalizedstring.h>
+#include <ktoggleaction.h>
+#include <kactionmenu.h>
 #include <kiconloader.h>
+#include <kmessagebox.h>
+#include <kstandardaction.h>
+#include <kactioncollection.h>
+#include <kxmlguiwindow.h>
 #ifndef KDE4
 #include <kprinter.h>
 #endif
-#include <kurl.h>
-#include <kmessagebox.h>
-#include <QAction>
-#include <kactionmenu.h>
-#include <ktoggleaction.h>
-#include <kstandardaction.h>
-#include <kactioncollection.h>
-#include <kmenu.h>
-#include <kxmlguiwindow.h>
 
 #include "scanglobal.h"
 #include "imagecanvas.h"
@@ -64,9 +61,6 @@
 #include "kookasettings.h"
 #include "kookaview.h"
 #include "imagetransform.h"
-
-#include <kvbox.h>
-#include <qlabel.h>
 
 
 Kooka::Kooka(const QByteArray &deviceToUse)
@@ -400,10 +394,7 @@ void Kooka::readProperties(const KConfigGroup &grp)
 
 void Kooka::dragEnterEvent(QDragEnterEvent *ev)
 {
-    KUrl::List uriList = KUrl::List::fromMimeData(ev->mimeData());
-    if (!uriList.isEmpty()) {
-        ev->accept();    // accept URI drops only
-    }
+    if (ev->mimeData()->hasUrls()) ev->accept();	// accept URI drops only
 }
 
 void Kooka::filePrint()

@@ -64,4 +64,4 @@ private:
     QByteArray mFormat;
 };
 
-#endif                          // IMAGEFORMAT_H
+#endif							// IMAGEFORMAT_H

@@ -104,7 +104,7 @@ protected slots:
     void slotDecorate(FileTreeViewItem *item);
     void slotDecorate(FileTreeBranch *branch, const FileTreeViewItemList &list);
 
-    void slotItemHighlighted(QTreeWidgetItem *curr);
+    void slotItemHighlighted(QTreeWidgetItem *curr = NULL);
     void slotItemActivated(QTreeWidgetItem *curr);
     void slotHighlightItem(const QUrl &url);
     void slotActivateItem(const QUrl &url);
@@ -148,4 +148,4 @@ private:
     bool m_startup;
 };
 
-#endif                          // SCANGALLERY_H
+#endif							// SCANGALLERY_H

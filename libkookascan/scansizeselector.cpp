@@ -112,6 +112,7 @@ ScanSizeSelector::ScanSizeSelector(QWidget *parent, const QSize &bedSize)
     }
 
     QVBoxLayout *vbl = new QVBoxLayout(this);
+    vbl->setMargin(0);
 
     m_sizeCb = new QComboBox(this);
     m_sizeCb->setToolTip(i18n("<qt>Set the size of the scanned area"));

@@ -102,4 +102,4 @@ private:
     QString m_versionStr;
 };
 
-#endif                          // OCROCRADDIALOG_H
+#endif							// OCROCRADDIALOG_H

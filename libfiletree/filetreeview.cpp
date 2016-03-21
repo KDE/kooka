@@ -520,26 +520,13 @@ FileTreeViewItem *FileTreeView::findItemInBranch(const QString &branchName, cons
     return (findItemInBranch(br, relUrl));
 }
 
-FileTreeViewItem *FileTreeView::findItemInBranch(FileTreeBranch *branch, const QString &relUrl) const
+FileTreeViewItem *FileTreeView::findItemInBranch(FileTreeBranch *branch, const QString &relPath) const
 {
-    FileTreeViewItem *ret = NULL;
-    if (branch != NULL) {
-        if (relUrl.isEmpty() || relUrl == "/") {
-            ret = branch->root();
-        } else {
-            QString partUrl(relUrl);
-            if (partUrl.endsWith('/')) {
-                partUrl.chop(1);
-            }
+    if (branch==NULL) return (NULL);			// no branch to search
 
-            QUrl url = branch->rootUrl().resolved(QUrl::fromUserInput(relUrl));
-#ifdef DEBUG_LISTING
-            qDebug() << "searching for" << url;
-#endif // DEBUG_LISTING
-            ret = branch->findItemByUrl(url);
-        }
-    }
-
+    FileTreeViewItem *ret;
+    if (relPath.isEmpty() || relPath=="/") ret = branch->root();
+    else ret = branch->findItemByPath(relPath);
     return (ret);
 }
 

@@ -33,36 +33,23 @@
 #include <qdebug.h>
 #include <qmimetype.h>
 #include <qmimedatabase.h>
-
-#include <kservice.h>
-#include <kservicetypetrader.h>
+#include <qimagereader.h>
+#include <qimagewriter.h>
 
 // This class provides two facilities:
 //
 // (a) The opaque ImageFormat data type, which is used throughout to represent
-//     a KImageIO/Qt image format name.  It is a separate type from standard
-//     strings so that it does not get confused with a MIME type (always passed
+//     a Qt image format name.  It is a separate type from standard strings
+//     so that it does not get confused with a MIME type (always passed
 //     around as a QMimeType) or a file extension (always handled as a QString).
 //
 // (b) Its static functions provide some useful lookups not available from
-//     KImageIO.
+//     the QImage* classes.
 //
-// Strangely, this class does not actually use KImageIO at all! - although the
-// format dialogue, which is the source of the list of image types, does
-// use KImageIO::types() to get the initial list.  The main reason for this
-// is that the MIME type comparisons in KImageIO (kdelibs/kio/kio/kimageio.cpp)
-// are all done using the textual MIME type name.  This doesn't work for MIME
-// type aliases, and especially in the case where a format's QImageIOPlugins
-// service file specifies a MIME type alias instead of the canonical name
-// (e.g. JP2).  From the KMimeType::is() API documentation:
-//
-//   Do not use name()=="somename" anymore, to check for a given mimetype.
-//   For mimetype inheritance to work, use is("somename") instead.
-//
-// So we query the services directly and use is() for MIME type comparison.
-//
-// TODO: fix KImageIO MIME type comparison, add missing KImageIO::mimeForType(),
-// then eliminate the above and simplify this file.
+// In KDE Frameworks this class no longer uses KImageIO or any KDE service
+// files, although it does make an assumption about the internal operation
+// of QImage* - i.e. that a Qt format name is actually a file extension.
+
 
 ImageFormat::ImageFormat(const QByteArray &format)
 {
@@ -95,49 +82,26 @@ QDebug operator<<(QDebug stream, const ImageFormat &format)
     return (stream.space());
 }
 
-// Get the QImageIOPlugins service for this format.
-//
-// Note that the X-KDE-ImageFormat property can be a list with its entries
-// in indeterminate case, therefore using the '~in' operator.
-
-static KService::Ptr service(const QByteArray &format)
-{
-    const KService::List services = KServiceTypeTrader::self()->query(
-                                        "QImageIOPlugins",
-                                        QString("'%1' ~in [X-KDE-ImageFormat]").arg(format.constData()));
-    if (services.count() == 0) {
-        //qDebug() << "no service found for image format" << *this;
-        return (KService::Ptr());
-    }
-
-    return (services.first());
-}
-
-// Get the MIME type for a KImageIO (=Qt) image format.  This is the reverse
-// operation to KImageIO::typeForMime(), which really ought to be provided by
-// KImageIO but isn't.
 
 QMimeType ImageFormat::mime() const
 {
-    KService::Ptr srv = service(mFormat);
-    if (!srv) return (QMimeType());
-
-    QString name = srv->property("X-KDE-MimeType").toString();
+    // As noted previously and in FormatDialog::FormatDialog(), a Qt image
+    // format name is really a file extension.  Therefore we can do this
+    // lookup using a file name with that extension.
     QMimeDatabase db;
-    QMimeType mime = db.mimeTypeForName(name);
-    //if (!mime.isValid()) {
-        //qDebug() << "no MIME type for image format" << *this;
-    //}
+    QMimeType mime = db.mimeTypeForFile(QString("a.")+mFormat, QMimeDatabase::MatchExtension);
+    if (!mime.isValid() || mime.isDefault())
+    {
+        qDebug() << "no MIME type for image format" << *this;
+    }
+    else
+    {
+        //qDebug() << "for" << *this << "returning" << mime.name();
+    }
 
-    //qDebug() << "for" << *this << "returning" << mime->name();
     return (mime);
 }
 
-// KImageIO::suffix(format) seems to be no longer present, with no
-// equivalent available.  The lookup here is to get the preferred
-// file extension for the Qt image format.
-//
-// The dot is not included in the result, unlike KMimeType::mainExtension()
 
 QString ImageFormat::extension() const
 {
@@ -153,48 +117,31 @@ QString ImageFormat::extension() const
     return (suf);
 }
 
-// Similar to KImageIO::isSupported(), but uses the service information
-// directly instead of going to the MIME type and back again.
 
 bool ImageFormat::canWrite() const
 {
-    KService::Ptr srv = service(mFormat);
-    if (!srv) return (false);
-    return (srv->property("X-KDE-Write").toBool());
+    return (QImageWriter::supportedImageFormats().contains(mFormat.toLower()));
 }
 
-// Similar to KImageIO::typeForMime(), but uses QMimeType::inherits()
-// for the MIME type comparison instead of textual names.  See the top
-// of this file for why.
-//
-// The X-KDE-ImageFormat property is a list of possible formats.
-// Normally we assume that there will only be one, but possibly
-// there may be more.  This lookup just takes the first one.
 
 ImageFormat ImageFormat::formatForMime(const QMimeType &mime)
 {
     if (!mime.isValid()) return (ImageFormat());
 
-    QStringList formats;
-    const KService::List services = KServiceTypeTrader::self()->query("QImageIOPlugins");
-    foreach (const KService::Ptr &service, services) {
-        if (mime.inherits(service->property("X-KDE-MimeType").toString())) {
-            formats = service->property("X-KDE-ImageFormat").toStringList();
-            break;
-        }
-    }
+    // Assuming that the format name is the first file extension ("suffix")
+    // registered for that MIME type which is a supported Qt image type.
 
-    int fcount = formats.count();           // how many formats found?
-    if (fcount == 0) {              // no image format found
-        ////qDebug() << "no format found for MIME type" << mime->name();
-        return (ImageFormat());
-    }
-    if (fcount > 1) {               // more than one type found
-        ////qDebug() << "found" << fcount << "formats for MIME type" << mime->name();
-    }
+    QStringList sufs = mime.suffixes();
+    if (sufs.isEmpty()) return (ImageFormat());
 
-    return (ImageFormat(formats.first().toLocal8Bit().trimmed()));
+    foreach (const QString &suf, sufs)			// find the first matching one
+    {
+        const QByteArray s = suf.toLocal8Bit();
+        if (QImageReader::supportedImageFormats().contains(s.toLower())) return (ImageFormat(s));
+    }
+    return (ImageFormat());				// nothing matched
 }
+
 
 ImageFormat ImageFormat::formatForUrl(const QUrl &url)
 {

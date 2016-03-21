@@ -45,18 +45,15 @@
 #endif
 
 #include <qlayout.h>
-#include <qdir.h>
 #include <qicon.h>
+#include <qdir.h>
 #include <qdebug.h>
 #include <qpushbutton.h>
 #include <qstandardpaths.h>
 
 #include <klocalizedstring.h>
-#include <kconfig.h>
-#include <kstandarddirs.h>
 #include <kmessagebox.h>
 #include <kstandardguiitem.h>
-#include <kconfigskeleton.h>
 
 #include "prefspages.h"
 #include "kookasettings.h"
@@ -251,7 +248,7 @@ QString KookaPref::findGalleryRoot()
     if (!QDir::isAbsolutePath(galleryName))
     {
         QString docpath = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
-        newpath = QDir(docpath+'/'+galleryName).canonicalPath();
+        newpath = docpath+'/'+galleryName;		// already an absolute path
     }
 
     QDir newdir(newpath);

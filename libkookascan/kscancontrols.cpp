@@ -49,6 +49,8 @@
 #include <klocalizedstring.h>
 #include <kurlrequester.h>
 
+#include "imagefilter.h"
+
 
 //  KScanControl - base class
 //  -------------------------
@@ -353,26 +355,9 @@ KScanFileRequester::KScanFileRequester(QWidget *parent, const QString &text)
     mEntry = new KUrlRequester(this);
     mLayout->addWidget(mEntry);
 
-    QStringList fileSelector;
-    fileSelector.append(i18n("*.pnm *.pbm *.pgm *.ppm|PNM Image Files"));
-
-    QMimeDatabase db;
-    QList<QByteArray> mimeTypes = QImageReader::supportedMimeTypes();
-    foreach (const QByteArray &mimeType, mimeTypes)
-    {
-        QMimeType mime = db.mimeTypeForName(mimeType);
-        if (!mime.isValid()) continue;
-
-        // KF5: Can't use QMimeType::filterString() here, because that returns
-        // an QT format filter string but KUrlRequester::setFilter() expects
-        // a KDE format filter.  It is possible to set a list of MIME type
-        // filters using KUrlRequester::fileDialog()->setMimeTypeFilters(), but
-        // that produces a "deprecated" warning.
-        fileSelector.append(mime.globPatterns().join(' ')+'|'+mime.comment());
-    }
-
-    fileSelector.append(i18n("*|All Files"));
-    mEntry->setFilter(fileSelector.join("\n"));
+    QString filter = i18n("*.pnm *.pbm *.pgm *.ppm|PNM Image Files");
+    filter += '\n'+ImageFilter::kdeFilter(ImageFilter::Reading);
+    mEntry->setFilter(filter);
 
     connect(mEntry, SIGNAL(textChanged(QString)), SIGNAL(settingChanged(QString)));
     connect(mEntry, SIGNAL(returnPressed()), SIGNAL(returnPressed()));

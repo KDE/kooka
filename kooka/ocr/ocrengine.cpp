@@ -41,10 +41,8 @@
 #include <qtextcursor.h>
 
 #include <kmessagebox.h>
-#include <kapplication.h>
 #include <kprocess.h>
 #include <klocalizedstring.h>
-#include <kdialog.h>
 #include <kcolorscheme.h>
 
 #include "imagecanvas.h"
@@ -264,8 +262,8 @@ void OcrEngine::removeTempFiles()
                 continue;
             }
 
-            KUrl u(*it);
-            s += i18n("<filename><a href=\"%1\">%2</a></filename><br>", u.url(), u.pathOrUrl());
+            QUrl u(*it);
+            s += i18n("<filename><a href=\"%1\">%2</a></filename><br>", u.url(), u.url(QUrl::PreferLocalFile));
             haveSome = true;
         }
 

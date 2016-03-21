@@ -39,7 +39,6 @@
 #include <qpushbutton.h>
 #include <qdebug.h>
 
-#include <kvbox.h>
 #include <klocalizedstring.h>
 #include <kseparator.h>
 #include <kmessagebox.h>

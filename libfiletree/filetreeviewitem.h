@@ -96,6 +96,7 @@ public:
     /**
      * substitute for the KFileItem's extra data, but only one of these
      */
+    // TODO: use QTreeWidgetItem::data()
     void setClientData(void *data);
     void *clientData() const;
 
@@ -107,6 +108,7 @@ private:
     bool m_wasListed;
     void *m_clientData;
 
+    // TODO: not used
     class FileTreeViewItemPrivate;
     FileTreeViewItemPrivate *d;
 };

@@ -31,13 +31,12 @@
 #ifndef FORMATDIALOG_H
 #define FORMATDIALOG_H
 
-#include <qcheckbox.h>
-
-#include <kdialog.h>
+#include "dialogbase.h"
 
 #include "imgsaver.h"
 #include "imageformat.h"
 
+class QCheckBox;
 class QComboBox;
 class QLabel;
 class QLineEdit;
@@ -45,13 +44,14 @@ class QListWidget;
 class QListWidgetItem;
 class QMimeType;
 
+
 /**
  *  Class FormatDialog:
  *  Asks the user for the image-Format and gives help for
  *  selecting it.
  **/
 
-class FormatDialog : public KDialog
+class FormatDialog : public DialogBase
 {
     Q_OBJECT
 
@@ -63,14 +63,8 @@ public:
     ImageFormat getFormat() const;
     QByteArray getSubFormat() const;
     QString getFilename() const;
-    bool alwaysUseFormat() const
-    {
-        return (mDontAskCheck != NULL ? mDontAskCheck->isChecked() : false);
-    }
-    bool useAssistant() const
-    {
-        return (mWantAssistant);
-    }
+    bool alwaysUseFormat() const;
+    bool useAssistant() const    			{ return (mWantAssistant); }
 
     static void forgetRemembered();
 
@@ -110,4 +104,4 @@ private:
     bool mWantAssistant;
 };
 
-#endif                          // FORMATDIALOG_H
+#endif							// FORMATDIALOG_H
