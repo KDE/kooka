@@ -829,13 +829,8 @@ void ScanGallery::loadImageForItem(FileTreeViewItem *item)
     if (!ret.isEmpty())					// image loading failed
     {
         KMessageBox::error(this,
-                           i18n("<qt>"
-                                "<p>Unable to load the image<br>"
-                                "<filename>%2</filename><br>"
-                                "<br>"
-                                "%1",
-                                ret,
-                                item->url().url(QUrl::PreferLocalFile)),
+                           xi18nc("@info", "Unable to load the image <filename>%2</filename><nl/>%1",
+                                  ret, item->url().url(QUrl::PreferLocalFile)),
                            i18n("Image Load Error"));
     }
 }
@@ -973,9 +968,9 @@ void ScanGallery::addImage(const QImage *img, const ImageMetaInfo *info)
 
     if (isstat != ImgSaver::SaveStatusOk &&     // image saving failed
             isstat != ImgSaver::SaveStatusCanceled) {   // user cancelled, just ignore
-        KMessageBox::error(this, i18n("<qt>Could not save the image<br><filename>%2</filename><br><br>%1",
-                                      mSaver->errorString(isstat),
-                                      lurl.url(QUrl::PreferLocalFile)),
+        KMessageBox::error(this, xi18nc("@info", "Could not save the image<nl/><filename>%2</filename><nl/>%1",
+                                        mSaver->errorString(isstat),
+                                        lurl.url(QUrl::PreferLocalFile)),
                            i18n("Image Save Error"));
     }
 
@@ -1204,14 +1199,14 @@ void ScanGallery::slotDeleteItems()
     QString s;
     QString dontAskKey;
     if (isDir) {
-        s = i18n("<qt>Do you really want to permanently delete the folder<br>"
-                 "<filename>%1</filename><br>"
-                 "and all of its contents? It cannot be restored.", urlToDel.url(QUrl::PreferLocalFile));
+        s = xi18nc("@info", "Do you really want to permanently delete the folder<nl/>"
+                   "<filename>%1</filename><nl/>"
+                   "and all of its contents? It cannot be restored.", urlToDel.url(QUrl::PreferLocalFile));
         dontAskKey = "AskForDeleteDirs";
     } else {
-        s = i18n("<qt>Do you really want to permanently delete the image<br>"
-                 "<filename>%1</filename>?<br>"
-                 "It cannot be restored.", urlToDel.url(QUrl::PreferLocalFile));
+        s = xi18nc("@info", "Do you really want to permanently delete the image<nl/>"
+                   "<filename>%1</filename>?<nl/>"
+                   "It cannot be restored.", urlToDel.url(QUrl::PreferLocalFile));
         dontAskKey = "AskForDeleteFiles";
     }
 
@@ -1228,9 +1223,9 @@ void ScanGallery::slotDeleteItems()
     KIO::DeleteJob *job = KIO::del(urlToDel);
     if (!job->exec())
     {
-        KMessageBox::error(this, i18n("<qt>Could not delete the image or folder<br><filename>%2</filename><br><br>%1",
-                                      job->errorString(),
-                                      urlToDel.url(QUrl::PreferLocalFile)),
+        KMessageBox::error(this, xi18nc("@info", "Could not delete the image or folder<nl/><filename>%2</filename><nl/>%1",
+                                        job->errorString(),
+                                        urlToDel.url(QUrl::PreferLocalFile)),
                            i18n("File Delete Error"));
         return;
     }
@@ -1286,9 +1281,8 @@ void ScanGallery::slotCreateFolder()
     KIO::MkdirJob *job = KIO::mkdir(url);
     if (!job->exec())
     {
-        KMessageBox::error(this, i18n("<qt>Could not create the folder<br><filename>%2</filename><br><br>%1",
-                                      job->errorString(),
-                                      url.url(QUrl::PreferLocalFile)),
+        KMessageBox::error(this, xi18nc("@info", "Could not create the folder<nl/><filename>%2</filename><nl/>%1",
+                                        job->errorString(), url.url(QUrl::PreferLocalFile)),
                            i18n("Folder Create Error"));
     }
 }

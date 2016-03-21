@@ -258,8 +258,8 @@ FormatDialog::FormatDialog(QWidget *parent, ImageMetaInfo::ImageType type,
 
     if (askForFormat)					// format selector section
     {
-        l1 = new QLabel(i18n("<qt>Select a format to save the scanned image.<br>This is a <b>%1</b>.",
-                             ImgSaver::picTypeAsString(type)), page);
+        l1 = new QLabel(xi18nc("@info", "Select a format to save the scanned image.<nl/>This is a <emphasis strong=\"1\">%1</emphasis>.",
+                               ImgSaver::picTypeAsString(type)), page);
         gl->addWidget(l1, row, 0, 1, 3);
         ++row;
 

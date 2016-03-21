@@ -115,7 +115,7 @@ ScanSizeSelector::ScanSizeSelector(QWidget *parent, const QSize &bedSize)
     vbl->setMargin(0);
 
     m_sizeCb = new QComboBox(this);
-    m_sizeCb->setToolTip(i18n("<qt>Set the size of the scanned area"));
+    m_sizeCb->setToolTip(i18n("Set the size of the scanned area"));
     connect(m_sizeCb, static_cast<void (QComboBox::*)(int)>(&QComboBox::activated), this, &ScanSizeSelector::slotSizeSelected);
     setFocusProxy(m_sizeCb);
     vbl->addWidget(m_sizeCb);
@@ -148,7 +148,7 @@ ScanSizeSelector::ScanSizeSelector(QWidget *parent, const QSize &bedSize)
     m_customSize = QRect();
     m_prevSelected = m_sizeCb->currentIndex();
 
-    setToolTip(i18n("<qt>Set the orientation for a preset size of the scanned area"));
+    setToolTip(i18n("Set the orientation for a preset size of the scanned area"));
 }
 
 ScanSizeSelector::~ScanSizeSelector()

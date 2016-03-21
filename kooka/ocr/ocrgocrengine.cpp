@@ -83,14 +83,13 @@ OcrEngine::EngineType OcrGocrEngine::engineType() const
 
 QString OcrGocrEngine::engineDesc()
 {
-    return (i18n("<qt>"
-                 "<p>"
-                 "<b>GOCR</b> (sometimes known as <b>JOCR</b>) is an open source "
-                 "OCR engine, originally started by Joerg&nbsp;Schulenburg and now "
-                 "with a team of active developers. "
-                 "<p>"
-                 "See <a href=\"http://jocr.sourceforge.net\">jocr.sourceforge.net</a> "
-                 "for more information on GOCR."));
+    return (xi18nc("@info",
+                   "<emphasis>GOCR</emphasis> (sometimes known as <emphasis>JOCR</emphasis>) is an open source "
+                   "OCR engine, originally started by Joerg&nbsp;Schulenburg and now "
+                   "with a team of active developers. "
+                   "<nl/><nl/>"
+                   "See <link url=\"http://jocr.sourceforge.net\">jocr.sourceforge.net</link> "
+                   "for more information on GOCR."));
 }
 
 // TODO: similar function used for GOCR and OCRAD
@@ -192,8 +191,8 @@ void OcrGocrEngine::slotGOcrExited(int exitCode, QProcess::ExitStatus exitStatus
         const char *reason = "";
 #endif
         KMessageBox::error(NULL,
-                           i18n("<qt>Cannot read GOCR result file <filename>%1</filename><br/>%2",
-                                m_resultFile, reason),
+                           xi18nc("@info", "Cannot read GOCR result file <filename>%1</filename><nl/>%2",
+                                  m_resultFile, reason),
                            i18n("GOCR Result File Error"));
         finishedOCRVisible(false);
         return;

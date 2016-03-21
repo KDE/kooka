@@ -69,18 +69,17 @@ OcrBaseDialog *OcrOcradEngine::createOCRDialog(QWidget *parent)
 
 QString OcrOcradEngine::engineDesc()
 {
-    return (i18n("<qt>"
-                 "<p>"
-                 "<b>OCRAD</b> is an free software OCR engine by Antonio&nbsp;Diaz, "
-                 "part of the GNU&nbsp;Project. "
-                 "<p>"
-                 "Images for OCR should be scanned in black/white (lineart) mode. "
-                 "Best results are achieved if the characters are at least "
-                 "20&nbsp;pixels high.  Problems may arise, as usual, with very bold "
-                 "or very light or broken characters, or with merged character groups."
-                 "<p>"
-                 "See <a href=\"http://www.gnu.org/software/ocrad/ocrad.html\">www.gnu.org/software/ocrad/ocrad.html</a> "
-                 "for more information on OCRAD."));
+    return (xi18nc("@info",
+                   "<emphasis>OCRAD</emphasis> is an free software OCR engine by Antonio&nbsp;Diaz, "
+                   "part of the GNU&nbsp;Project. "
+                   "<nl/><nl/>"
+                   "Images for OCR should be scanned in black/white (lineart) mode. "
+                   "Best results are achieved if the characters are at least "
+                   "20&nbsp;pixels high.  Problems may arise, as usual, with very bold "
+                   "or very light or broken characters, or with merged character groups."
+                   "<nl/><nl/>"
+                   "See <link url=\"http://www.gnu.org/software/ocrad/ocrad.html\">www.gnu.org/software/ocrad/ocrad.html</link> "
+                   "for more information on OCRAD."));
 }
 
 QString getTempFileName(const QString &suffix)
@@ -191,17 +190,15 @@ void OcrOcradEngine::slotOcradExited(int exitCode, QProcess::ExitStatus exitStat
 
     if (exitStatus != QProcess::NormalExit || exitCode != 0) {
         KMessageBox::sorry(m_parent,
-                           i18n("<qt>"
-                                "Running the OCRAD process (<filename>%1</filename>) %2 with exit status %3."
-                                "<br>"
-                                "More information may be available in its "
-                                "<A HREF=\"%4\">standard output</A> or "
-                                "<A HREF=\"%5\">standard error</A> log files.",
-                                m_ocrProcess->program().first(),
-                                (exitStatus == QProcess::CrashExit ? i18n("crashed") : i18n("failed")),
-                                exitCode,
-                                QUrl::fromLocalFile(m_tempStdoutLog).url(),
-                                QUrl::fromLocalFile(m_tempStderrLog).url()),
+                           xi18nc("@info", "Running the OCRAD process (<filename>%1</filename>) %2 with exit status %3."
+                                  "<nl/>More information may be available in its "
+                                  "<link url=\"%4\">standard output</link> or "
+                                  "<link url=\"%5\">standard error</link> log files.",
+                                  m_ocrProcess->program().first(),
+                                  (exitStatus == QProcess::CrashExit ? i18n("crashed") : i18n("failed")),
+                                  exitCode,
+                                  QUrl::fromLocalFile(m_tempStdoutLog).url(),
+                                  QUrl::fromLocalFile(m_tempStderrLog).url()),
                            i18n("OCR Command Failed"),
                            KMessageBox::AllowLink);
         parseRes = false;
@@ -301,15 +298,15 @@ QString OcrOcradEngine::readORF(const QString &fileName)
     QFile file(fileName);
     // some checks on the ORF
     if (!file.exists()) {
-        return (i18n("File '%1' does not exist", fileName));
+        return (xi18nc("@info", "File <filename>%1</filename> does not exist", fileName));
     }
     QFileInfo fi(fileName);
     if (!fi.isReadable()) {
-        return (i18n("File '%1' unreadable", fileName));
+        return (xi18nc("@info", "File <filename>%1</filename> unreadable", fileName));
     }
 
     if (!file.open(QIODevice::ReadOnly)) {
-        return (i18n("Cannot open file '%1'", fileName));
+        return (xi18nc("@info", "Cannot open file <filename>%1</filename>", fileName));
     }
     QTextStream stream(&file);
 

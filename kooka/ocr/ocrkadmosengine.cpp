@@ -67,21 +67,18 @@ OcrEngine::EngineType OcrKadmosEngine::engineType() const
 
 QString OcrKadmosEngine::engineDesc()
 {
-    return (i18nc("%1 is one of the two following messages",
-                  "<qt>"
-                  "<p><b>Kadmos</b> is a commercial OCR/ICR library produced by reRecognition&nbsp;AG.</p>"
-                  "<p>%1</p>"
-                  "<p>See <a href=\"http://www.rerecognition.com\">www.rerecognition.com</a> "
-                  "for more information on Kadmos.</p>"
-                  "</qt>",
+    return (xi18nc("@info %1 is one of the two following messages",
+                   "<para><emphasis>Kadmos</emphasis> is a commercial OCR/ICR library produced by reRecognition&nbsp;AG.</para>"
+                   "<para>%1</para>"
+                   "<para>See <link url=\"http://www.rerecognition.com\">www.rerecognition.com</link> for more information on Kadmos.</para>",
 #ifdef HAVE_KADMOS
-                  i18n("This version of Kooka is configured to use the Kadmos engine.")
+                   i18n("This version of Kooka is configured to use the Kadmos engine.")
 #else
-                  i18n("This version of Kooka is not configured for Kadmos.  The Kadmos "
-                       "libraries need to be installed, and Kooka needs to be rebuilt with "
-                       "the '--with-kadmos' option.")
+                   i18n("This version of Kooka is not configured for Kadmos.  The Kadmos "
+                        "libraries need to be installed, and Kooka needs to be rebuilt with "
+                        "the '--with-kadmos' option.")
 #endif
-                 ));
+                ));
 }
 
 void OcrKadmosEngine::startProcess(OcrBaseDialog *dia, const KookaImage *img)

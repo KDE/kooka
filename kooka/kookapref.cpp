@@ -203,25 +203,20 @@ static QString createGallery(const QDir &d, bool *success = NULL)
 #endif
             QString docs = docsPath();
             KMessageBox::error(NULL,
-                               i18n("<qt>"
-                                    "<p>Unable to create the directory<br>"
-                                    "<filename>%1</filename><br>"
-                                    "for the Kooka gallery"
+                               xi18nc("@info", "Unable to create the directory <filename>%1</filename>"
+                                      "<nl/>for the Kooka gallery"
 #ifdef HAVE_STRERROR
-                                    " - %3."
+                                      " - %3."
 #else
-                                    "."
+                                      "."
 #endif
-                                    "<p>Your document directory,<br>"
-                                    "<filename>%2</filename><br>"
-                                    "will be used."
-                                    "<p>"
-                                    "Check the document directory setting and permissions.",
+                                      "<nl/><nl/>Your document directory <filename>%2</filename>"
+                                      "<nl/>will be used."
+                                      "<nl/><nl>Check the document directory setting and permissions.",
                                     d.absolutePath(), docs, reason),
                                i18n("Error creating gallery"));
-            if (success != NULL) {
-                *success = false;
-            }
+
+            if (success != NULL) *success = false;
             return (docs);
         }
     }
@@ -265,13 +260,11 @@ QString KookaPref::findGalleryRoot()
         dir = newpath;					// fine, just use that
     } else if (oldexists && !newexists) {		// only old exists
         if (KMessageBox::questionYesNo(NULL,
-                                       i18n("<qt>"
-                                            "<p>An old Kooka gallery was found at<br>"
-                                            "<filename>%1</filename>."
-                                            "<p>The preferred new location is now<br>"
-                                            "<filename>%2</filename>."
-                                            "<p>Do you want to create a new gallery at the new location?",
-                                            oldpath, newpath),
+                                       xi18nc("@info",
+                                              "An old Kooka gallery was found at <filename>%1</filename>."
+                                              "<nl/>The preferred new location is now <filename>%2</filename>."
+                                              "<nl/><nl/>Do you want to create a new gallery at the new location?",
+                                              oldpath, newpath),
                                        i18n("Create New Gallery"),
                                        KStandardGuiItem::yes(), KStandardGuiItem::no(),
                                        "GalleryNoMigrate") == KMessageBox::Yes) {
@@ -280,13 +273,11 @@ QString KookaPref::findGalleryRoot()
             dir = createGallery(newdir, &created);
             if (created) {				// new created OK
                 KMessageBox::information(NULL,
-                                         i18n("<qt>"
-                                              "<p>Kooka will use the new gallery,<br>"
-                                              "<a href=\"file:%1\"><filename>%1</filename></a>."
-                                              "<p>If you wish to add the images from your old gallery,<br>"
-                                              "<a href=\"file:%2\"><filename>%2</filename></a>,<br>"
-                                              "then you may do so by simply copying or moving the files.",
-                                              newpath, oldpath),
+                                         xi18nc("@info",
+                                                "Kooka will use the new gallery, <link url=\"file:%1\"><filename>%1</filename></link>."
+                                                "<nl/><nl/>If you wish to add the images from your old gallery <link url=\"file:%2\"><filename>%2</filename></link>,"
+                                                "<nl/>then you may do so by simply copying or moving the files.",
+                                                newpath, oldpath),
                                          i18n("New Gallery Created"),
                                          QString::null,
                                          KMessageBox::Notify | KMessageBox::AllowLink);
@@ -296,13 +287,11 @@ QString KookaPref::findGalleryRoot()
         }
     } else {						// both exist
         KMessageBox::information(NULL,
-                                 i18n("<qt>"
-                                      "<p>Kooka will use the new gallery,<br>"
-                                      "<a href=\"file:%1\"><filename>%1</filename></a>."
-                                      "<p>If you wish to add the images from your old gallery,<br>"
-                                      "<a href=\"file:%2\"><filename>%2</filename></a>,<br>"
-                                      "then you may do so by simply copying or moving the files.",
-                                      newpath, oldpath),
+                                 xi18nc("@info",
+                                        "Kooka will use the new gallery, <link url=\"file:%1\"><filename>%1</filename></link>."
+                                        "<nl/><nl/>If you wish to add the images from your old gallery, <link url=\"file:%2\"><filename>%2</filename></link>,"
+                                        "<nl/>then you may do so by simply copying or moving the files.",
+                                        newpath, oldpath),
                                  i18n("Old Gallery Exists"),
                                  "GalleryNoRemind",
                                  KMessageBox::Notify | KMessageBox::AllowLink);

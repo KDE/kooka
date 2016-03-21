@@ -164,9 +164,9 @@ void OcrResEdit::slotSaveText()
 
     QFile file(fileName);
     if (!file.open(QIODevice::WriteOnly)) {
-        QString msg = i18n("<qt>Unable to save the OCR results file<br><filename>%1</filename>", fileName);
+        QString msg = xi18nc("@info", "Unable to save the OCR results file<nl/><filename>%1</filename>", fileName);
 #ifdef HAVE_STRERROR
-        msg += i18n("<br>%1", strerror(errno));
+        msg += xi18nc("@info", "<nl/>%1", strerror(errno));
 #endif
         KMessageBox::error(this, msg, i18n("Error saving OCR results"));
         return;

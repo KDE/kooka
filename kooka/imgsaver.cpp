@@ -61,9 +61,8 @@ static void createDir(const QUrl &url)
     KIO::StatJob *job = KIO::stat(url, KIO::StatJob::DestinationSide, 0 /* minimal details */);
     if (!job->exec())
     {
-        KMessageBox::sorry(NULL, i18n("<qt>The directory <filename>%2</filename><br>could not be accessed.<br><br>%1",
-                                      job->errorString(),
-                                      url.url(QUrl::PreferLocalFile)));
+        KMessageBox::sorry(NULL, xi18nc("@info", "The directory <filename>%2</filename><nl/>could not be accessed.<nl/>%1",
+                                        job->errorString(), url.url(QUrl::PreferLocalFile)));
         return;
     }
 
@@ -74,9 +73,8 @@ static void createDir(const QUrl &url)
         KIO::MkdirJob *job = KIO::mkdir(url);
         if (!job->exec())
         {
-            KMessageBox::sorry(NULL, i18n("<qt>The directory <filename>%2</filename><br>could not be created.<br><br>%1",
-                                          job->errorString(),
-                                          url.url(QUrl::PreferLocalFile)));
+            KMessageBox::sorry(NULL, xi18nc("@info", "The directory <filename>%2</filename><nl/>could not be created.<nl/>%1",
+                                            job->errorString(), url.url(QUrl::PreferLocalFile)));
             return;
         }
     }
@@ -465,9 +463,9 @@ bool copyRenameImage(bool isCopying, const QUrl &fromUrl, const QUrl &toUrl, boo
         fName += extFrom;
 
         if (askExt) result = KMessageBox::questionYesNo(overWidget,
-                                 i18n("<qt><p>The file name you supplied has no file extension."
-                                      "<br>Should the original one be added?\n"
-                                      "<p>This would result in the new file name <filename>%1</filename>", fName),
+                                 xi18nc("@info", "The file name you supplied has no file extension.<nl/>"
+                                        "Should the original one be added?<nl/><nl/>"
+                                        "This would result in the new file name <filename>%1</filename>", fName),
                                  i18n("Extension Missing"),
                                  KGuiItem(i18n("Add Extension")),
                                  KGuiItem(i18n("Do Not Add")),
@@ -513,14 +511,9 @@ bool copyRenameImage(bool isCopying, const QUrl &fromUrl, const QUrl &toUrl, boo
                                    i18n("Unable to rename the file"));
         QString title = (isCopying ? i18n("Error copying file") :
                                      i18n("Error renaming file"));
-        KMessageBox::sorry(overWidget, i18n("<qt>"
-                                            "<p>%1<br>"
-                                            "<filename>%3</filename><br>"
-                                            "<br>"
-                                            "%2",
-                                            msg,
-                                            errorString,
-                                            fromUrl.url(QUrl::PreferLocalFile)), title);
+        KMessageBox::sorry(overWidget, xi18nc("@info", "%1 <filename>%3</filename><nl/>%2",
+                                              msg, errorString,
+                                              fromUrl.url(QUrl::PreferLocalFile)), title);
         return (false);
     }
 

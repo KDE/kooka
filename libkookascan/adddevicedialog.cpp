@@ -49,26 +49,24 @@ AddDeviceDialog::AddDeviceDialog(QWidget *parent, const QString &caption)
     QWidget *w = new QWidget(this);
     QVBoxLayout *vl = new QVBoxLayout(w);
 
-    QLabel *lab = new QLabel(i18n("<qt>"
-                                  "<p>"
-                                  "If your scanner has not been automatically detected, you can specify it here. "
-                                  "The <b>Scanner device name</b> should be a backend name (with optional parameters) "
-                                  "that is understood by SANE, see <a href=\"man:/sane\">sane(7)</a> or "
-                                  "<a href=\"man:/sane-dll\">sane-dll(5)</a> for more information on available backends. "
-                                  "The <b>Type</b> and <b>Description</b> can be used to identify the scanner later."
-                                  "<p>"
-                                  "For the information that needs to be entered here, try to locate the device using the "
-                                  "<a href=\"man:/sane-find-scanner\">sane-find-scanner(1)</a> command. For a "
-                                  "USB or networked HP scanner using <a href=\"http://hplip.sourceforge.net/\">HPLIP</a>, "
-                                  "try using the <u>hp-probe</u> command to locate it, for example "
-                                  "'hp-probe&nbsp;-b&nbsp;usb' or 'hp-probe&nbsp;-b&nbsp;net'. "
-                                  "If the scanner is found, then enter the device name displayed by these commands; note "
-                                  "that if using HPLIP then \"hp:\" needs to be replaced by \"hpaio:\"."
-                                  "<p>"
-                                  "If these commands fail to locate your scanner, then it may not be supported "
-                                  "by SANE. Check the SANE documentation for a "
-                                  "<a href=\"http://www.sane-project.org/sane-supported-devices.html\">list of supported devices</a>."
-                                  "<br>"), w);
+    QLabel *lab = new QLabel(xi18nc("@info",
+                                    "If your scanner has not been automatically detected, you can specify it here. "
+                                    "The <interface>Scanner device name</interface> should be a backend name (with optional parameters) "
+                                    "that is understood by SANE, see <link url=\"man:/sane\">sane(7)</link> or "
+                                    "<link url=\"man:/sane-dll\">sane-dll(5)</link> for more information on available backends. "
+                                    "The <interface>Type</interface> and <interface>Description</interface> can be used to identify the scanner later."
+                                    "<nl/><nl/>"
+                                    "For the information that needs to be entered here, try to locate the device using the "
+                                    "<link url=\"man:/sane-find-scanner\">sane-find-scanner(1)</link> command. For a "
+                                    "USB or networked HP scanner using <link url=\"http://hplip.sourceforge.net/\">HPLIP</link>, "
+                                    "try using the <command>hp-probe</command> command to locate it, for example "
+                                    "<icode>hp-probe&nbsp;-b&nbsp;usb</icode> or <icode>hp-probe&nbsp;-b&nbsp;net</icode>. "
+                                    "If the scanner is found, then enter the device name displayed by these commands; note "
+                                    "that if using HPLIP then <icode>hp:</icode> needs to be replaced by <icode>hpaio:</icode>."
+                                    "<nl/><nl/>"
+                                    "If these commands fail to locate your scanner, then it may not be supported "
+                                    "by SANE. Check the SANE documentation for a "
+                                    "<link url=\"http://www.sane-project.org/sane-supported-devices.html\">list of supported devices</link>."), w);
     lab->setWordWrap(true);
     lab->setOpenExternalLinks(true);
     vl->addWidget(lab);

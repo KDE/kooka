@@ -36,15 +36,15 @@ QWidget *KookaScanParams::messageScannerNotSelected()
 {
     if (!mNoScannerMessage) {
         mNoScannerMessage = new QLabel(
-            i18n("<qt>"
-                 "<b>Gallery Mode - No scanner selected</b>"
-                 "<p>"
-                 "In this mode you can browse, manipulate and OCR images already in the gallery."
-                 "<p>"
-                 "<a href=\"a:1\">Select a scanner device</a> "
-                 "to perform scanning, or "
-                 "<a href=\"a:2\">add a device</a> "
-                 "if a scanner is not automatically detected."));
+            xi18nc("@info",
+                   "<emphasis strong=\"1\">Gallery Mode - No scanner selected</emphasis>"
+                   "<nl/><nl/>"
+                   "In this mode you can browse, manipulate and OCR images already in the gallery."
+                   "<nl/><nl/>"
+                   "<link url=\"a:1\">Select a scanner device</link> "
+                   "to perform scanning, or "
+                   "<link url=\"a:2\">add a device</link> "
+                   "if a scanner is not automatically detected."));
 
         mNoScannerMessage->setWordWrap(true);
         connect(mNoScannerMessage, &QLabel::linkActivated, this, &KookaScanParams::slotLinkActivated);

@@ -473,18 +473,18 @@ bool KookaView::slotSelectDevice(const QByteArray &useDevice, bool alwaysAsk)
             if (stat == KScanDevice::Ok) {
                 haveConnection = true;
             } else {
-                QString msg = i18n("<qt><p>"
-                                   "There was a problem opening the scanner device."
-                                   "<br>"
-                                   "Check that the scanner is connected and switched on, "
-                                   "and that SANE support for it is correctly configured."
-                                   "<p>"
-                                   "Trying to use scanner device: <b>%3</b><br>"
-                                   "libkookascan reported error: <b>%2</b><br>"
-                                   "SANE reported error: <b>%1</b>",
-                                   mScanDevice->lastSaneErrorMessage(),
-                                   KScanDevice::statusMessage(stat),
-                                   selDevice.constData());
+                QString msg = xi18nc("@info",
+                                     "There was a problem opening the scanner device."
+                                     "<nl/><nl/>"
+                                     "Check that the scanner is connected and switched on, "
+                                     "and that SANE support for it is correctly configured."
+                                     "<nl/><nl/>"
+                                     "Trying to use scanner device: <icode>%3</icode><nl/>"
+                                     "libkookascan reported error: <emphasis>%2</emphasis><nl/>"
+                                     "SANE reported error: <emphasis>%1</emphasis>",
+                                     mScanDevice->lastSaneErrorMessage(),
+                                     KScanDevice::statusMessage(stat),
+                                     selDevice.constData());
 
                 int tryAgain = KMessageBox::warningContinueCancel(mMainWindow, msg, QString::null,
                                KGuiItem("Retry"));
@@ -549,7 +549,20 @@ QByteArray KookaView::userDeviceSelection(bool alwaysAsk)
     /* a list of backends the scan backend knows */
     QList<QByteArray> backends = ScanDevices::self()->allDevices();
     if (backends.count() == 0) {
-        if (KMessageBox::warningContinueCancel(mMainWindow, i18n("<qt><p>No scanner devices are available.<p>If your scanner is a type that can be auto-detected by SANE, check that it is connected, switched on and configured correctly.<p>If the scanner cannot be auto-detected by SANE (this includes some network scanners), you need to specify the device to use.  Use the \"Add Scan Device\" option to enter the backend name and parameters, or see that dialog for more information."), QString::null, KGuiItem(i18n("Add Scan Device..."))) != KMessageBox::Continue) {
+        if (KMessageBox::warningContinueCancel(mMainWindow,
+                                               xi18nc("@info",
+                                                      "No scanner devices are available."
+                                                      "<nl/><nl/>"
+                                                      "If your scanner is a type that can be auto-detected by SANE, "
+                                                      "check that it is connected, switched on and configured correctly."
+                                                      "<nl/><nl/>"
+                                                      "If the scanner cannot be auto-detected by SANE (this includes some network scanners), "
+                                                      "you need to specify the device to use. "
+                                                      "Use the <interface>Add Scan Device</interface> option to enter the backend name and parameters, "
+                                                      "or see that dialog for more information."),
+                                               QString::null,
+                                               KGuiItem(i18n("Add Scan Device..."))) != KMessageBox::Continue)
+        {
             return ("");
         }
 
@@ -863,19 +876,19 @@ void KookaView::slotScanFinished(KScanDevice::Status stat)
     //qDebug() << "Scan finished with status" << stat;
 
     if (stat != KScanDevice::Ok && stat != KScanDevice::Cancelled) {
-        QString msg = i18n("<qt><p>"
-                           "There was a problem during preview or scanning."
-                           "<br>"
-                           "Check that the scanner is still connected and switched on, "
-                           "<br>"
-                           "and that media is loaded if required."
-                           "<p>"
-                           "Trying to use scanner device: <b>%3</b><br>"
-                           "libkookascan reported error: <b>%2</b><br>"
-                           "SANE reported error: <b>%1</b>",
-                           mScanDevice->lastSaneErrorMessage(),
-                           KScanDevice::statusMessage(stat),
-                           mScanDevice->scannerBackendName().constData());
+        QString msg = xi18nc("@info",
+                             "There was a problem during preview or scanning."
+                             "<nl/>"
+                             "Check that the scanner is still connected and switched on, "
+                             "<nl/>"
+                             "and that media is loaded if required."
+                             "<nl/><nl/>"
+                             "Trying to use scanner device: <icode>%3</icode><nl/>"
+                             "libkookascan reported error: <emphasis>%2</emphasis><nl/>"
+                             "SANE reported error: <emphasis>%1</emphasis>",
+                             mScanDevice->lastSaneErrorMessage(),
+                             KScanDevice::statusMessage(stat),
+                             mScanDevice->scannerBackendName().constData());
         KMessageBox::error(mMainWindow, msg);
     }
 

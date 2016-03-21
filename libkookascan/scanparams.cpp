@@ -212,7 +212,7 @@ bool ScanParams::connectDevice(KScanDevice *newScanDevice, bool galleryMode)
     // TOTO: port/update
     adf = ADF_OFF;
 #endif
-    QLabel *lab = new QLabel(i18n("<qt><b>Scanner&nbsp;Settings</b>"), this);
+    QLabel *lab = new QLabel(xi18nc("@info", "<emphasis strong=\"1\">Scanner&nbsp;Settings</emphasis>"), this);
     lay->addWidget(lab, 0, 0, Qt::AlignLeft);
 
     mLed = new KLed(this);
@@ -255,13 +255,13 @@ bool ScanParams::connectDevice(KScanDevice *newScanDevice, bool galleryMode)
 
     /* Create the Scan Buttons */
     QPushButton *pb = new QPushButton(QIcon::fromTheme("preview"), i18n("Pre&view"), this);
-    pb->setToolTip(i18n("<qt>Start a preview scan and show the preview image"));
+    pb->setToolTip(i18n("Start a preview scan and show the preview image"));
     pb->setMinimumWidth(100);
     connect(pb, &QPushButton::clicked, this, &ScanParams::slotAcquirePreview);
     lay->addWidget(pb, 5, 0, Qt::AlignLeft);
 
     pb = new QPushButton(QIcon::fromTheme("scan"), i18n("Star&t Scan"), this);
-    pb->setToolTip(i18n("<qt>Start a scan and save the scanned image"));
+    pb->setToolTip(i18n("Start a scan and save the scanned image"));
     pb->setMinimumWidth(100);
     connect(pb, &QPushButton::clicked, this, &ScanParams::slotStartScan);
     lay->addWidget(pb, 5, 1, Qt::AlignRight);
@@ -339,10 +339,10 @@ QWidget *ScanParams::createScannerParams()
         vbl->setMargin(0);
 
         QRadioButton *rb1 = new QRadioButton(i18n("SANE Debug (from PNM image)"), vbg);
-        rb1->setToolTip(i18n("<qt>Operate in the same way that a real scanner does (including scan area, image processing etc.), but reading from the specified image file. See <a href=\"man:sane-pnm(5)\">sane-pnm(5)</a> for more information."));
+        rb1->setToolTip(xi18nc("@info:tooltip", "Operate in the same way that a real scanner does (including scan area, image processing etc.), but reading from the specified image file. See <link url=\"man:sane-pnm(5)\">sane-pnm(5)</link> for more information."));
         vbl->addWidget(rb1);
         QRadioButton *rb2 = new QRadioButton(i18n("Virtual Scanner (any image format)"), vbg);
-        rb2->setToolTip(i18n("<qt>Do not perform any scanning or processing, but simply read the specified image file. This is for testing the image saving, etc."));
+        rb2->setToolTip(xi18nc("@info:tooltip", "Do not perform any scanning or processing, but simply read the specified image file. This is for testing the image saving, etc."));
         vbl->addWidget(rb2);
 
         if (mScanMode == ScanParams::NormalMode) mScanMode = ScanParams::SaneDebugMode;
@@ -593,10 +593,10 @@ QWidget *ScanParams::messageScannerNotSelected()
 {
     if (mNoScannerMessage == NULL) {
         mNoScannerMessage = new QLabel(
-            i18n("<qt>"
-                 "<b>No scanner selected</b>"
-                 "<p>"
-                 "Select a scanner device to perform scanning."));
+            xi18nc("@info",
+                   "<emphasis strong=\"1\">No scanner selected</emphasis>"
+                   "<nl/><nl/>"
+                   "Select a scanner device to perform scanning."));
 
         mNoScannerMessage->setWordWrap(true);
     }
@@ -608,19 +608,19 @@ QWidget *ScanParams::messageScannerProblem()
 {
     if (mProblemMessage == NULL) {
         mProblemMessage = new QLabel(
-            i18n("<qt>"
-                 "<b>Problem: No scanner found, or unable to access it</b>"
-                 "<p>"
-                 "There was a problem using the SANE (Scanner Access Now Easy) library to access "
-                 "the scanner device.  There may be a problem with your SANE installation, or it "
-                 "may not be configured to support your scanner."
-                 "<p>"
-                 "Check that SANE is correctly installed and configured on your system, and "
-                 "also that the scanner device name and settings are correct."
-                 "<p>"
-                 "See the SANE project home page "
-                 "(<a href=\"http://www.sane-project.org\">www.sane-project.org</a>) "
-                 "for more information on SANE installation and setup."));
+            xi18nc("@info",
+                   "<emphasis strong=\"1\">Problem: No scanner found, or unable to access it</emphasis>"
+                   "<nl/><nl/>"
+                   "There was a problem using the SANE (Scanner Access Now Easy) library to access "
+                   "the scanner device.  There may be a problem with your SANE installation, or it "
+                   "may not be configured to support your scanner."
+                   "<nl/><nl/>"
+                   "Check that SANE is correctly installed and configured on your system, and "
+                   "also that the scanner device name and settings are correct."
+                   "<nl/><nl/>"
+                   "See the SANE project home page "
+                   "(<link url=\"http://www.sane-project.org\">www.sane-project.org</link>) "
+                   "for more information on SANE installation and setup."));
 
         mProblemMessage->setWordWrap(true);
         mProblemMessage->setOpenExternalLinks(true);
@@ -725,7 +725,7 @@ KScanDevice::Status ScanParams::prepareScan(QString *vfp)
 
         QFileInfo fi(virtfile);
         if (!fi.exists()) {
-            KMessageBox::sorry(this, i18n("<qt>The testing or virtual file<br><filename>%1</filename><br>was not found or is not readable", virtfile));
+            KMessageBox::sorry(this, xi18nc("@info", "The testing or virtual file <filename>%1</filename><nl/>was not found or is not readable.", virtfile));
             return (KScanDevice::ParamError);
         }
 
@@ -735,8 +735,8 @@ KScanDevice::Status ScanParams::prepareScan(QString *vfp)
             if (!(mime.inherits("image/x-portable-bitmap") ||
                   mime.inherits("image/x-portable-greymap") ||
                   mime.inherits("image/x-portable-pixmap"))) {
-                KMessageBox::sorry(this, i18n("<qt>SANE Debug can only read PNM files.<br>"
-                                              "This file is type <b>%1</b>.", mime.name()));
+                KMessageBox::sorry(this, xi18nc("@info", "SANE Debug can only read PNM files.<nl/>"
+                                              "The specified file is type <icode>%1</icode>.", mime.name()));
                 return (KScanDevice::ParamError);
             }
         }
@@ -754,7 +754,7 @@ void ScanParams::setScanDestination(const QString &dest)
     if (dest.isEmpty()) {
         mProgressDialog->setLabelText(i18n("Scan in progress"));
     } else {
-        mProgressDialog->setLabelText(i18n("Scan in progress<br><br><filename>%1</filename>", dest));
+        mProgressDialog->setLabelText(xi18nc("@info", "Scan in progress<nl/><nl/><filename>%1</filename>", dest));
     }
 }
 

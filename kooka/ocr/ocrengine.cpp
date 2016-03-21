@@ -256,14 +256,14 @@ void OcrEngine::removeTempFiles()
 
     bool haveSome = false;
     if (retain) {
-        QString s = i18n("<qt>The following OCR temporary files are retained for debugging:<p>");
+        QString s = xi18nc("@info", "The following OCR temporary files are retained for debugging:<nl/><nl/>");
         for (QStringList::const_iterator it = temps.constBegin(); it != temps.constEnd(); ++it) {
             if ((*it).isEmpty()) {
                 continue;
             }
 
             QUrl u(*it);
-            s += i18n("<filename><a href=\"%1\">%2</a></filename><br>", u.url(), u.url(QUrl::PreferLocalFile));
+            s += xi18nc("@info", "<filename><link url=\"%1\">%2</link></filename><nl/>", u.url(), u.url(QUrl::PreferLocalFile));
             haveSome = true;
         }
 
