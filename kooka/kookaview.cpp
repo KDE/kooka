@@ -690,13 +690,14 @@ void KookaView::print()
     d.setWindowTitle(i18nc("@title:window", "Print Image"));
     d.setOptions(QAbstractPrintDialog::PrintToFile|QAbstractPrintDialog::PrintShowPageSize);
 
-    d.setOption(QAbstractPrintDialog::PrintSelection, false);
-    d.setOption(QAbstractPrintDialog::PrintPageRange, false);
+    // TODO (investigate): even with the options set as above, the options below still
+    // appear in the print dialogue.  Is this as intended by Qt?
+    //     d.setOption(QAbstractPrintDialog::PrintSelection, false);
+    //     d.setOption(QAbstractPrintDialog::PrintPageRange, false);
 
 
     QMap<QString, QString> imgOptions;
     // TODO: get options from config
-    // if OPT_SCREEN_RES not set, read and set it
 
     ImgPrintDialog imgTab(img);				// create tab for our options
     imgTab.setOptions(imgOptions);			// set initial print options
@@ -707,10 +708,25 @@ void KookaView::print()
 
     if (!d.exec()) return;
 
-    imgTab.getOptions(imgOptions);			// read back changed options
+    QString msg;
+    if (!imgTab.isValid(msg))				// check that settings are valid
+    {
+        KMessageBox::sorry(this,
+                           i18nc("@info", "Invalid print options were specified:\n\n%1", msg),
+                           i18nc("@title:window", "Cannot Print"));
+        return;
+    }
+
+    imgTab.getOptions(imgOptions);			// read back updated options
+    qDebug() << "selected options:";
+    for (QMap<QString, QString>::const_iterator it = imgOptions.constBegin();
+         it!=imgOptions.constEnd(); ++it)
+    {
+        qDebug() << " " << qPrintable(it.key()) << "=" << it.value();
+    }
+
 
 // TODO: printing in KF5
-    // check imgTab.isValid() and display message if problem
     // create a KookaPrint (subclass of a QPrinter)
     // pass options to printer
     // print image

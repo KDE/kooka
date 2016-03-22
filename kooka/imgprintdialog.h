@@ -98,6 +98,7 @@ private:
 
     const KookaImage *m_image;
     bool        m_ignoreSignal;
+    int mScreenDpi;
 };
 
 #endif							// IMGPRINTDIALOG_H

@@ -65,8 +65,6 @@ ImgPrintDialog::ImgPrintDialog(const KookaImage *img, QWidget *parent)
     setWindowTitle(i18nc("@title:tab", "Image"));	// used as tab title
 
     QVBoxLayout *layout = new QVBoxLayout(this);
-    // layout->setMargin( KDialog::marginHint() );
-    // layout->setSpacing( KDialog::spacingHint() );
 
     QGroupBox *grp = new QGroupBox(i18nc("@title:group", "Scaling"), this);
 
@@ -180,50 +178,49 @@ void ImgPrintDialog::setOptions(const QMap<QString, QString> &opts)
 
     // m_autofit->setChecked(opts["app-img-autofit"] == "1");
     QString scale = opts[OPT_SCALING];
-    if (scale == "scan") {
-        m_scaleRadios->button(ID_ORIG)->setChecked(true);
-    } else if (scale == "custom") {
-        m_scaleRadios->button(ID_CUSTOM)->setChecked(true);
-    } else if (scale == "fitpage") {
-        m_scaleRadios->button(ID_FITPAGE)->setChecked(true);
-    } else {
-        m_scaleRadios->button(ID_SCREEN)->setChecked(true);
+    if (scale == "scan") m_scaleRadios->button(ID_ORIG)->setChecked(true);
+    else if (scale == "custom") m_scaleRadios->button(ID_CUSTOM)->setChecked(true);
+    else if (scale == "fitpage") m_scaleRadios->button(ID_FITPAGE)->setChecked(true);
+    else m_scaleRadios->button(ID_SCREEN)->setChecked(true);
+
+    m_dpi->setValue(opts[OPT_SCAN_RES].toInt());
+    m_sizeW->setValue(opts[OPT_WIDTH].toInt());
+    m_sizeH->setValue(opts[OPT_HEIGHT].toInt());
+
+    mScreenDpi = opts[OPT_SCREEN_RES].toInt();
+    if (mScreenDpi==0)					// screen resolution not provided
+    {
+        int resX = logicalDpiX();
+        int resY = logicalDpiY();
+        // TODO: check whether they differ by more than, say, 5%
+        // and warn the user if so - scaling by screen resolution
+        // in that case will not preserve the aspect ratio.
+        mScreenDpi = (resX+resY)/2;
     }
+    m_screenRes->setText(i18nc("@info:status", "Screen resolution: %1 dpi", mScreenDpi));
 
-    int help  = opts[OPT_SCAN_RES].toInt();
-    m_dpi->setValue(help);
-
-    help = opts[OPT_WIDTH].toInt();
-    m_sizeW->setValue(help);
-
-    help = opts[OPT_HEIGHT].toInt();
-    m_sizeH->setValue(help);
-
-    help = opts[OPT_SCREEN_RES].toInt();
-    m_screenRes->setText(i18n("Screen resolution: %1 dpi", help));
-
-    help = opts[OPT_PSGEN_DRAFT].toInt();
-    m_psDraft->setChecked(help == 1);
-
-    help = opts[OPT_RATIO].toInt();
-    m_ratio->setChecked(help == 1);
+    m_psDraft->setChecked(opts[OPT_PSGEN_DRAFT].toInt()==1);
+    m_ratio->setChecked(opts[OPT_RATIO].toInt()==1);
 }
 
 void ImgPrintDialog::getOptions(QMap<QString, QString> &opts, bool include_def)
 {
     // TODO: Check for meaning of include_def !
-    // //qDebug() << "In getOption with include_def: "  << include_def << endl;
+    //
+    // KDE3 kdelibs/kdeprint/kprintdialogpage.h says:
+    // This function is called to fill the structure @p opts with
+    // the selected options from this dialog page. If @p incldef is true,
+    // include also options with default values, otherwise discard them.
+    // Reimplement this function in subclasses.
+    // @param opts the option set to fill
+    // @param incldef if true, include also options with default values
+   // //qDebug() << "In getOption with include_def: "  << include_def << endl;
 
     QString scale = "screen";
-    if (m_scaleRadios->button(ID_ORIG)->isChecked()) {
-        scale = "scan";
-    } else if (m_scaleRadios->button(ID_CUSTOM)->isChecked()) {
-        scale = "custom";
-    } else if (m_scaleRadios->button(ID_FITPAGE)->isChecked()) {
-        scale = "fitpage";
-    }
-
-    opts[OPT_SCALING]     = scale;
+    if (m_scaleRadios->button(ID_ORIG)->isChecked()) scale = "scan";
+    else if (m_scaleRadios->button(ID_CUSTOM)->isChecked()) scale = "custom";
+    else if (m_scaleRadios->button(ID_FITPAGE)->isChecked()) scale = "fitpage";
+    opts[OPT_SCALING] = scale;
 
     opts[OPT_SCAN_RES]    = QString::number(m_dpi->value());
     opts[OPT_WIDTH]       = QString::number(m_sizeW->value());
@@ -231,23 +228,28 @@ void ImgPrintDialog::getOptions(QMap<QString, QString> &opts, bool include_def)
     opts[OPT_PSGEN_DRAFT] = QString::number(m_psDraft->isChecked());
     opts[OPT_RATIO]       = QString::number(m_ratio->isChecked());
 
-    opts[OPT_SCREEN_RES]  = QString::number(this->logicalDpiX());
+    opts[OPT_SCREEN_RES]  = QString::number(mScreenDpi);
 }
+
 
 bool ImgPrintDialog::isValid(QString &msg)
 {
-    /* check if scan reso is higher than 0 in case its needed */
-    int id = m_scaleRadios->checkedId();
-    if (id == ID_ORIG && m_dpi->value() == 0) {
-        msg = i18n("Please specify a scan resolution larger than 0");
-        return false;
-    } else if (id == ID_CUSTOM && (m_sizeW->value() == 0 || m_sizeH->value() == 0)) {
-        msg = i18n("For custom printing, a valid size should be specified.\n"
-                   "At least one dimension is zero.");
+    const int id = m_scaleRadios->checkedId();
+    if (id==ID_ORIG && m_dpi->value()==0)
+    {
+        msg = i18n("The scan resolution must be specified for scaling to it.");
+        return (false);
     }
 
-    return true;
+    if (id==ID_CUSTOM && (m_sizeW->value()==0 || m_sizeH->value()==0))
+    {
+        msg = i18n("A valid size must be specified for custom scaling. One or both of the specified dimensions is zero.");
+        return (false);
+    }
+
+    return (true);
 }
+
 
 void ImgPrintDialog::slotScaleChanged(int id)
 {
@@ -257,22 +259,26 @@ void ImgPrintDialog::slotScaleChanged(int id)
         m_ratio->setEnabled(false);
         m_sizeW->setEnabled(false);
         m_sizeH->setEnabled(false);
+        m_screenRes->setEnabled(true);
     } else if (id == ID_ORIG) {
         /* disable size */
         m_dpi->setEnabled(true);
         m_ratio->setEnabled(false);
         m_sizeW->setEnabled(false);
         m_sizeH->setEnabled(false);
+        m_screenRes->setEnabled(false);
     } else if (id == ID_CUSTOM) {
         m_dpi->setEnabled(false);
         m_ratio->setEnabled(true);
         m_sizeW->setEnabled(true);
         m_sizeH->setEnabled(true);
+        m_screenRes->setEnabled(false);
     } else if (id == ID_FITPAGE) {
         m_dpi->setEnabled(false);
         m_ratio->setEnabled(true);
         m_sizeW->setEnabled(false);
         m_sizeH->setEnabled(false);
+        m_screenRes->setEnabled(false);
     }
 }
 
