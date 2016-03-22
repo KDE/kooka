@@ -273,6 +273,8 @@ FormatDialog::FormatDialog(QWidget *parent, ImageMetaInfo::ImageType type,
 
     if (askForFormat)					// format selector section
     {
+        mMimeTypes = ImageFormat::mimeTypes();		// need list of MIME types
+
         l1 = new QLabel(xi18nc("@info", "Select a format to save the scanned image.<nl/>This is a <emphasis strong=\"1\">%1</emphasis>.",
                                ImgSaver::picTypeAsString(type)), page);
         gl->addWidget(l1, row, 0, 1, 3);
@@ -287,81 +289,6 @@ FormatDialog::FormatDialog(QWidget *parent, ImageMetaInfo::ImageType type,
         gl->addWidget(l1, row, 0, Qt::AlignLeft);
 
         mFormatList = new QListWidget(page);
-
-        // TODO: the output from all this is mMimeTypes, so move to ImageFormat
-        // and make it a once-only initialisation.
-
-        // Each of the lists that we get from Qt (supported image formats and
-        // supported MIME types) is sorted alphabetically.  That means that
-        // there is no correlation between the two lists.  The formats list
-        // may also contain duplicates, e.g. "jpeg" and "jpg" both correspond
-        // to MIME type image/jpeg.
-        //
-        // However, it appears that the Qt image format is actually a file
-        // name extension.  That means that we can obtain the MIME type by
-        // finding the type for a file with that extension.
-
-        QList<QByteArray> supportedFormats = QImageWriter::supportedImageFormats();
-        //qDebug() << "have" << supportedFormats.count() << "image formats:" << supportedFormats;
-        QList<QByteArray> supportedTypes = QImageWriter::supportedMimeTypes();
-        //qDebug() << "have" << supportedTypes.count() << "mime types:" << supportedTypes;
-
-        // Although the format list from standard Qt 5 (unlike Qt 4) does not
-        // appear to contain any duplicates or mixed case, it is always possible
-        // that a plugin could introduce some.  So the apparently pointless loop
-        // here filters the list.
-        QList<QByteArray> formatList;
-        foreach (const QByteArray &format, supportedFormats)
-        {
-            const QByteArray f = format.toLower();
-            if (!formatList.contains(f)) formatList.append(f);
-        }
-        qDebug() << "have" << formatList.count() << "image types"
-                 << "from" << supportedFormats.count() << "supported";
-
-        // Even after filtering the list as above, there will be MIME type
-        // duplicates (e.g. JPG and JPEG both map to image/jpeg and produce
-        // the same results).  So the list is filtered again to eliminate
-        // duplicate MIME types.
-        //
-        // As a side effect, this completely eliminates any formats that do
-        // not have a defined MIME type.  None of those affected (currently
-        // BW, RGBA, XV) seem to be of any use.
-
-        QMimeDatabase db;
-        mMimeTypes.clear();
-        foreach (const QByteArray &format, formatList)
-        {
-            QMimeType mime = db.mimeTypeForFile(QString("a.")+format, QMimeDatabase::MatchExtension);
-            if (!mime.isValid() || mime.isDefault())
-            {
-                qDebug() << "No MIME type for format" << format;
-                continue;
-            }
-
-            // ImageFormat::formatForMime() should now work even in the presence
-            // of MIME aliases, but double check that it works at this stage.
-            ImageFormat fmt = ImageFormat::formatForMime(mime);
-            if (!fmt.isValid())
-            {
-                qDebug() << "MIME type" << mime.name() << "does not map back to format" << format;
-                continue;
-            }
-
-            bool seen = false;
-            foreach (const QMimeType &mt, mMimeTypes)
-            {
-                if (mime.inherits(mt.name()))
-                {
-                    seen = true;
-                    break;
-                }
-            }
-
-            if (!seen) mMimeTypes.append(mime);
-        }
-        qDebug() << "have" << mMimeTypes.count() << "unique MIME types";
-
         // The list box is filled later.
 
         mImageType = type;
