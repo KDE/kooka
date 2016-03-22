@@ -37,7 +37,6 @@
 #include "kookaview.h"
 
 class KConfigGroup;
-class KPrinter;
 class KToggleAction;
 class QAction;
 class KActionMenu;
@@ -117,7 +116,6 @@ private:
 private:
     KookaView *m_view;
 
-    KPrinter   *m_printer;
     KToggleAction *m_scanParamsAction;
     KToggleAction *m_previewerAction;
 

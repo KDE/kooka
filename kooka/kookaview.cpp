@@ -41,6 +41,7 @@
 #include <qicon.h>
 #include <qaction.h>
 #include <qmenu.h>
+#include <qprintdialog.h>
 
 #include <krun.h>
 #include <kmimetypetrader.h>
@@ -74,9 +75,9 @@
 #include "statusbarmanager.h"
 #include "kookasettings.h"
 
+#include "imgprintdialog.h"
 #ifndef KDE4
 #include "kookaprint.h"
-#include "imgprintdialog.h"
 #include "photocopyprintdialogpage.h"
 #endif
 
@@ -682,14 +683,50 @@ void KookaView::loadStartupImage()
 
 void KookaView::print()
 {
-// TODO: printing in KDE4
-#ifndef KDE4
-    /* For now, print a single file. Later, print multiple images to one page */
+    const KookaImage *img = gallery()->getCurrImage(true);
+    if (img == NULL) return;				// load image if necessary
 
-    KookaImage *img = gallery()->getCurrImage(true);    // load image if necessary
-    if (img == NULL) {
-        return;
-    }
+    QPrintDialog d(this);
+    d.setWindowTitle(i18nc("@title:window", "Print Image"));
+    d.setOptions(QAbstractPrintDialog::PrintToFile|QAbstractPrintDialog::PrintShowPageSize);
+
+    d.setOption(QAbstractPrintDialog::PrintSelection, false);
+    d.setOption(QAbstractPrintDialog::PrintPageRange, false);
+
+
+    QMap<QString, QString> imgOptions;
+    // TODO: get options from config
+    // if OPT_SCREEN_RES not set, read and set it
+
+    ImgPrintDialog imgTab(img);				// create tab for our options
+    imgTab.setOptions(imgOptions);			// set initial print options
+
+    QList<QWidget *> customTabs;
+    customTabs.append(&imgTab);
+    d.setOptionTabs(customTabs);			// add tab to print dialogue
+
+    if (!d.exec()) return;
+
+    imgTab.getOptions(imgOptions);			// read back changed options
+
+// TODO: printing in KF5
+    // check imgTab.isValid() and display message if problem
+    // create a KookaPrint (subclass of a QPrinter)
+    // pass options to printer
+    // print image
+
+
+
+
+
+
+
+
+
+
+
+#ifdef KDE3
+    /* For now, print a single file. Later, print multiple images to one page */
 
     KPrinter printer; // ( true, pMode );
     printer.setUsePrinterResolution(true);

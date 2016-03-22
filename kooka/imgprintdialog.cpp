@@ -1,57 +1,59 @@
-/***************************************************************************
-                imgprintdialog.h  - Kooka's Image Printing
-                             -------------------
-    begin                : May 2003
-    copyright            : (C) 1999 by Klaas Freitag
-    email                : freitag@suse.de
- ***************************************************************************/
-
-/***************************************************************************
- *                                                                         *
- *  This file may be distributed and/or modified under the terms of the    *
- *  GNU General Public License version 2 as published by the Free Software *
- *  Foundation and appearing in the file COPYING included in the           *
- *  packaging of this file.                                                *
- *
- *  As a special exception, permission is given to link this program       *
- *  with any version of the KADMOS ocr/icr engine of reRecognition GmbH,   *
- *  Kreuzlingen and distribute the resulting executable without            *
- *  including the source code for KADMOS in the source distribution.       *
- *
- *  As a special exception, permission is given to link this program       *
- *  with any edition of Qt, and distribute the resulting executable,       *
- *  without including the source code for Qt in the source distribution.   *
- *                                                                         *
- ***************************************************************************/
+/************************************************************************
+ *									*
+ *  This file is part of Kooka, a scanning/OCR application using	*
+ *  Qt <http://www.qt.io> and KDE Frameworks <http://www.kde.org>.	*
+ *									*
+ *  Copyright (C) 2003-2016 Klaas Freitag <freitag@suse.de>		*
+ *                          Jonathan Marten <jjm@keelhaul.me.uk>	*
+ *									*
+ *  Kooka is free software; you can redistribute it and/or modify it	*
+ *  under the terms of the GNU Library General Public License as	*
+ *  published by the Free Software Foundation and appearing in the	*
+ *  file COPYING included in the packaging of this file;  either	*
+ *  version 2 of the License, or (at your option) any later version.	*
+ *									*
+ *  As a special exception, permission is given to link this program	*
+ *  with any version of the KADMOS OCR/ICR engine (a product of		*
+ *  reRecognition GmbH, Kreuzlingen), and distribute the resulting	*
+ *  executable without including the source code for KADMOS in the	*
+ *  source distribution.						*
+ *									*
+ *  This program is distributed in the hope that it will be useful,	*
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of	*
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the	*
+ *  GNU General Public License for more details.			*
+ *									*
+ *  You should have received a copy of the GNU General Public		*
+ *  License along with this program;  see the file COPYING.  If		*
+ *  not, see <http://www.gnu.org/licenses/>.				*
+ *									*
+ ************************************************************************/
 
 #include "imgprintdialog.h"
 
-#include <qstring.h>
 #include <qmap.h>
 #include <qlayout.h>
-#include <q3buttongroup.h>
+#include <qlabel.h>
+#include <qbuttongroup.h>
 #include <qcheckbox.h>
 #include <qradiobutton.h>
-#include <q3vgroupbox.h>
-#ifndef KDE4
-#include <qpaintdevicemetrics.h>
-#endif
-#include <qlabel.h>
+#include <qgroupbox.h>
+#include <qspinbox.h>
 
-#include <QDebug>
-#include <KLocalizedString>
-#include <knuminput.h>
-#include <kdialog.h>
+#include <qdebug.h>
+#include <klocalizedstring.h>
 
 #include "kookaimage.h"
+
 
 #define ID_SCREEN 0
 #define ID_ORIG   1
 #define ID_CUSTOM 2
-#define ID_FIT_PAGE 3
+#define ID_FITPAGE 3
+
 
 ImgPrintDialog::ImgPrintDialog(const KookaImage *img, QWidget *parent)
-#ifndef KDE4
+#ifdef KDE3
     : KPrintDialogPage(parent, name),
 #else
     : QWidget(parent),
@@ -60,90 +62,114 @@ ImgPrintDialog::ImgPrintDialog(const KookaImage *img, QWidget *parent)
       m_image(img),
       m_ignoreSignal(false)
 {
-#ifndef KDE4
-    setTitle(i18n("Image Printing"));
-#endif
+    setWindowTitle(i18nc("@title:tab", "Image"));	// used as tab title
 
     QVBoxLayout *layout = new QVBoxLayout(this);
     // layout->setMargin( KDialog::marginHint() );
     // layout->setSpacing( KDialog::spacingHint() );
 
-    m_scaleRadios = new Q3ButtonGroup(2, Qt::Vertical, i18n("Image Print Size"), this);
-    m_scaleRadios->setRadioButtonExclusive(true);
-    connect(m_scaleRadios, &Q3ButtonGroup::clicked, this, &ImgPrintDialog::slScaleChanged);
+    QGroupBox *grp = new QGroupBox(i18nc("@title:group", "Scaling"), this);
 
-    m_rbScreen = new QRadioButton(i18n("Scale to same size as on screen"),
-                                  m_scaleRadios);
-    m_rbScreen->setToolTip(i18n("Screen scaling. That prints according to the screen resolution."));
+    // TODO: grid unified, radios and entry fields together
+    QVBoxLayout *vbl = new QVBoxLayout(grp);
+    //vbl->setMargin(0);
 
-    m_scaleRadios->insert(m_rbScreen, ID_SCREEN);
+    m_scaleRadios = new QButtonGroup(this);
+    connect(m_scaleRadios, static_cast<void (QButtonGroup::*)(int)>(&QButtonGroup::buttonClicked),
+            this, &ImgPrintDialog::slotScaleChanged);
 
-    m_rbOrigSize = new QRadioButton(i18n("Original size (calculate from scan resolution)"),
-                                    m_scaleRadios);
-    m_rbOrigSize->setToolTip(i18n("Calculates the print size from the scan resolution. Enter the scan resolution in the dialog field below."));
-    m_scaleRadios->insert(m_rbOrigSize, ID_ORIG);
+    QRadioButton *rb = new QRadioButton(i18nc("@option:radio", "Same size as on screen"), this);
+    rb->setToolTip(i18nc("@info;tooltip", "<div>Print at the same size as seen on screen, determined by the screen resolution.</div>"));
+    m_scaleRadios->addButton(rb, ID_SCREEN);
+    vbl->addWidget(rb);
 
-    m_rbScale    = new QRadioButton(i18n("Scale image to custom dimension"), m_scaleRadios);
-    m_rbScale->setToolTip(i18n("Set the print size yourself in the dialog below. The image is centered on the paper."));
+    rb = new QRadioButton(i18nc("@option:radio", "Size from scan resolution"), this);
+    rb->setToolTip(i18nc("@info:tooltip", "<div>Print at a size determined by the scan resolution. The scan resolution is saved with the image and used if available; if it is not, it can be entered below.</div>"));
+    m_scaleRadios->addButton(rb, ID_ORIG);
+    vbl->addWidget(rb);
 
-    m_scaleRadios->insert(m_rbScale, ID_CUSTOM);
+    rb = new QRadioButton(i18nc("@option:radio", "Custom size"), this);
+    rb->setToolTip(i18nc("@info:tooltip", "<div>Print scaled to the size as specified below. The image is centered on the paper.</div>"));
+    m_scaleRadios->addButton(rb, ID_CUSTOM);
+    vbl->addWidget(rb);
 
-    m_rbFitPage = new QRadioButton(i18n("Scale image to fit to page"), m_scaleRadios);
-    m_rbFitPage->setToolTip(i18n("Printout uses maximum space on the selected pager. Aspect ratio is maintained."));
-    m_scaleRadios->insert(m_rbFitPage, ID_FIT_PAGE);
+    rb = new QRadioButton(i18nc("@option:radio", "Fit to page"), this);
+    rb->setToolTip(i18nc("@info:tooltip", "<div>Print using as much of the available space on the paper as possible. The aspect ratio is maintained.</div>"));
+    m_scaleRadios->addButton(rb, ID_FITPAGE);
+    vbl->addWidget(rb);
 
-    layout->addWidget(m_scaleRadios);
+    layout->addWidget(grp);
 
-    QHBoxLayout *hbox = new QHBoxLayout(this);
+    QHBoxLayout *hbox = new QHBoxLayout;
     layout->addLayout(hbox);
 
     /** Box for Image Resolutions **/
-    Q3VGroupBox *group1 = new Q3VGroupBox(i18n("Resolutions"), this);
+    QGroupBox *group1 = new QGroupBox(i18nc("@title:group", "Resolutions"), this);
     hbox->addWidget(group1);
+    vbl = new QVBoxLayout(group1);
 
     /* Postscript generation resolution  */
-    m_psDraft = new QCheckBox(i18n("Generate low resolution PostScript (fast draft print)"), group1);
+    m_psDraft = new QCheckBox(i18nc("@option:check", "Generate low resolution PostScript (fast draft print)"), this);
     m_psDraft->setChecked(false);
+    vbl->addWidget(m_psDraft);
+
 
     /* Scan resolution of the image */
-    m_dpi = new KIntNumInput(group1);
-    m_dpi->setLabel(i18n("Scan resolution (dpi):"), Qt::AlignVCenter);
+    QLabel *l = new QLabel(i18nc("@label:spinbox", "Scan resolution:"), this);
+    vbl->addWidget(l);
+
+    m_dpi = new QSpinBox(group1);
+    m_dpi->setRange(50, 1200);
     m_dpi->setValue(300);
-    m_dpi->setSuffix(i18n(" dpi"));
+    m_dpi->setSuffix(i18nc("@item:intext abbreviation for 'dots per inch'", " dpi"));
+    l->setBuddy(m_dpi);
+    vbl->addWidget(m_dpi);
 
     /* Label for displaying the screen Resolution */
     m_screenRes = new QLabel(group1);
+    vbl->addWidget(m_screenRes);
 
     /** Box for Image Print Size **/
-    Q3VGroupBox *group = new Q3VGroupBox(i18n("Image Print Size"), this);
-    hbox->addWidget(group);
+    QGroupBox *group2 = new QGroupBox(i18nc("@title:group", "Image Print Size"), this);
+    hbox->addWidget(group2);
+    vbl = new QVBoxLayout(group2);
 
-    m_sizeW = new KIntNumInput(group);
-    m_sizeW->setLabel(i18n("Image width:"), Qt::AlignVCenter);
-    m_sizeW->setSuffix(i18n(" mm"));
-    connect(m_sizeW, &KIntNumInput::valueChanged, this, &ImgPrintDialog::slCustomWidthChanged);
-    m_sizeH = new KIntNumInput(m_sizeW, Qt::AlignVCenter, group);
-    m_sizeH->setLabel(i18n("Image height:"), Qt::AlignVCenter);
-    m_sizeH->setSuffix(i18n(" mm"));
-    connect(m_sizeH, &KIntNumInput::valueChanged, this, &ImgPrintDialog::slCustomHeightChanged);
+    l = new QLabel(i18nc("@label:spinbox", "Image width:"), this);
+    vbl->addWidget(l);
 
-    m_ratio = new QCheckBox(i18n("Maintain aspect ratio"), group);
+    m_sizeW = new QSpinBox(this);
+    m_sizeW->setRange(10, 1000);
+    m_sizeW->setSuffix(i18nc("abbreviation for 'millimetres'", " mm"));
+    connect(m_sizeW, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged), this, &ImgPrintDialog::slotCustomHeightChanged);
+    l->setBuddy(m_sizeW);
+    vbl->addWidget(m_sizeW);
+
+    l = new QLabel(i18nc("@label:spinbox", "Image height:"), this);
+    vbl->addWidget(l);
+
+    m_sizeH = new QSpinBox(this);
+    m_sizeH->setRange(10, 1000);
+    m_sizeH->setSuffix(i18nc("@item:intext abbreviation for 'millimetres'", " mm"));
+    connect(m_sizeH, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged), this, &ImgPrintDialog::slotCustomHeightChanged);
+    l->setBuddy(m_sizeH);
+    vbl->addWidget(m_sizeH);
+
+    m_ratio = new QCheckBox(i18nc("@option:check", "Maintain aspect ratio"), this);
     m_ratio->setChecked(true);
+    vbl->addWidget(m_ratio);
 
     QWidget *spaceEater = new QWidget(this);
     spaceEater->setSizePolicy(QSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored));
     layout->addWidget(spaceEater);
 
     /* Set start values */
-    m_rbScreen->setChecked(true);
+    m_scaleRadios->button(ID_SCREEN)->setChecked(true);
     slotScaleChanged(ID_SCREEN);
 }
 
 void ImgPrintDialog::setImage(const KookaImage *img)
 {
-    if (img == NULL) {
-        return;
-    }
+    if (img == NULL) return;
 
     // TODO: get scan resolution out of the image
 }
@@ -155,13 +181,13 @@ void ImgPrintDialog::setOptions(const QMap<QString, QString> &opts)
     // m_autofit->setChecked(opts["app-img-autofit"] == "1");
     QString scale = opts[OPT_SCALING];
     if (scale == "scan") {
-        m_rbOrigSize->setChecked(true);
+        m_scaleRadios->button(ID_ORIG)->setChecked(true);
     } else if (scale == "custom") {
-        m_rbScale->setChecked(true);
+        m_scaleRadios->button(ID_CUSTOM)->setChecked(true);
     } else if (scale == "fitpage") {
-        m_rbFitPage->setChecked(true);
+        m_scaleRadios->button(ID_FITPAGE)->setChecked(true);
     } else {
-        m_rbScreen->setChecked(true);
+        m_scaleRadios->button(ID_SCREEN)->setChecked(true);
     }
 
     int help  = opts[OPT_SCAN_RES].toInt();
@@ -174,7 +200,7 @@ void ImgPrintDialog::setOptions(const QMap<QString, QString> &opts)
     m_sizeH->setValue(help);
 
     help = opts[OPT_SCREEN_RES].toInt();
-    m_screenRes->setText(i18n("Screen resolution: %1 dpi").arg(help));
+    m_screenRes->setText(i18n("Screen resolution: %1 dpi", help));
 
     help = opts[OPT_PSGEN_DRAFT].toInt();
     m_psDraft->setChecked(help == 1);
@@ -189,11 +215,11 @@ void ImgPrintDialog::getOptions(QMap<QString, QString> &opts, bool include_def)
     // //qDebug() << "In getOption with include_def: "  << include_def << endl;
 
     QString scale = "screen";
-    if (m_rbOrigSize->isChecked()) {
+    if (m_scaleRadios->button(ID_ORIG)->isChecked()) {
         scale = "scan";
-    } else if (m_rbScale->isChecked()) {
+    } else if (m_scaleRadios->button(ID_CUSTOM)->isChecked()) {
         scale = "custom";
-    } else if (m_rbFitPage->isChecked()) {
+    } else if (m_scaleRadios->button(ID_FITPAGE)->isChecked()) {
         scale = "fitpage";
     }
 
@@ -211,7 +237,7 @@ void ImgPrintDialog::getOptions(QMap<QString, QString> &opts, bool include_def)
 bool ImgPrintDialog::isValid(QString &msg)
 {
     /* check if scan reso is higher than 0 in case its needed */
-    int id = m_scaleRadios->id(m_scaleRadios->selected());
+    int id = m_scaleRadios->checkedId();
     if (id == ID_ORIG && m_dpi->value() == 0) {
         msg = i18n("Please specify a scan resolution larger than 0");
         return false;
@@ -242,7 +268,7 @@ void ImgPrintDialog::slotScaleChanged(int id)
         m_ratio->setEnabled(true);
         m_sizeW->setEnabled(true);
         m_sizeH->setEnabled(true);
-    } else if (id == ID_FIT_PAGE) {
+    } else if (id == ID_FITPAGE) {
         m_dpi->setEnabled(false);
         m_ratio->setEnabled(true);
         m_sizeW->setEnabled(false);
@@ -258,7 +284,7 @@ void ImgPrintDialog::slotCustomWidthChanged(int val)
     }
 
     /* go out here if scaling is not custom */
-    if (m_scaleRadios->id(m_scaleRadios->selected()) != ID_CUSTOM) {
+    if (m_scaleRadios->checkedId() != ID_CUSTOM) {
         return;
     }
 
@@ -267,6 +293,7 @@ void ImgPrintDialog::slotCustomWidthChanged(int val)
         return;
     }
 
+    // TODO: use blockSignals()
     m_ignoreSignal = true;
     //qDebug() << "Setting value to horizontal size";
     m_sizeH->setValue(int(double(val) *
@@ -282,7 +309,7 @@ void ImgPrintDialog::slotCustomHeightChanged(int val)
     }
 
     /* go out here if scaling is not custom */
-    if (m_scaleRadios->id(m_scaleRadios->selected()) != ID_CUSTOM) {
+    if (m_scaleRadios->checkedId() != ID_CUSTOM) {
         return;
     }
 

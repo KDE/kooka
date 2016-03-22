@@ -136,7 +136,7 @@ set(kooka_SRCS
   kookagallery.cpp
   thumbview.cpp
   kookaprint.cpp
-  #QT5 imgprintdialog.cpp
+  imgprintdialog.cpp
   scanparamsdialog.cpp
   newscanparams.cpp		# -> newscaparamsdialog
   #QT5 photocopyprintdialogpage.cpp
@@ -162,6 +162,7 @@ kde4_add_kcfg_files(kooka_SRCS kookasettings.kcfgc)
 
 add_executable(kooka ${kooka_SRCS} ${kooka_ocr_SRCS})
 target_link_libraries(kooka
+  Qt5::PrintSupport
   dialogutil
   kookascan
   libfiletree
