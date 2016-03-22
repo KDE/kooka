@@ -45,15 +45,17 @@ public:
      * data (which is available via @c QImage::Format), but a general
      * category which an application or its user will be interested in.
      **/
-    enum ImageType {
-        Unknown     = 0x00,     ///< Unknown or not resolved yet
-        BlackWhite  = 0x01,     ///< Black/white bitmap
-        Greyscale   = 0x02,     ///< Grey scale (indexed with palette)
-        LowColour   = 0x04,     ///< Low colour (indexed with palette)
-        HighColour  = 0x08,     ///< High colour (RGB)
-        Preview     = 0x10,     ///< A preview image (application defined)
-        Thumbnail   = 0x20      ///< A thumbnail image (application defined)
+    enum ImageType
+    {
+        Unknown     = 0x00,				///< Unknown or not resolved yet
+        BlackWhite  = 0x01,				///< Black/white bitmap
+        Greyscale   = 0x02,				///< Grey scale (indexed with palette)
+        LowColour   = 0x04,				///< Low colour (indexed with palette)
+        HighColour  = 0x08,				///< High colour (RGB)
+        Preview     = 0x10,				///< A preview image (application defined)
+        Thumbnail   = 0x20				///< A thumbnail image (application defined)
     };
+    Q_DECLARE_FLAGS(ImageTypes, ImageType)
 
     /**
      * Constructor.
@@ -193,4 +195,6 @@ private:
     ImageMetaInfo::ImageType m_type;
 };
 
-#endif                          // IMAGEMETAINFO_H
+Q_DECLARE_OPERATORS_FOR_FLAGS(ImageMetaInfo::ImageTypes)
+
+#endif							// IMAGEMETAINFO_H

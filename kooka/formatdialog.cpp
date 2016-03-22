@@ -51,165 +51,180 @@
 #include "kookasettings.h"
 
 
-struct formatInfo {
+struct FormatInfo {
     const char *mime;
     const char *helpString;
-    int recForTypes;
-// TODO: also need an "allowed for types" field (a superset of recForTypes),
-// so that, e.g. PGM or PPM will not be shown for a 1-bit image.
-// Make recForTypes and this a QFlags
+    ImageMetaInfo::ImageTypes recForTypes;
+    ImageMetaInfo::ImageTypes okForTypes;
 };
 
-static struct formatInfo formats[] = {
+static struct FormatInfo formats[] =
+{
     {
-        "image/bmp",                  // BMP
+        "image/bmp",					// BMP
         I18N_NOOP(
             "<b>Bitmap Picture</b> is a widely used format for images under MS Windows. \
 It is suitable for color, grayscale and line art images.\
 <p>This format is widely supported but is not recommended, use an open format \
 instead."),
+        0,
         0
     },
 
     {
-        "image/x-portable-bitmap",            // PBM
+        "image/x-portable-bitmap",			// PBM
         I18N_NOOP(
             "<b>Portable Bitmap</b>, as used by Netpbm, is an uncompressed format for line art \
 (bitmap) images. Only 1 bit per pixel depth is supported."),
+        ImageMetaInfo::BlackWhite,
         ImageMetaInfo::BlackWhite
     },
 
     {
-        "image/x-portable-graymap",           // PGM
+        "image/x-portable-graymap",			// PGM
         I18N_NOOP(
             "<b>Portable Greymap</b>, as used by Netpbm, is an uncompressed format for grayscale \
 images. Only 8 bit per pixel depth is supported."),
+        ImageMetaInfo::Greyscale,
         ImageMetaInfo::Greyscale
     },
 
     {
-        "image/x-portable-pixmap",            // PPM
+        "image/x-portable-pixmap",			// PPM
         I18N_NOOP(
             "<b>Portable Pixmap</b>, as used by Netpbm, is an uncompressed format for full color \
 images. Only 24 bit per pixel RGB is supported."),
+        ImageMetaInfo::LowColour | ImageMetaInfo::HighColour,
         ImageMetaInfo::LowColour | ImageMetaInfo::HighColour
     },
 
     {
-        "image/x-pcx",                    // PCX
+        "image/x-pcx",					// PCX
         I18N_NOOP(
             "<b>PCX</b> is a lossless compressed format which is often supported by PC imaging \
 applications, although it is rather old and unsophisticated.  It is suitable for \
 color and grayscale images.\
 <p>This format is not recommended, use an open format instead."),
+        0,
         0
     },
 
     {
-        "image/x-xbitmap",                // XBM
+        "image/x-xbitmap",				// XBM
         I18N_NOOP(
             "<b>X Bitmap</b> is often used by the X Window System to store cursor and icon bitmaps.\
 <p>Unless required for this purpose, use a general purpose format instead."),
-        0
+        0,
+        ImageMetaInfo::BlackWhite
     },
 
     {
-        "image/x-xpixmap",                // XPM
+        "image/x-xpixmap",				// XPM
         I18N_NOOP(
             "<b>X Pixmap</b> is often used by the X Window System for color icons and other images.\
 <p>Unless required for this purpose, use a general purpose format instead."),
-        0
+        0,
+        ImageMetaInfo::LowColour | ImageMetaInfo::HighColour
     },
 
     {
-        "image/png",                  // PNG
+        "image/png",					// PNG
         I18N_NOOP(
             "<b>Portable Network Graphics</b> is a lossless compressed format designed to be \
 portable and extensible. It is suitable for any type of color or grayscale images, \
 indexed or true color.\
 <p>PNG is an open format which is widely supported."),
-        ImageMetaInfo::BlackWhite | ImageMetaInfo::LowColour | ImageMetaInfo::Greyscale | ImageMetaInfo::HighColour
+        ImageMetaInfo::BlackWhite | ImageMetaInfo::LowColour | ImageMetaInfo::Greyscale | ImageMetaInfo::HighColour,
+        0
     },
 
     {
-        "image/jpeg",                 // JPEG JPG
+        "image/jpeg",					// JPEG JPG
         I18N_NOOP(
             "<b>JPEG</b> is a compressed format suitable for true color or grayscale images. \
 It is a lossy format, so it is not recommended for archiving or for repeated loading \
 and saving.\
 <p>This is an open format which is widely supported."),
-        ImageMetaInfo::HighColour | ImageMetaInfo::Greyscale
+        ImageMetaInfo::HighColour | ImageMetaInfo::Greyscale,
+        ImageMetaInfo::LowColour | ImageMetaInfo::Greyscale | ImageMetaInfo::HighColour
     },
 
     {
-        "image/jp2",                  // JP2
+        "image/jp2",					// JP2
         I18N_NOOP(
             "<b>JPEG 2000</b> was intended as an update to the JPEG format, with the option of \
 lossless compression, but so far is not widely supported. It is suitable for true \
 color or grayscale images."),
-        0
+        0,
+        ImageMetaInfo::LowColour | ImageMetaInfo::Greyscale | ImageMetaInfo::HighColour
     },
 
     {
-        "image/x-eps",                    // EPS EPSF EPSI
+        "image/x-eps",					// EPS EPSF EPSI
         I18N_NOOP(
             "<b>Encapsulated PostScript</b> is derived from the PostScript&trade; \
 page description language.  Use this format for importing into other \
 applications, or to use with (e.g.) TeX."),
+        0,
         0
     },
 
     {
-        "image/x-tga",                    // TGA
+        "image/x-tga",					// TGA
         I18N_NOOP(
             "<b>Truevision Targa</b> can store full color images with an alpha channel, and is \
 used extensively by animation and video applications.\
 <p>This format is not recommended, use an open format instead."),
-        0
+        0,
+        ImageMetaInfo::LowColour | ImageMetaInfo::Greyscale | ImageMetaInfo::HighColour
     },
 
     {
-        "image/gif",                  // GIF
-        I18N_NOOP(     // writing may not be supported
+        "image/gif",					// GIF
+        I18N_NOOP(					// writing may not be supported
             "<b>Graphics Interchange Format</b> is a popular but patent-encumbered format often \
 used for web graphics.  It uses lossless compression with up to 256 colors and \
 optional transparency.\
 <p>For legal reasons this format is not recommended, use an open format instead."),
+        0,
         0
     },
 
     {
-        "image/tiff",                 // TIF TIFF
-        I18N_NOOP(     // writing may not be supported
+        "image/tiff",					// TIF TIFF
+        I18N_NOOP(					// writing may not be supported
             "<b>Tagged Image File Format</b> is a versatile and extensible file format widely \
 supported by imaging and publishing applications. It supports indexed and true color \
 images with alpha transparency.\
 <p>Because there are many variations, there may sometimes be compatibility problems. \
 Unless required for use with other applications, use an open format instead."),
-        ImageMetaInfo::BlackWhite | ImageMetaInfo::LowColour | ImageMetaInfo::Greyscale | ImageMetaInfo::HighColour
+        ImageMetaInfo::BlackWhite | ImageMetaInfo::LowColour | ImageMetaInfo::Greyscale | ImageMetaInfo::HighColour,
+        0
     },
 
     {
-        "video/x-mng",                    // MNG
+        "video/x-mng",					// MNG
         I18N_NOOP(
             "<b>Multiple-image Network Graphics</b> is derived from the PNG standard and is \
 intended for animated images.  It is an open format suitable for all types of \
 images.\
 <p>Images produced by a scanner will not be animated, so unless specifically \
 required for use with other applications use PNG instead."),
+        0,
         0
     },
 
     {
-        "image/x-sgi",                    // SGI
+        "image/x-sgi",					// SGI
         I18N_NOOP(
             "This is the <b>Silicon Graphics</b> native image file format, supporting 24 bit \
 true color images with optional lossless compression.\
 <p>Unless specifically required, use an open format instead."),
-        0
+        0,
+        ImageMetaInfo::LowColour | ImageMetaInfo::HighColour
     },
 
-    { NULL, NULL, 0 }
+    { NULL, NULL, 0, 0 }
 };
 
 static QString sLastFormat = QString::null;		// format last used, whether
@@ -481,7 +496,7 @@ void FormatDialog::formatSelected(QListWidgetItem *item)
 
     const char *helptxt = NULL;
     const QString mimename = item->data(Qt::UserRole).toString();
-    for (formatInfo *ip = &formats[0]; ip->mime != NULL; ++ip) {
+    for (FormatInfo *ip = &formats[0]; ip->mime != NULL; ++ip) {
         // locate help text for format
         if (ip->mime == mimename) {
             helptxt = ip->helpString;
@@ -508,6 +523,7 @@ void FormatDialog::formatSelected(QListWidgetItem *item)
     checkValid();
 }
 
+// TODO: implement subtypes
 void FormatDialog::check_subformat(const ImageFormat &format)
 {
     if (mSubformatCombo == NULL) return;		// not showing this
@@ -599,27 +615,46 @@ void FormatDialog::checkValid()
     setButtonEnabled(QDialogButtonBox::Ok, ok);
 }
 
+
+static const FormatInfo *findKnownFormat(const QMimeType &mime)
+{
+    for (const FormatInfo *fi = &formats[0]; fi->mime != NULL; ++fi)
+    {							// search for format info
+        if (mime.inherits(fi->mime)) return (fi);	// matching that MIME type
+    }
+
+    return (NULL);					// nothing found
+}
+
+
 void FormatDialog::buildFormatList(bool recOnly)
 {
     if (mFormatList == NULL) return;			// not showing this
     qDebug() << "recOnly" << recOnly << "for type" << mImageType;
 
     mFormatList->clear();
-    foreach (const QMimeType &mime, mMimeTypes)
+    foreach (const QMimeType &mime, mMimeTypes)		// for all known MIME types
     {
-        if (recOnly) {					// only want recommended
-            bool formatOk = false;
-            for (formatInfo *ip = &formats[0]; ip->mime != NULL; ++ip) {
-                // search for this format
-                if (!mime.inherits(ip->mime)) continue;
-
-                if (ip->recForTypes & mImageType) {	// recommended for this type?
-                    formatOk = true;			// this format to be shown
-                    break;				// no more to do
-                }
+        const FormatInfo *fi = findKnownFormat(mime);	// look for format information
+        if (fi==NULL)					// nothing for that MIME type
+        {
+            if (recOnly) continue;			// never show for recommended
+        }						// but always show otherwise
+        else
+        {
+            ImageMetaInfo::ImageTypes okTypes = fi->okForTypes;
+            if (okTypes!=0)				// format has allowed types
+            {
+                if (!(okTypes & mImageType)) continue;	// but not for this image type
             }
 
-            if (!formatOk) continue;			// this format not to be shown
+            if (recOnly)				// want only recommended types
+            {
+                if (!(fi->recForTypes & mImageType))	// check for recommended format
+                {
+                    continue;				// not for this image type
+                }
+            }
         }
 
         // add format to list
