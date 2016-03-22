@@ -42,7 +42,6 @@ class QLabel;
 class QLineEdit;
 class QListWidget;
 class QListWidgetItem;
-class QMimeType;
 
 
 /**
@@ -83,8 +82,6 @@ private:
     void setSelectedFormat(const ImageFormat &format);
     void check_subformat(const ImageFormat &format);
     void showExtension(const ImageFormat &format);
-
-    QList<QMimeType> mMimeTypes;
 
     ImageMetaInfo::ImageType mImageType;
 

@@ -151,10 +151,12 @@ ImageFormat ImageFormat::formatForUrl(const QUrl &url)
 }
 
 
-// TODO: make this a once only read
-QList<QMimeType> ImageFormat::mimeTypes()
+static const QList<QMimeType> *sMimeList = NULL;
+
+
+void buildMimeTypeList()
 {
-    QList<QMimeType> list;
+    QList<QMimeType> *list = new QList<QMimeType>;
 
     // Each of the lists that we get from Qt (supported image formats and
     // supported MIME types) is sorted alphabetically.  That means that
@@ -194,7 +196,6 @@ QList<QMimeType> ImageFormat::mimeTypes()
     // BW, RGBA, XV) seem to be of any use.
 
     QMimeDatabase db;
-    list.clear();
     foreach (const QByteArray &format, formatList)
     {
         QMimeType mime = db.mimeTypeForFile(QString("a.")+format, QMimeDatabase::MatchExtension);
@@ -214,7 +215,7 @@ QList<QMimeType> ImageFormat::mimeTypes()
         }
 
         bool seen = false;
-        foreach (const QMimeType &mt, list)
+        foreach (const QMimeType &mt, *list)
         {
             if (mime.inherits(mt.name()))
             {
@@ -223,9 +224,17 @@ QList<QMimeType> ImageFormat::mimeTypes()
             }
         }
 
-        if (!seen) list.append(mime);
+        if (!seen) list->append(mime);
     }
 
-    qDebug() << "have" << list.count() << "unique MIME types";
-    return (list);
+    if (list->isEmpty()) qWarning() << "No MIME types available!";
+    else qDebug() << "have" << list->count() << "unique MIME types";
+    sMimeList = list;
+}
+
+
+const QList<QMimeType> *ImageFormat::mimeTypes()
+{
+    if (sMimeList==NULL) buildMimeTypeList();
+    return (sMimeList);
 }

@@ -273,8 +273,6 @@ FormatDialog::FormatDialog(QWidget *parent, ImageMetaInfo::ImageType type,
 
     if (askForFormat)					// format selector section
     {
-        mMimeTypes = ImageFormat::mimeTypes();		// need list of MIME types
-
         l1 = new QLabel(xi18nc("@info", "Select a format to save the scanned image.<nl/>This is a <emphasis strong=\"1\">%1</emphasis>.",
                                ImgSaver::picTypeAsString(type)), page);
         gl->addWidget(l1, row, 0, 1, 3);
@@ -560,7 +558,8 @@ void FormatDialog::buildFormatList(bool recOnly)
     qDebug() << "recOnly" << recOnly << "for type" << mImageType;
 
     mFormatList->clear();
-    foreach (const QMimeType &mime, mMimeTypes)		// for all known MIME types
+    const QList<QMimeType> *mimeTypes = ImageFormat::mimeTypes();
+    foreach (const QMimeType &mime, *mimeTypes)		// for all known MIME types
     {
         const FormatInfo *fi = findKnownFormat(mime);	// look for format information
         if (fi==NULL)					// nothing for that MIME type

@@ -53,7 +53,7 @@ public:
 
     static ImageFormat formatForUrl(const QUrl &url);
     static ImageFormat formatForMime(const QMimeType &mime);
-    static QList<QMimeType> mimeTypes();
+    static const QList<QMimeType> *mimeTypes();
 
     bool operator==(const ImageFormat &other);
     friend QDebug operator<<(QDebug stream, const ImageFormat &format);
