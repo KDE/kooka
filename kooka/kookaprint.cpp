@@ -41,53 +41,66 @@
 #include "imgprintdialog.h"
 #include "kookaimage.h"
 
-KookaPrint::KookaPrint(KPrinter *printer)
-    : QObject(),
-      m_printer(printer),
-      m_extraMarginPercent(10)
-{
 
+KookaPrint::KookaPrint()
+    : QPrinter(QPrinter::HighResolution)
+// ,
+//       m_printer(printer),
+//       m_extraMarginPercent(10)
+{
+    qDebug();
 }
+
+
+
+void KookaPrint::setOptions(const QMap<QString, QString> *opts)
+{
+    m_options = opts;
+    qDebug() << "options:";
+    for (QMap<QString, QString>::const_iterator it = m_options->constBegin();
+         it!=m_options->constEnd(); ++it)
+    {
+        qDebug() << " " << qPrintable(it.key()) << "=" << it.value();
+    }
+}
+
+
+
 
 bool KookaPrint::printImage(const KookaImage *img, int intextraMarginPercent)
 {
+    if (img==NULL) return false;
     bool result = true;
-    if (! m_printer || !img) {
-        return false;
-    }
 
-#ifndef KDE4
     m_extraMarginPercent = intextraMarginPercent;
-    QString psMode = m_printer->option(OPT_PSGEN_DRAFT);
-    //qDebug() << "User setting for quality:" << psMode;
 
 #if 0
-    if (psMode == "1") {
-        m_printer->setResolution(75);
-    } else {
-        m_printer->setResolution(600);
-    }
+    QString psMode = m_options->value(OPT_PSGEN_DRAFT);
+// TODO: will this work?
+    if (psMode=="1") setResolution(75);
 #endif
 
-    /* Create painter _after_ setting Resolution */
-    QPainter painter(m_printer);
+    /* Create painter _after_ setting resolution */
+
+    QPainter painter(this);				// create after setting resolution
     m_painter = &painter;
+
     KookaImage   tmpImg;
     QPoint   pt(0, 0);               // the top-left corner (image will be centered)
 
-    int screenRes  = m_printer->option(OPT_SCREEN_RES).toInt();
-    int printerRes = m_printer->resolution();
+    int screenRes  = m_options->value(OPT_SCREEN_RES).toInt();
+    int printerRes = resolution();
 
-    QString scale = m_printer->option(OPT_SCALING);
+    QString scale = m_options->value(OPT_SCALING);
 
     int reso = screenRes;
 
     if (scale == "scan") {
         /* Scale to original size */
-        reso = m_printer->option(OPT_SCAN_RES).toInt();
+        reso = m_options->value(OPT_SCAN_RES).toInt();
     } else if (scale == "custom") {
         // //qDebug() << "Not yet implemented: Custom scale";
-        double userWidthInch = (m_printer->option(OPT_WIDTH).toDouble() / 25.4);
+        double userWidthInch = (m_options->value(OPT_WIDTH).toDouble() / 25.4);
         reso = int(double(img->width()) / userWidthInch);
 
         //qDebug() << "Custom resolution:" << reso;
@@ -100,14 +113,14 @@ bool KookaPrint::printImage(const KookaImage *img, int intextraMarginPercent)
 
     /* Scale the image for printing */
     //qDebug() << "Printer-Resolution:" << printerRes << "scale-reso:" << reso;
-    QSize margins = m_printer->margins();
+//    QSize margins = margins();
     //qDebug() << "Printer-Margins left:" << margins.width() << "top" << margins.height();
 
     if (reso > 0) {
         double sizeInch = double(img->width()) / double(reso);
         int newWidth = int(sizeInch * printerRes);
 
-        printerRes = m_painter->logicalDpiY();
+//////////////////////////////////        printerRes = m_painter->logicalDpiY();
         sizeInch = double(img->height()) / double(reso);
         int newHeight = int(sizeInch * printerRes);
 
@@ -121,7 +134,7 @@ bool KookaPrint::printImage(const KookaImage *img, int intextraMarginPercent)
         int maxRows, maxCols;
         int subpagesCnt = tmpImg.cutToTiles(maxOnPage, maxRows, maxCols);
 
-        //qDebug() << "Subpages count:" << subpagesCnt
+        qDebug() << "Subpages count:" << subpagesCnt
                 << "Columns:" << maxCols << "Rows:" << maxRows;
 
         int cnt = 0;
@@ -131,7 +144,7 @@ bool KookaPrint::printImage(const KookaImage *img, int intextraMarginPercent)
                 const QRect part = tmpImg.getTileRect(row, col);
                 const QSize imgSize = part.size();
 
-                //qDebug() << "Printing part from [" << part.x() << "," << part.y() << "]"
+                qDebug() << "Printing part from [" << part.x() << "," << part.y() << "]"
                         << "width:" << part.width() << "height:" << part.height();
                 QImage tileImg = tmpImg.copy(part);
 
@@ -139,26 +152,26 @@ bool KookaPrint::printImage(const KookaImage *img, int intextraMarginPercent)
                 drawCornerMarker(imgSize, row, col, maxRows, maxCols);
                 cnt++;
                 if (cnt < subpagesCnt) {
-                    m_printer->newPage();
+                    newPage();
                 }
             }
         }
     }
 
-    m_painter = 0;  // no, this is not a memory leak.
-#endif
-    return result;
+    m_painter = NULL;					// no, this is not a memory leak
+    return (result);
 }
+
 
 void KookaPrint::printFittingToPage(const KookaImage *img)
 {
     if (img == NULL || m_painter == NULL) {
         return;
     }
-#ifndef KDE4
+
     KookaImage   tmpImg;
 
-    QString psMode = m_printer->option(OPT_RATIO);
+    QString psMode = m_options->value(OPT_RATIO);
     bool maintainAspect = (psMode == "1");
 
     QSize s = maxPageSize();
@@ -183,7 +196,6 @@ void KookaPrint::printFittingToPage(const KookaImage *img)
 
     tmpImg = img->scaled(newWidth, newHeight, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
     m_painter->drawImage(0, 0, tmpImg);
-#endif
 }
 
 void KookaPrint::drawMarkerAroundPoint(const QPoint &p)

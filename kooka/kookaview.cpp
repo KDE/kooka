@@ -42,6 +42,7 @@
 #include <qaction.h>
 #include <qmenu.h>
 #include <qprintdialog.h>
+#include <qprinter.h>
 
 #include <krun.h>
 #include <kmimetypetrader.h>
@@ -76,8 +77,8 @@
 #include "kookasettings.h"
 
 #include "imgprintdialog.h"
-#ifndef KDE4
 #include "kookaprint.h"
+#ifndef KDE4
 #include "photocopyprintdialogpage.h"
 #endif
 
@@ -686,7 +687,10 @@ void KookaView::print()
     const KookaImage *img = gallery()->getCurrImage(true);
     if (img == NULL) return;				// load image if necessary
 
-    QPrintDialog d(this);
+// TODO: printing in KF5
+    // create a KookaPrint (subclass of a QPrinter)
+    KookaPrint printer;
+    QPrintDialog d(&printer, this);
     d.setWindowTitle(i18nc("@title:window", "Print Image"));
     d.setOptions(QAbstractPrintDialog::PrintToFile|QAbstractPrintDialog::PrintShowPageSize);
 
@@ -725,12 +729,11 @@ void KookaView::print()
         qDebug() << " " << qPrintable(it.key()) << "=" << it.value();
     }
 
-
-// TODO: printing in KF5
-    // create a KookaPrint (subclass of a QPrinter)
     // pass options to printer
-    // print image
+    printer.setOptions(&imgOptions);
 
+    // print image
+    printer.printImage(img);
 
 
 

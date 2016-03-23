@@ -27,10 +27,10 @@
 #ifndef KOOKAPRINT_H
 #define KOOKAPRINT_H
 
-#include <qobject.h>
-#include <qmap.h>
-#include <qstring.h>
-#include <qpoint.h>
+#include <qprinter.h>
+// #include <qmap.h>
+// #include <qstring.h>
+// #include <qpoint.h>
 
 #ifndef KDE4
 #include <kprinter.h>
@@ -38,37 +38,29 @@
 #endif
 
 class QPainter;
-class QSize;
-
-class KPrinter;
-class KLineEdit;
+// class QSize;
+// 
+// class KPrinter;
+// class KLineEdit;
 
 class KookaImage;
 
-// TODO: this seems to be unused
-#ifndef KDE4
-class ImageSettings : public KPrintDialogPage
-{
-public:
-    void setOptions(const QMap<QString, QString> &opts);
-    void getOptions(QMap<QString, QString> &opts, bool include_def = false);
-    bool isValid(QString &msg);
 
-private:
-    KLineEdit *m_width, *m_height;
-};
-#endif
-
-class KookaPrint : public QObject
+class KookaPrint : public QPrinter
 {
-    Q_OBJECT
+//     Q_OBJECT
 
 public:
-    KookaPrint(KPrinter *printer);
+    explicit KookaPrint();
+
+    void setOptions(const QMap<QString, QString> *opts);
+
 
     /**
      * The top left edge of the required print position
      */
+// TODO: no need for virtual
+// TODO: no need to be public either
     virtual QPoint printPosTopLeft(const QSize &) const;
     virtual QPoint printPosTopRight(const QSize &) const;
     virtual QPoint printPosBottomLeft(const QSize &) const;
@@ -95,10 +87,10 @@ protected:
     virtual void drawCornerMarker(const QSize &, int, int, int, int);
 
 private:
+    QPainter *m_painter;
+    const QMap<QString, QString> *m_options;
 
-    KPrinter    *m_printer;
-    QPainter    *m_painter;
-    int          m_extraMarginPercent;
+    int m_extraMarginPercent;
 };
 
 #endif                          // KOOKAPRINT_H
