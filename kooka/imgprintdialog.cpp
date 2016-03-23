@@ -111,6 +111,9 @@ ImgPrintDialog::ImgPrintDialog(const KookaImage *img, QWidget *parent)
     m_psDraft->setChecked(false);
     vbl->addWidget(m_psDraft);
 
+    // TODO: rename this "Resolution to use"
+    // show screen or image res (whatever is used)
+    // then eliminate m_screenRes below
 
     /* Scan resolution of the image */
     QLabel *l = new QLabel(i18nc("@label:spinbox", "Scan resolution:"), this);
@@ -138,7 +141,7 @@ ImgPrintDialog::ImgPrintDialog(const KookaImage *img, QWidget *parent)
     m_sizeW = new QSpinBox(this);
     m_sizeW->setRange(10, 1000);
     m_sizeW->setSuffix(i18nc("abbreviation for 'millimetres'", " mm"));
-    connect(m_sizeW, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged), this, &ImgPrintDialog::slotCustomHeightChanged);
+    connect(m_sizeW, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged), this, &ImgPrintDialog::slotCustomWidthChanged);
     l->setBuddy(m_sizeW);
     vbl->addWidget(m_sizeW);
 

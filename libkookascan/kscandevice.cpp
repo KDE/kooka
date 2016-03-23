@@ -1324,6 +1324,7 @@ void KScanDevice::slotScanFinished(KScanDevice::Status status)
 	info.setScannerName(mScannerName);
 
 	// put the resolution also into the image itself
+        // TODO: use qRound()
 	mScanImage->setDotsPerMeterX(static_cast<int>(mCurrScanResolutionX / 0.0254 + 0.5));
 	mScanImage->setDotsPerMeterY(static_cast<int>(mCurrScanResolutionY / 0.0254 + 0.5));
 

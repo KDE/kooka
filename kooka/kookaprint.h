@@ -28,28 +28,13 @@
 #define KOOKAPRINT_H
 
 #include <qprinter.h>
-// #include <qmap.h>
-// #include <qstring.h>
-// #include <qpoint.h>
-
-#ifndef KDE4
-#include <kprinter.h>
-#include <kdeprint/kprintdialogpage.h>
-#endif
 
 class QPainter;
-// class QSize;
-// 
-// class KPrinter;
-// class KLineEdit;
-
 class KookaImage;
 
 
 class KookaPrint : public QPrinter
 {
-//     Q_OBJECT
-
 public:
     explicit KookaPrint();
 
@@ -68,11 +53,6 @@ public:
 
     virtual int extraMarginPix() const;
 
-    /**
-     * The maximum pixel size of the image (or imagepart) on
-     * the current page
-     */
-    virtual QSize maxPageSize(int extraShrinkPercent = 0) const;
 
 // TODO: do these need to be slots?
 public slots:
@@ -87,10 +67,17 @@ protected:
     virtual void drawCornerMarker(const QSize &, int, int, int, int);
 
 private:
+    /**
+     * The pixel size of the current page.
+     **/
+    QSize maxPageSize(int extraShrinkPercent = 0) const;
+
+private:
     QPainter *m_painter;
     const QMap<QString, QString> *m_options;
 
+    QSize m_maxPageSize;
     int m_extraMarginPercent;
 };
 
-#endif                          // KOOKAPRINT_H
+#endif							// KOOKAPRINT_H

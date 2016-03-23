@@ -47,7 +47,7 @@ class KFileItem;
   * multiple pages.
   */
 
-// TODO: into class
+// TODO: into class (but never used)
 typedef enum { MaxCut, MediumCut } TileMode;
 
 class KookaImage : public QImage

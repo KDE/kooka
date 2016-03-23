@@ -300,6 +300,9 @@ bool KookaImage::isSubImage() const
     return (m_subNo>0);
 }
 
+
+
+// TODO: only used in kookaprint, move to there
 /*
  * tiling
  */
@@ -378,3 +381,7 @@ int KookaImage::subNumber() const
 {
     return m_subNo;
 }
+
+
+// TODO: implement dpiX() and setDpiX()
+// (more useful than dots per metre!)
