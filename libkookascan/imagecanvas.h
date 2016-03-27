@@ -66,7 +66,7 @@ public:
      * not specified, nothing is displayed until an image is set
      * using @c newImage().
      **/
-    ImageCanvas(QWidget *parent = NULL, const QImage *start_image = NULL);
+    ImageCanvas(QWidget *parent = Q_NULLPTR, const QImage *start_image = NULL);
 
     /**
      * Destructor.

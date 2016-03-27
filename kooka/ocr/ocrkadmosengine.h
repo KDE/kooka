@@ -39,7 +39,7 @@ class OcrKadmosEngine : public OcrEngine
     Q_OBJECT
 
 public:
-    explicit OcrKadmosEngine(QWidget *parent = NULL);
+    explicit OcrKadmosEngine(QWidget *parent = Q_NULLPTR);
     ~OcrKadmosEngine();
 
     OcrBaseDialog *createOCRDialog(QWidget *parent);

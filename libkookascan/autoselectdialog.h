@@ -44,7 +44,7 @@ class KOOKASCAN_EXPORT AutoSelectDialog : public DialogBase
     Q_OBJECT
 
 public:
-    explicit AutoSelectDialog(QWidget *parent = NULL);
+    explicit AutoSelectDialog(QWidget *parent = Q_NULLPTR);
     virtual ~AutoSelectDialog()				{}
 
     void setSettings(int margin, bool bgIsWhite, int dustsize);

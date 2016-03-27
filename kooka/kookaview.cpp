@@ -163,7 +163,7 @@ void WidgetSite::setWidget(QWidget *widget)
 class WidgetSplitter : public QSplitter
 {
 public:
-    WidgetSplitter(Qt::Orientation orientation, QWidget *parent = NULL);
+    WidgetSplitter(Qt::Orientation orientation, QWidget *parent = Q_NULLPTR);
 };
 
 WidgetSplitter::WidgetSplitter(Qt::Orientation orientation, QWidget *parent)

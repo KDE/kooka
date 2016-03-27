@@ -44,7 +44,7 @@ class OcrGocrEngine : public OcrEngine
     Q_OBJECT
 
 public:
-    OcrGocrEngine(QWidget *parent = NULL);
+    OcrGocrEngine(QWidget *parent = Q_NULLPTR);
     ~OcrGocrEngine();
 
     OcrBaseDialog *createOCRDialog(QWidget *parent);

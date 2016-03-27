@@ -35,7 +35,7 @@ class OcrOcradEngine : public OcrEngine
     Q_OBJECT
 
 public:
-    explicit OcrOcradEngine(QWidget *parent = NULL);
+    explicit OcrOcradEngine(QWidget *parent = Q_NULLPTR);
     ~OcrOcradEngine();
 
     OcrBaseDialog *createOCRDialog(QWidget *parent);

@@ -53,7 +53,7 @@ class OcrBaseDialog : public KPageDialog
     Q_OBJECT
 
 public:
-    explicit OcrBaseDialog(QWidget *parent=0);
+    explicit OcrBaseDialog(QWidget *parent=Q_NULLPTR);
     virtual ~OcrBaseDialog();
 
     virtual OcrEngine::EngineError setupGui();

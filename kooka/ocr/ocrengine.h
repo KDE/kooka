@@ -89,7 +89,7 @@ public:
     OcrEngine(QWidget *parent);
     virtual ~OcrEngine();
 
-    bool startOCRVisible(QWidget *parent = NULL);
+    bool startOCRVisible(QWidget *parent = Q_NULLPTR);
 
     /**
      * Sets an image Canvas that displays the result image of OCR. If this
