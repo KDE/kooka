@@ -72,26 +72,26 @@ public:
     void startup();
 
 protected:
-    virtual void closeEvent(QCloseEvent *ev);
+    void closeEvent(QCloseEvent *ev) Q_DECL_OVERRIDE;
 
     /**
      * Overridden virtuals for Qt drag 'n drop (XDND)
      */
-    virtual void dragEnterEvent(QDragEnterEvent *ev);
+    void dragEnterEvent(QDragEnterEvent *ev) Q_DECL_OVERRIDE;
     // virtual void dropEvent(QDropEvent *event);
 
     /**
      * This function is called when it is time for the app to save its
      * properties for session management purposes.
      */
-    void saveProperties(KConfigGroup &grp);
+    void saveProperties(KConfigGroup &grp) Q_DECL_OVERRIDE;
 
     /**
      * This function is called when this app is restored.  The KConfig
      * object points to the session management config file that was saved
      * with @ref saveProperties
      */
-    void readProperties(const KConfigGroup &grp);
+    void readProperties(const KConfigGroup &grp) Q_DECL_OVERRIDE;
 
     virtual void applyMainWindowSettings(const KConfigGroup &grp) Q_DECL_OVERRIDE;
 
