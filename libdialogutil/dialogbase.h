@@ -103,7 +103,9 @@ public:
      * This may be a subclass of a DialogStateSaver, reimplemented in
      * order to save special dialog settings (e.g. the column states of
      * a list view).  If this is not set then a plain DialogStateSaver
-     * will be created and used internally.
+     * will be created and used internally.  If a NULL state saver is
+     * set explicitly using this function, then no state restoring or
+     * saving will be done.
      *
      * @param saver the state saver
      *
