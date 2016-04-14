@@ -71,13 +71,11 @@ class ImgPrintDialog : public QWidget
     Q_OBJECT
 
 public:
-    ImgPrintDialog(const KookaImage *img, QWidget *parent = NULL);
+    ImgPrintDialog(const KookaImage *img, QWidget *pnt = NULL);
 
     void setOptions(const QMap<QString, QString> &opts);
     void getOptions(QMap<QString, QString> &opts, bool include_def = false);
     bool isValid(QString &msg);
-
-    void setImage(const KookaImage *img);
 
 protected slots:
     void slotScaleChanged(int id);

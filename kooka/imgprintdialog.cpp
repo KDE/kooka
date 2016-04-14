@@ -52,11 +52,19 @@
 #define ID_FITPAGE 3
 
 
-ImgPrintDialog::ImgPrintDialog(const KookaImage *img, QWidget *parent)
+
+#define DPM_TO_DPI(d)		qRound((d)*2.54/100)	// dots/metre -> dots/inch
+#define DPI_TO_DPM(d)		qRound((d)*100/2.54)	// dots/inch -> dots/metre
+
+
+
+
+
+ImgPrintDialog::ImgPrintDialog(const KookaImage *img, QWidget *pnt)
 #ifdef KDE3
-    : KPrintDialogPage(parent, name),
+    : KPrintDialogPage(pnt, name),
 #else
-    : QWidget(parent),
+    : QWidget(pnt),
 #endif
 
       m_image(img),
@@ -92,7 +100,7 @@ ImgPrintDialog::ImgPrintDialog(const KookaImage *img, QWidget *parent)
     vbl->addWidget(rb);
 
     rb = new QRadioButton(i18nc("@option:radio", "Fit to page"), this);
-    rb->setToolTip(i18nc("@info:tooltip", "<div>Print using as much of the available space on the paper as possible. The aspect ratio is maintained.</div>"));
+    rb->setToolTip(i18nc("@info:tooltip", "<div>Print using as much of the available space on the paper as possible. The aspect ratio can be maintained.</div>"));
     m_scaleRadios->addButton(rb, ID_FITPAGE);
     vbl->addWidget(rb);
 
@@ -108,7 +116,6 @@ ImgPrintDialog::ImgPrintDialog(const KookaImage *img, QWidget *parent)
 
     /* Postscript generation resolution  */
     m_psDraft = new QCheckBox(i18nc("@option:check", "Generate low resolution PostScript (fast draft print)"), this);
-    m_psDraft->setChecked(false);
     vbl->addWidget(m_psDraft);
 
     // TODO: rename this "Resolution to use"
@@ -121,7 +128,6 @@ ImgPrintDialog::ImgPrintDialog(const KookaImage *img, QWidget *parent)
 
     m_dpi = new QSpinBox(group1);
     m_dpi->setRange(50, 1200);
-    m_dpi->setValue(300);
     m_dpi->setSuffix(i18nc("@item:intext abbreviation for 'dots per inch'", " dpi"));
     l->setBuddy(m_dpi);
     vbl->addWidget(m_dpi);
@@ -140,7 +146,7 @@ ImgPrintDialog::ImgPrintDialog(const KookaImage *img, QWidget *parent)
 
     m_sizeW = new QSpinBox(this);
     m_sizeW->setRange(10, 1000);
-    m_sizeW->setSuffix(i18nc("abbreviation for 'millimetres'", " mm"));
+    m_sizeW->setSuffix(i18nc("@item:intext abbreviation for 'millimetres'", " mm"));
     connect(m_sizeW, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged), this, &ImgPrintDialog::slotCustomWidthChanged);
     l->setBuddy(m_sizeW);
     vbl->addWidget(m_sizeW);
@@ -156,39 +162,60 @@ ImgPrintDialog::ImgPrintDialog(const KookaImage *img, QWidget *parent)
     vbl->addWidget(m_sizeH);
 
     m_ratio = new QCheckBox(i18nc("@option:check", "Maintain aspect ratio"), this);
-    m_ratio->setChecked(true);
     vbl->addWidget(m_ratio);
 
     QWidget *spaceEater = new QWidget(this);
     spaceEater->setSizePolicy(QSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored));
     layout->addWidget(spaceEater);
 
-    /* Set start values */
+    // Set initial default values
+    m_psDraft->setChecked(false);
+    m_dpi->setValue(300);
+    m_sizeW->setValue(100);
+    m_sizeH->setValue(100);
+    m_ratio->setChecked(true);
     m_scaleRadios->button(ID_SCREEN)->setChecked(true);
     slotScaleChanged(ID_SCREEN);
 }
 
-void ImgPrintDialog::setImage(const KookaImage *img)
-{
-    if (img == NULL) return;
-
-    // TODO: get scan resolution out of the image
-}
 
 void ImgPrintDialog::setOptions(const QMap<QString, QString> &opts)
 {
     //qDebug();
 
+    qDebug() << "setting options:";
+    for (QMap<QString, QString>::const_iterator it = opts.constBegin();
+         it!=opts.constEnd(); ++it)
+    {
+        qDebug() << " " << qPrintable(it.key()) << it.value();
+    }
+
     // m_autofit->setChecked(opts["app-img-autofit"] == "1");
     QString scale = opts[OPT_SCALING];
-    if (scale == "scan") m_scaleRadios->button(ID_ORIG)->setChecked(true);
-    else if (scale == "custom") m_scaleRadios->button(ID_CUSTOM)->setChecked(true);
-    else if (scale == "fitpage") m_scaleRadios->button(ID_FITPAGE)->setChecked(true);
+    if (scale=="scan") m_scaleRadios->button(ID_ORIG)->setChecked(true);
+    else if (scale=="custom") m_scaleRadios->button(ID_CUSTOM)->setChecked(true);
+    else if (scale=="fitpage") m_scaleRadios->button(ID_FITPAGE)->setChecked(true);
     else m_scaleRadios->button(ID_SCREEN)->setChecked(true);
 
-    m_dpi->setValue(opts[OPT_SCAN_RES].toInt());
-    m_sizeW->setValue(opts[OPT_WIDTH].toInt());
-    m_sizeH->setValue(opts[OPT_HEIGHT].toInt());
+    QString opt = opts[OPT_SCAN_RES];
+    if (!opt.isEmpty()) m_dpi->setValue(opt.toInt());	// custom resolution provided?
+    else						// if not, get from image
+    {
+        // Get the scan resolution from the image
+        const int imgResX = DPM_TO_DPI(m_image->dotsPerMeterX());
+        const int imgResY = DPM_TO_DPI(m_image->dotsPerMeterY());
+        if (imgResX!=imgResY) qWarning() << "Different image resolutions" << imgResX << imgResY;
+        if (imgResX!=0)
+        {
+            qDebug() << "Resolution from image" << imgResX;
+            m_dpi->setValue(imgResX);
+        }
+    }
+
+    opt = opts[OPT_WIDTH];
+    if (!opt.isEmpty()) m_sizeW->setValue(opt.toInt());
+    opt = opts[OPT_HEIGHT];
+    if (!opt.isEmpty()) m_sizeH->setValue(opt.toInt());
 
     mScreenDpi = opts[OPT_SCREEN_RES].toInt();
     if (mScreenDpi==0)					// screen resolution not provided
@@ -202,8 +229,10 @@ void ImgPrintDialog::setOptions(const QMap<QString, QString> &opts)
     }
     m_screenRes->setText(i18nc("@info:status", "Screen resolution: %1 dpi", mScreenDpi));
 
-    m_psDraft->setChecked(opts[OPT_PSGEN_DRAFT].toInt()==1);
-    m_ratio->setChecked(opts[OPT_RATIO].toInt()==1);
+    opt = opts[OPT_PSGEN_DRAFT];
+    if (!opt.isEmpty()) m_psDraft->setChecked(opt.toInt()==1);
+    opt = opts[OPT_RATIO];
+    if (!opt.isEmpty()) m_ratio->setChecked(opt.toInt()==1);
 }
 
 void ImgPrintDialog::getOptions(QMap<QString, QString> &opts, bool include_def)
