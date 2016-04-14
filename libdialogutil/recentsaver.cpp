@@ -39,12 +39,9 @@
 
 RecentSaver::RecentSaver(const QString &fileClass)
 {
+    Q_ASSERT(!fileClass.isEmpty());
     mRecentClass = fileClass;
     if (!mRecentClass.startsWith(':')) mRecentClass.prepend(':');
-
-    mRecentDir = KRecentDirs::dir(mRecentClass);
-    if (!mRecentDir.isEmpty() && !mRecentDir.endsWith('/')) mRecentDir += '/';
-    qDebug() << "for" << mRecentClass << "dir" << mRecentDir;
 }
 
 
@@ -55,15 +52,19 @@ RecentSaver::~RecentSaver()
 
 QUrl RecentSaver::recentUrl(const QString &suggestedName)
 {
+    // QUrl::fromLocalFile("") -> QUrl(), so no need for null test here
     return (QUrl::fromLocalFile(recentPath(suggestedName)));
 }
 
 
 QString RecentSaver::recentPath(const QString &suggestedName)
 {
+    mRecentDir = KRecentDirs::dir(mRecentClass);
+    if (!mRecentDir.isEmpty() && !mRecentDir.endsWith('/')) mRecentDir += '/';
+
     QString recentDir = mRecentDir;
     if (!suggestedName.isEmpty()) recentDir += suggestedName;
-    qDebug() << recentDir;
+    qDebug() << "for" << mRecentClass << "dir" << mRecentDir << "->" << recentDir;
     return (recentDir);
 }
 
