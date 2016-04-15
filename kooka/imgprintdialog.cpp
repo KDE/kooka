@@ -161,6 +161,8 @@ ImgPrintDialog::ImgPrintDialog(const KookaImage *img, QWidget *pnt)
     l->setBuddy(m_sizeH);
     vbl->addWidget(m_sizeH);
 
+    // TODO: need to recalculate custom size if this option is
+    // set initially or is toggled on
     m_ratio = new QCheckBox(i18nc("@option:check", "Maintain aspect ratio"), this);
     vbl->addWidget(m_ratio);
 
@@ -231,6 +233,7 @@ void ImgPrintDialog::setOptions(const QMap<QString, QString> &opts)
 
     opt = opts[OPT_PSGEN_DRAFT];
     if (!opt.isEmpty()) m_psDraft->setChecked(opt.toInt()==1);
+    // TODO: see above
     opt = opts[OPT_RATIO];
     if (!opt.isEmpty()) m_ratio->setChecked(opt.toInt()==1);
 }
@@ -246,7 +249,7 @@ void ImgPrintDialog::getOptions(QMap<QString, QString> &opts, bool include_def)
     // Reimplement this function in subclasses.
     // @param opts the option set to fill
     // @param incldef if true, include also options with default values
-   // //qDebug() << "In getOption with include_def: "  << include_def << endl;
+    // //qDebug() << "In getOption with include_def: "  << include_def << endl;
 
     QString scale = "screen";
     if (m_scaleRadios->button(ID_ORIG)->isChecked()) scale = "scan";
@@ -264,6 +267,8 @@ void ImgPrintDialog::getOptions(QMap<QString, QString> &opts, bool include_def)
 }
 
 
+// TODO: return the message, or a null string if OK
+// (avoids pass-by-reference parameter)
 bool ImgPrintDialog::isValid(QString &msg)
 {
     const int id = m_scaleRadios->checkedId();

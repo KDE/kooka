@@ -1,30 +1,37 @@
-/***************************************************************************
-                kookaprint.cpp  -  Printing from the gallery
-                             -------------------
-    begin                : Tue May 13 2003
-    copyright            : (C) 1999 by Klaas Freitag
-    email                : freitag@suse.de
- ***************************************************************************/
-
-/***************************************************************************
- *                                                                         *
- *  This file may be distributed and/or modified under the terms of the    *
- *  GNU General Public License version 2 as published by the Free Software *
- *  Foundation and appearing in the file COPYING included in the           *
- *  packaging of this file.                                                *
- *
- *  As a special exception, permission is given to link this program       *
- *  with any version of the KADMOS ocr/icr engine of reRecognition GmbH,   *
- *  Kreuzlingen and distribute the resulting executable without            *
- *  including the source code for KADMOS in the source distribution.       *
- *
- *  As a special exception, permission is given to link this program       *
- *  with any edition of Qt, and distribute the resulting executable,       *
- *  without including the source code for Qt in the source distribution.   *
- *                                                                         *
- ***************************************************************************/
+/************************************************************************
+ *									*
+ *  This file is part of Kooka, a scanning/OCR application using	*
+ *  Qt <http://www.qt.io> and KDE Frameworks <http://www.kde.org>.	*
+ *									*
+ *  Copyright (C) 2003-2016 Klaas Freitag <freitag@suse.de>		*
+ *                          Jonathan Marten <jjm@keelhaul.me.uk>	*
+ *									*
+ *  Kooka is free software; you can redistribute it and/or modify it	*
+ *  under the terms of the GNU Library General Public License as	*
+ *  published by the Free Software Foundation and appearing in the	*
+ *  file COPYING included in the packaging of this file;  either	*
+ *  version 2 of the License, or (at your option) any later version.	*
+ *									*
+ *  As a special exception, permission is given to link this program	*
+ *  with any version of the KADMOS OCR/ICR engine (a product of		*
+ *  reRecognition GmbH, Kreuzlingen), and distribute the resulting	*
+ *  executable without including the source code for KADMOS in the	*
+ *  source distribution.						*
+ *									*
+ *  This program is distributed in the hope that it will be useful,	*
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of	*
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the	*
+ *  GNU General Public License for more details.			*
+ *									*
+ *  You should have received a copy of the GNU General Public		*
+ *  License along with this program;  see the file COPYING.  If		*
+ *  not, see <http://www.gnu.org/licenses/>.				*
+ *									*
+ ************************************************************************/
 
 #include "kookaprint.h"
+
+#include <math.h>
 
 #include <qpainter.h>
 #include <qfontmetrics.h>
@@ -35,6 +42,14 @@
 
 #include "imgprintdialog.h"
 #include "kookaimage.h"
+
+
+#define CUT_MARGIN		5			// margin in millimetres
+
+// TODO: somewhere common (in libkookascan)
+#define DPM_TO_DPI(d)		qRound((d)*2.54/100)	// dots/metre -> dots/inch
+#define DPI_TO_DPM(d)		qRound((d)*100/2.54)	// dots/inch -> dots/metre
+
 
 
 KookaPrint::KookaPrint()
@@ -60,22 +75,22 @@ bool KookaPrint::printImage(const KookaImage *img, int intextraMarginPercent)
     QGuiApplication::setOverrideCursor(Qt::WaitCursor);
 
     qDebug() << "image:";
-    qDebug() << "  size" << img->size();
-    qDebug() << "  dpi X" << qRound(img->dotsPerMeterX()*(2.54/100));
-    qDebug() << "  dpi Y" << qRound(img->dotsPerMeterY()*(2.54/100));
+    qDebug() << "  size =" << img->size();
+    qDebug() << "  dpi X =" << qRound(img->dotsPerMeterX()*(2.54/100));
+    qDebug() << "  dpi Y =" << qRound(img->dotsPerMeterY()*(2.54/100));
     qDebug() << "printer:";
-    qDebug() << "  name" << printerName();
-    qDebug() << "  colour mode" << colorMode();
+    qDebug() << "  name =" << printerName();
+    qDebug() << "  colour mode =" << colorMode();
     qDebug() << "  full page?" << fullPage();
-    qDebug() << "  output format" << outputFormat();
-    qDebug() << "  paper rect (mm)" << paperRect(QPrinter::Millimeter);
-    qDebug() << "  page rect (mm)" << pageRect(QPrinter::Millimeter);
-    qDebug() << "  resolution" << resolution();
+    qDebug() << "  output format =" << outputFormat();
+    qDebug() << "  paper rect (mm) =" << paperRect(QPrinter::Millimeter);
+    qDebug() << "  page rect (mm) =" << pageRect(QPrinter::Millimeter);
+    qDebug() << "  resolution =" << resolution();
     qDebug() << "options:";
     for (QMap<QString, QString>::const_iterator it = m_options->constBegin();
          it!=m_options->constEnd(); ++it)
     {
-        qDebug() << " " << qPrintable(it.key()) << it.value();
+        qDebug() << " " << qPrintable(it.key()) << "=" << it.value();
     }
 
     m_extraMarginPercent = intextraMarginPercent;
@@ -90,83 +105,196 @@ bool KookaPrint::printImage(const KookaImage *img, int intextraMarginPercent)
     m_painter = &painter;				// make accessible throughout class
     m_painter->setRenderHint(QPainter::SmoothPixmapTransform);
 
-    KookaImage tmpImg;
-    QPoint pt(0, 0);               // the top-left corner (image will be centered)
+    // Calculate the available page size, in real world units
+    QRectF r = pageRect(QPrinter::Millimeter);
+    double pageWidthMm = r.width();
+    double pageHeightMm = r.height();
 
-    int screenRes  = m_options->value(OPT_SCREEN_RES).toInt();
-    int printerRes = resolution();
+    // See whether cut marks are requested.
+    QString cuts = m_options->value(OPT_CUTMARKS);
+//    if (cuts.isEmpty()) cuts = "multiple";
+    // TODO: debugging
+    if (cuts.isEmpty()) cuts = "always";
 
-    QString scale = m_options->value(OPT_SCALING);
+    // Calculate the size at which the image is to be printed,
+    // depending on the scaling option.
 
-    m_maxPageSize = maxPageSize();			// calculate total page size
+    const int imgWidthPix = img->width();		// image size in pixels
+    const int imgHeightPix = img->height();
 
-    int reso = screenRes;
-    if (scale == "scan") {
-        /* Scale to original size */
-        reso = m_options->value(OPT_SCAN_RES).toInt();
-    } else if (scale == "custom") {
-        // //qDebug() << "Not yet implemented: Custom scale";
-        double userWidthInch = (m_options->value(OPT_WIDTH).toDouble() / 25.4);
-        reso = int(double(img->width()) / userWidthInch);
+    double printWidthMm;				// print size of the image
+    double printHeightMm;
 
-        //qDebug() << "Custom resolution:" << reso;
+    const QString scale = m_options->value(OPT_SCALING);
+    if (scale=="scan")					// Original scan size
+    {
+        const QString opt = m_options->value(OPT_SCAN_RES);
+        const int imageRes = !opt.isEmpty() ? DPI_TO_DPM(opt.toInt()) : img->dotsPerMeterX();
+							// dots per metre
+        printWidthMm = double(imgWidthPix)/imageRes*1000;
+        printHeightMm = double(imgHeightPix)/imageRes*1000;
+    }
+    else if (scale=="screen")				// Scale to screen resolution
+    {
+        int screenRes  = m_options->value(OPT_SCREEN_RES).toInt();
+        Q_ASSERT(screenRes>0);
+        printWidthMm = double(imgWidthPix)/DPI_TO_DPM(screenRes)*1000;
+        printHeightMm = double(imgHeightPix)/DPI_TO_DPM(screenRes)*1000;
+    }
+    else if (scale=="custom")				// Custom size
+    {
+        // For this option, "Maintain aspect ratio" can be enabled in the GUI.
+        // There is however no need to take account of it here, because the
+        // values are already scaled/adjusted there.
 
-        // TODO: for this option "Maintain aspect ratio" is enabled in GUI, but
-        // not taken account of here.  No need, the scaling is taken account of
-        // there.
+        printWidthMm = m_options->value(OPT_WIDTH).toDouble();
+        printHeightMm = m_options->value(OPT_HEIGHT).toDouble();
+        Q_ASSERT(printWidthMm>0 && printHeightMm>0);
+    }
+    else if (scale=="fitpage")				// Fit to one page
+    {
+        printWidthMm = pageWidthMm;
+        printHeightMm = pageHeightMm;
 
-    } else if (scale == "fitpage") {
-        //qDebug() << "Printing using maximum space on page";
-        printFittingToPage(img);
-        reso = 0;  // to skip the printing on this page.
-        // TODO: combine printFittingToPage() with below
+        // If cut marks are being "always" shown, then reduce the printed
+        // image size here to account for them.  For the other cut marks
+        // options, the image for this scale will by definition fit on one page
+        // and so they will not be shown.
+
+        if (cuts=="always")
+        {
+            printWidthMm -= 2*CUT_MARGIN;
+            printHeightMm -= 2*CUT_MARGIN;
+        }
+
+        if (m_options->value(OPT_RATIO)=="1")		// maintain the aspect ratio
+        {
+            QRectF r = pageRect(QPrinter::DevicePixel);
+            double wAspect = r.width()/imgWidthPix;	// scaling ratio image -> page
+            double hAspect = r.height()/imgHeightPix;
+
+            if (wAspect>hAspect)
+            {
+                // More scaling up is needed in the horizontal direction,
+                // so reduce that to maintain the aspect ratio
+                printWidthMm *= hAspect/wAspect;
+            }
+            else if (hAspect>wAspect)
+            {
+                // More scaling up is needed in the vertical direction,
+                // so reduce that to maintain the aspect ratio
+                printHeightMm *= wAspect/hAspect;
+            }
+        }
+    }
+    else Q_ASSERT(false);
+
+    qDebug() << "scaled image size (mm) =" << QSizeF(printWidthMm, printHeightMm);
+
+    const int printRes = DPI_TO_DPM(resolution())/1000;	// dots per millimetre
+
+    // Now that we have the image size to be printed,
+    // see if cut marks are required.
+
+    double pageWidthAdjustedMm = pageWidthMm;
+    double pageHeightAdjustedMm = pageHeightMm;
+
+    bool withCutMarks;
+    if (cuts=="multiple") withCutMarks = !(printWidthMm<=pageWidthMm && printHeightMm<=pageHeightMm);
+    else if (cuts=="always") withCutMarks = true;
+    else if (cuts=="never") withCutMarks = false;
+    else Q_ASSERT(false);
+    qDebug() << "for cuts" << cuts << "with marks?" << withCutMarks;
+
+    // If cut marks are required, reduce the available page size
+    // to allow for them.
+
+    int printLeftPix = 0;				// page origin of print
+    int printTopPix = 0;
+
+    if (withCutMarks)
+    {
+        pageWidthAdjustedMm -= 2*CUT_MARGIN;
+        pageHeightAdjustedMm -= 2*CUT_MARGIN;
+        qDebug() << "adjusted page size (mm) =" << QSizeF(pageWidthAdjustedMm, pageHeightAdjustedMm);
+
+        printLeftPix = printTopPix = CUT_MARGIN*printRes;
     }
 
-    /* Scale the image for printing */
-    //qDebug() << "Printer-Resolution:" << printerRes << "scale-reso:" << reso;
-//    QSize margins = margins();
-    //qDebug() << "Printer-Margins left:" << margins.width() << "top" << margins.height();
+    bool onOnePage = (printWidthMm<=pageWidthAdjustedMm && printHeightMm<=pageHeightAdjustedMm);
+    qDebug() << "on one page?" << onOnePage;		// see if fits on one page
+    if (scale=="fitpage") Q_ASSERT(onOnePage);		// must be true for this
 
-    if (reso > 0) {
-        double sizeInch = double(img->width()) / double(reso);
-        int newWidth = int(sizeInch * printerRes);
+    // If the image fits on one page, then adjust the print margins so
+    // that it is centered.  I'm not sure whether this is the right thing
+    // to do, but it is implied by tool tips set in ImgPrintDialog.
 
-        int printerResY = m_painter->device()->logicalDpiY();
+    // TODO: maybe make it an option
 
-        sizeInch = double(img->height()) / double(reso);
-        int newHeight = int(sizeInch * printerResY);
+    if (onOnePage)
+    {
+        int widthSpareMm = pageWidthAdjustedMm-printWidthMm;
+        printLeftPix += (widthSpareMm/2)*printRes;
+        int heightSpareMm = pageHeightAdjustedMm-printHeightMm;
+        printTopPix += (heightSpareMm/2)*printRes;
+    }
 
-        qDebug() << "Scaling to size [" << newWidth << "x" << newHeight << "]";
+    // Calculate how many parts (including partial parts)
+    // the image needs to be sliced up into.
 
-        // TODO: this is a memory intensive operation, can it be eliminated?
-        tmpImg = img->scaled(newWidth, newHeight, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+    double ipart;
+    double fpart = modf(printWidthMm/pageWidthAdjustedMm, &ipart);
+    //qDebug() << "for cols ipart" << ipart << "fpart" << fpart;
+    int cols = qRound(ipart)+(fpart>0 ? 1 : 0);
+    fpart = modf(printHeightMm/pageHeightAdjustedMm, &ipart);
+    //qDebug() << "for rows ipart" << ipart << "fpart" << fpart;
+    int rows = qRound(ipart)+(fpart>0 ? 1 : 0);
 
-        QSize   sz = tmpImg.size();        // the current image size
+    int totalPages = cols*rows;
+    qDebug() << "print cols" << cols << "rows" << rows << "pages" << totalPages;
+    Q_ASSERT(totalPages>0);				// checks for sanity
+    if (onOnePage) Q_ASSERT(totalPages==1);
 
-        int maxRows, maxCols;
-        int totalPages = tmpImg.cutToTiles(m_maxPageSize, maxRows, maxCols);
+    // The image is to be printed as 'cols' columns in 'rows' rows.
+    // Each whole slice is 'sliceWidthPix' pixels wide and 'sliceHeightPix'
+    // pixels high;  the last slice in each row and column may be smaller.
 
-        qDebug() << "Subpages count:" << totalPages
-                << "Columns:" << maxCols << "Rows:" << maxRows;
+    int sliceWidthPix = qRound(imgWidthPix*pageWidthAdjustedMm/printWidthMm);
+    int sliceHeightPix = qRound(imgHeightPix*pageHeightAdjustedMm/printHeightMm);
+    qDebug() << "slice size =" << QSize(sliceWidthPix, sliceHeightPix);
 
-        int page = 1;
-        for (int row = 0; row < maxRows; ++row)
+    // Print columns and rows in this order, so that in the usual printer
+    // and alignment case the sheets line up corresponding with the columns.
+
+    int page = 1;
+    for (int col = 0; col<cols; ++col)
+    {
+        for (int row = 0; row<rows; ++row)
         {
-            for (int col = 0; col < maxCols; ++col)
-            {
-                const QRect part = tmpImg.getTileRect(row, col);
-                const QSize imgSize = part.size();
+            qDebug() << "print page" << page << "col" << col << "row" << row;
 
-                qDebug() << "Printing page" << page << "from source" << part;
+            // The slice starts at 'sliceLeftPix' and 'sliceTopPix' in the image.
+            int sliceLeftPix = col*sliceWidthPix;
+            int sliceTopPix = row*sliceHeightPix;
 
-                const QRect targetRect(printPosTopLeft(imgSize), imgSize);
-                m_painter->drawImage(targetRect, tmpImg, part);
+            // Calculate the source rectangle within the image
+            int thisWidthPix = qMin(sliceWidthPix, (imgWidthPix-sliceLeftPix));
+            int thisHeightPix = qMin(sliceHeightPix, (imgHeightPix-sliceTopPix));
+            const QRect sourceRect(sliceLeftPix, sliceTopPix, thisWidthPix, thisHeightPix);
 
-                drawCornerMarker(imgSize, row, col, maxRows, maxCols);
+            // Calculate the target rectangle on the painter
+            int targetWidthPix = qRound((pageWidthAdjustedMm*printRes)*(double(thisWidthPix)/sliceWidthPix));
+            int targetHeightPix = qRound((pageHeightAdjustedMm*printRes)*(double(thisHeightPix)/sliceHeightPix));
+            const QRect targetRect(printLeftPix, printTopPix, targetWidthPix, targetHeightPix);
 
-                ++page;
-                if (page<=totalPages) newPage();	// not for the last page
-            }
+            qDebug() << " " << sourceRect << "->" << targetRect;
+            m_painter->drawImage(targetRect, *img, sourceRect);
+
+//                 // TODO: should be drawn first so as not to go over image!
+//                 drawCornerMarker(imgSize, row, col, maxRows, maxCols);
+
+            ++page;
+            if (page<=totalPages) newPage();		// not for the last page
         }
     }
 

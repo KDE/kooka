@@ -52,8 +52,8 @@ class KookaImage;
 #define OPT_PSGEN_DRAFT  "kde-kooka-psdraft"
 #define OPT_RATIO    "kde-kooka-ratio"
 #define OPT_FITPAGE  "kde-kooka-fitpage"
+#define OPT_CUTMARKS  "kde-kooka-cutmarks"
 
-class QString;
 class QLabel;
 class QButtonGroup;
 class QCheckBox;

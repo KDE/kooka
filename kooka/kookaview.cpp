@@ -690,6 +690,11 @@ void KookaView::print()
 // TODO: printing in KF5
     // create a KookaPrint (subclass of a QPrinter)
     KookaPrint printer;
+
+    // TODO: debugging
+    printer.setOutputFileName("/tmp/print.pdf");
+
+
     QPrintDialog d(&printer, this);
     d.setWindowTitle(i18nc("@title:window", "Print Image"));
     d.setOptions(QAbstractPrintDialog::PrintToFile|QAbstractPrintDialog::PrintShowPageSize);
@@ -722,25 +727,8 @@ void KookaView::print()
     }
 
     imgTab.getOptions(imgOptions);			// read back updated options
-    qDebug() << "selected options:";
-    for (QMap<QString, QString>::const_iterator it = imgOptions.constBegin();
-         it!=imgOptions.constEnd(); ++it)
-    {
-        qDebug() << " " << qPrintable(it.key()) << "=" << it.value();
-    }
-
-    // pass options to printer
-    printer.setOptions(&imgOptions);
-
-    // print image
-    printer.printImage(img);
-
-
-
-
-
-
-
+    printer.setOptions(&imgOptions);			// set the printer options
+    printer.printImage(img);				// print the image
 
 
 
