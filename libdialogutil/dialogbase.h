@@ -147,22 +147,6 @@ public:
      **/
     static int horizontalSpacing();
 
-protected:
-
-    /**
-     * Constructor.
-     *
-     * @param pnt Parent widget
-     **/
-    explicit DialogBase(QWidget *pnt = NULL);
-
-    /**
-     * Set the main widget to be displayed within the dialog.
-     *
-     * @param w The widget
-     **/
-    void setMainWidget(QWidget *w)			{ mMainWidget = w; }
-
     /**
      * Access the dialog's button box.
      *
@@ -222,6 +206,22 @@ protected:
      * accordingly.
      **/
     void setButtonGuiItem(QDialogButtonBox::StandardButton button, const KGuiItem &guiItem);
+
+protected:
+
+    /**
+     * Constructor.
+     *
+     * @param pnt Parent widget
+     **/
+    explicit DialogBase(QWidget *pnt = NULL);
+
+    /**
+     * Set the main widget to be displayed within the dialog.
+     *
+     * @param w The widget
+     **/
+    void setMainWidget(QWidget *w)			{ mMainWidget = w; }
 
     /**
      * @reimp
