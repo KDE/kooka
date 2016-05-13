@@ -47,7 +47,6 @@
 #include <klocalizedstring.h>
 #include <kstandardguiitem.h>
 #include <kconfigskeleton.h>
-#include <krecentdirs.h>
 
 #include <kio/global.h>
 #include <kio/copyjob.h>
@@ -64,6 +63,7 @@
 #include "imagemetainfo.h"
 #include "imagefilter.h"
 #include "scanicons.h"
+#include "recentsaver.h"
 
 
 #undef DEBUG_LOADING
@@ -1055,21 +1055,12 @@ void ScanGallery::slotExportFile()
     if (format.isValid()) filter = format.mime().filterString();
     else filter = i18n("All Files (*)");
 
-    const QString recentClass(":exportImage");
-    QString recentDir = KRecentDirs::dir(recentClass);
-    if (!recentDir.isEmpty() && !recentDir.endsWith('/')) recentDir += '/';
-    recentDir += fromUrl.fileName();
-
+    RecentSaver saver("exportImage");
     QUrl fileName = QFileDialog::getSaveFileUrl(this, i18nc("@title:window", "Export Image"),
-                                                QUrl::fromLocalFile(recentDir), filter);
+                                                saver.recentUrl(fromUrl.fileName()), filter);
     if (!fileName.isValid()) return;			// didn't get a file name
     if (fileName==fromUrl) return;			// can't save over myself
-
-    if (fileName.isLocalFile())
-    {
-        QString rd = fileName.adjusted(QUrl::RemoveFilename).path();
-        KRecentDirs::add(recentClass, rd);
-    }
+    saver.save(fileName);
 
     // Since the copy operation is asynchronous,
     // we will never know if it succeeds.
@@ -1089,18 +1080,11 @@ void ScanGallery::slotImportFile()
 
     QString filter = ImageFilter::qtFilterString(ImageFilter::Reading, ImageFilter::AllImages|ImageFilter::AllFiles);
 
-    const QString recentClass(":importImage");
-    QString recentDir = KRecentDirs::dir(recentClass);
-    if (!recentDir.isEmpty() && !recentDir.endsWith('/')) recentDir += '/';
-
+    RecentSaver saver("importImage");
     QUrl impUrl = QFileDialog::getOpenFileUrl(this, i18n("Import Image File to Gallery"),
-                                              QUrl::fromLocalFile(recentDir), filter);
+                                              saver.recentUrl(), filter);
     if (!impUrl.isValid()) return;
-    if (impUrl.isLocalFile())
-    {
-        QString rd = impUrl.adjusted(QUrl::RemoveFilename).path();
-        KRecentDirs::add(recentClass, rd);
-    }
+    saver.save(impUrl);
 							// use the name of the source file
     impTarget = impTarget.resolved(QUrl(impUrl.fileName()));
     m_nextUrlToShow = impTarget;

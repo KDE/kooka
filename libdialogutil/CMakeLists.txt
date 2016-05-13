@@ -6,11 +6,13 @@ project(libdialogutil)
 set(dialogutil_SRCS
   dialogbase.cpp
   dialogstatesaver.cpp
+  recentsaver.cpp
 )
 
 set(dialogutil_HDRS
   dialogbase.h
   dialogstatesaver.h
+  recentsaver.h
   ${CMAKE_CURRENT_BINARY_DIR}/libdialogutil_export.h
 )
 
@@ -20,6 +22,8 @@ target_link_libraries(dialogutil
   Qt5::Widgets
   KF5::ConfigCore
   KF5::WidgetsAddons
+  KF5::KIOCore
+  KF5::KIOFileWidgets
 )
 
 set_target_properties(dialogutil PROPERTIES VERSION 1.0.0 SOVERSION 1)
