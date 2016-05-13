@@ -34,6 +34,7 @@
 #include <qdesktopwidget.h>
 #include <qevent.h>
 #include <qapplication.h>
+#include <qabstractbutton.h>
 #include <qdebug.h>
 
 #include <kconfiggroup.h>
@@ -56,6 +57,13 @@ DialogStateSaver::DialogStateSaver(QDialog *pnt)
 DialogStateSaver::~DialogStateSaver()
 {
     qDebug() << "done";
+}
+
+
+void DialogStateSaver::setSaveOnButton(QAbstractButton *but)
+{
+    qDebug() << "button" << but->text();
+    connect(but, &QAbstractButton::clicked, this, &DialogStateSaver::saveConfigInternal);
 }
 
 
