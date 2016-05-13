@@ -106,6 +106,52 @@ public:
      */
     void setSaveOnButton(QAbstractButton *but);
 
+    /**
+     * Save the state of a window.
+     *
+     * The window need not be a dialog, therefore this can be used for
+     * saving the state of any window.  The state is saved to a group
+     * named as appropriate for the window.
+     *
+     * @param window window to save the state of
+     **/
+    static void saveWindowState(QWidget *window);
+
+    /**
+     * Save the state of a window.
+     *
+     * The window need not be a dialog, therefore this can be used for
+     * saving the state of any window.  The state is saved to the
+     * specified group.
+     *
+     * @param window window to save the state of
+     * @param grp group to save the configuration to
+     **/
+    static void saveWindowState(QWidget *window, KConfigGroup &grp);
+
+    /**
+     * Restore the state of a window.
+     *
+     * The window need not be a dialog, therefore this can be used for
+     * restoring the state of any window.  The state is restore from a group
+     * named as appropriate for the window.
+     *
+     * @param window window to restore the state of
+     **/
+    static void restoreWindowState(QWidget *window);
+
+    /**
+     * Restore the state of a window.
+     *
+     * The window need not be a dialog, therefore this can be used for
+     * restoring the state of any window.  The state is restored from
+     * the specified group.
+     *
+     * @param window window to restore the state of
+     * @param grp group to restore the configuration from
+     **/
+    static void restoreWindowState(QWidget *window, const KConfigGroup &grp);
+
 protected:
     /**
      * Save the dialog size to the application config file.
