@@ -34,6 +34,7 @@
 #include <qdesktopwidget.h>
 #include <qevent.h>
 #include <qapplication.h>
+#include <qabstractbutton.h>
 #include <qdebug.h>
 
 #include <kconfiggroup.h>
@@ -59,6 +60,13 @@ DialogStateSaver::~DialogStateSaver()
 }
 
 
+void DialogStateSaver::setSaveOnButton(QAbstractButton *but)
+{
+    qDebug() << "button" << but->text();
+    connect(but, &QAbstractButton::clicked, this, &DialogStateSaver::saveConfigInternal);
+}
+
+
 bool DialogStateSaver::eventFilter(QObject *obj, QEvent *ev)
 {
     if (obj==mParent && ev->type()==QEvent::Show)	// only interested in show event
@@ -69,35 +77,54 @@ bool DialogStateSaver::eventFilter(QObject *obj, QEvent *ev)
 }
 
 
+static KConfigGroup configGroupFor(QWidget *window)
+{
+    QString objName = window->objectName();
+    if (objName.isEmpty())
+    {
+        objName = window->metaObject()->className();
+        qWarning() << "object name not set, using class name" << objName;
+    }
+    else qDebug() << "for" << objName << "which is a" << window->metaObject()->className();
+
+    return (KSharedConfig::openConfig(QString(), KConfig::NoCascade)->group(objName));
+}
+
+
 void DialogStateSaver::restoreConfigInternal()
 {
     if (!sSaveSettings) return;
 
-    QString objName = mParent->objectName();
-    qDebug() << "for" << objName << "which is a" << mParent->metaObject()->className();
-    if (objName.isEmpty())
-    {
-        objName = mParent->metaObject()->className();
-        qWarning() << "object name not set, using class name" << objName;
-    }
-
-    const KConfigGroup grp = KSharedConfig::openConfig(QString(), KConfig::NoCascade)->group(objName);
-    qDebug() << "from" << grp.name() << "in" << grp.config()->name();
+    const KConfigGroup grp = configGroupFor(mParent);
     this->restoreConfig(mParent, grp);
 }
 
 
 void DialogStateSaver::restoreConfig(QDialog *dialog, const KConfigGroup &grp)
 {
-    // from KDE4 KDialog::restoreDialogSize()
-    int scnum = QApplication::desktop()->screenNumber(dialog->parentWidget());
-    QRect desk = QApplication::desktop()->screenGeometry(scnum);
-    int width = dialog->sizeHint().width();
-    int height = dialog->sizeHint().height();
+    restoreWindowState(dialog, grp);
+}
 
+
+void DialogStateSaver::restoreWindowState(QWidget *window)
+{
+    const KConfigGroup grp = configGroupFor(window);
+    restoreWindowState(window, grp);
+}
+
+
+void DialogStateSaver::restoreWindowState(QWidget *window, const KConfigGroup &grp)
+{
+    // from KDE4 KDialog::restoreDialogSize()
+    int scnum = QApplication::desktop()->screenNumber(window->parentWidget());
+    QRect desk = QApplication::desktop()->screenGeometry(scnum);
+    int width = window->sizeHint().width();
+    int height = window->sizeHint().height();
+
+    qDebug() << "from" << grp.name() << "in" << grp.config()->name();
     width = grp.readEntry(QString::fromLatin1("Width %1").arg(desk.width()), width);
     height = grp.readEntry(QString::fromLatin1("Height %1").arg(desk.height()), height);
-    dialog->resize(width, height);
+    window->resize(width, height);
 }
 
 
@@ -105,11 +132,7 @@ void DialogStateSaver::saveConfigInternal() const
 {
     if (!sSaveSettings) return;
 
-    QString objName = mParent->objectName();
-    if (objName.isEmpty()) objName = mParent->metaObject()->className();
-
-    KConfigGroup grp = KSharedConfig::openConfig(QString(), KConfig::NoCascade)->group(objName);
-    qDebug() << "to" << grp.name() << "in" << grp.config()->name();
+    KConfigGroup grp = configGroupFor(mParent);
     this->saveConfig(mParent, grp);
     grp.sync();
 }
@@ -117,13 +140,28 @@ void DialogStateSaver::saveConfigInternal() const
 
 void DialogStateSaver::saveConfig(QDialog *dialog, KConfigGroup &grp) const
 {
-    // from KDE4 KDialog::saveDialogSize()
-    const int scnum = QApplication::desktop()->screenNumber(dialog->parentWidget());
-    QRect desk = QApplication::desktop()->screenGeometry(scnum);
-    const QSize sizeToSave = dialog->size();
+    saveWindowState(dialog, grp);
+}
 
+
+void DialogStateSaver::saveWindowState(QWidget *window)
+{
+    KConfigGroup grp = configGroupFor(window);
+    saveWindowState(window, grp);
+}
+
+
+void DialogStateSaver::saveWindowState(QWidget *window, KConfigGroup &grp)
+{
+    // from KDE4 KDialog::saveDialogSize()
+    const int scnum = QApplication::desktop()->screenNumber(window->parentWidget());
+    QRect desk = QApplication::desktop()->screenGeometry(scnum);
+    const QSize sizeToSave = window->size();
+
+    qDebug() << "to" << grp.name() << "in" << grp.config()->name();
     grp.writeEntry(QString::fromLatin1("Width %1").arg(desk.width()), sizeToSave.width());
     grp.writeEntry( QString::fromLatin1("Height %1").arg(desk.height()), sizeToSave.height());
+    grp.sync();
 }
 
 

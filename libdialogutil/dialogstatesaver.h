@@ -36,6 +36,7 @@
 
 class QDialog;
 class QEvent;
+class QAbstractButton;
 class KConfigGroup;
 
 
@@ -85,6 +86,71 @@ public:
      * @see QObject::objectName()
      **/
     static void setSaveSettingsDefault(bool on);
+
+    /**
+     * Sets a button to save the state of the dialog when it is used.
+     *
+     * Normally the dialog state will be saved when the parent dialog is accepted.
+     * This means when any button with the @c QDialogButtonBox::AcceptRole is
+     * clicked: that is, @c QDialogButtonBox::Ok and some others.  Notably, it
+     * does not include a @c QDialogButtonBox::Close button which is used where
+     * there is no difference between closing and cancelling.  This means that the
+     * dialog state will not normally be saved when that button is used.
+     *
+     * If a button is specified here, the state will be saved when that button is
+     * used, in addition to any button with the @c QDialogButtonBox::AcceptRole.
+     * Additional buttons may be specified multiple times, and they will all
+     * save the state.
+     *
+     * @param but The button to activate the saving
+     */
+    void setSaveOnButton(QAbstractButton *but);
+
+    /**
+     * Save the state of a window.
+     *
+     * The window need not be a dialog, therefore this can be used for
+     * saving the state of any window.  The state is saved to a group
+     * named as appropriate for the window.
+     *
+     * @param window window to save the state of
+     **/
+    static void saveWindowState(QWidget *window);
+
+    /**
+     * Save the state of a window.
+     *
+     * The window need not be a dialog, therefore this can be used for
+     * saving the state of any window.  The state is saved to the
+     * specified group.
+     *
+     * @param window window to save the state of
+     * @param grp group to save the configuration to
+     **/
+    static void saveWindowState(QWidget *window, KConfigGroup &grp);
+
+    /**
+     * Restore the state of a window.
+     *
+     * The window need not be a dialog, therefore this can be used for
+     * restoring the state of any window.  The state is restore from a group
+     * named as appropriate for the window.
+     *
+     * @param window window to restore the state of
+     **/
+    static void restoreWindowState(QWidget *window);
+
+    /**
+     * Restore the state of a window.
+     *
+     * The window need not be a dialog, therefore this can be used for
+     * restoring the state of any window.  The state is restored from
+     * the specified group.
+     *
+     * @param window window to restore the state of
+     * @param grp group to restore the configuration from
+     **/
+    static void restoreWindowState(QWidget *window, const KConfigGroup &grp);
 
 protected:
     /**

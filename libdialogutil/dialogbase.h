@@ -116,6 +116,15 @@ public:
     void setStateSaver(DialogStateSaver *saver);
 
     /**
+     * Access the state saver used by the dialog.
+     *
+     * This may be the default one, or that set by @c setStateSaver().
+     *
+     * @return the state saver
+     **/
+    DialogStateSaver *stateSaver() const 		{ return (mStateSaver); }
+
+    /**
      * Set the default option of whether the button separator line
      * is shown. The default is @c true. This is an application-wide
      * setting which affects all subsequently created dialogs.
@@ -146,22 +155,6 @@ public:
      * @return The spacing hint
      **/
     static int horizontalSpacing();
-
-protected:
-
-    /**
-     * Constructor.
-     *
-     * @param pnt Parent widget
-     **/
-    explicit DialogBase(QWidget *pnt = NULL);
-
-    /**
-     * Set the main widget to be displayed within the dialog.
-     *
-     * @param w The widget
-     **/
-    void setMainWidget(QWidget *w)			{ mMainWidget = w; }
 
     /**
      * Access the dialog's button box.
@@ -222,6 +215,22 @@ protected:
      * accordingly.
      **/
     void setButtonGuiItem(QDialogButtonBox::StandardButton button, const KGuiItem &guiItem);
+
+protected:
+
+    /**
+     * Constructor.
+     *
+     * @param pnt Parent widget
+     **/
+    explicit DialogBase(QWidget *pnt = NULL);
+
+    /**
+     * Set the main widget to be displayed within the dialog.
+     *
+     * @param w The widget
+     **/
+    void setMainWidget(QWidget *w)			{ mMainWidget = w; }
 
     /**
      * @reimp
