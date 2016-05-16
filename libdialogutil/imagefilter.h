@@ -33,7 +33,7 @@
 
 #include <qstringlist.h>
 
-#include "kookascan_export.h"
+#include "libdialogutil_export.h"
 
 
 /**
@@ -80,8 +80,8 @@ namespace ImageFilter
      * @param options Options for the filter generation.
      * @return The filter list
      **/
-    KOOKASCAN_EXPORT QStringList qtFilterList(ImageFilter::FilterMode mode,
-                                              ImageFilter::FilterOptions options = ImageFilter::NoOptions);
+    LIBDIALOGUTIL_EXPORT QStringList qtFilterList(ImageFilter::FilterMode mode,
+                                                  ImageFilter::FilterOptions options = ImageFilter::NoOptions);
 
     /**
      * Generate a Qt-style filter string.
@@ -93,8 +93,8 @@ namespace ImageFilter
      * @param options Options for the filter generation.
      * @return The filter string
      **/
-    KOOKASCAN_EXPORT QString qtFilterString(ImageFilter::FilterMode mode,
-                                            ImageFilter::FilterOptions options = ImageFilter::NoOptions);
+    LIBDIALOGUTIL_EXPORT QString qtFilterString(ImageFilter::FilterMode mode,
+                                                ImageFilter::FilterOptions options = ImageFilter::NoOptions);
 
     /**
      * Generate a KDE-style filter list.
@@ -105,8 +105,8 @@ namespace ImageFilter
      * @param options Options for the filter generation.
      * @return The filter string
      **/
-    KOOKASCAN_EXPORT QString kdeFilter(ImageFilter::FilterMode mode,
-                                       ImageFilter::FilterOptions options = ImageFilter::NoOptions);
+    LIBDIALOGUTIL_EXPORT QString kdeFilter(ImageFilter::FilterMode mode,
+                                           ImageFilter::FilterOptions options = ImageFilter::NoOptions);
 }
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(ImageFilter::FilterOptions)

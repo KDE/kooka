@@ -7,12 +7,14 @@ set(dialogutil_SRCS
   dialogbase.cpp
   dialogstatesaver.cpp
   recentsaver.cpp
+  imagefilter.cpp
 )
 
 set(dialogutil_HDRS
   dialogbase.h
   dialogstatesaver.h
   recentsaver.h
+  imagefilter.h
   ${CMAKE_CURRENT_BINARY_DIR}/libdialogutil_export.h
 )
 
@@ -20,6 +22,7 @@ add_library(dialogutil SHARED ${dialogutil_SRCS})
 generate_export_header(dialogutil BASE_NAME libdialogutil)
 target_link_libraries(dialogutil
   Qt5::Widgets
+  KF5::I18n
   KF5::ConfigCore
   KF5::WidgetsAddons
   KF5::KIOCore
