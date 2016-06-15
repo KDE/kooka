@@ -1,0 +1,6 @@
+@PACKAGE_INIT@
+
+find_dependency(KF5Config)
+find_dependency(KF5WidgetsAddons)
+
+set(DIALOGUTIL_LIBRARIES "-ldialogutil")

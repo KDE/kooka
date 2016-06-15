@@ -31,7 +31,18 @@ target_link_libraries(dialogutil
 
 set_target_properties(dialogutil PROPERTIES VERSION 1.0.0 SOVERSION 1)
 
+########### package config ###############
+
+set(DU "DialogUtil")
+set(CONFIGDIR "${KDE_INSTALL_CMAKEPACKAGEDIR}/${DU}")
+
+ecm_configure_package_config_file(
+  "${CMAKE_CURRENT_SOURCE_DIR}/${DU}Config.cmake.in"
+  "${CMAKE_CURRENT_BINARY_DIR}/${DU}Config.cmake"
+  INSTALL_DESTINATION ${CONFIGDIR})
+
 ########### installation ###############
 
 install(TARGETS dialogutil ${INSTALL_TARGETS_DEFAULT_ARGS})
 install(FILES ${dialogutil_HDRS} DESTINATION ${KDE_INSTALL_INCLUDEDIR_KF5})
+install(FILES "${CMAKE_CURRENT_BINARY_DIR}/${DU}Config.cmake" DESTINATION ${CONFIGDIR} COMPONENT Devel)
