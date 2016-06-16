@@ -43,7 +43,45 @@ class KookaPrint : public QPrinter
 public:
     explicit KookaPrint();
 
-    void setOptions(const QMap<QString, QString> *opts);
+    bool printImage(int intextraMarginPercent = 10);
+
+    enum ScaleOption
+    {
+        ScaleScreen,					///< As seen on screen
+        ScaleScan,					///< From scan resolution
+        ScaleCustom,					///< Custom size
+        ScaleFitPage					///< Fit to page
+    };
+
+    enum CutMarksOption
+    {
+        CutMarksNone,					///< No cut marks
+        CutMarksMultiple,				///< Cut marks if multiple pages
+        CutMarksAlways					///< Always cut marks
+    };
+
+    void setImage(const KookaImage *img)		{ m_image = img; }
+    const KookaImage *image() const			{ return (m_image); }
+
+    void setScaleOption(KookaPrint::ScaleOption opt)	{ m_scaleOption = opt; }
+    KookaPrint::ScaleOption scaleOption() const		{ return (m_scaleOption); }
+
+    void setPrintSize(const QSize &opt)			{ m_printSize = opt; }
+    QSize printSize() const				{ return (m_printSize); }
+
+    void setMaintainAspect(bool opt)			{ m_maintainAspect = opt; }
+    bool maintainAspect() const				{ return (m_maintainAspect); }
+
+    void setLowResDraft(bool opt)			{ m_lowResDraft = opt; }
+    bool lowResDraft() const				{ return (m_lowResDraft); }
+
+    void setScreenResolution(int res)			{ m_screenResolution = res; }
+    int screenResolution() const			{ return (m_screenResolution); }
+
+    void setScanResolution(int res)			{ m_scanResolution = res; }
+    int scanResolution() const				{ return (m_scanResolution); }
+
+
 
 
     /**
@@ -58,12 +96,6 @@ public:
 
     virtual int extraMarginPix() const;
 
-
-// TODO: do these need to be slots?
-public slots:
-    bool printImage(const KookaImage *img, int intextraMarginPercent = 10);
-    void printFittingToPage(const KookaImage *img);
-
 protected:
     typedef enum { SW, NW, NO, SO } MarkerDirection;
 
@@ -72,17 +104,19 @@ protected:
     virtual void drawCornerMarker(const QSize &, int, int, int, int);
 
 private:
-    /**
-     * The pixel size of the current page.
-     **/
-    QSize maxPageSize(int extraShrinkPercent = 0) const;
-
-private:
     QPainter *m_painter;
-    const QMap<QString, QString> *m_options;
 
     QSize m_maxPageSize;
     int m_extraMarginPercent;
+    const KookaImage *m_image;
+
+    KookaPrint::ScaleOption m_scaleOption;
+    KookaPrint::CutMarksOption m_cutsOption;
+    QSize m_printSize;
+    bool m_maintainAspect;
+    bool m_lowResDraft;
+    int m_screenResolution;
+    int m_scanResolution;
 };
 
 #endif							// KOOKAPRINT_H

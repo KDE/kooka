@@ -31,7 +31,6 @@
 
 #include "imgprintdialog.h"
 
-#include <qmap.h>
 #include <qlayout.h>
 #include <qlabel.h>
 #include <qbuttongroup.h>
@@ -39,11 +38,15 @@
 #include <qradiobutton.h>
 #include <qgroupbox.h>
 #include <qspinbox.h>
-
+#include <qtimer.h>
+#include <qprintdialog.h>
 #include <qdebug.h>
+#include <QSignalBlocker>
+
 #include <klocalizedstring.h>
 
 #include "kookaimage.h"
+#include "kookaprint.h"
 
 
 #define ID_SCREEN 0
@@ -58,19 +61,25 @@
 
 
 
-
-
-ImgPrintDialog::ImgPrintDialog(const KookaImage *img, QWidget *pnt)
+ImgPrintDialog::ImgPrintDialog(const KookaImage *img, KookaPrint *prt, QWidget *pnt)
 #ifdef KDE3
-    : KPrintDialogPage(pnt, name),
+    : KPrintDialogPage(pnt),
 #else
     : QWidget(pnt),
 #endif
-
-      m_image(img),
-      m_ignoreSignal(false)
+      m_image(img)
 {
     setWindowTitle(i18nc("@title:tab", "Image"));	// used as tab title
+
+    mPrinter = prt;					// record the printer
+
+    // Timer for delayed/combined updates of print parameters
+    mUpdateTimer = new QTimer(this);
+    mUpdateTimer->setSingleShot(true);
+    // The default button auto-repeat delay is set to 300
+    // in qtbase/src/widgets/widgets/qabstractbutton.cpp
+    mUpdateTimer->setInterval(320);			// longer than button auto-repeat
+    connect(mUpdateTimer, &QTimer::timeout, this, &ImgPrintDialog::updatePrintParameters);
 
     QVBoxLayout *layout = new QVBoxLayout(this);
 
@@ -78,11 +87,19 @@ ImgPrintDialog::ImgPrintDialog(const KookaImage *img, QWidget *pnt)
 
     // TODO: grid unified, radios and entry fields together
     QVBoxLayout *vbl = new QVBoxLayout(grp);
-    //vbl->setMargin(0);
+
+    // Each control (or group of controls) created here that affect the printer
+    // page or layout needs to be connected to mUpdateTimer->start().  This will
+    // call updatePrintParameters() on a delay to combine updates from auto-repeating
+    // controls.  Those that do not affect the printer page/layout do not need to
+    // do this, the caller will perform a final updatePrintParameters() before
+    // starting to print.
 
     m_scaleRadios = new QButtonGroup(this);
     connect(m_scaleRadios, static_cast<void (QButtonGroup::*)(int)>(&QButtonGroup::buttonClicked),
             this, &ImgPrintDialog::slotScaleChanged);
+    connect(m_scaleRadios, static_cast<void (QButtonGroup::*)(int)>(&QButtonGroup::buttonClicked),
+            mUpdateTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
 
     QRadioButton *rb = new QRadioButton(i18nc("@option:radio", "Same size as on screen"), this);
     rb->setToolTip(i18nc("@info;tooltip", "<div>Print at the same size as seen on screen, determined by the screen resolution.</div>"));
@@ -129,6 +146,8 @@ ImgPrintDialog::ImgPrintDialog(const KookaImage *img, QWidget *pnt)
     m_dpi = new QSpinBox(group1);
     m_dpi->setRange(50, 1200);
     m_dpi->setSuffix(i18nc("@item:intext abbreviation for 'dots per inch'", " dpi"));
+    connect(m_dpi, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged),
+            mUpdateTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
     l->setBuddy(m_dpi);
     vbl->addWidget(m_dpi);
 
@@ -147,7 +166,10 @@ ImgPrintDialog::ImgPrintDialog(const KookaImage *img, QWidget *pnt)
     m_sizeW = new QSpinBox(this);
     m_sizeW->setRange(10, 1000);
     m_sizeW->setSuffix(i18nc("@item:intext abbreviation for 'millimetres'", " mm"));
-    connect(m_sizeW, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged), this, &ImgPrintDialog::slotCustomWidthChanged);
+    connect(m_sizeW, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged),
+            this, &ImgPrintDialog::slotCustomWidthChanged);
+    connect(m_sizeW, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged),
+            mUpdateTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
     l->setBuddy(m_sizeW);
     vbl->addWidget(m_sizeW);
 
@@ -157,50 +179,43 @@ ImgPrintDialog::ImgPrintDialog(const KookaImage *img, QWidget *pnt)
     m_sizeH = new QSpinBox(this);
     m_sizeH->setRange(10, 1000);
     m_sizeH->setSuffix(i18nc("@item:intext abbreviation for 'millimetres'", " mm"));
-    connect(m_sizeH, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged), this, &ImgPrintDialog::slotCustomHeightChanged);
+    connect(m_sizeH, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged),
+            this, &ImgPrintDialog::slotCustomHeightChanged);
+    connect(m_sizeH, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged),
+            mUpdateTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
     l->setBuddy(m_sizeH);
     vbl->addWidget(m_sizeH);
 
     // TODO: need to recalculate custom size if this option is
     // set initially or is toggled on
     m_ratio = new QCheckBox(i18nc("@option:check", "Maintain aspect ratio"), this);
+    connect(m_ratio, &QCheckBox::toggled,
+            mUpdateTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
     vbl->addWidget(m_ratio);
 
     QWidget *spaceEater = new QWidget(this);
     spaceEater->setSizePolicy(QSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored));
     layout->addWidget(spaceEater);
 
-    // Set initial default values
-    m_psDraft->setChecked(false);
-    m_dpi->setValue(300);
-    m_sizeW->setValue(100);
-    m_sizeH->setValue(100);
-    m_ratio->setChecked(true);
-    m_scaleRadios->button(ID_SCREEN)->setChecked(true);
-    slotScaleChanged(ID_SCREEN);
+    // The initial default values come from the printer.
+
+    initOptions();					// print parameters to GUI
+    mUpdateTimer->stop();				// don't want a delayed update
+    updatePrintParameters();				// but do it immediately
 }
 
 
-void ImgPrintDialog::setOptions(const QMap<QString, QString> &opts)
+void ImgPrintDialog::initOptions()
 {
-    //qDebug();
-
-    qDebug() << "setting options:";
-    for (QMap<QString, QString>::const_iterator it = opts.constBegin();
-         it!=opts.constEnd(); ++it)
-    {
-        qDebug() << " " << qPrintable(it.key()) << it.value();
-    }
-
-    // m_autofit->setChecked(opts["app-img-autofit"] == "1");
-    QString scale = opts[OPT_SCALING];
-    if (scale=="scan") m_scaleRadios->button(ID_ORIG)->setChecked(true);
-    else if (scale=="custom") m_scaleRadios->button(ID_CUSTOM)->setChecked(true);
-    else if (scale=="fitpage") m_scaleRadios->button(ID_FITPAGE)->setChecked(true);
+    KookaPrint::ScaleOption scale = printer()->scaleOption();
+    if (scale==KookaPrint::ScaleScan) m_scaleRadios->button(ID_ORIG)->setChecked(true);
+    else if (scale==KookaPrint::ScaleCustom) m_scaleRadios->button(ID_CUSTOM)->setChecked(true);
+    else if (scale==KookaPrint::ScaleFitPage) m_scaleRadios->button(ID_FITPAGE)->setChecked(true);
     else m_scaleRadios->button(ID_SCREEN)->setChecked(true);
+    slotScaleChanged(m_scaleRadios->checkedId());
 
-    QString opt = opts[OPT_SCAN_RES];
-    if (!opt.isEmpty()) m_dpi->setValue(opt.toInt());	// custom resolution provided?
+    const int scanRes = printer()->scanResolution();
+    if (scanRes!=-1) m_dpi->setValue(scanRes);		// custom resolution provided?
     else						// if not, get from image
     {
         // Get the scan resolution from the image
@@ -214,16 +229,16 @@ void ImgPrintDialog::setOptions(const QMap<QString, QString> &opts)
         }
     }
 
-    opt = opts[OPT_WIDTH];
-    if (!opt.isEmpty()) m_sizeW->setValue(opt.toInt());
-    opt = opts[OPT_HEIGHT];
-    if (!opt.isEmpty()) m_sizeH->setValue(opt.toInt());
+    QSize printSize = printer()->printSize();
+    m_sizeW->setValue(printSize.width());
+    m_sizeH->setValue(printSize.height());
 
-    mScreenDpi = opts[OPT_SCREEN_RES].toInt();
-    if (mScreenDpi==0)					// screen resolution not provided
+    mScreenDpi = printer()->screenResolution();
+    if (mScreenDpi==-1)					// screen resolution not provided
     {
         int resX = logicalDpiX();
         int resY = logicalDpiY();
+
         // TODO: check whether they differ by more than, say, 5%
         // and warn the user if so - scaling by screen resolution
         // in that case will not preserve the aspect ratio.
@@ -231,139 +246,96 @@ void ImgPrintDialog::setOptions(const QMap<QString, QString> &opts)
     }
     m_screenRes->setText(i18nc("@info:status", "Screen resolution: %1 dpi", mScreenDpi));
 
-    opt = opts[OPT_PSGEN_DRAFT];
-    if (!opt.isEmpty()) m_psDraft->setChecked(opt.toInt()==1);
-    // TODO: see above
-    opt = opts[OPT_RATIO];
-    if (!opt.isEmpty()) m_ratio->setChecked(opt.toInt()==1);
-}
-
-void ImgPrintDialog::getOptions(QMap<QString, QString> &opts, bool include_def)
-{
-    // TODO: Check for meaning of include_def !
-    //
-    // KDE3 kdelibs/kdeprint/kprintdialogpage.h says:
-    // This function is called to fill the structure @p opts with
-    // the selected options from this dialog page. If @p incldef is true,
-    // include also options with default values, otherwise discard them.
-    // Reimplement this function in subclasses.
-    // @param opts the option set to fill
-    // @param incldef if true, include also options with default values
-    // //qDebug() << "In getOption with include_def: "  << include_def << endl;
-
-    QString scale = "screen";
-    if (m_scaleRadios->button(ID_ORIG)->isChecked()) scale = "scan";
-    else if (m_scaleRadios->button(ID_CUSTOM)->isChecked()) scale = "custom";
-    else if (m_scaleRadios->button(ID_FITPAGE)->isChecked()) scale = "fitpage";
-    opts[OPT_SCALING] = scale;
-
-    opts[OPT_SCAN_RES]    = QString::number(m_dpi->value());
-    opts[OPT_WIDTH]       = QString::number(m_sizeW->value());
-    opts[OPT_HEIGHT]      = QString::number(m_sizeH->value());
-    opts[OPT_PSGEN_DRAFT] = QString::number(m_psDraft->isChecked());
-    opts[OPT_RATIO]       = QString::number(m_ratio->isChecked());
-
-    opts[OPT_SCREEN_RES]  = QString::number(mScreenDpi);
+    m_ratio->setChecked(printer()->maintainAspect());
+    m_psDraft->setChecked(printer()->lowResDraft());
 }
 
 
-// TODO: return the message, or a null string if OK
-// (avoids pass-by-reference parameter)
-bool ImgPrintDialog::isValid(QString &msg)
+QString ImgPrintDialog::checkValid() const
 {
     const int id = m_scaleRadios->checkedId();
     if (id==ID_ORIG && m_dpi->value()==0)
     {
-        msg = i18n("The scan resolution must be specified for scaling to it.");
-        return (false);
+        return (i18n("The scan resolution must be specified for scaling to it."));
     }
 
     if (id==ID_CUSTOM && (m_sizeW->value()==0 || m_sizeH->value()==0))
     {
-        msg = i18n("A valid size must be specified for custom scaling. One or both of the specified dimensions is zero.");
-        return (false);
+        return (i18n("A valid size must be specified for custom scaling. One or both of the specified dimensions is zero."));
     }
 
-    return (true);
+    return (QString::null);				// no problems
 }
 
 
 void ImgPrintDialog::slotScaleChanged(int id)
 {
-    if (id == ID_SCREEN) {
-        /* disalbe size, scan res. */
-        m_dpi->setEnabled(false);
-        m_ratio->setEnabled(false);
-        m_sizeW->setEnabled(false);
-        m_sizeH->setEnabled(false);
-        m_screenRes->setEnabled(true);
-    } else if (id == ID_ORIG) {
-        /* disable size */
-        m_dpi->setEnabled(true);
-        m_ratio->setEnabled(false);
-        m_sizeW->setEnabled(false);
-        m_sizeH->setEnabled(false);
-        m_screenRes->setEnabled(false);
-    } else if (id == ID_CUSTOM) {
-        m_dpi->setEnabled(false);
-        m_ratio->setEnabled(true);
-        m_sizeW->setEnabled(true);
-        m_sizeH->setEnabled(true);
-        m_screenRes->setEnabled(false);
-    } else if (id == ID_FITPAGE) {
-        m_dpi->setEnabled(false);
-        m_ratio->setEnabled(true);
-        m_sizeW->setEnabled(false);
-        m_sizeH->setEnabled(false);
-        m_screenRes->setEnabled(false);
-    }
+    m_dpi->setEnabled(id==ID_ORIG);
+    m_ratio->setEnabled(id==ID_CUSTOM || id==ID_FITPAGE);
+    m_sizeW->setEnabled(id==ID_CUSTOM);
+    m_sizeH->setEnabled(id==ID_CUSTOM);
+    m_screenRes->setEnabled(id==ID_SCREEN);
 }
+
 
 void ImgPrintDialog::slotCustomWidthChanged(int val)
 {
-    if (m_ignoreSignal) {
-        m_ignoreSignal = false;
-        return;
-    }
+    if (m_scaleRadios->checkedId()!=ID_CUSTOM) return;	// only for custom scaling
+    if (!m_ratio->isChecked()) return;			// only if maintaining aspect
 
-    /* go out here if scaling is not custom */
-    if (m_scaleRadios->checkedId() != ID_CUSTOM) {
-        return;
-    }
-
-    /* go out here if maintain aspect ration is off */
-    if (! m_ratio->isChecked()) {
-        return;
-    }
-
-    // TODO: use blockSignals()
-    m_ignoreSignal = true;
-    //qDebug() << "Setting value to horizontal size";
-    m_sizeH->setValue(int(double(val) *
-                          double(m_image->height()) / double(m_image->width())));
-
+    QSignalBlocker blocker(m_sizeH);
+    m_sizeH->setValue(qRound(double(val)*m_image->height()/m_image->width()));
 }
+
 
 void ImgPrintDialog::slotCustomHeightChanged(int val)
 {
-    if (m_ignoreSignal) {
-        m_ignoreSignal = false;
-        return;
-    }
+    if (m_scaleRadios->checkedId()!=ID_CUSTOM) return;	// only for custom scaling
+    if (!m_ratio->isChecked()) return;			// only if maintaining aspect
 
-    /* go out here if scaling is not custom */
-    if (m_scaleRadios->checkedId() != ID_CUSTOM) {
-        return;
-    }
+    QSignalBlocker blocker(m_sizeW);
+    m_sizeW->setValue(qRound(double(val)*m_image->width()/m_image->height()));
+}
 
-    /* go out here if maintain aspect ration is off */
-    if (! m_ratio->isChecked()) {
-        return;
-    }
 
-    m_ignoreSignal = true;
-    //qDebug() << "Setting value to vertical size";
-    m_sizeW->setValue(int(double(val) *
-                          double(m_image->width()) / double(m_image->height())));
+void ImgPrintDialog::updatePrintParameters()
+{
+    KookaPrint *pr = printer();
+
+    const QImage *img = pr->image();
+    qDebug() << "image size" << img->size();
+
+    KookaPrint::ScaleOption scale = KookaPrint::ScaleScreen;
+    if (m_scaleRadios->button(ID_ORIG)->isChecked()) scale = KookaPrint::ScaleScan;
+    else if (m_scaleRadios->button(ID_CUSTOM)->isChecked()) scale = KookaPrint::ScaleCustom;
+    else if (m_scaleRadios->button(ID_FITPAGE)->isChecked()) scale = KookaPrint::ScaleFitPage;
+    qDebug() << "scale option" << scale;
+    printer()->setScaleOption(scale);
+
+    const QSize size(m_sizeW->value(), m_sizeH->value());
+    qDebug() << "print size" << size;
+    printer()->setPrintSize(size);
+
+    const bool asp = m_ratio->isChecked();
+    qDebug() << "maintain aspect?" << asp;
+    printer()->setMaintainAspect(asp);
+
+    const bool draft = m_psDraft->isChecked();
+    qDebug() << "low res draft?" << draft;
+    printer()->setLowResDraft(draft);
+
+    const int scanRes = m_dpi->value();
+    qDebug() << "scan res" << scanRes;
+    printer()->setScanResolution(scanRes);
+
+    qDebug() << "screen res" << mScreenDpi;		// calculated in initOptions()
+    printer()->setScreenResolution(mScreenDpi);
+
+
+
+    // get printer to calculate page parameters
+
+    // reflect them in GUI
+
 
 }

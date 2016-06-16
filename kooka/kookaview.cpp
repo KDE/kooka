@@ -685,15 +685,16 @@ void KookaView::loadStartupImage()
 void KookaView::print()
 {
     const KookaImage *img = gallery()->getCurrImage(true);
-    if (img == NULL) return;				// load image if necessary
+    if (img==NULL) return;				// load image if necessary
 
 // TODO: printing in KF5
     // create a KookaPrint (subclass of a QPrinter)
     KookaPrint printer;
+    printer.setImage(img);
+    // TODO: set printer options from config
 
     // TODO: debugging
     printer.setOutputFileName("/tmp/print.pdf");
-
 
     QPrintDialog d(&printer, this);
     d.setWindowTitle(i18nc("@title:window", "Print Image"));
@@ -704,21 +705,12 @@ void KookaView::print()
     //     d.setOption(QAbstractPrintDialog::PrintSelection, false);
     //     d.setOption(QAbstractPrintDialog::PrintPageRange, false);
 
+    ImgPrintDialog imgTab(img, &printer);		// create tab for our options
+    d.setOptionTabs(QList<QWidget *>() << &imgTab);	// add tab to print dialogue
 
-    QMap<QString, QString> imgOptions;
-    // TODO: get options from config
-
-    ImgPrintDialog imgTab(img);				// create tab for our options
-    imgTab.setOptions(imgOptions);			// set initial print options
-
-    QList<QWidget *> customTabs;
-    customTabs.append(&imgTab);
-    d.setOptionTabs(customTabs);			// add tab to print dialogue
-
-    if (!d.exec()) return;
-
-    QString msg;
-    if (!imgTab.isValid(msg))				// check that settings are valid
+    if (!d.exec()) return;				// open the dialogue
+    QString msg = imgTab.checkValid();			// check that settings are valid
+    if (!msg.isEmpty())					// if not, display error message
     {
         KMessageBox::sorry(this,
                            i18nc("@info", "Invalid print options were specified:\n\n%1", msg),
@@ -726,11 +718,8 @@ void KookaView::print()
         return;
     }
 
-    imgTab.getOptions(imgOptions);			// read back updated options
-    printer.setOptions(&imgOptions);			// set the printer options
-    printer.printImage(img);				// print the image
-
-
+    imgTab.updatePrintParameters();			// set final printer options
+    printer.printImage();				// print the image
 
 #ifdef KDE3
     /* For now, print a single file. Later, print multiple images to one page */

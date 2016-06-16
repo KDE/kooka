@@ -43,23 +43,16 @@
 #endif
 
 class KookaImage;
-
-#define OPT_SCALING  "kde-kooka-scaling"
-#define OPT_SCAN_RES "kde-kooka-scanres"
-#define OPT_SCREEN_RES "kde-kooka-screenres"
-#define OPT_WIDTH    "kde-kooka-width"
-#define OPT_HEIGHT   "kde-kooka-height"
-#define OPT_PSGEN_DRAFT  "kde-kooka-psdraft"
-#define OPT_RATIO    "kde-kooka-ratio"
-#define OPT_FITPAGE  "kde-kooka-fitpage"
-#define OPT_CUTMARKS  "kde-kooka-cutmarks"
+class KookaPrint;
 
 class QLabel;
 class QButtonGroup;
 class QCheckBox;
 class QSpinBox;
+class QTimer;
 
 class KookaImage;
+class KookaPrint;
 
 
 #ifdef KDE3
@@ -71,16 +64,24 @@ class ImgPrintDialog : public QWidget
     Q_OBJECT
 
 public:
-    ImgPrintDialog(const KookaImage *img, QWidget *pnt = NULL);
+    ImgPrintDialog(const KookaImage *img, KookaPrint *prt, QWidget *pnt = NULL);
+    virtual ~ImgPrintDialog() = default;
 
-    void setOptions(const QMap<QString, QString> &opts);
-    void getOptions(QMap<QString, QString> &opts, bool include_def = false);
-    bool isValid(QString &msg);
+    QString checkValid() const;
+
+public slots:
+    void updatePrintParameters();
+
+protected:
+    KookaPrint *printer() const				{ return (mPrinter); }
 
 protected slots:
     void slotScaleChanged(int id);
     void slotCustomWidthChanged(int);
     void slotCustomHeightChanged(int);
+
+private:
+    void initOptions();
 
 private:
     QButtonGroup  *m_scaleRadios;
@@ -95,8 +96,9 @@ private:
     QLabel     *m_screenRes;
 
     const KookaImage *m_image;
-    bool        m_ignoreSignal;
     int mScreenDpi;
+    QTimer *mUpdateTimer;
+    KookaPrint *mPrinter;
 };
 
 #endif							// IMGPRINTDIALOG_H
