@@ -48,6 +48,7 @@ class KookaPrint;
 class QLabel;
 class QButtonGroup;
 class QCheckBox;
+class QLineEdit;
 class QSpinBox;
 class QTimer;
 
@@ -90,10 +91,10 @@ private:
     QSpinBox *m_sizeH;
     QSpinBox *m_dpi;
 
-    QCheckBox    *m_psDraft;
-    QCheckBox    *m_ratio;
+    QCheckBox *m_psDraft;
+    QCheckBox *m_ratio;
 
-    QLabel     *m_screenRes;
+    QLineEdit *m_screenRes;
 
     const KookaImage *m_image;
     int mScreenDpi;
