@@ -80,9 +80,9 @@ bool KookaPrint::printImage(int intextraMarginPercent)
     QGuiApplication::setOverrideCursor(Qt::WaitCursor);
 
     qDebug() << "image:";
-    qDebug() << "  size =" << m_image->size();
-    qDebug() << "  dpi X =" << qRound(m_image->dotsPerMeterX()*(2.54/100));
-    qDebug() << "  dpi Y =" << qRound(m_image->dotsPerMeterY()*(2.54/100));
+    qDebug() << "  size (pix) =" << m_image->size();
+    qDebug() << "  dpi X =" << DPM_TO_DPI(m_image->dotsPerMeterX());
+    qDebug() << "  dpi Y =" << DPM_TO_DPI(m_image->dotsPerMeterY());
     qDebug() << "printer:";
     qDebug() << "  name =" << printerName();
     qDebug() << "  colour mode =" << colorMode();
@@ -107,8 +107,8 @@ bool KookaPrint::printImage(int intextraMarginPercent)
     if (m_lowResDraft) setResolution(75);
 #endif
 
-    QPainter painter(this);				// create after setting resolution
-    m_painter = &painter;				// make accessible throughout class
+    // Create the painter after all the print parameters have been set.
+    m_painter = new QPainter(this);			// make accessible throughout class
     m_painter->setRenderHint(QPainter::SmoothPixmapTransform);
 
     // Calculate the available page size, in real world units
@@ -296,7 +296,7 @@ bool KookaPrint::printImage(int intextraMarginPercent)
         }
     }
 
-    m_painter = NULL;					// no, this is not a memory leak
+    delete m_painter;					// finished with painting
     QGuiApplication::restoreOverrideCursor();
     qDebug() << "done";
     return (true);
