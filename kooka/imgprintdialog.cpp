@@ -40,7 +40,6 @@
 #include <qspinbox.h>
 #include <qlineedit.h>
 #include <qtimer.h>
-#include <qprintdialog.h>
 #include <qdebug.h>
 #include <qgridlayout.h>
 
@@ -69,13 +68,14 @@ ImgPrintDialog::ImgPrintDialog(const KookaImage *img, KookaPrint *prt, QWidget *
 #ifdef KDE3
     : KPrintDialogPage(pnt),
 #else
-    : QWidget(pnt),
+    : QWidget(pnt)
 #endif
-      m_image(img)
 {
-    setWindowTitle(i18nc("@title:tab", "Image"));	// used as tab title
-
+    m_image = img;					// record the image
+    qDebug() << "image size" << img->size();
     mPrinter = prt;					// record the printer
+
+    setWindowTitle(i18nc("@title:tab", "Image"));	// used as tab title
 
     // Timer for delayed/combined updates of print parameters
     mUpdateTimer = new QTimer(this);
@@ -87,16 +87,16 @@ ImgPrintDialog::ImgPrintDialog(const KookaImage *img, KookaPrint *prt, QWidget *
 
     QVBoxLayout *layout = new QVBoxLayout(this);
 
-    // "Scaling" group box
-    QGroupBox *grp = new QGroupBox(i18nc("@title:group", "Scaling"), this);
-    QGridLayout *gl = new QGridLayout(grp);
-
     // Each control (or group of controls) created here that affect the printer
     // page or layout needs to be connected to mUpdateTimer->start().  This will
     // call updatePrintParameters() on a delay to combine updates from auto-repeating
     // controls.  Those that do not affect the printer page/layout do not need to
     // do this, the caller will perform a final updatePrintParameters() before
     // starting to print.
+
+    // "Scaling" group box
+    QGroupBox *grp = new QGroupBox(i18nc("@title:group", "Scaling"), this);
+    QGridLayout *gl = new QGridLayout(grp);
 
     m_scaleRadios = new QButtonGroup(this);
     connect(m_scaleRadios, static_cast<void (QButtonGroup::*)(int)>(&QButtonGroup::buttonClicked),
@@ -205,6 +205,41 @@ ImgPrintDialog::ImgPrintDialog(const KookaImage *img, KookaPrint *prt, QWidget *
     vbl->addStretch(1);
     hbox->addWidget(grp);
 
+    // "Print Layout" group box
+    grp = new QGroupBox(i18nc("@title:group", "Print Layout"), this);
+    gl = new QGridLayout(grp);
+    int row = 0;
+
+    // The image size in pixels
+    l = new QLabel(i18nc("@label:textbox", "Image size:"), this);
+    gl->addWidget(l, row, 0);
+    mImageSize = new QLabel("-", this);
+    gl->addWidget(mImageSize, row, 1);
+    ++row;
+
+    // The available print area on the paper
+    l = new QLabel(i18nc("@label:textbox", "Available print area:"), this);
+    gl->addWidget(l, row, 0);
+    mPrintArea = new QLabel("-", this);
+    gl->addWidget(mPrintArea, row, 1);
+    ++row;
+
+    // The image print area, allowing for scaling and margins
+    l = new QLabel(i18nc("@label:textbox", "Image print area:"), this);
+    gl->addWidget(l, row, 0);
+    mImageArea = new QLabel("-", this);
+    gl->addWidget(mImageArea, row, 1);
+    ++row;
+
+    // How many pages will be printed
+    l = new QLabel(i18nc("@label:textbox", "Pages required:"), this);
+    gl->addWidget(l, row, 0);
+    mPrintPages = new QLabel("-", this);
+    gl->addWidget(mPrintPages, row, 1);
+    ++row;
+
+    gl->setRowStretch(row, 1);
+    hbox->addWidget(grp);
     hbox->setStretchFactor(grp, 1);			// want this one to stretch
 
     layout->addLayout(hbox);
@@ -219,14 +254,14 @@ ImgPrintDialog::ImgPrintDialog(const KookaImage *img, KookaPrint *prt, QWidget *
 
 void ImgPrintDialog::initOptions()
 {
-    KookaPrint::ScaleOption scale = printer()->scaleOption();
+    KookaPrint::ScaleOption scale = mPrinter->scaleOption();
     if (scale==KookaPrint::ScaleScan) m_scaleRadios->button(ID_ORIG)->setChecked(true);
     else if (scale==KookaPrint::ScaleCustom) m_scaleRadios->button(ID_CUSTOM)->setChecked(true);
     else if (scale==KookaPrint::ScaleFitPage) m_scaleRadios->button(ID_FITPAGE)->setChecked(true);
     else m_scaleRadios->button(ID_SCREEN)->setChecked(true);
     slotScaleChanged(m_scaleRadios->checkedId());
 
-    const int scanRes = printer()->scanResolution();
+    const int scanRes = mPrinter->scanResolution();
     if (scanRes!=-1) m_dpi->setValue(scanRes);		// custom resolution provided?
     else						// if not, get from image
     {
@@ -241,12 +276,12 @@ void ImgPrintDialog::initOptions()
         }
     }
 
-    QSize printSize = printer()->printSize();
+    QSize printSize = mPrinter->printSize();
     m_sizeW->setValue(printSize.width());
     m_sizeH->setValue(printSize.height());
 
-    mScreenDpi = printer()->screenResolution();
-    if (mScreenDpi==-1)					// screen resolution not provided
+    int screenDpi = mPrinter->screenResolution();
+    if (screenDpi==-1)					// screen resolution not provided
     {
         int resX = logicalDpiX();
         int resY = logicalDpiY();
@@ -254,12 +289,16 @@ void ImgPrintDialog::initOptions()
         // TODO: check whether they differ by more than, say, 5%
         // and warn the user if so - scaling by screen resolution
         // in that case will not preserve the aspect ratio.
-        mScreenDpi = (resX+resY)/2;
+        screenDpi = (resX+resY)/2;
+        mPrinter->setScreenResolution(screenDpi);	// pass our value to printer
     }
-    m_screenRes->setText(i18nc("@info:status", "%1 dpi", QString::number(mScreenDpi)));
+    m_screenRes->setText(i18nc("@info:status", "%1 dpi", QString::number(screenDpi)));
 
-    m_ratio->setChecked(printer()->maintainAspect());
-    m_psDraft->setChecked(printer()->lowResDraft());
+    m_ratio->setChecked(mPrinter->maintainAspect());
+    m_psDraft->setChecked(mPrinter->lowResDraft());
+
+    // TODO: do this properly
+//    slotCustomWidthChanged(m_sizeW->value());		// adjust height for aspect
 }
 
 
@@ -312,42 +351,51 @@ void ImgPrintDialog::slotCustomHeightChanged(int val)
 
 void ImgPrintDialog::updatePrintParameters()
 {
-    KookaPrint *pr = printer();
-
-    const QImage *img = pr->image();
-    qDebug() << "image size" << img->size();
-
+    // get options from GUI and update the printer
     KookaPrint::ScaleOption scale = KookaPrint::ScaleScreen;
     if (m_scaleRadios->button(ID_ORIG)->isChecked()) scale = KookaPrint::ScaleScan;
     else if (m_scaleRadios->button(ID_CUSTOM)->isChecked()) scale = KookaPrint::ScaleCustom;
     else if (m_scaleRadios->button(ID_FITPAGE)->isChecked()) scale = KookaPrint::ScaleFitPage;
     qDebug() << "scale option" << scale;
-    printer()->setScaleOption(scale);
+    mPrinter->setScaleOption(scale);
 
-    const QSize size(m_sizeW->value(), m_sizeH->value());
+    QSize size(m_sizeW->value(), m_sizeH->value());
     qDebug() << "print size" << size;
-    printer()->setPrintSize(size);
+    mPrinter->setPrintSize(size);
 
     const bool asp = m_ratio->isChecked();
     qDebug() << "maintain aspect?" << asp;
-    printer()->setMaintainAspect(asp);
+    mPrinter->setMaintainAspect(asp);
 
     const bool draft = m_psDraft->isChecked();
     qDebug() << "low res draft?" << draft;
-    printer()->setLowResDraft(draft);
+    mPrinter->setLowResDraft(draft);
+
+    // No need to setScreenResolution() here, that has already been done
+    // in initOptions() and it never changes.
 
     const int scanRes = m_dpi->value();
     qDebug() << "scan res" << scanRes;
-    printer()->setScanResolution(scanRes);
+    mPrinter->setScanResolution(scanRes);
 
-    qDebug() << "screen res" << mScreenDpi;		// calculated in initOptions()
-    printer()->setScreenResolution(mScreenDpi);
+    // ask the printer to recalculate page parameters
+    mPrinter->recalculatePrintParameters();
 
+    // reflect them in the preview GUI
+    mImageSize->setText(i18nc("@info:status width,height pixels",
+                              "%1 x %2 pix", m_image->width(), m_image->height()));
 
+    size = mPrinter->availablePageArea();
+    mPrintArea->setText(i18nc("@info:status width,height millimetres",
+                              "%1 x %2 mm", size.width(), size.height()));
 
-    // get printer to calculate page parameters
+    size = mPrinter->imagePrintArea();
+    mImageArea->setText(i18nc("@info:status width,height millimetres",
+                              "%1 x %2 mm", size.width(), size.height()));
 
-    // reflect them in GUI
-
-
+    size = mPrinter->pageCount();			// width=columns, height=rows
+    int totalPages = size.height()*size.width();
+    if (totalPages==1) mPrintPages->setText(i18nc("@info:status total", "%1", totalPages));
+    else mPrintPages->setText(i18nc("@info:status total(rows,cols)",
+                                    "%1 (%2 x %3)", totalPages, size.height(), size.width()));
 }

@@ -73,11 +73,9 @@ KookaPrint::KookaPrint()
 }
 
 
-bool KookaPrint::printImage(int intextraMarginPercent)
+void KookaPrint::recalculatePrintParameters()
 {
-    if (m_image==NULL) return (false);			// no image to print
-
-    QGuiApplication::setOverrideCursor(Qt::WaitCursor);
+    if (m_image==NULL) return;				// no image to print
 
     qDebug() << "image:";
     qDebug() << "  size (pix) =" << m_image->size();
@@ -100,44 +98,33 @@ bool KookaPrint::printImage(int intextraMarginPercent)
     qDebug() << "  maintain aspect?" << m_maintainAspect;
     qDebug() << "  low res draft?" << m_lowResDraft;
 
-    m_extraMarginPercent = intextraMarginPercent;
-
-#if 1
-    // TODO: does this work?
-    if (m_lowResDraft) setResolution(75);
-#endif
-
-    // Create the painter after all the print parameters have been set.
-    m_painter = new QPainter(this);			// make accessible throughout class
-    m_painter->setRenderHint(QPainter::SmoothPixmapTransform);
-
     // Calculate the available page size, in real world units
     QRectF r = pageRect(QPrinter::Millimeter);
-    double pageWidthMm = r.width();
-    double pageHeightMm = r.height();
+    mPageWidthMm = r.width();
+    mPageHeightMm = r.height();
 
     // Calculate the size at which the image is to be printed,
     // depending on the scaling option.
 
-    const int imgWidthPix = m_image->width();		// image size in pixels
-    const int imgHeightPix = m_image->height();
+    mImageWidthPix = m_image->width();			// image size in pixels
+    mImageHeightPix = m_image->height();
 
-    double printWidthMm;				// print size of the image
-    double printHeightMm;
+//     double printWidthMm;				// print size of the image
+//     double printHeightMm;
 
     if (m_scaleOption==KookaPrint::ScaleScan)		// Original scan size
     {
         const int imageRes = m_scanResolution!=-1 ? DPI_TO_DPM(m_scanResolution) : m_image->dotsPerMeterX();
 	Q_ASSERT(imageRes>0);				// dots per metre
-        printWidthMm = double(imgWidthPix)/imageRes*1000;
-        printHeightMm = double(imgHeightPix)/imageRes*1000;
+        mPrintWidthMm = double(mImageWidthPix)/imageRes*1000;
+        mPrintHeightMm = double(mImageHeightPix)/imageRes*1000;
     }
     else if (m_scaleOption==KookaPrint::ScaleScreen)	// Scale to screen resolution
     {
         int screenRes = DPI_TO_DPM(m_screenResolution);
         Q_ASSERT(screenRes>0);				// dots per metre
-        printWidthMm = double(imgWidthPix)/screenRes*1000;
-        printHeightMm = double(imgHeightPix)/screenRes*1000;
+        mPrintWidthMm = double(mImageWidthPix)/screenRes*1000;
+        mPrintHeightMm = double(mImageHeightPix)/screenRes*1000;
     }
     else if (m_scaleOption==KookaPrint::ScaleCustom)	// Custom size
     {
@@ -145,14 +132,14 @@ bool KookaPrint::printImage(int intextraMarginPercent)
         // There is however no need to take account of it here, because the
         // values are already scaled/adjusted there.
 
-        printWidthMm = double(m_printSize.width());
-        printHeightMm = double(m_printSize.height());
-        Q_ASSERT(printWidthMm>0 && printHeightMm>0);
+        mPrintWidthMm = double(m_printSize.width());
+        mPrintHeightMm = double(m_printSize.height());
+        Q_ASSERT(mPrintWidthMm>0 && mPrintHeightMm>0);
     }
     else if (m_scaleOption==KookaPrint::ScaleFitPage)	// Fit to one page
     {
-        printWidthMm = pageWidthMm;
-        printHeightMm = pageHeightMm;
+        mPrintWidthMm = mPageWidthMm;
+        mPrintHeightMm = mPageHeightMm;
 
         // If cut marks are being "always" shown, then reduce the printed
         // image size here to account for them.  For the other cut marks
@@ -161,44 +148,44 @@ bool KookaPrint::printImage(int intextraMarginPercent)
 
         if (m_cutsOption==KookaPrint::CutMarksAlways)
         {
-            printWidthMm -= 2*CUT_MARGIN;
-            printHeightMm -= 2*CUT_MARGIN;
+            mPrintWidthMm -= 2*CUT_MARGIN;
+            mPrintHeightMm -= 2*CUT_MARGIN;
         }
 
         if (m_maintainAspect)				// maintain the aspect ratio
         {
             QRectF r = pageRect(QPrinter::DevicePixel);
-            double wAspect = r.width()/imgWidthPix;	// scaling ratio image -> page
-            double hAspect = r.height()/imgHeightPix;
+            double wAspect = r.width()/mImageWidthPix;	// scaling ratio image -> page
+            double hAspect = r.height()/mImageHeightPix;
 
             if (wAspect>hAspect)
             {
                 // More scaling up is needed in the horizontal direction,
                 // so reduce that to maintain the aspect ratio
-                printWidthMm *= hAspect/wAspect;
+                mPrintWidthMm *= hAspect/wAspect;
             }
             else if (hAspect>wAspect)
             {
                 // More scaling up is needed in the vertical direction,
                 // so reduce that to maintain the aspect ratio
-                printHeightMm *= wAspect/hAspect;
+                mPrintHeightMm *= wAspect/hAspect;
             }
         }
     }
     else Q_ASSERT(false);
 
-    qDebug() << "scaled image size (mm) =" << QSizeF(printWidthMm, printHeightMm);
+    qDebug() << "scaled image size (mm) =" << QSizeF(mPrintWidthMm, mPrintHeightMm);
 
-    const int printRes = DPI_TO_DPM(resolution())/1000;	// dots per millimetre
+    mPrintResolution = DPI_TO_DPM(resolution())/1000;	// dots per millimetre
 
     // Now that we have the image size to be printed,
     // see if cut marks are required.
 
-    double pageWidthAdjustedMm = pageWidthMm;
-    double pageHeightAdjustedMm = pageHeightMm;
+    mPageWidthAdjustedMm = mPageWidthMm;
+    mPageHeightAdjustedMm = mPageHeightMm;
 
     bool withCutMarks;
-    if (m_cutsOption==KookaPrint::CutMarksMultiple) withCutMarks = !(printWidthMm<=pageWidthMm && printHeightMm<=pageHeightMm);
+    if (m_cutsOption==KookaPrint::CutMarksMultiple) withCutMarks = !(mPrintWidthMm<=mPageWidthMm && mPrintHeightMm<=mPageHeightMm);
     else if (m_cutsOption==KookaPrint::CutMarksAlways) withCutMarks = true;
     else if (m_cutsOption==KookaPrint::CutMarksNone) withCutMarks = false;
     else Q_ASSERT(false);
@@ -207,19 +194,19 @@ bool KookaPrint::printImage(int intextraMarginPercent)
     // If cut marks are required, reduce the available page size
     // to allow for them.
 
-    int printLeftPix = 0;				// page origin of print
-    int printTopPix = 0;
+    mPrintLeftPix = 0;					// page origin of print
+    mPrintTopPix = 0;
 
     if (withCutMarks)
     {
-        pageWidthAdjustedMm -= 2*CUT_MARGIN;
-        pageHeightAdjustedMm -= 2*CUT_MARGIN;
-        qDebug() << "adjusted page size (mm) =" << QSizeF(pageWidthAdjustedMm, pageHeightAdjustedMm);
+        mPageWidthAdjustedMm -= 2*CUT_MARGIN;
+        mPageHeightAdjustedMm -= 2*CUT_MARGIN;
+        qDebug() << "adjusted page size (mm) =" << QSizeF(mPageWidthAdjustedMm, mPageHeightAdjustedMm);
 
-        printLeftPix = printTopPix = CUT_MARGIN*printRes;
+        mPrintLeftPix = mPrintTopPix = CUT_MARGIN*mPrintResolution;
     }
 
-    bool onOnePage = (printWidthMm<=pageWidthAdjustedMm && printHeightMm<=pageHeightAdjustedMm);
+    bool onOnePage = (mPrintWidthMm<=mPageWidthAdjustedMm && mPrintHeightMm<=mPageHeightAdjustedMm);
     qDebug() << "on one page?" << onOnePage;		// see if fits on one page
 							// must be true for this
     if (m_scaleOption==KookaPrint::ScaleFitPage) Q_ASSERT(onOnePage);
@@ -231,43 +218,70 @@ bool KookaPrint::printImage(int intextraMarginPercent)
 
     if (onOnePage)
     {
-        int widthSpareMm = pageWidthAdjustedMm-printWidthMm;
-        printLeftPix += (widthSpareMm/2)*printRes;
-        int heightSpareMm = pageHeightAdjustedMm-printHeightMm;
-        printTopPix += (heightSpareMm/2)*printRes;
+        int widthSpareMm = mPageWidthAdjustedMm-mPrintWidthMm;
+        mPrintLeftPix += (widthSpareMm/2)*mPrintResolution;
+        int heightSpareMm = mPageHeightAdjustedMm-mPrintHeightMm;
+        mPrintTopPix += (heightSpareMm/2)*mPrintResolution;
     }
 
     // Calculate how many parts (including partial parts)
     // the image needs to be sliced up into.
 
     double ipart;
-    double fpart = modf(printWidthMm/pageWidthAdjustedMm, &ipart);
+    double fpart = modf(mPrintWidthMm/mPageWidthAdjustedMm, &ipart);
     //qDebug() << "for cols ipart" << ipart << "fpart" << fpart;
-    int cols = qRound(ipart)+(fpart>0 ? 1 : 0);
-    fpart = modf(printHeightMm/pageHeightAdjustedMm, &ipart);
+    mPrintColumns = qRound(ipart)+(fpart>0 ? 1 : 0);
+    fpart = modf(mPrintHeightMm/mPageHeightAdjustedMm, &ipart);
     //qDebug() << "for rows ipart" << ipart << "fpart" << fpart;
-    int rows = qRound(ipart)+(fpart>0 ? 1 : 0);
+    mPrintRows = qRound(ipart)+(fpart>0 ? 1 : 0);
 
-    int totalPages = cols*rows;
-    qDebug() << "print cols" << cols << "rows" << rows << "pages" << totalPages;
+    int totalPages = mPrintColumns*mPrintRows;
+    qDebug() << "print cols" << mPrintColumns << "rows" << mPrintRows << "pages" << totalPages;
     Q_ASSERT(totalPages>0);				// checks for sanity
     if (onOnePage) Q_ASSERT(totalPages==1);
 
-    // The image is to be printed as 'cols' columns in 'rows' rows.
-    // Each whole slice is 'sliceWidthPix' pixels wide and 'sliceHeightPix'
+    qDebug() << "done";
+}
+
+
+
+
+
+
+
+
+
+void KookaPrint::printImage()
+{
+    if (m_image==NULL) return;				// no image to print
+    qDebug() << "starting";
+    QGuiApplication::setOverrideCursor(Qt::WaitCursor);	// this may take some time
+
+#if 1
+    // TODO: does this work?
+    if (m_lowResDraft) setResolution(75);
+#endif
+
+    // Create the painter after all the print parameters have been set.
+    m_painter = new QPainter(this);			// make accessible throughout class
+    m_painter->setRenderHint(QPainter::SmoothPixmapTransform);
+
+    // The image is to be printed as 'mPrintColumns' columns in 'mPrintRows'
+    // rows. Each whole slice is 'sliceWidthPix' pixels wide and 'sliceHeightPix'
     // pixels high;  the last slice in each row and column may be smaller.
 
-    int sliceWidthPix = qRound(imgWidthPix*pageWidthAdjustedMm/printWidthMm);
-    int sliceHeightPix = qRound(imgHeightPix*pageHeightAdjustedMm/printHeightMm);
+    int sliceWidthPix = qRound(mImageWidthPix*mPageWidthAdjustedMm/mPrintWidthMm);
+    int sliceHeightPix = qRound(mImageHeightPix*mPageHeightAdjustedMm/mPrintHeightMm);
     qDebug() << "slice size =" << QSize(sliceWidthPix, sliceHeightPix);
 
     // Print columns and rows in this order, so that in the usual printer
     // and alignment case the sheets line up corresponding with the columns.
 
+    const int totalPages = mPrintColumns*mPrintRows;
     int page = 1;
-    for (int col = 0; col<cols; ++col)
+    for (int col = 0; col<mPrintColumns; ++col)
     {
-        for (int row = 0; row<rows; ++row)
+        for (int row = 0; row<mPrintRows; ++row)
         {
             qDebug() << "print page" << page << "col" << col << "row" << row;
 
@@ -276,14 +290,14 @@ bool KookaPrint::printImage(int intextraMarginPercent)
             int sliceTopPix = row*sliceHeightPix;
 
             // Calculate the source rectangle within the image
-            int thisWidthPix = qMin(sliceWidthPix, (imgWidthPix-sliceLeftPix));
-            int thisHeightPix = qMin(sliceHeightPix, (imgHeightPix-sliceTopPix));
+            int thisWidthPix = qMin(sliceWidthPix, (mImageWidthPix-sliceLeftPix));
+            int thisHeightPix = qMin(sliceHeightPix, (mImageHeightPix-sliceTopPix));
             const QRect sourceRect(sliceLeftPix, sliceTopPix, thisWidthPix, thisHeightPix);
 
             // Calculate the target rectangle on the painter
-            int targetWidthPix = qRound((pageWidthAdjustedMm*printRes)*(double(thisWidthPix)/sliceWidthPix));
-            int targetHeightPix = qRound((pageHeightAdjustedMm*printRes)*(double(thisHeightPix)/sliceHeightPix));
-            const QRect targetRect(printLeftPix, printTopPix, targetWidthPix, targetHeightPix);
+            int targetWidthPix = qRound((mPageWidthAdjustedMm*mPrintResolution)*(double(thisWidthPix)/sliceWidthPix));
+            int targetHeightPix = qRound((mPageHeightAdjustedMm*mPrintResolution)*(double(thisHeightPix)/sliceHeightPix));
+            const QRect targetRect(mPrintLeftPix, mPrintTopPix, targetWidthPix, targetHeightPix);
 
             qDebug() << " " << sourceRect << "->" << targetRect;
             m_painter->drawImage(targetRect, *m_image, sourceRect);
@@ -299,7 +313,6 @@ bool KookaPrint::printImage(int intextraMarginPercent)
     delete m_painter;					// finished with painting
     QGuiApplication::restoreOverrideCursor();
     qDebug() << "done";
-    return (true);
 }
 
 

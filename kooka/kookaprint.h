@@ -43,8 +43,6 @@ class KookaPrint : public QPrinter
 public:
     explicit KookaPrint();
 
-    bool printImage(int intextraMarginPercent = 10);
-
     enum ScaleOption
     {
         ScaleScreen,					///< As seen on screen
@@ -59,6 +57,9 @@ public:
         CutMarksMultiple,				///< Cut marks if multiple pages
         CutMarksAlways					///< Always cut marks
     };
+
+    void recalculatePrintParameters();
+    void printImage();
 
     void setImage(const KookaImage *img)		{ m_image = img; }
     const KookaImage *image() const			{ return (m_image); }
@@ -81,8 +82,9 @@ public:
     void setScanResolution(int res)			{ m_scanResolution = res; }
     int scanResolution() const				{ return (m_scanResolution); }
 
-
-
+    QSize availablePageArea() const			{ return (QSize(qRound(mPageWidthMm), qRound(mPageHeightMm))); }
+    QSize imagePrintArea() const			{ return (QSize(qRound(mPrintWidthMm), qRound(mPrintHeightMm))); }
+    QSize pageCount() const				{ return (QSize(mPrintColumns, mPrintRows)); }
 
     /**
      * The top left edge of the required print position
@@ -117,6 +119,21 @@ private:
     bool m_lowResDraft;
     int m_screenResolution;
     int m_scanResolution;
+
+    int mImageWidthPix;					// pixel size of the image
+    int mImageHeightPix;
+    double mPrintWidthMm;				// print size of the image
+    double mPrintHeightMm;
+    double mPageWidthMm;				// print area available on page
+    double mPageHeightMm;
+    double mPageWidthAdjustedMm;			// print area used on page
+    double mPageHeightAdjustedMm;
+    int mPrintRows;					// rows/columns required
+    int mPrintColumns;
+    int mPrintTopPix;					// pixel position of origin
+    int mPrintLeftPix;
+
+    int mPrintResolution;				// printer resolution
 };
 
 #endif							// KOOKAPRINT_H

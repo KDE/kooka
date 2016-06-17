@@ -73,9 +73,6 @@ public:
 public slots:
     void updatePrintParameters();
 
-protected:
-    KookaPrint *printer() const				{ return (mPrinter); }
-
 protected slots:
     void slotScaleChanged(int id);
     void slotCustomWidthChanged(int);
@@ -96,8 +93,12 @@ private:
 
     QLineEdit *m_screenRes;
 
+    QLabel *mImageSize;
+    QLabel *mPrintArea;
+    QLabel *mImageArea;
+    QLabel *mPrintPages;
+
     const KookaImage *m_image;
-    int mScreenDpi;
     QTimer *mUpdateTimer;
     KookaPrint *mPrinter;
 };
