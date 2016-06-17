@@ -48,6 +48,7 @@ class KookaPrint;
 class QLabel;
 class QButtonGroup;
 class QCheckBox;
+class QComboBox;
 class QLineEdit;
 class QSpinBox;
 class QTimer;
@@ -90,6 +91,7 @@ private:
 
     QCheckBox *m_psDraft;
     QCheckBox *m_ratio;
+    QComboBox *m_cutsCombo;
 
     QLineEdit *m_screenRes;
 

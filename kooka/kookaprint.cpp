@@ -68,8 +68,6 @@ KookaPrint::KookaPrint()
     m_screenResolution = -1;				// set by caller
     m_scanResolution = -1;				// from image
     m_cutsOption = KookaPrint::CutMarksMultiple;
-    // TODO: for debugging
-    m_cutsOption = KookaPrint::CutMarksAlways;
 }
 
 
