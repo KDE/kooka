@@ -60,7 +60,6 @@ KookaPrint::KookaPrint()
     : QPrinter(QPrinter::HighResolution)
 {
     qDebug();
-    m_painter = NULL;
     m_image = NULL;
 
     // Initial default print parameters
@@ -254,8 +253,8 @@ void KookaPrint::printImage()
 #endif
 
     // Create the painter after all the print parameters have been set.
-    m_painter = new QPainter(this);			// make accessible throughout class
-    m_painter->setRenderHint(QPainter::SmoothPixmapTransform);
+    QPainter painter(this);
+    painter.setRenderHint(QPainter::SmoothPixmapTransform);
 
     // The image is to be printed as 'mPrintColumns' columns in 'mPrintRows'
     // rows. Each whole slice is 'sliceWidthPix' pixels wide and 'sliceHeightPix'
@@ -292,37 +291,36 @@ void KookaPrint::printImage()
 
             qDebug() << " " << sourceRect << "->" << targetRect;
             // The markers are drawn first so that the image will overwrite them.
-            drawCornerMarkers(targetRect, row, col, mPrintRows, mPrintColumns);
+            drawCornerMarkers(&painter, targetRect, row, col, mPrintRows, mPrintColumns);
             // Then the image rectangle.
-            m_painter->drawImage(targetRect, *m_image, sourceRect);
+            painter.drawImage(targetRect, *m_image, sourceRect);
 
             ++page;
             if (page<=totalPages) newPage();		// not for the last page
         }
     }
 
-    delete m_painter;					// finished with painting
     QGuiApplication::restoreOverrideCursor();
     qDebug() << "done";
 }
 
 
 // Draw a cross marker centered on that corner of the printed image.
-void KookaPrint::drawMarkerAroundPoint(const QPoint &p)
+void KookaPrint::drawMarkerAroundPoint(QPainter *painter, const QPoint &p)
 {
     const int len = (CUT_MARGIN-1)*mPrintResolution;	// length in device pixels
 
-    m_painter->save();
-    m_painter->setPen(QPen(QBrush(Qt::black), 0));	// cosmetic pen width
-    m_painter->drawLine(p-QPoint(len, 0), p+QPoint(len, 0));
-    m_painter->drawLine(p-QPoint(0, len), p+QPoint(0, len));
-    m_painter->restore();
+    painter->save();
+    painter->setPen(QPen(QBrush(Qt::black), 0));	// cosmetic pen width
+    painter->drawLine(p-QPoint(len, 0), p+QPoint(len, 0));
+    painter->drawLine(p-QPoint(0, len), p+QPoint(0, len));
+    painter->restore();
 }
 
 
-void KookaPrint::drawCutSign(const QPoint &p, int num, Qt::Corner dir)
+void KookaPrint::drawCutSign(QPainter *painter, const QPoint &p, int num, Qt::Corner dir)
 {
-    m_painter->save();
+    painter->save();
     int start = 0;
     const int radius = (CUT_MARGIN-2)*mPrintResolution;	// offset in device pixels
 
@@ -331,7 +329,7 @@ void KookaPrint::drawCutSign(const QPoint &p, int num, Qt::Corner dir)
     int toffY = 0;
     QString numStr = QString::number(num);
 
-    QFontMetrics fm = m_painter->fontMetrics();
+    QFontMetrics fm = painter->fontMetrics();
     int textWidth = fm.width(numStr) / 2;
     int textHeight = fm.width(numStr) / 2;
     int textYOff = 0;
@@ -377,31 +375,32 @@ void KookaPrint::drawCutSign(const QPoint &p, int num, Qt::Corner dir)
     int x = p.x() - radius / 2;
     int y = p.y() - radius / 2;
 
-    // m_painter->drawRect( x, y, radius, radius );  /* debug !!! */
+    // painter->drawRect( x, y, radius, radius );  /* debug !!! */
     const int tAway = radius * 3 / 4;
 
     QRect bRect = fm.boundingRect(numStr);
     int textX = p.x() + tAway * toffX + textXOff;
     int textY = p.y() + tAway * toffY + textYOff;
 
-    // m_painter->drawRect( textX, textY, bRect.width(), bRect.height() );
+    // painter->drawRect( textX, textY, bRect.width(), bRect.height() );
     //qDebug() << "Drawing to position [" << textX << "," << textY << "]";
-    m_painter->drawText(textX,
+    painter->drawText(textX,
                         textY,
                         numStr);
 
 #ifdef CUTMARKS_COLOURSEGS
     QBrush b(brushColor);				// draw a colour segment
-    m_painter->setBrush(b);				// to show correct orientation
-    m_painter->drawPie(x, y, radius, radius, start*16, -90*16);
+    painter->setBrush(b);				// to show correct orientation
+    painter->drawPie(x, y, radius, radius, start*16, -90*16);
 #endif
 
-    m_painter->restore();
+    painter->restore();
 }
 
 
 // Draw the circle and the numbers that indicate the adjacent pages
-void KookaPrint::drawCornerMarkers(const QRect &targetRect, int row, int col, int maxRows, int maxCols)
+void KookaPrint::drawCornerMarkers(QPainter *painter, const QRect &targetRect,
+                                   int row, int col, int maxRows, int maxCols)
 {
     const bool multiPages = (maxRows>1 || maxCols>1);
 
@@ -419,44 +418,44 @@ void KookaPrint::drawCornerMarkers(const QRect &targetRect, int row, int col, in
 
     // Top left
     QPoint p = targetRect.topLeft();
-    drawMarkerAroundPoint(p);
+    drawMarkerAroundPoint(painter, p);
     if (multiPages)
     {
-        if (!firstColumn) drawCutSign(p, indx - 1, Qt::BottomLeftCorner);
-        if (!firstRow) drawCutSign(p, indx - maxCols, Qt::TopRightCorner);
-        if (!firstColumn && !firstRow) drawCutSign(p, indx - maxCols - 1, Qt::TopLeftCorner);
+        if (!firstColumn) drawCutSign(painter, p, indx - 1, Qt::BottomLeftCorner);
+        if (!firstRow) drawCutSign(painter, p, indx - maxCols, Qt::TopRightCorner);
+        if (!firstColumn && !firstRow) drawCutSign(painter, p, indx - maxCols - 1, Qt::TopLeftCorner);
     }
 
     // Top right
     p = targetRect.topRight();
-    drawMarkerAroundPoint(p);
+    drawMarkerAroundPoint(painter, p);
     if (multiPages)
     {
-        if (!lastColumn) drawCutSign(p, indx + 1, Qt::BottomRightCorner);
-        if (!firstRow) drawCutSign(p, indx - maxCols, Qt::TopLeftCorner);
-        if (!lastColumn && !firstRow) drawCutSign(p, indx - maxCols + 1, Qt::TopRightCorner);
+        if (!lastColumn) drawCutSign(painter, p, indx + 1, Qt::BottomRightCorner);
+        if (!firstRow) drawCutSign(painter, p, indx - maxCols, Qt::TopLeftCorner);
+        if (!lastColumn && !firstRow) drawCutSign(painter, p, indx - maxCols + 1, Qt::TopRightCorner);
     }
 
     // Bottom right
     p = targetRect.bottomRight();
     // p += QPoint( 1, 1 );
-    drawMarkerAroundPoint(p);
+    drawMarkerAroundPoint(painter, p);
     if (multiPages)
     {
-        if (!lastColumn) drawCutSign(p, indx + 1, Qt::TopRightCorner);
-        if (!lastRow) drawCutSign(p, indx + maxCols, Qt::BottomLeftCorner);
-        //if (!lastColumn && !lastRow) drawCutSign(p, indx + maxCols, Qt::BottomRightCorner);
-        if (!lastColumn && !lastRow) drawCutSign(p, indx + maxCols + 1, Qt::BottomRightCorner);
+        if (!lastColumn) drawCutSign(painter, p, indx + 1, Qt::TopRightCorner);
+        if (!lastRow) drawCutSign(painter, p, indx + maxCols, Qt::BottomLeftCorner);
+        //if (!lastColumn && !lastRow) drawCutSign(painter, p, indx + maxCols, Qt::BottomRightCorner);
+        if (!lastColumn && !lastRow) drawCutSign(painter, p, indx + maxCols + 1, Qt::BottomRightCorner);
     }
 
     // Bottom left
     p = targetRect.bottomLeft();
     // p += QPoint( -1, 1 );
-    drawMarkerAroundPoint(p);
+    drawMarkerAroundPoint(painter, p);
     if (multiPages)
     {
-        if (!firstColumn) drawCutSign(p, indx - 1, Qt::TopLeftCorner);
-        if (!lastRow) drawCutSign(p, indx + maxCols, Qt::BottomRightCorner);
-        if (!firstColumn && !lastRow) drawCutSign(p, indx + maxCols - 1, Qt::BottomLeftCorner);
+        if (!firstColumn) drawCutSign(painter, p, indx - 1, Qt::TopLeftCorner);
+        if (!lastRow) drawCutSign(painter, p, indx + maxCols, Qt::BottomRightCorner);
+        if (!firstColumn && !lastRow) drawCutSign(painter, p, indx + maxCols - 1, Qt::BottomLeftCorner);
     }
 }

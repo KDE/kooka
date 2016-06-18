@@ -90,12 +90,11 @@ public:
     QSize pageCount() const				{ return (QSize(mPrintColumns, mPrintRows)); }
 
 protected:
-    void drawMarkerAroundPoint(const QPoint &p);
-    void drawCutSign(const QPoint &p, int num, Qt::Corner dir);
-    void drawCornerMarkers(const QRect &targetRect, int row, int col, int maxRows, int maxCols);
+    void drawMarkerAroundPoint(QPainter *painter, const QPoint &p);
+    void drawCutSign(QPainter *painter, const QPoint &p, int num, Qt::Corner dir);
+    void drawCornerMarkers(QPainter *painter, const QRect &targetRect, int row, int col, int maxRows, int maxCols);
 
 private:
-    QPainter *m_painter;
     const KookaImage *m_image;
 
     KookaPrint::ScaleOption m_scaleOption;
