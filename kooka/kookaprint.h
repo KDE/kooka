@@ -89,30 +89,13 @@ public:
     QSize imagePrintArea() const			{ return (QSize(qRound(mPrintWidthMm), qRound(mPrintHeightMm))); }
     QSize pageCount() const				{ return (QSize(mPrintColumns, mPrintRows)); }
 
-    /**
-     * The top left edge of the required print position
-     */
-// TODO: no need for virtual
-// TODO: no need to be public either
-    virtual QPoint printPosTopLeft(const QSize &) const;
-    virtual QPoint printPosTopRight(const QSize &) const;
-    virtual QPoint printPosBottomLeft(const QSize &) const;
-    virtual QPoint printPosBottomRight(const QSize &) const;
-
-    virtual int extraMarginPix() const;
-
 protected:
-    typedef enum { SW, NW, NO, SO } MarkerDirection;
-
-    virtual void drawMarkerAroundPoint(const QPoint &);
-    virtual void drawCutSign(const QPoint &, int, MarkerDirection);
-    virtual void drawCornerMarker(const QSize &, int, int, int, int);
+    void drawMarkerAroundPoint(const QPoint &p);
+    void drawCutSign(const QPoint &p, int num, Qt::Corner dir);
+    void drawCornerMarkers(const QRect &targetRect, int row, int col, int maxRows, int maxCols);
 
 private:
     QPainter *m_painter;
-
-    QSize m_maxPageSize;
-    int m_extraMarginPercent;
     const KookaImage *m_image;
 
     KookaPrint::ScaleOption m_scaleOption;
