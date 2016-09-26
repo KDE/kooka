@@ -40,7 +40,7 @@
 
 #include <kguiitem.h>
 
-#include "dialogstatesaver.h"
+#include "dialogstatewatcher.h"
 
 
 static bool sButtonSeparatorShown = true;
@@ -54,19 +54,13 @@ DialogBase::DialogBase(QWidget *pnt)
     setModal(true);					// convenience, can reset if necessary
 
     mMainWidget = NULL;					// caller not provided yet
-    mStateSaver = new DialogStateSaver(this);		// use our own as default
+    mStateWatcher = new DialogStateWatcher(this);	// use our own as default
 
     mButtonBox = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel, this);
     connect(mButtonBox, &QDialogButtonBox::accepted, this, &DialogBase::accept);
     connect(mButtonBox, &QDialogButtonBox::rejected, this, &DialogBase::reject);
 
     mButtonSeparatorShown = sButtonSeparatorShown;
-}
-
-
-DialogBase::~DialogBase()
-{
-    //qDebug() << "done";
 }
 
 
@@ -176,6 +170,11 @@ int DialogBase::horizontalSpacing()
 
 void DialogBase::setStateSaver(DialogStateSaver *saver)
 {
-    if (mStateSaver!=NULL) delete mStateSaver;
-    mStateSaver = saver;
+    mStateWatcher->setStateSaver(saver);
+}
+
+
+DialogStateSaver *DialogBase::stateSaver() const
+{
+    return (mStateWatcher->stateSaver());
 }

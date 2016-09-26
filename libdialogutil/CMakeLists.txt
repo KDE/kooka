@@ -6,6 +6,7 @@ project(libdialogutil)
 set(dialogutil_SRCS
   dialogbase.cpp
   dialogstatesaver.cpp
+  dialogstatewatcher.cpp
   recentsaver.cpp
   imagefilter.cpp
 )
@@ -13,6 +14,7 @@ set(dialogutil_SRCS
 set(dialogutil_HDRS
   dialogbase.h
   dialogstatesaver.h
+  dialogstatewatcher.h
   recentsaver.h
   imagefilter.h
   ${CMAKE_CURRENT_BINARY_DIR}/libdialogutil_export.h

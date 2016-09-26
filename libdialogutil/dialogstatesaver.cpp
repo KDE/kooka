@@ -32,9 +32,7 @@
 
 #include <qdialog.h>
 #include <qdesktopwidget.h>
-#include <qevent.h>
 #include <qapplication.h>
-#include <qabstractbutton.h>
 #include <qdebug.h>
 
 #include <kconfiggroup.h>
@@ -45,35 +43,15 @@ static bool sSaveSettings = true;
 
 
 DialogStateSaver::DialogStateSaver(QDialog *pnt)
-    : QObject(pnt)
 {
+    Q_ASSERT(pnt!=NULL);
     mParent = pnt;
-    Q_ASSERT(mParent!=NULL);
-    mParent->installEventFilter(this);
-    connect(mParent, &QDialog::accepted, this, &DialogStateSaver::saveConfigInternal);
 }
 
 
 DialogStateSaver::~DialogStateSaver()
 {
     qDebug() << "done";
-}
-
-
-void DialogStateSaver::setSaveOnButton(QAbstractButton *but)
-{
-    qDebug() << "button" << but->text();
-    connect(but, &QAbstractButton::clicked, this, &DialogStateSaver::saveConfigInternal);
-}
-
-
-bool DialogStateSaver::eventFilter(QObject *obj, QEvent *ev)
-{
-    if (obj==mParent && ev->type()==QEvent::Show)	// only interested in show event
-    {
-        restoreConfigInternal();			// restore size and config
-    }
-    return (false);					// always pass the event on
 }
 
 
@@ -91,9 +69,9 @@ static KConfigGroup configGroupFor(QWidget *window)
 }
 
 
-void DialogStateSaver::restoreConfigInternal()
+void DialogStateSaver::restoreConfig()
 {
-    if (!sSaveSettings) return;
+    if (!sSaveSettings) return;				// settings not to be restored
 
     const KConfigGroup grp = configGroupFor(mParent);
     this->restoreConfig(mParent, grp);
@@ -128,9 +106,9 @@ void DialogStateSaver::restoreWindowState(QWidget *window, const KConfigGroup &g
 }
 
 
-void DialogStateSaver::saveConfigInternal() const
+void DialogStateSaver::saveConfig() const
 {
-    if (!sSaveSettings) return;
+    if (!sSaveSettings) return;				// settings not to be saved
 
     KConfigGroup grp = configGroupFor(mParent);
     this->saveConfig(mParent, grp);

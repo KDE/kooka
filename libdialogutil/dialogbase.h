@@ -38,11 +38,12 @@
 class QShowEvent;
 class KGuiItem;
 class KConfigGroup;
+class DialogStateWatcher;
 class DialogStateSaver;
 
 
 /**
- * @short A wrapper for QDialog incorportaing some convenience functions.
+ * @short A wrapper for QDialog incorporating some convenience functions.
  *
  * This is a lightweight wrapper around QDialog, incorporating some useful
  * functions which used to be provided by KDialog in KDE4.  These are:
@@ -64,7 +65,7 @@ public:
      * Destructor.
      *
      **/
-    virtual ~DialogBase();
+    virtual ~DialogBase() = default;
 
     /**
      * Retrieve the main widget.
@@ -122,7 +123,16 @@ public:
      *
      * @return the state saver
      **/
-    DialogStateSaver *stateSaver() const 		{ return (mStateSaver); }
+    DialogStateSaver *stateSaver() const;
+
+    /**
+     * Access the state watcher used by the dialog.
+     *
+     * This is created and used internally.
+     *
+     * @return the state watcher
+     **/
+    DialogStateWatcher *stateWatcher() const		{ return (mStateWatcher); }
 
     /**
      * Set the default option of whether the button separator line
@@ -217,7 +227,6 @@ public:
     void setButtonGuiItem(QDialogButtonBox::StandardButton button, const KGuiItem &guiItem);
 
 protected:
-
     /**
      * Constructor.
      *
@@ -241,7 +250,7 @@ private:
     QDialogButtonBox *mButtonBox;
     QWidget *mMainWidget;
     bool mButtonSeparatorShown;
-    DialogStateSaver *mStateSaver;
+    DialogStateWatcher *mStateWatcher;
 };
 
 #endif							// DIALOGBASE_H

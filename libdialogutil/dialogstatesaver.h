@@ -31,31 +31,33 @@
 #ifndef DIALOGSTATESAVER_H
 #define DIALOGSTATESAVER_H
 
-#include <qobject.h>
 #include "libdialogutil_export.h"
 
 class QDialog;
-class QEvent;
-class QAbstractButton;
+class QWidget;
 class KConfigGroup;
 
 
 /**
- * @short A helper to save and restore the size and state of a dialog box.
+ * @short Save and restore the size and state of a dialog box.
  *
- * The helper takes care of saving and restoring a dialog's size in the
+ * This class manages saving and restoring a dialog's size in the
  * application config file.  All that is necessary is to create a
- * DialogStateSaver object in the dialog's constructor, passing the
+ * DialogStateWatcher object in the dialog's constructor, passing the
  * dialog as a parameter.  If the dialog is a subclass of DialogBase
- * then a saver will be created automatically.
+ * then a watcher and saver will be created automatically.
+ *
+ * The saver can be subclassed if necessary in order to save additional
+ * information (e.g. the column states of a list view).  Since it does
+ * not inherit QObject, the dialog itself can be the DialogStateSaver
+ * to do its own saving and restoring, having access to its own internal
+ * state.
  *
  * @author Jonathan Marten
  **/
 
-class LIBDIALOGUTIL_EXPORT DialogStateSaver : public QObject
+class LIBDIALOGUTIL_EXPORT DialogStateSaver
 {
-    Q_OBJECT
-
 public:
     /**
      * Constructor.
@@ -88,23 +90,24 @@ public:
     static void setSaveSettingsDefault(bool on);
 
     /**
-     * Sets a button to save the state of the dialog when it is used.
+     * Save the parent dialog size to the application config file.
      *
-     * Normally the dialog state will be saved when the parent dialog is accepted.
-     * This means when any button with the @c QDialogButtonBox::AcceptRole is
-     * clicked: that is, @c QDialogButtonBox::Ok and some others.  Notably, it
-     * does not include a @c QDialogButtonBox::Close button which is used where
-     * there is no difference between closing and cancelling.  This means that the
-     * dialog state will not normally be saved when that button is used.
+     * This is called by the dialog state watcher and should not need
+     * to be called explicitly.  It simply calls the virtual method
+     * of the same name, which may be reimplemented in a subclass in order
+     * to save other settings (e.g. the column states of a list view).
+     **/
+    void saveConfig() const;
+
+    /**
+     * Restore the dialog size from the application config file.
      *
-     * If a button is specified here, the state will be saved when that button is
-     * used, in addition to any button with the @c QDialogButtonBox::AcceptRole.
-     * Additional buttons may be specified multiple times, and they will all
-     * save the state.
-     *
-     * @param but The button to activate the saving
-     */
-    void setSaveOnButton(QAbstractButton *but);
+     * This is called by the dialog state watcher and should not need
+     * to be called explicitly.  It simply calls the virtual method
+     * of the same name, which may be reimplemented in a subclass in order
+     * to restore other settings (e.g. the column states of a list view).
+     **/
+    void restoreConfig();
 
     /**
      * Save the state of a window.
@@ -176,15 +179,6 @@ protected:
      * @param grp group to restore the configuration from
      **/
     virtual void restoreConfig(QDialog *dialog, const KConfigGroup &grp);
-
-    /**
-     * @reimp
-     **/
-    virtual bool eventFilter(QObject *obj, QEvent *ev);
-
-private slots:
-    void restoreConfigInternal();
-    void saveConfigInternal() const;
 
 private:
     QDialog *mParent;
