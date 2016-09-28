@@ -69,7 +69,7 @@ public:
     /**
      * Destructor.
      **/
-    virtual ~DialogStateSaver();
+    virtual ~DialogStateSaver() = default;
 
     /**
      * Set the default option of whether the size of dialog boxes

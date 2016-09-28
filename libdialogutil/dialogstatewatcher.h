@@ -83,6 +83,10 @@ public:
      * set explicitly using this function, then no state restoring or
      * saving will be done.
      *
+     * The watcher does not take ownership of the state saver, therefore
+     * it is the caller's responsibility to delete it when it is no
+     * longer required.
+     *
      * @param saver the state saver
      *
      * @note The saver should be set before the dialog is shown for
@@ -132,6 +136,7 @@ private slots:
 private:
     QDialog *mParent;
     DialogStateSaver *mStateSaver;
+    bool mHaveOwnSaver;
 };
 
 #endif							// DIALOGSTATEWATCHER_H

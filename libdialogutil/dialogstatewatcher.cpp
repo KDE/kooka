@@ -49,6 +49,7 @@ DialogStateWatcher::DialogStateWatcher(QDialog *pnt)
     connect(mParent, &QDialog::accepted, this, &DialogStateWatcher::saveConfigInternal);
 
     mStateSaver = new DialogStateSaver(mParent);	// use our own as default
+    mHaveOwnSaver = true;				// note that we created it
 }
 
 
@@ -85,6 +86,9 @@ void DialogStateWatcher::saveConfigInternal() const
 
 void DialogStateWatcher::setStateSaver(DialogStateSaver *saver)
 {
-    if (mStateSaver!=NULL) delete mStateSaver;		// forget the existing saver
+    // We only delete the existing saver if we created it.
+    if (mStateSaver!=NULL && mHaveOwnSaver) delete mStateSaver;
+
     mStateSaver = saver;				// set the new one
+    mHaveOwnSaver = false;				// note that it's not ours
 }

@@ -49,12 +49,6 @@ DialogStateSaver::DialogStateSaver(QDialog *pnt)
 }
 
 
-DialogStateSaver::~DialogStateSaver()
-{
-    qDebug() << "done";
-}
-
-
 static KConfigGroup configGroupFor(QWidget *window)
 {
     QString objName = window->objectName();
