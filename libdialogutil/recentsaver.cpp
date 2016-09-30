@@ -45,11 +45,6 @@ RecentSaver::RecentSaver(const QString &fileClass)
 }
 
 
-RecentSaver::~RecentSaver()
-{
-}
-
-
 QUrl RecentSaver::recentUrl(const QString &suggestedName)
 {
     // QUrl::fromLocalFile("") -> QUrl(), so no need for null test here

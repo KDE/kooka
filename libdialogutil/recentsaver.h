@@ -44,6 +44,20 @@ class QUrl;
  * is needed before and after each file dialogue to look up the appropriate
  * recent location and save it afterwards.  This class automates that.
  *
+ * For a simple use of the static QFileDialog functions, simple create and
+ * use a RecentSaver like this:
+ *
+ * @code
+ * RecentSaver recent("key");
+ * QUrl u = QFileDialog::getSaveFileUrl(parent, i18n("caption"),
+ *                                      recent.recentUrl("untitled.ext"))
+ * if (u.isValid())
+ * {
+ *   recent.save(u);
+ *   // use the URL
+ * }
+ * @endcode
+ *
  * @see KRecentDirs
  * @see QFileDialog
  * @author Jonathan Marten
@@ -66,7 +80,7 @@ public:
     /**
      * Destructor.
      **/
-    ~RecentSaver();
+    ~RecentSaver() = default;
 
     /**
      * Resolve the saved recent location (if there is one) and a suggested
@@ -75,6 +89,8 @@ public:
      *
      * @param suggestedName The suggested file name, or a null string
      * if none is required.
+     * @return The resolved URL, or a null URL if there is no saved
+     * history.
      **/
     QUrl recentUrl(const QString &suggestedName = QString::null);
 
@@ -85,6 +101,8 @@ public:
      *
      * @param suggestedName The suggested file name, or a null string
      * if none is required.
+     * @return The resolved file path, or a null string if there is no
+     * saved history.
      **/
     QString recentPath(const QString &suggestedName = QString::null);
 
