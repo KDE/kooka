@@ -36,6 +36,7 @@
 #include "libdialogutil_export.h"
 
 class QShowEvent;
+class QSpacerItem;
 class KGuiItem;
 class KConfigGroup;
 class DialogStateWatcher;
@@ -165,6 +166,20 @@ public:
      * @return The spacing hint
      **/
     static int horizontalSpacing();
+
+    /**
+     * Create a spacer item suitable for use within a vertical layout.
+     *
+     * @return The spacer item
+     **/
+    static QSpacerItem *verticalSpacerItem();
+
+    /**
+     * Create a spacer item suitable for use within a horizontal layout.
+     *
+     * @return The spacer item
+     **/
+    static QSpacerItem *horizontalSpacerItem();
 
     /**
      * Access the dialog's button box.

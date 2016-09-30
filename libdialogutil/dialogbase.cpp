@@ -37,6 +37,7 @@
 #include <qstyle.h>
 #include <qpushbutton.h>
 #include <qapplication.h>
+#include <QSpacerItem>
 
 #include <kguiitem.h>
 
@@ -177,4 +178,16 @@ void DialogBase::setStateSaver(DialogStateSaver *saver)
 DialogStateSaver *DialogBase::stateSaver() const
 {
     return (mStateWatcher->stateSaver());
+}
+
+
+QSpacerItem *DialogBase::verticalSpacerItem()
+{
+    return (new QSpacerItem(1, verticalSpacing(), QSizePolicy::Minimum, QSizePolicy::Fixed));
+}
+
+
+QSpacerItem *DialogBase::horizontalSpacerItem()
+{
+    return (new QSpacerItem(horizontalSpacing(), 1, QSizePolicy::Fixed, QSizePolicy::Minimum));
 }
