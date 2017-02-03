@@ -203,6 +203,7 @@ ImgPrintDialog::ImgPrintDialog(const KookaImage *img, KookaPrint *prt, QWidget *
     m_cutsCombo->addItem(i18nc("@item:inlistbox", "None"), KookaPrint::CutMarksNone);
     m_cutsCombo->addItem(i18nc("@item:inlistbox", "For multiple pages"), KookaPrint::CutMarksMultiple);
     m_cutsCombo->addItem(i18nc("@item:inlistbox", "Always"), KookaPrint::CutMarksAlways);
+    m_cutsCombo->setToolTip(i18nc("@info:tooltip", "<div>Select whether cut/join marks are printed. The marks will reduce the available printable area.</div>"));
     connect(m_cutsCombo, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
             mUpdateTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
     l->setBuddy(m_cutsCombo);
