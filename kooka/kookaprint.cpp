@@ -46,6 +46,7 @@
 
 #define CUT_MARGIN		5			// margin in millimetres
 
+#define PRINT_ORDER_COLUMNS
 #define CUTMARKS_COLOURSEGS
 
 
@@ -63,7 +64,7 @@ KookaPrint::KookaPrint()
     m_image = NULL;
 
     // Initial default print parameters
-    m_scaleOption = KookaPrint::ScaleScreen;
+    m_scaleOption = KookaPrint::ScaleScan;
     m_printSize = QSize(100, 100);
     m_maintainAspect = true;
     m_lowResDraft = false;
@@ -269,9 +270,17 @@ void KookaPrint::printImage()
 
     const int totalPages = mPrintColumns*mPrintRows;
     int page = 1;
+#ifdef PRINT_ORDER_COLUMNS
     for (int col = 0; col<mPrintColumns; ++col)
+#else
+    for (int row = 0; row<mPrintRows; ++row)
+#endif
     {
+#ifdef PRINT_ORDER_COLUMNS
         for (int row = 0; row<mPrintRows; ++row)
+#else
+        for (int col = 0; col<mPrintColumns; ++col)
+#endif
         {
             qDebug() << "print page" << page << "col" << col << "row" << row;
 
@@ -409,7 +418,12 @@ void KookaPrint::drawCornerMarkers(QPainter *painter, const QRect &targetRect,
     const bool firstRow = (row==0);
     const bool lastRow = (row==(maxRows-1));
 
+#ifdef PRINT_ORDER_COLUMNS
+    const int indx = maxRows*col + row + 1;
+#else
     const int indx = maxCols*row + col + 1;
+#endif
+    qDebug() << ">>> col" << col << "/" << maxCols << "row" << row << "/" << maxRows << "-> index" << indx;
 
     //qDebug() << "Marker: Row" << row << "col" << col << "from max" << maxRows << "x" << maxCols;
 
@@ -421,9 +435,15 @@ void KookaPrint::drawCornerMarkers(QPainter *painter, const QRect &targetRect,
     drawMarkerAroundPoint(painter, p);
     if (multiPages)
     {
+#ifdef PRINT_ORDER_COLUMNS
+        if (!firstColumn) drawCutSign(painter, p, indx - maxRows, Qt::BottomLeftCorner);
+        if (!firstRow) drawCutSign(painter, p, indx - 1, Qt::TopRightCorner);
+        if (!firstColumn && !firstRow) drawCutSign(painter, p, indx - maxRows - 1, Qt::TopLeftCorner);
+#else
         if (!firstColumn) drawCutSign(painter, p, indx - 1, Qt::BottomLeftCorner);
         if (!firstRow) drawCutSign(painter, p, indx - maxCols, Qt::TopRightCorner);
         if (!firstColumn && !firstRow) drawCutSign(painter, p, indx - maxCols - 1, Qt::TopLeftCorner);
+#endif
     }
 
     // Top right
@@ -431,31 +451,46 @@ void KookaPrint::drawCornerMarkers(QPainter *painter, const QRect &targetRect,
     drawMarkerAroundPoint(painter, p);
     if (multiPages)
     {
+#ifdef PRINT_ORDER_COLUMNS
+        if (!lastColumn) drawCutSign(painter, p, indx + maxRows, Qt::BottomRightCorner);
+        if (!firstRow) drawCutSign(painter, p, indx - 1, Qt::TopLeftCorner);
+        if (!lastColumn && !firstRow) drawCutSign(painter, p, indx + maxRows - 1, Qt::TopRightCorner);
+#else
         if (!lastColumn) drawCutSign(painter, p, indx + 1, Qt::BottomRightCorner);
         if (!firstRow) drawCutSign(painter, p, indx - maxCols, Qt::TopLeftCorner);
         if (!lastColumn && !firstRow) drawCutSign(painter, p, indx - maxCols + 1, Qt::TopRightCorner);
+#endif
     }
 
     // Bottom right
     p = targetRect.bottomRight();
-    // p += QPoint( 1, 1 );
     drawMarkerAroundPoint(painter, p);
     if (multiPages)
     {
+#ifdef PRINT_ORDER_COLUMNS
+        if (!lastColumn) drawCutSign(painter, p, indx + maxRows, Qt::TopRightCorner);
+        if (!lastRow) drawCutSign(painter, p, indx + 1, Qt::BottomLeftCorner);
+        if (!lastColumn && !lastRow) drawCutSign(painter, p, indx + maxRows + 1, Qt::BottomRightCorner);
+#else
         if (!lastColumn) drawCutSign(painter, p, indx + 1, Qt::TopRightCorner);
         if (!lastRow) drawCutSign(painter, p, indx + maxCols, Qt::BottomLeftCorner);
-        //if (!lastColumn && !lastRow) drawCutSign(painter, p, indx + maxCols, Qt::BottomRightCorner);
         if (!lastColumn && !lastRow) drawCutSign(painter, p, indx + maxCols + 1, Qt::BottomRightCorner);
+#endif
     }
 
     // Bottom left
     p = targetRect.bottomLeft();
-    // p += QPoint( -1, 1 );
     drawMarkerAroundPoint(painter, p);
     if (multiPages)
     {
+#ifdef PRINT_ORDER_COLUMNS
+        if (!firstColumn) drawCutSign(painter, p, indx - maxRows, Qt::TopLeftCorner);
+        if (!lastRow) drawCutSign(painter, p, indx + 1, Qt::BottomRightCorner);
+        if (!firstColumn && !lastRow) drawCutSign(painter, p, indx - maxRows + 1, Qt::BottomLeftCorner);
+#else
         if (!firstColumn) drawCutSign(painter, p, indx - 1, Qt::TopLeftCorner);
         if (!lastRow) drawCutSign(painter, p, indx + maxCols, Qt::BottomRightCorner);
         if (!firstColumn && !lastRow) drawCutSign(painter, p, indx + maxCols - 1, Qt::BottomLeftCorner);
+#endif
     }
 }
