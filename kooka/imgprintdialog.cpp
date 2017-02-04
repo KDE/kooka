@@ -181,10 +181,9 @@ ImgPrintDialog::ImgPrintDialog(const KookaImage *img, KookaPrint *prt, QWidget *
     QVBoxLayout *vbl = new QVBoxLayout(grp);
 
     // Maintain Aspect option
-    // TODO: need to recalculate custom size if this option is
-    // set initially or is toggled on
     m_ratio = new QCheckBox(i18nc("@option:check", "Maintain aspect ratio"), this);
     m_ratio->setToolTip(i18nc("@info:tooltip", "<div>Adjust the height or width to maintain the original aspect ratio of the printed image.</div>"));
+    connect(m_ratio, &QCheckBox::toggled, this, &ImgPrintDialog::slotAdjustCustomSize);
     connect(m_ratio, &QCheckBox::toggled, mUpdateTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
     vbl->addWidget(m_ratio);
 
@@ -306,8 +305,7 @@ void ImgPrintDialog::initOptions()
     int idx = m_cutsCombo->findData(mPrinter->cutMarksOption());
     if (idx!=-1) m_cutsCombo->setCurrentIndex(idx);
 
-    // TODO: do this properly
-//    slotCustomWidthChanged(m_sizeW->value());		// adjust height for aspect
+    slotAdjustCustomSize();				// adjust height for aspect
 }
 
 
@@ -340,23 +338,26 @@ void ImgPrintDialog::slotScaleChanged(int id)
 
 void ImgPrintDialog::slotCustomWidthChanged(int val)
 {
-    if (m_scaleRadios->checkedId()!=KookaPrint::ScaleCustom) return;
-							// only for custom scaling
-    if (!m_ratio->isChecked()) return;			// only if maintaining aspect
-
-    QSignalBlocker blocker(m_sizeH);
-    m_sizeH->setValue(qRound(double(val)*m_image->height()/m_image->width()));
+    slotAdjustCustomSize();
 }
 
 
 void ImgPrintDialog::slotCustomHeightChanged(int val)
 {
-    if (m_scaleRadios->checkedId()!=KookaPrint::ScaleCustom) return;
-							// only for custom scaling
     if (!m_ratio->isChecked()) return;			// only if maintaining aspect
 
     QSignalBlocker blocker(m_sizeW);
     m_sizeW->setValue(qRound(double(val)*m_image->width()/m_image->height()));
+}
+
+
+void ImgPrintDialog::slotAdjustCustomSize()
+{
+    if (!m_ratio->isChecked()) return;			// only if maintaining aspect
+
+    const double val = m_sizeW->value();		// current width setting
+    QSignalBlocker blocker(m_sizeH);			// adjust height to suit
+    m_sizeH->setValue(qRound(double(val)*m_image->height()/m_image->width()));
 }
 
 

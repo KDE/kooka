@@ -78,6 +78,7 @@ protected slots:
     void slotScaleChanged(int id);
     void slotCustomWidthChanged(int);
     void slotCustomHeightChanged(int);
+    void slotAdjustCustomSize();
 
 private:
     void initOptions();

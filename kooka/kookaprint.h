@@ -85,7 +85,7 @@ public:
     void setCutMarks(KookaPrint::CutMarksOption opt)	{ m_cutsOption = opt; }
     KookaPrint::CutMarksOption cutMarksOption() const	{ return (m_cutsOption); }
 
-    QSize availablePageArea() const			{ return (QSize(qRound(mPageWidthMm), qRound(mPageHeightMm))); }
+    QSize availablePageArea() const			{ return (QSize(qRound(mPageWidthAdjustedMm), qRound(mPageHeightAdjustedMm))); }
     QSize imagePrintArea() const			{ return (QSize(qRound(mPrintWidthMm), qRound(mPrintHeightMm))); }
     QSize pageCount() const				{ return (QSize(mPrintColumns, mPrintRows)); }
 
