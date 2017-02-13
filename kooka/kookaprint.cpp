@@ -387,7 +387,6 @@ void KookaPrint::drawCutSign(QPainter *painter, const QPoint &p, int num, Qt::Co
     // painter->drawRect( x, y, radius, radius );  /* debug !!! */
     const int tAway = radius * 3 / 4;
 
-    QRect bRect = fm.boundingRect(numStr);
     int textX = p.x() + tAway * toffX + textXOff;
     int textY = p.y() + tAway * toffY + textYOff;
 
@@ -423,12 +422,21 @@ void KookaPrint::drawCornerMarkers(QPainter *painter, const QRect &targetRect,
 #else
     const int indx = maxCols*row + col + 1;
 #endif
-    qDebug() << ">>> col" << col << "/" << maxCols << "row" << row << "/" << maxRows << "-> index" << indx;
-
-    //qDebug() << "Marker: Row" << row << "col" << col << "from max" << maxRows << "x" << maxCols;
+    //qDebug() << "for col" << col << "/" << maxCols << "row" << row << "/" << maxRows << "-> index" << indx;
 
     // All the measurements here are derived from 'targetRect',
     // which is in device pixels.
+
+    // Page index, if required
+    if (multiPages)
+    {
+        const QString numStr = QString("= %1 =").arg(indx);
+        const QFontMetrics &fm = painter->fontMetrics();
+        const int xoff = targetRect.left()+((targetRect.width()-fm.width(numStr))/2);
+
+        painter->setPen(Qt::black);
+        painter->drawText(xoff, fm.height()-1, numStr);
+    }
 
     // Top left
     QPoint p = targetRect.topLeft();
