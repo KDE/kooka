@@ -42,6 +42,7 @@
 
 #include "imgprintdialog.h"
 #include "kookaimage.h"
+#include "kookasettings.h"
 
 
 #define CUT_MARGIN		5			// margin in millimetres
@@ -64,13 +65,16 @@ KookaPrint::KookaPrint()
     m_image = NULL;
 
     // Initial default print parameters
-    m_scaleOption = KookaPrint::ScaleScan;
-    m_printSize = QSize(100, 100);
-    m_maintainAspect = true;
-    m_lowResDraft = false;
+    m_scaleOption = static_cast<KookaPrint::ScaleOption>(KookaSettings::printScaleOption());
+    m_printSize = KookaSettings::printPrintSize();
+    m_maintainAspect = KookaSettings::printMaintainAspect();
+    m_lowResDraft = KookaSettings::printLowResDraft();
+    m_cutsOption = static_cast<KookaPrint::CutMarksOption>(KookaSettings::printCutsOption());
+
+    setOutputFileName(KookaSettings::printFileName());
+
     m_screenResolution = -1;				// set by caller
-    m_scanResolution = -1;				// from image
-    m_cutsOption = KookaPrint::CutMarksMultiple;
+    m_scanResolution = -1;				// taken from image
 }
 
 
@@ -247,6 +251,15 @@ void KookaPrint::printImage()
     if (m_image==NULL) return;				// no image to print
     qDebug() << "starting";
     QGuiApplication::setOverrideCursor(Qt::WaitCursor);	// this may take some time
+
+    // Save the print parameters used
+    KookaSettings::setPrintScaleOption(m_scaleOption);
+    KookaSettings::setPrintPrintSize(m_printSize);
+    KookaSettings::setPrintMaintainAspect(m_maintainAspect);
+    KookaSettings::setPrintLowResDraft(m_lowResDraft);
+    KookaSettings::setPrintCutsOption(m_cutsOption);
+    KookaSettings::setPrintFileName(outputFileName());
+    KookaSettings::self()->save();
 
 #if 1
     // TODO: does this work?

@@ -687,14 +687,9 @@ void KookaView::print()
     const KookaImage *img = gallery()->getCurrImage(true);
     if (img==NULL) return;				// load image if necessary
 
-// TODO: printing in KF5
     // create a KookaPrint (subclass of a QPrinter)
     KookaPrint printer;
     printer.setImage(img);
-    // TODO: set printer options from config
-
-    // TODO: debugging
-    printer.setOutputFileName("/tmp/print.pdf");
 
     QPrintDialog d(&printer, this);
     d.setWindowTitle(i18nc("@title:window", "Print Image"));
