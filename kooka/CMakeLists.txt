@@ -13,6 +13,10 @@
 
 project(kooka5)
 
+########### dependencies ###############
+
+find_package(KF5 ${KF5_MIN_VERSION} REQUIRED COMPONENTS I18n Config TextWidgets KIO)
+
 ############### Packages used by KDE ###############
 
 include(CheckIncludeFile)
@@ -158,16 +162,14 @@ if (WITH_KADMOS)
   set(kooka_SRCS ${kooka_SRCS} ocr/kadmosocr.cpp)
 endif (WITH_KADMOS)
 
-kde4_add_kcfg_files(kooka_SRCS kookasettings.kcfgc)
+kconfig_add_kcfg_files(kooka_SRCS kookasettings.kcfgc)
 
 add_executable(kooka ${kooka_SRCS} ${kooka_ocr_SRCS})
 target_link_libraries(kooka
   dialogutil
   kookascan
   libfiletree
-  KF5::KIOCore
-  KF5::KIOFileWidgets
-  KF5::KIOWidgets
+  KF5::KIOCore KF5::KIOFileWidgets KF5::KIOWidgets
   KF5::XmlGui
   KF5::TextWidgets
 )

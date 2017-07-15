@@ -113,7 +113,7 @@ WidgetSite::WidgetSite(QWidget *parent, QWidget *widget)
     : QFrame(parent)
 {
     QString name = QString("WidgetSite-#%1").arg(++sCount);
-    setObjectName(name.toAscii());
+    setObjectName(name.toLocal8Bit());
 
     setFrameStyle(QFrame::Panel | QFrame::Raised);  // from "scanparams.cpp"
     setLineWidth(1);

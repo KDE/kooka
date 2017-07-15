@@ -139,7 +139,7 @@ void OcrGocrEngine::startProcess(OcrBaseDialog *dia, const KookaImage *img)
 
     QStringList args;                   // arguments for process
 
-    if (img->numColors() < 0 || img->numColors() > 3) { // Not a B&W image
+    if (img->colorCount() < 0 || img->colorCount() > 3) { // Not a B&W image
         args << "-l" << QString::number(gocrDia->getGraylevel());
     }
     args << "-s" << QString::number(gocrDia->getSpaceWidth());

@@ -108,16 +108,12 @@ ScanGallery::ScanGallery(QWidget *parent)
 
     // Drag and Drop
     setDragEnabled(true);               // allow drags out
-    model()->setSupportedDragActions(Qt::CopyAction | Qt::MoveAction);
-
     setAcceptDrops(true);               // allow drops in
     connect(this, SIGNAL(dropped(QDropEvent*,FileTreeViewItem*)),
             SLOT(slotUrlsDropped(QDropEvent*,FileTreeViewItem*)));
 
-//     connect(this, SIGNAL(currentItemChanged(QTreeWidgetItem*,QTreeWidgetItem*)),
-//             SLOT(slotItemHighlighted(QTreeWidgetItem*)));
-     connect(this, SIGNAL(itemSelectionChanged()),
-             SLOT(slotItemHighlighted()));
+    connect(this, SIGNAL(itemSelectionChanged()),
+            SLOT(slotItemHighlighted()));
     connect(this, SIGNAL(itemActivated(QTreeWidgetItem*,int)),
             SLOT(slotItemActivated(QTreeWidgetItem*)));
     connect(this, SIGNAL(fileRenamed(FileTreeViewItem*,QString)),
@@ -172,7 +168,7 @@ void ScanGallery::restoreHeaderState(int forIndex)
     // same workaround as needed in Akregator (even with Qt 4.6),
     // see r918196 and r1001242 to kdepim/akregator/src/articlelistview.cpp
     hdr->resizeSection(hdr->logicalIndex(hdr->count() - 1), 1);
-    hdr->restoreState(QByteArray::fromBase64(state.toAscii()));
+    hdr->restoreState(QByteArray::fromBase64(state.toLocal8Bit()));
 }
 
 void ScanGallery::openRoots()

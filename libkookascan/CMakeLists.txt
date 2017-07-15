@@ -3,6 +3,8 @@ project(kookascan)
 
 ########### dependencies ###############
 
+find_package(KF5 ${KF5_MIN_VERSION} REQUIRED COMPONENTS I18n Config IconThemes KIO)
+
 # libpaper (at least in Gentoo Linux) provides neither a
 # Find<package>.cmake or a pkg-config file.
 find_library(LIBPAPER_LIB NAMES "libpaper" "libpaper.so")
@@ -23,7 +25,6 @@ add_subdirectory(desktop)
 ########### setup ###############
 
 add_definitions(-DKDE4)
-add_definitions(-DKDE_DEFAULT_DEBUG_AREA=29000)
 if (HAVE_SANE)
   add_definitions(-DHAVE_SANE)
   add_definitions(-DSANE_VERSION=\"${SANE_VERSION}\")
@@ -74,11 +75,8 @@ generate_export_header(kookascan BASE_NAME kookascan)
 target_link_libraries(kookascan
   dialogutil
   KF5::I18n
-  KF5::ConfigCore
-  KF5::ConfigGui
-  KF5::ConfigWidgets
-  KF5::KIOCore
-  KF5::KIOWidgets
+  KF5::ConfigCore KF5::ConfigGui KF5::ConfigWidgets
+  KF5::KIOCore KF5::KIOWidgets
   KF5::IconThemes
 )
 

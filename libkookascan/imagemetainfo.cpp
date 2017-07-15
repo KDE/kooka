@@ -34,10 +34,10 @@ ImageMetaInfo::ImageType ImageMetaInfo::findImageType(const QImage *image)
         return (ImageMetaInfo::Unknown);
     }
 
-    if (image->depth() == 1 || image->numColors() == 2) {
+    if (image->depth()==1 || image->colorCount()==2) {
         return (ImageMetaInfo::BlackWhite);
     } else {
-        if (image->depth() > 8) {
+        if (image->depth()>8) {
             return (ImageMetaInfo::HighColour);
         } else {
             if (image->allGray()) {

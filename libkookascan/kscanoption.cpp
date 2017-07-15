@@ -808,7 +808,7 @@ QList<QByteArray> KScanOption::getList() const
        {
            if (*ip<imin) continue;
            if (*ip>imax) continue;
-           strList.append(QString::number(*ip).toAscii());
+           strList.append(QString::number(*ip).toLocal8Bit());
        }
    }
 

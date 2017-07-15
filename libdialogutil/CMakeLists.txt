@@ -1,6 +1,10 @@
 
 project(libdialogutil)
 
+########### dependencies ###############
+
+find_package(KF5 ${KF5_MIN_VERSION} REQUIRED COMPONENTS I18n Config KIO WidgetsAddons)
+
 ########### libdialogutil ###############
 
 set(dialogutil_SRCS
@@ -23,12 +27,11 @@ set(dialogutil_HDRS
 add_library(dialogutil SHARED ${dialogutil_SRCS})
 generate_export_header(dialogutil BASE_NAME libdialogutil)
 target_link_libraries(dialogutil
-  Qt5::Widgets
+  Qt5::Core Qt5::Widgets
   KF5::I18n
   KF5::ConfigCore
   KF5::WidgetsAddons
-  KF5::KIOCore
-  KF5::KIOFileWidgets
+  KF5::KIOCore KF5::KIOFileWidgets
 )
 
 set_target_properties(dialogutil PROPERTIES VERSION 1.0.0 SOVERSION 1)

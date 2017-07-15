@@ -156,7 +156,7 @@ void OcrGocrDialog::introduceImage(const KookaImage *img)
     }
 
     m_isBW = true;
-    if (img->numColors() > 0 && img->numColors() <= 2) {
+    if (img->colorCount() > 0 && img->colorCount() <= 2) {
         //qDebug() << "Have" << img->numColors() << "colors on depth" << img->depth();
         /* that means it is a black-and-white image. Thus we do not need the GrayLevel slider */
         m_isBW = false;
