@@ -403,7 +403,6 @@ void Kooka::filePrint()
     // the Print shortcut is pressed (usually CTRL+P) or the Print toolbar
     // button is clicked
     m_view->print();
-
 }
 
 void Kooka::optionsPreferences()

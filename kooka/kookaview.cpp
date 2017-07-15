@@ -41,6 +41,8 @@
 #include <qicon.h>
 #include <qaction.h>
 #include <qmenu.h>
+#include <qprintdialog.h>
+#include <qprinter.h>
 
 #include <krun.h>
 #include <kmimetypetrader.h>
@@ -74,9 +76,9 @@
 #include "statusbarmanager.h"
 #include "kookasettings.h"
 
-#ifndef KDE4
-#include "kookaprint.h"
 #include "imgprintdialog.h"
+#include "kookaprint.h"
+#ifndef KDE4
 #include "photocopyprintdialogpage.h"
 #endif
 
@@ -682,14 +684,40 @@ void KookaView::loadStartupImage()
 
 void KookaView::print()
 {
-// TODO: printing in KDE4
-#ifndef KDE4
-    /* For now, print a single file. Later, print multiple images to one page */
+    const KookaImage *img = gallery()->getCurrImage(true);
+    if (img==NULL) return;				// load image if necessary
 
-    KookaImage *img = gallery()->getCurrImage(true);    // load image if necessary
-    if (img == NULL) {
+    // create a KookaPrint (subclass of a QPrinter)
+    KookaPrint printer;
+    printer.setImage(img);
+
+    QPrintDialog d(&printer, this);
+    d.setWindowTitle(i18nc("@title:window", "Print Image"));
+    d.setOptions(QAbstractPrintDialog::PrintToFile|QAbstractPrintDialog::PrintShowPageSize);
+
+    // TODO (investigate): even with the options set as above, the options below still
+    // appear in the print dialogue.  Is this as intended by Qt?
+    //     d.setOption(QAbstractPrintDialog::PrintSelection, false);
+    //     d.setOption(QAbstractPrintDialog::PrintPageRange, false);
+
+    ImgPrintDialog imgTab(img, &printer);		// create tab for our options
+    d.setOptionTabs(QList<QWidget *>() << &imgTab);	// add tab to print dialogue
+
+    if (!d.exec()) return;				// open the dialogue
+    QString msg = imgTab.checkValid();			// check that settings are valid
+    if (!msg.isEmpty())					// if not, display error message
+    {
+        KMessageBox::sorry(this,
+                           i18nc("@info", "Invalid print options were specified:\n\n%1", msg),
+                           i18nc("@title:window", "Cannot Print"));
         return;
     }
+
+    imgTab.updatePrintParameters();			// set final printer options
+    printer.printImage();				// print the image
+
+#ifdef KDE3
+    /* For now, print a single file. Later, print multiple images to one page */
 
     KPrinter printer; // ( true, pMode );
     printer.setUsePrinterResolution(true);
