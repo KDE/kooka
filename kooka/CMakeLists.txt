@@ -15,6 +15,7 @@ project(kooka5)
 
 ########### dependencies ###############
 
+find_package(Qt5 ${QT_MIN_VERSION} REQUIRED COMPONENTS PrintSupport)
 find_package(KF5 ${KF5_MIN_VERSION} REQUIRED COMPONENTS I18n Config TextWidgets KIO)
 
 ############### Packages used by KDE ###############
