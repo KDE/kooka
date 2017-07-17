@@ -73,7 +73,7 @@ static const char copyright[] =
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);			// first of all, so that i18n() works
-
+    KLocalizedString::setApplicationDomain("kooka");
     KAboutData about("kooka",					// componentName
                      i18n("Kooka"),				// displayName
 #if VCS_AVAILABLE
