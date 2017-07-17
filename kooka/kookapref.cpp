@@ -212,7 +212,7 @@ static QString createGallery(const QDir &d, bool *success = NULL)
 #endif
                                       "<nl/><nl/>Your document directory <filename>%2</filename>"
                                       "<nl/>will be used."
-                                      "<nl/><nl>Check the document directory setting and permissions.",
+                                      "<nl/><nl/>Check the document directory setting and permissions.",
                                     d.absolutePath(), docs, reason),
                                i18n("Error creating gallery"));
 
