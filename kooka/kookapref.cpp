@@ -289,7 +289,7 @@ QString KookaPref::findGalleryRoot()
         KMessageBox::information(NULL,
                                  xi18nc("@info",
                                         "Kooka will use the new gallery, <link url=\"file:%1\"><filename>%1</filename></link>."
-                                        "<nl/><nl/>If you wish to add the images from your old gallery, <link url=\"file:%2\"><filename>%2</filename></link>,"
+                                        "<nl/><nl/>If you wish to add the images from your old gallery <link url=\"file:%2\"><filename>%2</filename></link>,"
                                         "<nl/>then you may do so by simply copying or moving the files.",
                                         newpath, oldpath),
                                  i18n("Old Gallery Exists"),
