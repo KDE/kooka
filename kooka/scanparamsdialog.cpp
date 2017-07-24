@@ -268,7 +268,7 @@ void ScanParamsDialog::slotDelete()
     QString name = item->text();
     //qDebug() << "set" << name;
     if (KMessageBox::warningContinueCancel(this,
-                                           xi18nc("@info", "Do you really want to delete the set <emphasis strong=\"1\">%1</emphasis>'?", name),
+                                           xi18nc("@info", "Do you really want to delete the set <emphasis strong=\"1\">%1</emphasis>?", name),
                                            i18n("Delete Scan Parameter Set"),
                                            KStandardGuiItem::del(),
                                            KStandardGuiItem::cancel(),
