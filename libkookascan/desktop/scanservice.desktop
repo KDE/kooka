@@ -32,7 +32,6 @@ Name[tr]=KDE Tarama Hizmeti
 Name[ug]=KDE شويلىلاش مۇلازىمىتى
 Name[uk]=Служба сканування KDE
 Name[x-test]=xxKDE Scan Servicexx
-Name[zh_CN]=KDE 扫描服务
 X-KDE-Library=libkscan
 InitialPreference=2
 ServiceTypes=KScan/KScanDialog
