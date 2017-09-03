@@ -1,7 +1,5 @@
 <?xml version="1.0" ?>
-<!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.2-Based Variant V1.1//EN" "dtd/kdex.dtd" [
-  <!ENTITY kappname "&kooka;">
-  <!ENTITY package "playground-graphics">
+<!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.5-Based Variant V1.1//EN" "dtd/kdedbx45.dtd" [
   <!ENTITY % addindex "IGNORE">
   <!ENTITY % English "INCLUDE"> <!-- change language only here --> 
 ]>
@@ -37,14 +35,14 @@
 <legalnotice
 >&FDLNotice;</legalnotice>
 
-<date>2012-08-02</date>
-<releaseinfo>0.61 (&kde; 4.9)</releaseinfo>
+<date>2017-07-17</date>
+<releaseinfo>&kooka; 0.90</releaseinfo>
 
-<abstract><para>&kooka; allows you to scan, save and view in any image format that &kde; supports, 
+<abstract><para>&kooka; allows you to scan, save and view in any image format that &Qt; supports, 
 and can perform optical character recognition.</para></abstract> 
 
 <keywordset>
-<keyword>KDE</keyword>
+<keyword>OCR</keyword>
 <keyword>Scanner</keyword>
 </keywordset>
 
@@ -53,11 +51,11 @@ and can perform optical character recognition.</para></abstract>
 <chapter id="introduction">
 <title>Introduction</title>
 
-<para>&kooka; is a &kde; application that provides access to scanner hardware 
+<para>&kooka; is an application that provides access to scanner hardware 
 using the <ulink url="http://www.sane-project.org/">SANE</ulink> library. 
 Therefore, the <acronym>SANE</acronym> package must be installed to use &kooka;.</para>
 
-<para>&kooka; allows you to scan, save and view in any image format that &kde; supports.</para>
+<para>&kooka; allows you to scan, save and view in any image format that &Qt; supports.</para>
 
 <para>Character recognition is also provided by using the open source 
 <ulink url="http://jocr.sourceforge.net/">GOCR</ulink> or 
@@ -93,8 +91,8 @@ purchasing a scanner, if possible.</para>
 
 <para>Start &kooka; from a console by simply entering
 <userinput><command>kooka</command></userinput> or select it from the 
-<guilabel>Graphics</guilabel> submenu in the application starter.  
-Create a link on the &kde; desktop, which uses a scanner icon, if desired.</para>
+<guilabel>Graphics</guilabel> submenu in the application starter.
+Create a link on the desktop, which uses a scanner icon, if desired.</para>
 
 <para>To use &kooka; only for optical character recognition without connecting to 
 a scanner start the application in gallery mode with <userinput><command>kooka</command> 
@@ -109,9 +107,8 @@ the windows as needed.</para>
 <para>The navigation window consists of three tabs, which allow you to
 switch between the <guilabel>Scan</guilabel>, <guilabel>OCR</guilabel> and the integrated
 file browser called the <guilabel>Gallery</guilabel>.  The working
-folder is displayed in the lower part of the window along with the
+folder is displayed in the upper part of the window along with the
 folder where the scan will be saved.</para> 
-<!--FIXME-->
 </listitem>
 
 <listitem>
@@ -152,25 +149,24 @@ scan.</para>
 
 </chapter>
 
-<chapter id="commands">
-<title>Command References</title>
+<chapter id="commands-configuration">
+<title>Command Reference and Configuration</title>
 
-<sect1 id="kooka-toolbar">
-<title>The main &kooka; Toolbar</title>
-<!--FIXME-->
+<sect1 id="command">
+<title>The &kooka; Menubar</title>
 
 <sect2>
-<title>The <guimenu>File</guimenu> Menu</title>
+<title>The File Menu</title>
 
 <variablelist> 
 <varlistentry> 
 <term>
 <menuchoice>
 <guimenu>File</guimenu>
-<guimenuitem>Create Folder...</guimenuitem>
+<guimenuitem>New Folder...</guimenuitem>
 </menuchoice></term> 
 <listitem>
-<para>Create a folder to hold your images in the <guilabel>Kooka Gallery</guilabel>.</para>
+<para>Create a new folder to hold your images in the <guilabel>Kooka Gallery</guilabel>.</para>
 </listitem> 
 </varlistentry>
 
@@ -193,19 +189,19 @@ section for details.</para>
 
 <!--
 Import Image...
-Rename Image F2
+Rename Folder F2
   -->
 <varlistentry> 
 <term>
 <menuchoice>
 <shortcut>
-<keycombo action="simul">&Ctrl;<keysym>Del</keysym></keycombo>
+<keycombo action="simul">&Shift;<keysym>Del</keysym></keycombo>
 </shortcut>
 <guimenu>File</guimenu>
-<guimenuitem>Delete Image</guimenuitem>
+<guimenuitem>Delete Folder</guimenuitem>
 </menuchoice></term> 
 <listitem>
-<para>Delete the image selected underneath the 
+<para>Delete the folder selected underneath the 
 <guilabel>Kooka Gallery</guilabel>.</para>
 </listitem> 
 </varlistentry>
@@ -238,14 +234,10 @@ crop tool.</para>
 <guimenuitem>Unload Image</guimenuitem>
 </menuchoice></term> 
 <listitem>
-<para>Remove the image displayed in the <guilabel>Image
-Viewer</guilabel>.
-  <!--FIXME no guilabel Image Viewer-->
-</para>
+<para>Remove the image displayed in the Image Viewer.</para>
 </listitem> 
 </varlistentry>
 
-<!-- not functional in kde 4
 <varlistentry> 
 <term>
 <menuchoice>
@@ -259,7 +251,6 @@ Viewer</guilabel>.
 <para>Prints the displayed image.</para>
 </listitem> 
 </varlistentry>
--->
 
 <varlistentry> 
 <term>
@@ -279,16 +270,16 @@ Viewer</guilabel>.
 </sect2>
 
 <sect2>
-<title>The <guimenu>Scan</guimenu> Menu</title>
+<title>The Scan Menu</title>
 
 <variablelist> 
 <!--
 Preview F3
-Start Scan... F4
+Start Scan F4
 Photocopy... Ctrl+F
+Auto Select Ctrl+A
 Scan Parameters... Ctrl+Shift+S
-Profile 
-  -->
+-->
 <varlistentry>
 <term>
 <menuchoice><guimenu>Scan</guimenu>
@@ -308,7 +299,6 @@ starts the character recognition for the preview image.</para>
 <guimenuitem>OCR Selection...</guimenuitem>
 </menuchoice></term> 
 <listitem>
-  <!--FIXME A window will reappear ???-->
 <para>A window will reappear for the character recognition. Here,
 however, the character recognition is only for the area highlighted in
 the final scan.</para>
@@ -322,7 +312,7 @@ Save OCR Result Text... Ctrl+U
 </sect2>
  
 <sect2>
-<title>The <guimenu>Image</guimenu> Menu</title>
+<title>The Image Menu</title>
 
 <para>The actions in this menu are also available in the context menu 
 of the preview window.</para>
@@ -404,19 +394,7 @@ Keep Zoom Setting Ctrl+Z
 <para>Flip image horizontally.</para>
 </listitem> 
 </varlistentry> 
-<!-- not in kde4
-<varlistentry>
-<term><menuchoice><shortcut>
-<keycombo action="simul">&Ctrl;<keycap>B</keycap></keycombo>
-</shortcut>
-<guimenu>Image</guimenu>
-<guimenuitem>Mirror both directions</guimenuitem>
-</menuchoice></term> 
-<listitem>
-<para>Flip image both horizontally and vertically.</para>
-</listitem>
-</varlistentry>
--->
+
 <varlistentry> 
 <term>
 <menuchoice><shortcut>
@@ -461,81 +439,70 @@ Keep Zoom Setting Ctrl+Z
 </sect2>
 
 <sect2>
-<title>The <guimenu>Settings</guimenu> Menu</title>
+<title>The Settings Menu</title>
+
+<para>Apart from the common &kde; <guimenu>Settings</guimenu> and <guimenu>Help</guimenu>
+menus described in the <ulink url="help:/fundamentals/ui.html#menus">Menu</ulink>
+chapter of the &kde; Fundamentals documentation &kooka; has these application specific menu entries:
+</para>
 
 <variablelist>
-<!--
-Select Scan Device...
-Add Scan Device...
-other entries -> link to Fundamentals
--->
-<varlistentry>
+
+<varlistentry> 
 <term>
 <menuchoice>
 <guimenu>Settings</guimenu>
-<guimenuitem>Show Toolbar</guimenuitem>
+<guimenuitem>Select Scan Device...</guimenuitem>
 </menuchoice>
-</term> 
+</term>
 <listitem>
-<para>Removes the top toolbar to give additional viewing area. </para>
+<para>If you have several scanners use this action to select a scanner and
+use a certain device always at startup.</para>
 </listitem> 
 </varlistentry>
 
-<varlistentry>
+<varlistentry> 
 <term>
 <menuchoice>
 <guimenu>Settings</guimenu>
-<guimenuitem>Show Statusbar</guimenuitem>
+<guimenuitem>Add Scan Device...</guimenuitem>
 </menuchoice>
-</term> 
-<listitem>
-<para>Removes the bottom statusbar to give additional viewing area.</para>
+</term><listitem>
+<para>Add a device which is not automatically detected at startup of &kooka;.</para>
 </listitem> 
 </varlistentry>
- </variablelist>
+
+</variablelist>
 </sect2>
 
-<sect2>
-<title>Configuring Shortcuts</title>
+</sect1>
 
-<para>The <menuchoice>
-<guimenu>Settings</guimenu><guimenuitem>Configure Shortcuts...</guimenuitem></menuchoice>
-allows you to specify key bindings</para>
 
-<para>For more information read the section about <ulink url="help:/fundamentals/config.html#shortcuts"
->Using and Customizing Shortcuts</ulink> of the &kde; Fundamentals.
-</para>
-</sect2>
-
-<sect2>
-<title>Configuring Toolbars</title>
-<para>The <menuchoice>
-<guimenu>Settings</guimenu><guimenuitem>Configure Toolbars...</guimenuitem></menuchoice>
-Is used to add additional buttons to the toolbars.</para>
-
-<para>For more information read the section about <ulink url="help:/fundamentals/config.html#toolbars"
->Customizing Toolbars</ulink> of the &kde; Fundamentals.
-</para>
-</sect2>
-
-<sect2>
+<sect1 id="configuration">
 <title>Configuring Kooka</title>
-<para>The <menuchoice>
-<guimenu>Settings</guimenu><guimenuitem>Configure Kooka...</guimenuitem>
-</menuchoice>
-</para>
-
 
 <variablelist>
 <varlistentry>
 <term>
 <menuchoice>
-<guilabel>Kooka Startup Preferences</guilabel> 
+<guilabel>General</guilabel> 
 </menuchoice>
 </term> 
 <listitem>
-<para>You may want to uncheck <guilabel>Show the scanner selection box
-on next startup</guilabel>, if you have only one scanner. If you 
+<para>Use the button in this section to reenable all messages and questions
+hidden by using <guibutton>Don't ask me again</guibutton>.</para>
+</listitem> 
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guilabel>Startup</guilabel> 
+</menuchoice>
+</term> 
+<listitem>
+<para>You may want to uncheck <guilabel>Show the scanner selection dialog
+</guilabel>, if you have only one scanner. If you 
 have only one computer you may also want to uncheck
 <guilabel>Query network for available scanners</guilabel>. 
 </para>
@@ -545,21 +512,45 @@ have only one computer you may also want to uncheck
 <varlistentry>
 <term>
 <menuchoice>
-<guilabel>Thumbnail View</guilabel> 
+<guilabel>Image Saving</guilabel> 
 </menuchoice>
 </term> 
 <listitem>
-<para>Here the size and the shading of the thumbnails can be adjusted;
+<para>Always use the Save Assistant
+Ask for filename when saving   Before the scan starts / After the scan is finished. 
+</para>
+</listitem> 
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guilabel>Gallery &amp; Thumbnails</guilabel> 
+</menuchoice>
+</term> 
+<listitem>
+<para>Here the size of the thumbnails can be adjusted;
 as well as the background. For example, you might want to reduce the
 size of the thumbnails if you are scanning many pages from a book.
+</para>
+<para>In the section <guilabel>Image Gallery</guilabel> select how and where
+to show the recent folders.</para>
+</listitem> 
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guilabel>OCR</guilabel> 
+</menuchoice>
+</term> 
+<listitem>
+<para>Select the OCR engine and the path to the executable.
 </para>
 </listitem> 
 </varlistentry>
 
 </variablelist>
-
-</sect2>
-
 
 </sect1>
 </chapter>
@@ -573,8 +564,7 @@ than in many other applications. Click the
 <guilabel>Gallery</guilabel> tab to open a small file browser. This is
 the folder <filename
 class="directory">~/Documents/KookaGallery</filename>. In the
-lower portion of the window, your current subfolder in the gallery
-  <!--FIXME ~/Documents-> Systemsettings Path  and  lower?-->
+window, your current subfolder in the gallery
 is shown. This is where all scanned images are first saved as
 files. When starting &kooka; for the first time, you will only see the
 <filename class="directory">KookaGallery</filename>.  Create
@@ -584,8 +574,8 @@ location of the scanned images. The scans are labeled in ascending
 numerical order as in <filename>kscan_0001</filename> and
 <filename>kscan_0002</filename>.</para>
 
-<para>To save an image permanently, <mousebutton>left</mousebutton>
-click the name. Next, give a new name and the appropriate ending for
+<para>To save an image permanently, use <guimenuitem>Rename Image</guimenuitem>
+and give a new name and the appropriate ending for
 the image format chosen when scanning.  If you enter a different
 extension, you will get a message that it does not correspond to the
 scanned format. Although you can still save the image under this name,
@@ -594,10 +584,10 @@ it will retain its original format. At present,
 
 ><para>If you do not want to use this method of managing your images
 in <filename
-class="directory">~/.kde/share/apps/KookaGallery/</filename>, you can,
+class="directory">~/Documents/KookaGallery/</filename>, you can,
 of course, save them to another location. To do this,
 <mousebutton>right</mousebutton> click the
-image name and select <guilabel>Save</guilabel>.  Choose any path
+image name and select <guilabel>Save Image</guilabel>.  Choose any path
 here. In addition, close or permanently delete images here.</para>
 
 <para>To incorporate other images in the gallery, use <menuchoice>
@@ -633,8 +623,8 @@ the document itself. </para>
 <screenshot> <screeninfo>The gocr Window</screeninfo> <mediaobject>
 <imageobject><imagedata fileref="kooka_gocr.png"
 format="PNG"/></imageobject> </mediaobject> </screenshot>
-<para>After character recognition is complete, a spellcheck
-is automatically started for the recognized material. You can edit the content
+<para>After character recognition is complete, start a spellcheck
+for the recognized material. You can edit the content
 in the <guilabel>OCR</guilabel> window and export it as plain text.
 </para>
 <para>After the final scan, mark a selection in the image
@@ -672,15 +662,5 @@ format="PNG"/></imageobject>
 &underGPL;
 
 </chapter>  
-
-<appendix id="installation">
-<title>Installation</title>
-
-&install.intro.documentation;
-
-&install.compile.documentation;
-                
-</appendix>
-
 </book>
 

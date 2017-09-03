@@ -7,6 +7,8 @@ find_package(KF5 ${KF5_MIN_VERSION} REQUIRED COMPONENTS I18n Config KIO WidgetsA
 
 ########### libdialogutil ###############
 
+add_definitions(-DTRANSLATION_DOMAIN="libkookascan")
+
 set(dialogutil_SRCS
   dialogbase.cpp
   dialogstatesaver.cpp

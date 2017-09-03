@@ -8,3 +8,4 @@ SetUserTexts=true
 UseEnumTypes=false
 
 IncludeFiles=thumbview.h,kiconloader.h
+TranslationSystem=kde

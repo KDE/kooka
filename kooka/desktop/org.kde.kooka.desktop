@@ -38,7 +38,6 @@ GenericName[sv]=Bildläsare och optisk teckentydning
 GenericName[tr]=Tarama ve Karakter Tanılama Uygulaması
 GenericName[uk]=Програма для сканування і розпізнавання
 GenericName[x-test]=xxScan & OCR Programxx
-GenericName[zh_CN]=扫描和 OCR 程序
 Name=Kooka
 Name[ast]=Kooka
 Name[bg]=Kooka
@@ -75,7 +74,6 @@ Name[sv]=Kooka
 Name[tr]=Kooka
 Name[uk]=Kooka
 Name[x-test]=xxKookaxx
-Name[zh_CN]=Kooka
 
 Categories=Qt;KDE;Graphics;Scanning;
 X-DBUS-ServiceName=org.kde.kooka

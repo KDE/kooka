@@ -40,7 +40,7 @@ class KScanDevice;
 /**
  * @short A single scanner parameter.
  *
- * A scanner may support any number of these parameters, some are are
+ * A scanner may support any number of these parameters, some are
  * well-known and common to almost all scanners while others may be
  * model-specific.
  *

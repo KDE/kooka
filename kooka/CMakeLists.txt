@@ -116,10 +116,6 @@ if (HAVE_TIFF)
   include_directories(${TIFF_INCLUDE_DIR})
 endif (HAVE_TIFF)
 
-########### i18n ###############
-
-add_definitions(-DTRANSLATION_DOMAIN="kooka")
-
 ########### executable ###############
 
 # TODO: rename some of these files to match class name, some others are obsolete
