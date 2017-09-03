@@ -44,9 +44,6 @@
 #include "dialogstatewatcher.h"
 
 
-static bool sButtonSeparatorShown = true;
-
-
 DialogBase::DialogBase(QWidget *pnt)
     : QDialog(pnt)
 {
@@ -60,8 +57,6 @@ DialogBase::DialogBase(QWidget *pnt)
     mButtonBox = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel, this);
     connect(mButtonBox, &QDialogButtonBox::accepted, this, &DialogBase::accept);
     connect(mButtonBox, &QDialogButtonBox::rejected, this, &DialogBase::reject);
-
-    mButtonSeparatorShown = sButtonSeparatorShown;
 }
 
 
@@ -81,14 +76,6 @@ void DialogBase::showEvent(QShowEvent *ev)
 
         mainLayout->addWidget(mMainWidget);
         mainLayout->setStretchFactor(mMainWidget, 1);
-
-        if (mButtonSeparatorShown)
-        {
-            QFrame *frame = new QFrame(this);
-            frame->setFrameStyle(QFrame::Sunken|QFrame::HLine);
-            mainLayout->addWidget(frame);
-        }
-
         mainLayout->addWidget(mButtonBox);
     }
 
@@ -137,12 +124,6 @@ void DialogBase::setButtonGuiItem(QDialogButtonBox::StandardButton button, const
 {
     QPushButton *but = mButtonBox->button(button);
     if (but!=NULL) KGuiItem::assign(but, guiItem);
-}
-
-
-void DialogBase::setButtonSeparatorShownDefault(bool on)
-{
-    sButtonSeparatorShown = on;
 }
 
 

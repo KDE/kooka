@@ -51,7 +51,6 @@ class DialogStateSaver;
  *
  * - Managing the button box and providing access to its buttons
  * - Managing the top level layout
- * - Generating a button separator line if required
  * - Saving and restoring the dialog size
  *
  * @author Jonathan Marten
@@ -74,30 +73,6 @@ public:
      * @return the main widget
      **/
     QWidget *mainWidget() const				{ return (mMainWidget); }
-
-    /**
-     * Set whether a button separator line is shown for
-     * this instance of the dialog.
-     *
-     * @param on Whether the button separator is to be shown
-     *
-     * @note This option should be set before the dialog is shown
-     * for the first time;  changing the setting afterwards has
-     * no effect.
-     *
-     * @note If this is not explicitly set for a particular instance
-     * of the dialog, the default is whatever has been set by
-     * @c setButtonSeparatorShownDefault().
-     **/
-    void setButtonSeparatorShown(bool on)		{ mButtonSeparatorShown = on; }
-
-    /**
-     * Retrieve whether the button separator line is shown.
-     *
-     * @return @c true if the button separator is shown,
-     * @c false if it is not.
-     **/
-    bool isButtonSeparatorShown() const			{ return (mButtonSeparatorShown); }
 
     /**
      * Set a state saver for the dialog.
@@ -134,15 +109,6 @@ public:
      * @return the state watcher
      **/
     DialogStateWatcher *stateWatcher() const		{ return (mStateWatcher); }
-
-    /**
-     * Set the default option of whether the button separator line
-     * is shown. The default is @c true. This is an application-wide
-     * setting which affects all subsequently created dialogs.
-     *
-     * @param on Whether the button separator is to be shown
-     **/
-    static void setButtonSeparatorShownDefault(bool on);
 
     /**
      * Get a spacing hint suitable for use within the dialog layout.
@@ -264,7 +230,6 @@ protected:
 private:
     QDialogButtonBox *mButtonBox;
     QWidget *mMainWidget;
-    bool mButtonSeparatorShown;
     DialogStateWatcher *mStateWatcher;
 };
 

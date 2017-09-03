@@ -247,8 +247,6 @@ FormatDialog::FormatDialog(QWidget *parent, ImageMetaInfo::ImageType type,
     setButtons(QDialogButtonBox::Ok|QDialogButtonBox::Cancel|QDialogButtonBox::Yes);
     setWindowTitle(askForFormat ? i18n("Save Assistant") : i18n("Save Scan"));
 
-    setButtonSeparatorShown(false);			// we'll add our own later,
-							// otherwise length isn't consistent
     QWidget *page = new QWidget(this);
     setMainWidget(page);
 
@@ -368,10 +366,6 @@ FormatDialog::FormatDialog(QWidget *parent, ImageMetaInfo::ImageType type,
             buttonBox()->button(QDialogButtonBox::Yes)->setText(i18n("Select Format..."));
         }
     }
-
-    sep = new KSeparator(Qt::Horizontal, page);
-    gl->addWidget(sep, row, 0, 1, 3);
-    ++row;
 
     if (mFormatList != NULL)				// have the format selector
     {
