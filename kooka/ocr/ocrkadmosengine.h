@@ -40,21 +40,21 @@ class OcrKadmosEngine : public OcrEngine
 
 public:
     explicit OcrKadmosEngine(QWidget *parent = Q_NULLPTR);
-    ~OcrKadmosEngine();
+    virtual ~OcrKadmosEngine();
 
-    OcrBaseDialog *createOCRDialog(QWidget *parent);
+    OcrBaseDialog *createOCRDialog(QWidget *parent) override;
 
-    OcrEngine::EngineType engineType() const;
+    OcrEngine::EngineType engineType() const override;
     static QString engineDesc();
 
 protected:
-    QStringList tempFiles(bool retain);
+    QStringList tempFiles(bool retain) override;
 
 protected slots:
     void slotKadmosResult();
 
 private:
-    void startProcess(OcrBaseDialog *dia, const KookaImage *img);
+    void startProcess(OcrBaseDialog *dia, const KookaImage *img) override;
 
 private:
     QString m_tmpFile;

@@ -69,10 +69,10 @@ public:
                   QGraphicsItem *parent = NULL);
     virtual ~HighlightItem()                {}
 
-    virtual QRectF boundingRect() const;
+    virtual QRectF boundingRect() const override;
 
     virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
-                       QWidget *widget = NULL);
+                       QWidget *widget = NULL) override;
 
 private:
     QRectF mRectangle;
@@ -125,14 +125,14 @@ public:
     SelectionItem(QGraphicsItem *parent = NULL);
     virtual ~SelectionItem()                {}
 
-    virtual QRectF boundingRect() const;
+    virtual QRectF boundingRect() const override;
     void setRect(const QRectF &rect);
 
     void stepDashPattern();
     void resetDashPattern();
 
     virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
-                       QWidget *widget = NULL);
+                       QWidget *widget = NULL) override;
 
 private:
     QRectF mRectangle;

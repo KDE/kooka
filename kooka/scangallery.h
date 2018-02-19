@@ -84,7 +84,7 @@ protected:
     // TODO: port D&D
     //virtual void contentsDragMoveEvent( QDragMoveEvent *ev);
 
-    void contextMenuEvent(QContextMenuEvent *ev);
+    void contextMenuEvent(QContextMenuEvent *ev) override;
 
 protected slots:
     void slotImageArrived(FileTreeViewItem *item, KookaImage *image);

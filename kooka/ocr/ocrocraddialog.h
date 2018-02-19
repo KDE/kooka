@@ -52,13 +52,13 @@ class OcrOcradDialog : public OcrBaseDialog
 
 public:
     OcrOcradDialog(QWidget *parent);
-    ~OcrOcradDialog();
+    virtual ~OcrOcradDialog();
 
-    OcrEngine::EngineError setupGui();
+    OcrEngine::EngineError setupGui() override;
 
-    QString ocrEngineName() const;
-    QString ocrEngineDesc() const;
-    QString ocrEngineLogo() const;
+    QString ocrEngineName() const override;
+    QString ocrEngineDesc() const override;
+    QString ocrEngineLogo() const override;
 
     QString getOCRCmd() const
     {
@@ -77,10 +77,10 @@ public:
     QString orfUrl() const;
 
 protected:
-    void enableFields(bool enable);
+    void enableFields(bool enable) override;
 
 protected slots:
-    void slotWriteConfig();
+    void slotWriteConfig() override;
 
 private:
     void getVersion(const QString &bin);

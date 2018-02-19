@@ -183,13 +183,13 @@ public:
                 double min, double max,
                 bool haveStdButt = false, int stdValue = 0);
 
-    KScanControl::ControlType type() const
+    KScanControl::ControlType type() const override
     {
         return (KScanControl::Number);
     }
 
-    int value() const;
-    void setValue(int val);
+    int value() const override;
+    void setValue(int val) override;
 
     QSpinBox *spinBox() const
     {
@@ -228,13 +228,13 @@ public:
      */
     KScanStringEntry(QWidget *parent, const QString &text);
 
-    KScanControl::ControlType type() const
+    KScanControl::ControlType type() const override
     {
         return (KScanControl::Text);
     }
 
-    QString text() const;
-    void setText(const QString &text);
+    QString text() const override;
+    void setText(const QString &text) override;
 
 private:
     QLineEdit *mEntry;
@@ -259,13 +259,13 @@ public:
      */
     KScanNumberEntry(QWidget *parent, const QString &text);
 
-    KScanControl::ControlType type() const
+    KScanControl::ControlType type() const override
     {
         return (KScanControl::Number);
     }
 
-    int value() const;
-    void setValue(int i);
+    int value() const override;
+    void setValue(int i) override;
 
 protected slots:
     void slotTextChanged(const QString &s);
@@ -293,15 +293,15 @@ public:
      */
     KScanCheckbox(QWidget *parent, const QString &text);
 
-    KScanControl::ControlType type() const
+    KScanControl::ControlType type() const override
     {
         return (KScanControl::Number);
     }
 
-    int value() const;
-    void setValue(int i);
+    int value() const override;
+    void setValue(int i) override;
 
-    QString label() const;
+    QString label() const override;
 
 private:
     QCheckBox *mCheckbox;
@@ -326,14 +326,14 @@ public:
      */
     KScanCombo(QWidget *parent, const QString &text);
 
-    KScanControl::ControlType type() const
+    KScanControl::ControlType type() const override
     {
         return (KScanControl::Text);
     }
 
-    QString text() const;
-    void setText(const QString &text);
-    void setValue(int i);
+    QString text() const override;
+    void setText(const QString &text) override;
+    void setValue(int i) override;
 
     /**
      * Populate the combo box with a list of values.
@@ -391,13 +391,13 @@ public:
      */
     KScanFileRequester(QWidget *parent, const QString &text);
 
-    KScanControl::ControlType type() const
+    KScanControl::ControlType type() const override
     {
         return (KScanControl::Text);
     }
 
-    QString text() const;
-    void setText(const QString &text);
+    QString text() const override;
+    void setText(const QString &text) override;
 
 private:
     KUrlRequester *mEntry;
@@ -422,12 +422,12 @@ public:
      */
     KScanGroup(QWidget *parent, const QString &text);
 
-    KScanControl::ControlType type() const
+    KScanControl::ControlType type() const override
     {
         return (KScanControl::Group);
     }
 
-    QString label() const;
+    QString label() const override;
 
 private:
     QGroupBox *mGroup;
@@ -452,12 +452,12 @@ public:
      */
     KScanPushButton(QWidget *parent, const QString &text);
 
-    KScanControl::ControlType type() const
+    KScanControl::ControlType type() const override
     {
         return (KScanControl::Button);
     }
 
-    QString label() const;
+    QString label() const override;
 
 private:
     QPushButton *mButton;

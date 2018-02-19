@@ -241,31 +241,31 @@ protected:
      * @reimp
      * @see QTreeWidget::mimeData()
      **/
-    virtual QMimeData *mimeData(const QList<QTreeWidgetItem *> items) const;
+    virtual QMimeData *mimeData(const QList<QTreeWidgetItem *> items) const override;
 
     /**
      * @reimp
      * @see QAbstractItemView::dragEnterEvent()
      **/
-    virtual void dragEnterEvent(QDragEnterEvent *ev);
+    virtual void dragEnterEvent(QDragEnterEvent *ev) override;
 
     /**
      * @reimp
      * @see QTreeView::dragMoveEvent()
      **/
-    virtual void dragMoveEvent(QDragMoveEvent *ev);
+    virtual void dragMoveEvent(QDragMoveEvent *ev) override;
 
     /**
      * @reimp
      * @see QAbstractItemView::dragLeaveEvent()
      **/
-    virtual void dragLeaveEvent(QDragLeaveEvent *ev);
+    virtual void dragLeaveEvent(QDragLeaveEvent *ev) override;
 
     /**
      * @reimp
      * @see QTreeWidget::dropEvent()
      **/
-    virtual void dropEvent(QDropEvent *ev);
+    virtual void dropEvent(QDropEvent *ev) override;
 
 protected slots:
     /**

@@ -49,9 +49,9 @@ class OcrGocrDialog : public OcrBaseDialog
 
 public:
     OcrGocrDialog(QWidget *parent);
-    ~OcrGocrDialog();
+    virtual ~OcrGocrDialog();
 
-    OcrEngine::EngineError setupGui();
+    OcrEngine::EngineError setupGui() override;
 
     QString getOCRCmd() const
     {
@@ -70,17 +70,17 @@ public:
         return (sliderSpace->value());
     }
 
-    QString ocrEngineLogo() const;
-    QString ocrEngineName() const;
-    QString ocrEngineDesc() const;
+    QString ocrEngineLogo() const override;
+    QString ocrEngineName() const override;
+    QString ocrEngineDesc() const override;
 
-    void introduceImage(const KookaImage *img);
+    void introduceImage(const KookaImage *img) override;
 
 protected:
-    void enableFields(bool enable);
+    void enableFields(bool enable) override;
 
 protected slots:
-    void slotWriteConfig();
+    void slotWriteConfig() override;
 
 private:
     QString version();

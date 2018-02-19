@@ -127,7 +127,7 @@ protected:
     /**
      * @reimp
      **/
-    virtual bool eventFilter(QObject *obj, QEvent *ev);
+    virtual bool eventFilter(QObject *obj, QEvent *ev) override;
 
 private slots:
     void restoreConfigInternal();

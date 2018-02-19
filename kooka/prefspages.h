@@ -68,8 +68,8 @@ class KookaGeneralPage : public KookaPrefsPage
 public:
     KookaGeneralPage(KPageDialog *parent);
 
-    void saveSettings();
-    void defaultSettings();
+    void saveSettings() override;
+    void defaultSettings() override;
 
 private slots:
     void slotEnableWarnings();
@@ -85,8 +85,8 @@ class KookaStartupPage : public KookaPrefsPage
 public:
     KookaStartupPage(KPageDialog *parent);
 
-    void saveSettings();
-    void defaultSettings();
+    void saveSettings() override;
+    void defaultSettings() override;
 
 private:
     void applySettings();
@@ -103,8 +103,8 @@ class KookaSavingPage : public KookaPrefsPage
 public:
     KookaSavingPage(KPageDialog *parent);
 
-    void saveSettings();
-    void defaultSettings();
+    void saveSettings() override;
+    void defaultSettings() override;
 
 private:
     void applySettings();
@@ -122,8 +122,8 @@ class KookaThumbnailPage : public KookaPrefsPage
 public:
     KookaThumbnailPage(KPageDialog *parent);
 
-    void saveSettings();
-    void defaultSettings();
+    void saveSettings() override;
+    void defaultSettings() override;
 
 private slots:
     void slotCustomThumbBgndToggled(bool state);
@@ -145,8 +145,8 @@ class KookaOcrPage : public KookaPrefsPage
 public:
     KookaOcrPage(KPageDialog *parent);
 
-    void saveSettings();
-    void defaultSettings();
+    void saveSettings() override;
+    void defaultSettings() override;
 
 private slots:
     void slotEngineSelected(int i);

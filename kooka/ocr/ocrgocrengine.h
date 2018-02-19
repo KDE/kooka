@@ -45,22 +45,22 @@ class OcrGocrEngine : public OcrEngine
 
 public:
     OcrGocrEngine(QWidget *parent = Q_NULLPTR);
-    ~OcrGocrEngine();
+    virtual ~OcrGocrEngine();
 
-    OcrBaseDialog *createOCRDialog(QWidget *parent);
+    OcrBaseDialog *createOCRDialog(QWidget *parent) override;
 
-    OcrEngine::EngineType engineType() const;
+    OcrEngine::EngineType engineType() const override;
     static QString engineDesc();
 
 protected:
-    QStringList tempFiles(bool retain);
+    QStringList tempFiles(bool retain) override;
 
 protected slots:
     void slotGOcrStdout();
     void slotGOcrExited(int exitCode, QProcess::ExitStatus exitStatus);
 
 private:
-    void startProcess(OcrBaseDialog *dia, const KookaImage *img);
+    void startProcess(OcrBaseDialog *dia, const KookaImage *img) override;
 
 private:
     QTemporaryDir *m_tempDir;

@@ -79,7 +79,7 @@ public slots:
     void setSizeInByte(long newSize);
 
 protected:
-    void paintEvent(QPaintEvent *ev);
+    void paintEvent(QPaintEvent *ev) override;
 
 private:
     long mThreshold;

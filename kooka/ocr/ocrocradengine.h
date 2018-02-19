@@ -36,24 +36,24 @@ class OcrOcradEngine : public OcrEngine
 
 public:
     explicit OcrOcradEngine(QWidget *parent = Q_NULLPTR);
-    ~OcrOcradEngine();
+    virtual ~OcrOcradEngine();
 
-    OcrBaseDialog *createOCRDialog(QWidget *parent);
+    OcrBaseDialog *createOCRDialog(QWidget *parent) override;
 
-    OcrEngine::EngineType engineType() const
+    OcrEngine::EngineType engineType() const override
     {
         return (OcrEngine::EngineOcrad);
     }
     static QString engineDesc();
 
 protected:
-    QStringList tempFiles(bool retain);
+    QStringList tempFiles(bool retain) override;
 
 protected slots:
     void slotOcradExited(int exitCode, QProcess::ExitStatus exitStatus);
 
 private:
-    void startProcess(OcrBaseDialog *dia, const KookaImage *img);
+    void startProcess(OcrBaseDialog *dia, const KookaImage *img) override;
     QString readORF(const QString &fileName);
 
 private:

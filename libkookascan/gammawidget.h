@@ -63,13 +63,13 @@ public:
     /**
      * Reimplemented
      **/
-    QSize sizeHint() const;
+    QSize sizeHint() const override;
 
 protected:
     /**
      * Reimplemented
      **/
-    void paintEvent(QPaintEvent *ev);
+    void paintEvent(QPaintEvent *ev) override;
 
 private:
     KGammaTable *mTable;

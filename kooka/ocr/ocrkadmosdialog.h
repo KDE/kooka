@@ -79,22 +79,22 @@ class KadmosDialog: public OcrBaseDialog
 
 public:
     KadmosDialog(QWidget *parent);
-    ~KadmosDialog();
+    virtual ~KadmosDialog();
 
     typedef QMap<QString, QString> StrMap;
 
-    OcrEngine::EngineError setupGui();
+    OcrEngine::EngineError setupGui() override;
     bool getAutoScale();
     bool getNoiseReduction();
     bool getSelClassifier(QString &) const;
     QString getSelClassifierName() const;
 
-    QString ocrEngineName() const;
-    QString ocrEngineDesc() const;
-    QString ocrEngineLogo() const;
+    QString ocrEngineName() const override;
+    QString ocrEngineDesc() const override;
+    QString ocrEngineLogo() const override;
 
 public slots:
-    void enableFields(bool);
+    void enableFields(bool) override;
 
 protected:
     void setupPreprocessing(QWidget *box);
@@ -105,7 +105,7 @@ protected:
     OcrEngine::EngineError findClassifierPath();
 
 protected slots:
-    void slotWriteConfig();
+    void slotWriteConfig() override;
 
 private slots:
     void slotFontChanged(int id);

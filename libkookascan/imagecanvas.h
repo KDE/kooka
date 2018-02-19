@@ -564,14 +564,14 @@ protected:
      *
      * @param ev The timer event
      **/
-    void timerEvent(QTimerEvent *ev);
+    void timerEvent(QTimerEvent *ev) override;
 
     /**
      * Resize and redraw the currently displayed image to fit the new size.
      *
      * @param ev The resize event
      **/
-    void resizeEvent(QResizeEvent *ev);
+    void resizeEvent(QResizeEvent *ev) override;
 
     /**
      * If a context menu has been created by calling @c contextMenu(),
@@ -580,7 +580,7 @@ protected:
      *
      * @param ev The menu event
      **/
-    void contextMenuEvent(QContextMenuEvent *ev);
+    void contextMenuEvent(QContextMenuEvent *ev) override;
 
     /**
      * Possibly start to drag a new selection area, or move or resize
@@ -588,7 +588,7 @@ protected:
      *
      * @param ev The mouse event
      **/
-    void mousePressEvent(QMouseEvent *ev);
+    void mousePressEvent(QMouseEvent *ev) override;
 
     /**
      * Finish dragging a selection area, and emit the @c newRect signals.
@@ -596,14 +596,14 @@ protected:
      * @param ev The mouse event
      * @see newRect
      **/
-    void mouseReleaseEvent(QMouseEvent *ev);
+    void mouseReleaseEvent(QMouseEvent *ev) override;
 
     /**
      * Continue to drag and redraw the selection area.
      *
      * @param ev The mouse event
      **/
-    void mouseMoveEvent(QMouseEvent *ev);
+    void mouseMoveEvent(QMouseEvent *ev) override;
 
     /**
      * Detect a double click on the image and emit a signal with
@@ -612,7 +612,7 @@ protected:
      * @param ev The mouse event
      * @see doubleClicked
      **/
-    void mouseDoubleClickEvent(QMouseEvent *ev);
+    void mouseDoubleClickEvent(QMouseEvent *ev) override;
 
 private:
     enum MoveState {
