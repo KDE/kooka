@@ -364,7 +364,7 @@ void KookaView::saveWindowSettings(KConfigGroup &grp)
     KookaSettings::setLayoutOcr2(mOcrSubSplitter->saveState().toBase64());
 
     saveGalleryState();					// for the current tab
-    KookaSettings::self()->writeConfig();
+    KookaSettings::self()->save();
 }
 
 // this gets called by Kooka::applyMainWindowSettings() at startup

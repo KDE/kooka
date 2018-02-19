@@ -326,7 +326,6 @@ QString OcrOcradEngine::readORF(const QString &fileName)
      */
     int lineNo = 0;
     int blockCnt = 0;
-    int currBlock = -1;
     QString line;
     QRect blockRect;
 
@@ -359,7 +358,7 @@ QString OcrOcradEngine::readORF(const QString &fileName)
                 continue;
             }
 
-            currBlock = (rx1.cap(1).toInt()) - 1;
+            int currBlock = (rx1.cap(1).toInt()) - 1;
             blockRect.setRect(rx1.cap(2).toInt(), rx1.cap(3).toInt(),
                               rx1.cap(4).toInt(), rx1.cap(5).toInt());
             //qDebug() << "Current block" << currBlock << "rect" << blockRect;

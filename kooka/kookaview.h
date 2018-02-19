@@ -261,6 +261,6 @@ private:
     QSignalMapper *mOpenWithMapper;
 };
 
-Q_DECLARE_OPERATORS_FOR_FLAGS(KookaView::StateFlags);
+Q_DECLARE_OPERATORS_FOR_FLAGS(KookaView::StateFlags)
 
 #endif							// KOOKAVIEW_H

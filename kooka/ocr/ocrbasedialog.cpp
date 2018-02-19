@@ -126,6 +126,7 @@ void OcrBaseDialog::setupSetupPage()
 {
     QWidget *w = new QWidget(this);
     QGridLayout *gl = new QGridLayout(w);
+    Q_UNUSED(gl);					// retrieved via layout()
 
     m_progress = new QProgressBar(this);
     m_progress->setVisible(false);

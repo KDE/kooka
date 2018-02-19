@@ -150,7 +150,7 @@ void FileTreeView::dragMoveEvent(QDragMoveEvent *ev)
         return;
     }
 
-    FileTreeViewItem *ftvi = static_cast<FileTreeViewItem *>(item);
+    //FileTreeViewItem *ftvi = static_cast<FileTreeViewItem *>(item);
     //if (!ftvi->isDir()) item = item->parent();    // if file, highlight parent dir
 
     setCurrentItem(item);               // temporarily select it
