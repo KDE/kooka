@@ -354,7 +354,7 @@ KookaView::~KookaView()
 // this gets called via Kooka::closeEvent() at shutdown
 void KookaView::saveWindowSettings(KConfigGroup &grp)
 {
-    //qDebug() << "to group" << grp.name();
+    qDebug() << "to group" << grp.name();
     KookaSettings::setLayoutTabIndex(currentIndex());
     KookaSettings::setLayoutScan1(mScanPage->saveState().toBase64());
     KookaSettings::setLayoutScan2(mScanSubSplitter->saveState().toBase64());
@@ -364,13 +364,13 @@ void KookaView::saveWindowSettings(KConfigGroup &grp)
     KookaSettings::setLayoutOcr2(mOcrSubSplitter->saveState().toBase64());
 
     saveGalleryState();					// for the current tab
-    grp.sync();
+    KookaSettings::self()->writeConfig();
 }
 
 // this gets called by Kooka::applyMainWindowSettings() at startup
 void KookaView::applyWindowSettings(const KConfigGroup &grp)
 {
-    //qDebug() << "from group" << grp.name();
+    qDebug() << "from group" << grp.name();
 
     QString set = KookaSettings::layoutScan1();
     if (!set.isEmpty()) mScanPage->restoreState(QByteArray::fromBase64(set.toLocal8Bit()));
