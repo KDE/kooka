@@ -37,7 +37,7 @@ include(KDECMakeSettings)
 include(GenerateExportHeader)
 include(ECMInstallIcons)
 
-# Required Qt5 components to build this framework
+# Required Qt5 components to build this package
 find_package(Qt5 ${QT_MIN_VERSION} REQUIRED COMPONENTS Core Widgets)
 
 # REMOVE IT
@@ -101,3 +101,6 @@ add_custom_target(vcsversion
 #     COMMAND sh -c "${KDELIBS_SOURCE_DIR}/doc/api/doxygen.sh --no-modulename --recurse --doxdatadir=${KDELIBS_SOURCE_DIR}/doc/common ${CMAKE_CURRENT_SOURCE_DIR}; echo 'API documentation at file://${CMAKE_CURRENT_BINARY_DIR}/apidocs/index.html';")
 # endif (HAVE_APIDOX)
 
+############### Configuration information ###############
+
+feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)
