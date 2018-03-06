@@ -298,7 +298,7 @@ void KScanCombo::setList(const QList<QByteArray> &list)
     foreach (const QByteArray &item, list)
     {
         // See the KI18N Programmer's Guide, "Connecting to Catalogs in Library Code"
-        mCombo->addItem(ki18n(item).toString("sane-backends"), item);
+        mCombo->addItem(ki18n(item.constData()).toString("sane-backends"), item);
     }
 
     mCombo->blockSignals(bs);

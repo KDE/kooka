@@ -41,8 +41,8 @@ include(ECMInstallIcons)
 find_package(Qt5 ${QT_MIN_VERSION} REQUIRED COMPONENTS Core Widgets)
 
 # REMOVE IT
-remove_definitions(-DQT_NO_CAST_FROM_BYTEARRAY)
 remove_definitions(-DQT_NO_CAST_FROM_ASCII)
+#add_definitions(-DQT_RESTRICTED_CAST_FROM_ASCII)
 remove_definitions(-DQT_NO_SIGNALS_SLOTS_KEYWORDS)
 
 add_definitions(-DQT_NO_URL_CAST_FROM_STRING)

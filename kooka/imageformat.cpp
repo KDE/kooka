@@ -61,9 +61,9 @@ bool ImageFormat::isValid() const
     return (!mFormat.isEmpty());
 }
 
-QByteArray ImageFormat::name() const
+const char *ImageFormat::name() const
 {
-    return (mFormat);
+    return (mFormat.constData());
 }
 
 ImageFormat::ImageFormat()
@@ -78,7 +78,7 @@ bool ImageFormat::operator==(const ImageFormat &other)
 
 QDebug operator<<(QDebug stream, const ImageFormat &format)
 {
-    stream.nospace() << "ImageFormat[" << format.name().constData() << "]";
+    stream.nospace() << "ImageFormat[" << format.name() << "]";
     return (stream.space());
 }
 

@@ -458,7 +458,7 @@ void ScanGallery::slotDecorate(FileTreeViewItem *item)
         ImageFormat format = getImgFormat(item);	// this is safe for any file
         if (!isSubImage)				// no format for subimages
         {
-            item->setText(2, (QString(" " + format.name() + " ")));
+            item->setText(2, (QString(" %1 ").arg(format.name())));
         }
 
         const KookaImage *img = imageForItem(item);

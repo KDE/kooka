@@ -226,13 +226,13 @@ KScanDevice::Status KScanDevice::openDevice(const QByteArray &backend)
     mScannerName = backend;				// set now for authentication
     QApplication::setOverrideCursor(Qt::WaitCursor);	// potential lengthy operation
     ScanGlobal::self()->setScanDevice(this);		// for possible authentication
-    mSaneStatus = sane_open(backend, &mScannerHandle);
+    mSaneStatus = sane_open(backend.constData(), &mScannerHandle);
 
     if (mSaneStatus==SANE_STATUS_ACCESS_DENIED)		// authentication failed?
     {
         clearSavedAuth();				// clear any saved password
         //qDebug() << "retrying authentication";		// try again once more
-        mSaneStatus = sane_open(backend, &mScannerHandle);
+        mSaneStatus = sane_open(backend.constData(), &mScannerHandle);
     }
 
     if (mSaneStatus==SANE_STATUS_GOOD)

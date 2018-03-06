@@ -193,9 +193,11 @@ static QString docsPath()
 // TODO: maybe save a .directory file there which shows a 'scanner' logo?
 static QString createGallery(const QDir &d, bool *success = NULL)
 {
-    if (!d.exists()) {                  // does not already exist
-        if (mkdir(d.path().toLocal8Bit(), 0755) != 0) { // using mkdir(2) so that we can
-            // get the errno if it fails
+    if (!d.exists())					// does not already exist
+    {
+        if (mkdir(QFile::encodeName(d.path()).constData(), 0755) != 0)
+        {						// using mkdir(2) so that we can
+							// get the errno if it fails
 #ifdef HAVE_STRERROR
             const char *reason = strerror(errno);
 #else

@@ -390,7 +390,7 @@ void FileTreeBranch::slotItemsAdded(const QUrl &parent, const KFileItemList &ite
 #endif // DEBUG_LISTING
             //qDebug() << "Doing stat on" << filename;
             struct stat statBuf;
-            if (stat(filename.toLocal8Bit(), &statBuf) == 0) {
+            if (stat(QFile::encodeName(filename).constData(), &statBuf) == 0) {
                 int hardLinks = statBuf.st_nlink;  /* Count of dirs */
 #ifdef DEBUG_LISTING
                 qDebug() << "stat succeeded, hardlinks: " << hardLinks;

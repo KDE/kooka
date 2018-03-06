@@ -159,7 +159,7 @@ QString KookaImage::loadFromUrl(const QUrl &url)
     {							// for multiple images
         m_subImages = 0;				// no subimages found yet
         qDebug() << "Checking for multi-page TIFF";
-        TIFF *tif = TIFFOpen(filename.toLatin1(), "r");
+        TIFF *tif = TIFFOpen(QFile::encodeName(filename).constData(), "r");
         if (tif != NULL)
         {
             do
@@ -214,7 +214,7 @@ bool KookaImage::loadTiffDir(const QString &filename, int no)
 
     // if it is TIFF, check with TIFFlib if it is multiple images
     //qDebug() << "Trying to load TIFF, subimage number" << no;
-    TIFF *tif = TIFFOpen(filename.toLatin1(), "r");
+    TIFF *tif = TIFFOpen(QFile::encodeName(filename).constData(), "r");
     if (tif == NULL) {
         return (false);
     }

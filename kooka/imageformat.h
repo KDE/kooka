@@ -45,7 +45,7 @@ public:
     ImageFormat(const QByteArray &format);
 
     bool isValid() const;
-    QByteArray name() const;
+    const char *name() const;
 
     QMimeType mime() const;
     QString extension() const;

@@ -160,9 +160,9 @@ void ScanDevices::addUserSpecifiedDevice(const QByteArray &backend,
     // There is only a limited number of these objects in most applications,
     // so hopefully it won't matter too much.
 
-    userdev->name = *(new QByteArray(backend));
-    userdev->model = *(new QByteArray(description.toLocal8Bit()));
-    userdev->type = *(new QByteArray(devtype));
+    userdev->name = (new QByteArray(backend))->constData();
+    userdev->model = (new QByteArray(description.toLocal8Bit()))->constData();
+    userdev->type = (new QByteArray(devtype))->constData();
     userdev->vendor = "User specified";
 
     mScannerNames.append(backend);
