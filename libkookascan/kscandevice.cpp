@@ -824,7 +824,7 @@ KScanDevice::Status KScanDevice::acquireScan(const QString &filename)
         ImageMetaInfo info;
         info.setXResolution(img.dotsPerMeterX());	// TODO: *2.54/100
         info.setYResolution(img.dotsPerMeterY());	// TODO: *2.54/100
-        info.setScannerName(filename);
+        info.setScannerName(QFile::encodeName(filename));
         emit sigNewImage(&img, &info);
         return (KScanDevice::Ok);
     }

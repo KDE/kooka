@@ -380,17 +380,17 @@ case SANE_TYPE_BOOL:
 
 case SANE_TYPE_INT:
 case SANE_TYPE_FIXED:
-        if (QString::compare(mDesc->name, SANE_NAME_SCAN_RESOLUTION)==0 ||
-            QString::compare(mDesc->name, SANE_NAME_SCAN_X_RESOLUTION)==0 ||
-            QString::compare(mDesc->name, SANE_NAME_SCAN_Y_RESOLUTION)==0)
+        if (qstrcmp(mDesc->name, SANE_NAME_SCAN_RESOLUTION)==0 ||
+            qstrcmp(mDesc->name, SANE_NAME_SCAN_X_RESOLUTION)==0 ||
+            qstrcmp(mDesc->name, SANE_NAME_SCAN_Y_RESOLUTION)==0)
         {
             ret = KScanOption::Resolution;
             if (mDesc->unit!=SANE_UNIT_DPI) qDebug() << "expected" << mName << "unit" << mDesc->unit << "to be DPI";
         }
-        else if (QString::compare(mDesc->name, SANE_NAME_GAMMA_VECTOR)==0 ||
-                 QString::compare(mDesc->name, SANE_NAME_GAMMA_VECTOR_R)==0 ||
-                 QString::compare(mDesc->name, SANE_NAME_GAMMA_VECTOR_G)==0 ||
-                 QString::compare(mDesc->name, SANE_NAME_GAMMA_VECTOR_B)==0)
+        else if (qstrcmp(mDesc->name, SANE_NAME_GAMMA_VECTOR)==0 ||
+                 qstrcmp(mDesc->name, SANE_NAME_GAMMA_VECTOR_R)==0 ||
+                 qstrcmp(mDesc->name, SANE_NAME_GAMMA_VECTOR_G)==0 ||
+                 qstrcmp(mDesc->name, SANE_NAME_GAMMA_VECTOR_B)==0)
         {
             ret = KScanOption::GammaTable;
             if (mDesc->size!=sizeof(SANE_Byte)) qDebug() << "expected" << mName << "size" << mDesc->size << "to be BYTE";
@@ -402,7 +402,7 @@ case SANE_TYPE_FIXED:
         break;
 
 case SANE_TYPE_STRING:
-        if (QString::compare(mDesc->name, SANE_NAME_FILE)==0) ret = KScanOption::File;
+        if (qstrcmp(mDesc->name, SANE_NAME_FILE)==0) ret = KScanOption::File;
         else if (mDesc->constraint_type==SANE_CONSTRAINT_STRING_LIST) ret = KScanOption::StringList;
         else ret = KScanOption::String;
         break;

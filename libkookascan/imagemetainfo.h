@@ -119,7 +119,7 @@ public:
      * @param scanner The new scanner name
      * @see getScannerName
      **/
-    void setScannerName(const QString &scanner)
+    void setScannerName(const QByteArray &scanner)
     {
         m_scanner = scanner;
     }
@@ -174,7 +174,7 @@ public:
      * @return The scanner name
      * @see setScannerName
      **/
-    QString getScannerName() const
+    QByteArray getScannerName() const
     {
         return (m_scanner);
     }
@@ -204,7 +204,7 @@ private:
     int m_xRes;
     int m_yRes;
     QString m_mode;
-    QString m_scanner;
+    QByteArray m_scanner;
     ImageMetaInfo::ImageType m_type;
 };
 

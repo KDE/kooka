@@ -382,7 +382,7 @@ public:
      * from the global scanner configuration file.
      *
      * @param item The settings template item
-     * @return The configuration setting, or its default value if none i
+     * @return The configuration setting, or its default value if none is
      * saved in the configuration.
      *
      * @see storeConfig

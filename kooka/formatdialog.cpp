@@ -414,7 +414,7 @@ void FormatDialog::formatSelected(QListWidgetItem *item)
     mFormatList->setCurrentItem(item);			// focus highlight -> select
 
     const char *helptxt = NULL;
-    const QString mimename = item->data(Qt::UserRole).toString();
+    const QByteArray mimename = item->data(Qt::UserRole).toByteArray();
     for (FormatInfo *ip = &formats[0]; ip->mime != NULL; ++ip) {
         // locate help text for format
         if (ip->mime == mimename) {

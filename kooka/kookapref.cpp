@@ -185,7 +185,7 @@ static QString docsPath()
         docpath = QDir(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)).absolutePath();
     }
     if (docpath.isEmpty()) {
-        docpath = getenv("HOME");
+        docpath = QFile::decodeName(getenv("HOME"));
     }
     return (docpath);
 }

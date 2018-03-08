@@ -716,7 +716,7 @@ KScanDevice::Status ScanParams::prepareScan(QString *vfp)
     QString virtfile;
     if (mScanMode == ScanParams::SaneDebugMode || mScanMode == ScanParams::VirtualScannerMode) {
         if (mVirtualFile != NULL) {
-            virtfile = mVirtualFile->get();
+            virtfile = QFile::decodeName(mVirtualFile->get());
         }
         if (virtfile.isEmpty()) {
             KMessageBox::sorry(this, i18n("A file must be entered for testing or virtual scanning"));

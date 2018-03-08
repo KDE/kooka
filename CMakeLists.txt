@@ -40,12 +40,17 @@ include(ECMInstallIcons)
 # Required Qt5 components to build this package
 find_package(Qt5 ${QT_MIN_VERSION} REQUIRED COMPONENTS Core Widgets)
 
-# REMOVE IT
-remove_definitions(-DQT_NO_CAST_FROM_ASCII)
-#add_definitions(-DQT_RESTRICTED_CAST_FROM_ASCII)
-remove_definitions(-DQT_NO_SIGNALS_SLOTS_KEYWORDS)
+# Rigourousness
+add_definitions("-DQT_USE_FAST_CONCATENATION")
+add_definitions("-DQT_USE_FAST_OPERATOR_PLUS")
+add_definitions("-DQT_NO_CAST_FROM_BYTEARRAY")
+add_definitions("-DQT_NO_NARROWING_CONVERSIONS_IN_CONNECT")
+add_definitions("-DQT_NO_CAST_TO_ASCII")
+add_definitions("-DQT_NO_URL_CAST_FROM_STRING")
 
-add_definitions(-DQT_NO_URL_CAST_FROM_STRING)
+# Permissiveness
+remove_definitions("-DQT_NO_CAST_FROM_ASCII")
+remove_definitions("-DQT_NO_SIGNALS_SLOTS_KEYWORDS")
 
 # Support for SANE, here because library and sanedump both need it
 if (SANECONFIG_BIN)
