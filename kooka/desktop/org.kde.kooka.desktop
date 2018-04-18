@@ -76,6 +76,7 @@ Name[sv]=Kooka
 Name[tr]=Kooka
 Name[uk]=Kooka
 Name[x-test]=xxKookaxx
+Name[zh_CN]=Kooka
 
 Categories=Qt;KDE;Graphics;Scanning;
 X-DBUS-ServiceName=org.kde.kooka
