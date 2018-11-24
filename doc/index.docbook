@@ -60,8 +60,8 @@ Therefore, the <acronym>SANE</acronym> package must be installed to use &kooka;.
 <para>Character recognition is also provided by using the open source 
 <ulink url="http://jocr.sourceforge.net/">GOCR</ulink> or 
 <ulink url="http://www.gnu.org/software/ocrad/ocrad.html">OCRAD</ulink> programs, 
-or the commercial <ulink url="http://www.rerecognition.com/">KADMOS</ulink> library. 
-You have to install at least one of these software packages to
+or the commercial <ulink url="https://rerecognition.com/en/products/kadmos-icr-ocr/">KADMOS</ulink>
+library. You have to install at least one of these software packages to
 use this functionality. After character recognition is complete, a spellcheck
 is automatically started for the recognized material. You can edit the content
 in the <guilabel>OCR</guilabel> window and export it as plain text.
