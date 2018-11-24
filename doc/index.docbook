@@ -516,8 +516,10 @@ have only one computer you may also want to uncheck
 </menuchoice>
 </term> 
 <listitem>
-<para>Always use the Save Assistant
-Ask for filename when saving   Before the scan starts / After the scan is finished. 
+<para>
+<guilabel>Always use the Save Assistant</guilabel>
+<guilabel>Ask for filename when saving</guilabel>
+<guilabel>Before the scan starts</guilabel> / <guilabel>After the scan is finished</guilabel>.
 </para>
 </listitem> 
 </varlistentry>
