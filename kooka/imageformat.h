@@ -33,12 +33,14 @@
 
 #include <qbytearray.h>
 
+#include "kookacore_export.h"
+
 class QDebug;
 class QMimeType;
 class QUrl;
 
 
-class ImageFormat
+class KOOKACORE_EXPORT ImageFormat
 {
 
 public:

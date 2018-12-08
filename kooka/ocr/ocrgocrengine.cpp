@@ -44,53 +44,41 @@
 #include <qtemporaryfile.h>
 #include <qtemporarydir.h>
 #include <qdebug.h>
+#include <qprocess.h>
 
-#include <kprocess.h>
 #include <klocalizedstring.h>
 #include <kmessagebox.h>
+#include <kpluginfactory.h>
 
 #include "imgsaver.h"
 #include "kookaimage.h"
 #include "imageformat.h"
 #include "ocrgocrdialog.h"
 
-static const char *possibleResultFiles[] = { "out30.png", "out20.png", "out30.bmp", "out20.bmp", NULL };
+
+K_PLUGIN_FACTORY_WITH_JSON(OcrGocrEngineFactory, "kookaocr-gocr.json", registerPlugin<OcrGocrEngine>();)
+#include "ocrgocrengine.moc"
 
 
-OcrGocrEngine::OcrGocrEngine(QWidget *parent)
-    : OcrEngine(parent)
+static const char *possibleResultFiles[] = { "out30.png", "out20.png", "out30.bmp", "out20.bmp", nullptr };
+
+
+OcrGocrEngine::OcrGocrEngine(QObject *pnt, const QVariantList &args)
+    : AbstractOcrEngine(pnt)
 {
-    m_tempDir = NULL;
-    m_inputFile = QString::null;            // input image file
-    m_resultFile = QString::null;           // OCR result text file
-    m_stderrFile = QString::null;           // stderr log/debug output
-    m_ocrResultFile = QString::null;            // OCR result image
+    m_tempDir = nullptr;
+    m_inputFile = QString::null;			// input image file
+    m_resultFile = QString::null;			// OCR result text file
+    m_stderrFile = QString::null;			// stderr log/debug output
+    m_ocrResultFile = QString::null;			// OCR result image
 }
 
-OcrGocrEngine::~OcrGocrEngine()
+
+AbstractOcrDialogue *OcrGocrEngine::createOcrDialogue(AbstractOcrEngine *plugin, QWidget *pnt)
 {
+    return (new OcrGocrDialog(plugin, pnt));
 }
 
-OcrBaseDialog *OcrGocrEngine::createOCRDialog(QWidget *parent)
-{
-    return (new OcrGocrDialog(parent));
-}
-
-OcrEngine::EngineType OcrGocrEngine::engineType() const
-{
-    return (OcrEngine::EngineGocr);
-}
-
-QString OcrGocrEngine::engineDesc()
-{
-    return (xi18nc("@info",
-                   "<emphasis>GOCR</emphasis> (sometimes known as <emphasis>JOCR</emphasis>) is an open source "
-                   "OCR engine, originally started by Joerg&nbsp;Schulenburg and now "
-                   "with a team of active developers. "
-                   "<nl/><nl/>"
-                   "See <link url=\"http://jocr.sourceforge.net\">jocr.sourceforge.net</link> "
-                   "for more information on GOCR."));
-}
 
 // TODO: similar function used for GOCR and OCRAD
 static QString newTempFile(const QString &suffix)
@@ -103,7 +91,8 @@ static QString newTempFile(const QString &suffix)
     return (result);
 }
 
-void OcrGocrEngine::startProcess(OcrBaseDialog *dia, const KookaImage *img)
+
+void OcrGocrEngine::startOcrProcess(AbstractOcrDialogue *dia, const KookaImage *img)
 {
     OcrGocrDialog *gocrDia = static_cast<OcrGocrDialog *>(dia);
     const QString cmd = gocrDia->getOCRCmd();
@@ -119,14 +108,14 @@ void OcrGocrEngine::startProcess(OcrBaseDialog *dia, const KookaImage *img)
 
     // TODO: if the input file is local and is readable by GOCR,
     // can use it directly (but don't delete it afterwards!)
-    m_inputFile = ImgSaver::tempSaveImage(img, ImageFormat(format));
+    m_inputFile = tempSaveImage(img, ImageFormat(format));
     // save image to a temp file
     m_ocrResultFile = QString::null;            // don't know this until finished
 
     if (m_ocrProcess != NULL) {
         delete m_ocrProcess;    // kill old process if still there
     }
-    m_ocrProcess = new KProcess();          // start new GOCR process
+    m_ocrProcess = new QProcess();          // start new GOCR process
     Q_CHECK_PTR(m_ocrProcess);
 
     m_ocrResultText = QString::null;			// clear buffer for capturing
@@ -146,6 +135,8 @@ void OcrGocrEngine::startProcess(OcrBaseDialog *dia, const KookaImage *img)
     args << "-d" << QString::number(gocrDia->getDustsize());
 
     args << "-v" << "32";               // write a result image
+
+    // TODO: use '-f' to output XML (with position and accuracy data)
 
     // Specify this explicitly, because "-" does not mean the same
     // as "/dev/stdout".  The former interleaves the progress outout
@@ -171,9 +162,10 @@ void OcrGocrEngine::startProcess(OcrBaseDialog *dia, const KookaImage *img)
 
     qDebug() << "Running GOCR on" << format << "file as" << cmd << args.join(" ");
 
-    m_ocrProcess->setProgram(QFile::encodeName(cmd), args);
-    m_ocrProcess->setNextOpenMode(QIODevice::ReadOnly);
-    m_ocrProcess->setOutputChannelMode(KProcess::OnlyStdoutChannel);
+    m_ocrProcess->setProgram(cmd);
+    m_ocrProcess->setArguments(args);
+    m_ocrProcess->setStandardInputFile(QProcess::nullDevice());
+    m_ocrProcess->setProcessChannelMode(QProcess::ForwardedErrorChannel);
 
     m_ocrProcess->start();
     if (!m_ocrProcess->waitForStarted(5000)) qWarning() << "Error starting GOCR process!";
@@ -190,11 +182,11 @@ void OcrGocrEngine::slotGOcrExited(int exitCode, QProcess::ExitStatus exitStatus
 #else
         const char *reason = "";
 #endif
-        KMessageBox::error(NULL,
+        KMessageBox::error(nullptr,
                            xi18nc("@info", "Cannot read GOCR result file <filename>%1</filename><nl/>%2",
                                   m_resultFile, reason),
                            i18n("GOCR Result File Error"));
-        finishedOCRVisible(false);
+        finishedOcr(false);
         return;
     }
 
@@ -254,7 +246,7 @@ void OcrGocrEngine::slotGOcrExited(int exitCode, QProcess::ExitStatus exitStatus
         qDebug() << "cannot find result image in" << dir.absolutePath();
     }
 
-    finishedOCRVisible(m_ocrProcess->exitStatus() == QProcess::NormalExit);
+    finishedOcr(m_ocrProcess->exitStatus()==QProcess::NormalExit);
 }
 
 QStringList OcrGocrEngine::tempFiles(bool retain)

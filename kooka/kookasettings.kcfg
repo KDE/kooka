@@ -5,6 +5,8 @@
                           http://www.kde.org/standards/kcfg/1.0/kcfg.xsd" >
   <kcfgfile></kcfgfile>
   <include>kookaprint.h</include>
+  <include>kiconloader.h</include>
+  <!-- <include>thumbview.h</include> -->
 
   <group name="General">
 
@@ -157,7 +159,8 @@
     <entry name="ThumbnailBackgroundPath" key="BackGroundTile" type="Path">
       <label>Image:</label>
       <tooltip>&lt;div&gt;The background image to use for the thumbnail view.&lt;/div&gt;</tooltip>
-      <default code="true">ThumbView::standardBackground()</default>
+      <!-- <default code="true">ThumbView::standardBackground()</default> -->
+      <default></default>
     </entry>
 
     <entry name="ThumbnailPreviewSize" key="previewSize" type="Int">

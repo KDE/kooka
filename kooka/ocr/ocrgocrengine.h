@@ -34,23 +34,20 @@
 
 #include <qprocess.h>
 
-#include "ocrengine.h"
+#include "abstractocrengine.h"
 
 class QTemporaryDir;
 
 
-class OcrGocrEngine : public OcrEngine
+class OcrGocrEngine : public AbstractOcrEngine
 {
     Q_OBJECT
 
 public:
-    OcrGocrEngine(QWidget *parent = Q_NULLPTR);
-    virtual ~OcrGocrEngine();
+    OcrGocrEngine(QObject *pnt, const QVariantList &args);
+    virtual ~OcrGocrEngine() = default;
 
-    OcrBaseDialog *createOCRDialog(QWidget *parent) override;
-
-    OcrEngine::EngineType engineType() const override;
-    static QString engineDesc();
+    AbstractOcrDialogue *createOcrDialogue(AbstractOcrEngine *plugin, QWidget *pnt) override;
 
 protected:
     QStringList tempFiles(bool retain) override;
@@ -60,7 +57,7 @@ protected slots:
     void slotGOcrExited(int exitCode, QProcess::ExitStatus exitStatus);
 
 private:
-    void startProcess(OcrBaseDialog *dia, const KookaImage *img) override;
+    void startOcrProcess(AbstractOcrDialogue *dia, const KookaImage *img) override;
 
 private:
     QTemporaryDir *m_tempDir;

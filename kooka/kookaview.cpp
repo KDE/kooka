@@ -66,7 +66,8 @@
 #include "galleryhistory.h"
 #include "thumbview.h"
 #include "kookaimage.h"
-#include "ocrengine.h"
+#include "abstractocrengine.h"
+#include "pluginmanager.h"
 #include "ocrresedit.h"
 #include "scanparamsdialog.h"
 #include "kookagallery.h"
@@ -772,7 +773,8 @@ void KookaView::slotOcrSpellCheck(bool interactive, bool background)
         return;
     }
 
-    if (mOcrEngine == NULL || !mOcrEngine->engineValid() || mOcrResEdit == NULL) {
+    if (mOcrEngine==nullptr || mOcrResEdit==nullptr)
+    {
         KMessageBox::sorry(mMainWindow,
                            i18n("OCR has not been performed yet, or the engine has been changed."),
                            i18n("OCR Spell Check not possible"));
@@ -781,22 +783,33 @@ void KookaView::slotOcrSpellCheck(bool interactive, bool background)
 
     setCurrentIndex(KookaView::TabOcr);
     emit changeStatus(i18n("OCR Spell Check"));
-    if (background) {
-        mOcrResEdit->setCheckSpellingEnabled(true);
-    }
-    if (interactive) {
-        mOcrResEdit->checkSpelling();
-    }
+    if (background) mOcrResEdit->setCheckSpellingEnabled(true);
+    if (interactive) mOcrResEdit->checkSpelling();
 }
+
 
 void KookaView::startOCR(const KookaImage img)
 {
-    if (img.isNull()) {
-        return;
-    }
+    if (img.isNull()) return;
 
     setCurrentIndex(KookaView::TabOcr);
 
+    if (mOcrEngine==nullptr)
+    {
+        // TODO: temp hardcoded plugin name
+        mOcrEngine = qobject_cast<AbstractOcrEngine *>(PluginManager::self()->loadPlugin(
+                                                            PluginManager::OcrPlugin, "gocr"));
+        if (mOcrEngine==nullptr)
+        {
+            KMessageBox::error(mMainWindow,
+                               // TODO: show name of plugin
+                               i18n("Cannot load OCR plugin 'NAME'"));
+            return;
+        }
+
+#if 0
+    // TODO: engineValid() checks whether the configured OCR engine is
+    // the same as the one currently loaded.  Try to do this a difefrent way?
     if (mOcrEngine != NULL && !mOcrEngine->engineValid()) { // engine already exists,
         // but needs to be changed?
         delete mOcrEngine;
@@ -813,6 +826,8 @@ void KookaView::startOCR(const KookaImage img)
             }
             return;
         }
+    }
+#endif
 
         mOcrEngine->setImageCanvas(mImageCanvas);
         mOcrEngine->setTextDocument(mOcrResEdit->document());
@@ -839,14 +854,15 @@ void KookaView::startOCR(const KookaImage img)
     }
 
     mOcrEngine->setImage(img);
-    mOcrEngine->startOCRVisible(this);
+    mOcrEngine->openOcrDialogue(this);
 }
+
 
 void KookaView::slotOcrResultAvailable()
 {
-    emit signalOcrResultAvailable(mOcrResEdit->document()->characterCount() > 0);
-
+    emit signalOcrResultAvailable(mOcrResEdit->document()->characterCount()>0);
 }
+
 
 void KookaView::slotScanStart(const ImageMetaInfo *info)
 {
@@ -980,7 +996,7 @@ void KookaView::slotTransformImage()
     gallery()->slotUnloadItems();           // unload original from memory
 
     QThread *transformer = new ImageTransform(img, op, imageFile, this);
-    connect(transformer, SIGNAL(done(KUrl)), gallery(), SLOT(slotUpdatedItem(KUrl)));
+    connect(transformer, SIGNAL(done(QUrl)), gallery(), SLOT(slotUpdatedItem(QUrl)));
     connect(transformer, SIGNAL(statusMessage(QString)), SIGNAL(changeStatus(QString)));
     connect(transformer, SIGNAL(finished()), transformer, SLOT(deleteLater()));
     transformer->start();
@@ -1009,10 +1025,11 @@ void KookaView::slotShowAImage(const KookaImage *img, bool isDir)
         mImageCanvas->setReadOnly(false);
     }
 
-    if (mOcrEngine != NULL) {
+    if (mOcrEngine!=nullptr)				// tell OCR about it
+    {
         mOcrEngine->setImage(img != NULL ? *img : KookaImage());
     }
-    // tell OCR about it
+
     if (mImageCanvas != NULL) {
         emit changeStatus(mImageCanvas->imageInfoString(), StatusBarManager::ImageDims);
     }

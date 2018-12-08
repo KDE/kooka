@@ -16,7 +16,7 @@ project(kooka5)
 ########### dependencies ###############
 
 find_package(Qt5 ${QT_MIN_VERSION} REQUIRED COMPONENTS PrintSupport)
-find_package(KF5 ${KF5_MIN_VERSION} REQUIRED COMPONENTS I18n Config TextWidgets KIO)
+find_package(KF5 ${KF5_MIN_VERSION} REQUIRED COMPONENTS I18n Config TextWidgets KIO IconThemes)
 
 ############### Packages used by KDE ###############
 
@@ -71,11 +71,6 @@ if (WITH_KADMOS)
   set(HAVE_KADMOS true)
 endif (WITH_KADMOS)
 
-########### subdirectories ###############
-
-add_subdirectory(pics)
-add_subdirectory(desktop)
-
 ########### setup ###############
 
 if (HAVE_ERRNO_H)
@@ -101,7 +96,6 @@ if (HAVE_TIFF)
 endif (HAVE_TIFF)
 
 include_directories(..)
-include_directories(./ocr/)
 
 if (HAVE_KADMOS)
   if (KADMOS_INCLUDE_DIR)
@@ -116,6 +110,26 @@ if (HAVE_TIFF)
   include_directories(${TIFF_INCLUDE_DIR})
 endif (HAVE_TIFF)
 
+########### library shared with plugins ###############
+
+set(kookacore_SRCS
+  kookaimage.cpp
+  imageformat.cpp
+  pluginmanager.cpp
+  abstractplugin.cpp
+)
+kconfig_add_kcfg_files(kookacore_SRCS kookasettings.kcfgc)
+add_library(kookacore SHARED ${kookacore_SRCS})
+generate_export_header(kookacore BASE_NAME kookacore)
+set_target_properties(kookacore PROPERTIES SOVERSION "1.0.0")
+target_link_libraries(kookacore Qt5::Core Qt5::Gui Qt5::PrintSupport)
+target_link_libraries(kookacore KF5::I18n KF5::KIOFileWidgets KF5::KIOWidgets KF5::IconThemes KF5::ConfigGui)
+if (HAVE_TIFF)
+  target_link_libraries(kookacore ${TIFF_LIBRARIES})
+endif (HAVE_TIFF)
+
+install(TARGETS kookacore ${INSTALL_TARGETS_DEFAULT_ARGS})
+
 ########### executable ###############
 
 # TODO: rename some of these files to match class name, some others are obsolete
@@ -129,8 +143,6 @@ set(kooka_SRCS
   kookascanparams.cpp
   imgsaver.cpp			# -> imagesaver
   formatdialog.cpp
-  kookaimage.cpp
-  imageformat.cpp
   imagetransform.cpp
   scangallery.cpp
   galleryhistory.cpp
@@ -140,45 +152,27 @@ set(kooka_SRCS
   imgprintdialog.cpp
   scanparamsdialog.cpp
   newscanparams.cpp		# -> newscaparamsdialog
+  ocrresedit.cpp
   #QT5 photocopyprintdialogpage.cpp
 )
 
-set(kooka_ocr_SRCS
-  ocr/ocrbasedialog.cpp
-  ocr/ocrengine.cpp
-  ocr/ocrgocrdialog.cpp
-  ocr/ocrgocrengine.cpp
-  #QT5 ocr/ocrkadmosdialog.cpp
-  ocr/ocrkadmosengine.cpp
-  ocr/ocrocraddialog.cpp
-  ocr/ocrocradengine.cpp
-  ocr/ocrresedit.cpp
-)
-
-if (WITH_KADMOS)
-  set(kooka_SRCS ${kooka_SRCS} ocr/kadmosocr.cpp)
-endif (WITH_KADMOS)
-
-kconfig_add_kcfg_files(kooka_SRCS kookasettings.kcfgc)
-
-add_executable(kooka ${kooka_SRCS} ${kooka_ocr_SRCS})
+add_executable(kooka ${kooka_SRCS})
 target_link_libraries(kooka
   Qt5::PrintSupport
   dialogutil
   kookascan
+  kookacore
+  kookaocr
   libfiletree
   KF5::KIOCore KF5::KIOFileWidgets KF5::KIOWidgets
   KF5::XmlGui
   KF5::TextWidgets
 )
 
-if (HAVE_KADMOS)
-  target_link_libraries(kooka librep)
-endif (HAVE_KADMOS)
-
-if (HAVE_TIFF)
-  target_link_libraries(kooka ${TIFF_LIBRARIES})
-endif (HAVE_TIFF)
+################### TODO: to Kadmos plugin
+# if (HAVE_KADMOS)
+#   target_link_libraries(kooka librep)
+# endif (HAVE_KADMOS)
 
 include_directories(${CMAKE_CURRENT_BINARY_DIR}/..)
 add_dependencies(kooka vcsversion)
@@ -187,3 +181,9 @@ add_dependencies(kooka vcsversion)
 
 install(TARGETS kooka ${INSTALL_TARGETS_DEFAULT_ARGS})
 install(FILES kookasettings.kcfg DESTINATION ${KDE_INSTALL_KCFGDIR})
+
+########### subdirectories ###############
+
+add_subdirectory(ocr)
+add_subdirectory(pics)
+add_subdirectory(desktop)

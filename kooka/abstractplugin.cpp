@@ -1,0 +1,9 @@
+//////////////////////////////////////////////////////////////////////////
+
+#include "abstractplugin.h"
+
+
+AbstractPlugin::AbstractPlugin(QObject *pnt)
+    : QObject(pnt)
+{
+}

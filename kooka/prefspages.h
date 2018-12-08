@@ -34,7 +34,6 @@
 
 #include <qwidget.h>
 
-#include "ocrengine.h"
 
 class QCheckBox;
 class QPushButton;
@@ -45,6 +44,7 @@ class QVBoxLayout;
 class KUrlRequester;
 class KComboBox;
 class KPageDialog;
+
 
 class KookaPrefsPage : public QWidget
 {
@@ -78,6 +78,7 @@ private:
     QPushButton *mEnableMessagesButton;
 };
 
+
 class KookaStartupPage : public KookaPrefsPage
 {
     Q_OBJECT
@@ -95,6 +96,7 @@ private:
     QCheckBox *mSelectScannerCheck;
     QCheckBox *mRestoreImageCheck;
 };
+
 
 class KookaSavingPage : public KookaPrefsPage
 {
@@ -114,6 +116,7 @@ private:
     QRadioButton *mAskBeforeScan;
     QRadioButton *mAskAfterScan;
 };
+
 
 class KookaThumbnailPage : public KookaPrefsPage
 {
@@ -138,6 +141,7 @@ private:
     QCheckBox *mCustomBackgroundCheck;
 };
 
+
 class KookaOcrPage : public KookaPrefsPage
 {
     Q_OBJECT
@@ -159,7 +163,7 @@ private:
     KComboBox *mEngineCombo;
     QLabel *mDescLabel;
 
-    OcrEngine::EngineType mSelectedEngine;
+//    OcrEngine::EngineType mSelectedEngine;
 };
 
 #endif                          // PREFSPAGES_H

@@ -76,7 +76,7 @@ bool ImageFormat::operator==(const ImageFormat &other)
     return (mFormat == other.mFormat);
 }
 
-QDebug operator<<(QDebug stream, const ImageFormat &format)
+KOOKACORE_EXPORT QDebug operator<<(QDebug stream, const ImageFormat &format)
 {
     stream.nospace() << "ImageFormat[" << format.name() << "]";
     return (stream.space());

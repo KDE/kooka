@@ -393,58 +393,6 @@ QString ImgSaver::errorString(ImgSaver::ImageSaveStatus status) const
     return (re);
 }
 
-QString ImgSaver::tempSaveImage(const KookaImage *img, const ImageFormat &format, int colors)
-{
-    if (img == NULL) return (QString::null);
-
-    const QString tempTemplate = QDir::tempPath()+'/'+"imgsaverXXXXXX."+format.extension();
-    QTemporaryFile tmpFile(tempTemplate);
-    tmpFile.setAutoRemove(false);
-
-    if (!tmpFile.open())
-    {
-        qDebug() << "Error opening temp file" << tmpFile.fileName();
-        tmpFile.setAutoRemove(true);
-        return (QString::null);
-    }
-    QString name = tmpFile.fileName();
-    tmpFile.close();
-
-    const KookaImage *tmpImg = NULL;
-    if (colors != -1 && img->depth() != colors) { // Need to convert image
-        QImage::Format newfmt;
-        switch (colors) {
-        case 1:     newfmt = QImage::Format_Mono;
-            break;
-
-        case 8:     newfmt = QImage::Format_Indexed8;
-            break;
-
-        case 24:    newfmt = QImage::Format_RGB888;
-            break;
-
-        case 32:    newfmt = QImage::Format_RGB32;
-            break;
-
-        default:    //qDebug() << "Error: Bad colour depth requested" << colors;
-            tmpFile.setAutoRemove(true);
-            return (QString::null);
-        }
-
-        tmpImg = new KookaImage(img->convertToFormat(newfmt));
-        img = tmpImg;
-    }
-
-    qDebug() << "Saving to" << name << "in format" << format;
-    if (!img->save(name, format.name())) {
-        qDebug() << "Error saving to" << name;
-        tmpFile.setAutoRemove(true);
-        name = QString::null;
-    }
-
-    if (tmpImg != NULL) delete tmpImg;
-    return (name);
-}
 
 bool copyRenameImage(bool isCopying, const QUrl &fromUrl, const QUrl &toUrl, bool askExt, QWidget *overWidget)
 {

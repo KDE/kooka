@@ -186,6 +186,11 @@ public:
      **/
     static bool renameImage(const QUrl &fromUrl, const QUrl &toUrl, bool askExt = false, QWidget *overWidget = NULL);
 
+
+
+
+
+#if 0
     /**
      * Save an image to a temporary file.
      *
@@ -199,6 +204,10 @@ public:
      *         an error.
      **/
     static QString tempSaveImage(const KookaImage *img, const ImageFormat &format, int colors = -1);
+#endif
+
+
+
 
     /**
      * Check the remembered save format for an image type.

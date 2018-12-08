@@ -32,6 +32,8 @@
 #ifndef KOOKAIMAGE_H
 #define KOOKAIMAGE_H
 
+#include "kookacore_export.h"
+
 #include <qimage.h>
 #include <qvector.h>
 #include <qrect.h>
@@ -50,7 +52,7 @@ class KFileItem;
 // TODO: into class (but never used)
 typedef enum { MaxCut, MediumCut } TileMode;
 
-class KookaImage : public QImage
+class KOOKACORE_EXPORT KookaImage : public QImage
 {
 public:
     KookaImage();

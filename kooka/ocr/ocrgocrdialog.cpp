@@ -32,7 +32,6 @@
 #include "ocrgocrdialog.h"
 
 #include <qlabel.h>
-#include <qtooltip.h>
 #include <qregexp.h>
 #include <qgridlayout.h>
 #include <qprogressbar.h>
@@ -52,35 +51,18 @@
 #include "ocrgocrengine.h"
 
 
-OcrGocrDialog::OcrGocrDialog(QWidget *parent)
-    : OcrBaseDialog(parent),
+OcrGocrDialog::OcrGocrDialog(AbstractOcrEngine *plugin, QWidget *pnt)
+    : AbstractOcrDialogue(plugin, pnt),
       m_ocrCmd(QString::null),
       m_isBW(false)
 {
+    qDebug();
 }
 
-OcrGocrDialog::~OcrGocrDialog()
-{
-}
 
-QString OcrGocrDialog::ocrEngineLogo() const
+AbstractOcrEngine::EngineError OcrGocrDialog::setupGui()
 {
-    return ("gocr.png");
-}
-
-QString OcrGocrDialog::ocrEngineName() const
-{
-    return (OcrEngine::engineName(OcrEngine::EngineGocr));
-}
-
-QString OcrGocrDialog::ocrEngineDesc() const
-{
-    return (OcrGocrEngine::engineDesc());
-}
-
-OcrEngine::EngineError OcrGocrDialog::setupGui()
-{
-    OcrBaseDialog::setupGui();
+    AbstractOcrDialogue::setupGui();
 
     QWidget *w = addExtraSetupWidget();
     QGridLayout *gl = new QGridLayout(w);
@@ -119,18 +101,21 @@ OcrEngine::EngineError OcrGocrDialog::setupGui()
     l->setBuddy(sliderSpace);
     gl->addWidget(sliderSpace, 2, 1);
 
+    // TODO: slider for "certainty" (GOCR option '-a')
+
     gl->setRowStretch(3, 1);                // for top alignment
 
     /* find the GOCR binary */
     QString res = KookaSettings::ocrGocrBinary();
     if (res.isEmpty()) {
-        res = KookaPref::tryFindGocr();
+        // TODO: move KookaPref::tryFindBinary() to AbstractOcr?????? and use it
+//        res = KookaPref::tryFindGocr();
         if (res.isEmpty()) {
             /* Popup here telling that the config needs to be called */
             KMessageBox::sorry(this, i18n("The path to the GOCR binary is not configured or is not valid.\n"
-                                          "Please enter or check the path in the Kooka configuration."),
+                                          "Please provide or check the path in the Kooka configuration."),
                                i18n("GOCR Software Not Found"));
-            buttonBox()->button(QDialogButtonBox::Yes)->setEnabled(false);
+            buttonBox()->button(QDialogButtonBox::Discard)->setEnabled(false);
         }
     }
 
@@ -145,12 +130,12 @@ OcrEngine::EngineError OcrGocrDialog::setupGui()
     progressBar()->setMaximum(0);           // animation only
 
     m_setupWidget = w;
-    return (OcrEngine::ENG_OK);
+    return (AbstractOcrEngine::ENG_OK);
 }
 
 void OcrGocrDialog::introduceImage(const KookaImage *img)
 {
-    OcrBaseDialog::introduceImage(img);
+    AbstractOcrDialogue::introduceImage(img);
     if (img == NULL || img->isNull()) {
         return;
     }
@@ -169,9 +154,7 @@ void OcrGocrDialog::introduceImage(const KookaImage *img)
 
 void OcrGocrDialog::slotWriteConfig(void)
 {
-    //qDebug();
-
-    OcrBaseDialog::slotWriteConfig();
+    AbstractOcrDialogue::slotWriteConfig();
 
     KookaSettings::setOcrGocrBinary(getOCRCmd());
 

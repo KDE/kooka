@@ -3,7 +3,7 @@
  *  This file is part of Kooka, a scanning/OCR application using	*
  *  Qt <http://www.qt.io> and KDE Frameworks <http://www.kde.org>.	*
  *									*
- *  Copyright (C) 2000-2016 Klaas Freitag <freitag@suse.de>		*
+ *  Copyright (C) 2000-2018 Klaas Freitag <freitag@suse.de>		*
  *                          Jonathan Marten <jjm@keelhaul.me.uk>	*
  *									*
  *  Kooka is free software; you can redistribute it and/or modify it	*
@@ -29,28 +29,27 @@
  *									*
  ************************************************************************/
 
-#ifndef OCRENGINE_H
-#define OCRENGINE_H
+#ifndef ABSTRACTOCRENGINE_H
+#define ABSTRACTOCRENGINE_H
 
 #include <qobject.h>
 #include <qtextformat.h>
 
 #include "kookaimage.h"
+#include "abstractplugin.h"
 
 /**
   *@author Klaas Freitag
   */
 
-class QRect;
-class QStringList;
-class QImage;
-class QTextDocument;
-
-class KProcess;
-
-class KookaImage;
+class QProcess;
+class ImageFormat;
 class ImageCanvas;
-class OcrBaseDialog;
+class AbstractOcrDialogue;
+
+#ifndef PLUGIN_EXPORT
+#define PLUGIN_EXPORT
+#endif
 
 // Using a QTextDocument for the OCR results, with the source image rectangle
 // and other OCR information held as text properties.
@@ -59,41 +58,34 @@ class OcrWordData : public QTextCharFormat
 {
 public:
     enum DataType {
-        Rectangle = QTextFormat::UserProperty,      // QRect
-        Alternatives,                   // QStringList
-        KNode                       // int
+        Rectangle = QTextFormat::UserProperty,		// QRect
+        Alternatives,					// QStringList
+        KNode						// int
     };
 
-    OcrWordData() : QTextCharFormat()   {}
+    OcrWordData() : QTextCharFormat()			{}
 };
 
-class OcrEngine : public QObject
+
+class PLUGIN_EXPORT AbstractOcrEngine : public AbstractPlugin
 {
     Q_OBJECT
 
 public:
-    enum EngineError {                  // OCR Engine setup errors
+    enum EngineError {					// OCR Engine setup errors
         ENG_ERROR,
         ENG_OK,
         ENG_DATA_MISSING,
         ENG_BAD_SETUP
     };
 
-    enum EngineType {               // OCR Engine configured type
-        EngineNone,
-        EngineGocr,
-        EngineOcrad,
-        EngineKadmos
-    };
+    virtual ~AbstractOcrEngine();
 
-    OcrEngine(QWidget *parent);
-    virtual ~OcrEngine();
-
-    bool startOCRVisible(QWidget *parent = Q_NULLPTR);
+    bool openOcrDialogue(QWidget *pnt = nullptr);
 
     /**
-     * Sets an image Canvas that displays the result image of OCR. If this
-     * is set to NULL (or never set) no result image is displayed.
+     * Sets an image canvas that displays the result image of the OCR.
+     * If this is set to @c NULL (or never set) no result image is displayed.
      * The OCR fabric passes a new image to the canvas which is a copy of
      * the image to OCR.
      */
@@ -101,22 +93,55 @@ public:
     void setImage(const KookaImage img);
     void setTextDocument(QTextDocument *doc);
 
-    static const QString engineName(OcrEngine::EngineType eng);
-    static OcrEngine *createEngine(QWidget *parent, bool *gotoPrefs = NULL);
-    bool engineValid() const;
+protected:
+    explicit AbstractOcrEngine(QObject *pnt);
 
-public slots:
-    void slotHighlightWord(const QRect &r);
-    void slotScrollToWord(const QRect &r);
+    virtual AbstractOcrDialogue *createOcrDialogue(AbstractOcrEngine *plugin, QWidget *pnt) = 0;
+
+    virtual QStringList tempFiles(bool retain) = 0;
+
+    /**
+     * Save an image to a temporary file.
+     *
+     * @param img The image to save
+     * @param format The image format to save in.
+     * @param colors The colour depth (bits per pixel) required.  If specified,
+     * this must be either 1, 8, 24 or 32.  The default is for no colour
+     * conversion.
+     *
+     * @return The file name as saved, or @c QString::null if there was
+     *         an error.
+     **/
+    static QString tempSaveImage(const KookaImage *img, const ImageFormat &format, int colors = -1);
+
+    void finishedOcr(bool success);
+
+    QTextDocument *startResultDocument();
+    void finishResultDocument();
+
+    void startLine();
+    void addWord(const QString &word, const OcrWordData &data);
+    void finishLine();
 
 signals:
     void newOCRResultText();
 
+    void setSpellCheckConfig(const QString &configFile);
+    void startSpellCheck(bool interactive, bool background);
+
     /**
-     * progress of the ocr process. The first integer is the main progress,
-     * the second the sub progress. If there is only on progress, it is the
-     * first parameter, the second is always -1 than.
+     * Indicates that the text editor holding the text that came through
+     * newOCRResultText should be set to readonly or not. Can be connected
+     * to QTextEdit::setReadOnly directly.
+     */
+    void readOnlyEditor(bool isReadOnly);
+
+    /**
+     * Progress of the OCR process. The first integer is the main progress,
+     * the second the sub progress. If there is only one progress, it is the
+     * first parameter while the second should be -1.
      * Both have a range from 0..100.
+     *
      * Note that this signal may not be emitted if the engine does not support
      * progress.
      */
@@ -128,40 +153,19 @@ signals:
      */
     void selectWord(const QPoint &p);
 
-    /**
-     * indicates that the text editor holding the text that came through
-     * newOCRResultText should be set to readonly or not. Can be connected
-     * to QTextEdit::setReadOnly directly.
-     */
-    void readOnlyEditor(bool isReadOnly);
-
-    void setSpellCheckConfig(const QString &configFile);
-    void startSpellCheck(bool interactive, bool background);
+public slots:
+    void slotHighlightWord(const QRect &r);
+    void slotScrollToWord(const QRect &r);
 
 protected:
-    void finishedOCRVisible(bool success);
-    virtual OcrBaseDialog *createOCRDialog(QWidget *parent) = 0;
-
-    virtual QStringList tempFiles(bool retain) = 0;
-
-    virtual OcrEngine::EngineType engineType() const = 0;
-
-    QTextDocument *startResultDocument();
-    void finishResultDocument();
-
-    void startLine();
-    void addWord(const QString &word, const OcrWordData &data);
-    void finishLine();
-
-protected:
-    KProcess *m_ocrProcess;
+    QProcess *m_ocrProcess;
     QString m_ocrResultFile;
     QString m_ocrResultText;
-    QWidget *m_parent;
-    // one block contains all lines of the page
-protected slots:
-    void slotClose();
+
+private slots:
+    void slotStartOCR();
     void slotStopOCR();
+    void slotClose();
 
     /**
      * Handle mouse double clicks on the image viewer showing the
@@ -170,28 +174,27 @@ protected slots:
     void slotImagePosition(const QPoint &p);
 
 private:
-    virtual void startProcess(OcrBaseDialog *dia, const KookaImage *img) = 0;
+    virtual void startOcrProcess(AbstractOcrDialogue *dia, const KookaImage *img) = 0;
 
-    void stopOCRProcess(bool tellUser);
+    void stopOcrProcess(bool tellUser);
     void removeTempFiles();
 
-private slots:
-    void startOCRProcess();
-
 private:
-    OcrBaseDialog *m_ocrDialog;
+    QWidget *m_parent;
+
     bool m_ocrRunning;
+    AbstractOcrDialogue *m_ocrDialog;
 
     KookaImage m_introducedImage;
     QImage *m_resultImage;
     ImageCanvas *m_imgCanvas;
 
+    QTextDocument *m_document;
+    QTextCursor *m_cursor;
     int m_currHighlight;
     bool m_trackingActive;
 
-    QTextDocument *m_document;
-    QTextCursor *m_cursor;
     int m_wordCount;
 };
 
-#endif                          // OCRENGINE_H
+#endif							// ABSTRACTOCRENGINE_H

@@ -29,175 +29,142 @@
  *									*
  ************************************************************************/
 
-#include "ocrengine.h"
+#include "abstractocrengine.h"
 
-#include <qpen.h>
-#include <qvector.h>
-#include <qevent.h>
+#include <qdir.h>
 #include <qfileinfo.h>
+#include <qprocess.h>
 #include <qdebug.h>
+#include <qtemporaryfile.h>
 
 #include <qtextdocument.h>
 #include <qtextcursor.h>
 
 #include <kmessagebox.h>
-#include <kprocess.h>
 #include <klocalizedstring.h>
 #include <kcolorscheme.h>
 
 #include "imagecanvas.h"
-
+#include "imageformat.h"
 #include "kookaimage.h"
-#include "kookasettings.h"
 
-#include "ocrbasedialog.h"
-#include "ocrocraddialog.h"
-#include "ocrgocrdialog.h"
-#include "ocrgocrengine.h"
-#include "ocrocradengine.h"
-#ifdef HAVE_KADMOS
-#include "kadmosocr.h"
-#include "ocrkadmosengine.h"
-#include "ocrkadmosdialog.h"
-#endif
+#include "abstractocrdialogue.h"
+
 
 //  Constructor/destructor and external engine creation
 //  ---------------------------------------------------
 
-OcrEngine::OcrEngine(QWidget *parent)
-    : m_ocrProcess(NULL),
-      m_ocrDialog(NULL),
+AbstractOcrEngine::AbstractOcrEngine(QObject *pnt)
+    : AbstractPlugin(pnt),
+      m_ocrProcess(nullptr),
       m_ocrRunning(false),
-      m_resultImage(0),
-      m_imgCanvas(NULL),
+      m_ocrDialog(nullptr),
+      m_resultImage(nullptr),
+      m_imgCanvas(nullptr),
+      m_document(nullptr),
+      m_cursor(nullptr),
       m_currHighlight(-1),
-      m_trackingActive(false),
-      m_document(NULL),
-      m_cursor(NULL)
+      m_trackingActive(false)
 {
     m_introducedImage = KookaImage();
-    m_ocrResultFile = QString::null;
-    m_parent = NULL;
+    m_ocrResultFile = QString();
+    m_parent = nullptr;
 }
 
-OcrEngine::~OcrEngine()
+
+AbstractOcrEngine::~AbstractOcrEngine()
 {
-    if (m_ocrProcess != NULL) {
-        delete m_ocrProcess;
-    }
-    if (m_ocrDialog != NULL) {
-        delete m_ocrDialog;
-    }
+    if (m_ocrProcess!=nullptr) delete m_ocrProcess;
+    if (m_ocrDialog!=nullptr) delete m_ocrDialog;
 }
 
-OcrEngine *OcrEngine::createEngine(QWidget *parent, bool *gotoPrefs)
-{
-    OcrEngine::EngineType eng = static_cast<OcrEngine::EngineType>(KookaSettings::ocrEngine());
-    qDebug() << "configured OCR engine is" << eng << "=" << engineName(eng);
-
-    QString msg = QString::null;
-    switch (eng)
-    {
-case OcrEngine::EngineGocr:	return (new OcrGocrEngine(parent));
-case OcrEngine::EngineOcrad:	return (new OcrOcradEngine(parent));
-
-case OcrEngine::EngineKadmos:
-#ifdef HAVE_KADMOS
-        return (new OcrKadmosEngine(parent));
-#else							// HAVE_KADMOS
-        msg = i18n("This version of Kooka is not compiled with KADMOS support.\n"
-                   "Please select another OCR engine in the configuration dialog.");
-        break;
-#endif							// HAVE_KADMOS
-
-case OcrEngine::EngineNone:
-        msg = i18n("No OCR engine is configured.\n"
-                   "Please select and configure one in the OCR configuration dialog.");
-        break;
-
-default:
-        qDebug() << "Unknown engine type" << eng;
-        return (NULL);
-    }
-
-    if (!msg.isNull()) {				// failed, tell the user
-        int result = KMessageBox::warningContinueCancel(parent, msg, QString::null,
-                                                        KGuiItem(i18n("Configure OCR...")));
-        if (gotoPrefs != NULL) *gotoPrefs = (result == KMessageBox::Continue);
-    }
-
-    return (NULL);
-}
-
-bool OcrEngine::engineValid() const
-{
-    OcrEngine::EngineType curEngine = engineType();
-    OcrEngine::EngineType confEngine = static_cast<OcrEngine::EngineType>(KookaSettings::ocrEngine());
-    //qDebug() << "cur" << curEngine << "conf" << confEngine;
-    return (curEngine == confEngine);
-}
-
-const QString OcrEngine::engineName(OcrEngine::EngineType eng)
-{
-    switch (eng) {
-case OcrEngine::EngineNone:	return (i18n("None"));
-case OcrEngine::EngineGocr:	return (i18n("GOCR"));
-case OcrEngine::EngineOcrad:	return (i18n("OCRAD"));
-case OcrEngine::EngineKadmos:	return (i18n("Kadmos"));
-default:			return (i18n("Unknown"));
-    }
-}
 
 /*
  * This is called to introduce a new image, usually if the user clicks on a
  * new image either in the gallery or on the thumbnailview.
  */
-void OcrEngine::setImage(const KookaImage img)
+void AbstractOcrEngine::setImage(const KookaImage img)
 {
-    m_introducedImage = img;             // shallow copy of original
+    m_introducedImage = img;				// shallow copy of original
 
-    if (m_ocrDialog != NULL) {
-        m_ocrDialog->introduceImage(&m_introducedImage);
-    }
+    if (m_ocrDialog!=nullptr) m_ocrDialog->introduceImage(&m_introducedImage);
     m_trackingActive = false;
 }
 
+
 /*
- * starts visual ocr process. Depending on the ocr engine, this function creates
+ * Starts the visual OCR process. Depending on the OCR engine, this function creates
  * a new dialog, and shows it.
  */
-bool OcrEngine::startOCRVisible(QWidget *parent)
+bool AbstractOcrEngine::openOcrDialogue(QWidget *pnt)
 {
     if (m_ocrRunning) {
-        KMessageBox::sorry(parent, i18n("OCR is already running"));
+        KMessageBox::sorry(pnt, i18n("OCR is already in progress"));
         return (false);
     }
 
-    m_parent = parent;
+    m_parent = pnt;
 
-    m_ocrDialog = createOCRDialog(parent);
-    if (m_ocrDialog == NULL) {
-        return (false);
-    }
+    m_ocrDialog = createOcrDialogue(this, pnt);
+    if (m_ocrDialog==nullptr) return (false);
 
     m_ocrDialog->setupGui();
     m_ocrDialog->introduceImage(&m_introducedImage);
 
-    connect(m_ocrDialog, &OcrBaseDialog::signalOcrStart, this, &OcrEngine::startOCRProcess);
-    connect(m_ocrDialog, &OcrBaseDialog::signalOcrStop, this, &OcrEngine::slotStopOCR);
-    connect(m_ocrDialog, &OcrBaseDialog::signalOcrClose, this, &OcrEngine::slotClose);
+    connect(m_ocrDialog, &AbstractOcrDialogue::signalOcrStart, this, &AbstractOcrEngine::slotStartOCR);
+    connect(m_ocrDialog, &AbstractOcrDialogue::signalOcrStop, this, &AbstractOcrEngine::slotStopOCR);
+    connect(m_ocrDialog, &AbstractOcrDialogue::signalOcrClose, this, &AbstractOcrEngine::slotClose);
     m_ocrDialog->show();
 
+    // TODO: m_ocrActive would better reflect the function (if indeed useful at all)
     m_ocrRunning = true;
     return (true);
 }
+
+
+/* Called by "Close" used while OCR is not in progress */
+void AbstractOcrEngine::slotClose()
+{
+    stopOcrProcess(false);
+}
+
+
+/* Called by "Stop" used while OCR is in progress */
+void AbstractOcrEngine::slotStopOCR()
+{
+    stopOcrProcess(true);
+}
+
+
+/* Called by "Start" used while OCR is not in progress */
+void AbstractOcrEngine::slotStartOCR()
+{
+    if (m_ocrDialog==nullptr) return;
+    m_ocrDialog->show();
+
+    m_ocrResultText.clear();
+    startOcrProcess(m_ocrDialog, &m_introducedImage);
+}
+
+
+void AbstractOcrEngine::stopOcrProcess(bool tellUser)
+{
+    if (m_ocrProcess!=nullptr && m_ocrProcess->state()==QProcess::Running)
+    {
+        qDebug() << "Killing OCR process" << m_ocrProcess->pid();
+        m_ocrProcess->kill();
+        if (tellUser) KMessageBox::error(m_parent, i18n("The OCR process was stopped"));
+    }
+
+    finishedOcr(false);
+}
+
 
 /**
  * This method should be called by the engine specific finish slots.
  * It does the engine independent cleanups like re-enabling buttons etc.
  */
-
-void OcrEngine::finishedOCRVisible(bool success)
+void AbstractOcrEngine::finishedOcr(bool success)
 {
     if (m_ocrDialog != NULL) {
         m_ocrDialog->enableGUI(false);
@@ -234,17 +201,15 @@ void OcrEngine::finishedOCRVisible(bool success)
         }
     }
 
-    if (m_ocrDialog != NULL) {
-        m_ocrDialog->hide();    // close the dialogue
-    }
-
+    if (m_ocrDialog!=nullptr) m_ocrDialog->hide();	// close the dialogue
     m_ocrRunning = false;
     removeTempFiles();
 
     qDebug() << "OCR finished";
 }
 
-void OcrEngine::removeTempFiles()
+
+void AbstractOcrEngine::removeTempFiles()
 {
     bool retain = m_ocrDialog->keepTempFiles();
     qDebug() << "retain=" << retain;
@@ -268,7 +233,7 @@ void OcrEngine::removeTempFiles()
         }
 
         if (haveSome) {
-            if (KMessageBox::questionYesNo(NULL, s,
+            if (KMessageBox::questionYesNo(nullptr, s,
                                            i18n("OCR Temporary Files"),
                                            KStandardGuiItem::del(),
                                            KStandardGuiItem::close(),
@@ -300,65 +265,29 @@ void OcrEngine::removeTempFiles()
     }
 }
 
-void OcrEngine::stopOCRProcess(bool tellUser)
-{
-    if (m_ocrProcess != NULL && m_ocrProcess->state() == QProcess::Running) {
-        qDebug() << "Killing OCR process" << m_ocrProcess->pid();
-        m_ocrProcess->kill();
-        if (tellUser) {
-            KMessageBox::error(m_parent, i18n("The OCR process was stopped"));
-        }
-    }
-
-    finishedOCRVisible(false);
-}
-
-/* Called by "Close" used while OCR is not in progress */
-void OcrEngine::slotClose()
-{
-    //qDebug();
-    stopOCRProcess(false);
-}
-
-/* Called by "Stop" used while OCR is in progress */
-void OcrEngine::slotStopOCR()
-{
-    //qDebug();
-    stopOCRProcess(true);
-}
-
-/* Called by "Start" used while OCR is not in progress */
-void OcrEngine::startOCRProcess()
-{
-    if (m_ocrDialog == NULL) return;
-
-    m_ocrResultText = "";
-    startProcess(m_ocrDialog, &m_introducedImage);
-}
 
 //  Filtering mouse events on the image viewer
 //  ------------------------------------------
-
-void OcrEngine::setImageCanvas(ImageCanvas *canvas)
+void AbstractOcrEngine::setImageCanvas(ImageCanvas *canvas)
 {
     m_imgCanvas = canvas;
-    connect(m_imgCanvas, &ImageCanvas::doubleClicked, this, &OcrEngine::slotImagePosition);
+    connect(m_imgCanvas, &ImageCanvas::doubleClicked, this, &AbstractOcrEngine::slotImagePosition);
 }
 
-void OcrEngine::slotImagePosition(const QPoint &p)
+
+void AbstractOcrEngine::slotImagePosition(const QPoint &p)
 {
-    if (!m_trackingActive) {
-        return;    // not interested
-    }
+    if (!m_trackingActive) return;			// not interested
+
     // ImageCanvas did the coordinate conversion.
     // OcrResEdit does all of the rest of the work.
     emit selectWord(p);
 }
 
+
 //  Highlighting/scrolling the result text
 //  --------------------------------------
-
-void OcrEngine::slotHighlightWord(const QRect &r)
+void AbstractOcrEngine::slotHighlightWord(const QRect &r)
 {
     if (m_imgCanvas == NULL) {
         return;
@@ -382,7 +311,7 @@ void OcrEngine::slotHighlightWord(const QRect &r)
     m_currHighlight = m_imgCanvas->addHighlight(r, true);
 }
 
-void OcrEngine::slotScrollToWord(const QRect &r)
+void AbstractOcrEngine::slotScrollToWord(const QRect &r)
 {
     if (m_imgCanvas == NULL) {
         return;
@@ -403,18 +332,17 @@ void OcrEngine::slotScrollToWord(const QRect &r)
     m_currHighlight = m_imgCanvas->addHighlight(r, true);
 }
 
+
 //  Assembling the OCR results
 //  --------------------------
-
-void OcrEngine::setTextDocument(QTextDocument *doc)
+void AbstractOcrEngine::setTextDocument(QTextDocument *doc)
 {
     m_document = doc;
 }
 
-QTextDocument *OcrEngine::startResultDocument()
-{
-    //qDebug();
 
+QTextDocument *AbstractOcrEngine::startResultDocument()
+{
     m_document->setUndoRedoEnabled(false);
     m_document->clear();
     m_wordCount = 0;
@@ -425,7 +353,7 @@ QTextDocument *OcrEngine::startResultDocument()
     return (m_document);
 }
 
-void OcrEngine::finishResultDocument()
+void AbstractOcrEngine::finishResultDocument()
 {
     qDebug() << "words" << m_wordCount << "lines" << m_document->blockCount() << "chars" << m_document->characterCount();
 
@@ -433,7 +361,7 @@ void OcrEngine::finishResultDocument()
     emit readOnlyEditor(false);				// now let user edit it
 }
 
-void OcrEngine::startLine()
+void AbstractOcrEngine::startLine()
 {
     if (m_ocrDialog->verboseDebug()) {
         //qDebug();
@@ -443,11 +371,11 @@ void OcrEngine::startLine()
     }
 }
 
-void OcrEngine::finishLine()
+void AbstractOcrEngine::finishLine()
 {
 }
 
-void OcrEngine::addWord(const QString &word, const OcrWordData &data)
+void AbstractOcrEngine::addWord(const QString &word, const OcrWordData &data)
 {
     if (m_ocrDialog->verboseDebug()) {
         //qDebug() << "word" << word << "len" << word.length()
@@ -460,4 +388,58 @@ void OcrEngine::addWord(const QString &word, const OcrWordData &data)
     }
     m_cursor->insertText(word, data);
     ++m_wordCount;
+}
+
+
+QString AbstractOcrEngine::tempSaveImage(const KookaImage *img, const ImageFormat &format, int colors)
+{
+    if (img==nullptr) return (QString::null);
+
+    const QString tempTemplate = QDir::tempPath()+'/'+"imgsaverXXXXXX."+format.extension();
+    QTemporaryFile tmpFile(tempTemplate);
+    tmpFile.setAutoRemove(false);
+
+    if (!tmpFile.open())
+    {
+        qDebug() << "Error opening temp file" << tmpFile.fileName();
+        tmpFile.setAutoRemove(true);
+        return (QString::null);
+    }
+    QString name = tmpFile.fileName();
+    tmpFile.close();
+
+    const KookaImage *tmpImg = NULL;
+    if (colors != -1 && img->depth() != colors) { // Need to convert image
+        QImage::Format newfmt;
+        switch (colors) {
+        case 1:     newfmt = QImage::Format_Mono;
+            break;
+
+        case 8:     newfmt = QImage::Format_Indexed8;
+            break;
+
+        case 24:    newfmt = QImage::Format_RGB888;
+            break;
+
+        case 32:    newfmt = QImage::Format_RGB32;
+            break;
+
+        default:    //qDebug() << "Error: Bad colour depth requested" << colors;
+            tmpFile.setAutoRemove(true);
+            return (QString::null);
+        }
+
+        tmpImg = new KookaImage(img->convertToFormat(newfmt));
+        img = tmpImg;
+    }
+
+    qDebug() << "Saving to" << name << "in format" << format;
+    if (!img->save(name, format.name())) {
+        qDebug() << "Error saving to" << name;
+        tmpFile.setAutoRemove(true);
+        name = QString::null;
+    }
+
+    if (tmpImg != NULL) delete tmpImg;
+    return (name);
 }

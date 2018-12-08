@@ -34,7 +34,7 @@
 
 #include "kscancontrols.h"
 
-#include "ocrbasedialog.h"
+#include "abstractocrdialogue.h"
 
 
 /**
@@ -43,15 +43,15 @@
 
 class QWidget;
 
-class OcrGocrDialog : public OcrBaseDialog
+class OcrGocrDialog : public AbstractOcrDialogue
 {
     Q_OBJECT
 
 public:
-    OcrGocrDialog(QWidget *parent);
-    virtual ~OcrGocrDialog();
+    explicit OcrGocrDialog(AbstractOcrEngine *plugin, QWidget *pnt);
+    virtual ~OcrGocrDialog() = default;
 
-    OcrEngine::EngineError setupGui() override;
+    AbstractOcrEngine::EngineError setupGui() override;
 
     QString getOCRCmd() const
     {
@@ -69,10 +69,6 @@ public:
     {
         return (sliderSpace->value());
     }
-
-    QString ocrEngineLogo() const override;
-    QString ocrEngineName() const override;
-    QString ocrEngineDesc() const override;
 
     void introduceImage(const KookaImage *img) override;
 

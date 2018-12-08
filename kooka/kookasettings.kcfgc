@@ -7,5 +7,7 @@ Mutators=true
 SetUserTexts=true
 UseEnumTypes=false
 
-IncludeFiles=thumbview.h,kiconloader.h
 TranslationSystem=kde
+
+IncludeFiles=kookacore_export.h
+Visibility=KOOKACORE_EXPORT

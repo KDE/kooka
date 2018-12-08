@@ -24,12 +24,13 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef OCRBASEDIALOG_H
-#define OCRBASEDIALOG_H
+#ifndef ABSTRACTOCRDIALOGUE_H
+#define ABSTRACTOCRDIALOGUE_H
 
 #include <kpagedialog.h>
 
-#include "ocrengine.h"
+#include "abstractocrengine.h"
+
 
 /**
   *@author Klaas Freitag
@@ -48,32 +49,15 @@ class KFileItem;
 
 class KookaImage;
 
-class OcrBaseDialog : public KPageDialog
+
+class PLUGIN_EXPORT AbstractOcrDialogue : public KPageDialog
 {
     Q_OBJECT
 
 public:
-    explicit OcrBaseDialog(QWidget *parent=Q_NULLPTR);
-    virtual ~OcrBaseDialog();
+    virtual ~AbstractOcrDialogue() = default;
 
-    virtual OcrEngine::EngineError setupGui();
-
-    /**
-     * @return the name of the ocr engine
-     */
-    virtual QString ocrEngineName() const = 0;
-
-    /**
-     * @return the filename (without path) of the logo of the ocr engine.
-     * the logo needs to be installed in $KDEDIR/share/apps/kooka/pics
-     */
-    virtual QString ocrEngineLogo() const = 0;
-
-    /**
-     * @return a description string of the ocr engine
-     */
-    virtual QString ocrEngineDesc() const = 0;
-
+    virtual AbstractOcrEngine::EngineError setupGui();
     virtual void introduceImage(const KookaImage *img);
 
     bool keepTempFiles() const;
@@ -91,8 +75,13 @@ signals:
     void signalOcrClose();
 
 protected:
+    explicit AbstractOcrDialogue(AbstractOcrEngine *plugin, QWidget *pnt = nullptr);
+
+    const KService::Ptr pluginService() const		{ return (m_plugin->pluginService()); }
+
+
     /**
-     * enable or disable dialog fields. This slot is called when the ocr process starts
+     * Enable or disable dialog fields. This slot is called when the ocr process starts
      * with parameter state=false and called again if the gui should accept user input
      * again after ocr finished with parameter true.
      */
@@ -129,6 +118,8 @@ private slots:
     void startAnimation();
 
 private:
+    AbstractOcrEngine *m_plugin;
+
     KPageWidgetItem *m_setupPage;
     KPageWidgetItem *m_sourcePage;
     KPageWidgetItem *m_enginePage;
@@ -156,4 +147,4 @@ private:
     QProgressBar *m_progress;
 };
 
-#endif                          // OCRBASEDIALOG_H
+#endif							// ABSTRACTOCRDIALOGUE_H

@@ -47,7 +47,7 @@
 #include <klocalizedstring.h>
 #include <kmessagebox.h>
 
-#include "ocrengine.h"
+#include "abstractocrengine.h"
 #include "recentsaver.h"
 
 //  The OCR results are stored in our text document.  Each OCR'ed word has
@@ -184,8 +184,8 @@ void OcrResEdit::slotUpdateHighlight()
     ////qDebug() << "pos" << textCursor().position() << "hassel" << textCursor().hasSelection()
     //         << "start" << textCursor().selectionStart() << "end" << textCursor().selectionEnd();
 
-    QTextCursor curs = textCursor();            // will not move cursor, see
-    // QTextEdit::textCursor() doc
+    QTextCursor curs = textCursor();			// will not move cursor, see
+							// QTextEdit::textCursor() doc
     if (curs.hasSelection()) {
         ////qDebug() << "sel start" << curs.selectionStart() << "end" << curs.selectionEnd();
 
@@ -229,7 +229,5 @@ void OcrResEdit::slotUpdateHighlight()
 void OcrResEdit::slotSetReadOnly(bool isRO)
 {
     setReadOnly(isRO);
-    if (isRO) {
-        setCheckSpellingEnabled(false);
-    }
+    if (isRO) setCheckSpellingEnabled(false);
 }

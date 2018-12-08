@@ -53,9 +53,7 @@
 #include "kookapref.h"
 #include "kookagallery.h"
 #include "formatdialog.h"
-#include "ocrgocrengine.h"
-#include "ocrocradengine.h"
-#include "ocrkadmosengine.h"
+#include "thumbview.h"
 #include "kookasettings.h"
 
 
@@ -383,12 +381,16 @@ KookaOcrPage::KookaOcrPage(KPageDialog *parent)
     lay->setColumnStretch(1, 9);
 
     mEngineCombo = new KComboBox(this);
+#if 0
     mEngineCombo->addItem(OcrEngine::engineName(OcrEngine::EngineNone), OcrEngine::EngineNone);
     mEngineCombo->addItem(OcrEngine::engineName(OcrEngine::EngineGocr), OcrEngine::EngineGocr);
     mEngineCombo->addItem(OcrEngine::engineName(OcrEngine::EngineOcrad), OcrEngine::EngineOcrad);
     mEngineCombo->addItem(OcrEngine::engineName(OcrEngine::EngineKadmos), OcrEngine::EngineKadmos);
+#else
+    qDebug() << "OCR stub 3";
+#endif
 
-    connect(mEngineCombo, static_cast<void (KComboBox::*)(int)>(&KComboBox::activated), this, &KookaOcrPage::slotEngineSelected);
+//     connect(mEngineCombo, static_cast<void (KComboBox::*)(int)>(&KComboBox::activated), this, &KookaOcrPage::slotEngineSelected);
     lay->addWidget(mEngineCombo, 0, 1);
 
     QLabel *lab = new QLabel(i18n("OCR Engine:"), this);
@@ -419,13 +421,14 @@ KookaOcrPage::KookaOcrPage(KPageDialog *parent)
 
     mLayout->addLayout(lay);
 
-    OcrEngine::EngineType originalEngine = static_cast<OcrEngine::EngineType>(KookaSettings::ocrEngine());
-    mEngineCombo->setCurrentIndex(originalEngine);
-    slotEngineSelected(originalEngine);
+//     OcrEngine::EngineType originalEngine = static_cast<OcrEngine::EngineType>(KookaSettings::ocrEngine());
+//     mEngineCombo->setCurrentIndex(originalEngine);
+//     slotEngineSelected(originalEngine);
 }
 
 void KookaOcrPage::saveSettings()
 {
+#if 0
     KookaSettings::setOcrEngine(static_cast<int>(mSelectedEngine));
 
     QString path = mOcrBinaryReq->url().path();
@@ -442,16 +445,21 @@ case OcrEngine::EngineOcrad:
 default:    break;
         }
     }
+#else
+    qDebug() << "OCR stub 5";
+#endif
 }
 
 void KookaOcrPage::defaultSettings()
 {
-    mEngineCombo->setCurrentIndex(OcrEngine::EngineNone);
-    slotEngineSelected(OcrEngine::EngineNone);
+    qDebug() << "OCR stub 6";
+//    mEngineCombo->setCurrentIndex(OcrEngine::EngineNone);
+//     slotEngineSelected(OcrEngine::EngineNone);
 }
 
 void KookaOcrPage::slotEngineSelected(int i)
 {
+#if 0
     mSelectedEngine = static_cast<OcrEngine::EngineType>(i);
     //qDebug() << "engine is" << mSelectedEngine;
 
@@ -466,19 +474,22 @@ void KookaOcrPage::slotEngineSelected(int i)
     case OcrEngine::EngineGocr:
         mOcrBinaryReq->setEnabled(true);
         mOcrBinaryReq->setUrl(QUrl::fromLocalFile(KookaPref::tryFindGocr()));
-        msg = OcrGocrEngine::engineDesc();
+        qDebug() << "OCR stub 4a";
+//        msg = OcrGocrEngine::engineDesc();
         break;
 
     case OcrEngine::EngineOcrad:
         mOcrBinaryReq->setEnabled(true);
         mOcrBinaryReq->setUrl(QUrl::fromLocalFile(KookaPref::tryFindOcrad()));
-        msg = OcrOcradEngine::engineDesc();
+        qDebug() << "OCR stub 4b";
+//        msg = OcrOcradEngine::engineDesc();
         break;
 
     case OcrEngine::EngineKadmos:
         mOcrBinaryReq->setEnabled(false);
         mOcrBinaryReq->clear();
-        msg = OcrKadmosEngine::engineDesc();
+        qDebug() << "OCR stub 4c";
+//        msg = OcrKadmosEngine::engineDesc();
         break;
 
     default:
@@ -489,6 +500,7 @@ void KookaOcrPage::slotEngineSelected(int i)
     }
 
     mDescLabel->setText(msg);
+#endif
 }
 
 bool KookaOcrPage::checkOcrBinary(const QString &cmd, const QString &bin, bool show_msg)

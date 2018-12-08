@@ -29,7 +29,7 @@
  *									*
  ************************************************************************/
 
-#include "ocrbasedialog.h"
+#include "abstractocrdialogue.h"
 
 #include <qlabel.h>
 #include <qgroupbox.h>
@@ -52,7 +52,6 @@
 
 #include <sonnet/configdialog.h>
 
-#include "ocrengine.h"
 #include "kookaimage.h"
 #include "kookasettings.h"
 
@@ -60,69 +59,80 @@
 #include "dialogbase.h"
 
 
-OcrBaseDialog::OcrBaseDialog(QWidget *parent)
-    : KPageDialog(parent),
-      m_setupPage(NULL),
-      m_sourcePage(NULL),
-      m_enginePage(NULL),
-      m_spellPage(NULL),
-      m_debugPage(NULL),
-      m_previewPix(NULL),
-      m_previewLabel(NULL),
+AbstractOcrDialogue::AbstractOcrDialogue(AbstractOcrEngine *plugin, QWidget *pnt)
+    : KPageDialog(pnt),
+      m_plugin(plugin),
+      m_setupPage(nullptr),
+      m_sourcePage(nullptr),
+      m_enginePage(nullptr),
+      m_spellPage(nullptr),
+      m_debugPage(nullptr),
+      m_previewPix(nullptr),
+      m_previewLabel(nullptr),
       m_wantDebugCfg(true),
-      m_cbRetainFiles(NULL),
-      m_cbVerboseDebug(NULL),
-      m_lVersion(NULL),
-      m_progress(NULL)
+      m_cbRetainFiles(nullptr),
+      m_cbVerboseDebug(nullptr),
+      m_lVersion(nullptr),
+      m_progress(nullptr)
 {
-    //qDebug();
-
-    setObjectName("OcrBaseDialog");
-
     setModal(true);
-    // original KDE4 buttons: User1=Start User2=Stop Close
-    // new Qt5 buttons:       Yes=Start   No=Stop    Close
+
+    // The original buttons used in KDE4 were User1=Start, User2=Stop, Close.
+    // Because the button actions must not simply accept or reject the dialogue
+    // (closing it in both cases), we need to carefully choose the standard
+    // buttons so that they do not perform those actions.  This means that the
+    // button cannot have an AcceptRole, RejectRole, YesRole or NoRole because
+    // those all either accept or reject the dialogue.  The dialogue needs to
+    // stay open while OCR is in progress, because it shows the progress and
+    // has the "Stop OCR" button.
+    //
+    // The buttons chosen also affect the placement, but the dialogue actions
+    // are more important!
+    //
+    // So the buttons used in Qt5 are Discard=Start, Apply=Stop, Close.  This at
+    // at least places the buttons in the intended order (in the standard KDE
+    // style), even though the buttons used bear no relation to their function.
+
+    // TODO: an enum in AbstractOcrDialog for buttons used,
+    // for subclases that need to use them directly.
+
     QDialogButtonBox *bb = buttonBox();
-    setStandardButtons(QDialogButtonBox::Yes|QDialogButtonBox::No|QDialogButtonBox::Close);
-    bb->button(QDialogButtonBox::Yes)->setDefault(true);
+    setStandardButtons(QDialogButtonBox::Discard|QDialogButtonBox::Apply|QDialogButtonBox::Close);
+    bb->button(QDialogButtonBox::Discard)->setDefault(true);
     setWindowTitle(i18n("Optical Character Recognition"));
 
-    KGuiItem::assign(bb->button(QDialogButtonBox::Yes), KGuiItem(i18n("Start OCR"), "system-run", i18n("Start the Optical Character Recognition process")));
-    KGuiItem::assign(bb->button(QDialogButtonBox::No), KGuiItem(i18n("Stop OCR"), "process-stop", i18n("Stop the Optical Character Recognition process")));
+    KGuiItem::assign(bb->button(QDialogButtonBox::Discard), KGuiItem(i18n("Start OCR"), "system-run", i18n("Start the Optical Character Recognition process")));
+    KGuiItem::assign(bb->button(QDialogButtonBox::Apply), KGuiItem(i18n("Stop OCR"), "process-stop", i18n("Stop the Optical Character Recognition process")));
 
     // Signals which tell our caller what the user is doing
-    connect(bb->button(QDialogButtonBox::Yes), &QAbstractButton::clicked, this, &OcrBaseDialog::slotStartOCR);
-    connect(bb->button(QDialogButtonBox::No), &QAbstractButton::clicked, this, &OcrBaseDialog::slotStopOCR);
-    connect(bb->button(QDialogButtonBox::Close), &QAbstractButton::clicked, this, &OcrBaseDialog::slotCloseOCR);
+    connect(bb->button(QDialogButtonBox::Discard), &QAbstractButton::clicked, this, &AbstractOcrDialogue::slotStartOCR);
+    connect(bb->button(QDialogButtonBox::Apply), &QAbstractButton::clicked, this, &AbstractOcrDialogue::slotStopOCR);
+    connect(bb->button(QDialogButtonBox::Close), &QAbstractButton::clicked, this, &AbstractOcrDialogue::slotCloseOCR);
+    connect(this, &QDialog::rejected, this, &AbstractOcrDialogue::slotCloseOCR);
 
     m_previewSize.setWidth(380);			// minimum preview size
     m_previewSize.setHeight(250);
 
-    bb->button(QDialogButtonBox::Yes)->setEnabled(true);  	// Start OCR
-    bb->button(QDialogButtonBox::No)->setEnabled(false);	// Stop OCR
+    bb->button(QDialogButtonBox::Discard)->setEnabled(true);	// Start OCR
+    bb->button(QDialogButtonBox::Apply)->setEnabled(false);	// Stop OCR
     bb->button(QDialogButtonBox::Close)->setEnabled(true);	// Close
 }
 
-OcrBaseDialog::~OcrBaseDialog()
-{
-    //qDebug();
-}
 
-OcrEngine::EngineError OcrBaseDialog::setupGui()
+AbstractOcrEngine::EngineError AbstractOcrDialogue::setupGui()
 {
     setupSetupPage();
     setupSpellPage();
     setupSourcePage();
     setupEnginePage();
     // TODO: preferences option for whether debug is shown
-    if (m_wantDebugCfg) {
-        setupDebugPage();
-    }
+    if (m_wantDebugCfg) setupDebugPage();
 
-    return (OcrEngine::ENG_OK);
+    return (AbstractOcrEngine::ENG_OK);
 }
 
-void OcrBaseDialog::setupSetupPage()
+
+void AbstractOcrDialogue::setupSetupPage()
 {
     QWidget *w = new QWidget(this);
     QGridLayout *gl = new QGridLayout(w);
@@ -132,16 +142,20 @@ void OcrBaseDialog::setupSetupPage()
     m_progress->setVisible(false);
 
     m_setupPage = addPage(w, i18n("Setup"));
-    m_setupPage->setHeader(i18n("Optical Character Recognition using %1", ocrEngineName()));
+
+    const KService::Ptr service = pluginService();
+    Q_ASSERT(service!=nullptr);
+    m_setupPage->setHeader(i18n("Optical Character Recognition using %1", service->name()));
     m_setupPage->setIcon(QIcon::fromTheme("ocr"));
 }
 
-QWidget *OcrBaseDialog::addExtraPageWidget(KPageWidgetItem *page, QWidget *wid, bool stretchBefore)
+
+QWidget *AbstractOcrDialogue::addExtraPageWidget(KPageWidgetItem *page, QWidget *wid, bool stretchBefore)
 {
     QGridLayout *gl = static_cast<QGridLayout *>(page->widget()->layout());
     int nextrow = gl->rowCount();
     // rowCount() seems to return 1 even if the layout is empty...
-    if (gl->itemAtPosition(0, 0) == NULL) {
+    if (gl->itemAtPosition(0, 0) == nullptr) {
         nextrow = 0;
     }
 
@@ -154,7 +168,7 @@ QWidget *OcrBaseDialog::addExtraPageWidget(KPageWidgetItem *page, QWidget *wid, 
         ++nextrow;
     }
 
-    if (wid == NULL) {
+    if (wid == nullptr) {
         wid = new QWidget(this);
     }
     gl->addWidget(wid, nextrow, 0, 1, 2);
@@ -162,17 +176,20 @@ QWidget *OcrBaseDialog::addExtraPageWidget(KPageWidgetItem *page, QWidget *wid, 
     return (wid);
 }
 
-QWidget *OcrBaseDialog::addExtraSetupWidget(QWidget *wid, bool stretchBefore)
+
+QWidget *AbstractOcrDialogue::addExtraSetupWidget(QWidget *wid, bool stretchBefore)
 {
     return (addExtraPageWidget(m_setupPage, wid, stretchBefore));
 }
 
-void OcrBaseDialog::ocrShowInfo(const QString &binary, const QString &version)
+
+void AbstractOcrDialogue::ocrShowInfo(const QString &binary, const QString &version)
 {
     QWidget *w = addExtraEngineWidget();        // engine path/version/icon
     QGridLayout *gl = new QGridLayout(w);
 
-    if (!binary.isNull()) {
+    if (!binary.isNull())
+    {
         QLabel *l = new QLabel(i18n("Executable:"), w);
         gl->addWidget(l, 0, 0, Qt::AlignLeft | Qt::AlignTop);
 
@@ -186,28 +203,28 @@ void OcrBaseDialog::ocrShowInfo(const QString &binary, const QString &version)
         gl->addWidget(m_lVersion, 1, 1, Qt::AlignLeft | Qt::AlignTop);
     }
 
-    // Find the logo and display if available
-    QString logoFile = QStandardPaths::locate(QStandardPaths::AppDataLocation, "pics/"+ocrEngineLogo());
-    if (!logoFile.isEmpty())
+    // Find the logo and display it if available
+    QString logoFile = KIconLoader::global()->iconPath(pluginService()->icon(), KIconLoader::NoGroup, true);
+    if (!logoFile.isNull())
     {
-        QPixmap pix(logoFile);
         QLabel *l = new QLabel(w);
-        l->setPixmap(pix);
+        l->setPixmap(QPixmap(logoFile));
         gl->addWidget(l, 0, 3, 2, 1, Qt::AlignRight);
     }
 
     gl->setColumnStretch(2, 1);
-
 }
 
-void OcrBaseDialog::ocrShowVersion(const QString &version)
+
+void AbstractOcrDialogue::ocrShowVersion(const QString &version)
 {
-    if (m_lVersion != NULL) {
+    if (m_lVersion != nullptr) {
         m_lVersion->setText(version);
     }
 }
 
-void OcrBaseDialog::setupSourcePage()
+
+void AbstractOcrDialogue::setupSourcePage()
 {
     QWidget *w = new QWidget(this);
     QGridLayout *gl = new QGridLayout(w);
@@ -231,13 +248,21 @@ void OcrBaseDialog::setupSourcePage()
     m_sourcePage->setIcon(QIcon::fromTheme("dialog-information"));
 }
 
-void OcrBaseDialog::setupEnginePage()
+
+void AbstractOcrDialogue::setupEnginePage()
 {
-    QWidget *w = new QWidget(this);         // engine title/logo/description
+    QWidget *w = new QWidget(this);			// engine title/logo/description
     QGridLayout *gl = new QGridLayout(w);
 
-    // row 0: engine description
-    QLabel *l = new QLabel(ocrEngineDesc(), w);
+    // The 'comment' returned from KService is a QString which may have KUIT markup.
+    // The conversion from that to a KLocalizedString, then back to a QString, actually
+    // implements the KUIT markup.  The "@info" context ensures that the markup is
+    // displayed as rich text.
+    //
+    // There should not be any need to specify a translation domain, because the string from
+    // the service file will already have been translated.
+    const QString desc = kxi18nc("@info", pluginService()->comment().toLocal8Bit().constData()).toString();
+    QLabel *l = new QLabel(desc, w);
     l->setWordWrap(true);
     l->setOpenExternalLinks(true);
     gl->addWidget(l, 0, 0, 1, 2, Qt::AlignTop);
@@ -250,12 +275,14 @@ void OcrBaseDialog::setupEnginePage()
     m_enginePage->setIcon(QIcon::fromTheme("application-x-executable"));
 }
 
-QWidget *OcrBaseDialog::addExtraEngineWidget(QWidget *wid, bool stretchBefore)
+
+QWidget *AbstractOcrDialogue::addExtraEngineWidget(QWidget *wid, bool stretchBefore)
 {
     return (addExtraPageWidget(m_enginePage, wid, stretchBefore));
 }
 
-void OcrBaseDialog::setupSpellPage()
+
+void AbstractOcrDialogue::setupSpellPage()
 {
     QWidget *w = new QWidget(this);
     QGridLayout *gl = new QGridLayout(w);
@@ -317,7 +344,8 @@ void OcrBaseDialog::setupSpellPage()
     m_spellPage->setIcon(QIcon::fromTheme("tools-check-spelling"));
 }
 
-void OcrBaseDialog::setupDebugPage()
+
+void AbstractOcrDialogue::setupDebugPage()
 {
     QWidget *w = new QWidget(this);
     QGridLayout *gl = new QGridLayout(w);
@@ -335,14 +363,16 @@ void OcrBaseDialog::setupDebugPage()
     m_debugPage->setIcon(QIcon::fromTheme("tools-report-bug"));
 }
 
-void OcrBaseDialog::stopAnimation()
+
+void AbstractOcrDialogue::stopAnimation()
 {
-    if (m_progress != NULL) {
+    if (m_progress != nullptr) {
         m_progress->setVisible(false);
     }
 }
 
-void OcrBaseDialog::startAnimation()
+
+void AbstractOcrDialogue::startAnimation()
 {
     if (!m_progress->isVisible()) {         // progress bar not added yet
         m_progress->setValue(0);
@@ -375,10 +405,10 @@ void OcrBaseDialog::startAnimation()
 // So forget about KFileMetaInfo here, just display a simple label with the
 // image size and depth (which information we already have available).
 
-void OcrBaseDialog::introduceImage(const KookaImage *img)
+void AbstractOcrDialogue::introduceImage(const KookaImage *img)
 {
-    if (img == NULL) {
-        if (m_previewLabel != NULL) {
+    if (img == nullptr) {
+        if (m_previewLabel != nullptr) {
             m_previewLabel->setText(i18n("No image"));
         }
         return;
@@ -392,7 +422,7 @@ void OcrBaseDialog::introduceImage(const KookaImage *img)
         fileItems.append(KFileItem(img->url()));
 
         KIO::PreviewJob *job = KIO::filePreview(fileItems, QSize(m_previewSize.width(), m_previewSize.height()));
-        if (job!=NULL) {
+        if (job!=nullptr) {
             job->setIgnoreMaximumSize();
             connect(job, SIGNAL(gotPreview(KFileItem,QPixmap)),
                     SLOT(slotGotPreview(KFileItem,QPixmap)));
@@ -403,98 +433,105 @@ void OcrBaseDialog::introduceImage(const KookaImage *img)
         slotGotPreview(KFileItem(), QPixmap::fromImage(qimg));
     }
 
-    if (m_previewLabel != NULL) {
+    if (m_previewLabel != nullptr) {
         KLocalizedString str = img->isFileBound() ? ki18n("Image: %1") : ki18n("Selection: %1");
         m_previewLabel->setText(str.subs(ImageCanvas::imageInfoString(img)).toString());
     }
 }
 
-bool OcrBaseDialog::keepTempFiles() const
+
+bool AbstractOcrDialogue::keepTempFiles() const
 {
     return (m_retainFiles);
 }
 
-bool OcrBaseDialog::verboseDebug() const
+
+bool AbstractOcrDialogue::verboseDebug() const
 {
     return (m_verboseDebug);
 }
 
-void OcrBaseDialog::slotGotPreview(const KFileItem &item, const QPixmap &newPix)
+
+void AbstractOcrDialogue::slotGotPreview(const KFileItem &item, const QPixmap &newPix)
 {
     //qDebug() << "pixmap" << newPix.size();
-    if (m_previewPix != NULL) {
+    if (m_previewPix != nullptr) {
         m_previewPix->setText(QString::null);
         m_previewPix->setPixmap(newPix);
     }
 }
 
-void OcrBaseDialog::slotWriteConfig()
+
+void AbstractOcrDialogue::slotWriteConfig()
 {
     KookaSettings::setOcrSpellBackgroundCheck(m_gbBackgroundCheck->isChecked());
     KookaSettings::setOcrSpellInteractiveCheck(m_gbInteractiveCheck->isChecked());
     KookaSettings::setOcrSpellCustomSettings(m_rbCustomSpellSettings->isChecked());
     KookaSettings::self()->save();
 
-    // deliberately not writing the OCR debug config
+    // deliberately not saving the OCR debug config
 }
 
-void OcrBaseDialog::slotStartOCR()
+
+void AbstractOcrDialogue::slotStartOCR()
 {
     setCurrentPage(m_setupPage);            // force back to first page
     enableGUI(true);                    // disable while running
 
-    m_retainFiles = (m_cbRetainFiles != NULL && m_cbRetainFiles->isChecked());
-    m_verboseDebug = (m_cbVerboseDebug != NULL && m_cbVerboseDebug->isChecked());
+    m_retainFiles = (m_cbRetainFiles != nullptr && m_cbRetainFiles->isChecked());
+    m_verboseDebug = (m_cbVerboseDebug != nullptr && m_cbVerboseDebug->isChecked());
 
     slotWriteConfig();                  // save configuration
     emit signalOcrStart();              // start the OCR process
 }
 
-void OcrBaseDialog::slotStopOCR()
+
+void AbstractOcrDialogue::slotStopOCR()
 {
     emit signalOcrStop();               // stop the OCR process
     enableGUI(false);                   // enable everything again
 }
 
-void OcrBaseDialog::slotCloseOCR()
+
+void AbstractOcrDialogue::slotCloseOCR()
 {
     emit signalOcrClose();              // indicate we're closed
 }
 
-void OcrBaseDialog::enableGUI(bool running)
+
+void AbstractOcrDialogue::enableGUI(bool running)
 {
     m_sourcePage->setEnabled(!running);
     m_enginePage->setEnabled(!running);
-    if (m_spellPage != NULL) {
-        m_spellPage->setEnabled(!running);
-    }
-    if (m_debugPage != NULL) {
-        m_debugPage->setEnabled(!running);
-    }
+    if (m_spellPage != nullptr) m_spellPage->setEnabled(!running);
+    if (m_debugPage != nullptr) m_debugPage->setEnabled(!running);
     enableFields(!running);				// engine's GUI widgets
 
     if (running) startAnimation();			// start our progress bar
     else stopAnimation();				// stop our progress bar
 
     QDialogButtonBox *bb = buttonBox();
-    bb->button(QDialogButtonBox::Yes)->setEnabled(!running);  	// Start OCR
-    bb->button(QDialogButtonBox::No)->setEnabled(running);	// Stop OCR
-    bb->button(QDialogButtonBox::Close)->setEnabled(!running);	// Close
+    bb->button(QDialogButtonBox::Discard)->setEnabled(!running);	// Start OCR
+    bb->button(QDialogButtonBox::Apply)->setEnabled(running);		// Stop OCR
+    bb->button(QDialogButtonBox::Close)->setEnabled(!running);		// Close
 
     QApplication::processEvents();			// ensure GUI up-to-date
 }
 
-bool OcrBaseDialog::wantInteractiveSpellCheck() const
+
+bool AbstractOcrDialogue::wantInteractiveSpellCheck() const
 {
     return (m_gbInteractiveCheck->isChecked());
 }
 
-bool OcrBaseDialog::wantBackgroundSpellCheck() const
+
+bool AbstractOcrDialogue::wantBackgroundSpellCheck() const
 {
     return (m_gbBackgroundCheck->isChecked());
 }
 
-QString OcrBaseDialog::customSpellConfigFile() const
+
+QString AbstractOcrDialogue::customSpellConfigFile() const
 {
     if (m_rbCustomSpellSettings->isChecked()) {		// our application config
         return (KSharedConfig::openConfig()->name());
@@ -502,12 +539,14 @@ QString OcrBaseDialog::customSpellConfigFile() const
     return ("sonnetrc");				// Sonnet global settings
 }
 
-QProgressBar *OcrBaseDialog::progressBar() const
+
+QProgressBar *AbstractOcrDialogue::progressBar() const
 {
     return (m_progress);
 }
 
-void OcrBaseDialog::slotCustomSpellDialog()
+
+void AbstractOcrDialogue::slotCustomSpellDialog()
 {
 #ifndef KF5
     // TODO: Sonnet in KF5 appears to no longer allow a custom configuration,
@@ -516,7 +555,8 @@ void OcrBaseDialog::slotCustomSpellDialog()
     // See also KookaView::slotSetOcrSpellConfig()
     // It may be possible, though, to configure only the language;
     // see http://api.kde.org/frameworks-api/frameworks5-apidocs/sonnet/html/classSonnet_1_1ConfigDialog.html
-    Sonnet::ConfigDialog d(KSharedConfig::openConfig().data(), this);
+    Sonnet::ConfigDialog d(this);
+//    Sonnet::ConfigDialog d(KSharedConfig::openConfig().data(), this);
     d.exec();						// save to our application config
 #endif
 }
