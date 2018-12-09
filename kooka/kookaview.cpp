@@ -798,7 +798,8 @@ void KookaView::startOCR(const KookaImage img)
     {
         // TODO: temp hardcoded plugin name
         mOcrEngine = qobject_cast<AbstractOcrEngine *>(PluginManager::self()->loadPlugin(
-                                                            PluginManager::OcrPlugin, "gocr"));
+//                                                            PluginManager::OcrPlugin, "gocr"));
+                                                            PluginManager::OcrPlugin, "ocrad"));
         if (mOcrEngine==nullptr)
         {
             KMessageBox::error(mMainWindow,

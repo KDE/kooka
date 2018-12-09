@@ -113,7 +113,7 @@ bool AbstractOcrEngine::openOcrDialogue(QWidget *pnt)
 
     connect(m_ocrDialog, &AbstractOcrDialogue::signalOcrStart, this, &AbstractOcrEngine::slotStartOCR);
     connect(m_ocrDialog, &AbstractOcrDialogue::signalOcrStop, this, &AbstractOcrEngine::slotStopOCR);
-    connect(m_ocrDialog, &AbstractOcrDialogue::signalOcrClose, this, &AbstractOcrEngine::slotClose);
+    connect(m_ocrDialog, &QDialog::rejected, this, &AbstractOcrEngine::slotClose);
     m_ocrDialog->show();
 
     // TODO: m_ocrActive would better reflect the function (if indeed useful at all)
@@ -363,7 +363,7 @@ void AbstractOcrEngine::finishResultDocument()
 
 void AbstractOcrEngine::startLine()
 {
-    if (m_ocrDialog->verboseDebug()) {
+    if (verboseDebug()) {
         //qDebug();
     }
     if (!m_cursor->atStart()) {
@@ -377,7 +377,7 @@ void AbstractOcrEngine::finishLine()
 
 void AbstractOcrEngine::addWord(const QString &word, const OcrWordData &data)
 {
-    if (m_ocrDialog->verboseDebug()) {
+    if (verboseDebug()) {
         //qDebug() << "word" << word << "len" << word.length()
         //<< "rect" << data.property(OcrWordData::Rectangle)
         //<< "alts" << data.property(OcrWordData::Alternatives);
@@ -442,4 +442,10 @@ QString AbstractOcrEngine::tempSaveImage(const KookaImage *img, const ImageForma
 
     if (tmpImg != NULL) delete tmpImg;
     return (name);
+}
+
+
+bool AbstractOcrEngine::verboseDebug() const
+{
+    return (m_ocrDialog->verboseDebug());
 }

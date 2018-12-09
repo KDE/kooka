@@ -32,16 +32,15 @@
 #ifndef OCRGOCRDIALOG_H
 #define OCRGOCRDIALOG_H
 
-#include "kscancontrols.h"
-
 #include "abstractocrdialogue.h"
-
 
 /**
   *@author Klaas Freitag
   */
 
 class QWidget;
+class KScanSlider;
+
 
 class OcrGocrDialog : public AbstractOcrDialogue
 {
@@ -53,24 +52,12 @@ public:
 
     AbstractOcrEngine::EngineError setupGui() override;
 
-    QString getOCRCmd() const
-    {
-        return (m_ocrCmd);
-    }
-    int getGraylevel() const
-    {
-        return (sliderGrayLevel->value());
-    }
-    int getDustsize() const
-    {
-        return (sliderDustSize->value());
-    }
-    int getSpaceWidth() const
-    {
-        return (sliderSpace->value());
-    }
-
     void introduceImage(const KookaImage *img) override;
+
+    QString getOCRCmd() const				{ return (m_ocrCmd); }
+    int getGraylevel() const;
+    int getDustsize() const;
+    int getSpaceWidth() const;
 
 protected:
     void enableFields(bool enable) override;

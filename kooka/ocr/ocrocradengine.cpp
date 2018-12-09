@@ -33,24 +33,29 @@
 
 #include <qregexp.h>
 #include <qfile.h>
+#include <qdir.h>
 #include <qfileinfo.h>
 #include <qdebug.h>
 #include <qtemporaryfile.h>
+#include <qprocess.h>
 
-#include <kprocess.h>
 #include <klocalizedstring.h>
 #include <kmessagebox.h>
 
-#include "imgsaver.h"
 #include "imageformat.h"
-#include "ocrocraddialog.h"
 #include "kookasettings.h"
+#include "ocrocraddialog.h"
+
+
+K_PLUGIN_FACTORY_WITH_JSON(OcrOcradEngineFactory, "kookaocr-ocrad.json", registerPlugin<OcrOcradEngine>();)
+#include "ocrocradengine.moc"
+
 
 static const char UndetectedChar = '_';
 
 
-OcrOcradEngine::OcrOcradEngine(QWidget *parent)
-    : OcrEngine(parent)
+OcrOcradEngine::OcrOcradEngine(QObject *pnt, const QVariantList &args)
+    : AbstractOcrEngine(pnt)
 {
     m_ocrResultFile = QString::null;
     m_ocrImagePBM = QString::null;
@@ -58,30 +63,14 @@ OcrOcradEngine::OcrOcradEngine(QWidget *parent)
     ocradVersion = 0;
 }
 
-OcrOcradEngine::~OcrOcradEngine()
+
+AbstractOcrDialogue *OcrOcradEngine::createOcrDialogue(AbstractOcrEngine *plugin, QWidget *pnt)
 {
+    return (new OcrOcradDialog(plugin, pnt));
 }
 
-OcrBaseDialog *OcrOcradEngine::createOCRDialog(QWidget *parent)
-{
-    return (new OcrOcradDialog(parent));
-}
 
-QString OcrOcradEngine::engineDesc()
-{
-    return (xi18nc("@info",
-                   "<emphasis>OCRAD</emphasis> is an free software OCR engine by Antonio&nbsp;Diaz, "
-                   "part of the GNU&nbsp;Project. "
-                   "<nl/><nl/>"
-                   "Images for OCR should be scanned in black/white (lineart) mode. "
-                   "Best results are achieved if the characters are at least "
-                   "20&nbsp;pixels high.  Problems may arise, as usual, with very bold "
-                   "or very light or broken characters, or with merged character groups."
-                   "<nl/><nl/>"
-                   "See <link url=\"http://www.gnu.org/software/ocrad/ocrad.html\">www.gnu.org/software/ocrad/ocrad.html</link> "
-                   "for more information on OCRAD."));
-}
-
+// TODO: same in OcrGocrEngine
 QString getTempFileName(const QString &suffix)
 {
     QTemporaryFile tmpFile(QDir::tempPath()+"/ocrocradtemp_XXXXXX"+suffix);
@@ -96,20 +85,20 @@ QString getTempFileName(const QString &suffix)
     return (tmpName);
 }
 
-void OcrOcradEngine::startProcess(OcrBaseDialog *dia, const KookaImage *img)
+
+void OcrOcradEngine::startOcrProcess(AbstractOcrDialogue *dia, const KookaImage *img)
 {
     OcrOcradDialog *parentDialog = static_cast<OcrOcradDialog *>(dia);
     ocradVersion = parentDialog->getNumVersion();
     const QString cmd = parentDialog->getOCRCmd();
-    m_verboseDebug = dia->verboseDebug();
 
-    m_ocrResultFile = ImgSaver::tempSaveImage(img, ImageFormat("BMP"), 8);
+    m_ocrResultFile = tempSaveImage(img, ImageFormat("BMP"), 8);
     // TODO: if the input file is local and is readable by OCRAD,
     // can use it directly (but don't delete it afterwards!)
-    m_ocrImagePBM = ImgSaver::tempSaveImage(img, ImageFormat("PBM"), 1);
+    m_ocrImagePBM = tempSaveImage(img, ImageFormat("PBM"), 1);
 
     if (m_ocrProcess != NULL) delete m_ocrProcess;	// kill old process if still there
-    m_ocrProcess = new KProcess();			// start new OCRAD process
+    m_ocrProcess = new QProcess();			// start new OCRAD process
     Q_CHECK_PTR(m_ocrProcess);
     QStringList args;					// arguments for process
 
@@ -148,17 +137,18 @@ void OcrOcradEngine::startProcess(OcrBaseDialog *dia, const KookaImage *img)
         if (!s.isEmpty()) args << "-T" << (s + "%");
     }
 
-    if (m_verboseDebug) args << "-v";
+    if (verboseDebug()) args << "-v";
 
     s = KookaSettings::ocrOcradExtraArguments();
     if (!s.isEmpty()) args << s;
 
     qDebug() << "Running OCRAD as" << cmd << args;
 
-    m_ocrProcess->setProgram(QFile::encodeName(cmd), args);
-    m_ocrProcess->setNextOpenMode(QIODevice::ReadOnly);
+    m_ocrProcess->setProgram(cmd);
+    m_ocrProcess->setArguments(args);
+    m_ocrProcess->setStandardInputFile(QProcess::nullDevice());
 
-    m_ocrProcess->setOutputChannelMode(KProcess::SeparateChannels);
+    m_ocrProcess->setProcessChannelMode(QProcess::SeparateChannels);
     m_tempStdoutLog = getTempFileName(".log");
     m_ocrProcess->setStandardOutputFile(m_tempStdoutLog);
     m_tempStderrLog = getTempFileName(".log");
@@ -169,6 +159,7 @@ void OcrOcradEngine::startProcess(OcrBaseDialog *dia, const KookaImage *img)
     m_ocrProcess->start();
     if (!m_ocrProcess->waitForStarted(5000)) qWarning() << "Error starting OCRAD process!";
 }
+
 
 QStringList OcrOcradEngine::tempFiles(bool retain)
 {
@@ -182,6 +173,7 @@ QStringList OcrOcradEngine::tempFiles(bool retain)
     return (result);
 }
 
+
 void OcrOcradEngine::slotOcradExited(int exitCode, QProcess::ExitStatus exitStatus)
 {
     qDebug() << "exit code" << exitCode << "status" << exitStatus;
@@ -194,7 +186,7 @@ void OcrOcradEngine::slotOcradExited(int exitCode, QProcess::ExitStatus exitStat
                                   "<nl/>More information may be available in its "
                                   "<link url=\"%4\">standard output</link> or "
                                   "<link url=\"%5\">standard error</link> log files.",
-                                  m_ocrProcess->program().first(),
+                                  m_ocrProcess->program(),
                                   (exitStatus == QProcess::CrashExit ? i18n("crashed") : i18n("failed")),
                                   exitCode,
                                   QUrl::fromLocalFile(m_tempStdoutLog).url(),
@@ -214,8 +206,9 @@ void OcrOcradEngine::slotOcradExited(int exitCode, QProcess::ExitStatus exitStat
         }
     }
 
-    finishedOCRVisible(parseRes);
+    finishedOcr(parseRes);
 }
+
 
 /*
   From http://kooka.kde.org/news/
@@ -338,7 +331,7 @@ QString OcrOcradEngine::readORF(const QString &fileName)
             continue;    // ignore comments
         }
 
-        if (m_verboseDebug) {
+        if (verboseDebug()) {
             //qDebug() << "# Line" << line;
         }
         if (line.startsWith("source file ")) {
@@ -373,7 +366,7 @@ QString OcrOcradEngine::readORF(const QString &fileName)
             }
 
             int charCount = rx2.cap(2).toInt();
-            if (m_verboseDebug) {
+            if (verboseDebug()) {
                 //qDebug() << "Expecting" << charCount << "chars for line" << lineNo;
             }
 
@@ -405,7 +398,7 @@ QString OcrOcradEngine::readORF(const QString &fileName)
                 int altCount = rx3.cap(1).toInt();
                 if (altCount == 0) {        // no alternatives,
                     // undecipherable character
-                    if (m_verboseDebug) {
+                    if (verboseDebug()) {
                         //qDebug() << "Undecipherable character in 'char' line" << charLine;
                     }
                 } else {

@@ -264,7 +264,8 @@
     </entry>
 
     <entry name="ocrOcradThresholdValue" key="thresholdValue" type="Int">
-      <label>Threshold:</label>
+      <!-- Not followed by a colon, because a KScanControl subclass adds one automatically -->
+      <label>Threshold</label>
       <default>50</default>
     </entry>
 

@@ -72,6 +72,7 @@ class PLUGIN_EXPORT AbstractOcrEngine : public AbstractPlugin
     Q_OBJECT
 
 public:
+    // TODO: better names
     enum EngineError {					// OCR Engine setup errors
         ENG_ERROR,
         ENG_OK,
@@ -123,6 +124,8 @@ protected:
     void addWord(const QString &word, const OcrWordData &data);
     void finishLine();
 
+    bool verboseDebug() const;
+
 signals:
     void newOCRResultText();
 
@@ -158,9 +161,12 @@ public slots:
     void slotScrollToWord(const QRect &r);
 
 protected:
+    // TODO: do more managing of the process in this class (creation, deletion, exit status)
     QProcess *m_ocrProcess;
+
     QString m_ocrResultFile;
     QString m_ocrResultText;
+    QWidget *m_parent;
 
 private slots:
     void slotStartOCR();
@@ -180,8 +186,6 @@ private:
     void removeTempFiles();
 
 private:
-    QWidget *m_parent;
-
     bool m_ocrRunning;
     AbstractOcrDialogue *m_ocrDialog;
 

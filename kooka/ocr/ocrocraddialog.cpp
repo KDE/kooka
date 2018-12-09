@@ -57,8 +57,8 @@
 #include "ocrocradengine.h"
 
 
-OcrOcradDialog::OcrOcradDialog(QWidget *parent)
-    : OcrBaseDialog(parent),
+OcrOcradDialog::OcrOcradDialog(AbstractOcrEngine *plugin, QWidget *pnt)
+    : AbstractOcrDialogue(plugin, pnt),
       m_setupWidget(NULL),
       m_orfUrlRequester(NULL),
       m_layoutMode(0),
@@ -68,33 +68,17 @@ OcrOcradDialog::OcrOcradDialog(QWidget *parent)
 {
 }
 
-OcrOcradDialog::~OcrOcradDialog()
-{
-}
 
-QString OcrOcradDialog::ocrEngineLogo() const
-{
-    return ("ocrad.png");
-}
-
-QString OcrOcradDialog::ocrEngineName() const
-{
-    return (OcrEngine::engineName(OcrEngine::EngineOcrad));
-}
-
-QString OcrOcradDialog::ocrEngineDesc() const
-{
-    return (OcrOcradEngine::engineDesc());
-}
-
-OcrEngine::EngineError OcrOcradDialog::setupGui()
+AbstractOcrEngine::EngineError OcrOcradDialog::setupGui()
 {
     // Options available vary with the OCRAD version.  So we need to find
     // the OCRAD binary and get its version before creating the GUI.
     //
     // No need to read the config here, KookaPref::tryFindBinary() does that
 
-    QString res = KookaPref::tryFindOcrad();        // read config or search
+    /////////////////////////////////////////////////////////////////
+    QString res = "/usr/bin/ocrad";
+//    QString res = KookaPref::tryFindOcrad();        // read config or search
     if (res.isEmpty()) {                // not found or invalid
         KMessageBox::sorry(this, i18n("The path to the OCRAD binary is not configured or is not valid.\n"
                                       "Please enter or check the path in the Kooka configuration."),
@@ -104,7 +88,7 @@ OcrEngine::EngineError OcrOcradDialog::setupGui()
         getVersion(res);
     }
 
-    OcrBaseDialog::setupGui();              // now can build the GUI
+    AbstractOcrDialogue::setupGui();			// now can build the GUI
 
     QWidget *w = addExtraSetupWidget();
     QGridLayout *gl = new QGridLayout(w);
@@ -240,14 +224,13 @@ OcrEngine::EngineError OcrOcradDialog::setupGui()
     progressBar()->setMaximum(0);           // animation only
 
     m_setupWidget = w;
-    return (OcrEngine::ENG_OK);
+    return (AbstractOcrEngine::ENG_OK);
 }
+
 
 void OcrOcradDialog::slotWriteConfig()
 {
-    //qDebug();
-
-    OcrBaseDialog::slotWriteConfig();
+    AbstractOcrDialogue::slotWriteConfig();
 
     KookaSettings::setOcrOcradBinary(getOCRCmd());
     KookaSettings::setOcrOcradLayoutDetection(m_layoutMode->currentIndex());
@@ -269,10 +252,12 @@ void OcrOcradDialog::slotWriteConfig()
     KookaSettings::setOcrOcradThresholdValue(m_thresholdSlider->value());
 }
 
+
 void OcrOcradDialog::enableFields(bool enable)
 {
     m_setupWidget->setEnabled(enable);
 }
+
 
 /* Later: Allow interactive loading of orf files
  *  for now, return emty string
@@ -285,6 +270,7 @@ QString OcrOcradDialog::orfUrl() const
         return (QString::null);
     }
 }
+
 
 void OcrOcradDialog::getVersion(const QString &bin)
 {

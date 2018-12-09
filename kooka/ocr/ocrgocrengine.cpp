@@ -160,7 +160,7 @@ void OcrGocrEngine::startOcrProcess(AbstractOcrDialogue *dia, const KookaImage *
 
     args << "-i" << QFile::encodeName(m_inputFile); // input image file
 
-    qDebug() << "Running GOCR on" << format << "file as" << cmd << args.join(" ");
+    qDebug() << "Running GOCR on" << format << "file as" << cmd << args;
 
     m_ocrProcess->setProgram(cmd);
     m_ocrProcess->setArguments(args);

@@ -49,6 +49,7 @@
 #include "kookasettings.h"
 
 #include "ocrgocrengine.h"
+#include "kscancontrols.h"
 
 
 OcrGocrDialog::OcrGocrDialog(AbstractOcrEngine *plugin, QWidget *pnt)
@@ -152,6 +153,7 @@ void OcrGocrDialog::introduceImage(const KookaImage *img)
     }
 }
 
+
 void OcrGocrDialog::slotWriteConfig(void)
 {
     AbstractOcrDialogue::slotWriteConfig();
@@ -168,6 +170,25 @@ void OcrGocrDialog::enableFields(bool enable)
 {
     m_setupWidget->setEnabled(enable);
 }
+
+
+int OcrGocrDialog::getGraylevel() const
+{
+    return (sliderGrayLevel->value());
+}
+
+
+int OcrGocrDialog::getDustsize() const
+{
+    return (sliderDustSize->value());
+}
+
+
+int OcrGocrDialog::getSpaceWidth() const
+{
+    return (sliderSpace->value());
+}
+
 
 QString OcrGocrDialog::version()
 {

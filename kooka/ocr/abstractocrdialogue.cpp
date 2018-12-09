@@ -72,6 +72,8 @@ AbstractOcrDialogue::AbstractOcrDialogue(AbstractOcrEngine *plugin, QWidget *pnt
       m_wantDebugCfg(true),
       m_cbRetainFiles(nullptr),
       m_cbVerboseDebug(nullptr),
+      m_retainFiles(false),
+      m_verboseDebug(false),
       m_lVersion(nullptr),
       m_progress(nullptr)
 {
@@ -107,7 +109,7 @@ AbstractOcrDialogue::AbstractOcrDialogue(AbstractOcrEngine *plugin, QWidget *pnt
     // Signals which tell our caller what the user is doing
     connect(bb->button(QDialogButtonBox::Discard), &QAbstractButton::clicked, this, &AbstractOcrDialogue::slotStartOCR);
     connect(bb->button(QDialogButtonBox::Apply), &QAbstractButton::clicked, this, &AbstractOcrDialogue::slotStopOCR);
-    connect(bb->button(QDialogButtonBox::Close), &QAbstractButton::clicked, this, &AbstractOcrDialogue::slotCloseOCR);
+    // TODO: connect directly to signal, eliminate AbstractOcrDialogue::slotCloseOCR()
     connect(this, &QDialog::rejected, this, &AbstractOcrDialogue::slotCloseOCR);
 
     m_previewSize.setWidth(380);			// minimum preview size

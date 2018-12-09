@@ -32,7 +32,7 @@
 #ifndef OCROCRADDIALOG_H
 #define OCROCRADDIALOG_H
 
-#include "ocrbasedialog.h"
+#include "abstractocrdialogue.h"
 
 
 /**
@@ -46,33 +46,24 @@ class KUrlRequester;
 
 class KScanSlider;
 
-class OcrOcradDialog : public OcrBaseDialog
+
+class OcrOcradDialog : public AbstractOcrDialogue
 {
     Q_OBJECT
 
 public:
-    OcrOcradDialog(QWidget *parent);
-    virtual ~OcrOcradDialog();
+    explicit OcrOcradDialog(AbstractOcrEngine *plugin, QWidget *pnt);
+    virtual ~OcrOcradDialog() = default;
 
-    OcrEngine::EngineError setupGui() override;
+    AbstractOcrEngine::EngineError setupGui() override;
 
-    QString ocrEngineName() const override;
-    QString ocrEngineDesc() const override;
-    QString ocrEngineLogo() const override;
-
-    QString getOCRCmd() const
-    {
-        return (m_ocrCmd);
-    }
+    QString getOCRCmd() const				{ return (m_ocrCmd); }
 
     /*
      * returns the numeric version of the ocrad program.
      * Attention: This method returns 10 for ocrad v. 0.10 and 8 for ocrad-0.8
      */
-    int getNumVersion() const
-    {
-        return (m_versionNum);
-    }
+    int getNumVersion() const				{ return (m_versionNum); }
 
     QString orfUrl() const;
 

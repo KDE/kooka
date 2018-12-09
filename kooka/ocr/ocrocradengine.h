@@ -28,23 +28,18 @@
 
 #include <qprocess.h>
 
-#include "ocrengine.h"
+#include "abstractocrengine.h"
 
-class OcrOcradEngine : public OcrEngine
+
+class OcrOcradEngine : public AbstractOcrEngine
 {
     Q_OBJECT
 
 public:
-    explicit OcrOcradEngine(QWidget *parent = Q_NULLPTR);
-    virtual ~OcrOcradEngine();
+    OcrOcradEngine(QObject *pnt, const QVariantList &args);
+    virtual ~OcrOcradEngine() = default;
 
-    OcrBaseDialog *createOCRDialog(QWidget *parent) override;
-
-    OcrEngine::EngineType engineType() const override
-    {
-        return (OcrEngine::EngineOcrad);
-    }
-    static QString engineDesc();
+    AbstractOcrDialogue *createOcrDialogue(AbstractOcrEngine *plugin, QWidget *pnt) override;
 
 protected:
     QStringList tempFiles(bool retain) override;
@@ -53,7 +48,7 @@ protected slots:
     void slotOcradExited(int exitCode, QProcess::ExitStatus exitStatus);
 
 private:
-    void startProcess(OcrBaseDialog *dia, const KookaImage *img) override;
+    void startOcrProcess(AbstractOcrDialogue *dia, const KookaImage *img) override;
     QString readORF(const QString &fileName);
 
 private:
@@ -63,7 +58,6 @@ private:
     QString m_tempStderrLog;
 
     int ocradVersion;
-    bool m_verboseDebug;
 };
 
 #endif                          // OCROCRADENGINE_H
