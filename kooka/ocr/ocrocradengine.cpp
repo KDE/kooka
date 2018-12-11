@@ -41,6 +41,7 @@
 
 #include <klocalizedstring.h>
 #include <kmessagebox.h>
+#include <kpluginfactory.h>
 
 #include "imageformat.h"
 #include "kookasettings.h"
@@ -55,7 +56,7 @@ static const char UndetectedChar = '_';
 
 
 OcrOcradEngine::OcrOcradEngine(QObject *pnt, const QVariantList &args)
-    : AbstractOcrEngine(pnt)
+    : AbstractOcrEngine(pnt, "OcrOcradEngine")
 {
     m_ocrResultFile = QString::null;
     m_ocrImagePBM = QString::null;

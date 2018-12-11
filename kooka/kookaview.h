@@ -49,7 +49,6 @@ class QAction;
 class KMainWindow;
 class KActionMenu;
 
-class AbstractOcrEngine;
 class ThumbView;
 class KookaImage;
 class KookaGallery;
@@ -233,7 +232,6 @@ private:
     KScanDevice *mScanDevice;
 
     QImage *mOcrResultImg;
-    AbstractOcrEngine *mOcrEngine;
     OcrResEdit *mOcrResEdit;
 
     bool mIsPhotoCopyMode;

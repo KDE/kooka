@@ -196,6 +196,7 @@ void ThumbView::slotHighlightItem(const QUrl &url, bool isDir)
         }
     }
 
+    // TODO: use QSignalBlocker
     bool b = blockSignals(true);            // avoid signal loop
     setCurrentItem(isDir ? QUrl() : urlToShow);
     blockSignals(b);
@@ -239,6 +240,7 @@ void ThumbView::slotFinishedLoading()
 
     if (m_toSelect.isValid()) {             // see if something to select
         //qDebug() << "selecting" << m_toSelect;
+        // TODO: use QSignalBlocker
         bool blk = blockSignals(true);          // avoid signal loop
         setCurrentItem(m_toSelect);
         blockSignals(blk);
@@ -339,6 +341,7 @@ void ThumbView::slotImageDeleted(const KFileItem *kfi)
     // No need to do anything here.
 }
 
+// TODO: code directly in settings
 QString ThumbView::standardBackground()
 {
     return (QStandardPaths::locate(QStandardPaths::AppDataLocation, "pics/thumbviewtile.png"));

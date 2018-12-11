@@ -33,16 +33,19 @@
 #define PREFSPAGES_H
 
 #include <qwidget.h>
+#include <qmap.h>
+
+#include "abstractplugin.h"
 
 
 class QCheckBox;
+class QComboBox;
 class QPushButton;
 class QRadioButton;
 class QLabel;
 class QVBoxLayout;
 
 class KUrlRequester;
-class KComboBox;
 class KPageDialog;
 
 
@@ -135,9 +138,9 @@ private:
     void applySettings();
 
     QCheckBox *mAllowRenameCheck;
-    KComboBox *mGalleryLayoutCombo;
+    QComboBox *mGalleryLayoutCombo;
     KUrlRequester *mTileSelector;
-    KComboBox *mThumbSizeCombo;
+    QComboBox *mThumbSizeCombo;
     QCheckBox *mCustomBackgroundCheck;
 };
 
@@ -154,16 +157,16 @@ public:
 
 private slots:
     void slotEngineSelected(int i);
+    void slotOcrAdvanced();
 
 private:
     void applySettings();
     bool checkOcrBinary(const QString &cmd, const QString &bin, bool showMsg);
 
-    KUrlRequester *mOcrBinaryReq;
-    KComboBox *mEngineCombo;
+    QComboBox *mEngineCombo;
     QLabel *mDescLabel;
-
-//    OcrEngine::EngineType mSelectedEngine;
+    QPushButton *mOcrAdvancedButton;
+    QMap<QString,AbstractPluginInfo> mOcrPlugins;
 };
 
 #endif                          // PREFSPAGES_H

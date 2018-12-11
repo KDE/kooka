@@ -95,7 +95,7 @@ public:
     void setTextDocument(QTextDocument *doc);
 
 protected:
-    explicit AbstractOcrEngine(QObject *pnt);
+    explicit AbstractOcrEngine(QObject *pnt, const char *name);
 
     virtual AbstractOcrDialogue *createOcrDialogue(AbstractOcrEngine *plugin, QWidget *pnt) = 0;
 

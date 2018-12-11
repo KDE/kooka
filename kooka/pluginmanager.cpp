@@ -8,6 +8,8 @@
 #include <qdebug.h>
 
 #include <kservicetypetrader.h>
+#include <kplugininfo.h>
+#include <klocalizedstring.h>
 
 #include "abstractplugin.h"
 
@@ -51,30 +53,113 @@ PluginManager *PluginManager::self()
 }
 
 
+static QString commentAsRichText(const QString &comment)
+{
+    // The 'comment' returned from KService is a QString which may have KUIT markup.
+    // The conversion from that to a KLocalizedString, then back to a QString, actually
+    // implements the KUIT markup.  The "@info" context ensures that the markup is
+    // converted to rich text (HTML).
+    //
+    // There is no need to specify a translation domain, because the string from the
+    // service desktop file will already have been translated.
+
+    return (kxi18nc("@info", comment.toLocal8Bit().constData()).toString());
+}
+
+
 AbstractPlugin *PluginManager::loadPlugin(PluginManager::PluginType type, const QString &name)
 {
     qDebug() << "want type" << type << name;
 
-    const KService::List list = KServiceTypeTrader::self()->query("Kooka/OcrPlugin",
-                                                                  QString("[X-KDE-PluginInfo-Name]=='%1'").arg(name));
-    qDebug() << "query count" << list.count();
-    if (list.isEmpty())
+    AbstractPlugin *plugin = mLoadedPlugins.value(type);
+    if (plugin!=nullptr)				// a plugin is loaded
     {
-        qWarning() << "No plugin services found";
-        return (nullptr);
+        qDebug() << "have current" << plugin->pluginInfo()->key;
+        if (name==plugin->pluginInfo()->key)		// wanted plugin is already loaded
+        {
+            qDebug() << "already loaded";
+            return (plugin);
+        }
+
+        qDebug() << "unloading current";
+        delete plugin;
+        plugin = nullptr;
     }
 
-    if (list.count()>1) qWarning() << "Multiple plugin services found, using only the first";
+    if (name.isEmpty())					// just want to unload current
+    {
+        mLoadedPlugins[type] = nullptr;			// note that nothing is loaded
+        return (nullptr);				// no more to do
+    }
+
+    // TODO: plugin type
+    const KService::List list = KServiceTypeTrader::self()->query("Kooka/OcrPlugin",
+                                                                  QString("[DesktopEntryName]=='%1'").arg(name));
+    qDebug() << "query count" << list.count();
+    if (list.isEmpty()) qWarning() << "No plugin services found";
+    else
+    {
+        if (list.count()>1) qWarning() << "Multiple plugin services found, using only the first";
 							// should not happen, names are unique
-    const KService::Ptr service = list.first();
-    qDebug() << "  name" << service->name();
-    qDebug() << "  icon" << service->icon();
-    qDebug() << "  library" << service->library();
+        const KService::Ptr service = list.first();
+        qDebug() << "  name" << service->name();
+        qDebug() << "  icon" << service->icon();
+        qDebug() << "  library" << service->library();
 
-    KPluginLoader loader(*service);
-    AbstractPlugin *plugin = loader.factory()->create<AbstractPlugin>();
-    qDebug() << "loaded plugin" << plugin;
+        KPluginLoader loader(*service);
+        plugin = loader.factory()->create<AbstractPlugin>();
 
-    if (plugin!=nullptr) plugin->mService = service;
+        if (plugin!=nullptr)
+        {
+            qDebug() << "loaded plugin library" << service->library();
+
+            AbstractPluginInfo *info = new AbstractPluginInfo;
+            info->key = service->desktopEntryName();
+            info->name = service->name();
+            info->icon = service->icon();
+            info->description = commentAsRichText(service->comment());
+
+            plugin->mPluginInfo = info;
+        }
+        else qWarning() << "Cannot load plugin library" << service->library();
+    }
+
+    mLoadedPlugins[type] = plugin;
     return (plugin);
+}
+
+
+QMap<QString,AbstractPluginInfo> PluginManager::allPlugins(PluginManager::PluginType type) const
+{
+    qDebug() << "want all of type" << type;
+
+    QMap<QString,AbstractPluginInfo> plugins;
+
+    // TODO: plugin type
+    const KService::List list = KServiceTypeTrader::self()->query("Kooka/OcrPlugin");
+    qDebug() << "query count" << list.count();
+    if (list.isEmpty()) qWarning() << "No plugin services found";
+    else
+    {
+        foreach (const KService::Ptr service, qAsConst(list))
+        {
+            qDebug() << "  found" << service->desktopEntryName();
+
+            struct AbstractPluginInfo info;
+            info.key = service->desktopEntryName();
+            info.name = service->name();
+            info.icon = service->icon();
+            info.description = commentAsRichText(service->comment());
+
+            plugins[info.key] = info;
+        }
+    }
+
+    return (plugins);
+}
+
+
+AbstractPlugin *PluginManager::currentPlugin(PluginManager::PluginType type) const
+{
+    return (mLoadedPlugins.value(type));
 }

@@ -77,7 +77,7 @@ signals:
 protected:
     explicit AbstractOcrDialogue(AbstractOcrEngine *plugin, QWidget *pnt = nullptr);
 
-    const KService::Ptr pluginService() const		{ return (m_plugin->pluginService()); }
+    const AbstractPlugin *plugin() const		{ return (m_plugin); }
 
 
     /**

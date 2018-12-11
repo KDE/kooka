@@ -174,14 +174,8 @@
 
   <group name="ocrDialog">
 
-    <entry name="OcrGocrBinary" key="gocrBinary" type="Path">
-    </entry>
-
-    <entry name="OcrOcradBinary" key="ocradBinary" type="Path">
-    </entry>
-
-    <entry name="OcrEngine" key="ocrEngine2" type="Int">
-      <default>0</default>
+    <entry name="OcrEngineName" key="ocrEngine3" type="String">
+      <default></default>
     </entry>
 
   </group>
@@ -205,6 +199,10 @@
 
   <group name="gocr">
 
+    <entry name="OcrGocrBinary" key="gocrBinary" type="Path">
+      <default>gocr</default>
+    </entry>
+
     <entry name="OcrGocrDustSize" key="gocrDustSize" type="Int">
       <label>Dust size:</label>
       <tooltip>&lt;div&gt;Clusters smaller than this size will be considered to be noise, and ignored. The default is 10.&lt;/div&gt;</tooltip>
@@ -227,6 +225,10 @@
 
 
   <group name="ocrad">
+
+    <entry name="OcrOcradBinary" key="ocradBinary" type="Path">
+      <default>ocrad</default>
+    </entry>
 
     <entry name="ocrOcradLayoutDetection" key="layoutDetection" type="Int">
       <label>Layout analysis mode:</label>

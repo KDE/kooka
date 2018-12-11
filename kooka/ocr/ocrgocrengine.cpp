@@ -64,7 +64,7 @@ static const char *possibleResultFiles[] = { "out30.png", "out20.png", "out30.bm
 
 
 OcrGocrEngine::OcrGocrEngine(QObject *pnt, const QVariantList &args)
-    : AbstractOcrEngine(pnt)
+    : AbstractOcrEngine(pnt, "OcrGocrEngine")
 {
     m_tempDir = nullptr;
     m_inputFile = QString::null;			// input image file

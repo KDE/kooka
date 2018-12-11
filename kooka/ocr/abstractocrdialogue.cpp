@@ -57,6 +57,7 @@
 
 #include "imagecanvas.h"
 #include "dialogbase.h"
+#include "pluginmanager.h"
 
 
 AbstractOcrDialogue::AbstractOcrDialogue(AbstractOcrEngine *plugin, QWidget *pnt)
@@ -145,9 +146,8 @@ void AbstractOcrDialogue::setupSetupPage()
 
     m_setupPage = addPage(w, i18n("Setup"));
 
-    const KService::Ptr service = pluginService();
-    Q_ASSERT(service!=nullptr);
-    m_setupPage->setHeader(i18n("Optical Character Recognition using %1", service->name()));
+    const AbstractPluginInfo *info = plugin()->pluginInfo();
+    m_setupPage->setHeader(i18n("Optical Character Recognition using %1", info->name));
     m_setupPage->setIcon(QIcon::fromTheme("ocr"));
 }
 
@@ -206,7 +206,8 @@ void AbstractOcrDialogue::ocrShowInfo(const QString &binary, const QString &vers
     }
 
     // Find the logo and display it if available
-    QString logoFile = KIconLoader::global()->iconPath(pluginService()->icon(), KIconLoader::NoGroup, true);
+    const AbstractPluginInfo *info = plugin()->pluginInfo();
+    QString logoFile = KIconLoader::global()->iconPath(info->icon, KIconLoader::NoGroup, true);
     if (!logoFile.isNull())
     {
         QLabel *l = new QLabel(w);
@@ -256,15 +257,8 @@ void AbstractOcrDialogue::setupEnginePage()
     QWidget *w = new QWidget(this);			// engine title/logo/description
     QGridLayout *gl = new QGridLayout(w);
 
-    // The 'comment' returned from KService is a QString which may have KUIT markup.
-    // The conversion from that to a KLocalizedString, then back to a QString, actually
-    // implements the KUIT markup.  The "@info" context ensures that the markup is
-    // displayed as rich text.
-    //
-    // There should not be any need to specify a translation domain, because the string from
-    // the service file will already have been translated.
-    const QString desc = kxi18nc("@info", pluginService()->comment().toLocal8Bit().constData()).toString();
-    QLabel *l = new QLabel(desc, w);
+    const AbstractPluginInfo *info = plugin()->pluginInfo();
+    QLabel *l = new QLabel(info->description, w);
     l->setWordWrap(true);
     l->setOpenExternalLinks(true);
     gl->addWidget(l, 0, 0, 1, 2, Qt::AlignTop);

@@ -187,7 +187,7 @@ KookaView::KookaView(KMainWindow *parent, const QByteArray &deviceToUse)
     mMainWindow = parent;
     mOcrResultImg = NULL;
     mScanParams = NULL;
-    mOcrEngine = NULL;
+//    mOcrEngine = NULL;
     mCurrentTab = KookaView::TabNone;
 
     mIsPhotoCopyMode = false;
@@ -768,15 +768,16 @@ void KookaView::slotSetOcrSpellConfig(const QString &configFile)
 
 void KookaView::slotOcrSpellCheck(bool interactive, bool background)
 {
-    if (!interactive && !background) {          // not doing anything
+    if (!interactive && !background)			// not doing anything
+    {
         emit changeStatus(i18n("OCR finished"));
         return;
     }
 
-    if (mOcrEngine==nullptr || mOcrResEdit==nullptr)
+    if (mOcrResEdit->document()->isEmpty())
     {
         KMessageBox::sorry(mMainWindow,
-                           i18n("OCR has not been performed yet, or the engine has been changed."),
+                           i18n("There is no OCR result text to spell check."),
                            i18n("OCR Spell Check not possible"));
         return;
     }
@@ -790,72 +791,51 @@ void KookaView::slotOcrSpellCheck(bool interactive, bool background)
 
 void KookaView::startOCR(const KookaImage img)
 {
-    if (img.isNull()) return;
+    if (img.isNull()) return;				// no image to OCR
 
     setCurrentIndex(KookaView::TabOcr);
 
-    if (mOcrEngine==nullptr)
+    const QString engineName = KookaSettings::ocrEngineName();
+    if (engineName.isEmpty())
     {
-        // TODO: temp hardcoded plugin name
-        mOcrEngine = qobject_cast<AbstractOcrEngine *>(PluginManager::self()->loadPlugin(
-//                                                            PluginManager::OcrPlugin, "gocr"));
-                                                            PluginManager::OcrPlugin, "ocrad"));
-        if (mOcrEngine==nullptr)
-        {
-            KMessageBox::error(mMainWindow,
-                               // TODO: show name of plugin
-                               i18n("Cannot load OCR plugin 'NAME'"));
-            return;
-        }
-
-#if 0
-    // TODO: engineValid() checks whether the configured OCR engine is
-    // the same as the one currently loaded.  Try to do this a difefrent way?
-    if (mOcrEngine != NULL && !mOcrEngine->engineValid()) { // engine already exists,
-        // but needs to be changed?
-        delete mOcrEngine;
-        mOcrEngine = NULL;
+        int result = KMessageBox::warningContinueCancel(mMainWindow,
+                                                        i18n("No OCR engine is configured.\n"
+                                                             "Please select and configure one in order to perform OCR."),
+                                                        i18n("OCR Not Configured"),
+                                                        KGuiItem(i18n("Configure OCR...")));
+        if (result==KMessageBox::Continue) emit signalOcrPrefs();
+        return;
     }
 
-    if (mOcrEngine == NULL) {
-        bool gotoPrefs = false;
-        mOcrEngine = OcrEngine::createEngine(this, &gotoPrefs);
-        if (mOcrEngine == NULL) {
-            //qDebug() << "Cannot create OCR engine!";
-            if (gotoPrefs) {
-                emit signalOcrPrefs();
-            }
-            return;
-        }
-    }
-#endif
-
-        mOcrEngine->setImageCanvas(mImageCanvas);
-        mOcrEngine->setTextDocument(mOcrResEdit->document());
-
-        // Connections OCR Engine --> myself
-        connect(mOcrEngine, SIGNAL(newOCRResultText()),
-                SLOT(slotOcrResultAvailable()));
-        connect(mOcrEngine, SIGNAL(setSpellCheckConfig(QString)),
-                SLOT(slotSetOcrSpellConfig(QString)));
-        connect(mOcrEngine, SIGNAL(startSpellCheck(bool,bool)),
-                SLOT(slotOcrSpellCheck(bool,bool)));
-
-        // Connections OCR Results --> OCR Engine
-        connect(mOcrResEdit, SIGNAL(highlightWord(QRect)),
-                mOcrEngine, SLOT(slotHighlightWord(QRect)));
-        connect(mOcrResEdit, SIGNAL(scrollToWord(QRect)),
-                mOcrEngine, SLOT(slotScrollToWord(QRect)));
-
-        // Connections OCR Engine --> OCR Results
-        connect(mOcrEngine, SIGNAL(readOnlyEditor(bool)),
-                mOcrResEdit, SLOT(slotSetReadOnly(bool)));
-        connect(mOcrEngine, SIGNAL(selectWord(QPoint)),
-                mOcrResEdit, SLOT(slotSelectWord(QPoint)));
+    AbstractOcrEngine *engine = qobject_cast<AbstractOcrEngine *>(PluginManager::self()->loadPlugin(PluginManager::OcrPlugin, engineName));
+    if (engine==nullptr)
+    {
+        KMessageBox::error(mMainWindow, i18n("Cannot load OCR plugin '%1'", engineName));
+        return;
     }
 
-    mOcrEngine->setImage(img);
-    mOcrEngine->openOcrDialogue(this);
+    // We don't know whether the plugin object has been used before.
+    // So disconnect all of its existing signals so that they do not
+    // get double connected.
+    engine->disconnect();
+
+    // Connections OCR Engine --> myself
+    connect(engine, &AbstractOcrEngine::newOCRResultText, this, &KookaView::slotOcrResultAvailable);
+    connect(engine, &AbstractOcrEngine::setSpellCheckConfig, this, &KookaView::slotSetOcrSpellConfig);
+    connect(engine, &AbstractOcrEngine::startSpellCheck, this, &KookaView::slotOcrSpellCheck);
+
+    // Connections OCR Results --> OCR Engine
+    connect(mOcrResEdit, &OcrResEdit::highlightWord, engine, &AbstractOcrEngine::slotHighlightWord);
+    connect(mOcrResEdit, &OcrResEdit::scrollToWord, engine, &AbstractOcrEngine::slotScrollToWord);
+
+    // Connections OCR Engine --> OCR Results
+    connect(engine, &AbstractOcrEngine::readOnlyEditor, mOcrResEdit, &OcrResEdit::slotSetReadOnly);
+    connect(engine, &AbstractOcrEngine::selectWord, mOcrResEdit, &OcrResEdit::slotSelectWord);
+
+    engine->setImageCanvas(mImageCanvas);
+    engine->setTextDocument(mOcrResEdit->document());
+    engine->setImage(img);
+    engine->openOcrDialogue(this);
 }
 
 
@@ -1026,10 +1006,11 @@ void KookaView::slotShowAImage(const KookaImage *img, bool isDir)
         mImageCanvas->setReadOnly(false);
     }
 
-    if (mOcrEngine!=nullptr)				// tell OCR about it
-    {
-        mOcrEngine->setImage(img != NULL ? *img : KookaImage());
-    }
+//     if (mOcrEngine!=nullptr)				// tell OCR about it
+//     {
+//         // TODO: can be done in startOCR()
+//         mOcrEngine->setImage(img != NULL ? *img : KookaImage());
+//     }
 
     if (mImageCanvas != NULL) {
         emit changeStatus(mImageCanvas->imageInfoString(), StatusBarManager::ImageDims);

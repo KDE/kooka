@@ -38,10 +38,10 @@
 #include <qradiobutton.h>
 #include <qbuttongroup.h>
 #include <qgroupbox.h>
+#include <qcombobox.h>
 #include <qdebug.h>
 
 #include <klocalizedstring.h>
-#include <kcombobox.h>
 #include <kmessagebox.h>
 #include <kurlrequester.h>
 #include <kseparator.h>
@@ -54,6 +54,7 @@
 #include "kookagallery.h"
 #include "formatdialog.h"
 #include "thumbview.h"
+#include "pluginmanager.h"
 #include "kookasettings.h"
 
 
@@ -254,7 +255,7 @@ KookaThumbnailPage::KookaThumbnailPage(KPageDialog *parent)
     lab->setToolTip(item->toolTip());
     gl->addWidget(lab, 0, 0, Qt::AlignRight);
 
-    mGalleryLayoutCombo = new KComboBox(gb);
+    mGalleryLayoutCombo = new QComboBox(gb);
     mGalleryLayoutCombo->setToolTip(item->toolTip());
 // TODO: eliminate former enums
     mGalleryLayoutCombo->addItem(i18n("Not shown"), KookaSettings::RecentNone);
@@ -310,7 +311,7 @@ KookaThumbnailPage::KookaThumbnailPage(KPageDialog *parent)
     lab->setToolTip(item->toolTip());
     gl->addWidget(lab, 5, 0, Qt::AlignRight);
 
-    mThumbSizeCombo = new KComboBox(this);
+    mThumbSizeCombo = new QComboBox(this);
     mThumbSizeCombo->setToolTip(item->toolTip());
     mThumbSizeCombo->addItem(ThumbView::sizeName(KIconLoader::SizeEnormous), KIconLoader::SizeEnormous);
     mThumbSizeCombo->addItem(ThumbView::sizeName(KIconLoader::SizeHuge), KIconLoader::SizeHuge);
@@ -380,17 +381,24 @@ KookaOcrPage::KookaOcrPage(KPageDialog *parent)
     QGridLayout *lay = new QGridLayout;
     lay->setColumnStretch(1, 9);
 
-    mEngineCombo = new KComboBox(this);
-#if 0
-    mEngineCombo->addItem(OcrEngine::engineName(OcrEngine::EngineNone), OcrEngine::EngineNone);
-    mEngineCombo->addItem(OcrEngine::engineName(OcrEngine::EngineGocr), OcrEngine::EngineGocr);
-    mEngineCombo->addItem(OcrEngine::engineName(OcrEngine::EngineOcrad), OcrEngine::EngineOcrad);
-    mEngineCombo->addItem(OcrEngine::engineName(OcrEngine::EngineKadmos), OcrEngine::EngineKadmos);
-#else
-    qDebug() << "OCR stub 3";
-#endif
+    const QString configuredEngine = KookaSettings::ocrEngineName();
+    qDebug() << "configured engine" << configuredEngine;
+    int engineIndex = 0;
 
-//     connect(mEngineCombo, static_cast<void (KComboBox::*)(int)>(&KComboBox::activated), this, &KookaOcrPage::slotEngineSelected);
+    mEngineCombo = new QComboBox(this);
+    mOcrPlugins = PluginManager::self()->allPlugins(PluginManager::OcrPlugin);
+    qDebug() << "have" << mOcrPlugins.count() << "OCR plugins";
+
+    mEngineCombo->addItem(i18n("None"), QString());
+    for (QMap<QString,AbstractPluginInfo>::const_iterator it = mOcrPlugins.constBegin();
+         it!=mOcrPlugins.constEnd(); ++it)
+    {
+        const AbstractPluginInfo &info = it.value();
+        if (info.key==configuredEngine) engineIndex = mEngineCombo->count();
+        mEngineCombo->addItem(QIcon::fromTheme(info.icon), info.name, info.key);
+    }
+
+    connect(mEngineCombo, QOverload<int>::of(&QComboBox::activated), this, &KookaOcrPage::slotEngineSelected);
     lay->addWidget(mEngineCombo, 0, 1);
 
     QLabel *lab = new QLabel(i18n("OCR Engine:"), this);
@@ -399,13 +407,9 @@ KookaOcrPage::KookaOcrPage(KPageDialog *parent)
 
     lay->setRowMinimumHeight(1, 2*DialogBase::verticalSpacing());
 
-    mOcrBinaryReq = new KUrlRequester(this);
-    mOcrBinaryReq->setMode(KFile::File | KFile::ExistingOnly | KFile::LocalOnly);
-    lay->addWidget(mOcrBinaryReq, 2, 1);
-
-    lab = new QLabel(i18n("Engine executable:"), this);
-    lab->setBuddy(mOcrBinaryReq);
-    lay->addWidget(lab, 2, 0, Qt::AlignRight);
+    mOcrAdvancedButton = new QPushButton(i18n("OCR Engine Settings..."), this);
+    connect(mOcrAdvancedButton, &QPushButton::clicked, this, &KookaOcrPage::slotOcrAdvanced);
+    lay->addWidget(mOcrAdvancedButton, 2, 1, Qt::AlignRight);
 
     lay->setRowMinimumHeight(3, 2*DialogBase::verticalSpacing());
 
@@ -421,87 +425,67 @@ KookaOcrPage::KookaOcrPage(KPageDialog *parent)
 
     mLayout->addLayout(lay);
 
-//     OcrEngine::EngineType originalEngine = static_cast<OcrEngine::EngineType>(KookaSettings::ocrEngine());
-//     mEngineCombo->setCurrentIndex(originalEngine);
-//     slotEngineSelected(originalEngine);
+    mEngineCombo->setCurrentIndex(engineIndex);
+    slotEngineSelected(mEngineCombo->currentIndex());
 }
+
 
 void KookaOcrPage::saveSettings()
 {
-#if 0
-    KookaSettings::setOcrEngine(static_cast<int>(mSelectedEngine));
-
-    QString path = mOcrBinaryReq->url().path();
-    if (!path.isEmpty()) {
-        switch (mSelectedEngine) {
-case OcrEngine::EngineGocr:
-            if (checkOcrBinary(path, "gocr", true)) KookaSettings::setOcrGocrBinary(path);
-            break;
-
-case OcrEngine::EngineOcrad:
-            if (checkOcrBinary(path, "ocrad", true)) KookaSettings::setOcrOcradBinary(path);
-            break;
-
-default:    break;
-        }
-    }
-#else
-    qDebug() << "OCR stub 5";
-#endif
+    KookaSettings::setOcrEngineName(mEngineCombo->currentData().toString());
 }
+
 
 void KookaOcrPage::defaultSettings()
 {
-    qDebug() << "OCR stub 6";
-//    mEngineCombo->setCurrentIndex(OcrEngine::EngineNone);
-//     slotEngineSelected(OcrEngine::EngineNone);
+    mEngineCombo->setCurrentIndex(0);
+    slotEngineSelected(mEngineCombo->currentIndex());
 }
+
 
 void KookaOcrPage::slotEngineSelected(int i)
 {
-#if 0
-    mSelectedEngine = static_cast<OcrEngine::EngineType>(i);
-    //qDebug() << "engine is" << mSelectedEngine;
+    const QString pluginKey = mEngineCombo->currentData().toString();
+    qDebug() << "selected" << pluginKey;
+
+    mOcrAdvancedButton->setEnabled(false);		// for the moment, anyway
 
     QString msg;
-    switch (mSelectedEngine) {
-    case OcrEngine::EngineNone:
-        mOcrBinaryReq->setEnabled(false);
-        mOcrBinaryReq->clear();
-        msg = i18n("No OCR engine is selected. Select and configure one to perform OCR.");
-        break;
-
-    case OcrEngine::EngineGocr:
-        mOcrBinaryReq->setEnabled(true);
-        mOcrBinaryReq->setUrl(QUrl::fromLocalFile(KookaPref::tryFindGocr()));
-        qDebug() << "OCR stub 4a";
-//        msg = OcrGocrEngine::engineDesc();
-        break;
-
-    case OcrEngine::EngineOcrad:
-        mOcrBinaryReq->setEnabled(true);
-        mOcrBinaryReq->setUrl(QUrl::fromLocalFile(KookaPref::tryFindOcrad()));
-        qDebug() << "OCR stub 4b";
-//        msg = OcrOcradEngine::engineDesc();
-        break;
-
-    case OcrEngine::EngineKadmos:
-        mOcrBinaryReq->setEnabled(false);
-        mOcrBinaryReq->clear();
-        qDebug() << "OCR stub 4c";
-//        msg = OcrKadmosEngine::engineDesc();
-        break;
-
-    default:
-        mOcrBinaryReq->setEnabled(false);
-        mOcrBinaryReq->clear();
-        msg = i18n("Unknown engine %1.", mSelectedEngine);
-        break;
+    if (pluginKey.isEmpty())				// no engine selected
+    {
+        msg = i18n("No OCR engine is selected. Select and configure one to be able to perform OCR.");
+    }
+    else
+    {
+        const AbstractPlugin *plugin = PluginManager::self()->loadPlugin(PluginManager::OcrPlugin, pluginKey);
+        if (plugin==nullptr)				// plugin not found
+        {
+            msg = i18n("Unknown engine '%1'.", pluginKey);
+        }
+        else
+        {
+            msg = plugin->pluginInfo()->description;
+            // TODO: only if plugin has advanced settings
+            //mOcrAdvancedButton->setEnabled(plugin->hasAdvancedSettings());
+            mOcrAdvancedButton->setEnabled(true);
+        }
     }
 
     mDescLabel->setText(msg);
-#endif
 }
+
+
+void KookaOcrPage::slotOcrAdvanced()
+{
+    qDebug();
+    AbstractPlugin *plugin = PluginManager::self()->currentPlugin(PluginManager::OcrPlugin);
+    Q_ASSERT(plugin!=nullptr);
+    // TODO: plugin support for this
+//    Q_ASSERT(plugin->hasAdvancedSettings());
+//     plugin->openAdvancedSettings();
+// needs to save settings on "OK"
+}
+
 
 bool KookaOcrPage::checkOcrBinary(const QString &cmd, const QString &bin, bool show_msg)
 {

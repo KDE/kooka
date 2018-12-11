@@ -54,7 +54,7 @@
 //  Constructor/destructor and external engine creation
 //  ---------------------------------------------------
 
-AbstractOcrEngine::AbstractOcrEngine(QObject *pnt)
+AbstractOcrEngine::AbstractOcrEngine(QObject *pnt, const char *name)
     : AbstractPlugin(pnt),
       m_ocrProcess(nullptr),
       m_ocrRunning(false),
@@ -66,14 +66,19 @@ AbstractOcrEngine::AbstractOcrEngine(QObject *pnt)
       m_currHighlight(-1),
       m_trackingActive(false)
 {
+    setObjectName(name);
+
     m_introducedImage = KookaImage();
     m_ocrResultFile = QString();
     m_parent = nullptr;
+
+    qDebug() << objectName();
 }
 
 
 AbstractOcrEngine::~AbstractOcrEngine()
 {
+    qDebug() << objectName();
     if (m_ocrProcess!=nullptr) delete m_ocrProcess;
     if (m_ocrDialog!=nullptr) delete m_ocrDialog;
 }
