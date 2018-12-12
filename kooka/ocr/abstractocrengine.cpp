@@ -43,6 +43,7 @@
 #include <kmessagebox.h>
 #include <klocalizedstring.h>
 #include <kcolorscheme.h>
+#include <kconfigskeleton.h>
 
 #include "imagecanvas.h"
 #include "imageformat.h"
@@ -69,7 +70,6 @@ AbstractOcrEngine::AbstractOcrEngine(QObject *pnt, const char *name)
     setObjectName(name);
 
     m_introducedImage = KookaImage();
-    m_ocrResultFile = QString();
     m_parent = nullptr;
 
     qDebug() << objectName();
@@ -109,16 +109,40 @@ bool AbstractOcrEngine::openOcrDialogue(QWidget *pnt)
     }
 
     m_parent = pnt;
+    m_errorText.clear();				// ready for new messages
 
     m_ocrDialog = createOcrDialogue(this, pnt);
-    if (m_ocrDialog==nullptr) return (false);
+    Q_ASSERT(m_ocrDialog!=nullptr);
 
-    m_ocrDialog->setupGui();
-    m_ocrDialog->introduceImage(&m_introducedImage);
+    if (m_ocrDialog->setupGui()!=AbstractOcrEngine::Ok)
+    {
+        // The error message(s) in m_errorText will already have been converted
+        // from KUIT markup to HTML by xi18nc( ) or similar.  So all that is
+        // needed is to build the rest of the error message in rich text also.
+        // There will be some spurious <html> tags around each separate message
+        // which has been converted, but they don't seem to cause any problem.
+
+        m_errorText.prepend(QString());
+        m_errorText.prepend(i18n("OCR could not be started."));
+        m_errorText.prepend("<html>");
+
+        m_errorText.append(QString());
+        m_errorText.append(i18n("Check the OCR engine selection and settings."));
+        m_errorText.append("</html>");
+
+        const QString msg = m_errorText.join("<br/>");
+        int result = KMessageBox::warningContinueCancel(pnt, msg,
+                                                        i18n("OCR Setup Error"),
+                                                        KGuiItem(i18n("Configure OCR...")));
+        if (result==KMessageBox::Continue) emit openOcrPrefs();
+        return (false);					// with no OCR dialogue
+    }
 
     connect(m_ocrDialog, &AbstractOcrDialogue::signalOcrStart, this, &AbstractOcrEngine::slotStartOCR);
     connect(m_ocrDialog, &AbstractOcrDialogue::signalOcrStop, this, &AbstractOcrEngine::slotStopOCR);
     connect(m_ocrDialog, &QDialog::rejected, this, &AbstractOcrEngine::slotClose);
+
+    m_ocrDialog->introduceImage(&m_introducedImage);
     m_ocrDialog->show();
 
     // TODO: m_ocrActive would better reflect the function (if indeed useful at all)
@@ -137,15 +161,20 @@ void AbstractOcrEngine::slotClose()
 /* Called by "Stop" used while OCR is in progress */
 void AbstractOcrEngine::slotStopOCR()
 {
+    Q_ASSERT(m_ocrDialog!=nullptr);
+
     stopOcrProcess(true);
+    m_ocrDialog->enableGUI(false);			// enable controls again
 }
 
 
 /* Called by "Start" used while OCR is not in progress */
 void AbstractOcrEngine::slotStartOCR()
 {
-    if (m_ocrDialog==nullptr) return;
-    m_ocrDialog->show();
+    Q_ASSERT(m_ocrDialog!=nullptr);
+
+    m_ocrDialog->enableGUI(true);			// disable controls while running
+    m_ocrDialog->show();				// just in case it got closed
 
     m_ocrResultText.clear();
     startOcrProcess(m_ocrDialog, &m_introducedImage);
@@ -453,4 +482,37 @@ QString AbstractOcrEngine::tempSaveImage(const KookaImage *img, const ImageForma
 bool AbstractOcrEngine::verboseDebug() const
 {
     return (m_ocrDialog->verboseDebug());
+}
+
+
+QString AbstractOcrEngine::findExecutable(QString (*settingFunc)(), KConfigSkeletonItem *settingItem)
+{
+    QString exec = (*settingFunc)();			// get current setting
+    if (exec.isEmpty()) settingItem->setDefault();	// if null, apply default
+    exec = (*settingFunc)();				// and get new setting
+    Q_ASSERT(!exec.isEmpty());				// should now have something
+    qDebug() << "configured/default" << exec;
+
+    if (!QDir::isAbsolutePath(exec))			// not specified absolute path
+    {
+        const QString pathExec = QStandardPaths::findExecutable(exec);
+        if (pathExec.isEmpty())				// try to find executable
+        {
+            qDebug() << "no" << exec << "found on PATH";
+            setErrorText(xi18nc("@info", "The executable <command>%1</command> could not be found on <envar>PATH</envar>."));
+            return (QString());
+        }
+        exec = pathExec;
+    }
+
+    QFileInfo fi(exec);					// now check it is usable
+    if (!fi.exists() || fi.isDir() || !fi.isExecutable())
+    {
+        qDebug() << "configured" << exec << "not usable";
+        setErrorText(xi18nc("@info", "The executable <filename>%1</filename> does not exist or is not usable.", fi.absoluteFilePath()));
+        return (QString());
+    }
+
+    qDebug() << "found" << exec;
+    return (exec);
 }

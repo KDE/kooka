@@ -38,13 +38,9 @@
 #include <qspinbox.h>
 #include <qlayout.h>
 #include <qprogressbar.h>
-#include <qpushbutton.h>
 #include <qdebug.h>
 
 #include <klocalizedstring.h>
-#include <kanimatedbutton.h>
-#include <kseparator.h>
-#include <kmessagebox.h>
 #include <kurlrequester.h>
 #include <kprocess.h>
 
@@ -69,26 +65,19 @@ OcrOcradDialog::OcrOcradDialog(AbstractOcrEngine *plugin, QWidget *pnt)
 }
 
 
-AbstractOcrEngine::EngineError OcrOcradDialog::setupGui()
+AbstractOcrEngine::EngineStatus OcrOcradDialog::setupGui()
 {
+    AbstractOcrDialogue::setupGui();			// build the standard GUI
+
     // Options available vary with the OCRAD version.  So we need to find
     // the OCRAD binary and get its version before creating the GUI.
-    //
-    // No need to read the config here, KookaPref::tryFindBinary() does that
+    m_ocrCmd = engine()->findExecutable(&KookaSettings::ocrOcradBinary, KookaSettings::self()->ocrOcradBinaryItem());
 
-    /////////////////////////////////////////////////////////////////
-    QString res = "/usr/bin/ocrad";
-//    QString res = KookaPref::tryFindOcrad();        // read config or search
-    if (res.isEmpty()) {                // not found or invalid
-        KMessageBox::sorry(this, i18n("The path to the OCRAD binary is not configured or is not valid.\n"
-                                      "Please enter or check the path in the Kooka configuration."),
-                           i18n("OCRAD Binary Not Found"));
-        buttonBox()->button(QDialogButtonBox::Yes)->setEnabled(false);
-    } else {
-        getVersion(res);
+    if (!m_ocrCmd.isEmpty()) getVersion(m_ocrCmd);	// found, get its version
+    else						// not found or invalid
+    {
+        engine()->setErrorText(i18n("The OCRAD executable is not configured or is not available."));
     }
-
-    AbstractOcrDialogue::setupGui();			// now can build the GUI
 
     QWidget *w = addExtraSetupWidget();
     QGridLayout *gl = new QGridLayout(w);
@@ -215,16 +204,14 @@ AbstractOcrEngine::EngineError OcrOcradDialog::setupGui()
     connect(m_thresholdEnable, &QCheckBox::toggled, m_thresholdSlider, &KScanSlider::setEnabled);
     m_thresholdSlider->setEnabled(m_thresholdEnable->isChecked());
 
-    gl->setRowStretch(10, 1);               // for top alignment
+    gl->setRowStretch(10, 1);				// for top alignment
     gl->setColumnStretch(1, 1);
 
-    ocrShowInfo((!m_ocrCmd.isEmpty() ? m_ocrCmd : i18n("Not found")),
-                (!m_versionStr.isEmpty() ? m_versionStr : i18n("Unknown")));
-    // show binary and version
-    progressBar()->setMaximum(0);           // animation only
+    ocrShowInfo(m_ocrCmd, m_versionStr);		// show the binary and version
+    progressBar()->setMaximum(0);			// progress animation only
 
     m_setupWidget = w;
-    return (AbstractOcrEngine::ENG_OK);
+    return (!m_ocrCmd.isEmpty() ? AbstractOcrEngine::Ok : AbstractOcrEngine::SetupError);
 }
 
 
@@ -259,9 +246,7 @@ void OcrOcradDialog::enableFields(bool enable)
 }
 
 
-/* Later: Allow interactive loading of orf files
- *  for now, return emty string
- */
+/* Later: Allow interactive loading of ORF files */
 QString OcrOcradDialog::orfUrl() const
 {
     if (m_orfUrlRequester != NULL) {

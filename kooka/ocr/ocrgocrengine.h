@@ -57,7 +57,7 @@ protected slots:
     void slotGOcrExited(int exitCode, QProcess::ExitStatus exitStatus);
 
 private:
-    void startOcrProcess(AbstractOcrDialogue *dia, const KookaImage *img) override;
+    AbstractOcrEngine::EngineStatus startOcrProcess(AbstractOcrDialogue *dia, const KookaImage *img) override;
 
 private:
     QTemporaryDir *m_tempDir;

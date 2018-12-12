@@ -57,7 +57,7 @@ class PLUGIN_EXPORT AbstractOcrDialogue : public KPageDialog
 public:
     virtual ~AbstractOcrDialogue() = default;
 
-    virtual AbstractOcrEngine::EngineError setupGui();
+    virtual AbstractOcrEngine::EngineStatus setupGui();
     virtual void introduceImage(const KookaImage *img);
 
     bool keepTempFiles() const;
@@ -77,13 +77,16 @@ signals:
 protected:
     explicit AbstractOcrDialogue(AbstractOcrEngine *plugin, QWidget *pnt = nullptr);
 
-    const AbstractPlugin *plugin() const		{ return (m_plugin); }
-
+    AbstractOcrEngine *engine() const			{ return (m_plugin); }
 
     /**
-     * Enable or disable dialog fields. This slot is called when the ocr process starts
-     * with parameter state=false and called again if the gui should accept user input
-     * again after ocr finished with parameter true.
+     * Enable or disable dialogue fields.
+     *
+     * @param enable Whether the dialogue fields should be enabled
+     *
+     * @note This is called when the OCR process starts with the parameter @p enable
+     * set to @c false, and called after OCR has finished and the GUI should accept
+     * user input again with the parameter @p enable set to @c true.
      */
     virtual void enableFields(bool enable) = 0;
 

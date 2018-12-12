@@ -43,6 +43,7 @@
   */
 
 class QProcess;
+class KConfigSkeletonItem;
 class ImageFormat;
 class ImageCanvas;
 class AbstractOcrDialogue;
@@ -72,12 +73,11 @@ class PLUGIN_EXPORT AbstractOcrEngine : public AbstractPlugin
     Q_OBJECT
 
 public:
-    // TODO: better names
-    enum EngineError {					// OCR Engine setup errors
-        ENG_ERROR,
-        ENG_OK,
-        ENG_DATA_MISSING,
-        ENG_BAD_SETUP
+    enum EngineStatus					// OCR engine setup/runtime status
+    {
+        Ok,
+        SetupError,
+        RuntimeError
     };
 
     virtual ~AbstractOcrEngine();
@@ -93,6 +93,10 @@ public:
     void setImageCanvas(ImageCanvas *canvas);
     void setImage(const KookaImage img);
     void setTextDocument(QTextDocument *doc);
+
+    QString findExecutable(QString (*settingFunc)(), KConfigSkeletonItem *settingItem);
+
+    void setErrorText(const QString &msg)			{ m_errorText.append(msg); }
 
 protected:
     explicit AbstractOcrEngine(QObject *pnt, const char *name);
@@ -128,6 +132,7 @@ protected:
 
 signals:
     void newOCRResultText();
+    void openOcrPrefs();
 
     void setSpellCheckConfig(const QString &configFile);
     void startSpellCheck(bool interactive, bool background);
@@ -180,7 +185,7 @@ private slots:
     void slotImagePosition(const QPoint &p);
 
 private:
-    virtual void startOcrProcess(AbstractOcrDialogue *dia, const KookaImage *img) = 0;
+    virtual AbstractOcrEngine::EngineStatus startOcrProcess(AbstractOcrDialogue *dia, const KookaImage *img) = 0;
 
     void stopOcrProcess(bool tellUser);
     void removeTempFiles();
@@ -188,6 +193,7 @@ private:
 private:
     bool m_ocrRunning;
     AbstractOcrDialogue *m_ocrDialog;
+    QStringList m_errorText;
 
     KookaImage m_introducedImage;
     QImage *m_resultImage;

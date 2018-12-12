@@ -35,12 +35,9 @@
 #include <qregexp.h>
 #include <qgridlayout.h>
 #include <qprogressbar.h>
-#include <qpushbutton.h>
 #include <qdebug.h>
 
 #include <klocalizedstring.h>
-#include <kseparator.h>
-#include <kmessagebox.h>
 #include <kprocess.h>
 #include <kconfigskeleton.h>
 
@@ -54,14 +51,13 @@
 
 OcrGocrDialog::OcrGocrDialog(AbstractOcrEngine *plugin, QWidget *pnt)
     : AbstractOcrDialogue(plugin, pnt),
-      m_ocrCmd(QString::null),
-      m_isBW(false)
+      m_ocrCmd(QString::null)
 {
     qDebug();
 }
 
 
-AbstractOcrEngine::EngineError OcrGocrDialog::setupGui()
+AbstractOcrEngine::EngineStatus OcrGocrDialog::setupGui()
 {
     AbstractOcrDialogue::setupGui();
 
@@ -104,53 +100,33 @@ AbstractOcrEngine::EngineError OcrGocrDialog::setupGui()
 
     // TODO: slider for "certainty" (GOCR option '-a')
 
-    gl->setRowStretch(3, 1);                // for top alignment
+    gl->setRowStretch(3, 1);				// for top alignment
 
     /* find the GOCR binary */
-    QString res = KookaSettings::ocrGocrBinary();
-    if (res.isEmpty()) {
-        // TODO: move KookaPref::tryFindBinary() to AbstractOcr?????? and use it
-//        res = KookaPref::tryFindGocr();
-        if (res.isEmpty()) {
-            /* Popup here telling that the config needs to be called */
-            KMessageBox::sorry(this, i18n("The path to the GOCR binary is not configured or is not valid.\n"
-                                          "Please provide or check the path in the Kooka configuration."),
-                               i18n("GOCR Software Not Found"));
-            buttonBox()->button(QDialogButtonBox::Discard)->setEnabled(false);
-        }
+    m_ocrCmd = engine()->findExecutable(&KookaSettings::ocrGocrBinary, KookaSettings::self()->ocrGocrBinaryItem());
+    if (m_ocrCmd.isEmpty())				// found, get its version
+    {
+        engine()->setErrorText(i18n("The GOCR executable is not configured or is not available."));
     }
 
-    /* retrieve program version and display */
-    if (res.isEmpty()) {
-        res = i18n("Not found");
-    } else {
-        m_ocrCmd = res;
-    }
-    ocrShowInfo(res, version());            // show binary and version
-
-    progressBar()->setMaximum(0);           // animation only
+    ocrShowInfo(m_ocrCmd, version());			// the show binary and version
+    progressBar()->setMaximum(0);			// progress animation only
 
     m_setupWidget = w;
-    return (AbstractOcrEngine::ENG_OK);
+    return (!m_ocrCmd.isEmpty() ? AbstractOcrEngine::Ok : AbstractOcrEngine::SetupError);
 }
+
 
 void OcrGocrDialog::introduceImage(const KookaImage *img)
 {
     AbstractOcrDialogue::introduceImage(img);
-    if (img == NULL || img->isNull()) {
-        return;
-    }
+    if (img==nullptr || img->isNull()) return;
 
-    m_isBW = true;
-    if (img->colorCount() > 0 && img->colorCount() <= 2) {
-        //qDebug() << "Have" << img->numColors() << "colors on depth" << img->depth();
-        /* that means it is a black-and-white image. Thus we do not need the GrayLevel slider */
-        m_isBW = false;
-    }
-
-    if (sliderGrayLevel != NULL) {
-        sliderGrayLevel->setEnabled(m_isBW);
-    }
+    // See if the image is black-and-white, where the GrayLevel slider is not needed.
+    // This was originally (as a member variable) called 'm_isBW', but the logic was
+    // the other way round!
+    const bool notBW = !(img->colorCount()>0 && img->colorCount()<=2);
+    if (sliderGrayLevel!=nullptr) sliderGrayLevel->setEnabled(notBW);
 }
 
 
@@ -192,8 +168,6 @@ int OcrGocrDialog::getSpaceWidth() const
 
 QString OcrGocrDialog::version()
 {
-    //qDebug() << "of" << m_ocrCmd;
-
     QString vers;
 
     KProcess proc;
@@ -210,7 +184,6 @@ QString OcrGocrDialog::version()
             vers = i18n("Unknown");
         }
     } else {
-        //qDebug() << "failed with status" << status;
         vers = i18n("Error");
     }
 

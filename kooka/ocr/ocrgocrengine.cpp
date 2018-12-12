@@ -92,7 +92,7 @@ static QString newTempFile(const QString &suffix)
 }
 
 
-void OcrGocrEngine::startOcrProcess(AbstractOcrDialogue *dia, const KookaImage *img)
+AbstractOcrEngine::EngineStatus OcrGocrEngine::startOcrProcess(AbstractOcrDialogue *dia, const KookaImage *img)
 {
     OcrGocrDialog *gocrDia = static_cast<OcrGocrDialog *>(dia);
     const QString cmd = gocrDia->getOCRCmd();
@@ -160,7 +160,7 @@ void OcrGocrEngine::startOcrProcess(AbstractOcrDialogue *dia, const KookaImage *
 
     args << "-i" << QFile::encodeName(m_inputFile); // input image file
 
-    qDebug() << "Running GOCR on" << format << "file as" << cmd << args;
+    qDebug() << "Running GOCR on" << format << "file," << cmd << args;
 
     m_ocrProcess->setProgram(cmd);
     m_ocrProcess->setArguments(args);
@@ -169,6 +169,8 @@ void OcrGocrEngine::startOcrProcess(AbstractOcrDialogue *dia, const KookaImage *
 
     m_ocrProcess->start();
     if (!m_ocrProcess->waitForStarted(5000)) qWarning() << "Error starting GOCR process!";
+/////////////////////// TODO: status
+    return (AbstractOcrEngine::Ok);
 }
 
 void OcrGocrEngine::slotGOcrExited(int exitCode, QProcess::ExitStatus exitStatus)

@@ -823,6 +823,7 @@ void KookaView::startOCR(const KookaImage img)
     connect(engine, &AbstractOcrEngine::newOCRResultText, this, &KookaView::slotOcrResultAvailable);
     connect(engine, &AbstractOcrEngine::setSpellCheckConfig, this, &KookaView::slotSetOcrSpellConfig);
     connect(engine, &AbstractOcrEngine::startSpellCheck, this, &KookaView::slotOcrSpellCheck);
+    connect(engine, &AbstractOcrEngine::openOcrPrefs, this, &KookaView::signalOcrPrefs);
 
     // Connections OCR Results --> OCR Engine
     connect(mOcrResEdit, &OcrResEdit::highlightWord, engine, &AbstractOcrEngine::slotHighlightWord);

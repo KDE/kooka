@@ -87,10 +87,11 @@ QString getTempFileName(const QString &suffix)
 }
 
 
-void OcrOcradEngine::startOcrProcess(AbstractOcrDialogue *dia, const KookaImage *img)
+AbstractOcrEngine::EngineStatus OcrOcradEngine::startOcrProcess(AbstractOcrDialogue *dia, const KookaImage *img)
 {
     OcrOcradDialog *parentDialog = static_cast<OcrOcradDialog *>(dia);
     ocradVersion = parentDialog->getNumVersion();
+
     const QString cmd = parentDialog->getOCRCmd();
 
     m_ocrResultFile = tempSaveImage(img, ImageFormat("BMP"), 8);
@@ -143,7 +144,7 @@ void OcrOcradEngine::startOcrProcess(AbstractOcrDialogue *dia, const KookaImage 
     s = KookaSettings::ocrOcradExtraArguments();
     if (!s.isEmpty()) args << s;
 
-    qDebug() << "Running OCRAD as" << cmd << args;
+    qDebug() << "Running OCRAD," << cmd << args;
 
     m_ocrProcess->setProgram(cmd);
     m_ocrProcess->setArguments(args);
@@ -159,6 +160,8 @@ void OcrOcradEngine::startOcrProcess(AbstractOcrDialogue *dia, const KookaImage 
 
     m_ocrProcess->start();
     if (!m_ocrProcess->waitForStarted(5000)) qWarning() << "Error starting OCRAD process!";
+    ///////////////////////////// TODO: status
+    return (AbstractOcrEngine::Ok);
 }
 
 

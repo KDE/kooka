@@ -48,7 +48,7 @@ protected slots:
     void slotOcradExited(int exitCode, QProcess::ExitStatus exitStatus);
 
 private:
-    void startOcrProcess(AbstractOcrDialogue *dia, const KookaImage *img) override;
+    AbstractOcrEngine::EngineStatus startOcrProcess(AbstractOcrDialogue *dia, const KookaImage *img) override;
     QString readORF(const QString &fileName);
 
 private:

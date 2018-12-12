@@ -96,9 +96,6 @@ AbstractOcrDialogue::AbstractOcrDialogue(AbstractOcrEngine *plugin, QWidget *pnt
     // at least places the buttons in the intended order (in the standard KDE
     // style), even though the buttons used bear no relation to their function.
 
-    // TODO: an enum in AbstractOcrDialog for buttons used,
-    // for subclases that need to use them directly.
-
     QDialogButtonBox *bb = buttonBox();
     setStandardButtons(QDialogButtonBox::Discard|QDialogButtonBox::Apply|QDialogButtonBox::Close);
     bb->button(QDialogButtonBox::Discard)->setDefault(true);
@@ -122,7 +119,7 @@ AbstractOcrDialogue::AbstractOcrDialogue(AbstractOcrEngine *plugin, QWidget *pnt
 }
 
 
-AbstractOcrEngine::EngineError AbstractOcrDialogue::setupGui()
+AbstractOcrEngine::EngineStatus AbstractOcrDialogue::setupGui()
 {
     setupSetupPage();
     setupSpellPage();
@@ -131,7 +128,7 @@ AbstractOcrEngine::EngineError AbstractOcrDialogue::setupGui()
     // TODO: preferences option for whether debug is shown
     if (m_wantDebugCfg) setupDebugPage();
 
-    return (AbstractOcrEngine::ENG_OK);
+    return (AbstractOcrEngine::Ok);
 }
 
 
@@ -146,7 +143,7 @@ void AbstractOcrDialogue::setupSetupPage()
 
     m_setupPage = addPage(w, i18n("Setup"));
 
-    const AbstractPluginInfo *info = plugin()->pluginInfo();
+    const AbstractPluginInfo *info = engine()->pluginInfo();
     m_setupPage->setHeader(i18n("Optical Character Recognition using %1", info->name));
     m_setupPage->setIcon(QIcon::fromTheme("ocr"));
 }
@@ -187,26 +184,23 @@ QWidget *AbstractOcrDialogue::addExtraSetupWidget(QWidget *wid, bool stretchBefo
 
 void AbstractOcrDialogue::ocrShowInfo(const QString &binary, const QString &version)
 {
-    QWidget *w = addExtraEngineWidget();        // engine path/version/icon
+    QWidget *w = addExtraEngineWidget();		// engine path/version/icon
     QGridLayout *gl = new QGridLayout(w);
 
-    if (!binary.isNull())
-    {
-        QLabel *l = new QLabel(i18n("Executable:"), w);
-        gl->addWidget(l, 0, 0, Qt::AlignLeft | Qt::AlignTop);
+    QLabel *l = new QLabel(i18n("Executable:"), w);
+    gl->addWidget(l, 0, 0, Qt::AlignLeft | Qt::AlignTop);
 
-        l = new QLabel(binary, w);
-        gl->addWidget(l, 0, 1, Qt::AlignLeft | Qt::AlignTop);
+    l = new QLabel((!binary.isEmpty() ? xi18nc("@info", "<filename>%1</filename>", binary) : i18n("Not found")), w);
+    gl->addWidget(l, 0, 1, Qt::AlignLeft | Qt::AlignTop);
 
-        l = new QLabel(i18n("Version:"), w);
-        gl->addWidget(l, 1, 0, Qt::AlignLeft | Qt::AlignTop);
+    l = new QLabel(i18n("Version:"), w);
+    gl->addWidget(l, 1, 0, Qt::AlignLeft | Qt::AlignTop);
 
-        m_lVersion = new QLabel((!version.isEmpty() ? version : i18n("unknown")), w);
-        gl->addWidget(m_lVersion, 1, 1, Qt::AlignLeft | Qt::AlignTop);
-    }
+    m_lVersion = new QLabel((!version.isEmpty() ? version : i18n("Unknown")), w);
+    gl->addWidget(m_lVersion, 1, 1, Qt::AlignLeft | Qt::AlignTop);
 
     // Find the logo and display it if available
-    const AbstractPluginInfo *info = plugin()->pluginInfo();
+    const AbstractPluginInfo *info = engine()->pluginInfo();
     QString logoFile = KIconLoader::global()->iconPath(info->icon, KIconLoader::NoGroup, true);
     if (!logoFile.isNull())
     {
@@ -257,7 +251,7 @@ void AbstractOcrDialogue::setupEnginePage()
     QWidget *w = new QWidget(this);			// engine title/logo/description
     QGridLayout *gl = new QGridLayout(w);
 
-    const AbstractPluginInfo *info = plugin()->pluginInfo();
+    const AbstractPluginInfo *info = engine()->pluginInfo();
     QLabel *l = new QLabel(info->description, w);
     l->setWordWrap(true);
     l->setOpenExternalLinks(true);
@@ -471,27 +465,26 @@ void AbstractOcrDialogue::slotWriteConfig()
 
 void AbstractOcrDialogue::slotStartOCR()
 {
-    setCurrentPage(m_setupPage);            // force back to first page
-    enableGUI(true);                    // disable while running
+    setCurrentPage(m_setupPage);			// force back to first page
 
     m_retainFiles = (m_cbRetainFiles != nullptr && m_cbRetainFiles->isChecked());
     m_verboseDebug = (m_cbVerboseDebug != nullptr && m_cbVerboseDebug->isChecked());
 
-    slotWriteConfig();                  // save configuration
-    emit signalOcrStart();              // start the OCR process
+    slotWriteConfig();					// save configuration
+    emit signalOcrStart();				// start the OCR process
 }
 
 
+// TODO: eliminate these 2
 void AbstractOcrDialogue::slotStopOCR()
 {
-    emit signalOcrStop();               // stop the OCR process
-    enableGUI(false);                   // enable everything again
+    emit signalOcrStop();				// stop the OCR process
 }
 
 
 void AbstractOcrDialogue::slotCloseOCR()
 {
-    emit signalOcrClose();              // indicate we're closed
+    emit signalOcrClose();				// indicate we're closed
 }
 
 

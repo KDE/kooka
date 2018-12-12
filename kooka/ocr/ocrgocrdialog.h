@@ -50,7 +50,7 @@ public:
     explicit OcrGocrDialog(AbstractOcrEngine *plugin, QWidget *pnt);
     virtual ~OcrGocrDialog() = default;
 
-    AbstractOcrEngine::EngineError setupGui() override;
+    AbstractOcrEngine::EngineStatus setupGui() override;
 
     void introduceImage(const KookaImage *img) override;
 
@@ -75,7 +75,6 @@ private:
 
     QWidget *m_setupWidget;
     QString m_ocrCmd;
-    bool m_isBW;
 };
 
 #endif							// OCRGOCRDIALOG_H
