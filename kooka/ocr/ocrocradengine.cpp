@@ -46,6 +46,7 @@
 #include "imageformat.h"
 #include "kookasettings.h"
 #include "ocrocraddialog.h"
+#include "executablepathdialogue.h"
 
 
 K_PLUGIN_FACTORY_WITH_JSON(OcrOcradEngineFactory, "kookaocr-ocrad.json", registerPlugin<OcrOcradEngine>();)
@@ -470,4 +471,24 @@ QString OcrOcradEngine::readORF(const QString &fileName)
     qDebug() << "Finished analysing ORF";
 
     return (QString::null);             // no error detected
+}
+
+
+void OcrOcradEngine::openAdvancedSettings()
+{
+    ExecutablePathDialogue d(nullptr);
+
+    QString exec = KookaSettings::ocrOcradBinary();
+    if (exec.isEmpty())
+    {
+        KConfigSkeletonItem *ski = KookaSettings::self()->ocrOcradBinaryItem();
+        ski->setDefault();
+        exec = KookaSettings::ocrOcradBinary();
+    }
+
+    d.setPath(exec);
+    d.setLabel(i18n("Name or path of the OCRAR executable:"));
+    if (!d.exec()) return;
+
+    KookaSettings::setOcrOcradBinary(d.path());
 }

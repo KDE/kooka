@@ -41,6 +41,9 @@ public:
 
     AbstractOcrDialogue *createOcrDialogue(AbstractOcrEngine *plugin, QWidget *pnt) override;
 
+    bool hasAdvancedSettings() const override			{ return (true); }
+    void openAdvancedSettings() override;
+
 protected:
     QStringList tempFiles(bool retain) override;
 

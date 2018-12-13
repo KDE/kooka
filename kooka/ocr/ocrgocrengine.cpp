@@ -49,11 +49,14 @@
 #include <klocalizedstring.h>
 #include <kmessagebox.h>
 #include <kpluginfactory.h>
+#include <kconfigskeleton.h>
 
 #include "imgsaver.h"
 #include "kookaimage.h"
 #include "imageformat.h"
 #include "ocrgocrdialog.h"
+#include "executablepathdialogue.h"
+#include "kookasettings.h"
 
 
 K_PLUGIN_FACTORY_WITH_JSON(OcrGocrEngineFactory, "kookaocr-gocr.json", registerPlugin<OcrGocrEngine>();)
@@ -299,4 +302,24 @@ void OcrGocrEngine::slotGOcrStdout()
 
         if (progress > 0) emit ocrProgress(progress, subProgress);
     }
+}
+
+
+void OcrGocrEngine::openAdvancedSettings()
+{
+    ExecutablePathDialogue d(nullptr);
+
+    QString exec = KookaSettings::ocrGocrBinary();
+    if (exec.isEmpty())
+    {
+        KConfigSkeletonItem *ski = KookaSettings::self()->ocrGocrBinaryItem();
+        ski->setDefault();
+        exec = KookaSettings::ocrGocrBinary();
+    }
+
+    d.setPath(exec);
+    d.setLabel(i18n("Name or path of the GOCR executable:"));
+    if (!d.exec()) return;
+
+    KookaSettings::setOcrGocrBinary(d.path());
 }

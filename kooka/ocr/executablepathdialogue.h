@@ -3,8 +3,7 @@
  *  This file is part of Kooka, a scanning/OCR application using	*
  *  Qt <http://www.qt.io> and KDE Frameworks <http://www.kde.org>.	*
  *									*
- *  Copyright (C) 2000-2016 Klaas Freitag <freitag@suse.de>		*
- *                          Jonathan Marten <jjm@keelhaul.me.uk>	*
+ *  Copyright (C) 2018 Jonathan Marten <jjm@keelhaul.me.uk>		*
  *									*
  *  Kooka is free software; you can redistribute it and/or modify it	*
  *  under the terms of the GNU Library General Public License as	*
@@ -29,44 +28,39 @@
  *									*
  ************************************************************************/
 
-#ifndef OCRGOCRENGINE_H
-#define OCRGOCRENGINE_H
+#ifndef EXECUTABLEPATHDIALOGUE_H
+#define EXECUTABLEPATHDIALOGUE_H
 
-#include <qprocess.h>
-
-#include "abstractocrengine.h"
-
-class QTemporaryDir;
+#include "dialogbase.h"
 
 
-class OcrGocrEngine : public AbstractOcrEngine
+class QLabel;
+class KUrlRequester;
+
+
+class PLUGIN_EXPORT ExecutablePathDialogue : public DialogBase
 {
     Q_OBJECT
 
 public:
-    OcrGocrEngine(QObject *pnt, const QVariantList &args);
-    virtual ~OcrGocrEngine() = default;
+    explicit ExecutablePathDialogue(QWidget *pnt);
+    virtual ~ExecutablePathDialogue() = default;
 
-    AbstractOcrDialogue *createOcrDialogue(AbstractOcrEngine *plugin, QWidget *pnt) override;
+    void setPath(const QString &exec);
+    void setLabel(const QString &text);
 
-    bool hasAdvancedSettings() const override			{ return (true); }
-    void openAdvancedSettings() override;
+    QString path() const;
 
 protected:
-    QStringList tempFiles(bool retain) override;
 
 protected slots:
-    void slotGOcrStdout();
-    void slotGOcrExited(int exitCode, QProcess::ExitStatus exitStatus);
+    void slotTextChanged(const QString &text);
 
 private:
-    AbstractOcrEngine::EngineStatus startOcrProcess(AbstractOcrDialogue *dia, const KookaImage *img) override;
 
 private:
-    QTemporaryDir *m_tempDir;
-    QString m_inputFile;
-    QString m_resultFile;
-    QString m_stderrFile;
+    QLabel *mLabel;
+    KUrlRequester *mPathRequester;
 };
 
-#endif							// OCRGOCRENGINE_H
+#endif							// EXECUTABLEPATHDIALOGUE_H

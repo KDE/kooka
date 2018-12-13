@@ -98,6 +98,22 @@ public:
 
     void setErrorText(const QString &msg)			{ m_errorText.append(msg); }
 
+    /**
+     * Check whether the engine has advanced settings:  for example, the
+     * pathname of an executable which performs the OCR.  The actual dialogue
+     * will be requested by @c openAdvancedSettings().
+     *
+     * @return @c true if the engine has advanced settings
+     **/
+    virtual bool hasAdvancedSettings() const			{ return (false); }
+
+    /**
+     * Open a dialogue for advanced engine settings.  This will only be
+     * called if the engine has indicated that it has advanced settings,
+     * by returning @c true from @c hasAdvancedSettings().
+     **/
+    virtual void openAdvancedSettings()				{}
+
 protected:
     explicit AbstractOcrEngine(QObject *pnt, const char *name);
 

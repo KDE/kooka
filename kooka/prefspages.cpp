@@ -55,6 +55,7 @@
 #include "formatdialog.h"
 #include "thumbview.h"
 #include "pluginmanager.h"
+#include "abstractocrengine.h"
 #include "kookasettings.h"
 
 
@@ -448,42 +449,41 @@ void KookaOcrPage::slotEngineSelected(int i)
     const QString pluginKey = mEngineCombo->currentData().toString();
     qDebug() << "selected" << pluginKey;
 
-    mOcrAdvancedButton->setEnabled(false);		// for the moment, anyway
+    QString msg;					// description message
+    bool enableAdvanced = false;			// for the moment, anyway
 
-    QString msg;
     if (pluginKey.isEmpty())				// no engine selected
     {
         msg = i18n("No OCR engine is selected. Select and configure one to be able to perform OCR.");
     }
-    else
-    {
+    else						// an engine is selected,
+    {							// try to load its plugin
         const AbstractPlugin *plugin = PluginManager::self()->loadPlugin(PluginManager::OcrPlugin, pluginKey);
-        if (plugin==nullptr)				// plugin not found
+        const AbstractOcrEngine *engine = qobject_cast<const AbstractOcrEngine *>(plugin);
+        if (engine==nullptr)				// plugin not found
         {
             msg = i18n("Unknown engine '%1'.", pluginKey);
         }
         else
         {
-            msg = plugin->pluginInfo()->description;
-            // TODO: only if plugin has advanced settings
-            //mOcrAdvancedButton->setEnabled(plugin->hasAdvancedSettings());
-            mOcrAdvancedButton->setEnabled(true);
+            msg = engine->pluginInfo()->description;
+            enableAdvanced = engine->hasAdvancedSettings();
         }
     }
 
-    mDescLabel->setText(msg);
+    mDescLabel->setText(msg);				// show description text
+    mOcrAdvancedButton->setEnabled(enableAdvanced);	// enable button if applicable
 }
 
 
 void KookaOcrPage::slotOcrAdvanced()
 {
-    qDebug();
     AbstractPlugin *plugin = PluginManager::self()->currentPlugin(PluginManager::OcrPlugin);
-    Q_ASSERT(plugin!=nullptr);
-    // TODO: plugin support for this
-//    Q_ASSERT(plugin->hasAdvancedSettings());
-//     plugin->openAdvancedSettings();
-// needs to save settings on "OK"
+    AbstractOcrEngine *engine = qobject_cast<AbstractOcrEngine *>(plugin);
+    Q_ASSERT(engine!=nullptr);
+    Q_ASSERT(engine->hasAdvancedSettings());
+
+    engine->openAdvancedSettings();
 }
 
 

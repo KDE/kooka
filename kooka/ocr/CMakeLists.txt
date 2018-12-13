@@ -1,6 +1,6 @@
 #########################################################################
 #  Project:		Kooka						#
-#  Edit:		09-Dec-18					#
+#  Edit:		13-Dec-18					#
 #########################################################################
 
 project(kooka)
@@ -31,11 +31,17 @@ add_definitions("-DPLUGIN_EXPORT=__attribute__((visibility(\"default\")))")
 #									#
 #########################################################################
 
-add_library(kookaocr SHARED abstractocrengine.cpp abstractocrdialogue.cpp)
+set(kookaocr_SRCS
+  abstractocrengine.cpp
+  abstractocrdialogue.cpp
+  executablepathdialogue.cpp
+)
+add_library(kookaocr SHARED ${kookaocr_SRCS})
 set_target_properties(kookaocr PROPERTIES SOVERSION "1.0.0")
 target_link_libraries(kookaocr Qt5::Core Qt5::Widgets Qt5::PrintSupport)
 target_link_libraries(kookaocr KF5::I18n KF5::WidgetsAddons KF5::ConfigWidgets KF5::SonnetCore KF5::SonnetUi)
 target_link_libraries(kookaocr kookascan kookacore)
+target_link_libraries(kookaocr dialogutil)
 
 ##install(TARGETS kookaocr ${INSTALL_TARGETS_DEFAULT_ARGS})
 

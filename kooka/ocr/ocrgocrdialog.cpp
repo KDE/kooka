@@ -53,7 +53,6 @@ OcrGocrDialog::OcrGocrDialog(AbstractOcrEngine *plugin, QWidget *pnt)
     : AbstractOcrDialogue(plugin, pnt),
       m_ocrCmd(QString::null)
 {
-    qDebug();
 }
 
 
