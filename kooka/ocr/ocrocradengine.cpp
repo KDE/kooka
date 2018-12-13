@@ -72,22 +72,6 @@ AbstractOcrDialogue *OcrOcradEngine::createOcrDialogue(AbstractOcrEngine *plugin
 }
 
 
-// TODO: same in OcrGocrEngine
-QString getTempFileName(const QString &suffix)
-{
-    QTemporaryFile tmpFile(QDir::tempPath()+"/ocrocradtemp_XXXXXX"+suffix);
-    tmpFile.setAutoRemove(false);
-    if (!tmpFile.open()) {
-        //qDebug() << "error creating temporary file for" << suffix;
-        return (QString::null);
-    }
-
-    QString tmpName = QFile::encodeName(tmpFile.fileName());
-    tmpFile.close();					// just want its name
-    return (tmpName);
-}
-
-
 AbstractOcrEngine::EngineStatus OcrOcradEngine::startOcrProcess(AbstractOcrDialogue *dia, const KookaImage *img)
 {
     OcrOcradDialog *parentDialog = static_cast<OcrOcradDialog *>(dia);
@@ -105,7 +89,7 @@ AbstractOcrEngine::EngineStatus OcrOcradEngine::startOcrProcess(AbstractOcrDialo
     Q_CHECK_PTR(m_ocrProcess);
     QStringList args;					// arguments for process
 
-    m_tempOrfName = getTempFileName(".orf");
+    m_tempOrfName = tempFileName("orf");
     args << "-x" << m_tempOrfName;			// the ORF result file
 
     args << QFile::encodeName(m_ocrImagePBM);		// name of the input image
@@ -152,9 +136,9 @@ AbstractOcrEngine::EngineStatus OcrOcradEngine::startOcrProcess(AbstractOcrDialo
     m_ocrProcess->setStandardInputFile(QProcess::nullDevice());
 
     m_ocrProcess->setProcessChannelMode(QProcess::SeparateChannels);
-    m_tempStdoutLog = getTempFileName(".log");
+    m_tempStdoutLog = tempFileName("stdout.log");
     m_ocrProcess->setStandardOutputFile(m_tempStdoutLog);
-    m_tempStderrLog = getTempFileName(".log");
+    m_tempStderrLog = tempFileName("stderr.log");
     m_ocrProcess->setStandardErrorFile(m_tempStderrLog);
 
     connect(m_ocrProcess, SIGNAL(finished(int,QProcess::ExitStatus)), SLOT(slotOcradExited(int,QProcess::ExitStatus)));

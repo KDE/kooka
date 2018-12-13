@@ -425,57 +425,67 @@ void AbstractOcrEngine::addWord(const QString &word, const OcrWordData &data)
 }
 
 
-QString AbstractOcrEngine::tempSaveImage(const KookaImage *img, const ImageFormat &format, int colors)
+QString AbstractOcrEngine::tempFileName(const QString &suffix, const QString &baseName)
 {
-    if (img==nullptr) return (QString::null);
-
-    const QString tempTemplate = QDir::tempPath()+'/'+"imgsaverXXXXXX."+format.extension();
-    QTemporaryFile tmpFile(tempTemplate);
+    const QString protoName = QDir::tempPath()+'/'+baseName+"_XXXXXX."+suffix;
+    QTemporaryFile tmpFile(protoName);
     tmpFile.setAutoRemove(false);
 
     if (!tmpFile.open())
     {
-        qDebug() << "Error opening temp file" << tmpFile.fileName();
-        tmpFile.setAutoRemove(true);
+        qDebug() << "error creating temporary file" << protoName;
+        setErrorText(xi18nc("@info", "Cannot create temporary file <filename>%1</filename>", protoName));
         return (QString::null);
     }
-    QString name = tmpFile.fileName();
-    tmpFile.close();
 
-    const KookaImage *tmpImg = NULL;
-    if (colors != -1 && img->depth() != colors) { // Need to convert image
+    QString tmpName = QFile::encodeName(tmpFile.fileName());
+    tmpFile.close();					// just want its name
+    return (tmpName);
+}
+
+
+QString AbstractOcrEngine::tempSaveImage(const KookaImage *img, const ImageFormat &format, int colors)
+{
+    if (img==nullptr) return (QString::null);		// no image to save
+
+    QString tmpName = tempFileName(format.extension(), "imagetemp");
+    const KookaImage *tmpImg = nullptr;
+
+    if (colors!=-1 && img->depth()!=colors)		// need to convert image
+    {
         QImage::Format newfmt;
-        switch (colors) {
-        case 1:     newfmt = QImage::Format_Mono;
+        switch (colors)
+        {
+case 1:     newfmt = QImage::Format_Mono;
             break;
 
-        case 8:     newfmt = QImage::Format_Indexed8;
+case 8:     newfmt = QImage::Format_Indexed8;
             break;
 
-        case 24:    newfmt = QImage::Format_RGB888;
+case 24:    newfmt = QImage::Format_RGB888;
             break;
 
-        case 32:    newfmt = QImage::Format_RGB32;
+case 32:    newfmt = QImage::Format_RGB32;
             break;
 
-        default:    //qDebug() << "Error: Bad colour depth requested" << colors;
-            tmpFile.setAutoRemove(true);
+default:    qWarning() << "bad colour depth" << colors;
             return (QString::null);
         }
 
         tmpImg = new KookaImage(img->convertToFormat(newfmt));
-        img = tmpImg;
+        img = tmpImg;					// replace with converted image
     }
 
-    qDebug() << "Saving to" << name << "in format" << format;
-    if (!img->save(name, format.name())) {
-        qDebug() << "Error saving to" << name;
-        tmpFile.setAutoRemove(true);
-        name = QString::null;
+    qDebug() << "saving to" << tmpName << "in format" << format;
+    if (!img->save(tmpName, format.name()))
+    {
+        qDebug() << "Error saving to" << tmpName;
+        setErrorText(xi18nc("@info", "Cannot save image to temporary file <filename>%1</filename>", tmpName));
+        tmpName.clear();
     }
 
-    if (tmpImg != NULL) delete tmpImg;
-    return (name);
+    if (tmpImg!=nullptr) delete tmpImg;
+    return (tmpName);
 }
 
 

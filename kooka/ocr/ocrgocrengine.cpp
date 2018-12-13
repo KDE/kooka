@@ -83,18 +83,6 @@ AbstractOcrDialogue *OcrGocrEngine::createOcrDialogue(AbstractOcrEngine *plugin,
 }
 
 
-// TODO: similar function used for GOCR and OCRAD
-static QString newTempFile(const QString &suffix)
-{
-    QTemporaryFile tf(QDir::tempPath()+"/ocrgocrtemp_XXXXXX"+suffix);
-    tf.setAutoRemove(false);				// we will do this later
-    tf.open();						// create the file
-    QString result = tf.fileName();			// save its assigned name
-    tf.close();						// don't need it any more
-    return (result);
-}
-
-
 AbstractOcrEngine::EngineStatus OcrGocrEngine::startOcrProcess(AbstractOcrDialogue *dia, const KookaImage *img)
 {
     OcrGocrDialog *gocrDia = static_cast<OcrGocrDialog *>(dia);
@@ -155,13 +143,13 @@ AbstractOcrEngine::EngineStatus OcrGocrEngine::startOcrProcess(AbstractOcrDialog
     // connects to the ocrProgress() signal :-(
     args << "-x" << "/dev/stdout";          // progress to stdout
 
-    m_resultFile = newTempFile(".gocrout.txt");     // OCR result text file
+    m_resultFile = tempFileName("gocrout.txt");		// OCR result text file
     args << "-o" << QFile::encodeName(m_resultFile);
 
-    m_stderrFile = newTempFile(".gocrerr.txt");     // stderr log/debug output
+    m_stderrFile = tempFileName("gocrerr.txt");		// stderr log/debug output
     args << "-e" << QFile::encodeName(m_stderrFile);
 
-    args << "-i" << QFile::encodeName(m_inputFile); // input image file
+    args << "-i" << QFile::encodeName(m_inputFile);	// input image file
 
     qDebug() << "Running GOCR on" << format << "file," << cmd << args;
 

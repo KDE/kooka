@@ -125,7 +125,7 @@ protected:
      * Save an image to a temporary file.
      *
      * @param img The image to save
-     * @param format The image format to save in.
+     * @param format The image format to save in
      * @param colors The colour depth (bits per pixel) required.  If specified,
      * this must be either 1, 8, 24 or 32.  The default is for no colour
      * conversion.
@@ -133,7 +133,19 @@ protected:
      * @return The file name as saved, or @c QString::null if there was
      *         an error.
      **/
-    static QString tempSaveImage(const KookaImage *img, const ImageFormat &format, int colors = -1);
+    QString tempSaveImage(const KookaImage *img, const ImageFormat &format, int colors = -1);
+
+    /**
+     * Get a name to use for a temporary file.
+     *
+     * @param suffix File name suffix, no leading '.' is required
+     * @return The temporary file name, or @c QString::null if the file could not be created
+     *
+     * @note The temporary file is created and is left in place under the returned name,
+     * but is not opened.  Its name should be saved and eventually returned in the
+     * @c tempFiles() list so that it will be removed.
+     **/
+    QString tempFileName(const QString &suffix, const QString &baseName = "ocrtemp");
 
     void finishedOcr(bool success);
 
