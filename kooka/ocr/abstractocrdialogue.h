@@ -101,9 +101,7 @@ protected:
 
 protected slots:
     virtual void slotWriteConfig();
-    void slotStopOCR();
     void slotStartOCR();
-    void slotCloseOCR();
     void slotCustomSpellDialog();
 
 private:

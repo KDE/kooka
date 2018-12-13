@@ -106,9 +106,8 @@ AbstractOcrDialogue::AbstractOcrDialogue(AbstractOcrEngine *plugin, QWidget *pnt
 
     // Signals which tell our caller what the user is doing
     connect(bb->button(QDialogButtonBox::Discard), &QAbstractButton::clicked, this, &AbstractOcrDialogue::slotStartOCR);
-    connect(bb->button(QDialogButtonBox::Apply), &QAbstractButton::clicked, this, &AbstractOcrDialogue::slotStopOCR);
-    // TODO: connect directly to signal, eliminate AbstractOcrDialogue::slotCloseOCR()
-    connect(this, &QDialog::rejected, this, &AbstractOcrDialogue::slotCloseOCR);
+    connect(bb->button(QDialogButtonBox::Apply), &QAbstractButton::clicked, this, &AbstractOcrDialogue::signalOcrStop);
+    connect(this, &QDialog::rejected, this, &AbstractOcrDialogue::signalOcrClose);
 
     m_previewSize.setWidth(380);			// minimum preview size
     m_previewSize.setHeight(250);
@@ -458,8 +457,7 @@ void AbstractOcrDialogue::slotWriteConfig()
     KookaSettings::setOcrSpellInteractiveCheck(m_gbInteractiveCheck->isChecked());
     KookaSettings::setOcrSpellCustomSettings(m_rbCustomSpellSettings->isChecked());
     KookaSettings::self()->save();
-
-    // deliberately not saving the OCR debug config
+    // deliberately not saving the OCR debug configuration
 }
 
 
@@ -472,19 +470,6 @@ void AbstractOcrDialogue::slotStartOCR()
 
     slotWriteConfig();					// save configuration
     emit signalOcrStart();				// start the OCR process
-}
-
-
-// TODO: eliminate these 2
-void AbstractOcrDialogue::slotStopOCR()
-{
-    emit signalOcrStop();				// stop the OCR process
-}
-
-
-void AbstractOcrDialogue::slotCloseOCR()
-{
-    emit signalOcrClose();				// indicate we're closed
 }
 
 
