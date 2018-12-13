@@ -135,30 +135,6 @@ int KookaPref::currentPageIndex()
     return (mPages.indexOf(currentPage()));
 }
 
-static QString tryFindBinary(const QString &bin, const QString &configPath)
-{
-    // First check for a full path in the config file.
-    // Not sure what the point of the 'contains' test is here.
-    if (!configPath.isEmpty() && configPath.contains(bin))
-    {
-        QFileInfo fi(configPath);			// check for valid executable
-        if (fi.exists() && fi.isExecutable() && !fi.isDir()) return (fi.absoluteFilePath());
-    }
-
-    // Otherwise try to find the program on the user's search PATH
-    return (QStandardPaths::findExecutable(bin));
-}
-
-QString KookaPref::tryFindGocr()
-{
-    return (tryFindBinary("gocr", KookaSettings::ocrGocrBinary()));
-}
-
-QString KookaPref::tryFindOcrad(void)
-{
-    return (tryFindBinary("ocrad", KookaSettings::ocrOcradBinary()));
-}
-
 // Support for the gallery location - moved here from Previewer class in libkscan
 
 QString KookaPref::sGalleryRoot = QString::null;    // global resolved location

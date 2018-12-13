@@ -47,9 +47,6 @@ public:
     int createPage(KookaPrefsPage *page, const QString &name,
                    const QString &header, const char *icon);
 
-    static QString tryFindGocr();
-    static QString tryFindOcrad();
-
     void showPageIndex(int page);
     int currentPageIndex();
 

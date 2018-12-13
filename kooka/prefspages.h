@@ -55,7 +55,7 @@ class KookaPrefsPage : public QWidget
 
 public:
     KookaPrefsPage(KPageDialog *parent);
-    virtual ~KookaPrefsPage();
+    virtual ~KookaPrefsPage() = default;
 
     virtual void saveSettings() = 0;
     virtual void defaultSettings() = 0;
@@ -161,7 +161,6 @@ private slots:
 
 private:
     void applySettings();
-    bool checkOcrBinary(const QString &cmd, const QString &bin, bool showMsg);
 
     QComboBox *mEngineCombo;
     QLabel *mDescLabel;

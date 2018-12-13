@@ -34,7 +34,6 @@
 #include <qlayout.h>
 #include <qcheckbox.h>
 #include <qlabel.h>
-#include <qfileinfo.h>
 #include <qradiobutton.h>
 #include <qbuttongroup.h>
 #include <qgroupbox.h>
@@ -65,10 +64,6 @@ KookaPrefsPage::KookaPrefsPage(KPageDialog *parent)
     : QWidget(parent)
 {
     mLayout = new QVBoxLayout(this);
-}
-
-KookaPrefsPage::~KookaPrefsPage()
-{
 }
 
 //  "General" page
@@ -484,31 +479,4 @@ void KookaOcrPage::slotOcrAdvanced()
     Q_ASSERT(engine->hasAdvancedSettings());
 
     engine->openAdvancedSettings();
-}
-
-
-bool KookaOcrPage::checkOcrBinary(const QString &cmd, const QString &bin, bool show_msg)
-{
-    // Why do we do this test?  See KookaPref::tryFindBinary().
-    if (!cmd.contains(bin)) {
-        return (false);
-    }
-
-    QFileInfo fi(cmd);
-    if (!fi.exists()) {
-        if (show_msg) KMessageBox::sorry(this, xi18nc("@info", "The path <filename>%1</filename> is not a valid binary.<nl/>"
-                                                      "Check the path and install the program if necessary.", cmd),
-                                         i18n("OCR Engine Not Found"));
-        return (false);
-    } else {
-        /* File exists, check if not dir and executable */
-        if (fi.isDir() || (!fi.isExecutable())) {
-            if (show_msg) KMessageBox::sorry(this, xi18nc("@info", "The program <filename>%1</filename> exists, but is not executable.<nl/>"
-                                                          "Check the path and permissions, and/or reinstall the program if necessary.", cmd),
-                                             i18n("OCR Engine Not Executable"));
-            return (false);
-        }
-    }
-
-    return (true);
 }
