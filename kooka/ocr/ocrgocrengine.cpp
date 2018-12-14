@@ -47,7 +47,6 @@
 #include <qprocess.h>
 
 #include <klocalizedstring.h>
-#include <kmessagebox.h>
 #include <kpluginfactory.h>
 #include <kconfigskeleton.h>
 
@@ -72,8 +71,6 @@ OcrGocrEngine::OcrGocrEngine(QObject *pnt, const QVariantList &args)
     m_tempDir = nullptr;
     m_inputFile = QString::null;			// input image file
     m_resultFile = QString::null;			// OCR result text file
-    m_stderrFile = QString::null;			// stderr log/debug output
-    m_ocrResultFile = QString::null;			// OCR result image
 }
 
 
@@ -83,7 +80,7 @@ AbstractOcrDialogue *OcrGocrEngine::createOcrDialogue(AbstractOcrEngine *plugin,
 }
 
 
-AbstractOcrEngine::EngineStatus OcrGocrEngine::startOcrProcess(AbstractOcrDialogue *dia, const KookaImage *img)
+bool OcrGocrEngine::createOcrProcess(AbstractOcrDialogue *dia, const KookaImage *img)
 {
     OcrGocrDialog *gocrDia = static_cast<OcrGocrDialog *>(dia);
     const QString cmd = gocrDia->getOCRCmd();
@@ -100,24 +97,12 @@ AbstractOcrEngine::EngineStatus OcrGocrEngine::startOcrProcess(AbstractOcrDialog
     // TODO: if the input file is local and is readable by GOCR,
     // can use it directly (but don't delete it afterwards!)
     m_inputFile = tempSaveImage(img, ImageFormat(format));
-    // save image to a temp file
-    m_ocrResultFile = QString::null;            // don't know this until finished
-
-    if (m_ocrProcess != NULL) {
-        delete m_ocrProcess;    // kill old process if still there
-    }
-    m_ocrProcess = new QProcess();          // start new GOCR process
-    Q_CHECK_PTR(m_ocrProcess);
-
-    m_ocrResultText = QString::null;			// clear buffer for capturing
+							// save image to a temp file
+    QProcess *proc = initOcrProcess();			// start process for OCR
+    QStringList args;					// arguments for process
 							// new unique temporary directory
     m_tempDir = new QTemporaryDir(QDir::tempPath()+"/ocrgocrdir_XXXXXX");
-    m_ocrProcess->setWorkingDirectory(m_tempDir->path());
-							// run process in there
-    connect(m_ocrProcess, SIGNAL(finished(int,QProcess::ExitStatus)), SLOT(slotGOcrExited(int,QProcess::ExitStatus)));
-    connect(m_ocrProcess, SIGNAL(readyReadStandardOutput()), SLOT(slotGOcrStdout()));
-
-    QStringList args;                   // arguments for process
+    proc->setWorkingDirectory(m_tempDir->path());	// run process in there
 
     if (img->colorCount() < 0 || img->colorCount() > 3) { // Not a B&W image
         args << "-l" << QString::number(gocrDia->getGraylevel());
@@ -146,27 +131,21 @@ AbstractOcrEngine::EngineStatus OcrGocrEngine::startOcrProcess(AbstractOcrDialog
     m_resultFile = tempFileName("gocrout.txt");		// OCR result text file
     args << "-o" << QFile::encodeName(m_resultFile);
 
-    m_stderrFile = tempFileName("gocrerr.txt");		// stderr log/debug output
-    args << "-e" << QFile::encodeName(m_stderrFile);
-
     args << "-i" << QFile::encodeName(m_inputFile);	// input image file
 
-    qDebug() << "Running GOCR on" << format << "file," << cmd << args;
+    proc->setProgram(cmd);
+    proc->setArguments(args);
 
-    m_ocrProcess->setProgram(cmd);
-    m_ocrProcess->setArguments(args);
-    m_ocrProcess->setStandardInputFile(QProcess::nullDevice());
-    m_ocrProcess->setProcessChannelMode(QProcess::ForwardedErrorChannel);
+    proc->setReadChannel(QProcess::StandardOutput);	// collect stdout for progress
+    connect(proc, &QProcess::readyReadStandardOutput, this, &OcrGocrEngine::slotGOcrStdout);
 
-    m_ocrProcess->start();
-    if (!m_ocrProcess->waitForStarted(5000)) qWarning() << "Error starting GOCR process!";
-/////////////////////// TODO: status
-    return (AbstractOcrEngine::Ok);
+    return (runOcrProcess());
 }
 
-void OcrGocrEngine::slotGOcrExited(int exitCode, QProcess::ExitStatus exitStatus)
+
+bool OcrGocrEngine::finishedOcrProcess(QProcess *proc)
 {
-    qDebug() << "exit code" << exitCode << "status" << exitStatus;
+    qDebug();
 
     QFile rf(m_resultFile);
     if (!rf.open(QIODevice::ReadOnly)) {
@@ -175,21 +154,17 @@ void OcrGocrEngine::slotGOcrExited(int exitCode, QProcess::ExitStatus exitStatus
 #else
         const char *reason = "";
 #endif
-        KMessageBox::error(nullptr,
-                           xi18nc("@info", "Cannot read GOCR result file <filename>%1</filename><nl/>%2",
-                                  m_resultFile, reason),
-                           i18n("GOCR Result File Error"));
-        finishedOcr(false);
-        return;
+        setErrorText(xi18nc("@info", "Cannot read GOCR result file <filename>%1</filename><nl/>%2", m_resultFile, reason));
+        return (false);
     }
 
-    m_ocrResultText = rf.readAll();         // read all the result text
-    rf.close();                     // finished with result file
+    const QString ocrResultText = rf.readAll();         // read all the result text
+    rf.close();						// finished with result file
 
     // Now all the text output by GOCR is in m_ocrResultText. Split this up
     // first into lines and then into words, and save this as the OCR results.
-    QStringList lines = m_ocrResultText.split('\n', QString::SkipEmptyParts);
-    //qDebug() << "RESULT" << m_ocrResultText << "split to" << lines.count() << "lines";
+    QStringList lines = ocrResultText.split('\n', QString::SkipEmptyParts);
+    //qDebug() << "RESULT" << ocrResultText << "split to" << lines.count() << "lines";
 
     startResultDocument();
 
@@ -208,12 +183,13 @@ void OcrGocrEngine::slotGOcrExited(int exitCode, QProcess::ExitStatus exitStatus
 
     // Find the GOCR result image
     QDir dir(m_tempDir->path());
+    QString foundResult;
     const char **prf = possibleResultFiles;
     while (*prf != NULL) {              // search for result files
         QString ri = dir.absoluteFilePath(*prf);
         if (QFile::exists(ri)) {            // take first one that matches
             qDebug() << "found result image" << ri;
-            m_ocrResultFile = ri;
+            foundResult = ri;
             break;
         }
         ++prf;
@@ -235,18 +211,18 @@ void OcrGocrEngine::slotGOcrExited(int exitCode, QProcess::ExitStatus exitStatus
     // refer to the viewed image directly - i.e. there is no need to take a
     // copy in OcrEngine::setImage().  The result image is still displayed in
     // the image viewer in OcrEngine::finishedOCRVisible().
-    if (m_ocrResultFile.isNull()) {
-        qDebug() << "cannot find result image in" << dir.absolutePath();
-    }
+    if (!foundResult.isEmpty()) setResultImage(foundResult);
+    else qDebug() << "cannot find result image in" << dir.absolutePath();
 
-    finishedOcr(m_ocrProcess->exitStatus()==QProcess::NormalExit);
+    return (true);
 }
+
 
 QStringList OcrGocrEngine::tempFiles(bool retain)
 {
     QStringList result;
 
-    result << m_inputFile << m_resultFile << m_stderrFile << m_ocrResultFile;
+    result << m_inputFile << m_resultFile;
 
     if (m_tempDir != NULL) {
         result << m_tempDir->path();
@@ -275,9 +251,8 @@ void OcrGocrEngine::slotGOcrStdout()
     int progress = -1;
     int subProgress;
 
-    m_ocrProcess->setReadChannel(QProcess::StandardOutput);
     QByteArray line;
-    while (!(line = m_ocrProcess->readLine()).isEmpty()) {
+    while (!(line = ocrProcess()->readLine()).isEmpty()) {
         //qDebug() << "GOCR stdout:" << line;
         // Calculate OCR progress
         if (rx1.indexIn(line) > -1) {

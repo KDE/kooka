@@ -65,7 +65,7 @@ OcrOcradDialog::OcrOcradDialog(AbstractOcrEngine *plugin, QWidget *pnt)
 }
 
 
-AbstractOcrEngine::EngineStatus OcrOcradDialog::setupGui()
+bool OcrOcradDialog::setupGui()
 {
     AbstractOcrDialogue::setupGui();			// build the standard GUI
 
@@ -211,7 +211,7 @@ AbstractOcrEngine::EngineStatus OcrOcradDialog::setupGui()
     progressBar()->setMaximum(0);			// progress animation only
 
     m_setupWidget = w;
-    return (!m_ocrCmd.isEmpty() ? AbstractOcrEngine::Ok : AbstractOcrEngine::SetupError);
+    return (!m_ocrCmd.isEmpty());
 }
 
 

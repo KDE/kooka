@@ -40,7 +40,6 @@
 #include <qprocess.h>
 
 #include <klocalizedstring.h>
-#include <kmessagebox.h>
 #include <kpluginfactory.h>
 
 #include "imageformat.h"
@@ -59,7 +58,6 @@ static const char UndetectedChar = '_';
 OcrOcradEngine::OcrOcradEngine(QObject *pnt, const QVariantList &args)
     : AbstractOcrEngine(pnt, "OcrOcradEngine")
 {
-    m_ocrResultFile = QString::null;
     m_ocrImagePBM = QString::null;
     m_tempOrfName = QString::null;
     ocradVersion = 0;
@@ -72,21 +70,20 @@ AbstractOcrDialogue *OcrOcradEngine::createOcrDialogue(AbstractOcrEngine *plugin
 }
 
 
-AbstractOcrEngine::EngineStatus OcrOcradEngine::startOcrProcess(AbstractOcrDialogue *dia, const KookaImage *img)
+bool OcrOcradEngine::createOcrProcess(AbstractOcrDialogue *dia, const KookaImage *img)
 {
     OcrOcradDialog *parentDialog = static_cast<OcrOcradDialog *>(dia);
     ocradVersion = parentDialog->getNumVersion();
 
     const QString cmd = parentDialog->getOCRCmd();
 
-    m_ocrResultFile = tempSaveImage(img, ImageFormat("BMP"), 8);
+    const QString ocrResultFile = tempSaveImage(img, ImageFormat("BMP"), 8);
+    setResultImage(ocrResultFile);
     // TODO: if the input file is local and is readable by OCRAD,
     // can use it directly (but don't delete it afterwards!)
     m_ocrImagePBM = tempSaveImage(img, ImageFormat("PBM"), 1);
 
-    if (m_ocrProcess != NULL) delete m_ocrProcess;	// kill old process if still there
-    m_ocrProcess = new QProcess();			// start new OCRAD process
-    Q_CHECK_PTR(m_ocrProcess);
+    QProcess *proc = initOcrProcess();			// start process for OCR
     QStringList args;					// arguments for process
 
     m_tempOrfName = tempFileName("orf");
@@ -129,73 +126,36 @@ AbstractOcrEngine::EngineStatus OcrOcradEngine::startOcrProcess(AbstractOcrDialo
     s = KookaSettings::ocrOcradExtraArguments();
     if (!s.isEmpty()) args << s;
 
-    qDebug() << "Running OCRAD," << cmd << args;
+    proc->setProgram(cmd);
+    proc->setArguments(args);
 
-    m_ocrProcess->setProgram(cmd);
-    m_ocrProcess->setArguments(args);
-    m_ocrProcess->setStandardInputFile(QProcess::nullDevice());
-
-    m_ocrProcess->setProcessChannelMode(QProcess::SeparateChannels);
+    proc->setProcessChannelMode(QProcess::SeparateChannels);
     m_tempStdoutLog = tempFileName("stdout.log");
-    m_ocrProcess->setStandardOutputFile(m_tempStdoutLog);
-    m_tempStderrLog = tempFileName("stderr.log");
-    m_ocrProcess->setStandardErrorFile(m_tempStderrLog);
+    proc->setStandardOutputFile(m_tempStdoutLog);
 
-    connect(m_ocrProcess, SIGNAL(finished(int,QProcess::ExitStatus)), SLOT(slotOcradExited(int,QProcess::ExitStatus)));
-
-    m_ocrProcess->start();
-    if (!m_ocrProcess->waitForStarted(5000)) qWarning() << "Error starting OCRAD process!";
-    ///////////////////////////// TODO: status
-    return (AbstractOcrEngine::Ok);
+    return (runOcrProcess());
 }
 
 
 QStringList OcrOcradEngine::tempFiles(bool retain)
 {
     QStringList result;
-    result << m_ocrResultFile;
     result << m_ocrImagePBM;
     result << m_tempOrfName;
     result << m_tempStdoutLog;
-    result << m_tempStderrLog;
 
     return (result);
 }
 
 
-void OcrOcradEngine::slotOcradExited(int exitCode, QProcess::ExitStatus exitStatus)
+bool OcrOcradEngine::finishedOcrProcess(QProcess *proc)
 {
-    qDebug() << "exit code" << exitCode << "status" << exitStatus;
+    qDebug();
+    QString errStr = readORF(m_tempOrfName);		// parse the OCR results
+    if (errStr.isEmpty()) return (true);		// parsed successfulyl
 
-    bool parseRes = true;
-
-    if (exitStatus != QProcess::NormalExit || exitCode != 0) {
-        KMessageBox::sorry(m_parent,
-                           xi18nc("@info", "Running the OCRAD process (<filename>%1</filename>) %2 with exit status %3."
-                                  "<nl/>More information may be available in its "
-                                  "<link url=\"%4\">standard output</link> or "
-                                  "<link url=\"%5\">standard error</link> log files.",
-                                  m_ocrProcess->program(),
-                                  (exitStatus == QProcess::CrashExit ? i18n("crashed") : i18n("failed")),
-                                  exitCode,
-                                  QUrl::fromLocalFile(m_tempStdoutLog).url(),
-                                  QUrl::fromLocalFile(m_tempStderrLog).url()),
-                           i18n("OCR Command Failed"),
-                           KMessageBox::AllowLink);
-        parseRes = false;
-    }
-
-    if (parseRes) {
-        QString errStr = readORF(m_tempOrfName);
-        if (!errStr.isNull()) {
-            KMessageBox::error(m_parent,
-                               i18n("Parsing the OCRAD result file failed\n%1", errStr),
-                               i18n("OCR Result Parse Problem"));
-            parseRes = false;
-        }
-    }
-
-    finishedOcr(parseRes);
+    setErrorText(errStr);				// record the parse error
+    return (false);					// parsing failed
 }
 
 

@@ -53,20 +53,17 @@ public:
     void openAdvancedSettings() override;
 
 protected:
+    bool createOcrProcess(AbstractOcrDialogue *dia, const KookaImage *img) override;
     QStringList tempFiles(bool retain) override;
+    bool finishedOcrProcess(QProcess *proc) override;
 
 protected slots:
     void slotGOcrStdout();
-    void slotGOcrExited(int exitCode, QProcess::ExitStatus exitStatus);
-
-private:
-    AbstractOcrEngine::EngineStatus startOcrProcess(AbstractOcrDialogue *dia, const KookaImage *img) override;
 
 private:
     QTemporaryDir *m_tempDir;
     QString m_inputFile;
     QString m_resultFile;
-    QString m_stderrFile;
 };
 
 #endif							// OCRGOCRENGINE_H

@@ -34,6 +34,7 @@
 
 #include <qobject.h>
 #include <qtextformat.h>
+#include <qprocess.h>
 
 #include "kookaimage.h"
 #include "abstractplugin.h"
@@ -73,13 +74,6 @@ class PLUGIN_EXPORT AbstractOcrEngine : public AbstractPlugin
     Q_OBJECT
 
 public:
-    enum EngineStatus					// OCR engine setup/runtime status
-    {
-        Ok,
-        SetupError,
-        RuntimeError
-    };
-
     virtual ~AbstractOcrEngine();
 
     bool openOcrDialogue(QWidget *pnt = nullptr);
@@ -147,8 +141,6 @@ protected:
      **/
     QString tempFileName(const QString &suffix, const QString &baseName = "ocrtemp");
 
-    void finishedOcr(bool success);
-
     QTextDocument *startResultDocument();
     void finishResultDocument();
 
@@ -157,6 +149,15 @@ protected:
     void finishLine();
 
     bool verboseDebug() const;
+
+    virtual bool createOcrProcess(AbstractOcrDialogue *dia, const KookaImage *img) = 0;
+
+    QProcess *initOcrProcess();
+    QProcess *ocrProcess() const				{ return (m_ocrProcess); }
+    bool runOcrProcess();
+    virtual bool finishedOcrProcess(QProcess *proc)		{ Q_UNUSED(proc); return (true); }
+
+    void setResultImage(const QString &file)			{ m_ocrResultFile = file; }
 
 signals:
     void newOCRResultText();
@@ -193,18 +194,12 @@ public slots:
     void slotHighlightWord(const QRect &r);
     void slotScrollToWord(const QRect &r);
 
-protected:
-    // TODO: do more managing of the process in this class (creation, deletion, exit status)
-    QProcess *m_ocrProcess;
-
-    QString m_ocrResultFile;
-    QString m_ocrResultText;
-    QWidget *m_parent;
-
 private slots:
     void slotStartOCR();
     void slotStopOCR();
     void slotClose();
+
+    void slotProcessExited(int exitCode, QProcess::ExitStatus exitStatus);
 
     /**
      * Handle mouse double clicks on the image viewer showing the
@@ -213,16 +208,22 @@ private slots:
     void slotImagePosition(const QPoint &p);
 
 private:
-    virtual AbstractOcrEngine::EngineStatus startOcrProcess(AbstractOcrDialogue *dia, const KookaImage *img) = 0;
-
     void stopOcrProcess(bool tellUser);
     void removeTempFiles();
+    void finishedOcr(bool success);
+
+    QString collectErrorMessages(const QString &starter, const QString &ender);
 
 private:
+    QWidget *m_parent;
+
+    QProcess *m_ocrProcess;
     bool m_ocrRunning;
     AbstractOcrDialogue *m_ocrDialog;
     QStringList m_errorText;
+    QString m_ocrStderrLog;
 
+    QString m_ocrResultFile;
     KookaImage m_introducedImage;
     QImage *m_resultImage;
     ImageCanvas *m_imgCanvas;

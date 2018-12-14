@@ -114,23 +114,10 @@ bool AbstractOcrEngine::openOcrDialogue(QWidget *pnt)
     m_ocrDialog = createOcrDialogue(this, pnt);
     Q_ASSERT(m_ocrDialog!=nullptr);
 
-    if (m_ocrDialog->setupGui()!=AbstractOcrEngine::Ok)
+    if (!m_ocrDialog->setupGui())
     {
-        // The error message(s) in m_errorText will already have been converted
-        // from KUIT markup to HTML by xi18nc( ) or similar.  So all that is
-        // needed is to build the rest of the error message in rich text also.
-        // There will be some spurious <html> tags around each separate message
-        // which has been converted, but they don't seem to cause any problem.
-
-        m_errorText.prepend(QString());
-        m_errorText.prepend(i18n("OCR could not be started."));
-        m_errorText.prepend("<html>");
-
-        m_errorText.append(QString());
-        m_errorText.append(i18n("Check the OCR engine selection and settings."));
-        m_errorText.append("</html>");
-
-        const QString msg = m_errorText.join("<br/>");
+        const QString msg = collectErrorMessages(i18n("OCR could not be started."),
+                                                 i18n("Check the OCR engine selection and settings."));
         int result = KMessageBox::warningContinueCancel(pnt, msg,
                                                         i18n("OCR Setup Error"),
                                                         KGuiItem(i18n("Configure OCR...")));
@@ -176,8 +163,7 @@ void AbstractOcrEngine::slotStartOCR()
     m_ocrDialog->enableGUI(true);			// disable controls while running
     m_ocrDialog->show();				// just in case it got closed
 
-    m_ocrResultText.clear();
-    startOcrProcess(m_ocrDialog, &m_introducedImage);
+    createOcrProcess(m_ocrDialog, &m_introducedImage);
 }
 
 
@@ -200,27 +186,22 @@ void AbstractOcrEngine::stopOcrProcess(bool tellUser)
  */
 void AbstractOcrEngine::finishedOcr(bool success)
 {
-    if (m_ocrDialog != NULL) {
-        m_ocrDialog->enableGUI(false);
-    }
+    if (m_ocrDialog!=nullptr) m_ocrDialog->enableGUI(false);
 
-    if (success) {
-        emit newOCRResultText();
+    if (success)
+    {
+        emit newOCRResultText();			// send out the text result
 
-        if (m_imgCanvas != NULL) {
-            if (m_resultImage != NULL) {
-                delete m_resultImage;
-            }
-
+        if (!m_ocrResultFile.isEmpty() &&		// there is a result image
+            m_imgCanvas!=nullptr)			// and we can display it
+        {
+            delete m_resultImage;			// create new result image
             m_resultImage = new QImage(m_ocrResultFile);
             qDebug() << "Result image" << m_ocrResultFile << "size" << m_resultImage->size();
 
-            /* The image canvas is present. Set it to our image */
-            m_imgCanvas->newImage(m_resultImage, true);
+            m_imgCanvas->newImage(m_resultImage, true);	// display on image canvas
             m_imgCanvas->setReadOnly(true);
-
-            /* now handle double clicks to jump to the word */
-            m_trackingActive = true;
+            m_trackingActive = true;			// handle clicks on image
         }
 
         /* now it is time to invoke the dictionary if required */
@@ -248,34 +229,29 @@ void AbstractOcrEngine::removeTempFiles()
     bool retain = m_ocrDialog->keepTempFiles();
     qDebug() << "retain=" << retain;
 
-    const QStringList temps = tempFiles(retain);
-    if (temps.isEmpty()) {
-        return;
-    }
+    QStringList temps = tempFiles(retain);			// get files used by engine
+    if (!m_ocrResultFile.isEmpty()) temps << m_ocrResultFile;	// plus our result image
+    if (!m_ocrStderrLog.isEmpty()) temps << m_ocrStderrLog;	// and our standard error log
+    if (temps.join("").isEmpty()) return;			// no temporary files to remove
 
-    bool haveSome = false;
-    if (retain) {
+    if (retain)
+    {
         QString s = xi18nc("@info", "The following OCR temporary files are retained for debugging:<nl/><nl/>");
-        for (QStringList::const_iterator it = temps.constBegin(); it != temps.constEnd(); ++it) {
-            if ((*it).isEmpty()) {
-                continue;
-            }
+        for (QStringList::const_iterator it = temps.constBegin(); it != temps.constEnd(); ++it)
+        {
+            const QString file = (*it);
+            if (file.isEmpty()) continue;
 
-            QUrl u(*it);
-            s += xi18nc("@info", "<filename><link url=\"%1\">%2</link></filename><nl/>", u.url(), u.url(QUrl::PreferLocalFile));
-            haveSome = true;
+            QUrl u = QUrl::fromLocalFile(file);
+            s += xi18nc("@info", "<filename><link url=\"%1\">%2</link></filename><nl/>", u.url(), file);
         }
 
-        if (haveSome) {
-            if (KMessageBox::questionYesNo(nullptr, s,
-                                           i18n("OCR Temporary Files"),
-                                           KStandardGuiItem::del(),
-                                           KStandardGuiItem::close(),
-                                           QString::null,
-                                           KMessageBox::AllowLink) == KMessageBox::Yes) {
-                retain = false;
-            }
-        }
+        if (KMessageBox::questionYesNo(m_parent, s,
+                                       i18n("OCR Temporary Files"),
+                                       KStandardGuiItem::del(),
+                                       KStandardGuiItem::close(),
+                                       QString::null,
+                                       KMessageBox::AllowLink)==KMessageBox::Yes) retain = false;
     }
 
     if (!retain) {
@@ -521,8 +497,93 @@ QString AbstractOcrEngine::findExecutable(QString (*settingFunc)(), KConfigSkele
         qDebug() << "configured" << exec << "not usable";
         setErrorText(xi18nc("@info", "The executable <filename>%1</filename> does not exist or is not usable.", fi.absoluteFilePath()));
         return (QString());
-    }
+            }
 
     qDebug() << "found" << exec;
     return (exec);
+}
+
+
+QString AbstractOcrEngine::collectErrorMessages(const QString &starter, const QString &ender)
+{
+    // Any error message(s) in m_errorText will already have been converted
+    // from KUIT markup to HTML by xi18nc() or similar.  So all that is
+    // needed is to build the rest of the error message in rich text also.
+    // There will be some spurious <html> tags around each separate message
+    // which has been converted, but they don't seem to cause any problem.
+
+    m_errorText.prepend(QString());
+    m_errorText.prepend(starter);
+    m_errorText.prepend("<html>");
+
+    m_errorText.append(QString());
+    m_errorText.append(ender);
+    m_errorText.append("</html>");
+
+    return (m_errorText.join("<br/>"));
+}
+
+
+QProcess *AbstractOcrEngine::initOcrProcess()
+{
+    if (m_ocrProcess!=nullptr) delete m_ocrProcess;	// kill old process if still there
+
+    m_ocrProcess = new QProcess();			// start new OCR process
+    Q_CHECK_PTR(m_ocrProcess);
+    qDebug();
+
+    m_ocrProcess->setStandardInputFile(QProcess::nullDevice());
+
+    m_ocrProcess->setProcessChannelMode(QProcess::SeparateChannels);
+    m_ocrStderrLog = tempFileName("stderr.log");
+    m_ocrProcess->setStandardErrorFile(m_ocrStderrLog);
+
+    return (m_ocrProcess);
+}
+
+
+bool AbstractOcrEngine::runOcrProcess()
+{
+    qDebug() << "Running OCR," << m_ocrProcess->program() << m_ocrProcess->arguments();
+    connect(m_ocrProcess, QOverload<int,QProcess::ExitStatus>::of(&QProcess::finished), this, &AbstractOcrEngine::slotProcessExited);
+
+    m_ocrProcess->start();
+    if (!m_ocrProcess->waitForStarted(5000))
+    {
+        qWarning() << "Error starting OCR process";
+        return (false);
+    }
+
+    return (true);
+}
+
+
+void AbstractOcrEngine::slotProcessExited(int exitCode, QProcess::ExitStatus exitStatus)
+{
+    qDebug() << "exit code" << exitCode << "status" << exitStatus;
+
+    bool success = (exitStatus==QProcess::NormalExit && exitCode==0);
+    if (!success)					// OCR command failed
+    {
+        setErrorText(xi18nc("@info", "Command <command>%1</command> %2 with exit status <numid>%3</numid>",
+                            m_ocrProcess->program(),
+                            (exitStatus==QProcess::CrashExit ? i18n("crashed") : i18n("failed")), exitCode));
+
+        const QString msg = collectErrorMessages(xi18nc("@info", "Running the OCR process failed."),
+                                                 xi18nc("@info", "More information may be available in its <link url=\"%1\">standard error</link> log file.",
+                                                        QUrl::fromLocalFile(m_ocrStderrLog).url()));
+
+        KMessageBox::sorry(m_parent, msg, i18n("OCR Command Failed"), KMessageBox::AllowLink);
+    }
+    else						// OCR command succeeded
+    {
+        success = finishedOcrProcess(m_ocrProcess);	// process the OCR results
+        if (!success)					// OCR processing failed
+        {
+            const QString msg = collectErrorMessages(xi18nc("@info", "Processing the OCR results failed."), QString());
+            KMessageBox::sorry(m_parent, msg, i18n("OCR Processing Failed"), KMessageBox::AllowLink);
+        }
+    }
+
+    finishedOcr(success);
 }

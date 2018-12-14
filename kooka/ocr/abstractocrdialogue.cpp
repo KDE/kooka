@@ -118,7 +118,7 @@ AbstractOcrDialogue::AbstractOcrDialogue(AbstractOcrEngine *plugin, QWidget *pnt
 }
 
 
-AbstractOcrEngine::EngineStatus AbstractOcrDialogue::setupGui()
+bool AbstractOcrDialogue::setupGui()
 {
     setupSetupPage();
     setupSpellPage();
@@ -127,7 +127,7 @@ AbstractOcrEngine::EngineStatus AbstractOcrDialogue::setupGui()
     // TODO: preferences option for whether debug is shown
     if (m_wantDebugCfg) setupDebugPage();
 
-    return (AbstractOcrEngine::Ok);
+    return (true);
 }
 
 

@@ -45,20 +45,17 @@ public:
     void openAdvancedSettings() override;
 
 protected:
+    bool createOcrProcess(AbstractOcrDialogue *dia, const KookaImage *img) override;
     QStringList tempFiles(bool retain) override;
-
-protected slots:
-    void slotOcradExited(int exitCode, QProcess::ExitStatus exitStatus);
+    bool finishedOcrProcess(QProcess *proc) override;
 
 private:
-    AbstractOcrEngine::EngineStatus startOcrProcess(AbstractOcrDialogue *dia, const KookaImage *img) override;
     QString readORF(const QString &fileName);
 
 private:
     QString m_ocrImagePBM;
     QString m_tempOrfName;
     QString m_tempStdoutLog;
-    QString m_tempStderrLog;
 
     int ocradVersion;
 };

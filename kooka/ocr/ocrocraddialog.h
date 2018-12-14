@@ -55,7 +55,7 @@ public:
     explicit OcrOcradDialog(AbstractOcrEngine *plugin, QWidget *pnt);
     virtual ~OcrOcradDialog() = default;
 
-    AbstractOcrEngine::EngineStatus setupGui() override;
+    bool setupGui() override;
 
     QString getOCRCmd() const				{ return (m_ocrCmd); }
 

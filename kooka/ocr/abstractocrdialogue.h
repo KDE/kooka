@@ -57,7 +57,7 @@ class PLUGIN_EXPORT AbstractOcrDialogue : public KPageDialog
 public:
     virtual ~AbstractOcrDialogue() = default;
 
-    virtual AbstractOcrEngine::EngineStatus setupGui();
+    virtual bool setupGui();
     virtual void introduceImage(const KookaImage *img);
 
     bool keepTempFiles() const;
