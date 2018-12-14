@@ -3,7 +3,7 @@
 #  Edit:		14-Dec-18					#
 #########################################################################
 
-project(kooka)
+project(kooka5)
 
 #########################################################################
 #									#
@@ -76,5 +76,7 @@ target_link_libraries(kookaocrkadmos KF5::I18n KF5::WidgetsAddons)
 target_link_libraries(kookaocrkadmos kookaocr kookascan)
 target_link_libraries(kookaocrkadmos librep)
 
-#install(TARGETS kookaocrkadmos DESTINATION ${PLUGIN_INSTALL_DIR}/kooka)
+if (INSTALL_BINARIES)
+  install(TARGETS kookaocrkadmos DESTINATION ${PLUGIN_INSTALL_DIR}/kooka)
+endif (INSTALL_BINARIES)
 install(FILES kookaocr-kadmos.desktop DESTINATION ${SERVICES_INSTALL_DIR})

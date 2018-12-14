@@ -88,7 +88,9 @@ if (HAVE_TIFF)
   target_link_libraries(kookacore ${TIFF_LIBRARIES})
 endif (HAVE_TIFF)
 
-install(TARGETS kookacore ${INSTALL_TARGETS_DEFAULT_ARGS})
+if (INSTALL_BINARIES)
+  install(TARGETS kookacore ${INSTALL_TARGETS_DEFAULT_ARGS})
+endif (INSTALL_BINARIES)
 
 ########### executable ###############
 
@@ -134,7 +136,9 @@ add_dependencies(kooka vcsversion)
 
 ########### install files ###############
 
-install(TARGETS kooka ${INSTALL_TARGETS_DEFAULT_ARGS})
+if (INSTALL_BINARIES)
+  install(TARGETS kooka ${INSTALL_TARGETS_DEFAULT_ARGS})
+endif (INSTALL_BINARIES)
 install(FILES kookasettings.kcfg DESTINATION ${KDE_INSTALL_KCFGDIR})
 
 ########### subdirectories ###############

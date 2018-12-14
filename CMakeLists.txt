@@ -37,6 +37,9 @@ include(KDECMakeSettings)
 include(GenerateExportHeader)
 include(ECMInstallIcons)
 
+# Options
+option(INSTALL_BINARIES "Install the binaries and libraries, turn off for development in place" ON)
+
 # Required Qt5 components to build this package
 find_package(Qt5 ${QT_MIN_VERSION} REQUIRED COMPONENTS Core Widgets)
 
