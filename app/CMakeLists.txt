@@ -43,34 +43,6 @@ else (TIFF_FOUND)
   message(STATUS "TIFF library not found, no multi-page image support")
 endif (TIFF_FOUND)
 
-############### Build Options ###############
-
-option(WITH_KADMOS "Enable the Kadmos OCR engine" false)
-option(KADMOS_DIR "Path to Kadmos include and library files, default '/usr/local'" "/usr/local")
-
-############### Support for Kadmos OCR ###############
-
-if (WITH_KADMOS)
-
-  find_file(KADMOS_HEADER_FOUND kadmos.h PATHS ${KADMOS_DIR})
-  if (KADMOS_HEADER_FOUND)
-    string(REGEX REPLACE "/.*$" "" KADMOS_INCLUDE_DIR KADMOS_HEADER_FOUND)
-    message(STATUS "Kadmos includes: ${KADMOS_INCLUDE_DIR}")
-  else (KADMOS_HEADER_FOUND)
-    message(SEND_ERROR "WITH_KADMOS requested, but Kadmos engine header file 'kadmos.h' not found in ${KADMOS_DIR} - set KADMOS_DIR to locate it")
-  endif (KADMOS_HEADER_FOUND)
-
-  find_file(KADMOS_LIB_FOUND librep.a PATHS ${KADMOS_DIR})
-  if (KADMOS_LIB_FOUND)
-    string(REGEX REPLACE "/.*$" "" KADMOS_LIB_DIR KADMOS_LIB_FOUND)
-    message(STATUS "Kadmos libraries: ${KADMOS_LIB_DIR}")
-  else (KADMOS_LIB_FOUND)
-    message(SEND_ERROR "WITH_KADMOS requested, but Kadmos engine library 'librep.a' not found in ${KADMOS_DIR} - set KADMOS_DIR to locate it")
-  endif (KADMOS_LIB_FOUND)
-
-  set(HAVE_KADMOS true)
-endif (WITH_KADMOS)
-
 ########### setup ###############
 
 if (HAVE_ERRNO_H)
@@ -88,23 +60,11 @@ endif (HAVE_SYS_TYPES_H)
 
 add_definitions(-DKDE4)
 add_definitions(-DKF5)
-if (HAVE_KADMOS)
-  add_definitions(-DHAVE_KADMOS)
-endif (HAVE_KADMOS)
 if (HAVE_TIFF)
   add_definitions(-DHAVE_TIFF)
 endif (HAVE_TIFF)
 
 include_directories(..)
-
-if (HAVE_KADMOS)
-  if (KADMOS_INCLUDE_DIR)
-    include_directories(${KADMOS_INCLUDE_DIR})
-  endif (KADMOS_INCLUDE_DIR)
-  if (KADMOS_LIB_DIR)
-    link_directories(${KADMOS_LIB_DIR})
-  endif (KADMOS_LIB_DIR)
-endif (HAVE_KADMOS)
 
 if (HAVE_TIFF)
   include_directories(${TIFF_INCLUDE_DIR})
@@ -169,11 +129,6 @@ target_link_libraries(kooka
   KF5::TextWidgets
 )
 
-################### TODO: to Kadmos plugin
-# if (HAVE_KADMOS)
-#   target_link_libraries(kooka librep)
-# endif (HAVE_KADMOS)
-
 include_directories(${CMAKE_CURRENT_BINARY_DIR}/..)
 add_dependencies(kooka vcsversion)
 
@@ -184,6 +139,5 @@ install(FILES kookasettings.kcfg DESTINATION ${KDE_INSTALL_KCFGDIR})
 
 ########### subdirectories ###############
 
-add_subdirectory(ocr)
 add_subdirectory(pics)
 add_subdirectory(desktop)
