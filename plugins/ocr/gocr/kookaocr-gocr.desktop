@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Service
+X-KDE-ServiceTypes=Kooka/OcrPlugin
+X-KDE-Library=kookaocrgocr
+X-KDE-PluginInfo-Name=gocr
+X-KDE-PluginInfo-License=GPL
+Icon=gocr
+Name=GOCR
+Comment=<emphasis>GOCR</emphasis> (sometimes known as <emphasis>JOCR</emphasis>) is an open source OCR engine, originally started by Joerg&nbsp;Schulenburg and now with a team of active developers.<nl/><nl/>See <link url="http://jocr.sourceforge.net">jocr.sourceforge.net</link> for more information on GOCR.

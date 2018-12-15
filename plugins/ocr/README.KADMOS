@@ -1,0 +1,99 @@
+Kooka and KADMOS integration
+============================
+
+KAMDOS is a commercial OCR/ICR software library produced by the
+company reRecognition of Kreuzlingen, Switzerland (www.rerecognition.com).
+It is reputed to produce extremely good OCR results, from both printed
+and hand written texts.
+
+KADMOS support was originally integrated into Kooka by Klaas Freitag
+in the KDE3 version.  In the port to KDE4 and later to KF5, the KADMOS
+support was converted as far as possible but left untested, since
+neither myself nor anyone else involved in the porting had access to
+any KADMOS SDK or development system.
+
+For the same reason, since the reorganisation of the source to
+implement OCR as plugins, the KADMOS support has not been ported.  It
+currently resides in the plugins/ocr/kadmos source directory, but it
+would require access to a KADMOS SDK to be able to port to the new OCR
+plugin API.  If there is someone who has access to KADMOS and is
+willing to do the (not extensive) OCR plugin porting, then Kooka
+will be able to support KADMOS again.
+
+-- Jonathan Marten <jjm@keelhaul.me.uk>
+
+The remainder of this document is the original description for
+building and using Kooka with the KADMOS engine, dating from 2003
+(with minor corrections).
+
+-----------------------------------------------------------------------
+
+This file describes how to make Kooka working with the KADMOS OCR/ICR
+engine. 
+
+KADMOS is commercial OCR/ICR software component of the company
+ 
+ reRecognition GmbH
+ Hafenstr. 50B 
+ 8280 Kreuzlingen
+ Switzerland 
+ Tel.: +41 71 6780000
+ Fax: +41 71 6780099
+ www.reRecognition.com
+
+and Kooka can be built using the Linux version of the component in
+order to achive very good OCR results.
+
+Please contact re Recognition directly if you like to obtain or test
+KADMOS. Note that if you are linking against KADMOS, you lose the
+permission to use the GPL Qt version, so you need a commercial Qt
+version as well.
+
+Configuration
+-------------
+
+As Kooka does not require KADMOS, it is neccessary to configure
+Kooka to use the KADMOS library. This could be done by calling the
+configure script of Kooka's source distribution with following 
+parameter:
+
+./configure --with-kadmos-dir=/where/kadmos.h/resides/
+
+The configure script tries to locate the file kadmos.h in the
+directory that was specified. The KADMOS library is expected in the
+same directory.  Build the source after configuring with KADMOS. Kooka
+enables the code to work with KADMOS in the source and links the
+library.
+
+Installation
+------------
+
+KADMOS is linked statically and thus there is no need for special 
+installation of the KADMOS library. 
+
+Installation of the Classifier Files:
+
+KADMOS needs classifier files for the ocr process which come with
+the KADMOS developer's toolkit. The classifier files need to be installed
+in the KDE application data directory for Kooka in a subdirectory named
+classifiers. If your KDE installation goes to /opt/kde3/, this is for
+example /opt/kde3/share/apps/kooka/classifiers. Kooka picks the 
+available classifiers up automatically.
+
+The classifiers are named in the following way:
+
+[fontkind][country/region].rec, 
+where fontkinds are
+ttf  -> machine print font
+hand -> handprint (isolated)
+norm -> OCR norm font
+
+For example the following classifier names are used:
+
+ttfus.rec      US machineprint classifiers
+handus.rec     US handwriting classifiers
+norm.rec       Special OCR character sets, not localized
+
+----------------------------------------------------------------------
+Klaas Freitag <freitag@suse.de>
+$Id$

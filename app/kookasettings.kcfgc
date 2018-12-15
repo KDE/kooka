@@ -1,0 +1,13 @@
+File=kookasettings.kcfg
+ClassName=KookaSettings
+Singleton=true
+
+ItemAccessors=true
+Mutators=true
+SetUserTexts=true
+UseEnumTypes=false
+
+TranslationSystem=kde
+
+IncludeFiles=kookacore_export.h
+Visibility=KOOKACORE_EXPORT

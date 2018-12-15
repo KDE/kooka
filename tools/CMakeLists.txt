@@ -21,4 +21,6 @@ endif (HAVE_SANE)
 
 ########### install files ###############
 
-install(TARGETS sanedump ${INSTALL_TARGETS_DEFAULT_ARGS})
+if (INSTALL_BINARIES)
+  install(TARGETS sanedump ${INSTALL_TARGETS_DEFAULT_ARGS})
+endif (INSTALL_BINARIES)

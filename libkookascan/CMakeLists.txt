@@ -91,5 +91,7 @@ set_target_properties(kookascan PROPERTIES VERSION 1.0.0 SOVERSION 1)
 
 ########### installation ###############
 
-install(TARGETS kookascan ${INSTALL_TARGETS_DEFAULT_ARGS})
+if (INSTALL_BINARIES)
+  install(TARGETS kookascan ${INSTALL_TARGETS_DEFAULT_ARGS})
+endif (INSTALL_BINARIES)
 install(FILES scansettings.kcfg DESTINATION ${KDE_INSTALL_KCFGDIR})

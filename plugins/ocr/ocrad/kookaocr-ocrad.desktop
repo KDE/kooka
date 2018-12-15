@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Service
+X-KDE-ServiceTypes=Kooka/OcrPlugin
+X-KDE-Library=kookaocrocrad
+X-KDE-PluginInfo-Name=ocrad
+X-KDE-PluginInfo-License=GPL
+Icon=ocrad
+Name=OCRAD
+Comment=<emphasis>OCRAD</emphasis> is an free software OCR engine by Antonio&nbsp;Diaz, part of the GNU&nbsp;Project.<nl/><nl/>Images for OCR should be scanned in black/white (lineart) mode. Best results are achieved if the characters are at least 20&nbsp;pixels high. Problems may arise, as usual, with very bold or very light or broken characters, or with merged character groups.<nl/><nl/>See <link url="http://www.gnu.org/software/ocrad/ocrad.html">www.gnu.org/software/ocrad/ocrad.html</link> for more information on OCRAD.
