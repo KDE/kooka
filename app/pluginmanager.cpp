@@ -28,10 +28,16 @@ PluginManager::PluginManager()
     QString installPath = pluginPaths.takeFirst();
     pluginPaths.prepend(installPath+"/"+QCoreApplication::applicationName());
 
-    // Also add a subdirectory of the executable directory,
-    // for use when running in place.  In order to get the most up-to-date
-    // plugins, this needs to have priority over all other install locations.
-    pluginPaths.prepend(QCoreApplication::applicationDirPath()+"/ocr");
+    // Also add the plugin build directories, for use when running in place.
+    // In order to get the most up-to-date plugins, these need to have priority
+    // over all other install locations.
+    QDir dir(QCoreApplication::applicationDirPath()+"/../plugins/ocr");
+    const QStringList subdirs = dir.entryList(QDir::Dirs|QDir::NoDotAndDotDot);
+    foreach (const QString &subdir, subdirs)
+    {
+        const QString path = subdir+"/Makefile";
+        if (dir.exists(path)) pluginPaths.prepend(dir.absoluteFilePath(subdir));
+    }
 
     // Put back the standard install location, for locating KParts and
     // other plugins which may be needed.
@@ -102,26 +108,33 @@ AbstractPlugin *PluginManager::loadPlugin(PluginManager::PluginType type, const 
         if (list.count()>1) qWarning() << "Multiple plugin services found, using only the first";
 							// should not happen, names are unique
         const KService::Ptr service = list.first();
+        const QString lib = service->library();
         qDebug() << "  name" << service->name();
         qDebug() << "  icon" << service->icon();
-        qDebug() << "  library" << service->library();
+        qDebug() << "  library" << lib;
 
         KPluginLoader loader(*service);
-        plugin = loader.factory()->create<AbstractPlugin>();
-
-        if (plugin!=nullptr)
+        if (loader.factory()==nullptr)
         {
-            qDebug() << "loaded plugin library" << service->library();
-
-            AbstractPluginInfo *info = new AbstractPluginInfo;
-            info->key = service->desktopEntryName();
-            info->name = service->name();
-            info->icon = service->icon();
-            info->description = commentAsRichText(service->comment());
-
-            plugin->mPluginInfo = info;
+            qWarning() << "Cannot load plugin library" << lib << "from service";
         }
-        else qWarning() << "Cannot load plugin library" << service->library();
+        else
+        {
+            plugin = loader.factory()->create<AbstractPlugin>();
+            if (plugin!=nullptr)
+            {
+                qDebug() << "created plugin from library" << lib;
+
+                AbstractPluginInfo *info = new AbstractPluginInfo;
+                info->key = service->desktopEntryName();
+                info->name = service->name();
+                info->icon = service->icon();
+                info->description = commentAsRichText(service->comment());
+
+                plugin->mPluginInfo = info;
+            }
+            else qWarning() << "Cannot create plugin from library" << lib;
+        }
     }
 
     mLoadedPlugins[type] = plugin;
