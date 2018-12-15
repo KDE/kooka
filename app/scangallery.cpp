@@ -719,7 +719,7 @@ void ScanGallery::loadImageForItem(FileTreeViewItem *item)
     ImageFormat format = getImgFormat(item);		// check for valid image format
     if (!format.isValid())
     {
-        ret = i18n("Not a valid image format");
+        ret = i18n("Not a supported image format");
     }
     else						// valid image
     {

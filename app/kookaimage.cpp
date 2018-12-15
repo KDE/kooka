@@ -168,6 +168,11 @@ QString KookaImage::loadFromUrl(const QUrl &url)
             } while (TIFFReadDirectory(tif));
             qDebug() << "found" << m_subImages << "TIFF directories";
             if (m_subImages>1) haveTiff = true;
+            // This format will have been specially detected
+            // in ImageFormat::formatForMime(), if the file is TIFF
+            // but QImageReader does not have TIFF support.
+            // The TIFF file can still be read by loadTiffDir() below.
+            else if (m_subImages==1 && format==ImageFormat("TIFFLIB")) haveTiff = true;
         }
     }
 #endif
@@ -213,16 +218,20 @@ bool KookaImage::loadTiffDir(const QString &filename, int no)
     int imgWidth, imgHeight;
 
     // if it is TIFF, check with TIFFlib if it is multiple images
-    //qDebug() << "Trying to load TIFF, subimage number" << no;
+    qDebug() << "Trying to load TIFF, subimage" << no;
     TIFF *tif = TIFFOpen(QFile::encodeName(filename).constData(), "r");
     if (tif == NULL) {
+        qDebug() << "TIFFOpen failed";
         return (false);
     }
 
-    if (!TIFFSetDirectory(tif, no-1)) {
-        //qDebug() << "Error: TIFFSetDirectory failed";
-        TIFFClose(tif);
-        return (false);
+    if (no>0)						// want a subimage
+    {
+        if (!TIFFSetDirectory(tif, no-1)) {
+            qDebug() << "TIFFSetDirectory failed";
+            TIFFClose(tif);
+            return (false);
+        }
     }
 
     TIFFGetField(tif, TIFFTAG_IMAGEWIDTH,  &imgWidth);
@@ -249,7 +258,7 @@ bool KookaImage::loadTiffDir(const QString &filename, int no)
         tmpImg = tmpImg.rgbSwapped();           // swap red and blue
         tmpImg = tmpImg.mirrored();         // reverse (it's upside down)
     } else {
-        //qDebug() << "Error: TIFFReadRGBAImage failed";
+        qDebug() << "TIFFReadRGBAImage failed";
         TIFFClose(tif);
         return (false);
     }
@@ -279,8 +288,8 @@ bool KookaImage::loadTiffDir(const QString &filename, int no)
         }
     }
 
-    QImage::operator=(tmpImg);              // copy as our image
-#endif                          // HAVE_TIFF
+    QImage::operator=(tmpImg);				// copy as our image
+#endif							// HAVE_TIFF
 
     return (true);
 }

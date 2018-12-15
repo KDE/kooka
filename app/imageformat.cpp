@@ -134,11 +134,26 @@ ImageFormat ImageFormat::formatForMime(const QMimeType &mime)
     QStringList sufs = mime.suffixes();
     if (sufs.isEmpty()) return (ImageFormat());
 
+    const QList<QByteArray> formats = QImageReader::supportedImageFormats();
     foreach (const QString &suf, sufs)			// find the first matching one
     {
         const QByteArray s = suf.toLocal8Bit();
-        if (QImageReader::supportedImageFormats().contains(s.toLower())) return (ImageFormat(s));
+        if (formats.contains(s.toLower())) return (ImageFormat(s));
     }
+
+#ifdef HAVE_TIFF
+    // Qt 5:  This can happen if only QtGui is installed, because TIFF support is
+    // now provided in QtImageFormats.  However, if we are built with TIFF library
+    // support (for reading multi-page TIFF files) then TIFF reading is also available
+    // via that library even if Qt does not support it.
+    //
+    // The special format name used here is checked by KookaImage::loadFromUrl()
+    // and used to force loading via the TIFF library.
+    //
+    // TIFF write support will still not be available unless QtImageFormats is
+    // installed.
+    if (mime.inherits("image/tiff")) return (ImageFormat("TIFFLIB"));
+#endif
     return (ImageFormat());				// nothing matched
 }
 
