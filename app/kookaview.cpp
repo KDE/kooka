@@ -971,7 +971,7 @@ void KookaView::slotTransformImage()
     }
     const QImage img = *loadedImage;            // get a copy of the image
 
-    QString imageFile = gallery()->getCurrImageFileName(true);
+    QString imageFile = gallery()->currentImageFileName();
     if (imageFile.isEmpty()) {
         return;    // get file to save back to
     }

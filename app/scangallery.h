@@ -55,7 +55,7 @@ public:
     ScanGallery(QWidget *parent);
     ~ScanGallery();
 
-    QString getCurrImageFileName(bool withPath = true) const;
+    QString currentImageFileName() const;
     const KookaImage *getCurrImage(bool loadOnDemand = false);
 
     QMenu *contextMenu() const

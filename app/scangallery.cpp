@@ -257,21 +257,6 @@ static ImageFormat getImgFormat(const FileTreeViewItem *item)
     return (ImageFormat::formatForUrl(kfi->url()));
 }
 
-static QString localFileName(const FileTreeViewItem *item)
-{
-    if (item == NULL) {
-        return (QString::null);
-    }
-
-    bool isLocal = false;
-    QUrl u = item->fileItem()->mostLocalUrl(isLocal);
-    if (!isLocal) {
-        return (QString::null);
-    }
-
-    return (u.toLocalFile());
-}
-
 static KookaImage *imageForItem(const FileTreeViewItem *item)
 {
     if (item == NULL) return (NULL);			// get loaded image if any
@@ -735,7 +720,6 @@ void ScanGallery::loadImageForItem(FileTreeViewItem *item)
             // create an subimage item for every subimage, but do not yet load
             // them.
 
-            // TODO: KookaImage constructor which takes a URL
             img = new KookaImage();
             ret = img->loadFromUrl(item->url());
             if (ret.isEmpty())				// image loaded OK
@@ -763,7 +747,7 @@ void ScanGallery::loadImageForItem(FileTreeViewItem *item)
 
                             // Set the URL to mark this as a subimage.  The subimage
                             // number is set as the URL fragment;  this is detected by
-                            // KookaImage::loadFromurl() and used to extract the
+                            // KookaImage::loadFromUrl() and used to extract the
                             // submimage.
                             QUrl u = newKfi.url();
                             u.setFragment(QString::number(i));
@@ -843,25 +827,20 @@ const KookaImage *ScanGallery::getCurrImage(bool loadOnDemand)
     return (img);
 }
 
-QString ScanGallery::getCurrImageFileName(bool withPath) const
+
+QString ScanGallery::currentImageFileName() const
 {
     QString result = "";
 
-    FileTreeViewItem *curr = highlightedFileTreeViewItem();
-    if (! curr) {
-        //qDebug() << "nothing selected!";
-    } else {
-        if (withPath) {
-            result = localFileName(curr);
-        } else {
-            // TODO: the next 2 lines don't make sense
-            QUrl url(localFileName(curr));
-            url = curr->url();
-            result = url.fileName();
-        }
-    }
-    return (result);
+    const FileTreeViewItem *curr = highlightedFileTreeViewItem();
+    if (curr==nullptr) return (QString::null);
+
+    bool isLocal = false;
+    const QUrl u = curr->fileItem()->mostLocalUrl(isLocal);
+    if (!isLocal) return (QString::null);
+    return (u.toLocalFile());
 }
+
 
 bool ScanGallery::prepareToSave(const ImageMetaInfo *info)
 {

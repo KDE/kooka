@@ -369,7 +369,7 @@ void Kooka::saveProperties(KConfigGroup &grp)
     // later when this app is restored.
 
     KookaSettings::setPreferencesTab(m_prefDialogIndex);
-    //FIXME crash KookaSettings::setStartupSelectedImage(m_view->gallery()->getCurrImageFileName(true));
+    //FIXME crash KookaSettings::setStartupSelectedImage(m_view->gallery()->currentImageFileName());
     KookaSettings::self()->save();
 }
 
