@@ -724,7 +724,7 @@ void ScanGallery::loadImageForItem(FileTreeViewItem *item)
     else						// valid image
     {
         KookaImage *img = imageForItem(item);
-        if (img == NULL)				// image not already loaded
+        if (img==nullptr)				// image not already loaded
         {
 #ifdef DEBUG_LOADING
             qDebug() << "need to load image";
@@ -735,13 +735,14 @@ void ScanGallery::loadImageForItem(FileTreeViewItem *item)
             // create an subimage item for every subimage, but do not yet load
             // them.
 
+            // TODO: KookaImage constructor which takes a URL
             img = new KookaImage();
             ret = img->loadFromUrl(item->url());
             if (ret.isEmpty())				// image loaded OK
             {
                 img->setFileItem(kfi);			// store the KFileItem
 
-                if (img->subImagesCount() > 1)		// see if it has subimages
+                if (img->subImagesCount()>1)		// see if it has subimages
                 {
 #ifdef DEBUG_LOADING
                     qDebug() << "subimage count" << img->subImagesCount();
@@ -751,18 +752,20 @@ void ScanGallery::loadImageForItem(FileTreeViewItem *item)
 #ifdef DEBUG_LOADING
                         qDebug() << "need to create subimages";
 #endif // DEBUG_LOADING
-
                         // Create items for each subimage
                         QIcon subImgIcon = QIcon::fromTheme("edit-copy");
 
                         // Sub-images start counting from 1, KookaImage adjusts
-                        // adjusts that back to the 0-based TIFF directory index.
+                        // that back to the 0-based TIFF directory index.
                         for (int i = 1; i<=img->subImagesCount(); i++)
                         {
-                            //qDebug() << "Creating subimage" << i;
                             KFileItem newKfi(*kfi);
 
-                            QUrl u = newKfi.url();	// set URL to mark as a subimage
+                            // Set the URL to mark this as a subimage.  The subimage
+                            // number is set as the URL fragment;  this is detected by
+                            // KookaImage::loadFromurl() and used to extract the
+                            // submimage.
+                            QUrl u = newKfi.url();
                             u.setFragment(QString::number(i));
                             newKfi.setUrl(u);
 
@@ -770,55 +773,27 @@ void ScanGallery::loadImageForItem(FileTreeViewItem *item)
                             // add it to the parent item later, so that
                             // the setText() below does not trigger a rename.
                             FileTreeViewItem *subImgItem = new FileTreeViewItem(
-                                static_cast<FileTreeViewItem *>(NULL), newKfi, item->branch());
+                                static_cast<FileTreeViewItem *>(nullptr), newKfi, item->branch());
 
                             subImgItem->setText(0, i18n("Sub-image %1", i));
                             subImgItem->setIcon(0, subImgIcon);
-
-                            // TODO: this gives wrong results in the case where a subimage
-                            // is loaded, then unloaded, then clicked on again.  We rely
-                            // on the subImgImg's created here to identify the item as
-                            // being a subimage, but on unload that information is lost
-                            // and the result is loading the subimages as a child of this
-                            // subimage (a grandchild of the container).
-                            //
-                            // Maybe a better approach: create the FTVIs as here, but
-                            // simply set the URL to identify them as subimages using
-                            // the fragment.  Make KookaImage::loadFromUrl() understand
-                            // a fragment and extractNow() the subimage there instead of
-                            // below.  slotImageArrived() will then do the equivalent of
-                            // the 3 lines below.
-                            KookaImage *subImgImg = new KookaImage(i, img);
-                            subImgImg->setFileItem(&newKfi);
-                            subImgItem->setClientData(subImgImg);
-
                             item->addChild(subImgItem);
                         }
                     }
                 }
             }
-            else delete img;				// image loading failed
+            else
+            {
+                delete img;				// image loading failed
+                img = nullptr;				// don't try to use it below
+            }
         }
 #ifdef DEBUG_LOADING
         else qDebug() << "have an image already";
 #endif // DEBUG_LOADING
 
-        if (img!=NULL)					// already loaded, or loaded above
+        if (img!=nullptr)				// already loaded, or loaded above
         {
-            if (img->isSubImage())			// this is a subimage
-            {
-#ifdef DEBUG_LOADING
-                qDebug() << "this is a subimage";
-#endif // DEBUG_LOADING
-                if (img->isNull())			// if not already loaded,
-                {
-#ifdef DEBUG_LOADING
-                    qDebug() << "extracting subimage";
-#endif // DEBUG_LOADING
-                    img->extractNow();			// extract it from parent
-                }
-            }
-
             slotImageArrived(item, img);		// display the image
         }
     }

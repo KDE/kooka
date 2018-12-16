@@ -747,7 +747,7 @@ void KookaView::slotNewPreview(const QImage *newimg, const ImageMetaInfo *info)
 void KookaView::slotStartOcrSelection()
 {
     emit changeStatus(i18n("Starting OCR on selection"));
-    startOCR(mImageCanvas->selectedImage());
+    startOCR(KookaImage(mImageCanvas->selectedImage()));
     emit clearStatus();
 }
 
@@ -1006,12 +1006,6 @@ void KookaView::slotShowAImage(const KookaImage *img, bool isDir)
         mImageCanvas->newImage(img);
         mImageCanvas->setReadOnly(false);
     }
-
-//     if (mOcrEngine!=nullptr)				// tell OCR about it
-//     {
-//         // TODO: can be done in startOCR()
-//         mOcrEngine->setImage(img != NULL ? *img : KookaImage());
-//     }
 
     if (mImageCanvas != NULL) {
         emit changeStatus(mImageCanvas->imageInfoString(), StatusBarManager::ImageDims);
