@@ -158,6 +158,16 @@ ImageFormat ImageFormat::formatForMime(const QMimeType &mime)
 }
 
 
+bool ImageFormat::isTiff() const
+{
+    if (mFormat=="TIF" || mFormat=="TIFF") return (true);
+#ifdef HAVE_TIFF
+    if (mFormat=="TIFFLIB") return (true);
+#endif
+    return (false);
+}
+
+
 ImageFormat ImageFormat::formatForUrl(const QUrl &url)
 {
     QMimeDatabase db;

@@ -138,11 +138,11 @@ QString KookaImage::loadFromUrl(const QUrl &url)
     ImageFormat format = ImageFormat::formatForUrl(url);
 
     // If the file is TIFF and QImageReader supports TIFF files, 'format' as
-    // returned by ImageFormat::formatForUrl() will be "TIFF".  If TIFF files
+    // returned by ImageFormat::formatForUrl() will be "TIF".  If TIFF files
     // are not supported but the MIME type of the file says that it is TIFF,
     // then 'format will be "TIFFLIB".  So either of these format names means
     // that a TIFF file is being loaded.
-    if (format==ImageFormat("TIFF") || format==ImageFormat("TIFFLIB")) isTiff = true;
+    isTiff = format.isTiff();
     //qDebug() << "Image format to load:" << format << "from file" << filename;
 
 #ifdef HAVE_TIFF

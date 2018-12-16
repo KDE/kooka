@@ -53,6 +53,8 @@ public:
     QString extension() const;
     bool canWrite() const;
 
+    bool isTiff() const;
+
     static ImageFormat formatForUrl(const QUrl &url);
     static ImageFormat formatForMime(const QMimeType &mime);
     static const QList<QMimeType> *mimeTypes();
