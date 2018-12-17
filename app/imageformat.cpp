@@ -128,8 +128,13 @@ ImageFormat ImageFormat::formatForMime(const QMimeType &mime)
 {
     if (!mime.isValid()) return (ImageFormat());
 
-    // Assuming that the format name is the first file extension ("suffix")
-    // registered for that MIME type which is a supported Qt image type.
+    // Before Qt 5.12 there was no official way to perform this operation;
+    // that is, to find the Qt image format name corresponding to a MIME type.
+    // So this does so by assuming that the format name is the first file
+    // extension ("suffix") registered for that MIME type which is a
+    // supported Qt image type.
+    //
+    // TODO: could now use QImageReader::imageFormatsForMimeType() in Qt 5.12
 
     QStringList sufs = mime.suffixes();
     if (sufs.isEmpty()) return (ImageFormat());
@@ -147,8 +152,8 @@ ImageFormat ImageFormat::formatForMime(const QMimeType &mime)
     // support (for reading multi-page TIFF files) then TIFF reading is also available
     // via that library even if Qt does not support it.
     //
-    // The special format name used here is checked by KookaImage::loadFromUrl()
-    // and used to force loading via the TIFF library.
+    // The special format name used here is checked by isTiff() below and used
+    // in KookaImage::loadFromUrl() to force loading via the TIFF library.
     //
     // TIFF write support will still not be available unless QtImageFormats is
     // installed.
