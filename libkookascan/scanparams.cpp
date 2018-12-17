@@ -49,10 +49,12 @@
 #include <qmimetype.h>
 #include <qmimedatabase.h>
 #include <qlayout.h>
+#include <qdesktopservices.h>
 
 #include <klocalizedstring.h>
 #include <kled.h>
 #include <kmessagebox.h>
+#include <kmessagewidget.h>
 
 extern "C"
 {
@@ -591,13 +593,17 @@ void ScanParams::createNoScannerMsg(bool galleryMode)
 
 QWidget *ScanParams::messageScannerNotSelected()
 {
-    if (mNoScannerMessage == NULL) {
-        mNoScannerMessage = new QLabel(
+    if (mNoScannerMessage==nullptr)
+    {
+        mNoScannerMessage = new KMessageWidget(
             xi18nc("@info",
                    "<emphasis strong=\"1\">No scanner selected</emphasis>"
                    "<nl/><nl/>"
                    "Select a scanner device to perform scanning."));
 
+        mNoScannerMessage->setMessageType(KMessageWidget::Information);
+        mNoScannerMessage->setIcon(QIcon::fromTheme("dialog-information"));
+        mNoScannerMessage->setCloseButtonVisible(false);
         mNoScannerMessage->setWordWrap(true);
     }
 
@@ -606,10 +612,11 @@ QWidget *ScanParams::messageScannerNotSelected()
 
 QWidget *ScanParams::messageScannerProblem()
 {
-    if (mProblemMessage == NULL) {
-        mProblemMessage = new QLabel(
+    if (mProblemMessage==nullptr)
+    {
+        mProblemMessage = new KMessageWidget(
             xi18nc("@info",
-                   "<emphasis strong=\"1\">Problem: No scanner found, or unable to access it</emphasis>"
+                   "<emphasis strong=\"1\">No scanner found, or unable to access it</emphasis>"
                    "<nl/><nl/>"
                    "There was a problem using the SANE (Scanner Access Now Easy) library to access "
                    "the scanner device.  There may be a problem with your SANE installation, or it "
@@ -622,12 +629,22 @@ QWidget *ScanParams::messageScannerProblem()
                    "(<link url=\"http://www.sane-project.org\">www.sane-project.org</link>) "
                    "for more information on SANE installation and setup."));
 
+        mProblemMessage->setMessageType(KMessageWidget::Warning);
+        mProblemMessage->setIcon(QIcon::fromTheme("dialog-warning"));
+        mProblemMessage->setCloseButtonVisible(false);
         mProblemMessage->setWordWrap(true);
-        mProblemMessage->setOpenExternalLinks(true);
+        connect(mProblemMessage, &KMessageWidget::linkActivated, this, &ScanParams::slotMessageLinkActivated);
     }
 
     return (mProblemMessage);
 }
+
+
+void ScanParams::slotMessageLinkActivated(const QString &link)
+{
+    QDesktopServices::openUrl(QUrl(link));
+}
+
 
 void ScanParams::slotSourceSelect()
 {

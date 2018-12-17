@@ -23,7 +23,7 @@
 
 #include <scanparams.h>
 
-class QLabel;
+class KMessageWidget;
 
 class KookaScanParams : public ScanParams
 {
@@ -31,7 +31,7 @@ class KookaScanParams : public ScanParams
 
 public:
     explicit KookaScanParams(QWidget *parent);
-    virtual ~KookaScanParams()      {}
+    virtual ~KookaScanParams() = default;
 
 protected:
     /**
@@ -49,7 +49,7 @@ protected slots:
     void slotLinkActivated(const QString &link);
 
 private:
-    QLabel *mNoScannerMessage;
+    KMessageWidget *mNoScannerMessage;
 };
 
 #endif                          // KOOKASCANPARAMS_H

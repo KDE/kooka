@@ -22,20 +22,23 @@
 
 #include "kookascanparams.h"
 
-#include <qlabel.h>
+#include <qicon.h>
 
-#include <KLocalizedString>
+#include <kmessagewidget.h>
+#include <klocalizedstring.h>
+
 
 KookaScanParams::KookaScanParams(QWidget *parent)
     : ScanParams(parent),
-      mNoScannerMessage(0)
+      mNoScannerMessage(nullptr)
 {
 }
 
 QWidget *KookaScanParams::messageScannerNotSelected()
 {
-    if (!mNoScannerMessage) {
-        mNoScannerMessage = new QLabel(
+    if (mNoScannerMessage==nullptr)
+    {
+        mNoScannerMessage = new KMessageWidget(
             xi18nc("@info",
                    "<emphasis strong=\"1\">Gallery Mode - No scanner selected</emphasis>"
                    "<nl/><nl/>"
@@ -46,11 +49,14 @@ QWidget *KookaScanParams::messageScannerNotSelected()
                    "<link url=\"a:2\">add a device</link> "
                    "if a scanner is not automatically detected."));
 
+        mNoScannerMessage->setMessageType(KMessageWidget::Information);
+        mNoScannerMessage->setIcon(QIcon::fromTheme("dialog-information"));
         mNoScannerMessage->setWordWrap(true);
-        connect(mNoScannerMessage, &QLabel::linkActivated, this, &KookaScanParams::slotLinkActivated);
+        mNoScannerMessage->setCloseButtonVisible(false);
+        connect(mNoScannerMessage, &KMessageWidget::linkActivated, this, &KookaScanParams::slotLinkActivated);
     }
 
-    return mNoScannerMessage;
+    return (mNoScannerMessage);
 }
 
 void KookaScanParams::slotLinkActivated(const QString &link)

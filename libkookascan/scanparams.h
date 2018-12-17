@@ -47,6 +47,7 @@ class QTabWidget;
 class KScanOption;
 class KGammaTable;
 class KLed;
+class KMessageWidget;
 
 class ScanParamsPage;
 class ScanSizeSelector;
@@ -281,6 +282,7 @@ signals:
 
 private slots:
     void slotScanProgress(int value);
+    void slotMessageLinkActivated(const QString &link);
 
 private:
 
@@ -320,8 +322,8 @@ private:
     KScanOption *mResolutionBind;
     KScanOption *mSourceSelect;
 
-    QLabel *mProblemMessage;
-    QLabel *mNoScannerMessage;
+    KMessageWidget *mProblemMessage;
+    KMessageWidget *mNoScannerMessage;
 };
 
 #endif                          // SCANPARAMS_H
