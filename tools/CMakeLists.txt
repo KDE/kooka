@@ -13,6 +13,11 @@
 
 project(kooka5)
 
+########### dependencies ###############
+
+find_package(Qt5 ${QT_MIN_VERSION} REQUIRED COMPONENTS Core Gui)
+find_package(KF5 ${KF5_MIN_VERSION} REQUIRED COMPONENTS I18n CoreAddons)
+
 ########### sanedump ###############
 
 set(sanedump_SRCS
@@ -28,11 +33,19 @@ if (HAVE_SANE)
   target_link_libraries(sanedump ${SANE_LIBRARIES})
 endif (HAVE_SANE)
 
-########### kimageioinfo is KDE4 only ###############
+########### qimageioinfo ###############
 
+set(qimageioinfo_SRCS
+  qimageioinfo.cpp
+)
+
+add_executable(qimageioinfo ${qimageioinfo_SRCS})
+target_link_libraries(qimageioinfo Qt5::Core Qt5::Gui)
+target_link_libraries(qimageioinfo KF5::CoreAddons)
 
 ########### install files ###############
 
 if (INSTALL_BINARIES)
   install(TARGETS sanedump ${INSTALL_TARGETS_DEFAULT_ARGS})
+  install(TARGETS qimageioinfo ${INSTALL_TARGETS_DEFAULT_ARGS})
 endif (INSTALL_BINARIES)

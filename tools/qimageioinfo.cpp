@@ -3,7 +3,7 @@
  *  This file is part of Kooka, a scanning/OCR application using	*
  *  Qt <http://www.qt.io> and KDE Frameworks <http://www.kde.org>.	*
  *									*
- *  Copyright (C) 2009 Jonathan Marten <jjm@keelhaul.me.uk>		*
+ *  Copyright (C) 2009-2018 Jonathan Marten <jjm@keelhaul.me.uk>	*
  *									*
  *  Kooka is free software; you can redistribute it and/or modify it	*
  *  under the terms of the GNU Library General Public License as	*
@@ -33,13 +33,13 @@
 
 #include <qhash.h>
 #include <qstring.h>
-#include <qstringlist.h>
 #include <qtextstream.h>
-
-#include <kcmdlineargs.h>
-#include <kapplication.h>
-#include <kimageio.h>
-#include <kmimetype.h>
+#include <qguiapplication.h>
+#include <qcommandlineparser.h>
+#include <qimagereader.h>
+#include <qimagewriter.h>
+#include <qmimetype.h>
+#include <qmimedatabase.h>
 
 
 #define READ		0x01
@@ -54,39 +54,41 @@
 
 #define YESNO(b)	((b) ? " Y" : " -")
 
+#if (QT_VERSION>=QT_VERSION_CHECK(5, 12, 0))
+#define HAVE_REVERSE_LOOKUP
+#endif
+
 
 int main(int argc, char **argv)
 {
-    KCmdLineArgs::init(argc,					// argc
-                       argv,					// argv
-                       "kimageioinfo",				// appname
-                       "",					// catalog
-                       ki18n("KImageIOinfo"),			// programName
-                       "1.00",					// version
-                       ki18n("Show KImageIO information"),	// description
-                       KCmdLineArgs::CmdLineArgNone);		// stdargs
+    QGuiApplication app(argc, argv);
+    app.setApplicationDisplayName("QImageIOInfo");
+    app.setApplicationName("qimageioinfo");
+    app.setApplicationVersion("1.0.0");
 
-    KApplication app(false);					// no GUI
+    QCommandLineParser parser;
+    parser.setApplicationDescription("Show QImageIO supported formats and information");
+    parser.addHelpOption();
+    parser.addVersionOption();
+    parser.process(app);
 
-    QHash<QString,int> combinedMap;
+    QHash<QByteArray,int> combinedMap;
 
-    QStringList readTypes = KImageIO::types(KImageIO::Reading);
-    QStringList writeTypes = KImageIO::types(KImageIO::Writing);
+    QList<QByteArray> readTypes = QImageReader::supportedImageFormats();
+    QList<QByteArray> writeTypes = QImageWriter::supportedImageFormats();
 
-    for (QStringList::const_iterator it = readTypes.constBegin();
-         it!=readTypes.constEnd(); ++it)
+    foreach (const QByteArray &it, qAsConst(readTypes))
     {
-        combinedMap[(*it).toUpper().trimmed()] |= READ;
+        combinedMap[it.toUpper().trimmed()] |= READ;
     }
 
-    for (QStringList::const_iterator it = writeTypes.constBegin();
-         it!=writeTypes.constEnd(); ++it)
+    foreach (const QByteArray &it, qAsConst(writeTypes))
     {
-        combinedMap[(*it).toUpper().trimmed()] |= WRITE;
+        combinedMap[it.toUpper().trimmed()] |= WRITE;
     }
 
-    QStringList formats(combinedMap.keys());
-    formats.sort();
+    QList<QByteArray> formats(combinedMap.keys());
+    qSort(formats);
 
     QTextStream ts(stdout);
 
@@ -98,7 +100,11 @@ int main(int argc, char **argv)
         .arg("Read",FIELD23)
         .arg("Write",FIELD23)
         .arg("MIME type",FIELD4)
+#ifdef HAVE_REVERSE_LOOKUP
         .arg("Reverse",FIELD5)
+#else
+        .arg("",FIELD5)
+#endif
         .arg("Extension",FIELD6)
        << endl;
     ts << QString(FMT)
@@ -106,33 +112,41 @@ int main(int argc, char **argv)
         .arg("----",FIELD23)
         .arg("-----",FIELD23)
         .arg("---------",FIELD4)
+#ifdef HAVE_REVERSE_LOOKUP
         .arg("-------",FIELD5)
+#else
+        .arg("",FIELD5)
+#endif
         .arg("---------",FIELD6)
        << endl;
 
-    for (QStringList::const_iterator it = formats.constBegin();
-         it!=formats.constEnd(); ++it)
+    QMimeDatabase db;
+
+    foreach (const QByteArray &format, qAsConst(formats))
     {
-        QString format = (*it);
         int sup = combinedMap[format];
 
-        KMimeType::Ptr mime = KMimeType::findByPath("/tmp/x."+format.toLower(), 0, true);
-        QString type = (mime->isDefault() ? "(none)" : mime->name());
-        mime->patterns();				// needed for below to work!
-        QString ext = (mime->isDefault() ? "" : mime->mainExtension());
-        QString icon = mime->iconName();
+        const QMimeType mime = db.mimeTypeForFile(QString("/tmp/x.")+format.toLower(), QMimeDatabase::MatchExtension);
+        bool isDefault = (mime.name()=="application/octet-stream");
+        QString type = (isDefault ? "(none)" : mime.name());
+        QString ext = (isDefault ? "" : mime.suffixes().value(0));
+        QString icon = mime.iconName();
 
+#ifdef HAVE_REVERSE_LOOKUP
         QString backfmt = "(none)";
-        QStringList formats = KImageIO::typeForMime(mime->name());
+        QList<QByteArray> formats = QImageReader::imageFormatsForMimeType(mime.name());
         int fcount = formats.count();			// get format from file name
         if (fcount>0)
         {
-            backfmt = formats.first().trimmed().toUpper().toLocal8Bit();
+            backfmt = formats.first().trimmed().toUpper();
             if (fcount>1) backfmt += QString(" (+%1)").arg(fcount-1);
         }
+#else
+        QString backfmt = "";
+#endif
 
         ts << QString(FMT)
-            .arg(format,FIELD1)
+            .arg(format.constData(),FIELD1)
             .arg(YESNO(sup & READ),FIELD23)
             .arg(YESNO(sup & WRITE),FIELD23)
             .arg(type,FIELD4)
