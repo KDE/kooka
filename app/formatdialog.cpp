@@ -386,7 +386,7 @@ void FormatDialog::showEvent(QShowEvent *ev)
 
     if (mFilenameEdit != nullptr) {			// asking for a file name
         mFilenameEdit->setFocus();			// set focus to that
-        mFilenameEdit->selectAll();			// highight for editing
+        mFilenameEdit->selectAll();			// highlight for editing
     }
 }
 

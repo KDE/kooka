@@ -39,7 +39,7 @@
 #include "kgammatable.h"
 
 
-static const int MARGIN = 5;				// margin aroung display
+static const int MARGIN = 5;				// margin around display
 static const int NGRID = 4;				// number of grid lines
 
 

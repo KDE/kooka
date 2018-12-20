@@ -39,16 +39,16 @@ public:
     static ScanGlobal *self();
 
     /**
-     * Calls sane_init() to initialise the SANE library, the first time this
+     * Calls sane_init() to initialize the SANE library, the first time this
      * function is called.  Subsequent calls are ignored.  Sets up to call
      * sane_exit() when the application exits.
      *
-     * @return @c true if SANE intialisation succeeded
+     * @return @c true if SANE initialization succeeded
      */
     bool init();
 
     /**
-     * Checks whether SANE initialisation succeeded.
+     * Checks whether SANE initialization succeeded.
      *
      * @return @c true if @c init() has been called and it did, @c false if it did not. 
      * @see init

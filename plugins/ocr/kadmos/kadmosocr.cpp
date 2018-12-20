@@ -143,7 +143,7 @@ const char *CRep::RepTextLine(int nLine, unsigned char RejectLevel, int RejectCh
 
 /**
  * This method handles the given line. It takes repRes and goes through the
- * kadmos result tree structures recursivly.
+ * kadmos result tree structures recursively.
  */
 ocrWordList CRep::getLineWords(int line)
 {

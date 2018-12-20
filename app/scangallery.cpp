@@ -496,7 +496,7 @@ void ScanGallery::slotDecorate(FileTreeViewItem *item)
             item->url().adjusted(QUrl::StripTrailingSlash)) {
             m_nextUrlToShow = QUrl();           // do this first to prevent recursion
             slotItemActivated(item);
-            setCurrentItem(item);           // neccessary in case of new file from D&D
+            setCurrentItem(item);           // necessary in case of new file from D&D
         }
     }
 }

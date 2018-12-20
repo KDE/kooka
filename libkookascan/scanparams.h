@@ -62,7 +62,7 @@ class ScanSizeSelector;
  * Other scanner options are placed either in an "Other" or "Advanced" tab,
  * depending on how they are classified by the SANE backend.
  *
- * The scanner name/desciption and the operation LED appear above the
+ * The scanner name/description and the operation LED appear above the
  * scanner settings, and the "Preview" and "Scan" action buttons below.
  *
  * This class controls the scanner operation (via its @c KScanDevice) and

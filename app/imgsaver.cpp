@@ -122,7 +122,7 @@ ImgSaver::ImageSaveStatus ImgSaver::getFilenameAndFormat(ImageMetaInfo::ImageTyp
              << "subformat=" << saveSubformat;
 
     while (saveFilename.isEmpty() || !saveFormat.isValid() || m_saveAskFormat || m_saveAskFilename)
-    {							// is a dialogue neeeded?
+    {							// is a dialogue needed?
         FormatDialog fd(nullptr, type, m_saveAskFormat, saveFormat, m_saveAskFilename, saveFilename);
         if (!fd.exec()) {
             return (ImgSaver::SaveStatusCanceled);

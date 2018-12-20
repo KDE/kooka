@@ -42,7 +42,7 @@ KADMOS is commercial OCR/ICR software component of the company
  www.reRecognition.com
 
 and Kooka can be built using the Linux version of the component in
-order to achive very good OCR results.
+order to achieve very good OCR results.
 
 Please contact re Recognition directly if you like to obtain or test
 KADMOS. Note that if you are linking against KADMOS, you lose the
@@ -52,7 +52,7 @@ version as well.
 Configuration
 -------------
 
-As Kooka does not require KADMOS, it is neccessary to configure
+As Kooka does not require KADMOS, it is necessary to configure
 Kooka to use the KADMOS library. This could be done by calling the
 configure script of Kooka's source distribution with following 
 parameter:
@@ -76,8 +76,8 @@ Installation of the Classifier Files:
 KADMOS needs classifier files for the ocr process which come with
 the KADMOS developer's toolkit. The classifier files need to be installed
 in the KDE application data directory for Kooka in a subdirectory named
-classifiers. If your KDE installation goes to /opt/kde3/, this is for
-example /opt/kde3/share/apps/kooka/classifiers. Kooka picks the 
+classifiers. If your KDE installation goes to /opt/kde/, this is for
+example /opt/kde/share/apps/kooka/classifiers. Kooka picks the 
 available classifiers up automatically.
 
 The classifiers are named in the following way:

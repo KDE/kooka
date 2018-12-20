@@ -154,7 +154,7 @@ QLabel *PhotoCopyPrintDialogPage::constructLabel(Q3VGroupBox *group, const char 
 
 // The unusual 'const QString *' parameter is here so that this function can
 // be overloaded with the previous.  If this were 'const QString &' then the
-// overload would be ambiguous (because there is a converion from QByteArray
+// overload would be ambiguous (because there is a conversion from QByteArray
 // to QString).
 
 QLabel *PhotoCopyPrintDialogPage::constructLabel(Q3VGroupBox *group, const char *strTitle, const QString *strContents)

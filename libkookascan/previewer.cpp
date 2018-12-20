@@ -320,7 +320,7 @@ void Previewer::setAutoSelection(bool isOn)
 }
 
 /**
- * reads the scanner dependant config file through the mScanDevice pointer.
+ * reads the scanner dependent config file through the mScanDevice pointer.
  * If a value for the scanner is not yet known, the function starts up a
  * popup and asks the user.  The result is stored.
  */

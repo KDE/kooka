@@ -115,7 +115,7 @@ bool OcrGocrEngine::createOcrProcess(AbstractOcrDialogue *dia, const KookaImage 
     // TODO: use '-f' to output XML (with position and accuracy data)
 
     // Specify this explicitly, because "-" does not mean the same
-    // as "/dev/stdout".  The former interleaves the progress outout
+    // as "/dev/stdout".  The former interleaves the progress output
     // with the OCR result text.  See GOCR's process_arguments()
     // in gocr.c and ini_progress() in progress.c.
     //

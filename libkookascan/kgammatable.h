@@ -93,7 +93,7 @@ public:
     /**
      * Set the gamma table parameters from a string representation.
      *
-     * @param String value, in the form "gamma,brightness,contrast"
+     * @param str String value, in the form "gamma,brightness,contrast"
      * where each parameter is a decimal integer.
      *
      * @return @c true if the string format is valid.  If it is not

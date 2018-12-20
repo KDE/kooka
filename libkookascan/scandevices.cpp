@@ -78,7 +78,7 @@ ScanDevices::ScanDevices()
     if (!devs.isEmpty())
     {
         QStringList descs = ScanSettings::userDescriptions();
-        if (descs.count()<devs.count())			// ensure list corrent length
+        if (descs.count()<devs.count())			// ensure list correct length
         {
             for (int i = descs.count(); i<devs.count(); ++i) descs.append("Unknown");
             ScanSettings::setUserDescriptions(descs);

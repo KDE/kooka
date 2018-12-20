@@ -383,8 +383,8 @@ public:
      *
      * @param new_image The new image to display.  If this is @c nullptr,
      * no new image is set.
-     * @param hold_zoom If set to @true, do not change the current
-     * scaling type or scaling factor;  if set to @false, reset the
+     * @param hold_zoom If set to @c true, do not change the current
+     * scaling type or scaling factor;  if set to @c false, reset the
      * scaling type to that set by @c setDefaultScaleType().
      * @see setDefaultScaleType
      * @see setKeepZoom
@@ -422,7 +422,7 @@ public:
     void removeAllHighlights();
 
     /**
-     * Set the style, pen and brush to be used for subequently
+     * Set the style, pen and brush to be used for subsequently
      * added highlight rectangles.
      *
      * @param style The new style
@@ -449,7 +449,7 @@ public slots:
      * Set whether the current scaling settings are retained when a
      * new image is set.
      *
-     * @param k The new setting.  If @true, the scaling settings are always
+     * @param k The new setting.  If @c true, the scaling settings are always
      * retained when setting a new image, regardless of the @c hold_zoom
      * parameter to @c newImage().  The default is @c false.
      * @see newImage

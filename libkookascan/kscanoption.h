@@ -446,7 +446,7 @@ private:
     /**
      * Create a new object for the named option belonging to the
      * specified scanner device. After construction, if the option
-     * is valid it will initally contain the current parameter value
+     * is valid it will initially contain the current parameter value
      * retrieved from the scanner.
      *
      * @param name Name of the scanner option

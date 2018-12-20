@@ -47,7 +47,7 @@ public:
     /**
      *  Creates a size indicator widget.
      *
-     *  @param thres Threshold size, above which the widget starts to turn the warning colour.
+     *  @param thresh Threshold size, above which the widget starts to turn the warning colour.
      *  @param crit Critical size, above which the widget starts to turn the error colour.
      */
     explicit SizeIndicator(QWidget *parent,
@@ -59,7 +59,7 @@ public:
     /**
      * Sets the threshold size.
      *
-     * @param thres the threshold size.
+     * @param thresh the threshold size.
      */
     void setThreshold(long thresh = DEFAULT_THRESHOLD);
 

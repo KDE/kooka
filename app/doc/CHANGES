@@ -128,7 +128,7 @@ For Kooka 0.40:
 
 * Added Kadmos-Check to configure.in.in
 
-* Changed the Mainwindow to be KParts-Mainwindow,neccessary for using Parts in Kooka
+* Changed the Mainwindow to be KParts-Mainwindow, necessary for using Parts in Kooka
 
 * OCR: Code massive reorganised. More ability to use different ocr engines.
  

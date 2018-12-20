@@ -166,7 +166,7 @@ bool ScanParamsPage::lastRow()
 void ScanParamsPage::addGroup(QWidget *wid)
 {
     if (mPendingGroup != nullptr) {
-        mPendingGroup->hide();    // dont't need this after all
+        mPendingGroup->hide();    // don't need this after all
     }
 
     mPendingGroup = wid;
