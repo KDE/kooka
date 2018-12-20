@@ -127,7 +127,7 @@ ScanGallery::ScanGallery(QWidget *parent)
     mSavedTo = NULL;
 
     /* create a context menu and set the title */
-    m_contextMenu = new QMenu();
+    m_contextMenu = new QMenu(this);
     m_contextMenu->addSection(i18n("Gallery"));
 }
 
