@@ -34,13 +34,7 @@
 
 #include <qmap.h>
 #include <qcheckbox.h>
-#ifndef KDE3
 #include <qwidget.h>
-#endif
-
-#ifdef KDE3
-#include <kdeprint/kprintdialogpage.h>
-#endif
 
 class KookaImage;
 class KookaPrint;
@@ -57,11 +51,7 @@ class KookaImage;
 class KookaPrint;
 
 
-#ifdef KDE3
-class ImgPrintDialog : public KPrintDialogPage
-#else
 class ImgPrintDialog : public QWidget
-#endif
 {
     Q_OBJECT
 

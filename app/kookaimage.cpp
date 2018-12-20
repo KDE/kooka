@@ -68,9 +68,6 @@ void KookaImage::init()
     m_subImages = 0;
     m_fileItem = NULL;
     m_fileBound = false;
-#ifdef KDE3
-    m_tileCols = 0;
-#endif
 }
 
 

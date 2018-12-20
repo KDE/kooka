@@ -59,11 +59,7 @@
 
 
 ImgPrintDialog::ImgPrintDialog(const KookaImage *img, KookaPrint *prt, QWidget *pnt)
-#ifdef KDE3
-    : KPrintDialogPage(pnt),
-#else
     : QWidget(pnt)
-#endif
 {
     m_image = img;					// record the image
     qDebug() << "image size" << img->size();

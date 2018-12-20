@@ -717,18 +717,6 @@ void KookaView::print()
     imgTab.updatePrintParameters();			// set final printer options
     printer.printImage();				// print the image
 
-#ifdef KDE3
-    /* For now, print a single file. Later, print multiple images to one page */
-
-    KPrinter printer; // ( true, pMode );
-    printer.setUsePrinterResolution(true);
-    printer.addDialogPage(new ImgPrintDialog(img));
-
-    if (printer.setup(mMainWindow, i18n("Print %1").arg(img->localFileName().section('/', -1)))) {
-        KookaPrint kookaprint(&printer);
-        kookaprint.printImage(img, 10);
-    }
-#endif
 }
 
 void KookaView::slotNewPreview(const QImage *newimg, const ImageMetaInfo *info)
