@@ -62,7 +62,7 @@ Previewer::Previewer(QWidget *parent)
     mDisplayUnit = KRuler::Millimetres;
     mAutoSelThresh = 25;				// not used until scanner connected
 
-    mScanDevice = NULL;                 // no scanner connected yet
+    mScanDevice = nullptr;                 // no scanner connected yet
     mBedHeight = 297;                   // for most A4/Letter scanners
     mBedWidth = 215;
 
@@ -214,7 +214,7 @@ static inline int mmToPixels(double mm, int res)
 
 void Previewer::updateSelectionDims()
 {
-    if (mScanDevice == NULL) {
+    if (mScanDevice == nullptr) {
         return;    // no scanner connected
     }
 
@@ -258,9 +258,9 @@ void Previewer::connectScanner(KScanDevice *scan)
 {
     //qDebug();
     mScanDevice = scan;
-    mCanvas->newImage(NULL);				// remove previous preview
+    mCanvas->newImage(nullptr);				// remove previous preview
 
-    if (scan != NULL) {
+    if (scan != nullptr) {
         setAutoSelection(false);			// initially off, disregard config
 							// but get other saved values
         const KConfigSkeletonItem *item = ScanSettings::self()->previewAutoselBackgroundItem();
@@ -303,16 +303,16 @@ void Previewer::setAutoSelection(bool isOn)
 {
     //qDebug() << "to" << isOn;
 
-    if (isOn && mScanDevice == NULL) {			// no scanner connected yet
+    if (isOn && mScanDevice == nullptr) {			// no scanner connected yet
         //qDebug() << "no scanner!";
         isOn = false;
     }
 
     mDoAutoSelection = isOn;
-    if (mAutoSelectBar != NULL) {
+    if (mAutoSelectBar != nullptr) {
         mAutoSelectBar->setVisible(isOn);
     }
-    if (mScanDevice != NULL) {
+    if (mScanDevice != nullptr) {
         const KConfigSkeletonItem *item = ScanSettings::self()->previewAutoselOnItem();
         mScanDevice->storeConfig<bool>(item, isOn);
     }							// tell the GUI
@@ -327,7 +327,7 @@ void Previewer::setAutoSelection(bool isOn)
 
 bool Previewer::checkForScannerBg()
 {
-    if (mScanDevice == NULL) {
+    if (mScanDevice == nullptr) {
         return (true);    // no scan device
     }
 
@@ -379,7 +379,7 @@ void Previewer::slotSetAutoSelThresh(int t)
     mAutoSelThresh = t;
     //qDebug() << "Setting threshold to" << t;
 
-    if (mScanDevice!=NULL)
+    if (mScanDevice!=nullptr)
     {
         const KConfigSkeletonItem *item = ScanSettings::self()->previewAutoselThresholdItem();
         mScanDevice->storeConfig<int>(item, t);
@@ -392,7 +392,7 @@ void Previewer::slotAutoSelectSettingsChanged(int margin, bool bgIsWhite, int du
 {
     //qDebug() << "margin" << margin << "white?" << bgIsWhite << "dust" << dustsize;
 
-    if (mScanDevice!=NULL)				// save settings for scanner
+    if (mScanDevice!=nullptr)				// save settings for scanner
     {
         const KConfigSkeletonItem *item = ScanSettings::self()->previewAutoselMarginItem();
         mScanDevice->storeConfig<int>(item, margin);
@@ -433,7 +433,7 @@ void Previewer::slotFindAutoSelection()
     }
 
     const QImage *img = mCanvas->rootImage();
-    if (img == NULL || img->isNull()) {
+    if (img == nullptr || img->isNull()) {
         return;    // must have an image
     }
 

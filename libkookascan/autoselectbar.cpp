@@ -67,7 +67,7 @@ AutoSelectBar::AutoSelectBar(int initialValue, QWidget *parent)
 
     // Threshold setting slider/spinbox
     int maxThresh = item->maxValue().toInt();
-    mThresholdSlider = new KScanSlider(NULL, QString::null, 0, maxThresh);
+    mThresholdSlider = new KScanSlider(nullptr, QString::null, 0, maxThresh);
     mThresholdSlider->setValue(initialValue);
     mThresholdSlider->setToolTip(item->toolTip());
     l->setBuddy(mThresholdSlider);

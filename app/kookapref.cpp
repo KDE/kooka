@@ -91,7 +91,7 @@ int KookaPref::createPage(KookaPrefsPage *page,
                           const char *icon)
 {
     QVBoxLayout *top = static_cast<QVBoxLayout *>(page->layout());
-    if (top != NULL) {
+    if (top != nullptr) {
         top->addStretch(1);
     }
 
@@ -167,7 +167,7 @@ static QString docsPath()
 }
 
 // TODO: maybe save a .directory file there which shows a 'scanner' logo?
-static QString createGallery(const QDir &d, bool *success = NULL)
+static QString createGallery(const QDir &d, bool *success = nullptr)
 {
     if (!d.exists())					// does not already exist
     {
@@ -180,7 +180,7 @@ static QString createGallery(const QDir &d, bool *success = NULL)
             const char *reason = "";
 #endif
             QString docs = docsPath();
-            KMessageBox::error(NULL,
+            KMessageBox::error(nullptr,
                                xi18nc("@info", "Unable to create the directory <filename>%1</filename>"
                                       "<nl/>for the Kooka gallery"
 #ifdef HAVE_STRERROR
@@ -194,12 +194,12 @@ static QString createGallery(const QDir &d, bool *success = NULL)
                                     d.absolutePath(), docs, reason),
                                i18n("Error creating gallery"));
 
-            if (success != NULL) *success = false;
+            if (success != nullptr) *success = false;
             return (docs);
         }
     }
 
-    if (success != NULL) {
+    if (success != nullptr) {
         *success = true;
     }
     return (d.absolutePath());
@@ -237,7 +237,7 @@ QString KookaPref::findGalleryRoot()
     } else if (!oldexists && newexists) {		// only new exists
         dir = newpath;					// fine, just use that
     } else if (oldexists && !newexists) {		// only old exists
-        if (KMessageBox::questionYesNo(NULL,
+        if (KMessageBox::questionYesNo(nullptr,
                                        xi18nc("@info",
                                               "An old Kooka gallery was found at <filename>%1</filename>."
                                               "<nl/>The preferred new location is now <filename>%2</filename>."
@@ -250,7 +250,7 @@ QString KookaPref::findGalleryRoot()
             bool created;
             dir = createGallery(newdir, &created);
             if (created) {				// new created OK
-                KMessageBox::information(NULL,
+                KMessageBox::information(nullptr,
                                          xi18nc("@info",
                                                 "Kooka will use the new gallery, <link url=\"file:%1\"><filename>%1</filename></link>."
                                                 "<nl/><nl/>If you wish to add the images from your old gallery <link url=\"file:%2\"><filename>%2</filename></link>,"
@@ -264,7 +264,7 @@ QString KookaPref::findGalleryRoot()
             dir = oldpath;				// stay with old location
         }
     } else {						// both exist
-        KMessageBox::information(NULL,
+        KMessageBox::information(nullptr,
                                  xi18nc("@info",
                                         "Kooka will use the new gallery, <link url=\"file:%1\"><filename>%1</filename></link>."
                                         "<nl/><nl/>If you wish to add the images from your old gallery <link url=\"file:%2\"><filename>%2</filename></link>,"

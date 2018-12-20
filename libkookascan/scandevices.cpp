@@ -39,11 +39,11 @@
 #include "scansettings.h"
 
 
-ScanDevices *sInstance = NULL;
+ScanDevices *sInstance = nullptr;
 
 ScanDevices *ScanDevices::self()
 {
-    if (sInstance == NULL) {
+    if (sInstance == nullptr) {
         sInstance = new ScanDevices();
     }
     return (sInstance);
@@ -60,7 +60,7 @@ ScanDevices::ScanDevices()
     bool netaccess = ScanSettings::startupOnlyLocal();
     //qDebug() << "Query for network scanners" << (netaccess ? "not enabled" : "enabled");
 
-    SANE_Device const **dev_list = NULL;
+    SANE_Device const **dev_list = nullptr;
     SANE_Status status = sane_get_devices(&dev_list, (netaccess ? SANE_TRUE : SANE_FALSE));
     if (status != SANE_STATUS_GOOD) {
         //qDebug() << "sane_get_devices() failed, status" << status;
@@ -68,7 +68,7 @@ ScanDevices::ScanDevices()
     }
 
     const SANE_Device *dev;
-    for (int devno = 0; (dev = dev_list[devno]) != NULL; ++devno) {
+    for (int devno = 0; (dev = dev_list[devno]) != nullptr; ++devno) {
         mScannerNames.append(dev->name);
         mScannerDevices.insert(dev->name, dev);
         //qDebug() << "SANE found scanner:" << dev->name << "=" << deviceDescription(dev->name);
@@ -172,7 +172,7 @@ void ScanDevices::addUserSpecifiedDevice(const QByteArray &backend,
 const SANE_Device *ScanDevices::deviceInfo(const QByteArray &backend) const
 {
     if (!mScannerNames.contains(backend)) {
-        return (NULL);
+        return (nullptr);
     }
     return (mScannerDevices[backend]);
 }

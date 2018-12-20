@@ -61,10 +61,10 @@ static const PaperSize defaultSizes[] = {
     { "US Legal",   216, 356 },
     { "9x13",        90, 130 },
     { "10x15",      100, 150 },
-    { NULL,       0,  0 }
+    { nullptr,       0,  0 }
 };
 
-static const PaperSize *sizes = NULL;
+static const PaperSize *sizes = nullptr;
 #ifdef HAVE_LIBPAPER
 static QVector<PaperSize> papers;
 #endif
@@ -77,12 +77,12 @@ ScanSizeSelector::ScanSizeSelector(QWidget *parent, const QSize &bedSize)
     bedWidth = bedSize.width();
     bedHeight = bedSize.height();
 
-    if (sizes == NULL) {                // initialise paper data
+    if (sizes == nullptr) {                // initialise paper data
 #ifdef HAVE_LIBPAPER
         paperinit();                    // start to access library
 
         PaperSize ps;
-        for (const struct paper *p = paperfirst(); p != NULL; p = papernext(p)) {
+        for (const struct paper *p = paperfirst(); p != nullptr; p = papernext(p)) {
             // iterate over defined papers
             ////qDebug() << "paper at" << ((void*) p)
             //         << "name" << papername(p)
@@ -101,7 +101,7 @@ ScanSizeSelector::ScanSizeSelector(QWidget *parent, const QSize &bedSize)
 
         //qDebug() << "got" << papers.size() << "paper sizes from libpaper";
 
-        ps.name = NULL;                 // finish with null terminator
+        ps.name = nullptr;                 // finish with null terminator
         papers.append(ps);
 
         paperdone();                    // finished accessing library
@@ -122,7 +122,7 @@ ScanSizeSelector::ScanSizeSelector(QWidget *parent, const QSize &bedSize)
 
     m_sizeCb->addItem(i18n("Full size"));		// index 0
     m_sizeCb->addItem(i18n("(No selection)"));		// index 1
-    for (int i = 0; sizes[i].name != NULL; ++i) {	// index 2 and upwards
+    for (int i = 0; sizes[i].name != nullptr; ++i) {	// index 2 and upwards
         // only those that will fit
         if (sizes[i].width > bedWidth || sizes[i].height > bedHeight) {
             continue;
@@ -157,13 +157,13 @@ ScanSizeSelector::~ScanSizeSelector()
 
 static const PaperSize *findPaperSize(const QString &sizename)
 {
-    for (int i = 0; sizes[i].name != NULL; ++i) {   // search for that size
+    for (int i = 0; sizes[i].name != nullptr; ++i) {   // search for that size
         if (sizename == sizes[i].name) {
             return (&sizes[i]);
         }
     }
 
-    return (NULL);
+    return (nullptr);
 }
 
 void ScanSizeSelector::implementPortraitLandscape(const PaperSize *sp)
@@ -214,7 +214,7 @@ void ScanSizeSelector::slotPortraitLandscape(int id)
     }
 
     const PaperSize *sp = findPaperSize(m_sizeCb->itemText(idx));
-    if (sp == NULL) {
+    if (sp == nullptr) {
         return;
     }
     newScanSize(sp->width, sp->height);
@@ -236,7 +236,7 @@ void ScanSizeSelector::slotSizeSelected(int idx)
         }
     } else {                    // Named size
         const PaperSize *sp = findPaperSize(m_sizeCb->itemText(idx));
-        if (sp == NULL) {
+        if (sp == nullptr) {
             return;
         }
 
@@ -274,7 +274,7 @@ void ScanSizeSelector::selectSize(const QRect &rect)
     // is moved around (assuming that the size reported is 100% accurate).
     if (rect.isValid()) {
         // can this be a preset size?
-        for (int i = 0; sizes[i].name != NULL; ++i) { // search for preset that size
+        for (int i = 0; sizes[i].name != nullptr; ++i) { // search for preset that size
             if (sizes[i].width == rect.width() && sizes[i].height == rect.height()) {
                 m_portraitRb->setChecked(true);
                 m_landscapeRb->setChecked(false);

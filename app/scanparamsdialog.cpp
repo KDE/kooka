@@ -133,7 +133,7 @@ void ScanParamsDialog::slotSelectionChanged()
     bool enable = false;
 
     QListWidgetItem *item = paramsList->currentItem();
-    if (item == NULL) {
+    if (item == nullptr) {
         desc = i18n("No save set selected.");
     } else {                    // something getting selected
         desc = sets[item->text()];
@@ -152,7 +152,7 @@ void ScanParamsDialog::slotSelectionChanged()
 void ScanParamsDialog::slotLoad()
 {
     QListWidgetItem *item = paramsList->currentItem();
-    if (item == NULL) return;
+    if (item == nullptr) return;
 
     QString name = item->text();
     //qDebug() << "set" << name;
@@ -169,7 +169,7 @@ void ScanParamsDialog::slotLoad()
 
 void ScanParamsDialog::slotLoadAndClose(QListWidgetItem *item)
 {
-    if (item == NULL) return;
+    if (item == nullptr) return;
 
     //qDebug() << "set" << item->text();
     paramsList->setCurrentItem(item);
@@ -181,7 +181,7 @@ void ScanParamsDialog::slotSave()
 {
     QString name = QString::null;
     QListWidgetItem *item = paramsList->currentItem();
-    if (item != NULL) name = item->text();
+    if (item != nullptr) name = item->text();
     //qDebug() << "selected set" << name;
 
     QString newdesc = QString::null;
@@ -190,7 +190,7 @@ void ScanParamsDialog::slotSave()
     } else {
         const KScanOption *sm = sane->getExistingGuiElement(SANE_NAME_SCAN_MODE);
         const KScanOption *sr = sane->getExistingGuiElement(SANE_NAME_SCAN_RESOLUTION);
-        if (sm != NULL && sr != NULL) newdesc = i18n("%1, %2 dpi",
+        if (sm != nullptr && sr != nullptr) newdesc = i18n("%1, %2 dpi",
                                                     sm->get().constData(),
                                                     sr->get().constData());
     }
@@ -209,7 +209,7 @@ void ScanParamsDialog::slotSave()
         sets[newName] = newDesc;
 
         // TODO: why?
-        paramsList->setCurrentItem(NULL);
+        paramsList->setCurrentItem(nullptr);
         QList<QListWidgetItem *> found = paramsList->findItems(newName, Qt::MatchFixedString | Qt::MatchCaseSensitive);
         if (found.count() == 0) {
             paramsList->addItem(newName);
@@ -226,7 +226,7 @@ void ScanParamsDialog::slotSave()
 void ScanParamsDialog::slotEdit()
 {
     QListWidgetItem *item = paramsList->currentItem();
-    if (item == NULL) {
+    if (item == nullptr) {
         return;
     }
     QString oldName = item->text();
@@ -263,7 +263,7 @@ void ScanParamsDialog::slotEdit()
 void ScanParamsDialog::slotDelete()
 {
     QListWidgetItem *item = paramsList->currentItem();
-    if (item == NULL) return;
+    if (item == nullptr) return;
 
     QString name = item->text();
     //qDebug() << "set" << name;
@@ -278,5 +278,5 @@ void ScanParamsDialog::slotDelete()
 
     KScanOptSet::deleteSet(name);
     delete paramsList->takeItem(paramsList->row(item));
-    paramsList->setCurrentItem(NULL);			// clear selection
+    paramsList->setCurrentItem(nullptr);			// clear selection
 }

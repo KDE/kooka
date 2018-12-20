@@ -66,7 +66,7 @@ public:
      * not specified, nothing is displayed until an image is set
      * using @c newImage().
      **/
-    ImageCanvas(QWidget *parent = Q_NULLPTR, const QImage *start_image = NULL);
+    ImageCanvas(QWidget *parent = Q_NULLPTR, const QImage *start_image = nullptr);
 
     /**
      * Destructor.
@@ -262,7 +262,7 @@ public:
     /**
      * Access the image displayed.
      *
-     * @return The image, or @c NULL if no image is currently set.
+     * @return The image, or @c nullptr if no image is currently set.
      **/
     const QImage *rootImage() const
     {
@@ -381,7 +381,7 @@ public:
      * or @c setKeepZoom(true) has been called, the scaling type is
      * reset to the default.
      *
-     * @param new_image The new image to display.  If this is @c NULL,
+     * @param new_image The new image to display.  If this is @c nullptr,
      * no new image is set.
      * @param hold_zoom If set to @true, do not change the current
      * scaling type or scaling factor;  if set to @false, reset the

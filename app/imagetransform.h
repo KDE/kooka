@@ -52,7 +52,7 @@ public:
     };
 
     ImageTransform(const QImage &img, ImageTransform::Operation op,
-                   QString fileName, QObject *parent = NULL);
+                   QString fileName, QObject *parent = nullptr);
     virtual ~ImageTransform();
 
 signals:

@@ -67,7 +67,7 @@ public:
     void setAllowRename(bool on);
 
     bool prepareToSave(const ImageMetaInfo *info);
-    void addImage(const QImage *img, const ImageMetaInfo *info = NULL);
+    void addImage(const QImage *img, const ImageMetaInfo *info = nullptr);
 
     void saveHeaderState(int forIndex) const;
     void restoreHeaderState(int forIndex);
@@ -104,7 +104,7 @@ protected slots:
     void slotDecorate(FileTreeViewItem *item);
     void slotDecorate(FileTreeBranch *branch, const FileTreeViewItemList &list);
 
-    void slotItemHighlighted(QTreeWidgetItem *curr = NULL);
+    void slotItemHighlighted(QTreeWidgetItem *curr = nullptr);
     void slotItemActivated(QTreeWidgetItem *curr);
     void slotHighlightItem(const QUrl &url);
     void slotActivateItem(const QUrl &url);
@@ -129,7 +129,7 @@ private:
     void loadImageForItem(FileTreeViewItem *item);
     FileTreeBranch *openRoot(const QUrl &root, const QString &title = QString::null);
 
-    FileTreeViewItem *findItemByUrl(const QUrl &url, FileTreeBranch *branch = NULL);
+    FileTreeViewItem *findItemByUrl(const QUrl &url, FileTreeBranch *branch = nullptr);
     QUrl itemDirectory(const FileTreeViewItem *item) const;
     QString itemDirectoryRelative(const FileTreeViewItem *item) const;
     void updateParent(const FileTreeViewItem *curr);

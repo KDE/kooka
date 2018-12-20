@@ -44,7 +44,7 @@ static bool sSaveSettings = true;
 
 DialogStateSaver::DialogStateSaver(QDialog *pnt)
 {
-    Q_ASSERT(pnt!=NULL);
+    Q_ASSERT(pnt!=nullptr);
     mParent = pnt;
 }
 

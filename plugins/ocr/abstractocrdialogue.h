@@ -95,9 +95,9 @@ protected:
     void ocrShowInfo(const QString &binary, const QString &version = QString::null);
     void ocrShowVersion(const QString &version);
 
-    QWidget *addExtraSetupWidget(QWidget *wid = NULL, bool stretchBefore = false);
-    QWidget *addExtraEngineWidget(QWidget *wid = NULL, bool stretchBefore = false);
-    QWidget *addExtraDebugWidget(QWidget *wid = NULL, bool stretchBefore = false);
+    QWidget *addExtraSetupWidget(QWidget *wid = nullptr, bool stretchBefore = false);
+    QWidget *addExtraEngineWidget(QWidget *wid = nullptr, bool stretchBefore = false);
+    QWidget *addExtraDebugWidget(QWidget *wid = nullptr, bool stretchBefore = false);
 
 protected slots:
     virtual void slotWriteConfig();

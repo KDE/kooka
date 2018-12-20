@@ -58,12 +58,12 @@ public:
      * @param pix is a pixmap to display as an icon of the branch.
      * @param showHidden flag to make hidden files visible or not.
      * @param branchRoot is the FileTreeViewItem to use as the root of the
-     *        branch, with the default NULL meaning to let FileTreeBranch create
+     *        branch, with the default nullptr meaning to let FileTreeBranch create
      *        it for you.
      */
     FileTreeBranch(FileTreeView *parent, const QUrl &url, const QString &name,
                    const QIcon &pix, bool showHidden = false,
-                   FileTreeViewItem *branchRoot = NULL);
+                   FileTreeViewItem *branchRoot = nullptr);
 
     /**
      * @returns the root url of the branch.

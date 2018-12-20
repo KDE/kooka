@@ -103,7 +103,7 @@
 class WidgetSite : public QFrame
 {
 public:
-    WidgetSite(QWidget *parent, QWidget *widget = NULL);
+    WidgetSite(QWidget *parent, QWidget *widget = nullptr);
     void setWidget(QWidget *widget);
 
 private:
@@ -125,7 +125,7 @@ WidgetSite::WidgetSite(QWidget *parent, QWidget *widget)
     lay->setRowStretch(0, 1);
     lay->setColumnStretch(0, 1);
 
-    if (widget == NULL) {
+    if (widget == nullptr) {
         QLabel *l = new QLabel(name, this);
         l->setAlignment(Qt::AlignVCenter | Qt::AlignHCenter);
         widget = l;
@@ -185,20 +185,20 @@ KookaView::KookaView(KMainWindow *parent, const QByteArray &deviceToUse)
     setObjectName("KookaView");
 
     mMainWindow = parent;
-    mOcrResultImg = NULL;
-    mScanParams = NULL;
-//    mOcrEngine = NULL;
+    mOcrResultImg = nullptr;
+    mScanParams = nullptr;
+//    mOcrEngine = nullptr;
     mCurrentTab = KookaView::TabNone;
 
     mIsPhotoCopyMode = false;
 
-    mOpenWithMapper = NULL;
+    mOpenWithMapper = nullptr;
 
     /** Image Viewer **/
     mImageCanvas = new ImageCanvas(this);
     mImageCanvas->setMinimumSize(100, 200);
     QMenu *ctxtmenu = mImageCanvas->contextMenu();
-    if (ctxtmenu != NULL) {
+    if (ctxtmenu != nullptr) {
         ctxtmenu->addSection(i18n("Image View"));
     }
 
@@ -275,7 +275,7 @@ KookaView::KookaView(KMainWindow *parent, const QByteArray &deviceToUse)
     mPreviewCanvas = new Previewer(this);
     mPreviewCanvas->setMinimumSize(100, 100);
     ctxtmenu = mPreviewCanvas->getImageCanvas()->contextMenu();
-    if (ctxtmenu != NULL) {
+    if (ctxtmenu != nullptr) {
         ctxtmenu->addSection(i18n("Scan Preview"));
     }
 
@@ -452,14 +452,14 @@ bool KookaView::slotSelectDevice(const QByteArray &useDevice, bool alwaysAsk)
         }
 
         if (selDevice.isEmpty()) {          // dialogue cancelled
-            if (mScanParams != NULL) {
+            if (mScanParams != nullptr) {
                 return (false);    // have setup, do nothing
             }
             gallery_mode = true;
         }
     }
 
-    if (mScanParams != NULL) {
+    if (mScanParams != nullptr) {
         closeScanDevice();    // remove existing GUI object
     }
 
@@ -525,8 +525,8 @@ bool KookaView::slotSelectDevice(const QByteArray &useDevice, bool alwaysAsk)
 
     if (!haveConnection) {              // no scanner device available,
         // or starting in gallery mode
-        if (mScanParams != NULL) {
-            mScanParams->connectDevice(NULL, gallery_mode);
+        if (mScanParams != nullptr) {
+            mScanParams->connectDevice(nullptr, gallery_mode);
         }
     }
 
@@ -621,7 +621,7 @@ void KookaView::updateSelectionState()
 {
     KookaView::StateFlags state = 0;
     const FileTreeViewItem *ftvi = mGallery->galleryTree()->highlightedFileTreeViewItem();
-    const KFileItem *fi = (ftvi != NULL ? ftvi->fileItem() : NULL);
+    const KFileItem *fi = (ftvi != nullptr ? ftvi->fileItem() : nullptr);
     const bool scanmode = (mCurrentTab == KookaView::TabScan);
 
     if (scanmode)					// Scan mode
@@ -633,7 +633,7 @@ void KookaView::updateSelectionState()
         state |= KookaView::GalleryShown;
     }
 
-    if (fi != NULL && !fi->isNull())			// have a gallery selection
+    if (fi != nullptr && !fi->isNull())			// have a gallery selection
     {
         if (fi->isDir()) state |= KookaView::IsDirectory;
         else
@@ -644,7 +644,7 @@ void KookaView::updateSelectionState()
         }
     }
 
-    if (ftvi != NULL && ftvi->isRoot()) state |= KookaView::RootSelected;
+    if (ftvi != nullptr && ftvi->isRoot()) state |= KookaView::RootSelected;
     if (imageViewer()->hasImage()) state |= KookaView::ImageValid;
 
     ////qDebug() << "state" << state;
@@ -654,10 +654,10 @@ void KookaView::updateSelectionState()
 void KookaView::slotGallerySelectionChanged()
 {
     const FileTreeViewItem *ftvi = mGallery->galleryTree()->highlightedFileTreeViewItem();
-    const KFileItem *fi = (ftvi != NULL ? ftvi->fileItem() : NULL);
+    const KFileItem *fi = (ftvi != nullptr ? ftvi->fileItem() : nullptr);
     const bool scanmode = (mCurrentTab == KookaView::TabScan);
 
-    if (fi == NULL || fi->isNull()) {       // no gallery selection
+    if (fi == nullptr || fi->isNull()) {       // no gallery selection
         if (!scanmode) {
             emit changeStatus(i18n("No selection"));
         }
@@ -686,7 +686,7 @@ void KookaView::loadStartupImage()
 void KookaView::print()
 {
     const KookaImage *img = gallery()->getCurrImage(true);
-    if (img==NULL) return;				// load image if necessary
+    if (img==nullptr) return;				// load image if necessary
 
     // create a KookaPrint (subclass of a QPrinter)
     KookaPrint printer;
@@ -721,7 +721,7 @@ void KookaView::print()
 
 void KookaView::slotNewPreview(const QImage *newimg, const ImageMetaInfo *info)
 {
-    if (newimg == NULL) {
+    if (newimg == nullptr) {
         return;
     }
 
@@ -750,7 +750,7 @@ void KookaView::slotSetOcrSpellConfig(const QString &configFile)
 {
 #ifndef KF5
     //qDebug() << configFile;
-    if (mOcrResEdit!=NULL) mOcrResEdit->setSpellCheckingConfigFileName(configFile);
+    if (mOcrResEdit!=nullptr) mOcrResEdit->setSpellCheckingConfigFileName(configFile);
 #endif
 }
 
@@ -839,7 +839,7 @@ void KookaView::slotScanStart(const ImageMetaInfo *info)
     //qDebug() << "Scan starts...";
     if (KookaSettings::saverAskBeforeScan())		// ask for filename first?
     {
-        if (info != NULL)				// if we have initial image info
+        if (info != nullptr)				// if we have initial image info
         {
             //qDebug() << "imgtype" << info->getImageType();
             if (!gallery()->prepareToSave(info))	// get ready to save
@@ -850,11 +850,11 @@ void KookaView::slotScanStart(const ImageMetaInfo *info)
         }
     }
 
-    if (mScanParams != NULL) {
+    if (mScanParams != nullptr) {
         mScanParams->setEnabled(false);
 
         KLed *led = mScanParams->operationLED();
-        if (led != NULL) {
+        if (led != nullptr) {
             led->setColor(Qt::red);         // scanner warming up
             led->setState(KLed::On);
             qApp->processEvents();          // let the change show
@@ -867,9 +867,9 @@ void KookaView::slotScanStart(const ImageMetaInfo *info)
 void KookaView::slotAcquireStart()
 {
     //qDebug() << "Acquire starts";
-    if (mScanParams != NULL) {
+    if (mScanParams != nullptr) {
         KLed *led = mScanParams->operationLED();
-        if (led != NULL) {
+        if (led != nullptr) {
             led->setColor(Qt::green);           // scanning active
             qApp->processEvents();          // let the change show
         }
@@ -906,10 +906,10 @@ void KookaView::slotScanFinished(KScanDevice::Status stat)
         KMessageBox::error(mMainWindow, msg);
     }
 
-    if (mScanParams != NULL) {
+    if (mScanParams != nullptr) {
         mScanParams->setEnabled(true);
         KLed *led = mScanParams->operationLED();
-        if (led != NULL) {
+        if (led != nullptr) {
             led->setColor(Qt::green);
             led->setState(KLed::Off);
         }
@@ -919,9 +919,9 @@ void KookaView::slotScanFinished(KScanDevice::Status stat)
 void KookaView::closeScanDevice()
 {
     //qDebug() << "Scanner Device closes down";
-    if (mScanParams != NULL) {
+    if (mScanParams != nullptr) {
         delete mScanParams;
-        mScanParams = NULL;
+        mScanParams = nullptr;
     }
 
     mScanDevice->closeDevice();
@@ -946,7 +946,7 @@ void KookaView::slotTransformImage()
 
     // Get operation code from action that was triggered
     QAction *act = static_cast<QAction *>(sender());
-    if (act == NULL) {
+    if (act == nullptr) {
         return;
     }
     ImageTransform::Operation op = static_cast<ImageTransform::Operation>(act->data().toInt());
@@ -954,7 +954,7 @@ void KookaView::slotTransformImage()
     // This may appear to be a waste, since we are immediately unloading the image.
     // But we need a copy of the image anyway, so there will still be a load needed.
     const KookaImage *loadedImage = gallery()->getCurrImage(true);
-    if (loadedImage == NULL) {
+    if (loadedImage == nullptr) {
         return;
     }
     const QImage img = *loadedImage;            // get a copy of the image
@@ -974,14 +974,14 @@ void KookaView::slotTransformImage()
 
 void KookaView::slotSaveOcrResult()
 {
-    if (mOcrResEdit != NULL) {
+    if (mOcrResEdit != nullptr) {
         mOcrResEdit->slotSaveText();
     }
 }
 
 void KookaView::slotScanParams()
 {
-    if (mScanDevice == NULL) {
+    if (mScanDevice == nullptr) {
         return;    // must have a scanner device
     }
     ScanParamsDialog d(this, mScanDevice);
@@ -990,15 +990,15 @@ void KookaView::slotScanParams()
 
 void KookaView::slotShowAImage(const KookaImage *img, bool isDir)
 {
-    if (mImageCanvas != NULL) {         // load into image viewer
+    if (mImageCanvas != nullptr) {         // load into image viewer
         mImageCanvas->newImage(img);
         mImageCanvas->setReadOnly(false);
     }
 
-    if (mImageCanvas != NULL) {
+    if (mImageCanvas != nullptr) {
         emit changeStatus(mImageCanvas->imageInfoString(), StatusBarManager::ImageDims);
     }
-    if (img != NULL) {
+    if (img != nullptr) {
         emit changeStatus(i18n("Loaded image %1", img->url().url(QUrl::PreferLocalFile)));
     } else if (!isDir) {
         emit changeStatus(i18n("Unloaded image"));
@@ -1009,8 +1009,8 @@ void KookaView::slotShowAImage(const KookaImage *img, bool isDir)
 void KookaView::slotUnloadAImage(const KookaImage *img)
 {
     //qDebug() << "Unloading Image";
-    if (mImageCanvas != NULL) {
-        mImageCanvas->newImage(NULL);
+    if (mImageCanvas != nullptr) {
+        mImageCanvas->newImage(nullptr);
     }
     updateSelectionState();
 }
@@ -1025,11 +1025,11 @@ void KookaView::slotStartLoading(const QUrl &url)
 
 void KookaView::connectViewerAction(QAction *action, bool sepBefore)
 {
-    if (action == NULL) {
+    if (action == nullptr) {
         return;
     }
     QMenu *popup = mImageCanvas->contextMenu();
-    if (popup == NULL) {
+    if (popup == nullptr) {
         return;
     }
 
@@ -1041,11 +1041,11 @@ void KookaView::connectViewerAction(QAction *action, bool sepBefore)
 
 void KookaView::connectGalleryAction(QAction *action, bool sepBefore)
 {
-    if (action == NULL) {
+    if (action == nullptr) {
         return;
     }
     QMenu *popup = gallery()->contextMenu();
-    if (popup == NULL) {
+    if (popup == nullptr) {
         return;
     }
 
@@ -1057,32 +1057,32 @@ void KookaView::connectGalleryAction(QAction *action, bool sepBefore)
 
 void KookaView::connectThumbnailAction(QAction *action)
 {
-    if (action == NULL) {
+    if (action == nullptr) {
         return;
     }
     QMenu *popup = mThumbView->contextMenu();
-    if (popup != NULL) {
+    if (popup != nullptr) {
         popup->addAction(action);
     }
 }
 
 void KookaView::connectPreviewAction(QAction *action)
 {
-    if (action == NULL) {
+    if (action == nullptr) {
         return;
     }
     QMenu *popup = mPreviewCanvas->getImageCanvas()->contextMenu();
-    if (popup != NULL) {
+    if (popup != nullptr) {
         popup->addAction(action);
     }
 }
 
 void KookaView::slotApplySettings()
 {
-    if (mThumbView != NULL) {
+    if (mThumbView != nullptr) {
         mThumbView->readSettings();    // size and background
     }
-    if (mGallery != NULL) {
+    if (mGallery != nullptr) {
         mGallery->readSettings();    // layout and rename
     }
 }
@@ -1091,7 +1091,7 @@ void KookaView::slotApplySettings()
 
 void KookaView::slotStartPreview()
 {
-    if (mScanParams == NULL) {
+    if (mScanParams == nullptr) {
         return;
     }
     setCurrentIndex(KookaView::TabScan);
@@ -1101,7 +1101,7 @@ void KookaView::slotStartPreview()
 
 void KookaView::slotStartFinalScan()
 {
-    if (mScanParams == NULL) {
+    if (mScanParams == nullptr) {
         return;
     }
     setCurrentIndex(KookaView::TabScan);
@@ -1111,7 +1111,7 @@ void KookaView::slotStartFinalScan()
 
 void KookaView::slotAutoSelect(bool on)
 {
-    if (mPreviewCanvas == NULL) {
+    if (mPreviewCanvas == nullptr) {
         return;
     }
     setCurrentIndex(KookaView::TabScan);
@@ -1210,7 +1210,7 @@ void KookaView::showOpenWithMenu(KActionMenu *menu)
     QString mimeType = curr->fileItem()->mimetype();
     //qDebug() << "Trying to open" << curr->url() << "which is" << mimeType;
 
-    if (mOpenWithMapper == NULL) {
+    if (mOpenWithMapper == nullptr) {
         mOpenWithMapper = new QSignalMapper(this);
         connect(mOpenWithMapper, SIGNAL(mapped(int)), SLOT(slotOpenWith(int)));
     }
@@ -1243,7 +1243,7 @@ void KookaView::slotOpenWith(int idx)
     //qDebug() << "idx" << idx;
 
     FileTreeViewItem *ftvi = gallery()->highlightedFileTreeViewItem();
-    if (ftvi == NULL) {
+    if (ftvi == nullptr) {
         return;
     }
     QList<QUrl> urllist;

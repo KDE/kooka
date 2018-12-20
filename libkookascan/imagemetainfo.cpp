@@ -30,7 +30,7 @@ ImageMetaInfo::ImageMetaInfo()
 
 ImageMetaInfo::ImageType ImageMetaInfo::findImageType(const QImage *image)
 {
-    if (image == NULL || image->isNull()) {
+    if (image == nullptr || image->isNull()) {
         return (ImageMetaInfo::Unknown);
     }
 

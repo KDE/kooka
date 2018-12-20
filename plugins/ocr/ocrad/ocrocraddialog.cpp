@@ -55,8 +55,8 @@
 
 OcrOcradDialog::OcrOcradDialog(AbstractOcrEngine *plugin, QWidget *pnt)
     : AbstractOcrDialogue(plugin, pnt),
-      m_setupWidget(NULL),
-      m_orfUrlRequester(NULL),
+      m_setupWidget(nullptr),
+      m_orfUrlRequester(nullptr),
       m_layoutMode(0),
       m_ocrCmd(QString::null),
       m_versionNum(0),
@@ -84,7 +84,7 @@ bool OcrOcradDialog::setupGui()
 
     // Layout detection mode, dependent on OCRAD version
     KConfigSkeletonItem *ski = KookaSettings::self()->ocrOcradLayoutDetectionItem();
-    Q_ASSERT(ski!=NULL);
+    Q_ASSERT(ski!=nullptr);
     QLabel *l = new QLabel(ski->label(), w);
     gl->addWidget(l, 0, 0);
 
@@ -109,7 +109,7 @@ bool OcrOcradDialog::setupGui()
     // Character set, auto detected values
     QStringList vals = getValidValues("charset");
     ski = KookaSettings::self()->ocrOcradCharsetItem();
-    Q_ASSERT(ski!=NULL);
+    Q_ASSERT(ski!=nullptr);
     l = new QLabel(ski->label(), w);
     gl->addWidget(l, 2, 0);
     m_characterSet = new QComboBox(w);
@@ -130,7 +130,7 @@ bool OcrOcradDialog::setupGui()
     // Filter, auto detected values
     vals = getValidValues("filter");
     ski = KookaSettings::self()->ocrOcradFilterItem();
-    Q_ASSERT(ski!=NULL);
+    Q_ASSERT(ski!=nullptr);
     l = new QLabel(ski->label(), w);
     gl->addWidget(l, 3, 0);
     m_filter = new QComboBox(w);
@@ -151,7 +151,7 @@ bool OcrOcradDialog::setupGui()
     // Transform, auto detected values
     vals = getValidValues("transform");
     ski = KookaSettings::self()->ocrOcradTransformItem();
-    Q_ASSERT(ski!=NULL);
+    Q_ASSERT(ski!=nullptr);
     l = new QLabel(ski->label(), w);
     gl->addWidget(l, 4, 0);
     m_transform = new QComboBox(w);
@@ -173,7 +173,7 @@ bool OcrOcradDialog::setupGui()
 
     // Invert option, on/off
     ski = KookaSettings::self()->ocrOcradInvertItem();
-    Q_ASSERT(ski!=NULL);
+    Q_ASSERT(ski!=nullptr);
     m_invert = new QCheckBox(ski->label(), w);
     m_invert->setChecked(KookaSettings::ocrOcradInvert());
     m_invert->setToolTip(ski->toolTip());
@@ -183,14 +183,14 @@ bool OcrOcradDialog::setupGui()
 
     // Threshold, on/off and slider
     ski = KookaSettings::self()->ocrOcradThresholdEnableItem();
-    Q_ASSERT(ski!=NULL);
+    Q_ASSERT(ski!=nullptr);
     m_thresholdEnable = new QCheckBox(ski->label(), w);
     m_thresholdEnable->setChecked(KookaSettings::ocrOcradThresholdEnable());
     m_thresholdEnable->setToolTip(ski->toolTip());
     gl->addWidget(m_thresholdEnable, 8, 1, Qt::AlignLeft);
 
     ski = KookaSettings::self()->ocrOcradThresholdValueItem();
-    Q_ASSERT(ski!=NULL);
+    Q_ASSERT(ski!=nullptr);
     m_thresholdSlider = new KScanSlider(w, ski->label(), 0, 100);
     m_thresholdSlider->setValue(KookaSettings::ocrOcradThresholdValue());
     m_thresholdSlider->setToolTip(ski->toolTip());
@@ -249,7 +249,7 @@ void OcrOcradDialog::enableFields(bool enable)
 /* Later: Allow interactive loading of ORF files */
 QString OcrOcradDialog::orfUrl() const
 {
-    if (m_orfUrlRequester != NULL) {
+    if (m_orfUrlRequester != nullptr) {
         return (m_orfUrlRequester->url().url());
     } else {
         return (QString::null);
@@ -289,7 +289,7 @@ QStringList OcrOcradDialog::getValidValues(const QString &opt)
     QStringList result;
 
     KConfigSkeletonItem *ski = KookaSettings::self()->ocrOcradValidValuesItem();
-    Q_ASSERT(ski!=NULL);
+    Q_ASSERT(ski!=nullptr);
     QString groupName = QString("%1_v%2").arg(ski->group()).arg(m_versionStr);
     KConfigGroup grp = KookaSettings::self()->config()->group(groupName);
 

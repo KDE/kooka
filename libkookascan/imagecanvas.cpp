@@ -66,13 +66,13 @@ public:
     HighlightItem(const QRect &rect,
                   ImageCanvas::HighlightStyle style,
                   const QPen &pen, const QBrush &brush,
-                  QGraphicsItem *parent = NULL);
+                  QGraphicsItem *parent = nullptr);
     virtual ~HighlightItem()                {}
 
     virtual QRectF boundingRect() const override;
 
     virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
-                       QWidget *widget = NULL) override;
+                       QWidget *widget = nullptr) override;
 
 private:
     QRectF mRectangle;
@@ -122,7 +122,7 @@ void HighlightItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *opt
 class SelectionItem : public QGraphicsItem
 {
 public:
-    SelectionItem(QGraphicsItem *parent = NULL);
+    SelectionItem(QGraphicsItem *parent = nullptr);
     virtual ~SelectionItem()                {}
 
     virtual QRectF boundingRect() const override;
@@ -132,7 +132,7 @@ public:
     void resetDashPattern();
 
     virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
-                       QWidget *widget = NULL) override;
+                       QWidget *widget = nullptr) override;
 
 private:
     QRectF mRectangle;
@@ -202,7 +202,7 @@ ImageCanvas::ImageCanvas(QWidget *parent, const QImage *start_image)
 
     //qDebug();
 
-    mContextMenu = NULL;
+    mContextMenu = nullptr;
     mTimerId = 0;
 
     mKeepZoom = false;
@@ -258,7 +258,7 @@ void ImageCanvas::newImage(const QImage *new_image, bool hold_zoom)
 
     stopMarqueeTimer();                 // also clears selection
 
-    if (mImage != NULL) {               // handle the new image
+    if (mImage != nullptr) {               // handle the new image
         //qDebug() << "new image size is" << mImage->size();
         mPixmapItem->setPixmap(QPixmap::fromImage(*mImage));
         setSceneRect(mPixmapItem->boundingRect());  // image always defines size
@@ -293,7 +293,7 @@ void ImageCanvas::newImage(const QImage *new_image, bool hold_zoom)
 
 QMenu *ImageCanvas::contextMenu()
 {
-    if (mContextMenu == NULL) {         // menu not created yet
+    if (mContextMenu == nullptr) {         // menu not created yet
         mContextMenu = new QMenu(this);
         //qDebug() << "context menu enabled";
     }
@@ -303,7 +303,7 @@ QMenu *ImageCanvas::contextMenu()
 
 void ImageCanvas::contextMenuEvent(QContextMenuEvent *ev)
 {
-    if (mContextMenu == NULL) {
+    if (mContextMenu == nullptr) {
         return;    // menu not enabled
     }
     // but allowed if no image loaded
@@ -313,7 +313,7 @@ void ImageCanvas::contextMenuEvent(QContextMenuEvent *ev)
 
 void ImageCanvas::performUserAction(ImageCanvas::UserAction act)
 {
-    if (mImage == NULL) {
+    if (mImage == nullptr) {
         return;    // no action if no image loaded
     }
 
@@ -897,7 +897,7 @@ const QString ImageCanvas::imageInfoString(int w, int h, int d)     // static
 
 const QString ImageCanvas::imageInfoString(const QImage *img)       // static
 {
-    if (img == NULL) {
+    if (img == nullptr) {
         return ("-");
     } else {
         return (imageInfoString(img->width(), img->height(), img->depth()));
@@ -911,7 +911,7 @@ const QString ImageCanvas::imageInfoString() const          // member
 
 bool ImageCanvas::hasImage() const
 {
-    return (mImage != NULL && !mImage->isNull());
+    return (mImage != nullptr && !mImage->isNull());
 }
 
 //  Highlight areas
@@ -922,7 +922,7 @@ int ImageCanvas::addHighlight(const QRect &rect, bool ensureVis)
     HighlightItem *item = new HighlightItem(rect, mHighlightStyle,
                                             mHighlightPen, mHighlightBrush);
 
-    int idx = mHighlights.indexOf(NULL);        // any empty slots?
+    int idx = mHighlights.indexOf(nullptr);        // any empty slots?
     if (idx != -1) {
         mHighlights[idx] = item;    // yes, reuse that
     } else {                    // no, append new item
@@ -951,13 +951,13 @@ void ImageCanvas::removeHighlight(int idx)
     }
 
     QGraphicsItem *item = mHighlights[idx];
-    if (item == NULL) {
+    if (item == nullptr) {
         return;
     }
 
     mScene->removeItem(item);
     delete item;
-    mHighlights[idx] = NULL;
+    mHighlights[idx] = nullptr;
 }
 
 void ImageCanvas::scrollTo(const QRect &rect)

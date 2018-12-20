@@ -82,7 +82,7 @@ public:
 
     /**
      *  Set and get the KFileItem of the image. Note that the KFileItem pointer returned
-     *  may be NULL.
+     *  may be nullptr.
      */
     const KFileItem *fileItem() const;
     void setFileItem(const KFileItem *item);

@@ -61,7 +61,7 @@ static void createDir(const QUrl &url)
     KIO::StatJob *job = KIO::stat(url, KIO::StatJob::DestinationSide, 0 /* minimal details */);
     if (!job->exec())
     {
-        KMessageBox::sorry(NULL, xi18nc("@info", "The directory <filename>%2</filename><nl/>could not be accessed.<nl/>%1",
+        KMessageBox::sorry(nullptr, xi18nc("@info", "The directory <filename>%2</filename><nl/>could not be accessed.<nl/>%1",
                                         job->errorString(), url.url(QUrl::PreferLocalFile)));
         return;
     }
@@ -73,7 +73,7 @@ static void createDir(const QUrl &url)
         KIO::MkdirJob *job = KIO::mkdir(url);
         if (!job->exec())
         {
-            KMessageBox::sorry(NULL, xi18nc("@info", "The directory <filename>%2</filename><nl/>could not be created.<nl/>%1",
+            KMessageBox::sorry(nullptr, xi18nc("@info", "The directory <filename>%2</filename><nl/>could not be created.<nl/>%1",
                                             job->errorString(), url.url(QUrl::PreferLocalFile)));
             return;
         }
@@ -123,7 +123,7 @@ ImgSaver::ImageSaveStatus ImgSaver::getFilenameAndFormat(ImageMetaInfo::ImageTyp
 
     while (saveFilename.isEmpty() || !saveFormat.isValid() || m_saveAskFormat || m_saveAskFilename)
     {							// is a dialogue neeeded?
-        FormatDialog fd(NULL, type, m_saveAskFormat, saveFormat, m_saveAskFilename, saveFilename);
+        FormatDialog fd(nullptr, type, m_saveAskFormat, saveFormat, m_saveAskFilename, saveFilename);
         if (!fd.exec()) {
             return (ImgSaver::SaveStatusCanceled);
         }
@@ -164,13 +164,13 @@ ImgSaver::ImageSaveStatus ImgSaver::getFilenameAndFormat(ImageMetaInfo::ImageTyp
 
 ImgSaver::ImageSaveStatus ImgSaver::setImageInfo(const ImageMetaInfo *info)
 {
-    if (info == NULL) return (ImgSaver::SaveStatusParam);
+    if (info == nullptr) return (ImgSaver::SaveStatusParam);
     return (getFilenameAndFormat(info->getImageType()));
 }
 
 ImgSaver::ImageSaveStatus ImgSaver::saveImage(const QImage *image)
 {
-    if (image == NULL) return (ImgSaver::SaveStatusParam);
+    if (image == nullptr) return (ImgSaver::SaveStatusParam);
 
     if (!mSaveFormat.isValid()) {			// see if have this already
         // if not, get from image now
@@ -192,7 +192,7 @@ ImgSaver::ImageSaveStatus ImgSaver::saveImage(const QImage *image,
                                               const ImageFormat &format,
                                               const QString &subformat)
 {
-    if (image == NULL) return (ImgSaver::SaveStatusParam);
+    if (image == nullptr) return (ImgSaver::SaveStatusParam);
 
     qDebug() << "to" << url << "format" << format << "subformat" << subformat;
 
@@ -333,7 +333,7 @@ default:			return (KookaSettings::self()->formatUnknownItem());
 ImageFormat ImgSaver::getFormatForType(ImageMetaInfo::ImageType type)
 {
     const KConfigSkeleton::ItemString *ski = configItemForType(type);
-    Q_ASSERT(ski!=NULL);
+    Q_ASSERT(ski!=nullptr);
     return (ImageFormat(ski->value().toLocal8Bit()));
 }
 
@@ -352,7 +352,7 @@ void ImgSaver::storeFormatForType(ImageMetaInfo::ImageType type, const ImageForm
     //  will do exactly what it says.
 
     KConfigSkeleton::ItemString *ski = configItemForType(type);
-    Q_ASSERT(ski!=NULL);
+    Q_ASSERT(ski!=nullptr);
     ski->setValue(format.name());
     KookaSettings::self()->save();
 }

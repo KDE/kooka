@@ -67,7 +67,7 @@ ThumbView::ThumbView(QWidget *parent)
 
     setUrl(QUrl::fromUserInput(KookaPref::galleryRoot()), true);
 							// initial location
-    setPreviewWidget(NULL);				// no preview at side
+    setPreviewWidget(nullptr);				// no preview at side
     setMode(KFile::File);				// implies single selection mode
     setInlinePreviewShown(true);			// show file previews
     setView(KFile::Simple);				// simple icon view
@@ -83,7 +83,7 @@ ThumbView::ThumbView(QWidget *parent)
 
     // We want to provide our own context menu, not the one that
     // KDirOperator has built in.
-    disconnect(view(), SIGNAL(customContextMenuRequested(QPoint)), NULL, NULL);
+    disconnect(view(), SIGNAL(customContextMenuRequested(QPoint)), nullptr, nullptr);
     connect(view(), SIGNAL(customContextMenuRequested(QPoint)),
             SLOT(slotContextMenu(QPoint)));
 
@@ -251,7 +251,7 @@ void ThumbView::slotFinishedLoading()
 void ThumbView::slotEnsureVisible()
 {
     QListView *v = qobject_cast<QListView *>(view());
-    if (v == NULL) {
+    if (v == nullptr) {
         return;
     }
 

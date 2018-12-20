@@ -82,7 +82,7 @@ QByteArray KScanOptSet::getValue(const QByteArray &optName) const
 
 bool KScanOptSet::backupOption(const KScanOption *opt)
 {
-    if (opt == NULL || !opt->isValid()) {
+    if (opt == nullptr || !opt->isValid()) {
         return (false);
     }
 

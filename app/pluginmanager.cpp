@@ -42,7 +42,7 @@
 #include "abstractplugin.h"
 
 
-static PluginManager *sInstance = NULL;
+static PluginManager *sInstance = nullptr;
 
 
 PluginManager::PluginManager()
@@ -78,7 +78,7 @@ PluginManager::PluginManager()
 
 PluginManager *PluginManager::self()
 {
-    if (sInstance==NULL)
+    if (sInstance==nullptr)
     {
         sInstance = new PluginManager();
         qDebug() << "allocated global instance";

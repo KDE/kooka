@@ -94,14 +94,14 @@ public:
     /**
      * Specify a scanner device and create the GUI for its settings.
      *
-     * @param newScanDevice The scan device to use, or @c NULL if no
+     * @param newScanDevice The scan device to use, or @c nullptr if no
      * scanner device is to be used.
-     * @param galleryMode If this is @c true, then a @c NULL value for
+     * @param galleryMode If this is @c true, then a @c nullptr value for
      * the @p newScanDevice will be allowed and a message will be
      * displayed in place of the scanner settings.  This message will
      * be as created by @c messageScannerNotSelected().  If this
      * parameter is @c false and the @p newScanDevice parameter is
-     * @c NULL, the message as created by @c messageScannerProblem()
+     * @c nullptr, the message as created by @c messageScannerProblem()
      * will be displayed.
      * @return @c true in all cases.
      **/
@@ -110,7 +110,7 @@ public:
     /**
      * Get the operation "LED" widget.
      *
-     * @return The widget, or @c NULL if it has not been created yet.
+     * @return The widget, or @c nullptr if it has not been created yet.
      * Do not delete this, it is owned by the @c ScanParams object.
      **/
     KLed *operationLED() const;
@@ -143,7 +143,7 @@ protected:
     /**
      * Create a widget (for example, a QLabel showing an appropriate message)
      * which is displayed if no scanner is selected.  This happens if
-     * the @c newScanDevice parameter to @c connectDevice() is @c NULL and
+     * the @c newScanDevice parameter to @c connectDevice() is @c nullptr and
      * the @c galleryMode parameter is @c true.
      *
      * @return the created widget
@@ -159,7 +159,7 @@ protected:
      * Create a widget (for example, a QLabel showing an appropriate message)
      * which is displayed if a scanner is selected but there is an error
      * opening or connecting to it.  This happens if the @c newScanDevice
-     * parameter to @c connectDevice() is @c NULL but the @c galleryMode
+     * parameter to @c connectDevice() is @c nullptr but the @c galleryMode
      * parameter is @c false (the default).
      *
      * @return the created widget
@@ -300,7 +300,7 @@ private:
     void setEditCustomGammaTableState();
 
     QWidget *createScannerParams();
-    ScanParamsPage *createTab(QTabWidget *tw, const QString &title, const char *name = NULL);
+    ScanParamsPage *createTab(QTabWidget *tw, const QString &title, const char *name = nullptr);
 
     void applyRect(const QRect &rect);
     void setMaximalScanSize();

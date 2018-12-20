@@ -51,7 +51,7 @@ DialogBase::DialogBase(QWidget *pnt)
 
     setModal(true);					// convenience, can reset if necessary
 
-    mMainWidget = NULL;					// caller not provided yet
+    mMainWidget = nullptr;					// caller not provided yet
     mStateWatcher = new DialogStateWatcher(this);	// use our own as default
 
     mButtonBox = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel, this);
@@ -62,13 +62,13 @@ DialogBase::DialogBase(QWidget *pnt)
 
 void DialogBase::showEvent(QShowEvent *ev)
 {
-    if (layout()==NULL)					// layout not yet set up
+    if (layout()==nullptr)					// layout not yet set up
     {
         qDebug() << "setup layout";
         QVBoxLayout *mainLayout = new QVBoxLayout;
         setLayout(mainLayout);
 
-        if (mMainWidget==NULL)
+        if (mMainWidget==nullptr)
         {
             qWarning() << "No main widget set for" << objectName();
             mMainWidget = new QWidget(this);
@@ -104,26 +104,26 @@ void DialogBase::setButtons(QDialogButtonBox::StandardButtons buttons)
 void DialogBase::setButtonEnabled(QDialogButtonBox::StandardButton button, bool state)
 {
     QPushButton *but = mButtonBox->button(button);
-    if (but!=NULL) but->setEnabled(state);
+    if (but!=nullptr) but->setEnabled(state);
 }
 
 
 void DialogBase::setButtonText(QDialogButtonBox::StandardButton button, const QString &text)
 {
     QPushButton *but = mButtonBox->button(button);
-    if (but!=NULL) but->setText(text);
+    if (but!=nullptr) but->setText(text);
 }
 
 void DialogBase::setButtonIcon(QDialogButtonBox::StandardButton button, const QIcon &icon)
 {
     QPushButton *but = mButtonBox->button(button);
-    if (but!=NULL) but->setIcon(icon);
+    if (but!=nullptr) but->setIcon(icon);
 }
 
 void DialogBase::setButtonGuiItem(QDialogButtonBox::StandardButton button, const KGuiItem &guiItem)
 {
     QPushButton *but = mButtonBox->button(button);
-    if (but!=NULL) KGuiItem::assign(but, guiItem);
+    if (but!=nullptr) KGuiItem::assign(but, guiItem);
 }
 
 

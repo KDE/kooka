@@ -77,7 +77,7 @@ void GammaWidget::paintEvent(QPaintEvent *ev)
         p.drawLine(l * step, 1, l * step, size - 1);	// vertical line
     }
 
-    if (mTable == NULL) return;				// no values to draw
+    if (mTable == nullptr) return;				// no values to draw
 
     // the gamma curve
     p.setPen(palette().highlight().color());

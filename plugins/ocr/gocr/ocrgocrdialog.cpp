@@ -64,7 +64,7 @@ bool OcrGocrDialog::setupGui()
     QGridLayout *gl = new QGridLayout(w);
 
     KConfigSkeletonItem *ski = KookaSettings::self()->ocrGocrGrayLevelItem();
-    Q_ASSERT(ski!=NULL);
+    Q_ASSERT(ski!=nullptr);
     QLabel *l = new QLabel(ski->label(), w);
     gl->addWidget(l, 0, 0);
 
@@ -76,7 +76,7 @@ bool OcrGocrDialog::setupGui()
     gl->addWidget(sliderGrayLevel, 0, 1);
 
     ski = KookaSettings::self()->ocrGocrDustSizeItem();
-    Q_ASSERT(ski!=NULL);
+    Q_ASSERT(ski!=nullptr);
     l = new QLabel(ski->label(), w);
     gl->addWidget(l, 1, 0);
     sliderDustSize = new KScanSlider(w, QString::null, 0, 60, true, 10);
@@ -87,7 +87,7 @@ bool OcrGocrDialog::setupGui()
     gl->addWidget(sliderDustSize, 1, 1);
 
     ski = KookaSettings::self()->ocrGocrSpaceWidthItem();
-    Q_ASSERT(ski!=NULL);
+    Q_ASSERT(ski!=nullptr);
     l = new QLabel(ski->label(), w);
     gl->addWidget(l, 2, 0);
     sliderSpace = new KScanSlider(w, QString::null, 0, 60, true, 0);

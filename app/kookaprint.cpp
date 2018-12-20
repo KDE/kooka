@@ -62,7 +62,7 @@ KookaPrint::KookaPrint()
     : QPrinter(QPrinter::HighResolution)
 {
     qDebug();
-    m_image = NULL;
+    m_image = nullptr;
 
     // Initial default print parameters
     m_scaleOption = static_cast<KookaPrint::ScaleOption>(KookaSettings::printScaleOption());
@@ -80,7 +80,7 @@ KookaPrint::KookaPrint()
 
 void KookaPrint::recalculatePrintParameters()
 {
-    if (m_image==NULL) return;				// no image to print
+    if (m_image==nullptr) return;				// no image to print
 
     qDebug() << "image:";
     qDebug() << "  size (pix) =" << m_image->size();
@@ -248,7 +248,7 @@ void KookaPrint::recalculatePrintParameters()
 
 void KookaPrint::printImage()
 {
-    if (m_image==NULL) return;				// no image to print
+    if (m_image==nullptr) return;				// no image to print
     qDebug() << "starting";
     QGuiApplication::setOverrideCursor(Qt::WaitCursor);	// this may take some time
 

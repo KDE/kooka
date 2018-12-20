@@ -207,7 +207,7 @@ void AbstractOcrEngine::finishedOcr(bool success)
         /* now it is time to invoke the dictionary if required */
         // TODO: readOnlyEditor needed here? Also done in finishResultDocument()
         emit readOnlyEditor(false);         // user can now edit
-        if (m_ocrDialog != NULL) {
+        if (m_ocrDialog != nullptr) {
             emit setSpellCheckConfig(m_ocrDialog->customSpellConfigFile());
 
             bool doSpellcheck = m_ocrDialog->wantInteractiveSpellCheck();
@@ -299,7 +299,7 @@ void AbstractOcrEngine::slotImagePosition(const QPoint &p)
 //  --------------------------------------
 void AbstractOcrEngine::slotHighlightWord(const QRect &r)
 {
-    if (m_imgCanvas == NULL) {
+    if (m_imgCanvas == nullptr) {
         return;
     }
 
@@ -323,7 +323,7 @@ void AbstractOcrEngine::slotHighlightWord(const QRect &r)
 
 void AbstractOcrEngine::slotScrollToWord(const QRect &r)
 {
-    if (m_imgCanvas == NULL) {
+    if (m_imgCanvas == nullptr) {
         return;
     }
 
@@ -367,7 +367,7 @@ void AbstractOcrEngine::finishResultDocument()
 {
     qDebug() << "words" << m_wordCount << "lines" << m_document->blockCount() << "chars" << m_document->characterCount();
 
-    if (m_cursor != NULL) delete m_cursor;
+    if (m_cursor != nullptr) delete m_cursor;
     emit readOnlyEditor(false);				// now let user edit it
 }
 

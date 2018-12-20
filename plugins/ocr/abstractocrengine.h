@@ -80,7 +80,7 @@ public:
 
     /**
      * Sets an image canvas that displays the result image of the OCR.
-     * If this is set to @c NULL (or never set) no result image is displayed.
+     * If this is set to @c nullptr (or never set) no result image is displayed.
      * The OCR fabric passes a new image to the canvas which is a copy of
      * the image to OCR.
      */

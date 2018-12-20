@@ -69,7 +69,7 @@ StatusBarManager::StatusBarManager(KXmlGuiWindow *mainWindow)
     mStatusBar->addPermanentWidget(mPreviewDimsLabel);
 
     // Preview file size
-    mFileSize = new SizeIndicator(NULL);
+    mFileSize = new SizeIndicator(nullptr);
     mFileSize->setMaximumWidth(100);
     mFileSize->setFrameStyle(QFrame::NoFrame);
     mFileSize->setToolTip(i18nc("@info:tooltip", "<qt>This is the uncompressed size of the scanned image. "

@@ -48,7 +48,7 @@ void FileTreeViewItem::init(const KFileItem &fi, FileTreeBranch *branch)
     m_kfileitem = fi;
     m_branch = branch;
     m_wasListed = false;
-    m_clientData = NULL;
+    m_clientData = nullptr;
 
     setIcon(0, QIcon::fromTheme(fi.iconName()));
     setText(0, fi.text());

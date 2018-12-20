@@ -113,21 +113,21 @@ KookaStartupPage::KookaStartupPage(KPageDialog *parent)
 {
     /* Query for network scanner (Checkbox) */
     const KConfigSkeletonItem *item = ScanSettings::self()->startupOnlyLocalItem();
-    Q_ASSERT(item!=NULL);
+    Q_ASSERT(item!=nullptr);
     mNetQueryCheck = new QCheckBox(item->label(), this);
     mNetQueryCheck->setToolTip(item->toolTip());
     mLayout->addWidget(mNetQueryCheck);
 
     /* Show scanner selection box on startup (Checkbox) */
     item = ScanSettings::self()->startupSkipAskItem();
-    Q_ASSERT(item!=NULL);
+    Q_ASSERT(item!=nullptr);
     mSelectScannerCheck = new QCheckBox(item->label(), this);
     mSelectScannerCheck->setToolTip(item->toolTip());
     mLayout->addWidget(mSelectScannerCheck);
 
     /* Read startup image on startup (Checkbox) */
     item = KookaSettings::self()->startupReadImageItem();
-    Q_ASSERT(item!=NULL);
+    Q_ASSERT(item!=nullptr);
     mRestoreImageCheck = new QCheckBox(item->label(), this);
     mRestoreImageCheck->setToolTip(item->toolTip());
     mLayout->addWidget(mRestoreImageCheck);
@@ -168,7 +168,7 @@ KookaSavingPage::KookaSavingPage(KPageDialog *parent)
     : KookaPrefsPage(parent)
 {
     const KConfigSkeletonItem *item = KookaSettings::self()->saverAskForFormatItem();
-    Q_ASSERT(item!=NULL);
+    Q_ASSERT(item!=nullptr);
     mAskSaveFormat = new QCheckBox(item->label(), this);
     mAskSaveFormat->setToolTip(item->toolTip());
     mLayout->addWidget(mAskSaveFormat);
@@ -186,7 +186,7 @@ KookaSavingPage::KookaSavingPage(KPageDialog *parent)
     gl->setColumnMinimumWidth(0, 3*DialogBase::verticalSpacing());
 
     item = KookaSettings::self()->saverAskBeforeScanItem();
-    Q_ASSERT(item!=NULL);
+    Q_ASSERT(item!=nullptr);
     mAskBeforeScan = new QRadioButton(item->label(), this);
     mAskBeforeScan->setEnabled(mAskFileName->isChecked());
     mAskBeforeScan->setToolTip(item->toolTip());
@@ -195,7 +195,7 @@ KookaSavingPage::KookaSavingPage(KPageDialog *parent)
     gl->addWidget(mAskBeforeScan, 0, 1);
 
     item = KookaSettings::self()->saverAskAfterScanItem();
-    Q_ASSERT(item!=NULL);
+    Q_ASSERT(item!=nullptr);
     mAskAfterScan = new QRadioButton(item->label(), this);
     mAskAfterScan->setEnabled(mAskFileName->isChecked());
     mAskAfterScan->setToolTip(item->toolTip());
@@ -246,7 +246,7 @@ KookaThumbnailPage::KookaThumbnailPage(KPageDialog *parent)
 
     /* Layout */
     const KConfigSkeletonItem *item = KookaSettings::self()->galleryLayoutItem();
-    Q_ASSERT(item!=NULL);
+    Q_ASSERT(item!=nullptr);
     QLabel *lab = new QLabel(item->label(), gb);
     lab->setToolTip(item->toolTip());
     gl->addWidget(lab, 0, 0, Qt::AlignRight);
@@ -263,7 +263,7 @@ KookaThumbnailPage::KookaThumbnailPage(KPageDialog *parent)
 
     /* Allow renaming */
     item = KookaSettings::self()->galleryAllowRenameItem();
-    Q_ASSERT(item!=NULL);
+    Q_ASSERT(item!=nullptr);
     mAllowRenameCheck = new QCheckBox(item->label(), gb);
     mAllowRenameCheck->setToolTip(item->toolTip());
     gl->addWidget(mAllowRenameCheck, 1, 0, 1, 2);
@@ -277,7 +277,7 @@ KookaThumbnailPage::KookaThumbnailPage(KPageDialog *parent)
 
     // Do we want a background image?
     item = KookaSettings::self()->thumbnailCustomBackgroundItem();
-    Q_ASSERT(item!=NULL);
+    Q_ASSERT(item!=nullptr);
     mCustomBackgroundCheck = new QCheckBox(item->label(), this);
     mCustomBackgroundCheck->setToolTip(item->toolTip());
     connect(mCustomBackgroundCheck, &QCheckBox::toggled, this, &KookaThumbnailPage::slotCustomThumbBgndToggled);
@@ -285,7 +285,7 @@ KookaThumbnailPage::KookaThumbnailPage(KPageDialog *parent)
 
     /* Background image */
     item = KookaSettings::self()->thumbnailBackgroundPathItem();
-    Q_ASSERT(item!=NULL);
+    Q_ASSERT(item!=nullptr);
     lab = new QLabel(item->label(), this);
     lab->setToolTip(item->toolTip());
     gl->addWidget(lab, 3, 0, Qt::AlignRight);
@@ -302,7 +302,7 @@ KookaThumbnailPage::KookaThumbnailPage(KPageDialog *parent)
 
     /* Preview size */
     item = KookaSettings::self()->thumbnailPreviewSizeItem();
-    Q_ASSERT(item!=NULL);
+    Q_ASSERT(item!=nullptr);
     lab = new QLabel(item->label(), this);
     lab->setToolTip(item->toolTip());
     gl->addWidget(lab, 5, 0, Qt::AlignRight);

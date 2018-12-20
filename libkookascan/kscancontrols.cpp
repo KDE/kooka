@@ -95,7 +95,7 @@ KScanSlider::KScanSlider(QWidget *parent, const QString &text,
     : KScanControl(parent, text)
 {
     mValue = mStdValue = stdValue;
-    mStdButt = NULL;
+    mStdButt = nullptr;
 
     mSlider = new QSlider(Qt::Horizontal, this);    // slider
     mSlider->setRange(((int) min), ((int) max));
@@ -122,7 +122,7 @@ KScanSlider::KScanSlider(QWidget *parent, const QString &text,
 
     connect(mSlider, SIGNAL(valueChanged(int)), SLOT(slotSliderSpinboxChange(int)));
     connect(mSpinbox, SIGNAL(valueChanged(int)), SLOT(slotSliderSpinboxChange(int)));
-    if (mStdButt != NULL) {
+    if (mStdButt != nullptr) {
         connect(mStdButt, SIGNAL(clicked()), SLOT(slotRevertValue()));
     }
 

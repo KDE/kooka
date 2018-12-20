@@ -71,7 +71,7 @@ KScanOption::KScanOption(const QByteArray &name, KScanDevice *scandev)
     SANE_Status sanestat = sane_control_option(mScanDevice->scannerHandle(),
                                                 mIndex,
                                                 SANE_ACTION_GET_VALUE,
-                                                mBuffer.data(), NULL);
+                                                mBuffer.data(), nullptr);
     if (sanestat==SANE_STATUS_GOOD) mBufferClean = false;
 }
 
@@ -84,8 +84,8 @@ static bool shouldBePriorityOption(const QByteArray &name)
 
 bool KScanOption::initOption(const QByteArray &name)
 {
-    mDesc = NULL;
-    mControl = NULL;
+    mDesc = nullptr;
+    mControl = nullptr;
     mIsGroup = false;
     mIsReadable = true;
     mIsPriority = shouldBePriorityOption(name);
@@ -107,7 +107,7 @@ bool KScanOption::initOption(const QByteArray &name)
     }
 
     mDesc = sane_get_option_descriptor(mScanDevice->scannerHandle(), mIndex);
-    if (mDesc==NULL) return (false);
+    if (mDesc==nullptr) return (false);
 
     mBuffer.resize(0);
     mBufferClean = true;
@@ -117,7 +117,7 @@ bool KScanOption::initOption(const QByteArray &name)
     if (mIsGroup || mDesc->type==SANE_TYPE_BUTTON) mIsReadable = false;
     if (!(mDesc->cap & SANE_CAP_SOFT_DETECT)) mIsReadable = false;
 
-    mGammaTable = NULL;					// for recording gamma values
+    mGammaTable = nullptr;					// for recording gamma values
 
     mWidgetType = resolveWidgetType();			// work out the type of widget
     allocForDesc();					// allocate initial buffer
@@ -158,7 +158,7 @@ void KScanOption::slotWidgetChange()
 void KScanOption::updateList()
 {
     KScanCombo *combo = qobject_cast<KScanCombo *>(mControl);
-    if (combo==NULL) return;
+    if (combo==nullptr) return;
 
     QList<QByteArray> list = getList();
     combo->setList(list);
@@ -169,7 +169,7 @@ void KScanOption::updateList()
  */
 void KScanOption::redrawWidget()
 {
-    if (!isValid() || !isReadable() || mControl==NULL || mBuffer.isNull()) return;
+    if (!isValid() || !isReadable() || mControl==nullptr || mBuffer.isNull()) return;
 
     KScanControl::ControlType type = mControl->type();
     if (type==KScanControl::Number)			// numeric control
@@ -187,7 +187,7 @@ void KScanOption::redrawWidget()
 /* Get and update the current setting from the scanner */
 void KScanOption::reload()
 {
-    if (mControl!=NULL)
+    if (mControl!=nullptr)
     {
         if (isGroup())
         {
@@ -249,12 +249,12 @@ void KScanOption::reload()
     // is not so for the 'test' device and a sample of others - so it should not be
     // necessary to conditionalise it for that device only.
     const SANE_Option_Descriptor *desc = sane_get_option_descriptor(mScanDevice->scannerHandle(), mIndex);
-    if (desc==NULL) return;				// should never happen
+    if (desc==nullptr) return;				// should never happen
 
     SANE_Status sanestat = sane_control_option(mScanDevice->scannerHandle(),
                                                 mIndex,
                                                 SANE_ACTION_GET_VALUE,
-                                                mBuffer.data(), NULL);
+                                                mBuffer.data(), nullptr);
     if (sanestat!=SANE_STATUS_GOOD)
     {
         qWarning() << "Can't get value for" << mName << "status" << sane_strstatus(sanestat);
@@ -282,7 +282,7 @@ bool KScanOption::apply()
 
     // See comment in reload() above
     const SANE_Option_Descriptor *desc = sane_get_option_descriptor(mScanDevice->scannerHandle(), mIndex);
-    if (desc==NULL) return (false);			// should never happen
+    if (desc==nullptr) return (false);			// should never happen
 
     if (mName==SANE_NAME_PREVIEW || mName==SANE_NAME_SCAN_MODE)
     {
@@ -520,7 +520,7 @@ default:
 bool KScanOption::set(const int *val, int size)
 {
     if (!isValid() || mBuffer.isNull()) return (false);
-    if (val==NULL) return (false);
+    if (val==nullptr) return (false);
 #ifdef DEBUG_GETSET
     qDebug() << "Setting" << mName << "of size" << size;
 #endif
@@ -638,7 +638,7 @@ bool KScanOption::set(const KGammaTable *gt)
     if (!isValid() || mBuffer.isNull()) return (false);
 
     // Remember the set values
-    if (mGammaTable!=NULL) delete mGammaTable;
+    if (mGammaTable!=nullptr) delete mGammaTable;
     mGammaTable = new KGammaTable(*gt);
 
     int size = mDesc->size/sizeof(SANE_Word);		// size of scanner gamma table
@@ -715,7 +715,7 @@ QByteArray KScanOption::get() const
     /* Handle gamma-table correctly */
     if (mWidgetType==KScanOption::GammaTable)
     {
-        if (mGammaTable!=NULL) retstr = mGammaTable->toString().toLocal8Bit();
+        if (mGammaTable!=nullptr) retstr = mGammaTable->toString().toLocal8Bit();
     }
     else
     {
@@ -755,7 +755,7 @@ default:    //qDebug() << "Can't get" << mName << "as this type";
 
 bool KScanOption::get(KGammaTable *gt) const
 {
-    if (mGammaTable==NULL) return (false);		// has not been set
+    if (mGammaTable==nullptr) return (false);		// has not been set
 
     gt->setAll(mGammaTable->getGamma(), mGammaTable->getBrightness(), mGammaTable->getContrast());
 #ifdef DEBUG_GETSET
@@ -767,15 +767,15 @@ bool KScanOption::get(KGammaTable *gt) const
 
 QList<QByteArray> KScanOption::getList() const
 {
-    const char **sstring = NULL;
+    const char **sstring = nullptr;
     QList<QByteArray> strList;
-    if (mDesc==NULL) return (strList);
+    if (mDesc==nullptr) return (strList);
 
     if (mDesc->constraint_type==SANE_CONSTRAINT_STRING_LIST)
     {
         sstring = (const char **)mDesc->constraint.string_list;
 
-        while (*sstring!=NULL)
+        while (*sstring!=nullptr)
         {
             strList.append(*sstring);
             sstring++;
@@ -818,7 +818,7 @@ QList<QByteArray> KScanOption::getList() const
 
 bool KScanOption::getRange(double *minp, double *maxp, double *quantp) const
 {
-    if (mDesc==NULL) return (false);
+    if (mDesc==nullptr) return (false);
 
     double min = 0.0;
     double max = 0.0;
@@ -865,7 +865,7 @@ bool KScanOption::getRange(double *minp, double *maxp, double *quantp) const
 
     *minp = min;
     *maxp = max;
-    if (quantp!=NULL) *quantp = quant;
+    if (quantp!=nullptr) *quantp = quant;
 
     return (true);
 }
@@ -876,16 +876,16 @@ KScanControl *KScanOption::createWidget(QWidget *parent)
     if (!isValid())
     {
         //qDebug() << "Option is not valid!";
-	return (NULL);
+	return (nullptr);
     }
 
-    delete mControl; mControl = NULL;			// dispose of the old control
+    delete mControl; mControl = nullptr;			// dispose of the old control
  	
-    if (mDesc!=NULL) mText = i18n(mDesc->title);
+    if (mDesc!=nullptr) mText = i18n(mDesc->title);
 
     //qDebug() << "type" << mWidgetType << "text" << mText;
 
-    KScanControl *w = NULL;
+    KScanControl *w = nullptr;
     switch (mWidgetType)
     {
 case KScanOption::Bool:
@@ -933,7 +933,7 @@ default:
 	break;
     }
  	
-    if (w!=NULL)
+    if (w!=nullptr)
     {
         mControl = w;
         updateList();					// set list for combo box
@@ -956,7 +956,7 @@ case KScanControl::Group:				// group separator
             break;					// nothing to do here
         }
 
-	if (mDesc!=NULL)				// set tool tip
+	if (mDesc!=nullptr)				// set tool tip
         {
             if (qstrlen(mDesc->desc)>0)			// if there is a SANE description
             {
@@ -979,7 +979,7 @@ case KScanControl::Group:				// group separator
     }
  	
     reload();						// check if active, enabled etc.
-    if (w!=NULL) redrawWidget();
+    if (w!=nullptr) redrawWidget();
     return (w);
 }
 
@@ -1036,7 +1036,7 @@ inline KScanControl *KScanOption::createActionButton(QWidget *parent, const QStr
 
 QLabel *KScanOption::getLabel(QWidget *parent, bool alwaysBuddy) const
 {
-    if (mControl==NULL) return (NULL);
+    if (mControl==nullptr) return (nullptr);
     KSqueezedTextLabel *l = new KSqueezedTextLabel(mControl->label(), parent);
     if (isCommonOption() || alwaysBuddy) l->setBuddy(mControl->focusProxy());
     return (l);
@@ -1045,7 +1045,7 @@ QLabel *KScanOption::getLabel(QWidget *parent, bool alwaysBuddy) const
 
 QLabel *KScanOption::getUnit(QWidget *parent) const
 {
-    if (mControl==NULL) return (NULL);
+    if (mControl==nullptr) return (nullptr);
 
     QString s;
     switch (mDesc->unit)
@@ -1060,7 +1060,7 @@ case SANE_UNIT_MICROSECOND:	s = i18n("\302\265sec");	break;
 default:							break;
     }
 
-    if (s.isEmpty()) return (NULL);			// no unit label
+    if (s.isEmpty()) return (nullptr);			// no unit label
     QLabel *l = new QLabel(s, parent);
     return (l);
 }
@@ -1068,7 +1068,7 @@ default:							break;
 
 void KScanOption::allocForDesc()
 {
-    if (mDesc==NULL) return;
+    if (mDesc==nullptr) return;
 
     switch (mDesc->type)
     {

@@ -123,8 +123,8 @@ ScanGallery::ScanGallery(QWidget *parent)
 
     m_startup = true;
     m_currSelectedDir = QUrl();
-    mSaver = NULL;
-    mSavedTo = NULL;
+    mSaver = nullptr;
+    mSavedTo = nullptr;
 
     /* create a context menu and set the title */
     m_contextMenu = new QMenu(this);
@@ -147,7 +147,7 @@ void ScanGallery::saveHeaderState(int forIndex) const
     QString key = columnStatesKey(forIndex);
     //qDebug() << "to" << key;
     const KConfigSkeletonItem *ski = KookaSettings::self()->columnStatesItem();
-    Q_ASSERT(ski!=NULL);
+    Q_ASSERT(ski!=nullptr);
     KConfigGroup grp = KookaSettings::self()->config()->group(ski->group());
     grp.writeEntry(key, header()->saveState().toBase64());
     grp.sync();
@@ -158,7 +158,7 @@ void ScanGallery::restoreHeaderState(int forIndex)
     QString key = columnStatesKey(forIndex);
     //qDebug() << "from" << key;
     const KConfigSkeletonItem *ski = KookaSettings::self()->columnStatesItem();
-    Q_ASSERT(ski!=NULL);
+    Q_ASSERT(ski!=nullptr);
     const KConfigGroup grp = KookaSettings::self()->config()->group(ski->group());
 
     QString state = grp.readEntry(key, "");
@@ -219,7 +219,7 @@ void ScanGallery::slotStartupFinished(FileTreeViewItem *item)
 
     //qDebug();
 
-    if (highlightedFileTreeViewItem() == NULL) {    // nothing currently selected,
+    if (highlightedFileTreeViewItem() == nullptr) {    // nothing currently selected,
         // select the branch root
         item->setSelected(true);
         emit galleryPathChanged(m_defaultBranch, "/");  // tell the history combo
@@ -231,14 +231,14 @@ void ScanGallery::slotStartupFinished(FileTreeViewItem *item)
 void ScanGallery::contextMenuEvent(QContextMenuEvent *ev)
 {
     ev->accept();
-    if (m_contextMenu != NULL) {
+    if (m_contextMenu != nullptr) {
         m_contextMenu->exec(ev->globalPos());
     }
 }
 
 static ImageFormat getImgFormat(const FileTreeViewItem *item)
 {
-    if (item == NULL) {
+    if (item == nullptr) {
         return (ImageFormat(""));
     }
 
@@ -259,24 +259,24 @@ static ImageFormat getImgFormat(const FileTreeViewItem *item)
 
 static KookaImage *imageForItem(const FileTreeViewItem *item)
 {
-    if (item == NULL) return (NULL);			// get loaded image if any
+    if (item == nullptr) return (nullptr);			// get loaded image if any
     return (static_cast<KookaImage *>(item->clientData()));
 }
 
 void ScanGallery::slotItemHighlighted(QTreeWidgetItem *curr)
 {
-    if (curr==NULL)
+    if (curr==nullptr)
     {
         QList<QTreeWidgetItem *> selItems = selectedItems();
         if (!selItems.isEmpty()) curr = selItems.first();
     }
     FileTreeViewItem *item = static_cast<FileTreeViewItem *>(curr);
-    if (item==NULL) return;
+    if (item==nullptr) return;
 
     //qDebug() << item->url();
 
     if (item->isDir()) {
-        emit showImage(NULL, true);    // clear displayed image
+        emit showImage(nullptr, true);    // clear displayed image
     } else {
         KookaImage *img = imageForItem(item);
         emit showImage(img, false);         // clear or redisplay image
@@ -292,7 +292,7 @@ void ScanGallery::slotItemActivated(QTreeWidgetItem *curr)
 
     //  Check if directory, hide image for now, later show a thumb view?
     if (item->isDir()) {                // is it a directory?
-        emit showImage(NULL, true);            // unload current image
+        emit showImage(nullptr, true);            // unload current image
     } else {                    // not a directory
         //  Load the image if necessary. This is done by loadImageForItem,
         //  which is async (TODO). The image finally arrives in slotImageArrived.
@@ -317,7 +317,7 @@ void ScanGallery::slotHighlightItem(const QUrl &url)
     //qDebug() << url;
 
     FileTreeViewItem *found = findItemByUrl(url);
-    if (found == NULL) {
+    if (found == nullptr) {
         return;
     }
 
@@ -337,7 +337,7 @@ void ScanGallery::slotActivateItem(const QUrl &url)
     //qDebug() << url;
 
     FileTreeViewItem *found = findItemByUrl(url);
-    if (found == NULL) {
+    if (found == nullptr) {
         return;
     }
 
@@ -351,7 +351,7 @@ void ScanGallery::slotActivateItem(const QUrl &url)
 void ScanGallery::slotUpdatedItem(const QUrl &url)
 {
     FileTreeViewItem *found = findItemByUrl(url);
-    if (found == NULL) {
+    if (found == nullptr) {
         return;
     }
 
@@ -363,7 +363,7 @@ void ScanGallery::slotUpdatedItem(const QUrl &url)
 
 void ScanGallery::slotDirCount(FileTreeViewItem *item, int cnt)
 {
-    if (item == NULL) {
+    if (item == nullptr) {
         return;
     }
     if (!item->isDir()) {
@@ -414,7 +414,7 @@ void ScanGallery::slotDirCount(FileTreeViewItem *item, int cnt)
 
 void ScanGallery::slotItemExpanded(QTreeWidgetItem *item)
 {
-    if (item == NULL) {
+    if (item == nullptr) {
         return;
     }
     if (!(static_cast<FileTreeViewItem *>(item))->isDir()) {
@@ -431,7 +431,7 @@ void ScanGallery::slotItemExpanded(QTreeWidgetItem *item)
 
 void ScanGallery::slotDecorate(FileTreeViewItem *item)
 {
-    if (item == NULL) return;
+    if (item == nullptr) return;
 
 #ifdef DEBUG_LOADING
     qDebug() << item->url();
@@ -447,7 +447,7 @@ void ScanGallery::slotDecorate(FileTreeViewItem *item)
         }
 
         const KookaImage *img = imageForItem(item);
-        if (img != NULL)				// image is loaded
+        if (img != nullptr)				// image is loaded
         {
             // set image depth pixmap as appropriate
             QIcon icon;
@@ -515,7 +515,7 @@ void ScanGallery::slotDecorate(FileTreeBranch *branch, const FileTreeViewItemLis
 void ScanGallery::updateParent(const FileTreeViewItem *curr)
 {
     FileTreeBranch *branch = branches().at(0);      /* There should be at least one */
-    if (branch == NULL) {
+    if (branch == nullptr) {
         return;
     }
 
@@ -524,7 +524,7 @@ void ScanGallery::updateParent(const FileTreeViewItem *curr)
     branch->updateDirectory(dir);
 
     FileTreeViewItem *parent = branch->findItemByUrl(dir);
-    if (parent != NULL) {
+    if (parent != nullptr) {
         parent->setExpanded(true);    /* Ensure parent is expanded */
     }
 }
@@ -534,7 +534,7 @@ void ScanGallery::updateParent(const FileTreeViewItem *curr)
 void ScanGallery::slotRenameItems()
 {
     FileTreeViewItem *curr = highlightedFileTreeViewItem();
-    if (curr != NULL) {
+    if (curr != nullptr) {
         editItem(curr, 0);
     }
 }
@@ -603,7 +603,7 @@ static QString buildNewFilename(const QString &cmplFilename, const ImageFormat &
         ext = cmplFilename;
     } else {
         /* new Ext. differs from the current extension. Later. */
-        KMessageBox::sorry(NULL, i18n("You entered a file extension that differs from the existing one. That is not yet possible. Converting 'on the fly' is planned for a future release.\n"
+        KMessageBox::sorry(nullptr, i18n("You entered a file extension that differs from the existing one. That is not yet possible. Converting 'on the fly' is planned for a future release.\n"
                                       "Kooka corrects the extension."),
                            i18n("On the Fly Conversion"));
         ext = base + "." + nowExt;
@@ -617,7 +617,7 @@ static QString buildNewFilename(const QString &cmplFilename, const ImageFormat &
 */
 QUrl ScanGallery::itemDirectory(const FileTreeViewItem *item) const
 {
-    if (item == NULL) {
+    if (item == nullptr) {
         //qDebug() << "no item";
         return (QUrl());
     }
@@ -642,7 +642,7 @@ QString ScanGallery::itemDirectoryRelative(const FileTreeViewItem *item) const
 {
     const QUrl u = itemDirectory(item);
     const FileTreeBranch *branch = item->branch();
-    if (branch == NULL) {
+    if (branch == nullptr) {
         return (u.path());    // no branch, can this ever happen?
     }
 
@@ -683,7 +683,7 @@ void ScanGallery::slotSelectDirectory(const QString &branchName, const QString &
     {
         item = findItemInBranch(branches().at(0), relPath);
     }
-    if (item == NULL) return;				// not found in branch
+    if (item == nullptr) return;				// not found in branch
 
     scrollToItem(item);
     setCurrentItem(item);
@@ -692,7 +692,7 @@ void ScanGallery::slotSelectDirectory(const QString &branchName, const QString &
 
 void ScanGallery::loadImageForItem(FileTreeViewItem *item)
 {
-    if (item == NULL) return;
+    if (item == nullptr) return;
     const KFileItem *kfi = item->fileItem();
     if (kfi->isNull()) return;
 
@@ -794,7 +794,7 @@ void ScanGallery::loadImageForItem(FileTreeViewItem *item)
 /* Hit this slot with a file for a kfiletreeviewitem. */
 void ScanGallery::slotImageArrived(FileTreeViewItem *item, KookaImage *image)
 {
-    if (item == NULL || image == NULL) {
+    if (item == nullptr || image == nullptr) {
         return;
     }
 
@@ -808,17 +808,17 @@ void ScanGallery::slotImageArrived(FileTreeViewItem *item, KookaImage *image)
 const KookaImage *ScanGallery::getCurrImage(bool loadOnDemand)
 {
     FileTreeViewItem *curr = highlightedFileTreeViewItem();
-    if (curr == NULL) {
-        return (NULL);    // no current item
+    if (curr == nullptr) {
+        return (nullptr);    // no current item
     }
     if (curr->isDir()) {
-        return (NULL);    // is a directory
+        return (nullptr);    // is a directory
     }
 
     KookaImage *img = imageForItem(curr);       // see if already loaded
-    if (img == NULL) {              // no, try to do that
+    if (img == nullptr) {              // no, try to do that
         if (!loadOnDemand) {
-            return (NULL);    // not loaded, and don't want to
+            return (nullptr);    // not loaded, and don't want to
         }
         slotItemActivated(curr);            // select/load this image
         img = imageForItem(curr);           // and get image for it
@@ -844,27 +844,27 @@ QString ScanGallery::currentImageFileName() const
 
 bool ScanGallery::prepareToSave(const ImageMetaInfo *info)
 {
-    if (info == NULL) {
+    if (info == nullptr) {
         //qDebug() << "no image info";
     } else {
         //qDebug() << "type" << info->getImageType();
     }
 
-    delete mSaver; mSaver = NULL;           // recreate with clean info
+    delete mSaver; mSaver = nullptr;           // recreate with clean info
 
     // Resolve where to save the new image when it arrives
     FileTreeViewItem *curr = highlightedFileTreeViewItem();
-    if (curr == NULL) {             // into root if nothing is selected
+    if (curr == nullptr) {             // into root if nothing is selected
         FileTreeBranch *branch = branches().at(0);  // there should be at least one
-        if (branch != NULL) {
+        if (branch != nullptr) {
             // if user has created this????
             curr = findItemInBranch(branch, i18n("Incoming/"));
-            if (curr == NULL) {
+            if (curr == nullptr) {
                 curr = branch->root();
             }
         }
 
-        if (curr == NULL) {
+        if (curr == nullptr) {
             return (false);    // should never happen
         }
         curr->setSelected(true);
@@ -876,7 +876,7 @@ bool ScanGallery::prepareToSave(const ImageMetaInfo *info)
     QUrl dir(itemDirectory(curr));          // where new image will go
     mSaver = new ImgSaver(dir);             // create saver to use later
 
-    if (info != NULL) {             // have image information,
+    if (info != nullptr) {             // have image information,
         // tell saver about it
         ImgSaver::ImageSaveStatus stat = mSaver->setImageInfo(info);
         if (stat == ImgSaver::SaveStatusCanceled) {
@@ -889,7 +889,7 @@ bool ScanGallery::prepareToSave(const ImageMetaInfo *info)
 
 QUrl ScanGallery::saveURL() const
 {
-    if (mSaver == NULL) {
+    if (mSaver == nullptr) {
         return (QUrl());
     }
     // TODO: relative to root
@@ -901,15 +901,15 @@ QUrl ScanGallery::saveURL() const
 
 void ScanGallery::addImage(const QImage *img, const ImageMetaInfo *info)
 {
-    if (img == NULL) {
+    if (img == nullptr) {
         return;    // nothing to save!
     }
     //qDebug() << "size" << img->size() << "depth" << img->depth();
 
-    if (mSaver == NULL) {
-        prepareToSave(NULL);    // if not done already
+    if (mSaver == nullptr) {
+        prepareToSave(nullptr);    // if not done already
     }
-    if (mSaver == NULL) {
+    if (mSaver == nullptr) {
         return;    // should never happen
     }
 
@@ -925,13 +925,13 @@ void ScanGallery::addImage(const QImage *img, const ImageMetaInfo *info)
                            i18n("Image Save Error"));
     }
 
-    delete mSaver; mSaver = NULL;           // now finished with this
+    delete mSaver; mSaver = nullptr;           // now finished with this
 
     if (isstat == ImgSaver::SaveStatusOk) {     // image was saved OK,
         // select the new image
         slotSetNextUrlToSelect(lurl);
         m_nextUrlToShow = lurl;
-        if (mSavedTo != NULL) {
+        if (mSavedTo != nullptr) {
             updateParent(mSavedTo);
         }
     }
@@ -943,7 +943,7 @@ void ScanGallery::addImage(const QImage *img, const ImageMetaInfo *info)
 void ScanGallery::slotSelectImage(const QUrl &url)
 {
     FileTreeViewItem *found = findItemByUrl(url);
-    if (found == NULL) {
+    if (found == nullptr) {
         found = m_defaultBranch->root();
     }
 
@@ -962,21 +962,21 @@ FileTreeViewItem *ScanGallery::findItemByUrl(const QUrl &url, FileTreeBranch *br
     //qDebug() << "URL search for" << u;
 
     // Prepare a list of branches to search.  If the parameter 'branch'
-    // is set, search only in the specified branch. If it is NULL, search
+    // is set, search only in the specified branch. If it is nullptr, search
     // all branches.
     FileTreeBranchList branchList;
-    if (branch != NULL) {
+    if (branch != nullptr) {
         branchList.append(branch);
     } else {
         branchList = branches();
     }
 
-    FileTreeViewItem *foundItem = NULL;
+    FileTreeViewItem *foundItem = nullptr;
     for (FileTreeBranchList::const_iterator it = branchList.constBegin();
             it != branchList.constEnd(); ++it) {
         FileTreeBranch *branchloop = (*it);
         FileTreeViewItem *ftvi = branchloop->findItemByUrl(u);
-        if (ftvi != NULL) {
+        if (ftvi != nullptr) {
             foundItem = ftvi;
             //qDebug() << "found item for" << ftvi->url();
             break;
@@ -989,7 +989,7 @@ FileTreeViewItem *ScanGallery::findItemByUrl(const QUrl &url, FileTreeBranch *br
 void ScanGallery::slotExportFile()
 {
     FileTreeViewItem *curr = highlightedFileTreeViewItem();
-    if (curr == NULL) {
+    if (curr == nullptr) {
         return;
     }
 
@@ -1020,7 +1020,7 @@ void ScanGallery::slotExportFile()
 void ScanGallery::slotImportFile()
 {
     FileTreeViewItem *curr = highlightedFileTreeViewItem();
-    if (curr==NULL) return;
+    if (curr==nullptr) return;
 
     QUrl impTarget = curr->url();
     if (!curr->isDir()) {
@@ -1049,10 +1049,10 @@ void ScanGallery::slotUrlsDropped(QDropEvent *ev, FileTreeViewItem *item)
         return;
     }
 
-    //qDebug() << "onto" << (item == NULL ? "NULL" : item->url().prettyUrl())
+    //qDebug() << "onto" << (item == nullptr ? "nullptr" : item->url().prettyUrl())
     //<< "srcs" << urls.count() << "first" << urls.first();
 
-    if (item == NULL) return;
+    if (item == nullptr) return;
     QUrl dest = item->url();
 
     // Check whether the drop is on top of a directory (in which case we
@@ -1087,13 +1087,13 @@ void ScanGallery::slotJobResult(KJob *job)
 void ScanGallery::slotUnloadItems()
 {
     FileTreeViewItem *curr = highlightedFileTreeViewItem();
-    emit showImage(NULL, false);
+    emit showImage(nullptr, false);
     slotUnloadItem(curr);
 }
 
 void ScanGallery::slotUnloadItem(FileTreeViewItem *curr)
 {
-    if (curr == NULL) {
+    if (curr == nullptr) {
         return;
     }
 
@@ -1104,7 +1104,7 @@ void ScanGallery::slotUnloadItem(FileTreeViewItem *curr)
         }
     } else {                    // is a file/image
         const KookaImage *image = imageForItem(curr);
-        if (image == NULL) {
+        if (image == nullptr) {
             return;    // ok, nothing to unload
         }
 
@@ -1119,7 +1119,7 @@ void ScanGallery::slotUnloadItem(FileTreeViewItem *curr)
         emit unloadImage(image);
         delete image;
 
-        curr->setClientData(NULL);          // clear image from item
+        curr->setClientData(nullptr);          // clear image from item
         slotDecorate(curr);
     }
 }
@@ -1127,7 +1127,7 @@ void ScanGallery::slotUnloadItem(FileTreeViewItem *curr)
 void ScanGallery::slotItemProperties()
 {
     FileTreeViewItem *curr = highlightedFileTreeViewItem();
-    if (curr == NULL) {
+    if (curr == nullptr) {
         return;
     }
     KPropertiesDialog::showDialog(curr->url(), this);
@@ -1138,7 +1138,7 @@ void ScanGallery::slotItemProperties()
 void ScanGallery::slotDeleteItems()
 {
     FileTreeViewItem *curr = highlightedFileTreeViewItem();
-    if (curr == NULL) {
+    if (curr == nullptr) {
         return;
     }
 
@@ -1186,7 +1186,7 @@ void ScanGallery::slotDeleteItems()
     }
 
 #if 0
-    if (nextToSelect != NULL) {
+    if (nextToSelect != nullptr) {
         setSelected(nextToSelect, true);
     }
     //  TODO: if doing the above, also need to signal to update thumbnail
@@ -1197,8 +1197,8 @@ void ScanGallery::slotDeleteItems()
     //  else (the next image is selected and loaded).  So leaving this
     //  commented out for now.
     curr = highlightedFileTreeViewItem();
-    //qDebug() << "new selection after delete" << (curr == NULL ? "NULL" : curr->url().prettyURL());
-    if (curr != NULL) {
+    //qDebug() << "new selection after delete" << (curr == nullptr ? "nullptr" : curr->url().prettyURL());
+    if (curr != nullptr) {
         emit showItem(curr->fileItem());
     }
 #endif
@@ -1212,7 +1212,7 @@ void ScanGallery::slotCreateFolder()
     if (folder.isEmpty()) return;
 
     FileTreeViewItem *item = highlightedFileTreeViewItem();
-    if (item==NULL) return;
+    if (item==nullptr) return;
 
     // The GUI ensures that the action is only enabled if the current
     // item is a directory.  Hence, we can assume that it is and ensure

@@ -47,7 +47,7 @@ public:
      * @param parent  The parent widget
      * @param name    Qt object name
      */
-    ScanParamsPage(QWidget *parent, const char *name = NULL);
+    ScanParamsPage(QWidget *parent, const char *name = nullptr);
 
     /**
      * Destructor.
@@ -58,10 +58,10 @@ public:
      * Add a standard parameter row to the page.
      *
      * @param lab    Label for the parameter, normally from KScanOption::getlabel()
-     *               or @c NULL for no label.
+     *               or @c nullptr for no label.
      * @param wid    Scan control widget, normally from KScanOption::widget().
      * @param unit   SANE unit label, normally from KScanOption::getUnit() or
-     *               @c NULL for no unit label.
+     *               @c nullptr for no unit label.
      * @param align  Special alignment flags for layout row.
 
      * @note The layout coloumns are used as follows:  the @p lab label goes in
@@ -69,7 +69,7 @@ public:
      * present then it goes in column 3 and the @p wid widget in column 2.  If
      * there is no @p unit label then the @p wid widget spans columns 2 and 3.
      */
-    void addRow(QLabel *lab, QWidget *wid, QLabel *unit = NULL, Qt::Alignment align = 0);
+    void addRow(QLabel *lab, QWidget *wid, QLabel *unit = nullptr, Qt::Alignment align = 0);
 
     /**
      * Add a full width widget to the page.

@@ -142,7 +142,7 @@ QByteArray DeviceSelector::getSelectedDevice() const
 
 void DeviceSelector::setScanSources(const QList<QByteArray> &backends)
 {
-    const KConfig *typeConf = NULL;
+    const KConfig *typeConf = nullptr;
 
     QString typeFile = QStandardPaths::locate(QStandardPaths::GenericDataLocation, "libkookascan/scantypes.dat");
     //qDebug() << "Scanner type file" << typeFile;
@@ -151,13 +151,13 @@ void DeviceSelector::setScanSources(const QList<QByteArray> &backends)
     }
 
     QByteArray defstr = ScanSettings::startupScanDevice().toLocal8Bit();
-    QListWidgetItem *defItem = NULL;
+    QListWidgetItem *defItem = nullptr;
 
     for (QList<QByteArray>::const_iterator it = backends.constBegin();
             it != backends.constEnd(); ++it) {
         QByteArray devName = (*it);
         const SANE_Device *dev = ScanDevices::self()->deviceInfo(devName);
-        if (dev == NULL) {
+        if (dev == nullptr) {
             //qDebug() << "no device info for" << devName;
             continue;
         }
@@ -173,7 +173,7 @@ void DeviceSelector::setScanSources(const QList<QByteArray> &backends)
         hlay->setSpacing(horizontalSpacing());
 
         QString itemIcon = "scanner";
-        if (typeConf != NULL) {         // type config file available
+        if (typeConf != nullptr) {         // type config file available
             QString devBase = QString(devName).section(':', 0, 0);
             QString ii = typeConf->group("Devices").readEntry(devBase, "");
             //qDebug() << "for device" << devBase << "icon" << ii;
@@ -210,12 +210,12 @@ void DeviceSelector::setScanSources(const QList<QByteArray> &backends)
 
         // Select this item (when finished) either if it matches the default
         // device, or else is the first item.
-        if (defItem == NULL || devName == defstr) {
+        if (defItem == nullptr || devName == defstr) {
             defItem = item;
         }
     }
 
-    if (defItem != NULL) {
+    if (defItem != nullptr) {
         defItem->setSelected(true);
     }
     delete typeConf;

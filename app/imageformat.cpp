@@ -181,7 +181,7 @@ ImageFormat ImageFormat::formatForUrl(const QUrl &url)
 }
 
 
-static const QList<QMimeType> *sMimeList = NULL;
+static const QList<QMimeType> *sMimeList = nullptr;
 
 
 void buildMimeTypeList()
@@ -265,6 +265,6 @@ void buildMimeTypeList()
 
 const QList<QMimeType> *ImageFormat::mimeTypes()
 {
-    if (sMimeList==NULL) buildMimeTypeList();
+    if (sMimeList==nullptr) buildMimeTypeList();
     return (sMimeList);
 }

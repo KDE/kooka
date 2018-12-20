@@ -48,7 +48,7 @@ FileTreeBranch::FileTreeBranch(FileTreeView *parent,
       m_name(name),
       m_rootIcon(pix),
       m_openRootIcon(pix),
-      m_lastFoundItem(NULL),
+      m_lastFoundItem(nullptr),
       m_recurseChildren(true),
       m_showExtensions(true)
 {
@@ -63,7 +63,7 @@ FileTreeBranch::FileTreeBranch(FileTreeView *parent,
     //qDebug() << "for" << u;
 
     // if no root is specified, create a new one
-    if (m_root == NULL) m_root = new FileTreeViewItem(parent,
+    if (m_root == nullptr) m_root = new FileTreeViewItem(parent,
                 KFileItem(u, "inode/directory", S_IFDIR),
                 this);
     //m_root->setExpandable(true);
@@ -138,7 +138,7 @@ QIcon FileTreeBranch::openPixmap() const
 
 void FileTreeBranch::setOpen(bool open)
 {
-    if (root() != NULL) {
+    if (root() != nullptr) {
         root()->setExpanded(open);
     }
 }
@@ -158,7 +158,7 @@ void FileTreeBranch::slotListerStarted(const QUrl &url)
 #endif // DEBUG_LISTING
 
     FileTreeViewItem *item = findItemByUrl(url);
-    if (item != NULL) {
+    if (item != nullptr) {
         emit populateStarted(item);
     }
 }
@@ -179,7 +179,7 @@ void FileTreeBranch::slotRefreshItems(const QList<QPair<KFileItem, KFileItem> > 
         qDebug() << fi2.url();
 #endif // DEBUG_LISTING
         FileTreeViewItem *item = findItemByUrl(fi2.url());
-        if (item != NULL) {
+        if (item != nullptr) {
             treeViewItList.append(item);
             item->setIcon(0, QIcon::fromTheme(fi2.iconName()));
             item->setText(0, fi2.text());
@@ -200,7 +200,7 @@ void FileTreeBranch::slotRefreshItems(const QList<QPair<KFileItem, KFileItem> > 
 //
 //FileTreeViewItem *FileTreeBranch::treeItemForFileItem(const KFileItem &fi)
 //{
-//    if (fi.isNull()) return (NULL);
+//    if (fi.isNull()) return (nullptr);
 //    //qDebug() << "for" << fi.url();
 //    FileTreeViewItem *ftvi = static_cast<FileTreeViewItem *>(const_cast<void *>(fi.extraData(this)));
 //    return (ftvi);
@@ -208,7 +208,7 @@ void FileTreeBranch::slotRefreshItems(const QList<QPair<KFileItem, KFileItem> > 
 
 FileTreeViewItem *FileTreeBranch::findItemByUrl(const QUrl &url)
 {
-    FileTreeViewItem *resultItem = NULL;
+    FileTreeViewItem *resultItem = nullptr;
 
     if (url == m_lastFoundUrl) {			// most likely and fastest first
 #ifdef DEBUG_MAPPING
@@ -243,7 +243,7 @@ FileTreeViewItem *FileTreeBranch::findItemByUrl(const QUrl &url)
 #endif
     }
 
-    if (resultItem != NULL) {				// found something
+    if (resultItem != nullptr) {				// found something
         m_lastFoundItem = resultItem;			// cache for next time
         m_lastFoundUrl = url;				// path this applies to
     }
@@ -264,7 +264,7 @@ FileTreeViewItem *FileTreeBranch::findItemByPath(const QString &path)
 
     foreach (const QString &part, pathSplit)
     {
-        FileTreeViewItem *foundItem = NULL;
+        FileTreeViewItem *foundItem = nullptr;
         for (int i = 0; i<item->childCount(); ++i)
         {
             FileTreeViewItem *child = static_cast<FileTreeViewItem *>(item->child(i));
@@ -275,12 +275,12 @@ FileTreeViewItem *FileTreeBranch::findItemByPath(const QString &path)
             }
         }
 
-        if (foundItem==NULL)
+        if (foundItem==nullptr)
         {            
 #ifdef DEBUG_MAPPING
             qDebug() << "didn't find" << part << "under" << item->url();
 #endif
-            return (NULL);				// no child with that name
+            return (nullptr);				// no child with that name
         }
 
         item = foundItem;
@@ -303,7 +303,7 @@ void FileTreeBranch::itemRenamed(FileTreeViewItem *item)
 // No longer needed, itemsAdded signal passes parent URL
 //FileTreeViewItem *FileTreeBranch::parentFTVItem(const KFileItem &fi)
 //{
-//    if (fi.isNull()) return (NULL);
+//    if (fi.isNull()) return (nullptr);
 //
 //    QUrl url = fi.url();
 //    //qDebug() << "for" << url;
@@ -314,9 +314,9 @@ void FileTreeBranch::itemRenamed(FileTreeViewItem *item)
 FileTreeViewItem *FileTreeBranch::createTreeViewItem(FileTreeViewItem *parent,
         const KFileItem &fileItem)
 {
-    FileTreeViewItem *tvi = NULL;
+    FileTreeViewItem *tvi = nullptr;
 
-    if (parent != NULL && !fileItem.isNull()) {
+    if (parent != nullptr && !fileItem.isNull()) {
         tvi = new FileTreeViewItem(parent, fileItem, this);
         const QString p = fileItem.url().url(QUrl::PreferLocalFile|QUrl::StripTrailingSlash);
         m_itemMap[fileItem.url()] = tvi;
@@ -336,7 +336,7 @@ void FileTreeBranch::slotItemsAdded(const QUrl &parent, const KFileItemList &ite
     //qDebug() << "Adding" << items.count() << "items";
 
     FileTreeViewItem *parentItem = findItemByUrl(parent);
-    if (parentItem == NULL) {
+    if (parentItem == nullptr) {
         //qDebug() << "parent item not found for" << parent;
         return;
     }
@@ -348,12 +348,12 @@ void FileTreeBranch::slotItemsAdded(const QUrl &parent, const KFileItemList &ite
         const KFileItem currItem = (*it);
 
         /* Only create a new FileTreeViewItem if it does not yet exist */
-        if (findItemByUrl(currItem.url()) != NULL) {
+        if (findItemByUrl(currItem.url()) != nullptr) {
             continue;
         }
 
         newItem = createTreeViewItem(parentItem, currItem);
-        if (newItem == NULL) {          // should never happen now,
+        if (newItem == nullptr) {          // should never happen now,
             // 'parent' checked above
             //qDebug() << "failed to create item for" << currItem.url();
             continue;
@@ -473,7 +473,7 @@ void FileTreeBranch::itemDeleted(const KFileItem *fi)
 #endif // DEBUG_LISTING
 
     FileTreeViewItem *ftvi = findItemByUrl(fi->url());
-    if (ftvi == NULL) {
+    if (ftvi == nullptr) {
 #ifdef DEBUG_LISTING
         qDebug() << "no tree item!";
 #endif // DEBUG_LISTING
@@ -487,7 +487,7 @@ void FileTreeBranch::itemDeleted(const KFileItem *fi)
 #endif // DEBUG_LISTING
         for (int i = 0; i < nChildren; ++i) {
             FileTreeViewItem *ch = static_cast<FileTreeViewItem *>(ftvi->child(i));
-            if (ch != NULL) {
+            if (ch != nullptr) {
                 itemDeleted(ch->fileItem());
             }
         }
@@ -496,7 +496,7 @@ void FileTreeBranch::itemDeleted(const KFileItem *fi)
     QUrl u = fi->url();
     if (u == m_lastFoundUrl) {
         m_lastFoundUrl = QUrl();			// invalidate last-found cache
-        m_lastFoundItem = NULL;
+        m_lastFoundItem = nullptr;
     }
     m_itemMap.remove(u);				// remove from item map
 
@@ -514,7 +514,7 @@ void FileTreeBranch::slotListerCanceled(const QUrl &url)
 
     // stop animations, etc.
     FileTreeViewItem *item = findItemByUrl(url);
-    if (item != NULL) {
+    if (item != nullptr) {
         emit populateFinished(item);
     }
 }
@@ -525,7 +525,7 @@ void FileTreeBranch::slotListerClear()
     qDebug();
 #endif // DEBUG_LISTING
     /* this slots needs to clear all listed items, but NOT the root item */
-    if (m_root != NULL) {
+    if (m_root != nullptr) {
         deleteChildrenOf(m_root);
     }
 }
@@ -536,7 +536,7 @@ void FileTreeBranch::slotListerClearUrl(const QUrl &url)
     qDebug() << "for" << url;
 #endif // DEBUG_LISTING
     FileTreeViewItem *ftvi = findItemByUrl(url);
-    if (ftvi != NULL) {
+    if (ftvi != nullptr) {
         deleteChildrenOf(ftvi);
     }
 }
@@ -544,8 +544,8 @@ void FileTreeBranch::slotListerClearUrl(const QUrl &url)
 void FileTreeBranch::deleteChildrenOf(QTreeWidgetItem *parent)
 {
     // for some strange reason, slotListerClearUrl() sometimes calls us
-    // with a NULL parent.
-    if (parent == NULL) {
+    // with a nullptr parent.
+    if (parent == nullptr) {
         return;
     }
 
@@ -567,7 +567,7 @@ void FileTreeBranch::slotListerCompleted(const QUrl &url)
     qDebug() << "lister completed for" << url;
 #endif // DEBUG_LISTING
     FileTreeViewItem *currParent = findItemByUrl(url);
-    if (currParent == NULL) {
+    if (currParent == nullptr) {
         return;
     }
 
@@ -611,7 +611,7 @@ void FileTreeBranch::slotListerCompleted(const QUrl &url)
 #endif // DEBUG_LISTING
         int nChildren = 0;
 
-        if (wantRecurseUrl && currParent != NULL) {
+        if (wantRecurseUrl && currParent != nullptr) {
             /* now walk again through the tree and populate the children to get +-signs */
             /* This is the starting point. The visible folder has finished,
                processing the children has not yet started */
@@ -659,7 +659,7 @@ void FileTreeBranch::slotListerCompleted(const QUrl &url)
 bool FileTreeBranch::populate(const QUrl &url, FileTreeViewItem *currItem)
 {
     bool ret = false;
-    if (currItem == NULL) {
+    if (currItem == nullptr) {
         return (ret);
     }
 

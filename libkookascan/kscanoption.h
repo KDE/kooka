@@ -84,7 +84,7 @@ public:
      **/
     bool isValid() const
     {
-        return (mDesc != NULL);
+        return (mDesc != nullptr);
     }
 
     /**
@@ -130,7 +130,7 @@ public:
      *
      * @return @c true if the option can be set automatically
      **/
-    bool isAutoSettable() const		{ return (mDesc!=NULL && (mDesc->cap & SANE_CAP_AUTOMATIC)); }
+    bool isAutoSettable() const		{ return (mDesc!=nullptr && (mDesc->cap & SANE_CAP_AUTOMATIC)); }
 
     /**
      * Check whether the option is a common option (not SANE_CAP_ADVANCED).
@@ -138,7 +138,7 @@ public:
      * @return @c true if the option is a common option,
      *         @c false if it is an advanced option.
      **/
-    bool isCommonOption() const		{ return (mDesc!=NULL && !(mDesc->cap & SANE_CAP_ADVANCED)); }
+    bool isCommonOption() const		{ return (mDesc!=nullptr && !(mDesc->cap & SANE_CAP_ADVANCED)); }
 
     /**
      * Check whether the option should be set as a priority, before any
@@ -153,7 +153,7 @@ public:
      *
      * @return @c true if the option is currently active
      **/
-    bool isActive() const		{ return (mDesc!=NULL && SANE_OPTION_IS_ACTIVE(mDesc->cap)); }
+    bool isActive() const		{ return (mDesc!=nullptr && SANE_OPTION_IS_ACTIVE(mDesc->cap)); }
 
     /**
      * Check whether the option is can be set by software
@@ -163,7 +163,7 @@ public:
      * @return @c true if the option can be set
      * @see isReadable
      **/
-    bool isSoftwareSettable() const	 { return (mDesc!=NULL && SANE_OPTION_IS_SETTABLE(mDesc->cap)); }
+    bool isSoftwareSettable() const	 { return (mDesc!=nullptr && SANE_OPTION_IS_SETTABLE(mDesc->cap)); }
 
     /**
      * Check whether the option has an associated GUI element
@@ -173,7 +173,7 @@ public:
      **/
     bool isGuiElement() const
     {
-        return (mControl != NULL);
+        return (mControl != nullptr);
     }
 
     /**
@@ -269,7 +269,7 @@ public:
      * Retrieve the option value.
      *
      * @param gt A gamma table to receive the value read
-     * @return @c true in all cases (unless the @p gt parameter is @c NULL)
+     * @return @c true in all cases (unless the @p gt parameter is @c nullptr)
      **/
     bool get(KGammaTable *gt) const;
 
@@ -299,7 +299,7 @@ public:
      *
      * @param minp A @c double to receive the minimum value
      * @param maxp A @c double to receive the maximum value
-     * @param quantp A @c double to receive the step, if it is not @c NULL.
+     * @param quantp A @c double to receive the step, if it is not @c nullptr.
      * @return @c true if the option is a range type
      *
      * @note For an option with SANE_CONSTRAINT_WORD_LIST, the minimum
@@ -307,7 +307,7 @@ public:
      * is the range divided by the number of possible values.  This does
      * not imply that any intermediate values calculated from these are valid.
      **/
-    bool getRange(double *minp, double *maxp, double *quantp = NULL) const;
+    bool getRange(double *minp, double *maxp, double *quantp = nullptr) const;
 
     /**
      * Send the data (previously set by @c set()) to the scanner, if this
@@ -346,7 +346,7 @@ public:
      * should not be deleted by the caller.
      *
      * @param parent Parent for the created widget.
-     * @return The created widget, or @c NULL if it could not be created.
+     * @return The created widget, or @c nullptr if it could not be created.
      **/
     KScanControl *createWidget(QWidget *parent);
 
@@ -369,7 +369,7 @@ public:
      * @c createWidget() must have been used to create the control first.
      *
      * @param parent Parent widget for the created label.
-     * @return The created label widget, or @c NULL if no unit is
+     * @return The created label widget, or @c nullptr if no unit is
      * applicable.
      **/
     QLabel *getUnit(QWidget *parent) const;
@@ -389,13 +389,13 @@ public:
      *
      * @return The capabilities, or 0 if the option is not valid
      **/
-    int getCapabilities() const		{ return (mDesc!=NULL ? mDesc->cap : 0); }
+    int getCapabilities() const		{ return (mDesc!=nullptr ? mDesc->cap : 0); }
 
     /**
      * Get the GUI widget for the option, if applicable and one has been
      * created by @c createWidget()).
      *
-     * @return The widget, or @c NULL if there is none.
+     * @return The widget, or @c nullptr if there is none.
      **/
     KScanControl *widget() const
     {

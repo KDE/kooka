@@ -74,7 +74,7 @@ public:
      * Get the currently selected item.
      *
      * @return the selected item,
-     * or @c NULL if there is no selected item.
+     * or @c nullptr if there is no selected item.
      **/
     FileTreeViewItem *selectedFileTreeViewItem() const;
 
@@ -82,7 +82,7 @@ public:
      * Get the KFileItem (file information) for the currently selected item.
      *
      * @return the @c KFileItem for the selected item,
-     * or @c NULL if there is no selected item.
+     * or @c nullptr if there is no selected item.
      **/
     const KFileItem *selectedFileItem() const;
 
@@ -98,7 +98,7 @@ public:
      * Get the currently highlighted item.
      *
      * @return the highlighted item,
-     * or @c NULL if there is no highlighted item.
+     * or @c nullptr if there is no highlighted item.
      **/
     FileTreeViewItem *highlightedFileTreeViewItem() const;
 
@@ -106,7 +106,7 @@ public:
      * Get the KFileItem (file information) for the currently highlighted item.
      *
      * @return the @c KFileItem for the highlighted item,
-     * or @c NULL if there is no highlighted item.
+     * or @c nullptr if there is no highlighted item.
      **/
     const KFileItem *highlightedFileItem() const;
 
@@ -127,7 +127,7 @@ public:
      * @param path base URL of the branch
      * @param name name of the branch (the text for column 0)
      * @param showHidden if @c true, hidden files and directories will be visible
-     * @return the new branch, or @c NULL if the branch could not be created
+     * @return the new branch, or @c nullptr if the branch could not be created
      *
      * @note No directory listing starts until the branch is expanded,
      * either by the user opening the root item or by calling @c setExpanded()
@@ -145,7 +145,7 @@ public:
      * @param name name of the branch (the text for column 0)
      * @param pix pixmap for the branch
      * @param showHidden if @c true, hidden files and directories will be visible
-     * @return the new branch, or @c NULL if the branch could not be created
+     * @return the new branch, or @c nullptr if the branch could not be created
      **/
     virtual FileTreeBranch *addBranch(const QUrl &path, const QString &name,
                                       const QIcon &pix, bool showHidden = false);
@@ -174,7 +174,7 @@ public:
      * Search for a branch by name.
      *
      * @param searchName the name of a branch to search for.
-     * @return the named branch, or @c NULL if the branch was not found.
+     * @return the named branch, or @c nullptr if the branch was not found.
      **/
     FileTreeBranch *branch(const QString &searchName) const;
 
@@ -200,7 +200,7 @@ public:
      *
      * @param branch the branch to search in
      * @param relUrl the URL path to search for, relative to the root URL of the branch
-     * @return the found item, or @c NULL if nothing was found
+     * @return the found item, or @c nullptr if nothing was found
      **/
     FileTreeViewItem *findItemInBranch(FileTreeBranch *branch, const QString &relUrl) const;
 
@@ -209,7 +209,7 @@ public:
      *
      * @param branchName the name of the branch to search in
      * @param relUrl the URL path to search for, relative to the root URL of the branch
-     * @return the found item, or @c NULL if nothing was found
+     * @return the found item, or @c nullptr if nothing was found
      **/
     FileTreeViewItem *findItemInBranch(const QString &branchName, const QString &relUrl) const;
 

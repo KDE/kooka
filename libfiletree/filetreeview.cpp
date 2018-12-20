@@ -48,8 +48,8 @@ FileTreeView::FileTreeView(QWidget *parent)
     setEditTriggers(QAbstractItemView::NoEditTriggers); // maybe changed later
 
     m_wantOpenFolderPixmaps = true;
-    m_currentBeforeDropItem = NULL;
-    m_dropItem = NULL;
+    m_currentBeforeDropItem = nullptr;
+    m_dropItem = nullptr;
     m_busyCount = 0;
 
     m_autoOpenTimer = new QTimer(this);
@@ -112,12 +112,12 @@ QMimeData *FileTreeView::mimeData(const QList<QTreeWidgetItem *> items) const
 // Dragging and dropping into the view.
 void FileTreeView::setDropItem(QTreeWidgetItem *item)
 {
-    if (item != NULL) {
+    if (item != nullptr) {
         m_dropItem = item;
         // TODO: make auto-open an option, don't start timer if not enabled
         m_autoOpenTimer->start();
     } else {
-        m_dropItem = NULL;
+        m_dropItem = nullptr;
         m_autoOpenTimer->stop();
     }
 }
@@ -132,7 +132,7 @@ void FileTreeView::dragEnterEvent(QDragEnterEvent *ev)
     ev->acceptProposedAction();
 
     QList<QTreeWidgetItem *> items = selectedItems();
-    m_currentBeforeDropItem = (items.count() > 0 ? items.first() : NULL);
+    m_currentBeforeDropItem = (items.count() > 0 ? items.first() : nullptr);
     setDropItem(itemAt(ev->pos()));
 }
 
@@ -144,9 +144,9 @@ void FileTreeView::dragMoveEvent(QDragMoveEvent *ev)
     }
 
     QTreeWidgetItem *item = itemAt(ev->pos());
-    if (item == NULL || item->isDisabled()) {   // over a valid item?
+    if (item == nullptr || item->isDisabled()) {   // over a valid item?
         // no, ignore drops on it
-        setDropItem(NULL);              // clear drop item
+        setDropItem(nullptr);              // clear drop item
         return;
     }
 
@@ -163,16 +163,16 @@ void FileTreeView::dragMoveEvent(QDragMoveEvent *ev)
 
 void FileTreeView::dragLeaveEvent(QDragLeaveEvent *ev)
 {
-    if (m_currentBeforeDropItem != NULL) {      // there was a current item
+    if (m_currentBeforeDropItem != nullptr) {      // there was a current item
         // before the drag started
         setCurrentItem(m_currentBeforeDropItem);    // restore its selection
         scrollToItem(m_currentBeforeDropItem);
-    } else if (m_dropItem != NULL) {        // item selected by drag
+    } else if (m_dropItem != nullptr) {        // item selected by drag
         m_dropItem->setSelected(false);         // clear that selection
     }
 
-    m_currentBeforeDropItem = NULL;
-    setDropItem(NULL);
+    m_currentBeforeDropItem = nullptr;
+    setDropItem(nullptr);
 }
 
 void FileTreeView::dropEvent(QDropEvent *ev)
@@ -182,7 +182,7 @@ void FileTreeView::dropEvent(QDropEvent *ev)
         return;
     }
 
-    if (m_dropItem == NULL) {
+    if (m_dropItem == nullptr) {
         return;    // invalid drop target
     }
 
@@ -190,7 +190,7 @@ void FileTreeView::dropEvent(QDropEvent *ev)
 #ifdef DEBUG_LISTING
     qDebug() << "onto" << item->url();
 #endif // DEBUG_LISTING
-    setDropItem(NULL);					// stop timer now
+    setDropItem(nullptr);					// stop timer now
 							// also clears m_dropItem!
     emit dropped(ev, item);
     ev->accept();
@@ -199,7 +199,7 @@ void FileTreeView::dropEvent(QDropEvent *ev)
 void FileTreeView::slotCollapsed(QTreeWidgetItem *tvi)
 {
     FileTreeViewItem *item = static_cast<FileTreeViewItem *>(tvi);
-    if (item != NULL && item->isDir()) {
+    if (item != nullptr && item->isDir()) {
         item->setIcon(0, itemIcon(item));
     }
 }
@@ -207,7 +207,7 @@ void FileTreeView::slotCollapsed(QTreeWidgetItem *tvi)
 void FileTreeView::slotExpanded(QTreeWidgetItem *tvi)
 {
     FileTreeViewItem *item = static_cast<FileTreeViewItem *>(tvi);
-    if (item == NULL) {
+    if (item == nullptr) {
         return;
     }
 
@@ -218,7 +218,7 @@ void FileTreeView::slotExpanded(QTreeWidgetItem *tvi)
     FileTreeBranch *branch = item->branch();
 
     // Check if the branch needs to be populated now
-    if (item->isDir() && branch != NULL && item->childCount() == 0) {
+    if (item->isDir() && branch != nullptr && item->childCount() == 0) {
 #ifdef DEBUG_LISTING
         qDebug() << "need to populate" << item->url();
 #endif // DEBUG_LISTING
@@ -242,24 +242,24 @@ void FileTreeView::slotExpanded(QTreeWidgetItem *tvi)
 
 void FileTreeView::slotExecuted(QTreeWidgetItem *item)
 {
-    if (item == NULL) {
+    if (item == nullptr) {
         return;
     }
 
     FileTreeViewItem *ftvi = static_cast<FileTreeViewItem *>(item);
-    if (ftvi != NULL && ftvi->isDir() && !ftvi->isRoot()) {
+    if (ftvi != nullptr && ftvi->isDir() && !ftvi->isRoot()) {
         item->setExpanded(!item->isExpanded());
     }
 }
 
 void FileTreeView::slotDoubleClicked(QTreeWidgetItem *item)
 {
-    if (item == NULL) {
+    if (item == nullptr) {
         return;
     }
 
     FileTreeViewItem *ftvi = static_cast<FileTreeViewItem *>(item);
-    if (ftvi != NULL && ftvi->isRoot()) {
+    if (ftvi != nullptr && ftvi->isRoot()) {
         item->setExpanded(!item->isExpanded());
     }
 }
@@ -283,7 +283,7 @@ void FileTreeView::slotAutoOpenFolder()
 
 void FileTreeView::slotSelectionChanged()
 {
-    if (m_dropItem != NULL) {           // don't do this during the dragmove
+    if (m_dropItem != nullptr) {           // don't do this during the dragmove
     }
 }
 
@@ -355,7 +355,7 @@ FileTreeBranch *FileTreeView::branch(const QString &searchName) const
         }
     }
 
-    return (NULL);
+    return (nullptr);
 }
 
 const FileTreeBranchList &FileTreeView::branches() const
@@ -376,14 +376,14 @@ bool FileTreeView::removeBranch(FileTreeBranch *branch)
 
 void FileTreeView::setDirOnlyMode(FileTreeBranch *branch, bool bom)
 {
-    if (branch != NULL) {
+    if (branch != nullptr) {
         branch->setDirOnlyMode(bom);
     }
 }
 
 void FileTreeView::slotNewTreeViewItems(FileTreeBranch *branch, const FileTreeViewItemList &items)
 {
-    if (branch == NULL) {
+    if (branch == nullptr) {
         return;
     }
 #ifdef DEBUG_LISTING
@@ -416,7 +416,7 @@ QIcon FileTreeView::itemIcon(FileTreeViewItem *item) const
 {
     QIcon pix;
 
-    if (item != NULL) {
+    if (item != nullptr) {
         /* Check whether it is a branch root */
         FileTreeBranch *branch = item->branch();
         if (item == branch->root()) {
@@ -442,7 +442,7 @@ QIcon FileTreeView::itemIcon(FileTreeViewItem *item) const
 
 void FileTreeView::slotStartAnimation(FileTreeViewItem *item)
 {
-    if (item == NULL) {
+    if (item == nullptr) {
         return;
     }
 #ifdef DEBUG_LISTING
@@ -455,7 +455,7 @@ void FileTreeView::slotStartAnimation(FileTreeViewItem *item)
 
 void FileTreeView::slotStopAnimation(FileTreeViewItem *item)
 {
-    if (item == NULL) {
+    if (item == nullptr) {
         return;
     }
 #ifdef DEBUG_LISTING
@@ -474,44 +474,44 @@ void FileTreeView::slotStopAnimation(FileTreeViewItem *item)
 FileTreeViewItem *FileTreeView::selectedFileTreeViewItem() const
 {
     QList<QTreeWidgetItem *> items = selectedItems();
-    return (items.count() > 0 ? static_cast<FileTreeViewItem *>(items.first()) : NULL);
+    return (items.count() > 0 ? static_cast<FileTreeViewItem *>(items.first()) : nullptr);
 }
 
 const KFileItem *FileTreeView::selectedFileItem() const
 {
     FileTreeViewItem *item = selectedFileTreeViewItem();
-    return (item == NULL ? NULL : item->fileItem());
+    return (item == nullptr ? nullptr : item->fileItem());
 }
 
 QUrl FileTreeView::selectedUrl() const
 {
     FileTreeViewItem *item = selectedFileTreeViewItem();
-    return (item != NULL ? item->url() : QUrl());
+    return (item != nullptr ? item->url() : QUrl());
 }
 
 FileTreeViewItem *FileTreeView::highlightedFileTreeViewItem() const
 {
     QList<QTreeWidgetItem *> items = selectedItems();
-    if (items.isEmpty()) return (NULL);
+    if (items.isEmpty()) return (nullptr);
     return (static_cast<FileTreeViewItem *>(items.first()));
 }
 
 const KFileItem *FileTreeView::highlightedFileItem() const
 {
     FileTreeViewItem *item = highlightedFileTreeViewItem();
-    return (item == NULL ? NULL : item->fileItem());
+    return (item == nullptr ? nullptr : item->fileItem());
 }
 
 QUrl FileTreeView::highlightedUrl() const
 {
     FileTreeViewItem *item = highlightedFileTreeViewItem();
-    return (item != NULL ? item->url() : QUrl());
+    return (item != nullptr ? item->url() : QUrl());
 }
 
 void FileTreeView::slotOnItem(QTreeWidgetItem *item)
 {
     FileTreeViewItem *i = static_cast<FileTreeViewItem *>(item);
-    if (i != NULL) emit onItem(i->url().url(QUrl::PreferLocalFile));
+    if (i != nullptr) emit onItem(i->url().url(QUrl::PreferLocalFile));
 }
 
 FileTreeViewItem *FileTreeView::findItemInBranch(const QString &branchName, const QString &relUrl) const
@@ -522,7 +522,7 @@ FileTreeViewItem *FileTreeView::findItemInBranch(const QString &branchName, cons
 
 FileTreeViewItem *FileTreeView::findItemInBranch(FileTreeBranch *branch, const QString &relPath) const
 {
-    if (branch==NULL) return (NULL);			// no branch to search
+    if (branch==nullptr) return (nullptr);			// no branch to search
 
     FileTreeViewItem *ret;
     if (relPath.isEmpty() || relPath=="/") ret = branch->root();

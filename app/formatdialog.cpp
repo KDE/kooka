@@ -224,7 +224,7 @@ true color images with optional lossless compression.\
         ImageMetaInfo::LowColour | ImageMetaInfo::HighColour
     },
 
-    { NULL, NULL, 0, 0 }
+    { nullptr, nullptr, 0, 0 }
 };
 
 static QString sLastFormat = QString::null;		// format last used, whether
@@ -250,14 +250,14 @@ FormatDialog::FormatDialog(QWidget *parent, ImageMetaInfo::ImageType type,
     QWidget *page = new QWidget(this);
     setMainWidget(page);
 
-    mHelpLabel = NULL;
-    mSubformatCombo = NULL;
-    mFormatList = NULL;
-    mSubformatLabel = NULL;
-    mDontAskCheck = NULL;
-    mRecOnlyCheck = NULL;
-    mExtensionLabel = NULL;
-    mFilenameEdit = NULL;
+    mHelpLabel = nullptr;
+    mSubformatCombo = nullptr;
+    mFormatList = nullptr;
+    mSubformatLabel = nullptr;
+    mDontAskCheck = nullptr;
+    mRecOnlyCheck = nullptr;
+    mExtensionLabel = nullptr;
+    mFilenameEdit = nullptr;
 
     if (!mFormat.isValid()) askForFormat = true;	// must ask if none
     mWantAssistant = false;
@@ -319,7 +319,7 @@ FormatDialog::FormatDialog(QWidget *parent, ImageMetaInfo::ImageType type,
 
         // Checkbox to store setting
         const KConfigSkeletonItem *ski = KookaSettings::self()->saverOnlyRecommendedTypesItem();
-        Q_ASSERT(ski!=NULL);
+        Q_ASSERT(ski!=nullptr);
         mRecOnlyCheck = new QCheckBox(ski->label(), page);
         mRecOnlyCheck->setToolTip(ski->toolTip());
         mRecOnlyCheck->setChecked(KookaSettings::saverOnlyRecommendedTypes());
@@ -328,7 +328,7 @@ FormatDialog::FormatDialog(QWidget *parent, ImageMetaInfo::ImageType type,
         ++row;
 
         ski = KookaSettings::self()->saverAlwaysUseFormatItem();
-        Q_ASSERT(ski!=NULL);
+        Q_ASSERT(ski!=nullptr);
         mDontAskCheck  = new QCheckBox(ski->label(), page);
         mDontAskCheck->setToolTip(ski->toolTip());
         gl->addWidget(mDontAskCheck, row, 0, 1, 3, Qt::AlignLeft);
@@ -367,7 +367,7 @@ FormatDialog::FormatDialog(QWidget *parent, ImageMetaInfo::ImageType type,
         }
     }
 
-    if (mFormatList != NULL)				// have the format selector
+    if (mFormatList != nullptr)				// have the format selector
     {
         setSelectedFormat(format);			// preselect the remembered format
     }
@@ -384,7 +384,7 @@ void FormatDialog::showEvent(QShowEvent *ev)
 {
     DialogBase::showEvent(ev);
 
-    if (mFilenameEdit != NULL) {			// asking for a file name
+    if (mFilenameEdit != nullptr) {			// asking for a file name
         mFilenameEdit->setFocus();			// set focus to that
         mFilenameEdit->selectAll();			// highight for editing
     }
@@ -392,20 +392,20 @@ void FormatDialog::showEvent(QShowEvent *ev)
 
 void FormatDialog::showExtension(const ImageFormat &format)
 {
-    if (mExtensionLabel == NULL) return;		// not showing this
+    if (mExtensionLabel == nullptr) return;		// not showing this
     mExtensionLabel->setText("." + format.extension());	// show extension it will have
 }
 
 void FormatDialog::formatSelected(QListWidgetItem *item)
 {
-    if (mHelpLabel == NULL) return;			// not showing this
+    if (mHelpLabel == nullptr) return;			// not showing this
 
-    if (item == NULL) {					// nothing is selected
+    if (item == nullptr) {					// nothing is selected
         mHelpLabel->setText(i18n("No format selected."));
         setButtonEnabled(QDialogButtonBox::Ok, false);
 
         mFormatList->clearSelection();
-        if (mExtensionLabel != NULL) {
+        if (mExtensionLabel != nullptr) {
             mExtensionLabel->setText(".???");
         }
         return;
@@ -413,9 +413,9 @@ void FormatDialog::formatSelected(QListWidgetItem *item)
 
     mFormatList->setCurrentItem(item);			// focus highlight -> select
 
-    const char *helptxt = NULL;
+    const char *helptxt = nullptr;
     const QByteArray mimename = item->data(Qt::UserRole).toByteArray();
-    for (FormatInfo *ip = &formats[0]; ip->mime != NULL; ++ip) {
+    for (FormatInfo *ip = &formats[0]; ip->mime != nullptr; ++ip) {
         // locate help text for format
         if (ip->mime == mimename) {
             helptxt = ip->helpString;
@@ -427,14 +427,14 @@ void FormatDialog::formatSelected(QListWidgetItem *item)
     QMimeType mime = db.mimeTypeForName(mimename);
     ImageFormat format = ImageFormat::formatForMime(mime);
 
-    if (helptxt != NULL) {				// found some help text
+    if (helptxt != nullptr) {				// found some help text
         mHelpLabel->setText(i18n(helptxt));		// set the hint
         check_subformat(format);			// and check subformats
     } else {
         mHelpLabel->setText(i18n("No information is available for this format."));
     }
 
-    if (mDontAskCheck != NULL) {
+    if (mDontAskCheck != nullptr) {
         mDontAskCheck->setChecked(ImgSaver::isRememberedFormat(mImageType, format));
     }
 
@@ -445,7 +445,7 @@ void FormatDialog::formatSelected(QListWidgetItem *item)
 // TODO: implement subtypes
 void FormatDialog::check_subformat(const ImageFormat &format)
 {
-    if (mSubformatCombo == NULL) return;		// not showing this
+    if (mSubformatCombo == nullptr) return;		// not showing this
 
     mSubformatCombo->setEnabled(false);			// not yet implemented
     mSubformatLabel->setEnabled(false);
@@ -453,7 +453,7 @@ void FormatDialog::check_subformat(const ImageFormat &format)
 
 void FormatDialog::setSelectedFormat(const ImageFormat &format)
 {
-    if (mFormatList == NULL) return;			// not showing this
+    if (mFormatList == nullptr) return;			// not showing this
 
     if (format.isValid()) {				// valid format to select
         const QMimeType mime = format.mime();
@@ -461,7 +461,7 @@ void FormatDialog::setSelectedFormat(const ImageFormat &format)
 
         for (int i = 0; i < mFormatList->count(); ++i) {
             QListWidgetItem *item = mFormatList->item(i);
-            if (item == NULL) {
+            if (item == nullptr) {
                 continue;
             }
             QString mimename = item->data(Qt::UserRole).toString();
@@ -483,7 +483,7 @@ void FormatDialog::setSelectedFormat(const ImageFormat &format)
     if (!sLastFormat.isEmpty()) {
         for (int i = 0; i < mFormatList->count(); ++i) {
             QListWidgetItem *item = mFormatList->item(i);
-            if (item == NULL) {
+            if (item == nullptr) {
                 continue;
             }
             QString mimename = item->data(Qt::UserRole).toString();
@@ -498,11 +498,11 @@ void FormatDialog::setSelectedFormat(const ImageFormat &format)
 
 ImageFormat FormatDialog::getFormat() const
 {
-    if (mFormatList == NULL) return (mFormat);		// no UI for this
+    if (mFormatList == nullptr) return (mFormat);		// no UI for this
 
     QMimeDatabase db;
     const QListWidgetItem *item = mFormatList->currentItem();
-    if (item != NULL) {
+    if (item != nullptr) {
         QString mimename = item->data(Qt::UserRole).toString();
         const QMimeType mime = db.mimeTypeForName(mimename);
         if (mime.isValid()) {
@@ -516,7 +516,7 @@ ImageFormat FormatDialog::getFormat() const
 
 QString FormatDialog::getFilename() const
 {
-    if (mFilenameEdit == NULL) return (mFilename);	// no UI for this
+    if (mFilenameEdit == nullptr) return (mFilename);	// no UI for this
     return (mFilenameEdit->text());
 }
 
@@ -529,26 +529,26 @@ void FormatDialog::checkValid()
 {
     bool ok = true;					// so far, anyway
 
-    if (mFormatList != NULL && mFormatList->selectedItems().count() == 0) ok = false;
-    if (mFilenameEdit != NULL && mFilenameEdit->text().isEmpty()) ok = false;
+    if (mFormatList != nullptr && mFormatList->selectedItems().count() == 0) ok = false;
+    if (mFilenameEdit != nullptr && mFilenameEdit->text().isEmpty()) ok = false;
     setButtonEnabled(QDialogButtonBox::Ok, ok);
 }
 
 
 static const FormatInfo *findKnownFormat(const QMimeType &mime)
 {
-    for (const FormatInfo *fi = &formats[0]; fi->mime != NULL; ++fi)
+    for (const FormatInfo *fi = &formats[0]; fi->mime != nullptr; ++fi)
     {							// search for format info
         if (mime.inherits(fi->mime)) return (fi);	// matching that MIME type
     }
 
-    return (NULL);					// nothing found
+    return (nullptr);					// nothing found
 }
 
 
 void FormatDialog::buildFormatList(bool recOnly)
 {
-    if (mFormatList == NULL) return;			// not showing this
+    if (mFormatList == nullptr) return;			// not showing this
     qDebug() << "recOnly" << recOnly << "for type" << mImageType;
 
     mFormatList->clear();
@@ -556,7 +556,7 @@ void FormatDialog::buildFormatList(bool recOnly)
     foreach (const QMimeType &mime, *mimeTypes)		// for all known MIME types
     {
         const FormatInfo *fi = findKnownFormat(mime);	// look for format information
-        if (fi==NULL)					// nothing for that MIME type
+        if (fi==nullptr)					// nothing for that MIME type
         {
             if (recOnly) continue;			// never show for recommended
         }						// but always show otherwise
@@ -586,12 +586,12 @@ void FormatDialog::buildFormatList(bool recOnly)
         mFormatList->addItem(item);
     }
 
-    formatSelected(NULL);				// selection has been cleared
+    formatSelected(nullptr);				// selection has been cleared
 }
 
 void FormatDialog::slotOk()
 {
-    if (mRecOnlyCheck != NULL) {			// have UI for this
+    if (mRecOnlyCheck != nullptr) {			// have UI for this
         KookaSettings::setSaverOnlyRecommendedTypes(mRecOnlyCheck->isChecked());
         KookaSettings::self()->save();			// save state of this option
     }
@@ -606,7 +606,7 @@ void FormatDialog::slotUser1()
 void FormatDialog::forgetRemembered()
 {
     const KConfigSkeletonItem *ski = KookaSettings::self()->saverOnlyRecommendedTypesItem();
-    Q_ASSERT(ski!=NULL);
+    Q_ASSERT(ski!=nullptr);
     KConfigGroup grp = KookaSettings::self()->config()->group(ski->group());
     grp.deleteGroup();
     grp.sync();
@@ -615,5 +615,5 @@ void FormatDialog::forgetRemembered()
 
 bool FormatDialog::alwaysUseFormat() const
 {
-    return (mDontAskCheck != NULL ? mDontAskCheck->isChecked() : false);
+    return (mDontAskCheck != nullptr ? mDontAskCheck->isChecked() : false);
 }

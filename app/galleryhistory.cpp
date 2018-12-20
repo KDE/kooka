@@ -54,7 +54,7 @@ static QString entryName(const FileTreeBranch *branch, const QString &relPath)
     QString name = QString::null;
 
     FileTreeView *view = static_cast<FileTreeView *>(branch->root()->treeWidget());
-    if (view == NULL) {
+    if (view == nullptr) {
         return (relPath);    // get view that this belongs to
     }
 

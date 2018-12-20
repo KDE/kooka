@@ -64,7 +64,7 @@
 
 
 Kooka::Kooka(const QByteArray &deviceToUse)
-    : KXmlGuiWindow(NULL),
+    : KXmlGuiWindow(nullptr),
 #ifndef KDE4
       m_printer(0),
 #endif
@@ -135,7 +135,7 @@ Kooka::~Kooka()
 
 void Kooka::startup()
 {
-    if (m_view == NULL) {
+    if (m_view == nullptr) {
         return;
     }
 

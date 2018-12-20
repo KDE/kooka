@@ -44,8 +44,8 @@ ScanIcons::ScanIcons()
 
 ScanIcons *ScanIcons::self()
 {
-    static ScanIcons *instance = NULL;
-    if (instance==NULL) instance = new ScanIcons;
+    static ScanIcons *instance = nullptr;
+    if (instance==nullptr) instance = new ScanIcons;
     return (instance);
 }
 

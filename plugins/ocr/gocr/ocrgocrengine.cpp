@@ -185,7 +185,7 @@ bool OcrGocrEngine::finishedOcrProcess(QProcess *proc)
     QDir dir(m_tempDir->path());
     QString foundResult;
     const char **prf = possibleResultFiles;
-    while (*prf != NULL) {              // search for result files
+    while (*prf != nullptr) {              // search for result files
         QString ri = dir.absoluteFilePath(*prf);
         if (QFile::exists(ri)) {            // take first one that matches
             qDebug() << "found result image" << ri;
@@ -198,7 +198,7 @@ bool OcrGocrEngine::finishedOcrProcess(QProcess *proc)
     // This used to replace the introduced image with the result file, having
     // been cleared above:
     //
-    //   if (m_introducedImage!=NULL) delete m_introducedImage;
+    //   if (m_introducedImage!=nullptr) delete m_introducedImage;
     //   m_introducedImage = new KookaImage();
     //   ...
     //   if (!m_ocrResultFile.isNull()) m_introducedImage->load(m_ocrResultFile);
@@ -224,11 +224,11 @@ QStringList OcrGocrEngine::tempFiles(bool retain)
 
     result << m_inputFile << m_resultFile;
 
-    if (m_tempDir != NULL) {
+    if (m_tempDir != nullptr) {
         result << m_tempDir->path();
         m_tempDir->setAutoRemove(!retain);
         delete m_tempDir;               // autoRemove will do the rest
-        m_tempDir = NULL;
+        m_tempDir = nullptr;
     }
 
     return (result);

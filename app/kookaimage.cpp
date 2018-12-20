@@ -66,7 +66,7 @@ KookaImage::KookaImage(const QImage &img)
 void KookaImage::init()
 {
     m_subImages = 0;
-    m_fileItem = NULL;
+    m_fileItem = nullptr;
     m_fileBound = false;
 }
 

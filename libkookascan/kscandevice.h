@@ -145,7 +145,7 @@ public:
     /**
      * Get the SANE scanner handle of the current scanner.
      *
-     * @return The scanner handle, or @c NULL if no scanner is
+     * @return The scanner handle, or @c nullptr if no scanner is
      * currently open.
      **/
     SANE_Handle scannerHandle() const
@@ -288,7 +288,7 @@ public:
      *
      * @param name Name of the SANE parameter.
      * @param parent Parent for widget.
-     * @return A @c KScanOption for the parameter, or @c NULL if none
+     * @return A @c KScanOption for the parameter, or @c nullptr if none
      * could be created.
      *
      * @see KScanOption::createWidget
@@ -301,7 +301,7 @@ public:
      * Find the @c KScanOption for an existing scanner parameter.
      *
      * @param name Name of the SANE parameter.
-     * @return The @c KScanOption for the parameter, or @c NULL if the
+     * @return The @c KScanOption for the parameter, or @c nullptr if the
      * parameter does not exist or it has not been created yet.
      **/
     KScanOption *getExistingGuiElement(const QByteArray &name) const;
@@ -313,9 +313,9 @@ public:
      * @param name Name of the SANE parameter.
      * @param create If the option does not yet exist, then create it if
      * this is @c true (the default).  If this is @c false, then do not
-     * create the option if it does not already exist but return NULL
+     * create the option if it does not already exist but return nullptr
      * instead.
-     * @return The existing or created option, or @c NULL if @p create
+     * @return The existing or created option, or @c nullptr if @p create
      * is @c false and the option does not currently exist.
      * @note This is the only means for a calling library or application
      * to create or obtain a @c KScanOption.
@@ -459,7 +459,7 @@ public:
      * may have changed due to the change in this option; if so, SANE
      * will tell us to reload them.
      *
-     * @param opt The option to @c apply().  If this is @c NULL, this
+     * @param opt The option to @c apply().  If this is @c nullptr, this
      * function is equivalent to @c reloadAllOptions().
      *
      * @note Even if a reload is needed, the scanner option given as the
@@ -494,7 +494,7 @@ signals:
      * @param info Image information, if it is currently available
      * @see sigAcquireStart
      *
-     * @note The @p info parameter may be NULL, or it may not contain
+     * @note The @p info parameter may be nullptr, or it may not contain
      * any useful format information.
      **/
     void sigScanStart(const ImageMetaInfo *info);

@@ -162,7 +162,7 @@ public:
      * @note If the @p toUrl and the @p fromurl both do have a file name
      * extensions, then they must resolve to the same MIME type.
      **/
-    static bool copyImage(const QUrl &fromUrl, const QUrl &toUrl, QWidget *overWidget = NULL);
+    static bool copyImage(const QUrl &fromUrl, const QUrl &toUrl, QWidget *overWidget = nullptr);
 
     /**
      * Rename a image file.
@@ -184,7 +184,7 @@ public:
      * @note If the @p toUrl and the @p fromurl both do have a file name
      * extensions, then they must resolve to the same MIME type.
      **/
-    static bool renameImage(const QUrl &fromUrl, const QUrl &toUrl, bool askExt = false, QWidget *overWidget = NULL);
+    static bool renameImage(const QUrl &fromUrl, const QUrl &toUrl, bool askExt = false, QWidget *overWidget = nullptr);
 
 
 

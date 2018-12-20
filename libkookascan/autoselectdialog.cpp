@@ -63,12 +63,12 @@ AutoSelectDialog::AutoSelectDialog(QWidget *parent)
 
     // slider for add/subtract margin
     const KConfigSkeletonItem *item = ScanSettings::self()->previewAutoselMarginItem();
-    Q_ASSERT(item!=NULL);
+    Q_ASSERT(item!=nullptr);
     int defaultVal = KScanDevice::getDefault<int>(item);
     int maxVal = item->maxValue().toInt();
     int minVal = item->minValue().toInt();
 
-    mMarginSlider = new KScanSlider(NULL, QString::null, minVal, maxVal, true, defaultVal);
+    mMarginSlider = new KScanSlider(nullptr, QString::null, minVal, maxVal, true, defaultVal);
     mMarginSlider->setValue(defaultVal);
     mMarginSlider->setToolTip(item->toolTip());
     connect(mMarginSlider, SIGNAL(settingChanged(int)), SLOT(slotControlChanged()));
@@ -78,7 +78,7 @@ AutoSelectDialog::AutoSelectDialog(QWidget *parent)
 
     // combobox to select whether black or white background
     item = ScanSettings::self()->previewAutoselBackgroundItem();
-    Q_ASSERT(item!=NULL);
+    Q_ASSERT(item!=nullptr);
     mBackgroundCombo = new QComboBox;
     mBackgroundCombo->insertItem(INDEX_BLACK, i18n("Black"));
     mBackgroundCombo->insertItem(INDEX_WHITE, i18n("White"));
@@ -88,12 +88,12 @@ AutoSelectDialog::AutoSelectDialog(QWidget *parent)
 
     // slider for dust size - apparently not really much impact on the result
     item = ScanSettings::self()->previewAutoselDustsizeItem();
-    Q_ASSERT(item!=NULL);
+    Q_ASSERT(item!=nullptr);
     defaultVal = KScanDevice::getDefault<int>(item);
     maxVal = item->maxValue().toInt();
     minVal = item->minValue().toInt();
 
-    mDustsizeSlider = new KScanSlider(NULL, QString::null, minVal, maxVal, true, defaultVal);
+    mDustsizeSlider = new KScanSlider(nullptr, QString::null, minVal, maxVal, true, defaultVal);
     mDustsizeSlider->setValue(defaultVal);
     mDustsizeSlider->setToolTip(item->toolTip());
     connect(mDustsizeSlider, SIGNAL(settingChanged(int)), SLOT(slotControlChanged()));

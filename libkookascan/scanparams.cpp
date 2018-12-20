@@ -101,7 +101,7 @@ ScanParamsPage::ScanParamsPage(QWidget *parent, const char *name)
     mLayout->setColumnMinimumWidth(1, 2*DialogBase::horizontalSpacing());
 
     mNextRow = 0;
-    mPendingGroup = NULL;
+    mPendingGroup = nullptr;
 }
 
 ScanParamsPage::~ScanParamsPage()
@@ -110,16 +110,16 @@ ScanParamsPage::~ScanParamsPage()
 
 void ScanParamsPage::checkPendingGroup()
 {
-    if (mPendingGroup != NULL) {            // separator to add first?
+    if (mPendingGroup != nullptr) {            // separator to add first?
         QWidget *w = mPendingGroup;
-        mPendingGroup = NULL;               // avoid recursion!
+        mPendingGroup = nullptr;               // avoid recursion!
         addRow(w);
     }
 }
 
 void ScanParamsPage::addRow(QWidget *wid)
 {
-    if (wid == NULL) {
+    if (wid == nullptr) {
         return;    // must have one
     }
 
@@ -130,20 +130,20 @@ void ScanParamsPage::addRow(QWidget *wid)
 
 void ScanParamsPage::addRow(QLabel *lab, QWidget *wid, QLabel *unit, Qt::Alignment align)
 {
-    if (wid == NULL) {
+    if (wid == nullptr) {
         return;    // must have one
     }
     wid->setMaximumWidth(MAX_CONTROL_WIDTH);
 
     checkPendingGroup();                // add separator if needed
 
-    if (lab != NULL) {
+    if (lab != nullptr) {
         lab->setMaximumWidth(MAX_LABEL_WIDTH);
         lab->setMinimumWidth(MIN_LABEL_WIDTH);
         mLayout->addWidget(lab, mNextRow, 0, Qt::AlignLeft | align);
     }
 
-    if (unit != NULL) {
+    if (unit != nullptr) {
         mLayout->addWidget(wid, mNextRow, 2, align);
         mLayout->addWidget(unit, mNextRow, 3, Qt::AlignLeft | align);
     } else {
@@ -155,7 +155,7 @@ void ScanParamsPage::addRow(QLabel *lab, QWidget *wid, QLabel *unit, Qt::Alignme
 
 bool ScanParamsPage::lastRow()
 {
-    addGroup(NULL);                 // hide last if present
+    addGroup(nullptr);                 // hide last if present
 
     mLayout->addWidget(new QLabel(QString::null, this), mNextRow, 0, 1, -1, Qt::AlignTop);
     mLayout->setRowStretch(mNextRow, 9);
@@ -165,7 +165,7 @@ bool ScanParamsPage::lastRow()
 
 void ScanParamsPage::addGroup(QWidget *wid)
 {
-    if (mPendingGroup != NULL) {
+    if (mPendingGroup != nullptr) {
         mPendingGroup->hide();    // dont't need this after all
     }
 
@@ -177,16 +177,16 @@ ScanParams::ScanParams(QWidget *parent)
 {
     setObjectName("ScanParams");
 
-    mSaneDevice = NULL;
-    mVirtualFile = NULL;
-    mGammaEditButt = NULL;
-    mResolutionBind = NULL;
-    mProgressDialog = NULL;
-    mSourceSelect = NULL;
-    mLed = NULL;
+    mSaneDevice = nullptr;
+    mVirtualFile = nullptr;
+    mGammaEditButt = nullptr;
+    mResolutionBind = nullptr;
+    mProgressDialog = nullptr;
+    mSourceSelect = nullptr;
+    mLed = nullptr;
 
-    mProblemMessage = NULL;
-    mNoScannerMessage = NULL;
+    mProblemMessage = nullptr;
+    mNoScannerMessage = nullptr;
 }
 
 ScanParams::~ScanParams()
@@ -201,9 +201,9 @@ bool ScanParams::connectDevice(KScanDevice *newScanDevice, bool galleryMode)
     lay->setMargin(0);
     lay->setColumnStretch(0, 9);
 
-    if (newScanDevice == NULL) {            // no scanner device
+    if (newScanDevice == nullptr) {            // no scanner device
         //qDebug() << "No scan device, gallery=" << galleryMode;
-        mSaneDevice = NULL;
+        mSaneDevice = nullptr;
         createNoScannerMsg(galleryMode);
         return (true);
     }
@@ -253,7 +253,7 @@ bool ScanParams::connectDevice(KScanDevice *newScanDevice, bool galleryMode)
     // Send the current settings to the previewer
     initStartupArea(startupOptions.isEmpty());		// signal newCustomScanSize()
     slotNewScanMode();					// signal scanModeChanged()
-    slotNewResolution(NULL);				// signal scanResolutionChanged
+    slotNewResolution(nullptr);				// signal scanResolutionChanged
 
     /* Create the Scan Buttons */
     QPushButton *pb = new QPushButton(QIcon::fromTheme("preview"), i18n("Pre&view"), this);
@@ -269,7 +269,7 @@ bool ScanParams::connectDevice(KScanDevice *newScanDevice, bool galleryMode)
     lay->addWidget(pb, 5, 1, Qt::AlignRight);
 
     /* Initialise the progress dialog */
-    mProgressDialog = new QProgressDialog(QString::null, i18n("Stop"), 0, 100, NULL);
+    mProgressDialog = new QProgressDialog(QString::null, i18n("Stop"), 0, 100, nullptr);
     mProgressDialog->setModal(true);
     mProgressDialog->setAutoClose(true);
     mProgressDialog->setAutoReset(true);
@@ -327,7 +327,7 @@ QWidget *ScanParams::createScannerParams()
 
     // Virtual/debug image file
     mVirtualFile = mSaneDevice->getGuiElement(SANE_NAME_FILE, frame);
-    if (mVirtualFile != NULL) {
+    if (mVirtualFile != nullptr) {
         connect(mVirtualFile, &KScanOption::guiChange, this, &ScanParams::slotOptionChanged);
 
         l = mVirtualFile->getLabel(frame, true);
@@ -358,7 +358,7 @@ QWidget *ScanParams::createScannerParams()
         connect(vbgGroup, static_cast<void (QButtonGroup::*)(int)>(&QButtonGroup::buttonClicked), this, &ScanParams::slotVirtScanModeSelect);
 
         l = new QLabel(i18n("Reading mode:"), frame);
-        frame->addRow(l, vbg, NULL, Qt::AlignTop);
+        frame->addRow(l, vbg, nullptr, Qt::AlignTop);
 
         // Separator line after these.  Using a KScanGroup with a null text,
         // so that it looks the same as any real group separators following.
@@ -367,7 +367,7 @@ QWidget *ScanParams::createScannerParams()
 
     // Mode setting
     so = mSaneDevice->getGuiElement(SANE_NAME_SCAN_MODE, frame);
-    if (so != NULL) {
+    if (so != nullptr) {
         KScanCombo *cb = (KScanCombo *) so->widget();
 
         // The option display strings are translated via the 'sane-backends' message
@@ -402,10 +402,10 @@ QWidget *ScanParams::createScannerParams()
     // option then try just "Resolution", this may not be the same as
     // "X-Resolution" even though this was the case in SANE<=1.0.19.
     so = mSaneDevice->getGuiElement(SANE_NAME_SCAN_X_RESOLUTION, frame);
-    if (so == NULL) {
+    if (so == nullptr) {
         so = mSaneDevice->getGuiElement(SANE_NAME_SCAN_RESOLUTION, frame);
     }
-    if (so != NULL) {
+    if (so != nullptr) {
         connect(so, &KScanOption::guiChange, this, &ScanParams::slotOptionChanged);
         // Connection that passes the resolution to the previewer
         connect(so, &KScanOption::guiChange, this, &ScanParams::slotNewResolution);
@@ -417,7 +417,7 @@ QWidget *ScanParams::createScannerParams()
 
         // Same X/Y resolution option (if present)
         mResolutionBind = mSaneDevice->getGuiElement(SANE_NAME_RESOLUTION_BIND, frame);
-        if (mResolutionBind != NULL) {
+        if (mResolutionBind != nullptr) {
             connect(mResolutionBind, &KScanOption::guiChange, this, &ScanParams::slotOptionChanged);
 
             l = so->getLabel(frame, true);
@@ -427,7 +427,7 @@ QWidget *ScanParams::createScannerParams()
 
         // Now the "Y-Resolution" setting, if there is a separate one
         so = mSaneDevice->getGuiElement(SANE_NAME_SCAN_Y_RESOLUTION, frame);
-        if (so!=NULL)
+        if (so!=nullptr)
         {
             // Connection that passes the resolution to the previewer
             connect(so, &KScanOption::guiChange, this, &ScanParams::slotNewResolution);
@@ -446,14 +446,14 @@ QWidget *ScanParams::createScannerParams()
     connect(mAreaSelect, &ScanSizeSelector::sizeSelected, this, &ScanParams::slotScanSizeSelected);
     l = new QLabel("Scan &area:", frame);       // make sure it gets an accel
     l->setBuddy(mAreaSelect->focusProxy());
-    frame->addRow(l, mAreaSelect, NULL, Qt::AlignTop);
+    frame->addRow(l, mAreaSelect, nullptr, Qt::AlignTop);
 
     // Insert another beautification line
     frame->addGroup(new KScanGroup(frame, QString::null));
 
     // Source selection
     mSourceSelect = mSaneDevice->getGuiElement(SANE_NAME_SCAN_SOURCE, frame);
-    if (mSourceSelect != NULL) {
+    if (mSourceSelect != nullptr) {
         connect(mSourceSelect, &KScanOption::guiChange, this, &ScanParams::slotOptionChanged);
 
         l = mSourceSelect->getLabel(frame, true);
@@ -471,7 +471,7 @@ QWidget *ScanParams::createScannerParams()
 
     // SANE testing options, for the "test" device
     so = mSaneDevice->getGuiElement(SANE_NAME_TEST_PICTURE, frame);
-    if (so != NULL) {
+    if (so != nullptr) {
         connect(so, &KScanOption::guiChange, this, &ScanParams::slotOptionChanged);
 
         l = so->getLabel(frame);
@@ -495,12 +495,12 @@ QWidget *ScanParams::createScannerParams()
         }
 
         so = mSaneDevice->getExistingGuiElement(opt);   // see if already created
-        if (so != NULL) {
+        if (so != nullptr) {
             continue;    // if so ignore, don't duplicate
         }
 
         so = mSaneDevice->getGuiElement(opt, frame);
-        if (so != NULL) {
+        if (so != nullptr) {
             //qDebug() << "creating" << (so->isCommonOption() ? "OTHER" : "ADVANCED") << "option" << opt;
             connect(so, &KScanOption::guiChange, this, &ScanParams::slotOptionChanged);
 
@@ -532,7 +532,7 @@ QWidget *ScanParams::createScannerParams()
                 connect(mGammaEditButt, &QPushButton::clicked, this, &ScanParams::slotEditCustGamma);
                 setEditCustomGammaTableState();
 
-                frame->addRow(NULL, mGammaEditButt, NULL, Qt::AlignRight);
+                frame->addRow(nullptr, mGammaEditButt, nullptr, Qt::AlignRight);
             }
         }
     }
@@ -586,7 +586,7 @@ void ScanParams::createNoScannerMsg(bool galleryMode)
     }
 
     QGridLayout *lay = dynamic_cast<QGridLayout *>(layout());
-    if (lay != NULL) {
+    if (lay != nullptr) {
         lay->addWidget(lab, 0, 0, Qt::AlignTop);
     }
 }
@@ -652,7 +652,7 @@ void ScanParams::slotSourceSelect()
 // TODO: port/update
     AdfBehaviour adf = ADF_OFF;
 
-    if (mSourceSelect == NULL) {
+    if (mSourceSelect == nullptr) {
         return;    // no source selection GUI
     }
     if (!mSourceSelect->isValid()) {
@@ -732,7 +732,7 @@ KScanDevice::Status ScanParams::prepareScan(QString *vfp)
 
     QString virtfile;
     if (mScanMode == ScanParams::SaneDebugMode || mScanMode == ScanParams::VirtualScannerMode) {
-        if (mVirtualFile != NULL) {
+        if (mVirtualFile != nullptr) {
             virtfile = QFile::decodeName(mVirtualFile->get());
         }
         if (virtfile.isEmpty()) {
@@ -759,7 +759,7 @@ KScanDevice::Status ScanParams::prepareScan(QString *vfp)
         }
     }
 
-    if (vfp != NULL) {
+    if (vfp != nullptr) {
         *vfp = virtfile;
     }
     return (KScanDevice::Ok);
@@ -803,7 +803,7 @@ void ScanParams::slotAcquirePreview()
 
     KScanOption *greyPreview = mSaneDevice->getExistingGuiElement(SANE_NAME_GRAY_PREVIEW);
     int gp = 0;
-    if (greyPreview != NULL) {
+    if (greyPreview != nullptr) {
         greyPreview->get(&gp);
     }
 
@@ -853,7 +853,7 @@ void ScanParams::slotStartScan()
 bool ScanParams::getGammaTableFrom(const QByteArray &opt, KGammaTable *gt)
 {
     KScanOption *so = mSaneDevice->getOption(opt, false);
-    if (so == NULL) {
+    if (so == nullptr) {
         return (false);
     }
 
@@ -867,7 +867,7 @@ bool ScanParams::getGammaTableFrom(const QByteArray &opt, KGammaTable *gt)
 bool ScanParams::setGammaTableTo(const QByteArray &opt, const KGammaTable *gt)
 {
     KScanOption *so = mSaneDevice->getOption(opt, false);
-    if (so == NULL) {
+    if (so == nullptr) {
         return (false);
     }
 
@@ -909,14 +909,14 @@ void ScanParams::slotEditCustGamma()
 
 void ScanParams::slotApplyGamma(const KGammaTable *gt)
 {
-    if (gt == NULL) {
+    if (gt == nullptr) {
         return;
     }
 
     bool reload = false;
 
     KScanOption *so = mSaneDevice->getOption(SANE_NAME_CUSTOM_GAMMA);
-    if (so != NULL) {               // do we have a gamma switch?
+    if (so != nullptr) {               // do we have a gamma switch?
         int cg = 0;
         if (so->get(&cg) && !cg) {          // yes, see if already on
             // if not, set it on now
@@ -943,7 +943,7 @@ void ScanParams::slotApplyGamma(const KGammaTable *gt)
 
 void ScanParams::slotOptionChanged(KScanOption *so)
 {
-    if (so == NULL || mSaneDevice == NULL) {
+    if (so == nullptr || mSaneDevice == nullptr) {
         return;
     }
     mSaneDevice->applyOption(so);
@@ -957,44 +957,44 @@ void ScanParams::slotOptionChanged(KScanOption *so)
 
 void ScanParams::setEditCustomGammaTableState()
 {
-    if (mSaneDevice == NULL) {
+    if (mSaneDevice == nullptr) {
         return;
     }
-    if (mGammaEditButt == NULL) {
+    if (mGammaEditButt == nullptr) {
         return;
     }
 
     bool butState = false;
 
     KScanOption *so = mSaneDevice->getOption(SANE_NAME_CUSTOM_GAMMA, false);
-    if (so != NULL) {
+    if (so != nullptr) {
         butState = so->isActive();
     }
 
     if (!butState) {
         KScanOption *so = mSaneDevice->getOption(SANE_NAME_GAMMA_VECTOR, false);
-        if (so != NULL) {
+        if (so != nullptr) {
             butState = so->isActive();
         }
     }
 
     if (!butState) {
         KScanOption *so = mSaneDevice->getOption(SANE_NAME_GAMMA_VECTOR_R, false);
-        if (so != NULL) {
+        if (so != nullptr) {
             butState = so->isActive();
         }
     }
 
     if (!butState) {
         KScanOption *so = mSaneDevice->getOption(SANE_NAME_GAMMA_VECTOR_G, false);
-        if (so != NULL) {
+        if (so != nullptr) {
             butState = so->isActive();
         }
     }
 
     if (!butState) {
         KScanOption *so = mSaneDevice->getOption(SANE_NAME_GAMMA_VECTOR_B, false);
-        if (so != NULL) {
+        if (so != nullptr) {
             butState = so->isActive();
         }
     }
@@ -1084,18 +1084,18 @@ void ScanParams::setMaximalScanSize()
 void ScanParams::slotNewResolution(KScanOption *opt)
 {
     KScanOption *opt_x = mSaneDevice->getExistingGuiElement(SANE_NAME_SCAN_X_RESOLUTION);
-    if (opt_x == NULL) {
+    if (opt_x == nullptr) {
         opt_x = mSaneDevice->getExistingGuiElement(SANE_NAME_SCAN_RESOLUTION);
     }
     KScanOption *opt_y = mSaneDevice->getExistingGuiElement(SANE_NAME_SCAN_Y_RESOLUTION);
 
     int x_res = 0;                                      // get the X resolution
-    if (opt_x != NULL && opt_x->isValid()) {
+    if (opt_x != nullptr && opt_x->isValid()) {
         opt_x->get(&x_res);
     }
 
     int y_res = 0;                                      // get the Y resolution
-    if (opt_y != NULL && opt_y->isValid()) {
+    if (opt_y != nullptr && opt_y->isValid()) {
         opt_y->get(&y_res);
     }
 

@@ -42,12 +42,12 @@ extern "C" {
 }
 
 
-static ScanGlobal *sInstance = NULL;
-static KScanDevice *sScanDevice = NULL;
+static ScanGlobal *sInstance = nullptr;
+static KScanDevice *sScanDevice = nullptr;
 
 ScanGlobal *ScanGlobal::self()
 {
-    if (sInstance == NULL) {
+    if (sInstance == nullptr) {
         sInstance = new ScanGlobal();
     }
     return (sInstance);
@@ -90,7 +90,7 @@ extern "C" void authCallback(SANE_String_Const resource,
 {
     //qDebug() << "for resource" << resource;
 
-    if (sScanDevice == NULL) {          // no device set
+    if (sScanDevice == nullptr) {          // no device set
         //qDebug() << "cannot authenticate, no device";
         return;
     }
@@ -118,7 +118,7 @@ bool ScanGlobal::init()
     }
 
     //qDebug() << "calling sane_init()";
-    SANE_Status status = sane_init(NULL, &authCallback);
+    SANE_Status status = sane_init(nullptr, &authCallback);
     if (status != SANE_STATUS_GOOD) {
         mSaneInitError = true;
         qDebug() << "sane_init() failed, status" << status;

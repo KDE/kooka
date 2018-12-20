@@ -43,7 +43,7 @@
 DialogStateWatcher::DialogStateWatcher(QDialog *pnt)
     : QObject(pnt)
 {
-    Q_ASSERT(pnt!=NULL);
+    Q_ASSERT(pnt!=nullptr);
     mParent = pnt;
     mParent->installEventFilter(this);
     connect(mParent, &QDialog::accepted, this, &DialogStateWatcher::saveConfigInternal);
@@ -72,14 +72,14 @@ bool DialogStateWatcher::eventFilter(QObject *obj, QEvent *ev)
 
 void DialogStateWatcher::restoreConfigInternal()
 {
-    if (mStateSaver==NULL) return;			// no saver set or provided
+    if (mStateSaver==nullptr) return;			// no saver set or provided
     mStateSaver->restoreConfig();
 }
 
 
 void DialogStateWatcher::saveConfigInternal() const
 {
-    if (mStateSaver==NULL) return;			// no saver set or provided
+    if (mStateSaver==nullptr) return;			// no saver set or provided
     mStateSaver->saveConfig();
 }
 
@@ -87,7 +87,7 @@ void DialogStateWatcher::saveConfigInternal() const
 void DialogStateWatcher::setStateSaver(DialogStateSaver *saver)
 {
     // We only delete the existing saver if we created it.
-    if (mStateSaver!=NULL && mHaveOwnSaver) delete mStateSaver;
+    if (mStateSaver!=nullptr && mHaveOwnSaver) delete mStateSaver;
 
     mStateSaver = saver;				// set the new one
     mHaveOwnSaver = false;				// note that it's not ours
