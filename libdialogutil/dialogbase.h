@@ -225,7 +225,7 @@ protected:
     /**
      * @reimp
      **/
-    virtual void showEvent(QShowEvent *ev) override;
+    void showEvent(QShowEvent *ev) override;
 
 private:
     QDialogButtonBox *mButtonBox;

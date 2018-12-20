@@ -69,7 +69,7 @@ public:
                   QGraphicsItem *parent = nullptr);
     virtual ~HighlightItem()                {}
 
-    virtual QRectF boundingRect() const override;
+    QRectF boundingRect() const override;
 
     virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
                        QWidget *widget = nullptr) override;
@@ -122,16 +122,16 @@ void HighlightItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *opt
 class SelectionItem : public QGraphicsItem
 {
 public:
-    SelectionItem(QGraphicsItem *parent = nullptr);
-    virtual ~SelectionItem()                {}
+    explicit SelectionItem(QGraphicsItem *parent = nullptr);
+    ~SelectionItem() override {}
 
-    virtual QRectF boundingRect() const override;
+    QRectF boundingRect() const override;
     void setRect(const QRectF &rect);
 
     void stepDashPattern();
     void resetDashPattern();
 
-    virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
                        QWidget *widget = nullptr) override;
 
 private:

@@ -39,7 +39,7 @@ protected:
      *
      * @see ScanParams::meessageScannerNotSelected
      */
-    virtual QWidget *messageScannerNotSelected() override;
+    QWidget *messageScannerNotSelected() override;
 
 signals:
     void actionSelectScanner();

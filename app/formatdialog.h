@@ -68,7 +68,7 @@ public:
     static void forgetRemembered();
 
 protected:
-    void showEvent(QShowEvent *ev) Q_DECL_OVERRIDE;
+    void showEvent(QShowEvent *ev) override;
 protected slots:
     void slotOk();
     void slotUser1();

@@ -60,7 +60,7 @@ signals:
     void done(const QUrl &imageUrl);
 
 protected:
-    virtual void run() override;
+    void run() override;
 
 private:
     ImageTransform::Operation mOperation;
