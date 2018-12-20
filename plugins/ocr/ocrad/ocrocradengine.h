@@ -36,8 +36,8 @@ class OcrOcradEngine : public AbstractOcrEngine
     Q_OBJECT
 
 public:
-    OcrOcradEngine(QObject *pnt, const QVariantList &args);
-    virtual ~OcrOcradEngine() = default;
+    explicit OcrOcradEngine(QObject *pnt, const QVariantList &args);
+    ~OcrOcradEngine() override = default;
 
     AbstractOcrDialogue *createOcrDialogue(AbstractOcrEngine *plugin, QWidget *pnt) override;
 

@@ -46,7 +46,7 @@ class NewScanParams : public DialogBase
     Q_OBJECT
 
 public:
-    NewScanParams(QWidget *parent, const QString &name, const QString &desc, bool renaming);
+    explicit NewScanParams(QWidget *parent, const QString &name, const QString &desc, bool renaming);
 
     QString getName() const;
     QString getDescription() const;

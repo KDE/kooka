@@ -31,7 +31,7 @@ class KookaScanParams : public ScanParams
 
 public:
     explicit KookaScanParams(QWidget *parent);
-    virtual ~KookaScanParams() = default;
+    ~KookaScanParams() override = default;
 
 protected:
     /**

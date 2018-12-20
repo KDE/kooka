@@ -83,7 +83,7 @@ public:
      * be saved.  If it does not exist, it will be created at this point.
      * The default is the current gallery root.
      **/
-    ImgSaver(const QUrl &dir = QUrl());
+    explicit ImgSaver(const QUrl &dir = QUrl());
 
     /**
      * Save an image.

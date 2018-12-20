@@ -59,8 +59,8 @@ class PhotoCopyPrintDialogPage: public QWidget
     Q_OBJECT
 
 public:
-    PhotoCopyPrintDialogPage(KScanDevice *newScanDevice);
-    ~PhotoCopyPrintDialogPage();
+    explicit PhotoCopyPrintDialogPage(KScanDevice *newScanDevice);
+    virtual ~PhotoCopyPrintDialogPage();
 
     void setOptions(const QMap<QString, QString> &opts);
     void getOptions(QMap<QString, QString> &opts, bool include_def = false);

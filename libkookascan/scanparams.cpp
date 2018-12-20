@@ -1133,7 +1133,7 @@ void ScanParams::slotNewScanMode()
     }
 }
 
-KScanDevice::Status ScanParams::performADFScan(void)
+KScanDevice::Status ScanParams::performADFScan()
 {
     KScanDevice::Status stat = KScanDevice::Ok;
     bool          scan_on = true;

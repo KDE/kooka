@@ -44,8 +44,8 @@ class OcrGocrEngine : public AbstractOcrEngine
     Q_OBJECT
 
 public:
-    OcrGocrEngine(QObject *pnt, const QVariantList &args);
-    virtual ~OcrGocrEngine() = default;
+    explicit OcrGocrEngine(QObject *pnt, const QVariantList &args);
+    ~OcrGocrEngine() override = default;
 
     AbstractOcrDialogue *createOcrDialogue(AbstractOcrEngine *plugin, QWidget *pnt) override;
 

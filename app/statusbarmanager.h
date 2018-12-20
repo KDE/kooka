@@ -71,7 +71,7 @@ public:
      *
      * @param mainWindow The parent main window
      **/
-    StatusBarManager(KXmlGuiWindow *mainWindow);
+    explicit StatusBarManager(KXmlGuiWindow *mainWindow);
 
     /**
      * Destructor.

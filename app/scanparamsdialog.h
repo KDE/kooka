@@ -52,7 +52,7 @@ class ScanParamsDialog : public DialogBase
     Q_OBJECT
 
 public:
-    ScanParamsDialog(QWidget *parent, KScanDevice *scandev);
+    explicit ScanParamsDialog(QWidget *parent, KScanDevice *scandev);
 
 protected slots:
     void slotSelectionChanged();

@@ -36,13 +36,13 @@ class KOOKASCAN_EXPORT ScanDialog : public KScanDialog
     Q_OBJECT
 
 public:
-    ScanDialog(QWidget *parent = 0, const char *name = 0, bool modal = false);
+    explicit ScanDialog(QWidget *parent = nullptr, const char *name = 0, bool modal = false);
     ~ScanDialog();
 
     virtual bool setup();
 
 private:
-    void createOptionsTab(void);
+    void createOptionsTab();
 
 protected slots:
     void slotFinalImage(QImage *, ImgScanInfo *);

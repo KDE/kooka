@@ -53,7 +53,7 @@ class OcrOcradDialog : public AbstractOcrDialogue
 
 public:
     explicit OcrOcradDialog(AbstractOcrEngine *plugin, QWidget *pnt);
-    virtual ~OcrOcradDialog() = default;
+    ~OcrOcradDialog() override = default;
 
     bool setupGui() override;
 

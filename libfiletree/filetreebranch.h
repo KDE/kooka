@@ -61,7 +61,7 @@ public:
      *        branch, with the default nullptr meaning to let FileTreeBranch create
      *        it for you.
      */
-    FileTreeBranch(FileTreeView *parent, const QUrl &url, const QString &name,
+    explicit FileTreeBranch(FileTreeView *parent, const QUrl &url, const QString &name,
                    const QIcon &pix, bool showHidden = false,
                    FileTreeViewItem *branchRoot = nullptr);
 

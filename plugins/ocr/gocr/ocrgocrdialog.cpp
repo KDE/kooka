@@ -129,7 +129,7 @@ void OcrGocrDialog::introduceImage(const KookaImage *img)
 }
 
 
-void OcrGocrDialog::slotWriteConfig(void)
+void OcrGocrDialog::slotWriteConfig()
 {
     AbstractOcrDialogue::slotWriteConfig();
 

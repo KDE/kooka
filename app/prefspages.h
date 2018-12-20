@@ -54,7 +54,7 @@ class KookaPrefsPage : public QWidget
     Q_OBJECT
 
 public:
-    KookaPrefsPage(KPageDialog *parent);
+    explicit KookaPrefsPage(KPageDialog *parent);
     virtual ~KookaPrefsPage() = default;
 
     virtual void saveSettings() = 0;
@@ -69,7 +69,7 @@ class KookaGeneralPage : public KookaPrefsPage
     Q_OBJECT
 
 public:
-    KookaGeneralPage(KPageDialog *parent);
+    explicit KookaGeneralPage(KPageDialog *parent);
 
     void saveSettings() override;
     void defaultSettings() override;
@@ -87,7 +87,7 @@ class KookaStartupPage : public KookaPrefsPage
     Q_OBJECT
 
 public:
-    KookaStartupPage(KPageDialog *parent);
+    explicit KookaStartupPage(KPageDialog *parent);
 
     void saveSettings() override;
     void defaultSettings() override;
@@ -106,7 +106,7 @@ class KookaSavingPage : public KookaPrefsPage
     Q_OBJECT
 
 public:
-    KookaSavingPage(KPageDialog *parent);
+    explicit KookaSavingPage(KPageDialog *parent);
 
     void saveSettings() override;
     void defaultSettings() override;

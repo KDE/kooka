@@ -63,7 +63,7 @@ public:
      * drops.  The caller must use @c setAcceptDrops(true) for drops to be
      * accepted, and @c setDragEnabled(true) for drags to be accepted.
      **/
-    FileTreeView(QWidget *parent = Q_NULLPTR);
+    explicit FileTreeView(QWidget *parent = nullptr);
 
     /**
      * Destructor.  All of the branches are automatically deleted.

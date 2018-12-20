@@ -54,7 +54,7 @@ class KOOKASCAN_EXPORT Previewer : public QFrame
     Q_OBJECT
 
 public:
-    Previewer(QWidget *parent = Q_NULLPTR);
+    explicit Previewer(QWidget *parent = nullptr);
     virtual ~Previewer();
 
     ImageCanvas *getImageCanvas() const

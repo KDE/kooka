@@ -50,7 +50,7 @@ class ThumbView : public KDirOperator
     Q_OBJECT
 
 public:
-    ThumbView(QWidget *parent);
+    explicit ThumbView(QWidget *parent);
     ~ThumbView();
 
     QMenu *contextMenu() const

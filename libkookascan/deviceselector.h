@@ -81,7 +81,7 @@ public:
      * @param cancelGuiItem GUI item for the "Cancel" button, if required
      * to replace the default.
      **/
-    DeviceSelector(QWidget *pnt, const QList<QByteArray> &backends, const KGuiItem &cancelGuiItem = KGuiItem());
+    explicit DeviceSelector(QWidget *pnt, const QList<QByteArray> &backends, const KGuiItem &cancelGuiItem = KGuiItem());
 
     /**
      * Destructor.

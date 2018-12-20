@@ -52,8 +52,8 @@ class ScanGallery : public FileTreeView
     Q_OBJECT
 
 public:
-    ScanGallery(QWidget *parent);
-    ~ScanGallery();
+    explicit ScanGallery(QWidget *parent);
+    ~ScanGallery() override;
 
     QString currentImageFileName() const;
     const KookaImage *getCurrImage(bool loadOnDemand = false);

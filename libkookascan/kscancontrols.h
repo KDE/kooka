@@ -68,7 +68,7 @@ public:
      * @param parent The parent widget
      * @param text Text label for control
      */
-    KScanControl(QWidget *parent, const QString &text);
+    explicit KScanControl(QWidget *parent, const QString &text);
 
     /**
      * Destructs the control and any child widgets that it uses.

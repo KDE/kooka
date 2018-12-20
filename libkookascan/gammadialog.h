@@ -63,7 +63,7 @@ public:
      * @param table Gamma table to take initial values from
      * @param parent Parent widget
      **/
-    GammaDialog(const KGammaTable *table, QWidget *parent = Q_NULLPTR);
+    explicit GammaDialog(const KGammaTable *table, QWidget *parent = nullptr);
 
     /**
      * Destructor.

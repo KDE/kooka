@@ -48,7 +48,7 @@ class KOOKASCAN_EXPORT ScanSizeSelector : public QFrame
     Q_OBJECT
 
 public:
-    ScanSizeSelector(QWidget *parent, const QSize &bedSize);
+    explicit ScanSizeSelector(QWidget *parent, const QSize &bedSize);
     ~ScanSizeSelector();
 
     void selectCustomSize(const QRect &rect);

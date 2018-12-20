@@ -75,7 +75,7 @@ public:
      * from a configuration file, the set name specified here is used as
      * the group name.
      **/
-    KScanOptSet(const QString &setName);
+    explicit KScanOptSet(const QString &setName);
 
     /**
      * Destructor.

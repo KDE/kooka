@@ -71,7 +71,7 @@ public:
     /**
      * Destructor.
      **/
-    virtual ~DialogStateWatcher() = default;
+    ~DialogStateWatcher() override = default;
 
     /**
      * Set a state saver for the dialog being watched.

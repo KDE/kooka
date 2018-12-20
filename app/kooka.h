@@ -58,12 +58,12 @@ public:
     /**
      * Default Constructor
      */
-    Kooka(const QByteArray &deviceToUse);
+    explicit Kooka(const QByteArray &deviceToUse);
 
     /**
      * Default Destructor
      */
-    ~Kooka();
+    ~Kooka() override;
 
     /**
      * Startup, loads (at the moment) only the last displayed image

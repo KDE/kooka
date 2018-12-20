@@ -47,7 +47,7 @@ class Q3ButtonGroup;
 class KadmosClassifier   /* Not yet used FIXME */
 {
 public:
-    KadmosClassifier(QString lang, QString filename);
+    virtual KadmosClassifier(const QString &lang, const QString &filename);
 
     QString getCmplFilename() const
     {

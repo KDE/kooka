@@ -59,7 +59,7 @@ public:
      * @param parent Parent widget
      * @param caption Caption for the dialogue
      **/
-    AddDeviceDialog(QWidget *parent, const QString &caption);
+    explicit AddDeviceDialog(QWidget *parent, const QString &caption);
 
     /**
      * Destructor.

@@ -55,7 +55,7 @@ class FormatDialog : public DialogBase
     Q_OBJECT
 
 public:
-    FormatDialog(QWidget *parent, ImageMetaInfo::ImageType type,
+    explicit FormatDialog(QWidget *parent, ImageMetaInfo::ImageType type,
                  bool askForFormat, const ImageFormat &format,
                  bool askForFilename, const QString &filename);
 
@@ -63,7 +63,7 @@ public:
     QByteArray getSubFormat() const;
     QString getFilename() const;
     bool alwaysUseFormat() const;
-    bool useAssistant() const    			{ return (mWantAssistant); }
+    bool useAssistant() const    			{ return mWantAssistant; }
 
     static void forgetRemembered();
 

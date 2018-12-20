@@ -47,7 +47,7 @@ public:
      * @param parent  The parent widget
      * @param name    Qt object name
      */
-    ScanParamsPage(QWidget *parent, const char *name = nullptr);
+    explicit ScanParamsPage(QWidget *parent, const char *name = nullptr);
 
     /**
      * Destructor.

@@ -48,7 +48,7 @@ class KOOKASCAN_EXPORT ImgScaleDialog : public DialogBase
     Q_OBJECT
 
 public:
-    explicit ImgScaleDialog(QWidget *parent = Q_NULLPTR, int curr_sel = 100);
+    explicit ImgScaleDialog(QWidget *parent = nullptr, int curr_sel = 100);
     virtual ~ImgScaleDialog()				{}
 
     int getSelected() const;

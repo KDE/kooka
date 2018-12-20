@@ -53,12 +53,12 @@ public:
      * @param table The gamma table to display
      * @param parent Parent widget
      **/
-    GammaWidget(KGammaTable *table, QWidget *parent = Q_NULLPTR);
+    explicit GammaWidget(KGammaTable *table, QWidget *parent = nullptr);
 
     /**
      * Destructor.
      **/
-    virtual ~GammaWidget() {}
+    ~GammaWidget() override {}
 
     /**
      * Reimplemented

@@ -51,9 +51,9 @@ public:
         MirrorBoth                  // effectively same as Rotate180
     };
 
-    ImageTransform(const QImage &img, ImageTransform::Operation op,
-                   QString fileName, QObject *parent = nullptr);
-    virtual ~ImageTransform();
+    explicit ImageTransform(const QImage &img, ImageTransform::Operation op,
+                   const QString fileName, QObject *parent = nullptr);
+    ~ImageTransform() override;
 
 signals:
     void statusMessage(const QString &message);

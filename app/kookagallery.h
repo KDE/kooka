@@ -51,7 +51,7 @@ public:
         RecentAtBottom
     };
 
-    KookaGallery(QWidget *parent);
+    explicit KookaGallery(QWidget *parent);
 
     void readSettings();
 

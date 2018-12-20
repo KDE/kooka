@@ -40,13 +40,13 @@ class KOOKASCAN_EXPORT ScanSourceDialog : public KDialog
     Q_OBJECT
 
 public:
-    ScanSourceDialog(QWidget *parent, const QList<QByteArray> list, AdfBehaviour adfBehave);
+    explicit ScanSourceDialog(QWidget *parent, const QList<QByteArray> list, AdfBehaviour adfBehave);
     ~ScanSourceDialog();
 
     // void     fillWithSources( QStrList *list );
-    QString     getText(void) const;
+    QString     getText() const;
 
-    AdfBehaviour    getAdfBehave(void) const;
+    AdfBehaviour    getAdfBehave() const;
     int sourceAdfEntry() const;
 
 public slots:

@@ -56,7 +56,7 @@ class ImgPrintDialog : public QWidget
     Q_OBJECT
 
 public:
-    ImgPrintDialog(const KookaImage *img, KookaPrint *prt, QWidget *pnt = nullptr);
+    explicit ImgPrintDialog(const KookaImage *img, KookaPrint *prt, QWidget *pnt = nullptr);
     virtual ~ImgPrintDialog() = default;
 
     QString checkValid() const;

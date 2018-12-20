@@ -101,7 +101,7 @@ public:
     /**
      * Default constructor
      */
-    KookaView(KMainWindow *parent, const QByteArray &deviceToUse);
+    explicit KookaView(KMainWindow *parent, const QByteArray &deviceToUse);
 
     /**
      * Destructor

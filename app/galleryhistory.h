@@ -40,7 +40,7 @@ class GalleryHistory : public KComboBox
     Q_OBJECT
 
 public:
-    GalleryHistory(QWidget *parent);
+    explicit GalleryHistory(QWidget *parent);
 
 public slots:
     void slotPathChanged(const FileTreeBranch *branch, const QString &relPath);

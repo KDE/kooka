@@ -42,7 +42,7 @@ class KookaPref : public KPageDialog
     Q_OBJECT
 
 public:
-    KookaPref(QWidget *parent = Q_NULLPTR);
+    explicit KookaPref(QWidget *parent = nullptr);
 
     int createPage(KookaPrefsPage *page, const QString &name,
                    const QString &header, const char *icon);

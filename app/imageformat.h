@@ -44,7 +44,7 @@ class KOOKACORE_EXPORT ImageFormat
 {
 
 public:
-    ImageFormat(const QByteArray &format);
+    explicit ImageFormat(const QByteArray &format);
 
     bool isValid() const;
     const char *name() const;
