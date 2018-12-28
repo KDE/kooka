@@ -497,7 +497,7 @@ QString AbstractOcrEngine::findExecutable(QString (*settingFunc)(), KConfigSkele
         qDebug() << "configured" << exec << "not usable";
         setErrorText(xi18nc("@info", "The executable <filename>%1</filename> does not exist or is not usable.", fi.absoluteFilePath()));
         return (QString());
-            }
+    }
 
     qDebug() << "found" << exec;
     return (exec);
@@ -565,9 +565,16 @@ void AbstractOcrEngine::slotProcessExited(int exitCode, QProcess::ExitStatus exi
     bool success = (exitStatus==QProcess::NormalExit && exitCode==0);
     if (!success)					// OCR command failed
     {
-        setErrorText(xi18nc("@info", "Command <command>%1</command> %2 with exit status <numid>%3</numid>",
-                            m_ocrProcess->program(),
-                            (exitStatus==QProcess::CrashExit ? i18n("crashed") : i18n("failed")), exitCode));
+        if (exitStatus==QProcess::CrashExit)
+        {
+            setErrorText(xi18nc("@info", "Command <command>%1</command> crashed with exit status <numid>%2</numid>",
+                                m_ocrProcess->program(), exitCode));
+        }
+        else
+        {
+            setErrorText(xi18nc("@info", "Command <command>%1</command> exited with status <numid>%2</numid>",
+                                m_ocrProcess->program(), exitCode));
+        }
 
         const QString msg = collectErrorMessages(xi18nc("@info", "Running the OCR process failed."),
                                                  xi18nc("@info", "More information may be available in its <link url=\"%1\">standard error</link> log file.",
