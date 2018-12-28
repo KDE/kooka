@@ -610,6 +610,7 @@ QWidget *ScanParams::messageScannerNotSelected()
     return (mNoScannerMessage);
 }
 
+
 QWidget *ScanParams::messageScannerProblem()
 {
     if (mProblemMessage==nullptr)
@@ -633,16 +634,11 @@ QWidget *ScanParams::messageScannerProblem()
         mProblemMessage->setIcon(QIcon::fromTheme("dialog-warning"));
         mProblemMessage->setCloseButtonVisible(false);
         mProblemMessage->setWordWrap(true);
-        connect(mProblemMessage, &KMessageWidget::linkActivated, this, &ScanParams::slotMessageLinkActivated);
+        connect(mProblemMessage, &KMessageWidget::linkActivated,
+                [](const QString &link){ QDesktopServices::openUrl(QUrl(link)); });
     }
 
     return (mProblemMessage);
-}
-
-
-void ScanParams::slotMessageLinkActivated(const QString &link)
-{
-    QDesktopServices::openUrl(QUrl(link));
 }
 
 

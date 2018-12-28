@@ -282,7 +282,6 @@ signals:
 
 private slots:
     void slotScanProgress(int value);
-    void slotMessageLinkActivated(const QString &link);
 
 private:
 
