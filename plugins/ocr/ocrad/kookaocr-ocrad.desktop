@@ -15,6 +15,7 @@ Name[pt]=OCRAD
 Name[sv]=OCRAD
 Name[uk]=OCRAD
 Name[x-test]=xxOCRADxx
+Name[zh_CN]=OCRAD
 Name[zh_TW]=OCRAD
 Comment=<emphasis>OCRAD</emphasis> is an free software OCR engine by Antonio&nbsp;Diaz, part of the GNU&nbsp;Project.<nl/><nl/>Images for OCR should be scanned in black/white (lineart) mode. Best results are achieved if the characters are at least 20&nbsp;pixels high. Problems may arise, as usual, with very bold or very light or broken characters, or with merged character groups.<nl/><nl/>See <link url="http://www.gnu.org/software/ocrad/ocrad.html">www.gnu.org/software/ocrad/ocrad.html</link> for more information on OCRAD.
 Comment[ca]=L'<emphasis>OCRAD</emphasis> és un motor d'OCR de programari lliure fet per l'Antonio&nbsp;Diaz, part del Projecte&nbsp;GNU. <nl/><nl/>Les imatges per a l'OCR s'han d'escanejar en mode blanc i negre (art lineal). S'aconsegueixen els millors resultats si els caràcters tenen com a mínim 20&nbsp;píxels d'alçada. Poden produir-se problemes, normalment, amb caràcters molt grossos o molt fins o trencats, o amb grups de caràcters barrejats.<nl/><nl/>Vegeu <link url="http://www.gnu.org/software/ocrad/ocrad.html">www.gnu.org/software/ocrad/ocrad.html</link> per a més informació quant a l'OCRAD.
