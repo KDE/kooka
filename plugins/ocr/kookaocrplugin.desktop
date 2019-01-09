@@ -5,6 +5,7 @@ X-KDE-Derived=KPluginInfo
 Name=Kooka OCR Plugin
 Name[ca]=Connector OCR del Kooka
 Name[ca@valencia]=Connector OCR del Kooka
+Name[es]=Complemento OCR de Kooka
 Name[fr]=Module externe Kooka OCR
 Name[gl]=Complemento de OCR de Kooka
 Name[nl]=Kooka OCR-plug-in
