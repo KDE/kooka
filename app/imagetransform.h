@@ -52,8 +52,8 @@ public:
     };
 
     explicit ImageTransform(const QImage &img, ImageTransform::Operation op,
-                   const QString fileName, QObject *parent = nullptr);
-    ~ImageTransform() override;
+                   const QString &fileName, QObject *parent = nullptr);
+    ~ImageTransform() override = default;
 
 signals:
     void statusMessage(const QString &message);

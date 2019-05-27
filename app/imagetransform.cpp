@@ -37,7 +37,7 @@
 
 
 ImageTransform::ImageTransform(const QImage &img, ImageTransform::Operation op,
-                               const QString fileName, QObject *parent)
+                               const QString &fileName, QObject *parent)
     : QThread(parent)
 {
     mImage = img;
@@ -46,9 +46,6 @@ ImageTransform::ImageTransform(const QImage &img, ImageTransform::Operation op,
     //qDebug() << "for operation" << mOperation;
 }
 
-ImageTransform::~ImageTransform()
-{
-}
 
 void ImageTransform::run()
 {
