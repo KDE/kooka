@@ -431,7 +431,7 @@ void OcrOcradEngine::openAdvancedSettings()
     }
 
     d.setPath(exec);
-    d.setLabel(i18n("Name or path of the OCRAR executable:"));
+    d.setLabel(i18n("Name or path of the OCRAD executable:"));
     if (!d.exec()) return;
 
     KookaSettings::setOcrOcradBinary(d.path());

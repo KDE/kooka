@@ -42,6 +42,7 @@ ExecutablePathDialogue::ExecutablePathDialogue(QWidget *pnt)
 {
     setObjectName("ExecutablePathDialogue");
     setButtons(QDialogButtonBox::Ok|QDialogButtonBox::Cancel);
+    setWindowTitle(i18n("Executable Path"));
 
     QWidget *page = new QWidget(this);
     setMainWidget(page);
