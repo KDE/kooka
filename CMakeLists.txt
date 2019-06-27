@@ -56,30 +56,46 @@ remove_definitions("-DQT_NO_CAST_FROM_ASCII")
 remove_definitions("-DQT_NO_SIGNALS_SLOTS_KEYWORDS")
 
 # Support for SANE, here because library and sanedump both need it
-if (SANECONFIG_BIN)
-  set(SANECONFIG_PROG ${SANECONFIG_BIN})
-  message(STATUS "Specified sane-config(1), ${SANECONFIG_PROG}")
-else (SANECONFIG_BIN)
-  find_program(SANECONFIG_PROG NAMES sane-config)
-  message(STATUS "Found sane-config(1), ${SANECONFIG_PROG}")
-endif (SANECONFIG_BIN)
+#
+# Prefer pkg-config(1), because sane-config(1) was removed from Debian
+# package sane-backends 1.0.25 in December 2016.  Assuming here that
+# pkg-config(1) is available on any reasonable system.
+find_package(PkgConfig)
+if (PkgConfig_FOUND)
+  pkg_check_modules(SANE sane-backends)
+endif (PkgConfig_FOUND)
 
-if (SANECONFIG_PROG)
-  set(HAVE_SANE true)
-else (SANECONFIG_PROG)
-  message(SEND_ERROR "libkookascan needs SANE (http://www.sane-project.org) - specify location of sane-config(1) with SANECONFIG_BIN")
+if (SANE_FOUND)
+  set(SANE_INCLUDES "${SANE_CFLAGS}")
+  set(SANE_LIBRARIES "${SANE_LDFLAGS}")
+else (SANE_FOUND)
+  # if pkg-config(1) did not find anything, then fall back to sane-config(1)
+  message(STATUS "SANE not found via pkg-config(1), trying sane-config(1)")
+  if (SANECONFIG_BIN)
+    set(SANECONFIG_PROG ${SANECONFIG_BIN})
+    message(STATUS "Specified sane-config(1), ${SANECONFIG_PROG}")
+  else (SANECONFIG_BIN)
+    find_program(SANECONFIG_PROG NAMES sane-config)
+    message(STATUS "Found sane-config(1), ${SANECONFIG_PROG}")
+  endif (SANECONFIG_BIN)
+
+  if (SANECONFIG_PROG)
+    set(SANE_FOUND true)
+    execute_process(COMMAND ${SANECONFIG_PROG} --version OUTPUT_VARIABLE SANE_VERSION OUTPUT_STRIP_TRAILING_WHITESPACE)
+    execute_process(COMMAND ${SANECONFIG_PROG} --cflags OUTPUT_VARIABLE SANE_INCLUDES OUTPUT_STRIP_TRAILING_WHITESPACE)
+    execute_process(COMMAND ${SANECONFIG_PROG} --libs OUTPUT_VARIABLE SANE_LIBRARIES OUTPUT_STRIP_TRAILING_WHITESPACE)
+    message(STATUS "Found SANE, version ${SANE_VERSION}")
 endif (SANECONFIG_PROG)
 
-if (HAVE_SANE)
-  execute_process(COMMAND ${SANECONFIG_PROG} --version OUTPUT_VARIABLE SANE_VERSION OUTPUT_STRIP_TRAILING_WHITESPACE)
-  message(STATUS "Found SANE, version ${SANE_VERSION}")
+endif (SANE_FOUND)
 
-  execute_process(COMMAND ${SANECONFIG_PROG} --cflags OUTPUT_VARIABLE SANE_INCLUDES OUTPUT_STRIP_TRAILING_WHITESPACE)
-  message(STATUS "SANE includes: ${SANE_INCLUDES}")
-
-  execute_process(COMMAND ${SANECONFIG_PROG} --libs OUTPUT_VARIABLE SANE_LIBRARIES OUTPUT_STRIP_TRAILING_WHITESPACE)
-  message(STATUS "SANE libraries: ${SANE_LIBRARIES}")
-endif (HAVE_SANE)
+if (SANE_FOUND)
+  set(HAVE_SANE true)
+  message(STATUS "  SANE includes: ${SANE_INCLUDES}")
+  message(STATUS "  SANE libraries: ${SANE_LIBRARIES}")
+else (SANE_FOUND)
+  message(SEND_ERROR "libkookascan needs SANE (http://www.sane-project.org) - install package or specify location of sane-config(1) with SANECONFIG_BIN")
+endif (SANE_FOUND)
 
 ############### Now, we add the Kooka components ###############
 
