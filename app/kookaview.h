@@ -38,10 +38,10 @@
 
 #include "statusbarmanager.h"
 
+#include "imagecanvas.h"
 #include "kscandevice.h"
 
 class QSplitter;
-class QSignalMapper;
 class QUrl;
 
 class KPrinter;
@@ -126,6 +126,7 @@ public:
     void connectGalleryAction(QAction *action, bool sepBefore = false);
     void connectThumbnailAction(QAction *action);
     void connectPreviewAction(QAction *action);
+    void imageViewerAction(ImageCanvas::UserAction act);
 
     void saveWindowSettings(KConfigGroup &grp);
     void applyWindowSettings(const KConfigGroup &grp);
@@ -181,7 +182,6 @@ protected slots:
     void slotOcrResultAvailable();
 
     void slotTabChanged(int index);
-    void slotImageViewerAction(int act);
 
 signals:
     /**
@@ -256,7 +256,6 @@ private:
     WidgetSite *mOcrImgviewSite;
 
     KService::List mOpenWithOffers;
-    QSignalMapper *mOpenWithMapper;
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(KookaView::StateFlags)

@@ -32,7 +32,6 @@
 #include "kooka.h"
 
 #include <qevent.h>
-#include <qsignalmapper.h>
 #include <qaction.h>
 #include <qicon.h>
 #include <qmenu.h>
@@ -154,44 +153,37 @@ void Kooka::setupActions()
 
     // Image Viewer
 
-    QSignalMapper *mapper = new QSignalMapper(this);
-    connect(mapper, SIGNAL(mapped(int)), m_view, SLOT(slotImageViewerAction(int)));
-
     scaleToWidthAction =  new QAction(QIcon::fromTheme("zoom-fit-width"), i18n("Scale to Width"), this);
     actionCollection()->addAction("scaleToWidth", scaleToWidthAction);
     actionCollection()->setDefaultShortcut(scaleToWidthAction, Qt::CTRL + Qt::Key_I);
-    connect(scaleToWidthAction, SIGNAL(triggered()), mapper, SLOT(map()));
+    connect(scaleToWidthAction, &QAction::triggered, [=]() { m_view->imageViewerAction(ImageCanvas::UserActionFitWidth); });
     m_view->connectViewerAction(scaleToWidthAction);
     m_view->connectPreviewAction(scaleToWidthAction);
-    mapper->setMapping(scaleToWidthAction, ImageCanvas::UserActionFitWidth);
 
     scaleToHeightAction = new QAction(QIcon::fromTheme("zoom-fit-height"), i18n("Scale to Height"), this);
     actionCollection()->addAction("scaleToHeight", scaleToHeightAction);
     actionCollection()->setDefaultShortcut(scaleToHeightAction, Qt::CTRL + Qt::Key_H);
-    connect(scaleToHeightAction, SIGNAL(triggered()), mapper, SLOT(map()));
+    connect(scaleToHeightAction, &QAction::triggered, [=]() { m_view->imageViewerAction(ImageCanvas::UserActionFitHeight); });
     m_view->connectViewerAction(scaleToHeightAction);
     m_view->connectPreviewAction(scaleToHeightAction);
-    mapper->setMapping(scaleToHeightAction, ImageCanvas::UserActionFitHeight);
 
     scaleToOriginalAction = new QAction(QIcon::fromTheme("zoom-original"), i18n("Original Size"), this);
     actionCollection()->addAction("scaleOriginal", scaleToOriginalAction);
     actionCollection()->setDefaultShortcut(scaleToOriginalAction, Qt::CTRL + Qt::Key_1);
-    connect(scaleToOriginalAction, SIGNAL(triggered()), mapper, SLOT(map()));
+    connect(scaleToOriginalAction, &QAction::triggered, [=]() { m_view->imageViewerAction(ImageCanvas::UserActionOrigSize); });
     m_view->connectViewerAction(scaleToOriginalAction);
-    mapper->setMapping(scaleToOriginalAction, ImageCanvas::UserActionOrigSize);
 
     scaleToZoomAction = new QAction(QIcon::fromTheme("page-zoom"), i18n("Set Zoom..."), this);
     actionCollection()->addAction("showZoomDialog", scaleToZoomAction);
     // No shortcut.  There wasn't a standard shortcut for "Zoom" in KDE4,
     // and there is no KStandardShortcut::Zoom in KF5.
-    connect(scaleToZoomAction, SIGNAL(triggered()), mapper, SLOT(map()));
+    connect(scaleToZoomAction, &QAction::triggered, [=]() { m_view->imageViewerAction(ImageCanvas::UserActionZoom); });
     m_view->connectViewerAction(scaleToZoomAction);
-    mapper->setMapping(scaleToZoomAction, ImageCanvas::UserActionZoom);
 
     keepZoomAction = new KToggleAction(QIcon::fromTheme("lockzoom"), i18n("Keep Zoom Setting"), this);
     actionCollection()->addAction("keepZoom", keepZoomAction);
     actionCollection()->setDefaultShortcut(keepZoomAction, Qt::CTRL + Qt::Key_Z);
-    connect(keepZoomAction, SIGNAL(toggled(bool)), m_view->imageViewer(), SLOT(setKeepZoom(bool)));
+    connect(keepZoomAction, &KToggleAction::toggled, m_view->imageViewer(), &ImageCanvas::setKeepZoom);
     m_view->connectViewerAction(keepZoomAction);
 
     // Thumb view and gallery actions

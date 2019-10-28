@@ -77,7 +77,7 @@ protected slots:
     void slotFileHighlighted(const KFileItem &kfi);
     void slotFinishedLoading();
     void slotEnsureVisible();
-    void slotSetSize(int size);
+    void slotSetSize(KIconLoader::StdSizes size);
 
 signals:
     void itemHighlighted(const QUrl &url);
@@ -85,15 +85,14 @@ signals:
 
 private:
     void setBackground();
+    void createActionForSize(KIconLoader::StdSizes size);
 
     QMenu *mContextMenu;
     bool m_firstMenu;
     KActionMenu *m_sizeMenu;
     QMap<KIconLoader::StdSizes, KToggleAction *> m_sizeMap;
 
-    // This is really a KIconLoader::StdSizes, but it has to be an int because
-    // of the signal from QSignalMapper.
-    int m_thumbSize;
+    KIconLoader::StdSizes m_thumbSize;
 
     QUrl m_lastSelected;
     QUrl m_toSelect;

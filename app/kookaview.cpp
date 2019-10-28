@@ -36,7 +36,6 @@
 #include <qsplitter.h>
 #include <qimage.h>
 #include <qapplication.h>
-#include <qsignalmapper.h>
 #include <qdebug.h>
 #include <qicon.h>
 #include <qaction.h>
@@ -191,8 +190,6 @@ KookaView::KookaView(KMainWindow *parent, const QByteArray &deviceToUse)
     mCurrentTab = KookaView::TabNone;
 
     mIsPhotoCopyMode = false;
-
-    mOpenWithMapper = nullptr;
 
     /** Image Viewer **/
     mImageCanvas = new ImageCanvas(this);
@@ -1195,12 +1192,12 @@ Previewer *KookaView::previewer() const
     return (mPreviewCanvas);
 }
 
-void KookaView::slotImageViewerAction(int act)
+void KookaView::imageViewerAction(ImageCanvas::UserAction act)
 {
-    if (mCurrentTab == KookaView::TabScan) {    // Scan
-        mPreviewCanvas->getImageCanvas()->performUserAction(static_cast<ImageCanvas::UserAction>(act));
-    } else {                    // Gallery or OCR
-        mImageCanvas->performUserAction(static_cast<ImageCanvas::UserAction>(act));
+    if (mCurrentTab == KookaView::TabScan) {		// Scan
+        mPreviewCanvas->getImageCanvas()->performUserAction(act);
+    } else {						// Gallery or OCR
+        mImageCanvas->performUserAction(act);
     }
 }
 
@@ -1209,11 +1206,6 @@ void KookaView::showOpenWithMenu(KActionMenu *menu)
     FileTreeViewItem *curr = gallery()->highlightedFileTreeViewItem();
     QString mimeType = curr->fileItem()->mimetype();
     //qDebug() << "Trying to open" << curr->url() << "which is" << mimeType;
-
-    if (mOpenWithMapper == nullptr) {
-        mOpenWithMapper = new QSignalMapper(this);
-        connect(mOpenWithMapper, SIGNAL(mapped(int)), SLOT(slotOpenWith(int)));
-    }
 
     menu->menu()->clear();
 
@@ -1226,15 +1218,13 @@ void KookaView::showOpenWithMenu(KActionMenu *menu)
 
         QString actionName((*it)->name().replace("&", "&&"));
         QAction *act = new QAction(QIcon::fromTheme((*it)->icon()), actionName, this);
-        connect(act, SIGNAL(triggered()), mOpenWithMapper, SLOT(map()));
-        mOpenWithMapper->setMapping(act, i);
+        connect(act, &QAction::triggered, this, [=]() { slotOpenWith(i); });
         menu->addAction(act);
     }
 
     menu->menu()->addSeparator();
     QAction *act = new QAction(i18n("Other..."), this);
-    connect(act, SIGNAL(triggered()), mOpenWithMapper, SLOT(map()));
-    mOpenWithMapper->setMapping(act, i);
+    connect(act, &QAction::triggered, this, [=]() { slotOpenWith(-1); });
     menu->addAction(act);
 }
 
@@ -1249,7 +1239,9 @@ void KookaView::slotOpenWith(int idx)
     QList<QUrl> urllist;
     urllist.append(ftvi->url());
 
-    if (idx < mOpenWithOffers.count()) {		// application from the menu
+    if (idx!=-1)			 		// application from the menu
+    {
+        Q_ASSERT(idx<mOpenWithOffers.count());
         KService::Ptr ptr = mOpenWithOffers[idx];
         KRun::runService(*ptr, urllist, mMainWindow);
     } else {						// last item = "Other..."

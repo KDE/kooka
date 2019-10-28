@@ -31,13 +31,13 @@
 
 #include "thumbview.h"
 
-#include <qsignalmapper.h>
 #include <qabstractitemview.h>
 #include <qlistview.h>
 #include <qaction.h>
 #include <qdebug.h>
 #include <qmenu.h>
 #include <qstandardpaths.h>
+#include <QSignalBlocker>
 
 #include <kfileitem.h>
 #include <kactionmenu.h>
@@ -47,6 +47,15 @@
 
 #include "kookapref.h"
 #include "kookasettings.h"
+
+
+void ThumbView::createActionForSize(KIconLoader::StdSizes size)
+{
+    KToggleAction *act = new KToggleAction(sizeName(size), this);
+    connect(act, &QAction::triggered, this, [=]() { slotSetSize(size); });
+    m_sizeMap[size] = act;
+    m_sizeMenu->addAction(act);
+}
 
 
 ThumbView::ThumbView(QWidget *parent)
@@ -102,42 +111,13 @@ ThumbView::ThumbView(QWidget *parent)
     readSettings();
 
     m_sizeMenu = new KActionMenu(i18n("Preview Size"), this);
-    QSignalMapper *mapper = new QSignalMapper(this);
-    KToggleAction *act;
+    createActionForSize(KIconLoader::SizeEnormous);
+    createActionForSize(KIconLoader::SizeHuge);
+    createActionForSize(KIconLoader::SizeLarge);
+    createActionForSize(KIconLoader::SizeMedium);
+    createActionForSize(KIconLoader::SizeSmallMedium);
 
-    act = new KToggleAction(sizeName(KIconLoader::SizeEnormous), this);
-    connect(act, SIGNAL(triggered()), mapper, SLOT(map()));
-    mapper->setMapping(act, KIconLoader::SizeEnormous);
-    m_sizeMap[KIconLoader::SizeEnormous] = act;
-    m_sizeMenu->addAction(act);
-
-    act = new KToggleAction(sizeName(KIconLoader::SizeHuge), this);
-    connect(act, SIGNAL(triggered()), mapper, SLOT(map()));
-    mapper->setMapping(act, KIconLoader::SizeHuge);
-    m_sizeMap[KIconLoader::SizeHuge] = act;
-    m_sizeMenu->addAction(act);
-
-    act = new KToggleAction(sizeName(KIconLoader::SizeLarge), this);
-    connect(act, SIGNAL(triggered()), mapper, SLOT(map()));
-    mapper->setMapping(act, KIconLoader::SizeLarge);
-    m_sizeMap[KIconLoader::SizeLarge] = act;
-    m_sizeMenu->addAction(act);
-
-    act = new KToggleAction(sizeName(KIconLoader::SizeMedium), this);
-    connect(act, SIGNAL(triggered()), mapper, SLOT(map()));
-    mapper->setMapping(act, KIconLoader::SizeMedium);
-    m_sizeMap[KIconLoader::SizeMedium] = act;
-    m_sizeMenu->addAction(act);
-
-    act = new KToggleAction(sizeName(KIconLoader::SizeSmallMedium), this);
-    connect(act, SIGNAL(triggered()), mapper, SLOT(map()));
-    mapper->setMapping(act, KIconLoader::SizeSmallMedium);
-    m_sizeMap[KIconLoader::SizeSmallMedium] = act;
-    m_sizeMenu->addAction(act);
-
-    connect(mapper, SIGNAL(mapped(int)), SLOT(slotSetSize(int)));
-
-    setMinimumSize(64, 64);             // sensible minimum size
+    setMinimumSize(64, 64);				// sensible minimum size
 }
 
 ThumbView::~ThumbView()
@@ -174,77 +154,72 @@ void ThumbView::slotHighlightItem(const QUrl &url, bool isDir)
         // There are two possible (but extremely unlikely) race conditions here.
 
 #ifdef WORKAROUND_216928
-        if (dirLister()->isFinished()) {        // idle, can do this now
+        if (dirLister()->isFinished()) {		// idle, can do this now
             //qDebug() << "lister idle, changing dir to" << dirToShow;
-            setUrl(dirToShow, true);            // change path and reload
+            setUrl(dirToShow, true);			// change path and reload
         } else {
             //qDebug() << "lister busy, deferring change to" << dirToShow;
-            m_toChangeTo = dirToShow;           // note to do later
+            m_toChangeTo = dirToShow;			// note to do later
         }
 #else
         //qDebug() << "changing dir to" << dirToShow;
-        setUrl(dirToShow, true);            // change path and reload
+        setUrl(dirToShow, true);			// change path and reload
 #endif
         return;
     }
 
     KFileItemList selItems = selectedItems();
-    if (!selItems.isEmpty()) {              // the current selection
+    if (!selItems.isEmpty()) {				// the current selection
         KFileItem curItem = selItems.first();
         if (curItem.url() == urlToShow) {
             return;    // already selected
         }
     }
 
-    // TODO: use QSignalBlocker
-    bool b = blockSignals(true);            // avoid signal loop
+    QSignalBlocker block(this);
     setCurrentItem(isDir ? QUrl() : urlToShow);
-    blockSignals(b);
 }
 
 void ThumbView::slotContextMenu(const QPoint &pos)
 {
-    if (m_firstMenu) {                  // first time menu activated
+    if (m_firstMenu) {					// first time menu activated
         mContextMenu->addSeparator();
-        mContextMenu->addAction(m_sizeMenu);        // append size menu at end
-        m_firstMenu = false;                // note this has been done
+        mContextMenu->addAction(m_sizeMenu);		// append size menu at end
+        m_firstMenu = false;				// note this has been done
     }
 
     for (QMap<KIconLoader::StdSizes, KToggleAction *>::const_iterator it = m_sizeMap.constBegin();
-            it != m_sizeMap.constEnd(); ++it) {    // tick applicable size entry
+            it != m_sizeMap.constEnd(); ++it) {		// tick applicable size entry
         (*it)->setChecked(m_thumbSize == it.key());
     }
 
     mContextMenu->exec(QCursor::pos());
 }
 
-void ThumbView::slotSetSize(int size)
+void ThumbView::slotSetSize(KIconLoader::StdSizes size)
 {
     m_thumbSize = size;
 
     // see KDirOperator::setIconsZoom() in kio/src/kfilewidgets/kdiroperator.cpp
-    int val = ((size - KIconLoader::SizeSmall) * 100) / (KIconLoader::SizeEnormous - KIconLoader::SizeSmall);
-
+    const int val = ((size-KIconLoader::SizeSmall)*100) / (KIconLoader::SizeEnormous-KIconLoader::SizeSmall);
     //qDebug() << "size" << size << "-> val" << val;
     setIconsZoom(val);
 }
 
 void ThumbView::slotFinishedLoading()
 {
-    if (m_toChangeTo.isValid()) {           // see if change deferred
+    if (m_toChangeTo.isValid()) {			// see if change deferred
         //qDebug() << "setting dirop url to" << m_toChangeTo;
-        setUrl(m_toChangeTo, true);         // change path and reload
-        m_toChangeTo = QUrl();              // have dealt with this now
+        setUrl(m_toChangeTo, true);			// change path and reload
+        m_toChangeTo = QUrl();				// have dealt with this now
         return;
     }
 
-    if (m_toSelect.isValid()) {             // see if something to select
+    if (m_toSelect.isValid()) {				// see if something to select
         //qDebug() << "selecting" << m_toSelect;
-        // TODO: use QSignalBlocker
-        bool blk = blockSignals(true);          // avoid signal loop
+        QSignalBlocker block(this);
         setCurrentItem(m_toSelect);
-        blockSignals(blk);
-        m_toSelect = QUrl();                // have dealt with this now
+        m_toSelect = QUrl();				// have dealt with this now
     }
 }
 
@@ -286,7 +261,7 @@ void ThumbView::slotFileHighlighted(const KFileItem &kfi)
 
 void ThumbView::readSettings()
 {
-    slotSetSize(KookaSettings::thumbnailPreviewSize());
+    slotSetSize(static_cast<KIconLoader::StdSizes>(KookaSettings::thumbnailPreviewSize()));
     setBackground();
 }
 
@@ -324,7 +299,7 @@ void ThumbView::slotImageChanged(const KFileItem *kfi)
 {
     //qDebug() << kfi->url();
     // TODO: is there an equivalent?
-    //m_fileview->updateView(kfi);          // update that view item
+    //m_fileview->updateView(kfi);			// update that view item
 }
 
 void ThumbView::slotImageRenamed(const KFileItem *item, const QString &newName)
