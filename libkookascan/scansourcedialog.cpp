@@ -122,7 +122,7 @@ ScanSourceDialog::~ScanSourceDialog()
 {
     if (d) {
         delete d;
-        d = NULL;
+        d = nullptr;
     }
 }
 
@@ -169,7 +169,7 @@ void ScanSourceDialog::slotNotifyADF(bool checked)
 
 void ScanSourceDialog::slotChangeSource(int i)
 {
-    if (d->bgroup == NULL) {
+    if (d->bgroup == nullptr) {
         return;
     }
 
@@ -188,7 +188,7 @@ void ScanSourceDialog::slotChangeSource(int i)
 
 int ScanSourceDialog::sourceAdfEntry() const
 {
-    if (d->sources == NULL) {
+    if (d->sources == nullptr) {
         return (-1);
     }
 
@@ -210,7 +210,7 @@ int ScanSourceDialog::sourceAdfEntry() const
 
 void ScanSourceDialog::slotSetSource(const QString &source)
 {
-    if (d->sources == NULL) {
+    if (d->sources == nullptr) {
         return;
     }
 

@@ -287,7 +287,7 @@ bool KScanOption::apply()
     if (mName==SANE_NAME_PREVIEW || mName==SANE_NAME_SCAN_MODE)
     {
         sanestat = sane_control_option(mScanDevice->scannerHandle(), mIndex,
-                                       SANE_ACTION_SET_AUTO, 0,
+                                       SANE_ACTION_SET_AUTO, nullptr,
                                        &sane_result);
         /* No return here, please! Carsten, does it still work than for you? */
     }
@@ -304,7 +304,7 @@ bool KScanOption::apply()
         debug += " auto";
 #endif // DEBUG_APPLY
         sanestat = sane_control_option(mScanDevice->scannerHandle(), mIndex,
-                                       SANE_ACTION_SET_AUTO, 0,
+                                       SANE_ACTION_SET_AUTO, nullptr,
                                        &sane_result);
     }
     else

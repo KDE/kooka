@@ -57,7 +57,7 @@ OcrOcradDialog::OcrOcradDialog(AbstractOcrEngine *plugin, QWidget *pnt)
     : AbstractOcrDialogue(plugin, pnt),
       m_setupWidget(nullptr),
       m_orfUrlRequester(nullptr),
-      m_layoutMode(0),
+      m_layoutMode(nullptr),
       m_ocrCmd(QString()),
       m_versionNum(0),
       m_versionStr(QString())

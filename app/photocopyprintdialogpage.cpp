@@ -92,12 +92,12 @@ PhotoCopyPrintDialogPage::PhotoCopyPrintDialogPage(KScanDevice *newScanDevice)
     QString strBR_Y;
 
     KScanOption *res = sane_device->getOption(SANE_NAME_SCAN_BR_X, true);
-    if (res != NULL) {
+    if (res != nullptr) {
         strBR_X = res->get();
     }
 
     res = sane_device->getOption(SANE_NAME_SCAN_BR_Y, true);
-    if (res != NULL) {
+    if (res != nullptr) {
         strBR_Y = res->get();
     }
 
@@ -146,7 +146,7 @@ bool PhotoCopyPrintDialogPage::isValid(QString &msg)
 QLabel *PhotoCopyPrintDialogPage::constructLabel(Q3VGroupBox *group, const char *strTitle, const QByteArray &strSaneOption)
 {
     KScanOption *res = sane_device->getOption(strSaneOption, true);
-    QString str = i18n(strTitle) + ": " + "\t" + (res != NULL ? res->get() : "?");
+    QString str = i18n(strTitle) + ": " + "\t" + (res != nullptr ? res->get() : "?");
     QLabel *lbl = new QLabel(group);
     lbl->setText(str);
     return (lbl);
