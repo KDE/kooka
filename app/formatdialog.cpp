@@ -67,8 +67,8 @@ static struct FormatInfo formats[] =
 It is suitable for color, grayscale and line art images.\
 <p>This format is widely supported but is not recommended, use an open format \
 instead."),
-        0,
-        0
+        ImageMetaInfo::None,
+        ImageMetaInfo::None
     },
 
     {
@@ -105,8 +105,8 @@ images. Only 24 bit per pixel RGB is supported."),
 applications, although it is rather old and unsophisticated.  It is suitable for \
 color and grayscale images.\
 <p>This format is not recommended, use an open format instead."),
-        0,
-        0
+        ImageMetaInfo::None,
+        ImageMetaInfo::None
     },
 
     {
@@ -114,7 +114,7 @@ color and grayscale images.\
         I18N_NOOP(
             "<b>X Bitmap</b> is often used by the X Window System to store cursor and icon bitmaps.\
 <p>Unless required for this purpose, use a general purpose format instead."),
-        0,
+        ImageMetaInfo::None,
         ImageMetaInfo::BlackWhite
     },
 
@@ -123,7 +123,7 @@ color and grayscale images.\
         I18N_NOOP(
             "<b>X Pixmap</b> is often used by the X Window System for color icons and other images.\
 <p>Unless required for this purpose, use a general purpose format instead."),
-        0,
+        ImageMetaInfo::None,
         ImageMetaInfo::LowColour | ImageMetaInfo::HighColour
     },
 
@@ -135,7 +135,7 @@ portable and extensible. It is suitable for any type of color or grayscale image
 indexed or true color.\
 <p>PNG is an open format which is widely supported."),
         ImageMetaInfo::BlackWhite | ImageMetaInfo::LowColour | ImageMetaInfo::Greyscale | ImageMetaInfo::HighColour,
-        0
+        ImageMetaInfo::None
     },
 
     {
@@ -155,7 +155,7 @@ and saving.\
             "<b>JPEG 2000</b> was intended as an update to the JPEG format, with the option of \
 lossless compression, but so far is not widely supported. It is suitable for true \
 color or grayscale images."),
-        0,
+        ImageMetaInfo::None,
         ImageMetaInfo::LowColour | ImageMetaInfo::Greyscale | ImageMetaInfo::HighColour
     },
 
@@ -165,8 +165,8 @@ color or grayscale images."),
             "<b>Encapsulated PostScript</b> is derived from the PostScript&trade; \
 page description language.  Use this format for importing into other \
 applications, or to use with (e.g.) TeX."),
-        0,
-        0
+        ImageMetaInfo::None,
+        ImageMetaInfo::None
     },
 
     {
@@ -175,7 +175,7 @@ applications, or to use with (e.g.) TeX."),
             "<b>Truevision Targa</b> can store full color images with an alpha channel, and is \
 used extensively by animation and video applications.\
 <p>This format is not recommended, use an open format instead."),
-        0,
+        ImageMetaInfo::None,
         ImageMetaInfo::LowColour | ImageMetaInfo::Greyscale | ImageMetaInfo::HighColour
     },
 
@@ -186,8 +186,8 @@ used extensively by animation and video applications.\
 used for web graphics.  It uses lossless compression with up to 256 colors and \
 optional transparency.\
 <p>For legal reasons this format is not recommended, use an open format instead."),
-        0,
-        0
+        ImageMetaInfo::None,
+        ImageMetaInfo::None
     },
 
     {
@@ -199,7 +199,7 @@ images with alpha transparency.\
 <p>Because there are many variations, there may sometimes be compatibility problems. \
 Unless required for use with other applications, use an open format instead."),
         ImageMetaInfo::BlackWhite | ImageMetaInfo::LowColour | ImageMetaInfo::Greyscale | ImageMetaInfo::HighColour,
-        0
+        ImageMetaInfo::None
     },
 
     {
@@ -210,8 +210,8 @@ intended for animated images.  It is an open format suitable for all types of \
 images.\
 <p>Images produced by a scanner will not be animated, so unless specifically \
 required for use with other applications use PNG instead."),
-        0,
-        0
+        ImageMetaInfo::None,
+        ImageMetaInfo::None
     },
 
     {
@@ -220,11 +220,11 @@ required for use with other applications use PNG instead."),
             "This is the <b>Silicon Graphics</b> native image file format, supporting 24 bit \
 true color images with optional lossless compression.\
 <p>Unless specifically required, use an open format instead."),
-        0,
+        ImageMetaInfo::None,
         ImageMetaInfo::LowColour | ImageMetaInfo::HighColour
     },
 
-    { nullptr, nullptr, 0, 0 }
+    { nullptr, nullptr, ImageMetaInfo::None, ImageMetaInfo::None }
 };
 
 static QString sLastFormat;				// format last used, whether

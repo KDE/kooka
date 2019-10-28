@@ -69,7 +69,7 @@ public:
      * present then it goes in column 3 and the @p wid widget in column 2.  If
      * there is no @p unit label then the @p wid widget spans columns 2 and 3.
      */
-    void addRow(QLabel *lab, QWidget *wid, QLabel *unit = nullptr, Qt::Alignment align = 0);
+    void addRow(QLabel *lab, QWidget *wid, QLabel *unit = nullptr, Qt::Alignment align = Qt::Alignment());
 
     /**
      * Add a full width widget to the page.

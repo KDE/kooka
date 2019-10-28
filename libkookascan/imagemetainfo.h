@@ -60,6 +60,7 @@ public:
     enum ImageType
     {
         Unknown     = 0x00,				///< Unknown or not resolved yet
+        None        = Unknown,				///< None specified
         BlackWhite  = 0x01,				///< Black/white bitmap
         Greyscale   = 0x02,				///< Grey scale (indexed with palette)
         LowColour   = 0x04,				///< Low colour (indexed with palette)

@@ -619,7 +619,7 @@ void KookaView::slotSelectionChanged(const QRect &newSelection)
 
 void KookaView::updateSelectionState()
 {
-    KookaView::StateFlags state = 0;
+    KookaView::StateFlags state = KookaView::StateFlags();
     const FileTreeViewItem *ftvi = mGallery->galleryTree()->highlightedFileTreeViewItem();
     const KFileItem *fi = (ftvi != nullptr ? ftvi->fileItem() : nullptr);
     const bool scanmode = (mCurrentTab == KookaView::TabScan);
