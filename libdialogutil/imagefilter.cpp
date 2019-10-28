@@ -70,7 +70,7 @@ static QStringList filterList(ImageFilter::FilterMode mode, ImageFilter::FilterO
 
     if (!(options & ImageFilter::Unsorted))		// unless list wanted unsorted,
     {							// sort by the mime type comment
-        qSort(list.begin(), list.end(), commentLessThan);
+        std::sort(list.begin(), list.end(), commentLessThan);
     }
 
     if (!kdeFormat)
