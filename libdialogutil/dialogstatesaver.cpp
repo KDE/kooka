@@ -31,8 +31,8 @@
 #include "dialogstatesaver.h"
 
 #include <qdialog.h>
-#include <qdesktopwidget.h>
-#include <qapplication.h>
+#include <qwindow.h>
+#include <qscreen.h>
 #include <qdebug.h>
 
 #include <kconfiggroup.h>
@@ -87,15 +87,13 @@ void DialogStateSaver::restoreWindowState(QWidget *window)
 
 void DialogStateSaver::restoreWindowState(QWidget *window, const KConfigGroup &grp)
 {
-    // from KDE4 KDialog::restoreDialogSize()
-    int scnum = QApplication::desktop()->screenNumber(window->parentWidget());
-    QRect desk = QApplication::desktop()->screenGeometry(scnum);
-    int width = window->sizeHint().width();
-    int height = window->sizeHint().height();
+    // originally from KDE4 KDialog::restoreDialogSize()
+    const QRect desk = window->parentWidget()->window()->windowHandle()->screen()->geometry();
+    const QSize sizeDefault = window->sizeHint();
 
     qDebug() << "from" << grp.name() << "in" << grp.config()->name();
-    width = grp.readEntry(QString::fromLatin1("Width %1").arg(desk.width()), width);
-    height = grp.readEntry(QString::fromLatin1("Height %1").arg(desk.height()), height);
+    const int width = grp.readEntry(QString::fromLatin1("Width %1").arg(desk.width()), sizeDefault.width());
+    const int height = grp.readEntry(QString::fromLatin1("Height %1").arg(desk.height()), sizeDefault.height());
     window->resize(width, height);
 }
 
@@ -125,9 +123,8 @@ void DialogStateSaver::saveWindowState(QWidget *window)
 
 void DialogStateSaver::saveWindowState(QWidget *window, KConfigGroup &grp)
 {
-    // from KDE4 KDialog::saveDialogSize()
-    const int scnum = QApplication::desktop()->screenNumber(window->parentWidget());
-    QRect desk = QApplication::desktop()->screenGeometry(scnum);
+    // originally from KDE4 KDialog::saveDialogSize()
+    const QRect desk = window->parentWidget()->window()->windowHandle()->screen()->geometry();
     const QSize sizeToSave = window->size();
 
     qDebug() << "to" << grp.name() << "in" << grp.config()->name();
