@@ -127,7 +127,7 @@ signals:
 
 private:
     void loadImageForItem(FileTreeViewItem *item);
-    FileTreeBranch *openRoot(const QUrl &root, const QString &title = QString::null);
+    FileTreeBranch *openRoot(const QUrl &root, const QString &title = QString());
 
     FileTreeViewItem *findItemByUrl(const QUrl &url, FileTreeBranch *branch = nullptr);
     QUrl itemDirectory(const FileTreeViewItem *item) const;

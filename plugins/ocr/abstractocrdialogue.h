@@ -92,7 +92,7 @@ protected:
 
     QProgressBar *progressBar() const;
 
-    void ocrShowInfo(const QString &binary, const QString &version = QString::null);
+    void ocrShowInfo(const QString &binary, const QString &version = QString());
     void ocrShowVersion(const QString &version);
 
     QWidget *addExtraSetupWidget(QWidget *wid = nullptr, bool stretchBefore = false);

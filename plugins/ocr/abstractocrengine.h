@@ -124,7 +124,7 @@ protected:
      * this must be either 1, 8, 24 or 32.  The default is for no colour
      * conversion.
      *
-     * @return The file name as saved, or @c QString::null if there was
+     * @return The file name as saved, or @c QString() if there was
      *         an error.
      **/
     QString tempSaveImage(const KookaImage *img, const ImageFormat &format, int colors = -1);
@@ -133,7 +133,7 @@ protected:
      * Get a name to use for a temporary file.
      *
      * @param suffix File name suffix, no leading '.' is required
-     * @return The temporary file name, or @c QString::null if the file could not be created
+     * @return The temporary file name, or @c QString() if the file could not be created
      *
      * @note The temporary file is created and is left in place under the returned name,
      * but is not opened.  Its name should be saved and eventually returned in the

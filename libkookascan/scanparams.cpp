@@ -157,7 +157,7 @@ bool ScanParamsPage::lastRow()
 {
     addGroup(nullptr);                 // hide last if present
 
-    mLayout->addWidget(new QLabel(QString::null, this), mNextRow, 0, 1, -1, Qt::AlignTop);
+    mLayout->addWidget(new QLabel(QString(), this), mNextRow, 0, 1, -1, Qt::AlignTop);
     mLayout->setRowStretch(mNextRow, 9);
 
     return (mNextRow > 0);
@@ -269,7 +269,7 @@ bool ScanParams::connectDevice(KScanDevice *newScanDevice, bool galleryMode)
     lay->addWidget(pb, 5, 1, Qt::AlignRight);
 
     /* Initialise the progress dialog */
-    mProgressDialog = new QProgressDialog(QString::null, i18n("Stop"), 0, 100, nullptr);
+    mProgressDialog = new QProgressDialog(QString(), i18n("Stop"), 0, 100, nullptr);
     mProgressDialog->setModal(true);
     mProgressDialog->setAutoClose(true);
     mProgressDialog->setAutoReset(true);
@@ -279,7 +279,7 @@ bool ScanParams::connectDevice(KScanDevice *newScanDevice, bool galleryMode)
     // appears to show itself after the default 'minimumDuration' (= 4 seconds),
     // even despite the previous and no 'value' being set.
     mProgressDialog->reset();
-    setScanDestination(QString::null);			// reset destination display
+    setScanDestination(QString());			// reset destination display
 
     connect(mProgressDialog, &QProgressDialog::canceled, mSaneDevice, &KScanDevice::slotStopScanning);
     connect(mSaneDevice, &KScanDevice::sigScanProgress, this, &ScanParams::slotScanProgress);
@@ -362,7 +362,7 @@ QWidget *ScanParams::createScannerParams()
 
         // Separator line after these.  Using a KScanGroup with a null text,
         // so that it looks the same as any real group separators following.
-        frame->addGroup(new KScanGroup(frame, QString::null));
+        frame->addGroup(new KScanGroup(frame, QString()));
     }
 
     // Mode setting
@@ -449,7 +449,7 @@ QWidget *ScanParams::createScannerParams()
     frame->addRow(l, mAreaSelect, nullptr, Qt::AlignTop);
 
     // Insert another beautification line
-    frame->addGroup(new KScanGroup(frame, QString::null));
+    frame->addGroup(new KScanGroup(frame, QString()));
 
     // Source selection
     mSourceSelect = mSaneDevice->getGuiElement(SANE_NAME_SCAN_SOURCE, frame);
@@ -680,7 +680,7 @@ void ScanParams::slotSourceSelect()
     //qDebug() << "new source" << sel_source << "ADF" << adf;
 
     /* set the selected Document source, the behavior is stored in a membervar */
-    mSourceSelect->set(sel_source.toLatin1());      // TODO: FIX in ScanSourceDialog, then here
+    mSourceSelect->set(sel_source.toLatin1());		// TODO: FIX in ScanSourceDialog, then here
     mSourceSelect->apply();
     mSourceSelect->reload();
     mSourceSelect->redrawWidget();
@@ -712,13 +712,13 @@ KScanDevice::Status ScanParams::prepareScan(QString *vfp)
 {
     //qDebug() << "scan mode=" << mScanMode;
 
-    setScanDestination(QString::null);          // reset progress display
+    setScanDestination(QString());			// reset progress display
 
     // Check compatibility of scan settings
     int format;
     int depth;
     mSaneDevice->getCurrentFormat(&format, &depth);
-    if (depth == 1 && format != SANE_FRAME_GRAY) {  // 1-bit scan depth in colour?
+    if (depth == 1 && format != SANE_FRAME_GRAY) {	// 1-bit scan depth in colour?
         KMessageBox::sorry(this, i18n("1-bit depth scan cannot be done in color"));
         return (KScanDevice::ParamError);
     } else if (depth == 16) {
@@ -803,8 +803,8 @@ void ScanParams::slotAcquirePreview()
         greyPreview->get(&gp);
     }
 
-    setMaximalScanSize();               // always preview at maximal size
-    mAreaSelect->selectCustomSize(QRect());     // reset selector to reflect that
+    setMaximalScanSize();				// always preview at maximal size
+    mAreaSelect->selectCustomSize(QRect());		// reset selector to reflect that
 
     stat = mSaneDevice->acquirePreview(gp);
     if (stat != KScanDevice::Ok) {
@@ -823,7 +823,7 @@ void ScanParams::slotStartScan()
 
     //qDebug() << "scan mode=" << mScanMode << "virtfile" << virtfile;
 
-    if (mScanMode != ScanParams::VirtualScannerMode) { // acquire via SANE
+    if (mScanMode != ScanParams::VirtualScannerMode) {	// acquire via SANE
 #if 0
 // TODO: port/update
         if (adf == ADF_OFF) {
@@ -874,7 +874,7 @@ bool ScanParams::setGammaTableTo(const QByteArray &opt, const KGammaTable *gt)
 
 void ScanParams::slotEditCustGamma()
 {
-    KGammaTable gt;                 // start with default values
+    KGammaTable gt;					// start with default values
 
     // Get the current gamma table from either the combined gamma table
     // option, or any one of the colour channel gamma tables.
@@ -912,9 +912,9 @@ void ScanParams::slotApplyGamma(const KGammaTable *gt)
     bool reload = false;
 
     KScanOption *so = mSaneDevice->getOption(SANE_NAME_CUSTOM_GAMMA);
-    if (so != nullptr) {               // do we have a gamma switch?
+    if (so != nullptr) {				// do we have a gamma switch?
         int cg = 0;
-        if (so->get(&cg) && !cg) {          // yes, see if already on
+        if (so->get(&cg) && !cg) {			// yes, see if already on
             // if not, set it on now
             //qDebug() << "Setting gamma switch on";
             so->set(true);
@@ -929,7 +929,7 @@ void ScanParams::slotApplyGamma(const KGammaTable *gt)
     reload |= setGammaTableTo(SANE_NAME_GAMMA_VECTOR_B, gt);
 
     if (reload) {
-        mSaneDevice->reloadAllOptions();    // reload is needed
+        mSaneDevice->reloadAllOptions();		// reload is needed
     }
 }
 
@@ -1013,7 +1013,7 @@ void ScanParams::applyRect(const QRect &rect)
     double min1, max1;
     double min2, max2;
 
-    if (!rect.isValid()) {              // set full scan area
+    if (!rect.isValid()) {				// set full scan area
         tl_x->getRange(&min1, &max1); tl_x->set(min1);
         br_x->getRange(&min1, &max1); br_x->set(max1);
         tl_y->getRange(&min2, &max2); tl_y->set(min2);
@@ -1098,10 +1098,10 @@ void ScanParams::slotNewResolution(KScanOption *opt)
     //qDebug() << "X/Y resolution" << x_res << y_res;
 
     if (y_res == 0) {
-        y_res = x_res;    // use X res if Y unavailable
+        y_res = x_res;					// use X res if Y unavailable
     }
     if (x_res == 0) {
-        x_res = y_res;    // unlikely, but orthogonal
+        x_res = y_res;					// unlikely, but orthogonal
     }
 
     if (x_res == 0 && y_res == 0) {
@@ -1121,8 +1121,8 @@ void ScanParams::slotNewScanMode()
 
     qDebug() << "format" << format << "depth" << depth << "-> strips " << strips;
 
-    if (strips == 1 && depth == 1) {        // bitmap scan
-        emit scanModeChanged(0);            // 8 pixels per byte
+    if (strips == 1 && depth == 1) {			// bitmap scan
+        emit scanModeChanged(0);			// 8 pixels per byte
     } else {
         // bytes per pixel
         emit scanModeChanged(strips * (depth == 16 ? 2 : 1));

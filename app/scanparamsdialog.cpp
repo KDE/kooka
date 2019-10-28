@@ -179,12 +179,12 @@ void ScanParamsDialog::slotLoadAndClose(QListWidgetItem *item)
 
 void ScanParamsDialog::slotSave()
 {
-    QString name = QString::null;
+    QString name;
     QListWidgetItem *item = paramsList->currentItem();
     if (item != nullptr) name = item->text();
     //qDebug() << "selected set" << name;
 
-    QString newdesc = QString::null;
+    QString newdesc;
     if (sets.contains(name)) {
         newdesc = sets[name];
     } else {

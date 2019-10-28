@@ -92,7 +92,7 @@ public:
      * @return The resolved URL, or a null URL if there is no saved
      * history.
      **/
-    QUrl recentUrl(const QString &suggestedName = QString::null);
+    QUrl recentUrl(const QString &suggestedName = QString());
 
     /**
      * Resolve the saved recent location (if there is one) and a suggested
@@ -104,7 +104,7 @@ public:
      * @return The resolved file path, or a null string if there is no
      * saved history.
      **/
-    QString recentPath(const QString &suggestedName = QString::null);
+    QString recentPath(const QString &suggestedName = QString());
 
     /**
      * Save the location selected by the file dialogue as a new recent location.

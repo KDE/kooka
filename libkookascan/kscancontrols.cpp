@@ -71,7 +71,7 @@ KScanControl::~KScanControl()               {}
 
 QString KScanControl::text() const
 {
-    return (QString::null);
+    return (QString());
 }
 void KScanControl::setText(const QString &text)     {}
 
@@ -257,7 +257,7 @@ void KScanCheckbox::setValue(int i)
 
 QString KScanCheckbox::label() const
 {
-    return (QString::null);
+    return (QString());
 }
 
 //  KScanCombo - combo box with list of options
@@ -332,7 +332,7 @@ void KScanCombo::setValue(int i)
 
 QString KScanCombo::textAt(int i) const
 {
-    return (i == -1 ? QString::null : mCombo->itemData(i).toString());
+    return (i == -1 ? QString() : mCombo->itemData(i).toString());
 }
 
 int KScanCombo::count() const
@@ -392,7 +392,7 @@ KScanGroup::KScanGroup(QWidget *parent, const QString &text)
 
 QString KScanGroup::label() const
 {
-    return (QString::null);
+    return (QString());
 }
 
 //  KScanPushButton - action button
@@ -409,5 +409,5 @@ KScanPushButton::KScanPushButton(QWidget *parent, const QString &text)
 
 QString KScanPushButton::label() const
 {
-    return (QString::null);
+    return (QString());
 }

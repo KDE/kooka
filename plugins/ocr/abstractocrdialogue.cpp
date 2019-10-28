@@ -445,7 +445,7 @@ void AbstractOcrDialogue::slotGotPreview(const KFileItem &item, const QPixmap &n
 {
     //qDebug() << "pixmap" << newPix.size();
     if (m_previewPix != nullptr) {
-        m_previewPix->setText(QString::null);
+        m_previewPix->setText(QString());
         m_previewPix->setPixmap(newPix);
     }
 }

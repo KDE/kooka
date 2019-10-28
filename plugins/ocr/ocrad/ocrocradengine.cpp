@@ -58,8 +58,8 @@ static const char UndetectedChar = '_';
 OcrOcradEngine::OcrOcradEngine(QObject *pnt, const QVariantList &args)
     : AbstractOcrEngine(pnt, "OcrOcradEngine")
 {
-    m_ocrImagePBM = QString::null;
-    m_tempOrfName = QString::null;
+    m_ocrImagePBM = QString();
+    m_tempOrfName = QString();
     ocradVersion = 0;
 }
 
@@ -274,7 +274,7 @@ QString OcrOcradEngine::readORF(const QString &fileName)
     startResultDocument();
 
     while (!stream.atEnd()) {
-        line = stream.readLine().trimmed();     // line of text excluding '\n'
+        line = stream.readLine().trimmed();		// line of text excluding '\n'
 
         if (line.startsWith("#")) {
             continue;    // ignore comments
@@ -284,17 +284,17 @@ QString OcrOcradEngine::readORF(const QString &fileName)
             //qDebug() << "# Line" << line;
         }
         if (line.startsWith("source file ")) {
-            continue;    // source file name, ignore
-        } else if (line.startsWith("total blocks ")) { // total count of blocks,
-            // must be first line
+            continue;					// source file name, ignore
+        } else if (line.startsWith("total blocks ")) {	// total count of blocks,
+							// must be first line
             blockCnt = line.mid(13).toInt();
             qDebug() << "Block count (V<10)" << blockCnt;
         } else if (line.startsWith("total text blocks ")) {
             blockCnt = line.mid(18).toInt();
             qDebug() << "Block count (V>10)" << blockCnt;
         } else if (line.startsWith("block ") || line.startsWith("text block ")) {
-            // start of text block
-            // matching "block 1 0 0 560 792"
+							// start of text block
+							// matching "block 1 0 0 560 792"
             if (rx1.indexIn(line) == -1) {
                 //qDebug() << "Failed to match 'block' line" << line;
                 continue;
@@ -304,9 +304,9 @@ QString OcrOcradEngine::readORF(const QString &fileName)
             blockRect.setRect(rx1.cap(2).toInt(), rx1.cap(3).toInt(),
                               rx1.cap(4).toInt(), rx1.cap(5).toInt());
             //qDebug() << "Current block" << currBlock << "rect" << blockRect;
-        } else if (line.startsWith("lines ")) { // lines in this block
+        } else if (line.startsWith("lines ")) {		// lines in this block
             //qDebug() << "Block line count" << line.mid(6).toInt();
-        } else if (line.startsWith("line ")) {  // start of text line
+        } else if (line.startsWith("line ")) {		// start of text line
             startLine();
 
             if (rx2.indexIn(line) == -1) {
@@ -345,8 +345,8 @@ QString OcrOcradEngine::readORF(const QString &fileName)
                 }
 
                 int altCount = rx3.cap(1).toInt();
-                if (altCount == 0) {        // no alternatives,
-                    // undecipherable character
+                if (altCount == 0) {			// no alternatives,
+							// undecipherable character
                     if (verboseDebug()) {
                         //qDebug() << "Undecipherable character in 'char' line" << charLine;
                     }
@@ -374,8 +374,8 @@ QString OcrOcradEngine::readORF(const QString &fileName)
                     }
                 }
 
-                if (detectedChar == ' ') {      // space terminates the word
-                    if (ocradVersion < 10) {    // offset is relative to block
+                if (detectedChar == ' ') {		// space terminates the word
+                    if (ocradVersion < 10) {		// offset is relative to block
                         wordRect.translate(blockRect.x(), blockRect.y());
                     }
 
@@ -383,16 +383,16 @@ QString OcrOcradEngine::readORF(const QString &fileName)
                     wd.setProperty(OcrWordData::Rectangle, wordRect);
                     addWord(word, wd);
 
-                    word = QString::null;       // reset for next time
+                    word = QString();			// reset for next time
                     wordRect = QRect();
                 } else {
-                    word.append(detectedChar);    // append char to word
+                    word.append(detectedChar);		// append char to word
                 }
-            }                       // end of text line loop
+            }						// end of text line loop
             ++lineNo;
 
-            if (!word.isEmpty()) {          // last word in line
-                if (ocradVersion < 10) {        // offset is relative to block
+            if (!word.isEmpty()) {			// last word in line
+                if (ocradVersion < 10) {		// offset is relative to block
                     wordRect.translate(blockRect.x(), blockRect.y());
                 }
 
@@ -400,7 +400,7 @@ QString OcrOcradEngine::readORF(const QString &fileName)
                 wd.setProperty(OcrWordData::Rectangle, wordRect);
                 addWord(word, wd);
 
-                word = QString::null;           // reset for next time
+                word = QString();			// reset for next time
                 wordRect = QRect();
             }
 
@@ -410,11 +410,11 @@ QString OcrOcradEngine::readORF(const QString &fileName)
         }
     }
 
-    file.close();                   // finished with ORF file
+    file.close();					// finished with ORF file
     finishResultDocument();
     qDebug() << "Finished analysing ORF";
 
-    return (QString::null);             // no error detected
+    return (QString());					// no error detected
 }
 
 

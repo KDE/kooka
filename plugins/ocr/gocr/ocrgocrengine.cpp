@@ -69,8 +69,8 @@ OcrGocrEngine::OcrGocrEngine(QObject *pnt, const QVariantList &args)
     : AbstractOcrEngine(pnt, "OcrGocrEngine")
 {
     m_tempDir = nullptr;
-    m_inputFile = QString::null;			// input image file
-    m_resultFile = QString::null;			// OCR result text file
+    m_inputFile = QString();			// input image file
+    m_resultFile = QString();			// OCR result text file
 }
 
 

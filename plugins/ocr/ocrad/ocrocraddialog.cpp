@@ -58,9 +58,9 @@ OcrOcradDialog::OcrOcradDialog(AbstractOcrEngine *plugin, QWidget *pnt)
       m_setupWidget(nullptr),
       m_orfUrlRequester(nullptr),
       m_layoutMode(0),
-      m_ocrCmd(QString::null),
+      m_ocrCmd(QString()),
       m_versionNum(0),
-      m_versionStr(QString::null)
+      m_versionStr(QString())
 {
 }
 
@@ -223,15 +223,15 @@ void OcrOcradDialog::slotWriteConfig()
     KookaSettings::setOcrOcradLayoutDetection(m_layoutMode->currentIndex());
 
     int ix = m_characterSet->currentIndex();
-    QString value = (m_characterSet->itemData(ix).toBool() ? m_characterSet->currentText() : QString::null);
+    QString value = (m_characterSet->itemData(ix).toBool() ? m_characterSet->currentText() : QString());
     KookaSettings::setOcrOcradCharset(value);
 
     ix = m_filter->currentIndex();
-    value = (m_filter->itemData(ix).toBool() ? m_filter->currentText() : QString::null);
+    value = (m_filter->itemData(ix).toBool() ? m_filter->currentText() : QString());
     KookaSettings::setOcrOcradFilter(value);
 
     ix = m_transform->currentIndex();
-    value = (m_transform->itemData(ix).toBool() ? m_transform->currentText() : QString::null);
+    value = (m_transform->itemData(ix).toBool() ? m_transform->currentText() : QString());
     KookaSettings::setOcrOcradTransform(value);
 
     KookaSettings::setOcrOcradInvert(m_invert->isChecked());
@@ -252,7 +252,7 @@ QString OcrOcradDialog::orfUrl() const
     if (m_orfUrlRequester != nullptr) {
         return (m_orfUrlRequester->url().url());
     } else {
-        return (QString::null);
+        return (QString());
     }
 }
 

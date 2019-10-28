@@ -288,7 +288,7 @@ OcrEngine::EngineError KadmosDialog::setupGui()
         slotFontChanged(0);    // Load machine print font language list
     }
 
-    ocrShowInfo(QString::null);
+    ocrShowInfo(QString());
     return err;
 }
 

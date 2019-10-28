@@ -227,7 +227,7 @@ true color images with optional lossless compression.\
     { nullptr, nullptr, 0, 0 }
 };
 
-static QString sLastFormat = QString::null;		// format last used, whether
+static QString sLastFormat;				// format last used, whether
 							// remembered or not
 
 FormatDialog::FormatDialog(QWidget *parent, ImageMetaInfo::ImageType type,

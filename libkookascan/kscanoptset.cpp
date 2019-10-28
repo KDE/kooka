@@ -57,7 +57,7 @@ static QString groupForSet(const QString &setName)
 static QString setNameFromGroup(const QString &grpName)
 {
     QString prefix = ScanSettings::self()->saveSetDescItem()->group();
-    if (!grpName.startsWith(prefix)) return (QString::null);
+    if (!grpName.startsWith(prefix)) return (QString());
     return (grpName.mid(prefix.length()+1));
 }
 

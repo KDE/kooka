@@ -101,7 +101,7 @@ public:
     ImgSaver::ImageSaveStatus saveImage(const QImage *image,
                                         const QUrl &url,
                                         const ImageFormat &format,
-                                        const QString &subformat = QString::null);
+                                        const QString &subformat = QString());
 
     /**
      * Save an image.
@@ -200,7 +200,7 @@ public:
      * this must be either 1, 8, 24 or 32.  The default is for no colour
      * conversion.
      *
-     * @return The file name as saved, or @c QString::null if there was
+     * @return The file name as saved, or @c QString() if there was
      *         an error.
      **/
     static QString tempSaveImage(const KookaImage *img, const ImageFormat &format, int colors = -1);

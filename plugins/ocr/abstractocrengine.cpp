@@ -250,7 +250,7 @@ void AbstractOcrEngine::removeTempFiles()
                                        i18n("OCR Temporary Files"),
                                        KStandardGuiItem::del(),
                                        KStandardGuiItem::close(),
-                                       QString::null,
+                                       QString(),
                                        KMessageBox::AllowLink)==KMessageBox::Yes) retain = false;
     }
 
@@ -411,7 +411,7 @@ QString AbstractOcrEngine::tempFileName(const QString &suffix, const QString &ba
     {
         qDebug() << "error creating temporary file" << protoName;
         setErrorText(xi18nc("@info", "Cannot create temporary file <filename>%1</filename>", protoName));
-        return (QString::null);
+        return (QString());
     }
 
     QString tmpName = QFile::encodeName(tmpFile.fileName());
@@ -422,7 +422,7 @@ QString AbstractOcrEngine::tempFileName(const QString &suffix, const QString &ba
 
 QString AbstractOcrEngine::tempSaveImage(const KookaImage *img, const ImageFormat &format, int colors)
 {
-    if (img==nullptr) return (QString::null);		// no image to save
+    if (img==nullptr) return (QString());		// no image to save
 
     QString tmpName = tempFileName(format.extension(), "imagetemp");
     const KookaImage *tmpImg = nullptr;
@@ -445,7 +445,7 @@ case 32:    newfmt = QImage::Format_RGB32;
             break;
 
 default:    qWarning() << "bad colour depth" << colors;
-            return (QString::null);
+            return (QString());
         }
 
         tmpImg = new KookaImage(img->convertToFormat(newfmt));

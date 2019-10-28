@@ -47,7 +47,7 @@
 OcrKadmosEngine::OcrKadmosEngine(QWidget *parent)
     : OcrEngine(parent)
 {
-    m_tmpFile = QString::null;
+    m_tmpFile = QString();
 }
 
 OcrKadmosEngine::~OcrKadmosEngine()
@@ -211,7 +211,7 @@ QStringList OcrKadmosEngine::tempFiles(bool retain)
 #ifdef USE_KADMOS_FILEOP
     if (!m_tmpFile.isNull()) {
         result << m_tmpFile;
-        m_tmpFile = QString::null;
+        m_tmpFile = QString();
     }
 #endif
 

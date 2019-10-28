@@ -68,7 +68,7 @@ AutoSelectDialog::AutoSelectDialog(QWidget *parent)
     int maxVal = item->maxValue().toInt();
     int minVal = item->minValue().toInt();
 
-    mMarginSlider = new KScanSlider(nullptr, QString::null, minVal, maxVal, true, defaultVal);
+    mMarginSlider = new KScanSlider(nullptr, QString(), minVal, maxVal, true, defaultVal);
     mMarginSlider->setValue(defaultVal);
     mMarginSlider->setToolTip(item->toolTip());
     connect(mMarginSlider, SIGNAL(settingChanged(int)), SLOT(slotControlChanged()));
@@ -93,7 +93,7 @@ AutoSelectDialog::AutoSelectDialog(QWidget *parent)
     maxVal = item->maxValue().toInt();
     minVal = item->minValue().toInt();
 
-    mDustsizeSlider = new KScanSlider(nullptr, QString::null, minVal, maxVal, true, defaultVal);
+    mDustsizeSlider = new KScanSlider(nullptr, QString(), minVal, maxVal, true, defaultVal);
     mDustsizeSlider->setValue(defaultVal);
     mDustsizeSlider->setToolTip(item->toolTip());
     connect(mDustsizeSlider, SIGNAL(settingChanged(int)), SLOT(slotControlChanged()));

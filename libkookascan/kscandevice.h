@@ -175,7 +175,7 @@ public:
      * If this is a null or empty string, a real scan is performed.
      * @return The status of the operation
      **/
-    KScanDevice::Status acquireScan(const QString &filename = QString::null);
+    KScanDevice::Status acquireScan(const QString &filename = QString());
 
     /**
      * Get the standard file name for saving the preview image for the

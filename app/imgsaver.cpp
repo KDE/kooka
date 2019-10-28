@@ -172,14 +172,16 @@ ImgSaver::ImageSaveStatus ImgSaver::saveImage(const QImage *image)
 {
     if (image == nullptr) return (ImgSaver::SaveStatusParam);
 
-    if (!mSaveFormat.isValid()) {			// see if have this already
+    if (!mSaveFormat.isValid())				// see if have this already
+    {
         // if not, get from image now
         //qDebug() << "format not resolved yet";
         ImgSaver::ImageSaveStatus stat = getFilenameAndFormat(ImageMetaInfo::findImageType(image));
         if (stat != ImgSaver::SaveStatusOk) return (stat);
     }
 
-    if (!mSaveUrl.isValid() || !mSaveFormat.isValid()) { // must have these now
+    if (!mSaveUrl.isValid() || !mSaveFormat.isValid())	// must have these now
+    {
         //qDebug() << "format not resolved!";
         return (ImgSaver::SaveStatusParam);
     }
@@ -244,7 +246,7 @@ ImgSaver::ImageSaveStatus ImgSaver::saveImage(const QImage *image,
  **/
 QString ImgSaver::createFilename()
 {
-    if (!m_saveDirectory.isLocalFile()) return (QString::null);
+    if (!m_saveDirectory.isLocalFile()) return (QString());
     // TODO: allow non-local files
     QDir files(m_saveDirectory.path(), "kscan_[0-9][0-9][0-9][0-9].*");
     QStringList l(files.entryList());
@@ -360,7 +362,7 @@ void ImgSaver::storeFormatForType(ImageMetaInfo::ImageType type, const ImageForm
 QString ImgSaver::findSubFormat(const ImageFormat &format)
 {
     //qDebug() << "for" << format;
-    return (QString::null);             // no subformats currently used
+    return (QString());					// no subformats currently used
 }
 
 QString ImgSaver::errorString(ImgSaver::ImageSaveStatus status) const
@@ -368,27 +370,27 @@ QString ImgSaver::errorString(ImgSaver::ImageSaveStatus status) const
     QString re;
     switch (status) {
     case ImgSaver::SaveStatusOk:
-        re = i18n("Save OK");                           break;
+        re = i18n("Save OK");							break;
     case ImgSaver::SaveStatusPermission:
-        re = i18n("Permission denied");                     break;
-    case ImgSaver::SaveStatusBadFilename:           // never used
-        re = i18n("Bad file name");                     break;
-    case ImgSaver::SaveStatusNoSpace:           // never used
-        re = i18n("No space left on device");                   break;
+        re = i18n("Permission denied");						break;
+    case ImgSaver::SaveStatusBadFilename:		// never used
+        re = i18n("Bad file name");						break;
+    case ImgSaver::SaveStatusNoSpace:			// never used
+        re = i18n("No space left on device");					break;
     case ImgSaver::SaveStatusFormatNoWrite:
-        re = i18n("Cannot write image format '%1'", mLastFormat.constData());   break;
+        re = i18n("Cannot write image format '%1'", mLastFormat.constData());	break;
     case ImgSaver::SaveStatusProtocol:
-        re = i18n("Cannot write using protocol '%1'", mLastUrl.scheme()); break;
+        re = i18n("Cannot write using protocol '%1'", mLastUrl.scheme());	break;
     case ImgSaver::SaveStatusCanceled:
-        re = i18n("User cancelled saving");                 break;
+        re = i18n("User cancelled saving");					break;
     case ImgSaver::SaveStatusMkdir:
-        re = i18n("Cannot create directory");                   break;
+        re = i18n("Cannot create directory");					break;
     case ImgSaver::SaveStatusFailed:
-        re = i18n("Save failed");                       break;
+        re = i18n("Save failed");						break;
     case ImgSaver::SaveStatusParam:
-        re = i18n("Bad parameter");                     break;
+        re = i18n("Bad parameter");						break;
     default:
-        re = i18n("Unknown status %1", status);                 break;
+        re = i18n("Unknown status %1", status);					break;
     }
     return (re);
 }
@@ -396,7 +398,7 @@ QString ImgSaver::errorString(ImgSaver::ImageSaveStatus status) const
 
 bool copyRenameImage(bool isCopying, const QUrl &fromUrl, const QUrl &toUrl, bool askExt, QWidget *overWidget)
 {
-    QString errorString = QString::null;
+    QString errorString;
 
     /* Check if the provided filename has a extension */
     QString extFrom = extension(fromUrl);
@@ -465,7 +467,7 @@ bool copyRenameImage(bool isCopying, const QUrl &fromUrl, const QUrl &toUrl, boo
         return (false);
     }
 
-    return (true);                  // file operation succeeded
+    return (true);					// file operation succeeded
 }
 
 bool ImgSaver::renameImage(const QUrl &fromUrl, const QUrl &toUrl, bool askExt, QWidget *overWidget)

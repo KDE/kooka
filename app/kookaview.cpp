@@ -489,7 +489,7 @@ bool KookaView::slotSelectDevice(const QByteArray &useDevice, bool alwaysAsk)
                                      KScanDevice::statusMessage(stat),
                                      selDevice.constData());
 
-                int tryAgain = KMessageBox::warningContinueCancel(mMainWindow, msg, QString::null,
+                int tryAgain = KMessageBox::warningContinueCancel(mMainWindow, msg, QString(),
                                KGuiItem("Retry"));
                 if (tryAgain == KMessageBox::Cancel) {
                     break;
@@ -563,7 +563,7 @@ QByteArray KookaView::userDeviceSelection(bool alwaysAsk)
                                                       "you need to specify the device to use. "
                                                       "Use the <interface>Add Scan Device</interface> option to enter the backend name and parameters, "
                                                       "or see that dialog for more information."),
-                                               QString::null,
+                                               QString(),
                                                KGuiItem(i18n("Add Scan Device..."))) != KMessageBox::Continue)
         {
             return ("");

@@ -126,7 +126,7 @@ QString KookaImage::loadFromUrl(const QUrl &url)
             const QString fileName = url.adjusted(QUrl::RemoveFragment).toLocalFile();
             qDebug() << "subimage" << subno << "from" << fileName;
             loadTiffDir(fileName, subno);		// load TIFF subimage
-            return (QString::null);
+            return (QString());
         }
 
     }
@@ -179,7 +179,7 @@ QString KookaImage::loadFromUrl(const QUrl &url)
 
     m_url = url;					// record image source
     m_fileBound = true;					// note loaded from file
-    return (QString::null);				// loaded OK
+    return (QString());				// loaded OK
 }
 
 
@@ -258,7 +258,7 @@ QString  KookaImage::loadTiffDir(const QString &filename, int subno)
 #else
     return (i18n("TIFF not supported"));
 #endif							// HAVE_TIFF
-    return (QString::null);				// TIFF read succeeded
+    return (QString());				// TIFF read succeeded
 }
 
 

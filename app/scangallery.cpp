@@ -472,7 +472,7 @@ void ScanGallery::slotDecorate(FileTreeViewItem *item)
                 if (isSubImage)				// subimages don't show size
                 {
                     item->setIcon(0, QIcon::fromTheme("edit-copy"));
-                    item->setText(1, QString::null);
+                    item->setText(1, QString());
                 }
                 else
                 {
@@ -683,7 +683,7 @@ void ScanGallery::slotSelectDirectory(const QString &branchName, const QString &
     {
         item = findItemInBranch(branches().at(0), relPath);
     }
-    if (item == nullptr) return;				// not found in branch
+    if (item == nullptr) return;			// not found in branch
 
     scrollToItem(item);
     setCurrentItem(item);
@@ -699,7 +699,7 @@ void ScanGallery::loadImageForItem(FileTreeViewItem *item)
 #ifdef DEBUG_LOADING
     qDebug() << "loading" << item->url();
 #endif // DEBUG_LOADING
-    QString ret = QString::null;			// no error so far
+    QString ret;					// no error so far
 
     ImageFormat format = getImgFormat(item);		// check for valid image format
     if (!format.isValid())
@@ -815,13 +815,13 @@ const KookaImage *ScanGallery::getCurrImage(bool loadOnDemand)
         return (nullptr);    // is a directory
     }
 
-    KookaImage *img = imageForItem(curr);       // see if already loaded
-    if (img == nullptr) {              // no, try to do that
+    KookaImage *img = imageForItem(curr);		// see if already loaded
+    if (img == nullptr) {				// no, try to do that
         if (!loadOnDemand) {
-            return (nullptr);    // not loaded, and don't want to
+            return (nullptr);				// not loaded, and don't want to
         }
-        slotItemActivated(curr);            // select/load this image
-        img = imageForItem(curr);           // and get image for it
+        slotItemActivated(curr);			// select/load this image
+        img = imageForItem(curr);			// and get image for it
     }
 
     return (img);
@@ -833,11 +833,11 @@ QString ScanGallery::currentImageFileName() const
     QString result = "";
 
     const FileTreeViewItem *curr = highlightedFileTreeViewItem();
-    if (curr==nullptr) return (QString::null);
+    if (curr==nullptr) return (QString());
 
     bool isLocal = false;
     const QUrl u = curr->fileItem()->mostLocalUrl(isLocal);
-    if (!isLocal) return (QString::null);
+    if (!isLocal) return (QString());
     return (u.toLocalFile());
 }
 
@@ -850,12 +850,12 @@ bool ScanGallery::prepareToSave(const ImageMetaInfo *info)
         //qDebug() << "type" << info->getImageType();
     }
 
-    delete mSaver; mSaver = nullptr;           // recreate with clean info
+    delete mSaver; mSaver = nullptr;			// recreate with clean info
 
     // Resolve where to save the new image when it arrives
     FileTreeViewItem *curr = highlightedFileTreeViewItem();
-    if (curr == nullptr) {             // into root if nothing is selected
-        FileTreeBranch *branch = branches().at(0);  // there should be at least one
+    if (curr == nullptr) {				// into root if nothing is selected
+        FileTreeBranch *branch = branches().at(0);	// there should be at least one
         if (branch != nullptr) {
             // if user has created this????
             curr = findItemInBranch(branch, i18n("Incoming/"));
@@ -870,21 +870,21 @@ bool ScanGallery::prepareToSave(const ImageMetaInfo *info)
         curr->setSelected(true);
     }
 
-    mSavedTo = curr;                    // note for selecting later
+    mSavedTo = curr;					// note for selecting later
 
     // Create the ImgSaver to use later
-    QUrl dir(itemDirectory(curr));          // where new image will go
-    mSaver = new ImgSaver(dir);             // create saver to use later
+    QUrl dir(itemDirectory(curr));			// where new image will go
+    mSaver = new ImgSaver(dir);				// create saver to use later
 
-    if (info != nullptr) {             // have image information,
-        // tell saver about it
+    if (info != nullptr) {				// have image information,
+							// tell saver about it
         ImgSaver::ImageSaveStatus stat = mSaver->setImageInfo(info);
         if (stat == ImgSaver::SaveStatusCanceled) {
             return (false);
         }
     }
 
-    return (true);                  // all ready to save
+    return (true);					// all ready to save
 }
 
 QUrl ScanGallery::saveURL() const
@@ -907,17 +907,17 @@ void ScanGallery::addImage(const QImage *img, const ImageMetaInfo *info)
     //qDebug() << "size" << img->size() << "depth" << img->depth();
 
     if (mSaver == nullptr) {
-        prepareToSave(nullptr);    // if not done already
+        prepareToSave(nullptr);				// if not done already
     }
     if (mSaver == nullptr) {
-        return;    // should never happen
+        return;						// should never happen
     }
 
     ImgSaver::ImageSaveStatus isstat = mSaver->saveImage(img);
     // try to save the image
-    QUrl lurl = mSaver->lastURL();          // record where it ended up
+    QUrl lurl = mSaver->lastURL();			// record where it ended up
 
-    if (isstat != ImgSaver::SaveStatusOk &&     // image saving failed
+    if (isstat != ImgSaver::SaveStatusOk &&		// image saving failed
             isstat != ImgSaver::SaveStatusCanceled) {   // user cancelled, just ignore
         KMessageBox::error(this, xi18nc("@info", "Could not save the image<nl/><filename>%2</filename><nl/>%1",
                                         mSaver->errorString(isstat),
@@ -925,9 +925,9 @@ void ScanGallery::addImage(const QImage *img, const ImageMetaInfo *info)
                            i18n("Image Save Error"));
     }
 
-    delete mSaver; mSaver = nullptr;           // now finished with this
+    delete mSaver; mSaver = nullptr;			// now finished with this
 
-    if (isstat == ImgSaver::SaveStatusOk) {     // image was saved OK,
+    if (isstat == ImgSaver::SaveStatusOk) {		// image was saved OK,
         // select the new image
         slotSetNextUrlToSelect(lurl);
         m_nextUrlToShow = lurl;
@@ -1097,19 +1097,19 @@ void ScanGallery::slotUnloadItem(FileTreeViewItem *curr)
         return;
     }
 
-    if (curr->isDir()) {                // is a directory
+    if (curr->isDir()) {				// is a directory
         for (int i = 0; i < curr->childCount(); ++i) {
             FileTreeViewItem *child = static_cast<FileTreeViewItem *>(curr->child(i));
-            slotUnloadItem(child);          // recursively unload contents
+            slotUnloadItem(child);			// recursively unload contents
         }
-    } else {                    // is a file/image
+    } else {						// is a file/image
         const KookaImage *image = imageForItem(curr);
         if (image == nullptr) {
-            return;    // ok, nothing to unload
+            return;					// ok, nothing to unload
         }
 
-        if (image->subImagesCount() > 0) {      // image with subimages
-            while (curr->childCount() > 0) {    // recursively unload subimages
+        if (image->subImagesCount() > 0) {		// image with subimages
+            while (curr->childCount() > 0) {		// recursively unload subimages
                 FileTreeViewItem *child = static_cast<FileTreeViewItem *>(curr->takeChild(0));
                 slotUnloadItem(child);
                 delete child;
@@ -1119,7 +1119,7 @@ void ScanGallery::slotUnloadItem(FileTreeViewItem *curr)
         emit unloadImage(image);
         delete image;
 
-        curr->setClientData(nullptr);          // clear image from item
+        curr->setClientData(nullptr);			// clear image from item
         slotDecorate(curr);
     }
 }
@@ -1142,8 +1142,8 @@ void ScanGallery::slotDeleteItems()
         return;
     }
 
-    QUrl urlToDel = curr->url();            // item to be deleted
-    bool isDir = curr->isDir();             // deleting a folder?
+    QUrl urlToDel = curr->url();			// item to be deleted
+    bool isDir = curr->isDir();				// deleting a folder?
     QTreeWidgetItem *nextToSelect = curr->treeWidget()->itemBelow(curr);
     // select this afterwards
     QString s;
@@ -1180,8 +1180,8 @@ void ScanGallery::slotDeleteItems()
         return;
     }
 
-    updateParent(curr);                 // update parent folder count
-    if (isDir) {                    // remove from the name combo
+    updateParent(curr);					// update parent folder count
+    if (isDir) {					// remove from the name combo
         emit galleryDirectoryRemoved(curr->branch(), itemDirectoryRelative(curr));
     }
 

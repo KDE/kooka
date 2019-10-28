@@ -120,7 +120,7 @@ default:
 
 void StatusBarManager::clearStatus(StatusBarManager::Item item)
 {
-    setStatus(QString::null, item);
+    setStatus(QString(), item);
 }
 
 

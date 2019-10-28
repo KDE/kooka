@@ -94,7 +94,7 @@ public:
     /**
      * Get the control's current text value.
      *
-     * @return the text value, or @c QString::null for a @c Number
+     * @return the text value, or @c QString() for a @c Number
      * or @c Group control.
      */
     virtual QString text() const;

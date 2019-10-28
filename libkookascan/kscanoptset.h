@@ -120,7 +120,7 @@ public:
      * optSet.saveConfig(saneDevice->scannerBackendName(), setDesc);
      * @endcode
      **/
-    void saveConfig(const QByteArray &scannerName, const QString &desc = QString::null) const;
+    void saveConfig(const QByteArray &scannerName, const QString &desc = QString()) const;
 
     /**
      * Load an option set from the global scanner configuration file.

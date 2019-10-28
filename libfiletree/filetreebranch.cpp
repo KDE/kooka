@@ -307,7 +307,7 @@ void FileTreeBranch::itemRenamed(FileTreeViewItem *item)
 //
 //    QUrl url = fi.url();
 //    //qDebug() << "for" << url;
-//    url.setFileName(QString::null);
+//    url.setFileName(QString());
 //    return (findItemByUrl(url));
 //}
 

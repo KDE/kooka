@@ -318,7 +318,7 @@ QString ImgPrintDialog::checkValid() const
         return (i18n("A valid size must be specified for custom scaling. One or both of the specified dimensions is zero."));
     }
 
-    return (QString::null);				// no problems
+    return (QString());				// no problems
 }
 
 

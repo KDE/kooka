@@ -99,9 +99,9 @@ int KookaPref::createPage(KookaPrefsPage *page,
     item->setHeader(header);
     item->setIcon(QIcon::fromTheme(icon));
 
-    int idx = mPages.count();               // index of new item
+    int idx = mPages.count();				// index of new item
     mPages.append(item);
-    return (idx);                   // index of item added
+    return (idx);					// index of item added
 }
 
 void KookaPref::slotSaveSettings()
@@ -137,7 +137,7 @@ int KookaPref::currentPageIndex()
 
 // Support for the gallery location - moved here from Previewer class in libkscan
 
-QString KookaPref::sGalleryRoot = QString::null;    // global resolved location
+QString KookaPref::sGalleryRoot;			// global resolved location
 
 // The static variable above ensures that the user is only asked
 // at most once in an application run.
@@ -211,7 +211,7 @@ QString KookaPref::findGalleryRoot()
     if (galleryName.isEmpty())
     {
         qWarning() << "Gallery name not configured";
-        return (QString::null);
+        return (QString());
     }
 
     QString oldpath = QStandardPaths::locate(QStandardPaths::AppDataLocation, "ScanImages", QStandardPaths::LocateDirectory);
@@ -257,7 +257,7 @@ QString KookaPref::findGalleryRoot()
                                                 "<nl/>then you may do so by simply copying or moving the files.",
                                                 newpath, oldpath),
                                          i18n("New Gallery Created"),
-                                         QString::null,
+                                         QString(),
                                          KMessageBox::Notify | KMessageBox::AllowLink);
             }
         } else {					// no, don't create

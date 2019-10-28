@@ -51,7 +51,7 @@ static QString entryData(const FileTreeBranch *branch, const QString &relPath)
 // Data for display - what the user sees
 static QString entryName(const FileTreeBranch *branch, const QString &relPath)
 {
-    QString name = QString::null;
+    QString name;
 
     FileTreeView *view = static_cast<FileTreeView *>(branch->root()->treeWidget());
     if (view == nullptr) {
@@ -110,7 +110,7 @@ void GalleryHistory::slotPathChanged(const FileTreeBranch *branch, const QString
 
 void GalleryHistory::slotActivated(int idx)
 {
-    QString branchName = QString::null;
+    QString branchName;
 
     QString relPath = itemData(idx).toString();
     int ix = relPath.indexOf(GALLERY_PATH_SEP);     // is the separator present?
