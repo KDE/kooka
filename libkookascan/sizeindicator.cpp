@@ -32,7 +32,7 @@ SizeIndicator::SizeIndicator(QWidget *parent, long thresh, long crit)
     : QLabel(parent)
 {
     setFrameStyle(QFrame::Box | QFrame::Sunken);
-    setMinimumWidth(fontMetrics().width("MMMM.MM MiB"));
+    setMinimumWidth(fontMetrics().horizontalAdvance("MMMM.MM MiB"));
 
     mThreshold = thresh;
     mCritical = crit;

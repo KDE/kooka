@@ -352,8 +352,8 @@ void KookaPrint::drawCutSign(QPainter *painter, const QPoint &p, int num, Qt::Co
     QString numStr = QString::number(num);
 
     QFontMetrics fm = painter->fontMetrics();
-    int textWidth = fm.width(numStr) / 2;
-    int textHeight = fm.width(numStr) / 2;
+    int textWidth = fm.horizontalAdvance(numStr)/2;
+    int textHeight = fm.height()/2;
     int textYOff = 0;
     int textXOff = 0;
     switch (dir) {
@@ -445,7 +445,7 @@ void KookaPrint::drawCornerMarkers(QPainter *painter, const QRect &targetRect,
     {
         const QString numStr = QString("= %1 =").arg(indx);
         const QFontMetrics &fm = painter->fontMetrics();
-        const int xoff = targetRect.left()+((targetRect.width()-fm.width(numStr))/2);
+        const int xoff = targetRect.left()+((targetRect.width()-fm.horizontalAdvance(numStr))/2);
 
         painter->setPen(Qt::black);
         painter->drawText(xoff, fm.height()-1, numStr);
