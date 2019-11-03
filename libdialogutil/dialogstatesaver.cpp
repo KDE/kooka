@@ -78,23 +78,27 @@ void DialogStateSaver::restoreConfig(QDialog *dialog, const KConfigGroup &grp)
 }
 
 
-void DialogStateSaver::restoreWindowState(QWidget *window)
+void DialogStateSaver::restoreWindowState(QWidget *widget)
 {
-    const KConfigGroup grp = configGroupFor(window);
-    restoreWindowState(window, grp);
+    const KConfigGroup grp = configGroupFor(widget);
+    restoreWindowState(widget, grp);
 }
 
 
-void DialogStateSaver::restoreWindowState(QWidget *window, const KConfigGroup &grp)
+void DialogStateSaver::restoreWindowState(QWidget *widget, const KConfigGroup &grp)
 {
-    // originally from KDE4 KDialog::restoreDialogSize()
-    const QRect desk = window->parentWidget()->window()->windowHandle()->screen()->geometry();
-    const QSize sizeDefault = window->sizeHint();
+    // Ensure that the widget's window() - that is, either the widget itself
+    // or its nearest ancestor widget that is or could be top level- is a
+    // native window, so that windowHandle() below will return a valid QWindow.
+    const WId wid = widget->window()->winId();
+    const QRect desk = widget->window()->windowHandle()->screen()->geometry();
+    const QSize sizeDefault = widget->sizeHint();
 
+    // originally from KDE4 KDialog::restoreDialogSize()
     qDebug() << "from" << grp.name() << "in" << grp.config()->name();
     const int width = grp.readEntry(QString::fromLatin1("Width %1").arg(desk.width()), sizeDefault.width());
     const int height = grp.readEntry(QString::fromLatin1("Height %1").arg(desk.height()), sizeDefault.height());
-    window->resize(width, height);
+    widget->resize(width, height);
 }
 
 
@@ -114,19 +118,20 @@ void DialogStateSaver::saveConfig(QDialog *dialog, KConfigGroup &grp) const
 }
 
 
-void DialogStateSaver::saveWindowState(QWidget *window)
+void DialogStateSaver::saveWindowState(QWidget *widget)
 {
-    KConfigGroup grp = configGroupFor(window);
-    saveWindowState(window, grp);
+    KConfigGroup grp = configGroupFor(widget);
+    saveWindowState(widget, grp);
 }
 
 
-void DialogStateSaver::saveWindowState(QWidget *window, KConfigGroup &grp)
+void DialogStateSaver::saveWindowState(QWidget *widget, KConfigGroup &grp)
 {
-    // originally from KDE4 KDialog::saveDialogSize()
-    const QRect desk = window->parentWidget()->window()->windowHandle()->screen()->geometry();
-    const QSize sizeToSave = window->size();
+    const WId wid = widget->window()->winId();
+    const QRect desk = widget->window()->windowHandle()->screen()->geometry();
+    const QSize sizeToSave = widget->size();
 
+    // originally from KDE4 KDialog::saveDialogSize()
     qDebug() << "to" << grp.name() << "in" << grp.config()->name();
     grp.writeEntry(QString::fromLatin1("Width %1").arg(desk.width()), sizeToSave.width());
     grp.writeEntry( QString::fromLatin1("Height %1").arg(desk.height()), sizeToSave.height());
