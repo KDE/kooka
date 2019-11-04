@@ -88,7 +88,7 @@ AbstractOcrEngine::~AbstractOcrEngine()
  * This is called to introduce a new image, usually if the user clicks on a
  * new image either in the gallery or on the thumbnailview.
  */
-void AbstractOcrEngine::setImage(const KookaImage img)
+void AbstractOcrEngine::setImage(const KookaImage &img)
 {
     m_introducedImage = img;				// shallow copy of original
 

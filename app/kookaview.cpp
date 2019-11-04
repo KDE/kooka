@@ -774,7 +774,7 @@ void KookaView::slotOcrSpellCheck(bool interactive, bool background)
 }
 
 
-void KookaView::startOCR(const KookaImage img)
+void KookaView::startOCR(const KookaImage &img)
 {
     if (img.isNull()) return;				// no image to OCR
 

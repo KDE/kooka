@@ -85,7 +85,7 @@ public:
      * the image to OCR.
      */
     void setImageCanvas(ImageCanvas *canvas);
-    void setImage(const KookaImage img);
+    void setImage(const KookaImage &img);
     void setTextDocument(QTextDocument *doc);
 
     QString findExecutable(QString (*settingFunc)(), KConfigSkeletonItem *settingItem);

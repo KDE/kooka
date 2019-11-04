@@ -206,7 +206,7 @@ signals:
     void signalOcrPrefs();
 
 private:
-    void startOCR(const KookaImage img);
+    void startOCR(const KookaImage &img);
 
     QByteArray userDeviceSelection(bool alwaysAsk);
 
