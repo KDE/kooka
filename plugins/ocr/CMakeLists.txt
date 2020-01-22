@@ -60,6 +60,7 @@ install(FILES kookaocrplugin.desktop DESTINATION ${SERVICETYPES_INSTALL_DIR})
 
 add_subdirectory(gocr)
 add_subdirectory(ocrad)
+add_subdirectory(tesseract)
 if(WITH_KADMOS)
   add_subdirectory(kadmos)
 endif(WITH_KADMOS)

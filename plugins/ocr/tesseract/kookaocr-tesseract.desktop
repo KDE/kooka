@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Service
+X-KDE-ServiceTypes=Kooka/OcrPlugin
+X-KDE-Library=kookaocrtesseract
+X-KDE-PluginInfo-Name=tesseract
+X-KDE-PluginInfo-License=GPL
+Icon=tesseract
+Name=Tesseract
+Comment=<emphasis>Tesseract</emphasis> is a free software OCR engine, originally developed at at HP&nbsp;Labs and now sponsored by Google. It supports multiple languages and scripts (including right-to-left text) and page layout analysis.<nl/><nl/>The best results are achieved if scanned characters are at least 20&nbsp;pixels high. Problems may arise with excessively skewed or rotated images, or if dark borders are present.<nl/><nl/>See <link url="https://github.com/tesseract-ocr/tesseract">github.com/tesseract-ocr/tesseract</link> for more information on Tesseract.

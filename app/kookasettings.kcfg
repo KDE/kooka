@@ -278,6 +278,43 @@
 
   </group>
 
+  <group name="tesseract">
+
+    <entry name="OcrTesseractBinary" key="tesseractBinary" type="Path">
+      <default>tesseract</default>
+    </entry>
+
+    <!--  No GUI (although the user can edit if required) -->
+    <entry name="ocrTesseractExtraArguments" key="extraArguments" type="String">
+    </entry>
+
+    <entry name="ocrTesseractLanguage" key="language" type="String">
+      <label>Language:</label>
+    </entry>
+
+    <entry name="ocrTesseractUserWords" key="user-words" type="Url">
+      <label>User word list:</label>
+    </entry>
+
+    <entry name="ocrTesseractUserPatterns" key="user-patterns" type="Url">
+      <label>User patterns:</label>
+    </entry>
+
+    <entry name="ocrTesseractEngineMode" key="engineMode" type="String">
+      <label>Engine mode:</label>
+    </entry>
+
+    <entry name="ocrTesseractSegmentationMode" key="segmentationMode" type="String">
+      <label>Segmentation mode:</label>
+    </entry>
+
+    <!--  Dummy entry just to be able to find this group, see			-->
+    <!--  OcrTesseractDialog::getValidValues()					-->
+    <entry name="ocrTesseractValidValues" type="StringList">
+    </entry>
+
+  </group>
+
   <group name="Printing">
 
     <entry name="printScaleOption" key="scaleOption" type="Int">

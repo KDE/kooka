@@ -3,8 +3,7 @@
  *  This file is part of Kooka, a scanning/OCR application using	*
  *  Qt <http://www.qt.io> and KDE Frameworks <http://www.kde.org>.	*
  *									*
- *  Copyright (C) 2000-2016 Klaas Freitag <freitag@suse.de>		*
- *                          Jonathan Marten <jjm@keelhaul.me.uk>	*
+ *  Copyright (C) 2020      Jonathan Marten <jjm@keelhaul.me.uk>	*
  *									*
  *  Kooka is free software; you can redistribute it and/or modify it	*
  *  under the terms of the GNU Library General Public License as	*
@@ -29,25 +28,23 @@
  *									*
  ************************************************************************/
 
-#ifndef OCRGOCRENGINE_H
-#define OCRGOCRENGINE_H
+#ifndef OCRTESSERACTENGINE_H
+#define OCRTESSERACTENGINE_H
 
 #include "abstractocrengine.h"
 
-class QTemporaryDir;
 
-
-class OcrGocrEngine : public AbstractOcrEngine
+class OcrTesseractEngine : public AbstractOcrEngine
 {
     Q_OBJECT
 
 public:
-    explicit OcrGocrEngine(QObject *pnt, const QVariantList &args);
-    ~OcrGocrEngine() override = default;
+    explicit OcrTesseractEngine(QObject *pnt, const QVariantList &args);
+    ~OcrTesseractEngine() override = default;
 
     AbstractOcrDialogue *createOcrDialogue(AbstractOcrEngine *plugin, QWidget *pnt) override;
 
-    bool hasAdvancedSettings() const override			{ return (true); }
+    bool hasAdvancedSettings() const override		{ return (true); }
     void openAdvancedSettings() override;
 
 protected:
@@ -55,13 +52,15 @@ protected:
     QStringList tempFiles(bool retain) override;
     bool finishedOcrProcess(QProcess *proc) override;
 
-protected slots:
-    void slotGOcrStdout();
+private:
+    QString readHOCR(const QString &fileName);
 
 private:
-    QTemporaryDir *m_tempDir;
-    QString m_inputFile;
-    QString m_resultFile;
+    QString m_ocrImageIn;
+    QString m_tempHOCROut;
+    QString m_tempStdoutLog;
+
+    int m_tesseractVersion;
 };
 
-#endif							// OCRGOCRENGINE_H
+#endif							// OCRTESSERACTENGINE_H

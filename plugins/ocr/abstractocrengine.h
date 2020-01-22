@@ -62,7 +62,7 @@ public:
     enum DataType {
         Rectangle = QTextFormat::UserProperty,		// QRect
         Alternatives,					// QStringList
-        KNode						// int
+        KNode						// int - not sure what this ever did
     };
 
     OcrWordData() : QTextCharFormat()			{}

@@ -25,6 +25,7 @@ set(kooka_PICS
   ocr-select.png
   gocr.png
   ocrad.png
+  tesseract.png
   photocopy.png
   preview.png
   scan.png
