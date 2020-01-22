@@ -3,8 +3,7 @@
  *  This file is part of Kooka, a scanning/OCR application using	*
  *  Qt <http://www.qt.io> and KDE Frameworks <http://www.kde.org>.	*
  *									*
- *  Copyright (C) 2000-2016 Klaas Freitag <freitag@suse.de>		*
- *                          Jonathan Marten <jjm@keelhaul.me.uk>	*
+ *  Copyright (C) 2020      Jonathan Marten <jjm@keelhaul.me.uk>	*
  *									*
  *  Kooka is free software; you can redistribute it and/or modify it	*
  *  under the terms of the GNU Library General Public License as	*
@@ -29,39 +28,52 @@
  *									*
  ************************************************************************/
 
-#ifndef OCRGOCRENGINE_H
-#define OCRGOCRENGINE_H
+#ifndef OCRTESSERACTDIALOG_H
+#define OCRTESSERACTDIALOG_H
 
-#include "abstractocrengine.h"
-
-class QTemporaryDir;
+#include "abstractocrdialogue.h"
 
 
-class OcrGocrEngine : public AbstractOcrEngine
+class QWidget;
+class QComboBox;
+
+class KUrlRequester;
+
+
+class OcrTesseractDialog : public AbstractOcrDialogue
 {
     Q_OBJECT
 
 public:
-    explicit OcrGocrEngine(QObject *pnt, const QVariantList &args);
-    ~OcrGocrEngine() override = default;
+    explicit OcrTesseractDialog(AbstractOcrEngine *plugin, QWidget *pnt);
+    ~OcrTesseractDialog() override = default;
 
-    AbstractOcrDialogue *createOcrDialogue(AbstractOcrEngine *plugin, QWidget *pnt) override;
+    bool setupGui() override;
 
-    bool hasAdvancedSettings() const override			{ return (true); }
-    void openAdvancedSettings() override;
+    QString getOCRCmd() const				{ return (m_ocrCmd); }
+    int getNumVersion() const				{ return (m_versionNum); }
 
 protected:
-    bool createOcrProcess(AbstractOcrDialogue *dia, const KookaImage *img) override;
-    QStringList tempFiles(bool retain) override;
-    bool finishedOcrProcess(QProcess *proc) override;
+    void enableFields(bool enable) override;
 
 protected slots:
-    void slotGOcrStdout();
+    void slotWriteConfig() override;
 
 private:
-    QTemporaryDir *m_tempDir;
-    QString m_inputFile;
-    QString m_resultFile;
+    void getVersion(const QString &bin);
+    QMap<QString,QString> getValidValues(const QString &opt);
+
+private:
+    QWidget *m_setupWidget;
+    QComboBox *m_engineMode;
+    QComboBox *m_segmentationMode;
+    QComboBox *m_language;
+    KUrlRequester *m_userWords;
+    KUrlRequester *m_userPatterns;
+
+    QString m_ocrCmd;
+    int m_versionNum;
+    QString m_versionStr;
 };
 
-#endif							// OCRGOCRENGINE_H
+#endif							// OCRTESSERACTDIALOG_H

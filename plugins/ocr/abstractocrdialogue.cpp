@@ -205,7 +205,7 @@ void AbstractOcrDialogue::ocrShowInfo(const QString &binary, const QString &vers
     {
         QLabel *l = new QLabel(w);
         l->setPixmap(QPixmap(logoFile));
-        gl->addWidget(l, 0, 3, 2, 1, Qt::AlignRight);
+        gl->addWidget(l, 0, 3, 3, 1, Qt::AlignRight);
     }
 
     gl->setColumnStretch(2, 1);
@@ -256,7 +256,7 @@ void AbstractOcrDialogue::setupEnginePage()
     l->setOpenExternalLinks(true);
     gl->addWidget(l, 0, 0, 1, 2, Qt::AlignTop);
 
-    gl->setRowStretch(0, 1);
+    gl->setRowStretch(2, 1);
     gl->setColumnStretch(0, 1);
 
     m_enginePage = addPage(w, i18n("OCR Engine"));

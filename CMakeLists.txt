@@ -97,6 +97,10 @@ else (SANE_FOUND)
   message(SEND_ERROR "libkookascan needs SANE (http://www.sane-project.org) - install package or specify location of sane-config(1) with SANECONFIG_BIN")
 endif (SANE_FOUND)
 
+############### Common install locations ###############
+
+set(PICS_INSTALL_DIR ${DATA_INSTALL_DIR}/kooka/pics)
+
 ############### Now, we add the Kooka components ###############
 
 add_subdirectory(libdialogutil)

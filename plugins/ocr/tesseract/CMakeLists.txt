@@ -15,24 +15,24 @@ project(kooka5)
 
 #########################################################################
 #									#
-#  OCR plugin for OCRAD							#
+#  OCR plugin for Tesseract						#
 #									#
 #########################################################################
 
-set(kookaocrocrad_SRCS
-  ocrocradengine.cpp
-  ocrocraddialog.cpp
+set(kookaocrtesseract_SRCS
+  ocrtesseractengine.cpp
+  ocrtesseractdialog.cpp
 )
 
-add_library(kookaocrocrad MODULE ${kookaocrocrad_SRCS})
-kcoreaddons_desktop_to_json(kookaocrocrad kookaocr-ocrad.desktop)
+add_library(kookaocrtesseract MODULE ${kookaocrtesseract_SRCS})
+kcoreaddons_desktop_to_json(kookaocrtesseract kookaocr-tesseract.desktop)
 
-target_link_libraries(kookaocrocrad Qt5::Core Qt5::Gui)
-target_link_libraries(kookaocrocrad KF5::I18n KF5::WidgetsAddons)
-target_link_libraries(kookaocrocrad kookaocr kookascan)
+target_link_libraries(kookaocrtesseract Qt5::Core Qt5::Gui)
+target_link_libraries(kookaocrtesseract KF5::I18n KF5::WidgetsAddons)
+target_link_libraries(kookaocrtesseract kookaocr kookascan)
 
 if (INSTALL_BINARIES)
-  install(TARGETS kookaocrocrad DESTINATION ${PLUGIN_INSTALL_DIR}/kooka)
+  install(TARGETS kookaocrtesseract DESTINATION ${PLUGIN_INSTALL_DIR}/kooka)
 endif (INSTALL_BINARIES)
-install(FILES kookaocr-ocrad.desktop DESTINATION ${SERVICES_INSTALL_DIR})
-install(FILES ocrad.png DESTINATION ${PICS_INSTALL_DIR})
+install(FILES kookaocr-tesseract.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+install(FILES tesseract.png DESTINATION ${PICS_INSTALL_DIR})

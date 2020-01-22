@@ -26,8 +26,6 @@
 #ifndef OCROCRADENGINE_H
 #define OCROCRADENGINE_H
 
-#include <qprocess.h>
-
 #include "abstractocrengine.h"
 
 

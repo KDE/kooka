@@ -403,7 +403,9 @@ void AbstractOcrEngine::addWord(const QString &word, const OcrWordData &data)
 
 QString AbstractOcrEngine::tempFileName(const QString &suffix, const QString &baseName)
 {
-    const QString protoName = QDir::tempPath()+'/'+baseName+"_XXXXXX."+suffix;
+    QString protoName = QDir::tempPath()+'/'+baseName+"_XXXXXX";
+    if (!suffix.isEmpty()) protoName += "."+suffix;
+
     QTemporaryFile tmpFile(protoName);
     tmpFile.setAutoRemove(false);
 
