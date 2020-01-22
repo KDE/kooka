@@ -23,9 +23,6 @@ set(kooka_PICS
   newfromselect.png
   ocr.png
   ocr-select.png
-  gocr.png
-  ocrad.png
-  tesseract.png
   photocopy.png
   preview.png
   scan.png
@@ -41,4 +38,4 @@ set(kooka_PICS
   autoselect.png
 )
 
-install(FILES ${kooka_PICS} DESTINATION ${DATA_INSTALL_DIR}/kooka/pics)
+install(FILES ${kooka_PICS} DESTINATION ${PICS_INSTALL_DIR})
