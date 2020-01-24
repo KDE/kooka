@@ -6,4 +6,11 @@ X-KDE-PluginInfo-Name=tesseract
 X-KDE-PluginInfo-License=GPL
 Icon=tesseract
 Name=Tesseract
+Name[ca]=Tesseract
+Name[et]=Tesseract
+Name[nl]=Tesseract
+Name[pt]=Tesseract
+Name[uk]=Tesseract
+Name[x-test]=xxTesseractxx
 Comment=<emphasis>Tesseract</emphasis> is a free software OCR engine, originally developed at HP&nbsp;Labs and now sponsored by Google. It supports multiple languages and scripts (including right-to-left text) and page layout analysis.<nl/><nl/>The best results are achieved if scanned characters are at least 20&nbsp;pixels high. Problems may arise with excessively skewed or rotated images, or if dark borders are present.<nl/><nl/>See <link url="https://github.com/tesseract-ocr/tesseract">github.com/tesseract-ocr/tesseract</link> for more information on Tesseract.
+Comment[uk]=<emphasis>Tesseract</emphasis> — вільний рушій для розпізнавання тексту, початкову версію якого було створено у HP&nbsp;Labs. Зараз розробку спонсорує Google. Передбачено підтримку декількох мов та писемностей (зокрема писемностей із напрямком тексту справа ліворуч) та аналізу компонування сторінки.<nl/><nl/>Найкращі результат дає для сканованих символів, розмір яких перевищує 20&nbsp;пікселів у висоту. Проблемними можуть бути рядки тексту із значним нахилом або поворотом, а також сторінки із темними полями.<nl/><nl/>Щоб дізнатися більше про Tesseract, відвідайте сторінку <link url="https://github.com/tesseract-ocr/tesseract">github.com/tesseract-ocr/tesseract</link>.
