@@ -491,10 +491,12 @@ signals:
      * while the lamp warms up) between this signal and the
      * @c sigAcquireStart.
      *
-     * @param info Image information, if it is currently available
+     * @param info Image information, if a scan is being started and
+     * the image information is is currently available.  This pointer
+     * will be null if a preview is being started.
      * @see sigAcquireStart
      *
-     * @note The @p info parameter may be nullptr, or it may not contain
+     * @note Even if the @p info parameter is not null, it may not contain
      * any useful format information.
      **/
     void sigScanStart(const ImageMetaInfo *info);
@@ -542,7 +544,7 @@ signals:
     /**
      * Emitted to indicate that a scan or preview has finished.
      * This signal is always emitted, even if the scan failed with
-     * an error or was cancelled, and before the @c sigNewImage or
+     * an error or was cancelled, and after the @c sigNewImage or
      * the @c sigNewPreview.
      *
      * @param stat Status of the scan
@@ -559,7 +561,6 @@ signals:
 
 private slots:
     void doProcessABlock();
-    void slotScanFinished(KScanDevice::Status status);
 
 private:
     KScanDevice::Status findOptions();
@@ -569,7 +570,8 @@ private:
 
     KScanDevice::Status createNewImage(const SANE_Parameters *p);
 
-    KScanDevice::Status acquireData(bool isPreview = false);
+    KScanDevice::Status acquireData(bool isPreview);
+    void scanFinished(KScanDevice::Status status);
 
     /**
      * Clear any saved authentication for this scanner, to ensure that the
@@ -601,8 +603,6 @@ private:
     OptionHash mCreatedOptions;				// option name -> KScanOption
     IndexMap mKnownOptions;				// SANE index -> option name
 
-    KScanOptSet *mSavedOptions;
-
     QByteArray mScannerName;
     bool mScannerInitialised;
     SANE_Handle mScannerHandle;
@@ -612,7 +612,6 @@ private:
 
     SANE_Byte *mScanBuf;
     QImage *mScanImage;
-    ImageMetaInfo *mImageInfo;
     SANE_Parameters mSaneParameters;
     long mBytesRead;
     long mBlocksRead;

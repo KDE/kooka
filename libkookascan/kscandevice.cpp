@@ -181,26 +181,18 @@ KScanDevice::KScanDevice(QObject *parent)
 
     mScanBuf = nullptr;					// image data buffer while scanning
     mScanImage = nullptr;				// temporary image to scan into
-    mImageInfo = nullptr;				// scanned image information
 
     mSocketNotifier = nullptr;				// socket notifier for async scanning
-    mSavedOptions = nullptr;				// options to save during preview
 
     mBytesRead = 0;
     mBytesUsed = 0;
     mPixelX = 0;
     mPixelY = 0;
-
-// TODO: make this just a function call, for predictable order
-// (sigScanFinished before sigNewImage)
-    connect(this, &KScanDevice::sigScanFinished, this, &KScanDevice::slotScanFinished);
 }
 
 
 KScanDevice::~KScanDevice()
 {
-    delete mSavedOptions;
-    delete mImageInfo;
 // TODO: need to check and do closeDevice() here?
     ScanGlobal::self()->setScanDevice(nullptr);		// going away, don't call me
 
@@ -501,11 +493,7 @@ void KScanDevice::reloadAllOptions()
 
 void KScanDevice::slotStopScanning()
 {
-    //qDebug() << "Attempt to stop scanning";
-
-// TODO: needed? will be done by acquireData()
-    if (mScanningState==KScanDevice::ScanInProgress) emit sigScanFinished(KScanDevice::Cancelled);
-
+    qDebug();
     mScanningState = KScanDevice::ScanStopNow;
 }
 
@@ -667,10 +655,9 @@ case ImageMetaInfo::HighColour:	fmt = QImage::Format_RGB32;		break;
 //  Acquiring preview/scan image
 //  ----------------------------
 
-KScanDevice::Status KScanDevice::acquirePreview( bool forceGray, int dpi )
+KScanDevice::Status KScanDevice::acquirePreview(bool forceGray, int dpi)
 {
-    if (mSavedOptions!=nullptr) mSavedOptions->clear();
-    else mSavedOptions = new KScanOptSet("TempStore");
+    KScanOptSet savedOptions("SavedForPreview");
 
     /* set Preview = ON if exists */
     KScanOption *prev = getOption(SANE_NAME_PREVIEW, false);
@@ -679,7 +666,7 @@ KScanDevice::Status KScanDevice::acquirePreview( bool forceGray, int dpi )
         prev->set(true);
         prev->apply();
         prev->set(false);				// Ensure that it gets restored
-        mSavedOptions->backupOption(prev);		// back to 'false' after previewing
+        savedOptions.backupOption(prev);		// back to 'false' after previewing
     }
 
     // TODO: this block doesn't make sense (set the option to true if
@@ -706,7 +693,7 @@ KScanDevice::Status KScanDevice::acquirePreview( bool forceGray, int dpi )
     if (mode!=nullptr)
     {
         //qDebug() << "Scan mode before preview is" << mode->get();
-        mSavedOptions->backupOption(mode);
+        savedOptions.backupOption(mode);
         /* apply if it has a widget, or apply always? */
         if (mode->isGuiElement()) mode->apply();
     }
@@ -717,7 +704,7 @@ KScanDevice::Status KScanDevice::acquirePreview( bool forceGray, int dpi )
     if (xres!=nullptr)
     {
         //qDebug() << "Scan resolution before preview is" << xres->get();
-        mSavedOptions->backupOption(xres);
+        savedOptions.backupOption(xres);
 
         int preview_dpi = dpi;
         if (dpi==0)					// preview DPI not specified
@@ -738,7 +725,7 @@ KScanDevice::Status KScanDevice::acquirePreview( bool forceGray, int dpi )
         if (yres!=nullptr)
         {
             /* if active ? */
-            mSavedOptions->backupOption(yres);
+            savedOptions.backupOption(yres);
             yres->set(preview_dpi);
             yres->apply();
             yres->get(&mCurrScanResolutionY);
@@ -750,7 +737,7 @@ KScanDevice::Status KScanDevice::acquirePreview( bool forceGray, int dpi )
         if (bind!=nullptr)
         {
             /* Switch binding on if available */
-            mSavedOptions->backupOption(bind);
+            savedOptions.backupOption(bind);
             bind->set(true);
             bind->apply();
         }
@@ -763,7 +750,9 @@ KScanDevice::Status KScanDevice::acquirePreview( bool forceGray, int dpi )
         if (mCurrScanResolutionY==0) mCurrScanResolutionY = mCurrScanResolutionX;
     }
 
-    return (acquireData(true));				// perform the preview
+    KScanDevice::Status status = acquireData(true);	// perform the preview
+    loadOptionSet(&savedOptions);			// restore original scan settings
+    return (status);
 }
 
 
@@ -871,12 +860,10 @@ KScanDevice::Status KScanDevice::acquireData(bool isPreview)
 
     ScanGlobal::self()->setScanDevice(this);		// for possible authentication
 
-    if (mImageInfo!=nullptr) delete mImageInfo;		// start with this clean
-    mImageInfo = nullptr;
-
+    // Tell the application that scanning is about to start.
     if (!isPreview)					// scanning to eventually save
     {
-        mImageInfo = new ImageMetaInfo;			// create for image information
+        ImageMetaInfo imageInfo;			// information for result image
 
         mSaneStatus = sane_get_parameters(mScannerHandle, &mSaneParameters);
         if (mSaneStatus==SANE_STATUS_GOOD)		// get pre-scan parameters
@@ -891,17 +878,16 @@ KScanDevice::Status KScanDevice::acquireData(bool isPreview)
                 if (fmt==ImageMetaInfo::Unknown)	// find format it will have
                 {					// scan format not recognised?
                     stat = KScanDevice::ParamError;	// no point starting scan
-                    emit sigScanFinished(stat);		// scan is now finished
+                    scanFinished(stat);			// clean up anything started
                     return (stat);
                 }
 
-                mImageInfo->setImageType(fmt);		// save result for later
+                imageInfo.setImageType(fmt);		// save result for later
             }
         }
+        emit sigScanStart(&imageInfo);			// with image information
     }
-
-    // Tell the application that scanning is about to start.
-    emit sigScanStart(mImageInfo);
+    else emit sigScanStart(nullptr);			// scanning only for preview
 
     // If the image information was available, the application may have
     // prompted for a filename.  If the user cancelled that, it will have
@@ -911,7 +897,7 @@ KScanDevice::Status KScanDevice::acquireData(bool isPreview)
     {							// user cancelled save dialogue
         //qDebug() << "user cancelled before start";
         stat = KScanDevice::Cancelled;
-        emit sigScanFinished(stat);
+        scanFinished(stat);				// clean up anything started
         return (stat);
     }
 
@@ -998,7 +984,7 @@ KScanDevice::Status KScanDevice::acquireData(bool isPreview)
         {
             // Scanning could not start - give up now
             //qDebug() << "Scanning failed to start, status" << stat;
-            emit sigScanFinished(stat);
+            scanFinished(stat);				// clean up anything started
             return (stat);
         }
 
@@ -1075,7 +1061,7 @@ KScanDevice::Status KScanDevice::acquireData(bool isPreview)
     //qDebug() << "Scan read" << mBytesRead << "bytes in"
     //<< mBlocksRead << "blocks," << frames << "frames - status" << stat;
 
-    emit sigScanFinished(stat);				// scan is now finished
+    scanFinished(stat);					// scan is now finished
     return (stat);
 }
 
@@ -1297,18 +1283,18 @@ default:    //qDebug() << "Undefined SANE format" << mSaneParameters.format;
 }
 
 
-void KScanDevice::slotScanFinished(KScanDevice::Status status)
+void KScanDevice::scanFinished(KScanDevice::Status status)
 {
+    qDebug() << "status" << status;
+
+    emit sigScanProgress(MAX_PROGRESS);
+    QApplication::restoreOverrideCursor();
+
     if (mSocketNotifier!=nullptr)			// clean up if in use
     {
 	delete mSocketNotifier;
 	mSocketNotifier = nullptr;
     }
-
-    emit sigScanProgress(MAX_PROGRESS);
-    QApplication::restoreOverrideCursor();
-
-    //qDebug() << "status" <<  status;
 
     if (mScanBuf!=nullptr)
     {
@@ -1316,6 +1302,8 @@ void KScanDevice::slotScanFinished(KScanDevice::Status status)
 	mScanBuf = nullptr;
     }
 
+    // If the scan succeeded, finish off the result image and tell the
+    // application that it is ready.
     if (status==KScanDevice::Ok && mScanImage!=nullptr)
     {
 	ImageMetaInfo info;
@@ -1331,8 +1319,6 @@ void KScanDevice::slotScanFinished(KScanDevice::Status status)
 	{
 	    savePreviewImage(*mScanImage);
 	    emit sigNewPreview(mScanImage, &info);
-
-	    loadOptionSet(mSavedOptions);		// restore original scan settings
 	}
 	else
 	{
@@ -1345,7 +1331,17 @@ void KScanDevice::slotScanFinished(KScanDevice::Status status)
     // in the ADF even if only one page has been requested to be scanned.
     sane_cancel(mScannerHandle);
 
-    /* This follows after sending the signal */
+    // Tell the application that the scan has finished.
+    emit sigScanFinished(status);
+
+    // Clean up after the image that we allocated, after signalling the
+    // application to copy or save it.
+    //
+    // TODO: this is unsafe.  Firstly, it relies on the sigNewImage or sigNewPreview
+    // being connected and delivered directly.  Secondly, saving the image may run
+    // an asynchronous event loop (e.g. saving to a remote location via KIO) and need
+    // the image to persist until that is finished.  The image allocation and
+    // transmission should use some sort of shared and ref-counted pointer class.
     if (mScanImage!=nullptr)
     {
 	delete mScanImage;
