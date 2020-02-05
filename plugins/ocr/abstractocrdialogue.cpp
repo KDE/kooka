@@ -363,8 +363,14 @@ void AbstractOcrDialogue::stopAnimation()
 
 void AbstractOcrDialogue::startAnimation()
 {
+    // If the progress bar range has been set to (0,0) then the engine will
+    // not be providing a detailed progress percentage, only a busy indication.
+    // In this case, set the value to 1 now to start the animation.
+    // If there is a maximum then there will be a detailed progress
+    // percentage, so set the initial value to the minimum.
+    m_progress->setValue(m_progress->maximum()==0 ? 1 : m_progress->minimum());
+
     if (!m_progress->isVisible()) {         // progress bar not added yet
-        m_progress->setValue(0);
         addExtraSetupWidget(m_progress, true);
         m_progress->setVisible(true);
     }
