@@ -822,8 +822,8 @@ KScanDevice::Status KScanDevice::acquireScan(const QString &filename)
         }
 
         ImageMetaInfo info;
-        info.setXResolution(img.dotsPerMeterX());	// TODO: *2.54/100
-        info.setYResolution(img.dotsPerMeterY());	// TODO: *2.54/100
+        info.setXResolution(DPM_TO_DPI(img.dotsPerMeterX()));
+        info.setYResolution(DPM_TO_DPI(img.dotsPerMeterY()));
         info.setScannerName(QFile::encodeName(filename));
         emit sigNewImage(&img, &info);
         return (KScanDevice::Ok);
@@ -1324,9 +1324,8 @@ void KScanDevice::slotScanFinished(KScanDevice::Status status)
 	info.setScannerName(mScannerName);
 
 	// put the resolution also into the image itself
-        // TODO: use qRound()
-	mScanImage->setDotsPerMeterX(static_cast<int>(mCurrScanResolutionX / 0.0254 + 0.5));
-	mScanImage->setDotsPerMeterY(static_cast<int>(mCurrScanResolutionY / 0.0254 + 0.5));
+	mScanImage->setDotsPerMeterX(DPI_TO_DPM(mCurrScanResolutionX));
+	mScanImage->setDotsPerMeterY(DPI_TO_DPM(mCurrScanResolutionY));
 
 	if (mScanningPreview)
 	{
@@ -1341,6 +1340,9 @@ void KScanDevice::slotScanFinished(KScanDevice::Status status)
 	}
     }
 
+    // TODO: Should this be called here, even for normal scan termination?
+    // It seems to have side effects, such as feeding through anything remaining
+    // in the ADF even if only one page has been requested to be scanned.
     sane_cancel(mScannerHandle);
 
     /* This follows after sending the signal */

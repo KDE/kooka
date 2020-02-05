@@ -50,12 +50,8 @@
 
 #include "kookaimage.h"
 #include "kookaprint.h"
+#include "kscandevice.h"
 #include "dialogbase.h"
-
-
-#define DPM_TO_DPI(d)		qRound((d)*2.54/100)	// dots/metre -> dots/inch
-#define DPI_TO_DPM(d)		qRound((d)*100/2.54)	// dots/inch -> dots/metre
-
 
 
 ImgPrintDialog::ImgPrintDialog(const KookaImage *img, KookaPrint *prt, QWidget *pnt)

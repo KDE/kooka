@@ -586,7 +586,7 @@ private:
     /**
      * Scanning progress state.
      **/
-    enum ScanningState {                // only used by KScanDevice
+    enum ScanningState {				// only used by KScanDevice
         ScanIdle,
         ScanStarting,
         ScanInProgress,
@@ -598,8 +598,8 @@ private:
     typedef QHash<QByteArray, KScanOption *> OptionHash;
     typedef QMap<int, QByteArray> IndexMap;
 
-    OptionHash mCreatedOptions;             // option name -> KScanOption
-    IndexMap mKnownOptions;             // SANE index -> option name
+    OptionHash mCreatedOptions;				// option name -> KScanOption
+    IndexMap mKnownOptions;				// SANE index -> option name
 
     KScanOptSet *mSavedOptions;
 
@@ -625,4 +625,12 @@ private:
     int mCurrScanResolutionY;
 };
 
-#endif                          // KSCANDEVICE_H
+/**
+ * Conversion between resolutions in dots-per-inch (used by SANE and the scanner GUI)
+ * and dots-per-metre (used by QImage).
+ **/
+
+#define DPM_TO_DPI(d)		qRound((d)*2.54/100)	// dots/metre -> dots/inch
+#define DPI_TO_DPM(d)		qRound((d)*100/2.54)	// dots/inch -> dots/metre
+
+#endif							// KSCANDEVICE_H

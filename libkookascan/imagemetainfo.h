@@ -141,6 +141,9 @@ public:
      *
      * @return The X resolution, or -1 if it has not been set.
      * @see setXResolution
+     * @note The resolution unit is not used by @c ImageMetaInfo or anywhere within
+     * the library or the Kooka application, but is should be set in dots-per-inch
+     * to follow with SANE and user expectations.
      **/
     int getXResolution() const
     {

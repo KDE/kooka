@@ -43,19 +43,13 @@
 #include "imgprintdialog.h"
 #include "kookaimage.h"
 #include "kookasettings.h"
+#include "kscandevice.h"
 
 
 #define CUT_MARGIN		5			// margin in millimetres
 
 #define PRINT_ORDER_COLUMNS
 #define CUTMARKS_COLOURSEGS
-
-
-
-// TODO: somewhere common (in libkookascan)
-#define DPM_TO_DPI(d)		qRound((d)*2.54/100)	// dots/metre -> dots/inch
-#define DPI_TO_DPM(d)		qRound((d)*100/2.54)	// dots/inch -> dots/metre
-
 
 
 KookaPrint::KookaPrint()
