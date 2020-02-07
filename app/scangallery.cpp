@@ -79,9 +79,8 @@
 //
 // This is a consequence of commit 719513, "Making KFileItemList value based".
 //
-// We store the image pointer in the 'clientData' of the item (of the ported
-// FileTreeView) instead.
-// TODO: use FileTreeViewItem->data(Qt::UserRole)
+// The image pointer is stored as the Qt::UserRole data of the item
+// (of the ported FileTreeView) instead.
 
 ScanGallery::ScanGallery(QWidget *parent)
     : FileTreeView(parent)
@@ -260,7 +259,7 @@ static ImageFormat getImgFormat(const FileTreeViewItem *item)
 static KookaImage *imageForItem(const FileTreeViewItem *item)
 {
     if (item == nullptr) return (nullptr);			// get loaded image if any
-    return (static_cast<KookaImage *>(item->clientData()));
+    return (static_cast<KookaImage *>(item->data(0, Qt::UserRole).value<void *>()));
 }
 
 void ScanGallery::slotItemHighlighted(QTreeWidgetItem *curr)
@@ -797,10 +796,8 @@ void ScanGallery::slotImageArrived(FileTreeViewItem *item, KookaImage *image)
     if (item == nullptr || image == nullptr) {
         return;
     }
-
-    //qDebug() << item->text(0);
-
-    item->setClientData(image);             // note image for item
+							// note image for item
+    item->setData(0, Qt::UserRole, QVariant::fromValue(static_cast<void *>(image)));
     slotDecorate(item);
     emit showImage(image, false);
 }
@@ -1118,8 +1115,8 @@ void ScanGallery::slotUnloadItem(FileTreeViewItem *curr)
 
         emit unloadImage(image);
         delete image;
-
-        curr->setClientData(nullptr);			// clear image from item
+							// clear image from item
+        curr->setData(0, Qt::UserRole, QVariant::fromValue(nullptr));
         slotDecorate(curr);
     }
 }

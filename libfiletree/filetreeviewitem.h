@@ -41,7 +41,7 @@ class FileTreeViewItem : public QTreeWidgetItem
 public:
     FileTreeViewItem(FileTreeViewItem *parent, const KFileItem &fi, FileTreeBranch *branch);
     FileTreeViewItem(FileTreeView *parent, const KFileItem &fi, FileTreeBranch *branch);
-    ~FileTreeViewItem();
+    ~FileTreeViewItem() = default;
 
     /**
      * @return the KFileTreeBranch the item is sorted in.
@@ -53,7 +53,7 @@ public:
 
     /**
      * @return the KFileItem the viewitem is representing.
-     * A copy of the original (provided by the KDirLister), so not
+     * A copy of the original (provided by the KDirLister), so there is not
      * much point in trying to modify it.
      */
     const KFileItem *fileItem() const
@@ -62,13 +62,13 @@ public:
     }
 
     /**
-     * @return the path of the item.
+     * @return the path of the item
      */
     // TODO: is this simply equivalent to 'url().path()'?
     QString path() const;
 
     /**
-     * @return the items QUrl
+     * @return the item's URL
      */
     QUrl url() const;
     void setUrl(const QUrl &url);
@@ -84,21 +84,14 @@ public:
     bool isRoot() const;
 
     /**
-     * @return if this directory was already seen by a KDirLister.
+     * @return if this directory has already been seen by a KDirLister
      */
     bool alreadyListed() const;
 
     /**
-     * set the flag if the directory was already listed.
+     * set the flag to indicate if the directory has already been listed
      */
     void setListed(bool wasListed);
-
-    /**
-     * substitute for the KFileItem's extra data, but only one of these
-     */
-    // TODO: use QTreeWidgetItem::data()
-    void setClientData(void *data);
-    void *clientData() const;
 
 private:
     void init(const KFileItem &fi, FileTreeBranch *branch);
@@ -106,11 +99,6 @@ private:
     KFileItem m_kfileitem;
     FileTreeBranch *m_branch;
     bool m_wasListed;
-    void *m_clientData;
-
-    // TODO: not used
-    class FileTreeViewItemPrivate;
-    FileTreeViewItemPrivate *d;
 };
 
 /**
@@ -118,4 +106,4 @@ private:
  */
 typedef QList<FileTreeViewItem *> FileTreeViewItemList;
 
-#endif                          // FILETREEVIEWITEM_H
+#endif							// FILETREEVIEWITEM_H

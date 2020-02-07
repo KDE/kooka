@@ -48,14 +48,9 @@ void FileTreeViewItem::init(const KFileItem &fi, FileTreeBranch *branch)
     m_kfileitem = fi;
     m_branch = branch;
     m_wasListed = false;
-    m_clientData = nullptr;
 
     setIcon(0, QIcon::fromTheme(fi.iconName()));
     setText(0, fi.text());
-}
-
-FileTreeViewItem::~FileTreeViewItem()
-{
 }
 
 bool FileTreeViewItem::alreadyListed() const
@@ -93,14 +88,4 @@ bool FileTreeViewItem::isDir() const
 bool FileTreeViewItem::isRoot() const
 {
     return (this == m_branch->root());
-}
-
-void FileTreeViewItem::setClientData(void *data)
-{
-    m_clientData = data;
-}
-
-void *FileTreeViewItem::clientData() const
-{
-    return (m_clientData);
 }
