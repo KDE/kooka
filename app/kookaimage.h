@@ -37,8 +37,6 @@
 #include <qimage.h>
 #include <qurl.h>
 
-class KFileItem;
-
 
 /**
   * @author Klaas Freitag
@@ -59,7 +57,7 @@ public:
     KookaImage &operator=(const KookaImage &src);
 
     /**
-     * load an image from a KURL. This method reads the entire file and sets
+     * Load an image from a URL. This method reads the image file and sets
      * the subimage count if applicable.  Returns a null string if succeeded,
      * or an error message string if failed.
      */
@@ -71,45 +69,29 @@ public:
     int subImagesCount() const;
 
     /**
-     * the parent image.
-     */
-    KookaImage *parentImage() const;
-
-    /**
      * returns true if this is a subimage.
      */
     bool isSubImage() const;
 
     /**
-     *  Set and get the KFileItem of the image. Note that the KFileItem pointer returned
-     *  may be nullptr.
-     */
-    const KFileItem *fileItem() const;
-    void setFileItem(const KFileItem *item);
-
-    /**
-     * set the url of the kooka image. Note that loadFromUrl sets this
-     * url automatically.
+     * Get the URL of the image, if it was loaded from a file.  Note that
+     * loadFromUrl() records the URL automatically.
      */
     void setUrl(const QUrl &url);
     QUrl url() const;
 
     /**
-     * checks if the image is file bound ie. was loaded from file. If this
-     * method returns false, fileMetaInfo and FileItem are undefined.
+     * Checks if the image is file bound, i.e. it was loaded from a file.
      */
     bool isFileBound() const;
-
 
 private:
     void init();
     QString loadTiffDir(const QString &file, int subno);
 
 private:
-    int         m_subImages;
-    QUrl                m_url;
-    const KFileItem           *m_fileItem;
-    bool                m_fileBound;
+    int m_subImages;
+    QUrl m_url;
 };
 
 #endif                          // KOOKAIMAGE_H

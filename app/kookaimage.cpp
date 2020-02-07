@@ -58,57 +58,39 @@ KookaImage::KookaImage(const QImage &img)
     : QImage(img)
 {
     init();
-    //qDebug() << "image" << img.size();
 }
-
 
 
 void KookaImage::init()
 {
     m_subImages = 0;
-    m_fileItem = nullptr;
-    m_fileBound = false;
 }
 
 
 KookaImage &KookaImage::operator=(const KookaImage &img)
 {
-    if (this != &img) {             // ignore self-assignment
+    if (this != &img) {					// ignore self-assignment
         QImage::operator=(img);
 
         m_subImages = img.m_subImages;
         m_url       = img.m_url;
-        m_fileItem  = img.m_fileItem;
-        m_fileBound = img.m_fileBound;
     }
 
     return (*this);
 }
 
-const KFileItem *KookaImage::fileItem() const
-{
-    return (m_fileItem);
-}
-
-void KookaImage::setFileItem(const KFileItem *fi)
-{
-    m_fileItem = fi;
-}
-
-void KookaImage::setUrl(const QUrl &url)
-{
-    m_url = url;
-}
 
 QUrl KookaImage::url() const
 {
-    return m_url;
+    return (m_url);
 }
+
 
 bool KookaImage::isFileBound() const
 {
-    return m_fileBound;
+    return (m_url.isValid());
 }
+
 
 QString KookaImage::loadFromUrl(const QUrl &url)
 {
@@ -177,9 +159,8 @@ QString KookaImage::loadFromUrl(const QUrl &url)
     }
 #endif
 
-    m_url = url;					// record image source
-    m_fileBound = true;					// note loaded from file
-    return (QString());				// loaded OK
+    m_url = url;					// record image source as from file
+    return (QString());					// loaded OK
 }
 
 
@@ -221,9 +202,9 @@ QString  KookaImage::loadTiffDir(const QString &filename, int subno)
     QImage tmpImg(imgWidth, imgHeight, QImage::Format_RGB32);
     uint32 *data = (uint32 *)(tmpImg.bits());
     if (TIFFReadRGBAImage(tif, imgWidth, imgHeight, data, 0)) {
-        // Successfully read, now convert
-        tmpImg = tmpImg.rgbSwapped();           // swap red and blue
-        tmpImg = tmpImg.mirrored();         // reverse (it's upside down)
+							// Successfully read, now convert
+        tmpImg = tmpImg.rgbSwapped();			// swap red and blue
+        tmpImg = tmpImg.mirrored();			// reverse (it's upside down)
     } else {
         TIFFClose(tif);
         return (i18n("Failed to read TIFF image"));
@@ -235,7 +216,7 @@ QString  KookaImage::loadTiffDir(const QString &filename, int subno)
                       TIFFGetField(tif, TIFFTAG_YRESOLUTION, &yReso);
     //qDebug() << "TIFF image: X-Res" << xReso << "Y-Res" << yReso;
 
-    TIFFClose(tif);                 // finished with TIFF file
+    TIFFClose(tif);					// finished with TIFF file
 
     // Check now if resolution in x- and y-directions differ.
     // If so, stretch the image accordingly.
@@ -258,7 +239,7 @@ QString  KookaImage::loadTiffDir(const QString &filename, int subno)
 #else
     return (i18n("TIFF not supported"));
 #endif							// HAVE_TIFF
-    return (QString());				// TIFF read succeeded
+    return (QString());					// TIFF read succeeded
 }
 
 

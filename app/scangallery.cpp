@@ -723,8 +723,6 @@ void ScanGallery::loadImageForItem(FileTreeViewItem *item)
             ret = img->loadFromUrl(item->url());
             if (ret.isEmpty())				// image loaded OK
             {
-                img->setFileItem(kfi);			// store the KFileItem
-
                 if (img->subImagesCount()>1)		// see if it has subimages
                 {
 #ifdef DEBUG_LOADING
