@@ -836,7 +836,7 @@ QString ScanGallery::currentImageFileName() const
     if (curr==nullptr) return (QString());
 
     bool isLocal = false;
-    const QUrl u = curr->fileItem()->mostLocalUrl(isLocal);
+    const QUrl u = curr->fileItem()->mostLocalUrl(&isLocal);
     if (!isLocal) return (QString());
     return (u.toLocalFile());
 }

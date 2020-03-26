@@ -784,15 +784,14 @@ QList<QByteArray> KScanOption::getList() const
    else if (mDesc->constraint_type==SANE_CONSTRAINT_WORD_LIST)
    {
        const SANE_Int *sint = mDesc->constraint.word_list;
-       int amount_vals = *sint;
-       sint++;
+       const int amount_vals = sint[0];
        QString s;
 
-       for (int i = 0; i<amount_vals; i++)
+       for (int i = 1; i<=amount_vals; i++)
        {
-           if (mDesc->type==SANE_TYPE_FIXED) s.sprintf("%f",SANE_UNFIX(*sint));
-           else s.sprintf("%d",*sint);
-           sint++;
+           if (mDesc->type==SANE_TYPE_FIXED) s = QString::number(SANE_UNFIX(sint[i]), 'f');
+           else s = QString::number(sint[i]);
+
            strList.append(s.toLocal8Bit());
        }
    }
