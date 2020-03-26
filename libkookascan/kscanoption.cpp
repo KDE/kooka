@@ -878,53 +878,53 @@ KScanControl *KScanOption::createWidget(QWidget *parent)
 	return (nullptr);
     }
 
-    delete mControl; mControl = nullptr;			// dispose of the old control
+    delete mControl; mControl = nullptr;		// dispose of the old control
  	
     if (mDesc!=nullptr) mText = i18n(mDesc->title);
 
     //qDebug() << "type" << mWidgetType << "text" << mText;
 
     KScanControl *w = nullptr;
+    double min, max, quant;				// range for a slider
+
     switch (mWidgetType)
     {
 case KScanOption::Bool:
-	w = createToggleButton(parent, mText);		// toggle button
+	w = new KScanCheckbox(parent, mText);;		// toggle button
 	break;
 
 case KScanOption::SingleValue:
-	w = createNumberEntry(parent, mText);		// numeric entry
+	w = new KScanNumberEntry(parent, mText);	// numeric entry
 	break;
 
 case KScanOption::Range:
-	w = createSlider(parent, mText);		// slider and spinbox
+	getRange(&min, &max);				// slider and spinbox
+	w = new KScanSlider(parent, mText, min, max, true);
 	break;
 
-case KScanOption::Resolution:
-	w = createComboBox(parent, mText);		// special resolution combo
+case KScanOption::Resolution:				// special resolution combo
+case KScanOption::StringList:	 			// string list combo
+	w = new KScanCombo(parent, mText);
 	break;
 
 case KScanOption::GammaTable:
 	//qDebug() << "GammaTable not implemented here";
 	break;						// no widget for this
 
-case KScanOption::StringList:	 		
-	w = createComboBox(parent, mText);		// string list combo
-	break;
-
 case KScanOption::String:
-	w = createStringEntry(parent, mText);		// free text entry
+	w = new KScanStringEntry(parent, mText);	// free text entry
 	break;
 
 case KScanOption::File:
-	w = createFileField(parent, mText);		// file name requester
+	w = new KScanFileRequester(parent, mText);	// file name requester
         break;
 
 case KScanOption::Group:
-	w = createGroupSeparator(parent, mText);	// group separator
+	w = new KScanGroup(parent, mText);		// group separator
         break;
 
 case KScanOption::Button:
-	w = createActionButton(parent, mText);		// button to do action
+	w = new KScanPushButton(parent, mText);		// action button
         break;
 
 default:
@@ -980,56 +980,6 @@ case KScanControl::Group:				// group separator
     reload();						// check if active, enabled etc.
     if (w!=nullptr) redrawWidget();
     return (w);
-}
-
-
-inline KScanControl *KScanOption::createToggleButton(QWidget *parent, const QString &text)
-{
-    return (new KScanCheckbox(parent, text));
-}
-
-
-inline KScanControl *KScanOption::createComboBox(QWidget *parent, const QString &text)
-{
-    return (new KScanCombo(parent, text));
-}
-
-
-inline KScanControl *KScanOption::createStringEntry(QWidget *parent, const QString &text)
-{
-    return (new KScanStringEntry(parent, text));
-}
-
-
-inline KScanControl *KScanOption::createNumberEntry(QWidget *parent, const QString &text)
-{
-    return (new KScanNumberEntry(parent, text));
-}
-
-
-inline KScanControl *KScanOption::createSlider(QWidget *parent, const QString &text)
-{
-    double min, max;
-    getRange(&min, &max);
-    return (new KScanSlider(parent, text, min, max, true));
-}
-
-
-inline KScanControl *KScanOption::createFileField(QWidget *parent, const QString &text)
-{
-    return (new KScanFileRequester(parent, text));
-}
-
-
-inline KScanControl *KScanOption::createGroupSeparator(QWidget *parent, const QString &text)
-{
-    return (new KScanGroup(parent, text));
-}
-
-
-inline KScanControl *KScanOption::createActionButton(QWidget *parent, const QString &text)
-{
-    return (new KScanPushButton(parent, text));
 }
 
 

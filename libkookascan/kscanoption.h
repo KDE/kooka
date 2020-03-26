@@ -493,15 +493,6 @@ private:
     void allocBuffer(long size);
     void updateList();
 
-    KScanControl *createToggleButton(QWidget *parent, const QString &text);
-    KScanControl *createStringEntry(QWidget *parent, const QString &text);
-    KScanControl *createNumberEntry(QWidget *parent, const QString &text);
-    KScanControl *createSlider(QWidget *parent, const QString &text);
-    KScanControl *createComboBox(QWidget *parent, const QString &text);
-    KScanControl *createFileField(QWidget *parent, const QString &text);
-    KScanControl *createGroupSeparator(QWidget *parent, const QString &text);
-    KScanControl *createActionButton(QWidget *parent, const QString &text);
-
     KScanDevice *mScanDevice;
     int mIndex;
     const SANE_Option_Descriptor *mDesc;
