@@ -117,7 +117,7 @@ bool KScanOption::initOption(const QByteArray &name)
     if (mIsGroup || mDesc->type==SANE_TYPE_BUTTON) mIsReadable = false;
     if (!(mDesc->cap & SANE_CAP_SOFT_DETECT)) mIsReadable = false;
 
-    mGammaTable = nullptr;					// for recording gamma values
+    mGammaTable = nullptr;				// for recording gamma values
 
     mWidgetType = resolveWidgetType();			// work out the type of widget
     allocForDesc();					// allocate initial buffer
@@ -885,21 +885,43 @@ KScanControl *KScanOption::createWidget(QWidget *parent)
     //qDebug() << "type" << mWidgetType << "text" << mText;
 
     KScanControl *w = nullptr;
-    double min, max, quant;				// range for a slider
 
     switch (mWidgetType)
     {
-case KScanOption::Bool:
-	w = new KScanCheckbox(parent, mText);;		// toggle button
+case KScanOption::Bool:					// toggle button
+	w = new KScanCheckbox(parent, mText);
 	break;
 
-case KScanOption::SingleValue:
-	w = new KScanNumberEntry(parent, mText);	// numeric entry
+case KScanOption::SingleValue:				// numeric entry
+	w = new KScanNumberEntry(parent, mText);
 	break;
 
-case KScanOption::Range:
-	getRange(&min, &max);				// slider and spinbox
-	w = new KScanSlider(parent, mText, min, max, true);
+case KScanOption::Range:				// slider and spinbox
+	{
+            KScanSlider *kss = new KScanSlider(parent, mText, true);
+            w = kss;
+
+            // This is the only option type that has an option to reset
+            // the value to the default.  SANE does not specify what the
+            // default value is, so it has to be guessed.  If the allowable
+            // range includes the value 0 then the default is set to that,
+            // otherwise the minimum value is used.
+            //
+            // Note that in theory the constrained range of a SANE value may
+            // not have endpoints that are integers and it may not even include
+            // any integer;  for example, the range could be 12.02 - 12.08
+            // or even more precisely specified.  However, since the GUI
+            // controls used (QSlider and QSpinBox) only work in integers then
+            // the range is rounded to integer values.  No problem caused by
+            // doing this has been reported with any existing scanner.
+
+            double min, max, quant;
+            getRange(&min, &max, &quant);
+
+            int stdValue = 0;
+            if (stdValue>max || stdValue<min) stdValue = qRound(min);
+            kss->setRange(qRound(min), qRound(max), qRound(quant), stdValue);
+        }
 	break;
 
 case KScanOption::Resolution:				// special resolution combo
@@ -907,24 +929,24 @@ case KScanOption::StringList:	 			// string list combo
 	w = new KScanCombo(parent, mText);
 	break;
 
-case KScanOption::GammaTable:
+case KScanOption::GammaTable:				// no widget for this
 	//qDebug() << "GammaTable not implemented here";
-	break;						// no widget for this
-
-case KScanOption::String:
-	w = new KScanStringEntry(parent, mText);	// free text entry
 	break;
 
-case KScanOption::File:
-	w = new KScanFileRequester(parent, mText);	// file name requester
+case KScanOption::String:				// free text entry
+	w = new KScanStringEntry(parent, mText);
+	break;
+
+case KScanOption::File:					// file name requester
+	w = new KScanFileRequester(parent, mText);
         break;
 
-case KScanOption::Group:
-	w = new KScanGroup(parent, mText);		// group separator
+case KScanOption::Group:				// group separator
+	w = new KScanGroup(parent, mText);
         break;
 
-case KScanOption::Button:
-	w = new KScanPushButton(parent, mText);		// action button
+case KScanOption::Button:				// action button
+	w = new KScanPushButton(parent, mText);
         break;
 
 default:

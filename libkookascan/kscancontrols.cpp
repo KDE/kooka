@@ -94,29 +94,33 @@ KScanSlider::KScanSlider(QWidget *parent, const QString &text,
                          bool haveStdButt, int stdValue)
     : KScanControl(parent, text)
 {
-    mValue = mStdValue = stdValue;
+    init(haveStdButt);
+    setRange(min, max, -1, stdValue);
+}
+
+KScanSlider::KScanSlider(QWidget *parent, const QString &text, bool haveStdButt)
+    : KScanControl(parent, text)
+{
+    init(haveStdButt);
+}
+
+void KScanSlider::init(bool haveStdButt)
+{
     mStdButt = nullptr;
 
-    mSlider = new QSlider(Qt::Horizontal, this);    // slider
-    mSlider->setRange(((int) min), ((int) max));
+    mSlider = new QSlider(Qt::Horizontal, this);	// slider
     mSlider->setTickPosition(QSlider::TicksBelow);
-    mSlider->setTickInterval(qMax(((int)((max - min) / 10)), 1));
-    mSlider->setSingleStep(qMax(((int)((max - min) / 20)), 1));
-    mSlider->setPageStep(qMax(((int)((max - min) / 10)), 1));
     mSlider->setMinimumWidth(140);
-    mSlider->setValue(mValue);              // initial value
     mLayout->addWidget(mSlider, 1);
 
-    mSpinbox = new QSpinBox(this);          // spin box
-    mSpinbox->setRange((int) min, (int) max);
-    mSpinbox->setSingleStep(1);
-    mSpinbox->setValue(mValue);             // initial value
+    mSpinbox = new QSpinBox(this);			// spin box
+    mSpinbox->setMinimumWidth(60);
     mLayout->addWidget(mSpinbox);
 
-    if (haveStdButt) {
-        mStdButt = new QToolButton(this);       // reset button
+    if (haveStdButt)
+    {
+        mStdButt = new QToolButton(this);		// reset button
         mStdButt->setIcon(QIcon::fromTheme("edit-undo"));
-        mStdButt->setToolTip(i18n("Reset this setting to its standard value, %1", stdValue));
         mLayout->addWidget(mStdButt);
     }
 
@@ -128,6 +132,35 @@ KScanSlider::KScanSlider(QWidget *parent, const QString &text,
 
     setFocusProxy(mSlider);
     setFocusPolicy(Qt::StrongFocus);
+}
+
+void KScanSlider::setRange(int min, int max, int step, int stdValue)
+{
+    const double span = max-min;
+
+    mSlider->setRange(min, max);
+    mSlider->setTickInterval(qMax(qRound(span/10), 1));
+    mSpinbox->setRange(min, max);
+
+    if (step==-1)					// default step value
+    {
+        mSlider->setSingleStep(qMax(qRound(span/20), 1));
+        mSlider->setPageStep(qMax(qRound(span/5), 1));
+        mSpinbox->setSingleStep(1);
+    }
+    else						// specified step value
+    {
+        mSlider->setSingleStep(step);
+        mSlider->setPageStep(step*4);
+        mSpinbox->setSingleStep(step);
+    }
+
+    mStdValue = qBound(stdValue, min, max);		// limit default value to range
+    mValue = mStdValue;					// set current value to that
+    mSlider->setValue(mValue);
+    mSpinbox->setValue(mValue);
+
+    if (mStdButt!=nullptr) mStdButt->setToolTip(i18n("Reset this setting to its standard value, %1", QString::number(mStdValue)));
 }
 
 void KScanSlider::setValue(int val)
