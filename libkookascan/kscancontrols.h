@@ -177,7 +177,7 @@ public:
      * @param min minimum slider value
      * @param max maximum slider value
      * @param haveStdButt if @c true, the 'reset' button will be present
-     * @param stdValue the value to which the 'reset' button resets the setting
+     * @param stdValue the value to which the 'reset' button resets the control
      */
     Q_DECL_DEPRECATED_X("Use KScanSlider(QWidget *,const QString &, bool) then setRange()")
     KScanSlider(QWidget *parent, const QString &text,
@@ -204,8 +204,10 @@ public:
      *
      * @param min minimum slider value
      * @param max maximum slider value
-     * @param step value step
-     * @param stdValue the value to which the 'reset' button resets the setting
+     * @param step value step, or -1 for a default setting
+     * @param stdValue the value to which the 'reset' button resets the control
+     *
+     * @note The current control value is set to @p stdValue.
      */
     void setRange(int min, int max, int step = -1, int stdValue = 0);
 

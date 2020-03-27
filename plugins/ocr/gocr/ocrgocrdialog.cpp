@@ -68,9 +68,9 @@ bool OcrGocrDialog::setupGui()
     QLabel *l = new QLabel(ski->label(), w);
     gl->addWidget(l, 0, 0);
 
-    sliderGrayLevel = new KScanSlider(w, QString(), 0, 254, true, 160);
-    int numdefault = KookaSettings::ocrGocrGrayLevel();
-    sliderGrayLevel->setValue(numdefault);
+    sliderGrayLevel = new KScanSlider(w, QString(), true);
+    sliderGrayLevel->setRange(0, 254, -1, 160);
+    sliderGrayLevel->setValue(KookaSettings::ocrGocrGrayLevel());
     sliderGrayLevel->setToolTip(ski->toolTip());
     l->setBuddy(sliderGrayLevel);
     gl->addWidget(sliderGrayLevel, 0, 1);
@@ -79,9 +79,9 @@ bool OcrGocrDialog::setupGui()
     Q_ASSERT(ski!=nullptr);
     l = new QLabel(ski->label(), w);
     gl->addWidget(l, 1, 0);
-    sliderDustSize = new KScanSlider(w, QString(), 0, 60, true, 10);
-    numdefault = KookaSettings::ocrGocrDustSize();
-    sliderDustSize->setValue(numdefault);
+    sliderDustSize = new KScanSlider(w, QString(), true);
+    sliderDustSize->setRange(0, 20, -1, 10);
+    sliderDustSize->setValue(KookaSettings::ocrGocrDustSize());
     sliderDustSize->setToolTip(ski->toolTip());
     l->setBuddy(sliderDustSize);
     gl->addWidget(sliderDustSize, 1, 1);
@@ -90,9 +90,9 @@ bool OcrGocrDialog::setupGui()
     Q_ASSERT(ski!=nullptr);
     l = new QLabel(ski->label(), w);
     gl->addWidget(l, 2, 0);
-    sliderSpace = new KScanSlider(w, QString(), 0, 60, true, 0);
-    numdefault = KookaSettings::ocrGocrSpaceWidth();
-    sliderSpace->setValue(numdefault);
+    sliderSpace = new KScanSlider(w, QString(), true);
+    sliderSpace->setRange(0, 60, -1, 0);
+    sliderSpace->setValue(KookaSettings::ocrGocrSpaceWidth());
     sliderSpace->setToolTip(ski->toolTip());
     l->setBuddy(sliderSpace);
     gl->addWidget(sliderSpace, 2, 1);

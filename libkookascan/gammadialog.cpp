@@ -59,7 +59,8 @@ GammaDialog::GammaDialog(const KGammaTable *table, QWidget *parent)
     QGridLayout *gl = new QGridLayout(page);
 
     // Sliders for brightness, contrast, gamma
-    mSetBright = new KScanSlider(page, i18n("Brightness"), -50, 50);
+    mSetBright = new KScanSlider(page, i18n("Brightness"));
+    mSetBright->setRange(-50, 50);
     mSetBright->setValue(mTable->getBrightness());
     connect(mSetBright, SIGNAL(settingChanged(int)), mTable, SLOT(setBrightness(int)));
     QLabel *l = new QLabel(mSetBright->label(), page);
@@ -68,7 +69,8 @@ GammaDialog::GammaDialog(const KGammaTable *table, QWidget *parent)
     gl->addWidget(l, 1, 0, Qt::AlignRight);
     gl->addWidget(mSetBright, 1, 1);
 
-    mSetContrast = new KScanSlider(page, i18n("Contrast"), -50, 50);
+    mSetContrast = new KScanSlider(page, i18n("Contrast"));
+    mSetContrast->setRange(-50, 50);
     mSetContrast->setValue(mTable->getContrast());
     connect(mSetContrast, SIGNAL(settingChanged(int)), mTable, SLOT(setContrast(int)));
     l = new QLabel(mSetContrast->label(), page);
@@ -77,7 +79,8 @@ GammaDialog::GammaDialog(const KGammaTable *table, QWidget *parent)
     gl->addWidget(l, 3, 0, Qt::AlignRight);
     gl->addWidget(mSetContrast, 3, 1);
 
-    mSetGamma = new KScanSlider(page, i18n("Gamma"), 30, 300);
+    mSetGamma = new KScanSlider(page, i18n("Gamma"));
+    mSetGamma->setRange(30, 300);
     mSetGamma->setValue(mTable->getGamma());
     connect(mSetGamma, SIGNAL(settingChanged(int)), mTable, SLOT(setGamma(int)));
     l = new QLabel(mSetGamma->label(), page);
