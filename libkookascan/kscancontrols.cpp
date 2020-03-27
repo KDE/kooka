@@ -67,19 +67,27 @@ KScanControl::KScanControl(QWidget *parent, const QString &text)
     }
 }
 
-KScanControl::~KScanControl()               {}
+KScanControl::~KScanControl()
+{
+}
 
 QString KScanControl::text() const
 {
     return (QString());
 }
-void KScanControl::setText(const QString &text)     {}
+
+void KScanControl::setText(const QString &text)
+{
+}
 
 int KScanControl::value() const
 {
     return (0);
 }
-void KScanControl::setValue(int val)            {}
+
+void KScanControl::setValue(int val)
+{
+}
 
 QString KScanControl::label() const
 {
@@ -124,11 +132,9 @@ void KScanSlider::init(bool haveStdButt)
         mLayout->addWidget(mStdButt);
     }
 
-    connect(mSlider, SIGNAL(valueChanged(int)), SLOT(slotSliderSpinboxChange(int)));
-    connect(mSpinbox, SIGNAL(valueChanged(int)), SLOT(slotSliderSpinboxChange(int)));
-    if (mStdButt != nullptr) {
-        connect(mStdButt, SIGNAL(clicked()), SLOT(slotRevertValue()));
-    }
+    connect(mSlider, &QSlider::valueChanged, this, &KScanSlider::slotSliderSpinboxChange);
+    connect(mSpinbox, QOverload<int>::of(&QSpinBox::valueChanged), this, &KScanSlider::slotSliderSpinboxChange);
+    if (mStdButt!=nullptr) connect(mStdButt, &QPushButton::clicked, this, &KScanSlider::slotRevertValue);
 
     setFocusProxy(mSlider);
     setFocusPolicy(Qt::StrongFocus);
@@ -211,8 +217,8 @@ KScanStringEntry::KScanStringEntry(QWidget *parent, const QString &text)
     mEntry = new QLineEdit(this);
     mLayout->addWidget(mEntry);
 
-    connect(mEntry, SIGNAL(textChanged(QString)), SIGNAL(settingChanged(QString)));
-    connect(mEntry, SIGNAL(returnPressed()), SIGNAL(returnPressed()));
+    connect(mEntry, &QLineEdit::textChanged, this, QOverload<const QString &>::of(&KScanStringEntry::settingChanged));
+    connect(mEntry, &QLineEdit::returnPressed, this, &KScanStringEntry::returnPressed);
 
     setFocusProxy(mEntry);
     setFocusPolicy(Qt::StrongFocus);
@@ -241,8 +247,8 @@ KScanNumberEntry::KScanNumberEntry(QWidget *parent, const QString &text)
     mEntry->setValidator(new QIntValidator);
     mLayout->addWidget(mEntry);
 
-    connect(mEntry, SIGNAL(textChanged(QString)), SLOT(slotTextChanged(QString)));
-    connect(mEntry, SIGNAL(returnPressed()), SIGNAL(returnPressed()));
+    connect(mEntry, &QLineEdit::textChanged, this, QOverload<const QString &>::of(&KScanNumberEntry::settingChanged));
+    connect(mEntry, &QLineEdit::returnPressed, this, &KScanNumberEntry::returnPressed);
 
     setFocusProxy(mEntry);
     setFocusPolicy(Qt::StrongFocus);
@@ -272,7 +278,7 @@ KScanCheckbox::KScanCheckbox(QWidget *parent, const QString &text)
     mCheckbox = new QCheckBox(text, this);
     mLayout->addWidget(mCheckbox);
 
-    connect(mCheckbox, SIGNAL(stateChanged(int)), SIGNAL(settingChanged(int)));
+    connect(mCheckbox, &QCheckBox::stateChanged, this, QOverload<int>::of(&KScanCheckbox::settingChanged));
 
     setFocusProxy(mCheckbox);
     setFocusPolicy(Qt::StrongFocus);
@@ -309,7 +315,7 @@ KScanCombo::KScanCombo(QWidget *parent, const QString &text)
     mCombo = new QComboBox(this);
     mLayout->addWidget(mCombo);
 
-    connect(mCombo, SIGNAL(activated(int)), SLOT(slotActivated(int)));
+    connect(mCombo, QOverload<int>::of(&QComboBox::activated), this, &KScanCombo::slotActivated);
 
     setFocusProxy(mCombo);
     setFocusPolicy(Qt::StrongFocus);
@@ -392,8 +398,8 @@ KScanFileRequester::KScanFileRequester(QWidget *parent, const QString &text)
     filter += '\n'+ImageFilter::kdeFilter(ImageFilter::Reading);
     mEntry->setFilter(filter);
 
-    connect(mEntry, SIGNAL(textChanged(QString)), SIGNAL(settingChanged(QString)));
-    connect(mEntry, SIGNAL(returnPressed()), SIGNAL(returnPressed()));
+    connect(mEntry, QOverload<const QString &>::of(&KUrlRequester::textChanged), this, QOverload<const QString &>::of(&KScanFileRequester::settingChanged));
+    connect(mEntry, QOverload<>::of(&KUrlRequester::returnPressed), this, &KScanStringEntry::returnPressed);
 
     setFocusProxy(mEntry);
     setFocusPolicy(Qt::StrongFocus);
@@ -437,7 +443,7 @@ KScanPushButton::KScanPushButton(QWidget *parent, const QString &text)
     mButton = new QPushButton(text, this);
     mLayout->addWidget(mButton);
 
-    connect(mButton, SIGNAL(clicked()), SIGNAL(returnPressed()));
+    connect(mButton, &QPushButton::clicked, this, &KScanPushButton::returnPressed);
 }
 
 QString KScanPushButton::label() const

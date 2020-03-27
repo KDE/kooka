@@ -71,7 +71,7 @@ public:
     explicit KScanControl(QWidget *parent, const QString &text);
 
     /**
-     * Destructs the control and any child widgets that it uses.
+     * Destroys the control and any child widgets that it uses.
      */
     virtual ~KScanControl();
 

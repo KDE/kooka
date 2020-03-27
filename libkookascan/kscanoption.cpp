@@ -962,15 +962,15 @@ default:
         switch (w->type())
         {
 case KScanControl::Number:				// numeric control
-            connect(w, SIGNAL(settingChanged(int)), SLOT(slotWidgetChange(int)));
+            connect(w, QOverload<int>::of(&KScanControl::settingChanged), this, QOverload<int>::of(&KScanOption::slotWidgetChange));
             break;
 
 case KScanControl::Text:				// text control
-            connect(w, SIGNAL(settingChanged(const QString &)), SLOT(slotWidgetChange(const QString &)));
+            connect(w, QOverload<const QString &>::of(&KScanControl::settingChanged), this, QOverload<const QString &>::of(&KScanOption::slotWidgetChange));
             break;
 
 case KScanControl::Button:				// push button
-            connect(w, SIGNAL(returnPressed()), SLOT(slotWidgetChange()));
+            connect(w, &KScanControl::returnPressed, this, QOverload<>::of(&KScanOption::slotWidgetChange));
             break;
 
 case KScanControl::Group:				// group separator
