@@ -440,7 +440,7 @@ bool copyRenameImage(bool isCopying, const QUrl &fromUrl, const QUrl &toUrl, boo
     {
         qDebug() << (isCopying ? "Copy" : "Rename") << "->" << targetUrl;
 
-        KJob *job = KIO::statDetails(targetUrl, KIO::StatJob::DestinationSide, KIO::NoDetails);
+        KJob *job = KIO::statDetails(targetUrl, KIO::StatJob::DestinationSide, KIO::StatNoDetails);
         if (job->exec())				// stat with minimal details
         {						// to see if destination exists
                 errorString = i18n("Target already exists");
