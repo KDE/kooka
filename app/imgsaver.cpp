@@ -58,7 +58,7 @@
 static void createDir(const QUrl &url)
 {
     qDebug() << url;
-    KIO::StatJob *job = KIO::statDetails(url, KIO::StatJob::DestinationSide, KIO::Basic);
+    KIO::StatJob *job = KIO::statDetails(url, KIO::StatJob::DestinationSide, KIO::StatBasic);
     if (!job->exec())
     {
         KMessageBox::sorry(nullptr, xi18nc("@info", "The directory <filename>%2</filename><nl/>could not be accessed.<nl/>%1",
