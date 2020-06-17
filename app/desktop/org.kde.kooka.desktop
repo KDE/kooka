@@ -39,7 +39,6 @@ GenericName[sl]=Program za skeniranje in optično prepoznavo znakov
 GenericName[sv]=Bildläsare och optisk teckentydning
 GenericName[tr]=Tarama ve Karakter Tanılama Uygulaması
 GenericName[uk]=Програма для сканування і розпізнавання
-GenericName[x-test]=xxScan & OCR Programxx
 GenericName[zh_TW]=掃描及 OCR 程式
 Name=Kooka
 Name[bg]=Kooka
@@ -78,7 +77,6 @@ Name[sl]=Kooka
 Name[sv]=Kooka
 Name[tr]=Kooka
 Name[uk]=Kooka
-Name[x-test]=xxKookaxx
 Name[zh_CN]=Kooka
 Name[zh_TW]=Kooka
 
