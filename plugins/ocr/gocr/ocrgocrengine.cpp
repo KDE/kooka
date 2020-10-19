@@ -51,7 +51,7 @@
 #include <kconfigskeleton.h>
 
 #include "imgsaver.h"
-#include "kookaimage.h"
+#include "scanimage.h"
 #include "imageformat.h"
 #include "ocrgocrdialog.h"
 #include "executablepathdialogue.h"
@@ -80,7 +80,7 @@ AbstractOcrDialogue *OcrGocrEngine::createOcrDialogue(AbstractOcrEngine *plugin,
 }
 
 
-bool OcrGocrEngine::createOcrProcess(AbstractOcrDialogue *dia, const KookaImage *img)
+bool OcrGocrEngine::createOcrProcess(AbstractOcrDialogue *dia, const ScanImage *img)
 {
     OcrGocrDialog *gocrDia = static_cast<OcrGocrDialog *>(dia);
     const QString cmd = gocrDia->getOCRCmd();
@@ -199,7 +199,7 @@ bool OcrGocrEngine::finishedOcrProcess(QProcess *proc)
     // been cleared above:
     //
     //   if (m_introducedImage!=nullptr) delete m_introducedImage;
-    //   m_introducedImage = new KookaImage();
+    //   m_introducedImage = new ScanImage();
     //   ...
     //   if (!m_ocrResultFile.isNull()) m_introducedImage->load(m_ocrResultFile);
     //   else //qDebug() << "cannot find result image in" << dir.absolutePath();

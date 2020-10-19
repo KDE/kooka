@@ -47,7 +47,8 @@
 #include <kio/udsentry.h>
 
 #include "imageformat.h"
-#include "kookaimage.h"
+#include "scanimage.h"
+
 #include "kookapref.h"
 #include "kookasettings.h"
 #include "formatdialog.h"

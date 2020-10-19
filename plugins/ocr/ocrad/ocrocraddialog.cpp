@@ -44,7 +44,7 @@
 #include <kurlrequester.h>
 #include <kprocess.h>
 
-#include "kookaimage.h"
+#include "scanimage.h"
 #include "kookapref.h"
 #include "kookasettings.h"
 #include "kscancontrols.h"

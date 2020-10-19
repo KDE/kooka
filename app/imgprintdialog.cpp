@@ -48,13 +48,14 @@
 
 #include <klocalizedstring.h>
 
-#include "kookaimage.h"
+#include "scanimage.h"
+
 #include "kookaprint.h"
 #include "kscandevice.h"
 #include "dialogbase.h"
 
 
-ImgPrintDialog::ImgPrintDialog(const KookaImage *img, KookaPrint *prt, QWidget *pnt)
+ImgPrintDialog::ImgPrintDialog(const ScanImage *img, KookaPrint *prt, QWidget *pnt)
     : QWidget(pnt)
 {
     m_image = img;					// record the image

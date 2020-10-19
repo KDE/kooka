@@ -50,7 +50,7 @@ class KMainWindow;
 class KActionMenu;
 
 class ThumbView;
-class KookaImage;
+class ScanImage;
 class KookaGallery;
 class OcrResEdit;
 class ScanGallery;
@@ -167,12 +167,12 @@ protected slots:
     void slotPhotoCopyPrint(const QImage *img, const ImageMetaInfo *info);
     void slotPhotoCopyScan(KScanDevice::Status);
 
-    void slotShowAImage(const KookaImage *img, bool isDir);
-    void slotUnloadAImage(const KookaImage *img);
+    void slotShowAImage(const ScanImage *img, bool isDir);
+    void slotUnloadAImage(const ScanImage *img);
 
     /**
      * called from the scandevice if a new Image was successfully scanned.
-     * Needs to convert the one-page-QImage to a KookaImage
+     * Needs to convert the one-page-QImage to a ScanImage
      */
     void slotNewImageScanned(const QImage *img, const ImageMetaInfo *info);
 
@@ -206,7 +206,7 @@ signals:
     void signalOcrPrefs();
 
 private:
-    void startOCR(const KookaImage &img);
+    void startOCR(const ScanImage &img);
 
     QByteArray userDeviceSelection(bool alwaysAsk);
 

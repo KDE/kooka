@@ -41,7 +41,7 @@
 #include <kprocess.h>
 #include <kconfigskeleton.h>
 
-#include "kookaimage.h"
+#include "scanimage.h"
 #include "kookapref.h"
 #include "kookasettings.h"
 
@@ -116,7 +116,7 @@ bool OcrGocrDialog::setupGui()
 }
 
 
-void OcrGocrDialog::introduceImage(const KookaImage *img)
+void OcrGocrDialog::introduceImage(const ScanImage *img)
 {
     AbstractOcrDialogue::introduceImage(img);
     if (img==nullptr || img->isNull()) return;

@@ -101,6 +101,11 @@ endif (SANE_FOUND)
 
 set(PICS_INSTALL_DIR ${DATA_INSTALL_DIR}/kooka/pics)
 
+############### Common definitions ###############
+
+add_definitions(-DKDE4)					# TODO: temp, remove
+add_definitions(-DKF5)
+
 ############### Now, we add the Kooka components ###############
 
 add_subdirectory(libdialogutil)

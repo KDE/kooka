@@ -47,7 +47,7 @@ class QProgressBar;
 class KPageWidgetItem;
 class KFileItem;
 
-class KookaImage;
+class ScanImage;
 
 
 class PLUGIN_EXPORT AbstractOcrDialogue : public KPageDialog
@@ -58,7 +58,7 @@ public:
     virtual ~AbstractOcrDialogue() = default;
 
     virtual bool setupGui();
-    virtual void introduceImage(const KookaImage *img);
+    virtual void introduceImage(const ScanImage *img);
 
     bool keepTempFiles() const;
     bool verboseDebug() const;

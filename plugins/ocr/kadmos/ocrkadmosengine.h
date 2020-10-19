@@ -54,7 +54,7 @@ protected slots:
     void slotKadmosResult();
 
 private:
-    void startProcess(OcrBaseDialog *dia, const KookaImage *img) override;
+    void startProcess(OcrBaseDialog *dia, const ScanImage *img) override;
 
 private:
     QString m_tmpFile;

@@ -41,7 +41,6 @@
 #include <kurlrequester.h>
 #include <kprocess.h>
 
-#include "kookaimage.h"
 #include "kookapref.h"
 #include "kookasettings.h"
 #include "dialogbase.h"

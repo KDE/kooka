@@ -56,10 +56,10 @@
 #include <kio/jobuidelegate.h>
 
 #include "imgsaver.h"
-#include "kookaimage.h"
 #include "kookapref.h"
 #include "kookasettings.h"
 
+#include "scanimage.h"
 #include "imagemetainfo.h"
 #include "imagefilter.h"
 #include "scanicons.h"
@@ -75,7 +75,7 @@
 // internal one, not a pointer to it - so the internal KFileItem cannot
 // be modified.  This means that we can't store information in the extra data
 // of the KFileItem of a FileTreeViewItem.  Including, unfortunately, our
-// KookaImage pointer :-(
+// ScanImage pointer :-(
 //
 // This is a consequence of commit 719513, "Making KFileItemList value based".
 //
@@ -256,10 +256,10 @@ static ImageFormat getImgFormat(const FileTreeViewItem *item)
     return (ImageFormat::formatForUrl(kfi->url()));
 }
 
-static KookaImage *imageForItem(const FileTreeViewItem *item)
+static ScanImage *imageForItem(const FileTreeViewItem *item)
 {
     if (item == nullptr) return (nullptr);			// get loaded image if any
-    return (static_cast<KookaImage *>(item->data(0, Qt::UserRole).value<void *>()));
+    return (static_cast<ScanImage *>(item->data(0, Qt::UserRole).value<void *>()));
 }
 
 void ScanGallery::slotItemHighlighted(QTreeWidgetItem *curr)
@@ -277,7 +277,7 @@ void ScanGallery::slotItemHighlighted(QTreeWidgetItem *curr)
     if (item->isDir()) {
         emit showImage(nullptr, true);    // clear displayed image
     } else {
-        KookaImage *img = imageForItem(item);
+        ScanImage *img = imageForItem(item);
         emit showImage(img, false);         // clear or redisplay image
     }
 
@@ -445,7 +445,7 @@ void ScanGallery::slotDecorate(FileTreeViewItem *item)
             item->setText(2, (QString(" %1 ").arg(format.name())));
         }
 
-        const KookaImage *img = imageForItem(item);
+        const ScanImage *img = imageForItem(item);
         if (img != nullptr)				// image is loaded
         {
             // set image depth pixmap as appropriate
@@ -707,7 +707,7 @@ void ScanGallery::loadImageForItem(FileTreeViewItem *item)
     }
     else						// valid image
     {
-        KookaImage *img = imageForItem(item);
+        ScanImage *img = imageForItem(item);
         if (img==nullptr)				// image not already loaded
         {
 #ifdef DEBUG_LOADING
@@ -715,11 +715,11 @@ void ScanGallery::loadImageForItem(FileTreeViewItem *item)
 #endif // DEBUG_LOADING
 
             // The image needs to be loaded. Possibly it is a multi-page image.
-            // If it is, the KookaImage has a subImageCount larger than one. We
+            // If it is, the ScanImage has a subImageCount larger than one. We
             // create an subimage item for every subimage, but do not yet load
             // them.
 
-            img = new KookaImage();
+            img = new ScanImage();
             ret = img->loadFromUrl(item->url());
             if (ret.isEmpty())				// image loaded OK
             {
@@ -736,7 +736,7 @@ void ScanGallery::loadImageForItem(FileTreeViewItem *item)
                         // Create items for each subimage
                         QIcon subImgIcon = QIcon::fromTheme("edit-copy");
 
-                        // Sub-images start counting from 1, KookaImage adjusts
+                        // Sub-images start counting from 1, ScanImage adjusts
                         // that back to the 0-based TIFF directory index.
                         for (int i = 1; i<=img->subImagesCount(); i++)
                         {
@@ -744,7 +744,7 @@ void ScanGallery::loadImageForItem(FileTreeViewItem *item)
 
                             // Set the URL to mark this as a subimage.  The subimage
                             // number is set as the URL fragment;  this is detected by
-                            // KookaImage::loadFromUrl() and used to extract the
+                            // ScanImage::loadFromUrl() and used to extract the
                             // submimage.
                             QUrl u = newKfi.url();
                             u.setFragment(QString::number(i));
@@ -789,7 +789,7 @@ void ScanGallery::loadImageForItem(FileTreeViewItem *item)
 }
 
 /* Hit this slot with a file for a kfiletreeviewitem. */
-void ScanGallery::slotImageArrived(FileTreeViewItem *item, KookaImage *image)
+void ScanGallery::slotImageArrived(FileTreeViewItem *item, ScanImage *image)
 {
     if (item == nullptr || image == nullptr) {
         return;
@@ -800,7 +800,7 @@ void ScanGallery::slotImageArrived(FileTreeViewItem *item, KookaImage *image)
     emit showImage(image, false);
 }
 
-const KookaImage *ScanGallery::getCurrImage(bool loadOnDemand)
+const ScanImage *ScanGallery::getCurrImage(bool loadOnDemand)
 {
     FileTreeViewItem *curr = highlightedFileTreeViewItem();
     if (curr == nullptr) {
@@ -810,7 +810,7 @@ const KookaImage *ScanGallery::getCurrImage(bool loadOnDemand)
         return (nullptr);    // is a directory
     }
 
-    KookaImage *img = imageForItem(curr);		// see if already loaded
+    ScanImage *img = imageForItem(curr);		// see if already loaded
     if (img == nullptr) {				// no, try to do that
         if (!loadOnDemand) {
             return (nullptr);				// not loaded, and don't want to
@@ -1098,7 +1098,7 @@ void ScanGallery::slotUnloadItem(FileTreeViewItem *curr)
             slotUnloadItem(child);			// recursively unload contents
         }
     } else {						// is a file/image
-        const KookaImage *image = imageForItem(curr);
+        const ScanImage *image = imageForItem(curr);
         if (image == nullptr) {
             return;					// ok, nothing to unload
         }

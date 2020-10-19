@@ -38,7 +38,6 @@
 #include "imagemetainfo.h"
 
 class QWidget;
-class KookaImage;
 
 
 /**
@@ -185,29 +184,6 @@ public:
      * extensions, then they must resolve to the same MIME type.
      **/
     static bool renameImage(const QUrl &fromUrl, const QUrl &toUrl, bool askExt = false, QWidget *overWidget = nullptr);
-
-
-
-
-
-#if 0
-    /**
-     * Save an image to a temporary file.
-     *
-     * @param img The image to save
-     * @param format The image format to save in.
-     * @param colors The colour depth (bits per pixel) required.  If specified,
-     * this must be either 1, 8, 24 or 32.  The default is for no colour
-     * conversion.
-     *
-     * @return The file name as saved, or @c QString() if there was
-     *         an error.
-     **/
-    static QString tempSaveImage(const KookaImage *img, const ImageFormat &format, int colors = -1);
-#endif
-
-
-
 
     /**
      * Check the remembered save format for an image type.

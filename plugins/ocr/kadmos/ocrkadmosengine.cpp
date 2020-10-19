@@ -81,7 +81,7 @@ QString OcrKadmosEngine::engineDesc()
                 ));
 }
 
-void OcrKadmosEngine::startProcess(OcrBaseDialog *dia, const KookaImage *img)
+void OcrKadmosEngine::startProcess(OcrBaseDialog *dia, const ScanImage *img)
 {
     //qDebug();
 #if 0 //QT5

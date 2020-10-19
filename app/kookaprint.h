@@ -35,7 +35,7 @@
 #include <qprinter.h>
 
 class QPainter;
-class KookaImage;
+class ScanImage;
 
 
 class KookaPrint : public QPrinter
@@ -61,8 +61,8 @@ public:
     void recalculatePrintParameters();
     void printImage();
 
-    void setImage(const KookaImage *img)		{ m_image = img; }
-    const KookaImage *image() const			{ return (m_image); }
+    void setImage(const ScanImage *img)			{ m_image = img; }
+    const ScanImage *image() const			{ return (m_image); }
 
     void setScaleOption(KookaPrint::ScaleOption opt)	{ m_scaleOption = opt; }
     KookaPrint::ScaleOption scaleOption() const		{ return (m_scaleOption); }
@@ -95,7 +95,7 @@ protected:
     void drawCornerMarkers(QPainter *painter, const QRect &targetRect, int row, int col, int maxRows, int maxCols);
 
 private:
-    const KookaImage *m_image;
+    const ScanImage *m_image;
 
     KookaPrint::ScaleOption m_scaleOption;
     KookaPrint::CutMarksOption m_cutsOption;

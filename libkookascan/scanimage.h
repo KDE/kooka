@@ -29,10 +29,10 @@
  *									*
  ************************************************************************/
 
-#ifndef KOOKAIMAGE_H
-#define KOOKAIMAGE_H
+#ifndef SCANIMAGE_H
+#define SCANIMAGE_H
 
-#include "kookacore_export.h"
+#include "kookascan_export.h"
 
 #include <qimage.h>
 #include <qurl.h>
@@ -47,14 +47,15 @@
 
 // TODO: into class (but never used)
 
-class KOOKACORE_EXPORT KookaImage : public QImage
+class KOOKASCAN_EXPORT ScanImage : public QImage
 {
 public:
-    KookaImage();
-    explicit KookaImage(const QImage &img);
-    ~KookaImage() = default;
+    ScanImage();
+    explicit ScanImage(const QImage &img);
+    ~ScanImage() = default;
 
-    KookaImage &operator=(const KookaImage &src);
+    // TODO: delete
+    ScanImage &operator=(const ScanImage &src);
 
     /**
      * Load an image from a URL. This method reads the image file and sets
@@ -94,4 +95,4 @@ private:
     QUrl m_url;
 };
 
-#endif                          // KOOKAIMAGE_H
+#endif							// SCANIMAGE_H

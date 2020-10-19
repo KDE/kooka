@@ -43,7 +43,7 @@ public:
     void openAdvancedSettings() override;
 
 protected:
-    bool createOcrProcess(AbstractOcrDialogue *dia, const KookaImage *img) override;
+    bool createOcrProcess(AbstractOcrDialogue *dia, const ScanImage *img) override;
     QStringList tempFiles(bool retain) override;
     bool finishedOcrProcess(QProcess *proc) override;
 

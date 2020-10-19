@@ -60,11 +60,11 @@
 #include "adddevicedialog.h"
 #include "previewer.h"
 #include "imagecanvas.h"
+#include "scanimage.h"
 
 #include "kookapref.h"
 #include "galleryhistory.h"
 #include "thumbview.h"
-#include "kookaimage.h"
 #include "abstractocrengine.h"
 #include "pluginmanager.h"
 #include "ocrresedit.h"
@@ -212,12 +212,12 @@ KookaView::KookaView(KMainWindow *parent, const QByteArray &deviceToUse)
     // Connections ScanGallery --> myself
     connect(packager, SIGNAL(itemHighlighted(QUrl,bool)),
             SLOT(slotGallerySelectionChanged()));
-    connect(packager, SIGNAL(showImage(const KookaImage*,bool)),
-            SLOT(slotShowAImage(const KookaImage*,bool)));
+    connect(packager, SIGNAL(showImage(const ScanImage*,bool)),
+            SLOT(slotShowAImage(const ScanImage*,bool)));
     connect(packager, SIGNAL(aboutToShowImage(QUrl)),
             SLOT(slotStartLoading(QUrl)));
-    connect(packager, SIGNAL(unloadImage(const KookaImage*)),
-            SLOT(slotUnloadAImage(const KookaImage*)));
+    connect(packager, SIGNAL(unloadImage(const ScanImage*)),
+            SLOT(slotUnloadAImage(const ScanImage*)));
 
     // Connections ScanGallery --> ThumbView
     connect(packager, SIGNAL(itemHighlighted(QUrl,bool)),
@@ -682,7 +682,7 @@ void KookaView::loadStartupImage()
 
 void KookaView::print()
 {
-    const KookaImage *img = gallery()->getCurrImage(true);
+    const ScanImage *img = gallery()->getCurrImage(true);
     if (img==nullptr) return;				// load image if necessary
 
     // create a KookaPrint (subclass of a QPrinter)
@@ -732,7 +732,7 @@ void KookaView::slotNewPreview(const QImage *newimg, const ImageMetaInfo *info)
 void KookaView::slotStartOcrSelection()
 {
     emit changeStatus(i18n("Starting OCR on selection"));
-    startOCR(KookaImage(mImageCanvas->selectedImage()));
+    startOCR(ScanImage(mImageCanvas->selectedImage()));
     emit clearStatus();
 }
 
@@ -774,7 +774,7 @@ void KookaView::slotOcrSpellCheck(bool interactive, bool background)
 }
 
 
-void KookaView::startOCR(const KookaImage &img)
+void KookaView::startOCR(const ScanImage &img)
 {
     if (img.isNull()) return;				// no image to OCR
 
@@ -950,7 +950,7 @@ void KookaView::slotTransformImage()
 
     // This may appear to be a waste, since we are immediately unloading the image.
     // But we need a copy of the image anyway, so there will still be a load needed.
-    const KookaImage *loadedImage = gallery()->getCurrImage(true);
+    const ScanImage *loadedImage = gallery()->getCurrImage(true);
     if (loadedImage == nullptr) {
         return;
     }
@@ -985,7 +985,7 @@ void KookaView::slotScanParams()
     d.exec();
 }
 
-void KookaView::slotShowAImage(const KookaImage *img, bool isDir)
+void KookaView::slotShowAImage(const ScanImage *img, bool isDir)
 {
     if (mImageCanvas != nullptr) {         // load into image viewer
         mImageCanvas->newImage(img);
@@ -1003,7 +1003,7 @@ void KookaView::slotShowAImage(const KookaImage *img, bool isDir)
     updateSelectionState();
 }
 
-void KookaView::slotUnloadAImage(const KookaImage *img)
+void KookaView::slotUnloadAImage(const ScanImage *img)
 {
     //qDebug() << "Unloading Image";
     if (mImageCanvas != nullptr) {
@@ -1143,7 +1143,7 @@ void KookaView::slotPhotoCopyPrint(const QImage *img, const ImageMetaInfo *info)
     if (! mIsPhotoCopyMode) {
         return;
     }
-    KookaImage kooka_img = KookaImage(*img);
+    ScanImage kooka_img = ScanImage(*img);
     KookaPrint kookaprint(mPhotoCopyPrinter);
     kookaprint.printImage(&kooka_img , 0);
 #endif

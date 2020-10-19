@@ -47,9 +47,6 @@
 #include <kstandardaction.h>
 #include <kactioncollection.h>
 #include <kxmlguiwindow.h>
-#ifndef KDE4
-#include <kprinter.h>
-#endif
 
 #include "scanglobal.h"
 #include "imagecanvas.h"
@@ -64,9 +61,6 @@
 
 Kooka::Kooka(const QByteArray &deviceToUse)
     : KXmlGuiWindow(nullptr),
-#ifndef KDE4
-      m_printer(0),
-#endif
       m_prefDialogIndex(0)
 {
     setObjectName("Kooka");

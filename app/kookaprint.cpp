@@ -40,8 +40,9 @@
 
 #include <klocalizedstring.h>
 
+#include "scanimage.h"
+
 #include "imgprintdialog.h"
-#include "kookaimage.h"
 #include "kookasettings.h"
 #include "kscandevice.h"
 

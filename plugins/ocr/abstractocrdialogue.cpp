@@ -52,7 +52,6 @@
 
 #include <sonnet/configdialog.h>
 
-#include "kookaimage.h"
 #include "kookasettings.h"
 
 #include "imagecanvas.h"
@@ -400,7 +399,7 @@ void AbstractOcrDialogue::startAnimation()
 // So forget about KFileMetaInfo here, just display a simple label with the
 // image size and depth (which information we already have available).
 
-void AbstractOcrDialogue::introduceImage(const KookaImage *img)
+void AbstractOcrDialogue::introduceImage(const ScanImage *img)
 {
     if (img == nullptr) {
         if (m_previewLabel != nullptr) {

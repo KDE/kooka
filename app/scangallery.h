@@ -44,7 +44,7 @@ class QUrl;
 
 class ImgSaver;
 class ImageMetaInfo;
-class KookaImage;
+class ScanImage;
 
 
 class ScanGallery : public FileTreeView
@@ -56,7 +56,7 @@ public:
     ~ScanGallery() override;
 
     QString currentImageFileName() const;
-    const KookaImage *getCurrImage(bool loadOnDemand = false);
+    const ScanImage *getCurrImage(bool loadOnDemand = false);
 
     QMenu *contextMenu() const
     {
@@ -87,7 +87,7 @@ protected:
     void contextMenuEvent(QContextMenuEvent *ev) override;
 
 protected slots:
-    void slotImageArrived(FileTreeViewItem *item, KookaImage *image);
+    void slotImageArrived(FileTreeViewItem *item, ScanImage *image);
     void slotCreateFolder();
     void slotDeleteItems();
     void slotRenameItems();
@@ -112,9 +112,9 @@ protected slots:
 
 signals:
     void aboutToShowImage(const QUrl &url);
-    void showImage(const KookaImage *img, bool isDir);
-    void deleteImage(const KookaImage *img);
-    void unloadImage(const KookaImage *img);
+    void showImage(const ScanImage *img, bool isDir);
+    void deleteImage(const ScanImage *img);
+    void unloadImage(const ScanImage *img);
     void galleryPathChanged(const FileTreeBranch *branch, const QString &relPath);
     void galleryDirectoryRemoved(const FileTreeBranch *branch, const QString &relPath);
 

@@ -29,6 +29,17 @@ else (LIBPAPER_LIB AND LIBPAPER_HDR)
   message(STATUS "libpaper library not found, using built-in list of paper sizes")
 endif (LIBPAPER_LIB AND LIBPAPER_HDR)
 
+############### Support for multi-page TIFF images ###############
+
+include(FindTIFF)
+if (TIFF_FOUND)
+  message(STATUS "TIFF includes: ${TIFF_INCLUDE_DIR}")
+  message(STATUS "TIFF libraries: ${TIFF_LIBRARIES}")
+  set(HAVE_TIFF true)
+else (TIFF_FOUND)
+  message(STATUS "TIFF library not found, no multi-page image support")
+endif (TIFF_FOUND)
+
 ########### subdirectories ###############
 
 add_subdirectory(pics)
@@ -36,7 +47,6 @@ add_subdirectory(desktop)
 
 ########### setup ###############
 
-add_definitions(-DKDE4)
 if (HAVE_SANE)
   add_definitions(-DHAVE_SANE)
   add_definitions(-DSANE_VERSION=\"${SANE_VERSION}\")
@@ -47,8 +57,12 @@ if (HAVE_LIBPAPER)
   get_filename_component(LIBPAPER_INCLUDES ${LIBPAPER_HDR} PATH)
   include_directories(${LIBPAPER_INCLUDES})
 endif (HAVE_LIBPAPER)
+if (HAVE_TIFF)
+  add_definitions(-DHAVE_TIFF)
+  include_directories(${TIFF_INCLUDE_DIR})
+endif (HAVE_TIFF)
 
-########### i18n ###############
+########### I18N ###############
 
 add_definitions(-DTRANSLATION_DOMAIN="libkookascan")
 
@@ -57,6 +71,8 @@ add_definitions(-DTRANSLATION_DOMAIN="libkookascan")
 # TODO: rename some of these to match class name, others are obsolete
 set(kookascan_SRCS
   scanglobal.cpp
+  imageformat.cpp
+  scanimage.cpp
   kscandevice.cpp
   scandevices.cpp
   kscancontrols.cpp
@@ -98,8 +114,11 @@ endif (HAVE_SANE)
 if (HAVE_LIBPAPER)
   target_link_libraries(kookascan ${LIBPAPER_LIB})
 endif (HAVE_LIBPAPER)
+if (HAVE_TIFF)
+  target_link_libraries(kookascan ${TIFF_LIBRARIES})
+endif (HAVE_TIFF)
 
-set_target_properties(kookascan PROPERTIES VERSION 1.0.0 SOVERSION 1)
+set_target_properties(kookascan PROPERTIES VERSION 2.0.0 SOVERSION 2)
 
 ########### installation ###############
 

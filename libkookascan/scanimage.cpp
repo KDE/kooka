@@ -29,7 +29,7 @@
  *									*
  ************************************************************************/
 
-#include "kookaimage.h"
+#include "scanimage.h"
 
 #include <qdebug.h>
 #include <qfile.h>
@@ -47,27 +47,27 @@ extern "C"
 #endif
 
 
-KookaImage::KookaImage()
+ScanImage::ScanImage()
     : QImage()
 {
     init();
 }
 
 
-KookaImage::KookaImage(const QImage &img)
+ScanImage::ScanImage(const QImage &img)
     : QImage(img)
 {
     init();
 }
 
 
-void KookaImage::init()
+void ScanImage::init()
 {
     m_subImages = 0;
 }
 
 
-KookaImage &KookaImage::operator=(const KookaImage &img)
+ScanImage &ScanImage::operator=(const ScanImage &img)
 {
     if (this != &img) {					// ignore self-assignment
         QImage::operator=(img);
@@ -80,19 +80,21 @@ KookaImage &KookaImage::operator=(const KookaImage &img)
 }
 
 
-QUrl KookaImage::url() const
+QUrl ScanImage::url() const
 {
     return (m_url);
 }
 
 
-bool KookaImage::isFileBound() const
+bool ScanImage::isFileBound() const
 {
     return (m_url.isValid());
 }
 
 
-QString KookaImage::loadFromUrl(const QUrl &url)
+// TODO: only used immediately after construction in ScanGallery,
+// implement constructor taking a QUrl
+QString ScanImage::loadFromUrl(const QUrl &url)
 {
     bool ret = true;					// return status
     bool isTiff = false;				// do we have a TIFF file?
@@ -164,7 +166,7 @@ QString KookaImage::loadFromUrl(const QUrl &url)
 }
 
 
-QString  KookaImage::loadTiffDir(const QString &filename, int subno)
+QString  ScanImage::loadTiffDir(const QString &filename, int subno)
 {
 #ifdef HAVE_TIFF
     // if it is TIFF, check with TIFFlib if it is multiple images
@@ -243,97 +245,13 @@ QString  KookaImage::loadTiffDir(const QString &filename, int subno)
 }
 
 
-int KookaImage::subImagesCount() const
+int ScanImage::subImagesCount() const
 {
     return (m_subImages);
 }
 
 
-bool KookaImage::isSubImage() const
+bool ScanImage::isSubImage() const
 {
     return (m_url.isValid() && m_url.fragment().toInt()>0);
 }
-
-
-#ifdef KDE3
-
-// TODO: only used in kookaprint, move to there
-/*
- * tiling
- */
-int KookaImage::cutToTiles(const QSize maxSize, int &rows, int &cols, TileMode)
-{
-    QSize imgSize = size();
-
-    int w = imgSize.width();
-    if (w > maxSize.width()) {
-        // image is wider than paper
-        w = maxSize.width();
-    }
-    int h = imgSize.height();
-    if (h > maxSize.height()) {
-        // image is wider than paper
-        h = maxSize.height();
-    }
-
-    int absX = 0;  // absolute x position from where to start print
-    int absY = 0;  // on the image, left top corner of the part to print
-    rows = 0;
-
-    while (h) { // Loop over height, cut in vertical direction
-        rows++;
-        cols = 0;
-        while (w) { // Loop over width, cut in horizontal direction
-            cols++;
-            m_tileVector.append(QRect(absX, absY, w, h));
-
-            absX += w + 1;
-            w = imgSize.width() - absX;
-
-            // if w < 0, this was the last loop, set w to zero to stop loop
-            if (w < 0) {
-                w = 0;
-            }
-
-            // if > 0 here, a new page is required
-            if (w > 0) {
-                if (w > maxSize.width()) {
-                    w = maxSize.width();
-                }
-            }
-        }
-        // Reset the X-values to start on the left border again
-        absX = 0;
-        // start with full width again
-        w = imgSize.width();
-        if (w > maxSize.width()) {
-            w = maxSize.width();
-        }
-
-        absY += h + 1;
-        h = imgSize.height() - absY;
-
-        if (h < 0) {
-            h = 0;    // be sure to meet the break condition
-        }
-        if (h > maxSize.height()) {
-            h = maxSize.height();    // limit to page height
-        }
-    }
-    m_tileCols = cols;
-
-    return m_tileVector.count();
-}
-
-QRect KookaImage::getTileRect(int rowPos, int colPos) const
-{
-    int indx = rowPos * m_tileCols + colPos;
-    //qDebug() << "Tile index" << indx;
-    return (m_tileVector[indx]);
-}
-
-#endif
-
-
-// TODO: implement dpiX() and setDpiX()
-// (more useful than dots per metre!)

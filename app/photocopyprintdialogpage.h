@@ -47,7 +47,7 @@ class Q3VGroupBox;
 
 class KIntNumInput;
 
-class KookaImage;
+class ScanImage;
 class KScanDevice;
 
 #ifndef KDE4
@@ -73,7 +73,7 @@ private:
     KIntNumInput *m_copies;
     KScanDevice  *sane_device;
 
-    KookaImage *m_image;
+    ScanImage  *m_image;
     QLabel     *m_screenRes;
     bool        m_ignoreSignal;
 };

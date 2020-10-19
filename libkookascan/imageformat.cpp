@@ -76,7 +76,7 @@ bool ImageFormat::operator==(const ImageFormat &other)
     return (mFormat == other.mFormat);
 }
 
-KOOKACORE_EXPORT QDebug operator<<(QDebug stream, const ImageFormat &format)
+KOOKASCAN_EXPORT QDebug operator<<(QDebug stream, const ImageFormat &format)
 {
     stream.nospace() << "ImageFormat[" << format.name() << "]";
     return (stream.space());
@@ -153,7 +153,7 @@ ImageFormat ImageFormat::formatForMime(const QMimeType &mime)
     // via that library even if Qt does not support it.
     //
     // The special format name used here is checked by isTiff() below and used
-    // in KookaImage::loadFromUrl() to force loading via the TIFF library.
+    // in ScanImage::loadFromUrl() to force loading via the TIFF library.
     //
     // TIFF write support will still not be available unless QtImageFormats is
     // installed.

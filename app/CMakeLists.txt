@@ -32,17 +32,6 @@ endif (HAVE_STRERROR)
 check_include_file(sys/stat.h HAVE_SYS_STAT_H)
 check_include_file(sys/types.h HAVE_SYS_TYPES_H)
 
-############### Support for multi-page TIFF images ###############
-
-include(FindTIFF)
-if (TIFF_FOUND)
-  message(STATUS "TIFF includes: ${TIFF_INCLUDE_DIR}")
-  message(STATUS "TIFF libraries: ${TIFF_LIBRARIES}")
-  set(HAVE_TIFF true)
-else (TIFF_FOUND)
-  message(STATUS "TIFF library not found, no multi-page image support")
-endif (TIFF_FOUND)
-
 ########### setup ###############
 
 if (HAVE_ERRNO_H)
@@ -58,35 +47,20 @@ if (HAVE_SYS_TYPES_H)
   add_definitions(-DHAVE_SYS_TYPES_H)
 endif (HAVE_SYS_TYPES_H)
 
-add_definitions(-DKDE4)
-add_definitions(-DKF5)
-if (HAVE_TIFF)
-  add_definitions(-DHAVE_TIFF)
-endif (HAVE_TIFF)
-
 include_directories(..)
-
-if (HAVE_TIFF)
-  include_directories(${TIFF_INCLUDE_DIR})
-endif (HAVE_TIFF)
 
 ########### library shared with plugins ###############
 
 set(kookacore_SRCS
-  kookaimage.cpp
-  imageformat.cpp
   pluginmanager.cpp
   abstractplugin.cpp
 )
 kconfig_add_kcfg_files(kookacore_SRCS kookasettings.kcfgc)
 add_library(kookacore SHARED ${kookacore_SRCS})
 generate_export_header(kookacore BASE_NAME kookacore)
-set_target_properties(kookacore PROPERTIES SOVERSION "1.0.0")
+set_target_properties(kookacore PROPERTIES SOVERSION "2.0.0")
 target_link_libraries(kookacore Qt5::Core Qt5::Gui Qt5::PrintSupport)
 target_link_libraries(kookacore KF5::I18n KF5::KIOFileWidgets KF5::KIOWidgets KF5::IconThemes KF5::ConfigGui)
-if (HAVE_TIFF)
-  target_link_libraries(kookacore ${TIFF_LIBRARIES})
-endif (HAVE_TIFF)
 
 if (INSTALL_BINARIES)
   install(TARGETS kookacore ${INSTALL_TARGETS_DEFAULT_ARGS})

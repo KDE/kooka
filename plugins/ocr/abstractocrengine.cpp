@@ -47,7 +47,6 @@
 
 #include "imagecanvas.h"
 #include "imageformat.h"
-#include "kookaimage.h"
 
 #include "abstractocrdialogue.h"
 
@@ -69,7 +68,7 @@ AbstractOcrEngine::AbstractOcrEngine(QObject *pnt, const char *name)
 {
     setObjectName(name);
 
-    m_introducedImage = KookaImage();
+    m_introducedImage = ScanImage();
     m_parent = nullptr;
 
     qDebug() << objectName();
@@ -88,7 +87,7 @@ AbstractOcrEngine::~AbstractOcrEngine()
  * This is called to introduce a new image, usually if the user clicks on a
  * new image either in the gallery or on the thumbnailview.
  */
-void AbstractOcrEngine::setImage(const KookaImage &img)
+void AbstractOcrEngine::setImage(const ScanImage &img)
 {
     m_introducedImage = img;				// shallow copy of original
 
@@ -422,12 +421,12 @@ QString AbstractOcrEngine::tempFileName(const QString &suffix, const QString &ba
 }
 
 
-QString AbstractOcrEngine::tempSaveImage(const KookaImage *img, const ImageFormat &format, int colors)
+QString AbstractOcrEngine::tempSaveImage(const ScanImage *img, const ImageFormat &format, int colors)
 {
     if (img==nullptr) return (QString());		// no image to save
 
     QString tmpName = tempFileName(format.extension(), "imagetemp");
-    const KookaImage *tmpImg = nullptr;
+    const ScanImage *tmpImg = nullptr;
 
     if (colors!=-1 && img->depth()!=colors)		// need to convert image
     {
@@ -450,7 +449,7 @@ default:    qWarning() << "bad colour depth" << colors;
             return (QString());
         }
 
-        tmpImg = new KookaImage(img->convertToFormat(newfmt));
+        tmpImg = new ScanImage(img->convertToFormat(newfmt));
         img = tmpImg;					// replace with converted image
     }
 
