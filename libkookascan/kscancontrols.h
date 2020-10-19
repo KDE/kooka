@@ -71,7 +71,7 @@ public:
     explicit KScanControl(QWidget *parent, const QString &text);
 
     /**
-     * Destructs the control and any child widgets that it uses.
+     * Destroys the control and any child widgets that it uses.
      */
     virtual ~KScanControl();
 
@@ -177,28 +177,46 @@ public:
      * @param min minimum slider value
      * @param max maximum slider value
      * @param haveStdButt if @c true, the 'reset' button will be present
-     * @param stdValue the value to which the 'reset' button resets the setting
+     * @param stdValue the value to which the 'reset' button resets the control
      */
+    Q_DECL_DEPRECATED_X("Use KScanSlider(QWidget *,const QString &, bool) then setRange()")
     KScanSlider(QWidget *parent, const QString &text,
                 double min, double max,
                 bool haveStdButt = false, int stdValue = 0);
 
-    KScanControl::ControlType type() const override
-    {
-        return (KScanControl::Number);
-    }
+    /**
+     * Creates the control.
+     *
+     * @param parent parent widget
+     * @param text descriptive label for the control
+     * @param haveStdButt if @c true, the 'reset' button will be present
+     */
+    KScanSlider(QWidget *parent, const QString &text, bool haveStdButt = false);
+
+    KScanControl::ControlType type() const override		{ return (KScanControl::Number); }
 
     int value() const override;
     void setValue(int val) override;
+    QSpinBox *spinBox() const					{ return (mSpinbox); }
 
-    QSpinBox *spinBox() const
-    {
-        return (mSpinbox);
-    }
+    /**
+     * Sets the allowed range and step for the slider.
+     *
+     * @param min minimum slider value
+     * @param max maximum slider value
+     * @param step value step, or -1 for a default setting
+     * @param stdValue the value to which the 'reset' button resets the control
+     *
+     * @note The current control value is set to @p stdValue.
+     */
+    void setRange(int min, int max, int step = -1, int stdValue = 0);
 
 protected slots:
     void slotSliderSpinboxChange(int val);
     void slotRevertValue();
+
+private:
+    void init(bool haveStdButt);
 
 private:
     QSlider *mSlider;

@@ -58,7 +58,7 @@
 static void createDir(const QUrl &url)
 {
     qDebug() << url;
-    KIO::StatJob *job = KIO::stat(url, KIO::StatJob::DestinationSide, 0 /* minimal details */);
+    KIO::StatJob *job = KIO::statDetails(url, KIO::StatJob::DestinationSide, KIO::StatBasic);
     if (!job->exec())
     {
         KMessageBox::sorry(nullptr, xi18nc("@info", "The directory <filename>%2</filename><nl/>could not be accessed.<nl/>%1",
@@ -440,14 +440,13 @@ bool copyRenameImage(bool isCopying, const QUrl &fromUrl, const QUrl &toUrl, boo
     {
         qDebug() << (isCopying ? "Copy" : "Rename") << "->" << targetUrl;
 
-        KIO::StatJob *job = KIO::stat(targetUrl, KIO::StatJob::DestinationSide, 0);
+        KJob *job = KIO::statDetails(targetUrl, KIO::StatJob::DestinationSide, KIO::StatNoDetails);
         if (job->exec())				// stat with minimal details
         {						// to see if destination exists
                 errorString = i18n("Target already exists");
         }
         else
         {
-            KJob *job;
             if (isCopying) job = KIO::file_copy(fromUrl, targetUrl);
             else job = KIO::file_move(fromUrl, targetUrl);
 							// copy/rename the file

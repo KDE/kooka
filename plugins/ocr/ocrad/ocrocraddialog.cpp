@@ -191,7 +191,8 @@ bool OcrOcradDialog::setupGui()
 
     ski = KookaSettings::self()->ocrOcradThresholdValueItem();
     Q_ASSERT(ski!=nullptr);
-    m_thresholdSlider = new KScanSlider(w, ski->label(), 0, 100);
+    m_thresholdSlider = new KScanSlider(w, ski->label());
+    m_thresholdSlider->setRange(0, 100, 5, 50);
     m_thresholdSlider->setValue(KookaSettings::ocrOcradThresholdValue());
     m_thresholdSlider->setToolTip(ski->toolTip());
     m_thresholdSlider->spinBox()->setSuffix("%");

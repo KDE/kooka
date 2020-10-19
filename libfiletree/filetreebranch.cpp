@@ -76,25 +76,16 @@ FileTreeBranch::FileTreeBranch(FileTreeView *parent,
 
     setShowingDotFiles(showHidden);
 
-    connect(this, &FileTreeBranch::itemsAdded, this, &FileTreeBranch::slotItemsAdded);
-    connect(this, &FileTreeBranch::itemsDeleted, this, &FileTreeBranch::slotItemsDeleted);
-    connect(this, &FileTreeBranch::refreshItems, this, &FileTreeBranch::slotRefreshItems);
-    connect(this, &FileTreeBranch::started, this, &FileTreeBranch::slotListerStarted);
+    connect(this, &KDirLister::itemsAdded, this, &FileTreeBranch::slotItemsAdded);
+    connect(this, &KDirLister::itemsDeleted, this, &FileTreeBranch::slotItemsDeleted);
+    connect(this, &KDirLister::refreshItems, this, &FileTreeBranch::slotRefreshItems);
+    connect(this, &KDirLister::started, this, &FileTreeBranch::slotListerStarted);
 
-    connect(this, static_cast<void (FileTreeBranch::*)(const QUrl &)>(&FileTreeBranch::completed),
-            this, &FileTreeBranch::slotListerCompleted);
-
-    connect(this, static_cast<void (FileTreeBranch::*)(const QUrl &)>(&FileTreeBranch::canceled),
-            this, &FileTreeBranch::slotListerCanceled);
-
-    connect(this, static_cast<void (FileTreeBranch::*)()>(&FileTreeBranch::clear),
-            this, &FileTreeBranch::slotListerClear);
-
-    connect(this, static_cast<void (FileTreeBranch::*)(const QUrl &)>(&FileTreeBranch::clear),
-            this, &FileTreeBranch::slotListerClearUrl);
-
-    connect(this, static_cast<void (FileTreeBranch::*)(const QUrl &, const QUrl &)>(&FileTreeBranch::redirection),
-            this, &FileTreeBranch::slotRedirect);
+    connect(this, QOverload<const QUrl &>::of(&KDirLister::completed), this, &FileTreeBranch::slotListerCompleted);
+    connect(this, QOverload<const QUrl &>::of(&KDirLister::canceled), this, &FileTreeBranch::slotListerCanceled);
+    connect(this, QOverload<>::of(&KDirLister::clear), this, &FileTreeBranch::slotListerClear);
+    connect(this, QOverload<const QUrl &>::of(&KDirLister::clear), this, &FileTreeBranch::slotListerClearUrl);
+    connect(this, QOverload<const QUrl &, const QUrl &>::of(&KDirLister::redirection), this, &FileTreeBranch::slotRedirect);
 
     m_openChildrenURLs.append(u);
 }

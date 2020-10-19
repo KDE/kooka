@@ -54,35 +54,26 @@ FileTreeView::FileTreeView(QWidget *parent)
 
     m_autoOpenTimer = new QTimer(this);
     m_autoOpenTimer->setInterval((QApplication::startDragTime() * 3) / 2);
-    connect(m_autoOpenTimer, SIGNAL(timeout()), SLOT(slotAutoOpenFolder()));
+    connect(m_autoOpenTimer, &QTimer::timeout, this, &FileTreeView::slotAutoOpenFolder);
 
-    /* The executed-Slot only opens  a path, while the expanded-Slot populates it */
-    connect(this, SIGNAL(itemActivated(QTreeWidgetItem*,int)),
-            SLOT(slotExecuted(QTreeWidgetItem*)));
-    connect(this, SIGNAL(itemExpanded(QTreeWidgetItem*)),
-            SLOT(slotExpanded(QTreeWidgetItem*)));
-    connect(this, SIGNAL(itemCollapsed(QTreeWidgetItem*)),
-            SLOT(slotCollapsed(QTreeWidgetItem*)));
-    connect(this, SIGNAL(itemDoubleClicked(QTreeWidgetItem*,int)),
-            SLOT(slotDoubleClicked(QTreeWidgetItem*)));
+    // The slotExecuted only opens a path, while the slotExpanded populates it
+    connect(this, &QTreeWidget::itemActivated, this, &FileTreeView::slotExecuted);
+    connect(this, &QTreeWidget::itemExpanded, this, &FileTreeView::slotExpanded);
+    connect(this, &QTreeWidget::itemCollapsed, this, &FileTreeView::slotCollapsed);
+    connect(this, &QTreeWidget::itemDoubleClicked, this, &FileTreeView::slotDoubleClicked);
+    connect(this, &QTreeWidget::itemSelectionChanged, this, &FileTreeView::slotSelectionChanged);
+    connect(this, &QTreeWidget::itemEntered, this, &FileTreeView::slotOnItem);
 
-    connect(model(), SIGNAL(dataChanged(QModelIndex,QModelIndex)),
-            SLOT(slotDataChanged(QModelIndex,QModelIndex)));
-
-    /* connections from the konqtree widget */
-    connect(this, SIGNAL(itemSelectionChanged()),
-            SLOT(slotSelectionChanged()));
-    connect(this, SIGNAL(itemEntered(QTreeWidgetItem*,int)),
-            SLOT(slotOnItem(QTreeWidgetItem*)));
+    connect(model(), &QAbstractItemModel::dataChanged, this, &FileTreeView::slotDataChanged);
 
     m_openFolderPixmap = QIcon::fromTheme("folder-open");
 }
 
 FileTreeView::~FileTreeView()
 {
-    // we must make sure that the FileTreeTreeViewItems are deleted _before_ the
+    // We must make sure that the FileTreeTreeViewItems are deleted _before_ the
     // branches are deleted. Otherwise, the KFileItems would be destroyed
-    // and the FileTreeViewItems had dangling pointers to them.
+    // and the FileTreeViewItems will still hold dangling pointers to them.
     hide();
     clear();
 
@@ -326,13 +317,9 @@ FileTreeBranch *FileTreeView::addBranch(const QUrl &path, const QString &name,
 
 FileTreeBranch *FileTreeView::addBranch(FileTreeBranch *newBranch)
 {
-    connect(newBranch, SIGNAL(populateStarted(FileTreeViewItem*)),
-            SLOT(slotStartAnimation(FileTreeViewItem*)));
-    connect(newBranch, SIGNAL(populateFinished(FileTreeViewItem*)),
-            SLOT(slotStopAnimation(FileTreeViewItem*)));
-
-    connect(newBranch, SIGNAL(newTreeViewItems(FileTreeBranch*,FileTreeViewItemList)),
-            SLOT(slotNewTreeViewItems(FileTreeBranch*,FileTreeViewItemList)));
+    connect(newBranch, &FileTreeBranch::populateStarted, this, &FileTreeView::slotStartAnimation);
+    connect(newBranch, &FileTreeBranch::populateFinished, this, &FileTreeView::slotStopAnimation);
+    connect(newBranch, &FileTreeBranch::newTreeViewItems, this, &FileTreeView::slotNewTreeViewItems);
 
     m_branches.append(newBranch);
     return (newBranch);
