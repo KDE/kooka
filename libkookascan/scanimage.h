@@ -37,52 +37,88 @@
 #include <qimage.h>
 #include <qurl.h>
 
-
 /**
-  * @author Klaas Freitag
-  *
-  * class that represents an image, very much as QImage. But this one can contain
-  * multiple pages.
-  */
-
-// TODO: into class (but never used)
+ * @short An image representing scanned results or loaded from the gallery.
+ *
+ * @author Klaas Freitag
+ * @author Jonathan Marten
+ *
+ * A class that represents an image, based on @c QImage with extensions for
+ * image meta-information and supporting image formats that can contain
+ * multiple pages.
+ */
 
 class KOOKASCAN_EXPORT ScanImage : public QImage
 {
 public:
+    /* A pointer to a @c ScanImage.  Always use this to pass around an image,
+     * do not use a plain pointer or copy the image that it points to.
+     * The pointer can be copied, the @c QSharedPointer will manage reference
+     * counting and deletion.
+     */
+    typedef QSharedPointer<ScanImage> Ptr;
+
+    /*
+     * Constructor.  Creates a null image.
+     */
     ScanImage();
+
+    /*
+     * Constructor.  Creates an image from a @c QImage.
+     * A shallow copy is made of the image data, which as with @c QImage
+     * is automatically detached if it is modified.
+     *
+     * @see QImage::QImage(const QImage &)
+     */
     explicit ScanImage(const QImage &img);
+
+    /*
+     * Destructor.
+     */
     ~ScanImage() = default;
 
-    // TODO: delete
+    // TODO: delete, use Q_DISABLE_COPY in private section
     ScanImage &operator=(const ScanImage &src);
 
     /**
-     * Load an image from a URL. This method reads the image file and sets
-     * the subimage count if applicable.  Returns a null string if succeeded,
-     * or an error message string if failed.
+     * Load an image from a URL.
+     *
+     * If the URL has a numeric fragment, then this requests the specified
+     * subimage from the containing file.  Otherwise, read in the main image
+     * and set the count of subimages if it has any.
+     *
+     * @param url URL of the file to be loaded
+     * @return a null string if the load succeeded, or an error message string
      */
     QString loadFromUrl(const QUrl &url);
 
     /**
-     * The number of subimages. This is 0 if there are no subimages.
+     * The number of subimages.
+     *
+     * @return The subimage count, or 0 if there are no subimages
      */
     int subImagesCount() const;
 
     /**
-     * returns true if this is a subimage.
+     * Check whether this image is a subimage.
+     *
+     * @return @c true if this image is a subimage
      */
     bool isSubImage() const;
 
     /**
-     * Get the URL of the image, if it was loaded from a file.  Note that
-     * loadFromUrl() records the URL automatically.
+     * The URL of the image.
+     *
+     * @return the image URL, or an invalid URL if it was not loaded from a file.
+     * @note The URL is set when loaded via @c loadFromUrl().
      */
-    void setUrl(const QUrl &url);
     QUrl url() const;
 
     /**
-     * Checks if the image is file bound, i.e. it was loaded from a file.
+     * Checks whether the image is file bound;
+     * that is, if it was loaded from a file via @c loadFromurl().
+     *
+     * @return @c true if the image was loaded from a file
      */
     bool isFileBound() const;
 
