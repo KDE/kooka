@@ -47,13 +47,6 @@ extern "C"
 #endif
 
 
-ScanImage::ScanImage()
-    : QImage()
-{
-    init();
-}
-
-
 ScanImage::ScanImage(int width, int height, QImage::Format format)
     : QImage(width, height, format)
 {
@@ -68,51 +61,19 @@ ScanImage::ScanImage(const QImage &img)
 }
 
 
-ScanImage::~ScanImage()
+ScanImage::ScanImage(const QUrl &url)
+    : QImage()
 {
-}
+    init();
 
-
-void ScanImage::init()
-{
-    m_subImages = 0;
-}
-
-
-ScanImage &ScanImage::operator=(const ScanImage &img)
-{
-    if (this != &img) {					// ignore self-assignment
-        QImage::operator=(img);
-
-        m_subImages = img.m_subImages;
-        m_url       = img.m_url;
-    }
-
-    return (*this);
-}
-
-
-QUrl ScanImage::url() const
-{
-    return (m_url);
-}
-
-
-bool ScanImage::isFileBound() const
-{
-    return (m_url.isValid());
-}
-
-
-// TODO: only used immediately after construction in ScanGallery,
-// implement constructor taking a QUrl
-QString ScanImage::loadFromUrl(const QUrl &url)
-{
-    bool ret = true;					// return status
     bool isTiff = false;				// do we have a TIFF file?
     bool haveTiff = false;				// can it be read via TIFF lib?
 
-    if (!url.isLocalFile()) return (i18n("Loading non-local images is not yet implemented"));
+    if (!url.isLocalFile())
+    {
+        m_errorString = i18n("Loading non-local images is not yet implemented");
+        return;
+    }
 
     if (url.hasFragment())				// is this a subimage?
     {
@@ -121,10 +82,9 @@ QString ScanImage::loadFromUrl(const QUrl &url)
         {						// get local file without fragment
             const QString fileName = url.adjusted(QUrl::RemoveFragment).toLocalFile();
             qDebug() << "subimage" << subno << "from" << fileName;
-            loadTiffDir(fileName, subno);		// load TIFF subimage
-            return (QString());
+            m_errorString = loadTiffDir(fileName, subno);
+            return;					// load TIFF subimage
         }
-
     }
 
     const QString filename = url.toLocalFile();		// local path of image
@@ -136,7 +96,7 @@ QString ScanImage::loadFromUrl(const QUrl &url)
     // then 'format' will be "TIFFLIB".  So either of these format names means
     // that a TIFF file is being loaded.
     isTiff = format.isTiff();
-    //qDebug() << "Image format to load:" << format << "from file" << filename;
+    qDebug() << "Loading image format" << format << "from" << filename;
 
 #ifdef HAVE_TIFF
     if (isTiff)						// if it is TIFF, check
@@ -162,23 +122,40 @@ QString ScanImage::loadFromUrl(const QUrl &url)
 #endif
     if (!haveTiff)					// not TIFF, or not multi-page
     {
-        ret = QImage::load(filename);			// Qt can only read one image
-        if (!ret) return (i18n("Image loading failed"));
+        QImage::load(filename);				// Qt can only read one image
+        if (isNull()) m_errorString = i18n("Image loading failed");
         m_subImages = 0;
     }
 #ifdef HAVE_TIFF
     else						// a TIFF file, multi-page or not
     {
-        loadTiffDir(filename, 0);			// read by TIFFlib directly
+        m_errorString = loadTiffDir(filename, 0);	// read by TIFFlib directly
     }
 #endif
 
     m_url = url;					// record image source as from file
-    return (QString());					// loaded OK
 }
 
 
-QString  ScanImage::loadTiffDir(const QString &filename, int subno)
+ScanImage::~ScanImage()
+{
+}
+
+
+void ScanImage::init()
+{
+    m_subImages = 0;					// no subimages present
+    m_errorString.clear();				// no error detected yet
+}
+
+
+bool ScanImage::isFileBound() const
+{
+    return (m_url.isValid());
+}
+
+
+QString ScanImage::loadTiffDir(const QString &filename, int subno)
 {
 #ifdef HAVE_TIFF
     // if it is TIFF, check with TIFFlib if it is multiple images
@@ -254,12 +231,6 @@ QString  ScanImage::loadTiffDir(const QString &filename, int subno)
     return (i18n("TIFF not supported"));
 #endif							// HAVE_TIFF
     return (QString());					// TIFF read succeeded
-}
-
-
-int ScanImage::subImagesCount() const
-{
-    return (m_subImages);
 }
 
 

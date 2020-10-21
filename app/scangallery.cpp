@@ -720,9 +720,8 @@ void ScanGallery::loadImageForItem(FileTreeViewItem *item)
             // create an subimage item for every subimage, but do not yet load
             // them.
 
-            img.reset(new ScanImage());
-            ret = img->loadFromUrl(item->url());
-            if (ret.isEmpty())				// image loaded OK
+            img.reset(new ScanImage(item->url()));
+            if (img->errorString().isEmpty())		// image loaded OK
             {
                 if (img->subImagesCount()>1)		// see if it has subimages
                 {
@@ -766,6 +765,7 @@ void ScanGallery::loadImageForItem(FileTreeViewItem *item)
             }
             else
             {						// image loading failed
+                qDebug() << "Failed to load image," << img->errorString();
                 img.clear();				// don't try to use it below
             }
         }

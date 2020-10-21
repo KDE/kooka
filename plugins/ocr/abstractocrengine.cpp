@@ -194,8 +194,7 @@ void AbstractOcrEngine::finishedOcr(bool success)
             // Load the result image from its file.
             // The QSharedPointer passed to ImageCanvas::newImage() will
             // retain the image and delete it when it is no longer needed.
-            ScanImage *resultImage = new ScanImage();
-            resultImage->loadFromUrl(QUrl::fromLocalFile(m_ocrResultFile));
+            ScanImage *resultImage = new ScanImage(QUrl::fromLocalFile(m_ocrResultFile));
             qDebug() << "Result image from" << m_ocrResultFile << "size" << resultImage->size();
             m_imgCanvas->newImage(ScanImage::Ptr(resultImage), true);
             m_imgCanvas->setReadOnly(true);		// display on image canvas
