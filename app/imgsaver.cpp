@@ -67,7 +67,6 @@ static void createDir(const QUrl &url)
         return;
     }
 
-    qDebug() << job->statResult().numberValue(KIO::UDSEntry::UDS_FILE_TYPE);
     if (!job->statResult().isDir())
     {
         qDebug() << "directory" << url << "does not exist, try to create";
@@ -103,12 +102,61 @@ QString extension(const QUrl &url)
     return (db.suffixForFileName(url.path()));
 }
 
+
+static KConfigSkeleton::ItemString *configItemForType(ImageMetaInfo::ImageType type)
+{
+    switch (type)
+    {
+case ImageMetaInfo::LowColour:	return (KookaSettings::self()->formatLowColourItem());
+case ImageMetaInfo::Greyscale:	return (KookaSettings::self()->formatGreyscaleItem());
+case ImageMetaInfo::BlackWhite:	return (KookaSettings::self()->formatBlackWhiteItem());
+case ImageMetaInfo::HighColour:	return (KookaSettings::self()->formatHighColourItem());
+default:			return (KookaSettings::self()->formatUnknownItem());
+    }
+}
+
+
+static void storeFormatForType(ImageMetaInfo::ImageType type, const ImageFormat &format)
+{
+    //  We don't save OP_FILE_ASK_FORMAT here, this is the global setting
+    //  "Always use the Save Assistant" from the Kooka configuration which
+    //  is a preference option affecting all image types.  To get automatic
+    //  saving in the preferred format, turn off that option in "Configure
+    //  Kooka - Image Saver" and select "Always use this format for this type
+    //  of file" when saving an image.  As long as an image of that type has
+    //  scanned and saved, then the Save Assistant will not subsequently
+    //  appear for that image type.
+    //
+    //  This means that turning on the "Always use the Save Assistant" option
+    //  will do exactly what it says.
+
+    KConfigSkeleton::ItemString *ski = configItemForType(type);
+    Q_ASSERT(ski!=nullptr);
+    ski->setValue(format.name());
+    KookaSettings::self()->save();
+}
+
+
+static ImageFormat getFormatForType(ImageMetaInfo::ImageType type)
+{
+    const KConfigSkeleton::ItemString *ski = configItemForType(type);
+    Q_ASSERT(ski!=nullptr);
+    return (ImageFormat(ski->value().toLocal8Bit()));
+}
+
+
+static QString findSubFormat(const ImageFormat &format)
+{
+    return (QString());					// no subformats currently used
+}
+
+
 ImgSaver::ImageSaveStatus ImgSaver::getFilenameAndFormat(ImageMetaInfo::ImageType type)
 {
     if (type == ImageMetaInfo::Unknown) return (ImgSaver::SaveStatusParam);
 
     QString saveFilename = createFilename();		// find next unused filename
-    ImageFormat saveFormat = findFormat(type);		// find saved image format
+    ImageFormat saveFormat = getFormatForType(type);	// find saved image format
     QString saveSubformat = findSubFormat(saveFormat);	// currently not used
 							// get dialogue preferences
     m_saveAskFilename = KookaSettings::saverAskForFilename();
@@ -265,23 +313,6 @@ QString ImgSaver::createFilename()
     return (fname);
 }
 
-/*
- * findFormat looks to see if there is a previously saved file format for
- * the image type in question.
- */
-ImageFormat ImgSaver::findFormat(ImageMetaInfo::ImageType type)
-{
-    if (type == ImageMetaInfo::Thumbnail) {
-        return (ImageFormat("BMP"));    // thumbnail always this format
-    }
-    if (type == ImageMetaInfo::Preview) {
-        return (ImageFormat("BMP"));    // preview always this format
-    }
-    // real images from here on
-    ImageFormat format = getFormatForType(type);
-    //qDebug() << "format for type" << type << "=" << format;
-    return (format);
-}
 
 QString ImgSaver::picTypeAsString(ImageMetaInfo::ImageType type)
 {
@@ -321,50 +352,6 @@ bool ImgSaver::isRememberedFormat(ImageMetaInfo::ImageType type, const ImageForm
     return (getFormatForType(type) == format);
 }
 
-static KConfigSkeleton::ItemString *configItemForType(ImageMetaInfo::ImageType type)
-{
-    switch (type)
-    {
-case ImageMetaInfo::LowColour:	return (KookaSettings::self()->formatLowColourItem());
-case ImageMetaInfo::Greyscale:	return (KookaSettings::self()->formatGreyscaleItem());
-case ImageMetaInfo::BlackWhite:	return (KookaSettings::self()->formatBlackWhiteItem());
-case ImageMetaInfo::HighColour:	return (KookaSettings::self()->formatHighColourItem());
-default:			return (KookaSettings::self()->formatUnknownItem());
-    }
-}
-
-ImageFormat ImgSaver::getFormatForType(ImageMetaInfo::ImageType type)
-{
-    const KConfigSkeleton::ItemString *ski = configItemForType(type);
-    Q_ASSERT(ski!=nullptr);
-    return (ImageFormat(ski->value().toLocal8Bit()));
-}
-
-void ImgSaver::storeFormatForType(ImageMetaInfo::ImageType type, const ImageFormat &format)
-{
-    //  We don't save OP_FILE_ASK_FORMAT here, this is the global setting
-    //  "Always use the Save Assistant" from the Kooka configuration which
-    //  is a preference option affecting all image types.  To get automatic
-    //  saving in the preferred format, turn off that option in "Configure
-    //  Kooka - Image Saver" and select "Always use this format for this type
-    //  of file" when saving an image.  As long as an image of that type has
-    //  scanned and saved, then the Save Assistant will not subsequently
-    //  appear for that image type.
-    //
-    //  This means that turning on the "Always use the Save Assistant" option
-    //  will do exactly what it says.
-
-    KConfigSkeleton::ItemString *ski = configItemForType(type);
-    Q_ASSERT(ski!=nullptr);
-    ski->setValue(format.name());
-    KookaSettings::self()->save();
-}
-
-QString ImgSaver::findSubFormat(const ImageFormat &format)
-{
-    //qDebug() << "for" << format;
-    return (QString());					// no subformats currently used
-}
 
 QString ImgSaver::errorString(ImgSaver::ImageSaveStatus status) const
 {

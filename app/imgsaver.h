@@ -224,14 +224,7 @@ public:
     }
 
 private:
-    static ImageFormat findFormat(ImageMetaInfo::ImageType type);
-    static QString findSubFormat(const ImageFormat &format);
-
-    static ImageFormat getFormatForType(ImageMetaInfo::ImageType type);
-    static void storeFormatForType(ImageMetaInfo::ImageType type, const ImageFormat &format);
-
     QString createFilename();
-
     ImgSaver::ImageSaveStatus getFilenameAndFormat(ImageMetaInfo::ImageType type);
 
     QUrl m_saveDirectory;				// dir where the image should be saved
