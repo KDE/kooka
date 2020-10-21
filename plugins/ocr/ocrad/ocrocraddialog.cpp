@@ -309,7 +309,11 @@ QStringList OcrOcradDialog::getValidValues(const QString &opt)
             QRegExp rx("Valid .*are:([^\n]+)");
             if (rx.indexIn(output) > -1) {
                 QString values = rx.cap(1);
+#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
+                result = rx.cap(1).split(QRegExp("\\s+"), Qt::SkipEmptyParts);
+#else
                 result = rx.cap(1).split(QRegExp("\\s+"), QString::SkipEmptyParts);
+#endif
             } else {
                 //qDebug() << "cannot get values, no match in" << output;
             }
