@@ -52,7 +52,7 @@ void ImageTransform::run()
     //qDebug() << "thread started for operation" << mOperation;
 
     QImage resultImg;
-    QMatrix m;
+    QTransform m;
 
     switch (mOperation) {
     case ImageTransform::Rotate90:

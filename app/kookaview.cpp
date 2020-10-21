@@ -31,6 +31,11 @@
 
 #include "kookaview.h"
 
+#include <kio_version.h>
+#if KIO_VERSION >= QT_VERSION_CHECK(5, 69, 0)
+#define HAVE_KIO_APPLICATIONLAUNCHERJOB
+#endif
+
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qsplitter.h>
@@ -43,7 +48,6 @@
 #include <qprintdialog.h>
 #include <qprinter.h>
 
-#include <krun.h>
 #include <kmimetypetrader.h>
 #include <klocalizedstring.h>
 #include <kmessagebox.h>
@@ -52,6 +56,13 @@
 #include <kactionmenu.h>
 #include <kfileitem.h>
 #include <kmainwindow.h>
+
+#ifdef HAVE_KIO_APPLICATIONLAUNCHERJOB
+#include <kio/applicationlauncherjob.h>
+#include <kio/jobuidelegate.h>
+#else
+#include <krun.h>
+#endif
 
 #include "scandevices.h"
 #include "kscandevice.h"
@@ -1218,24 +1229,40 @@ void KookaView::showOpenWithMenu(KActionMenu *menu)
 
 void KookaView::slotOpenWith(int idx)
 {
-    //qDebug() << "idx" << idx;
-
     FileTreeViewItem *ftvi = gallery()->highlightedFileTreeViewItem();
-    if (ftvi == nullptr) {
-        return;
-    }
+    if (ftvi == nullptr) return;
+
     QList<QUrl> urllist;
     urllist.append(ftvi->url());
 
+#ifdef HAVE_KIO_APPLICATIONLAUNCHERJOB
+    KIO::ApplicationLauncherJob *job;
+#endif
     if (idx!=-1)			 		// application from the menu
     {
         Q_ASSERT(idx<mOpenWithOffers.count());
         KService::Ptr ptr = mOpenWithOffers[idx];
+#ifdef HAVE_KIO_APPLICATIONLAUNCHERJOB
+        job = new KIO::ApplicationLauncherJob(ptr, mMainWindow);
+#else
         KRun::runService(*ptr, urllist, mMainWindow);
-    } else {						// last item = "Other..."
-        KRun::displayOpenWithDialog(urllist, mMainWindow);
+#endif
     }
+    else    						// last item = "Other..."
+    {
+#ifdef HAVE_KIO_APPLICATIONLAUNCHERJOB
+        job = new KIO::ApplicationLauncherJob(mMainWindow);
+#else
+        KRun::displayOpenWithDialog(urllist, mMainWindow);
+#endif
+    }
+#ifdef HAVE_KIO_APPLICATIONLAUNCHERJOB
+    job->setUrls(urllist);
+    job->setUiDelegate(new KIO::JobUiDelegate(KJobUiDelegate::AutoHandlingEnabled, this));
+    job->start();
+#endif
 }
+
 
 void KookaView::slotPreviewDimsChanged(const QString &dims)
 {
