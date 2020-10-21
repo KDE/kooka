@@ -51,7 +51,7 @@ public:
     void openAdvancedSettings() override;
 
 protected:
-    bool createOcrProcess(AbstractOcrDialogue *dia, const ScanImage *img) override;
+    bool createOcrProcess(AbstractOcrDialogue *dia, ScanImage::Ptr img) override;
     QStringList tempFiles(bool retain) override;
     bool finishedOcrProcess(QProcess *proc) override;
 

@@ -49,8 +49,8 @@
 #include "kscanoption.h"
 #include "kscanoptset.h"
 #include "deviceselector.h"
-#include "imagemetainfo.h"
 #include "scansettings.h"
+#include "imagemetainfo.h"
 
 extern "C" {
 #include <sane/saneopts.h>
@@ -515,12 +515,11 @@ const QString KScanDevice::previewFile() const
 }
 
 
-QImage KScanDevice::loadPreviewImage()
+QImage KScanDevice::loadPreviewImage() const
 {
-   const QString prevFile = previewFile();
-
-   //qDebug() << "Loading preview from" << prevFile;
-   return (QImage(prevFile));
+    const QString prevFile = previewFile();
+    qDebug() << "Loading preview from" << prevFile;
+    return (QImage(prevFile));
 }
 
 
@@ -528,10 +527,9 @@ bool KScanDevice::savePreviewImage(const QImage &image) const
 {
     if (image.isNull()) return (false);
 
-   const QString prevFile = previewFile();
-
-   //qDebug() << "Saving preview to" << prevFile;
-   return (image.save(prevFile, "BMP"));
+    const QString prevFile = previewFile();
+    qDebug() << "Saving preview to" << prevFile;
+    return (image.save(prevFile, "BMP"));
 }
 
 
@@ -634,9 +632,19 @@ case ImageMetaInfo::Greyscale:	fmt = QImage::Format_Indexed8;		break;
 case ImageMetaInfo::HighColour:	fmt = QImage::Format_RGB32;		break;
     }
 
-    delete mScanImage;					// recreate new image
-    mScanImage = new QImage(p->pixels_per_line,p->lines,fmt);
-    if (mScanImage==nullptr) return (KScanDevice::NoMemory);
+    // mScanImage is the master allocated image for the result of the scan.
+    // Once the QSharedPointer has been reset() to point to the image, it
+    // must only be copied or passed around using the QSharedPointer.  The
+    // image will automatically be deleted when the last QSharedPointer to
+    // it is clear()'ed or destroyed.
+    //
+    // An image can also be allocated in acquireScan() in virtual scanner
+    // mode.  The same restriction applies.
+    ScanImage *newImage = new ScanImage(p->pixels_per_line, p->lines, fmt);
+    if (newImage==nullptr) return (KScanDevice::NoMemory);
+
+    mScanImage.clear();					// remove reference to previous
+    mScanImage.reset(newImage);				// capture the new image pointer
 
     if (itype==ImageMetaInfo::BlackWhite)		// Line art (bitmap)
     {
@@ -810,11 +818,19 @@ KScanDevice::Status KScanDevice::acquireScan(const QString &filename)
             return (KScanDevice::ParamError);
         }
 
+        // See createNewImage() for further information regarding the
+        // allocated image and shared pointer.
+        ScanImage *newImage = new ScanImage(img);
+        if (newImage==nullptr) return (KScanDevice::NoMemory);
+
+        mScanImage.clear();				// remove reference to previous
+        mScanImage.reset(newImage);			// capture the new image pointer
+
         ImageMetaInfo info;
         info.setXResolution(DPM_TO_DPI(img.dotsPerMeterX()));
         info.setYResolution(DPM_TO_DPI(img.dotsPerMeterY()));
         info.setScannerName(QFile::encodeName(filename));
-        emit sigNewImage(&img, &info);
+        emit sigNewImage(mScanImage, &info);
         return (KScanDevice::Ok);
     }
 }
@@ -1334,19 +1350,9 @@ void KScanDevice::scanFinished(KScanDevice::Status status)
     // Tell the application that the scan has finished.
     emit sigScanFinished(status);
 
-    // Clean up after the image that we allocated, after signalling the
-    // application to copy or save it.
-    //
-    // TODO: this is unsafe.  Firstly, it relies on the sigNewImage or sigNewPreview
-    // being connected and delivered directly.  Secondly, saving the image may run
-    // an asynchronous event loop (e.g. saving to a remote location via KIO) and need
-    // the image to persist until that is finished.  The image allocation and
-    // transmission should use some sort of shared and ref-counted pointer class.
-    if (mScanImage!=nullptr)
-    {
-	delete mScanImage;
-	mScanImage = nullptr;
-    }
+    // Nothing needs to be done to clean up the image that was allocated
+    // in createNewImage(), the QSharedPointer will take care of reference
+    // counting and deletion.
 
     mScanningState = KScanDevice::ScanIdle;
 }

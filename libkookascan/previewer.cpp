@@ -87,38 +87,30 @@ Previewer::Previewer(QWidget *parent)
     mSelectionWidthMm = mBedWidth;
     mSelectionHeightMm = mBedHeight;
     updateSelectionDims();
-    setAutoSelection(false);                // initially disable, no scanner
+    setAutoSelection(false);				// initially disable, no scanner
 }
 
-Previewer::~Previewer()
-{
-}
 
-bool Previewer::setPreviewImage(const QImage &image)
+bool Previewer::setPreviewImage(ScanImage::Ptr image)
 {
-    if (image.isNull()) {
-        return false;
-    }
+    if (image.isNull()) return (false);
 
     //qDebug() << "setting new image, size" << image.size();
-    mPreviewImage = image;
-    mCanvas->newImage(&mPreviewImage);
-
-    return true;
+    mCanvas->newImage(image);
+    return (true);
 }
 
-void Previewer::newImage(const QImage *image)
+
+void Previewer::newImage(ScanImage::Ptr image)
 {
-    //qDebug() << "size" << image->size();
+    if (image.isNull()) return;
 
-    /* image canvas does not copy the image, so we hold a copy here */
-    mPreviewImage = *image;
-
-    resetAutoSelection();                // reset for new image
-    mCanvas->newImage(&mPreviewImage);           // set image on canvas
-    slotFindAutoSelection();             // auto-select if required
-    slotNotifyAutoSelectChanged();           // tell the GUI
+    resetAutoSelection();				// reset for new image
+    mCanvas->newImage(image);				// set image on canvas
+    slotFindAutoSelection();				// auto-select if required
+    slotNotifyAutoSelectChanged();			// tell the GUI
 }
+
 
 void Previewer::setScannerBedSize(int w, int h)
 {
@@ -127,7 +119,7 @@ void Previewer::setScannerBedSize(int w, int h)
     mBedWidth = w;
     mBedHeight = h;
 
-    slotNewCustomScanSize(QRect());          // reset selection and display
+    slotNewCustomScanSize(QRect());			// reset selection and display
 }
 
 void Previewer::setDisplayUnit(KRuler::MetricStyle unit)
@@ -428,14 +420,10 @@ void Previewer::slotAutoSelectSettingsChanged(int margin, bool bgIsWhite, int du
 
 void Previewer::slotFindAutoSelection()
 {
-    if (!mDoAutoSelection) {
-        return;    // not doing auto selection
-    }
+    if (!mDoAutoSelection) return;			// not doing auto selection
 
-    const QImage *img = mCanvas->rootImage();
-    if (img == nullptr || img->isNull()) {
-        return;    // must have an image
-    }
+    const QImage *img = mCanvas->rootImage().data();
+    if (img==nullptr || img->isNull()) return;		// must have an image
 
     //qDebug() << "image size" << img->size()
     //<< "threshold" << mAutoSelThresh

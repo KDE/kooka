@@ -85,7 +85,7 @@ public:
      * the image to OCR.
      */
     void setImageCanvas(ImageCanvas *canvas);
-    void setImage(const ScanImage &img);
+    void setImage(ScanImage::Ptr img);
     void setTextDocument(QTextDocument *doc);
 
     QString findExecutable(QString (*settingFunc)(), KConfigSkeletonItem *settingItem);
@@ -127,7 +127,7 @@ protected:
      * @return The file name as saved, or @c QString() if there was
      *         an error.
      **/
-    QString tempSaveImage(const ScanImage *img, const ImageFormat &format, int colors = -1);
+    QString tempSaveImage(ScanImage::Ptr img, const ImageFormat &format, int colors = -1);
 
     /**
      * Get a name to use for a temporary file.
@@ -150,7 +150,7 @@ protected:
 
     bool verboseDebug() const;
 
-    virtual bool createOcrProcess(AbstractOcrDialogue *dia, const ScanImage *img) = 0;
+    virtual bool createOcrProcess(AbstractOcrDialogue *dia, ScanImage::Ptr img) = 0;
 
     QProcess *initOcrProcess();
     QProcess *ocrProcess() const				{ return (m_ocrProcess); }
@@ -224,8 +224,7 @@ private:
     QString m_ocrStderrLog;
 
     QString m_ocrResultFile;
-    ScanImage m_introducedImage;
-    QImage *m_resultImage;
+    ScanImage::Ptr m_introducedImage;
     ImageCanvas *m_imgCanvas;
 
     QTextDocument *m_document;

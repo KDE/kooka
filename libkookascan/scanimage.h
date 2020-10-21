@@ -52,9 +52,10 @@ class KOOKASCAN_EXPORT ScanImage : public QImage
 {
 public:
     /* A pointer to a @c ScanImage.  Always use this to pass around an image,
-     * do not use a plain pointer or copy the image that it points to.
-     * The pointer can be copied, the @c QSharedPointer will manage reference
-     * counting and deletion.
+     * do not use a plain pointer unless it can be assured that it will only
+     * be used for immediate reference and will not be retained, copied or
+     * deleted.  The shared pointer can be copied, the @c QSharedPointer will
+     * manage reference counting and deletion.
      */
     typedef QSharedPointer<ScanImage> Ptr;
 
@@ -73,9 +74,14 @@ public:
     explicit ScanImage(const QImage &img);
 
     /*
+     * Constructor.  Creates an image with the specified size and @p format.
+     */
+    ScanImage(int width, int height, QImage::Format format);
+
+    /*
      * Destructor.
      */
-    ~ScanImage() = default;
+    ~ScanImage();
 
     // TODO: delete, use Q_DISABLE_COPY in private section
     ScanImage &operator=(const ScanImage &src);
@@ -130,5 +136,9 @@ private:
     int m_subImages;
     QUrl m_url;
 };
+
+// Allow the shared pointer to be stored in a QVariant.
+Q_DECLARE_METATYPE(ScanImage::Ptr)
+
 
 #endif							// SCANIMAGE_H

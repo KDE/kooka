@@ -39,6 +39,8 @@
 
 #include <kruler.h>
 
+#include "scanimage.h"
+
 /**
   *@author Klaas Freitag
   */
@@ -55,15 +57,12 @@ class KOOKASCAN_EXPORT Previewer : public QFrame
 
 public:
     explicit Previewer(QWidget *parent = nullptr);
-    virtual ~Previewer();
+    virtual ~Previewer() = default;
 
-    ImageCanvas *getImageCanvas() const
-    {
-        return (mCanvas);
-    }
+    ImageCanvas *getImageCanvas() const			{ return (mCanvas); }
 
-    bool setPreviewImage(const QImage &image);
-    void newImage(const QImage *image);
+    bool setPreviewImage(ScanImage::Ptr image);
+    void newImage(ScanImage::Ptr image);
     void setScannerBedSize(int w, int h);
     void setDisplayUnit(KRuler::MetricStyle unit);
     void connectScanner(KScanDevice *scan);
@@ -103,17 +102,14 @@ private slots:
 
 private:
     ImageCanvas *mCanvas;
-    QImage mPreviewImage;
+    AutoSelectBar *mAutoSelectBar;
+    KScanDevice *mScanDevice;
 
     int mBedWidth, mBedHeight;
     int mScanResX, mScanResY;
     int mBytesPerPix;
     double mSelectionWidthMm, mSelectionHeightMm;
     KRuler::MetricStyle mDisplayUnit;
-
-    AutoSelectBar *mAutoSelectBar;
-
-    KScanDevice *mScanDevice;
 
     bool mDoAutoSelection;
     int mAutoSelMargin;

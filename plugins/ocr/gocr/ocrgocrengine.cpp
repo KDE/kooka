@@ -80,7 +80,7 @@ AbstractOcrDialogue *OcrGocrEngine::createOcrDialogue(AbstractOcrEngine *plugin,
 }
 
 
-bool OcrGocrEngine::createOcrProcess(AbstractOcrDialogue *dia, const ScanImage *img)
+bool OcrGocrEngine::createOcrProcess(AbstractOcrDialogue *dia, ScanImage::Ptr img)
 {
     OcrGocrDialog *gocrDia = static_cast<OcrGocrDialog *>(dia);
     const QString cmd = gocrDia->getOCRCmd();

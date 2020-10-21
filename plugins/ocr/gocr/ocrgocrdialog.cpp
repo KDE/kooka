@@ -116,7 +116,7 @@ bool OcrGocrDialog::setupGui()
 }
 
 
-void OcrGocrDialog::introduceImage(const ScanImage *img)
+void OcrGocrDialog::introduceImage(ScanImage::Ptr img)
 {
     AbstractOcrDialogue::introduceImage(img);
     if (img==nullptr || img->isNull()) return;

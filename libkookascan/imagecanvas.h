@@ -32,6 +32,8 @@
 #include <qgraphicsview.h>
 #include <qvector.h>
 
+#include "scanimage.h"
+
 class QGraphicsScene;
 class QGraphicsPixmapItem;
 
@@ -59,14 +61,11 @@ class KOOKASCAN_EXPORT ImageCanvas : public QGraphicsView
 
 public:
     /**
-     * Create the image canvas widget.
+     * Constructor.
      *
-     * @param parent The parent widget.
-     * @param start_image The initial image to display.  If this is
-     * not specified, nothing is displayed until an image is set
-     * using @c newImage().
+     * @param parent the parent widget
      **/
-    explicit ImageCanvas(QWidget *parent = nullptr, const QImage *start_image = nullptr);
+    explicit ImageCanvas(QWidget *parent = nullptr);
 
     /**
      * Destructor.
@@ -264,10 +263,7 @@ public:
      *
      * @return The image, or @c nullptr if no image is currently set.
      **/
-    const QImage *rootImage() const
-    {
-        return (mImage);
-    }
+    ScanImage::Ptr rootImage() const			{ return (mImage); }
 
     /**
      * Check whether an image is currently set and displayed
@@ -343,7 +339,7 @@ public:
      * @return A copy of the selected image area, or a null image if there
      * is no image displayed or if there is no selected area.
      **/
-    QImage selectedImage() const;
+    ScanImage::Ptr selectedImage() const;
 
     /**
      * Get a textual description of the image size and depth.
@@ -375,21 +371,21 @@ public:
     /**
      * Display a new image.
      *
-     * The old image is forgotten (but not deleted).  The selection is
-     * cleared, but the newRect() signals are not emitted.  All current
-     * highlights are removed.  Unless the @p hold_zoom option is set
-     * or @c setKeepZoom(true) has been called, the scaling type is
-     * reset to the default.
+     * The old image is forgotten, and if no more references to it remain
+     * then it is deleted.  The selection is cleared, but the @c newRect()
+     * signal is are not emitted.  All current highlights are removed.
+     * Unless the @p holdZoom option is set, or @c setKeepZoom(true) has been
+     * called, the scaling type is reset to the default.
      *
-     * @param new_image The new image to display.  If this is @c nullptr,
+     * @param newImage The new image to display.  If this is null,
      * no new image is set.
-     * @param hold_zoom If set to @c true, do not change the current
+     * @param holdZoom If set to @c true, do not change the current
      * scaling type or scaling factor;  if set to @c false, reset the
      * scaling type to that set by @c setDefaultScaleType().
      * @see setDefaultScaleType
      * @see setKeepZoom
      **/
-    void newImage(const QImage *new_image, bool hold_zoom = false);
+    void newImage(ScanImage::Ptr newImage, bool holdZoom = false);
 
     /**
      * Highlight a rectangular area on the current image,
@@ -450,7 +446,7 @@ public slots:
      * new image is set.
      *
      * @param k The new setting.  If @c true, the scaling settings are always
-     * retained when setting a new image, regardless of the @c hold_zoom
+     * retained when setting a new image, regardless of the @c holdZoom
      * parameter to @c newImage().  The default is @c false.
      * @see newImage
      **/
@@ -639,7 +635,7 @@ private:
     QMenu *mContextMenu;
     int mTimerId;
 
-    const QImage *mImage;
+    ScanImage::Ptr mImage;
 
     int mScaleFactor;
     int mBrightness;

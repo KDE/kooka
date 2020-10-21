@@ -55,7 +55,7 @@
 #include "dialogbase.h"
 
 
-ImgPrintDialog::ImgPrintDialog(const ScanImage *img, KookaPrint *prt, QWidget *pnt)
+ImgPrintDialog::ImgPrintDialog(ScanImage::Ptr img, KookaPrint *prt, QWidget *pnt)
     : QWidget(pnt)
 {
     m_image = img;					// record the image

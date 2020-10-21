@@ -35,7 +35,15 @@
 #include <qprinter.h>
 
 class QPainter;
-class ScanImage;
+// For rigorousness, the image to be printed should be passed to us and
+// stored as a ScanImage::Ptr (a QSharedPointer to a ScanImage).  Unfortunately,
+// having such a pointer as a member would need to include "scanimage.h", which
+// in turn means that the KCFG settings (which needs to include "kookaprint.h"
+// but then cannot find "scanimage.h") will not build.
+//
+// Since KookaPrint only uses the image for printing and does not need to copy
+// or modify it, it should be safe to store a pointer to the image here.
+class QImage;
 
 
 class KookaPrint : public QPrinter
@@ -61,8 +69,7 @@ public:
     void recalculatePrintParameters();
     void printImage();
 
-    void setImage(const ScanImage *img)			{ m_image = img; }
-    const ScanImage *image() const			{ return (m_image); }
+    void setImage(const QImage *img)			{ m_image = img; }
 
     void setScaleOption(KookaPrint::ScaleOption opt)	{ m_scaleOption = opt; }
     KookaPrint::ScaleOption scaleOption() const		{ return (m_scaleOption); }
@@ -95,7 +102,7 @@ protected:
     void drawCornerMarkers(QPainter *painter, const QRect &targetRect, int row, int col, int maxRows, int maxCols);
 
 private:
-    const ScanImage *m_image;
+    const QImage *m_image;
 
     KookaPrint::ScaleOption m_scaleOption;
     KookaPrint::CutMarksOption m_cutsOption;

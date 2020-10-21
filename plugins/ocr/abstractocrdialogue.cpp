@@ -399,12 +399,11 @@ void AbstractOcrDialogue::startAnimation()
 // So forget about KFileMetaInfo here, just display a simple label with the
 // image size and depth (which information we already have available).
 
-void AbstractOcrDialogue::introduceImage(const ScanImage *img)
+void AbstractOcrDialogue::introduceImage(ScanImage::Ptr img)
 {
-    if (img == nullptr) {
-        if (m_previewLabel != nullptr) {
-            m_previewLabel->setText(i18n("No image"));
-        }
+    if (img.isNull())
+    {
+        if (m_previewLabel!=nullptr) m_previewLabel->setText(i18n("No image"));
         return;
     }
 
@@ -429,7 +428,7 @@ void AbstractOcrDialogue::introduceImage(const ScanImage *img)
 
     if (m_previewLabel != nullptr) {
         KLocalizedString str = img->isFileBound() ? ki18n("Image: %1") : ki18n("Selection: %1");
-        m_previewLabel->setText(str.subs(ImageCanvas::imageInfoString(img)).toString());
+        m_previewLabel->setText(str.subs(ImageCanvas::imageInfoString(img.data())).toString());
     }
 }
 

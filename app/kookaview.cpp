@@ -184,9 +184,7 @@ KookaView::KookaView(KMainWindow *parent, const QByteArray &deviceToUse)
     setObjectName("KookaView");
 
     mMainWindow = parent;
-    mOcrResultImg = nullptr;
     mScanParams = nullptr;
-//    mOcrEngine = nullptr;
     mCurrentTab = KookaView::TabNone;
 
     mIsPhotoCopyMode = false;
@@ -210,14 +208,10 @@ KookaView::KookaView(KMainWindow *parent, const QByteArray &deviceToUse)
     ScanGallery *packager = mGallery->galleryTree();
 
     // Connections ScanGallery --> myself
-    connect(packager, SIGNAL(itemHighlighted(QUrl,bool)),
-            SLOT(slotGallerySelectionChanged()));
-    connect(packager, SIGNAL(showImage(const ScanImage*,bool)),
-            SLOT(slotShowAImage(const ScanImage*,bool)));
-    connect(packager, SIGNAL(aboutToShowImage(QUrl)),
-            SLOT(slotStartLoading(QUrl)));
-    connect(packager, SIGNAL(unloadImage(const ScanImage*)),
-            SLOT(slotUnloadAImage(const ScanImage*)));
+    connect(packager, &ScanGallery::itemHighlighted, this, &KookaView::slotGallerySelectionChanged);
+    connect(packager, &ScanGallery::showImage, this, &KookaView::slotShowImage);
+    connect(packager, &ScanGallery::aboutToShowImage, this, &KookaView::slotStartLoading);
+    connect(packager, &ScanGallery::unloadImage, this, &KookaView::slotUnloadImage);
 
     // Connections ScanGallery --> ThumbView
     connect(packager, SIGNAL(itemHighlighted(QUrl,bool)),
@@ -256,17 +250,18 @@ KookaView::KookaView(KMainWindow *parent, const QByteArray &deviceToUse)
     mScanDevice = new KScanDevice(this);
 
     // Connections KScanDevice --> myself
-    connect(mScanDevice, SIGNAL(sigScanFinished(KScanDevice::Status)), SLOT(slotScanFinished(KScanDevice::Status)));
-    connect(mScanDevice, SIGNAL(sigScanFinished(KScanDevice::Status)), SLOT(slotPhotoCopyScan(KScanDevice::Status)));
-    /* New image created after scanning now call save dialog*/
-    connect(mScanDevice, SIGNAL(sigNewImage(const QImage*,const ImageMetaInfo*)), SLOT(slotNewImageScanned(const QImage*,const ImageMetaInfo*)));
-    /* New image created after scanning now print it*/
-    connect(mScanDevice, SIGNAL(sigNewImage(const QImage*,const ImageMetaInfo*)), SLOT(slotPhotoCopyPrint(const QImage*,const ImageMetaInfo*)));
-    /* New preview image */
-    connect(mScanDevice, SIGNAL(sigNewPreview(const QImage*,const ImageMetaInfo*)), SLOT(slotNewPreview(const QImage*,const ImageMetaInfo*)));
+//    connect(mScanDevice, SIGNAL(sigScanFinished(KScanDevice::Status)), SLOT(slotPhotoCopyScan(KScanDevice::Status)));
+    // New image scanned, now save it
+    connect(mScanDevice, &KScanDevice::sigNewImage, this, &KookaView::slotNewImageScanned);
+//    /* New image created after scanning now print it*/
+//    connect(mScanDevice, SIGNAL(sigNewImage(const QImage*,const ImageMetaInfo*)), SLOT(slotPhotoCopyPrint(const QImage*,const ImageMetaInfo*)));
 
-    connect(mScanDevice, SIGNAL(sigScanStart(const ImageMetaInfo*)), SLOT(slotScanStart(const ImageMetaInfo*)));
-    connect(mScanDevice, SIGNAL(sigAcquireStart()), SLOT(slotAcquireStart()));
+    // New preview image, display it
+    connect(mScanDevice, &KScanDevice::sigNewPreview, this, &KookaView::slotNewPreview);
+    // Scan operation starting and ending
+    connect(mScanDevice, &KScanDevice::sigScanStart, this, &KookaView::slotScanStart);
+    connect(mScanDevice, &KScanDevice::sigAcquireStart, this, &KookaView::slotAcquireStart);
+    connect(mScanDevice, &KScanDevice::sigScanFinished, this, &KookaView::slotScanFinished);
 
     /** Scan Preview **/
     mPreviewCanvas = new Previewer(this);
@@ -513,10 +508,11 @@ bool KookaView::slotSelectDevice(const QByteArray &useDevice, bool alwaysAsk)
 
             mScanParams->connectDevice(mScanDevice);    // create scanning options
 
-            mPreviewCanvas->setPreviewImage(mScanDevice->loadPreviewImage());
-            // load saved preview image
+            // Load the saved preview image, if there is one
+            ScanImage *previewImage = new ScanImage(mScanDevice->loadPreviewImage());
+            mPreviewCanvas->setPreviewImage(ScanImage::Ptr(previewImage));
+            // Load auto-selection options for the selected scanner
             mPreviewCanvas->connectScanner(mScanDevice);
-            // load its autosel options
         }
     }
 
@@ -682,12 +678,12 @@ void KookaView::loadStartupImage()
 
 void KookaView::print()
 {
-    const ScanImage *img = gallery()->getCurrImage(true);
-    if (img==nullptr) return;				// load image if necessary
+    ScanImage::Ptr img = gallery()->getCurrImage(true);
+    if (img.isNull()) return;				// load image if necessary
 
     // create a KookaPrint (subclass of a QPrinter)
     KookaPrint printer;
-    printer.setImage(img);
+    printer.setImage(img.data());
 
     QPrintDialog d(&printer, this);
     d.setWindowTitle(i18nc("@title:window", "Print Image"));
@@ -716,30 +712,28 @@ void KookaView::print()
 
 }
 
-void KookaView::slotNewPreview(const QImage *newimg, const ImageMetaInfo *info)
+void KookaView::slotNewPreview(ScanImage::Ptr newimg, const ImageMetaInfo *info)
 {
-    if (newimg == nullptr) {
-        return;
-    }
+    if (newimg.isNull()) return;
 
     //qDebug() << "new preview image, size" << newimg->size()
     //<< "res [" << info->getXResolution() << "x" << info->getYResolution() << "]";
 
-    mPreviewCanvas->newImage(newimg);            // set new image and size
+    mPreviewCanvas->newImage(newimg);			// set new image and size
     updateSelectionState();
 }
 
 void KookaView::slotStartOcrSelection()
 {
     emit changeStatus(i18n("Starting OCR on selection"));
-    startOCR(ScanImage(mImageCanvas->selectedImage()));
+    startOCR(mImageCanvas->selectedImage());
     emit clearStatus();
 }
 
 void KookaView::slotStartOcr()
 {
     emit changeStatus(i18n("Starting OCR on the image"));
-    startOCR(*gallery()->getCurrImage(true));
+    startOCR(gallery()->getCurrImage(true));
     emit clearStatus();
 }
 
@@ -774,7 +768,7 @@ void KookaView::slotOcrSpellCheck(bool interactive, bool background)
 }
 
 
-void KookaView::startOCR(const ScanImage &img)
+void KookaView::startOCR(ScanImage::Ptr img)
 {
     if (img.isNull()) return;				// no image to OCR
 
@@ -873,7 +867,8 @@ void KookaView::slotAcquireStart()
     }
 }
 
-void KookaView::slotNewImageScanned(const QImage *img, const ImageMetaInfo *info)
+
+void KookaView::slotNewImageScanned(ScanImage::Ptr img, const ImageMetaInfo *info)
 {
     if (mIsPhotoCopyMode) {
         return;
@@ -881,6 +876,7 @@ void KookaView::slotNewImageScanned(const QImage *img, const ImageMetaInfo *info
 
     gallery()->addImage(img, info);
 }
+
 
 void KookaView::slotScanFinished(KScanDevice::Status stat)
 {
@@ -913,26 +909,26 @@ void KookaView::slotScanFinished(KScanDevice::Status stat)
     }
 }
 
+
 void KookaView::closeScanDevice()
 {
-    //qDebug() << "Scanner Device closes down";
-    if (mScanParams != nullptr) {
-        delete mScanParams;
-        mScanParams = nullptr;
-    }
-
+    qDebug();
+    delete mScanParams;
+    mScanParams = nullptr;
     mScanDevice->closeDevice();
 }
 
+
 void KookaView::slotCreateNewImgFromSelection()
 {
+    ScanImage::Ptr img = mImageCanvas->selectedImage();
+    if (img.isNull()) return;				// no selection
+
     emit changeStatus(i18n("Create new image from selection"));
-    QImage img = mImageCanvas->selectedImage();
-    if (!img.isNull()) {
-        gallery()->addImage(&img);
-    }
+    gallery()->addImage(img);
     emit clearStatus();
 }
+
 
 void KookaView::slotTransformImage()
 {
@@ -943,24 +939,19 @@ void KookaView::slotTransformImage()
 
     // Get operation code from action that was triggered
     QAction *act = static_cast<QAction *>(sender());
-    if (act == nullptr) {
-        return;
-    }
+    if (act==nullptr) return;
     ImageTransform::Operation op = static_cast<ImageTransform::Operation>(act->data().toInt());
 
     // This may appear to be a waste, since we are immediately unloading the image.
     // But we need a copy of the image anyway, so there will still be a load needed.
-    const ScanImage *loadedImage = gallery()->getCurrImage(true);
-    if (loadedImage == nullptr) {
-        return;
-    }
-    const QImage img = *loadedImage;            // get a copy of the image
+    ScanImage::Ptr loadedImage = gallery()->getCurrImage(true);
+    if (loadedImage.isNull()) return;
+
+    const QImage img = *loadedImage.data();		// get a copy of the image
 
     QString imageFile = gallery()->currentImageFileName();
-    if (imageFile.isEmpty()) {
-        return;    // get file to save back to
-    }
-    gallery()->slotUnloadItems();           // unload original from memory
+    if (imageFile.isEmpty()) return;			// get file to save back to
+    gallery()->slotUnloadItems();			// unload original from memory
 
     QThread *transformer = new ImageTransform(img, op, imageFile, this);
     connect(transformer, SIGNAL(done(QUrl)), gallery(), SLOT(slotUpdatedItem(QUrl)));
@@ -968,6 +959,7 @@ void KookaView::slotTransformImage()
     connect(transformer, SIGNAL(finished()), transformer, SLOT(deleteLater()));
     transformer->start();
 }
+
 
 void KookaView::slotSaveOcrResult()
 {
@@ -985,32 +977,28 @@ void KookaView::slotScanParams()
     d.exec();
 }
 
-void KookaView::slotShowAImage(const ScanImage *img, bool isDir)
+
+void KookaView::slotShowImage(ScanImage::Ptr img, bool isDir)
 {
-    if (mImageCanvas != nullptr) {         // load into image viewer
+    if (mImageCanvas!=nullptr)				// load into image viewer
+    {
         mImageCanvas->newImage(img);
         mImageCanvas->setReadOnly(false);
-    }
-
-    if (mImageCanvas != nullptr) {
         emit changeStatus(mImageCanvas->imageInfoString(), StatusBarManager::ImageDims);
     }
-    if (img != nullptr) {
-        emit changeStatus(i18n("Loaded image %1", img->url().url(QUrl::PreferLocalFile)));
-    } else if (!isDir) {
-        emit changeStatus(i18n("Unloaded image"));
-    }
+
+    if (!img.isNull()) emit changeStatus(i18n("Loaded image %1", img->url().url(QUrl::PreferLocalFile)));
+    else if (!isDir) emit changeStatus(i18n("Unloaded image"));
     updateSelectionState();
 }
 
-void KookaView::slotUnloadAImage(const ScanImage *img)
+
+void KookaView::slotUnloadImage()
 {
-    //qDebug() << "Unloading Image";
-    if (mImageCanvas != nullptr) {
-        mImageCanvas->newImage(nullptr);
-    }
+    if (mImageCanvas!=nullptr) mImageCanvas->newImage(nullptr);
     updateSelectionState();
 }
+
 
 /* this slot is called when the user clicks on an image in the packager
  * and loading of the image starts

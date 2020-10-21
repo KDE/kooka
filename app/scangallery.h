@@ -32,10 +32,10 @@
 #ifndef SCANGALLERY_H
 #define SCANGALLERY_H
 
-#include <qmap.h>
-
 #include "libfiletree/filetreeview.h"
+
 #include "imageformat.h"
+#include "scanimage.h"
 
 class QImage;
 class QTreeWidgetItem;
@@ -44,7 +44,6 @@ class QUrl;
 
 class ImgSaver;
 class ImageMetaInfo;
-class ScanImage;
 
 
 class ScanGallery : public FileTreeView
@@ -56,7 +55,7 @@ public:
     ~ScanGallery() override;
 
     QString currentImageFileName() const;
-    const ScanImage *getCurrImage(bool loadOnDemand = false);
+    ScanImage::Ptr getCurrImage(bool loadOnDemand = false);
 
     QMenu *contextMenu() const
     {
@@ -67,7 +66,7 @@ public:
     void setAllowRename(bool on);
 
     bool prepareToSave(const ImageMetaInfo *info);
-    void addImage(const QImage *img, const ImageMetaInfo *info = nullptr);
+    void addImage(ScanImage::Ptr img, const ImageMetaInfo *info = nullptr);
 
     void saveHeaderState(int forIndex) const;
     void restoreHeaderState(int forIndex);
@@ -87,7 +86,7 @@ protected:
     void contextMenuEvent(QContextMenuEvent *ev) override;
 
 protected slots:
-    void slotImageArrived(FileTreeViewItem *item, ScanImage *image);
+    void slotImageArrived(FileTreeViewItem *item, ScanImage::Ptr img);
     void slotCreateFolder();
     void slotDeleteItems();
     void slotRenameItems();
@@ -112,9 +111,9 @@ protected slots:
 
 signals:
     void aboutToShowImage(const QUrl &url);
-    void showImage(const ScanImage *img, bool isDir);
-    void deleteImage(const ScanImage *img);
-    void unloadImage(const ScanImage *img);
+    void showImage(ScanImage::Ptr img, bool isDir);
+    void deleteImage(ScanImage::Ptr img);
+    void unloadImage(ScanImage::Ptr img);
     void galleryPathChanged(const FileTreeBranch *branch, const QString &relPath);
     void galleryDirectoryRemoved(const FileTreeBranch *branch, const QString &relPath);
 

@@ -58,7 +58,7 @@ public:
     virtual ~AbstractOcrDialogue() = default;
 
     virtual bool setupGui();
-    virtual void introduceImage(const ScanImage *img);
+    virtual void introduceImage(ScanImage::Ptr img);
 
     bool keepTempFiles() const;
     bool verboseDebug() const;

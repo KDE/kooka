@@ -59,7 +59,6 @@ AbstractOcrEngine::AbstractOcrEngine(QObject *pnt, const char *name)
       m_ocrProcess(nullptr),
       m_ocrRunning(false),
       m_ocrDialog(nullptr),
-      m_resultImage(nullptr),
       m_imgCanvas(nullptr),
       m_document(nullptr),
       m_cursor(nullptr),
@@ -67,11 +66,9 @@ AbstractOcrEngine::AbstractOcrEngine(QObject *pnt, const char *name)
       m_trackingActive(false)
 {
     setObjectName(name);
-
-    m_introducedImage = ScanImage();
-    m_parent = nullptr;
-
     qDebug() << objectName();
+
+    m_parent = nullptr;
 }
 
 
@@ -87,11 +84,11 @@ AbstractOcrEngine::~AbstractOcrEngine()
  * This is called to introduce a new image, usually if the user clicks on a
  * new image either in the gallery or on the thumbnailview.
  */
-void AbstractOcrEngine::setImage(const ScanImage &img)
+void AbstractOcrEngine::setImage(ScanImage::Ptr img)
 {
-    m_introducedImage = img;				// shallow copy of original
+    m_introducedImage = img;				// shared copy of original
 
-    if (m_ocrDialog!=nullptr) m_ocrDialog->introduceImage(&m_introducedImage);
+    if (m_ocrDialog!=nullptr) m_ocrDialog->introduceImage(m_introducedImage);
     m_trackingActive = false;
 }
 
@@ -128,7 +125,7 @@ bool AbstractOcrEngine::openOcrDialogue(QWidget *pnt)
     connect(m_ocrDialog, &AbstractOcrDialogue::signalOcrStop, this, &AbstractOcrEngine::slotStopOCR);
     connect(m_ocrDialog, &QDialog::rejected, this, &AbstractOcrEngine::slotClose);
 
-    m_ocrDialog->introduceImage(&m_introducedImage);
+    m_ocrDialog->introduceImage(m_introducedImage);
     m_ocrDialog->show();
 
     // TODO: m_ocrActive would better reflect the function (if indeed useful at all)
@@ -162,7 +159,7 @@ void AbstractOcrEngine::slotStartOCR()
     m_ocrDialog->enableGUI(true);			// disable controls while running
     m_ocrDialog->show();				// just in case it got closed
 
-    createOcrProcess(m_ocrDialog, &m_introducedImage);
+    createOcrProcess(m_ocrDialog, m_introducedImage);
 }
 
 
@@ -194,12 +191,14 @@ void AbstractOcrEngine::finishedOcr(bool success)
         if (!m_ocrResultFile.isEmpty() &&		// there is a result image
             m_imgCanvas!=nullptr)			// and we can display it
         {
-            delete m_resultImage;			// create new result image
-            m_resultImage = new QImage(m_ocrResultFile);
-            qDebug() << "Result image" << m_ocrResultFile << "size" << m_resultImage->size();
-
-            m_imgCanvas->newImage(m_resultImage, true);	// display on image canvas
-            m_imgCanvas->setReadOnly(true);
+            // Load the result image from its file.
+            // The QSharedPointer passed to ImageCanvas::newImage() will
+            // retain the image and delete it when it is no longer needed.
+            ScanImage *resultImage = new ScanImage();
+            resultImage->loadFromUrl(QUrl::fromLocalFile(m_ocrResultFile));
+            qDebug() << "Result image from" << m_ocrResultFile << "size" << resultImage->size();
+            m_imgCanvas->newImage(ScanImage::Ptr(resultImage), true);
+            m_imgCanvas->setReadOnly(true);		// display on image canvas
             m_trackingActive = true;			// handle clicks on image
         }
 
@@ -421,14 +420,14 @@ QString AbstractOcrEngine::tempFileName(const QString &suffix, const QString &ba
 }
 
 
-QString AbstractOcrEngine::tempSaveImage(const ScanImage *img, const ImageFormat &format, int colors)
+QString AbstractOcrEngine::tempSaveImage(ScanImage::Ptr img, const ImageFormat &format, int colors)
 {
-    if (img==nullptr) return (QString());		// no image to save
+    if (img.isNull()) return (QString());		// no image to save
 
     QString tmpName = tempFileName(format.extension(), "imagetemp");
-    const ScanImage *tmpImg = nullptr;
 
-    if (colors!=-1 && img->depth()!=colors)		// need to convert image
+    ScanImage::Ptr tmpImg = img;			// original image
+    if (colors!=-1 && img->depth()!=colors)		// need to convert it?
     {
         QImage::Format newfmt;
         switch (colors)
@@ -449,19 +448,18 @@ default:    qWarning() << "bad colour depth" << colors;
             return (QString());
         }
 
-        tmpImg = new ScanImage(img->convertToFormat(newfmt));
-        img = tmpImg;					// replace with converted image
-    }
+        tmpImg.clear();					// lose reference to original
+        tmpImg.reset(new ScanImage(img->convertToFormat(newfmt)));
+    }							// update with converted image
 
     qDebug() << "saving to" << tmpName << "in format" << format;
-    if (!img->save(tmpName, format.name()))
+    if (!tmpImg->save(tmpName, format.name()))
     {
         qDebug() << "Error saving to" << tmpName;
         setErrorText(xi18nc("@info", "Cannot save image to temporary file <filename>%1</filename>", tmpName));
         tmpName.clear();
     }
 
-    if (tmpImg!=nullptr) delete tmpImg;
     return (tmpName);
 }
 

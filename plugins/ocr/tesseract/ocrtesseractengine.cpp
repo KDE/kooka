@@ -65,7 +65,7 @@ AbstractOcrDialogue *OcrTesseractEngine::createOcrDialogue(AbstractOcrEngine *pl
 }
 
 
-bool OcrTesseractEngine::createOcrProcess(AbstractOcrDialogue *dia, const ScanImage *img)
+bool OcrTesseractEngine::createOcrProcess(AbstractOcrDialogue *dia, ScanImage::Ptr img)
 {
     OcrTesseractDialog *parentDialog = static_cast<OcrTesseractDialog *>(dia);
     m_tesseractVersion = parentDialog->getNumVersion();

@@ -52,7 +52,7 @@ public:
 
     bool setupGui() override;
 
-    void introduceImage(const ScanImage *img) override;
+    void introduceImage(ScanImage::Ptr img) override;
 
     QString getOCRCmd() const				{ return (m_ocrCmd); }
     int getGraylevel() const;

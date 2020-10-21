@@ -40,6 +40,7 @@
 
 #include "imagecanvas.h"
 #include "kscandevice.h"
+#include "scanimage.h"
 
 class QSplitter;
 class QUrl;
@@ -50,7 +51,6 @@ class KMainWindow;
 class KActionMenu;
 
 class ThumbView;
-class ScanImage;
 class KookaGallery;
 class OcrResEdit;
 class ScanGallery;
@@ -139,7 +139,7 @@ public slots:
     void slotSaveOcrResult();
 
     void slotStartPreview();
-    void slotNewPreview(const QImage *newimg, const ImageMetaInfo *info);
+    void slotNewPreview(ScanImage::Ptr newimg, const ImageMetaInfo *info);
     void slotStartFinalScan();
     void slotAutoSelect(bool on);
 
@@ -167,14 +167,14 @@ protected slots:
     void slotPhotoCopyPrint(const QImage *img, const ImageMetaInfo *info);
     void slotPhotoCopyScan(KScanDevice::Status);
 
-    void slotShowAImage(const ScanImage *img, bool isDir);
-    void slotUnloadAImage(const ScanImage *img);
+    void slotShowImage(ScanImage::Ptr img, bool isDir);
+    void slotUnloadImage();
 
     /**
      * called from the scandevice if a new Image was successfully scanned.
      * Needs to convert the one-page-QImage to a ScanImage
      */
-    void slotNewImageScanned(const QImage *img, const ImageMetaInfo *info);
+    void slotNewImageScanned(ScanImage::Ptr img, const ImageMetaInfo *info);
 
     void slotSelectionChanged(const QRect &newSelection);
     void slotGallerySelectionChanged();
@@ -206,7 +206,7 @@ signals:
     void signalOcrPrefs();
 
 private:
-    void startOCR(const ScanImage &img);
+    void startOCR(ScanImage::Ptr img);
 
     QByteArray userDeviceSelection(bool alwaysAsk);
 
@@ -231,7 +231,6 @@ private:
 
     KScanDevice *mScanDevice;
 
-    QImage *mOcrResultImg;
     OcrResEdit *mOcrResEdit;
 
     bool mIsPhotoCopyMode;

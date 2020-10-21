@@ -31,6 +31,8 @@
 
 #include <kconfigskeleton.h>
 
+#include "scanimage.h"
+
 extern "C" {
 #include <sane/sane.h>
 }
@@ -178,21 +180,6 @@ public:
     KScanDevice::Status acquireScan(const QString &filename = QString());
 
     /**
-     * Get the standard file name for saving the preview image for the
-     * current scanner.
-     *
-     * @return Preview file name
-     *
-     * @note Saving the preview image this does not actually work unless a
-     * subdirectory called @c previews exists within the calling application's
-     * @c data resource directory.
-     * @see loadPreviewImage
-     * @see savePreviewImage
-     * @see KStandardDirs
-     **/
-    const QString previewFile() const;
-
-    /**
      * Load the last saved preview image for this device from the saved file.
      *
      * @return The preview image, or a null image if none could be loaded.
@@ -200,7 +187,7 @@ public:
      * @see previewFile
      * @see savePreviewImage
      **/
-    QImage loadPreviewImage();
+    QImage loadPreviewImage() const;
 
     /**
      * Saves a preview image for this device to the standard save file.
@@ -528,7 +515,7 @@ signals:
      * @param info Additional information for the image
      * @see sigNewPreview
      **/
-    void sigNewImage(const QImage *img, const ImageMetaInfo *info);
+    void sigNewImage(ScanImage::Ptr img, const ImageMetaInfo *info);
 
     /**
      * Emitted when a new preview image has been acquired.
@@ -539,7 +526,7 @@ signals:
      * @param info Additional information for the image
      * @see sigNewImage
      **/
-    void sigNewPreview(const QImage *img, const ImageMetaInfo *info);
+    void sigNewPreview(ScanImage::Ptr img, const ImageMetaInfo *info);
 
     /**
      * Emitted to indicate that a scan or preview has finished.
@@ -563,6 +550,22 @@ private slots:
     void doProcessABlock();
 
 private:
+    /**
+     * Get the standard file name for saving the preview image for the
+     * current scanner.
+     *
+     * @return the preview file name
+     *
+     * @note Saving the preview image does not actually work unless a
+     * subdirectory called @c previews exists within the calling
+     * application's @c data resource directory.
+     *
+     * @see loadPreviewImage
+     * @see savePreviewImage
+     * @see KStandardDirs
+     **/
+    const QString previewFile() const;
+
     KScanDevice::Status findOptions();
     void showOptions();
     void loadOptionSetInternal(const KScanOptSet *optSet, bool prio);
@@ -611,7 +614,6 @@ private:
     SANE_Status mSaneStatus;
 
     SANE_Byte *mScanBuf;
-    QImage *mScanImage;
     SANE_Parameters mSaneParameters;
     long mBytesRead;
     long mBlocksRead;
@@ -622,6 +624,8 @@ private:
 
     int mCurrScanResolutionX;
     int mCurrScanResolutionY;
+
+    ScanImage::Ptr mScanImage;
 };
 
 /**

@@ -54,10 +54,22 @@ ScanImage::ScanImage()
 }
 
 
+ScanImage::ScanImage(int width, int height, QImage::Format format)
+    : QImage(width, height, format)
+{
+    init();
+}
+
+
 ScanImage::ScanImage(const QImage &img)
     : QImage(img)
 {
     init();
+}
+
+
+ScanImage::~ScanImage()
+{
 }
 
 

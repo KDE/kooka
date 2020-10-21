@@ -195,12 +195,10 @@ void SelectionItem::resetDashPattern()
 //  ImageCanvas -- Scrolling area containing the pixmap/highlight widget.
 //  Selected areas are drawn over the top of that.
 
-ImageCanvas::ImageCanvas(QWidget *parent, const QImage *start_image)
+ImageCanvas::ImageCanvas(QWidget *parent)
     : QGraphicsView(parent)
 {
     setObjectName("ImageCanvas");
-
-    //qDebug();
 
     mContextMenu = nullptr;
     mTimerId = 0;
@@ -209,10 +207,10 @@ ImageCanvas::ImageCanvas(QWidget *parent, const QImage *start_image)
     mReadOnly = false;
     mScaleType = ImageCanvas::ScaleUnspecified;
     mDefaultScaleType = ImageCanvas::ScaleOriginal;
-    mScaleFactor = 100;                 // means original size
+    mScaleFactor = 100;					// means original size
     mMaintainAspect = true;
 
-    setAlignment(Qt::AlignLeft | Qt::AlignTop);
+    setAlignment(Qt::AlignLeft|Qt::AlignTop);
 
     mScene = new QGraphicsScene(this);
     setScene(mScene);
@@ -222,13 +220,13 @@ ImageCanvas::ImageCanvas(QWidget *parent, const QImage *start_image)
     mScene->addItem(mPixmapItem);
 
     mSelectionItem = new SelectionItem;
-    mSelectionItem->setVisible(false);          // not displayed yet
+    mSelectionItem->setVisible(false);			// no selection yet
     mScene->addItem(mSelectionItem);
 
     mMoving = ImageCanvas::MoveNone;
     mCurrentCursor = Qt::ArrowCursor;
 
-    newImage(start_image);
+    newImage(ScanImage::Ptr());				// no displayed image
 
     setCursorShape(Qt::CrossCursor);
     setMouseTracking(true);
@@ -237,18 +235,19 @@ ImageCanvas::ImageCanvas(QWidget *parent, const QImage *start_image)
     show();
 }
 
+
 ImageCanvas::~ImageCanvas()
 {
-    //qDebug();
     stopMarqueeTimer();
 }
+
 
 //  Setting the image
 //  -----------------
 
-void ImageCanvas::newImage(const QImage *new_image, bool hold_zoom)
+void ImageCanvas::newImage(ScanImage::Ptr newImage, bool holdZoom)
 {
-    mImage = new_image;                 // don't free old image, not ours
+    mImage = newImage;					// take reference to shared pointer
 
 #ifdef HOLD_SELECTION
     QRect oldSelected = mSelected;
@@ -256,16 +255,15 @@ void ImageCanvas::newImage(const QImage *new_image, bool hold_zoom)
     //qDebug() << "   w=" << mSelected.width() << "h=" << mSelected.height();
 #endif
 
-    stopMarqueeTimer();                 // also clears selection
+    stopMarqueeTimer();					// also clears selection
 
-    if (mImage != nullptr) {               // handle the new image
+    if (!mImage.isNull())				// handle the new image
+    {
         //qDebug() << "new image size is" << mImage->size();
-        mPixmapItem->setPixmap(QPixmap::fromImage(*mImage));
-        setSceneRect(mPixmapItem->boundingRect());  // image always defines size
+        mPixmapItem->setPixmap(QPixmap::fromImage(*mImage.data()));
+        setSceneRect(mPixmapItem->boundingRect());	// image always defines size
 
-        if (!mKeepZoom && !hold_zoom) {
-            setScaleType(defaultScaleType());
-        }
+        if (!mKeepZoom && !holdZoom) setScaleType(defaultScaleType());
 
 #ifdef HOLD_SELECTION
         if (!oldSelected.isNull()) {
@@ -274,13 +272,12 @@ void ImageCanvas::newImage(const QImage *new_image, bool hold_zoom)
             startMarqueeTimer();
         }
 #endif
-    } else {
-        //qDebug() << "no new image";
-        mPixmapItem->setPixmap(QPixmap());
     }
+    else mPixmapItem->setPixmap(QPixmap());		// no new image to show
 
     recalculateViewScale();
 }
+
 
 //  Context menu
 //  ------------
@@ -313,9 +310,7 @@ void ImageCanvas::contextMenuEvent(QContextMenuEvent *ev)
 
 void ImageCanvas::performUserAction(ImageCanvas::UserAction act)
 {
-    if (mImage == nullptr) {
-        return;    // no action if no image loaded
-    }
+    if (mImage.isNull()) return;			// no action if no image loaded
 
     switch (act) {
     case ImageCanvas::UserActionZoom: {
@@ -422,21 +417,20 @@ void ImageCanvas::setSelectionRect(const QRectF &rect)
     }
 }
 
+
 //  Selected image
 //  --------------
 
-QImage ImageCanvas::selectedImage() const
+ScanImage::Ptr ImageCanvas::selectedImage() const
 {
-    if (!hasImage()) {
-        return (QImage());
-    }
-    // no image available
+    if (!hasImage()) return (ScanImage::Ptr());		// no image available
     const QRect r = selectedRect();
-    if (!r.isValid()) {
-        return (QImage());    // no selection
-    }
-    return (mImage->copy(r));               // extract and return selection
+    if (!r.isValid()) return (ScanImage::Ptr());	// no selection
+
+    ScanImage *img = new ScanImage(mImage->copy(r));	// extract selection as new image
+    return (ScanImage::Ptr(img));			// return shared pointer to it
 }
+
 
 //  Animation timer
 //  ---------------
@@ -890,29 +884,31 @@ void ImageCanvas::setReadOnly(bool ro)
     emit imageReadOnly(ro);
 }
 
-const QString ImageCanvas::imageInfoString(int w, int h, int d)     // static
+
+/* static */ const QString ImageCanvas::imageInfoString(int w, int h, int d)
 {
     return (i18n("%1x%2 pix, %3 bpp", w, h, d));
 }
 
-const QString ImageCanvas::imageInfoString(const QImage *img)       // static
+
+/* static */ const QString ImageCanvas::imageInfoString(const QImage *img)
 {
-    if (img == nullptr) {
-        return ("-");
-    } else {
-        return (imageInfoString(img->width(), img->height(), img->depth()));
-    }
+    if (img==nullptr) return ("-");
+    else return (imageInfoString(img->width(), img->height(), img->depth()));
 }
 
-const QString ImageCanvas::imageInfoString() const          // member
+
+const QString ImageCanvas::imageInfoString() const
 {
-    return (imageInfoString(mImage));
+    return (imageInfoString(mImage.data()));
 }
+
 
 bool ImageCanvas::hasImage() const
 {
-    return (mImage != nullptr && !mImage->isNull());
+    return (!mImage.isNull() && !mImage->isNull());
 }
+
 
 //  Highlight areas
 //  ---------------

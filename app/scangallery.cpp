@@ -256,11 +256,13 @@ static ImageFormat getImgFormat(const FileTreeViewItem *item)
     return (ImageFormat::formatForUrl(kfi->url()));
 }
 
-static ScanImage *imageForItem(const FileTreeViewItem *item)
+
+static ScanImage::Ptr imageForItem(const FileTreeViewItem *item)
 {
-    if (item == nullptr) return (nullptr);			// get loaded image if any
-    return (static_cast<ScanImage *>(item->data(0, Qt::UserRole).value<void *>()));
+    if (item==nullptr) return (nullptr);		// get loaded image if any
+    return (item->data(0, Qt::UserRole).value<ScanImage::Ptr>());
 }
+
 
 void ScanGallery::slotItemHighlighted(QTreeWidgetItem *curr)
 {
@@ -272,17 +274,16 @@ void ScanGallery::slotItemHighlighted(QTreeWidgetItem *curr)
     FileTreeViewItem *item = static_cast<FileTreeViewItem *>(curr);
     if (item==nullptr) return;
 
-    //qDebug() << item->url();
-
-    if (item->isDir()) {
-        emit showImage(nullptr, true);    // clear displayed image
-    } else {
-        ScanImage *img = imageForItem(item);
-        emit showImage(img, false);         // clear or redisplay image
+    if (item->isDir()) emit showImage(nullptr, true);	// clear displayed image
+    else
+    {
+        ScanImage::Ptr img = imageForItem(item);
+        emit showImage(img, false);			// clear or redisplay image
     }
 
     emit itemHighlighted(item->url(), item->isDir());
 }
+
 
 void ScanGallery::slotItemActivated(QTreeWidgetItem *curr)
 {
@@ -445,8 +446,8 @@ void ScanGallery::slotDecorate(FileTreeViewItem *item)
             item->setText(2, (QString(" %1 ").arg(format.name())));
         }
 
-        const ScanImage *img = imageForItem(item);
-        if (img != nullptr)				// image is loaded
+        ScanImage::Ptr img = imageForItem(item);
+        if (!img.isNull())				// image is loaded
         {
             // set image depth pixmap as appropriate
             QIcon icon;
@@ -707,8 +708,8 @@ void ScanGallery::loadImageForItem(FileTreeViewItem *item)
     }
     else						// valid image
     {
-        ScanImage *img = imageForItem(item);
-        if (img==nullptr)				// image not already loaded
+        ScanImage::Ptr img = imageForItem(item);
+        if (img.isNull())				// image not already loaded
         {
 #ifdef DEBUG_LOADING
             qDebug() << "need to load image";
@@ -719,7 +720,7 @@ void ScanGallery::loadImageForItem(FileTreeViewItem *item)
             // create an subimage item for every subimage, but do not yet load
             // them.
 
-            img = new ScanImage();
+            img.reset(new ScanImage());
             ret = img->loadFromUrl(item->url());
             if (ret.isEmpty())				// image loaded OK
             {
@@ -764,16 +765,15 @@ void ScanGallery::loadImageForItem(FileTreeViewItem *item)
                 }
             }
             else
-            {
-                delete img;				// image loading failed
-                img = nullptr;				// don't try to use it below
+            {						// image loading failed
+                img.clear();				// don't try to use it below
             }
         }
 #ifdef DEBUG_LOADING
         else qDebug() << "have an image already";
 #endif // DEBUG_LOADING
 
-        if (img!=nullptr)				// already loaded, or loaded above
+        if (!img.isNull())				// already loaded, or loaded above
         {
             slotImageArrived(item, img);		// display the image
         }
@@ -788,33 +788,28 @@ void ScanGallery::loadImageForItem(FileTreeViewItem *item)
     }
 }
 
+
 /* Hit this slot with a file for a kfiletreeviewitem. */
-void ScanGallery::slotImageArrived(FileTreeViewItem *item, ScanImage *image)
+void ScanGallery::slotImageArrived(FileTreeViewItem *item, ScanImage::Ptr img)
 {
-    if (item == nullptr || image == nullptr) {
-        return;
-    }
+    if (item==nullptr || img.isNull()) return;
 							// note image for item
-    item->setData(0, Qt::UserRole, QVariant::fromValue(static_cast<void *>(image)));
+    item->setData(0, Qt::UserRole, QVariant::fromValue(img));
     slotDecorate(item);
-    emit showImage(image, false);
+    emit showImage(img, false);
 }
 
-const ScanImage *ScanGallery::getCurrImage(bool loadOnDemand)
+
+ScanImage::Ptr ScanGallery::getCurrImage(bool loadOnDemand)
 {
     FileTreeViewItem *curr = highlightedFileTreeViewItem();
-    if (curr == nullptr) {
-        return (nullptr);    // no current item
-    }
-    if (curr->isDir()) {
-        return (nullptr);    // is a directory
-    }
+    if (curr==nullptr) return (nullptr);		// no current item
+    if (curr->isDir()) return (nullptr);		// is a directory
 
-    ScanImage *img = imageForItem(curr);		// see if already loaded
-    if (img == nullptr) {				// no, try to do that
-        if (!loadOnDemand) {
-            return (nullptr);				// not loaded, and don't want to
-        }
+    ScanImage::Ptr img = imageForItem(curr);		// see if already loaded
+    if (img.isNull())					// no, try to do that
+    {
+        if (!loadOnDemand) return (nullptr);		// not loaded, and don't want to
         slotItemActivated(curr);			// select/load this image
         img = imageForItem(curr);			// and get image for it
     }
@@ -894,41 +889,33 @@ QUrl ScanGallery::saveURL() const
 /* ----------------------------------------------------------------------- */
 /* This slot takes a new scanned Picture and saves it.  */
 
-void ScanGallery::addImage(const QImage *img, const ImageMetaInfo *info)
+void ScanGallery::addImage(ScanImage::Ptr img, const ImageMetaInfo *info)
 {
-    if (img == nullptr) {
-        return;    // nothing to save!
-    }
-    //qDebug() << "size" << img->size() << "depth" << img->depth();
+    if (img.isNull()) return;				// no image to add
 
-    if (mSaver == nullptr) {
-        prepareToSave(nullptr);				// if not done already
-    }
-    if (mSaver == nullptr) {
-        return;						// should never happen
-    }
+    if (mSaver==nullptr) prepareToSave(nullptr);	// if not done already
+    if (mSaver==nullptr) return;			// should never happen
 
-    ImgSaver::ImageSaveStatus isstat = mSaver->saveImage(img);
-    // try to save the image
-    QUrl lurl = mSaver->lastURL();			// record where it ended up
+    ImgSaver::ImageSaveStatus isstat = mSaver->saveImage(img.data());
+							// try to save the image
+    const QUrl lurl = mSaver->lastURL();		// find out where it ended up
 
-    if (isstat != ImgSaver::SaveStatusOk &&		// image saving failed
-            isstat != ImgSaver::SaveStatusCanceled) {   // user cancelled, just ignore
+    if (isstat!=ImgSaver::SaveStatusOk &&		// image saving failed
+        isstat!=ImgSaver::SaveStatusCanceled)		// user cancelled, just ignore
+    {
         KMessageBox::error(this, xi18nc("@info", "Could not save the image<nl/><filename>%2</filename><nl/>%1",
                                         mSaver->errorString(isstat),
-                                        lurl.url(QUrl::PreferLocalFile)),
+                                        lurl.toDisplayString(QUrl::PreferLocalFile)),
                            i18n("Image Save Error"));
     }
 
     delete mSaver; mSaver = nullptr;			// now finished with this
 
-    if (isstat == ImgSaver::SaveStatusOk) {		// image was saved OK,
-        // select the new image
+    if (isstat==ImgSaver::SaveStatusOk)			// image was saved,
+    {							// select the new image
         slotSetNextUrlToSelect(lurl);
         m_nextUrlToShow = lurl;
-        if (mSavedTo != nullptr) {
-            updateParent(mSavedTo);
-        }
+        if (mSavedTo!=nullptr) updateParent(mSavedTo);
     }
 }
 
@@ -1086,34 +1073,36 @@ void ScanGallery::slotUnloadItems()
     slotUnloadItem(curr);
 }
 
+
 void ScanGallery::slotUnloadItem(FileTreeViewItem *curr)
 {
-    if (curr == nullptr) {
-        return;
-    }
+    if (curr==nullptr) return;
 
-    if (curr->isDir()) {				// is a directory
-        for (int i = 0; i < curr->childCount(); ++i) {
+    if (curr->isDir())					// is a directory
+    {
+        for (int i = 0; i<curr->childCount(); ++i)
+        {
             FileTreeViewItem *child = static_cast<FileTreeViewItem *>(curr->child(i));
             slotUnloadItem(child);			// recursively unload contents
         }
-    } else {						// is a file/image
-        const ScanImage *image = imageForItem(curr);
-        if (image == nullptr) {
-            return;					// ok, nothing to unload
-        }
+    }
+    else						// is a file/image
+    {
+        ScanImage::Ptr img = imageForItem(curr);
+        if (img.isNull()) return;			// nothing to unload
 
-        if (image->subImagesCount() > 0) {		// image with subimages
-            while (curr->childCount() > 0) {		// recursively unload subimages
+        if (img->subImagesCount()>0)			// image with subimages
+        {
+            while (curr->childCount()>0)		// recursively unload subimages
+            {
                 FileTreeViewItem *child = static_cast<FileTreeViewItem *>(curr->takeChild(0));
                 slotUnloadItem(child);
                 delete child;
             }
         }
 
-        emit unloadImage(image);
-        delete image;
-							// clear image from item
+        emit unloadImage(img);
+							// unreference image from item
         curr->setData(0, Qt::UserRole, QVariant::fromValue(nullptr));
         slotDecorate(curr);
     }

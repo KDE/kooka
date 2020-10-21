@@ -70,7 +70,7 @@ AbstractOcrDialogue *OcrOcradEngine::createOcrDialogue(AbstractOcrEngine *plugin
 }
 
 
-bool OcrOcradEngine::createOcrProcess(AbstractOcrDialogue *dia, const ScanImage *img)
+bool OcrOcradEngine::createOcrProcess(AbstractOcrDialogue *dia, ScanImage::Ptr img)
 {
     OcrOcradDialog *parentDialog = static_cast<OcrOcradDialog *>(dia);
     ocradVersion = parentDialog->getNumVersion();

@@ -36,6 +36,8 @@
 #include <qcheckbox.h>
 #include <qwidget.h>
 
+#include "scanimage.h"
+
 class QLabel;
 class QButtonGroup;
 class QCheckBox;
@@ -44,7 +46,6 @@ class QLineEdit;
 class QSpinBox;
 class QTimer;
 
-class ScanImage;
 class KookaPrint;
 
 
@@ -53,7 +54,7 @@ class ImgPrintDialog : public QWidget
     Q_OBJECT
 
 public:
-    explicit ImgPrintDialog(const ScanImage *img, KookaPrint *prt, QWidget *pnt = nullptr);
+    explicit ImgPrintDialog(ScanImage::Ptr img, KookaPrint *prt, QWidget *pnt = nullptr);
     virtual ~ImgPrintDialog() = default;
 
     QString checkValid() const;
@@ -88,7 +89,7 @@ private:
     QLabel *mImageArea;
     QLabel *mPrintPages;
 
-    const ScanImage *m_image;
+    ScanImage::Ptr m_image;
     QTimer *mUpdateTimer;
     KookaPrint *mPrinter;
 };
