@@ -57,7 +57,11 @@ ImgScaleDialog::ImgScaleDialog(QWidget *parent, int curr_sel)
     setMainWidget(radios);
 
     QButtonGroup *radiosGroup = new QButtonGroup(radios);
+#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
+    connect(radiosGroup, &QButtonGroup::idClicked, this, &ImgScaleDialog::slotSetSelValue);
+#else
     connect(radiosGroup, static_cast<void (QButtonGroup::*)(int)>(&QButtonGroup::buttonClicked), this, &ImgScaleDialog::slotSetSelValue);
+#endif
 
     QVBoxLayout *radiosLayout = new QVBoxLayout(this);
 

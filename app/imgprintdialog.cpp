@@ -85,10 +85,15 @@ ImgPrintDialog::ImgPrintDialog(const KookaImage *img, KookaPrint *prt, QWidget *
     QGridLayout *gl = new QGridLayout(grp);
 
     m_scaleRadios = new QButtonGroup(this);
+#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
+    connect(m_scaleRadios, &QButtonGroup::idClicked, this, &ImgPrintDialog::slotScaleChanged);
+    connect(m_scaleRadios, &QButtonGroup::idClicked, mUpdateTimer, QOverload<>::of(&QTimer::start));
+#else
     connect(m_scaleRadios, static_cast<void (QButtonGroup::*)(int)>(&QButtonGroup::buttonClicked),
             this, &ImgPrintDialog::slotScaleChanged);
     connect(m_scaleRadios, static_cast<void (QButtonGroup::*)(int)>(&QButtonGroup::buttonClicked),
             mUpdateTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
+#endif
 
     // Option 1: ScaleScreen
     QRadioButton *rb = new QRadioButton(i18nc("@option:radio", "Size as on screen"), this);
