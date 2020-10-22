@@ -54,11 +54,17 @@
 // The ImageType can be OR-ed here to make a set of possible formats
 Q_DECLARE_OPERATORS_FOR_FLAGS(ScanImage::ImageTypes)
 
-// Information for a format
+// Information for a format.  Static, so only POD allowed.
 struct FormatInfo {
+    // A semicolon-separated list of MIME types that make up this format.
     const char *mime;
+    // An I18N_NOOP()'ed help string for the format.
     const char *helpString;
+    // An OR-ed set of image types that this format is recommended for.
+    // ScanImage::None means that it is not recommended for any image type.
     ScanImage::ImageTypes recForTypes;
+    // An OR-ed set of image types that this format can be used for.
+    // ScanImage::None means that it can be used for any image type.
     ScanImage::ImageTypes okForTypes;
 };
 
@@ -104,7 +110,7 @@ images. Only 24 bit per pixel RGB is supported."),
     },
 
     {
-        "image/x-pcx",					// PCX
+        "image/x-pcx;image/vnd.zbrush.pcx",		// PCX
         I18N_NOOP(
             "<b>PCX</b> is a lossless compressed format which is often supported by PC imaging \
 applications, although it is rather old and unsophisticated.  It is suitable for \
@@ -192,7 +198,7 @@ used for web graphics.  It uses lossless compression with up to 256 colors and \
 optional transparency.\
 <p>For legal reasons this format is not recommended, use an open format instead."),
         ScanImage::None,
-        ScanImage::None
+        ScanImage::LowColour | ScanImage::Greyscale
     },
 
     {
@@ -227,6 +233,29 @@ true color images with optional lossless compression.\
 <p>Unless specifically required, use an open format instead."),
         ScanImage::None,
         ScanImage::LowColour | ScanImage::HighColour
+    },
+
+    {
+        "image/vnd.wap.wbmp",				// WBMP
+        I18N_NOOP(
+            "<b>Wireless Bitmap</b> is a monochrome bitmap format optimised \
+for WAP mobile devices.  It supports black and white bitmaps only.\
+<p>Unless specifically required, use an general purpose format instead."),
+        ScanImage::None,
+        ScanImage::BlackWhite
+    },
+
+    {
+        "image/webp",					// WEBP
+        I18N_NOOP(
+            "<b>WebP</b> is intended to be an open standard for true colour \
+images with optional transparency.  It is widely supported by modern \
+web browsers and graphics software.\
+<p>Various compression methods, both lossy and lossless, are supported. \
+Lossy compression is not recommended for archiving or for repeated loading \
+and saving."),
+        ScanImage::HighColour | ScanImage::Greyscale,
+        ScanImage::LowColour | ScanImage::Greyscale | ScanImage::HighColour
     },
 
     { nullptr, nullptr, ScanImage::None, ScanImage::None }
@@ -418,11 +447,14 @@ void FormatDialog::formatSelected(QListWidgetItem *item)
 
     mFormatList->setCurrentItem(item);			// focus highlight -> select
 
+    // Locate the help text for the format
     const char *helptxt = nullptr;
     const QByteArray mimename = item->data(Qt::UserRole).toByteArray();
-    for (FormatInfo *ip = &formats[0]; ip->mime != nullptr; ++ip) {
-        // locate help text for format
-        if (ip->mime == mimename) {
+    for (FormatInfo *ip = &formats[0]; ip->mime!=nullptr; ++ip)
+    {
+        const QList<QByteArray> mimetypes = QByteArray(ip->mime).split(';');
+        if (mimetypes.contains(mimename))
+        {
             helptxt = ip->helpString;
             break;
         }
@@ -431,6 +463,7 @@ void FormatDialog::formatSelected(QListWidgetItem *item)
     QMimeDatabase db;
     QMimeType mime = db.mimeTypeForName(mimename);
     ImageFormat format = ImageFormat::formatForMime(mime);
+    qDebug() << "MIME" << mimename << "format" << format;
 
     if (helptxt != nullptr) {				// found some help text
         mHelpLabel->setText(i18n(helptxt));		// set the hint
@@ -460,7 +493,8 @@ void FormatDialog::setSelectedFormat(const ImageFormat &format)
 {
     if (mFormatList == nullptr) return;			// not showing this
 
-    if (format.isValid()) {				// valid format to select
+    if (format.isValid())				// valid format to select
+    {
         const QMimeType mime = format.mime();
         if (!mime.isValid()) return;
 
@@ -542,9 +576,13 @@ void FormatDialog::checkValid()
 
 static const FormatInfo *findKnownFormat(const QMimeType &mime)
 {
-    for (const FormatInfo *fi = &formats[0]; fi->mime != nullptr; ++fi)
+    for (const FormatInfo *fi = &formats[0]; fi->mime!=nullptr; ++fi)
     {							// search for format info
-        if (mime.inherits(fi->mime)) return (fi);	// matching that MIME type
+        const QList<QByteArray> mimetypes = QByteArray(fi->mime).split(';');
+        for (const QByteArray &mimetype : mimetypes)
+        {
+            if (mime.inherits(mimetype)) return (fi);	// matching that MIME type
+        }
     }
 
     return (nullptr);					// nothing found

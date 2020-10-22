@@ -80,8 +80,13 @@ static void createDir(const QUrl &url)
 
 
 // This was originally ImageMetaInfo::findImageType().
-// It is only used here, and even that only as a last resort.
-// The logic is very similar to KScanDevice::getImageFormat().
+// It is only used here, and even that only if the image type
+// has not been specified by KScanDevice.
+//
+// The logic is very similar to KScanDevice::getImageFormat(),
+// except that it looks at the result image instead of the initial
+// SANE parameters.  This means that the image type could possibly
+// be resolved as LowColour here.
 static ScanImage::ImageType findImageType(const QImage *image)
 {
     if (image==nullptr || image->isNull()) return (ScanImage::None);
