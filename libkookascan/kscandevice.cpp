@@ -180,6 +180,7 @@ KScanDevice::KScanDevice(QObject *parent)
 
     mScanBuf = nullptr;					// image data buffer while scanning
     mScanImage.clear();					// temporary image to scan into
+    mTestFormat = ScanImage::None;			// format deduced from scan
 
     mSocketNotifier = nullptr;				// socket notifier for async scanning
 
@@ -592,7 +593,8 @@ void KScanDevice::showOptions()
 //  ------------------------------------------------
 
 // Deduce the scanned image type from the SANE parameters.
-// The logic is very similar to ImgSaver::findImageType().
+// The logic is very similar to ImgSaver::findImageType(),
+// except that the image type cannot be LowColour.
 static ScanImage::ImageType getImageFormat(const SANE_Parameters *p)
 {
     if (p==nullptr) return (ScanImage::None);
@@ -883,7 +885,6 @@ KScanDevice::Status KScanDevice::acquireData(bool isPreview)
     ScanImage::ImageType fmt = ScanImage::None;
     if (!isPreview)					// scanning to eventually save
     {
-
         mSaneStatus = sane_get_parameters(mScannerHandle, &mSaneParameters);
         if (mSaneStatus==SANE_STATUS_GOOD)		// get pre-scan parameters
         {
@@ -903,7 +904,12 @@ KScanDevice::Status KScanDevice::acquireData(bool isPreview)
             }
         }
     }
-    emit sigScanStart(fmt);				// with image information
+    if (mTestFormat!=ScanImage::None)
+    {
+        fmt = mTestFormat;
+        qDebug() << "Testing with image format" << fmt;
+    }
+    emit sigScanStart(fmt);
 
     // If the image information was available, the application may have
     // prompted for a filename.  If the user cancelled that, it will have

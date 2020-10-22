@@ -50,6 +50,7 @@
 #include <qmimedatabase.h>
 #include <qlayout.h>
 #include <qdesktopservices.h>
+#include <qcombobox.h>
 
 #include <klocalizedstring.h>
 #include <kled.h>
@@ -475,12 +476,36 @@ QWidget *ScanParams::createScannerParams()
 
     // SANE testing options, for the "test" device
     so = mSaneDevice->getGuiElement(SANE_NAME_TEST_PICTURE, frame);
-    if (so != nullptr) {
+    if (so!=nullptr)
+    {
         connect(so, &KScanOption::guiChange, this, &ScanParams::slotOptionChanged);
 
         l = so->getLabel(frame);
         w = so->widget();
         frame->addRow(l, w);
+
+        // This control allows the image type presented to the application to be
+        // tested.  It does not actually affect the format of the scanned image,
+        // so it will only affect the image type in Kooka's "Save Assistant"
+        // dialogue if it is set to ask for a filename before the scan starts.
+        // The setting is not persistent.
+        QComboBox *fitCombo = new QComboBox(frame);
+        fitCombo->addItem(i18n("Default (from scan settings)"), ScanImage::None);
+        fitCombo->addItem(i18n("Black/white bitmap"), ScanImage::BlackWhite);
+        fitCombo->addItem(i18n("Grey scale"), ScanImage::Greyscale);
+        fitCombo->addItem(i18n("Low colour"), ScanImage::LowColour);
+        fitCombo->addItem(i18n("High colour"), ScanImage::HighColour);
+        fitCombo->setCurrentIndex(0);
+
+        connect(fitCombo, QOverload<int>::of(&QComboBox::currentIndexChanged),
+                this, [=](int index)
+                {
+                    ScanImage::ImageType fmt = static_cast<ScanImage::ImageType>(fitCombo->currentData().toInt());
+                    mSaneDevice->setTestFormat(fmt);
+                });
+
+        l = new QLabel(i18n("Force image format:"), frame);
+        frame->addRow(l, fitCombo);
     }
 
     // Now all of the other options which have not been accounted for yet.

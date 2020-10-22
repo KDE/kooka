@@ -462,6 +462,17 @@ public:
      **/
     void reloadAllOptions();
 
+    /**
+     * Set a format to be used for indicating the image type to the
+     * application.  The GUI control is only shown when using the SANE
+     * "test" device, normally the image type is resolved from the SANE
+     * parameters.
+     *
+     * @param type the image type
+     * @see sigScanStart()
+     **/
+    void setTestFormat(ScanImage::ImageType type)	{ mTestFormat = type; }
+
 public slots:
     /**
      * Request the scan device to stop the scan currently in progress.
@@ -621,6 +632,7 @@ private:
     int mCurrScanResolutionY;
 
     ScanImage::Ptr mScanImage;
+    ScanImage::ImageType mTestFormat;
 };
 
 #endif							// KSCANDEVICE_H
