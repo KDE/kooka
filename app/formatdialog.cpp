@@ -51,13 +51,18 @@
 #include "kookasettings.h"
 
 
+// The ImageType can be OR-ed here to make a set of possible formats
+Q_DECLARE_OPERATORS_FOR_FLAGS(ScanImage::ImageTypes)
+
+// Information for a format
 struct FormatInfo {
     const char *mime;
     const char *helpString;
-    ImageMetaInfo::ImageTypes recForTypes;
-    ImageMetaInfo::ImageTypes okForTypes;
+    ScanImage::ImageTypes recForTypes;
+    ScanImage::ImageTypes okForTypes;
 };
 
+// Known formats with help text and compatibility recommendations
 static struct FormatInfo formats[] =
 {
     {
@@ -67,8 +72,8 @@ static struct FormatInfo formats[] =
 It is suitable for color, grayscale and line art images.\
 <p>This format is widely supported but is not recommended, use an open format \
 instead."),
-        ImageMetaInfo::None,
-        ImageMetaInfo::None
+        ScanImage::None,
+        ScanImage::None
     },
 
     {
@@ -76,8 +81,8 @@ instead."),
         I18N_NOOP(
             "<b>Portable Bitmap</b>, as used by Netpbm, is an uncompressed format for line art \
 (bitmap) images. Only 1 bit per pixel depth is supported."),
-        ImageMetaInfo::BlackWhite,
-        ImageMetaInfo::BlackWhite
+        ScanImage::BlackWhite,
+        ScanImage::BlackWhite
     },
 
     {
@@ -85,8 +90,8 @@ instead."),
         I18N_NOOP(
             "<b>Portable Greymap</b>, as used by Netpbm, is an uncompressed format for grayscale \
 images. Only 8 bit per pixel depth is supported."),
-        ImageMetaInfo::Greyscale,
-        ImageMetaInfo::Greyscale
+        ScanImage::Greyscale,
+        ScanImage::Greyscale
     },
 
     {
@@ -94,8 +99,8 @@ images. Only 8 bit per pixel depth is supported."),
         I18N_NOOP(
             "<b>Portable Pixmap</b>, as used by Netpbm, is an uncompressed format for full color \
 images. Only 24 bit per pixel RGB is supported."),
-        ImageMetaInfo::LowColour | ImageMetaInfo::HighColour,
-        ImageMetaInfo::LowColour | ImageMetaInfo::HighColour
+        ScanImage::LowColour | ScanImage::HighColour,
+        ScanImage::LowColour | ScanImage::HighColour
     },
 
     {
@@ -105,8 +110,8 @@ images. Only 24 bit per pixel RGB is supported."),
 applications, although it is rather old and unsophisticated.  It is suitable for \
 color and grayscale images.\
 <p>This format is not recommended, use an open format instead."),
-        ImageMetaInfo::None,
-        ImageMetaInfo::None
+        ScanImage::None,
+        ScanImage::None
     },
 
     {
@@ -114,8 +119,8 @@ color and grayscale images.\
         I18N_NOOP(
             "<b>X Bitmap</b> is often used by the X Window System to store cursor and icon bitmaps.\
 <p>Unless required for this purpose, use a general purpose format instead."),
-        ImageMetaInfo::None,
-        ImageMetaInfo::BlackWhite
+        ScanImage::None,
+        ScanImage::BlackWhite
     },
 
     {
@@ -123,8 +128,8 @@ color and grayscale images.\
         I18N_NOOP(
             "<b>X Pixmap</b> is often used by the X Window System for color icons and other images.\
 <p>Unless required for this purpose, use a general purpose format instead."),
-        ImageMetaInfo::None,
-        ImageMetaInfo::LowColour | ImageMetaInfo::HighColour
+        ScanImage::None,
+        ScanImage::LowColour | ScanImage::HighColour
     },
 
     {
@@ -134,8 +139,8 @@ color and grayscale images.\
 portable and extensible. It is suitable for any type of color or grayscale images, \
 indexed or true color.\
 <p>PNG is an open format which is widely supported."),
-        ImageMetaInfo::BlackWhite | ImageMetaInfo::LowColour | ImageMetaInfo::Greyscale | ImageMetaInfo::HighColour,
-        ImageMetaInfo::None
+        ScanImage::BlackWhite | ScanImage::LowColour | ScanImage::Greyscale | ScanImage::HighColour,
+        ScanImage::None
     },
 
     {
@@ -145,8 +150,8 @@ indexed or true color.\
 It is a lossy format, so it is not recommended for archiving or for repeated loading \
 and saving.\
 <p>This is an open format which is widely supported."),
-        ImageMetaInfo::HighColour | ImageMetaInfo::Greyscale,
-        ImageMetaInfo::LowColour | ImageMetaInfo::Greyscale | ImageMetaInfo::HighColour
+        ScanImage::HighColour | ScanImage::Greyscale,
+        ScanImage::LowColour | ScanImage::Greyscale | ScanImage::HighColour
     },
 
     {
@@ -155,8 +160,8 @@ and saving.\
             "<b>JPEG 2000</b> was intended as an update to the JPEG format, with the option of \
 lossless compression, but so far is not widely supported. It is suitable for true \
 color or grayscale images."),
-        ImageMetaInfo::None,
-        ImageMetaInfo::LowColour | ImageMetaInfo::Greyscale | ImageMetaInfo::HighColour
+        ScanImage::None,
+        ScanImage::LowColour | ScanImage::Greyscale | ScanImage::HighColour
     },
 
     {
@@ -165,8 +170,8 @@ color or grayscale images."),
             "<b>Encapsulated PostScript</b> is derived from the PostScript&trade; \
 page description language.  Use this format for importing into other \
 applications, or to use with (e.g.) TeX."),
-        ImageMetaInfo::None,
-        ImageMetaInfo::None
+        ScanImage::None,
+        ScanImage::None
     },
 
     {
@@ -175,8 +180,8 @@ applications, or to use with (e.g.) TeX."),
             "<b>Truevision Targa</b> can store full color images with an alpha channel, and is \
 used extensively by animation and video applications.\
 <p>This format is not recommended, use an open format instead."),
-        ImageMetaInfo::None,
-        ImageMetaInfo::LowColour | ImageMetaInfo::Greyscale | ImageMetaInfo::HighColour
+        ScanImage::None,
+        ScanImage::LowColour | ScanImage::Greyscale | ScanImage::HighColour
     },
 
     {
@@ -186,8 +191,8 @@ used extensively by animation and video applications.\
 used for web graphics.  It uses lossless compression with up to 256 colors and \
 optional transparency.\
 <p>For legal reasons this format is not recommended, use an open format instead."),
-        ImageMetaInfo::None,
-        ImageMetaInfo::None
+        ScanImage::None,
+        ScanImage::None
     },
 
     {
@@ -198,8 +203,8 @@ supported by imaging and publishing applications. It supports indexed and true c
 images with alpha transparency.\
 <p>Because there are many variations, there may sometimes be compatibility problems. \
 Unless required for use with other applications, use an open format instead."),
-        ImageMetaInfo::BlackWhite | ImageMetaInfo::LowColour | ImageMetaInfo::Greyscale | ImageMetaInfo::HighColour,
-        ImageMetaInfo::None
+        ScanImage::BlackWhite | ScanImage::LowColour | ScanImage::Greyscale | ScanImage::HighColour,
+        ScanImage::None
     },
 
     {
@@ -210,8 +215,8 @@ intended for animated images.  It is an open format suitable for all types of \
 images.\
 <p>Images produced by a scanner will not be animated, so unless specifically \
 required for use with other applications use PNG instead."),
-        ImageMetaInfo::None,
-        ImageMetaInfo::None
+        ScanImage::None,
+        ScanImage::None
     },
 
     {
@@ -220,17 +225,17 @@ required for use with other applications use PNG instead."),
             "This is the <b>Silicon Graphics</b> native image file format, supporting 24 bit \
 true color images with optional lossless compression.\
 <p>Unless specifically required, use an open format instead."),
-        ImageMetaInfo::None,
-        ImageMetaInfo::LowColour | ImageMetaInfo::HighColour
+        ScanImage::None,
+        ScanImage::LowColour | ScanImage::HighColour
     },
 
-    { nullptr, nullptr, ImageMetaInfo::None, ImageMetaInfo::None }
+    { nullptr, nullptr, ScanImage::None, ScanImage::None }
 };
 
 static QString sLastFormat;				// format last used, whether
 							// remembered or not
 
-FormatDialog::FormatDialog(QWidget *parent, ImageMetaInfo::ImageType type,
+FormatDialog::FormatDialog(QWidget *parent, ScanImage::ImageType type,
                            bool askForFormat, const ImageFormat &format,
                            bool askForFilename, const QString &filename)
     : DialogBase(parent),
@@ -562,7 +567,7 @@ void FormatDialog::buildFormatList(bool recOnly)
         }						// but always show otherwise
         else
         {
-            ImageMetaInfo::ImageTypes okTypes = fi->okForTypes;
+            ScanImage::ImageTypes okTypes = fi->okForTypes;
             if (okTypes!=0)				// format has allowed types
             {
                 if (!(okTypes & mImageType)) continue;	// but not for this image type

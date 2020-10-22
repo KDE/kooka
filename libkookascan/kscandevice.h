@@ -44,7 +44,6 @@ class KConfigSkeletonItem;
 
 class KScanOption;
 class KScanOptSet;
-class ImageMetaInfo;
 
 /**
  * @short Access and control a scanner.
@@ -478,20 +477,19 @@ signals:
      * while the lamp warms up) between this signal and the
      * @c sigAcquireStart.
      *
-     * @param info Image information, if a scan is being started and
-     * the image information is is currently available.  This pointer
-     * will be null if a preview is being started.
-     * @see sigAcquireStart
+     * @param type Image type information, if a scan is being started
+     * and the image information is is currently available.  This will
+     * be ScanImage::None if a preview is being started.
      *
-     * @note Even if the @p info parameter is not null, it may not contain
-     * any useful format information.
+     * @see sigAcquireStart
      **/
-    void sigScanStart(const ImageMetaInfo *info);
+    void sigScanStart(ScanImage::ImageType type);
 
     /**
      * Emitted to indicate that a scan is starting to acquire data.
      * The first @c sigScanProgress will be emitted with progress value 0
      * immediately after this signal.
+     *
      * @see sigScanStart
      **/
     void sigAcquireStart();
@@ -508,25 +506,22 @@ signals:
 
     /**
      * Emitted when a new scan image has been acquired.
-     * The receiver should take a deep copy of the image, as it will
-     * be destroyed after this signal has been delivered.
      *
      * @param img The acquired scan image
-     * @param info Additional information for the image
+     *
      * @see sigNewPreview
      **/
-    void sigNewImage(ScanImage::Ptr img, const ImageMetaInfo *info);
+    void sigNewImage(ScanImage::Ptr img);
 
     /**
      * Emitted when a new preview image has been acquired.
-     * The receiver should take a deep copy of the image, as it will
-     * be destroyed after this signal has been delivered.
      *
      * @param img The acquired preview image
      * @param info Additional information for the image
+     *
      * @see sigNewImage
      **/
-    void sigNewPreview(ScanImage::Ptr img, const ImageMetaInfo *info);
+    void sigNewPreview(ScanImage::Ptr img);
 
     /**
      * Emitted to indicate that a scan or preview has finished.
@@ -627,13 +622,5 @@ private:
 
     ScanImage::Ptr mScanImage;
 };
-
-/**
- * Conversion between resolutions in dots-per-inch (used by SANE and the scanner GUI)
- * and dots-per-metre (used by QImage).
- **/
-
-#define DPM_TO_DPI(d)		qRound((d)*2.54/100)	// dots/metre -> dots/inch
-#define DPI_TO_DPM(d)		qRound((d)*100/2.54)	// dots/inch -> dots/metre
 
 #endif							// KSCANDEVICE_H

@@ -50,7 +50,6 @@
 #include "kscanoptset.h"
 #include "deviceselector.h"
 #include "scansettings.h"
-#include "imagemetainfo.h"
 
 extern "C" {
 #include <sane/saneopts.h>
@@ -180,7 +179,7 @@ KScanDevice::KScanDevice(QObject *parent)
     mScanningState = KScanDevice::ScanIdle;
 
     mScanBuf = nullptr;					// image data buffer while scanning
-    mScanImage = nullptr;				// temporary image to scan into
+    mScanImage.clear();					// temporary image to scan into
 
     mSocketNotifier = nullptr;				// socket notifier for async scanning
 
@@ -523,6 +522,7 @@ QImage KScanDevice::loadPreviewImage() const
 }
 
 
+// TODO: take a ScanImage::Ptr
 bool KScanDevice::savePreviewImage(const QImage &image) const
 {
     if (image.isNull()) return (false);
@@ -589,47 +589,49 @@ void KScanDevice::showOptions()
 #endif // DEBUG_OPTIONS
 
 
-//  Creating a new image to receive the scan/preview
 //  ------------------------------------------------
 
-static ImageMetaInfo::ImageType getImageFormat(const SANE_Parameters *p)
+// Deduce the scanned image type from the SANE parameters.
+// The logic is very similar to ImgSaver::findImageType().
+static ScanImage::ImageType getImageFormat(const SANE_Parameters *p)
 {
-    if (p==nullptr) return (ImageMetaInfo::Unknown);
+    if (p==nullptr) return (ScanImage::None);
 
     if (p->depth==1) 					// Line art (bitmap)
     {
-        return (ImageMetaInfo::BlackWhite);
+        return (ScanImage::BlackWhite);
     }
     else if (p->depth==8)				// 8 bit RGB
     {
         if (p->format==SANE_FRAME_GRAY)			// Grey scale
         {
-            return (ImageMetaInfo::Greyscale);
+            return (ScanImage::Greyscale);
         }
         else						// True colour
         {
-            return (ImageMetaInfo::HighColour);
+            return (ScanImage::HighColour);
         }
     }
     else						// Error, no others supported
     {
-        //qDebug() << "Only bit depths 1 or 8 supported!";
-        return (ImageMetaInfo::Unknown);
+        qDebug() << "Only bit depths 1 or 8 supported!";
+        return (ScanImage::None);
     }
 }
 
 
+//  Create a new image to receive the scan or preview
 KScanDevice::Status KScanDevice::createNewImage(const SANE_Parameters *p)
 {
     QImage::Format fmt;
-    ImageMetaInfo::ImageType itype = getImageFormat(p);	// what format should this be?
+    ScanImage::ImageType itype = getImageFormat(p);	// what format should this be?
     switch (itype)					// choose QImage option for that
     {
 default:
-case ImageMetaInfo::Unknown:	return (KScanDevice::ParamError);
-case ImageMetaInfo::BlackWhite:	fmt = QImage::Format_Mono;		break;
-case ImageMetaInfo::Greyscale:	fmt = QImage::Format_Indexed8;		break;
-case ImageMetaInfo::HighColour:	fmt = QImage::Format_RGB32;		break;
+case ScanImage::None:		return (KScanDevice::ParamError);
+case ScanImage::BlackWhite:	fmt = QImage::Format_Mono;		break;
+case ScanImage::Greyscale:	fmt = QImage::Format_Indexed8;		break;
+case ScanImage::HighColour:	fmt = QImage::Format_RGB32;		break;
     }
 
     // mScanImage is the master allocated image for the result of the scan.
@@ -646,12 +648,12 @@ case ImageMetaInfo::HighColour:	fmt = QImage::Format_RGB32;		break;
     mScanImage.clear();					// remove reference to previous
     mScanImage.reset(newImage);				// capture the new image pointer
 
-    if (itype==ImageMetaInfo::BlackWhite)		// Line art (bitmap)
+    if (itype==ScanImage::BlackWhite)			// Line art (bitmap)
     {
         mScanImage->setColor(0,qRgb(0x00,0x00,0x00));	// set black/white palette
         mScanImage->setColor(1,qRgb(0xFF,0xFF,0xFF));
     }
-    else if (itype==ImageMetaInfo::Greyscale)		// 8 bit grey
+    else if (itype==ScanImage::Greyscale)		// 8 bit grey
     {							// set grey scale palette
         for (int i = 0; i<256; i++) mScanImage->setColor(i,qRgb(i,i,i));
     }
@@ -826,11 +828,12 @@ KScanDevice::Status KScanDevice::acquireScan(const QString &filename)
         mScanImage.clear();				// remove reference to previous
         mScanImage.reset(newImage);			// capture the new image pointer
 
-        ImageMetaInfo info;
-        info.setXResolution(DPM_TO_DPI(img.dotsPerMeterX()));
-        info.setYResolution(DPM_TO_DPI(img.dotsPerMeterY()));
-        info.setScannerName(QFile::encodeName(filename));
-        emit sigNewImage(mScanImage, &info);
+        // Copy the resolution from the original image
+        mScanImage->setXResolution(DPM_TO_DPI(img.dotsPerMeterX()));
+        mScanImage->setYResolution(DPM_TO_DPI(img.dotsPerMeterY()));
+        // Set the original image file name as the scanner name
+        mScanImage->setScannerName(QFile::encodeName(filename));
+        emit sigNewImage(mScanImage);
         return (KScanDevice::Ok);
     }
 }
@@ -877,9 +880,9 @@ KScanDevice::Status KScanDevice::acquireData(bool isPreview)
     ScanGlobal::self()->setScanDevice(this);		// for possible authentication
 
     // Tell the application that scanning is about to start.
+    ScanImage::ImageType fmt = ScanImage::None;
     if (!isPreview)					// scanning to eventually save
     {
-        ImageMetaInfo imageInfo;			// information for result image
 
         mSaneStatus = sane_get_parameters(mScannerHandle, &mSaneParameters);
         if (mSaneStatus==SANE_STATUS_GOOD)		// get pre-scan parameters
@@ -890,20 +893,17 @@ KScanDevice::Status KScanDevice::acquireData(bool isPreview)
 
             if (mSaneParameters.lines>=1 && mSaneParameters.pixels_per_line>0)
             {						// check for a plausible image
-                ImageMetaInfo::ImageType fmt = getImageFormat(&mSaneParameters);
-                if (fmt==ImageMetaInfo::Unknown)	// find format it will have
+                fmt = getImageFormat(&mSaneParameters);
+                if (fmt==ScanImage::None)		// find format it will have
                 {					// scan format not recognised?
                     stat = KScanDevice::ParamError;	// no point starting scan
                     scanFinished(stat);			// clean up anything started
                     return (stat);
                 }
-
-                imageInfo.setImageType(fmt);		// save result for later
             }
         }
-        emit sigScanStart(&imageInfo);			// with image information
     }
-    else emit sigScanStart(nullptr);			// scanning only for preview
+    emit sigScanStart(fmt);				// with image information
 
     // If the image information was available, the application may have
     // prompted for a filename.  If the user cancelled that, it will have
@@ -1320,25 +1320,20 @@ void KScanDevice::scanFinished(KScanDevice::Status status)
 
     // If the scan succeeded, finish off the result image and tell the
     // application that it is ready.
-    if (status==KScanDevice::Ok && mScanImage!=nullptr)
+    if (status==KScanDevice::Ok && !mScanImage.isNull())
     {
-	ImageMetaInfo info;
-	info.setXResolution(mCurrScanResolutionX);
-	info.setYResolution(mCurrScanResolutionY);
-	info.setScannerName(mScannerName);
-
-	// put the resolution also into the image itself
-	mScanImage->setDotsPerMeterX(DPI_TO_DPM(mCurrScanResolutionX));
-	mScanImage->setDotsPerMeterY(DPI_TO_DPM(mCurrScanResolutionY));
+	mScanImage->setXResolution(mCurrScanResolutionX);
+	mScanImage->setYResolution(mCurrScanResolutionY);
+	mScanImage->setScannerName(mScannerName);
 
 	if (mScanningPreview)
 	{
 	    savePreviewImage(*mScanImage);
-	    emit sigNewPreview(mScanImage, &info);
+	    emit sigNewPreview(mScanImage);
 	}
 	else
 	{
-	    emit sigNewImage(mScanImage, &info);
+	    emit sigNewImage(mScanImage);
 	}
     }
 

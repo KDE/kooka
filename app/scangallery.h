@@ -43,7 +43,6 @@ class QMenu;
 class QUrl;
 
 class ImgSaver;
-class ImageMetaInfo;
 
 
 class ScanGallery : public FileTreeView
@@ -65,8 +64,8 @@ public:
 
     void setAllowRename(bool on);
 
-    bool prepareToSave(const ImageMetaInfo *info);
-    void addImage(ScanImage::Ptr img, const ImageMetaInfo *info = nullptr);
+    bool prepareToSave(ScanImage::ImageType type);
+    void addImage(ScanImage::Ptr img);
 
     void saveHeaderState(int forIndex) const;
     void restoreHeaderState(int forIndex);

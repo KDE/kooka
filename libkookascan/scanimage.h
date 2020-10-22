@@ -61,6 +61,21 @@ public:
     typedef QSharedPointer<ScanImage> Ptr;
 
     /**
+     * An image type.  This is not the detailed format of the image
+     * data (which is available via @c QImage::Format), but a general
+     * category which an application or its user will be interested in.
+     **/
+    enum ImageType
+    {
+        None        = 0x00,				///< None, unknown or not resolved yet
+        BlackWhite  = 0x01,				///< Black/white bitmap
+        Greyscale   = 0x02,				///< Grey scale
+        LowColour   = 0x04,				///< Low colour (indexed with palette)
+        HighColour  = 0x08				///< High colour (RGB)
+    };
+    Q_DECLARE_FLAGS(ImageTypes, ImageType)
+
+    /**
      * Constructor.  Creates an image from a @c QImage.
      * A shallow copy is made of the image data, which as with @c QImage
      * is automatically detached if it is modified.
@@ -129,6 +144,53 @@ public:
      **/
     bool isFileBound() const;
 
+    /**
+     * Set the name of the scanner that was used to generate the image.
+     *
+     * @param scanner the new scanner name
+     **/
+    void setScannerName(const QByteArray &scanner);
+
+    /**
+     * Get the scanner name that was set for the image.
+     *
+     * @return the scanner name
+     * @see setScannerName
+     **/
+    QByteArray getScannerName() const;
+
+    /**
+     * Set the X resolution of the image in dots per inch.
+     *
+     * @param res the new X resolution
+     * @see getXResolution
+     **/
+    void setXResolution(int res);
+
+    /**
+     * Set the Y resolution of the image in dots per inch.
+     *
+     * @param res the new Y resolution
+     * @see getXResolution
+     **/
+    void setYResolution(int res);
+
+    /**
+     * Get the X resolution of the image in dots per inch.
+     *
+     * @return the X resolution, or the QImage default if it has not been set.
+     * @see setXResolution
+     **/
+    int getXResolution() const;
+
+    /**
+     * Get the Y resolution of the image in dots per inch.
+     *
+     * @return the Y resolution, or the QImage default if it has not been set.
+     * @see setYResolution
+     **/
+    int getYResolution() const;
+
 private:
     void init();
     QString loadTiffDir(const QString &file, int subno);
@@ -141,8 +203,19 @@ private:
     QString m_errorString;
 };
 
+// Not doing Q_DECLARE_OPERATORS_FOR_FLAGS(ScanImage::ImageTypes) here.
+// The only place that uses an OR-ed combination of types is FormatDialog,
+// so the operators are declared there.
+
 // Allow the shared pointer to be stored in a QVariant.
 Q_DECLARE_METATYPE(ScanImage::Ptr)
+
+/**
+ * Conversion between resolutions in dots-per-inch (used by SANE and the scanner GUI)
+ * and dots-per-metre (used by QImage).
+ **/
+#define DPM_TO_DPI(d)		qRound((d)*2.54/100)	// dots/metre -> dots/inch
+#define DPI_TO_DPM(d)		qRound((d)*100/2.54)	// dots/inch -> dots/metre
 
 
 #endif							// SCANIMAGE_H

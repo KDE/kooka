@@ -53,8 +53,6 @@
 #include "kookasettings.h"
 #include "formatdialog.h"
 
-#include "imagemetainfo.h"
-
 
 static void createDir(const QUrl &url)
 {
@@ -80,6 +78,27 @@ static void createDir(const QUrl &url)
     }
 }
 
+
+// This was originally ImageMetaInfo::findImageType().
+// It is only used here, and even that only as a last resort.
+// The logic is very similar to KScanDevice::getImageFormat().
+static ScanImage::ImageType findImageType(const QImage *image)
+{
+    if (image==nullptr || image->isNull()) return (ScanImage::None);
+
+    if (image->depth()==1 || image->colorCount()==2) return (ScanImage::BlackWhite);
+    else
+    {
+        if (image->depth()>8) return (ScanImage::HighColour);
+        else
+        {
+            if (image->allGray()) return (ScanImage::Greyscale);
+            else return (ScanImage::LowColour);
+        }
+    }
+}
+
+
 ImgSaver::ImgSaver(const QUrl &dir)
     : mSaveUrl(QUrl()),
       mSaveFormat("")
@@ -103,20 +122,20 @@ QString extension(const QUrl &url)
 }
 
 
-static KConfigSkeleton::ItemString *configItemForType(ImageMetaInfo::ImageType type)
+static KConfigSkeleton::ItemString *configItemForType(ScanImage::ImageType type)
 {
     switch (type)
     {
-case ImageMetaInfo::LowColour:	return (KookaSettings::self()->formatLowColourItem());
-case ImageMetaInfo::Greyscale:	return (KookaSettings::self()->formatGreyscaleItem());
-case ImageMetaInfo::BlackWhite:	return (KookaSettings::self()->formatBlackWhiteItem());
-case ImageMetaInfo::HighColour:	return (KookaSettings::self()->formatHighColourItem());
+case ScanImage::LowColour:	return (KookaSettings::self()->formatLowColourItem());
+case ScanImage::Greyscale:	return (KookaSettings::self()->formatGreyscaleItem());
+case ScanImage::BlackWhite:	return (KookaSettings::self()->formatBlackWhiteItem());
+case ScanImage::HighColour:	return (KookaSettings::self()->formatHighColourItem());
 default:			return (KookaSettings::self()->formatUnknownItem());
     }
 }
 
 
-static void storeFormatForType(ImageMetaInfo::ImageType type, const ImageFormat &format)
+static void storeFormatForType(ScanImage::ImageType type, const ImageFormat &format)
 {
     //  We don't save OP_FILE_ASK_FORMAT here, this is the global setting
     //  "Always use the Save Assistant" from the Kooka configuration which
@@ -137,7 +156,7 @@ static void storeFormatForType(ImageMetaInfo::ImageType type, const ImageFormat 
 }
 
 
-static ImageFormat getFormatForType(ImageMetaInfo::ImageType type)
+static ImageFormat getFormatForType(ScanImage::ImageType type)
 {
     const KConfigSkeleton::ItemString *ski = configItemForType(type);
     Q_ASSERT(ski!=nullptr);
@@ -151,9 +170,9 @@ static QString findSubFormat(const ImageFormat &format)
 }
 
 
-ImgSaver::ImageSaveStatus ImgSaver::getFilenameAndFormat(ImageMetaInfo::ImageType type)
+ImgSaver::ImageSaveStatus ImgSaver::getFilenameAndFormat(ScanImage::ImageType type)
 {
-    if (type == ImageMetaInfo::Unknown) return (ImgSaver::SaveStatusParam);
+    if (type==ScanImage::None) return (ImgSaver::SaveStatusParam);
 
     QString saveFilename = createFilename();		// find next unused filename
     ImageFormat saveFormat = getFormatForType(type);	// find saved image format
@@ -211,22 +230,23 @@ ImgSaver::ImageSaveStatus ImgSaver::getFilenameAndFormat(ImageMetaInfo::ImageTyp
     return (ImgSaver::SaveStatusOk);
 }
 
-ImgSaver::ImageSaveStatus ImgSaver::setImageInfo(const ImageMetaInfo *info)
+
+ImgSaver::ImageSaveStatus ImgSaver::setImageInfo(ScanImage::ImageType type)
 {
-    if (info == nullptr) return (ImgSaver::SaveStatusParam);
-    return (getFilenameAndFormat(info->getImageType()));
+    return (getFilenameAndFormat(type));
 }
+
 
 ImgSaver::ImageSaveStatus ImgSaver::saveImage(const QImage *image)
 {
-    if (image == nullptr) return (ImgSaver::SaveStatusParam);
+    if (image==nullptr) return (ImgSaver::SaveStatusParam);
 
     if (!mSaveFormat.isValid())				// see if have this already
     {
         // if not, get from image now
-        //qDebug() << "format not resolved yet";
-        ImgSaver::ImageSaveStatus stat = getFilenameAndFormat(ImageMetaInfo::findImageType(image));
+        ImgSaver::ImageSaveStatus stat = getFilenameAndFormat(findImageType(image));
         if (stat != ImgSaver::SaveStatusOk) return (stat);
+        qDebug() << "format from image" << mSaveFormat;
     }
 
     if (!mSaveUrl.isValid() || !mSaveFormat.isValid())	// must have these now
@@ -234,6 +254,7 @@ ImgSaver::ImageSaveStatus ImgSaver::saveImage(const QImage *image)
         //qDebug() << "format not resolved!";
         return (ImgSaver::SaveStatusParam);
     }
+
     // save image to file
     return (saveImage(image, mSaveUrl, mSaveFormat, mSaveSubformat));
 }
@@ -314,24 +335,24 @@ QString ImgSaver::createFilename()
 }
 
 
-QString ImgSaver::picTypeAsString(ImageMetaInfo::ImageType type)
+QString ImgSaver::picTypeAsString(ScanImage::ImageType type)
 {
     QString res;
 
     switch (type) {
-    case ImageMetaInfo::LowColour:
+    case ScanImage::LowColour:
         res = i18n("indexed color image (up to 8 bit depth)");
         break;
 
-    case ImageMetaInfo::Greyscale:
+    case ScanImage::Greyscale:
         res = i18n("gray scale image (up to 8 bit depth)");
         break;
 
-    case ImageMetaInfo::BlackWhite:
+    case ScanImage::BlackWhite:
         res = i18n("lineart image (black and white, 1 bit depth)");
         break;
 
-    case ImageMetaInfo::HighColour:
+    case ScanImage::HighColour:
         res = i18n("high/true color image (more than 8 bit depth)");
         break;
 
@@ -347,7 +368,7 @@ QString ImgSaver::picTypeAsString(ImageMetaInfo::ImageType type)
  *  This method returns true if the image format given in format is remembered
  *  for that image type.
  */
-bool ImgSaver::isRememberedFormat(ImageMetaInfo::ImageType type, const ImageFormat &format)
+bool ImgSaver::isRememberedFormat(ScanImage::ImageType type, const ImageFormat &format)
 {
     return (getFormatForType(type) == format);
 }

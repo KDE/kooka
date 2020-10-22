@@ -60,7 +60,6 @@
 #include "kookasettings.h"
 
 #include "scanimage.h"
-#include "imagemetainfo.h"
 #include "imagefilter.h"
 #include "scanicons.h"
 #include "recentsaver.h"
@@ -832,47 +831,36 @@ QString ScanGallery::currentImageFileName() const
 }
 
 
-bool ScanGallery::prepareToSave(const ImageMetaInfo *info)
+bool ScanGallery::prepareToSave(ScanImage::ImageType type)
 {
-    if (info == nullptr) {
-        //qDebug() << "no image info";
-    } else {
-        //qDebug() << "type" << info->getImageType();
-    }
+    qDebug() << "type" << type;
 
-    delete mSaver; mSaver = nullptr;			// recreate with clean info
+    delete mSaver; mSaver = nullptr;			// recreate a clean instance
 
     // Resolve where to save the new image when it arrives
     FileTreeViewItem *curr = highlightedFileTreeViewItem();
-    if (curr == nullptr) {				// into root if nothing is selected
+    if (curr==nullptr)					// into root if nothing is selected
+    {
         FileTreeBranch *branch = branches().at(0);	// there should be at least one
-        if (branch != nullptr) {
+        if (branch!=nullptr)
+        {
             // if user has created this????
             curr = findItemInBranch(branch, i18n("Incoming/"));
-            if (curr == nullptr) {
-                curr = branch->root();
-            }
+            if (curr==nullptr) curr = branch->root();
         }
 
-        if (curr == nullptr) {
-            return (false);    // should never happen
-        }
+        if (curr==nullptr) return (false);		// should never happen
         curr->setSelected(true);
     }
 
     mSavedTo = curr;					// note for selecting later
 
-    // Create the ImgSaver to use later
+    // Create the saver to use after the scan is complete
     QUrl dir(itemDirectory(curr));			// where new image will go
     mSaver = new ImgSaver(dir);				// create saver to use later
-
-    if (info != nullptr) {				// have image information,
-							// tell saver about it
-        ImgSaver::ImageSaveStatus stat = mSaver->setImageInfo(info);
-        if (stat == ImgSaver::SaveStatusCanceled) {
-            return (false);
-        }
-    }
+    // Pass the initial image information to the saver
+    ImgSaver::ImageSaveStatus stat = mSaver->setImageInfo(type);
+    if (stat==ImgSaver::SaveStatusCanceled) return (false);
 
     return (true);					// all ready to save
 }
@@ -889,11 +877,11 @@ QUrl ScanGallery::saveURL() const
 /* ----------------------------------------------------------------------- */
 /* This slot takes a new scanned Picture and saves it.  */
 
-void ScanGallery::addImage(ScanImage::Ptr img, const ImageMetaInfo *info)
+void ScanGallery::addImage(ScanImage::Ptr img)
 {
     if (img.isNull()) return;				// no image to add
-
-    if (mSaver==nullptr) prepareToSave(nullptr);	// if not done already
+							// if not done already
+    if (mSaver==nullptr) prepareToSave(ScanImage::None);
     if (mSaver==nullptr) return;			// should never happen
 
     ImgSaver::ImageSaveStatus isstat = mSaver->saveImage(img.data());

@@ -66,7 +66,6 @@
 
 #include "scandevices.h"
 #include "kscandevice.h"
-#include "imagemetainfo.h"
 #include "deviceselector.h"
 #include "adddevicedialog.h"
 #include "previewer.h"
@@ -723,16 +722,15 @@ void KookaView::print()
 
 }
 
-void KookaView::slotNewPreview(ScanImage::Ptr newimg, const ImageMetaInfo *info)
+
+void KookaView::slotNewPreview(ScanImage::Ptr newimg)
 {
     if (newimg.isNull()) return;
-
-    //qDebug() << "new preview image, size" << newimg->size()
-    //<< "res [" << info->getXResolution() << "x" << info->getYResolution() << "]";
 
     mPreviewCanvas->newImage(newimg);			// set new image and size
     updateSelectionState();
 }
+
 
 void KookaView::slotStartOcrSelection()
 {
@@ -836,15 +834,15 @@ void KookaView::slotOcrResultAvailable()
 }
 
 
-void KookaView::slotScanStart(const ImageMetaInfo *info)
+void KookaView::slotScanStart(ScanImage::ImageType type)
 {
     //qDebug() << "Scan starts...";
     if (KookaSettings::saverAskBeforeScan())		// ask for filename first?
     {
-        if (info != nullptr)				// if we have initial image info
+        if (type!=ScanImage::None)			// if we have initial image info
         {
             //qDebug() << "imgtype" << info->getImageType();
-            if (!gallery()->prepareToSave(info))	// get ready to save
+            if (!gallery()->prepareToSave(type))	// get ready to save
             {						// user cancelled file prompt
                 mScanDevice->slotStopScanning();	// abort the scan now
                 return;
@@ -879,13 +877,13 @@ void KookaView::slotAcquireStart()
 }
 
 
-void KookaView::slotNewImageScanned(ScanImage::Ptr img, const ImageMetaInfo *info)
+void KookaView::slotNewImageScanned(ScanImage::Ptr img)
 {
     if (mIsPhotoCopyMode) {
         return;
     }
 
-    gallery()->addImage(img, info);
+    gallery()->addImage(img);
 }
 
 
@@ -1134,7 +1132,7 @@ void KookaView::slotStartPhotoCopy()
 #endif
 }
 
-void KookaView::slotPhotoCopyPrint(const QImage *img, const ImageMetaInfo *info)
+void KookaView::slotPhotoCopyPrint(const QImage *img)
 {
     //qDebug();
 

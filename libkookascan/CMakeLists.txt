@@ -90,7 +90,6 @@ set(kookascan_SRCS
   previewer.cpp
   imgscaledialog.cpp
   sizeindicator.cpp
-  imagemetainfo.cpp
   scansizeselector.cpp
   autoselectbar.cpp
   autoselectdialog.cpp

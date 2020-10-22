@@ -34,8 +34,8 @@
 
 #include <qurl.h>
 
+#include "scanimage.h"
 #include "imageformat.h"
-#include "imagemetainfo.h"
 
 class QWidget;
 
@@ -127,12 +127,11 @@ public:
      * operation.  The user may be prompted for a file name and/or a file
      * format at this point.
      *
-     * @param info Image information
+     * @param type the image type
      * @return Status of the operation
-     *
      * @see saveImage
      **/
-    ImgSaver::ImageSaveStatus setImageInfo(const ImageMetaInfo *info);
+    ImgSaver::ImageSaveStatus setImageInfo(ScanImage::ImageType type);
 
     /**
      * Get a readable description for an status return code.
@@ -193,7 +192,7 @@ public:
      *
      * @return @c true if @p format is the remembered format for the image @p type.
      **/
-    static bool isRememberedFormat(ImageMetaInfo::ImageType type, const ImageFormat &format);
+    static bool isRememberedFormat(ScanImage::ImageType type, const ImageFormat &format);
 
     /**
      * Get a readable description for an image type.
@@ -201,7 +200,7 @@ public:
      * @param type Type of image
      * @return The readable description
      **/
-    static QString picTypeAsString(ImageMetaInfo::ImageType type);
+    static QString picTypeAsString(ScanImage::ImageType type);
 
     /**
      * Get the location where the image will be saved to.
@@ -225,7 +224,7 @@ public:
 
 private:
     QString createFilename();
-    ImgSaver::ImageSaveStatus getFilenameAndFormat(ImageMetaInfo::ImageType type);
+    ImgSaver::ImageSaveStatus getFilenameAndFormat(ScanImage::ImageType type);
 
     QUrl m_saveDirectory;				// dir where the image should be saved
     QByteArray mLastFormat;

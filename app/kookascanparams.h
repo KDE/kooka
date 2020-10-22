@@ -21,9 +21,10 @@
 #ifndef KOOKASCANPARAMS_H
 #define KOOKASCANPARAMS_H
 
-#include <scanparams.h>
+#include "scanparams.h"
 
 class KMessageWidget;
+
 
 class KookaScanParams : public ScanParams
 {

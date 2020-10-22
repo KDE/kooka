@@ -55,7 +55,7 @@ class FormatDialog : public DialogBase
     Q_OBJECT
 
 public:
-    explicit FormatDialog(QWidget *parent, ImageMetaInfo::ImageType type,
+    explicit FormatDialog(QWidget *parent, ScanImage::ImageType type,
                  bool askForFormat, const ImageFormat &format,
                  bool askForFilename, const QString &filename);
 
@@ -83,7 +83,7 @@ private:
     void check_subformat(const ImageFormat &format);
     void showExtension(const ImageFormat &format);
 
-    ImageMetaInfo::ImageType mImageType;
+    ScanImage::ImageType mImageType;
 
     QComboBox *mSubformatCombo;
     QListWidget *mFormatList;

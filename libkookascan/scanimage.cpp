@@ -238,3 +238,39 @@ bool ScanImage::isSubImage() const
 {
     return (m_url.isValid() && m_url.fragment().toInt()>0);
 }
+
+
+void ScanImage::setScannerName(const QByteArray &scanner)
+{
+    setText("ScannerName", QString::fromLocal8Bit(scanner));
+}
+
+
+QByteArray ScanImage::getScannerName() const
+{
+    return (text("ScannerName").toLocal8Bit());
+}
+
+
+void ScanImage::setXResolution(int res)
+{
+    setDotsPerMeterY(DPI_TO_DPM(res));
+}
+
+
+void ScanImage::setYResolution(int res)
+{
+    setDotsPerMeterY(DPI_TO_DPM(res));
+}
+
+
+int ScanImage::getXResolution() const
+{
+    return (DPM_TO_DPI(dotsPerMeterX()));
+}
+
+
+int ScanImage::getYResolution() const
+{
+    return (DPM_TO_DPI(dotsPerMeterY()));
+}
