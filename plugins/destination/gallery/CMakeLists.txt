@@ -15,17 +15,21 @@ project(kooka5)
 
 #########################################################################
 #									#
-#  Common definitions for plugins					#
+#  Destination plugin for the scan gallery				#
 #									#
 #########################################################################
 
-add_definitions("-DPLUGIN_EXPORT=__attribute__((visibility(\"default\")))")
+set(kookadestinationgallery_SRCS
+  destinationgallery.cpp
+)
+add_library(kookadestinationgallery MODULE ${kookadestinationgallery_SRCS})
+kcoreaddons_desktop_to_json(kookadestinationgallery kookadestination-gallery.desktop)
 
-#########################################################################
-#									#
-#  Subdirectories							#
-#									#
-#########################################################################
+target_link_libraries(kookadestinationgallery Qt5::Core Qt5::Gui)
+target_link_libraries(kookadestinationgallery KF5::I18n KF5::WidgetsAddons)
+target_link_libraries(kookadestinationgallery kookadestination kookascan)
 
-add_subdirectory(ocr)
-add_subdirectory(destination)
+if (INSTALL_BINARIES)
+  install(TARGETS kookadestinationgallery DESTINATION ${PLUGIN_INSTALL_DIR}/kooka)
+endif (INSTALL_BINARIES)
+install(FILES kookadestination-gallery.desktop DESTINATION ${SERVICES_INSTALL_DIR})

@@ -56,7 +56,7 @@
 #include <kio/jobuidelegate.h>
 
 #include "imgsaver.h"
-#include "kookapref.h"
+#include "galleryroot.h"
 #include "kookasettings.h"
 
 #include "scanimage.h"
@@ -172,7 +172,7 @@ void ScanGallery::restoreHeaderState(int forIndex)
 void ScanGallery::openRoots()
 {
     /* standard root always exists, ImgRoot creates it */
-    QUrl rootUrl = QUrl::fromLocalFile(KookaPref::galleryRoot());
+    QUrl rootUrl = QUrl::fromLocalFile(GalleryRoot::root());
     //qDebug() << "Standard root" << rootUrl.url();
 
     m_defaultBranch = openRoot(rootUrl, i18n("Kooka Gallery"));

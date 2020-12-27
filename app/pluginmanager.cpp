@@ -59,12 +59,18 @@ PluginManager::PluginManager()
     // Also add the plugin build directories, for use when running in place.
     // In order to get the most up-to-date plugins, these need to have priority
     // over all other install locations.
-    QDir dir(QCoreApplication::applicationDirPath()+"/../plugins/ocr");
-    const QStringList subdirs = dir.entryList(QDir::Dirs|QDir::NoDotAndDotDot);
-    foreach (const QString &subdir, subdirs)
+    QDir dir1(QCoreApplication::applicationDirPath()+"/../plugins");
+    const QStringList subdirs1 = dir1.entryList(QDir::Dirs|QDir::NoDotAndDotDot);
+    foreach (const QString &subdir1, subdirs1)
     {
-        const QString path = subdir+"/Makefile";
-        if (dir.exists(path)) pluginPaths.prepend(dir.absoluteFilePath(subdir));
+        QDir dir2(QCoreApplication::applicationDirPath()+"/../plugins/"+subdir1);
+        const QStringList subdirs2 = dir2.entryList(QDir::Dirs|QDir::NoDotAndDotDot);
+        foreach (const QString &subdir2, subdirs2)
+        {
+            const QString subdir = subdir1+"/"+subdir2;
+            const QString path = subdir+"/Makefile";
+            if (dir1.exists(path)) pluginPaths.prepend(dir1.absoluteFilePath(subdir));
+        }
     }
 
     // Put back the standard install location, for locating KParts and
@@ -101,6 +107,17 @@ static QString commentAsRichText(const QString &comment)
 }
 
 
+static QString pluginTypeString(PluginManager::PluginType type)
+{
+    switch (type)
+    {
+case PluginManager::OcrPlugin:			return ("Kooka/OcrPlugin");
+case PluginManager::DestinationPlugin:		return ("Kooka/DestinationPlugin");
+default:					return ("Kooka/UnknownPlugin");
+    }
+}
+
+
 AbstractPlugin *PluginManager::loadPlugin(PluginManager::PluginType type, const QString &name)
 {
     qDebug() << "want type" << type << name;
@@ -108,14 +125,13 @@ AbstractPlugin *PluginManager::loadPlugin(PluginManager::PluginType type, const 
     AbstractPlugin *plugin = mLoadedPlugins.value(type);
     if (plugin!=nullptr)				// a plugin is loaded
     {
-        qDebug() << "have current" << plugin->pluginInfo()->key;
         if (name==plugin->pluginInfo()->key)		// wanted plugin is already loaded
         {
             qDebug() << "already loaded";
             return (plugin);
         }
 
-        qDebug() << "unloading current";
+        qDebug() << "unloading current" << plugin->pluginInfo()->key;
         delete plugin;
         plugin = nullptr;
     }
@@ -126,8 +142,7 @@ AbstractPlugin *PluginManager::loadPlugin(PluginManager::PluginType type, const 
         return (nullptr);				// no more to do
     }
 
-    // TODO: plugin type
-    const KService::List list = KServiceTypeTrader::self()->query("Kooka/OcrPlugin",
+    const KService::List list = KServiceTypeTrader::self()->query(pluginTypeString(type),
                                                                   QString("[DesktopEntryName]=='%1'").arg(name));
     qDebug() << "query count" << list.count();
     if (list.isEmpty()) qWarning() << "No plugin services found";
@@ -176,8 +191,7 @@ QMap<QString,AbstractPluginInfo> PluginManager::allPlugins(PluginManager::Plugin
 
     QMap<QString,AbstractPluginInfo> plugins;
 
-    // TODO: plugin type
-    const KService::List list = KServiceTypeTrader::self()->query("Kooka/OcrPlugin");
+    const KService::List list = KServiceTypeTrader::self()->query(pluginTypeString(type));
     qDebug() << "query count" << list.count();
     if (list.isEmpty()) qWarning() << "No plugin services found";
     else

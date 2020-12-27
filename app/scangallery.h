@@ -32,7 +32,9 @@
 #ifndef SCANGALLERY_H
 #define SCANGALLERY_H
 
-#include "libfiletree/filetreeview.h"
+#include "kookacore_export.h"
+
+#include "filetreeview.h"
 
 #include "imageformat.h"
 #include "scanimage.h"
@@ -45,7 +47,7 @@ class QUrl;
 class ImgSaver;
 
 
-class ScanGallery : public FileTreeView
+class KOOKACORE_EXPORT ScanGallery : public FileTreeView
 {
     Q_OBJECT
 

@@ -1,0 +1,6 @@
+[Desktop Entry]
+Type=ServiceType
+X-KDE-ServiceType=Kooka/DestinationPlugin
+X-KDE-Derived=KPluginInfo
+Name=Kooka Scan Destination Plugin
+Name[x-test]=xxKooka Scan Destination Pluginxx

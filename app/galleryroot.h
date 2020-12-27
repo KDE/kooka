@@ -29,36 +29,19 @@
  *									*
  ************************************************************************/
 
-#ifndef KOOKAPREF_H
-#define KOOKAPREF_H
+#ifndef GALLERYROOT_H
+#define GALLERYROOT_H
 
-#include <kpagedialog.h>
+#include "kookacore_export.h"
 
-class KookaPrefsPage;
+#include <qstring.h>
 
 
-class KookaPref : public KPageDialog
+namespace GalleryRoot
 {
-    Q_OBJECT
+    // TODO: this should return a QUrl
+    // to allow for the possibility of remote galleries
+    KOOKACORE_EXPORT QString root();
+}
 
-public:
-    explicit KookaPref(QWidget *parent = nullptr);
-
-    int createPage(KookaPrefsPage *page, const QString &name,
-                   const QString &header, const char *icon);
-
-    void showPageIndex(int page);
-    int currentPageIndex();
-
-protected slots:
-    void slotSaveSettings();
-    void slotSetDefaults();
-
-signals:
-    void dataSaved();
-
-private:
-    QVector<KPageWidgetItem *> mPages;
-};
-
-#endif							// KOOKAPREF_H
+#endif							// GALLERYROOT_H

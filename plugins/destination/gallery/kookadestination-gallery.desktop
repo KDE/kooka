@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Service
+X-KDE-ServiceTypes=Kooka/DestinationPlugin
+X-KDE-Library=kookadestinationgallery
+X-KDE-PluginInfo-Name=destinationgallery
+X-KDE-PluginInfo-License=GPL
+Icon=image-x-generic
+
+Name=Scan Gallery
+Name[x-test]=xxScan Galleryxx
+Comment=Save the scanned image to the scan gallery

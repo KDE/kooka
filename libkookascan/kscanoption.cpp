@@ -606,7 +606,11 @@ case SANE_TYPE_STRING:
 case SANE_TYPE_INT:
 case SANE_TYPE_FIXED:
         bool ok;
+        // TODO: this does not work properly for fixed values set as a string, e.g.
+        // the 'fixed-constraint-word-list' option for the SANE test device.
+        // Call set(int) or set(double) as appropriate?
         val = buf.toInt(&ok);
+
         if (ok) set(&val,1);
         else
         {

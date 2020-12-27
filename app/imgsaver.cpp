@@ -49,7 +49,7 @@
 #include "imageformat.h"
 #include "scanimage.h"
 
-#include "kookapref.h"
+#include "galleryroot.h"
 #include "kookasettings.h"
 #include "formatdialog.h"
 
@@ -113,7 +113,7 @@ ImgSaver::ImgSaver(const QUrl &dir)
         m_saveDirectory = dir;
         qDebug() << "specified directory" << m_saveDirectory;
     } else {                    // cannot, so use default
-        m_saveDirectory = QUrl::fromLocalFile(KookaPref::galleryRoot());
+        m_saveDirectory = QUrl::fromLocalFile(GalleryRoot::root());
         qDebug() << "default directory" << m_saveDirectory;
     }
 

@@ -54,6 +54,10 @@ include_directories(..)
 set(kookacore_SRCS
   pluginmanager.cpp
   abstractplugin.cpp
+  scangallery.cpp
+  imgsaver.cpp			# -> imagesaver
+  formatdialog.cpp
+  galleryroot.cpp
 )
 kconfig_add_kcfg_files(kookacore_SRCS kookasettings.kcfgc)
 add_library(kookacore SHARED ${kookacore_SRCS})
@@ -61,6 +65,8 @@ generate_export_header(kookacore BASE_NAME kookacore)
 set_target_properties(kookacore PROPERTIES SOVERSION "2.0.0")
 target_link_libraries(kookacore Qt5::Core Qt5::Gui Qt5::PrintSupport)
 target_link_libraries(kookacore KF5::I18n KF5::KIOFileWidgets KF5::KIOWidgets KF5::IconThemes KF5::ConfigGui)
+target_link_libraries(kookacore kookascan)
+target_link_libraries(kookacore libfiletree)
 
 if (INSTALL_BINARIES)
   install(TARGETS kookacore ${INSTALL_TARGETS_DEFAULT_ARGS})
@@ -77,10 +83,7 @@ set(kooka_SRCS
   kookapref.cpp			# -> kookaprefs
   prefspages.cpp
   kookascanparams.cpp
-  imgsaver.cpp			# -> imagesaver
-  formatdialog.cpp
   imagetransform.cpp
-  scangallery.cpp
   galleryhistory.cpp
   kookagallery.cpp
   thumbview.cpp
@@ -96,10 +99,9 @@ add_executable(kooka ${kooka_SRCS})
 target_link_libraries(kooka
   Qt5::PrintSupport
   dialogutil
-  kookascan
   kookacore
+  kookadestination
   kookaocr
-  libfiletree
   KF5::KIOCore KF5::KIOFileWidgets KF5::KIOWidgets
   KF5::XmlGui
   KF5::TextWidgets

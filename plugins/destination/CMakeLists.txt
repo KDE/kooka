@@ -15,11 +15,31 @@ project(kooka5)
 
 #########################################################################
 #									#
-#  Common definitions for plugins					#
+#  Additional dependencies for scan destinations			#
 #									#
 #########################################################################
 
-add_definitions("-DPLUGIN_EXPORT=__attribute__((visibility(\"default\")))")
+find_package(KF5 ${KF5_MIN_VERSION} REQUIRED COMPONENTS I18n CoreAddons WidgetsAddons)
+
+#########################################################################
+#									#
+#  Destination plugin base library					#
+#									#
+#########################################################################
+
+set(kookadestination_SRCS
+  abstractdestination.cpp
+)
+add_library(kookadestination SHARED ${kookadestination_SRCS})
+set_target_properties(kookadestination PROPERTIES SOVERSION "1.0.0")
+target_link_libraries(kookadestination Qt5::Core Qt5::Widgets)
+target_link_libraries(kookadestination KF5::I18n KF5::WidgetsAddons)
+target_link_libraries(kookadestination kookascan kookacore)
+
+if (INSTALL_BINARIES)
+  install(TARGETS kookadestination ${INSTALL_TARGETS_DEFAULT_ARGS})
+endif (INSTALL_BINARIES)
+install(FILES kookadestinationplugin.desktop DESTINATION ${SERVICETYPES_INSTALL_DIR})
 
 #########################################################################
 #									#
@@ -27,5 +47,4 @@ add_definitions("-DPLUGIN_EXPORT=__attribute__((visibility(\"default\")))")
 #									#
 #########################################################################
 
-add_subdirectory(ocr)
-add_subdirectory(destination)
+add_subdirectory(gallery)

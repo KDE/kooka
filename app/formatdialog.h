@@ -31,6 +31,8 @@
 #ifndef FORMATDIALOG_H
 #define FORMATDIALOG_H
 
+#include "kookacore_export.h"
+
 #include "dialogbase.h"
 
 #include "imgsaver.h"
@@ -50,7 +52,7 @@ class QListWidgetItem;
  *  selecting it.
  **/
 
-class FormatDialog : public DialogBase
+class KOOKACORE_EXPORT FormatDialog : public DialogBase
 {
     Q_OBJECT
 

@@ -3,7 +3,7 @@
  *  This file is part of Kooka, a scanning/OCR application using	*
  *  Qt <http://www.qt.io> and KDE Frameworks <http://www.kde.org>.	*
  *									*
- *  Copyright (C) 2000-2016 Klaas Freitag <freitag@suse.de>		*
+ *  Copyright (C) 1999-2020 Klaas Freitag <freitag@suse.de>		*
  *                          Jonathan Marten <jjm@keelhaul.me.uk>	*
  *									*
  *  Kooka is free software; you can redistribute it and/or modify it	*
@@ -29,36 +29,26 @@
  *									*
  ************************************************************************/
 
-#ifndef KOOKAPREF_H
-#define KOOKAPREF_H
+#ifndef DESTINATIONGALLERY_H
+#define DESTINATIONGALLERY_H
 
-#include <kpagedialog.h>
-
-class KookaPrefsPage;
+#include "abstractdestination.h"
 
 
-class KookaPref : public KPageDialog
+class DestinationGallery : public AbstractDestination
 {
     Q_OBJECT
 
 public:
-    explicit KookaPref(QWidget *parent = nullptr);
+    explicit DestinationGallery(QObject *pnt, const QVariantList &args);
+    ~DestinationGallery() override = default;
 
-    int createPage(KookaPrefsPage *page, const QString &name,
-                   const QString &header, const char *icon);
+    bool scanStarting(ScanImage::ImageType type) override;
+    void imageScanned(ScanImage::Ptr img) override;
 
-    void showPageIndex(int page);
-    int currentPageIndex();
-
-protected slots:
-    void slotSaveSettings();
-    void slotSetDefaults();
-
-signals:
-    void dataSaved();
+    QString scanDestinationString() override;
 
 private:
-    QVector<KPageWidgetItem *> mPages;
 };
 
-#endif							// KOOKAPREF_H
+#endif                          // DESTINATIONGALLERY_H

@@ -276,7 +276,7 @@ FormatDialog::FormatDialog(QWidget *parent, ScanImage::ImageType type,
     //qDebug();
 
     setModal(true);
-    // KDE4 buttons: Ok  Cancel  User1=Select Format
+    // KDE4 buttons: Ok  Cancel  User1=SelectFormat
     // KF5 buttons:  Ok  Cancel  Yes=SelectFormat
     setButtons(QDialogButtonBox::Ok|QDialogButtonBox::Cancel|QDialogButtonBox::Yes);
     setWindowTitle(askForFormat ? i18n("Save Assistant") : i18n("Save Scan"));

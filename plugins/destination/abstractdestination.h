@@ -3,7 +3,7 @@
  *  This file is part of Kooka, a scanning/OCR application using	*
  *  Qt <http://www.qt.io> and KDE Frameworks <http://www.kde.org>.	*
  *									*
- *  Copyright (C) 2000-2016 Klaas Freitag <freitag@suse.de>		*
+ *  Copyright (C) 2000-2018 Klaas Freitag <freitag@suse.de>		*
  *                          Jonathan Marten <jjm@keelhaul.me.uk>	*
  *									*
  *  Kooka is free software; you can redistribute it and/or modify it	*
@@ -29,36 +29,45 @@
  *									*
  ************************************************************************/
 
-#ifndef KOOKAPREF_H
-#define KOOKAPREF_H
+#ifndef ABSTRACTDESTINATION_H
+#define ABSTRACTDESTINATION_H
 
-#include <kpagedialog.h>
+#include <qobject.h>
+#include <qtextformat.h>
+#include <qprocess.h>
 
-class KookaPrefsPage;
+#include "scanimage.h"
+#include "abstractplugin.h"
 
 
-class KookaPref : public KPageDialog
+class ScanGallery;
+
+#ifndef PLUGIN_EXPORT
+#define PLUGIN_EXPORT
+#endif
+
+
+class PLUGIN_EXPORT AbstractDestination : public AbstractPlugin
 {
     Q_OBJECT
 
 public:
-    explicit KookaPref(QWidget *parent = nullptr);
+    virtual ~AbstractDestination();
 
-    int createPage(KookaPrefsPage *page, const QString &name,
-                   const QString &header, const char *icon);
+    virtual bool scanStarting(ScanImage::ImageType type) = 0;
+    virtual void imageScanned(ScanImage::Ptr img) = 0;
 
-    void showPageIndex(int page);
-    int currentPageIndex();
+    virtual QString scanDestinationString()		{ return (QString()); }
 
-protected slots:
-    void slotSaveSettings();
-    void slotSetDefaults();
+    void setScanGallery(ScanGallery *gallery)		{ mGallery = gallery; }
 
-signals:
-    void dataSaved();
+protected:
+    explicit AbstractDestination(QObject *pnt, const char *name);
+
+    ScanGallery *gallery() const			{ return (mGallery); }
 
 private:
-    QVector<KPageWidgetItem *> mPages;
+    ScanGallery *mGallery;
 };
 
-#endif							// KOOKAPREF_H
+#endif							// ABSTRACTDESTINATION_H

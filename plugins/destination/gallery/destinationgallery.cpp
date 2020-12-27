@@ -29,36 +29,41 @@
  *									*
  ************************************************************************/
 
-#ifndef KOOKAPREF_H
-#define KOOKAPREF_H
+#include "destinationgallery.h"
 
-#include <kpagedialog.h>
+#include <qdebug.h>
 
-class KookaPrefsPage;
+#include <kpluginfactory.h>
+
+#include "scangallery.h"
 
 
-class KookaPref : public KPageDialog
+K_PLUGIN_FACTORY_WITH_JSON(DestinationGalleryFactory, "kookadestination-gallery.json", registerPlugin<DestinationGallery>();)
+#include "destinationgallery.moc"
+
+
+DestinationGallery::DestinationGallery(QObject *pnt, const QVariantList &args)
+    : AbstractDestination(pnt, "DestinationGallery")
 {
-    Q_OBJECT
+    qDebug();
+}
 
-public:
-    explicit KookaPref(QWidget *parent = nullptr);
 
-    int createPage(KookaPrefsPage *page, const QString &name,
-                   const QString &header, const char *icon);
+bool DestinationGallery::scanStarting(ScanImage::ImageType type)
+{
+    qDebug() << "type" << type;
+    return (gallery()->prepareToSave(type));
+}
 
-    void showPageIndex(int page);
-    int currentPageIndex();
 
-protected slots:
-    void slotSaveSettings();
-    void slotSetDefaults();
+void DestinationGallery::imageScanned(ScanImage::Ptr img)
+{
+    qDebug() << "image size" << img->size();
+    gallery()->addImage(img);
+}
 
-signals:
-    void dataSaved();
 
-private:
-    QVector<KPageWidgetItem *> mPages;
-};
-
-#endif							// KOOKAPREF_H
+QString DestinationGallery::scanDestinationString()
+{
+    return (gallery()->saveURL().url(QUrl::PreferLocalFile));
+}

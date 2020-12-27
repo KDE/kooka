@@ -29,36 +29,25 @@
  *									*
  ************************************************************************/
 
-#ifndef KOOKAPREF_H
-#define KOOKAPREF_H
+#include "abstractdestination.h"
 
-#include <kpagedialog.h>
-
-class KookaPrefsPage;
+#include <qdebug.h>
 
 
-class KookaPref : public KPageDialog
+//  Constructor/destructor and external engine creation
+//  ---------------------------------------------------
+
+AbstractDestination::AbstractDestination(QObject *pnt, const char *name)
+    : AbstractPlugin(pnt)
 {
-    Q_OBJECT
+    setObjectName(name);
+    qDebug() << objectName();
 
-public:
-    explicit KookaPref(QWidget *parent = nullptr);
+    mGallery = nullptr;
+}
 
-    int createPage(KookaPrefsPage *page, const QString &name,
-                   const QString &header, const char *icon);
 
-    void showPageIndex(int page);
-    int currentPageIndex();
-
-protected slots:
-    void slotSaveSettings();
-    void slotSetDefaults();
-
-signals:
-    void dataSaved();
-
-private:
-    QVector<KPageWidgetItem *> mPages;
-};
-
-#endif							// KOOKAPREF_H
+AbstractDestination::~AbstractDestination()
+{
+    qDebug() << objectName();
+}

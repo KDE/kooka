@@ -52,7 +52,8 @@ class KOOKACORE_EXPORT PluginManager
 public:
     enum PluginType
     {
-        OcrPlugin
+        OcrPlugin,
+        DestinationPlugin
     };
 
     /**

@@ -45,7 +45,7 @@
 #include <klocalizedstring.h>
 #include <kcolorscheme.h>
 
-#include "kookapref.h"
+#include "galleryroot.h"
 #include "kookasettings.h"
 
 
@@ -74,7 +74,7 @@ ThumbView::ThumbView(QWidget *parent)
     // See PreviewJob::startPreview() in kio/src/widgets/previewjob.cpp
     qDebug() << "Maximum preview file size is" << KookaSettings::previewMaximumSize();
 
-    setUrl(QUrl::fromUserInput(KookaPref::galleryRoot()), true);
+    setUrl(QUrl::fromUserInput(GalleryRoot::root()), true);
 							// initial location
     setPreviewWidget(nullptr);				// no preview at side
     setMode(KFile::File);				// implies single selection mode

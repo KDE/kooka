@@ -76,6 +76,7 @@
 #include "galleryhistory.h"
 #include "thumbview.h"
 #include "abstractocrengine.h"
+#include "abstractdestination.h"
 #include "pluginmanager.h"
 #include "ocrresedit.h"
 #include "scanparamsdialog.h"
@@ -195,6 +196,7 @@ KookaView::KookaView(KMainWindow *parent, const QByteArray &deviceToUse)
 
     mMainWindow = parent;
     mScanParams = nullptr;
+    mDestinationPlugin = nullptr;
     mCurrentTab = KookaView::TabNone;
 
     mIsPhotoCopyMode = false;
@@ -836,33 +838,67 @@ void KookaView::slotOcrResultAvailable()
 
 void KookaView::slotScanStart(ScanImage::ImageType type)
 {
-    //qDebug() << "Scan starts...";
+    if (mDestinationPlugin==nullptr)			// plugin not created yet
+    {
+        // TODO: plugin selection
+        const QString destName = "kookadestination-gallery";
+        if (destName.isEmpty())
+        {
+            KMessageBox::sorry(mMainWindow,
+                               i18n("No scan destination is configured."),
+                               i18n("Destination Not Configured"));
+            goto abort;					// abort the scan now
+        }
+
+        AbstractDestination *dest = qobject_cast<AbstractDestination *>(PluginManager::self()->loadPlugin(PluginManager::DestinationPlugin, destName));
+        if (dest==nullptr)
+        {
+            KMessageBox::error(mMainWindow, i18n("Cannot load scan destination plugin '%1'", destName));
+            goto abort;
+        }
+
+        // We don't know whether the plugin object has been used before.
+        // So disconnect all of its existing signals so that they do not
+        // get double connected.
+        dest->disconnect();
+
+        // Allow the plugin to find the scan gallery, if it needs to send
+        // the scan output to there.
+        dest->setScanGallery(gallery());
+
+        mDestinationPlugin = dest;
+    }
+
+    Q_ASSERT(mDestinationPlugin!=nullptr);
     if (KookaSettings::saverAskBeforeScan())		// ask for filename first?
     {
-        if (type!=ScanImage::None)			// if we have initial image info
-        {
-            //qDebug() << "imgtype" << info->getImageType();
-            if (!gallery()->prepareToSave(type))	// get ready to save
+        if (type!=ScanImage::None)			// if we have initial image info,
+        {						// get ready to save
+            if (!mDestinationPlugin->scanStarting(type))
             {						// user cancelled file prompt
-                mScanDevice->slotStopScanning();	// abort the scan now
+abort:          mScanDevice->slotStopScanning();	// abort the scan now
                 return;
             }
         }
     }
 
-    if (mScanParams != nullptr) {
+    if (mScanParams!=nullptr)
+    {
         mScanParams->setEnabled(false);
 
         KLed *led = mScanParams->operationLED();
-        if (led != nullptr) {
+        if (led!=nullptr)
+        {
             led->setColor(Qt::red);         // scanner warming up
             led->setState(KLed::On);
             qApp->processEvents();          // let the change show
         }
 
-        mScanParams->setScanDestination(gallery()->saveURL().url(QUrl::PreferLocalFile));
+        // Sets the destination string displayed in the "Scan in Progress" dialogue
+        mScanParams->setScanDestination(mDestinationPlugin->scanDestinationString());
     }
 }
+
 
 void KookaView::slotAcquireStart()
 {
@@ -883,7 +919,8 @@ void KookaView::slotNewImageScanned(ScanImage::Ptr img)
         return;
     }
 
-    gallery()->addImage(img);
+    if (mDestinationPlugin!=nullptr) mDestinationPlugin->imageScanned(img);
+    else qWarning() << "Destination plugin not available";
 }
 
 
