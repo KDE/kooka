@@ -34,14 +34,12 @@
 
 #include "kookacore_export.h"
 
-#include <qstring.h>
+#include <qurl.h>
 
 
 namespace GalleryRoot
 {
-    // TODO: this should return a QUrl
-    // to allow for the possibility of remote galleries
-    KOOKACORE_EXPORT QString root();
+    KOOKACORE_EXPORT QUrl root();
 }
 
 #endif							// GALLERYROOT_H

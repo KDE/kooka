@@ -113,7 +113,7 @@ ImgSaver::ImgSaver(const QUrl &dir)
         m_saveDirectory = dir;
         qDebug() << "specified directory" << m_saveDirectory;
     } else {                    // cannot, so use default
-        m_saveDirectory = QUrl::fromLocalFile(GalleryRoot::root());
+        m_saveDirectory = GalleryRoot::root();
         qDebug() << "default directory" << m_saveDirectory;
     }
 

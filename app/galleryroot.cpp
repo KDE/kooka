@@ -59,9 +59,11 @@
 // class in libkscan.
 
 
-// The global resolved gallery location.  Static so that the user is only asked
-// at most once in an application run.
-static QString sGalleryRoot;
+// The global resolved gallery location, static so that the user is only asked
+// at most once in an application run.  No need to use Q_GLOBAL_STATIC, because
+// its initialisation is guarded with the flag.
+static QUrl sGalleryRoot;
+static bool sGalleryLocated = false;
 
 
 // Get the user's configured KDE documents path.  It may not exist yet, in
@@ -197,8 +199,14 @@ static QString findGalleryRoot()
 }
 
 
-QString GalleryRoot::root()
+QUrl GalleryRoot::root()
 {
-    if (sGalleryRoot.isNull()) sGalleryRoot = findGalleryRoot();
+    if (!sGalleryLocated)
+    {
+        sGalleryRoot = QUrl::fromLocalFile(findGalleryRoot());
+        if (!sGalleryRoot.isValid()) qWarning() << "root not valid!";
+        sGalleryLocated = true;
+    }
+
     return (sGalleryRoot);
 }

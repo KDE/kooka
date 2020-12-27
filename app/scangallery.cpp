@@ -172,7 +172,7 @@ void ScanGallery::restoreHeaderState(int forIndex)
 void ScanGallery::openRoots()
 {
     /* standard root always exists, ImgRoot creates it */
-    QUrl rootUrl = QUrl::fromLocalFile(GalleryRoot::root());
+    const QUrl rootUrl = GalleryRoot::root();
     //qDebug() << "Standard root" << rootUrl.url();
 
     m_defaultBranch = openRoot(rootUrl, i18n("Kooka Gallery"));

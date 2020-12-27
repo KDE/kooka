@@ -74,15 +74,13 @@ ThumbView::ThumbView(QWidget *parent)
     // See PreviewJob::startPreview() in kio/src/widgets/previewjob.cpp
     qDebug() << "Maximum preview file size is" << KookaSettings::previewMaximumSize();
 
-    setUrl(QUrl::fromUserInput(GalleryRoot::root()), true);
-							// initial location
+    setUrl(GalleryRoot::root(), true);			// initial location
     setPreviewWidget(nullptr);				// no preview at side
     setMode(KFile::File);				// implies single selection mode
     setInlinePreviewShown(true);			// show file previews
     setView(KFile::Simple);				// simple icon view
     dirLister()->setMimeExcludeFilter(QStringList("inode/directory"));
 							// only files, not directories
-
     connect(this, SIGNAL(fileSelected(KFileItem)),
             SLOT(slotFileSelected(KFileItem)));
     connect(this, SIGNAL(fileHighlighted(KFileItem)),
