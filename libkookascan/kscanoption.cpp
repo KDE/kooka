@@ -711,6 +711,11 @@ case SANE_TYPE_INT:
 
 case SANE_TYPE_FIXED:
             retstr.setNum(SANE_UNFIX(sane_word), 'f');
+            // Using 'f' format always has the specified number of digits (default 6)
+            // after the decimal point.  We never want exponential format here so must
+            // use 'f', but do not want trailing zeros or a decimal point.
+            while (retstr.endsWith('0')) retstr.chop(1);
+            if (retstr.endsWith('.')) retstr.chop(1);
             break;
 
 default:    //qDebug() << "Can't get" << mName << "as this type";
