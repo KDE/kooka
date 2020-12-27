@@ -163,7 +163,7 @@ void ScanDevices::addUserSpecifiedDevice(const QByteArray &backend,
     userdev->name = (new QByteArray(backend))->constData();
     userdev->model = (new QByteArray(description.toLocal8Bit()))->constData();
     userdev->type = (new QByteArray(devtype))->constData();
-    userdev->vendor = "User specified";
+    userdev->vendor = "";
 
     mScannerNames.append(backend);
     mScannerDevices.insert(backend, userdev);
@@ -179,10 +179,11 @@ const SANE_Device *ScanDevices::deviceInfo(const QByteArray &backend) const
 
 QString ScanDevices::deviceDescription(const QByteArray &backend) const
 {
-    if (!mScannerNames.contains(backend)) {
-        return (i18n("Unknown device '%1'", backend.constData()));
-    }
+    if (!mScannerNames.contains(backend)) return (i18n("Unknown device '%1'", backend.constData()));
 
     const SANE_Device *scanner = mScannerDevices[backend];
-    return (QString("%1 %2").arg(scanner->vendor, scanner->model));
+    QString result = QString::fromLocal8Bit(scanner->vendor);
+    if (!result.isEmpty()) result += ' ';
+    result += QString::fromLocal8Bit(scanner->model);
+    return (result);
 }

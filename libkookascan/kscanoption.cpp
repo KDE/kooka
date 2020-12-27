@@ -871,6 +871,11 @@ case KScanOption::Bool:					// toggle button
 	break;
 
 case KScanOption::SingleValue:				// numeric entry
+        // This will have been deduced by the SANE parameter having a type
+        // of SANE_TYPE_INT or SANE_TYPE_FIXED and a constraint of SANE_CONSTRAINT_NONE.
+        // In theory a SANE_TYPE_FIXED value should allow floating point user input
+        // and values, as noted for KScanOption::Range below.  No problem caused by
+        // only allowing integer values has been reported with any existing scanner.
 	w = new KScanNumberEntry(parent, mText);
 	break;
 
