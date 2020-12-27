@@ -564,16 +564,18 @@ void KScanDevice::showOptions()
     std::cerr << " Option                           |SSL|HSL|SDT|EMU|AUT|INA|ADV|PRI| Value" << std::endl;
     std::cerr << "----------------------------------+---+---+---+---+---+---+---+---+-------" << std::endl;
 
-    for (OptionHash::const_iterator it = mCreatedOptions.constBegin();
-         it!=mCreatedOptions.constEnd(); ++it)
+    QList<QByteArray> optionNames = mCreatedOptions.keys();
+    std::sort(optionNames.begin(), optionNames.end());
+    for (QList<QByteArray>::const_iterator it = optionNames.constBegin();
+         it!=optionNames.constEnd(); ++it)
     {
-        const KScanOption *so = it.value();
+        QByteArray optionName = (*it);
+        const KScanOption *so = mCreatedOptions.value(optionName);
         if (so->isGroup()) continue;
 
         int cap = so->getCapabilities();
-        QString s = QString(it.key()).left(31).leftJustified(32);
         std::cerr <<
-            " " << qPrintable(s) << " |" <<
+            " " << qPrintable(optionName.left(31).leftJustified(32)) << " |" <<
             optionNotifyString((cap & SANE_CAP_SOFT_SELECT)) << 
             optionNotifyString((cap & SANE_CAP_HARD_SELECT)) << 
             optionNotifyString((cap & SANE_CAP_SOFT_DETECT)) << 
