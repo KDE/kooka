@@ -860,7 +860,7 @@ KScanControl *KScanOption::createWidget(QWidget *parent)
  	
     if (mDesc!=nullptr) mText = i18n(mDesc->title);
 
-    //qDebug() << "type" << mWidgetType << "text" << mText;
+    //qDebug() << "type" << mWidgetType << "name" << mName;
 
     KScanControl *w = nullptr;
 
