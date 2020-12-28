@@ -248,6 +248,7 @@ KScanNumberEntry::KScanNumberEntry(QWidget *parent, const QString &text)
     mLayout->addWidget(mEntry);
 
     connect(mEntry, &QLineEdit::textChanged, this, QOverload<const QString &>::of(&KScanNumberEntry::settingChanged));
+    connect(mEntry, &QLineEdit::textChanged, this, &KScanNumberEntry::slotTextChanged);
     connect(mEntry, &QLineEdit::returnPressed, this, &KScanNumberEntry::returnPressed);
 
     setFocusProxy(mEntry);

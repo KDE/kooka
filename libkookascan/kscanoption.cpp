@@ -529,32 +529,14 @@ bool KScanOption::set(const int *val, int size)
     int word_size = mDesc->size/sizeof(SANE_Word);
     QVector<SANE_Word> qa(1+word_size);		/* add 1 in case offset is needed */
 
-#if 0
-    if( mDesc->constraint_type == SANE_CONSTRAINT_WORD_LIST )
-    {
-	/* That means that the first entry must contain the size */
-	//qDebug() << "Size" << size << "word_size" << word_size << "mDescr-size"<< mDesc->size;
-	qa[0] = (SANE_Word) 1+size;
-	//qDebug() << "set length field to" << qa[0];
-	offset = 1;
-    }
-#endif
-
     switch (mDesc->type)
     {
+case SANE_TYPE_FIXED:					// must have already used SANE_FIX()
 case SANE_TYPE_INT:
         for (int i = 0; i<word_size; i++)
         {
             if (i<size) qa[offset+i] = (SANE_Word) *(val++);
             else qa[offset+i] = (SANE_Word) *val;
-        }
-        break;
-
-case SANE_TYPE_FIXED:
-        for (int i = 0; i<word_size; i++)
-        {
-            if (i<size) qa[offset+i] = SANE_FIX((double) *(val++));
-            else qa[offset+i] = SANE_FIX((double) *val);
         }
         break;
 
@@ -582,6 +564,7 @@ bool KScanOption::set(const QByteArray &buf)
 
     int val;
     int origSize;
+    bool ok;
 
     // Check whether the string value looks like a gamma table specification.
     // If it is, then convert it to a gamma table and set that.
@@ -604,24 +587,19 @@ case SANE_TYPE_STRING:
         break;
 
 case SANE_TYPE_INT:
-case SANE_TYPE_FIXED:
-        bool ok;
-        // TODO: this does not work properly for fixed values set as a string, e.g.
-        // the 'fixed-constraint-word-list' option for the SANE test device.
-        // Call set(int) or set(double) as appropriate?
         val = buf.toInt(&ok);
+        if (ok) set(&val, 1);
+        else return (false);
+        break;
 
-        if (ok) set(&val,1);
-        else
-        {
-            //qDebug() << "Conversion of string value" << buf << "failed!";
-            return (false);
-        }
+case SANE_TYPE_FIXED:
+        val = SANE_FIX(buf.toDouble(&ok));
+        if (ok) set(&val, 1);
+        else return (false);
         break;
 
 case SANE_TYPE_BOOL:
-        val = (buf=="true") ? 1 : 0;
-        set(val);
+        set(buf=="true");
         break;
 
 default:
@@ -677,24 +655,18 @@ bool KScanOption::get(int *val) const
 {
     if (!isValid() || mBuffer.isNull()) return (false);
 
-    SANE_Word sane_word;
-    double d;
-			
     switch (mDesc->type)
     {
 case SANE_TYPE_BOOL:					/* Buffer has a SANE_Word */
-        sane_word = *((SANE_Word *) mBuffer.data());
-        *val = (sane_word==SANE_TRUE ? 1 : 0);
+        *val = (*((SANE_Word *) mBuffer.constData()))==SANE_TRUE ? 1 : 0;
         break;
 
 case SANE_TYPE_INT:					/* reading just the first is OK */
-        sane_word = *((SANE_Word *) mBuffer.data());
-        *val = sane_word;
+        *val = *((SANE_Word *) mBuffer.constData());
         break;
 
 case SANE_TYPE_FIXED:					/* reading just the first is OK */
-        d = SANE_UNFIX(*((SANE_Word *) mBuffer.data()));
-        *val = static_cast<int>(d);
+        *val = static_cast<int>(SANE_UNFIX(*((SANE_Word *) mBuffer.constData())));
         break;
 
 default:
@@ -714,7 +686,6 @@ QByteArray KScanOption::get() const
     if (!isValid() || mBuffer.isNull()) return ("");
 
     QByteArray retstr;
-    SANE_Word sane_word;
 
     /* Handle gamma-table correctly */
     if (mWidgetType==KScanOption::GammaTable)
@@ -722,28 +693,31 @@ QByteArray KScanOption::get() const
         if (mGammaTable!=nullptr) retstr = mGammaTable->toString().toLocal8Bit();
     }
     else
-    {
+    {							// first SANE_Word of buffer
+        SANE_Word sane_word = *((SANE_Word *) mBuffer.constData());
         switch (mDesc->type)
         {
 case SANE_TYPE_BOOL:
-            sane_word = *((SANE_Word *) mBuffer.data());
             retstr = (sane_word==SANE_TRUE ? "true" : "false");
             break;
 
 case SANE_TYPE_STRING:
-            retstr = (const char *) mBuffer.data();
+            retstr = mBuffer;
             break;
 
 case SANE_TYPE_INT:
-            sane_word = *((SANE_Word *) mBuffer.data());
             retstr.setNum(sane_word);
             break;
 
 case SANE_TYPE_FIXED:
-            sane_word = (SANE_Word) SANE_UNFIX(*((SANE_Word *) mBuffer.data()));
-            retstr.setNum(sane_word);
+            retstr.setNum(SANE_UNFIX(sane_word), 'f');
+            // Using 'f' format always has the specified number of digits (default 6)
+            // after the decimal point.  We never want exponential format here so must
+            // use 'f', but do not want trailing zeros or a decimal point.
+            while (retstr.endsWith('0')) retstr.chop(1);
+            if (retstr.endsWith('.')) retstr.chop(1);
             break;
-	
+
 default:    //qDebug() << "Can't get" << mName << "as this type";
             retstr = "?";
             break;
@@ -886,7 +860,7 @@ KScanControl *KScanOption::createWidget(QWidget *parent)
  	
     if (mDesc!=nullptr) mText = i18n(mDesc->title);
 
-    //qDebug() << "type" << mWidgetType << "text" << mText;
+    //qDebug() << "type" << mWidgetType << "name" << mName;
 
     KScanControl *w = nullptr;
 
@@ -897,6 +871,11 @@ case KScanOption::Bool:					// toggle button
 	break;
 
 case KScanOption::SingleValue:				// numeric entry
+        // This will have been deduced by the SANE parameter having a type
+        // of SANE_TYPE_INT or SANE_TYPE_FIXED and a constraint of SANE_CONSTRAINT_NONE.
+        // In theory a SANE_TYPE_FIXED value should allow floating point user input
+        // and values, as noted for KScanOption::Range below.  No problem caused by
+        // only allowing integer values has been reported with any existing scanner.
 	w = new KScanNumberEntry(parent, mText);
 	break;
 

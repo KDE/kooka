@@ -221,15 +221,6 @@ public:
     /**
      * Set the option value.
      *
-     * @param val A new array of integer values
-     * @param size The length of the array
-     * @return @c true if the value was set successfully
-     **/
-    bool set(const int *val, int size);
-
-    /**
-     * Set the option value.
-     *
      * @param val A new formatted string value
      * @return @c true if the value was set successfully
      **/
@@ -243,7 +234,7 @@ public:
      **/
     bool set(bool val)
     {
-        return (set(val ? 1 : 0));
+        return (set(val ? SANE_TRUE : SANE_FALSE));
     }
 
     /**
@@ -261,7 +252,8 @@ public:
      * @return @c true if the value was read successfully
      *
      * @note If the scanner parameter is an array, only the first value
-     * is retrieved from it.
+     * is retrieved from it.  If the scanner parameter is of SANE_TYPE_FIXED,
+     * the floating point value is cast to an integer.
      **/
     bool get(int *val) const;
 
@@ -280,19 +272,6 @@ public:
      * not be read.
      **/
     QByteArray get() const;
-
-    /**
-     * Retrieve a list of all possible option values.
-     *
-     * @return A list of formatted string values (as would be returned
-     * by @c get())
-     *
-     * @note This works for options with SANE_CONSTRAINT_STRING_LIST,
-     * SANE_CONSTRAINT_WORD_LIST and for a SANE_CONSTRAINT_RANGE which is a
-     * resolution setting.  To retrieve the range for other constraint
-     * types, use @c getRange().
-     **/
-    QList<QByteArray> getList() const;
 
     /**
      * Retrieve the range of possible numeric values.
@@ -379,10 +358,7 @@ public:
      *
      * @return The name of the option
      **/
-    QByteArray getName() const
-    {
-        return (mName);
-    }
+    QByteArray getName() const		{ return (mName); }
 
     /**
      * Get the SANE capabilities for the option.
@@ -397,10 +373,7 @@ public:
      *
      * @return The widget, or @c nullptr if there is none.
      **/
-    KScanControl *widget() const
-    {
-        return (mControl);
-    }
+    KScanControl *widget() const	{ return (mControl); }
 
     /**
      * Update the GUI widget to reflect the current value of the option.
@@ -468,6 +441,28 @@ private:
      **/
     ~KScanOption();
     friend void KScanDevice::closeDevice();
+
+    /**
+     * Set the option value.
+     *
+     * @param val A new array of integer or SANE_FIX()'ed values
+     * @param size The length of the array
+     * @return @c true if the value was set successfully
+     **/
+    bool set(const int *val, int size);
+
+    /**
+     * Retrieve a list of all possible option values.
+     *
+     * @return A list of formatted string values (as would be returned
+     * by @c get())
+     *
+     * @note This works for options with SANE_CONSTRAINT_STRING_LIST,
+     * SANE_CONSTRAINT_WORD_LIST and for a SANE_CONSTRAINT_RANGE which is a
+     * resolution setting.  To retrieve the range for other constraint
+     * types, use @c getRange().
+     **/
+    QList<QByteArray> getList() const;
 
     /**
      * The type of an associated GUI widget (if there is one).
