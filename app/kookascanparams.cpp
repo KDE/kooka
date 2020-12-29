@@ -23,23 +23,47 @@
 #include "kookascanparams.h"
 
 #include <qicon.h>
+#include <qdebug.h>
+#include <qcombobox.h>
+#include <qlabel.h>
 
 #include <kmessagewidget.h>
 #include <klocalizedstring.h>
 
+#include "abstractplugin.h"
+#include "abstractdestination.h"
+#include "pluginmanager.h"
+#include "scanparamspage.h"
+
+
+#define ROWS_TO_RESERVE		5			// rows to reserve for plugin GUI
+
 
 KookaScanParams::KookaScanParams(QWidget *parent)
-    : ScanParams(parent),
-      mNoScannerMessage(nullptr)
+    : ScanParams(parent)
 {
+    mNoScannerMessage = nullptr;
+    mDestinationPlugin = nullptr;
 }
+
+
+static KMessageWidget *createErrorWidget(const QString &text)
+{
+    KMessageWidget *msg = new KMessageWidget(text);
+    msg->setMessageType(KMessageWidget::Error);
+    msg->setIcon(QIcon::fromTheme("dialog-error"));
+    msg->setWordWrap(true);
+    msg->setCloseButtonVisible(false);
+    return (msg);
+}
+
 
 QWidget *KookaScanParams::messageScannerNotSelected()
 {
     if (mNoScannerMessage==nullptr)
     {
-        mNoScannerMessage = new KMessageWidget(
-            xi18nc("@info",
+        mNoScannerMessage = createErrorWidget(
+            xi18nc("@info:status",
                    "<emphasis strong=\"1\">Gallery Mode - No scanner selected</emphasis>"
                    "<nl/><nl/>"
                    "In this mode you can browse, manipulate and OCR images already in the gallery."
@@ -51,13 +75,12 @@ QWidget *KookaScanParams::messageScannerNotSelected()
 
         mNoScannerMessage->setMessageType(KMessageWidget::Information);
         mNoScannerMessage->setIcon(QIcon::fromTheme("dialog-information"));
-        mNoScannerMessage->setWordWrap(true);
-        mNoScannerMessage->setCloseButtonVisible(false);
         connect(mNoScannerMessage, &KMessageWidget::linkActivated, this, &KookaScanParams::slotLinkActivated);
     }
 
     return (mNoScannerMessage);
 }
+
 
 void KookaScanParams::slotLinkActivated(const QString &link)
 {
@@ -66,4 +89,70 @@ void KookaScanParams::slotLinkActivated(const QString &link)
     } else if (link == QLatin1String("a:2")) {
         emit actionAddScanner();
     }
+}
+
+
+void KookaScanParams::createScanDestinationGUI(ScanParamsPage *frame)
+{
+    const QMap<QString,AbstractPluginInfo> plugins = PluginManager::self()->allPlugins(PluginManager::DestinationPlugin);
+    qDebug() << "have" << plugins.count() << "destination plugins";
+
+    mDestinationCombo = new QComboBox(frame);
+    for (QMap<QString,AbstractPluginInfo>::const_iterator it = plugins.constBegin(); it!=plugins.constEnd(); ++it)
+    {
+        const AbstractPluginInfo &info = it.value();
+        //if (info.key==configuredEngine) engineIndex = mEngineCombo->count();
+        mDestinationCombo->addItem(QIcon::fromTheme(info.icon), info.name, info.key);
+    }
+
+    connect(mDestinationCombo, QOverload<int>::of(&QComboBox::activated), this, &KookaScanParams::slotDestinationSelected);
+    frame->addRow(new QLabel(i18n("Scan destination:"), frame), mDestinationCombo);
+
+    mParamsPage = frame;
+    mParamsRow = frame->currentRow();
+
+    slotDestinationSelected(mDestinationCombo->currentIndex());
+    frame->setCurrentRow(mParamsRow+ROWS_TO_RESERVE);
+}
+
+
+void KookaScanParams::slotDestinationSelected(int idx)
+{
+    const QString destName = mDestinationCombo->itemData(idx).toString();
+    qDebug() << idx << destName;
+
+    // Check the plugin that is currently loaded.  If it is the same as is
+    // required then nothing needs to be done.
+    AbstractDestination *currentPlugin = qobject_cast<AbstractDestination *>(PluginManager::self()->currentPlugin(PluginManager::DestinationPlugin));
+    if (currentPlugin!=nullptr && currentPlugin->pluginInfo()->key==destName)
+    {
+        // But ensure that this is not the initialisation of scan parameters
+        // for a new scanner, after the same plugin has previously been
+        // loaded for the previous scanner.  In this case, the GUI setup
+        // still needs to be done.
+        if (mDestinationPlugin!=nullptr) return;
+    }
+
+    qDebug() << "params at row" << mParamsRow;
+    for (int i = ROWS_TO_RESERVE-1; i>=0; --i)		// clear any existing GUI rows,
+    {							// backwards to leave first row as current
+        mParamsPage->setCurrentRow(mParamsRow+i);
+        mParamsPage->clearRow();
+    }
+
+    if (destName.isEmpty())
+    {
+        mParamsPage->addRow(createErrorWidget(xi18nc("@info:status", "No destination selected")));
+        return;
+    }
+
+    mDestinationPlugin = qobject_cast<AbstractDestination *>(PluginManager::self()->loadPlugin(PluginManager::DestinationPlugin, destName));
+    //mDestinationPlugin=nullptr;
+    if (mDestinationPlugin==nullptr)
+    {
+        mParamsPage->addRow(createErrorWidget(xi18nc("@info:status", "Unable to load plugin '%1'", destName)));
+        return;
+    }
+
+    mDestinationPlugin->createGUI(mParamsPage);		// add plugin's GUI widgets
 }

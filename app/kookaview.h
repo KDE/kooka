@@ -58,7 +58,6 @@ class KookaScanParams;
 class Previewer;
 class KScanDevice;
 class ImageCanvas;
-class AbstractDestination;
 
 class WidgetSite;
 
@@ -226,7 +225,6 @@ private:
     KookaScanParams *mScanParams;
 
     KScanDevice *mScanDevice;
-    AbstractDestination *mDestinationPlugin;
 
     OcrResEdit *mOcrResEdit;
 

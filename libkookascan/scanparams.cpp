@@ -30,7 +30,6 @@
  ************************************************************************/
 
 #include "scanparams.h"
-#include "scanparams_p.h"
 
 #include <qpushbutton.h>
 #include <qimage.h>
@@ -63,6 +62,7 @@ extern "C"
 }
 
 #include "scanglobal.h"
+#include "scanparamspage.h"
 //#include "scansourcedialog.h"
 //#include "massscandialog.h"
 #include "gammadialog.h"
@@ -91,87 +91,6 @@ extern "C"
 #define SANE_NAME_GRAYIFY		"grayify"
 #endif
 
-ScanParamsPage::ScanParamsPage(QWidget *parent, const char *name)
-    : QWidget(parent)
-{
-    setObjectName(name);
-
-    mLayout = new QGridLayout(this);
-    mLayout->setSpacing(2*DialogBase::verticalSpacing());
-    mLayout->setColumnStretch(2, 1);
-    mLayout->setColumnMinimumWidth(1, 2*DialogBase::horizontalSpacing());
-
-    mNextRow = 0;
-    mPendingGroup = nullptr;
-}
-
-ScanParamsPage::~ScanParamsPage()
-{
-}
-
-void ScanParamsPage::checkPendingGroup()
-{
-    if (mPendingGroup != nullptr) {            // separator to add first?
-        QWidget *w = mPendingGroup;
-        mPendingGroup = nullptr;               // avoid recursion!
-        addRow(w);
-    }
-}
-
-void ScanParamsPage::addRow(QWidget *wid)
-{
-    if (wid == nullptr) {
-        return;    // must have one
-    }
-
-    checkPendingGroup();                // add separator if needed
-    mLayout->addWidget(wid, mNextRow, 0, 1, -1);
-    ++mNextRow;
-}
-
-void ScanParamsPage::addRow(QLabel *lab, QWidget *wid, QLabel *unit, Qt::Alignment align)
-{
-    if (wid == nullptr) {
-        return;    // must have one
-    }
-    wid->setMaximumWidth(MAX_CONTROL_WIDTH);
-
-    checkPendingGroup();                // add separator if needed
-
-    if (lab != nullptr) {
-        lab->setMaximumWidth(MAX_LABEL_WIDTH);
-        lab->setMinimumWidth(MIN_LABEL_WIDTH);
-        mLayout->addWidget(lab, mNextRow, 0, Qt::AlignLeft | align);
-    }
-
-    if (unit != nullptr) {
-        mLayout->addWidget(wid, mNextRow, 2, align);
-        mLayout->addWidget(unit, mNextRow, 3, Qt::AlignLeft | align);
-    } else {
-        mLayout->addWidget(wid, mNextRow, 2, 1, 2, align);
-    }
-
-    ++mNextRow;
-}
-
-bool ScanParamsPage::lastRow()
-{
-    addGroup(nullptr);                 // hide last if present
-
-    mLayout->addWidget(new QLabel(QString(), this), mNextRow, 0, 1, -1, Qt::AlignTop);
-    mLayout->setRowStretch(mNextRow, 9);
-
-    return (mNextRow > 0);
-}
-
-void ScanParamsPage::addGroup(QWidget *wid)
-{
-    if (mPendingGroup != nullptr) {
-        mPendingGroup->hide();    // don't need this after all
-    }
-
-    mPendingGroup = wid;
-}
 
 ScanParams::ScanParams(QWidget *parent)
     : QWidget(parent)
@@ -449,12 +368,20 @@ QWidget *ScanParams::createScannerParams()
     // Scan size setting
     mAreaSelect = new ScanSizeSelector(frame, mSaneDevice->getMaxScanSize());
     connect(mAreaSelect, &ScanSizeSelector::sizeSelected, this, &ScanParams::slotScanSizeSelected);
-    l = new QLabel("Scan &area:", frame);       // make sure it gets an accel
+    l = new QLabel("Scan &area:", frame);		// make sure it gets an accel
     l->setBuddy(mAreaSelect->focusProxy());
     frame->addRow(l, mAreaSelect, nullptr, Qt::AlignTop);
 
     // Insert another beautification line
     frame->addGroup(new KScanGroup(frame, QString()));
+
+    // Scan destination
+    const int originalRow = frame->currentRow();	// note what has been built so far
+    createScanDestinationGUI(frame);			// call out to the application
+    if (frame->currentRow()>originalRow)		// did that create anything?
+    {							// if so then add a separator
+        frame->addGroup(new KScanGroup(frame, QString()));
+    }
 
     // Source selection
     mSourceSelect = mSaneDevice->getGuiElement(SANE_NAME_SCAN_SOURCE, frame);
@@ -1148,7 +1075,7 @@ void ScanParams::slotNewScanMode()
 
     int strips = (format == SANE_FRAME_GRAY ? 1 : 3);
 
-    qDebug() << "format" << format << "depth" << depth << "-> strips " << strips;
+    qDebug() << "format" << format << "depth" << depth << "-> strips" << strips;
 
     if (strips == 1 && depth == 1) {			// bitmap scan
         emit scanModeChanged(0);			// 8 pixels per byte

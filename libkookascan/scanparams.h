@@ -171,6 +171,18 @@ protected:
      **/
     virtual QWidget *messageScannerProblem();
 
+    /**
+     * Create a GUI to display the application's "Scan Destination"
+     * selector and further controls as appropriate.
+     *
+     * @param frame the page to add the widgets to
+     *
+     * @note Any widgets created should be children of the @p frame page,
+     * so they will be deleted along with the @c ScanParams object.
+     * @see @c ScanParamsPage
+     **/
+    virtual void createScanDestinationGUI(ScanParamsPage *frame)	{ }
+
 protected slots:
     /**
      * Open the source selection dialogue.  Internally connected

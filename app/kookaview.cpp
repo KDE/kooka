@@ -196,7 +196,6 @@ KookaView::KookaView(KMainWindow *parent, const QByteArray &deviceToUse)
 
     mMainWindow = parent;
     mScanParams = nullptr;
-    mDestinationPlugin = nullptr;
     mCurrentTab = KookaView::TabNone;
 
     mIsPhotoCopyMode = false;
@@ -838,45 +837,29 @@ void KookaView::slotOcrResultAvailable()
 
 void KookaView::slotScanStart(ScanImage::ImageType type)
 {
-    if (mDestinationPlugin==nullptr)			// plugin not created yet
+    // The destination plugin is loaded and managed by KookaScanParams.
+    AbstractDestination *dest = mScanParams->destinationPlugin();
+    if (dest==nullptr)
     {
-        // TODO: plugin selection
-        const QString destName = "kookadestination-gallery";
-        if (destName.isEmpty())
-        {
-            KMessageBox::sorry(mMainWindow,
-                               i18n("No scan destination is configured."),
-                               i18n("Destination Not Configured"));
-            goto abort;					// abort the scan now
-        }
-
-        AbstractDestination *dest = qobject_cast<AbstractDestination *>(PluginManager::self()->loadPlugin(PluginManager::DestinationPlugin, destName));
-        if (dest==nullptr)
-        {
-            KMessageBox::error(mMainWindow, i18n("Cannot load scan destination plugin '%1'", destName));
-            goto abort;
-        }
-
-        // We don't know whether the plugin object has been used before.
-        // So disconnect all of its existing signals so that they do not
-        // get double connected.
-        dest->disconnect();
-
-        // Allow the plugin to find the scan gallery, if it needs to send
-        // the scan output to there.
-        dest->setScanGallery(gallery());
-
-        mDestinationPlugin = dest;
+        qWarning() << "No destination plugin";
+        mScanDevice->slotStopScanning();		// no point starting scan
+        return;
     }
 
-    Q_ASSERT(mDestinationPlugin!=nullptr);
+    // Allow the plugin to find the scan gallery, if it needs to send
+    // the scan output to there.
+    dest->setScanGallery(gallery());
+
+//     mDestinationPlugin = dest;
+//     }
+
     if (KookaSettings::saverAskBeforeScan())		// ask for filename first?
     {
         if (type!=ScanImage::None)			// if we have initial image info,
-        {						// get ready to save
-            if (!mDestinationPlugin->scanStarting(type))
+        {
+            if (!dest->scanStarting(type))		// get ready to save
             {						// user cancelled file prompt
-abort:          mScanDevice->slotStopScanning();	// abort the scan now
+                mScanDevice->slotStopScanning();	// abort the scan now
                 return;
             }
         }
@@ -895,7 +878,7 @@ abort:          mScanDevice->slotStopScanning();	// abort the scan now
         }
 
         // Sets the destination string displayed in the "Scan in Progress" dialogue
-        mScanParams->setScanDestination(mDestinationPlugin->scanDestinationString());
+        mScanParams->setScanDestination(dest->scanDestinationString());
     }
 }
 
@@ -915,12 +898,13 @@ void KookaView::slotAcquireStart()
 
 void KookaView::slotNewImageScanned(ScanImage::Ptr img)
 {
-    if (mIsPhotoCopyMode) {
-        return;
-    }
+     if (mIsPhotoCopyMode) {
+         return;
+     }
 
-    if (mDestinationPlugin!=nullptr) mDestinationPlugin->imageScanned(img);
-    else qWarning() << "Destination plugin not available";
+    AbstractDestination *dest = mScanParams->destinationPlugin();
+    if (dest!=nullptr) dest->imageScanned(img);
+    else qWarning() << "No destination plugin";
 }
 
 

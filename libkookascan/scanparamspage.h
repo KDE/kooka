@@ -17,17 +17,21 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef SCANPARAMS_P_H
-#define SCANPARAMS_P_H
+#ifndef SCANPARAMSPAGE_H
+#define SCANPARAMSPAGE_H
 
 #include <qwidget.h>
-#include <qlabel.h>
-#include <qgridlayout.h>
+
+#include "kookascan_export.h"
 
 //  Limits for the scan option and label, to keep them to reasonable sizes
 #define MAX_CONTROL_WIDTH       300
 #define MAX_LABEL_WIDTH         150
 #define MIN_LABEL_WIDTH         50
+
+class QLabel;
+class QGridLayout;
+
 
 /**
  * This class represents a single options page (Basic, Other or Advanced)
@@ -36,7 +40,7 @@
  * @author Jonathan Marten
  */
 
-class ScanParamsPage : public QWidget
+class KOOKASCAN_EXPORT ScanParamsPage : public QWidget
 {
     Q_OBJECT
 
@@ -52,7 +56,7 @@ public:
     /**
      * Destructor.
      */
-    virtual ~ScanParamsPage();
+    virtual ~ScanParamsPage() = default;
 
     /**
      * Add a standard parameter row to the page.
@@ -74,7 +78,7 @@ public:
     /**
      * Add a full width widget to the page.
      *
-     * @param wid    The widget to add.
+     * @param wid The widget to add.
      */
     void addRow(QWidget *wid);
 
@@ -92,9 +96,30 @@ public:
      * may be nothing following, or another group, so the group is retained as
      * "pending" and added just before the next row.
      *
-     * @param wid    The widget to add.
+     * @param wid The widget to add.
      */
     void addGroup(QWidget *wid);
+
+    /**
+     * Retrieve the current layout row, which is the next row that
+     * will be filled by either of the @c addRow() functions.
+     *
+     * @return the current row
+     **/
+    int currentRow() const				{ return (mNextRow); }
+
+    /**
+     * Set the current layout row, which is the next row that will be filled
+     * by either of the @c addRow() functions.
+     *
+     * @param row The layout row to set.
+     **/
+    void setCurrentRow(int row)				{ mNextRow = row; }
+
+    /**
+     * Clear the current layout row and delete any widgets which it contains.
+     **/
+    void clearRow();
 
 private:
     void checkPendingGroup();
@@ -104,4 +129,4 @@ private:
     QWidget *mPendingGroup;
 };
 
-#endif                          // SCANPARAMS_P_H
+#endif // SCANPARAMSPAGE_H

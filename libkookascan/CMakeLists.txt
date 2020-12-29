@@ -83,6 +83,7 @@ set(kookascan_SRCS
   gammawidget.cpp
   #scansourcedialog.cpp
   scanparams.cpp
+  scanparamspage.cpp
   #massscandialog.cpp
   deviceselector.cpp
   adddevicedialog.cpp

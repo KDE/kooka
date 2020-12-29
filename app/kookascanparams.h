@@ -23,7 +23,10 @@
 
 #include "scanparams.h"
 
+class QComboBox;
 class KMessageWidget;
+class ScanParamsPage;
+class AbstractDestination;
 
 
 class KookaScanParams : public ScanParams
@@ -34,13 +37,22 @@ public:
     explicit KookaScanParams(QWidget *parent);
     ~KookaScanParams() override = default;
 
+    AbstractDestination *destinationPlugin() const	{ return (mDestinationPlugin); }
+
 protected:
     /**
      * Reimplemented for a custom message.
      *
-     * @see ScanParams::meessageScannerNotSelected
+     * @see ScanParams::messageScannerNotSelected
      */
     QWidget *messageScannerNotSelected() override;
+
+    /**
+     * Reimplemented for the scan destination controls.
+     *
+     * @see ScanParams::createScanDestinationGUI
+     */
+    void createScanDestinationGUI(ScanParamsPage *frame) override;
 
 signals:
     void actionSelectScanner();
@@ -48,9 +60,16 @@ signals:
 
 protected slots:
     void slotLinkActivated(const QString &link);
+    void slotDestinationSelected(int idx);
 
 private:
     KMessageWidget *mNoScannerMessage;
+    QComboBox *mDestinationCombo;
+
+    ScanParamsPage *mParamsPage;
+    int mParamsRow;
+
+    AbstractDestination *mDestinationPlugin;
 };
 
 #endif                          // KOOKASCANPARAMS_H

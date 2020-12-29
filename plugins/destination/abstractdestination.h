@@ -41,6 +41,7 @@
 
 
 class ScanGallery;
+class ScanParamsPage;
 
 #ifndef PLUGIN_EXPORT
 #define PLUGIN_EXPORT
@@ -52,19 +53,78 @@ class PLUGIN_EXPORT AbstractDestination : public AbstractPlugin
     Q_OBJECT
 
 public:
+    /**
+     * Destructor.
+     **/
     virtual ~AbstractDestination();
 
+    /**
+     * Indicates that a scan is starting.  The plugin should prepare
+     * to receive the image.
+     *
+     * @param type The type of the image that is about to be scanned.
+     * @return @c true if the scan is to go ahead, or @c false if it
+     * is to be cancelled.
+     **/
     virtual bool scanStarting(ScanImage::ImageType type) = 0;
+
+    /**
+     * Indicates that an image has been scanned.  The plugin should
+     * save or send the image as required.
+     *
+     * @param img The image that has been scanned,
+     **/
     virtual void imageScanned(ScanImage::Ptr img) = 0;
 
-    virtual QString scanDestinationString()		{ return (QString()); }
+    /**
+     * Get a description string for the scan destination.
+     *
+     * @return A descriptive filename or title which will be shown
+     * along with the scan progress indicator.  If the description
+     * is an empty string then nothing will be shown.  The base class
+     * implementation returns an empty string.
+     *
+     * @note @c scanStarting() may not necessarily have been called
+     * before this function.
+     **/
+    virtual QString scanDestinationString()			{ return (QString()); }
 
-    void setScanGallery(ScanGallery *gallery)		{ mGallery = gallery; }
+    /**
+     * Create GUI widgets as required for the selected destination
+     * plugin.
+     *
+     * @param page The parent frame.
+     *
+     * @note The current row of the @p page is the first reserved
+     * parameter row.  The base class implementation adds nothing.
+     **/
+    virtual void createGUI(ScanParamsPage *page)		{ }
+
+    /**
+     * Sets the scan gallery, in the event that the plugin needs
+     * to locate it.
+     *
+     * @param gallery The scan gallery.
+     * @see @c gallery()
+     **/
+    void setScanGallery(ScanGallery *gallery)			{ mGallery = gallery; }
 
 protected:
+    /**
+     * Constructor.
+     *
+     * @param pnt The parent object.
+     * @param name The Qt object name.
+     **/
     explicit AbstractDestination(QObject *pnt, const char *name);
 
-    ScanGallery *gallery() const			{ return (mGallery); }
+    /**
+     * Get the scan gallery, if needed by the plugin.
+     *
+     * @return the scan gallery, or @c nullptr if none has been set.
+     * @see @c setScanGallery()
+     **/
+    ScanGallery *gallery() const				{ return (mGallery); }
 
 private:
     ScanGallery *mGallery;
