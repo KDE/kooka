@@ -896,20 +896,21 @@ KScanDevice::Status KScanDevice::acquireData(bool isPreview)
 
             if (mSaneParameters.lines>=1 && mSaneParameters.pixels_per_line>0)
             {						// check for a plausible image
-                fmt = getImageFormat(&mSaneParameters);
-                if (fmt==ScanImage::None)		// find format it will have
-                {					// scan format not recognised?
+                fmt = getImageFormat(&mSaneParameters);	// find format it will have
+                if (fmt==ScanImage::None)		// scan format not recognised?
+                {
                     stat = KScanDevice::ParamError;	// no point starting scan
                     scanFinished(stat);			// clean up anything started
                     return (stat);
                 }
             }
         }
-    }
-    if (mTestFormat!=ScanImage::None)
-    {
-        fmt = mTestFormat;
-        qDebug() << "Testing with image format" << fmt;
+
+        if (mTestFormat!=ScanImage::None)
+        {
+            fmt = mTestFormat;
+            qDebug() << "Testing with image format" << fmt;
+        }
     }
     emit sigScanStart(fmt);
 

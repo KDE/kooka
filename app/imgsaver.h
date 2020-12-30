@@ -34,6 +34,8 @@
 
 #include <qurl.h>
 
+#include "kookacore_export.h"
+
 #include "scanimage.h"
 #include "imageformat.h"
 
@@ -52,7 +54,7 @@ class QWidget;
  * @author Jonathan Marten
  **/
 
-class ImgSaver
+class KOOKACORE_EXPORT ImgSaver
 {
 public:
 

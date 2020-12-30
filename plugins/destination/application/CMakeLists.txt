@@ -15,37 +15,29 @@ project(kooka5)
 
 #########################################################################
 #									#
-#  Additional dependencies for scan destinations			#
+#  Additional dependencies for this plugin				#
 #									#
 #########################################################################
 
-find_package(KF5 ${KF5_MIN_VERSION} REQUIRED COMPONENTS I18n CoreAddons WidgetsAddons)
+find_package(KF5 ${KF5_MIN_VERSION} REQUIRED COMPONENTS Service)
 
 #########################################################################
 #									#
-#  Destination plugin base library					#
+#  Destination plugin to open the scan with an application		#
 #									#
 #########################################################################
 
-set(kookadestination_SRCS
-  abstractdestination.cpp
+set(kookadestinationapplication_SRCS
+  destinationapplication.cpp
 )
-add_library(kookadestination SHARED ${kookadestination_SRCS})
-set_target_properties(kookadestination PROPERTIES SOVERSION "1.0.0")
-target_link_libraries(kookadestination Qt5::Core Qt5::Widgets)
-target_link_libraries(kookadestination KF5::I18n KF5::WidgetsAddons)
-target_link_libraries(kookadestination kookascan kookacore)
+add_library(kookadestinationapplication MODULE ${kookadestinationapplication_SRCS})
+kcoreaddons_desktop_to_json(kookadestinationapplication kookadestination-application.desktop)
+
+target_link_libraries(kookadestinationapplication Qt5::Core Qt5::Widgets)
+target_link_libraries(kookadestinationapplication KF5::I18n KF5::WidgetsAddons KF5::Service)
+target_link_libraries(kookadestinationapplication kookadestination kookacore kookascan)
 
 if (INSTALL_BINARIES)
-  install(TARGETS kookadestination ${INSTALL_TARGETS_DEFAULT_ARGS})
+  install(TARGETS kookadestinationapplication DESTINATION ${PLUGIN_INSTALL_DIR}/kooka)
 endif (INSTALL_BINARIES)
-install(FILES kookadestinationplugin.desktop DESTINATION ${SERVICETYPES_INSTALL_DIR})
-
-#########################################################################
-#									#
-#  Subdirectories							#
-#									#
-#########################################################################
-
-add_subdirectory(gallery)
-add_subdirectory(application)
+install(FILES kookadestination-application.desktop DESTINATION ${SERVICES_INSTALL_DIR})

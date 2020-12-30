@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Service
+X-KDE-ServiceTypes=Kooka/DestinationPlugin
+X-KDE-Library=kookadestinationapplication
+X-KDE-PluginInfo-Name=destinationapplication
+X-KDE-PluginInfo-License=GPL
+Icon=system-run
+
+Name=Application
+Name[x-test]=xxApplicationxx
+Comment=Open the scanned image in an application

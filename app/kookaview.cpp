@@ -850,9 +850,8 @@ void KookaView::slotScanStart(ScanImage::ImageType type)
     // the scan output to there.
     dest->setScanGallery(gallery());
 
-//     mDestinationPlugin = dest;
-//     }
-
+    // TODO: should always call scanStarting(), plugin should take account
+    // of saverAskBeforeScan() if appropriate
     if (KookaSettings::saverAskBeforeScan())		// ask for filename first?
     {
         if (type!=ScanImage::None)			// if we have initial image info,
@@ -878,6 +877,7 @@ void KookaView::slotScanStart(ScanImage::ImageType type)
         }
 
         // Sets the destination string displayed in the "Scan in Progress" dialogue
+        // TODO: only if not a preview
         mScanParams->setScanDestination(dest->scanDestinationString());
     }
 }
