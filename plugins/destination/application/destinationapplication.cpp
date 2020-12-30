@@ -49,6 +49,7 @@
 #include "scanparamspage.h"
 #include "imageformat.h"
 #include "formatdialog.h"
+#include "kookasettings.h"
 
 
 K_PLUGIN_FACTORY_WITH_JSON(DestinationApplicationFactory, "kookadestination-application.json", registerPlugin<DestinationApplication>();)
@@ -235,11 +236,18 @@ found:  qDebug() << "accept" << service->desktopEntryName() << "by MIME, pref" <
     qDebug() << "have" << validServices.count() << "valid services";
 
     mAppsCombo = new QComboBox;
+
+    const QString configuredApp = KookaSettings::destinationApplicationApp();
+    int configuredIndex = -1;
     for (const KService::Ptr service : validServices)
     {
-        mAppsCombo->addItem(QIcon::fromTheme(service->icon()), service->name(), service->desktopEntryName());
+        const QString key = service->desktopEntryName();
+        if (key==configuredApp) configuredIndex = mAppsCombo->count();
+        mAppsCombo->addItem(QIcon::fromTheme(service->icon()), service->name(), key);
     }
+    if (configuredApp=="") configuredIndex = mAppsCombo->count();
     mAppsCombo->addItem(QIcon::fromTheme("system-run"), i18n("Other..."));
+    if (configuredIndex!=-1) mAppsCombo->setCurrentIndex(configuredIndex);
     page->addRow(new QLabel(i18n("Application:"), page), mAppsCombo);
 
     // For the image format combo, again we do not yet know the format
@@ -255,6 +263,10 @@ found:  qDebug() << "accept" << service->desktopEntryName() << "by MIME, pref" <
     // should be ones that are accepted by most common applications.
     mFormatCombo = new QComboBox;
 
+
+    const QString configuredMime = KookaSettings::destinationApplicationMime();
+    configuredIndex = -1;
+
     QMimeDatabase db;
     for (const QString &mimeName : {"image/png",
                                     "image/jpeg",
@@ -266,8 +278,18 @@ found:  qDebug() << "accept" << service->desktopEntryName() << "by MIME, pref" <
         const ImageFormat fmt = ImageFormat::formatForMime(mimeType);
         if (!fmt.isValid()) continue;			// this format not supported
 
+        if (mimeName==configuredMime) configuredIndex = mFormatCombo->count();
         mFormatCombo->addItem(QIcon::fromTheme(mimeType.iconName()), mimeType.comment(), mimeType.name());
     }
+    if (configuredMime=="") configuredIndex = mFormatCombo->count();
     mFormatCombo->addItem(QIcon::fromTheme("system-run"), i18n("Other..."));
+    if (configuredIndex!=-1) mFormatCombo->setCurrentIndex(configuredIndex);
     page->addRow(new QLabel(i18n("Image format:"), page), mFormatCombo);
+}
+
+
+void DestinationApplication::saveSettings() const
+{
+    KookaSettings::setDestinationApplicationApp(mAppsCombo->currentData().toString());
+    KookaSettings::setDestinationApplicationMime(mFormatCombo->currentData().toString());
 }

@@ -34,6 +34,7 @@
 #include "abstractdestination.h"
 #include "pluginmanager.h"
 #include "scanparamspage.h"
+#include "kookasettings.h"
 
 
 #define ROWS_TO_RESERVE		5			// rows to reserve for plugin GUI
@@ -97,14 +98,18 @@ void KookaScanParams::createScanDestinationGUI(ScanParamsPage *frame)
     const QMap<QString,AbstractPluginInfo> plugins = PluginManager::self()->allPlugins(PluginManager::DestinationPlugin);
     qDebug() << "have" << plugins.count() << "destination plugins";
 
+    const QString configuredPlugin = KookaSettings::destinationPlugin();
+    int configuredIndex = -1;
+
     mDestinationCombo = new QComboBox(frame);
     for (QMap<QString,AbstractPluginInfo>::const_iterator it = plugins.constBegin(); it!=plugins.constEnd(); ++it)
     {
         const AbstractPluginInfo &info = it.value();
-        //if (info.key==configuredEngine) engineIndex = mEngineCombo->count();
+        if (info.key==configuredPlugin) configuredIndex = mDestinationCombo->count();
         mDestinationCombo->addItem(QIcon::fromTheme(info.icon), info.name, info.key);
     }
 
+    if (configuredIndex!=-1) mDestinationCombo->setCurrentIndex(configuredIndex);
     connect(mDestinationCombo, QOverload<int>::of(&QComboBox::activated), this, &KookaScanParams::slotDestinationSelected);
     frame->addRow(new QLabel(i18n("Scan destination:"), frame), mDestinationCombo);
 
@@ -155,4 +160,18 @@ void KookaScanParams::slotDestinationSelected(int idx)
     }
 
     mDestinationPlugin->createGUI(mParamsPage);		// add plugin's GUI widgets
+}
+
+
+void KookaScanParams::saveDestinationSettings()
+{
+    qDebug();
+
+    AbstractDestination *currentPlugin = qobject_cast<AbstractDestination *>(PluginManager::self()->currentPlugin(PluginManager::DestinationPlugin));
+    if (currentPlugin==nullptr) return;			// nothing to save
+
+    KookaSettings::setDestinationPlugin(currentPlugin->pluginInfo()->key);
+    currentPlugin->saveSettings();
+
+    KookaSettings::self()->save();
 }

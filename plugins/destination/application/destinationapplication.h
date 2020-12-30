@@ -52,6 +52,7 @@ public:
 
     QString scanDestinationString() override;
     void createGUI(ScanParamsPage *page) override;
+    void saveSettings() const override;
 
 private:
     QComboBox *mAppsCombo;

@@ -943,8 +943,8 @@ void KookaView::slotScanFinished(KScanDevice::Status stat)
 void KookaView::closeScanDevice()
 {
     qDebug();
-    delete mScanParams;
-    mScanParams = nullptr;
+    mScanParams->saveDestinationSettings();
+    delete mScanParams; mScanParams = nullptr;
     mScanDevice->closeDevice();
 }
 

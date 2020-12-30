@@ -38,6 +38,7 @@ public:
     ~KookaScanParams() override = default;
 
     AbstractDestination *destinationPlugin() const	{ return (mDestinationPlugin); }
+    void saveDestinationSettings();
 
 protected:
     /**

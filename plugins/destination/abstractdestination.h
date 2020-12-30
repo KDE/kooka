@@ -91,7 +91,8 @@ public:
 
     /**
      * Create GUI widgets as required for the selected destination
-     * plugin.
+     * plugin.  This includes loading the saved settings if the
+     * plugin has any.
      *
      * @param page The parent frame.
      *
@@ -108,6 +109,12 @@ public:
      * @see @c gallery()
      **/
     void setScanGallery(ScanGallery *gallery)			{ mGallery = gallery; }
+
+    /**
+     * Save the plugin settings, either to the application settings or
+     * a private configuration.  The base class implementation does nothing.
+     **/
+    virtual void saveSettings() const				{ }
 
 protected:
     /**

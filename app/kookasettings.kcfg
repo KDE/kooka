@@ -343,4 +343,24 @@
 
   </group>
 
+  <group name="DestinationPlugin">
+
+    <entry name="DestinationPlugin" key="Plugin" type="String">
+      <default>kookadestination-gallery</default>
+    </entry>
+
+    <entry name="DestinationApplicationApp" key="ApplicationApp" type="String">
+      <!-- The default value "*" means the first in the list (highest priority), -->
+      <!-- blank means "Other".                                                  -->
+      <default>*</default>
+    </entry>
+
+    <entry name="DestinationApplicationMime" key="ApplicationMime" type="String">
+      <default>image/png</default>
+    </entry>
+
+  </group>
+
+
+
 </kcfg>
