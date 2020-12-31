@@ -482,7 +482,8 @@ void ScanGallery::slotDecorate(FileTreeViewItem *item)
             }
             else					// not an image file
             {						// show its standard MIME type
-                item->setIcon(0, KIO::pixmapForUrl(item->url(), 0, KIconLoader::Small));
+                item->setIcon(0, QIcon::fromTheme(KIO::iconNameForUrl(item->url()),
+                                                  QIcon::fromTheme("application-octet-stream")));
             }
         }
     }
