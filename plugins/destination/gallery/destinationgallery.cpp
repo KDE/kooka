@@ -36,6 +36,7 @@
 #include <kpluginfactory.h>
 
 #include "scangallery.h"
+#include "kookasettings.h"
 
 
 K_PLUGIN_FACTORY_WITH_JSON(DestinationGalleryFactory, "kookadestination-gallery.json", registerPlugin<DestinationGallery>();)
@@ -45,20 +46,25 @@ K_PLUGIN_FACTORY_WITH_JSON(DestinationGalleryFactory, "kookadestination-gallery.
 DestinationGallery::DestinationGallery(QObject *pnt, const QVariantList &args)
     : AbstractDestination(pnt, "DestinationGallery")
 {
-    qDebug();
 }
 
 
 bool DestinationGallery::scanStarting(ScanImage::ImageType type)
 {
     qDebug() << "type" << type;
-    return (gallery()->prepareToSave(type));
+    if (type==ScanImage::None) return (true);		// can't prompt for anything yet
+
+    if (KookaSettings::saverAskBeforeScan())		// ask for file name first?
+    {
+        return (gallery()->prepareToSave(type));	// ask for file name and format
+    }
+    else return (true);
 }
 
 
 void DestinationGallery::imageScanned(ScanImage::Ptr img)
 {
-    qDebug() << "image size" << img->size();
+    qDebug() << "received image size" << img->size();
     gallery()->addImage(img);
 }
 

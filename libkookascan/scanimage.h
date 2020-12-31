@@ -71,7 +71,8 @@ public:
         BlackWhite  = 0x01,				///< Black/white bitmap
         Greyscale   = 0x02,				///< Grey scale
         LowColour   = 0x04,				///< Low colour (indexed with palette)
-        HighColour  = 0x08				///< High colour (RGB)
+        HighColour  = 0x08,				///< High colour (RGB)
+        Preview     = 0x10				///< Preview image
     };
     Q_DECLARE_FLAGS(ImageTypes, ImageType)
 

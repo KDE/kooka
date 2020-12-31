@@ -912,12 +912,14 @@ KScanDevice::Status KScanDevice::acquireData(bool isPreview)
             qDebug() << "Testing with image format" << fmt;
         }
     }
-    emit sigScanStart(fmt);
+    else fmt = ScanImage::Preview;			// special to indicate preview
+    emit sigScanStart(fmt);				// now tell the application
 
-    // If the image information was available, the application may have
-    // prompted for a filename.  If the user cancelled that, it will have
-    // called our slotStopScanning() which set mScanningState to
-    // KScanDevice::ScanStopNow.  If that is the case, then finish here.
+    // The application may have prompted for a file name.
+    // If the user cancelled that, it will have called our
+    // slotStopScanning() which sets mScanningState to
+    // KScanDevice::ScanStopNow.  If that is the case,
+    // then finish here.
     if (mScanningState==KScanDevice::ScanStopNow)
     {							// user cancelled save dialogue
         //qDebug() << "user cancelled before start";

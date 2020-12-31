@@ -59,14 +59,12 @@ K_PLUGIN_FACTORY_WITH_JSON(DestinationApplicationFactory, "kookadestination-appl
 DestinationApplication::DestinationApplication(QObject *pnt, const QVariantList &args)
     : AbstractDestination(pnt, "DestinationApplication")
 {
-    qDebug();
 }
 
 
 bool DestinationApplication::scanStarting(ScanImage::ImageType type)
 {
-    // TODO: this may not be called if "Ask after scan" is set.
-    // See KookaView::slotScanStart().
+    // TODO: find a way so that we don't have to remember this
     mImageType = type;
     return (true);					// no preparation, can always start
 }
@@ -74,6 +72,7 @@ bool DestinationApplication::scanStarting(ScanImage::ImageType type)
 
 void DestinationApplication::imageScanned(ScanImage::Ptr img)
 {
+    qDebug() << "received image size" << img->size();
     const QString appService = mAppsCombo->currentData().toString();
     const QString mimeName = mFormatCombo->currentData().toString();
     qDebug() << "app" << appService << "mime" << mimeName;

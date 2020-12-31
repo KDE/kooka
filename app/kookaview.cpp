@@ -850,17 +850,13 @@ void KookaView::slotScanStart(ScanImage::ImageType type)
     // the scan output to there.
     dest->setScanGallery(gallery());
 
-    // TODO: should always call scanStarting(), plugin should take account
-    // of saverAskBeforeScan() if appropriate
-    if (KookaSettings::saverAskBeforeScan())		// ask for filename first?
+    // Tell the plugin that a scan is starting.
+    if (type!=ScanImage::Preview)
     {
-        if (type!=ScanImage::None)			// if we have initial image info,
-        {
-            if (!dest->scanStarting(type))		// get ready to save
-            {						// user cancelled file prompt
-                mScanDevice->slotStopScanning();	// abort the scan now
-                return;
-            }
+        if (!dest->scanStarting(type))			// get ready to save
+        {						// user cancelled file prompt
+            mScanDevice->slotStopScanning();		// abort the scan now
+            return;
         }
     }
 
@@ -876,7 +872,7 @@ void KookaView::slotScanStart(ScanImage::ImageType type)
             qApp->processEvents();          // let the change show
         }
 
-        // Sets the destination string displayed in the "Scan in Progress" dialogue
+        // Set the destination string displayed in the "Scan in Progress" dialogue
         // TODO: only if not a preview
         mScanParams->setScanDestination(dest->scanDestinationString());
     }

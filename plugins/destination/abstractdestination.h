@@ -62,6 +62,13 @@ public:
      * Indicates that a scan is starting.  The plugin should prepare
      * to receive the image.
      *
+     * This is always called before the start of the scan, but not for
+     * a preview.  However, if SANE did not provide enough information
+     * to determine the format of the scanned image then @p type may be
+     * @c ScanImage::None.  If the plugin needs to ask for a file name
+     * to save or send the scan, then it should take account of the @p type
+     * and should also honour the "ask before or after scan" setting.
+     *
      * @param type The type of the image that is about to be scanned.
      * @return @c true if the scan is to go ahead, or @c false if it
      * is to be cancelled.
@@ -79,13 +86,12 @@ public:
     /**
      * Get a description string for the scan destination.
      *
-     * @return A descriptive filename or title which will be shown
+     * @return A descriptive filename or title, which will be shown
      * along with the scan progress indicator.  If the description
      * is an empty string then nothing will be shown.  The base class
      * implementation returns an empty string.
      *
-     * @note @c scanStarting() may not necessarily have been called
-     * before this function.
+     * @note @c scanStarting() will always be called before this function.
      **/
     virtual QString scanDestinationString()			{ return (QString()); }
 
@@ -94,10 +100,12 @@ public:
      * plugin.  This includes loading the saved settings if the
      * plugin has any.
      *
+     * The base class implementation adds nothing.
+     *
      * @param page The parent frame.
      *
      * @note The current row of the @p page is the first reserved
-     * parameter row.  The base class implementation adds nothing.
+     * parameter row.
      **/
     virtual void createGUI(ScanParamsPage *page)		{ }
 
@@ -112,7 +120,9 @@ public:
 
     /**
      * Save the plugin settings, either to the application settings or
-     * a private configuration.  The base class implementation does nothing.
+     * a private configuration.
+     *
+     * The base class implementation does nothing.
      **/
     virtual void saveSettings() const				{ }
 
