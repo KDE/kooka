@@ -199,7 +199,7 @@ bool ScanParams::connectDevice(KScanDevice *newScanDevice, bool galleryMode)
     // appears to show itself after the default 'minimumDuration' (= 4 seconds),
     // even despite the previous and no 'value' being set.
     mProgressDialog->reset();
-    setScanDestination(QString());			// reset destination display
+    setScanDestination(KLocalizedString());		// reset destination display
 
     connect(mProgressDialog, &QProgressDialog::canceled, mSaneDevice, &KScanDevice::slotStopScanning);
     connect(mSaneDevice, &KScanDevice::sigScanProgress, this, &ScanParams::slotScanProgress);
@@ -668,7 +668,7 @@ KScanDevice::Status ScanParams::prepareScan(QString *vfp)
 {
     //qDebug() << "scan mode=" << mScanMode;
 
-    setScanDestination(QString());			// reset progress display
+    setScanDestination(KLocalizedString());		// reset progress display
 
     // Check compatibility of scan settings
     int format;
@@ -717,20 +717,21 @@ KScanDevice::Status ScanParams::prepareScan(QString *vfp)
     return (KScanDevice::Ok);
 }
 
-void ScanParams::setScanDestination(const QString &dest)
+
+void ScanParams::setScanDestination(const KLocalizedString &dest)
 {
-    //qDebug() << "scan destination is" << dest;
-    if (dest.isEmpty()) {
-        mProgressDialog->setLabelText(i18n("Scan in progress"));
-    } else {
-        mProgressDialog->setLabelText(xi18nc("@info", "Scan in progress<nl/><nl/><filename>%1</filename>", dest));
-    }
+    KLocalizedString labelText;
+    if (dest.isEmpty()) labelText = kxi18n("Scan in progress");
+    else labelText = kxi18n("Scan in progress<nl/><nl/>%1").subs(dest);
+    mProgressDialog->setLabelText(labelText.toString(Kuit::RichText));
 }
+
 
 void ScanParams::slotScanProgress(int value)
 {
     mProgressDialog->setValue(value);
 }
+
 
 /* Slot called to start acquiring a preview */
 void ScanParams::slotAcquirePreview()

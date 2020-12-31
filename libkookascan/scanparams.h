@@ -48,6 +48,7 @@ class KScanOption;
 class KGammaTable;
 class KLed;
 class KMessageWidget;
+class KLocalizedString;
 
 class ScanParamsPage;
 class ScanSizeSelector;
@@ -120,7 +121,7 @@ public:
      *
      * @param dest Destination to be shown
      **/
-    void setScanDestination(const QString &dest);
+    void setScanDestination(const KLocalizedString &dest);
 
 public slots:
     /**

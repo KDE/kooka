@@ -34,6 +34,7 @@
 #include <qdebug.h>
 
 #include <kpluginfactory.h>
+#include <klocalizedstring.h>
 
 #include "scangallery.h"
 #include "kookasettings.h"
@@ -69,7 +70,7 @@ void DestinationGallery::imageScanned(ScanImage::Ptr img)
 }
 
 
-QString DestinationGallery::scanDestinationString()
+KLocalizedString DestinationGallery::scanDestinationString()
 {
-    return (gallery()->saveURL().url(QUrl::PreferLocalFile));
+    return (kxi18n("<filename>%1</filename>").subs(gallery()->saveURL().url(QUrl::PreferLocalFile)));
 }

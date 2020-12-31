@@ -871,8 +871,10 @@ void KookaView::slotScanStart(ScanImage::ImageType type)
     }
 
     // Set the destination string displayed in the "Scan in Progress" dialogue
-    // TODO: only if not a preview
-    mScanParams->setScanDestination(dest->scanDestinationString());
+    if (type!=ScanImage::Preview)
+    {
+        mScanParams->setScanDestination(dest->scanDestinationString());
+    }
 }
 
 

@@ -148,14 +148,13 @@ void DestinationApplication::imageScanned(ScanImage::Ptr img)
 }
 
 
-QString DestinationApplication::scanDestinationString()
+KLocalizedString DestinationApplication::scanDestinationString()
 {
     const QString appService = mAppsCombo->currentData().toString();
-    if (appService.isEmpty()) return (i18n("Sending to application"));
+    if (appService.isEmpty()) return (ki18n("Sending to application"));
 							// selected "Other"
-    // TODO: KUIT here
-    return (i18n("Sending to '%1'", mAppsCombo->currentText()));
-}							// application name
+    return (kxi18n("Sending to <application>%1</application>").subs(mAppsCombo->currentText()));
+}							// with application name
 
 
 void DestinationApplication::createGUI(ScanParamsPage *page)

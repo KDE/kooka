@@ -50,7 +50,7 @@ public:
     bool scanStarting(ScanImage::ImageType type) override;
     void imageScanned(ScanImage::Ptr img) override;
 
-    QString scanDestinationString() override;
+    KLocalizedString scanDestinationString() override;
     void createGUI(ScanParamsPage *page) override;
     void saveSettings() const override;
 

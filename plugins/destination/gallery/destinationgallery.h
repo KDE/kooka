@@ -46,9 +46,9 @@ public:
     bool scanStarting(ScanImage::ImageType type) override;
     void imageScanned(ScanImage::Ptr img) override;
 
-    QString scanDestinationString() override;
+    KLocalizedString scanDestinationString() override;
 
 private:
 };
 
-#endif                          // DESTINATIONGALLERY_H
+#endif							// DESTINATIONGALLERY_H
