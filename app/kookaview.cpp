@@ -837,8 +837,9 @@ void KookaView::slotOcrResultAvailable()
 
 void KookaView::slotScanStart(ScanImage::ImageType type)
 {
-    // The destination plugin is loaded and managed by KookaScanParams.
-    AbstractDestination *dest = mScanParams->destinationPlugin();
+    // The scan parameters GUI must exist here, in order to locate the
+    // destination plugin which is loaded and managed by KookaScanParams.
+    AbstractDestination *dest = (mScanParams!=nullptr) ? mScanParams->destinationPlugin() : nullptr;
     if (dest==nullptr)
     {
         qWarning() << "No destination plugin";
@@ -860,33 +861,31 @@ void KookaView::slotScanStart(ScanImage::ImageType type)
         }
     }
 
-    if (mScanParams!=nullptr)
+    mScanParams->setEnabled(false);			// disable GUI while scanning
+    KLed *led = mScanParams->operationLED();		// update the LED indicator
+    if (led!=nullptr)
     {
-        mScanParams->setEnabled(false);
-
-        KLed *led = mScanParams->operationLED();
-        if (led!=nullptr)
-        {
-            led->setColor(Qt::red);         // scanner warming up
-            led->setState(KLed::On);
-            qApp->processEvents();          // let the change show
-        }
-
-        // Set the destination string displayed in the "Scan in Progress" dialogue
-        // TODO: only if not a preview
-        mScanParams->setScanDestination(dest->scanDestinationString());
+        led->setColor(Qt::red);				// scanner warming up
+        led->setState(KLed::On);
+        qApp->processEvents();				// let the change show
     }
+
+    // Set the destination string displayed in the "Scan in Progress" dialogue
+    // TODO: only if not a preview
+    mScanParams->setScanDestination(dest->scanDestinationString());
 }
 
 
 void KookaView::slotAcquireStart()
 {
     //qDebug() << "Acquire starts";
-    if (mScanParams != nullptr) {
-        KLed *led = mScanParams->operationLED();
-        if (led != nullptr) {
-            led->setColor(Qt::green);           // scanning active
-            qApp->processEvents();          // let the change show
+    if (mScanParams!=nullptr)
+    {
+        KLed *led = mScanParams->operationLED();	// update the LED indicator
+        if (led!=nullptr)
+        {
+            led->setColor(Qt::green);			// scanning active
+            qApp->processEvents();			// let the change show
         }
     }
 }
@@ -898,7 +897,7 @@ void KookaView::slotNewImageScanned(ScanImage::Ptr img)
          return;
      }
 
-    AbstractDestination *dest = mScanParams->destinationPlugin();
+    AbstractDestination *dest = (mScanParams!=nullptr) ? mScanParams->destinationPlugin() : nullptr;
     if (dest!=nullptr) dest->imageScanned(img);
     else qWarning() << "No destination plugin";
 }

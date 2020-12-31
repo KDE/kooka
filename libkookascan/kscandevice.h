@@ -490,7 +490,8 @@ signals:
      *
      * @param type Image type information, if a scan is being started
      * and the image information is is currently available.  This will
-     * be ScanImage::None if a preview is being started.
+     * be @c ScanImage::Preview if a preview is being started, and may
+     * be @c ScanImage::None if not enough image information is available.
      *
      * @see sigAcquireStart
      **/
