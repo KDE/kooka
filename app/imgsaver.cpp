@@ -79,31 +79,6 @@ static void createDir(const QUrl &url)
 }
 
 
-// This was originally ImageMetaInfo::findImageType().
-// It is only used here, and even that only if the image type
-// has not been specified by KScanDevice.
-//
-// The logic is very similar to KScanDevice::getImageFormat(),
-// except that it looks at the result image instead of the initial
-// SANE parameters.  This means that the image type could possibly
-// be resolved as LowColour here.
-static ScanImage::ImageType findImageType(const QImage *image)
-{
-    if (image==nullptr || image->isNull()) return (ScanImage::None);
-
-    if (image->depth()==1 || image->colorCount()==2) return (ScanImage::BlackWhite);
-    else
-    {
-        if (image->depth()>8) return (ScanImage::HighColour);
-        else
-        {
-            if (image->allGray()) return (ScanImage::Greyscale);
-            else return (ScanImage::LowColour);
-        }
-    }
-}
-
-
 ImgSaver::ImgSaver(const QUrl &dir)
     : mSaveUrl(QUrl()),
       mSaveFormat("")
@@ -242,14 +217,14 @@ ImgSaver::ImageSaveStatus ImgSaver::setImageInfo(ScanImage::ImageType type)
 }
 
 
-ImgSaver::ImageSaveStatus ImgSaver::saveImage(const QImage *image)
+ImgSaver::ImageSaveStatus ImgSaver::saveImage(const ScanImage::Ptr image)
 {
     if (image==nullptr) return (ImgSaver::SaveStatusParam);
 
     if (!mSaveFormat.isValid())				// see if have this already
     {
         // if not, get from image now
-        ImgSaver::ImageSaveStatus stat = getFilenameAndFormat(findImageType(image));
+        ImgSaver::ImageSaveStatus stat = getFilenameAndFormat(image->imageType());
         if (stat != ImgSaver::SaveStatusOk) return (stat);
         qDebug() << "format from image" << mSaveFormat;
     }
@@ -264,7 +239,8 @@ ImgSaver::ImageSaveStatus ImgSaver::saveImage(const QImage *image)
     return (saveImage(image, mSaveUrl, mSaveFormat, mSaveSubformat));
 }
 
-ImgSaver::ImageSaveStatus ImgSaver::saveImage(const QImage *image,
+
+ImgSaver::ImageSaveStatus ImgSaver::saveImage(const ScanImage::Ptr image,
                                               const QUrl &url,
                                               const ImageFormat &format,
                                               const QString &subformat)

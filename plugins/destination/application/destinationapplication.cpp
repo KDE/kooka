@@ -50,6 +50,7 @@
 #include "imageformat.h"
 #include "formatdialog.h"
 #include "kookasettings.h"
+#include "scanimage.h"
 
 
 K_PLUGIN_FACTORY_WITH_JSON(DestinationApplicationFactory, "kookadestination-application.json", registerPlugin<DestinationApplication>();)
@@ -64,15 +65,13 @@ DestinationApplication::DestinationApplication(QObject *pnt, const QVariantList 
 
 bool DestinationApplication::scanStarting(ScanImage::ImageType type)
 {
-    // TODO: find a way so that we don't have to remember this
-    mImageType = type;
     return (true);					// no preparation, can always start
 }
 
 
 void DestinationApplication::imageScanned(ScanImage::Ptr img)
 {
-    qDebug() << "received image size" << img->size();
+    qDebug() << "received image size" << img->size() << "type" << img->imageType();
     const QString appService = mAppsCombo->currentData().toString();
     const QString mimeName = mFormatCombo->currentData().toString();
     qDebug() << "app" << appService << "mime" << mimeName;
@@ -94,7 +93,7 @@ void DestinationApplication::imageScanned(ScanImage::Ptr img)
     if (!fmt.isValid())
     {
         FormatDialog fd(nullptr,			// parent
-                        mImageType,			// type
+                        img->imageType(),		// type
                         true,				// askForFormat
                         fmt,				// default format
                         false,				// askForFilename
@@ -119,7 +118,7 @@ void DestinationApplication::imageScanned(ScanImage::Ptr img)
     qDebug() << "save to" << saveUrl;			// temporary file location
 
     ImgSaver saver;					// save the image
-    ImgSaver::ImageSaveStatus status = saver.saveImage(img.data(), saveUrl, fmt);
+    ImgSaver::ImageSaveStatus status = saver.saveImage(img, saveUrl, fmt);
     if (status!=ImgSaver::SaveStatusOk)			// image save failed
     {
         KMessageBox::sorry(nullptr, xi18nc("@info", "Cannot save image file<nl/><filename>%1</filename><nl/>%2",

@@ -99,7 +99,7 @@ public:
      *
      * @note The @c dir parameter to the constructor is ignored.
      **/
-    ImgSaver::ImageSaveStatus saveImage(const QImage *image,
+    ImgSaver::ImageSaveStatus saveImage(const ScanImage::Ptr image,
                                         const QUrl &url,
                                         const ImageFormat &format,
                                         const QString &subformat = QString());
@@ -119,7 +119,7 @@ public:
      *
      * @see setImageInfo
      **/
-    ImgSaver::ImageSaveStatus saveImage(const QImage *image);
+    ImgSaver::ImageSaveStatus saveImage(const ScanImage::Ptr image);
 
     /**
      * Set image information prior to saving.

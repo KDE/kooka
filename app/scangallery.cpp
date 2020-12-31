@@ -884,7 +884,7 @@ void ScanGallery::addImage(ScanImage::Ptr img)
     if (mSaver==nullptr) prepareToSave(ScanImage::None);
     if (mSaver==nullptr) return;			// should never happen
 
-    ImgSaver::ImageSaveStatus isstat = mSaver->saveImage(img.data());
+    ImgSaver::ImageSaveStatus isstat = mSaver->saveImage(img);
 							// try to save the image
     const QUrl lurl = mSaver->lastURL();		// find out where it ended up
 

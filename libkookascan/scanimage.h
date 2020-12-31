@@ -107,21 +107,21 @@ public:
     /**
      * Destructor.
      **/
-    ~ScanImage();
+    ~ScanImage() = default;
 
     /**
      * Get an error message from the image load operation.
      *
      * @return the error string, or a null string if there was no error.
      **/
-    QString errorString() const			{ return (m_errorString); }
+    QString errorString() const				{ return (m_errorString); }
 
     /**
      * The number of subimages.
      *
      * @return the subimage count, or 0 if there are no subimages
      **/
-    int subImagesCount() const			{ return (m_subImages); }
+    int subImagesCount() const				{ return (m_subImages); }
 
     /**
      * Check whether this image is a subimage.
@@ -135,7 +135,7 @@ public:
      *
      * @return the image URL, or an invalid URL if it was not loaded from a file.
      **/
-    QUrl url() const				{ return (m_url); }
+    QUrl url() const					{ return (m_url); }
 
     /**
      * Checks whether the image is file bound;
@@ -192,6 +192,27 @@ public:
      **/
     int getYResolution() const;
 
+    /**
+     * Set the image type.
+
+     * This is used when an image is being created to receive scan results,
+     * if it can be deduced from the SANE parameters.
+     *
+     * @param type The image type
+     **/
+    void setImageType(ScanImage::ImageType type)	{ mImageType = type; }
+
+    /**
+     * Get the image type.
+     *
+     * If the image type was initially set from the SANE parameters
+     * via @c setImageType(), then that is returned.  If no image type has
+     * been set then the type is deduced from the image data.
+     *
+     * @return the image type.
+     **/
+    ScanImage::ImageType imageType() const;
+
 private:
     void init();
     QString loadTiffDir(const QString &file, int subno);
@@ -202,6 +223,7 @@ private:
     int m_subImages;
     QUrl m_url;
     QString m_errorString;
+    ScanImage::ImageType mImageType;
 };
 
 // Not doing Q_DECLARE_OPERATORS_FOR_FLAGS(ScanImage::ImageTypes) here.

@@ -33,8 +33,6 @@
 
 #include "abstractdestination.h"
 
-#include "scanimage.h"
-
 
 class QComboBox;
 
@@ -57,7 +55,6 @@ public:
 private:
     QComboBox *mAppsCombo;
     QComboBox *mFormatCombo;
-    ScanImage::ImageType mImageType;
 };
 
 #endif							// DESTINATIONAPPLICATION_H

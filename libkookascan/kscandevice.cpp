@@ -595,7 +595,7 @@ void KScanDevice::showOptions()
 //  ------------------------------------------------
 
 // Deduce the scanned image type from the SANE parameters.
-// The logic is very similar to ImgSaver::findImageType(),
+// The logic is very similar to ScanImage::imageType(),
 // except that the image type cannot be LowColour.
 static ScanImage::ImageType getImageFormat(const SANE_Parameters *p)
 {
@@ -651,8 +651,9 @@ case ScanImage::HighColour:	fmt = QImage::Format_RGB32;		break;
 
     mScanImage.clear();					// remove reference to previous
     mScanImage.reset(newImage);				// capture the new image pointer
+    mScanImage->setImageType(itype);			// remember the image format
 
-    if (itype==ScanImage::BlackWhite)			// Line art (bitmap)
+    if (itype==ScanImage::BlackWhite)			// line art (bitmap)
     {
         mScanImage->setColor(0,qRgb(0x00,0x00,0x00));	// set black/white palette
         mScanImage->setColor(1,qRgb(0xFF,0xFF,0xFF));

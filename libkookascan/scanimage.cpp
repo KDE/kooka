@@ -137,11 +137,6 @@ ScanImage::ScanImage(const QUrl &url)
 }
 
 
-ScanImage::~ScanImage()
-{
-}
-
-
 void ScanImage::init()
 {
     m_subImages = 0;					// no subimages present
@@ -273,4 +268,26 @@ int ScanImage::getXResolution() const
 int ScanImage::getYResolution() const
 {
     return (DPM_TO_DPI(dotsPerMeterY()));
+}
+
+
+// This was originally ImageMetaInfo::findImageType() and then
+// ImgSaver::findImageType().  It is used to deduce the image
+// type, if it has not been possible to derive it from the
+// SANE parameters by KScanDevice.
+//
+// The logic is very similar to KScanDevice::getImageFormat(),
+// except that it looks at the actual result image instead of the
+// initial SANE parameters.  This means that the image type could
+// possibly be resolved as LowColour here.
+ScanImage::ImageType ScanImage::imageType() const
+{
+    if (mImageType!=ScanImage::None) return (mImageType);	// image type as set
+    if (isNull()) return (ScanImage::None);			// null image
+
+    if (depth()==1 || colorCount()==2) return (ScanImage::BlackWhite);
+								// black/white bitmap
+    if (depth()>8) return (ScanImage::HighColour);		// high colour
+    if (allGray()) return (ScanImage::Greyscale);		// grey scale
+    return (ScanImage::LowColour);				// low (indexed) colour
 }
