@@ -44,6 +44,7 @@
 #include <kdiroperator.h>
 #include <klocalizedstring.h>
 #include <kcolorscheme.h>
+#include <kio_version.h>
 
 #include "kookapref.h"
 #include "kookasettings.h"
@@ -200,10 +201,14 @@ void ThumbView::slotSetSize(KIconLoader::StdSizes size)
 {
     m_thumbSize = size;
 
+#if KIO_VERSION>=QT_VERSION_CHECK(5, 76, 0)
+    setIconSize(size);
+#else
     // see KDirOperator::setIconsZoom() in kio/src/kfilewidgets/kdiroperator.cpp
     const int val = ((size-KIconLoader::SizeSmall)*100) / (KIconLoader::SizeEnormous-KIconLoader::SizeSmall);
     //qDebug() << "size" << size << "-> val" << val;
     setIconsZoom(val);
+#endif
 }
 
 void ThumbView::slotFinishedLoading()
