@@ -64,7 +64,7 @@ QWidget *KookaScanParams::messageScannerNotSelected()
     if (mNoScannerMessage==nullptr)
     {
         mNoScannerMessage = createErrorWidget(
-            xi18nc("@info:status",
+            xi18nc("@info",
                    "<emphasis strong=\"1\">Gallery Mode - No scanner selected</emphasis>"
                    "<nl/><nl/>"
                    "In this mode you can browse, manipulate and OCR images already in the gallery."
@@ -147,7 +147,7 @@ void KookaScanParams::slotDestinationSelected(int idx)
 
     if (destName.isEmpty())
     {
-        mParamsPage->addRow(createErrorWidget(xi18nc("@info:status", "No destination selected")));
+        mParamsPage->addRow(createErrorWidget(xi18nc("@info", "No destination selected")));
         return;
     }
 
@@ -155,7 +155,7 @@ void KookaScanParams::slotDestinationSelected(int idx)
     //mDestinationPlugin=nullptr;
     if (mDestinationPlugin==nullptr)
     {
-        mParamsPage->addRow(createErrorWidget(xi18nc("@info:status", "Unable to load plugin '%1'", destName)));
+        mParamsPage->addRow(createErrorWidget(xi18nc("@info", "Unable to load plugin '%1'", destName)));
         return;
     }
 
