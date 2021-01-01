@@ -28,6 +28,12 @@ set(dialogutil_SRCS
   recentsaver.cpp
   imagefilter.cpp
 )
+ecm_qt_declare_logging_category(dialogutil_SRCS
+  HEADER "libdialogutil_logging.h"
+  IDENTIFIER "LIBDIALOGUTIL_LOG"
+  CATEGORY_NAME "libdialogutil"
+  EXPORT kookalogging
+  DESCRIPTION "libdialogutil (Kooka)")
 
 set(dialogutil_HDRS
   dialogbase.h

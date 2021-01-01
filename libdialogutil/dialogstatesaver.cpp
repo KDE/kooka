@@ -33,10 +33,11 @@
 #include <qdialog.h>
 #include <qwindow.h>
 #include <qscreen.h>
-#include <qdebug.h>
 
 #include <kconfiggroup.h>
 #include <ksharedconfig.h>
+
+#include "libdialogutil_logging.h"
 
 
 static bool sSaveSettings = true;
@@ -55,9 +56,9 @@ static KConfigGroup configGroupFor(QWidget *window)
     if (objName.isEmpty())
     {
         objName = window->metaObject()->className();
-        qWarning() << "object name not set, using class name" << objName;
+        qCWarning(LIBDIALOGUTIL_LOG) << "object name not set, using class name" << objName;
     }
-    else qDebug() << "for" << objName << "which is a" << window->metaObject()->className();
+    else qCDebug(LIBDIALOGUTIL_LOG) << "for" << objName << "which is a" << window->metaObject()->className();
 
     return (KSharedConfig::openConfig(QString(), KConfig::NoCascade)->group(objName));
 }
@@ -95,7 +96,7 @@ void DialogStateSaver::restoreWindowState(QWidget *widget, const KConfigGroup &g
     const QSize sizeDefault = widget->sizeHint();
 
     // originally from KDE4 KDialog::restoreDialogSize()
-    qDebug() << "from" << grp.name() << "in" << grp.config()->name();
+    qCDebug(LIBDIALOGUTIL_LOG) << "from" << grp.name() << "in" << grp.config()->name();
     const int width = grp.readEntry(QString::fromLatin1("Width %1").arg(desk.width()), sizeDefault.width());
     const int height = grp.readEntry(QString::fromLatin1("Height %1").arg(desk.height()), sizeDefault.height());
     widget->resize(width, height);
@@ -132,7 +133,7 @@ void DialogStateSaver::saveWindowState(QWidget *widget, KConfigGroup &grp)
     const QSize sizeToSave = widget->size();
 
     // originally from KDE4 KDialog::saveDialogSize()
-    qDebug() << "to" << grp.name() << "in" << grp.config()->name();
+    qCDebug(LIBDIALOGUTIL_LOG) << "to" << grp.name() << "in" << grp.config()->name();
     grp.writeEntry(QString::fromLatin1("Width %1").arg(desk.width()), sizeToSave.width());
     grp.writeEntry( QString::fromLatin1("Height %1").arg(desk.height()), sizeToSave.height());
     grp.sync();

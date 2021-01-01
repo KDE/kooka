@@ -36,6 +36,8 @@
 
 #include <krecentdirs.h>
 
+#include "libdialogutil_logging.h"
+
 
 RecentSaver::RecentSaver(const QString &fileClass)
 {
@@ -59,7 +61,7 @@ QString RecentSaver::recentPath(const QString &suggestedName)
 
     QString recentDir = mRecentDir;
     if (!suggestedName.isEmpty()) recentDir += suggestedName;
-    qDebug() << "for" << mRecentClass << "dir" << mRecentDir << "->" << recentDir;
+    qCDebug(LIBDIALOGUTIL_LOG) << "for" << mRecentClass << "dir" << mRecentDir << "->" << recentDir;
     return (recentDir);
 }
 
@@ -80,6 +82,6 @@ void RecentSaver::save(const QString &path)
     if (!rd.endsWith('/')) rd += '/';			// ensure saved as directory
     if (rd==mRecentDir) return;				// nothing new, no need to save
 
-    qDebug() << "for" << mRecentClass << "saving" << rd;
+    qCDebug(LIBDIALOGUTIL_LOG) << "for" << mRecentClass << "saving" << rd;
     KRecentDirs::add(mRecentClass, rd);
 }

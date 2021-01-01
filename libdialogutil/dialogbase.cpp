@@ -32,7 +32,6 @@
 
 #include <qlayout.h>
 #include <qdesktopwidget.h>
-#include <qdebug.h>
 #include <qframe.h>
 #include <qstyle.h>
 #include <qpushbutton.h>
@@ -42,12 +41,13 @@
 #include <kguiitem.h>
 
 #include "dialogstatewatcher.h"
+#include "libdialogutil_logging.h"
 
 
 DialogBase::DialogBase(QWidget *pnt)
     : QDialog(pnt)
 {
-    qDebug();
+    qCDebug(LIBDIALOGUTIL_LOG);
 
     setModal(true);					// convenience, can reset if necessary
 
@@ -64,13 +64,13 @@ void DialogBase::showEvent(QShowEvent *ev)
 {
     if (layout()==nullptr)					// layout not yet set up
     {
-        qDebug() << "setup layout";
+        qCDebug(LIBDIALOGUTIL_LOG) << "setup layout";
         QVBoxLayout *mainLayout = new QVBoxLayout;
         setLayout(mainLayout);
 
         if (mMainWidget==nullptr)
         {
-            qWarning() << "No main widget set for" << objectName();
+            qCWarning(LIBDIALOGUTIL_LOG) << "No main widget set for" << objectName();
             mMainWidget = new QWidget(this);
         }
 
@@ -85,12 +85,12 @@ void DialogBase::showEvent(QShowEvent *ev)
 
 void DialogBase::setButtons(QDialogButtonBox::StandardButtons buttons)
 {
-    qDebug() << buttons;
+    qCDebug(LIBDIALOGUTIL_LOG) << buttons;
     mButtonBox->setStandardButtons(buttons);
 
     if (buttons & QDialogButtonBox::Ok)
     {
-        qDebug() << "setup OK button";
+        qCDebug(LIBDIALOGUTIL_LOG) << "setup OK button";
         QPushButton *okButton = mButtonBox->button(QDialogButtonBox::Ok);
         okButton->setDefault(true);
         okButton->setShortcut(Qt::CTRL|Qt::Key_Return);
