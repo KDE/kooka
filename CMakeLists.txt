@@ -20,7 +20,7 @@ message(STATUS "Configuring for Kooka/libkookascan version ${VERSION}")
 cmake_minimum_required (VERSION 2.8.12 FATAL_ERROR)
 set(QT_MIN_VERSION "5.4.0")
 set(KF5_MIN_VERSION "5.10.0")
-set(ECM_MIN_VERSION "1.2.0")
+set(ECM_MIN_VERSION "5.68.0")
 
 # ECM setup (Extra Cmake Modules)
 find_package(ECM ${ECM_MIN_VERSION} REQUIRED NO_MODULE)
@@ -36,6 +36,7 @@ include(KDEFrameworkCompilerSettings NO_POLICY_SCOPE)
 include(KDECMakeSettings)
 include(GenerateExportHeader)
 include(ECMInstallIcons)
+include(ECMQtDeclareLoggingCategory)
 
 # Options
 option(INSTALL_BINARIES "Install the binaries and libraries, turn off for development in place" ON)
@@ -134,6 +135,13 @@ add_custom_target(vcsversion
 #     VERBATIM
 #     COMMAND sh -c "${KDELIBS_SOURCE_DIR}/doc/api/doxygen.sh --no-modulename --recurse --doxdatadir=${KDELIBS_SOURCE_DIR}/doc/common ${CMAKE_CURRENT_SOURCE_DIR}; echo 'API documentation at file://${CMAKE_CURRENT_BINARY_DIR}/apidocs/index.html';")
 # endif (HAVE_APIDOX)
+
+############### Logging ###############
+
+ecm_qt_install_logging_categories(
+  EXPORT kookalogging
+  FILE kooka.categories
+  DESTINATION "${KDE_INSTALL_LOGGINGCATEGORIESDIR}")
 
 ############### Configuration information ###############
 
