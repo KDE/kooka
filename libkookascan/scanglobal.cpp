@@ -30,12 +30,12 @@
 
 #include "scanglobal.h"
 
-#include <qdebug.h>
-
 #include <klocalizedstring.h>
 
 #include "kscandevice.h"
 #include "scansettings.h"
+
+#include "libkookascan_logging.h"
 
 extern "C" {
 #include <sane/sane.h>
@@ -55,7 +55,7 @@ ScanGlobal *ScanGlobal::self()
 
 ScanGlobal::ScanGlobal()
 {
-    //qDebug();
+    qCDebug(LIBKOOKASCAN_LOG);
 
     mSaneInitDone = false;
     mSaneInitError = false;
@@ -64,7 +64,7 @@ ScanGlobal::ScanGlobal()
 ScanGlobal::~ScanGlobal()
 {
     if (mSaneInitDone) {
-        //qDebug() << "calling sane_exit()";
+        qCDebug(LIBKOOKASCAN_LOG) << "calling sane_exit()";
         sane_exit();
     }
 }
@@ -88,10 +88,10 @@ extern "C" void authCallback(SANE_String_Const resource,
                              SANE_Char username[SANE_MAX_USERNAME_LEN],
                              SANE_Char password[SANE_MAX_PASSWORD_LEN])
 {
-    //qDebug() << "for resource" << resource;
+    qCDebug(LIBKOOKASCAN_LOG) << "for resource" << resource;
 
     if (sScanDevice == nullptr) {          // no device set
-        //qDebug() << "cannot authenticate, no device";
+        qCWarning(LIBKOOKASCAN_LOG) << "cannot authenticate, no device";
         return;
     }
 
@@ -117,11 +117,11 @@ bool ScanGlobal::init()
         return (false);    // error happened, no point
     }
 
-    //qDebug() << "calling sane_init()";
+    qCDebug(LIBKOOKASCAN_LOG) << "calling sane_init()";
     SANE_Status status = sane_init(nullptr, &authCallback);
     if (status != SANE_STATUS_GOOD) {
         mSaneInitError = true;
-        qDebug() << "sane_init() failed, status" << status;
+        qCWarning(LIBKOOKASCAN_LOG) << "sane_init() failed, status" << status;
     } else {
         mSaneInitDone = true;
     }

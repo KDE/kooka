@@ -36,7 +36,6 @@
 #include <qapplication.h>
 #include <qsocketnotifier.h>
 #include <qstandardpaths.h>
-#include <qdebug.h>
 
 #include <klocalizedstring.h>
 #include <kconfig.h>
@@ -50,6 +49,7 @@
 #include "kscanoptset.h"
 #include "deviceselector.h"
 #include "scansettings.h"
+#include "libkookascan_logging.h"
 
 extern "C" {
 #include <sane/saneopts.h>
@@ -93,7 +93,7 @@ KScanOption *KScanDevice::getOption(const QByteArray &name, bool create)
     if (mCreatedOptions.contains(alias))
     {
 #ifdef DEBUG_CREATE
-        qDebug() << "already exists" << alias;
+        qCDebug(LIBKOOKASCAN_LOG) << "already exists" << alias;
 #endif // DEBUG_CREATE
         return (mCreatedOptions.value(alias));
     }
@@ -101,13 +101,13 @@ KScanOption *KScanDevice::getOption(const QByteArray &name, bool create)
     if (!create)
     {
 #ifdef DEBUG_CREATE
-        qDebug() << "does not exist" << alias;
+        qCDebug(LIBKOOKASCAN_LOG) << "does not exist" << alias;
 #endif // DEBUG_CREATE
         return (nullptr);
     }
 
 #ifdef DEBUG_CREATE
-    qDebug() << "creating new" << alias;
+    qCDebug(LIBKOOKASCAN_LOG) << "creating new" << alias;
 #endif // DEBUG_CREATE
     KScanOption *so = new KScanOption(alias, this);
     mCreatedOptions.insert(alias, so);
@@ -140,7 +140,7 @@ KScanOption *KScanDevice::getGuiElement(const QByteArray &name, QWidget *parent)
     if (name.isEmpty()) return (nullptr);
     if (!optionExists(name)) return (nullptr);
 
-    //qDebug() << "for" << name;
+    //qCDebug(LIBKOOKASCAN_LOG) << "for" << name;
 
     KScanOption *so = getExistingGuiElement(name);	// see if already exists
     if (so!=nullptr) return (so);			// if so, just return that
@@ -150,11 +150,11 @@ KScanOption *KScanDevice::getGuiElement(const QByteArray &name, QWidget *parent)
     {
         QWidget *w = so->createWidget(parent);		// create widget for option
         if (w!=nullptr) w->setEnabled(so->isActive() && so->isSoftwareSettable());
-        //else qDebug() << "no widget created for" << name;
+        else qCDebug(LIBKOOKASCAN_LOG) << "no widget created for" << name;
     }
     else						// option not valid
     {							// (not known by scanner?)
-        //qDebug() << "option invalid" << name;
+        qCDebug(LIBKOOKASCAN_LOG) << "option invalid" << name;
         so = nullptr;
     }
 
@@ -168,7 +168,7 @@ KScanOption *KScanDevice::getGuiElement(const QByteArray &name, QWidget *parent)
 KScanDevice::KScanDevice(QObject *parent)
    : QObject(parent)
 {
-    //qDebug();
+    qCDebug(LIBKOOKASCAN_LOG);
 
     ScanGlobal::self()->init();				// do sane_init() first of all
 
@@ -196,7 +196,7 @@ KScanDevice::~KScanDevice()
 // TODO: need to check and do closeDevice() here?
     ScanGlobal::self()->setScanDevice(nullptr);		// going away, don't call me
 
-    //qDebug();
+    qCDebug(LIBKOOKASCAN_LOG) << "done";
 }
 
 
@@ -207,7 +207,7 @@ KScanDevice::Status KScanDevice::openDevice(const QByteArray &backend)
 {
     KScanDevice::Status stat = KScanDevice::Ok;
 
-    //qDebug() << "backend" << backend;
+    qCDebug(LIBKOOKASCAN_LOG) << "backend" << backend;
 
     mSaneStatus = SANE_STATUS_UNSUPPORTED;
     if (backend.isEmpty()) return (KScanDevice::ParamError);
@@ -223,7 +223,7 @@ KScanDevice::Status KScanDevice::openDevice(const QByteArray &backend)
     if (mSaneStatus==SANE_STATUS_ACCESS_DENIED)		// authentication failed?
     {
         clearSavedAuth();				// clear any saved password
-        //qDebug() << "retrying authentication";	// try again once more
+        qCDebug(LIBKOOKASCAN_LOG) << "retrying authentication";	// try again once more
         mSaneStatus = sane_open(backend.constData(), &mScannerHandle);
     }
 
@@ -247,14 +247,14 @@ void KScanDevice::closeDevice()
 {
     emit sigCloseDevice();				// tell callers we're closing
 
-    //qDebug() << "Saving default scan settings";
+    //qCDebug(LIBKOOKASCAN_LOG) << "Saving default scan settings";
     saveStartupConfig();				// save config for next startup
 
     if (mScannerHandle!=nullptr)
     {
         if (mScanningState!=KScanDevice::ScanIdle)
         {
-            //qDebug() << "Scanner is still active, calling sane_cancel()";
+            qCDebug(LIBKOOKASCAN_LOG) << "Scanner is still active, calling sane_cancel()";
             sane_cancel(mScannerHandle);
         }
         sane_close(mScannerHandle);			// close the SANE device
@@ -288,7 +288,6 @@ QString KScanDevice::scannerDescription() const
         ret = i18n("No scanner selected");
     }
 
-    //qDebug() << "returning" << ret;
     return (ret);
 }
 
@@ -329,7 +328,7 @@ KScanDevice::Status KScanDevice::findOptions()
     if (sane_control_option(mScannerHandle, 0, SANE_ACTION_GET_VALUE,
                             &n, &opt)!=SANE_STATUS_GOOD)
     {
-        qWarning() << "cannot read option 0 (count)";
+        qCWarning(LIBKOOKASCAN_LOG) << "cannot read option 0 (count)";
         return (KScanDevice::ControlError);
     }
 
@@ -351,11 +350,11 @@ KScanDevice::Status KScanDevice::findOptions()
         if (!name.isEmpty())				// must now have a name
         {
 #ifdef DEBUG_OPTIONS
-            qDebug() << "Option" << i << "is" << name;
+            qCDebug(LIBKOOKASCAN_LOG) << "Option" << i << "is" << name;
 #endif // DEBUG_OPTIONS
             mKnownOptions.insert(i, name);
         }
-        else qWarning() << "Invalid option" << i << "(no name and not a group)";
+        else qCWarning(LIBKOOKASCAN_LOG) << "Invalid option" << i << "(no name and not a group)";
     }
 
     return (KScanDevice::Ok);
@@ -424,17 +423,14 @@ QByteArray KScanDevice::aliasName( const QByteArray& name ) const
 {
     if (mCreatedOptions.contains(name)) return (name);
 
-	QByteArray ret = name;
-    if( name == SANE_NAME_CUSTOM_GAMMA )
+    QByteArray ret = name;
+    if (name == SANE_NAME_CUSTOM_GAMMA)
     {
-		if (mCreatedOptions.contains("gamma-correction"))
-			ret = "gamma-correction";
+        if (mCreatedOptions.contains("gamma-correction")) ret = "gamma-correction";
     }
 
-    //if( ret != name )
-    //qDebug() << "Found alias for" << name << "which is" << ret;
-
-    return( ret );
+    if (ret!=name) qCDebug(LIBKOOKASCAN_LOG) << "Found alias for" << name << "which is" << ret;
+    return (ret);
 }
 
 
@@ -445,7 +441,7 @@ void KScanDevice::applyOption(KScanOption *opt)
     if (opt!=nullptr)					// an option is specified
     {
 #ifdef DEBUG_RELOAD
-        qDebug() << "option" << opt->getName();
+        qCDebug(LIBKOOKASCAN_LOG) << "option" << opt->getName();
 #endif // DEBUG_APPLY
         reload = opt->apply();				// apply this option
     }
@@ -453,7 +449,7 @@ void KScanDevice::applyOption(KScanOption *opt)
     if (!reload)					// need to reload now?
     {
 #ifdef DEBUG_RELOAD
-        qDebug() << "Reload of others not needed";
+        qCDebug(LIBKOOKASCAN_LOG) << "Reload of others not needed";
 #endif // DEBUG_RELOAD
         return;
     }
@@ -466,7 +462,7 @@ void KScanDevice::applyOption(KScanOption *opt)
         if (opt==nullptr || so!=opt)
         {
 #ifdef DEBUG_RELOAD
-            qDebug() << "Reloading" << so->getName();
+            qCDebug(LIBKOOKASCAN_LOG) << "Reloading" << so->getName();
 #endif // DEBUG_RELOAD
             so->reload();
             so->redrawWidget();
@@ -474,7 +470,7 @@ void KScanDevice::applyOption(KScanOption *opt)
     }
 
 #ifdef DEBUG_RELOAD
-    qDebug() << "Finished";
+    qCDebug(LIBKOOKASCAN_LOG) << "Finished";
 #endif // DEBUG_RELOAD
 }
 
@@ -482,7 +478,7 @@ void KScanDevice::applyOption(KScanOption *opt)
 void KScanDevice::reloadAllOptions()
 {
 #ifdef DEBUG_RELOAD
-    qDebug();
+    qCDebug(LIBKOOKASCAN_LOG);
 #endif // DEBUG_RELOAD
     applyOption(nullptr);
 }
@@ -493,7 +489,7 @@ void KScanDevice::reloadAllOptions()
 
 void KScanDevice::slotStopScanning()
 {
-    qDebug();
+    qCDebug(LIBKOOKASCAN_LOG);
     mScanningState = KScanDevice::ScanStopNow;
 }
 
@@ -518,7 +514,7 @@ const QString KScanDevice::previewFile() const
 QImage KScanDevice::loadPreviewImage() const
 {
     const QString prevFile = previewFile();
-    qDebug() << "Loading preview from" << prevFile;
+    qCDebug(LIBKOOKASCAN_LOG) << "Loading preview from" << prevFile;
     return (QImage(prevFile));
 }
 
@@ -529,7 +525,7 @@ bool KScanDevice::savePreviewImage(const QImage &image) const
     if (image.isNull()) return (false);
 
     const QString prevFile = previewFile();
-    qDebug() << "Saving preview to" << prevFile;
+    qCDebug(LIBKOOKASCAN_LOG) << "Saving preview to" << prevFile;
     return (image.save(prevFile, "BMP"));
 }
 
@@ -559,7 +555,7 @@ inline const char *optionNotifyString(int opt)
 
 void KScanDevice::showOptions()
 {
-    qDebug() << "for" << mScannerName;
+    qCDebug(LIBKOOKASCAN_LOG) << "for" << mScannerName;
     std::cerr << "----------------------------------+---+---+---+---+---+---+---+---+-------" << std::endl;
     std::cerr << " Option                           |SSL|HSL|SDT|EMU|AUT|INA|ADV|PRI| Value" << std::endl;
     std::cerr << "----------------------------------+---+---+---+---+---+---+---+---+-------" << std::endl;
@@ -618,7 +614,7 @@ static ScanImage::ImageType getImageFormat(const SANE_Parameters *p)
     }
     else						// Error, no others supported
     {
-        qDebug() << "Only bit depths 1 or 8 supported!";
+        qCWarning(LIBKOOKASCAN_LOG) << "Only bit depths 1 or 8 supported!";
         return (ScanImage::None);
     }
 }
@@ -693,12 +689,12 @@ KScanDevice::Status KScanDevice::acquirePreview(bool forceGray, int dpi)
         {
             /* Gray preview on */
             so->set(true);
-            //qDebug() << "Setting GrayPreview ON";
+            qCDebug(LIBKOOKASCAN_LOG) << "Setting GrayPreview ON";
         }
         else
         {
             so->set(false);
-            //qDebug() << "Setting GrayPreview OFF";
+            qCDebug(LIBKOOKASCAN_LOG) << "Setting GrayPreview OFF";
         }
         so->apply();
     }
@@ -706,7 +702,7 @@ KScanDevice::Status KScanDevice::acquirePreview(bool forceGray, int dpi)
     KScanOption *mode = getOption(SANE_NAME_SCAN_MODE, false);
     if (mode!=nullptr)
     {
-        //qDebug() << "Scan mode before preview is" << mode->get();
+        qCDebug(LIBKOOKASCAN_LOG) << "Scan mode before preview is" << mode->get();
         savedOptions.backupOption(mode);
         /* apply if it has a widget, or apply always? */
         if (mode->isGuiElement()) mode->apply();
@@ -717,7 +713,7 @@ KScanDevice::Status KScanDevice::acquirePreview(bool forceGray, int dpi)
     if (xres==nullptr) xres = getOption(SANE_NAME_SCAN_RESOLUTION, false);
     if (xres!=nullptr)
     {
-        //qDebug() << "Scan resolution before preview is" << xres->get();
+        qCDebug(LIBKOOKASCAN_LOG) << "Scan resolution before preview is" << xres->get();
         savedOptions.backupOption(xres);
 
         int preview_dpi = dpi;
@@ -726,13 +722,13 @@ KScanDevice::Status KScanDevice::acquirePreview(bool forceGray, int dpi)
             double min, max;
             if (!xres->getRange(&min, &max))
             {
-                //qDebug() << "Could not retrieve resolution range!";
+                qCDebug(LIBKOOKASCAN_LOG) << "Could not retrieve resolution range!";
                 min = 75.0;				// hope every scanner can do this
             }
 
             preview_dpi = (int) min;
             if (preview_dpi<MIN_PREVIEW_DPI) preview_dpi = MIN_PREVIEW_DPI;
-            //qDebug() << "Resolution range" << min << "-" << max << "preview at" << preview_dpi;
+            qCDebug(LIBKOOKASCAN_LOG) << "Resolution range" << min << "-" << max << "preview at" << preview_dpi;
         }
 
         KScanOption *yres = getOption(SANE_NAME_SCAN_Y_RESOLUTION, false);
@@ -813,14 +809,14 @@ KScanDevice::Status KScanDevice::acquireScan(const QString &filename)
         QFileInfo file(filename);
         if (!file.exists())
         {
-            //qDebug() << "virtual file" << filename << "does not exist";
+            qCWarning(LIBKOOKASCAN_LOG) << "virtual file" << filename << "does not exist";
             return (KScanDevice::ParamError);
         }
 
         QImage img(filename);
         if (img.isNull())
         {
-            //qDebug() << "virtual file" << filename << "could not load";
+            qCWarning(LIBKOOKASCAN_LOG) << "virtual file" << filename << "could not load";
             return (KScanDevice::ParamError);
         }
 
@@ -856,13 +852,13 @@ case SANE_FRAME_GREEN:	formatName = "GREEN";	break;
 case SANE_FRAME_BLUE:	formatName = "BLUE";	break;
     }
 
-    qDebug() << msg.toLatin1().constData();
-    qDebug() << "  format:          " << p->format << "=" << formatName.constData();
-    qDebug() << "  last_frame:      " << p->last_frame;
-    qDebug() << "  lines:           " << p->lines;
-    qDebug() << "  depth:           " << p->depth;
-    qDebug() << "  pixels_per_line: " << p->pixels_per_line;
-    qDebug() << "  bytes_per_line:  " << p->bytes_per_line;
+    qCDebug(LIBKOOKASCAN_LOG) << msg.toLatin1().constData();
+    qCDebug(LIBKOOKASCAN_LOG) << "  format:          " << p->format << "=" << formatName.constData();
+    qCDebug(LIBKOOKASCAN_LOG) << "  last_frame:      " << p->last_frame;
+    qCDebug(LIBKOOKASCAN_LOG) << "  lines:           " << p->lines;
+    qCDebug(LIBKOOKASCAN_LOG) << "  depth:           " << p->depth;
+    qCDebug(LIBKOOKASCAN_LOG) << "  pixels_per_line: " << p->pixels_per_line;
+    qCDebug(LIBKOOKASCAN_LOG) << "  bytes_per_line:  " << p->bytes_per_line;
 }
 #endif // DEBUG_PARAMS
 
@@ -909,7 +905,7 @@ KScanDevice::Status KScanDevice::acquireData(bool isPreview)
     if (mTestFormat!=ScanImage::None)
     {
         fmt = mTestFormat;
-        qDebug() << "Testing with image format" << fmt;
+        qCDebug(LIBKOOKASCAN_LOG) << "Testing with image format" << fmt;
     }
     emit sigScanStart(fmt);
 
@@ -919,7 +915,7 @@ KScanDevice::Status KScanDevice::acquireData(bool isPreview)
     // KScanDevice::ScanStopNow.  If that is the case, then finish here.
     if (mScanningState==KScanDevice::ScanStopNow)
     {							// user cancelled save dialogue
-        //qDebug() << "user cancelled before start";
+        qCDebug(LIBKOOKASCAN_LOG) << "user cancelled before start";
         stat = KScanDevice::Cancelled;
         scanFinished(stat);				// clean up anything started
         return (stat);
@@ -932,7 +928,7 @@ KScanDevice::Status KScanDevice::acquireData(bool isPreview)
         mSaneStatus = sane_start(mScannerHandle);
         if (mSaneStatus==SANE_STATUS_ACCESS_DENIED)	// authentication failed?
         {
-            //qDebug() << "retrying authentication";
+            qCDebug(LIBKOOKASCAN_LOG) << "retrying authentication";
             clearSavedAuth();				// clear any saved password
             mSaneStatus = sane_start(mScannerHandle);	// try again once more
         }
@@ -949,25 +945,25 @@ KScanDevice::Status KScanDevice::acquireData(bool isPreview)
                 // TODO: implement "Hand Scanner" support
                 if (mSaneParameters.lines<1)
                 {
-                    //qDebug() << "Hand Scanner not supported";
+                    qCWarning(LIBKOOKASCAN_LOG) << "Hand Scanner not supported";
                     stat = KScanDevice::NotSupported;
                 }
                 else if (mSaneParameters.pixels_per_line==0)
                 {
-                    //qDebug() << "Nothing to acquire!";
+                    qCWarning(LIBKOOKASCAN_LOG) << "Nothing to acquire!";
                     stat = KScanDevice::EmptyPic;
                 }
             }
             else
             {
                 stat = KScanDevice::OpenDevice;
-                //qDebug() << "sane_get_parameters() error" << lastSaneErrorMessage();
+                qCDebug(LIBKOOKASCAN_LOG) << "sane_get_parameters() error" << lastSaneErrorMessage();
             }
         }
         else
         {
             stat = KScanDevice::OpenDevice;
-            //qDebug() << "sane_start() error" << lastSaneErrorMessage();
+            qCDebug(LIBKOOKASCAN_LOG) << "sane_start() error" << lastSaneErrorMessage();
         }
         QApplication::restoreOverrideCursor();
 
@@ -994,20 +990,20 @@ KScanDevice::Status KScanDevice::acquireData(bool isPreview)
                 {
                     if (sane_get_select_fd(mScannerHandle, &fd)==SANE_STATUS_GOOD)
                     {
-                        //qDebug() << "using read socket notifier";
+                        qCDebug(LIBKOOKASCAN_LOG) << "using read socket notifier";
                         mSocketNotifier = new QSocketNotifier(fd, QSocketNotifier::Read, this);
                         connect(mSocketNotifier, &QSocketNotifier::activated, this, &KScanDevice::doProcessABlock);
                     }
-                    //else qDebug() << "not using socket notifier (sane_get_select_fd() failed)";
+                    else qCDebug(LIBKOOKASCAN_LOG) << "not using socket notifier (sane_get_select_fd() failed)";
                 }
-                //else qDebug() << "not using socket notifier (sane_set_io_mode() failed)";
+                else qCDebug(LIBKOOKASCAN_LOG) << "not using socket notifier (sane_set_io_mode() failed)";
             }
         }
 
         if (stat!=KScanDevice::Ok)			// some problem getting started
         {
             // Scanning could not start - give up now
-            //qDebug() << "Scanning failed to start, status" << stat;
+            qCDebug(LIBKOOKASCAN_LOG) << "Scanning failed to start, status" << stat;
             scanFinished(stat);				// clean up anything started
             return (stat);
         }
@@ -1082,8 +1078,8 @@ KScanDevice::Status KScanDevice::acquireData(bool isPreview)
         }
     }
 
-    //qDebug() << "Scan read" << mBytesRead << "bytes in"
-    //<< mBlocksRead << "blocks," << frames << "frames - status" << stat;
+    qCDebug(LIBKOOKASCAN_LOG) << "Scan read" << mBytesRead << "bytes in"
+                              << mBlocksRead << "blocks," << frames << "frames, status" << stat;
 
     scanFinished(stat);					// scan is now finished
     return (stat);
@@ -1124,8 +1120,8 @@ void KScanDevice::doProcessABlock()
         {
             if (mSaneStatus!=SANE_STATUS_EOF)		// this is OK, just stop
             {						// any other error
-                //qDebug() << "sane_read() error" << lastSaneErrorMessage()
-                //<< "bytes read" << bytes_read;
+                qCDebug(LIBKOOKASCAN_LOG) << "sane_read() error" << lastSaneErrorMessage()
+                                          << "bytes read" << bytes_read;
             }
             break;
         }
@@ -1134,7 +1130,6 @@ void KScanDevice::doProcessABlock()
 
         ++mBlocksRead;
 	mBytesRead += bytes_read;
-	// qDebug( "Bytes read: %d, bytes written: %d", bytes_read, mBytesUsed );
 
         int red = 0;
         int green = 0;
@@ -1249,7 +1244,7 @@ default:                newCol = qRgba(0xFF, 0xFF, 0xFF, 0xFF);
             }
             break;
 
-default:    //qDebug() << "Undefined SANE format" << mSaneParameters.format;
+default:    qCWarning(LIBKOOKASCAN_LOG) << "Undefined SANE format" << mSaneParameters.format;
             break;
 	}						// switch of scan format
 
@@ -1262,7 +1257,7 @@ default:    //qDebug() << "Undefined SANE format" << mSaneParameters.format;
         // cannot get here, bytes_read and EOF tested above
 	//if( bytes_read == 0 || mSaneStatus == SANE_STATUS_EOF )
 	//{
-	//   //qDebug() << "mSaneStatus not OK:" << sane_stat;
+	//   //qCDebug(LIBKOOKASCAN_LOG) << "mSaneStatus not OK:" << sane_stat;
 	//   break;
 	//}
 
@@ -1275,8 +1270,8 @@ default:    //qDebug() << "Undefined SANE format" << mSaneParameters.format;
              * the QSocketnotifier fires for a few times after the scan has been
              * cancelled.  Does it matter ? To see it, just uncomment the qDebug msg.
              */
-            //qDebug() << "Stopping the scan progress";
-//            mScanningState = KScanDevice::ScanIdle;
+            //qCDebug(LIBKOOKASCAN_LOG) << "Stopping the scan progress";
+            //mScanningState = KScanDevice::ScanIdle;
             break;
         }
     }							// end of main loop
@@ -1287,20 +1282,20 @@ default:    //qDebug() << "Undefined SANE format" << mSaneParameters.format;
         if (mSaneParameters.last_frame)			// end of scanning run
         {
             /** Everything is okay, the picture is ready **/
-            //qDebug() << "Last frame reached, scan successful";
+            qCDebug(LIBKOOKASCAN_LOG) << "Last frame reached, scan successful";
             mScanningState = KScanDevice::ScanIdle;
         }
         else
         {
             /** EOF und nicht letzter Frame -> Parameter neu belegen und neu starten **/
             mScanningState = KScanDevice::ScanNextFrame;
-            //qDebug() << "EOF, but another frame to scan";
+            qCDebug(LIBKOOKASCAN_LOG) << "EOF, but another frame to scan";
         }
     }
     else if (mSaneStatus!=SANE_STATUS_GOOD)
     {
         mScanningState = KScanDevice::ScanIdle;
-        //qDebug() << "Scan error or cancelled, status" << mSaneStatus;
+        qCDebug(LIBKOOKASCAN_LOG) << "Scan error or cancelled, status" << mSaneStatus;
     }
 
     if (mSocketNotifier!=nullptr) mSocketNotifier->setEnabled(true);
@@ -1309,7 +1304,7 @@ default:    //qDebug() << "Undefined SANE format" << mSaneParameters.format;
 
 void KScanDevice::scanFinished(KScanDevice::Status status)
 {
-    qDebug() << "status" << status;
+    qCDebug(LIBKOOKASCAN_LOG) << "status" << status;
 
     emit sigScanProgress(MAX_PROGRESS);
     QApplication::restoreOverrideCursor();
@@ -1396,8 +1391,8 @@ void KScanDevice::loadOptionSetInternal(const KScanOptSet *optSet, bool prio)
 void KScanDevice::loadOptionSet(const KScanOptSet *optSet)
 {
     if (optSet==nullptr) return;
-    //qDebug() << "Loading set" << optSet->getSetName() << "with" << optSet->count() << "options";
 
+    qCDebug(LIBKOOKASCAN_LOG) << "Loading set" << optSet->getSetName() << "with" << optSet->count() << "options";
     loadOptionSetInternal(optSet, true);
     loadOptionSetInternal(optSet, false);
 }
@@ -1454,7 +1449,7 @@ KConfigGroup KScanDevice::configGroup(const QString &groupName)
 
 bool KScanDevice::authenticate(QByteArray *retuser, QByteArray *retpass)
 {
-    //qDebug() << "for" << mScannerName;
+    qCDebug(LIBKOOKASCAN_LOG) << "for" << mScannerName;
 
     // TODO: use KWallet for username/password?
     KConfigGroup grp = configGroup(mScannerName);
@@ -1463,11 +1458,11 @@ bool KScanDevice::authenticate(QByteArray *retuser, QByteArray *retpass)
 
     if (!user.isEmpty() && !pass.isEmpty())
     {
-        //qDebug() << "have saved username/password";
+        qCDebug(LIBKOOKASCAN_LOG) << "have saved username/password";
     }
     else
     {
-        //qDebug() << "asking for username/password";
+        qCDebug(LIBKOOKASCAN_LOG) << "asking for username/password";
 
         KPasswordDialog dlg(nullptr, KPasswordDialog::ShowKeepPassword|KPasswordDialog::ShowUsernameLine);
         dlg.setPrompt(xi18nc("@info", "The scanner<nl/><emphasis strong=\"1\">%1</emphasis><nl/>requires authentication.", mScannerName.constData()));

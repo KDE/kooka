@@ -28,19 +28,20 @@
 
 #include <QGraphicsScene>
 #include <QGraphicsPixmapItem>
-#include <QTransform>
 
+#include <qtransform.h>
 #include <qimage.h>
 #include <qpainter.h>
 #include <qstyle.h>
 #include <qevent.h>
 #include <qapplication.h>
+#include <qmenu.h>
 
-#include <KLocalizedString>
-#include <QDebug>
-#include <QMenu>
+#include <klocalizedstring.h>
 
 #include "imgscaledialog.h"
+#include "libkookascan_logging.h"
+
 
 //  Parameters for display and selection
 //  ------------------------------------
@@ -142,8 +143,6 @@ private:
 SelectionItem::SelectionItem(QGraphicsItem *parent)
     : QGraphicsItem(parent)
 {
-    //qDebug();
-
     mDashOffset = 0;
 }
 
@@ -251,15 +250,15 @@ void ImageCanvas::newImage(ScanImage::Ptr newImage, bool holdZoom)
 
 #ifdef HOLD_SELECTION
     QRect oldSelected = mSelected;
-    //qDebug() << "original selection" << oldSelected << "null=" << oldSelected.isEmpty();
-    //qDebug() << "   w=" << mSelected.width() << "h=" << mSelected.height();
+    qCDebug(LIBKOOKASCAN_LOG) << "original selection" << oldSelected << "null" << oldSelected.isEmpty();
+    qCDebug(LIBKOOKASCAN_LOG) << "w" << mSelected.width() << "h" << mSelected.height();
 #endif
 
     stopMarqueeTimer();					// also clears selection
 
     if (!mImage.isNull())				// handle the new image
     {
-        //qDebug() << "new image size is" << mImage->size();
+        //qCDebug(LIBKOOKASCAN_LOG) << "new image size is" << mImage->size();
         mPixmapItem->setPixmap(QPixmap::fromImage(*mImage.data()));
         setSceneRect(mPixmapItem->boundingRect());	// image always defines size
 
@@ -268,7 +267,7 @@ void ImageCanvas::newImage(ScanImage::Ptr newImage, bool holdZoom)
 #ifdef HOLD_SELECTION
         if (!oldSelected.isNull()) {
             mSelected = oldSelected;
-            //qDebug() << "restored selection" << mSelected;
+            qCDebug(LIBKOOKASCAN_LOG) << "restored selection" << mSelected;
             startMarqueeTimer();
         }
 #endif
@@ -292,7 +291,6 @@ QMenu *ImageCanvas::contextMenu()
 {
     if (mContextMenu == nullptr) {         // menu not created yet
         mContextMenu = new QMenu(this);
-        //qDebug() << "context menu enabled";
     }
 
     return (mContextMenu);
@@ -382,7 +380,7 @@ QRectF ImageCanvas::selectedRectF() const
 // Set the selected area in absolute image pixels.
 void ImageCanvas::setSelectionRect(const QRect &rect)
 {
-    //qDebug() << "rect=" << rect;
+    //qCDebug(LIBKOOKASCAN_LOG) << "rect=" << rect;
     if (!hasImage()) {
         return;
     }
@@ -398,7 +396,7 @@ void ImageCanvas::setSelectionRect(const QRect &rect)
 // Set the selected area as a proportion of the image size.
 void ImageCanvas::setSelectionRect(const QRectF &rect)
 {
-    //qDebug() << "rect=" << rect;
+    //qCDebug(LIBKOOKASCAN_LOG) << "rect=" << rect;
     if (!hasImage()) {
         return;
     }
@@ -525,14 +523,14 @@ void ImageCanvas::mouseReleaseEvent(QMouseEvent *ev)
     mMoving = ImageCanvas::MoveNone;
 
     QRect selected = selectedRect();
-    //qDebug() << "selected rect" << selected;
+    //qCDebug(LIBKOOKASCAN_LOG) << "selected rect" << selected;
     if (selected.width() < MIN_AREA_WIDTH || selected.height() < MIN_AREA_HEIGHT) {
-        //qDebug() << "no selection";
+        //qCDebug(LIBKOOKASCAN_LOG) << "no selection";
         stopMarqueeTimer();             // also hides selection
         emit newRect(QRect());
         emit newRect(QRectF());
     } else {
-        //qDebug() << "have selection";
+        //qCDebug(LIBKOOKASCAN_LOG) << "have selection";
         startMarqueeTimer();
         emit newRect(selectedRect());
         emit newRect(selectedRectF());
@@ -578,7 +576,7 @@ void ImageCanvas::mouseMoveEvent(QMouseEvent *ev)
     int sx = scenePos.x();              // in scene coordinates
     int sy = scenePos.y();
 
-    ////qDebug() << x << y << "moving" << mMoving;
+    //qCDebug(LIBKOOKASCAN_LOG) << x << y << "moving" << mMoving;
 
     // Set the cursor shape appropriately
     switch (mMoving != ImageCanvas::MoveNone ? mMoving : classifyPoint(QPoint(x, y))) {
@@ -752,7 +750,7 @@ void ImageCanvas::resizeEvent(QResizeEvent *ev)
 
 void ImageCanvas::setScaleFactor(int i)
 {
-    //qDebug() << "to" << i;
+    //qCDebug(LIBKOOKASCAN_LOG) << "to" << i;
     mScaleFactor = i;
     if (i == 0) {
         setScaleType(ImageCanvas::ScaleDynamic);
@@ -776,7 +774,7 @@ void ImageCanvas::setScaleType(ScaleType type)
         return;    // no change
     }
 
-    //qDebug() << "to" << type;
+    //qCDebug(LIBKOOKASCAN_LOG) << "to" << type;
     mScaleType = type;
     emit scalingChanged(scaleTypeString());
 }
@@ -824,7 +822,7 @@ void ImageCanvas::recalculateViewScale()
         break;
 
     default:
-    //qDebug() << "Unknown scale type" << scaleType();
+        qCDebug(LIBKOOKASCAN_LOG) << "Unknown scale type" << scaleType();
     // fall through
     case ImageCanvas::ScaleOriginal:
         yscale = xscale = 1.0;
@@ -836,7 +834,7 @@ void ImageCanvas::recalculateViewScale()
         if ((yscale * ih) >= ah) {          // will there be a scroll bar?
             // account for vertical scroll bar
             xscale = yscale = double(aw - sbSize) / double(iw);
-            //qDebug() << "FIT WIDTH scrollbar to subtract:" << sbSize;
+            //qCDebug(LIBKOOKASCAN_LOG) << "FIT WIDTH scrollbar to subtract:" << sbSize;
         }
         mScaleFactor = static_cast<int>(100 * xscale);
         break;
@@ -846,7 +844,7 @@ void ImageCanvas::recalculateViewScale()
         if ((xscale * iw) >= aw) {          // will there be a scroll bar?
             // account for horizontal scroll bar
             yscale = xscale = double(ah - sbSize) / double(ih);
-            //qDebug() << "FIT HEIGHT scrollbar to subtract:" << sbSize;
+            //qCDebug(LIBKOOKASCAN_LOG) << "FIT HEIGHT scrollbar to subtract:" << sbSize;
         }
         mScaleFactor = static_cast<int>(100 * yscale);
         break;
@@ -859,7 +857,7 @@ void ImageCanvas::recalculateViewScale()
 
     QTransform trans;
     trans.scale(xscale, yscale);
-    //qDebug() << "setting transform to" << trans;
+    //qCDebug(LIBKOOKASCAN_LOG) << "setting transform to" << trans;
     setTransform(trans);
 }
 
@@ -984,7 +982,7 @@ ImageCanvas::MoveState ImageCanvas::classifyPoint(const QPoint &p) const
     }
 
     const QRect r = mapFromScene(mSelectionItem->boundingRect()).boundingRect().normalized();
-    ////qDebug() << p << "for rect" << r;
+    //qCDebug(LIBKOOKASCAN_LOG) << p << "for rect" << r;
     if (r.isEmpty()) {
         return (ImageCanvas::MoveNone);
     }

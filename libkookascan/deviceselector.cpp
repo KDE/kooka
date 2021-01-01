@@ -36,7 +36,6 @@
 #include <qlabel.h>
 #include <qlistwidget.h>
 #include <qstandardpaths.h>
-#include <qdebug.h>
 
 #include <klocalizedstring.h>
 #include <kguiitem.h>
@@ -45,6 +44,7 @@
 #include "scanglobal.h"
 #include "scandevices.h"
 #include "scansettings.h"
+#include "libkookascan_logging.h"
 
 
 DeviceSelector::DeviceSelector(QWidget *pnt,
@@ -96,13 +96,13 @@ DeviceSelector::~DeviceSelector()
 QByteArray DeviceSelector::getDeviceFromConfig() const
 {
     QByteArray result = ScanSettings::startupScanDevice().toLocal8Bit();
-    //qDebug() << "Scanner from config" << result;
+    qCDebug(LIBKOOKASCAN_LOG) << "Scanner from config" << result;
 
     bool skipDialog = ScanSettings::startupSkipAsk();
     if (skipDialog && !result.isEmpty() && mDeviceList.contains(result)) {
-        //qDebug() << "Using scanner from config";
+        qCDebug(LIBKOOKASCAN_LOG) << "Using scanner from config";
     } else {
-        //qDebug() << "Not using scanner from config";
+        qCDebug(LIBKOOKASCAN_LOG) << "Not using scanner from config";
         result = "";
     }
 
@@ -123,13 +123,13 @@ QByteArray DeviceSelector::getSelectedDevice() const
 
     int selIndex = mListBox->row(selItems.first()); // of selected item
     int dcount = mDeviceList.count();
-    //qDebug() << "selected index" << selIndex << "of" << dcount;
+    //qCDebug(LIBKOOKASCAN_LOG) << "selected index" << selIndex << "of" << dcount;
     if (selIndex < 0 || selIndex >= dcount) {
         return ("");    // can never happen?
     }
 
     QByteArray dev = mDeviceList.at(selIndex).toLocal8Bit();
-    //qDebug() << "selected device" << dev;
+    qCDebug(LIBKOOKASCAN_LOG) << "selected device" << dev;
 
     // Save both the scan device and the skip-start-dialog flag
     // in the global "scannerrc" file.
@@ -145,7 +145,7 @@ void DeviceSelector::setScanSources(const QList<QByteArray> &backends)
     const KConfig *typeConf = nullptr;
 
     QString typeFile = QStandardPaths::locate(QStandardPaths::GenericDataLocation, "libkookascan/scantypes.dat");
-    //qDebug() << "Scanner type file" << typeFile;
+    qCDebug(LIBKOOKASCAN_LOG) << "Scanner type file" << typeFile;
     if (!typeFile.isEmpty()) {
         typeConf = new KConfig(typeFile, KConfig::SimpleConfig);
     }
@@ -158,7 +158,7 @@ void DeviceSelector::setScanSources(const QList<QByteArray> &backends)
         QByteArray devName = (*it);
         const SANE_Device *dev = ScanDevices::self()->deviceInfo(devName);
         if (dev == nullptr) {
-            //qDebug() << "no device info for" << devName;
+            qCDebug(LIBKOOKASCAN_LOG) << "no device info for" << devName;
             continue;
         }
 
@@ -176,12 +176,12 @@ void DeviceSelector::setScanSources(const QList<QByteArray> &backends)
         if (typeConf != nullptr) {         // type config file available
             QString devBase = QString(devName).section(':', 0, 0);
             QString ii = typeConf->group("Devices").readEntry(devBase, "");
-            //qDebug() << "for device" << devBase << "icon" << ii;
+            qCDebug(LIBKOOKASCAN_LOG) << "for device" << devBase << "icon" << ii;
             if (!ii.isEmpty()) {
                 itemIcon = ii;
             } else {
                 ii = typeConf->group("Types").readEntry(dev->type, "");
-                //qDebug() << "for type" << dev->type << "icon" << ii;
+                qCDebug(LIBKOOKASCAN_LOG) << "for type" << dev->type << "icon" << ii;
                 if (!ii.isEmpty()) {
                     itemIcon = ii;
                 }

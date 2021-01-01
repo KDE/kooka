@@ -33,7 +33,6 @@
 
 #include <qlabel.h>
 #include <qgridlayout.h>
-#include <qdebug.h>
 #include <qdialogbuttonbox.h>
 #include <qpushbutton.h>
 
@@ -113,14 +112,12 @@ GammaDialog::GammaDialog(const KGammaTable *table, QWidget *parent)
 
 void GammaDialog::slotApply()
 {
-    qDebug();
     emit gammaToApply(gammaTable());
 }
 
 
 void GammaDialog::slotReset()
 {
-    qDebug();
     KGammaTable defaultGamma;				// construct with default values
     int b = defaultGamma.getBrightness();		// retrieve those values
     int c = defaultGamma.getContrast();

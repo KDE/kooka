@@ -96,6 +96,12 @@ set(kookascan_SRCS
   scanicons.cpp
 )
 kconfig_add_kcfg_files(kookascan_SRCS scansettings.kcfgc)
+ecm_qt_declare_logging_category(kookascan_SRCS
+  HEADER "libkookascan_logging.h"
+  IDENTIFIER "LIBKOOKASCAN_LOG"
+  CATEGORY_NAME "libkookascan"
+  EXPORT kookalogging
+  DESCRIPTION "libkookascan (Kooka)")
 
 add_library(kookascan SHARED ${kookascan_SRCS})
 generate_export_header(kookascan BASE_NAME kookascan)

@@ -33,7 +33,6 @@
 
 #include <qvector.h>
 #include <qtimer.h>
-#include <qdebug.h>
 #include <qlayout.h>
 
 #include <klocalizedstring.h>
@@ -48,6 +47,7 @@
 #include "kscandevice.h"
 #include "autoselectbar.h"
 #include "scansettings.h"
+#include "libkookascan_logging.h"
 
 
 Previewer::Previewer(QWidget *parent)
@@ -95,7 +95,7 @@ bool Previewer::setPreviewImage(ScanImage::Ptr image)
 {
     if (image.isNull()) return (false);
 
-    //qDebug() << "setting new image, size" << image.size();
+    qCDebug(LIBKOOKASCAN_LOG) << "setting new image, size" << image->size();
     mCanvas->newImage(image);
     return (true);
 }
@@ -114,7 +114,7 @@ void Previewer::newImage(ScanImage::Ptr image)
 
 void Previewer::setScannerBedSize(int w, int h)
 {
-    //qDebug() << "to [" << w << "," << h << "]";
+    //qCDebug(LIBKOOKASCAN_LOG) << "to [" << w << "," << h << "]";
 
     mBedWidth = w;
     mBedHeight = h;
@@ -132,7 +132,7 @@ void Previewer::setDisplayUnit(KRuler::MetricStyle unit)
 // from scan size combo (specified in integer millimetres)
 void Previewer::slotNewCustomScanSize(const QRect &rect)
 {
-    //qDebug() << "rect" << rect;
+    //qCDebug(LIBKOOKASCAN_LOG) << "rect" << rect;
 
     QRect r = rect;
     QRectF newRect;
@@ -155,7 +155,7 @@ void Previewer::slotNewCustomScanSize(const QRect &rect)
 
 void Previewer::slotNewScanResolutions(int xres, int yres)
 {
-    //qDebug() << "resolution" << xres << " x " << yres;
+    qCDebug(LIBKOOKASCAN_LOG) << "resolution" << xres << "x" << yres;
 
     mScanResX = xres;
     mScanResY = yres;
@@ -164,7 +164,7 @@ void Previewer::slotNewScanResolutions(int xres, int yres)
 
 void Previewer::slotNewScanMode(int bytes_per_pix)
 {
-    //qDebug() << "bytes per pix" << bytes_per_pix;
+    qCDebug(LIBKOOKASCAN_LOG) << "bytes per pix" << bytes_per_pix;
 
     mBytesPerPix = bytes_per_pix;
     updateSelectionDims();
@@ -175,7 +175,7 @@ void Previewer::slotNewScanMode(int bytes_per_pix)
 //  to millimetres and re-emitted as signal newPreviewRect().
 void Previewer::slotNewAreaSelected(const QRectF &rect)
 {
-    //qDebug() << "rect" << rect << "width" << mBedWidth << "height" << mBedHeight;
+    qCDebug(LIBKOOKASCAN_LOG) << "rect" << rect << "width" << mBedWidth << "height" << mBedHeight;
 
     if (rect.isValid()) {
         // convert bedsize -> mm
@@ -184,7 +184,7 @@ void Previewer::slotNewAreaSelected(const QRectF &rect)
         r.setWidth(qRound(rect.width()*mBedWidth));
         r.setTop(qRound(rect.top()*mBedHeight));
         r.setHeight(qRound(rect.height()*mBedHeight));
-        //qDebug() << "new rect" << r;
+        //qCDebug(LIBKOOKASCAN_LOG) << "new rect" << r;
         emit newPreviewRect(r);
 
         mSelectionWidthMm = r.width();
@@ -248,7 +248,7 @@ QString Previewer::previewInfoString(double widthMm, double heightMm, int resX, 
 
 void Previewer::connectScanner(KScanDevice *scan)
 {
-    //qDebug();
+    qCDebug(LIBKOOKASCAN_LOG) << scan->scannerBackendName();
     mScanDevice = scan;
     mCanvas->newImage(nullptr);				// remove previous preview
 
@@ -271,7 +271,7 @@ void Previewer::connectScanner(KScanDevice *scan)
         val = scan->getConfig<int>(item);
         mAutoSelMargin = val;
 
-        //qDebug() << "margin" << mAutoSelMargin << "white?" << mBgIsWhite << "dust" << mAutoSelDustsize;
+        //qCDebug(LIBKOOKASCAN_LOG) << "margin" << mAutoSelMargin << "white?" << mBgIsWhite << "dust" << mAutoSelDustsize;
         mAutoSelectBar->setAdvancedSettings(mAutoSelMargin, mBgIsWhite, mAutoSelDustsize);
 
         updateSelectionDims();
@@ -293,10 +293,10 @@ void Previewer::resetAutoSelection()
 
 void Previewer::setAutoSelection(bool isOn)
 {
-    //qDebug() << "to" << isOn;
+    qCDebug(LIBKOOKASCAN_LOG) << "to" << isOn;
 
     if (isOn && mScanDevice == nullptr) {			// no scanner connected yet
-        //qDebug() << "no scanner!";
+        qCWarning(LIBKOOKASCAN_LOG) << "no scanner!";
         isOn = false;
     }
 
@@ -329,7 +329,7 @@ bool Previewer::checkForScannerBg()
 
     if (curWhite==ScanSettings::BackgroundUnknown)	// not yet known, ask the user
     {
-        //qDebug() << "Don't know the scanner background yet";
+        qCDebug(LIBKOOKASCAN_LOG) << "Don't know the scanner background yet";
         int res = KMessageBox::questionYesNoCancel(this,
                                                    i18n("The autodetection of images on the preview depends on the background color of the preview image (the result of scanning with no document loaded).\n\nPlease select whether the background of the preview image is black or white."),
                                                    i18nc("@title:window", "Autodetection Background"),
@@ -360,7 +360,7 @@ void Previewer::slotAutoSelToggled(bool isOn)
     setAutoSelection(isOn);             // set and store setting
     if (isOn && !mCanvas->hasSelectedRect()) {      // no selection yet?
         if (mCanvas->hasImage()) {          // is there a preview?
-            //qDebug() << "No selection, try to find one";
+            qCDebug(LIBKOOKASCAN_LOG) << "No selection, try to find one";
             slotFindAutoSelection();
         }
     }
@@ -369,7 +369,7 @@ void Previewer::slotAutoSelToggled(bool isOn)
 void Previewer::slotSetAutoSelThresh(int t)
 {
     mAutoSelThresh = t;
-    //qDebug() << "Setting threshold to" << t;
+    qCDebug(LIBKOOKASCAN_LOG) << "Setting threshold to" << t;
 
     if (mScanDevice!=nullptr)
     {
@@ -382,7 +382,7 @@ void Previewer::slotSetAutoSelThresh(int t)
 
 void Previewer::slotAutoSelectSettingsChanged(int margin, bool bgIsWhite, int dustsize)
 {
-    //qDebug() << "margin" << margin << "white?" << bgIsWhite << "dust" << dustsize;
+    qCDebug(LIBKOOKASCAN_LOG) << "margin" << margin << "white?" << bgIsWhite << "dust" << dustsize;
 
     if (mScanDevice!=nullptr)				// save settings for scanner
     {
@@ -425,16 +425,16 @@ void Previewer::slotFindAutoSelection()
     const QImage *img = mCanvas->rootImage().data();
     if (img==nullptr || img->isNull()) return;		// must have an image
 
-    //qDebug() << "image size" << img->size()
-    //<< "threshold" << mAutoSelThresh
-    //<< "dustsize" << mAutoSelDustsize
-    //<< "isWhite" << mBgIsWhite;
+    qCDebug(LIBKOOKASCAN_LOG) << "image size" << img->size()
+                              << "threshold" << mAutoSelThresh
+                              << "dustsize" << mAutoSelDustsize
+                              << "isWhite" << mBgIsWhite;
 
     const long iWidth  = img->width();          // cheap copies
     const long iHeight = img->height();
 
     if (mHeightSum.isEmpty()) {             // need to initialise arrays
-        //qDebug() << "Summing image data";
+        //qCDebug(LIBKOOKASCAN_LOG) << "Summing image data";
         QVector<long> heightSum(iHeight);
         QVector<long> widthSum(iWidth);
         heightSum.fill(0);
@@ -517,7 +517,7 @@ void Previewer::slotFindAutoSelection()
         r.setRight(qMin(((double(end) / iWidth) + margin), 0.999999));;
     }
 
-    //qDebug() << "Autodetection result" << r;
+    qCDebug(LIBKOOKASCAN_LOG) << "Autodetection result" << r;
     mCanvas->setSelectionRect(r);
     slotNewAreaSelected(r);
 }

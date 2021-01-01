@@ -40,7 +40,6 @@
 #include <qlabel.h>
 #include <qslider.h>
 #include <qlineedit.h>
-#include <qdebug.h>
 #include <qicon.h>
 #include <qimagereader.h>
 #include <qmimetype.h>
@@ -50,6 +49,7 @@
 #include <kurlrequester.h>
 
 #include "imagefilter.h"
+#include "libkookascan_logging.h"
 
 
 //  KScanControl - base class
@@ -328,7 +328,7 @@ void KScanCombo::setList(const QList<QByteArray> &list)
     // An optimisation, which may turn out to be not a valid one:
     // only update the combo box if the number of items has changed.
     if (list.count()==mCombo->count()) return;
-    //qDebug() << "count" << mCombo->count() << "->" << list.count() << "=" << list;
+    //qCDebug(LIBKOOKASCAN_LOG) << "count" << mCombo->count() << "->" << list.count() << "=" << list;
 
     const QString cur = text();				// get current setting
 

@@ -24,7 +24,6 @@
 #include <qcheckbox.h>
 #include <qlabel.h>
 #include <qregexp.h>
-#include <qdebug.h>
 
 #include <klocalizedstring.h>
 #include <kacceleratormanager.h>
@@ -39,6 +38,7 @@ extern "C" {
 #include "kscandevice.h"
 #include "kscancontrols.h"
 #include "kscanoptset.h"
+#include "libkookascan_logging.h"
 
 
 //  Debugging options
@@ -60,7 +60,7 @@ KScanOption::KScanOption(const QByteArray &name, KScanDevice *scandev)
 
     if (!initOption(name))
     {
-        //qDebug() << "initOption for" << name << "failed!";
+        qCWarning(LIBKOOKASCAN_LOG) << "initOption for" << name << "failed!";
         return;
     }
 
@@ -102,7 +102,7 @@ bool KScanOption::initOption(const QByteArray &name)
     mIndex = mScanDevice->getOptionIndex(mName);
     if (mIndex<=0)
     {
-        //qDebug() << "no option descriptor for" << mName;
+        qCWarning(LIBKOOKASCAN_LOG) << "no option descriptor for" << mName;
         return (false);
     }
 
@@ -128,7 +128,7 @@ bool KScanOption::initOption(const QByteArray &name)
 KScanOption::~KScanOption()
 {
 #ifdef DEBUG_MEM
-    if (!mBuffer.isNull()) //qDebug() << "Freeing" << mBuffer.size() << "bytes for" << mName;
+    if (!mBuffer.isNull()) qCDebug(LIBKOOKASCAN_LOG) << "Freeing" << mBuffer.size() << "bytes for" << mName;
 #endif
     // TODO: need to delete mControl here?
 }
@@ -198,14 +198,14 @@ void KScanOption::reload()
         if (!isActive())
         {
 #ifdef DEBUG_RELOAD
-            qDebug() << "not active" << mName;
+            qCDebug(LIBKOOKASCAN_LOG) << "not active" << mName;
 #endif
             mControl->setEnabled(false);
         }
         else if (!isSoftwareSettable())
         {
 #ifdef DEBUG_RELOAD
-            qDebug() << "not settable" << mName;
+            qCDebug(LIBKOOKASCAN_LOG) << "not settable" << mName;
 #endif
             mControl->setEnabled(false);
         }
@@ -215,14 +215,14 @@ void KScanOption::reload()
     if (!isReadable())
     {
 #ifdef DEBUG_RELOAD
-        qDebug() << "not readable" << mName;
+        qCDebug(LIBKOOKASCAN_LOG) << "not readable" << mName;
 #endif
         return;
     }
 
     if (mBuffer.isNull())				// first get mem if needed
     {
-        qDebug() << "need to allocate now";
+        qCDebug(LIBKOOKASCAN_LOG) << "need to allocate now";
         allocForDesc();					// allocate the buffer now
     }
 
@@ -230,8 +230,8 @@ void KScanOption::reload()
 
     if (mDesc->size>mBuffer.size())
     {
-        //qDebug() << "buffer too small for" << mName << "type" << mDesc->type
-        //<< "size" << mBuffer.size() << "need" << mDesc->size;
+        qCWarning(LIBKOOKASCAN_LOG) << "buffer too small for" << mName << "type" << mDesc->type
+                                    << "size" << mBuffer.size() << "need" << mDesc->size;
         allocForDesc();					// grow the buffer
     }
 
@@ -257,14 +257,14 @@ void KScanOption::reload()
                                                 mBuffer.data(), nullptr);
     if (sanestat!=SANE_STATUS_GOOD)
     {
-        qWarning() << "Can't get value for" << mName << "status" << sane_strstatus(sanestat);
+        qCWarning(LIBKOOKASCAN_LOG) << "Can't get value for" << mName << "status" << sane_strstatus(sanestat);
         return;
     }
 
     updateList();					// if range changed, update GUI
 
 #ifdef DEBUG_RELOAD
-    qDebug() << "reloaded" << mName;
+    qCDebug(LIBKOOKASCAN_LOG) << "reloaded" << mName;
 #endif
     mBufferClean = false;
 }
@@ -334,7 +334,7 @@ bool KScanOption::apply()
 
     if (sanestat!=SANE_STATUS_GOOD)
     {
-        //qDebug() << "apply" << mName << "failed, SANE status" << sane_strstatus(sanestat);
+        qCWarning(LIBKOOKASCAN_LOG) << "apply" << mName << "failed, SANE status" << sane_strstatus(sanestat);
         return (false);
     }
 
@@ -357,7 +357,7 @@ bool KScanOption::apply()
     mApplied = true;
 ret:
 #ifdef DEBUG_APPLY
-    qDebug() << qPrintable(debug);			// no quotes, please
+    qCDebug(LIBKOOKASCAN_LOG) << qPrintable(debug);			// no quotes, please
 #endif // DEBUG_APPLY
     return (reload);
 }
@@ -385,7 +385,7 @@ case SANE_TYPE_FIXED:
             qstrcmp(mDesc->name, SANE_NAME_SCAN_Y_RESOLUTION)==0)
         {
             ret = KScanOption::Resolution;
-            if (mDesc->unit!=SANE_UNIT_DPI) qDebug() << "expected" << mName << "unit" << mDesc->unit << "to be DPI";
+            if (mDesc->unit!=SANE_UNIT_DPI) qCWarning(LIBKOOKASCAN_LOG) << "expected" << mName << "unit" << mDesc->unit << "to be DPI";
         }
         else if (qstrcmp(mDesc->name, SANE_NAME_GAMMA_VECTOR)==0 ||
                  qstrcmp(mDesc->name, SANE_NAME_GAMMA_VECTOR_R)==0 ||
@@ -393,7 +393,7 @@ case SANE_TYPE_FIXED:
                  qstrcmp(mDesc->name, SANE_NAME_GAMMA_VECTOR_B)==0)
         {
             ret = KScanOption::GammaTable;
-            if (mDesc->size!=sizeof(SANE_Byte)) qDebug() << "expected" << mName << "size" << mDesc->size << "to be BYTE";
+            if (mDesc->size!=sizeof(SANE_Byte)) qCDebug(LIBKOOKASCAN_LOG) << "expected" << mName << "size" << mDesc->size << "to be BYTE";
         }
         else if (mDesc->constraint_type==SANE_CONSTRAINT_RANGE) ret = KScanOption::Range;
         else if (mDesc->constraint_type==SANE_CONSTRAINT_WORD_LIST) ret = KScanOption::StringList;
@@ -416,13 +416,13 @@ case SANE_TYPE_GROUP:
         break;
 
 default:
-        qDebug() << "unsupported SANE type" << mDesc->type;
+        qCDebug(LIBKOOKASCAN_LOG) << "unsupported SANE type" << mDesc->type;
         ret = KScanOption::Invalid;
         break;
     }
 
 #ifdef DEBUG_GETSET
-    qDebug() << "for SANE type" << mDesc->type << "returning" << ret;
+    qCDebug(LIBKOOKASCAN_LOG) << "for SANE type" << mDesc->type << "returning" << ret;
 #endif
     return (ret);
 }
@@ -432,7 +432,7 @@ bool KScanOption::set(int val)
 {
     if (!isValid() || mBuffer.isNull()) return (false);
 #ifdef DEBUG_GETSET
-    qDebug() << "Setting" << mName << "to" << val;
+    qCDebug(LIBKOOKASCAN_LOG) << "Setting" << mName << "to" << val;
 #endif
 
     int word_size;
@@ -464,7 +464,7 @@ case SANE_TYPE_FIXED:					// Fill the whole buffer with that value
         break;
 
 default:
-	//qDebug() << "Can't set" << mName << "with this type";
+        qCDebug(LIBKOOKASCAN_LOG) << "Can't set" << mName << "with type" << mDesc->type;
         return (false);
     }
 
@@ -477,7 +477,7 @@ bool KScanOption::set(double val)
 {
     if (!isValid() || mBuffer.isNull()) return (false);
 #ifdef DEBUG_GETSET
-    qDebug() << "Setting" << mName << "to" << val;
+    qCDebug(LIBKOOKASCAN_LOG) << "Setting" << mName << "to" << val;
 #endif
 
     int word_size;
@@ -508,7 +508,7 @@ case SANE_TYPE_FIXED:					// Fill the whole buffer with that value
         break;
 
 default:
-	//qDebug() << "Can't set" << mName << "with this type";
+        qCDebug(LIBKOOKASCAN_LOG) << "Can't set" << mName << "with type" << mDesc->type;
         return (false);
    }
 
@@ -522,7 +522,7 @@ bool KScanOption::set(const int *val, int size)
     if (!isValid() || mBuffer.isNull()) return (false);
     if (val==nullptr) return (false);
 #ifdef DEBUG_GETSET
-    qDebug() << "Setting" << mName << "of size" << size;
+    qCDebug(LIBKOOKASCAN_LOG) << "Setting" << mName << "of size" << size;
 #endif
 
     int offset = 0;
@@ -541,15 +541,15 @@ case SANE_TYPE_INT:
         break;
 
 default:
-	//qDebug() << "Can't set" << mName << "with this type";
+        qCDebug(LIBKOOKASCAN_LOG) << "Can't set" << mName << "with type" << mDesc->type;
         return (false);
     }
 
     int copybyte = mDesc->size;
     if (offset) copybyte += sizeof(SANE_Word);
 
-    //kdDebug(29000) << "Copying " << copybyte << " byte to options buffer" << endl;
-    mBuffer = QByteArray(((const char *) qa.data()),copybyte);
+    //qCDebug(LIBKOOKASCAN_LOG) << "Copying" << copybyte << "bytes to options buffer";
+    mBuffer = QByteArray(((const char *) qa.data()), copybyte);
     mBufferClean = false;
     return (true);
 }
@@ -559,7 +559,7 @@ bool KScanOption::set(const QByteArray &buf)
 {
     if (!isValid() || mBuffer.isNull()) return (false);
 #ifdef DEBUG_GETSET
-    qDebug() << "Setting" << mName << "to" << buf;
+    qCDebug(LIBKOOKASCAN_LOG) << "Setting" << mName << "to" << buf;
 #endif
 
     int val;
@@ -572,7 +572,7 @@ bool KScanOption::set(const QByteArray &buf)
     if (gt.setFromString(buf))
     {
 #ifdef DEBUG_GETSET
-        qDebug() << "is a gamma table";
+        qCDebug(LIBKOOKASCAN_LOG) << "is a gamma table";
 #endif
         return (set(&gt));
     }
@@ -603,7 +603,7 @@ case SANE_TYPE_BOOL:
         break;
 
 default:
-	//qDebug() << "Can't set" << mName << "with this type";
+        qCDebug(LIBKOOKASCAN_LOG) << "Can't set" << mName << "with type" << mDesc->type;
         return (false);
     }
 
@@ -625,7 +625,7 @@ bool KScanOption::set(const KGammaTable *gt)
 
     int size = mDesc->size/sizeof(SANE_Word);		// size of scanner gamma table
 #ifdef DEBUG_GETSET
-    qDebug() << "Setting gamma table for" << mName << "size" << size << "to" << gt->toString();
+    qCDebug(LIBKOOKASCAN_LOG) << "Setting gamma table for" << mName << "size" << size << "to" << gt->toString();
 #endif
     const int *run = mGammaTable->getTable(size);	// get table of that size
     QVector<SANE_Word> qa(size);			// converted to SANE values
@@ -641,7 +641,7 @@ case SANE_TYPE_FIXED:
         break;
 
 default:
-	//qDebug() << "Can't set" << mName << "with this type";
+        qCDebug(LIBKOOKASCAN_LOG) << "Can't set" << mName << "with type" << mDesc->type;
         return (false);
     }
 
@@ -670,12 +670,12 @@ case SANE_TYPE_FIXED:					/* reading just the first is OK */
         break;
 
 default:
-	//qDebug() << "Can't get" << mName << "as this type";
+        qCDebug(LIBKOOKASCAN_LOG) << "Can't get" << mName << "as type" << mDesc->type;
         return (false);
     }
 
 #ifdef DEBUG_GETSET
-    qDebug() << "Returning" << mName << "as" << *val;
+    qCDebug(LIBKOOKASCAN_LOG) << "Returning" << mName << "=" << *val;
 #endif
     return (true);
 }
@@ -718,14 +718,14 @@ case SANE_TYPE_FIXED:
             if (retstr.endsWith('.')) retstr.chop(1);
             break;
 
-default:    //qDebug() << "Can't get" << mName << "as this type";
+default:    qCDebug(LIBKOOKASCAN_LOG) << "Can't get" << mName << "as type" << mDesc->type;
             retstr = "?";
             break;
         }
     }
 
 #ifdef DEBUG_GETSET
-    qDebug() << "Returning" << mName << "as" << retstr;
+    qCDebug(LIBKOOKASCAN_LOG) << "Returning" << mName << "=" << retstr;
 #endif
     return (retstr);
 }
@@ -737,7 +737,7 @@ bool KScanOption::get(KGammaTable *gt) const
 
     gt->setAll(mGammaTable->getGamma(), mGammaTable->getBrightness(), mGammaTable->getContrast());
 #ifdef DEBUG_GETSET
-    qDebug() << "Returning" << mName << "as" << gt->toString();
+    qCDebug(LIBKOOKASCAN_LOG) << "Returning" << mName << "=" << gt->toString();
 #endif
     return (true);
 }
@@ -836,7 +836,7 @@ bool KScanOption::getRange(double *minp, double *maxp, double *quantp) const
     }
     else
     {
-        //qDebug() << "Not a range type" << mDesc->name;
+        qCDebug(LIBKOOKASCAN_LOG) << "Not a range type" << mDesc->name;
         return (false);
     }
 
@@ -852,7 +852,7 @@ KScanControl *KScanOption::createWidget(QWidget *parent)
 {
     if (!isValid())
     {
-        //qDebug() << "Option is not valid!";
+        qCWarning(LIBKOOKASCAN_LOG) << "Option is not valid";
 	return (nullptr);
     }
 
@@ -860,7 +860,7 @@ KScanControl *KScanOption::createWidget(QWidget *parent)
  	
     if (mDesc!=nullptr) mText = i18n(mDesc->title);
 
-    //qDebug() << "type" << mWidgetType << "name" << mName;
+    qCDebug(LIBKOOKASCAN_LOG) << "type" << mWidgetType << "name" << mName;
 
     KScanControl *w = nullptr;
 
@@ -913,7 +913,7 @@ case KScanOption::StringList:	 			// string list combo
 	break;
 
 case KScanOption::GammaTable:				// no widget for this
-	//qDebug() << "GammaTable not implemented here";
+	qCDebug(LIBKOOKASCAN_LOG) << "GammaTable not implemented here";
 	break;
 
 case KScanOption::String:				// free text entry
@@ -933,7 +933,7 @@ case KScanOption::Button:				// action button
         break;
 
 default:
-	//qDebug() << "unknown control type " << mWidgetType;
+	qCWarning(LIBKOOKASCAN_LOG) << "unknown control type " << mWidgetType;
 	break;
     }
  	
@@ -1048,13 +1048,12 @@ void KScanOption::allocBuffer(long size)
     if (size<1) return;
 
 #ifdef DEBUG_MEM
-    //qDebug() << "Allocating" << size << "bytes for" << name;
+    qCDebug(LIBKOOKASCAN_LOG) << "Allocating" << size << "bytes for" << name;
 #endif
-
     mBuffer.resize(size);				// set buffer size
     if (mBuffer.isNull())				// check allocation worked???
     {
-        qWarning() << "Fatal: Allocating" << size << "bytes for" << mName << "failed!";
+        qCWarning(LIBKOOKASCAN_LOG) << "Allocating" << size << "bytes for" << mName << "failed!";
         return;
     }
 
