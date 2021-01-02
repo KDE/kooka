@@ -261,9 +261,7 @@ QString OcrOcradDialog::orfUrl() const
 void OcrOcradDialog::getVersion(const QString &bin)
 {
     qCDebug(OCR_LOG) << "of" << bin;
-    if (bin.isEmpty()) {
-        return;
-    }
+    if (bin.isEmpty()) return;
 
     KProcess proc;
     proc.setOutputChannelMode(KProcess::MergedChannels);
@@ -272,7 +270,7 @@ void OcrOcradDialog::getVersion(const QString &bin)
     int status = proc.execute(5000);
     if (status == 0) {
         QByteArray output = proc.readAllStandardOutput();
-        QRegExp rx("GNU Ocrad (version )?([\\d\\.]+)");
+        QRegExp rx("GNU [Oo]crad (version )?([\\d\\.]+)");
         if (rx.indexIn(output) > -1) {
             m_ocrCmd = bin;
             m_versionStr = rx.cap(2);
@@ -306,7 +304,7 @@ QStringList OcrOcradDialog::getValidValues(const QString &opt)
             proc.execute(5000);
             // Ignore return status, because '--OPTION=help' returns exit code 1
             QByteArray output = proc.readAllStandardOutput();
-            QRegExp rx("Valid .*are:([^\n]+)");
+            QRegExp rx("Valid .*(?:are|names):([^\n]+)");
             if (rx.indexIn(output) > -1) {
                 QString values = rx.cap(1);
 #if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
