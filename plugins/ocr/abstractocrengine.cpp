@@ -34,7 +34,6 @@
 #include <qdir.h>
 #include <qfileinfo.h>
 #include <qprocess.h>
-#include <qdebug.h>
 #include <qtemporaryfile.h>
 
 #include <qtextdocument.h>
@@ -49,6 +48,7 @@
 #include "imageformat.h"
 
 #include "abstractocrdialogue.h"
+#include "ocr_logging.h"
 
 
 //  Constructor/destructor and external engine creation
@@ -66,7 +66,7 @@ AbstractOcrEngine::AbstractOcrEngine(QObject *pnt, const char *name)
       m_trackingActive(false)
 {
     setObjectName(name);
-    qDebug() << objectName();
+    qCDebug(OCR_LOG) << objectName();
 
     m_parent = nullptr;
 }
@@ -74,7 +74,7 @@ AbstractOcrEngine::AbstractOcrEngine(QObject *pnt, const char *name)
 
 AbstractOcrEngine::~AbstractOcrEngine()
 {
-    qDebug() << objectName();
+    qCDebug(OCR_LOG) << objectName();
     if (m_ocrProcess!=nullptr) delete m_ocrProcess;
     if (m_ocrDialog!=nullptr) delete m_ocrDialog;
 }
@@ -167,7 +167,7 @@ void AbstractOcrEngine::stopOcrProcess(bool tellUser)
 {
     if (m_ocrProcess!=nullptr && m_ocrProcess->state()==QProcess::Running)
     {
-        qDebug() << "Killing OCR process" << m_ocrProcess->pid();
+        qCDebug(OCR_LOG) << "Killing OCR process" << m_ocrProcess->pid();
         m_ocrProcess->kill();
         if (tellUser) KMessageBox::error(m_parent, i18n("The OCR process was stopped"));
     }
@@ -195,7 +195,7 @@ void AbstractOcrEngine::finishedOcr(bool success)
             // The QSharedPointer passed to ImageCanvas::newImage() will
             // retain the image and delete it when it is no longer needed.
             ScanImage *resultImage = new ScanImage(QUrl::fromLocalFile(m_ocrResultFile));
-            qDebug() << "Result image from" << m_ocrResultFile << "size" << resultImage->size();
+            qCDebug(OCR_LOG) << "Result image from" << m_ocrResultFile << "size" << resultImage->size();
             m_imgCanvas->newImage(ScanImage::Ptr(resultImage), true);
             m_imgCanvas->setReadOnly(true);		// display on image canvas
             m_trackingActive = true;			// handle clicks on image
@@ -217,14 +217,14 @@ void AbstractOcrEngine::finishedOcr(bool success)
     m_ocrRunning = false;
     removeTempFiles();
 
-    qDebug() << "OCR finished";
+    qCDebug(OCR_LOG) << "OCR finished";
 }
 
 
 void AbstractOcrEngine::removeTempFiles()
 {
     bool retain = m_ocrDialog->keepTempFiles();
-    qDebug() << "retain=" << retain;
+    qCDebug(OCR_LOG) << "retain?" << retain;
 
     QStringList temps = tempFiles(retain);			// get files used by engine
     if (!m_ocrResultFile.isEmpty()) temps << m_ocrResultFile;	// plus our result image
@@ -260,12 +260,12 @@ void AbstractOcrEngine::removeTempFiles()
             QString tf = (*it);
             QFileInfo fi(tf);
             if (!fi.exists()) {				// what happened?
-                //qDebug() << "does not exist:" << tf;
+                //qCDebug(OCR_LOG) << "does not exist:" << tf;
             } else if (fi.isDir()) {
-                //qDebug() << "temp dir" << tf;
+                //qCDebug(OCR_LOG) << "temp dir" << tf;
                 QDir(tf).removeRecursively();		// recursive deletion
             } else {
-                //qDebug() << "temp file" << tf;
+                //qCDebug(OCR_LOG) << "temp file" << tf;
                 QFile::remove(tf);			// just a simple file
             }
         }
@@ -362,7 +362,7 @@ QTextDocument *AbstractOcrEngine::startResultDocument()
 
 void AbstractOcrEngine::finishResultDocument()
 {
-    qDebug() << "words" << m_wordCount << "lines" << m_document->blockCount() << "chars" << m_document->characterCount();
+    qCDebug(OCR_LOG) << "words" << m_wordCount << "lines" << m_document->blockCount() << "chars" << m_document->characterCount();
 
     if (m_cursor != nullptr) delete m_cursor;
     emit readOnlyEditor(false);				// now let user edit it
@@ -371,7 +371,7 @@ void AbstractOcrEngine::finishResultDocument()
 void AbstractOcrEngine::startLine()
 {
     if (verboseDebug()) {
-        //qDebug();
+        qCDebug(OCR_LOG);
     }
     if (!m_cursor->atStart()) {
         m_cursor->insertBlock(QTextBlockFormat(), QTextCharFormat());
@@ -385,9 +385,9 @@ void AbstractOcrEngine::finishLine()
 void AbstractOcrEngine::addWord(const QString &word, const OcrWordData &data)
 {
     if (verboseDebug()) {
-        //qDebug() << "word" << word << "len" << word.length()
-        //<< "rect" << data.property(OcrWordData::Rectangle)
-        //<< "alts" << data.property(OcrWordData::Alternatives);
+        qCDebug(OCR_LOG) << "word" << word << "len" << word.length()
+                         << "rect" << data.property(OcrWordData::Rectangle)
+                         << "alts" << data.property(OcrWordData::Alternatives);
     }
 
     if (!m_cursor->atBlockStart()) {
@@ -408,7 +408,7 @@ QString AbstractOcrEngine::tempFileName(const QString &suffix, const QString &ba
 
     if (!tmpFile.open())
     {
-        qDebug() << "error creating temporary file" << protoName;
+        qCDebug(OCR_LOG) << "error creating temporary file" << protoName;
         setErrorText(xi18nc("@info", "Cannot create temporary file <filename>%1</filename>", protoName));
         return (QString());
     }
@@ -443,7 +443,7 @@ case 24:    newfmt = QImage::Format_RGB888;
 case 32:    newfmt = QImage::Format_RGB32;
             break;
 
-default:    qWarning() << "bad colour depth" << colors;
+default:    qCWarning(OCR_LOG) << "bad colour depth" << colors;
             return (QString());
         }
 
@@ -451,10 +451,10 @@ default:    qWarning() << "bad colour depth" << colors;
         tmpImg.reset(new ScanImage(img->convertToFormat(newfmt)));
     }							// update with converted image
 
-    qDebug() << "saving to" << tmpName << "in format" << format;
+    qCDebug(OCR_LOG) << "saving to" << tmpName << "in format" << format;
     if (!tmpImg->save(tmpName, format.name()))
     {
-        qDebug() << "Error saving to" << tmpName;
+        qCDebug(OCR_LOG) << "error saving to" << tmpName;
         setErrorText(xi18nc("@info", "Cannot save image to temporary file <filename>%1</filename>", tmpName));
         tmpName.clear();
     }
@@ -475,14 +475,14 @@ QString AbstractOcrEngine::findExecutable(QString (*settingFunc)(), KConfigSkele
     if (exec.isEmpty()) settingItem->setDefault();	// if null, apply default
     exec = (*settingFunc)();				// and get new setting
     Q_ASSERT(!exec.isEmpty());				// should now have something
-    qDebug() << "configured/default" << exec;
+    qCDebug(OCR_LOG) << "configured/default" << exec;
 
     if (!QDir::isAbsolutePath(exec))			// not specified absolute path
     {
         const QString pathExec = QStandardPaths::findExecutable(exec);
         if (pathExec.isEmpty())				// try to find executable
         {
-            qDebug() << "no" << exec << "found on PATH";
+            qCDebug(OCR_LOG) << "no" << exec << "found on PATH";
             setErrorText(xi18nc("@info", "The executable <command>%1</command> could not be found on <envar>PATH</envar>."));
             return (QString());
         }
@@ -492,12 +492,12 @@ QString AbstractOcrEngine::findExecutable(QString (*settingFunc)(), KConfigSkele
     QFileInfo fi(exec);					// now check it is usable
     if (!fi.exists() || fi.isDir() || !fi.isExecutable())
     {
-        qDebug() << "configured" << exec << "not usable";
+        qCDebug(OCR_LOG) << "configured" << exec << "not usable";
         setErrorText(xi18nc("@info", "The executable <filename>%1</filename> does not exist or is not usable.", fi.absoluteFilePath()));
         return (QString());
     }
 
-    qDebug() << "found" << exec;
+    qCDebug(OCR_LOG) << "found" << exec;
     return (exec);
 }
 
@@ -528,7 +528,7 @@ QProcess *AbstractOcrEngine::initOcrProcess()
 
     m_ocrProcess = new QProcess();			// start new OCR process
     Q_CHECK_PTR(m_ocrProcess);
-    qDebug();
+    qCDebug(OCR_LOG);
 
     m_ocrProcess->setStandardInputFile(QProcess::nullDevice());
 
@@ -542,13 +542,13 @@ QProcess *AbstractOcrEngine::initOcrProcess()
 
 bool AbstractOcrEngine::runOcrProcess()
 {
-    qDebug() << "Running OCR," << m_ocrProcess->program() << m_ocrProcess->arguments();
+    qCDebug(OCR_LOG) << "Running OCR," << m_ocrProcess->program() << m_ocrProcess->arguments();
     connect(m_ocrProcess, QOverload<int,QProcess::ExitStatus>::of(&QProcess::finished), this, &AbstractOcrEngine::slotProcessExited);
 
     m_ocrProcess->start();
     if (!m_ocrProcess->waitForStarted(5000))
     {
-        qWarning() << "Error starting OCR process";
+        qCWarning(OCR_LOG) << "Error starting OCR process";
         return (false);
     }
 
@@ -558,7 +558,7 @@ bool AbstractOcrEngine::runOcrProcess()
 
 void AbstractOcrEngine::slotProcessExited(int exitCode, QProcess::ExitStatus exitStatus)
 {
-    qDebug() << "exit code" << exitCode << "status" << exitStatus;
+    qCDebug(OCR_LOG) << "exit code" << exitCode << "status" << exitStatus;
 
     bool success = (exitStatus==QProcess::NormalExit && exitCode==0);
     if (!success)					// OCR command failed

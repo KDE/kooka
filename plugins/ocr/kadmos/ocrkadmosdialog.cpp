@@ -32,16 +32,13 @@
 #include <qtooltip.h>
 #include <qdir.h>
 #include <qmap.h>
-//#include <q3buttongroup.h>
 #include <qradiobutton.h>
 #include <qcombobox.h>
-//#include <q3groupbox.h>
 #include <qcheckbox.h>
 #include <qstringlist.h>
 
 #include <kconfig.h>
 #include <kglobal.h>
-#include <QDebug>
 #include <KLocalizedString>
 #include <kseparator.h>
 #include <kmessagebox.h>
@@ -50,6 +47,7 @@
 #include <QHBoxLayout>
 
 #include "ocrkadmosengine.h"
+#include "ocr_logging.h"
 
 /* defines for konfig-reading */
 #define CFG_GROUP_KADMOS "Kadmos"
@@ -65,7 +63,7 @@ KadmosDialog::KadmosDialog(QWidget *parent)
       m_cbAutoscale(0),
       m_haveNorm(false)
 {
-    //qDebug();
+    //qCDebug(OCR_LOG);
     // Layout-Boxes
     findClassifiers();
 }
@@ -125,7 +123,7 @@ OcrEngine::EngineError KadmosDialog::findClassifiers()
     } else {
         /* standard location */
         KStandardDirs stdDir;
-        //qDebug() << "Starting to read resources";
+        //qCDebug(OCR_LOG) << "Starting to read resources";
 
         lst = stdDir.findAllResources("data",
                                       "kooka/classifiers/*.rec",
@@ -134,7 +132,7 @@ OcrEngine::EngineError KadmosDialog::findClassifiers()
 
     /* no go through lst and sort out hand-, ttf- and norm classifier */
     for (QStringList::Iterator it = lst.begin(); it != lst.end(); ++it) {
-        //qDebug() << "Checking file:" << (*it);
+        //qCDebug(OCR_LOG) << "Checking file:" << (*it);
         QFileInfo fi(*it);
         QString name = fi.fileName().toLower();
 
@@ -146,14 +144,14 @@ OcrEngine::EngineError KadmosDialog::findClassifiers()
                     lngCountry = name;
                 }
                 m_ttfClassifier << lngCountry;
-                //qDebug() << "TTF: Insert country" << lngCountry;
+                //qCDebug(OCR_LOG) << "TTF: Insert country" << lngCountry;
             } else if (lang == "cz") {
                 m_ttfClassifier << CNTRY_CZ;
             } else if (lang == "us") {
                 m_ttfClassifier << CNTRY_GB;
             } else {
                 m_ttfClassifier << name;
-                //qDebug() << "TTF: Unknown country";
+                //qCDebug(OCR_LOG) << "TTF: Unknown country";
             }
         } else if (name.startsWith("hand")) {
             QString lang = name.mid(4, 2);
@@ -168,14 +166,14 @@ OcrEngine::EngineError KadmosDialog::findClassifiers()
             } else if (lang == "us") {
                 m_handClassifier << i18n("Great Britain, USA");
             } else {
-                //qDebug() << "HAND: Unknown country" << lang;
+                //qCDebug(OCR_LOG) << "HAND: Unknown country" << lang;
                 m_handClassifier << name;
             }
         } else if (name.startsWith("norm")) {
             m_haveNorm = true;
         }
 
-        //qDebug() << "Found classifier:" << (*it);
+        //qCDebug(OCR_LOG) << "Found classifier:" << (*it);
         m_classifierPath << *it;
     }
 
@@ -351,20 +349,20 @@ bool KadmosDialog::getSelClassifier(QString &path) const
 
     if (cmplPath.isEmpty()) {
         /* hm, no path was found */
-        //qDebug() << "Error: The entire path is empty";
+        //qCDebug(OCR_LOG) << "Error: The entire path is empty";
         res = false;
     } else {
         /* Check if the classifier exists on the HD. If not, return an empty string */
         QFileInfo fi(cmplPath);
 
         if (res && ! fi.exists()) {
-            //qDebug() << "Classifier file does not exist";
+            //qCDebug(OCR_LOG) << "Classifier file does not exist";
             path = i18n("Classifier file %1 does not exist", classifier);
             res = false;
         }
 
         if (res && ! fi.isReadable()) {
-            //qDebug() << "Classifier file could not be read";
+            //qCDebug(OCR_LOG) << "Classifier file could not be read";
             path = i18n("Classifier file %1 is not readable", classifier);
             res = false;
         }
@@ -391,7 +389,7 @@ QString KadmosDialog::getSelClassifierName() const
         } else if (fontTypeID == 2) {
             fType = "norm";
         } else {
-            //qDebug() << "Error: Wrong font type ID";
+            //qCDebug(OCR_LOG) << "Error: Wrong font type ID";
         }
     }
 
@@ -408,10 +406,10 @@ QString KadmosDialog::getSelClassifierName() const
         } else if (fType == "norm") {
             trans = "norm.rec";
         } else {
-            //qDebug() << "Error: Not a valid classifier";
+            //qCDebug(OCR_LOG) << "Error: Not a valid classifier";
         }
     }
-    //qDebug() << "Returning" << trans;
+    //qCDebug(OCR_LOG) << "Returning" << trans;
     return (trans);
 }
 
@@ -433,7 +431,7 @@ KadmosDialog::~KadmosDialog()
 
 void KadmosDialog::slotWriteConfig()
 {
-    //qDebug();
+    //qCDebug(OCR_LOG);
 
     OcrBaseDialog::slotWriteConfig();
 

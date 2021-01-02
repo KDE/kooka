@@ -35,11 +35,20 @@ find_package(KF5 ${KF5_MIN_VERSION} REQUIRED COMPONENTS I18n ConfigWidgets TextW
 #									#
 #########################################################################
 
+ecm_qt_declare_logging_category(kookaocr_LOG_SRCS
+  HEADER "ocr_logging.h"
+  IDENTIFIER "OCR_LOG"
+  CATEGORY_NAME "ocr"
+  EXPORT kookalogging
+  DESCRIPTION "ocr (Kooka)")
+
 set(kookaocr_SRCS
   abstractocrengine.cpp
   abstractocrdialogue.cpp
   executablepathdialogue.cpp
+  ${kookaocr_LOG_SRCS}
 )
+
 add_library(kookaocr SHARED ${kookaocr_SRCS})
 set_target_properties(kookaocr PROPERTIES SOVERSION "1.0.0")
 target_link_libraries(kookaocr Qt5::Core Qt5::Widgets)

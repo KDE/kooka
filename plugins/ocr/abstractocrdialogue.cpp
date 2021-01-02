@@ -39,7 +39,6 @@
 #include <qapplication.h>
 #include <qradiobutton.h>
 #include <qpushbutton.h>
-#include <qdebug.h>
 #include <qicon.h>
 #include <qstandardpaths.h>
 
@@ -57,6 +56,7 @@
 #include "imagecanvas.h"
 #include "dialogbase.h"
 #include "pluginmanager.h"
+#include "ocr_logging.h"
 
 
 AbstractOcrDialogue::AbstractOcrDialogue(AbstractOcrEngine *plugin, QWidget *pnt)
@@ -407,7 +407,7 @@ void AbstractOcrDialogue::introduceImage(ScanImage::Ptr img)
         return;
     }
 
-    //qDebug() << "url" << img->url() << "filebound" << img->isFileBound();
+    qCDebug(OCR_LOG) << "url" << img->url() << "filebound" << img->isFileBound();
 
     if (img->isFileBound()) {           // image backed by a file
         /* Start to create a preview job for the thumb */
@@ -447,7 +447,7 @@ bool AbstractOcrDialogue::verboseDebug() const
 
 void AbstractOcrDialogue::slotGotPreview(const KFileItem &item, const QPixmap &newPix)
 {
-    //qDebug() << "pixmap" << newPix.size();
+    qCDebug(OCR_LOG) << "pixmap" << newPix.size();
     if (m_previewPix != nullptr) {
         m_previewPix->setText(QString());
         m_previewPix->setPixmap(newPix);

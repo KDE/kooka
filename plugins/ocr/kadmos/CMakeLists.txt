@@ -74,6 +74,7 @@ set(kookaocrkadmos_SRCS
   ocrkadmosengine.cpp
   ocrkadmosdialog.cpp
   kadmosocr.cpp
+  ${kookaocr_LOG_SRCS}
 )
 
 add_library(kookaocrkadmos MODULE ${kookaocrkadmos_SRCS})

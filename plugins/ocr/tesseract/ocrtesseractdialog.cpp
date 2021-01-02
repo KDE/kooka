@@ -35,7 +35,6 @@
 #include <qcombobox.h>
 #include <qlayout.h>
 #include <qprogressbar.h>
-#include <qdebug.h>
 
 #include <klocalizedstring.h>
 #include <kurlrequester.h>
@@ -46,6 +45,7 @@
 #include "dialogbase.h"
 
 #include "ocrtesseractengine.h"
+#include "ocr_logging.h"
 
 
 OcrTesseractDialog::OcrTesseractDialog(AbstractOcrEngine *plugin, QWidget *pnt)
@@ -224,7 +224,7 @@ void OcrTesseractDialog::enableFields(bool enable)
 
 void OcrTesseractDialog::getVersion(const QString &bin)
 {
-    qDebug() << "of" << bin;
+    qCDebug(OCR_LOG) << "of" << bin;
     if (bin.isEmpty()) return;
 
     KProcess proc;
@@ -241,12 +241,12 @@ void OcrTesseractDialog::getVersion(const QString &bin)
             m_ocrCmd = bin;
             m_versionStr = rx.cap(1);
             m_versionNum = m_versionStr.left(1).toInt();
-            qDebug() << "version" << m_versionStr << "=" << m_versionNum;
+            qCDebug(OCR_LOG) << "version" << m_versionStr << "=" << m_versionNum;
         }
     }
     else
     {
-        qDebug() << "failed with status" << status;
+        qCDebug(OCR_LOG) << "failed with status" << status;
         m_versionStr = i18n("Error");
     }
 }
@@ -266,7 +266,7 @@ QMap<QString,QString> OcrTesseractDialog::getValidValues(const QString &opt)
 
     if (grp.hasKey(opt+"_keys"))			// values in config already
     {
-        qDebug() << "option" << opt << "already in config";
+        qCDebug(OCR_LOG) << "option" << opt << "already in config";
 
         const QStringList keys = grp.readEntry(opt+"_keys", QStringList());
         const QStringList descs = grp.readEntry(opt+"_descs", QStringList());
@@ -276,7 +276,7 @@ QMap<QString,QString> OcrTesseractDialog::getValidValues(const QString &opt)
     {
         if (m_ocrCmd.isEmpty())
         {
-            qWarning() << "cannot get values, no binary";
+            qCWarning(OCR_LOG) << "cannot get values, no binary";
             return (result);
         }
 
@@ -290,7 +290,7 @@ QMap<QString,QString> OcrTesseractDialog::getValidValues(const QString &opt)
         for (const QByteArray &line : lines)
         {
             const QString lineStr = QString::fromLocal8Bit(line);
-            qDebug() << "line:" << lineStr;
+            qCDebug(OCR_LOG) << "line:" << lineStr;
 
             QRegExp rx;
             if (opt=="list-langs") rx.setPattern("^\\s*(\\w+)()$");
@@ -304,7 +304,7 @@ QMap<QString,QString> OcrTesseractDialog::getValidValues(const QString &opt)
             }
         }
 
-        qDebug() << "parsed result count" << result.count();
+        qCDebug(OCR_LOG) << "parsed result count" << result.count();
         if (!result.isEmpty())
         {						   	// save result for next time
             grp.writeEntry(opt+"_keys", result.keys());	   	// ordered list of keys
@@ -313,6 +313,6 @@ QMap<QString,QString> OcrTesseractDialog::getValidValues(const QString &opt)
         }
     }
 
-    qDebug() << "values for" << opt << "=" << result.keys();
+    qCDebug(OCR_LOG) << "values for" << opt << "=" << result.keys();
     return (result);
 }

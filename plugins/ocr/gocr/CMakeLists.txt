@@ -22,6 +22,7 @@ project(kooka5)
 set(kookaocrgocr_SRCS
   ocrgocrengine.cpp
   ocrgocrdialog.cpp
+  ${kookaocr_LOG_SRCS}
 )
 
 add_library(kookaocrgocr MODULE ${kookaocrgocr_SRCS})
