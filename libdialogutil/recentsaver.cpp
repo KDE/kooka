@@ -31,7 +31,6 @@
 #include "recentsaver.h"
 
 #include <qurl.h>
-#include <qdebug.h>
 #include <qfileinfo.h>
 
 #include <krecentdirs.h>

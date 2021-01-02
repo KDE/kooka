@@ -37,7 +37,6 @@
 #include <qapplication.h>
 #include <qheaderview.h>
 #include <qmenu.h>
-#include <qdebug.h>
 #include <qinputdialog.h>
 #include <qfiledialog.h>
 #include <qmimedata.h>
@@ -63,6 +62,7 @@
 #include "imagefilter.h"
 #include "scanicons.h"
 #include "recentsaver.h"
+#include "kooka_logging.h"
 
 
 #undef DEBUG_LOADING
@@ -132,7 +132,6 @@ ScanGallery::ScanGallery(QWidget *parent)
 ScanGallery::~ScanGallery()
 {
     delete mSaver;
-    //qDebug();
 }
 
 static QString columnStatesKey(int forIndex)
@@ -143,7 +142,7 @@ static QString columnStatesKey(int forIndex)
 void ScanGallery::saveHeaderState(int forIndex) const
 {
     QString key = columnStatesKey(forIndex);
-    //qDebug() << "to" << key;
+    qCDebug(KOOKA_LOG) << "to" << key;
     const KConfigSkeletonItem *ski = KookaSettings::self()->columnStatesItem();
     Q_ASSERT(ski!=nullptr);
     KConfigGroup grp = KookaSettings::self()->config()->group(ski->group());
@@ -154,7 +153,7 @@ void ScanGallery::saveHeaderState(int forIndex) const
 void ScanGallery::restoreHeaderState(int forIndex)
 {
     QString key = columnStatesKey(forIndex);
-    //qDebug() << "from" << key;
+    qCDebug(KOOKA_LOG) << "from" << key;
     const KConfigSkeletonItem *ski = KookaSettings::self()->columnStatesItem();
     Q_ASSERT(ski!=nullptr);
     const KConfigGroup grp = KookaSettings::self()->config()->group(ski->group());
@@ -173,7 +172,7 @@ void ScanGallery::openRoots()
 {
     /* standard root always exists, ImgRoot creates it */
     QUrl rootUrl = QUrl::fromLocalFile(KookaPref::galleryRoot());
-    //qDebug() << "Standard root" << rootUrl.url();
+    qCDebug(KOOKA_LOG) << "Standard root" << rootUrl;
 
     m_defaultBranch = openRoot(rootUrl, i18n("Kooka Gallery"));
     m_defaultBranch->setOpen(true);
@@ -215,7 +214,7 @@ void ScanGallery::slotStartupFinished(FileTreeViewItem *item)
         return;    // not the 1st branch root
     }
 
-    //qDebug();
+    qCDebug(KOOKA_LOG);
 
     if (highlightedFileTreeViewItem() == nullptr) {    // nothing currently selected,
         // select the branch root
@@ -287,7 +286,7 @@ void ScanGallery::slotItemHighlighted(QTreeWidgetItem *curr)
 void ScanGallery::slotItemActivated(QTreeWidgetItem *curr)
 {
     FileTreeViewItem *item = static_cast<FileTreeViewItem *>(curr);
-    //qDebug() << item->url();
+    qCDebug(KOOKA_LOG) << item->url();
 
     //  Check if directory, hide image for now, later show a thumb view?
     if (item->isDir()) {                // is it a directory?
@@ -313,7 +312,7 @@ void ScanGallery::slotItemActivated(QTreeWidgetItem *curr)
 
 void ScanGallery::slotHighlightItem(const QUrl &url)
 {
-    //qDebug() << url;
+    qCDebug(KOOKA_LOG) << url;
 
     FileTreeViewItem *found = findItemByUrl(url);
     if (found == nullptr) {
@@ -333,13 +332,10 @@ void ScanGallery::slotHighlightItem(const QUrl &url)
 
 void ScanGallery::slotActivateItem(const QUrl &url)
 {
-    //qDebug() << url;
+    qCDebug(KOOKA_LOG) << url;
 
     FileTreeViewItem *found = findItemByUrl(url);
-    if (found == nullptr) {
-        return;
-    }
-
+    if (found == nullptr) return;
     slotItemActivated(found);
 }
 
@@ -433,7 +429,7 @@ void ScanGallery::slotDecorate(FileTreeViewItem *item)
     if (item == nullptr) return;
 
 #ifdef DEBUG_LOADING
-    qDebug() << item->url();
+    qCDebug(KOOKA_LOG) << item->url();
 #endif // DEBUG_LOADING
     const bool isSubImage = item->url().hasFragment();	// is this a sub-image?
 
@@ -503,7 +499,9 @@ void ScanGallery::slotDecorate(FileTreeViewItem *item)
 
 void ScanGallery::slotDecorate(FileTreeBranch *branch, const FileTreeViewItemList &list)
 {
-    //qDebug() << "count" << list.count();
+#ifdef DEBUG_LOADING
+    qCDebug(KOOKA_LOG) << "count" << list.count();
+#endif // DEBUG_LOADING
     for (FileTreeViewItemList::const_iterator it = list.constBegin();
             it != list.constEnd(); ++it) {
         FileTreeViewItem *ftvi = (*it);
@@ -520,7 +518,9 @@ void ScanGallery::updateParent(const FileTreeViewItem *curr)
     }
 
     QUrl dir = itemDirectory(curr);
-    //qDebug() << "Updating directory" << dir;
+#ifdef DEBUG_LOADING
+    qCDebug(KOOKA_LOG) << "Updating directory" << dir;
+#endif // DEBUG_LOADING
     branch->updateDirectory(dir);
 
     FileTreeViewItem *parent = branch->findItemByUrl(dir);
@@ -546,7 +546,6 @@ bool ScanGallery::slotFileRenamed(FileTreeViewItem *item, const QString &newName
     if (item->isRoot()) return (false);			// cannot rename root here
 
     QUrl urlFrom = item->url();
-    //qDebug() << "url" << urlFrom << "->" << newName;
     QString oldName = urlFrom.fileName();
 
     QUrl urlTo(urlFrom.resolved(QUrl(newName)));
@@ -556,7 +555,7 @@ bool ScanGallery::slotFileRenamed(FileTreeViewItem *item, const QString &newName
      */
     // slotUnloadItem(item);                // unnecessary, bug 68532
     // because of "note new URL" below
-    qDebug() << "Renaming " << urlFrom << "->" << urlTo;
+    qCDebug(KOOKA_LOG) << "Renaming " << urlFrom << "->" << urlTo;
 
     //setSelected(item,false);
 
@@ -565,7 +564,7 @@ bool ScanGallery::slotFileRenamed(FileTreeViewItem *item, const QString &newName
         item->setUrl(urlTo);                // note new URL
         emit fileRenamed(item->fileItem(), newName);
     } else {
-        //qDebug() << "renaming failed";
+        qCWarning(KOOKA_LOG) << "renaming failed";
         item->setText(0, oldName);          // restore original name
     }
 
@@ -593,7 +592,7 @@ static QString buildNewFilename(const QString &cmplFilename, const ImageFormat &
     QString nowExt = currFormat.extension();
     QString ext = "";
 
-    //qDebug() << "Filename wanted:" << cmplFilename << "ext" << nowExt << "->" << newExt;
+    qCDebug(KOOKA_LOG) << "Filename wanted:" << cmplFilename << "ext" << nowExt << "->" << newExt;
 
     if (newExt.isEmpty()) {
         /* ok, fine -> return the currFormat-Extension */
@@ -617,10 +616,7 @@ static QString buildNewFilename(const QString &cmplFilename, const ImageFormat &
 */
 QUrl ScanGallery::itemDirectory(const FileTreeViewItem *item) const
 {
-    if (item == nullptr) {
-        //qDebug() << "no item";
-        return (QUrl());
-    }
+    if (item == nullptr) return (QUrl());
 
     QUrl u = item->url();
     if (!item->isDir()) {
@@ -648,16 +644,16 @@ QString ScanGallery::itemDirectoryRelative(const FileTreeViewItem *item) const
 
     QString rootUrl = branch->rootUrl().url(QUrl::StripTrailingSlash)+'/';
     QString itemUrl = u.url();
-    //qDebug() << "itemurl" << itemUrl << "rooturl" << rootUrl;
+    //qCDebug(KOOKA_LOG) << "itemurl" << itemUrl << "rooturl" << rootUrl;
     if (itemUrl.startsWith(rootUrl)) {
         itemUrl.remove(0, rootUrl.length());        // remove root URL prefix
-        //qDebug() << "->" << itemUrl;
+        //qCDebug(KOOKA_LOG) << "->" << itemUrl;
         if (itemUrl.isEmpty()) {
             itemUrl = "/";    // it is the root
         }
-        //qDebug() << "->" << itemUrl;
+        //qCDebug(KOOKA_LOG) << "->" << itemUrl;
     } else {
-        //qDebug() << "item URL" << itemUrl << "does not start with root URL" << rootUrl;
+        qCWarning(KOOKA_LOG) << "item URL" << itemUrl << "does not start with root URL" << rootUrl;
     }
 
     return (itemUrl);
@@ -672,7 +668,7 @@ QString ScanGallery::itemDirectoryRelative(const FileTreeViewItem *item) const
 
 void ScanGallery::slotSelectDirectory(const QString &branchName, const QString &relPath)
 {
-    //qDebug() << "branch" << branchName << "path" << relPath;
+    qCDebug(KOOKA_LOG) << "branch" << branchName << "path" << relPath;
 
     FileTreeViewItem *item;
     if (!branchName.isEmpty())				// find in specified branch
@@ -697,7 +693,7 @@ void ScanGallery::loadImageForItem(FileTreeViewItem *item)
     if (kfi->isNull()) return;
 
 #ifdef DEBUG_LOADING
-    qDebug() << "loading" << item->url();
+    qCDebug(KOOKA_LOG) << "loading" << item->url();
 #endif // DEBUG_LOADING
     QString ret;					// no error so far
 
@@ -712,7 +708,7 @@ void ScanGallery::loadImageForItem(FileTreeViewItem *item)
         if (img.isNull())				// image not already loaded
         {
 #ifdef DEBUG_LOADING
-            qDebug() << "need to load image";
+            qCDebug(KOOKA_LOG) << "need to load image";
 #endif // DEBUG_LOADING
 
             // The image needs to be loaded. Possibly it is a multi-page image.
@@ -726,12 +722,12 @@ void ScanGallery::loadImageForItem(FileTreeViewItem *item)
                 if (img->subImagesCount()>1)		// see if it has subimages
                 {
 #ifdef DEBUG_LOADING
-                    qDebug() << "subimage count" << img->subImagesCount();
+                    qCDebug(KOOKA_LOG) << "subimage count" << img->subImagesCount();
 #endif // DEBUG_LOADING
                     if (item->childCount()==0)		// check not already created
                     {
 #ifdef DEBUG_LOADING
-                        qDebug() << "need to create subimages";
+                        qCDebug(KOOKA_LOG) << "need to create subimages";
 #endif // DEBUG_LOADING
                         // Create items for each subimage
                         QIcon subImgIcon = QIcon::fromTheme("edit-copy");
@@ -765,12 +761,12 @@ void ScanGallery::loadImageForItem(FileTreeViewItem *item)
             }
             else
             {						// image loading failed
-                qDebug() << "Failed to load image," << img->errorString();
+                qCDebug(KOOKA_LOG) << "Failed to load image," << img->errorString();
                 img.clear();				// don't try to use it below
             }
         }
 #ifdef DEBUG_LOADING
-        else qDebug() << "have an image already";
+        else qCDebug(KOOKA_LOG) << "have an image already";
 #endif // DEBUG_LOADING
 
         if (!img.isNull())				// already loaded, or loaded above
@@ -834,7 +830,7 @@ QString ScanGallery::currentImageFileName() const
 
 bool ScanGallery::prepareToSave(ScanImage::ImageType type)
 {
-    qDebug() << "type" << type;
+    qCDebug(KOOKA_LOG) << "type" << type;
 
     delete mSaver; mSaver = nullptr;			// recreate a clean instance
 
@@ -930,7 +926,7 @@ FileTreeViewItem *ScanGallery::findItemByUrl(const QUrl &url, FileTreeBranch *br
         QDir d(url.path());				// ensure path is canonical
         u.setPath(d.canonicalPath());
     }
-    //qDebug() << "URL search for" << u;
+    //qCDebug(KOOKA_LOG) << "URL search for" << u;
 
     // Prepare a list of branches to search.  If the parameter 'branch'
     // is set, search only in the specified branch. If it is nullptr, search
@@ -949,7 +945,7 @@ FileTreeViewItem *ScanGallery::findItemByUrl(const QUrl &url, FileTreeBranch *br
         FileTreeViewItem *ftvi = branchloop->findItemByUrl(u);
         if (ftvi != nullptr) {
             foundItem = ftvi;
-            //qDebug() << "found item for" << ftvi->url();
+            //qCDebug(KOOKA_LOG) << "found item for" << ftvi->url();
             break;
         }
     }
@@ -965,7 +961,7 @@ void ScanGallery::slotExportFile()
     }
 
     if (curr->isDir()) {
-        //qDebug() << "Not yet implemented!";
+        qCDebug(KOOKA_LOG) << "Not yet implemented!";
         return;
     }
 
@@ -1009,7 +1005,7 @@ void ScanGallery::slotImportFile()
 							// use the name of the source file
     impTarget = impTarget.resolved(QUrl(impUrl.fileName()));
     m_nextUrlToShow = impTarget;
-    qDebug() << "Importing" << impUrl << "->" << impTarget;
+    qCDebug(KOOKA_LOG) << "Importing" << impUrl << "->" << impTarget;
     ImgSaver::copyImage(impUrl, impTarget);
 }
 
@@ -1020,8 +1016,8 @@ void ScanGallery::slotUrlsDropped(QDropEvent *ev, FileTreeViewItem *item)
         return;
     }
 
-    //qDebug() << "onto" << (item == nullptr ? "nullptr" : item->url().prettyUrl())
-    //<< "srcs" << urls.count() << "first" << urls.first();
+    qCDebug(KOOKA_LOG) << "onto" << (item == nullptr ? "(null)" : item->url().toDisplayString())
+                       << "srcs" << urls.count() << "first" << urls.first();
 
     if (item == nullptr) return;
     QUrl dest = item->url();
@@ -1030,7 +1026,7 @@ void ScanGallery::slotUrlsDropped(QDropEvent *ev, FileTreeViewItem *item)
     // want to move/copy into it) or a file (move/copy into its containing
     // directory).
     if (!item->isDir()) dest = dest.adjusted(QUrl::RemoveFilename);
-    qDebug() << "resolved destination" << dest;
+    qCDebug(KOOKA_LOG) << "resolved destination" << dest;
 
     // Make the last URL to copy the one to select next
     QUrl nextSel = dest.resolved(QUrl(urls.back().fileName()));
@@ -1048,10 +1044,7 @@ void ScanGallery::slotUrlsDropped(QDropEvent *ev, FileTreeViewItem *item)
 
 void ScanGallery::slotJobResult(KJob *job)
 {
-    //qDebug() << "error" << job->error();
-    if (job->error()) {
-        job->uiDelegate()->showErrorMessage();
-    }
+    if (job->error()) job->uiDelegate()->showErrorMessage();
 }
 
 /* ----------------------------------------------------------------------- */
@@ -1142,7 +1135,7 @@ void ScanGallery::slotDeleteItems()
     }
 
     slotUnloadItem(curr);
-    qDebug() << "Deleting" << urlToDel;
+    qCDebug(KOOKA_LOG) << "Deleting" << urlToDel;
     KIO::DeleteJob *job = KIO::del(urlToDel);
     if (!job->exec())
     {
@@ -1170,7 +1163,7 @@ void ScanGallery::slotDeleteItems()
     //  else (the next image is selected and loaded).  So leaving this
     //  commented out for now.
     curr = highlightedFileTreeViewItem();
-    //qDebug() << "new selection after delete" << (curr == nullptr ? "nullptr" : curr->url().prettyURL());
+    //qCDebug(KOOKA_LOG) << "new selection after delete" << (curr == nullptr ? "nullptr" : curr->url().prettyURL());
     if (curr != nullptr) {
         emit showItem(curr->fileItem());
     }
@@ -1193,7 +1186,7 @@ void ScanGallery::slotCreateFolder()
     QUrl url = item->url().adjusted(QUrl::StripTrailingSlash);
     url.setPath(url.path()+'/');
     url = url.resolved(QUrl(folder));
-    qDebug() << "Creating folder" << url;
+    qCDebug(KOOKA_LOG) << "Creating folder" << url;
 
     /* Since the new directory arrives in the packager in the newItems-slot, we set a
      * variable urlToSelectOnArrive here. The newItems-slot will honor it and select
@@ -1212,6 +1205,6 @@ void ScanGallery::slotCreateFolder()
 
 void ScanGallery::setAllowRename(bool on)
 {
-    //qDebug() << "to" << on;
+    qCDebug(KOOKA_LOG) << "to" << on;
     setEditTriggers(on ? QAbstractItemView::DoubleClicked : QAbstractItemView::NoEditTriggers);
 }

@@ -30,7 +30,6 @@
 
 #include "imagefilter.h"
 
-#include <qdebug.h>
 #include <qimagereader.h>
 #include <qimagewriter.h>
 #include <qmimedatabase.h>

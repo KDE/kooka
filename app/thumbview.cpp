@@ -34,7 +34,6 @@
 #include <qabstractitemview.h>
 #include <qlistview.h>
 #include <qaction.h>
-#include <qdebug.h>
 #include <qmenu.h>
 #include <qstandardpaths.h>
 #include <QSignalBlocker>
@@ -48,6 +47,7 @@
 
 #include "kookapref.h"
 #include "kookasettings.h"
+#include "kooka_logging.h"
 
 
 void ThumbView::createActionForSize(KIconLoader::StdSizes size)
@@ -73,7 +73,7 @@ ThumbView::ThumbView(QWidget *parent)
     // configuration - this also has a useful side effect that the user can
     // change the setting there if they so wish.
     // See PreviewJob::startPreview() in kio/src/widgets/previewjob.cpp
-    qDebug() << "Maximum preview file size is" << KookaSettings::previewMaximumSize();
+    qCDebug(KOOKA_LOG) << "Maximum preview file size is" << KookaSettings::previewMaximumSize();
 
     setUrl(QUrl::fromUserInput(KookaPref::galleryRoot()), true);
 							// initial location
@@ -156,14 +156,14 @@ void ThumbView::slotHighlightItem(const QUrl &url, bool isDir)
 
 #ifdef WORKAROUND_216928
         if (dirLister()->isFinished()) {		// idle, can do this now
-            //qDebug() << "lister idle, changing dir to" << dirToShow;
+            qCDebug(KOOKA_LOG) << "lister idle, changing dir to" << dirToShow;
             setUrl(dirToShow, true);			// change path and reload
         } else {
-            //qDebug() << "lister busy, deferring change to" << dirToShow;
+            qCDebug(KOOKA_LOG) << "lister busy, deferring change to" << dirToShow;
             m_toChangeTo = dirToShow;			// note to do later
         }
 #else
-        //qDebug() << "changing dir to" << dirToShow;
+        qCDebug(KOOKA_LOG) << "changing dir to" << dirToShow;
         setUrl(dirToShow, true);			// change path and reload
 #endif
         return;
@@ -206,7 +206,7 @@ void ThumbView::slotSetSize(KIconLoader::StdSizes size)
 #else
     // see KDirOperator::setIconsZoom() in kio/src/kfilewidgets/kdiroperator.cpp
     const int val = ((size-KIconLoader::SizeSmall)*100) / (KIconLoader::SizeEnormous-KIconLoader::SizeSmall);
-    //qDebug() << "size" << size << "-> val" << val;
+    qCDebug(KOOKA_LOG) << "size" << size << "-> val" << val;
     setIconsZoom(val);
 #endif
 }
@@ -214,14 +214,14 @@ void ThumbView::slotSetSize(KIconLoader::StdSizes size)
 void ThumbView::slotFinishedLoading()
 {
     if (m_toChangeTo.isValid()) {			// see if change deferred
-        //qDebug() << "setting dirop url to" << m_toChangeTo;
+        qCDebug(KOOKA_LOG) << "setting dirop url to" << m_toChangeTo;
         setUrl(m_toChangeTo, true);			// change path and reload
         m_toChangeTo = QUrl();				// have dealt with this now
         return;
     }
 
     if (m_toSelect.isValid()) {				// see if something to select
-        //qDebug() << "selecting" << m_toSelect;
+        qCDebug(KOOKA_LOG) << "selecting" << m_toSelect;
         QSignalBlocker block(this);
         setCurrentItem(m_toSelect);
         m_toSelect = QUrl();				// have dealt with this now
@@ -241,7 +241,7 @@ void ThumbView::slotEnsureVisible()
     QItemSelectionModel *selModel = v->selectionModel();
     if (selModel->hasSelection()) {
         const QModelIndex index = selModel->currentIndex();
-        //qDebug() << "ensuring visible" << index;
+        qCDebug(KOOKA_LOG) << "ensuring visible" << index;
         v->scrollTo(index, QAbstractItemView::EnsureVisible);
     }
 }
@@ -249,7 +249,7 @@ void ThumbView::slotEnsureVisible()
 void ThumbView::slotFileSelected(const KFileItem &kfi)
 {
     QUrl u = (!kfi.isNull() ? kfi.url() : url());
-    //qDebug() << u;
+    //qCDebug(KOOKA_LOG) << u;
 
     if (u != m_lastSelected) {
         m_lastSelected = u;
@@ -260,7 +260,7 @@ void ThumbView::slotFileSelected(const KFileItem &kfi)
 void ThumbView::slotFileHighlighted(const KFileItem &kfi)
 {
     QUrl u = (!kfi.isNull() ? kfi.url() : url());
-    //qDebug() << u;
+    //qCDebug(KOOKA_LOG) << u;
     emit itemHighlighted(u);
 }
 
@@ -284,13 +284,13 @@ void ThumbView::setBackground()
 
     QString newBgImg = KookaSettings::thumbnailBackgroundPath();
     bool newCustomBg = KookaSettings::thumbnailCustomBackground();
-    //qDebug() << "custom" << newCustomBg << "img" << newBgImg;
+    qCDebug(KOOKA_LOG) << "custom" << newCustomBg << "img" << newBgImg;
 
     if (newCustomBg && !newBgImg.isEmpty()) {		// can set custom background
         if (bgPix.load(newBgImg)) {
             pal.setBrush(iv->backgroundRole(), QBrush(bgPix));
         } else {
-            qWarning() << "Failed to load background image" << newBgImg;
+            qCWarning(KOOKA_LOG) << "Failed to load background image" << newBgImg;
         }
     } else {						// reset to default
         KColorScheme sch(QPalette::Normal);
@@ -302,14 +302,14 @@ void ThumbView::setBackground()
 
 void ThumbView::slotImageChanged(const KFileItem *kfi)
 {
-    //qDebug() << kfi->url();
+    //qCDebug(KOOKA_LOG) << kfi->url();
     // TODO: is there an equivalent?
     //m_fileview->updateView(kfi);			// update that view item
 }
 
 void ThumbView::slotImageRenamed(const KFileItem *item, const QString &newName)
 {
-    //qDebug() << item->url() << "->" << newName;
+    //qCDebug(KOOKA_LOG) << item->url() << "->" << newName;
 
     // Nothing to do here.
     // KDirLister::refreshItems signal -> slotEnsureVisible()

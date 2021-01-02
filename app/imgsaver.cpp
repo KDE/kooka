@@ -33,7 +33,6 @@
 
 #include <qdir.h>
 #include <qregexp.h>
-#include <qdebug.h>
 #include <qmimedatabase.h>
 #include <qtemporaryfile.h>
 
@@ -48,15 +47,15 @@
 
 #include "imageformat.h"
 #include "scanimage.h"
-
 #include "kookapref.h"
 #include "kookasettings.h"
 #include "formatdialog.h"
+#include "kooka_logging.h"
 
 
 static void createDir(const QUrl &url)
 {
-    qDebug() << url;
+    qCDebug(KOOKA_LOG) << url;
     KIO::StatJob *job = KIO::statDetails(url, KIO::StatJob::DestinationSide, KIO::StatBasic);
     if (!job->exec())
     {
@@ -67,7 +66,7 @@ static void createDir(const QUrl &url)
 
     if (!job->statResult().isDir())
     {
-        qDebug() << "directory" << url << "does not exist, try to create";
+        qCDebug(KOOKA_LOG) << "directory does not exist, try to create";
         KIO::MkdirJob *job = KIO::mkdir(url);
         if (!job->exec())
         {
@@ -111,10 +110,10 @@ ImgSaver::ImgSaver(const QUrl &dir)
     if (dir.isValid() && !dir.isEmpty() && dir.isLocalFile()) {
         // can use specified place
         m_saveDirectory = dir;
-        qDebug() << "specified directory" << m_saveDirectory;
+        qCDebug(KOOKA_LOG) << "specified directory" << m_saveDirectory;
     } else {                    // cannot, so use default
         m_saveDirectory = QUrl::fromLocalFile(KookaPref::galleryRoot());
-        qDebug() << "default directory" << m_saveDirectory;
+        qCDebug(KOOKA_LOG) << "default directory" << m_saveDirectory;
     }
 
     createDir(m_saveDirectory);				// ensure save location exists
@@ -186,13 +185,13 @@ ImgSaver::ImageSaveStatus ImgSaver::getFilenameAndFormat(ScanImage::ImageType ty
     m_saveAskFilename = KookaSettings::saverAskForFilename();
     m_saveAskFormat = KookaSettings::saverAskForFormat();
 
-    qDebug() << "before dialogue,"
-             << "type=" << type
-             << "ask_filename=" << m_saveAskFilename
-             << "ask_format=" << m_saveAskFormat
-             << "filename=" << saveFilename
-             << "format=" << saveFormat
-             << "subformat=" << saveSubformat;
+    qCDebug(KOOKA_LOG) << "before dialogue,"
+                       << "type=" << type
+                       << "ask_filename=" << m_saveAskFilename
+                       << "ask_format=" << m_saveAskFormat
+                       << "filename=" << saveFilename
+                       << "format=" << saveFormat
+                       << "subformat=" << saveSubformat;
 
     while (saveFilename.isEmpty() || !saveFormat.isValid() || m_saveAskFormat || m_saveAskFilename)
     {							// is a dialogue needed?
@@ -227,11 +226,11 @@ ImgSaver::ImageSaveStatus ImgSaver::getFilenameAndFormat(ScanImage::ImageType ty
     mSaveFormat = saveFormat;
     mSaveSubformat = saveSubformat;
 
-    qDebug() << "after dialogue,"
-             << "filename=" << saveFilename
-             << "format=" << mSaveFormat
-             << "subformat=" << mSaveSubformat
-             << "url=" << mSaveUrl;
+    qCDebug(KOOKA_LOG) << "after dialogue,"
+                       << "filename=" << saveFilename
+                       << "format=" << mSaveFormat
+                       << "subformat=" << mSaveSubformat
+                       << "url=" << mSaveUrl;
     return (ImgSaver::SaveStatusOk);
 }
 
@@ -251,12 +250,12 @@ ImgSaver::ImageSaveStatus ImgSaver::saveImage(const QImage *image)
         // if not, get from image now
         ImgSaver::ImageSaveStatus stat = getFilenameAndFormat(findImageType(image));
         if (stat != ImgSaver::SaveStatusOk) return (stat);
-        qDebug() << "format from image" << mSaveFormat;
+        qCDebug(KOOKA_LOG) << "format from image" << mSaveFormat;
     }
 
     if (!mSaveUrl.isValid() || !mSaveFormat.isValid())	// must have these now
     {
-        //qDebug() << "format not resolved!";
+        qCWarning(KOOKA_LOG) << "format not resolved!";
         return (ImgSaver::SaveStatusParam);
     }
 
@@ -271,14 +270,14 @@ ImgSaver::ImageSaveStatus ImgSaver::saveImage(const QImage *image,
 {
     if (image == nullptr) return (ImgSaver::SaveStatusParam);
 
-    qDebug() << "to" << url << "format" << format << "subformat" << subformat;
+    qCDebug(KOOKA_LOG) << "to" << url << "format" << format << "subformat" << subformat;
 
     mLastFormat = format.name();			// save for error message later
     mLastUrl = url;
 
     if (!url.isLocalFile())				// file must be local
     {
-        qDebug() << "Can only save local files";
+        qCDebug(KOOKA_LOG) << "Can only save local files";
         // TODO: allow non-local files
         return (ImgSaver::SaveStatusProtocol);
     }
@@ -290,23 +289,23 @@ ImgSaver::ImageSaveStatus ImgSaver::saveImage(const QImage *image,
     QDir dir(dirPath);
     if (!dir.exists())					// should always exist, except
     {							// for first preview save
-        qDebug() << "Creating directory" << dirPath;
+        qCDebug(KOOKA_LOG) << "Creating directory" << dirPath;
         if (!dir.mkdir(dirPath))
         {
-            //qDebug() << "Could not create directory" << dirPath;
+            qCWarning(KOOKA_LOG) << "Could not create directory" << dirPath;
             return (ImgSaver::SaveStatusMkdir);
         }
     }
 
     if (fi.exists() && !fi.isWritable())
     {
-        //qDebug() << "Cannot overwrite existing file" << filename;
+        qCWarning(KOOKA_LOG) << "Cannot overwrite existing file" << filename;
         return (ImgSaver::SaveStatusPermission);
     }
 
     if (!format.canWrite())				// check format, is it writable?
     {
-        //qDebug() << "Cannot write format" << format;
+        qCWarning(KOOKA_LOG) << "Cannot write format" << format;
         return (ImgSaver::SaveStatusFormatNoWrite);
     }
 
@@ -335,7 +334,7 @@ QString ImgSaver::createFilename()
         }
     }
 
-    //qDebug() << "returning" << fname;
+    qCDebug(KOOKA_LOG) << "returning" << fname;
     return (fname);
 }
 
@@ -452,7 +451,7 @@ bool copyRenameImage(bool isCopying, const QUrl &fromUrl, const QUrl &toUrl, boo
 
     if (errorString.isEmpty())				// no problem so far
     {
-        qDebug() << (isCopying ? "Copy" : "Rename") << "->" << targetUrl;
+        qCDebug(KOOKA_LOG) << (isCopying ? "Copy" : "Rename") << "->" << targetUrl;
 
         KJob *job = KIO::statDetails(targetUrl, KIO::StatJob::DestinationSide, KIO::StatNoDetails);
         if (job->exec())				// stat with minimal details

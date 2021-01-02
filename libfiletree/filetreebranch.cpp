@@ -25,7 +25,6 @@
 #include <unistd.h>
 
 #include <qdir.h>
-#include <qdebug.h>
 #include <qmimedatabase.h>
 
 #include <kfileitem.h>

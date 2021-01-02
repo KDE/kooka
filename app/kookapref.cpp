@@ -47,7 +47,6 @@
 #include <qlayout.h>
 #include <qicon.h>
 #include <qdir.h>
-#include <qdebug.h>
 #include <qpushbutton.h>
 #include <qstandardpaths.h>
 
@@ -58,6 +57,7 @@
 #include "prefspages.h"
 #include "kookasettings.h"
 #include "dialogstatesaver.h"
+#include "kooka_logging.h"
 
 
 KookaPref::KookaPref(QWidget *parent)
@@ -210,7 +210,7 @@ QString KookaPref::findGalleryRoot()
     QString galleryName = KookaSettings::galleryName();	// may be base name or absolute path
     if (galleryName.isEmpty())
     {
-        qWarning() << "Gallery name not configured";
+        qCWarning(KOOKA_LOG) << "Gallery name not configured";
         return (QString());
     }
 
@@ -227,8 +227,8 @@ QString KookaPref::findGalleryRoot()
     QDir newdir(newpath);
     bool newexists = newdir.exists();
 
-    qDebug() << "old" << oldpath << "exists" << oldexists;
-    qDebug() << "new" << newpath << "exists" << newexists;
+    qCDebug(KOOKA_LOG) << "old" << oldpath << "exists" << oldexists;
+    qCDebug(KOOKA_LOG) << "new" << newpath << "exists" << newexists;
 
     QString dir;
 
@@ -277,6 +277,6 @@ QString KookaPref::findGalleryRoot()
     }
 
     if (!dir.endsWith("/")) dir += "/";
-    qDebug() << "using" << dir;
+    qCDebug(KOOKA_LOG) << "using" << dir;
     return (dir);
 }

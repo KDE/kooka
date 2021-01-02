@@ -26,12 +26,14 @@
 
 #include "galleryhistory.h"
 
-#include <QDebug>
 #include <KLocalizedString>
 #include <kcombobox.h>
 
 #include "libfiletree/filetreeview.h"
 #include "libfiletree/filetreebranch.h"
+
+#include "kooka_logging.h"
+
 
 #define GALLERY_PATH_SEP    " - "
 
@@ -78,7 +80,7 @@ static QString entryName(const FileTreeBranch *branch, const QString &relPath)
 void GalleryHistory::slotPathRemoved(const FileTreeBranch *branch, const QString &relPath)
 {
     QString removeEntry = entryData(branch, relPath);
-    //qDebug() << "removing" << removeEntry;
+    qCDebug(KOOKA_LOG) << "removing" << removeEntry;
 
     int idx = findData(removeEntry);
     if (idx == -1) {
@@ -94,7 +96,7 @@ void GalleryHistory::slotPathRemoved(const FileTreeBranch *branch, const QString
 void GalleryHistory::slotPathChanged(const FileTreeBranch *branch, const QString &relPath)
 {
     QString newData = entryData(branch, relPath);
-    //qDebug() << "inserting" << newData;
+    qCDebug(KOOKA_LOG) << "inserting" << newData;
 
     int idx = findData(newData);            // see if exists already
     if (idx != -1) {

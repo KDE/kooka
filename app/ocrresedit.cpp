@@ -41,7 +41,6 @@
 #include <qcolor.h>
 #include <qfile.h>
 #include <qtextstream.h>
-#include <qdebug.h>
 #include <qfiledialog.h>
 
 #include <klocalizedstring.h>
@@ -49,6 +48,7 @@
 
 #include "abstractocrengine.h"
 #include "recentsaver.h"
+#include "kooka_logging.h"
 
 //  The OCR results are stored in our text document.  Each OCR'ed word has
 //  properties stored in its QTextCharFormat recording the word rectangle
@@ -96,7 +96,7 @@ void OcrResEdit::slotSelectWord(const QPoint &pos)
         return;    // nothing to search
     }
 
-    //qDebug() << pos;
+    //qCDebug(KOOKA_LOG) << pos;
 
     QTextCursor curs(document());           // start of document
     QRect wordRect;
@@ -107,7 +107,7 @@ void OcrResEdit::slotSelectWord(const QPoint &pos)
     while (!curs.atEnd()) {
         QTextCharFormat fmt = curs.charFormat();
         QRect rect = fmt.property(OcrWordData::Rectangle).toRect();
-        ////qDebug() << "at" << curs.position() << "rect" << rect;
+        ////qCDebug(KOOKA_LOG) << "at" << curs.position() << "rect" << rect;
         if (rect.isValid() && rect.contains(pos, true)) {
             wordRect = rect;
             break;
@@ -115,7 +115,7 @@ void OcrResEdit::slotSelectWord(const QPoint &pos)
         moveForward(curs);
     }
 
-    //qDebug() << "found rect" << wordRect << "at" << curs.position();
+    //qCDebug(KOOKA_LOG) << "found rect" << wordRect << "at" << curs.position();
 
     if (!wordRect.isValid()) {
         return;    // no word found
@@ -130,16 +130,16 @@ void OcrResEdit::slotSelectWord(const QPoint &pos)
     moveForward(curs);
     while (!curs.atEnd()) {
         QTextCharFormat fmt = curs.charFormat();
-        ////qDebug() << "at" << curs.position() << "rect" << fmt.property(OcrWordData::Rectangle).toRect();
+        ////qCDebug(KOOKA_LOG) << "at" << curs.position() << "rect" << fmt.property(OcrWordData::Rectangle).toRect();
         if (fmt != ref) {
-            ////qDebug() << "mismatch at" << curs.position();
+            ////qCDebug(KOOKA_LOG) << "mismatch at" << curs.position();
             break;
         }
         moveForward(curs);
     }
 
     curs.movePosition(QTextCursor::PreviousCharacter);
-    //qDebug() << "word start" << wordStart.position() << "end" << curs.position();
+    //qCDebug(KOOKA_LOG) << "word start" << wordStart.position() << "end" << curs.position();
     int pos1 = wordStart.position();
     int pos2 = curs.position();
     if (pos1 == pos2) {
@@ -181,36 +181,36 @@ void OcrResEdit::slotUpdateHighlight()
     if (isReadOnly()) {
         return;
     }
-    ////qDebug() << "pos" << textCursor().position() << "hassel" << textCursor().hasSelection()
+    ////qCDebug(KOOKA_LOG) << "pos" << textCursor().position() << "hassel" << textCursor().hasSelection()
     //         << "start" << textCursor().selectionStart() << "end" << textCursor().selectionEnd();
 
     QTextCursor curs = textCursor();			// will not move cursor, see
 							// QTextEdit::textCursor() doc
     if (curs.hasSelection()) {
-        ////qDebug() << "sel start" << curs.selectionStart() << "end" << curs.selectionEnd();
+        ////qCDebug(KOOKA_LOG) << "sel start" << curs.selectionStart() << "end" << curs.selectionEnd();
 
         int send = curs.selectionEnd();
         curs.setPosition(curs.selectionStart());
         curs.movePosition(QTextCursor::NextCharacter);
         QTextCharFormat ref = curs.charFormat();
-        ////qDebug() << "at" << curs.position() << "format rect" << ref.property(OcrWordData::Rectangle).toRect();
+        ////qCDebug(KOOKA_LOG) << "at" << curs.position() << "format rect" << ref.property(OcrWordData::Rectangle).toRect();
         bool same = true;
 
         while (curs.position() != send) {
             curs.movePosition(QTextCursor::NextCharacter);
             QTextCharFormat fmt = curs.charFormat();
-            ////qDebug() << "at" << curs.position() << "format rect" << fmt.property(OcrWordData::Rectangle).toRect();
+            ////qCDebug(KOOKA_LOG) << "at" << curs.position() << "format rect" << fmt.property(OcrWordData::Rectangle).toRect();
             if (fmt != ref) {
-                ////qDebug() << "mismatch at" << curs.position();
+                ////qCDebug(KOOKA_LOG) << "mismatch at" << curs.position();
                 same = false;
                 break;
             }
         }
 
-        ////qDebug() << "range same format?" << same;
+        ////qCDebug(KOOKA_LOG) << "range same format?" << same;
         if (same) {                 // valid word selection
             QRect r = ref.property(OcrWordData::Rectangle).toRect();
-            ////qDebug() << "rect" << r;
+            ////qCDebug(KOOKA_LOG) << "rect" << r;
             emit highlightWord(r);
             return;
         }

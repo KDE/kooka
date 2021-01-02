@@ -29,7 +29,6 @@
  *									*
  ************************************************************************/
 
-#include <qdebug.h>
 #include <qapplication.h>
 #include <qcommandlineparser.h>
 
@@ -38,6 +37,7 @@
 
 #include "kooka.h"
 #include "vcsversion.h"
+#include "kooka_logging.h"
 
 
 static const char shortDesc[] =
@@ -112,7 +112,7 @@ int main(int argc, char *argv[])
 
     QString devToUse = parser.value("d");
     if (parser.isSet("g")) devToUse = "gallery";
-    //qDebug() << "DevToUse is" << devToUse;
+    qCDebug(KOOKA_LOG) << "device to use" << devToUse;
 
     // TODO: try ScanGlobal::init(), if that fails no point in carrying on
     // so show an error box and give up (or can we carry on and run in

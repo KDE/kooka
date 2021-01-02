@@ -26,7 +26,6 @@
 #include <qapplication.h>
 #include <qtimer.h>
 #include <qmimedata.h>
-#include <qdebug.h>
 
 #include <kfileitem.h>
 

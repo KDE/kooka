@@ -31,9 +31,9 @@
 #include "imagetransform.h"
 
 #include <qurl.h>
-#include <qdebug.h>
 
 #include <klocalizedstring.h>
+#include "kooka_logging.h"
 
 
 ImageTransform::ImageTransform(const QImage &img, ImageTransform::Operation op,
@@ -43,13 +43,13 @@ ImageTransform::ImageTransform(const QImage &img, ImageTransform::Operation op,
     mImage = img;
     mOperation = op;
     mFileName = fileName;
-    //qDebug() << "for operation" << mOperation;
+    qCDebug(KOOKA_LOG) << "operation" << mOperation;
 }
 
 
 void ImageTransform::run()
 {
-    //qDebug() << "thread started for operation" << mOperation;
+    qCDebug(KOOKA_LOG) << "thread started for operation" << mOperation;
 
     QImage resultImg;
     QTransform m;
@@ -84,7 +84,7 @@ void ImageTransform::run()
         break;
 
     default:
-        //qDebug() << "Unknown operation" << mOperation;
+        qCWarning(KOOKA_LOG) << "Unknown operation" << mOperation;
         break;
     }
 
@@ -94,5 +94,5 @@ void ImageTransform::run()
         emit statusMessage(i18n("Error updating image %1", mFileName));
     }
 
-    //qDebug() << "thread finished";
+    qCDebug(KOOKA_LOG) << "thread finished";
 }

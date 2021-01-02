@@ -38,7 +38,6 @@
 #include <qbuttongroup.h>
 #include <qgroupbox.h>
 #include <qcombobox.h>
-#include <qdebug.h>
 
 #include <klocalizedstring.h>
 #include <kmessagebox.h>
@@ -56,6 +55,7 @@
 #include "pluginmanager.h"
 #include "abstractocrengine.h"
 #include "kookasettings.h"
+#include "kooka_logging.h"
 
 
 //  Abstract base
@@ -97,7 +97,7 @@ void KookaGeneralPage::defaultSettings()
 
 void KookaGeneralPage::slotEnableWarnings()
 {
-    //qDebug();
+    qCDebug(KOOKA_LOG);
 
     KMessageBox::enableAllMessages();
     FormatDialog::forgetRemembered();
@@ -378,12 +378,12 @@ KookaOcrPage::KookaOcrPage(KPageDialog *parent)
     lay->setColumnStretch(1, 9);
 
     const QString configuredEngine = KookaSettings::ocrEngineName();
-    qDebug() << "configured engine" << configuredEngine;
+    qCDebug(KOOKA_LOG) << "configured engine" << configuredEngine;
     int engineIndex = 0;
 
     mEngineCombo = new QComboBox(this);
     mOcrPlugins = PluginManager::self()->allPlugins(PluginManager::OcrPlugin);
-    qDebug() << "have" << mOcrPlugins.count() << "OCR plugins";
+    qCDebug(KOOKA_LOG) << "have" << mOcrPlugins.count() << "OCR plugins";
 
     mEngineCombo->addItem(i18n("None"), QString());
     for (QMap<QString,AbstractPluginInfo>::const_iterator it = mOcrPlugins.constBegin();
@@ -442,7 +442,7 @@ void KookaOcrPage::defaultSettings()
 void KookaOcrPage::slotEngineSelected(int i)
 {
     const QString pluginKey = mEngineCombo->currentData().toString();
-    qDebug() << "selected" << pluginKey;
+    qCDebug(KOOKA_LOG) << "selected" << pluginKey;
 
     QString msg;					// description message
     bool enableAdvanced = false;			// for the moment, anyway

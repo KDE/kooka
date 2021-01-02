@@ -19,8 +19,6 @@
 
 #include "filetreeviewitem.h"
 
-#include <qdebug.h>
-
 #include <kfileitem.h>
 
 #include "filetreeview.h"

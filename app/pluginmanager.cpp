@@ -33,13 +33,13 @@
 #include <qpluginloader.h>
 #include <qdir.h>
 #include <qcoreapplication.h>
-#include <qdebug.h>
 
 #include <kservicetypetrader.h>
 #include <kplugininfo.h>
 #include <klocalizedstring.h>
 
 #include "abstractplugin.h"
+#include "kooka_logging.h"
 
 
 static PluginManager *sInstance = nullptr;
@@ -48,7 +48,7 @@ static PluginManager *sInstance = nullptr;
 PluginManager::PluginManager()
 {
     QStringList pluginPaths = QCoreApplication::libraryPaths();
-    qDebug() << "initial paths" << pluginPaths;
+    qCDebug(KOOKA_LOG) << "initial paths" << pluginPaths;
 
     // Assume that the first path entry is the standard install location.
     // Our plugins will be in a subdirectory of that.
@@ -71,7 +71,7 @@ PluginManager::PluginManager()
     // other plugins which may be needed.
     pluginPaths.append(installPath);
 
-    qDebug() << "using paths" << pluginPaths;
+    qCDebug(KOOKA_LOG) << "using paths" << pluginPaths;
     QCoreApplication::setLibraryPaths(pluginPaths);
 }
 
@@ -81,7 +81,7 @@ PluginManager *PluginManager::self()
     if (sInstance==nullptr)
     {
         sInstance = new PluginManager();
-        qDebug() << "allocated global instance";
+        qCDebug(KOOKA_LOG) << "allocated global instance";
     }
     return (sInstance);
 }
@@ -103,19 +103,19 @@ static QString commentAsRichText(const QString &comment)
 
 AbstractPlugin *PluginManager::loadPlugin(PluginManager::PluginType type, const QString &name)
 {
-    qDebug() << "want type" << type << name;
+    qCDebug(KOOKA_LOG) << "want type" << type << name;
 
     AbstractPlugin *plugin = mLoadedPlugins.value(type);
     if (plugin!=nullptr)				// a plugin is loaded
     {
-        qDebug() << "have current" << plugin->pluginInfo()->key;
+        qCDebug(KOOKA_LOG) << "have current" << plugin->pluginInfo()->key;
         if (name==plugin->pluginInfo()->key)		// wanted plugin is already loaded
         {
-            qDebug() << "already loaded";
+            qCDebug(KOOKA_LOG) << "already loaded";
             return (plugin);
         }
 
-        qDebug() << "unloading current";
+        qCDebug(KOOKA_LOG) << "unloading current";
         delete plugin;
         plugin = nullptr;
     }
@@ -129,29 +129,29 @@ AbstractPlugin *PluginManager::loadPlugin(PluginManager::PluginType type, const 
     // TODO: plugin type
     const KService::List list = KServiceTypeTrader::self()->query("Kooka/OcrPlugin",
                                                                   QString("[DesktopEntryName]=='%1'").arg(name));
-    qDebug() << "query count" << list.count();
-    if (list.isEmpty()) qWarning() << "No plugin services found";
+    qCDebug(KOOKA_LOG) << "query count" << list.count();
+    if (list.isEmpty()) qCWarning(KOOKA_LOG) << "No plugin services found";
     else
     {
-        if (list.count()>1) qWarning() << "Multiple plugin services found, using only the first";
+        if (list.count()>1) qCWarning(KOOKA_LOG) << "Multiple plugin services found, using only the first";
 							// should not happen, names are unique
         const KService::Ptr service = list.first();
         const QString lib = service->library();
-        qDebug() << "  name" << service->name();
-        qDebug() << "  icon" << service->icon();
-        qDebug() << "  library" << lib;
+        qCDebug(KOOKA_LOG) << "  name" << service->name();
+        qCDebug(KOOKA_LOG) << "  icon" << service->icon();
+        qCDebug(KOOKA_LOG) << "  library" << lib;
 
         KPluginLoader loader(*service);
         if (loader.factory()==nullptr)
         {
-            qWarning() << "Cannot load plugin library" << lib << "from service";
+            qCWarning(KOOKA_LOG) << "Cannot load plugin library" << lib << "from service";
         }
         else
         {
             plugin = loader.factory()->create<AbstractPlugin>();
             if (plugin!=nullptr)
             {
-                qDebug() << "created plugin from library" << lib;
+                qCDebug(KOOKA_LOG) << "created plugin from library" << lib;
 
                 AbstractPluginInfo *info = new AbstractPluginInfo;
                 info->key = service->desktopEntryName();
@@ -161,7 +161,7 @@ AbstractPlugin *PluginManager::loadPlugin(PluginManager::PluginType type, const 
 
                 plugin->mPluginInfo = info;
             }
-            else qWarning() << "Cannot create plugin from library" << lib;
+            else qCWarning(KOOKA_LOG) << "Cannot create plugin from library" << lib;
         }
     }
 
@@ -172,19 +172,19 @@ AbstractPlugin *PluginManager::loadPlugin(PluginManager::PluginType type, const 
 
 QMap<QString,AbstractPluginInfo> PluginManager::allPlugins(PluginManager::PluginType type) const
 {
-    qDebug() << "want all of type" << type;
+    qCDebug(KOOKA_LOG) << "want all of type" << type;
 
     QMap<QString,AbstractPluginInfo> plugins;
 
     // TODO: plugin type
     const KService::List list = KServiceTypeTrader::self()->query("Kooka/OcrPlugin");
-    qDebug() << "query count" << list.count();
-    if (list.isEmpty()) qWarning() << "No plugin services found";
+    qCDebug(KOOKA_LOG) << "query count" << list.count();
+    if (list.isEmpty()) qCWarning(KOOKA_LOG) << "No plugin services found";
     else
     {
         foreach (const KService::Ptr service, qAsConst(list))
         {
-            qDebug() << "  found" << service->desktopEntryName();
+            qCDebug(KOOKA_LOG) << "  found" << service->desktopEntryName();
 
             struct AbstractPluginInfo info;
             info.key = service->desktopEntryName();
