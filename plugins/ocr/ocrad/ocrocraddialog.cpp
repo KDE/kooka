@@ -38,7 +38,6 @@
 #include <qspinbox.h>
 #include <qlayout.h>
 #include <qprogressbar.h>
-#include <qdebug.h>
 
 #include <klocalizedstring.h>
 #include <kurlrequester.h>
@@ -51,6 +50,7 @@
 #include "dialogbase.h"
 
 #include "ocrocradengine.h"
+#include "ocr_logging.h"
 
 
 OcrOcradDialog::OcrOcradDialog(AbstractOcrEngine *plugin, QWidget *pnt)
@@ -260,10 +260,8 @@ QString OcrOcradDialog::orfUrl() const
 
 void OcrOcradDialog::getVersion(const QString &bin)
 {
-    //qDebug() << "of" << bin;
-    if (bin.isEmpty()) {
-        return;
-    }
+    qCDebug(OCR_LOG) << "of" << bin;
+    if (bin.isEmpty()) return;
 
     KProcess proc;
     proc.setOutputChannelMode(KProcess::MergedChannels);
@@ -272,15 +270,15 @@ void OcrOcradDialog::getVersion(const QString &bin)
     int status = proc.execute(5000);
     if (status == 0) {
         QByteArray output = proc.readAllStandardOutput();
-        QRegExp rx("GNU Ocrad (version )?([\\d\\.]+)");
+        QRegExp rx("GNU [Oo]crad (version )?([\\d\\.]+)");
         if (rx.indexIn(output) > -1) {
             m_ocrCmd = bin;
             m_versionStr = rx.cap(2);
             m_versionNum = m_versionStr.mid(2).toInt();
-            //qDebug() << "version" << m_versionStr << "=" << m_versionNum;
+            qCDebug(OCR_LOG) << "version" << m_versionStr << "=" << m_versionNum;
         }
     } else {
-        //qDebug() << "failed with status" << status;
+        qCWarning(OCR_LOG) << "failed with status" << status;
         m_versionStr = i18n("Error");
     }
 }
@@ -295,7 +293,7 @@ QStringList OcrOcradDialog::getValidValues(const QString &opt)
     KConfigGroup grp = KookaSettings::self()->config()->group(groupName);
 
     if (grp.hasKey(opt)) {				// values in config already
-        //qDebug() << "option" << opt << "already in config";
+        qCDebug(OCR_LOG) << "option" << opt << "already in config";
         result = grp.readEntry(opt, QStringList());
     } else {						// not in config, need to extract
         if (!m_ocrCmd.isEmpty()) {
@@ -306,7 +304,7 @@ QStringList OcrOcradDialog::getValidValues(const QString &opt)
             proc.execute(5000);
             // Ignore return status, because '--OPTION=help' returns exit code 1
             QByteArray output = proc.readAllStandardOutput();
-            QRegExp rx("Valid .*are:([^\n]+)");
+            QRegExp rx("Valid .*(?:are|names):([^\n]+)");
             if (rx.indexIn(output) > -1) {
                 QString values = rx.cap(1);
 #if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
@@ -315,14 +313,14 @@ QStringList OcrOcradDialog::getValidValues(const QString &opt)
                 result = rx.cap(1).split(QRegExp("\\s+"), QString::SkipEmptyParts);
 #endif
             } else {
-                //qDebug() << "cannot get values, no match in" << output;
+                qCWarning(OCR_LOG) << "cannot get values, no match in" << output;
             }
         } else {
-            //qDebug() << "cannot get values, no binary";
+            qCWarning(OCR_LOG) << "cannot get values, no binary";
         }
     }
 
-    //qDebug() << "values for" << opt << "=" << result.join(",");
+    qCDebug(OCR_LOG) << "values for" << opt << "=" << result.join(",");
     if (!result.isEmpty()) {
         grp.writeEntry(opt, result);			// save for next time
         grp.sync();

@@ -34,7 +34,6 @@
 #include <qlayout.h>
 #include <qpushbutton.h>
 #include <qlistwidget.h>
-#include <qdebug.h>
 
 #include <klocalizedstring.h>
 #include <kmessagebox.h>
@@ -47,8 +46,8 @@ extern "C" {
 #include "kscandevice.h"
 #include "kscanoption.h"
 #include "kscanoptset.h"
-
 #include "newscanparams.h"
+#include "kooka_logging.h"
 
 
 // TODO: also associate an icon, default the "color"/"grey" etc
@@ -122,7 +121,7 @@ void ScanParamsDialog::populateList()
     sets = KScanOptSet::readList();
 
     for (KScanOptSet::StringMap::const_iterator it = sets.constBegin(); it != sets.constEnd(); ++it) {
-        //qDebug() << "saveset" << it.key();
+        qCDebug(KOOKA_LOG) << "saveset" << it.key();
         paramsList->addItem(it.key());
     }
 }
@@ -155,11 +154,11 @@ void ScanParamsDialog::slotLoad()
     if (item == nullptr) return;
 
     QString name = item->text();
-    //qDebug() << "set" << name;
+    qCDebug(KOOKA_LOG) << "set" << name;
 
     KScanOptSet optSet(name);
     if (!optSet.loadConfig()) {
-        //qDebug() << "Failed to load set" << name;
+        qCWarning(KOOKA_LOG) << "Failed to load set" << name;
         return;
     }
 
@@ -171,7 +170,7 @@ void ScanParamsDialog::slotLoadAndClose(QListWidgetItem *item)
 {
     if (item == nullptr) return;
 
-    //qDebug() << "set" << item->text();
+    qCDebug(KOOKA_LOG) << "set" << item->text();
     paramsList->setCurrentItem(item);
     slotLoad();
     accept();
@@ -182,7 +181,7 @@ void ScanParamsDialog::slotSave()
     QString name;
     QListWidgetItem *item = paramsList->currentItem();
     if (item != nullptr) name = item->text();
-    //qDebug() << "selected set" << name;
+    qCDebug(KOOKA_LOG) << "selected set" << name;
 
     QString newdesc;
     if (sets.contains(name)) {
@@ -200,7 +199,7 @@ void ScanParamsDialog::slotSave()
         QString newName = d.getName();
         QString newDesc = d.getDescription();
 
-        //qDebug() << "name" << newName << "desc" << newDesc;
+        qCDebug(KOOKA_LOG) << "name" << newName << "desc" << newDesc;
 
         KScanOptSet optSet(newName);
         sane->getCurrentOptions(&optSet);
@@ -230,7 +229,7 @@ void ScanParamsDialog::slotEdit()
         return;
     }
     QString oldName = item->text();
-    //qDebug() << "selected set" << oldName;
+    qCDebug(KOOKA_LOG) << "selected set" << oldName;
 
     NewScanParams d(this, oldName, sets[oldName], true);
     if (d.exec()) {
@@ -240,11 +239,11 @@ void ScanParamsDialog::slotEdit()
             return;
         }
 
-        //qDebug() << "new name" << newName << "desc" << newDesc;
+        qCDebug(KOOKA_LOG) << "new name" << newName << "desc" << newDesc;
 
         KScanOptSet optSet(oldName.toLocal8Bit());
         if (!optSet.loadConfig()) {
-            //qDebug() << "Failed to load set" << oldName;
+            qCWarning(KOOKA_LOG) << "Failed to load set" << oldName;
             return;
         }
 
@@ -266,7 +265,7 @@ void ScanParamsDialog::slotDelete()
     if (item == nullptr) return;
 
     QString name = item->text();
-    //qDebug() << "set" << name;
+    qCDebug(KOOKA_LOG) << "set" << name;
     if (KMessageBox::warningContinueCancel(this,
                                            xi18nc("@info", "Do you really want to delete the set <emphasis strong=\"1\">%1</emphasis>?", name),
                                            i18n("Delete Scan Parameter Set"),

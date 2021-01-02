@@ -33,19 +33,19 @@
 
 #include <qlayout.h>
 #include <qlabel.h>
-#include <qdebug.h>
 
 #include <klocalizedstring.h>
 
 #include "scangallery.h"
 #include "galleryhistory.h"
 #include "kookasettings.h"
+#include "kooka_logging.h"
 
 
 KookaGallery::KookaGallery(QWidget *parent)
     : QWidget(parent)
 {
-    //qDebug();
+    qCDebug(KOOKA_LOG);
     m_layout = new QGridLayout(this);
     m_layout->setMargin(0);
 

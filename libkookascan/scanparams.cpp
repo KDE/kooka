@@ -44,7 +44,6 @@
 #include <qlabel.h>
 #include <qscrollarea.h>
 #include <qtabwidget.h>
-#include <qdebug.h>
 #include <qmimetype.h>
 #include <qmimedatabase.h>
 #include <qlayout.h>
@@ -73,6 +72,7 @@ extern "C"
 #include "kscanoptset.h"
 #include "scanicons.h"
 #include "dialogbase.h"
+#include "libkookascan_logging.h"
 
 //  Debugging options
 #undef DEBUG_ADF
@@ -111,7 +111,6 @@ ScanParams::ScanParams(QWidget *parent)
 
 ScanParams::~ScanParams()
 {
-    //qDebug();
     delete mProgressDialog;
 }
 
@@ -122,7 +121,7 @@ bool ScanParams::connectDevice(KScanDevice *newScanDevice, bool galleryMode)
     lay->setColumnStretch(0, 9);
 
     if (newScanDevice == nullptr) {            // no scanner device
-        //qDebug() << "No scan device, gallery=" << galleryMode;
+        qCDebug(LIBKOOKASCAN_LOG) << "No scan device, gallery=" << galleryMode;
         mSaneDevice = nullptr;
         createNoScannerMsg(galleryMode);
         return (true);
@@ -158,14 +157,14 @@ bool ScanParams::connectDevice(KScanDevice *newScanDevice, bool galleryMode)
     // Or update KScanDevice and here to save/load the startup options
     // on a per-scanner basis.
 
-    //qDebug() << "looking for startup options";
+    qCDebug(LIBKOOKASCAN_LOG) << "looking for startup options";
     KScanOptSet startupOptions(KScanOptSet::startupSetName());
     if (startupOptions.loadConfig(mSaneDevice->scannerBackendName()))
     {
-        //qDebug() << "loading startup options";
+        qCDebug(LIBKOOKASCAN_LOG) << "loading startup options";
         mSaneDevice->loadOptionSet(&startupOptions);
     }
-    //else qDebug() << "Could not load startup options";
+    else qCDebug(LIBKOOKASCAN_LOG) << "no startup options to load";
 
     // Reload all options, to take account of inactive ones
     mSaneDevice->reloadAllOptions();
@@ -362,7 +361,7 @@ QWidget *ScanParams::createScannerParams()
             frame->addRow(l, w, u);
         }
     } else {
-        //qDebug() << "Serious: No resolution option available!";
+        qCWarning(LIBKOOKASCAN_LOG) << "No resolution option available!";
     }
 
     // Scan size setting
@@ -457,7 +456,7 @@ QWidget *ScanParams::createScannerParams()
 
         so = mSaneDevice->getGuiElement(opt, frame);
         if (so != nullptr) {
-            //qDebug() << "creating" << (so->isCommonOption() ? "OTHER" : "ADVANCED") << "option" << opt;
+            //qCDebug(LIBKOOKASCAN_LOG) << "creating" << (so->isCommonOption() ? "OTHER" : "ADVANCED") << "option" << opt;
             connect(so, &KScanOption::guiChange, this, &ScanParams::slotOptionChanged);
 
             if (so->isCommonOption()) {
@@ -612,7 +611,7 @@ void ScanParams::slotSourceSelect()
     }
 
     const QByteArray &currSource = mSourceSelect->get();
-    //qDebug() << "Current source is" << currSource;
+    //qCDebug(LIBKOOKASCAN_LOG) << "Current source is" << currSource;
 
     QList<QByteArray> sources = mSourceSelect->getList();
 #ifdef DEBUG_ADF
@@ -633,7 +632,7 @@ void ScanParams::slotSourceSelect()
 
     QString sel_source = d.getText();
     adf = d.getAdfBehave();
-    //qDebug() << "new source" << sel_source << "ADF" << adf;
+    //qCDebug(LIBKOOKASCAN_LOG) << "new source" << sel_source << "ADF" << adf;
 
     /* set the selected Document source, the behavior is stored in a membervar */
     mSourceSelect->set(sel_source.toLatin1());		// TODO: FIX in ScanSourceDialog, then here
@@ -666,7 +665,7 @@ void ScanParams::slotVirtScanModeSelect(int but)
 
 KScanDevice::Status ScanParams::prepareScan(QString *vfp)
 {
-    //qDebug() << "scan mode=" << mScanMode;
+    qCDebug(LIBKOOKASCAN_LOG) << "scan mode=" << mScanMode;
 
     setScanDestination(KLocalizedString());		// reset progress display
 
@@ -752,7 +751,7 @@ void ScanParams::slotAcquirePreview()
         return;
     }
 
-    //qDebug() << "scan mode=" << mScanMode << "virtfile" << virtfile;
+    //qCDebug(LIBKOOKASCAN_LOG) << "scan mode=" << mScanMode << "virtfile" << virtfile;
 
     KScanOption *greyPreview = mSaneDevice->getExistingGuiElement(SANE_NAME_GRAY_PREVIEW);
     int gp = 0;
@@ -765,7 +764,7 @@ void ScanParams::slotAcquirePreview()
 
     stat = mSaneDevice->acquirePreview(gp);
     if (stat != KScanDevice::Ok) {
-        //qDebug() << "Error, preview status " << stat;
+        qCWarning(LIBKOOKASCAN_LOG) << "Error, preview status " << stat;
     }
 }
 
@@ -778,28 +777,28 @@ void ScanParams::slotStartScan()
         return;
     }
 
-    //qDebug() << "scan mode=" << mScanMode << "virtfile" << virtfile;
+    //qCDebug(LIBKOOKASCAN_LOG) << "scan mode=" << mScanMode << "virtfile" << virtfile;
 
     if (mScanMode != ScanParams::VirtualScannerMode) {	// acquire via SANE
 #if 0
 // TODO: port/update
         if (adf == ADF_OFF) {
 #endif
-            //qDebug() << "Start to acquire image";
+            qCDebug(LIBKOOKASCAN_LOG) << "Start to acquire image";
             stat = mSaneDevice->acquireScan();
 #if 0
         } else {
-            //qDebug() << "ADF Scan not yet implemented :-/";
+            //qCDebug(LIBKOOKASCAN_LOG) << "ADF Scan not yet implemented :-/";
             // stat = performADFScan();
         }
 #endif
     } else {                    // acquire via Qt-IMGIO
-        //qDebug() << "Acquiring from virtual file";
+        qCDebug(LIBKOOKASCAN_LOG) << "Acquiring from virtual file";
         stat = mSaneDevice->acquireScan(virtfile);
     }
 
     if (stat != KScanDevice::Ok) {
-        //qDebug() << "Error, scan status " << stat;
+        qCDebug(LIBKOOKASCAN_LOG) << "Error, scan status " << stat;
     }
 }
 
@@ -813,7 +812,8 @@ bool ScanParams::getGammaTableFrom(const QByteArray &opt, KGammaTable *gt)
     if (!so->get(gt)) {
         return (false);
     }
-    //qDebug() << "got from" << so->getName() << "=" << gt->toString();
+
+    qCDebug(LIBKOOKASCAN_LOG) << "got from" << so->getName() << "=" << gt->toString();
     return (true);
 }
 
@@ -824,7 +824,7 @@ bool ScanParams::setGammaTableTo(const QByteArray &opt, const KGammaTable *gt)
         return (false);
     }
 
-    //qDebug() << "set" << so->getName() << "=" << gt->toString();
+    qCDebug(LIBKOOKASCAN_LOG) << "set" << so->getName() << "=" << gt->toString();
     so->set(gt);
     return (so->apply());
 }
@@ -842,12 +842,12 @@ void ScanParams::slotEditCustGamma()
                     // Should not happen... but if it does, no problem
                     // the dialogue will just use the default values
                     // for an empty gamma table.
-                    //qDebug() << "no existing/active gamma option!";
+                    qCWarning(LIBKOOKASCAN_LOG) << "no existing/active gamma option!";
                 }
             }
         }
     }
-    //qDebug() << "initial gamma table" << gt.toString();
+    qCDebug(LIBKOOKASCAN_LOG) << "initial gamma table" << gt.toString();
 
 // TODO; Maybe need to have a separate GUI widget for each gamma table, a
 // little preview of the gamma curve (a GammaWidget) with an edit button.
@@ -873,13 +873,13 @@ void ScanParams::slotApplyGamma(const KGammaTable *gt)
         int cg = 0;
         if (so->get(&cg) && !cg) {			// yes, see if already on
             // if not, set it on now
-            //qDebug() << "Setting gamma switch on";
+            qCDebug(LIBKOOKASCAN_LOG) << "Setting gamma switch on";
             so->set(true);
             reload = so->apply();
         }
     }
 
-    //qDebug() << "Applying gamma table" << gt->toString();
+    qCDebug(LIBKOOKASCAN_LOG) << "Applying gamma table" << gt->toString();
     reload |= setGammaTableTo(SANE_NAME_GAMMA_VECTOR, gt);
     reload |= setGammaTableTo(SANE_NAME_GAMMA_VECTOR_R, gt);
     reload |= setGammaTableTo(SANE_NAME_GAMMA_VECTOR_G, gt);
@@ -952,7 +952,7 @@ void ScanParams::setEditCustomGammaTableState()
         }
     }
 
-    //qDebug() << "State of edit custom gamma button=" << butState;
+    qCDebug(LIBKOOKASCAN_LOG) << "Set state to" << butState;
     mGammaEditButt->setEnabled(butState);
 }
 
@@ -960,7 +960,7 @@ void ScanParams::setEditCustomGammaTableState()
 // All scanners out there appear to do this.
 void ScanParams::applyRect(const QRect &rect)
 {
-    //qDebug() << "rect=" << rect;
+    qCDebug(LIBKOOKASCAN_LOG) << "rect=" << rect;
 
     KScanOption *tl_x = mSaneDevice->getOption(SANE_NAME_SCAN_TL_X);
     KScanOption *tl_y = mSaneDevice->getOption(SANE_NAME_SCAN_TL_Y);
@@ -976,7 +976,7 @@ void ScanParams::applyRect(const QRect &rect)
         tl_y->getRange(&min2, &max2); tl_y->set(min2);
         br_y->getRange(&min2, &max2); br_y->set(max2);
 
-        //qDebug() << "setting full area" << min1 << min2 << "-" << max1 << max2;
+        qCDebug(LIBKOOKASCAN_LOG) << "setting full area" << min1 << min2 << "-" << max1 << max2;
     } else {
         double tlx = rect.left();
         double tly = rect.top();
@@ -997,7 +997,7 @@ void ScanParams::applyRect(const QRect &rect)
         }
         tl_y->set(tly); br_y->set(bry);
 
-        //qDebug() << "setting area" << tlx << tly << "-" << brx << bry;
+        qCDebug(LIBKOOKASCAN_LOG) << "setting area" << tlx << tly << "-" << brx << bry;
     }
 
     tl_x->apply();
@@ -1010,8 +1010,7 @@ void ScanParams::applyRect(const QRect &rect)
 //  new preview area (specified in millimetres).
 void ScanParams::slotNewPreviewRect(const QRect &rect)
 {
-    //qDebug() << "rect=" << rect;
-
+    qCDebug(LIBKOOKASCAN_LOG) << "rect=" << rect;
     applyRect(rect);
     mAreaSelect->selectSize(rect);
 }
@@ -1019,8 +1018,7 @@ void ScanParams::slotNewPreviewRect(const QRect &rect)
 //  A new preset scan size or orientation chosen by the user
 void ScanParams::slotScanSizeSelected(const QRect &rect)
 {
-    //qDebug() << "rect=" << rect << "full=" << !rect.isValid();
-
+    qCDebug(LIBKOOKASCAN_LOG) << "rect=" << rect << "full=" << !rect.isValid();
     applyRect(rect);
     emit newCustomScanSize(rect);
 }
@@ -1030,7 +1028,7 @@ void ScanParams::slotScanSizeSelected(const QRect &rect)
  */
 void ScanParams::setMaximalScanSize()
 {
-    //qDebug() << "Setting to default";
+    qCDebug(LIBKOOKASCAN_LOG) << "Setting to default";
     slotScanSizeSelected(QRect());
 }
 
@@ -1052,7 +1050,7 @@ void ScanParams::slotNewResolution(KScanOption *opt)
         opt_y->get(&y_res);
     }
 
-    //qDebug() << "X/Y resolution" << x_res << y_res;
+    qCDebug(LIBKOOKASCAN_LOG) << "X/Y resolution" << x_res << y_res;
 
     if (y_res == 0) {
         y_res = x_res;					// use X res if Y unavailable
@@ -1062,7 +1060,7 @@ void ScanParams::slotNewResolution(KScanOption *opt)
     }
 
     if (x_res == 0 && y_res == 0) {
-        //qDebug() << "resolution not available!";
+        qCWarning(LIBKOOKASCAN_LOG) << "resolution not available!";
     } else {
         emit scanResolutionChanged(x_res, y_res);
     }
@@ -1075,8 +1073,7 @@ void ScanParams::slotNewScanMode()
     mSaneDevice->getCurrentFormat(&format, &depth);
 
     int strips = (format == SANE_FRAME_GRAY ? 1 : 3);
-
-    qDebug() << "format" << format << "depth" << depth << "-> strips" << strips;
+    qCDebug(LIBKOOKASCAN_LOG) << "format" << format << "depth" << depth << "-> strips" << strips;
 
     if (strips == 1 && depth == 1) {			// bitmap scan
         emit scanModeChanged(0);			// 8 pixels per byte

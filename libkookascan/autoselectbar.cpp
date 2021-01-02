@@ -34,7 +34,6 @@
 #include <qlayout.h>
 #include <qlabel.h>
 #include <qslider.h>
-#include <qdebug.h>
 #include <qicon.h>
 #include <qframe.h>
 #include <qpalette.h>
@@ -50,7 +49,6 @@
 AutoSelectBar::AutoSelectBar(int initialValue, QWidget *parent)
     : QWidget(parent)
 {
-    //qDebug();
     setObjectName("AutoSelectBar");
 
     QHBoxLayout *hbl = new QHBoxLayout;

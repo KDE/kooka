@@ -41,7 +41,6 @@
 #include <qsplitter.h>
 #include <qimage.h>
 #include <qapplication.h>
-#include <qdebug.h>
 #include <qicon.h>
 #include <qaction.h>
 #include <qmenu.h>
@@ -86,6 +85,7 @@
 #include "imagetransform.h"
 #include "statusbarmanager.h"
 #include "kookasettings.h"
+#include "kooka_logging.h"
 
 #include "imgprintdialog.h"
 #include "kookaprint.h"
@@ -141,7 +141,7 @@ WidgetSite::WidgetSite(QWidget *parent, QWidget *widget)
         widget = l;
     }
 
-    ////qDebug() << name
+    //qCDebug(KOOKA_LOG) << name
     //         << "widget is a" << widget->metaObject()->className()
     //         << "parent is a" << widget->parent()->metaObject()->className();
     lay->addWidget(widget, 0, 0);
@@ -162,7 +162,7 @@ void WidgetSite::setWidget(QWidget *widget)
         }
     }
 
-    ////qDebug() << objectName()
+    //qCDebug(KOOKA_LOG) << objectName()
     //         << "widget is a" << widget->metaObject()->className()
     //         << "parent is a" << widget->parent()->metaObject()->className();
     lay->addWidget(widget, 0, 0);
@@ -351,14 +351,12 @@ KookaView::KookaView(KMainWindow *parent, const QByteArray &deviceToUse)
 KookaView::~KookaView()
 {
     delete mScanDevice;
-
-    //qDebug();
 }
 
 // this gets called via Kooka::closeEvent() at shutdown
 void KookaView::saveWindowSettings(KConfigGroup &grp)
 {
-    qDebug() << "to group" << grp.name();
+    qCDebug(KOOKA_LOG) << "to group" << grp.name();
     KookaSettings::setLayoutTabIndex(currentIndex());
     KookaSettings::setLayoutScan1(mScanPage->saveState().toBase64());
     KookaSettings::setLayoutScan2(mScanSubSplitter->saveState().toBase64());
@@ -374,7 +372,7 @@ void KookaView::saveWindowSettings(KConfigGroup &grp)
 // this gets called by Kooka::applyMainWindowSettings() at startup
 void KookaView::applyWindowSettings(const KConfigGroup &grp)
 {
-    qDebug() << "from group" << grp.name();
+    qCDebug(KOOKA_LOG) << "from group" << grp.name();
 
     QString set = KookaSettings::layoutScan1();
     if (!set.isEmpty()) mScanPage->restoreState(QByteArray::fromBase64(set.toLocal8Bit()));
@@ -406,7 +404,7 @@ void KookaView::restoreGalleryState(int index)
 
 void KookaView::slotTabChanged(int index)
 {
-    //qDebug() << index;
+    //qCDebug(KOOKA_LOG) << index;
     if (mCurrentTab != KookaView::TabNone) {
         saveGalleryState(mCurrentTab);
     }
@@ -439,7 +437,7 @@ void KookaView::slotTabChanged(int index)
 
 bool KookaView::slotSelectDevice(const QByteArray &useDevice, bool alwaysAsk)
 {
-    //qDebug() << "use device" << useDevice << "ask" << alwaysAsk;
+    qCDebug(KOOKA_LOG) << "device" << useDevice << "ask" << alwaysAsk;
 
     bool haveConnection = false;
     bool gallery_mode = (useDevice == "gallery");
@@ -474,7 +472,7 @@ bool KookaView::slotSelectDevice(const QByteArray &useDevice, bool alwaysAsk)
 
     if (!selDevice.isEmpty()) {             // connect to the selected scanner
         while (!haveConnection) {
-            //qDebug() << "Opening device" << selDevice;
+            qCDebug(KOOKA_LOG) << "Opening device" << selDevice;
             KScanDevice::Status stat = mScanDevice->openDevice(selDevice);
             if (stat == KScanDevice::Ok) {
                 haveConnection = true;
@@ -502,7 +500,6 @@ bool KookaView::slotSelectDevice(const QByteArray &useDevice, bool alwaysAsk)
 
         if (haveConnection) {           // scanner connected OK
             QSize s = mScanDevice->getMaxScanSize();    // fix for 160148
-            //qDebug() << "scanner max size" << s;
             mPreviewCanvas->setScannerBedSize(s.width(), s.height());
 
             // Connections ScanParams --> Previewer
@@ -545,7 +542,7 @@ void KookaView::slotAddDevice()
         QByteArray dev = d.getDevice();
         QString dsc = d.getDescription();
         QByteArray type = d.getType();
-        //qDebug() << "dev" << dev << "type" << type << "desc" << dsc;
+        qCDebug(KOOKA_LOG) << "dev" << dev << "type" << type << "desc" << dsc;
 
         ScanDevices::self()->addUserSpecifiedDevice(dev, dsc, type);
     }
@@ -588,11 +585,11 @@ QByteArray KookaView::userDeviceSelection(bool alwaysAsk)
     }
 
     if (selDevice.isEmpty()) {
-        //qDebug() << "no selDevice, starting selector";
+        qCDebug(KOOKA_LOG) << "no selDevice, starting selector";
         if (ds.exec() == QDialog::Accepted) {
             selDevice = ds.getSelectedDevice();
         }
-        //qDebug() << "selector returned device" << selDevice;
+        qCDebug(KOOKA_LOG) << "selector returned device" << selDevice;
     }
 
     return (selDevice);
@@ -651,7 +648,7 @@ void KookaView::updateSelectionState()
     if (ftvi != nullptr && ftvi->isRoot()) state |= KookaView::RootSelected;
     if (imageViewer()->hasImage()) state |= KookaView::ImageValid;
 
-    ////qDebug() << "state" << state;
+    //qCDebug(KOOKA_LOG) << "state" << state;
     emit signalViewSelectionState(state);
 }
 
@@ -680,10 +677,8 @@ void KookaView::loadStartupImage()
     const bool wantReadOnStart = KookaSettings::startupReadImage();
     if (wantReadOnStart) {
         QString startup = KookaSettings::startupSelectedImage();
-        //qDebug() << "load startup image" << startup;
+        qCDebug(KOOKA_LOG) << "load startup image" << startup;
         if (!startup.isEmpty()) gallery()->slotSelectImage(QUrl::fromLocalFile(startup));
-    } else {
-        //qDebug() << "do not load startup image";
     }
 }
 
@@ -750,7 +745,7 @@ void KookaView::slotStartOcr()
 void KookaView::slotSetOcrSpellConfig(const QString &configFile)
 {
 #ifndef KF5
-    //qDebug() << configFile;
+    qCDebug(KOOKA_LOG) << configFile;
     if (mOcrResEdit!=nullptr) mOcrResEdit->setSpellCheckingConfigFileName(configFile);
 #endif
 }
@@ -880,7 +875,6 @@ void KookaView::slotScanStart(ScanImage::ImageType type)
 
 void KookaView::slotAcquireStart()
 {
-    //qDebug() << "Acquire starts";
     if (mScanParams!=nullptr)
     {
         KLed *led = mScanParams->operationLED();	// update the LED indicator
@@ -907,7 +901,7 @@ void KookaView::slotNewImageScanned(ScanImage::Ptr img)
 
 void KookaView::slotScanFinished(KScanDevice::Status stat)
 {
-    //qDebug() << "Scan finished with status" << stat;
+    qCDebug(KOOKA_LOG) << "Scan finished with status" << stat;
 
     if (stat != KScanDevice::Ok && stat != KScanDevice::Cancelled) {
         QString msg = xi18nc("@info",
@@ -939,7 +933,7 @@ void KookaView::slotScanFinished(KScanDevice::Status stat)
 
 void KookaView::closeScanDevice()
 {
-    qDebug();
+    qCDebug(KOOKA_LOG);
     mScanParams->saveDestinationSettings();
     delete mScanParams; mScanParams = nullptr;
     mScanDevice->closeDevice();
@@ -1134,7 +1128,7 @@ void KookaView::slotAutoSelect(bool on)
 /* Slot called to start copying to printer */
 void KookaView::slotStartPhotoCopy()
 {
-    //qDebug();
+    //qCDebug(KOOKA_LOG);
 
 #ifndef KDE4
     if (mScanParams == 0) {
@@ -1152,7 +1146,7 @@ void KookaView::slotStartPhotoCopy()
 
 void KookaView::slotPhotoCopyPrint(const QImage *img)
 {
-    //qDebug();
+    //qCDebug(KOOKA_LOG);
 
 #ifndef KDE4
     if (! mIsPhotoCopyMode) {
@@ -1167,7 +1161,7 @@ void KookaView::slotPhotoCopyPrint(const QImage *img)
 
 void KookaView::slotPhotoCopyScan(KScanDevice::Status status)
 {
-    //qDebug();
+    //qCDebug(KOOKA_LOG);
 
 #ifndef KDE4
     if (! mIsPhotoCopyMode) {
@@ -1179,7 +1173,7 @@ void KookaView::slotPhotoCopyScan(KScanDevice::Status status)
     KScanOption res(SANE_NAME_SCAN_RESOLUTION);
     mPhotoCopyPrinter->setOption(OPT_SCAN_RES, res.get());
     mPhotoCopyPrinter->setMargins(QSize(0, 0));
-    //qDebug() << "Resolution" << res.get();
+    //qCDebug(KOOKA_LOG) << "Resolution" << res.get();
 
 //    mPhotoCopyPrinter->addDialogPage( new ImgPrintDialog( 0 ) );
     if (mPhotoCopyPrinter->setup(0, "Photocopy")) {
@@ -1220,7 +1214,7 @@ void KookaView::showOpenWithMenu(KActionMenu *menu)
 {
     FileTreeViewItem *curr = gallery()->highlightedFileTreeViewItem();
     QString mimeType = curr->fileItem()->mimetype();
-    //qDebug() << "Trying to open" << curr->url() << "which is" << mimeType;
+    //qCDebug(KOOKA_LOG) << "Trying to open" << curr->url() << "which is" << mimeType;
 
     menu->menu()->clear();
 
@@ -1229,7 +1223,7 @@ void KookaView::showOpenWithMenu(KActionMenu *menu)
     for (KService::List::ConstIterator it = mOpenWithOffers.constBegin();
             it != mOpenWithOffers.constEnd(); ++it, ++i) {
         KService::Ptr service = (*it);
-        //qDebug() << "> offer:" << (*it)->name();
+        //qCDebug(KOOKA_LOG) << "> offer:" << (*it)->name();
 
         QString actionName((*it)->name().replace("&", "&&"));
         QAction *act = new QAction(QIcon::fromTheme((*it)->icon()), actionName, this);

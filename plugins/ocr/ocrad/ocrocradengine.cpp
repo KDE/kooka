@@ -35,7 +35,6 @@
 #include <qfile.h>
 #include <qdir.h>
 #include <qfileinfo.h>
-#include <qdebug.h>
 #include <qtemporaryfile.h>
 #include <qprocess.h>
 
@@ -46,6 +45,7 @@
 #include "kookasettings.h"
 #include "ocrocraddialog.h"
 #include "executablepathdialogue.h"
+#include "ocr_logging.h"
 
 
 K_PLUGIN_FACTORY_WITH_JSON(OcrOcradEngineFactory, "kookaocr-ocrad.json", registerPlugin<OcrOcradEngine>();)
@@ -150,7 +150,7 @@ QStringList OcrOcradEngine::tempFiles(bool retain)
 
 bool OcrOcradEngine::finishedOcrProcess(QProcess *proc)
 {
-    qDebug();
+    qCDebug(OCR_LOG);
     QString errStr = readORF(m_tempOrfName);		// parse the OCR results
     if (errStr.isEmpty()) return (true);		// parsed successfulyl
 
@@ -252,7 +252,7 @@ QString OcrOcradEngine::readORF(const QString &fileName)
     }
     QTextStream stream(&file);
 
-    qDebug() << "Starting to analyse ORF" << fileName << "version" << ocradVersion;
+    qCDebug(OCR_LOG) << "Starting to analyse ORF" << fileName << "version" << ocradVersion;
 
     // to match "block 1 0 0 560 792"
     const QRegExp rx1("^.*block\\s+(\\d+)\\s+(\\d+)\\s+(\\d+)\\s+(\\d+)\\s+(\\d+)");
@@ -281,43 +281,41 @@ QString OcrOcradEngine::readORF(const QString &fileName)
         }
 
         if (verboseDebug()) {
-            //qDebug() << "# Line" << line;
+            qCDebug(OCR_LOG) << "# Line" << line;
         }
         if (line.startsWith("source file ")) {
             continue;					// source file name, ignore
         } else if (line.startsWith("total blocks ")) {	// total count of blocks,
 							// must be first line
             blockCnt = line.mid(13).toInt();
-            qDebug() << "Block count (V<10)" << blockCnt;
+            qCDebug(OCR_LOG) << "Block count (V<10)" << blockCnt;
         } else if (line.startsWith("total text blocks ")) {
             blockCnt = line.mid(18).toInt();
-            qDebug() << "Block count (V>10)" << blockCnt;
+            qCDebug(OCR_LOG) << "Block count (V>10)" << blockCnt;
         } else if (line.startsWith("block ") || line.startsWith("text block ")) {
 							// start of text block
 							// matching "block 1 0 0 560 792"
             if (rx1.indexIn(line) == -1) {
-                //qDebug() << "Failed to match 'block' line" << line;
+                qCDebug(OCR_LOG) << "Failed to match 'block' line" << line;
                 continue;
             }
 
             int currBlock = (rx1.cap(1).toInt()) - 1;
             blockRect.setRect(rx1.cap(2).toInt(), rx1.cap(3).toInt(),
                               rx1.cap(4).toInt(), rx1.cap(5).toInt());
-            //qDebug() << "Current block" << currBlock << "rect" << blockRect;
+            if (verboseDebug()) qCDebug(OCR_LOG) << "Current block" << currBlock << "rect" << blockRect;
         } else if (line.startsWith("lines ")) {		// lines in this block
-            //qDebug() << "Block line count" << line.mid(6).toInt();
+            if (verboseDebug()) qCDebug(OCR_LOG) << "Block line count" << line.mid(6).toInt();
         } else if (line.startsWith("line ")) {		// start of text line
             startLine();
 
             if (rx2.indexIn(line) == -1) {
-                //qDebug() << "Failed to match 'line' line" << line;
+                qCDebug(OCR_LOG) << "Failed to match 'line' line" << line;
                 continue;
             }
 
             int charCount = rx2.cap(2).toInt();
-            if (verboseDebug()) {
-                //qDebug() << "Expecting" << charCount << "chars for line" << lineNo;
-            }
+            if (verboseDebug()) qCDebug(OCR_LOG) << "Expecting" << charCount << "chars for line" << lineNo;
 
             QString word;
             QRect wordRect;
@@ -327,7 +325,7 @@ QString OcrOcradEngine::readORF(const QString &fileName)
                 QString charLine = stream.readLine();
                 int semiPos = charLine.indexOf(';');
                 if (semiPos == -1) {
-                    //qDebug() << "No ';' in 'char' line" << charLine;
+                    qCDebug(OCR_LOG) << "No ';' in 'char' line" << charLine;
                     continue;
                 }
 
@@ -340,7 +338,7 @@ QString OcrOcradEngine::readORF(const QString &fileName)
 
                 // find how many alternatives, matching " 1, 'r'0"
                 if (rx3.indexIn(resultStr) == -1) {
-                    //qDebug() << "Failed to match" << resultStr << "in 'char' line" << charLine;
+                    qCDebug(OCR_LOG) << "Failed to match" << resultStr << "in 'char' line" << charLine;
                     continue;
                 }
 
@@ -348,12 +346,12 @@ QString OcrOcradEngine::readORF(const QString &fileName)
                 if (altCount == 0) {			// no alternatives,
 							// undecipherable character
                     if (verboseDebug()) {
-                        //qDebug() << "Undecipherable character in 'char' line" << charLine;
+                        qCDebug(OCR_LOG) << "Undecipherable character in 'char' line" << charLine;
                     }
                 } else {
                     int h = resultStr.indexOf(',');
                     if (h == -1) {
-                        //qDebug() << "No ',' in" << resultStr << "in 'char' line" << charLine;
+                        qCDebug(OCR_LOG) << "No ',' in" << resultStr << "in 'char' line" << charLine;
                         continue;
                     }
                     resultStr = resultStr.remove(0, h + 1).trimmed();
@@ -364,7 +362,7 @@ QString OcrOcradEngine::readORF(const QString &fileName)
                     // Analyse the result rectangle
                     if (detectedChar != ' ') {
                         if (rx4.indexIn(rectStr) == -1) {
-                            //qDebug() << "Failed to match" << rectStr << "in 'char' line" << charLine;
+                            qCDebug(OCR_LOG) << "Failed to match" << rectStr << "in 'char' line" << charLine;
                             continue;
                         }
 
@@ -406,13 +404,13 @@ QString OcrOcradEngine::readORF(const QString &fileName)
 
             finishLine();
         } else {
-            //qDebug() << "Unknown line format" << line;
+            qCDebug(OCR_LOG) << "Unknown line format" << line;
         }
     }
 
     file.close();					// finished with ORF file
     finishResultDocument();
-    qDebug() << "Finished analysing ORF";
+    qCDebug(OCR_LOG) << "Finished analysing ORF";
 
     return (QString());					// no error detected
 }

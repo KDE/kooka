@@ -22,8 +22,8 @@ project(kooka5)
 set(kookaocrtesseract_SRCS
   ocrtesseractengine.cpp
   ocrtesseractdialog.cpp
+  ${kookaocr_LOG_SRCS}
 )
-
 add_library(kookaocrtesseract MODULE ${kookaocrtesseract_SRCS})
 kcoreaddons_desktop_to_json(kookaocrtesseract kookaocr-tesseract.desktop)
 

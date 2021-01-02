@@ -30,11 +30,13 @@
 
 #include "imageformat.h"
 
-#include <qdebug.h>
 #include <qmimetype.h>
 #include <qmimedatabase.h>
 #include <qimagereader.h>
 #include <qimagewriter.h>
+
+#include "libkookascan_logging.h"
+
 
 // This class provides two facilities:
 //
@@ -92,11 +94,11 @@ QMimeType ImageFormat::mime() const
     QMimeType mime = db.mimeTypeForFile(QString("a.")+mFormat, QMimeDatabase::MatchExtension);
     if (!mime.isValid() || mime.isDefault())
     {
-        qDebug() << "no MIME type for image format" << *this;
+        qCDebug(LIBKOOKASCAN_LOG) << "no MIME type for image format" << *this;
     }
     else
     {
-        //qDebug() << "for" << *this << "returning" << mime.name();
+        //qCDebug(LIBKOOKASCAN_LOG) << "for" << *this << "returning" << mime.name();
     }
 
     return (mime);
@@ -113,7 +115,7 @@ QString ImageFormat::extension() const
     }
 
     if (suf.startsWith('.')) suf = suf.mid(1);
-    //qDebug() << "for" << *this << "returning" << suf;
+    //qCDebug(LIBKOOKASCAN_LOG) << "for" << *this << "returning" << suf;
     return (suf);
 }
 
@@ -199,9 +201,9 @@ void buildMimeTypeList()
     // finding the type for a file with that extension.
 
     QList<QByteArray> supportedFormats = QImageWriter::supportedImageFormats();
-    //qDebug() << "have" << supportedFormats.count() << "image formats:" << supportedFormats;
+    qCDebug(LIBKOOKASCAN_LOG) << "have" << supportedFormats.count() << "image formats:" << supportedFormats;
     QList<QByteArray> supportedTypes = QImageWriter::supportedMimeTypes();
-    //qDebug() << "have" << supportedTypes.count() << "mime types:" << supportedTypes;
+    qCDebug(LIBKOOKASCAN_LOG) << "have" << supportedTypes.count() << "mime types:" << supportedTypes;
 
     // Although the format list from standard Qt 5 (unlike Qt 4) does not
     // appear to contain any duplicates or mixed case, it is always possible
@@ -213,8 +215,8 @@ void buildMimeTypeList()
         const QByteArray f = format.toLower();
         if (!formatList.contains(f)) formatList.append(f);
     }
-    qDebug() << "have" << formatList.count() << "image types"
-             << "from" << supportedFormats.count() << "supported";
+    qCDebug(LIBKOOKASCAN_LOG) << "have" << formatList.count() << "image types"
+                              << "from" << supportedFormats.count() << "supported";
 
     // Even after filtering the list as above, there will be MIME type
     // duplicates (e.g. JPG and JPEG both map to image/jpeg and produce
@@ -231,7 +233,7 @@ void buildMimeTypeList()
         QMimeType mime = db.mimeTypeForFile(QString("a.")+format, QMimeDatabase::MatchExtension);
         if (!mime.isValid() || mime.isDefault())
         {
-            qDebug() << "No MIME type for format" << format;
+            qCWarning(LIBKOOKASCAN_LOG) << "No MIME type for format" << format;
             continue;
         }
 
@@ -240,7 +242,7 @@ void buildMimeTypeList()
         ImageFormat fmt = ImageFormat::formatForMime(mime);
         if (!fmt.isValid())
         {
-            qDebug() << "MIME type" << mime.name() << "does not map back to format" << format;
+            qCWarning(LIBKOOKASCAN_LOG) << "MIME type" << mime.name() << "does not map back to format" << format;
             continue;
         }
 
@@ -257,8 +259,8 @@ void buildMimeTypeList()
         if (!seen) list->append(mime);
     }
 
-    if (list->isEmpty()) qWarning() << "No MIME types available!";
-    else qDebug() << "have" << list->count() << "unique MIME types";
+    if (list->isEmpty()) qCWarning(LIBKOOKASCAN_LOG) << "No MIME types available!";
+    else qCDebug(LIBKOOKASCAN_LOG) << "have" << list->count() << "unique MIME types";
     sMimeList = list;
 }
 

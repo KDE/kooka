@@ -33,7 +33,6 @@
 #include <qregexp.h>
 #include <qfile.h>
 #include <qfileinfo.h>
-#include <qdebug.h>
 
 #include <QXmlStreamReader>
 
@@ -44,6 +43,7 @@
 #include "kookasettings.h"
 #include "ocrtesseractdialog.h"
 #include "executablepathdialogue.h"
+#include "ocr_logging.h"
 
 
 K_PLUGIN_FACTORY_WITH_JSON(OcrTesseractEngineFactory, "kookaocr-tesseract.json", registerPlugin<OcrTesseractEngine>();)
@@ -141,7 +141,7 @@ QStringList OcrTesseractEngine::tempFiles(bool retain)
 
 bool OcrTesseractEngine::finishedOcrProcess(QProcess *proc)
 {
-    qDebug();
+    qCDebug(OCR_LOG);
     QString errStr = readHOCR(m_tempHOCROut);		// parse the OCR results
     if (errStr.isEmpty()) return (true);		// parsed successfully
 
@@ -157,7 +157,7 @@ QString OcrTesseractEngine::readHOCR(const QString &fileName)
     if (!fi.exists()) return (xi18nc("@info", "File <filename>%1</filename> does not exist", fileName));
     if (!fi.isReadable()) return (xi18nc("@info", "File <filename>%1</filename> unreadable", fileName));
 
-    qDebug() << "Starting to analyse HOCR" << fileName;
+    qCDebug(OCR_LOG) << "Starting to analyse HOCR" << fileName;
 
     QFile file(fileName);
     if (!file.open(QIODevice::ReadOnly))
@@ -222,14 +222,14 @@ QString OcrTesseractEngine::readHOCR(const QString &fileName)
 
     if (reader.hasError())
     {
-        qDebug() << "XML reader error, line" << reader.lineNumber() << reader.error();
+        qCDebug(OCR_LOG) << "XML reader error, line" << reader.lineNumber() << reader.error();
         return (i18n("HOCR parsing error, %1", reader.errorString()));
     }
 
     finishResultDocument();				// finished with output document
     file.close();					// finished with HOCR file
 
-    qDebug() << "Finished analysing HOCR";
+    qCDebug(OCR_LOG) << "Finished analysing HOCR";
 
     return (QString());					// no error detected
 }

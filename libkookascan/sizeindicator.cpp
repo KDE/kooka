@@ -21,12 +21,14 @@
 
 #include <qpainter.h>
 #include <qevent.h>
-#include <qdebug.h>
 #include <QLinearGradient>
 
 #include <klocalizedstring.h>
 #include <kcolorscheme.h>
 #include <kformat.h>
+
+#include "libkookascan_logging.h"
+
 
 SizeIndicator::SizeIndicator(QWidget *parent, long thresh, long crit)
     : QLabel(parent)
@@ -61,8 +63,7 @@ void SizeIndicator::setThreshold(long thresh)
 
 void SizeIndicator::setSizeInByte(long newSize)
 {
-    //qDebug() << "New size" << newSize << "bytes";
-
+    //qCDebug(LIBKOOKASCAN_LOG) << "New size" << newSize << "bytes";
     mSizeInByte = newSize;
 
     if (newSize < 0) {

@@ -25,12 +25,12 @@
 #include <unistd.h>
 
 #include <qdir.h>
-#include <qdebug.h>
 #include <qmimedatabase.h>
 
 #include <kfileitem.h>
 
 #include "filetreeview.h"
+#include "libfiletree_logging.h"
 
 
 #undef DEBUG_LISTING
@@ -60,7 +60,7 @@ FileTreeBranch::FileTreeBranch(FileTreeView *parent,
         u.setPath(d.canonicalPath());
     }
     m_startURL = u;
-    //qDebug() << "for" << u;
+    qCDebug(LIBFILETREE_LOG) << "for" << u;
 
     // if no root is specified, create a new one
     if (m_root == nullptr) m_root = new FileTreeViewItem(parent,
@@ -145,7 +145,7 @@ void FileTreeBranch::setOpenPixmap(const QIcon &pix)
 void FileTreeBranch::slotListerStarted(const QUrl &url)
 {
 #ifdef DEBUG_LISTING
-    qDebug() << "lister started for" << url;
+    qCDebug(LIBFILETREE_LOG) << "lister started for" << url;
 #endif // DEBUG_LISTING
 
     FileTreeViewItem *item = findItemByUrl(url);
@@ -160,14 +160,14 @@ void FileTreeBranch::slotListerStarted(const QUrl &url)
 void FileTreeBranch::slotRefreshItems(const QList<QPair<KFileItem, KFileItem> > &list)
 {
 #ifdef DEBUG_LISTING
-    qDebug() << "Refreshing" << list.count() << "items";
+    qCDebug(LIBFILETREE_LOG) << "Refreshing" << list.count() << "items";
 #endif // DEBUG_LISTING
 
     FileTreeViewItemList treeViewItList;		// tree view items updated
     for (int i = 0; i < list.count(); ++i) {
         const KFileItem fi2 = list[i].second;		// not interested in the first
 #ifdef DEBUG_LISTING
-        qDebug() << fi2.url();
+        qCDebug(LIBFILETREE_LOG) << fi2.url();
 #endif // DEBUG_LISTING
         FileTreeViewItem *item = findItemByUrl(fi2.url());
         if (item != nullptr) {
@@ -192,7 +192,7 @@ void FileTreeBranch::slotRefreshItems(const QList<QPair<KFileItem, KFileItem> > 
 //FileTreeViewItem *FileTreeBranch::treeItemForFileItem(const KFileItem &fi)
 //{
 //    if (fi.isNull()) return (nullptr);
-//    //qDebug() << "for" << fi.url();
+//    //qCDebug(LIBFILETREE_LOG) << "for" << fi.url();
 //    FileTreeViewItem *ftvi = static_cast<FileTreeViewItem *>(const_cast<void *>(fi.extraData(this)));
 //    return (ftvi);
 //}
@@ -203,17 +203,17 @@ FileTreeViewItem *FileTreeBranch::findItemByUrl(const QUrl &url)
 
     if (url == m_lastFoundUrl) {			// most likely and fastest first
 #ifdef DEBUG_MAPPING
-        qDebug() << "Found as last" << url;
+        qCDebug(LIBFILETREE_LOG) << "Found as last" << url;
 #endif
         return (m_lastFoundItem);			// no more to do
     } else if (url == m_startURL) {			// see if is the root
 #ifdef DEBUG_MAPPING
-        qDebug() << "Found as root" << url;
+        qCDebug(LIBFILETREE_LOG) << "Found as root" << url;
 #endif
         resultItem = m_root;
     } else if (m_itemMap.contains(url)) {		// see if in our map
 #ifdef DEBUG_MAPPING
-        qDebug() << "Found in map" << url;
+        qCDebug(LIBFILETREE_LOG) << "Found in map" << url;
 #endif
         resultItem = m_itemMap[url];
     } else {						// need to ask the lister
@@ -221,16 +221,16 @@ FileTreeViewItem *FileTreeBranch::findItemByUrl(const QUrl &url)
         // We should never get here, the TVImap should have the data for
         // every item that we create.
         //
-        ////qDebug() << "searching dirlister for" << url;
+        ////qCDebug(LIBFILETREE_LOG) << "searching dirlister for" << url;
         //const KFileItem it = findByUrl(url);
         //if (!it.isNull() )
         //{
-        //    //qDebug() << "found item url" << it.url();
+        //    //qCDebug(LIBFILETREE_LOG) << "found item url" << it.url();
         //    resultItem = treeItemForFileItem(it);
         //}
 
 #ifdef DEBUG_MAPPING
-        qDebug() << "Not found" << url;
+        qCDebug(LIBFILETREE_LOG) << "Not found" << url;
 #endif
     }
 
@@ -248,7 +248,7 @@ FileTreeViewItem *FileTreeBranch::findItemByUrl(const QUrl &url)
 FileTreeViewItem *FileTreeBranch::findItemByPath(const QString &path)
 {
 #ifdef DEBUG_MAPPING
-    qDebug() << path;
+    qCDebug(LIBFILETREE_LOG) << path;
 #endif
 #if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
     const QStringList pathSplit = path.split('/', Qt::SkipEmptyParts);
@@ -273,7 +273,7 @@ FileTreeViewItem *FileTreeBranch::findItemByPath(const QString &path)
         if (foundItem==nullptr)
         {            
 #ifdef DEBUG_MAPPING
-            qDebug() << "didn't find" << part << "under" << item->url();
+            qCDebug(LIBFILETREE_LOG) << "didn't find" << part << "under" << item->url();
 #endif
             return (nullptr);				// no child with that name
         }
@@ -282,7 +282,7 @@ FileTreeViewItem *FileTreeBranch::findItemByPath(const QString &path)
     }
 
 #ifdef DEBUG_MAPPING
-    qDebug() << "found" << item->url();
+    qCDebug(LIBFILETREE_LOG) << "found" << item->url();
 #endif
     return (item);
 }
@@ -301,7 +301,7 @@ void FileTreeBranch::itemRenamed(FileTreeViewItem *item)
 //    if (fi.isNull()) return (nullptr);
 //
 //    QUrl url = fi.url();
-//    //qDebug() << "for" << url;
+//    //qCDebug(LIBFILETREE_LOG) << "for" << url;
 //    url.setFileName(QString());
 //    return (findItemByUrl(url));
 //}
@@ -316,11 +316,11 @@ FileTreeViewItem *FileTreeBranch::createTreeViewItem(FileTreeViewItem *parent,
         const QString p = fileItem.url().url(QUrl::PreferLocalFile|QUrl::StripTrailingSlash);
         m_itemMap[fileItem.url()] = tvi;
 #ifdef DEBUG_MAPPING
-        qDebug() << "stored in map" << fileItem.url();
+        qCDebug(LIBFILETREE_LOG) << "stored in map" << fileItem.url();
 #endif
     } else {
 #ifdef DEBUG_MAPPING
-        qDebug() << "no parent/fileitem for new item!";
+        qCDebug(LIBFILETREE_LOG) << "no parent/fileitem for new item!";
 #endif
     }
     return (tvi);
@@ -328,11 +328,13 @@ FileTreeViewItem *FileTreeBranch::createTreeViewItem(FileTreeViewItem *parent,
 
 void FileTreeBranch::slotItemsAdded(const QUrl &parent, const KFileItemList &items)
 {
-    //qDebug() << "Adding" << items.count() << "items";
+#ifdef DEBUG_LISTING
+    qCDebug(LIBFILETREE_LOG) << "Adding" << items.count() << "items";
+#endif // DEBUG_LISTING
 
     FileTreeViewItem *parentItem = findItemByUrl(parent);
     if (parentItem == nullptr) {
-        //qDebug() << "parent item not found for" << parent;
+        qCWarning(LIBFILETREE_LOG) << "parent item not found for" << parent;
         return;
     }
 
@@ -350,7 +352,7 @@ void FileTreeBranch::slotItemsAdded(const QUrl &parent, const KFileItemList &ite
         newItem = createTreeViewItem(parentItem, currItem);
         if (newItem == nullptr) {          // should never happen now,
             // 'parent' checked above
-            //qDebug() << "failed to create item for" << currItem.url();
+            qCWarning(LIBFILETREE_LOG) << "failed to create item for" << currItem.url();
             continue;
         }
 
@@ -381,14 +383,13 @@ void FileTreeBranch::slotItemsAdded(const QUrl &parent, const KFileItemList &ite
              *  count only contains directory links. Thus, this method only seem
              * to work in dir-only mode */
 #ifdef DEBUG_LISTING
-            qDebug() << "Doing stat on" << filename;
+            qCDebug(LIBFILETREE_LOG) << "Doing stat on" << filename;
 #endif // DEBUG_LISTING
-            //qDebug() << "Doing stat on" << filename;
             struct stat statBuf;
             if (stat(QFile::encodeName(filename).constData(), &statBuf) == 0) {
                 int hardLinks = statBuf.st_nlink;  /* Count of dirs */
 #ifdef DEBUG_LISTING
-                qDebug() << "stat succeeded, hardlinks: " << hardLinks;
+                qCDebug(LIBFILETREE_LOG) << "stat succeeded, hardlinks: " << hardLinks;
 #endif // DEBUG_LISTING
                 // If the link count is > 2, the directory likely has subdirs. If it's < 2
                 // it's something weird like a mounted SMB share. In that case we don't know
@@ -403,12 +404,12 @@ void FileTreeBranch::slotItemsAdded(const QUrl &parent, const KFileItemList &ite
                 if (hardLinks >= 2) { // "Normal" directory with subdirs
                     hardLinks -= 2;
 #ifdef DEBUG_LISTING
-                    qDebug() << "Emitting directoryChildCount" << hardLinks << "for" << url;
+                    qCDebug(LIBFILETREE_LOG) << "Emitting directoryChildCount" << hardLinks << "for" << url;
 #endif // DEBUG_LISTING
                     emit directoryChildCount(newItem, hardLinks);
                 }
             } else {
-                //qDebug() << "stat of" << filename << "failed!";
+                qCWarning(LIBFILETREE_LOG) << "stat of" << filename << "failed!";
             }
         }
 
@@ -464,13 +465,13 @@ void FileTreeBranch::itemDeleted(const KFileItem *fi)
         return;
     }
 #ifdef DEBUG_LISTING
-    qDebug() << "for" << fi->url();
+    qCDebug(LIBFILETREE_LOG) << "for" << fi->url();
 #endif // DEBUG_LISTING
 
     FileTreeViewItem *ftvi = findItemByUrl(fi->url());
     if (ftvi == nullptr) {
 #ifdef DEBUG_LISTING
-        qDebug() << "no tree item!";
+        qCDebug(LIBFILETREE_LOG) << "no tree item!";
 #endif // DEBUG_LISTING
         return;
     }
@@ -478,7 +479,7 @@ void FileTreeBranch::itemDeleted(const KFileItem *fi)
     int nChildren = ftvi->childCount();
     if (nChildren > 0) {
 #ifdef DEBUG_LISTING
-        qDebug() << "child count" << nChildren;
+        qCDebug(LIBFILETREE_LOG) << "child count" << nChildren;
 #endif // DEBUG_LISTING
         for (int i = 0; i < nChildren; ++i) {
             FileTreeViewItem *ch = static_cast<FileTreeViewItem *>(ftvi->child(i));
@@ -501,7 +502,7 @@ void FileTreeBranch::itemDeleted(const KFileItem *fi)
 void FileTreeBranch::slotListerCanceled(const QUrl &url)
 {
 #ifdef DEBUG_LISTING
-    qDebug() << "lister cancelled for" << url;
+    qCDebug(LIBFILETREE_LOG) << "lister cancelled for" << url;
 #endif // DEBUG_LISTING
 
     // remove the URL from the children-to-recurse list
@@ -517,7 +518,7 @@ void FileTreeBranch::slotListerCanceled(const QUrl &url)
 void FileTreeBranch::slotListerClear()
 {
 #ifdef DEBUG_LISTING
-    qDebug();
+    qCDebug(LIBFILETREE_LOG);
 #endif // DEBUG_LISTING
     /* this slots needs to clear all listed items, but NOT the root item */
     if (m_root != nullptr) {
@@ -528,7 +529,7 @@ void FileTreeBranch::slotListerClear()
 void FileTreeBranch::slotListerClearUrl(const QUrl &url)
 {
 #ifdef DEBUG_LISTING
-    qDebug() << "for" << url;
+    qCDebug(LIBFILETREE_LOG) << "for" << url;
 #endif // DEBUG_LISTING
     FileTreeViewItem *ftvi = findItemByUrl(url);
     if (ftvi != nullptr) {
@@ -559,7 +560,7 @@ void FileTreeBranch::slotRedirect(const QUrl &oldUrl, const QUrl &newUrl)
 void FileTreeBranch::slotListerCompleted(const QUrl &url)
 {
 #ifdef DEBUG_LISTING
-    qDebug() << "lister completed for" << url;
+    qCDebug(LIBFILETREE_LOG) << "lister completed for" << url;
 #endif // DEBUG_LISTING
     FileTreeViewItem *currParent = findItemByUrl(url);
     if (currParent == nullptr) {
@@ -567,8 +568,8 @@ void FileTreeBranch::slotListerCompleted(const QUrl &url)
     }
 
 #ifdef DEBUG_LISTING
-    qDebug() << "current parent" << currParent
-             << "already listed?" << currParent->alreadyListed();
+    qCDebug(LIBFILETREE_LOG) << "current parent" << currParent
+                             << "already listed?" << currParent->alreadyListed();
 #endif // DEBUG_LISTING
 
     emit populateFinished(currParent);
@@ -585,9 +586,9 @@ void FileTreeBranch::slotListerCompleted(const QUrl &url)
     currParent->setListed(true);
 
 #ifdef DEBUG_LISTING
-    qDebug() << "recurseChildren" << m_recurseChildren
-             << "isLocalFile" << m_startURL.isLocalFile()
-             << "dirOnlyMode" << dirOnlyMode();
+    qCDebug(LIBFILETREE_LOG) << "recurseChildren" << m_recurseChildren
+                             << "isLocalFile" << m_startURL.isLocalFile()
+                             << "dirOnlyMode" << dirOnlyMode();
 #endif // DEBUG_LISTING
 
     if (m_recurseChildren && (!m_startURL.isLocalFile() || !dirOnlyMode())) {
@@ -602,7 +603,7 @@ void FileTreeBranch::slotListerCompleted(const QUrl &url)
         }
 
 #ifdef DEBUG_LISTING
-        qDebug() << "Recurse for" << url << wantRecurseUrl;
+        qCDebug(LIBFILETREE_LOG) << "Recurse for" << url << wantRecurseUrl;
 #endif // DEBUG_LISTING
         int nChildren = 0;
 
@@ -614,7 +615,7 @@ void FileTreeBranch::slotListerCompleted(const QUrl &url)
             if (nChildren == 0) {
                 /* This happens if there is no child at all */
 #ifdef DEBUG_LISTING
-                qDebug() << "No children to recurse";
+                qCDebug(LIBFILETREE_LOG) << "No children to recurse";
 #endif // DEBUG_LISTING
             }
 
@@ -636,7 +637,7 @@ void FileTreeBranch::slotListerCompleted(const QUrl &url)
                 if (!fi->isNull() && fi->isReadable()) {
                     QUrl recurseUrl = fi->url();
 #ifdef DEBUG_LISTING
-                    qDebug() << "Starting to list" << recurseUrl;
+                    qCDebug(LIBFILETREE_LOG) << "Starting to list" << recurseUrl;
 #endif // DEBUG_LISTING
                     openUrl(recurseUrl, KDirLister::Keep);
                 }
@@ -645,7 +646,7 @@ void FileTreeBranch::slotListerCompleted(const QUrl &url)
     }
 #ifdef DEBUG_LISTING
     else {
-        qDebug() << "no need to recurse";
+        qCDebug(LIBFILETREE_LOG) << "no need to recurse";
     }
 #endif // DEBUG_LISTING
 }
@@ -659,25 +660,25 @@ bool FileTreeBranch::populate(const QUrl &url, FileTreeViewItem *currItem)
     }
 
 #ifdef DEBUG_LISTING
-    qDebug() << "populating" << url;
+    qCDebug(LIBFILETREE_LOG) << "populating" << url;
 #endif // DEBUG_LISTING
 
     /* Add this url to the list of urls to recurse for children */
     if (m_recurseChildren) {
         m_openChildrenURLs.append(url);
 #ifdef DEBUG_LISTING
-        qDebug() << "Adding as open child";
+        qCDebug(LIBFILETREE_LOG) << "Adding as open child";
 #endif // DEBUG_LISTING
     }
 
     if (!currItem->alreadyListed()) {
 #ifdef DEBUG_LISTING
-        qDebug() << "Starting to list";
+        qCDebug(LIBFILETREE_LOG) << "Starting to list";
 #endif // DEBUG_LISTING
         ret = openUrl(url, KDirLister::Keep);       // start the lister
     } else {
 #ifdef DEBUG_LISTING
-        qDebug() << "Children already exist";
+        qCDebug(LIBFILETREE_LOG) << "Children already exist";
 #endif // DEBUG_LISTING
         slotListerCompleted(url);
         ret = true;

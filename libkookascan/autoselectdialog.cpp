@@ -33,7 +33,6 @@
 #include <qcombobox.h>
 #include <qformlayout.h>
 #include <qlabel.h>
-#include <qdebug.h>
 #include <qpushbutton.h>
 
 #include <klocalizedstring.h>

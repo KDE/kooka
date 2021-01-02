@@ -22,6 +22,7 @@ project(kooka5)
 set(kookaocrocrad_SRCS
   ocrocradengine.cpp
   ocrocraddialog.cpp
+  ${kookaocr_LOG_SRCS}
 )
 
 add_library(kookaocrocrad MODULE ${kookaocrocrad_SRCS})

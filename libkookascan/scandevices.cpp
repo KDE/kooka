@@ -31,12 +31,11 @@
 
 #include "scandevices.h"
 
-#include <qdebug.h>
-
 #include <klocalizedstring.h>
 
 #include "scanglobal.h"
 #include "scansettings.h"
+#include "libkookascan_logging.h"
 
 
 ScanDevices *sInstance = nullptr;
@@ -51,27 +50,28 @@ ScanDevices *ScanDevices::self()
 
 ScanDevices::ScanDevices()
 {
-    //qDebug();
+    qCDebug(LIBKOOKASCAN_LOG);
 
     if (!ScanGlobal::self()->init()) {
         return;    // do sane_init() if necessary
     }
 
     bool netaccess = ScanSettings::startupOnlyLocal();
-    //qDebug() << "Query for network scanners" << (netaccess ? "not enabled" : "enabled");
+    qCDebug(LIBKOOKASCAN_LOG) << "Query for network scanners?" << netaccess;
 
     SANE_Device const **dev_list = nullptr;
     SANE_Status status = sane_get_devices(&dev_list, (netaccess ? SANE_TRUE : SANE_FALSE));
-    if (status != SANE_STATUS_GOOD) {
-        //qDebug() << "sane_get_devices() failed, status" << status;
-        return;                     // no point carrying on
+    if (status != SANE_STATUS_GOOD)
+    {
+        qCWarning(LIBKOOKASCAN_LOG) << "sane_get_devices() failed, status" << status;
+        return;						// no point carrying on
     }
 
     const SANE_Device *dev;
     for (int devno = 0; (dev = dev_list[devno]) != nullptr; ++devno) {
         mScannerNames.append(dev->name);
         mScannerDevices.insert(dev->name, dev);
-        //qDebug() << "SANE found scanner:" << dev->name << "=" << deviceDescription(dev->name);
+        qCDebug(LIBKOOKASCAN_LOG) << "SANE found scanner:" << dev->name << "=" << deviceDescription(dev->name);
     }
 
     QStringList devs = ScanSettings::userDevices();
@@ -103,7 +103,7 @@ ScanDevices::ScanDevices()
                 continue;
             }
             addUserSpecifiedDevice(name, (*it2), (*it3).toLocal8Bit(), true);
-            //qDebug() << "Configured scanner:" << name << "=" << deviceDescription(name);
+            qCDebug(LIBKOOKASCAN_LOG) << "Configured scanner:" << name << "=" << deviceDescription(name);
         }
     }
 }
@@ -122,13 +122,13 @@ void ScanDevices::addUserSpecifiedDevice(const QByteArray &backend,
     }
 
     if (mScannerNames.contains(backend)) {
-        //qDebug() << "device" << backend << "already exists, not adding";
+        qCDebug(LIBKOOKASCAN_LOG) << "device" << backend << "already exists, not adding";
         return;
     }
 
     QByteArray devtype = (!type.isEmpty() ? type : "scanner");
-    //qDebug() << "adding" << backend << "desc" << description
-    //<< "type" << devtype << "dontSave" << dontSave;
+    qCDebug(LIBKOOKASCAN_LOG) << "adding" << backend << "desc" << description
+                              << "type" << devtype << "dontSave" << dontSave;
 
     if (!dontSave)					// add new device to config
     {							// get existing device lists

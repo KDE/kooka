@@ -32,7 +32,6 @@
 #include "kscanoptset.h"
 
 #include <qstring.h>
-#include <qdebug.h>
 
 #include <kconfig.h>
 #include <kconfiggroup.h>
@@ -41,6 +40,7 @@
 #include "kscanoption.h"
 #include "kscandevice.h"
 #include "scansettings.h"
+#include "libkookascan_logging.h"
 
 
 // Debugging options
@@ -67,12 +67,12 @@ KScanOptSet::KScanOptSet(const QString &setName)
     mSetDescription = "";
 
     if (mSetName.isEmpty()) mSetName = "default";
-    //qDebug() << mSetName;
+    qCDebug(LIBKOOKASCAN_LOG) << mSetName;
 }
 
 KScanOptSet::~KScanOptSet()
 {
-    //qDebug() << mSetName << "with" << count() << "options";
+    //qCDebug(LIBKOOKASCAN_LOG) << mSetName << "with" << count() << "options";
 }
 
 QByteArray KScanOptSet::getValue(const QByteArray &optName) const
@@ -88,19 +88,19 @@ bool KScanOptSet::backupOption(const KScanOption *opt)
 
     const QByteArray optName = opt->getName();
     if (optName.isNull()) {
-        //qDebug() << "option has no name";
+        qCDebug(LIBKOOKASCAN_LOG) << "option has no name";
         return (false);
     }
 
     if (!opt->isReadable()) {
-        //qDebug() << "option is not readable" << optName;
+        qCDebug(LIBKOOKASCAN_LOG) << "option is not readable" << optName;
         return (false);
     }
 
     const QByteArray val = opt->get();
 #ifdef DEBUG_BACKUP
-    if (contains(optName)) qDebug() << "replace" << optName << "with value" << QString(val);
-    else qDebug() << "add" << optName << "with value" << QString(val);
+    if (contains(optName)) qCDebug(LIBKOOKASCAN_LOG) << "replace" << optName << "with value" << QString(val);
+    else qCDebug(LIBKOOKASCAN_LOG) << "add" << optName << "with value" << QString(val);
 #endif // DEBUG_BACKUP
     insert(optName, val);
     return (true);
@@ -108,7 +108,7 @@ bool KScanOptSet::backupOption(const KScanOption *opt)
 
 void KScanOptSet::setSetName(const QString &newName)
 {
-    //qDebug() << "renaming" << mSetName << "->" << newName;
+    qCDebug(LIBKOOKASCAN_LOG) << "renaming" << mSetName << "->" << newName;
     mSetName = newName;
 }
 
@@ -120,8 +120,8 @@ void KScanOptSet::setDescription(const QString &desc)
 void KScanOptSet::saveConfig(const QByteArray &scannerName,
                              const QString &desc) const
 {
-    //qDebug() << "Saving set" << mSetName << "for scanner" << scannerName
-    //<< "with" << count() << "options";
+    qCDebug(LIBKOOKASCAN_LOG) << "Saving set" << mSetName << "for scanner" << scannerName
+                              << "with" << count() << "options";
 
     QString grpName = groupForSet(mSetName);
     KConfigGroup grp = KScanDevice::configGroup(grpName);
@@ -130,12 +130,12 @@ void KScanOptSet::saveConfig(const QByteArray &scannerName,
 
     for (KScanOptSet::const_iterator it = constBegin();
             it != constEnd(); ++it) {
-        //qDebug() << " " << it.key() << "=" << it.value();
+        //qCDebug(LIBKOOKASCAN_LOG) << " " << it.key() << "=" << it.value();
         grp.writeEntry(QString(it.key()), it.value());
     }
 
     grp.sync();
-    //qDebug() << "done";
+    qCDebug(LIBKOOKASCAN_LOG) << "done";
 }
 
 bool KScanOptSet::loadConfig(const QByteArray &scannerName)
@@ -143,11 +143,11 @@ bool KScanOptSet::loadConfig(const QByteArray &scannerName)
     QString grpName = groupForSet(mSetName);
     const KConfigGroup grp = KScanDevice::configGroup(grpName);
     if (!grp.exists()) {
-        //qDebug() << "Group" << grpName << "does not exist in configuration!";
+        qCDebug(LIBKOOKASCAN_LOG) << "Group" << grpName << "does not exist in configuration!";
         return (false);
     }
 
-    //qDebug() << "Loading set" << mSetName << "for scanner" << scannerName;
+    qCDebug(LIBKOOKASCAN_LOG) << "Loading set" << mSetName << "for scanner" << scannerName;
 
     const QMap<QString, QString> emap = grp.entryMap();
     for (QMap<QString, QString>::const_iterator it = emap.constBegin();
@@ -159,16 +159,16 @@ bool KScanOptSet::loadConfig(const QByteArray &scannerName)
         {						// check this but ignore
             if (!scannerName.isEmpty() && scannerName!=it.value())
             {
-                //qDebug() << "was saved for scanner" << it.value();
+                qCDebug(LIBKOOKASCAN_LOG) << "was saved for scanner" << it.value();
             }
             continue;
         }
 
-        //qDebug() << " " << it.key() << "=" << it.value();
+        //qCDebug(LIBKOOKASCAN_LOG) << " " << it.key() << "=" << it.value();
         insert(it.key().toLatin1(), it.value().toLatin1());
     }
 
-    //qDebug() << "done with" << count() << "options";
+    qCDebug(LIBKOOKASCAN_LOG) << "done with" << count() << "options";
     return (true);
 }
 
@@ -179,14 +179,14 @@ KScanOptSet::StringMap KScanOptSet::readList()
     ScanSettings::self()->load();			// ensure refreshed
     KConfig *conf = ScanSettings::self()->config();
     QStringList groups = conf->groupList();
-    //groups.sort(); qDebug() << groups;
+    //groups.sort(); qCDebug(LIBKOOKASCAN_LOG) << groups;
     foreach (const QString &grp, groups)
     {
         QString set = setNameFromGroup(grp);
         if (!set.isEmpty())
         {
             if (set==startupSetName()) continue;	// don't return this one
-            qDebug() << "found group" << grp  << "-> set" << set;
+            qCDebug(LIBKOOKASCAN_LOG) << "found group" << grp  << "-> set" << set;
             const KConfigGroup g = KScanDevice::configGroup(grp);
             ret[set] = g.readEntry(ScanSettings::self()->saveSetDescItem()->key(), i18n("No description"));
         }
@@ -198,7 +198,7 @@ KScanOptSet::StringMap KScanOptSet::readList()
 void KScanOptSet::deleteSet(const QString &setName)
 {
     const QString grpName = groupForSet(setName);
-    //qDebug() << grpName;
+    qCDebug(LIBKOOKASCAN_LOG) << grpName;
     KConfig *conf = ScanSettings::self()->config();
     conf->deleteGroup(grpName);
     conf->sync();

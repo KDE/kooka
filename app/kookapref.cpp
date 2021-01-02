@@ -33,7 +33,6 @@
 
 #include <qlayout.h>
 #include <qicon.h>
-#include <qdebug.h>
 #include <qpushbutton.h>
 
 #include <klocalizedstring.h>
@@ -41,6 +40,7 @@
 #include "prefspages.h"
 #include "kookasettings.h"
 #include "dialogstatesaver.h"
+#include "kooka_logging.h"
 
 
 KookaPref::KookaPref(QWidget *parent)

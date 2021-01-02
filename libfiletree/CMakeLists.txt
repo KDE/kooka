@@ -19,13 +19,18 @@ find_package(KF5 ${KF5_MIN_VERSION} REQUIRED COMPONENTS I18n KIO)
 
 ########### libfiletree ###############
 
-add_definitions(-DKDE_DEFAULT_DEBUG_AREA=250)
-
 set(libfiletree_SRCS
   filetreeview.cpp
   filetreebranch.cpp
   filetreeviewitem.cpp
 )
+
+ecm_qt_declare_logging_category(libfiletree_SRCS
+  HEADER "libfiletree_logging.h"
+  IDENTIFIER "LIBFILETREE_LOG"
+  CATEGORY_NAME "libfiletree"
+  EXPORT kookalogging
+  DESCRIPTION "libfiletree (Kooka)")
 
 add_library(libfiletree STATIC ${libfiletree_SRCS})
 target_link_libraries(libfiletree

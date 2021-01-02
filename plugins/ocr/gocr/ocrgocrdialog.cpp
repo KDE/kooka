@@ -35,7 +35,6 @@
 #include <qregexp.h>
 #include <qgridlayout.h>
 #include <qprogressbar.h>
-#include <qdebug.h>
 
 #include <klocalizedstring.h>
 #include <kprocess.h>

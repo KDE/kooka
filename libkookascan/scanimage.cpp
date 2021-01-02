@@ -31,12 +31,12 @@
 
 #include "scanimage.h"
 
-#include <qdebug.h>
 #include <qfile.h>
 
 #include <klocalizedstring.h>
 
 #include "imageformat.h"
+#include "libkookascan_logging.h"
 
 #ifdef HAVE_TIFF
 extern "C"
@@ -81,7 +81,7 @@ ScanImage::ScanImage(const QUrl &url)
         if (subno>0)					// valid number from fragment
         {						// get local file without fragment
             const QString fileName = url.adjusted(QUrl::RemoveFragment).toLocalFile();
-            qDebug() << "subimage" << subno << "from" << fileName;
+            qCDebug(LIBKOOKASCAN_LOG) << "subimage" << subno << "from" << fileName;
             m_errorString = loadTiffDir(fileName, subno);
             return;					// load TIFF subimage
         }
@@ -96,12 +96,12 @@ ScanImage::ScanImage(const QUrl &url)
     // then 'format' will be "TIFFLIB".  So either of these format names means
     // that a TIFF file is being loaded.
     isTiff = format.isTiff();
-    qDebug() << "Loading image format" << format << "from" << filename;
+    qCDebug(LIBKOOKASCAN_LOG) << "Loading image format" << format << "from" << filename;
 
 #ifdef HAVE_TIFF
     if (isTiff)						// if it is TIFF, check
     {							// for multiple images
-        qDebug() << "Checking for multi-page TIFF";
+        qCDebug(LIBKOOKASCAN_LOG) << "Checking for multi-page TIFF";
         TIFF *tif = TIFFOpen(QFile::encodeName(filename).constData(), "r");
         if (tif!=nullptr)
         {
@@ -109,7 +109,7 @@ ScanImage::ScanImage(const QUrl &url)
             {
                 ++m_subImages;
             } while (TIFFReadDirectory(tif));
-            qDebug() << "found" << m_subImages << "TIFF directories";
+            qCDebug(LIBKOOKASCAN_LOG) << "found" << m_subImages << "TIFF directories";
             if (m_subImages>1) haveTiff = true;
             // This format will have been specially detected
             // in ImageFormat::formatForMime(), if the file is TIFF
@@ -154,7 +154,7 @@ QString ScanImage::loadTiffDir(const QString &filename, int subno)
 {
 #ifdef HAVE_TIFF
     // if it is TIFF, check with TIFFlib if it is multiple images
-    qDebug() << "Trying to load TIFF, subimage" << subno;
+    qCDebug(LIBKOOKASCAN_LOG) << "Trying to load TIFF, subimage" << subno;
     TIFF *tif = TIFFOpen(QFile::encodeName(filename).constData(), "r");
     if (tif==nullptr) return (i18n("Failed to open TIFF file"));
 
@@ -200,7 +200,7 @@ QString ScanImage::loadTiffDir(const QString &filename, int subno)
     float xReso, yReso;
     bool resosFound = TIFFGetField(tif, TIFFTAG_XRESOLUTION, &xReso) &&
                       TIFFGetField(tif, TIFFTAG_YRESOLUTION, &yReso);
-    //qDebug() << "TIFF image: X-Res" << xReso << "Y-Res" << yReso;
+    //qCDebug(LIBKOOKASCAN_LOG) << "TIFF image: X-Res" << xReso << "Y-Res" << yReso;
 
     TIFFClose(tif);					// finished with TIFF file
 
@@ -209,13 +209,13 @@ QString ScanImage::loadTiffDir(const QString &filename, int subno)
     if (resosFound && xReso != yReso) {
         if (xReso > yReso) {
             float yScalefactor = xReso / yReso;
-            //qDebug() << "Different resolution X/Y, rescaling Y with factor" << yScalefactor;
+            //qCDebug(LIBKOOKASCAN_LOG) << "Different resolution X/Y, rescaling Y with factor" << yScalefactor;
             /* rescale the image */
             tmpImg = tmpImg.scaled(imgWidth, int(imgHeight * yScalefactor),
                                    Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
         } else {
             float xScalefactor = yReso / xReso;
-            //qDebug() << "Different resolution X/Y, rescaling X with factor" << xScalefactor;
+            //qCDebug(LIBKOOKASCAN_LOG) << "Different resolution X/Y, rescaling X with factor" << xScalefactor;
             tmpImg = tmpImg.scaled(int(imgWidth * xScalefactor), imgHeight,
                                    Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
         }
@@ -249,7 +249,7 @@ QByteArray ScanImage::getScannerName() const
 
 void ScanImage::setXResolution(int res)
 {
-    setDotsPerMeterY(DPI_TO_DPM(res));
+    setDotsPerMeterX(DPI_TO_DPM(res));
 }
 
 

@@ -26,12 +26,12 @@
 #include <qapplication.h>
 #include <qtimer.h>
 #include <qmimedata.h>
-#include <qdebug.h>
 
 #include <kfileitem.h>
 
 #include "filetreeviewitem.h"
 #include "filetreebranch.h"
+#include "libfiletree_logging.h"
 
 
 #undef DEBUG_LISTING
@@ -41,11 +41,11 @@ FileTreeView::FileTreeView(QWidget *parent)
     : QTreeWidget(parent)
 {
     setObjectName("FileTreeView");
-    //qDebug();
+    qCDebug(LIBFILETREE_LOG);
 
     setSelectionMode(QAbstractItemView::SingleSelection);
-    setExpandsOnDoubleClick(false);         // we'll handle this ourselves
-    setEditTriggers(QAbstractItemView::NoEditTriggers); // maybe changed later
+    setExpandsOnDoubleClick(false);			// we'll handle this ourselves
+    setEditTriggers(QAbstractItemView::NoEditTriggers);	// maybe changed later
 
     m_wantOpenFolderPixmaps = true;
     m_currentBeforeDropItem = nullptr;
@@ -91,7 +91,7 @@ QMimeData *FileTreeView::mimeData(const QList<QTreeWidgetItem *> items) const
             it != items.constEnd(); ++it) {
         FileTreeViewItem *item = static_cast<FileTreeViewItem *>(*it);
 #ifdef DEBUG_LISTING
-        qDebug() << item->url();
+        qCDebug(LIBFILETREE_LOG) << item->url();
 #endif // DEBUG_LISTING
         urlList.append(item->url());
     }
@@ -179,7 +179,7 @@ void FileTreeView::dropEvent(QDropEvent *ev)
 
     FileTreeViewItem *item = static_cast<FileTreeViewItem *>(m_dropItem);
 #ifdef DEBUG_LISTING
-    qDebug() << "onto" << item->url();
+    qCDebug(LIBFILETREE_LOG) << "onto" << item->url();
 #endif // DEBUG_LISTING
     setDropItem(nullptr);					// stop timer now
 							// also clears m_dropItem!
@@ -203,18 +203,17 @@ void FileTreeView::slotExpanded(QTreeWidgetItem *tvi)
     }
 
 #ifdef DEBUG_LISTING
-    qDebug() << item->text(0);
+    qCDebug(LIBFILETREE_LOG) << item->text(0);
 #endif // DEBUG_LISTING
-
     FileTreeBranch *branch = item->branch();
 
     // Check if the branch needs to be populated now
     if (item->isDir() && branch != nullptr && item->childCount() == 0) {
 #ifdef DEBUG_LISTING
-        qDebug() << "need to populate" << item->url();
+        qCDebug(LIBFILETREE_LOG) << "need to populate" << item->url();
 #endif // DEBUG_LISTING
         if (!branch->populate(item->url(), item)) {
-            //qDebug() << "Branch populate failed!";
+            qCWarning(LIBFILETREE_LOG) << "Branch populate" << item->url() << "failed";
         }
     }
 
@@ -260,7 +259,7 @@ void FileTreeView::slotAutoOpenFolder()
     m_autoOpenTimer->stop();
 
 #ifdef DEBUG_LISTING
-    qDebug() << "children" << m_dropItem->childCount() << "expanded" << m_dropItem->isExpanded();
+    qCDebug(LIBFILETREE_LOG) << "children" << m_dropItem->childCount() << "expanded" << m_dropItem->isExpanded();
 #endif // DEBUG_LISTING
     if (m_dropItem->childCount() == 0) {
         return;						// nothing to expand
@@ -307,7 +306,7 @@ FileTreeBranch *FileTreeView::addBranch(const QUrl &path, const QString &name,
 FileTreeBranch *FileTreeView::addBranch(const QUrl &path, const QString &name,
                                         const QIcon &pix, bool showHidden)
 {
-    //qDebug() << path;
+    qCDebug(LIBFILETREE_LOG) << path << name;
 
     /* Open a new branch */
     FileTreeBranch *newBranch = new FileTreeBranch(this, path, name, pix,
@@ -327,16 +326,19 @@ FileTreeBranch *FileTreeView::addBranch(FileTreeBranch *newBranch)
 
 FileTreeBranch *FileTreeView::branch(const QString &searchName) const
 {
+#ifdef DEBUG_LISTING
+    qCDebug(LIBFILETREE_LOG) << "searching for" << searchName;
+#endif // DEBUG_LISTING
     for (FileTreeBranchList::const_iterator it = m_branches.constBegin();
             it != m_branches.constEnd(); ++it) {
         FileTreeBranch *branch = (*it);
         QString bname = branch->name();
 #ifdef DEBUG_LISTING
-        qDebug() << "branch" << bname;
+        qCDebug(LIBFILETREE_LOG) << "branch" << bname;
 #endif // DEBUG_LISTING
         if (bname == searchName) {
 #ifdef DEBUG_LISTING
-            qDebug() << "Found requested branch";
+            qCDebug(LIBFILETREE_LOG) << "Found requested branch";
 #endif // DEBUG_LISTING
             return (branch);
         }
@@ -374,7 +376,7 @@ void FileTreeView::slotNewTreeViewItems(FileTreeBranch *branch, const FileTreeVi
         return;
     }
 #ifdef DEBUG_LISTING
-    qDebug();
+    qCDebug(LIBFILETREE_LOG) << "items" << items.count()
 #endif // DEBUG_LISTING
 
     /* Sometimes it happens that new items should become selected, i.e. if the user
@@ -433,7 +435,7 @@ void FileTreeView::slotStartAnimation(FileTreeViewItem *item)
         return;
     }
 #ifdef DEBUG_LISTING
-    qDebug() << "for" << item->text(0);
+    qCDebug(LIBFILETREE_LOG) << "for" << item->text(0);
 #endif // DEBUG_LISTING
 
     ++m_busyCount;
@@ -446,7 +448,7 @@ void FileTreeView::slotStopAnimation(FileTreeViewItem *item)
         return;
     }
 #ifdef DEBUG_LISTING
-    qDebug() << "for" << item->text(0);
+    qCDebug(LIBFILETREE_LOG) << "for" << item->text(0);
 #endif // DEBUG_LISTING
     if (m_busyCount <= 0) {
         return;

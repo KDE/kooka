@@ -33,7 +33,6 @@
 #include <qcombobox.h>
 #include <qradiobutton.h>
 #include <qbuttongroup.h>
-#include <qdebug.h>
 #include <qlayout.h>
 #ifdef HAVE_LIBPAPER
 #include <qvector.h>
@@ -46,6 +45,9 @@ extern "C" {
 #include <paper.h>
 }
 #endif
+
+#include "libkookascan_logging.h"
+
 
 struct PaperSize {
     const char *name;                   // no I18N needed here?
@@ -61,7 +63,7 @@ static const PaperSize defaultSizes[] = {
     { "US Legal",   216, 356 },
     { "9x13",        90, 130 },
     { "10x15",      100, 150 },
-    { nullptr,       0,  0 }
+    { nullptr,        0,   0 }
 };
 
 static const PaperSize *sizes = nullptr;
@@ -72,7 +74,7 @@ static QVector<PaperSize> papers;
 ScanSizeSelector::ScanSizeSelector(QWidget *parent, const QSize &bedSize)
     : QFrame(parent)
 {
-    qDebug() << "bed size" << bedSize;
+    qCDebug(LIBKOOKASCAN_LOG) << "bed size" << bedSize;
 
     bedWidth = bedSize.width();
     bedHeight = bedSize.height();
@@ -84,7 +86,7 @@ ScanSizeSelector::ScanSizeSelector(QWidget *parent, const QSize &bedSize)
         PaperSize ps;
         for (const struct paper *p = paperfirst(); p != nullptr; p = papernext(p)) {
             // iterate over defined papers
-            ////qDebug() << "paper at" << ((void*) p)
+            ////qCDebug(LIBKOOKASCAN_LOG) << "paper at" << ((void*) p)
             //         << "name" << papername(p)
             //         << "width" << paperpswidth(p)
             //         << "height" << paperpsheight(p);
@@ -98,8 +100,7 @@ ScanSizeSelector::ScanSizeSelector(QWidget *parent, const QSize &bedSize)
             ps.height = qRound(paperpsheight(p) / 72.0 * 25.4);
             papers.append(ps);
         }
-
-        //qDebug() << "got" << papers.size() << "paper sizes from libpaper";
+        qCDebug(LIBKOOKASCAN_LOG) << "got" << papers.size() << "paper sizes from libpaper";
 
         ps.name = nullptr;                 // finish with null terminator
         papers.append(ps);
@@ -206,7 +207,7 @@ void ScanSizeSelector::newScanSize(int width, int height)
     } else if (m_landscapeRb->isChecked()) {
         emit sizeSelected(QRect(0, 0, height, width));
     } else {
-        //qDebug() << "no orientation appropriate!";
+        //qCDebug(LIBKOOKASCAN_LOG) << "no orientation appropriate!";
     }
 }
 
@@ -266,7 +267,7 @@ void ScanSizeSelector::selectCustomSize(const QRect &rect)
 
 void ScanSizeSelector::selectSize(const QRect &rect)
 {
-    //qDebug() << "rect" << rect << "valid" << rect.isValid();
+    //qCDebug(LIBKOOKASCAN_LOG) << "rect" << rect << "valid" << rect.isValid();
 
     bool found = false;
 

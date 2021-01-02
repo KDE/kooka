@@ -34,7 +34,6 @@
 #include <qpainter.h>
 #include <qpixmap.h>
 #include <qevent.h>
-#include <qdebug.h>
 
 #include "kgammatable.h"
 

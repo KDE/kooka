@@ -36,7 +36,6 @@
 #include <qpainter.h>
 #include <qfontmetrics.h>
 #include <qguiapplication.h>
-#include <qdebug.h>
 
 #include <klocalizedstring.h>
 
@@ -45,6 +44,7 @@
 #include "imgprintdialog.h"
 #include "kookasettings.h"
 #include "kscandevice.h"
+#include "kooka_logging.h"
 
 
 #define CUT_MARGIN		5			// margin in millimetres
@@ -56,7 +56,7 @@
 KookaPrint::KookaPrint()
     : QPrinter(QPrinter::HighResolution)
 {
-    qDebug();
+    qCDebug(KOOKA_LOG);
     m_image = nullptr;
 
     // Initial default print parameters
@@ -77,26 +77,26 @@ void KookaPrint::recalculatePrintParameters()
 {
     if (m_image==nullptr) return;				// no image to print
 
-    qDebug() << "image:";
-    qDebug() << "  size (pix) =" << m_image->size();
-    qDebug() << "  dpi X =" << DPM_TO_DPI(m_image->dotsPerMeterX());
-    qDebug() << "  dpi Y =" << DPM_TO_DPI(m_image->dotsPerMeterY());
-    qDebug() << "printer:";
-    qDebug() << "  name =" << printerName();
-    qDebug() << "  colour mode =" << colorMode();
-    qDebug() << "  full page?" << fullPage();
-    qDebug() << "  output format =" << outputFormat();
-    qDebug() << "  paper rect (mm) =" << paperRect(QPrinter::Millimeter);
-    qDebug() << "  page rect (mm) =" << pageRect(QPrinter::Millimeter);
-    qDebug() << "  resolution =" << resolution();
-    qDebug() << "options:";
-    qDebug() << "  scale mode =" << m_scaleOption;
-    qDebug() << "  print size (mm) =" << m_printSize;
-    qDebug() << "  scan resolution =" << m_scanResolution;
-    qDebug() << "  screen resolution =" << m_screenResolution;
-    qDebug() << "  cuts option =" << m_cutsOption;
-    qDebug() << "  maintain aspect?" << m_maintainAspect;
-    qDebug() << "  low res draft?" << m_lowResDraft;
+    qCDebug(KOOKA_LOG) << "image:";
+    qCDebug(KOOKA_LOG) << "  size (pix) =" << m_image->size();
+    qCDebug(KOOKA_LOG) << "  dpi X =" << DPM_TO_DPI(m_image->dotsPerMeterX());
+    qCDebug(KOOKA_LOG) << "  dpi Y =" << DPM_TO_DPI(m_image->dotsPerMeterY());
+    qCDebug(KOOKA_LOG) << "printer:";
+    qCDebug(KOOKA_LOG) << "  name =" << printerName();
+    qCDebug(KOOKA_LOG) << "  colour mode =" << colorMode();
+    qCDebug(KOOKA_LOG) << "  full page?" << fullPage();
+    qCDebug(KOOKA_LOG) << "  output format =" << outputFormat();
+    qCDebug(KOOKA_LOG) << "  paper rect (mm) =" << paperRect(QPrinter::Millimeter);
+    qCDebug(KOOKA_LOG) << "  page rect (mm) =" << pageRect(QPrinter::Millimeter);
+    qCDebug(KOOKA_LOG) << "  resolution =" << resolution();
+    qCDebug(KOOKA_LOG) << "options:";
+    qCDebug(KOOKA_LOG) << "  scale mode =" << m_scaleOption;
+    qCDebug(KOOKA_LOG) << "  print size (mm) =" << m_printSize;
+    qCDebug(KOOKA_LOG) << "  scan resolution =" << m_scanResolution;
+    qCDebug(KOOKA_LOG) << "  screen resolution =" << m_screenResolution;
+    qCDebug(KOOKA_LOG) << "  cuts option =" << m_cutsOption;
+    qCDebug(KOOKA_LOG) << "  maintain aspect?" << m_maintainAspect;
+    qCDebug(KOOKA_LOG) << "  low res draft?" << m_lowResDraft;
 
     // Calculate the available page size, in real world units
     QRectF r = pageRect(QPrinter::Millimeter);
@@ -171,7 +171,7 @@ void KookaPrint::recalculatePrintParameters()
     }
     else Q_ASSERT(false);
 
-    qDebug() << "scaled image size (mm) =" << QSizeF(mPrintWidthMm, mPrintHeightMm);
+    qCDebug(KOOKA_LOG) << "scaled image size (mm) =" << QSizeF(mPrintWidthMm, mPrintHeightMm);
 
     mPrintResolution = DPI_TO_DPM(resolution())/1000;	// dots per millimetre
 
@@ -186,7 +186,7 @@ void KookaPrint::recalculatePrintParameters()
     else if (m_cutsOption==KookaPrint::CutMarksAlways) withCutMarks = true;
     else if (m_cutsOption==KookaPrint::CutMarksNone) withCutMarks = false;
     else Q_ASSERT(false);
-    qDebug() << "for cuts" << m_cutsOption << "with marks?" << withCutMarks;
+    qCDebug(KOOKA_LOG) << "for cuts" << m_cutsOption << "with marks?" << withCutMarks;
 
     // If cut marks are required, reduce the available page size
     // to allow for them.
@@ -198,13 +198,13 @@ void KookaPrint::recalculatePrintParameters()
     {
         mPageWidthAdjustedMm -= 2*CUT_MARGIN;
         mPageHeightAdjustedMm -= 2*CUT_MARGIN;
-        qDebug() << "adjusted page size (mm) =" << QSizeF(mPageWidthAdjustedMm, mPageHeightAdjustedMm);
+        qCDebug(KOOKA_LOG) << "adjusted page size (mm) =" << QSizeF(mPageWidthAdjustedMm, mPageHeightAdjustedMm);
 
         mPrintLeftPix = mPrintTopPix = CUT_MARGIN*mPrintResolution;
     }
 
     bool onOnePage = (mPrintWidthMm<=mPageWidthAdjustedMm && mPrintHeightMm<=mPageHeightAdjustedMm);
-    qDebug() << "on one page?" << onOnePage;		// see if fits on one page
+    qCDebug(KOOKA_LOG) << "on one page?" << onOnePage;	// see if fits on one page
 							// must be true for this
     if (m_scaleOption==KookaPrint::ScaleFitPage) Q_ASSERT(onOnePage);
 
@@ -226,25 +226,25 @@ void KookaPrint::recalculatePrintParameters()
 
     double ipart;
     double fpart = modf(mPrintWidthMm/mPageWidthAdjustedMm, &ipart);
-    //qDebug() << "for cols ipart" << ipart << "fpart" << fpart;
+    //qCDebug(KOOKA_LOG) << "for cols ipart" << ipart << "fpart" << fpart;
     mPrintColumns = qRound(ipart)+(fpart>0 ? 1 : 0);
     fpart = modf(mPrintHeightMm/mPageHeightAdjustedMm, &ipart);
-    //qDebug() << "for rows ipart" << ipart << "fpart" << fpart;
+    //qCDebug(KOOKA_LOG) << "for rows ipart" << ipart << "fpart" << fpart;
     mPrintRows = qRound(ipart)+(fpart>0 ? 1 : 0);
 
     int totalPages = mPrintColumns*mPrintRows;
-    qDebug() << "print cols" << mPrintColumns << "rows" << mPrintRows << "pages" << totalPages;
+    qCDebug(KOOKA_LOG) << "print cols" << mPrintColumns << "rows" << mPrintRows << "pages" << totalPages;
     Q_ASSERT(totalPages>0);				// checks for sanity
     if (onOnePage) Q_ASSERT(totalPages==1);
 
-    qDebug() << "done";
+    qCDebug(KOOKA_LOG) << "done";
 }
 
 
 void KookaPrint::printImage()
 {
-    if (m_image==nullptr) return;				// no image to print
-    qDebug() << "starting";
+    if (m_image==nullptr) return;			// no image to print
+    qCDebug(KOOKA_LOG) << "starting";
     QGuiApplication::setOverrideCursor(Qt::WaitCursor);	// this may take some time
 
     // Save the print parameters used
@@ -271,7 +271,7 @@ void KookaPrint::printImage()
 
     int sliceWidthPix = qRound(mImageWidthPix*mPageWidthAdjustedMm/mPrintWidthMm);
     int sliceHeightPix = qRound(mImageHeightPix*mPageHeightAdjustedMm/mPrintHeightMm);
-    qDebug() << "slice size =" << QSize(sliceWidthPix, sliceHeightPix);
+    qCDebug(KOOKA_LOG) << "slice size =" << QSize(sliceWidthPix, sliceHeightPix);
 
     // Print columns and rows in this order, so that in the usual printer
     // and alignment case the sheets line up corresponding with the columns.
@@ -290,7 +290,7 @@ void KookaPrint::printImage()
         for (int col = 0; col<mPrintColumns; ++col)
 #endif
         {
-            qDebug() << "print page" << page << "col" << col << "row" << row;
+            qCDebug(KOOKA_LOG) << "print page" << page << "col" << col << "row" << row;
 
             // The slice starts at 'sliceLeftPix' and 'sliceTopPix' in the image.
             int sliceLeftPix = col*sliceWidthPix;
@@ -306,7 +306,7 @@ void KookaPrint::printImage()
             int targetHeightPix = qRound((mPageHeightAdjustedMm*mPrintResolution)*(double(thisHeightPix)/sliceHeightPix));
             const QRect targetRect(mPrintLeftPix, mPrintTopPix, targetWidthPix, targetHeightPix);
 
-            qDebug() << " " << sourceRect << "->" << targetRect;
+            qCDebug(KOOKA_LOG) << " " << sourceRect << "->" << targetRect;
             // The markers are drawn first so that the image will overwrite them.
             drawCornerMarkers(&painter, targetRect, row, col, mPrintRows, mPrintColumns);
             // Then the image rectangle.
@@ -318,7 +318,7 @@ void KookaPrint::printImage()
     }
 
     QGuiApplication::restoreOverrideCursor();
-    qDebug() << "done";
+    qCDebug(KOOKA_LOG) << "done";
 }
 
 
@@ -398,11 +398,8 @@ void KookaPrint::drawCutSign(QPainter *painter, const QPoint &p, int num, Qt::Co
     int textX = p.x() + tAway * toffX + textXOff;
     int textY = p.y() + tAway * toffY + textYOff;
 
-    // painter->drawRect( textX, textY, bRect.width(), bRect.height() );
-    //qDebug() << "Drawing to position [" << textX << "," << textY << "]";
-    painter->drawText(textX,
-                        textY,
-                        numStr);
+    //painter->drawRect( textX, textY, bRect.width(), bRect.height() );
+    painter->drawText(textX, textY, numStr);
 
 #ifdef CUTMARKS_COLOURSEGS
     QBrush b(brushColor);				// draw a colour segment
@@ -430,7 +427,7 @@ void KookaPrint::drawCornerMarkers(QPainter *painter, const QRect &targetRect,
 #else
     const int indx = maxCols*row + col + 1;
 #endif
-    //qDebug() << "for col" << col << "/" << maxCols << "row" << row << "/" << maxRows << "-> index" << indx;
+    //qCDebug(KOOKA_LOG) << "for col" << col << "/" << maxCols << "row" << row << "/" << maxRows << "-> index" << indx;
 
     // All the measurements here are derived from 'targetRect',
     // which is in device pixels.

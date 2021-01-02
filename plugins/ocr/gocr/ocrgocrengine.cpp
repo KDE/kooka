@@ -43,7 +43,6 @@
 #include <qdir.h>
 #include <qtemporaryfile.h>
 #include <qtemporarydir.h>
-#include <qdebug.h>
 #include <qprocess.h>
 
 #include <klocalizedstring.h>
@@ -56,6 +55,7 @@
 #include "ocrgocrdialog.h"
 #include "executablepathdialogue.h"
 #include "kookasettings.h"
+#include "ocr_logging.h"
 
 
 K_PLUGIN_FACTORY_WITH_JSON(OcrGocrEngineFactory, "kookaocr-gocr.json", registerPlugin<OcrGocrEngine>();)
@@ -145,8 +145,6 @@ bool OcrGocrEngine::createOcrProcess(AbstractOcrDialogue *dia, ScanImage::Ptr im
 
 bool OcrGocrEngine::finishedOcrProcess(QProcess *proc)
 {
-    qDebug();
-
     QFile rf(m_resultFile);
     if (!rf.open(QIODevice::ReadOnly)) {
 #ifdef HAVE_STRERROR
@@ -158,6 +156,7 @@ bool OcrGocrEngine::finishedOcrProcess(QProcess *proc)
         return (false);
     }
 
+    qCDebug(OCR_LOG) << "reading" << m_resultFile;
     const QString ocrResultText = rf.readAll();         // read all the result text
     rf.close();						// finished with result file
 
@@ -168,7 +167,8 @@ bool OcrGocrEngine::finishedOcrProcess(QProcess *proc)
 #else
     QStringList lines = ocrResultText.split('\n', QString::SkipEmptyParts);
 #endif
-    //qDebug() << "RESULT" << ocrResultText << "split to" << lines.count() << "lines";
+    //qCDebug(OCR_LOG) << "RESULT" << ocrResultText;
+    qCDebug(OCR_LOG) << "split to" << lines.count() << "lines";
 
     startResultDocument();
 
@@ -188,7 +188,7 @@ bool OcrGocrEngine::finishedOcrProcess(QProcess *proc)
     }
 
     finishResultDocument();
-    //qDebug() << "Finished splitting";
+    qCDebug(OCR_LOG) << "finished reading results";
 
     // Find the GOCR result image
     QDir dir(m_tempDir->path());
@@ -197,7 +197,7 @@ bool OcrGocrEngine::finishedOcrProcess(QProcess *proc)
     while (*prf != nullptr) {              // search for result files
         QString ri = dir.absoluteFilePath(*prf);
         if (QFile::exists(ri)) {            // take first one that matches
-            qDebug() << "found result image" << ri;
+            qCDebug(OCR_LOG) << "found result image" << ri;
             foundResult = ri;
             break;
         }
@@ -211,7 +211,7 @@ bool OcrGocrEngine::finishedOcrProcess(QProcess *proc)
     //   m_introducedImage = new ScanImage();
     //   ...
     //   if (!m_ocrResultFile.isNull()) m_introducedImage->load(m_ocrResultFile);
-    //   else //qDebug() << "cannot find result image in" << dir.absolutePath();
+    //   else //qCDebug(OCR_LOG) << "cannot find result image in" << dir.absolutePath();
     //
     // But that seems pointless - the replaced m_introducedImage was not
     // subsequently used anywhere (although would it be reused if "Start OCR"
@@ -221,7 +221,7 @@ bool OcrGocrEngine::finishedOcrProcess(QProcess *proc)
     // copy in OcrEngine::setImage().  The result image is still displayed in
     // the image viewer in OcrEngine::finishedOCRVisible().
     if (!foundResult.isEmpty()) setResultImage(foundResult);
-    else qDebug() << "cannot find result image in" << dir.absolutePath();
+    else qCDebug(OCR_LOG) << "cannot find result image in" << dir.absolutePath();
 
     return (true);
 }
@@ -262,7 +262,7 @@ void OcrGocrEngine::slotGOcrStdout()
 
     QByteArray line;
     while (!(line = ocrProcess()->readLine()).isEmpty()) {
-        //qDebug() << "GOCR stdout:" << line;
+        //qCDebug(OCR_LOG) << "GOCR stdout:" << line;
         // Calculate OCR progress
         if (rx1.indexIn(line) > -1) {
             progress = rx1.capturedTexts()[1].toInt();

@@ -35,9 +35,9 @@
 #include <qevent.h>
 #include <qapplication.h>
 #include <qabstractbutton.h>
-#include <qdebug.h>
 
 #include "dialogstatesaver.h"
+#include "libdialogutil_logging.h"
 
 
 DialogStateWatcher::DialogStateWatcher(QDialog *pnt)
@@ -55,7 +55,7 @@ DialogStateWatcher::DialogStateWatcher(QDialog *pnt)
 
 void DialogStateWatcher::setSaveOnButton(QAbstractButton *but)
 {
-    qDebug() << "button" << but->text();
+    qCDebug(LIBDIALOGUTIL_LOG) << "button" << but->text();
     connect(but, &QAbstractButton::clicked, this, &DialogStateWatcher::saveConfigInternal);
 }
 

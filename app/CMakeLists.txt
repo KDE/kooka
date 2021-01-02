@@ -49,6 +49,15 @@ endif (HAVE_SYS_TYPES_H)
 
 include_directories(..)
 
+########### logging ###############
+
+ecm_qt_declare_logging_category(kooka_LOG_SRCS
+  HEADER "kooka_logging.h"
+  IDENTIFIER "KOOKA_LOG"
+  CATEGORY_NAME "kooka"
+  EXPORT kookalogging
+  DESCRIPTION "application (Kooka)")
+
 ########### library shared with plugins ###############
 
 set(kookacore_SRCS
@@ -58,8 +67,10 @@ set(kookacore_SRCS
   imgsaver.cpp			# -> imagesaver
   formatdialog.cpp
   galleryroot.cpp
+  ${kooka_LOG_SRCS}
 )
 kconfig_add_kcfg_files(kookacore_SRCS kookasettings.kcfgc)
+
 add_library(kookacore SHARED ${kookacore_SRCS})
 generate_export_header(kookacore BASE_NAME kookacore)
 set_target_properties(kookacore PROPERTIES SOVERSION "2.0.0")
@@ -93,6 +104,7 @@ set(kooka_SRCS
   newscanparams.cpp		# -> newscaparamsdialog
   ocrresedit.cpp
   #QT5 photocopyprintdialogpage.cpp
+  ${kooka_LOG_SRCS}
 )
 
 add_executable(kooka ${kooka_SRCS})

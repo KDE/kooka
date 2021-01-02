@@ -30,10 +30,11 @@
 
 #include "scanicons.h"
 
-#include <qdebug.h>
 #include <qicon.h>
 
 #include <kiconloader.h>
+
+#include "libkookascan_logging.h"
 
 
 ScanIcons::ScanIcons()
@@ -61,7 +62,7 @@ static QIcon findIcon(ScanIcons::IconType type, QIcon *var, const QString &name1
         QString ip = KIconLoader::global()->iconPath(name1, KIconLoader::Small, true);
         // Then try our own icons, returning the 'unknown' icon if not found.
         if (ip.isEmpty()) ip = KIconLoader::global()->iconPath(name2, KIconLoader::Small);
-        qDebug() << "for" << type << "using" << ip;
+        qCDebug(LIBKOOKASCAN_LOG) << "for" << type << "using" << ip;
         *var = QIcon(ip);				// save for next time
         Q_ASSERT(!var->isNull());
     }

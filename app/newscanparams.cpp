@@ -33,7 +33,6 @@
 #include <qlabel.h>
 #include <qlineedit.h>
 #include <qlayout.h>
-#include <qdebug.h>
 
 #include <klocalizedstring.h>
 

@@ -37,7 +37,6 @@
 #include <qpushbutton.h>
 #include <qlineedit.h>
 #include <qlistwidget.h>
-#include <qdebug.h>
 #include <qicon.h>
 #include <qmimetype.h>
 #include <qmimedatabase.h>
@@ -49,6 +48,7 @@
 
 #include "imageformat.h"
 #include "kookasettings.h"
+#include "kooka_logging.h"
 
 
 // The ImageType can be OR-ed here to make a set of possible formats
@@ -273,8 +273,6 @@ FormatDialog::FormatDialog(QWidget *parent, ScanImage::ImageType type,
 {
     setObjectName("FormatDialog");
 
-    //qDebug();
-
     setModal(true);
     // KDE4 buttons: Ok  Cancel  User1=SelectFormat
     // KF5 buttons:  Ok  Cancel  Yes=SelectFormat
@@ -463,7 +461,7 @@ void FormatDialog::formatSelected(QListWidgetItem *item)
     QMimeDatabase db;
     QMimeType mime = db.mimeTypeForName(mimename);
     ImageFormat format = ImageFormat::formatForMime(mime);
-    qDebug() << "MIME" << mimename << "format" << format;
+    qCDebug(KOOKA_LOG) << "MIME" << mimename << "format" << format;
 
     if (helptxt != nullptr) {				// found some help text
         mHelpLabel->setText(i18n(helptxt));		// set the hint
@@ -592,7 +590,7 @@ static const FormatInfo *findKnownFormat(const QMimeType &mime)
 void FormatDialog::buildFormatList(bool recOnly)
 {
     if (mFormatList == nullptr) return;			// not showing this
-    qDebug() << "recOnly" << recOnly << "for type" << mImageType;
+    qCDebug(KOOKA_LOG) << "recOnly" << recOnly << "for type" << mImageType;
 
     mFormatList->clear();
     const QList<QMimeType> *mimeTypes = ImageFormat::mimeTypes();

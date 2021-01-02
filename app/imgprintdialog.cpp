@@ -41,7 +41,6 @@
 #include <qspinbox.h>
 #include <qlineedit.h>
 #include <qtimer.h>
-#include <qdebug.h>
 #include <qgridlayout.h>
 
 #include <QSignalBlocker>
@@ -53,13 +52,14 @@
 #include "kookaprint.h"
 #include "kscandevice.h"
 #include "dialogbase.h"
+#include "kooka_logging.h"
 
 
 ImgPrintDialog::ImgPrintDialog(ScanImage::Ptr img, KookaPrint *prt, QWidget *pnt)
     : QWidget(pnt)
 {
     m_image = img;					// record the image
-    qDebug() << "image size" << img->size();
+    qCDebug(KOOKA_LOG) << "image size" << img->size();
     mPrinter = prt;					// record the printer
 
     setWindowTitle(i18nc("@title:tab", "Image"));	// used as tab title
@@ -271,10 +271,10 @@ void ImgPrintDialog::initOptions()
         // Get the scan resolution from the image
         const int imgResX = DPM_TO_DPI(m_image->dotsPerMeterX());
         const int imgResY = DPM_TO_DPI(m_image->dotsPerMeterY());
-        if (imgResX!=imgResY) qWarning() << "Different image resolutions" << imgResX << imgResY;
+        if (imgResX!=imgResY) qCWarning(KOOKA_LOG) << "Different image resolutions" << imgResX << imgResY;
         if (imgResX!=0)
         {
-            qDebug() << "Resolution from image" << imgResX;
+            qCDebug(KOOKA_LOG) << "Resolution from image" << imgResX;
             m_dpi->setValue(imgResX);
         }
     }
@@ -363,30 +363,30 @@ void ImgPrintDialog::updatePrintParameters()
 {
     // get options from GUI and update the printer
     const KookaPrint::ScaleOption scale = static_cast<KookaPrint::ScaleOption>(m_scaleRadios->checkedId());
-    qDebug() << "scale option" << scale;
+    qCDebug(KOOKA_LOG) << "scale option" << scale;
     mPrinter->setScaleOption(scale);
 
     QSize size(m_sizeW->value(), m_sizeH->value());
-    qDebug() << "print size" << size;
+    qCDebug(KOOKA_LOG) << "print size" << size;
     mPrinter->setPrintSize(size);
 
     const bool asp = m_ratio->isChecked();
-    qDebug() << "maintain aspect?" << asp;
+    qCDebug(KOOKA_LOG) << "maintain aspect?" << asp;
     mPrinter->setMaintainAspect(asp);
 
     const bool draft = m_psDraft->isChecked();
-    qDebug() << "low res draft?" << draft;
+    qCDebug(KOOKA_LOG) << "low res draft?" << draft;
     mPrinter->setLowResDraft(draft);
 
     // No need to setScreenResolution() here, that has already been done
     // in initOptions() and it never changes.
 
     const int scanRes = m_dpi->value();
-    qDebug() << "scan res" << scanRes;
+    qCDebug(KOOKA_LOG) << "scan res" << scanRes;
     mPrinter->setScanResolution(scanRes);
 
     const KookaPrint::CutMarksOption cuts = static_cast<KookaPrint::CutMarksOption>(m_cutsCombo->currentData().toInt());
-    qDebug() << "cut marks" << cuts;
+    qCDebug(KOOKA_LOG) << "cut marks" << cuts;
     mPrinter->setCutMarks(cuts);
 
     // ask the printer to recalculate page parameters

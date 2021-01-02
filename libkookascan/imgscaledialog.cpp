@@ -208,8 +208,6 @@ void ImgScaleDialog::slotSetSelValue(int val)
                 selected = old_sel;
             }
         } // Selection is not custom
-    } else {
-        //qDebug() << "Error: Invalid size selected!" << val;
     }
 }
 
