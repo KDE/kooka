@@ -29,10 +29,11 @@ find_package(KF5 ${KF5_MIN_VERSION} REQUIRED COMPONENTS Service)
 
 set(kookadestinationapplication_SRCS
   destinationapplication.cpp
+  ${kookadestination_LOG_SRCS}
 )
+
 add_library(kookadestinationapplication MODULE ${kookadestinationapplication_SRCS})
 kcoreaddons_desktop_to_json(kookadestinationapplication kookadestination-application.desktop)
-
 target_link_libraries(kookadestinationapplication Qt5::Core Qt5::Widgets)
 target_link_libraries(kookadestinationapplication KF5::I18n KF5::WidgetsAddons KF5::Service)
 target_link_libraries(kookadestinationapplication kookadestination kookacore kookascan)

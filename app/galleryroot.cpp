@@ -45,7 +45,6 @@
 #endif
 
 #include <qdir.h>
-#include <qdebug.h>
 #include <qstandardpaths.h>
 
 #include <klocalizedstring.h>
@@ -53,6 +52,7 @@
 #include <kstandardguiitem.h>
 
 #include "kookasettings.h"
+#include "kooka_logging.h"
 
 // Support for the gallery location - moved here from KookaPref so that it
 // can be used in the core library.  Before that is was part of the Previewer
@@ -127,7 +127,7 @@ static QString findGalleryRoot()
     QString galleryName = KookaSettings::galleryName();	// may be base name or absolute path
     if (galleryName.isEmpty())
     {
-        qWarning() << "Gallery name not configured";
+        qCWarning(KOOKA_LOG) << "Gallery name not configured";
         return (QString());
     }
 
@@ -144,8 +144,8 @@ static QString findGalleryRoot()
     QDir newdir(newpath);
     bool newexists = newdir.exists();
 
-    qDebug() << "old" << oldpath << "exists" << oldexists;
-    qDebug() << "new" << newpath << "exists" << newexists;
+    qCDebug(KOOKA_LOG) << "old" << oldpath << "exists" << oldexists;
+    qCDebug(KOOKA_LOG) << "new" << newpath << "exists" << newexists;
 
     QString dir;
 
@@ -194,7 +194,7 @@ static QString findGalleryRoot()
     }
 
     if (!dir.endsWith("/")) dir += "/";
-    qDebug() << "using" << dir;
+    qCDebug(KOOKA_LOG) << "using" << dir;
     return (dir);
 }
 
@@ -204,7 +204,7 @@ QUrl GalleryRoot::root()
     if (!sGalleryLocated)
     {
         sGalleryRoot = QUrl::fromLocalFile(findGalleryRoot());
-        if (!sGalleryRoot.isValid()) qWarning() << "root not valid!";
+        if (!sGalleryRoot.isValid()) qCWarning(KOOKA_LOG) << "root not valid!";
         sGalleryLocated = true;
     }
 

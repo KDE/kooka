@@ -21,10 +21,11 @@ project(kooka5)
 
 set(kookadestinationgallery_SRCS
   destinationgallery.cpp
+  ${kookadestination_LOG_SRCS}
 )
+
 add_library(kookadestinationgallery MODULE ${kookadestinationgallery_SRCS})
 kcoreaddons_desktop_to_json(kookadestinationgallery kookadestination-gallery.desktop)
-
 target_link_libraries(kookadestinationgallery Qt5::Core Qt5::Gui)
 target_link_libraries(kookadestinationgallery KF5::I18n KF5::WidgetsAddons)
 target_link_libraries(kookadestinationgallery kookadestination kookascan)

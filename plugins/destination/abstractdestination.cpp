@@ -31,23 +31,17 @@
 
 #include "abstractdestination.h"
 
-#include <qdebug.h>
+#include "destination_logging.h"
 
 
-//  Constructor/destructor and external engine creation
-//  ---------------------------------------------------
+//  Constructor/destructor and plugin creation
+//  ------------------------------------------
 
 AbstractDestination::AbstractDestination(QObject *pnt, const char *name)
     : AbstractPlugin(pnt)
 {
     setObjectName(name);
-    qDebug() << objectName();
+    qCDebug(DESTINATION_LOG) << objectName();
 
     mGallery = nullptr;
-}
-
-
-AbstractDestination::~AbstractDestination()
-{
-    qDebug() << objectName();
 }

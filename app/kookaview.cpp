@@ -837,7 +837,7 @@ void KookaView::slotScanStart(ScanImage::ImageType type)
     AbstractDestination *dest = (mScanParams!=nullptr) ? mScanParams->destinationPlugin() : nullptr;
     if (dest==nullptr)
     {
-        qWarning() << "No destination plugin";
+        qCWarning(KOOKA_LOG) << "No destination plugin";
         mScanDevice->slotStopScanning();		// no point starting scan
         return;
     }
@@ -895,7 +895,7 @@ void KookaView::slotNewImageScanned(ScanImage::Ptr img)
 
     AbstractDestination *dest = (mScanParams!=nullptr) ? mScanParams->destinationPlugin() : nullptr;
     if (dest!=nullptr) dest->imageScanned(img);
-    else qWarning() << "No destination plugin";
+    else qCWarning(KOOKA_LOG) << "No destination plugin";
 }
 
 

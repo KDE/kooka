@@ -30,7 +30,6 @@
 
 #include "destinationapplication.h"
 
-#include <qdebug.h>
 #include <qmimetype.h>
 #include <qmimedatabase.h>
 #include <qcombobox.h>
@@ -51,6 +50,7 @@
 #include "formatdialog.h"
 #include "kookasettings.h"
 #include "scanimage.h"
+#include "destination_logging.h"
 
 
 K_PLUGIN_FACTORY_WITH_JSON(DestinationApplicationFactory, "kookadestination-application.json", registerPlugin<DestinationApplication>();)
@@ -71,10 +71,10 @@ bool DestinationApplication::scanStarting(ScanImage::ImageType type)
 
 void DestinationApplication::imageScanned(ScanImage::Ptr img)
 {
-    qDebug() << "received image size" << img->size() << "type" << img->imageType();
+    qCDebug(DESTINATION_LOG) << "received image size" << img->size() << "type" << img->imageType();
     const QString appService = mAppsCombo->currentData().toString();
     const QString mimeName = mFormatCombo->currentData().toString();
-    qDebug() << "app" << appService << "mime" << mimeName;
+    qCDebug(DESTINATION_LOG) << "app" << appService << "mime" << mimeName;
 
     // Get a format to save the scanned image.  If a valid one is selected,
     // the use that.  If "Other" is selected or the selected format is not
@@ -85,7 +85,7 @@ void DestinationApplication::imageScanned(ScanImage::Ptr img)
     {
         QMimeDatabase db;				// get image format to use
         fmt = ImageFormat::formatForMime(db.mimeTypeForName(mimeName));
-        if (!fmt.isValid()) qWarning() << "No MIME type or format for" << mimeName;
+        if (!fmt.isValid()) qCWarning(DESTINATION_LOG) << "No MIME type or format for" << mimeName;
     }
 
     // If the format is "Other", or there was an error finding the MIME type,
@@ -106,7 +106,7 @@ void DestinationApplication::imageScanned(ScanImage::Ptr img)
         fmt = fd.getFormat();
     }
 
-    qDebug() << "format" << fmt << "ext" << fmt.extension();
+    qCDebug(DESTINATION_LOG) << "format" << fmt << "ext" << fmt.extension();
     if (!fmt.isValid()) return;				// must have this now
 
     // Save the image to a temporary file, in the format specified.
@@ -115,7 +115,7 @@ void DestinationApplication::imageScanned(ScanImage::Ptr img)
     temp.open();
     QUrl saveUrl = QUrl::fromLocalFile(temp.fileName());
     temp.close();					// now have name, but do not remove
-    qDebug() << "save to" << saveUrl;			// temporary file location
+    qCDebug(DESTINATION_LOG) << "save to" << saveUrl;	// temporary file location
 
     ImgSaver saver;					// save the image
     ImgSaver::ImageSaveStatus status = saver.saveImage(img, saveUrl, fmt);
@@ -136,7 +136,7 @@ void DestinationApplication::imageScanned(ScanImage::Ptr img)
     if (!appService.isEmpty())
     {
         service = KService::serviceByDesktopName(appService);
-        if (service==nullptr) qWarning() << "Cannot find service" << appService;
+        if (service==nullptr) qCWarning(DESTINATION_LOG) << "Cannot find service" << appService;
     }
 
     KIO::ApplicationLauncherJob *job = new KIO::ApplicationLauncherJob(service);
@@ -177,7 +177,7 @@ void DestinationApplication::createGUI(ScanParamsPage *page)
     // save to).
 
     const KService::List allServices = KServiceTypeTrader::self()->query("Application");
-    qDebug() << "have" << allServices.count() << "services";
+    qCDebug(DESTINATION_LOG) << "have" << allServices.count() << "services";
     const QList<QMimeType> *imageMimeTypes = ImageFormat::mimeTypes();
 
     KService::List validServices;
@@ -204,14 +204,14 @@ void DestinationApplication::createGUI(ScanParamsPage *page)
         // services).
         if (service->desktopEntryName()=="org.kde.okular")
         {
-            qDebug() << "accept" << service->desktopEntryName() << "by name, pref" << service->initialPreference();
+            qCDebug(DESTINATION_LOG) << "accept" << service->desktopEntryName() << "by name, pref" << service->initialPreference();
             validServices.append(service);
             continue;
         }
 
         if (service->noDisplay()) continue;		// ignore hidden services
         if (service->mimeTypes().isEmpty()) continue;	// ignore those with no MIME types
-        //qDebug() << "  " << service->mimeTypes();
+        //qCDebug(DESTINATION_LOG) << "  " << service->mimeTypes();
 
         for (const QString &mimeType : service->mimeTypes())
         {
@@ -223,14 +223,14 @@ void DestinationApplication::createGUI(ScanParamsPage *page)
         }
         continue;					// service not accepted
 
-found:  qDebug() << "accept" << service->desktopEntryName() << "by MIME, pref" << service->initialPreference();
+found:  qCDebug(DESTINATION_LOG) << "accept" << service->desktopEntryName() << "by MIME, pref" << service->initialPreference();
         validServices.append(service);
     }
 
     // Now all of the applications that accept file formats that can be
     // saved by Kooka are listed.  Fortunately the original trader query
     // returned them in priority order, so there is no need to sort them.
-    qDebug() << "have" << validServices.count() << "valid services";
+    qCDebug(DESTINATION_LOG) << "have" << validServices.count() << "valid services";
 
     mAppsCombo = new QComboBox;
 

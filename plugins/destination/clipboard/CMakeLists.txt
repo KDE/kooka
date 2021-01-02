@@ -21,10 +21,11 @@ project(kooka5)
 
 set(kookadestinationclipboard_SRCS
   destinationclipboard.cpp
+  ${kookadestination_LOG_SRCS}
 )
+
 add_library(kookadestinationclipboard MODULE ${kookadestinationclipboard_SRCS})
 kcoreaddons_desktop_to_json(kookadestinationclipboard kookadestination-clipboard.desktop)
-
 target_link_libraries(kookadestinationclipboard Qt5::Gui)
 target_link_libraries(kookadestinationclipboard kookadestination kookascan)
 

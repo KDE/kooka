@@ -40,7 +40,7 @@ ecm_qt_declare_logging_category(kookaocr_LOG_SRCS
   IDENTIFIER "OCR_LOG"
   CATEGORY_NAME "ocr"
   EXPORT kookalogging
-  DESCRIPTION "ocr (Kooka)")
+  DESCRIPTION "ocr plugins (Kooka)")
 
 set(kookaocr_SRCS
   abstractocrengine.cpp

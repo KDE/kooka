@@ -30,12 +30,13 @@
 
 #include "destinationclipboard.h"
 
-#include <qdebug.h>
 #include <qclipboard.h>
 #include <qguiapplication.h>
 
 #include <kpluginfactory.h>
 #include <klocalizedstring.h>
+
+#include "destination_logging.h"
 
 
 K_PLUGIN_FACTORY_WITH_JSON(DestinationClipboardFactory, "kookadestination-clipboard.json", registerPlugin<DestinationClipboard>();)
@@ -56,7 +57,7 @@ bool DestinationClipboard::scanStarting(ScanImage::ImageType type)
 
 void DestinationClipboard::imageScanned(ScanImage::Ptr img)
 {
-    qDebug() << "received image size" << img->size();
+    qCDebug(DESTINATION_LOG) << "received image size" << img->size();
     QGuiApplication::clipboard()->setImage(*img.data());
 }
 

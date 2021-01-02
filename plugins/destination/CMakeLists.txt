@@ -27,9 +27,18 @@ find_package(KF5 ${KF5_MIN_VERSION} REQUIRED COMPONENTS I18n CoreAddons WidgetsA
 #									#
 #########################################################################
 
+ecm_qt_declare_logging_category(kookadestination_LOG_SRCS
+  HEADER "destination_logging.h"
+  IDENTIFIER "DESTINATION_LOG"
+  CATEGORY_NAME "destination"
+  EXPORT kookalogging
+  DESCRIPTION "destination plugins (Kooka)")
+
 set(kookadestination_SRCS
   abstractdestination.cpp
+  ${kookadestination_LOG_SRCS}
 )
+
 add_library(kookadestination SHARED ${kookadestination_SRCS})
 set_target_properties(kookadestination PROPERTIES SOVERSION "1.0.0")
 target_link_libraries(kookadestination Qt5::Core Qt5::Widgets)

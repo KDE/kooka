@@ -23,7 +23,6 @@
 #include "kookascanparams.h"
 
 #include <qicon.h>
-#include <qdebug.h>
 #include <qcombobox.h>
 #include <qlabel.h>
 
@@ -35,6 +34,7 @@
 #include "pluginmanager.h"
 #include "scanparamspage.h"
 #include "kookasettings.h"
+#include "kooka_logging.h"
 
 
 #define ROWS_TO_RESERVE		5			// rows to reserve for plugin GUI
@@ -96,7 +96,7 @@ void KookaScanParams::slotLinkActivated(const QString &link)
 void KookaScanParams::createScanDestinationGUI(ScanParamsPage *frame)
 {
     const QMap<QString,AbstractPluginInfo> plugins = PluginManager::self()->allPlugins(PluginManager::DestinationPlugin);
-    qDebug() << "have" << plugins.count() << "destination plugins";
+    qCDebug(KOOKA_LOG) << "have" << plugins.count() << "destination plugins";
 
     const QString configuredPlugin = KookaSettings::destinationPlugin();
     int configuredIndex = -1;
@@ -124,7 +124,7 @@ void KookaScanParams::createScanDestinationGUI(ScanParamsPage *frame)
 void KookaScanParams::slotDestinationSelected(int idx)
 {
     const QString destName = mDestinationCombo->itemData(idx).toString();
-    qDebug() << idx << destName;
+    qCDebug(KOOKA_LOG) << idx << destName;
 
     // Check the plugin that is currently loaded.  If it is the same as is
     // required then nothing needs to be done.
@@ -138,7 +138,7 @@ void KookaScanParams::slotDestinationSelected(int idx)
         if (mDestinationPlugin!=nullptr) return;
     }
 
-    qDebug() << "params at row" << mParamsRow;
+    qCDebug(KOOKA_LOG) << "params at row" << mParamsRow;
     for (int i = ROWS_TO_RESERVE-1; i>=0; --i)		// clear any existing GUI rows,
     {							// backwards to leave first row as current
         mParamsPage->setCurrentRow(mParamsRow+i);
@@ -165,7 +165,7 @@ void KookaScanParams::slotDestinationSelected(int idx)
 
 void KookaScanParams::saveDestinationSettings()
 {
-    qDebug();
+    qCDebug(KOOKA_LOG);
 
     AbstractDestination *currentPlugin = qobject_cast<AbstractDestination *>(PluginManager::self()->currentPlugin(PluginManager::DestinationPlugin));
     if (currentPlugin==nullptr) return;			// nothing to save

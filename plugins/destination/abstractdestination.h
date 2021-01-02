@@ -58,7 +58,7 @@ public:
     /**
      * Destructor.
      **/
-    virtual ~AbstractDestination();
+    virtual ~AbstractDestination() = default;
 
     /**
      * Indicates that a scan is starting.  The plugin should prepare
