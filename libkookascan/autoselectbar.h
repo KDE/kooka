@@ -45,7 +45,7 @@ class KOOKASCAN_EXPORT AutoSelectBar : public QWidget
 
 public:
     explicit AutoSelectBar(int initialValue, QWidget *parent = nullptr);
-    virtual ~AutoSelectBar();
+    virtual ~AutoSelectBar() = default;
 
 public slots:
     void setThreshold(int thresh);

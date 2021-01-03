@@ -107,17 +107,11 @@ ScanGallery::ScanGallery(QWidget *parent)
     // Drag and Drop
     setDragEnabled(true);               // allow drags out
     setAcceptDrops(true);               // allow drops in
-    connect(this, SIGNAL(dropped(QDropEvent*,FileTreeViewItem*)),
-            SLOT(slotUrlsDropped(QDropEvent*,FileTreeViewItem*)));
-
-    connect(this, SIGNAL(itemSelectionChanged()),
-            SLOT(slotItemHighlighted()));
-    connect(this, SIGNAL(itemActivated(QTreeWidgetItem*,int)),
-            SLOT(slotItemActivated(QTreeWidgetItem*)));
-    connect(this, SIGNAL(fileRenamed(FileTreeViewItem*,QString)),
-            SLOT(slotFileRenamed(FileTreeViewItem*,QString)));
-    connect(this, SIGNAL(itemExpanded(QTreeWidgetItem*)),
-            SLOT(slotItemExpanded(QTreeWidgetItem*)));
+    connect(this, &FileTreeView::dropped, this, &ScanGallery::slotUrlsDropped);
+    connect(this, &QTreeWidget::itemSelectionChanged, this, [this]() { slotItemHighlighted(); });
+    connect(this, &QTreeWidget::itemActivated, this, &ScanGallery::slotItemActivated);
+    connect(this, &FileTreeView::fileRenamed, this, &ScanGallery::slotFileRenamed);
+    connect(this, &QTreeWidget::itemExpanded, this, &ScanGallery::slotItemExpanded);
 
     m_startup = true;
     m_currSelectedDir = QUrl();
@@ -190,17 +184,10 @@ FileTreeBranch *ScanGallery::openRoot(const QUrl &root, const QString &title)
 
     setDirOnlyMode(branch, false);
 
-    connect(branch, SIGNAL(newTreeViewItems(FileTreeBranch*,FileTreeViewItemList)),
-            SLOT(slotDecorate(FileTreeBranch*,FileTreeViewItemList)));
-
-    connect(branch, SIGNAL(changedTreeViewItems(FileTreeBranch*,FileTreeViewItemList)),
-            SLOT(slotDecorate(FileTreeBranch*,FileTreeViewItemList)));
-
-    connect(branch, SIGNAL(directoryChildCount(FileTreeViewItem*,int)),
-            SLOT(slotDirCount(FileTreeViewItem*,int)));
-
-    connect(branch, SIGNAL(populateFinished(FileTreeViewItem*)),
-            SLOT(slotStartupFinished(FileTreeViewItem*)));
+    connect(branch, &FileTreeBranch::newTreeViewItems, this, QOverload<FileTreeBranch *, const FileTreeViewItemList &>::of(&ScanGallery::slotDecorate));
+    connect(branch, &FileTreeBranch::changedTreeViewItems, this, QOverload<FileTreeBranch *, const FileTreeViewItemList &>::of(&ScanGallery::slotDecorate));
+    connect(branch, &FileTreeBranch::directoryChildCount, this, &ScanGallery::slotDirCount);
+    connect(branch, &FileTreeBranch::populateFinished, this, &ScanGallery::slotStartupFinished);
 
     return (branch);
 }
@@ -1039,7 +1026,7 @@ void ScanGallery::slotUrlsDropped(QDropEvent *ev, FileTreeViewItem *item)
     } else {
         job = KIO::copy(urls, dest);
     }
-    connect(job, SIGNAL(result(KJob*)), SLOT(slotJobResult(KJob*)));
+    connect(job, &KJob::result, this, &ScanGallery::slotJobResult);
 }
 
 void ScanGallery::slotJobResult(KJob *job)

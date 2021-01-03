@@ -158,11 +158,11 @@ public slots:
     void slotScanStart(ScanImage::ImageType type);
     void slotScanFinished(KScanDevice::Status stat);
     void slotAcquireStart();
+    void slotStartPhotoCopy();
 
     void showOpenWithMenu(KActionMenu *menu);
 
 protected slots:
-    void slotStartPhotoCopy();
     void slotPhotoCopyPrint(const QImage *img);
     void slotPhotoCopyScan(KScanDevice::Status);
 

@@ -395,7 +395,7 @@ QWidget *ScanParams::createScannerParams()
         //  contains other ADF options.  They are not implemented at the moment
         //  but they may be some day...
         //QPushButton *pb = new QPushButton( i18n("Source && ADF Options..."), frame);
-        //connect(pb, SIGNAL(clicked()), SLOT(slotSourceSelect()));
+        //connect(pb, &QAbstractButton::clicked, this, &ScanParams::slotSourceSelect);
         //lay->addWidget(pb,row,2,1,-1,Qt::AlignRight);
         //++row;
     }
@@ -475,16 +475,17 @@ QWidget *ScanParams::createScannerParams()
             }
 
             // Some special things to do for particular options
-            if (opt == SANE_NAME_BIT_DEPTH) {
+            if (opt == SANE_NAME_BIT_DEPTH)
+            {
                 connect(so, &KScanOption::guiChange, this, &ScanParams::slotNewScanMode);
-            } else if (opt == SANE_NAME_CUSTOM_GAMMA) {
-                // Enabling/disabling the edit button is handled by
-                // slotOptionChanged() calling setEditCustomGammaTableState()
-                //connect(so, SIGNAL(guiChange(KScanOption*)), SLOT(slotOptionNotify(KScanOption*)));
-
+            }
+            else if (opt == SANE_NAME_CUSTOM_GAMMA)
+            {
                 mGammaEditButt = new QPushButton(i18n("Edit Gamma Table..."), this);
                 mGammaEditButt->setIcon(QIcon::fromTheme("document-edit"));
                 connect(mGammaEditButt, &QPushButton::clicked, this, &ScanParams::slotEditCustGamma);
+                // Enabling/disabling the edit button is handled by
+                // slotOptionChanged() calling setEditCustomGammaTableState()
                 setEditCustomGammaTableState();
 
                 frame->addRow(nullptr, mGammaEditButt, nullptr, Qt::AlignRight);

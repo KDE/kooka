@@ -61,7 +61,7 @@ GammaDialog::GammaDialog(const KGammaTable *table, QWidget *parent)
     mSetBright = new KScanSlider(page, i18n("Brightness"));
     mSetBright->setRange(-50, 50);
     mSetBright->setValue(mTable->getBrightness());
-    connect(mSetBright, SIGNAL(settingChanged(int)), mTable, SLOT(setBrightness(int)));
+    connect(mSetBright, QOverload<int>::of(&KScanSlider::settingChanged), mTable, &KGammaTable::setBrightness);
     QLabel *l = new QLabel(mSetBright->label(), page);
     l->setBuddy(mSetBright);
     gl->setRowMinimumHeight(0, verticalSpacing());
@@ -71,7 +71,7 @@ GammaDialog::GammaDialog(const KGammaTable *table, QWidget *parent)
     mSetContrast = new KScanSlider(page, i18n("Contrast"));
     mSetContrast->setRange(-50, 50);
     mSetContrast->setValue(mTable->getContrast());
-    connect(mSetContrast, SIGNAL(settingChanged(int)), mTable, SLOT(setContrast(int)));
+    connect(mSetContrast, QOverload<int>::of(&KScanSlider::settingChanged), mTable, &KGammaTable::setContrast);
     l = new QLabel(mSetContrast->label(), page);
     l->setBuddy(mSetContrast);
     gl->setRowMinimumHeight(2, verticalSpacing());
@@ -81,7 +81,7 @@ GammaDialog::GammaDialog(const KGammaTable *table, QWidget *parent)
     mSetGamma = new KScanSlider(page, i18n("Gamma"));
     mSetGamma->setRange(30, 300);
     mSetGamma->setValue(mTable->getGamma());
-    connect(mSetGamma, SIGNAL(settingChanged(int)), mTable, SLOT(setGamma(int)));
+    connect(mSetGamma, QOverload<int>::of(&KScanSlider::settingChanged), mTable, &KGammaTable::setGamma);
     l = new QLabel(mSetGamma->label(), page);
     l->setBuddy(mSetGamma);
     gl->setRowMinimumHeight(4, verticalSpacing());
@@ -105,8 +105,8 @@ GammaDialog::GammaDialog(const KGammaTable *table, QWidget *parent)
 //    gl->setColumnStretch(1, 1);
 
     setMainWidget(page);
-    connect(buttonBox()->button(QDialogButtonBox::Apply), SIGNAL(clicked()), SLOT(slotApply()));
-    connect(buttonBox()->button(QDialogButtonBox::Reset), SIGNAL(clicked()), SLOT(slotReset()));
+    connect(buttonBox()->button(QDialogButtonBox::Apply), &QAbstractButton::clicked, this, &GammaDialog::slotApply);
+    connect(buttonBox()->button(QDialogButtonBox::Reset), &QAbstractButton::clicked, this, &GammaDialog::slotReset);
 }
 
 

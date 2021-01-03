@@ -140,6 +140,13 @@ public slots:
      **/
     void slotStartScan();
 
+    /**
+     * A new scan area has been drawn on or auto-selected by the previewer.
+     *
+     * @param rect The new scan area.
+     **/
+    void slotNewPreviewRect(const QRect &rect);
+
 protected:
     /**
      * Create a widget (for example, a QLabel showing an appropriate message)
@@ -253,13 +260,6 @@ protected slots:
      * @see newCustomScanSize
      **/
     void slotScanSizeSelected(const QRect &rect);
-
-    /**
-     * A new scan area has been drawn on or auto-selected by the previewer.
-     *
-     * @param rect The new scan area.
-     **/
-    void slotNewPreviewRect(const QRect &rect);
 
 signals:
     /**
