@@ -208,7 +208,7 @@ KookaView::KookaView(KMainWindow *parent, const QByteArray &deviceToUse)
     }
 
     // Connections ImageCanvas --> myself
-    connect(mImageCanvas, SIGNAL(newRect(QRect)), SLOT(slotSelectionChanged(QRect)));
+    connect(mImageCanvas, QOverload<const QRect &>::of(&ImageCanvas::newRect), this, &KookaView::slotSelectionChanged);
 
     /** Thumbnail View **/
     mThumbView = new ThumbView(this);
@@ -224,28 +224,20 @@ KookaView::KookaView(KMainWindow *parent, const QByteArray &deviceToUse)
     connect(packager, &ScanGallery::unloadImage, this, &KookaView::slotUnloadImage);
 
     // Connections ScanGallery --> ThumbView
-    connect(packager, SIGNAL(itemHighlighted(QUrl,bool)),
-            mThumbView, SLOT(slotHighlightItem(QUrl,bool)));
-    connect(packager, SIGNAL(imageChanged(const KFileItem*)),
-            mThumbView, SLOT(slotImageChanged(const KFileItem*)));
-    connect(packager, SIGNAL(fileRenamed(const KFileItem*,QString)),
-            mThumbView, SLOT(slotImageRenamed(const KFileItem*,QString)));
+    connect(packager, &ScanGallery::itemHighlighted, mThumbView, &ThumbView::slotHighlightItem);
+    connect(packager, &ScanGallery::imageChanged, mThumbView, &ThumbView::slotImageChanged);
+    connect(packager, &ScanGallery::fileRenamed, mThumbView, &ThumbView::slotImageRenamed);
 
     // Connections ThumbView --> ScanGallery
-    connect(mThumbView, SIGNAL(itemHighlighted(QUrl)),
-            packager, SLOT(slotHighlightItem(QUrl)));
-    connect(mThumbView, SIGNAL(itemActivated(QUrl)),
-            packager, SLOT(slotActivateItem(QUrl)));
+    connect(mThumbView, &ThumbView::itemHighlighted, packager, &ScanGallery::slotHighlightItem);
+    connect(mThumbView, &ThumbView::itemActivated, packager, &ScanGallery::slotActivateItem);
 
     GalleryHistory *recentFolder = mGallery->galleryRecent();
 
     // Connections ScanGallery <--> recent folder history
-    connect(packager, SIGNAL(galleryPathChanged(const FileTreeBranch*,QString)),
-            recentFolder, SLOT(slotPathChanged(const FileTreeBranch*,QString)));
-    connect(packager, SIGNAL(galleryDirectoryRemoved(const FileTreeBranch*,QString)),
-            recentFolder, SLOT(slotPathRemoved(const FileTreeBranch*,QString)));
-    connect(recentFolder, SIGNAL(pathSelected(QString,QString)),
-            packager, SLOT(slotSelectDirectory(QString,QString)));
+    connect(packager, &ScanGallery::galleryPathChanged, recentFolder, &GalleryHistory::slotPathChanged);
+    connect(packager, &ScanGallery::galleryDirectoryRemoved, recentFolder, &GalleryHistory::slotPathRemoved);
+    connect(recentFolder, &GalleryHistory::pathSelected, packager, &ScanGallery::slotSelectDirectory);
 
     /** Scanner Settings **/
 
@@ -260,15 +252,8 @@ KookaView::KookaView(KMainWindow *parent, const QByteArray &deviceToUse)
     mScanDevice = new KScanDevice(this);
 
     // Connections KScanDevice --> myself
-//    connect(mScanDevice, SIGNAL(sigScanFinished(KScanDevice::Status)), SLOT(slotPhotoCopyScan(KScanDevice::Status)));
-    // New image scanned, now save it
     connect(mScanDevice, &KScanDevice::sigNewImage, this, &KookaView::slotNewImageScanned);
-//    /* New image created after scanning now print it*/
-//    connect(mScanDevice, SIGNAL(sigNewImage(const QImage*,const ImageMetaInfo*)), SLOT(slotPhotoCopyPrint(const QImage*,const ImageMetaInfo*)));
-
-    // New preview image, display it
     connect(mScanDevice, &KScanDevice::sigNewPreview, this, &KookaView::slotNewPreview);
-    // Scan operation starting and ending
     connect(mScanDevice, &KScanDevice::sigScanStart, this, &KookaView::slotScanStart);
     connect(mScanDevice, &KScanDevice::sigAcquireStart, this, &KookaView::slotAcquireStart);
     connect(mScanDevice, &KScanDevice::sigScanFinished, this, &KookaView::slotScanFinished);
@@ -282,15 +267,14 @@ KookaView::KookaView(KMainWindow *parent, const QByteArray &deviceToUse)
     }
 
     // Connections Previewer --> myself
-    connect(mPreviewCanvas, SIGNAL(previewDimsChanged(QString)), SLOT(slotPreviewDimsChanged(QString)));
+    connect(mPreviewCanvas, &Previewer::previewDimsChanged, this, &KookaView::slotPreviewDimsChanged);
 
     /** Ocr Result Text **/
     mOcrResEdit  = new OcrResEdit(this);
     mOcrResEdit->setAcceptRichText(false);
     mOcrResEdit->setWordWrapMode(QTextOption::NoWrap);
     mOcrResEdit->setPlaceholderText(i18n("OCR results will appear here"));
-    connect(mOcrResEdit, SIGNAL(spellCheckStatus(QString)),
-            this, SIGNAL(changeStatus(QString)));
+    connect(mOcrResEdit, &OcrResEdit::spellCheckStatus, this, [this](const QString &msg){ changeStatus(msg); });
 
     /** Tabs **/
     // TODO: not sure which tab position is best, make this configurable
@@ -306,7 +290,7 @@ KookaView::KookaView(KMainWindow *parent, const QByteArray &deviceToUse)
     mOcrPage = new WidgetSplitter(Qt::Vertical, this);
     addTab(mOcrPage, QIcon::fromTheme("ocr"), i18n("OCR"));
 
-    connect(this, SIGNAL(currentChanged(int)), SLOT(slotTabChanged(int)));
+    connect(this, &QTabWidget::currentChanged, this, &KookaView::slotTabChanged);
 
     // TODO: make the splitter layouts and sizes configurable
 
@@ -464,8 +448,8 @@ bool KookaView::slotSelectDevice(const QByteArray &useDevice, bool alwaysAsk)
     }
 
     mScanParams = new KookaScanParams(this);        // and create a new one
-    connect(mScanParams, SIGNAL(actionSelectScanner()), SLOT(slotSelectDevice()));
-    connect(mScanParams, SIGNAL(actionAddScanner()), SLOT(slotAddDevice()));
+    connect(mScanParams, &KookaScanParams::actionSelectScanner, this, [this](){ slotSelectDevice(); });
+    connect(mScanParams, &KookaScanParams::actionAddScanner, this, &KookaView::slotAddDevice);
 
     mParamsSite->setWidget(mScanParams);
 
@@ -502,16 +486,12 @@ bool KookaView::slotSelectDevice(const QByteArray &useDevice, bool alwaysAsk)
             mPreviewCanvas->setScannerBedSize(s.width(), s.height());
 
             // Connections ScanParams --> Previewer
-            connect(mScanParams, SIGNAL(scanResolutionChanged(int,int)),
-                    mPreviewCanvas, SLOT(slotNewScanResolutions(int,int)));
-            connect(mScanParams, SIGNAL(scanModeChanged(int)),
-                    mPreviewCanvas, SLOT(slotNewScanMode(int)));
-            connect(mScanParams, SIGNAL(newCustomScanSize(QRect)),
-                    mPreviewCanvas, SLOT(slotNewCustomScanSize(QRect)));
+            connect(mScanParams, &ScanParams::scanResolutionChanged, mPreviewCanvas, &Previewer::slotNewScanResolutions);
+            connect(mScanParams, &ScanParams::scanModeChanged, mPreviewCanvas, &Previewer::slotNewScanMode);
+            connect(mScanParams, &ScanParams::newCustomScanSize, mPreviewCanvas, &Previewer::slotNewCustomScanSize);
 
             // Connections Previewer --> ScanParams
-            connect(mPreviewCanvas, SIGNAL(newPreviewRect(QRect)),
-                    mScanParams, SLOT(slotNewPreviewRect(QRect)));
+            connect(mPreviewCanvas, &Previewer::newPreviewRect, mScanParams, &ScanParams::slotNewPreviewRect);
 
             mScanParams->connectDevice(mScanDevice);    // create scanning options
 
@@ -957,10 +937,10 @@ void KookaView::slotTransformImage()
     if (imageFile.isEmpty()) return;			// get file to save back to
     gallery()->slotUnloadItems();			// unload original from memory
 
-    QThread *transformer = new ImageTransform(img, op, imageFile, this);
-    connect(transformer, SIGNAL(done(QUrl)), gallery(), SLOT(slotUpdatedItem(QUrl)));
-    connect(transformer, SIGNAL(statusMessage(QString)), SIGNAL(changeStatus(QString)));
-    connect(transformer, SIGNAL(finished()), transformer, SLOT(deleteLater()));
+    ImageTransform *transformer = new ImageTransform(img, op, imageFile, this);
+    connect(transformer, &ImageTransform::done, gallery(), &ScanGallery::slotUpdatedItem);
+    connect(transformer, &ImageTransform::statusMessage, this, [this](const QString &msg){ changeStatus(msg); });
+    connect(transformer, &QThread::finished, transformer, &QObject::deleteLater);
     transformer->start();
 }
 

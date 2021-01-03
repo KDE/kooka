@@ -70,7 +70,7 @@ AutoSelectBar::AutoSelectBar(int initialValue, QWidget *parent)
     mThresholdSlider->setToolTip(item->toolTip());
     l->setBuddy(mThresholdSlider);
 
-    connect(mThresholdSlider, SIGNAL(settingChanged(int)), SLOT(slotThresholdChanged(int)));
+    connect(mThresholdSlider, QOverload<int>::of(&KScanSlider::settingChanged), this, &AutoSelectBar::slotThresholdChanged);
     hbl->addWidget(mThresholdSlider);
     hbl->setStretchFactor(mThresholdSlider, 1);
 
@@ -88,14 +88,14 @@ AutoSelectBar::AutoSelectBar(int initialValue, QWidget *parent)
     QToolButton *but = new QToolButton;
     but->setIcon(QIcon::fromTheme("view-refresh"));
     but->setToolTip(i18nc("@info:tooltip", "Perform the auto-detection again"));
-    connect(but, SIGNAL(clicked()), SIGNAL(performSelection()));
+    connect(but, &QAbstractButton::clicked, this, &AutoSelectBar::performSelection);
     hbl->addWidget(but);
 
     // Advanced settings button
     but = new QToolButton;
     but->setIcon(QIcon::fromTheme("configure"));
     but->setToolTip(i18nc("@info:tooltip", "Advanced settings for auto-detection"));
-    connect(but, SIGNAL(clicked()), SLOT(slotShowSettings()));
+    connect(but, &QAbstractButton::clicked, this, &AutoSelectBar::slotShowSettings);
     hbl->addWidget(but);
 
     setLayout(hbl);
@@ -103,9 +103,6 @@ AutoSelectBar::AutoSelectBar(int initialValue, QWidget *parent)
     slotThresholdChanged(mThresholdSlider->value());    // update the colour patch
 }
 
-AutoSelectBar::~AutoSelectBar()
-{
-}
 
 void AutoSelectBar::slotThresholdChanged(int value)
 {
@@ -124,8 +121,8 @@ void AutoSelectBar::slotShowSettings()
 {
     AutoSelectDialog *d = new AutoSelectDialog(this);
     d->setSettings(mMargin, mBgIsWhite, mDustsize);
-    connect(d, SIGNAL(settingsChanged(int,bool,int)), SLOT(setAdvancedSettings(int,bool,int)));
-    connect(d, SIGNAL(settingsChanged(int,bool,int)), SIGNAL(advancedSettingsChanged(int,bool,int)));
+    connect(d, &AutoSelectDialog::settingsChanged, this, &AutoSelectBar::setAdvancedSettings);
+    connect(d, &AutoSelectDialog::settingsChanged, this, &AutoSelectBar::advancedSettingsChanged);
     d->show();
 }
 

@@ -70,7 +70,7 @@ AutoSelectDialog::AutoSelectDialog(QWidget *parent)
     mMarginSlider = new KScanSlider(nullptr, QString(), true);
     mMarginSlider->setRange(minVal, maxVal, -1, defaultVal);
     mMarginSlider->setToolTip(item->toolTip());
-    connect(mMarginSlider, SIGNAL(settingChanged(int)), SLOT(slotControlChanged()));
+    connect(mMarginSlider, QOverload<int>::of(&KScanSlider::settingChanged), this, &AutoSelectDialog::slotControlChanged);
     fl->addRow(item->label(), mMarginSlider);
 
     fl->addItem(new QSpacerItem(1, verticalSpacing()));
@@ -82,7 +82,7 @@ AutoSelectDialog::AutoSelectDialog(QWidget *parent)
     mBackgroundCombo->insertItem(INDEX_BLACK, i18n("Black"));
     mBackgroundCombo->insertItem(INDEX_WHITE, i18n("White"));
     mBackgroundCombo->setToolTip(item->toolTip());
-    connect(mBackgroundCombo, SIGNAL(currentIndexChanged(int)), SLOT(slotControlChanged()));
+    connect(mBackgroundCombo, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &AutoSelectDialog::slotControlChanged);
     fl->addRow(item->label(), mBackgroundCombo);
 
     // slider for dust size - apparently not really much impact on the result
@@ -95,13 +95,13 @@ AutoSelectDialog::AutoSelectDialog(QWidget *parent)
     mDustsizeSlider = new KScanSlider(nullptr, QString(), true);
     mDustsizeSlider->setRange(minVal, maxVal, -1, defaultVal);
     mDustsizeSlider->setToolTip(item->toolTip());
-    connect(mDustsizeSlider, SIGNAL(settingChanged(int)), SLOT(slotControlChanged()));
+    connect(mDustsizeSlider, QOverload<int>::of(&KScanSlider::settingChanged), this, &AutoSelectDialog::slotControlChanged);
     fl->addRow(item->label(), mDustsizeSlider);
 
     setMainWidget(w);
 
-    connect(buttonBox()->button(QDialogButtonBox::Apply), SIGNAL(clicked()), SLOT(slotApplySettings()));
-    connect(buttonBox()->button(QDialogButtonBox::Ok), SIGNAL(clicked()), SLOT(slotApplySettings()));
+    connect(buttonBox()->button(QDialogButtonBox::Apply), &QAbstractButton::clicked, this, &AutoSelectDialog::slotApplySettings);
+    connect(buttonBox()->button(QDialogButtonBox::Ok), &QAbstractButton::clicked, this, &AutoSelectDialog::slotApplySettings);
     buttonBox()->button(QDialogButtonBox::Apply)->setEnabled(false);
 }
 

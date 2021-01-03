@@ -46,7 +46,7 @@ GammaWidget::GammaWidget(KGammaTable *table, QWidget *parent)
     : QWidget(parent)
 {
     mTable = table;
-    connect(mTable, SIGNAL(tableChanged()), SLOT(repaint()));
+    connect(mTable, &KGammaTable::tableChanged, this, QOverload<>::of(&QWidget::repaint));
 
     QSizePolicy pol(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
     setSizePolicy(pol);

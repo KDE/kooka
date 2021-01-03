@@ -72,12 +72,12 @@ Previewer::Previewer(QWidget *parent)
     vbl->addWidget(mCanvas);
 
     /*Signals: Control the custom-field and show size of selection */
-    connect(mCanvas, SIGNAL(newRect(QRectF)), SLOT(slotNewAreaSelected(QRectF)));
+    connect(mCanvas, QOverload<const QRectF &>::of(&ImageCanvas::newRect), this, &Previewer::slotNewAreaSelected);
 
     mAutoSelectBar = new AutoSelectBar(mAutoSelThresh, this);
-    connect(mAutoSelectBar, SIGNAL(thresholdChanged(int)), SLOT(slotSetAutoSelThresh(int)));
-    connect(mAutoSelectBar, SIGNAL(advancedSettingsChanged(int,bool,int)), SLOT(slotAutoSelectSettingsChanged(int,bool,int)));
-    connect(mAutoSelectBar, SIGNAL(performSelection()), SLOT(slotFindAutoSelection()));
+    connect(mAutoSelectBar, &AutoSelectBar::thresholdChanged, this, &Previewer::slotSetAutoSelThresh);
+    connect(mAutoSelectBar, &AutoSelectBar::advancedSettingsChanged, this, &Previewer::slotAutoSelectSettingsChanged);
+    connect(mAutoSelectBar, &AutoSelectBar::performSelection, this, &Previewer::slotFindAutoSelection);
     vbl->addWidget(mAutoSelectBar);
 
     mScanResX = -1;

@@ -78,22 +78,26 @@ public slots:
     void slotSelectDirectory(const QString &branchName, const QString &relPath);
     void slotUnloadItems();
 
+    void slotHighlightItem(const QUrl &url);
+    void slotActivateItem(const QUrl &url);
+    void slotUpdatedItem(const QUrl &url);
+
+    void slotCreateFolder();
+    void slotDeleteItems();
+    void slotRenameItems();
+    void slotItemProperties();
+
 protected:
     // TODO: port D&D
     //virtual void contentsDragMoveEvent( QDragMoveEvent *ev);
-
     void contextMenuEvent(QContextMenuEvent *ev) override;
 
 protected slots:
     void slotImageArrived(FileTreeViewItem *item, ScanImage::Ptr img);
-    void slotCreateFolder();
-    void slotDeleteItems();
-    void slotRenameItems();
     void slotUnloadItem(FileTreeViewItem *curr);
     void slotDirCount(FileTreeViewItem *item, int cnt);
     void slotStartupFinished(FileTreeViewItem *item);
     void slotItemExpanded(QTreeWidgetItem *item);
-    void slotItemProperties();
 
     void slotUrlsDropped(QDropEvent *ev, FileTreeViewItem *item);
     void slotJobResult(KJob *job);
@@ -104,9 +108,6 @@ protected slots:
 
     void slotItemHighlighted(QTreeWidgetItem *curr = nullptr);
     void slotItemActivated(QTreeWidgetItem *curr);
-    void slotHighlightItem(const QUrl &url);
-    void slotActivateItem(const QUrl &url);
-    void slotUpdatedItem(const QUrl &url);
 
 signals:
     void aboutToShowImage(const QUrl &url);

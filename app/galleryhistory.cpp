@@ -40,7 +40,7 @@
 GalleryHistory::GalleryHistory(QWidget *parent)
     : KComboBox(parent)
 {
-    connect(this, SIGNAL(activated(int)), SLOT(slotActivated(int)));
+    connect(this, QOverload<int>::of(&QComboBox::activated), this, &GalleryHistory::slotActivated);
     setEnabled(false);                  // no items added yet
 }
 

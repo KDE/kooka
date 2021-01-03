@@ -288,10 +288,8 @@ void AbstractOcrDialogue::setupSpellPage()
     gl1->addWidget(m_rbCustomSpellSettings, 1, 0);
     m_pbCustomSpellDialog = new QPushButton(i18n("Custom Spell Configuration..."), w);
     gl1->addWidget(m_pbCustomSpellDialog, 2, 0, Qt::AlignRight);
-    connect(m_rbCustomSpellSettings, SIGNAL(toggled(bool)),
-            m_pbCustomSpellDialog, SLOT(setEnabled(bool)));
-    connect(m_pbCustomSpellDialog, SIGNAL(clicked()),
-            SLOT(slotCustomSpellDialog()));
+    connect(m_rbCustomSpellSettings, &QAbstractButton::toggled, m_pbCustomSpellDialog, &QWidget::setEnabled);
+    connect(m_pbCustomSpellDialog, &QAbstractButton::clicked, this, &AbstractOcrDialogue::slotCustomSpellDialog);
     gl->addWidget(m_gbBackgroundCheck, 0, 0);
 
     // row 1: space
@@ -417,8 +415,7 @@ void AbstractOcrDialogue::introduceImage(ScanImage::Ptr img)
         KIO::PreviewJob *job = KIO::filePreview(fileItems, QSize(m_previewSize.width(), m_previewSize.height()));
         if (job!=nullptr) {
             job->setIgnoreMaximumSize();
-            connect(job, SIGNAL(gotPreview(KFileItem,QPixmap)),
-                    SLOT(slotGotPreview(KFileItem,QPixmap)));
+            connect(job, &KIO::PreviewJob::gotPreview, this, &AbstractOcrDialogue::slotGotPreview);
         }
     } else {                    // selection only in memory,
         // do the preview ourselves
