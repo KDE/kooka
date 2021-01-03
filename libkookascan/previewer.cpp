@@ -307,8 +307,9 @@ void Previewer::setAutoSelection(bool isOn)
     if (mScanDevice != nullptr) {
         const KConfigSkeletonItem *item = ScanSettings::self()->previewAutoselOnItem();
         mScanDevice->storeConfig<bool>(item, isOn);
-    }							// tell the GUI
-    QTimer::singleShot(0, this, SLOT(slotNotifyAutoSelectChanged()));
+    }
+							// tell the GUI
+    QTimer::singleShot(0, this, &Previewer::slotNotifyAutoSelectChanged);
 }
 
 /**
