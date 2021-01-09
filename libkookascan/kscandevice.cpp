@@ -790,7 +790,22 @@ KScanDevice::Status KScanDevice::acquireScan(const QString &filename)
         applyAllOptions(true);				// apply priority options
         applyAllOptions(false);				// apply non-priority options
 
-        // One of the Scan Resolution parameters should always exist
+        // Some scanners seem to forget the scan area options after certain
+        // other options have been applied (which means that they should be
+        // considered to be priority options or flagged as 'reload', but this
+        // is not always the case).  The area options do not get applied above
+        // because they will have already been applied (so their KScanOption's
+        // are clean) when the scan area is selected.  Ensure that they are
+        // applied after all other options.
+        //
+        // Seen with the HP OfficeJet 8610 via HPLIP.
+        KScanOption *opt;
+        opt = getOption(SANE_NAME_SCAN_TL_X, false); if (opt!=nullptr) opt->apply();
+        opt = getOption(SANE_NAME_SCAN_TL_Y, false); if (opt!=nullptr) opt->apply();
+        opt = getOption(SANE_NAME_SCAN_BR_X, false); if (opt!=nullptr) opt->apply();
+        opt = getOption(SANE_NAME_SCAN_BR_Y, false); if (opt!=nullptr) opt->apply();
+
+        // One of the Scan Resolution parameters should always exist.
         KScanOption *xres = getOption(SANE_NAME_SCAN_X_RESOLUTION, false);
         if (xres==nullptr) xres = getOption(SANE_NAME_SCAN_RESOLUTION, false);
         if (xres!=nullptr)
