@@ -34,6 +34,8 @@
 
 #include <qprinter.h>
 
+#include "kookacore_export.h"
+
 class QPainter;
 // For rigorousness, the image to be printed should be passed to us and
 // stored as a ScanImage::Ptr (a QSharedPointer to a ScanImage).  Unfortunately,
@@ -46,7 +48,7 @@ class QPainter;
 class QImage;
 
 
-class KookaPrint : public QPrinter
+class KOOKACORE_EXPORT KookaPrint : public QPrinter
 {
 public:
     explicit KookaPrint();
@@ -70,6 +72,8 @@ public:
     void printImage();
 
     void setImage(const QImage *img)			{ m_image = img; }
+    void setCopyMode(bool on);
+    bool isCopyMode() const				{ return (m_copyMode); }
 
     void setScaleOption(KookaPrint::ScaleOption opt)	{ m_scaleOption = opt; }
     KookaPrint::ScaleOption scaleOption() const		{ return (m_scaleOption); }
@@ -126,6 +130,8 @@ private:
     int mPrintLeftPix;
 
     int mPrintResolution;				// printer resolution
+
+    bool m_copyMode;
 };
 
 #endif							// KOOKAPRINT_H

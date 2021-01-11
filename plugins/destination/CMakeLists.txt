@@ -59,3 +59,4 @@ install(FILES kookadestinationplugin.desktop DESTINATION ${SERVICETYPES_INSTALL_
 add_subdirectory(gallery)
 add_subdirectory(application)
 add_subdirectory(clipboard)
+add_subdirectory(print)

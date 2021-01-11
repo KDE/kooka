@@ -3,8 +3,7 @@
  *  This file is part of Kooka, a scanning/OCR application using	*
  *  Qt <http://www.qt.io> and KDE Frameworks <http://www.kde.org>.	*
  *									*
- *  Copyright (C) 2003-2016 Klaas Freitag <freitag@suse.de>		*
- *                          Jonathan Marten <jjm@keelhaul.me.uk>	*
+ *  Copyright (C) 2020      Jonathan Marten <jjm@keelhaul.me.uk>	*
  *									*
  *  Kooka is free software; you can redistribute it and/or modify it	*
  *  under the terms of the GNU Library General Public License as	*
@@ -29,71 +28,34 @@
  *									*
  ************************************************************************/
 
-#ifndef IMGPRINTDIALOG_H
-#define IMGPRINTDIALOG_H
+#ifndef DESTINATIONPRINT_H
+#define DESTINATIONPRINT_H
 
-#include <qmap.h>
-#include <qcheckbox.h>
-#include <qwidget.h>
+#include "abstractdestination.h"
 
-#include "scanimage.h"
-
-#include "kookacore_export.h"
-
-class QLabel;
-class QButtonGroup;
 class QCheckBox;
-class QComboBox;
-class QLineEdit;
-class QSpinBox;
-class QTimer;
-
 class KookaPrint;
 
 
-class KOOKACORE_EXPORT ImgPrintDialog : public QWidget
+class DestinationPrint : public AbstractDestination
 {
     Q_OBJECT
 
 public:
-    explicit ImgPrintDialog(ScanImage::Ptr img, KookaPrint *prt, QWidget *pnt = nullptr);
-    virtual ~ImgPrintDialog() = default;
+    explicit DestinationPrint(QObject *pnt, const QVariantList &args);
+    ~DestinationPrint() override;
 
-    QString checkValid() const;
+    bool scanStarting(ScanImage::ImageType type) override;
+    void imageScanned(ScanImage::Ptr img) override;
+    void createGUI(ScanParamsPage *page) override;
 
-public slots:
-    void updatePrintParameters();
-
-protected slots:
-    void slotScaleChanged(int id);
-    void slotCustomWidthChanged(int);
-    void slotCustomHeightChanged(int);
-    void slotAdjustCustomSize();
+    KLocalizedString scanDestinationString() override;
+    void saveSettings() const override;
 
 private:
-    void initOptions();
-
-private:
-    QButtonGroup  *m_scaleRadios;
-
-    QSpinBox *m_sizeW;
-    QSpinBox *m_sizeH;
-    QSpinBox *m_dpi;
-
-    QCheckBox *m_psDraft;
-    QCheckBox *m_ratio;
-    QComboBox *m_cutsCombo;
-
-    QLineEdit *m_screenRes;
-
-    QLabel *mImageSize;
-    QLabel *mPrintArea;
-    QLabel *mImageArea;
-    QLabel *mPrintPages;
-
-    ScanImage::Ptr m_image;
-    QTimer *mUpdateTimer;
     KookaPrint *mPrinter;
+
+    QCheckBox *mImmediateCheck;
 };
 
-#endif							// IMGPRINTDIALOG_H
+#endif							// DESTINATIONPRINT_H

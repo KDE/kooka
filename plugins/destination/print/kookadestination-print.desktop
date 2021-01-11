@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Service
+X-KDE-ServiceTypes=Kooka/DestinationPlugin
+X-KDE-Library=kookadestinationprint
+X-KDE-PluginInfo-Name=destinationprint
+X-KDE-PluginInfo-License=GPL
+Icon=document-print
+
+Name=Print Image
+Name[x-test]=xxPrint Imagexx
+Comment=Print the scanned image

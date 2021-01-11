@@ -202,6 +202,8 @@ void buildMimeTypeList()
 
     QList<QByteArray> supportedFormats = QImageWriter::supportedImageFormats();
     qCDebug(LIBKOOKASCAN_LOG) << "have" << supportedFormats.count() << "image formats:" << supportedFormats;
+    // TODO: this list is never actually used, and some image formats map to
+    // MIME types which are not in this list.
     QList<QByteArray> supportedTypes = QImageWriter::supportedMimeTypes();
     qCDebug(LIBKOOKASCAN_LOG) << "have" << supportedTypes.count() << "mime types:" << supportedTypes;
 

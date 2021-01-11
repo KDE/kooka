@@ -695,7 +695,6 @@ void KookaView::print()
 
     imgTab.updatePrintParameters();			// set final printer options
     printer.printImage();				// print the image
-
 }
 
 

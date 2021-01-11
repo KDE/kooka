@@ -74,6 +74,7 @@ public:
      * there is no @p unit label then the @p wid widget spans columns 2 and 3.
      */
     void addRow(QLabel *lab, QWidget *wid, QLabel *unit = nullptr, Qt::Alignment align = Qt::Alignment());
+    // TODO: add an overload that takes a QString for the label
 
     /**
      * Add a full width widget to the page.

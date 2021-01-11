@@ -261,6 +261,12 @@ ImgPrintDialog::ImgPrintDialog(ScanImage::Ptr img, KookaPrint *prt, QWidget *pnt
 void ImgPrintDialog::initOptions()
 {
     KookaPrint::ScaleOption scale = mPrinter->scaleOption();
+    if (mPrinter->isCopyMode())
+    {
+        if (scale==KookaPrint::ScaleScreen) scale = KookaPrint::ScaleScan;
+        m_scaleRadios->button(KookaPrint::ScaleScreen)->setEnabled(false);
+        m_screenRes->setEnabled(false);
+    }
     m_scaleRadios->button(scale)->setChecked(true);
     slotScaleChanged(scale);
 

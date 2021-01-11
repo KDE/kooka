@@ -70,6 +70,7 @@ KookaPrint::KookaPrint()
 
     m_screenResolution = -1;				// set by caller
     m_scanResolution = -1;				// taken from image
+    m_copyMode = false;					// normal print mode
 }
 
 
@@ -247,14 +248,18 @@ void KookaPrint::printImage()
     qCDebug(KOOKA_LOG) << "starting";
     QGuiApplication::setOverrideCursor(Qt::WaitCursor);	// this may take some time
 
-    // Save the print parameters used
-    KookaSettings::setPrintScaleOption(m_scaleOption);
-    KookaSettings::setPrintPrintSize(m_printSize);
-    KookaSettings::setPrintMaintainAspect(m_maintainAspect);
-    KookaSettings::setPrintLowResDraft(m_lowResDraft);
-    KookaSettings::setPrintCutsOption(m_cutsOption);
-    KookaSettings::setPrintFileName(outputFileName());
-    KookaSettings::self()->save();
+    if (!m_copyMode)
+    {
+        // Save the print parameters used
+        KookaSettings::setPrintScaleOption(m_scaleOption);
+        KookaSettings::setPrintPrintSize(m_printSize);
+        KookaSettings::setPrintMaintainAspect(m_maintainAspect);
+        KookaSettings::setPrintLowResDraft(m_lowResDraft);
+        KookaSettings::setPrintCutsOption(m_cutsOption);
+        KookaSettings::setPrintFileName(outputFileName());
+        KookaSettings::self()->save();
+    }
+    else qCDebug(KOOKA_LOG) << "copy mode, not saving print parameters";
 
 #if 1
     // TODO: does this work?
@@ -506,4 +511,11 @@ void KookaPrint::drawCornerMarkers(QPainter *painter, const QRect &targetRect,
         if (!firstColumn && !lastRow) drawCutSign(painter, p, indx + maxCols - 1, Qt::BottomLeftCorner);
 #endif
     }
+}
+
+
+void KookaPrint::setCopyMode(bool on)
+{
+    qCDebug(KOOKA_LOG) << on;
+    m_copyMode = on;
 }

@@ -67,6 +67,8 @@ set(kookacore_SRCS
   imgsaver.cpp			# -> imagesaver
   formatdialog.cpp
   galleryroot.cpp
+  kookaprint.cpp
+  imgprintdialog.cpp
   ${kooka_LOG_SRCS}
 )
 kconfig_add_kcfg_files(kookacore_SRCS kookasettings.kcfgc)
@@ -98,8 +100,6 @@ set(kooka_SRCS
   galleryhistory.cpp
   kookagallery.cpp
   thumbview.cpp
-  kookaprint.cpp
-  imgprintdialog.cpp
   scanparamsdialog.cpp
   newscanparams.cpp		# -> newscaparamsdialog
   ocrresedit.cpp
