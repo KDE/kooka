@@ -130,15 +130,19 @@ ImageFormat ImageFormat::formatForMime(const QMimeType &mime)
 {
     if (!mime.isValid()) return (ImageFormat());
 
+#if QT_VERSION >= QT_VERSION_CHECK(5, 12, 0)
+    // This information can now be obtained directly.  The first format
+    // in the list always appears to be the image type corresponding to
+    // the MIME type's preferred suffix.
+    const QList<QByteArray> fmts = QImageReader::imageFormatsForMimeType(mime.name().toLocal8Bit());
+    if (!fmts.isEmpty()) return (ImageFormat(fmts.first()));
+#else
     // Before Qt 5.12 there was no official way to perform this operation;
     // that is, to find the Qt image format name corresponding to a MIME type.
     // So this does so by assuming that the format name is the first file
     // extension ("suffix") registered for that MIME type which is a
     // supported Qt image type.
-    //
-    // TODO: could now use QImageReader::imageFormatsForMimeType() in Qt 5.12
-
-    QStringList sufs = mime.suffixes();
+    const QStringList sufs = mime.suffixes();
     if (sufs.isEmpty()) return (ImageFormat());
 
     const QList<QByteArray> formats = QImageReader::supportedImageFormats();
@@ -147,6 +151,7 @@ ImageFormat ImageFormat::formatForMime(const QMimeType &mime)
         const QByteArray s = suf.toLocal8Bit();
         if (formats.contains(s.toLower())) return (ImageFormat(s));
     }
+#endif
 
 #ifdef HAVE_TIFF
     // Qt 5:  This can happen if only QtGui is installed, because TIFF support is
@@ -202,10 +207,6 @@ void buildMimeTypeList()
 
     QList<QByteArray> supportedFormats = QImageWriter::supportedImageFormats();
     qCDebug(LIBKOOKASCAN_LOG) << "have" << supportedFormats.count() << "image formats:" << supportedFormats;
-    // TODO: this list is never actually used, and some image formats map to
-    // MIME types which are not in this list.
-    QList<QByteArray> supportedTypes = QImageWriter::supportedMimeTypes();
-    qCDebug(LIBKOOKASCAN_LOG) << "have" << supportedTypes.count() << "mime types:" << supportedTypes;
 
     // Although the format list from standard Qt 5 (unlike Qt 4) does not
     // appear to contain any duplicates or mixed case, it is always possible
