@@ -89,9 +89,6 @@
 
 #include "imgprintdialog.h"
 #include "kookaprint.h"
-#ifndef KDE4
-#include "photocopyprintdialogpage.h"
-#endif
 
 
 // ---------------------------------------------------------------------------
@@ -197,8 +194,6 @@ KookaView::KookaView(KMainWindow *parent, const QByteArray &deviceToUse)
     mMainWindow = parent;
     mScanParams = nullptr;
     mCurrentTab = KookaView::TabNone;
-
-    mIsPhotoCopyMode = false;
 
     /** Image Viewer **/
     mImageCanvas = new ImageCanvas(this);
@@ -868,10 +863,6 @@ void KookaView::slotAcquireStart()
 
 void KookaView::slotNewImageScanned(ScanImage::Ptr img)
 {
-     if (mIsPhotoCopyMode) {
-         return;
-     }
-
     AbstractDestination *dest = (mScanParams!=nullptr) ? mScanParams->destinationPlugin() : nullptr;
     if (dest!=nullptr) dest->imageScanned(img);
     else qCWarning(KOOKA_LOG) << "No destination plugin";
@@ -1104,66 +1095,6 @@ void KookaView::slotAutoSelect(bool on)
     mPreviewCanvas->slotAutoSelToggled(on);
 }
 
-/* Slot called to start copying to printer */
-void KookaView::slotStartPhotoCopy()
-{
-    //qCDebug(KOOKA_LOG);
-
-#ifndef KDE4
-    if (mScanParams == 0) {
-        return;
-    }
-    mIsPhotoCopyMode = true;
-    mPhotoCopyPrinter = new KPrinter(true, QPrinter::HighResolution);
-//    mPhotoCopyPrinter->removeStandardPage( KPrinter::CopiesPage );
-    mPhotoCopyPrinter->setUsePrinterResolution(true);
-    mPhotoCopyPrinter->setOption(OPT_SCALING, "scan");
-    mPhotoCopyPrinter->setFullPage(true);
-    slotPhotoCopyScan(KScanDevice::Ok);
-#endif
-}
-
-void KookaView::slotPhotoCopyPrint(const QImage *img)
-{
-    //qCDebug(KOOKA_LOG);
-
-#ifndef KDE4
-    if (! mIsPhotoCopyMode) {
-        return;
-    }
-    ScanImage kooka_img = ScanImage(*img);
-    KookaPrint kookaprint(mPhotoCopyPrinter);
-    kookaprint.printImage(&kooka_img , 0);
-#endif
-
-}
-
-void KookaView::slotPhotoCopyScan(KScanDevice::Status status)
-{
-    //qCDebug(KOOKA_LOG);
-
-#ifndef KDE4
-    if (! mIsPhotoCopyMode) {
-        return;
-    }
-
-//    mPhotoCopyPrinter->addDialogPage( new PhotoCopyPrintDialogPage( mScanDevice ) );
-
-    KScanOption res(SANE_NAME_SCAN_RESOLUTION);
-    mPhotoCopyPrinter->setOption(OPT_SCAN_RES, res.get());
-    mPhotoCopyPrinter->setMargins(QSize(0, 0));
-    //qCDebug(KOOKA_LOG) << "Resolution" << res.get();
-
-//    mPhotoCopyPrinter->addDialogPage( new ImgPrintDialog( 0 ) );
-    if (mPhotoCopyPrinter->setup(0, "Photocopy")) {
-        Q_CHECK_PTR(mScanDevice);
-        mScanParams->slotStartScan();
-    } else {
-        mIsPhotoCopyMode = false;
-        delete mPhotoCopyPrinter;
-    }
-#endif
-}
 
 ScanGallery *KookaView::gallery() const
 {

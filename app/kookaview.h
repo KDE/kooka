@@ -45,7 +45,6 @@
 class QSplitter;
 class QUrl;
 
-class KPrinter;
 class QAction;
 class KMainWindow;
 class KActionMenu;
@@ -158,14 +157,10 @@ public slots:
     void slotScanStart(ScanImage::ImageType type);
     void slotScanFinished(KScanDevice::Status stat);
     void slotAcquireStart();
-    void slotStartPhotoCopy();
 
     void showOpenWithMenu(KActionMenu *menu);
 
 protected slots:
-    void slotPhotoCopyPrint(const QImage *img);
-    void slotPhotoCopyScan(KScanDevice::Status);
-
     void slotShowImage(ScanImage::Ptr img, bool isDir);
     void slotUnloadImage();
 
@@ -227,9 +222,6 @@ private:
     KScanDevice *mScanDevice;
 
     OcrResEdit *mOcrResEdit;
-
-    bool mIsPhotoCopyMode;
-    KPrinter *mPhotoCopyPrinter;
 
     KookaView::TabPage mCurrentTab;
 
