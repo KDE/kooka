@@ -80,8 +80,7 @@ void DestinationPrint::imageScanned(ScanImage::Ptr img)
 
     if (!mImmediateCheck->isChecked())			// want the print dialogue
     {
-        // TODO: need access to a widget parent from plugin
-        QPrintDialog d(mPrinter, nullptr);
+        QPrintDialog d(mPrinter, parentWidget());
         d.setWindowTitle(i18nc("@title:window", "Print Image"));
         d.setOptions(QAbstractPrintDialog::PrintToFile|QAbstractPrintDialog::PrintShowPageSize);
 
@@ -92,8 +91,7 @@ void DestinationPrint::imageScanned(ScanImage::Ptr img)
         QString msg = imgTab.checkValid();		// check that settings are valid
         if (!msg.isEmpty())				// if not, display error message
         {
-        // TODO: need access to a widget parent
-            KMessageBox::sorry(nullptr,
+            KMessageBox::sorry(parentWidget(),
                                i18nc("@info", "Invalid print options were specified:\n\n%1", msg),
                                i18nc("@title:window", "Cannot Print"));
             return;

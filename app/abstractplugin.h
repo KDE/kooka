@@ -63,16 +63,21 @@ class KOOKACORE_EXPORT AbstractPlugin : public QObject
 
 public:
     const AbstractPluginInfo *pluginInfo() const	{ return (mPluginInfo); }
+    void setParentWidget(QWidget *w)			{ mParentWidget = w; }
 
 protected:
     // Only subclasses can use these to create and destroy plugin objects.
     explicit AbstractPlugin(QObject *pnt);
     virtual ~AbstractPlugin();
 
+    QWidget *parentWidget() const			{ return (mParentWidget); }
+
 private:
     // Only the PluginManager can create, destroy and set information for plugins.
     friend class PluginManager;
     AbstractPluginInfo *mPluginInfo;
+
+    QWidget *mParentWidget;
 };
 
 #endif							// ABSTRACTPLUGIN_H

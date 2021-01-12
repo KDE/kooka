@@ -92,7 +92,7 @@ void DestinationApplication::imageScanned(ScanImage::Ptr img)
     // then prompt for a format.
     if (!fmt.isValid())
     {
-        FormatDialog fd(nullptr,			// parent
+        FormatDialog fd(parentWidget(),			// parent
                         img->imageType(),		// type
                         true,				// askForFormat
                         fmt,				// default format
@@ -142,7 +142,7 @@ void DestinationApplication::imageScanned(ScanImage::Ptr img)
     KIO::ApplicationLauncherJob *job = new KIO::ApplicationLauncherJob(service);
     job->setUrls(QList<QUrl>() << saveUrl);
     job->setRunFlags(KIO::ApplicationLauncherJob::DeleteTemporaryFiles);
-    job->setUiDelegate(new KIO::JobUiDelegate(KJobUiDelegate::AutoHandlingEnabled, nullptr));
+    job->setUiDelegate(new KIO::JobUiDelegate(KJobUiDelegate::AutoHandlingEnabled, parentWidget()));
     job->start();					// all done
 }
 

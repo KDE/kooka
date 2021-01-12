@@ -35,6 +35,7 @@ AbstractPlugin::AbstractPlugin(QObject *pnt)
     : QObject(pnt)
 {
     mPluginInfo = nullptr;
+    mParentWidget = nullptr;
 }
 
 

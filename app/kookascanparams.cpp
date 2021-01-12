@@ -152,14 +152,14 @@ void KookaScanParams::slotDestinationSelected(int idx)
     }
 
     mDestinationPlugin = qobject_cast<AbstractDestination *>(PluginManager::self()->loadPlugin(PluginManager::DestinationPlugin, destName));
-    //mDestinationPlugin=nullptr;
     if (mDestinationPlugin==nullptr)
     {
         mParamsPage->addRow(createErrorWidget(xi18nc("@info", "Unable to load plugin '%1'", destName)));
         return;
     }
 
-    mDestinationPlugin->createGUI(mParamsPage);		// add plugin's GUI widgets
+    mDestinationPlugin->setParentWidget(this);		// give it a widget for reference
+    mDestinationPlugin->createGUI(mParamsPage);		// create the plugin's GUI
 }
 
 
