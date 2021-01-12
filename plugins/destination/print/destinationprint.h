@@ -45,7 +45,6 @@ public:
     explicit DestinationPrint(QObject *pnt, const QVariantList &args);
     ~DestinationPrint() override;
 
-    bool scanStarting(ScanImage::ImageType type) override;
     void imageScanned(ScanImage::Ptr img) override;
     void createGUI(ScanParamsPage *page) override;
 

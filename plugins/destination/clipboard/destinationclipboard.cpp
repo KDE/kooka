@@ -49,12 +49,6 @@ DestinationClipboard::DestinationClipboard(QObject *pnt, const QVariantList &arg
 }
 
 
-bool DestinationClipboard::scanStarting(ScanImage::ImageType type)
-{
-    return (true);					// no preparation, can always start
-}
-
-
 void DestinationClipboard::imageScanned(ScanImage::Ptr img)
 {
     qCDebug(DESTINATION_LOG) << "received image size" << img->size();

@@ -61,12 +61,6 @@ DestinationPrint::~DestinationPrint()
 }
 
 
-bool DestinationPrint::scanStarting(ScanImage::ImageType type)
-{
-    return (true);					// no preparation, can always start
-}
-
-
 void DestinationPrint::imageScanned(ScanImage::Ptr img)
 {
     qCDebug(DESTINATION_LOG) << "received image size" << img->size();

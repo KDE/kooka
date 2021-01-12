@@ -63,12 +63,6 @@ DestinationApplication::DestinationApplication(QObject *pnt, const QVariantList 
 }
 
 
-bool DestinationApplication::scanStarting(ScanImage::ImageType type)
-{
-    return (true);					// no preparation, can always start
-}
-
-
 void DestinationApplication::imageScanned(ScanImage::Ptr img)
 {
     qCDebug(DESTINATION_LOG) << "received image size" << img->size() << "type" << img->imageType();

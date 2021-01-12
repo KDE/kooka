@@ -71,11 +71,15 @@ public:
      * to save or send the scan, then it should take account of the @p type
      * and should also honour the "ask before or after scan" setting.
      *
+     * The base class implementation ignores the image type and always
+     * returns @c true.  There is no need for a plugin which overrides
+     * this function to call the base class implementation.
+     *
      * @param type The type of the image that is about to be scanned.
      * @return @c true if the scan is to go ahead, or @c false if it
      * is to be cancelled.
      **/
-    virtual bool scanStarting(ScanImage::ImageType type) = 0;
+    virtual bool scanStarting(ScanImage::ImageType type)	{ return (true); }
 
     /**
      * Indicates that an image has been scanned.  The plugin should
