@@ -245,7 +245,7 @@ found:  qCDebug(DESTINATION_LOG) << "accept" << service->desktopEntryName() << "
     if (configuredApp=="") configuredIndex = mAppsCombo->count();
     mAppsCombo->addItem(QIcon::fromTheme("system-run"), i18n("Other..."));
     if (configuredIndex!=-1) mAppsCombo->setCurrentIndex(configuredIndex);
-    page->addRow(new QLabel(i18n("Application:"), page), mAppsCombo);
+    page->addRow(i18n("Application:"), mAppsCombo);
 
     // For the image format combo, again we do not yet know the format
     // of the scanned image.  Therefore the approach taken here, trying
@@ -281,7 +281,7 @@ found:  qCDebug(DESTINATION_LOG) << "accept" << service->desktopEntryName() << "
     if (configuredMime=="") configuredIndex = mFormatCombo->count();
     mFormatCombo->addItem(QIcon::fromTheme("system-run"), i18n("Other..."));
     if (configuredIndex!=-1) mFormatCombo->setCurrentIndex(configuredIndex);
-    page->addRow(new QLabel(i18n("Image format:"), page), mFormatCombo);
+    page->addRow(i18n("Image format:"), mFormatCombo);
 }
 
 

@@ -61,10 +61,10 @@ public:
     /**
      * Add a standard parameter row to the page.
      *
-     * @param lab    Label for the parameter, normally from KScanOption::getlabel()
+     * @param lab    Label for the parameter, normally from @c KScanOption::getLabel(),
      *               or @c nullptr for no label.
-     * @param wid    Scan control widget, normally from KScanOption::widget().
-     * @param unit   SANE unit label, normally from KScanOption::getUnit() or
+     * @param wid    Scan control widget, normally from @c KScanOption::widget().
+     * @param unit   SANE unit label, normally from @c KScanOption::getUnit(), or
      *               @c nullptr for no unit label.
      * @param align  Special alignment flags for layout row.
 
@@ -74,7 +74,19 @@ public:
      * there is no @p unit label then the @p wid widget spans columns 2 and 3.
      */
     void addRow(QLabel *lab, QWidget *wid, QLabel *unit = nullptr, Qt::Alignment align = Qt::Alignment());
-    // TODO: add an overload that takes a QString for the label
+
+    /**
+     * Add a standard parameter row to the page.
+     *
+     * @param lab    Label text for the parameter, or a null string for no label.
+     * @param wid    Scan control widget, normally from @c KScanOption::widget().
+     * @param unit   SANE unit label, normally from @c KScanOption::getUnit(), or
+     *               @c nullptr for no unit label.
+     * @param align  Special alignment flags for layout row.
+
+     * @see the previous overload for column and alignment information.
+     */
+    void addRow(const QString &lab, QWidget *wid, QLabel *unit = nullptr, Qt::Alignment align = Qt::Alignment());
 
     /**
      * Add a full width widget to the page.

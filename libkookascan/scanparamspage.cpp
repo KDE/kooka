@@ -99,6 +99,18 @@ void ScanParamsPage::addRow(QLabel *lab, QWidget *wid, QLabel *unit, Qt::Alignme
 }
 
 
+void ScanParamsPage::addRow(const QString &lab, QWidget *wid, QLabel *unit, Qt::Alignment align)
+{
+    QLabel *l = nullptr;
+    if (!lab.isEmpty())
+    {
+        l = new QLabel(lab, this);
+        l->setBuddy(wid);
+    }
+    addRow(l, wid, unit, align);
+}
+
+
 void ScanParamsPage::clearRow()
 {
     for (int c = 0; c<mLayout->columnCount(); ++c)

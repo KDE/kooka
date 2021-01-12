@@ -111,7 +111,7 @@ void KookaScanParams::createScanDestinationGUI(ScanParamsPage *frame)
 
     if (configuredIndex!=-1) mDestinationCombo->setCurrentIndex(configuredIndex);
     connect(mDestinationCombo, QOverload<int>::of(&QComboBox::activated), this, &KookaScanParams::slotDestinationSelected);
-    frame->addRow(new QLabel(i18n("Scan destination:"), frame), mDestinationCombo);
+    frame->addRow(i18n("Scan &destination:"), mDestinationCombo);
 
     mParamsPage = frame;
     mParamsRow = frame->currentRow();
