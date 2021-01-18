@@ -134,7 +134,7 @@ int main(int argc, char **argv)
 
 #ifdef HAVE_REVERSE_LOOKUP
         QString backfmt = "(none)";
-        QList<QByteArray> formats = QImageReader::imageFormatsForMimeType(mime.name());
+        QList<QByteArray> formats = QImageReader::imageFormatsForMimeType(mime.name().toLocal8Bit());
         int fcount = formats.count();			// get format from file name
         if (fcount>0)
         {
