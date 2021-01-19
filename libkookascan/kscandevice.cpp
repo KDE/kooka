@@ -1480,7 +1480,7 @@ bool KScanDevice::authenticate(QByteArray *retuser, QByteArray *retpass)
         qCDebug(LIBKOOKASCAN_LOG) << "asking for username/password";
 
         KPasswordDialog dlg(nullptr, KPasswordDialog::ShowKeepPassword|KPasswordDialog::ShowUsernameLine);
-        dlg.setPrompt(xi18nc("@info", "The scanner<nl/><emphasis strong=\"1\">%1</emphasis><nl/>requires authentication.", mScannerName.constData()));
+        dlg.setPrompt(xi18nc("@info", "The scanner<nl/><icode>%1</icode><nl/>requires authentication.", mScannerName.constData()));
         dlg.setWindowTitle(i18n("Scanner Authentication"));
 
         if (!user.isEmpty()) dlg.setUsername(user);

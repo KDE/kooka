@@ -214,7 +214,7 @@ bool ScanParams::connectDevice(KScanDevice *newScanDevice, bool galleryMode)
     // TOTO: port/update
     adf = ADF_OFF;
 #endif
-    QLabel *lab = new QLabel(xi18nc("@info", "<emphasis strong=\"1\">Scanner&nbsp;Settings</emphasis>"), this);
+    QLabel *lab = new QLabel(xi18nc("@info", "<title>Scanner&nbsp;Settings</title>"), this);
     lay->addWidget(lab, 0, 0, Qt::AlignLeft);
 
     mLed = new KLed(this);
@@ -626,7 +626,7 @@ QWidget *ScanParams::messageScannerNotSelected()
     {
         mNoScannerMessage = new KMessageWidget(
             xi18nc("@info",
-                   "<emphasis strong=\"1\">No scanner selected</emphasis>"
+                   "<title>No scanner selected</title>"
                    "<nl/><nl/>"
                    "Select a scanner device to perform scanning."));
 
@@ -646,7 +646,7 @@ QWidget *ScanParams::messageScannerProblem()
     {
         mProblemMessage = new KMessageWidget(
             xi18nc("@info",
-                   "<emphasis strong=\"1\">No scanner found, or unable to access it</emphasis>"
+                   "<title>No scanner found, or unable to access it</title>"
                    "<nl/><nl/>"
                    "There was a problem using the SANE (Scanner Access Now Easy) library to access "
                    "the scanner device.  There may be a problem with your SANE installation, or it "

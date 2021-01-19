@@ -53,7 +53,7 @@ AutoSelectBar::AutoSelectBar(int initialValue, QWidget *parent)
 
     QHBoxLayout *hbl = new QHBoxLayout;
 
-    QLabel *l = new QLabel(xi18nc("@info", "<emphasis strong=\"1\">Auto Select</emphasis>"));
+    QLabel *l = new QLabel(xi18nc("@info", "<subtitle>Auto Select</subtitle>"));
     hbl->addWidget(l);
 
     hbl->addSpacing(2*DialogBase::horizontalSpacing());

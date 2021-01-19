@@ -40,7 +40,7 @@ QWidget *KookaScanParams::messageScannerNotSelected()
     {
         mNoScannerMessage = new KMessageWidget(
             xi18nc("@info",
-                   "<emphasis strong=\"1\">Gallery Mode - No scanner selected</emphasis>"
+                   "<title>Gallery Mode - No scanner selected</title>"
                    "<nl/><nl/>"
                    "In this mode you can browse, manipulate and OCR images already in the gallery."
                    "<nl/><nl/>"
