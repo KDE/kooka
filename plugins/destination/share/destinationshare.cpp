@@ -146,8 +146,9 @@ void DestinationShare::createGUI(ScanParamsPage *page)
 
 KLocalizedString DestinationShare::scanDestinationString()
 {
-    // TODO: name the destination
-    return (ki18n("Sharing image"));
+    // Can't say "Sharing to..." or anything like that, because it
+    // looks clumsy when it says "Sharing to Send via Bluetooth".
+    return (kxi18n("<application>%1</application>").subs(mShareCombo->currentText()));
 }
 
 
