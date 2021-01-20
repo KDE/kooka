@@ -31,25 +31,18 @@
 #include "destinationapplication.h"
 
 #include <qmimetype.h>
-#include <qmimedatabase.h>
 #include <qcombobox.h>
 #include <qlabel.h>
-#include <qtemporaryfile.h>
-#include <qdir.h>
 
 #include <kpluginfactory.h>
 #include <kservice.h>
 #include <kservicetypetrader.h>
 #include <klocalizedstring.h>
-#include <kmessagebox.h>
 #include <kio/applicationlauncherjob.h>
 #include <kio/jobuidelegate.h>
 
 #include "scanparamspage.h"
-#include "imageformat.h"
-#include "formatdialog.h"
 #include "kookasettings.h"
-#include "scanimage.h"
 #include "destination_logging.h"
 
 
@@ -70,56 +63,10 @@ void DestinationApplication::imageScanned(ScanImage::Ptr img)
     const QString mimeName = mFormatCombo->currentData().toString();
     qCDebug(DESTINATION_LOG) << "app" << appService << "mime" << mimeName;
 
-    // Get a format to save the scanned image.  If a valid one is selected,
-    // the use that.  If "Other" is selected or the selected format is not
-    // valid for saving (this shouldn't happen), then use the FormatDialog
-    // to prompt for a format.
-    ImageFormat fmt("");
-    if (!mimeName.isEmpty())				// have selected a MIME type
-    {
-        QMimeDatabase db;				// get image format to use
-        fmt = ImageFormat::formatForMime(db.mimeTypeForName(mimeName));
-        if (!fmt.isValid()) qCWarning(DESTINATION_LOG) << "No MIME type or format for" << mimeName;
-    }
-
-    // If the format is "Other", or there was an error finding the MIME type,
-    // then prompt for a format.
-    if (!fmt.isValid())
-    {
-        FormatDialog fd(parentWidget(),			// parent
-                        img->imageType(),		// type
-                        true,				// askForFormat
-                        fmt,				// default format
-                        false,				// askForFilename
-                        QString());			// filename
-        if (!fd.exec()) return;				// dialogue cancelled
-        // TODO: check meaning of "Always use this format"
-        // not remembered (that done when called from ImgSaver)
-        // retrieve by fd.alwaysUseFormat()
-        // save format internally, pass to constructor above
-        fmt = fd.getFormat();
-    }
-
-    qCDebug(DESTINATION_LOG) << "format" << fmt << "ext" << fmt.extension();
+    ImageFormat fmt = getSaveFormat(mimeName, img);	// get format for saving image
     if (!fmt.isValid()) return;				// must have this now
-
-    // Save the image to a temporary file, in the format specified.
-    QTemporaryFile temp(QDir::tempPath()+"/"+QCoreApplication::applicationName()+"XXXXXX."+fmt.extension());
-    temp.setAutoRemove(false);
-    temp.open();
-    QUrl saveUrl = QUrl::fromLocalFile(temp.fileName());
-    temp.close();					// now have name, but do not remove
-    qCDebug(DESTINATION_LOG) << "save to" << saveUrl;	// temporary file location
-
-    ImgSaver saver;					// save the image
-    ImgSaver::ImageSaveStatus status = saver.saveImage(img, saveUrl, fmt);
-    if (status!=ImgSaver::SaveStatusOk)			// image save failed
-    {
-        KMessageBox::sorry(nullptr, xi18nc("@info", "Cannot save image file<nl/><filename>%1</filename><nl/>%2",
-                                           saveUrl.toDisplayString(), saver.errorString(status)));
-        temp.setAutoRemove(true);			// clean up temporary file
-        return;
-    }
+    const QUrl saveUrl = saveTempImage(fmt, img);	// save to temporary file
+    if (!saveUrl.isValid()) return;			// could not save image
 
     // Open the temporary file with the selected application service.
     // If the service is "Other" (appService is empty), or if there is
@@ -241,40 +188,10 @@ found:  qCDebug(DESTINATION_LOG) << "accept" << service->desktopEntryName() << "
     if (configuredIndex!=-1) mAppsCombo->setCurrentIndex(configuredIndex);
     page->addRow(i18n("Application:"), mAppsCombo);
 
-    // For the image format combo, again we do not yet know the format
-    // of the scanned image.  Therefore the approach taken here, trying
-    // to balance versatility against not confusing the user with a
-    // long list of obscure image file formats, is to offer a small
-    // predetermined list of popular formats in the combo, followed by
-    // an "Other..." option.  The last option uses the Save Assistant to
-    // select an image type (but without the option to enter the file name).
-    //
-    // It is the user's responsibility to make sure that the selected
-    // application accepts the selected format, so the explicit formats
-    // should be ones that are accepted by most common applications.
-    mFormatCombo = new QComboBox;
-
-
-    const QString configuredMime = KookaSettings::destinationApplicationMime();
-    configuredIndex = -1;
-
-    QMimeDatabase db;
-    for (const QString &mimeName : {"image/png",
-                                    "image/jpeg",
-                                    "image/tiff",
-                                    "image/x-eps",
-                                    "image/bmp"})
-    {
-        const QMimeType mimeType = db.mimeTypeForName(mimeName);
-        const ImageFormat fmt = ImageFormat::formatForMime(mimeType);
-        if (!fmt.isValid()) continue;			// this format not supported
-
-        if (mimeName==configuredMime) configuredIndex = mFormatCombo->count();
-        mFormatCombo->addItem(QIcon::fromTheme(mimeType.iconName()), mimeType.comment(), mimeType.name());
-    }
-    if (configuredMime=="") configuredIndex = mFormatCombo->count();
-    mFormatCombo->addItem(QIcon::fromTheme("system-run"), i18n("Other..."));
-    if (configuredIndex!=-1) mFormatCombo->setCurrentIndex(configuredIndex);
+    // The MIME types that can be selected for sending the image.
+    QStringList mimeTypes;
+    mimeTypes << "image/png" << "image/jpeg" << "image/tiff" << "image/x-eps" << "image/bmp";
+    mFormatCombo = createFormatCombo(mimeTypes, KookaSettings::destinationApplicationMime());
     page->addRow(i18n("Image format:"), mFormatCombo);
 }
 

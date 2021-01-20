@@ -32,16 +32,14 @@
 #ifndef ABSTRACTDESTINATION_H
 #define ABSTRACTDESTINATION_H
 
-#include <qobject.h>
-#include <qtextformat.h>
-#include <qprocess.h>
-
 #include <klocalizedstring.h>
 
-#include "scanimage.h"
 #include "abstractplugin.h"
+#include "scanimage.h"
+#include "imageformat.h"
 
 
+class QComboBox;
 class ScanGallery;
 class ScanParamsPage;
 
@@ -154,6 +152,44 @@ protected:
      * @see @c setScanGallery()
      **/
     ScanGallery *gallery() const				{ return (mGallery); }
+
+    /**
+     * Get a format to save the image, from the user specified MIME type.
+     *
+     * If a valid MIME type is selected, then use that.  If "Other" is
+     * selected or the selected format is not valid for saving, then use
+     * a @c FormatDialog to prompt for a format.
+     *
+     * @param mimeName The MIME type name.
+     * @param img The image which is to be saved,
+     * @return an @c ImageFormat for saving the image.
+     **/
+    ImageFormat getSaveFormat(const QString &mimeName, ScanImage::Ptr img);
+
+    /**
+     * Save a temporary image for sending to a destination.
+     *
+     * @param fmt The image format to save in.
+     * @param img The image which is to be saved,
+     * @return the URL of a temporary file, or a null URL if there was
+     * a problem saving the image. If the URL is valid then the temporary
+     * file will not be deleted even when the application exits, the
+     * caller must delete the file when it is no longer required.
+     **/
+    QUrl saveTempImage(const ImageFormat &fmt, ScanImage::Ptr img);
+
+    /**
+     * Create a combo box for selecting an image format.
+     *
+     * @param mimeTypes A list of MIME types to show in the combo box.
+     * @param configuredType The MIME type that is to be initially
+     * selected, or @c QString() if the "Other" option is to be selected.
+     * @return a combo box, with no parent widget assigned.  The caller may
+     * assign the combo box a parent or delete it when it is no longer required.
+     * @note The relevant MIME type is stored in the @c data(Qt::UserRole)
+     * of the combo box items, with a null string for "Other".
+     **/
+    QComboBox *createFormatCombo(const QStringList &mimeTypes, const QString &configuredType);
 
 private:
     ScanGallery *mGallery;

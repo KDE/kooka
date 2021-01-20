@@ -91,9 +91,8 @@ ImgSaver::ImgSaver(const QUrl &dir)
         m_saveDirectory = GalleryRoot::root();
         qCDebug(KOOKA_LOG) << "default directory" << m_saveDirectory;
     }
-
-    createDir(m_saveDirectory);				// ensure save location exists
 }
+
 
 QString extension(const QUrl &url)
 {

@@ -32,10 +32,12 @@
 #ifndef SCANIMAGE_H
 #define SCANIMAGE_H
 
-#include "kookascan_export.h"
-
 #include <qimage.h>
 #include <qurl.h>
+#include <qsharedpointer.h>
+
+#include "kookascan_export.h"
+
 
 /**
  * @short An image representing scanned results or loaded from the gallery.
