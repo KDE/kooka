@@ -53,6 +53,8 @@
 #include "kooka_logging.h"
 
 
+#if 0
+// This may come in useful one day if we ever support remote galleries.
 static void createDir(const QUrl &url)
 {
     qCDebug(KOOKA_LOG) << url;
@@ -76,6 +78,7 @@ static void createDir(const QUrl &url)
         }
     }
 }
+#endif
 
 
 // This was originally ImageMetaInfo::findImageType().
@@ -115,9 +118,8 @@ ImgSaver::ImgSaver(const QUrl &dir)
         m_saveDirectory = QUrl::fromLocalFile(KookaPref::galleryRoot());
         qCDebug(KOOKA_LOG) << "default directory" << m_saveDirectory;
     }
-
-    createDir(m_saveDirectory);				// ensure save location exists
 }
+
 
 QString extension(const QUrl &url)
 {
