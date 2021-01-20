@@ -21,6 +21,13 @@ project(kooka5)
 
 find_package(KF5 ${KF5_MIN_VERSION} REQUIRED COMPONENTS I18n CoreAddons WidgetsAddons)
 
+find_package(KF5Purpose ${KF5_MIN_VERSION})
+set_package_properties(KF5Purpose PROPERTIES
+    DESCRIPTION "A framework for services and actions integration"
+    PURPOSE "Required for the Share Scan plugin"
+    TYPE OPTIONAL
+)
+
 #########################################################################
 #									#
 #  Destination plugin base library					#
@@ -60,3 +67,7 @@ add_subdirectory(gallery)
 add_subdirectory(application)
 add_subdirectory(clipboard)
 add_subdirectory(print)
+
+if (KF5Purpose_FOUND)
+  add_subdirectory(share)
+endif (KF5Purpose_FOUND)

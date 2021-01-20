@@ -359,6 +359,13 @@
       <default>image/png</default>
     </entry>
 
+    <entry name="DestinationShareDest" key="ShareDest" type="String">
+    </entry>
+
+    <entry name="DestinationShareMime" key="ShareMime" type="String">
+      <default>image/png</default>
+    </entry>
+
   </group>
 
 

@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Service
+X-KDE-ServiceTypes=Kooka/DestinationPlugin
+X-KDE-Library=kookadestinationshare
+X-KDE-PluginInfo-Name=destinationshare
+X-KDE-PluginInfo-License=GPL
+Icon=document-share
+
+Name=Share Image
+Name[x-test]=xxShare Imagexx
+Comment=Share the scanned image
