@@ -69,6 +69,7 @@ private:
     QComboBox *mShareCombo;
     QComboBox *mFormatCombo;
 
+    QUrl mSaveUrl;
 };
 
 #endif							// DESTINATIONSHARE_H

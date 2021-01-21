@@ -32,6 +32,7 @@
 
 #include <qcombobox.h>
 #include <qjsonarray.h>
+#include <qprocess.h>
 
 #include <kpluginfactory.h>
 #include <klocalizedstring.h>
@@ -76,8 +77,8 @@ void DestinationShare::imageScanned(ScanImage::Ptr img)
 
     ImageFormat fmt = getSaveFormat(mimeName, img);	// get format for saving image
     if (!fmt.isValid()) return;				// must have this now
-    const QUrl saveUrl = saveTempImage(fmt, img);	// save to temporary file
-    if (!saveUrl.isValid()) return;			// could not save image
+    mSaveUrl = saveTempImage(fmt, img);			// save to temporary file
+    if (!mSaveUrl.isValid()) return;			// could not save image
 
     // Because we did not know the specific MIME type at the time, the
     // original menu and hence the share destination combo box will have
@@ -92,7 +93,7 @@ void DestinationShare::imageScanned(ScanImage::Ptr img)
     QJsonObject dataObject;
     dataObject.insert("mimeType", QJsonValue(mimeName));
     QJsonArray dataUrls;
-    dataUrls.append(saveUrl.url());
+    dataUrls.append(mSaveUrl.url());
     dataObject.insert("urls", dataUrls);
 
     mModel->setInputData(dataObject);			// set MIME type and URL
@@ -197,10 +198,10 @@ void DestinationShare::slotUpdateShareCombo()
 }
 
 
-// Based on the lambda in ShareFileItemAction::ShareFileItemAction()
-// The signal is emitted by purpose/src/widgets/JobDialog.qml
 void DestinationShare::slotShareFinished(const QJsonObject &output, int error, const QString &errorMessage)
 {
+    // Based on the lambda in ShareFileItemAction::ShareFileItemAction()
+    // The finished() signal is emitted by purpose/src/widgets/JobDialog.qml
     qCDebug(DESTINATION_LOG) << "error" << error << "output" << output;
     if (error==0 || error==KIO::ERR_USER_CANCELED)
     {
@@ -222,24 +223,31 @@ void DestinationShare::slotShareFinished(const QJsonObject &output, int error, c
     }
     else
     {
-        qWarning() << "job failed with error" << error << errorMessage << output;
+        qCWarning(DESTINATION_LOG) << "job failed with error" << error << errorMessage << output;
         KMessageBox::sorry(parentWidget(),
                            xi18nc("@info", "Cannot share the scanned image<nl/><nl/><message>%1</message>", errorMessage));
     }
 
-// TODO: the share job does not delete the temporary file, but it may need
-// it to be present until the share is complete.  Delete the temp file here,
-// calling libexec/kf5/kioexec with --tempfiles and '/bin/true %f' in a detached
-// process so that Kooka can exit even if waiting to delete the file.
-//
-// This will work even if the temporary file is placed in a subdirectory, because
-// kioexec does:
-//
-//            qDebug() << sleepSecs << "seconds have passed, deleting" << info.filePath();
-//            QFile(src).remove();
-//            // NOTE: this is not necessarily a temporary directory.
-//            if (QDir().rmdir(parentDir)) {
-//                qDebug() << "Removed empty parent directory" << parentDir;
-//            }
+    // The share job does not delete the temporary file, but it may need it to
+    // be present until the share is complete.  So as to be absolutely sure
+    // that the file stays around until needed, use the kioexec utility
+    // (normally used to open a remote file in an application that does not
+    // support KIO) to not do anything with the file but delete it after three
+    // minutes have passed.  Calling this in a detached process allows Kooka
+    // to exit cleanly even if waiting for that time delay.
+    //
+    // If the temporary file is in a subdirectory, then kioexec will also
+    // delete the containing directory if it is empty.
 
+    // from second test in kio/src/core/desktopexecparser.cpp
+    const QString kioexec = (LIBEXEC_DIR "/kioexec");
+    QStringList args;
+    args << "--tempfiles";					// delete temporary files
+    args << QStandardPaths::findExecutable("true")+" %f";	// do nothing with the file
+    args << mSaveUrl.url();					// temporary file shared
+
+    qCDebug(DESTINATION_LOG) << "running" << kioexec << args;
+    if (!QProcess::startDetached(kioexec, args)) qCWarning(DESTINATION_LOG) << "Cannot start detached process";
+
+    mSaveUrl.clear();					// have dealt with this now
 }
