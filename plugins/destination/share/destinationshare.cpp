@@ -120,8 +120,8 @@ void DestinationShare::imageScanned(ScanImage::Ptr img)
     Q_ASSERT(act!=nullptr);
     act->trigger();					// do the share action
 
-    // Nothing more to do now, the temporary file will get deleted
-    // in slotShareFinished().
+    // There is nothing more to do here, the temporary file will eventually
+    // be deleted in slotShareFinished().
 }
 
 
@@ -197,21 +197,34 @@ void DestinationShare::slotUpdateShareCombo()
 }
 
 
-// copied from lambda in ShareFileItemAction::ShareFileItemAction()
+// Based on the lambda in ShareFileItemAction::ShareFileItemAction()
+// The signal is emitted by purpose/src/widgets/JobDialog.qml
 void DestinationShare::slotShareFinished(const QJsonObject &output, int error, const QString &errorMessage)
 {
     qCDebug(DESTINATION_LOG) << "error" << error << "output" << output;
-        if (error == 0 || error == KIO::ERR_USER_CANCELED)
+    if (error==0 || error==KIO::ERR_USER_CANCELED)
     {
-        // TODO: report the URL (test case: Imgur)
-//        if (output.contains(QLatin1String("url")))
-//            QDesktopServices::openUrl(QUrl(output.value(QLatin1String("url")).toString()));
+        // Report the result URL if there is one in the share output.
+        // Test case for this is Imgur (no account/password needed).
+        if (output.contains(QLatin1String("url")))
+        {
+            QString url = output.value(QLatin1String("url")).toString();
+
+            // It may be more friendly to use a KMessageWidget (including
+            // a "Copy link" button) for this, but vertical space in the
+            // ScanParams area is already at a premium.
+            KMessageBox::information(parentWidget(),
+                                     xi18nc("@info", "The scan was shared to<nl/><link>%1</link>", url),
+                                     i18n("Scan Shared"),
+                                     QString(),
+                                     KMessageBox::Notify|KMessageBox::AllowLink);
+        }
     }
     else
     {
         qWarning() << "job failed with error" << error << errorMessage << output;
         KMessageBox::sorry(parentWidget(),
-                           xi18nc("@info", "Cannot share image<nl/><nl/><message>%1</message>", errorMessage));
+                           xi18nc("@info", "Cannot share the scanned image<nl/><nl/><message>%1</message>", errorMessage));
     }
 
 // TODO: the share job does not delete the temporary file, but it may need
