@@ -267,7 +267,7 @@ void ScanParamsDialog::slotDelete()
     QString name = item->text();
     qCDebug(KOOKA_LOG) << "set" << name;
     if (KMessageBox::warningContinueCancel(this,
-                                           xi18nc("@info", "Do you really want to delete the set <emphasis strong=\"1\">%1</emphasis>?", name),
+                                           xi18nc("@info", "Do you really want to delete the set <resource>%1</resource>?", name),
                                            i18n("Delete Scan Parameter Set"),
                                            KStandardGuiItem::del(),
                                            KStandardGuiItem::cancel(),

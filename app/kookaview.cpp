@@ -463,8 +463,8 @@ bool KookaView::slotSelectDevice(const QByteArray &useDevice, bool alwaysAsk)
                                      "and that SANE support for it is correctly configured."
                                      "<nl/><nl/>"
                                      "Trying to use scanner device: <icode>%3</icode><nl/>"
-                                     "libkookascan reported error: <emphasis>%2</emphasis><nl/>"
-                                     "SANE reported error: <emphasis>%1</emphasis>",
+                                     "libkookascan reported error: <message>%2</message><nl/>"
+                                     "SANE reported error: <message>%1</message>",
                                      mScanDevice->lastSaneErrorMessage(),
                                      KScanDevice::statusMessage(stat),
                                      selDevice.constData());
@@ -882,8 +882,8 @@ void KookaView::slotScanFinished(KScanDevice::Status stat)
                              "and that media is loaded if required."
                              "<nl/><nl/>"
                              "Trying to use scanner device: <icode>%3</icode><nl/>"
-                             "libkookascan reported error: <emphasis>%2</emphasis><nl/>"
-                             "SANE reported error: <emphasis>%1</emphasis>",
+                             "libkookascan reported error: <message>%2</message><nl/>"
+                             "SANE reported error: <message>%1</message>",
                              mScanDevice->lastSaneErrorMessage(),
                              KScanDevice::statusMessage(stat),
                              mScanDevice->scannerBackendName().constData());

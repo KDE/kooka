@@ -54,6 +54,8 @@
 #include "kooka_logging.h"
 
 
+#if 0
+// This may come in useful one day if we ever support remote galleries.
 static void createDir(const QUrl &url)
 {
     qCDebug(KOOKA_LOG) << url;
@@ -77,6 +79,7 @@ static void createDir(const QUrl &url)
         }
     }
 }
+#endif
 
 
 ImgSaver::ImgSaver(const QUrl &dir)
