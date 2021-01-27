@@ -48,7 +48,7 @@ public:
     void saveSettings() const override;
 
 private:
-    bool getSaveLocation();
+    bool getSaveLocation(ScanImage::ImageType type);
 
 private:
     QUrl mSaveUrl;

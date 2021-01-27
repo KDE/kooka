@@ -58,8 +58,8 @@ class KOOKACORE_EXPORT FormatDialog : public DialogBase
 
 public:
     explicit FormatDialog(QWidget *parent, ScanImage::ImageType type,
-                 bool askForFormat, const ImageFormat &format,
-                 bool askForFilename, const QString &filename);
+                          bool askForFormat, const ImageFormat &format,
+                          bool askForFilename, const QString &filename);
 
     ImageFormat getFormat() const;
     QByteArray getSubFormat() const;
@@ -68,6 +68,8 @@ public:
     bool useAssistant() const    			{ return mWantAssistant; }
 
     static void forgetRemembered();
+
+    static bool isCompatible(const QMimeType &mime, ScanImage::ImageType type, bool recOnly = true);
 
 protected:
     void showEvent(QShowEvent *ev) override;

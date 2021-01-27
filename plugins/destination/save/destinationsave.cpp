@@ -32,6 +32,7 @@
 
 #include <qfiledialog.h>
 #include <qmimetype.h>
+#include <qmimedatabase.h>
 
 #include <kpluginfactory.h>
 #include <klocalizedstring.h>
@@ -45,6 +46,7 @@
 #include "scanparamspage.h"
 #include "kookasettings.h"
 #include "imageformat.h"
+#include "formatdialog.h"
 #include "imgsaver.h"
 #include "destination_logging.h"
 
@@ -67,7 +69,7 @@ bool DestinationSave::scanStarting(ScanImage::ImageType type)
     // Honour the "Ask for filename before/after scan" setting
     if (KookaSettings::saverAskBeforeScan())
     {
-        if (!getSaveLocation()) return (false);
+        if (!getSaveLocation(type)) return (false);
     }
 
     return (true);
@@ -80,7 +82,7 @@ void DestinationSave::imageScanned(ScanImage::Ptr img)
 
     if (!mSaveUrl.isValid())				// if we didn't ask before,
     {							// then do it now
-        if (!getSaveLocation()) return;
+        if (!getSaveLocation(img->imageType())) return;
     }
     if (!mSaveUrl.isValid()) return;			// nowhere to save to
 
@@ -170,28 +172,45 @@ void DestinationSave::saveSettings() const
 }
 
 
-bool DestinationSave::getSaveLocation()
+bool DestinationSave::getSaveLocation(ScanImage::ImageType type)
 {
+    qCDebug(DESTINATION_LOG) << "for type" << type;
+
     // Using the non-static QFileDialog so as to be able to
     // set MIME type filters.
     QFileDialog dlg(parentWidget(), i18n("Save Scan"));
     dlg.setAcceptMode(QFileDialog::AcceptSave);
 
-    // TODO: if KookaSettings::saverOnlyRecommendedTypes() is set,
-    // ask FormatDialog whether the MIME type is recommended
-    // and ignore it if it is not
+    // Check whether to offer only recommended save formats for
+    // the image type.
+    const bool recOnly = KookaSettings::saverOnlyRecommendedTypes();
 
     QStringList filters;
     const QList<QMimeType> *mimeTypes = ImageFormat::mimeTypes();
     for (const QMimeType &mimeType : *mimeTypes)
     {
-        filters << mimeType.name();
+        ImageFormat fmt = ImageFormat::formatForMime(mimeType);
+        if (!fmt.isValid()) continue;			// format for that MIME type
+							// see if it should be used
+        if (!FormatDialog::isCompatible(mimeType, type, recOnly)) continue;
+        filters << mimeType.name();			// yes, add to filter list
     }
-    qDebug() << "filters" << filters;
+
+    // To allow the user to save to a format for which there may not
+    // be a filter entry, the "All files" type is added.  If this filter is
+    // selected when the dialogue completes, the applicable MIME type is
+    // deduced from the full save URL.
+    filters << "application/octet-stream";
+
     dlg.setMimeTypeFilters(filters);
 
     const QString saveMime = KookaSettings::destinationSaveMime();
-    if (!saveMime.isEmpty()) dlg.selectMimeTypeFilter(saveMime);
+    if (!saveMime.isEmpty())
+    {
+        if (filters.contains(saveMime)) dlg.selectMimeTypeFilter(saveMime);
+        else dlg.selectMimeTypeFilter(filters.last());
+    }
+
     const QUrl saveUrl = KookaSettings::destinationSaveDest();
     if (saveUrl.isValid()) dlg.setDirectoryUrl(saveUrl);
 
@@ -201,7 +220,27 @@ bool DestinationSave::getSaveLocation()
     if (urls.isEmpty()) return (false);
 
     mSaveUrl = urls.first();
+
     mSaveMime = dlg.selectedMimeTypeFilter();
+    // If the "All files" filter is selected, deduce the applicable MIME type
+    // from the save URL.
+    if (mSaveMime==filters.last())
+    {
+        QMimeDatabase db;
+        QMimeType mimeType = db.mimeTypeForUrl(mSaveUrl);
+        ImageFormat fmt = ImageFormat::formatForMime(mimeType);
+        if (!fmt.isValid())
+        {
+            KMessageBox::sorry(parentWidget(),
+                               xi18nc("@info", "Cannot save to <filename>%2</filename><nl/>The image format <resource>%1</resource> is not supported.",
+                                      mimeType.name(), mSaveUrl.toDisplayString()),
+                               i18n("Cannot Save Image"));
+            return (false);
+        }
+
+        mSaveMime = mimeType.name();			// use resolved MIME type
+    }
+
     qCDebug(DESTINATION_LOG) << "url" << mSaveUrl << "mime" << mSaveMime;
     return (true);
 }

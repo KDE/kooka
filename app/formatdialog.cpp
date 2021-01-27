@@ -448,7 +448,7 @@ void FormatDialog::formatSelected(QListWidgetItem *item)
     // Locate the help text for the format
     const char *helptxt = nullptr;
     const QByteArray mimename = item->data(Qt::UserRole).toByteArray();
-    for (FormatInfo *ip = &formats[0]; ip->mime!=nullptr; ++ip)
+    for (const FormatInfo *ip = &formats[0]; ip->mime!=nullptr; ++ip)
     {
         const QList<QByteArray> mimetypes = QByteArray(ip->mime).split(';');
         if (mimetypes.contains(mimename))
@@ -644,7 +644,7 @@ void FormatDialog::slotUser1()
     accept();
 }
 
-void FormatDialog::forgetRemembered()
+/* static */ void FormatDialog::forgetRemembered()
 {
     const KConfigSkeletonItem *ski = KookaSettings::self()->saverOnlyRecommendedTypesItem();
     Q_ASSERT(ski!=nullptr);
@@ -657,4 +657,20 @@ void FormatDialog::forgetRemembered()
 bool FormatDialog::alwaysUseFormat() const
 {
     return (mDontAskCheck != nullptr ? mDontAskCheck->isChecked() : false);
+}
+
+
+/* static */ bool FormatDialog::isCompatible(const QMimeType &mime, ScanImage::ImageType type, bool recOnly)
+{
+    //qCDebug(KOOKA_LOG) << "mime" << mime << "type" << type << "recOnly" << recOnly;
+    for (const FormatInfo *ip = &formats[0]; ip->mime!=nullptr; ++ip)
+    {							// scan the format descriptions
+        if (mime.inherits(ip->mime))			// found format for the MIME type
+        {
+            const ScanImage::ImageTypes types = (recOnly ? ip->recForTypes : ip->okForTypes);
+            return (types & type);			// check image type mask
+        }
+    }
+
+    return (false);
 }
