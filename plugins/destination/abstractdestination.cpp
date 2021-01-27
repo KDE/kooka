@@ -108,7 +108,7 @@ QUrl AbstractDestination::saveTempImage(const ImageFormat &fmt, ScanImage::Ptr i
     ImgSaver::ImageSaveStatus status = saver.saveImage(img, saveUrl, fmt);
     if (status!=ImgSaver::SaveStatusOk)			// image save failed
     {
-        KMessageBox::sorry(parentWidget(), xi18nc("@info", "Cannot save image file<nl/><filename>%1</filename><nl/>%2",
+        KMessageBox::sorry(parentWidget(), xi18nc("@info", "Cannot save temporary image file<nl/><filename>%1</filename><nl/><message>%2</message>",
                                                   saveUrl.toDisplayString(), saver.errorString(status)));
         temp.setAutoRemove(true);			// clean up temporary file
         return (QUrl());				// indicate could not save

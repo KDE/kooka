@@ -67,6 +67,7 @@ add_subdirectory(gallery)
 add_subdirectory(application)
 add_subdirectory(clipboard)
 add_subdirectory(print)
+add_subdirectory(save)
 
 if (KF5Purpose_FOUND)
   add_subdirectory(share)

@@ -366,8 +366,13 @@
       <default>image/png</default>
     </entry>
 
+    <entry name="DestinationSaveDest" key="SaveDest" type="Url">
+    </entry>
+
+    <entry name="DestinationSaveMime" key="SaveMime" type="String">
+      <default>image/png</default>
+    </entry>
+
   </group>
-
-
 
 </kcfg>
