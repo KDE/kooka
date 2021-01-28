@@ -28,35 +28,53 @@
  *									*
  ************************************************************************/
 
-#ifndef NEWSCANPARAMS_H
-#define NEWSCANPARAMS_H
+#ifndef SCANPRESETSDIALOG_H
+#define SCANPRESETSDIALOG_H
 
 #include <dialogbase.h>
 
-class QLineEdit;
+#include "kscanoptset.h"
+
+class QLabel;
+class QListWidget;
+class QListWidgetItem;
+
+class KScanDevice;
 
 
 /**
- *  A dialogue to allow the user to enter a name and description for
- *  a set of saved scan parameters.
- */
+ *  A dialogue to manage sets of saved scan parameters.
+ **/
 
-class NewScanParams : public DialogBase
+class ScanPresetsDialog : public DialogBase
 {
     Q_OBJECT
 
 public:
-    explicit NewScanParams(QWidget *parent, const QString &name, const QString &desc, bool renaming);
-
-    QString getName() const;
-    QString getDescription() const;
+    explicit ScanPresetsDialog(KScanDevice *scandev, QWidget *pnt = nullptr);
+    ~ScanPresetsDialog() override = default;
 
 protected slots:
-    void slotTextChanged();
+    void slotSelectionChanged();
+    void slotLoad();
+    void slotSave();
+    void slotDelete();
+    void slotEdit();
+    void slotLoadAndClose(QListWidgetItem *item);
 
 private:
-    QLineEdit *mNameEdit;
-    QLineEdit *mDescEdit;
+    void populateList();
+
+private:
+    QLabel *descLabel;
+    QListWidget *paramsList;
+    QPushButton *buttonLoad;
+    QPushButton *buttonSave;
+    QPushButton *buttonDelete;
+    QPushButton *buttonEdit;
+
+    KScanOptSet::StringMap sets;
+    KScanDevice *sane;
 };
 
-#endif                          // NEWSCANPARAMS_H
+#endif							// SCANPRESETSDIALOG_H

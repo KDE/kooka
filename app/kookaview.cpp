@@ -77,7 +77,7 @@
 #include "abstractocrengine.h"
 #include "pluginmanager.h"
 #include "ocrresedit.h"
-#include "scanparamsdialog.h"
+#include "scanpresetsdialog.h"
 #include "kookagallery.h"
 #include "kookascanparams.h"
 #include "scangallery.h"
@@ -952,12 +952,11 @@ void KookaView::slotSaveOcrResult()
     }
 }
 
+
 void KookaView::slotScanParams()
 {
-    if (mScanDevice == nullptr) {
-        return;    // must have a scanner device
-    }
-    ScanParamsDialog d(this, mScanDevice);
+    if (mScanDevice == nullptr) return;			// must have a scanner device
+    ScanPresetsDialog d(mScanDevice, this);
     d.exec();
 }
 

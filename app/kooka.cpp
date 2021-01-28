@@ -286,12 +286,7 @@ void Kooka::setupActions()
     actionCollection()->setDefaultShortcut(scanAction, Qt::Key_F4);
     connect(scanAction, &QAction::triggered, m_view, &KookaView::slotStartFinalScan);
 
-    photocopyAction = new QAction(QIcon::fromTheme("photocopy"), i18n("Photocopy..."), this);
-    actionCollection()->addAction("startPhotoCopy", photocopyAction);
-    actionCollection()->setDefaultShortcut(photocopyAction, Qt::CTRL + Qt::Key_F);
-    connect(photocopyAction, &QAction::triggered, m_view, &KookaView::slotStartPhotoCopy);
-
-    paramsAction = new QAction(QIcon::fromTheme("bookmark-new"), i18n("Scan Parameters..."), this);
+    paramsAction = new QAction(QIcon::fromTheme("bookmark-new"), i18n("Scan Presets..."), this);
     actionCollection()->addAction("scanparam", paramsAction);
     actionCollection()->setDefaultShortcut(paramsAction, Qt::CTRL + Qt::SHIFT + Qt::Key_S);
     connect(paramsAction, &QAction::triggered, m_view, &KookaView::slotScanParams);
@@ -401,7 +396,6 @@ void Kooka::slotUpdateScannerActions(bool haveConnection)
 
     scanAction->setEnabled(haveConnection);
     previewAction->setEnabled(haveConnection);
-    photocopyAction->setEnabled(haveConnection);
     paramsAction->setEnabled(haveConnection);
 
     if (!ScanGlobal::self()->available()) {

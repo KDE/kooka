@@ -97,10 +97,9 @@ set(kooka_SRCS
   thumbview.cpp
   kookaprint.cpp
   imgprintdialog.cpp
-  scanparamsdialog.cpp
-  newscanparams.cpp		# -> newscaparamsdialog
+  scanpresetsdialog.cpp
+  newscanpresetdialog.cpp
   ocrresedit.cpp
-  #QT5 photocopyprintdialogpage.cpp
   ${kooka_LOG_SRCS}
 )
 

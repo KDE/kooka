@@ -124,7 +124,6 @@ private:
 
     QAction *scanAction;
     QAction *previewAction;
-    QAction *photocopyAction;
     QAction *paramsAction;
     KToggleAction *autoselAction;
     QAction *ocrAction;
