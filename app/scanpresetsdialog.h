@@ -66,15 +66,15 @@ private:
     void populateList();
 
 private:
-    QLabel *descLabel;
-    QListWidget *paramsList;
-    QPushButton *buttonLoad;
-    QPushButton *buttonSave;
-    QPushButton *buttonDelete;
-    QPushButton *buttonEdit;
+    QLabel *mDescLabel;
+    QListWidget *mParamsList;
+    QPushButton *mLoadButton;
+    QPushButton *mSaveButton;
+    QPushButton *mDeleteButton;
+    QPushButton *mEditButton;
 
-    KScanOptSet::StringMap sets;
-    KScanDevice *sane;
+    KScanOptSet::StringMap mSets;
+    KScanDevice *mScanDevice;
 };
 
 #endif							// SCANPRESETSDIALOG_H

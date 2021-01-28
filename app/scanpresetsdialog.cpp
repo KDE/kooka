@@ -64,41 +64,41 @@ ScanPresetsDialog::ScanPresetsDialog(KScanDevice *scandev, QWidget *pnt)
     QWidget *w = new QWidget(this);
     QGridLayout *gl = new QGridLayout(w);
 
-    paramsList = new QListWidget(w);
-    paramsList->setSelectionMode(QAbstractItemView::SingleSelection);
-    paramsList->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
-    paramsList->setMinimumWidth(200);
-    connect(paramsList, &QListWidget::itemSelectionChanged, this, &ScanPresetsDialog::slotSelectionChanged);
-    connect(paramsList, &QListWidget::itemDoubleClicked, this, &ScanPresetsDialog::slotLoadAndClose);
-    gl->addWidget(paramsList, 1, 0, 5, 1);
+    mParamsList = new QListWidget(w);
+    mParamsList->setSelectionMode(QAbstractItemView::SingleSelection);
+    mParamsList->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+    mParamsList->setMinimumWidth(200);
+    connect(mParamsList, &QListWidget::itemSelectionChanged, this, &ScanPresetsDialog::slotSelectionChanged);
+    connect(mParamsList, &QListWidget::itemDoubleClicked, this, &ScanPresetsDialog::slotLoadAndClose);
+    gl->addWidget(mParamsList, 1, 0, 5, 1);
 
     QLabel *l = new QLabel(i18n("Saved scan preset sets:"), w);
     gl->addWidget(l, 0, 0, Qt::AlignLeft);
-    l->setBuddy(paramsList);
+    l->setBuddy(mParamsList);
 
-    buttonLoad = new QPushButton(i18n("Select"), w);
-    buttonLoad->setIcon(QIcon::fromTheme("dialog-ok-apply"));
-    buttonLoad->setToolTip(i18n("Load the selected scan preset set to use as scanner settings"));
-    connect(buttonLoad, &QPushButton::clicked, this, &ScanPresetsDialog::slotLoad);
-    gl->addWidget(buttonLoad, 1, 2);
+    mLoadButton = new QPushButton(i18n("Select"), w);
+    mLoadButton->setIcon(QIcon::fromTheme("dialog-ok-apply"));
+    mLoadButton->setToolTip(i18n("Load the selected scan preset set to use as scanner settings"));
+    connect(mLoadButton, &QPushButton::clicked, this, &ScanPresetsDialog::slotLoad);
+    gl->addWidget(mLoadButton, 1, 2);
 
-    buttonSave = new QPushButton(i18n("Save..."), w);
-    buttonSave->setIcon(QIcon::fromTheme("bookmark-new"));
-    buttonSave->setToolTip(i18n("Save the current scanner settings as a new scan preset set"));
-    connect(buttonSave, &QPushButton::clicked, this, &ScanPresetsDialog::slotSave);
-    gl->addWidget(buttonSave, 2, 2);
+    mSaveButton = new QPushButton(i18n("Save..."), w);
+    mSaveButton->setIcon(QIcon::fromTheme("bookmark-new"));
+    mSaveButton->setToolTip(i18n("Save the current scanner settings as a new scan preset set"));
+    connect(mSaveButton, &QPushButton::clicked, this, &ScanPresetsDialog::slotSave);
+    gl->addWidget(mSaveButton, 2, 2);
 
-    buttonDelete = new QPushButton(w);
-    KGuiItem::assign(buttonDelete, KStandardGuiItem::del());
-    buttonDelete->setToolTip(i18n("Delete the selected scan preset set"));
-    connect(buttonDelete, &QPushButton::clicked, this, &ScanPresetsDialog::slotDelete);
-    gl->addWidget(buttonDelete, 3, 2);
+    mDeleteButton = new QPushButton(w);
+    KGuiItem::assign(mDeleteButton, KStandardGuiItem::del());
+    mDeleteButton->setToolTip(i18n("Delete the selected scan preset set"));
+    connect(mDeleteButton, &QPushButton::clicked, this, &ScanPresetsDialog::slotDelete);
+    gl->addWidget(mDeleteButton, 3, 2);
 
-    buttonEdit = new QPushButton(i18n("Edit..."), w);
-    buttonEdit->setIcon(QIcon::fromTheme("document-edit"));
-    buttonEdit->setToolTip(i18n("Change the name or description of the selected scan preset set"));
-    connect(buttonEdit, &QPushButton::clicked, this, &ScanPresetsDialog::slotEdit);
-    gl->addWidget(buttonEdit, 4, 2);
+    mEditButton = new QPushButton(i18n("Edit..."), w);
+    mEditButton->setIcon(QIcon::fromTheme("document-edit"));
+    mEditButton->setToolTip(i18n("Change the name or description of the selected scan preset set"));
+    connect(mEditButton, &QPushButton::clicked, this, &ScanPresetsDialog::slotEdit);
+    gl->addWidget(mEditButton, 4, 2);
 
     gl->setRowStretch(5, 9);
     gl->setRowMinimumHeight(6, 2*DialogBase::verticalSpacing());
@@ -106,10 +106,10 @@ ScanPresetsDialog::ScanPresetsDialog(KScanDevice *scandev, QWidget *pnt)
     gl->setColumnStretch(0, 9);
     gl->setColumnMinimumWidth(1, 2*DialogBase::horizontalSpacing());
 
-    descLabel = new QLabel(w);
-    gl->addWidget(descLabel, 7, 0, 1, 3);
+    mDescLabel = new QLabel(w);
+    gl->addWidget(mDescLabel, 7, 0, 1, 3);
 
-    sane = scandev;
+    mScanDevice = scandev;
 
     setMainWidget(w);
     populateList();
@@ -119,13 +119,13 @@ ScanPresetsDialog::ScanPresetsDialog(KScanDevice *scandev, QWidget *pnt)
 
 void ScanPresetsDialog::populateList()
 {
-    paramsList->clear();
-    sets = KScanOptSet::readList();
+    mParamsList->clear();
+    mSets = KScanOptSet::readList();
 
-    for (KScanOptSet::StringMap::const_iterator it = sets.constBegin(); it != sets.constEnd(); ++it)
+    for (KScanOptSet::StringMap::const_iterator it = mSets.constBegin(); it != mSets.constEnd(); ++it)
     {
         qCDebug(KOOKA_LOG) << "saveset" << it.key();
-        paramsList->addItem(it.key());
+        mParamsList->addItem(it.key());
     }
 }
 
@@ -135,27 +135,27 @@ void ScanPresetsDialog::slotSelectionChanged()
     QString desc;
     bool enable = false;
 
-    QListWidgetItem *item = paramsList->currentItem();
+    QListWidgetItem *item = mParamsList->currentItem();
     if (item == nullptr) desc = i18n("No preset set selected.");
     else						// something getting selected
     {
-        desc = sets[item->text()];
+        desc = mSets[item->text()];
         enable = true;
     }
 
-    descLabel->setText(desc);
-    buttonLoad->setEnabled(enable);
-    buttonDelete->setEnabled(enable);
-    buttonEdit->setEnabled(enable);
+    mDescLabel->setText(desc);
+    mLoadButton->setEnabled(enable);
+    mDeleteButton->setEnabled(enable);
+    mEditButton->setEnabled(enable);
 
-    buttonLoad->setDefault(enable);
+    mLoadButton->setDefault(enable);
     buttonBox()->button(QDialogButtonBox::Close)->setDefault(!enable);
 }
 
 
 void ScanPresetsDialog::slotLoad()
 {
-    QListWidgetItem *item = paramsList->currentItem();
+    QListWidgetItem *item = mParamsList->currentItem();
     if (item == nullptr) return;
 
     QString name = item->text();
@@ -168,8 +168,8 @@ void ScanPresetsDialog::slotLoad()
         return;
     }
 
-    sane->loadOptionSet(&optSet);
-    sane->reloadAllOptions();
+    mScanDevice->loadOptionSet(&optSet);
+    mScanDevice->reloadAllOptions();
 }
 
 
@@ -178,7 +178,7 @@ void ScanPresetsDialog::slotLoadAndClose(QListWidgetItem *item)
     if (item == nullptr) return;
 
     qCDebug(KOOKA_LOG) << "set" << item->text();
-    paramsList->setCurrentItem(item);
+    mParamsList->setCurrentItem(item);
     slotLoad();
     accept();
 }
@@ -187,20 +187,20 @@ void ScanPresetsDialog::slotLoadAndClose(QListWidgetItem *item)
 void ScanPresetsDialog::slotSave()
 {
     QString name;
-    QListWidgetItem *item = paramsList->currentItem();
+    QListWidgetItem *item = mParamsList->currentItem();
     if (item != nullptr) name = item->text();
     qCDebug(KOOKA_LOG) << "selected set" << name;
 
     QString newdesc;
-    if (sets.contains(name)) newdesc = sets[name];
+    if (mSets.contains(name)) newdesc = mSets[name];
     else
     {
-        const KScanOption *sm = sane->getExistingGuiElement(SANE_NAME_SCAN_MODE);
-        const KScanOption *sr = sane->getExistingGuiElement(SANE_NAME_SCAN_RESOLUTION);
+        const KScanOption *sm = mScanDevice->getExistingGuiElement(SANE_NAME_SCAN_MODE);
+        const KScanOption *sr = mScanDevice->getExistingGuiElement(SANE_NAME_SCAN_RESOLUTION);
         if (sm != nullptr && sr != nullptr)
         {
             // See KScanCombo::setList() for explanation
-            QString scanMode = ki18n(sm->widget()->text().toLocal8Bit().constData()).toString("sane-backends");
+            QString scanMode = ki18n(sm->widget()->text().toLocal8Bit().constData()).toString("mScanDevice-backends");
             if (scanMode.isEmpty()) scanMode = sm->get();
             newdesc = i18nc("New set name, %1=scan mode, %2=resolution", "%1, %2 dpi",
                             scanMode, sr->get().constData());
@@ -208,88 +208,83 @@ void ScanPresetsDialog::slotSave()
     }
 
     NewScanPresetDialog d(name, newdesc, false, this);
-    if (d.exec())
-    {
-        QString newName = d.getName();
-        QString newDesc = d.getDescription();
+    if (!d.exec()) return;
 
-        qCDebug(KOOKA_LOG) << "name" << newName << "desc" << newDesc;
+    const QString newName = d.getName();
+    const QString newDesc = d.getDescription();
+    qCDebug(KOOKA_LOG) << "name" << newName << "desc" << newDesc;
 
-        KScanOptSet optSet(newName);
-        sane->getCurrentOptions(&optSet);
+    KScanOptSet optSet(newName);
+    mScanDevice->getCurrentOptions(&optSet);
 
-        optSet.saveConfig(sane->scannerBackendName(), newDesc);
-        sets[newName] = newDesc;
+    optSet.saveConfig(mScanDevice->scannerBackendName(), newDesc);
+    mSets[newName] = newDesc;
 
-        // TODO: why?
-        paramsList->setCurrentItem(nullptr);
-        QList<QListWidgetItem *> found = paramsList->findItems(newName, Qt::MatchFixedString | Qt::MatchCaseSensitive);
-        if (found.count() == 0) {
-            paramsList->addItem(newName);
-            item = paramsList->item(paramsList->count() - 1);
-        } else {
-            item = found.first();
-        }
-
-        paramsList->setCurrentItem(item);
-        slotSelectionChanged();
+    // TODO: why?
+    mParamsList->setCurrentItem(nullptr);
+    QList<QListWidgetItem *> found = mParamsList->findItems(newName, Qt::MatchFixedString | Qt::MatchCaseSensitive);
+    if (found.count() == 0) {
+        mParamsList->addItem(newName);
+        item = mParamsList->item(mParamsList->count() - 1);
+    } else {
+        item = found.first();
     }
+
+    mParamsList->setCurrentItem(item);
+    slotSelectionChanged();
 }
 
 
 void ScanPresetsDialog::slotEdit()
 {
-    QListWidgetItem *item = paramsList->currentItem();
+    QListWidgetItem *item = mParamsList->currentItem();
     if (item == nullptr) {
         return;
     }
     QString oldName = item->text();
     qCDebug(KOOKA_LOG) << "selected set" << oldName;
 
-    NewScanPresetDialog d(oldName, sets[oldName], true, this);
-    if (d.exec()) {
-        QString newName = d.getName();
-        QString newDesc = d.getDescription();
-        if (newName == oldName && newDesc == sets[oldName]) {
-            return;
-        }
+    NewScanPresetDialog d(oldName, mSets[oldName], true, this);
+    if (!d.exec()) return;
 
-        qCDebug(KOOKA_LOG) << "new name" << newName << "desc" << newDesc;
+    const QString newName = d.getName();
+    const QString newDesc = d.getDescription();
+    if (newName==oldName && newDesc==mSets[oldName]) return;
+    qCDebug(KOOKA_LOG) << "new name" << newName << "desc" << newDesc;
 
-        KScanOptSet optSet(oldName.toLocal8Bit());
-        if (!optSet.loadConfig()) {
-            qCWarning(KOOKA_LOG) << "Failed to load set" << oldName;
-            return;
-        }
-
-        KScanOptSet::deleteSet(oldName);		// do first, in case name not changed
-        optSet.setSetName(newName);
-        optSet.saveConfig(sane->scannerBackendName(), newDesc);
-
-        sets.remove(oldName);				// do first, ditto
-        sets[newName] = newDesc;
-
-        item->setText(newName);
-        slotSelectionChanged();				// recalculate 'item', it may change
+    KScanOptSet optSet(oldName.toLocal8Bit());
+    if (!optSet.loadConfig()) {
+        qCWarning(KOOKA_LOG) << "Failed to load set" << oldName;
+        return;
     }
+
+    KScanOptSet::deleteSet(oldName);			// do first, in case name not changed
+    optSet.setSetName(newName);
+    optSet.saveConfig(mScanDevice->scannerBackendName(), newDesc);
+
+    mSets.remove(oldName);				// do first, ditto
+    mSets[newName] = newDesc;
+
+    item->setText(newName);
+    slotSelectionChanged();				// recalculate 'item', it may change
 }
 
 
 void ScanPresetsDialog::slotDelete()
 {
-    QListWidgetItem *item = paramsList->currentItem();
+    QListWidgetItem *item = mParamsList->currentItem();
     if (item == nullptr) return;
 
     QString name = item->text();
     qCDebug(KOOKA_LOG) << "set" << name;
     if (KMessageBox::warningContinueCancel(this,
                                            xi18nc("@info", "Do you really want to delete the set <resource>%1</resource>?", name),
-                                           i18n("Delete Scan Parameter Set"),
+                                           i18n("Delete Scan Preset Set"),
                                            KStandardGuiItem::del(),
                                            KStandardGuiItem::cancel(),
                                            "deleteSaveSet") != KMessageBox::Continue) return;
 
     KScanOptSet::deleteSet(name);
-    delete paramsList->takeItem(paramsList->row(item));
-    paramsList->setCurrentItem(nullptr);			// clear selection
+    delete mParamsList->takeItem(mParamsList->row(item));
+    mParamsList->setCurrentItem(nullptr);		// clear selection
 }
