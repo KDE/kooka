@@ -47,6 +47,7 @@ extern "C" {
 #include "kscanoption.h"
 #include "kscanoptset.h"
 #include "kscancontrols.h"
+#include "scanicons.h"
 #include "newscanpresetdialog.h"
 #include "kooka_logging.h"
 
@@ -124,8 +125,14 @@ void ScanPresetsDialog::populateList()
 
     for (KScanOptSet::StringMap::const_iterator it = mSets.constBegin(); it != mSets.constEnd(); ++it)
     {
-        qCDebug(KOOKA_LOG) << "saveset" << it.key();
-        mParamsList->addItem(it.key());
+        const QString &setName = it.key();
+        qCDebug(KOOKA_LOG) << "saveset" << setName;
+
+        KScanOptSet optSet(setName);
+        optSet.loadConfig();
+        const QByteArray scanMode = optSet.value(SANE_NAME_SCAN_MODE);
+
+        mParamsList->addItem(new QListWidgetItem(ScanIcons::self()->icon(scanMode), setName));
     }
 }
 
@@ -199,8 +206,8 @@ void ScanPresetsDialog::slotSave()
         const KScanOption *sr = mScanDevice->getExistingGuiElement(SANE_NAME_SCAN_RESOLUTION);
         if (sm != nullptr && sr != nullptr)
         {
-            // See KScanCombo::setList() for explanation
-            QString scanMode = ki18n(sm->widget()->text().toLocal8Bit().constData()).toString("mScanDevice-backends");
+            // See KScanCombo for explanation of how the translation works.
+            QString scanMode = ki18n(sm->widget()->text().toLocal8Bit().constData()).toString("sane-backends");
             if (scanMode.isEmpty()) scanMode = sm->get();
             newdesc = i18nc("New set name, %1=scan mode, %2=resolution", "%1, %2 dpi",
                             scanMode, sr->get().constData());
@@ -223,12 +230,13 @@ void ScanPresetsDialog::slotSave()
     // TODO: why?
     mParamsList->setCurrentItem(nullptr);
     QList<QListWidgetItem *> found = mParamsList->findItems(newName, Qt::MatchFixedString | Qt::MatchCaseSensitive);
-    if (found.count() == 0) {
-        mParamsList->addItem(newName);
+    if (found.isEmpty())
+    {
+        const QByteArray scanMode = optSet.value(SANE_NAME_SCAN_MODE);
+        mParamsList->addItem(new QListWidgetItem(ScanIcons::self()->icon(scanMode), newName));
         item = mParamsList->item(mParamsList->count() - 1);
-    } else {
-        item = found.first();
     }
+    else item = found.first();
 
     mParamsList->setCurrentItem(item);
     slotSelectionChanged();
