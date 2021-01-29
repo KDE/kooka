@@ -99,8 +99,8 @@ bool KScanOptSet::backupOption(const KScanOption *opt)
 
     const QByteArray val = opt->get();
 #ifdef DEBUG_BACKUP
-    if (contains(optName)) qCDebug(LIBKOOKASCAN_LOG) << "replace" << optName << "with value" << QString(val);
-    else qCDebug(LIBKOOKASCAN_LOG) << "add" << optName << "with value" << QString(val);
+    if (contains(optName)) qCDebug(LIBKOOKASCAN_LOG) << "replace" << optName << "with value" << val;
+    else qCDebug(LIBKOOKASCAN_LOG) << "add" << optName << "with value" << val;
 #endif // DEBUG_BACKUP
     insert(optName, val);
     return (true);
