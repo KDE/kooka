@@ -33,7 +33,7 @@
 #include <qcombobox.h>
 #include <qradiobutton.h>
 #include <qbuttongroup.h>
-#include <qlayout.h>
+#include <qgridlayout.h>
 #ifdef HAVE_LIBPAPER
 #include <qvector.h>
 #endif
@@ -112,14 +112,14 @@ ScanSizeSelector::ScanSizeSelector(QWidget *parent, const QSize &bedSize)
 #endif
     }
 
-    QVBoxLayout *vbl = new QVBoxLayout(this);
-    vbl->setMargin(0);
+    QGridLayout *gl = new QGridLayout(this);
+    gl->setMargin(0);
 
     m_sizeCb = new QComboBox(this);
     m_sizeCb->setToolTip(i18n("Set the size of the scanned area"));
     connect(m_sizeCb, static_cast<void (QComboBox::*)(int)>(&QComboBox::activated), this, &ScanSizeSelector::slotSizeSelected);
     setFocusProxy(m_sizeCb);
-    vbl->addWidget(m_sizeCb);
+    gl->addWidget(m_sizeCb, 0, 0, 1, -1);
 
     m_sizeCb->addItem(i18n("Full size"));		// index 0
     m_sizeCb->addItem(i18n("(No selection)"));		// index 1
@@ -143,12 +143,15 @@ ScanSizeSelector::ScanSizeSelector(QWidget *parent, const QSize &bedSize)
     m_portraitRb = new QRadioButton(i18n("Portrait"), this);
     m_portraitRb->setEnabled(false);
     bg->addButton(m_portraitRb);
-    vbl->addWidget(m_portraitRb);
+    gl->addWidget(m_portraitRb, 1, 0);
 
     m_landscapeRb = new QRadioButton(i18n("Landscape"), this);
     m_landscapeRb->setEnabled(false);
     bg->addButton(m_landscapeRb);
-    vbl->addWidget(m_landscapeRb);
+    gl->addWidget(m_landscapeRb, 1, 2);
+
+    gl->setColumnMinimumWidth(1, 8);
+    gl->setColumnStretch(3, 1);
 
     m_customSize = QRect();
     m_prevSelected = m_sizeCb->currentIndex();
