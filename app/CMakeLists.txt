@@ -100,8 +100,10 @@ set(kooka_SRCS
   galleryhistory.cpp
   kookagallery.cpp
   thumbview.cpp
-  scanparamsdialog.cpp
-  newscanparams.cpp		# -> newscaparamsdialog
+  kookaprint.cpp
+  imgprintdialog.cpp
+  scanpresetsdialog.cpp
+  newscanpresetdialog.cpp
   ocrresedit.cpp
   ${kooka_LOG_SRCS}
 )

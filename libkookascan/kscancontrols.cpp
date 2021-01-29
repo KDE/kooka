@@ -304,8 +304,8 @@ QString KScanCheckbox::label() const
 //  -------------------------------------------
 //
 //  This control (and currently only this control) is special, because the
-//  item text is set to the translated value of the option values.  But these
-//  values need to reported back unchanged, so the untranslated form is stored
+//  item text is set to the translated SANE value.  But these values need
+//  to be reported back unchanged, so the untranslated form is stored
 //  in the itemData and the translated form is seen by the user as itemText.
 //  Any access needs to only set or report the itemData, never the itemText,
 //  which is why the activated(QString) signal cannot be used directly.

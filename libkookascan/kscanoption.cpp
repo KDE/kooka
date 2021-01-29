@@ -702,7 +702,10 @@ case SANE_TYPE_BOOL:
             break;
 
 case SANE_TYPE_STRING:
-            retstr = mBuffer;
+            // This assignment looks pointless, but mBuffer may include null trailing
+            // bytes.  Getting a pointer to the buffer data and then converting it
+            // back to a QByteArray takes a deep copy and eliminates them.
+            retstr = mBuffer.constData();
             break;
 
 case SANE_TYPE_INT:

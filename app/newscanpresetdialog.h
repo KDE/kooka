@@ -28,8 +28,8 @@
  *									*
  ************************************************************************/
 
-#ifndef NEWSCANPARAMS_H
-#define NEWSCANPARAMS_H
+#ifndef NEWSCANPRESETDIALOG_H
+#define NEWSCANPRESETDIALOG_H
 
 #include <dialogbase.h>
 
@@ -41,12 +41,14 @@ class QLineEdit;
  *  a set of saved scan parameters.
  */
 
-class NewScanParams : public DialogBase
+class NewScanPresetDialog : public DialogBase
 {
     Q_OBJECT
 
 public:
-    explicit NewScanParams(QWidget *parent, const QString &name, const QString &desc, bool renaming);
+    explicit NewScanPresetDialog(const QString &name, const QString &desc, bool renaming,
+                                 QWidget *pnt = nullptr);
+    ~NewScanPresetDialog() override = default;
 
     QString getName() const;
     QString getDescription() const;
@@ -59,4 +61,4 @@ private:
     QLineEdit *mDescEdit;
 };
 
-#endif                          // NEWSCANPARAMS_H
+#endif							// NEWSCANPRESETDIALOG_H

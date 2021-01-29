@@ -28,7 +28,7 @@
  *									*
  ************************************************************************/
 
-#include "newscanparams.h"
+#include "newscanpresetdialog.h"
 
 #include <qlabel.h>
 #include <qlineedit.h>
@@ -37,11 +37,10 @@
 #include <klocalizedstring.h>
 
 
-NewScanParams::NewScanParams(QWidget *parent,
-                             const QString &name, const QString &desc, bool renaming)
-    : DialogBase(parent)
+NewScanPresetDialog::NewScanPresetDialog(const QString &name, const QString &desc, bool renaming, QWidget *pnt)
+    : DialogBase(pnt)
 {
-    setObjectName("NewScanParams");
+    setObjectName("NewScanPresetDialog");
 
     setButtons(QDialogButtonBox::Ok|QDialogButtonBox::Cancel);
 
@@ -51,31 +50,31 @@ NewScanParams::NewScanParams(QWidget *parent,
     QLabel *l;
     if (renaming)
     {
-        setWindowTitle(i18n("Edit Scan Parameters"));
-        l = new QLabel(i18n("Change the name and/or description of the scan parameter set."), vb);
+        setWindowTitle(i18n("Edit Scan Preset"));
+        l = new QLabel(i18n("Change the name and/or description of the scan preset."), vb);
     }
     else
     {
-        setWindowTitle(i18n("Save Scan Parameters"));
-        l = new QLabel(i18n("Enter a name and description for the new scan parameter set."), vb);
+        setWindowTitle(i18n("Save Scan Preset"));
+        l = new QLabel(i18n("Enter a name and description for the new scan preset."), vb);
     }
     vbVBoxLayout->addWidget(l);
 
     l = new QLabel("", vb);
     vbVBoxLayout->addWidget(l);
 
-    l = new QLabel(i18n("Set name:"), vb);
+    l = new QLabel(i18n("Preset name:"), vb);
     vbVBoxLayout->addWidget(l);
     mNameEdit = new QLineEdit(name, vb);
     vbVBoxLayout->addWidget(mNameEdit);
-    connect(mNameEdit, &QLineEdit::textChanged, this, &NewScanParams::slotTextChanged);
+    connect(mNameEdit, &QLineEdit::textChanged, this, &NewScanPresetDialog::slotTextChanged);
     l->setBuddy(mNameEdit);
 
     l = new QLabel(i18n("Description:"), vb);
     vbVBoxLayout->addWidget(l);
     mDescEdit = new QLineEdit(desc, vb);
     vbVBoxLayout->addWidget(mDescEdit);
-    connect(mDescEdit, &QLineEdit::textChanged, this, &NewScanParams::slotTextChanged);
+    connect(mDescEdit, &QLineEdit::textChanged, this, &NewScanPresetDialog::slotTextChanged);
     l->setBuddy(mDescEdit);
 
     setMainWidget(vb);
@@ -83,18 +82,18 @@ NewScanParams::NewScanParams(QWidget *parent,
     mNameEdit->setFocus();
 }
 
-void NewScanParams::slotTextChanged()
+void NewScanPresetDialog::slotTextChanged()
 {
     setButtonEnabled(QDialogButtonBox::Ok, !mNameEdit->text().trimmed().isEmpty() &&
                                            !mDescEdit->text().trimmed().isEmpty());
 }
 
-QString NewScanParams::getName() const
+QString NewScanPresetDialog::getName() const
 {
     return (mNameEdit->text());
 }
 
-QString NewScanParams::getDescription() const
+QString NewScanPresetDialog::getDescription() const
 {
     return (mDescEdit->text());
 }

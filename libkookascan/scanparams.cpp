@@ -293,25 +293,19 @@ QWidget *ScanParams::createScannerParams()
     if (so != nullptr) {
         KScanCombo *cb = (KScanCombo *) so->widget();
 
-        // The option display strings are translated via the 'sane-backends' message
-        // catalogue, see KScanCombo::setList().  But KScanCombo::setIcon() works on
-        // the untranslated strings, which are really SANE values.  So the strings
-        // here need to cover the full set of possible SANE values for all backends
-        // (extra ones which a particular SANE backend doesn't support don't matter).
-        //
-        // So don't translate these strings or wrap them in any sort of i18n().
+        // Set icons for all possible scan modes which the combo box may contain.
+        // Modes which the scanner does not support and hence which are not in
+        // the combo box don't matter.  See ScanIcons and KScanCombo::setIcon().
         //
         // The combo has already been populated with the current list of SANE values
         // at the KScanOption initialisation (by KScanOption::updateList() calling
         // KScanOption::getList() which reads the list values from SANE).  But
         // this may not work properly if the list of scan modes changes at runtime!
-
-        cb->setIcon(ScanIcons::self()->icon(ScanIcons::BlackWhite), "Lineart");
-        cb->setIcon(ScanIcons::self()->icon(ScanIcons::BlackWhite), "Binary");
-        cb->setIcon(ScanIcons::self()->icon(ScanIcons::Greyscale), "Gray");
-        cb->setIcon(ScanIcons::self()->icon(ScanIcons::Greyscale), "Grayscale");
-        cb->setIcon(ScanIcons::self()->icon(ScanIcons::Colour), "Color");
-        cb->setIcon(ScanIcons::self()->icon(ScanIcons::Halftone), "Halftone");
+        const QList<QByteArray> scanModes = ScanIcons::self()->allModes();
+        for (const QByteArray &scanMode : scanModes)
+        {
+            cb->setIcon(ScanIcons::self()->icon(scanMode), scanMode.constData());
+        }
 
         connect(so, &KScanOption::guiChange, this, &ScanParams::slotOptionChanged);
         connect(so, &KScanOption::guiChange, this, &ScanParams::slotNewScanMode);

@@ -74,6 +74,21 @@ public:
      **/
     QIcon icon(ScanIcons::IconType type);
 
+    /**
+     * Get an icon for the specified SANE scan mode.
+     *
+     * @param scanMode The SANE mode setting
+     * @return The requested icon.
+     **/
+    QIcon icon(const QByteArray &scanMode);
+
+    /**
+     * Retrieve a list of all known SANE scan mode strings.
+     *
+     * @return A list of all known modes.
+     **/
+    QList<QByteArray> allModes() const;
+
 private:
     explicit ScanIcons();
 

@@ -283,7 +283,7 @@ void Kooka::setupActions()
     actionCollection()->setDefaultShortcut(scanAction, Qt::Key_F4);
     connect(scanAction, &QAction::triggered, m_view, &KookaView::slotStartFinalScan);
 
-    paramsAction = new QAction(QIcon::fromTheme("bookmark-new"), i18n("Scan Parameters..."), this);
+    paramsAction = new QAction(QIcon::fromTheme("bookmark-new"), i18n("Scan Presets..."), this);
     actionCollection()->addAction("scanparam", paramsAction);
     actionCollection()->setDefaultShortcut(paramsAction, Qt::CTRL + Qt::SHIFT + Qt::Key_S);
     connect(paramsAction, &QAction::triggered, m_view, &KookaView::slotScanParams);

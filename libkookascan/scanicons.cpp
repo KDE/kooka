@@ -37,9 +37,30 @@
 #include "libkookascan_logging.h"
 
 
+// This is safe - the ScanIcons instance will be not be constructed
+// until long after application startup.
+static QMap<QByteArray, ScanIcons::IconType> sModeMap;
+
+
 ScanIcons::ScanIcons()
 {
     KIconLoader::global()->addAppDir("libkookascan");	// access to our icons
+
+    // The option display strings are translated via the 'sane-backends' message
+    // catalogue, see KScanCombo::setList().  But finding a scan mode icon works on
+    // the untranslated strings, which are really SANE values.  So the strings
+    // here need to cover the full set of possible SANE values for all backends
+    // (extra ones which a particular SANE backend doesn't support don't matter).
+    //
+    // These map key strings therefore need to be untranslated SANE option values.
+    // So don't translate these strings or wrap them in any sort of i18n().
+
+    sModeMap.insert("Lineart", ScanIcons::BlackWhite);
+    sModeMap.insert("Binary", ScanIcons::BlackWhite);
+    sModeMap.insert("Gray", ScanIcons::Greyscale);
+    sModeMap.insert("Grayscale", ScanIcons::Greyscale);
+    sModeMap.insert("Color", ScanIcons::Colour);
+    sModeMap.insert("Halftone", ScanIcons::Halftone);
 }
 
 
@@ -81,4 +102,23 @@ case ScanIcons::Halftone:	return (findIcon(type, &mHalftoneIcon, "halftone", "pa
 case ScanIcons::Colour:		return (findIcon(type, &mColourIcon, "color", "palette-color"));
 default:			return (QIcon());
     }
+}
+
+
+QIcon ScanIcons::icon(const QByteArray &scanMode)
+{
+    if (scanMode.isEmpty()) return (QIcon());
+    if (!sModeMap.contains(scanMode))
+    {
+        qCWarning(LIBKOOKASCAN_LOG) << "Don't know what type of scan" << scanMode << "is. Please add it to ScanIcons::ScanIcons().";
+        return (QIcon());
+    }
+
+    return (icon(sModeMap.value(scanMode)));
+}
+
+
+QList<QByteArray> ScanIcons::allModes() const
+{
+    return (sModeMap.keys());
 }
