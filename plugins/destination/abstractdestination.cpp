@@ -37,6 +37,8 @@
 #include <qtemporaryfile.h>
 #include <qcoreapplication.h>
 #include <qcombobox.h>
+#include <qstandardpaths.h>
+#include <qprocess.h>
 
 #include <kmessagebox.h>
 
@@ -152,4 +154,32 @@ QComboBox *AbstractDestination::createFormatCombo(const QStringList &mimeTypes,
     if (configuredIndex!=-1) combo->setCurrentIndex(configuredIndex);
 
     return (combo);					// the created combo box
+}
+
+
+void AbstractDestination::delayedDelete(const QUrl &url)
+{
+    // A destination may need the scanned image to persist until a share or
+    // export is complete, and it may not even be able to tell when an image
+    // is no longer required.  So as to be absolutely sure that the file
+    // stays around for enough time, even if the application is quit, use the
+    // kioexec utility (normally used to open a remote file in an application
+    // that does not support KIO) to not do anything with the file but delete
+    // it after three minutes have passed.  Calling this in a detached process
+    // allows Kooka to exit cleanly even if waiting for that time delay.
+    //
+    // If the temporary file is in a subdirectory, then kioexec will also
+    // delete the containing directory if it is empty.
+
+    if (!url.isLocalFile()) return;				// should always be the case
+
+    // from second test in kio/src/core/desktopexecparser.cpp
+    const QString kioexec = (LIBEXEC_DIR "/kioexec");
+    QStringList args;
+    args << "--tempfiles";					// delete temporary files
+    args << QStandardPaths::findExecutable("true")+" %f";	// do nothing with the file
+    args << url.url();
+
+    qCDebug(DESTINATION_LOG) << "running" << kioexec << args;
+    if (!QProcess::startDetached(kioexec, args)) qCWarning(DESTINATION_LOG) << "Cannot start detached process";
 }

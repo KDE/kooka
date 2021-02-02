@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Service
+X-KDE-ServiceTypes=Kooka/DestinationPlugin
+X-KDE-Library=kookadestinationexport
+X-KDE-PluginInfo-Name=destinationexport
+X-KDE-PluginInfo-License=GPL
+Icon=document-export
+
+Name=Online Service
+Name[x-test]=xxOnline Servicexx
+Comment=Export the scanned image to an online service

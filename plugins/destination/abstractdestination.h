@@ -191,6 +191,13 @@ protected:
      **/
     QComboBox *createFormatCombo(const QStringList &mimeTypes, const QString &configuredType);
 
+    /**
+     * Delete a file in the background, after a time delay.
+     *
+     * @param url The file to delete.
+     **/
+    void delayedDelete(const QUrl &url);
+
 private:
     ScanGallery *mGallery;
 };

@@ -373,6 +373,13 @@
       <default>image/png</default>
     </entry>
 
+    <entry name="DestinationExportDest" key="ExportDest" type="String">
+    </entry>
+
+    <entry name="DestinationExportMime" key="ExportMime" type="String">
+      <default>image/jpeg</default>
+    </entry>
+
   </group>
 
 </kcfg>

@@ -23,9 +23,19 @@ find_package(KF5 ${KF5_MIN_VERSION} REQUIRED COMPONENTS I18n CoreAddons WidgetsA
 
 find_package(KF5Purpose ${KF5_MIN_VERSION})
 set_package_properties(KF5Purpose PROPERTIES
-    DESCRIPTION "A framework for services and actions integration"
-    PURPOSE "Required for the Share Scan plugin"
-    TYPE OPTIONAL
+  URL "https://invent.kde.org/frameworks/purpose"
+  DESCRIPTION "A framework for services and actions integration"
+  PURPOSE "Required for the Share Scan destination plugin"
+  TYPE OPTIONAL
+)
+
+set(KIPI_MIN_VERSION "5.2.0")
+find_package(KF5Kipi ${KIPI_MIN_VERSION})
+set_package_properties(KF5Kipi PROPERTIES
+  URL "https://invent.kde.org/graphics/libkipi"
+  DESCRIPTION "Provides various image manipulation and export features"
+  PURPOSE "Required for the Export Scan destination plugin"
+  TYPE OPTIONAL
 )
 
 #########################################################################
@@ -46,6 +56,7 @@ set(kookadestination_SRCS
   ${kookadestination_LOG_SRCS}
 )
 
+add_definitions(-DLIBEXEC_DIR=\"${CMAKE_INSTALL_FULL_LIBEXECDIR_KF5}\")
 add_library(kookadestination SHARED ${kookadestination_SRCS})
 set_target_properties(kookadestination PROPERTIES SOVERSION "1.0.0")
 target_link_libraries(kookadestination Qt5::Core Qt5::Widgets)
@@ -72,3 +83,7 @@ add_subdirectory(save)
 if (KF5Purpose_FOUND)
   add_subdirectory(share)
 endif (KF5Purpose_FOUND)
+
+if (KF5Kipi_FOUND)
+  add_subdirectory(export)
+endif (KF5Kipi_FOUND)
