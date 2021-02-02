@@ -24,7 +24,6 @@ set(kookadestinationshare_SRCS
   ${kookadestination_LOG_SRCS}
 )
 
-add_definitions(-DLIBEXEC_DIR=\"${CMAKE_INSTALL_FULL_LIBEXECDIR_KF5}\")
 add_library(kookadestinationshare MODULE ${kookadestinationshare_SRCS})
 kcoreaddons_desktop_to_json(kookadestinationshare kookadestination-share.desktop)
 target_link_libraries(kookadestinationshare Qt5::Gui)

@@ -32,7 +32,6 @@
 
 #include <qcombobox.h>
 #include <qjsonarray.h>
-#include <qprocess.h>
 
 #include <kpluginfactory.h>
 #include <klocalizedstring.h>
@@ -228,26 +227,6 @@ void DestinationShare::slotShareFinished(const QJsonObject &output, int error, c
                            xi18nc("@info", "Cannot share the scanned image<nl/><nl/><message>%1</message>", errorMessage));
     }
 
-    // The share job does not delete the temporary file, but it may need it to
-    // be present until the share is complete.  So as to be absolutely sure
-    // that the file stays around until needed, use the kioexec utility
-    // (normally used to open a remote file in an application that does not
-    // support KIO) to not do anything with the file but delete it after three
-    // minutes have passed.  Calling this in a detached process allows Kooka
-    // to exit cleanly even if waiting for that time delay.
-    //
-    // If the temporary file is in a subdirectory, then kioexec will also
-    // delete the containing directory if it is empty.
-
-    // from second test in kio/src/core/desktopexecparser.cpp
-    const QString kioexec = (LIBEXEC_DIR "/kioexec");
-    QStringList args;
-    args << "--tempfiles";					// delete temporary files
-    args << QStandardPaths::findExecutable("true")+" %f";	// do nothing with the file
-    args << mSaveUrl.url();					// temporary file shared
-
-    qCDebug(DESTINATION_LOG) << "running" << kioexec << args;
-    if (!QProcess::startDetached(kioexec, args)) qCWarning(DESTINATION_LOG) << "Cannot start detached process";
-
+    delayedDelete(mSaveUrl);				// delete temporary file, eventually
     mSaveUrl.clear();					// have dealt with this now
 }
