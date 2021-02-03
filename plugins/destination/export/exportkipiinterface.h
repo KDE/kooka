@@ -70,9 +70,10 @@ public:
     void thumbnails(const QList<QUrl> &urls, int size) override;
 
     void setUrl(const QUrl &url);
+    void addUrl(const QUrl &url);
 
 private:
-    QUrl mUrl;
+    QList<QUrl> mUrls;
 };
 
 #endif							// EXPORTKIPIINTERFACE_H

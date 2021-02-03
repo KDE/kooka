@@ -55,7 +55,15 @@ ExportKipiInterface::ExportKipiInterface(QObject *pnt)
 void ExportKipiInterface::setUrl(const QUrl &url)
 {
     qCDebug(DESTINATION_LOG) << url;
-    mUrl = url;
+    mUrls.clear();
+    mUrls.append(url);
+}
+
+
+void ExportKipiInterface::addUrl(const QUrl &url)
+{
+    qCDebug(DESTINATION_LOG) << url;
+    mUrls.append(url);
 }
 
 
@@ -63,7 +71,7 @@ void ExportKipiInterface::setUrl(const QUrl &url)
 KIPI::ImageCollection ExportKipiInterface::currentAlbum()
 {
     qCDebug(DESTINATION_LOG);
-    return (KIPI::ImageCollection(new ExportCollectionShared(mUrl)));
+    return (KIPI::ImageCollection(new ExportCollectionShared(mUrls)));
 }
 
 

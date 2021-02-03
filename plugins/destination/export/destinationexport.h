@@ -33,10 +33,6 @@
 
 #include "abstractdestination.h"
 
-#include <kipi/interface.h>
-#include <kipi/pluginloader.h>
-
-
 class QComboBox;
 
 
@@ -61,9 +57,7 @@ private:
     QUrl mSaveUrl;
     QList<QUrl> mSavedFiles;
 
-    KIPI::Interface *mKipiInterface;
-    KIPI::PluginLoader *mLoader;
-    QWidget *mDummyWidget;
+    QString mHelper;
 };
 
 #endif							// DESTINATIONEXPORT_H

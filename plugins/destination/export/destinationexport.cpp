@@ -4,12 +4,6 @@
  *  Qt <http://www.qt.io> and KDE Frameworks <http://www.kde.org>.	*
  *									*
  *  Copyright (C) 2021      Jonathan Marten <jjm@keelhaul.me.uk>	*
- *  Based on the KIPI interface for Spectacle, which is:		*
- *  Copyright (C) 2015 Boudhayan Gupta <me@BaloneyGeek.com>		*
- *  Copyright (C) 2010 Pau Garcia i Quiles <pgquiles@elpauer.org>	*
- *  Essentially a rip-off of code for Kamoso by:			*
- *  Copyright (C) 2008-2009 by Aleix Pol <aleixpol@kde.org>		*
- *  Copyright (C) 2008-2009 by Alex Fiestas <alex@eyeos.org>		*
  *									*
  *  Kooka is free software; you can redistribute it and/or modify it	*
  *  under the terms of the GNU Library General Public License as	*
@@ -38,18 +32,14 @@
 
 #include <qcombobox.h>
 #include <qaction.h>
+#include <qprocess.h>
+#include <qregularexpression.h>
 
 #include <kpluginfactory.h>
 #include <klocalizedstring.h>
-#include <kmessagebox.h>
-
-#include <kio/global.h>
-
-#include <kipi/plugin.h>
 
 #include "scanparamspage.h"
 #include "kookasettings.h"
-#include "exportkipiinterface.h"
 #include "destination_logging.h"
 
 
@@ -60,11 +50,11 @@ K_PLUGIN_FACTORY_WITH_JSON(DestinationExportFactory, "kookadestination-export.js
 DestinationExport::DestinationExport(QObject *pnt, const QVariantList &args)
     : AbstractDestination(pnt, "DestinationExport")
 {
-    mDummyWidget = new QWidget;
-    mKipiInterface = new ExportKipiInterface(this);
-    mLoader = new KIPI::PluginLoader;
-    mLoader->setInterface(mKipiInterface);
-    mLoader->init();
+    QStringList paths;
+    paths << BUILDBIN_DIR << LIBEXEC_DIR;
+    mHelper = QStandardPaths::findExecutable("kookakipihelper", paths);
+    if (!mHelper.isEmpty()) qCDebug(DESTINATION_LOG) << "KIPI helper found at" << mHelper;
+    else qCWarning(DESTINATION_LOG) << "KIPI helper executable not found!";
 }
 
 
@@ -75,31 +65,38 @@ DestinationExport::~DestinationExport()
     {
         delayedDelete(savedFile);
     }
-
-    delete mLoader;
-    delete mKipiInterface;
-    delete mDummyWidget;
 }
 
 
 void DestinationExport::imageScanned(ScanImage::Ptr img)
 {
     qCDebug(DESTINATION_LOG) << "received image size" << img->size();
-    QAction *exportAction = mExportCombo->currentData().value<QAction *>();
+    if (mHelper.isEmpty()) return;			// can't really do anything
+
+    const QString exportName = mExportCombo->currentData().toString();
     const QString mimeName = mFormatCombo->currentData().toString();
-    qCDebug(DESTINATION_LOG) << "export" << exportAction->text() << "mime" << mimeName;
+    qCDebug(DESTINATION_LOG) << "export" << exportName << "mime" << mimeName;
 
     ImageFormat fmt = getSaveFormat(mimeName, img);	// get format for saving image
     if (!fmt.isValid()) return;				// must have this now
     mSaveUrl = saveTempImage(fmt, img);			// save to temporary file
     if (!mSaveUrl.isValid()) return;			// could not save image
-							// tell KIPI where it is
-    static_cast<ExportKipiInterface *>(mKipiInterface)->setUrl(mSaveUrl);
-    exportAction->trigger();				// do the export action
 
-    mSavedFiles.append(mSaveUrl);
+    // Use the helper to perform the sharing.
+    QProcess proc(this);
+    proc.setProgram(mHelper);
+    proc.setArguments(QStringList() << "-s" << exportName << mSaveUrl.url());
+    proc.setProcessChannelMode(QProcess::ForwardedErrorChannel);
+
+    qCDebug(DESTINATION_LOG) << "executing" << proc.program() << proc.arguments();
+    // The export helper process may take an indeterminate time,
+    // and will most likely need to put up a GUI.  So start it
+    // detached and hope.
+    if (!proc.startDetached()) qCWarning(DESTINATION_LOG) << "Cannot execute KIPI helper";
+
     // Record the temporary file.  There is nothing more to do here,
     // all temporary files will eventually be deleted by the destructor.
+    mSavedFiles.append(mSaveUrl);
 }
 
 
@@ -115,53 +112,58 @@ void DestinationExport::createGUI(ScanParamsPage *page)
 
     // The available export destinations.
     mExportCombo = new QComboBox;
+    page->addRow(i18n("Online service:"), mExportCombo);
+
+    if (mHelper.isEmpty())				// if helper was not found,
+    {							// can't really do anything
+fail:   mFormatCombo->setEnabled(false);
+        mExportCombo->setEnabled(false);
+        return;
+    }
+
     const QString configuredExport = KookaSettings::destinationExportDest();
     int configuredIndex = -1;
 
-    // Based on ExportMenu::loadKipiItems() in spectacle/src/Gui/ExportMenu.cpp 
-    QList<QAction *> exportActions;
-    const KIPI::PluginLoader::PluginList pluginList = mLoader->pluginList();
-    qCDebug(DESTINATION_LOG) << "have" << pluginList.count() << "plugins";
-    for (const auto &pluginInfo : pluginList)
+    // Use the helper to list the available destinations.
+    QProcess proc(this);
+    proc.setProgram(mHelper);
+    proc.setArguments(QStringList() << "-l");
+    proc.setProcessChannelMode(QProcess::ForwardedErrorChannel);
+    qCDebug(DESTINATION_LOG) << "executing" << proc.program() << proc.arguments();
+    proc.start();
+    if (!proc.waitForFinished(10000))
     {
-        if (!pluginInfo->shouldLoad()) continue;
-
-        KIPI::Plugin *plugin = pluginInfo->plugin();
-        if (plugin==nullptr)
-        {
-            qCWarning(DESTINATION_LOG) << "Failed to load KIPI plugin from library" << pluginInfo->library();
-            continue;
-        }
-
-        plugin->setup(mDummyWidget);
-        const QList<QAction *> actions = plugin->actions();
-        for (QAction *action : actions)
-        {
-            KIPI::Category category = plugin->category(action);
-            if (category==KIPI::ExportPlugin)
-            {
-                exportActions += action;
-            }
-            else if (category==KIPI::ImagesPlugin && pluginInfo->library().contains(QLatin1String("kipiplugin_sendimages")))
-            {
-                exportActions += action;
-            }
-        }
+        qCWarning(DESTINATION_LOG) << "Cannot get list of actions from KIPI helper";
+        // TODO: error with a KMessageWidget
+        goto fail;
     }
 
-    qCDebug(DESTINATION_LOG) << "have" << exportActions.count() << "export actions";
-    const QString dots = i18nc("as added to action text", "...");
-    for (QAction *action : qAsConst(exportActions))
+    const QByteArray result = proc.readAllStandardOutput();
+    const QList<QByteArray> lines = result.split('\n');
+    const QRegularExpression rx("\\s{2,}");		// split on 2 or more spaces
+
+    for (const QByteArray &line : lines)
     {
-        QString text = KLocalizedString::removeAcceleratorMarker(action->text());
-        if (text.endsWith(dots)) text.chop(dots.length());
-        qCDebug(DESTINATION_LOG) << "action" << text;
-        if (action->objectName()==configuredExport) configuredIndex = mExportCombo->count();
-        mExportCombo->addItem(action->icon(), text, QVariant::fromValue<QAction *>(action));
+        //qCDebug(DESTINATION_LOG) << "read line" << line;
+
+        // QString::split() is more versatile than QByteArray::split(),
+        // which can only split on a single character.
+        const QStringList splits = QString::fromLocal8Bit(line).split(rx, Qt::SkipEmptyParts);
+        if (splits.count()<3) continue;			// not enough fields
+
+        QStringList::const_iterator it = splits.begin();
+        const QString actionName = (*it++);
+        const QString actionIcon = (*it++);
+        const QString actionText = QStringList(it, splits.constEnd()).join(' ');
+
+        // The check on the KIPI::Category will already have been done by the
+        // helper, so always accept the action.
+        if (actionName==configuredExport) configuredIndex = mExportCombo->count();
+        mExportCombo->addItem(QIcon::fromTheme(actionIcon), actionText, actionName);
     }
 
+    qCDebug(DESTINATION_LOG) << "have" << mExportCombo->count() << "export actions";
     if (configuredIndex!=-1) mExportCombo->setCurrentIndex(configuredIndex);
-    page->addRow(i18n("Online service:"), mExportCombo);
 }
 
 
@@ -173,7 +175,7 @@ KLocalizedString DestinationExport::scanDestinationString()
 
 void DestinationExport::saveSettings() const
 {
-    QAction *exportAction = mExportCombo->currentData().value<QAction *>();
-    KookaSettings::setDestinationExportDest(exportAction->objectName());
+    if (!mFormatCombo->isEnabled()) return;		// error condition, don't save
+    KookaSettings::setDestinationExportDest(mExportCombo->currentData().toString());
     KookaSettings::setDestinationExportMime(mFormatCombo->currentData().toString());
 }

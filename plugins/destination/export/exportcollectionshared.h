@@ -46,7 +46,7 @@
 class ExportCollectionShared : public KIPI::ImageCollectionShared
 {
 public:
-    explicit ExportCollectionShared(const QUrl &url);
+    explicit ExportCollectionShared(const QList<QUrl> &urls);
     ~ExportCollectionShared() override = default;
 
     QString name() override			{ return (QGuiApplication::applicationDisplayName()); }

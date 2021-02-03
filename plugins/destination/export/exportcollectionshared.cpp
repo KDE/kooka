@@ -38,8 +38,8 @@
 #include "destination_logging.h"
 
 
-ExportCollectionShared::ExportCollectionShared(const QUrl &url)
+ExportCollectionShared::ExportCollectionShared(const QList<QUrl> &urls)
 {
-    qCDebug(DESTINATION_LOG) << url;
-    mImages.append(url);
+    qCDebug(DESTINATION_LOG) << urls;
+    mImages = urls;
 }
