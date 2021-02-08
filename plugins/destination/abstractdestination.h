@@ -200,6 +200,7 @@ protected:
 
 private:
     ScanGallery *mGallery;
+    ImageFormat mLastUsedFormat;
 };
 
 #endif							// ABSTRACTDESTINATION_H

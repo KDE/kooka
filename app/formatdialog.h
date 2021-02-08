@@ -65,11 +65,13 @@ public:
     QByteArray getSubFormat() const;
     QString getFilename() const;
     bool alwaysUseFormat() const;
-    bool useAssistant() const    			{ return mWantAssistant; }
+    bool useAssistant() const    			{ return (mWantAssistant); }
 
     static void forgetRemembered();
 
     static bool isCompatible(const QMimeType &mime, ScanImage::ImageType type, bool recOnly = true);
+
+    QCheckBox *alwaysUseFormatCheck() const		{ return (mDontAskCheck); }
 
 protected:
     void showEvent(QShowEvent *ev) override;

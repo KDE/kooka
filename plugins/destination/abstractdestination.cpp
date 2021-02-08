@@ -38,6 +38,7 @@
 #include <qcoreapplication.h>
 #include <qcombobox.h>
 #include <qstandardpaths.h>
+#include <qcheckbox.h>
 #include <qprocess.h>
 
 #include <kmessagebox.h>
@@ -50,7 +51,8 @@
 //  ------------------------------------------
 
 AbstractDestination::AbstractDestination(QObject *pnt, const char *name)
-    : AbstractPlugin(pnt)
+    : AbstractPlugin(pnt),
+      mLastUsedFormat(ImageFormat(""))
 {
     setObjectName(name);
     qCDebug(DESTINATION_LOG) << objectName();
@@ -71,7 +73,8 @@ ImageFormat AbstractDestination::getSaveFormat(const QString &mimeName, ScanImag
 
     // If the format is "Other", or there was an error finding the MIME type,
     // then prompt for a format.
-    if (!fmt.isValid())
+    if (!fmt.isValid()) fmt = mLastUsedFormat;		// try the remembered format
+    if (!fmt.isValid())					// no remembered format
     {
         FormatDialog fd(parentWidget(),			// parent
                         img->imageType(),		// type
@@ -79,12 +82,16 @@ ImageFormat AbstractDestination::getSaveFormat(const QString &mimeName, ScanImag
                         fmt,				// default format
                         false,				// askForFilename
                         QString());			// filename
+							// special text for check box
+        fd.alwaysUseFormatCheck()->setText(i18n("Remember this format"));
+
         if (!fd.exec()) return (fmt);			// dialogue cancelled
-        // TODO: check meaning of "Always use this format"
-        // not remembered (that done when called from ImgSaver)
-        // retrieve by fd.alwaysUseFormat()
-        // save format internally, pass to constructor above
-        fmt = fd.getFormat();
+        fmt = fd.getFormat();				// get the selected format
+
+        // If the "Remember" check box is ticked, then note the format for
+        // next time.  The format is only remembered for the lifetime of this
+        // plugin, and does not affect the main Kooka setting.
+        if (fd.alwaysUseFormat()) mLastUsedFormat = fmt;
     }
 
     // TODO: even if there is no need to ask for a format then maybe ask
