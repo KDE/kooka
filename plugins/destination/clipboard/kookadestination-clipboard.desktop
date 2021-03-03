@@ -7,5 +7,4 @@ X-KDE-PluginInfo-License=GPL
 Icon=edit-copy
 
 Name=Copy Image
-Name[x-test]=xxCopy Imagexx
 Comment=Copy the scanned image to the clipboard

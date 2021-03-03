@@ -7,5 +7,4 @@ X-KDE-PluginInfo-License=GPL
 Icon=system-run
 
 Name=Application
-Name[x-test]=xxApplicationxx
 Comment=Open the scanned image in an application

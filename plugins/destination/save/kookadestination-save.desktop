@@ -7,5 +7,4 @@ X-KDE-PluginInfo-License=GPL
 Icon=document-save
 
 Name=Save Image
-Name[x-test]=xxSave Imagexx
 Comment=Save the scanned image
