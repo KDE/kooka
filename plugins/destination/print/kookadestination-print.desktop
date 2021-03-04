@@ -7,4 +7,16 @@ X-KDE-PluginInfo-License=GPL
 Icon=document-print
 
 Name=Print Image
+Name[ca]=Impressió de la imatge
+Name[nl]=Afbeelding afdrukken
+Name[pt]=Imprimir a Imagem
+Name[sv]=Skriv ut bild
+Name[uk]=Друк зображення
+Name[x-test]=xxPrint Imagexx
 Comment=Print the scanned image
+Comment[ca]=Imprimeix la imatge escanejada
+Comment[nl]=De gescande afbeelding afdrukken
+Comment[pt]=Imprimir a imagem digitalizada
+Comment[sv]=Skriv ut den inlästa bilden
+Comment[uk]=Надрукувати скановане зображення
+Comment[x-test]=xxPrint the scanned imagexx

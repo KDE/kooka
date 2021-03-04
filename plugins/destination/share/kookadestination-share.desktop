@@ -7,4 +7,16 @@ X-KDE-PluginInfo-License=GPL
 Icon=document-share
 
 Name=Share Image
+Name[ca]=Comparteix una imatge
+Name[nl]=Afbeelding delen
+Name[pt]=Partilhar a Imagem
+Name[sv]=Dela bild
+Name[uk]=Оприлюднити зображення
+Name[x-test]=xxShare Imagexx
 Comment=Share the scanned image
+Comment[ca]=Comparteix la imatge escanejada
+Comment[nl]=De gescande afbeelding delen
+Comment[pt]=Partilhar a imagem digitalizada
+Comment[sv]=Dela den inlästa bilden
+Comment[uk]=Оприлюднення сканованого зображення
+Comment[x-test]=xxShare the scanned imagexx

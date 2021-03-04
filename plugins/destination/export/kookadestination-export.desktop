@@ -7,4 +7,16 @@ X-KDE-PluginInfo-License=GPL
 Icon=document-export
 
 Name=Online Service
+Name[ca]=Servei en línia
+Name[nl]=Online service
+Name[pt]=Serviço 'Online'
+Name[sv]=Nättjänst
+Name[uk]=Інтернет-служба
+Name[x-test]=xxOnline Servicexx
 Comment=Export the scanned image to an online service
+Comment[ca]=Exporta la imatge escanejada a un servei en línia
+Comment[nl]=De gescande afbeelding naar een online service exporteren
+Comment[pt]=Exportar a imagem digitalizada para um serviço 'online'
+Comment[sv]=Exportera den inlästa bilden till en Internettjänst
+Comment[uk]=Експортувати скановане зображення до служби інтернет-зберігання
+Comment[x-test]=xxExport the scanned image to an online servicexx

@@ -7,4 +7,16 @@ X-KDE-PluginInfo-License=GPL
 Icon=image-x-generic
 
 Name=Scan Gallery
+Name[ca]=Galeria d'escaneig
+Name[nl]=Galerij voor scannen
+Name[pt]=Galeria de Digitalizações
+Name[sv]=Sök igenom galleri
+Name[uk]=Галерея сканування
+Name[x-test]=xxScan Galleryxx
 Comment=Save the scanned image to the scan gallery
+Comment[ca]=Desa la imatge escanejada a la galeria d'escaneig
+Comment[nl]=De gescande afbeelding opslaan in de galerij voor scannen
+Comment[pt]=Gravar a imagem digitalizada na galeria de digitalizações
+Comment[sv]=Spara den inlästa bilden i bildgalleriet
+Comment[uk]=Зберегти скановане зображення у галереї сканування
+Comment[x-test]=xxSave the scanned image to the scan galleryxx

@@ -7,4 +7,16 @@ X-KDE-PluginInfo-License=GPL
 Icon=edit-copy
 
 Name=Copy Image
+Name[ca]=Copia la imatge
+Name[nl]=Afbeelding kopiëren
+Name[pt]=Copiar a Imagem
+Name[sv]=Kopiera bild
+Name[uk]=Копіювання зображення
+Name[x-test]=xxCopy Imagexx
 Comment=Copy the scanned image to the clipboard
+Comment[ca]=Copia la imatge escanejada al porta-retalls
+Comment[nl]=De gescande afbeelding kopiëren naar het klembord
+Comment[pt]=Copiar a imagem digitalizada para a aplicação
+Comment[sv]=Kopierar den inlästa bilden till klippbordet
+Comment[uk]=Копіювати скановане зображення до буфера
+Comment[x-test]=xxCopy the scanned image to the clipboardxx

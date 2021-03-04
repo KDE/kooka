@@ -7,4 +7,16 @@ X-KDE-PluginInfo-License=GPL
 Icon=system-run
 
 Name=Application
+Name[ca]=Aplicació
+Name[nl]=Toepassing
+Name[pt]=Aplicação
+Name[sv]=Program
+Name[uk]=Програма
+Name[x-test]=xxApplicationxx
 Comment=Open the scanned image in an application
+Comment[ca]=Obre la imatge escanejada en una aplicació
+Comment[nl]=De gescande afbeelding in een toepassing openen
+Comment[pt]=Abrir a imagem digitalizada numa aplicação
+Comment[sv]=Öppna den inlästa bilden i ett program
+Comment[uk]=Відкрити скановане зображення у програмі
+Comment[x-test]=xxOpen the scanned image in an applicationxx
