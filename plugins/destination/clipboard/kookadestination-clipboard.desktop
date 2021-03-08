@@ -8,6 +8,8 @@ Icon=edit-copy
 
 Name=Copy Image
 Name[ca]=Copia la imatge
+Name[ca@valencia]=Copia la imatge
+Name[de]=Bild kopieren
 Name[es]=Copiar imagen
 Name[nl]=Afbeelding kopiëren
 Name[pt]=Copiar a Imagem
@@ -17,6 +19,7 @@ Name[uk]=Копіювання зображення
 Name[x-test]=xxCopy Imagexx
 Comment=Copy the scanned image to the clipboard
 Comment[ca]=Copia la imatge escanejada al porta-retalls
+Comment[ca@valencia]=Copia la imatge escanejada al porta-retalls
 Comment[es]=Copiar la imagen escaneada en el portapapeles
 Comment[nl]=De gescande afbeelding kopiëren naar het klembord
 Comment[pt]=Copiar a imagem digitalizada para a aplicação

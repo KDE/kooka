@@ -8,6 +8,8 @@ Icon=document-share
 
 Name=Share Image
 Name[ca]=Comparteix una imatge
+Name[ca@valencia]=Comparteix una imatge
+Name[de]=Bild teilen
 Name[es]=Compartir imagen
 Name[nl]=Afbeelding delen
 Name[pt]=Partilhar a Imagem
@@ -17,6 +19,7 @@ Name[uk]=Оприлюднити зображення
 Name[x-test]=xxShare Imagexx
 Comment=Share the scanned image
 Comment[ca]=Comparteix la imatge escanejada
+Comment[ca@valencia]=Comparteix la imatge escanejada
 Comment[es]=Compartir la imagen escaneada
 Comment[nl]=De gescande afbeelding delen
 Comment[pt]=Partilhar a imagem digitalizada

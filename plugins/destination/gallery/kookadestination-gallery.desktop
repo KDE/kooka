@@ -8,6 +8,7 @@ Icon=image-x-generic
 
 Name=Scan Gallery
 Name[ca]=Galeria d'escaneig
+Name[ca@valencia]=Galeria d'escaneig
 Name[es]=Galería de escaneo
 Name[nl]=Galerij voor scannen
 Name[pt]=Galeria de Digitalizações
@@ -17,6 +18,7 @@ Name[uk]=Галерея сканування
 Name[x-test]=xxScan Galleryxx
 Comment=Save the scanned image to the scan gallery
 Comment[ca]=Desa la imatge escanejada a la galeria d'escaneig
+Comment[ca@valencia]=Guarda la imatge escanejada a la galeria d'escaneig
 Comment[es]=Guardar la imagen escaneada en la galería de escaneo
 Comment[nl]=De gescande afbeelding opslaan in de galerij voor scannen
 Comment[pt]=Gravar a imagem digitalizada na galeria de digitalizações

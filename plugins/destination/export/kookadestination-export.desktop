@@ -8,6 +8,8 @@ Icon=document-export
 
 Name=Online Service
 Name[ca]=Servei en línia
+Name[ca@valencia]=Servei en línia
+Name[de]=Online-Dienst
 Name[es]=Servicio en línea
 Name[nl]=Online service
 Name[pt]=Serviço 'Online'
@@ -17,6 +19,7 @@ Name[uk]=Інтернет-служба
 Name[x-test]=xxOnline Servicexx
 Comment=Export the scanned image to an online service
 Comment[ca]=Exporta la imatge escanejada a un servei en línia
+Comment[ca@valencia]=Exporta la imatge escanejada a un servei en línia
 Comment[es]=Exportar la imagen escaneada a un servicio en línea
 Comment[nl]=De gescande afbeelding naar een online service exporteren
 Comment[pt]=Exportar a imagem digitalizada para um serviço 'online'

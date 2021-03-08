@@ -8,6 +8,8 @@ Icon=document-save
 
 Name=Save Image
 Name[ca]=Desa la imatge
+Name[ca@valencia]=Guarda la imatge
+Name[de]=Bild speichern
 Name[es]=Guardar imagen
 Name[nl]=Afbeelding opslaan
 Name[pt]=Gravar a Imagem
@@ -17,6 +19,7 @@ Name[uk]=Збереження зображення
 Name[x-test]=xxSave Imagexx
 Comment=Save the scanned image
 Comment[ca]=Desa la imatge escanejada
+Comment[ca@valencia]=Guarda la imatge escanejada
 Comment[es]=Guardar la imagen escaneada
 Comment[nl]=De gescande afbeelding opslaan
 Comment[pt]=Gravar a imagem digitalizada

@@ -4,6 +4,7 @@ X-KDE-ServiceType=Kooka/DestinationPlugin
 X-KDE-Derived=KPluginInfo
 Name=Kooka Scan Destination Plugin
 Name[ca]=Connector de destinació d'escaneig del Kooka
+Name[ca@valencia]=Connector de destinació d'escaneig del Kooka
 Name[es]=Complemento de destino de escaneo de Kooka
 Name[nl]=Plug-in voor Kooka scanbestemming
 Name[pt]='Plugin' de Destino de Digitalização do Kooka
