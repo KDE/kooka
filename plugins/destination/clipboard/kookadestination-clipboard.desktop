@@ -24,6 +24,7 @@ Name[x-test]=xxCopy Imagexx
 Comment=Copy the scanned image to the clipboard
 Comment[ca]=Copia la imatge escanejada al porta-retalls
 Comment[ca@valencia]=Copia la imatge escanejada al porta-retalls
+Comment[de]=Kopiert das eingescannte Bild in die Zwischenablage
 Comment[en_GB]=Copy the scanned image to the clipboard
 Comment[es]=Copiar la imagen escaneada en el portapapeles
 Comment[fr]=Copier l'image numérisée dans le presse-papier

@@ -24,6 +24,7 @@ Name[x-test]=xxPrint Imagexx
 Comment=Print the scanned image
 Comment[ca]=Imprimeix la imatge escanejada
 Comment[ca@valencia]=Imprimeix la imatge escanejada
+Comment[de]=Druckt das eingescannte Bild
 Comment[en_GB]=Print the scanned image
 Comment[es]=Imprimir la imagen escaneada
 Comment[fr]=Imprimer l'image numérisée

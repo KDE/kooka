@@ -24,6 +24,7 @@ Name[x-test]=xxOnline Servicexx
 Comment=Export the scanned image to an online service
 Comment[ca]=Exporta la imatge escanejada a un servei en línia
 Comment[ca@valencia]=Exporta la imatge escanejada a un servei en línia
+Comment[de]=Exportiert das eingescannte Bild zu einem Online-Dienst
 Comment[en_GB]=Export the scanned image to an online service
 Comment[es]=Exportar la imagen escaneada a un servicio en línea
 Comment[fr]=Exporter l'image numérisée vers un service en ligne

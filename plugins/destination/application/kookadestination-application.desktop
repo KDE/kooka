@@ -25,6 +25,7 @@ Name[x-test]=xxApplicationxx
 Comment=Open the scanned image in an application
 Comment[ca]=Obre la imatge escanejada en una aplicació
 Comment[ca@valencia]=Obri la imatge escanejada en una aplicació
+Comment[de]=Eingescanntes Bild in einer Anwendung öffnen
 Comment[en_GB]=Open the scanned image in an application
 Comment[es]=Abrir la imagen escaneada en una aplicación
 Comment[fr]=Ouvrir l'élément numérisé avec l'application.
