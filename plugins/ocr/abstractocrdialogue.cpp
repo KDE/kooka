@@ -91,7 +91,7 @@ AbstractOcrDialogue::AbstractOcrDialogue(AbstractOcrEngine *plugin, QWidget *pnt
     // The buttons chosen also affect the placement, but the dialogue actions
     // are more important!
     //
-    // So the buttons used in Qt5 are Discard=Start, Apply=Stop, Close.  This at
+    // So the buttons used with Qt5 are Discard=Start, Apply=Stop, Close.  This
     // at least places the buttons in the intended order (in the standard KDE
     // style), even though the buttons used bear no relation to their function.
 
@@ -114,6 +114,10 @@ AbstractOcrDialogue::AbstractOcrDialogue(AbstractOcrEngine *plugin, QWidget *pnt
     bb->button(QDialogButtonBox::Discard)->setEnabled(true);	// Start OCR
     bb->button(QDialogButtonBox::Apply)->setEnabled(false);	// Stop OCR
     bb->button(QDialogButtonBox::Close)->setEnabled(true);	// Close
+
+    // This appears to be necessary to ensure that "Start OCR" becomes the
+    // default button.
+    bb->button(QDialogButtonBox::Discard)->setFocus(Qt::OtherFocusReason);
 }
 
 
