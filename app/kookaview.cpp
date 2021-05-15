@@ -46,6 +46,7 @@
 #include <qmenu.h>
 #include <qprintdialog.h>
 #include <qprinter.h>
+#include <qfiledialog.h>
 
 #include <kmimetypetrader.h>
 #include <klocalizedstring.h>
@@ -85,6 +86,8 @@
 #include "imagetransform.h"
 #include "statusbarmanager.h"
 #include "kookasettings.h"
+#include "imagefilter.h"
+#include "recentsaver.h"
 #include "kooka_logging.h"
 
 #include "imgprintdialog.h"
@@ -706,14 +709,35 @@ void KookaView::slotStartOcrSelection()
 {
     emit changeStatus(i18n("Starting OCR on selection"));
     startOCR(mImageCanvas->selectedImage());
-    emit clearStatus();
 }
 
 void KookaView::slotStartOcr()
 {
     emit changeStatus(i18n("Starting OCR on the image"));
     startOCR(gallery()->getCurrImage(true));
-    emit clearStatus();
+}
+
+void KookaView::slotStartOcrFile()
+{
+    RecentSaver saver("ocrFile");
+    QUrl url = QFileDialog::getOpenFileUrl(this, i18n("OCR File"),
+                                           saver.recentUrl(),
+                                           ImageFilter::qtFilterString(ImageFilter::Reading, ImageFilter::AllImages|ImageFilter::AllFiles));
+    if (!url.isValid()) return;
+    saver.save(url);
+
+    ScanImage::Ptr img(new ScanImage(url));
+    if (!img->isFileBound())
+    {
+        KMessageBox::sorry(mMainWindow,
+                           xi18nc("@info", "Cannot load <filename>%1</filename> for OCR:<nl/>%2",
+                                  url.toDisplayString(), img->errorString()),
+                           i18n("Cannot Read OCR File"));
+        return;
+    }
+
+    emit changeStatus(xi18nc("@info", "Starting OCR on file <filename>%1</filename>", url.url(QUrl::PreferLocalFile)));
+    startOCR(img);
 }
 
 void KookaView::slotSetOcrSpellConfig(const QString &configFile)

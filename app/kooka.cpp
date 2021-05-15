@@ -304,6 +304,10 @@ void Kooka::setupActions()
     actionCollection()->addAction("ocrImageSelect", ocrSelectAction);
     connect(ocrSelectAction, &QAction::triggered, m_view, &KookaView::slotStartOcrSelection);
 
+    QAction *ocrFileAction = new QAction(QIcon::fromTheme("ocr-file"), i18n("OCR File..."), this);
+    actionCollection()->addAction("ocrFile", ocrFileAction);
+    connect(ocrFileAction, &QAction::triggered, m_view, &KookaView::slotStartOcrFile);
+
     m_saveOCRTextAction = new QAction(QIcon::fromTheme("document-save-as"), i18n("Save OCR Result Text..."), this);
     actionCollection()->addAction("saveOCRResult", m_saveOCRTextAction);
     actionCollection()->setDefaultShortcut(m_saveOCRTextAction, Qt::CTRL + Qt::Key_U);

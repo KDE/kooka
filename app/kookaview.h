@@ -132,6 +132,7 @@ public:
 public slots:
     void slotStartOcr();
     void slotStartOcrSelection();
+    void slotStartOcrFile();
     void slotSetOcrSpellConfig(const QString &configFile);
     void slotOcrSpellCheck(bool interactive = true, bool background = false);
     void slotSaveOcrResult();

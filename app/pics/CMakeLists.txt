@@ -20,6 +20,7 @@ set(kooka_PICS
   newfromselect.png
   ocr.png
   ocr-select.png
+  ocr-file.png
   photocopy.png
   preview.png
   scan.png
