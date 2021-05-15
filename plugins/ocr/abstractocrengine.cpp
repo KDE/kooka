@@ -167,7 +167,7 @@ void AbstractOcrEngine::stopOcrProcess(bool tellUser)
 {
     if (m_ocrProcess!=nullptr && m_ocrProcess->state()==QProcess::Running)
     {
-        qCDebug(OCR_LOG) << "Killing OCR process" << m_ocrProcess->pid();
+        qCDebug(OCR_LOG) << "Killing OCR process" << m_ocrProcess->processId();
         m_ocrProcess->kill();
         if (tellUser) KMessageBox::error(m_parent, i18n("The OCR process was stopped"));
     }
