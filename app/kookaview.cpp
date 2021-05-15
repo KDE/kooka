@@ -825,6 +825,7 @@ void KookaView::startOCR(ScanImage::Ptr img)
 void KookaView::slotOcrResultAvailable()
 {
     emit signalOcrResultAvailable(mOcrResEdit->document()->characterCount()>0);
+    updateSelectionState();
 }
 
 

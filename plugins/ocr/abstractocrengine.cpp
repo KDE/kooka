@@ -186,8 +186,6 @@ void AbstractOcrEngine::finishedOcr(bool success)
 
     if (success)
     {
-        emit newOCRResultText();			// send out the text result
-
         if (!m_ocrResultFile.isEmpty() &&		// there is a result image
             m_imgCanvas!=nullptr)			// and we can display it
         {
@@ -201,10 +199,17 @@ void AbstractOcrEngine::finishedOcr(bool success)
             m_trackingActive = true;			// handle clicks on image
         }
 
+        // Do this after loading the result image above.  Then when the signal
+        // reaches KookaView::slotOcrResultAvailable() which then calls
+        // updateSelectionState(), the image canvas has the image loaded and
+        // the image view actions are correctly enabled.
+        emit newOCRResultText();			// send out the text result
+
         /* now it is time to invoke the dictionary if required */
         // TODO: readOnlyEditor needed here? Also done in finishResultDocument()
-        emit readOnlyEditor(false);         // user can now edit
-        if (m_ocrDialog != nullptr) {
+        emit readOnlyEditor(false);			// user can now edit
+        if (m_ocrDialog != nullptr)
+        {
             emit setSpellCheckConfig(m_ocrDialog->customSpellConfigFile());
 
             bool doSpellcheck = m_ocrDialog->wantInteractiveSpellCheck();
