@@ -121,7 +121,7 @@ void Kooka::startup()
     m_view->loadStartupImage();
 }
 
-// TODO: use KStandardShortcut wherever available
+
 void Kooka::setupActions()
 {
     printImageAction = KStandardAction::print(this, &Kooka::filePrint, actionCollection());
@@ -131,31 +131,36 @@ void Kooka::setupActions()
 
     // Image Viewer
 
-    scaleToWidthAction =  new QAction(QIcon::fromTheme("zoom-fit-width"), i18n("Scale to Width"), this);
+    scaleToWidthAction = new QAction(QIcon::fromTheme("zoom-fit-width"), i18n("Scale to Width"), this);
     actionCollection()->addAction("scaleToWidth", scaleToWidthAction);
-    actionCollection()->setDefaultShortcut(scaleToWidthAction, Qt::CTRL + Qt::Key_I);
-    connect(scaleToWidthAction, &QAction::triggered, [=]() { m_view->imageViewerAction(ImageCanvas::UserActionFitWidth); });
+    // Use the traditional Kooka shortcut if no standard shortcut is
+    // defined by KStandardShortcut.
+    QList<QKeySequence> shortcuts = KStandardShortcut::shortcut(KStandardShortcut::FitToWidth);
+    if (shortcuts.isEmpty()) shortcuts.append(Qt::CTRL + Qt::Key_I);
+    actionCollection()->setDefaultShortcuts(scaleToWidthAction, shortcuts);
+    connect(scaleToWidthAction, &QAction::triggered, this, [=]() { m_view->imageViewerAction(ImageCanvas::UserActionFitWidth); });
     m_view->connectViewerAction(scaleToWidthAction);
     m_view->connectPreviewAction(scaleToWidthAction);
 
     scaleToHeightAction = new QAction(QIcon::fromTheme("zoom-fit-height"), i18n("Scale to Height"), this);
     actionCollection()->addAction("scaleToHeight", scaleToHeightAction);
-    actionCollection()->setDefaultShortcut(scaleToHeightAction, Qt::CTRL + Qt::Key_H);
-    connect(scaleToHeightAction, &QAction::triggered, [=]() { m_view->imageViewerAction(ImageCanvas::UserActionFitHeight); });
+    shortcuts = KStandardShortcut::shortcut(KStandardShortcut::FitToHeight);
+    if (shortcuts.isEmpty()) shortcuts.append(Qt::CTRL + Qt::Key_H);
+    actionCollection()->setDefaultShortcuts(scaleToHeightAction, shortcuts);
+    connect(scaleToHeightAction, &QAction::triggered, this, [=]() { m_view->imageViewerAction(ImageCanvas::UserActionFitHeight); });
     m_view->connectViewerAction(scaleToHeightAction);
     m_view->connectPreviewAction(scaleToHeightAction);
 
     scaleToOriginalAction = new QAction(QIcon::fromTheme("zoom-original"), i18n("Original Size"), this);
     actionCollection()->addAction("scaleOriginal", scaleToOriginalAction);
-    actionCollection()->setDefaultShortcut(scaleToOriginalAction, Qt::CTRL + Qt::Key_1);
-    connect(scaleToOriginalAction, &QAction::triggered, [=]() { m_view->imageViewerAction(ImageCanvas::UserActionOrigSize); });
+    actionCollection()->setDefaultShortcuts(scaleToOriginalAction, KStandardShortcut::shortcut(KStandardShortcut::ActualSize));
+    connect(scaleToOriginalAction, &QAction::triggered, this, [=]() { m_view->imageViewerAction(ImageCanvas::UserActionOrigSize); });
     m_view->connectViewerAction(scaleToOriginalAction);
 
     scaleToZoomAction = new QAction(QIcon::fromTheme("page-zoom"), i18n("Set Zoom..."), this);
     actionCollection()->addAction("showZoomDialog", scaleToZoomAction);
-    // No shortcut.  There wasn't a standard shortcut for "Zoom" in KDE4,
-    // and there is no KStandardShortcut::Zoom in KF5.
-    connect(scaleToZoomAction, &QAction::triggered, [=]() { m_view->imageViewerAction(ImageCanvas::UserActionZoom); });
+    actionCollection()->setDefaultShortcuts(scaleToZoomAction, KStandardShortcut::shortcut(KStandardShortcut::Zoom));
+    connect(scaleToZoomAction, &QAction::triggered, this, [=]() { m_view->imageViewerAction(ImageCanvas::UserActionZoom); });
     m_view->connectViewerAction(scaleToZoomAction);
 
     keepZoomAction = new KToggleAction(QIcon::fromTheme("lockzoom"), i18n("Keep Zoom Setting"), this);
@@ -236,14 +241,14 @@ void Kooka::setupActions()
 
     deleteImageAction = new QAction(QIcon::fromTheme("edit-delete"), i18n("Delete Image"), this);
     actionCollection()->addAction("deleteImage", deleteImageAction);
-    actionCollection()->setDefaultShortcut(deleteImageAction, Qt::SHIFT + Qt::Key_Delete);
+    actionCollection()->setDefaultShortcuts(deleteImageAction, KStandardShortcut::deleteFile());
     connect(deleteImageAction, &QAction::triggered, m_view->gallery(), &ScanGallery::slotDeleteItems);
     m_view->connectGalleryAction(deleteImageAction);
     m_view->connectThumbnailAction(deleteImageAction);
 
     renameImageAction = new QAction(QIcon::fromTheme("edit-rename"), i18n("Rename Image"), this);
     actionCollection()->addAction("renameImage", renameImageAction);
-    actionCollection()->setDefaultShortcut(renameImageAction, Qt::Key_F2);
+    actionCollection()->setDefaultShortcuts(renameImageAction, KStandardShortcut::renameFile());
     connect(renameImageAction, &QAction::triggered, m_view->gallery(), &ScanGallery::slotRenameItems);
     m_view->connectGalleryAction(renameImageAction);
 
