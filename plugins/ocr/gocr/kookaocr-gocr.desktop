@@ -13,6 +13,7 @@ Name[de]=GOCR
 Name[en_GB]=GOCR
 Name[es]=GOCR
 Name[et]=GOCR
+Name[eu]=GOCR
 Name[fi]=GOCR
 Name[fr]=GOCR
 Name[gl]=GOCR
@@ -36,6 +37,7 @@ Comment[de]=<emphasis>GOCR</emphasis> (auch unter dem Namen <emphasis>JOCR</emph
 Comment[en_GB]=<emphasis>GOCR</emphasis> (sometimes known as <emphasis>JOCR</emphasis>) is an open source OCR engine, originally started by Joerg&nbsp;Schulenburg and now with a team of active developers.<nl/><nl/>See <link url="http://jocr.sourceforge.net">jocr.sourceforge.net</link> for more information on GOCR.
 Comment[es]=<emphasis>GOCR</emphasis> (a veces conocido como <emphasis>JOCR</emphasis> es un motor OCR de código abierto, iniciado originalmente por Joerg&nbsp;Schulenburg y mantenido en la actualidad por un equipo de desarrolladores activos.<nl/><nl/>Consulte <link url="http://jocr.sourceforge.net">jocr.sourceforge.net</link> para más información sobre GOCR.
 Comment[et]=<emphasis>GOCR</emphasis> (vahel ka nimega <emphasis>JOCR</emphasis>) on avatud lähtekoodiga optilise märgituvastuse mootor, mille algselt lõi Joerg&nbsp;Schulenburg ja mida nüüd arendab terve aktiivne meeskond.<nl/><nl/>GOCR-i kohta leiab lähemat teavet veebilehelt <link url="http://jocr.sourceforge.net">jocr.sourceforge.net</link>.
+Comment[eu]=<emphasis>GOCR</emphasis> (batzuetan <emphasis>JOCR</emphasis> gisa ezaguna) sorburu irekiko OCR motor bat da, jatorrian Joerg&nbsp;Schulenburg-ek hasia eta orain garatzaile-talde aktibo bat duena.<nl/><nl/>Begiratu <link url="http://jocr.sourceforge.net">jocr.sourceforge.net</link> GOCR-ren gaineko informazio gehiago nahi baduzu.
 Comment[fi]=<emphasis>GOCR</emphasis> (joka joskus tunnetaan nimellä <emphasis>JOCR</emphasis> on avoimen lähdekoodin tekstintunnistusmoottori, jonka alkuaan loi Joerg&nbsp;Schulenberg ja jota nykyään kehittää aktiivinen kehitysryhmä.<nl/><nl/>Lisätietoa GOCR:stä löytyy sivulta <link url="http://jocr.sourceforge.net/">jocr.sourceforge.net</link>.
 Comment[fr]=<emphasis>GOCR</emphasis> (aussi connu en tant que <emphasis>JOCR</emphasis>) est un moteur de ROC open-source, initié par Joerg&nbsp;Schulenburg et désormais suivi par une équipe de développeurs.<nl/> <nl/>Consultez <link url="http://jocr.sourceforge.net">jocr.sourceforge.net</link> pour plus d'informations sur GOCR.
 Comment[gl]=<emphasis>GOCR</emphasis> (ás veces denominado <emphasis>JOCR</emphasis>) é un motor libre de recoñecemento óptico de caracteres (OCR) que comezou a desenvolver Joerg&nbsp;Schulenburg e que agora goza dun equipo de desenvolvedores activos.<nl/> <nl/> Consulte <link url="http://jocr.sourceforge.net">jocr.sourceforge.net</link> para obter máis información sobre GOCR.
