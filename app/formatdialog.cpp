@@ -668,6 +668,8 @@ bool FormatDialog::alwaysUseFormat() const
         if (mime.inherits(ip->mime))			// found format for the MIME type
         {
             const ScanImage::ImageTypes types = (recOnly ? ip->recForTypes : ip->okForTypes);
+            if (!recOnly && types==ScanImage::None) return (true);
+							// allowed for all formats
             return (types & type);			// check image type mask
         }
     }
