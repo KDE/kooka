@@ -76,16 +76,16 @@ FileTreeBranch::FileTreeBranch(FileTreeView *parent,
 
     setShowingDotFiles(showHidden);
 
-    connect(this, &KDirLister::itemsAdded, this, &FileTreeBranch::slotItemsAdded);
-    connect(this, &KDirLister::itemsDeleted, this, &FileTreeBranch::slotItemsDeleted);
-    connect(this, &KDirLister::refreshItems, this, &FileTreeBranch::slotRefreshItems);
-    connect(this, &KDirLister::started, this, &FileTreeBranch::slotListerStarted);
+    connect(this, &KCoreDirLister::itemsAdded, this, &FileTreeBranch::slotItemsAdded);
+    connect(this, &KCoreDirLister::itemsDeleted, this, &FileTreeBranch::slotItemsDeleted);
+    connect(this, &KCoreDirLister::refreshItems, this, &FileTreeBranch::slotRefreshItems);
+    connect(this, &KCoreDirLister::started, this, &FileTreeBranch::slotListerStarted);
 
-    connect(this, QOverload<const QUrl &>::of(&KDirLister::completed), this, &FileTreeBranch::slotListerCompleted);
-    connect(this, QOverload<const QUrl &>::of(&KDirLister::canceled), this, &FileTreeBranch::slotListerCanceled);
-    connect(this, QOverload<>::of(&KDirLister::clear), this, &FileTreeBranch::slotListerClear);
-    connect(this, QOverload<const QUrl &>::of(&KDirLister::clear), this, &FileTreeBranch::slotListerClearUrl);
-    connect(this, QOverload<const QUrl &, const QUrl &>::of(&KDirLister::redirection), this, &FileTreeBranch::slotRedirect);
+    connect(this, &KCoreDirLister::listingDirCompleted, this, &FileTreeBranch::slotListerCompleted);
+    connect(this, &KCoreDirLister::listingDirCanceled, this, &FileTreeBranch::slotListerCanceled);
+    connect(this, &KCoreDirLister::clearDir, this, &FileTreeBranch::slotListerClear);
+    connect(this, &KCoreDirLister::clearDir, this, &FileTreeBranch::slotListerClearUrl);
+    connect(this, QOverload<const QUrl &, const QUrl &>::of(&KCoreDirLister::redirection), this, &FileTreeBranch::slotRedirect);
 
     m_openChildrenURLs.append(u);
 }
