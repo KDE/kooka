@@ -23,7 +23,7 @@
 #include <qtreewidget.h>
 
 #include <kfileitem.h>
-#include <kdirlister.h>
+#include <kcoredirlister.h>
 
 #include <kio/global.h>
 #include <kio/job.h>

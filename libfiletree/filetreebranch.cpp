@@ -43,7 +43,7 @@ FileTreeBranch::FileTreeBranch(FileTreeView *parent,
                                const QIcon &pix,
                                bool showHidden,
                                FileTreeViewItem *branchRoot)
-    : KDirLister(parent),
+    : KCoreDirLister(parent),
       m_root(branchRoot),
       m_name(name),
       m_rootIcon(pix),
@@ -639,7 +639,7 @@ void FileTreeBranch::slotListerCompleted(const QUrl &url)
 #ifdef DEBUG_LISTING
                     qCDebug(LIBFILETREE_LOG) << "Starting to list" << recurseUrl;
 #endif // DEBUG_LISTING
-                    openUrl(recurseUrl, KDirLister::Keep);
+                    openUrl(recurseUrl, KCoreDirLister::Keep);
                 }
             }
         }
@@ -675,7 +675,7 @@ bool FileTreeBranch::populate(const QUrl &url, FileTreeViewItem *currItem)
 #ifdef DEBUG_LISTING
         qCDebug(LIBFILETREE_LOG) << "Starting to list";
 #endif // DEBUG_LISTING
-        ret = openUrl(url, KDirLister::Keep);       // start the lister
+        ret = openUrl(url, KCoreDirLister::Keep);	// start the lister
     } else {
 #ifdef DEBUG_LISTING
         qCDebug(LIBFILETREE_LOG) << "Children already exist";
