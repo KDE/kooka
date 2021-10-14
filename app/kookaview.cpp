@@ -48,7 +48,7 @@
 #include <qprinter.h>
 #include <qfiledialog.h>
 
-#include <kmimetypetrader.h>
+#include <kapplicationtrader.h>
 #include <klocalizedstring.h>
 #include <kmessagebox.h>
 #include <kled.h>
@@ -1161,14 +1161,12 @@ void KookaView::showOpenWithMenu(KActionMenu *menu)
     menu->menu()->clear();
 
     int i = 0;
-    mOpenWithOffers = KMimeTypeTrader::self()->query(mimeType);
-    for (KService::List::ConstIterator it = mOpenWithOffers.constBegin();
-            it != mOpenWithOffers.constEnd(); ++it, ++i) {
-        KService::Ptr service = (*it);
-        //qCDebug(KOOKA_LOG) << "> offer:" << (*it)->name();
-
-        QString actionName((*it)->name().replace("&", "&&"));
-        QAction *act = new QAction(QIcon::fromTheme((*it)->icon()), actionName, this);
+    mOpenWithOffers = KApplicationTrader::queryByMimeType(mimeType);
+    for (const KService::Ptr service : qAsConst(mOpenWithOffers))
+    {
+        //qCDebug(KOOKA_LOG) << "> offer:" << service->name();
+        QString actionName(service->name().replace("&", "&&"));
+        QAction *act = new QAction(QIcon::fromTheme(service->icon()), actionName, this);
         connect(act, &QAction::triggered, this, [=]() { slotOpenWith(i); });
         menu->addAction(act);
     }
