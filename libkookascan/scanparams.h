@@ -191,6 +191,13 @@ protected:
      **/
     virtual void createScanDestinationGUI(ScanParamsPage *frame)	{ }
 
+    /**
+     * Check whether a scan device is present and configured.
+     *
+     * @return @c true if there is a scan device.
+     **/
+    bool hasScanDevice() const					{ return (mSaneDevice!=nullptr); }
+
 protected slots:
     /**
      * Open the source selection dialogue.  Internally connected

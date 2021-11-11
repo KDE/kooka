@@ -167,6 +167,8 @@ void KookaScanParams::saveDestinationSettings()
 {
     qCDebug(KOOKA_LOG);
 
+    if (!hasScanDevice()) return;			// no scanner configured
+
     AbstractDestination *currentPlugin = qobject_cast<AbstractDestination *>(PluginManager::self()->currentPlugin(PluginManager::DestinationPlugin));
     if (currentPlugin==nullptr) return;			// nothing to save
 
