@@ -499,21 +499,31 @@ void ScanGallery::slotDecorate(FileTreeBranch *branch, const FileTreeViewItemLis
 
 void ScanGallery::updateParent(const FileTreeViewItem *curr)
 {
-    FileTreeBranch *branch = branches().at(0);      /* There should be at least one */
-    if (branch == nullptr) {
-        return;
+    QUrl dir = itemDirectory(curr);
+    if (curr->isDir())
+    {
+        // Get the actual parent of the directory.  itemDirectory() above
+        // will, for a directory, ensure that its path ends with a slash.
+        // So do not combine the two calls below, it is first necessary to
+        // remove that trailing slash again and then remove the file name,
+        // going up to the parent directory.  Combining the two flags will
+        // do those adjustments in the wrong order, first removing the file
+        // name (which will be empty, therefore doing nothing) and then the
+        // trailing slash.  This effectively leaves the original directory
+        // URL unchanged.
+        dir = dir.adjusted(QUrl::StripTrailingSlash);
+        dir = dir.adjusted(QUrl::RemoveFilename);
     }
 
-    QUrl dir = itemDirectory(curr);
 #ifdef DEBUG_LOADING
     qCDebug(KOOKA_LOG) << "Updating directory" << dir;
 #endif // DEBUG_LOADING
+
+    FileTreeBranch *branch = curr->branch();		// it should have one
     branch->updateDirectory(dir);
 
     FileTreeViewItem *parent = branch->findItemByUrl(dir);
-    if (parent != nullptr) {
-        parent->setExpanded(true);    /* Ensure parent is expanded */
-    }
+    if (parent != nullptr) parent->setExpanded(true);	// ensure parent is expanded
 }
 
 // "Rename" action triggered in the GUI
@@ -1091,14 +1101,12 @@ void ScanGallery::slotItemProperties()
 void ScanGallery::slotDeleteItems()
 {
     FileTreeViewItem *curr = highlightedFileTreeViewItem();
-    if (curr == nullptr) {
-        return;
-    }
+    if (curr == nullptr) return;
 
     QUrl urlToDel = curr->url();			// item to be deleted
     bool isDir = curr->isDir();				// deleting a folder?
     QTreeWidgetItem *nextToSelect = curr->treeWidget()->itemBelow(curr);
-    // select this afterwards
+							// select this afterwards
     QString s;
     QString dontAskKey;
     if (isDir) {
@@ -1121,20 +1129,22 @@ void ScanGallery::slotDeleteItems()
         return;
     }
 
-    slotUnloadItem(curr);
+    slotUnloadItem(curr);				// unload item, possibly recursively
+
     qCDebug(KOOKA_LOG) << "Deleting" << urlToDel;
     KIO::DeleteJob *job = KIO::del(urlToDel);
-    if (!job->exec())
+    if (!job->exec())					// do the deletion
     {
         KMessageBox::error(this, xi18nc("@info", "Could not delete the image or folder<nl/><filename>%2</filename><nl/>%1",
                                         job->errorString(),
-                                        urlToDel.url(QUrl::PreferLocalFile)),
+                                        urlToDel.toDisplayString(QUrl::PreferLocalFile)),
                            i18n("File Delete Error"));
         return;
     }
 
     updateParent(curr);					// update parent folder count
-    if (isDir) {					// remove from the name combo
+    if (isDir)						// remove from the name combo
+    {
         emit galleryDirectoryRemoved(curr->branch(), itemDirectoryRelative(curr));
     }
 

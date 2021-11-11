@@ -376,7 +376,7 @@ void FileTreeView::slotNewTreeViewItems(FileTreeBranch *branch, const FileTreeVi
         return;
     }
 #ifdef DEBUG_LISTING
-    qCDebug(LIBFILETREE_LOG) << "items" << items.count()
+    qCDebug(LIBFILETREE_LOG) << "items" << items.count();
 #endif // DEBUG_LISTING
 
     /* Sometimes it happens that new items should become selected, i.e. if the user
