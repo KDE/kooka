@@ -96,7 +96,6 @@ private:
 
     QUrl m_lastSelected;
     QUrl m_toSelect;
-    QUrl m_toChangeTo;
 };
 
 #endif                          // THUMBVIEW_H

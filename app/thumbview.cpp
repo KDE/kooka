@@ -36,6 +36,7 @@
 #include <qaction.h>
 #include <qmenu.h>
 #include <qstandardpaths.h>
+#include <qtimer.h>
 #include <QSignalBlocker>
 
 #include <kfileitem.h>
@@ -100,7 +101,6 @@ ThumbView::ThumbView(QWidget *parent)
 
     m_lastSelected = url();
     m_toSelect = QUrl();
-    m_toChangeTo = QUrl();
 
     readSettings();
 
@@ -130,6 +130,8 @@ void ThumbView::slotHighlightItem(const QUrl &url, bool isDir)
     {							// see if changing path
         if (!isDir) m_toSelect = urlToShow;		// select that when loading finished
 
+        // A workaround was formerly needed here:
+        //
         // Bug 216928: Need to check whether the KDirOperator's KDirLister is
         // currently busy.  If it is, then trying to set the KDirOperator to a
         // new directory at this point is accepted but fails soon afterwards
@@ -146,28 +148,45 @@ void ThumbView::slotHighlightItem(const QUrl &url, bool isDir)
         // will then call our slotFinishedLoading() and do the setUrl() there.
         //
         // There are two possible (but extremely unlikely) race conditions here.
+        //
+        // It is not clear whether this is the same fundamental problem as tried to
+        // work around above, but it seems to be possible to reliably trigger a
+        // segfault in KDirModel when a new directory is created for the second time
+        // at the same level (e.g. the top) of the gallery tree:
+        //
+        //    Application: Kooka (kooka), signal: Segmentation fault
+        //    KFileItem::isDir (this=this@entry=0x8) at kio/src/core/kfileitem.cpp:1284
+        //    KDirModelPrivate::isDir (node=0x0) at kio/src/widgets/kdirmodel.cpp:222
+        //    KDirModelPrivate::isDir (node=0x0) at kio/src/widgets/kdirmodel.cpp:220
+        //    KDirModelPrivate::_k_slotCompleted() at kio/src/widgets/kdirmodel.cpp:572
+        //    [signal despatch]
+        //    KCoreDirLister::listingDirCompleted() at moc_kcoredirlister.cpp:497
+        //    KCoreDirListerCache::slotUpdateResult() at kio/src/core/kcoredirlister.cpp:1842
+        //    KJob::result() at moc_kjob.cpp:635
+        //
+        // The twofold solution seems to be first to stop the lister if it appears
+        // to be currently busy, and then to defer setting the new URL until after
+        // a hopefully imperceptible delay.
 
-#ifdef WORKAROUND_216928
-        if (dirLister()->isFinished()) {		// idle, can do this now
-            qCDebug(KOOKA_LOG) << "lister idle, changing dir to" << dirToShow;
-            setUrl(dirToShow, true);			// change path and reload
-        } else {
-            qCDebug(KOOKA_LOG) << "lister busy, deferring change to" << dirToShow;
-            m_toChangeTo = dirToShow;			// note to do later
+        if (!dirLister()->isFinished())			// not idle, ensure stopped first
+        {
+            qCDebug(KOOKA_LOG) << "lister busy, stopping";
+            dirLister()->stop();
         }
-#else
-        qCDebug(KOOKA_LOG) << "changing dir to" << dirToShow;
-        setUrl(dirToShow, true);			// change path and reload
-#endif
+
+        qCDebug(KOOKA_LOG) << "deferring change to" << dirToShow;
+        QTimer::singleShot(100, this, [this,dirToShow]()
+        {
+            setUrl(dirToShow, true);			// change path and reload
+        });
         return;
     }
 
     KFileItemList selItems = selectedItems();
-    if (!selItems.isEmpty()) {				// the current selection
+    if (!selItems.isEmpty())				// the current selection
+    {
         KFileItem curItem = selItems.first();
-        if (curItem.url() == urlToShow) {
-            return;    // already selected
-        }
+        if (curItem.url() == urlToShow) return;		// already selected
     }
 
     QSignalBlocker block(this);
@@ -206,13 +225,6 @@ void ThumbView::slotSetSize(KIconLoader::StdSizes size)
 
 void ThumbView::slotFinishedLoading()
 {
-    if (m_toChangeTo.isValid()) {			// see if change deferred
-        qCDebug(KOOKA_LOG) << "setting dirop url to" << m_toChangeTo;
-        setUrl(m_toChangeTo, true);			// change path and reload
-        m_toChangeTo = QUrl();				// have dealt with this now
-        return;
-    }
-
     if (m_toSelect.isValid()) {				// see if something to select
         qCDebug(KOOKA_LOG) << "selecting" << m_toSelect;
         QSignalBlocker block(this);
