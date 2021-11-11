@@ -156,14 +156,15 @@ AbstractPlugin *PluginManager::loadPlugin(PluginManager::PluginType type, const 
         qCDebug(KOOKA_LOG) << "  icon" << service->icon();
         qCDebug(KOOKA_LOG) << "  library" << lib;
 
-        KPluginLoader loader(*service);
-        if (loader.factory()==nullptr)
+        QPluginLoader loader(lib);
+        KPluginMetaData metadata(loader);
+        if (!metadata.isValid())
         {
-            qCWarning(KOOKA_LOG) << "Cannot load plugin library" << lib << "from service";
+            qCWarning(KOOKA_LOG) << "Cannot get plugin metadata from service" << service->storageId();
         }
         else
         {
-            plugin = loader.factory()->create<AbstractPlugin>();
+            plugin = KPluginFactory::instantiatePlugin<AbstractPlugin>(metadata).plugin;
             if (plugin!=nullptr)
             {
                 qCDebug(KOOKA_LOG) << "created plugin from library" << lib;
