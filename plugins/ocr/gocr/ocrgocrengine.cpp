@@ -110,6 +110,7 @@ bool OcrGocrEngine::createOcrProcess(AbstractOcrDialogue *dia, ScanImage::Ptr im
     }
     args << "-s" << QString::number(gocrDia->getSpaceWidth());
     args << "-d" << QString::number(gocrDia->getDustsize());
+    args << "-a" << QString::number(gocrDia->getCertainty());
 
     // The verbosity value is a bitfield.  1 means to print more information,
     // 32 means output a PNG result image (which is always requested).

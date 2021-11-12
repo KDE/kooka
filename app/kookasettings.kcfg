@@ -221,6 +221,12 @@
       <default>0</default>
     </entry>
 
+    <entry name="OcrGocrCertainty" key="gocrCertainty" type="Int">
+      <label>Certainty:</label>
+      <tooltip>&lt;div&gt;The acceptance certainty threshold for recognition, characters with a lower certainty are considered to be unknown. The default is 95.&lt;/div&gt;</tooltip>
+      <default>95</default>
+    </entry>
+
   </group>
 
 

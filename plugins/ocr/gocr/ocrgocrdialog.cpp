@@ -100,9 +100,18 @@ bool OcrGocrDialog::setupGui()
     l->setBuddy(sliderSpace);
     gl->addWidget(sliderSpace, 2, 1);
 
-    // TODO: slider for "certainty" (GOCR option '-a')
+    ski = KookaSettings::self()->ocrGocrCertaintyItem();
+    Q_ASSERT(ski!=nullptr);
+    l = new QLabel(ski->label(), w);
+    gl->addWidget(l, 3, 0);
+    sliderCertainty = new KScanSlider(w, QString(), true);
+    sliderCertainty->setRange(5, 100, -1, 95);
+    sliderCertainty->setValue(KookaSettings::ocrGocrCertainty());
+    sliderCertainty->setToolTip(ski->toolTip());
+    l->setBuddy(sliderCertainty);
+    gl->addWidget(sliderCertainty, 3, 1);
 
-    gl->setRowStretch(3, 1);				// for top alignment
+    gl->setRowStretch(4, 1);				// for top alignment
 
     /* find the GOCR binary */
     m_ocrCmd = engine()->findExecutable(&KookaSettings::ocrGocrBinary, KookaSettings::self()->ocrGocrBinaryItem());
@@ -140,6 +149,7 @@ void OcrGocrDialog::slotWriteConfig()
     KookaSettings::setOcrGocrGrayLevel(getGraylevel());
     KookaSettings::setOcrGocrDustSize(getDustsize());
     KookaSettings::setOcrGocrSpaceWidth(getSpaceWidth());
+    KookaSettings::setOcrGocrCertainty(getCertainty());
     KookaSettings::self()->save();
 }
 
@@ -164,6 +174,12 @@ int OcrGocrDialog::getDustsize() const
 int OcrGocrDialog::getSpaceWidth() const
 {
     return (sliderSpace->value());
+}
+
+
+int OcrGocrDialog::getCertainty() const
+{
+    return (sliderCertainty->value());
 }
 
 

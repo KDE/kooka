@@ -58,6 +58,7 @@ public:
     int getGraylevel() const;
     int getDustsize() const;
     int getSpaceWidth() const;
+    int getCertainty() const;
 
 protected:
     void enableFields(bool enable) override;
@@ -72,6 +73,7 @@ private:
     KScanSlider *sliderGrayLevel;
     KScanSlider *sliderDustSize;
     KScanSlider *sliderSpace;
+    KScanSlider *sliderCertainty;
 
     QWidget *m_setupWidget;
     QString m_ocrCmd;
