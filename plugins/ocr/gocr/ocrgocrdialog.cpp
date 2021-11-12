@@ -35,6 +35,7 @@
 #include <qregexp.h>
 #include <qgridlayout.h>
 #include <qprogressbar.h>
+#include <qspinbox.h>
 
 #include <klocalizedstring.h>
 #include <kprocess.h>
@@ -71,6 +72,7 @@ bool OcrGocrDialog::setupGui()
     sliderGrayLevel->setRange(0, 254, -1, 160);
     sliderGrayLevel->setValue(KookaSettings::ocrGocrGrayLevel());
     sliderGrayLevel->setToolTip(ski->toolTip());
+    sliderGrayLevel->spinBox()->setSpecialValueText(i18n("Automatic"));
     l->setBuddy(sliderGrayLevel);
     gl->addWidget(sliderGrayLevel, 0, 1);
 
@@ -79,9 +81,10 @@ bool OcrGocrDialog::setupGui()
     l = new QLabel(ski->label(), w);
     gl->addWidget(l, 1, 0);
     sliderDustSize = new KScanSlider(w, QString(), true);
-    sliderDustSize->setRange(0, 20, -1, 10);
+    sliderDustSize->setRange(-1, 20, -1, 10);
     sliderDustSize->setValue(KookaSettings::ocrGocrDustSize());
     sliderDustSize->setToolTip(ski->toolTip());
+    sliderDustSize->spinBox()->setSpecialValueText(i18n("Automatic"));
     l->setBuddy(sliderDustSize);
     gl->addWidget(sliderDustSize, 1, 1);
 
@@ -93,6 +96,7 @@ bool OcrGocrDialog::setupGui()
     sliderSpace->setRange(0, 60, -1, 0);
     sliderSpace->setValue(KookaSettings::ocrGocrSpaceWidth());
     sliderSpace->setToolTip(ski->toolTip());
+    sliderSpace->spinBox()->setSpecialValueText(i18n("Automatic"));
     l->setBuddy(sliderSpace);
     gl->addWidget(sliderSpace, 2, 1);
 

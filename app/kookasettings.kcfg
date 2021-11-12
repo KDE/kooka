@@ -205,19 +205,19 @@
 
     <entry name="OcrGocrDustSize" key="gocrDustSize" type="Int">
       <label>Dust size:</label>
-      <tooltip>&lt;div&gt;Clusters smaller than this size will be considered to be noise, and ignored. The default is 10.&lt;/div&gt;</tooltip>
+      <tooltip>&lt;div&gt;Clusters smaller than this size will be considered to be noise, and ignored.  0 means to not detect dust clusters, -1 means to automatically detect them. The default is 10.&lt;/div&gt;</tooltip>
       <default>10</default>
     </entry>
 
     <entry name="OcrGocrGrayLevel" key="gocrGrayLevel" type="Int">
       <label>Gray level:</label>
-      <tooltip>&lt;div&gt;The threshold value below which gray pixels are considered to be black. The default is 160.&lt;/div&gt;</tooltip>
+      <tooltip>&lt;div&gt;The threshold value below which gray pixels are considered to be black. 0 means to automatically detect the gray level.  The default is 160.&lt;/div&gt;</tooltip>
       <default>160</default>
     </entry>
 
     <entry name="OcrGocrSpaceWidth" key="gocrSpaceWidth" type="Int">
       <label>Space width:</label>
-      <tooltip>&lt;div&gt;Spacing between characters. The default is 0 which means autodetection.&lt;/div&gt;</tooltip>
+      <tooltip>&lt;div&gt;The minimum gap in pixels considered to be word spacing. The default is 0 which means to automatically detect spacing.&lt;/div&gt;</tooltip>
       <default>0</default>
     </entry>
 
