@@ -104,7 +104,8 @@ bool OcrGocrEngine::createOcrProcess(AbstractOcrDialogue *dia, ScanImage::Ptr im
     m_tempDir = new QTemporaryDir(QDir::tempPath()+"/ocrgocrdir_XXXXXX");
     proc->setWorkingDirectory(m_tempDir->path());	// run process in there
 
-    if (img->colorCount() < 0 || img->colorCount() > 3) { // Not a B&W image
+    if (!isBW())					// Not a B&W image
+    {
         args << "-l" << QString::number(gocrDia->getGraylevel());
     }
     args << "-s" << QString::number(gocrDia->getSpaceWidth());

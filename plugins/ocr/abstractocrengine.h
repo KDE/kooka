@@ -85,8 +85,21 @@ public:
      * the image to OCR.
      */
     void setImageCanvas(ImageCanvas *canvas);
-    void setImage(ScanImage::Ptr img);
     void setTextDocument(QTextDocument *doc);
+
+    /**
+     * Specify the image to be OCRed.
+     *
+     * @param img The image
+     **/
+    void setImage(ScanImage::Ptr img);
+
+    /**
+     * Check whether the image to be OCRed is black/white (just a bitmap).
+     *
+     * @return @c true if the image is pure black/white
+     **/
+    bool isBW();
 
     QString findExecutable(QString (*settingFunc)(), KConfigSkeletonItem *settingItem);
 
@@ -224,8 +237,11 @@ private:
     QString m_ocrStderrLog;
 
     QString m_ocrResultFile;
-    ScanImage::Ptr m_introducedImage;
     ImageCanvas *m_imgCanvas;
+
+    ScanImage::Ptr m_introducedImage;
+    bool m_resolvedBW;
+    bool m_isBW;
 
     QTextDocument *m_document;
     QTextCursor *m_cursor;

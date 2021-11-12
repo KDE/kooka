@@ -143,6 +143,7 @@ void ScanImage::init()
 {
     m_subImages = 0;					// no subimages present
     m_errorString.clear();				// no error detected yet
+    mImageType = ScanImage::None;			// image type not yet set
 }
 
 

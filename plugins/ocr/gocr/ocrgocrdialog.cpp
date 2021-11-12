@@ -120,11 +120,10 @@ void OcrGocrDialog::introduceImage(ScanImage::Ptr img)
     AbstractOcrDialogue::introduceImage(img);
     if (img==nullptr || img->isNull()) return;
 
-    // See if the image is black-and-white, where the GrayLevel slider is not needed.
+    // See if the image is black-and-white, where the GreyLevel slider is not needed.
     // This was originally (as a member variable) called 'm_isBW', but the logic was
     // the other way round!
-    const bool notBW = !(img->colorCount()>0 && img->colorCount()<=2);
-    if (sliderGrayLevel!=nullptr) sliderGrayLevel->setEnabled(notBW);
+    if (sliderGrayLevel!=nullptr) sliderGrayLevel->setEnabled(!engine()->isBW());
 }
 
 

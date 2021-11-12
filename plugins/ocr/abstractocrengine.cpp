@@ -69,6 +69,8 @@ AbstractOcrEngine::AbstractOcrEngine(QObject *pnt, const char *name)
     qCDebug(OCR_LOG) << objectName();
 
     m_parent = nullptr;
+
+    m_resolvedBW = false;				// have not examined image yet
 }
 
 
@@ -87,6 +89,7 @@ AbstractOcrEngine::~AbstractOcrEngine()
 void AbstractOcrEngine::setImage(ScanImage::Ptr img)
 {
     m_introducedImage = img;				// shared copy of original
+    m_resolvedBW = false;				// invalidate previous result
 
     if (m_ocrDialog!=nullptr) m_ocrDialog->introduceImage(m_introducedImage);
     m_trackingActive = false;
@@ -601,4 +604,43 @@ void AbstractOcrEngine::slotProcessExited(int exitCode, QProcess::ExitStatus exi
     }
 
     finishedOcr(success);
+}
+
+
+bool AbstractOcrEngine::isBW()
+{
+    if (m_resolvedBW) return (m_isBW);			// have already resolved this
+
+    m_isBW = false;					// assume so to start
+
+    const int cols = m_introducedImage->colorCount();	// colour count for indexed images
+    if (cols>0)						// not a true colour image
+    {
+        m_isBW = (cols<=2);				// only this many palette entries
+    }
+    else						// image is true colour
+    {
+        if (m_introducedImage->allGray())		// could possibly be BW
+        {
+            int othercols = 0;				// colours not white or black
+
+            const int w = m_introducedImage->width();
+            const int h = m_introducedImage->height();
+            for (int x = 0; x<w; ++x)
+            {
+                for (int y = 0; y<h; ++y)
+                {
+                    const QRgb col = m_introducedImage->pixel(x, y);
+                    const int r = qRed(col);
+                    if (r!=0 && r!=1 && r!=255) ++othercols;
+                }
+            }
+
+            m_isBW = (othercols==0);			// no other colours in image
+        }
+    }
+
+    qDebug() << "cols" << cols << "format" << m_introducedImage->format() << "->" << m_isBW;
+    m_resolvedBW = true;				// note result now resolved
+    return (m_isBW);
 }
