@@ -151,6 +151,9 @@ void KookaScanParams::slotDestinationSelected(int idx)
         return;
     }
 
+    // Save the settings for the current plugin before it gets unloaded.
+    if (currentPlugin!=nullptr) currentPlugin->saveSettings();
+
     mDestinationPlugin = qobject_cast<AbstractDestination *>(PluginManager::self()->loadPlugin(PluginManager::DestinationPlugin, destName));
     if (mDestinationPlugin==nullptr)
     {
