@@ -204,14 +204,16 @@ bool DestinationSave::getSaveLocation(ScanImage::ImageType type)
 
     dlg.setMimeTypeFilters(filters);
 
-    const QString saveMime = KookaSettings::destinationSaveMime();
+    QString saveMime = mLastSaveMime;
+    if (saveMime.isEmpty()) saveMime = KookaSettings::destinationSaveMime();
     if (!saveMime.isEmpty())
     {
         if (filters.contains(saveMime)) dlg.selectMimeTypeFilter(saveMime);
         else dlg.selectMimeTypeFilter(filters.last());
     }
 
-    const QUrl saveUrl = KookaSettings::destinationSaveDest();
+    QUrl saveUrl = mLastSaveUrl;
+    if (!saveUrl.isValid()) saveUrl = KookaSettings::destinationSaveDest();
     if (saveUrl.isValid()) dlg.setDirectoryUrl(saveUrl);
 
     if (!dlg.exec()) return (false);
