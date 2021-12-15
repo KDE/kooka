@@ -43,8 +43,7 @@ option(INSTALL_BINARIES "Install the binaries and libraries, turn off for develo
 find_package(Qt5 ${QT_MIN_VERSION} REQUIRED COMPONENTS Core Widgets)
 
 # Rigourousness
-add_definitions("-DQT_USE_FAST_CONCATENATION")
-add_definitions("-DQT_USE_FAST_OPERATOR_PLUS")
+add_definitions("-DQT_USE_QSTRINGBUILDER")
 add_definitions("-DQT_NO_CAST_FROM_BYTEARRAY")
 add_definitions("-DQT_NO_NARROWING_CONVERSIONS_IN_CONNECT")
 add_definitions("-DQT_NO_CAST_TO_ASCII")
