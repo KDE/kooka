@@ -19,10 +19,9 @@ message(STATUS "Configuring for Kooka/libkookascan version ${VERSION}")
 
 set(QT_MIN_VERSION "5.4.0")
 set(KF5_MIN_VERSION "5.80.0")
-set(ECM_MIN_VERSION "5.68.0")
 
 # ECM setup (Extra Cmake Modules)
-find_package(ECM ${ECM_MIN_VERSION} REQUIRED NO_MODULE)
+find_package(ECM ${KF5_MIN_VERSION} REQUIRED NO_MODULE)
 set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH})
 
 include(FeatureSummary)
@@ -53,7 +52,8 @@ add_definitions("-DQT_NO_URL_CAST_FROM_STRING")
 
 # Permissiveness
 remove_definitions("-DQT_NO_CAST_FROM_ASCII")
-remove_definitions("-DQT_NO_SIGNALS_SLOTS_KEYWORDS")
+remove_definitions("-DQT_NO_FOREACH")
+remove_definitions("-DQT_NO_KEYWORDS")
 
 # Support for SANE, here because library and sanedump both need it
 #
