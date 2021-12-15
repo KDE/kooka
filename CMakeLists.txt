@@ -23,7 +23,7 @@ set(ECM_MIN_VERSION "5.68.0")
 
 # ECM setup (Extra Cmake Modules)
 find_package(ECM ${ECM_MIN_VERSION} REQUIRED NO_MODULE)
-set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR})
+set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH})
 
 include(FeatureSummary)
 include(ECMSetupVersion)
