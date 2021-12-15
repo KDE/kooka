@@ -17,7 +17,6 @@ project(kooka5)
 set(VERSION "0.90")
 message(STATUS "Configuring for Kooka/libkookascan version ${VERSION}")
 
-cmake_minimum_required (VERSION 2.8.12 FATAL_ERROR)
 set(QT_MIN_VERSION "5.4.0")
 set(KF5_MIN_VERSION "5.80.0")
 set(ECM_MIN_VERSION "5.68.0")
