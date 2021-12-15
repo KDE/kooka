@@ -24,17 +24,19 @@ set(KF5_MIN_VERSION "5.80.0")
 find_package(ECM ${KF5_MIN_VERSION} REQUIRED NO_MODULE)
 set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH})
 
+include(KDEInstallDirs)
+include(KDECMakeSettings)
+include(KDECompilerSettings NO_POLICY_SCOPE)
+
 include(FeatureSummary)
 include(ECMSetupVersion)
 include(ECMGenerateHeaders)
 include(ECMPackageConfigHelpers)
 include(CheckFunctionExists)
-include(KDEInstallDirs)
-include(KDEFrameworkCompilerSettings NO_POLICY_SCOPE)
-include(KDECMakeSettings)
 include(GenerateExportHeader)
 include(ECMInstallIcons)
 include(ECMQtDeclareLoggingCategory)
+include(KDEClangFormat)
 
 # Options
 option(INSTALL_BINARIES "Install the binaries and libraries, turn off for development in place" ON)
@@ -96,6 +98,17 @@ else (SANE_FOUND)
   message(SEND_ERROR "libkookascan needs SANE (http://www.sane-project.org) - install package or specify location of sane-config(1) with SANECONFIG_BIN")
 endif (SANE_FOUND)
 
+############### Common build flags ###############
+
+if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pedantic")
+
+   # both gcc & clang support it since the same version
+   if (CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL 5.0.0)
+      set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wzero-as-null-pointer-constant" )
+   endif()
+endif()
+
 ############### Common install locations ###############
 
 set(PICS_INSTALL_DIR ${DATA_INSTALL_DIR}/kooka/pics)
@@ -123,6 +136,11 @@ add_custom_target(vcsversion
   VERBATIM
   COMMAND sh ${CMAKE_CURRENT_SOURCE_DIR}/vcsversion.sh ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${VERSION}
 )
+
+# ########### Code formatting ###############
+
+file(GLOB_RECURSE ALL_CLANG_FORMAT_SOURCE_FILES *.cpp *.h *.c)
+kde_clang_format(${ALL_CLANG_FORMAT_SOURCE_FILES})
 
 # ########### documentation ###############
 #
