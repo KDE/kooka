@@ -17,7 +17,7 @@ project(kooka5)
 set(VERSION "0.90")
 message(STATUS "Configuring for Kooka/libkookascan version ${VERSION}")
 
-set(QT_MIN_VERSION "5.4.0")
+set(QT_MIN_VERSION "5.14.0")
 set(KF5_MIN_VERSION "5.80.0")
 
 # ECM setup (Extra Cmake Modules)
