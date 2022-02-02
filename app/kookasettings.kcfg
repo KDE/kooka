@@ -6,7 +6,7 @@
   <kcfgfile></kcfgfile>
   <include>kookaprint.h</include>
   <include>kiconloader.h</include>
-  <!-- <include>thumbview.h</include> -->
+
 
   <group name="General">
 
@@ -58,6 +58,7 @@
   </group>
 
 
+  <!--  This group is permanent user settings, managed by the preferences dialogue.	-->
   <group name="Files">
 
     <entry name="SaverAskForFormat" key="AskForSaveFormat" type="Bool">
@@ -90,9 +91,18 @@
       <default>false</default>
     </entry>
 
+  </group>
+
+
+  <!--  This group is implied user settings set by "Always use this format"	-->
+  <!--  for an image type.  The options are reset (by deleting this group in	-->
+  <!--  its entirety) by FormatDialog::forgetRemembered().			-->
+  <group name="Files2">
+
     <entry name="SaverAlwaysUseFormat" type="Bool">
       <label>Always use this save format for this image type</label>
       <tooltip>&lt;div&gt;Check this to remember the selected file format for the scanned image type and not ask for it again.&lt;/div&gt;</tooltip>
+      <default>false</default>
     </entry>
 
     <entry name="FormatLowColour" key="ColorSaveFormat" type="String">

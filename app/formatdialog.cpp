@@ -644,13 +644,16 @@ void FormatDialog::slotUser1()
     accept();
 }
 
+
 /* static */ void FormatDialog::forgetRemembered()
 {
-    const KConfigSkeletonItem *ski = KookaSettings::self()->saverOnlyRecommendedTypesItem();
+    const KConfigSkeletonItem *ski = KookaSettings::self()->saverAlwaysUseFormatItem();
     Q_ASSERT(ski!=nullptr);
     KConfigGroup grp = KookaSettings::self()->config()->group(ski->group());
     grp.deleteGroup();
-    grp.sync();
+
+    KookaSettings::self()->save();			// ensure the config is saved
+    KookaSettings::self()->read();			// and internal values are up to date
 }
 
 
