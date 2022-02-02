@@ -11,32 +11,32 @@
 ##									##
 ##########################################################################
 
-cmake_minimum_required(VERSION 2.8.12)
+cmake_minimum_required(VERSION 3.5)
 
 project(kooka5)
 set(VERSION "0.90")
 message(STATUS "Configuring for Kooka/libkookascan version ${VERSION}")
 
-cmake_minimum_required (VERSION 2.8.12 FATAL_ERROR)
-set(QT_MIN_VERSION "5.4.0")
+set(QT_MIN_VERSION "5.14.0")
 set(KF5_MIN_VERSION "5.80.0")
-set(ECM_MIN_VERSION "5.68.0")
 
 # ECM setup (Extra Cmake Modules)
-find_package(ECM ${ECM_MIN_VERSION} REQUIRED NO_MODULE)
-set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR})
+find_package(ECM ${KF5_MIN_VERSION} REQUIRED NO_MODULE)
+set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH})
+
+include(KDEInstallDirs)
+include(KDECMakeSettings)
+include(KDECompilerSettings NO_POLICY_SCOPE)
 
 include(FeatureSummary)
 include(ECMSetupVersion)
 include(ECMGenerateHeaders)
 include(ECMPackageConfigHelpers)
 include(CheckFunctionExists)
-include(KDEInstallDirs)
-include(KDEFrameworkCompilerSettings NO_POLICY_SCOPE)
-include(KDECMakeSettings)
 include(GenerateExportHeader)
 include(ECMInstallIcons)
 include(ECMQtDeclareLoggingCategory)
+include(KDEClangFormat)
 
 # Options
 option(INSTALL_BINARIES "Install the binaries and libraries, turn off for development in place" ON)
@@ -45,8 +45,7 @@ option(INSTALL_BINARIES "Install the binaries and libraries, turn off for develo
 find_package(Qt5 ${QT_MIN_VERSION} REQUIRED COMPONENTS Core Widgets)
 
 # Rigourousness
-add_definitions("-DQT_USE_FAST_CONCATENATION")
-add_definitions("-DQT_USE_FAST_OPERATOR_PLUS")
+add_definitions("-DQT_USE_QSTRINGBUILDER")
 add_definitions("-DQT_NO_CAST_FROM_BYTEARRAY")
 add_definitions("-DQT_NO_NARROWING_CONVERSIONS_IN_CONNECT")
 add_definitions("-DQT_NO_CAST_TO_ASCII")
@@ -54,7 +53,8 @@ add_definitions("-DQT_NO_URL_CAST_FROM_STRING")
 
 # Permissiveness
 remove_definitions("-DQT_NO_CAST_FROM_ASCII")
-remove_definitions("-DQT_NO_SIGNALS_SLOTS_KEYWORDS")
+remove_definitions("-DQT_NO_FOREACH")
+remove_definitions("-DQT_NO_KEYWORDS")
 
 # Support for SANE, here because library and sanedump both need it
 #
@@ -98,6 +98,17 @@ else (SANE_FOUND)
   message(SEND_ERROR "libkookascan needs SANE (http://www.sane-project.org) - install package or specify location of sane-config(1) with SANECONFIG_BIN")
 endif (SANE_FOUND)
 
+############### Common build flags ###############
+
+if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pedantic")
+
+   # both gcc & clang support it since the same version
+   if (CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL 5.0.0)
+      set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wzero-as-null-pointer-constant" )
+   endif()
+endif()
+
 ############### Common install locations ###############
 
 set(PICS_INSTALL_DIR ${DATA_INSTALL_DIR}/kooka/pics)
@@ -125,6 +136,11 @@ add_custom_target(vcsversion
   VERBATIM
   COMMAND sh ${CMAKE_CURRENT_SOURCE_DIR}/vcsversion.sh ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${VERSION}
 )
+
+# ########### Code formatting ###############
+
+file(GLOB_RECURSE ALL_CLANG_FORMAT_SOURCE_FILES *.cpp *.h *.c)
+kde_clang_format(${ALL_CLANG_FORMAT_SOURCE_FILES})
 
 # ########### documentation ###############
 #
