@@ -27,6 +27,7 @@ Name[pt]=GOCR
 Name[pt_BR]=GOCR
 Name[sl]=GOCR
 Name[sv]=GOCR
+Name[tr]=GOCR
 Name[uk]=GOCR
 Name[x-test]=xxGOCRxx
 Name[zh_TW]=GOCR
@@ -48,6 +49,7 @@ Comment[pl]=<emphasis>GOCR</emphasis> (czasami znane jako <emphasis>JOCR</emphas
 Comment[pt]=O <emphasis>GOCR</emphasis> (conhecido algumas vezes como <emphasis>JOCR</emphasis>) é um motor de OCR em código aberto, iniciado originalmente por Joerg&nbsp;Schulenburg e agora é composto por uma equipa de programadores activos.<nl/><nl/>Veja em <link url="http://jocr.sourceforge.net">jocr.sourceforge.net</link> mais informações sobre o GOCR.
 Comment[sl]=<emphasis>GOCR</emphasis> (včasih znan kot <emphasis>JOCR</emphasis>) je odprtokodni razpoznavalnik znakov (OCR), ki ga je sprva začel Joerg&nbsp;Schulenburg zdaj skupaj z ekipo aktivnih razvijalcev.<nl/><nl/>Oglejte si <link url="http://jocr.sourceforge.net">jocr.sourceforge.net</link> za več informacij o GOCR.
 Comment[sv]=<emphasis>GOCR</emphasis> (ibland kallat <emphasis>JOCR</emphasis>) är ett program för optisk teckentydning med öppen källkod, ursprungligen startat av Jörg&nbsp;Schulenburg, nu med en grupp aktiva utvecklare.<nl/><nl/>Se <link url="http://jocr.sourceforge.net">jocr.sourceforge.net</link> för mer information om GOCR.
+Comment[tr]=<emphasis>GOCR</emphasis> (bazen <emphasis>JOCR</emphasis> olarak da bilinir), ilk olarak Jörg Schulenberg tarafından oluşturulan ve şimdi etkin bir geliştirici takımı tarafından geliştirilmesi sürdürülen açık kaynaklı bir OCR kitaplığıdır.<nl/><nl/>GOCR üzerine daha fazla bilgi için <link url="http://jocr.sourceforge.net">jocr.sourceforge.net</link> sayfasına bakın.
 Comment[uk]=<emphasis>GOCR</emphasis> (іноді програму називають <emphasis>JOCR</emphasis>) — рушій розпізнавання текстів з відкритим кодом, першим розробником якого є Joerg&nbsp;Schulenburg. Зараз за розробку відповідає команда інших розробників.<nl/><nl/>Докладніші дані щодо GOCR можна знайти на сторінці <link url="http://jocr.sourceforge.net">jocr.sourceforge.net</link>.
 Comment[x-test]=xx<emphasis>GOCR</emphasis> (sometimes known as <emphasis>JOCR</emphasis>) is an open source OCR engine, originally started by Joerg&nbsp;Schulenburg and now with a team of active developers.<nl/><nl/>See <link url="http://jocr.sourceforge.net">jocr.sourceforge.net</link> for more information on GOCR.xx
 Comment[zh_TW]=<emphasis>GOCR</emphasis> (也被稱為 <emphasis>JOCR</emphasis>) 是個開源的 OCR 引擎，最初由 Joerg&nbsp;Schulenburg 開始這個計畫，而現在則與活躍的開發者團隊一起開發。<nl/><nl/>閱讀 <link url="http://jocr.sourceforge.net">jocr.sourceforge.net</link> 取得 GOCR 的更多資訊。
