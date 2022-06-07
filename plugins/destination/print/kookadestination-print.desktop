@@ -8,7 +8,7 @@ Icon=document-print
 
 Name=Print Image
 Name[ca]=Impressió de la imatge
-Name[ca@valencia]=Impressió de la imatge
+Name[ca@valencia]=Impressió de la image
 Name[cs]=Vytisknout obrázek
 Name[de]=Bild drucken
 Name[en_GB]=Print Image
@@ -29,7 +29,7 @@ Name[uk]=Друк зображення
 Name[x-test]=xxPrint Imagexx
 Comment=Print the scanned image
 Comment[ca]=Imprimeix la imatge escanejada
-Comment[ca@valencia]=Imprimix la imatge escanejada
+Comment[ca@valencia]=Imprimix la image escanejada
 Comment[de]=Druckt das eingescannte Bild
 Comment[en_GB]=Print the scanned image
 Comment[es]=Imprimir la imagen escaneada
