@@ -1,6 +1,6 @@
 [Desktop Entry]
 Type=Application
-Exec=kooka %i %U
+Exec=kooka %U
 Icon=kooka
 Terminal=false
 X-DocPath=kooka/index.html
