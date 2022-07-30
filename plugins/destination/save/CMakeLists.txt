@@ -19,17 +19,13 @@ project(kooka5)
 #									#
 #########################################################################
 
-set(kookadestinationsave_SRCS
+set(destinationsave_SRCS
   destinationsave.cpp
   ${kookadestination_LOG_SRCS}
 )
 
-add_library(kookadestinationsave MODULE ${kookadestinationsave_SRCS})
-kcoreaddons_desktop_to_json(kookadestinationsave kookadestination-save.desktop)
-target_link_libraries(kookadestinationsave Qt5::Gui)
-target_link_libraries(kookadestinationsave kookadestination kookascan)
+kcoreaddons_add_plugin(destinationsave SOURCES ${destinationsave_SRCS} INSTALL_NAMESPACE "kooka_destination")
 
-if (INSTALL_BINARIES)
-  install(TARGETS kookadestinationsave DESTINATION ${KDE_INSTALL_PLUGINDIR}/kooka)
-endif (INSTALL_BINARIES)
-install(FILES kookadestination-save.desktop DESTINATION ${KDE_INSTALL_KSERVICES5DIR})
+kcoreaddons_desktop_to_json(destinationsave kookadestination-save.desktop)
+target_link_libraries(destinationsave Qt5::Gui)
+target_link_libraries(destinationsave kookadestination kookascan)

@@ -1,8 +1,5 @@
 [Desktop Entry]
 Type=Service
-X-KDE-ServiceTypes=Kooka/OcrPlugin
-X-KDE-Library=kookaocrtesseract
-X-KDE-PluginInfo-Name=tesseract
 X-KDE-PluginInfo-License=GPL
 Icon=tesseract
 Name=Tesseract

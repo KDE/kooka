@@ -1,8 +1,5 @@
 [Desktop Entry]
 Type=Service
-X-KDE-ServiceTypes=Kooka/OcrPlugin
-X-KDE-Library=kookaocrgocr
-X-KDE-PluginInfo-Name=gocr
 X-KDE-PluginInfo-License=GPL
 Icon=gocr
 Name=GOCR

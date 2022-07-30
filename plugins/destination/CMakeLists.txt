@@ -66,7 +66,6 @@ target_link_libraries(kookadestination kookascan kookacore)
 if (INSTALL_BINARIES)
   install(TARGETS kookadestination ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 endif (INSTALL_BINARIES)
-install(FILES kookadestinationplugin.desktop DESTINATION ${KDE_INSTALL_KSERVICETYPES5DIR})
 
 #########################################################################
 #									#

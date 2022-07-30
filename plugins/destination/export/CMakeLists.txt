@@ -44,16 +44,11 @@ endif (INSTALL_BINARIES)
 #									#
 #########################################################################
 
-set(kookadestinationexport_SRCS
+set(destinationexport_SRCS
   destinationexport.cpp
   ${kookadestination_LOG_SRCS}
 )
 
-add_library(kookadestinationexport MODULE ${kookadestinationexport_SRCS})
-kcoreaddons_desktop_to_json(kookadestinationexport kookadestination-export.desktop)
-target_link_libraries(kookadestinationexport kookadestination kookascan)
-
-if (INSTALL_BINARIES)
-  install(TARGETS kookadestinationexport DESTINATION ${KDE_INSTALL_PLUGINDIR}/kooka)
-endif (INSTALL_BINARIES)
-install(FILES kookadestination-export.desktop DESTINATION ${KDE_INSTALL_KSERVICES5DIR})
+kcoreaddons_add_plugin(destinationexport SOURCES ${destinationexport_SRCS} INSTALL_NAMESPACE "kooka_destination")
+kcoreaddons_desktop_to_json(destinationexport kookadestination-export.desktop)
+target_link_libraries(destinationexport kookadestination kookascan)

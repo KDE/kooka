@@ -70,22 +70,18 @@ endif (HAVE_KADMOS)
 #									#
 #########################################################################
 
-set(kookaocrkadmos_SRCS
+set(kadmos_SRCS
   ocrkadmosengine.cpp
   ocrkadmosdialog.cpp
   kadmosocr.cpp
   ${kookaocr_LOG_SRCS}
 )
 
-add_library(kookaocrkadmos MODULE ${kookaocrkadmos_SRCS})
-kcoreaddons_desktop_to_json(kookaocrkadmos kookaocr-kadmos.desktop)
+kcoreaddons_add_plugin(kadmos SOURCES ${kadmos_SRCS} INSTALL_NAMESPACE "kooka_ocr")
 
-target_link_libraries(kookaocrkadmos Qt5::Core Qt5::Gui)
-target_link_libraries(kookaocrkadmos KF5::I18n KF5::WidgetsAddons)
-target_link_libraries(kookaocrkadmos kookaocr kookascan)
-target_link_libraries(kookaocrkadmos librep)
+kcoreaddons_desktop_to_json(kadmos kookaocr-kadmos.desktop)
 
-if (INSTALL_BINARIES)
-  install(TARGETS kookaocrkadmos DESTINATION ${KDE_INSTALL_PLUGINDIR}/kooka)
-endif (INSTALL_BINARIES)
-install(FILES kookaocr-kadmos.desktop DESTINATION ${KDE_INSTALL_KSERVICES5DIR})
+target_link_libraries(kadmos Qt5::Core Qt5::Gui)
+target_link_libraries(kadmos KF5::I18n KF5::WidgetsAddons)
+target_link_libraries(kadmos kookaocr kookascan)
+target_link_libraries(kadmos librep)

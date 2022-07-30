@@ -1,8 +1,5 @@
 [Desktop Entry]
 Type=Service
-X-KDE-ServiceTypes=Kooka/DestinationPlugin
-X-KDE-Library=kookadestinationexport
-X-KDE-PluginInfo-Name=destinationexport
 X-KDE-PluginInfo-License=GPL
 Icon=document-export
 

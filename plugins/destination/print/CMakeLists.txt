@@ -19,17 +19,12 @@ project(kooka5)
 #									#
 #########################################################################
 
-set(kookadestinationprint_SRCS
+set(destinationprint_SRCS
   destinationprint.cpp
   ${kookadestination_LOG_SRCS}
 )
 
-add_library(kookadestinationprint MODULE ${kookadestinationprint_SRCS})
-kcoreaddons_desktop_to_json(kookadestinationprint kookadestination-print.desktop)
-target_link_libraries(kookadestinationprint Qt5::Gui)
-target_link_libraries(kookadestinationprint kookadestination kookascan)
-
-if (INSTALL_BINARIES)
-  install(TARGETS kookadestinationprint DESTINATION ${KDE_INSTALL_PLUGINDIR}/kooka)
-endif (INSTALL_BINARIES)
-install(FILES kookadestination-print.desktop DESTINATION ${KDE_INSTALL_KSERVICES5DIR})
+kcoreaddons_add_plugin(destinationprint SOURCES ${destinationprint_SRCS} INSTALL_NAMESPACE "kooka_destination")
+kcoreaddons_desktop_to_json(destinationprint kookadestination-print.desktop)
+target_link_libraries(destinationprint Qt5::Gui)
+target_link_libraries(destinationprint kookadestination kookascan)

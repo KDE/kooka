@@ -27,18 +27,14 @@ find_package(KF5 ${KF5_MIN_VERSION} REQUIRED COMPONENTS Service)
 #									#
 #########################################################################
 
-set(kookadestinationapplication_SRCS
+set(destinationapplication_SRCS
   destinationapplication.cpp
   ${kookadestination_LOG_SRCS}
 )
 
-add_library(kookadestinationapplication MODULE ${kookadestinationapplication_SRCS})
-kcoreaddons_desktop_to_json(kookadestinationapplication kookadestination-application.desktop)
-target_link_libraries(kookadestinationapplication Qt5::Core Qt5::Widgets)
-target_link_libraries(kookadestinationapplication KF5::I18n KF5::WidgetsAddons KF5::Service)
-target_link_libraries(kookadestinationapplication kookadestination kookacore kookascan)
+kcoreaddons_add_plugin(destinationapplication SOURCES ${destinationapplication_SRCS} INSTALL_NAMESPACE "kooka_destination")
 
-if (INSTALL_BINARIES)
-  install(TARGETS kookadestinationapplication DESTINATION ${KDE_INSTALL_PLUGINDIR}/kooka)
-endif (INSTALL_BINARIES)
-install(FILES kookadestination-application.desktop DESTINATION ${KDE_INSTALL_KSERVICES5DIR})
+kcoreaddons_desktop_to_json(destinationapplication kookadestination-application.desktop)
+target_link_libraries(destinationapplication Qt5::Core Qt5::Widgets)
+target_link_libraries(destinationapplication KF5::I18n KF5::WidgetsAddons KF5::Service)
+target_link_libraries(destinationapplication kookadestination kookacore kookascan)

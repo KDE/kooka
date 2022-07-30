@@ -1,8 +1,5 @@
 [Desktop Entry]
 Type=Service
-X-KDE-ServiceTypes=Kooka/DestinationPlugin
-X-KDE-Library=kookadestinationsave
-X-KDE-PluginInfo-Name=destinationsave
 X-KDE-PluginInfo-License=GPL
 Icon=document-save
 

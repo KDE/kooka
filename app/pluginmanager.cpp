@@ -30,12 +30,8 @@
 
 #include "pluginmanager.h"
 
-#include <qpluginloader.h>
-#include <qdir.h>
-#include <qcoreapplication.h>
-
-#include <kservicetypetrader.h>
-#include <kplugininfo.h>
+#include <kpluginmetadata.h>
+#include <kpluginfactory.h>
 #include <klocalizedstring.h>
 
 #include "abstractplugin.h"
@@ -47,38 +43,6 @@ static PluginManager *sInstance = nullptr;
 
 PluginManager::PluginManager()
 {
-    QStringList pluginPaths = QCoreApplication::libraryPaths();
-    qCDebug(KOOKA_LOG) << "initial paths" << pluginPaths;
-
-    // Assume that the first path entry is the standard install location.
-    // Our plugins will be in a subdirectory of that.
-    Q_ASSERT(!pluginPaths.isEmpty());
-    QString installPath = pluginPaths.takeFirst();
-    pluginPaths.prepend(installPath+"/"+QCoreApplication::applicationName());
-
-    // Also add the plugin build directories, for use when running in place.
-    // In order to get the most up-to-date plugins, these need to have priority
-    // over all other install locations.
-    QDir dir1(QCoreApplication::applicationDirPath()+"/../plugins");
-    const QStringList subdirs1 = dir1.entryList(QDir::Dirs|QDir::NoDotAndDotDot);
-    foreach (const QString &subdir1, subdirs1)
-    {
-        QDir dir2(QCoreApplication::applicationDirPath()+"/../plugins/"+subdir1);
-        const QStringList subdirs2 = dir2.entryList(QDir::Dirs|QDir::NoDotAndDotDot);
-        foreach (const QString &subdir2, subdirs2)
-        {
-            const QString subdir = subdir1+"/"+subdir2;
-            const QString path = subdir+"/Makefile";
-            if (dir1.exists(path)) pluginPaths.prepend(dir1.absoluteFilePath(subdir));
-        }
-    }
-
-    // Put back the standard install location, for locating KParts and
-    // other plugins which may be needed.
-    pluginPaths.append(installPath);
-
-    qCDebug(KOOKA_LOG) << "using paths" << pluginPaths;
-    QCoreApplication::setLibraryPaths(pluginPaths);
 }
 
 
@@ -111,10 +75,11 @@ static QString pluginTypeString(PluginManager::PluginType type)
 {
     switch (type)
     {
-case PluginManager::OcrPlugin:			return ("Kooka/OcrPlugin");
-case PluginManager::DestinationPlugin:		return ("Kooka/DestinationPlugin");
-default:					return ("Kooka/UnknownPlugin");
+case PluginManager::OcrPlugin:			return ("ocr");
+case PluginManager::DestinationPlugin:		return ("destination");
     }
+    Q_UNREACHABLE();
+    return QString();
 }
 
 
@@ -142,44 +107,23 @@ AbstractPlugin *PluginManager::loadPlugin(PluginManager::PluginType type, const 
         return (nullptr);				// no more to do
     }
 
-    const KService::List list = KServiceTypeTrader::self()->query(pluginTypeString(type),
-                                                                  QString("[DesktopEntryName]=='%1'").arg(name));
-    qCDebug(KOOKA_LOG) << "query count" << list.count();
-    if (list.isEmpty()) qCWarning(KOOKA_LOG) << "No plugin services found";
-    else
+    KPluginMetaData md(QStringLiteral("kooka_") + pluginTypeString(type) + QStringLiteral("/") + name);
+
+    plugin = KPluginFactory::instantiatePlugin<AbstractPlugin>(md).plugin;
+
+    if (plugin!=nullptr)
     {
-        if (list.count()>1) qCWarning(KOOKA_LOG) << "Multiple plugin services found, using only the first";
-							// should not happen, names are unique
-        const KService::Ptr service = list.first();
-        const QString lib = service->library();
-        qCDebug(KOOKA_LOG) << "  name" << service->name();
-        qCDebug(KOOKA_LOG) << "  icon" << service->icon();
-        qCDebug(KOOKA_LOG) << "  library" << lib;
+        qCDebug(KOOKA_LOG) << "created plugin from library" << md.fileName();
 
-        QPluginLoader loader(lib);
-        KPluginMetaData metadata(loader);
-        if (!metadata.isValid())
-        {
-            qCWarning(KOOKA_LOG) << "Cannot get plugin metadata from service" << service->storageId();
-        }
-        else
-        {
-            plugin = KPluginFactory::instantiatePlugin<AbstractPlugin>(metadata).plugin;
-            if (plugin!=nullptr)
-            {
-                qCDebug(KOOKA_LOG) << "created plugin from library" << lib;
+        AbstractPluginInfo *info = new AbstractPluginInfo;
+        info->key = md.pluginId();
+        info->name = md.name();
+        info->icon = md.iconName();
+        info->description = commentAsRichText(md.description());
 
-                AbstractPluginInfo *info = new AbstractPluginInfo;
-                info->key = service->desktopEntryName();
-                info->name = service->name();
-                info->icon = service->icon();
-                info->description = commentAsRichText(service->comment());
-
-                plugin->mPluginInfo = info;
-            }
-            else qCWarning(KOOKA_LOG) << "Cannot create plugin from library" << lib;
-        }
+        plugin->mPluginInfo = info;
     }
+    else qCWarning(KOOKA_LOG) << "Cannot create plugin from library" << md.fileName();
 
     mLoadedPlugins[type] = plugin;
     return (plugin);
@@ -192,20 +136,21 @@ QMap<QString,AbstractPluginInfo> PluginManager::allPlugins(PluginManager::Plugin
 
     QMap<QString,AbstractPluginInfo> plugins;
 
-    const KService::List list = KServiceTypeTrader::self()->query(pluginTypeString(type));
+    const QVector<KPluginMetaData> list = KPluginMetaData::findPlugins(QStringLiteral("kooka_") + pluginTypeString(type));
+
     qCDebug(KOOKA_LOG) << "query count" << list.count();
     if (list.isEmpty()) qCWarning(KOOKA_LOG) << "No plugin services found";
     else
     {
-        foreach (const KService::Ptr service, qAsConst(list))
+        for (const KPluginMetaData &service : list)
         {
-            qCDebug(KOOKA_LOG) << "  found" << service->desktopEntryName();
+            qCDebug(KOOKA_LOG) << "  found" << service.pluginId();
 
             struct AbstractPluginInfo info;
-            info.key = service->desktopEntryName();
-            info.name = service->name();
-            info.icon = service->icon();
-            info.description = commentAsRichText(service->comment());
+            info.key = service.pluginId();
+            info.name = service.name();
+            info.icon = service.iconName();
+            info.description = commentAsRichText(service.description());
 
             plugins[info.key] = info;
         }
