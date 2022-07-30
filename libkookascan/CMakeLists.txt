@@ -81,10 +81,8 @@ set(kookascan_SRCS
   kscanoptset.cpp
   gammadialog.cpp
   gammawidget.cpp
-  #scansourcedialog.cpp
   scanparams.cpp
   scanparamspage.cpp
-  #massscandialog.cpp
   deviceselector.cpp
   adddevicedialog.cpp
   imagecanvas.cpp

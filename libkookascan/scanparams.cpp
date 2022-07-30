@@ -62,8 +62,6 @@ extern "C"
 
 #include "scanglobal.h"
 #include "scanparamspage.h"
-//#include "scansourcedialog.h"
-//#include "massscandialog.h"
 #include "gammadialog.h"
 #include "kgammatable.h"
 #include "kscancontrols.h"
@@ -1082,12 +1080,6 @@ KScanDevice::Status ScanParams::performADFScan()
 {
     KScanDevice::Status stat = KScanDevice::Ok;
     bool          scan_on = true;
-
-#if 0
-// TODO: port/update
-    MassScanDialog *msd = new MassScanDialog(this);
-    msd->show();
-#endif
 
     /* The scan source should be set to ADF by the SourceSelect-Dialog */
 
