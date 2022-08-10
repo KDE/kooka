@@ -62,7 +62,7 @@ static void createDir(const QUrl &url)
     KIO::StatJob *job = KIO::statDetails(url, KIO::StatJob::DestinationSide, KIO::StatBasic);
     if (!job->exec())
     {
-        KMessageBox::sorry(nullptr, xi18nc("@info", "The directory <filename>%2</filename><nl/>could not be accessed.<nl/>%1",
+        KMessageBox::error(nullptr, xi18nc("@info", "The directory <filename>%2</filename><nl/>could not be accessed.<nl/>%1",
                                         job->errorString(), url.url(QUrl::PreferLocalFile)));
         return;
     }
@@ -73,7 +73,7 @@ static void createDir(const QUrl &url)
         KIO::MkdirJob *job = KIO::mkdir(url);
         if (!job->exec())
         {
-            KMessageBox::sorry(nullptr, xi18nc("@info", "The directory <filename>%2</filename><nl/>could not be created.<nl/>%1",
+            KMessageBox::error(nullptr, xi18nc("@info", "The directory <filename>%2</filename><nl/>could not be created.<nl/>%1",
                                             job->errorString(), url.url(QUrl::PreferLocalFile)));
             return;
         }
@@ -452,7 +452,7 @@ bool copyRenameImage(bool isCopying, const QUrl &fromUrl, const QUrl &toUrl, boo
                                    i18n("Unable to rename the file"));
         QString title = (isCopying ? i18n("Error copying file") :
                                      i18n("Error renaming file"));
-        KMessageBox::sorry(overWidget, xi18nc("@info", "%1 <filename>%3</filename><nl/>%2",
+        KMessageBox::error(overWidget, xi18nc("@info", "%1 <filename>%3</filename><nl/>%2",
                                               msg, errorString,
                                               fromUrl.url(QUrl::PreferLocalFile)), title);
         return (false);

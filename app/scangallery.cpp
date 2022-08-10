@@ -599,9 +599,9 @@ static QString buildNewFilename(const QString &cmplFilename, const ImageFormat &
         ext = cmplFilename;
     } else {
         /* new Ext. differs from the current extension. Later. */
-        KMessageBox::sorry(nullptr, i18n("You entered a file extension that differs from the existing one. That is not yet possible. Converting 'on the fly' is planned for a future release.\n"
-                                      "Kooka corrects the extension."),
-                           i18n("On the Fly Conversion"));
+        KMessageBox::information(nullptr, i18n("You entered a file extension that differs from the existing one. That is not yet possible. Converting 'on the fly' is planned for a future release.\n"
+                                               "Kooka corrects the extension."),
+                                 i18n("On the Fly Conversion"));
         ext = base + "." + nowExt;
     }
     return (ext);

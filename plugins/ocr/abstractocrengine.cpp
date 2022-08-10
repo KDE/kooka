@@ -103,7 +103,7 @@ void AbstractOcrEngine::setImage(ScanImage::Ptr img)
 bool AbstractOcrEngine::openOcrDialogue(QWidget *pnt)
 {
     if (m_ocrRunning) {
-        KMessageBox::sorry(pnt, i18n("OCR is already in progress"));
+        KMessageBox::error(pnt, i18n("OCR is already in progress"));
         return (false);
     }
 
@@ -591,7 +591,7 @@ void AbstractOcrEngine::slotProcessExited(int exitCode, QProcess::ExitStatus exi
                                                  xi18nc("@info", "More information may be available in its <link url=\"%1\">standard error</link> log file.",
                                                         QUrl::fromLocalFile(m_ocrStderrLog).url()));
 
-        KMessageBox::sorry(m_parent, msg, i18n("OCR Command Failed"), KMessageBox::AllowLink);
+        KMessageBox::error(m_parent, msg, i18n("OCR Command Failed"), KMessageBox::AllowLink);
     }
     else						// OCR command succeeded
     {
@@ -599,7 +599,7 @@ void AbstractOcrEngine::slotProcessExited(int exitCode, QProcess::ExitStatus exi
         if (!success)					// OCR processing failed
         {
             const QString msg = collectErrorMessages(xi18nc("@info", "Processing the OCR results failed."), QString());
-            KMessageBox::sorry(m_parent, msg, i18n("OCR Processing Failed"), KMessageBox::AllowLink);
+            KMessageBox::error(m_parent, msg, i18n("OCR Processing Failed"), KMessageBox::AllowLink);
         }
     }
 
