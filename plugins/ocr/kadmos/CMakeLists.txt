@@ -86,6 +86,6 @@ target_link_libraries(kookaocrkadmos kookaocr kookascan)
 target_link_libraries(kookaocrkadmos librep)
 
 if (INSTALL_BINARIES)
-  install(TARGETS kookaocrkadmos DESTINATION ${PLUGIN_INSTALL_DIR}/kooka)
+  install(TARGETS kookaocrkadmos DESTINATION ${KDE_INSTALL_PLUGINDIR}/kooka)
 endif (INSTALL_BINARIES)
-install(FILES kookaocr-kadmos.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+install(FILES kookaocr-kadmos.desktop DESTINATION ${KDE_INSTALL_KSERVICES5DIR})

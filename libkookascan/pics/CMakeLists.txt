@@ -22,4 +22,4 @@ set(libkookascan_PICS
   palette-lineart.png
 )
 
-install(FILES ${libkookascan_PICS} DESTINATION ${DATA_INSTALL_DIR}/libkookascan/pics)
+install(FILES ${libkookascan_PICS} DESTINATION ${KDE_INSTALL_DATADIR}/libkookascan/pics)

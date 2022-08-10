@@ -46,6 +46,6 @@ target_link_libraries(qimageioinfo KF5::CoreAddons)
 ########### install files ###############
 
 if (INSTALL_BINARIES)
-  install(TARGETS sanedump ${INSTALL_TARGETS_DEFAULT_ARGS})
-  install(TARGETS qimageioinfo ${INSTALL_TARGETS_DEFAULT_ARGS})
+  install(TARGETS sanedump ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
+  install(TARGETS qimageioinfo ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 endif (INSTALL_BINARIES)

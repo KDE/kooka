@@ -64,9 +64,9 @@ target_link_libraries(kookadestination KF5::I18n KF5::WidgetsAddons)
 target_link_libraries(kookadestination kookascan kookacore)
 
 if (INSTALL_BINARIES)
-  install(TARGETS kookadestination ${INSTALL_TARGETS_DEFAULT_ARGS})
+  install(TARGETS kookadestination ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 endif (INSTALL_BINARIES)
-install(FILES kookadestinationplugin.desktop DESTINATION ${SERVICETYPES_INSTALL_DIR})
+install(FILES kookadestinationplugin.desktop DESTINATION ${KDE_INSTALL_KSERVICETYPES5DIR})
 
 #########################################################################
 #									#

@@ -30,6 +30,6 @@ target_link_libraries(kookadestinationclipboard Qt5::Gui)
 target_link_libraries(kookadestinationclipboard kookadestination kookascan)
 
 if (INSTALL_BINARIES)
-  install(TARGETS kookadestinationclipboard DESTINATION ${PLUGIN_INSTALL_DIR}/kooka)
+  install(TARGETS kookadestinationclipboard DESTINATION ${KDE_INSTALL_PLUGINDIR}/kooka)
 endif (INSTALL_BINARIES)
-install(FILES kookadestination-clipboard.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+install(FILES kookadestination-clipboard.desktop DESTINATION ${KDE_INSTALL_KSERVICES5DIR})

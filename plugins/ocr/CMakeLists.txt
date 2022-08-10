@@ -57,9 +57,9 @@ target_link_libraries(kookaocr kookascan kookacore)
 target_link_libraries(kookaocr dialogutil)
 
 if (INSTALL_BINARIES)
-  install(TARGETS kookaocr ${INSTALL_TARGETS_DEFAULT_ARGS})
+  install(TARGETS kookaocr ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 endif (INSTALL_BINARIES)
-install(FILES kookaocrplugin.desktop DESTINATION ${SERVICETYPES_INSTALL_DIR})
+install(FILES kookaocrplugin.desktop DESTINATION ${KDE_INSTALL_KSERVICETYPES5DIR})
 
 #########################################################################
 #									#

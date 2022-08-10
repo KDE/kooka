@@ -31,6 +31,6 @@ target_link_libraries(kookadestinationshare KF5::Purpose KF5::PurposeWidgets)
 target_link_libraries(kookadestinationshare kookadestination kookascan)
 
 if (INSTALL_BINARIES)
-  install(TARGETS kookadestinationshare DESTINATION ${PLUGIN_INSTALL_DIR}/kooka)
+  install(TARGETS kookadestinationshare DESTINATION ${KDE_INSTALL_PLUGINDIR}/kooka)
 endif (INSTALL_BINARIES)
-install(FILES kookadestination-share.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+install(FILES kookadestination-share.desktop DESTINATION ${KDE_INSTALL_KSERVICES5DIR})

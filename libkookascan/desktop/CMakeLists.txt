@@ -15,4 +15,4 @@ project(kookascan)
 
 ########### install files ###############
 
-install(FILES scantypes.dat DESTINATION ${DATA_INSTALL_DIR}/libkookascan)
+install(FILES scantypes.dat DESTINATION ${KDE_INSTALL_DATADIR}/libkookascan)

@@ -111,7 +111,7 @@ endif()
 
 ############### Common install locations ###############
 
-set(PICS_INSTALL_DIR ${DATA_INSTALL_DIR}/kooka/pics)
+set(PICS_INSTALL_DIR ${KDE_INSTALL_DATADIR}/kooka/pics)
 
 ############### Common definitions ###############
 

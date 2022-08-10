@@ -30,6 +30,6 @@ target_link_libraries(kookadestinationsave Qt5::Gui)
 target_link_libraries(kookadestinationsave kookadestination kookascan)
 
 if (INSTALL_BINARIES)
-  install(TARGETS kookadestinationsave DESTINATION ${PLUGIN_INSTALL_DIR}/kooka)
+  install(TARGETS kookadestinationsave DESTINATION ${KDE_INSTALL_PLUGINDIR}/kooka)
 endif (INSTALL_BINARIES)
-install(FILES kookadestination-save.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+install(FILES kookadestination-save.desktop DESTINATION ${KDE_INSTALL_KSERVICES5DIR})

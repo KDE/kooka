@@ -31,6 +31,6 @@ target_link_libraries(kookadestinationgallery KF5::I18n KF5::WidgetsAddons)
 target_link_libraries(kookadestinationgallery kookadestination kookascan)
 
 if (INSTALL_BINARIES)
-  install(TARGETS kookadestinationgallery DESTINATION ${PLUGIN_INSTALL_DIR}/kooka)
+  install(TARGETS kookadestinationgallery DESTINATION ${KDE_INSTALL_PLUGINDIR}/kooka)
 endif (INSTALL_BINARIES)
-install(FILES kookadestination-gallery.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+install(FILES kookadestination-gallery.desktop DESTINATION ${KDE_INSTALL_KSERVICES5DIR})

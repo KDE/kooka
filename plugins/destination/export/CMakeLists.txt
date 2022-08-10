@@ -54,6 +54,6 @@ kcoreaddons_desktop_to_json(kookadestinationexport kookadestination-export.deskt
 target_link_libraries(kookadestinationexport kookadestination kookascan)
 
 if (INSTALL_BINARIES)
-  install(TARGETS kookadestinationexport DESTINATION ${PLUGIN_INSTALL_DIR}/kooka)
+  install(TARGETS kookadestinationexport DESTINATION ${KDE_INSTALL_PLUGINDIR}/kooka)
 endif (INSTALL_BINARIES)
-install(FILES kookadestination-export.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+install(FILES kookadestination-export.desktop DESTINATION ${KDE_INSTALL_KSERVICES5DIR})

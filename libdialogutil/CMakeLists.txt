@@ -68,6 +68,6 @@ ecm_configure_package_config_file(
 
 ########### installation ###############
 
-install(TARGETS dialogutil ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS dialogutil ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 install(FILES ${dialogutil_HDRS} DESTINATION ${KDE_INSTALL_INCLUDEDIR_KF5})
 install(FILES "${CMAKE_CURRENT_BINARY_DIR}/${DU}Config.cmake" DESTINATION ${CONFIGDIR} COMPONENT Devel)

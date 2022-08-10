@@ -82,7 +82,7 @@ target_link_libraries(kookacore kookascan)
 target_link_libraries(kookacore libfiletree)
 
 if (INSTALL_BINARIES)
-  install(TARGETS kookacore ${INSTALL_TARGETS_DEFAULT_ARGS})
+  install(TARGETS kookacore ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 endif (INSTALL_BINARIES)
 
 ########### executable ###############
@@ -126,7 +126,7 @@ add_dependencies(kooka vcsversion)
 ########### install files ###############
 
 if (INSTALL_BINARIES)
-  install(TARGETS kooka ${INSTALL_TARGETS_DEFAULT_ARGS})
+  install(TARGETS kooka ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 endif (INSTALL_BINARIES)
 install(FILES kookasettings.kcfg DESTINATION ${KDE_INSTALL_KCFGDIR})
 
