@@ -125,14 +125,6 @@ void DialogBase::setButtonGuiItem(QDialogButtonBox::StandardButton button, const
     if (but!=nullptr) KGuiItem::assign(but, guiItem);
 }
 
-
-int DialogBase::spacingHint()
-{
-    // from KDE4 KDialog::spacingHint()
-    return (QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
-}
-
-
 int DialogBase::verticalSpacing()
 {
     int spacing = QApplication::style()->pixelMetric(QStyle::PM_LayoutVerticalSpacing);
