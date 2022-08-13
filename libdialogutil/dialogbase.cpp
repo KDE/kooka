@@ -128,7 +128,6 @@ void DialogBase::setButtonGuiItem(QDialogButtonBox::StandardButton button, const
 int DialogBase::verticalSpacing()
 {
     int spacing = QApplication::style()->pixelMetric(QStyle::PM_LayoutVerticalSpacing);
-    if (spacing==-1) spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
     return (spacing);
 }
 
@@ -136,7 +135,6 @@ int DialogBase::verticalSpacing()
 int DialogBase::horizontalSpacing()
 {
     int spacing = QApplication::style()->pixelMetric(QStyle::PM_LayoutHorizontalSpacing);
-    if (spacing==-1) spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
     return (spacing);
 }
 
