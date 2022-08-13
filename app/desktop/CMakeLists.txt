@@ -17,4 +17,4 @@ project(kooka5)
 
 ecm_install_icons(ICONS 48-apps-kooka.png DESTINATION ${KDE_INSTALL_ICONDIR} THEME hicolor)
 install(FILES org.kde.kooka.desktop DESTINATION ${KDE_INSTALL_APPDIR})
-install(FILES kookaui.rc DESTINATION ${KDE_INSTALL_KXMLGUI5DIR}/kooka)
+install(FILES kookaui.rc DESTINATION ${KDE_INSTALL_KXMLGUIDIR}/kooka)
