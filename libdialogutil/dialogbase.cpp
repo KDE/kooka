@@ -31,7 +31,6 @@
 #include "dialogbase.h"
 
 #include <qlayout.h>
-#include <qdesktopwidget.h>
 #include <qframe.h>
 #include <qstyle.h>
 #include <qpushbutton.h>
