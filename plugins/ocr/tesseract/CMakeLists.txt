@@ -29,7 +29,7 @@ kcoreaddons_add_plugin(tesseract SOURCES ${tesseract_SRCS} INSTALL_NAMESPACE "ko
 
 kcoreaddons_desktop_to_json(tesseract kookaocr-tesseract.desktop)
 
-target_link_libraries(tesseract Qt5::Core Qt5::Gui)
+target_link_libraries(tesseract Qt::Core Qt::Gui)
 target_link_libraries(tesseract KF5::I18n KF5::WidgetsAddons)
 target_link_libraries(tesseract kookaocr kookascan)
 

@@ -51,7 +51,7 @@ set(kookaocr_SRCS
 
 add_library(kookaocr SHARED ${kookaocr_SRCS})
 set_target_properties(kookaocr PROPERTIES SOVERSION "1.0.0")
-target_link_libraries(kookaocr Qt5::Core Qt5::Widgets)
+target_link_libraries(kookaocr Qt::Core Qt::Widgets)
 target_link_libraries(kookaocr KF5::I18n KF5::WidgetsAddons KF5::ConfigWidgets KF5::SonnetCore KF5::SonnetUi)
 target_link_libraries(kookaocr kookascan kookacore)
 target_link_libraries(kookaocr dialogutil)

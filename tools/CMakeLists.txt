@@ -15,7 +15,7 @@ project(kooka5)
 
 ########### dependencies ###############
 
-find_package(Qt5 ${QT_MIN_VERSION} REQUIRED COMPONENTS Core Gui)
+find_package(Qt${QT_MAJOR_VERSION} ${QT_MIN_VERSION} REQUIRED COMPONENTS Core Gui)
 find_package(KF5 ${KF5_MIN_VERSION} REQUIRED COMPONENTS I18n CoreAddons)
 
 ########### sanedump ###############
@@ -40,7 +40,7 @@ set(qimageioinfo_SRCS
 )
 
 add_executable(qimageioinfo ${qimageioinfo_SRCS})
-target_link_libraries(qimageioinfo Qt5::Core Qt5::Gui)
+target_link_libraries(qimageioinfo Qt::Core Qt::Gui)
 target_link_libraries(qimageioinfo KF5::CoreAddons)
 
 ########### install files ###############

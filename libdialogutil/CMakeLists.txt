@@ -47,7 +47,7 @@ set(dialogutil_HDRS
 add_library(dialogutil SHARED ${dialogutil_SRCS})
 generate_export_header(dialogutil BASE_NAME libdialogutil)
 target_link_libraries(dialogutil
-  Qt5::Core Qt5::Widgets
+  Qt::Core Qt::Widgets
   KF5::I18n
   KF5::ConfigCore
   KF5::WidgetsAddons

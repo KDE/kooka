@@ -81,7 +81,7 @@ kcoreaddons_add_plugin(kadmos SOURCES ${kadmos_SRCS} INSTALL_NAMESPACE "kooka_oc
 
 kcoreaddons_desktop_to_json(kadmos kookaocr-kadmos.desktop)
 
-target_link_libraries(kadmos Qt5::Core Qt5::Gui)
+target_link_libraries(kadmos Qt::Core Qt::Gui)
 target_link_libraries(kadmos KF5::I18n KF5::WidgetsAddons)
 target_link_libraries(kadmos kookaocr kookascan)
 target_link_libraries(kadmos librep)

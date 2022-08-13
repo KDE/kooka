@@ -15,7 +15,7 @@ project(kooka5)
 
 ########### dependencies ###############
 
-find_package(Qt5 ${QT_MIN_VERSION} REQUIRED COMPONENTS PrintSupport)
+find_package(Qt${QT_MAJOR_VERSION} ${QT_MIN_VERSION} REQUIRED COMPONENTS PrintSupport)
 find_package(KF5 ${KF5_MIN_VERSION} REQUIRED COMPONENTS I18n Config TextWidgets KIO IconThemes)
 
 ############### Packages used by KDE ###############
@@ -76,7 +76,7 @@ kconfig_add_kcfg_files(kookacore_SRCS kookasettings.kcfgc)
 add_library(kookacore SHARED ${kookacore_SRCS})
 generate_export_header(kookacore BASE_NAME kookacore)
 set_target_properties(kookacore PROPERTIES SOVERSION "2.0.0")
-target_link_libraries(kookacore Qt5::Core Qt5::Gui Qt5::PrintSupport)
+target_link_libraries(kookacore Qt::Core Qt::Gui Qt::PrintSupport)
 target_link_libraries(kookacore KF5::I18n KF5::KIOFileWidgets KF5::KIOWidgets KF5::IconThemes KF5::ConfigGui)
 target_link_libraries(kookacore kookascan)
 target_link_libraries(kookacore libfiletree)
@@ -110,7 +110,7 @@ set(kooka_SRCS
 
 add_executable(kooka ${kooka_SRCS})
 target_link_libraries(kooka
-  Qt5::PrintSupport
+  Qt::PrintSupport
   dialogutil
   kookacore
   kookadestination

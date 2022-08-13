@@ -34,6 +34,6 @@ ecm_qt_declare_logging_category(libfiletree_SRCS
 
 add_library(libfiletree STATIC ${libfiletree_SRCS})
 target_link_libraries(libfiletree
-  Qt5::Core Qt5::Widgets
+  Qt::Core Qt::Widgets
   KF5::KIOCore
 )

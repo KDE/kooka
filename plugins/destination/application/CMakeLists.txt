@@ -35,6 +35,6 @@ set(destinationapplication_SRCS
 kcoreaddons_add_plugin(destinationapplication SOURCES ${destinationapplication_SRCS} INSTALL_NAMESPACE "kooka_destination")
 
 kcoreaddons_desktop_to_json(destinationapplication kookadestination-application.desktop)
-target_link_libraries(destinationapplication Qt5::Core Qt5::Widgets)
+target_link_libraries(destinationapplication Qt::Core Qt::Widgets)
 target_link_libraries(destinationapplication KF5::I18n KF5::WidgetsAddons KF5::Service)
 target_link_libraries(destinationapplication kookadestination kookacore kookascan)

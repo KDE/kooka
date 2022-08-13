@@ -29,7 +29,7 @@ kcoreaddons_add_plugin(ocrad SOURCES ${ocrad_SRCS} INSTALL_NAMESPACE "kooka_ocr"
 
 kcoreaddons_desktop_to_json(ocrad kookaocr-ocrad.desktop)
 
-target_link_libraries(ocrad Qt5::Core Qt5::Gui)
+target_link_libraries(ocrad Qt::Core Qt::Gui)
 target_link_libraries(ocrad KF5::I18n KF5::WidgetsAddons)
 target_link_libraries(ocrad kookaocr kookascan)
 
