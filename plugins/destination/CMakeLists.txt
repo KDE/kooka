@@ -29,15 +29,6 @@ set_package_properties(KF5Purpose PROPERTIES
   TYPE OPTIONAL
 )
 
-set(KIPI_MIN_VERSION "5.2.0")
-find_package(KF5Kipi ${KIPI_MIN_VERSION})
-set_package_properties(KF5Kipi PROPERTIES
-  URL "https://invent.kde.org/graphics/libkipi"
-  DESCRIPTION "Provides various image manipulation and export features"
-  PURPOSE "Required for the Export Scan destination plugin"
-  TYPE OPTIONAL
-)
-
 #########################################################################
 #									#
 #  Destination plugin base library					#
@@ -82,7 +73,3 @@ add_subdirectory(save)
 if (KF5Purpose_FOUND)
   add_subdirectory(share)
 endif (KF5Purpose_FOUND)
-
-if (KF5Kipi_FOUND)
-  add_subdirectory(export)
-endif (KF5Kipi_FOUND)
