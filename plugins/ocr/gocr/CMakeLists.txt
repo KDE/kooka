@@ -19,18 +19,18 @@ project(kooka5)
 #									#
 #########################################################################
 
-set(gocr_SRCS
+set(ocrgocr_SRCS
   ocrgocrengine.cpp
   ocrgocrdialog.cpp
   ${kookaocr_LOG_SRCS}
 )
 
-kcoreaddons_add_plugin(gocr SOURCES ${gocr_SRCS} INSTALL_NAMESPACE "kooka_ocr")
+kcoreaddons_add_plugin(ocrgocr SOURCES ${ocrgocr_SRCS} INSTALL_NAMESPACE "kooka_ocr")
 
-kcoreaddons_desktop_to_json(gocr kookaocr-gocr.desktop)
+kcoreaddons_desktop_to_json(ocrgocr kookaocr-gocr.desktop)
 
-target_link_libraries(gocr Qt::Core Qt::Gui)
-target_link_libraries(gocr KF5::I18n KF5::WidgetsAddons)
-target_link_libraries(gocr kookaocr kookascan)
+target_link_libraries(ocrgocr Qt::Core Qt::Gui)
+target_link_libraries(ocrgocr KF5::I18n KF5::WidgetsAddons)
+target_link_libraries(ocrgocr kookaocr kookascan)
 
 install(FILES gocr.png DESTINATION ${PICS_INSTALL_DIR})
