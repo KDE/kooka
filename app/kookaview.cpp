@@ -932,9 +932,11 @@ void KookaView::closeScanDevice()
 
     if (mScanParams!=nullptr)
     {
+        // First save the current destination plugin settings
         mScanParams->saveDestinationSettings();
-        AbstractDestination *dest = mScanParams->destinationPlugin();
-        if (dest!=nullptr) delete dest;
+        // Then ensure that the current destination plugin is unloaded
+        PluginManager::self()->loadPlugin(PluginManager::DestinationPlugin, QString());
+        // Then the scan parameters GUI can be destroyed
         delete mScanParams;
         mScanParams = nullptr;
     }
