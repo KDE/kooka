@@ -400,7 +400,7 @@ KScanFileRequester::KScanFileRequester(QWidget *parent, const QString &text)
     mEntry->setFilter(filter);
 
     connect(mEntry, QOverload<const QString &>::of(&KUrlRequester::textChanged), this, QOverload<const QString &>::of(&KScanFileRequester::settingChanged));
-    connect(mEntry, QOverload<>::of(&KUrlRequester::returnPressed), this, &KScanStringEntry::returnPressed);
+    connect(mEntry, QOverload<const QString &>::of(&KUrlRequester::returnPressed), this, &KScanStringEntry::returnPressed);
 
     setFocusProxy(mEntry);
     setFocusPolicy(Qt::StrongFocus);
