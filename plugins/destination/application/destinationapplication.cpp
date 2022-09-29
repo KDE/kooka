@@ -39,7 +39,7 @@
 #include <kservice.h>
 #include <klocalizedstring.h>
 #include <kio/applicationlauncherjob.h>
-#include <kio/jobuidelegate.h>
+#include <kio/jobuidelegatefactory.h>
 
 #include "scanparamspage.h"
 #include "kookasettings.h"
@@ -83,7 +83,7 @@ void DestinationApplication::imageScanned(ScanImage::Ptr img)
     KIO::ApplicationLauncherJob *job = new KIO::ApplicationLauncherJob(service);
     job->setUrls(QList<QUrl>() << saveUrl);
     job->setRunFlags(KIO::ApplicationLauncherJob::DeleteTemporaryFiles);
-    job->setUiDelegate(new KIO::JobUiDelegate(KJobUiDelegate::AutoHandlingEnabled, parentWidget()));
+    job->setUiDelegate(KIO::createDefaultJobUiDelegate(KJobUiDelegate::AutoHandlingEnabled, parentWidget()));
     job->start();					// all done
 }
 

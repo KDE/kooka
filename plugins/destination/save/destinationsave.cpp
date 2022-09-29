@@ -41,7 +41,7 @@
 
 #include <kio/statjob.h>
 #include <kio/copyjob.h>
-#include <kio/jobuidelegate.h>
+#include <kio/jobuidelegatefactory.h>
 
 #include "scanparamspage.h"
 #include "kookasettings.h"
@@ -108,7 +108,7 @@ void DestinationSave::imageScanned(ScanImage::Ptr img)
             // afterwards.
             KIO::StatJob *job = KIO::mostLocalUrl(url.adjusted(QUrl::RemoveFilename|QUrl::StripTrailingSlash));
             job->setSide(KIO::StatJob::DestinationSide);
-            job->setUiDelegate(new KIO::JobUiDelegate(KJobUiDelegate::AutoHandlingEnabled, parentWidget()));
+            job->setUiDelegate(KIO::createDefaultJobUiDelegate(KJobUiDelegate::AutoHandlingEnabled, parentWidget()));
             if (job->exec())
             {
                 QString fileName = url.fileName();
@@ -144,7 +144,7 @@ void DestinationSave::imageScanned(ScanImage::Ptr img)
         if (!url.isValid()) return;			// temp image save failed
 
         KIO::CopyJob *job = KIO::copy(url, mSaveUrl);
-        job->setUiDelegate(new KIO::JobUiDelegate(KJobUiDelegate::AutoHandlingEnabled, parentWidget()));
+        job->setUiDelegate(KIO::createDefaultJobUiDelegate(KJobUiDelegate::AutoHandlingEnabled, parentWidget()));
         job->exec();					// do the remote copy
 
         QFile::remove(url.toLocalFile());		// remove the temporary file

@@ -59,7 +59,7 @@
 
 #ifdef HAVE_KIO_APPLICATIONLAUNCHERJOB
 #include <kio/applicationlauncherjob.h>
-#include <kio/jobuidelegate.h>
+#include <kio/jobuidelegatefactory.h>
 #else
 #include <krun.h>
 #endif
@@ -1210,7 +1210,7 @@ void KookaView::slotOpenWith(int idx)
     }
 #ifdef HAVE_KIO_APPLICATIONLAUNCHERJOB
     job->setUrls(urllist);
-    job->setUiDelegate(new KIO::JobUiDelegate(KJobUiDelegate::AutoHandlingEnabled, this));
+    job->setUiDelegate(KIO::createDefaultJobUiDelegate(KJobUiDelegate::AutoHandlingEnabled, this));
     job->start();
 #endif
 }
