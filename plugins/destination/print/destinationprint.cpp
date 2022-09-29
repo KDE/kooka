@@ -85,7 +85,7 @@ void DestinationPrint::imageScanned(ScanImage::Ptr img)
         QString msg = imgTab.checkValid();		// check that settings are valid
         if (!msg.isEmpty())				// if not, display error message
         {
-            KMessageBox::sorry(parentWidget(),
+            KMessageBox::error(parentWidget(),
                                i18nc("@info", "Invalid print options were specified:\n\n%1", msg),
                                i18nc("@title:window", "Cannot Print"));
             return;

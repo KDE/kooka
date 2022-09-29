@@ -81,10 +81,8 @@ set(kookascan_SRCS
   kscanoptset.cpp
   gammadialog.cpp
   gammawidget.cpp
-  #scansourcedialog.cpp
   scanparams.cpp
   scanparamspage.cpp
-  #massscandialog.cpp
   deviceselector.cpp
   adddevicedialog.cpp
   imagecanvas.cpp
@@ -129,6 +127,6 @@ set_target_properties(kookascan PROPERTIES VERSION 2.0.0 SOVERSION 2)
 ########### installation ###############
 
 if (INSTALL_BINARIES)
-  install(TARGETS kookascan ${INSTALL_TARGETS_DEFAULT_ARGS})
+  install(TARGETS kookascan ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 endif (INSTALL_BINARIES)
 install(FILES scansettings.kcfg DESTINATION ${KDE_INSTALL_KCFGDIR})

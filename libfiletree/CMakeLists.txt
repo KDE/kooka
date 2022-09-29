@@ -33,7 +33,8 @@ ecm_qt_declare_logging_category(libfiletree_SRCS
   DESCRIPTION "libfiletree (Kooka)")
 
 add_library(libfiletree STATIC ${libfiletree_SRCS})
+set_target_properties(libfiletree PROPERTIES POSITION_INDEPENDENT_CODE ON)
 target_link_libraries(libfiletree
-  Qt5::Core Qt5::Widgets
+  Qt::Core Qt::Widgets
   KF5::KIOCore
 )

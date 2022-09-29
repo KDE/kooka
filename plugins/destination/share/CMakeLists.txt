@@ -19,18 +19,14 @@ project(kooka5)
 #									#
 #########################################################################
 
-set(kookadestinationshare_SRCS
+set(destinationshare_SRCS
   destinationshare.cpp
   ${kookadestination_LOG_SRCS}
 )
 
-add_library(kookadestinationshare MODULE ${kookadestinationshare_SRCS})
-kcoreaddons_desktop_to_json(kookadestinationshare kookadestination-share.desktop)
-target_link_libraries(kookadestinationshare Qt5::Gui)
-target_link_libraries(kookadestinationshare KF5::Purpose KF5::PurposeWidgets)
-target_link_libraries(kookadestinationshare kookadestination kookascan)
+kcoreaddons_add_plugin(destinationshare SOURCES ${destinationshare_SRCS} INSTALL_NAMESPACE "kooka_destination")
 
-if (INSTALL_BINARIES)
-  install(TARGETS kookadestinationshare DESTINATION ${PLUGIN_INSTALL_DIR}/kooka)
-endif (INSTALL_BINARIES)
-install(FILES kookadestination-share.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+kcoreaddons_desktop_to_json(destinationshare kookadestination-share.desktop)
+target_link_libraries(destinationshare Qt::Gui)
+target_link_libraries(destinationshare KF5::Purpose KF5::PurposeWidgets)
+target_link_libraries(destinationshare kookadestination kookascan)

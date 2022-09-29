@@ -128,7 +128,7 @@ void DestinationSave::imageScanned(ScanImage::Ptr img)
         ImgSaver::ImageSaveStatus status = saver.saveImage(img, url, fmt);
         if (status!=ImgSaver::SaveStatusOk)
         {
-            KMessageBox::sorry(parentWidget(),
+            KMessageBox::error(parentWidget(),
                                xi18nc("@info", "Cannot save image to <filename>%1</filename><nl/><message>%2</message>",
                                       url.toDisplayString(), saver.errorString(status)),
                                i18n("Cannot Save Image"));
@@ -233,7 +233,7 @@ bool DestinationSave::getSaveLocation(ScanImage::ImageType type)
         ImageFormat fmt = ImageFormat::formatForMime(mimeType);
         if (!fmt.isValid())
         {
-            KMessageBox::sorry(parentWidget(),
+            KMessageBox::error(parentWidget(),
                                xi18nc("@info", "Cannot save to <filename>%2</filename><nl/>The image format <resource>%1</resource> is not supported.",
                                       mimeType.name(), mSaveUrl.toDisplayString()),
                                i18n("Cannot Save Image"));

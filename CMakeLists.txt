@@ -17,7 +17,7 @@ project(kooka5)
 set(VERSION "0.90")
 message(STATUS "Configuring for Kooka/libkookascan version ${VERSION}")
 
-set(QT_MIN_VERSION "5.14.0")
+set(QT_MIN_VERSION "5.15.0")
 set(KF5_MIN_VERSION "5.80.0")
 
 # ECM setup (Extra Cmake Modules)
@@ -41,8 +41,8 @@ include(KDEClangFormat)
 # Options
 option(INSTALL_BINARIES "Install the binaries and libraries, turn off for development in place" ON)
 
-# Required Qt5 components to build this package
-find_package(Qt5 ${QT_MIN_VERSION} REQUIRED COMPONENTS Core Widgets)
+# Required Qt components to build this package
+find_package(Qt${QT_MAJOR_VERSION} ${QT_MIN_VERSION} REQUIRED COMPONENTS Core Widgets)
 
 # Rigourousness
 add_definitions("-DQT_USE_QSTRINGBUILDER")
@@ -111,7 +111,7 @@ endif()
 
 ############### Common install locations ###############
 
-set(PICS_INSTALL_DIR ${DATA_INSTALL_DIR}/kooka/pics)
+set(PICS_INSTALL_DIR ${KDE_INSTALL_DATADIR}/kooka/pics)
 
 ############### Common definitions ###############
 

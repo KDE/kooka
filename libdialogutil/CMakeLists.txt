@@ -47,7 +47,7 @@ set(dialogutil_HDRS
 add_library(dialogutil SHARED ${dialogutil_SRCS})
 generate_export_header(dialogutil BASE_NAME libdialogutil)
 target_link_libraries(dialogutil
-  Qt5::Core Qt5::Widgets
+  Qt::Core Qt::Widgets
   KF5::I18n
   KF5::ConfigCore
   KF5::WidgetsAddons
@@ -68,6 +68,6 @@ ecm_configure_package_config_file(
 
 ########### installation ###############
 
-install(TARGETS dialogutil ${INSTALL_TARGETS_DEFAULT_ARGS})
-install(FILES ${dialogutil_HDRS} DESTINATION ${KDE_INSTALL_INCLUDEDIR_KF5})
+install(TARGETS dialogutil ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
+install(FILES ${dialogutil_HDRS} DESTINATION ${KDE_INSTALL_INCLUDEDIR_KF})
 install(FILES "${CMAKE_CURRENT_BINARY_DIR}/${DU}Config.cmake" DESTINATION ${CONFIGDIR} COMPONENT Devel)

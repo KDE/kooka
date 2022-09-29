@@ -19,17 +19,13 @@ project(kooka5)
 #									#
 #########################################################################
 
-set(kookadestinationclipboard_SRCS
+set(destinationclipboard_SRCS
   destinationclipboard.cpp
   ${kookadestination_LOG_SRCS}
 )
 
-add_library(kookadestinationclipboard MODULE ${kookadestinationclipboard_SRCS})
-kcoreaddons_desktop_to_json(kookadestinationclipboard kookadestination-clipboard.desktop)
-target_link_libraries(kookadestinationclipboard Qt5::Gui)
-target_link_libraries(kookadestinationclipboard kookadestination kookascan)
+kcoreaddons_add_plugin(destinationclipboard SOURCES ${destinationclipboard_SRCS} INSTALL_NAMESPACE "kooka_destination")
 
-if (INSTALL_BINARIES)
-  install(TARGETS kookadestinationclipboard DESTINATION ${PLUGIN_INSTALL_DIR}/kooka)
-endif (INSTALL_BINARIES)
-install(FILES kookadestination-clipboard.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+kcoreaddons_desktop_to_json(destinationclipboard kookadestination-clipboard.desktop)
+target_link_libraries(destinationclipboard Qt::Gui)
+target_link_libraries(destinationclipboard kookadestination kookascan)

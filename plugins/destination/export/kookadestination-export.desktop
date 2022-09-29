@@ -1,8 +1,5 @@
 [Desktop Entry]
 Type=Service
-X-KDE-ServiceTypes=Kooka/DestinationPlugin
-X-KDE-Library=kookadestinationexport
-X-KDE-PluginInfo-Name=destinationexport
 X-KDE-PluginInfo-License=GPL
 Icon=document-export
 
@@ -22,8 +19,10 @@ Name[nl]=Online service
 Name[pa]=ਆਨਲਾਈਨ ਸਰਵਿਸ
 Name[pl]=Usługa sieciowa
 Name[pt]=Serviço 'Online'
+Name[pt_BR]=Serviço online
 Name[sl]=Spletna storitev
 Name[sv]=Nättjänst
+Name[tr]=Çevrimiçi Hizmet
 Name[uk]=Інтернет-служба
 Name[x-test]=xxOnline Servicexx
 Comment=Export the scanned image to an online service
@@ -40,7 +39,9 @@ Comment[ko]=스캔한 그림을 온라인 서비스로 내보내기
 Comment[nl]=De gescande afbeelding naar een online service exporteren
 Comment[pl]=Wyeksportuj zeskanowany obraz do usługi sieciowej
 Comment[pt]=Exportar a imagem digitalizada para um serviço 'online'
+Comment[pt_BR]=Exportar a imagem escaneada para um serviço online
 Comment[sl]=Izvozi optično prebrano sliko v spletno storitev
 Comment[sv]=Exportera den inlästa bilden till en Internettjänst
+Comment[tr]=Taranan görseli bir çevrimiçi hizmete dışa aktar
 Comment[uk]=Експортувати скановане зображення до служби інтернет-зберігання
 Comment[x-test]=xxExport the scanned image to an online servicexx

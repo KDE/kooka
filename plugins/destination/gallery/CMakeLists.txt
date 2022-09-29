@@ -19,18 +19,14 @@ project(kooka5)
 #									#
 #########################################################################
 
-set(kookadestinationgallery_SRCS
+set(destinationgallery_SRCS
   destinationgallery.cpp
   ${kookadestination_LOG_SRCS}
 )
 
-add_library(kookadestinationgallery MODULE ${kookadestinationgallery_SRCS})
-kcoreaddons_desktop_to_json(kookadestinationgallery kookadestination-gallery.desktop)
-target_link_libraries(kookadestinationgallery Qt5::Core Qt5::Gui)
-target_link_libraries(kookadestinationgallery KF5::I18n KF5::WidgetsAddons)
-target_link_libraries(kookadestinationgallery kookadestination kookascan)
+kcoreaddons_add_plugin(destinationgallery SOURCES ${destinationgallery_SRCS} INSTALL_NAMESPACE "kooka_destination")
 
-if (INSTALL_BINARIES)
-  install(TARGETS kookadestinationgallery DESTINATION ${PLUGIN_INSTALL_DIR}/kooka)
-endif (INSTALL_BINARIES)
-install(FILES kookadestination-gallery.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+kcoreaddons_desktop_to_json(destinationgallery kookadestination-gallery.desktop)
+target_link_libraries(destinationgallery Qt::Core Qt::Gui)
+target_link_libraries(destinationgallery KF5::I18n KF5::WidgetsAddons)
+target_link_libraries(destinationgallery kookadestination kookascan)

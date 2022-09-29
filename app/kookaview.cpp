@@ -685,7 +685,7 @@ void KookaView::print()
     QString msg = imgTab.checkValid();			// check that settings are valid
     if (!msg.isEmpty())					// if not, display error message
     {
-        KMessageBox::sorry(this,
+        KMessageBox::error(this,
                            i18nc("@info", "Invalid print options were specified:\n\n%1", msg),
                            i18nc("@title:window", "Cannot Print"));
         return;
@@ -729,7 +729,7 @@ void KookaView::slotStartOcrFile()
     ScanImage::Ptr img(new ScanImage(url));
     if (!img->isFileBound())
     {
-        KMessageBox::sorry(mMainWindow,
+        KMessageBox::error(mMainWindow,
                            xi18nc("@info", "Cannot load <filename>%1</filename> for OCR:<nl/>%2",
                                   url.toDisplayString(), img->errorString()),
                            i18n("Cannot Read OCR File"));
@@ -758,7 +758,7 @@ void KookaView::slotOcrSpellCheck(bool interactive, bool background)
 
     if (mOcrResEdit->document()->isEmpty())
     {
-        KMessageBox::sorry(mMainWindow,
+        KMessageBox::error(mMainWindow,
                            i18n("There is no OCR result text to spell check."),
                            i18n("OCR Spell Check not possible"));
         return;

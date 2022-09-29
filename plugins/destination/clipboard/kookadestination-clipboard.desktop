@@ -1,8 +1,5 @@
 [Desktop Entry]
 Type=Service
-X-KDE-ServiceTypes=Kooka/DestinationPlugin
-X-KDE-Library=kookadestinationclipboard
-X-KDE-PluginInfo-Name=destinationclipboard
 X-KDE-PluginInfo-License=GPL
 Icon=edit-copy
 
@@ -22,8 +19,10 @@ Name[nl]=Afbeelding kopiëren
 Name[pa]=ਚਿੱਤਰ ਕਾਪੀ ਕਰੋ
 Name[pl]=Skopiuj obraz
 Name[pt]=Copiar a Imagem
+Name[pt_BR]=Copiar imagem
 Name[sl]=Kopiraj sliko
 Name[sv]=Kopiera bild
+Name[tr]=Görseli Kopyala
 Name[uk]=Копіювання зображення
 Name[x-test]=xxCopy Imagexx
 Comment=Copy the scanned image to the clipboard
@@ -42,7 +41,9 @@ Comment[nl]=De gescande afbeelding kopiëren naar het klembord
 Comment[pa]=ਸਕੈਨ ਕੀਤੇ ਚਿੱਤਰ ਨੂੰ ਕਲਿੱਪਬੋਰਡ ਵਿੱਚ ਕਾਪੀ ਕਰੋ
 Comment[pl]=Skopiuj zeskanowany obraz do schowka
 Comment[pt]=Copiar a imagem digitalizada para a aplicação
+Comment[pt_BR]=Copiar a imagem escaneada para a área de trabalho
 Comment[sl]=Kopiraj prebrano sliko na odložišče
 Comment[sv]=Kopierar den inlästa bilden till klippbordet
+Comment[tr]=Taranan görseli panoya kopyala
 Comment[uk]=Копіювати скановане зображення до буфера
 Comment[x-test]=xxCopy the scanned image to the clipboardxx

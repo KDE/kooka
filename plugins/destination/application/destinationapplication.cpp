@@ -34,9 +34,9 @@
 #include <qcombobox.h>
 #include <qlabel.h>
 
+#include <kapplicationtrader.h>
 #include <kpluginfactory.h>
 #include <kservice.h>
-#include <kservicetypetrader.h>
 #include <klocalizedstring.h>
 #include <kio/applicationlauncherjob.h>
 #include <kio/jobuidelegate.h>
@@ -117,7 +117,9 @@ void DestinationApplication::createGUI(ScanParamsPage *page)
     // also supported as a QImageWriter format (that is, a format that Kooka can
     // save to).
 
-    const KService::List allServices = KServiceTypeTrader::self()->query("Application");
+    const KService::List allServices = KApplicationTrader::query([](const KService::Ptr &){
+        return true;
+    });
     qCDebug(DESTINATION_LOG) << "have" << allServices.count() << "services";
     const QList<QMimeType> *imageMimeTypes = ImageFormat::mimeTypes();
 

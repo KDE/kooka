@@ -62,8 +62,6 @@ extern "C"
 
 #include "scanglobal.h"
 #include "scanparamspage.h"
-//#include "scansourcedialog.h"
-//#include "massscandialog.h"
 #include "gammadialog.h"
 #include "kgammatable.h"
 #include "kscancontrols.h"
@@ -669,10 +667,10 @@ KScanDevice::Status ScanParams::prepareScan(QString *vfp)
     int depth;
     mSaneDevice->getCurrentFormat(&format, &depth);
     if (depth == 1 && format != SANE_FRAME_GRAY) {	// 1-bit scan depth in colour?
-        KMessageBox::sorry(this, i18n("1-bit depth scan cannot be done in color"));
+        KMessageBox::error(this, i18n("1-bit depth scan cannot be done in color"));
         return (KScanDevice::ParamError);
     } else if (depth == 16) {
-        KMessageBox::sorry(this, i18n("16-bit depth scans are not supported"));
+        KMessageBox::error(this, i18n("16-bit depth scans are not supported"));
         return (KScanDevice::ParamError);
     }
 
@@ -682,13 +680,13 @@ KScanDevice::Status ScanParams::prepareScan(QString *vfp)
             virtfile = QFile::decodeName(mVirtualFile->get());
         }
         if (virtfile.isEmpty()) {
-            KMessageBox::sorry(this, i18n("A file must be entered for testing or virtual scanning"));
+            KMessageBox::error(this, i18n("A file must be entered for testing or virtual scanning"));
             return (KScanDevice::ParamError);
         }
 
         QFileInfo fi(virtfile);
         if (!fi.exists()) {
-            KMessageBox::sorry(this, xi18nc("@info", "The testing or virtual file <filename>%1</filename><nl/>was not found or is not readable.", virtfile));
+            KMessageBox::error(this, xi18nc("@info", "The testing or virtual file <filename>%1</filename><nl/>was not found or is not readable.", virtfile));
             return (KScanDevice::ParamError);
         }
 
@@ -698,7 +696,7 @@ KScanDevice::Status ScanParams::prepareScan(QString *vfp)
             if (!(mime.inherits("image/x-portable-bitmap") ||
                   mime.inherits("image/x-portable-greymap") ||
                   mime.inherits("image/x-portable-pixmap"))) {
-                KMessageBox::sorry(this, xi18nc("@info", "SANE Debug can only read PNM files.<nl/>"
+                KMessageBox::error(this, xi18nc("@info", "SANE Debug can only read PNM files.<nl/>"
                                               "The specified file is type <icode>%1</icode>.", mime.name()));
                 return (KScanDevice::ParamError);
             }
@@ -736,7 +734,7 @@ void ScanParams::slotAcquirePreview()
     // doesn't matter).
 
     if (mScanMode == ScanParams::VirtualScannerMode) {
-        KMessageBox::sorry(this, i18n("Cannot preview in Virtual Scanner mode"));
+        KMessageBox::error(this, i18n("Cannot preview in Virtual Scanner mode"));
         return;
     }
 
@@ -1082,12 +1080,6 @@ KScanDevice::Status ScanParams::performADFScan()
 {
     KScanDevice::Status stat = KScanDevice::Ok;
     bool          scan_on = true;
-
-#if 0
-// TODO: port/update
-    MassScanDialog *msd = new MassScanDialog(this);
-    msd->show();
-#endif
 
     /* The scan source should be set to ADF by the SourceSelect-Dialog */
 

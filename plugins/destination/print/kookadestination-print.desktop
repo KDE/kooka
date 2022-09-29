@@ -1,8 +1,5 @@
 [Desktop Entry]
 Type=Service
-X-KDE-ServiceTypes=Kooka/DestinationPlugin
-X-KDE-Library=kookadestinationprint
-X-KDE-PluginInfo-Name=destinationprint
 X-KDE-PluginInfo-License=GPL
 Icon=document-print
 
@@ -24,11 +21,12 @@ Name[pl]=Wydrukuj obraz
 Name[pt]=Imprimir a Imagem
 Name[sl]=Natisni sliko
 Name[sv]=Skriv ut bild
+Name[tr]=Görseli Yazdır
 Name[uk]=Друк зображення
 Name[x-test]=xxPrint Imagexx
 Comment=Print the scanned image
 Comment[ca]=Imprimeix la imatge escanejada
-Comment[ca@valencia]=Imprimeix la imatge escanejada
+Comment[ca@valencia]=Imprimix la imatge escanejada
 Comment[de]=Druckt das eingescannte Bild
 Comment[en_GB]=Print the scanned image
 Comment[es]=Imprimir la imagen escaneada
@@ -41,7 +39,9 @@ Comment[nl]=De gescande afbeelding afdrukken
 Comment[pa]=ਸਕੈਨ ਕੀਤੇ ਚਿੱਤਰ ਪਰਿੰਟ ਕਰੋ
 Comment[pl]=Wydrukuj zeskanowany obraz
 Comment[pt]=Imprimir a imagem digitalizada
+Comment[pt_BR]=Imprimir a imagem escaneada
 Comment[sl]=Natisni optično prebrano sliko
 Comment[sv]=Skriv ut den inlästa bilden
+Comment[tr]=Taranan görseli yazdır
 Comment[uk]=Надрукувати скановане зображення
 Comment[x-test]=xxPrint the scanned imagexx

@@ -1159,7 +1159,7 @@ void KScanDevice::doProcessABlock()
 	{
 case SANE_FRAME_RGB:
             if (mSaneParameters.lines<1) break;
-            bytes_read += mBytesUsed;			// die übergebliebenen Bytes dazu
+            bytes_read += mBytesUsed;			// die Ã¼bergebliebenen Bytes dazu
             mBytesUsed = bytes_read % 3;
 
             for (val = 0; val<((bytes_read-mBytesUsed)/3); val++)

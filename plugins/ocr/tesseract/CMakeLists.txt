@@ -19,20 +19,18 @@ project(kooka5)
 #									#
 #########################################################################
 
-set(kookaocrtesseract_SRCS
+set(tesseract_SRCS
   ocrtesseractengine.cpp
   ocrtesseractdialog.cpp
   ${kookaocr_LOG_SRCS}
 )
-add_library(kookaocrtesseract MODULE ${kookaocrtesseract_SRCS})
-kcoreaddons_desktop_to_json(kookaocrtesseract kookaocr-tesseract.desktop)
 
-target_link_libraries(kookaocrtesseract Qt5::Core Qt5::Gui)
-target_link_libraries(kookaocrtesseract KF5::I18n KF5::WidgetsAddons)
-target_link_libraries(kookaocrtesseract kookaocr kookascan)
+kcoreaddons_add_plugin(tesseract SOURCES ${tesseract_SRCS} INSTALL_NAMESPACE "kooka_ocr")
 
-if (INSTALL_BINARIES)
-  install(TARGETS kookaocrtesseract DESTINATION ${PLUGIN_INSTALL_DIR}/kooka)
-endif (INSTALL_BINARIES)
-install(FILES kookaocr-tesseract.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+kcoreaddons_desktop_to_json(tesseract kookaocr-tesseract.desktop)
+
+target_link_libraries(tesseract Qt::Core Qt::Gui)
+target_link_libraries(tesseract KF5::I18n KF5::WidgetsAddons)
+target_link_libraries(tesseract kookaocr kookascan)
+
 install(FILES tesseract.png DESTINATION ${PICS_INSTALL_DIR})

@@ -59,14 +59,13 @@ set(kookadestination_SRCS
 add_definitions(-DLIBEXEC_DIR=\"${CMAKE_INSTALL_FULL_LIBEXECDIR_KF5}\")
 add_library(kookadestination SHARED ${kookadestination_SRCS})
 set_target_properties(kookadestination PROPERTIES SOVERSION "1.0.0")
-target_link_libraries(kookadestination Qt5::Core Qt5::Widgets)
+target_link_libraries(kookadestination Qt::Core Qt::Widgets)
 target_link_libraries(kookadestination KF5::I18n KF5::WidgetsAddons)
 target_link_libraries(kookadestination kookascan kookacore)
 
 if (INSTALL_BINARIES)
-  install(TARGETS kookadestination ${INSTALL_TARGETS_DEFAULT_ARGS})
+  install(TARGETS kookadestination ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 endif (INSTALL_BINARIES)
-install(FILES kookadestinationplugin.desktop DESTINATION ${SERVICETYPES_INSTALL_DIR})
 
 #########################################################################
 #									#

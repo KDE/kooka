@@ -19,21 +19,18 @@ project(kooka5)
 #									#
 #########################################################################
 
-set(kookaocrocrad_SRCS
+set(ocrad_SRCS
   ocrocradengine.cpp
   ocrocraddialog.cpp
   ${kookaocr_LOG_SRCS}
 )
 
-add_library(kookaocrocrad MODULE ${kookaocrocrad_SRCS})
-kcoreaddons_desktop_to_json(kookaocrocrad kookaocr-ocrad.desktop)
+kcoreaddons_add_plugin(ocrad SOURCES ${ocrad_SRCS} INSTALL_NAMESPACE "kooka_ocr")
 
-target_link_libraries(kookaocrocrad Qt5::Core Qt5::Gui)
-target_link_libraries(kookaocrocrad KF5::I18n KF5::WidgetsAddons)
-target_link_libraries(kookaocrocrad kookaocr kookascan)
+kcoreaddons_desktop_to_json(ocrad kookaocr-ocrad.desktop)
 
-if (INSTALL_BINARIES)
-  install(TARGETS kookaocrocrad DESTINATION ${PLUGIN_INSTALL_DIR}/kooka)
-endif (INSTALL_BINARIES)
-install(FILES kookaocr-ocrad.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+target_link_libraries(ocrad Qt::Core Qt::Gui)
+target_link_libraries(ocrad KF5::I18n KF5::WidgetsAddons)
+target_link_libraries(ocrad kookaocr kookascan)
+
 install(FILES ocrad.png DESTINATION ${PICS_INSTALL_DIR})

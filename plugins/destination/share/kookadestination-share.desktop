@@ -1,14 +1,11 @@
 [Desktop Entry]
 Type=Service
-X-KDE-ServiceTypes=Kooka/DestinationPlugin
-X-KDE-Library=kookadestinationshare
-X-KDE-PluginInfo-Name=destinationshare
 X-KDE-PluginInfo-License=GPL
 Icon=document-share
 
 Name=Share Image
 Name[ca]=Comparteix una imatge
-Name[ca@valencia]=Comparteix una imatge
+Name[ca@valencia]=Compartix una imatge
 Name[cs]=Sdílet obrázek
 Name[de]=Bild teilen
 Name[en_GB]=Share Image
@@ -24,11 +21,12 @@ Name[pl]=Udostępnij obraz
 Name[pt]=Partilhar a Imagem
 Name[sl]=Deli sliko
 Name[sv]=Dela bild
+Name[tr]=Görseli Paylaş
 Name[uk]=Оприлюднити зображення
 Name[x-test]=xxShare Imagexx
 Comment=Share the scanned image
 Comment[ca]=Comparteix la imatge escanejada
-Comment[ca@valencia]=Comparteix la imatge escanejada
+Comment[ca@valencia]=Compartix la imatge escanejada
 Comment[de]=Teilt das eingescannte Bild
 Comment[en_GB]=Share the scanned image
 Comment[es]=Compartir la imagen escaneada
@@ -43,5 +41,6 @@ Comment[pl]=Udostępnij zeskanowany obraz
 Comment[pt]=Partilhar a imagem digitalizada
 Comment[sl]=Deli optično prebrano sliko
 Comment[sv]=Dela den inlästa bilden
+Comment[tr]=Taranan görseli paylaş
 Comment[uk]=Оприлюднення сканованого зображення
 Comment[x-test]=xxShare the scanned imagexx

@@ -223,7 +223,7 @@ void DestinationShare::slotShareFinished(const QJsonObject &output, int error, c
     else
     {
         qCWarning(DESTINATION_LOG) << "job failed with error" << error << errorMessage << output;
-        KMessageBox::sorry(parentWidget(),
+        KMessageBox::error(parentWidget(),
                            xi18nc("@info", "Cannot share the scanned image<nl/><nl/><message>%1</message>", errorMessage));
     }
 
