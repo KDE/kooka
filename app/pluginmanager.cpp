@@ -37,12 +37,39 @@
 #include "abstractplugin.h"
 #include "kooka_logging.h"
 
+#include <qcoreapplication.h>
+
 
 static PluginManager *sInstance = nullptr;
 
 
 PluginManager::PluginManager()
 {
+    // There is an anomaly between KPluginMetaData::findPlugins() which
+    // is used by allPlugins(), and the KPluginMetaData(const QString &file)
+    // constructor which is used by loadPlugin().  KPluginMetaData::findPlugins()
+    // uses KPluginMetaDataPrivate::forEachPlugin() which prepends the
+    // application directory (containing the current executable) to
+    // QCoreApplication::libraryPaths(), giving built but uninstalled plugins
+    // priority over installed ones.  The KPluginMetaData(const QString &file)
+    // constructor does not do this and passes the specified file name directly
+    // to QPluginLoader, so using QCoreApplication::libraryPaths() unchanged.
+    // The result is that allPlugins() will enumerate uninstalled development
+    // plugins but loadPlugin() will not necessarily load from the same location.
+    //
+    // To work around this, ensure that the application directory is at the
+    // front of QCoreApplication::libraryPaths().
+
+    QStringList pluginPaths = QCoreApplication::libraryPaths();
+    qCDebug(KOOKA_LOG) << "initial paths" << pluginPaths;
+    Q_ASSERT(!pluginPaths.isEmpty());
+
+    QString appDirPath = QCoreApplication::applicationDirPath();
+    pluginPaths.removeAll(appDirPath);
+    pluginPaths.prepend(appDirPath);
+
+    qCDebug(KOOKA_LOG) << "using paths" << pluginPaths;
+    QCoreApplication::setLibraryPaths(pluginPaths);
 }
 
 
@@ -108,7 +135,6 @@ AbstractPlugin *PluginManager::loadPlugin(PluginManager::PluginType type, const 
     }
 
     KPluginMetaData md(QStringLiteral("kooka_") + pluginTypeString(type) + QStringLiteral("/") + name);
-
     plugin = KPluginFactory::instantiatePlugin<AbstractPlugin>(md).plugin;
 
     if (plugin!=nullptr)
