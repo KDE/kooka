@@ -117,14 +117,15 @@ void DestinationApplication::createGUI(ScanParamsPage *page)
     // also supported as a QImageWriter format (that is, a format that Kooka can
     // save to).
 
-    const KService::List allServices = KApplicationTrader::query([](const KService::Ptr &){
-        return true;
+    const KService::List allServices = KApplicationTrader::query([](const KService::Ptr &)
+    {
+        return (true);
     });
     qCDebug(DESTINATION_LOG) << "have" << allServices.count() << "services";
     const QList<QMimeType> *imageMimeTypes = ImageFormat::mimeTypes();
 
     KService::List validServices;
-    for (const KService::Ptr service : allServices)
+    for (const KService::Ptr &service : allServices)
     {
         // Okular is an odd case.  For whatever reason, the application does
         // not have just one desktop file listing all of the MIME types that
@@ -179,7 +180,7 @@ found:  qCDebug(DESTINATION_LOG) << "accept" << service->desktopEntryName() << "
 
     const QString configuredApp = KookaSettings::destinationApplicationApp();
     int configuredIndex = -1;
-    for (const KService::Ptr service : validServices)
+    for (const KService::Ptr &service : qAsConst(validServices))
     {
         const QString key = service->desktopEntryName();
         if (key==configuredApp) configuredIndex = mAppsCombo->count();

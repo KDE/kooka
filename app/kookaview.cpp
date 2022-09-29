@@ -1164,7 +1164,7 @@ void KookaView::showOpenWithMenu(KActionMenu *menu)
 
     int i = 0;
     mOpenWithOffers = KApplicationTrader::queryByMimeType(mimeType);
-    for (const KService::Ptr service : qAsConst(mOpenWithOffers))
+    for (const KService::Ptr &service : qAsConst(mOpenWithOffers))
     {
         //qCDebug(KOOKA_LOG) << "> offer:" << service->name();
         QString actionName(service->name().replace("&", "&&"));
