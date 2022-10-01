@@ -322,7 +322,6 @@ KScanCombo::KScanCombo(QWidget *parent, const QString &text)
     setFocusPolicy(Qt::StrongFocus);
 }
 
-
 void KScanCombo::setList(const QList<QByteArray> &list)
 {
     // An optimisation, which may turn out to be not a valid one:
@@ -335,7 +334,7 @@ void KScanCombo::setList(const QList<QByteArray> &list)
     const bool bs = mCombo->blockSignals(true);
     mCombo->clear();
 
-    foreach (const QByteArray &item, list)
+    for (const QByteArray &item : list)
     {
         // See the KI18N Programmer's Guide, "Connecting to Catalogs in Library Code"
         mCombo->addItem(ki18n(item.constData()).toString("sane-backends"), item);

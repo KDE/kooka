@@ -594,10 +594,10 @@ void FormatDialog::buildFormatList(bool recOnly)
 
     mFormatList->clear();
     const QList<QMimeType> *mimeTypes = ImageFormat::mimeTypes();
-    foreach (const QMimeType &mime, *mimeTypes)		// for all known MIME types
+    for (const QMimeType &mime : qAsConst(*mimeTypes))	// for all known MIME types
     {
         const FormatInfo *fi = findKnownFormat(mime);	// look for format information
-        if (fi==nullptr)					// nothing for that MIME type
+        if (fi==nullptr)				// nothing for that MIME type
         {
             if (recOnly) continue;			// never show for recommended
         }						// but always show otherwise

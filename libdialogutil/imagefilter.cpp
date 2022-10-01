@@ -57,7 +57,7 @@ static QStringList filterList(ImageFilter::FilterMode mode, ImageFilter::FilterO
 
     QMimeDatabase db;
 
-    foreach (const QByteArray &mimeType, mimeTypes)
+    for (const QByteArray &mimeType : qAsConst(mimeTypes))
     {
         QMimeType mime = db.mimeTypeForName(mimeType);
         if (!mime.isValid()) continue;

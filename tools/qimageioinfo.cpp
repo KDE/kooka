@@ -77,12 +77,12 @@ int main(int argc, char **argv)
     QList<QByteArray> readTypes = QImageReader::supportedImageFormats();
     QList<QByteArray> writeTypes = QImageWriter::supportedImageFormats();
 
-    foreach (const QByteArray &it, qAsConst(readTypes))
+    for (const QByteArray &it : qAsConst(readTypes))
     {
         combinedMap[it.toUpper().trimmed()] |= READ;
     }
 
-    foreach (const QByteArray &it, qAsConst(writeTypes))
+    for (const QByteArray &it : qAsConst(writeTypes))
     {
         combinedMap[it.toUpper().trimmed()] |= WRITE;
     }
@@ -122,7 +122,7 @@ int main(int argc, char **argv)
 
     QMimeDatabase db;
 
-    foreach (const QByteArray &format, qAsConst(formats))
+    for (const QByteArray &format : qAsConst(formats))
     {
         int sup = combinedMap[format];
 

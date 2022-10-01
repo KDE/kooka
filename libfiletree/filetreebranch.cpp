@@ -257,7 +257,7 @@ FileTreeViewItem *FileTreeBranch::findItemByPath(const QString &path)
 #endif
     FileTreeViewItem *item = m_root;
 
-    foreach (const QString &part, pathSplit)
+    for (const QString &part : pathSplit)
     {
         FileTreeViewItem *foundItem = nullptr;
         for (int i = 0; i<item->childCount(); ++i)
@@ -594,7 +594,7 @@ void FileTreeBranch::slotListerCompleted(const QUrl &url)
     if (m_recurseChildren && (!m_startURL.isLocalFile() || !dirOnlyMode())) {
         bool wantRecurseUrl = false;
         /* look if the url is in the list for url to recurse */
-        foreach (const QUrl &u, m_openChildrenURLs) {
+        for (const QUrl &u : qAsConst(m_openChildrenURLs)) {
             /* it is only interesting that the url _is_in_ the list. */
             if (u.adjusted(QUrl::StripTrailingSlash) == url.adjusted(QUrl::StripTrailingSlash)) {
                 wantRecurseUrl = true;

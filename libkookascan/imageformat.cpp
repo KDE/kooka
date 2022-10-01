@@ -146,7 +146,7 @@ ImageFormat ImageFormat::formatForMime(const QMimeType &mime)
     if (sufs.isEmpty()) return (ImageFormat());
 
     const QList<QByteArray> formats = QImageReader::supportedImageFormats();
-    foreach (const QString &suf, sufs)			// find the first matching one
+    for (const QString &suf : sufs)			// find the first matching one
     {
         const QByteArray s = suf.toLocal8Bit();
         if (formats.contains(s.toLower())) return (ImageFormat(s));
@@ -205,7 +205,7 @@ void buildMimeTypeList()
     // name extension.  That means that we can obtain the MIME type by
     // finding the type for a file with that extension.
 
-    QList<QByteArray> supportedFormats = QImageWriter::supportedImageFormats();
+    const QList<QByteArray> supportedFormats = QImageWriter::supportedImageFormats();
     qCDebug(LIBKOOKASCAN_LOG) << "have" << supportedFormats.count() << "image formats:" << supportedFormats;
 
     // Although the format list from standard Qt 5 (unlike Qt 4) does not
@@ -213,7 +213,7 @@ void buildMimeTypeList()
     // that a plugin could introduce some.  So the apparently pointless loop
     // here filters the list.
     QList<QByteArray> formatList;
-    foreach (const QByteArray &format, supportedFormats)
+    for (const QByteArray &format : supportedFormats)
     {
         const QByteArray f = format.toLower();
         if (!formatList.contains(f)) formatList.append(f);
@@ -231,7 +231,7 @@ void buildMimeTypeList()
     // BW, RGBA, XV) seem to be of any use.
 
     QMimeDatabase db;
-    foreach (const QByteArray &format, formatList)
+    for (const QByteArray &format : qAsConst(formatList))
     {
         QMimeType mime = db.mimeTypeForFile(QString("a.")+format, QMimeDatabase::MatchExtension);
         if (!mime.isValid() || mime.isDefault())
@@ -250,7 +250,7 @@ void buildMimeTypeList()
         }
 
         bool seen = false;
-        foreach (const QMimeType &mt, *list)
+        for (const QMimeType &mt : qAsConst(*list))
         {
             if (mime.inherits(mt.name()))
             {

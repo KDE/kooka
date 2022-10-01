@@ -53,7 +53,6 @@ add_definitions("-DQT_NO_URL_CAST_FROM_STRING")
 
 # Permissiveness
 remove_definitions("-DQT_NO_CAST_FROM_ASCII")
-remove_definitions("-DQT_NO_FOREACH")
 remove_definitions("-DQT_NO_KEYWORDS")
 
 # Support for SANE, here because library and sanedump both need it

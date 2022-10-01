@@ -178,9 +178,8 @@ KScanOptSet::StringMap KScanOptSet::readList()
 
     ScanSettings::self()->load();			// ensure refreshed
     KConfig *conf = ScanSettings::self()->config();
-    QStringList groups = conf->groupList();
-    //groups.sort(); qCDebug(LIBKOOKASCAN_LOG) << groups;
-    foreach (const QString &grp, groups)
+    const QStringList groups = conf->groupList();
+    for (const QString &grp : groups)
     {
         QString set = setNameFromGroup(grp);
         if (!set.isEmpty())
