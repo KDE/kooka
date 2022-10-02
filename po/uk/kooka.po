@@ -1,0 +1,3721 @@
+# Translation of kooka.po to Ukrainian
+# Copyright (C) 2002-2021 This_file_is_part_of_KDE
+# This file is distributed under the license LGPL version 2.1 or
+# version 3 or later versions approved by the membership of KDE e.V.
+#
+# Andriy Rysin <rysin@kde.org>, 2002, 2003, 2006.
+# Eugene Onischenko <oneugene@ukr.net>, 2003, 2004.
+# Ivan Petrouchtchak <ivanpetrouchtchak@yahoo.com>, 2004, 2005, 2006, 2007.
+# Yuri Chornoivan <yurchor@ukr.net>, 2009, 2010, 2011, 2012, 2013, 2017, 2018, 2019, 2020, 2021.
+msgid ""
+msgstr ""
+"Project-Id-Version: kooka\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-10-01 00:45+0000\n"
+"PO-Revision-Date: 2021-11-19 08:17+0200\n"
+"Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
+"Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
+"Language: uk\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 20.12.0\n"
+"Plural-Forms: nplurals=4; plural=n==1 ? 3 : n%10==1 && n%100!=11 ? 0 : n"
+"%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "Andriy Rysin,Eugene Onischenko,Іван Петрущак"
+
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "rysin@kde.org,oneugene@ukr.net,ivanpetrouchtchak@yahoo.com"
+
+#: ../plugins/destination/abstractdestination.cpp:86
+#, kde-format
+msgid "Remember this format"
+msgstr "Запам'ятати цей формат"
+
+#: ../plugins/destination/abstractdestination.cpp:120
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"Cannot save temporary image file<nl/><filename>%1</filename><nl/><message>"
+"%2</message>"
+msgstr ""
+"Не вдалося зберегти дані до тимчасового файла зображення<nl/><filename>%1</"
+"filename><nl/><message>%2</message>"
+
+#: ../plugins/destination/abstractdestination.cpp:160
+#: ../plugins/destination/application/destinationapplication.cpp:190
+#: kookaview.cpp:1177
+#, kde-format
+msgid "Other..."
+msgstr "Інше…"
+
+#: ../plugins/destination/application/destinationapplication.cpp:94
+#, kde-format
+msgid "Sending to application"
+msgstr "Надсилаємо до програми"
+
+#: ../plugins/destination/application/destinationapplication.cpp:96
+#, kde-kuit-format
+msgid "Sending to <application>%1</application>"
+msgstr "Надсилаємо до <application>%1</application>"
+
+#: ../plugins/destination/application/destinationapplication.cpp:192
+#, kde-format
+msgid "Application:"
+msgstr "Програма:"
+
+#: ../plugins/destination/application/destinationapplication.cpp:198
+#: ../plugins/destination/export/destinationexport.cpp:111
+#: ../plugins/destination/share/destinationshare.cpp:137
+#, kde-format
+msgid "Image format:"
+msgstr "Формат зображення:"
+
+#: ../plugins/destination/clipboard/destinationclipboard.cpp:61
+#, kde-format
+msgid "Copying image to clipboard"
+msgstr "Копіювати зображення в буфер"
+
+#: ../plugins/destination/export/destinationexport.cpp:115
+#, kde-format
+msgid "Online service:"
+msgstr "Інтернет-служба:"
+
+#: ../plugins/destination/export/destinationexport.cpp:172
+#: ../plugins/destination/share/destinationshare.cpp:151
+#, kde-kuit-format
+msgid "<application>%1</application>"
+msgstr "<application>%1</application>"
+
+#: ../plugins/destination/export/kookakipihelper.cpp:58
+#, kde-format
+msgid "Helper command for the 'Export to Online Service' plugin"
+msgstr "Допоміжна команда для додатка «Експорт до інтернет-служб»"
+
+#: ../plugins/destination/export/kookakipihelper.cpp:61
+#, kde-format
+msgid "(C) 2021, the Kooka developers and contributors"
+msgstr "© Розробники Kooka, 2021"
+
+#: ../plugins/destination/export/kookakipihelper.cpp:79
+#, kde-format
+msgid "Kooka KIPI Helper"
+msgstr "Допоміжний засіб KIPI Kooka"
+
+#: ../plugins/destination/export/kookakipihelper.cpp:91 main.cpp:90
+#, kde-format
+msgid "Jonathan Marten"
+msgstr "Jonathan Marten"
+
+#: ../plugins/destination/export/kookakipihelper.cpp:91
+#, kde-format
+msgid "Current maintainer, KDE4/KF5 port"
+msgstr "Поточний супровідник, портування на KDE4/KF5"
+
+#: ../plugins/destination/export/kookakipihelper.cpp:99
+#, kde-format
+msgid "List all of the available KIPI plugin actions"
+msgstr "Список усіх доступних дій для додатків KIPI"
+
+#: ../plugins/destination/export/kookakipihelper.cpp:102
+#, kde-format
+msgid "The KIPI plugin action to export to"
+msgstr "Дія додатка KIPI для експортування до"
+
+#: ../plugins/destination/export/kookakipihelper.cpp:102
+#, kde-format
+msgid "action"
+msgstr "дія"
+
+#: ../plugins/destination/export/kookakipihelper.cpp:105
+#, kde-format
+msgid "URLs of the image files to export"
+msgstr "Адреси файлів зображень для експортування"
+
+#: ../plugins/destination/export/kookakipihelper.cpp:114
+#, kde-format
+msgid "Cannot specify both list ('-l') and share ('-s') mode"
+msgstr ""
+"Не можна одночасно вказувати режим списку («-l») і режим оприлюднення («-s»)"
+
+#: ../plugins/destination/export/kookakipihelper.cpp:115
+#, kde-format
+msgid "Arguments ignored in list ('-l') mode"
+msgstr "Проігноровано аргументи у режимі списку («-l»)"
+
+#: ../plugins/destination/export/kookakipihelper.cpp:119
+#, kde-format
+msgid "Arguments missing for share ('-s') mode"
+msgstr "Пропущено аргументи у режимі оприлюднення («-s»)"
+
+#: ../plugins/destination/export/kookakipihelper.cpp:121
+#, kde-format
+msgid "One of either list ('-l') or share ('-s') mode must be specified"
+msgstr ""
+"Слід вказати один із режимів: або список («-l»), або оприлюднення («-s»)"
+
+#: ../plugins/destination/export/kookakipihelper.cpp:171
+#, kde-format
+msgctxt "as added to action text"
+msgid "..."
+msgstr "…"
+
+#: ../plugins/destination/export/kookakipihelper.cpp:193
+#, kde-format
+msgid "Argument '%1' is not a local file, ignored"
+msgstr "Аргумент «%1» не є локальним файлом. Його проігноровано."
+
+#: ../plugins/destination/export/kookakipihelper.cpp:200
+#, kde-format
+msgid "File '%1' not found or is unreadable, ignored"
+msgstr ""
+"Не знайдено файла «%1» або знайдений файл є непридатним до читання. Файл "
+"проігноровано."
+
+#: ../plugins/destination/export/kookakipihelper.cpp:207
+#, kde-format
+msgid "No usable files to share"
+msgstr "Немає придатних файлів для оприлюднення"
+
+#: ../plugins/destination/export/kookakipihelper.cpp:223
+#, kde-format
+msgid "Unknown plugin action '%1'"
+msgstr "Невідома дія додатка, «%1»"
+
+#: ../plugins/destination/gallery/destinationgallery.cpp:74
+#, kde-kuit-format
+msgid "<filename>%1</filename>"
+msgstr "<filename>%1</filename>"
+
+#: ../plugins/destination/print/destinationprint.cpp:78 kookaview.cpp:673
+#, kde-format
+msgctxt "@title:window"
+msgid "Print Image"
+msgstr "Друк зображення"
+
+#: ../plugins/destination/print/destinationprint.cpp:89 kookaview.cpp:689
+#, kde-format
+msgctxt "@info"
+msgid ""
+"Invalid print options were specified:\n"
+"\n"
+"%1"
+msgstr ""
+"Було вказано некоректні параметри друку:\n"
+"\n"
+"%1"
+
+#: ../plugins/destination/print/destinationprint.cpp:90 kookaview.cpp:690
+#, kde-format
+msgctxt "@title:window"
+msgid "Cannot Print"
+msgstr "Не можна надрукувати"
+
+#: ../plugins/destination/print/destinationprint.cpp:106
+#, kde-format
+msgid "Print immediately with same settings"
+msgstr "Надрукувати негайно із тими самими параметрами"
+
+#: ../plugins/destination/print/destinationprint.cpp:116
+#, kde-format
+msgid "Printing image"
+msgstr "Друк зображення"
+
+#: ../plugins/destination/save/destinationsave.cpp:132
+#, kde-kuit-format
+msgctxt "@info"
+msgid "Cannot save image to <filename>%1</filename><nl/><message>%2</message>"
+msgstr ""
+"Не вдалося зберегти зображення до <filename>%1</filename><nl/><message>%2</"
+"message>"
+
+#: ../plugins/destination/save/destinationsave.cpp:134
+#: ../plugins/destination/save/destinationsave.cpp:239
+#, kde-format
+msgid "Cannot Save Image"
+msgstr "Не вдалося зберегти зображення"
+
+#: ../plugins/destination/save/destinationsave.cpp:163
+#, kde-format
+msgid "Saving image"
+msgstr "Збереження зображення"
+
+#: ../plugins/destination/save/destinationsave.cpp:164
+#, kde-kuit-format
+msgid "Saving to <filename>%1</filename>"
+msgstr "Зберігаємо до <filename>%1</filename>"
+
+#: ../plugins/destination/save/destinationsave.cpp:181 formatdialog.cpp:280
+#, kde-format
+msgid "Save Scan"
+msgstr "Збереження сканованого зображення"
+
+#: ../plugins/destination/save/destinationsave.cpp:237
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"Cannot save to <filename>%2</filename><nl/>The image format <resource>%1</"
+"resource> is not supported."
+msgstr ""
+"Не вдалося зберегти дані до <filename>%2</filename><nl/>Підтримки зображень "
+"у форматі <resource>%1</resource> не передбачено."
+
+#: ../plugins/destination/share/destinationshare.cpp:143
+#, kde-format
+msgid "Share to:"
+msgstr "Оприлюднити на:"
+
+#: ../plugins/destination/share/destinationshare.cpp:217
+#, kde-kuit-format
+msgctxt "@info"
+msgid "The scan was shared to<nl/><link>%1</link>"
+msgstr "Скановане зображення було оприлюднено на<nl/><link>%1</link>"
+
+#: ../plugins/destination/share/destinationshare.cpp:218
+#, kde-format
+msgid "Scan Shared"
+msgstr "Скановане зображення оприлюднено"
+
+#: ../plugins/destination/share/destinationshare.cpp:227
+#, kde-kuit-format
+msgctxt "@info"
+msgid "Cannot share the scanned image<nl/><nl/><message>%1</message>"
+msgstr ""
+"Не вдалося оприлюднити скановане зображення<nl/><nl/><message>%1</message>"
+
+#: ../plugins/ocr/abstractocrdialogue.cpp:101 kookapref.cpp:61
+#, kde-format
+msgid "Optical Character Recognition"
+msgstr "Оптичне Розпізнавання Знаків"
+
+#: ../plugins/ocr/abstractocrdialogue.cpp:103
+#, kde-format
+msgid "Start OCR"
+msgstr "Почати розпізнавання"
+
+#: ../plugins/ocr/abstractocrdialogue.cpp:103
+#, kde-format
+msgid "Start the Optical Character Recognition process"
+msgstr "Почати процес оптичного розпізнавання тексту"
+
+#: ../plugins/ocr/abstractocrdialogue.cpp:104
+#, kde-format
+msgid "Stop OCR"
+msgstr "Зупинити розпізнавання"
+
+#: ../plugins/ocr/abstractocrdialogue.cpp:104
+#, kde-format
+msgid "Stop the Optical Character Recognition process"
+msgstr "Зупинити процес оптичного розпізнавання тексту"
+
+#: ../plugins/ocr/abstractocrdialogue.cpp:146
+#, kde-format
+msgid "Setup"
+msgstr "Налаштування"
+
+#: ../plugins/ocr/abstractocrdialogue.cpp:149
+#, kde-format
+msgid "Optical Character Recognition using %1"
+msgstr "Оптичне розпізнавання тексту за допомогою %1"
+
+#: ../plugins/ocr/abstractocrdialogue.cpp:192
+#, kde-format
+msgid "Executable:"
+msgstr "Виконуваний файл:"
+
+#: ../plugins/ocr/abstractocrdialogue.cpp:195
+#, kde-kuit-format
+msgctxt "@info"
+msgid "<filename>%1</filename>"
+msgstr "<filename>%1</filename>"
+
+#: ../plugins/ocr/abstractocrdialogue.cpp:195
+#, kde-format
+msgid "Not found"
+msgstr "Не знайдено"
+
+#: ../plugins/ocr/abstractocrdialogue.cpp:198
+#, kde-format
+msgid "Version:"
+msgstr "Версія:"
+
+#: ../plugins/ocr/abstractocrdialogue.cpp:201
+#: ../plugins/ocr/gocr/ocrgocrdialog.cpp:201
+#, kde-format
+msgid "Unknown"
+msgstr "Невідомий"
+
+#: ../plugins/ocr/abstractocrdialogue.cpp:233
+#, kde-format
+msgid "No preview available"
+msgstr "Перегляд недоступний"
+
+#: ../plugins/ocr/abstractocrdialogue.cpp:242
+#, kde-format
+msgid "No information available"
+msgstr "Дані недоступні"
+
+#: ../plugins/ocr/abstractocrdialogue.cpp:245
+#, kde-format
+msgid "Source"
+msgstr "Джерело"
+
+#: ../plugins/ocr/abstractocrdialogue.cpp:246
+#, kde-format
+msgid "Source Image Information"
+msgstr "Дані щодо початкового зображення"
+
+#: ../plugins/ocr/abstractocrdialogue.cpp:265
+#, kde-format
+msgid "OCR Engine"
+msgstr "Рушій розпізнавання"
+
+#: ../plugins/ocr/abstractocrdialogue.cpp:266
+#, kde-format
+msgid "OCR Engine Information"
+msgstr "Дані щодо рушія розпізнавання тексту"
+
+#: ../plugins/ocr/abstractocrdialogue.cpp:283
+#, kde-format
+msgid "Highlight misspelled words"
+msgstr "Позначати слова з помилками у правописі."
+
+#: ../plugins/ocr/abstractocrdialogue.cpp:289
+#, kde-format
+msgid "Use the system spell configuration"
+msgstr "Використовувати загальносистемні налаштування перевірки правопису"
+
+#: ../plugins/ocr/abstractocrdialogue.cpp:291
+#, kde-format
+msgid "Use custom spell configuration"
+msgstr "Використовувати нетипові налаштування перевірки правопису"
+
+#: ../plugins/ocr/abstractocrdialogue.cpp:293
+#, kde-format
+msgid "Custom Spell Configuration..."
+msgstr "Нетипове налаштування перевірки правопису…"
+
+#: ../plugins/ocr/abstractocrdialogue.cpp:303
+#, kde-format
+msgid "Start interactive spell check"
+msgstr "Розпочати інтерактивну перевірку правопису"
+
+#: ../plugins/ocr/abstractocrdialogue.cpp:309
+#, kde-format
+msgid ""
+"Custom spell settings above do not affect this spelling check, use the "
+"language setting in the dialog to change the dictionary language."
+msgstr ""
+"Вказані вище нетипові параметри перевірки правопису не стосуватимуться "
+"поточної перевірки. Для зміни мови перевірки скористайтеся пунктом зміни "
+"мови у цьому діалоговому вікні."
+
+#: ../plugins/ocr/abstractocrdialogue.cpp:332
+#, kde-format
+msgid "Spell Check"
+msgstr "Перевірка правопису"
+
+#: ../plugins/ocr/abstractocrdialogue.cpp:333
+#, kde-format
+msgid "OCR Result Spell Checking"
+msgstr "Перевірка правопису у результатах розпізнавання"
+
+#: ../plugins/ocr/abstractocrdialogue.cpp:343
+#, kde-format
+msgid "Retain temporary files"
+msgstr "Не вилучати тимчасові файли"
+
+#: ../plugins/ocr/abstractocrdialogue.cpp:346
+#, kde-format
+msgid "Verbose message output"
+msgstr "Докладні повідомлення"
+
+#: ../plugins/ocr/abstractocrdialogue.cpp:351
+#, kde-format
+msgid "Debugging"
+msgstr "Діагностика"
+
+#: ../plugins/ocr/abstractocrdialogue.cpp:352
+#, kde-format
+msgid "OCR Debugging"
+msgstr "Діагностика розпізнавання"
+
+#: ../plugins/ocr/abstractocrdialogue.cpp:408
+#, kde-format
+msgid "No image"
+msgstr "Немає зображення"
+
+#: ../plugins/ocr/abstractocrdialogue.cpp:431
+#, kde-format
+msgid "Image: %1"
+msgstr "Зображення: %1"
+
+#: ../plugins/ocr/abstractocrdialogue.cpp:431
+#, kde-format
+msgid "Selection: %1"
+msgstr "Вибір: %1"
+
+#: ../plugins/ocr/abstractocrengine.cpp:106
+#, kde-format
+msgid "OCR is already in progress"
+msgstr "Розпізнавання вже виконується"
+
+#: ../plugins/ocr/abstractocrengine.cpp:118
+#, kde-format
+msgid "OCR could not be started."
+msgstr "Не вдалося запустити розпізнавання тексту."
+
+#: ../plugins/ocr/abstractocrengine.cpp:119
+#, kde-format
+msgid "Check the OCR engine selection and settings."
+msgstr ""
+"Перевірте, чи правильно вибрано рушій розпізнавання тексту та чи правильно "
+"його налаштовано."
+
+#: ../plugins/ocr/abstractocrengine.cpp:121
+#, kde-format
+msgid "OCR Setup Error"
+msgstr "Помилка у налаштуваннях розпізнавання"
+
+#: ../plugins/ocr/abstractocrengine.cpp:122 kookaview.cpp:787
+#, kde-format
+msgid "Configure OCR..."
+msgstr "Налаштувати розпізнавання…"
+
+#: ../plugins/ocr/abstractocrengine.cpp:180
+#, kde-format
+msgid "The OCR process was stopped"
+msgstr "Процес розпізнавання було зупинено."
+
+#: ../plugins/ocr/abstractocrengine.cpp:249
+#, kde-kuit-format
+msgctxt "@info"
+msgid "The following OCR temporary files are retained for debugging:<nl/><nl/>"
+msgstr ""
+"З метою діагностики не було вилучено таких тимчасових файлів розпізнавання:"
+"<nl/><nl/>"
+
+#: ../plugins/ocr/abstractocrengine.cpp:256
+#, kde-kuit-format
+msgctxt "@info"
+msgid "<filename><link url=\"%1\">%2</link></filename><nl/>"
+msgstr "<filename><link url=\"%1\">%2</link></filename><nl/>"
+
+#: ../plugins/ocr/abstractocrengine.cpp:260
+#, kde-format
+msgid "OCR Temporary Files"
+msgstr "Тимчасові файли розпізнавання"
+
+#: ../plugins/ocr/abstractocrengine.cpp:425
+#, kde-kuit-format
+msgctxt "@info"
+msgid "Cannot create temporary file <filename>%1</filename>"
+msgstr "Не вдалося створити тимчасовий файл <filename>%1</filename>"
+
+#: ../plugins/ocr/abstractocrengine.cpp:471
+#, kde-kuit-format
+msgctxt "@info"
+msgid "Cannot save image to temporary file <filename>%1</filename>"
+msgstr ""
+"Не вдалося зберегти зображення до тимчасового файла <filename>%1</filename>"
+
+#: ../plugins/ocr/abstractocrengine.cpp:499
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"The executable <command>%1</command> could not be found on <envar>PATH</"
+"envar>."
+msgstr ""
+"Не вдалося знайти виконуваний файл <command>%1</command> хоч у одному з "
+"каталогів, які визначено за допомогою змінної <envar>PATH</envar>."
+
+#: ../plugins/ocr/abstractocrengine.cpp:509
+#, kde-kuit-format
+msgctxt "@info"
+msgid "The executable <filename>%1</filename> does not exist or is not usable."
+msgstr ""
+"Виконуваного файла <filename>%1</filename> не існує або цей файл є "
+"непридатним до використання."
+
+#: ../plugins/ocr/abstractocrengine.cpp:581
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"Command <command>%1</command> crashed with exit status <numid>%2</numid>"
+msgstr ""
+"Виконання команди <command>%1</command> завершилося у аварійному режимі зі "
+"станом виходу <numid>%2</numid>"
+
+#: ../plugins/ocr/abstractocrengine.cpp:586
+#, kde-kuit-format
+msgctxt "@info"
+msgid "Command <command>%1</command> exited with status <numid>%2</numid>"
+msgstr ""
+"Виконання команди <command>%1</command> завершено зі станом виходу <numid>"
+"%2</numid>"
+
+#: ../plugins/ocr/abstractocrengine.cpp:590
+#, kde-kuit-format
+msgctxt "@info"
+msgid "Running the OCR process failed."
+msgstr "Не вдалося запустити процес розпізнавання тексту."
+
+#: ../plugins/ocr/abstractocrengine.cpp:591
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"More information may be available in its <link url=\"%1\">standard error</"
+"link> log file."
+msgstr ""
+"Докладніші дані можна знайти у <link url=\"%1\">стандартному файлі журналу "
+"помилок</link>."
+
+#: ../plugins/ocr/abstractocrengine.cpp:594
+#, kde-format
+msgid "OCR Command Failed"
+msgstr "Не вдалося виконати команду розпізнавання"
+
+#: ../plugins/ocr/abstractocrengine.cpp:601
+#, kde-kuit-format
+msgctxt "@info"
+msgid "Processing the OCR results failed."
+msgstr "Не вдалося обробити результати розпізнавання тексту."
+
+#: ../plugins/ocr/abstractocrengine.cpp:602
+#, kde-format
+msgid "OCR Processing Failed"
+msgstr "Не вдалося обробити зображення засобом розпізнавання тексту"
+
+#: ../plugins/ocr/executablepathdialogue.cpp:45
+#, kde-format
+msgid "Executable Path"
+msgstr "Шлях до виконуваного файла"
+
+#: ../plugins/ocr/executablepathdialogue.cpp:52
+#, kde-format
+msgid "Executable path:"
+msgstr "Шлях до виконуваного файла:"
+
+#: ../plugins/ocr/executablepathdialogue.cpp:56
+#, kde-format
+msgid "Enter or select the path..."
+msgstr "Вкажіть або виберіть шлях…"
+
+#: ../plugins/ocr/gocr/ocrgocrdialog.cpp:75
+#: ../plugins/ocr/gocr/ocrgocrdialog.cpp:87
+#: ../plugins/ocr/gocr/ocrgocrdialog.cpp:99
+#, kde-format
+msgid "Automatic"
+msgstr "Автоматично"
+
+#: ../plugins/ocr/gocr/ocrgocrdialog.cpp:120
+#, kde-format
+msgid "The GOCR executable is not configured or is not available."
+msgstr "Виконуваний файл GOCR не налаштовано або не вдалося знайти цей файл."
+
+#: ../plugins/ocr/gocr/ocrgocrdialog.cpp:204
+#: ../plugins/ocr/ocrad/ocrocraddialog.cpp:282
+#: ../plugins/ocr/tesseract/ocrtesseractdialog.cpp:250
+#, kde-format
+msgid "Error"
+msgstr "Помилка"
+
+#: ../plugins/ocr/gocr/ocrgocrengine.cpp:159
+#, kde-kuit-format
+msgctxt "@info"
+msgid "Cannot read GOCR result file <filename>%1</filename><nl/>%2"
+msgstr ""
+"Не вдалося прочитати файл результатів GOCR, <filename>%1</filename><nl/>%2"
+
+#: ../plugins/ocr/gocr/ocrgocrengine.cpp:297
+#, kde-format
+msgid "Name or path of the GOCR executable:"
+msgstr "Назва виконуваного файла GOCR або шлях до нього:"
+
+#: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:57
+#: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:165
+#, kde-format
+msgid "Czech Republic, Slovakia"
+msgstr "Чеська республіка, Словаччина"
+
+#: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:58
+#: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:167
+#, kde-format
+msgid "Great Britain, USA"
+msgstr "Велика Британія, США"
+
+#: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:96
+#, kde-format
+msgid "European Countries"
+msgstr "Європейські країни"
+
+#: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:199
+#: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:280
+#, kde-format
+msgid ""
+"The classifier files for KADMOS could not be found.\n"
+"OCR with KADMOS will not be possible.\n"
+"\n"
+"Change the OCR engine in the preferences dialog."
+msgstr ""
+"Не вдалося знайти файли класифікаторів для KADMOS.\n"
+"Розпізнавання за допомогою KADMOS неможливе!\n"
+"\n"
+"Змініть рушій розпізнавання у вікні налаштування."
+
+#: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:202
+#: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:283
+#, kde-format
+msgid "Installation Error"
+msgstr "Помилка встановлення"
+
+#: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:227
+#, kde-format
+msgid "Please classify the font type and language of the text on the image:"
+msgstr "Будь ласка, вкажіть тип шрифту та мову тексту на зображенні:"
+
+#: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:232
+#, kde-format
+msgid "Font Type Selection"
+msgstr "Вибір типу шрифту"
+
+#: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:235
+#, kde-format
+msgid "Machine print"
+msgstr "Друкарська машинка"
+
+#: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:236
+#, kde-format
+msgid "Hand writing"
+msgstr "Рукописний текст"
+
+#: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:237
+#, kde-format
+msgid "Norm font"
+msgstr "Звичайний текст"
+
+#: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:239
+#, kde-format
+msgid "Country"
+msgstr "Країна"
+
+#: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:255
+#, kde-format
+msgid "OCR Modifier"
+msgstr "Модифікатор ОРС"
+
+#: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:259
+#, kde-format
+msgid "Enable automatic noise reduction"
+msgstr "Ввімкнути автоматичне зменшення шумів"
+
+#: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:260
+#, kde-format
+msgid "Enable automatic scaling"
+msgstr "Ввімкнути автоматичне масштабування"
+
+#: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:360
+#, kde-format
+msgid "Classifier file %1 does not exist"
+msgstr "Файл класифікатора %1 не існує"
+
+#: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:366
+#, kde-format
+msgid "Classifier file %1 is not readable"
+msgstr "Неможливо прочитати файл класифікатора %1"
+
+#: ../plugins/ocr/kadmos/ocrkadmosengine.cpp:71
+#, kde-kuit-format
+msgctxt "@info %1 is one of the two following messages"
+msgid ""
+"<para><emphasis>Kadmos</emphasis> is a commercial OCR/ICR library produced "
+"by reRecognition&nbsp;AG.</para><para>%1</para><para>See <link url=\"http://"
+"www.rerecognition.com\">www.rerecognition.com</link> for more information on "
+"Kadmos.</para>"
+msgstr ""
+"<para><emphasis>Kadmos</emphasis> — комерційна бібліотека для оптичного та "
+"інтелектуального розпізнавання текстів, створена reRecognition&nbsp;AG.</"
+"para><para>%1</para><para>Докладніше про Kadmos можна дізнатися <link url="
+"\"http://www.rerecognition.com\">тут</link>.</para>"
+
+#: ../plugins/ocr/kadmos/ocrkadmosengine.cpp:75
+#, kde-format
+msgid "This version of Kooka is configured to use the Kadmos engine."
+msgstr "Цю версію Kooka налаштовано на використання рушія Kadmos."
+
+#: ../plugins/ocr/kadmos/ocrkadmosengine.cpp:77
+#, kde-format
+msgid ""
+"This version of Kooka is not configured for Kadmos.  The Kadmos libraries "
+"need to be installed, and Kooka needs to be rebuilt with the '--with-kadmos' "
+"option."
+msgstr ""
+"Цю версію Kooka не налаштовано на використання Kadmos. Вам слід встановити "
+"бібліотеки Kadmos і зібрати Kooka з параметром «--with-kadmos»."
+
+#: ../plugins/ocr/kadmos/ocrkadmosengine.cpp:93
+#, kde-format
+msgid ""
+"The classifier file necessary for OCR cannot be loaded: %1;\n"
+"OCR with the KADMOS engine is not possible."
+msgstr ""
+"Неможливо завантажити потрібний для ОРС файл класифікатора: %1;\n"
+"Розпізнавання тексту через рушій KADMOS неможливе."
+
+#: ../plugins/ocr/kadmos/ocrkadmosengine.cpp:95
+#, kde-format
+msgid "KADMOS Installation Problem"
+msgstr "Проблеми з встановленням KADMOS"
+
+#: ../plugins/ocr/kadmos/ocrkadmosengine.cpp:106
+#, kde-format
+msgid ""
+"The KADMOS OCR system could not be started:\n"
+"%1\n"
+"Please check the configuration."
+msgstr ""
+"Не вдалося запустити систему розпізнавання KADMOS:\n"
+"%1\n"
+"Будь ласка, виправте налаштування."
+
+#: ../plugins/ocr/kadmos/ocrkadmosengine.cpp:110
+#, kde-format
+msgid "KADMOS Failure"
+msgstr "Помилка KADMOS"
+
+#: ../plugins/ocr/ocrad/ocrocraddialog.cpp:79
+#, kde-format
+msgid "The OCRAD executable is not configured or is not available."
+msgstr "Виконуваний файл OCRAD не налаштовано або не вдалося знайти цей файл."
+
+#: ../plugins/ocr/ocrad/ocrocraddialog.cpp:92
+#, kde-format
+msgid "No Layout Detection"
+msgstr "Без виявлення формату розміщення"
+
+#: ../plugins/ocr/ocrad/ocrocraddialog.cpp:95
+#, kde-format
+msgid "Layout Detection"
+msgstr "Визначення компонування"
+
+#: ../plugins/ocr/ocrad/ocrocraddialog.cpp:98
+#, kde-format
+msgid "Column Detection"
+msgstr "Виявлення стовпчиків"
+
+#: ../plugins/ocr/ocrad/ocrocraddialog.cpp:99
+#, kde-format
+msgid "Full Layout Detection"
+msgstr "Повне виявлення формату розміщення"
+
+#: ../plugins/ocr/ocrad/ocrocraddialog.cpp:117
+#: ../plugins/ocr/ocrad/ocrocraddialog.cpp:138
+#: ../plugins/ocr/ocrad/ocrocraddialog.cpp:159
+#: ../plugins/ocr/tesseract/ocrtesseractdialog.cpp:87
+#: ../plugins/ocr/tesseract/ocrtesseractdialog.cpp:149
+#: ../plugins/ocr/tesseract/ocrtesseractdialog.cpp:174
+#, kde-format
+msgid "(default)"
+msgstr "(типовий)"
+
+#: ../plugins/ocr/ocrad/ocrocradengine.cpp:243
+#: ../plugins/ocr/tesseract/ocrtesseractengine.cpp:157
+#, kde-kuit-format
+msgctxt "@info"
+msgid "File <filename>%1</filename> does not exist"
+msgstr "Файла <filename>%1</filename> не існує"
+
+#: ../plugins/ocr/ocrad/ocrocradengine.cpp:247
+#: ../plugins/ocr/tesseract/ocrtesseractengine.cpp:158
+#, kde-kuit-format
+msgctxt "@info"
+msgid "File <filename>%1</filename> unreadable"
+msgstr "Файл <filename>%1</filename> непридатний до читання"
+
+#: ../plugins/ocr/ocrad/ocrocradengine.cpp:251
+#: ../plugins/ocr/tesseract/ocrtesseractengine.cpp:165
+#, kde-kuit-format
+msgctxt "@info"
+msgid "Cannot open file <filename>%1</filename>"
+msgstr "Не вдалося відкрити файл <filename>%1</filename>"
+
+#: ../plugins/ocr/ocrad/ocrocradengine.cpp:432
+#, kde-format
+msgid "Name or path of the OCRAD executable:"
+msgstr "Назва виконуваного файла OCRAD або шлях до нього:"
+
+#: ../plugins/ocr/tesseract/ocrtesseractdialog.cpp:72
+#, kde-format
+msgid "The Tesseract executable is not configured or is not available."
+msgstr ""
+"Виконуваний файл Tessweract не налаштовано або не вдалося знайти цей файл."
+
+#: ../plugins/ocr/tesseract/ocrtesseractdialog.cpp:112
+#: ../plugins/ocr/tesseract/ocrtesseractdialog.cpp:129
+#, kde-format
+msgid "Select a file if required..."
+msgstr "Виберіть файл, якщо потрібно…"
+
+#: ../plugins/ocr/tesseract/ocrtesseractengine.cpp:226
+#, kde-format
+msgid "HOCR parsing error, %1"
+msgstr "Помилка обробки HOCR, %1"
+
+#: ../plugins/ocr/tesseract/ocrtesseractengine.cpp:251
+#, kde-format
+msgid "Name or path of the Tesseract executable:"
+msgstr "Назва виконуваного файла Tesseract або шлях до нього:"
+
+#. i18n: ectx: Menu (file)
+#: desktop/kookaui.rc:5
+#, kde-format
+msgid "&File"
+msgstr "&Файл"
+
+#. i18n: ectx: Menu (scan)
+#: desktop/kookaui.rc:22
+#, kde-format
+msgid "S&can"
+msgstr "С&канування"
+
+#. i18n: ectx: Menu (imgCanvas)
+#: desktop/kookaui.rc:40
+#, kde-format
+msgid "&Image"
+msgstr "&Зображення"
+
+#. i18n: ectx: Menu (settings)
+#: desktop/kookaui.rc:56
+#, kde-format
+msgid "&Settings"
+msgstr "П&араметри"
+
+#. i18n: ectx: ToolBar (imageToolBar)
+#: desktop/kookaui.rc:67
+#, kde-format
+msgid "Image Viewer Toolbar"
+msgstr "Пенал переглядача зображень"
+
+#. i18n: ectx: ToolBar (scanToolBar)
+#: desktop/kookaui.rc:84
+#, kde-format
+msgid "Scanning Toolbar"
+msgstr "Панель сканування"
+
+#: formatdialog.cpp:77
+#, kde-format
+msgid ""
+"<b>Bitmap Picture</b> is a widely used format for images under MS Windows. "
+"It is suitable for color, grayscale and line art images.<p>This format is "
+"widely supported but is not recommended, use an open format instead."
+msgstr ""
+"<b>Bitmap Picture</b> — формат зберігання зображень, який широко "
+"використовується у MS Windows. Формат придатний для зберігання кольорових "
+"зображень, зображень у відтінках сірого та штрихових зображень.<p>Цей формат "
+"є розповсюдженим, але ми не рекомендуємо ним користуватися, краще "
+"скористайтеся відкритим форматом."
+
+#: formatdialog.cpp:88
+#, kde-format
+msgid ""
+"<b>Portable Bitmap</b>, as used by Netpbm, is an uncompressed format for "
+"line art (bitmap) images. Only 1 bit per pixel depth is supported."
+msgstr ""
+"<b>Portable Bitmap</b> — назва, яку використано розробником, компанією "
+"Netpbm. Формат зберігання даних без стискання для штрихових (растрових) "
+"зображень. Підтримується лише 1 біт на піксель."
+
+#: formatdialog.cpp:97
+#, kde-format
+msgid ""
+"<b>Portable Greymap</b>, as used by Netpbm, is an uncompressed format for "
+"grayscale images. Only 8 bit per pixel depth is supported."
+msgstr ""
+"<b>Portable Greymap</b> — назва, яку використано розробником, компанією "
+"Netpbm. Формат зберігання даних без стискання для зображень у відтінках "
+"сірого. Підтримується лише 8 бітів на піксель."
+
+#: formatdialog.cpp:106
+#, kde-format
+msgid ""
+"<b>Portable Pixmap</b>, as used by Netpbm, is an uncompressed format for "
+"full color images. Only 24 bit per pixel RGB is supported."
+msgstr ""
+"<b>Portable Pixmap</b> — назва, яку використано розробником, компанією "
+"Netpbm. Формат зберігання даних без стискання для кольорових зображень. "
+"Підтримується лише 24 бітів на піксель у форматі RGB."
+
+#: formatdialog.cpp:115
+#, kde-format
+msgid ""
+"<b>PCX</b> is a lossless compressed format which is often supported by PC "
+"imaging applications, although it is rather old and unsophisticated.  It is "
+"suitable for color and grayscale images.<p>This format is not recommended, "
+"use an open format instead."
+msgstr ""
+"<b>PCX</b> — формат зберігання зі стисканням без втрат, який часто "
+"підтримується програмами для роботи з зображеннями на ПК, але цей формат є "
+"доволі застарілим і неефективним. Придатний для зберігання кольорових "
+"зображень та зображень у відтінках сірого.<p>Не рекомендуємо вам "
+"користуватися цим форматом, скористайтеся краще якимось з відкритих форматів."
+
+#: formatdialog.cpp:126
+#, kde-format
+msgid ""
+"<b>X Bitmap</b> is often used by the X Window System to store cursor and "
+"icon bitmaps.<p>Unless required for this purpose, use a general purpose "
+"format instead."
+msgstr ""
+"<b>X Bitmap</b> — часто використовується у системі X Window для зберігання "
+"растрових зображень вказівників та піктограм.<p>Якщо вашою метою не є "
+"створення зображення вказівника або піктограми, скористайтеся якимось іншим "
+"форматом загального призначення."
+
+#: formatdialog.cpp:135
+#, kde-format
+msgid ""
+"<b>X Pixmap</b> is often used by the X Window System for color icons and "
+"other images.<p>Unless required for this purpose, use a general purpose "
+"format instead."
+msgstr ""
+"<b>X Pixmap</b> — часто використовується у системі X Window для зберігання "
+"даних кольорових піктограм та інших зображень.<p>Якщо вашою метою не є "
+"створення зображення піктограми, скористайтеся якимось іншим форматом "
+"загального призначення."
+
+#: formatdialog.cpp:144
+#, kde-format
+msgid ""
+"<b>Portable Network Graphics</b> is a lossless compressed format designed to "
+"be portable and extensible. It is suitable for any type of color or "
+"grayscale images, indexed or true color.<p>PNG is an open format which is "
+"widely supported."
+msgstr ""
+"<b>Portable Network Graphics</b> — формат зберігання зі стисканням без "
+"втрат, розроблений для якнайширшої сумісності з обладнанням та зображеннями. "
+"Можна використовувати для кольорових зображень та зображень у відтінках "
+"сірого, індексованих та реалістичних кольорів.<p>PNG є відкритим форматом з "
+"широкою підтримкою у інших програмах."
+
+#: formatdialog.cpp:155
+#, kde-format
+msgid ""
+"<b>JPEG</b> is a compressed format suitable for true color or grayscale "
+"images. It is a lossy format, so it is not recommended for archiving or for "
+"repeated loading and saving.<p>This is an open format which is widely "
+"supported."
+msgstr ""
+"<b>JPEG</b> — формат зі стисканням даних, у якому можна зберігати кольорові "
+"зображення та зображення у відтінках сірого. Використання формату призводить "
+"до втрати даних, тому не рекомендується використовувати його для створення "
+"архівів та повторного редагування.<p>Цей формат є відкритим і дуже широко "
+"підтримується обладнанням та програмами."
+
+#: formatdialog.cpp:166
+#, kde-format
+msgid ""
+"<b>JPEG 2000</b> was intended as an update to the JPEG format, with the "
+"option of lossless compression, but so far is not widely supported. It is "
+"suitable for true color or grayscale images."
+msgstr ""
+"<b>JPEG 2000</b> є оновленою версією формату JPEG, у якій передбачено "
+"стискання без втрат, але цей формат не має такої широкої підтримки. "
+"Придатний для зберігання кольорових зображень та зображень у відтінках "
+"сірого."
+
+#: formatdialog.cpp:176
+#, kde-format
+msgid ""
+"<b>Encapsulated PostScript</b> is derived from the PostScript&trade; page "
+"description language.  Use this format for importing into other "
+"applications, or to use with (e.g.) TeX."
+msgstr ""
+"<b>Encapsulated PostScript</b> походить з мови опису компонування сторінок "
+"PostScript&trade;. Цим форматом можна скористатися для імпортування даних до "
+"інших програм або використання, наприклад у TeX."
+
+#: formatdialog.cpp:186
+#, kde-format
+msgid ""
+"<b>Truevision Targa</b> can store full color images with an alpha channel, "
+"and is used extensively by animation and video applications.<p>This format "
+"is not recommended, use an open format instead."
+msgstr ""
+"<b>Truevision Targa</b> придатний для зберігання кольорових зображень з "
+"каналом прозорості. Широко використовується у програмах для роботи з "
+"анімацією та відео.<p>Не рекомендуємо вам користуватися цим форматом, краще "
+"скористайтеся якимось з відкритих форматів."
+
+#: formatdialog.cpp:196
+#, kde-format
+msgid ""
+"<b>Graphics Interchange Format</b> is a popular but patent-encumbered format "
+"often used for web graphics.  It uses lossless compression with up to 256 "
+"colors and optional transparency.<p>For legal reasons this format is not "
+"recommended, use an open format instead."
+msgstr ""
+"<b>Graphics Interchange Format</b> — популярний, але проблемний з точки зору "
+"патентів формат, який часто використовується для інтернет-графіки. У цьому "
+"форматі зі стиканням без втрати якості можна зберігати зображення з "
+"кількістю кольорів до 256 і каналом прозорості.<p>Якщо не хочете мати "
+"проблем з патентним законодавством, скористайтеся якимось іншим відкритим "
+"форматом."
+
+#: formatdialog.cpp:207
+#, kde-format
+msgid ""
+"<b>Tagged Image File Format</b> is a versatile and extensible file format "
+"widely supported by imaging and publishing applications. It supports indexed "
+"and true color images with alpha transparency.<p>Because there are many "
+"variations, there may sometimes be compatibility problems. Unless required "
+"for use with other applications, use an open format instead."
+msgstr ""
+"<b>Tagged Image File Format</b> — гнучкий формат файлі з широкими "
+"можливостями, підтримується переважною частиною програм для роботи з "
+"зображеннями та поліграфії. Передбачено підтримку індексованих та кольорових "
+"зображень з каналом прозорості.<p>Через те, що було створено доволі багато "
+"версій формату, іноді можуть виникати проблеми з сумісністю. Якщо зберігання "
+"у цьому форматі не є обов’язковою вимогою, скористайтеся відкритим форматом "
+"замість цього."
+
+#: formatdialog.cpp:219
+#, kde-format
+msgid ""
+"<b>Multiple-image Network Graphics</b> is derived from the PNG standard and "
+"is intended for animated images.  It is an open format suitable for all "
+"types of images.<p>Images produced by a scanner will not be animated, so "
+"unless specifically required for use with other applications use PNG instead."
+msgstr ""
+"<b>Multiple-image Network Graphics</b> створено на основі стандарту PNG, "
+"призначено для анімованих зображень. Формат є відкритим, його призначено для "
+"зображень будь-якого типу.<p>Зображення, створені сканером не будуть "
+"анімованими, отже, якщо збереження у цьому форматі не є обов’язковою "
+"вимогою, краще скористайтеся форматом PNG."
+
+#: formatdialog.cpp:231
+#, kde-format
+msgid ""
+"This is the <b>Silicon Graphics</b> native image file format, supporting 24 "
+"bit true color images with optional lossless compression.<p>Unless "
+"specifically required, use an open format instead."
+msgstr ""
+"Формат файлів зображень, створений <b>Silicon Graphics</b>, передбачено "
+"роботу з кольоровими зображеннями глибиною кольору 24 біти з додатковими "
+"можливостями стискання без втрати якості.<p>Якщо зберігання у цьому форматі "
+"не є обов’язковою вимогою, скористайтеся відкритим форматом замість цього."
+
+#: formatdialog.cpp:241
+#, kde-format
+msgid ""
+"<b>Wireless Bitmap</b> is a monochrome bitmap format optimised for WAP "
+"mobile devices.  It supports black and white bitmaps only.<p>Unless "
+"specifically required, use an general purpose format instead."
+msgstr ""
+"<b>Wireless Bitmap</b> — формат чорно-білих растрових зображень, "
+"оптимізований для бездротових мобільних пристроїв. Передбачено підтримку "
+"лише чорно-білих зображень.<p>Якщо немає безумовної потреби у використанні "
+"цього формату, скористайтеся замість нього якимось загальновживаним форматом."
+
+#: formatdialog.cpp:251
+#, kde-format
+msgid ""
+"<b>WebP</b> is intended to be an open standard for true colour images with "
+"optional transparency.  It is widely supported by modern web browsers and "
+"graphics software.<p>Various compression methods, both lossy and lossless, "
+"are supported. Lossy compression is not recommended for archiving or for "
+"repeated loading and saving."
+msgstr ""
+"<b>WebP</b> — розроблено як відкритий стандарт для кольорових зображень із "
+"можливим використанням прозорості. Його підтримку реалізовано у широкому "
+"спектрі програм для перегляду інтернету та роботи із графікою.<p>У цьому "
+"форматі передбачено підтримку різноманітних методів стискання, із втратою та "
+"без втрати якості. Не рекомендуємо користуватися стисканням із втратою "
+"якості для архівування та повторного завантаження і збереження."
+
+#: formatdialog.cpp:280
+#, kde-format
+msgid "Save Assistant"
+msgstr "Помічник збереження"
+
+#: formatdialog.cpp:306
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"Select a format to save the scanned image.<nl/>This is a <emphasis strong="
+"\"1\">%1</emphasis>."
+msgstr ""
+"Виберіть формат зберігання даних сканованого зображення.<nl/>Це <emphasis "
+"strong=\"1\">%1</emphasis>."
+
+#: formatdialog.cpp:316
+#, kde-format
+msgid "File format:"
+msgstr "Формат файлів:"
+
+#: formatdialog.cpp:338
+#, kde-format
+msgid "Image sub-format:"
+msgstr "Додатковий формат зображення:"
+
+#: formatdialog.cpp:384
+#, kde-format
+msgid "File name:"
+msgstr "Назва файла:"
+
+#: formatdialog.cpp:398
+#, kde-format
+msgid "Select Format..."
+msgstr "Виберіть формат…"
+
+#: formatdialog.cpp:436
+#, kde-format
+msgid "No format selected."
+msgstr "Формат не вказано."
+
+#: formatdialog.cpp:470
+#, kde-format
+msgid "No information is available for this format."
+msgstr "Даних щодо цього формату не виявлено."
+
+#: galleryroot.cpp:100
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"Unable to create the directory <filename>%1</filename><nl/>for the Kooka "
+"gallery - %3..<nl/><nl/>Your document directory <filename>%2</filename><nl/"
+">will be used.<nl/><nl/>Check the document directory setting and permissions."
+msgstr ""
+"Не вдалося створити каталог <filename>%1</filename><nl/>для галереї Kooka — "
+"%3.<nl/><nl/>Буде використано ваш каталог документів <filename>%2</"
+"filename><nl/><nl/>Змініть параметри каталогу та права доступу до нього."
+
+#: galleryroot.cpp:111
+#, kde-format
+msgid "Error creating gallery"
+msgstr "Помилка під час спроби створення галереї"
+
+#: galleryroot.cpp:159
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"An old Kooka gallery was found at <filename>%1</filename>.<nl/>The preferred "
+"new location is now <filename>%2</filename>.<nl/><nl/>Do you want to create "
+"a new gallery at the new location?"
+msgstr ""
+"Виявлено стару галерею Kooka у <filename>%1</filename>.<nl/>У новій версії "
+"галереї варто зберігати у <filename>%2</filename>.<nl/><nl/>Бажаєте створити "
+"нову галерею у новому місці?"
+
+#: galleryroot.cpp:163
+#, kde-format
+msgid "Create New Gallery"
+msgstr "Створення галереї"
+
+#: galleryroot.cpp:172 galleryroot.cpp:186
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"Kooka will use the new gallery, <link url=\"file:%1\"><filename>%1</"
+"filename></link>.<nl/><nl/>If you wish to add the images from your old "
+"gallery <link url=\"file:%2\"><filename>%2</filename></link>,<nl/>then you "
+"may do so by simply copying or moving the files."
+msgstr ""
+"Kooka використовуватиме нову галерею, <link url=\"file:%1\"><filename>%1</"
+"filename></link>.<nl/><nl/>Якщо ви бажаєте додати туди зображення зі старої "
+"галереї, <link url=\"file:%2\"><filename>%2</filename></link>,<nl/>вам "
+"достатньо просто скопіювати або пересунути відповідні файли."
+
+#: galleryroot.cpp:176
+#, kde-format
+msgid "New Gallery Created"
+msgstr "Створено нову галерею"
+
+#: galleryroot.cpp:190
+#, kde-format
+msgid "Old Gallery Exists"
+msgstr "Існує стара галерея"
+
+#: imagetransform.cpp:59
+#, kde-format
+msgid "Rotate image +90 degrees"
+msgstr "Обернути зображення на +90 градусів"
+
+#: imagetransform.cpp:66
+#, kde-format
+msgid "Rotate image 180 degrees"
+msgstr "Обернути зображення на 180 градусів"
+
+#: imagetransform.cpp:71
+#, kde-format
+msgid "Rotate image -90 degrees"
+msgstr "Обернути зображення на -90 градусів"
+
+#: imagetransform.cpp:77
+#, kde-format
+msgid "Mirror image horizontally"
+msgstr "Віддзеркалити зображення горизонтально"
+
+#: imagetransform.cpp:82
+#, kde-format
+msgid "Mirror image vertically"
+msgstr "Віддзеркалити зображення вертикально"
+
+#: imagetransform.cpp:94
+#, kde-format
+msgid "Error updating image %1"
+msgstr "Помилка під час спроби оновлення зображення %1"
+
+#: imgprintdialog.cpp:65
+#, kde-format
+msgctxt "@title:tab"
+msgid "Image"
+msgstr "Зображення"
+
+#: imgprintdialog.cpp:85
+#, kde-format
+msgctxt "@title:group"
+msgid "Scaling"
+msgstr "Масштабування"
+
+#: imgprintdialog.cpp:100
+#, kde-format
+msgctxt "@option:radio"
+msgid "Size as on screen"
+msgstr "Розмір як на екрані"
+
+#: imgprintdialog.cpp:101
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"<div>Print at the same size as seen on screen, determined by the screen "
+"resolution.</div>"
+msgstr ""
+"<div>Надрукувати з використанням того самого розміру, що і на екрані, на "
+"основі роздільної здатності екрана.</div>"
+
+#: imgprintdialog.cpp:105
+#, kde-format
+msgid "Screen resolution:"
+msgstr "Роздільна здатність:"
+
+#: imgprintdialog.cpp:110
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"<div>This is the current screen resolution. It cannot be changed here.</div>"
+msgstr ""
+"<div>Це поточна роздільна здатність екрана. Її не можна змінити за допомогою "
+"цієї програми.</div>"
+
+#: imgprintdialog.cpp:114
+#, kde-format
+msgctxt "@option:radio"
+msgid "Size as scanned"
+msgstr "Розмір сканованого"
+
+#: imgprintdialog.cpp:115
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"<div>Print at a size determined by the scan resolution. The resolution is "
+"saved with the image and used if available; if it is not, it can be entered "
+"here.</div>"
+msgstr ""
+"<div>Надрукувати з використанням розміру, що визначається роздільною "
+"здатністю сканування. Роздільну здатність буде збережено у файлі зображення "
+"і використано, якщо її буде виявлено. Якщо роздільну здатність не вдасться "
+"визначити, її можна вказати за допомогою цього поля.</div>"
+
+#: imgprintdialog.cpp:119
+#, kde-format
+msgid "Scan resolution:"
+msgstr "Роздільна здатність сканування:"
+
+#: imgprintdialog.cpp:124
+#, kde-format
+msgctxt "@item:intext abbreviation for 'dots per inch'"
+msgid " dpi"
+msgstr " т/д"
+
+#: imgprintdialog.cpp:125
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"<div>This is the scan resolution as saved with the image. It can be changed "
+"if necessary.</div>"
+msgstr ""
+"<div>Це роздільна здатність сканування, дані щодо якої було збережено у "
+"файлі зображення. Якщо потрібно, її можна змінити.</div>"
+
+#: imgprintdialog.cpp:132
+#, kde-format
+msgctxt "@option:radio"
+msgid "Custom size"
+msgstr "Нетиповий розмір"
+
+#: imgprintdialog.cpp:133
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"<div>Print scaled to the specified size. The image is centered on the paper."
+"</div>"
+msgstr ""
+"<div>Друк із нетиповим масштабуванням. Зображення буде розташовано у центрі "
+"аркуша паперу.</div>"
+
+#: imgprintdialog.cpp:137
+#, kde-format
+msgctxt "@label:spinbox"
+msgid "Image width:"
+msgstr "Ширина зображення:"
+
+#: imgprintdialog.cpp:142 imgprintdialog.cpp:156
+#, kde-format
+msgctxt "@item:intext abbreviation for 'millimetres'"
+msgid " mm"
+msgstr " мм"
+
+#: imgprintdialog.cpp:143
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "<div>The width at which the image will be printed.</div>"
+msgstr "<div>Ширина надрукованого зображення.</div>"
+
+#: imgprintdialog.cpp:151
+#, kde-format
+msgctxt "@label:spinbox"
+msgid "Image height:"
+msgstr "Висота зображення:"
+
+#: imgprintdialog.cpp:157
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "<div>The height at which the image will be printed.</div>"
+msgstr "<div>Висота надрукованого зображення.</div>"
+
+#: imgprintdialog.cpp:166
+#, kde-format
+msgctxt "@option:radio"
+msgid "Fit to page"
+msgstr "За аркушем"
+
+#: imgprintdialog.cpp:167
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"<div>Print using as much of the available space on the paper as possible. "
+"The aspect ratio can be maintained.</div>"
+msgstr ""
+"<div>Надрукувати з використанням якомога більшої частки аркуша паперу. "
+"Співвідношення розмірів зображення можна зберегти.</div>"
+
+#: imgprintdialog.cpp:178
+#, kde-format
+msgctxt "@title:group"
+msgid "Other Options"
+msgstr "Інші параметри"
+
+#: imgprintdialog.cpp:182
+#, kde-format
+msgctxt "@option:check"
+msgid "Maintain aspect ratio"
+msgstr "Зберігати співвідношення розмірів"
+
+#: imgprintdialog.cpp:183
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"<div>Adjust the height or width to maintain the original aspect ratio of the "
+"printed image.</div>"
+msgstr ""
+"<div>Скоригувати висоту і ширину зображення так, щоб співвідношення розмірів "
+"початкового зображення лишилося незмінним.</div>"
+
+#: imgprintdialog.cpp:189
+#, kde-format
+msgctxt "@option:check"
+msgid "Low resolution (fast draft print)"
+msgstr "Низька роздільна здатність (швидкий друк для чернетки)"
+
+#: imgprintdialog.cpp:190
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"<div>Print at as low a resolution as possible. This may not work as intended "
+"on all printers.</div>"
+msgstr ""
+"<div>Надрукувати із якомога меншою роздільною здатністю. Такий друк працює "
+"належним чином не на усіх принтерах.</div>"
+
+#: imgprintdialog.cpp:196
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Cut marks:"
+msgstr "Позначки розрізання:"
+
+#: imgprintdialog.cpp:200
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "None"
+msgstr "Немає"
+
+#: imgprintdialog.cpp:201
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "For multiple pages"
+msgstr "Для декількох сторінок"
+
+#: imgprintdialog.cpp:202
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "Always"
+msgstr "Завжди"
+
+#: imgprintdialog.cpp:203
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"<div>Select whether cut/join marks are printed. The marks will reduce the "
+"available printable area.</div>"
+msgstr ""
+"<div>Вкажіть, чи слід друкувати позначки розрізання-склеювання. Друк таких "
+"позначок зменшить доступну для друку область паперу.</div>"
+
+#: imgprintdialog.cpp:214
+#, kde-format
+msgctxt "@title:group"
+msgid "Print Layout"
+msgstr "Розкладка друку"
+
+#: imgprintdialog.cpp:219
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Image size:"
+msgstr "Розмір зображення:"
+
+#: imgprintdialog.cpp:222
+#, kde-format
+msgctxt "@info:status width,height pixels"
+msgid "%1 x %2 pix"
+msgstr "%1⨯%2 пікселів"
+
+#: imgprintdialog.cpp:227
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Available print area:"
+msgstr "Доступна область друку:"
+
+#: imgprintdialog.cpp:234
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Image print area:"
+msgstr "Область друку зображення:"
+
+#: imgprintdialog.cpp:241
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Pages required:"
+msgstr "Потрібно сторінок:"
+
+#: imgprintdialog.cpp:304
+#, kde-format
+msgctxt "@info:status"
+msgid "%1 dpi"
+msgstr "%1 точок/дюйм"
+
+#: imgprintdialog.cpp:321
+#, kde-format
+msgid "The scan resolution must be specified for scaling to it."
+msgstr "Для масштабування слід вказати роздільність сканування."
+
+#: imgprintdialog.cpp:326
+#, kde-format
+msgid ""
+"A valid size must be specified for custom scaling. One or both of the "
+"specified dimensions is zero."
+msgstr ""
+"Для нетипового масштабування слід вказати коректний розмір. Зараз розмір за "
+"однією чи обома координатами дорівнює нулеві."
+
+#: imgprintdialog.cpp:404 imgprintdialog.cpp:408
+#, kde-format
+msgctxt "@info:status width,height millimetres"
+msgid "%1 x %2 mm"
+msgstr "%1 x %2 мм"
+
+#: imgprintdialog.cpp:412
+#, kde-format
+msgctxt "@info:status total"
+msgid "%1"
+msgstr "%1"
+
+#: imgprintdialog.cpp:414
+#, kde-format
+msgctxt "@info:status total(rows,cols)"
+msgid "%1 (%2 x %3)"
+msgstr "%1 (%2⨯%3)"
+
+#: imgsaver.cpp:65
+#, kde-kuit-format
+msgctxt "@info"
+msgid "The directory <filename>%2</filename><nl/>could not be accessed.<nl/>%1"
+msgstr ""
+"Не вдалося отримати доступ до каталогу <filename>%2</filename>.<nl/><nl/>%1"
+
+#: imgsaver.cpp:76
+#, kde-kuit-format
+msgctxt "@info"
+msgid "The directory <filename>%2</filename><nl/>could not be created.<nl/>%1"
+msgstr "Не вдалося створити каталог <filename>%2</filename>.<nl/><nl/>%1"
+
+#: imgsaver.cpp:327
+#, kde-format
+msgid "indexed color image (up to 8 bit depth)"
+msgstr "індексоване кольорове зображення (глибина — до 8 бітів)"
+
+#: imgsaver.cpp:331
+#, kde-format
+msgid "gray scale image (up to 8 bit depth)"
+msgstr "зображення у відтінках сірого (глибина — 8 бітів)"
+
+#: imgsaver.cpp:335
+#, kde-format
+msgid "lineart image (black and white, 1 bit depth)"
+msgstr "штрихове зображення (чорно-біле, глибина — 1 біт)"
+
+#: imgsaver.cpp:339
+#, kde-format
+msgid "high/true color image (more than 8 bit depth)"
+msgstr "кольорове зображення з палітрою (глибина — 8 бітів)"
+
+#: imgsaver.cpp:343
+#, kde-format
+msgid "unknown image type %1"
+msgstr "невідомий тип зображення %1"
+
+#: imgsaver.cpp:365
+#, kde-format
+msgid "Save OK"
+msgstr "Успішне збереження"
+
+#: imgsaver.cpp:367
+#, kde-format
+msgid "Permission denied"
+msgstr "Відмовлено у доступі"
+
+#: imgsaver.cpp:369
+#, kde-format
+msgid "Bad file name"
+msgstr "Помилкова назва файла"
+
+#: imgsaver.cpp:371
+#, kde-format
+msgid "No space left on device"
+msgstr "Немає місця на пристрої"
+
+#: imgsaver.cpp:373
+#, kde-format
+msgid "Cannot write image format '%1'"
+msgstr "Не вдалося записати зображення у форматі «%1»"
+
+#: imgsaver.cpp:375
+#, kde-format
+msgid "Cannot write using protocol '%1'"
+msgstr "Не вдалося виконати запис за допомогою протоколу «%1»"
+
+#: imgsaver.cpp:377
+#, kde-format
+msgid "User cancelled saving"
+msgstr "Збереження скасовано користувачем"
+
+#: imgsaver.cpp:379
+#, kde-format
+msgid "Cannot create directory"
+msgstr "Не вдалося створити каталог"
+
+#: imgsaver.cpp:381
+#, kde-format
+msgid "Save failed"
+msgstr "Помилка збереження"
+
+#: imgsaver.cpp:383
+#, kde-format
+msgid "Bad parameter"
+msgstr "Помилковий параметр"
+
+#: imgsaver.cpp:385
+#, kde-format
+msgid "Unknown status %1"
+msgstr "Невідомий стан %1"
+
+#: imgsaver.cpp:408
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"The file name you supplied has no file extension.<nl/>Should the original "
+"one be added?<nl/><nl/>This would result in the new file name <filename>%1</"
+"filename>"
+msgstr ""
+"У вказаної вами назви файла немає суфікса.<nl/>Додати суфікс автоматично?<nl/"
+"><nl/>Нова назва файла буде такою: <filename>%1</filename>"
+
+#: imgsaver.cpp:411
+#, kde-format
+msgid "Extension Missing"
+msgstr "Не вказано суфікса"
+
+#: imgsaver.cpp:412
+#, kde-format
+msgid "Add Extension"
+msgstr "Додати суфікс"
+
+#: imgsaver.cpp:413
+#, kde-format
+msgid "Do Not Add"
+msgstr "Не додавати"
+
+#: imgsaver.cpp:438
+#, kde-format
+msgid "Target already exists"
+msgstr "Такий файл вже існує"
+
+#: imgsaver.cpp:451
+#, kde-format
+msgid "Unable to copy the file"
+msgstr "Не вдалося скопіювати файл"
+
+#: imgsaver.cpp:452
+#, kde-format
+msgid "Unable to rename the file"
+msgstr "Не вдалося перейменувати файл"
+
+#: imgsaver.cpp:453
+#, kde-format
+msgid "Error copying file"
+msgstr "Помилка під час копіювання файла"
+
+#: imgsaver.cpp:454
+#, kde-format
+msgid "Error renaming file"
+msgstr "Помилка під час спроби перейменування файла"
+
+#: imgsaver.cpp:455
+#, kde-kuit-format
+msgctxt "@info"
+msgid "%1 <filename>%3</filename><nl/>%2"
+msgstr "%1 <filename>%3</filename><nl/>%2"
+
+#: kooka.cpp:100
+#, kde-format
+msgid "KDE Scanning"
+msgstr "Сканування для KDE"
+
+#: kooka.cpp:134
+#, kde-format
+msgid "Scale to Width"
+msgstr "Влаштувати у ширину"
+
+#: kooka.cpp:145
+#, kde-format
+msgid "Scale to Height"
+msgstr "Влаштувати у висоту"
+
+#: kooka.cpp:154
+#, kde-format
+msgid "Original Size"
+msgstr "Початковий розмір"
+
+#: kooka.cpp:160
+#, kde-format
+msgid "Set Zoom..."
+msgstr "Встановити масштаб…"
+
+#: kooka.cpp:166
+#, kde-format
+msgid "Keep Zoom Setting"
+msgstr "Запам'ятати масштаб"
+
+#: kooka.cpp:174
+#, kde-format
+msgid "New Image From Selection"
+msgstr "Створити зображення з позначеної ділянки"
+
+#: kooka.cpp:179
+#, kde-format
+msgid "Mirror Vertically"
+msgstr "Віддзеркалити вертикально"
+
+#: kooka.cpp:186
+#, kde-format
+msgid "Mirror Horizontally"
+msgstr "Віддзеркалити горизонтально"
+
+#: kooka.cpp:196
+#, kde-format
+msgid "Rotate Counter-Clockwise"
+msgstr "Обернути проти годинникової стрілки"
+
+#: kooka.cpp:203
+#, kde-format
+msgid "Rotate Clockwise"
+msgstr "Обернути за годинниковою стрілкою"
+
+#: kooka.cpp:210
+#, kde-format
+msgid "Rotate 180 Degrees"
+msgstr "Обернути на 180°"
+
+#: kooka.cpp:219
+#, kde-format
+msgid "New Folder..."
+msgstr "Створити теку…"
+
+#: kooka.cpp:224
+#, kde-format
+msgid "Open With"
+msgstr "Відкрити за допомогою"
+
+#: kooka.cpp:230
+#, kde-format
+msgid "Save Image..."
+msgstr "Зберегти зображення…"
+
+#: kooka.cpp:237
+#, kde-format
+msgid "Import Image..."
+msgstr "Імпортувати зображення…"
+
+#: kooka.cpp:242 kooka.cpp:550
+#, kde-format
+msgid "Delete Image"
+msgstr "Вилучити зображення"
+
+#: kooka.cpp:249 kooka.cpp:551
+#, kde-format
+msgid "Rename Image"
+msgstr "Перейменувати зображення"
+
+#: kooka.cpp:255 kooka.cpp:549
+#, kde-format
+msgid "Unload Image"
+msgstr "Вивантажити зображення"
+
+#: kooka.cpp:262
+#, kde-format
+msgid "Properties..."
+msgstr "Властивості…"
+
+#: kooka.cpp:271
+#, kde-format
+msgid "Select Scan Device..."
+msgstr "Вибрати пристрій сканування…"
+
+#: kooka.cpp:275 kookaview.cpp:546
+#, kde-format
+msgid "Add Scan Device..."
+msgstr "Додати пристрій сканування…"
+
+#: kooka.cpp:281
+#, kde-format
+msgid "Preview"
+msgstr "Попередній перегляд"
+
+#: kooka.cpp:286
+#, kde-format
+msgid "Start Scan"
+msgstr "Почати сканування"
+
+#: kooka.cpp:291
+#, kde-format
+msgid "Scan Presets..."
+msgstr "Набори параметрів сканування…"
+
+#: kooka.cpp:296
+#, kde-format
+msgid "Auto Select"
+msgstr "Автовибір"
+
+#: kooka.cpp:304
+#, kde-format
+msgid "OCR Image..."
+msgstr "Розпізнати зображення…"
+
+#: kooka.cpp:308
+#, kde-format
+msgid "OCR Selection..."
+msgstr "Розпізнати позначене…"
+
+#: kooka.cpp:312
+#, kde-format
+msgid "OCR File..."
+msgstr "Розпізнати файл…"
+
+#: kooka.cpp:316
+#, kde-format
+msgid "Save OCR Result Text..."
+msgstr "Зберегти розпізнаний текст…"
+
+#: kooka.cpp:321
+#, kde-format
+msgid "Spell Check OCR Result..."
+msgstr "Результат перевірки правопису розпізнаного тексту…"
+
+#: kooka.cpp:537
+#, kde-format
+msgid "Unload Folder"
+msgstr "Вивантажити теку"
+
+#: kooka.cpp:538
+#, kde-format
+msgid "Delete Folder"
+msgstr "Вилучити теку"
+
+#: kooka.cpp:539
+#, kde-format
+msgid "Rename Folder"
+msgstr "Перейменувати теку"
+
+#: kookagallery.cpp:56
+#, kde-format
+msgid "Folder:"
+msgstr "Тека:"
+
+#: kookapref.cpp:55
+#, kde-format
+msgid "Preferences"
+msgstr "Параметри"
+
+#: kookapref.cpp:57
+#, kde-format
+msgid "General"
+msgstr "Загальне"
+
+#: kookapref.cpp:57
+#, kde-format
+msgid "General Options"
+msgstr "Загальні параметри"
+
+#: kookapref.cpp:58
+#, kde-format
+msgid "Startup"
+msgstr "Запуск"
+
+#: kookapref.cpp:58
+#, kde-format
+msgid "Startup Options"
+msgstr "Параметри запуску"
+
+#: kookapref.cpp:59
+#, kde-format
+msgid "Image Saving"
+msgstr "Збереження зображення"
+
+#: kookapref.cpp:59
+#, kde-format
+msgid "Image Saving Options"
+msgstr "Параметри збереження зображень"
+
+#: kookapref.cpp:60
+#, kde-format
+msgid "Gallery & Thumbnails"
+msgstr "Галерея і мініатюри"
+
+#: kookapref.cpp:60
+#, kde-format
+msgid "Image Gallery and Thumbnail View"
+msgstr "Панель галереї і мініатюр"
+
+#: kookapref.cpp:61 kookaview.cpp:290
+#, kde-format
+msgid "OCR"
+msgstr "Розпізнавання"
+
+#: kookascanparams.cpp:68
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"<title>Gallery Mode - No scanner selected</title><nl/><nl/>In this mode you "
+"can browse, manipulate and OCR images already in the gallery.<nl/><nl/><link "
+"url=\"a:1\">Select a scanner device</link> to perform scanning, or <link url="
+"\"a:2\">add a device</link> if a scanner is not automatically detected."
+msgstr ""
+"<title>Режим галереї — не вказано сканера</title><nl/><nl/>У цьому режимі ви "
+"можете переглядати, керувати зображеннями у галереї та виконувати "
+"розпізнавання тексту на зображеннях.<nl/><nl/><link url=\"a:1\">Вкажіть "
+"пристрій для сканування</link> або <link url=\"a:2\">додайте пристрій</"
+"link>, якщо сканер не було виявлено у автоматичному режимі."
+
+#: kookascanparams.cpp:114
+#, kde-format
+msgid "Scan &destination:"
+msgstr "П&ризначення сканування:"
+
+#: kookascanparams.cpp:150
+#, kde-kuit-format
+msgctxt "@info"
+msgid "No destination selected"
+msgstr "Не вибрано призначення"
+
+#: kookascanparams.cpp:160
+#, kde-kuit-format
+msgctxt "@info"
+msgid "Unable to load plugin '%1'"
+msgstr "Не вдалося завантажити додаток «%1»"
+
+#. i18n: ectx: label, entry (StartupReadImage), group (Startup)
+#: kookasettings.kcfg:50
+#, kde-format
+msgid "Load the last selected image into the viewer"
+msgstr "Завантажувати останнє зображення на панель перегляду"
+
+#. i18n: ectx: tooltip, entry (StartupReadImage), group (Startup)
+#: kookasettings.kcfg:51
+#, kde-format
+msgid ""
+"<div>Check this if you want Kooka to load the last selected image into the "
+"viewer on startup.<br/><br/>If your images are large, that might slow down "
+"Kooka's startup.</div>"
+msgstr ""
+"<div>Позначте, якщо хочете, щоб Kooka завантажував останні вибрані "
+"зображення при запуску.<br/><br/>Якщо ці зображення досить великі, це може "
+"суттєво сповільнити запуск.</div>"
+
+#. i18n: ectx: label, entry (SaverAskForFormat), group (Files)
+#: kookasettings.kcfg:65
+#, kde-format
+msgid "Always use the Save Assistant"
+msgstr "Завжди використовувати помічник збереження"
+
+#. i18n: ectx: tooltip, entry (SaverAskForFormat), group (Files)
+#: kookasettings.kcfg:66
+#, kde-format
+msgid ""
+"<div>Check this if you want to always use the image save assistant, even if "
+"there is a default format for the image type.</div>"
+msgstr ""
+"<div>Позначте цей пункт, якщо хочете завжди використовувати помічник "
+"збереження зображень, навіть якщо вибрано типовий формат зображень.</div>"
+
+#. i18n: ectx: label, entry (SaverAskForFilename), group (Files)
+#: kookasettings.kcfg:71
+#, kde-format
+msgid "Ask for filename when saving"
+msgstr "Запитувати назву файла під час збереження"
+
+#. i18n: ectx: tooltip, entry (SaverAskForFilename), group (Files)
+#: kookasettings.kcfg:72
+#, kde-format
+msgid ""
+"<div>Check this if you want to enter a file name when scanning an image.</"
+"div>"
+msgstr ""
+"<div>Позначте цей пункт, якщо ви хочете вказувати назву файла під час "
+"сканування зображення.</div>"
+
+#. i18n: ectx: label, entry (SaverAskBeforeScan), group (Files)
+#: kookasettings.kcfg:77
+#, kde-format
+msgid "Before the scan starts"
+msgstr "До того, як буде розпочато сканування"
+
+#. i18n: ectx: tooltip, entry (SaverAskBeforeScan), group (Files)
+#: kookasettings.kcfg:78
+#, kde-format
+msgid ""
+"<div>Check this if you want to enter the file name before scanning starts.</"
+"div>"
+msgstr ""
+"<div>Позначте цей пункт, якщо вводити назву файла кожного разу до того, як "
+"буде розпочато сканування.</div>"
+
+#. i18n: ectx: label, entry (SaverAskAfterScan), group (Files)
+#: kookasettings.kcfg:83
+#, kde-format
+msgid "After the scan is finished"
+msgstr "Після того, як сканування буде завершено"
+
+#. i18n: ectx: tooltip, entry (SaverAskAfterScan), group (Files)
+#: kookasettings.kcfg:84
+#, kde-format
+msgid ""
+"<div>Check this if you want to enter the file name after scanning has "
+"finished.</div>"
+msgstr ""
+"<div>Позначте цей пункт, якщо вводити назву файла після того, як сканування "
+"буде завершено.</div>"
+
+#. i18n: ectx: label, entry (SaverOnlyRecommendedTypes), group (Files)
+#: kookasettings.kcfg:89
+#, kde-format
+msgid "Only show recommended formats for this image type"
+msgstr "Показувати лише рекомендовані формати для зображень цього типу"
+
+#. i18n: ectx: tooltip, entry (SaverOnlyRecommendedTypes), group (Files)
+#: kookasettings.kcfg:90
+#, kde-format
+msgid ""
+"<div>Check this to only show recommended file formats for the scan type. "
+"Uncheck it to show all compatible formats.</div>"
+msgstr ""
+"<div>Позначте цей пункт, щоб програма показувала лише рекомендовані формати "
+"файлів для типів сканування. Зніміть позначку з пункту, якщо слід показувати "
+"усі сумісні формати.</div>"
+
+#. i18n: ectx: label, entry (SaverAlwaysUseFormat), group (Files2)
+#: kookasettings.kcfg:103
+#, kde-format
+msgid "Always use this save format for this image type"
+msgstr "Завжди використовувати цей формат для такого типу зображень"
+
+#. i18n: ectx: tooltip, entry (SaverAlwaysUseFormat), group (Files2)
+#: kookasettings.kcfg:104
+#, kde-format
+msgid ""
+"<div>Check this to remember the selected file format for the scanned image "
+"type and not ask for it again.</div>"
+msgstr ""
+"<div>Позначте цей пункт, щоб програма запам’ятовувала вибраний формат файлів "
+"для сканованих зображень і не питала про нього знову.</div>"
+
+#. i18n: ectx: label, entry (GalleryAllowRename), group (Gallery)
+#: kookasettings.kcfg:137
+#, kde-format
+msgid "Allow click-to-rename"
+msgstr "Уможливити перейменування клацанням"
+
+#. i18n: ectx: tooltip, entry (GalleryAllowRename), group (Gallery)
+#: kookasettings.kcfg:138
+#, kde-format
+msgid ""
+"<div>Check this if you want to be able to rename gallery items by clicking "
+"on them (otherwise, use the \"Rename\" menu option).</div>"
+msgstr ""
+"<div>Позначте цей пункт, якщо ви бажаєте мати змогу перейменовувати елементи "
+"галереї натисканням їхніх пунктів у списку (якщо ви не позначите пункт, "
+"можна буде скористатися пунктом меню «Перейменувати»).</div>"
+
+#. i18n: ectx: label, entry (GalleryLayout), group (Gallery)
+#: kookasettings.kcfg:143
+#, kde-format
+msgid "Show recent folders:"
+msgstr "Показ нещодавніх тек:"
+
+#. i18n: ectx: tooltip, entry (GalleryLayout), group (Gallery)
+#: kookasettings.kcfg:144
+#, kde-format
+msgid ""
+"<div>Select whether and where a list of recently accessed gallery folders "
+"will be shown.</div>"
+msgstr ""
+"<div>Вибір того, чи слід показувати список нещодавно використаних тек "
+"галереї і де його слід показувати.</div>"
+
+#. i18n: ectx: label, entry (ThumbnailCustomBackground), group (thumbnailView)
+#: kookasettings.kcfg:164
+#, kde-format
+msgid "Use a custom background image"
+msgstr "Використовувати нетипове зображення тла"
+
+#. i18n: ectx: tooltip, entry (ThumbnailCustomBackground), group (thumbnailView)
+#: kookasettings.kcfg:165
+#, kde-format
+msgid "<div>Set a custom background image for the thumbnail view.</div>"
+msgstr ""
+"<div>Встановити нетипове зображення тла для панелі перегляду мініатюр.</div>"
+
+#. i18n: ectx: label, entry (ThumbnailBackgroundPath), group (thumbnailView)
+#: kookasettings.kcfg:170
+#, kde-format
+msgid "Image:"
+msgstr "Зображення:"
+
+#. i18n: ectx: tooltip, entry (ThumbnailBackgroundPath), group (thumbnailView)
+#: kookasettings.kcfg:171
+#, kde-format
+msgid "<div>The background image to use for the thumbnail view.</div>"
+msgstr ""
+"<div>Зображення тла, яким слід скористатися для панелі перегляду мініатюр.</"
+"div>"
+
+#. i18n: ectx: label, entry (ThumbnailPreviewSize), group (thumbnailView)
+#: kookasettings.kcfg:177
+#, kde-format
+msgid "Preview size:"
+msgstr "Розмір перегляду:"
+
+#. i18n: ectx: tooltip, entry (ThumbnailPreviewSize), group (thumbnailView)
+#: kookasettings.kcfg:178
+#, kde-format
+msgid "<div>Select the default preview size for the thumbnail view.</div>"
+msgstr ""
+"<div>Виберіть типовий розмір попереднього перегляду для панелі перегляду "
+"мініатюр.</div>"
+
+#. i18n: ectx: label, entry (OcrGocrDustSize), group (gocr)
+#: kookasettings.kcfg:217
+#, kde-format
+msgid "Dust size:"
+msgstr "Розмір пилу:"
+
+#. i18n: ectx: tooltip, entry (OcrGocrDustSize), group (gocr)
+#: kookasettings.kcfg:218
+#, kde-format
+msgid ""
+"<div>Clusters smaller than this size will be considered to be noise, and "
+"ignored.  0 means to not detect dust clusters, -1 means to automatically "
+"detect them. The default is 10.</div>"
+msgstr ""
+"<div>Групи точок, розмір яких буде меншим за це значення, вважатимуться "
+"пилом, їх буде вилучено з зображення. 0 — не виявляти скупчення пилу, –1 — "
+"автоматично виявляти такі скупчення. Типове значення — 10.</div>"
+
+#. i18n: ectx: label, entry (OcrGocrGrayLevel), group (gocr)
+#: kookasettings.kcfg:223
+#, kde-format
+msgid "Gray level:"
+msgstr "Рівень сірого:"
+
+#. i18n: ectx: tooltip, entry (OcrGocrGrayLevel), group (gocr)
+#: kookasettings.kcfg:224
+#, kde-format
+msgid ""
+"<div>The threshold value below which gray pixels are considered to be black. "
+"0 means to automatically detect the gray level.  The default is 160.</div>"
+msgstr ""
+"<div>Числове значення інтенсивності сірих пікселів, що вважаються чорними. 0 "
+"— автоматично виявляти рівень сірого. Типове значення — 160.</div>"
+
+#. i18n: ectx: label, entry (OcrGocrSpaceWidth), group (gocr)
+#: kookasettings.kcfg:229
+#, kde-format
+msgid "Space width:"
+msgstr "Ширина інтервалів:"
+
+#. i18n: ectx: tooltip, entry (OcrGocrSpaceWidth), group (gocr)
+#: kookasettings.kcfg:230
+#, kde-format
+msgid ""
+"<div>The minimum gap in pixels considered to be word spacing. The default is "
+"0 which means to automatically detect spacing.</div>"
+msgstr ""
+"<div>Мінімальний проміжок у пікселях, який вважається інтервалом між "
+"словами. Типовим є значення 0, яке вказує на автоматичне визначення "
+"інтервалу.</div>"
+
+#. i18n: ectx: label, entry (OcrGocrCertainty), group (gocr)
+#: kookasettings.kcfg:235
+#, kde-format
+msgid "Certainty:"
+msgstr "Певність:"
+
+#. i18n: ectx: tooltip, entry (OcrGocrCertainty), group (gocr)
+#: kookasettings.kcfg:236
+#, kde-format
+msgid ""
+"<div>The acceptance certainty threshold for recognition, characters with a "
+"lower certainty are considered to be unknown. The default is 95.</div>"
+msgstr ""
+"<div>Порогове значення певності для прийняття при розпізнаванні. Символи із "
+"нижчим рівнем певності вважатимуться невідомими. Типовим є значення 95.</div>"
+
+#. i18n: ectx: label, entry (ocrOcradLayoutDetection), group (ocrad)
+#: kookasettings.kcfg:250
+#, kde-format
+msgid "Layout analysis mode:"
+msgstr "Режим визначення компонування:"
+
+#. i18n: ectx: label, entry (ocrOcradCharset), group (ocrad)
+#: kookasettings.kcfg:263
+#, kde-format
+msgid "Character set:"
+msgstr "Набір символів:"
+
+#. i18n: ectx: label, entry (ocrOcradFilter), group (ocrad)
+#: kookasettings.kcfg:267
+#, kde-format
+msgid "Filter:"
+msgstr "Фільтр:"
+
+#. i18n: ectx: label, entry (ocrOcradTransform), group (ocrad)
+#: kookasettings.kcfg:271
+#, kde-format
+msgid "Transform:"
+msgstr "Перетворення:"
+
+#. i18n: ectx: label, entry (ocrOcradInvert), group (ocrad)
+#: kookasettings.kcfg:275
+#, kde-format
+msgid "Invert input"
+msgstr "Інвертувати вхідні дані"
+
+#. i18n: ectx: label, entry (ocrOcradThresholdEnable), group (ocrad)
+#: kookasettings.kcfg:280
+#, kde-format
+msgid "Set threshold"
+msgstr "Встановити поріг"
+
+#. i18n: ectx: label, entry (ocrOcradThresholdValue), group (ocrad)
+#: kookasettings.kcfg:286
+#, kde-format
+msgid "Threshold"
+msgstr "Поріг"
+
+#. i18n: ectx: label, entry (ocrTesseractLanguage), group (tesseract)
+#: kookasettings.kcfg:308
+#, kde-format
+msgid "Language:"
+msgstr "Мова:"
+
+#. i18n: ectx: label, entry (ocrTesseractUserWords), group (tesseract)
+#: kookasettings.kcfg:312
+#, kde-format
+msgid "User word list:"
+msgstr "Список слів користувача:"
+
+#. i18n: ectx: label, entry (ocrTesseractUserPatterns), group (tesseract)
+#: kookasettings.kcfg:316
+#, kde-format
+msgid "User patterns:"
+msgstr "Взірці користувача:"
+
+#. i18n: ectx: label, entry (ocrTesseractEngineMode), group (tesseract)
+#: kookasettings.kcfg:320
+#, kde-format
+msgid "Engine mode:"
+msgstr "Режим рушія:"
+
+#. i18n: ectx: label, entry (ocrTesseractSegmentationMode), group (tesseract)
+#: kookasettings.kcfg:324
+#, kde-format
+msgid "Segmentation mode:"
+msgstr "Режим поділу:"
+
+#: kookaview.cpp:206
+#, kde-format
+msgid "Image View"
+msgstr "Перегляд зображення"
+
+#: kookaview.cpp:265
+#, kde-format
+msgid "Scan Preview"
+msgstr "Перегляд сканування"
+
+#: kookaview.cpp:275
+#, kde-format
+msgid "OCR results will appear here"
+msgstr "Тут буде показано результати розпізнавання"
+
+#: kookaview.cpp:284
+#, kde-format
+msgid "Scan"
+msgstr "Сканування"
+
+#: kookaview.cpp:287 kookaview.cpp:560 kookaview.cpp:579 scangallery.cpp:123
+#, kde-format
+msgid "Gallery"
+msgstr "Галерея"
+
+#: kookaview.cpp:463
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"There was a problem opening the scanner device.<nl/><nl/>Check that the "
+"scanner is connected and switched on, and that SANE support for it is "
+"correctly configured.<nl/><nl/>Trying to use scanner device: <icode>%3</"
+"icode><nl/>libkookascan reported error: <message>%2</message><nl/>SANE "
+"reported error: <message>%1</message>"
+msgstr ""
+"Не вдалося встановити зв’язок з пристроєм для сканування.<nl/><nl/>З’єднайте "
+"сканер з комп’ютером і увімкніть його, а також переконайтеся, що підтримку "
+"сканера передбачено у SANE.<nl/><nl/>Спроба використання пристрою для "
+"сканування: <icode>%3</icode><nl/>Помилка, повідомлена libkookascan: "
+"<message>%2</message><nl/>Помилка, повідомлена SANE: <message>%1</message>"
+
+#: kookaview.cpp:518
+#, kde-format
+msgid "Add Scan Device"
+msgstr "Додати пристрій для сканування"
+
+#: kookaview.cpp:536
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"No scanner devices are available.<nl/><nl/>If your scanner is a type that "
+"can be auto-detected by SANE, check that it is connected, switched on and "
+"configured correctly.<nl/><nl/>If the scanner cannot be auto-detected by "
+"SANE (this includes some network scanners), you need to specify the device "
+"to use. Use the <interface>Add Scan Device</interface> option to enter the "
+"backend name and parameters, or see that dialog for more information."
+msgstr ""
+"Не виявлено пристроїв для сканування.<nl/><nl/>Якщо ваш сканер належить до "
+"типу, який може бути автоматично розпізнано SANE, перевірте, чи з’єднано "
+"його з комп’ютером, чи увімкнено його і чи налаштовано його належним чином."
+"<nl/><nl/>Якщо сканер не може бути автоматично виявлено SANE (це стосується "
+"деяких мережевих сканерів), вам слід вказати пристрій, який має "
+"використовувати програма. Скористайтеся кнопкою <interface>Додати пристрій "
+"для сканування</interface>, щоб вказати назву модуля сканера та параметрів "
+"сканування. Крім того, у відповідному діалоговому вікні буде показано "
+"додаткові відомості."
+
+#: kookaview.cpp:582
+#, kde-format
+msgid "No scanner connected"
+msgstr "Не з’єднано жодного сканера"
+
+#: kookaview.cpp:641
+#, kde-format
+msgid "No selection"
+msgstr "Нічого не позначено"
+
+#: kookaview.cpp:645
+#, kde-format
+msgid "Gallery folder %1"
+msgstr "Теки галереї %1"
+
+#: kookaview.cpp:645
+#, kde-format
+msgid "Gallery image %1"
+msgstr "Зображення галереї %1"
+
+#: kookaview.cpp:710
+#, kde-format
+msgid "Starting OCR on selection"
+msgstr "Починається ОРС для виділеного шматка"
+
+#: kookaview.cpp:716
+#, kde-format
+msgid "Starting OCR on the image"
+msgstr "Починається розпізнавання тексту зображення"
+
+#: kookaview.cpp:723
+#, kde-format
+msgid "OCR File"
+msgstr "Розпізнавання тексту файла"
+
+#: kookaview.cpp:733
+#, kde-kuit-format
+msgctxt "@info"
+msgid "Cannot load <filename>%1</filename> for OCR:<nl/>%2"
+msgstr ""
+"Не вдалося завантажити <filename>%1</filename> для розпізнавання тексту:<nl/>"
+"%2"
+
+#: kookaview.cpp:735
+#, kde-format
+msgid "Cannot Read OCR File"
+msgstr "Не вдалося прочитати файл для розпізнавання"
+
+#: kookaview.cpp:739
+#, kde-kuit-format
+msgctxt "@info"
+msgid "Starting OCR on file <filename>%1</filename>"
+msgstr "Розпочинаємо розпізнавання тексту у файлі <filename>%1</filename>"
+
+#: kookaview.cpp:755
+#, kde-format
+msgid "OCR finished"
+msgstr "Розпізнавання завершено"
+
+#: kookaview.cpp:762
+#, kde-format
+msgid "There is no OCR result text to spell check."
+msgstr ""
+"Рушієм розпізнавання тексту не надано текстових даних для перевірки "
+"правопису."
+
+#: kookaview.cpp:763
+#, kde-format
+msgid "OCR Spell Check not possible"
+msgstr "Не вдалося виконати перевірку правопису розпізнаного тексту"
+
+#: kookaview.cpp:768
+#, kde-format
+msgid "OCR Spell Check"
+msgstr "Перевірка правопису"
+
+#: kookaview.cpp:784
+#, kde-format
+msgid ""
+"No OCR engine is configured.\n"
+"Please select and configure one in order to perform OCR."
+msgstr ""
+"Не налаштовано рушія розпізнавання тексту.\n"
+"Будь ласка, виберіть і налаштуйте такий рушій, щоб мати змогу виконувати "
+"комп'ютерне розпізнавання тексту."
+
+#: kookaview.cpp:786
+#, kde-format
+msgid "OCR Not Configured"
+msgstr "Не налаштовано рушій для розпізнавання"
+
+#: kookaview.cpp:795
+#, kde-format
+msgid "Cannot load OCR plugin '%1'"
+msgstr "Не вдалося завантажити додаток розпізнавання «%1»"
+
+#: kookaview.cpp:903
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"There was a problem during preview or scanning.<nl/>Check that the scanner "
+"is still connected and switched on, <nl/>and that media is loaded if "
+"required.<nl/><nl/>Trying to use scanner device: <icode>%3</icode><nl/"
+">libkookascan reported error: <message>%2</message><nl/>SANE reported error: "
+"<message>%1</message>"
+msgstr ""
+"Під час попереднього перегляду або сканування сталася помилка.<nl/"
+">Перевірте, чи з’єднано сканер з комп’ютером, чи увімкнено сканер, <nl/>та "
+"чи завантажено до нього носій даних, якщо це потрібно.<nl/><nl/>Спроба "
+"використання пристрою для сканування: <icode>%3</icode><nl/>Помилка, "
+"повідомлена libkookascan: <message>%2</message><nl/>Помилка, повідомлена "
+"SANE: <message>%1</message>"
+
+#: kookaview.cpp:953
+#, kde-format
+msgid "Create new image from selection"
+msgstr "Створити нове зображення з виділеного шматка"
+
+#: kookaview.cpp:962
+#, kde-format
+msgid "Cannot transform, image is read-only"
+msgstr "Не вдалося перетворити зображення, оскільки файл захищено від запису"
+
+#: kookaview.cpp:1015
+#, kde-format
+msgid "Loaded image %1"
+msgstr "Завантажене зображення %1"
+
+#: kookaview.cpp:1016
+#, kde-format
+msgid "Unloaded image"
+msgstr "Невивантажене зображення"
+
+#: kookaview.cpp:1033
+#, kde-format
+msgid "Loading %1..."
+msgstr "Завантажуємо %1…"
+
+#: main.cpp:44
+#, kde-format
+msgid "Scanning, image gallery and OCR"
+msgstr "Сканування, галерея зображень та розпізнавання"
+
+#: main.cpp:47
+#, kde-format
+msgid ""
+"Kooka provides access to scanner hardware using the <a href=\"http://www."
+"sane-project.org/\">SANE</a> library.\n"
+"\n"
+"Kooka allows you to scan, save and view in any image format that KDE "
+"supports, and can perform Optical Character Recognition using the open "
+"source <a href=\"http://jocr.sourceforge.net/\">GOCR</a> or <a href=\"http://"
+"www.gnu.org/software/ocrad/ocrad.html\">OCRAD</a> programs, or the "
+"commercial <a href=\"http://www.rerecognition.com/\">KADMOS</a> library."
+msgstr ""
+"Kooka здійснює доступ до обладнання для сканування за допомогою бібліотеки "
+"<a href=\"http://www.sane-project.org/\">SANE</a>.\n"
+"\n"
+"За допомогою Kooka ви можете сканувати, зберігати і переглядати зображення у "
+"будь-якому форматі з підтримуваних KDE, а також виконувати розпізнавання "
+"текстів на зображеннях за допомогою програм з відкритим кодом <a href="
+"\"http://jocr.sourceforge.net/\">GOCR</a> та <a href=\"http://www.gnu.org/"
+"software/ocrad/ocrad.html\">OCRAD</a> або комерційної бібліотеки <a href="
+"\"http://www.rerecognition.com/\">KADMOS</a>."
+
+#: main.cpp:57
+#, kde-format
+msgid ""
+"This program is distributed under the terms of the GPL v2 as published\n"
+"by the Free Software Foundation.\n"
+"\n"
+"As a special exception, permission is given to link this program\n"
+"with any version of the KADMOS OCR/ICR engine of reRecognition GmbH\n"
+"(http://www.rerecognition.com), and distribute the resulting executable\n"
+"without including the source code for KADMOS in the source distribution.\n"
+"\n"
+"Note that linking against KADMOS is not permitted under the terms of\n"
+"the Qt GPL licence, so if you wish to do this then you must have a\n"
+"commercial Qt development licence.\n"
+msgstr ""
+"Ця програма розповсюджується за умов дотримання GPL v2 у варіанті,\n"
+"який надається Free Software Foundation.\n"
+"\n"
+"Як особливе виключення, надається право включення цієї програми\n"
+"до будь-якої версії рушія розпізнавання тексту KADMOS компанії "
+"reRecognition\n"
+"GmbH (http://www.rerecognition.com) і поширення створеного виконуваного\n"
+"файла без включення початкового коду до KADMOS у форматі архіву із\n"
+"початковим кодом.\n"
+"\n"
+"Зауважте, що компонування з KADMOS не дозволяється за умовами ліцензування\n"
+"Qt. Отже, якщо ви хочете зробити це власноруч, вам слід придбати\n"
+"ліцензію на комерційну розробку з використанням бібліотек Qt.\n"
+
+#: main.cpp:70
+#, kde-format
+msgid "(C) 2000-2018, the Kooka developers and contributors"
+msgstr "© Розробники Kooka, 2000–2018"
+
+#: main.cpp:78
+#, kde-format
+msgid "Kooka"
+msgstr "Kooka"
+
+#: main.cpp:90
+#, kde-format
+msgid "Current maintainer, KDE4 port"
+msgstr "Поточний супровідник, портування на KDE4"
+
+#: main.cpp:91
+#, kde-format
+msgid "Montel Laurent"
+msgstr "Montel Laurent"
+
+#: main.cpp:91
+#, kde-format
+msgid "Initial KF5 port"
+msgstr "Початкове портування на KF5"
+
+#: main.cpp:92
+#, kde-format
+msgid "Klaas Freitag"
+msgstr "Klaas Freitag"
+
+#: main.cpp:92
+#, kde-format
+msgid "Developer"
+msgstr "Розробник"
+
+#: main.cpp:93
+#, kde-format
+msgid "Mat Colton"
+msgstr "Mat Colton"
+
+#: main.cpp:93
+#, kde-format
+msgid "Graphics, web"
+msgstr "графіка, інтернет"
+
+#: main.cpp:94
+#, kde-format
+msgid "Ivan Shvedunov"
+msgstr "Ivan Shvedunov"
+
+#: main.cpp:94
+#, kde-format
+msgid "Original kscan application"
+msgstr "Перша версія програми kscan"
+
+#: main.cpp:95
+#, kde-format
+msgid "Alex Kempshall"
+msgstr "Alex Kempshall"
+
+#: main.cpp:95
+#, kde-format
+msgid "Photocopy facility"
+msgstr "Можливості з фотокопіювання"
+
+#: main.cpp:105
+#, kde-format
+msgid "Gallery mode - do not connect to scanner"
+msgstr "Режим галереї - не з'єднуватись із сканером"
+
+#: main.cpp:108
+#, kde-format
+msgid "The SANE device specification (e.g. 'umax:/dev/sg0')"
+msgstr "Специфікація пристрою SANE (наприклад «umax:/dev/sg0»)"
+
+#: main.cpp:108
+#, kde-format
+msgid "device"
+msgstr "пристрій"
+
+#: newscanpresetdialog.cpp:53
+#, kde-format
+msgid "Edit Scan Preset"
+msgstr "Редагування набору параметрів сканування"
+
+#: newscanpresetdialog.cpp:54
+#, kde-format
+msgid "Change the name and/or description of the scan preset."
+msgstr "Змінити назву і/або опис набору параметрів сканування."
+
+#: newscanpresetdialog.cpp:58
+#, kde-format
+msgid "Save Scan Preset"
+msgstr "Збереження набору параметрів сканування"
+
+#: newscanpresetdialog.cpp:59
+#, kde-format
+msgid "Enter a name and description for the new scan preset."
+msgstr "Вкажіть назву і опис нового набору параметрів сканування."
+
+#: newscanpresetdialog.cpp:66
+#, kde-format
+msgid "Preset name:"
+msgstr "Назва набору:"
+
+#: newscanpresetdialog.cpp:73
+#, kde-format
+msgid "Description:"
+msgstr "Опис:"
+
+#: ocrresedit.cpp:159
+#, kde-format
+msgid "Save OCR Result Text"
+msgstr "Зберегти текст, отриманий при ОРС"
+
+#: ocrresedit.cpp:160
+#, kde-format
+msgid "Text File (*.txt)"
+msgstr "текстовий файл (*.txt)"
+
+#: ocrresedit.cpp:166
+#, kde-kuit-format
+msgctxt "@info"
+msgid "Unable to save the OCR results file<nl/><filename>%1</filename>"
+msgstr ""
+"Не вдалося зберегти файл результатів розпізнавання<nl/><filename>%1</"
+"filename>"
+
+#: ocrresedit.cpp:168
+#, kde-kuit-format
+msgctxt "@info"
+msgid "<nl/>%1"
+msgstr "<nl/>%1"
+
+#: ocrresedit.cpp:170
+#, kde-format
+msgid "Error saving OCR results"
+msgstr "Помилка під час спроби зберегти результати розпізнавання"
+
+#: prefspages.cpp:76
+#, kde-format
+msgid "Hidden Messages"
+msgstr "Приховані повідомлення"
+
+#: prefspages.cpp:80
+#, kde-format
+msgid ""
+"Use this button to reenable all messages and questions which\n"
+"have been hidden by using \"Don't ask me again\"."
+msgstr ""
+"Натисніть цю кнопку, щоб увімкнути показ всіх повідомлень та запитань,\n"
+"які було приховано у результаті позначення пункту «Більше не питати»."
+
+#: prefspages.cpp:83
+#, kde-format
+msgid "Enable Messages/Questions"
+msgstr "Увімкнути повідомлення та запитання"
+
+#: prefspages.cpp:243
+#, kde-format
+msgid "Image Gallery"
+msgstr "Галерея зображень"
+
+#: prefspages.cpp:257
+#, kde-format
+msgid "Not shown"
+msgstr "Не показувати"
+
+#: prefspages.cpp:258
+#, kde-format
+msgid "At top"
+msgstr "Вгорі"
+
+#: prefspages.cpp:259
+#, kde-format
+msgid "At bottom"
+msgstr "Внизу"
+
+#: prefspages.cpp:274
+#, kde-format
+msgid "Thumbnail View"
+msgstr "Віконце мініатюр"
+
+#: prefspages.cpp:388
+#, kde-format
+msgid "None"
+msgstr "Немає"
+
+#: prefspages.cpp:400
+#, kde-format
+msgid "OCR Engine:"
+msgstr "Рушій розпізнавання:"
+
+#: prefspages.cpp:406
+#, kde-format
+msgid "OCR Engine Settings..."
+msgstr "Параметри рушія розпізнавання тексту…"
+
+#: prefspages.cpp:452
+#, kde-format
+msgid ""
+"No OCR engine is selected. Select and configure one to be able to perform "
+"OCR."
+msgstr ""
+"Не вказано рушія розпізнавання. Позначте і налаштуйте рушій, щоб можна було "
+"виконати розпізнавання тексту."
+
+#: prefspages.cpp:460
+#, kde-format
+msgid "Unknown engine '%1'."
+msgstr "Невідомий рушій «%1»."
+
+#: scangallery.cpp:98
+#, kde-format
+msgid "Name"
+msgstr "Назва"
+
+#: scangallery.cpp:99
+#, kde-format
+msgid "Size"
+msgstr "Розмір"
+
+#: scangallery.cpp:100
+#, kde-format
+msgid "Format"
+msgstr "Формат"
+
+#: scangallery.cpp:171
+#, kde-format
+msgid "Kooka Gallery"
+msgstr "Галерея Kooka"
+
+#: scangallery.cpp:375
+#, kde-format
+msgid "empty"
+msgstr "порожньо"
+
+#: scangallery.cpp:378
+#, kde-format
+msgid "one image"
+msgid_plural "%1 images"
+msgstr[0] "%1 зображення"
+msgstr[1] "%1 зображення"
+msgstr[2] "%1 зображень"
+msgstr[3] "одне зображення"
+
+#: scangallery.cpp:380
+#, kde-format
+msgid "one file"
+msgid_plural "%1 files"
+msgstr[0] "%1 файл"
+msgstr[1] "%1 файли"
+msgstr[2] "%1 файлів"
+msgstr[3] "один файл"
+
+#: scangallery.cpp:386
+#, kde-format
+msgid "one file, "
+msgid_plural "%1 files, "
+msgstr[0] "%1 файл, "
+msgstr[1] "%1 файли, "
+msgstr[2] "%1 файлів, "
+msgstr[3] "один файл, "
+
+#: scangallery.cpp:388
+#, kde-format
+msgid "one image, "
+msgid_plural "%1 images, "
+msgstr[0] "%1 зображення, "
+msgstr[1] "%1 зображення, "
+msgstr[2] "%1 зображень, "
+msgstr[3] "одне зображення, "
+
+#: scangallery.cpp:391
+#, kde-format
+msgid "1 folder"
+msgid_plural "%1 folders"
+msgstr[0] "%1 тека"
+msgstr[1] "%1 теки"
+msgstr[2] "%1 тек"
+msgstr[3] "одна тека"
+
+#: scangallery.cpp:446
+#, kde-format
+msgid " %1 x %2"
+msgstr "%1 ⨯ %2"
+
+#: scangallery.cpp:602
+#, kde-format
+msgid ""
+"You entered a file extension that differs from the existing one. That is not "
+"yet possible. Converting 'on the fly' is planned for a future release.\n"
+"Kooka corrects the extension."
+msgstr ""
+"Ви вказали суфікс, що відрізняється від вже існуючого. У поточній версії "
+"програми перетворення зображення «на льоту» неможливе. Це стане можливим у "
+"наступних випусках.\n"
+"Kooka виправить суфікс назви."
+
+#: scangallery.cpp:604
+#, kde-format
+msgid "On the Fly Conversion"
+msgstr "Перетворення на ходу"
+
+#: scangallery.cpp:700
+#, kde-format
+msgid "Not a supported image format"
+msgstr "Непідтримуваний формат зображень"
+
+#: scangallery.cpp:752
+#, kde-format
+msgid "Sub-image %1"
+msgstr "Підзображення %1"
+
+#: scangallery.cpp:778
+#, kde-kuit-format
+msgctxt "@info"
+msgid "Unable to load the image <filename>%2</filename><nl/>%1"
+msgstr "Не вдалося завантажити зображення <filename>%2</filename><nl/>%1"
+
+#: scangallery.cpp:780
+#, kde-format
+msgid "Image Load Error"
+msgstr "Помилка завантаження збереження"
+
+#: scangallery.cpp:842
+#, kde-format
+msgid "Incoming/"
+msgstr "Вхідні/"
+
+#: scangallery.cpp:888
+#, kde-kuit-format
+msgctxt "@info"
+msgid "Could not save the image<nl/><filename>%2</filename><nl/>%1"
+msgstr "Не вдалося зберегти зображення<nl/><filename>%2</filename><nl/>%1"
+
+#: scangallery.cpp:891
+#, kde-format
+msgid "Image Save Error"
+msgstr "Помилка збереження зображення"
+
+#: scangallery.cpp:970
+#, kde-format
+msgid "All Files (*)"
+msgstr "усі файли (*)"
+
+#: scangallery.cpp:973
+#, kde-format
+msgctxt "@title:window"
+msgid "Export Image"
+msgstr "Експортування зображення"
+
+#: scangallery.cpp:998
+#, kde-format
+msgid "Import Image File to Gallery"
+msgstr "Імпортувати файл зображення у галерею"
+
+#: scangallery.cpp:1113
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"Do you really want to permanently delete the folder<nl/><filename>%1</"
+"filename><nl/>and all of its contents? It cannot be restored."
+msgstr ""
+"Ви справді бажаєте остаточно вилучити теку<nl/><filename>%1</filename><nl/"
+">та всі дані з неї? Дані буде дуже важко відновити."
+
+#: scangallery.cpp:1118
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"Do you really want to permanently delete the image<nl/><filename>%1</"
+"filename>?<nl/>It cannot be restored."
+msgstr ""
+"Ви справді бажаєте вилучити зображення<nl/><filename>%1</filename>?<nl/>Його "
+"буде дуже важко відновити."
+
+#: scangallery.cpp:1125
+#, kde-format
+msgid "Delete Gallery Item"
+msgstr "Вилучення елемента збірки"
+
+#: scangallery.cpp:1138
+#, kde-kuit-format
+msgctxt "@info"
+msgid "Could not delete the image or folder<nl/><filename>%2</filename><nl/>%1"
+msgstr ""
+"Не вдалося вилучити зображення або теку<nl/><filename>%2</filename><nl/>%1"
+
+#: scangallery.cpp:1141
+#, kde-format
+msgid "File Delete Error"
+msgstr "Помилка вилучення файла"
+
+#: scangallery.cpp:1173
+#, kde-format
+msgid "New Folder"
+msgstr "Нова тека"
+
+#: scangallery.cpp:1174
+#, kde-format
+msgid "Name for the new folder:"
+msgstr "Назва нової теки:"
+
+#: scangallery.cpp:1197
+#, kde-kuit-format
+msgctxt "@info"
+msgid "Could not create the folder<nl/><filename>%2</filename><nl/>%1"
+msgstr "Не вдалося створити теку<nl/><filename>%2</filename><nl/>%1"
+
+#: scangallery.cpp:1199
+#, kde-format
+msgid "Folder Create Error"
+msgstr "Помилка під час створення теки"
+
+#: scanpresetsdialog.cpp:63
+#, kde-format
+msgid "Scan Presets"
+msgstr "Набори параметрів сканування"
+
+#: scanpresetsdialog.cpp:76
+#, kde-format
+msgid "Saved scan preset sets:"
+msgstr "Збережені набори параметрів сканування:"
+
+#: scanpresetsdialog.cpp:80
+#, kde-format
+msgid "Select"
+msgstr "Вибрати"
+
+#: scanpresetsdialog.cpp:82
+#, kde-format
+msgid "Load the selected scan preset set to use as scanner settings"
+msgstr "Завантажити позначений набір параметрів сканування і використати його"
+
+#: scanpresetsdialog.cpp:86
+#, kde-format
+msgid "Save..."
+msgstr "Зберегти…"
+
+#: scanpresetsdialog.cpp:88
+#, kde-format
+msgid "Save the current scanner settings as a new scan preset set"
+msgstr ""
+"Зберегти поточні параметри сканування у форматі нового набору параметрів"
+
+#: scanpresetsdialog.cpp:94
+#, kde-format
+msgid "Delete the selected scan preset set"
+msgstr "Вилучити позначений набір параметрів сканування"
+
+#: scanpresetsdialog.cpp:98
+#, kde-format
+msgid "Edit..."
+msgstr "Змінити…"
+
+#: scanpresetsdialog.cpp:100
+#, kde-format
+msgid "Change the name or description of the selected scan preset set"
+msgstr "Змінити назву або опис позначеного набору параметрів сканування"
+
+#: scanpresetsdialog.cpp:146
+#, kde-format
+msgid "No preset set selected."
+msgstr "Не позначено жодного набору."
+
+#: scanpresetsdialog.cpp:212
+#, kde-format
+msgctxt "New set name, %1=scan mode, %2=resolution"
+msgid "%1, %2 dpi"
+msgstr "%1, %2 т/д"
+
+#: scanpresetsdialog.cpp:289
+#, kde-kuit-format
+msgctxt "@info"
+msgid "Do you really want to delete the set <resource>%1</resource>?"
+msgstr "Ви справді хочете вилучити набір <resource>%1</resource>?"
+
+#: scanpresetsdialog.cpp:290
+#, kde-format
+msgid "Delete Scan Preset Set"
+msgstr "Вилучення набору параметрів сканування"
+
+#: statusbarmanager.cpp:52
+#, kde-format
+msgctxt "@info:status"
+msgid "Ready"
+msgstr "Готово"
+
+#: statusbarmanager.cpp:59
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "The size of the image being viewed in the gallery"
+msgstr "Розмір зображення у перегляді галереї"
+
+#: statusbarmanager.cpp:67
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "The size of the selected area that will be scanned"
+msgstr "Розмір позначеної ділянки для сканування"
+
+#: statusbarmanager.cpp:75
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"<qt>This is the uncompressed size of the scanned image. It tries to warn you "
+"if you try to produce too big an image by changing its background color."
+msgstr ""
+"<qt>Це дані щодо нестисненого розміру сканованого зображення. Програма "
+"попереджатиме вас щодо створення надто великих зображень зміною кольору тла "
+"панелі показу цих даних."
+
+#: statusbarmanager.cpp:108
+#, kde-format
+msgctxt "@info:status"
+msgid "Image: %1"
+msgstr "Зображення: %1"
+
+#: statusbarmanager.cpp:112
+#, kde-format
+msgctxt "@info:status"
+msgid "Scan: %1"
+msgstr "Сканування: %1"
+
+#: thumbview.cpp:96
+#, kde-format
+msgid "Thumbnails"
+msgstr "Мініатюри"
+
+#: thumbview.cpp:107
+#, kde-format
+msgid "Preview Size"
+msgstr "Розмір перегляду"
+
+#: thumbview.cpp:338
+#, kde-format
+msgid "Very Large"
+msgstr "Дуже великий"
+
+#: thumbview.cpp:339
+#, kde-format
+msgid "Large"
+msgstr "Великий"
+
+#: thumbview.cpp:340
+#, kde-format
+msgid "Medium"
+msgstr "Середній"
+
+#: thumbview.cpp:341
+#, kde-format
+msgid "Small"
+msgstr "Малий"
+
+#: thumbview.cpp:342
+#, kde-format
+msgid "Very Small"
+msgstr "Дуже малий"
+
+#: thumbview.cpp:343
+#, kde-format
+msgid "Tiny"
+msgstr "Крихітний"
+
+#~ msgid "PhotoCopier"
+#~ msgstr "Фотокопіювання"
+
+#~ msgid "Print options"
+#~ msgstr "Параметри друку"
+
+#~ msgid "Copies: "
+#~ msgstr "Копії: "
+
+#~ msgid "Scanner Settings: %1"
+#~ msgstr "Параметри сканера: %1"
+
+#~ msgid "Scan size:"
+#~ msgstr "Розмір сканування:"
+
+#~ msgid "Photocopy..."
+#~ msgstr "Фотокопіювання…"
+
+#~ msgid "Loading non-local images is not yet implemented"
+#~ msgstr "Завантаження нелокальних зображень ще не реалізовано"
+
+#~ msgid "Image loading failed"
+#~ msgstr "Не вдалося завантажити зображення"
+
+#~ msgid "Failed to open TIFF file"
+#~ msgstr "Не вдалося відкрити файл TIFF"
+
+#~ msgid "Failed to read TIFF directory"
+#~ msgstr "Не вдалося прочитати каталог TIFF"
+
+#~ msgid "Failed to read TIFF image"
+#~ msgstr "Не вдалося прочитати зображення TIFF"
+
+#~ msgid "TIFF not supported"
+#~ msgstr "Підтримки TIFF не передбачено"
+
+#~ msgid "Print %1"
+#~ msgstr "Друкувати %1"
+
+#~ msgid "OCR has not been performed yet, or the engine has been changed."
+#~ msgstr "Розпізнавання ще не виконано або рушій розпізнавання було змінено."
+
+#~ msgid "unknown"
+#~ msgstr "невідома"
+
+#~ msgid ""
+#~ "This version of Kooka is not compiled with KADMOS support.\n"
+#~ "Please select another OCR engine in the configuration dialog."
+#~ msgstr ""
+#~ "Цю версію Kooka було зібрано без підтримки KADMOS.\n"
+#~ "Будь ласка, виберіть іншій рушій розпізнавання у вікні налаштування."
+
+#~ msgid ""
+#~ "No OCR engine is configured.\n"
+#~ "Please select and configure one in the OCR configuration dialog."
+#~ msgstr ""
+#~ "Не вказано рушія розпізнавання.\n"
+#~ "Будь ласка, вкажіть рушій і налаштуйте його роботу за допомогою "
+#~ "діалогового вікна налаштування розпізнавання."
+
+#~ msgid "GOCR"
+#~ msgstr "GOCR"
+
+#~ msgid "OCRAD"
+#~ msgstr "OCRAD"
+
+#~ msgid "Kadmos"
+#~ msgstr "Kadmos"
+
+#~ msgid ""
+#~ "The path to the GOCR binary is not configured or is not valid.\n"
+#~ "Please enter or check the path in the Kooka configuration."
+#~ msgstr ""
+#~ "Не вказано або вказано помилкову адресу виконуваного файла GOCR.\n"
+#~ "Будь ласка, вкажіть правильну адресу у налаштуваннях Kooka."
+
+#~ msgid "GOCR Software Not Found"
+#~ msgstr "Не знайдено програми GOCR"
+
+#~ msgctxt "@info"
+#~ msgid ""
+#~ "<emphasis>GOCR</emphasis> (sometimes known as <emphasis>JOCR</emphasis>) "
+#~ "is an open source OCR engine, originally started by Joerg&nbsp;"
+#~ "Schulenburg and now with a team of active developers. <nl/><nl/>See <link "
+#~ "url=\"http://jocr.sourceforge.net\">jocr.sourceforge.net</link> for more "
+#~ "information on GOCR."
+#~ msgstr ""
+#~ "<emphasis>GOCR</emphasis> (іноді програму називають <emphasis>JOCR</"
+#~ "emphasis>) — рушій розпізнавання текстів з відкритим кодом, першим "
+#~ "розробником якого є Joerg&nbsp;Schulenburg. Зараз розробку виконує "
+#~ "команда інших розробників. <nl/><nl/>Докладніші дані щодо GOCR можна "
+#~ "знайти на сторінці <link url=\"http://jocr.sourceforge.net\">jocr."
+#~ "sourceforge.net</link>."
+
+#~ msgid ""
+#~ "The path to the OCRAD binary is not configured or is not valid.\n"
+#~ "Please enter or check the path in the Kooka configuration."
+#~ msgstr ""
+#~ "Не вказано або вказано помилкову адресу виконуваного файла OCRAD.\n"
+#~ "Будь ласка, вкажіть правильну адресу у налаштуваннях Kooka."
+
+#~ msgid "OCRAD Binary Not Found"
+#~ msgstr "Не знайдено виконуваний файл OCRAD"
+
+#~ msgctxt "@info"
+#~ msgid ""
+#~ "<emphasis>OCRAD</emphasis> is an free software OCR engine by Antonio&nbsp;"
+#~ "Diaz, part of the GNU&nbsp;Project. <nl/><nl/>Images for OCR should be "
+#~ "scanned in black/white (lineart) mode. Best results are achieved if the "
+#~ "characters are at least 20&nbsp;pixels high.  Problems may arise, as "
+#~ "usual, with very bold or very light or broken characters, or with merged "
+#~ "character groups.<nl/><nl/>See <link url=\"http://www.gnu.org/software/"
+#~ "ocrad/ocrad.html\">www.gnu.org/software/ocrad/ocrad.html</link> for more "
+#~ "information on OCRAD."
+#~ msgstr ""
+#~ "<emphasis>OCRAD</emphasis> — вільне програмне забезпечення для "
+#~ "розпізнавання текстів, створене Antonio&nbsp;Diaz, є частиною проєкту GNU."
+#~ "<nl/><nl/>Зображення для розпізнавання має бути скановано у чорно-білому "
+#~ "(штриховому) режимі. Найкращих результатів можна досягти, якщо висота "
+#~ "символів перевищує 20 пікселів. Як завжди, проблеми можуть бути з дуже "
+#~ "темними та дуже світлими зображеннями, пошкодженими символами або з "
+#~ "групами символів, що перекриваються.<nl/><nl/>Докладніше про OCRAD можна "
+#~ "дізнатися <link url=\"http://www.gnu.org/software/ocrad/ocrad.html\">тут</"
+#~ "link>."
+
+#~ msgctxt "@info"
+#~ msgid ""
+#~ "Running the OCRAD process (<filename>%1</filename>) %2 with exit status "
+#~ "%3.<nl/>More information may be available in its <link url="
+#~ "\"%4\">standard output</link> or <link url=\"%5\">standard error</link> "
+#~ "log files."
+#~ msgstr ""
+#~ "Запуск процесу OCRAD (<filename>%1</filename>) %2 призвів до завершення "
+#~ "роботи зі станом %3.<nl/>Докладніші дані можна знайти у <link url="
+#~ "\"%4\">стандартних виведених даних</link> або у <link url=\"%5\">типовому "
+#~ "файлі повідомлень про помилки</link>."
+
+#~ msgid "crashed"
+#~ msgstr "аварійне завершення"
+
+#~ msgid "failed"
+#~ msgstr "помилка"
+
+#~ msgid "OCR Result Parse Problem"
+#~ msgstr "Не вдалося обробити результати розпізнавання"
+
+#~ msgid "Engine executable:"
+#~ msgstr "Виконуваний файл рушія:"
+
+#~ msgctxt "@info"
+#~ msgid ""
+#~ "The path <filename>%1</filename> is not a valid binary.<nl/>Check the "
+#~ "path and install the program if necessary."
+#~ msgstr ""
+#~ "Адреса <filename>%1</filename> не є адресою виконуваного файла.<nl/"
+#~ ">Перевірте, будь ласка, чи правильно встановлено програму, та/або "
+#~ "встановіть її."
+
+#~ msgid "OCR Engine Not Found"
+#~ msgstr "Не знайдено програми для розпізнавання"
+
+#~ msgctxt "@info"
+#~ msgid ""
+#~ "The program <filename>%1</filename> exists, but is not executable.<nl/"
+#~ ">Check the path and permissions, and/or reinstall the program if "
+#~ "necessary."
+#~ msgstr ""
+#~ "Програма <filename>%1</filename> існує, але не встановлено дозволу на "
+#~ "виконання.<nl/>Перевірте, будь ласка, чи правильно встановлено програму, "
+#~ "та/або встановіть її належним чином."
+
+#~ msgid "OCR Engine Not Executable"
+#~ msgstr "Вказаний рушій розпізнавання не призначено для виконання"
+
+#~ msgctxt "@info"
+#~ msgid ""
+#~ "Kooka will use the new gallery, <link url=\"file:%1\"><filename>%1</"
+#~ "filename></link>.<nl/><nl/>If you wish to add the images from your old "
+#~ "gallery, <link url=\"file:%2\"><filename>%2</filename></link>,<nl/>then "
+#~ "you may do so by simply copying or moving the files."
+#~ msgstr ""
+#~ "Kooka використовуватиме нову галерею, <link url=\"file:%1\"><filename>%1</"
+#~ "filename></link>.<nl/><nl/>Якщо ви бажаєте додати туди зображення зі "
+#~ "старої галереї, <link url=\"file:%2\"><filename>%2</filename></link>,<nl/"
+#~ ">вам достатньо просто скопіювати або пересунути відповідні файли."
+
+#~ msgid "Image Printing"
+#~ msgstr "Друк зображення"
+
+#~ msgid "Screen scaling. That prints according to the screen resolution."
+#~ msgstr "Як на екрані. Друк з роздільною здатністю монітора."
+
+#~ msgid "Original size (calculate from scan resolution)"
+#~ msgstr ""
+#~ "Оригінальний розмір (розрахувати з роздільної здатності при скануванні)"
+
+#~ msgid ""
+#~ "Calculates the print size from the scan resolution. Enter the scan "
+#~ "resolution in the dialog field below."
+#~ msgstr ""
+#~ "Підрахування розміру з роздільної здатності при скануванні.\n"
+#~ "Введіть роздільну здатність, що була при скануванні, у рядок розташований "
+#~ "нижче."
+
+#~ msgid "Scale image to custom dimension"
+#~ msgstr "Масштабувати зображення до вказаного розміру"
+
+#~ msgid "Scale image to fit to page"
+#~ msgstr "Масштабувати розмір зображення до аркуша"
+
+#~ msgid ""
+#~ "Printout uses maximum space on the selected pager. Aspect ratio is "
+#~ "maintained."
+#~ msgstr ""
+#~ "Використовувати весь розмір аркуша при друкуванні.\n"
+#~ "Співвідношення розмірів збережеться."
+
+#~ msgid "Resolutions"
+#~ msgstr "Роздільні здатності"
+
+#~ msgid "Please specify a scan resolution larger than 0"
+#~ msgstr "Будь ласка, вкажіть роздільну здатність більшу за нуль"
+
+#~ msgid ""
+#~ "For custom printing, a valid size should be specified.\n"
+#~ "At least one dimension is zero."
+#~ msgstr ""
+#~ "Потрібно вказати правильний розмір.\n"
+#~ "Щонайменше один з розмірів дорівнює нулю."
+
+#~ msgid "Error creating directory"
+#~ msgstr "Помилка створення каталогу"
+
+#~ msgid ""
+#~ "<qt>The directory<br><filename>%1</filename><br> is not writable, please "
+#~ "check the permissions."
+#~ msgstr ""
+#~ "<qt>Запис до каталогу<br><filename>%1</filename><br>неможливий. Змініть "
+#~ "права доступу до цього каталогу."
+
+#~ msgid "Create Folder..."
+#~ msgstr "Створити теку…"
+
+#~ msgid "Use the global spell configuration"
+#~ msgstr "Використовувати загальні налаштування перевірки правопису"
+
+#~ msgid "<br>%1"
+#~ msgstr "<br>%1"
+
+#~ msgid "Load"
+#~ msgstr "Завантажити"
+
+#~ msgid "Delete"
+#~ msgstr "Вилучити"
+
+#~ msgid "-"
+#~ msgstr "-"
+
+#~ msgid "Query network for available scanners"
+#~ msgstr "Шукати наявні сканери у мережі"
+
+#~ msgid ""
+#~ "Check this if you want a network query for available scanners.\n"
+#~ "Note that this does not mean a query over the entire network but only the "
+#~ "stations configured for SANE."
+#~ msgstr ""
+#~ "Позначте цей пункт, якщо програм слід виконати пошуку сканерів у мережі.\n"
+#~ "Примітка: це не означає, що буде виконано пошук у всій мережі. Програма "
+#~ "шукатиме лише сервери, на яких встановлено SANE."
+
+#~ msgid "Show the scanner selection dialog"
+#~ msgstr "Показати вікно вибору сканера"
+
+#~ msgid "Mirroring image both directions"
+#~ msgstr "Віддзеркалення зображення в обох напрямках"
+
+#~ msgid "<qt>Unable to update the image<br><filename>%2</filename><br><br>%1"
+#~ msgstr ""
+#~ "<qt>Не вдалося оновити зображення<br><filename>%2</filename><br><br>%1"
+
+#~ msgid "Save Error"
+#~ msgstr "Помилка збереження"
+
+#~ msgid "folder"
+#~ msgstr "тека"
+
+#~ msgid "image"
+#~ msgstr "зображення"
+
+#~ msgid "Gallery %1 %2"
+#~ msgstr "Галерея %1 %2"
+
+#~ msgid ""
+#~ "The classifier files for KADMOS could not be found.\n"
+#~ "OCR with KADMOS will not be possible!\n"
+#~ "\n"
+#~ "Change the OCR engine in the preferences dialog."
+#~ msgstr ""
+#~ "Файли класифікаторів для KADMOS не вдалося знайти.\n"
+#~ "ОРС через KADMOS неможливе!\n"
+#~ "\n"
+#~ "Змініть рушій ОРС у вікні налаштування."
+
+#~ msgid "Select the image sub-format"
+#~ msgstr "Виберіть допоміжний формат зображення"
+
+#~ msgid "Do not ask again for the save format if it is defined."
+#~ msgstr "Не питати більше про збереження формату, якщо його визначено."
+
+#~ msgid ""
+#~ "The folder\n"
+#~ "%1\n"
+#~ " does not exist and could not be created;\n"
+#~ "please check the permissions."
+#~ msgstr ""
+#~ "Тека\n"
+#~ "%1\n"
+#~ " не існує та не може бути створена;\n"
+#~ "перевірте, будь ласка, права доступу."
+
+#~ msgid "Enter filename:"
+#~ msgstr "Введіть назву файла:"
+
+#~ msgid "high (or true-) color image, not palleted"
+#~ msgstr "зображення в high- або true-color, без палітри"
+
+#~ msgid " image save OK      "
+#~ msgstr " зображення було успішно збережено      "
+
+#~ msgid " unknown error      "
+#~ msgstr " невідома помилка      "
+
+#~ msgid " parameter wrong    "
+#~ msgstr " неправильний параметр    "
+
+#~ msgid "That would result in the new filename: %1"
+#~ msgstr "Це призведе до створення нової назви файла: %1"
+
+#~ msgid "Format changes of images are currently not supported."
+#~ msgstr "Зміна формату зображень ще не підтримується."
+
+#~ msgid "Wrong Extension Found"
+#~ msgstr "Знайдено помилковий суфікс"
+
+#~ msgid "Cancel"
+#~ msgstr "Скасувати"
+
+#~ msgid "Stop the OCR Process"
+#~ msgstr "Зупинити процес оптичного розпізнавання символів"
+
+#~ msgid "<b>Starting Optical Character Recognition with %1</b><p>"
+#~ msgstr "<b>Запуск оптичного розпізнавання знаків з %1</b><p>"
+
+#~ msgid "Enable spell-checking for validation of the OCR result"
+#~ msgstr "Ввімкнути перевірку правопису для ствердження результатів ОРС"
+
+#~ msgid "Spell-Check Options"
+#~ msgstr "Параметри перевірки правопису"
+
+#~ msgid ""
+#~ "GOCR is an Open Source project for optical character recognition.<P>The "
+#~ "author of gocr is <B>Joerg Schulenburg</B><BR>For more information about "
+#~ "gocr see <A HREF=http://jocr.sourceforge.net>http://jocr.sourceforge.net</"
+#~ "A>"
+#~ msgstr ""
+#~ "GOCR - це вільний програма для оптичного розпізнавання символів.<P>Автор "
+#~ "gocr - <B>Joerg Schulenburg</B> <BR>Більш детальну інформацію про gocr "
+#~ "можна знайти на <A HREF=http://jocr.sourceforge.net>http://jocr."
+#~ "sourceforge.net</A>"
+
+#~ msgid "Using GOCR binary: "
+#~ msgstr "Використовувати програму GOCR: "
+
+#~ msgid "KADMOS OCR/ICR"
+#~ msgstr "KADMOS OCR/ICR"
+
+#~ msgid ""
+#~ "This version of Kooka was linked with the <I>KADMOS OCR/ICR engine</I>, a "
+#~ "commercial engine for optical character recognition.<P>Kadmos is a "
+#~ "product of <B>re Recognition AG</B><BR>For more information about Kadmos "
+#~ "OCR see <A HREF=http://www.rerecognition.com>http://www.rerecognition."
+#~ "com</A>"
+#~ msgstr ""
+#~ "Цю версію Kooka було скомпільовано з <I>KADMOS OCR/ICR</I>, це - "
+#~ "комерційний рушій для оптичного розпізнавання символів.<P>Kadmos "
+#~ "розроблено у <B>re Recognition AG</B><BR>Більш детальну інформацію про "
+#~ "Kadmos можна знайти на <A HREF=http://www.rerecognition.com>http://www."
+#~ "rerecognition.com</A>"
+
+#~ msgid "ocrad"
+#~ msgstr "ocrad"
+
+#~ msgid ""
+#~ "ocrad is a Free Software project for optical character recognition.<p>The "
+#~ "author of ocrad is <b>Antonio Diaz</b><br>For more information about "
+#~ "ocrad see <A HREF=\"http://www.gnu.org/software/ocrad/ocrad.html\">http://"
+#~ "www.gnu.org/software/ocrad/ocrad.html</A><p>Images should be scanned in "
+#~ "black/white mode for ocrad.<br>Best results are achieved if the "
+#~ "characters are at least 20 pixels high.<p>Problems arise, as usual, with "
+#~ "very bold or very light or broken characters, the same with merged "
+#~ "character groups."
+#~ msgstr ""
+#~ "ocrad - це вільний проєкт програми для оптичного розпізнавання символів."
+#~ "<p>Автор - <b>Antonio Diaz</b><br>Більш детальну інформацію про ocrad "
+#~ "можна знайти на <A HREF=\"http://www.gnu.org/software/ocrad/ocrad.html"
+#~ "\">http://www.gnu.org/software/ocrad/ocrad.html</A><p>ocrad потребує "
+#~ "сканування зображень у чорно/білому режимі.<br>Найкращі результати "
+#~ "досягаються для символів більше ніж 20 точок у висоту.<p>Зазвичай, "
+#~ "проблеми виникають з дуже жирними або дуже тонкими чи поламаними "
+#~ "символами, а також з групами об'єднаних символів."
+
+#~ msgid ""
+#~ "The path to the ocrad binary is not configured yet.\n"
+#~ "Please go to the Kooka configuration and enter the path manually."
+#~ msgstr ""
+#~ "Шлях до програми ocrad ще не вказано.\n"
+#~ "Будь ласка, вкажіть його у вікні налаштування."
+
+#~ msgid "Using ocrad binary: "
+#~ msgstr "Використовувати програму ocrad: "
+
+#~ msgid "Mirror Image &Both Directions"
+#~ msgstr "Віддзеркалити зображення в &обох напрямках"
+
+#~ msgid "Open Image in &Graphic Application..."
+#~ msgstr "&Відкрити зображення у графічному редакторі..."
+
+#~ msgid "Enable All Warnings && Messages"
+#~ msgstr "Ввімкнути всі повідомлення та попередження"
+
+#~ msgid "Save OCR Res&ult Text"
+#~ msgstr "Зберегти т&екст, отриманий при ОРС"
+
+#~ msgid "All messages and warnings will now be shown."
+#~ msgstr "Тепер буде показано всі повідомлення та попередження."
+
+#~ msgid "KADMOS engine"
+#~ msgstr "Рушій KADMOS"
+
+#~ msgid "OCRAD engine"
+#~ msgstr "Рушій OCRAD"
+
+#~ msgid "GOCR OCR"
+#~ msgstr "ОРС через GOCR"
+
+#~ msgid "KADMOS OCR"
+#~ msgstr "ОРС через KADMOS"
+
+#~ msgid "The KADMOS OCR engine is available"
+#~ msgstr "Рушій ОРС KADMOS доступний"
+
+#~ msgid "The KADMOS OCR engine is not available in this version of Kooka"
+#~ msgstr "Рушій ОРС KADMOS не доступний в цій версії Kooka"
+
+#~ msgid "Select the %1 binary to use:"
+#~ msgstr "Виберіть програму %1 для використання:"
+
+#~ msgid ""
+#~ "Enter the path to %1, the optical-character-recognition command line tool."
+#~ msgstr ""
+#~ "Введіть шлях до програми %1, програми оптичного розпізнавання знаків з "
+#~ "інтерфейсом командного рядка."
+
+#~ msgid "Kooka Startup Preferences"
+#~ msgstr "Налаштування запуску Kooka"
+
+#~ msgid "Kooka must be restarted for changes in these options to take effect."
+#~ msgstr ""
+#~ "Потрібно перезапустити Kooka, щоб зміни в цих параметрах увійшли в дію."
+
+#~ msgid ""
+#~ "Check this if you once checked 'do not show the scanner selection on "
+#~ "startup',\n"
+#~ "but you want to see it again."
+#~ msgstr ""
+#~ "Позначте, якщо ви колись позначили пункт «не показувати вибір сканера при "
+#~ "запуску»,\n"
+#~ "але знову хочете побачити відповідне вікно."
+
+#~ msgid "Configure Image Save Assistant"
+#~ msgstr "Налаштування помічника збереження зображень"
+
+#~ msgid "Thumbnail Gallery View"
+#~ msgstr "Віконце галереї мініатюр"
+
+#~ msgid ""
+#~ "Here you can configure the appearance of the thumbnail view of your scan "
+#~ "picture gallery."
+#~ msgstr ""
+#~ "Тут можна налаштувати вигляд віконця мініатюр галереї сканованих малюнків."
+
+#~ msgid "Thumbview Background"
+#~ msgstr "Тло віконця мініатюр"
+
+#~ msgid "Thumbnail Size"
+#~ msgstr "Розмір мініатюр"
+
+#~ msgid "Thumbnail Frame"
+#~ msgstr "Рамка мініатюр"
+
+#~ msgid "Thumbnail maximum &width:"
+#~ msgstr "Максимальна &ширина мініатюр:"
+
+#~ msgid "Thumbnail maximum &height:"
+#~ msgstr "Максимальна &висота мініатюр:"
+
+#~ msgid "Thumbnail &frame width:"
+#~ msgstr "Ширина &рамки мініатюр:"
+
+#~ msgid "Frame color &1: "
+#~ msgstr "Колір рамки &1: "
+
+#~ msgid "Frame color &2: "
+#~ msgstr "Колір рамки &2: "
+
+#~ msgid ""
+#~ "The OCR engine settings were changed.\n"
+#~ "Note that Kooka needs to be restarted to change the OCR engine."
+#~ msgstr ""
+#~ "Налаштування рушія ОРС було змінено.\n"
+#~ "Потрібно перезапустити Kooka для зміни рушія ОРС."
+
+#~ msgid "OCR Engine Change"
+#~ msgstr "Зміна рушія ОРС"
+
+#~ msgid "Image Viewer"
+#~ msgstr "Переглядач зображень"
+
+#~ msgid "Gallery:"
+#~ msgstr "Галерея:"
+
+#~ msgid "OCR Result Text"
+#~ msgstr "Текст, отриманий при ОРС"
+
+#~ msgid ""
+#~ "Could not start OCR-Process.\n"
+#~ "Probably there is already one running."
+#~ msgstr ""
+#~ "Не вдалося запустити процес ОРС.\n"
+#~ "Можливо такий процес вже існує."
+
+#~ msgid "Storing image changes"
+#~ msgstr "Збереження змін в зображенні"
+
+#~ msgid "Tool Views"
+#~ msgstr "Віконця засобів"
+
+#~ msgid "Show Image Viewer"
+#~ msgstr "Показувати переглядач зображень"
+
+#~ msgid "Show Preview"
+#~ msgstr "Показувати перегляд"
+
+#~ msgid "Show Thumbnail Window"
+#~ msgstr "Показувати вікно мініатюр"
+
+#~ msgid "Show Scan Parameters"
+#~ msgstr "Показувати параметри сканування"
+
+#~ msgid "Kooka OCR Dictionary Check"
+#~ msgstr "Перевірка словника ОРС Kooka"
+
+#~ msgid ""
+#~ "Spell-checking cannot be started on this system.\n"
+#~ "Please check the configuration"
+#~ msgstr ""
+#~ "Не вдається запустити перевірку правопису на цій системі.\n"
+#~ "Перевірте, будь ласка, налаштування"
+
+#~ msgid "http://kooka.kde.org"
+#~ msgstr "http://kooka.kde.org"
+
+#~ msgid "Image Name"
+#~ msgstr "Назва зображення"
+
+#~ msgid ""
+#~ "Cannot write this image format.\n"
+#~ "Image will not be saved."
+#~ msgstr ""
+#~ "Неможливо записати зображення у цьому\n"
+#~ "форматі. Зображення не буде збережено."
+
+#~ msgid ""
+#~ "Image file is write protected.\n"
+#~ "Image will not be saved."
+#~ msgstr ""
+#~ "Файл захищений від запису.\n"
+#~ "Зображення не буде збережено."
+
+#~ msgid ""
+#~ "Cannot save the image, because the file is local.\n"
+#~ "Kooka will support other protocols later."
+#~ msgstr ""
+#~ "Неможливо зберегти зображення, тому що файл є локальним.\n"
+#~ "Kooka буде підтримувати інші протоколи пізніше."
+
+#~ msgid "Canceled by user"
+#~ msgstr "Скасовано користувачем"

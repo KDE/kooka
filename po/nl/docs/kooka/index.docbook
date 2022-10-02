@@ -1,0 +1,975 @@
+<?xml version="1.0" ?>
+<!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.5-Based Variant V1.1//EN" "dtd/kdedbx45.dtd" [
+  <!ENTITY % addindex "IGNORE">
+  <!ENTITY % Dutch "INCLUDE"
+> <!-- change language only here --> 
+]>
+
+<book id="kooka" lang="&language;">
+
+<bookinfo>
+<title
+>Het handboek van &kooka;</title>
+
+<authorgroup>
+<author
+><firstname
+>Martin</firstname
+> <surname
+>Sommer</surname
+> <affiliation
+><address
+><email
+>msommer@suse.de</email
+></address
+></affiliation
+> 
+</author>
+<othercredit role="developer"
+><firstname
+>Klaas</firstname
+> <surname
+>Freitag</surname
+> <affiliation
+> <address
+><email
+>freitag@suse.de</email
+></address>
+</affiliation>
+<contrib
+>Ontwikkelaar</contrib>
+</othercredit>
+
+&Freek.de.Kruijf;&Ronald.Stroethoff; 
+
+</authorgroup>
+
+<copyright>
+<year
+>2002</year>
+<holder
+>Klaas Freitag, Martin Sommer</holder>
+</copyright>
+
+<legalnotice
+>&FDLNotice;</legalnotice>
+
+<date
+>2017-07-17</date>
+<releaseinfo
+>&kooka; 0.90</releaseinfo>
+
+<abstract
+><para
+>&kooka; stelt u in staat om een afbeeldingsformaat te scannen, op te slaan en te bekijken in elk afbeeldingsformaat dat &Qt; ondersteunt en kan optische tekenherkenning (OCR) uitvoeren.</para
+></abstract
+> 
+
+<keywordset>
+<keyword
+>OCR</keyword>
+<keyword
+>Scanner</keyword>
+</keywordset>
+
+</bookinfo>
+
+<chapter id="introduction">
+<title
+>Inleiding</title>
+
+<para
+>&kooka; is een toepassing die toegang biedt tot scannerhardware met de bibliotheek. <ulink url="http://www.sane-project.org/"
+>SANE</ulink
+> .Daarom moet het <acronym
+>SANE</acronym
+> pakket worden geïnstalleerd om &kooka; te kunnen gebruiken.</para>
+
+<para
+>&kooka; stelt u in staat om een afbeeldingsformaat te scannen, op te slaan en te bekijken in elk afbeeldingsformaat dat &Qt; ondersteunt.</para>
+
+<para
+>Tekstherkenning is ook mogelijk door het gebruik van de open source programma's <ulink url="http://jocr.sourceforge.net/"
+>GOCR</ulink
+> of <ulink url="http://www.gnu.org/software/ocrad/ocrad.html"
+>OCRAD</ulink
+>, of de commerciële <ulink url="https://rerecognition.com/en/products/kadmos-icr-ocr"
+>KADMOS</ulink
+> bibliotheek. U moet tenminste een van deze software pakketten installeren om deze mogelijkheid te kunnen gebruiken. Nadat de tekstherkenning (character recognition) compleet is, zal voor het herkende materiaal automatisch een spellingscontrole starten. U kunt de tekstinhoud in het <guilabel
+>OCR</guilabel
+>-venster bewerken en het daarna als gewone tekst exporteren. </para>
+
+</chapter>
+
+<chapter id="how-to-use">
+<title
+>Instructies voor de toepassing</title>
+
+<para
+>De website <ulink url="http://www.sane-project.org/"
+>http://www.sane-project.org</ulink
+> heeft informatie over ondersteunde scanners. Bekijk deze, indien mogelijk, alvorens een scanner te kopen.</para>
+
+<sect1 id="screen">
+<title
+>Het hoofdvenster van &kooka;</title>
+
+<screenshot
+> 
+<screeninfo
+>Het hoofdvenster van &kooka; </screeninfo
+> 
+<mediaobject
+> 
+<imageobject>
+<imagedata fileref="kooka_mainctrl.png" format="PNG"/></imageobject
+> 
+</mediaobject
+> 
+
+</screenshot
+>  
+
+<para
+>Start &kooka; vanaf een console door gewoon <userinput
+><command
+>kooka</command
+></userinput
+> in te typen of selecteer het in het submenu <guilabel
+>Grafisch</guilabel
+> in de programmastarter. Maak, indien gewenst, een koppeling aan op het bureaublad, die een pictogram van een scanner gebruikt.</para>
+
+<para
+>Om &kooka; alleen voor optische tekenherkenning te gebruiken zonder te verbinden met een scanner, start de toepassing in modus gallery met <userinput
+><command
+>kooka</command
+> <option
+>-g</option
+></userinput
+>.</para>
+
+<para
+>Het hoofdvenster van &kooka; bestaat uit drie gedeeltes. Aan de bovenkant, ziet u zowel pictogrammen als menupanelen. Gebruik de muis om het venster naar wens te vergroten of te verkleinen.</para>
+
+<itemizedlist
+> 
+<listitem>
+<para
+>Het navigatievenster bestaat uit drie tabs, waarmee u kunt schakelen tussen de <guilabel
+>Scannen</guilabel
+>, <guilabel
+>Tekstherkenning (OCR)</guilabel
+> en de geïntegreerde bestandsbeheerder genaamd de <guilabel
+>Galerij</guilabel
+>. De werkmap is te zien in het bovenste gedeelte van het venster samen met de map waar de scan zal worden opgeslagen.</para
+> 
+</listitem>
+
+<listitem>
+<para
+>Maak uw scanner-afhankelijke instellingen, die afhankelijk zijn van de scanner waarmee u verbonden bent, in het venster linksonder. Dit zijn meestal instellingen voor de resolutie, helderheid en contrast, scan-modus (&eg;, kleur, grijs, of binair (lijnen)), en voor gamma waarden.</para>
+
+<para
+>Maak hier eerst uw instellingen. Start daarna de voorbeeldweergave van de scan met <guimenuitem
+>Scanvoorbeeld</guimenuitem
+>. Het resultaat van de scan zal in het rechter paneel verschijnen.</para>
+
+<para
+>Selecteer voor de uiteindelijke afmetingen in het voorbeeldvenster met de muis het gebied dat u wilt scannen.</para>
+
+<para
+>Nadat u dit heeft gedaan, klikt u op <guimenu
+>Scan</guimenu
+> om de selectie die u in het voorbeeld heeft gemaakt te scannen. Na het scannen, krijgt u de vraag in welk bestandsformaat u de afbeelding wilt opslaan en of u dat uw standaard bestandsformaat wilt maken (zonder in de toekomst opnieuw te worden gevraagd).</para>
+
+<note
+><para
+>Als u aangevinkt hebt dat u niet meer gevraagd wilt worden naar het opslagformaat, dan zal de geheugenassistent niet langer verschijnen. Om het formaat in de toekomst te wijzigen, selecteer <menuchoice
+> <guimenu
+>Instellingen</guimenu
+> <guimenuitem
+>Kooka instellen...</guimenuitem
+> <guimenuitem
+>Afbeelding opslaan</guimenuitem
+> <guimenuitem
+>Altijd de opslagassistent gebruiken</guimenuitem
+> </menuchoice
+></para
+></note
+> 
+
+</listitem
+> 
+<listitem>
+<para
+>Het grote venster toont hoe de afbeelding verschijnt na een uiteindelijke scan.</para>
+</listitem>
+</itemizedlist>
+
+</sect1>
+
+</chapter>
+
+<chapter id="commands-configuration">
+<title
+>Commandoreferenties en configuratie</title>
+
+<sect1 id="command">
+<title
+>De menubalk van &kooka;</title>
+
+<sect2>
+<title
+>Het menu Bestand</title>
+
+<variablelist
+> 
+<varlistentry
+> 
+<term>
+<menuchoice
+><guimenu
+>Bestand</guimenu
+> <guimenuitem
+>Nieuwe map...</guimenuitem
+> </menuchoice
+></term
+> 
+<listitem>
+<para
+>Maakt een nieuw map aan om de afbeeldingen uit de <guilabel
+>Kooka-galerij</guilabel
+> in op te slaan.</para>
+</listitem
+> 
+</varlistentry>
+
+<varlistentry
+> 
+<term>
+<menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>S</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Bestand</guimenu
+> <guimenuitem
+>Afbeelding opslaan</guimenuitem
+> </menuchoice
+></term
+> 
+<listitem>
+<para
+>Slaat de in de <guilabel
+>Kooka galerij</guilabel
+> geselecteerde afbeelding op in een andere map op de harde schijf.</para>
+<para
+>Zie de sectie <link linkend="save"
+> Opslaan</link
+> voor meer details.</para>
+</listitem
+> 
+</varlistentry>
+
+<!--
+Import Image...
+Rename Folder F2
+  -->
+<varlistentry
+> 
+<term>
+<menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Shift;<keysym
+>Del</keysym
+></keycombo
+> </shortcut
+> <guimenu
+>Bestand</guimenu
+> <guimenuitem
+>Map verwijderen</guimenuitem
+> </menuchoice
+></term
+> 
+<listitem>
+<para
+>Verwijdert een in de <guilabel
+>Kooka Galerij</guilabel
+> geselecteerde map.</para>
+</listitem
+> 
+</varlistentry>
+
+<!--
+Properties... Alt+Return
+-->
+<varlistentry
+> 
+<term>
+<menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>N</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Bestand</guimenu
+> <guimenuitem
+>Nieuwe afbeelding uit selectie</guimenuitem
+> </menuchoice
+></term
+> 
+<listitem>
+<para
+>Als op de gescande afbeelding meer staat dan u op de uiteindelijke afbeelding wilt laten zien, dan kunt u dit onderdeel gebruiken om uw afbeelding kleiner te maken door op uw afbeelding een gedeelte te markeren en vervolgens dit onderdeel te selecteren. De afbeelding wordt vervolgens overeenkomstig uw markering bijgesneden. U bent wellicht al bekend met dit hulpmiddel uit &kolourpaint;.</para>
+</listitem
+> 
+</varlistentry
+> 
+
+<varlistentry
+> 
+<term>
+<menuchoice
+><guimenu
+>Bestand</guimenu
+> <guimenuitem
+>Afbeelding uitladen</guimenuitem
+> </menuchoice
+></term
+> 
+<listitem>
+<para
+>Verwijder de in de getoonde afbeelding in de Afbeeldingsviewer.</para>
+</listitem
+> 
+</varlistentry>
+
+<varlistentry
+> 
+<term>
+<menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>P</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Bestand</guimenu
+> <guimenuitem
+>Afdrukken</guimenuitem
+> </menuchoice
+></term
+> 
+<listitem>
+<para
+>Drukt de getoonde afbeelding af.</para>
+</listitem
+> 
+</varlistentry>
+
+<varlistentry
+> 
+<term>
+<menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>Q</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Bestand</guimenu
+> <guimenuitem
+>Afsluiten</guimenuitem
+> </menuchoice
+></term
+> 
+<listitem>
+<para
+>&kooka; afsluiten.</para>
+</listitem
+> 
+</varlistentry>
+
+</variablelist>
+</sect2>
+
+<sect2>
+<title
+>Het menu Scan</title>
+
+<variablelist
+> 
+<!--
+Preview F3
+Start Scan F4
+Photocopy... Ctrl+F
+Auto Select Ctrl+A
+Scan Parameters... Ctrl+Shift+S
+-->
+<varlistentry>
+<term>
+<menuchoice
+><guimenu
+>Scan</guimenu
+> <guimenuitem
+>OCR afbeelding</guimenuitem
+> </menuchoice
+></term>
+<listitem>
+<para
+>Start de optical character recognition (<acronym
+>OCR</acronym
+>) van de hele afbeelding met behulp van het herkenningssysteem dat gekozen is op de <guilabel
+>OCR</guilabel
+> pagina in het dialoogvenster voor de instellingen. Dit start het herkennen van de karakters op de afgebeelde afbeelding.</para>
+</listitem
+> 
+</varlistentry
+> 
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Scan</guimenu
+> <guimenuitem
+>OCR selectie...</guimenuitem
+> </menuchoice
+></term
+> 
+<listitem>
+<para
+>Een venster opent voor het herkennen van de karakters. Hier zal echter alleen de karakters worden herkent in het gemarkeerde gebied van de uiteindelijke scan.</para>
+</listitem
+> 
+</varlistentry>
+<!--
+Spell Check OCR Result...
+Save OCR Result Text... Ctrl+U
+-->
+</variablelist
+> 
+</sect2>
+ 
+<sect2>
+<title
+>Het menu Afbeelding</title>
+
+<para
+>De acties uit dit menu zijn ook beschikbaar in het contextmenu van het voorbeeldvenster.</para>
+
+<variablelist
+> 
+
+<varlistentry>
+<term>
+<menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>I</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Afbeelding</guimenu
+> <guimenuitem
+>Schalen naar breedte</guimenuitem
+> </menuchoice
+></term
+> 
+<listitem>
+<para
+>Toont de afbeelding verschaalt naar de breedte van het scherm.</para>
+</listitem
+> 
+</varlistentry>
+
+<varlistentry
+> 
+<term>
+<menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>H</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Afbeelding</guimenu
+> <guimenuitem
+>Schalen naar hoogte</guimenuitem
+> </menuchoice
+></term
+> 
+<listitem>
+<para
+>Toont de afbeelding verschaalt naar de hoogte van het scherm.</para
+> 
+</listitem
+> 
+</varlistentry>
+
+<varlistentry
+> 
+<term>
+<menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>1</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Afbeelding</guimenu
+> <guimenuitem
+>Originele grootte</guimenuitem
+> </menuchoice
+></term
+> 
+<listitem>
+<para
+>Verschaalt terug naar het originele formaat door de afbeelding op het scherm te vergroten of te verkleinen.</para
+> 
+
+<para
+>Er zijn nog meer methoden voor het verschalen van een afbeelding: klik met de &RMB; op de getoonde afbeelding. Negeer de drie eerder genoemde methoden en stel de vergroting zelf in. Dit kunt u ook doen in het <guilabel
+>Voorbeeld</guilabel
+> venter.</para>
+</listitem
+> 
+</varlistentry>
+<!--
+Set Zoom...
+Keep Zoom Setting Ctrl+Z
+-->
+<varlistentry
+> 
+<term>
+<menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>V</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Afbeelding</guimenu
+> <guimenuitem
+>Verticaal spiegelen</guimenuitem
+> </menuchoice
+></term
+> 
+<listitem>
+<para
+>Spiegelt de afbeelding verticaal.</para>
+</listitem
+> 
+</varlistentry
+> 
+
+<varlistentry
+> 
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>M</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Afbeelding</guimenu
+> <guimenuitem
+>Horizontaal spiegelen</guimenuitem
+> </menuchoice>
+</term
+> 
+<listitem>
+<para
+>Spiegelt de afbeelding horizontaal.</para>
+</listitem
+> 
+</varlistentry
+> 
+
+<varlistentry
+> 
+<term>
+<menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>7</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Afbeelding</guimenu
+> <guimenuitem
+>Linksom draaien</guimenuitem
+> </menuchoice>
+</term
+> 
+<listitem>
+<para
+>Roteert de afbeelding negentig graden tegen de klok in.</para>
+</listitem
+> 
+</varlistentry
+> 
+
+<varlistentry
+> 
+<term>
+<menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>9</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Afbeelding</guimenu
+> <guimenuitem
+>Rechtsom draaien</guimenuitem
+> </menuchoice
+></term
+> 
+<listitem>
+<para
+>Roteert de afbeelding negentig graden met de klok mee.</para>
+</listitem>
+</varlistentry
+> 
+
+<varlistentry>
+<term>
+<menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>8</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Afbeelding</guimenu
+> <guimenuitem
+>Afbeelding 180 graden draaien</guimenuitem
+> </menuchoice>
+</term
+> 
+<listitem>
+<para
+>Roteert de afbeelding honderdtachtig graden.</para>
+</listitem
+> 
+</varlistentry
+> 
+</variablelist>
+</sect2>
+
+<sect2>
+<title
+>Het menu Instellingen</title>
+
+<para
+>Naast de standaard &kde;-menu's <guimenu
+>Instellingen</guimenu
+> en <guimenu
+>Help</guimenu
+> zoals beschreven in het hoofdstuk <ulink url="help:/fundamentals/menus.html#menus"
+>Menu</ulink
+> van de documentatie in &kde; Fundamentals heeft &kooka; specifieke menu-items van het programma: </para>
+
+<variablelist>
+
+<varlistentry
+> 
+<term>
+<menuchoice
+><guimenu
+>Instellingen</guimenu
+> <guimenuitem
+>Scanapparaat selecteren...</guimenuitem
+> </menuchoice>
+</term>
+<listitem>
+<para
+>Als u verschillende scanners hebt gebruik deze actie om een scanner te selecteren en gebruik een bepaald apparaat altijd bij opstarten.</para>
+</listitem
+> 
+</varlistentry>
+
+<varlistentry
+> 
+<term>
+<menuchoice
+><guimenu
+>Instellingen</guimenu
+> <guimenuitem
+>Scanapparaat toevoegen</guimenuitem
+> </menuchoice>
+</term
+><listitem>
+<para
+>Een apparaat dat niet automatisch gedetecteerd wordt bij opstarten van &kooka;.</para>
+</listitem
+> 
+</varlistentry>
+
+</variablelist>
+</sect2>
+
+</sect1>
+
+
+<sect1 id="configuration">
+<title
+>&kooka; instellen</title>
+
+<variablelist>
+<varlistentry>
+<term>
+<menuchoice>
+<guilabel
+>Algemeen</guilabel
+> 
+</menuchoice>
+</term
+> 
+<listitem>
+<para
+>De knop in deze sectie gebruiken om alle berichten en vragen opnieuw in te die verborgen zijn door <guibutton
+>Niet opnieuw vragen</guibutton
+>.</para>
+</listitem
+> 
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guilabel
+>Opstarten</guilabel
+> 
+</menuchoice>
+</term
+> 
+<listitem>
+<para
+>U kunt <guilabel
+>De scannerselectiedialoog tonen</guilabel
+> deactiveren, als u slechts één scanner hebt. Als u slechts één computer hebt dan kunt u ook <guilabel
+>Netwerk afzoeken naar beschikbare scanners</guilabel
+> deactiveren. </para>
+</listitem
+> 
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guilabel
+>Afbeeldingopslag</guilabel
+> 
+</menuchoice>
+</term
+> 
+<listitem>
+<para
+><guilabel
+>Altijd de Opslagassistent gebruiken</guilabel
+> <guilabel
+>Naar bestandsnaam vragen bij opslaan</guilabel
+> <guilabel
+>Voordat de scan start</guilabel
+> / <guilabel
+>Nadat de scan is beëindigd</guilabel
+>. </para>
+</listitem
+> 
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guilabel
+>Galerij &amp; miniaturen</guilabel
+> 
+</menuchoice>
+</term
+> 
+<listitem>
+<para
+>Hier kunt u de afmetingen van de miniaturen instellen; evenals de achtergrond. U wilt wellicht bijvoorbeeld de afmetingen van de miniaturen verkleinen als u vele pagina's van een boek gaat scannen. </para>
+<para
+>In de sectie <guilabel
+>Afbeeldingsgalerij</guilabel
+> selecteert u hoe en waar de recente mappen te tonen.</para>
+</listitem
+> 
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guilabel
+>OCR</guilabel
+> 
+</menuchoice>
+</term
+> 
+<listitem>
+<para
+>Selecteer de OCR-engine en het pad naar het uitvoerbare programma. </para>
+</listitem
+> 
+</varlistentry>
+
+</variablelist>
+
+</sect1>
+</chapter>
+
+<chapter id="save">
+<title
+>Opslaan</title>
+<subtitle
+>Meer over het opslaan van afbeeldingen</subtitle>
+
+<para
+>De methode voor opslaan van een afbeelding is een beetje anders in &kooka; dan in veel andere toepassingen. Klik op het tabblad <guilabel
+>Galerij</guilabel
+> om een kleine bestandsbrowser te openen. Dit is de map <filename class="directory"
+>~/Documents/KookaGallery</filename
+>. In het venster wordt uw huidige submap in de galerij getoond. Dit is waar alle gescande afbeeldingen eerst als bestanden worden opgeslagen. Wanneer &kooka; voor de eerste keer wordt gestart zult u slechts slechts de map <filename class="directory"
+>KookaGallery</filename
+> zien. Maak submappen door <mousebutton
+>rechts</mousebutton
+> te klikken in deze map. De geselecteerde map, geaccentueerd in blauw, is de eerste opslaglocatie van de gescande afbeeldingen. De scans worden in oplopende numerieke volgorde zoals in <filename
+>kscan_0001</filename
+> en <filename
+>kscan_0002</filename
+> gelabeld.</para>
+
+<para
+>Om een afbeelding permanent op te slaan, gebruikt u <guimenuitem
+>Afbeelding hernoemen</guimenuitem
+> geeft u een nieuw naam en de juiste extensie horend bij het bij het scannen gekozen afbeeldingsformaat. Als u een andere extensie invoert, dan krijgt u een melding dat het niet overeenkomt met het gescande formaat. Alhoewel u het nog steeds onder deze naam kan opslaan, zal het originele formaat houden. Op dit moment, is <quote
+>On-the-fly</quote
+> conversie niet aanwezig.</para
+><para
+>Als u niet deze methode voor het beheren van uw afbeeldingen in <filename class="directory"
+>~/Documents/KookaGallery/</filename
+> wilt gebruiken, dan kunt natuurlijk ze op een andere locatie opslaan. Om dit te doen, klikt u met de &RMB; op de naam van de afbeelding en selecteert <guilabel
+>Afbeelding opslaan</guilabel
+>. Kies hier het gewenste pad. Daarnaast sluit of verwijdert u de afbeeldingen hier.</para>
+
+<para
+>Om andere afbeeldingen in de galerij op te nemen, gebruikt u <menuchoice
+> <guimenu
+>Bestand</guimenu
+><guimenuitem
+>Afbeelding importeren</guimenuitem
+> </menuchoice
+> of u voegt ze toe door verslepen met de muis. Open in de bestandsbeheerder de map met de gewenste afbeeldingen. Voeg ze dan aan de &kooka; galerij toe door ze naar de galerij te verslepen.</para>
+
+</chapter>
+
+<chapter id="ocr">
+<title
+>Tekstherkenning</title>
+
+<para
+>Zoals al genoemd moet <application
+>gocr</application
+> geïnstalleerd zijn. Scan een voorbeeld van uw document in grijs of kleur. U kunt alleen in binaire modus scannen als u een puur wit vel papier met zwarte afdruk hebt. Accentueer vervolgens de te herkennen tekst in het voorbeeldvenster. Doe daarna uw uiteindelijke scan in binaire modus met <guibutton
+>Scan</guibutton
+>.</para>
+
+<para
+>Klik nu op de <inlinemediaobject
+><imageobject
+><imagedata fileref="ocr-select.png" format="PNG"/> </imageobject
+></inlinemediaobject
+> pictogram in de werkbalk, <guilabel
+>Tekstherkenning op afbeelding</guilabel
+>, of selecteer dit item in het <guilabel
+>Scan</guilabel
+> menu. Wijzig bij de eerste poging niet de standaardwaarden in het te voorschijn komende <acronym
+>OCR</acronym
+> venster. Deze zijn meestal toepasselijk en zijn geschikt voor de meeste situaties. Klik nu op <guimenuitem
+>Tekstherkenning op selectie</guimenuitem
+>. U krijgt nu een venster zien met de resultaten van de <acronym
+>OCR</acronym
+>. De kwaliteit is erg afhankelijk van de kwaliteit van het document zelf. </para>
+
+<screenshot
+> <screeninfo
+>Het gocr venster</screeninfo
+> <mediaobject>
+<imageobject
+><imagedata fileref="kooka_gocr.png"
+format="PNG"/></imageobject
+> </mediaobject
+> </screenshot>
+<para
+>Nadat de tekstherkenning voltooid is, zal voor het herkende materiaal een spellingscontrole worden opgestart. U kunt de inhoud van het <guilabel
+>OCR</guilabel
+> venster bewerken en het als gewone tekst exporteren. </para>
+<para
+>Na de uiteindelijke scan, kunt u ook in het venster rechts een selectie maken om alleen maar een gedeelte van de tekst te laden of afbeelding naar <acronym
+>OCR</acronym
+> te laden. Klik vervolgens op de <inlinemediaobject
+><imageobject
+><imagedata fileref="ocr-select.png" format="PNG"/> </imageobject
+></inlinemediaobject
+> pictogram of het menuitem in <guimenuitem
+>Tekstherkenning op selectie</guimenuitem
+>. Ga nu verder zoals in de vorige sectie beschreven.</para>
+
+<screenshot
+> 
+<screeninfo
+>De resultaten van de <acronym
+>OCR</acronym
+></screeninfo
+> 
+<mediaobject
+> 
+<imageobject>
+<imagedata fileref="kooka_gocr_result.png"
+format="PNG"/></imageobject
+> 
+</mediaobject
+> 
+</screenshot>
+
+</chapter>
+
+<chapter id="credits">
+<title
+>Dankbetuigingen en licentie</title>
+ 
+<para
+>&kooka;</para>
+
+<para
+>Copyright voor het programma 2000-2010, de ontwikkelaars van &kooka;</para>
+
+<para
+>Copyright voor de documentatie 2002 Martin Sommer <email
+>msommer@suse.de</email
+></para>
+
+&meld.fouten;&vertaling.freek; &underFDL; &underGPL; </chapter
+>  
+</book>
+

@@ -1,0 +1,991 @@
+<?xml version="1.0" ?>
+<!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.5-Based Variant V1.1//EN" "dtd/kdedbx45.dtd" [
+  <!ENTITY % addindex "IGNORE">
+  <!ENTITY % Swedish "INCLUDE"
+> <!-- change language only here --> 
+]>
+
+<book id="kooka" lang="&language;">
+
+<bookinfo>
+<title
+>Handbok &kooka;</title>
+
+<authorgroup>
+<author
+><firstname
+>Martin</firstname
+> <surname
+>Sommer</surname
+> <affiliation
+><address
+><email
+>msommer@suse.de</email
+></address
+></affiliation
+> 
+</author>
+<othercredit role="developer"
+><firstname
+>Klaas</firstname
+> <surname
+>Freitag</surname
+> <affiliation
+> <address
+><email
+>freitag@suse.de</email
+></address>
+</affiliation>
+<contrib
+>Utvecklare</contrib>
+</othercredit>
+
+<othercredit role="translator"
+> <firstname
+>Stefan</firstname
+> <surname
+>Asserhäll</surname
+> <affiliation
+><address
+><email
+>stefan.asserhall@bredband.net</email
+></address
+></affiliation
+> <contrib
+>Översättare</contrib
+></othercredit
+> 
+
+</authorgroup>
+
+<copyright>
+<year
+>2002</year>
+<holder
+>Klaas Freitag, Martin Sommer</holder>
+</copyright>
+
+<legalnotice
+>&FDLNotice;</legalnotice>
+
+<date
+>2017-07-17</date>
+<releaseinfo
+>&kooka; 0.90</releaseinfo>
+
+<abstract
+><para
+>&kooka; låter dig läsa in, spara och visa bilder med alla bildformat som &Qt; stöder, och kan utföra optisk teckentydning.</para
+></abstract
+> 
+
+<keywordset>
+<keyword
+>Optisk teckentydning</keyword>
+<keyword
+>Bildläsare</keyword>
+</keywordset>
+
+</bookinfo>
+
+<chapter id="introduction">
+<title
+>Inledning</title>
+
+<para
+>&kooka; är ett program som möjliggör enkel inläsning av bilder med <ulink url="http://www.sane-project.org/"
+>SANE-biblioteket</ulink
+>. Därför måste <acronym
+>SANE</acronym
+>-paketet vara installerat för att använda &kooka;.</para>
+
+<para
+>&kooka; låter dig läsa in, spara och visa bilder med alla bildformat som &Qt; stöder.</para>
+
+<para
+>Teckentydning tillhandahålls också genom att använda programmen <ulink url="http://jocr.sourceforge.net/"
+>GOCR</ulink
+> eller <ulink url="http://www.gnu.org/software/ocrad/ocrad.html"
+>OCRAD</ulink
+> med öppen källkod, eller det kommersiella biblioteket <ulink url="https://rerecognition.com/en/products/kadmos-icr-ocr/"
+>KADMOS</ulink
+>. Du måste installera åtminstone ett av dessa programvarupaket för att använda funktionen. Efter teckentydning är färdig, startas automatiskt en stavningskontroll för det igenkända materialet. Du kan redigera innehållet i fönstret <guilabel
+>Optisk teckentydning</guilabel
+> och exportera det som vanlig text. </para>
+
+</chapter>
+
+<chapter id="how-to-use">
+<title
+>Användningsinstruktioner</title>
+
+<para
+>Webbplatsen <ulink url="http://www.sane-project.org/"
+>http://www.sane-project.org</ulink
+> har information om bildläsare som stöds. Titta på den innan du köper en bildläsare, om möjligt.</para>
+
+<sect1 id="screen">
+<title
+>&kooka;s huvudfönster</title>
+
+<screenshot
+> 
+<screeninfo
+>The &kooka; Main Window </screeninfo
+> 
+<mediaobject
+> 
+<imageobject>
+<imagedata fileref="kooka_mainctrl.png" format="PNG"/></imageobject
+> 
+</mediaobject
+> 
+
+</screenshot
+>  
+
+<para
+>Starta &kooka; från en terminal genom att helt enkelt skriva in <userinput
+><command
+>kooka</command
+></userinput
+> eller välj det i startprogrammet under <guilabel
+>Grafik</guilabel
+>. Skapa en länk på skrivbordet, som använder en bildläsarikon, om du vill.</para>
+
+<para
+>För att bara använda &kooka; för optisk teckentydning utan anslutning till en bildläsare, starta programmet i gelleriläge med <userinput
+><command
+>kooka</command
+> <option
+>-g</option
+></userinput
+>.</para>
+
+<para
+>Huvudfönstret i &kooka; består av tre rutor. Överst, finns både en menyrad och verktygsrad med ikoner. Använd musen för att förstora eller förminska rutorna enligt behov.</para>
+
+<itemizedlist
+> 
+<listitem>
+<para
+>Navigeringsfönstret består av tre flikar som låter dig byta mellan <guilabel
+>Läs in bild</guilabel
+>, <guilabel
+>Optisk teckentydning</guilabel
+> och en integrerad filbläddrare, benämnd <guilabel
+>Galleri</guilabel
+>. Arbetskatalogen visas i den övre delen av fönstret tillsammans med katalogen där den inlästa bilden kommer att sparas.</para
+> 
+</listitem>
+
+<listitem>
+<para
+>Gör de bildläsarberoende inställningarna som beror på vilken bildläsare du använder, i nedre vänstra rutan. Oftast är detta inställningar för upplösning, ljusstyrka och kontrast, inläsningsläge (t.ex. färg, gråskala eller svartvitt), och gammavärden.</para>
+
+<para
+>Anpassa först inställningarna här. Starta därefter inläsningen av förhandsgranskningsbilden med <guimenuitem
+>Förhandsgranskning</guimenuitem
+>. Resultatet av inläsningen visas då i rutan till höger.</para>
+
+<para
+>Markera området att läsa in i själva förhandsgranskningsbilden med musen för att definiera den slutliga dimensionen.</para>
+
+<para
+>Efter det här är klart, klicka på <guimenu
+>Läs in</guimenu
+> för att läsa in markeringen som gjorts i förhandsgranskningen. Efter inläsningen blir du tillfrågad om formatet som bilden ska sparas med, och om du vill att detta format ska vara standardformat (så att du slipper bli tillfrågad om att bekräfta ditt val i fortsättningen).</para>
+
+<note
+><para
+>Om du markerade att du inte vill bli tillfrågad om formatet att spara med, kommer minnesassistenten inte längre visas. För att ändra format någon gång senare, välj <menuchoice
+> <guimenu
+>Inställningar</guimenu
+> <guimenuitem
+>Anpassa Kooka...</guimenuitem
+> <guimenuitem
+>Spara bild</guimenuitem
+> <guimenuitem
+>Använd alltid assistent för att spara</guimenuitem
+> </menuchoice
+></para
+></note
+> 
+
+</listitem
+> 
+<listitem>
+<para
+>Det stora fönstret visar hur bilden ser ut efter den slutliga inläsningen.</para>
+</listitem>
+</itemizedlist>
+
+</sect1>
+
+</chapter>
+
+<chapter id="commands-configuration">
+<title
+>Kommandoreferens och inställning</title>
+
+<sect1 id="command">
+<title
+>Menyraden i &kooka;</title>
+
+<sect2>
+<title
+>Menyn Arkiv</title>
+
+<variablelist
+> 
+<varlistentry
+> 
+<term>
+<menuchoice
+><guimenu
+>Arkiv</guimenu
+> <guimenuitem
+>Ny katalog...</guimenuitem
+> </menuchoice
+></term
+> 
+<listitem>
+<para
+>Skapa en ny katalog som ska innehålla bilderna i <guilabel
+>Kookas galleri</guilabel
+>.</para>
+</listitem
+> 
+</varlistentry>
+
+<varlistentry
+> 
+<term>
+<menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>S</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Arkiv</guimenu
+> <guimenuitem
+>Spara bild</guimenuitem
+> </menuchoice
+></term
+> 
+<listitem>
+<para
+>Spara bilden som är markerad inne i <guilabel
+>Kookas galleri</guilabel
+> i en annan katalog på hårddisken.</para>
+<para
+>Se avsnittet <link linkend="save"
+>Spara</link
+> för mer information.</para>
+</listitem
+> 
+</varlistentry>
+
+<!--
+Import Image...
+Rename Folder F2
+  -->
+<varlistentry
+> 
+<term>
+<menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Shift;<keysym
+>Del</keysym
+></keycombo
+> </shortcut
+> <guimenu
+>Arkiv</guimenu
+> <guimenuitem
+>Ta bort katalog</guimenuitem
+> </menuchoice
+></term
+> 
+<listitem>
+<para
+>Ta bort katalogen som är markerad i <guilabel
+>Kookas galleri</guilabel
+>.</para>
+</listitem
+> 
+</varlistentry>
+
+<!--
+Properties... Alt+Return
+-->
+<varlistentry
+> 
+<term>
+<menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>N</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Arkiv</guimenu
+> <guimenuitem
+>Ny bild från markering</guimenuitem
+> </menuchoice
+></term
+> 
+<listitem>
+<para
+>Om den inlästa bilden innehåller mer än du vill ska vara med i den slutliga bilden, använd det här verktyget för att beskära bilden genom att först markera i den större bilden som visas till höger, och därefter använda det här verktyget. Bilden beskärs enligt markeringen. Du kanske redan är bekant med den här funktionen från beskärningsverktyget i &kolourpaint;.</para>
+</listitem
+> 
+</varlistentry
+> 
+
+<varlistentry
+> 
+<term>
+<menuchoice
+><guimenu
+>Arkiv</guimenu
+> <guimenuitem
+>Ladda ur bild</guimenuitem
+> </menuchoice
+></term
+> 
+<listitem>
+<para
+>Ta bort bilden som visas i Bildvisaren.</para>
+</listitem
+> 
+</varlistentry>
+
+<varlistentry
+> 
+<term>
+<menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>P</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Arkiv</guimenu
+> <guimenuitem
+>Skriv ut</guimenuitem
+> </menuchoice
+></term
+> 
+<listitem>
+<para
+>Skriver ut bilden som visas.</para>
+</listitem
+> 
+</varlistentry>
+
+<varlistentry
+> 
+<term>
+<menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>Q</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Arkiv</guimenu
+> <guimenuitem
+>Avsluta</guimenuitem
+> </menuchoice
+></term
+> 
+<listitem>
+<para
+>Avsluta &kooka;.</para>
+</listitem
+> 
+</varlistentry>
+
+</variablelist>
+</sect2>
+
+<sect2>
+<title
+>Menyn Läs in</title>
+
+<variablelist
+> 
+<!--
+Preview F3
+Start Scan F4
+Photocopy... Ctrl+F
+Auto Select Ctrl+A
+Scan Parameters... Ctrl+Shift+S
+-->
+<varlistentry>
+<term>
+<menuchoice
+><guimenu
+>Läs in</guimenu
+> <guimenuitem
+>Bild för optisk teckentydning...</guimenuitem
+> </menuchoice
+></term>
+<listitem>
+<para
+>Starta optisk teckentydning (<acronym
+>OCR</acronym
+>) av hela bilden med systemet för teckentydning definierat på sidan <guilabel
+>Optisk teckentydning</guilabel
+> i inställningsdialogrutan. Det startar teckentydning av förhandsgranskningsbilden.</para>
+</listitem
+> 
+</varlistentry
+> 
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Läs in</guimenu
+> <guimenuitem
+>Markering för optisk teckentydning...</guimenuitem
+> </menuchoice
+></term
+> 
+<listitem>
+<para
+>Ett fönster visas för teckentydningen. Här görs dock teckentydningen bara för området som är markerad i den slutliga inläsningen.</para>
+</listitem
+> 
+</varlistentry>
+<!--
+Spell Check OCR Result...
+Save OCR Result Text... Ctrl+U
+-->
+</variablelist
+> 
+</sect2>
+ 
+<sect2>
+<title
+>Menyn Bild</title>
+
+<para
+>Åtgärderna i den här menyn är också tillgängliga i förhandsgranskningsfönstrets sammanhangsberoende meny.</para>
+
+<variablelist
+> 
+
+<varlistentry>
+<term>
+<menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>I</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Bild</guimenu
+> <guimenuitem
+>Skala om till bredden</guimenuitem
+> </menuchoice
+></term
+> 
+<listitem>
+<para
+>Det här skalar bilden proportionellt i det stora rutan till bredden på skärmen.</para>
+</listitem
+> 
+</varlistentry>
+
+<varlistentry
+> 
+<term>
+<menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>H</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Bild</guimenu
+> <guimenuitem
+>Skala om till höjden</guimenuitem
+> </menuchoice
+></term
+> 
+<listitem>
+<para
+>Skalar bilden proportionellt till höjden på skärmen.</para
+> 
+</listitem
+> 
+</varlistentry>
+
+<varlistentry
+> 
+<term>
+<menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>1</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Bild</guimenu
+> <guimenuitem
+>Originalstorlek</guimenuitem
+> </menuchoice
+></term
+> 
+<listitem>
+<para
+>Återställer den ursprungliga inlästa storleken genom att förminska eller förstora bilden som visas.</para
+> 
+
+<para
+>Det finns ytterligare sätt att skala en bild: <mousebutton
+>höger</mousebutton
+>klicka på bildvisningen. Definiera om de tre nämnda alternativen och ställ in förstoringsgraden. Det här kan också göras i förhandsgranskningsfönstret.</para>
+</listitem
+> 
+</varlistentry>
+<!--
+Set Zoom...
+Keep Zoom Setting Ctrl+Z
+-->
+<varlistentry
+> 
+<term>
+<menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>V</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Bild</guimenu
+> <guimenuitem
+>Spegla vertikalt</guimenuitem
+> </menuchoice
+></term
+> 
+<listitem>
+<para
+>Vänd bilden vertikalt.</para>
+</listitem
+> 
+</varlistentry
+> 
+
+<varlistentry
+> 
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>M</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Bild</guimenu
+> <guimenuitem
+>Spegla horisontellt</guimenuitem
+> </menuchoice>
+</term
+> 
+<listitem>
+<para
+>Vänd bilden horisontellt.</para>
+</listitem
+> 
+</varlistentry
+> 
+
+<varlistentry
+> 
+<term>
+<menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>7</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Bild</guimenu
+> <guimenuitem
+>Rotera moturs</guimenuitem
+> </menuchoice>
+</term
+> 
+<listitem>
+<para
+>Roterar bilden 90 grader moturs.</para>
+</listitem
+> 
+</varlistentry
+> 
+
+<varlistentry
+> 
+<term>
+<menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>9</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Bild</guimenu
+> <guimenuitem
+>Rotera medurs</guimenuitem
+> </menuchoice
+></term
+> 
+<listitem>
+<para
+>Roterar bilden 90 grader medurs.</para>
+</listitem>
+</varlistentry
+> 
+
+<varlistentry>
+<term>
+<menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>8</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Bild</guimenu
+> <guimenuitem
+>Rotera bild 180 grader</guimenuitem
+> </menuchoice>
+</term
+> 
+<listitem>
+<para
+>Roterar bilden 180 grader.</para>
+</listitem
+> 
+</varlistentry
+> 
+</variablelist>
+</sect2>
+
+<sect2>
+<title
+>Menyn Inställningar</title>
+
+<para
+>Förutom de vanliga menyerna <guimenu
+>Inställningar</guimenu
+> och <guimenu
+>Hjälp</guimenu
+> i &kde; som beskrivs i kapitlet <ulink url="help:/fundamentals/menus.html"
+>Meny</ulink
+> i dokumentet &kde;:s grunder, har &kooka; följande programspecifika menyalternativ: </para>
+
+<variablelist>
+
+<varlistentry
+> 
+<term>
+<menuchoice
+><guimenu
+>Inställningar</guimenu
+> <guimenuitem
+>Välj bildläsarenhet...</guimenuitem
+> </menuchoice>
+</term>
+<listitem>
+<para
+>Om du har flera bildläsare, använd alternativet för att välja en bildläsare och att alltid använda en viss enhet vid start.</para>
+</listitem
+> 
+</varlistentry>
+
+<varlistentry
+> 
+<term>
+<menuchoice
+><guimenu
+>Inställningar</guimenu
+> <guimenuitem
+>Lägg till bildläsarenhet...</guimenuitem
+> </menuchoice>
+</term
+><listitem>
+<para
+>Lägg till en enhet som inte automatiskt detekteras av &kooka; vid start.</para>
+</listitem
+> 
+</varlistentry>
+
+</variablelist>
+</sect2>
+
+</sect1>
+
+
+<sect1 id="configuration">
+<title
+>Anpassa Kooka</title>
+
+<variablelist>
+<varlistentry>
+<term>
+<menuchoice>
+<guilabel
+>Allmänt</guilabel
+> 
+</menuchoice>
+</term
+> 
+<listitem>
+<para
+>Använd knappen i den här sektionen för att åter aktivera alla meddelanden och frågor som har dolts genom att välja <guibutton
+>Fråga inte igen</guibutton
+>.</para>
+</listitem
+> 
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guilabel
+>Start</guilabel
+> 
+</menuchoice>
+</term
+> 
+<listitem>
+<para
+>Du kanske vill avmarkera <guilabel
+>Visa dialogrutan för val av bildläsare</guilabel
+>, om du bara har en bildläsare. Om du bara har en dator, kanske du också vill avmarkera <guilabel
+>Sök efter bildläsarenheter på nätverket</guilabel
+>. </para>
+</listitem
+> 
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guilabel
+>Spara bilder</guilabel
+> 
+</menuchoice>
+</term
+> 
+<listitem>
+<para
+><guilabel
+>Använd alltid assistent för att spara</guilabel
+>: <guilabel
+>Fråga efter filnamn  när bilden sparas</guilabel
+> <guilabel
+>Innan inläsningen börjar</guilabel
+> / <guilabel
+>Efter inläsningen är avslutad</guilabel
+>. </para>
+</listitem
+> 
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guilabel
+>Galleri och miniatyrbilder</guilabel
+> 
+</menuchoice>
+</term
+> 
+<listitem>
+<para
+>Här kan du anpassa miniatyrbildernas storlek, samt bakgrunden. Du kanske till exempel vill minska storleken på miniatyrbilderna om du läser in många sidor från en bok. </para>
+<para
+>Välj hur och var senaste kataloger visas i sektionen <guilabel
+>Bildgalleri</guilabel
+>.</para>
+</listitem
+> 
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guilabel
+>Optisk teckentydning</guilabel
+> 
+</menuchoice>
+</term
+> 
+<listitem>
+<para
+>Välj optiskt teckentydningsprogram och sökvägen till den körbara filen. </para>
+</listitem
+> 
+</varlistentry>
+
+</variablelist>
+
+</sect1>
+</chapter>
+
+<chapter id="save">
+<title
+>Spara</title>
+<subtitle
+>Mer om att spara bilder</subtitle>
+
+<para
+>Sättet att spara en bild skiljer sig lite grand i &kooka; jämfört med många andra program. Klicka på fliken <guilabel
+>Galleri</guilabel
+> för att öppna en liten filbläddrare. Det är katalogen <filename class="directory"
+>~/Documents/KookaGallery</filename
+>. I fönstret visas den nuvarande underkatalogen i galleriet. Här sparas först alla inlästa bilder som filer. När du startar &kooka; för första gången, ser du bara <filename class="directory"
+>KookaGallery</filename
+>. Skapa underkataloger genom att <mousebutton
+>höger</mousebutton
+>klicka på katalogen. Den valda katalogen, som markeras med blått, är det första stället där inlästa bilder lagras. De lagrade bilderna namnges i stigande nummerordning, enligt <filename
+>kscan_0001</filename
+> och <filename
+>kscan_0002</filename
+>.</para>
+
+<para
+>För att permanent spara en bild, använd <guimenuitem
+>Byt namn på bild</guimenuitem
+> och ge den ett nytt namn och passande filändelse för bildformatet som valdes vid inläsning. Om du skriver in en annan filändelse, får du ett meddelande om att den inte stämmer med det inlästa formatet. Även om du fortfarande kan spara bilden med det namnet, behåller den sitt ursprungliga format. För närvarande erbjuds inte konvertering <quote
+>i farten</quote
+>.</para
+><para
+>Om du inte vill använda den här metoden att hantera bilder i <filename class="directory"
+>~/Documents/KookaGallery/</filename
+>, kan du förstås spara dem på en annan plats. För att göra detta, <mousebutton
+>höger</mousebutton
+>klicka på bildnamnet och välj <guilabel
+>Spara bild</guilabel
+>. Välj vilken sökväg som helst här. Dessutom, stäng eller ta bort bilder permanent här.</para>
+
+<para
+>För att lägga till andra bilder i galleriet, använd <menuchoice
+><guimenu
+>Arkiv</guimenu
+> <guimenuitem
+>Importera bild</guimenuitem
+></menuchoice
+> eller lägg till dem genom att dra och släppa. Öppna filhanteraren med katalogen som innehåller de önskade bilderna. Lägg sedan till dem i &kooka;s galleri genom att dra och släppa dem i galleriet.</para>
+
+</chapter>
+
+<chapter id="ocr">
+<title
+>Teckentydning</title>
+
+<para
+>Som tidigare nämnts, måste programmet <application
+>gocr</application
+> vara installerat. Förhandsgranska dokumentet i gråskala eller färg. Du kan bara läsa in i svart-vitt om du har ett rent vitt pappersark med svart tryck. Markera därefter texten för igenkänning i förhandsgranskningsfönstret. Gör därefter den slutliga inläsningen i svart-vitt läge med <guibutton
+>Läs in</guibutton
+>.</para>
+
+<para
+>Klicka nu på den ikonen <inlinemediaobject
+><imageobject
+><imagedata fileref="ocr-select.png" format="PNG"/></imageobject
+></inlinemediaobject
+> i verktygsraden, <guilabel
+>Markering för optisk teckentydning</guilabel
+> eller välj alternativet i menyn <guilabel
+>Läs in</guilabel
+>. Ändra inte de förvalda inställningarna som visas i fönstret <acronym
+>Optisk teckentydning</acronym
+> vid det första försöket. De passar oftast bra och uppfyller de flesta behov. Klicka nu på <guimenuitem
+>Starta optisk teckentydning</guimenuitem
+>. Du ser nu ett fönster som innehåller resultatet av teckentydningen. Kvaliteten beror nästan helt och hållet på själva dokumentet. </para>
+
+<screenshot
+> <screeninfo
+>Fönstret gocr</screeninfo
+> <mediaobject>
+<imageobject
+><imagedata fileref="kooka_gocr.png"
+format="PNG"/></imageobject
+> </mediaobject
+> </screenshot>
+<para
+>Efter teckentydning är färdig, starta en stavningskontroll av det igenkända materialet. Du kan redigera innehållet i fönstret <guilabel
+>Optisk teckentydning</guilabel
+> och exportera det som vanlig text. </para>
+<para
+>Efter den slutliga inläsningen, markera en del av bilden som visas till höger för att bara ladda en del av texten eller bilden till teckentydningen. Klicka därefter på ikonen <inlinemediaobject
+><imageobject
+><imagedata fileref="ocr-select.png" format="PNG"/></imageobject
+></inlinemediaobject
+>, eller klicka på <guimenuitem
+>Markering för optisk teckentydning</guimenuitem
+> i menyn. Fortsätt därefter enligt beskrivningen i föregående avsnitt.</para>
+
+<screenshot
+> 
+<screeninfo
+>Resultat av <acronym
+>OCR</acronym
+></screeninfo
+> 
+<mediaobject
+> 
+<imageobject>
+<imagedata fileref="kooka_gocr_result.png"
+format="PNG"/></imageobject
+> 
+</mediaobject
+> 
+</screenshot>
+
+</chapter>
+
+<chapter id="credits">
+<title
+>Tack till och licens</title>
+ 
+<para
+>&kooka;</para>
+
+<para
+>Copyright av programmet 2000-2010, &kooka;-utvecklarna och -bidragsgivarna</para>
+
+<para
+>Copyright för dokumentation 2002 Martin Sommer <email
+>msommer@suse.de</email
+></para>
+
+<para
+>Översättning Stefan Asserhäll <email
+>stefan.asserhall@bredband.net</email
+></para
+> &underFDL; &underGPL; </chapter
+>  
+</book>
+

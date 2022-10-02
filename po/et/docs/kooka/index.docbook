@@ -1,0 +1,1024 @@
+<?xml version="1.0" ?>
+<!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.5-Based Variant V1.1//EN" "dtd/kdedbx45.dtd" [
+  <!ENTITY kappname "&kooka;">
+  <!ENTITY package "playground-graphics">
+  <!ENTITY % addindex "IGNORE">
+  <!ENTITY % Estonian  "INCLUDE"
+> <!-- change language only here --> 
+]>
+
+<book id="kooka" lang="&language;">
+
+<bookinfo>
+<title
+>&kooka; käsiraamat</title>
+
+<authorgroup>
+<author
+><firstname
+>Martin</firstname
+> <surname
+>Sommer</surname
+> <affiliation
+><address
+><email
+>msommer@suse.de</email
+></address
+></affiliation
+> 
+</author>
+<othercredit role="developer"
+><firstname
+>Klaas</firstname
+> <surname
+>Freitag</surname
+> <affiliation
+> <address
+><email
+>freitag@suse.de</email
+></address>
+</affiliation>
+<contrib
+>Arendaja</contrib>
+</othercredit>
+
+<othercredit role="translator"
+><firstname
+>Marek</firstname
+><surname
+>Laane</surname
+><affiliation
+><address
+><email
+>bald@starman.ee</email
+></address
+></affiliation
+><contrib
+>Tõlge eesti keelde</contrib
+></othercredit
+> 
+
+</authorgroup>
+
+<copyright>
+<year
+>2002</year>
+<holder
+>Klaas Freitag, Martin Sommer</holder>
+</copyright>
+
+<legalnotice
+>&FDLNotice;</legalnotice>
+
+<date
+>2012-08-02</date>
+<releaseinfo
+>0.61 (&kde; 4.9)</releaseinfo>
+
+<abstract
+><para
+>&kooka; võimaldab skannida, salvestada ja vaadata kõiki pildivorminguid, mida &kde; toetab, ning sooritada optilist märgituvastust.</para
+></abstract
+> 
+
+<keywordset>
+<keyword
+>KDE</keyword>
+<keyword
+>Skanner</keyword>
+</keywordset>
+
+</bookinfo>
+
+<chapter id="introduction">
+<title
+>Sissejuhatus</title>
+
+<para
+>&kooka; on &kde; rakendus, mis võimaldab hõlpsasti skannida <acronym
+>SANE</acronym
+> teeke kasutades. Seepärast peab pakett <acronym
+>SANE</acronym
+> olema paigaldatud, muidu &kooka; kasutamine ei õnnestu.</para>
+
+<para
+>&kooka; võimaldab skannida, salvestada ja vaadata kõiki pildivorminguid, mida &kde; toetab.</para>
+
+<para
+>Samuti on võimalik optiline märgituvastus kas avatud lähtekoodiga programmide <ulink url="http://jocr.sourceforge.net/"
+>GOCR</ulink
+> ja <ulink url="http://www.gnu.org/software/ocrad/ocrad.html"
+>OCRAD</ulink
+> või kommertstarkvara <ulink url="http://www.rerecognition.com/"
+>KADMOS</ulink
+> teegi abil. Selleks tuleb paigaldada vähemalt üks mainitud tarkvarapakettidest. Kui märgituvastus on tehtud, käivitatakse äratuntud osal automaatselt õigekirja kontroll. Sisu saab muuta <guilabel
+>OMT</guilabel
+> aknas ning selle siis eksportida lihttekstina. </para>
+
+</chapter>
+
+<chapter id="how-to-use">
+<title
+>Juhtnöörid</title>
+
+<para
+>Infot toetatud skannerite kohta saav veebileheküljelt <ulink url="http://www.mostang.com/sane"
+>http://www.sane-project.org</ulink
+>. Kui võimalik, uurige sobivust enne skanneri ostmist.</para>
+
+<sect1 id="screen">
+<title
+>&kooka; põhiaken</title>
+
+<screenshot
+> 
+<screeninfo
+>&kooka; põhiaken </screeninfo
+> 
+<mediaobject
+> 
+<imageobject>
+<imagedata fileref="kooka_mainctrl.png" format="PNG"/></imageobject
+> 
+</mediaobject
+> 
+
+</screenshot
+>  
+
+<para
+>&kooka; saab käivitada käsurealt korraldusega <userinput
+><command
+>kooka</command
+></userinput
+> või valides selle rakenduse käivitusmenüü alammenüüst <guilabel
+>Graafika</guilabel
+>. Soovi korral võid luua &kde; töölauale skanneri ikooniga viida.</para>
+
+<para
+>&kooka; kasutamiseks ainult optilise märgituvastuse huvides ilma skanneriga ühendumata käivita rakendus galeriirežiimis käsuga <userinput
+><command
+>kooka</command
+> <option
+>-g</option
+></userinput
+>.</para>
+
+<para
+>&kooka; põhiaken koosneb kolmest osast. Ülal asuvad nii ikooni- kui menüüriba. Osade suurendamiseks või kahandamiseks saab kasutada hiirt.</para>
+
+<itemizedlist
+> 
+<listitem>
+<para
+>Liikumisaken koosneb kolmest kaardist, mis võimaldavad valida kas <guilabel
+>skannimise</guilabel
+>e, <guilabel
+>OMT</guilabel
+> või integreeritud faililehitseja ehk <guilabel
+>galerii</guilabel
+>. Töökataloogi näidatakse akna alumises osas kõrvuti kataloogiga, kuhu skannimise tulemus salvestada.</para
+> 
+<!--FIXME-->
+</listitem>
+
+<listitem>
+<para
+>Akna alumises vasakus osas saab seadistada skanneripõhiseid asju, tavaliselt on neiks resolutsioon, heledus, kontrast, skannimisrežiim (&eg; värviline, halltoonides või binaarne) ning gammaväärtused.</para>
+
+<para
+>Määra kõigepealt vajalikud seadistused. Seejärel käivita eelvaatlus menüükäsuga <guimenuitem
+>Eelvaatlus</guimenuitem
+>.  Skannimise tulemus ilmub nähtavale parempoolsel paneelil.</para>
+
+<para
+>Lõplike mõõtmete määramiseks vali skannitav ala hiirega eelvaatluse pildil endal.</para>
+
+<para
+>Kui see on tehtud, klõpsa käsule <guimenu
+>Skanni</guimenu
+>, et skannida eelvaatluses määratud valik. Skannimise järel küsitakse sinu käest, millises vormingus kujutis salvestada ja kas muuta see standardvorminguks (mis tähendab, et edaspidi selle vormingu puhul enam kinnitust ei küsita).</para>
+
+<note
+><para
+>Kui märgid, et ei soovi enam näha küsimust salvestamise vormingu kohta, ei näegi sa enam salvestusabilist. Kui soovid kunagi siiski vormingut muuta, saad seda teha menüükäsuga <menuchoice
+><guimenu
+>Seadistused</guimenu
+> <guimenuitem
+>Kooka seadistamine...</guimenuitem
+> <guimenuitem
+>Pildi salvestamine</guimenuitem
+> <guimenuitem
+>Alati kasutatakse salvestusabilist</guimenuitem
+></menuchoice
+></para
+></note
+> 
+
+</listitem
+> 
+<listitem>
+<para
+>Suur aken näitab, milline näeb kujutis välja pärast lõplikku skannimist.</para>
+</listitem>
+</itemizedlist>
+
+</sect1>
+
+</chapter>
+
+<chapter id="commands">
+<title
+>Käskude seletus</title>
+
+<sect1 id="kooka-toolbar">
+<title
+>&kooka; peamine tööriistariba</title>
+<!--FIXME-->
+
+<sect2>
+<title
+>Menüü <guimenu
+>Fail</guimenu
+></title>
+
+<variablelist
+> 
+<varlistentry
+> 
+<term>
+<menuchoice
+><guimenu
+>Fail</guimenu
+> <guimenuitem
+>Loo kataloog...</guimenuitem
+> </menuchoice
+></term
+> 
+<listitem>
+<para
+>Loob kataloogi, kus asuvad <guilabel
+>Kooka galerii</guilabel
+> pildid.</para>
+</listitem
+> 
+</varlistentry>
+
+<varlistentry
+> 
+<term>
+<menuchoice
+><shortcut
+><keycombo action="simul"
+>&Ctrl;<keycap
+>S</keycap
+></keycombo
+></shortcut
+><guimenu
+>Fail</guimenu
+><guimenuitem
+>Salvesta pilt</guimenuitem
+> </menuchoice
+></term
+> 
+<listitem>
+<para
+>Salvestab allolevas <guilabel
+>Kooka galerii</guilabel
+>s valitud pildi kettal mõnda teise kataloogi.</para>
+<para
+>Vaata lähemalt osa <link linkend="save"
+>Salvestamine</link
+>.</para>
+</listitem
+> 
+</varlistentry>
+
+<!--
+Import Image...
+Rename Image F2
+  -->
+<varlistentry
+> 
+<term>
+<menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keysym
+>Del</keysym
+></keycombo
+> </shortcut
+> <guimenu
+>Fail</guimenu
+> <guimenuitem
+>Kustuta pilt</guimenuitem
+> </menuchoice
+></term
+> 
+<listitem>
+<para
+>Kustutab pildi, mis on valitud <guilabel
+>Kooka galerii</guilabel
+>s.</para>
+</listitem
+> 
+</varlistentry>
+
+<!--
+Properties... Alt+Return
+-->
+<varlistentry
+> 
+<term>
+<menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>N</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Fail</guimenu
+><guimenuitem
+>Uus pilt valiku põhjal</guimenuitem
+> </menuchoice
+></term
+> 
+<listitem>
+<para
+>Kui skannitud kujutis sisaldab rohkem infot, kui sa soovid näha lõplikul pildil, kasuta seda vahendit kujutise kärpimiseks, märkides suuremal pildivaatel esmalt oma valiku ja siis klõpsates seda abivahendit. Kujutis kärbitakse vastavalt sinu valikule. See võimalus on küllap sulle juba tuttav, kui oled kasutanud pilditöötlusrakendust &kolourpaint;.</para>
+</listitem
+> 
+</varlistentry
+> 
+
+<varlistentry
+> 
+<term>
+<menuchoice
+><guimenu
+>Fail</guimenu
+> <guimenuitem
+>Sulge kujutis</guimenuitem
+> </menuchoice
+></term
+> 
+<listitem>
+<para
+>Eemaldab pildi, mida näidatakse parajasti <guilabel
+>Kujutise vaataja</guilabel
+>s. </para>
+</listitem
+> 
+</varlistentry>
+
+<!-- not functional in kde 4
+<varlistentry
+> 
+<term>
+<menuchoice>
+<shortcut>
+<keycombo action="simul"
+>&Ctrl;<keycap
+>P</keycap
+></keycombo>
+</shortcut>
+<guimenu
+>File</guimenu>
+<guimenuitem
+>Print</guimenuitem>
+</menuchoice
+></term
+> 
+<listitem>
+<para
+>Prints the displayed image.</para>
+</listitem
+> 
+</varlistentry>
+-->
+
+<varlistentry
+> 
+<term>
+<menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>Q</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Fail</guimenu
+> <guimenuitem
+>Välju</guimenuitem
+> </menuchoice
+></term
+> 
+<listitem>
+<para
+>Lõpetab &kooka; töö.</para>
+</listitem
+> 
+</varlistentry>
+
+</variablelist>
+</sect2>
+
+<sect2>
+<title
+>Menüü Skannimine</title>
+
+<variablelist
+> 
+<!--
+Preview F3
+Start Scan... F4
+Photocopy... Ctrl+F
+Scan Parameters... Ctrl+Shift+S
+Profile 
+  -->
+<varlistentry>
+<term>
+<menuchoice
+><guimenu
+>Skannimine</guimenu
+> <guimenuitem
+>Pildi OMT...</guimenuitem
+> </menuchoice
+></term>
+<listitem>
+<para
+>Käivitab kogu pildi optilise märgituvastuse (<acronym
+>OMT</acronym
+>), kasutades seadistustedialoogi kaardil <guilabel
+>OMT</guilabel
+> määratud tuvastamissüsteemi. See käivitab märgituvastuse eelvaatluse pildil.</para>
+</listitem
+> 
+</varlistentry
+> 
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Skannimine</guimenu
+> <guimenuitem
+>Valiku OMT...</guimenuitem
+> </menuchoice
+></term
+> 
+<listitem>
+  <!--FIXME A window will reappear ???-->
+<para
+>Ilmub märgituvastuse aken. Siin aga võetakse märgituvastus ette vaid lõplikult skannitud kujutise esiletõstetud osal.</para>
+</listitem
+> 
+</varlistentry>
+<!--
+Spell Check OCR Result...
+Save OCR Result Text... Ctrl+U
+-->
+</variablelist
+> 
+</sect2>
+ 
+<sect2>
+<title
+>Menüü <guimenu
+>Kujutis</guimenu
+></title>
+
+<para
+>Selle menüü kirjed leiab ka eelvaatluse akna kontekstimenüüst.</para>
+
+<variablelist
+> 
+
+<varlistentry>
+<term>
+<menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>I</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Kujutis</guimenu
+> <guimenuitem
+>Mahuta laiusele</guimenuitem
+> </menuchoice
+></term
+> 
+<listitem>
+<para
+>Muudab proportsionaalselt kujutist, et see täidaks vaateala laiuti.</para>
+</listitem
+> 
+</varlistentry>
+
+<varlistentry
+> 
+<term>
+<menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>H</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Kujutis</guimenu
+> <guimenuitem
+>Mahuta kõrgusele</guimenuitem
+> </menuchoice
+></term
+> 
+<listitem>
+<para
+>Muudab proportsionaalselt kujutist, et see täidaks vaateala täiskõrguses.</para
+> 
+</listitem
+> 
+</varlistentry>
+
+<varlistentry
+> 
+<term>
+<menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>1</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Pilt</guimenu
+><guimenuitem
+>Originaalsuurus</guimenuitem
+> </menuchoice
+></term
+> 
+<listitem>
+<para
+>Taastab kujutise originaalsuuruse seda vastavalt vähendades või suurendades.</para
+> 
+
+<para
+>Meetodeid kujutise skaleerimiseks on veel, nende kasutamiseks tee hiire <mousebutton
+>parema</mousebutton
+> nupuga klõps kujutisel. Määratle uuesti kolm mainitud võimalust ning sea ise suurenduse aste. Seda saab teha ka <guilabel
+>eelvaatlus</guilabel
+>e aknas.</para>
+</listitem
+> 
+</varlistentry>
+<!--
+Set Zoom...
+Keep Zoom Setting Ctrl+Z
+-->
+<varlistentry
+> 
+<term>
+<menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>V</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Pilt</guimenu
+><guimenuitem
+>Peegelda vertikaalselt</guimenuitem
+> </menuchoice
+></term
+> 
+<listitem>
+<para
+>Keerab kujutist vertikaalselt.</para>
+</listitem
+> 
+</varlistentry
+> 
+
+<varlistentry
+> 
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>M</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Pilt</guimenu
+> <guimenuitem
+>Peegelda horisontaalselt</guimenuitem
+> </menuchoice>
+</term
+> 
+<listitem>
+<para
+>Keerab kujutist horisontaalselt.</para>
+</listitem
+> 
+</varlistentry
+> 
+<!-- not in kde4
+<varlistentry>
+<term
+><menuchoice
+><shortcut>
+<keycombo action="simul"
+>&Ctrl;<keycap
+>B</keycap
+></keycombo>
+</shortcut>
+<guimenu
+>Image</guimenu>
+<guimenuitem
+>Mirror both directions</guimenuitem>
+</menuchoice
+></term
+> 
+<listitem>
+<para
+>Flip image both horizontally and vertically.</para>
+</listitem>
+</varlistentry>
+-->
+<varlistentry
+> 
+<term>
+<menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>7</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Pilt</guimenu
+><guimenuitem
+>Pööra vastupäeva</guimenuitem
+> </menuchoice>
+</term
+> 
+<listitem>
+<para
+>Pöörab kujutist 90 kraadi vastupäeva (vastupidi kellaosuti liikumise suunale).</para>
+</listitem
+> 
+</varlistentry
+> 
+
+<varlistentry
+> 
+<term>
+<menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>9</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Pilt</guimenu
+><guimenuitem
+>Pööra päripäeva</guimenuitem
+> </menuchoice
+></term
+> 
+<listitem>
+<para
+>Pöörab kujutist 90 kraadi päripäeva (kellaosuti liikumise suunas).</para>
+</listitem>
+</varlistentry
+> 
+
+<varlistentry>
+<term>
+<menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>8</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Pilt</guimenu
+><guimenuitem
+>Pööra 180 kraadi</guimenuitem
+> </menuchoice>
+</term
+> 
+<listitem>
+<para
+>Pöörab kujutist 180 kraadi (pea peale).</para>
+</listitem
+> 
+</varlistentry
+> 
+</variablelist>
+</sect2>
+
+<sect2>
+<title
+>Menüü <guimenu
+>Seadistused</guimenu
+></title>
+
+<variablelist>
+<!--
+Select Scan Device...
+Add Scan Device...
+other entries -> link to Fundamentals
+-->
+<varlistentry>
+<term>
+<menuchoice
+><guimenu
+>Seadistused</guimenu
+> <guimenuitem
+>Tööriistariba näitamine</guimenuitem
+> </menuchoice>
+</term
+> 
+<listitem>
+<para
+>Eemaldab ülemise tööriistariba, mis suurendab veidi vaateala. </para>
+</listitem
+> 
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice
+><guimenu
+>Seadistused</guimenu
+> <guimenuitem
+>Olekuriba näitamine</guimenuitem
+> </menuchoice>
+</term
+> 
+<listitem>
+<para
+>Eemaldab alumise olekuriba, mis suurendab veidi vaateala.</para>
+</listitem
+> 
+</varlistentry>
+ </variablelist>
+</sect2>
+
+<sect2>
+<title
+>Kiirklahvide seadistamine</title>
+
+<para
+><menuchoice
+> <guimenu
+>Seadistused</guimenu
+><guimenuitem
+>Kiirklahvide seadistamine...</guimenuitem
+></menuchoice
+> võimaldab määrata kiirklahve.</para>
+
+<para
+>Täpsemat teavet annab &kde; põhialuste käsiraamatu <ulink url="help:/fundamentals/config.html#shortcuts"
+>kiirklahvide kasutamist ja kohandamist</ulink
+> käsitlev osa. </para>
+</sect2>
+
+<sect2>
+<title
+>Tööriistaribade seadistamine</title>
+<para
+><menuchoice
+><guimenu
+>Seadistused</guimenu
+><guimenuitem
+>Tööriistaribade seadistamine...</guimenuitem
+></menuchoice
+> on kasutatav lisanuppude asetamiseks tööriistaribadele.</para>
+
+<para
+>Täpsemat teavet annab &kde; põhialuste käsiraamatu <ulink url="help:/fundamentals/config.html#toolbars"
+>tööriistaribade kohandamist</ulink
+> käsitlev osa. </para>
+</sect2>
+
+<sect2>
+<title
+>Kooka seadistamine</title>
+<para
+><menuchoice
+><guimenu
+>Seadistused</guimenu
+><guimenuitem
+>Kooka seadistamine...</guimenuitem
+></menuchoice
+> </para>
+
+
+<variablelist>
+<varlistentry>
+<term>
+<menuchoice>
+<guilabel
+>Kooka käivitamise seadistused</guilabel
+> 
+</menuchoice>
+</term
+> 
+<listitem>
+<para
+>Võid eemaldada märgi kastist <guilabel
+>Skanneri valiku dialoogi näidatakse järgmisel käivitamisel</guilabel
+>, kui sul on vaid üks skanner. Kui kasutad vaid üht arvutit, võid eemaldada märgi ka kastist <guilabel
+>Võrgust otsitakse saadaolevaid skannereid</guilabel
+>. </para>
+</listitem
+> 
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guilabel
+>Pisipildivaade</guilabel
+> 
+</menuchoice>
+</term
+> 
+<listitem>
+<para
+>Siin saab kohandada pisipiltide suurust ja tausta. Võid näiteks kahandada pisipiltide suurust, kui kavatsed skannida mõnda paksu raamatut. </para>
+</listitem
+> 
+</varlistentry>
+
+</variablelist>
+
+</sect2>
+
+
+</sect1>
+</chapter>
+
+<chapter id="save">
+<title
+>Salvestamine</title>
+<subtitle
+>Põhjalikumalt piltide salvestamisest</subtitle>
+
+<para
+>Kujutise salvestamise meetod &kooka;s erineb mõnevõrra enamikust muudest rakendustest. Klõpsa kaardil <guilabel
+>Galerii</guilabel
+> väikese faililehitseja avamiseks. See on kataloog <filename class="directory"
+>~/.Documents/KookaGallery</filename
+>. Akna alumises osas on näha käesoleva galerii alamkataloog. See on koht, kuhu kõik skannitud kujutised kõigepealt failidena salvestatakse. &kooka; esmakäivitusel on näha ainult kataloog <filename class="directory"
+>KookaGallery</filename
+>. Loo alamkatalooge sellele hiire <mousebutton
+>parema</mousebutton
+> nupuga klõpsates. Valitud kataloog, mis on tähistatud siniselt, on skannitud kujutiste esmase salvestamise asukoht. Skannitud kujutised tähistatakse numbrilises järjekorras, seega näiteks <filename
+>kscan_0001</filename
+>, <filename
+>kscan_0002</filename
+> jne.</para>
+
+<para
+>Kujutise püsivaks salvestamiseks klõpsa hiire <mousebutton
+>vasaku</mousebutton
+> nupuga nimel. Seejärel anna failile uus nimi ja sobilik laiend, mis vastab skannimise ajal valitud pildivormingule. Kui sisestad mõne muu laiendi, saad teate, mis ütleb, et see ei vasta skannitud vormingule. Kuigi sa võid põhimõtteliselt salvestada kujutise ka mistahes laiendiga, säilitab see esialgse vormingu. Praegu ei ole teisendamine <quote
+>käigult</quote
+> veel võimalik.</para
+><para
+>Kui sa ei soovi selliselt hallata oma pilte kataloogis <filename class="directory"
+>~/.kde/share/apps/KookaGallery</filename
+>, võid mõistagi salvestada need ka muusse asukohta. Selleks klõpsa hiire <mousebutton
+>parema</mousebutton
+> nupuga kujutise nimel ning vali käsk <guilabel
+>Salvesta</guilabel
+>. Seejärel võid valida mistahes asukoha. Lisaks saad ka kujutisi sulgeda või jäädavalt kustutada.</para>
+
+<para
+>Teiste piltide kaasamiseks galeriisse vali lisa <menuchoice
+> <guimenu
+>Fail</guimenu
+><guimenuitem
+>Impordi pilt</guimenuitem
+> </menuchoice
+> või lisa need lohistades. Ava failihalduris kataloog, mis sisaldab soovitud pilte. Seejärel lisa nad &kooka; galeriisse, lohistades pildid otse galerii aknasse.</para>
+
+</chapter>
+
+<chapter id="ocr">
+<title
+>Märgituvastus</title>
+
+<para
+>Nagu märgitud, peab olema paigaldatud <application
+>gocr</application
+>. Skanni oma dokument halltoonides või värvilisena. Skannida saab ainult binaarrežiimis, kui tegemist on puhasvalge musta trükiga paberiga. Edasi tõsta eelvaatluse aknas esile tekst, millel soovid märgituvastust kasutada. Seejärel soorita lõplik skannimine binaarrežiimis, klõpsates nupule <guibutton
+>Skanni</guibutton
+>.</para>
+
+<para
+>Nüüd klõpsa tööriistaribal ikoonile <inlinemediaobject
+><imageobject
+><imagedata fileref="ocr-select.png" format="PNG"/> </imageobject
+></inlinemediaobject
+> <guilabel
+>Valiku OMT</guilabel
+> või vali sama käsk menüüst <guilabel
+>Skannimine</guilabel
+>. Esimesel korral ära muuda vaikeseadeid ilmuvas <acronym
+>OMT</acronym
+> aknas. Tavaliselt sobivad need hästi ka sinu vajadustega. Nüüd klõpsa <guimenuitem
+>Käivita OMT</guimenuitem
+>. Seejärel näed akent <acronym
+>OMT</acronym
+> tulemustega. Selle kvaliteet sõltub tugevasti dokumendi enda kvaliteedist. </para>
+
+<screenshot
+> <screeninfo
+>Gocr aken</screeninfo
+> <mediaobject>
+<imageobject
+><imagedata fileref="kooka_gocr.png"
+format="PNG"/></imageobject
+> </mediaobject
+> </screenshot>
+<para
+>Kui märgituvastus on tehtud, käivitatakse äratuntud osal automaatselt õigekirja kontroll. Sisu saab muuta <guilabel
+>OMT</guilabel
+> aknas ning selle siis eksportida lihttekstina. </para>
+<para
+>Pärast lõplikku skannimist tee paremal asuvas vaatealas valik ainult osa teksti või pildi kasutamiseks <acronym
+>OMT</acronym
+>-l. Seejärel klõpsa tööriistaribal ikoonile <inlinemediaobject
+><imageobject
+><imagedata fileref="ocr-select.png" format="PNG"/> </imageobject
+></inlinemediaobject
+> või vali menüükäsk <guimenuitem
+>Valiku OMT</guimenuitem
+>. Seejärel talita nii, nagu eespool kirjeldatud.</para>
+
+<screenshot
+> 
+<screeninfo
+><acronym
+>OMT</acronym
+> tulemused</screeninfo
+> 
+<mediaobject
+> 
+<imageobject>
+<imagedata fileref="kooka_gocr_result.png"
+format="PNG"/></imageobject
+> 
+</mediaobject
+> 
+</screenshot>
+
+</chapter>
+
+<chapter id="credits">
+<title
+>Autorid ja litsents</title>
+ 
+<para
+>&kooka;</para>
+
+<para
+>Rakenduse autoriõigus 2000-2010: &kooka; arendajad ja kaasautorid</para>
+
+<para
+>Dokumentatsiooni autoriõigus 2002: Martin Sommer <email
+>msommer@suse.de</email
+></para>
+
+<para
+>Tõlge eesti keelde: Marek Laane <email
+>bald@starman.ee</email
+></para
+> 
+&underFDL; &underGPL; </chapter
+>  
+
+<appendix id="installation">
+<title
+>Paigaldamine</title>
+
+&install.intro.documentation;
+
+&install.compile.documentation;
+                
+</appendix>
+
+</book>
+

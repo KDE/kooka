@@ -1,0 +1,1026 @@
+<?xml version="1.0" ?>
+<!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.5-Based Variant V1.1//EN" "dtd/kdedbx45.dtd" [
+  <!ENTITY kappname "&kooka;">
+  <!ENTITY package "playground-graphics">
+  <!ENTITY % addindex "IGNORE">
+  <!ENTITY % Portuguese "INCLUDE"
+> <!-- change language only here --> 
+]>
+
+<book id="kooka" lang="&language;">
+
+<bookinfo>
+<title
+>O Manual do &kooka;</title>
+
+<authorgroup>
+<author
+><firstname
+>Martin</firstname
+> <surname
+>Sommer</surname
+> <affiliation
+><address
+><email
+>msommer@suse.de</email
+></address
+></affiliation
+> 
+</author>
+<othercredit role="developer"
+><firstname
+>Klaas</firstname
+> <surname
+>Freitag</surname
+> <affiliation
+> <address
+><email
+>freitag@suse.de</email
+></address>
+</affiliation>
+<contrib
+>Desenvolvimento</contrib>
+</othercredit>
+
+<othercredit role="translator"
+><firstname
+>José</firstname
+><surname
+>Pires</surname
+><affiliation
+><address
+><email
+>zepires@gmail.com</email
+></address
+></affiliation
+><contrib
+>Tradução</contrib
+></othercredit
+> 
+
+</authorgroup>
+
+<copyright>
+<year
+>2002</year>
+<holder
+>Klaas Freitag, Martin Sommer</holder>
+</copyright>
+
+<legalnotice
+>&FDLNotice;</legalnotice>
+
+<date
+>2012-08-02</date>
+<releaseinfo
+>0.61 (&kde; 4.9)</releaseinfo>
+
+<abstract
+><para
+>O &kooka; permite-lhe digitalizar, gravar e ver imagens em qualquer formato que o &kde; suporta, podendo também efectuar reconhecimento óptico de caracteres.</para
+></abstract
+> 
+
+<keywordset>
+<keyword
+>KDE</keyword>
+<keyword
+>Digitalizador</keyword>
+</keywordset>
+
+</bookinfo>
+
+<chapter id="introduction">
+<title
+>Introdução</title>
+
+<para
+>O &kooka; é uma aplicação do &kde; que permite a digitalização simples usando as as bibliotecas do <ulink url="http://www.sane-project.org/"
+>SANE</ulink
+>. Como tal, o pacote <acronym
+>SANE</acronym
+> tem de estar instalado para usar o &kooka;.</para>
+
+<para
+>O &kooka; permite-lhe digitalizar, gravar e ver imagens em qualquer formato que o &kde; suporta.</para>
+
+<para
+>O reconhecimento de caracteres também é oferecido com os programas de 'software' livre <ulink url="http://jocr.sourceforge.net/"
+>GOCR</ulink
+> ou <ulink url="http://www.gnu.org/software/ocrad/ocrad.html"
+>OCRAD</ulink
+>, ou ainda pela biblioteca comercial <ulink url="http://www.rerecognition.com/"
+>KADMOS</ulink
+>. Terá de instalar pelo menos um destes pacotes de aplicações para usar esta funcionalidade. Depois de o reconhecimento de caracteres terminar, é iniciada automaticamente uma verificação ortográfica do material reconhecido. Poderá editar o conteúdo na janela <guilabel
+>OCR</guilabel
+> e exportá-lo como texto simples. </para>
+
+</chapter>
+
+<chapter id="how-to-use">
+<title
+>Instruções de Aplicações</title>
+
+<para
+>O 'site' Web <ulink url="http://www.sane-project.org/"
+>http://www.sane-project.org</ulink
+> tem informações acerca dos 'scanners' suportados. Baseie-se nele antes de comprar um 'scanner', se possível.</para>
+
+<sect1 id="screen">
+<title
+>A Janela Principal do &kooka;</title>
+
+<screenshot
+> 
+<screeninfo
+>A Janela Principal do &kooka; </screeninfo
+> 
+<mediaobject
+> 
+<imageobject>
+<imagedata fileref="kooka_mainctrl.png" format="PNG"/></imageobject
+> 
+</mediaobject
+> 
+
+</screenshot
+>  
+
+<para
+>Inicie o &kooka; a partir de uma consola, bastando para tal escrever <userinput
+><command
+>kooka</command
+></userinput
+> ou seleccionando-o no submenu <guilabel
+>Gráficos</guilabel
+> do lançador de aplicações. Crie um atalho no ecrã do &kde; que use o ícone de um 'scanner', se desejar.</para>
+
+<para
+>Para usar o &kooka; apenas para o reconhecimento óptico de caracteres, sem o ligar a um 'scanner', inicie a aplicação no modo de galeria com a opção <userinput
+><command
+>kooka</command
+> <option
+>-g</option
+></userinput
+>.</para>
+
+<para
+>A janela principal do &kooka; consiste em três zonas. No topo, poderá ver tanto um um painel de ícones como o menu. Use o rato para aumentar ou reduzir as janelas à medida das necessidades.</para>
+
+<itemizedlist
+> 
+<listitem>
+<para
+>A janela de navegação consiste em três páginas, que lhe permitem mudar entre a <guilabel
+>Digitalização</guilabel
+>, a <guilabel
+>OCR</guilabel
+> e o navegador de ficheiros integrado denominado de <guilabel
+>Galeria</guilabel
+>. A pasta de trabalho é mostrada na parte inferior da janela, em conjunto com a pasta onde a digitalização será gravada.</para
+> 
+<!--FIXME-->
+</listitem>
+
+<listitem>
+<para
+>Faça a configuração dependente do seu 'scanner' que você ligou na janela em baixo e à esquerda. Normalmente, estas são as opções de resolução, brilho e contraste, bem como o modo de digitalização (&eg;, a cores, tons de cinzento ou binário) ou os valores do 'gama'.</para>
+
+<para
+>Configure aqui as suas opções primeiro. Depois disso, inicie a digitalização de antevisão com a <guimenuitem
+>Antevisão</guimenuitem
+>. O resultado da digitalização irá aparecer então do lado direito.</para>
+
+<para
+>Seleccione a área a digitalizar na imagem de antevisão em si, usando o rato para definir as dimensões finais.</para>
+
+<para
+>Depois de isto ser feito, carregue em <guimenu
+>Digitalizar</guimenu
+> para digitalizar a selecção feita na antevisão. Depois dessa operação, ser-lhe-á perguntado qual o formato com o qual gravar a imagem e se deseja que este seja o seu formato-padrão (ser lhe ser confirmada mais nenhuma vez no futuro).</para>
+
+<note
+><para
+>Se você assinalou que não deseja mais responder ao formato de gravação, o assistente de memória não aparecerá mais. Para mudar o formato no futuro, seleccione  <menuchoice
+> <guimenu
+>Configuração</guimenu
+> <guimenuitem
+>Configurar o Kooka...</guimenuitem
+> <guimenuitem
+>Gravar a Imagem</guimenuitem
+> <guimenuitem
+>Usar sempre o assistente de gravação</guimenuitem
+> </menuchoice
+></para
+></note
+> 
+
+</listitem
+> 
+<listitem>
+<para
+>A janela grande mostra como é que a imagem aparece depois de uma digitalização final.</para>
+</listitem>
+</itemizedlist>
+
+</sect1>
+
+</chapter>
+
+<chapter id="commands">
+<title
+>Referência de Comandos</title>
+
+<sect1 id="kooka-toolbar">
+<title
+>A Barra de Ferramentas Principal do &kooka;</title>
+<!--FIXME-->
+
+<sect2>
+<title
+>O Menu <guimenu
+>Ficheiro</guimenu
+></title>
+
+<variablelist
+> 
+<varlistentry
+> 
+<term>
+<menuchoice
+><guimenu
+>Ficheiro</guimenu
+> <guimenuitem
+>Criar uma Pasta...</guimenuitem
+> </menuchoice
+></term
+> 
+<listitem>
+<para
+>Cria uma pasta para guardar as suas imagens na <guilabel
+>Galeria do Kooka</guilabel
+>.</para>
+</listitem
+> 
+</varlistentry>
+
+<varlistentry
+> 
+<term>
+<menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>S</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Ficheiro</guimenu
+> <guimenuitem
+>Gravar a Imagem</guimenuitem
+> </menuchoice
+></term
+> 
+<listitem>
+<para
+>Grava a imagem seleccionada na <guilabel
+>Galeria do Kooka</guilabel
+> numa pasta diferente do seu disco.</para>
+<para
+>Veja a secção sobre <link linkend="save"
+> Gravação</link
+> para mais detalhes.</para>
+</listitem
+> 
+</varlistentry>
+
+<!--
+Import Image...
+Rename Image F2
+  -->
+<varlistentry
+> 
+<term>
+<menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>Del</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Ficheiro</guimenu
+> <guimenuitem
+>Apagar a Imagem</guimenuitem
+> </menuchoice
+></term
+> 
+<listitem>
+<para
+>Remove a imagem seleccionada que se encontra na <guilabel
+>Galeria do Kooka</guilabel
+>.</para>
+</listitem
+> 
+</varlistentry>
+
+<!--
+Properties... Alt+Return
+-->
+<varlistentry
+> 
+<term>
+<menuchoice
+><shortcut
+><keycombo action="simul"
+>&Ctrl; <keycap
+>N</keycap
+></keycombo
+></shortcut
+> <guimenu
+>Ficheiro</guimenu
+> <guimenuitem
+>Nova Imagem a Partir da Selecção</guimenuitem
+> </menuchoice
+></term
+> 
+<listitem>
+<para
+>Se a imagem digitalizada incluir mais do que você quer que apareça na imagem final, use esta ferramenta para cortar a sua imagem, marcando a sua selecção na área maior de apresentação da imagem à direita, seleccionando de seguida esta ferramenta. A imagem será cortada de acordo com a sua selecção. Você poderá estar familiarizado com este comportamento com base na ferramenta de corte da aplicação &kolourpaint;.</para>
+</listitem
+> 
+</varlistentry
+> 
+
+<varlistentry
+> 
+<term>
+<menuchoice
+><guimenu
+>Ficheiro</guimenu
+> <guimenuitem
+>Fechar a Imagem</guimenuitem
+> </menuchoice
+></term
+> 
+<listitem>
+<para
+>Remove a imagem apresentada no <guilabel
+>Visualizador de Imagens</guilabel
+>. </para>
+</listitem
+> 
+</varlistentry>
+
+<!-- not functional in kde 4
+<varlistentry
+> 
+<term>
+<menuchoice>
+<shortcut>
+<keycombo action="simul"
+>&Ctrl;<keycap
+>P</keycap
+></keycombo>
+</shortcut>
+<guimenu
+>File</guimenu>
+<guimenuitem
+>Print</guimenuitem>
+</menuchoice
+></term
+> 
+<listitem>
+<para
+>Prints the displayed image.</para>
+</listitem
+> 
+</varlistentry>
+-->
+
+<varlistentry
+> 
+<term>
+<menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>Q</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Ficheiro</guimenu
+> <guimenuitem
+>Sair</guimenuitem
+> </menuchoice
+></term
+> 
+<listitem>
+<para
+>Sai do &kooka;.</para>
+</listitem
+> 
+</varlistentry>
+
+</variablelist>
+</sect2>
+
+<sect2>
+<title
+>O Menu <guimenu
+>Digitalizar</guimenu
+></title>
+
+<variablelist
+> 
+<!--
+Preview F3
+Start Scan... F4
+Photocopy... Ctrl+F
+Scan Parameters... Ctrl+Shift+S
+Profile 
+  -->
+<varlistentry>
+<term>
+<menuchoice
+><guimenu
+>Digitalizar</guimenu
+> <guimenuitem
+>OCR da Imagem...</guimenuitem
+> </menuchoice
+></term>
+<listitem>
+<para
+>Inicia a janela para o reconhecimento óptico de caracteres (<acronym
+>OCR</acronym
+>), usando o sistema de reconhecimento definido na página <guilabel
+>OCR</guilabel
+> da janela de configuração. Isto inicia o reconhecimento de caracteres para a área de antevisão ou para a área seleccionada.</para>
+</listitem
+> 
+</varlistentry
+> 
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Digitalizar</guimenu
+> <guimenuitem
+>OCR da Selecção...</guimenuitem
+> </menuchoice
+></term
+> 
+<listitem>
+  <!--FIXME A window will reappear ???-->
+<para
+>Irá aparecer de novo uma janela para o reconhecimento de caracteres. Aqui, contudo, o reconhecimento de caracteres é só para a área seleccionada na digitalização final.</para>
+</listitem
+> 
+</varlistentry>
+<!--
+Spell Check OCR Result...
+Save OCR Result Text... Ctrl+U
+-->
+</variablelist
+> 
+</sect2>
+ 
+<sect2>
+<title
+>O Menu <guimenu
+>Imagem</guimenu
+></title>
+
+<para
+>As acções neste menu estão também disponíveis no menu de contexto da janela de antevisão.</para>
+
+<variablelist
+> 
+
+<varlistentry>
+<term>
+<menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>I</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Imagem</guimenu
+> <guimenuitem
+>Escalar à Largura</guimenuitem
+> </menuchoice
+></term
+> 
+<listitem>
+<para
+>Isto escala proporcionalmente a imagem na área grande de desenho até à largura do ecrã.</para>
+</listitem
+> 
+</varlistentry>
+
+<varlistentry
+> 
+<term>
+<menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>H</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Imagem</guimenu
+> <guimenuitem
+>Escalar à Altura</guimenuitem
+> </menuchoice
+></term
+> 
+<listitem>
+<para
+>Escala proporcionalmente a imagem à altura do ecrã.</para
+> 
+</listitem
+> 
+</varlistentry>
+
+<varlistentry
+> 
+<term>
+<menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>1</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Imagem</guimenu
+> <guimenuitem
+>Tamanho Original</guimenuitem
+> </menuchoice
+></term
+> 
+<listitem>
+<para
+>Repõe o tamanho original da digitalização, reduzindo ou aumentando a imagem no ecrã.</para
+> 
+
+<para
+>Existem métodos adicionais para escalar uma imagem: carregue com o botão <mousebutton
+>direito</mousebutton
+> na área da imagem. Redefina as três opções associadas e defina o próprio ajuste. Isto também poderá ser feito na janela de <guilabel
+>Antevisão</guilabel
+>.</para>
+</listitem
+> 
+</varlistentry>
+<!--
+Set Zoom...
+Keep Zoom Setting Ctrl+Z
+-->
+<varlistentry
+> 
+<term>
+<menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>V</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Imagem</guimenu
+> <guimenuitem
+>Espelho Vertical</guimenuitem
+> </menuchoice
+></term
+> 
+<listitem>
+<para
+>Faz um espelho da imagem na vertical.</para>
+</listitem
+> 
+</varlistentry
+> 
+
+<varlistentry
+> 
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>M</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Imagem</guimenu
+> <guimenuitem
+>Espelho Horizontal</guimenuitem
+> </menuchoice>
+</term
+> 
+<listitem>
+<para
+>Faz um espelho da imagem na horizontal.</para>
+</listitem
+> 
+</varlistentry
+> 
+<!-- not in kde4
+<varlistentry>
+<term
+><menuchoice
+><shortcut>
+<keycombo action="simul"
+>&Ctrl;<keycap
+>B</keycap
+></keycombo>
+</shortcut>
+<guimenu
+>Image</guimenu>
+<guimenuitem
+>Mirror both directions</guimenuitem>
+</menuchoice
+></term
+> 
+<listitem>
+<para
+>Flip image both horizontally and vertically.</para>
+</listitem>
+</varlistentry>
+-->
+<varlistentry
+> 
+<term>
+<menuchoice
+><shortcut
+><keycombo action="simul"
+>&Ctrl; <keycap
+>7</keycap
+></keycombo
+></shortcut
+> <guimenu
+>Imagem</guimenu
+> <guimenuitem
+>Rodar no Sentido Anti-Horário</guimenuitem
+> </menuchoice>
+</term
+> 
+<listitem>
+<para
+>Roda a Imagem 90 graus contra os ponteiros do relógio.</para>
+</listitem
+> 
+</varlistentry
+> 
+
+<varlistentry
+> 
+<term>
+<menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>9</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Imagem</guimenu
+> <guimenuitem
+>Rodar no Sentido Horário</guimenuitem
+> </menuchoice
+></term
+> 
+<listitem>
+<para
+>Roda a imagem 90 graus nos ponteiros do relógio.</para>
+</listitem>
+</varlistentry
+> 
+
+<varlistentry>
+<term>
+<menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>8</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Imagem</guimenu
+> <guimenuitem
+>Rodar a Imagem 180 Graus</guimenuitem
+> </menuchoice>
+</term
+> 
+<listitem>
+<para
+>Roda a imagem 180 graus.</para>
+</listitem
+> 
+</varlistentry
+> 
+</variablelist>
+</sect2>
+
+<sect2>
+<title
+>O Menu <guimenu
+>Configuração</guimenu
+></title>
+
+<variablelist>
+<!--
+Select Scan Device...
+Add Scan Device...
+other entries -> link to Fundamentals
+-->
+<varlistentry>
+<term>
+<menuchoice
+><guimenu
+>Configuração</guimenu
+> <guimenuitem
+>Mostrar a Barra de Ferramentas</guimenuitem
+> </menuchoice>
+</term
+> 
+<listitem>
+<para
+>Remove a barra de ferramentas de topo para fornecer uma área de visualização adicional. </para>
+</listitem
+> 
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice
+><guimenu
+>Configuração</guimenu
+> <guimenuitem
+>Mostrar a Barra de Estado</guimenuitem
+> </menuchoice>
+</term
+> 
+<listitem>
+<para
+>Remove a barra de estado ou de informações do fundo da janela para disponibilizar mais área de visualização.</para>
+</listitem
+> 
+</varlistentry>
+ </variablelist>
+</sect2>
+
+<sect2>
+<title
+>Configurar os Atalhos</title>
+
+<para
+>O menu <menuchoice
+> <guimenu
+>Configuração</guimenu
+><guimenuitem
+>Configurar os Atalhos...</guimenuitem
+></menuchoice
+> permite-lhe atribuir as associações de teclas</para>
+
+<para
+>Para mais informações, leia a secção sobre a <ulink url="help:/fundamentals/config.html#shortcuts"
+>Utilização e Configuração de Atalhos</ulink
+> dos Fundamentos do &kde;. </para>
+</sect2>
+
+<sect2>
+<title
+>Configurar as Barras de Ferramentas</title>
+<para
+>A opção <menuchoice
+> <guimenu
+>Configuração</guimenu
+><guimenuitem
+>Configurar as Barras de Ferramentas...</guimenuitem
+></menuchoice
+> é usada para adicionar botões extra às barras de ferramentas.</para>
+
+<para
+>Para mais informações, leia a secção sobre a <ulink url="help:/fundamentals/config.html#toolbars"
+>Personalização das Barras de Ferramentas</ulink
+> nos Fundamentos do &kde;. </para>
+</sect2>
+
+<sect2>
+<title
+>Configurar o Kooka</title>
+<para
+>O <menuchoice
+> <guimenu
+>Configuração</guimenu
+> <guimenuitem
+>Configurar o Kooka...</guimenuitem
+></menuchoice
+> </para>
+
+
+<variablelist>
+<varlistentry>
+<term>
+<menuchoice>
+<guilabel
+>Preferências do Kooka no Arranque</guilabel
+> 
+</menuchoice>
+</term
+> 
+<listitem>
+<para
+>Você poderá querer desligar a opção <guilabel
+>Mostrar o selector de 'scanners' no próximo arranque</guilabel
+>, se você tiver apenas um 'scanner'. Se você também só tiver um computador poderá querer desligar a opção <guilabel
+>Pesquisar a rede à procura dos 'scanners' disponíveis</guilabel
+>. </para>
+</listitem
+> 
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guilabel
+>Vista em Miniaturas</guilabel
+> 
+</menuchoice>
+</term
+> 
+<listitem>
+<para
+>Aqui o tamanho e a representação das miniaturas poderá ser ajustado, assim como o fundo. Por exemplo, você poderá querer reduzir o tamanho das miniaturas se estiver a digitalizar muitas páginas de um livro. </para>
+</listitem
+> 
+</varlistentry>
+
+</variablelist>
+
+</sect2>
+
+
+</sect1>
+</chapter>
+
+<chapter id="save">
+<title
+>Gravar</title>
+<subtitle
+>Mais Sobre Gravar Imagens</subtitle>
+
+<para
+>O método para gravar uma imagem é ligeiramente diferente no &kooka; face a muitas outras aplicações. Carregue na página <guilabel
+>Galeria</guilabel
+> para abrir um pequeno navegador de ficheiros. Esta é a pasta <filename class="directory"
+>~/Documents/KookaGallery</filename
+> Na parte inferior da janela é mostrada a sua subpasta actual da galeria. Aqui é onde todas as imagens digitalizadas serão gravadas em primeiro lugar como ficheiros. Ao iniciar o &kooka; pela primeira vez, você só verá a <filename class="directory"
+>KookaGallery</filename
+>. Crie as subpastas, carregando com o botão <mousebutton
+>direito</mousebutton
+> nesta pasta. A pasta seleccionada, identificada por um fundo azul, é a primeira localização das imagens digitalizadas. As digitalizações são identificadas em ordem numérica crescente, como por exemplo <filename
+>kscan_0001</filename
+> e <filename
+>kscan_0002</filename
+>.</para>
+
+<para
+>Para gravar permanentemente uma imagem, carregue com o botão <mousebutton
+>esquerdo</mousebutton
+> no seu nome. De seguida, dê um nome novo e a finalização apropriada para o formato da imagem escolhido enquanto digitaliza. Se você indicar uma extensão diferente, irá obter uma imagem que não corresponde ao formato digitalizado. Ainda que você possa gravar à mesma a imagem com este nome, ela permanecerá no seu formato original. De momento, a conversão <quote
+>na altura</quote
+> não é disponibilizada.</para
+><para
+>Se você não quiser este método para gerir as suas imagens em <filename class="directory"
+>~/.kde/share/apps/KookaGallery/</filename
+>, você pode, obviamente, gravá-las noutro sítio. Para o fazer, carregue com o botão <mousebutton
+>direito</mousebutton
+> no nome da imagem e seleccione <guilabel
+>Gravar</guilabel
+>. Escolha qualquer localização na janela que aparece. Para além disso, pode fechar ou apagar permanentemente as imagens aqui.</para>
+
+<para
+>Para incorporar outras imagens na galeria, use a opção <menuchoice
+> <guimenu
+>Ficheiro</guimenu
+><guimenuitem
+>Importar a Imagem</guimenuitem
+> </menuchoice
+> ou então arrastá-las e largá-las. Abra o gestor de ficheiros na pasta que contém as imagens desejadas. De seguida, adicione-as à galeria do &kooka;, arrastando-as e largando-as na galeria.</para>
+
+</chapter>
+
+<chapter id="ocr">
+<title
+>Reconhecimento de Caracteres</title>
+
+<para
+>Tal como foi referido, o <application
+>gocr</application
+> precisa estar instalado. Digitalize uma antevisão do seu documento em tons de cinzento ou a cores. Você só poderá digitalizar no formato binário se tiver uma folha totalmente branca com uma impressão em preto puro. De seguida, seleccione o texto a ser reconhecido na janela de antevisão. Finalmente, faça a sua digitalização final no modo binário com a opção <guibutton
+>Digitalizar</guibutton
+>.</para>
+
+<para
+>Agora, carregue no segundo ícone à esquerda, <inlinemediaobject
+><imageobject
+> <imagedata fileref="ocr-select.png" format="PNG"/> </imageobject
+></inlinemediaobject
+>, no painel do ícone, a opção <guilabel
+>OCR da Selecção</guilabel
+>, ou seleccione este item no menu <guilabel
+>Digitalizar</guilabel
+>. Para a sua primeira tentativa, não altere a configuração por omissão mostrada na janela de <acronym
+>OCR</acronym
+> que aparece. Estas são normalmente apropriadas e correspondem à maioria das necessidades. Depois carregue em <guimenuitem
+>Iniciar o reconhecimento de caracteres</guimenuitem
+>. Irá agora ver uma janela que contém os resultados do <acronym
+>OCR</acronym
+>. A qualidade depende em grande medida do conteúdo do documento. </para>
+
+<screenshot
+> <screeninfo
+>A Janela do 'gocr'</screeninfo
+> <mediaobject>
+<imageobject
+><imagedata fileref="kooka_gocr.png"
+format="PNG"/></imageobject
+> </mediaobject
+> </screenshot>
+<para
+>Depois de terminar o reconhecimento de caracteres, é iniciada automaticamente uma verificação ortográfica para o material reconhecido. Poderá editar o conteúdo na janela de <guilabel
+>OCR</guilabel
+> e exportá-la como texto simples. </para>
+<para
+>Depois da digitalização final, marque uma selecção na área da imagem à direita para correr apenas uma parte do texto ou da imagem no <acronym
+>OCR</acronym
+>. De seguida, na barra de ferramentas, carregue no ícone <inlinemediaobject
+><imageobject
+><imagedata fileref="ocr-select.png" format="PNG"/> </imageobject
+></inlinemediaobject
+> ou carregue na opção <guimenuitem
+>OCR da Selecção</guimenuitem
+> do menu. A partir daqui, prossiga como foi descrito na secção anterior.</para>
+
+<screenshot
+> 
+<screeninfo
+>Os Resultados do <acronym
+>OCR</acronym
+></screeninfo
+> 
+<mediaobject
+> 
+<imageobject>
+<imagedata fileref="kooka_gocr_result.png"
+format="PNG"/></imageobject
+> 
+</mediaobject
+> 
+</screenshot>
+
+</chapter>
+
+<chapter id="credits">
+<title
+>Créditos e Licença</title>
+ 
+<para
+>&kooka;</para>
+
+<para
+>'Copyright' da aplicação 2000-2010 pelos programadores e contribuintes do &kooka;</para>
+
+<para
+>Copyright da documentação Martin Sommer <email
+>msommer@suse.de</email
+></para>
+
+<para
+>Tradução de José Nuno Pires <email
+>zepires@gmail.com</email
+></para
+> 
+&underFDL; &underGPL; </chapter
+>  
+
+<appendix id="installation">
+<title
+>Instalação</title>
+
+&install.intro.documentation;
+
+&install.compile.documentation;
+                
+</appendix>
+
+</book>
+

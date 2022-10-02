@@ -1,0 +1,953 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Stefan Asserhall <stefan.asserhall@bredband.net>, 2011, 2013, 2016, 2017, 2018, 2020, 2021.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-10-02 00:44+0000\n"
+"PO-Revision-Date: 2021-03-03 20:06+0100\n"
+"Last-Translator: Stefan Asserhäll <stefan.asserhall@bredband.net>\n"
+"Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
+"Language: sv\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 20.08.1\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: ../libdialogutil/imagefilter.cpp:91
+#, kde-format
+msgid "%1|All Image Files"
+msgstr "%1|Alla bildfiler"
+
+#: ../libdialogutil/imagefilter.cpp:92
+#, kde-format
+msgid "All Image Files (%1)"
+msgstr "Alla bildfiler (%1)"
+
+#: ../libdialogutil/imagefilter.cpp:97
+#, kde-format
+msgid "*|All Files"
+msgstr "*|Alla filer"
+
+#: ../libdialogutil/imagefilter.cpp:98
+#, kde-format
+msgid "All Files (*)"
+msgstr "Alla filer (*)"
+
+#: adddevicedialog.cpp:53
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"If your scanner has not been automatically detected, you can specify it "
+"here. The <interface>Scanner device name</interface> should be a backend "
+"name (with optional parameters) that is understood by SANE, see <link url="
+"\"man:/sane\">sane(7)</link> or <link url=\"man:/sane-dll\">sane-dll(5)</"
+"link> for more information on available backends. The <interface>Type</"
+"interface> and <interface>Description</interface> can be used to identify "
+"the scanner later.<nl/><nl/>For the information that needs to be entered "
+"here, try to locate the device using the <link url=\"man:/sane-find-scanner"
+"\">sane-find-scanner(1)</link> command. For a USB or networked HP scanner "
+"using <link url=\"http://hplip.sourceforge.net/\">HPLIP</link>, try using "
+"the <command>hp-probe</command> command to locate it, for example <icode>hp-"
+"probe&nbsp;-b&nbsp;usb</icode> or <icode>hp-probe&nbsp;-b&nbsp;net</icode>. "
+"If the scanner is found, then enter the device name displayed by these "
+"commands; note that if using HPLIP then <icode>hp:</icode> needs to be "
+"replaced by <icode>hpaio:</icode>.<nl/><nl/>If these commands fail to locate "
+"your scanner, then it may not be supported by SANE. Check the SANE "
+"documentation for a <link url=\"http://www.sane-project.org/sane-supported-"
+"devices.html\">list of supported devices</link>."
+msgstr ""
+"Om bildläsaren inte detekteras automatiskt, kan du ange den här. "
+"<interface>Bildläsarenhetens namn</interface> ska vara gränssnittets namn "
+"(med valfria parametrar) som förstås av SANE. Se <link url=\"man:/sane"
+"\">sane(7)</link> eller <link url=\"man:/sane-dll\">sane-dll(5)</link> för "
+"mer information om tillgängliga gränssnitt. <interface>Typ</interface> och "
+"<interface>Beskrivning</interface> kan användas för att senare identifiera "
+"bildläsaren.<nl/><nl/>För att ta reda på informationen som ska skrivas in "
+"här, försök att hitta enheten med kommandot <link url=\"man:/sane-find-"
+"scanner\">sane-find-scanner(1)</link>. Försök använda kommandot <command>hp-"
+"probe</command> för att hitta en <link url=\"http://hplip.sourceforge.net/"
+"\">HPLIP</link> HP-bildläsare med USB eller nätverk, exempelvis <icode>hp-"
+"probe&nbsp;-b&nbsp;usb</icode> or <icode>hp-probe&nbsp;-b&nbsp;net</icode>. "
+"Om bildläsaren hittas, skriv då in enhetsnamnet som visas av kommandona. "
+"Observera att om HPLIP används, måste <icode>hp:</icode> ersättas med "
+"<icode>hpaio:</icode>.<nl/><nl/>Om kommandona misslyckas hitta bildläsaren, "
+"kanske den inte stöds av SANE. Titta i SANE-dokumentationens <link url="
+"\"http://www.sane-project.org/sane-supported-devices.html\">lista över "
+"enheter som stöds</link>."
+
+#: adddevicedialog.cpp:77
+#, kde-format
+msgid "Scanner device name:"
+msgstr "Bildläsarenhetens namn:"
+
+#: adddevicedialog.cpp:85
+#, kde-format
+msgid "Device type:"
+msgstr "Enhetstyp:"
+
+#: adddevicedialog.cpp:92
+#, kde-format
+msgid "Description:"
+msgstr "Beskrivning:"
+
+#: autoselectbar.cpp:56
+#, kde-kuit-format
+msgctxt "@info"
+msgid "<subtitle>Auto Select</subtitle>"
+msgstr "<subtitle>Automatiskt markering</subtitle>"
+
+#: autoselectbar.cpp:82
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "This is the grayscale value of the selected threshold"
+msgstr "Det här är den valda tröskelns gråskalevärde"
+
+#: autoselectbar.cpp:90
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Perform the auto-detection again"
+msgstr "Utför automatisk detektering igen"
+
+#: autoselectbar.cpp:97
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Advanced settings for auto-detection"
+msgstr "Avancerade inställningar för automatisk detektering"
+
+#: autoselectdialog.cpp:56
+#, kde-format
+msgctxt "@title:window"
+msgid "Autoselect Settings"
+msgstr "Inställningar av automatiskt markering"
+
+#: autoselectdialog.cpp:82
+#, kde-format
+msgid "Black"
+msgstr "Svart"
+
+#: autoselectdialog.cpp:83
+#, kde-format
+msgid "White"
+msgstr "Vit"
+
+#: deviceselector.cpp:58
+#, kde-format
+msgid "Select"
+msgstr "Välj"
+
+#: deviceselector.cpp:59
+#, kde-format
+msgid "Select Scan Device"
+msgstr "Välj bildläsarenhet"
+
+#: deviceselector.cpp:71
+#, kde-format
+msgid "Available Scanners:"
+msgstr "Tillgängliga bildläsare:"
+
+#: deviceselector.cpp:82
+#, kde-format
+msgid "Always use this device at startup"
+msgstr "Använd alltid den här enheten vid start"
+
+#: gammadialog.cpp:53
+#, kde-format
+msgid "Edit Gamma Table"
+msgstr "Redigera gammatabell"
+
+#: gammadialog.cpp:61
+#, kde-format
+msgid "Brightness"
+msgstr "Ljusstyrka"
+
+#: gammadialog.cpp:71
+#, kde-format
+msgid "Contrast"
+msgstr "Kontrast"
+
+#: gammadialog.cpp:81
+#, kde-format
+msgid "Gamma"
+msgstr "Gamma"
+
+#: gammadialog.cpp:95
+#, kde-format
+msgid "This gamma table is passed to the scanner hardware."
+msgstr "Den här gammatabellen skickas till bildläsarens hårdvara."
+
+#: imagecanvas.cpp:785
+#, kde-format
+msgid "Fit Best"
+msgstr "Bästa anpassning"
+
+#: imagecanvas.cpp:786
+#, kde-format
+msgid "Original size"
+msgstr "Ursprunglig storlek"
+
+#: imagecanvas.cpp:787
+#, kde-format
+msgid "Fit Width"
+msgstr "Fyll bredden"
+
+#: imagecanvas.cpp:788
+#, kde-format
+msgid "Fit Height"
+msgstr "Fyll höjd"
+
+#: imagecanvas.cpp:789
+#, kde-format
+msgid "Zoom %1%"
+msgstr "Zooma %1 %"
+
+#: imagecanvas.cpp:790
+#, kde-format
+msgid "Unknown"
+msgstr "Okänd"
+
+#: imagecanvas.cpp:888
+#, kde-format
+msgid "%1x%2 pix, %3 bpp"
+msgstr "%1 x %2 bp, %3 bpp"
+
+#: imgscaledialog.cpp:51
+#, kde-format
+msgid "Image Zoom"
+msgstr "Bildzoomning"
+
+#: imgscaledialog.cpp:72
+#, kde-format
+msgid "25 %"
+msgstr "25 %"
+
+#: imgscaledialog.cpp:79
+#, kde-format
+msgid "50 %"
+msgstr "50 %"
+
+#: imgscaledialog.cpp:86
+#, kde-format
+msgid "75 %"
+msgstr "75 %"
+
+#: imgscaledialog.cpp:93
+#, kde-format
+msgid "&100 %"
+msgstr "&100 %"
+
+#: imgscaledialog.cpp:105
+#, kde-format
+msgid "150 &%"
+msgstr "150 &%"
+
+#: imgscaledialog.cpp:112
+#, kde-format
+msgid "200 %"
+msgstr "200 %"
+
+#: imgscaledialog.cpp:119
+#, kde-format
+msgid "300 %"
+msgstr "300 %"
+
+#: imgscaledialog.cpp:126
+#, kde-format
+msgid "400 %"
+msgstr "400 %"
+
+#: imgscaledialog.cpp:141
+#, kde-format
+msgid "Custom:"
+msgstr "Egen:"
+
+#: kscancontrols.cpp:66
+#, kde-format
+msgid "(Unknown)"
+msgstr "(Okänd)"
+
+#: kscancontrols.cpp:169
+#, kde-format
+msgid "Reset this setting to its standard value, %1"
+msgstr "Återställ alternativ till standardvärde, %1"
+
+#: kscancontrols.cpp:397
+#, kde-format
+msgid "*.pnm *.pbm *.pgm *.ppm|PNM Image Files"
+msgstr "*.pnm *.pbm *.pgm *.ppm|PNM-bildfiler"
+
+#: kscandevice.cpp:288
+#, kde-format
+msgid "No scanner selected"
+msgstr "Ingen bildläsare vald"
+
+#: kscandevice.cpp:1387
+#, kde-format
+msgid "Default startup configuration"
+msgstr "Förvald startinställning"
+
+#: kscandevice.cpp:1487
+#, kde-kuit-format
+msgctxt "@info"
+msgid "The scanner<nl/><icode>%1</icode><nl/>requires authentication."
+msgstr "Bildläsaren<nl/><icode>%1</icode><nl/>kräver behörighetskontroll."
+
+#: kscandevice.cpp:1488
+#, kde-format
+msgid "Scanner Authentication"
+msgstr "Behörighetskontroll för bildläsare"
+
+#: kscandevice.cpp:1532
+#, kde-format
+msgid "OK"
+msgstr "Ok"
+
+#: kscandevice.cpp:1533
+#, kde-format
+msgid "No device"
+msgstr "Ingen enhet"
+
+#: kscandevice.cpp:1534
+#, kde-format
+msgid "Bad parameter"
+msgstr "Felaktig parameter"
+
+#: kscandevice.cpp:1535
+#, kde-format
+msgid "Cannot open device"
+msgstr "Kan inte öppna enhet"
+
+#: kscandevice.cpp:1536
+#, kde-format
+msgid "sane_control_option() failed"
+msgstr "sane_control_option() misslyckades"
+
+#: kscandevice.cpp:1537
+#, kde-format
+msgid "Error while scanning"
+msgstr "Fel vid bildläsning"
+
+#: kscandevice.cpp:1538
+#, kde-format
+msgid "Empty picture"
+msgstr "Tom bild"
+
+#: kscandevice.cpp:1539
+#, kde-format
+msgid "Out of memory"
+msgstr "Slut på minne"
+
+#: kscandevice.cpp:1540
+#, kde-format
+msgid "Needs reload"
+msgstr "Behöver återställning"
+
+#: kscandevice.cpp:1541
+#, kde-format
+msgid "Cancelled"
+msgstr "Stämplat"
+
+#: kscandevice.cpp:1542
+#, kde-format
+msgid "Not active"
+msgstr "Inte aktiv"
+
+#: kscandevice.cpp:1543
+#, kde-format
+msgid "Not supported"
+msgstr "Stöds inte"
+
+#: kscandevice.cpp:1544
+#, kde-format
+msgid "Unknown status %1"
+msgstr "Okänt tillstånd %1"
+
+#: kscanoption.cpp:1011
+#, kde-format
+msgid "pixels"
+msgstr "bildpunkter"
+
+#: kscanoption.cpp:1012
+#, kde-format
+msgid "bits"
+msgstr "bitar"
+
+#: kscanoption.cpp:1013
+#, kde-format
+msgid "mm"
+msgstr "mm"
+
+#: kscanoption.cpp:1014
+#, kde-format
+msgid "dpi"
+msgstr "punkter/tum"
+
+#: kscanoption.cpp:1015
+#, kde-format
+msgid "%"
+msgstr "%"
+
+#: kscanoption.cpp:1016
+#, kde-format
+msgid "µsec"
+msgstr "µs"
+
+#: kscanoptset.cpp:190
+#, kde-format
+msgid "No description"
+msgstr "Ingen beskrivning"
+
+#: previewer.cpp:242
+#, no-c-format, kde-format
+msgctxt "@info:status"
+msgid "%1x%2mm, %3x%4pix"
+msgstr "%1 x %2 mm, %3 x %4 bp"
+
+#: previewer.cpp:245
+#, no-c-format, kde-format
+msgctxt "@info:status"
+msgid "%1x%2mm"
+msgstr "%1 x %2 mm"
+
+#: previewer.cpp:335
+#, kde-format
+msgid ""
+"The autodetection of images on the preview depends on the background color "
+"of the preview image (the result of scanning with no document loaded).\n"
+"\n"
+"Please select whether the background of the preview image is black or white."
+msgstr ""
+"Automatisk detektering av bilder med förhandsgranskningen beror på "
+"bakgrundsfärgen hos bilden som förhandsgranskas (resultatet av inläsning "
+"utan något dokument på plats).\n"
+"Välj om förhandsgranskningens bakgrund är svart eller vit."
+
+#: previewer.cpp:336
+#, kde-format
+msgctxt "@title:window"
+msgid "Autodetection Background"
+msgstr "Automatisk detektering av bakgrund"
+
+#: previewer.cpp:337
+#, kde-format
+msgctxt "@action:button Name of colour"
+msgid "White"
+msgstr "Vit"
+
+#: previewer.cpp:338
+#, kde-format
+msgctxt "@action:button Name of colour"
+msgid "Black"
+msgstr "Svart"
+
+#: scandevices.cpp:182
+#, kde-format
+msgid "Unknown device '%1'"
+msgstr "Okänd enhet '%1'"
+
+#: scanimage.cpp:76
+#, kde-format
+msgid "Loading non-local images is not yet implemented"
+msgstr "Att läsa in icke-lokala bilder är ännu inte implementerat"
+
+#: scanimage.cpp:128
+#, kde-format
+msgid "Image loading failed"
+msgstr "Misslyckades läsa in bild"
+
+#: scanimage.cpp:162
+#, kde-format
+msgid "Failed to open TIFF file"
+msgstr "Misslyckades öppna TIFF-fil"
+
+#: scanimage.cpp:169
+#, kde-format
+msgid "Failed to read TIFF directory"
+msgstr "Misslyckades läsa TIFF-katalog"
+
+#: scanimage.cpp:199
+#, kde-format
+msgid "Failed to read TIFF image"
+msgstr "Misslyckades läsa TIFF-bild"
+
+#: scanimage.cpp:229
+#, kde-format
+msgid "TIFF not supported"
+msgstr "TIFF stöds inte"
+
+#: scanparams.cpp:134
+#, kde-kuit-format
+msgctxt "@info"
+msgid "<title>Scanner&nbsp;Settings</title>"
+msgstr "<title>Inställningar&nbsp;av&nbsp;bildläsare</title>"
+
+#: scanparams.cpp:176
+#, kde-format
+msgid "Pre&view"
+msgstr "Förhands&granska"
+
+#: scanparams.cpp:177
+#, kde-format
+msgid "Start a preview scan and show the preview image"
+msgstr ""
+"Starta en inläsning av förhandsgranskning och visa förhandsgranskningsbilden"
+
+#: scanparams.cpp:182
+#, kde-format
+msgid "Star&t Scan"
+msgstr "S&tarta inläsning"
+
+#: scanparams.cpp:183
+#, kde-format
+msgid "Start a scan and save the scanned image"
+msgstr "Starta en inläsning och spara den inlästa bilden"
+
+#: scanparams.cpp:189
+#, kde-format
+msgid "Stop"
+msgstr "Stoppa"
+
+#: scanparams.cpp:193
+#, kde-format
+msgid "Scanning"
+msgstr "Söker"
+
+#: scanparams.cpp:232
+#, kde-format
+msgid "&Basic"
+msgstr "&Grundläggande"
+
+#: scanparams.cpp:233
+#, kde-format
+msgid "Other"
+msgstr "Övriga"
+
+#: scanparams.cpp:234
+#, kde-format
+msgid "Advanced"
+msgstr "Avancerat"
+
+#: scanparams.cpp:260
+#, kde-format
+msgid "SANE Debug (from PNM image)"
+msgstr "SANE-felsökning (från PNM-bild)"
+
+#: scanparams.cpp:261
+#, kde-kuit-format
+msgctxt "@info:tooltip"
+msgid ""
+"Operate in the same way that a real scanner does (including scan area, image "
+"processing etc.), but reading from the specified image file. See <link url="
+"\"man:sane-pnm(5)\">sane-pnm(5)</link> for more information."
+msgstr ""
+"Fungera på samma sätt som en verklig bildläsare gör (inklusive inläst "
+"område, bildbehandling, etc.), men läs från den angivna bildfilen. Se <link "
+"url=\"man:sane-pnm(5)\">sane-pnm(5)</link> för mer information."
+
+#: scanparams.cpp:263
+#, kde-format
+msgid "Virtual Scanner (any image format)"
+msgstr "Virtuell bildläsare (godtyckligt bildformat)"
+
+#: scanparams.cpp:264
+#, kde-kuit-format
+msgctxt "@info:tooltip"
+msgid ""
+"Do not perform any scanning or processing, but simply read the specified "
+"image file. This is for testing the image saving, etc."
+msgstr ""
+"Utför ingen inläsning eller behandling, utan läs helt enkelt den angivna "
+"bildfilen. Det är till för att prova att spara bilden, etc."
+
+#: scanparams.cpp:281
+#, kde-format
+msgid "Reading mode:"
+msgstr "Läsläge:"
+
+#: scanparams.cpp:411
+#, kde-format
+msgid "Default (from scan settings)"
+msgstr "Standard (från inläsningsinställningar)"
+
+#: scanparams.cpp:412
+#, kde-format
+msgid "Black/white bitmap"
+msgstr "Svartvit bitavbildning"
+
+#: scanparams.cpp:413
+#, kde-format
+msgid "Grey scale"
+msgstr "Gråskala"
+
+#: scanparams.cpp:414
+#, kde-format
+msgid "Low colour"
+msgstr "Få färger"
+
+#: scanparams.cpp:415
+#, kde-format
+msgid "High colour"
+msgstr "Många färger"
+
+#: scanparams.cpp:425
+#, kde-format
+msgid "Force image format:"
+msgstr "Tvinga bildformat:"
+
+#: scanparams.cpp:476
+#, kde-format
+msgid "Edit Gamma Table..."
+msgstr "Redigera gammatabell..."
+
+#: scanparams.cpp:548
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"<title>No scanner selected</title><nl/><nl/>Select a scanner device to "
+"perform scanning."
+msgstr ""
+"<title>Ingen bildläsare vald</title><nl/><nl/>Välj en bildläsare för att "
+"utföra bildläsning."
+
+#: scanparams.cpp:568
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"<title>No scanner found, or unable to access it</title><nl/><nl/>There was a "
+"problem using the SANE (Scanner Access Now Easy) library to access the "
+"scanner device.  There may be a problem with your SANE installation, or it "
+"may not be configured to support your scanner.<nl/><nl/>Check that SANE is "
+"correctly installed and configured on your system, and also that the scanner "
+"device name and settings are correct.<nl/><nl/>See the SANE project home "
+"page (<link url=\"http://www.sane-project.org\">www.sane-project.org</link>) "
+"for more information on SANE installation and setup."
+msgstr ""
+"<title>Ingen bildläsare hittades, eller det går inte att komma åt den</"
+"title><nl/><nl/>Ett problem uppstod att använda SANE-biblioteket (Scanner "
+"Access Now Easy) för att komma åt bildläsarenheten. Det kan finnas ett "
+"problem med installationen av SANE, eller kanske det inte är inställt att "
+"stödja bildläsaren.<nl/><nl/>Kontrollera att SANE är riktigt installerat och "
+"inställt på systemet, och dessutom att bildläsarens enhetsnamn och "
+"inställningar är riktiga.<nl/><nl/>Se SANE-projekets hemsida (<link url="
+"\"http://www.sane-project.org\">www.sane-project.org</link>) för mer "
+"information om installation och inställning av SANE."
+
+#: scanparams.cpp:670
+#, kde-format
+msgid "1-bit depth scan cannot be done in color"
+msgstr "Inläsning med 1 bits djup kan inte göras i färg"
+
+#: scanparams.cpp:673
+#, kde-format
+msgid "16-bit depth scans are not supported"
+msgstr "Inläsning med 16-bitars djup stöds inte"
+
+#: scanparams.cpp:683
+#, kde-format
+msgid "A file must be entered for testing or virtual scanning"
+msgstr "En fil måste anges för prov eller virtuell inläsning"
+
+#: scanparams.cpp:689
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"The testing or virtual file <filename>%1</filename><nl/>was not found or is "
+"not readable."
+msgstr ""
+"Provfil eller virtuell fil <filename>%1</filename><nl/>hittades inte eller "
+"kunde inte läsas"
+
+#: scanparams.cpp:699
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"SANE Debug can only read PNM files.<nl/>The specified file is type <icode>"
+"%1</icode>."
+msgstr ""
+"SANE-felsökning kan bara läsa PNM-filer.<nl/>Den här filen är av typen "
+"<icode>%1</icode>."
+
+#: scanparams.cpp:716
+#, kde-kuit-format
+msgid "Scan in progress"
+msgstr "Inläsning pågår"
+
+#: scanparams.cpp:717
+#, kde-kuit-format
+msgid "Scan in progress<nl/><nl/>%1"
+msgstr "Inläsning pågår<nl/><nl/>%1"
+
+#: scanparams.cpp:737
+#, kde-format
+msgid "Cannot preview in Virtual Scanner mode"
+msgstr "Kan inte förhandsgranska i virtuellt bildläsningsläge"
+
+#. i18n: ectx: label, entry (StartupOnlyLocal), group (Startup)
+#: scansettings.kcfg:12
+#, kde-format
+msgid "Query network for available scanners"
+msgstr "Sök efter bildläsarenheter på nätverket"
+
+#. i18n: ectx: tooltip, entry (StartupOnlyLocal), group (Startup)
+#: scansettings.kcfg:13
+#, kde-format
+msgid ""
+"<div>Check this if you want a network query for available scanners.<br/><br/"
+">Note that this does not mean a query over the entire network, but only "
+"those hosts configured for SANE.</div>"
+msgstr ""
+"<div>Markera det här om du vill göra en nätverksförfrågan efter tillgängliga "
+"bildläsare.<br/><br/>Observera att det inte betyder en förfrågan över hela "
+"nätverket, utan bara till värddatorer som är inställda för att använda SANE."
+"</div>"
+
+#. i18n: ectx: label, entry (StartupSkipAsk), group (Startup)
+#: scansettings.kcfg:22
+#, kde-format
+msgid "Show the scanner selection dialog"
+msgstr "Visa dialogrutan för val av bildläsare"
+
+#. i18n: ectx: tooltip, entry (StartupSkipAsk), group (Startup)
+#: scansettings.kcfg:23
+#, kde-format
+msgid "<div>Check this to show the scanner selection dialog on startup.</div>"
+msgstr ""
+"<div>Markera för att visa dialogrutan för val av bildläsare vid nästa start."
+"</div>"
+
+#. i18n: ectx: label, entry (PreviewAutoselThreshold), group (Scanner Name)
+#: scansettings.kcfg:53
+#, kde-format
+msgid "Threshold:"
+msgstr "Tröskel:"
+
+#. i18n: ectx: tooltip, entry (PreviewAutoselThreshold), group (Scanner Name)
+#: scansettings.kcfg:54
+#, kde-format
+msgid ""
+"<div>Threshold for auto-detection. All pixels lighter (on a black "
+"background) or darker (on a white background) than this are considered to be "
+"part of the image.</div>"
+msgstr ""
+"<div>Tröskel för automatisk detektering. Alla bildpunkter ljusare (på svart "
+"bakgrund) eller mörkare (på vit bakgrund) än den här anses ingå i bilden.</"
+"div>"
+
+#. i18n: ectx: label, entry (PreviewAutoselDustsize), group (Scanner Name)
+#: scansettings.kcfg:61
+#, kde-format
+msgid "Dust size (pixels):"
+msgstr "Dammstorlek (bildpunkter):"
+
+#. i18n: ectx: tooltip, entry (PreviewAutoselDustsize), group (Scanner Name)
+#: scansettings.kcfg:62
+#, kde-format
+msgid ""
+"<div>Set the dust size; dark or light areas smaller than this will be "
+"ignored</div>"
+msgstr ""
+"<div>Ställ in dammstorlek. Mörka eller ljusa områden mindre än denna kommer "
+"att ignoreras.</div>"
+
+#. i18n: ectx: label, entry (PreviewAutoselMargin), group (Scanner Name)
+#: scansettings.kcfg:69
+#, kde-format
+msgid "Add/subtract margin (mm):"
+msgstr "Addera eller subtrahera marginal (mm):"
+
+#. i18n: ectx: tooltip, entry (PreviewAutoselMargin), group (Scanner Name)
+#: scansettings.kcfg:70
+#, kde-format
+msgid ""
+"<div>Set a margin to be added to or subtracted from the detected area</div>"
+msgstr ""
+"<div>Ange en marginal som ska adderas till eller subtraheras från det "
+"detekterade området</div>"
+
+#. i18n: ectx: label, entry (PreviewAutoselBackground), group (Scanner Name)
+#: scansettings.kcfg:77
+#, kde-format
+msgid "Scanner background:"
+msgstr "Bildläsarens bakgrund:"
+
+#. i18n: ectx: tooltip, entry (PreviewAutoselBackground), group (Scanner Name)
+#: scansettings.kcfg:78
+#, kde-format
+msgid ""
+"<div>Select whether a scan of the empty scanner glass results in a black or "
+"a white image</div>"
+msgstr ""
+"<div>Välj om inläsning av den tomma bildläsarens glas åstadkommer en svart "
+"eller vit bild</div>"
+
+#: scansizeselector.cpp:119
+#, kde-format
+msgid "Set the size of the scanned area"
+msgstr "Ställ in det inlästa områdets storlek"
+
+#: scansizeselector.cpp:124
+#, kde-format
+msgid "Full size"
+msgstr "Full storlek"
+
+#: scansizeselector.cpp:125
+#, kde-format
+msgid "(No selection)"
+msgstr "(Ingen markering)"
+
+#: scansizeselector.cpp:143
+#, kde-format
+msgid "Portrait"
+msgstr "Stående"
+
+#: scansizeselector.cpp:148
+#, kde-format
+msgid "Landscape"
+msgstr "Liggande"
+
+#: scansizeselector.cpp:159
+#, kde-format
+msgid "Set the orientation for a preset size of the scanned area"
+msgstr "Ställ in orientering för en förinställd storlek av det inlästa området"
+
+#: scansizeselector.cpp:266
+#, kde-format
+msgid "Selection"
+msgstr "Markering"
+
+#~ msgid "ADF Scanning"
+#~ msgstr "ADF-bildläsning"
+
+#~ msgid "<qt><b>Mass Scanning</b>"
+#~ msgstr "<qt><b>Mängdinläsning</b>"
+
+#~ msgid "Scan Parameters"
+#~ msgstr "Inläsningsparametrar"
+
+#~ msgid "Scanning <B>%s</B> at <B>%d</B> dpi"
+#~ msgstr "Läser in <B>%s</B> med <B>%d</B> punkter/tum"
+
+#~ msgid "Saving scans in folder <B>%s</B>"
+#~ msgstr "Sparar inlästa bilder i katalogen <B>%s</B>"
+
+#~ msgid "Scan Progress"
+#~ msgstr "Inläsningsförlopp"
+
+#~ msgid "Scanning page %1"
+#~ msgstr "Läser in sida %1"
+
+#~ msgid "&Scanning"
+#~ msgstr "&Söker"
+
+#~ msgid "&Options"
+#~ msgstr "A&lternativ"
+
+#~ msgid "Startup Options"
+#~ msgstr "Startalternativ"
+
+#~ msgid ""
+#~ "Note: changing these options will affect the scan plugin on next start."
+#~ msgstr ""
+#~ "Observera: Ändring av de här alternativen påverkar insticksprogrammet för "
+#~ "bildläsning vid nästa start."
+
+#~ msgid "&Ask for the scan device on plugin startup"
+#~ msgstr "&Fråga efter bildläsarenhet vid start av insticksprogrammet"
+
+#~ msgid ""
+#~ "You can uncheck this if you do not want to be asked which scanner to use "
+#~ "on startup."
+#~ msgstr ""
+#~ "Du kan avmarkera det här om du inte vill bli tillfrågad om vilken "
+#~ "bildläsare som ska användas vid start."
+
+#~ msgid "&Query the network for scan devices"
+#~ msgstr "&Sök efter bildläsarenheter på nätverket"
+
+#~ msgid ""
+#~ "Check this if you want to query for configured network scan stations."
+#~ msgstr ""
+#~ "Markera det här om du vill söka efter tillgängliga bildläsarstationer på "
+#~ "nätverket."
+
+#~ msgid "Custom Gamma Tables"
+#~ msgstr "Egna gammatabeller"
+
+#~ msgid ""
+#~ "<b>Source selection</b><br />Note that you may see more sources than "
+#~ "actually exist"
+#~ msgstr ""
+#~ "<b>Val av källa</b><br />Observera att fler källor än de som faktiskt "
+#~ "finns kan synas."
+
+#~ msgid "Advanced ADF Options"
+#~ msgstr "Avancerade ADF-alternativ"
+
+#~ msgid "Scan until ADF reports out of paper"
+#~ msgstr "Sök till ADF rapporterar slut på papper"
+
+#~ msgid "Scan only one sheet of ADF per click"
+#~ msgstr "Sök bara ett blad i ADF per klick"
+
+#~ msgctxt "@info"
+#~ msgid "Scan in progress<nl/><nl/><filename>%1</filename>"
+#~ msgstr "Inläsning pågår<nl/><nl/><filename>%1</filename>"
+
+#~ msgctxt "@info"
+#~ msgid "<emphasis strong=\"1\">Auto Select</emphasis>"
+#~ msgstr "<emphasis strong=\"1\">Välj automatiskt</emphasis>"
+
+#~ msgid "Lineart"
+#~ msgstr "Linjeteckning"
+
+#~ msgid "Binary"
+#~ msgstr "Binär"
+
+#~ msgid "Gray"
+#~ msgstr "Grå"
+
+#~ msgid "Color"
+#~ msgstr "Färg"
+
+#~ msgid "Halftone"
+#~ msgstr "Halvton"
+
+#~ msgid "<b>Preview</b>"
+#~ msgstr "<b>Förhandsgranskning</b>"
+
+#~ msgid "- mm"
+#~ msgstr "- mm"
+
+#~ msgid "- pix"
+#~ msgstr "- bildpunkter"
+
+#~ msgid ""
+#~ "This size field shows how large the uncompressed image will be.\n"
+#~ "It tries to warn you if you try to produce too big an image by \n"
+#~ "changing its background color."
+#~ msgstr ""
+#~ "Storleksfältet visar hur stor den okomprimerade bilden kommer att bli.\n"
+#~ "Det försöker ge en varning om du försöker skapa en alltför stor bild\n"
+#~ "genom att ändra dess bakgrundsfärg."
+
+#~ msgid ""
+#~ "Select this option to automatically detect\n"
+#~ "the document scan area"
+#~ msgstr ""
+#~ "Markera alternativet för att automatiskt\n"
+#~ "detektera dokumentets inläsningsområde"
+
+#~ msgid "%1 x %2 mm"
+#~ msgstr "%1 x %2 mm"
+
+#~ msgid "%1 x %2 pixel"
+#~ msgstr "%1 x %2 bildpunkter"
+
+#~ msgid "Line art"
+#~ msgstr "Linjegrafik"
+
+#~ msgid "Grey"
+#~ msgstr "Grå"

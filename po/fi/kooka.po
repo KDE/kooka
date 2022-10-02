@@ -1,0 +1,3454 @@
+# translation of kooka.po to Finnish
+# KDE Finnish translation sprint participants:
+# Author: Artnay
+# Author: Lliehu
+# Teemu Rytilahti <teemu.rytilahti@d5k.net>, 2003.
+# Kim Enkovaara <kim.enkovaara@iki.fi>, 2003.
+# Teemu Rytilahti <teemu.rytilahti@kde-fi.org>, 2003.
+# Lasse Liehu <lasse.liehu@gmail.com>, 2013, 2014.
+# Tommi Nieminen <translator@legisign.org>, 2018, 2019, 2020, 2021.
+msgid ""
+msgstr ""
+"Project-Id-Version: kooka\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-10-01 00:45+0000\n"
+"PO-Revision-Date: 2021-12-07 14:41+0200\n"
+"Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
+"Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
+"Language: fi\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-POT-Import-Date: 2012-12-01 22:27:05+0000\n"
+"X-Generator: Lokalize 20.04.2\n"
+
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "Kim Enkovaara,Tapio Kautto,Tommi Nieminen"
+
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "kim.enkovaara@iki.fi,eleknader@phnet.fi,translator@legisign.org"
+
+#: ../plugins/destination/abstractdestination.cpp:86
+#, kde-format
+msgid "Remember this format"
+msgstr "Muista tämä muoto"
+
+#: ../plugins/destination/abstractdestination.cpp:120
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"Cannot save temporary image file<nl/><filename>%1</filename><nl/><message>"
+"%2</message>"
+msgstr ""
+"Ei voitu tallentaa väliaikaista kuvatiedostoa<nl/><filename>%2</filename><nl/"
+"><message>%1</message>"
+
+#: ../plugins/destination/abstractdestination.cpp:160
+#: ../plugins/destination/application/destinationapplication.cpp:190
+#: kookaview.cpp:1177
+#, kde-format
+msgid "Other..."
+msgstr "Muu…"
+
+#: ../plugins/destination/application/destinationapplication.cpp:94
+#, kde-format
+msgid "Sending to application"
+msgstr "Lähetetään sovellukseen"
+
+#: ../plugins/destination/application/destinationapplication.cpp:96
+#, kde-kuit-format
+msgid "Sending to <application>%1</application>"
+msgstr "Lähetetään sovellukseen <application>%1</application>"
+
+#: ../plugins/destination/application/destinationapplication.cpp:192
+#, kde-format
+msgid "Application:"
+msgstr "Sovellus:"
+
+#: ../plugins/destination/application/destinationapplication.cpp:198
+#: ../plugins/destination/export/destinationexport.cpp:111
+#: ../plugins/destination/share/destinationshare.cpp:137
+#, kde-format
+msgid "Image format:"
+msgstr "Kuvamuoto:"
+
+#: ../plugins/destination/clipboard/destinationclipboard.cpp:61
+#, kde-format
+msgid "Copying image to clipboard"
+msgstr "Kopioidaan kuva leikepöydälle"
+
+#: ../plugins/destination/export/destinationexport.cpp:115
+#, kde-format
+msgid "Online service:"
+msgstr "Verkkopalvelu:"
+
+#: ../plugins/destination/export/destinationexport.cpp:172
+#: ../plugins/destination/share/destinationshare.cpp:151
+#, kde-kuit-format
+msgid "<application>%1</application>"
+msgstr "<application>%1</application>"
+
+#: ../plugins/destination/export/kookakipihelper.cpp:58
+#, kde-format
+msgid "Helper command for the 'Export to Online Service' plugin"
+msgstr "”Vie verkkopalveluun” -liitännäisen apukomento"
+
+#: ../plugins/destination/export/kookakipihelper.cpp:61
+#, kde-format
+msgid "(C) 2021, the Kooka developers and contributors"
+msgstr "© 2021 Kookan kehittäjät ja avustajat"
+
+#: ../plugins/destination/export/kookakipihelper.cpp:79
+#, kde-format
+msgid "Kooka KIPI Helper"
+msgstr "Kookan KIPI-apuohjelma"
+
+#: ../plugins/destination/export/kookakipihelper.cpp:91 main.cpp:90
+#, kde-format
+msgid "Jonathan Marten"
+msgstr "Jonathan Marten"
+
+#: ../plugins/destination/export/kookakipihelper.cpp:91
+#, kde-format
+msgid "Current maintainer, KDE4/KF5 port"
+msgstr "Nykyinen ylläpitäjä, KDE4/KF5-siirros"
+
+#: ../plugins/destination/export/kookakipihelper.cpp:99
+#, kde-format
+msgid "List all of the available KIPI plugin actions"
+msgstr "Luettele kaikki käytettävissä olevat KIPI-liitännäistoiminnot"
+
+#: ../plugins/destination/export/kookakipihelper.cpp:102
+#, kde-format
+msgid "The KIPI plugin action to export to"
+msgstr "KIPI-liitännäistoiminto, johon viedään"
+
+#: ../plugins/destination/export/kookakipihelper.cpp:102
+#, kde-format
+msgid "action"
+msgstr "toiminto"
+
+#: ../plugins/destination/export/kookakipihelper.cpp:105
+#, kde-format
+msgid "URLs of the image files to export"
+msgstr "Vietävien kuvatiedostojen verkko-osoitteet"
+
+#: ../plugins/destination/export/kookakipihelper.cpp:114
+#, kde-format
+msgid "Cannot specify both list ('-l') and share ('-s') mode"
+msgstr "Ei voi antaa sekä luettelointi- (”-l”) että jakamistilaa (”-s”)"
+
+#: ../plugins/destination/export/kookakipihelper.cpp:115
+#, kde-format
+msgid "Arguments ignored in list ('-l') mode"
+msgstr "Luettelointitilassa (”-l”) parametrit sivuutetaan"
+
+#: ../plugins/destination/export/kookakipihelper.cpp:119
+#, kde-format
+msgid "Arguments missing for share ('-s') mode"
+msgstr "Jakamistilalta (”-s”) puuttuu parametreja"
+
+#: ../plugins/destination/export/kookakipihelper.cpp:121
+#, kde-format
+msgid "One of either list ('-l') or share ('-s') mode must be specified"
+msgstr "Joko luettelointi- (”-l”) tai jakamistila (”-s”) on annettava"
+
+#: ../plugins/destination/export/kookakipihelper.cpp:171
+#, kde-format
+msgctxt "as added to action text"
+msgid "..."
+msgstr "…"
+
+#: ../plugins/destination/export/kookakipihelper.cpp:193
+#, kde-format
+msgid "Argument '%1' is not a local file, ignored"
+msgstr "Parametri ”%1” ei ole paikallinen tiedosto: sivuutetaan"
+
+#: ../plugins/destination/export/kookakipihelper.cpp:200
+#, kde-format
+msgid "File '%1' not found or is unreadable, ignored"
+msgstr "Tiedostoa ”%1” ei löydy tai voi lukea: sivuutetaan"
+
+#: ../plugins/destination/export/kookakipihelper.cpp:207
+#, kde-format
+msgid "No usable files to share"
+msgstr "Ei jakamiskelpoisia tiedostoja"
+
+#: ../plugins/destination/export/kookakipihelper.cpp:223
+#, kde-format
+msgid "Unknown plugin action '%1'"
+msgstr "Tuntematon liitännäistoiminto ”%1”"
+
+#: ../plugins/destination/gallery/destinationgallery.cpp:74
+#, kde-kuit-format
+msgid "<filename>%1</filename>"
+msgstr "<filename>%1</filename>"
+
+#: ../plugins/destination/print/destinationprint.cpp:78 kookaview.cpp:673
+#, kde-format
+msgctxt "@title:window"
+msgid "Print Image"
+msgstr "Tulosta kuva"
+
+#: ../plugins/destination/print/destinationprint.cpp:89 kookaview.cpp:689
+#, kde-format
+msgctxt "@info"
+msgid ""
+"Invalid print options were specified:\n"
+"\n"
+"%1"
+msgstr ""
+"Annettiin virheelliset tulostusvalinnat:\n"
+"\n"
+"%1"
+
+#: ../plugins/destination/print/destinationprint.cpp:90 kookaview.cpp:690
+#, kde-format
+msgctxt "@title:window"
+msgid "Cannot Print"
+msgstr "Ei voida tulostaa"
+
+#: ../plugins/destination/print/destinationprint.cpp:106
+#, kde-format
+msgid "Print immediately with same settings"
+msgstr "Tulosta välittömästi samoin asetuksin"
+
+#: ../plugins/destination/print/destinationprint.cpp:116
+#, kde-format
+msgid "Printing image"
+msgstr "Tulostetaan kuvaa"
+
+#: ../plugins/destination/save/destinationsave.cpp:132
+#, kde-kuit-format
+msgctxt "@info"
+msgid "Cannot save image to <filename>%1</filename><nl/><message>%2</message>"
+msgstr ""
+"Tiedostoa <filename>%1</filename> ei voi tallentaa<nl/><message>%2</message>"
+
+#: ../plugins/destination/save/destinationsave.cpp:134
+#: ../plugins/destination/save/destinationsave.cpp:239
+#, kde-format
+msgid "Cannot Save Image"
+msgstr "Tiedostoa ei voi tallentaa"
+
+#: ../plugins/destination/save/destinationsave.cpp:163
+#, kde-format
+msgid "Saving image"
+msgstr "Tallennetaan kuvaa"
+
+#: ../plugins/destination/save/destinationsave.cpp:164
+#, kde-kuit-format
+msgid "Saving to <filename>%1</filename>"
+msgstr "Tallennetaan tiedostoon <filename>%1</filename>"
+
+#: ../plugins/destination/save/destinationsave.cpp:181 formatdialog.cpp:280
+#, kde-format
+msgid "Save Scan"
+msgstr "Tallenna luettu kuva"
+
+#: ../plugins/destination/save/destinationsave.cpp:237
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"Cannot save to <filename>%2</filename><nl/>The image format <resource>%1</"
+"resource> is not supported."
+msgstr ""
+"Ei voida tallentaa tiedostoon <filename>%2</filename><nl/>Kuvatiedostomuotoa "
+"<resource>%1</resource> ei tueta."
+
+#: ../plugins/destination/share/destinationshare.cpp:143
+#, kde-format
+msgid "Share to:"
+msgstr "Jaa kohteeseen:"
+
+#: ../plugins/destination/share/destinationshare.cpp:217
+#, kde-kuit-format
+msgctxt "@info"
+msgid "The scan was shared to<nl/><link>%1</link>"
+msgstr "Luettu kuva jaettiin kohteeseen<nl/><link>%1</link>"
+
+# *** TARKISTA: ID:n merkitys epävarma
+#: ../plugins/destination/share/destinationshare.cpp:218
+#, kde-format
+msgid "Scan Shared"
+msgstr "Luettu kuva jaettu"
+
+#: ../plugins/destination/share/destinationshare.cpp:227
+#, kde-kuit-format
+msgctxt "@info"
+msgid "Cannot share the scanned image<nl/><nl/><message>%1</message>"
+msgstr "Luettua kuvaa ei voida jakaa<nl/><nl/><message>%1</message>"
+
+#: ../plugins/ocr/abstractocrdialogue.cpp:101 kookapref.cpp:61
+#, kde-format
+msgid "Optical Character Recognition"
+msgstr "Tekstintunnistus"
+
+#: ../plugins/ocr/abstractocrdialogue.cpp:103
+#, kde-format
+msgid "Start OCR"
+msgstr "Käynnistä tekstintunnistus"
+
+#: ../plugins/ocr/abstractocrdialogue.cpp:103
+#, kde-format
+msgid "Start the Optical Character Recognition process"
+msgstr "Käynnistä tekstintunnistus"
+
+#: ../plugins/ocr/abstractocrdialogue.cpp:104
+#, kde-format
+msgid "Stop OCR"
+msgstr "Keskeytä tekstintunnistus"
+
+#: ../plugins/ocr/abstractocrdialogue.cpp:104
+#, kde-format
+msgid "Stop the Optical Character Recognition process"
+msgstr "Keskeytä tekstintunnistus"
+
+#: ../plugins/ocr/abstractocrdialogue.cpp:146
+#, kde-format
+msgid "Setup"
+msgstr "Asetukset"
+
+#: ../plugins/ocr/abstractocrdialogue.cpp:149
+#, kde-format
+msgid "Optical Character Recognition using %1"
+msgstr "Tekstintunnistus moottorilla %1"
+
+#: ../plugins/ocr/abstractocrdialogue.cpp:192
+#, kde-format
+msgid "Executable:"
+msgstr "Ohjelmatiedosto:"
+
+#: ../plugins/ocr/abstractocrdialogue.cpp:195
+#, kde-kuit-format
+msgctxt "@info"
+msgid "<filename>%1</filename>"
+msgstr "<filename>%1</filename>"
+
+#: ../plugins/ocr/abstractocrdialogue.cpp:195
+#, kde-format
+msgid "Not found"
+msgstr "Ei löytynyt"
+
+#: ../plugins/ocr/abstractocrdialogue.cpp:198
+#, kde-format
+msgid "Version:"
+msgstr "Versio:"
+
+#: ../plugins/ocr/abstractocrdialogue.cpp:201
+#: ../plugins/ocr/gocr/ocrgocrdialog.cpp:201
+#, kde-format
+msgid "Unknown"
+msgstr "Tuntematon"
+
+#: ../plugins/ocr/abstractocrdialogue.cpp:233
+#, kde-format
+msgid "No preview available"
+msgstr "Esikatselu ei ole käytettävissä"
+
+#: ../plugins/ocr/abstractocrdialogue.cpp:242
+#, kde-format
+msgid "No information available"
+msgstr "Tietoa ei ole saatavilla"
+
+#: ../plugins/ocr/abstractocrdialogue.cpp:245
+#, kde-format
+msgid "Source"
+msgstr "Lähde"
+
+#: ../plugins/ocr/abstractocrdialogue.cpp:246
+#, kde-format
+msgid "Source Image Information"
+msgstr "Lähdekuvan tiedot"
+
+#: ../plugins/ocr/abstractocrdialogue.cpp:265
+#, kde-format
+msgid "OCR Engine"
+msgstr "Tekstintunnistusmoottori"
+
+#: ../plugins/ocr/abstractocrdialogue.cpp:266
+#, kde-format
+msgid "OCR Engine Information"
+msgstr "Tekstintunnistusmoottorin tiedot"
+
+#: ../plugins/ocr/abstractocrdialogue.cpp:283
+#, kde-format
+msgid "Highlight misspelled words"
+msgstr "Korosta väärin kirjoitetut sanat"
+
+#: ../plugins/ocr/abstractocrdialogue.cpp:289
+#, kde-format
+msgid "Use the system spell configuration"
+msgstr "Käytä järjestelmän oikolukuasetuksia"
+
+#: ../plugins/ocr/abstractocrdialogue.cpp:291
+#, kde-format
+msgid "Use custom spell configuration"
+msgstr "Mukautettu oikoluku"
+
+#: ../plugins/ocr/abstractocrdialogue.cpp:293
+#, kde-format
+msgid "Custom Spell Configuration..."
+msgstr "Mukauta oikolukua…"
+
+#: ../plugins/ocr/abstractocrdialogue.cpp:303
+#, kde-format
+msgid "Start interactive spell check"
+msgstr "Käynnistä vuorovaikutteinen oikoluku"
+
+#: ../plugins/ocr/abstractocrdialogue.cpp:309
+#, kde-format
+msgid ""
+"Custom spell settings above do not affect this spelling check, use the "
+"language setting in the dialog to change the dictionary language."
+msgstr ""
+"Yllä olevat mukautetut oikolukuasetukset eivät vaikuta tähän oikolukuun. "
+"Vaihda sanaston kieltä ikkunan kieliasetuksesta."
+
+#: ../plugins/ocr/abstractocrdialogue.cpp:332
+#, kde-format
+msgid "Spell Check"
+msgstr "Oikoluku"
+
+#: ../plugins/ocr/abstractocrdialogue.cpp:333
+#, kde-format
+msgid "OCR Result Spell Checking"
+msgstr "Tunnistetun tekstin oikoluku"
+
+#: ../plugins/ocr/abstractocrdialogue.cpp:343
+#, kde-format
+msgid "Retain temporary files"
+msgstr "Säilytä väliaikaistiedostot"
+
+#: ../plugins/ocr/abstractocrdialogue.cpp:346
+#, kde-format
+msgid "Verbose message output"
+msgstr "Yksityiskohtaiset tulosviestit"
+
+#: ../plugins/ocr/abstractocrdialogue.cpp:351
+#, kde-format
+msgid "Debugging"
+msgstr "Virheenpaikannus"
+
+#: ../plugins/ocr/abstractocrdialogue.cpp:352
+#, kde-format
+msgid "OCR Debugging"
+msgstr "Tekstintunnistuksen virheenpaikannus"
+
+#: ../plugins/ocr/abstractocrdialogue.cpp:408
+#, kde-format
+msgid "No image"
+msgstr "Ei kuvaa"
+
+#: ../plugins/ocr/abstractocrdialogue.cpp:431
+#, kde-format
+msgid "Image: %1"
+msgstr "Kuva: %1"
+
+#: ../plugins/ocr/abstractocrdialogue.cpp:431
+#, kde-format
+msgid "Selection: %1"
+msgstr "Valinta: %1"
+
+#: ../plugins/ocr/abstractocrengine.cpp:106
+#, kde-format
+msgid "OCR is already in progress"
+msgstr "Tekstintunnistus on jo käynnissä"
+
+#: ../plugins/ocr/abstractocrengine.cpp:118
+#, kde-format
+msgid "OCR could not be started."
+msgstr "Tekstintunnistusta ei voitu käynnistää."
+
+#: ../plugins/ocr/abstractocrengine.cpp:119
+#, kde-format
+msgid "Check the OCR engine selection and settings."
+msgstr "Valitse tekstintunnistusmoottori ja sen asetukset."
+
+#: ../plugins/ocr/abstractocrengine.cpp:121
+#, kde-format
+msgid "OCR Setup Error"
+msgstr "Tekstintunnistuksen asetusvirhe"
+
+#: ../plugins/ocr/abstractocrengine.cpp:122 kookaview.cpp:787
+#, kde-format
+msgid "Configure OCR..."
+msgstr "Tekstintunnistusasetukset…"
+
+#: ../plugins/ocr/abstractocrengine.cpp:180
+#, kde-format
+msgid "The OCR process was stopped"
+msgstr "Tekstintunnistusprosessi keskeytettiin"
+
+#: ../plugins/ocr/abstractocrengine.cpp:249
+#, kde-kuit-format
+msgctxt "@info"
+msgid "The following OCR temporary files are retained for debugging:<nl/><nl/>"
+msgstr ""
+"Virheenpaikannusta varten säilytetään seuraavat väliaikaistiedostot:<nl/><nl/"
+">"
+
+#: ../plugins/ocr/abstractocrengine.cpp:256
+#, kde-kuit-format
+msgctxt "@info"
+msgid "<filename><link url=\"%1\">%2</link></filename><nl/>"
+msgstr "<filename><link url=\"%1\">%2</link></filename><nl/>"
+
+#: ../plugins/ocr/abstractocrengine.cpp:260
+#, kde-format
+msgid "OCR Temporary Files"
+msgstr "Tekstintunnistuksen väliaikaistiedostot"
+
+#: ../plugins/ocr/abstractocrengine.cpp:425
+#, kde-kuit-format
+msgctxt "@info"
+msgid "Cannot create temporary file <filename>%1</filename>"
+msgstr "Ei voida luoda väliaikaistiedostoa <filename>%1</filename>"
+
+#: ../plugins/ocr/abstractocrengine.cpp:471
+#, kde-kuit-format
+msgctxt "@info"
+msgid "Cannot save image to temporary file <filename>%1</filename>"
+msgstr "Ei voida tallentaa väliaikaistiedostoon <filename>%1</filename>"
+
+#: ../plugins/ocr/abstractocrengine.cpp:499
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"The executable <command>%1</command> could not be found on <envar>PATH</"
+"envar>."
+msgstr ""
+"Ohjelmatiedostoa <command>%1</command> ei löydy hakupolusta (<envar>PATH</"
+"envar>)."
+
+#: ../plugins/ocr/abstractocrengine.cpp:509
+#, kde-kuit-format
+msgctxt "@info"
+msgid "The executable <filename>%1</filename> does not exist or is not usable."
+msgstr ""
+"Ohjelmatiedostoa <filename>%1</filename> ei ole olemassa tai se ei ole "
+"käytettävissä."
+
+#: ../plugins/ocr/abstractocrengine.cpp:581
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"Command <command>%1</command> crashed with exit status <numid>%2</numid>"
+msgstr ""
+"Ohjelmatiedosto <command>%1</command> kaatui, paluukoodi <numid>%2</numid>"
+
+#: ../plugins/ocr/abstractocrengine.cpp:586
+#, kde-kuit-format
+msgctxt "@info"
+msgid "Command <command>%1</command> exited with status <numid>%2</numid>"
+msgstr ""
+"Ohjelmatiedosto <command>%1</command> päättyi koodiin <numid>%2</numid>"
+
+#: ../plugins/ocr/abstractocrengine.cpp:590
+#, kde-kuit-format
+msgctxt "@info"
+msgid "Running the OCR process failed."
+msgstr "Tekstintunnistusprosessin suoritus epäonnistui."
+
+#: ../plugins/ocr/abstractocrengine.cpp:591
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"More information may be available in its <link url=\"%1\">standard error</"
+"link> log file."
+msgstr ""
+"Ohjelman <link url=\"%1\">vakiovirhevirran</link> lokitiedostosta voi löytyä "
+"lisätietoa."
+
+#: ../plugins/ocr/abstractocrengine.cpp:594
+#, kde-format
+msgid "OCR Command Failed"
+msgstr "Tekstintunnistuskomento epäonnistui"
+
+#: ../plugins/ocr/abstractocrengine.cpp:601
+#, kde-kuit-format
+msgctxt "@info"
+msgid "Processing the OCR results failed."
+msgstr "Tekstintunnistustulosten prosessointi epäonnistui."
+
+#: ../plugins/ocr/abstractocrengine.cpp:602
+#, kde-format
+msgid "OCR Processing Failed"
+msgstr "Tekstintunnistusprosessi epäonnistui"
+
+#: ../plugins/ocr/executablepathdialogue.cpp:45
+#, kde-format
+msgid "Executable Path"
+msgstr "Ohjelmatiedoston sijainti"
+
+#: ../plugins/ocr/executablepathdialogue.cpp:52
+#, kde-format
+msgid "Executable path:"
+msgstr "Ohjelmatiedoston sijainti:"
+
+#: ../plugins/ocr/executablepathdialogue.cpp:56
+#, kde-format
+msgid "Enter or select the path..."
+msgstr "Kirjoita tai valitse sijainti…"
+
+#: ../plugins/ocr/gocr/ocrgocrdialog.cpp:75
+#: ../plugins/ocr/gocr/ocrgocrdialog.cpp:87
+#: ../plugins/ocr/gocr/ocrgocrdialog.cpp:99
+#, kde-format
+msgid "Automatic"
+msgstr "Automaattinen"
+
+#: ../plugins/ocr/gocr/ocrgocrdialog.cpp:120
+#, kde-format
+msgid "The GOCR executable is not configured or is not available."
+msgstr "GOCR-ohjelmatiedostoa ei ole asetettu tai se ei ole käytettävissä."
+
+#: ../plugins/ocr/gocr/ocrgocrdialog.cpp:204
+#: ../plugins/ocr/ocrad/ocrocraddialog.cpp:282
+#: ../plugins/ocr/tesseract/ocrtesseractdialog.cpp:250
+#, kde-format
+msgid "Error"
+msgstr "Virhe"
+
+#: ../plugins/ocr/gocr/ocrgocrengine.cpp:159
+#, kde-kuit-format
+msgctxt "@info"
+msgid "Cannot read GOCR result file <filename>%1</filename><nl/>%2"
+msgstr "GOCR-tulostiedostoa <filename>%1</filename> ei voi avata<nl/>%2"
+
+#: ../plugins/ocr/gocr/ocrgocrengine.cpp:297
+#, kde-format
+msgid "Name or path of the GOCR executable:"
+msgstr "GOCR-ohjelmatiedoston nimi ja sijainti:"
+
+#: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:57
+#: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:165
+#, kde-format
+msgid "Czech Republic, Slovakia"
+msgstr "Tšekki, Slovakia"
+
+#: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:58
+#: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:167
+#, kde-format
+msgid "Great Britain, USA"
+msgstr "Britannia, Yhdysvallat"
+
+#: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:96
+#, kde-format
+msgid "European Countries"
+msgstr "Euroopan maat"
+
+#: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:199
+#: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:280
+#, kde-format
+msgid ""
+"The classifier files for KADMOS could not be found.\n"
+"OCR with KADMOS will not be possible.\n"
+"\n"
+"Change the OCR engine in the preferences dialog."
+msgstr ""
+"KADMOS-määritystiedostoja ei löytynyt.\n"
+"Tekstintunnistus KADMOS-ohjelmalla ei ole mahdollista.\n"
+"\n"
+"Vaihda tekstintunnistusmoottoria asetusikkunassa."
+
+#: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:202
+#: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:283
+#, kde-format
+msgid "Installation Error"
+msgstr "Asennusvirhe"
+
+#: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:227
+#, kde-format
+msgid "Please classify the font type and language of the text on the image:"
+msgstr "Määritä fontin luokka ja kuvan tekstin kieli:"
+
+#: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:232
+#, kde-format
+msgid "Font Type Selection"
+msgstr "Fonttityypin valinta"
+
+#: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:235
+#, kde-format
+msgid "Machine print"
+msgstr "Tietokonetuloste"
+
+#: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:236
+#, kde-format
+msgid "Hand writing"
+msgstr "Kaunokirjoitus"
+
+#: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:237
+#, kde-format
+msgid "Norm font"
+msgstr "Normifontti"
+
+#: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:239
+#, kde-format
+msgid "Country"
+msgstr "Maa"
+
+#: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:255
+#, kde-format
+msgid "OCR Modifier"
+msgstr "Tekstintunnistus"
+
+#: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:259
+#, kde-format
+msgid "Enable automatic noise reduction"
+msgstr "Käytä automaattista kohinanvaimennusta"
+
+#: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:260
+#, kde-format
+msgid "Enable automatic scaling"
+msgstr "Käytä automaattista skaalausta"
+
+#: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:360
+#, kde-format
+msgid "Classifier file %1 does not exist"
+msgstr "Luokitustiedostoa %1 ei ole olemassa"
+
+#: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:366
+#, kde-format
+msgid "Classifier file %1 is not readable"
+msgstr "Luokitustiedostoa %1 ei voida lukea"
+
+#: ../plugins/ocr/kadmos/ocrkadmosengine.cpp:71
+#, kde-kuit-format
+msgctxt "@info %1 is one of the two following messages"
+msgid ""
+"<para><emphasis>Kadmos</emphasis> is a commercial OCR/ICR library produced "
+"by reRecognition&nbsp;AG.</para><para>%1</para><para>See <link url=\"http://"
+"www.rerecognition.com\">www.rerecognition.com</link> for more information on "
+"Kadmos.</para>"
+msgstr ""
+"<para><emphasis>KADMOS</emphasis> on kaupallinen tekstintunnistuskirjasto, "
+"jonka on tuottanut reRecognition&nbsp;AG.</para><para>%1</"
+"para><para>Lisätietoa KADMOS-ohjelmistosta löytyy sivulta <link url=\"http://"
+"www.rerecognition.com/\">www.rerecognition.com</link>.</para>"
+
+#: ../plugins/ocr/kadmos/ocrkadmosengine.cpp:75
+#, kde-format
+msgid "This version of Kooka is configured to use the Kadmos engine."
+msgstr "Tätä Kookan versiota ei ole koostettu käyttämään KADMOS-moottoria."
+
+#: ../plugins/ocr/kadmos/ocrkadmosengine.cpp:77
+#, kde-format
+msgid ""
+"This version of Kooka is not configured for Kadmos.  The Kadmos libraries "
+"need to be installed, and Kooka needs to be rebuilt with the '--with-kadmos' "
+"option."
+msgstr ""
+"Tätä Kookan versiota ei ole määritetty KADMOS-kirjastolle. KADMOS täytyy "
+"asentaa ja Kooka koostaa ”--with-kadmos”-valitsimella."
+
+#: ../plugins/ocr/kadmos/ocrkadmosengine.cpp:93
+#, kde-format
+msgid ""
+"The classifier file necessary for OCR cannot be loaded: %1;\n"
+"OCR with the KADMOS engine is not possible."
+msgstr ""
+"Tekstintunnistuksen vaatimaa luokitustiedostoa ei voitu ladata: %1;\n"
+"tekstintunnistus KADMOS-moottorilla ei ole mahdollista."
+
+#: ../plugins/ocr/kadmos/ocrkadmosengine.cpp:95
+#, kde-format
+msgid "KADMOS Installation Problem"
+msgstr "KADMOS-asennusongelma"
+
+#: ../plugins/ocr/kadmos/ocrkadmosengine.cpp:106
+#, kde-format
+msgid ""
+"The KADMOS OCR system could not be started:\n"
+"%1\n"
+"Please check the configuration."
+msgstr ""
+"KADMOS-tekstintunnistusjärjestelmää ei saatu käynnistettyä.\n"
+"%1\n"
+"Tarkista asetukset."
+
+#: ../plugins/ocr/kadmos/ocrkadmosengine.cpp:110
+#, kde-format
+msgid "KADMOS Failure"
+msgstr "KADMOS-virhe"
+
+#: ../plugins/ocr/ocrad/ocrocraddialog.cpp:79
+#, kde-format
+msgid "The OCRAD executable is not configured or is not available."
+msgstr "OCRAD-ohjelmatiedostoa ei ole asetettu tai se ei ole käytettävissä."
+
+#: ../plugins/ocr/ocrad/ocrocraddialog.cpp:92
+#, kde-format
+msgid "No Layout Detection"
+msgstr "Ei asettelun tunnistusta"
+
+#: ../plugins/ocr/ocrad/ocrocraddialog.cpp:95
+#, kde-format
+msgid "Layout Detection"
+msgstr "Asettelun tunnistus"
+
+#: ../plugins/ocr/ocrad/ocrocraddialog.cpp:98
+#, kde-format
+msgid "Column Detection"
+msgstr "Palstojen tunnistus"
+
+#: ../plugins/ocr/ocrad/ocrocraddialog.cpp:99
+#, kde-format
+msgid "Full Layout Detection"
+msgstr "Täysi asettelun tunnistus"
+
+#: ../plugins/ocr/ocrad/ocrocraddialog.cpp:117
+#: ../plugins/ocr/ocrad/ocrocraddialog.cpp:138
+#: ../plugins/ocr/ocrad/ocrocraddialog.cpp:159
+#: ../plugins/ocr/tesseract/ocrtesseractdialog.cpp:87
+#: ../plugins/ocr/tesseract/ocrtesseractdialog.cpp:149
+#: ../plugins/ocr/tesseract/ocrtesseractdialog.cpp:174
+#, kde-format
+msgid "(default)"
+msgstr "(oletus)"
+
+#: ../plugins/ocr/ocrad/ocrocradengine.cpp:243
+#: ../plugins/ocr/tesseract/ocrtesseractengine.cpp:157
+#, kde-kuit-format
+msgctxt "@info"
+msgid "File <filename>%1</filename> does not exist"
+msgstr "Tiedostoa <filename>%1</filename> ei ole olemassa"
+
+#: ../plugins/ocr/ocrad/ocrocradengine.cpp:247
+#: ../plugins/ocr/tesseract/ocrtesseractengine.cpp:158
+#, kde-kuit-format
+msgctxt "@info"
+msgid "File <filename>%1</filename> unreadable"
+msgstr "Tiedostoa <filename>%1</filename> ei voi lukea"
+
+#: ../plugins/ocr/ocrad/ocrocradengine.cpp:251
+#: ../plugins/ocr/tesseract/ocrtesseractengine.cpp:165
+#, kde-kuit-format
+msgctxt "@info"
+msgid "Cannot open file <filename>%1</filename>"
+msgstr "Ei voida avata tiedostoa <filename>%1</filename>"
+
+#: ../plugins/ocr/ocrad/ocrocradengine.cpp:432
+#, kde-format
+msgid "Name or path of the OCRAD executable:"
+msgstr "OCRAD-ohjelmatiedoston nimi ja sijainti:"
+
+#: ../plugins/ocr/tesseract/ocrtesseractdialog.cpp:72
+#, kde-format
+msgid "The Tesseract executable is not configured or is not available."
+msgstr ""
+"Tesseract-ohjelmatiedostoa ei ole asetettu tai se ei ole käytettävissä."
+
+#: ../plugins/ocr/tesseract/ocrtesseractdialog.cpp:112
+#: ../plugins/ocr/tesseract/ocrtesseractdialog.cpp:129
+#, kde-format
+msgid "Select a file if required..."
+msgstr "Valitse tiedosto, jos vaaditaan…"
+
+#: ../plugins/ocr/tesseract/ocrtesseractengine.cpp:226
+#, kde-format
+msgid "HOCR parsing error, %1"
+msgstr "HOCR-jäsennysvirhe: %1"
+
+#: ../plugins/ocr/tesseract/ocrtesseractengine.cpp:251
+#, kde-format
+msgid "Name or path of the Tesseract executable:"
+msgstr "Tesseract-ohjelmatiedoston nimi ja sijainti:"
+
+#. i18n: ectx: Menu (file)
+#: desktop/kookaui.rc:5
+#, kde-format
+msgid "&File"
+msgstr "&Tiedosto"
+
+#. i18n: ectx: Menu (scan)
+#: desktop/kookaui.rc:22
+#, kde-format
+msgid "S&can"
+msgstr "&Lue kuva"
+
+#. i18n: ectx: Menu (imgCanvas)
+#: desktop/kookaui.rc:40
+#, kde-format
+msgid "&Image"
+msgstr "&Kuva"
+
+#. i18n: ectx: Menu (settings)
+#: desktop/kookaui.rc:56
+#, kde-format
+msgid "&Settings"
+msgstr "&Asetukset"
+
+#. i18n: ectx: ToolBar (imageToolBar)
+#: desktop/kookaui.rc:67
+#, kde-format
+msgid "Image Viewer Toolbar"
+msgstr "Kuvankatselimen työkalurivi"
+
+#. i18n: ectx: ToolBar (scanToolBar)
+#: desktop/kookaui.rc:84
+#, kde-format
+msgid "Scanning Toolbar"
+msgstr "Kuvanlukukalurivi"
+
+#: formatdialog.cpp:77
+#, kde-format
+msgid ""
+"<b>Bitmap Picture</b> is a widely used format for images under MS Windows. "
+"It is suitable for color, grayscale and line art images.<p>This format is "
+"widely supported but is not recommended, use an open format instead."
+msgstr ""
+"<b>BMP</b> (bitmap picture) on MS Windowsin yleisesti käyttämä kuvamuoto. Se "
+"sopii väri-, harmaasävy- ja viivapiirustuskuville.<p>Kuvamuoto on yleisesti "
+"tuettu mutta ei suositeltava: käytä mieluummin avointa muotoa."
+
+#: formatdialog.cpp:88
+#, kde-format
+msgid ""
+"<b>Portable Bitmap</b>, as used by Netpbm, is an uncompressed format for "
+"line art (bitmap) images. Only 1 bit per pixel depth is supported."
+msgstr ""
+"Netpbm:n käyttämä <b>PBM</b> (portable bitmap) on pakkaamaton "
+"viivapiirustuskuvien (-bittikarttojen) kuvamuoto. Vain 1 bitti/kuvapiste -"
+"syvyyttä tuetaan."
+
+#: formatdialog.cpp:97
+#, kde-format
+msgid ""
+"<b>Portable Greymap</b>, as used by Netpbm, is an uncompressed format for "
+"grayscale images. Only 8 bit per pixel depth is supported."
+msgstr ""
+"Netpbm:n käyttämä <b>PGM</b> (portable greymap) on pakkaamaton "
+"harmaasävykuvamuoto. Vain 8 bittiä/kuvapiste -syvyyttä tuetaan."
+
+#: formatdialog.cpp:106
+#, kde-format
+msgid ""
+"<b>Portable Pixmap</b>, as used by Netpbm, is an uncompressed format for "
+"full color images. Only 24 bit per pixel RGB is supported."
+msgstr ""
+"Netpbm:n käyttämä <b>PPM</b> (portable pixmap) on pakkaamaton "
+"täysvärikuvamuoto. Vain 24 bittiä/kuvapiste -syvyyttä (RGB) tuetaan."
+
+#: formatdialog.cpp:115
+#, kde-format
+msgid ""
+"<b>PCX</b> is a lossless compressed format which is often supported by PC "
+"imaging applications, although it is rather old and unsophisticated.  It is "
+"suitable for color and grayscale images.<p>This format is not recommended, "
+"use an open format instead."
+msgstr ""
+"<b>PCX</b> on häviötön pakattu kuvamuoto, jota monet PC:n "
+"kuvankäsittelysovellukset tukevat, vaikka se on vanha ja yksinkertainen. Se "
+"sopii väri- ja harmaasävykuville.<p>Kuvamuoto ei ole suositeltava: käytä "
+"mieluummin avointa muotoa."
+
+#: formatdialog.cpp:126
+#, kde-format
+msgid ""
+"<b>X Bitmap</b> is often used by the X Window System to store cursor and "
+"icon bitmaps.<p>Unless required for this purpose, use a general purpose "
+"format instead."
+msgstr ""
+"X-ikkunointijärjestelmä käyttää <b>XBM</b>-muotoa (X bitmap) osoitin ja "
+"kuvakebittikarttojen tallentamiseen.<p>Ellei se erityisesti ole tarpeen, "
+"käytä mieluummin yleiskäyttöistä kuvamuotoa."
+
+#: formatdialog.cpp:135
+#, kde-format
+msgid ""
+"<b>X Pixmap</b> is often used by the X Window System for color icons and "
+"other images.<p>Unless required for this purpose, use a general purpose "
+"format instead."
+msgstr ""
+"X-ikkunointijärjestelmä käyttää <b>XPM</b>-muotoa (X pixmap) värillisille "
+"kuvakkeille ja muille kuville.<p>Ellei se erityisesti ole tarpeen, käytä "
+"mieluummin yleiskäyttöistä kuvamuotoa."
+
+#: formatdialog.cpp:144
+#, kde-format
+msgid ""
+"<b>Portable Network Graphics</b> is a lossless compressed format designed to "
+"be portable and extensible. It is suitable for any type of color or "
+"grayscale images, indexed or true color.<p>PNG is an open format which is "
+"widely supported."
+msgstr ""
+"<b>PNG</b> (portable network graphics) on häviötön pakattu kuvamuoto, joka "
+"on suunniteltu siirrettävissä ja laajennettavissa olevaksi. Se sopii "
+"kaikenlaisiin väri- ja harmaasävykuville, niin indeksoituihin kuin "
+"tosivärisiin.<p>PNG on laajalti tuettu avoin kuvamuoto."
+
+#: formatdialog.cpp:155
+#, kde-format
+msgid ""
+"<b>JPEG</b> is a compressed format suitable for true color or grayscale "
+"images. It is a lossy format, so it is not recommended for archiving or for "
+"repeated loading and saving.<p>This is an open format which is widely "
+"supported."
+msgstr ""
+"<b>JPEG</b> on tosiväri- ja harmaasävykuville sopiva pakattu kuvamuoto. Se "
+"on häviöllinen muoto, joten se ei sovi arkistointiin tai toistuvaan "
+"lataukseen ja tallennukseen.<p>Tämä on laajalti tuettu avoin kuvamuoto."
+
+#: formatdialog.cpp:166
+#, kde-format
+msgid ""
+"<b>JPEG 2000</b> was intended as an update to the JPEG format, with the "
+"option of lossless compression, but so far is not widely supported. It is "
+"suitable for true color or grayscale images."
+msgstr ""
+"<b>JPEG 2000</b> tarkoitettiin JPEG-kuvamuodon päivitykseksi, jossa on "
+"häviöttömän pakkauksen mahdollisuus, mutta toistaiseksi sitä ei laajalti "
+"tueta. Se sopii tosiväri- ja harmaasävykuville."
+
+#: formatdialog.cpp:176
+#, kde-format
+msgid ""
+"<b>Encapsulated PostScript</b> is derived from the PostScript&trade; page "
+"description language.  Use this format for importing into other "
+"applications, or to use with (e.g.) TeX."
+msgstr ""
+"<b>EPS</b> (encapsulated PostScript) on PostScript&trade;-sivunkuvauskielen "
+"johdannainen. Käytä tätä muotoa tuotaessa kuvia muihin sovelluksiin tai "
+"esim. TeXissä."
+
+#: formatdialog.cpp:186
+#, kde-format
+msgid ""
+"<b>Truevision Targa</b> can store full color images with an alpha channel, "
+"and is used extensively by animation and video applications.<p>This format "
+"is not recommended, use an open format instead."
+msgstr ""
+"<b>TTG</b> (Truevision Targa) voi tallentaa täysvärikuvia alfakanavalla, ja "
+"sitä käytetään laajasti animaatio- ja videosovelluksissa.<b>Kuvamuoto ei ole "
+"suositeltava: käytä mieluummin avointa muotoa."
+
+#: formatdialog.cpp:196
+#, kde-format
+msgid ""
+"<b>Graphics Interchange Format</b> is a popular but patent-encumbered format "
+"often used for web graphics.  It uses lossless compression with up to 256 "
+"colors and optional transparency.<p>For legal reasons this format is not "
+"recommended, use an open format instead."
+msgstr ""
+"<b>GIF</b> (graphics interchange format) on verkkografiikassa käytetty "
+"suosittu mutta patenttien raskauttama kuvamuoto. Se käyttää häviötöntä "
+"pakkausta 256 väriin saakka ja valinnaista läpinäkyvyyttä.<p>Juridisista "
+"syistä tätä kuvamuotoa ei suositella: käytä mieluummin avointa muotoa."
+
+#: formatdialog.cpp:207
+#, kde-format
+msgid ""
+"<b>Tagged Image File Format</b> is a versatile and extensible file format "
+"widely supported by imaging and publishing applications. It supports indexed "
+"and true color images with alpha transparency.<p>Because there are many "
+"variations, there may sometimes be compatibility problems. Unless required "
+"for use with other applications, use an open format instead."
+msgstr ""
+"<b>TIFF</b> (tagged image file format) on kuvankäsittely- ja "
+"julkaisusoveltusten laajalti tukema joustava ja laajennettavissa ole "
+"kuvamuoto. Se tukee indeksoituja ja tosivärikuvia alfa-läpinäkyvyydellä."
+"<p>Kuvamuodon monien muunnelmien takia joskus voi esiintyä "
+"yhteensopivuusongelmia. Ellei se erityisesti ole tarpeen, käytä mieluummin "
+"avointa kuvamuotoa."
+
+#: formatdialog.cpp:219
+#, kde-format
+msgid ""
+"<b>Multiple-image Network Graphics</b> is derived from the PNG standard and "
+"is intended for animated images.  It is an open format suitable for all "
+"types of images.<p>Images produced by a scanner will not be animated, so "
+"unless specifically required for use with other applications use PNG instead."
+msgstr ""
+"<b>MNG</b> (multiple-image network graphics) on PNG-standardista johdettu, "
+"animoituihin kuviin tarkoitettu kuvamuoto. Se on kaikenlaisille kuville "
+"sopiva avoin muoto.<p>Kuvanluvun tuottamat kuvat eivät ole animoituja, joten "
+"ellei se erityisesti ole tarpeen muiden sovellusten takia, käytä mieluummin "
+"PNG-muotoa."
+
+#: formatdialog.cpp:231
+#, kde-format
+msgid ""
+"This is the <b>Silicon Graphics</b> native image file format, supporting 24 "
+"bit true color images with optional lossless compression.<p>Unless "
+"specifically required, use an open format instead."
+msgstr ""
+"Tämä on <b>Silicon Graphics</b>in natiivi kuvamuoto, joka tulee 24 bitin "
+"tosivärikuvia valinnaisesti häviöttömällä pakkauksella.<p>Ellei tätä "
+"nimenomaisesti tarvita, valitse mieluummin avoin tiedostomuoto."
+
+#: formatdialog.cpp:241
+#, kde-format
+msgid ""
+"<b>Wireless Bitmap</b> is a monochrome bitmap format optimised for WAP "
+"mobile devices.  It supports black and white bitmaps only.<p>Unless "
+"specifically required, use an general purpose format instead."
+msgstr ""
+"<b>Wireless Bitmap</b> on WAP-mobiililaitteille optimoitu "
+"mustavalkobittikarttamuoto. Se tukee vain mustavalkoisia bittikarttoja."
+"<p>Ellei tätä nimenomaisesti vaadita, käytä jotakin yleisempää muotoa."
+
+#: formatdialog.cpp:251
+#, kde-format
+msgid ""
+"<b>WebP</b> is intended to be an open standard for true colour images with "
+"optional transparency.  It is widely supported by modern web browsers and "
+"graphics software.<p>Various compression methods, both lossy and lossless, "
+"are supported. Lossy compression is not recommended for archiving or for "
+"repeated loading and saving."
+msgstr ""
+"<b>WebP</b> on tarkoitettu valinnaisen läpinäkyvyyden tosivärikuvien "
+"avoimeksi standardiksi. Nykyiset selain- ja grafiikkaohjelmat laajalti "
+"tukevat sitä.<p>Sekä häviöllisiä että häviöttömiä pakkausmenetelmiä tuetaan. "
+"Häviöllistä pakkausta ei suositella arkistointiin tai toistuvaan avaamiseen "
+"ja tallentamiseen."
+
+#: formatdialog.cpp:280
+#, kde-format
+msgid "Save Assistant"
+msgstr "Tallennusavustaja"
+
+#: formatdialog.cpp:306
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"Select a format to save the scanned image.<nl/>This is a <emphasis strong="
+"\"1\">%1</emphasis>."
+msgstr ""
+"Valitse luetun kuvan tallennusmuoto.<nl/>Tämä on <emphasis strong=\"1\">%1</"
+"emphasis>."
+
+#: formatdialog.cpp:316
+#, kde-format
+msgid "File format:"
+msgstr "Tiedostomuoto:"
+
+#: formatdialog.cpp:338
+#, kde-format
+msgid "Image sub-format:"
+msgstr "Kuvan alimuoto:"
+
+#: formatdialog.cpp:384
+#, kde-format
+msgid "File name:"
+msgstr "Tiedostonimi:"
+
+#: formatdialog.cpp:398
+#, kde-format
+msgid "Select Format..."
+msgstr "Valitse tallennusmuoto…"
+
+#: formatdialog.cpp:436
+#, kde-format
+msgid "No format selected."
+msgstr "Ei valittua tallennusmuotoa."
+
+#: formatdialog.cpp:470
+#, kde-format
+msgid "No information is available for this format."
+msgstr "Tästä kuvamuodosta ei ole saatavilla lisätietoa."
+
+#: galleryroot.cpp:100
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"Unable to create the directory <filename>%1</filename><nl/>for the Kooka "
+"gallery - %3..<nl/><nl/>Your document directory <filename>%2</filename><nl/"
+">will be used.<nl/><nl/>Check the document directory setting and permissions."
+msgstr ""
+"Kooka-galleriaan ei voida luoda kansiota <filename>%1</filename>:<nl/>%3…<nl/"
+"><nl/>Käytetään sen sijaan kansiota <filename>%2</filename>.<nl/><nl/"
+">Tarkista kansion asetukset ja käyttöoikeudet."
+
+#: galleryroot.cpp:111
+#, kde-format
+msgid "Error creating gallery"
+msgstr "Virhe luotaessa galleriaa"
+
+#: galleryroot.cpp:159
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"An old Kooka gallery was found at <filename>%1</filename>.<nl/>The preferred "
+"new location is now <filename>%2</filename>.<nl/><nl/>Do you want to create "
+"a new gallery at the new location?"
+msgstr ""
+"Kansiosta <filename>%1</filename> löytyi vanha Kookan galleria.<nl/"
+">Ensisijainen uusi sijainti on nyt <filename>%2</filename>.<nl/><nl/"
+">Haluatko luoda uuden gallerian uuteen sijaintiin?"
+
+#: galleryroot.cpp:163
+#, kde-format
+msgid "Create New Gallery"
+msgstr "Luo uusi galleria"
+
+#: galleryroot.cpp:172 galleryroot.cpp:186
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"Kooka will use the new gallery, <link url=\"file:%1\"><filename>%1</"
+"filename></link>.<nl/><nl/>If you wish to add the images from your old "
+"gallery <link url=\"file:%2\"><filename>%2</filename></link>,<nl/>then you "
+"may do so by simply copying or moving the files."
+msgstr ""
+"Kooka käyttää uutta galleriaa: <link url=\"file:%1\"><filename>%1</"
+"filename></link>.<nl/><nl/>Jos vanhasta galleriasta <link url=\"file:"
+"%2\"><filename>%2</filename></link> halutaan lisätä kuvia,<nl/>ne voi "
+"yksinkertaisesti kopioida tai siirtää."
+
+#: galleryroot.cpp:176
+#, kde-format
+msgid "New Gallery Created"
+msgstr "Luotiin uusi galleria"
+
+#: galleryroot.cpp:190
+#, kde-format
+msgid "Old Gallery Exists"
+msgstr "Vanha galleria on olemassa"
+
+#: imagetransform.cpp:59
+#, kde-format
+msgid "Rotate image +90 degrees"
+msgstr "Kierrä kuvaa +90°"
+
+#: imagetransform.cpp:66
+#, kde-format
+msgid "Rotate image 180 degrees"
+msgstr "Kierrä kuvaa 180°"
+
+#: imagetransform.cpp:71
+#, kde-format
+msgid "Rotate image -90 degrees"
+msgstr "Kierrä kuvaa –90°"
+
+#: imagetransform.cpp:77
+#, kde-format
+msgid "Mirror image horizontally"
+msgstr "Peilaa kuva vaakasuunnassa"
+
+#: imagetransform.cpp:82
+#, kde-format
+msgid "Mirror image vertically"
+msgstr "Peilaa kuva pystysuunnassa"
+
+#: imagetransform.cpp:94
+#, kde-format
+msgid "Error updating image %1"
+msgstr "Virhe päivitettäessä kuvaa %1"
+
+#: imgprintdialog.cpp:65
+#, kde-format
+msgctxt "@title:tab"
+msgid "Image"
+msgstr "Kuva"
+
+#: imgprintdialog.cpp:85
+#, kde-format
+msgctxt "@title:group"
+msgid "Scaling"
+msgstr "Skaalaus"
+
+#: imgprintdialog.cpp:100
+#, kde-format
+msgctxt "@option:radio"
+msgid "Size as on screen"
+msgstr "Koko kuin näytöllä"
+
+#: imgprintdialog.cpp:101
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"<div>Print at the same size as seen on screen, determined by the screen "
+"resolution.</div>"
+msgstr ""
+"<div>Tulosta saman kokoisena kuin ruudulla nähtynä, näytön tarkkuuden "
+"määräämänä.</div>"
+
+#: imgprintdialog.cpp:105
+#, kde-format
+msgid "Screen resolution:"
+msgstr "Näytön tarkkuus:"
+
+#: imgprintdialog.cpp:110
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"<div>This is the current screen resolution. It cannot be changed here.</div>"
+msgstr ""
+"<div>Tämä on näytön nykyinen tarkkuus. Tarkkuutta ei voi muuttaa tästä.</div>"
+
+#: imgprintdialog.cpp:114
+#, kde-format
+msgctxt "@option:radio"
+msgid "Size as scanned"
+msgstr "Kuva kuin luettuna"
+
+#: imgprintdialog.cpp:115
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"<div>Print at a size determined by the scan resolution. The resolution is "
+"saved with the image and used if available; if it is not, it can be entered "
+"here.</div>"
+msgstr ""
+"<div>Tulosta kuvanlukutarkkuuden määräämässä koossa. Tarkkuus tallennetaan "
+"kuvaan ja sitä käytetään, jos mahdollista; ellei ole, tarkkuuden voi antaa "
+"tässä.</div>"
+
+#: imgprintdialog.cpp:119
+#, kde-format
+msgid "Scan resolution:"
+msgstr "Kuvanlukutarkkuus:"
+
+#: imgprintdialog.cpp:124
+#, kde-format
+msgctxt "@item:intext abbreviation for 'dots per inch'"
+msgid " dpi"
+msgstr " dpi"
+
+#: imgprintdialog.cpp:125
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"<div>This is the scan resolution as saved with the image. It can be changed "
+"if necessary.</div>"
+msgstr ""
+"<div>Tämä on kuvaan tallennettu kuvanlukutarkkuus. Sitä voi tarvittaessa "
+"muuttaa.</div>"
+
+#: imgprintdialog.cpp:132
+#, kde-format
+msgctxt "@option:radio"
+msgid "Custom size"
+msgstr "Mukautettu koko"
+
+#: imgprintdialog.cpp:133
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"<div>Print scaled to the specified size. The image is centered on the paper."
+"</div>"
+msgstr ""
+"<div>Tulosta skaalattuna annettuun kokoon. Kuva keskitetään arkille.</div>"
+
+#: imgprintdialog.cpp:137
+#, kde-format
+msgctxt "@label:spinbox"
+msgid "Image width:"
+msgstr "Kuvan leveys:"
+
+#: imgprintdialog.cpp:142 imgprintdialog.cpp:156
+#, kde-format
+msgctxt "@item:intext abbreviation for 'millimetres'"
+msgid " mm"
+msgstr " mm"
+
+#: imgprintdialog.cpp:143
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "<div>The width at which the image will be printed.</div>"
+msgstr "<div>Tulostettavan kuvan leveys.</div>"
+
+#: imgprintdialog.cpp:151
+#, kde-format
+msgctxt "@label:spinbox"
+msgid "Image height:"
+msgstr "Kuvan korkeus:"
+
+#: imgprintdialog.cpp:157
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "<div>The height at which the image will be printed.</div>"
+msgstr "<div>Tulostettavan kuvan korkeus.</div>"
+
+#: imgprintdialog.cpp:166
+#, kde-format
+msgctxt "@option:radio"
+msgid "Fit to page"
+msgstr "Sovita sivulle"
+
+#: imgprintdialog.cpp:167
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"<div>Print using as much of the available space on the paper as possible. "
+"The aspect ratio can be maintained.</div>"
+msgstr ""
+"<div>Tulosta käyttäen niin paljon arkin tilaa kuin mahdollista. Kuvasuhde on "
+"mahdollista säilyttää.</div>"
+
+#: imgprintdialog.cpp:178
+#, kde-format
+msgctxt "@title:group"
+msgid "Other Options"
+msgstr "Muut asetukset"
+
+#: imgprintdialog.cpp:182
+#, kde-format
+msgctxt "@option:check"
+msgid "Maintain aspect ratio"
+msgstr "Säilytä kuvasuhde"
+
+#: imgprintdialog.cpp:183
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"<div>Adjust the height or width to maintain the original aspect ratio of the "
+"printed image.</div>"
+msgstr ""
+"<div>Säädä leveyttä ja korkeutta niin, että tulostetun kuvan alkuperäinen "
+"kuvasuhde säilyy.</div>"
+
+#: imgprintdialog.cpp:189
+#, kde-format
+msgctxt "@option:check"
+msgid "Low resolution (fast draft print)"
+msgstr "Alhainen tarkkuus (nopea vedostulostus)"
+
+#: imgprintdialog.cpp:190
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"<div>Print at as low a resolution as possible. This may not work as intended "
+"on all printers.</div>"
+msgstr ""
+"<div>Tulosta alhaisimmalla mahdollisella tarkkuudella. Tämä ei ehkä toimi "
+"odotetusti kaikilla tulostimilla.</div>"
+
+#: imgprintdialog.cpp:196
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Cut marks:"
+msgstr "Leikkausmerkit:"
+
+#: imgprintdialog.cpp:200
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "None"
+msgstr "Ei mitään"
+
+#: imgprintdialog.cpp:201
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "For multiple pages"
+msgstr "Useammille sivuille"
+
+#: imgprintdialog.cpp:202
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "Always"
+msgstr "Aina"
+
+#: imgprintdialog.cpp:203
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"<div>Select whether cut/join marks are printed. The marks will reduce the "
+"available printable area.</div>"
+msgstr ""
+"<div>Valitse, tulostetaanko leikkausmerkit. Merkit pienentävät "
+"tulostettavissa olevaa aluetta.</div>"
+
+#: imgprintdialog.cpp:214
+#, kde-format
+msgctxt "@title:group"
+msgid "Print Layout"
+msgstr "Tulostusasettelu"
+
+#: imgprintdialog.cpp:219
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Image size:"
+msgstr "Kuvakoko:"
+
+#: imgprintdialog.cpp:222
+#, kde-format
+msgctxt "@info:status width,height pixels"
+msgid "%1 x %2 pix"
+msgstr "%1 × %2 pix"
+
+#: imgprintdialog.cpp:227
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Available print area:"
+msgstr "Käytettävissä oleva tulostusalue:"
+
+#: imgprintdialog.cpp:234
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Image print area:"
+msgstr "Kuvan tulostusalue:"
+
+#: imgprintdialog.cpp:241
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Pages required:"
+msgstr "Vaaditut sivut:"
+
+#: imgprintdialog.cpp:304
+#, kde-format
+msgctxt "@info:status"
+msgid "%1 dpi"
+msgstr "%1 dpi"
+
+#: imgprintdialog.cpp:321
+#, kde-format
+msgid "The scan resolution must be specified for scaling to it."
+msgstr "Kuvanlukutarkkuus täytyy määrittää, jotta siihen voi skaalata."
+
+#: imgprintdialog.cpp:326
+#, kde-format
+msgid ""
+"A valid size must be specified for custom scaling. One or both of the "
+"specified dimensions is zero."
+msgstr ""
+"Mukautettua skaalausta varten on annettava kelvollinen koko. Jompikumpi tai "
+"kumpikin annetuista ulottuvuuksista on nolla."
+
+#: imgprintdialog.cpp:404 imgprintdialog.cpp:408
+#, kde-format
+msgctxt "@info:status width,height millimetres"
+msgid "%1 x %2 mm"
+msgstr "%1 × %2 mm"
+
+#: imgprintdialog.cpp:412
+#, kde-format
+msgctxt "@info:status total"
+msgid "%1"
+msgstr "%1"
+
+#: imgprintdialog.cpp:414
+#, kde-format
+msgctxt "@info:status total(rows,cols)"
+msgid "%1 (%2 x %3)"
+msgstr "%1 (%2 × %3)"
+
+#: imgsaver.cpp:65
+#, kde-kuit-format
+msgctxt "@info"
+msgid "The directory <filename>%2</filename><nl/>could not be accessed.<nl/>%1"
+msgstr "Kansiota <filename>%2</filename><nl/>ei ole käyttöoikeuksia.<nl/>%1"
+
+#: imgsaver.cpp:76
+#, kde-kuit-format
+msgctxt "@info"
+msgid "The directory <filename>%2</filename><nl/>could not be created.<nl/>%1"
+msgstr "Kansiota <filename>%2</filename><nl/>ei voitu luoda.<nl/>%1"
+
+#: imgsaver.cpp:327
+#, kde-format
+msgid "indexed color image (up to 8 bit depth)"
+msgstr "Indeksoitu värikuva (8 bitin syvyyteen asti)"
+
+#: imgsaver.cpp:331
+#, kde-format
+msgid "gray scale image (up to 8 bit depth)"
+msgstr "harmaasävykuva (8 bitin syvyyteen asti)"
+
+#: imgsaver.cpp:335
+#, kde-format
+msgid "lineart image (black and white, 1 bit depth)"
+msgstr "viivakuva (mustavalkoinen, 1 bittinen)"
+
+#: imgsaver.cpp:339
+#, kde-format
+msgid "high/true color image (more than 8 bit depth)"
+msgstr "tosivärikuva (enemmän kuin 8 bitin syvyys)"
+
+#: imgsaver.cpp:343
+#, kde-format
+msgid "unknown image type %1"
+msgstr "tuntematon kuvatyyppi %1"
+
+#: imgsaver.cpp:365
+#, kde-format
+msgid "Save OK"
+msgstr "Tallenna onnistui"
+
+#: imgsaver.cpp:367
+#, kde-format
+msgid "Permission denied"
+msgstr "Ei käyttöoikeutta"
+
+#: imgsaver.cpp:369
+#, kde-format
+msgid "Bad file name"
+msgstr "Virheellinen tiedostonimi"
+
+#: imgsaver.cpp:371
+#, kde-format
+msgid "No space left on device"
+msgstr "Laitteessa ei ole tilaa vapaana"
+
+#: imgsaver.cpp:373
+#, kde-format
+msgid "Cannot write image format '%1'"
+msgstr "Ei voida kirjoittaa kuvamuotoa ”%1”"
+
+#: imgsaver.cpp:375
+#, kde-format
+msgid "Cannot write using protocol '%1'"
+msgstr "Ei voida kirjoittaa yhteyskäytännöllä ”%1”"
+
+#: imgsaver.cpp:377
+#, kde-format
+msgid "User cancelled saving"
+msgstr "Käyttäjä perui tallennuksen"
+
+#: imgsaver.cpp:379
+#, kde-format
+msgid "Cannot create directory"
+msgstr "Ei voida luoda kansiota"
+
+#: imgsaver.cpp:381
+#, kde-format
+msgid "Save failed"
+msgstr "Tallennus epäonnistui"
+
+#: imgsaver.cpp:383
+#, kde-format
+msgid "Bad parameter"
+msgstr "Virheellinen parametri"
+
+#: imgsaver.cpp:385
+#, kde-format
+msgid "Unknown status %1"
+msgstr "Tuntematon tila %1"
+
+#: imgsaver.cpp:408
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"The file name you supplied has no file extension.<nl/>Should the original "
+"one be added?<nl/><nl/>This would result in the new file name <filename>%1</"
+"filename>"
+msgstr ""
+"Antamallasi tiedostonimellä ei ole päätettä.<nl/>Lisätäänkö alkuperäinen?<nl/"
+"><nl/>Uudeksi tiedostonimeksi tulisi <filename>%1</filename>"
+
+#: imgsaver.cpp:411
+#, kde-format
+msgid "Extension Missing"
+msgstr "Puuttuva tiedostopääte"
+
+#: imgsaver.cpp:412
+#, kde-format
+msgid "Add Extension"
+msgstr "Lisää tiedostopääte"
+
+#: imgsaver.cpp:413
+#, kde-format
+msgid "Do Not Add"
+msgstr "Älä lisää"
+
+#: imgsaver.cpp:438
+#, kde-format
+msgid "Target already exists"
+msgstr "Kohde on jo olemassa"
+
+#: imgsaver.cpp:451
+#, kde-format
+msgid "Unable to copy the file"
+msgstr "Tiedostoa ei voida kopioida"
+
+#: imgsaver.cpp:452
+#, kde-format
+msgid "Unable to rename the file"
+msgstr "Tiedoston nimeä ei voida muuttaa"
+
+#: imgsaver.cpp:453
+#, kde-format
+msgid "Error copying file"
+msgstr "Virhe kopioitaessa tiedostoa"
+
+#: imgsaver.cpp:454
+#, kde-format
+msgid "Error renaming file"
+msgstr "Virhe muutettaessa tiedoston nimeä"
+
+#: imgsaver.cpp:455
+#, kde-kuit-format
+msgctxt "@info"
+msgid "%1 <filename>%3</filename><nl/>%2"
+msgstr "%1 <filename>%3</filename><nl/>%2"
+
+#: kooka.cpp:100
+#, kde-format
+msgid "KDE Scanning"
+msgstr "KDE:n kuvanluku"
+
+#: kooka.cpp:134
+#, kde-format
+msgid "Scale to Width"
+msgstr "Skaalaa leveyteen"
+
+#: kooka.cpp:145
+#, kde-format
+msgid "Scale to Height"
+msgstr "Skaalaa korkeuteen"
+
+#: kooka.cpp:154
+#, kde-format
+msgid "Original Size"
+msgstr "Alkuperäinen koko"
+
+#: kooka.cpp:160
+#, kde-format
+msgid "Set Zoom..."
+msgstr "Valitse tarkennus…"
+
+#: kooka.cpp:166
+#, kde-format
+msgid "Keep Zoom Setting"
+msgstr "Säilytä lähennysasetus"
+
+#: kooka.cpp:174
+#, kde-format
+msgid "New Image From Selection"
+msgstr "Luo uusi kuva valinnasta"
+
+#: kooka.cpp:179
+#, kde-format
+msgid "Mirror Vertically"
+msgstr "Peilaa pystysuunnassa"
+
+#: kooka.cpp:186
+#, kde-format
+msgid "Mirror Horizontally"
+msgstr "Peilaa vaakasuunnassa"
+
+#: kooka.cpp:196
+#, kde-format
+msgid "Rotate Counter-Clockwise"
+msgstr "Kierrä vastapäivään"
+
+#: kooka.cpp:203
+#, kde-format
+msgid "Rotate Clockwise"
+msgstr "Kierrä myötäpäivään"
+
+#: kooka.cpp:210
+#, kde-format
+msgid "Rotate 180 Degrees"
+msgstr "Kierrä 180°"
+
+#: kooka.cpp:219
+#, kde-format
+msgid "New Folder..."
+msgstr "Uusi kansio…"
+
+#: kooka.cpp:224
+#, kde-format
+msgid "Open With"
+msgstr "Avaa ohjelmalla"
+
+#: kooka.cpp:230
+#, kde-format
+msgid "Save Image..."
+msgstr "Tallenna kuva…"
+
+#: kooka.cpp:237
+#, kde-format
+msgid "Import Image..."
+msgstr "Tuo kuva…"
+
+#: kooka.cpp:242 kooka.cpp:550
+#, kde-format
+msgid "Delete Image"
+msgstr "Poista kuva"
+
+#: kooka.cpp:249 kooka.cpp:551
+#, kde-format
+msgid "Rename Image"
+msgstr "Muuta kuvan nimeä"
+
+#: kooka.cpp:255 kooka.cpp:549
+#, kde-format
+msgid "Unload Image"
+msgstr "Sulje kuva"
+
+#: kooka.cpp:262
+#, kde-format
+msgid "Properties..."
+msgstr "Ominaisuudet…"
+
+#: kooka.cpp:271
+#, kde-format
+msgid "Select Scan Device..."
+msgstr "Valitse kuvanlukulaite…"
+
+#: kooka.cpp:275 kookaview.cpp:546
+#, kde-format
+msgid "Add Scan Device..."
+msgstr "Lisää kuvanlukulaite…"
+
+#: kooka.cpp:281
+#, kde-format
+msgid "Preview"
+msgstr "Esikatsele"
+
+#: kooka.cpp:286
+#, kde-format
+msgid "Start Scan"
+msgstr "Aloita kuvanluku"
+
+#: kooka.cpp:291
+#, kde-format
+msgid "Scan Presets..."
+msgstr "Kuvanluvun esiasetukset…"
+
+#: kooka.cpp:296
+#, kde-format
+msgid "Auto Select"
+msgstr "Automaattivalinta"
+
+#: kooka.cpp:304
+#, kde-format
+msgid "OCR Image..."
+msgstr "Tunnista kuvasta teksti…"
+
+#: kooka.cpp:308
+#, kde-format
+msgid "OCR Selection..."
+msgstr "Tunnista valinnasta teksti…"
+
+#: kooka.cpp:312
+#, kde-format
+msgid "OCR File..."
+msgstr "Tunnista tiedostosta teksti…"
+
+#: kooka.cpp:316
+#, kde-format
+msgid "Save OCR Result Text..."
+msgstr "Tallenna tunnistettu teksti…"
+
+#: kooka.cpp:321
+#, kde-format
+msgid "Spell Check OCR Result..."
+msgstr "Tarkista tunnistetun tekstin oikeinkirjoitus…"
+
+#: kooka.cpp:537
+#, kde-format
+msgid "Unload Folder"
+msgstr "Sulje kansio"
+
+#: kooka.cpp:538
+#, kde-format
+msgid "Delete Folder"
+msgstr "Poista kansio"
+
+#: kooka.cpp:539
+#, kde-format
+msgid "Rename Folder"
+msgstr "Muuta kansion nimeä"
+
+#: kookagallery.cpp:56
+#, kde-format
+msgid "Folder:"
+msgstr "Kansio:"
+
+#: kookapref.cpp:55
+#, kde-format
+msgid "Preferences"
+msgstr "Asetukset"
+
+#: kookapref.cpp:57
+#, kde-format
+msgid "General"
+msgstr "Yleistä"
+
+#: kookapref.cpp:57
+#, kde-format
+msgid "General Options"
+msgstr "Perusasetukset"
+
+#: kookapref.cpp:58
+#, kde-format
+msgid "Startup"
+msgstr "Käynnistys"
+
+#: kookapref.cpp:58
+#, kde-format
+msgid "Startup Options"
+msgstr "Käynnistysvalinnat"
+
+#: kookapref.cpp:59
+#, kde-format
+msgid "Image Saving"
+msgstr "Kuvan tallennus"
+
+#: kookapref.cpp:59
+#, kde-format
+msgid "Image Saving Options"
+msgstr "Kuvantallennusvalinnat"
+
+#: kookapref.cpp:60
+#, kde-format
+msgid "Gallery & Thumbnails"
+msgstr "Galleria ja esikatselukuvat"
+
+#: kookapref.cpp:60
+#, kde-format
+msgid "Image Gallery and Thumbnail View"
+msgstr "Kuvagalleria ja esikatselukuvanäkymä"
+
+#: kookapref.cpp:61 kookaview.cpp:290
+#, kde-format
+msgid "OCR"
+msgstr "OCR"
+
+#: kookascanparams.cpp:68
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"<title>Gallery Mode - No scanner selected</title><nl/><nl/>In this mode you "
+"can browse, manipulate and OCR images already in the gallery.<nl/><nl/><link "
+"url=\"a:1\">Select a scanner device</link> to perform scanning, or <link url="
+"\"a:2\">add a device</link> if a scanner is not automatically detected."
+msgstr ""
+"<title>Galleriatila – ei valittua kuvanlukijaa</title><nl/><nl/>Tässä "
+"tilassa voi selata ja käsitellä galleriassa jo olevia kuvia sekä tunnistaa "
+"niistä tekstiä.<nl/><nl/>Lukeaksesi kuvia <link url=\"a:1\">valitse "
+"kuvanlukulaite</link> tai ellei sitä tunnistettu automaattisesti, <link url="
+"\"a:2\">lisää kuvanlukulaite</link>."
+
+#: kookascanparams.cpp:114
+#, kde-format
+msgid "Scan &destination:"
+msgstr "Kuvanluvun k&ohde:"
+
+#: kookascanparams.cpp:150
+#, kde-kuit-format
+msgctxt "@info"
+msgid "No destination selected"
+msgstr "Kohdetta ei valittu"
+
+#: kookascanparams.cpp:160
+#, kde-kuit-format
+msgctxt "@info"
+msgid "Unable to load plugin '%1'"
+msgstr "Liitännäistä ”%1” ei voi ladata"
+
+#. i18n: ectx: label, entry (StartupReadImage), group (Startup)
+#: kookasettings.kcfg:50
+#, kde-format
+msgid "Load the last selected image into the viewer"
+msgstr "Lataa viimeksi valittu kuva katselimeen"
+
+#. i18n: ectx: tooltip, entry (StartupReadImage), group (Startup)
+#: kookasettings.kcfg:51
+#, kde-format
+msgid ""
+"<div>Check this if you want Kooka to load the last selected image into the "
+"viewer on startup.<br/><br/>If your images are large, that might slow down "
+"Kooka's startup.</div>"
+msgstr ""
+"<div>Valitse tämä, jos haluat Kookan lataavan viimeksi valitun kuvan "
+"katselimeen käynnistettäessä.<br/><br/>Jos kuvasi ovat suuria, tämä voi "
+"hidastaa Kookan käynnistymistä."
+
+#. i18n: ectx: label, entry (SaverAskForFormat), group (Files)
+#: kookasettings.kcfg:65
+#, kde-format
+msgid "Always use the Save Assistant"
+msgstr "Käytä tallennusavustajaa aina"
+
+#. i18n: ectx: tooltip, entry (SaverAskForFormat), group (Files)
+#: kookasettings.kcfg:66
+#, kde-format
+msgid ""
+"<div>Check this if you want to always use the image save assistant, even if "
+"there is a default format for the image type.</div>"
+msgstr ""
+"<div>Valitse tämä, jos haluat aina käyttää tallennusavustajaa, vaikka kuvien "
+"tallentamiseen olisikin määritetty oletusmuoto.</div>"
+
+#. i18n: ectx: label, entry (SaverAskForFilename), group (Files)
+#: kookasettings.kcfg:71
+#, kde-format
+msgid "Ask for filename when saving"
+msgstr "Pyydä tiedostonimi tallennettaessa"
+
+#. i18n: ectx: tooltip, entry (SaverAskForFilename), group (Files)
+#: kookasettings.kcfg:72
+#, kde-format
+msgid ""
+"<div>Check this if you want to enter a file name when scanning an image.</"
+"div>"
+msgstr ""
+"<div>Valitse tämä, jos haluat antaa tiedostonimen sen jälkeen, kun kuva on "
+"luettu.</div>"
+
+#. i18n: ectx: label, entry (SaverAskBeforeScan), group (Files)
+#: kookasettings.kcfg:77
+#, kde-format
+msgid "Before the scan starts"
+msgstr "Ennen kuvan lukua"
+
+#. i18n: ectx: tooltip, entry (SaverAskBeforeScan), group (Files)
+#: kookasettings.kcfg:78
+#, kde-format
+msgid ""
+"<div>Check this if you want to enter the file name before scanning starts.</"
+"div>"
+msgstr ""
+"<div>Valitse tämä, jos haluat antaa tiedostonimen ennen kuvanluvun "
+"aloittamista.</div>"
+
+#. i18n: ectx: label, entry (SaverAskAfterScan), group (Files)
+#: kookasettings.kcfg:83
+#, kde-format
+msgid "After the scan is finished"
+msgstr "Kuvan luvun jälkeen"
+
+#. i18n: ectx: tooltip, entry (SaverAskAfterScan), group (Files)
+#: kookasettings.kcfg:84
+#, kde-format
+msgid ""
+"<div>Check this if you want to enter the file name after scanning has "
+"finished.</div>"
+msgstr ""
+"<div>Valitse tämä, jos haluat antaa tiedostonimen, kun kuva on luettu.</div>"
+
+#. i18n: ectx: label, entry (SaverOnlyRecommendedTypes), group (Files)
+#: kookasettings.kcfg:89
+#, kde-format
+msgid "Only show recommended formats for this image type"
+msgstr "Näytä vain tälle kuvatyypille suositellut kuvamuodot"
+
+#. i18n: ectx: tooltip, entry (SaverOnlyRecommendedTypes), group (Files)
+#: kookasettings.kcfg:90
+#, kde-format
+msgid ""
+"<div>Check this to only show recommended file formats for the scan type. "
+"Uncheck it to show all compatible formats.</div>"
+msgstr ""
+"<div>Valitse tämä näyttääksesi kuvanlukutyypillä vain suositellut "
+"kuvatiedostomuodot. Kaikki muodot näytetään poistamalla valinta.</nl>"
+
+#. i18n: ectx: label, entry (SaverAlwaysUseFormat), group (Files2)
+#: kookasettings.kcfg:103
+#, kde-format
+msgid "Always use this save format for this image type"
+msgstr "Käytä tälle kuvatyypillä aina tätä tallennusmuotoa"
+
+#. i18n: ectx: tooltip, entry (SaverAlwaysUseFormat), group (Files2)
+#: kookasettings.kcfg:104
+#, kde-format
+msgid ""
+"<div>Check this to remember the selected file format for the scanned image "
+"type and not ask for it again.</div>"
+msgstr ""
+"<div>Valitse tämä, niin luetulle kuvalle valittu kuva tiedostomuoto "
+"muistetaan eikä sitä kysytä toiste.</div>"
+
+#. i18n: ectx: label, entry (GalleryAllowRename), group (Gallery)
+#: kookasettings.kcfg:137
+#, kde-format
+msgid "Allow click-to-rename"
+msgstr "Salli nimen muuttaminen napsauttamalla"
+
+#. i18n: ectx: tooltip, entry (GalleryAllowRename), group (Gallery)
+#: kookasettings.kcfg:138
+#, kde-format
+msgid ""
+"<div>Check this if you want to be able to rename gallery items by clicking "
+"on them (otherwise, use the \"Rename\" menu option).</div>"
+msgstr ""
+"<div>Valitse tämä, jos haluat muuttaa gallerian kohteiden nimiä "
+"napsauttamalla niitä (muulloin voit käyttää Muuta nimeä -valikkokohtaa).</"
+"div>"
+
+#. i18n: ectx: label, entry (GalleryLayout), group (Gallery)
+#: kookasettings.kcfg:143
+#, kde-format
+msgid "Show recent folders:"
+msgstr "Näytä viimeaikaiset kansiot:"
+
+#. i18n: ectx: tooltip, entry (GalleryLayout), group (Gallery)
+#: kookasettings.kcfg:144
+#, kde-format
+msgid ""
+"<div>Select whether and where a list of recently accessed gallery folders "
+"will be shown.</div>"
+msgstr ""
+"<div>Valitse, näytetäänkö viime aikoina käytettyjen galleriakansioiden "
+"luettelo ja missä.</div>"
+
+#. i18n: ectx: label, entry (ThumbnailCustomBackground), group (thumbnailView)
+#: kookasettings.kcfg:164
+#, kde-format
+msgid "Use a custom background image"
+msgstr "Käytä mukautettua taustakuvaa"
+
+#. i18n: ectx: tooltip, entry (ThumbnailCustomBackground), group (thumbnailView)
+#: kookasettings.kcfg:165
+#, kde-format
+msgid "<div>Set a custom background image for the thumbnail view.</div>"
+msgstr "<div>Mukauta pienoiskuvanäkymän taustakuvaa.</div>"
+
+#. i18n: ectx: label, entry (ThumbnailBackgroundPath), group (thumbnailView)
+#: kookasettings.kcfg:170
+#, kde-format
+msgid "Image:"
+msgstr "Kuva:"
+
+#. i18n: ectx: tooltip, entry (ThumbnailBackgroundPath), group (thumbnailView)
+#: kookasettings.kcfg:171
+#, kde-format
+msgid "<div>The background image to use for the thumbnail view.</div>"
+msgstr "<div>Pienoiskuvanäkymässä käytettävä taustakuva.</div>"
+
+#. i18n: ectx: label, entry (ThumbnailPreviewSize), group (thumbnailView)
+#: kookasettings.kcfg:177
+#, kde-format
+msgid "Preview size:"
+msgstr "Esikatselun koko:"
+
+#. i18n: ectx: tooltip, entry (ThumbnailPreviewSize), group (thumbnailView)
+#: kookasettings.kcfg:178
+#, kde-format
+msgid "<div>Select the default preview size for the thumbnail view.</div>"
+msgstr "<div>Valitse pienoiskuvanäkymän esikatselun oletuskoko.</div>"
+
+#. i18n: ectx: label, entry (OcrGocrDustSize), group (gocr)
+#: kookasettings.kcfg:217
+#, kde-format
+msgid "Dust size:"
+msgstr "Pölyn koko:"
+
+#. i18n: ectx: tooltip, entry (OcrGocrDustSize), group (gocr)
+#: kookasettings.kcfg:218
+#, kde-format
+msgid ""
+"<div>Clusters smaller than this size will be considered to be noise, and "
+"ignored.  0 means to not detect dust clusters, -1 means to automatically "
+"detect them. The default is 10.</div>"
+msgstr ""
+"<div>Tätä pienemmät kasaumat tulkitaan kohinaksi ja sivuutetaan. 0 = älä "
+"tunnista pölykasaumia, –1 = tunnista automaattisesti. Oletus on 10.</div>"
+
+#. i18n: ectx: label, entry (OcrGocrGrayLevel), group (gocr)
+#: kookasettings.kcfg:223
+#, kde-format
+msgid "Gray level:"
+msgstr "Harmaan taso:"
+
+#. i18n: ectx: tooltip, entry (OcrGocrGrayLevel), group (gocr)
+#: kookasettings.kcfg:224
+#, kde-format
+msgid ""
+"<div>The threshold value below which gray pixels are considered to be black. "
+"0 means to automatically detect the gray level.  The default is 160.</div>"
+msgstr ""
+"<div>Kynnysarvo, jonka alla harmaat kuvapisteet tulkitaan mustiksi. 0 = "
+"tunnista harmaan taso automaattisesti. Oletus on 160.</div>"
+
+#. i18n: ectx: label, entry (OcrGocrSpaceWidth), group (gocr)
+#: kookasettings.kcfg:229
+#, kde-format
+msgid "Space width:"
+msgstr "Välistyksen leveys:"
+
+#. i18n: ectx: tooltip, entry (OcrGocrSpaceWidth), group (gocr)
+#: kookasettings.kcfg:230
+#, kde-format
+msgid ""
+"<div>The minimum gap in pixels considered to be word spacing. The default is "
+"0 which means to automatically detect spacing.</div>"
+msgstr ""
+"<p>Pienin sanaväliksi katsottava kuvapisteväli. Oletus on 0 = tunnista väli "
+"automaattisesti.</div>"
+
+#. i18n: ectx: label, entry (OcrGocrCertainty), group (gocr)
+#: kookasettings.kcfg:235
+#, kde-format
+msgid "Certainty:"
+msgstr "Varmuus:"
+
+#. i18n: ectx: tooltip, entry (OcrGocrCertainty), group (gocr)
+#: kookasettings.kcfg:236
+#, kde-format
+msgid ""
+"<div>The acceptance certainty threshold for recognition, characters with a "
+"lower certainty are considered to be unknown. The default is 95.</div>"
+msgstr ""
+"<div>Tunnistuksen hyväksymisen varmuuskynnys: pienemmän varmuuden merkit "
+"tulkitaan tuntemattomiksi. Oletus on 95.</div>"
+
+#. i18n: ectx: label, entry (ocrOcradLayoutDetection), group (ocrad)
+#: kookasettings.kcfg:250
+#, kde-format
+msgid "Layout analysis mode:"
+msgstr "Asetteluntunnistustila:"
+
+#. i18n: ectx: label, entry (ocrOcradCharset), group (ocrad)
+#: kookasettings.kcfg:263
+#, kde-format
+msgid "Character set:"
+msgstr "Merkistö:"
+
+#. i18n: ectx: label, entry (ocrOcradFilter), group (ocrad)
+#: kookasettings.kcfg:267
+#, kde-format
+msgid "Filter:"
+msgstr "Suodatin:"
+
+#. i18n: ectx: label, entry (ocrOcradTransform), group (ocrad)
+#: kookasettings.kcfg:271
+#, kde-format
+msgid "Transform:"
+msgstr "Muunnos:"
+
+#. i18n: ectx: label, entry (ocrOcradInvert), group (ocrad)
+#: kookasettings.kcfg:275
+#, kde-format
+msgid "Invert input"
+msgstr "Käännä syöte"
+
+#. i18n: ectx: label, entry (ocrOcradThresholdEnable), group (ocrad)
+#: kookasettings.kcfg:280
+#, kde-format
+msgid "Set threshold"
+msgstr "Aseta kynnys"
+
+#. i18n: ectx: label, entry (ocrOcradThresholdValue), group (ocrad)
+#: kookasettings.kcfg:286
+#, kde-format
+msgid "Threshold"
+msgstr "Kynnys"
+
+#. i18n: ectx: label, entry (ocrTesseractLanguage), group (tesseract)
+#: kookasettings.kcfg:308
+#, kde-format
+msgid "Language:"
+msgstr "Kieli:"
+
+#. i18n: ectx: label, entry (ocrTesseractUserWords), group (tesseract)
+#: kookasettings.kcfg:312
+#, kde-format
+msgid "User word list:"
+msgstr "Käyttäjän sanalista:"
+
+# *** TARKISTA: Mitä ”pattern” on tässä?
+#. i18n: ectx: label, entry (ocrTesseractUserPatterns), group (tesseract)
+#: kookasettings.kcfg:316
+#, kde-format
+msgid "User patterns:"
+msgstr "Käyttäjän kuviot:"
+
+#. i18n: ectx: label, entry (ocrTesseractEngineMode), group (tesseract)
+#: kookasettings.kcfg:320
+#, kde-format
+msgid "Engine mode:"
+msgstr "Tekstintunnistustapa:"
+
+#. i18n: ectx: label, entry (ocrTesseractSegmentationMode), group (tesseract)
+#: kookasettings.kcfg:324
+#, kde-format
+msgid "Segmentation mode:"
+msgstr "Segmentointitapa:"
+
+#: kookaview.cpp:206
+#, kde-format
+msgid "Image View"
+msgstr "Kuvanäkymä"
+
+#: kookaview.cpp:265
+#, kde-format
+msgid "Scan Preview"
+msgstr "Esikatselu"
+
+#: kookaview.cpp:275
+#, kde-format
+msgid "OCR results will appear here"
+msgstr "Tähän ilmestyy tunnistettu teksti"
+
+#: kookaview.cpp:284
+#, kde-format
+msgid "Scan"
+msgstr "Lue kuva"
+
+#: kookaview.cpp:287 kookaview.cpp:560 kookaview.cpp:579 scangallery.cpp:123
+#, kde-format
+msgid "Gallery"
+msgstr "Galleria"
+
+#: kookaview.cpp:463
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"There was a problem opening the scanner device.<nl/><nl/>Check that the "
+"scanner is connected and switched on, and that SANE support for it is "
+"correctly configured.<nl/><nl/>Trying to use scanner device: <icode>%3</"
+"icode><nl/>libkookascan reported error: <message>%2</message><nl/>SANE "
+"reported error: <message>%1</message>"
+msgstr ""
+"Kuvanlukulaiteyhteyttä avattaessa ilmeni ongelma.<nl/><nl/>Varmista, että "
+"laite on kytketty ja toiminnassa ja että sen SANE-tuki on määritetty oikein."
+"<nl/><nl/>Yritettäessä käyttää kuvanlukijaa: <icode>%3</icode><nl/"
+">libkookascan palautti virheen: <message>%2</message><nl/>SANE ilmoitti "
+"virheen: <message>%1</message>"
+
+#: kookaview.cpp:518
+#, kde-format
+msgid "Add Scan Device"
+msgstr "Lisää kuvanlukulaite"
+
+#: kookaview.cpp:536
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"No scanner devices are available.<nl/><nl/>If your scanner is a type that "
+"can be auto-detected by SANE, check that it is connected, switched on and "
+"configured correctly.<nl/><nl/>If the scanner cannot be auto-detected by "
+"SANE (this includes some network scanners), you need to specify the device "
+"to use. Use the <interface>Add Scan Device</interface> option to enter the "
+"backend name and parameters, or see that dialog for more information."
+msgstr ""
+"Kuvanlukulaitteita ei ole käytettävissä.<nl/><nl/>Jos kuvanlukijasi on SANEn "
+"automaattisesti tunnistamaa tyyppiä, varmista, että se on kytketty, "
+"toiminnassa ja oikein määritetty.<nl/><nl/>Jos SANE ei tunnista kuvanlukijaa "
+"automaattisesti (esim. verkkokuvanlukijat), voit määrittää käytettävän "
+"laitteen. Anna taustaosanimi ja parametrit <interface>Lisää kuvanlukulaite</"
+"interface>-valinnalla. Katso lisätietoa kyseisestä ikkunasta."
+
+#: kookaview.cpp:582
+#, kde-format
+msgid "No scanner connected"
+msgstr "Kuvanlukijaa ei ole kytketty"
+
+#: kookaview.cpp:641
+#, kde-format
+msgid "No selection"
+msgstr "Ei valintaa"
+
+#: kookaview.cpp:645
+#, kde-format
+msgid "Gallery folder %1"
+msgstr "Galleriakansio %1"
+
+#: kookaview.cpp:645
+#, kde-format
+msgid "Gallery image %1"
+msgstr "Gallerian kuva %1"
+
+#: kookaview.cpp:710
+#, kde-format
+msgid "Starting OCR on selection"
+msgstr "Aloitan kirjaimentunnistuksen valinnalle"
+
+#: kookaview.cpp:716
+#, kde-format
+msgid "Starting OCR on the image"
+msgstr "Aloitan kirjaimentunnistuksen kuvalle"
+
+#: kookaview.cpp:723
+#, kde-format
+msgid "OCR File"
+msgstr "Tunnista tiedostosta teksti"
+
+#: kookaview.cpp:733
+#, kde-kuit-format
+msgctxt "@info"
+msgid "Cannot load <filename>%1</filename> for OCR:<nl/>%2"
+msgstr ""
+"Tiedostoa <filename>%1</filename> ei voida ladata tekstintunnistusta varten:"
+"<nl/>%2"
+
+#: kookaview.cpp:735
+#, kde-format
+msgid "Cannot Read OCR File"
+msgstr "Tekstintunnistustiedostoa ei voi lukea"
+
+#: kookaview.cpp:739
+#, kde-kuit-format
+msgctxt "@info"
+msgid "Starting OCR on file <filename>%1</filename>"
+msgstr "Aletaan tunnistaa tekstiä tiedostosta <filename>%1</filename>"
+
+#: kookaview.cpp:755
+#, kde-format
+msgid "OCR finished"
+msgstr "Tekstintunnistus on valmis"
+
+#: kookaview.cpp:762
+#, kde-format
+msgid "There is no OCR result text to spell check."
+msgstr "Tarkistettavaa tunnistettua tekstiä ei ole"
+
+#: kookaview.cpp:763
+#, kde-format
+msgid "OCR Spell Check not possible"
+msgstr "Tunnistetun tekstin oikeinkirjoituksen tarkistus ei ole mahdollista"
+
+#: kookaview.cpp:768
+#, kde-format
+msgid "OCR Spell Check"
+msgstr "Tunnistetun tekstin oikeinkirjoituksen tarkistus"
+
+#: kookaview.cpp:784
+#, kde-format
+msgid ""
+"No OCR engine is configured.\n"
+"Please select and configure one in order to perform OCR."
+msgstr ""
+"Tekstintunnistusmoottoria ei ole asetettu.\n"
+"Valitse ja aseta jokin tekstintunnistusta varten."
+
+#: kookaview.cpp:786
+#, kde-format
+msgid "OCR Not Configured"
+msgstr "Teksintunnistusta ei ole asetettu"
+
+#: kookaview.cpp:795
+#, kde-format
+msgid "Cannot load OCR plugin '%1'"
+msgstr "Tekstintunnistusliitännäistä ”%1” ei voi ladata"
+
+#: kookaview.cpp:903
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"There was a problem during preview or scanning.<nl/>Check that the scanner "
+"is still connected and switched on, <nl/>and that media is loaded if "
+"required.<nl/><nl/>Trying to use scanner device: <icode>%3</icode><nl/"
+">libkookascan reported error: <message>%2</message><nl/>SANE reported error: "
+"<message>%1</message>"
+msgstr ""
+"Esikatselun tai kuvanluvun aikana ilmeni ongelma.<nl/>Varmista, että "
+"kuvanlukulaite on yhä kytketty ja toiminnassa<nl/>ja mahdollisesti "
+"vaadittava tietoväline ladattu.<nl/><nl/>Yritettäessä käyttää "
+"kuvanlukulaitetta: <icode>%3</icode><nl/>libkookascan palautti virheen: "
+"<message>%2</message><nl/>SANE ilmoitti virheen: <message>%1</message>"
+
+#: kookaview.cpp:953
+#, kde-format
+msgid "Create new image from selection"
+msgstr "Luo uusi kuva valinnasta"
+
+#: kookaview.cpp:962
+#, kde-format
+msgid "Cannot transform, image is read-only"
+msgstr "Ei voi muuntaa: kuva on vain luettavissa"
+
+#: kookaview.cpp:1015
+#, kde-format
+msgid "Loaded image %1"
+msgstr "Kuva %1 ladattu"
+
+#: kookaview.cpp:1016
+#, kde-format
+msgid "Unloaded image"
+msgstr "Kuva suljettu"
+
+#: kookaview.cpp:1033
+#, kde-format
+msgid "Loading %1..."
+msgstr "Ladataan %1…"
+
+#: main.cpp:44
+#, kde-format
+msgid "Scanning, image gallery and OCR"
+msgstr "Kuvanluku, kuvagalleria ja tekstintunnistus"
+
+# Onkohan GOCR:n verkko-osoitteessa virhe (jocr > gocr)? Kumpikaan osoite ei tällä hetkellä toimi
+#: main.cpp:47
+#, kde-format
+msgid ""
+"Kooka provides access to scanner hardware using the <a href=\"http://www."
+"sane-project.org/\">SANE</a> library.\n"
+"\n"
+"Kooka allows you to scan, save and view in any image format that KDE "
+"supports, and can perform Optical Character Recognition using the open "
+"source <a href=\"http://jocr.sourceforge.net/\">GOCR</a> or <a href=\"http://"
+"www.gnu.org/software/ocrad/ocrad.html\">OCRAD</a> programs, or the "
+"commercial <a href=\"http://www.rerecognition.com/\">KADMOS</a> library."
+msgstr ""
+"Kooka tarjoaa pääsyn kuvanlukulaitteistoon <a href=\"http://www.sane-project."
+"org/\">SANE</a>-kirjaston avulla.\n"
+"\n"
+"Kookalla voit lukea, tallentaa ja katsella kaikkia KDE:n tukemia kuvamuotoja "
+"sekä tunnistaa kuvasta tekstin avoimen lähdekoodin <a href=\"http://gocr."
+"sourceforge.net/\">GOCR</a>- tai <a href=\"http://www.gnu.org/software/ocrad/"
+"ocrad.html\">OCRAD</a>-ohjelmalla tai kaupallisella <a href=\"http://www."
+"rerecognition.com/\">KADMOS</a>-kirjastolla."
+
+#: main.cpp:57
+#, kde-format
+msgid ""
+"This program is distributed under the terms of the GPL v2 as published\n"
+"by the Free Software Foundation.\n"
+"\n"
+"As a special exception, permission is given to link this program\n"
+"with any version of the KADMOS OCR/ICR engine of reRecognition GmbH\n"
+"(http://www.rerecognition.com), and distribute the resulting executable\n"
+"without including the source code for KADMOS in the source distribution.\n"
+"\n"
+"Note that linking against KADMOS is not permitted under the terms of\n"
+"the Qt GPL licence, so if you wish to do this then you must have a\n"
+"commercial Qt development licence.\n"
+msgstr ""
+"Tätä ohjelmaa jaetaan Free Software Foundationin GPL v2 -lisenssin\n"
+"mukaisesti.\n"
+"\n"
+"Erityispoikkeuksena tämän ohjelman saa linkittää reRecognition\n"
+"GmbH:n (http://www.rerecognition.com/) KADMOS OCR/ICR -moottorin\n"
+"mihin tahansa versioon ja jakaa syntyvää ohjelmatiedostoa\n"
+"sisällyttämättä KADMOS-lähdekoodia lähdejakeluun.\n"
+"\n"
+"Huomaa, että KADMOS-linkitys ei ole sallittua Qt:n GPL-lisenssin\n"
+"alla, joten jos teet näin, tarvitset kaupallisen Qt-kehityslisenssin.\n"
+
+#: main.cpp:70
+#, kde-format
+msgid "(C) 2000-2018, the Kooka developers and contributors"
+msgstr "© 2000–2018 Kookan kehittäjät ja avustajat"
+
+#: main.cpp:78
+#, kde-format
+msgid "Kooka"
+msgstr "Kooka"
+
+#: main.cpp:90
+#, kde-format
+msgid "Current maintainer, KDE4 port"
+msgstr "Nykyinen ylläpitäjä, siirros KDE 4:ään"
+
+#: main.cpp:91
+#, kde-format
+msgid "Montel Laurent"
+msgstr "Montel Laurent"
+
+#: main.cpp:91
+#, kde-format
+msgid "Initial KF5 port"
+msgstr "Alustava KF5-siirros"
+
+#: main.cpp:92
+#, kde-format
+msgid "Klaas Freitag"
+msgstr "Klaas Freitag"
+
+#: main.cpp:92
+#, kde-format
+msgid "Developer"
+msgstr "Kehittäjä"
+
+#: main.cpp:93
+#, kde-format
+msgid "Mat Colton"
+msgstr "Mat Colton"
+
+#: main.cpp:93
+#, kde-format
+msgid "Graphics, web"
+msgstr "Grafiikka, web"
+
+#: main.cpp:94
+#, kde-format
+msgid "Ivan Shvedunov"
+msgstr "Ivan Shvedunov"
+
+#: main.cpp:94
+#, kde-format
+msgid "Original kscan application"
+msgstr "Alkuperäinen kscan-sovellus"
+
+#: main.cpp:95
+#, kde-format
+msgid "Alex Kempshall"
+msgstr "Alex Kempshall"
+
+#: main.cpp:95
+#, kde-format
+msgid "Photocopy facility"
+msgstr "Valokopiointimahdollisuus"
+
+#: main.cpp:105
+#, kde-format
+msgid "Gallery mode - do not connect to scanner"
+msgstr "Galleriatila – älä yhdistä kuvanlukulaitteeseen"
+
+#: main.cpp:108
+#, kde-format
+msgid "The SANE device specification (e.g. 'umax:/dev/sg0')"
+msgstr "SANE-laitemääritys (esim. ”umax:/dev/sg0”)"
+
+#: main.cpp:108
+#, kde-format
+msgid "device"
+msgstr "laite"
+
+#: newscanpresetdialog.cpp:53
+#, kde-format
+msgid "Edit Scan Preset"
+msgstr "Muokkaa esiasetusjoukkoa"
+
+#: newscanpresetdialog.cpp:54
+#, kde-format
+msgid "Change the name and/or description of the scan preset."
+msgstr "Muuta esiasetusjoukon nimeä tai kuvausta."
+
+#: newscanpresetdialog.cpp:58
+#, kde-format
+msgid "Save Scan Preset"
+msgstr "Tallenna esiasetusjoukko"
+
+#: newscanpresetdialog.cpp:59
+#, kde-format
+msgid "Enter a name and description for the new scan preset."
+msgstr "Anna uudelle esiasetusjoukolle nimi ja kuvaus."
+
+#: newscanpresetdialog.cpp:66
+#, kde-format
+msgid "Preset name:"
+msgstr "Esiasetuksen nimi:"
+
+#: newscanpresetdialog.cpp:73
+#, kde-format
+msgid "Description:"
+msgstr "Kuvaus:"
+
+#: ocrresedit.cpp:159
+#, kde-format
+msgid "Save OCR Result Text"
+msgstr "Tallenna tunnistettu teksti"
+
+#: ocrresedit.cpp:160
+#, kde-format
+msgid "Text File (*.txt)"
+msgstr "Tekstitiedosto (*.txt)"
+
+#: ocrresedit.cpp:166
+#, kde-kuit-format
+msgctxt "@info"
+msgid "Unable to save the OCR results file<nl/><filename>%1</filename>"
+msgstr ""
+"Ei voitu tallentaa tunnistettua tekstiä tiedostoon<nl/><filename>%1</"
+"filename>"
+
+#: ocrresedit.cpp:168
+#, kde-kuit-format
+msgctxt "@info"
+msgid "<nl/>%1"
+msgstr "<nl/>%1"
+
+#: ocrresedit.cpp:170
+#, kde-format
+msgid "Error saving OCR results"
+msgstr "Virhe tallennettaessa tunnistettua tekstiä"
+
+#: prefspages.cpp:76
+#, kde-format
+msgid "Hidden Messages"
+msgstr "Piilotetut viestit"
+
+#: prefspages.cpp:80
+#, kde-format
+msgid ""
+"Use this button to reenable all messages and questions which\n"
+"have been hidden by using \"Don't ask me again\"."
+msgstr ""
+"Näytä kaikki aiemmin ”Älä kysy minulta enää” -toiminnolla piilotetut\n"
+"viestit ja kysymykset uudelleen napsauttamalla tätä painiketta."
+
+#: prefspages.cpp:83
+#, kde-format
+msgid "Enable Messages/Questions"
+msgstr "Salli viestit ja kysymykset"
+
+#: prefspages.cpp:243
+#, kde-format
+msgid "Image Gallery"
+msgstr "Kuvagalleria"
+
+#: prefspages.cpp:257
+#, kde-format
+msgid "Not shown"
+msgstr "Ei näytetty"
+
+#: prefspages.cpp:258
+#, kde-format
+msgid "At top"
+msgstr "Ylhäällä"
+
+#: prefspages.cpp:259
+#, kde-format
+msgid "At bottom"
+msgstr "Alhaalla"
+
+#: prefspages.cpp:274
+#, kde-format
+msgid "Thumbnail View"
+msgstr "Esikatselukuvien näyttäminen"
+
+#: prefspages.cpp:388
+#, kde-format
+msgid "None"
+msgstr "Ei mitään"
+
+#: prefspages.cpp:400
+#, kde-format
+msgid "OCR Engine:"
+msgstr "Tekstintunnistusmoottori:"
+
+#: prefspages.cpp:406
+#, kde-format
+msgid "OCR Engine Settings..."
+msgstr "Tekstintunnistusmoottorin asetukset…"
+
+#: prefspages.cpp:452
+#, kde-format
+msgid ""
+"No OCR engine is selected. Select and configure one to be able to perform "
+"OCR."
+msgstr ""
+"Tekstintunnistusmoottoria ei ole valittu. Valitse ja aseta jokin "
+"tekstintunnistusta varten."
+
+#: prefspages.cpp:460
+#, kde-format
+msgid "Unknown engine '%1'."
+msgstr "Tuntematon moottori ”%1”."
+
+#: scangallery.cpp:98
+#, kde-format
+msgid "Name"
+msgstr "Nimi"
+
+#: scangallery.cpp:99
+#, kde-format
+msgid "Size"
+msgstr "Koko"
+
+#: scangallery.cpp:100
+#, kde-format
+msgid "Format"
+msgstr "Muoto"
+
+#: scangallery.cpp:171
+#, kde-format
+msgid "Kooka Gallery"
+msgstr "Kookan kuvagalleria"
+
+#: scangallery.cpp:375
+#, kde-format
+msgid "empty"
+msgstr "tyhjä"
+
+#: scangallery.cpp:378
+#, kde-format
+msgid "one image"
+msgid_plural "%1 images"
+msgstr[0] "yksi kuva"
+msgstr[1] "%1 kuvaa"
+
+#: scangallery.cpp:380
+#, kde-format
+msgid "one file"
+msgid_plural "%1 files"
+msgstr[0] "yksi tiedosto"
+msgstr[1] "%1 tiedostoa"
+
+#: scangallery.cpp:386
+#, kde-format
+msgid "one file, "
+msgid_plural "%1 files, "
+msgstr[0] "yksi file, "
+msgstr[1] "%1 tiedostoa, "
+
+#: scangallery.cpp:388
+#, kde-format
+msgid "one image, "
+msgid_plural "%1 images, "
+msgstr[0] "yksi kuva, "
+msgstr[1] "%1 kuvaa, "
+
+#: scangallery.cpp:391
+#, kde-format
+msgid "1 folder"
+msgid_plural "%1 folders"
+msgstr[0] "yksi kansio"
+msgstr[1] "%1 kansiota"
+
+#: scangallery.cpp:446
+#, kde-format
+msgid " %1 x %2"
+msgstr " %1 × %2"
+
+#: scangallery.cpp:602
+#, kde-format
+msgid ""
+"You entered a file extension that differs from the existing one. That is not "
+"yet possible. Converting 'on the fly' is planned for a future release.\n"
+"Kooka corrects the extension."
+msgstr ""
+"Annoit tiedostopäätteen, joka poikkeaa tiedoston nykyisestä päätteestä.\n"
+"Tiedostotyyppien muunnos ei onnistu vielä Kookan tällä versiolla, sitä\n"
+"tullaan tukemaan myöhemmissä versioissa. Kooka korjaa päätteen."
+
+#: scangallery.cpp:604
+#, kde-format
+msgid "On the Fly Conversion"
+msgstr "Konvertoi lennossa"
+
+#: scangallery.cpp:700
+#, kde-format
+msgid "Not a supported image format"
+msgstr "Kuvamuoto ei ole tuettu"
+
+#: scangallery.cpp:752
+#, kde-format
+msgid "Sub-image %1"
+msgstr "Alikuva %1"
+
+#: scangallery.cpp:778
+#, kde-kuit-format
+msgctxt "@info"
+msgid "Unable to load the image <filename>%2</filename><nl/>%1"
+msgstr "Ei voitu ladata kuvaa <filename>%2</filename><nl/>%1"
+
+#: scangallery.cpp:780
+#, kde-format
+msgid "Image Load Error"
+msgstr "Kuvan lataamisvirhe"
+
+#: scangallery.cpp:842
+#, kde-format
+msgid "Incoming/"
+msgstr "tulevat/"
+
+#: scangallery.cpp:888
+#, kde-kuit-format
+msgctxt "@info"
+msgid "Could not save the image<nl/><filename>%2</filename><nl/>%1"
+msgstr "Ei voitu tallentaa kuvaa<nl/><filename>%2</filename><nl/>%1"
+
+#: scangallery.cpp:891
+#, kde-format
+msgid "Image Save Error"
+msgstr "Kuvan tallennusvirhe"
+
+#: scangallery.cpp:970
+#, kde-format
+msgid "All Files (*)"
+msgstr "Kaikki tiedostot (*)"
+
+#: scangallery.cpp:973
+#, kde-format
+msgctxt "@title:window"
+msgid "Export Image"
+msgstr "Vie kuva"
+
+#: scangallery.cpp:998
+#, kde-format
+msgid "Import Image File to Gallery"
+msgstr "Tuo kuvatiedosto galleriaan"
+
+#: scangallery.cpp:1113
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"Do you really want to permanently delete the folder<nl/><filename>%1</"
+"filename><nl/>and all of its contents? It cannot be restored."
+msgstr ""
+"Haluatko varmasti poistaa pysyvästi kansion<nl/><filename>%1</filename><nl/"
+">sisältöineen? Sitä ei voi palauttaa."
+
+#: scangallery.cpp:1118
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"Do you really want to permanently delete the image<nl/><filename>%1</"
+"filename>?<nl/>It cannot be restored."
+msgstr ""
+"Haluatko varmasti poistaa pysyvästi kuvan<nl/><filename>%1</filename>?<nl/"
+">Sitä ei voi palauttaa."
+
+#: scangallery.cpp:1125
+#, kde-format
+msgid "Delete Gallery Item"
+msgstr "Poista gallerian kohde"
+
+#: scangallery.cpp:1138
+#, kde-kuit-format
+msgctxt "@info"
+msgid "Could not delete the image or folder<nl/><filename>%2</filename><nl/>%1"
+msgstr ""
+"Ei voitu poistaa tiedostoa tai kansiota<nl/><filename>%2</filename><nl/>%1"
+
+#: scangallery.cpp:1141
+#, kde-format
+msgid "File Delete Error"
+msgstr "Tiedoston poistovirhe"
+
+#: scangallery.cpp:1173
+#, kde-format
+msgid "New Folder"
+msgstr "Uusi kansio"
+
+#: scangallery.cpp:1174
+#, kde-format
+msgid "Name for the new folder:"
+msgstr "Uuden kansion nimi:"
+
+#: scangallery.cpp:1197
+#, kde-kuit-format
+msgctxt "@info"
+msgid "Could not create the folder<nl/><filename>%2</filename><nl/>%1"
+msgstr "Ei voitu luoda kansiota<nl/><filename>%2</filename><nl/>%1"
+
+#: scangallery.cpp:1199
+#, kde-format
+msgid "Folder Create Error"
+msgstr "Kansion luontivirhe"
+
+#: scanpresetsdialog.cpp:63
+#, kde-format
+msgid "Scan Presets"
+msgstr "Kuvanluvun esiasetukset"
+
+#: scanpresetsdialog.cpp:76
+#, kde-format
+msgid "Saved scan preset sets:"
+msgstr "Tallennetut esiasetusjoukot:"
+
+#: scanpresetsdialog.cpp:80
+#, kde-format
+msgid "Select"
+msgstr "Valitse"
+
+#: scanpresetsdialog.cpp:82
+#, kde-format
+msgid "Load the selected scan preset set to use as scanner settings"
+msgstr "Lataa valittu esiasetusjoukko kuvanlukuasetuksiksi"
+
+#: scanpresetsdialog.cpp:86
+#, kde-format
+msgid "Save..."
+msgstr "Tallenna…"
+
+#: scanpresetsdialog.cpp:88
+#, kde-format
+msgid "Save the current scanner settings as a new scan preset set"
+msgstr "Tallenna nykyiset kuvanlukuasetukset uudeksi esiasetusjoukoksi"
+
+#: scanpresetsdialog.cpp:94
+#, kde-format
+msgid "Delete the selected scan preset set"
+msgstr "Poista valittu esiasetusjoukko"
+
+#: scanpresetsdialog.cpp:98
+#, kde-format
+msgid "Edit..."
+msgstr "Muokkaa…"
+
+#: scanpresetsdialog.cpp:100
+#, kde-format
+msgid "Change the name or description of the selected scan preset set"
+msgstr "Muuta valitun esiasetusjoukon nimeä tai kuvausta"
+
+#: scanpresetsdialog.cpp:146
+#, kde-format
+msgid "No preset set selected."
+msgstr "Esiasetusjoukkoa ei ole valittu."
+
+#: scanpresetsdialog.cpp:212
+#, kde-format
+msgctxt "New set name, %1=scan mode, %2=resolution"
+msgid "%1, %2 dpi"
+msgstr "%1, %2 dpi"
+
+#: scanpresetsdialog.cpp:289
+#, kde-kuit-format
+msgctxt "@info"
+msgid "Do you really want to delete the set <resource>%1</resource>?"
+msgstr "Haluatko varmasti poistaa joukon <resource>%1</resource>?"
+
+#: scanpresetsdialog.cpp:290
+#, kde-format
+msgid "Delete Scan Preset Set"
+msgstr "Poista esiasetusjoukko"
+
+#: statusbarmanager.cpp:52
+#, kde-format
+msgctxt "@info:status"
+msgid "Ready"
+msgstr "Valmis"
+
+#: statusbarmanager.cpp:59
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "The size of the image being viewed in the gallery"
+msgstr "Galleriasta näytetyn kuvan koko"
+
+#: statusbarmanager.cpp:67
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "The size of the selected area that will be scanned"
+msgstr "Luettavaksi valitun alueen koko"
+
+#: statusbarmanager.cpp:75
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"<qt>This is the uncompressed size of the scanned image. It tries to warn you "
+"if you try to produce too big an image by changing its background color."
+msgstr ""
+"<qt>Tämä on luetun kuvan pakkaamaton koko. Se yrittää varoittaa sinua, jos "
+"yrität luoda liian ison kuvan vaihtamalla sen taustaväriä."
+
+#: statusbarmanager.cpp:108
+#, kde-format
+msgctxt "@info:status"
+msgid "Image: %1"
+msgstr "Kuva: %1"
+
+#: statusbarmanager.cpp:112
+#, kde-format
+msgctxt "@info:status"
+msgid "Scan: %1"
+msgstr "Lue kuva: %1"
+
+#: thumbview.cpp:96
+#, kde-format
+msgid "Thumbnails"
+msgstr "Esikatselukuvat"
+
+#: thumbview.cpp:107
+#, kde-format
+msgid "Preview Size"
+msgstr "Esikatselun koko"
+
+#: thumbview.cpp:338
+#, kde-format
+msgid "Very Large"
+msgstr "Erittäin suuri"
+
+#: thumbview.cpp:339
+#, kde-format
+msgid "Large"
+msgstr "Suuri"
+
+#: thumbview.cpp:340
+#, kde-format
+msgid "Medium"
+msgstr "Normaali"
+
+#: thumbview.cpp:341
+#, kde-format
+msgid "Small"
+msgstr "Pieni"
+
+#: thumbview.cpp:342
+#, kde-format
+msgid "Very Small"
+msgstr "Erittäin pieni"
+
+#: thumbview.cpp:343
+#, kde-format
+msgid "Tiny"
+msgstr "Pienenpieni"
+
+#~ msgid "PhotoCopier"
+#~ msgstr "PhotoCopier"
+
+#~ msgid "Print options"
+#~ msgstr "Tulostusvalinnat"
+
+#~ msgid "Copies: "
+#~ msgstr "Kopioita: "
+
+#~ msgid "Scanner Settings: %1"
+#~ msgstr "Kuvanlukijan asetukset: %1"
+
+#~ msgid "Scan size:"
+#~ msgstr "Skannauksen koko:"
+
+#~ msgid "Photocopy..."
+#~ msgstr "Valokopio…"
+
+#~ msgid "Loading non-local images is not yet implemented"
+#~ msgstr "Muiden kuin paikallisten kuvien lataamista ei ole vielä toteutettu"
+
+#~ msgid "Image loading failed"
+#~ msgstr "Kuvan lataus epäonnistui"
+
+#~ msgid "Failed to open TIFF file"
+#~ msgstr "TIFF-tiedostoa ei voi avata"
+
+#~ msgid "Failed to read TIFF directory"
+#~ msgstr "TIFF-kansiota ei voi lukea"
+
+#~ msgid "Failed to read TIFF image"
+#~ msgstr "TIFF-kuvan lukeminen epäonnistui"
+
+#~ msgid "TIFF not supported"
+#~ msgstr "TIFFiä ei tueta"
+
+#~ msgid "Print %1"
+#~ msgstr "Tulosta %1"
+
+#~ msgid "OCR has not been performed yet, or the engine has been changed."
+#~ msgstr "Tekstintunnistusta ei ole vielä tehty tai moottoria on vaihdettu."
+
+#~ msgid "unknown"
+#~ msgstr "tuntematon"
+
+#~ msgid ""
+#~ "This version of Kooka is not compiled with KADMOS support.\n"
+#~ "Please select another OCR engine in the configuration dialog."
+#~ msgstr ""
+#~ "Tätä Kookan versiota ei ole koostettu KADMOS-tuella.\n"
+#~ "Valitse toinen tekstintunnistusmoottori tekstintunnistusasetuksista."
+
+#~ msgid ""
+#~ "No OCR engine is configured.\n"
+#~ "Please select and configure one in the OCR configuration dialog."
+#~ msgstr ""
+#~ "Tekstintunnistusmoottoria ei ole asetettu.\n"
+#~ "Valitse ja määritä jokin tekstintunnistuksen asetuksissa."
+
+#~ msgid "GOCR"
+#~ msgstr "GOCR"
+
+#~ msgid "OCRAD"
+#~ msgstr "OCRAD"
+
+#~ msgid "Kadmos"
+#~ msgstr "Kadmos"
+
+#~ msgid ""
+#~ "The path to the GOCR binary is not configured or is not valid.\n"
+#~ "Please enter or check the path in the Kooka configuration."
+#~ msgstr ""
+#~ "GOCR-ohjelmatiedoston sijaintia ei ole määritetty tai se ei ole oikein.\n"
+#~ "Anna tai korjaa sijainti Kookan asetuksissa."
+
+#~ msgid "GOCR Software Not Found"
+#~ msgstr "GOCR-ohjelmistoa ei löytynyt"
+
+#~ msgid ""
+#~ "The path to the OCRAD binary is not configured or is not valid.\n"
+#~ "Please enter or check the path in the Kooka configuration."
+#~ msgstr ""
+#~ "OCRAD-ohjelmatiedoston sijantia ei ole määritetty tai se ei ole oikein.\n"
+#~ "Anna tai korjaa sijainti Kookan asetuksissa."
+
+#~ msgid "OCRAD Binary Not Found"
+#~ msgstr "OCRAD-ohjelmatiedostoa ei löytynyt"
+
+#~ msgctxt "@info"
+#~ msgid ""
+#~ "<emphasis>OCRAD</emphasis> is an free software OCR engine by Antonio&nbsp;"
+#~ "Diaz, part of the GNU&nbsp;Project. <nl/><nl/>Images for OCR should be "
+#~ "scanned in black/white (lineart) mode. Best results are achieved if the "
+#~ "characters are at least 20&nbsp;pixels high.  Problems may arise, as "
+#~ "usual, with very bold or very light or broken characters, or with merged "
+#~ "character groups.<nl/><nl/>See <link url=\"http://www.gnu.org/software/"
+#~ "ocrad/ocrad.html\">www.gnu.org/software/ocrad/ocrad.html</link> for more "
+#~ "information on OCRAD."
+#~ msgstr ""
+#~ "<emphasis>OCRAD</emphasis> on Antonio&nbsp;Diazin vapaa "
+#~ "tekstintunnistusmoottori, joka on osa GNU-projektia.<nl/><nl/>Kuvat, "
+#~ "joista tekstiä tunnistetaan, tulisi lukea mustavalkoisina "
+#~ "(viivapiirustuksina). Parhaan tuloksen saa, jos merkit ovat vähintään 20 "
+#~ "kuvapistettä korkeita. Ongelmia voi esiintyä, kuten tavallista, jos "
+#~ "merkit ovat hyvin tummia tai vaaleita, särkyneitä tai sulautuneet yhteen."
+#~ "<nl/><nl/>OCRADista löytyy lisätietoa osoitteesta <link url=\"http://www."
+#~ "gnu.org/software/ocrad/ocrad.html\">www.gnu.org/software/ocrad/ocrad."
+#~ "html</link>."
+
+#~ msgctxt "@info"
+#~ msgid ""
+#~ "Running the OCRAD process (<filename>%1</filename>) %2 with exit status "
+#~ "%3.<nl/>More information may be available in its <link url="
+#~ "\"%4\">standard output</link> or <link url=\"%5\">standard error</link> "
+#~ "log files."
+#~ msgstr ""
+#~ "OCRAD-prosessin (<filename>%1</filename>) %2 suoritus päättyi "
+#~ "paluukoodiin %3.<nl/>Lisätietoa löytyy ohjelman <link url="
+#~ "\"%4\">vakiotuloste-</link> tai <link url=\"%5\">vakiovirhevirran</link> "
+#~ "lokitiedostoista."
+
+#~ msgid "crashed"
+#~ msgstr "kaatui"
+
+#~ msgid "failed"
+#~ msgstr "epäonnistui"
+
+#~ msgid "OCR Result Parse Problem"
+#~ msgstr "Tekstintunnistustulosten jäsennysongelma"
+
+#~ msgid "Engine executable:"
+#~ msgstr "Moottorin ohjelmatiedosto:"
+
+#~ msgctxt "@info"
+#~ msgid ""
+#~ "The path <filename>%1</filename> is not a valid binary.<nl/>Check the "
+#~ "path and install the program if necessary."
+#~ msgstr ""
+#~ "<filename>%1</filename> ei ole kelvollinen ohjelmatiedosto.<nl/>Tarkista "
+#~ "sijainti ja asenna ohjelma, jos tarpeen."
+
+#~ msgctxt "@info"
+#~ msgid ""
+#~ "The program <filename>%1</filename> exists, but is not executable.<nl/"
+#~ ">Check the path and permissions, and/or reinstall the program if "
+#~ "necessary."
+#~ msgstr ""
+#~ "<filename>%1</filename> on olemassa muttei ohjelmatiedosto.<nl/>Tarkista "
+#~ "sijainti ja käyttöoikeudet. Asenna ohjelma uudelleen, jos tarpeen."
+
+#~ msgid "OCR Engine Not Executable"
+#~ msgstr "Tekstintunnistusmoottori ei ole ohjelmatiedosto"
+
+#~ msgid "Create Folder..."
+#~ msgstr "Luo kansio…"
+
+#~ msgid "Load"
+#~ msgstr "Lataa"
+
+#~ msgid "Delete"
+#~ msgstr "Poista"
+
+#~ msgid "-"
+#~ msgstr "-"
+
+#~ msgid "Query network for available scanners"
+#~ msgstr "Hae verkosta skannerit"
+
+#~ msgid ""
+#~ "Check this if you want a network query for available scanners.\n"
+#~ "Note that this does not mean a query over the entire network but only the "
+#~ "stations configured for SANE."
+#~ msgstr ""
+#~ "Valitse tämä kohta, mikäli haluat että käytettävissä olevia skannereita "
+#~ "etsitään verkosta.\n"
+#~ "Tietoja ei haeta kaikista lähiverkon koneista, vaan pelkästään niistä "
+#~ "joissa SANE on käytössä."
+
+#~ msgid "Show the scanner selection dialog"
+#~ msgstr "Näytä skannerin valintaikkuna"
+
+#~ msgid "Mirroring image both directions"
+#~ msgstr "Peilaa kuva molempiin suuntiin"
+
+#~ msgid "<qt>Unable to update the image<br><filename>%2</filename><br><br>%1"
+#~ msgstr "<qt>Ei voitu päivittää kuvaa<br><filename>%2</filename><br><br>%1"
+
+#, fuzzy
+#~| msgid "New Folder"
+#~ msgid "folder"
+#~ msgstr "Uusi kansio"
+
+#, fuzzy
+#~| msgid "Gallery"
+#~ msgid "Gallery %1 %2"
+#~ msgstr "Galleria"
+
+#~ msgid "Select the image sub-format"
+#~ msgstr "Valitse kuvan alityyppi"
+
+#, fuzzy
+#~ msgid "Do not ask again for the save format if it is defined."
+#~ msgstr "Älä kysy uudelleen tallennusmuotoa jos se on määritelty."
+
+#, fuzzy
+#~ msgid ""
+#~ "The folder\n"
+#~ "%1\n"
+#~ " does not exist and could not be created;\n"
+#~ "please check the permissions."
+#~ msgstr ""
+#~ "Hakemistoa\n"
+#~ "%1\n"
+#~ " ei ole olemassa ja sitä ei voitu luoda!\n"
+#~ "Tarkista oikeudet."
+
+#~ msgid "high (or true-) color image, not palleted"
+#~ msgstr "higcolor (tai truecolor-) kuva, ei palettivärit"
+
+#~ msgid " image save OK      "
+#~ msgstr " kuvan tallennus OK      "
+
+#~ msgid " unknown error      "
+#~ msgstr " tuntematon virhe      "
+
+#~ msgid " parameter wrong    "
+#~ msgstr " virheellinen parametri    "
+
+#, fuzzy
+#~ msgid "That would result in the new filename: %1"
+#~ msgstr "Tiedoston uudeksi nimeksi tulisi: %1"
+
+#~ msgid "Format changes of images are currently not supported."
+#~ msgstr "Kuvan tallennusmuotoa ei voi muuttaa."
+
+#, fuzzy
+#~ msgid "Wrong Extension Found"
+#~ msgstr "Väärä tiedoston pääte"
+
+#, fuzzy
+#~ msgid "<b>Starting Optical Character Recognition with %1</b><p>"
+#~ msgstr "<B>Kirjaintentunnistuksen tulokset</B>"
+
+#, fuzzy
+#~ msgid ""
+#~ "GOCR is an Open Source project for optical character recognition.<P>The "
+#~ "author of gocr is <B>Joerg Schulenburg</B><BR>For more information about "
+#~ "gocr see <A HREF=http://jocr.sourceforge.net>http://jocr.sourceforge.net</"
+#~ "A>"
+#~ msgstr ""
+#~ "<B>Tekstin tunnistamisen käynnistyminen</B><P>Kooka käyttää <I>gocr</I> "
+#~ "ohjelmaa kirjainten tunnistukseen, joka on myös avoin "
+#~ "ohjelmaprojekti<P>Gocr ohjelman tekijä on <B>Joerg Schulenburg</"
+#~ "B><BR>Saadaksesi lisätietoja gocr ohjelmasta katso <A HREF=http://jocr."
+#~ "sourceforge.net>http://jocr.sourceforge.net</A>"
+
+#, fuzzy
+#~ msgid "Using ocrad binary: "
+#~ msgstr "Polku 'gocr' ohjelmaan: "
+
+#~ msgid "Mirror Image &Both Directions"
+#~ msgstr "Peilaa kuva &molemmissa suunnissa"
+
+#~ msgid "Open Image in &Graphic Application..."
+#~ msgstr "Avaa kuva &grafiikkasovelluksessa..."
+
+#~ msgid "Enable All Warnings && Messages"
+#~ msgstr "Näytä kaikki varoitukset && viestit"
+
+#~ msgid "All messages and warnings will now be shown."
+#~ msgstr "Kaikki viestit ja varoitukset näytetään."
+
+#, fuzzy
+#~ msgid ""
+#~ "Enter the path to %1, the optical-character-recognition command line tool."
+#~ msgstr ""
+#~ "Anna polku gocr ohjelmaan, joka on komentorivityökalu kirjainten "
+#~ "tunnistukseen."
+
+#~ msgid "Kooka Startup Preferences"
+#~ msgstr "Kooka käynnistysasetukset"
+
+#~ msgid ""
+#~ "Check this if you once checked 'do not show the scanner selection on "
+#~ "startup',\n"
+#~ "but you want to see it again."
+#~ msgstr ""
+#~ "Valitse tämä kohta, jos valitsit ohjelman käynnistyessä kohdan 'Älä näytä "
+#~ "skannerin valintaa käynnistettäessä', mutta haluat nähdä valinnan "
+#~ "jatkossa."
+
+#, fuzzy
+#~ msgid "Configure Image Save Assistant"
+#~ msgstr "Tallennusavustajan asetukset"
+
+#~ msgid "Thumbnail Gallery View"
+#~ msgstr "Esikatselukuvien gallerianäkymä"
+
+#~ msgid ""
+#~ "Here you can configure the appearance of the thumbnail view of your scan "
+#~ "picture gallery."
+#~ msgstr ""
+#~ "Tässä kohdassa voit muokata skannattujen kuvien kuvagallerian "
+#~ "esikatselukuvien asetuksia."
+
+#~ msgid "Thumbview Background"
+#~ msgstr "Esikatselukuvien tausta"
+
+#~ msgid "Thumbnail Size"
+#~ msgstr "Esikatselukuvan koko"
+
+#~ msgid "Thumbnail Frame"
+#~ msgstr "Esikatselukuvan kehys"
+
+#~ msgid "Thumbnail maximum &width:"
+#~ msgstr "Esikatselukuvan maksimi&leveys:"
+
+#~ msgid "Thumbnail maximum &height:"
+#~ msgstr "Esikatselukuvan maksimi&korkeus:"
+
+#~ msgid "Thumbnail &frame width:"
+#~ msgstr "Esikatselukuvan k&ehyksen leveys:"
+
+#~ msgid "Frame color &1: "
+#~ msgstr "Kehyksen väri &1: "
+
+#~ msgid "Frame color &2: "
+#~ msgstr "Kehyksen väri &2: "
+
+#~ msgid "Image Viewer"
+#~ msgstr "Kuvannäyttäjä"
+
+#~ msgid "Gallery:"
+#~ msgstr "Galleria:"
+
+#~ msgid ""
+#~ "Could not start OCR-Process.\n"
+#~ "Probably there is already one running."
+#~ msgstr ""
+#~ "Ei voitu käynnistää OCR prosessia.\n"
+#~ "todennäköisesti jokin ohjelma tunnistaa tekstiä."
+
+#~ msgid "Storing image changes"
+#~ msgstr "Tallennan kuvan muutokset"
+
+#~ msgid "Tool Views"
+#~ msgstr "Työkalunäkymät"
+
+#~ msgid "Show Image Viewer"
+#~ msgstr "Näytä kuvannäyttäjä"
+
+#~ msgid "Show Preview"
+#~ msgstr "Näytä esikatselu"
+
+#~ msgid "Show Thumbnail Window"
+#~ msgstr "Näytä esikatselukuvien ikkuna"
+
+#~ msgid "Show Scan Parameters"
+#~ msgstr "Näytä skannausparametrit"
+
+#~ msgid "http://kooka.kde.org"
+#~ msgstr "http://kooka.kde.org"
+
+#~ msgid "Image Name"
+#~ msgstr "Kuvan nimi"
+
+#, fuzzy
+#~ msgid ""
+#~ "Cannot write this image format.\n"
+#~ "Image will not be saved."
+#~ msgstr ""
+#~ "Kuvaa ei voita kirjoittaa tässä tallennusmuodossa.\n"
+#~ "Kuvaa ei tallenneta!"
+
+#, fuzzy
+#~ msgid ""
+#~ "Image file is write protected.\n"
+#~ "Image will not be saved."
+#~ msgstr ""
+#~ "Kuvatiedosto on suojattu.\n"
+#~ "Kuvaa ei tallenneta!"
+
+#~ msgid ""
+#~ "Cannot save the image, because the file is local.\n"
+#~ "Kooka will support other protocols later."
+#~ msgstr ""
+#~ "Kuvaa ei voitu tallentaa koska tiedosto on paikallinen.\n"
+#~ "Kooka tukee muita protokollia myöhemmin."
+
+#~ msgid "Canceled by user"
+#~ msgstr "Peruutettu käyttäjän toimesta"
+
+#~ msgid "Note that changing these options will affect Kooka's next start!"
+#~ msgstr ""
+#~ "Huomaa että tämän asetuksen muuttaminen näkyy vasta kun käynnistät Kookan "
+#~ "uudelleen!"

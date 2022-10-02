@@ -1,0 +1,898 @@
+# Copyright (C) YEAR This file is copyright:
+# This file is distributed under the same license as the kooka package.
+#
+# Matjaž Jeran <matjaz.jeran@amis.net>, 2020, 2021.
+msgid ""
+msgstr ""
+"Project-Id-Version: kooka\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-10-02 00:44+0000\n"
+"PO-Revision-Date: 2021-03-05 10:54+0100\n"
+"Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
+"Language-Team: Slovenian <lugos-slo@lugos.si>\n"
+"Language: sl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 20.08.1\n"
+"Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
+"%100==4 ? 3 : 0);\n"
+
+#: ../libdialogutil/imagefilter.cpp:91
+#, kde-format
+msgid "%1|All Image Files"
+msgstr "%1|Vse slikovne datoteke"
+
+#: ../libdialogutil/imagefilter.cpp:92
+#, kde-format
+msgid "All Image Files (%1)"
+msgstr "Vse slikovne datoteke (%1)"
+
+#: ../libdialogutil/imagefilter.cpp:97
+#, kde-format
+msgid "*|All Files"
+msgstr "*|Vse datoteke"
+
+#: ../libdialogutil/imagefilter.cpp:98
+#, kde-format
+msgid "All Files (*)"
+msgstr "Vse datoteke (*)"
+
+#: adddevicedialog.cpp:53
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"If your scanner has not been automatically detected, you can specify it "
+"here. The <interface>Scanner device name</interface> should be a backend "
+"name (with optional parameters) that is understood by SANE, see <link url="
+"\"man:/sane\">sane(7)</link> or <link url=\"man:/sane-dll\">sane-dll(5)</"
+"link> for more information on available backends. The <interface>Type</"
+"interface> and <interface>Description</interface> can be used to identify "
+"the scanner later.<nl/><nl/>For the information that needs to be entered "
+"here, try to locate the device using the <link url=\"man:/sane-find-scanner"
+"\">sane-find-scanner(1)</link> command. For a USB or networked HP scanner "
+"using <link url=\"http://hplip.sourceforge.net/\">HPLIP</link>, try using "
+"the <command>hp-probe</command> command to locate it, for example <icode>hp-"
+"probe&nbsp;-b&nbsp;usb</icode> or <icode>hp-probe&nbsp;-b&nbsp;net</icode>. "
+"If the scanner is found, then enter the device name displayed by these "
+"commands; note that if using HPLIP then <icode>hp:</icode> needs to be "
+"replaced by <icode>hpaio:</icode>.<nl/><nl/>If these commands fail to locate "
+"your scanner, then it may not be supported by SANE. Check the SANE "
+"documentation for a <link url=\"http://www.sane-project.org/sane-supported-"
+"devices.html\">list of supported devices</link>."
+msgstr ""
+"Če vaš optični bralnik ni bil samodejno zaznan, ga lahko določite tukaj. "
+"<interface>Ime naprave optičnega bralnika</interface> bi moralo biti  ime iz "
+"zaledja (z izbirnimi parametri), ki ga razume SANE, glejte <link url=\"man:/"
+"sane\">sane(7)</link> ali <link url=\"man:/sane-dll\">sane-dll(5)</link> za "
+"več informacij o razpoložljivih ozadjih. <interface>Tip</interface> in "
+"<interface>Opis</interface> sta, da lahko optični bralnik prepoznate kasneje."
+"<nl/><nl/>Za podatke, ki jih je treba vnesti tukaj, poskusite najti napravo "
+"z ukazom <link url=\"man:/sane-find-scanner\">sane-find-scanner(1)</link>. "
+"Če želite uporabiti USB ali omrežni HP-jev optični bralnik <link url="
+"\"http://hplip.sourceforge.net/\">HPLIP</link>, ga poskusite poiskati z "
+"ukazom <command>hp-probe</command>, na primer <icode>hp-probe&nbsp;-b&nbsp;"
+"usb</icode> ali <icode>hp-probe&nbsp;-b&nbsp;net</icode>. Če je optični "
+"bralnik najden, vnesite ime naprave, prikazane s temi ukazi; upoštevajte, da "
+"če uporabljate HPLIP, morate <icode>hp:</icode> zamenjati z <icode>hpaio:</"
+"icode>.<nl/><nl/>Če ti ukazi ne najdejo optičnega bralnika, potem jih morda "
+"SANE ne podpira. Preverite dokumentacijo SANE za <link url=\"http://www.sane-"
+"project.org/sane-supported-devices.html\"> seznam podprtih naprav</link>."
+
+#: adddevicedialog.cpp:77
+#, kde-format
+msgid "Scanner device name:"
+msgstr "Ime naprave za optično branje:"
+
+#: adddevicedialog.cpp:85
+#, kde-format
+msgid "Device type:"
+msgstr "Tip naprave:"
+
+#: adddevicedialog.cpp:92
+#, kde-format
+msgid "Description:"
+msgstr "Opis:"
+
+#: autoselectbar.cpp:56
+#, kde-kuit-format
+msgctxt "@info"
+msgid "<subtitle>Auto Select</subtitle>"
+msgstr "<subtitle>Samodejna izbira</subtitle>"
+
+#: autoselectbar.cpp:82
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "This is the grayscale value of the selected threshold"
+msgstr "To je vrednost sivine izbranega praga"
+
+#: autoselectbar.cpp:90
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Perform the auto-detection again"
+msgstr "Ponovno izvedi avto-detekcijo"
+
+#: autoselectbar.cpp:97
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Advanced settings for auto-detection"
+msgstr "Napredne nastavitve za avto-detekcijo"
+
+#: autoselectdialog.cpp:56
+#, kde-format
+msgctxt "@title:window"
+msgid "Autoselect Settings"
+msgstr "Avtomatsko izberi nastavitve"
+
+#: autoselectdialog.cpp:82
+#, kde-format
+msgid "Black"
+msgstr "Črna"
+
+#: autoselectdialog.cpp:83
+#, kde-format
+msgid "White"
+msgstr "Bela"
+
+#: deviceselector.cpp:58
+#, kde-format
+msgid "Select"
+msgstr "Izberi"
+
+#: deviceselector.cpp:59
+#, kde-format
+msgid "Select Scan Device"
+msgstr "Izberi optični bralnik"
+
+#: deviceselector.cpp:71
+#, kde-format
+msgid "Available Scanners:"
+msgstr "Optični bralniki na voljo:"
+
+#: deviceselector.cpp:82
+#, kde-format
+msgid "Always use this device at startup"
+msgstr "Vedno uporabi to napravo ob zagonu"
+
+#: gammadialog.cpp:53
+#, kde-format
+msgid "Edit Gamma Table"
+msgstr "Uredi tabelo game"
+
+#: gammadialog.cpp:61
+#, kde-format
+msgid "Brightness"
+msgstr "Svetlost"
+
+#: gammadialog.cpp:71
+#, kde-format
+msgid "Contrast"
+msgstr "Kontrast"
+
+#: gammadialog.cpp:81
+#, kde-format
+msgid "Gamma"
+msgstr "Gama"
+
+#: gammadialog.cpp:95
+#, kde-format
+msgid "This gamma table is passed to the scanner hardware."
+msgstr "Ta tabela game je prenesena v strojno napravo optičnega bralnika."
+
+#: imagecanvas.cpp:785
+#, kde-format
+msgid "Fit Best"
+msgstr "Najbolje prilagodi"
+
+#: imagecanvas.cpp:786
+#, kde-format
+msgid "Original size"
+msgstr "Izvirna velikost"
+
+#: imagecanvas.cpp:787
+#, kde-format
+msgid "Fit Width"
+msgstr "Prilagodi širini"
+
+#: imagecanvas.cpp:788
+#, kde-format
+msgid "Fit Height"
+msgstr "Prilagodi višini"
+
+#: imagecanvas.cpp:789
+#, kde-format
+msgid "Zoom %1%"
+msgstr "Zoom %1%"
+
+#: imagecanvas.cpp:790
+#, kde-format
+msgid "Unknown"
+msgstr "Neznano"
+
+#: imagecanvas.cpp:888
+#, kde-format
+msgid "%1x%2 pix, %3 bpp"
+msgstr "%1x%2 pix, %3 bpp"
+
+#: imgscaledialog.cpp:51
+#, kde-format
+msgid "Image Zoom"
+msgstr "Povečava slike"
+
+#: imgscaledialog.cpp:72
+#, kde-format
+msgid "25 %"
+msgstr "25 %"
+
+#: imgscaledialog.cpp:79
+#, kde-format
+msgid "50 %"
+msgstr "50 %"
+
+#: imgscaledialog.cpp:86
+#, kde-format
+msgid "75 %"
+msgstr "75 %"
+
+#: imgscaledialog.cpp:93
+#, kde-format
+msgid "&100 %"
+msgstr "&100 %"
+
+#: imgscaledialog.cpp:105
+#, kde-format
+msgid "150 &%"
+msgstr "150 &%"
+
+#: imgscaledialog.cpp:112
+#, kde-format
+msgid "200 %"
+msgstr "200 %"
+
+#: imgscaledialog.cpp:119
+#, kde-format
+msgid "300 %"
+msgstr "300 %"
+
+#: imgscaledialog.cpp:126
+#, kde-format
+msgid "400 %"
+msgstr "400 %"
+
+#: imgscaledialog.cpp:141
+#, kde-format
+msgid "Custom:"
+msgstr "Po meri:"
+
+#: kscancontrols.cpp:66
+#, kde-format
+msgid "(Unknown)"
+msgstr "(neznano)"
+
+#: kscancontrols.cpp:169
+#, kde-format
+msgid "Reset this setting to its standard value, %1"
+msgstr "Ponovno nastavite to nastavitev na njeno standardno vrednost, %1"
+
+#: kscancontrols.cpp:397
+#, kde-format
+msgid "*.pnm *.pbm *.pgm *.ppm|PNM Image Files"
+msgstr "*.pnm *.pbm *.pgm *.ppm|PNM slikovne datoteke"
+
+#: kscandevice.cpp:288
+#, kde-format
+msgid "No scanner selected"
+msgstr "Ni izbranega optičnega bralnika"
+
+#: kscandevice.cpp:1387
+#, kde-format
+msgid "Default startup configuration"
+msgstr "Privzeta nastavitev ob zagonu"
+
+#: kscandevice.cpp:1487
+#, kde-kuit-format
+msgctxt "@info"
+msgid "The scanner<nl/><icode>%1</icode><nl/>requires authentication."
+msgstr "Optični bralnik<nl/><icode>%1</icode><nl/>zahteva overitev."
+
+#: kscandevice.cpp:1488
+#, kde-format
+msgid "Scanner Authentication"
+msgstr "Overitev na optičnem bralniku"
+
+#: kscandevice.cpp:1532
+#, kde-format
+msgid "OK"
+msgstr "V redu"
+
+#: kscandevice.cpp:1533
+#, kde-format
+msgid "No device"
+msgstr "Ni naprave"
+
+#: kscandevice.cpp:1534
+#, kde-format
+msgid "Bad parameter"
+msgstr "Slab parameter"
+
+#: kscandevice.cpp:1535
+#, kde-format
+msgid "Cannot open device"
+msgstr "Ni mogoče odpreti naprave"
+
+#: kscandevice.cpp:1536
+#, kde-format
+msgid "sane_control_option() failed"
+msgstr "ni uspela sane_control_option()"
+
+#: kscandevice.cpp:1537
+#, kde-format
+msgid "Error while scanning"
+msgstr "Napaka ob skeniranju"
+
+#: kscandevice.cpp:1538
+#, kde-format
+msgid "Empty picture"
+msgstr "Prazna slika"
+
+#: kscandevice.cpp:1539
+#, kde-format
+msgid "Out of memory"
+msgstr "Pomanjkanje pomnilnika"
+
+#: kscandevice.cpp:1540
+#, kde-format
+msgid "Needs reload"
+msgstr "Potreba po ponovnem nalaganju"
+
+#: kscandevice.cpp:1541
+#, kde-format
+msgid "Cancelled"
+msgstr "Preklicano"
+
+#: kscandevice.cpp:1542
+#, kde-format
+msgid "Not active"
+msgstr "Ni dejavno"
+
+#: kscandevice.cpp:1543
+#, kde-format
+msgid "Not supported"
+msgstr "Ni podprto"
+
+#: kscandevice.cpp:1544
+#, kde-format
+msgid "Unknown status %1"
+msgstr "Neznan status %1"
+
+#: kscanoption.cpp:1011
+#, kde-format
+msgid "pixels"
+msgstr "pikslov"
+
+#: kscanoption.cpp:1012
+#, kde-format
+msgid "bits"
+msgstr "bitov"
+
+#: kscanoption.cpp:1013
+#, kde-format
+msgid "mm"
+msgstr "mm"
+
+#: kscanoption.cpp:1014
+#, kde-format
+msgid "dpi"
+msgstr "dpi"
+
+#: kscanoption.cpp:1015
+#, kde-format
+msgid "%"
+msgstr "%"
+
+#: kscanoption.cpp:1016
+#, kde-format
+msgid "µsec"
+msgstr "µsec"
+
+#: kscanoptset.cpp:190
+#, kde-format
+msgid "No description"
+msgstr "Ni opisa"
+
+#: previewer.cpp:242
+#, no-c-format, kde-format
+msgctxt "@info:status"
+msgid "%1x%2mm, %3x%4pix"
+msgstr "%1x%2mm, %3x%4pix"
+
+#: previewer.cpp:245
+#, no-c-format, kde-format
+msgctxt "@info:status"
+msgid "%1x%2mm"
+msgstr "%1x%2mm"
+
+#: previewer.cpp:335
+#, kde-format
+msgid ""
+"The autodetection of images on the preview depends on the background color "
+"of the preview image (the result of scanning with no document loaded).\n"
+"\n"
+"Please select whether the background of the preview image is black or white."
+msgstr ""
+"Samodejno zaznavanje slik v predogledu je odvisno od barve ozadja "
+"predogledne slike (rezultat skeniranja brez naloženega dokumenta).\n"
+"\n"
+"Izberite, ali je ozadje predogledne slike črno ali belo."
+
+#: previewer.cpp:336
+#, kde-format
+msgctxt "@title:window"
+msgid "Autodetection Background"
+msgstr "Avtomatska detekcija ozadja"
+
+#: previewer.cpp:337
+#, kde-format
+msgctxt "@action:button Name of colour"
+msgid "White"
+msgstr "Belo"
+
+#: previewer.cpp:338
+#, kde-format
+msgctxt "@action:button Name of colour"
+msgid "Black"
+msgstr "Črno"
+
+#: scandevices.cpp:182
+#, kde-format
+msgid "Unknown device '%1'"
+msgstr "Neznana naprava '%1'"
+
+#: scanimage.cpp:76
+#, kde-format
+msgid "Loading non-local images is not yet implemented"
+msgstr "Nalaganje nelokalnih slik še ni narejeno"
+
+#: scanimage.cpp:128
+#, kde-format
+msgid "Image loading failed"
+msgstr "Nalaganje slike ni uspelo"
+
+#: scanimage.cpp:162
+#, kde-format
+msgid "Failed to open TIFF file"
+msgstr "Ni mogoče odpreti datoteke TIFF"
+
+#: scanimage.cpp:169
+#, kde-format
+msgid "Failed to read TIFF directory"
+msgstr "Ni mogoče prebrati direktorija TIFF"
+
+#: scanimage.cpp:199
+#, kde-format
+msgid "Failed to read TIFF image"
+msgstr "Ni mogoče prebrati slike TIFF"
+
+#: scanimage.cpp:229
+#, kde-format
+msgid "TIFF not supported"
+msgstr "TIFF ni podprt"
+
+#: scanparams.cpp:134
+#, kde-kuit-format
+msgctxt "@info"
+msgid "<title>Scanner&nbsp;Settings</title>"
+msgstr "<title>Nastavitve optičnega bralnika</title>"
+
+#: scanparams.cpp:176
+#, kde-format
+msgid "Pre&view"
+msgstr "Predogled"
+
+#: scanparams.cpp:177
+#, kde-format
+msgid "Start a preview scan and show the preview image"
+msgstr "Začni predogledni sken in prikaži predogledno sliko"
+
+#: scanparams.cpp:182
+#, kde-format
+msgid "Star&t Scan"
+msgstr "Začni sken"
+
+#: scanparams.cpp:183
+#, kde-format
+msgid "Start a scan and save the scanned image"
+msgstr "Začni sken in shrani skenirano sliko"
+
+#: scanparams.cpp:189
+#, kde-format
+msgid "Stop"
+msgstr "Ustavi"
+
+#: scanparams.cpp:193
+#, kde-format
+msgid "Scanning"
+msgstr "Skeniram"
+
+#: scanparams.cpp:232
+#, kde-format
+msgid "&Basic"
+msgstr "Osnovno"
+
+#: scanparams.cpp:233
+#, kde-format
+msgid "Other"
+msgstr "Ostalo"
+
+#: scanparams.cpp:234
+#, kde-format
+msgid "Advanced"
+msgstr "Napredno"
+
+#: scanparams.cpp:260
+#, kde-format
+msgid "SANE Debug (from PNM image)"
+msgstr "SANE razhroščevanje (iz slike PNM)"
+
+#: scanparams.cpp:261
+#, kde-kuit-format
+msgctxt "@info:tooltip"
+msgid ""
+"Operate in the same way that a real scanner does (including scan area, image "
+"processing etc.), but reading from the specified image file. See <link url="
+"\"man:sane-pnm(5)\">sane-pnm(5)</link> for more information."
+msgstr ""
+"Deluj na enak način kot pravi bralnik (vključno s področjem skeniranja, "
+"obdelavo slike itd.), vendar bere iz določene slikovne datoteke. Glejte "
+"<link url=\"man:sane-pnm(5)\">sane-pnm(5)</link> za več informacij."
+
+#: scanparams.cpp:263
+#, kde-format
+msgid "Virtual Scanner (any image format)"
+msgstr "Navidezni optični bralnik (kateregakoli formata slike)"
+
+#: scanparams.cpp:264
+#, kde-kuit-format
+msgctxt "@info:tooltip"
+msgid ""
+"Do not perform any scanning or processing, but simply read the specified "
+"image file. This is for testing the image saving, etc."
+msgstr ""
+"Ne izvajaj nobenega skeniranja ali obdelave, ampak preprosto preberi "
+"navedeno slikovno datoteko. To je za preizkus shranjevanja slike itd."
+
+#: scanparams.cpp:281
+#, kde-format
+msgid "Reading mode:"
+msgstr "Način branja:"
+
+#: scanparams.cpp:411
+#, kde-format
+msgid "Default (from scan settings)"
+msgstr "Privzeto (iz nastavitev skeniranja)"
+
+#: scanparams.cpp:412
+#, kde-format
+msgid "Black/white bitmap"
+msgstr "Črno/bela bitna slika"
+
+#: scanparams.cpp:413
+#, kde-format
+msgid "Grey scale"
+msgstr "Lestvica sivin"
+
+#: scanparams.cpp:414
+#, kde-format
+msgid "Low colour"
+msgstr "Nizke barve"
+
+#: scanparams.cpp:415
+#, kde-format
+msgid "High colour"
+msgstr "Visoke barve"
+
+#: scanparams.cpp:425
+#, kde-format
+msgid "Force image format:"
+msgstr "Obvezen format slike:"
+
+#: scanparams.cpp:476
+#, kde-format
+msgid "Edit Gamma Table..."
+msgstr "Uredi tabelo gama..."
+
+#: scanparams.cpp:548
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"<title>No scanner selected</title><nl/><nl/>Select a scanner device to "
+"perform scanning."
+msgstr ""
+"<title>Noben optični bralnik ni izbran</title><nl/><nl/>Izberite napravo za "
+"izvajanje optičnega branja."
+
+#: scanparams.cpp:568
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"<title>No scanner found, or unable to access it</title><nl/><nl/>There was a "
+"problem using the SANE (Scanner Access Now Easy) library to access the "
+"scanner device.  There may be a problem with your SANE installation, or it "
+"may not be configured to support your scanner.<nl/><nl/>Check that SANE is "
+"correctly installed and configured on your system, and also that the scanner "
+"device name and settings are correct.<nl/><nl/>See the SANE project home "
+"page (<link url=\"http://www.sane-project.org\">www.sane-project.org</link>) "
+"for more information on SANE installation and setup."
+msgstr ""
+"<title>Nobenega optičnega bralnika ni bilo mogoče najti ali do njega "
+"dostopati</title><nl/><nl/>Pri dostopu do naprave za optično branje je pri "
+"uporabi knjižnice SANE (Scanner Access Now Easy) prišlo do težave. Morda je "
+"bila težava pri namestitvi SANE ali pa morda ni nastavljena za podporo "
+"vašega optičnega bralnika.<nl/><nl/>Preverite, ali je SANE pravilno nameščen "
+"in nastavljen v vašem sistemu, in da je pravilno ime in nastavitve naprave "
+"optičnega bralnika.<nl/><nl/>Glejte domačo stran projekta SANE (<link url="
+"\"http://www.sane-project.org\">www.sane-project.org</link>) za dodatne "
+"informacije o namestitvi in nastavitvi SANE."
+
+#: scanparams.cpp:670
+#, kde-format
+msgid "1-bit depth scan cannot be done in color"
+msgstr "1-bitno globinsko skeniranje ni možno v barvah"
+
+#: scanparams.cpp:673
+#, kde-format
+msgid "16-bit depth scans are not supported"
+msgstr "16-bitna skeniranja niso podprta"
+
+#: scanparams.cpp:683
+#, kde-format
+msgid "A file must be entered for testing or virtual scanning"
+msgstr "Za testiranje ali navidezno skeniranje je treba vnesti datoteko"
+
+#: scanparams.cpp:689
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"The testing or virtual file <filename>%1</filename><nl/>was not found or is "
+"not readable."
+msgstr ""
+"Preskusne ali navidezne datoteke <filename>%1</filename><nl/> ni bilo mogoče "
+"najti oz. ni berljiva."
+
+#: scanparams.cpp:699
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"SANE Debug can only read PNM files.<nl/>The specified file is type <icode>"
+"%1</icode>."
+msgstr ""
+"SANE razhroščevanje lahko bere samo datoteke PNM.<nl/>Navedena datoteka je "
+"tipa <icode>%1</icode>."
+
+#: scanparams.cpp:716
+#, kde-kuit-format
+msgid "Scan in progress"
+msgstr "Skeniranje v teku"
+
+#: scanparams.cpp:717
+#, kde-kuit-format
+msgid "Scan in progress<nl/><nl/>%1"
+msgstr "Skeniranje v teku<nl/><nl/>%1"
+
+#: scanparams.cpp:737
+#, kde-format
+msgid "Cannot preview in Virtual Scanner mode"
+msgstr "Predogled ni mogoč v načinu navideznega optičnega bralnika"
+
+#. i18n: ectx: label, entry (StartupOnlyLocal), group (Startup)
+#: scansettings.kcfg:12
+#, kde-format
+msgid "Query network for available scanners"
+msgstr "Poizvedi po omrežju po razpoložljivih optičnih bralnikih"
+
+#. i18n: ectx: tooltip, entry (StartupOnlyLocal), group (Startup)
+#: scansettings.kcfg:13
+#, kde-format
+msgid ""
+"<div>Check this if you want a network query for available scanners.<br/><br/"
+">Note that this does not mean a query over the entire network, but only "
+"those hosts configured for SANE.</div>"
+msgstr ""
+"<div>Odkljukajte, če želite poizvedbo po omrežja po razpoložljivih optičnih "
+"bralnikih.<br/><br/>Upoštevajte, da to ne pomeni poizvedbe v celotnem "
+"omrežju, ampak samo med gostitelji nastavljenimi za SANE.</div>"
+
+#. i18n: ectx: label, entry (StartupSkipAsk), group (Startup)
+#: scansettings.kcfg:22
+#, kde-format
+msgid "Show the scanner selection dialog"
+msgstr "Pokaži pogovorno okno za izbiro optičnega bralnika"
+
+#. i18n: ectx: tooltip, entry (StartupSkipAsk), group (Startup)
+#: scansettings.kcfg:23
+#, kde-format
+msgid "<div>Check this to show the scanner selection dialog on startup.</div>"
+msgstr ""
+"<div>Odkljukajte to, da se ob zagonu prikaže pogovorno okno za izbiro "
+"optičnega bralnika.</div>"
+
+#. i18n: ectx: label, entry (PreviewAutoselThreshold), group (Scanner Name)
+#: scansettings.kcfg:53
+#, kde-format
+msgid "Threshold:"
+msgstr "Prag:"
+
+#. i18n: ectx: tooltip, entry (PreviewAutoselThreshold), group (Scanner Name)
+#: scansettings.kcfg:54
+#, kde-format
+msgid ""
+"<div>Threshold for auto-detection. All pixels lighter (on a black "
+"background) or darker (on a white background) than this are considered to be "
+"part of the image.</div>"
+msgstr ""
+"<div>Prag samodejnega zaznavanja. Vsi piksli, ki so svetlejši (na črnem "
+"ozadju) ali temnejši (na belem ozadju) od praga, obravnavamo kot del slike.</"
+"div>"
+
+#. i18n: ectx: label, entry (PreviewAutoselDustsize), group (Scanner Name)
+#: scansettings.kcfg:61
+#, kde-format
+msgid "Dust size (pixels):"
+msgstr "Velikost prahu (piksli):"
+
+#. i18n: ectx: tooltip, entry (PreviewAutoselDustsize), group (Scanner Name)
+#: scansettings.kcfg:62
+#, kde-format
+msgid ""
+"<div>Set the dust size; dark or light areas smaller than this will be "
+"ignored</div>"
+msgstr ""
+"<div> Nastavite velikost prahu; temna ali svetla območja manjša od tega "
+"prezremo</div>"
+
+#. i18n: ectx: label, entry (PreviewAutoselMargin), group (Scanner Name)
+#: scansettings.kcfg:69
+#, kde-format
+msgid "Add/subtract margin (mm):"
+msgstr "Dodaj/odštej rob (mm):"
+
+#. i18n: ectx: tooltip, entry (PreviewAutoselMargin), group (Scanner Name)
+#: scansettings.kcfg:70
+#, kde-format
+msgid ""
+"<div>Set a margin to be added to or subtracted from the detected area</div>"
+msgstr ""
+"<div>Nastavite rob, ki naj se doda ali odšteje od zaznanega območja</div>"
+
+#. i18n: ectx: label, entry (PreviewAutoselBackground), group (Scanner Name)
+#: scansettings.kcfg:77
+#, kde-format
+msgid "Scanner background:"
+msgstr "Ozadje bralnika:"
+
+#. i18n: ectx: tooltip, entry (PreviewAutoselBackground), group (Scanner Name)
+#: scansettings.kcfg:78
+#, kde-format
+msgid ""
+"<div>Select whether a scan of the empty scanner glass results in a black or "
+"a white image</div>"
+msgstr ""
+"<div>Izberite, ali naj bo pri skeniranju praznega stekla optičnega bralnika "
+"črna ali bela slika</div>"
+
+#: scansizeselector.cpp:119
+#, kde-format
+msgid "Set the size of the scanned area"
+msgstr "Določite velikost skeniranega področja"
+
+#: scansizeselector.cpp:124
+#, kde-format
+msgid "Full size"
+msgstr "Polna velikost"
+
+#: scansizeselector.cpp:125
+#, kde-format
+msgid "(No selection)"
+msgstr "(Ni izbire)"
+
+#: scansizeselector.cpp:143
+#, kde-format
+msgid "Portrait"
+msgstr "Pokončno"
+
+#: scansizeselector.cpp:148
+#, kde-format
+msgid "Landscape"
+msgstr "Ležeče"
+
+#: scansizeselector.cpp:159
+#, kde-format
+msgid "Set the orientation for a preset size of the scanned area"
+msgstr "Nastavite orientacijo prednastavljene velikosti skeniranega območja"
+
+#: scansizeselector.cpp:266
+#, kde-format
+msgid "Selection"
+msgstr "Izbira"
+
+#~ msgid "ADF Scanning"
+#~ msgstr "Skeniranje ADF"
+
+#~ msgid "<qt><b>Mass Scanning</b>"
+#~ msgstr "<qt><b>Masovno skeniranje</b>"
+
+#~ msgid "Scan Parameters"
+#~ msgstr "Parametri skeniranja"
+
+#~ msgid "Scanning <B>%s</B> at <B>%d</B> dpi"
+#~ msgstr "Skeniram <B>%s</B> pri <B>%d</B> dpi"
+
+#~ msgid "Saving scans in folder <B>%s</B>"
+#~ msgstr "Shranjujem skene v mapo <B>%s</B>"
+
+#~ msgid "Scan Progress"
+#~ msgstr "Napredek skeniranja"
+
+#~ msgid "Scanning page %1"
+#~ msgstr "Skeniram stran %1"
+
+#~ msgid "&Scanning"
+#~ msgstr "&Skeniram"
+
+#~ msgid "&Options"
+#~ msgstr "Možnosti"
+
+#~ msgid "Startup Options"
+#~ msgstr "Možnosti ob zagonu"
+
+#~ msgid ""
+#~ "Note: changing these options will affect the scan plugin on next start."
+#~ msgstr ""
+#~ "Opomba: sprememba teh možnosti bo vplivala na vtičnik pri naslednjem "
+#~ "zagonu."
+
+#~ msgid "&Ask for the scan device on plugin startup"
+#~ msgstr "Pri zagonu vtičnika vprašaj napravo za optično branje"
+
+#~ msgid ""
+#~ "You can uncheck this if you do not want to be asked which scanner to use "
+#~ "on startup."
+#~ msgstr ""
+#~ "Lahko odstranite kljukico, če se ne želite vpraševati, kateri optični "
+#~ "bralnik uporabljati ob zagonu."
+
+#~ msgid "&Query the network for scan devices"
+#~ msgstr "Poizveduj po omrežju za napravah za optično branje"
+
+#~ msgid ""
+#~ "Check this if you want to query for configured network scan stations."
+#~ msgstr ""
+#~ "Odkljukajte, če želite poizvedbo nastavljenih optičnih bralnikov v "
+#~ "omrežju."
+
+#~ msgid "Custom Gamma Tables"
+#~ msgstr "Tabele gama po meri"
+
+#~ msgid ""
+#~ "<b>Source selection</b><br />Note that you may see more sources than "
+#~ "actually exist"
+#~ msgstr ""
+#~ "<b>Izbira vira</b><br />Upoštevajte, da boste morda videli več virov, kot "
+#~ "jih dejansko obstaja"
+
+#~ msgid "Advanced ADF Options"
+#~ msgstr "Napredne možnosti ADF"
+
+#~ msgid "Scan until ADF reports out of paper"
+#~ msgstr "Skeniraj, dokler ADF ne sporoči, da ni več papirja"
+
+#~ msgid "Scan only one sheet of ADF per click"
+#~ msgstr "Skeniraj eno stran ADF na klik"
+
+#~ msgctxt "@info"
+#~ msgid "Scan in progress<nl/><nl/><filename>%1</filename>"
+#~ msgstr "Skeniranje v teku<nl/><nl/><filename>%1</filename>"
+
+#~ msgctxt "@info"
+#~ msgid "<emphasis strong=\"1\">Auto Select</emphasis>"
+#~ msgstr "<emphasis strong=\"1\">Avtomatska izbira</emphasis>"

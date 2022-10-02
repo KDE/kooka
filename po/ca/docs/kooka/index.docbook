@@ -1,0 +1,979 @@
+<?xml version="1.0" ?>
+<!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.5-Based Variant V1.1//EN" "dtd/kdedbx45.dtd" [
+  <!ENTITY % addindex "IGNORE">
+  <!ENTITY % Catalan  "INCLUDE"
+> <!-- change language only here --> 
+]>
+
+<book id="kooka" lang="&language;">
+
+<bookinfo>
+<title
+>El manual del &kooka;</title>
+
+<authorgroup>
+<author
+><firstname
+>Martin</firstname
+> <surname
+>Sommer</surname
+> <affiliation
+><address
+><email
+>msommer@suse.de</email
+></address
+></affiliation
+> 
+</author>
+<othercredit role="developer"
+><firstname
+>Klaas</firstname
+> <surname
+>Freitag</surname
+> <affiliation
+> <address
+><email
+>freitag@suse.de</email
+></address>
+</affiliation>
+<contrib
+>Desenvolupador</contrib>
+</othercredit>
+
+&traductor.Antoni.Bella; 
+
+</authorgroup>
+
+<copyright>
+<year
+>2002</year>
+<holder
+>Klaas Freitag, Martin Sommer</holder>
+</copyright>
+
+<legalnotice
+>&FDLNotice;</legalnotice>
+
+<date
+>17 de juliol de 2017</date>
+<releaseinfo
+>&kooka; 0.90</releaseinfo>
+
+<abstract
+><para
+>El &kooka; permet escanejar, desar i visualitzar en qualsevol format d'imatge que admetin les &Qt; i pot realitzar el reconeixement òptic dels caràcters.</para
+></abstract
+> 
+
+<keywordset>
+<keyword
+>OCR</keyword>
+<keyword
+>escàner</keyword>
+</keywordset>
+
+</bookinfo>
+
+<chapter id="introduction">
+<title
+>Introducció</title>
+
+<para
+>El &kooka; és una aplicació que proporciona accés al maquinari de l'escàner mitjançant la biblioteca <ulink url="http://www.sane-project.org/"
+>SANE</ulink
+>. Per tant, el paquet <acronym
+>SANE</acronym
+> haurà d'estar instal·lat per a utilitzar el &kooka;.</para>
+
+<para
+>El &kooka; permet escanejar, desar i visualitzar en qualsevol format d'imatge que admetin les &Qt;.</para>
+
+<para
+>També proporciona reconeixement de caràcters mitjançant els programes de codi obert <ulink url="http://jocr.sourceforge.net/"
+>GOCR</ulink
+> o <ulink url="http://www.gnu.org/software/ocrad/ocrad.html"
+>OCRAD</ulink
+> o la biblioteca comercial <ulink url="https://rerecognition.com/en/products/kadmos-icr-ocr/"
+>KADMOS</ulink
+>. Almenys haureu de tenir instal·lat un d'aquests paquets de programari per a emprar aquesta característica. Un cop finalitzat el reconeixement de caràcters, s'iniciarà automàticament una verificació ortogràfica per al material reconegut. Podreu editar-lo a la finestra <guilabel
+>OCR</guilabel
+> i exportar-lo com a text sense format. </para>
+
+</chapter>
+
+<chapter id="how-to-use">
+<title
+>Instruccions de l'aplicació</title>
+
+<para
+>El lloc web <ulink url="http://www.sane-project.org/"
+>http://www.sane-project.org</ulink
+> conté informació sobre els escàners admesos. Si és possible, consulteu-lo abans de comprar un escàner.</para>
+
+<sect1 id="screen">
+<title
+>La finestra principal del &kooka;</title>
+
+<screenshot
+> 
+<screeninfo
+>La finestra principal del &kooka; </screeninfo
+> 
+<mediaobject
+> 
+<imageobject>
+<imagedata fileref="kooka_mainctrl.png" format="PNG"/></imageobject
+> 
+</mediaobject
+> 
+
+</screenshot
+>  
+
+<para
+>Inicieu el &kooka; des d'una consola simplement introduint <userinput
+><command
+>kooka</command
+></userinput
+> o seleccioneu-lo des del submenú <guilabel
+>Gràfics</guilabel
+> a l'iniciador d'aplicacions. Creeu un enllaç a l'escriptori, el qual utilitzarà una icona d'escàner.</para>
+
+<para
+>Per a utilitzar el &kooka; només per al reconeixement òptic dels caràcters sense connectar un escàner, inicieu l'aplicació en el mode galeria amb <userinput
+><command
+>kooka</command
+> <option
+>-g</option
+></userinput
+>.</para>
+
+<para
+>La finestra principal del &kooka; està formada de tres quadres. A la part superior veureu els plafons, les icones i el menú. Utilitzeu el ratolí per augmentar o reduir les finestres segons sigui necessari.</para>
+
+<itemizedlist
+> 
+<listitem>
+<para
+>La finestra de navegació està formada per tres pestanyes, les quals permeten canviar entre <guilabel
+>Escaneja</guilabel
+>, <guilabel
+>OCR</guilabel
+> i el navegador de fitxers integrat anomenat <guilabel
+>Galeria</guilabel
+>. La carpeta de treball es mostra a la part superior de la finestra juntament amb la carpeta on desarà l'escàner.</para
+> 
+</listitem>
+
+<listitem>
+<para
+>Efectueu la configuració que depengui de l'escàner a la finestra inferior esquerra, la qual serà per a l'escàner que tingueu connectat. Normalment, aquesta serà la configuració per a la resolució, brillantor i contrast, el mode d'escaneig (&pex;, color, gris o binari) i per als valors de la gamma.</para>
+
+<para
+>Configureu aquí el vostre arranjament. A continuació, inicieu la vista prèvia de l'escàner amb <guimenuitem
+>Vista prèvia</guimenuitem
+>. El resultat de l'escàner apareixerà a la subfinestra dreta.</para>
+
+<para
+>Seleccioneu amb el ratolí l'àrea que voleu escanejar a la mateixa imatge de vista prèvia per a definir les dimensions finals.</para>
+
+<para
+>Després d'això, feu clic a <guimenu
+>Escaneja</guimenu
+> per escanejar la selecció feta a la vista prèvia. Després de l'escaneig, se us demanarà en quin format voleu desar la imatge i si voleu fer que aquest sigui el vostre format estàndard (perquè no se us demani més).</para>
+
+<note
+><para
+>Si heu marcat que no voleu que se us demani sobre el format de desament, l'assistent de memòria ja no apareixerà. Per a canviar aquest format posteriorment, seleccioneu <menuchoice
+> <guimenu
+>Arranjament</guimenu
+><guimenuitem
+>Configura el Kooka...</guimenuitem
+> <guimenuitem
+>Desament de la imatge</guimenuitem
+> <guimenuitem
+>Usa sempre l'ajudant per desar</guimenuitem
+> </menuchoice
+></para
+></note
+> 
+
+</listitem
+> 
+<listitem>
+<para
+>La finestra gran mostra com apareixerà la imatge després d'un escaneig final.</para>
+</listitem>
+</itemizedlist>
+
+</sect1>
+
+</chapter>
+
+<chapter id="commands-configuration">
+<title
+>Referència d'ordres i configuració</title>
+
+<sect1 id="command">
+<title
+>La barra de menús del &kooka;</title>
+
+<sect2>
+<title
+>El menú Fitxer</title>
+
+<variablelist
+> 
+<varlistentry
+> 
+<term>
+<menuchoice
+><guimenu
+>Fitxer</guimenu
+> <guimenuitem
+>Carpeta nova...</guimenuitem
+> </menuchoice
+></term
+> 
+<listitem>
+<para
+>Crea una carpeta nova per a mantenir les imatges a la finestra <guilabel
+>Galeria del Kooka</guilabel
+>.</para>
+</listitem
+> 
+</varlistentry>
+
+<varlistentry
+> 
+<term>
+<menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>S</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Fitxer</guimenu
+> <guimenuitem
+>Desa la imatge</guimenuitem
+> </menuchoice
+></term
+> 
+<listitem>
+<para
+>Desa la imatge seleccionada sota la <guilabel
+>Galeria del Kooka</guilabel
+> a una carpeta diferent del vostre disc.</para>
+<para
+>Pels detalls, vegeu la secció <link linkend="save"
+>Desa</link
+>.</para>
+</listitem
+> 
+</varlistentry>
+
+<!--
+Import Image...
+Rename Folder F2
+  -->
+<varlistentry
+> 
+<term>
+<menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Maj;&Del;</keycombo
+> </shortcut
+> <guimenu
+>Fitxer</guimenu
+> <guimenuitem
+>Suprimeix la carpeta</guimenuitem
+> </menuchoice
+></term
+> 
+<listitem>
+<para
+>Suprimeix la carpeta seleccionada sota la <guilabel
+>Galeria del Kooka</guilabel
+>.</para>
+</listitem
+> 
+</varlistentry>
+
+<!--
+Properties... Alt+Return
+-->
+<varlistentry
+> 
+<term>
+<menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>N</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Fitxer</guimenu
+> <guimenuitem
+>Imatge nova des de la selecció</guimenuitem
+> </menuchoice
+></term
+> 
+<listitem>
+<para
+>Si la imatge escanejada inclou més del que voleu que aparegui a la imatge final, utilitzeu aquesta eina per a retallar la vostra imatge marcant la vostra selecció a la pantalla gran d'imatge que hi ha a la dreta i seleccioneu aquesta eina. La imatge serà retallada d'acord amb la vostra selecció. És possible que ja estigueu familiaritzat amb aquesta característica des de l'eina de retallat &kolourpaint;.</para>
+</listitem
+> 
+</varlistentry
+> 
+
+<varlistentry
+> 
+<term>
+<menuchoice
+><guimenu
+>Fitxer</guimenu
+> <guimenuitem
+>Envia la imatge</guimenuitem
+> </menuchoice
+></term
+> 
+<listitem>
+<para
+>Elimina la imatge que es mostrarà al visualitzador d'imatges.</para>
+</listitem
+> 
+</varlistentry>
+
+<varlistentry
+> 
+<term>
+<menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>P</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Fitxer</guimenu
+> <guimenuitem
+>Imprimeix</guimenuitem
+> </menuchoice
+></term
+> 
+<listitem>
+<para
+>Imprimeix la imatge mostrada.</para>
+</listitem
+> 
+</varlistentry>
+
+<varlistentry
+> 
+<term>
+<menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>Q</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Fitxer</guimenu
+> <guimenuitem
+>Surt</guimenuitem
+> </menuchoice
+></term
+> 
+<listitem>
+<para
+>Surt del &kooka;.</para>
+</listitem
+> 
+</varlistentry>
+
+</variablelist>
+</sect2>
+
+<sect2>
+<title
+>El menú Escaneja</title>
+
+<variablelist
+> 
+<!--
+Preview F3
+Start Scan F4
+Photocopy... Ctrl+F
+Auto Select Ctrl+A
+Scan Parameters... Ctrl+Shift+S
+-->
+<varlistentry>
+<term>
+<menuchoice
+><guimenu
+>Escaneja</guimenu
+> <guimenuitem
+>Imatge OCR...</guimenuitem
+> </menuchoice
+></term>
+<listitem>
+<para
+>Inicia el reconeixement òptic dels caràcters (<acronym
+>OCR</acronym
+>) de tota la imatge mitjançant el sistema de reconeixement definit a la pàgina <guilabel
+>OCR</guilabel
+> del diàleg de configuració. Iniciarà el reconeixement de caràcters per a la imatge en la vista prèvia.</para>
+</listitem
+> 
+</varlistentry
+> 
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Escaneja</guimenu
+> <guimenuitem
+>En seleccionar OCR...</guimenuitem
+> </menuchoice
+></term
+> 
+<listitem>
+<para
+>Obrirà una finestra per al reconeixement de caràcters. Aquí, però, el reconeixement de caràcters només es realitzarà per a l'àrea ressaltada a l'escaneig final.</para>
+</listitem
+> 
+</varlistentry>
+<!--
+Spell Check OCR Result...
+Save OCR Result Text... Ctrl+U
+-->
+</variablelist
+> 
+</sect2>
+ 
+<sect2>
+<title
+>El menú Imatge</title>
+
+<para
+>Les accions en aquest menú també estan disponibles al menú contextual de la finestra de vista prèvia.</para>
+
+<variablelist
+> 
+
+<varlistentry>
+<term>
+<menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>I</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Imatge</guimenu
+> <guimenuitem
+>Escala a l'amplada</guimenuitem
+> </menuchoice
+></term
+> 
+<listitem>
+<para
+>Escalarà proporcionalment la imatge fins a l'amplada de la pantalla.</para>
+</listitem
+> 
+</varlistentry>
+
+<varlistentry
+> 
+<term>
+<menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>H</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Imatge</guimenu
+> <guimenuitem
+>Escala a l'alçada</guimenuitem
+> </menuchoice
+></term
+> 
+<listitem>
+<para
+>Escalarà proporcionalment la imatge fins a l'alçada de la pantalla.</para
+> 
+</listitem
+> 
+</varlistentry>
+
+<varlistentry
+> 
+<term>
+<menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>1</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Imatge</guimenu
+> <guimenuitem
+>Mida original</guimenuitem
+> </menuchoice
+></term
+> 
+<listitem>
+<para
+>Restaura la mida de l'escaneig original reduint o ampliant la imatge a la pantalla.</para
+> 
+
+<para
+>Hi ha mètodes addicionals d'escalat d'una imatge: feu clic <mousebutton
+>dret</mousebutton
+> a la imatge mostrada. Redefiniu les tres opcions anomenades i establiu l'ampliació. Això també es pot fer des de la finestra de <guilabel
+>Vista prèvia</guilabel
+>.</para>
+</listitem
+> 
+</varlistentry>
+<!--
+Set Zoom...
+Keep Zoom Setting Ctrl+Z
+-->
+<varlistentry
+> 
+<term>
+<menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>V</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Imatge</guimenu
+> <guimenuitem
+>Emmiralla verticalment</guimenuitem
+> </menuchoice
+></term
+> 
+<listitem>
+<para
+>Inverteix verticalment la imatge.</para>
+</listitem
+> 
+</varlistentry
+> 
+
+<varlistentry
+> 
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>M</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Imatge</guimenu
+> <guimenuitem
+>Emmiralla horitzontalment</guimenuitem
+> </menuchoice>
+</term
+> 
+<listitem>
+<para
+>Inverteix horitzontalment la imatge.</para>
+</listitem
+> 
+</varlistentry
+> 
+
+<varlistentry
+> 
+<term>
+<menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>7</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Imatge</guimenu
+> <guimenuitem
+>Gira en sentit antihorari</guimenuitem
+> </menuchoice>
+</term
+> 
+<listitem>
+<para
+>Gira la imatge noranta graus en sentit contrari a les agulles del rellotge.</para>
+</listitem
+> 
+</varlistentry
+> 
+
+<varlistentry
+> 
+<term>
+<menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>9</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Imatge</guimenu
+> <guimenuitem
+>Gira en sentit horari</guimenuitem
+> </menuchoice
+></term
+> 
+<listitem>
+<para
+>Gira la imatge noranta graus en sentit a les agulles del rellotge.</para>
+</listitem>
+</varlistentry
+> 
+
+<varlistentry>
+<term>
+<menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>8</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Imatge</guimenu
+> <guimenuitem
+>Gira la imatge 180 graus</guimenuitem
+> </menuchoice>
+</term
+> 
+<listitem>
+<para
+>Gira la imatge a 180 graus.</para>
+</listitem
+> 
+</varlistentry
+> 
+</variablelist>
+</sect2>
+
+<sect2>
+<title
+>El menú Arranjament</title>
+
+<para
+>A part dels menús <guimenu
+>Arranjament</guimenu
+> i <guimenu
+>Ajuda</guimenu
+> comuns al &kde; que es descriuen en el capítol <ulink url="help:/fundamentals/menus.html"
+>Menú</ulink
+> de la documentació Fonaments del &kde;, el &kooka; té aquestes entrades de menú específiques de l'aplicació: </para>
+
+<variablelist>
+
+<varlistentry
+> 
+<term>
+<menuchoice
+><guimenu
+>Arranjament</guimenu
+> <guimenuitem
+>Selecciona el dispositiu d'escaneig...</guimenuitem
+> </menuchoice>
+</term>
+<listitem>
+<para
+>Si teniu diversos escàners, utilitzeu aquesta acció per a seleccionar un escàner i utilitzar sempre un determinat dispositiu a l'inici.</para>
+</listitem
+> 
+</varlistentry>
+
+<varlistentry
+> 
+<term>
+<menuchoice
+><guimenu
+>Arranjament</guimenu
+> <guimenuitem
+>Afegeix un dispositiu escaneig...</guimenuitem
+> </menuchoice>
+</term
+><listitem>
+<para
+>Afegeix un dispositiu que no es detecta automàticament durant l'inici del &kooka;.</para>
+</listitem
+> 
+</varlistentry>
+
+</variablelist>
+</sect2>
+
+</sect1>
+
+
+<sect1 id="configuration">
+<title
+>Configurar el &kooka;</title>
+
+<variablelist>
+<varlistentry>
+<term>
+<menuchoice>
+<guilabel
+>General</guilabel
+> 
+</menuchoice>
+</term
+> 
+<listitem>
+<para
+>Utilitzeu aquest botó per tornar a activar tots els missatges i qüestions que s'havien ocultat utilitzant <guibutton
+>No tornis a preguntar</guibutton
+>.</para>
+</listitem
+> 
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guilabel
+>Inici</guilabel
+> 
+</menuchoice>
+</term
+> 
+<listitem>
+<para
+>Si només teniu un escàner, és possible que vulgueu desmarcar <guilabel
+>Mostra el diàleg per a la selecció de l'escàner</guilabel
+>. Si només teniu un ordinador, també voldreu desmarcar <guilabel
+>Cerca a la xarxa per a dispositius d'escaneig</guilabel
+>. </para>
+</listitem
+> 
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guilabel
+>En desar la imatge</guilabel
+> 
+</menuchoice>
+</term
+> 
+<listitem>
+<para
+><guilabel
+>Usa sempre l'ajudant per desar</guilabel
+>, <guilabel
+>Pregunta pel nom de fitxer en desar</guilabel
+> o <guilabel
+>Abans que comenci l'escaneig</guilabel
+> / <guilabel
+>Després que finalitzi l'escaneig</guilabel
+>. </para>
+</listitem
+> 
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guilabel
+>Galeria i miniatures</guilabel
+> 
+</menuchoice>
+</term
+> 
+<listitem>
+<para
+>Aquí es pot ajustar la mida de les miniatures; així com el fons. Per exemple, és possible que vulgueu reduir la mida de les miniatures si esteu escanejant moltes pàgines d'un llibre. </para>
+<para
+>A la secció <guilabel
+>Galeria d'imatges</guilabel
+>, seleccioneu com i on mostrar les carpetes recents.</para>
+</listitem
+> 
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guilabel
+>OCR</guilabel
+> 
+</menuchoice>
+</term
+> 
+<listitem>
+<para
+>Seleccioneu el motor OCR i el camí d'accés a l'executable. </para>
+</listitem
+> 
+</varlistentry>
+
+</variablelist>
+
+</sect1>
+</chapter>
+
+<chapter id="save">
+<title
+>Desar</title>
+<subtitle
+>Moure en desar les imatges</subtitle>
+
+<para
+>El mètode per a desar una imatge és una mica diferent al &kooka; que en moltes altres aplicacions. Feu clic a la pestanya <guilabel
+>Galeria</guilabel
+> per obrir un petit navegador de fitxers. Aquesta és la carpeta <filename class="directory"
+>~/Documents/KookaGallery</filename
+>. A la finestra, es mostra la vostra subcarpeta actual a la galeria. Aquí és on es desen totes les imatges escanejades com a fitxers. Quan s'inicia el &kooka; per primera vegada, només veureu la <filename class="directory"
+>KookaGallery</filename
+>. Creeu subcarpetes fent clic <mousebutton
+>dret</mousebutton
+> en aquesta carpeta. La carpeta seleccionada, ressaltada en blau, serà la primera ubicació de desament per a les imatges escanejades. Els escanejos estaran etiquetats en ordre numèric ascendent com a <filename
+>kscan_0001</filename
+> i <filename
+>kscan_0002</filename
+>.</para>
+
+<para
+>Per a desar permanentment una imatge, utilitzeu <guimenuitem
+>Reanomena la imatge</guimenuitem
+> i doneu un nom nou i el final adequat per al format d'imatge escollit durant l'escaneig. Si introduïu una extensió diferent, obtindreu un missatge que no es correspondrà amb el format escanejat. Tot i que encara podreu desar la imatge amb aquest nom, conservarà el format original. Actualment, no s'ofereix la conversió <quote
+>sobre la marxa</quote
+>.</para
+><para
+>Si no voleu utilitzar aquest mètode per a gestionar les vostres imatges a <filename class="directory"
+>~/Documents/KookaGallery/</filename
+>, per descomptat, podeu desar-les a una altra ubicació. Per a fer-ho, feu clic <mousebutton
+>dret</mousebutton
+> al nom de la imatge i seleccioneu <guilabel
+>Desa la imatge</guilabel
+>. Trieu qualsevol camí. A més, tanqueu o suprimiu permanentment les imatges.</para>
+
+<para
+>Per incorporar altres imatges a la galeria, utilitzeu <menuchoice
+> <guimenu
+>Fitxer</guimenu
+><guimenuitem
+>Importa imatges</guimenuitem
+> </menuchoice
+> o afegiu-les arrossegant i deixant anar. Obriu el gestor de fitxers a la carpeta que contingui les imatges desitjades. A continuació, afegiu-les a la galeria del &kooka; arrossegant-les i deixant-les anar a dins de la galeria.</para>
+
+</chapter>
+
+<chapter id="ocr">
+<title
+>Reconeixement de caràcters</title>
+
+<para
+>Com ja s'ha esmentat, cal tenir instal·lada la <application
+>gocr</application
+>. Escaneja una vista prèvia del document en escala de grisos o color. Només podreu escanejar en mode binari si teniu un full de paper blanc pur amb impressió en negre. A continuació, ressalteu el text que es vol reconèixer a la finestra de vista prèvia. A continuació, feu l'escanejat final en mode binari amb <guibutton
+>Escaneja</guibutton
+>.</para>
+
+<para
+>Ara feu clic a la icona <inlinemediaobject
+><imageobject
+><imagedata fileref="ocr-select.png" format="PNG"/> </imageobject
+></inlinemediaobject
+> a la barra d'eines, <guilabel
+>En seleccionar OCR...</guilabel
+> o seleccioneu aquest element al menú <guilabel
+>Escaneig</guilabel
+>. Per a la primera prova, no canvieu les opcions de configuració predeterminades que es mostren a la finestra <acronym
+>OCR</acronym
+> emergent. Normalment, aquests seran adequats i satisfaran la majoria de les necessitats. Ara feu clic a <guimenuitem
+>Engega l'OCR</guimenuitem
+>. Ara veureu una finestra que conté els resultats de l'<acronym
+>OCR</acronym
+>. La qualitat dependrà en gran manera del document mateix. </para>
+
+<screenshot
+> <screeninfo
+>La finestra gocr</screeninfo
+> <mediaobject>
+<imageobject
+><imagedata fileref="kooka_gocr.png"
+format="PNG"/></imageobject
+> </mediaobject
+> </screenshot>
+<para
+>Un cop finalitzat el reconeixement dels caràcters, s'iniciarà una verificació ortogràfica del material reconegut. Podreu editar el contingut a la finestra <guilabel
+>OCR</guilabel
+> i exportar-lo com a text sense format. </para>
+<para
+>Després de l'escaneig final, marqueu una selecció a la imatge mostrada que hi ha a la dreta per a carregar només una part del text o la imatge a l'<acronym
+>OCR</acronym
+>. A continuació, feu clic a la icona <inlinemediaobject
+><imageobject
+><imagedata fileref="ocr-select.png" format="PNG"/> </imageobject
+></inlinemediaobject
+> de la barra d'eines o feu clic al menú a <guimenuitem
+>En seleccionar OCR...</guimenuitem
+>. Ara procediu tal com es descriu a la secció anterior.</para>
+
+<screenshot
+> 
+<screeninfo
+>Els resultats de l'<acronym
+>OCR</acronym
+></screeninfo
+> 
+<mediaobject
+> 
+<imageobject>
+<imagedata fileref="kooka_gocr_result.png"
+format="PNG"/></imageobject
+> 
+</mediaobject
+> 
+</screenshot>
+
+</chapter>
+
+<chapter id="credits">
+<title
+>Crèdits i llicència</title>
+ 
+<para
+>&kooka;</para>
+
+<para
+>Copyright per a l'aplicació 2000-2010, els desenvolupadors i col·laboradors del &kooka;</para>
+
+<para
+>Copyright per a la documentació 2002 Martin Sommer <email
+>msommer@suse.de</email
+></para>
+
+<para
+>Traductor de la documentació: &credits.Antoni.Bella;</para
+> &underFDL; &underGPL; </chapter
+>  
+</book>
+

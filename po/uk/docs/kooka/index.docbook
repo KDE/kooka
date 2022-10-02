@@ -1,0 +1,988 @@
+<?xml version="1.0" ?>
+<!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.5-Based Variant V1.1//EN" "dtd/kdedbx45.dtd" [
+  <!ENTITY % addindex "IGNORE">
+  <!ENTITY % Ukrainian "INCLUDE"
+> <!-- change language only here --> 
+]>
+
+<book id="kooka" lang="&language;">
+
+<bookinfo>
+<title
+>Підручник з &kooka;</title>
+
+<authorgroup>
+<author
+><firstname
+>Martin</firstname
+> <surname
+>Sommer</surname
+> <affiliation
+><address
+><email
+>msommer@suse.de</email
+></address
+></affiliation
+> 
+</author>
+<othercredit role="developer"
+><firstname
+>Klaas</firstname
+> <surname
+>Freitag</surname
+> <affiliation
+> <address
+><email
+>freitag@suse.de</email
+></address>
+</affiliation>
+<contrib
+>Розробник</contrib>
+</othercredit>
+
+<othercredit role="translator"
+><firstname
+>Юрій</firstname
+><surname
+>Чорноіван</surname
+><affiliation
+><address
+><email
+>yurchor@ukr.net</email
+></address
+></affiliation
+><contrib
+>Переклад українською</contrib
+></othercredit
+> 
+
+</authorgroup>
+
+<copyright>
+<year
+>2002</year>
+<holder
+>Klaas Freitag, Martin Sommer</holder>
+</copyright>
+
+<legalnotice
+>&FDLNotice;</legalnotice>
+
+<date
+>17 липня 2017 року</date>
+<releaseinfo
+>&kooka; 0.90</releaseinfo>
+
+<abstract
+><para
+>За допомогою &kooka; ви можете сканувати, зберігати та переглядати зображення у будь-якому з форматів, підтримку яких передбачено у &Qt; та виконувати розпізнавання символів на цих зображеннях.</para
+></abstract
+> 
+
+<keywordset>
+<keyword
+>Розпізнавання</keyword>
+<keyword
+>Сканер</keyword>
+</keywordset>
+
+</bookinfo>
+
+<chapter id="introduction">
+<title
+>Вступ</title>
+
+<para
+>&kooka; — це програма, яка полегшує процес сканування зображень за допомогою бібліотек <ulink url="http://www.sane-project.org/"
+>SANE</ulink
+>. Тому для належної роботи з &kooka;, вам слід встановити пакунок <acronym
+>SANE</acronym
+>.</para>
+
+<para
+>За допомогою &kooka; ви можете сканувати, зберігати та переглядати зображення у будь-якому з форматів, підтримку яких передбачено у &Qt;.</para>
+
+<para
+>Також передбачено можливість розпізнавання текстів за допомогою програм з відкритим кодом <ulink url="http://jocr.sourceforge.net/"
+>GOCR</ulink
+> або <ulink url="http://www.gnu.org/software/ocrad/ocrad.html"
+>OCRAD</ulink
+> і комерційної бібліотеки <ulink url="https://rerecognition.com/en/products/kadmos-icr-ocr/"
+>KADMOS</ulink
+>. Щоб отримати доступ до можливості розпізнавання символів, вам слід встановити принаймні один з цих пакунків з програмним забезпеченням. Щойно буде завершено розпізнавання, програма запустить засіб перевірки правопису для розпізнаних даних. Ви зможете виконати редагування даних у вікні <guilabel
+>Розпізнавання</guilabel
+> та експортувати дані у форматі звичайного тексту. </para>
+
+</chapter>
+
+<chapter id="how-to-use">
+<title
+>Настанови з програми</title>
+
+<para
+>На сайті <ulink url="http://www.sane-project.org/"
+>http://www.sane-project.org</ulink
+> розміщено список сканерів, які підтримуються програмою. Скористайтеся, за можливості, цим списком до купівлі сканера.</para>
+
+<sect1 id="screen">
+<title
+>Головне вікно &kooka;</title>
+
+<screenshot
+> 
+<screeninfo
+>Головне вікно &kooka; </screeninfo
+> 
+<mediaobject
+> 
+<imageobject>
+<imagedata fileref="kooka_mainctrl.png" format="PNG"/></imageobject
+> 
+</mediaobject
+> 
+
+</screenshot
+>  
+
+<para
+>Запустити &kooka; можна за допомогою команди <userinput
+><command
+>kooka</command
+></userinput
+>, відданої з термінала, або вибрати пункт програми у підменю <guilabel
+>Графіка</guilabel
+> засобу для запуску програм. Ви можете створити посилання на програму з піктограмою сканера на стільниці, якщо забажаєте.</para>
+
+<para
+>Щоб скористатися &kooka; лише для розпізнавання символів без з’єднання зі сканером, запустіть програму у режимі галереї за допомогою команди <userinput
+><command
+>kooka</command
+> <option
+>-g</option
+></userinput
+>.</para>
+
+<para
+>Головне вікно &kooka; поділено на три блоки. У верхній частині ви можете бачити панелі піктограм і меню. Скористайтеся вказівником миші для того, щоб збільшити або зменшити вікна до потрібних розмірів.</para>
+
+<itemizedlist
+> 
+<listitem>
+<para
+>Вікно навігації поділено між трьома вкладками, за допомогою яких ви можете перемикатися між режимом <guilabel
+>Сканування</guilabel
+>, <guilabel
+>Розпізнавання</guilabel
+> і вбудованим переглядачем файлів, який називається <guilabel
+>Галереєю</guilabel
+>. Робочу теку буде показано у верхній частині вікна, разом з текою, куди зберігатимуться скановані зображення.</para
+> 
+</listitem>
+
+<listitem>
+<para
+>У нижньому лівому вікні ви можете вказати власні параметри сканера, список яких залежить від моделі з’єднаного з комп’ютером сканера. Зазвичай, серед цих параметрів роздільна здатність, яскравість і контрастність, режим сканування (тобто, кольоровий, тони сірого або чорно-білий) та значення гами.</para>
+
+<para
+>Спочатку встановіть параметри сканування. Потім отримайте зображення попереднього перегляду за допомогою пункту <guimenuitem
+>Попередній перегляд</guimenuitem
+>. Результати сканування буде показано на панелі праворуч.</para>
+
+<para
+>За допомогою вказівника миші позначте область для сканування на зображенні попереднього перегляду, щоб визначити її остаточні розміри.</para>
+
+<para
+>Після виконання цих дій натисніть кнопку <guimenu
+>Сканувати</guimenu
+>, щоб сканер сканував область, обрану вами на тестовому зображенні. Після завершення сканування програма запитає у вас про те, у якому форматі ви бажаєте зберегти зображення, і про те, чи бажаєте ви зробити цей формат типовим (так, щоб програма не запитувала вас про це у майбутньому).</para>
+
+<note
+><para
+>Якщо ви позначите пункт щодо небажання відповідати у майбутньому на питання про формат збереження зображення, помічник збереження більше не відкриватиметься. Щоб змінити у майбутньому формат файлів зображень, скористайтеся пунктом меню <menuchoice
+> <guimenu
+>Параметри</guimenu
+> <guimenuitem
+>Налаштувати Kooka...</guimenuitem
+> <guimenuitem
+>Збереження зображень</guimenuitem
+> <guimenuitem
+>Завжди показувати помічник збереження</guimenuitem
+> </menuchoice
+></para
+></note
+> 
+
+</listitem
+> 
+<listitem>
+<para
+>У великому вікні буде показано, як виглядає зображення після остаточного сканування.</para>
+</listitem>
+</itemizedlist>
+
+</sect1>
+
+</chapter>
+
+<chapter id="commands-configuration">
+<title
+>Довідка щодо команд і налаштувань</title>
+
+<sect1 id="command">
+<title
+>Панель меню &kooka;</title>
+
+<sect2>
+<title
+>Меню «Файл»</title>
+
+<variablelist
+> 
+<varlistentry
+> 
+<term>
+<menuchoice
+><guimenu
+>Файл</guimenu
+> <guimenuitem
+>Створити теку…</guimenuitem
+> </menuchoice
+></term
+> 
+<listitem>
+<para
+>Створити теку для зберігання ваших зображень у <guilabel
+>Галереї Kooka</guilabel
+>.</para>
+</listitem
+> 
+</varlistentry>
+
+<varlistentry
+> 
+<term>
+<menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>S</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Файл</guimenu
+> <guimenuitem
+>Зберегти зображення</guimenuitem
+> </menuchoice
+></term
+> 
+<listitem>
+<para
+>Зберігає позначене зображення у <guilabel
+>Галереї Kooka</guilabel
+> до іншої теки на диску вашого комп’ютера.</para>
+<para
+>Подробиці можна дізнатися з розділу <link linkend="save"
+>Збереження</link
+>.</para>
+</listitem
+> 
+</varlistentry>
+
+<!--
+Import Image...
+Rename Folder F2
+  -->
+<varlistentry
+> 
+<term>
+<menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Shift;<keysym
+>Del</keysym
+></keycombo
+> </shortcut
+> <guimenu
+>Файл</guimenu
+> <guimenuitem
+>Вилучити теку</guimenuitem
+> </menuchoice
+></term
+> 
+<listitem>
+<para
+>Вилучає теку, яку позначено нижче на панелі <guilabel
+>Галереї Kooka</guilabel
+>.</para>
+</listitem
+> 
+</varlistentry>
+
+<!--
+Properties... Alt+Return
+-->
+<varlistentry
+> 
+<term>
+<menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>N</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Файл</guimenu
+> <guimenuitem
+>Створити зображення з позначеної ділянки</guimenuitem
+> </menuchoice
+></term
+> 
+<listitem>
+<para
+>Якщо у сканованому зображенні є зайві частини, непотрібні у остаточному зображенні, скористайтеся цим інструментом для того, щоб обрізати ваше зображення за визначеними на збільшеному зображенні, що з’явиться праворуч після вибору цього інструменту, позначками. Зображення буде обрізано відповідно до обраної вами області. Дії, які слід виконати, подібні до дій, які виконуються за допомогою інструменту обрізання &kolourpaint;.</para>
+</listitem
+> 
+</varlistentry
+> 
+
+<varlistentry
+> 
+<term>
+<menuchoice
+><guimenu
+>Файл</guimenu
+> <guimenuitem
+>Вивантажити зображення</guimenuitem
+> </menuchoice
+></term
+> 
+<listitem>
+<para
+>Вилучає зображення, показане на панелі «Переглядач зображень».</para>
+</listitem
+> 
+</varlistentry>
+
+<varlistentry
+> 
+<term>
+<menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>P</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Файл</guimenu
+> <guimenuitem
+>Друкувати</guimenuitem
+> </menuchoice
+></term
+> 
+<listitem>
+<para
+>Друкує показане зображення.</para>
+</listitem
+> 
+</varlistentry>
+
+<varlistentry
+> 
+<term>
+<menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>Q</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Файл</guimenu
+> <guimenuitem
+>Вийти</guimenuitem
+> </menuchoice
+></term
+> 
+<listitem>
+<para
+>Завершує роботу &kooka;.</para>
+</listitem
+> 
+</varlistentry>
+
+</variablelist>
+</sect2>
+
+<sect2>
+<title
+>Меню «Сканування»</title>
+
+<variablelist
+> 
+<!--
+Preview F3
+Start Scan F4
+Photocopy... Ctrl+F
+Auto Select Ctrl+A
+Scan Parameters... Ctrl+Shift+S
+-->
+<varlistentry>
+<term>
+<menuchoice
+><guimenu
+>Сканування</guimenu
+> <guimenuitem
+>Розпізнати зображення...</guimenuitem
+> </menuchoice
+></term>
+<listitem>
+<para
+>Відкриває вікно оптичного розпізнавання символів (<acronym
+>ОРС</acronym
+>) для всього зображення за допомогою системи розпізнавання символів, визначеної на сторінці <guilabel
+>Розпізнавання</guilabel
+> діалогового вікна параметрів програми.  Буде відкрито вікно розпізнавання поточного зображення попереднього перегляду.</para>
+</listitem
+> 
+</varlistentry
+> 
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Сканування</guimenu
+> <guimenuitem
+>Розпізнати позначене...</guimenuitem
+> </menuchoice
+></term
+> 
+<listitem>
+<para
+>Відкриє вікно розпізнавання символів. Але у цьому випадку буде розпізнано лише символи у виділеній області остаточного сканованого зображення.</para>
+</listitem
+> 
+</varlistentry>
+<!--
+Spell Check OCR Result...
+Save OCR Result Text... Ctrl+U
+-->
+</variablelist
+> 
+</sect2>
+ 
+<sect2>
+<title
+>Меню «Зображення»</title>
+
+<para
+>Доступ до пунктів цього меню можна також отримати з контекстного меню панелі попереднього перегляду.</para>
+
+<variablelist
+> 
+
+<varlistentry>
+<term>
+<menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>I</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Зображення</guimenu
+> <guimenuitem
+>Влаштувати у ширину</guimenuitem
+> </menuchoice
+></term
+> 
+<listitem>
+<para
+>Ця дія пропорційно змінить масштаб зображення на великому полотні до ширини вікна програми.</para>
+</listitem
+> 
+</varlistentry>
+
+<varlistentry
+> 
+<term>
+<menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>H</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Зображення</guimenu
+> <guimenuitem
+>Влаштувати у висоту</guimenuitem
+> </menuchoice
+></term
+> 
+<listitem>
+<para
+>Пропорційно змінює розміри зображення до висоти вікна програми.</para
+> 
+</listitem
+> 
+</varlistentry>
+
+<varlistentry
+> 
+<term>
+<menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>1</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Зображення</guimenu
+> <guimenuitem
+>Початковий розмір</guimenuitem
+> </menuchoice
+></term
+> 
+<listitem>
+<para
+>Відновлює початкові розміри сканованого зображення за рахунок зменшення або збільшення зображення у вікні програми.</para
+> 
+
+<para
+>Існують і додаткові способи зміни розмірів зображення: наведіть вказівник на область зображення і клацніть <mousebutton
+>правою</mousebutton
+> кнопкою миші. Змініть значення трьох параметрів і встановіть масштаб. Цю операцію можна виконати і за допомогою вікна <guilabel
+>Перегляд</guilabel
+>.</para>
+</listitem
+> 
+</varlistentry>
+<!--
+Set Zoom...
+Keep Zoom Setting Ctrl+Z
+-->
+<varlistentry
+> 
+<term>
+<menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>V</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Зображення</guimenu
+> <guimenuitem
+>Віддзеркалити вертикально</guimenuitem
+> </menuchoice
+></term
+> 
+<listitem>
+<para
+>Віддзеркалює зображення вертикально.</para>
+</listitem
+> 
+</varlistentry
+> 
+
+<varlistentry
+> 
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>M</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Зображення</guimenu
+> <guimenuitem
+>Віддзеркалити горизонтально</guimenuitem
+> </menuchoice>
+</term
+> 
+<listitem>
+<para
+>Віддзеркалює зображення горизонтально.</para>
+</listitem
+> 
+</varlistentry
+> 
+
+<varlistentry
+> 
+<term>
+<menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>7</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Зображення</guimenu
+> <guimenuitem
+>Обернути проти годинникової стрілки</guimenuitem
+> </menuchoice>
+</term
+> 
+<listitem>
+<para
+>Повертає зображення на дев’яносто градусів проти годинникової стрілки.</para>
+</listitem
+> 
+</varlistentry
+> 
+
+<varlistentry
+> 
+<term>
+<menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>9</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Зображення</guimenu
+> <guimenuitem
+>Обернути за годинниковою стрілкою</guimenuitem
+> </menuchoice
+></term
+> 
+<listitem>
+<para
+>Повертає зображення на дев’яносто градусів за годинниковою стрілкою.</para>
+</listitem>
+</varlistentry
+> 
+
+<varlistentry>
+<term>
+<menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>8</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Зображення</guimenu
+> <guimenuitem
+>Обернути на 180°</guimenuitem
+> </menuchoice>
+</term
+> 
+<listitem>
+<para
+>Повертає зображення на сто вісімдесят градусів.</para>
+</listitem
+> 
+</varlistentry
+> 
+</variablelist>
+</sect2>
+
+<sect2>
+<title
+>Меню «Параметри»</title>
+
+<para
+>Окрім типових для &kde; пунктів меню <guimenu
+>Параметри</guimenu
+> і <guimenu
+>Довідка</guimenu
+>, описаних у <ulink url="help:/fundamentals/menus.html"
+>розділі щодо меню</ulink
+> підручника з основ роботи у &kde;, у &kooka; передбачено такі додаткові пункти: </para>
+
+<variablelist>
+
+<varlistentry
+> 
+<term>
+<menuchoice
+><guimenu
+>Параметри</guimenu
+> <guimenuitem
+>Вибрати пристрій сканування…</guimenuitem
+> </menuchoice>
+</term>
+<listitem>
+<para
+>Якщо у вашій системі декілька сканерів, скористайтеся цим пунктом для вибору сканера і постійного використання програмою певного пристрою після запуску.</para>
+</listitem
+> 
+</varlistentry>
+
+<varlistentry
+> 
+<term>
+<menuchoice
+><guimenu
+>Параметри</guimenu
+> <guimenuitem
+>Додати пристрій сканування…</guimenuitem
+> </menuchoice>
+</term
+><listitem>
+<para
+>Додати пристрій, який не було автоматично виявлено під час запуску &kooka;.</para>
+</listitem
+> 
+</varlistentry>
+
+</variablelist>
+</sect2>
+
+</sect1>
+
+
+<sect1 id="configuration">
+<title
+>Як налаштувати Kooka</title>
+
+<variablelist>
+<varlistentry>
+<term>
+<menuchoice>
+<guilabel
+>Загальне</guilabel
+> 
+</menuchoice>
+</term
+> 
+<listitem>
+<para
+>Скористайтеся кнопкою у цьому розділі, щоб повторно увімкнути усі повідомлення і запита, які було приховано внаслідок позначення пункту <guibutton
+>Більше не питати</guibutton
+>.</para>
+</listitem
+> 
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guilabel
+>Запуск</guilabel
+> 
+</menuchoice>
+</term
+> 
+<listitem>
+<para
+>Ймовірно, вам слід зняти позначку навпроти пункту <guilabel
+>Показати вікно вибору сканера</guilabel
+>, якщо у вас є лише один сканер. Якщо у вас, крім того, є лише один комп’ютер, ймовірно, вам також слід зняти позначку з пункту <guilabel
+>Шукати наявні сканери у мережі</guilabel
+>. </para>
+</listitem
+> 
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guilabel
+>Збереження зображення</guilabel
+> 
+</menuchoice>
+</term
+> 
+<listitem>
+<para
+><guilabel
+>Завжди використовувати помічник збереження</guilabel
+> для назви файла під час збереження до початку сканування або після того, як скасування буде завершено. </para>
+</listitem
+> 
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guilabel
+>Галерея і мініатюри</guilabel
+> 
+</menuchoice>
+</term
+> 
+<listitem>
+<para
+>Тут ви можете налаштувати розмір мініатюр, а також тло. Наприклад, ймовірно, вам захочеться зменшити розмір мініатюр, якщо вам слід сканувати значну кількість сторінок з книжки. </para>
+<para
+>У розділі <guilabel
+>Галерея зображень</guilabel
+> можна визначити спосіб показу списку нещодавно використаних тек і розташування цих тек.</para>
+</listitem
+> 
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guilabel
+>Розпізнавання</guilabel
+> 
+</menuchoice>
+</term
+> 
+<listitem>
+<para
+>Вибір рушія розпізнавання текстів та шляху до виконуваного файла. </para>
+</listitem
+> 
+</varlistentry>
+
+</variablelist>
+
+</sect1>
+</chapter>
+
+<chapter id="save">
+<title
+>Зберегти</title>
+<subtitle
+>Докладніше про збереження зображень</subtitle>
+
+<para
+>Метод збереження зображень, який використовує &kooka;, дещо відрізняється від методу, який використовує більшість інших програм. Відкрийте вкладку <guilabel
+>Галерея</guilabel
+> з невеличким переглядачем файлів. Буде показано вміст теки <filename class="directory"
+>~/Documents/KookaGallery</filename
+>. У вікні буде показано вашу поточну підтеку у галереї. Тут попередньо зберігатимуться всі скановані зображення. Після першого запуску &kooka; ви побачите лише <filename class="directory"
+>Галерея Kooka</filename
+>. Підтеки можна створювати за допомогою контекстного меню, яке можна викликати клацанням <mousebutton
+>правою</mousebutton
+> кнопкою миші, коли вказівник знаходитиметься на позначці теки. Вибрана тека, яку буде підсвічено синім кольором, буде першим місцем, де зберігатимуться скановані зображення. Результати сканування матимуть назви зі зростанням числового індексу, <filename
+>kscan_0001</filename
+>, <filename
+>kscan_0002</filename
+> тощо.</para>
+
+<para
+>Щоб остаточно зберегти зображення, скористайтеся пунктом <guimenuitem
+>Перейменувати зображення</guimenuitem
+>. Далі, надайте зображенню нову назву і суфікс, який відповідатиме формату зображення, обраному під час сканування. Якщо ви введете інший суфікс, програма покаже повідомлення про те, що введений суфікс не збігається з форматом сканованого зображення. Хоча ви і можете зберегти зображення з будь-яким суфіксом, формат зображення змінено не буде. У поточній версії перетворення на льоту неможливе.</para
+><para
+>Якщо ви не бажаєте користуватися цим методом керування вашими зображеннями у <filename class="directory"
+>~/Документи/KookaGallery/</filename
+>, ви, звичайно ж, можете зберегти зображення у будь-якому іншому місці. Щоб виконати цю дію, наведіть вказівник миші на назву зображення, клацніть <mousebutton
+>правою</mousebutton
+> кнопкою миші і оберіть пункт <guilabel
+>Зберегти зображення</guilabel
+> у контекстному меню. Оберіть довільну адресу, а потім закрийте або остаточно вилучіть зображення за попередньою адресою.</para>
+
+<para
+>Щоб додати у галерею сторонні зображення, скористайтеся пунктом меню <menuchoice
+><guimenu
+>Файл</guimenu
+> <guimenuitem
+>Імпортувати зображення</guimenuitem
+> </menuchoice
+> або додайте їх за допомогою перетягування і скидання. Відкрийте у програмі для керування файлами теку, де містяться потрібні зображення. Після цього додайте їх до галереї &kooka; перетягуванням зі скиданням до вікна галереї.</para>
+
+</chapter>
+
+<chapter id="ocr">
+<title
+>Розпізнавання символів</title>
+
+<para
+>Як ми вже згадували, вам слід встановити програму <application
+>gocr</application
+>. Попереднє сканування зображення слід виконувати у кольорі або тонах сірого. Сканувати у чорно-білому режимі можна, лише якщо ви маєте справу з чистим білим листом паперу з надрукованим чорним текстом. Далі, виділіть текст, який слід розпізнати у вікні попереднього перегляду. Після цього виконайте остаточне сканування у чорно-білому режимі за допомогою кнопки <guibutton
+>Сканувати</guibutton
+>.</para>
+
+<para
+>Тепер натисніть піктограму <inlinemediaobject
+><imageobject
+><imagedata fileref="ocr-select.png" format="PNG"/> </imageobject
+></inlinemediaobject
+> на панелі піктограм, <guilabel
+>Розпізнати позначене</guilabel
+> або скористайтеся відповідним пунктом у меню <guilabel
+>Сканування</guilabel
+>. Для початку не змінюйте типові параметри, показані у вбудованому вікні <acronym
+>ОРС</acronym
+>. Ці параметри, зазвичай, є прийнятними і задовольнятимуть більшість ваших потреб. Тепер натисніть кнопку <guimenuitem
+>Розпочати розпізнавання</guimenuitem
+>. Ви побачите вікно з результатами розпізнавання. Якість розпізнавання значною мірою залежить від самого документа. </para>
+
+<screenshot
+> <screeninfo
+>Вікно gocr</screeninfo
+> <mediaobject>
+<imageobject
+><imagedata fileref="kooka_gocr.png"
+format="PNG"/></imageobject
+> </mediaobject
+> </screenshot>
+<para
+>Щойно буде завершено розпізнавання, програма запустить засіб перевірки правопису для розпізнаних даних. Ви зможете виконати редагування даних у вікні <guilabel
+>Розпізнавання</guilabel
+> та експортувати дані у форматі звичайного тексту. </para>
+<para
+>Після завершення остаточного сканування, позначте ділянку зображення у області перегляду зображення, розташованій праворуч, щоб завантажити частину тексту або зображення для <acronym
+>ОРС</acronym
+>. Далі, натисніть на панелі інструментів кнопку <inlinemediaobject
+><imageobject
+><imagedata fileref="ocr-select.png" format="PNG"/> </imageobject
+></inlinemediaobject
+> або скористайтеся пунктом меню <guimenuitem
+>Розпізнати позначене</guimenuitem
+>. Наступні ваші дії мають збігатися з діями з попереднього розділу.</para>
+
+<screenshot
+> 
+<screeninfo
+>Результати <acronym
+>ОРС</acronym
+></screeninfo
+> 
+<mediaobject
+> 
+<imageobject>
+<imagedata fileref="kooka_gocr_result.png"
+format="PNG"/></imageobject
+> 
+</mediaobject
+> 
+</screenshot>
+
+</chapter>
+
+<chapter id="credits">
+<title
+>Подяки і ліцензія</title>
+ 
+<para
+>&kooka;</para>
+
+<para
+>Авторські права на програму належать розробникам &kooka; та іншим її авторам, 2000–2010</para>
+
+<para
+>Авторські права на документацію до програми належать Martin Sommer <email
+>msommer@suse.de</email
+>, 2002</para>
+
+<para
+>Переклад українською: Юрій Чорноіван <email
+>yurchor@ukr.net</email
+></para
+> 
+&underFDL; &underGPL; </chapter
+>  
+</book>
+

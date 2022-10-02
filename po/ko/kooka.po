@@ -1,0 +1,3110 @@
+# Shinjo Park <kde@peremen.name>, 2014, 2015, 2019, 2020, 2021, 2022.
+msgid ""
+msgstr ""
+"Project-Id-Version: kooka\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-10-01 00:45+0000\n"
+"PO-Revision-Date: 2022-04-16 23:02+0200\n"
+"Last-Translator: Shinjo Park <kde@peremen.name>\n"
+"Language-Team: Korean <kde-kr@kde.org>\n"
+"Language: ko\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 21.08.1\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "박신조"
+
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "kde@peremen.name"
+
+#: ../plugins/destination/abstractdestination.cpp:86
+#, kde-format
+msgid "Remember this format"
+msgstr "이 형식 기억하기"
+
+#: ../plugins/destination/abstractdestination.cpp:120
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"Cannot save temporary image file<nl/><filename>%1</filename><nl/><message>"
+"%2</message>"
+msgstr ""
+"임시 그림 파일<nl/><filename>%1</filename>을(를) 저장할 수 없음<nl/><message>"
+"%2</message>"
+
+#: ../plugins/destination/abstractdestination.cpp:160
+#: ../plugins/destination/application/destinationapplication.cpp:190
+#: kookaview.cpp:1177
+#, kde-format
+msgid "Other..."
+msgstr "기타..."
+
+#: ../plugins/destination/application/destinationapplication.cpp:94
+#, kde-format
+msgid "Sending to application"
+msgstr "프로그램으로 전송 중"
+
+#: ../plugins/destination/application/destinationapplication.cpp:96
+#, kde-kuit-format
+msgid "Sending to <application>%1</application>"
+msgstr "<application>%1</application>(으)로 전송 중"
+
+#: ../plugins/destination/application/destinationapplication.cpp:192
+#, kde-format
+msgid "Application:"
+msgstr "프로그램:"
+
+#: ../plugins/destination/application/destinationapplication.cpp:198
+#: ../plugins/destination/export/destinationexport.cpp:111
+#: ../plugins/destination/share/destinationshare.cpp:137
+#, kde-format
+msgid "Image format:"
+msgstr "그림 형식:"
+
+#: ../plugins/destination/clipboard/destinationclipboard.cpp:61
+#, kde-format
+msgid "Copying image to clipboard"
+msgstr "클립보드에 그림 복사하는 중"
+
+#: ../plugins/destination/export/destinationexport.cpp:115
+#, kde-format
+msgid "Online service:"
+msgstr "온라인 서비스:"
+
+#: ../plugins/destination/export/destinationexport.cpp:172
+#: ../plugins/destination/share/destinationshare.cpp:151
+#, kde-kuit-format
+msgid "<application>%1</application>"
+msgstr "<application>%1</application>"
+
+#: ../plugins/destination/export/kookakipihelper.cpp:58
+#, kde-format
+msgid "Helper command for the 'Export to Online Service' plugin"
+msgstr "'온라인 서비스로 내보내기' 도우미 명령"
+
+#: ../plugins/destination/export/kookakipihelper.cpp:61
+#, kde-format
+msgid "(C) 2021, the Kooka developers and contributors"
+msgstr "(C) 2021, the Kooka developers and contributors"
+
+#: ../plugins/destination/export/kookakipihelper.cpp:79
+#, kde-format
+msgid "Kooka KIPI Helper"
+msgstr "Kooka KIPI 도우미"
+
+#: ../plugins/destination/export/kookakipihelper.cpp:91 main.cpp:90
+#, kde-format
+msgid "Jonathan Marten"
+msgstr "Jonathan Marten"
+
+#: ../plugins/destination/export/kookakipihelper.cpp:91
+#, kde-format
+msgid "Current maintainer, KDE4/KF5 port"
+msgstr "현재 관리자, KDE4/KF5 이식"
+
+#: ../plugins/destination/export/kookakipihelper.cpp:99
+#, kde-format
+msgid "List all of the available KIPI plugin actions"
+msgstr "모든 KIPI 플러그인 동작 표시"
+
+#: ../plugins/destination/export/kookakipihelper.cpp:102
+#, kde-format
+msgid "The KIPI plugin action to export to"
+msgstr "내보낼 KIPI 플러그인 동작"
+
+#: ../plugins/destination/export/kookakipihelper.cpp:102
+#, kde-format
+msgid "action"
+msgstr "action"
+
+#: ../plugins/destination/export/kookakipihelper.cpp:105
+#, kde-format
+msgid "URLs of the image files to export"
+msgstr "내보낼 그림 파일 URL"
+
+#: ../plugins/destination/export/kookakipihelper.cpp:114
+#, kde-format
+msgid "Cannot specify both list ('-l') and share ('-s') mode"
+msgstr "목록('-l')과 공유('-s') 모드를 동시에 지정할 수 없음"
+
+#: ../plugins/destination/export/kookakipihelper.cpp:115
+#, kde-format
+msgid "Arguments ignored in list ('-l') mode"
+msgstr "목록('-l') 모드에서는 인자 무시됨"
+
+#: ../plugins/destination/export/kookakipihelper.cpp:119
+#, kde-format
+msgid "Arguments missing for share ('-s') mode"
+msgstr "공유('-s') 모드의 인자 없음"
+
+#: ../plugins/destination/export/kookakipihelper.cpp:121
+#, kde-format
+msgid "One of either list ('-l') or share ('-s') mode must be specified"
+msgstr "목록('-l')이나 공유('-s') 모드 중 하나를 지정해야 함"
+
+#: ../plugins/destination/export/kookakipihelper.cpp:171
+#, kde-format
+msgctxt "as added to action text"
+msgid "..."
+msgstr "..."
+
+#: ../plugins/destination/export/kookakipihelper.cpp:193
+#, kde-format
+msgid "Argument '%1' is not a local file, ignored"
+msgstr "인자 '%1'은(는) 로컬 파일이 아니므로 무시함"
+
+#: ../plugins/destination/export/kookakipihelper.cpp:200
+#, kde-format
+msgid "File '%1' not found or is unreadable, ignored"
+msgstr "파일 '%1'을(를) 찾거나 읽을 수 없어서 무시함"
+
+#: ../plugins/destination/export/kookakipihelper.cpp:207
+#, kde-format
+msgid "No usable files to share"
+msgstr "공유할 수 있는 파일 없음"
+
+#: ../plugins/destination/export/kookakipihelper.cpp:223
+#, kde-format
+msgid "Unknown plugin action '%1'"
+msgstr "알 수 없는 플러그인 동작 '%1'"
+
+#: ../plugins/destination/gallery/destinationgallery.cpp:74
+#, kde-kuit-format
+msgid "<filename>%1</filename>"
+msgstr "<filename>%1</filename>"
+
+#: ../plugins/destination/print/destinationprint.cpp:78 kookaview.cpp:673
+#, kde-format
+msgctxt "@title:window"
+msgid "Print Image"
+msgstr "그림 인쇄"
+
+#: ../plugins/destination/print/destinationprint.cpp:89 kookaview.cpp:689
+#, kde-format
+msgctxt "@info"
+msgid ""
+"Invalid print options were specified:\n"
+"\n"
+"%1"
+msgstr ""
+"잘못된 인쇄 옵션을 지정했습니다:\n"
+"\n"
+"%1"
+
+#: ../plugins/destination/print/destinationprint.cpp:90 kookaview.cpp:690
+#, kde-format
+msgctxt "@title:window"
+msgid "Cannot Print"
+msgstr "인쇄할 수 없음"
+
+#: ../plugins/destination/print/destinationprint.cpp:106
+#, kde-format
+msgid "Print immediately with same settings"
+msgstr "같은 설정으로 즉시 인쇄"
+
+#: ../plugins/destination/print/destinationprint.cpp:116
+#, kde-format
+msgid "Printing image"
+msgstr "그림 인쇄"
+
+#: ../plugins/destination/save/destinationsave.cpp:132
+#, kde-kuit-format
+msgctxt "@info"
+msgid "Cannot save image to <filename>%1</filename><nl/><message>%2</message>"
+msgstr ""
+"그림을 <filename>%1</filename>(으)로 저장할 수 없음<nl/><message>%2</message>"
+
+#: ../plugins/destination/save/destinationsave.cpp:134
+#: ../plugins/destination/save/destinationsave.cpp:239
+#, kde-format
+msgid "Cannot Save Image"
+msgstr "그림을 저장할 수 없음"
+
+#: ../plugins/destination/save/destinationsave.cpp:163
+#, kde-format
+msgid "Saving image"
+msgstr "그림 저장"
+
+#: ../plugins/destination/save/destinationsave.cpp:164
+#, kde-kuit-format
+msgid "Saving to <filename>%1</filename>"
+msgstr "<filename>%1</filename>(으)로 저장"
+
+#: ../plugins/destination/save/destinationsave.cpp:181 formatdialog.cpp:280
+#, kde-format
+msgid "Save Scan"
+msgstr "스캔 저장"
+
+#: ../plugins/destination/save/destinationsave.cpp:237
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"Cannot save to <filename>%2</filename><nl/>The image format <resource>%1</"
+"resource> is not supported."
+msgstr ""
+"<filename>%2</filename>(으)로 저장할 수 없음<nl/><resource>%1</resource> 그"
+"림 형식은 지원하지 않습니다."
+
+#: ../plugins/destination/share/destinationshare.cpp:143
+#, kde-format
+msgid "Share to:"
+msgstr "다음으로 공유:"
+
+#: ../plugins/destination/share/destinationshare.cpp:217
+#, kde-kuit-format
+msgctxt "@info"
+msgid "The scan was shared to<nl/><link>%1</link>"
+msgstr "스캔 결과를 다음으로 공유함:<nl/><link>%1</link>"
+
+#: ../plugins/destination/share/destinationshare.cpp:218
+#, kde-format
+msgid "Scan Shared"
+msgstr "스캔한 그림 공유"
+
+#: ../plugins/destination/share/destinationshare.cpp:227
+#, kde-kuit-format
+msgctxt "@info"
+msgid "Cannot share the scanned image<nl/><nl/><message>%1</message>"
+msgstr "스캔한 그림을 공유할 수 없음<nl/><nl/><message>%1</message>"
+
+#: ../plugins/ocr/abstractocrdialogue.cpp:101 kookapref.cpp:61
+#, kde-format
+msgid "Optical Character Recognition"
+msgstr "광학 문자 인식(OCR)"
+
+#: ../plugins/ocr/abstractocrdialogue.cpp:103
+#, kde-format
+msgid "Start OCR"
+msgstr "OCR 시작"
+
+#: ../plugins/ocr/abstractocrdialogue.cpp:103
+#, kde-format
+msgid "Start the Optical Character Recognition process"
+msgstr "광학 문자 인식(OCR) 프로세스 시작"
+
+#: ../plugins/ocr/abstractocrdialogue.cpp:104
+#, kde-format
+msgid "Stop OCR"
+msgstr "OCR 정지"
+
+#: ../plugins/ocr/abstractocrdialogue.cpp:104
+#, kde-format
+msgid "Stop the Optical Character Recognition process"
+msgstr "광학 문자 인식(OCR) 프로세스 정지"
+
+#: ../plugins/ocr/abstractocrdialogue.cpp:146
+#, kde-format
+msgid "Setup"
+msgstr "설정"
+
+#: ../plugins/ocr/abstractocrdialogue.cpp:149
+#, kde-format
+msgid "Optical Character Recognition using %1"
+msgstr "%1(으)로 OCR 실행"
+
+#: ../plugins/ocr/abstractocrdialogue.cpp:192
+#, kde-format
+msgid "Executable:"
+msgstr "실행 파일:"
+
+#: ../plugins/ocr/abstractocrdialogue.cpp:195
+#, kde-kuit-format
+msgctxt "@info"
+msgid "<filename>%1</filename>"
+msgstr "<filename>%1</filename>"
+
+#: ../plugins/ocr/abstractocrdialogue.cpp:195
+#, kde-format
+msgid "Not found"
+msgstr "찾을 수 없음"
+
+#: ../plugins/ocr/abstractocrdialogue.cpp:198
+#, kde-format
+msgid "Version:"
+msgstr "버전:"
+
+#: ../plugins/ocr/abstractocrdialogue.cpp:201
+#: ../plugins/ocr/gocr/ocrgocrdialog.cpp:201
+#, kde-format
+msgid "Unknown"
+msgstr "알 수 없음"
+
+#: ../plugins/ocr/abstractocrdialogue.cpp:233
+#, kde-format
+msgid "No preview available"
+msgstr "미리 볼 수 없음"
+
+#: ../plugins/ocr/abstractocrdialogue.cpp:242
+#, kde-format
+msgid "No information available"
+msgstr "사용 가능한 정보 없음"
+
+#: ../plugins/ocr/abstractocrdialogue.cpp:245
+#, kde-format
+msgid "Source"
+msgstr "원본"
+
+#: ../plugins/ocr/abstractocrdialogue.cpp:246
+#, kde-format
+msgid "Source Image Information"
+msgstr "원본 그림 정보"
+
+#: ../plugins/ocr/abstractocrdialogue.cpp:265
+#, kde-format
+msgid "OCR Engine"
+msgstr "OCR 엔진"
+
+#: ../plugins/ocr/abstractocrdialogue.cpp:266
+#, kde-format
+msgid "OCR Engine Information"
+msgstr "OCR 엔진 정보"
+
+#: ../plugins/ocr/abstractocrdialogue.cpp:283
+#, kde-format
+msgid "Highlight misspelled words"
+msgstr "오타 강조"
+
+#: ../plugins/ocr/abstractocrdialogue.cpp:289
+#, kde-format
+msgid "Use the system spell configuration"
+msgstr "시스템 맞춤법 검사 설정 사용"
+
+#: ../plugins/ocr/abstractocrdialogue.cpp:291
+#, kde-format
+msgid "Use custom spell configuration"
+msgstr "사용자 정의 맞춤법 검사 설정 사용"
+
+#: ../plugins/ocr/abstractocrdialogue.cpp:293
+#, kde-format
+msgid "Custom Spell Configuration..."
+msgstr "사용자 정의 맞춤법 검사 설정..."
+
+#: ../plugins/ocr/abstractocrdialogue.cpp:303
+#, kde-format
+msgid "Start interactive spell check"
+msgstr "대화형 맞춤법 검사 시작"
+
+#: ../plugins/ocr/abstractocrdialogue.cpp:309
+#, kde-format
+msgid ""
+"Custom spell settings above do not affect this spelling check, use the "
+"language setting in the dialog to change the dictionary language."
+msgstr ""
+"사용자 정의 맞춤법 검사 설정은 이 맞춤법 검사에 영향을 주지 않습니다. 사전 언"
+"어를 변경하려면 대화 상자의 언어 설정을 사용하십시오."
+
+#: ../plugins/ocr/abstractocrdialogue.cpp:332
+#, kde-format
+msgid "Spell Check"
+msgstr "맞춤법 검사"
+
+#: ../plugins/ocr/abstractocrdialogue.cpp:333
+#, kde-format
+msgid "OCR Result Spell Checking"
+msgstr "OCR 결과 맞춤법 검사"
+
+#: ../plugins/ocr/abstractocrdialogue.cpp:343
+#, kde-format
+msgid "Retain temporary files"
+msgstr "임시 파일 유지"
+
+#: ../plugins/ocr/abstractocrdialogue.cpp:346
+#, kde-format
+msgid "Verbose message output"
+msgstr "자세한 메시지 출력"
+
+#: ../plugins/ocr/abstractocrdialogue.cpp:351
+#, kde-format
+msgid "Debugging"
+msgstr "디버깅"
+
+#: ../plugins/ocr/abstractocrdialogue.cpp:352
+#, kde-format
+msgid "OCR Debugging"
+msgstr "OCR 디버깅"
+
+#: ../plugins/ocr/abstractocrdialogue.cpp:408
+#, kde-format
+msgid "No image"
+msgstr "이미지 없음"
+
+#: ../plugins/ocr/abstractocrdialogue.cpp:431
+#, kde-format
+msgid "Image: %1"
+msgstr "그림: %1"
+
+#: ../plugins/ocr/abstractocrdialogue.cpp:431
+#, kde-format
+msgid "Selection: %1"
+msgstr "선택: %1"
+
+#: ../plugins/ocr/abstractocrengine.cpp:106
+#, kde-format
+msgid "OCR is already in progress"
+msgstr "OCR 진행 중"
+
+#: ../plugins/ocr/abstractocrengine.cpp:118
+#, kde-format
+msgid "OCR could not be started."
+msgstr "OCR을 시작할 수 없습니다."
+
+#: ../plugins/ocr/abstractocrengine.cpp:119
+#, kde-format
+msgid "Check the OCR engine selection and settings."
+msgstr "OCR 엔진 선택과 설정을 확인하십시오."
+
+#: ../plugins/ocr/abstractocrengine.cpp:121
+#, kde-format
+msgid "OCR Setup Error"
+msgstr "OCR 설정 오류"
+
+#: ../plugins/ocr/abstractocrengine.cpp:122 kookaview.cpp:787
+#, kde-format
+msgid "Configure OCR..."
+msgstr "OCR 설정..."
+
+#: ../plugins/ocr/abstractocrengine.cpp:180
+#, kde-format
+msgid "The OCR process was stopped"
+msgstr "OCR 프로세스가 중단됨"
+
+#: ../plugins/ocr/abstractocrengine.cpp:249
+#, kde-kuit-format
+msgctxt "@info"
+msgid "The following OCR temporary files are retained for debugging:<nl/><nl/>"
+msgstr "다음 OCR 임시 파일이 디버깅용으로 남아 있습니다:<nl/><nl/>"
+
+#: ../plugins/ocr/abstractocrengine.cpp:256
+#, kde-kuit-format
+msgctxt "@info"
+msgid "<filename><link url=\"%1\">%2</link></filename><nl/>"
+msgstr "<filename><link url=\"%1\">%2</link></filename><nl/>"
+
+#: ../plugins/ocr/abstractocrengine.cpp:260
+#, kde-format
+msgid "OCR Temporary Files"
+msgstr "OCR 임시 파일"
+
+#: ../plugins/ocr/abstractocrengine.cpp:425
+#, kde-kuit-format
+msgctxt "@info"
+msgid "Cannot create temporary file <filename>%1</filename>"
+msgstr "임시 파일 <filename>%1</filename>을(를) 만들 수 없습니다"
+
+#: ../plugins/ocr/abstractocrengine.cpp:471
+#, kde-kuit-format
+msgctxt "@info"
+msgid "Cannot save image to temporary file <filename>%1</filename>"
+msgstr "그림을 임시 파일 <filename>%1</filename>(으)로 저장할 수 없습니다"
+
+#: ../plugins/ocr/abstractocrengine.cpp:499
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"The executable <command>%1</command> could not be found on <envar>PATH</"
+"envar>."
+msgstr ""
+"실행 파일 <command>%1</command>을(를) <envar>PATH</envar>에서 찾을 수 없습니"
+"다."
+
+#: ../plugins/ocr/abstractocrengine.cpp:509
+#, kde-kuit-format
+msgctxt "@info"
+msgid "The executable <filename>%1</filename> does not exist or is not usable."
+msgstr "실행 파일 <filename>%1</filename>이(가) 없거나 사용할 수 없습니다."
+
+#: ../plugins/ocr/abstractocrengine.cpp:581
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"Command <command>%1</command> crashed with exit status <numid>%2</numid>"
+msgstr "<command>%1</command> 명령이 종료 코드 <numid>%2</numid>(으)로 실패함"
+
+#: ../plugins/ocr/abstractocrengine.cpp:586
+#, kde-kuit-format
+msgctxt "@info"
+msgid "Command <command>%1</command> exited with status <numid>%2</numid>"
+msgstr "<command>%1</command> 명령이 종료 코드 <numid>%2</numid>(으)로 종료됨"
+
+#: ../plugins/ocr/abstractocrengine.cpp:590
+#, kde-kuit-format
+msgctxt "@info"
+msgid "Running the OCR process failed."
+msgstr "OCR 프로세스를 실행하지 못했습니다."
+
+#: ../plugins/ocr/abstractocrengine.cpp:591
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"More information may be available in its <link url=\"%1\">standard error</"
+"link> log file."
+msgstr ""
+"더 많은 정보를 보려면 <link url=\"%1\">표준 오류</link> 로그 파일을 참조하십"
+"시오."
+
+#: ../plugins/ocr/abstractocrengine.cpp:594
+#, kde-format
+msgid "OCR Command Failed"
+msgstr "OCR 명령 실패"
+
+#: ../plugins/ocr/abstractocrengine.cpp:601
+#, kde-kuit-format
+msgctxt "@info"
+msgid "Processing the OCR results failed."
+msgstr "OCR 결과 처리가 실패했습니다."
+
+#: ../plugins/ocr/abstractocrengine.cpp:602
+#, kde-format
+msgid "OCR Processing Failed"
+msgstr "OCR 처리 실패"
+
+#: ../plugins/ocr/executablepathdialogue.cpp:45
+#, kde-format
+msgid "Executable Path"
+msgstr "실행 파일 경로"
+
+#: ../plugins/ocr/executablepathdialogue.cpp:52
+#, kde-format
+msgid "Executable path:"
+msgstr "실행 파일 경로:"
+
+#: ../plugins/ocr/executablepathdialogue.cpp:56
+#, kde-format
+msgid "Enter or select the path..."
+msgstr "경로를 입력하거나 선택..."
+
+#: ../plugins/ocr/gocr/ocrgocrdialog.cpp:75
+#: ../plugins/ocr/gocr/ocrgocrdialog.cpp:87
+#: ../plugins/ocr/gocr/ocrgocrdialog.cpp:99
+#, kde-format
+msgid "Automatic"
+msgstr "자동"
+
+#: ../plugins/ocr/gocr/ocrgocrdialog.cpp:120
+#, kde-format
+msgid "The GOCR executable is not configured or is not available."
+msgstr "GOCR 실행 파일이 설정되지 않았거나 사용할 수 없습니다."
+
+#: ../plugins/ocr/gocr/ocrgocrdialog.cpp:204
+#: ../plugins/ocr/ocrad/ocrocraddialog.cpp:282
+#: ../plugins/ocr/tesseract/ocrtesseractdialog.cpp:250
+#, kde-format
+msgid "Error"
+msgstr "오류"
+
+#: ../plugins/ocr/gocr/ocrgocrengine.cpp:159
+#, kde-kuit-format
+msgctxt "@info"
+msgid "Cannot read GOCR result file <filename>%1</filename><nl/>%2"
+msgstr "GOCR 결과 파일 <filename>%1</filename>을(를) 읽을 수 없음<nl/>%2"
+
+#: ../plugins/ocr/gocr/ocrgocrengine.cpp:297
+#, kde-format
+msgid "Name or path of the GOCR executable:"
+msgstr "GOCR 실행 파일의 이름이나 경로:"
+
+#: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:57
+#: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:165
+#, kde-format
+msgid "Czech Republic, Slovakia"
+msgstr "체코, 슬로바키아"
+
+#: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:58
+#: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:167
+#, kde-format
+msgid "Great Britain, USA"
+msgstr "영국, 미국"
+
+#: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:96
+#, kde-format
+msgid "European Countries"
+msgstr "유럽 국가"
+
+#: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:199
+#: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:280
+#, kde-format
+msgid ""
+"The classifier files for KADMOS could not be found.\n"
+"OCR with KADMOS will not be possible.\n"
+"\n"
+"Change the OCR engine in the preferences dialog."
+msgstr ""
+"KADMOS 분류기 파일을 찾을 수 없습니다.\n"
+"KADMOS OCR을 사용할 수 없습니다.\n"
+"\n"
+"설정 대화 상자에서 다른 OCR 엔진을 선택하십시오."
+
+#: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:202
+#: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:283
+#, kde-format
+msgid "Installation Error"
+msgstr "설치 오류"
+
+#: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:227
+#, kde-format
+msgid "Please classify the font type and language of the text on the image:"
+msgstr "이미지의 텍스트의 글꼴 종류와 언어를 선택하십시오:"
+
+#: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:232
+#, kde-format
+msgid "Font Type Selection"
+msgstr "글꼴 형식 선택"
+
+#: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:235
+#, kde-format
+msgid "Machine print"
+msgstr "기계 인쇄"
+
+#: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:236
+#, kde-format
+msgid "Hand writing"
+msgstr "필기"
+
+#: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:237
+#, kde-format
+msgid "Norm font"
+msgstr "일반 글꼴"
+
+#: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:239
+#, kde-format
+msgid "Country"
+msgstr "국가"
+
+#: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:255
+#, kde-format
+msgid "OCR Modifier"
+msgstr "OCR 수정자"
+
+#: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:259
+#, kde-format
+msgid "Enable automatic noise reduction"
+msgstr "자동 잡음 감소 사용"
+
+#: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:260
+#, kde-format
+msgid "Enable automatic scaling"
+msgstr "자동 크기 조정 사용"
+
+#: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:360
+#, kde-format
+msgid "Classifier file %1 does not exist"
+msgstr "분류기 파일 %1이(가) 없음"
+
+#: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:366
+#, kde-format
+msgid "Classifier file %1 is not readable"
+msgstr "분류기 파일 %1에서 읽을 수 없음"
+
+#: ../plugins/ocr/kadmos/ocrkadmosengine.cpp:71
+#, kde-kuit-format
+msgctxt "@info %1 is one of the two following messages"
+msgid ""
+"<para><emphasis>Kadmos</emphasis> is a commercial OCR/ICR library produced "
+"by reRecognition&nbsp;AG.</para><para>%1</para><para>See <link url=\"http://"
+"www.rerecognition.com\">www.rerecognition.com</link> for more information on "
+"Kadmos.</para>"
+msgstr ""
+"<para><emphasis>Kadmos</emphasis>는 reRecognition&nbsp;AG에서 개발한 상용 "
+"OCR/ICR 라이브러리입니다.</para><para>%1</para><para>더 많은 정보를 보려면 "
+"<link url=\"http://www.rerecognition.com\">www.rerecognition.com</link> 사이"
+"트를 방문하십시오.</para>"
+
+#: ../plugins/ocr/kadmos/ocrkadmosengine.cpp:75
+#, kde-format
+msgid "This version of Kooka is configured to use the Kadmos engine."
+msgstr "이 버전의 Kooka는 Kadmos 엔진을 사용하도록 설정되었습니다."
+
+#: ../plugins/ocr/kadmos/ocrkadmosengine.cpp:77
+#, kde-format
+msgid ""
+"This version of Kooka is not configured for Kadmos.  The Kadmos libraries "
+"need to be installed, and Kooka needs to be rebuilt with the '--with-kadmos' "
+"option."
+msgstr ""
+"이 버전의 Kooka는 Kadmos를 사용할 수 없습니다. Kadmos 라이브러리를 설치하고 "
+"Kooka를 '--with-kadmos' 옵션으로 다시 빌드해야 합니다."
+
+#: ../plugins/ocr/kadmos/ocrkadmosengine.cpp:93
+#, kde-format
+msgid ""
+"The classifier file necessary for OCR cannot be loaded: %1;\n"
+"OCR with the KADMOS engine is not possible."
+msgstr ""
+"OCR에 필요한 분류기 파일을 불러올 수 없습니다: %1\n"
+"KADMOS 엔진을 사용한 OCR을 사용할 수 없습니다."
+
+#: ../plugins/ocr/kadmos/ocrkadmosengine.cpp:95
+#, kde-format
+msgid "KADMOS Installation Problem"
+msgstr "KADMOS 설치 문제"
+
+#: ../plugins/ocr/kadmos/ocrkadmosengine.cpp:106
+#, kde-format
+msgid ""
+"The KADMOS OCR system could not be started:\n"
+"%1\n"
+"Please check the configuration."
+msgstr ""
+"KADMOS OCR 시스템을 시작할 수 없습니다:\n"
+"%1\n"
+"설정을 확인하십시오."
+
+#: ../plugins/ocr/kadmos/ocrkadmosengine.cpp:110
+#, kde-format
+msgid "KADMOS Failure"
+msgstr "KADMOS 오류"
+
+#: ../plugins/ocr/ocrad/ocrocraddialog.cpp:79
+#, kde-format
+msgid "The OCRAD executable is not configured or is not available."
+msgstr "OCRAD 실행 파일이 설정되지 않았거나 사용할 수 없습니다."
+
+#: ../plugins/ocr/ocrad/ocrocraddialog.cpp:92
+#, kde-format
+msgid "No Layout Detection"
+msgstr "레이아웃 감지하지 않음"
+
+#: ../plugins/ocr/ocrad/ocrocraddialog.cpp:95
+#, kde-format
+msgid "Layout Detection"
+msgstr "레이아웃 감지"
+
+#: ../plugins/ocr/ocrad/ocrocraddialog.cpp:98
+#, kde-format
+msgid "Column Detection"
+msgstr "단 감지"
+
+#: ../plugins/ocr/ocrad/ocrocraddialog.cpp:99
+#, kde-format
+msgid "Full Layout Detection"
+msgstr "전체 레이아웃 감지"
+
+#: ../plugins/ocr/ocrad/ocrocraddialog.cpp:117
+#: ../plugins/ocr/ocrad/ocrocraddialog.cpp:138
+#: ../plugins/ocr/ocrad/ocrocraddialog.cpp:159
+#: ../plugins/ocr/tesseract/ocrtesseractdialog.cpp:87
+#: ../plugins/ocr/tesseract/ocrtesseractdialog.cpp:149
+#: ../plugins/ocr/tesseract/ocrtesseractdialog.cpp:174
+#, kde-format
+msgid "(default)"
+msgstr "(기본값)"
+
+#: ../plugins/ocr/ocrad/ocrocradengine.cpp:243
+#: ../plugins/ocr/tesseract/ocrtesseractengine.cpp:157
+#, kde-kuit-format
+msgctxt "@info"
+msgid "File <filename>%1</filename> does not exist"
+msgstr "파일 <filename>%1</filename>이(가) 없음"
+
+#: ../plugins/ocr/ocrad/ocrocradengine.cpp:247
+#: ../plugins/ocr/tesseract/ocrtesseractengine.cpp:158
+#, kde-kuit-format
+msgctxt "@info"
+msgid "File <filename>%1</filename> unreadable"
+msgstr "파일 <filename>%1</filename>에서 읽을 수 없음"
+
+#: ../plugins/ocr/ocrad/ocrocradengine.cpp:251
+#: ../plugins/ocr/tesseract/ocrtesseractengine.cpp:165
+#, kde-kuit-format
+msgctxt "@info"
+msgid "Cannot open file <filename>%1</filename>"
+msgstr "파일 <filename>%1</filename>을(를) 열 수 없음"
+
+#: ../plugins/ocr/ocrad/ocrocradengine.cpp:432
+#, kde-format
+msgid "Name or path of the OCRAD executable:"
+msgstr "OCRAD 실행 파일의 이름이나 경로:"
+
+#: ../plugins/ocr/tesseract/ocrtesseractdialog.cpp:72
+#, kde-format
+msgid "The Tesseract executable is not configured or is not available."
+msgstr "Tesseract 실행 파일이 설정되지 않았거나 사용할 수 없습니다."
+
+#: ../plugins/ocr/tesseract/ocrtesseractdialog.cpp:112
+#: ../plugins/ocr/tesseract/ocrtesseractdialog.cpp:129
+#, kde-format
+msgid "Select a file if required..."
+msgstr "필요한 경우 파일 선택..."
+
+#: ../plugins/ocr/tesseract/ocrtesseractengine.cpp:226
+#, kde-format
+msgid "HOCR parsing error, %1"
+msgstr "HOCR 해석 오류, %1"
+
+#: ../plugins/ocr/tesseract/ocrtesseractengine.cpp:251
+#, kde-format
+msgid "Name or path of the Tesseract executable:"
+msgstr "Tesseract 실행 파일의 이름이나 경로:"
+
+#. i18n: ectx: Menu (file)
+#: desktop/kookaui.rc:5
+#, kde-format
+msgid "&File"
+msgstr "파일(&F)"
+
+#. i18n: ectx: Menu (scan)
+#: desktop/kookaui.rc:22
+#, kde-format
+msgid "S&can"
+msgstr "스캔(&C)"
+
+#. i18n: ectx: Menu (imgCanvas)
+#: desktop/kookaui.rc:40
+#, kde-format
+msgid "&Image"
+msgstr "그림(&I)"
+
+#. i18n: ectx: Menu (settings)
+#: desktop/kookaui.rc:56
+#, kde-format
+msgid "&Settings"
+msgstr "설정(&S)"
+
+#. i18n: ectx: ToolBar (imageToolBar)
+#: desktop/kookaui.rc:67
+#, kde-format
+msgid "Image Viewer Toolbar"
+msgstr "그림 뷰어 도구 모음"
+
+#. i18n: ectx: ToolBar (scanToolBar)
+#: desktop/kookaui.rc:84
+#, kde-format
+msgid "Scanning Toolbar"
+msgstr "스캔 도구 모음"
+
+#: formatdialog.cpp:77
+#, kde-format
+msgid ""
+"<b>Bitmap Picture</b> is a widely used format for images under MS Windows. "
+"It is suitable for color, grayscale and line art images.<p>This format is "
+"widely supported but is not recommended, use an open format instead."
+msgstr ""
+"<b>비트맵 그림</b>은 Microsoft Windows에서 자주 사용하는 형식입니다. 컬러, 회"
+"색조, 라인아트 그림에 사용할 수 있습니다.<p>이 형식은 많은 곳에서 지원하지만 "
+"다른 개방형 형식을 사용하는 것을 추천합니다."
+
+#: formatdialog.cpp:88
+#, kde-format
+msgid ""
+"<b>Portable Bitmap</b>, as used by Netpbm, is an uncompressed format for "
+"line art (bitmap) images. Only 1 bit per pixel depth is supported."
+msgstr ""
+"<b>PBM</b>(포터블 비트맵) 형식은 Netpbm에서 사용하며 라인아트(비트맵) 그림에 "
+"사용할 수 있는 비압축 형식입니다. 1비트 색 농도만 지원합니다."
+
+#: formatdialog.cpp:97
+#, kde-format
+msgid ""
+"<b>Portable Greymap</b>, as used by Netpbm, is an uncompressed format for "
+"grayscale images. Only 8 bit per pixel depth is supported."
+msgstr ""
+"<b>PGM</b>(포터블 그레이맵) 형식은 Netpbm에서 사용하며 회색조 그림에 사용할 "
+"수 있는 비압축 형식입니다. 8비트 색 농도만 지원합니다."
+
+#: formatdialog.cpp:106
+#, kde-format
+msgid ""
+"<b>Portable Pixmap</b>, as used by Netpbm, is an uncompressed format for "
+"full color images. Only 24 bit per pixel RGB is supported."
+msgstr ""
+"<b>PPM</b>(포터블 픽스맵) 형식은 Netpbm에서 사용하며 컬러 그림에 사용할 수 있"
+"는 비압축 형식입니다. 24비트/RGB 색 농도만 지원합니다."
+
+#: formatdialog.cpp:115
+#, kde-format
+msgid ""
+"<b>PCX</b> is a lossless compressed format which is often supported by PC "
+"imaging applications, although it is rather old and unsophisticated.  It is "
+"suitable for color and grayscale images.<p>This format is not recommended, "
+"use an open format instead."
+msgstr ""
+"<b>PCX</b> 형식은 그래픽 프로그램에서 종종 지원하는 무손실 압축 그림 형식이지"
+"만, 개발된지 오래 되었고 구조가 단순합니다. 컬러 및 회색조 그림에 추천합니다."
+"<p>다른 개방형 형식을 사용하는 것을 추천합니다."
+
+#: formatdialog.cpp:126
+#, kde-format
+msgid ""
+"<b>X Bitmap</b> is often used by the X Window System to store cursor and "
+"icon bitmaps.<p>Unless required for this purpose, use a general purpose "
+"format instead."
+msgstr ""
+"<b>X 비트맵</b> 형식은 X 윈도 시스템에서 커서 및 아이콘 비트맵을 저장하는 데 "
+"사용하는 형식입니다.<p>해당 목적으로 사용할 것이 아니라면 다른 일반 목적 형"
+"식 사용을 추천합니다."
+
+#: formatdialog.cpp:135
+#, kde-format
+msgid ""
+"<b>X Pixmap</b> is often used by the X Window System for color icons and "
+"other images.<p>Unless required for this purpose, use a general purpose "
+"format instead."
+msgstr ""
+"<b>X 픽스맵</b> 형식은 X 윈도 시스템에서 컬러 아이콘 및 다른 그림을 저장하는 "
+"데 사용하는 형식입니다.<p>해당 목적으로 사용할 것이 아니라면 다른 일반 목적 "
+"형식 사용을 추천합니다."
+
+#: formatdialog.cpp:144
+#, kde-format
+msgid ""
+"<b>Portable Network Graphics</b> is a lossless compressed format designed to "
+"be portable and extensible. It is suitable for any type of color or "
+"grayscale images, indexed or true color.<p>PNG is an open format which is "
+"widely supported."
+msgstr ""
+"<b>PNG</b> 형식은 다양한 환경에서 사용할 수 있는 확장 가능한 무손실 압축 그"
+"림 형식입니다. 인덱스 색상이나 트루컬러 색상을 사용하는 컬러, 회색조 그림에 "
+"적합합니다.<p>PNG는 많은 곳에서 지원하는 개방형 형식입니다."
+
+#: formatdialog.cpp:155
+#, kde-format
+msgid ""
+"<b>JPEG</b> is a compressed format suitable for true color or grayscale "
+"images. It is a lossy format, so it is not recommended for archiving or for "
+"repeated loading and saving.<p>This is an open format which is widely "
+"supported."
+msgstr ""
+"<b>JPEG</b>는 트루컬러 및 회색조 그림을 저장할 수 있는 손실 압축 그림 형식입"
+"니다. 장기 보관이나 잦은 편집 및 저장에는 추천하지 않습니다.<p>JPEG는 많은 곳"
+"에서 지원하는 개방형 형식입니다."
+
+#: formatdialog.cpp:166
+#, kde-format
+msgid ""
+"<b>JPEG 2000</b> was intended as an update to the JPEG format, with the "
+"option of lossless compression, but so far is not widely supported. It is "
+"suitable for true color or grayscale images."
+msgstr ""
+"<b>JPEG 2000</b>은 무손실 압축이 추가된 JPEG 형식의 업데이트로 계획되었으나 "
+"아직까지 많은 곳에서 사용하고 있지 않습니다. 트루컬러 및 회색조 그림을 저장"
+"할 수 있습니다."
+
+#: formatdialog.cpp:176
+#, kde-format
+msgid ""
+"<b>Encapsulated PostScript</b> is derived from the PostScript&trade; page "
+"description language.  Use this format for importing into other "
+"applications, or to use with (e.g.) TeX."
+msgstr ""
+"<b>EPS</b> 형식은 PostScript&trade; 페이지 기술 언어의 파생 형식입니다. TeX "
+"등 다른 프로그램에 임베드해야 할 때 사용하십시오."
+
+#: formatdialog.cpp:186
+#, kde-format
+msgid ""
+"<b>Truevision Targa</b> can store full color images with an alpha channel, "
+"and is used extensively by animation and video applications.<p>This format "
+"is not recommended, use an open format instead."
+msgstr ""
+"<b>Truevision Targa</b> 형식은 알파 채널이 들어 있는 컬러 그림을 저장할 수 있"
+"으며, 애니메이션과 비디오 프로그램에서 사용합니다.<p>다른 개방형 형식을 사용"
+"하는 것을 추천합니다."
+
+#: formatdialog.cpp:196
+#, kde-format
+msgid ""
+"<b>Graphics Interchange Format</b> is a popular but patent-encumbered format "
+"often used for web graphics.  It uses lossless compression with up to 256 "
+"colors and optional transparency.<p>For legal reasons this format is not "
+"recommended, use an open format instead."
+msgstr ""
+"<b>GIF</b> 형식은 웹 그래픽에서 종종 사용합니다. 최대 256색까지의 무손실 압축"
+"을 사용하며 선택 사항으로 투명도를 사용할 수 있습니다.<p>압축 알고리즘에 적용"
+"된 특허 문제로 인하여 다른 개방형 형식을 사용하는 것을 추천합니다."
+
+#: formatdialog.cpp:207
+#, kde-format
+msgid ""
+"<b>Tagged Image File Format</b> is a versatile and extensible file format "
+"widely supported by imaging and publishing applications. It supports indexed "
+"and true color images with alpha transparency.<p>Because there are many "
+"variations, there may sometimes be compatibility problems. Unless required "
+"for use with other applications, use an open format instead."
+msgstr ""
+"<b>TIFF</b> 형식은 이미징 및 출판 프로그램에서 지원하는 확장 가능한 다기능 파"
+"일 형식입니다. 인덱스 및 트루컬러 그림과 알파 투명도를 지원합니다.<p>TIFF 형"
+"식에는 여러 파생형이 있으므로 일부 경우에 호환성 문제가 발생할 수 있습니다. "
+"다른 프로그램에서 사용해야 하는 경우가 아니라면 다른 개방형 형식을 사용하는 "
+"것을 추천합니다."
+
+#: formatdialog.cpp:219
+#, kde-format
+msgid ""
+"<b>Multiple-image Network Graphics</b> is derived from the PNG standard and "
+"is intended for animated images.  It is an open format suitable for all "
+"types of images.<p>Images produced by a scanner will not be animated, so "
+"unless specifically required for use with other applications use PNG instead."
+msgstr ""
+"<b>MNG</b> 형식은 PNG 형식의 파생형으로 애니메이션을 지원합니다. 모든 형식의 "
+"그림에 적합한 개방형 표준입니다.<p>스캐너로 스캔한 그림은 애니메이션을 지원하"
+"지 않으며, 다른 프로그램에서 MNG 형식만을 사용해야 하는 경우가 아니면 PNG 형"
+"식을 사용하십시오."
+
+#: formatdialog.cpp:231
+#, kde-format
+msgid ""
+"This is the <b>Silicon Graphics</b> native image file format, supporting 24 "
+"bit true color images with optional lossless compression.<p>Unless "
+"specifically required, use an open format instead."
+msgstr ""
+"<b>SGI</b> 네이티브 그림 파일 형식이며, 24비트 트루컬러를 지원하며 선택 사항"
+"으로 무손실 압축을 지원합니다.<p>다른 프로그램에서 사용해야 하는 경우가 아니"
+"라면 다른 개방형 형식을 사용하는 것을 추천합니다."
+
+#: formatdialog.cpp:241
+#, kde-format
+msgid ""
+"<b>Wireless Bitmap</b> is a monochrome bitmap format optimised for WAP "
+"mobile devices.  It supports black and white bitmaps only.<p>Unless "
+"specifically required, use an general purpose format instead."
+msgstr ""
+"<b>무선 비트맵</b> 형식은 WAP 모바일 장치에 최적화된 단색 비트맵 형식입니다."
+"<p>해당 목적으로 사용할 것이 아니라면 다른 일반 목적 형식 사용을 추천합니다."
+
+#: formatdialog.cpp:251
+#, kde-format
+msgid ""
+"<b>WebP</b> is intended to be an open standard for true colour images with "
+"optional transparency.  It is widely supported by modern web browsers and "
+"graphics software.<p>Various compression methods, both lossy and lossless, "
+"are supported. Lossy compression is not recommended for archiving or for "
+"repeated loading and saving."
+msgstr ""
+"<b>WebP</b>는 투명도와 트루컬러 이미지를 저장하는 공개 표준으로 개발되었습니"
+"다. 다양한 현대적인 웹 브라우저와 그래픽 소프트웨어에서 지원합니다.<p>다양한 "
+"손실 및 무손실 압축 방법을 지원합니다. 반복해서 불러오고 저장하거나 보관용으"
+"로 저장할 때에는 손실 압축을 추천하지 않습니다."
+
+#: formatdialog.cpp:280
+#, kde-format
+msgid "Save Assistant"
+msgstr "도우미 저장"
+
+#: formatdialog.cpp:306
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"Select a format to save the scanned image.<nl/>This is a <emphasis strong="
+"\"1\">%1</emphasis>."
+msgstr ""
+"스캔한 그림을 저장할 형식을 선택하십시오.<nl/><emphasis strong=\"1\">%1</"
+"emphasis>입니다."
+
+#: formatdialog.cpp:316
+#, kde-format
+msgid "File format:"
+msgstr "파일 형식:"
+
+#: formatdialog.cpp:338
+#, kde-format
+msgid "Image sub-format:"
+msgstr "그림 하위 형식:"
+
+#: formatdialog.cpp:384
+#, kde-format
+msgid "File name:"
+msgstr "파일 이름:"
+
+#: formatdialog.cpp:398
+#, kde-format
+msgid "Select Format..."
+msgstr "형식 선택..."
+
+#: formatdialog.cpp:436
+#, kde-format
+msgid "No format selected."
+msgstr "형식을 선택하지 않았습니다."
+
+#: formatdialog.cpp:470
+#, kde-format
+msgid "No information is available for this format."
+msgstr "이 형식의 정보를 사용할 수 없습니다."
+
+#: galleryroot.cpp:100
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"Unable to create the directory <filename>%1</filename><nl/>for the Kooka "
+"gallery - %3..<nl/><nl/>Your document directory <filename>%2</filename><nl/"
+">will be used.<nl/><nl/>Check the document directory setting and permissions."
+msgstr ""
+"디렉터리 <filename>%1</filename>에<nl/>Kooka 갤러리를 만들 수 없습니다. %3."
+"<nl/><nl/>문서 디렉터리 <filename>%2</filename>을(를)<nl/>대신 사용합니다."
+"<nl/><nl/>문서 디렉터리 설정과 권한을 확인하십시오."
+
+#: galleryroot.cpp:111
+#, kde-format
+msgid "Error creating gallery"
+msgstr "갤러리 생성 오류"
+
+#: galleryroot.cpp:159
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"An old Kooka gallery was found at <filename>%1</filename>.<nl/>The preferred "
+"new location is now <filename>%2</filename>.<nl/><nl/>Do you want to create "
+"a new gallery at the new location?"
+msgstr ""
+"<filename>%1</filename>에서 예전 Kooka 갤러리를 찾았습니다.<nl/>선호하는 새 "
+"갤러리 위치는 <filename>%2</filename>입니다.<nl/><nl/>새 위치에 새 갤러리를 "
+"생성하시겠습니까?"
+
+#: galleryroot.cpp:163
+#, kde-format
+msgid "Create New Gallery"
+msgstr "새 갤러리 만들기"
+
+#: galleryroot.cpp:172 galleryroot.cpp:186
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"Kooka will use the new gallery, <link url=\"file:%1\"><filename>%1</"
+"filename></link>.<nl/><nl/>If you wish to add the images from your old "
+"gallery <link url=\"file:%2\"><filename>%2</filename></link>,<nl/>then you "
+"may do so by simply copying or moving the files."
+msgstr ""
+"Kooka는 이제 <link url=\"file:%1\"><filename>%1</filename></link>에 있는 새 "
+"갤러리를 사용합니다.<nl/><nl/><link url=\"file:%2\"><filename>%2</filename></"
+"link>에 있는 이전 갤러리에 있는 그림을 추가하려면<nl/>파일을 복사하거나 이동"
+"하십시오."
+
+#: galleryroot.cpp:176
+#, kde-format
+msgid "New Gallery Created"
+msgstr "새 갤러리 생성됨"
+
+#: galleryroot.cpp:190
+#, kde-format
+msgid "Old Gallery Exists"
+msgstr "이전 갤러리 존재함"
+
+#: imagetransform.cpp:59
+#, kde-format
+msgid "Rotate image +90 degrees"
+msgstr "그림 +90도 회전"
+
+#: imagetransform.cpp:66
+#, kde-format
+msgid "Rotate image 180 degrees"
+msgstr "그림 180도 회전"
+
+#: imagetransform.cpp:71
+#, kde-format
+msgid "Rotate image -90 degrees"
+msgstr "그림 -90도 회전"
+
+#: imagetransform.cpp:77
+#, kde-format
+msgid "Mirror image horizontally"
+msgstr "그림 좌우 반전"
+
+#: imagetransform.cpp:82
+#, kde-format
+msgid "Mirror image vertically"
+msgstr "그림 상하 반전"
+
+#: imagetransform.cpp:94
+#, kde-format
+msgid "Error updating image %1"
+msgstr "그림 %1 업데이트 오류"
+
+#: imgprintdialog.cpp:65
+#, kde-format
+msgctxt "@title:tab"
+msgid "Image"
+msgstr "그림"
+
+#: imgprintdialog.cpp:85
+#, kde-format
+msgctxt "@title:group"
+msgid "Scaling"
+msgstr "크기 조정"
+
+#: imgprintdialog.cpp:100
+#, kde-format
+msgctxt "@option:radio"
+msgid "Size as on screen"
+msgstr "화면에 표시된 크기"
+
+#: imgprintdialog.cpp:101
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"<div>Print at the same size as seen on screen, determined by the screen "
+"resolution.</div>"
+msgstr ""
+"<div>화면의 해상도에 따라서 화면에 표시된 크기와 같은 크기로 인쇄합니다.</"
+"div>"
+
+#: imgprintdialog.cpp:105
+#, kde-format
+msgid "Screen resolution:"
+msgstr "화면 해상도:"
+
+#: imgprintdialog.cpp:110
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"<div>This is the current screen resolution. It cannot be changed here.</div>"
+msgstr "<div>현재 화면 해상도입니다. 여기에서 변경할 수 없습니다.</div>"
+
+#: imgprintdialog.cpp:114
+#, kde-format
+msgctxt "@option:radio"
+msgid "Size as scanned"
+msgstr "스캔한 크기"
+
+#: imgprintdialog.cpp:115
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"<div>Print at a size determined by the scan resolution. The resolution is "
+"saved with the image and used if available; if it is not, it can be entered "
+"here.</div>"
+msgstr ""
+"<div>스캔 해상도에서 계산한 크기로 인쇄합니다. 그림에 저장된 해상도를 사용하"
+"며, 해상도 정보가 없으면 여기에 입력할 수 있습니다.</div>"
+
+#: imgprintdialog.cpp:119
+#, kde-format
+msgid "Scan resolution:"
+msgstr "스캔 해상도:"
+
+#: imgprintdialog.cpp:124
+#, kde-format
+msgctxt "@item:intext abbreviation for 'dots per inch'"
+msgid " dpi"
+msgstr " dpi"
+
+#: imgprintdialog.cpp:125
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"<div>This is the scan resolution as saved with the image. It can be changed "
+"if necessary.</div>"
+msgstr ""
+"<div>이 값은 그림에 저장된 스캔 해상도입니다. 필요한 경우 변경할 수 있습니다."
+"</div>"
+
+#: imgprintdialog.cpp:132
+#, kde-format
+msgctxt "@option:radio"
+msgid "Custom size"
+msgstr "사용자 정의 크기"
+
+#: imgprintdialog.cpp:133
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"<div>Print scaled to the specified size. The image is centered on the paper."
+"</div>"
+msgstr "<div>지정한 크기로 인쇄합니다. 그림은 종이 가운데에 위치합니다.</div>"
+
+#: imgprintdialog.cpp:137
+#, kde-format
+msgctxt "@label:spinbox"
+msgid "Image width:"
+msgstr "그림 너비:"
+
+#: imgprintdialog.cpp:142 imgprintdialog.cpp:156
+#, kde-format
+msgctxt "@item:intext abbreviation for 'millimetres'"
+msgid " mm"
+msgstr " mm"
+
+#: imgprintdialog.cpp:143
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "<div>The width at which the image will be printed.</div>"
+msgstr "<div>인쇄할 그림 너비입니다.</div>"
+
+#: imgprintdialog.cpp:151
+#, kde-format
+msgctxt "@label:spinbox"
+msgid "Image height:"
+msgstr "그림 높이:"
+
+#: imgprintdialog.cpp:157
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "<div>The height at which the image will be printed.</div>"
+msgstr "<div>인쇄할 그림 높이입니다.</div>"
+
+#: imgprintdialog.cpp:166
+#, kde-format
+msgctxt "@option:radio"
+msgid "Fit to page"
+msgstr "쪽 맞춤"
+
+#: imgprintdialog.cpp:167
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"<div>Print using as much of the available space on the paper as possible. "
+"The aspect ratio can be maintained.</div>"
+msgstr ""
+"<div>종이에 사용할 수 있는 최대한의 크기로 인쇄합니다. 종횡비를 유지합니다.</"
+"div>"
+
+#: imgprintdialog.cpp:178
+#, kde-format
+msgctxt "@title:group"
+msgid "Other Options"
+msgstr "기타 옵션"
+
+#: imgprintdialog.cpp:182
+#, kde-format
+msgctxt "@option:check"
+msgid "Maintain aspect ratio"
+msgstr "종횡비 유지"
+
+#: imgprintdialog.cpp:183
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"<div>Adjust the height or width to maintain the original aspect ratio of the "
+"printed image.</div>"
+msgstr ""
+"<div>크기를 조정할 때 인쇄한 그림과 원본 그림의 종횡비를 유지합니다.</div>"
+
+#: imgprintdialog.cpp:189
+#, kde-format
+msgctxt "@option:check"
+msgid "Low resolution (fast draft print)"
+msgstr "저해상도 모드(빠른 초안 인쇄)"
+
+#: imgprintdialog.cpp:190
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"<div>Print at as low a resolution as possible. This may not work as intended "
+"on all printers.</div>"
+msgstr ""
+"<div>최대한 낮은 해상도로 인쇄합니다. 모든 프린터에서 의도한 대로 작동하지 않"
+"을 수도 있습니다.</div>"
+
+#: imgprintdialog.cpp:196
+#, kde-format
+msgctxt "@label:listbox"
+msgid "Cut marks:"
+msgstr "절취선:"
+
+#: imgprintdialog.cpp:200
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "None"
+msgstr "없음"
+
+#: imgprintdialog.cpp:201
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "For multiple pages"
+msgstr "여러 쪽"
+
+#: imgprintdialog.cpp:202
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "Always"
+msgstr "항상"
+
+#: imgprintdialog.cpp:203
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"<div>Select whether cut/join marks are printed. The marks will reduce the "
+"available printable area.</div>"
+msgstr ""
+"<div>절취선을 인쇄할지 여부입니다. 절취선을 표시하면 인쇄 가능 영역의 크기가 "
+"작아집니다.</div>"
+
+#: imgprintdialog.cpp:214
+#, kde-format
+msgctxt "@title:group"
+msgid "Print Layout"
+msgstr "인쇄 레이아웃"
+
+#: imgprintdialog.cpp:219
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Image size:"
+msgstr "그림 크기:"
+
+#: imgprintdialog.cpp:222
+#, kde-format
+msgctxt "@info:status width,height pixels"
+msgid "%1 x %2 pix"
+msgstr "%1 x %2픽셀"
+
+#: imgprintdialog.cpp:227
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Available print area:"
+msgstr "사용 가능한 인쇄 영역:"
+
+#: imgprintdialog.cpp:234
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Image print area:"
+msgstr "그림 인쇄 영역:"
+
+#: imgprintdialog.cpp:241
+#, kde-format
+msgctxt "@label:textbox"
+msgid "Pages required:"
+msgstr "필요한 쪽 수:"
+
+#: imgprintdialog.cpp:304
+#, kde-format
+msgctxt "@info:status"
+msgid "%1 dpi"
+msgstr "%1 dpi"
+
+#: imgprintdialog.cpp:321
+#, kde-format
+msgid "The scan resolution must be specified for scaling to it."
+msgstr "크기를 조정하려면 스캔 해상도를 지정해야 합니다."
+
+#: imgprintdialog.cpp:326
+#, kde-format
+msgid ""
+"A valid size must be specified for custom scaling. One or both of the "
+"specified dimensions is zero."
+msgstr ""
+"사용자 정의 크기 조절을 하려면 올바른 크기를 지정해야 합니다. 지정한 크기 중 "
+"하나가 0입니다."
+
+#: imgprintdialog.cpp:404 imgprintdialog.cpp:408
+#, kde-format
+msgctxt "@info:status width,height millimetres"
+msgid "%1 x %2 mm"
+msgstr "%1 x %2 mm"
+
+#: imgprintdialog.cpp:412
+#, kde-format
+msgctxt "@info:status total"
+msgid "%1"
+msgstr "%1"
+
+#: imgprintdialog.cpp:414
+#, kde-format
+msgctxt "@info:status total(rows,cols)"
+msgid "%1 (%2 x %3)"
+msgstr "%1(%2 x %3)"
+
+#: imgsaver.cpp:65
+#, kde-kuit-format
+msgctxt "@info"
+msgid "The directory <filename>%2</filename><nl/>could not be accessed.<nl/>%1"
+msgstr "디렉터리 <filename>%2</filename>에<nl/> 접근할 수 없습니다.<nl/>%1"
+
+#: imgsaver.cpp:76
+#, kde-kuit-format
+msgctxt "@info"
+msgid "The directory <filename>%2</filename><nl/>could not be created.<nl/>%1"
+msgstr "디렉터리 <filename>%2</filename>을(를)<nl/>만들 수 없습니다.<nl/>%1"
+
+#: imgsaver.cpp:327
+#, kde-format
+msgid "indexed color image (up to 8 bit depth)"
+msgstr "인덱스 색상 그림(최대 8비트 색 농도)"
+
+#: imgsaver.cpp:331
+#, kde-format
+msgid "gray scale image (up to 8 bit depth)"
+msgstr "회색조 그림(최대 8비트 색 농도)"
+
+#: imgsaver.cpp:335
+#, kde-format
+msgid "lineart image (black and white, 1 bit depth)"
+msgstr "라인아트 그림(흑백, 1비트 농도)"
+
+#: imgsaver.cpp:339
+#, kde-format
+msgid "high/true color image (more than 8 bit depth)"
+msgstr "하이컬러/트루컬러 그림(8비트 이상 색 농도)"
+
+#: imgsaver.cpp:343
+#, kde-format
+msgid "unknown image type %1"
+msgstr "알 수 없는 그림 형식 %1"
+
+#: imgsaver.cpp:365
+#, kde-format
+msgid "Save OK"
+msgstr "저장 완료"
+
+#: imgsaver.cpp:367
+#, kde-format
+msgid "Permission denied"
+msgstr "권한 거부됨"
+
+#: imgsaver.cpp:369
+#, kde-format
+msgid "Bad file name"
+msgstr "잘못된 파일 이름"
+
+#: imgsaver.cpp:371
+#, kde-format
+msgid "No space left on device"
+msgstr "장치에 공간이 부족함"
+
+#: imgsaver.cpp:373
+#, kde-format
+msgid "Cannot write image format '%1'"
+msgstr "그림 형식 '%1'(으)로 기록할 수 없음"
+
+#: imgsaver.cpp:375
+#, kde-format
+msgid "Cannot write using protocol '%1'"
+msgstr "프로토콜 '%1'(으)로 기록할 수 없음"
+
+#: imgsaver.cpp:377
+#, kde-format
+msgid "User cancelled saving"
+msgstr "사용자가 저장을 취소함"
+
+#: imgsaver.cpp:379
+#, kde-format
+msgid "Cannot create directory"
+msgstr "디렉터리를 만들 수 없음"
+
+#: imgsaver.cpp:381
+#, kde-format
+msgid "Save failed"
+msgstr "저장 실패"
+
+#: imgsaver.cpp:383
+#, kde-format
+msgid "Bad parameter"
+msgstr "잘못된 인자"
+
+#: imgsaver.cpp:385
+#, kde-format
+msgid "Unknown status %1"
+msgstr "알 수 없는 상태 %1"
+
+#: imgsaver.cpp:408
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"The file name you supplied has no file extension.<nl/>Should the original "
+"one be added?<nl/><nl/>This would result in the new file name <filename>%1</"
+"filename>"
+msgstr ""
+"지정한 파일 이름에 확장자가 없습니다.<nl/>자동으로 알맞는 확장자를 추가하시겠"
+"습니까?<nl/><nl/>이 경우 새 파일 이름은 <filename>%1</filename>입니다"
+
+#: imgsaver.cpp:411
+#, kde-format
+msgid "Extension Missing"
+msgstr "확장자 없음"
+
+#: imgsaver.cpp:412
+#, kde-format
+msgid "Add Extension"
+msgstr "확장자 추가"
+
+#: imgsaver.cpp:413
+#, kde-format
+msgid "Do Not Add"
+msgstr "추가하지 않음"
+
+#: imgsaver.cpp:438
+#, kde-format
+msgid "Target already exists"
+msgstr "대상이 이미 존재함"
+
+#: imgsaver.cpp:451
+#, kde-format
+msgid "Unable to copy the file"
+msgstr "파일을 복사할 수 없음"
+
+#: imgsaver.cpp:452
+#, kde-format
+msgid "Unable to rename the file"
+msgstr "파일의 이름을 바꿀 수 없음"
+
+#: imgsaver.cpp:453
+#, kde-format
+msgid "Error copying file"
+msgstr "파일 복사 오류"
+
+#: imgsaver.cpp:454
+#, kde-format
+msgid "Error renaming file"
+msgstr "파일 이름 바꾸기 오류"
+
+#: imgsaver.cpp:455
+#, kde-kuit-format
+msgctxt "@info"
+msgid "%1 <filename>%3</filename><nl/>%2"
+msgstr "%1 <filename>%3</filename><nl/>%2"
+
+#: kooka.cpp:100
+#, kde-format
+msgid "KDE Scanning"
+msgstr "KDE 스캔"
+
+#: kooka.cpp:134
+#, kde-format
+msgid "Scale to Width"
+msgstr "폭 맞춤"
+
+#: kooka.cpp:145
+#, kde-format
+msgid "Scale to Height"
+msgstr "높이 맞춤"
+
+#: kooka.cpp:154
+#, kde-format
+msgid "Original Size"
+msgstr "원본 크기"
+
+#: kooka.cpp:160
+#, kde-format
+msgid "Set Zoom..."
+msgstr "크기 조정..."
+
+#: kooka.cpp:166
+#, kde-format
+msgid "Keep Zoom Setting"
+msgstr "크기 조정 설정 유지"
+
+#: kooka.cpp:174
+#, kde-format
+msgid "New Image From Selection"
+msgstr "선택 영역에서 새로운 그림 생성"
+
+#: kooka.cpp:179
+#, kde-format
+msgid "Mirror Vertically"
+msgstr "상하 반전"
+
+#: kooka.cpp:186
+#, kde-format
+msgid "Mirror Horizontally"
+msgstr "좌우 반전"
+
+#: kooka.cpp:196
+#, kde-format
+msgid "Rotate Counter-Clockwise"
+msgstr "반시계 방향으로 회전"
+
+#: kooka.cpp:203
+#, kde-format
+msgid "Rotate Clockwise"
+msgstr "시계 방향으로 회전"
+
+#: kooka.cpp:210
+#, kde-format
+msgid "Rotate 180 Degrees"
+msgstr "180도 회전"
+
+#: kooka.cpp:219
+#, kde-format
+msgid "New Folder..."
+msgstr "새 폴더..."
+
+#: kooka.cpp:224
+#, kde-format
+msgid "Open With"
+msgstr "다음으로 열기"
+
+#: kooka.cpp:230
+#, kde-format
+msgid "Save Image..."
+msgstr "그림 저장..."
+
+#: kooka.cpp:237
+#, kde-format
+msgid "Import Image..."
+msgstr "그림 가져오기..."
+
+#: kooka.cpp:242 kooka.cpp:550
+#, kde-format
+msgid "Delete Image"
+msgstr "그림 삭제"
+
+#: kooka.cpp:249 kooka.cpp:551
+#, kde-format
+msgid "Rename Image"
+msgstr "그림 이름 바꾸기"
+
+#: kooka.cpp:255 kooka.cpp:549
+#, kde-format
+msgid "Unload Image"
+msgstr "그림 불러오기 취소"
+
+#: kooka.cpp:262
+#, kde-format
+msgid "Properties..."
+msgstr "속성..."
+
+#: kooka.cpp:271
+#, kde-format
+msgid "Select Scan Device..."
+msgstr "스캔 장치 선택..."
+
+#: kooka.cpp:275 kookaview.cpp:546
+#, kde-format
+msgid "Add Scan Device..."
+msgstr "스캔 장치 추가..."
+
+#: kooka.cpp:281
+#, kde-format
+msgid "Preview"
+msgstr "미리 보기"
+
+#: kooka.cpp:286
+#, kde-format
+msgid "Start Scan"
+msgstr "스캔 시작"
+
+#: kooka.cpp:291
+#, kde-format
+msgid "Scan Presets..."
+msgstr "스캔 사전 설정..."
+
+#: kooka.cpp:296
+#, kde-format
+msgid "Auto Select"
+msgstr "자동 선택"
+
+#: kooka.cpp:304
+#, kde-format
+msgid "OCR Image..."
+msgstr "전체 그림 OCR 실행..."
+
+#: kooka.cpp:308
+#, kde-format
+msgid "OCR Selection..."
+msgstr "선택 영역 OCR 실행..."
+
+#: kooka.cpp:312
+#, kde-format
+msgid "OCR File..."
+msgstr "파일에 OCR 실행..."
+
+#: kooka.cpp:316
+#, kde-format
+msgid "Save OCR Result Text..."
+msgstr "OCR 결과 텍스트 저장..."
+
+#: kooka.cpp:321
+#, kde-format
+msgid "Spell Check OCR Result..."
+msgstr "OCR 결과 맞춤법 검사..."
+
+#: kooka.cpp:537
+#, kde-format
+msgid "Unload Folder"
+msgstr "폴더 불러오기 취소"
+
+#: kooka.cpp:538
+#, kde-format
+msgid "Delete Folder"
+msgstr "폴더 삭제"
+
+#: kooka.cpp:539
+#, kde-format
+msgid "Rename Folder"
+msgstr "폴더 이름 바꾸기"
+
+#: kookagallery.cpp:56
+#, kde-format
+msgid "Folder:"
+msgstr "폴더:"
+
+#: kookapref.cpp:55
+#, kde-format
+msgid "Preferences"
+msgstr "설정"
+
+#: kookapref.cpp:57
+#, kde-format
+msgid "General"
+msgstr "일반"
+
+#: kookapref.cpp:57
+#, kde-format
+msgid "General Options"
+msgstr "일반 옵션"
+
+#: kookapref.cpp:58
+#, kde-format
+msgid "Startup"
+msgstr "시작"
+
+#: kookapref.cpp:58
+#, kde-format
+msgid "Startup Options"
+msgstr "시작 옵션"
+
+#: kookapref.cpp:59
+#, kde-format
+msgid "Image Saving"
+msgstr "그림 저장"
+
+#: kookapref.cpp:59
+#, kde-format
+msgid "Image Saving Options"
+msgstr "그림 저장 옵션"
+
+#: kookapref.cpp:60
+#, kde-format
+msgid "Gallery & Thumbnails"
+msgstr "갤러리와 축소판"
+
+#: kookapref.cpp:60
+#, kde-format
+msgid "Image Gallery and Thumbnail View"
+msgstr "그림 갤러리와 축소판 보기"
+
+#: kookapref.cpp:61 kookaview.cpp:290
+#, kde-format
+msgid "OCR"
+msgstr "OCR"
+
+#: kookascanparams.cpp:68
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"<title>Gallery Mode - No scanner selected</title><nl/><nl/>In this mode you "
+"can browse, manipulate and OCR images already in the gallery.<nl/><nl/><link "
+"url=\"a:1\">Select a scanner device</link> to perform scanning, or <link url="
+"\"a:2\">add a device</link> if a scanner is not automatically detected."
+msgstr ""
+"<title>갤러리 모드 - 스캐너를 선택하지 않았음</title><nl/><nl/>이 모드에서는 "
+"갤러리에 있는 그림을 보거나 수정 및 OCR 작업을 진행할 수 있습니다.<nl/><nl/>"
+"스캔을 하려면 <link url=\"a:1\">스캐너 장치를 선택</link>하거나, 자동으로 감"
+"지된 스캐너가 없다면 <link url=\"a:2\">장치를 추가</link>할 수 있습니다."
+
+#: kookascanparams.cpp:114
+#, kde-format
+msgid "Scan &destination:"
+msgstr "스캔 대상(&D):"
+
+#: kookascanparams.cpp:150
+#, kde-kuit-format
+msgctxt "@info"
+msgid "No destination selected"
+msgstr "대상을 선택하지 않았음"
+
+#: kookascanparams.cpp:160
+#, kde-kuit-format
+msgctxt "@info"
+msgid "Unable to load plugin '%1'"
+msgstr "플러그인 '%1'을(를) 불러올 수 없음"
+
+#. i18n: ectx: label, entry (StartupReadImage), group (Startup)
+#: kookasettings.kcfg:50
+#, kde-format
+msgid "Load the last selected image into the viewer"
+msgstr "마지막으로 선택한 그림을 뷰어로 불러오기"
+
+#. i18n: ectx: tooltip, entry (StartupReadImage), group (Startup)
+#: kookasettings.kcfg:51
+#, kde-format
+msgid ""
+"<div>Check this if you want Kooka to load the last selected image into the "
+"viewer on startup.<br/><br/>If your images are large, that might slow down "
+"Kooka's startup.</div>"
+msgstr ""
+"<div>이 옵션을 선택하면 Kooka를 시작할 때 마지막으로 뷰어에서 선택한 그림을 "
+"불러옵니다.<br/><br/>해당 그림의 용량이 클 경우 Kooka의 시작이 느려질 수 있습"
+"니다.</div>"
+
+#. i18n: ectx: label, entry (SaverAskForFormat), group (Files)
+#: kookasettings.kcfg:65
+#, kde-format
+msgid "Always use the Save Assistant"
+msgstr "항상 저장 도우미 사용"
+
+#. i18n: ectx: tooltip, entry (SaverAskForFormat), group (Files)
+#: kookasettings.kcfg:66
+#, kde-format
+msgid ""
+"<div>Check this if you want to always use the image save assistant, even if "
+"there is a default format for the image type.</div>"
+msgstr ""
+"<div>이 옵션을 선택하면 그림 종류별 기본 파일 형식을 지정했다고 하더라도 그"
+"림 저장 도우미를 사용합니다.</div>"
+
+#. i18n: ectx: label, entry (SaverAskForFilename), group (Files)
+#: kookasettings.kcfg:71
+#, kde-format
+msgid "Ask for filename when saving"
+msgstr "파일 저장 시 파일 이름 묻기"
+
+#. i18n: ectx: tooltip, entry (SaverAskForFilename), group (Files)
+#: kookasettings.kcfg:72
+#, kde-format
+msgid ""
+"<div>Check this if you want to enter a file name when scanning an image.</"
+"div>"
+msgstr "<div>이 옵션을 선택하면 스캔 시 파일 이름을 입력할 수 있습니다.</div>"
+
+#. i18n: ectx: label, entry (SaverAskBeforeScan), group (Files)
+#: kookasettings.kcfg:77
+#, kde-format
+msgid "Before the scan starts"
+msgstr "스캔 시작 전"
+
+#. i18n: ectx: tooltip, entry (SaverAskBeforeScan), group (Files)
+#: kookasettings.kcfg:78
+#, kde-format
+msgid ""
+"<div>Check this if you want to enter the file name before scanning starts.</"
+"div>"
+msgstr ""
+"<div>이 옵션을 선택하면 스캔을 시작하기 전 파일 이름을 입력할 수 있습니다.</"
+"div>"
+
+#. i18n: ectx: label, entry (SaverAskAfterScan), group (Files)
+#: kookasettings.kcfg:83
+#, kde-format
+msgid "After the scan is finished"
+msgstr "스캔이 끝난 후"
+
+#. i18n: ectx: tooltip, entry (SaverAskAfterScan), group (Files)
+#: kookasettings.kcfg:84
+#, kde-format
+msgid ""
+"<div>Check this if you want to enter the file name after scanning has "
+"finished.</div>"
+msgstr ""
+"<div>이 옵션을 선택하면 스캔이 끝난 후 파일 이름을 입력할 수 있습니다.</div>"
+
+#. i18n: ectx: label, entry (SaverOnlyRecommendedTypes), group (Files)
+#: kookasettings.kcfg:89
+#, kde-format
+msgid "Only show recommended formats for this image type"
+msgstr "이 그림 종류에서 추천하는 그림 파일 형식만 표시"
+
+#. i18n: ectx: tooltip, entry (SaverOnlyRecommendedTypes), group (Files)
+#: kookasettings.kcfg:90
+#, kde-format
+msgid ""
+"<div>Check this to only show recommended file formats for the scan type. "
+"Uncheck it to show all compatible formats.</div>"
+msgstr ""
+"<div>이 옵션을 선택하면 스캔한 그림 종류에 추천하는 그림 파일 형식만 표시합니"
+"다. 선택하지 않으면 모든 형식을 표시합니다.</div>"
+
+#. i18n: ectx: label, entry (SaverAlwaysUseFormat), group (Files2)
+#: kookasettings.kcfg:103
+#, kde-format
+msgid "Always use this save format for this image type"
+msgstr "항상 이 그림 종류에 이 파일 형식 사용"
+
+#. i18n: ectx: tooltip, entry (SaverAlwaysUseFormat), group (Files2)
+#: kookasettings.kcfg:104
+#, kde-format
+msgid ""
+"<div>Check this to remember the selected file format for the scanned image "
+"type and not ask for it again.</div>"
+msgstr ""
+"<div>이 옵션을 선택하면 스캔한 그림 종류에 항상 선택한 파일 형식을 사용하고 "
+"다시 묻지 않습니다.</div>"
+
+#. i18n: ectx: label, entry (GalleryAllowRename), group (Gallery)
+#: kookasettings.kcfg:137
+#, kde-format
+msgid "Allow click-to-rename"
+msgstr "클릭해서 이름 바꾸기 허용"
+
+#. i18n: ectx: tooltip, entry (GalleryAllowRename), group (Gallery)
+#: kookasettings.kcfg:138
+#, kde-format
+msgid ""
+"<div>Check this if you want to be able to rename gallery items by clicking "
+"on them (otherwise, use the \"Rename\" menu option).</div>"
+msgstr ""
+"<div>이 옵션을 선택하면 갤러리 항목을 클릭했을 때 이름을 바꿀 수 있도록 합니"
+"다(그렇지 않은 경우 \"이름 바꾸기\" 메뉴 사용).</div>"
+
+#. i18n: ectx: label, entry (GalleryLayout), group (Gallery)
+#: kookasettings.kcfg:143
+#, kde-format
+msgid "Show recent folders:"
+msgstr "최근 폴더 표시:"
+
+#. i18n: ectx: tooltip, entry (GalleryLayout), group (Gallery)
+#: kookasettings.kcfg:144
+#, kde-format
+msgid ""
+"<div>Select whether and where a list of recently accessed gallery folders "
+"will be shown.</div>"
+msgstr "<div>최근에 사용한 갤러리를 표시할지 여부 및 표시할 위치입니다.</div>"
+
+#. i18n: ectx: label, entry (ThumbnailCustomBackground), group (thumbnailView)
+#: kookasettings.kcfg:164
+#, kde-format
+msgid "Use a custom background image"
+msgstr "사용자 정의 배경 그림 사용"
+
+#. i18n: ectx: tooltip, entry (ThumbnailCustomBackground), group (thumbnailView)
+#: kookasettings.kcfg:165
+#, kde-format
+msgid "<div>Set a custom background image for the thumbnail view.</div>"
+msgstr "<div>축소판 보기에 사용할 사용자 정의 배경 그림을 설정합니다.</div>"
+
+#. i18n: ectx: label, entry (ThumbnailBackgroundPath), group (thumbnailView)
+#: kookasettings.kcfg:170
+#, kde-format
+msgid "Image:"
+msgstr "그림:"
+
+#. i18n: ectx: tooltip, entry (ThumbnailBackgroundPath), group (thumbnailView)
+#: kookasettings.kcfg:171
+#, kde-format
+msgid "<div>The background image to use for the thumbnail view.</div>"
+msgstr "<div>축소판 보기에 사용할 배경 그림입니다.</div>"
+
+#. i18n: ectx: label, entry (ThumbnailPreviewSize), group (thumbnailView)
+#: kookasettings.kcfg:177
+#, kde-format
+msgid "Preview size:"
+msgstr "미리 보기 크기:"
+
+#. i18n: ectx: tooltip, entry (ThumbnailPreviewSize), group (thumbnailView)
+#: kookasettings.kcfg:178
+#, kde-format
+msgid "<div>Select the default preview size for the thumbnail view.</div>"
+msgstr "<div>축소판 보기에서 사용할 기본 미리 보기 크기를 선택합니다.</div>"
+
+#. i18n: ectx: label, entry (OcrGocrDustSize), group (gocr)
+#: kookasettings.kcfg:217
+#, kde-format
+msgid "Dust size:"
+msgstr "먼지 크기:"
+
+#. i18n: ectx: tooltip, entry (OcrGocrDustSize), group (gocr)
+#: kookasettings.kcfg:218
+#, kde-format
+msgid ""
+"<div>Clusters smaller than this size will be considered to be noise, and "
+"ignored.  0 means to not detect dust clusters, -1 means to automatically "
+"detect them. The default is 10.</div>"
+msgstr ""
+"<div>이 값보다 작은 클러스터는 잡음으로 인식하여 그림에서 제거합니다. 0으로 "
+"설정하면 먼지 클러스터를 감지하지 않으며, -1로 설정하면 자동으로 감지합니다. "
+"기본값은 10입니다.</div>"
+
+#. i18n: ectx: label, entry (OcrGocrGrayLevel), group (gocr)
+#: kookasettings.kcfg:223
+#, kde-format
+msgid "Gray level:"
+msgstr "회색 수준:"
+
+#. i18n: ectx: tooltip, entry (OcrGocrGrayLevel), group (gocr)
+#: kookasettings.kcfg:224
+#, kde-format
+msgid ""
+"<div>The threshold value below which gray pixels are considered to be black. "
+"0 means to automatically detect the gray level.  The default is 160.</div>"
+msgstr ""
+"<div>해당 임곗값 이하의 회색 픽셀을 검은색으로 취급합니다. 0으로 설정하면 회"
+"색 수준을 자동으로 감지합니다. 기본값은 160입니다.</div>"
+
+#. i18n: ectx: label, entry (OcrGocrSpaceWidth), group (gocr)
+#: kookasettings.kcfg:229
+#, kde-format
+msgid "Space width:"
+msgstr "공백 너비:"
+
+#. i18n: ectx: tooltip, entry (OcrGocrSpaceWidth), group (gocr)
+#: kookasettings.kcfg:230
+#, kde-format
+msgid ""
+"<div>The minimum gap in pixels considered to be word spacing. The default is "
+"0 which means to automatically detect spacing.</div>"
+msgstr ""
+"<div>단어간 띄어쓰기로 간주할 픽셀 단위의 문자 사이 빈 공간입니다. 기본값은 0"
+"으로 자동 탐색을 의미합니다.</div>"
+
+#. i18n: ectx: label, entry (OcrGocrCertainty), group (gocr)
+#: kookasettings.kcfg:235
+#, kde-format
+msgid "Certainty:"
+msgstr "확신도:"
+
+#. i18n: ectx: tooltip, entry (OcrGocrCertainty), group (gocr)
+#: kookasettings.kcfg:236
+#, kde-format
+msgid ""
+"<div>The acceptance certainty threshold for recognition, characters with a "
+"lower certainty are considered to be unknown. The default is 95.</div>"
+msgstr ""
+"<div>해당 값 이상의 확신도를 가지는 글자만 성공적으로 인식된 것으로 간주하"
+"며, 이 값 미만이면 알 수 없는 글자로 취급합니다. 기본값은 95입니다.</div>"
+
+#. i18n: ectx: label, entry (ocrOcradLayoutDetection), group (ocrad)
+#: kookasettings.kcfg:250
+#, kde-format
+msgid "Layout analysis mode:"
+msgstr "레이아웃 분석 모드:"
+
+#. i18n: ectx: label, entry (ocrOcradCharset), group (ocrad)
+#: kookasettings.kcfg:263
+#, kde-format
+msgid "Character set:"
+msgstr "문자 인코딩:"
+
+#. i18n: ectx: label, entry (ocrOcradFilter), group (ocrad)
+#: kookasettings.kcfg:267
+#, kde-format
+msgid "Filter:"
+msgstr "필터:"
+
+#. i18n: ectx: label, entry (ocrOcradTransform), group (ocrad)
+#: kookasettings.kcfg:271
+#, kde-format
+msgid "Transform:"
+msgstr "변형:"
+
+#. i18n: ectx: label, entry (ocrOcradInvert), group (ocrad)
+#: kookasettings.kcfg:275
+#, kde-format
+msgid "Invert input"
+msgstr "입력 반전"
+
+#. i18n: ectx: label, entry (ocrOcradThresholdEnable), group (ocrad)
+#: kookasettings.kcfg:280
+#, kde-format
+msgid "Set threshold"
+msgstr "임곗값 설정"
+
+#. i18n: ectx: label, entry (ocrOcradThresholdValue), group (ocrad)
+#: kookasettings.kcfg:286
+#, kde-format
+msgid "Threshold"
+msgstr "임곗값"
+
+#. i18n: ectx: label, entry (ocrTesseractLanguage), group (tesseract)
+#: kookasettings.kcfg:308
+#, kde-format
+msgid "Language:"
+msgstr "언어:"
+
+#. i18n: ectx: label, entry (ocrTesseractUserWords), group (tesseract)
+#: kookasettings.kcfg:312
+#, kde-format
+msgid "User word list:"
+msgstr "사용자 단어 목록:"
+
+#. i18n: ectx: label, entry (ocrTesseractUserPatterns), group (tesseract)
+#: kookasettings.kcfg:316
+#, kde-format
+msgid "User patterns:"
+msgstr "사용자 패턴:"
+
+#. i18n: ectx: label, entry (ocrTesseractEngineMode), group (tesseract)
+#: kookasettings.kcfg:320
+#, kde-format
+msgid "Engine mode:"
+msgstr "엔진 모드:"
+
+#. i18n: ectx: label, entry (ocrTesseractSegmentationMode), group (tesseract)
+#: kookasettings.kcfg:324
+#, kde-format
+msgid "Segmentation mode:"
+msgstr "세그멘테이션 모드:"
+
+#: kookaview.cpp:206
+#, kde-format
+msgid "Image View"
+msgstr "그림 보기"
+
+#: kookaview.cpp:265
+#, kde-format
+msgid "Scan Preview"
+msgstr "미리 보기 스캔"
+
+#: kookaview.cpp:275
+#, kde-format
+msgid "OCR results will appear here"
+msgstr "OCR 결과가 여기에 표시됩니다"
+
+#: kookaview.cpp:284
+#, kde-format
+msgid "Scan"
+msgstr "스캔"
+
+#: kookaview.cpp:287 kookaview.cpp:560 kookaview.cpp:579 scangallery.cpp:123
+#, kde-format
+msgid "Gallery"
+msgstr "갤러리"
+
+#: kookaview.cpp:463
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"There was a problem opening the scanner device.<nl/><nl/>Check that the "
+"scanner is connected and switched on, and that SANE support for it is "
+"correctly configured.<nl/><nl/>Trying to use scanner device: <icode>%3</"
+"icode><nl/>libkookascan reported error: <message>%2</message><nl/>SANE "
+"reported error: <message>%1</message>"
+msgstr ""
+"스캐너 장치를 여는 중 오류가 발생했습니다.<nl/><nl/>스캐너가 연결되어 있고 켜"
+"져 있으며, SANE 지원이 올바르게 설정되어 있는지 확인하십시오.<nl/><nl/>다음 "
+"스캐너 장치를 시도함: <icode>%3</icode><nl/>libkookascan 오류 메시지: "
+"<message>%2</message><nl/>SANE 오류 메시지: <message>%1</message>"
+
+#: kookaview.cpp:518
+#, kde-format
+msgid "Add Scan Device"
+msgstr "스캔 장치 추가"
+
+#: kookaview.cpp:536
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"No scanner devices are available.<nl/><nl/>If your scanner is a type that "
+"can be auto-detected by SANE, check that it is connected, switched on and "
+"configured correctly.<nl/><nl/>If the scanner cannot be auto-detected by "
+"SANE (this includes some network scanners), you need to specify the device "
+"to use. Use the <interface>Add Scan Device</interface> option to enter the "
+"backend name and parameters, or see that dialog for more information."
+msgstr ""
+"스캐너 장치를 사용할 수 없습니다.<nl/><nl/>스캐너 장치를 SANE에서 자동으로 감"
+"지할 수 있으면 연결 및 전원 상태를 확인하십시오.<nl/><nl/>스캐너 장치를 SANE"
+"에서 자동으로 감지할 수 없으면(일부 네트워크 스캐너 포함) 사용할 장치를 직접 "
+"지정하십시오. <interface>스캔 장치 추가</interface> 옵션을 사용하여 백엔드 이"
+"름과 인자를 입력할 수 있으며, 자세한 옵션은 해당 대화 상자를 참조하십시오."
+
+#: kookaview.cpp:582
+#, kde-format
+msgid "No scanner connected"
+msgstr "연결한 스캐너 없음"
+
+#: kookaview.cpp:641
+#, kde-format
+msgid "No selection"
+msgstr "선택 없음"
+
+#: kookaview.cpp:645
+#, kde-format
+msgid "Gallery folder %1"
+msgstr "갤러리 폴더 %1"
+
+#: kookaview.cpp:645
+#, kde-format
+msgid "Gallery image %1"
+msgstr "갤러리 그림 %1"
+
+#: kookaview.cpp:710
+#, kde-format
+msgid "Starting OCR on selection"
+msgstr "선택 영역에 OCR 시작"
+
+#: kookaview.cpp:716
+#, kde-format
+msgid "Starting OCR on the image"
+msgstr "그림에 OCR 시작"
+
+#: kookaview.cpp:723
+#, kde-format
+msgid "OCR File"
+msgstr "파일에 OCR 실행"
+
+#: kookaview.cpp:733
+#, kde-kuit-format
+msgctxt "@info"
+msgid "Cannot load <filename>%1</filename> for OCR:<nl/>%2"
+msgstr "파일 <filename>%1</filename>에서 OCR을 실행하려고 읽을 수 없음:<nl/>%2"
+
+#: kookaview.cpp:735
+#, kde-format
+msgid "Cannot Read OCR File"
+msgstr "OCR 파일을 읽을 수 없음"
+
+#: kookaview.cpp:739
+#, kde-kuit-format
+msgctxt "@info"
+msgid "Starting OCR on file <filename>%1</filename>"
+msgstr "파일 <filename>%1</filename>에서 OCR 시작 중"
+
+#: kookaview.cpp:755
+#, kde-format
+msgid "OCR finished"
+msgstr "OCR 완료됨"
+
+#: kookaview.cpp:762
+#, kde-format
+msgid "There is no OCR result text to spell check."
+msgstr "맞춤법 검사를 실행할 OCR 텍스트 결과가 없습니다."
+
+#: kookaview.cpp:763
+#, kde-format
+msgid "OCR Spell Check not possible"
+msgstr "OCR 맞춤법 검사를 사용할 수 없음"
+
+#: kookaview.cpp:768
+#, kde-format
+msgid "OCR Spell Check"
+msgstr "OCR 맞춤법 검사"
+
+#: kookaview.cpp:784
+#, kde-format
+msgid ""
+"No OCR engine is configured.\n"
+"Please select and configure one in order to perform OCR."
+msgstr ""
+"OCR 엔진을 선택하지 않았습니다.\n"
+"OCR 작업을 진행하려면 엔진을 선택하고 설정해야 합니다."
+
+#: kookaview.cpp:786
+#, kde-format
+msgid "OCR Not Configured"
+msgstr "OCR을 설정하지 않았음"
+
+#: kookaview.cpp:795
+#, kde-format
+msgid "Cannot load OCR plugin '%1'"
+msgstr "OCR 플러그인 '%1'을(를) 불러올 수 없음"
+
+#: kookaview.cpp:903
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"There was a problem during preview or scanning.<nl/>Check that the scanner "
+"is still connected and switched on, <nl/>and that media is loaded if "
+"required.<nl/><nl/>Trying to use scanner device: <icode>%3</icode><nl/"
+">libkookascan reported error: <message>%2</message><nl/>SANE reported error: "
+"<message>%1</message>"
+msgstr ""
+"미리 보기 및 스캔 과정에서 문제가 발생했습니다.<nl/>스캐너 연결 및 전원 상태"
+"를 확인하고<nl/>필요한 경우 미디어 급지 상태를 확인하십시오.<nl/><nl/>다음 스"
+"캐너 장치를 시도함: <icode>%3</icode><nl/>libkookascan 오류 메시지: <message>"
+"%2</message><nl/>SANE 오류 메시지: <message>%1</message>"
+
+#: kookaview.cpp:953
+#, kde-format
+msgid "Create new image from selection"
+msgstr "선택 영역에서 새로운 그림 생성"
+
+#: kookaview.cpp:962
+#, kde-format
+msgid "Cannot transform, image is read-only"
+msgstr "변형할 수 없음, 그림이 읽기 전용임"
+
+#: kookaview.cpp:1015
+#, kde-format
+msgid "Loaded image %1"
+msgstr "그림 %1 불러옴"
+
+#: kookaview.cpp:1016
+#, kde-format
+msgid "Unloaded image"
+msgstr "그림 불러오기 해제됨"
+
+#: kookaview.cpp:1033
+#, kde-format
+msgid "Loading %1..."
+msgstr "%1 불러오는 중..."
+
+#: main.cpp:44
+#, kde-format
+msgid "Scanning, image gallery and OCR"
+msgstr "스캔, 그림 갤러리, OCR"
+
+#: main.cpp:47
+#, kde-format
+msgid ""
+"Kooka provides access to scanner hardware using the <a href=\"http://www."
+"sane-project.org/\">SANE</a> library.\n"
+"\n"
+"Kooka allows you to scan, save and view in any image format that KDE "
+"supports, and can perform Optical Character Recognition using the open "
+"source <a href=\"http://jocr.sourceforge.net/\">GOCR</a> or <a href=\"http://"
+"www.gnu.org/software/ocrad/ocrad.html\">OCRAD</a> programs, or the "
+"commercial <a href=\"http://www.rerecognition.com/\">KADMOS</a> library."
+msgstr ""
+"Kooka는 <a href=\"http://www.sane-project.org/\">SANE</a> 라이브러리를 사용하"
+"여 스캐너 하드웨어에 접근합니다.\n"
+"\n"
+"Kooka는 KDE에서 지원하는 모든 형식으로 그림을 스캔, 저장 및 볼 수 있으며 <a "
+"href=\"http://jocr.sourceforge.net/\">GOCR</a>이나 <a href=\"http://www.gnu."
+"org/software/ocrad/ocrad.html\">OCRAD</a> 프로그램을 사용하여 OCR 작업을 수행"
+"할 수 있습니다. 사용할 수 있는 경우 상용 <a href=\"http://www.rerecognition."
+"com/\">KADMOS</a> 라이브러리를 사용할 수 있습니다."
+
+#: main.cpp:57
+#, kde-format
+msgid ""
+"This program is distributed under the terms of the GPL v2 as published\n"
+"by the Free Software Foundation.\n"
+"\n"
+"As a special exception, permission is given to link this program\n"
+"with any version of the KADMOS OCR/ICR engine of reRecognition GmbH\n"
+"(http://www.rerecognition.com), and distribute the resulting executable\n"
+"without including the source code for KADMOS in the source distribution.\n"
+"\n"
+"Note that linking against KADMOS is not permitted under the terms of\n"
+"the Qt GPL licence, so if you wish to do this then you must have a\n"
+"commercial Qt development licence.\n"
+msgstr ""
+"이 프로그램은 자유 소프트웨어 재단에서 정의한 GPL v2의 사용 조건 하에 배포됩"
+"니다.\n"
+"\n"
+"특별 예외 조건으로 이 프로그램을 reRecognition GmbH(http://www.rerecognition."
+"com)의\n"
+"KADMOS OCR/ICR 엔진의 임의의 버전으로 링크할 수 있는 권한 및 실행 파일을 배포"
+"할\n"
+"수 있는 권한이 주어집니다. KADMOS의 소스 코드는 배포할 수 없습니다.\n"
+"\n"
+"KADMOS 라이브러리 링크는 Qt를 GPL 라이선스로 사용하는 경우 허용되지 않습니"
+"다.\n"
+"해당 라이브러리를 사용하려고 하는 경우 상용 Qt 개발 라이선스를 취득하십시"
+"오.\n"
+
+#: main.cpp:70
+#, kde-format
+msgid "(C) 2000-2018, the Kooka developers and contributors"
+msgstr "(C) 2000-2018, the Kooka developers and contributors"
+
+#: main.cpp:78
+#, kde-format
+msgid "Kooka"
+msgstr "Kooka"
+
+#: main.cpp:90
+#, kde-format
+msgid "Current maintainer, KDE4 port"
+msgstr "현재 관리자, KDE4 이식"
+
+#: main.cpp:91
+#, kde-format
+msgid "Montel Laurent"
+msgstr "Montel Laurent"
+
+#: main.cpp:91
+#, kde-format
+msgid "Initial KF5 port"
+msgstr "초기 KF5 이식"
+
+#: main.cpp:92
+#, kde-format
+msgid "Klaas Freitag"
+msgstr "Klaas Freitag"
+
+#: main.cpp:92
+#, kde-format
+msgid "Developer"
+msgstr "개발자"
+
+#: main.cpp:93
+#, kde-format
+msgid "Mat Colton"
+msgstr "Mat Colton"
+
+#: main.cpp:93
+#, kde-format
+msgid "Graphics, web"
+msgstr "그래픽, 웹"
+
+#: main.cpp:94
+#, kde-format
+msgid "Ivan Shvedunov"
+msgstr "Ivan Shvedunov"
+
+#: main.cpp:94
+#, kde-format
+msgid "Original kscan application"
+msgstr "원본 kscan 프로그램"
+
+#: main.cpp:95
+#, kde-format
+msgid "Alex Kempshall"
+msgstr "Alex Kempshall"
+
+#: main.cpp:95
+#, kde-format
+msgid "Photocopy facility"
+msgstr "복사기 기능"
+
+#: main.cpp:105
+#, kde-format
+msgid "Gallery mode - do not connect to scanner"
+msgstr "갤러리 모드 - 스캐너에 연결하지 않음"
+
+#: main.cpp:108
+#, kde-format
+msgid "The SANE device specification (e.g. 'umax:/dev/sg0')"
+msgstr "SANE 장치 지정 (예: 'umax:/dev/sg0')"
+
+#: main.cpp:108
+#, kde-format
+msgid "device"
+msgstr "장치"
+
+#: newscanpresetdialog.cpp:53
+#, kde-format
+msgid "Edit Scan Preset"
+msgstr "스캔 사전 설정 편집"
+
+#: newscanpresetdialog.cpp:54
+#, kde-format
+msgid "Change the name and/or description of the scan preset."
+msgstr "스캔 사전 설정의 이름이나 설명을 편집합니다."
+
+#: newscanpresetdialog.cpp:58
+#, kde-format
+msgid "Save Scan Preset"
+msgstr "스캔 사전 설정 저장"
+
+#: newscanpresetdialog.cpp:59
+#, kde-format
+msgid "Enter a name and description for the new scan preset."
+msgstr "새 스캔 사전 설정의 이름과 설명을 입력하십시오."
+
+#: newscanpresetdialog.cpp:66
+#, kde-format
+msgid "Preset name:"
+msgstr "사전 설정 이름:"
+
+#: newscanpresetdialog.cpp:73
+#, kde-format
+msgid "Description:"
+msgstr "설명:"
+
+#: ocrresedit.cpp:159
+#, kde-format
+msgid "Save OCR Result Text"
+msgstr "OCR 결과 텍스트 저장"
+
+#: ocrresedit.cpp:160
+#, kde-format
+msgid "Text File (*.txt)"
+msgstr "텍스트 파일 (*.txt)"
+
+#: ocrresedit.cpp:166
+#, kde-kuit-format
+msgctxt "@info"
+msgid "Unable to save the OCR results file<nl/><filename>%1</filename>"
+msgstr "OCR 결과 파일을 저장할 수 없음:<nl/><filename>%1</filename>"
+
+#: ocrresedit.cpp:168
+#, kde-kuit-format
+msgctxt "@info"
+msgid "<nl/>%1"
+msgstr "<nl/>%1"
+
+#: ocrresedit.cpp:170
+#, kde-format
+msgid "Error saving OCR results"
+msgstr "OCR 결과 저장 오류"
+
+#: prefspages.cpp:76
+#, kde-format
+msgid "Hidden Messages"
+msgstr "숨겨진 메시지"
+
+#: prefspages.cpp:80
+#, kde-format
+msgid ""
+"Use this button to reenable all messages and questions which\n"
+"have been hidden by using \"Don't ask me again\"."
+msgstr ""
+"이 단추를 누르면 \"다시 묻지 않기\"로 숨긴\n"
+"메시지와 질문을 모두 다시 활성화합니다."
+
+#: prefspages.cpp:83
+#, kde-format
+msgid "Enable Messages/Questions"
+msgstr "메시지/질문 활성화"
+
+#: prefspages.cpp:243
+#, kde-format
+msgid "Image Gallery"
+msgstr "그림 갤러리"
+
+#: prefspages.cpp:257
+#, kde-format
+msgid "Not shown"
+msgstr "표시하지 않음"
+
+#: prefspages.cpp:258
+#, kde-format
+msgid "At top"
+msgstr "위에"
+
+#: prefspages.cpp:259
+#, kde-format
+msgid "At bottom"
+msgstr "아래에"
+
+#: prefspages.cpp:274
+#, kde-format
+msgid "Thumbnail View"
+msgstr "축소판 보기"
+
+#: prefspages.cpp:388
+#, kde-format
+msgid "None"
+msgstr "없음"
+
+#: prefspages.cpp:400
+#, kde-format
+msgid "OCR Engine:"
+msgstr "OCR 엔진:"
+
+#: prefspages.cpp:406
+#, kde-format
+msgid "OCR Engine Settings..."
+msgstr "OCR 엔진 설정..."
+
+#: prefspages.cpp:452
+#, kde-format
+msgid ""
+"No OCR engine is selected. Select and configure one to be able to perform "
+"OCR."
+msgstr ""
+"OCR 엔진을 선택하지 않았습니다. OCR 작업을 진행하려면 엔진을 선택하고 설정해"
+"야 합니다."
+
+#: prefspages.cpp:460
+#, kde-format
+msgid "Unknown engine '%1'."
+msgstr "알 수 없는 엔진 '%1'."
+
+#: scangallery.cpp:98
+#, kde-format
+msgid "Name"
+msgstr "이름"
+
+#: scangallery.cpp:99
+#, kde-format
+msgid "Size"
+msgstr "크기"
+
+#: scangallery.cpp:100
+#, kde-format
+msgid "Format"
+msgstr "형식"
+
+#: scangallery.cpp:171
+#, kde-format
+msgid "Kooka Gallery"
+msgstr "Kooka 갤러리"
+
+#: scangallery.cpp:375
+#, kde-format
+msgid "empty"
+msgstr "비어 있음"
+
+#: scangallery.cpp:378
+#, kde-format
+msgid "one image"
+msgid_plural "%1 images"
+msgstr[0] "그림 %1개"
+
+#: scangallery.cpp:380
+#, kde-format
+msgid "one file"
+msgid_plural "%1 files"
+msgstr[0] "파일 %1개"
+
+#: scangallery.cpp:386
+#, kde-format
+msgid "one file, "
+msgid_plural "%1 files, "
+msgstr[0] "파일 %1개, "
+
+#: scangallery.cpp:388
+#, kde-format
+msgid "one image, "
+msgid_plural "%1 images, "
+msgstr[0] "그림 %1개, "
+
+#: scangallery.cpp:391
+#, kde-format
+msgid "1 folder"
+msgid_plural "%1 folders"
+msgstr[0] "폴더 %1개"
+
+#: scangallery.cpp:446
+#, kde-format
+msgid " %1 x %2"
+msgstr " %1 x %2"
+
+#: scangallery.cpp:602
+#, kde-format
+msgid ""
+"You entered a file extension that differs from the existing one. That is not "
+"yet possible. Converting 'on the fly' is planned for a future release.\n"
+"Kooka corrects the extension."
+msgstr ""
+"실제 확장자와 다른 확장자를 입력했습니다. 아직 가능하지 않습니다. 즉석 변환"
+"은 차기 버전에서 준비 중입니다.\n"
+"Kooka에서 확장자를 수정합니다."
+
+#: scangallery.cpp:604
+#, kde-format
+msgid "On the Fly Conversion"
+msgstr "즉석 변환"
+
+#: scangallery.cpp:700
+#, kde-format
+msgid "Not a supported image format"
+msgstr "지원하는 그림 파일 형식이 아님"
+
+#: scangallery.cpp:752
+#, kde-format
+msgid "Sub-image %1"
+msgstr "하위 그림 %1"
+
+#: scangallery.cpp:778
+#, kde-kuit-format
+msgctxt "@info"
+msgid "Unable to load the image <filename>%2</filename><nl/>%1"
+msgstr "그림 파일 <filename>%2</filename>을(를) 불러올 수 없음<nl/>%1"
+
+#: scangallery.cpp:780
+#, kde-format
+msgid "Image Load Error"
+msgstr "그림 불러오기 오류"
+
+#: scangallery.cpp:842
+#, kde-format
+msgid "Incoming/"
+msgstr "가져옴/"
+
+#: scangallery.cpp:888
+#, kde-kuit-format
+msgctxt "@info"
+msgid "Could not save the image<nl/><filename>%2</filename><nl/>%1"
+msgstr "그림 파일<nl/><filename>%2</filename>을(를) 저장할 수 없음<nl/>%1"
+
+#: scangallery.cpp:891
+#, kde-format
+msgid "Image Save Error"
+msgstr "그림 저장 오류"
+
+#: scangallery.cpp:970
+#, kde-format
+msgid "All Files (*)"
+msgstr "모든 파일 (*)"
+
+#: scangallery.cpp:973
+#, kde-format
+msgctxt "@title:window"
+msgid "Export Image"
+msgstr "그림 내보내기"
+
+#: scangallery.cpp:998
+#, kde-format
+msgid "Import Image File to Gallery"
+msgstr "그림 파일을 갤러리로 가져오기"
+
+#: scangallery.cpp:1113
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"Do you really want to permanently delete the folder<nl/><filename>%1</"
+"filename><nl/>and all of its contents? It cannot be restored."
+msgstr ""
+"다음 폴더와 포함된 모든 파일을 완전히 삭제하시겠습니까?<nl/><filename>%1</"
+"filename><nl/>이 작업은 취소할 수 없습니다."
+
+#: scangallery.cpp:1118
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"Do you really want to permanently delete the image<nl/><filename>%1</"
+"filename>?<nl/>It cannot be restored."
+msgstr ""
+"다음 그림 파일을 완전히 삭제하시겠습니까?<nl/><filename>%1</filename><nl/>이 "
+"작업은 취소할 수 없습니다."
+
+#: scangallery.cpp:1125
+#, kde-format
+msgid "Delete Gallery Item"
+msgstr "갤러리 항목 삭제"
+
+#: scangallery.cpp:1138
+#, kde-kuit-format
+msgctxt "@info"
+msgid "Could not delete the image or folder<nl/><filename>%2</filename><nl/>%1"
+msgstr ""
+"그림 파일이나 폴더<nl/><filename>%2</filename>을(를) 삭제할 수 없음<nl/>%1"
+
+#: scangallery.cpp:1141
+#, kde-format
+msgid "File Delete Error"
+msgstr "파일 삭제 오류"
+
+#: scangallery.cpp:1173
+#, kde-format
+msgid "New Folder"
+msgstr "새 폴더"
+
+#: scangallery.cpp:1174
+#, kde-format
+msgid "Name for the new folder:"
+msgstr "새 폴더 이름:"
+
+#: scangallery.cpp:1197
+#, kde-kuit-format
+msgctxt "@info"
+msgid "Could not create the folder<nl/><filename>%2</filename><nl/>%1"
+msgstr "폴더를 만들 수 없음:<nl/><filename>%2</filename><nl/>%1"
+
+#: scangallery.cpp:1199
+#, kde-format
+msgid "Folder Create Error"
+msgstr "폴더 생성 오류"
+
+#: scanpresetsdialog.cpp:63
+#, kde-format
+msgid "Scan Presets"
+msgstr "스캔 사전 설정"
+
+#: scanpresetsdialog.cpp:76
+#, kde-format
+msgid "Saved scan preset sets:"
+msgstr "스캔 사전 설정 모음 저장:"
+
+#: scanpresetsdialog.cpp:80
+#, kde-format
+msgid "Select"
+msgstr "선택"
+
+#: scanpresetsdialog.cpp:82
+#, kde-format
+msgid "Load the selected scan preset set to use as scanner settings"
+msgstr "설정한 스캔 설정을 이번 스캔에 사용하도록 불러오기"
+
+#: scanpresetsdialog.cpp:86
+#, kde-format
+msgid "Save..."
+msgstr "저장..."
+
+#: scanpresetsdialog.cpp:88
+#, kde-format
+msgid "Save the current scanner settings as a new scan preset set"
+msgstr "현재 스캐너 설정을 새 스캔 사전 설정 모음으로 저장"
+
+#: scanpresetsdialog.cpp:94
+#, kde-format
+msgid "Delete the selected scan preset set"
+msgstr "선택한 스캔 사전 설정 삭제"
+
+#: scanpresetsdialog.cpp:98
+#, kde-format
+msgid "Edit..."
+msgstr "편집..."
+
+#: scanpresetsdialog.cpp:100
+#, kde-format
+msgid "Change the name or description of the selected scan preset set"
+msgstr "선택한 스캔 사전 설정 모음의 이름이나 설명 편집"
+
+#: scanpresetsdialog.cpp:146
+#, kde-format
+msgid "No preset set selected."
+msgstr "스캔 사전 설정 모음을 선택하지 않았습니다."
+
+#: scanpresetsdialog.cpp:212
+#, kde-format
+msgctxt "New set name, %1=scan mode, %2=resolution"
+msgid "%1, %2 dpi"
+msgstr "%1, %2 dpi"
+
+#: scanpresetsdialog.cpp:289
+#, kde-kuit-format
+msgctxt "@info"
+msgid "Do you really want to delete the set <resource>%1</resource>?"
+msgstr "스캔 사전 설정 모음 <resource>%1</resource>을(를) 삭제하시겠습니까?"
+
+#: scanpresetsdialog.cpp:290
+#, kde-format
+msgid "Delete Scan Preset Set"
+msgstr "스캔 사전 설정 모음 삭제"
+
+#: statusbarmanager.cpp:52
+#, kde-format
+msgctxt "@info:status"
+msgid "Ready"
+msgstr "준비"
+
+#: statusbarmanager.cpp:59
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "The size of the image being viewed in the gallery"
+msgstr "갤러리에서 보고 있는 그림 크기"
+
+#: statusbarmanager.cpp:67
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "The size of the selected area that will be scanned"
+msgstr "스캔할 선택 영역 크기"
+
+#: statusbarmanager.cpp:75
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"<qt>This is the uncompressed size of the scanned image. It tries to warn you "
+"if you try to produce too big an image by changing its background color."
+msgstr ""
+"<qt>스캔한 그림의 압축하지 않은 크기입니다. 배경색을 바꿔서 너무 큰 그림을 생"
+"성하려고 할 때 경고합니다."
+
+#: statusbarmanager.cpp:108
+#, kde-format
+msgctxt "@info:status"
+msgid "Image: %1"
+msgstr "그림: %1"
+
+#: statusbarmanager.cpp:112
+#, kde-format
+msgctxt "@info:status"
+msgid "Scan: %1"
+msgstr "스캔: %1"
+
+#: thumbview.cpp:96
+#, kde-format
+msgid "Thumbnails"
+msgstr "축소판"
+
+#: thumbview.cpp:107
+#, kde-format
+msgid "Preview Size"
+msgstr "미리 보기 크기"
+
+#: thumbview.cpp:338
+#, kde-format
+msgid "Very Large"
+msgstr "매우 크게"
+
+#: thumbview.cpp:339
+#, kde-format
+msgid "Large"
+msgstr "크게"
+
+#: thumbview.cpp:340
+#, kde-format
+msgid "Medium"
+msgstr "중간"
+
+#: thumbview.cpp:341
+#, kde-format
+msgid "Small"
+msgstr "작게"
+
+#: thumbview.cpp:342
+#, kde-format
+msgid "Very Small"
+msgstr "매우 작게"
+
+#: thumbview.cpp:343
+#, kde-format
+msgid "Tiny"
+msgstr "가장 작게"
+
+#~ msgid "PhotoCopier"
+#~ msgstr "복사기"
+
+#~ msgid "Print options"
+#~ msgstr "인쇄 설정"
+
+#~ msgid "Copies: "
+#~ msgstr "복사 부수:"
+
+#~ msgid "Scanner Settings: %1"
+#~ msgstr "스캐너 설정: %1"
+
+#~ msgid "Scan size:"
+#~ msgstr "스캔 크기:"
+
+#~ msgid "Photocopy..."
+#~ msgstr "복사..."
+
+#~ msgid "Loading non-local images is not yet implemented"
+#~ msgstr "로컬에 없는 그림 불러오기는 아직 구현되지 않았음"
+
+#~ msgid "Image loading failed"
+#~ msgstr "그림을 불러올 수 없음"
+
+#~ msgid "Failed to open TIFF file"
+#~ msgstr "TIFF 파일을 열 수 없음"
+
+#~ msgid "Failed to read TIFF directory"
+#~ msgstr "TIFF 디렉터리에서 읽을 수 없음"
+
+#~ msgid "Failed to read TIFF image"
+#~ msgstr "TIFF 그림을 읽을 수 없음"
+
+#~ msgid "TIFF not supported"
+#~ msgstr "TIFF를 지원하지 않음"
+
+#~ msgid "Print %1"
+#~ msgstr "%1 인쇄"
+
+#~ msgid "unknown"
+#~ msgstr "알 수 없음"
+
+#~ msgid "GOCR"
+#~ msgstr "GOCR"
+
+#, fuzzy
+#~| msgid "Save failed"
+#~ msgid "failed"
+#~ msgstr "저장 실패"
+
+#~ msgid "Image Printing"
+#~ msgstr "이미지 인쇄"
+
+#~ msgid "Screen scaling. That prints according to the screen resolution."
+#~ msgstr "화면 조정 조절. 화면 해상도에 따라 인쇄됩니다."
+
+#~ msgid "Original size (calculate from scan resolution)"
+#~ msgstr "기본 크기 (스캔시 해상도로 계산)"
+
+#~ msgid ""
+#~ "Calculates the print size from the scan resolution. Enter the scan "
+#~ "resolution in the dialog field below."
+#~ msgstr ""
+#~ "스캔 해상도에서 인쇄 크기를 계산합니다. 아래의 대화 상자 영역에 스캔 해상"
+#~ "도를 입력하십시오."
+
+#~ msgid "Scale image to custom dimension"
+#~ msgstr "사용자 지정 차원으로 이미지 조정"
+
+#~ msgid "Scale image to fit to page"
+#~ msgstr "종이에 맞게 이미지 조정 조절"
+
+#~ msgid ""
+#~ "Printout uses maximum space on the selected pager. Aspect ratio is "
+#~ "maintained."
+#~ msgstr "선택된 종이의 최대 공간을 사용합니다. 가로 세로비는 유지됩니다."
+
+#~ msgid "Resolutions"
+#~ msgstr "해상도"
+
+#~ msgid "Please specify a scan resolution larger than 0"
+#~ msgstr "스캔 해상도를 0보다 크게 설정하십시오."
+
+#~ msgid ""
+#~ "For custom printing, a valid size should be specified.\n"
+#~ "At least one dimension is zero."
+#~ msgstr ""
+#~ "사용자 지정 인쇄를 위해, 유효한 크기를 지정하십시오.\n"
+#~ "적어도 일차원은 0이어야 합니다."
+
+#~ msgid "Create Folder..."
+#~ msgstr "폴더 만들기..."
+
+#~ msgid "Delete"
+#~ msgstr "삭제"
+
+#~ msgid "Query network for available scanners"
+#~ msgstr "사용 가능한 스캐너 네트워크 조회"
