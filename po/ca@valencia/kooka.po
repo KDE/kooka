@@ -1269,7 +1269,7 @@ msgstr "Escalat"
 #, kde-format
 msgctxt "@option:radio"
 msgid "Size as on screen"
-msgstr "Escala a la mateixa mida que a la pantalla"
+msgstr "Escala a la mateixa mida que en la pantalla"
 
 #: imgprintdialog.cpp:101
 #, kde-format
@@ -1278,7 +1278,7 @@ msgid ""
 "<div>Print at the same size as seen on screen, determined by the screen "
 "resolution.</div>"
 msgstr ""
-"<div>Imprimix a la mateixa mida que es veu a la pantalla, determinat per la "
+"<div>Imprimix a la mateixa mida que es veu en la pantalla, determinat per la "
 "resolució de la pantalla.</div>"
 
 #: imgprintdialog.cpp:105
@@ -1926,10 +1926,10 @@ msgid ""
 "\"a:2\">add a device</link> if a scanner is not automatically detected."
 msgstr ""
 "<title>Mode de galeria - No s'ha seleccionat cap escàner</title>><nl/><nl/"
-">En este mode podeu veure, manipular i fer OCR de les imatges que ja estan a "
-"la galeria.<nl/><nl/><link url=\"a:1\">Seleccioneu un dispositiu d'escàner</"
-"link> per portar a terme l'escaneig, o <link url=\"a:2\">afegiu un "
-"dispositiu</link> si no s'ha detectat automàticament cap escàner."
+">En este mode podeu veure, manipular i fer OCR de les imatges que ja es "
+"troben en la galeria.<nl/><nl/><link url=\"a:1\">Seleccioneu un dispositiu "
+"d'escàner</link> per portar a terme l'escaneig, o <link url=\"a:2\">afegiu "
+"un dispositiu</link> si no s'ha detectat automàticament cap escàner."
 
 #: kookascanparams.cpp:114
 #, kde-format
@@ -3019,7 +3019,7 @@ msgstr "Llest"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "The size of the image being viewed in the gallery"
-msgstr "La mida de la imatge que es visualitzarà a la galeria"
+msgstr "La mida de la imatge que es visualitzarà en la galeria"
 
 #: statusbarmanager.cpp:67
 #, kde-format

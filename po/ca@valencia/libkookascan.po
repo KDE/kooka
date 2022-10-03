@@ -696,7 +696,7 @@ msgstr "No es pot previsualitzar en el mode «Escàner virtual»"
 #: scansettings.kcfg:12
 #, kde-format
 msgid "Query network for available scanners"
-msgstr "Busca a la xarxa per a dispositius d'escaneig"
+msgstr "Busca en la xarxa per a dispositius d'escaneig"
 
 #. i18n: ectx: tooltip, entry (StartupOnlyLocal), group (Startup)
 #: scansettings.kcfg:13
