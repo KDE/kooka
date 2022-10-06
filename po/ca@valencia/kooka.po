@@ -864,7 +864,7 @@ msgstr "Nom o camí cap a l'executable de Tesseract:"
 #: desktop/kookaui.rc:5
 #, kde-format
 msgid "&File"
-msgstr "&Fitxer"
+msgstr "Fi&txer"
 
 #. i18n: ectx: Menu (scan)
 #: desktop/kookaui.rc:22
