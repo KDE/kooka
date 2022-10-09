@@ -1928,7 +1928,7 @@ msgstr ""
 "<title>Mode de galeria - No s'ha seleccionat cap escàner</title>><nl/><nl/"
 ">En este mode podeu veure, manipular i fer OCR de les imatges que ja es "
 "troben en la galeria.<nl/><nl/><link url=\"a:1\">Seleccioneu un dispositiu "
-"d'escàner</link> per portar a terme l'escaneig, o <link url=\"a:2\">afegiu "
+"d'escàner</link> per a portar a terme l'escaneig, o <link url=\"a:2\">afegiu "
 "un dispositiu</link> si no s'ha detectat automàticament cap escàner."
 
 #: kookascanparams.cpp:114
@@ -2423,7 +2423,7 @@ msgid ""
 "Please select and configure one in order to perform OCR."
 msgstr ""
 "No s'ha seleccionat cap motor OCR.\n"
-"Seleccioneu-ne un i configureu-lo per portar a terme OCR."
+"Seleccioneu-ne un i configureu-lo per a portar a terme OCR."
 
 #: kookaview.cpp:786
 #, kde-format
@@ -2681,7 +2681,8 @@ msgid ""
 "Use this button to reenable all messages and questions which\n"
 "have been hidden by using \"Don't ask me again\"."
 msgstr ""
-"Utilitzeu este botó per tornar a activar tots els missatges i qüestions que\n"
+"Utilitzeu este botó per a tornar a activar tots els missatges i qüestions "
+"que\n"
 "s'havien ocultat utilitzant «No tornes a preguntar»."
 
 #: prefspages.cpp:83
