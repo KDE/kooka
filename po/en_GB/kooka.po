@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-10-01 00:45+0000\n"
+"POT-Creation-Date: 2022-10-10 00:44+0000\n"
 "PO-Revision-Date: 2022-01-01 15:34+0000\n"
 "Last-Translator: Steve Allewell <steve.allewell@gmail.com>\n"
 "Language-Team: British English <kde-l10n-en_gb@kde.org>\n"
@@ -72,7 +72,6 @@ msgid "Application:"
 msgstr "Application:"
 
 #: ../plugins/destination/application/destinationapplication.cpp:198
-#: ../plugins/destination/export/destinationexport.cpp:111
 #: ../plugins/destination/share/destinationshare.cpp:137
 #, kde-format
 msgid "Image format:"
@@ -82,108 +81,6 @@ msgstr "Image format:"
 #, kde-format
 msgid "Copying image to clipboard"
 msgstr "Copying image to clipboard"
-
-#: ../plugins/destination/export/destinationexport.cpp:115
-#, kde-format
-msgid "Online service:"
-msgstr "Online service:"
-
-#: ../plugins/destination/export/destinationexport.cpp:172
-#: ../plugins/destination/share/destinationshare.cpp:151
-#, kde-kuit-format
-msgid "<application>%1</application>"
-msgstr "<application>%1</application>"
-
-#: ../plugins/destination/export/kookakipihelper.cpp:58
-#, kde-format
-msgid "Helper command for the 'Export to Online Service' plugin"
-msgstr "Helper command for the 'Export to Online Service' plugin"
-
-#: ../plugins/destination/export/kookakipihelper.cpp:61
-#, kde-format
-msgid "(C) 2021, the Kooka developers and contributors"
-msgstr "(C) 2021, the Kooka developers and contributors"
-
-#: ../plugins/destination/export/kookakipihelper.cpp:79
-#, kde-format
-msgid "Kooka KIPI Helper"
-msgstr "Kooka KIPI Helper"
-
-#: ../plugins/destination/export/kookakipihelper.cpp:91 main.cpp:90
-#, kde-format
-msgid "Jonathan Marten"
-msgstr "Jonathan Marten"
-
-#: ../plugins/destination/export/kookakipihelper.cpp:91
-#, kde-format
-msgid "Current maintainer, KDE4/KF5 port"
-msgstr "Current maintainer, KDE4/KF5 port"
-
-#: ../plugins/destination/export/kookakipihelper.cpp:99
-#, kde-format
-msgid "List all of the available KIPI plugin actions"
-msgstr "List all of the available KIPI plugin actions"
-
-#: ../plugins/destination/export/kookakipihelper.cpp:102
-#, kde-format
-msgid "The KIPI plugin action to export to"
-msgstr "The KIPI plugin action to export to"
-
-#: ../plugins/destination/export/kookakipihelper.cpp:102
-#, kde-format
-msgid "action"
-msgstr "action"
-
-#: ../plugins/destination/export/kookakipihelper.cpp:105
-#, kde-format
-msgid "URLs of the image files to export"
-msgstr "URLs of the image files to export"
-
-#: ../plugins/destination/export/kookakipihelper.cpp:114
-#, kde-format
-msgid "Cannot specify both list ('-l') and share ('-s') mode"
-msgstr "Cannot specify both list ('-l') and share ('-s') mode"
-
-#: ../plugins/destination/export/kookakipihelper.cpp:115
-#, kde-format
-msgid "Arguments ignored in list ('-l') mode"
-msgstr "Arguments ignored in list ('-l') mode"
-
-#: ../plugins/destination/export/kookakipihelper.cpp:119
-#, kde-format
-msgid "Arguments missing for share ('-s') mode"
-msgstr "Arguments missing for share ('-s') mode"
-
-#: ../plugins/destination/export/kookakipihelper.cpp:121
-#, kde-format
-msgid "One of either list ('-l') or share ('-s') mode must be specified"
-msgstr "One of either list ('-l') or share ('-s') mode must be specified"
-
-#: ../plugins/destination/export/kookakipihelper.cpp:171
-#, kde-format
-msgctxt "as added to action text"
-msgid "..."
-msgstr "..."
-
-#: ../plugins/destination/export/kookakipihelper.cpp:193
-#, kde-format
-msgid "Argument '%1' is not a local file, ignored"
-msgstr "Argument '%1' is not a local file, ignored"
-
-#: ../plugins/destination/export/kookakipihelper.cpp:200
-#, kde-format
-msgid "File '%1' not found or is unreadable, ignored"
-msgstr "File '%1' not found or is unreadable, ignored"
-
-#: ../plugins/destination/export/kookakipihelper.cpp:207
-#, kde-format
-msgid "No usable files to share"
-msgstr "No usable files to share"
-
-#: ../plugins/destination/export/kookakipihelper.cpp:223
-#, kde-format
-msgid "Unknown plugin action '%1'"
-msgstr "Unknown plugin action '%1'"
 
 #: ../plugins/destination/gallery/destinationgallery.cpp:74
 #, kde-kuit-format
@@ -265,6 +162,11 @@ msgstr ""
 #, kde-format
 msgid "Share to:"
 msgstr "Share to:"
+
+#: ../plugins/destination/share/destinationshare.cpp:151
+#, kde-kuit-format
+msgid "<application>%1</application>"
+msgstr "<application>%1</application>"
 
 #: ../plugins/destination/share/destinationshare.cpp:217
 #, kde-kuit-format
@@ -2511,6 +2413,11 @@ msgstr "Kooka"
 
 #: main.cpp:90
 #, kde-format
+msgid "Jonathan Marten"
+msgstr "Jonathan Marten"
+
+#: main.cpp:90
+#, kde-format
 msgid "Current maintainer, KDE4 port"
 msgstr "Current maintainer, KDE4 port"
 
@@ -3047,6 +2954,61 @@ msgstr "Very Small"
 #, kde-format
 msgid "Tiny"
 msgstr "Tiny"
+
+#~ msgid "Online service:"
+#~ msgstr "Online service:"
+
+#~ msgid "Helper command for the 'Export to Online Service' plugin"
+#~ msgstr "Helper command for the 'Export to Online Service' plugin"
+
+#~ msgid "(C) 2021, the Kooka developers and contributors"
+#~ msgstr "(C) 2021, the Kooka developers and contributors"
+
+#~ msgid "Kooka KIPI Helper"
+#~ msgstr "Kooka KIPI Helper"
+
+#~ msgid "Current maintainer, KDE4/KF5 port"
+#~ msgstr "Current maintainer, KDE4/KF5 port"
+
+#~ msgid "List all of the available KIPI plugin actions"
+#~ msgstr "List all of the available KIPI plugin actions"
+
+#~ msgid "The KIPI plugin action to export to"
+#~ msgstr "The KIPI plugin action to export to"
+
+#~ msgid "action"
+#~ msgstr "action"
+
+#~ msgid "URLs of the image files to export"
+#~ msgstr "URLs of the image files to export"
+
+#~ msgid "Cannot specify both list ('-l') and share ('-s') mode"
+#~ msgstr "Cannot specify both list ('-l') and share ('-s') mode"
+
+#~ msgid "Arguments ignored in list ('-l') mode"
+#~ msgstr "Arguments ignored in list ('-l') mode"
+
+#~ msgid "Arguments missing for share ('-s') mode"
+#~ msgstr "Arguments missing for share ('-s') mode"
+
+#~ msgid "One of either list ('-l') or share ('-s') mode must be specified"
+#~ msgstr "One of either list ('-l') or share ('-s') mode must be specified"
+
+#~ msgctxt "as added to action text"
+#~ msgid "..."
+#~ msgstr "..."
+
+#~ msgid "Argument '%1' is not a local file, ignored"
+#~ msgstr "Argument '%1' is not a local file, ignored"
+
+#~ msgid "File '%1' not found or is unreadable, ignored"
+#~ msgstr "File '%1' not found or is unreadable, ignored"
+
+#~ msgid "No usable files to share"
+#~ msgstr "No usable files to share"
+
+#~ msgid "Unknown plugin action '%1'"
+#~ msgstr "Unknown plugin action '%1'"
 
 #~ msgid "PhotoCopier"
 #~ msgstr "Photocopier"

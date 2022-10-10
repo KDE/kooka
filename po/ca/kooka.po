@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-10-01 00:45+0000\n"
+"POT-Creation-Date: 2022-10-10 00:44+0000\n"
 "PO-Revision-Date: 2022-09-07 19:07+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -70,7 +70,6 @@ msgid "Application:"
 msgstr "Aplicació:"
 
 #: ../plugins/destination/application/destinationapplication.cpp:198
-#: ../plugins/destination/export/destinationexport.cpp:111
 #: ../plugins/destination/share/destinationshare.cpp:137
 #, kde-format
 msgid "Image format:"
@@ -80,108 +79,6 @@ msgstr "Format de la imatge:"
 #, kde-format
 msgid "Copying image to clipboard"
 msgstr "S'està copiant la imatge al porta-retalls"
-
-#: ../plugins/destination/export/destinationexport.cpp:115
-#, kde-format
-msgid "Online service:"
-msgstr "Servei en línia:"
-
-#: ../plugins/destination/export/destinationexport.cpp:172
-#: ../plugins/destination/share/destinationshare.cpp:151
-#, kde-kuit-format
-msgid "<application>%1</application>"
-msgstr "<application>%1</application>"
-
-#: ../plugins/destination/export/kookakipihelper.cpp:58
-#, kde-format
-msgid "Helper command for the 'Export to Online Service' plugin"
-msgstr "Ordre de l'ajudant per al connector «Exporta a un servei en línia»"
-
-#: ../plugins/destination/export/kookakipihelper.cpp:61
-#, kde-format
-msgid "(C) 2021, the Kooka developers and contributors"
-msgstr "(C) 2021, els desenvolupadors i col·laboradors del Kooka"
-
-#: ../plugins/destination/export/kookakipihelper.cpp:79
-#, kde-format
-msgid "Kooka KIPI Helper"
-msgstr "Ajudant KIPI del Kooka"
-
-#: ../plugins/destination/export/kookakipihelper.cpp:91 main.cpp:90
-#, kde-format
-msgid "Jonathan Marten"
-msgstr "Jonathan Marten"
-
-#: ../plugins/destination/export/kookakipihelper.cpp:91
-#, kde-format
-msgid "Current maintainer, KDE4/KF5 port"
-msgstr "Mantenidor actual, adaptació al KDE4/KF5"
-
-#: ../plugins/destination/export/kookakipihelper.cpp:99
-#, kde-format
-msgid "List all of the available KIPI plugin actions"
-msgstr "Llista totes les accions disponibles el connector KIPI"
-
-#: ../plugins/destination/export/kookakipihelper.cpp:102
-#, kde-format
-msgid "The KIPI plugin action to export to"
-msgstr "L'acció del connector KIPI per a exportar a"
-
-#: ../plugins/destination/export/kookakipihelper.cpp:102
-#, kde-format
-msgid "action"
-msgstr "acció"
-
-#: ../plugins/destination/export/kookakipihelper.cpp:105
-#, kde-format
-msgid "URLs of the image files to export"
-msgstr "Els URL dels fitxers d'imatge a exportar"
-
-#: ../plugins/destination/export/kookakipihelper.cpp:114
-#, kde-format
-msgid "Cannot specify both list ('-l') and share ('-s') mode"
-msgstr "No es pot especificar llista («-l») ni mode de compartir («-s»)"
-
-#: ../plugins/destination/export/kookakipihelper.cpp:115
-#, kde-format
-msgid "Arguments ignored in list ('-l') mode"
-msgstr "Arguments ignorats en el mode llista («-l»)"
-
-#: ../plugins/destination/export/kookakipihelper.cpp:119
-#, kde-format
-msgid "Arguments missing for share ('-s') mode"
-msgstr "Manquen arguments en el mode compartir («-s»)"
-
-#: ../plugins/destination/export/kookakipihelper.cpp:121
-#, kde-format
-msgid "One of either list ('-l') or share ('-s') mode must be specified"
-msgstr "Cal especificar o el mode llista («-l») o el mode compartir («-l»)"
-
-#: ../plugins/destination/export/kookakipihelper.cpp:171
-#, kde-format
-msgctxt "as added to action text"
-msgid "..."
-msgstr "..."
-
-#: ../plugins/destination/export/kookakipihelper.cpp:193
-#, kde-format
-msgid "Argument '%1' is not a local file, ignored"
-msgstr "L'argument «%1» no és cap fitxer local, s'ignora"
-
-#: ../plugins/destination/export/kookakipihelper.cpp:200
-#, kde-format
-msgid "File '%1' not found or is unreadable, ignored"
-msgstr "No s'ha trobat el fitxer «%1» o no es pot llegir, s'ignora"
-
-#: ../plugins/destination/export/kookakipihelper.cpp:207
-#, kde-format
-msgid "No usable files to share"
-msgstr "No hi ha fitxers usables per a compartir"
-
-#: ../plugins/destination/export/kookakipihelper.cpp:223
-#, kde-format
-msgid "Unknown plugin action '%1'"
-msgstr "Acció «%1» desconeguda del motor"
 
 #: ../plugins/destination/gallery/destinationgallery.cpp:74
 #, kde-kuit-format
@@ -265,6 +162,11 @@ msgstr ""
 #, kde-format
 msgid "Share to:"
 msgstr "Comparteix a:"
+
+#: ../plugins/destination/share/destinationshare.cpp:151
+#, kde-kuit-format
+msgid "<application>%1</application>"
+msgstr "<application>%1</application>"
 
 #: ../plugins/destination/share/destinationshare.cpp:217
 #, kde-kuit-format
@@ -2544,6 +2446,11 @@ msgstr "Kooka"
 
 #: main.cpp:90
 #, kde-format
+msgid "Jonathan Marten"
+msgstr "Jonathan Marten"
+
+#: main.cpp:90
+#, kde-format
 msgid "Current maintainer, KDE4 port"
 msgstr "Mantenidor actual, adaptació al KDE 4"
 
@@ -3090,6 +2997,61 @@ msgstr "Molt petita"
 #, kde-format
 msgid "Tiny"
 msgstr "Minúscula"
+
+#~ msgid "Online service:"
+#~ msgstr "Servei en línia:"
+
+#~ msgid "Helper command for the 'Export to Online Service' plugin"
+#~ msgstr "Ordre de l'ajudant per al connector «Exporta a un servei en línia»"
+
+#~ msgid "(C) 2021, the Kooka developers and contributors"
+#~ msgstr "(C) 2021, els desenvolupadors i col·laboradors del Kooka"
+
+#~ msgid "Kooka KIPI Helper"
+#~ msgstr "Ajudant KIPI del Kooka"
+
+#~ msgid "Current maintainer, KDE4/KF5 port"
+#~ msgstr "Mantenidor actual, adaptació al KDE4/KF5"
+
+#~ msgid "List all of the available KIPI plugin actions"
+#~ msgstr "Llista totes les accions disponibles el connector KIPI"
+
+#~ msgid "The KIPI plugin action to export to"
+#~ msgstr "L'acció del connector KIPI per a exportar a"
+
+#~ msgid "action"
+#~ msgstr "acció"
+
+#~ msgid "URLs of the image files to export"
+#~ msgstr "Els URL dels fitxers d'imatge a exportar"
+
+#~ msgid "Cannot specify both list ('-l') and share ('-s') mode"
+#~ msgstr "No es pot especificar llista («-l») ni mode de compartir («-s»)"
+
+#~ msgid "Arguments ignored in list ('-l') mode"
+#~ msgstr "Arguments ignorats en el mode llista («-l»)"
+
+#~ msgid "Arguments missing for share ('-s') mode"
+#~ msgstr "Manquen arguments en el mode compartir («-s»)"
+
+#~ msgid "One of either list ('-l') or share ('-s') mode must be specified"
+#~ msgstr "Cal especificar o el mode llista («-l») o el mode compartir («-l»)"
+
+#~ msgctxt "as added to action text"
+#~ msgid "..."
+#~ msgstr "..."
+
+#~ msgid "Argument '%1' is not a local file, ignored"
+#~ msgstr "L'argument «%1» no és cap fitxer local, s'ignora"
+
+#~ msgid "File '%1' not found or is unreadable, ignored"
+#~ msgstr "No s'ha trobat el fitxer «%1» o no es pot llegir, s'ignora"
+
+#~ msgid "No usable files to share"
+#~ msgstr "No hi ha fitxers usables per a compartir"
+
+#~ msgid "Unknown plugin action '%1'"
+#~ msgstr "Acció «%1» desconeguda del motor"
 
 #~ msgid "PhotoCopier"
 #~ msgstr "Fotocopiadora"

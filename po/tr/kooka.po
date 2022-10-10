@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: playground-graphics-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-10-01 00:45+0000\n"
+"POT-Creation-Date: 2022-10-10 00:44+0000\n"
 "PO-Revision-Date: 2022-08-15 23:30+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -72,7 +72,6 @@ msgid "Application:"
 msgstr "Uygulama:"
 
 #: ../plugins/destination/application/destinationapplication.cpp:198
-#: ../plugins/destination/export/destinationexport.cpp:111
 #: ../plugins/destination/share/destinationshare.cpp:137
 #, kde-format
 msgid "Image format:"
@@ -82,108 +81,6 @@ msgstr "Görsel biçimi:"
 #, kde-format
 msgid "Copying image to clipboard"
 msgstr "Görsel panoya kopyalanıyor"
-
-#: ../plugins/destination/export/destinationexport.cpp:115
-#, kde-format
-msgid "Online service:"
-msgstr "Çevrimiçi hizmet:"
-
-#: ../plugins/destination/export/destinationexport.cpp:172
-#: ../plugins/destination/share/destinationshare.cpp:151
-#, kde-kuit-format
-msgid "<application>%1</application>"
-msgstr "<application>%1</application>"
-
-#: ../plugins/destination/export/kookakipihelper.cpp:58
-#, kde-format
-msgid "Helper command for the 'Export to Online Service' plugin"
-msgstr "'Çevrimiçi Hizmete Dışa Aktar' eklentisi için yardımcı komut"
-
-#: ../plugins/destination/export/kookakipihelper.cpp:61
-#, kde-format
-msgid "(C) 2021, the Kooka developers and contributors"
-msgstr "(C) 2021, Kooka geliştiricileri ve katkıcıları"
-
-#: ../plugins/destination/export/kookakipihelper.cpp:79
-#, kde-format
-msgid "Kooka KIPI Helper"
-msgstr "Kooka KIPI Yardımcısı"
-
-#: ../plugins/destination/export/kookakipihelper.cpp:91 main.cpp:90
-#, kde-format
-msgid "Jonathan Marten"
-msgstr "Jonathan Marten"
-
-#: ../plugins/destination/export/kookakipihelper.cpp:91
-#, kde-format
-msgid "Current maintainer, KDE4/KF5 port"
-msgstr "Projeyi sürdüren, KDE4/KF5 geçişi"
-
-#: ../plugins/destination/export/kookakipihelper.cpp:99
-#, kde-format
-msgid "List all of the available KIPI plugin actions"
-msgstr "Tüm kullanılabilir KIPI eklenti eylemlerini listele"
-
-#: ../plugins/destination/export/kookakipihelper.cpp:102
-#, kde-format
-msgid "The KIPI plugin action to export to"
-msgstr "Dışa aktarılacak KIPI eklenti eylemi"
-
-#: ../plugins/destination/export/kookakipihelper.cpp:102
-#, kde-format
-msgid "action"
-msgstr "eylem"
-
-#: ../plugins/destination/export/kookakipihelper.cpp:105
-#, kde-format
-msgid "URLs of the image files to export"
-msgstr "Dışa aktarılacak görsel dosyalarının URL'leri"
-
-#: ../plugins/destination/export/kookakipihelper.cpp:114
-#, kde-format
-msgid "Cannot specify both list ('-l') and share ('-s') mode"
-msgstr "Hem listele ('-l') ve paylaş ('-s') kipi aynı anda belirtilemiyor"
-
-#: ../plugins/destination/export/kookakipihelper.cpp:115
-#, kde-format
-msgid "Arguments ignored in list ('-l') mode"
-msgstr "Listele ('-l') kipinde argümanlar yok sayılır"
-
-#: ../plugins/destination/export/kookakipihelper.cpp:119
-#, kde-format
-msgid "Arguments missing for share ('-s') mode"
-msgstr "Paylaş ('-s') kipi için argümanlar eksik"
-
-#: ../plugins/destination/export/kookakipihelper.cpp:121
-#, kde-format
-msgid "One of either list ('-l') or share ('-s') mode must be specified"
-msgstr "Listele ('-l') veya paylaş ('-s') kipinden biri belirtilmelidir"
-
-#: ../plugins/destination/export/kookakipihelper.cpp:171
-#, kde-format
-msgctxt "as added to action text"
-msgid "..."
-msgstr "..."
-
-#: ../plugins/destination/export/kookakipihelper.cpp:193
-#, kde-format
-msgid "Argument '%1' is not a local file, ignored"
-msgstr "'%1' argümanı yerel bir dosya değil, yok sayılıyor"
-
-#: ../plugins/destination/export/kookakipihelper.cpp:200
-#, kde-format
-msgid "File '%1' not found or is unreadable, ignored"
-msgstr "'%1' dosyası bulunamadı veya okunamıyor, yok sayılıyor"
-
-#: ../plugins/destination/export/kookakipihelper.cpp:207
-#, kde-format
-msgid "No usable files to share"
-msgstr "Paylaşacak kullanılabilir dosya yok"
-
-#: ../plugins/destination/export/kookakipihelper.cpp:223
-#, kde-format
-msgid "Unknown plugin action '%1'"
-msgstr "Bilinmeyen eklenti eylemi '%1'"
 
 #: ../plugins/destination/gallery/destinationgallery.cpp:74
 #, kde-kuit-format
@@ -267,6 +164,11 @@ msgstr ""
 #, kde-format
 msgid "Share to:"
 msgstr "Şurayla paylaş:"
+
+#: ../plugins/destination/share/destinationshare.cpp:151
+#, kde-kuit-format
+msgid "<application>%1</application>"
+msgstr "<application>%1</application>"
 
 #: ../plugins/destination/share/destinationshare.cpp:217
 #, kde-kuit-format
@@ -2527,6 +2429,11 @@ msgstr "Kooka"
 
 #: main.cpp:90
 #, kde-format
+msgid "Jonathan Marten"
+msgstr "Jonathan Marten"
+
+#: main.cpp:90
+#, kde-format
 msgid "Current maintainer, KDE4 port"
 msgstr "Geçerli bakımcı, KDE4 geçişi"
 
@@ -3065,3 +2972,58 @@ msgstr "Çok Küçük"
 #, kde-format
 msgid "Tiny"
 msgstr "Minik"
+
+#~ msgid "Online service:"
+#~ msgstr "Çevrimiçi hizmet:"
+
+#~ msgid "Helper command for the 'Export to Online Service' plugin"
+#~ msgstr "'Çevrimiçi Hizmete Dışa Aktar' eklentisi için yardımcı komut"
+
+#~ msgid "(C) 2021, the Kooka developers and contributors"
+#~ msgstr "(C) 2021, Kooka geliştiricileri ve katkıcıları"
+
+#~ msgid "Kooka KIPI Helper"
+#~ msgstr "Kooka KIPI Yardımcısı"
+
+#~ msgid "Current maintainer, KDE4/KF5 port"
+#~ msgstr "Projeyi sürdüren, KDE4/KF5 geçişi"
+
+#~ msgid "List all of the available KIPI plugin actions"
+#~ msgstr "Tüm kullanılabilir KIPI eklenti eylemlerini listele"
+
+#~ msgid "The KIPI plugin action to export to"
+#~ msgstr "Dışa aktarılacak KIPI eklenti eylemi"
+
+#~ msgid "action"
+#~ msgstr "eylem"
+
+#~ msgid "URLs of the image files to export"
+#~ msgstr "Dışa aktarılacak görsel dosyalarının URL'leri"
+
+#~ msgid "Cannot specify both list ('-l') and share ('-s') mode"
+#~ msgstr "Hem listele ('-l') ve paylaş ('-s') kipi aynı anda belirtilemiyor"
+
+#~ msgid "Arguments ignored in list ('-l') mode"
+#~ msgstr "Listele ('-l') kipinde argümanlar yok sayılır"
+
+#~ msgid "Arguments missing for share ('-s') mode"
+#~ msgstr "Paylaş ('-s') kipi için argümanlar eksik"
+
+#~ msgid "One of either list ('-l') or share ('-s') mode must be specified"
+#~ msgstr "Listele ('-l') veya paylaş ('-s') kipinden biri belirtilmelidir"
+
+#~ msgctxt "as added to action text"
+#~ msgid "..."
+#~ msgstr "..."
+
+#~ msgid "Argument '%1' is not a local file, ignored"
+#~ msgstr "'%1' argümanı yerel bir dosya değil, yok sayılıyor"
+
+#~ msgid "File '%1' not found or is unreadable, ignored"
+#~ msgstr "'%1' dosyası bulunamadı veya okunamıyor, yok sayılıyor"
+
+#~ msgid "No usable files to share"
+#~ msgstr "Paylaşacak kullanılabilir dosya yok"
+
+#~ msgid "Unknown plugin action '%1'"
+#~ msgstr "Bilinmeyen eklenti eylemi '%1'"

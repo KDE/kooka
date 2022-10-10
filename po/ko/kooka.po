@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-10-01 00:45+0000\n"
+"POT-Creation-Date: 2022-10-10 00:44+0000\n"
 "PO-Revision-Date: 2022-04-16 23:02+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -62,7 +62,6 @@ msgid "Application:"
 msgstr "프로그램:"
 
 #: ../plugins/destination/application/destinationapplication.cpp:198
-#: ../plugins/destination/export/destinationexport.cpp:111
 #: ../plugins/destination/share/destinationshare.cpp:137
 #, kde-format
 msgid "Image format:"
@@ -72,108 +71,6 @@ msgstr "그림 형식:"
 #, kde-format
 msgid "Copying image to clipboard"
 msgstr "클립보드에 그림 복사하는 중"
-
-#: ../plugins/destination/export/destinationexport.cpp:115
-#, kde-format
-msgid "Online service:"
-msgstr "온라인 서비스:"
-
-#: ../plugins/destination/export/destinationexport.cpp:172
-#: ../plugins/destination/share/destinationshare.cpp:151
-#, kde-kuit-format
-msgid "<application>%1</application>"
-msgstr "<application>%1</application>"
-
-#: ../plugins/destination/export/kookakipihelper.cpp:58
-#, kde-format
-msgid "Helper command for the 'Export to Online Service' plugin"
-msgstr "'온라인 서비스로 내보내기' 도우미 명령"
-
-#: ../plugins/destination/export/kookakipihelper.cpp:61
-#, kde-format
-msgid "(C) 2021, the Kooka developers and contributors"
-msgstr "(C) 2021, the Kooka developers and contributors"
-
-#: ../plugins/destination/export/kookakipihelper.cpp:79
-#, kde-format
-msgid "Kooka KIPI Helper"
-msgstr "Kooka KIPI 도우미"
-
-#: ../plugins/destination/export/kookakipihelper.cpp:91 main.cpp:90
-#, kde-format
-msgid "Jonathan Marten"
-msgstr "Jonathan Marten"
-
-#: ../plugins/destination/export/kookakipihelper.cpp:91
-#, kde-format
-msgid "Current maintainer, KDE4/KF5 port"
-msgstr "현재 관리자, KDE4/KF5 이식"
-
-#: ../plugins/destination/export/kookakipihelper.cpp:99
-#, kde-format
-msgid "List all of the available KIPI plugin actions"
-msgstr "모든 KIPI 플러그인 동작 표시"
-
-#: ../plugins/destination/export/kookakipihelper.cpp:102
-#, kde-format
-msgid "The KIPI plugin action to export to"
-msgstr "내보낼 KIPI 플러그인 동작"
-
-#: ../plugins/destination/export/kookakipihelper.cpp:102
-#, kde-format
-msgid "action"
-msgstr "action"
-
-#: ../plugins/destination/export/kookakipihelper.cpp:105
-#, kde-format
-msgid "URLs of the image files to export"
-msgstr "내보낼 그림 파일 URL"
-
-#: ../plugins/destination/export/kookakipihelper.cpp:114
-#, kde-format
-msgid "Cannot specify both list ('-l') and share ('-s') mode"
-msgstr "목록('-l')과 공유('-s') 모드를 동시에 지정할 수 없음"
-
-#: ../plugins/destination/export/kookakipihelper.cpp:115
-#, kde-format
-msgid "Arguments ignored in list ('-l') mode"
-msgstr "목록('-l') 모드에서는 인자 무시됨"
-
-#: ../plugins/destination/export/kookakipihelper.cpp:119
-#, kde-format
-msgid "Arguments missing for share ('-s') mode"
-msgstr "공유('-s') 모드의 인자 없음"
-
-#: ../plugins/destination/export/kookakipihelper.cpp:121
-#, kde-format
-msgid "One of either list ('-l') or share ('-s') mode must be specified"
-msgstr "목록('-l')이나 공유('-s') 모드 중 하나를 지정해야 함"
-
-#: ../plugins/destination/export/kookakipihelper.cpp:171
-#, kde-format
-msgctxt "as added to action text"
-msgid "..."
-msgstr "..."
-
-#: ../plugins/destination/export/kookakipihelper.cpp:193
-#, kde-format
-msgid "Argument '%1' is not a local file, ignored"
-msgstr "인자 '%1'은(는) 로컬 파일이 아니므로 무시함"
-
-#: ../plugins/destination/export/kookakipihelper.cpp:200
-#, kde-format
-msgid "File '%1' not found or is unreadable, ignored"
-msgstr "파일 '%1'을(를) 찾거나 읽을 수 없어서 무시함"
-
-#: ../plugins/destination/export/kookakipihelper.cpp:207
-#, kde-format
-msgid "No usable files to share"
-msgstr "공유할 수 있는 파일 없음"
-
-#: ../plugins/destination/export/kookakipihelper.cpp:223
-#, kde-format
-msgid "Unknown plugin action '%1'"
-msgstr "알 수 없는 플러그인 동작 '%1'"
 
 #: ../plugins/destination/gallery/destinationgallery.cpp:74
 #, kde-kuit-format
@@ -256,6 +153,11 @@ msgstr ""
 #, kde-format
 msgid "Share to:"
 msgstr "다음으로 공유:"
+
+#: ../plugins/destination/share/destinationshare.cpp:151
+#, kde-kuit-format
+msgid "<application>%1</application>"
+msgstr "<application>%1</application>"
 
 #: ../plugins/destination/share/destinationshare.cpp:217
 #, kde-kuit-format
@@ -2478,6 +2380,11 @@ msgstr "Kooka"
 
 #: main.cpp:90
 #, kde-format
+msgid "Jonathan Marten"
+msgstr "Jonathan Marten"
+
+#: main.cpp:90
+#, kde-format
 msgid "Current maintainer, KDE4 port"
 msgstr "현재 관리자, KDE4 이식"
 
@@ -3009,6 +2916,61 @@ msgstr "매우 작게"
 #, kde-format
 msgid "Tiny"
 msgstr "가장 작게"
+
+#~ msgid "Online service:"
+#~ msgstr "온라인 서비스:"
+
+#~ msgid "Helper command for the 'Export to Online Service' plugin"
+#~ msgstr "'온라인 서비스로 내보내기' 도우미 명령"
+
+#~ msgid "(C) 2021, the Kooka developers and contributors"
+#~ msgstr "(C) 2021, the Kooka developers and contributors"
+
+#~ msgid "Kooka KIPI Helper"
+#~ msgstr "Kooka KIPI 도우미"
+
+#~ msgid "Current maintainer, KDE4/KF5 port"
+#~ msgstr "현재 관리자, KDE4/KF5 이식"
+
+#~ msgid "List all of the available KIPI plugin actions"
+#~ msgstr "모든 KIPI 플러그인 동작 표시"
+
+#~ msgid "The KIPI plugin action to export to"
+#~ msgstr "내보낼 KIPI 플러그인 동작"
+
+#~ msgid "action"
+#~ msgstr "action"
+
+#~ msgid "URLs of the image files to export"
+#~ msgstr "내보낼 그림 파일 URL"
+
+#~ msgid "Cannot specify both list ('-l') and share ('-s') mode"
+#~ msgstr "목록('-l')과 공유('-s') 모드를 동시에 지정할 수 없음"
+
+#~ msgid "Arguments ignored in list ('-l') mode"
+#~ msgstr "목록('-l') 모드에서는 인자 무시됨"
+
+#~ msgid "Arguments missing for share ('-s') mode"
+#~ msgstr "공유('-s') 모드의 인자 없음"
+
+#~ msgid "One of either list ('-l') or share ('-s') mode must be specified"
+#~ msgstr "목록('-l')이나 공유('-s') 모드 중 하나를 지정해야 함"
+
+#~ msgctxt "as added to action text"
+#~ msgid "..."
+#~ msgstr "..."
+
+#~ msgid "Argument '%1' is not a local file, ignored"
+#~ msgstr "인자 '%1'은(는) 로컬 파일이 아니므로 무시함"
+
+#~ msgid "File '%1' not found or is unreadable, ignored"
+#~ msgstr "파일 '%1'을(를) 찾거나 읽을 수 없어서 무시함"
+
+#~ msgid "No usable files to share"
+#~ msgstr "공유할 수 있는 파일 없음"
+
+#~ msgid "Unknown plugin action '%1'"
+#~ msgstr "알 수 없는 플러그인 동작 '%1'"
 
 #~ msgid "PhotoCopier"
 #~ msgstr "복사기"

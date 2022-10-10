@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-10-01 00:45+0000\n"
+"POT-Creation-Date: 2022-10-10 00:44+0000\n"
 "PO-Revision-Date: 2021-12-07 14:41+0200\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -71,7 +71,6 @@ msgid "Application:"
 msgstr "Sovellus:"
 
 #: ../plugins/destination/application/destinationapplication.cpp:198
-#: ../plugins/destination/export/destinationexport.cpp:111
 #: ../plugins/destination/share/destinationshare.cpp:137
 #, kde-format
 msgid "Image format:"
@@ -81,108 +80,6 @@ msgstr "Kuvamuoto:"
 #, kde-format
 msgid "Copying image to clipboard"
 msgstr "Kopioidaan kuva leikepöydälle"
-
-#: ../plugins/destination/export/destinationexport.cpp:115
-#, kde-format
-msgid "Online service:"
-msgstr "Verkkopalvelu:"
-
-#: ../plugins/destination/export/destinationexport.cpp:172
-#: ../plugins/destination/share/destinationshare.cpp:151
-#, kde-kuit-format
-msgid "<application>%1</application>"
-msgstr "<application>%1</application>"
-
-#: ../plugins/destination/export/kookakipihelper.cpp:58
-#, kde-format
-msgid "Helper command for the 'Export to Online Service' plugin"
-msgstr "”Vie verkkopalveluun” -liitännäisen apukomento"
-
-#: ../plugins/destination/export/kookakipihelper.cpp:61
-#, kde-format
-msgid "(C) 2021, the Kooka developers and contributors"
-msgstr "© 2021 Kookan kehittäjät ja avustajat"
-
-#: ../plugins/destination/export/kookakipihelper.cpp:79
-#, kde-format
-msgid "Kooka KIPI Helper"
-msgstr "Kookan KIPI-apuohjelma"
-
-#: ../plugins/destination/export/kookakipihelper.cpp:91 main.cpp:90
-#, kde-format
-msgid "Jonathan Marten"
-msgstr "Jonathan Marten"
-
-#: ../plugins/destination/export/kookakipihelper.cpp:91
-#, kde-format
-msgid "Current maintainer, KDE4/KF5 port"
-msgstr "Nykyinen ylläpitäjä, KDE4/KF5-siirros"
-
-#: ../plugins/destination/export/kookakipihelper.cpp:99
-#, kde-format
-msgid "List all of the available KIPI plugin actions"
-msgstr "Luettele kaikki käytettävissä olevat KIPI-liitännäistoiminnot"
-
-#: ../plugins/destination/export/kookakipihelper.cpp:102
-#, kde-format
-msgid "The KIPI plugin action to export to"
-msgstr "KIPI-liitännäistoiminto, johon viedään"
-
-#: ../plugins/destination/export/kookakipihelper.cpp:102
-#, kde-format
-msgid "action"
-msgstr "toiminto"
-
-#: ../plugins/destination/export/kookakipihelper.cpp:105
-#, kde-format
-msgid "URLs of the image files to export"
-msgstr "Vietävien kuvatiedostojen verkko-osoitteet"
-
-#: ../plugins/destination/export/kookakipihelper.cpp:114
-#, kde-format
-msgid "Cannot specify both list ('-l') and share ('-s') mode"
-msgstr "Ei voi antaa sekä luettelointi- (”-l”) että jakamistilaa (”-s”)"
-
-#: ../plugins/destination/export/kookakipihelper.cpp:115
-#, kde-format
-msgid "Arguments ignored in list ('-l') mode"
-msgstr "Luettelointitilassa (”-l”) parametrit sivuutetaan"
-
-#: ../plugins/destination/export/kookakipihelper.cpp:119
-#, kde-format
-msgid "Arguments missing for share ('-s') mode"
-msgstr "Jakamistilalta (”-s”) puuttuu parametreja"
-
-#: ../plugins/destination/export/kookakipihelper.cpp:121
-#, kde-format
-msgid "One of either list ('-l') or share ('-s') mode must be specified"
-msgstr "Joko luettelointi- (”-l”) tai jakamistila (”-s”) on annettava"
-
-#: ../plugins/destination/export/kookakipihelper.cpp:171
-#, kde-format
-msgctxt "as added to action text"
-msgid "..."
-msgstr "…"
-
-#: ../plugins/destination/export/kookakipihelper.cpp:193
-#, kde-format
-msgid "Argument '%1' is not a local file, ignored"
-msgstr "Parametri ”%1” ei ole paikallinen tiedosto: sivuutetaan"
-
-#: ../plugins/destination/export/kookakipihelper.cpp:200
-#, kde-format
-msgid "File '%1' not found or is unreadable, ignored"
-msgstr "Tiedostoa ”%1” ei löydy tai voi lukea: sivuutetaan"
-
-#: ../plugins/destination/export/kookakipihelper.cpp:207
-#, kde-format
-msgid "No usable files to share"
-msgstr "Ei jakamiskelpoisia tiedostoja"
-
-#: ../plugins/destination/export/kookakipihelper.cpp:223
-#, kde-format
-msgid "Unknown plugin action '%1'"
-msgstr "Tuntematon liitännäistoiminto ”%1”"
 
 #: ../plugins/destination/gallery/destinationgallery.cpp:74
 #, kde-kuit-format
@@ -265,6 +162,11 @@ msgstr ""
 #, kde-format
 msgid "Share to:"
 msgstr "Jaa kohteeseen:"
+
+#: ../plugins/destination/share/destinationshare.cpp:151
+#, kde-kuit-format
+msgid "<application>%1</application>"
+msgstr "<application>%1</application>"
 
 #: ../plugins/destination/share/destinationshare.cpp:217
 #, kde-kuit-format
@@ -2517,6 +2419,11 @@ msgstr "Kooka"
 
 #: main.cpp:90
 #, kde-format
+msgid "Jonathan Marten"
+msgstr "Jonathan Marten"
+
+#: main.cpp:90
+#, kde-format
 msgid "Current maintainer, KDE4 port"
 msgstr "Nykyinen ylläpitäjä, siirros KDE 4:ään"
 
@@ -3055,6 +2962,61 @@ msgstr "Erittäin pieni"
 #, kde-format
 msgid "Tiny"
 msgstr "Pienenpieni"
+
+#~ msgid "Online service:"
+#~ msgstr "Verkkopalvelu:"
+
+#~ msgid "Helper command for the 'Export to Online Service' plugin"
+#~ msgstr "”Vie verkkopalveluun” -liitännäisen apukomento"
+
+#~ msgid "(C) 2021, the Kooka developers and contributors"
+#~ msgstr "© 2021 Kookan kehittäjät ja avustajat"
+
+#~ msgid "Kooka KIPI Helper"
+#~ msgstr "Kookan KIPI-apuohjelma"
+
+#~ msgid "Current maintainer, KDE4/KF5 port"
+#~ msgstr "Nykyinen ylläpitäjä, KDE4/KF5-siirros"
+
+#~ msgid "List all of the available KIPI plugin actions"
+#~ msgstr "Luettele kaikki käytettävissä olevat KIPI-liitännäistoiminnot"
+
+#~ msgid "The KIPI plugin action to export to"
+#~ msgstr "KIPI-liitännäistoiminto, johon viedään"
+
+#~ msgid "action"
+#~ msgstr "toiminto"
+
+#~ msgid "URLs of the image files to export"
+#~ msgstr "Vietävien kuvatiedostojen verkko-osoitteet"
+
+#~ msgid "Cannot specify both list ('-l') and share ('-s') mode"
+#~ msgstr "Ei voi antaa sekä luettelointi- (”-l”) että jakamistilaa (”-s”)"
+
+#~ msgid "Arguments ignored in list ('-l') mode"
+#~ msgstr "Luettelointitilassa (”-l”) parametrit sivuutetaan"
+
+#~ msgid "Arguments missing for share ('-s') mode"
+#~ msgstr "Jakamistilalta (”-s”) puuttuu parametreja"
+
+#~ msgid "One of either list ('-l') or share ('-s') mode must be specified"
+#~ msgstr "Joko luettelointi- (”-l”) tai jakamistila (”-s”) on annettava"
+
+#~ msgctxt "as added to action text"
+#~ msgid "..."
+#~ msgstr "…"
+
+#~ msgid "Argument '%1' is not a local file, ignored"
+#~ msgstr "Parametri ”%1” ei ole paikallinen tiedosto: sivuutetaan"
+
+#~ msgid "File '%1' not found or is unreadable, ignored"
+#~ msgstr "Tiedostoa ”%1” ei löydy tai voi lukea: sivuutetaan"
+
+#~ msgid "No usable files to share"
+#~ msgstr "Ei jakamiskelpoisia tiedostoja"
+
+#~ msgid "Unknown plugin action '%1'"
+#~ msgstr "Tuntematon liitännäistoiminto ”%1”"
 
 #~ msgid "PhotoCopier"
 #~ msgstr "PhotoCopier"
