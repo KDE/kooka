@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: libkscan\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-08-06 00:43+0000\n"
+"POT-Creation-Date: 2022-10-02 00:44+0000\n"
 "PO-Revision-Date: 2006-01-10 20:28+0100\n"
 "Last-Translator: Børre Gaup <boerre@skolelinux.no>\n"
 "Language-Team: Northern Sami <l10n-no@lister.huftis.org>\n"
@@ -258,7 +258,7 @@ msgstr ""
 msgid "Reset this setting to its standard value, %1"
 msgstr ""
 
-#: kscancontrols.cpp:398
+#: kscancontrols.cpp:397
 #, kde-format
 msgid "*.pnm *.pbm *.pgm *.ppm|PNM Image Files"
 msgstr ""
@@ -379,7 +379,7 @@ msgstr "%"
 msgid "µsec"
 msgstr ""
 
-#: kscanoptset.cpp:191
+#: kscanoptset.cpp:190
 #, kde-format
 msgid "No description"
 msgstr ""

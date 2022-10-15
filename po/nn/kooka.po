@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-08-14 00:43+0000\n"
+"POT-Creation-Date: 2022-10-10 00:44+0000\n"
 "PO-Revision-Date: 2018-09-07 22:28+0200\n"
 "Last-Translator: Karl Ove Hufthammer <karl@huftis.org>\n"
 "Language-Team: Norwegian Nynorsk <l10n-no@lister.huftis.org>\n"
@@ -45,8 +45,8 @@ msgid ""
 msgstr ""
 
 #: ../plugins/destination/abstractdestination.cpp:160
-#: ../plugins/destination/application/destinationapplication.cpp:189
-#: kookaview.cpp:1175
+#: ../plugins/destination/application/destinationapplication.cpp:190
+#: kookaview.cpp:1177
 #, kde-format
 msgid "Other..."
 msgstr ""
@@ -61,13 +61,12 @@ msgstr ""
 msgid "Sending to <application>%1</application>"
 msgstr ""
 
-#: ../plugins/destination/application/destinationapplication.cpp:191
+#: ../plugins/destination/application/destinationapplication.cpp:192
 #, kde-format
 msgid "Application:"
 msgstr ""
 
-#: ../plugins/destination/application/destinationapplication.cpp:197
-#: ../plugins/destination/export/destinationexport.cpp:111
+#: ../plugins/destination/application/destinationapplication.cpp:198
 #: ../plugins/destination/share/destinationshare.cpp:137
 #, kde-format
 msgid "Image format:"
@@ -76,108 +75,6 @@ msgstr ""
 #: ../plugins/destination/clipboard/destinationclipboard.cpp:61
 #, kde-format
 msgid "Copying image to clipboard"
-msgstr ""
-
-#: ../plugins/destination/export/destinationexport.cpp:115
-#, kde-format
-msgid "Online service:"
-msgstr ""
-
-#: ../plugins/destination/export/destinationexport.cpp:172
-#: ../plugins/destination/share/destinationshare.cpp:151
-#, kde-kuit-format
-msgid "<application>%1</application>"
-msgstr ""
-
-#: ../plugins/destination/export/kookakipihelper.cpp:58
-#, kde-format
-msgid "Helper command for the 'Export to Online Service' plugin"
-msgstr ""
-
-#: ../plugins/destination/export/kookakipihelper.cpp:61
-#, kde-format
-msgid "(C) 2021, the Kooka developers and contributors"
-msgstr ""
-
-#: ../plugins/destination/export/kookakipihelper.cpp:79
-#, kde-format
-msgid "Kooka KIPI Helper"
-msgstr ""
-
-#: ../plugins/destination/export/kookakipihelper.cpp:91 main.cpp:90
-#, kde-format
-msgid "Jonathan Marten"
-msgstr ""
-
-#: ../plugins/destination/export/kookakipihelper.cpp:91
-#, kde-format
-msgid "Current maintainer, KDE4/KF5 port"
-msgstr ""
-
-#: ../plugins/destination/export/kookakipihelper.cpp:99
-#, kde-format
-msgid "List all of the available KIPI plugin actions"
-msgstr ""
-
-#: ../plugins/destination/export/kookakipihelper.cpp:102
-#, kde-format
-msgid "The KIPI plugin action to export to"
-msgstr ""
-
-#: ../plugins/destination/export/kookakipihelper.cpp:102
-#, kde-format
-msgid "action"
-msgstr ""
-
-#: ../plugins/destination/export/kookakipihelper.cpp:105
-#, kde-format
-msgid "URLs of the image files to export"
-msgstr ""
-
-#: ../plugins/destination/export/kookakipihelper.cpp:114
-#, kde-format
-msgid "Cannot specify both list ('-l') and share ('-s') mode"
-msgstr ""
-
-#: ../plugins/destination/export/kookakipihelper.cpp:115
-#, kde-format
-msgid "Arguments ignored in list ('-l') mode"
-msgstr ""
-
-#: ../plugins/destination/export/kookakipihelper.cpp:119
-#, kde-format
-msgid "Arguments missing for share ('-s') mode"
-msgstr ""
-
-#: ../plugins/destination/export/kookakipihelper.cpp:121
-#, kde-format
-msgid "One of either list ('-l') or share ('-s') mode must be specified"
-msgstr ""
-
-#: ../plugins/destination/export/kookakipihelper.cpp:171
-#, kde-format
-msgctxt "as added to action text"
-msgid "..."
-msgstr ""
-
-#: ../plugins/destination/export/kookakipihelper.cpp:193
-#, kde-format
-msgid "Argument '%1' is not a local file, ignored"
-msgstr ""
-
-#: ../plugins/destination/export/kookakipihelper.cpp:200
-#, kde-format
-msgid "File '%1' not found or is unreadable, ignored"
-msgstr ""
-
-#: ../plugins/destination/export/kookakipihelper.cpp:207
-#, kde-format
-msgid "No usable files to share"
-msgstr ""
-
-#: ../plugins/destination/export/kookakipihelper.cpp:223
-#, kde-format
-msgid "Unknown plugin action '%1'"
 msgstr ""
 
 #: ../plugins/destination/gallery/destinationgallery.cpp:74
@@ -254,6 +151,11 @@ msgstr ""
 #: ../plugins/destination/share/destinationshare.cpp:143
 #, kde-format
 msgid "Share to:"
+msgstr ""
+
+#: ../plugins/destination/share/destinationshare.cpp:151
+#, kde-kuit-format
+msgid "<application>%1</application>"
 msgstr ""
 
 #: ../plugins/destination/share/destinationshare.cpp:217
@@ -1813,13 +1715,13 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: label, entry (SaverAskForFormat), group (Files)
-#: kookasettings.kcfg:64
+#: kookasettings.kcfg:65
 #, kde-format
 msgid "Always use the Save Assistant"
 msgstr ""
 
 #. i18n: ectx: tooltip, entry (SaverAskForFormat), group (Files)
-#: kookasettings.kcfg:65
+#: kookasettings.kcfg:66
 #, kde-format
 msgid ""
 "<div>Check this if you want to always use the image save assistant, even if "
@@ -1827,13 +1729,13 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: label, entry (SaverAskForFilename), group (Files)
-#: kookasettings.kcfg:70
+#: kookasettings.kcfg:71
 #, kde-format
 msgid "Ask for filename when saving"
 msgstr ""
 
 #. i18n: ectx: tooltip, entry (SaverAskForFilename), group (Files)
-#: kookasettings.kcfg:71
+#: kookasettings.kcfg:72
 #, kde-format
 msgid ""
 "<div>Check this if you want to enter a file name when scanning an image.</"
@@ -1841,13 +1743,13 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: label, entry (SaverAskBeforeScan), group (Files)
-#: kookasettings.kcfg:76
+#: kookasettings.kcfg:77
 #, kde-format
 msgid "Before the scan starts"
 msgstr ""
 
 #. i18n: ectx: tooltip, entry (SaverAskBeforeScan), group (Files)
-#: kookasettings.kcfg:77
+#: kookasettings.kcfg:78
 #, kde-format
 msgid ""
 "<div>Check this if you want to enter the file name before scanning starts.</"
@@ -1855,13 +1757,13 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: label, entry (SaverAskAfterScan), group (Files)
-#: kookasettings.kcfg:82
+#: kookasettings.kcfg:83
 #, kde-format
 msgid "After the scan is finished"
 msgstr ""
 
 #. i18n: ectx: tooltip, entry (SaverAskAfterScan), group (Files)
-#: kookasettings.kcfg:83
+#: kookasettings.kcfg:84
 #, kde-format
 msgid ""
 "<div>Check this if you want to enter the file name after scanning has "
@@ -1869,27 +1771,27 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: label, entry (SaverOnlyRecommendedTypes), group (Files)
-#: kookasettings.kcfg:88
+#: kookasettings.kcfg:89
 #, kde-format
 msgid "Only show recommended formats for this image type"
 msgstr ""
 
 #. i18n: ectx: tooltip, entry (SaverOnlyRecommendedTypes), group (Files)
-#: kookasettings.kcfg:89
+#: kookasettings.kcfg:90
 #, kde-format
 msgid ""
 "<div>Check this to only show recommended file formats for the scan type. "
 "Uncheck it to show all compatible formats.</div>"
 msgstr ""
 
-#. i18n: ectx: label, entry (SaverAlwaysUseFormat), group (Files)
-#: kookasettings.kcfg:94
+#. i18n: ectx: label, entry (SaverAlwaysUseFormat), group (Files2)
+#: kookasettings.kcfg:103
 #, kde-format
 msgid "Always use this save format for this image type"
 msgstr ""
 
-#. i18n: ectx: tooltip, entry (SaverAlwaysUseFormat), group (Files)
-#: kookasettings.kcfg:95
+#. i18n: ectx: tooltip, entry (SaverAlwaysUseFormat), group (Files2)
+#: kookasettings.kcfg:104
 #, kde-format
 msgid ""
 "<div>Check this to remember the selected file format for the scanned image "
@@ -1897,13 +1799,13 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: label, entry (GalleryAllowRename), group (Gallery)
-#: kookasettings.kcfg:127
+#: kookasettings.kcfg:137
 #, kde-format
 msgid "Allow click-to-rename"
 msgstr ""
 
 #. i18n: ectx: tooltip, entry (GalleryAllowRename), group (Gallery)
-#: kookasettings.kcfg:128
+#: kookasettings.kcfg:138
 #, kde-format
 msgid ""
 "<div>Check this if you want to be able to rename gallery items by clicking "
@@ -1911,13 +1813,13 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: label, entry (GalleryLayout), group (Gallery)
-#: kookasettings.kcfg:133
+#: kookasettings.kcfg:143
 #, kde-format
 msgid "Show recent folders:"
 msgstr ""
 
 #. i18n: ectx: tooltip, entry (GalleryLayout), group (Gallery)
-#: kookasettings.kcfg:134
+#: kookasettings.kcfg:144
 #, kde-format
 msgid ""
 "<div>Select whether and where a list of recently accessed gallery folders "
@@ -1925,49 +1827,49 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: label, entry (ThumbnailCustomBackground), group (thumbnailView)
-#: kookasettings.kcfg:154
+#: kookasettings.kcfg:164
 #, kde-format
 msgid "Use a custom background image"
 msgstr ""
 
 #. i18n: ectx: tooltip, entry (ThumbnailCustomBackground), group (thumbnailView)
-#: kookasettings.kcfg:155
+#: kookasettings.kcfg:165
 #, kde-format
 msgid "<div>Set a custom background image for the thumbnail view.</div>"
 msgstr ""
 
 #. i18n: ectx: label, entry (ThumbnailBackgroundPath), group (thumbnailView)
-#: kookasettings.kcfg:160
+#: kookasettings.kcfg:170
 #, kde-format
 msgid "Image:"
 msgstr ""
 
 #. i18n: ectx: tooltip, entry (ThumbnailBackgroundPath), group (thumbnailView)
-#: kookasettings.kcfg:161
+#: kookasettings.kcfg:171
 #, kde-format
 msgid "<div>The background image to use for the thumbnail view.</div>"
 msgstr ""
 
 #. i18n: ectx: label, entry (ThumbnailPreviewSize), group (thumbnailView)
-#: kookasettings.kcfg:167
+#: kookasettings.kcfg:177
 #, kde-format
 msgid "Preview size:"
 msgstr ""
 
 #. i18n: ectx: tooltip, entry (ThumbnailPreviewSize), group (thumbnailView)
-#: kookasettings.kcfg:168
+#: kookasettings.kcfg:178
 #, kde-format
 msgid "<div>Select the default preview size for the thumbnail view.</div>"
 msgstr ""
 
 #. i18n: ectx: label, entry (OcrGocrDustSize), group (gocr)
-#: kookasettings.kcfg:207
+#: kookasettings.kcfg:217
 #, kde-format
 msgid "Dust size:"
 msgstr ""
 
 #. i18n: ectx: tooltip, entry (OcrGocrDustSize), group (gocr)
-#: kookasettings.kcfg:208
+#: kookasettings.kcfg:218
 #, kde-format
 msgid ""
 "<div>Clusters smaller than this size will be considered to be noise, and "
@@ -1976,13 +1878,13 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: label, entry (OcrGocrGrayLevel), group (gocr)
-#: kookasettings.kcfg:213
+#: kookasettings.kcfg:223
 #, kde-format
 msgid "Gray level:"
 msgstr ""
 
 #. i18n: ectx: tooltip, entry (OcrGocrGrayLevel), group (gocr)
-#: kookasettings.kcfg:214
+#: kookasettings.kcfg:224
 #, kde-format
 msgid ""
 "<div>The threshold value below which gray pixels are considered to be black. "
@@ -1990,13 +1892,13 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: label, entry (OcrGocrSpaceWidth), group (gocr)
-#: kookasettings.kcfg:219
+#: kookasettings.kcfg:229
 #, kde-format
 msgid "Space width:"
 msgstr ""
 
 #. i18n: ectx: tooltip, entry (OcrGocrSpaceWidth), group (gocr)
-#: kookasettings.kcfg:220
+#: kookasettings.kcfg:230
 #, kde-format
 msgid ""
 "<div>The minimum gap in pixels considered to be word spacing. The default is "
@@ -2004,13 +1906,13 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: label, entry (OcrGocrCertainty), group (gocr)
-#: kookasettings.kcfg:225
+#: kookasettings.kcfg:235
 #, kde-format
 msgid "Certainty:"
 msgstr ""
 
 #. i18n: ectx: tooltip, entry (OcrGocrCertainty), group (gocr)
-#: kookasettings.kcfg:226
+#: kookasettings.kcfg:236
 #, kde-format
 msgid ""
 "<div>The acceptance certainty threshold for recognition, characters with a "
@@ -2018,73 +1920,73 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: label, entry (ocrOcradLayoutDetection), group (ocrad)
-#: kookasettings.kcfg:240
+#: kookasettings.kcfg:250
 #, kde-format
 msgid "Layout analysis mode:"
 msgstr ""
 
 #. i18n: ectx: label, entry (ocrOcradCharset), group (ocrad)
-#: kookasettings.kcfg:253
+#: kookasettings.kcfg:263
 #, kde-format
 msgid "Character set:"
 msgstr ""
 
 #. i18n: ectx: label, entry (ocrOcradFilter), group (ocrad)
-#: kookasettings.kcfg:257
+#: kookasettings.kcfg:267
 #, kde-format
 msgid "Filter:"
 msgstr ""
 
 #. i18n: ectx: label, entry (ocrOcradTransform), group (ocrad)
-#: kookasettings.kcfg:261
+#: kookasettings.kcfg:271
 #, kde-format
 msgid "Transform:"
 msgstr ""
 
 #. i18n: ectx: label, entry (ocrOcradInvert), group (ocrad)
-#: kookasettings.kcfg:265
+#: kookasettings.kcfg:275
 #, kde-format
 msgid "Invert input"
 msgstr ""
 
 #. i18n: ectx: label, entry (ocrOcradThresholdEnable), group (ocrad)
-#: kookasettings.kcfg:270
+#: kookasettings.kcfg:280
 #, kde-format
 msgid "Set threshold"
 msgstr ""
 
 #. i18n: ectx: label, entry (ocrOcradThresholdValue), group (ocrad)
-#: kookasettings.kcfg:276
+#: kookasettings.kcfg:286
 #, kde-format
 msgid "Threshold"
 msgstr ""
 
 #. i18n: ectx: label, entry (ocrTesseractLanguage), group (tesseract)
-#: kookasettings.kcfg:298
+#: kookasettings.kcfg:308
 #, kde-format
 msgid "Language:"
 msgstr ""
 
 #. i18n: ectx: label, entry (ocrTesseractUserWords), group (tesseract)
-#: kookasettings.kcfg:302
+#: kookasettings.kcfg:312
 #, kde-format
 msgid "User word list:"
 msgstr ""
 
 #. i18n: ectx: label, entry (ocrTesseractUserPatterns), group (tesseract)
-#: kookasettings.kcfg:306
+#: kookasettings.kcfg:316
 #, kde-format
 msgid "User patterns:"
 msgstr ""
 
 #. i18n: ectx: label, entry (ocrTesseractEngineMode), group (tesseract)
-#: kookasettings.kcfg:310
+#: kookasettings.kcfg:320
 #, kde-format
 msgid "Engine mode:"
 msgstr ""
 
 #. i18n: ectx: label, entry (ocrTesseractSegmentationMode), group (tesseract)
-#: kookasettings.kcfg:314
+#: kookasettings.kcfg:324
 #, kde-format
 msgid "Segmentation mode:"
 msgstr ""
@@ -2242,27 +2144,27 @@ msgid ""
 "<message>%1</message>"
 msgstr ""
 
-#: kookaview.cpp:951
+#: kookaview.cpp:953
 #, kde-format
 msgid "Create new image from selection"
 msgstr "Lag nytt bilete frå utval"
 
-#: kookaview.cpp:960
+#: kookaview.cpp:962
 #, kde-format
 msgid "Cannot transform, image is read-only"
 msgstr ""
 
-#: kookaview.cpp:1013
+#: kookaview.cpp:1015
 #, kde-format
 msgid "Loaded image %1"
 msgstr ""
 
-#: kookaview.cpp:1014
+#: kookaview.cpp:1016
 #, kde-format
 msgid "Unloaded image"
 msgstr ""
 
-#: kookaview.cpp:1031
+#: kookaview.cpp:1033
 #, kde-format
 msgid "Loading %1..."
 msgstr "Hentar %1 …"
@@ -2310,6 +2212,11 @@ msgstr ""
 #, kde-format
 msgid "Kooka"
 msgstr "Kooka"
+
+#: main.cpp:90
+#, kde-format
+msgid "Jonathan Marten"
+msgstr ""
 
 #: main.cpp:90
 #, kde-format
