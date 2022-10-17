@@ -2793,24 +2793,3 @@ msgstr "Много малък"
 #, kde-format
 msgid "Tiny"
 msgstr "Миниатюрен"
-
-#, fuzzy
-#~ msgid "(C) 2021, the Kooka developers and contributors"
-#~ msgstr "(C) 2000-2010, разработчиците на Kooka"
-
-#, fuzzy
-#~ msgid "Kooka KIPI Helper"
-#~ msgstr "Галерия"
-
-#, fuzzy
-#~ msgid "Current maintainer, KDE4/KF5 port"
-#~ msgstr "Текуща поддръжка, версия за KDE4"
-
-#, fuzzy
-#~ msgctxt "as added to action text"
-#~ msgid "..."
-#~ msgstr "Запис..."
-
-#, fuzzy
-#~ msgid "Unknown plugin action '%1'"
-#~ msgstr "Непознато ядро %1."

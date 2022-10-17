@@ -763,7 +763,7 @@ msgstr ""
 #: scansettings.kcfg:69
 #, kde-format
 msgid "Add/subtract margin (mm):"
-msgstr "Marge a afegir/restar (mm):"
+msgstr "Marge que s'ha d'afegir/restar (mm):"
 
 #. i18n: ectx: tooltip, entry (PreviewAutoselMargin), group (Scanner Name)
 #: scansettings.kcfg:70
