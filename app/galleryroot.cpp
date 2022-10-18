@@ -47,6 +47,7 @@
 #include <qdir.h>
 #include <qstandardpaths.h>
 
+#include <kwidgetsaddons_version.h>
 #include <klocalizedstring.h>
 #include <kmessagebox.h>
 #include <kstandardguiitem.h>
@@ -154,15 +155,25 @@ static QString findGalleryRoot()
     } else if (!oldexists && newexists) {		// only new exists
         dir = newpath;					// fine, just use that
     } else if (oldexists && !newexists) {		// only old exists
+#if KWIDGETSADDONS_VERSION >= QT_VERSION_CHECK(5, 100, 0)
+        if (KMessageBox::questionTwoActions(nullptr,
+#else
         if (KMessageBox::questionYesNo(nullptr,
+#endif
                                        xi18nc("@info",
                                               "An old Kooka gallery was found at <filename>%1</filename>."
                                               "<nl/>The preferred new location is now <filename>%2</filename>."
                                               "<nl/><nl/>Do you want to create a new gallery at the new location?",
                                               oldpath, newpath),
                                        i18n("Create New Gallery"),
-                                       KStandardGuiItem::yes(), KStandardGuiItem::no(),
-                                       "GalleryNoMigrate") == KMessageBox::Yes) {
+                                       KGuiItem(i18nc("@action:button", "Create New"), QStringLiteral("folder-new")),
+                                       KGuiItem(i18nc("@action:button", "Continue With Old"), QStringLiteral("dialog-cancel")),
+                                       "GalleryNoMigrate")
+#if KWIDGETSADDONS_VERSION >= QT_VERSION_CHECK(5, 100, 0)
+            == KMessageBox::PrimaryAction) {
+#else
+            == KMessageBox::Yes) {
+#endif
             // yes, create new
             bool created;
             dir = createGallery(newdir, &created);

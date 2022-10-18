@@ -35,6 +35,7 @@
 #include <qtimer.h>
 #include <qlayout.h>
 
+#include <kwidgetsaddons_version.h>
 #include <klocalizedstring.h>
 #include <kmessagebox.h>
 
@@ -331,13 +332,21 @@ bool Previewer::checkForScannerBg()
     if (curWhite==ScanSettings::BackgroundUnknown)	// not yet known, ask the user
     {
         qCDebug(LIBKOOKASCAN_LOG) << "Don't know the scanner background yet";
+#if KWIDGETSADDONS_VERSION >= QT_VERSION_CHECK(5, 100, 0)
+        int res = KMessageBox::questionTwoActionsCancel(this,
+#else
         int res = KMessageBox::questionYesNoCancel(this,
+#endif
                                                    i18n("The autodetection of images on the preview depends on the background color of the preview image (the result of scanning with no document loaded).\n\nPlease select whether the background of the preview image is black or white."),
                                                    i18nc("@title:window", "Autodetection Background"),
                                                    KGuiItem(i18nc("@action:button Name of colour", "White")),
                                                    KGuiItem(i18nc("@action:button Name of colour", "Black")));
         if (res==KMessageBox::Cancel) return (false);
+#if KWIDGETSADDONS_VERSION >= QT_VERSION_CHECK(5, 100, 0)
+        goWhite = (res==KMessageBox::PrimaryAction);
+#else
         goWhite = (res==KMessageBox::Yes);
+#endif
     }
     else if (curWhite==ScanSettings::BackgroundWhite) goWhite = true;
 

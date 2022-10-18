@@ -39,6 +39,7 @@
 #include <qtextdocument.h>
 #include <qtextcursor.h>
 
+#include <kwidgetsaddons_version.h>
 #include <kmessagebox.h>
 #include <klocalizedstring.h>
 #include <kcolorscheme.h>
@@ -256,12 +257,23 @@ void AbstractOcrEngine::removeTempFiles()
             s += xi18nc("@info", "<filename><link url=\"%1\">%2</link></filename><nl/>", u.url(), file);
         }
 
+#if KWIDGETSADDONS_VERSION >= QT_VERSION_CHECK(5, 100, 0)
+        if (KMessageBox::questionTwoActions(m_parent, s,
+#else
         if (KMessageBox::questionYesNo(m_parent, s,
+#endif
                                        i18n("OCR Temporary Files"),
                                        KStandardGuiItem::del(),
                                        KStandardGuiItem::close(),
                                        QString(),
-                                       KMessageBox::AllowLink)==KMessageBox::Yes) retain = false;
+                                       KMessageBox::AllowLink)
+#if KWIDGETSADDONS_VERSION >= QT_VERSION_CHECK(5, 100, 0)
+            == KMessageBox::PrimaryAction) {
+#else
+            == KMessageBox::Yes) {
+#endif
+            retain = false;
+        }
     }
 
     if (!retain) {

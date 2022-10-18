@@ -36,6 +36,7 @@
 #include <qmimedatabase.h>
 #include <qtemporaryfile.h>
 
+#include <kwidgetsaddons_version.h>
 #include <klocalizedstring.h>
 #include <kmessagebox.h>
 #include <kconfigskeleton.h>
@@ -404,7 +405,11 @@ bool copyRenameImage(bool isCopying, const QUrl &fromUrl, const QUrl &toUrl, boo
         if (!fName.endsWith(".")) fName += ".";
         fName += extFrom;
 
+#if KWIDGETSADDONS_VERSION >= QT_VERSION_CHECK(5, 100, 0)
+        if (askExt) result = KMessageBox::questionTwoActions(overWidget,
+#else
         if (askExt) result = KMessageBox::questionYesNo(overWidget,
+#endif
                                  xi18nc("@info", "The file name you supplied has no file extension.<nl/>"
                                         "Should the original one be added?<nl/><nl/>"
                                         "This would result in the new file name <filename>%1</filename>", fName),
@@ -412,7 +417,11 @@ bool copyRenameImage(bool isCopying, const QUrl &fromUrl, const QUrl &toUrl, boo
                                  KGuiItem(i18n("Add Extension")),
                                  KGuiItem(i18n("Do Not Add")),
                                  "AutoAddExtensions");
+#if KWIDGETSADDONS_VERSION >= QT_VERSION_CHECK(5, 100, 0)
+        if (result == KMessageBox::PrimaryAction)
+#else
         if (result == KMessageBox::Yes)
+#endif
         {
             targetUrl.setPath(targetUrl.adjusted(QUrl::RemoveFilename).path()+fName);
         }
