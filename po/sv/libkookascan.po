@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-10-02 00:44+0000\n"
+"POT-Creation-Date: 2022-10-20 00:45+0000\n"
 "PO-Revision-Date: 2021-03-03 20:06+0100\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@bredband.net>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
@@ -400,19 +400,19 @@ msgstr "µs"
 msgid "No description"
 msgstr "Ingen beskrivning"
 
-#: previewer.cpp:242
+#: previewer.cpp:243
 #, no-c-format, kde-format
 msgctxt "@info:status"
 msgid "%1x%2mm, %3x%4pix"
 msgstr "%1 x %2 mm, %3 x %4 bp"
 
-#: previewer.cpp:245
+#: previewer.cpp:246
 #, no-c-format, kde-format
 msgctxt "@info:status"
 msgid "%1x%2mm"
 msgstr "%1 x %2 mm"
 
-#: previewer.cpp:335
+#: previewer.cpp:340
 #, kde-format
 msgid ""
 "The autodetection of images on the preview depends on the background color "
@@ -425,19 +425,19 @@ msgstr ""
 "utan något dokument på plats).\n"
 "Välj om förhandsgranskningens bakgrund är svart eller vit."
 
-#: previewer.cpp:336
+#: previewer.cpp:341
 #, kde-format
 msgctxt "@title:window"
 msgid "Autodetection Background"
 msgstr "Automatisk detektering av bakgrund"
 
-#: previewer.cpp:337
+#: previewer.cpp:342
 #, kde-format
 msgctxt "@action:button Name of colour"
 msgid "White"
 msgstr "Vit"
 
-#: previewer.cpp:338
+#: previewer.cpp:343
 #, kde-format
 msgctxt "@action:button Name of colour"
 msgid "Black"

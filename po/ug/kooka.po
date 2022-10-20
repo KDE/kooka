@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-10-10 00:44+0000\n"
+"POT-Creation-Date: 2022-10-20 00:45+0000\n"
 "PO-Revision-Date: 2013-09-08 07:05+0900\n"
 "Last-Translator: Gheyret Kenji <gheyret@gmail.com>\n"
 "Language-Team: Uyghur Computer Science Association <UKIJ@yahoogroups.com>\n"
@@ -359,67 +359,67 @@ msgstr "سۈرەت(&I)"
 msgid "Selection: %1"
 msgstr "تەكشۈر"
 
-#: ../plugins/ocr/abstractocrengine.cpp:106
+#: ../plugins/ocr/abstractocrengine.cpp:107
 #, kde-format
 msgid "OCR is already in progress"
 msgstr ""
 
-#: ../plugins/ocr/abstractocrengine.cpp:118
+#: ../plugins/ocr/abstractocrengine.cpp:119
 #, kde-format
 msgid "OCR could not be started."
 msgstr ""
 
-#: ../plugins/ocr/abstractocrengine.cpp:119
+#: ../plugins/ocr/abstractocrengine.cpp:120
 #, kde-format
 msgid "Check the OCR engine selection and settings."
 msgstr ""
 
-#: ../plugins/ocr/abstractocrengine.cpp:121
+#: ../plugins/ocr/abstractocrengine.cpp:122
 #, fuzzy, kde-format
 #| msgid "Save Error"
 msgid "OCR Setup Error"
 msgstr "ساقلاش خاتالىقى"
 
-#: ../plugins/ocr/abstractocrengine.cpp:122 kookaview.cpp:787
+#: ../plugins/ocr/abstractocrengine.cpp:123 kookaview.cpp:787
 #, kde-format
 msgid "Configure OCR..."
 msgstr ""
 
-#: ../plugins/ocr/abstractocrengine.cpp:180
+#: ../plugins/ocr/abstractocrengine.cpp:181
 #, kde-format
 msgid "The OCR process was stopped"
 msgstr ""
 
-#: ../plugins/ocr/abstractocrengine.cpp:249
+#: ../plugins/ocr/abstractocrengine.cpp:250
 #, kde-kuit-format
 msgctxt "@info"
 msgid "The following OCR temporary files are retained for debugging:<nl/><nl/>"
 msgstr ""
 
-#: ../plugins/ocr/abstractocrengine.cpp:256
+#: ../plugins/ocr/abstractocrengine.cpp:257
 #, kde-kuit-format
 msgctxt "@info"
 msgid "<filename><link url=\"%1\">%2</link></filename><nl/>"
 msgstr ""
 
-#: ../plugins/ocr/abstractocrengine.cpp:260
+#: ../plugins/ocr/abstractocrengine.cpp:265
 #, kde-format
 msgid "OCR Temporary Files"
 msgstr ""
 
-#: ../plugins/ocr/abstractocrengine.cpp:425
+#: ../plugins/ocr/abstractocrengine.cpp:437
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot create temporary file <filename>%1</filename>"
 msgstr ""
 
-#: ../plugins/ocr/abstractocrengine.cpp:471
+#: ../plugins/ocr/abstractocrengine.cpp:483
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot save image to temporary file <filename>%1</filename>"
 msgstr ""
 
-#: ../plugins/ocr/abstractocrengine.cpp:499
+#: ../plugins/ocr/abstractocrengine.cpp:511
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -427,32 +427,32 @@ msgid ""
 "envar>."
 msgstr ""
 
-#: ../plugins/ocr/abstractocrengine.cpp:509
+#: ../plugins/ocr/abstractocrengine.cpp:521
 #, kde-kuit-format
 msgctxt "@info"
 msgid "The executable <filename>%1</filename> does not exist or is not usable."
 msgstr ""
 
-#: ../plugins/ocr/abstractocrengine.cpp:581
+#: ../plugins/ocr/abstractocrengine.cpp:593
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "Command <command>%1</command> crashed with exit status <numid>%2</numid>"
 msgstr ""
 
-#: ../plugins/ocr/abstractocrengine.cpp:586
+#: ../plugins/ocr/abstractocrengine.cpp:598
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Command <command>%1</command> exited with status <numid>%2</numid>"
 msgstr ""
 
-#: ../plugins/ocr/abstractocrengine.cpp:590
+#: ../plugins/ocr/abstractocrengine.cpp:602
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Running the OCR process failed."
 msgstr ""
 
-#: ../plugins/ocr/abstractocrengine.cpp:591
+#: ../plugins/ocr/abstractocrengine.cpp:603
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -460,18 +460,18 @@ msgid ""
 "link> log file."
 msgstr ""
 
-#: ../plugins/ocr/abstractocrengine.cpp:594
+#: ../plugins/ocr/abstractocrengine.cpp:606
 #, kde-format
 msgid "OCR Command Failed"
 msgstr ""
 
-#: ../plugins/ocr/abstractocrengine.cpp:601
+#: ../plugins/ocr/abstractocrengine.cpp:613
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Processing the OCR results failed."
 msgstr ""
 
-#: ../plugins/ocr/abstractocrengine.cpp:602
+#: ../plugins/ocr/abstractocrengine.cpp:614
 #, kde-format
 msgid "OCR Processing Failed"
 msgstr ""
@@ -976,7 +976,7 @@ msgstr ""
 msgid "No information is available for this format."
 msgstr ""
 
-#: galleryroot.cpp:100
+#: galleryroot.cpp:101
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -985,12 +985,12 @@ msgid ""
 ">will be used.<nl/><nl/>Check the document directory setting and permissions."
 msgstr ""
 
-#: galleryroot.cpp:111
+#: galleryroot.cpp:112
 #, kde-format
 msgid "Error creating gallery"
 msgstr ""
 
-#: galleryroot.cpp:159
+#: galleryroot.cpp:164
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -999,12 +999,25 @@ msgid ""
 "a new gallery at the new location?"
 msgstr ""
 
-#: galleryroot.cpp:163
+#: galleryroot.cpp:168
 #, kde-format
 msgid "Create New Gallery"
 msgstr ""
 
-#: galleryroot.cpp:172 galleryroot.cpp:186
+#: galleryroot.cpp:169
+#, fuzzy, kde-format
+#| msgid "Create Folder..."
+msgctxt "@action:button"
+msgid "Create New"
+msgstr "قىسقۇچ قۇر…"
+
+#: galleryroot.cpp:170
+#, kde-format
+msgctxt "@action:button"
+msgid "Continue With Old"
+msgstr ""
+
+#: galleryroot.cpp:183 galleryroot.cpp:197
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -1014,12 +1027,12 @@ msgid ""
 "may do so by simply copying or moving the files."
 msgstr ""
 
-#: galleryroot.cpp:176
+#: galleryroot.cpp:187
 #, kde-format
 msgid "New Gallery Created"
 msgstr ""
 
-#: galleryroot.cpp:190
+#: galleryroot.cpp:201
 #, kde-format
 msgid "Old Gallery Exists"
 msgstr ""
@@ -1340,99 +1353,99 @@ msgctxt "@info:status total(rows,cols)"
 msgid "%1 (%2 x %3)"
 msgstr " %1 x %2"
 
-#: imgsaver.cpp:65
+#: imgsaver.cpp:66
 #, kde-kuit-format
 msgctxt "@info"
 msgid "The directory <filename>%2</filename><nl/>could not be accessed.<nl/>%1"
 msgstr ""
 
-#: imgsaver.cpp:76
+#: imgsaver.cpp:77
 #, kde-kuit-format
 msgctxt "@info"
 msgid "The directory <filename>%2</filename><nl/>could not be created.<nl/>%1"
 msgstr ""
 
-#: imgsaver.cpp:327
+#: imgsaver.cpp:328
 #, kde-format
 msgid "indexed color image (up to 8 bit depth)"
 msgstr ""
 
-#: imgsaver.cpp:331
+#: imgsaver.cpp:332
 #, kde-format
 msgid "gray scale image (up to 8 bit depth)"
 msgstr ""
 
-#: imgsaver.cpp:335
+#: imgsaver.cpp:336
 #, kde-format
 msgid "lineart image (black and white, 1 bit depth)"
 msgstr ""
 
-#: imgsaver.cpp:339
+#: imgsaver.cpp:340
 #, kde-format
 msgid "high/true color image (more than 8 bit depth)"
 msgstr ""
 
-#: imgsaver.cpp:343
+#: imgsaver.cpp:344
 #, kde-format
 msgid "unknown image type %1"
 msgstr ""
 
-#: imgsaver.cpp:365
+#: imgsaver.cpp:366
 #, kde-format
 msgid "Save OK"
 msgstr ""
 
-#: imgsaver.cpp:367
+#: imgsaver.cpp:368
 #, kde-format
 msgid "Permission denied"
 msgstr "ھوقۇقىڭىز يەتمىدى"
 
-#: imgsaver.cpp:369
+#: imgsaver.cpp:370
 #, kde-format
 msgid "Bad file name"
 msgstr ""
 
-#: imgsaver.cpp:371
+#: imgsaver.cpp:372
 #, kde-format
 msgid "No space left on device"
 msgstr "ئۈسكۈنىدە يېتەرلىك بوشلۇق يوق"
 
-#: imgsaver.cpp:373
+#: imgsaver.cpp:374
 #, kde-format
 msgid "Cannot write image format '%1'"
 msgstr ""
 
-#: imgsaver.cpp:375
+#: imgsaver.cpp:376
 #, kde-format
 msgid "Cannot write using protocol '%1'"
 msgstr ""
 
-#: imgsaver.cpp:377
+#: imgsaver.cpp:378
 #, kde-format
 msgid "User cancelled saving"
 msgstr ""
 
-#: imgsaver.cpp:379
+#: imgsaver.cpp:380
 #, kde-format
 msgid "Cannot create directory"
 msgstr ""
 
-#: imgsaver.cpp:381
+#: imgsaver.cpp:382
 #, kde-format
 msgid "Save failed"
 msgstr "ساقلاش مەغلۇپ بولدى"
 
-#: imgsaver.cpp:383
+#: imgsaver.cpp:384
 #, kde-format
 msgid "Bad parameter"
 msgstr "خاتا پارامېتىر"
 
-#: imgsaver.cpp:385
+#: imgsaver.cpp:386
 #, kde-format
 msgid "Unknown status %1"
 msgstr ""
 
-#: imgsaver.cpp:408
+#: imgsaver.cpp:413
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -1441,47 +1454,47 @@ msgid ""
 "filename>"
 msgstr ""
 
-#: imgsaver.cpp:411
+#: imgsaver.cpp:416
 #, kde-format
 msgid "Extension Missing"
 msgstr ""
 
-#: imgsaver.cpp:412
+#: imgsaver.cpp:417
 #, kde-format
 msgid "Add Extension"
 msgstr "كېڭەيتىلمە قوش"
 
-#: imgsaver.cpp:413
+#: imgsaver.cpp:418
 #, kde-format
 msgid "Do Not Add"
 msgstr "قوشما"
 
-#: imgsaver.cpp:438
+#: imgsaver.cpp:447
 #, kde-format
 msgid "Target already exists"
 msgstr ""
 
-#: imgsaver.cpp:451
+#: imgsaver.cpp:460
 #, kde-format
 msgid "Unable to copy the file"
 msgstr ""
 
-#: imgsaver.cpp:452
+#: imgsaver.cpp:461
 #, kde-format
 msgid "Unable to rename the file"
 msgstr ""
 
-#: imgsaver.cpp:453
+#: imgsaver.cpp:462
 #, kde-format
 msgid "Error copying file"
 msgstr ""
 
-#: imgsaver.cpp:454
+#: imgsaver.cpp:463
 #, kde-format
 msgid "Error renaming file"
 msgstr "ھۆججەت ئاتىنى ئۆزگەرتكەندە خاتالىق كۆرۈلدى"
 
-#: imgsaver.cpp:455
+#: imgsaver.cpp:464
 #, kde-kuit-format
 msgctxt "@info"
 msgid "%1 <filename>%3</filename><nl/>%2"
@@ -2819,9 +2832,6 @@ msgstr "كىچىك"
 
 #~ msgid "Error creating directory"
 #~ msgstr "مۇندەرىجە قۇرغاندا خاتالىق كۆرۈلدى"
-
-#~ msgid "Create Folder..."
-#~ msgstr "قىسقۇچ قۇر…"
 
 #~ msgid "<br>%1"
 #~ msgstr "<br>%1"

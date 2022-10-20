@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-10-10 00:44+0000\n"
+"POT-Creation-Date: 2022-10-20 00:45+0000\n"
 "PO-Revision-Date: 2021-12-07 14:41+0200\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -357,37 +357,37 @@ msgstr "Kuva: %1"
 msgid "Selection: %1"
 msgstr "Valinta: %1"
 
-#: ../plugins/ocr/abstractocrengine.cpp:106
+#: ../plugins/ocr/abstractocrengine.cpp:107
 #, kde-format
 msgid "OCR is already in progress"
 msgstr "Tekstintunnistus on jo käynnissä"
 
-#: ../plugins/ocr/abstractocrengine.cpp:118
+#: ../plugins/ocr/abstractocrengine.cpp:119
 #, kde-format
 msgid "OCR could not be started."
 msgstr "Tekstintunnistusta ei voitu käynnistää."
 
-#: ../plugins/ocr/abstractocrengine.cpp:119
+#: ../plugins/ocr/abstractocrengine.cpp:120
 #, kde-format
 msgid "Check the OCR engine selection and settings."
 msgstr "Valitse tekstintunnistusmoottori ja sen asetukset."
 
-#: ../plugins/ocr/abstractocrengine.cpp:121
+#: ../plugins/ocr/abstractocrengine.cpp:122
 #, kde-format
 msgid "OCR Setup Error"
 msgstr "Tekstintunnistuksen asetusvirhe"
 
-#: ../plugins/ocr/abstractocrengine.cpp:122 kookaview.cpp:787
+#: ../plugins/ocr/abstractocrengine.cpp:123 kookaview.cpp:787
 #, kde-format
 msgid "Configure OCR..."
 msgstr "Tekstintunnistusasetukset…"
 
-#: ../plugins/ocr/abstractocrengine.cpp:180
+#: ../plugins/ocr/abstractocrengine.cpp:181
 #, kde-format
 msgid "The OCR process was stopped"
 msgstr "Tekstintunnistusprosessi keskeytettiin"
 
-#: ../plugins/ocr/abstractocrengine.cpp:249
+#: ../plugins/ocr/abstractocrengine.cpp:250
 #, kde-kuit-format
 msgctxt "@info"
 msgid "The following OCR temporary files are retained for debugging:<nl/><nl/>"
@@ -395,30 +395,30 @@ msgstr ""
 "Virheenpaikannusta varten säilytetään seuraavat väliaikaistiedostot:<nl/><nl/"
 ">"
 
-#: ../plugins/ocr/abstractocrengine.cpp:256
+#: ../plugins/ocr/abstractocrengine.cpp:257
 #, kde-kuit-format
 msgctxt "@info"
 msgid "<filename><link url=\"%1\">%2</link></filename><nl/>"
 msgstr "<filename><link url=\"%1\">%2</link></filename><nl/>"
 
-#: ../plugins/ocr/abstractocrengine.cpp:260
+#: ../plugins/ocr/abstractocrengine.cpp:265
 #, kde-format
 msgid "OCR Temporary Files"
 msgstr "Tekstintunnistuksen väliaikaistiedostot"
 
-#: ../plugins/ocr/abstractocrengine.cpp:425
+#: ../plugins/ocr/abstractocrengine.cpp:437
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot create temporary file <filename>%1</filename>"
 msgstr "Ei voida luoda väliaikaistiedostoa <filename>%1</filename>"
 
-#: ../plugins/ocr/abstractocrengine.cpp:471
+#: ../plugins/ocr/abstractocrengine.cpp:483
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot save image to temporary file <filename>%1</filename>"
 msgstr "Ei voida tallentaa väliaikaistiedostoon <filename>%1</filename>"
 
-#: ../plugins/ocr/abstractocrengine.cpp:499
+#: ../plugins/ocr/abstractocrengine.cpp:511
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -428,7 +428,7 @@ msgstr ""
 "Ohjelmatiedostoa <command>%1</command> ei löydy hakupolusta (<envar>PATH</"
 "envar>)."
 
-#: ../plugins/ocr/abstractocrengine.cpp:509
+#: ../plugins/ocr/abstractocrengine.cpp:521
 #, kde-kuit-format
 msgctxt "@info"
 msgid "The executable <filename>%1</filename> does not exist or is not usable."
@@ -436,7 +436,7 @@ msgstr ""
 "Ohjelmatiedostoa <filename>%1</filename> ei ole olemassa tai se ei ole "
 "käytettävissä."
 
-#: ../plugins/ocr/abstractocrengine.cpp:581
+#: ../plugins/ocr/abstractocrengine.cpp:593
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -444,20 +444,20 @@ msgid ""
 msgstr ""
 "Ohjelmatiedosto <command>%1</command> kaatui, paluukoodi <numid>%2</numid>"
 
-#: ../plugins/ocr/abstractocrengine.cpp:586
+#: ../plugins/ocr/abstractocrengine.cpp:598
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Command <command>%1</command> exited with status <numid>%2</numid>"
 msgstr ""
 "Ohjelmatiedosto <command>%1</command> päättyi koodiin <numid>%2</numid>"
 
-#: ../plugins/ocr/abstractocrengine.cpp:590
+#: ../plugins/ocr/abstractocrengine.cpp:602
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Running the OCR process failed."
 msgstr "Tekstintunnistusprosessin suoritus epäonnistui."
 
-#: ../plugins/ocr/abstractocrengine.cpp:591
+#: ../plugins/ocr/abstractocrengine.cpp:603
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -467,18 +467,18 @@ msgstr ""
 "Ohjelman <link url=\"%1\">vakiovirhevirran</link> lokitiedostosta voi löytyä "
 "lisätietoa."
 
-#: ../plugins/ocr/abstractocrengine.cpp:594
+#: ../plugins/ocr/abstractocrengine.cpp:606
 #, kde-format
 msgid "OCR Command Failed"
 msgstr "Tekstintunnistuskomento epäonnistui"
 
-#: ../plugins/ocr/abstractocrengine.cpp:601
+#: ../plugins/ocr/abstractocrengine.cpp:613
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Processing the OCR results failed."
 msgstr "Tekstintunnistustulosten prosessointi epäonnistui."
 
-#: ../plugins/ocr/abstractocrengine.cpp:602
+#: ../plugins/ocr/abstractocrengine.cpp:614
 #, kde-format
 msgid "OCR Processing Failed"
 msgstr "Tekstintunnistusprosessi epäonnistui"
@@ -1055,7 +1055,7 @@ msgstr "Ei valittua tallennusmuotoa."
 msgid "No information is available for this format."
 msgstr "Tästä kuvamuodosta ei ole saatavilla lisätietoa."
 
-#: galleryroot.cpp:100
+#: galleryroot.cpp:101
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -1067,12 +1067,12 @@ msgstr ""
 "><nl/>Käytetään sen sijaan kansiota <filename>%2</filename>.<nl/><nl/"
 ">Tarkista kansion asetukset ja käyttöoikeudet."
 
-#: galleryroot.cpp:111
+#: galleryroot.cpp:112
 #, kde-format
 msgid "Error creating gallery"
 msgstr "Virhe luotaessa galleriaa"
 
-#: galleryroot.cpp:159
+#: galleryroot.cpp:164
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -1084,12 +1084,25 @@ msgstr ""
 ">Ensisijainen uusi sijainti on nyt <filename>%2</filename>.<nl/><nl/"
 ">Haluatko luoda uuden gallerian uuteen sijaintiin?"
 
-#: galleryroot.cpp:163
+#: galleryroot.cpp:168
 #, kde-format
 msgid "Create New Gallery"
 msgstr "Luo uusi galleria"
 
-#: galleryroot.cpp:172 galleryroot.cpp:186
+#: galleryroot.cpp:169
+#, fuzzy, kde-format
+#| msgid "Create New Gallery"
+msgctxt "@action:button"
+msgid "Create New"
+msgstr "Luo uusi galleria"
+
+#: galleryroot.cpp:170
+#, kde-format
+msgctxt "@action:button"
+msgid "Continue With Old"
+msgstr ""
+
+#: galleryroot.cpp:183 galleryroot.cpp:197
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -1103,12 +1116,12 @@ msgstr ""
 "%2\"><filename>%2</filename></link> halutaan lisätä kuvia,<nl/>ne voi "
 "yksinkertaisesti kopioida tai siirtää."
 
-#: galleryroot.cpp:176
+#: galleryroot.cpp:187
 #, kde-format
 msgid "New Gallery Created"
 msgstr "Luotiin uusi galleria"
 
-#: galleryroot.cpp:190
+#: galleryroot.cpp:201
 #, kde-format
 msgid "Old Gallery Exists"
 msgstr "Vanha galleria on olemassa"
@@ -1430,99 +1443,99 @@ msgctxt "@info:status total(rows,cols)"
 msgid "%1 (%2 x %3)"
 msgstr "%1 (%2 × %3)"
 
-#: imgsaver.cpp:65
+#: imgsaver.cpp:66
 #, kde-kuit-format
 msgctxt "@info"
 msgid "The directory <filename>%2</filename><nl/>could not be accessed.<nl/>%1"
 msgstr "Kansiota <filename>%2</filename><nl/>ei ole käyttöoikeuksia.<nl/>%1"
 
-#: imgsaver.cpp:76
+#: imgsaver.cpp:77
 #, kde-kuit-format
 msgctxt "@info"
 msgid "The directory <filename>%2</filename><nl/>could not be created.<nl/>%1"
 msgstr "Kansiota <filename>%2</filename><nl/>ei voitu luoda.<nl/>%1"
 
-#: imgsaver.cpp:327
+#: imgsaver.cpp:328
 #, kde-format
 msgid "indexed color image (up to 8 bit depth)"
 msgstr "Indeksoitu värikuva (8 bitin syvyyteen asti)"
 
-#: imgsaver.cpp:331
+#: imgsaver.cpp:332
 #, kde-format
 msgid "gray scale image (up to 8 bit depth)"
 msgstr "harmaasävykuva (8 bitin syvyyteen asti)"
 
-#: imgsaver.cpp:335
+#: imgsaver.cpp:336
 #, kde-format
 msgid "lineart image (black and white, 1 bit depth)"
 msgstr "viivakuva (mustavalkoinen, 1 bittinen)"
 
-#: imgsaver.cpp:339
+#: imgsaver.cpp:340
 #, kde-format
 msgid "high/true color image (more than 8 bit depth)"
 msgstr "tosivärikuva (enemmän kuin 8 bitin syvyys)"
 
-#: imgsaver.cpp:343
+#: imgsaver.cpp:344
 #, kde-format
 msgid "unknown image type %1"
 msgstr "tuntematon kuvatyyppi %1"
 
-#: imgsaver.cpp:365
+#: imgsaver.cpp:366
 #, kde-format
 msgid "Save OK"
 msgstr "Tallenna onnistui"
 
-#: imgsaver.cpp:367
+#: imgsaver.cpp:368
 #, kde-format
 msgid "Permission denied"
 msgstr "Ei käyttöoikeutta"
 
-#: imgsaver.cpp:369
+#: imgsaver.cpp:370
 #, kde-format
 msgid "Bad file name"
 msgstr "Virheellinen tiedostonimi"
 
-#: imgsaver.cpp:371
+#: imgsaver.cpp:372
 #, kde-format
 msgid "No space left on device"
 msgstr "Laitteessa ei ole tilaa vapaana"
 
-#: imgsaver.cpp:373
+#: imgsaver.cpp:374
 #, kde-format
 msgid "Cannot write image format '%1'"
 msgstr "Ei voida kirjoittaa kuvamuotoa ”%1”"
 
-#: imgsaver.cpp:375
+#: imgsaver.cpp:376
 #, kde-format
 msgid "Cannot write using protocol '%1'"
 msgstr "Ei voida kirjoittaa yhteyskäytännöllä ”%1”"
 
-#: imgsaver.cpp:377
+#: imgsaver.cpp:378
 #, kde-format
 msgid "User cancelled saving"
 msgstr "Käyttäjä perui tallennuksen"
 
-#: imgsaver.cpp:379
+#: imgsaver.cpp:380
 #, kde-format
 msgid "Cannot create directory"
 msgstr "Ei voida luoda kansiota"
 
-#: imgsaver.cpp:381
+#: imgsaver.cpp:382
 #, kde-format
 msgid "Save failed"
 msgstr "Tallennus epäonnistui"
 
-#: imgsaver.cpp:383
+#: imgsaver.cpp:384
 #, kde-format
 msgid "Bad parameter"
 msgstr "Virheellinen parametri"
 
-#: imgsaver.cpp:385
+#: imgsaver.cpp:386
 #, kde-format
 msgid "Unknown status %1"
 msgstr "Tuntematon tila %1"
 
-#: imgsaver.cpp:408
+#: imgsaver.cpp:413
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -1533,47 +1546,47 @@ msgstr ""
 "Antamallasi tiedostonimellä ei ole päätettä.<nl/>Lisätäänkö alkuperäinen?<nl/"
 "><nl/>Uudeksi tiedostonimeksi tulisi <filename>%1</filename>"
 
-#: imgsaver.cpp:411
+#: imgsaver.cpp:416
 #, kde-format
 msgid "Extension Missing"
 msgstr "Puuttuva tiedostopääte"
 
-#: imgsaver.cpp:412
+#: imgsaver.cpp:417
 #, kde-format
 msgid "Add Extension"
 msgstr "Lisää tiedostopääte"
 
-#: imgsaver.cpp:413
+#: imgsaver.cpp:418
 #, kde-format
 msgid "Do Not Add"
 msgstr "Älä lisää"
 
-#: imgsaver.cpp:438
+#: imgsaver.cpp:447
 #, kde-format
 msgid "Target already exists"
 msgstr "Kohde on jo olemassa"
 
-#: imgsaver.cpp:451
+#: imgsaver.cpp:460
 #, kde-format
 msgid "Unable to copy the file"
 msgstr "Tiedostoa ei voida kopioida"
 
-#: imgsaver.cpp:452
+#: imgsaver.cpp:461
 #, kde-format
 msgid "Unable to rename the file"
 msgstr "Tiedoston nimeä ei voida muuttaa"
 
-#: imgsaver.cpp:453
+#: imgsaver.cpp:462
 #, kde-format
 msgid "Error copying file"
 msgstr "Virhe kopioitaessa tiedostoa"
 
-#: imgsaver.cpp:454
+#: imgsaver.cpp:463
 #, kde-format
 msgid "Error renaming file"
 msgstr "Virhe muutettaessa tiedoston nimeä"
 
-#: imgsaver.cpp:455
+#: imgsaver.cpp:464
 #, kde-kuit-format
 msgctxt "@info"
 msgid "%1 <filename>%3</filename><nl/>%2"

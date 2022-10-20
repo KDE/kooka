@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: libkscan\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-10-02 00:44+0000\n"
+"POT-Creation-Date: 2022-10-20 00:45+0000\n"
 "PO-Revision-Date: 2012-07-05 10:23+0700\n"
 "Last-Translator: sutha <sutha@khmeros.info>\n"
 "Language-Team: Khmer <support@khmeros>\n"
@@ -424,19 +424,19 @@ msgstr "µsec"
 msgid "No description"
 msgstr "គ្មាន​សេចក្ដី​ពិពណ៌នា"
 
-#: previewer.cpp:242
+#: previewer.cpp:243
 #, no-c-format, kde-format
 msgctxt "@info:status"
 msgid "%1x%2mm, %3x%4pix"
 msgstr ""
 
-#: previewer.cpp:245
+#: previewer.cpp:246
 #, no-c-format, kde-format
 msgctxt "@info:status"
 msgid "%1x%2mm"
 msgstr ""
 
-#: previewer.cpp:335
+#: previewer.cpp:340
 #, kde-format
 msgid ""
 "The autodetection of images on the preview depends on the background color "
@@ -449,21 +449,21 @@ msgstr ""
 "\n"
 "សូម​ជ្រើស​ថា​តើ​ផ្ទៃខាងក្រោយ​របស់​រូបភាព​មើល​ជា​មុន​ពណ៌ស ឬ​ពណ៌​ខ្មៅ ។"
 
-#: previewer.cpp:336
+#: previewer.cpp:341
 #, fuzzy, kde-format
 #| msgid "Autodetection Background"
 msgctxt "@title:window"
 msgid "Autodetection Background"
 msgstr "រក​ឃើញ​ផ្ទៃខាងក្រោយ​ដោយ​ស្វ័យប្រវត្តិ"
 
-#: previewer.cpp:337
+#: previewer.cpp:342
 #, fuzzy, kde-format
 #| msgid "White"
 msgctxt "@action:button Name of colour"
 msgid "White"
 msgstr "ស"
 
-#: previewer.cpp:338
+#: previewer.cpp:343
 #, fuzzy, kde-format
 #| msgid "Black"
 msgctxt "@action:button Name of colour"

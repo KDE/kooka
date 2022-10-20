@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-10-02 00:44+0000\n"
+"POT-Creation-Date: 2022-10-20 00:45+0000\n"
 "PO-Revision-Date: 2019-02-17 19:59+0800\n"
 "Last-Translator: pan93412 <pan93412@gmail.com>\n"
 "Language-Team: Chinese <zh-l10n@lists.linux.org.tw>\n"
@@ -382,19 +382,19 @@ msgstr ""
 msgid "No description"
 msgstr ""
 
-#: previewer.cpp:242
+#: previewer.cpp:243
 #, no-c-format, kde-format
 msgctxt "@info:status"
 msgid "%1x%2mm, %3x%4pix"
 msgstr ""
 
-#: previewer.cpp:245
+#: previewer.cpp:246
 #, no-c-format, kde-format
 msgctxt "@info:status"
 msgid "%1x%2mm"
 msgstr ""
 
-#: previewer.cpp:335
+#: previewer.cpp:340
 #, kde-format
 msgid ""
 "The autodetection of images on the preview depends on the background color "
@@ -403,19 +403,19 @@ msgid ""
 "Please select whether the background of the preview image is black or white."
 msgstr ""
 
-#: previewer.cpp:336
+#: previewer.cpp:341
 #, kde-format
 msgctxt "@title:window"
 msgid "Autodetection Background"
 msgstr ""
 
-#: previewer.cpp:337
+#: previewer.cpp:342
 #, kde-format
 msgctxt "@action:button Name of colour"
 msgid "White"
 msgstr ""
 
-#: previewer.cpp:338
+#: previewer.cpp:343
 #, kde-format
 msgctxt "@action:button Name of colour"
 msgid "Black"

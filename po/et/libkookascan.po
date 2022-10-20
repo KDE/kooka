@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-10-02 00:44+0000\n"
+"POT-Creation-Date: 2022-10-20 00:45+0000\n"
 "PO-Revision-Date: 2020-01-23 22:47+0200\n"
 "Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
 "Language-Team: Estonian <kde-et@lists.linux.ee>\n"
@@ -406,19 +406,19 @@ msgstr "µsek"
 msgid "No description"
 msgstr "Kirjeldus puudub"
 
-#: previewer.cpp:242
+#: previewer.cpp:243
 #, no-c-format, kde-format
 msgctxt "@info:status"
 msgid "%1x%2mm, %3x%4pix"
 msgstr "%1x%2 mm, %3x%4 pikslit"
 
-#: previewer.cpp:245
+#: previewer.cpp:246
 #, no-c-format, kde-format
 msgctxt "@info:status"
 msgid "%1x%2mm"
 msgstr "%1x%2 mm"
 
-#: previewer.cpp:335
+#: previewer.cpp:340
 #, kde-format
 msgid ""
 "The autodetection of images on the preview depends on the background color "
@@ -431,19 +431,19 @@ msgstr ""
 "\n"
 "Palun vali, kas eelvaatluspildi taust peab olema must või valge."
 
-#: previewer.cpp:336
+#: previewer.cpp:341
 #, kde-format
 msgctxt "@title:window"
 msgid "Autodetection Background"
 msgstr "Automaattuvastuse taust"
 
-#: previewer.cpp:337
+#: previewer.cpp:342
 #, kde-format
 msgctxt "@action:button Name of colour"
 msgid "White"
 msgstr "Valge"
 
-#: previewer.cpp:338
+#: previewer.cpp:343
 #, kde-format
 msgctxt "@action:button Name of colour"
 msgid "Black"
