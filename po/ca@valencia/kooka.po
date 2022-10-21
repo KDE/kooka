@@ -5,14 +5,14 @@
 #
 # Josep M. Ferrer <txemaq@gmail.com>, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022.
 # Albert Astals Cid <aacid@kde.org>, 2004, 2005.
-# Antoni Bella Pérez <antonibella5@yahoo.com>, 2014, 2017, 2018, 2020.
+# Antoni Bella Pérez <antonibella5@yahoo.com>, 2014, 2017, 2018, 2020, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-10-20 00:45+0000\n"
-"PO-Revision-Date: 2022-09-07 19:07+0200\n"
-"Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
+"PO-Revision-Date: 2022-10-20 16:01+0200\n"
+"Last-Translator: Antoni Bella <antonibella5@yahoo.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
 "MIME-Version: 1.0\n"
@@ -1102,17 +1102,16 @@ msgid "Create New Gallery"
 msgstr "Crea una galeria nova"
 
 #: galleryroot.cpp:169
-#, fuzzy, kde-format
-#| msgid "Create New Gallery"
+#, kde-format
 msgctxt "@action:button"
 msgid "Create New"
-msgstr "Crea una galeria nova"
+msgstr "Crea'n una de nova"
 
 #: galleryroot.cpp:170
 #, kde-format
 msgctxt "@action:button"
 msgid "Continue With Old"
-msgstr ""
+msgstr "Continua amb l'antiga"
 
 #: galleryroot.cpp:183 galleryroot.cpp:197
 #, kde-kuit-format

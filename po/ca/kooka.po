@@ -5,13 +5,13 @@
 #
 # Josep M. Ferrer <txemaq@gmail.com>, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022.
 # Albert Astals Cid <aacid@kde.org>, 2004, 2005.
-# Antoni Bella Pérez <antonibella5@yahoo.com>, 2014, 2017, 2018, 2020.
+# Antoni Bella Pérez <antonibella5@yahoo.com>, 2014, 2017, 2018, 2020, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-10-20 00:45+0000\n"
-"PO-Revision-Date: 2022-09-07 19:07+0200\n"
+"PO-Revision-Date: 2022-10-20 22:02+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -1105,17 +1105,16 @@ msgid "Create New Gallery"
 msgstr "Crea una galeria nova"
 
 #: galleryroot.cpp:169
-#, fuzzy, kde-format
-#| msgid "Create New Gallery"
+#, kde-format
 msgctxt "@action:button"
 msgid "Create New"
-msgstr "Crea una galeria nova"
+msgstr "Crea"
 
 #: galleryroot.cpp:170
 #, kde-format
 msgctxt "@action:button"
 msgid "Continue With Old"
-msgstr ""
+msgstr "Continua amb l'antiga"
 
 #: galleryroot.cpp:183 galleryroot.cpp:197
 #, kde-kuit-format
@@ -3010,94 +3009,3 @@ msgstr "Molt petita"
 #, kde-format
 msgid "Tiny"
 msgstr "Minúscula"
-
-#~ msgid "Online service:"
-#~ msgstr "Servei en línia:"
-
-#~ msgid "Helper command for the 'Export to Online Service' plugin"
-#~ msgstr "Ordre de l'ajudant per al connector «Exporta a un servei en línia»"
-
-#~ msgid "(C) 2021, the Kooka developers and contributors"
-#~ msgstr "(C) 2021, els desenvolupadors i col·laboradors del Kooka"
-
-#~ msgid "Kooka KIPI Helper"
-#~ msgstr "Ajudant KIPI del Kooka"
-
-#~ msgid "Current maintainer, KDE4/KF5 port"
-#~ msgstr "Mantenidor actual, adaptació al KDE4/KF5"
-
-#~ msgid "List all of the available KIPI plugin actions"
-#~ msgstr "Llista totes les accions disponibles el connector KIPI"
-
-#~ msgid "The KIPI plugin action to export to"
-#~ msgstr "L'acció del connector KIPI per a exportar a"
-
-#~ msgid "action"
-#~ msgstr "acció"
-
-#~ msgid "URLs of the image files to export"
-#~ msgstr "Els URL dels fitxers d'imatge a exportar"
-
-#~ msgid "Cannot specify both list ('-l') and share ('-s') mode"
-#~ msgstr "No es pot especificar llista («-l») ni mode de compartir («-s»)"
-
-#~ msgid "Arguments ignored in list ('-l') mode"
-#~ msgstr "Arguments ignorats en el mode llista («-l»)"
-
-#~ msgid "Arguments missing for share ('-s') mode"
-#~ msgstr "Manquen arguments en el mode compartir («-s»)"
-
-#~ msgid "One of either list ('-l') or share ('-s') mode must be specified"
-#~ msgstr "Cal especificar o el mode llista («-l») o el mode compartir («-l»)"
-
-#~ msgctxt "as added to action text"
-#~ msgid "..."
-#~ msgstr "..."
-
-#~ msgid "Argument '%1' is not a local file, ignored"
-#~ msgstr "L'argument «%1» no és cap fitxer local, s'ignora"
-
-#~ msgid "File '%1' not found or is unreadable, ignored"
-#~ msgstr "No s'ha trobat el fitxer «%1» o no es pot llegir, s'ignora"
-
-#~ msgid "No usable files to share"
-#~ msgstr "No hi ha fitxers usables per a compartir"
-
-#~ msgid "Unknown plugin action '%1'"
-#~ msgstr "Acció «%1» desconeguda del motor"
-
-#~ msgid "PhotoCopier"
-#~ msgstr "Fotocopiadora"
-
-#~ msgid "Print options"
-#~ msgstr "Opcions de la impressió"
-
-#~ msgid "Copies: "
-#~ msgstr "Còpies: "
-
-#~ msgid "Scanner Settings: %1"
-#~ msgstr "Arranjament de l'escàner: %1"
-
-#~ msgid "Scan size:"
-#~ msgstr "Mida de l'escaneig:"
-
-#~ msgid "Photocopy..."
-#~ msgstr "Fotocòpia..."
-
-#~ msgid "Loading non-local images is not yet implemented"
-#~ msgstr "La càrrega de les imatges no locals encara no està implementada"
-
-#~ msgid "Image loading failed"
-#~ msgstr "Ha fallat en carregar la imatge"
-
-#~ msgid "Failed to open TIFF file"
-#~ msgstr "Ha fallat en obrir el fitxer TIFF"
-
-#~ msgid "Failed to read TIFF directory"
-#~ msgstr "Ha fallat en llegir el directori TIFF"
-
-#~ msgid "Failed to read TIFF image"
-#~ msgstr "Ha fallat en llegir la imatge TIFF"
-
-#~ msgid "TIFF not supported"
-#~ msgstr "El TIFF no està admès"

@@ -4,14 +4,14 @@
 # Miguel Revilla Rodríguez <yo@miguelrevilla.com>, 2002,2003, 2004.
 # Pablo de Vicente <p.devicente@wanadoo.es>, 2004.
 # Santiago Fernandez Sancho <santi@kde-es.org>, 2005, 2008.
-# Eloy Cuadra <ecuadra@eloihr.net>, 2005, 2006, 2007, 2011, 2014, 2015, 2017, 2018, 2019, 2020, 2021.
+# Eloy Cuadra <ecuadra@eloihr.net>, 2005, 2006, 2007, 2011, 2014, 2015, 2017, 2018, 2019, 2020, 2021, 2022.
 # Miguel Angel Quesada Fernandez <kesadalive@gmail.com>, 2009.
 msgid ""
 msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-10-20 00:45+0000\n"
-"PO-Revision-Date: 2021-11-20 00:13+0100\n"
+"PO-Revision-Date: 2022-10-20 18:34+0200\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "First-Translator: Pablo de Vicente <pvicentea@nexo.es>\n"
-"X-Generator: Lokalize 21.08.3\n"
+"X-Generator: Lokalize 22.08.2\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #, kde-format
@@ -1104,17 +1104,16 @@ msgid "Create New Gallery"
 msgstr "Crear nueva galería"
 
 #: galleryroot.cpp:169
-#, fuzzy, kde-format
-#| msgid "Create New Gallery"
+#, kde-format
 msgctxt "@action:button"
 msgid "Create New"
-msgstr "Crear nueva galería"
+msgstr "Crear una nueva"
 
 #: galleryroot.cpp:170
 #, kde-format
 msgctxt "@action:button"
 msgid "Continue With Old"
-msgstr ""
+msgstr "Continuar con la antigua"
 
 #: galleryroot.cpp:183 galleryroot.cpp:197
 #, kde-kuit-format

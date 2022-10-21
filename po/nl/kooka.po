@@ -9,21 +9,21 @@
 # Wilbert Berendsen <wbsoft@xs4all.nl>, 2003, 2004.
 # Rinse de Vries <rinsedevries@kde.nl>, 2004, 2005, 2006, 2010.
 # Tom Albers <tomalbers@kde.nl>, 2004.
-# Freek de Kruijf <freekdekruijf@kde.nl>, 2008, 2009, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021.
+# Freek de Kruijf <freekdekruijf@kde.nl>, 2008, 2009, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022.
 # Ronald Stroethoff <stroet43@zonnet.nl>, 2016.
 msgid ""
 msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-10-20 00:45+0000\n"
-"PO-Revision-Date: 2021-11-19 13:14+0100\n"
+"PO-Revision-Date: 2022-10-20 14:59+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 21.08.3\n"
+"X-Generator: Lokalize 22.08.2\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #, kde-format
@@ -1118,17 +1118,16 @@ msgid "Create New Gallery"
 msgstr "Nieuwe galerij aanmaken"
 
 #: galleryroot.cpp:169
-#, fuzzy, kde-format
-#| msgid "Create New Gallery"
+#, kde-format
 msgctxt "@action:button"
 msgid "Create New"
-msgstr "Nieuwe galerij aanmaken"
+msgstr "Nieuwe aanmaken"
 
 #: galleryroot.cpp:170
 #, kde-format
 msgctxt "@action:button"
 msgid "Continue With Old"
-msgstr ""
+msgstr "Met oude doorgaan"
 
 #: galleryroot.cpp:183 galleryroot.cpp:197
 #, kde-kuit-format

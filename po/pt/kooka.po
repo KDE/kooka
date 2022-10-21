@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-10-20 00:45+0000\n"
-"PO-Revision-Date: 2021-11-22 11:30+0000\n"
+"PO-Revision-Date: 2022-10-20 09:11+0100\n"
 "Last-Translator: José Nuno Pires <zepires@gmail.com>\n"
 "Language-Team: pt <kde-i18n-pt@kde.org>\n"
 "Language: pt\n"
@@ -1112,17 +1112,16 @@ msgid "Create New Gallery"
 msgstr "Criar uma Nova Galeria"
 
 #: galleryroot.cpp:169
-#, fuzzy, kde-format
-#| msgid "Create New Gallery"
+#, kde-format
 msgctxt "@action:button"
 msgid "Create New"
-msgstr "Criar uma Nova Galeria"
+msgstr "Criar uma Nova"
 
 #: galleryroot.cpp:170
 #, kde-format
 msgctxt "@action:button"
 msgid "Continue With Old"
-msgstr ""
+msgstr "Continuar com a Antiga"
 
 #: galleryroot.cpp:183 galleryroot.cpp:197
 #, kde-kuit-format
@@ -3022,60 +3021,3 @@ msgstr "Muito Pequena"
 #, kde-format
 msgid "Tiny"
 msgstr "Minúscula"
-
-#~ msgid "Online service:"
-#~ msgstr "Serviço 'online':"
-
-#~ msgid "Helper command for the 'Export to Online Service' plugin"
-#~ msgstr ""
-#~ "Comando auxiliar para o 'plugin' para 'Exportar para um Serviço Online'"
-
-#~ msgid "(C) 2021, the Kooka developers and contributors"
-#~ msgstr "(C) 2021, os programadores e contribuintes do Kooka"
-
-#~ msgid "Kooka KIPI Helper"
-#~ msgstr "Utilitário de KIPI do Kooka"
-
-#~ msgid "Current maintainer, KDE4/KF5 port"
-#~ msgstr "Manutenção actual, versão para o KDE4/KF5"
-
-#~ msgid "List all of the available KIPI plugin actions"
-#~ msgstr "Apresenta todas as acções disponíveis do 'plugin' do KIPI"
-
-#~ msgid "The KIPI plugin action to export to"
-#~ msgstr "A acção do 'plugin' do KIPI para onde exportar"
-
-#~ msgid "action"
-#~ msgstr "acção"
-
-#~ msgid "URLs of the image files to export"
-#~ msgstr "URL's dos ficheiros de imagens a exportar"
-
-#~ msgid "Cannot specify both list ('-l') and share ('-s') mode"
-#~ msgstr ""
-#~ "Não é possível indicar ambos os modos de listagem ('-l') e partilha ('-s')"
-
-#~ msgid "Arguments ignored in list ('-l') mode"
-#~ msgstr "Os argumentos são ignorados no modo de listagem ('-l')"
-
-#~ msgid "Arguments missing for share ('-s') mode"
-#~ msgstr "Faltam argumentos no modo de partilha ('-s')"
-
-#~ msgid "One of either list ('-l') or share ('-s') mode must be specified"
-#~ msgstr "Deverá indicar um dos modos de listagem ('-l') ou partilha ('-s')"
-
-#~ msgctxt "as added to action text"
-#~ msgid "..."
-#~ msgstr "..."
-
-#~ msgid "Argument '%1' is not a local file, ignored"
-#~ msgstr "O argumento '%1' não é um ficheiro local - será ignorado"
-
-#~ msgid "File '%1' not found or is unreadable, ignored"
-#~ msgstr "O ficheiro '%1' não foi encontrado ou é ilegível - será ignorado"
-
-#~ msgid "No usable files to share"
-#~ msgstr "Não existem ficheiros úteis para partilhar"
-
-#~ msgid "Unknown plugin action '%1'"
-#~ msgstr "A acção '%1' do 'plugin' é desconhecida."
