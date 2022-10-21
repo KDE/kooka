@@ -13,6 +13,7 @@
 
 @PACKAGE_INIT@
 
+include(CMakeFindDependencyMacro)
 find_dependency(KF5Config)
 find_dependency(KF5WidgetsAddons)
 
