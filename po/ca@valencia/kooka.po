@@ -1693,7 +1693,7 @@ msgstr "Suprimix la imatge"
 #: kooka.cpp:249 kooka.cpp:551
 #, kde-format
 msgid "Rename Image"
-msgstr "Canvia el nom la imatge"
+msgstr "Canvia el nom de la imatge"
 
 #: kooka.cpp:255 kooka.cpp:549
 #, kde-format
