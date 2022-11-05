@@ -1,17 +1,15 @@
 <?xml version="1.0" ?>
 <!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.5-Based Variant V1.1//EN" "dtd/kdedbx45.dtd" [
-  <!ENTITY kappname "&kooka;">
-  <!ENTITY package "kdegraphics">
   <!ENTITY % addindex "IGNORE">
   <!ENTITY % Spanish "INCLUDE"
 > <!-- change language only here --> 
 ]>
 
-<book lang="&language;">
+<book id="kooka" lang="&language;">
 
 <bookinfo>
 <title
->El manual de &kooka;</title>
+>Manual de &kooka;</title>
 
 <authorgroup>
 <author
@@ -43,19 +41,19 @@
 </othercredit>
 
 <othercredit role="translator"
-> <firstname
->Miguel</firstname
-> <surname
->Revilla Rodríguez</surname
-> <affiliation
+><firstname
+>Eloy</firstname
+><surname
+>Cuadra</surname
+><affiliation
 ><address
 ><email
->yo@miguelrevilla.com</email
+>ecuadra@eloihr.net</email
 ></address
 ></affiliation
-> <contrib
+><contrib
 >Traductor</contrib
-> </othercredit
+></othercredit
 > 
 
 </authorgroup>
@@ -71,20 +69,19 @@
 >&FDLNotice;</legalnotice>
 
 <date
->2002-02-04</date>
+>2017-07-17</date>
 <releaseinfo
->0.33.00</releaseinfo>
+>&kooka; 0.90</releaseinfo>
 
 <abstract
 ><para
->&kooka; es una útil aplicación para escanear en &kde;</para
+>&kooka; le permite escanear, guardar y ver cualquier formato de imagen permitido por &Qt;, además de realizar reconocimiento óptico de caracteres.</para
 ></abstract
 > 
 
-
 <keywordset>
 <keyword
->KDE</keyword>
+>OCR</keyword>
 <keyword
 >Escáner</keyword>
 </keywordset>
@@ -96,16 +93,25 @@
 >Introducción</title>
 
 <para
->&kooka; es una aplicación de &kde; que facilita la adquisición de imágenes mediante las bibliotecas <acronym
+>&kooka; es una aplicación que proporciona acceso al hardware del escáner mediante la biblioteca <ulink url="http://www.sane-project.org/"
+>SANE</ulink
+>. Por lo tanto, el paquete <acronym
 >SANE</acronym
->. Por lo tanto, para que &kooka; funcione es necesario que el paquete <acronym
->SANE</acronym
-> esté instalado. El objetivo de este desarrollo ha sido el de ser claros y concisos.</para>
+> debe estar instalado para poder usar &kooka;.</para>
 
 <para
->También se proporciona reconocimiento de caracteres mediante el programa gorc incluido. Instale <application
->gocr</application
-> para hacer uso de esta funcionalidad. Una vez finalizado el reconocimiento de los caracteres, el material resultante se puede abrir con el editor &kate; con una sola pulsación de ratón, donde se podrá modificar el contenido.</para>
+>&kooka; le permite escanear, guardar y ver cualquier formato de imagen permitido por &Qt;.</para>
+
+<para
+>El reconocimiento óptico de caracteres también lo proporcionan los programas de código abierto <ulink url="http://jocr.sourceforge.net/"
+>GOCR</ulink
+> u <ulink url="http://www.gnu.org/software/ocrad/ocrad.html"
+>OCRAD</ulink
+>, o la biblioteca comercial <ulink url="https://rerecognition.com/en/products/kadmos-icr-ocr/"
+>KADMOS</ulink
+>. Debe instalar al menos uno de estos programas para usar esta funcionalidad. Tras completar el reconocimiento de caracteres, se inicia automáticamente una comprobación ortográfica sobre el material reconocido. Puede editar el contenido en la ventana <guilabel
+>OCR</guilabel
+> y exportarlo como texto sin formato. </para>
 
 </chapter>
 
@@ -139,11 +145,22 @@
 >  
 
 <para
->Inicie &kooka; desde la consola mediante la introducción del comando <userinput
+>Inicie &kooka; desde la consola introduciendo la orden <userinput
 ><command
 >kooka</command
 ></userinput
->. Si lo desea, puede añadir un enlace en el escritorio de &kde; que esté representado por un icono que muestre un escáner.</para>
+> o selecciónelo en el menú <guilabel
+>Gráficos</guilabel
+> del lanzador de aplicaciones. Si lo desea, puede crear un enlace en el escritorio con un icono que muestre un escáner.</para>
+
+<para
+>Para usar &kooka; solo para reconocimiento óptico de caracteres sin conectarse con un escáner, inicie la aplicación en modo galería con <userinput
+><command
+>kooka</command
+> <option
+>-g</option
+></userinput
+>.</para>
 
 <para
 >La ventana principal de &kooka; consta de tres marcos. En el superior se encuentran tanto los iconos como los paneles de menú. Utilice el ratón para aumentar o reducir la ventana si es necesario.</para>
@@ -152,11 +169,13 @@
 > 
 <listitem>
 <para
->La ventana de navegación consta de dos pestañas, que le permiten cambiar entre <guilabel
->Previsualización</guilabel
-> y el navegador de archivos incorporado que se denomina la <guilabel
+>La ventana de navegación consta de tres pestañas, que le permiten cambiar entre <guilabel
+>Escanear</guilabel
+>, <guilabel
+>OCR</guilabel
+> y el navegador de archivos integrado, que se denomina <guilabel
 >Galería</guilabel
->. La carpeta de trabajo aparece en la parte inferior de la ventana junto con la carpeta en el que se guardarán las imágenes obtenidas.</para
+>. La carpeta de trabajo se muestra en la parte superior de la ventana junto con la carpeta en la que se guardarán las imágenes escaneadas.</para
 > 
 </listitem>
 
@@ -165,16 +184,12 @@
 >Establezca las opciones concretas para su escáner, dependiendo de qué modelo tenga, en la ventana de la parte inferior izquierda. Normalmente los parámetros tendrán que ver con la resolución, brillo y contraste, modo de exploración (&eg;, color, gris o binario), y con valores de gamma.</para>
 
 <para
->Lo primero que debe hacer es configurar aquí sus opciones. Después de eso, inicie la exploración de previsualización con <guimenuitem
->Previsualización</guimenuitem
->. Si el apartado <guilabel
->Previsualización</guilabel
-> está seleccionado, podrá ver ahí los resultados.</para>
+>Lo primero que debe hacer es configurar aquí sus preferencias. Después de esto, inicie el escaneo preliminar con <guimenuitem
+>Vista previa</guimenuitem
+>. El resultado del escaneo se mostrará en el panel de la derecha.</para>
 
 <para
->Seleccione los diversos formatos en la propia imagen previsualizada para definir las dimensiones finales. Para esto se recomienda la opción <guilabel
->Usuario</guilabel
->, así que seleccione con el ratón el área a explorar en la imagen previa.</para>
+>Seleccione el área a escanear en la propia imagen de vista previa usando el ratón para definir el rectángulo final.</para>
 
 <para
 >Una vez hecho esto, pulse en <guimenu
@@ -183,17 +198,17 @@
 
 <note
 ><para
->Si ha seleccionado la opción de no ser preguntado acerca del formato de almacenamiento, el asistente no volverá a aparecer. Para cambiar el formato en el futuro, seleccione <menuchoice
+>Si ha marcado la opción para que no se le pida el formato para guardar la imagen, el asistente de memoria ya no aparecerá. Si desea cambiar el formato en el futuro, seleccione <menuchoice
 > <guimenu
 >Preferencias</guimenu
 > <guimenuitem
 >Configurar Kooka...</guimenuitem
 > <guimenuitem
->Guardar imagen</guimenuitem
+>Guardar la imagen</guimenuitem
 > <guimenuitem
->Mostrar siempre el asistente de memoria</guimenuitem
+>Usar siempre el asistente para guardar</guimenuitem
 > </menuchoice
-></para
+>.</para
 ></note
 > 
 
@@ -209,23 +224,146 @@
 
 </chapter>
 
-<chapter id="commands">
+<chapter id="commands-configuration">
 <title
->Referencia de comandos</title>
+>Referencia de órdenes y configuración</title>
 
-<sect1 id="kooka-toolbar">
+<sect1 id="command">
 <title
->La barra de herramientas principal de &kooka;</title>
-
+>La barra de menú de &kooka;</title>
 
 <sect2>
 <title
->El menú <guimenu
->Archivo</guimenu
-></title>
+>El menú Archivo</title>
 
 <variablelist
 > 
+<varlistentry
+> 
+<term>
+<menuchoice
+><guimenu
+>Archivo</guimenu
+> <guimenuitem
+>Nueva carpeta...</guimenuitem
+> </menuchoice
+></term
+> 
+<listitem>
+<para
+>Crear una nueva carpeta para guardar las imágenes en la <guilabel
+>Galería de Kooka</guilabel
+>.</para>
+</listitem
+> 
+</varlistentry>
+
+<varlistentry
+> 
+<term>
+<menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>S</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Archivo</guimenu
+> <guimenuitem
+>Guardar imagen</guimenuitem
+> </menuchoice
+></term
+> 
+<listitem>
+<para
+>Guardar la imagen seleccionada en la <guilabel
+>Galería de Kooka</guilabel
+> en otra carpeta del disco.</para>
+<para
+>Consulte más detalles en la sección <link linkend="save"
+>Guardar</link
+>.</para>
+</listitem
+> 
+</varlistentry>
+
+<!--
+Import Image...
+Rename Folder F2
+  -->
+<varlistentry
+> 
+<term>
+<menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Shift;<keysym
+>Supr</keysym
+></keycombo
+> </shortcut
+> <guimenu
+>Archivo</guimenu
+> <guimenuitem
+>Borrar carpeta</guimenuitem
+> </menuchoice
+></term
+> 
+<listitem>
+<para
+>Borra la carpeta seleccionada de la <guilabel
+>Galería de Kooka</guilabel
+>.</para>
+</listitem
+> 
+</varlistentry>
+
+<!--
+Properties... Alt+Return
+-->
+<varlistentry
+> 
+<term>
+<menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>N</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Archivo</guimenu
+> <guimenuitem
+>Nueva imagen desde la selección</guimenuitem
+> </menuchoice
+></term
+> 
+<listitem>
+<para
+>Si la imagen escaneada incluye más información de la que desea que aparezca en la imagen final, use esta herramienta para recortar la imagen marcando la selección en la versión grande de la derecha y después seleccionando esta herramienta. La imagen se recortará de acuerdo con la selección. Es posible que esta función le resulte familiar si está habituado a trabajar con la herramienta de recorte de &kolourpaint;.</para>
+</listitem
+> 
+</varlistentry
+> 
+
+<varlistentry
+> 
+<term>
+<menuchoice
+><guimenu
+>Archivo</guimenu
+> <guimenuitem
+>Liberar imagen</guimenuitem
+> </menuchoice
+></term
+> 
+<listitem>
+<para
+>Elimina la imagen que se muestra en el visor de imágenes.</para>
+</listitem
+> 
+</varlistentry>
+
 <varlistentry
 > 
 <term>
@@ -246,88 +384,6 @@
 <listitem>
 <para
 >Imprime la imagen mostrada.</para>
-</listitem
-> 
-</varlistentry>
-
-<varlistentry
-> 
-<term>
-<menuchoice
-><guimenu
->Archivo</guimenu
-> <guimenuitem
->Crear carpeta...</guimenuitem
-> </menuchoice
-></term
-> 
-<listitem>
-<para
->Crea una nueva carpeta para almacenar sus imágenes.</para>
-</listitem
-> 
-</varlistentry>
-
-<varlistentry
-> 
-<term>
-<menuchoice
-><guimenu
->Archivo</guimenu
-> <guimenuitem
->Guardar imagen</guimenuitem
-> </menuchoice
-></term
-> 
-<listitem>
-<para
->Guarda la imagen seleccionada en la <guilabel
->Galería de Kooka</guilabel
->.</para>
-<para
->Vea más detalles en la sección <link linkend="save"
->Guardar</link
->.</para>
-</listitem
-> 
-</varlistentry>
-
-<varlistentry
-> 
-<term>
-<menuchoice
-><guimenu
->Archivo</guimenu
-> <guimenuitem
->Borrar imagen</guimenuitem
-> </menuchoice
-></term
-> 
-<listitem>
-<para
->Borra la imagen seleccionada de la <guilabel
->Galería de Kooka</guilabel
->.</para>
-</listitem
-> 
-</varlistentry>
-
-<varlistentry
-> 
-<term>
-<menuchoice
-><guimenu
->Archivo</guimenu
-> <guimenuitem
->Liberar imagen</guimenuitem
-> </menuchoice
-></term
-> 
-<listitem>
-<para
->Elimina la imagen mostrada en el <guilabel
->Visor de imágenes</guilabel
->. </para>
 </listitem
 > 
 </varlistentry>
@@ -361,61 +417,33 @@
 
 <sect2>
 <title
->El menú <guimenu
->Imagen</guimenu
-></title>
+>El menú Escanear</title>
 
 <variablelist
 > 
-<varlistentry
-> 
-<term>
-<menuchoice
-><shortcut
-> <keycombo action="simul"
->&Ctrl;<keycap
->G</keycap
-></keycombo
-> </shortcut
-> <guimenu
->Imagen</guimenu
-> <guimenuitem
->Abrir imagen en aplicación gráfica</guimenuitem
-> </menuchoice
-></term
-> 
-<listitem>
-<para
->Introduzca una aplicación gráfica para abrir directamente las imágenes exploradas. Entre otras recomendadas se incluye <application
->The GIMP</application
->.</para>
-</listitem
-> 
-</varlistentry
-> 
-
+<!--
+Preview F3
+Start Scan F4
+Photocopy... Ctrl+F
+Auto Select Ctrl+A
+Scan Parameters... Ctrl+Shift+S
+-->
 <varlistentry>
 <term>
 <menuchoice
-><shortcut
-> <keycombo action="simul"
->&Ctrl;<keycap
->O</keycap
-></keycombo
-> </shortcut
-> <guimenu
->Imagen</guimenu
+><guimenu
+>Escanear</guimenu
 > <guimenuitem
->OCR en imagen...</guimenuitem
+>OCR de imagen...</guimenuitem
 > </menuchoice
 ></term>
 <listitem>
 <para
 >Inicia la ventana del reconocimiento óptico de caracteres (<acronym
 >OCR</acronym
->). Si usted tiene instalado <application
->gocr</application
->, la ruta para accederlo debe estar correctamente configurada en el sistema. De esta forma se iniciará el reconocimiento de caracteres de la imagen previa o del área seleccionada.</para>
+>) sobre la totalidad de la imagen usando el sistema de reconocimiento definido en la página <guilabel
+>OCR</guilabel
+> del diálogo de preferencia. Esto inicia el reconocimiento de caracteres para la imagen de la vista previa.</para>
 </listitem
 > 
 </varlistentry
@@ -423,29 +451,37 @@
 
 <varlistentry>
 <term
-> 
-<menuchoice
-><shortcut
-> <keycombo action="simul"
->&Ctrl;<keycap
->C</keycap
-></keycombo
-> </shortcut
-> <guimenu
->Imagen</guimenu
+><menuchoice
+><guimenu
+>Escanear</guimenu
 > <guimenuitem
->OCR en selección...</guimenuitem
+>Selección de OCR...</guimenuitem
 > </menuchoice
 ></term
 > 
 <listitem>
 <para
->Reaparecerá una ventana para el reconocimiento de caracteres. Aquí, sin embargo, el reconocimiento sólo se produce en el área seleccionada en la exploración final.</para>
+>Reaparecerá una ventana para el reconocimiento de caracteres. Aquí, sin embargo, el reconocimiento solo se produce en el área seleccionada en la exploración final.</para>
 </listitem
 > 
-</varlistentry
+</varlistentry>
+<!--
+Spell Check OCR Result...
+Save OCR Result Text... Ctrl+U
+-->
+</variablelist
 > 
+</sect2>
+ 
+<sect2>
+<title
+>El menú Imagen</title>
 
+<para
+>Las acciones de este menú también se muestran en el menú de contexto de la ventana de vista previa.</para>
+
+<variablelist
+> 
 
 <varlistentry>
 <term>
@@ -502,7 +538,7 @@
 ><shortcut
 > <keycombo action="simul"
 >&Ctrl;<keycap
->S</keycap
+>1</keycap
 ></keycombo
 > </shortcut
 > <guimenu
@@ -526,34 +562,10 @@
 </listitem
 > 
 </varlistentry>
-
-<varlistentry
-> 
-<term>
-<menuchoice
-><shortcut
-> <keycombo action="simul"
->&Ctrl;<keycap
->N</keycap
-></keycombo
-> </shortcut
-> <guimenu
->Imagen</guimenu
-> <guimenuitem
->Crear desde la selección</guimenuitem
-> </menuchoice
-></term
-> 
-<listitem>
-<para
->Si la imagen explorada incluye más información de la que usted quiere que aparezca en la imagen final, utilice esta herramienta para recortar la imagen marcando la selección en la versión grande de la derecha y después seleccionando esta herramienta. La imagen será recortada de acuerdo con su selección. Puede que esta función se resulte familiar si está habituado a trabajar con <application
->The GIMP</application
->.</para>
-</listitem
-> 
-</varlistentry
-> 
-
+<!--
+Set Zoom...
+Keep Zoom Setting Ctrl+Z
+-->
 <varlistentry
 > 
 <term>
@@ -567,7 +579,7 @@
 > <guimenu
 >Imagen</guimenu
 > <guimenuitem
->Voltear imagen verticalmente</guimenuitem
+>Voltear verticalmente</guimenuitem
 > </menuchoice
 ></term
 > 
@@ -592,7 +604,7 @@
 > <guimenu
 >Imagen</guimenu
 > <guimenuitem
->Voltear imagen horizontalmente</guimenuitem
+>Voltear horizontalmente</guimenuitem
 > </menuchoice>
 </term
 > 
@@ -604,28 +616,6 @@
 </varlistentry
 > 
 
-<varlistentry>
-<term
-><menuchoice
-><shortcut
-> <keycombo action="simul"
->&Ctrl;<keycap
->B</keycap
-></keycombo
-> </shortcut
-> <guimenu
->Imagen</guimenu
-> <guimenuitem
->Voltear imagen en ambas direcciones</guimenuitem
-> </menuchoice
-></term
-> 
-<listitem>
-<para
->Voltea la imagen tanto vertical como horizontalmente.</para>
-</listitem>
-</varlistentry>
-
 <varlistentry
 > 
 <term>
@@ -633,37 +623,13 @@
 ><shortcut
 > <keycombo action="simul"
 >&Ctrl;<keycap
->R</keycap
+>7</keycap
 ></keycombo
 > </shortcut
 > <guimenu
 >Imagen</guimenu
 > <guimenuitem
->Rotar imagen a la derecha</guimenuitem
-> </menuchoice
-></term
-> 
-<listitem>
-<para
->Gira la imagen noventa grados hacia la derecha.</para>
-</listitem>
-</varlistentry
-> 
-
-<varlistentry
-> 
-<term>
-<menuchoice
-><shortcut
-> <keycombo action="simul"
->&Ctrl;<keycap
->W</keycap
-></keycombo
-> </shortcut
-> <guimenu
->Imagen</guimenu
-> <guimenuitem
->Rotar imagen a la izquierda</guimenuitem
+>Rotar en sentido antihorario</guimenuitem
 > </menuchoice>
 </term
 > 
@@ -675,19 +641,43 @@
 </varlistentry
 > 
 
+<varlistentry
+> 
+<term>
+<menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>9</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Imagen</guimenu
+> <guimenuitem
+>Rotar en sentido horario</guimenuitem
+> </menuchoice
+></term
+> 
+<listitem>
+<para
+>Gira la imagen noventa grados hacia la derecha.</para>
+</listitem>
+</varlistentry
+> 
+
 <varlistentry>
 <term>
 <menuchoice
 ><shortcut
 > <keycombo action="simul"
 >&Ctrl;<keycap
->D</keycap
+>8</keycap
 ></keycombo
 > </shortcut
 > <guimenu
 >Imagen</guimenu
 > <guimenuitem
->Rotar imagen 180 grados</guimenuitem
+>Rotar la imagen 180 grados</guimenuitem
 > </menuchoice>
 </term
 > 
@@ -703,262 +693,163 @@
 
 <sect2>
 <title
->El menú <guimenu
+>El menú Preferencias</title>
+
+<para
+>Además de los típicos menús <guimenu
 >Preferencias</guimenu
-></title>
+> y <guimenu
+>Ayuda</guimenu
+> de &kde; que se describen en el capítulo <ulink url="help:/fundamentals/menus.html"
+>Menú</ulink
+> de la documentación de los principios básicos de &kde;, &kooka; dispone de las siguientes entradas específicas de la aplicación: </para>
 
 <variablelist>
-<varlistentry>
+
+<varlistentry
+> 
 <term>
 <menuchoice
 ><guimenu
 >Preferencias</guimenu
 > <guimenuitem
->Mostrar barra de herramientas</guimenuitem
+>Seleccionar dispositivo de escáner...</guimenuitem
 > </menuchoice>
-</term
-> 
+</term>
 <listitem>
 <para
->Eliminar la barra de herramientas superior para proporcionar mayor área de visión. </para>
+>Si dispone de varios escáneres, use esta acción para seleccionar un escáner y usarlo siempre tras iniciar la aplicación.</para>
 </listitem
 > 
 </varlistentry>
 
-<varlistentry>
+<varlistentry
+> 
 <term>
 <menuchoice
 ><guimenu
 >Preferencias</guimenu
 > <guimenuitem
->Mostrar barra de estado</guimenuitem
+>Añadir dispositivo de escáner...</guimenuitem
 > </menuchoice>
 </term
-> 
-<listitem>
+><listitem>
 <para
->Elimina la barra de estado inferior para proporcionar mayor área de visión.</para>
-</listitem
-> 
-</varlistentry>
- </variablelist>
-</sect2>
-
-<sect2>
-<title
->Configuración de accesos rápidos</title>
-
-<para
->El menú <menuchoice
-> <guimenu
->Preferencias</guimenu
-><guimenuitem
->Configurar accesos rápidos...</guimenuitem
-></menuchoice
-> le permite especificar las asignaciones de las teclas</para>
-
-
-<para
->A continuación se muestra un ejemplo de cómo configurar un acceso rápido para eliminar una imagen.</para>
-
-<screenshot>
-<screeninfo
->Imagen del diálogo de accesos rápidos</screeninfo>
-	<mediaobject>
-	  <imageobject>
-	    <imagedata fileref="shortcut0.png" format="PNG"/>
-	  </imageobject>
-	</mediaobject>
-</screenshot>
-
-<itemizedlist>
-<listitem
-><para
->Pinche en el botón de personalizar. </para
-></listitem>
-
-<listitem
-><para
->Después pinche en el botón primario. </para
-></listitem>
-
-<listitem
-><para
->Pulse <userinput
-><keycombo action="seq"
-><keycap
->CTRL</keycap
-><keycap
->X</keycap
-></keycombo
-></userinput
-> y desaparecerá el diálogo. La asignación ya estará configurada. </para
-></listitem>
-</itemizedlist>
-
-<screenshot>
-<screeninfo
->Imagen del diálogo de asignaciones de teclas</screeninfo>
-	<mediaobject>
-	  <imageobject>
-	    <imagedata fileref="shortcut1.png" format="PNG"/>
-	  </imageobject>
-	</mediaobject>
-</screenshot>
-
-<para
->Ahora, la pulsación de las teclas <userinput
-><keycombo action="seq"
-><keycap
->CTRL</keycap
-><keycap
->X</keycap
-></keycombo
-></userinput
-> eliminará la imagen de la <guilabel
->Galería de Kooka</guilabel
->. </para>
-</sect2>
-
-<sect2>
-<title
->Configuración de barra de herramientas</title>
-<para
->El menú <menuchoice
-> <guimenu
->Preferencias</guimenu
-><guimenuitem
->Configurar barras de herramientas...</guimenuitem
-></menuchoice
-> se utiliza para añadir botones adicionales a las barras de herramientas.</para>
-
-<screenshot>
-<screeninfo
->Imagen del diálogo de barras de herramientas</screeninfo>
-	<mediaobject>
-	  <imageobject>
-	    <imagedata fileref="toolbar.png" format="PNG"/>
-	  </imageobject>
-	</mediaobject>
-</screenshot>
-
-
-<itemizedlist>
-
-<listitem>
-<para
->Para añadir un botón a la barra de herramientas de archivo, </para>
-
-<screenshot>
-<screeninfo
->Imagen del diálogo de barras de herramientas</screeninfo>
-	<mediaobject>
-	  <imageobject>
-	    <imagedata fileref="toolbar1.png" format="PNG"/>
-	  </imageobject>
-	</mediaobject>
-</screenshot>
-
-<para
->asegúrese de que <guilabel
->Barra de herramientas principal</guilabel
-> se muestre en la lista desplegable superior. </para
-></listitem>
-
-<listitem
-><para
->Pinche en uno de los elementos del panel de la izquierda. El elemento presentará ahora un fondo azul indicando que ha sido seleccionado. </para
-></listitem>
-
-<listitem
-><para
->A continuación pinche en el botón de la <keysym
->flecha derecha</keysym
-> para colocarlo en el panel derecho. </para
-></listitem>
-
-<listitem
-><para
->Pinche en <userinput
-><guilabel
->Aplicar</guilabel
-></userinput
-> y después en <userinput
-><guilabel
->Aceptar</guilabel
-></userinput
-> </para
-></listitem>
-</itemizedlist>
-
-
-<para
->El nuevo elemento aparecerá en la barra de herramientas. <screenshot>
-<screeninfo
->Imagen del diálogo de barras de herramientas</screeninfo>
-	<mediaobject>
-	  <imageobject>
-	    <imagedata fileref="toolbar2.png" format="PNG"/>
-	  </imageobject>
-	</mediaobject>
-</screenshot>
-</para>
-</sect2>
-
-<sect2>
-<title
->Configuración de Kooka</title>
-<para
->El menú <menuchoice
-> <guimenu
->Preferencias</guimenu
-><guimenuitem
->Configurar Kooka...</guimenuitem
-> </menuchoice
-> </para>
-
-
-<variablelist>
-<varlistentry>
-<term>
-<menuchoice>
-<guilabel
->Opciones de inicio de Kooka</guilabel
-> 
-</menuchoice>
-</term
-> 
-<listitem>
-<para
->Quizá quiera desactivar <guilabel
->Mostrar la casilla de selección de escáner en el siguiente inicio</guilabel
->, si únicamente tiene un escáner. Si únicamente tiene un ordenador, también puede desactivar <guilabel
->Interrogar la red buscando escáneres disponibles</guilabel
->. </para>
-</listitem
-> 
-</varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
-<guilabel
->Hoja de contactos</guilabel
-> 
-</menuchoice>
-</term
-> 
-<listitem>
-<para
->Aquí se puede ajustar el tamaño y el sombreado de los contactos, así como el fondo. Por ejemplo, quizá prefiera reducir el tamaño de los contactos si está explorando muchas páginas de un libro. </para>
+>Permite añadir un dispositivo que no se haya detectado automáticamente durante el inicio de &kooka;.</para>
 </listitem
 > 
 </varlistentry>
 
 </variablelist>
-
 </sect2>
 
+</sect1>
+
+
+<sect1 id="configuration">
+<title
+>Configuración de Kooka</title>
+
+<variablelist>
+<varlistentry>
+<term>
+<menuchoice>
+<guilabel
+>General</guilabel
+> 
+</menuchoice>
+</term
+> 
+<listitem>
+<para
+>Use el botón de esta sección para volver a activar todos los mensajes y preguntas que se han ocultado al usar la opción <guibutton
+>No volver a preguntarme</guibutton
+>.</para>
+</listitem
+> 
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guilabel
+>Inicio</guilabel
+> 
+</menuchoice>
+</term
+> 
+<listitem>
+<para
+>Quizá quiera desmarcar la casilla <guilabel
+>Mostrar el diálogo de selección de escáner</guilabel
+> si solo tiene un escáner. Si también tiene un único ordenador, tal vez quiera desmarcar la casilla <guilabel
+>Consultar en la red los escáneres disponibles</guilabel
+>. </para>
+</listitem
+> 
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guilabel
+>Guardar imagen</guilabel
+> 
+</menuchoice>
+</term
+> 
+<listitem>
+<para
+><guilabel
+>Usar siempre el asistente para guardar</guilabel
+> <guilabel
+>Solicitar un nombre de archivo al guardar</guilabel
+> <guilabel
+>Antes de iniciar el escaneo</guilabel
+> / <guilabel
+>Después de terminar el escaneo</guilabel
+>. </para>
+</listitem
+> 
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guilabel
+>Galería y miniaturas</guilabel
+> 
+</menuchoice>
+</term
+> 
+<listitem>
+<para
+>Aquí se puede ajustar el tamaño de los contactos, así como el fondo. Por ejemplo, quizá prefiera reducir el tamaño de los contactos si está explorando muchas páginas de un libro. </para>
+<para
+>En la sección <guilabel
+>Galería de imágenes</guilabel
+>, seleccione cómo y dónde se muestran las carpetas recientes.</para>
+</listitem
+> 
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guilabel
+>OCR</guilabel
+> 
+</menuchoice>
+</term
+> 
+<listitem>
+<para
+>Seleccionar el motor OCR y la ruta a su ejecutable. </para>
+</listitem
+> 
+</varlistentry>
+
+</variablelist>
 
 </sect1>
 </chapter>
@@ -970,37 +861,41 @@
 >Más en almacenamiento de imágenes</subtitle>
 
 <para
->El método de almacenamiento de una imagen difiere en &kooka; un poco con respecto a la mayoría de aplicaciones. Pinche en el apartado <guilabel
+>El método de almacenamiento de una imagen difiere un poco en &kooka; con respecto a la mayoría de aplicaciones. Pulse en la pestaña <guilabel
 >Galería</guilabel
-> para abrir un pequeño navegador de archivos. Esta es la carpeta <filename class="directory"
->~/.kde/share/apps/ScanImages/</filename
->. En la parte inferior de la ventana, se mostrará la subcarpeta de galería actual. Este es el lugar en el que se almacenan por primera vez las imágenes como archivos. Al iniciar &kooka; por primera vez, sólo verá la carpeta <filename class="directory"
->ScanImages</filename
->. Puede crear subcarpetas pinchando en la carpeta con el botón <mousebutton
+> para abrir un sencillo navegador de archivos. Esta es la carpeta <filename class="directory"
+>~/Documentos/KookaGallery</filename
+>. En la ventana se mostrará la subcarpeta actual de la galería. Este es el lugar donde se almacenan por primera vez las imágenes como archivos. Al iniciar &kooka; por primera vez, solo verá la carpeta <filename class="directory"
+>KookaGallery</filename
+>. Puede crear subcarpetas haciendo clic en esta carpeta con el botón <mousebutton
 >derecho</mousebutton
-> del ratón. La carpeta seleccionada, destacada en azul, es el lugar de almacenamiento primario de las imágenes obtenidas. Estas se nombran en orden numérico ascendente como <filename
+> del ratón. La carpeta seleccionada, resaltada en azul, es el lugar de almacenamiento primario de las imágenes obtenidas. Las imágenes escaneadas se etiquetan en orden numérico ascendente, como <filename
 >kscan_0001</filename
 > y<filename
 >kscan_0002</filename
 >.</para>
 
 <para
->Para guardar una imagen permanentemente, pinche sobre el nombre con el botón <mousebutton
->izquierdo</mousebutton
-> del ratón. A continuación, introduzca un nuevo nombre al archivo y una extensión acorde con el formato elegido al iniciar la exploración. Si introduce una extensión diferente, recibirá un mensaje de error indicando que ese formato no corresponde con el explorado. Aunque sí puede guardar una imagen bajo ese nombre, esta conservará su formato original. En este momento no está disponible la conversión <quote
->al vuelo</quote
->.</para
+>Para guardar una imagen permanentemente, use <mousebutton
+>Cambiar nombre de la imagen</mousebutton
+> y proporcione un nuevo nombre y una extensión acorde con el formato elegido para escanear. Si introduce una extensión distinta, se le mostrará un mensaje de error indicando que ese formato no corresponde con el de escaneo. Aunque puede guardar la imagen con ese nombre, esta conservará su formato original. Hasta ahora no está disponible la conversión «al vuelo».</para
 ><para
->Si no desea utilizar este método para administrar sus imágenes en <filename class="directory"
->~/.kde/share/apps/ScanImages/</filename
->, siempre puede, desde luego, guardarlas en otro lugar. Para hacerlo, pinche sobre el nombre de la imagen con el botón <mousebutton
+>Si no desea usar este método para la gestión de imágenes en <filename class="directory"
+>~/Documentos/KookaGallery/</filename
+>, también puede, por supuesto, guardarlas en otra ubicación. Para ello, haga clic con el botón <mousebutton
 >derecho</mousebutton
-> del ratón y seleccione <guilabel
->Guardar</guilabel
->. Elija aquí cualquier ruta. Además también puede cerrar o eliminar imágenes desde el mismo menú.</para>
+> en el nombre de la imagen y seleccione <guilabel
+>Guardar imagen</guilabel
+>. Escoja cualquier ruta aquí. Además, se cierran o se borran permanentementelas imágenes aquí.</para>
 
 <para
->Para incorporar otras imágenes a la galería, añádalas en &konqueror; por el método de arrastrar y soltar. Abra &konqueror; y sitúese en la carpeta que contenga las imágenes deseadas. Para añadirlas a la galería de &kooka; arrástrelas y suéltelas sobre la misma.</para>
+>Para incorporar otras imágenes a la galería, use <menuchoice
+> <guimenu
+>Archivo</guimenu
+><guimenuitem
+>Importar imagen</guimenuitem
+> </menuchoice
+> o añádalas mediante arrastrar y soltar. Abra el gestor de archivos en la carpeta que contiene las imágenes que quiere. Para añadirlas a la galería de  &kooka;, arrástrelas y suéltelas en la galería.</para>
 
 </chapter>
 
@@ -1011,26 +906,26 @@
 <para
 >Como ya se ha mencionado, en necesario que <application
 >gocr</application
-> esté instalado. Explore una previsualización de su documento en escala de grises o color. Sólo podrá explorar en modo binario si tiene una página totalmente blanca impresa en tinta totalmente negra. A continuación resalte en la ventana de previsualización el texto que se debe reconocer. Por último haga la última exploración en modo binario con el botón <guibutton
+> esté instalado. Explore una previsualización de su documento en escala de grises o color. Solo podrá explorar en modo binario si tiene una página totalmente blanca impresa en tinta totalmente negra. A continuación resalte en la ventana de previsualización el texto que se debe reconocer. Por último haga la última exploración en modo binario con el botón <guibutton
 >Explorar</guibutton
 >.</para>
 
 <para
->Ahora pinche en el segundo icono por la izquierda, <inlinemediaobject
+>Ahora pulse el icono <inlinemediaobject
 ><imageobject
-> <imagedata fileref="ocr-select.png" format="PNG"/> </imageobject
+><imagedata fileref="ocr-select.png" format="PNG"/> </imageobject
 ></inlinemediaobject
->, en el panel de iconos, <guilabel
->OCR en selección...</guilabel
+> de la barra de herramientas, <guilabel
+>Selección de OCR</guilabel
 >, o seleccione este elemento en el menú <guilabel
->Imagen</guilabel
->. En su primer intento no cambie los parámetros que se muestra por defecto en la ventana <acronym
+>Escanear</guilabel
+>. En la primera prueba, no cambie los ajustes predeterminados que se muestran en la ventana <acronym
 >OCR</acronym
->. Normalmente esos parámetros deberían ser los apropiados en la mayoría de los casos. Ahora pinche en <guimenuitem
->Iniciar reconocimiento de caracteres</guimenuitem
->. Verá una ventana que contendrá los resultados del <acronym
+> que se muestra, ya que suelen ser apropiados y satisfacen la mayoría de situaciones. A continuación pulse <guimenuitem
+>Iniciar OCR</guimenuitem
+>. Se mostrará una ventana que contiene el resultado del <acronym
 >OCR</acronym
->. La calidad depende en gran medida de la del propio documento. </para>
+>. La calidad del resultado depende en gran medida de la calidad del propio documento. </para>
 
 <screenshot
 > <screeninfo
@@ -1041,13 +936,20 @@
 format="PNG"/></imageobject
 > </mediaobject
 > </screenshot>
-
 <para
->El texto se puede abrir con el editor &kate; pinchando en el botón. Después de la exploración final, haga una selección en la imagen mostrada a la derecha para cargar sólo una parte del texto o la imagen en el <acronym
+>Tras completar el reconocimiento de caracteres, inicie una comprobación ortográfica del material reconocido. Puede editar el contenido en la ventana <guilabel
+>OCR</guilabel
+> y exportarlo como texto sin formato. </para>
+<para
+>Tras el escaneo final, marque una selección en el visor de la imagen de la parte derecha para cargar solo una parte del texto o de la imagen en el <acronym
 >OCR</acronym
->. A continuación, en el panel de iconos, pinche en el tercero por la izquierda o en el menú la opción <guimenuitem
->OCR en selección</guimenuitem
->. A continuación proceda como se describe en la sección anterior.</para>
+>. A continuación, en la barra de herramientas, pulse el icono <inlinemediaobject
+><imageobject
+><imagedata fileref="ocr-select.png" format="PNG"/> </imageobject
+></inlinemediaobject
+> o abra el menú <guimenuitem
+>Selección de OCR</guimenuitem
+>. Ahora ya puede continuar como se ha descrito en la sección anterior.</para>
 
 <screenshot
 > 
@@ -1076,9 +978,7 @@ format="PNG"/></imageobject
 >&kooka;</para>
 
 <para
->Copyright de la aplicación 2001-2002 Klaas Freitag <email
->freitag@suse.de</email
-></para>
+>Copyright de la aplicación 2000-2010, los desarrolladores y colaboradores de &kooka;</para>
 
 <para
 >Copyright de la documentación 2002 Martin Sommer <email
@@ -1086,22 +986,10 @@ format="PNG"/></imageobject
 ></para>
 
 <para
->Traducido por Miguel Revilla Rodríguez <email
->yo@miguelrevilla.com</email
-></para
-> 
-&underFDL; &underGPL; </chapter
+>Traducido por Eloy Cuadra <email
+>ecuadra@eloihr.net</email
+>.</para
+> &underFDL; &underGPL; </chapter
 >  
-
-<appendix id="installation">
-<title
->Instalación</title>
-
-&install.intro.documentation;
-
-&install.compile.documentation;
-                
-</appendix>
-
 </book>
 
