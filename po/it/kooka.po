@@ -6,14 +6,14 @@
 # Bergoglio Cristiano <bergoglio@tiscali.it>, 2012.
 # Federico Zenith <federico.zenith@member.fsf.org>, 2012.
 # Vincenzo Reale <smart2128vr@gmail.com>, 2015.
-# Valter Mura <valtermura@gmail.com>, 2018, 2019, 2020, 2021.
+# Valter Mura <valtermura@gmail.com>, 2018, 2019, 2020, 2021, 2022.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-10-20 00:45+0000\n"
-"PO-Revision-Date: 2021-11-30 19:41+0100\n"
+"PO-Revision-Date: 2022-10-29 09:16+0200\n"
 "Last-Translator: Valter Mura <valtermura@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -21,7 +21,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 21.08.3\n"
+"X-Generator: Lokalize 22.04.0\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -1104,17 +1104,16 @@ msgid "Create New Gallery"
 msgstr "Crea una nuova galleria"
 
 #: galleryroot.cpp:169
-#, fuzzy, kde-format
-#| msgid "Create New Gallery"
+#, kde-format
 msgctxt "@action:button"
 msgid "Create New"
-msgstr "Crea una nuova galleria"
+msgstr "Crea nuovo"
 
 #: galleryroot.cpp:170
 #, kde-format
 msgctxt "@action:button"
 msgid "Continue With Old"
-msgstr ""
+msgstr "Continua col vecchio"
 
 #: galleryroot.cpp:183 galleryroot.cpp:197
 #, kde-kuit-format
