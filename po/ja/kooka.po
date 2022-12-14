@@ -2998,19 +2998,3 @@ msgstr ""
 #, kde-format
 msgid "Tiny"
 msgstr ""
-
-#, fuzzy
-#~| msgid "Kooka Gallery"
-#~ msgid "Kooka KIPI Helper"
-#~ msgstr "Kooka ギャラリー"
-
-#, fuzzy
-#~| msgid "&Save Image..."
-#~ msgctxt "as added to action text"
-#~ msgid "..."
-#~ msgstr "画像を保存(&S)..."
-
-#, fuzzy
-#~| msgid "Unknown image type"
-#~ msgid "Unknown plugin action '%1'"
-#~ msgstr "未知の画像タイプ"
