@@ -482,7 +482,7 @@ msgstr "No s'ha pogut llegir la imatge TIFF"
 #: scanimage.cpp:229
 #, kde-format
 msgid "TIFF not supported"
-msgstr "El TIFF no està admés"
+msgstr "TIFF no està admés"
 
 #: scanparams.cpp:134
 #, kde-kuit-format

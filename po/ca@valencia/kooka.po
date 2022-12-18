@@ -889,7 +889,7 @@ msgstr ""
 "El <b>gràfic de xarxa portable («Portable Network Graphics»)</b> és un "
 "format comprimit sense pèrdua dissenyat per a ser portable i ampliable. És "
 "adequat per a qualsevol tipus d'imatge en color o escala de grisos, indexada "
-"o color real.<p>El PNG és un format obert que és àmpliament acceptat."
+"o color real.<p>PNG és un format obert que és àmpliament acceptat."
 
 #: formatdialog.cpp:155
 #, kde-format
@@ -899,7 +899,7 @@ msgid ""
 "repeated loading and saving.<p>This is an open format which is widely "
 "supported."
 msgstr ""
-"El <b>JPEG</b> és un format comprimit adequat per a imatges de color real o "
+"<b>JPEG</b> és un format comprimit adequat per a imatges de color real o "
 "d'escala de grisos. És un format amb pèrdua, així que no es recomana per a "
 "arxivar o per a carregar i guardar repetidament.<p>És un format obert que és "
 "àmpliament acceptat."
@@ -911,9 +911,9 @@ msgid ""
 "option of lossless compression, but so far is not widely supported. It is "
 "suitable for true color or grayscale images."
 msgstr ""
-"El <b>JPEG 2000</b> pretenia ser una actualització del format JPEG, amb "
-"l'opció de compressió sense pèrdua, però no és àmpliament acceptat. És "
-"adequat per a imatges de color real o d'escala de grisos."
+"<b>JPEG 2000</b> pretenia ser una actualització del format JPEG, amb l'opció "
+"de compressió sense pèrdua, però no és àmpliament acceptat. És adequat per a "
+"imatges de color real o d'escala de grisos."
 
 #: formatdialog.cpp:176
 #, kde-format
@@ -980,7 +980,7 @@ msgstr ""
 "un format obert adequat per a tot tipus d'imatges.<p>Les imatges produïdes "
 "per un escàner no són animades, per tant, a menys que es requerisca "
 "especialment per a utilitzar-les amb altres aplicacions, en el seu lloc "
-"utilitzeu el PNG."
+"utilitzeu PNG."
 
 #: formatdialog.cpp:231
 #, kde-format
@@ -2796,7 +2796,7 @@ msgstr "Exporta la imatge"
 #: scangallery.cpp:998
 #, kde-format
 msgid "Import Image File to Gallery"
-msgstr "Importa un fitxer d'imatge a la galeria"
+msgstr "Importa un fitxer d'imatge cap a la galeria"
 
 #: scangallery.cpp:1113
 #, kde-kuit-format
