@@ -123,6 +123,9 @@ target_link_libraries(kooka
 include_directories(${CMAKE_CURRENT_BINARY_DIR}/..)
 add_dependencies(kooka vcsversion)
 
+#18n for both kooka and libkookascan
+ki18n_install(../po)
+
 ########### install files ###############
 
 if (INSTALL_BINARIES)
