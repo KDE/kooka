@@ -127,7 +127,7 @@ msgstr "Configuració avançada per a la detecció automàtica"
 #, kde-format
 msgctxt "@title:window"
 msgid "Autoselect Settings"
-msgstr "Configuració de la selecció automàtica"
+msgstr "Configureu la selecció automàtica"
 
 #: autoselectdialog.cpp:82
 #, kde-format
@@ -162,7 +162,7 @@ msgstr "Utilitza sempre este dispositiu durant l'inici"
 #: gammadialog.cpp:53
 #, kde-format
 msgid "Edit Gamma Table"
-msgstr "Edició de la taula de gamma"
+msgstr "Editeu la taula de gamma"
 
 #: gammadialog.cpp:61
 #, kde-format
@@ -292,7 +292,7 @@ msgstr "Cap escàner seleccionat"
 #: kscandevice.cpp:1387
 #, kde-format
 msgid "Default startup configuration"
-msgstr "Configuració d'inici predeterminat"
+msgstr "Configureu l'inici predeterminat"
 
 #: kscandevice.cpp:1487
 #, kde-kuit-format
