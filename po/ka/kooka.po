@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-10-20 00:45+0000\n"
-"PO-Revision-Date: 2022-10-06 11:45+0200\n"
+"PO-Revision-Date: 2023-01-24 08:44+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.1.1\n"
+"X-Generator: Poedit 3.2.2\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -31,7 +31,7 @@ msgstr "Temuri.doghonadze@gmail.com"
 #: ../plugins/destination/abstractdestination.cpp:86
 #, kde-format
 msgid "Remember this format"
-msgstr ""
+msgstr "ამ ფორმატის დამახსოვრება"
 
 #: ../plugins/destination/abstractdestination.cpp:120
 #, kde-kuit-format
@@ -51,12 +51,12 @@ msgstr "სხვები…"
 #: ../plugins/destination/application/destinationapplication.cpp:94
 #, kde-format
 msgid "Sending to application"
-msgstr ""
+msgstr "აპლიკაციისთვის გაგზავნა"
 
 #: ../plugins/destination/application/destinationapplication.cpp:96
 #, kde-kuit-format
 msgid "Sending to <application>%1</application>"
-msgstr ""
+msgstr "<application>%1</application>-სთვის გაგზავნა"
 
 #: ../plugins/destination/application/destinationapplication.cpp:192
 #, kde-format
@@ -72,7 +72,7 @@ msgstr "გამოსახულების ფორმატი:"
 #: ../plugins/destination/clipboard/destinationclipboard.cpp:61
 #, kde-format
 msgid "Copying image to clipboard"
-msgstr ""
+msgstr "გამოსახულების ბუფერში კოპირება"
 
 #: ../plugins/destination/gallery/destinationgallery.cpp:74
 #, kde-kuit-format
@@ -103,7 +103,7 @@ msgstr "დაბეჭდვა შეუძლებელია"
 #: ../plugins/destination/print/destinationprint.cpp:106
 #, kde-format
 msgid "Print immediately with same settings"
-msgstr ""
+msgstr "დაუყოვნებლივი დაბეჭდვა იგივე პარამეტრებით"
 
 #: ../plugins/destination/print/destinationprint.cpp:116
 #, kde-format
@@ -153,7 +153,7 @@ msgstr "გაზიარება:"
 #: ../plugins/destination/share/destinationshare.cpp:151
 #, kde-kuit-format
 msgid "<application>%1</application>"
-msgstr ""
+msgstr "<application>%1</application>"
 
 #: ../plugins/destination/share/destinationshare.cpp:217
 #, kde-kuit-format
@@ -205,7 +205,7 @@ msgstr "მორგება"
 #: ../plugins/ocr/abstractocrdialogue.cpp:149
 #, kde-format
 msgid "Optical Character Recognition using %1"
-msgstr ""
+msgstr "სიმბოლოების ოპტიკური გამოცნობა იყენებს: %1"
 
 #: ../plugins/ocr/abstractocrdialogue.cpp:192
 #, kde-format
@@ -242,7 +242,7 @@ msgstr "გადახედვა შეუძლებელია"
 #: ../plugins/ocr/abstractocrdialogue.cpp:242
 #, kde-format
 msgid "No information available"
-msgstr ""
+msgstr "ინფორმაცია ხელმიუწვდომელია"
 
 #: ../plugins/ocr/abstractocrdialogue.cpp:245
 #, kde-format
@@ -252,7 +252,7 @@ msgstr "წყარო"
 #: ../plugins/ocr/abstractocrdialogue.cpp:246
 #, kde-format
 msgid "Source Image Information"
-msgstr ""
+msgstr "წყაროს გამოსახულების ინფორმაცია"
 
 #: ../plugins/ocr/abstractocrdialogue.cpp:265
 #, kde-format
@@ -267,7 +267,7 @@ msgstr "OCR ძრავის ინფორმაცია"
 #: ../plugins/ocr/abstractocrdialogue.cpp:283
 #, kde-format
 msgid "Highlight misspelled words"
-msgstr ""
+msgstr "არასწორად დაწერილი სიტყვების გამოკვეთა"
 
 #: ../plugins/ocr/abstractocrdialogue.cpp:289
 #, kde-format
@@ -304,17 +304,17 @@ msgstr "მართლწერის შემოწმება"
 #: ../plugins/ocr/abstractocrdialogue.cpp:333
 #, kde-format
 msgid "OCR Result Spell Checking"
-msgstr ""
+msgstr "OCR-ის შედეგის მართლწერის შემოწმება"
 
 #: ../plugins/ocr/abstractocrdialogue.cpp:343
 #, kde-format
 msgid "Retain temporary files"
-msgstr ""
+msgstr "დროებითი ფაილების შენარჩუნება"
 
 #: ../plugins/ocr/abstractocrdialogue.cpp:346
 #, kde-format
 msgid "Verbose message output"
-msgstr ""
+msgstr "დამატებითი ინფორმაციის გამოტანა"
 
 #: ../plugins/ocr/abstractocrdialogue.cpp:351
 #, kde-format
@@ -324,17 +324,17 @@ msgstr "გამართვა"
 #: ../plugins/ocr/abstractocrdialogue.cpp:352
 #, kde-format
 msgid "OCR Debugging"
-msgstr ""
+msgstr "OCR-ის გამართვა"
 
 #: ../plugins/ocr/abstractocrdialogue.cpp:408
 #, kde-format
 msgid "No image"
-msgstr ""
+msgstr "გამოსახულების გარეშე"
 
 #: ../plugins/ocr/abstractocrdialogue.cpp:431
 #, kde-format
 msgid "Image: %1"
-msgstr ""
+msgstr "გამოსახულება: %1"
 
 #: ../plugins/ocr/abstractocrdialogue.cpp:431
 #, kde-format
@@ -344,12 +344,12 @@ msgstr "მონიშნული: %1"
 #: ../plugins/ocr/abstractocrengine.cpp:107
 #, kde-format
 msgid "OCR is already in progress"
-msgstr ""
+msgstr "OCR უკვე მიმდინარეობს"
 
 #: ../plugins/ocr/abstractocrengine.cpp:119
 #, kde-format
 msgid "OCR could not be started."
-msgstr ""
+msgstr "OCR-ის გაშვების შეცდომა."
 
 #: ../plugins/ocr/abstractocrengine.cpp:120
 #, kde-format
@@ -369,7 +369,7 @@ msgstr "OCR -ის მორგება..."
 #: ../plugins/ocr/abstractocrengine.cpp:181
 #, kde-format
 msgid "The OCR process was stopped"
-msgstr ""
+msgstr "OCR-ის პროცესი გაჩერდა"
 
 #: ../plugins/ocr/abstractocrengine.cpp:250
 #, kde-kuit-format
@@ -431,7 +431,7 @@ msgstr ""
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Running the OCR process failed."
-msgstr ""
+msgstr "OCR-ის პროცესის გაშვების შეცდომა."
 
 #: ../plugins/ocr/abstractocrengine.cpp:603
 #, kde-kuit-format
@@ -646,22 +646,22 @@ msgstr ""
 #: ../plugins/ocr/ocrad/ocrocraddialog.cpp:92
 #, kde-format
 msgid "No Layout Detection"
-msgstr ""
+msgstr "განლაგების ამოცნობის გარეშე"
 
 #: ../plugins/ocr/ocrad/ocrocraddialog.cpp:95
 #, kde-format
 msgid "Layout Detection"
-msgstr ""
+msgstr "განლაგების ამოცნობა"
 
 #: ../plugins/ocr/ocrad/ocrocraddialog.cpp:98
 #, kde-format
 msgid "Column Detection"
-msgstr ""
+msgstr "სვეტების ამოცნობა"
 
 #: ../plugins/ocr/ocrad/ocrocraddialog.cpp:99
 #, kde-format
 msgid "Full Layout Detection"
-msgstr ""
+msgstr "სრული განლაგების ამოცნობა"
 
 #: ../plugins/ocr/ocrad/ocrocraddialog.cpp:117
 #: ../plugins/ocr/ocrad/ocrocraddialog.cpp:138
@@ -909,7 +909,7 @@ msgstr ""
 #: formatdialog.cpp:280
 #, kde-format
 msgid "Save Assistant"
-msgstr ""
+msgstr "დამხმარის შენახვა"
 
 #: formatdialog.cpp:306
 #, kde-kuit-format
@@ -927,7 +927,7 @@ msgstr "ფაილის ფორმატი:"
 #: formatdialog.cpp:338
 #, kde-format
 msgid "Image sub-format:"
-msgstr ""
+msgstr "გამოსახულების ქვეფორმატი:"
 
 #: formatdialog.cpp:384
 #, kde-format
@@ -942,7 +942,7 @@ msgstr "აირჩიეთ ფორმატი..."
 #: formatdialog.cpp:436
 #, kde-format
 msgid "No format selected."
-msgstr ""
+msgstr "ფორმატი არჩეული არაა."
 
 #: formatdialog.cpp:470
 #, kde-format
@@ -961,7 +961,7 @@ msgstr ""
 #: galleryroot.cpp:112
 #, kde-format
 msgid "Error creating gallery"
-msgstr ""
+msgstr "გალერეის შექმნის შეცდომა"
 
 #: galleryroot.cpp:164
 #, kde-kuit-format
@@ -975,13 +975,14 @@ msgstr ""
 #: galleryroot.cpp:168
 #, kde-format
 msgid "Create New Gallery"
-msgstr ""
+msgstr "ახალი გალერეის შექმნა"
 
 #: galleryroot.cpp:169
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Create New Gallery"
 msgctxt "@action:button"
 msgid "Create New"
-msgstr ""
+msgstr "ახალი გალერეის შექმნა"
 
 #: galleryroot.cpp:170
 #, kde-format
@@ -1002,12 +1003,12 @@ msgstr ""
 #: galleryroot.cpp:187
 #, kde-format
 msgid "New Gallery Created"
-msgstr ""
+msgstr "ახალი გალერეა შეიქმნა"
 
 #: galleryroot.cpp:201
 #, kde-format
 msgid "Old Gallery Exists"
-msgstr ""
+msgstr "არსებობს ძველი გალერეა"
 
 #: imagetransform.cpp:59
 #, kde-format
@@ -1095,13 +1096,13 @@ msgstr ""
 #: imgprintdialog.cpp:119
 #, kde-format
 msgid "Scan resolution:"
-msgstr "სკანირების გარჩევადობა"
+msgstr "სკანირების გარჩევადობა:"
 
 #: imgprintdialog.cpp:124
 #, kde-format
 msgctxt "@item:intext abbreviation for 'dots per inch'"
 msgid " dpi"
-msgstr ""
+msgstr " dpi"
 
 #: imgprintdialog.cpp:125
 #, kde-format
@@ -1213,7 +1214,7 @@ msgstr ""
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "None"
-msgstr ""
+msgstr "არაფერი"
 
 #: imgprintdialog.cpp:201
 #, kde-format
@@ -1275,7 +1276,7 @@ msgstr ""
 #, kde-format
 msgctxt "@info:status"
 msgid "%1 dpi"
-msgstr ""
+msgstr "%1 dpi"
 
 #: imgprintdialog.cpp:321
 #, kde-format
@@ -1436,12 +1437,12 @@ msgstr ""
 #: imgsaver.cpp:461
 #, kde-format
 msgid "Unable to rename the file"
-msgstr ""
+msgstr "ფაილის სახელის გადარქმევის შეცდომა"
 
 #: imgsaver.cpp:462
 #, kde-format
 msgid "Error copying file"
-msgstr ""
+msgstr "ფაილის კოპირების შეცდომა"
 
 #: imgsaver.cpp:463
 #, kde-format
@@ -1452,12 +1453,12 @@ msgstr "ფაილის სახელის გადარქმევი�
 #, kde-kuit-format
 msgctxt "@info"
 msgid "%1 <filename>%3</filename><nl/>%2"
-msgstr ""
+msgstr "%1 <filename>%3</filename><nl/>%2"
 
 #: kooka.cpp:100
 #, kde-format
 msgid "KDE Scanning"
-msgstr ""
+msgstr "სკანირება KDE-დან"
 
 #: kooka.cpp:134
 #, kde-format
@@ -1477,7 +1478,7 @@ msgstr "საწყისი ზომა"
 #: kooka.cpp:160
 #, kde-format
 msgid "Set Zoom..."
-msgstr ""
+msgstr "გადიდების დაყენება..."
 
 #: kooka.cpp:166
 #, kde-format
@@ -1512,7 +1513,7 @@ msgstr "საათის ისრის მიმართულებით 
 #: kooka.cpp:210
 #, kde-format
 msgid "Rotate 180 Degrees"
-msgstr ""
+msgstr "180°-ით შებრუნება"
 
 #: kooka.cpp:219
 #, kde-format
@@ -1522,17 +1523,17 @@ msgstr "ახალი საქაღალდე..."
 #: kooka.cpp:224
 #, kde-format
 msgid "Open With"
-msgstr ""
+msgstr "გამხსნელი პროგრამა"
 
 #: kooka.cpp:230
 #, kde-format
 msgid "Save Image..."
-msgstr ""
+msgstr "გამოსახულების შენახვა..."
 
 #: kooka.cpp:237
 #, kde-format
 msgid "Import Image..."
-msgstr ""
+msgstr "გამოსახულების შემოტანა..."
 
 #: kooka.cpp:242 kooka.cpp:550
 #, kde-format
@@ -1542,12 +1543,12 @@ msgstr "გამოსახულების წაშლა"
 #: kooka.cpp:249 kooka.cpp:551
 #, kde-format
 msgid "Rename Image"
-msgstr ""
+msgstr "გამოსახულების სახელის გადარქმევა"
 
 #: kooka.cpp:255 kooka.cpp:549
 #, kde-format
 msgid "Unload Image"
-msgstr ""
+msgstr "გამოსახულების გამოტვირთვა"
 
 #: kooka.cpp:262
 #, kde-format
@@ -1587,17 +1588,17 @@ msgstr "ავტომატური არჩევა"
 #: kooka.cpp:304
 #, kde-format
 msgid "OCR Image..."
-msgstr ""
+msgstr "გამოსახულების OCR..."
 
 #: kooka.cpp:308
 #, kde-format
 msgid "OCR Selection..."
-msgstr ""
+msgstr "OCR Selection..."
 
 #: kooka.cpp:312
 #, kde-format
 msgid "OCR File..."
-msgstr ""
+msgstr "ფაილის OCR..."
 
 #: kooka.cpp:316
 #, kde-format
@@ -1612,7 +1613,7 @@ msgstr ""
 #: kooka.cpp:537
 #, kde-format
 msgid "Unload Folder"
-msgstr ""
+msgstr "საქაღალდის გამოტვირთვა"
 
 #: kooka.cpp:538
 #, kde-format
@@ -1632,7 +1633,7 @@ msgstr "დასტა:"
 #: kookapref.cpp:55
 #, kde-format
 msgid "Preferences"
-msgstr ""
+msgstr "მორგება"
 
 #: kookapref.cpp:57
 #, kde-format
@@ -1652,17 +1653,17 @@ msgstr "გაშვება"
 #: kookapref.cpp:58
 #, kde-format
 msgid "Startup Options"
-msgstr ""
+msgstr "გაშვების მორგება"
 
 #: kookapref.cpp:59
 #, kde-format
 msgid "Image Saving"
-msgstr ""
+msgstr "გამოსახულების შენახვა"
 
 #: kookapref.cpp:59
 #, kde-format
 msgid "Image Saving Options"
-msgstr ""
+msgstr "გამოსახულების შენახვის მორგება"
 
 #: kookapref.cpp:60
 #, kde-format
@@ -1823,7 +1824,7 @@ msgstr ""
 #: kookasettings.kcfg:143
 #, kde-format
 msgid "Show recent folders:"
-msgstr ""
+msgstr "ბოლოს გამოყენებული საქაღალდეების ჩვენება:"
 
 #. i18n: ectx: tooltip, entry (GalleryLayout), group (Gallery)
 #: kookasettings.kcfg:144
@@ -1873,7 +1874,7 @@ msgstr ""
 #: kookasettings.kcfg:217
 #, kde-format
 msgid "Dust size:"
-msgstr ""
+msgstr "მტვრის ზომა:"
 
 #. i18n: ectx: tooltip, entry (OcrGocrDustSize), group (gocr)
 #: kookasettings.kcfg:218
@@ -1888,7 +1889,7 @@ msgstr ""
 #: kookasettings.kcfg:223
 #, kde-format
 msgid "Gray level:"
-msgstr ""
+msgstr "ნაცრისფრის დონე:"
 
 #. i18n: ectx: tooltip, entry (OcrGocrGrayLevel), group (gocr)
 #: kookasettings.kcfg:224
@@ -2006,7 +2007,7 @@ msgstr "სურათის ხედი"
 #: kookaview.cpp:265
 #, kde-format
 msgid "Scan Preview"
-msgstr ""
+msgstr "სკანირების გადახედვა"
 
 #: kookaview.cpp:275
 #, kde-format
@@ -2021,7 +2022,7 @@ msgstr "სკანირება"
 #: kookaview.cpp:287 kookaview.cpp:560 kookaview.cpp:579 scangallery.cpp:123
 #, kde-format
 msgid "Gallery"
-msgstr ""
+msgstr "გალერეა"
 
 #: kookaview.cpp:463
 #, kde-kuit-format
@@ -2037,7 +2038,7 @@ msgstr ""
 #: kookaview.cpp:518
 #, kde-format
 msgid "Add Scan Device"
-msgstr ""
+msgstr "სკამერის მოწყობილობის დამატება"
 
 #: kookaview.cpp:536
 #, kde-kuit-format
@@ -2054,7 +2055,7 @@ msgstr ""
 #: kookaview.cpp:582
 #, kde-format
 msgid "No scanner connected"
-msgstr ""
+msgstr "სკანერი მიერთბული არაა"
 
 #: kookaview.cpp:641
 #, kde-format
@@ -2064,12 +2065,12 @@ msgstr "არაფერია მონიშნული"
 #: kookaview.cpp:645
 #, kde-format
 msgid "Gallery folder %1"
-msgstr ""
+msgstr "გალერეის საქაღალდე %1"
 
 #: kookaview.cpp:645
 #, kde-format
 msgid "Gallery image %1"
-msgstr ""
+msgstr "გალერეის გამოსახულება %1"
 
 #: kookaview.cpp:710
 #, kde-format
@@ -2084,7 +2085,7 @@ msgstr ""
 #: kookaview.cpp:723
 #, kde-format
 msgid "OCR File"
-msgstr ""
+msgstr "OCR ფაილი"
 
 #: kookaview.cpp:733
 #, kde-kuit-format
@@ -2106,7 +2107,7 @@ msgstr ""
 #: kookaview.cpp:755
 #, kde-format
 msgid "OCR finished"
-msgstr ""
+msgstr "OCR დასრულდა"
 
 #: kookaview.cpp:762
 #, kde-format
@@ -2121,7 +2122,7 @@ msgstr ""
 #: kookaview.cpp:768
 #, kde-format
 msgid "OCR Spell Check"
-msgstr ""
+msgstr "OCR-ის მართლწერის შემოწმება"
 
 #: kookaview.cpp:784
 #, kde-format
@@ -2133,7 +2134,7 @@ msgstr ""
 #: kookaview.cpp:786
 #, kde-format
 msgid "OCR Not Configured"
-msgstr ""
+msgstr "OCR მორგებული არაა"
 
 #: kookaview.cpp:795
 #, kde-format
@@ -2164,17 +2165,17 @@ msgstr ""
 #: kookaview.cpp:1015
 #, kde-format
 msgid "Loaded image %1"
-msgstr ""
+msgstr "ჩატვირთულია გამოსახულება %1"
 
 #: kookaview.cpp:1016
 #, kde-format
 msgid "Unloaded image"
-msgstr ""
+msgstr "გამოტვირთული გამოსახულება"
 
 #: kookaview.cpp:1033
 #, kde-format
 msgid "Loading %1..."
-msgstr ""
+msgstr "%1-ის ჩატვირთვა..."
 
 #: main.cpp:44
 #, kde-format
@@ -2243,7 +2244,7 @@ msgstr ""
 #: main.cpp:92
 #, kde-format
 msgid "Klaas Freitag"
-msgstr ""
+msgstr "Klaas Freitag"
 
 #: main.cpp:92
 #, kde-format
@@ -2253,17 +2254,17 @@ msgstr "პროგრამისტი"
 #: main.cpp:93
 #, kde-format
 msgid "Mat Colton"
-msgstr ""
+msgstr "Mat Colton"
 
 #: main.cpp:93
 #, kde-format
 msgid "Graphics, web"
-msgstr ""
+msgstr "გრაფიკა, ვები"
 
 #: main.cpp:94
 #, kde-format
 msgid "Ivan Shvedunov"
-msgstr ""
+msgstr "Ivan Shvedunov"
 
 #: main.cpp:94
 #, kde-format
@@ -2273,7 +2274,7 @@ msgstr ""
 #: main.cpp:95
 #, kde-format
 msgid "Alex Kempshall"
-msgstr ""
+msgstr "Alex Kempshall"
 
 #: main.cpp:95
 #, kde-format
@@ -2323,7 +2324,7 @@ msgstr "პრესეტის სახელი:"
 #: newscanpresetdialog.cpp:73
 #, kde-format
 msgid "Description:"
-msgstr ""
+msgstr "აღწერა:"
 
 #: ocrresedit.cpp:159
 #, kde-format
@@ -2333,7 +2334,7 @@ msgstr ""
 #: ocrresedit.cpp:160
 #, kde-format
 msgid "Text File (*.txt)"
-msgstr ""
+msgstr "ტექსტური ფაილი (*.txt)"
 
 #: ocrresedit.cpp:166
 #, kde-kuit-format
@@ -2345,7 +2346,7 @@ msgstr ""
 #, kde-kuit-format
 msgctxt "@info"
 msgid "<nl/>%1"
-msgstr ""
+msgstr "<nl/>%1"
 
 #: ocrresedit.cpp:170
 #, kde-format
@@ -2377,17 +2378,17 @@ msgstr "სურათების გალერეა"
 #: prefspages.cpp:257
 #, kde-format
 msgid "Not shown"
-msgstr ""
+msgstr "ნაჩვენები არაა"
 
 #: prefspages.cpp:258
 #, kde-format
 msgid "At top"
-msgstr ""
+msgstr "თავში"
 
 #: prefspages.cpp:259
 #, kde-format
 msgid "At bottom"
-msgstr ""
+msgstr "ბოლოში"
 
 #: prefspages.cpp:274
 #, kde-format
@@ -2397,17 +2398,17 @@ msgstr "მინიატურის ხედი"
 #: prefspages.cpp:388
 #, kde-format
 msgid "None"
-msgstr ""
+msgstr "არაფერი"
 
 #: prefspages.cpp:400
 #, kde-format
 msgid "OCR Engine:"
-msgstr ""
+msgstr "OCR ძრავა:"
 
 #: prefspages.cpp:406
 #, kde-format
 msgid "OCR Engine Settings..."
-msgstr ""
+msgstr "OCR ძრავის მორგება..."
 
 #: prefspages.cpp:452
 #, kde-format
@@ -2419,7 +2420,7 @@ msgstr ""
 #: prefspages.cpp:460
 #, kde-format
 msgid "Unknown engine '%1'."
-msgstr ""
+msgstr "უცნობი ძრავა '%1'."
 
 #: scangallery.cpp:98
 #, kde-format
@@ -2450,29 +2451,29 @@ msgstr "ცარიელია"
 #, kde-format
 msgid "one image"
 msgid_plural "%1 images"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "ერთი გამოსახულება"
+msgstr[1] "%1 გამოსახულება"
 
 #: scangallery.cpp:380
 #, kde-format
 msgid "one file"
 msgid_plural "%1 files"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "1 ფაილი"
+msgstr[1] "%1 ფაილი"
 
 #: scangallery.cpp:386
 #, kde-format
 msgid "one file, "
 msgid_plural "%1 files, "
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "1 ფაილი, "
+msgstr[1] "%1 ფაილი, "
 
 #: scangallery.cpp:388
 #, kde-format
 msgid "one image, "
 msgid_plural "%1 images, "
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "1 გამოსახულება, "
+msgstr[1] "%1 გამოსახულება, "
 
 #: scangallery.cpp:391
 #, kde-format
@@ -2497,17 +2498,17 @@ msgstr ""
 #: scangallery.cpp:604
 #, kde-format
 msgid "On the Fly Conversion"
-msgstr ""
+msgstr "პირდაპირ გადაყვანა"
 
 #: scangallery.cpp:700
 #, kde-format
 msgid "Not a supported image format"
-msgstr ""
+msgstr "მხარდაუჭერელი გამოსახულების ფორმატი"
 
 #: scangallery.cpp:752
 #, kde-format
 msgid "Sub-image %1"
-msgstr ""
+msgstr "ქვეგამოსახულება %1"
 
 #: scangallery.cpp:778
 #, kde-kuit-format
@@ -2518,12 +2519,12 @@ msgstr ""
 #: scangallery.cpp:780
 #, kde-format
 msgid "Image Load Error"
-msgstr ""
+msgstr "გამოსახულების ჩატვირთვის შეცდომა"
 
 #: scangallery.cpp:842
 #, kde-format
 msgid "Incoming/"
-msgstr ""
+msgstr "შემომავალი/"
 
 #: scangallery.cpp:888
 #, kde-kuit-format
@@ -2534,12 +2535,12 @@ msgstr ""
 #: scangallery.cpp:891
 #, kde-format
 msgid "Image Save Error"
-msgstr ""
+msgstr "გამოსახულების შენახვის შეცდომა"
 
 #: scangallery.cpp:970
 #, kde-format
 msgid "All Files (*)"
-msgstr ""
+msgstr "ყველა ფაილი (*)"
 
 #: scangallery.cpp:973
 #, kde-format
@@ -2587,12 +2588,12 @@ msgstr "ფაილის წაშლის სეცდომა"
 #: scangallery.cpp:1173
 #, kde-format
 msgid "New Folder"
-msgstr ""
+msgstr "ახალი საქაღალდე"
 
 #: scangallery.cpp:1174
 #, kde-format
 msgid "Name for the new folder:"
-msgstr ""
+msgstr "ახალი საქაღალდის სახელი:"
 
 #: scangallery.cpp:1197
 #, kde-kuit-format
@@ -2603,7 +2604,7 @@ msgstr ""
 #: scangallery.cpp:1199
 #, kde-format
 msgid "Folder Create Error"
-msgstr ""
+msgstr "საქაღალდის შექმნის შეცდომა"
 
 #: scanpresetsdialog.cpp:63
 #, kde-format
@@ -2659,7 +2660,7 @@ msgstr ""
 #, kde-format
 msgctxt "New set name, %1=scan mode, %2=resolution"
 msgid "%1, %2 dpi"
-msgstr ""
+msgstr "%1, %2 dpi"
 
 #: scanpresetsdialog.cpp:289
 #, kde-kuit-format
@@ -2702,13 +2703,13 @@ msgstr ""
 #, kde-format
 msgctxt "@info:status"
 msgid "Image: %1"
-msgstr ""
+msgstr "გამოსახულება: %1"
 
 #: statusbarmanager.cpp:112
 #, kde-format
 msgctxt "@info:status"
 msgid "Scan: %1"
-msgstr ""
+msgstr "სკანირება: %1"
 
 #: thumbview.cpp:96
 #, kde-format
@@ -2718,7 +2719,7 @@ msgstr "ესკიზები"
 #: thumbview.cpp:107
 #, kde-format
 msgid "Preview Size"
-msgstr ""
+msgstr "მინიატურის ზომა"
 
 #: thumbview.cpp:338
 #, kde-format
@@ -2749,6 +2750,15 @@ msgstr "ძალიან პატარა"
 #, kde-format
 msgid "Tiny"
 msgstr "პაწაწინა"
+
+#~ msgid "Online service:"
+#~ msgstr "ონლაინ სერვისი:"
+
+#~ msgid "Kooka KIPI Helper"
+#~ msgstr "Kooka-ის KIPI დამხმარე"
+
+#~ msgid "Current maintainer, KDE4/KF5 port"
+#~ msgstr "მიმდინარე ლიდერი, KDE4/KF5-ზე გადატანა"
 
 #~ msgid "action"
 #~ msgstr "action"
