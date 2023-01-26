@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-10-20 00:45+0000\n"
-"PO-Revision-Date: 2022-10-06 11:48+0200\n"
+"PO-Revision-Date: 2023-01-25 06:06+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.1.1\n"
+"X-Generator: Poedit 3.2.2\n"
 
 #: ../libdialogutil/imagefilter.cpp:91
 #, kde-format
@@ -195,7 +195,7 @@ msgstr "უცნობი"
 #: imagecanvas.cpp:888
 #, kde-format
 msgid "%1x%2 pix, %3 bpp"
-msgstr ""
+msgstr "%1x%2 pix, %3 bpp"
 
 #: imgscaledialog.cpp:51
 #, kde-format
@@ -265,12 +265,12 @@ msgstr ""
 #: kscandevice.cpp:288
 #, kde-format
 msgid "No scanner selected"
-msgstr ""
+msgstr "სკანერი არჩეული არაა"
 
 #: kscandevice.cpp:1387
 #, kde-format
 msgid "Default startup configuration"
-msgstr ""
+msgstr "ნაგულისხმები გაშვების მორგება"
 
 #: kscandevice.cpp:1487
 #, kde-kuit-format
@@ -435,22 +435,22 @@ msgstr ""
 #: scanimage.cpp:128
 #, kde-format
 msgid "Image loading failed"
-msgstr ""
+msgstr "გამოსახულების ჩატვირთვის შეცდომა"
 
 #: scanimage.cpp:162
 #, kde-format
 msgid "Failed to open TIFF file"
-msgstr ""
+msgstr "TIFF ფაილის გახსნის შეცდომა"
 
 #: scanimage.cpp:169
 #, kde-format
 msgid "Failed to read TIFF directory"
-msgstr ""
+msgstr "TIFF საქაღალდის გახსნის შეცდომა"
 
 #: scanimage.cpp:199
 #, kde-format
 msgid "Failed to read TIFF image"
-msgstr ""
+msgstr "TIFF გამოსახულების გახსნის შეცდომა"
 
 #: scanimage.cpp:229
 #, kde-format
@@ -476,7 +476,7 @@ msgstr ""
 #: scanparams.cpp:182
 #, kde-format
 msgid "Star&t Scan"
-msgstr ""
+msgstr "სკანირების &დასაწყისი"
 
 #: scanparams.cpp:183
 #, kde-format
@@ -538,7 +538,7 @@ msgstr ""
 #: scanparams.cpp:281
 #, kde-format
 msgid "Reading mode:"
-msgstr ""
+msgstr "წაკითხვის რეჟიმი:"
 
 #: scanparams.cpp:411
 #, kde-format
@@ -558,12 +558,12 @@ msgstr ""
 #: scanparams.cpp:414
 #, kde-format
 msgid "Low colour"
-msgstr ""
+msgstr "დაბალი ფერი"
 
 #: scanparams.cpp:415
 #, kde-format
 msgid "High colour"
-msgstr ""
+msgstr "მაღლი ფერი"
 
 #: scanparams.cpp:425
 #, kde-format
@@ -573,7 +573,7 @@ msgstr ""
 #: scanparams.cpp:476
 #, kde-format
 msgid "Edit Gamma Table..."
-msgstr ""
+msgstr "გამის ცხრილის ჩასწორება..."
 
 #: scanparams.cpp:548
 #, kde-kuit-format
@@ -631,7 +631,7 @@ msgstr ""
 #: scanparams.cpp:716
 #, kde-kuit-format
 msgid "Scan in progress"
-msgstr ""
+msgstr "მიმდინარეობს სკანირება"
 
 #: scanparams.cpp:717
 #, kde-kuit-format
@@ -689,7 +689,7 @@ msgstr ""
 #: scansettings.kcfg:61
 #, kde-format
 msgid "Dust size (pixels):"
-msgstr ""
+msgstr "მტვრის ზომა(პიქსელებში):"
 
 #. i18n: ectx: tooltip, entry (PreviewAutoselDustsize), group (Scanner Name)
 #: scansettings.kcfg:62
@@ -716,7 +716,7 @@ msgstr ""
 #: scansettings.kcfg:77
 #, kde-format
 msgid "Scanner background:"
-msgstr ""
+msgstr "სკანერის ფონი:"
 
 #. i18n: ectx: tooltip, entry (PreviewAutoselBackground), group (Scanner Name)
 #: scansettings.kcfg:78
@@ -739,7 +739,7 @@ msgstr "სრული ზომა"
 #: scansizeselector.cpp:125
 #, kde-format
 msgid "(No selection)"
-msgstr ""
+msgstr "(მონიშნულის გარეშე)"
 
 #: scansizeselector.cpp:143
 #, kde-format

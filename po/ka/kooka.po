@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-10-20 00:45+0000\n"
-"PO-Revision-Date: 2023-01-24 08:44+0100\n"
+"PO-Revision-Date: 2023-01-25 06:03+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -578,7 +578,7 @@ msgstr ""
 #: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:260
 #, kde-format
 msgid "Enable automatic scaling"
-msgstr ""
+msgstr "ავტომატური მასშტაბირების ჩართვა"
 
 #: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:360
 #, kde-format
@@ -623,7 +623,7 @@ msgstr ""
 #: ../plugins/ocr/kadmos/ocrkadmosengine.cpp:95
 #, kde-format
 msgid "KADMOS Installation Problem"
-msgstr ""
+msgstr "KADMOS-ის დაყენების შეცდომა"
 
 #: ../plugins/ocr/kadmos/ocrkadmosengine.cpp:106
 #, kde-format
@@ -636,7 +636,7 @@ msgstr ""
 #: ../plugins/ocr/kadmos/ocrkadmosengine.cpp:110
 #, kde-format
 msgid "KADMOS Failure"
-msgstr ""
+msgstr "KADMOS-ის შეცდომა"
 
 #: ../plugins/ocr/ocrad/ocrocraddialog.cpp:79
 #, kde-format
@@ -978,17 +978,16 @@ msgid "Create New Gallery"
 msgstr "ახალი გალერეის შექმნა"
 
 #: galleryroot.cpp:169
-#, fuzzy, kde-format
-#| msgid "Create New Gallery"
+#, kde-format
 msgctxt "@action:button"
 msgid "Create New"
-msgstr "ახალი გალერეის შექმნა"
+msgstr "ახლის შექმნა"
 
 #: galleryroot.cpp:170
 #, kde-format
 msgctxt "@action:button"
 msgid "Continue With Old"
-msgstr ""
+msgstr "ძველით გაგრძელება"
 
 #: galleryroot.cpp:183 galleryroot.cpp:197
 #, kde-kuit-format
@@ -1056,7 +1055,7 @@ msgstr "მასშტაბირება"
 #, kde-format
 msgctxt "@option:radio"
 msgid "Size as on screen"
-msgstr ""
+msgstr "ზომა, როგორც ეს ეკრანზეა"
 
 #: imgprintdialog.cpp:101
 #, kde-format
@@ -1082,7 +1081,7 @@ msgstr ""
 #, kde-format
 msgctxt "@option:radio"
 msgid "Size as scanned"
-msgstr ""
+msgstr "ზომა, რომლითაც დაასკანერეთ"
 
 #: imgprintdialog.cpp:115
 #, kde-format
@@ -1383,7 +1382,7 @@ msgstr ""
 #: imgsaver.cpp:380
 #, kde-format
 msgid "Cannot create directory"
-msgstr ""
+msgstr "საქაღალდის შექმნის შეცდომა"
 
 #: imgsaver.cpp:382
 #, kde-format
@@ -1417,7 +1416,7 @@ msgstr ""
 #: imgsaver.cpp:417
 #, kde-format
 msgid "Add Extension"
-msgstr ""
+msgstr "გაფართოების დამატება"
 
 #: imgsaver.cpp:418
 #, kde-format
@@ -1427,12 +1426,12 @@ msgstr "არ დაამატოთ"
 #: imgsaver.cpp:447
 #, kde-format
 msgid "Target already exists"
-msgstr ""
+msgstr "სამიზნე უკვე არსებობს"
 
 #: imgsaver.cpp:460
 #, kde-format
 msgid "Unable to copy the file"
-msgstr ""
+msgstr "ფაილის კოპირების შეცდომა"
 
 #: imgsaver.cpp:461
 #, kde-format
@@ -1463,12 +1462,12 @@ msgstr "სკანირება KDE-დან"
 #: kooka.cpp:134
 #, kde-format
 msgid "Scale to Width"
-msgstr ""
+msgstr "სიგანემდე გადიდება"
 
 #: kooka.cpp:145
 #, kde-format
 msgid "Scale to Height"
-msgstr ""
+msgstr "სიმაღლემდე გადიდება"
 
 #: kooka.cpp:154
 #, kde-format
@@ -1754,7 +1753,7 @@ msgstr ""
 #: kookasettings.kcfg:77
 #, kde-format
 msgid "Before the scan starts"
-msgstr ""
+msgstr "სანამ სკანირება დაიწყება"
 
 #. i18n: ectx: tooltip, entry (SaverAskBeforeScan), group (Files)
 #: kookasettings.kcfg:78
@@ -1768,7 +1767,7 @@ msgstr ""
 #: kookasettings.kcfg:83
 #, kde-format
 msgid "After the scan is finished"
-msgstr ""
+msgstr "როცა სკანირება დასრულდება"
 
 #. i18n: ectx: tooltip, entry (SaverAskAfterScan), group (Files)
 #: kookasettings.kcfg:84
@@ -1961,7 +1960,7 @@ msgstr ""
 #: kookasettings.kcfg:280
 #, kde-format
 msgid "Set threshold"
-msgstr ""
+msgstr "ზღვრის დაყენება"
 
 #. i18n: ectx: label, entry (ocrOcradThresholdValue), group (ocrad)
 #: kookasettings.kcfg:286
@@ -1979,13 +1978,13 @@ msgstr "ენა:"
 #: kookasettings.kcfg:312
 #, kde-format
 msgid "User word list:"
-msgstr ""
+msgstr "სიტყვები სიის გამოყენება:"
 
 #. i18n: ectx: label, entry (ocrTesseractUserPatterns), group (tesseract)
 #: kookasettings.kcfg:316
 #, kde-format
 msgid "User patterns:"
-msgstr ""
+msgstr "ნიმუშების გამოყენება:"
 
 #. i18n: ectx: label, entry (ocrTesseractEngineMode), group (tesseract)
 #: kookasettings.kcfg:320
@@ -2096,7 +2095,7 @@ msgstr ""
 #: kookaview.cpp:735
 #, kde-format
 msgid "Cannot Read OCR File"
-msgstr ""
+msgstr "OCR ფაილის წაკითხვის შეცდომა"
 
 #: kookaview.cpp:739
 #, kde-kuit-format
@@ -2117,7 +2116,7 @@ msgstr ""
 #: kookaview.cpp:763
 #, kde-format
 msgid "OCR Spell Check not possible"
-msgstr ""
+msgstr "OCR-ის მართლწერის შემოწმება შეუძლებელია"
 
 #: kookaview.cpp:768
 #, kde-format
@@ -2155,7 +2154,7 @@ msgstr ""
 #: kookaview.cpp:953
 #, kde-format
 msgid "Create new image from selection"
-msgstr ""
+msgstr "მონიშნულიდან ახალი გამოსახულების შექმნა"
 
 #: kookaview.cpp:962
 #, kde-format
@@ -2329,7 +2328,7 @@ msgstr "აღწერა:"
 #: ocrresedit.cpp:159
 #, kde-format
 msgid "Save OCR Result Text"
-msgstr ""
+msgstr "OCR-ს შედეგის ტექსტის შენახვა"
 
 #: ocrresedit.cpp:160
 #, kde-format
@@ -2351,12 +2350,12 @@ msgstr "<nl/>%1"
 #: ocrresedit.cpp:170
 #, kde-format
 msgid "Error saving OCR results"
-msgstr ""
+msgstr "OCR-ის შედეგების შენახვის შეცდომა"
 
 #: prefspages.cpp:76
 #, kde-format
 msgid "Hidden Messages"
-msgstr ""
+msgstr "დამალული შეტყობინებები"
 
 #: prefspages.cpp:80
 #, kde-format
