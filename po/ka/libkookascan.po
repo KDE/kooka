@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-10-20 00:45+0000\n"
-"PO-Revision-Date: 2023-01-25 06:06+0100\n"
+"PO-Revision-Date: 2023-01-27 09:35+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -260,7 +260,7 @@ msgstr ""
 #: kscancontrols.cpp:397
 #, kde-format
 msgid "*.pnm *.pbm *.pgm *.ppm|PNM Image Files"
-msgstr ""
+msgstr "*.pnm *.pbm *.pgm *.ppm|PNM გამოსახულების ფაილი"
 
 #: kscandevice.cpp:288
 #, kde-format
@@ -455,7 +455,7 @@ msgstr "TIFF გამოსახულების გახსნის შ�
 #: scanimage.cpp:229
 #, kde-format
 msgid "TIFF not supported"
-msgstr ""
+msgstr "TIFF მხარდაუჭერელია"
 
 #: scanparams.cpp:134
 #, kde-kuit-format
@@ -496,7 +496,7 @@ msgstr "სკანირება"
 #: scanparams.cpp:232
 #, kde-format
 msgid "&Basic"
-msgstr ""
+msgstr "&საბაზისო"
 
 #: scanparams.cpp:233
 #, kde-format
@@ -525,7 +525,7 @@ msgstr ""
 #: scanparams.cpp:263
 #, kde-format
 msgid "Virtual Scanner (any image format)"
-msgstr ""
+msgstr "ვირტუალური სკანერი (გამოსახულების ნებისმიერი ფორმატი)"
 
 #: scanparams.cpp:264
 #, kde-kuit-format

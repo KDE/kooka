@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-10-20 00:45+0000\n"
-"PO-Revision-Date: 2023-01-25 06:03+0100\n"
+"PO-Revision-Date: 2023-01-27 09:33+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -1698,7 +1698,7 @@ msgstr ""
 #, kde-kuit-format
 msgctxt "@info"
 msgid "No destination selected"
-msgstr ""
+msgstr "სამიზნე არჩეული არაა"
 
 #: kookascanparams.cpp:160
 #, kde-kuit-format
