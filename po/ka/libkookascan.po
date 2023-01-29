@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-10-20 00:45+0000\n"
-"PO-Revision-Date: 2023-01-27 09:35+0100\n"
+"PO-Revision-Date: 2023-01-28 08:13+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -81,7 +81,7 @@ msgstr "აღწერა:"
 #, kde-kuit-format
 msgctxt "@info"
 msgid "<subtitle>Auto Select</subtitle>"
-msgstr ""
+msgstr "<subtitle>ავტომატური არჩევა</subtitle>"
 
 #: autoselectbar.cpp:82
 #, kde-format
@@ -105,7 +105,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "Autoselect Settings"
-msgstr ""
+msgstr "პარამეტრების ავტომატური არჩევა"
 
 #: autoselectdialog.cpp:82
 #, kde-format
@@ -135,7 +135,7 @@ msgstr "ხელმისაწვდომი სკანერები:"
 #: deviceselector.cpp:82
 #, kde-format
 msgid "Always use this device at startup"
-msgstr ""
+msgstr "გაშვებისას ყოველთვის ამ მოწყობილობის გამოყენება"
 
 #: gammadialog.cpp:53
 #, kde-format
@@ -481,7 +481,7 @@ msgstr "სკანირების &დასაწყისი"
 #: scanparams.cpp:183
 #, kde-format
 msgid "Start a scan and save the scanned image"
-msgstr ""
+msgstr "სკანირების დაწყება და შედეგი გამოსახულების შენახვა"
 
 #: scanparams.cpp:189
 #, kde-format
@@ -511,7 +511,7 @@ msgstr "დაწინაურებული"
 #: scanparams.cpp:260
 #, kde-format
 msgid "SANE Debug (from PNM image)"
-msgstr ""
+msgstr "SANE-ის გამართვა (PNM გამოსახულებიდან)"
 
 #: scanparams.cpp:261
 #, kde-kuit-format
@@ -543,7 +543,7 @@ msgstr "წაკითხვის რეჟიმი:"
 #: scanparams.cpp:411
 #, kde-format
 msgid "Default (from scan settings)"
-msgstr ""
+msgstr "ნაგულისხმები (სკანირების პარამეტრებიდან)"
 
 #: scanparams.cpp:412
 #, kde-format
@@ -553,7 +553,7 @@ msgstr ""
 #: scanparams.cpp:413
 #, kde-format
 msgid "Grey scale"
-msgstr ""
+msgstr "ნაცრისფერი"
 
 #: scanparams.cpp:414
 #, kde-format
@@ -568,7 +568,7 @@ msgstr "მაღლი ფერი"
 #: scanparams.cpp:425
 #, kde-format
 msgid "Force image format:"
-msgstr ""
+msgstr "ასლის ფორმატის ხელით მითითება:"
 
 #: scanparams.cpp:476
 #, kde-format
@@ -636,18 +636,18 @@ msgstr "მიმდინარეობს სკანირება"
 #: scanparams.cpp:717
 #, kde-kuit-format
 msgid "Scan in progress<nl/><nl/>%1"
-msgstr ""
+msgstr "მიმდინარეობს სკანირება<nl/><nl/>%1"
 
 #: scanparams.cpp:737
 #, kde-format
 msgid "Cannot preview in Virtual Scanner mode"
-msgstr ""
+msgstr "ვირტუალური სკანერის რეჟიმში მინიატურები ხელმიუწვდომელია"
 
 #. i18n: ectx: label, entry (StartupOnlyLocal), group (Startup)
 #: scansettings.kcfg:12
 #, kde-format
 msgid "Query network for available scanners"
-msgstr ""
+msgstr "ქსელური სკანერების მოძებნა"
 
 #. i18n: ectx: tooltip, entry (StartupOnlyLocal), group (Startup)
 #: scansettings.kcfg:13
@@ -662,7 +662,7 @@ msgstr ""
 #: scansettings.kcfg:22
 #, kde-format
 msgid "Show the scanner selection dialog"
-msgstr ""
+msgstr "სკანერის არჩევის ფანჯრის ჩვენება"
 
 #. i18n: ectx: tooltip, entry (StartupSkipAsk), group (Startup)
 #: scansettings.kcfg:23
@@ -729,7 +729,7 @@ msgstr ""
 #: scansizeselector.cpp:119
 #, kde-format
 msgid "Set the size of the scanned area"
-msgstr ""
+msgstr "დასკანერებული ადგილის ზომის დაყენება"
 
 #: scansizeselector.cpp:124
 #, kde-format
