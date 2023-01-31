@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-10-20 00:45+0000\n"
-"PO-Revision-Date: 2023-01-27 09:33+0100\n"
+"PO-Revision-Date: 2023-01-30 10:47+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -2298,7 +2298,7 @@ msgstr "მოწყობილობა"
 #: newscanpresetdialog.cpp:53
 #, kde-format
 msgid "Edit Scan Preset"
-msgstr ""
+msgstr "სკანირების პრესეტის ჩასწორება"
 
 #: newscanpresetdialog.cpp:54
 #, kde-format
@@ -2308,7 +2308,7 @@ msgstr ""
 #: newscanpresetdialog.cpp:58
 #, kde-format
 msgid "Save Scan Preset"
-msgstr ""
+msgstr "სკანირების პრესეტის შენახვა"
 
 #: newscanpresetdialog.cpp:59
 #, kde-format
@@ -2608,7 +2608,7 @@ msgstr "საქაღალდის შექმნის შეცდომ�
 #: scanpresetsdialog.cpp:63
 #, kde-format
 msgid "Scan Presets"
-msgstr ""
+msgstr "პრესეტების სკანირება"
 
 #: scanpresetsdialog.cpp:76
 #, kde-format
@@ -2653,7 +2653,7 @@ msgstr ""
 #: scanpresetsdialog.cpp:146
 #, kde-format
 msgid "No preset set selected."
-msgstr ""
+msgstr "პრესეტის სეტი არჩეული არაა."
 
 #: scanpresetsdialog.cpp:212
 #, kde-format
@@ -2670,7 +2670,7 @@ msgstr ""
 #: scanpresetsdialog.cpp:290
 #, kde-format
 msgid "Delete Scan Preset Set"
-msgstr ""
+msgstr "სკანირების პრესეტების სეტის წაშლა"
 
 #: statusbarmanager.cpp:52
 #, kde-format
