@@ -1033,8 +1033,8 @@ msgid ""
 "Select a format to save the scanned image.<nl/>This is a <emphasis strong="
 "\"1\">%1</emphasis>."
 msgstr ""
-"Seleccioneu un format d'imatge per que es guardarà la imatge escanejada.<nl/"
-">Açò és un <emphasis strong=\"1\">%1</emphasis>."
+"Seleccioneu un format d'imatge per a guardar la imatge escanejada.<nl/>Açò "
+"és un <emphasis strong=\"1\">%1</emphasis>."
 
 #: formatdialog.cpp:316
 #, kde-format
@@ -1893,9 +1893,9 @@ msgid ""
 "<div>Check this if you want to always use the image save assistant, even if "
 "there is a default format for the image type.</div>"
 msgstr ""
-"<div>Activeu-la si voleu que sempre s'utilitze l'assistent per que es "
-"guardarà la imatge, encara que hi haja un format predeterminat per al tipus "
-"d'imatge.</div>"
+"<div>Activeu-la si voleu que sempre s'utilitze l'assistent per a guardar la "
+"imatge, encara que hi haja un format predeterminat per al tipus d'imatge.</"
+"div>"
 
 #. i18n: ectx: label, entry (SaverAskForFilename), group (Files)
 #: kookasettings.kcfg:71
@@ -1966,7 +1966,7 @@ msgstr ""
 #: kookasettings.kcfg:103
 #, kde-format
 msgid "Always use this save format for this image type"
-msgstr "Utilitza sempre este format per que es guardarà este tipus d'imatge"
+msgstr "Utilitza sempre este format per a guardar este tipus d'imatge"
 
 #. i18n: ectx: tooltip, entry (SaverAlwaysUseFormat), group (Files2)
 #: kookasettings.kcfg:104
