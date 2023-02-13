@@ -6,14 +6,14 @@
 # Krzysztof Lichota <lichota@mimuw.edu.pl>, 2002, 2005, 2006.
 # Andrzej Stencel <andrzejstencel@o2.pl>, 2004.
 # Michal Rudolf <mrudolf@kdewebdev.org>, 2004, 2005.
-# Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>, 2011, 2014, 2017, 2019, 2021, 2022.
+# Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>, 2011, 2014, 2017, 2019, 2021, 2022, 2023.
 # Marta Rybczyńska <kde-i18n@rybczynska.net>, 2013.
 msgid ""
 msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-10-20 00:45+0000\n"
-"PO-Revision-Date: 2022-06-26 20:23+0200\n"
+"PO-Revision-Date: 2023-02-12 09:22+0100\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
 "Language: pl\n"
@@ -23,7 +23,7 @@ msgstr ""
 ">\n"
 ">\n"
 ">\n"
-"X-Generator: Lokalize 22.03.70\n"
+"X-Generator: Lokalize 22.12.2\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
 
@@ -1102,17 +1102,16 @@ msgid "Create New Gallery"
 msgstr "Utwórz nową galerię"
 
 #: galleryroot.cpp:169
-#, fuzzy, kde-format
-#| msgid "Create New Gallery"
+#, kde-format
 msgctxt "@action:button"
 msgid "Create New"
-msgstr "Utwórz nową galerię"
+msgstr "Utwórz nową"
 
 #: galleryroot.cpp:170
 #, kde-format
 msgctxt "@action:button"
 msgid "Continue With Old"
-msgstr ""
+msgstr "Kontynuuj ze starą"
 
 #: galleryroot.cpp:183 galleryroot.cpp:197
 #, kde-kuit-format
