@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-10-20 00:45+0000\n"
-"PO-Revision-Date: 2023-02-12 09:01+0100\n"
+"PO-Revision-Date: 2023-02-13 06:07+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -40,6 +40,8 @@ msgid ""
 "Cannot save temporary image file<nl/><filename>%1</filename><nl/><message>"
 "%2</message>"
 msgstr ""
+"შეცდომა დროებითი გამოსახულების შენახვისას<nl/><filename>%1</filename><nl/"
+"><message>%2</message>"
 
 #: ../plugins/destination/abstractdestination.cpp:160
 #: ../plugins/destination/application/destinationapplication.cpp:190
@@ -118,6 +120,8 @@ msgstr "გამოსახულების დაბეჭდვა"
 msgctxt "@info"
 msgid "Cannot save image to <filename>%1</filename><nl/><message>%2</message>"
 msgstr ""
+"გამოსახულების შენახვის შეცდომა ფაილში <filename>%1</filename><nl/><message>"
+"%2</message>"
 
 #: ../plugins/destination/save/destinationsave.cpp:134
 #: ../plugins/destination/save/destinationsave.cpp:239
@@ -147,6 +151,8 @@ msgid ""
 "Cannot save to <filename>%2</filename><nl/>The image format <resource>%1</"
 "resource> is not supported."
 msgstr ""
+"<filename>%2</filename><nl/>-ში შენახვის შეცდომა. გამოსახულების ფორმატი "
+"<resource>%1</resource> მხარდაჭერილი არაა."
 
 #: ../plugins/destination/share/destinationshare.cpp:143
 #, kde-format
@@ -162,7 +168,7 @@ msgstr "<application>%1</application>"
 #, kde-kuit-format
 msgctxt "@info"
 msgid "The scan was shared to<nl/><link>%1</link>"
-msgstr ""
+msgstr "სკანირებული გამოსახულება გაზიარდა ბმულზე <nl/><link>%1</link>"
 
 #: ../plugins/destination/share/destinationshare.cpp:218
 #, kde-format
@@ -1148,7 +1154,7 @@ msgstr " მმ"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "<div>The width at which the image will be printed.</div>"
-msgstr ""
+msgstr "<div>იმისი სიგანე, რაც დაიბეჭდება.</div>"
 
 #: imgprintdialog.cpp:151
 #, kde-format
@@ -1160,7 +1166,7 @@ msgstr "გამოსახულების სიგრძე:"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "<div>The height at which the image will be printed.</div>"
-msgstr ""
+msgstr "<div>იმისი სიმაღლე, რაც დაიბეჭდება.</div>"
 
 #: imgprintdialog.cpp:166
 #, kde-format
@@ -2320,7 +2326,7 @@ msgstr "სკანირების პრესეტის შენახ�
 #: newscanpresetdialog.cpp:59
 #, kde-format
 msgid "Enter a name and description for the new scan preset."
-msgstr "შეიყვანეთ სკანირების ახალი პრესეტის სახელი და აღწერილობა"
+msgstr "შეიყვანეთ სკანირების ახალი პრესეტის სახელი და აღწერილობა."
 
 #: newscanpresetdialog.cpp:66
 #, kde-format
