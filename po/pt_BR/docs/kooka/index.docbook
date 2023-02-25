@@ -1,7 +1,5 @@
 <?xml version="1.0" ?>
 <!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.5-Based Variant V1.1//EN" "dtd/kdedbx45.dtd" [
-  <!ENTITY kappname "&kooka;">
-  <!ENTITY package "playground-graphics">
   <!ENTITY % addindex "IGNORE">
   <!ENTITY % Brazilian-Portuguese "INCLUDE"
 > <!-- change language only here --> 
@@ -71,19 +69,19 @@
 >&FDLNotice;</legalnotice>
 
 <date
->02/08/2012</date>
+>17/07/2017</date>
 <releaseinfo
->0.61 (&kde; 4.9)</releaseinfo>
+>&kooka; 0.90</releaseinfo>
 
 <abstract
 ><para
->O &kooka; permite-lhe digitalizar, salvar e ver imagens em qualquer formato que o &kde; suporte, podendo também efetuar o reconhecimento óptico de caracteres.</para
+>O &kooka; permite-lhe digitalizar, salvar e ver imagens em qualquer formato que o &Qt; suporte, podendo também efetuar o reconhecimento óptico de caracteres.</para
 ></abstract
 > 
 
 <keywordset>
 <keyword
->KDE</keyword>
+>OCR</keyword>
 <keyword
 >Digitalizador</keyword>
 </keywordset>
@@ -95,21 +93,21 @@
 >Introdução</title>
 
 <para
->O &kooka; é uma aplicação do &kde; que permite a digitalização simples usando as bibliotecas do <ulink url="http://www.sane-project.org/"
+>O &kooka; é um aplicativo que permite a digitalização simples usando as bibliotecas do <ulink url="http://www.sane-project.org/"
 >SANE</ulink
 >. Assim, o pacote <acronym
 >SANE</acronym
 > tem que estar instalado para usar o &kooka;.</para>
 
 <para
->O &kooka; permite-lhe digitalizar, salvar e ver imagens em qualquer formato que o &kde; suporte.</para>
+>O &kooka; permite-lhe digitalizar, salvar e ver imagens em qualquer formato que o &Qt; suporte.</para>
 
 <para
 >O reconhecimento de caracteres também é oferecido com os programas de 'software' livre <ulink url="http://jocr.sourceforge.net/"
 >GOCR</ulink
 > ou <ulink url="http://www.gnu.org/software/ocrad/ocrad.html"
 >OCRAD</ulink
->, ou ainda pela biblioteca comercial <ulink url="http://www.rerecognition.com/"
+>, ou ainda pela biblioteca comercial <ulink url="https://rerecognition.com/en/products/kadmos-icr-ocr/"
 >KADMOS</ulink
 >. Você terá que instalar pelo menos um destes pacotes de aplicações para usar esta funcionalidade. Depois de o reconhecimento de caracteres terminar, é iniciada automaticamente uma verificação ortográfica do material reconhecido. Você poderá editar o conteúdo na janela <guilabel
 >OCR</guilabel
@@ -119,7 +117,7 @@
 
 <chapter id="how-to-use">
 <title
->Instruções de Aplicações</title>
+>Instruções do aplicativo</title>
 
 <para
 >O 'site' Web <ulink url="http://www.sane-project.org/"
@@ -128,12 +126,12 @@
 
 <sect1 id="screen">
 <title
->A Janela Principal do &kooka;</title>
+>A janela principal do &kooka;</title>
 
 <screenshot
 > 
 <screeninfo
->A Janela Principal do &kooka; </screeninfo
+>A janela principal do &kooka; </screeninfo
 > 
 <mediaobject
 > 
@@ -153,7 +151,7 @@
 ></userinput
 >, ou selecionando-o no submenu <guilabel
 >Gráficos</guilabel
-> do lançador de aplicativos. Crie um atalho na tela do &kde; que use o ícone de um 'scanner', se desejar.</para>
+> do lançador de aplicativos. Crie um atalho na área de trabalho que use o ícone de um 'scanner', se desejar.</para>
 
 <para
 >Para usar o &kooka; apenas para o reconhecimento óptico de caracteres, sem conectá-lo a um digitalizador, inicie a aplicação no modo de galeria com a opção <userinput
@@ -177,9 +175,8 @@
 >OCR</guilabel
 > e o navegador de arquivos integrado denominado de <guilabel
 >Galeria</guilabel
->. A pasta de trabalho é mostrada na parte inferior da janela, em conjunto com a pasta onde a digitalização será salva.</para
+>. A pasta de trabalho é mostrada na parte superior da janela, em conjunto com a pasta onde a digitalização será salva.</para
 > 
-<!--FIXME-->
 </listitem>
 
 <listitem>
@@ -227,20 +224,17 @@
 
 </chapter>
 
-<chapter id="commands">
+<chapter id="commands-configuration">
 <title
->Referência de comandos</title>
+>Referência de comandos e configuração</title>
 
-<sect1 id="kooka-toolbar">
+<sect1 id="command">
 <title
->A Barra de Ferramentas Principal do &kooka;</title>
-<!--FIXME-->
+>A barra de menu do &kooka;</title>
 
 <sect2>
 <title
->Menu <guimenu
->Arquivo</guimenu
-></title>
+>O menu Arquivo</title>
 
 <variablelist
 > 
@@ -251,13 +245,13 @@
 ><guimenu
 >Arquivo</guimenu
 > <guimenuitem
->Criar uma Pasta...</guimenuitem
+>Nova pasta...</guimenuitem
 > </menuchoice
 ></term
 > 
 <listitem>
 <para
->Cria uma pasta para guardar as suas imagens na <guilabel
+>Cria uma nova pasta para guardar as suas imagens na <guilabel
 >Galeria do Kooka</guilabel
 >.</para>
 </listitem
@@ -277,7 +271,7 @@
 > <guimenu
 >Arquivo</guimenu
 > <guimenuitem
->Salvar a imagem</guimenuitem
+>Salvar imagem</guimenuitem
 > </menuchoice
 ></term
 > 
@@ -296,7 +290,7 @@
 
 <!--
 Import Image...
-Rename Image F2
+Rename Folder F2
   -->
 <varlistentry
 > 
@@ -304,20 +298,20 @@ Rename Image F2
 <menuchoice
 ><shortcut
 > <keycombo action="simul"
->&Ctrl;<keycap
->Del</keycap
+>&Shift;<keysym
+>Del</keysym
 ></keycombo
 > </shortcut
 > <guimenu
 >Arquivo</guimenu
 > <guimenuitem
->Apagar a imagem</guimenuitem
+>Excluir pasta</guimenuitem
 > </menuchoice
 ></term
 > 
 <listitem>
 <para
->Remove a imagem selecionada que se encontra na <guilabel
+>Exclui a pasta selecionada que se encontra na <guilabel
 >Galeria do Kooka</guilabel
 >.</para>
 </listitem
@@ -365,38 +359,34 @@ Properties... Alt+Return
 > 
 <listitem>
 <para
->Remove a imagem apresentada no <guilabel
->Visualizador de Imagens</guilabel
->. </para>
+>Remove a imagem apresentada no Visualizador de imagens.</para>
 </listitem
 > 
 </varlistentry>
 
-<!-- not functional in kde 4
 <varlistentry
 > 
 <term>
-<menuchoice>
-<shortcut>
-<keycombo action="simul"
+<menuchoice
+><shortcut
+> <keycombo action="simul"
 >&Ctrl;<keycap
 >P</keycap
-></keycombo>
-</shortcut>
-<guimenu
->File</guimenu>
-<guimenuitem
->Print</guimenuitem>
-</menuchoice
+></keycombo
+> </shortcut
+> <guimenu
+>Arquivo</guimenu
+> <guimenuitem
+>Imprimir</guimenuitem
+> </menuchoice
 ></term
 > 
 <listitem>
 <para
->Prints the displayed image.</para>
+>Imprime a imagem exibida.</para>
 </listitem
 > 
 </varlistentry>
--->
 
 <varlistentry
 > 
@@ -427,19 +417,17 @@ Properties... Alt+Return
 
 <sect2>
 <title
->O Menu <guimenu
->Digitalizar</guimenu
-></title>
+>O menu Digitalizar</title>
 
 <variablelist
 > 
 <!--
 Preview F3
-Start Scan... F4
+Start Scan F4
 Photocopy... Ctrl+F
+Auto Select Ctrl+A
 Scan Parameters... Ctrl+Shift+S
-Profile 
-  -->
+-->
 <varlistentry>
 <term>
 <menuchoice
@@ -472,7 +460,6 @@ Profile
 ></term
 > 
 <listitem>
-  <!--FIXME A window will reappear ???-->
 <para
 >Irá aparecer de novo uma janela para o reconhecimento de caracteres. Aqui, contudo, o reconhecimento de caracteres é só para a área selecionada na digitalização final.</para>
 </listitem
@@ -488,9 +475,7 @@ Save OCR Result Text... Ctrl+U
  
 <sect2>
 <title
->O Menu <guimenu
->Imagem</guimenu
-></title>
+>O Menu Imagem</title>
 
 <para
 >As ações neste menu estão também disponíveis no menu de contexto da janela de previsão.</para>
@@ -630,29 +615,7 @@ Keep Zoom Setting Ctrl+Z
 > 
 </varlistentry
 > 
-<!-- not in kde4
-<varlistentry>
-<term
-><menuchoice
-><shortcut>
-<keycombo action="simul"
->&Ctrl;<keycap
->B</keycap
-></keycombo>
-</shortcut>
-<guimenu
->Image</guimenu>
-<guimenuitem
->Mirror both directions</guimenuitem>
-</menuchoice
-></term
-> 
-<listitem>
-<para
->Flip image both horizontally and vertically.</para>
-</listitem>
-</varlistentry>
--->
+
 <varlistentry
 > 
 <term>
@@ -730,108 +693,87 @@ Keep Zoom Setting Ctrl+Z
 
 <sect2>
 <title
->O Menu <guimenu
+>O menu Configurações</title>
+
+<para
+>Além dos menus comuns do &kde; <guimenu
 >Configurações</guimenu
-></title>
+> e <guimenu
+>Ajuda</guimenu
+> descritos no capítulo <ulink url="help:/fundamentals/menus.html"
+>Menu</ulink
+> dos Fundamentos do &kde;, a documentação do &kooka; temestas entradas de menu específicas do aplicativo: </para>
 
 <variablelist>
-<!--
-Select Scan Device...
-Add Scan Device...
-other entries -> link to Fundamentals
--->
-<varlistentry>
+
+<varlistentry
+> 
 <term>
 <menuchoice
 ><guimenu
 >Configurações</guimenu
 > <guimenuitem
->Exibir barra de ferramentas</guimenuitem
+>Selecione o dispositivo de digitalização...</guimenuitem
 > </menuchoice>
-</term
-> 
+</term>
 <listitem>
 <para
->Remove a barra de ferramentas de topo para fornecer uma área de visualização adicional. </para>
+>Se você tiver vários scanners, use esta ação para selecionar um scanner e usar umdeterminado dispositivo sempre na inicialização.</para>
 </listitem
 > 
 </varlistentry>
 
-<varlistentry>
+<varlistentry
+> 
 <term>
 <menuchoice
 ><guimenu
 >Configurações</guimenu
 > <guimenuitem
->Exibir a barra de status</guimenuitem
+>Adicionar dispositivo de digitalização...</guimenuitem
 > </menuchoice>
 </term
-> 
-<listitem>
+><listitem>
 <para
->Remove a barra de estado ou de informações do fundo da janela para disponibilizar mais área de visualização.</para>
+>Adicione um dispositivo que não seja detectado automaticamente na inicialização do &kooka;.</para>
 </listitem
 > 
 </varlistentry>
- </variablelist>
+
+</variablelist>
 </sect2>
 
-<sect2>
-<title
->Configurando os atalhos</title>
+</sect1>
 
-<para
->O menu <menuchoice
-> <guimenu
->Configurações</guimenu
-><guimenuitem
->Configurar os Atalhos...</guimenuitem
-></menuchoice
-> permite-lhe atribuir as associações de teclas</para>
 
-<para
->Para mais informação, leia a seção <ulink url="help:/fundamentals/config.html#shortcuts"
->Usar e personalizar atalhos de teclado</ulink
-> dos Fundamentos do &kde;. </para>
-</sect2>
-
-<sect2>
-<title
->Configurando as barras de ferramentas</title>
-<para
->A opção <menuchoice
-> <guimenu
->Configuração</guimenu
-><guimenuitem
->Configurar as Barras de Ferramentas...</guimenuitem
-></menuchoice
-> é usada para adicionar botões extras às barras de ferramentas.</para>
-
-<para
->Para mais informação leia a seção sobre <ulink url="help:/fundamentals/config.html#toolbars"
->Personalizar as barras de ferramentas</ulink
-> dos Fundamentos do &kde;. </para>
-</sect2>
-
-<sect2>
+<sect1 id="configuration">
 <title
 >Configurar o Kooka</title>
-<para
->O <menuchoice
-> <guimenu
->Configurações</guimenu
-> <guimenuitem
->Configurar o Kooka...</guimenuitem
-></menuchoice
-> </para>
-
 
 <variablelist>
 <varlistentry>
 <term>
 <menuchoice>
 <guilabel
->Preferências do Kooka na Inicialização</guilabel
+>Geral</guilabel
+> 
+</menuchoice>
+</term
+> 
+<listitem>
+<para
+>Use o botão nesta seção para reativar todas as mensagens e perguntas ocultasusando <guibutton
+>Não me pergunte novamente</guibutton
+>.</para>
+</listitem
+> 
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guilabel
+>Inicialização</guilabel
 > 
 </menuchoice>
 </term
@@ -839,7 +781,7 @@ other entries -> link to Fundamentals
 <listitem>
 <para
 >Você poderá querer desligar a opção <guilabel
->Mostrar o seletor de 'scanners' na próxima inicialização</guilabel
+>Mostrar a janela de seleção de 'scanner'</guilabel
 >, se você tiver apenas um 'scanner'. Se você também só tiver um computador poderá querer desligar a opção <guilabel
 >Pesquisar a rede à procura dos 'scanners' disponíveis</guilabel
 >. </para>
@@ -851,22 +793,63 @@ other entries -> link to Fundamentals
 <term>
 <menuchoice>
 <guilabel
->Visão em Miniaturas</guilabel
+>Salvar imagem</guilabel
 > 
 </menuchoice>
 </term
 > 
 <listitem>
 <para
->Aqui o tamanho e a representação das miniaturas poderá ser ajustado, assim como o fundo. Por exemplo, você poderá querer reduzir o tamanho das miniaturas se estiver digitalizando muitas páginas de um livro. </para>
+><guilabel
+>Sempre use o Assistente de salvar</guilabel
+> <guilabel
+> Soliciteo nome do arquivo ao salvar </guilabel
+> <guilabel
+>Antes do início da verificação</guilabel
+> / <guilabel
+>Após o término da verificação </guilabel
+>. </para>
+</listitem
+> 
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guilabel
+>Galeria e miniaturas</guilabel
+> 
+</menuchoice>
+</term
+> 
+<listitem>
+<para
+>Aqui o tamanho das miniaturas poderá ser ajustado, assim como o fundo. Por exemplo, você poderá querer reduzir o tamanho das miniaturas se estiver digitalizando muitas páginas de um livro. </para>
+<para
+>Na seção <guilabel
+>Galeria de imagens</guilabel
+>, selecione como e ondemostra as pastas recentes.</para>
+</listitem
+> 
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guilabel
+>OCR</guilabel
+> 
+</menuchoice>
+</term
+> 
+<listitem>
+<para
+>Selecione o mecanismo de OCR e o caminho para o executável. </para>
 </listitem
 > 
 </varlistentry>
 
 </variablelist>
-
-</sect2>
-
 
 </sect1>
 </chapter>
@@ -882,7 +865,7 @@ other entries -> link to Fundamentals
 >Galeria</guilabel
 > para abrir um pequeno navegador de arquivos. Esta é a pasta <filename class="directory"
 >~/Documents/KookaGallery</filename
-> na porção inferior da janela, sua subpasta atual na galeria é exibida. Aqui é onde todas as imagens digitalizadas são inicialmente salvas. Ao iniciar o &kooka; pela primeira vez, você somente verá a <filename class="directory"
+> na janela, sua subpasta atual na galeria é exibida. Aqui é onde todas as imagens digitalizadas são inicialmente salvas. Ao iniciar o &kooka; pela primeira vez, você somente verá a <filename class="directory"
 >KookaGallery</filename
 >. Crie subpastas com um clique <mousebutton
 >direito</mousebutton
@@ -893,18 +876,18 @@ other entries -> link to Fundamentals
 >.</para>
 
 <para
->Para salvar permanentemente uma imagem, clique com o botão <mousebutton
->esquerdo</mousebutton
-> no seu nome. Em seguida, dê um nome novo e a finalização apropriada para o formato da imagem escolhido enquanto digitaliza. Se você indicar uma extensão diferente, irá obter uma imagem que não corresponde ao formato digitalizado. Ainda que você possa salvar a imagem com este nome, ela permanecerá no seu formato original. Atualmente, a conversão <quote
+>Para salvar permanentemente uma imagem, use <guimenuitem
+>Renomear imagem</guimenuitem
+> e dê um nome novo e a extensão apropriada para o formato da imagem escolhido enquanto digitaliza. Se você indicar uma extensão diferente, irá obter uma imagem que não corresponde ao formato digitalizado. Ainda que você possa salvar a imagem com este nome, ela permanecerá no seu formato original. Atualmente, a conversão <quote
 >on-the-fly</quote
 > não é disponibilizada.</para
 ><para
 >Se você não quiser este método para gerenciar as suas imagens em <filename class="directory"
->~/.kde/share/apps/KookaGallery/</filename
+>~/Documents/KookaGallery/</filename
 >, você pode, obviamente, gravá-las em outro local. Para fazer isso, clique com o botão <mousebutton
 >direito</mousebutton
 > no nome da imagem e selecione <guilabel
->Salvar</guilabel
+>Salvar imagem</guilabel
 >. Escolha qualquer localização na janela que aparece. Além disso, você pode fechar ou apagar permanentemente as imagens aqui.</para>
 
 <para
@@ -956,7 +939,7 @@ format="PNG"/></imageobject
 > </mediaobject
 > </screenshot>
 <para
->Depois de o reconhecimento de caracteres terminar, é iniciada automaticamente uma verificação ortográfica do material reconhecido. Você poderá editar o conteúdo na janela <guilabel
+>Depois de o reconhecimento de caracteres terminar, inicie uma verificação ortográfica do material reconhecido. Você poderá editar o conteúdo na janela <guilabel
 >OCR</guilabel
 > e exportá-lo como texto simples. </para>
 <para
@@ -1008,19 +991,7 @@ format="PNG"/></imageobject
 >Tradução de Marcus Gama <email
 >marcus.gama@gmail.com</email
 ></para
-> 
-&underFDL; &underGPL; </chapter
+> &underFDL; &underGPL; </chapter
 >  
-
-<appendix id="installation">
-<title
->Instalação</title>
-
-&install.intro.documentation;
-
-&install.compile.documentation;
-                
-</appendix>
-
 </book>
 
