@@ -1,17 +1,17 @@
-# Shinjo Park <kde@peremen.name>, 2014, 2015, 2019, 2020, 2021, 2022.
+# Shinjo Park <kde@peremen.name>, 2014, 2015, 2019, 2020, 2021, 2022, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-10-20 00:45+0000\n"
-"PO-Revision-Date: 2022-04-16 23:02+0200\n"
+"PO-Revision-Date: 2023-03-01 01:55+0100\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 21.08.1\n"
+"X-Generator: Lokalize 21.12.3\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #, kde-format
@@ -1064,17 +1064,16 @@ msgid "Create New Gallery"
 msgstr "새 갤러리 만들기"
 
 #: galleryroot.cpp:169
-#, fuzzy, kde-format
-#| msgid "Create New Gallery"
+#, kde-format
 msgctxt "@action:button"
 msgid "Create New"
-msgstr "새 갤러리 만들기"
+msgstr "새로 만들기"
 
 #: galleryroot.cpp:170
 #, kde-format
 msgctxt "@action:button"
 msgid "Continue With Old"
-msgstr ""
+msgstr "기존 항목에서 진행"
 
 #: galleryroot.cpp:183 galleryroot.cpp:197
 #, kde-kuit-format
