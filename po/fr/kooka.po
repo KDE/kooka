@@ -31,14 +31,15 @@
 # Raphaël Glles <raphaelg16@orange.fr>, 2018.
 # Simon Depiets <sdepiets@gmail.com>, 2018, 2019, 2020.
 #
+# Xavier BESNARD <xavier.besnard]neuf.fr>, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-10-20 00:45+0000\n"
-"PO-Revision-Date: 2022-10-21 07:14+0200\n"
-"Last-Translator: Xavier Besnard <xavier.besnard@neuf.fr>\n"
-"Language-Team: French <kde-francophone@kde.org>\n"
+"PO-Revision-Date: 2023-03-07 19:11+0100\n"
+"Last-Translator: Xavier BESNARD <xavier.besnard]neuf.fr>\n"
+"Language-Team: fr\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -47,7 +48,7 @@ msgstr ""
 "X-Environment: kde\n"
 "X-Accelerator-Marker: &\n"
 "X-Text-Markup: kde4\n"
-"X-Generator: Lokalize 22.08.2\n"
+"X-Generator: Lokalize 22.12.3\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -663,7 +664,7 @@ msgid ""
 "Kadmos.</para>"
 msgstr ""
 "<para><emphasis>KADMOS</emphasis> est une bibliothèque commerciale de type "
-"OCR/ICR produite par reRecognition&nbsp;AG.</para><para>%1</"
+"« OCR / ICR » produite par reRecognition AG.</para><para>%1</"
 "para><para>Consultez <link url=\"http://www.rerecognition.com\">www."
 "rerecognition.com</link> Pour plus d'informations sur KADMOS.</para> "
 
@@ -788,7 +789,7 @@ msgstr "Sélectionnez un fichier si nécessaire... "
 #: ../plugins/ocr/tesseract/ocrtesseractengine.cpp:226
 #, kde-format
 msgid "HOCR parsing error, %1"
-msgstr "Erreur d'analyse HOCR, %1"
+msgstr "Erreur d'analyse « HOCR », %1"
 
 #: ../plugins/ocr/tesseract/ocrtesseractengine.cpp:251
 #, kde-format
@@ -850,7 +851,7 @@ msgid ""
 "line art (bitmap) images. Only 1 bit per pixel depth is supported."
 msgstr ""
 "<b>Portable Bitmap</b>, comme utilisé par Netpbm, est un format non "
-"compressé pour des images de type Line Art (bitmap). La profondeur de "
+"compressé pour des images de type « Line Art » (bitmap). La profondeur de "
 "couleur est limitée à 1 bit par pixel (noir ou blanc). "
 
 #: formatdialog.cpp:97
@@ -2472,8 +2473,8 @@ msgstr ""
 " par la Free Software Foundation.\n"
 "\n"
 "Il est exceptionnellement permis d'inclure dans ce programme\n"
-" toute version du moteur OCR/ICR KADMOS de reRecognition GmbH\n"
-"(http://www.rerecognition.com), et de distribuer l'exécutable\n"
+" toute version du moteur OCR /ICR KADMOS de reRecognition GmbH\n"
+"(http://www.rerecognition.com) et de distribuer l'exécutable\n"
 "qui en résulte sans inclure sa source dans celles de Kooka.\n"
 "\n"
 "À noter que lier KADMOS à un autre programme n'est pas permis par les termes "
