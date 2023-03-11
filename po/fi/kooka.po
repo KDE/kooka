@@ -6,13 +6,13 @@
 # Kim Enkovaara <kim.enkovaara@iki.fi>, 2003.
 # Teemu Rytilahti <teemu.rytilahti@kde-fi.org>, 2003.
 # Lasse Liehu <lasse.liehu@gmail.com>, 2013, 2014.
-# Tommi Nieminen <translator@legisign.org>, 2018, 2019, 2020, 2021.
+# Tommi Nieminen <translator@legisign.org>, 2018, 2019, 2020, 2021, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-10-20 00:45+0000\n"
-"PO-Revision-Date: 2021-12-07 14:41+0200\n"
+"PO-Revision-Date: 2022-11-05 21:18+0200\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
 "Language: fi\n"
@@ -21,7 +21,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-POT-Import-Date: 2012-12-01 22:27:05+0000\n"
-"X-Generator: Lokalize 20.04.2\n"
+"X-Generator: Lokalize 21.12.3\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -1090,17 +1090,16 @@ msgid "Create New Gallery"
 msgstr "Luo uusi galleria"
 
 #: galleryroot.cpp:169
-#, fuzzy, kde-format
-#| msgid "Create New Gallery"
+#, kde-format
 msgctxt "@action:button"
 msgid "Create New"
-msgstr "Luo uusi galleria"
+msgstr "Luo uusi"
 
 #: galleryroot.cpp:170
 #, kde-format
 msgctxt "@action:button"
 msgid "Continue With Old"
-msgstr ""
+msgstr "Jatka vanhalla"
 
 #: galleryroot.cpp:183 galleryroot.cpp:197
 #, kde-kuit-format
@@ -1865,7 +1864,7 @@ msgid ""
 msgstr ""
 "<div>Valitse tämä, jos haluat Kookan lataavan viimeksi valitun kuvan "
 "katselimeen käynnistettäessä.<br/><br/>Jos kuvasi ovat suuria, tämä voi "
-"hidastaa Kookan käynnistymistä."
+"hidastaa Kookan käynnistymistä.</div>"
 
 #. i18n: ectx: label, entry (SaverAskForFormat), group (Files)
 #: kookasettings.kcfg:65
@@ -1944,7 +1943,7 @@ msgid ""
 "Uncheck it to show all compatible formats.</div>"
 msgstr ""
 "<div>Valitse tämä näyttääksesi kuvanlukutyypillä vain suositellut "
-"kuvatiedostomuodot. Kaikki muodot näytetään poistamalla valinta.</nl>"
+"kuvatiedostomuodot. Kaikki muodot näytetään poistamalla valinta.</div>"
 
 #. i18n: ectx: label, entry (SaverAlwaysUseFormat), group (Files2)
 #: kookasettings.kcfg:103
@@ -2077,8 +2076,8 @@ msgid ""
 "<div>The minimum gap in pixels considered to be word spacing. The default is "
 "0 which means to automatically detect spacing.</div>"
 msgstr ""
-"<p>Pienin sanaväliksi katsottava kuvapisteväli. Oletus on 0 = tunnista väli "
-"automaattisesti.</div>"
+"<div>Pienin sanaväliksi katsottava kuvapisteväli. Oletus on 0 = tunnista "
+"väli automaattisesti.</div>"
 
 #. i18n: ectx: label, entry (OcrGocrCertainty), group (gocr)
 #: kookasettings.kcfg:235
