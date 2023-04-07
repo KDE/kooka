@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-10-20 00:45+0000\n"
-"PO-Revision-Date: 2023-04-03 16:17+0200\n"
+"PO-Revision-Date: 2023-04-06 12:04+0200\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
 "Language: ia\n"
@@ -77,10 +77,10 @@ msgid "Description:"
 msgstr "Description:"
 
 #: autoselectbar.cpp:56
-#, fuzzy, kde-kuit-format
+#, kde-kuit-format
 msgctxt "@info"
 msgid "<subtitle>Auto Select</subtitle>"
-msgstr "Auto selige"
+msgstr "<subtitle>Auto selige</subtitle>"
 
 #: autoselectbar.cpp:82
 #, kde-format
@@ -117,7 +117,7 @@ msgid "White"
 msgstr "Blanco"
 
 #: deviceselector.cpp:58
-#, fuzzy, kde-format
+#, kde-format
 msgid "Select"
 msgstr "Selige"
 
@@ -167,7 +167,7 @@ msgid "Fit Best"
 msgstr ""
 
 #: imagecanvas.cpp:786
-#, fuzzy, kde-format
+#, kde-format
 msgid "Original size"
 msgstr "Grandor original"
 
@@ -182,19 +182,19 @@ msgid "Fit Height"
 msgstr "Adapta Altessa"
 
 #: imagecanvas.cpp:789
-#, fuzzy, kde-format
+#, kde-format
 msgid "Zoom %1%"
-msgstr "Zoom"
+msgstr "Zoom %1%"
 
 #: imagecanvas.cpp:790
-#, fuzzy, kde-format
+#, kde-format
 msgid "Unknown"
 msgstr "Incognite"
 
 #: imagecanvas.cpp:888
 #, kde-format
 msgid "%1x%2 pix, %3 bpp"
-msgstr ""
+msgstr "%1x%2 pix, %3 bpp"
 
 #: imgscaledialog.cpp:51
 #, kde-format
@@ -204,52 +204,52 @@ msgstr "Zoom de imagine"
 #: imgscaledialog.cpp:72
 #, kde-format
 msgid "25 %"
-msgstr ""
+msgstr "25 %"
 
 #: imgscaledialog.cpp:79
 #, kde-format
 msgid "50 %"
-msgstr ""
+msgstr "50 %"
 
 #: imgscaledialog.cpp:86
 #, kde-format
 msgid "75 %"
-msgstr ""
+msgstr "75 %"
 
 #: imgscaledialog.cpp:93
 #, kde-format
 msgid "&100 %"
-msgstr ""
+msgstr "&100 %"
 
 #: imgscaledialog.cpp:105
 #, kde-format
 msgid "150 &%"
-msgstr ""
+msgstr "150 &%"
 
 #: imgscaledialog.cpp:112
 #, kde-format
 msgid "200 %"
-msgstr ""
+msgstr "200 %"
 
 #: imgscaledialog.cpp:119
 #, kde-format
 msgid "300 %"
-msgstr ""
+msgstr "300 %"
 
 #: imgscaledialog.cpp:126
 #, kde-format
 msgid "400 %"
-msgstr ""
+msgstr "400 %"
 
 #: imgscaledialog.cpp:141
-#, fuzzy, kde-format
+#, kde-format
 msgid "Custom:"
 msgstr "Personalisa:"
 
 #: kscancontrols.cpp:66
-#, fuzzy, kde-format
+#, kde-format
 msgid "(Unknown)"
-msgstr "Incognite"
+msgstr "(Incognite)"
 
 #: kscancontrols.cpp:169
 #, kde-format
@@ -335,7 +335,7 @@ msgstr "Cancellate"
 #: kscandevice.cpp:1542
 #, kde-format
 msgid "Not active"
-msgstr ""
+msgstr "Non active"
 
 #: kscandevice.cpp:1543
 #, kde-format
@@ -370,7 +370,7 @@ msgstr " dpi"
 #: kscanoption.cpp:1015
 #, kde-format
 msgid "%"
-msgstr ""
+msgstr "%"
 
 #: kscanoption.cpp:1016
 #, kde-format
@@ -386,13 +386,13 @@ msgstr "Nulle description"
 #, no-c-format, kde-format
 msgctxt "@info:status"
 msgid "%1x%2mm, %3x%4pix"
-msgstr ""
+msgstr "%1x%2mm, %3x%4pix"
 
 #: previewer.cpp:246
-#, fuzzy, no-c-format, kde-format
+#, no-c-format, kde-format
 msgctxt "@info:status"
 msgid "%1x%2mm"
-msgstr "%1 x %2 mm (%3)"
+msgstr "%1x%2mm"
 
 #: previewer.cpp:340
 #, kde-format
@@ -422,9 +422,9 @@ msgid "Black"
 msgstr "Nigre"
 
 #: scandevices.cpp:182
-#, fuzzy, kde-format
+#, kde-format
 msgid "Unknown device '%1'"
-msgstr "Dispositivo incognite"
+msgstr "Dispositivo incognite '%1'"
 
 #: scanimage.cpp:76
 #, kde-format
@@ -463,7 +463,7 @@ msgid "<title>Scanner&nbsp;Settings</title>"
 msgstr ""
 
 #: scanparams.cpp:176
-#, fuzzy, kde-format
+#, kde-format
 msgid "Pre&view"
 msgstr "&Vista preliminar"
 
@@ -483,12 +483,12 @@ msgid "Start a scan and save the scanned image"
 msgstr ""
 
 #: scanparams.cpp:189
-#, fuzzy, kde-format
+#, kde-format
 msgid "Stop"
 msgstr "Stoppa"
 
 #: scanparams.cpp:193
-#, fuzzy, kde-format
+#, kde-format
 msgid "Scanning"
 msgstr "On scande"
 
@@ -628,14 +628,14 @@ msgid ""
 msgstr ""
 
 #: scanparams.cpp:716
-#, fuzzy, kde-kuit-format
+#, kde-kuit-format
 msgid "Scan in progress"
 msgstr "Scander in execution."
 
 #: scanparams.cpp:717
-#, fuzzy, kde-kuit-format
+#, kde-kuit-format
 msgid "Scan in progress<nl/><nl/>%1"
-msgstr "Scander in execution."
+msgstr "Scander in execution.<nl/><nl/>%1"
 
 #: scanparams.cpp:737
 #, kde-format
@@ -746,7 +746,7 @@ msgid "Portrait"
 msgstr "Vertical"
 
 #: scansizeselector.cpp:148
-#, fuzzy, kde-format
+#, kde-format
 msgid "Landscape"
 msgstr "Orientation horizontal"
 

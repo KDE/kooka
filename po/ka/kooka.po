@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-10-20 00:45+0000\n"
-"PO-Revision-Date: 2023-02-13 06:07+0100\n"
+"PO-Revision-Date: 2023-04-06 06:18+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -180,6 +180,8 @@ msgstr "გაზიარებულის სკანირება"
 msgctxt "@info"
 msgid "Cannot share the scanned image<nl/><nl/><message>%1</message>"
 msgstr ""
+"დასკანირებული გამოსახულების <nl/><nl/><message>%1</message> გაზიარება "
+"შეუძლებელია"
 
 #: ../plugins/ocr/abstractocrdialogue.cpp:101 kookapref.cpp:61
 #, kde-format
@@ -390,7 +392,7 @@ msgstr ""
 #, kde-kuit-format
 msgctxt "@info"
 msgid "<filename><link url=\"%1\">%2</link></filename><nl/>"
-msgstr ""
+msgstr "<filename><link url=\"%1\">%2</link></filename><nl/>"
 
 #: ../plugins/ocr/abstractocrengine.cpp:265
 #, kde-format
@@ -1350,7 +1352,7 @@ msgstr ""
 #: imgsaver.cpp:340
 #, kde-format
 msgid "high/true color image (more than 8 bit depth)"
-msgstr ""
+msgstr "მაღალი/ჭეშმარიტი ფერების მქონე გამოსახულება (8-ზე მეტ-ბიტიანი სიღრმე)"
 
 #: imgsaver.cpp:344
 #, kde-format
@@ -1495,7 +1497,7 @@ msgstr "გადიდების დაყენება..."
 #: kooka.cpp:166
 #, kde-format
 msgid "Keep Zoom Setting"
-msgstr ""
+msgstr "გადიდებისა პარამეტრს შენარჩუნება"
 
 #: kooka.cpp:174
 #, kde-format
@@ -1967,7 +1969,7 @@ msgstr "გარდაქმნა:"
 #: kookasettings.kcfg:275
 #, kde-format
 msgid "Invert input"
-msgstr ""
+msgstr "შეყვანის ინვერსია"
 
 #. i18n: ectx: label, entry (ocrOcradThresholdEnable), group (ocrad)
 #: kookasettings.kcfg:280
@@ -2526,7 +2528,7 @@ msgstr "ქვეგამოსახულება %1"
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Unable to load the image <filename>%2</filename><nl/>%1"
-msgstr ""
+msgstr "გამოსახულების ჩატვირთვის შეცდომა<filename>%2</filename><nl/>%1"
 
 #: scangallery.cpp:780
 #, kde-format
@@ -2542,7 +2544,7 @@ msgstr "შემომავალი/"
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Could not save the image<nl/><filename>%2</filename><nl/>%1"
-msgstr ""
+msgstr "გამოსახულების შენახვის შეცდომა<nl/><filename>%2</filename><nl/>%1"
 
 #: scangallery.cpp:891
 #, kde-format
@@ -2580,6 +2582,8 @@ msgid ""
 "Do you really want to permanently delete the image<nl/><filename>%1</"
 "filename>?<nl/>It cannot be restored."
 msgstr ""
+"მართლა გნებავთ, წაშალოთ გამოსახულება<nl/><filename>%1</filename>?<nl/>მისი "
+"აღდგენა შეუძლებელი იქნება."
 
 #: scangallery.cpp:1125
 #, kde-format
@@ -2591,6 +2595,8 @@ msgstr "გალერეის ელემენტის წაშლა"
 msgctxt "@info"
 msgid "Could not delete the image or folder<nl/><filename>%2</filename><nl/>%1"
 msgstr ""
+"შეცდომა საქაღალდის ან გამოსახულების წაშლისას<nl/><filename>%2</filename><nl/>"
+"%1"
 
 #: scangallery.cpp:1141
 #, kde-format

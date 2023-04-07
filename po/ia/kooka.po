@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-10-20 00:45+0000\n"
-"PO-Revision-Date: 2023-04-03 16:16+0200\n"
+"PO-Revision-Date: 2023-04-06 12:20+0200\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
 "Language: ia\n"
@@ -1489,12 +1489,12 @@ msgid "New Image From Selection"
 msgstr ""
 
 #: kooka.cpp:179
-#, fuzzy, kde-format
+#, kde-format
 msgid "Mirror Vertically"
 msgstr "Reflecte Verticalmente"
 
 #: kooka.cpp:186
-#, fuzzy, kde-format
+#, kde-format
 msgid "Mirror Horizontally"
 msgstr "Reflecte Horizontalmente"
 
@@ -1524,9 +1524,9 @@ msgid "Open With"
 msgstr "Aperi con"
 
 #: kooka.cpp:230
-#, fuzzy, kde-format
+#, kde-format
 msgid "Save Image..."
-msgstr "Salveguarda imagine"
+msgstr "Salveguarda imagine..."
 
 #: kooka.cpp:237
 #, kde-format
@@ -1564,7 +1564,7 @@ msgid "Add Scan Device..."
 msgstr ""
 
 #: kooka.cpp:281
-#, fuzzy, kde-format
+#, kde-format
 msgid "Preview"
 msgstr "Vista preliminar"
 
@@ -1584,9 +1584,9 @@ msgid "Auto Select"
 msgstr "Auto selige"
 
 #: kooka.cpp:304
-#, fuzzy, kde-format
+#, kde-format
 msgid "OCR Image..."
-msgstr "Image OCR"
+msgstr "Image OCR..."
 
 #: kooka.cpp:308
 #, kde-format
@@ -1614,7 +1614,7 @@ msgid "Unload Folder"
 msgstr ""
 
 #: kooka.cpp:538
-#, fuzzy, kde-format
+#, kde-format
 msgid "Delete Folder"
 msgstr "Dele dossier"
 
@@ -1634,17 +1634,17 @@ msgid "Preferences"
 msgstr "Preferentias"
 
 #: kookapref.cpp:57
-#, fuzzy, kde-format
+#, kde-format
 msgid "General"
 msgstr "General"
 
 #: kookapref.cpp:57
-#, fuzzy, kde-format
+#, kde-format
 msgid "General Options"
 msgstr "Optiones General"
 
 #: kookapref.cpp:58
-#, fuzzy, kde-format
+#, kde-format
 msgid "Startup"
 msgstr "Starta "
 
@@ -1654,7 +1654,7 @@ msgid "Startup Options"
 msgstr ""
 
 #: kookapref.cpp:59
-#, fuzzy, kde-format
+#, kde-format
 msgid "Image Saving"
 msgstr "Salveguardante imagine"
 
@@ -1858,9 +1858,9 @@ msgstr ""
 
 #. i18n: ectx: label, entry (ThumbnailPreviewSize), group (thumbnailView)
 #: kookasettings.kcfg:177
-#, fuzzy, kde-format
+#, kde-format
 msgid "Preview size:"
-msgstr "Dimension de vista preliminar"
+msgstr "Dimension de vista preliminar:"
 
 #. i18n: ectx: tooltip, entry (ThumbnailPreviewSize), group (thumbnailView)
 #: kookasettings.kcfg:178
@@ -1945,9 +1945,9 @@ msgstr "Filtro:"
 
 #. i18n: ectx: label, entry (ocrOcradTransform), group (ocrad)
 #: kookasettings.kcfg:271
-#, fuzzy, kde-format
+#, kde-format
 msgid "Transform:"
-msgstr "Transforma"
+msgstr "Transforma:"
 
 #. i18n: ectx: label, entry (ocrOcradInvert), group (ocrad)
 #: kookasettings.kcfg:275
@@ -1969,7 +1969,7 @@ msgstr "Limine"
 
 #. i18n: ectx: label, entry (ocrTesseractLanguage), group (tesseract)
 #: kookasettings.kcfg:308
-#, fuzzy, kde-format
+#, kde-format
 msgid "Language:"
 msgstr "Linguage:"
 
@@ -2013,14 +2013,14 @@ msgid "OCR results will appear here"
 msgstr ""
 
 #: kookaview.cpp:284
-#, fuzzy, kde-format
+#, kde-format
 msgid "Scan"
 msgstr "Scande"
 
 #: kookaview.cpp:287 kookaview.cpp:560 kookaview.cpp:579 scangallery.cpp:123
 #, kde-format
 msgid "Gallery"
-msgstr ""
+msgstr "Galeria"
 
 #: kookaview.cpp:463
 #, kde-kuit-format
@@ -2061,9 +2061,9 @@ msgid "No selection"
 msgstr ""
 
 #: kookaview.cpp:645
-#, fuzzy, kde-format
+#, kde-format
 msgid "Gallery folder %1"
-msgstr "Directorio de galleria:"
+msgstr "Directorio de galleria %1"
 
 #: kookaview.cpp:645
 #, kde-format
@@ -2245,9 +2245,9 @@ msgid "Klaas Freitag"
 msgstr ""
 
 #: main.cpp:92
-#, fuzzy, kde-format
+#, kde-format
 msgid "Developer"
-msgstr "Developpator"
+msgstr "Disveloppator"
 
 #: main.cpp:93
 #, kde-format
@@ -2290,7 +2290,7 @@ msgid "The SANE device specification (e.g. 'umax:/dev/sg0')"
 msgstr ""
 
 #: main.cpp:108
-#, fuzzy, kde-format
+#, kde-format
 msgid "device"
 msgstr "dispositivo"
 
@@ -2374,7 +2374,7 @@ msgid "Image Gallery"
 msgstr "Galeria de imagine"
 
 #: prefspages.cpp:257
-#, fuzzy, kde-format
+#, kde-format
 msgid "Not shown"
 msgstr "Non monstrate."
 
@@ -2394,7 +2394,7 @@ msgid "Thumbnail View"
 msgstr "Vista de miniatura"
 
 #: prefspages.cpp:388
-#, fuzzy, kde-format
+#, kde-format
 msgid "None"
 msgstr "Necun"
 
@@ -2426,12 +2426,12 @@ msgid "Name"
 msgstr "Nomine"
 
 #: scangallery.cpp:99
-#, fuzzy, kde-format
+#, kde-format
 msgid "Size"
 msgstr "Dimension"
 
 #: scangallery.cpp:100
-#, fuzzy, kde-format
+#, kde-format
 msgid "Format"
 msgstr "Formato"
 
@@ -2453,18 +2453,18 @@ msgstr[0] ""
 msgstr[1] "%1 images"
 
 #: scangallery.cpp:380
-#, fuzzy, kde-format
+#, kde-format
 msgid "one file"
 msgid_plural "%1 files"
 msgstr[0] "Un File"
 msgstr[1] "%1 files"
 
 #: scangallery.cpp:386
-#, fuzzy, kde-format
+#, kde-format
 msgid "one file, "
 msgid_plural "%1 files, "
-msgstr[0] "Un File"
-msgstr[1] "%1 files"
+msgstr[0] "Un File, "
+msgstr[1] "%1 files, "
 
 #: scangallery.cpp:388
 #, kde-format
@@ -2474,16 +2474,16 @@ msgstr[0] ""
 msgstr[1] "%1 (%2 imagines)"
 
 #: scangallery.cpp:391
-#, fuzzy, kde-format
+#, kde-format
 msgid "1 folder"
 msgid_plural "%1 folders"
 msgstr[0] "1 dossier"
 msgstr[1] "%1 dossieres"
 
 #: scangallery.cpp:446
-#, fuzzy, kde-format
+#, kde-format
 msgid " %1 x %2"
-msgstr "x"
+msgstr " %1 x %2"
 
 #: scangallery.cpp:602
 #, kde-format
@@ -2520,9 +2520,9 @@ msgid "Image Load Error"
 msgstr ""
 
 #: scangallery.cpp:842
-#, fuzzy, kde-format
+#, kde-format
 msgid "Incoming/"
-msgstr "In arrivata"
+msgstr "In arrivata/"
 
 #: scangallery.cpp:888
 #, kde-kuit-format
@@ -2584,7 +2584,7 @@ msgid "File Delete Error"
 msgstr ""
 
 #: scangallery.cpp:1173
-#, fuzzy, kde-format
+#, kde-format
 msgid "New Folder"
 msgstr "Nove dossier"
 
@@ -2615,7 +2615,7 @@ msgid "Saved scan preset sets:"
 msgstr ""
 
 #: scanpresetsdialog.cpp:80
-#, fuzzy, kde-format
+#, kde-format
 msgid "Select"
 msgstr "Selige"
 
@@ -2625,9 +2625,9 @@ msgid "Load the selected scan preset set to use as scanner settings"
 msgstr ""
 
 #: scanpresetsdialog.cpp:86
-#, fuzzy, kde-format
+#, kde-format
 msgid "Save..."
-msgstr "Salveguarda"
+msgstr "Salveguarda..."
 
 #: scanpresetsdialog.cpp:88
 #, kde-format
@@ -2640,7 +2640,7 @@ msgid "Delete the selected scan preset set"
 msgstr ""
 
 #: scanpresetsdialog.cpp:98
-#, fuzzy, kde-format
+#, kde-format
 msgid "Edit..."
 msgstr "Edita ..."
 
@@ -2655,10 +2655,10 @@ msgid "No preset set selected."
 msgstr ""
 
 #: scanpresetsdialog.cpp:212
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "New set name, %1=scan mode, %2=resolution"
 msgid "%1, %2 dpi"
-msgstr "%1 DPI"
+msgstr "%1, %2 dpi"
 
 #: scanpresetsdialog.cpp:289
 #, kde-kuit-format
@@ -2698,16 +2698,16 @@ msgid ""
 msgstr ""
 
 #: statusbarmanager.cpp:108
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:status"
 msgid "Image: %1"
-msgstr "Imagine"
+msgstr "Imagine: %1"
 
 #: statusbarmanager.cpp:112
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:status"
 msgid "Scan: %1"
-msgstr "Scande"
+msgstr "Scande: %1"
 
 #: thumbview.cpp:96
 #, kde-format
@@ -2715,27 +2715,27 @@ msgid "Thumbnails"
 msgstr "Miniaturas"
 
 #: thumbview.cpp:107
-#, fuzzy, kde-format
+#, kde-format
 msgid "Preview Size"
 msgstr "Dimension de vista preliminar"
 
 #: thumbview.cpp:338
-#, fuzzy, kde-format
+#, kde-format
 msgid "Very Large"
 msgstr "Multe Grande"
 
 #: thumbview.cpp:339
-#, fuzzy, kde-format
+#, kde-format
 msgid "Large"
 msgstr "Grande (Large)"
 
 #: thumbview.cpp:340
-#, fuzzy, kde-format
+#, kde-format
 msgid "Medium"
 msgstr "Medie"
 
 #: thumbview.cpp:341
-#, fuzzy, kde-format
+#, kde-format
 msgid "Small"
 msgstr "Parve"
 
