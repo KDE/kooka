@@ -236,7 +236,7 @@ msgstr "Incognite"
 #: ../plugins/ocr/abstractocrdialogue.cpp:233
 #, kde-format
 msgid "No preview available"
-msgstr "Nulle vista preliminari disponibile"
+msgstr "Nulle vista preliminar disponibile"
 
 #: ../plugins/ocr/abstractocrdialogue.cpp:242
 #, kde-format
