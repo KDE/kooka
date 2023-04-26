@@ -87,7 +87,7 @@ int main(int argc, char **argv)
     }
 
     QList<QByteArray> formats(combinedMap.keys());
-    qSort(formats);
+    std::sort(formats.begin(), formats.end());
 
     QTextStream ts(stdout);
 
