@@ -18,7 +18,7 @@ set(VERSION "0.90")
 message(STATUS "Configuring for Kooka/libkookascan version ${VERSION}")
 
 set(QT_MIN_VERSION "5.15.0")
-set(KF5_MIN_VERSION "5.100.0")
+set(KF5_MIN_VERSION "5.104.0")
 
 # ECM setup (Extra Cmake Modules)
 find_package(ECM ${KF5_MIN_VERSION} REQUIRED NO_MODULE)

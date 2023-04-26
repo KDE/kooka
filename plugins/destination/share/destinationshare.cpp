@@ -40,7 +40,7 @@
 #include <kio/global.h>
 
 #include <purpose/alternativesmodel.h>
-#include <purposewidgets/menu.h>
+#include <purpose/menu.h>
 
 #include "scanparamspage.h"
 #include "kookasettings.h"
