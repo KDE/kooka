@@ -91,9 +91,9 @@ int main(int argc, char **argv)
 
     QTextStream ts(stdout);
 
-    ts << endl << QString("Found %1 supported image formats").arg(formats.count()) << endl;
+    ts << Qt::endl << QString("Found %1 supported image formats").arg(formats.count()) << Qt::endl;
 
-    ts << endl;
+    ts << Qt::endl;
     ts << QString(FMT)
         .arg("Format",FIELD1)
         .arg("Read",FIELD23)
@@ -105,7 +105,7 @@ int main(int argc, char **argv)
         .arg("",FIELD5)
 #endif
         .arg("Extension",FIELD6)
-       << endl;
+       << Qt::endl;
     ts << QString(FMT)
         .arg("------",FIELD1)
         .arg("----",FIELD23)
@@ -117,7 +117,7 @@ int main(int argc, char **argv)
         .arg("",FIELD5)
 #endif
         .arg("---------",FIELD6)
-       << endl;
+       << Qt::endl;
 
     QMimeDatabase db;
 
@@ -151,9 +151,9 @@ int main(int argc, char **argv)
             .arg(type,FIELD4)
             .arg(backfmt,FIELD5)
             .arg(ext,FIELD6)
-           << endl;
+           << Qt::endl;
     }
 
-    ts << endl;
+    ts << Qt::endl;
     return (EXIT_SUCCESS);
 }
