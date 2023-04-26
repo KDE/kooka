@@ -34,7 +34,7 @@
 #include <qhash.h>
 #include <qstring.h>
 #include <qtextstream.h>
-#include <qguiapplication.h>
+#include <qcoreapplication.h>
 #include <qcommandlineparser.h>
 #include <qimagereader.h>
 #include <qimagewriter.h>
@@ -61,8 +61,7 @@
 
 int main(int argc, char **argv)
 {
-    QGuiApplication app(argc, argv);
-    app.setApplicationDisplayName("QImageIOInfo");
+    QCoreApplication app(argc, argv);
     app.setApplicationName("qimageioinfo");
     app.setApplicationVersion("1.0.0");
 

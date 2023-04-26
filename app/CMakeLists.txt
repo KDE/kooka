@@ -123,15 +123,15 @@ target_link_libraries(kooka
 include_directories(${CMAKE_CURRENT_BINARY_DIR}/..)
 add_dependencies(kooka vcsversion)
 
-#18n for both kooka and libkookascan
-ki18n_install(../po)
-
 ########### install files ###############
 
 if (INSTALL_BINARIES)
   install(TARGETS kooka ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 endif (INSTALL_BINARIES)
 install(FILES kookasettings.kcfg DESTINATION ${KDE_INSTALL_KCFGDIR})
+
+# I18n for both kooka and libkookascan
+ki18n_install(../po)
 
 ########### subdirectories ###############
 
