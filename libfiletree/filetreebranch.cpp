@@ -74,7 +74,7 @@ FileTreeBranch::FileTreeBranch(FileTreeView *parent,
     m_root->setToolTip(0, QString("%1 - %2").arg(name, u.url(QUrl::PreferLocalFile)));
     blockSignals(sb);
 
-    setShowingDotFiles(showHidden);
+    setShowHiddenFiles(showHidden);
 
     connect(this, &KCoreDirLister::itemsAdded, this, &FileTreeBranch::slotItemsAdded);
     connect(this, &KCoreDirLister::itemsDeleted, this, &FileTreeBranch::slotItemsDeleted);
