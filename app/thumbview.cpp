@@ -80,7 +80,7 @@ ThumbView::ThumbView(QWidget *parent)
     setPreviewWidget(nullptr);				// no preview at side
     setMode(KFile::File);				// implies single selection mode
     setInlinePreviewShown(true);			// show file previews
-    setView(KFile::Simple);				// simple icon view
+    setViewMode(KFile::Simple);				// simple icon view
     dirLister()->setMimeExcludeFilter(QStringList("inode/directory"));
 							// only files, not directories
     connect(this, &KDirOperator::fileSelected, this, &ThumbView::slotFileSelected);
