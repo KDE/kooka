@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-10-20 00:45+0000\n"
-"PO-Revision-Date: 2023-04-06 06:18+0200\n"
+"PO-Revision-Date: 2023-05-13 06:07+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.2.2\n"
+"X-Generator: Poedit 3.3\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -306,6 +306,8 @@ msgid ""
 "Custom spell settings above do not affect this spelling check, use the "
 "language setting in the dialog to change the dictionary language."
 msgstr ""
+"ზემოთ ხელით მითითებული მართლწერის პარამეტრი მართლწერის ამ შემოწმებაზე "
+"გავლენას ვერ მოახდენს. ლექსიკონის ენის მისათითებლად ენა ფანჯარაში შეცვალეთ."
 
 #: ../plugins/ocr/abstractocrdialogue.cpp:332
 #, kde-format
@@ -387,6 +389,7 @@ msgstr "OCR-ის პროცესი გაჩერდა"
 msgctxt "@info"
 msgid "The following OCR temporary files are retained for debugging:<nl/><nl/>"
 msgstr ""
+"გამართვისთვის შენახული იქნება შემდეგი OCR-ის დროებითი ფაილები:<nl/><nl/>"
 
 #: ../plugins/ocr/abstractocrengine.cpp:257
 #, kde-kuit-format
@@ -419,6 +422,8 @@ msgid ""
 "The executable <command>%1</command> could not be found on <envar>PATH</"
 "envar>."
 msgstr ""
+"გამშვებ ფაილი <command>%1</command> გარემოს ცვლადში <envar>PATH</envar> "
+"აღმოჩენილი არაა."
 
 #: ../plugins/ocr/abstractocrengine.cpp:521
 #, kde-kuit-format
@@ -434,12 +439,14 @@ msgctxt "@info"
 msgid ""
 "Command <command>%1</command> crashed with exit status <numid>%2</numid>"
 msgstr ""
+"ბრძანება <command>%1</command> ავარიულად დასრულდა გამოსვლის სტატუსით <numid>"
+"%2</numid>"
 
 #: ../plugins/ocr/abstractocrengine.cpp:598
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Command <command>%1</command> exited with status <numid>%2</numid>"
-msgstr ""
+msgstr "ბრძანება <command>%1</command> დასრულდა. სტატუსი <numid>%2</numid>"
 
 #: ../plugins/ocr/abstractocrengine.cpp:602
 #, kde-kuit-format
@@ -454,6 +461,8 @@ msgid ""
 "More information may be available in its <link url=\"%1\">standard error</"
 "link> log file."
 msgstr ""
+"მეტი ინფორმაცია შეიძლება ხელმისაწვდომი იყოს მისი <link url="
+"\"%1\">სტანდარტული შეცდომების</link> ჟურნალის ფაილში."
 
 #: ../plugins/ocr/abstractocrengine.cpp:606
 #, kde-format
@@ -1810,7 +1819,7 @@ msgstr ""
 #: kookasettings.kcfg:103
 #, kde-format
 msgid "Always use this save format for this image type"
-msgstr ""
+msgstr "ამ გამოსახულების ტიპისთვის ყოველთვის ამ შენახვის ფორმატის გამოყენება"
 
 #. i18n: ectx: tooltip, entry (SaverAlwaysUseFormat), group (Files2)
 #: kookasettings.kcfg:104
