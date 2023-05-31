@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 1.11.1\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
 "X-Accelerator-Marker: &\n"
 "X-Text-Markup: kde4\n"
 
@@ -2659,32 +2659,28 @@ msgid "empty"
 msgstr ""
 
 #: scangallery.cpp:378
-#, fuzzy, kde-format
+#, kde-format
 msgid "one image"
 msgid_plural "%1 images"
-msgstr[0] "%1 項目"
-msgstr[1] ""
+msgstr[0] ""
 
 #: scangallery.cpp:380
-#, fuzzy, kde-format
+#, kde-format
 msgid "one file"
 msgid_plural "%1 files"
-msgstr[0] "%1 項目"
-msgstr[1] ""
+msgstr[0] ""
 
 #: scangallery.cpp:386
-#, fuzzy, kde-format
+#, kde-format
 msgid "one file, "
 msgid_plural "%1 files, "
-msgstr[0] "%1 項目"
-msgstr[1] ""
+msgstr[0] ""
 
 #: scangallery.cpp:388
-#, fuzzy, kde-format
+#, kde-format
 msgid "one image, "
 msgid_plural "%1 images, "
-msgstr[0] "%1 項目"
-msgstr[1] ""
+msgstr[0] ""
 
 #: scangallery.cpp:391
 #, fuzzy, kde-format
@@ -2692,7 +2688,6 @@ msgstr[1] ""
 msgid "1 folder"
 msgid_plural "%1 folders"
 msgstr[0] "新規フォルダ"
-msgstr[1] "新規フォルダ"
 
 #: scangallery.cpp:446
 #, fuzzy, kde-format
