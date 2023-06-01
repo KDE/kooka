@@ -167,7 +167,7 @@ msgstr "Editeu la taula de gamma"
 #: gammadialog.cpp:61
 #, kde-format
 msgid "Brightness"
-msgstr "Lluminositat"
+msgstr "Brillantor"
 
 #: gammadialog.cpp:71
 #, kde-format
