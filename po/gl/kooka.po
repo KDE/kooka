@@ -6,14 +6,14 @@
 # marce villarino <mvillarino@users.sourceforge.net>, 2009.
 # Marce Villarino <mvillarino@gmail.com>, 2012.
 # Adrián Chaves Fernández <adriyetichaves@gmail.com>, 2015, 2017.
-# Adrián Chaves (Gallaecio) <adrian@chaves.io>, 2017, 2018, 2019, 2020.
+# Adrián Chaves (Gallaecio) <adrian@chaves.io>, 2017, 2018, 2019, 2020, 2023.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-10-20 00:45+0000\n"
-"PO-Revision-Date: 2020-03-07 17:49+0100\n"
+"PO-Revision-Date: 2023-06-11 21:38+0200\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Galician <proxecto@trasno.gal>\n"
 "Language: gl\n"
@@ -21,12 +21,12 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 19.08.3\n"
+"X-Generator: Lokalize 23.04.1\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
-msgstr "Gonzalo H. Castilla, Marce Villarino, Adrián Chaves Fernández"
+msgstr "Gonzalo H. Castilla, Marce Villarino, Adrián Chaves (Gallaecio)"
 
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
@@ -36,17 +36,17 @@ msgstr "ttxzgl@yahoo.es, mvillarino@users.sourceforge.net, adrian@chaves.io"
 #: ../plugins/destination/abstractdestination.cpp:86
 #, kde-format
 msgid "Remember this format"
-msgstr ""
+msgstr "Lembrar o formato"
 
 #: ../plugins/destination/abstractdestination.cpp:120
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid "Could not save the image<nl/><filename>%2</filename><nl/>%1"
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "Cannot save temporary image file<nl/><filename>%1</filename><nl/><message>"
 "%2</message>"
-msgstr "Non se puido gardar a imaxe:<nl/> <filename>%2</filename><nl/> %1"
+msgstr ""
+"Non se pode gardar o ficheiro temporal de imaxe<nl/><filename>%1</"
+"filename><nl/><message>%2</message>"
 
 #: ../plugins/destination/abstractdestination.cpp:160
 #: ../plugins/destination/application/destinationapplication.cpp:190
@@ -56,37 +56,33 @@ msgid "Other..."
 msgstr "Outro…"
 
 #: ../plugins/destination/application/destinationapplication.cpp:94
-#, fuzzy, kde-format
-#| msgid "Original kscan application"
+#, kde-format
 msgid "Sending to application"
-msgstr "Aplicación «kscan» orixinal."
+msgstr "Enviando á aplicación."
 
 #: ../plugins/destination/application/destinationapplication.cpp:96
 #, kde-kuit-format
 msgid "Sending to <application>%1</application>"
-msgstr ""
+msgstr "Enviando a <application>%1</application>."
 
 #: ../plugins/destination/application/destinationapplication.cpp:192
 #, kde-format
 msgid "Application:"
-msgstr ""
+msgstr "Aplicación:"
 
 #: ../plugins/destination/application/destinationapplication.cpp:198
 #: ../plugins/destination/share/destinationshare.cpp:137
-#, fuzzy, kde-format
-#| msgid "Image sub-format:"
+#, kde-format
 msgid "Image format:"
-msgstr "Sub-formato da imaxe:"
+msgstr "Formato da imaxe:"
 
 #: ../plugins/destination/clipboard/destinationclipboard.cpp:61
 #, kde-format
 msgid "Copying image to clipboard"
-msgstr ""
+msgstr "Copiando a imaxe no portapapeis."
 
 #: ../plugins/destination/gallery/destinationgallery.cpp:74
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid "<filename>%1</filename>"
+#, kde-kuit-format
 msgid "<filename>%1</filename>"
 msgstr "<filename>%1</filename>"
 
@@ -117,44 +113,36 @@ msgstr "Non se pode imprimir"
 #: ../plugins/destination/print/destinationprint.cpp:106
 #, kde-format
 msgid "Print immediately with same settings"
-msgstr ""
+msgstr "Imprimir inmediatamente coa mesma configuración."
 
 #: ../plugins/destination/print/destinationprint.cpp:116
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Print Image"
+#, kde-format
 msgid "Printing image"
-msgstr "Imprimir a imaxe"
+msgstr "Imprimindo a imaxe."
 
 #: ../plugins/destination/save/destinationsave.cpp:132
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid "Cannot save image to temporary file <filename>%1</filename>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot save image to <filename>%1</filename><nl/><message>%2</message>"
 msgstr ""
-"Non se pode gardar a imaxe no ficheiro temporal <filename>%1</filename>"
+"Non se pode gardar a imaxe en <filename>%1</filename><nl/><message>%2</"
+"message>"
 
 #: ../plugins/destination/save/destinationsave.cpp:134
 #: ../plugins/destination/save/destinationsave.cpp:239
-#, fuzzy, kde-format
-#| msgid "Save Image..."
+#, kde-format
 msgid "Cannot Save Image"
-msgstr "Gardar a imaxe…"
+msgstr "Non se pode gardar a imaxe"
 
 #: ../plugins/destination/save/destinationsave.cpp:163
-#, fuzzy, kde-format
-#| msgid "one image"
-#| msgid_plural "%1 images"
+#, kde-format
 msgid "Saving image"
-msgstr "unha imaxe"
+msgstr "Gardando a imaxe."
 
 #: ../plugins/destination/save/destinationsave.cpp:164
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid "<filename>%1</filename>"
+#, kde-kuit-format
 msgid "Saving to <filename>%1</filename>"
-msgstr "<filename>%1</filename>"
+msgstr "Gardando en <filename>%1</filename>."
 
 #: ../plugins/destination/save/destinationsave.cpp:181 formatdialog.cpp:280
 #, kde-format
@@ -168,41 +156,41 @@ msgid ""
 "Cannot save to <filename>%2</filename><nl/>The image format <resource>%1</"
 "resource> is not supported."
 msgstr ""
+"Non se pode gardar en <filename>%2</filename>.<nl/>Non se admite o formato "
+"de imaxe <resource>%1</resource>."
 
 #: ../plugins/destination/share/destinationshare.cpp:143
 #, kde-format
 msgid "Share to:"
-msgstr ""
+msgstr "Compartir con:"
 
 #: ../plugins/destination/share/destinationshare.cpp:151
 #, kde-kuit-format
 msgid "<application>%1</application>"
-msgstr ""
+msgstr "<application>%1</application>"
 
 #: ../plugins/destination/share/destinationshare.cpp:217
 #, kde-kuit-format
 msgctxt "@info"
 msgid "The scan was shared to<nl/><link>%1</link>"
-msgstr ""
+msgstr "O contido escaneado compartiuse con:<nl/><link>%1</link>"
 
 #: ../plugins/destination/share/destinationshare.cpp:218
-#, fuzzy, kde-format
-#| msgid "Scan Parameters"
+#, kde-format
 msgid "Scan Shared"
-msgstr "Parámetros da dixitalización"
+msgstr "Compartiuse o contido escaneado"
 
 #: ../plugins/destination/share/destinationshare.cpp:227
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid "Could not save the image<nl/><filename>%2</filename><nl/>%1"
+#, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot share the scanned image<nl/><nl/><message>%1</message>"
-msgstr "Non se puido gardar a imaxe:<nl/> <filename>%2</filename><nl/> %1"
+msgstr ""
+"Non se pode compartir a imaxe escaneada:<nl/><nl/><message>%1</message>"
 
 #: ../plugins/ocr/abstractocrdialogue.cpp:101 kookapref.cpp:61
 #, kde-format
 msgid "Optical Character Recognition"
-msgstr "Recoñecemento óptico de carateres"
+msgstr "Recoñecemento óptico de caracteres"
 
 #: ../plugins/ocr/abstractocrdialogue.cpp:103
 #, kde-format
@@ -515,7 +503,7 @@ msgstr "Escriba ou seleccione a ruta…"
 #: ../plugins/ocr/gocr/ocrgocrdialog.cpp:99
 #, kde-format
 msgid "Automatic"
-msgstr ""
+msgstr "Automática"
 
 #: ../plugins/ocr/gocr/ocrgocrdialog.cpp:120
 #, kde-format
@@ -1003,19 +991,16 @@ msgstr ""
 "formato aberto."
 
 #: formatdialog.cpp:241
-#, fuzzy, kde-format
-#| msgid ""
-#| "<b>X Bitmap</b> is often used by the X Window System to store cursor and "
-#| "icon bitmaps.<p>Unless required for this purpose, use a general purpose "
-#| "format instead."
+#, kde-format
 msgid ""
 "<b>Wireless Bitmap</b> is a monochrome bitmap format optimised for WAP "
 "mobile devices.  It supports black and white bitmaps only.<p>Unless "
 "specifically required, use an general purpose format instead."
 msgstr ""
-"<b>Mapa de bits X</b> adoita empregarse non sistema de xanelas X para "
-"almacenar mapas de bits de cursores e iconas. <p>Se non necesita este "
-"formato para dito caso de uso, mellor use un formato de propósito xeral."
+"<b>Wireless Bitmap</b> é un formato de mapa de bits monocromo optimizado "
+"para dispositivos móbiles WAP.  Só permite mapas de bits en branco e negro."
+"<p>A non ser que o necesite especificamente, mellor use un formato de uso "
+"xeral."
 
 #: formatdialog.cpp:251
 #, kde-format
@@ -1026,6 +1011,11 @@ msgid ""
 "are supported. Lossy compression is not recommended for archiving or for "
 "repeated loading and saving."
 msgstr ""
+"<b>WebP</b> pretende ser un estándar aberto para imaxes de cor verdadeira "
+"con transparencia opcional. Admíteno moitos navegadores web modernos e "
+"software de imaxe.<p>Admítense varios métodos de compresións, con e sen "
+"perda. A compresión con perda non se recomenda para arquivar ou se se vai "
+"cargar e gardar en repetidas ocasións."
 
 #: formatdialog.cpp:280
 #, kde-format
@@ -1108,17 +1098,16 @@ msgid "Create New Gallery"
 msgstr "Crear unha galería nova"
 
 #: galleryroot.cpp:169
-#, fuzzy, kde-format
-#| msgid "Create New Gallery"
+#, kde-format
 msgctxt "@action:button"
 msgid "Create New"
-msgstr "Crear unha galería nova"
+msgstr "Crear unha nova"
 
 #: galleryroot.cpp:170
 #, kde-format
 msgctxt "@action:button"
 msgid "Continue With Old"
-msgstr ""
+msgstr "Continuar coa vella"
 
 #: galleryroot.cpp:183 galleryroot.cpp:197
 #, kde-kuit-format
@@ -1734,10 +1723,9 @@ msgid "Start Scan"
 msgstr "Comezar a dixitalización"
 
 #: kooka.cpp:291
-#, fuzzy, kde-format
-#| msgid "Scan Parameters..."
+#, kde-format
 msgid "Scan Presets..."
-msgstr "Parámetros da dixitalización…"
+msgstr "Predefinicións de escaneamento…"
 
 #: kooka.cpp:296
 #, kde-format
@@ -1755,10 +1743,9 @@ msgid "OCR Selection..."
 msgstr "OCR da selección…"
 
 #: kooka.cpp:312
-#, fuzzy, kde-format
-#| msgid "OCR Image..."
+#, kde-format
 msgid "OCR File..."
-msgstr "OCR da imaxe…"
+msgstr "Ficheiro de OCR…"
 
 #: kooka.cpp:316
 #, kde-format
@@ -1841,14 +1828,7 @@ msgid "OCR"
 msgstr "OCR"
 
 #: kookascanparams.cpp:68
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "<emphasis strong=\"1\">Gallery Mode - No scanner selected</emphasis><nl/"
-#| "><nl/>In this mode you can browse, manipulate and OCR images already in "
-#| "the gallery.<nl/><nl/><link url=\"a:1\">Select a scanner device</link> to "
-#| "perform scanning, or <link url=\"a:2\">add a device</link> if a scanner "
-#| "is not automatically detected."
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "<title>Gallery Mode - No scanner selected</title><nl/><nl/>In this mode you "
@@ -1856,32 +1836,29 @@ msgid ""
 "url=\"a:1\">Select a scanner device</link> to perform scanning, or <link url="
 "\"a:2\">add a device</link> if a scanner is not automatically detected."
 msgstr ""
-"<emphasis strong=\"1\">Modo da galería - Non se seleccionou ningún escáner</"
-"emphasis><nl/> <nl/> Neste modo pode explorar, editar e usar o recoñecemento "
-"óptico de caracteres (OCR) para as imaxes da galería.<nl/> <nl/> <link url="
+"<title>Modo da galería - Non se seleccionou ningún escáner</title><nl/> <nl/"
+"> Neste modo pode explorar, editar e usar o recoñecemento óptico de "
+"caracteres (OCR) para as imaxes da galería.<nl/> <nl/> <link url="
 "\"a:1\">Seleccione un dispositivo de escanear</link> para dixitalizar, ou "
 "<link url=\"a:2\">engadir un dispositivo</link> se non se detecta "
 "automaticamente un escáner."
 
 #: kookascanparams.cpp:114
-#, fuzzy, kde-format
-#| msgid "Scan resolution:"
+#, kde-format
 msgid "Scan &destination:"
-msgstr "Resolución da dixitalización:"
+msgstr "&Destino do escaneamento:"
 
 #: kookascanparams.cpp:150
-#, fuzzy, kde-kuit-format
-#| msgid "No save set selected."
+#, kde-kuit-format
 msgctxt "@info"
 msgid "No destination selected"
-msgstr "Non escolleu ningunha configuración gardada."
+msgstr "Non seleccionou un destino."
 
 #: kookascanparams.cpp:160
-#, fuzzy, kde-kuit-format
-#| msgid "Cannot load OCR plugin '%1'"
+#, kde-kuit-format
 msgctxt "@info"
 msgid "Unable to load plugin '%1'"
-msgstr "Non se pode cargar o complemento de OCR «%1»"
+msgstr "Non se pode cargar o complemento «%1»."
 
 #. i18n: ectx: label, entry (StartupReadImage), group (Startup)
 #: kookasettings.kcfg:50
@@ -2080,17 +2057,15 @@ msgstr "Tamaño do po:"
 
 #. i18n: ectx: tooltip, entry (OcrGocrDustSize), group (gocr)
 #: kookasettings.kcfg:218
-#, fuzzy, kde-format
-#| msgid ""
-#| "<div>Clusters smaller than this size will be considered to be noise, and "
-#| "ignored. The default is 10.</div>"
+#, kde-format
 msgid ""
 "<div>Clusters smaller than this size will be considered to be noise, and "
 "ignored.  0 means to not detect dust clusters, -1 means to automatically "
 "detect them. The default is 10.</div>"
 msgstr ""
 "<div>Os grupos de menor tamaño do indicado consideraranse ruído e "
-"ignoraranse. O valor predeterminado é 10.</div>"
+"ignoraranse. 0 desactiva a detección de grupos de po, e -1 detéctaos "
+"automaticamente. O valor predeterminado é 10.</div>"
 
 #. i18n: ectx: label, entry (OcrGocrGrayLevel), group (gocr)
 #: kookasettings.kcfg:223
@@ -2100,16 +2075,13 @@ msgstr "Nivel de gris:"
 
 #. i18n: ectx: tooltip, entry (OcrGocrGrayLevel), group (gocr)
 #: kookasettings.kcfg:224
-#, fuzzy, kde-format
-#| msgid ""
-#| "<div>The threshold value below which gray pixels are considered to be "
-#| "black. The default is 160.</div>"
+#, kde-format
 msgid ""
 "<div>The threshold value below which gray pixels are considered to be black. "
 "0 means to automatically detect the gray level.  The default is 160.</div>"
 msgstr ""
-"<div>O límite a partir do que os píxeles grises se consideran negros. O "
-"valor predeterminado é 160.</div>"
+"<div>O límite a partir do que os píxeles grises se consideran negros. 0 "
+"detecta automaticamente o nivel de gris. O valor predeterminado é 160.</div>"
 
 #. i18n: ectx: label, entry (OcrGocrSpaceWidth), group (gocr)
 #: kookasettings.kcfg:229
@@ -2119,35 +2091,30 @@ msgstr "Espazamento:"
 
 #. i18n: ectx: tooltip, entry (OcrGocrSpaceWidth), group (gocr)
 #: kookasettings.kcfg:230
-#, fuzzy, kde-format
-#| msgid ""
-#| "<div>Spacing between characters. The default is 0 which means "
-#| "autodetection.</div>"
+#, kde-format
 msgid ""
 "<div>The minimum gap in pixels considered to be word spacing. The default is "
 "0 which means to automatically detect spacing.</div>"
 msgstr ""
-"<div>Espazamento entre caracteres. O valor predeterminado é 0, o que "
-"significa que se detectará automaticamente.</div>"
+"<div>O oco mínimo en píxeles que se considera espazo entre palabras. O "
+"predeterminado é 0, que causa a detección automática do espazamento.</div>"
 
 #. i18n: ectx: label, entry (OcrGocrCertainty), group (gocr)
 #: kookasettings.kcfg:235
 #, kde-format
 msgid "Certainty:"
-msgstr ""
+msgstr "Certeza:"
 
 #. i18n: ectx: tooltip, entry (OcrGocrCertainty), group (gocr)
 #: kookasettings.kcfg:236
-#, fuzzy, kde-format
-#| msgid ""
-#| "<div>The threshold value below which gray pixels are considered to be "
-#| "black. The default is 160.</div>"
+#, kde-format
 msgid ""
 "<div>The acceptance certainty threshold for recognition, characters with a "
 "lower certainty are considered to be unknown. The default is 95.</div>"
 msgstr ""
-"<div>O límite a partir do que os píxeles grises se consideran negros. O "
-"valor predeterminado é 160.</div>"
+"<div>O límite de certeza de aceptación para o recoñecemento, os caracteres "
+"cunha certeza inferior considéranse descoñecidos. O valor predeterminado é "
+"95.</div>"
 
 #. i18n: ectx: label, entry (ocrOcradLayoutDetection), group (ocrad)
 #: kookasettings.kcfg:250
@@ -2248,14 +2215,7 @@ msgid "Gallery"
 msgstr "Galería"
 
 #: kookaview.cpp:463
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "There was a problem opening the scanner device.<nl/><nl/>Check that the "
-#| "scanner is connected and switched on, and that SANE support for it is "
-#| "correctly configured.<nl/><nl/>Trying to use scanner device: <icode>%3</"
-#| "icode><nl/>libkookascan reported error: <emphasis>%2</emphasis><nl/>SANE "
-#| "reported error: <emphasis>%1</emphasis>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "There was a problem opening the scanner device.<nl/><nl/>Check that the "
@@ -2268,8 +2228,8 @@ msgstr ""
 ">Comprobe que o escáner está conectado e acendido, e que a compatibilidade "
 "de SANE con el está configurada correctamente.<nl/> <nl/> Intentando usar o "
 "dispositivo de escanear: <icode>%3</icode><nl/> libkookascan informou dun "
-"erro: <emphasis>%2</emphasis><nl/> SANE informou dun erro: <emphasis>%1</"
-"emphasis>"
+"erro: <message>%2</message><nl/> SANE informou dun erro: <message>%1</"
+"message>"
 
 #: kookaview.cpp:518
 #, kde-format
@@ -2288,7 +2248,7 @@ msgid ""
 "backend name and parameters, or see that dialog for more information."
 msgstr ""
 "Non hai dispositivos de escanear dispoñíbeis.<nl/> <nl/> Parece que de "
-"momento se retrasa ata dentro de 25 minutos. Se o tipo do seu escáner é dos "
+"momento se atrasa ata dentro de 25 minutos. Se o tipo do seu escáner é dos "
 "que SANE pode detectar automaticamente, comprobe que está conectado, "
 "acendido e configurado correctamente.<nl/> <nl/> Se SANE non pode detectar o "
 "escáner automaticamente (como é o caso dalgúns escáneres de rede), ten que "
@@ -2327,34 +2287,26 @@ msgid "Starting OCR on the image"
 msgstr "Comezando o recoñecemento óptico de caracteres (OCR) na imaxe."
 
 #: kookaview.cpp:723
-#, fuzzy, kde-format
-#| msgid "OCR Engine"
+#, kde-format
 msgid "OCR File"
-msgstr "Motor de OCR"
+msgstr "Ficheiro de OCR"
 
 #: kookaview.cpp:733
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid "Cannot read GOCR result file <filename>%1</filename><nl/>%2"
+#, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot load <filename>%1</filename> for OCR:<nl/>%2"
-msgstr ""
-"Non se pode ler o ficheiro de resultados de GOCR <filename>%1</filename><nl/"
-"> %2"
+msgstr "Non se pode cargar <filename>%1</filename> para OCR:<nl/>%2"
 
 #: kookaview.cpp:735
-#, fuzzy, kde-format
-#| msgid "Cannot load OCR plugin '%1'"
+#, kde-format
 msgid "Cannot Read OCR File"
-msgstr "Non se pode cargar o complemento de OCR «%1»"
+msgstr "Non se pode ler o ficheiro de OCR."
 
 #: kookaview.cpp:739
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid "Cannot open file <filename>%1</filename>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid "Starting OCR on file <filename>%1</filename>"
-msgstr "Non se pode abrir o ficheiro <filename>%1</filename>"
+msgstr "Iniciando o OCR no ficheiro <filename>%1</filename>."
 
 #: kookaview.cpp:755
 #, kde-format
@@ -2398,14 +2350,7 @@ msgid "Cannot load OCR plugin '%1'"
 msgstr "Non se pode cargar o complemento de OCR «%1»"
 
 #: kookaview.cpp:903
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "There was a problem during preview or scanning.<nl/>Check that the "
-#| "scanner is still connected and switched on, <nl/>and that media is loaded "
-#| "if required.<nl/><nl/>Trying to use scanner device: <icode>%3</icode><nl/"
-#| ">libkookascan reported error: <emphasis>%2</emphasis><nl/>SANE reported "
-#| "error: <emphasis>%1</emphasis>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "There was a problem during preview or scanning.<nl/>Check that the scanner "
@@ -2417,8 +2362,8 @@ msgstr ""
 "Non se produciu ningún erro na vista previa ou a dixitalización.<nl/> "
 "Comprobe que o escáner sigue conectado e acendido,<nl/> e que o dispositivo "
 "está cargado en caso de ser necesario.<nl/> <nl/> Intentando usar o escáner: "
-"<icode>%3</icode><nl/> libkookascan informou dun erro: <emphasis>%2</"
-"emphasis><nl/> SANE informou dun erro: <emphasis>%1</emphasis>"
+"<icode>%3</icode><nl/> libkookascan informou dun erro: <message>%2</"
+"message><nl/> SANE informou dun erro: <message>%1</message>"
 
 #: kookaview.cpp:953
 #, kde-format
@@ -2487,7 +2432,7 @@ msgid ""
 "the Qt GPL licence, so if you wish to do this then you must have a\n"
 "commercial Qt development licence.\n"
 msgstr ""
-"Este programa distrubúese baixo os termos la GPL v2 tal e como a\n"
+"Este programa distribúese baixo os termos la GPL v2 tal e como a\n"
 "publicou a Free Software Foundation.\n"
 "\n"
 "Como excepción extraordinaria, concédese permiso para ligar este\n"
@@ -2586,34 +2531,29 @@ msgid "device"
 msgstr "dispositivo"
 
 #: newscanpresetdialog.cpp:53
-#, fuzzy, kde-format
-#| msgid "Edit Scan Parameters"
+#, kde-format
 msgid "Edit Scan Preset"
-msgstr "Editar os parámetros de dixitalización"
+msgstr "Editar a predefinición de escaneamento"
 
 #: newscanpresetdialog.cpp:54
-#, fuzzy, kde-format
-#| msgid "Change the name and/or description of the scan parameter set."
+#, kde-format
 msgid "Change the name and/or description of the scan preset."
-msgstr "Cambiar o nome e a descrición da configuración de dixitalización."
+msgstr "Cambiar o nome e a descrición da predefinición de escaneamento."
 
 #: newscanpresetdialog.cpp:58
-#, fuzzy, kde-format
-#| msgid "Save Scan Parameters"
+#, kde-format
 msgid "Save Scan Preset"
-msgstr "Gardar os parámetros de dixitalización"
+msgstr "Gardar a predefinición de escaneamento"
 
 #: newscanpresetdialog.cpp:59
-#, fuzzy, kde-format
-#| msgid "Enter a name and description for the new scan parameter set."
+#, kde-format
 msgid "Enter a name and description for the new scan preset."
-msgstr "Insira o nome e a descrición da nova configuración de dixitalización."
+msgstr "Escriba o nome e a descrición da nova predefinición de escaneamento."
 
 #: newscanpresetdialog.cpp:66
-#, fuzzy, kde-format
-#| msgid "Set name:"
+#, kde-format
 msgid "Preset name:"
-msgstr "Definir o nome:"
+msgstr "Nome da predefinición:"
 
 #: newscanpresetdialog.cpp:73
 #, kde-format
@@ -2918,16 +2858,14 @@ msgid "Folder Create Error"
 msgstr "Erro de creación de cartafol"
 
 #: scanpresetsdialog.cpp:63
-#, fuzzy, kde-format
-#| msgid "Scan Preview"
+#, kde-format
 msgid "Scan Presets"
-msgstr "Vista previa da dixitalización"
+msgstr "Predefinicións de escaneamento"
 
 #: scanpresetsdialog.cpp:76
-#, fuzzy, kde-format
-#| msgid "Saved scan parameter sets:"
+#, kde-format
 msgid "Saved scan preset sets:"
-msgstr "Gardáronse as configuracións de dixitalización:"
+msgstr "Gardáronse os grupos de predefinicións de escaneamento:"
 
 #: scanpresetsdialog.cpp:80
 #, kde-format
@@ -2935,10 +2873,9 @@ msgid "Select"
 msgstr "Seleccionar"
 
 #: scanpresetsdialog.cpp:82
-#, fuzzy, kde-format
-#| msgid "Load the selected scan parameter set to use as scanner settings"
+#, kde-format
 msgid "Load the selected scan preset set to use as scanner settings"
-msgstr "Gardar a configuración de dixitalización cargada para usar co escáner."
+msgstr "Gardar a predefinición de escaneamento cargada para usar co escáner."
 
 #: scanpresetsdialog.cpp:86
 #, kde-format
@@ -2946,18 +2883,16 @@ msgid "Save..."
 msgstr "Gardar…"
 
 #: scanpresetsdialog.cpp:88
-#, fuzzy, kde-format
-#| msgid "Save the current scanner settings as a new scan parameter set"
+#, kde-format
 msgid "Save the current scanner settings as a new scan preset set"
 msgstr ""
-"Gardar a configuración actual do escáner como nova configuración de "
-"dixitalización."
+"Gardar a configuración actual do escáner como nova predefinición de "
+"escaneamento."
 
 #: scanpresetsdialog.cpp:94
-#, fuzzy, kde-format
-#| msgid "Delete the selected scan parameter set"
+#, kde-format
 msgid "Delete the selected scan preset set"
-msgstr "Eliminar a configuración de dixitalización."
+msgstr "Eliminar o grupo de predefinicións de escaneamento seleccionado."
 
 #: scanpresetsdialog.cpp:98
 #, kde-format
@@ -2965,42 +2900,32 @@ msgid "Edit..."
 msgstr "Editar…"
 
 #: scanpresetsdialog.cpp:100
-#, fuzzy, kde-format
-#| msgid "Change the name or description of the selected scan parameter set"
+#, kde-format
 msgid "Change the name or description of the selected scan preset set"
 msgstr ""
-"Cambiar o nome e a descrición da configuración de dixitalización "
-"seleccionada."
+"Cambiar o nome e a descrición da predefinición de escaneamento seleccionada."
 
 #: scanpresetsdialog.cpp:146
-#, fuzzy, kde-format
-#| msgid "No save set selected."
+#, kde-format
 msgid "No preset set selected."
-msgstr "Non escolleu ningunha configuración gardada."
+msgstr "Non seleccionou ningún grupo de predefinicións de escaneamento."
 
 #: scanpresetsdialog.cpp:212
-#, fuzzy, kde-format
-#| msgid "%1, %2 dpi"
+#, kde-format
 msgctxt "New set name, %1=scan mode, %2=resolution"
 msgid "%1, %2 dpi"
 msgstr "%1, %2 ppp"
 
 #: scanpresetsdialog.cpp:289
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "Do you really want to delete the set <emphasis strong=\"1\">%1</emphasis>?"
+#, kde-kuit-format
 msgctxt "@info"
 msgid "Do you really want to delete the set <resource>%1</resource>?"
-msgstr ""
-"Seguro que quere eliminar a configuración <emphasis strong=\"1\">%1</"
-"emphasis>?"
+msgstr "Seguro que quere eliminar o grupo <resource>%1</resource>?"
 
 #: scanpresetsdialog.cpp:290
-#, fuzzy, kde-format
-#| msgid "Delete Scan Parameter Set"
+#, kde-format
 msgid "Delete Scan Preset Set"
-msgstr "Eliminar a configuración de dixitalización"
+msgstr "Eliminar o grupo de predefinicións de escaneamento"
 
 #: statusbarmanager.cpp:52
 #, kde-format
