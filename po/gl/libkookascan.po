@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-10-20 00:45+0000\n"
-"PO-Revision-Date: 2023-06-11 22:03+0200\n"
+"PO-Revision-Date: 2023-06-17 14:01+0200\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Galician <proxecto@trasno.gal>\n"
 "Language: gl\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 23.04.1\n"
+"X-Generator: Lokalize 23.04.2\n"
 
 #: ../libdialogutil/imagefilter.cpp:91
 #, kde-format
@@ -762,7 +762,7 @@ msgstr ""
 #: scansettings.kcfg:69
 #, kde-format
 msgid "Add/subtract margin (mm):"
-msgstr "Marxe para engadir ou eliminar (mm):"
+msgstr "Marxe para engadir ou retirar (mm):"
 
 #. i18n: ectx: tooltip, entry (PreviewAutoselMargin), group (Scanner Name)
 #: scansettings.kcfg:70
@@ -770,7 +770,7 @@ msgstr "Marxe para engadir ou eliminar (mm):"
 msgid ""
 "<div>Set a margin to be added to or subtracted from the detected area</div>"
 msgstr ""
-"<div>Define unha marxe para engadir ou eliminar da zona detectada.</div>"
+"<div>Define unha marxe para engadir ou retirar da zona detectada.</div>"
 
 #. i18n: ectx: label, entry (PreviewAutoselBackground), group (Scanner Name)
 #: scansettings.kcfg:77

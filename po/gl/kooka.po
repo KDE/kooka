@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-10-20 00:45+0000\n"
-"PO-Revision-Date: 2023-06-11 21:38+0200\n"
+"PO-Revision-Date: 2023-06-17 16:07+0200\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Galician <proxecto@trasno.gal>\n"
 "Language: gl\n"
@@ -21,7 +21,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 23.04.1\n"
+"X-Generator: Lokalize 23.04.2\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -1837,7 +1837,7 @@ msgid ""
 "\"a:2\">add a device</link> if a scanner is not automatically detected."
 msgstr ""
 "<title>Modo da galería - Non se seleccionou ningún escáner</title><nl/> <nl/"
-"> Neste modo pode explorar, editar e usar o recoñecemento óptico de "
+"> Neste modo pode explorar, manipular e usar o recoñecemento óptico de "
 "caracteres (OCR) para as imaxes da galería.<nl/> <nl/> <link url="
 "\"a:1\">Seleccione un dispositivo de escanear</link> para dixitalizar, ou "
 "<link url=\"a:2\">engadir un dispositivo</link> se non se detecta "
@@ -2064,7 +2064,7 @@ msgid ""
 "detect them. The default is 10.</div>"
 msgstr ""
 "<div>Os grupos de menor tamaño do indicado consideraranse ruído e "
-"ignoraranse. 0 desactiva a detección de grupos de po, e -1 detéctaos "
+"ignoraranse. 0 significa non detectar grupos de po, e -1 detectalos "
 "automaticamente. O valor predeterminado é 10.</div>"
 
 #. i18n: ectx: label, entry (OcrGocrGrayLevel), group (gocr)
@@ -2373,7 +2373,7 @@ msgstr "Crear unha imaxe nova desde a selección"
 #: kookaview.cpp:962
 #, kde-format
 msgid "Cannot transform, image is read-only"
-msgstr "Non se pode transformar a imaxe, os seus permisos son de só lectura."
+msgstr "Non se pode transformar a imaxe, é de só lectura."
 
 #: kookaview.cpp:1015
 #, kde-format
