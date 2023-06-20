@@ -497,7 +497,7 @@ msgstr "&Vista previa"
 #: scanparams.cpp:177
 #, kde-format
 msgid "Start a preview scan and show the preview image"
-msgstr "Iniciar unha dixitalización dunha vista previa e mostrar a imaxe."
+msgstr "Iniciar unha dixitalización dunha vista previa e amosar a imaxe."
 
 #: scanparams.cpp:182
 #, kde-format
@@ -714,14 +714,14 @@ msgstr ""
 #: scansettings.kcfg:22
 #, kde-format
 msgid "Show the scanner selection dialog"
-msgstr "Mostrar o diálogo de escolla de escáner."
+msgstr "Amosar o diálogo de escolla de escáner."
 
 #. i18n: ectx: tooltip, entry (StartupSkipAsk), group (Startup)
 #: scansettings.kcfg:23
 #, kde-format
 msgid "<div>Check this to show the scanner selection dialog on startup.</div>"
 msgstr ""
-"<div>Marque esta opción para mostrar o diálogo de escolla de escáner no "
+"<div>Marque esta opción para amosar o diálogo de escolla de escáner no "
 "próximo inicio.</div>"
 
 #. i18n: ectx: label, entry (PreviewAutoselThreshold), group (Scanner Name)
