@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Lokalize 1.2\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -2729,12 +2729,14 @@ msgstr "خالی"
 msgid "one image"
 msgid_plural "%1 images"
 msgstr[0] "تصاویر"
+msgstr[1] ""
 
 #: scangallery.cpp:380
-#, kde-format
+#, fuzzy, kde-format
 msgid "one file"
 msgid_plural "%1 files"
 msgstr[0] "%1 پرونده"
+msgstr[1] ""
 
 #: scangallery.cpp:386
 #, fuzzy, kde-format
@@ -2743,6 +2745,7 @@ msgstr[0] "%1 پرونده"
 msgid "one file, "
 msgid_plural "%1 files, "
 msgstr[0] "پرونده‌ها"
+msgstr[1] ""
 
 #: scangallery.cpp:388
 #, fuzzy, kde-format
@@ -2751,12 +2754,14 @@ msgstr[0] "پرونده‌ها"
 msgid "one image, "
 msgid_plural "%1 images, "
 msgstr[0] "تصاویر"
+msgstr[1] ""
 
 #: scangallery.cpp:391
-#, kde-format
+#, fuzzy, kde-format
 msgid "1 folder"
 msgid_plural "%1 folders"
 msgstr[0] "%1 پوشه"
+msgstr[1] ""
 
 #: scangallery.cpp:446
 #, fuzzy, kde-format
