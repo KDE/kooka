@@ -49,7 +49,7 @@ msgstr "기타..."
 #: ../plugins/destination/application/destinationapplication.cpp:94
 #, kde-format
 msgid "Sending to application"
-msgstr "프로그램으로 전송 중"
+msgstr "앱으로 전송 중"
 
 #: ../plugins/destination/application/destinationapplication.cpp:96
 #, kde-kuit-format
@@ -59,7 +59,7 @@ msgstr "<application>%1</application>(으)로 전송 중"
 #: ../plugins/destination/application/destinationapplication.cpp:192
 #, kde-format
 msgid "Application:"
-msgstr "프로그램:"
+msgstr "앱:"
 
 #: ../plugins/destination/application/destinationapplication.cpp:198
 #: ../plugins/destination/share/destinationshare.cpp:137
@@ -827,9 +827,9 @@ msgid ""
 "suitable for color and grayscale images.<p>This format is not recommended, "
 "use an open format instead."
 msgstr ""
-"<b>PCX</b> 형식은 그래픽 프로그램에서 종종 지원하는 무손실 압축 그림 형식이지"
-"만, 개발된지 오래 되었고 구조가 단순합니다. 컬러 및 회색조 그림에 추천합니다."
-"<p>다른 개방형 형식을 사용하는 것을 추천합니다."
+"<b>PCX</b> 형식은 그래픽 앱에서 종종 지원하는 무손실 압축 그림 형식이지만, 개"
+"발된지 오래 되었고 구조가 단순합니다. 컬러 및 회색조 그림에 추천합니다.<p>다"
+"른 개방형 형식을 사용하는 것을 추천합니다."
 
 #: formatdialog.cpp:126
 #, kde-format
@@ -896,7 +896,7 @@ msgid ""
 "applications, or to use with (e.g.) TeX."
 msgstr ""
 "<b>EPS</b> 형식은 PostScript&trade; 페이지 기술 언어의 파생 형식입니다. TeX "
-"등 다른 프로그램에 임베드해야 할 때 사용하십시오."
+"등 다른 앱에 임베드해야 할 때 사용하십시오."
 
 #: formatdialog.cpp:186
 #, kde-format
@@ -906,8 +906,8 @@ msgid ""
 "is not recommended, use an open format instead."
 msgstr ""
 "<b>Truevision Targa</b> 형식은 알파 채널이 들어 있는 컬러 그림을 저장할 수 있"
-"으며, 애니메이션과 비디오 프로그램에서 사용합니다.<p>다른 개방형 형식을 사용"
-"하는 것을 추천합니다."
+"으며, 애니메이션과 비디오 앱에서 사용합니다.<p>다른 개방형 형식을 사용하는 것"
+"을 추천합니다."
 
 #: formatdialog.cpp:196
 #, kde-format
@@ -930,11 +930,11 @@ msgid ""
 "variations, there may sometimes be compatibility problems. Unless required "
 "for use with other applications, use an open format instead."
 msgstr ""
-"<b>TIFF</b> 형식은 이미징 및 출판 프로그램에서 지원하는 확장 가능한 다기능 파"
-"일 형식입니다. 인덱스 및 트루컬러 그림과 알파 투명도를 지원합니다.<p>TIFF 형"
-"식에는 여러 파생형이 있으므로 일부 경우에 호환성 문제가 발생할 수 있습니다. "
-"다른 프로그램에서 사용해야 하는 경우가 아니라면 다른 개방형 형식을 사용하는 "
-"것을 추천합니다."
+"<b>TIFF</b> 형식은 이미징 및 출판 앱에서 지원하는 확장 가능한 다기능 파일 형"
+"식입니다. 인덱스 및 트루컬러 그림과 알파 투명도를 지원합니다.<p>TIFF 형식에"
+"는 여러 파생형이 있으므로 일부 경우에 호환성 문제가 발생할 수 있습니다. 다른 "
+"앱에서 사용해야 하는 경우가 아니라면 다른 개방형 형식을 사용하는 것을 추천합"
+"니다."
 
 #: formatdialog.cpp:219
 #, kde-format
@@ -946,8 +946,8 @@ msgid ""
 msgstr ""
 "<b>MNG</b> 형식은 PNG 형식의 파생형으로 애니메이션을 지원합니다. 모든 형식의 "
 "그림에 적합한 개방형 표준입니다.<p>스캐너로 스캔한 그림은 애니메이션을 지원하"
-"지 않으며, 다른 프로그램에서 MNG 형식만을 사용해야 하는 경우가 아니면 PNG 형"
-"식을 사용하십시오."
+"지 않으며, 다른 앱에서 MNG 형식만을 사용해야 하는 경우가 아니면 PNG 형식을 사"
+"용하십시오."
 
 #: formatdialog.cpp:231
 #, kde-format
@@ -1774,12 +1774,12 @@ msgstr "그림 저장 옵션"
 #: kookapref.cpp:60
 #, kde-format
 msgid "Gallery & Thumbnails"
-msgstr "갤러리와 축소판"
+msgstr "갤러리와 섬네일"
 
 #: kookapref.cpp:60
 #, kde-format
 msgid "Image Gallery and Thumbnail View"
-msgstr "그림 갤러리와 축소판 보기"
+msgstr "그림 갤러리와 섬네일 보기"
 
 #: kookapref.cpp:61 kookaview.cpp:290
 #, kde-format
@@ -1968,7 +1968,7 @@ msgstr "사용자 정의 배경 그림 사용"
 #: kookasettings.kcfg:165
 #, kde-format
 msgid "<div>Set a custom background image for the thumbnail view.</div>"
-msgstr "<div>축소판 보기에 사용할 사용자 정의 배경 그림을 설정합니다.</div>"
+msgstr "<div>섬네일 보기에 사용할 사용자 정의 배경 그림을 설정합니다.</div>"
 
 #. i18n: ectx: label, entry (ThumbnailBackgroundPath), group (thumbnailView)
 #: kookasettings.kcfg:170
@@ -1980,7 +1980,7 @@ msgstr "그림:"
 #: kookasettings.kcfg:171
 #, kde-format
 msgid "<div>The background image to use for the thumbnail view.</div>"
-msgstr "<div>축소판 보기에 사용할 배경 그림입니다.</div>"
+msgstr "<div>섬네일 보기에 사용할 배경 그림입니다.</div>"
 
 #. i18n: ectx: label, entry (ThumbnailPreviewSize), group (thumbnailView)
 #: kookasettings.kcfg:177
@@ -1992,7 +1992,7 @@ msgstr "미리 보기 크기:"
 #: kookasettings.kcfg:178
 #, kde-format
 msgid "<div>Select the default preview size for the thumbnail view.</div>"
-msgstr "<div>축소판 보기에서 사용할 기본 미리 보기 크기를 선택합니다.</div>"
+msgstr "<div>섬네일 보기에서 사용할 기본 미리 보기 크기를 선택합니다.</div>"
 
 #. i18n: ectx: label, entry (OcrGocrDustSize), group (gocr)
 #: kookasettings.kcfg:217
@@ -2438,7 +2438,7 @@ msgstr "Ivan Shvedunov"
 #: main.cpp:94
 #, kde-format
 msgid "Original kscan application"
-msgstr "원본 kscan 프로그램"
+msgstr "원본 kscan 앱"
 
 #: main.cpp:95
 #, kde-format
@@ -2564,7 +2564,7 @@ msgstr "아래에"
 #: prefspages.cpp:274
 #, kde-format
 msgid "Thumbnail View"
-msgstr "축소판 보기"
+msgstr "섬네일 보기"
 
 #: prefspages.cpp:388
 #, kde-format
@@ -2892,7 +2892,7 @@ msgstr "스캔: %1"
 #: thumbview.cpp:96
 #, kde-format
 msgid "Thumbnails"
-msgstr "축소판"
+msgstr "섬네일"
 
 #: thumbview.cpp:107
 #, kde-format
