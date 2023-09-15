@@ -106,6 +106,8 @@ set(kooka_SRCS
   newscanpresetdialog.cpp
   ocrresedit.cpp
   ${kooka_LOG_SRCS}
+
+  kooka.qrc
 )
 
 add_executable(kooka ${kooka_SRCS})
