@@ -45,7 +45,7 @@ msgid ""
 "Cannot save temporary image file<nl/><filename>%1</filename><nl/><message>"
 "%2</message>"
 msgstr ""
-"Non se pode gardar o ficheiro temporal de imaxe<nl/><filename>%1</"
+"Non é posíbel gardar o ficheiro temporal de imaxe<nl/><filename>%1</"
 "filename><nl/><message>%2</message>"
 
 #: ../plugins/destination/abstractdestination.cpp:160
@@ -108,7 +108,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "Cannot Print"
-msgstr "Non se pode imprimir"
+msgstr "Non é posíbel imprimir"
 
 #: ../plugins/destination/print/destinationprint.cpp:106
 #, kde-format
@@ -125,14 +125,14 @@ msgstr "Imprimindo a imaxe."
 msgctxt "@info"
 msgid "Cannot save image to <filename>%1</filename><nl/><message>%2</message>"
 msgstr ""
-"Non se pode gardar a imaxe en <filename>%1</filename><nl/><message>%2</"
+"Non é posíbel gardar a imaxe en <filename>%1</filename><nl/><message>%2</"
 "message>"
 
 #: ../plugins/destination/save/destinationsave.cpp:134
 #: ../plugins/destination/save/destinationsave.cpp:239
 #, kde-format
 msgid "Cannot Save Image"
-msgstr "Non se pode gardar a imaxe"
+msgstr "Non é posíbel gardar a imaxe"
 
 #: ../plugins/destination/save/destinationsave.cpp:163
 #, kde-format
@@ -156,7 +156,7 @@ msgid ""
 "Cannot save to <filename>%2</filename><nl/>The image format <resource>%1</"
 "resource> is not supported."
 msgstr ""
-"Non se pode gardar en <filename>%2</filename>.<nl/>Non se admite o formato "
+"Non é posíbel gardar en <filename>%2</filename>.<nl/>Non se admite o formato "
 "de imaxe <resource>%1</resource>."
 
 #: ../plugins/destination/share/destinationshare.cpp:143
@@ -185,7 +185,7 @@ msgstr "Compartiuse o contido escaneado"
 msgctxt "@info"
 msgid "Cannot share the scanned image<nl/><nl/><message>%1</message>"
 msgstr ""
-"Non se pode compartir a imaxe escaneada:<nl/><nl/><message>%1</message>"
+"Non é posíbel compartir a imaxe escaneada:<nl/><nl/><message>%1</message>"
 
 #: ../plugins/ocr/abstractocrdialogue.cpp:101 kookapref.cpp:61
 #, kde-format
@@ -367,7 +367,7 @@ msgstr "O OCR xa está en marcha"
 #: ../plugins/ocr/abstractocrengine.cpp:119
 #, kde-format
 msgid "OCR could not be started."
-msgstr "Non se puido iniciar o OCR."
+msgstr "Non foi posíbel iniciar o OCR."
 
 #: ../plugins/ocr/abstractocrengine.cpp:120
 #, kde-format
@@ -412,14 +412,14 @@ msgstr "Ficheiros temporais de OCR"
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot create temporary file <filename>%1</filename>"
-msgstr "Non se pode crear o ficheiro temporal <filename>%1</filename>"
+msgstr "Non é posíbel crear o ficheiro temporal <filename>%1</filename>"
 
 #: ../plugins/ocr/abstractocrengine.cpp:483
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot save image to temporary file <filename>%1</filename>"
 msgstr ""
-"Non se pode gardar a imaxe no ficheiro temporal <filename>%1</filename>"
+"Non é posíbel gardar a imaxe no ficheiro temporal <filename>%1</filename>"
 
 #: ../plugins/ocr/abstractocrengine.cpp:511
 #, kde-kuit-format
@@ -428,7 +428,7 @@ msgid ""
 "The executable <command>%1</command> could not be found on <envar>PATH</"
 "envar>."
 msgstr ""
-"Non se puido atopar o executábel <command>%1</command> en <envar>PATH</"
+"Non foi posíbel atopar o executábel <command>%1</command> en <envar>PATH</"
 "envar>."
 
 #: ../plugins/ocr/abstractocrengine.cpp:521
@@ -522,8 +522,8 @@ msgstr "Erro"
 msgctxt "@info"
 msgid "Cannot read GOCR result file <filename>%1</filename><nl/>%2"
 msgstr ""
-"Non se pode ler o ficheiro de resultados de GOCR <filename>%1</filename><nl/"
-"> %2"
+"Non é posíbel ler o ficheiro de resultados de GOCR <filename>%1</"
+"filename><nl/> %2"
 
 #: ../plugins/ocr/gocr/ocrgocrengine.cpp:297
 #, kde-format
@@ -556,7 +556,7 @@ msgid ""
 "\n"
 "Change the OCR engine in the preferences dialog."
 msgstr ""
-"Non se puideron atopar os ficheiros de clasificador para KADMOS.\n"
+"Non foi posíbel atopar os ficheiros de clasificador para KADMOS.\n"
 "Non se poderá usar OCR con KADMOS.\n"
 "\n"
 "Cambie o motor de OCR no diálogo de preferencias."
@@ -620,7 +620,7 @@ msgstr "O ficheiro de clasificador %1 non existe"
 #: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:366
 #, kde-format
 msgid "Classifier file %1 is not readable"
-msgstr "Non se pode ler o ficheiro de clasificador %1"
+msgstr "Non é posíbel ler o ficheiro de clasificador %1"
 
 #: ../plugins/ocr/kadmos/ocrkadmosengine.cpp:71
 #, kde-kuit-format
@@ -673,7 +673,7 @@ msgid ""
 "%1\n"
 "Please check the configuration."
 msgstr ""
-"Non se puido iniciar o sistema de OCR KADMOS:\n"
+"Non foi posíbel iniciar o sistema de OCR KADMOS:\n"
 "%1\n"
 "Revise a configuración."
 
@@ -736,7 +736,7 @@ msgstr "O ficheiro <filename>%1</filename> non pode lerse"
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot open file <filename>%1</filename>"
-msgstr "Non se pode abrir o ficheiro <filename>%1</filename>"
+msgstr "Non é posíbel abrir o ficheiro <filename>%1</filename>"
 
 #: ../plugins/ocr/ocrad/ocrocradengine.cpp:432
 #, kde-format
@@ -1070,7 +1070,7 @@ msgid ""
 "gallery - %3..<nl/><nl/>Your document directory <filename>%2</filename><nl/"
 ">will be used.<nl/><nl/>Check the document directory setting and permissions."
 msgstr ""
-"Non se pode crear o directorio <filename>%1</filename><nl/> para a galería "
+"Non é posíbel crear o directorio <filename>%1</filename><nl/> para a galería "
 "de Kooka - %3…<nl/> <nl/> Usarase o directorio do seu documento: <filename>"
 "%2</filename>.<nl/> <nl/> Revise a configuración e os permisos do directorio "
 "do documento."
@@ -1456,13 +1456,14 @@ msgstr "%1 (%2 x %3)"
 #, kde-kuit-format
 msgctxt "@info"
 msgid "The directory <filename>%2</filename><nl/>could not be accessed.<nl/>%1"
-msgstr "Non se puido acceder ao cartafol<nl/> <filename>%2</filename>. <nl/>%1"
+msgstr ""
+"Non foi posíbel acceder ao cartafol<nl/> <filename>%2</filename>. <nl/>%1"
 
 #: imgsaver.cpp:77
 #, kde-kuit-format
 msgctxt "@info"
 msgid "The directory <filename>%2</filename><nl/>could not be created.<nl/>%1"
-msgstr "Non se puido crear o cartafol<nl/> <filename>%2</filename>.<nl/> %1"
+msgstr "Non foi posíbel crear o cartafol<nl/> <filename>%2</filename>.<nl/> %1"
 
 #: imgsaver.cpp:328
 #, kde-format
@@ -1512,12 +1513,12 @@ msgstr "Non queda espazo no dispositivo."
 #: imgsaver.cpp:374
 #, kde-format
 msgid "Cannot write image format '%1'"
-msgstr "Non se pode gardar usando o formato de imaxe «%1»."
+msgstr "Non é posíbel gardar usando o formato de imaxe «%1»."
 
 #: imgsaver.cpp:376
 #, kde-format
 msgid "Cannot write using protocol '%1'"
-msgstr "Non se pode gardar usando o protocolo «%1»."
+msgstr "Non é posíbel gardar usando o protocolo «%1»."
 
 #: imgsaver.cpp:378
 #, kde-format
@@ -1527,7 +1528,7 @@ msgstr "O usuario cancelou a acción de gardar."
 #: imgsaver.cpp:380
 #, kde-format
 msgid "Cannot create directory"
-msgstr "Non se pode crear o directorio."
+msgstr "Non é posíbel crear o directorio."
 
 #: imgsaver.cpp:382
 #, kde-format
@@ -1579,12 +1580,12 @@ msgstr "O destino xa existe."
 #: imgsaver.cpp:460
 #, kde-format
 msgid "Unable to copy the file"
-msgstr "Non se pode copiar o ficheiro."
+msgstr "Non é posíbel copiar o ficheiro."
 
 #: imgsaver.cpp:461
 #, kde-format
 msgid "Unable to rename the file"
-msgstr "Non se pode renomear o ficheiro."
+msgstr "Non é posíbel renomear o ficheiro."
 
 #: imgsaver.cpp:462
 #, kde-format
@@ -1858,7 +1859,7 @@ msgstr "Non seleccionou un destino."
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Unable to load plugin '%1'"
-msgstr "Non se pode cargar o complemento «%1»."
+msgstr "Non é posíbel cargar o complemento «%1»."
 
 #. i18n: ectx: label, entry (StartupReadImage), group (Startup)
 #: kookasettings.kcfg:50
@@ -2295,12 +2296,12 @@ msgstr "Ficheiro de OCR"
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot load <filename>%1</filename> for OCR:<nl/>%2"
-msgstr "Non se pode cargar <filename>%1</filename> para OCR:<nl/>%2"
+msgstr "Non é posíbel cargar <filename>%1</filename> para OCR:<nl/>%2"
 
 #: kookaview.cpp:735
 #, kde-format
 msgid "Cannot Read OCR File"
-msgstr "Non se pode ler o ficheiro de OCR."
+msgstr "Non é posíbel ler o ficheiro de OCR."
 
 #: kookaview.cpp:739
 #, kde-kuit-format
@@ -2347,7 +2348,7 @@ msgstr "O OCR non está configurado"
 #: kookaview.cpp:795
 #, kde-format
 msgid "Cannot load OCR plugin '%1'"
-msgstr "Non se pode cargar o complemento de OCR «%1»"
+msgstr "Non é posíbel cargar o complemento de OCR «%1»"
 
 #: kookaview.cpp:903
 #, kde-kuit-format
@@ -2373,7 +2374,7 @@ msgstr "Crear unha imaxe nova desde a selección"
 #: kookaview.cpp:962
 #, kde-format
 msgid "Cannot transform, image is read-only"
-msgstr "Non se pode transformar a imaxe, é de só lectura."
+msgstr "Non é posíbel transformar a imaxe, é de só lectura."
 
 #: kookaview.cpp:1015
 #, kde-format
@@ -2575,7 +2576,7 @@ msgstr "Ficheiro de texto (*.txt)"
 msgctxt "@info"
 msgid "Unable to save the OCR results file<nl/><filename>%1</filename>"
 msgstr ""
-"Non se pode gardar o ficheiro de resultados do recoñecemento óptico de "
+"Non é posíbel gardar o ficheiro de resultados do recoñecemento óptico de "
 "caracteres (OCR):<nl/> <filename>%1</filename>"
 
 #: ocrresedit.cpp:168
@@ -2759,7 +2760,7 @@ msgstr "Subimaxe %1"
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Unable to load the image <filename>%2</filename><nl/>%1"
-msgstr "Non se pode cargar a imaxe <filename>%2</filename><nl/> %1"
+msgstr "Non é posíbel cargar a imaxe <filename>%2</filename><nl/> %1"
 
 #: scangallery.cpp:780
 #, kde-format
@@ -2775,7 +2776,7 @@ msgstr "Entrante/"
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Could not save the image<nl/><filename>%2</filename><nl/>%1"
-msgstr "Non se puido gardar a imaxe:<nl/> <filename>%2</filename><nl/> %1"
+msgstr "Non foi posíbel gardar a imaxe:<nl/> <filename>%2</filename><nl/> %1"
 
 #: scangallery.cpp:891
 #, kde-format
@@ -2828,8 +2829,8 @@ msgstr "Eliminar o elemento da galería"
 msgctxt "@info"
 msgid "Could not delete the image or folder<nl/><filename>%2</filename><nl/>%1"
 msgstr ""
-"Non se puido eliminar a imaxe ou o cartafol<nl/> <filename>%2</filename><nl/"
-"> %1"
+"Non foi posíbel eliminar a imaxe ou o cartafol<nl/> <filename>%2</"
+"filename><nl/> %1"
 
 #: scangallery.cpp:1141
 #, kde-format
@@ -2850,7 +2851,7 @@ msgstr "Nome para o novo cartafol:"
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Could not create the folder<nl/><filename>%2</filename><nl/>%1"
-msgstr "Non se puido crear o cartafol<nl/> <filename>%2</filename><nl/> %1"
+msgstr "Non foi posíbel crear o cartafol<nl/> <filename>%2</filename><nl/> %1"
 
 #: scangallery.cpp:1199
 #, kde-format

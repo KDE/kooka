@@ -321,7 +321,7 @@ msgstr "Un dos parámetros é incorrecto."
 #: kscandevice.cpp:1535
 #, kde-format
 msgid "Cannot open device"
-msgstr "Non se pode abrir o dispositivo."
+msgstr "Non é posíbel abrir o dispositivo."
 
 #: kscandevice.cpp:1536
 #, kde-format
@@ -466,17 +466,17 @@ msgstr "A carga da imaxe fallou."
 #: scanimage.cpp:162
 #, kde-format
 msgid "Failed to open TIFF file"
-msgstr "Non se puido abrir o ficheiro TIFF"
+msgstr "Non foi posíbel abrir o ficheiro TIFF"
 
 #: scanimage.cpp:169
 #, kde-format
 msgid "Failed to read TIFF directory"
-msgstr "Non se puido ler o directorio TIFF"
+msgstr "Non foi posíbel ler o directorio TIFF"
 
 #: scanimage.cpp:199
 #, kde-format
 msgid "Failed to read TIFF image"
-msgstr "Non se puido ler a imaxe TIFF"
+msgstr "Non foi posíbel ler a imaxe TIFF"
 
 #: scanimage.cpp:229
 #, kde-format
@@ -690,7 +690,7 @@ msgstr "A dixitalización está en progreso.<nl/> <nl/>%1"
 #: scanparams.cpp:737
 #, kde-format
 msgid "Cannot preview in Virtual Scanner mode"
-msgstr "Non se pode previsualizar no modo de escáner virtual."
+msgstr "Non é posíbel previsualizar no modo de escáner virtual."
 
 #. i18n: ectx: label, entry (StartupOnlyLocal), group (Startup)
 #: scansettings.kcfg:12
