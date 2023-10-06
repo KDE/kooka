@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: playground-graphics-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-10-20 00:45+0000\n"
+"POT-Creation-Date: 2023-10-06 00:40+0000\n"
 "PO-Revision-Date: 2023-08-02 00:50+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -761,42 +761,6 @@ msgstr "HOCR ayrıştırma hatası, %1"
 #, kde-format
 msgid "Name or path of the Tesseract executable:"
 msgstr "Tesseract çalıştırılabilirinin adı veya yolu:"
-
-#. i18n: ectx: Menu (file)
-#: desktop/kookaui.rc:5
-#, kde-format
-msgid "&File"
-msgstr "&Dosya"
-
-#. i18n: ectx: Menu (scan)
-#: desktop/kookaui.rc:22
-#, kde-format
-msgid "S&can"
-msgstr "&Tara"
-
-#. i18n: ectx: Menu (imgCanvas)
-#: desktop/kookaui.rc:40
-#, kde-format
-msgid "&Image"
-msgstr "Gö&rsel"
-
-#. i18n: ectx: Menu (settings)
-#: desktop/kookaui.rc:56
-#, kde-format
-msgid "&Settings"
-msgstr "Ayar&lar"
-
-#. i18n: ectx: ToolBar (imageToolBar)
-#: desktop/kookaui.rc:67
-#, kde-format
-msgid "Image Viewer Toolbar"
-msgstr "Görsel Görüntüleyicisi Araç Çubuğu"
-
-#. i18n: ectx: ToolBar (scanToolBar)
-#: desktop/kookaui.rc:84
-#, kde-format
-msgid "Scanning Toolbar"
-msgstr "Tarama Araç Çubuğu"
 
 #: formatdialog.cpp:77
 #, kde-format
@@ -2176,6 +2140,42 @@ msgstr "İşletke kipi:"
 #, kde-format
 msgid "Segmentation mode:"
 msgstr "Bölütleme kipi:"
+
+#. i18n: ectx: Menu (file)
+#: kookaui.rc:5
+#, kde-format
+msgid "&File"
+msgstr "&Dosya"
+
+#. i18n: ectx: Menu (scan)
+#: kookaui.rc:22
+#, kde-format
+msgid "S&can"
+msgstr "&Tara"
+
+#. i18n: ectx: Menu (imgCanvas)
+#: kookaui.rc:40
+#, kde-format
+msgid "&Image"
+msgstr "Gö&rsel"
+
+#. i18n: ectx: Menu (settings)
+#: kookaui.rc:56
+#, kde-format
+msgid "&Settings"
+msgstr "Ayar&lar"
+
+#. i18n: ectx: ToolBar (imageToolBar)
+#: kookaui.rc:67
+#, kde-format
+msgid "Image Viewer Toolbar"
+msgstr "Görsel Görüntüleyicisi Araç Çubuğu"
+
+#. i18n: ectx: ToolBar (scanToolBar)
+#: kookaui.rc:84
+#, kde-format
+msgid "Scanning Toolbar"
+msgstr "Tarama Araç Çubuğu"
 
 #: kookaview.cpp:206
 #, kde-format

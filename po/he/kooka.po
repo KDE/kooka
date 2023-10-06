@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-10-20 00:45+0000\n"
+"POT-Creation-Date: 2023-10-06 00:40+0000\n"
 "PO-Revision-Date: 2006-01-25 00:22+0200\n"
 "Last-Translator: Diego Iastrubni <elcuco@kde.org>\n"
 "Language-Team: Hebrew <kde-l10n-he@kde.org>\n"
@@ -754,42 +754,6 @@ msgstr " שגיאה בהרשאות   "
 #: ../plugins/ocr/tesseract/ocrtesseractengine.cpp:251
 #, kde-format
 msgid "Name or path of the Tesseract executable:"
-msgstr ""
-
-#. i18n: ectx: Menu (file)
-#: desktop/kookaui.rc:5
-#, kde-format
-msgid "&File"
-msgstr ""
-
-#. i18n: ectx: Menu (scan)
-#: desktop/kookaui.rc:22
-#, kde-format
-msgid "S&can"
-msgstr ""
-
-#. i18n: ectx: Menu (imgCanvas)
-#: desktop/kookaui.rc:40
-#, kde-format
-msgid "&Image"
-msgstr "&תמונה"
-
-#. i18n: ectx: Menu (settings)
-#: desktop/kookaui.rc:56
-#, kde-format
-msgid "&Settings"
-msgstr ""
-
-#. i18n: ectx: ToolBar (imageToolBar)
-#: desktop/kookaui.rc:67
-#, kde-format
-msgid "Image Viewer Toolbar"
-msgstr "סרגל הכלים של מציג התמונות"
-
-#. i18n: ectx: ToolBar (scanToolBar)
-#: desktop/kookaui.rc:84
-#, kde-format
-msgid "Scanning Toolbar"
 msgstr ""
 
 #: formatdialog.cpp:77
@@ -2179,6 +2143,42 @@ msgstr ""
 #: kookasettings.kcfg:324
 #, kde-format
 msgid "Segmentation mode:"
+msgstr ""
+
+#. i18n: ectx: Menu (file)
+#: kookaui.rc:5
+#, kde-format
+msgid "&File"
+msgstr ""
+
+#. i18n: ectx: Menu (scan)
+#: kookaui.rc:22
+#, kde-format
+msgid "S&can"
+msgstr ""
+
+#. i18n: ectx: Menu (imgCanvas)
+#: kookaui.rc:40
+#, kde-format
+msgid "&Image"
+msgstr "&תמונה"
+
+#. i18n: ectx: Menu (settings)
+#: kookaui.rc:56
+#, kde-format
+msgid "&Settings"
+msgstr ""
+
+#. i18n: ectx: ToolBar (imageToolBar)
+#: kookaui.rc:67
+#, kde-format
+msgid "Image Viewer Toolbar"
+msgstr "סרגל הכלים של מציג התמונות"
+
+#. i18n: ectx: ToolBar (scanToolBar)
+#: kookaui.rc:84
+#, kde-format
+msgid "Scanning Toolbar"
 msgstr ""
 
 #: kookaview.cpp:206

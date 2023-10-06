@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-10-20 00:45+0000\n"
+"POT-Creation-Date: 2023-10-06 00:40+0000\n"
 "PO-Revision-Date: 2011-07-27 16:59+0300\n"
 "Last-Translator: Yasen Pramatarov <yasen@lindeas.com>\n"
 "Language-Team: Bulgarian <dict@fsa-bg.org>\n"
@@ -728,42 +728,6 @@ msgstr " грешка в правата за достъп   "
 #, kde-format
 msgid "Name or path of the Tesseract executable:"
 msgstr ""
-
-#. i18n: ectx: Menu (file)
-#: desktop/kookaui.rc:5
-#, kde-format
-msgid "&File"
-msgstr "&Файл"
-
-#. i18n: ectx: Menu (scan)
-#: desktop/kookaui.rc:22
-#, kde-format
-msgid "S&can"
-msgstr "&Сканиране"
-
-#. i18n: ectx: Menu (imgCanvas)
-#: desktop/kookaui.rc:40
-#, kde-format
-msgid "&Image"
-msgstr "&Изображение"
-
-#. i18n: ectx: Menu (settings)
-#: desktop/kookaui.rc:56
-#, fuzzy, kde-format
-msgid "&Settings"
-msgstr "&Настройки"
-
-#. i18n: ectx: ToolBar (imageToolBar)
-#: desktop/kookaui.rc:67
-#, kde-format
-msgid "Image Viewer Toolbar"
-msgstr "Лента с инструменти на визуализатора"
-
-#. i18n: ectx: ToolBar (scanToolBar)
-#: desktop/kookaui.rc:84
-#, kde-format
-msgid "Scanning Toolbar"
-msgstr "Инструменти за сканиране"
 
 #: formatdialog.cpp:77
 #, kde-format
@@ -2041,6 +2005,42 @@ msgstr "Програма GOCR"
 #, kde-format
 msgid "Segmentation mode:"
 msgstr ""
+
+#. i18n: ectx: Menu (file)
+#: kookaui.rc:5
+#, kde-format
+msgid "&File"
+msgstr "&Файл"
+
+#. i18n: ectx: Menu (scan)
+#: kookaui.rc:22
+#, kde-format
+msgid "S&can"
+msgstr "&Сканиране"
+
+#. i18n: ectx: Menu (imgCanvas)
+#: kookaui.rc:40
+#, kde-format
+msgid "&Image"
+msgstr "&Изображение"
+
+#. i18n: ectx: Menu (settings)
+#: kookaui.rc:56
+#, fuzzy, kde-format
+msgid "&Settings"
+msgstr "&Настройки"
+
+#. i18n: ectx: ToolBar (imageToolBar)
+#: kookaui.rc:67
+#, kde-format
+msgid "Image Viewer Toolbar"
+msgstr "Лента с инструменти на визуализатора"
+
+#. i18n: ectx: ToolBar (scanToolBar)
+#: kookaui.rc:84
+#, kde-format
+msgid "Scanning Toolbar"
+msgstr "Инструменти за сканиране"
 
 #: kookaview.cpp:206
 #, kde-format

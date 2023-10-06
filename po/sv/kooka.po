@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-10-20 00:45+0000\n"
+"POT-Creation-Date: 2023-10-06 00:40+0000\n"
 "PO-Revision-Date: 2023-07-31 10:08+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@bredband.net>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
@@ -765,42 +765,6 @@ msgstr "HOCR-tolkningsfel , %1"
 #, kde-format
 msgid "Name or path of the Tesseract executable:"
 msgstr "Namn eller sökväg till Tesseract körbart program:"
-
-#. i18n: ectx: Menu (file)
-#: desktop/kookaui.rc:5
-#, kde-format
-msgid "&File"
-msgstr "&Arkiv"
-
-#. i18n: ectx: Menu (scan)
-#: desktop/kookaui.rc:22
-#, kde-format
-msgid "S&can"
-msgstr "&Läs in"
-
-#. i18n: ectx: Menu (imgCanvas)
-#: desktop/kookaui.rc:40
-#, kde-format
-msgid "&Image"
-msgstr "B&ild"
-
-#. i18n: ectx: Menu (settings)
-#: desktop/kookaui.rc:56
-#, kde-format
-msgid "&Settings"
-msgstr "In&ställningar"
-
-#. i18n: ectx: ToolBar (imageToolBar)
-#: desktop/kookaui.rc:67
-#, kde-format
-msgid "Image Viewer Toolbar"
-msgstr "Verktygsrad för bildvisning"
-
-#. i18n: ectx: ToolBar (scanToolBar)
-#: desktop/kookaui.rc:84
-#, kde-format
-msgid "Scanning Toolbar"
-msgstr "Verktygsrad för bildläsning"
 
 #: formatdialog.cpp:77
 #, kde-format
@@ -2177,6 +2141,42 @@ msgstr "Teckentydningsmetod:"
 #, kde-format
 msgid "Segmentation mode:"
 msgstr "Segmenteringsmetod:"
+
+#. i18n: ectx: Menu (file)
+#: kookaui.rc:5
+#, kde-format
+msgid "&File"
+msgstr "&Arkiv"
+
+#. i18n: ectx: Menu (scan)
+#: kookaui.rc:22
+#, kde-format
+msgid "S&can"
+msgstr "&Läs in"
+
+#. i18n: ectx: Menu (imgCanvas)
+#: kookaui.rc:40
+#, kde-format
+msgid "&Image"
+msgstr "B&ild"
+
+#. i18n: ectx: Menu (settings)
+#: kookaui.rc:56
+#, kde-format
+msgid "&Settings"
+msgstr "In&ställningar"
+
+#. i18n: ectx: ToolBar (imageToolBar)
+#: kookaui.rc:67
+#, kde-format
+msgid "Image Viewer Toolbar"
+msgstr "Verktygsrad för bildvisning"
+
+#. i18n: ectx: ToolBar (scanToolBar)
+#: kookaui.rc:84
+#, kde-format
+msgid "Scanning Toolbar"
+msgstr "Verktygsrad för bildläsning"
 
 #: kookaview.cpp:206
 #, kde-format

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-10-20 00:45+0000\n"
+"POT-Creation-Date: 2023-10-06 00:40+0000\n"
 "PO-Revision-Date: 2020-09-19 02:14+0100\n"
 "Last-Translator: Sergiu Bivol <sergiu@cip.md>\n"
 "Language-Team: Romanian\n"
@@ -770,43 +770,6 @@ msgstr " eroare permisiuni    "
 #: ../plugins/ocr/tesseract/ocrtesseractengine.cpp:251
 #, kde-format
 msgid "Name or path of the Tesseract executable:"
-msgstr ""
-
-#. i18n: ectx: Menu (file)
-#: desktop/kookaui.rc:5
-#, kde-format
-msgid "&File"
-msgstr "&Fișier"
-
-#. i18n: ectx: Menu (scan)
-#: desktop/kookaui.rc:22
-#, kde-format
-msgid "S&can"
-msgstr ""
-
-#. i18n: ectx: Menu (imgCanvas)
-#: desktop/kookaui.rc:40
-#, kde-format
-msgid "&Image"
-msgstr "&Imagine"
-
-#. i18n: ectx: Menu (settings)
-#: desktop/kookaui.rc:56
-#, fuzzy, kde-format
-#| msgid "&Settings"
-msgid "&Settings"
-msgstr "&Configurări"
-
-#. i18n: ectx: ToolBar (imageToolBar)
-#: desktop/kookaui.rc:67
-#, kde-format
-msgid "Image Viewer Toolbar"
-msgstr "Bară de unelte vizualizor imagini"
-
-#. i18n: ectx: ToolBar (scanToolBar)
-#: desktop/kookaui.rc:84
-#, kde-format
-msgid "Scanning Toolbar"
 msgstr ""
 
 #: formatdialog.cpp:77
@@ -2150,6 +2113,43 @@ msgstr "Motorul GOCR"
 #: kookasettings.kcfg:324
 #, kde-format
 msgid "Segmentation mode:"
+msgstr ""
+
+#. i18n: ectx: Menu (file)
+#: kookaui.rc:5
+#, kde-format
+msgid "&File"
+msgstr "&Fișier"
+
+#. i18n: ectx: Menu (scan)
+#: kookaui.rc:22
+#, kde-format
+msgid "S&can"
+msgstr ""
+
+#. i18n: ectx: Menu (imgCanvas)
+#: kookaui.rc:40
+#, kde-format
+msgid "&Image"
+msgstr "&Imagine"
+
+#. i18n: ectx: Menu (settings)
+#: kookaui.rc:56
+#, fuzzy, kde-format
+#| msgid "&Settings"
+msgid "&Settings"
+msgstr "&Configurări"
+
+#. i18n: ectx: ToolBar (imageToolBar)
+#: kookaui.rc:67
+#, kde-format
+msgid "Image Viewer Toolbar"
+msgstr "Bară de unelte vizualizor imagini"
+
+#. i18n: ectx: ToolBar (scanToolBar)
+#: kookaui.rc:84
+#, kde-format
+msgid "Scanning Toolbar"
 msgstr ""
 
 #: kookaview.cpp:206

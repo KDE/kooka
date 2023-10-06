@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-10-20 00:45+0000\n"
+"POT-Creation-Date: 2023-10-06 00:40+0000\n"
 "PO-Revision-Date: 2023-04-03 16:31+0200\n"
 "Last-Translator: Frederik Schwarzer <schwarzer@kde.org>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
@@ -765,42 +765,6 @@ msgstr "HOCR-Verarbeitungsfehler, %1"
 #, kde-format
 msgid "Name or path of the Tesseract executable:"
 msgstr "Name oder Pfad des Programms Tesseract:"
-
-#. i18n: ectx: Menu (file)
-#: desktop/kookaui.rc:5
-#, kde-format
-msgid "&File"
-msgstr "&Datei"
-
-#. i18n: ectx: Menu (scan)
-#: desktop/kookaui.rc:22
-#, kde-format
-msgid "S&can"
-msgstr "S&can"
-
-#. i18n: ectx: Menu (imgCanvas)
-#: desktop/kookaui.rc:40
-#, kde-format
-msgid "&Image"
-msgstr "&Bild"
-
-#. i18n: ectx: Menu (settings)
-#: desktop/kookaui.rc:56
-#, kde-format
-msgid "&Settings"
-msgstr "Ein&stellungen"
-
-#. i18n: ectx: ToolBar (imageToolBar)
-#: desktop/kookaui.rc:67
-#, kde-format
-msgid "Image Viewer Toolbar"
-msgstr "Werkzeugleiste für Bildbetrachter"
-
-#. i18n: ectx: ToolBar (scanToolBar)
-#: desktop/kookaui.rc:84
-#, kde-format
-msgid "Scanning Toolbar"
-msgstr "Scan-Werkzeugleiste"
 
 #: formatdialog.cpp:77
 #, kde-format
@@ -2202,6 +2166,42 @@ msgstr "Modulmodus:"
 #, kde-format
 msgid "Segmentation mode:"
 msgstr "Segmentierungsmodus:"
+
+#. i18n: ectx: Menu (file)
+#: kookaui.rc:5
+#, kde-format
+msgid "&File"
+msgstr "&Datei"
+
+#. i18n: ectx: Menu (scan)
+#: kookaui.rc:22
+#, kde-format
+msgid "S&can"
+msgstr "S&can"
+
+#. i18n: ectx: Menu (imgCanvas)
+#: kookaui.rc:40
+#, kde-format
+msgid "&Image"
+msgstr "&Bild"
+
+#. i18n: ectx: Menu (settings)
+#: kookaui.rc:56
+#, kde-format
+msgid "&Settings"
+msgstr "Ein&stellungen"
+
+#. i18n: ectx: ToolBar (imageToolBar)
+#: kookaui.rc:67
+#, kde-format
+msgid "Image Viewer Toolbar"
+msgstr "Werkzeugleiste für Bildbetrachter"
+
+#. i18n: ectx: ToolBar (scanToolBar)
+#: kookaui.rc:84
+#, kde-format
+msgid "Scanning Toolbar"
+msgstr "Scan-Werkzeugleiste"
 
 #: kookaview.cpp:206
 #, kde-format
