@@ -1129,7 +1129,7 @@ msgstr "Emmiralla verticalment la imatge"
 #: imagetransform.cpp:94
 #, kde-format
 msgid "Error updating image %1"
-msgstr "S'ha produït un error en actualitzar la imatge %1"
+msgstr "S'ha produït un error durant l'actualització de la imatge %1"
 
 #: imgprintdialog.cpp:65
 #, kde-format
