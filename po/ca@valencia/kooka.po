@@ -2796,7 +2796,7 @@ msgstr "Exporta la imatge"
 #: scangallery.cpp:998
 #, kde-format
 msgid "Import Image File to Gallery"
-msgstr "Importa un fitxer d'imatge cap a la galeria"
+msgstr "Importa un fitxer d'imatge cap a dins de la galeria"
 
 #: scangallery.cpp:1113
 #, kde-kuit-format
