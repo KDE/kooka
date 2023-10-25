@@ -888,7 +888,8 @@ msgid ""
 msgstr ""
 "<b>PostScript encapsulat («Encapsulated PostScript»)</b> es deriva del "
 "llenguatge de descripció de pàgina PostScript&trade;. Utilitzeu este format "
-"per a importar a altres aplicacions, o per a utilitzar amb TeX, per exemple."
+"per a importar cap a altres aplicacions, o per a utilitzar amb TeX, per "
+"exemple."
 
 #: formatdialog.cpp:186
 #, kde-format
@@ -1057,7 +1058,7 @@ msgid ""
 "a new gallery at the new location?"
 msgstr ""
 "S'ha trobat una galeria antiga de Kooka a <filename>%1</filename>.<nl/>La "
-"nova ubicació preferida ara és <filename>%2</filename>.<nl/><nl/>Voleu crear "
+"ubicació nova preferida ara és <filename>%2</filename>.<nl/><nl/>Voleu crear "
 "una galeria nova a la ubicació nova?"
 
 #: galleryroot.cpp:168
