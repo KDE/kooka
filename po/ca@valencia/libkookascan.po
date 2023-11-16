@@ -706,10 +706,10 @@ msgid ""
 ">Note that this does not mean a query over the entire network, but only "
 "those hosts configured for SANE.</div>"
 msgstr ""
-"<div>Marqueu esta opció si voleu que es faça una consulta a la xarxa per als "
-"escàners disponibles.<br/><br/>Cal tindre en compte que açò no significa una "
-"consulta sobre tota la xarxa, sinó solament a les màquines configurades per "
-"SANE.</div>"
+"<div>Seleccioneu esta opció si voleu que es faça una consulta a la xarxa per "
+"als escàners disponibles.<br/><br/>Cal tindre en compte que açò no significa "
+"una consulta sobre tota la xarxa, sinó solament als amfitrions configurats "
+"per SANE.</div>"
 
 #. i18n: ectx: label, entry (StartupSkipAsk), group (Startup)
 #: scansettings.kcfg:22
@@ -722,7 +722,7 @@ msgstr "Mostra el diàleg de selecció de l'escàner"
 #, kde-format
 msgid "<div>Check this to show the scanner selection dialog on startup.</div>"
 msgstr ""
-"<div>Marqueu esta opció per a mostrar el diàleg per a la selecció de "
+"<div>Seleccioneu esta opció per a mostrar el diàleg per a la selecció de "
 "l'escàner durant l'inici.</div>"
 
 #. i18n: ectx: label, entry (PreviewAutoselThreshold), group (Scanner Name)

@@ -1841,8 +1841,8 @@ msgid ""
 "viewer on startup.<br/><br/>If your images are large, that might slow down "
 "Kooka's startup.</div>"
 msgstr ""
-"<div>Marqueu-la si voleu que Kooka carregue l'última imatge en el visor en "
-"iniciar.<br/><br/>Si les imatges són grans, l'inici de Kooka pot ser més "
+"<div>Seleccioneu-la si voleu que Kooka carregue l'última imatge en el visor "
+"en iniciar.<br/><br/>Si les imatges són grans, l'inici de Kooka pot ser més "
 "lent.</div>"
 
 #. i18n: ectx: label, entry (SaverAskForFormat), group (Files)
@@ -1858,9 +1858,9 @@ msgid ""
 "<div>Check this if you want to always use the image save assistant, even if "
 "there is a default format for the image type.</div>"
 msgstr ""
-"<div>Activeu-la si voleu que sempre s'utilitze l'assistent per a guardar la "
-"imatge, encara que hi haja un format predeterminat per al tipus d'imatge.</"
-"div>"
+"<div>Seleccioneu-la si voleu que sempre s'utilitze l'assistent per a guardar "
+"la imatge, encara que hi haja un format predeterminat per al tipus d'imatge."
+"</div>"
 
 #. i18n: ectx: label, entry (SaverAskForFilename), group (Files)
 #: kookasettings.kcfg:71
@@ -1875,8 +1875,8 @@ msgid ""
 "<div>Check this if you want to enter a file name when scanning an image.</"
 "div>"
 msgstr ""
-"<div>Marqueu-la si voleu introduir un nom de fitxer en escanejar una imatge."
-"</div>"
+"<div>Seleccioneu-la si voleu introduir un nom de fitxer en escanejar una "
+"imatge.</div>"
 
 #. i18n: ectx: label, entry (SaverAskBeforeScan), group (Files)
 #: kookasettings.kcfg:77
@@ -1891,7 +1891,7 @@ msgid ""
 "<div>Check this if you want to enter the file name before scanning starts.</"
 "div>"
 msgstr ""
-"<div>Marqueu-la si voleu introduir un nom de fitxer abans que comence "
+"<div>Seleccioneu-la si voleu introduir un nom de fitxer abans que comence "
 "l'escaneig.</div>"
 
 #. i18n: ectx: label, entry (SaverAskAfterScan), group (Files)
@@ -1907,8 +1907,8 @@ msgid ""
 "<div>Check this if you want to enter the file name after scanning has "
 "finished.</div>"
 msgstr ""
-"<div>Marqueu-la si voleu introduir un nom de fitxer després que finalitze "
-"l'escaneig</div>"
+"<div>Seleccioneu-la si voleu introduir un nom de fitxer després que "
+"finalitze l'escaneig</div>"
 
 #. i18n: ectx: label, entry (SaverOnlyRecommendedTypes), group (Files)
 #: kookasettings.kcfg:89
@@ -1923,9 +1923,9 @@ msgid ""
 "<div>Check this to only show recommended file formats for the scan type. "
 "Uncheck it to show all compatible formats.</div>"
 msgstr ""
-"<div>Marqueu-la per a només mostrar els formats de fitxer recomanats per al "
-"tipus d'escaneig. Desmarqueu-la per a mostrar tots els formats compatibles.</"
-"div>"
+"<div>Seleccioneu-la per a mostrar només els formats de fitxer recomanats per "
+"al tipus d'escaneig. Desseleccioneu-la per a mostrar tots els formats "
+"compatibles.</div>"
 
 #. i18n: ectx: label, entry (SaverAlwaysUseFormat), group (Files2)
 #: kookasettings.kcfg:103
@@ -1940,7 +1940,7 @@ msgid ""
 "<div>Check this to remember the selected file format for the scanned image "
 "type and not ask for it again.</div>"
 msgstr ""
-"<div>Marqueu-la per a recordar el format de fitxer seleccionat pel tipus "
+"<div>Seleccioneu-la per a recordar el format de fitxer seleccionat pel tipus "
 "d'imatge escanejat i no tornar-ho a preguntar.</div>"
 
 #. i18n: ectx: label, entry (GalleryAllowRename), group (Gallery)
@@ -1956,7 +1956,7 @@ msgid ""
 "<div>Check this if you want to be able to rename gallery items by clicking "
 "on them (otherwise, use the \"Rename\" menu option).</div>"
 msgstr ""
-"<div>Marqueu-la si voleu poder canviar de nom els elements d'una galeria "
+"<div>Seleccioneu-la si voleu poder canviar de nom els elements d'una galeria "
 "clicant-hi damunt (en cas contrari, utilitzeu l'opció «Canvia el nom» del "
 "menú).</div>"
 
