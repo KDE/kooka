@@ -207,7 +207,7 @@ msgstr "Ajusta a l'alçària"
 #: imagecanvas.cpp:789
 #, kde-format
 msgid "Zoom %1%"
-msgstr "Zoom a %1%"
+msgstr "Zoom al %1%"
 
 #: imagecanvas.cpp:790
 #, kde-format
