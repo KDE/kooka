@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: playground-graphics-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-05 12:26+0000\n"
-"PO-Revision-Date: 2023-01-18 22:31+0300\n"
+"PO-Revision-Date: 2023-11-26 01:26+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 22.12.1\n"
+"X-Generator: Lokalize 23.11.70\n"
 
 #: ../libdialogutil/imagefilter.cpp:91
 #, kde-format
@@ -217,7 +217,7 @@ msgstr "Bilinmeyen"
 #: imagecanvas.cpp:888
 #, kde-format
 msgid "%1x%2 pix, %3 bpp"
-msgstr "%1x%2 piks, %3 bpp"
+msgstr "%1 × %2 pks, %3 bpp"
 
 #: imgscaledialog.cpp:51
 #, kde-format
@@ -242,7 +242,7 @@ msgstr "%​75"
 #: imgscaledialog.cpp:93
 #, kde-format
 msgid "&100 %"
-msgstr "% ​&100"
+msgstr "%​&100"
 
 #: imgscaledialog.cpp:105
 #, kde-format
@@ -409,13 +409,13 @@ msgstr "Açıklama yok"
 #, no-c-format, kde-format
 msgctxt "@info:status"
 msgid "%1x%2mm, %3x%4pix"
-msgstr "%1x%2mm, %3x%4piks"
+msgstr "%1 × %2 mm, %3 × %4 pks"
 
 #: previewer.cpp:246
 #, no-c-format, kde-format
 msgctxt "@info:status"
 msgid "%1x%2mm"
-msgstr "%1x%2mm"
+msgstr "%1 × %2 mm"
 
 #: previewer.cpp:340
 #, kde-format
