@@ -78,7 +78,7 @@ msgstr "Format de la imatge:"
 #: ../plugins/destination/clipboard/destinationclipboard.cpp:61
 #, kde-format
 msgid "Copying image to clipboard"
-msgstr "S'està copiant la imatge al porta-retalls"
+msgstr "S'està copiant la imatge a dins del porta-retalls"
 
 #: ../plugins/destination/gallery/destinationgallery.cpp:74
 #, kde-kuit-format
