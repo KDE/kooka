@@ -149,7 +149,7 @@
 >.</para>
 
 <para
->La finestra principal del &kooka; està formada de tres quadres. A la part superior veureu els plafons, les icones i el menú. Utilitzeu el ratolí per augmentar o reduir les finestres segons sigui necessari.</para>
+>La finestra principal del &kooka; està formada de tres quadres. A la part superior veureu els plafons, les icones i el menú. Utilitzeu el ratolí per a augmentar o reduir les finestres segons sigui necessari.</para>
 
 <itemizedlist
 > 
@@ -180,7 +180,7 @@
 <para
 >Després d'això, feu clic a <guimenu
 >Escaneja</guimenu
-> per escanejar la selecció feta a la vista prèvia. Després de l'escaneig, se us demanarà en quin format voleu desar la imatge i si voleu fer que aquest sigui el vostre format estàndard (perquè no se us demani més).</para>
+> per a escanejar la selecció feta a la vista prèvia. Després de l'escaneig, se us demanarà en quin format voleu desar la imatge i si voleu fer que aquest sigui el vostre format estàndard (perquè no se us demani més).</para>
 
 <note
 ><para
@@ -192,7 +192,7 @@
 > <guimenuitem
 >Desament de la imatge</guimenuitem
 > <guimenuitem
->Usa sempre l'ajudant per desar</guimenuitem
+>Usa sempre l'ajudant per a desar</guimenuitem
 > </menuchoice
 ></para
 ></note
@@ -746,7 +746,7 @@ Keep Zoom Setting Ctrl+Z
 > 
 <listitem>
 <para
->Utilitzeu aquest botó per tornar a activar tots els missatges i qüestions que s'havien ocultat utilitzant <guibutton
+>Utilitzeu aquest botó per a tornar a activar tots els missatges i qüestions que s'havien ocultat utilitzant <guibutton
 >No tornis a preguntar</guibutton
 >.</para>
 </listitem
@@ -785,7 +785,7 @@ Keep Zoom Setting Ctrl+Z
 <listitem>
 <para
 ><guilabel
->Usa sempre l'ajudant per desar</guilabel
+>Usa sempre l'ajudant per a desar</guilabel
 >, <guilabel
 >Pregunta pel nom de fitxer en desar</guilabel
 > o <guilabel
@@ -847,7 +847,7 @@ Keep Zoom Setting Ctrl+Z
 <para
 >El mètode per a desar una imatge és una mica diferent al &kooka; que en moltes altres aplicacions. Feu clic a la pestanya <guilabel
 >Galeria</guilabel
-> per obrir un petit navegador de fitxers. Aquesta és la carpeta <filename class="directory"
+> per a obrir un petit navegador de fitxers. Aquesta és la carpeta <filename class="directory"
 >~/Documents/KookaGallery</filename
 >. A la finestra, es mostra la vostra subcarpeta actual a la galeria. Aquí és on es desen totes les imatges escanejades com a fitxers. Quan s'inicia el &kooka; per primera vegada, només veureu la <filename class="directory"
 >KookaGallery</filename
@@ -875,7 +875,7 @@ Keep Zoom Setting Ctrl+Z
 >. Trieu qualsevol camí. A més, tanqueu o suprimiu permanentment les imatges.</para>
 
 <para
->Per incorporar altres imatges a la galeria, utilitzeu <menuchoice
+>Per a incorporar altres imatges a la galeria, utilitzeu <menuchoice
 > <guimenu
 >Fitxer</guimenu
 ><guimenuitem
