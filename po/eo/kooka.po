@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-05 12:26+0000\n"
-"PO-Revision-Date: 2023-03-14 21:55+01\n"
+"PO-Revision-Date: 2024-02-04 17:21+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -1132,12 +1132,12 @@ msgid ""
 "resolution.</div>"
 msgstr ""
 "<div>Presi je la sama grandeco kiel vidita sur ekrano, determinita de la "
-"ekrana rezolucio.</div>"
+"ekrana distingivo.</div>"
 
 #: imgprintdialog.cpp:105
 #, kde-format
 msgid "Screen resolution:"
-msgstr "Ekrana rezolucio:"
+msgstr "Ekrana distingivo:"
 
 #: imgprintdialog.cpp:110
 #, kde-format
@@ -1145,7 +1145,7 @@ msgctxt "@info:tooltip"
 msgid ""
 "<div>This is the current screen resolution. It cannot be changed here.</div>"
 msgstr ""
-"<div>Jen la nuna ekranrezolucio. Ĝi ne povas esti ŝanĝita ĉi tie.</div>"
+"<div>Jen la nuna ekrandistingivo. Ĝi ne povas esti ŝanĝita ĉi tie.</div>"
 
 #: imgprintdialog.cpp:114
 #, kde-format
@@ -1161,14 +1161,14 @@ msgid ""
 "saved with the image and used if available; if it is not, it can be entered "
 "here.</div>"
 msgstr ""
-"<div>Presi je grandeco determinita de la skana rezolucio. La rezolucio estas "
-"konservita kun la bildo kaj uzata se disponebla; se ĝi ne estas, ĝi povas "
-"esti enigita ĉi tie.</div>"
+"<div>Presi je grandeco determinita de la skana distingivo. La distingivo "
+"estas konservita kun la bildo kaj uzata se disponebla; se ĝi ne estas, ĝi "
+"povas esti enigita ĉi tie.</div>"
 
 #: imgprintdialog.cpp:119
 #, kde-format
 msgid "Scan resolution:"
-msgstr "Skanado-rezolucio:"
+msgstr "Skanado-distingivo:"
 
 #: imgprintdialog.cpp:124
 #, kde-format
@@ -1183,7 +1183,7 @@ msgid ""
 "<div>This is the scan resolution as saved with the image. It can be changed "
 "if necessary.</div>"
 msgstr ""
-"<div>Ĉi tiu estas la skana rezolucio kiel konservita kun la bildo. Ĝi povas "
+"<div>Ĉi tiu estas la skana distingivo kiel konservita kun la bildo. Ĝi povas "
 "esti ŝanĝita se necese.</div>"
 
 #: imgprintdialog.cpp:132
@@ -1274,7 +1274,7 @@ msgstr ""
 #, kde-format
 msgctxt "@option:check"
 msgid "Low resolution (fast draft print)"
-msgstr "Malalta rezolucio (rapida malneta presado)"
+msgstr "Malalta distingivo (rapida malneta presado)"
 
 #: imgprintdialog.cpp:190
 #, kde-format
@@ -1283,8 +1283,8 @@ msgid ""
 "<div>Print at as low a resolution as possible. This may not work as intended "
 "on all printers.</div>"
 msgstr ""
-"<div>Presi je kiel eble plej malalta rezolucio. Ĉi tio eble ne funkcias kiel "
-"celite ĉe ĉiuj presiloj.</div>"
+"<div>Presi je kiel eble plej malalta distingivo. Ĉi tio eble ne funkcias "
+"kiel celite ĉe ĉiuj presiloj.</div>"
 
 #: imgprintdialog.cpp:196
 #, kde-format
@@ -1365,7 +1365,7 @@ msgstr "%1 dpi"
 #: imgprintdialog.cpp:321
 #, kde-format
 msgid "The scan resolution must be specified for scaling to it."
-msgstr "La skana rezolucio devas esti specifita por grimpi al ĝi."
+msgstr "La skana distingivo devas esti specifita por grimpi al ĝi."
 
 #: imgprintdialog.cpp:326
 #, kde-format
