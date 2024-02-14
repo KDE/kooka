@@ -89,10 +89,6 @@ DeviceSelector::DeviceSelector(QWidget *pnt,
     setScanSources(backends);
 }
 
-DeviceSelector::~DeviceSelector()
-{
-}
-
 QByteArray DeviceSelector::getDeviceFromConfig() const
 {
     QByteArray result = ScanSettings::startupScanDevice().toLocal8Bit();
@@ -142,14 +138,6 @@ QByteArray DeviceSelector::getSelectedDevice() const
 
 void DeviceSelector::setScanSources(const QList<QByteArray> &backends)
 {
-    const KConfig *typeConf = nullptr;
-
-    QString typeFile = QStandardPaths::locate(QStandardPaths::GenericDataLocation, "libkookascan/scantypes.dat");
-    qCDebug(LIBKOOKASCAN_LOG) << "Scanner type file" << typeFile;
-    if (!typeFile.isEmpty()) {
-        typeConf = new KConfig(typeFile, KConfig::SimpleConfig);
-    }
-
     QByteArray defstr = ScanSettings::startupScanDevice().toLocal8Bit();
     QListWidgetItem *defItem = nullptr;
 
@@ -172,26 +160,10 @@ void DeviceSelector::setScanSources(const QList<QByteArray> &backends)
 
         hlay->setSpacing(horizontalSpacing());
 
-        QString itemIcon = "scanner";
-        if (typeConf != nullptr) {         // type config file available
-            QString devBase = QString(devName).section(':', 0, 0);
-            QString ii = typeConf->group("Devices").readEntry(devBase, "");
-            qCDebug(LIBKOOKASCAN_LOG) << "for device" << devBase << "icon" << ii;
-            if (!ii.isEmpty()) {
-                itemIcon = ii;
-            } else {
-                ii = typeConf->group("Types").readEntry(dev->type, "");
-                qCDebug(LIBKOOKASCAN_LOG) << "for type" << dev->type << "icon" << ii;
-                if (!ii.isEmpty()) {
-                    itemIcon = ii;
-                }
-            }
-        }
-
         QLabel *label = new QLabel(hbox);
-        label->setPixmap(KIconLoader::global()->loadIcon(itemIcon,
-                         KIconLoader::NoGroup,
-                         KIconLoader::SizeMedium));
+        label->setPixmap(KIconLoader::global()->loadIcon(ScanDevices::self()->deviceIconName(devName),
+                                                         KIconLoader::NoGroup,
+                                                         KIconLoader::SizeMedium));
         hlay->addSpacing(horizontalSpacing());
         hlay->addWidget(label);
 
@@ -218,5 +190,4 @@ void DeviceSelector::setScanSources(const QList<QByteArray> &backends)
     if (defItem != nullptr) {
         defItem->setSelected(true);
     }
-    delete typeConf;
 }

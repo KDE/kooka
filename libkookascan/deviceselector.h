@@ -86,7 +86,7 @@ public:
     /**
      * Destructor.
      **/
-    virtual ~DeviceSelector();
+    virtual ~DeviceSelector() = default;
 
     /**
      * Get the device that the user selected.
@@ -115,6 +115,7 @@ public:
 private:
     void setScanSources(const QList<QByteArray> &backends);
 
+private:
     QListWidget *mListBox;
     QCheckBox *mSkipCheckbox;
 

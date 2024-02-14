@@ -40,6 +40,7 @@
 #include <klineedit.h>
 
 #include "clickabletooltip.h"
+#include "scandevices.h"
 
 
 AddDeviceDialog::AddDeviceDialog(QWidget *parent, const QString &caption)
@@ -92,13 +93,17 @@ AddDeviceDialog::AddDeviceDialog(QWidget *parent, const QString &caption)
     setMainWidget(w);
 
     // This list from http://www.sane-project.org/html/doc011.html#s4.2.8
-    QStringList types;
+    QList<const char *> types;
     types << "scanner" << "film scanner" << "flatbed scanner"
           << "frame grabber" << "handheld scanner" << "multi-function peripheral"
           << "sheetfed scanner" << "still camera" << "video camera"
           << "virtual device";
-    mTypeCombo->addItems(types);
-    // TODO: add icon using code from device selector dialogue
+    for (const char *type : qAsConst(types))
+    {
+        QString iconName = ScanDevices::self()->typeIconName(type);
+        if (iconName.isEmpty()) iconName = "scanner";
+        mTypeCombo->addItem(QIcon::fromTheme(iconName), type);
+    }
 
     slotTextChanged();
 }

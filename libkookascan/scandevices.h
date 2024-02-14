@@ -31,6 +31,10 @@ extern "C" {
 #include <sane/sane.h>                  // to define SANE_Device
 }
 
+
+class KConfig;
+
+
 class KOOKASCAN_EXPORT ScanDevices
 {
 public:
@@ -69,6 +73,9 @@ public:
                                 const QByteArray &type = "",
                                 bool dontSave = false);
 
+    QString deviceIconName(const QByteArray &backend);
+    QString typeIconName(const QByteArray &devType);
+
 private:
     explicit ScanDevices();
     ~ScanDevices() = default;
@@ -76,6 +83,7 @@ private:
 private:
     QList<QByteArray> mScannerNames;
     QHash<QByteArray, const SANE_Device *> mScannerDevices;
+    KConfig *mTypeConfig;
 };
 
 #endif                          // SCANDEVICES_H

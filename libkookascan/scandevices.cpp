@@ -38,15 +38,13 @@
 #include "libkookascan_logging.h"
 
 
-ScanDevices *sInstance = nullptr;
 
 ScanDevices *ScanDevices::self()
 {
-    if (sInstance == nullptr) {
-        sInstance = new ScanDevices();
-    }
-    return (sInstance);
+    static ScanDevices *instance = new ScanDevices();
+    return (instance);
 }
+
 
 ScanDevices::ScanDevices()
 {
@@ -73,6 +71,11 @@ ScanDevices::ScanDevices()
         mScannerDevices.insert(dev->name, dev);
         qCDebug(LIBKOOKASCAN_LOG) << "SANE found scanner:" << dev->name << "=" << deviceDescription(dev->name);
     }
+
+    QString typeFile = QStandardPaths::locate(QStandardPaths::GenericDataLocation, "libkookascan/scantypes.dat");
+    qCDebug(LIBKOOKASCAN_LOG) << "Scanner type file" << typeFile;
+    if (typeFile.isEmpty()) typeFile = "/dev/null";
+    mTypeConfig = new KConfig(typeFile, KConfig::SimpleConfig);
 
     // TODO: handling the 3 lists is tedious, use a scanner data structure
 
@@ -169,7 +172,7 @@ void ScanDevices::addUserSpecifiedDevice(const QByteArray &backend,
 
     // Need a permanent copy of the strings, because SANE_Device only holds
     // pointers to them.  Unfortunately there is a memory leak here, the
-    // 'userdev' object and its three QByteArray's are never deleted.
+    // 'userdev' object and its four QByteArray's are never deleted.
     // There is only a limited number of these objects in most applications,
     // so hopefully it won't matter too much.
 
@@ -193,6 +196,7 @@ const SANE_Device *ScanDevices::deviceInfo(const QByteArray &backend) const
     return (mScannerDevices[backend]);
 }
 
+
 QString ScanDevices::deviceDescription(const QByteArray &backend) const
 {
     if (!mScannerNames.contains(backend)) return (i18n("Unknown device '%1'", backend.constData()));
@@ -202,4 +206,34 @@ QString ScanDevices::deviceDescription(const QByteArray &backend) const
     if (!result.isEmpty()) result += ' ';
     result += QString::fromLocal8Bit(scanner->model);
     return (result);
+}
+
+
+QString ScanDevices::deviceIconName(const QByteArray &backend)
+{
+    QString itemIcon = "scanner";
+    QString devBase = QString(backend).section(':', 0, 0);
+    QString ii = mTypeConfig->group("Devices").readEntry(devBase, "");
+    qCDebug(LIBKOOKASCAN_LOG) << "for device" << devBase << "icon" << ii;
+    if (!ii.isEmpty()) itemIcon = ii;
+    else
+    {
+        // This is only possible if the backend is known, so that
+        // the device type can be read from it.
+        if (mScannerNames.contains(backend))
+        {
+            const SANE_Device *dev = mScannerDevices[backend];
+            ii = typeIconName(dev->type);
+            qCDebug(LIBKOOKASCAN_LOG) << "for type" << dev->type << "icon" << ii;
+            if (!ii.isEmpty()) itemIcon = ii;
+        }
+    }
+
+    return (itemIcon);
+}
+
+
+QString ScanDevices::typeIconName(const QByteArray &devType)
+{
+    return (mTypeConfig->group("Types").readEntry(devType, ""));
 }
