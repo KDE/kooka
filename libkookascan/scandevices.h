@@ -76,9 +76,6 @@ private:
 private:
     QList<QByteArray> mScannerNames;
     QHash<QByteArray, const SANE_Device *> mScannerDevices;
-
-    class ScanDevicesPrivate;
-    ScanDevicesPrivate *d;
 };
 
 #endif                          // SCANDEVICES_H

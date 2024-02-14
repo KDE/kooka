@@ -31,7 +31,7 @@
 #include "adddevicedialog.h"
 
 #include <qlabel.h>
-#include <qlayout.h>
+#include <qformlayout.h>
 #include <qcombobox.h>
 #include <qdesktopservices.h>
 #include <qurl.h>
@@ -51,12 +51,11 @@ AddDeviceDialog::AddDeviceDialog(QWidget *parent, const QString &caption)
     setWindowTitle(caption);
 
     QWidget *w = new QWidget(this);
-    // TODO: wider dialogue, use a QFormLayout
-    QVBoxLayout *vl = new QVBoxLayout(w);
+    QFormLayout *fl = new QFormLayout(w);
 
     QLabel *lab = new QLabel(xi18nc("@info",
                                     "If your scanner has not been automatically detected, you can specify it here. "
-                                    "The <interface>Scanner device name</interface> is the SANE backend name. "
+                                    "The <interface>Scanner device</interface> is the SANE backend device name. "
                                     "The <interface>Manufacturer</interface>, <interface>Type</interface> and "
                                     "<interface>Description</interface> can be used to identify the scanner later."
                                     "<nl/><nl/>"
@@ -68,44 +67,28 @@ AddDeviceDialog::AddDeviceDialog(QWidget *parent, const QString &caption)
     lab->setWordWrap(true);
     lab->setOpenExternalLinks(false);
     connect(lab, &QLabel::linkActivated, this, &AddDeviceDialog::slotLinkActivated);
-    vl->addWidget(lab);
+    fl->addRow(lab);
 
-    vl->addSpacing(verticalSpacing());
-    vl->addStretch(1);
-
-    lab = new QLabel(i18n("Scanner device name:"), w);
-    vl->addWidget(lab);
+    fl->addRow(new QLabel(w));				// separator row
 
     mDevEdit = new KLineEdit(w);
     connect(mDevEdit, &KLineEdit::textChanged, this, &AddDeviceDialog::slotTextChanged);
-    vl->addWidget(mDevEdit);
-    lab->setBuddy(mDevEdit);
-
-    lab = new QLabel(i18n("Manufacturer:"), w);
-    vl->addWidget(lab);
+    fl->addRow(i18n("Scanner device:"), mDevEdit);
 
     mManufacturerEdit = new KLineEdit(w);
     mManufacturerEdit->setPlaceholderText(i18nc("Value used for manufacturer if none entered", "User specified"));
     connect(mManufacturerEdit, &KLineEdit::textChanged, this, &AddDeviceDialog::slotTextChanged);
-    vl->addWidget(mManufacturerEdit);
-    lab->setBuddy(mManufacturerEdit);
-
-    lab = new QLabel(i18n("Device type:"), w);
-    vl->addWidget(lab);
+    fl->addRow(i18n("Manufacturer:"), mManufacturerEdit);
 
     mTypeCombo = new QComboBox(w);
-    vl->addWidget(mTypeCombo);
-    lab->setBuddy(mTypeCombo);
-
-    lab = new QLabel(i18n("Description:"), w);
-    vl->addWidget(lab);
+    mTypeCombo->setSizePolicy(QSizePolicy::MinimumExpanding, mTypeCombo->sizePolicy().verticalPolicy());
+    fl->addRow(i18n("Device type:"), mTypeCombo);
 
     mDescEdit = new KLineEdit(w);
     connect(mDescEdit, &KLineEdit::textChanged, this, &AddDeviceDialog::slotTextChanged);
-    vl->addWidget(mDescEdit);
-    lab->setBuddy(mDescEdit);
+    fl->addRow(i18n("Description:"), mDescEdit);
 
-    w->setMinimumSize(QSize(600, 330));
+    w->setMinimumSize(QSize(540, 300));
     setMainWidget(w);
 
     // This list from http://www.sane-project.org/html/doc011.html#s4.2.8
@@ -119,6 +102,7 @@ AddDeviceDialog::AddDeviceDialog(QWidget *parent, const QString &caption)
 
     slotTextChanged();
 }
+
 
 void AddDeviceDialog::slotLinkActivated(const QString &link)
 {
@@ -134,9 +118,10 @@ void AddDeviceDialog::slotLinkActivated(const QString &link)
     if (link=="?1")					// help on SANE backends
     {
         msg = xi18nc("@info",
-                     "The <interface>Scanner device name</interface> should be a backend name (with optional "
+                     "The <interface>Scanner device</interface> should be a backend name (with optional "
                      "parameters) that is understood by SANE. See <link url=\"man:/sane\">sane(7)</link> or "
-                     "<link url=\"man:/sane-dll\">sane&#8209;dll(5)</link> for more information on available backends.");
+                     "<link url=\"man:/sane-dll\">sane&#8209;dll(5)</link> for more information on available "
+                     "backends and the format of device names.");
     }
     else if (link=="?2")				// help on locating devices
     {
@@ -170,6 +155,7 @@ void AddDeviceDialog::slotLinkActivated(const QString &link)
     l->setTextInteractionFlags(Qt::LinksAccessibleByMouse);
     l->setOpenExternalLinks(true);
 }
+
 
 void AddDeviceDialog::slotTextChanged()
 {
