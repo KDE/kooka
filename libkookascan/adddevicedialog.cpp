@@ -47,6 +47,7 @@ AddDeviceDialog::AddDeviceDialog(QWidget *parent, const QString &caption)
     setWindowTitle(caption);
 
     QWidget *w = new QWidget(this);
+    // TODO: wider dialogue, use a QFormLayout
     QVBoxLayout *vl = new QVBoxLayout(w);
 
     QLabel *lab = new QLabel(xi18nc("@info",
@@ -54,7 +55,8 @@ AddDeviceDialog::AddDeviceDialog(QWidget *parent, const QString &caption)
                                     "The <interface>Scanner device name</interface> should be a backend name (with optional parameters) "
                                     "that is understood by SANE, see <link url=\"man:/sane\">sane(7)</link> or "
                                     "<link url=\"man:/sane-dll\">sane-dll(5)</link> for more information on available backends. "
-                                    "The <interface>Type</interface> and <interface>Description</interface> can be used to identify the scanner later."
+                                    "The <interface>Manufacturer</interface>, <interface>Type</interface> and <interface>Description</interface> "
+                                    "can be used to identify the scanner later."
                                     "<nl/><nl/>"
                                     "For the information that needs to be entered here, try to locate the device using the "
                                     "<link url=\"man:/sane-find-scanner\">sane-find-scanner(1)</link> command. For a "
@@ -82,6 +84,15 @@ AddDeviceDialog::AddDeviceDialog(QWidget *parent, const QString &caption)
     vl->addWidget(mDevEdit);
     lab->setBuddy(mDevEdit);
 
+    lab = new QLabel(i18n("Manufacturer:"), w);
+    vl->addWidget(lab);
+
+    mManufacturerEdit = new KLineEdit(w);
+    mManufacturerEdit->setPlaceholderText(i18nc("Value used for manufacturer if none entered", "User specified"));
+    connect(mManufacturerEdit, &KLineEdit::textChanged, this, &AddDeviceDialog::slotTextChanged);
+    vl->addWidget(mManufacturerEdit);
+    lab->setBuddy(mManufacturerEdit);
+
     lab = new QLabel(i18n("Device type:"), w);
     vl->addWidget(lab);
 
@@ -107,6 +118,7 @@ AddDeviceDialog::AddDeviceDialog(QWidget *parent, const QString &caption)
           << "sheetfed scanner" << "still camera" << "video camera"
           << "virtual device";
     mTypeCombo->addItems(types);
+    // TODO: add icon using code from device selector dialogue
 
     slotTextChanged();
 }
@@ -120,15 +132,20 @@ void AddDeviceDialog::slotTextChanged()
 
 QByteArray AddDeviceDialog::getDevice() const
 {
-    return mDevEdit->text().toLocal8Bit();
+    return (mDevEdit->text().toLocal8Bit());
 }
 
 QString AddDeviceDialog::getDescription() const
 {
-    return mDescEdit->text();
+    return (mDescEdit->text());
+}
+
+QString AddDeviceDialog::getManufacturer() const
+{
+    return (mManufacturerEdit->text());
 }
 
 QByteArray AddDeviceDialog::getType() const
 {
-    return mTypeCombo->currentText().toLocal8Bit();
+    return (mTypeCombo->currentText().toLocal8Bit());
 }

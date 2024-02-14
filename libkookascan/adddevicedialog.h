@@ -82,6 +82,13 @@ public:
     QString getDescription() const;
 
     /**
+     * Get the entered value from the "Manufacturer" field.
+     *
+     * @return The device manufacturer as entered by the user.
+     **/
+    QString getManufacturer() const;
+
+    /**
      * Get the selected value from the "Device type" combo box.
      *
      * @return The device type as selected by the user.
@@ -93,6 +100,7 @@ protected slots:
 
 private:
     KLineEdit *mDevEdit;
+    KLineEdit *mManufacturerEdit;
     KLineEdit *mDescEdit;
     QComboBox *mTypeCombo;
 };

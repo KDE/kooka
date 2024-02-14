@@ -242,9 +242,10 @@ KookaView::KookaView(KMainWindow *parent, const QByteArray &deviceToUse)
 
     if (!deviceToUse.isEmpty() && deviceToUse != "gallery") {
         ScanDevices::self()->addUserSpecifiedDevice(deviceToUse,
-                "on command line",
-                "",
-                true);
+                                                    i18n("User specified"),
+                                                    i18n("on command line"),
+                                                    "",
+                                                    true);
     }
 
     /** Scanner Device **/
@@ -516,14 +517,16 @@ bool KookaView::slotSelectDevice(const QByteArray &useDevice, bool alwaysAsk)
 void KookaView::slotAddDevice()
 {
     AddDeviceDialog d(mMainWindow, i18n("Add Scan Device"));
-    if (d.exec()) {
-        QByteArray dev = d.getDevice();
-        QString dsc = d.getDescription();
-        QByteArray type = d.getType();
-        qCDebug(KOOKA_LOG) << "dev" << dev << "type" << type << "desc" << dsc;
+    if (!d.exec()) return;
 
-        ScanDevices::self()->addUserSpecifiedDevice(dev, dsc, type);
-    }
+    QByteArray dev = d.getDevice();
+    QString manuf = d.getManufacturer();
+    QString dsc = d.getDescription();
+    QByteArray type = d.getType();
+    // TODO: no need to log, the function called below does that
+    qCDebug(KOOKA_LOG) << "dev" << dev << "manuf" << manuf << "type" << type << "desc" << dsc;
+
+    ScanDevices::self()->addUserSpecifiedDevice(dev, manuf, dsc, type);
 }
 
 QByteArray KookaView::userDeviceSelection(bool alwaysAsk)

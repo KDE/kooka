@@ -74,6 +74,8 @@ ScanDevices::ScanDevices()
         qCDebug(LIBKOOKASCAN_LOG) << "SANE found scanner:" << dev->name << "=" << deviceDescription(dev->name);
     }
 
+    // TODO: handling the 3 lists is tedious, use a scanner data structure
+
     QStringList devs = ScanSettings::userDevices();
     if (!devs.isEmpty())
     {
@@ -93,29 +95,35 @@ ScanDevices::ScanDevices()
             ScanSettings::self()->save();
         }
 
+        QStringList manufs = ScanSettings::userManufacturers();
+        if (manufs.count()<devs.count())			// ensure list correct length
+        {
+            for (int i = manufs.count(); i<devs.count(); ++i) manufs.append(QString());
+            ScanSettings::setUserManufacturers(manufs);
+            ScanSettings::self()->save();
+        }
+
         QStringList::const_iterator it2 = descs.constBegin();
         QStringList::const_iterator it3 = types.constBegin();
+        QStringList::const_iterator it4 = manufs.constBegin();
         for (QStringList::const_iterator it1 = devs.constBegin();
-                it1 != devs.constEnd(); ++it1, ++it2, ++it3) {
+             it1 != devs.constEnd(); ++it1, ++it2, ++it3, ++it4) {
             // avoid duplication
             QByteArray name = (*it1).toLocal8Bit();
             if (mScannerNames.contains(name)) {
                 continue;
             }
-            addUserSpecifiedDevice(name, (*it2), (*it3).toLocal8Bit(), true);
+            addUserSpecifiedDevice(name, (*it4), (*it2), (*it3).toLocal8Bit(), true);
             qCDebug(LIBKOOKASCAN_LOG) << "Configured scanner:" << name << "=" << deviceDescription(name);
         }
     }
 }
 
-ScanDevices::~ScanDevices()
-{
-}
-
 void ScanDevices::addUserSpecifiedDevice(const QByteArray &backend,
-        const QString &description,
-        const QByteArray &type,
-        bool dontSave)
+                                         const QString &manufacturer,
+                                         const QString &description,
+                                         const QByteArray &type,
+                                         bool dontSave)
 {
     if (backend.isEmpty()) {
         return;
@@ -127,12 +135,14 @@ void ScanDevices::addUserSpecifiedDevice(const QByteArray &backend,
     }
 
     QByteArray devtype = (!type.isEmpty() ? type : "scanner");
-    qCDebug(LIBKOOKASCAN_LOG) << "adding" << backend << "desc" << description
-                              << "type" << devtype << "dontSave" << dontSave;
+    qCDebug(LIBKOOKASCAN_LOG) << "adding" << backend << "manuf" << manufacturer
+                              << "desc" << description << "type" << devtype
+                              << "dontSave" << dontSave;
 
     if (!dontSave)					// add new device to config
     {							// get existing device lists
         QStringList devs = ScanSettings::userDevices();
+        QStringList manufs = ScanSettings::userManufacturers();
         QStringList descs = ScanSettings::userDescriptions();
         QStringList types = ScanSettings::userTypes();
 
@@ -140,13 +150,16 @@ void ScanDevices::addUserSpecifiedDevice(const QByteArray &backend,
         if (i >= 0) {					// see if already in list
             descs[i] = description;			// if so just update
             types[i] = devtype;
+            manufs[i] = manufacturer;
         } else {
             devs.append(backend);			// add new entry to lists
             descs.append(description);
             types.append(devtype);
+            manufs.append(manufacturer);
         }
 
         ScanSettings::setUserDevices(devs);
+        ScanSettings::setUserManufacturers(manufs);
         ScanSettings::setUserDescriptions(descs);
         ScanSettings::setUserTypes(types);
         ScanSettings::self()->save();
@@ -163,7 +176,10 @@ void ScanDevices::addUserSpecifiedDevice(const QByteArray &backend,
     userdev->name = (new QByteArray(backend))->constData();
     userdev->model = (new QByteArray(description.toLocal8Bit()))->constData();
     userdev->type = (new QByteArray(devtype))->constData();
-    userdev->vendor = "";
+
+    QString s = manufacturer;
+    if (s.isEmpty()) s = i18nc("Value used for manufacturer if none entered", "User specified");
+    userdev->vendor = (new QByteArray(s.toLocal8Bit()))->constData();
 
     mScannerNames.append(backend);
     mScannerDevices.insert(backend, userdev);

@@ -55,19 +55,23 @@ public:
     QString deviceDescription(const QByteArray &backend) const;
 
     /**
-     *  Add an explicitly specified device to the list of known ones.
-     *   @param backend the device name+parameters of the backend to add
-     *   @param description a readable description for it
-     *   @param dontSave if @c true, don't save the new device in the permanent configuration
+     * Add an explicitly specified device to the list of known ones.
+     *
+     * @param backend the device name+parameters of the backend to add
+     * @param manufacturer the device's manufacturer name
+     * @param description a readable description for it
+     * @param type the device type name
+     * @param dontSave if @c true, don't save the new device in the permanent configuration
      */
     void addUserSpecifiedDevice(const QByteArray &backend,
+                                const QString &manufacturer,
                                 const QString &description,
                                 const QByteArray &type = "",
                                 bool dontSave = false);
 
 private:
     explicit ScanDevices();
-    ~ScanDevices();
+    ~ScanDevices() = default;
 
 private:
     QList<QByteArray> mScannerNames;

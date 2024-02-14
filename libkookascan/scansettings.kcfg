@@ -29,6 +29,8 @@
   <group name="User Specified Scanners">
     <entry name="UserDevices" key="Devices" type="StringList">
     </entry>
+    <entry name="UserManufacturers" key="Manufacturer" type="StringList">
+    </entry>
     <entry name="UserDescriptions" key="Description" type="StringList">
     </entry>
     <entry name="UserTypes" key="Type" type="StringList">
