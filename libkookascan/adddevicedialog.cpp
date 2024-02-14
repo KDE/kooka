@@ -33,9 +33,13 @@
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qcombobox.h>
+#include <qdesktopservices.h>
+#include <qurl.h>
 
 #include <klocalizedstring.h>
 #include <klineedit.h>
+
+#include "clickabletooltip.h"
 
 
 AddDeviceDialog::AddDeviceDialog(QWidget *parent, const QString &caption)
@@ -52,25 +56,18 @@ AddDeviceDialog::AddDeviceDialog(QWidget *parent, const QString &caption)
 
     QLabel *lab = new QLabel(xi18nc("@info",
                                     "If your scanner has not been automatically detected, you can specify it here. "
-                                    "The <interface>Scanner device name</interface> should be a backend name (with optional parameters) "
-                                    "that is understood by SANE, see <link url=\"man:/sane\">sane(7)</link> or "
-                                    "<link url=\"man:/sane-dll\">sane-dll(5)</link> for more information on available backends. "
-                                    "The <interface>Manufacturer</interface>, <interface>Type</interface> and <interface>Description</interface> "
-                                    "can be used to identify the scanner later."
+                                    "The <interface>Scanner device name</interface> is the SANE backend name. "
+                                    "The <interface>Manufacturer</interface>, <interface>Type</interface> and "
+                                    "<interface>Description</interface> can be used to identify the scanner later."
                                     "<nl/><nl/>"
-                                    "For the information that needs to be entered here, try to locate the device using the "
-                                    "<link url=\"man:/sane-find-scanner\">sane-find-scanner(1)</link> command. For a "
-                                    "USB or networked HP scanner using <link url=\"http://hplip.sourceforge.net/\">HPLIP</link>, "
-                                    "try using the <command>hp-probe</command> command to locate it, for example "
-                                    "<icode>hp-probe&nbsp;-b&nbsp;usb</icode> or <icode>hp-probe&nbsp;-b&nbsp;net</icode>. "
-                                    "If the scanner is found, then enter the device name displayed by these commands; note "
-                                    "that if using HPLIP then <icode>hp:</icode> needs to be replaced by <icode>hpaio:</icode>."
-                                    "<nl/><nl/>"
-                                    "If these commands fail to locate your scanner, then it may not be supported "
-                                    "by SANE. Check the SANE documentation for a "
-                                    "<link url=\"http://www.sane-project.org/sane-supported-devices.html\">list of supported devices</link>."), w);
+                                    "More information on "
+                                    "<link url=\"?1\">SANE backends</link>, "
+                                    "<link url=\"?2\">locating devices</link>, "
+                                    "<link url=\"?3\">HP scanners</link>, "
+                                    "<link url=\"?4\">device not found</link>."), w);
     lab->setWordWrap(true);
-    lab->setOpenExternalLinks(true);
+    lab->setOpenExternalLinks(false);
+    connect(lab, &QLabel::linkActivated, this, &AddDeviceDialog::slotLinkActivated);
     vl->addWidget(lab);
 
     vl->addSpacing(verticalSpacing());
@@ -108,7 +105,7 @@ AddDeviceDialog::AddDeviceDialog(QWidget *parent, const QString &caption)
     vl->addWidget(mDescEdit);
     lab->setBuddy(mDescEdit);
 
-    w->setMinimumSize(QSize(450, 420));
+    w->setMinimumSize(QSize(600, 330));
     setMainWidget(w);
 
     // This list from http://www.sane-project.org/html/doc011.html#s4.2.8
@@ -121,6 +118,57 @@ AddDeviceDialog::AddDeviceDialog(QWidget *parent, const QString &caption)
     // TODO: add icon using code from device selector dialogue
 
     slotTextChanged();
+}
+
+void AddDeviceDialog::slotLinkActivated(const QString &link)
+{
+    if (!link.startsWith('?'))				// not an internal help link
+    {
+        QDesktopServices::openUrl(QUrl(link));
+        return;
+    }
+
+    // XML entity 8209 is a non-breaking hyphen (no equivalent in HTML)
+    QString msg;
+
+    if (link=="?1")					// help on SANE backends
+    {
+        msg = xi18nc("@info",
+                     "The <interface>Scanner device name</interface> should be a backend name (with optional "
+                     "parameters) that is understood by SANE. See <link url=\"man:/sane\">sane(7)</link> or "
+                     "<link url=\"man:/sane-dll\">sane&#8209;dll(5)</link> for more information on available backends.");
+    }
+    else if (link=="?2")				// help on locating devices
+    {
+        msg = xi18nc("@info",
+                     "To find the information that needs to be entered here, try to locate the device using the "
+                     "<link url=\"man:/sane-find-scanner\">sane&#8209;find&#8209;scanner(1)</link> command for SCSI, "
+                     "USB or parallel port scanners, or the <link url=\"man:/scanimage\">scanimage(1)</link> "
+                     "command with the <icode>&#8209;L</icode> option for network scanners. "
+                     "If the scanner is found, then enter the device name displayed by these commands.");
+    }
+    else if (link=="?3")				// help on HP network devices
+    {
+        msg = xi18nc("@info",
+                     "For a USB or networked HP scanner using <link url=\"http://hplip.sourceforge.net/\">HPLIP</link>, "
+                     "try using the <command>hp&#8209;probe</command> command to locate it, for example "
+                     "<icode>hp&#8209;probe&nbsp;&#8209;b&nbsp;usb</icode> or <icode>hp&#8209;probe&nbsp;&#8209;b&nbsp;net</icode>. "
+                     "Note that if the scanner is found by HPLIP, then the device name <icode>hp:</icode> "
+                     "that it displays needs to be replaced by <icode>hpaio:</icode> for SANE.");
+    }
+    else if (link=="?4")				// help if scanner not found
+    {
+        msg = xi18nc("@info",
+                     "If these commands fail to locate your scanner, then it may not be supported "
+                     "by SANE. Check the SANE documentation for a "
+                     "<link url=\"http://www.sane-project.org/sane-supported-devices.html\">list of supported devices</link>.");
+    }
+
+    if (msg.isEmpty()) return;				// help link not recognised
+
+    QLabel *l = ClickableToolTip::showText(QCursor::pos(), msg);
+    l->setTextInteractionFlags(Qt::LinksAccessibleByMouse);
+    l->setOpenExternalLinks(true);
 }
 
 void AddDeviceDialog::slotTextChanged()

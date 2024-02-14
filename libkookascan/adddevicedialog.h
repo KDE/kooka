@@ -97,6 +97,7 @@ public:
 
 protected slots:
     void slotTextChanged();
+    void slotLinkActivated(const QString &link);
 
 private:
     KLineEdit *mDevEdit;

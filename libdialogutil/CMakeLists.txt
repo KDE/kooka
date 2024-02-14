@@ -27,6 +27,7 @@ set(dialogutil_SRCS
   dialogstatewatcher.cpp
   recentsaver.cpp
   imagefilter.cpp
+  clickabletooltip.cpp
 )
 ecm_qt_declare_logging_category(dialogutil_SRCS
   HEADER "libdialogutil_logging.h"
