@@ -69,7 +69,6 @@ extern "C"
 #include "scansizeselector.h"
 #include "kscanoption.h"
 #include "kscanoptset.h"
-#include "scanicons.h"
 #include "scandevices.h"
 #include "dialogbase.h"
 #include "libkookascan_logging.h"
@@ -300,22 +299,10 @@ QWidget *ScanParams::createScannerParams()
 
     // Mode setting
     so = mSaneDevice->getGuiElement(SANE_NAME_SCAN_MODE, frame);
-    if (so != nullptr) {
-        KScanCombo *cb = (KScanCombo *) so->widget();
-
-        // Set icons for all possible scan modes which the combo box may contain.
-        // Modes which the scanner does not support and hence which are not in
-        // the combo box don't matter.  See ScanIcons and KScanCombo::setIcon().
-        //
-        // The combo has already been populated with the current list of SANE values
-        // at the KScanOption initialisation (by KScanOption::updateList() calling
-        // KScanOption::getList() which reads the list values from SANE).  But
-        // this may not work properly if the list of scan modes changes at runtime!
-        const QList<QByteArray> scanModes = ScanIcons::self()->allModes();
-        for (const QByteArray &scanMode : scanModes)
-        {
-            cb->setIcon(ScanIcons::self()->icon(scanMode), scanMode.constData());
-        }
+    if (so != nullptr)
+    {
+        KScanCombo *cb = qobject_cast<KScanCombo *>(so->widget());
+        if (cb!=nullptr) cb->setUseModeIcons(true);
 
         connect(so, &KScanOption::guiChange, this, &ScanParams::slotOptionChanged);
         connect(so, &KScanOption::guiChange, this, &ScanParams::slotNewScanMode);

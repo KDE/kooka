@@ -445,7 +445,7 @@ void KScanDevice::applyOption(KScanOption *opt)
     {
 #ifdef DEBUG_RELOAD
         qCDebug(LIBKOOKASCAN_LOG) << "option" << opt->getName();
-#endif // DEBUG_APPLY
+#endif // DEBUG_RELOAD
         reload = opt->apply();				// apply this option
     }
 

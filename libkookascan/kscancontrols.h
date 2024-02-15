@@ -383,11 +383,19 @@ public:
      */
     void setIcon(const QIcon &pix, const char *ent);
 
+    /**
+     * Indicate the the combo box should display scan mode icons.
+     *
+     * @param on @c true if icons should be used
+     */
+    void setUseModeIcons(bool on);
+
 protected slots:
     void slotActivated(int i);
 
 private:
     QComboBox *mCombo;
+    bool mUseModeIcons;
 };
 
 /**

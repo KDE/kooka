@@ -49,6 +49,7 @@
 #include <kurlrequester.h>
 
 #include "imagefilter.h"
+#include "scanicons.h"
 #include "libkookascan_logging.h"
 
 
@@ -320,13 +321,18 @@ KScanCombo::KScanCombo(QWidget *parent, const QString &text)
 
     setFocusProxy(mCombo);
     setFocusPolicy(Qt::StrongFocus);
+
+    mUseModeIcons = false;
 }
 
 void KScanCombo::setList(const QList<QByteArray> &list)
 {
     // An optimisation, which may turn out to be not a valid one:
     // only update the combo box if the number of items has changed.
-    if (list.count()==mCombo->count()) return;
+    // If using scan mode icons, this assumption is not valid because
+    // the list icons need to be finalised when the options are
+    // reloaded after they have all been created.
+    if (!mUseModeIcons && list.count()==mCombo->count()) return;
     //qCDebug(LIBKOOKASCAN_LOG) << "count" << mCombo->count() << "->" << list.count() << "=" << list;
 
     const QString cur = text();				// get current setting
@@ -334,10 +340,15 @@ void KScanCombo::setList(const QList<QByteArray> &list)
     const bool bs = mCombo->blockSignals(true);
     mCombo->clear();
 
-    for (const QByteArray &item : list)
+    for (const QByteArray &item : qAsConst(list))
     {
         // See the KI18N Programmer's Guide, "Connecting to Catalogs in Library Code"
         mCombo->addItem(ki18n(item.constData()).toString("sane-backends"), item);
+        if (mUseModeIcons)				// set the scan mode icon
+        {
+            const int idx = mCombo->count()-1;
+            mCombo->setItemIcon(idx, ScanIcons::self()->icon(item));
+        }
     }
 
     mCombo->blockSignals(bs);
@@ -384,6 +395,12 @@ void KScanCombo::slotActivated(int i)
     emit settingChanged(i);
     emit settingChanged(textAt(i));
 }
+
+void KScanCombo::setUseModeIcons(bool on)
+{
+    mUseModeIcons = on;
+}
+
 
 //  KScanFileRequester - standard URL requester
 //  -------------------------------------------

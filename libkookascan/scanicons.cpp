@@ -30,8 +30,6 @@
 
 #include "scanicons.h"
 
-#include <qicon.h>
-
 #include <kiconloader.h>
 
 #include "libkookascan_logging.h"
@@ -66,8 +64,7 @@ ScanIcons::ScanIcons()
 
 ScanIcons *ScanIcons::self()
 {
-    static ScanIcons *instance = nullptr;
-    if (instance==nullptr) instance = new ScanIcons;
+    static ScanIcons *instance = new ScanIcons;
     return (instance);
 }
 
