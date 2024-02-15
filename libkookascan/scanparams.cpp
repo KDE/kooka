@@ -451,6 +451,10 @@ QWidget *ScanParams::createScannerParams()
             //qCDebug(LIBKOOKASCAN_LOG) << "creating" << (so->isCommonOption() ? "OTHER" : "ADVANCED") << "option" << opt;
             connect(so, &KScanOption::guiChange, this, &ScanParams::slotOptionChanged);
 
+            if (opt == SANE_NAME_PREVIEW) {		// no GUI for this option
+                continue;
+            }
+
             if (so->isCommonOption()) {
                 frame = otherFrame;
             } else {
