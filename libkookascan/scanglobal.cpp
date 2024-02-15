@@ -40,6 +40,9 @@
 
 extern "C" {
 #include <sane/sane.h>
+#ifdef HAVE_TIFF
+#include <tiffvers.h>
+#endif
 }
 
 
@@ -137,6 +140,26 @@ bool ScanGlobal::init()
                                               .arg(SANE_VERSION_BUILD(vers)),
                            "http://sane-project.org",				// webAddress
                            KAboutLicense::GPL);					// licenseKey
+#ifdef HAVE_TIFF
+        about.addComponent(i18n("LibTIFF"),
+                           i18n("TIFF image format library"),
+                           QString("%1.%2.%3").arg(TIFFLIB_MAJOR_VERSION)
+                                              .arg(TIFFLIB_MINOR_VERSION)
+                                              .arg(TIFFLIB_MICRO_VERSION),
+                           "https://libtiff.gitlab.io/libtiff/",
+                           // Licence text is at https://libtiff.gitlab.io/libtiff/project/license.html
+                           KAboutLicense::Custom);
+#endif
+#ifdef HAVE_LIBPAPER
+        about.addComponent(i18n("libpaper"),
+                           i18n("Paper size configuration library"),
+                           // The library version does not seem to be available.
+                           "",
+                           "https://github.com/rrthomas/libpaper",
+                           // Some supporting executables are under GPLv2 or GPLv3,
+                           // but Kooka does not use or link to those.
+                           KAboutLicense::LGPL_V2_1);
+#endif
         KAboutData::setApplicationData(about);
 
         mSaneInitDone = true;
