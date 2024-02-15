@@ -54,6 +54,7 @@
 #include <kled.h>
 #include <kmessagebox.h>
 #include <kmessagewidget.h>
+#include <kiconloader.h>
 
 extern "C"
 {
@@ -69,6 +70,7 @@ extern "C"
 #include "kscanoption.h"
 #include "kscanoptset.h"
 #include "scanicons.h"
+#include "scandevices.h"
 #include "dialogbase.h"
 #include "libkookascan_logging.h"
 
@@ -116,7 +118,6 @@ bool ScanParams::connectDevice(KScanDevice *newScanDevice, bool galleryMode)
 {
     QGridLayout *lay = new QGridLayout(this);
     lay->setMargin(0);
-    lay->setColumnStretch(0, 9);
 
     if (newScanDevice == nullptr) {            // no scanner device
         qCDebug(LIBKOOKASCAN_LOG) << "No scan device, gallery=" << galleryMode;
@@ -131,30 +132,54 @@ bool ScanParams::connectDevice(KScanDevice *newScanDevice, bool galleryMode)
     // TOTO: port/update
     adf = ADF_OFF;
 #endif
-    QLabel *lab = new QLabel(xi18nc("@info", "<title>Scanner&nbsp;Settings</title>"), this);
-    lay->addWidget(lab, 0, 0, Qt::AlignLeft);
+
+    QLabel *lab = new QLabel(this);
+    lab->setPixmap(KIconLoader::global()->loadIcon(ScanDevices::self()->deviceIconName(newScanDevice->scannerBackendName()),
+                                                   KIconLoader::NoGroup,
+                                                   KIconLoader::SizeMedium));
+    lay->addWidget(lab, 0, 0, 2, 1, Qt::AlignLeft);
+
+    lab = new QLabel(xi18nc("@info", "<title>Scanner&nbsp;Settings</title>"), this);
+    lay->addWidget(lab, 0, 1, 1, 2, Qt::AlignLeft);
 
     mLed = new KLed(this);
     mLed->setState(KLed::Off);
     mLed->setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed));
-    lay->addWidget(mLed, 0, 1, Qt::AlignRight);
+    lay->addWidget(mLed, 0, 3, Qt::AlignRight);
 
     lab = new QLabel(mSaneDevice->scannerDescription(), this);
-    lay->addWidget(lab, 1, 0, 1, 2, Qt::AlignLeft);
+    lay->addWidget(lab, 1, 1, 1, 2, Qt::AlignLeft);
 
-    /* load the startup scanoptions */
+    lay->setRowMinimumHeight(2, 2*DialogBase::verticalSpacing());
 
     /* Now create Widgets for the important scan settings */
     QWidget *sv = createScannerParams();
-    lay->addWidget(sv, 3, 0, 1, 2);
+    lay->addWidget(sv, 3, 0, 1, -1);
+
+    lay->setRowMinimumHeight(4, DialogBase::verticalSpacing());
+
+    /* Create the Scan Buttons */
+    QPushButton *pb = new QPushButton(QIcon::fromTheme("preview"), i18n("Pre&view"), this);
+    pb->setToolTip(i18n("Start a preview scan and show the preview image"));
+    pb->setMinimumWidth(100);
+    connect(pb, &QPushButton::clicked, this, &ScanParams::slotAcquirePreview);
+    lay->addWidget(pb, 5, 0, 1, 2, Qt::AlignLeft);
+
+    pb = new QPushButton(QIcon::fromTheme("scan"), i18n("Star&t Scan"), this);
+    pb->setToolTip(i18n("Start a scan and save the scanned image"));
+    pb->setMinimumWidth(100);
+    connect(pb, &QPushButton::clicked, this, &ScanParams::slotStartScan);
+    lay->addWidget(pb, 5, 2, 1, 2, Qt::AlignRight);
+
     lay->setRowStretch(3, 9);
+    lay->setColumnStretch(2, 9);
 
     // Load the startup options
+    //
     // TODO: check whether the saved scanner options apply to the current scanner?
     // They may be for a completely different one...
     // Or update KScanDevice and here to save/load the startup options
     // on a per-scanner basis.
-
     qCDebug(LIBKOOKASCAN_LOG) << "looking for startup options";
     KScanOptSet startupOptions(KScanOptSet::startupSetName());
     if (startupOptions.loadConfig(mSaneDevice->scannerBackendName()))
@@ -168,22 +193,9 @@ bool ScanParams::connectDevice(KScanDevice *newScanDevice, bool galleryMode)
     mSaneDevice->reloadAllOptions();
 
     // Send the current settings to the previewer
-    initStartupArea(startupOptions.isEmpty());		// signal newCustomScanSize()
-    slotNewScanMode();					// signal scanModeChanged()
+    initStartupArea(startupOptions.isEmpty());		// signal newCustomScanSize
+    slotNewScanMode();					// signal scanModeChanged
     slotNewResolution(nullptr);				// signal scanResolutionChanged
-
-    /* Create the Scan Buttons */
-    QPushButton *pb = new QPushButton(QIcon::fromTheme("preview"), i18n("Pre&view"), this);
-    pb->setToolTip(i18n("Start a preview scan and show the preview image"));
-    pb->setMinimumWidth(100);
-    connect(pb, &QPushButton::clicked, this, &ScanParams::slotAcquirePreview);
-    lay->addWidget(pb, 5, 0, Qt::AlignLeft);
-
-    pb = new QPushButton(QIcon::fromTheme("scan"), i18n("Star&t Scan"), this);
-    pb->setToolTip(i18n("Start a scan and save the scanned image"));
-    pb->setMinimumWidth(100);
-    connect(pb, &QPushButton::clicked, this, &ScanParams::slotStartScan);
-    lay->addWidget(pb, 5, 1, Qt::AlignRight);
 
     /* Initialise the progress dialog */
     mProgressDialog = new QProgressDialog(QString(), i18n("Stop"), 0, 100, nullptr);
