@@ -38,12 +38,14 @@
 #include <qbuttongroup.h>
 #include <qgroupbox.h>
 #include <qcombobox.h>
+#include <qguiapplication.h>
 
 #include <klocalizedstring.h>
 #include <kmessagebox.h>
 #include <kurlrequester.h>
 #include <kseparator.h>
 #include <kconfigskeleton.h>
+#include <kmessagewidget.h>
 
 #include "scansettings.h"
 #include "imagefilter.h"
@@ -71,7 +73,7 @@ KookaPrefsPage::KookaPrefsPage(KPageDialog *parent)
 KookaGeneralPage::KookaGeneralPage(KPageDialog *parent)
     : KookaPrefsPage(parent)
 {
-    mLayout->addStretch(9);             // push down to bottom
+    mLayout->addStretch(9);				// push down to bottom
 
     QGroupBox *gb = new QGroupBox(i18n("Hidden Messages"), this);
     QGridLayout *gl = new QGridLayout(gb);
@@ -118,6 +120,15 @@ KookaStartupPage::KookaStartupPage(KPageDialog *parent)
     mNetQueryCheck->setToolTip(item->toolTip());
     mLayout->addWidget(mNetQueryCheck);
 
+    /* Use network proxy settings (Checkbox) */
+    item = ScanSettings::self()->startupUseProxyItem();
+    Q_ASSERT(item!=nullptr);
+    mNetProxyCheck = new QCheckBox(item->label(), this);
+    mNetProxyCheck->setToolTip(item->toolTip());
+    mLayout->addWidget(mNetProxyCheck);
+
+    mLayout->addSpacing(2*DialogBase::verticalSpacing());
+
     /* Show scanner selection box on startup (Checkbox) */
     item = ScanSettings::self()->startupSkipAskItem();
     Q_ASSERT(item!=nullptr);
@@ -132,6 +143,16 @@ KookaStartupPage::KookaStartupPage(KPageDialog *parent)
     mRestoreImageCheck->setToolTip(item->toolTip());
     mLayout->addWidget(mRestoreImageCheck);
 
+    mLayout->addStretch(9);				// push down to bottom
+
+    KMessageWidget *mw = new KMessageWidget(this);
+    mw->setCloseButtonVisible(false);
+    mw->setMessageType(KMessageWidget::Information);
+    mw->setWordWrap(true);
+    mw->setText(i18n("%1 must be restarted for these settings to take effect.", QGuiApplication::applicationDisplayName()));
+    mw->setIcon(QIcon::fromTheme("dialog-information"));
+    mLayout->addWidget(mw);
+
     applySettings();
 }
 
@@ -139,6 +160,7 @@ void KookaStartupPage::saveSettings()
 {
     ScanSettings::setStartupSkipAsk(!mSelectScannerCheck->isChecked());
     ScanSettings::setStartupOnlyLocal(!mNetQueryCheck->isChecked());
+    ScanSettings::setStartupUseProxy(mNetProxyCheck->isChecked());
     ScanSettings::self()->save();
 
     KookaSettings::setStartupReadImage(mRestoreImageCheck->isChecked());
@@ -149,6 +171,7 @@ void KookaStartupPage::defaultSettings()
 {
     ScanSettings::self()->startupSkipAskItem()->setDefault();
     ScanSettings::self()->startupOnlyLocalItem()->setDefault();
+    ScanSettings::self()->startupUseProxyItem()->setDefault();
     KookaSettings::self()->startupReadImageItem()->setDefault();
     applySettings();
 }
@@ -158,6 +181,7 @@ void KookaStartupPage::applySettings()
 {
     mSelectScannerCheck->setChecked(!ScanSettings::startupSkipAsk());
     mNetQueryCheck->setChecked(!ScanSettings::startupOnlyLocal());
+    mNetProxyCheck->setChecked(ScanSettings::startupUseProxy());
     mRestoreImageCheck->setChecked(KookaSettings::startupReadImage());
 }
 

@@ -96,6 +96,7 @@ private:
     void applySettings();
 
     QCheckBox *mNetQueryCheck;
+    QCheckBox *mNetProxyCheck;
     QCheckBox *mSelectScannerCheck;
     QCheckBox *mRestoreImageCheck;
 };

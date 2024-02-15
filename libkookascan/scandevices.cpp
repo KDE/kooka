@@ -54,12 +54,18 @@ ScanDevices::ScanDevices()
         return;    // do sane_init() if necessary
     }
 
-    bool netaccess = ScanSettings::startupOnlyLocal();
+    // Be ready to Implement the proxy option before querying for any scanners
+    mUseNetworkProxy = ScanSettings::startupUseProxy();
+    qCDebug(LIBKOOKASCAN_LOG) << "Use network proxy?" << mUseNetworkProxy;
+
+    const bool netaccess = ScanSettings::startupOnlyLocal();
     qCDebug(LIBKOOKASCAN_LOG) << "Query for network scanners?" << netaccess;
 
     SANE_Device const **dev_list = nullptr;
+    deactivateNetworkProxy();
     SANE_Status status = sane_get_devices(&dev_list, (netaccess ? SANE_TRUE : SANE_FALSE));
-    if (status != SANE_STATUS_GOOD)
+    reactivateNetworkProxy();
+    if (status!=SANE_STATUS_GOOD)
     {
         qCWarning(LIBKOOKASCAN_LOG) << "sane_get_devices() failed, status" << status;
         return;						// no point carrying on
@@ -236,4 +242,44 @@ QString ScanDevices::deviceIconName(const QByteArray &backend)
 QString ScanDevices::typeIconName(const QByteArray &devType)
 {
     return (mTypeConfig->group("Types").readEntry(devType, ""));
+}
+
+
+void ScanDevices::deactivateNetworkProxy()
+{
+    if (mUseNetworkProxy) return;			// want to use proxy, do nothing
+    qCDebug(LIBKOOKASCAN_LOG);
+
+    // Remove the proxy variables from the process environment.
+    //
+    // Doing this globally on startup causes a problem in that any processes
+    // spawned from the main Kooka process, including any application invoked
+    // by the scan destination plugin or "Open With", will also not have any
+    // proxy settings.  Therefore the variables are not changed in the environment
+    // until a SANE operation which will need network access is due to be
+    // performed.  At this point the original settings of these variables are
+    // read and saved, before they are cleared.  The saved settings are restored
+    // afterwards.
+
+    mSavedHttpProxy = qgetenv("http_proxy");
+    mSavedHttpsProxy = qgetenv("https_proxy");
+    mSavedFtpProxy = qgetenv("ftp_proxy");
+    mSavedNoProxy = qgetenv("no_proxy");
+
+    qunsetenv("http_proxy");
+    qunsetenv("https_proxy");
+    qunsetenv("ftp_proxy");
+    qunsetenv("no_proxy");
+}
+
+
+void ScanDevices::reactivateNetworkProxy()
+{
+    if (mUseNetworkProxy) return;			// want to use proxy, do nothing
+    qCDebug(LIBKOOKASCAN_LOG);
+
+    qputenv("http_proxy", mSavedHttpProxy);
+    qputenv("https_proxy", mSavedHttpsProxy);
+    qputenv("ftp_proxy", mSavedFtpProxy);
+    qputenv("no_proxy", mSavedNoProxy);
 }

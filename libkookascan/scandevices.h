@@ -76,6 +76,9 @@ public:
     QString deviceIconName(const QByteArray &backend);
     QString typeIconName(const QByteArray &devType);
 
+    void deactivateNetworkProxy();
+    void reactivateNetworkProxy();
+
 private:
     explicit ScanDevices();
     ~ScanDevices() = default;
@@ -84,6 +87,12 @@ private:
     QList<QByteArray> mScannerNames;
     QHash<QByteArray, const SANE_Device *> mScannerDevices;
     KConfig *mTypeConfig;
+
+    bool mUseNetworkProxy;
+    QByteArray mSavedHttpProxy;
+    QByteArray mSavedHttpsProxy;
+    QByteArray mSavedFtpProxy;
+    QByteArray mSavedNoProxy;
 };
 
 #endif                          // SCANDEVICES_H

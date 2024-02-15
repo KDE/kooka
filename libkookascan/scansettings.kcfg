@@ -14,6 +14,12 @@
       <default>true</default>
     </entry>
 
+    <entry name="StartupUseProxy" key="UseNetworkProxy" type="Bool">
+      <label>Use the system proxy settings to access network scanners</label>
+      <tooltip>&lt;div&gt;Check this if you want to use the standard system proxy settings to access network scanners.&lt;br/&gt;&lt;br/&gt;Note that some SANE backends (for example 'escl') may not work properly through a proxy.&lt;/div&gt;</tooltip>
+      <default>false</default>
+    </entry>
+
     <entry name="StartupScanDevice" key="ScanDevice" type="String">
     </entry>
 

@@ -218,7 +218,10 @@ KScanDevice::Status KScanDevice::openDevice(const QByteArray &backend)
     mScannerName = backend;				// set now for authentication
     QApplication::setOverrideCursor(Qt::WaitCursor);	// potential lengthy operation
     ScanGlobal::self()->setScanDevice(this);		// for possible authentication
+
+    ScanDevices::self()->deactivateNetworkProxy();
     mSaneStatus = sane_open(backend.constData(), &mScannerHandle);
+    ScanDevices::self()->reactivateNetworkProxy();
 
     if (mSaneStatus==SANE_STATUS_ACCESS_DENIED)		// authentication failed?
     {
@@ -912,8 +915,7 @@ KScanDevice::Status KScanDevice::acquireData(bool isPreview)
                 if (fmt==ScanImage::None)		// scan format not recognised?
                 {
                     stat = KScanDevice::ParamError;	// no point starting scan
-                    scanFinished(stat);			// clean up anything started
-                    return (stat);
+                    goto finish2;;			// clean up anything started
                 }
             }
         }
@@ -927,6 +929,8 @@ KScanDevice::Status KScanDevice::acquireData(bool isPreview)
     else fmt = ScanImage::Preview;			// special to indicate preview
     emit sigScanStart(fmt);				// now tell the application
 
+    ScanDevices::self()->deactivateNetworkProxy();
+
     // The application may have prompted for a file name.
     // If the user cancelled that, it will have called our
     // slotStopScanning() which sets mScanningState to
@@ -936,8 +940,7 @@ KScanDevice::Status KScanDevice::acquireData(bool isPreview)
     {							// user cancelled save dialogue
         qCDebug(LIBKOOKASCAN_LOG) << "user cancelled before start";
         stat = KScanDevice::Cancelled;
-        scanFinished(stat);				// clean up anything started
-        return (stat);
+        goto finish;					// clean up anything started
     }
 
     while (true)					// loop while frames available
@@ -1023,8 +1026,7 @@ KScanDevice::Status KScanDevice::acquireData(bool isPreview)
         {
             // Scanning could not start - give up now
             qCDebug(LIBKOOKASCAN_LOG) << "Scanning failed to start, status" << stat;
-            scanFinished(stat);				// clean up anything started
-            return (stat);
+            goto finish;;				// clean up anything started
         }
 
         if (mScanningState==KScanDevice::ScanStarting)	// first time through loop
@@ -1100,6 +1102,9 @@ KScanDevice::Status KScanDevice::acquireData(bool isPreview)
     qCDebug(LIBKOOKASCAN_LOG) << "Scan read" << mBytesRead << "bytes in"
                               << mBlocksRead << "blocks," << frames << "frames, status" << stat;
 
+finish:
+    ScanDevices::self()->reactivateNetworkProxy();
+finish2:
     scanFinished(stat);					// scan is now finished
     return (stat);
 }
@@ -1362,7 +1367,9 @@ void KScanDevice::scanFinished(KScanDevice::Status status)
     // TODO: Should this be called here, even for normal scan termination?
     // It seems to have side effects, such as feeding through anything remaining
     // in the ADF even if only one page has been requested to be scanned.
+    ScanDevices::self()->deactivateNetworkProxy();
     sane_cancel(mScannerHandle);
+    ScanDevices::self()->reactivateNetworkProxy();
 
     // Tell the application that the scan has finished.
     emit sigScanFinished(status);
