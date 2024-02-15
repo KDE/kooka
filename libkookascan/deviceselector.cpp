@@ -189,5 +189,6 @@ void DeviceSelector::setScanSources(const QList<QByteArray> &backends)
 
     if (defItem != nullptr) {
         defItem->setSelected(true);
+        mListBox->scrollToItem(defItem);
     }
 }
