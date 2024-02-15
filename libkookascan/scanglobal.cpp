@@ -31,6 +31,7 @@
 #include "scanglobal.h"
 
 #include <klocalizedstring.h>
+#include <kaboutdata.h>
 
 #include "kscandevice.h"
 #include "scansettings.h"
@@ -118,11 +119,26 @@ bool ScanGlobal::init()
     }
 
     qCDebug(LIBKOOKASCAN_LOG) << "calling sane_init()";
-    SANE_Status status = sane_init(nullptr, &authCallback);
+    SANE_Int vers;
+    SANE_Status status = sane_init(&vers, &authCallback);
     if (status != SANE_STATUS_GOOD) {
         mSaneInitError = true;
         qCWarning(LIBKOOKASCAN_LOG) << "sane_init() failed, status" << status;
     } else {
+        qCDebug(LIBKOOKASCAN_LOG) << "sane_init() done, version" << qPrintable(QString("%1").arg(vers, 6, 16, QLatin1Char('0')));
+
+        // Add the SANE component information to the application data,
+        // now that its version is available.
+        KAboutData about = KAboutData::applicationData();
+        about.addComponent(i18n("SANE - Scanner Access Now Easy"),		// name
+                           i18n("Scanner access and driver library"),		// description
+                           QString("%1.%2.%3").arg(SANE_VERSION_MAJOR(vers))	// version
+                                              .arg(SANE_VERSION_MINOR(vers))
+                                              .arg(SANE_VERSION_BUILD(vers)),
+                           "http://sane-project.org",				// webAddress
+                           KAboutLicense::GPL);					// licenseKey
+        KAboutData::setApplicationData(about);
+
         mSaneInitDone = true;
     }
 
