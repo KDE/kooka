@@ -302,11 +302,11 @@ QSize KScanDevice::getMaxScanSize()
 
     KScanOption *so_w = getOption(SANE_NAME_SCAN_BR_X);
     so_w->getRange(&min, &max);
-    s.setWidth(static_cast<int>(max));
+    s.setWidth(qRound(max));
 
     KScanOption *so_h = getOption(SANE_NAME_SCAN_BR_Y);
     so_h->getRange(&min, &max);
-    s.setHeight(static_cast<int>(max));
+    s.setHeight(qRound(max));
 
     return (s);
 }

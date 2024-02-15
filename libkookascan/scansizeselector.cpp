@@ -76,12 +76,12 @@ ScanSizeSelector::ScanSizeSelector(QWidget *parent, const QSize &bedSize)
 {
     qCDebug(LIBKOOKASCAN_LOG) << "bed size" << bedSize;
 
-    bedWidth = bedSize.width();
-    bedHeight = bedSize.height();
+    m_bedWidth = bedSize.width();
+    m_bedHeight = bedSize.height();
 
-    if (sizes == nullptr) {                // initialise paper data
+    if (sizes == nullptr) {				// initialise paper data
 #ifdef HAVE_LIBPAPER
-        paperinit();                    // start to access library
+        paperinit();					// start to access library
 
         PaperSize ps;
         for (const struct paper *p = paperfirst(); p != nullptr; p = papernext(p)) {
@@ -102,13 +102,13 @@ ScanSizeSelector::ScanSizeSelector(QWidget *parent, const QSize &bedSize)
         }
         qCDebug(LIBKOOKASCAN_LOG) << "got" << papers.size() << "paper sizes from libpaper";
 
-        ps.name = nullptr;                 // finish with null terminator
+        ps.name = nullptr;				// finish with null terminator
         papers.append(ps);
 
-        paperdone();                    // finished accessing library
-        sizes = papers.data();              // set pointer to data
+        paperdone();					// finished accessing library
+        sizes = papers.data();				// set pointer to data
 #else
-        sizes = defaultSizes;               // set pointer to defaults
+        sizes = defaultSizes;				// set pointer to defaults
 #endif
     }
 
@@ -125,7 +125,7 @@ ScanSizeSelector::ScanSizeSelector(QWidget *parent, const QSize &bedSize)
     m_sizeCb->addItem(i18n("(No selection)"));		// index 1
     for (int i = 0; sizes[i].name != nullptr; ++i) {	// index 2 and upwards
         // only those that will fit
-        if (sizes[i].width > bedWidth || sizes[i].height > bedHeight) {
+        if (sizes[i].width > m_bedWidth || sizes[i].height > m_bedHeight) {
             continue;
         }
         m_sizeCb->addItem(sizes[i].name);
@@ -159,10 +159,6 @@ ScanSizeSelector::ScanSizeSelector(QWidget *parent, const QSize &bedSize)
     setToolTip(i18n("Set the orientation for a preset size of the scanned area"));
 }
 
-ScanSizeSelector::~ScanSizeSelector()
-{
-}
-
 static const PaperSize *findPaperSize(const QString &sizename)
 {
     for (int i = 0; sizes[i].name != nullptr; ++i) {   // search for that size
@@ -176,8 +172,8 @@ static const PaperSize *findPaperSize(const QString &sizename)
 
 void ScanSizeSelector::implementPortraitLandscape(const PaperSize *sp)
 {
-    m_portraitRb->setEnabled(sp->width <= bedWidth && sp->height <= bedHeight);
-    m_landscapeRb->setEnabled(sp->width <= bedHeight && sp->height <= bedWidth);
+    m_portraitRb->setEnabled(sp->width <= m_bedWidth && sp->height <= m_bedHeight);
+    m_landscapeRb->setEnabled(sp->width <= m_bedHeight && sp->height <= m_bedWidth);
 
     if (!m_portraitRb->isChecked() && !m_landscapeRb->isChecked()) {
         m_portraitRb->setChecked(true);

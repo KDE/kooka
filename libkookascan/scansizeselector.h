@@ -49,7 +49,7 @@ class KOOKASCAN_EXPORT ScanSizeSelector : public QFrame
 
 public:
     explicit ScanSizeSelector(QWidget *parent, const QSize &bedSize);
-    ~ScanSizeSelector();
+    virtual ~ScanSizeSelector() = default;
 
     void selectCustomSize(const QRect &rect);
     void selectSize(const QRect &rect);
@@ -66,7 +66,7 @@ private:
     void implementPortraitLandscape(const PaperSize *sp);
     void implementSizeSetting(const PaperSize *sp);
 
-    int bedWidth, bedHeight;
+    int m_bedWidth, m_bedHeight;
 
     QRect m_customSize;
     int m_prevSelected;
