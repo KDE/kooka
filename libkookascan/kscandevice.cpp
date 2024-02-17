@@ -320,19 +320,21 @@ void KScanDevice::getCurrentFormat(int *format, int *depth)
 }
 
 
-bool KScanDevice::isAdfScan()
+void KScanDevice::checkAdf()
 {
     const KScanOption *so = getOption(SANE_NAME_SCAN_SOURCE, false);
-    if (so==nullptr) return (false);			// no source option, assume no ADF
-
-    // There does not seem to be any "official" SANE way to find out whether
-    // the scan source is an ADF, so this has to be done by looking at the
-    // string value of the option.  Not sure whether this will work properly
-    // if SANE is I18N'ed.
-    const QString val = so->get();
-    return (val.contains("ADF", Qt::CaseSensitive) ||
-            val.startsWith("Auto", Qt::CaseInsensitive) ||
-            val.contains("Feeder", Qt::CaseInsensitive));
+    if (so==nullptr) mScanningAdf = false;		// no source option, assume no ADF
+    else						// there is a source option
+    {
+        // There does not seem to be any "official" SANE way to find out whether
+        // the scan source is an ADF, so this has to be done by looking at the
+        // string value of the option.  Not sure whether this will work properly
+        // if SANE is I18N'ed.
+        const QString val = so->get();
+        mScanningAdf = (val.contains("ADF", Qt::CaseSensitive) ||
+                        val.startsWith("Auto", Qt::CaseInsensitive) ||
+                        val.contains("Feeder", Qt::CaseInsensitive));
+    }
 }
 
 
@@ -500,6 +502,19 @@ void KScanDevice::reloadAllOptions()
     qCDebug(LIBKOOKASCAN_LOG);
 #endif // DEBUG_RELOAD
     applyOption(nullptr);
+}
+
+
+void KScanDevice::applyAllOptions(bool prio)
+{
+    for (OptionHash::const_iterator it = mCreatedOptions.constBegin();
+         it!=mCreatedOptions.constEnd(); ++it)
+    {
+            KScanOption *so = it.value();
+            if (!so->isGuiElement()) continue;
+            if (so->isPriorityOption() ^ prio) continue;
+            if (so->isActive() && so->isSoftwareSettable()) so->apply();
+    }
 }
 
 
@@ -687,6 +702,9 @@ case ScanImage::HighColour:	fmt = QImage::Format_RGB32;		break;
 
 KScanDevice::Status KScanDevice::acquirePreview(bool forceGray, int dpi)
 {
+    checkAdf();						// check whether source is ADF
+    // TODO: prompt if ADF in use
+
     KScanOptSet savedOptions("SavedForPreview");
 
     /* set Preview = ON if exists */
@@ -787,25 +805,14 @@ KScanDevice::Status KScanDevice::acquirePreview(bool forceGray, int dpi)
 }
 
 
-void KScanDevice::applyAllOptions(bool prio)
-{
-    for (OptionHash::const_iterator it = mCreatedOptions.constBegin();
-         it!=mCreatedOptions.constEnd(); ++it)
-    {
-            KScanOption *so = it.value();
-            if (!so->isGuiElement()) continue;
-            if (so->isPriorityOption() ^ prio) continue;
-            if (so->isActive() && so->isSoftwareSettable()) so->apply();
-    }
-}
-
-
 /* Starts scanning
  *  depending on if a filename is given or not, the function tries to open
  *  the file using the Qt-Image-IO or really scans the image.
  */
 KScanDevice::Status KScanDevice::acquireScan(const QString &filename)
 {
+    checkAdf();						// check whether source is ADF
+
     if (filename.isEmpty())				// real scan
     {
         applyAllOptions(true);				// apply priority options
@@ -839,8 +846,7 @@ KScanDevice::Status KScanDevice::acquireScan(const QString &filename)
         }
 
         bool first = true;
-        const bool isAdf = isAdfScan();
-        if (isAdf) qCDebug(LIBKOOKASCAN_LOG) << "Starting ADF loop";
+        if (mScanningAdf) qCDebug(LIBKOOKASCAN_LOG) << "Starting ADF loop";
 
         while (true)
         {
@@ -867,7 +873,7 @@ KScanDevice::Status KScanDevice::acquireScan(const QString &filename)
             // as the scan carriage returns to its rest position.  This does not
             // affect the scan that has just been completed, but the error will be
             // reported to the user.
-            if (!isAdf) return (stat);
+            if (!mScanningAdf) return (stat);
 
             // Otherwise, just note that this is now not the first time through
             // the ADF loop.
@@ -922,8 +928,8 @@ case SANE_FRAME_GREEN:	formatName = "GREEN";	break;
 case SANE_FRAME_BLUE:	formatName = "BLUE";	break;
     }
 
-    qCDebug(LIBKOOKASCAN_LOG) << msg.toLatin1().constData();
-    qCDebug(LIBKOOKASCAN_LOG) << "  format:          " << p->format << "=" << formatName.constData();
+    qCDebug(LIBKOOKASCAN_LOG) << qPrintable(msg);
+    qCDebug(LIBKOOKASCAN_LOG) << "  format:          " << p->format << "=" << qPrintable(formatName);
     qCDebug(LIBKOOKASCAN_LOG) << "  last_frame:      " << p->last_frame;
     qCDebug(LIBKOOKASCAN_LOG) << "  lines:           " << p->lines;
     qCDebug(LIBKOOKASCAN_LOG) << "  depth:           " << p->depth;
@@ -933,13 +939,32 @@ case SANE_FRAME_BLUE:	formatName = "BLUE";	break;
 #endif // DEBUG_PARAMS
 
 
+KScanDevice::Status KScanDevice::startAcquire(ScanImage::ImageType fmt)
+{
+    // First tell the application that a scan is about to start.
+    if (mScanningState==KScanDevice::ScanStarting) emit sigScanStart(fmt);
+
+    // In response to the above (synchronous) signal, the application
+    // may have prompted for a file name.  If the user cancels that,
+    // it will have called our slotStopScanning() which sets mScanningState
+    // to KScanDevice::ScanStopNow.  If that is the case, then finish here.
+    if (mScanningState==KScanDevice::ScanStopNow)
+    {
+        qCDebug(LIBKOOKASCAN_LOG) << "user cancelled before start";
+        return (KScanDevice::Cancelled);
+    }
+
+    return (KScanDevice::Ok);
+}
+
+
 KScanDevice::Status KScanDevice::acquireData(bool isPreview)
 {
     KScanDevice::Status stat = KScanDevice::Ok;
     int frames = 0;
 
 #ifdef DEBUG_OPTIONS
-    showOptions();					// dump the current noptions
+    showOptions();					// dump the current options
 #endif
 
     mScanningPreview = isPreview;
@@ -978,26 +1003,31 @@ KScanDevice::Status KScanDevice::acquireData(bool isPreview)
         }
     }
     else fmt = ScanImage::Preview;			// special to indicate preview
-    emit sigScanStart(fmt);				// now tell the application
 
-    // The application may have prompted for a file name.
-    // If the user cancelled that, it will have called our
-    // slotStopScanning() which sets mScanningState to
-    // KScanDevice::ScanStopNow.  If that is the case,
-    // then finish here.
-    if (mScanningState==KScanDevice::ScanStopNow)
-    {							// user cancelled save dialogue
-        qCDebug(LIBKOOKASCAN_LOG) << "user cancelled before start";
-        stat = KScanDevice::Cancelled;
-        goto finish;					// clean up anything started
+    // If the scan is from the ADF, then it is first necessary to do the
+    // sane_start() in order to detect the "ADF empty" status.  However, doing
+    // this in all cases (including non-ADF scans) introduces a significant GUI
+    // delay before asking for the file name and/or type, if the user has chosen
+    // to do so before scanning.
+    //
+    // Therefore, if the scan is not from the ADF, then prompt here before doing
+    // the sane_start().  If the scan is from the ADF, then delay asking until
+    // sane_start() has been done and we know that the ADF is not empty.
+    //
+    // This is necessary because doing sane_start() seems to be the only way
+    // to read the ADF status.
+    if (!mScanningAdf)
+    {
+        stat = startAcquire(fmt);
+        if (stat!=KScanDevice::Ok) goto finish;
     }
 
     ScanDevices::self()->deactivateNetworkProxy();
     while (true)					// loop while frames available
     {
         QApplication::setOverrideCursor(Qt::WaitCursor);
-							// potential lengthy operation
-        mSaneStatus = sane_start(mScannerHandle);
+        mSaneStatus = sane_start(mScannerHandle);	// potential lengthy operation
+        QApplication::restoreOverrideCursor();
 
         if (mSaneStatus==SANE_STATUS_NO_DOCS)
         {
@@ -1014,6 +1044,16 @@ KScanDevice::Status KScanDevice::acquireData(bool isPreview)
 
         if (mSaneStatus==SANE_STATUS_GOOD)
         {
+            if (mScanningAdf)
+            {
+                // If the ADF is empty, that will have been detected above.
+                // Therefore here we know that the ADF is not empty and so the
+                // application can now ask for a file name and/or type if
+                // necessary.
+                stat = startAcquire(fmt);
+                if (stat!=KScanDevice::Ok) goto finish;
+            }
+
             mSaneStatus = sane_get_parameters(mScannerHandle, &mSaneParameters);
             if (mSaneStatus==SANE_STATUS_GOOD)
             {
@@ -1044,7 +1084,6 @@ KScanDevice::Status KScanDevice::acquireData(bool isPreview)
             stat = KScanDevice::OpenDevice;
             qCDebug(LIBKOOKASCAN_LOG) << "sane_start() error" << lastSaneErrorMessage();
         }
-        QApplication::restoreOverrideCursor();
 
         if (stat==KScanDevice::Ok && mScanningState==KScanDevice::ScanStarting)
         {						// first time through loop
@@ -1139,9 +1178,8 @@ KScanDevice::Status KScanDevice::acquireData(bool isPreview)
         }
 
         ++frames;					// count up this frame
-							// more frames to do
-        if (mScanningState==KScanDevice::ScanNextFrame) continue;
-        break;						// scan done, exit loop
+							// no more frames to do, exit loop
+        if (mScanningState!=KScanDevice::ScanNextFrame) break;
     }
     ScanDevices::self()->reactivateNetworkProxy();
 

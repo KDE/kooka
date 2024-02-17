@@ -583,7 +583,9 @@ private:
     KScanDevice::Status createNewImage(const SANE_Parameters *p);
 
     KScanDevice::Status acquireData(bool isPreview);
+    KScanDevice::Status startAcquire(ScanImage::ImageType fmt);
     void scanFinished(KScanDevice::Status status);
+    void checkAdf();
 
     /**
      * Clear any saved authentication for this scanner, to ensure that the
@@ -597,12 +599,13 @@ private:
      **/
     void saveStartupConfig();
 
-    /**
-     * Check whether the currently selected scan source is an ADF.
-     *
-     * @return @c true if an ADF is selected
-     **/
-    bool isAdfScan();
+// only if needed outside of KScanDevice
+//     /**
+//      * Check whether the currently selected scan source is an ADF.
+//      *
+//      * @return @c true if an ADF is selected
+//      **/
+//     bool isAdfScan() const				{ return (mScanningAdf); }
 
     /**
      * Scanning progress state.
@@ -637,6 +640,7 @@ private:
     int mPixelX, mPixelY;
     bool mScanningPreview;
     QSocketNotifier *mSocketNotifier;
+    bool mScanningAdf;
 
     int mCurrScanResolutionX;
     int mCurrScanResolutionY;
