@@ -140,10 +140,7 @@ public:
      * Check whether a scanner device is opened and connected: that is,
      * whether the @c openDevice() returned @c KScanDevice::Ok).
      **/
-    bool isScannerConnected() const
-    {
-        return (mScannerInitialised);
-    }
+    bool isScannerConnected() const			{ return (mScannerInitialised); }
 
     /**
      * Get the SANE scanner handle of the current scanner.
@@ -151,10 +148,7 @@ public:
      * @return The scanner handle, or @c nullptr if no scanner is
      * currently open.
      **/
-    SANE_Handle scannerHandle() const
-    {
-        return (mScannerHandle);
-    }
+    SANE_Handle scannerHandle() const			{ return (mScannerHandle); }
 
     /**
      * Acquires a preview from the current scanner device.
@@ -475,6 +469,13 @@ public:
      **/
     void setTestFormat(ScanImage::ImageType type)	{ mTestFormat = type; }
 
+    /**
+     * Check whether the currently selected scan source is an ADF.
+     *
+     * @return @c true if an ADF is selected
+     **/
+    bool isAdfScan() const				{ return (mScanningAdf); }
+
 public slots:
     /**
      * Request the scan device to stop the scan currently in progress.
@@ -585,7 +586,7 @@ private:
     KScanDevice::Status acquireData(bool isPreview);
     KScanDevice::Status startAcquire(ScanImage::ImageType fmt);
     void scanFinished(KScanDevice::Status status);
-    void checkAdf();
+    void updateAdfState(const KScanOption *so = nullptr);
 
     /**
      * Clear any saved authentication for this scanner, to ensure that the
@@ -598,14 +599,6 @@ private:
      * Only active and GUI options are saved.
      **/
     void saveStartupConfig();
-
-// only if needed outside of KScanDevice
-//     /**
-//      * Check whether the currently selected scan source is an ADF.
-//      *
-//      * @return @c true if an ADF is selected
-//      **/
-//     bool isAdfScan() const				{ return (mScanningAdf); }
 
     /**
      * Scanning progress state.

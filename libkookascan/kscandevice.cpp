@@ -177,6 +177,7 @@ KScanDevice::KScanDevice(QObject *parent)
     mScannerName = "";
 
     mScanningState = KScanDevice::ScanIdle;
+    mScanningAdf = false;				// assume no ADF so far
 
     mScanBuf = nullptr;					// image data buffer while scanning
     mScanImage.clear();					// temporary image to scan into
@@ -320,9 +321,9 @@ void KScanDevice::getCurrentFormat(int *format, int *depth)
 }
 
 
-void KScanDevice::checkAdf()
+void KScanDevice::updateAdfState(const KScanOption *so)
 {
-    const KScanOption *so = getOption(SANE_NAME_SCAN_SOURCE, false);
+    if (so==nullptr) so = getOption(SANE_NAME_SCAN_SOURCE, false);
     if (so==nullptr) mScanningAdf = false;		// no source option, assume no ADF
     else						// there is a source option
     {
@@ -334,6 +335,7 @@ void KScanDevice::checkAdf()
         mScanningAdf = (val.contains("ADF", Qt::CaseSensitive) ||
                         val.startsWith("Auto", Qt::CaseInsensitive) ||
                         val.contains("Feeder", Qt::CaseInsensitive));
+        qCDebug(LIBKOOKASCAN_LOG) << "ADF in use?" << mScanningAdf;
     }
 }
 
@@ -465,6 +467,8 @@ void KScanDevice::applyOption(KScanOption *opt)
         qCDebug(LIBKOOKASCAN_LOG) << "option" << opt->getName();
 #endif // DEBUG_RELOAD
         reload = opt->apply();				// apply this option
+							// update the ADF state
+        if (opt->getName()==SANE_NAME_SCAN_SOURCE) updateAdfState(opt);
     }
 
     if (!reload)					// need to reload now?
@@ -475,6 +479,7 @@ void KScanDevice::applyOption(KScanOption *opt)
         return;
     }
 							// reload of all others needed
+    // TODO: range-based for over hash values
     for (OptionHash::const_iterator it = mCreatedOptions.constBegin();
          it!=mCreatedOptions.constEnd(); ++it)
     {
@@ -514,6 +519,7 @@ void KScanDevice::applyAllOptions(bool prio)
             if (!so->isGuiElement()) continue;
             if (so->isPriorityOption() ^ prio) continue;
             if (so->isActive() && so->isSoftwareSettable()) so->apply();
+            if (so->getName()==SANE_NAME_SCAN_SOURCE) updateAdfState(so);
     }
 }
 
@@ -702,9 +708,6 @@ case ScanImage::HighColour:	fmt = QImage::Format_RGB32;		break;
 
 KScanDevice::Status KScanDevice::acquirePreview(bool forceGray, int dpi)
 {
-    checkAdf();						// check whether source is ADF
-    // TODO: prompt if ADF in use
-
     KScanOptSet savedOptions("SavedForPreview");
 
     /* set Preview = ON if exists */
@@ -811,8 +814,6 @@ KScanDevice::Status KScanDevice::acquirePreview(bool forceGray, int dpi)
  */
 KScanDevice::Status KScanDevice::acquireScan(const QString &filename)
 {
-    checkAdf();						// check whether source is ADF
-
     if (filename.isEmpty())				// real scan
     {
         applyAllOptions(true);				// apply priority options
@@ -1514,6 +1515,7 @@ void KScanDevice::loadOptionSetInternal(const KScanOptSet *optSet, bool prio)
 
         so->set(it.value());
         if (so->isInitialised() && so->isSoftwareSettable() && so->isActive()) so->apply();
+        if (so->getName()==SANE_NAME_SCAN_SOURCE) updateAdfState(so);
     }
 }
 

@@ -375,7 +375,8 @@ QWidget *ScanParams::createScannerParams()
 
     // Source selection
     mSourceSelect = mSaneDevice->getGuiElement(SANE_NAME_SCAN_SOURCE, frame);
-    if (mSourceSelect != nullptr) {
+    if (mSourceSelect != nullptr)
+    {
         connect(mSourceSelect, &KScanOption::guiChange, this, &ScanParams::slotOptionChanged);
 
         l = mSourceSelect->getLabel(frame, true);
@@ -739,6 +740,19 @@ void ScanParams::slotAcquirePreview()
     if (mScanMode == ScanParams::VirtualScannerMode) {
         KMessageBox::error(this, i18n("Cannot preview in Virtual Scanner mode"));
         return;
+    }
+
+    if (mSaneDevice->isAdfScan())
+    {
+        if (KMessageBox::warningContinueCancel(this,
+                                               i18n("The scan source is set to the automatic document feeder.<br/>"
+                                                    "The preview will take the first sheet from the feeder.<br/>"
+                                                    "<br/>"
+                                                    "Are you sure you want to preview?"),
+                                               i18n("ADF Selected"),
+                                               KGuiItem(i18n("Preview"), QIcon::fromTheme("preview")),
+                                               KStandardGuiItem::cancel(),
+                                               "adfpreview")!=KMessageBox::Continue) return;
     }
 
     QString virtfile;
