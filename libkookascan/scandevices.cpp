@@ -54,7 +54,7 @@ ScanDevices::ScanDevices()
         return;    // do sane_init() if necessary
     }
 
-    // Be ready to Implement the proxy option before querying for any scanners
+    // Be ready to implement the proxy option before querying for any scanners
     mUseNetworkProxy = ScanSettings::startupUseProxy();
     qCDebug(LIBKOOKASCAN_LOG) << "Use network proxy?" << mUseNetworkProxy;
 

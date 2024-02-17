@@ -103,7 +103,7 @@ void DestinationSave::imageScanned(ScanImage::Ptr img)
             // an error is displayed if the destination file does not exist (as
             // it is assumed it does not at this stage).  To avoid this situation
             // but to still get errors and/or warnings for other problems (e.g.
-            // an unreachable host, authentication failiure etc), give the StatJob
+            // an unreachable host, authentication failure etc), give the StatJob
             // the URL of the containing directory and add the file name back
             // afterwards.
             KIO::StatJob *job = KIO::mostLocalUrl(url.adjusted(QUrl::RemoveFilename|QUrl::StripTrailingSlash));

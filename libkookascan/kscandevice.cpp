@@ -320,6 +320,22 @@ void KScanDevice::getCurrentFormat(int *format, int *depth)
 }
 
 
+bool KScanDevice::isAdfScan()
+{
+    const KScanOption *so = getOption(SANE_NAME_SCAN_SOURCE, false);
+    if (so==nullptr) return (false);			// no source option, assume no ADF
+
+    // There does not seem to be any "official" SANE way to find out whether
+    // the scan source is an ADF, so this has to be done by looking at the
+    // string value of the option.  Not sure whether this will work properly
+    // if SANE is I18N'ed.
+    const QString val = so->get();
+    return (val.contains("ADF", Qt::CaseSensitive) ||
+            val.startsWith("Auto", Qt::CaseInsensitive) ||
+            val.contains("Feeder", Qt::CaseInsensitive));
+}
+
+
 //  Listing the available options
 //  -----------------------------
 
@@ -765,6 +781,7 @@ KScanDevice::Status KScanDevice::acquirePreview(bool forceGray, int dpi)
     }
 
     KScanDevice::Status status = acquireData(true);	// perform the preview
+    scanFinished(status);				// clean up after scan
     loadOptionSet(&savedOptions);			// restore original scan settings
     return (status);
 }
@@ -821,7 +838,41 @@ KScanDevice::Status KScanDevice::acquireScan(const QString &filename)
             else mCurrScanResolutionY = mCurrScanResolutionX;
         }
 
-        return (acquireData(false));			// perform the scan
+        bool first = true;
+        const bool isAdf = isAdfScan();
+        if (isAdf) qCDebug(LIBKOOKASCAN_LOG) << "Starting ADF loop";
+
+        while (true)
+        {
+            KScanDevice::Status stat = acquireData(false);
+
+            // If the ADF is empty the first time through the loop, then it
+            // is an error which the user should see.  For subsequent scans,
+            // it just means that the scanning is finished.
+            if (!first && stat==KScanDevice::AdfNoDoc)
+            {
+                qCDebug(LIBKOOKASCAN_LOG) << "ADF empty, scan finished";
+                stat = KScanDevice::AdfEmpty;
+            }
+
+            // Signal the scan status to the application, adjusted for the
+            // ADF state as above.  Then, if this is the first time through
+            // the ADF loop or if any other error has happened, then exit
+            // the loop now.
+            scanFinished(stat);
+            if (stat!=KScanDevice::Ok) return (stat);
+
+            // If not doing an ADF scan, then do not try to loop.  If we do, then
+            // the second attemnpt to scan may fail with a SANE_STATUS_DEVICE_BUSY
+            // as the scan carriage returns to its rest position.  This does not
+            // affect the scan that has just been completed, but the error will be
+            // reported to the user.
+            if (!isAdf) return (stat);
+
+            // Otherwise, just note that this is now not the first time through
+            // the ADF loop.
+            first = false;
+        }
     }
     else						// virtual scan from image file
     {
@@ -915,7 +966,7 @@ KScanDevice::Status KScanDevice::acquireData(bool isPreview)
                 if (fmt==ScanImage::None)		// scan format not recognised?
                 {
                     stat = KScanDevice::ParamError;	// no point starting scan
-                    goto finish2;;			// clean up anything started
+                    goto finish;			// clean up anything started
                 }
             }
         }
@@ -929,8 +980,6 @@ KScanDevice::Status KScanDevice::acquireData(bool isPreview)
     else fmt = ScanImage::Preview;			// special to indicate preview
     emit sigScanStart(fmt);				// now tell the application
 
-    ScanDevices::self()->deactivateNetworkProxy();
-
     // The application may have prompted for a file name.
     // If the user cancelled that, it will have called our
     // slotStopScanning() which sets mScanningState to
@@ -943,13 +992,21 @@ KScanDevice::Status KScanDevice::acquireData(bool isPreview)
         goto finish;					// clean up anything started
     }
 
+    ScanDevices::self()->deactivateNetworkProxy();
     while (true)					// loop while frames available
     {
         QApplication::setOverrideCursor(Qt::WaitCursor);
 							// potential lengthy operation
         mSaneStatus = sane_start(mScannerHandle);
-        if (mSaneStatus==SANE_STATUS_ACCESS_DENIED)	// authentication failed?
+
+        if (mSaneStatus==SANE_STATUS_NO_DOCS)
         {
+            qCDebug(LIBKOOKASCAN_LOG) << "ADF is empty";
+            mScanningState = KScanDevice::ScanStopAdfEmpty;
+            break;
+        }
+        else if (mSaneStatus==SANE_STATUS_ACCESS_DENIED)
+        {						// authentication failed?
             qCDebug(LIBKOOKASCAN_LOG) << "retrying authentication";
             clearSavedAuth();				// clear any saved password
             mSaneStatus = sane_start(mScannerHandle);	// try again once more
@@ -1026,7 +1083,7 @@ KScanDevice::Status KScanDevice::acquireData(bool isPreview)
         {
             // Scanning could not start - give up now
             qCDebug(LIBKOOKASCAN_LOG) << "Scanning failed to start, status" << stat;
-            goto finish;;				// clean up anything started
+            break;
         }
 
         if (mScanningState==KScanDevice::ScanStarting)	// first time through loop
@@ -1086,10 +1143,15 @@ KScanDevice::Status KScanDevice::acquireData(bool isPreview)
         if (mScanningState==KScanDevice::ScanNextFrame) continue;
         break;						// scan done, exit loop
     }
+    ScanDevices::self()->reactivateNetworkProxy();
 
     if (mScanningState==KScanDevice::ScanStopNow)
     {
         stat = KScanDevice::Cancelled;
+    }
+    else if (mScanningState==KScanDevice::ScanStopAdfEmpty)
+    {
+        stat = KScanDevice::AdfNoDoc;
     }
     else
     {
@@ -1103,9 +1165,6 @@ KScanDevice::Status KScanDevice::acquireData(bool isPreview)
                               << mBlocksRead << "blocks," << frames << "frames, status" << stat;
 
 finish:
-    ScanDevices::self()->reactivateNetworkProxy();
-finish2:
-    scanFinished(stat);					// scan is now finished
     return (stat);
 }
 
@@ -1326,9 +1385,9 @@ default:    qCWarning(LIBKOOKASCAN_LOG) << "Undefined SANE format" << mSaneParam
 }
 
 
-void KScanDevice::scanFinished(KScanDevice::Status status)
+void KScanDevice::scanFinished(KScanDevice::Status stat)
 {
-    qCDebug(LIBKOOKASCAN_LOG) << "status" << status;
+    qCDebug(LIBKOOKASCAN_LOG) << "status" << stat;
 
     emit sigScanProgress(MAX_PROGRESS);
     QApplication::restoreOverrideCursor();
@@ -1347,7 +1406,7 @@ void KScanDevice::scanFinished(KScanDevice::Status status)
 
     // If the scan succeeded, finish off the result image and tell the
     // application that it is ready.
-    if (status==KScanDevice::Ok && !mScanImage.isNull())
+    if (stat==KScanDevice::Ok && !mScanImage.isNull())
     {
 	mScanImage->setXResolution(mCurrScanResolutionX);
 	mScanImage->setYResolution(mCurrScanResolutionY);
@@ -1364,15 +1423,22 @@ void KScanDevice::scanFinished(KScanDevice::Status status)
 	}
     }
 
-    // TODO: Should this be called here, even for normal scan termination?
-    // It seems to have side effects, such as feeding through anything remaining
-    // in the ADF even if only one page has been requested to be scanned.
-    ScanDevices::self()->deactivateNetworkProxy();
-    sane_cancel(mScannerHandle);
-    ScanDevices::self()->reactivateNetworkProxy();
+    if (stat!=KScanDevice::Ok)
+    {
+        // sane_cancel() was originally called unconditionally here, even for
+        // normal scan termination.  However, it seems to have side effects,
+        // such as feeding through anything remaining in the ADF even if only
+        // one page has been requested to be scanned.  So do not call it if
+        // the scanning status was 'Ok', but do call it if there has been an
+        // error or if the ADF is empty.
+        ScanDevices::self()->deactivateNetworkProxy();
+        qCDebug(LIBKOOKASCAN_LOG) << "calling sane_cancel() for status" << stat;
+        sane_cancel(mScannerHandle);
+        ScanDevices::self()->reactivateNetworkProxy();
+    }
 
     // Tell the application that the scan has finished.
-    emit sigScanFinished(status);
+    emit sigScanFinished(stat);
 
     // Nothing needs to be done to clean up the image that was allocated
     // in createNewImage(), the QSharedPointer will take care of reference
@@ -1548,6 +1614,8 @@ case KScanDevice::Reload:		return (i18n("Needs reload"));	// never during scanni
 case KScanDevice::Cancelled:		return (i18n("Cancelled"));	// shouldn't be reported
 case KScanDevice::OptionNotActive:	return (i18n("Not active"));	// never during scanning
 case KScanDevice::NotSupported:		return (i18n("Not supported"));
+case KScanDevice::AdfNoDoc:		return (i18n("ADF no document loaded"));
+case KScanDevice::AdfEmpty:		return (i18n("ADF empty"));	// shouldn't be reported
 default:				return (i18n("Unknown status %1", stat));
     }
 }

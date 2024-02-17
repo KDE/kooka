@@ -901,7 +901,8 @@ void KookaView::slotScanFinished(KScanDevice::Status stat)
 {
     qCDebug(KOOKA_LOG) << "Scan finished with status" << stat;
 
-    if (stat != KScanDevice::Ok && stat != KScanDevice::Cancelled) {
+    if (stat!=KScanDevice::Ok && stat!=KScanDevice::Cancelled && stat!=KScanDevice::AdfEmpty)
+    {
         QString msg = xi18nc("@info",
                              "There was a problem during preview or scanning."
                              "<nl/>"

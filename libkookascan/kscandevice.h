@@ -84,7 +84,9 @@ public:
         Reload,
         Cancelled,
         OptionNotActive,
-        NotSupported
+        NotSupported,
+        AdfNoDoc,					// empty for the first scan
+        AdfEmpty					// empty for subsequent scans
     };
 
     /**
@@ -596,6 +598,13 @@ private:
     void saveStartupConfig();
 
     /**
+     * Check whether the currently selected scan source is an ADF.
+     *
+     * @return @c true if an ADF is selected
+     **/
+    bool isAdfScan();
+
+    /**
      * Scanning progress state.
      **/
     enum ScanningState {				// only used by KScanDevice
@@ -604,7 +613,7 @@ private:
         ScanInProgress,
         ScanNextFrame,
         ScanStopNow,
-        ScanStopAdfFinished
+        ScanStopAdfEmpty
     };
 
     typedef QHash<QByteArray, KScanOption *> OptionHash;
