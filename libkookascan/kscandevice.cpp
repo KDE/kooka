@@ -1016,7 +1016,7 @@ KScanDevice::Status KScanDevice::acquireData(bool isPreview)
     // sane_start() has been done and we know that the ADF is not empty.
     //
     // This is necessary because doing sane_start() seems to be the only way
-    // to read the ADF status.
+    // to find out whether the ADF has documents loaded.
     if (!mScanningAdf)
     {
         stat = startAcquire(fmt);
@@ -1372,29 +1372,30 @@ default:    qCWarning(LIBKOOKASCAN_LOG) << "Undefined SANE format" << mSaneParam
 
 	if ((mSaneParameters.lines>0) && ((mSaneParameters.lines*mPixelY)>0))
 	{
-            int progress =  (int)(((double)MAX_PROGRESS)/mSaneParameters.lines*mPixelY);
+            int progress =  static_cast<int>(static_cast<double>(MAX_PROGRESS)/mSaneParameters.lines*mPixelY);
             if (progress<MAX_PROGRESS) emit sigScanProgress(progress);
 	}
 
-        // cannot get here, bytes_read and EOF tested above
-	//if( bytes_read == 0 || mSaneStatus == SANE_STATUS_EOF )
-	//{
-	//   //qCDebug(LIBKOOKASCAN_LOG) << "mSaneStatus not OK:" << sane_stat;
-	//   break;
-	//}
-
         if (mScanningState==KScanDevice::ScanStopNow)
         {
-            /* mScanningState is set to ScanStopNow due to hitting slStopScanning   */
-            /* Mostly that one is fired by the STOP-Button in the progress dialog. */
+            // The "Stop" button in the progress display calls slotStopScanning()
+            // which sets mScanningState to ScanStopNow.
+            //
+            // Not sure how it can ever happen, but an old comment here said and did:
+            //
+            // This is also hit after the normal finish of the scan. Most probably,
+            // the QSocketNotifier fires for a few times after the scan has been
+            // cancelled.  Does it matter?  To see it, just uncomment the qDebug msg.
+            // mScanningState = KScanDevice::ScanIdle;
 
-            /* This is also hit after the normal finish of the scan. Most probably,
-             * the QSocketnotifier fires for a few times after the scan has been
-             * cancelled.  Does it matter ? To see it, just uncomment the qDebug msg.
-             */
-            //qCDebug(LIBKOOKASCAN_LOG) << "Stopping the scan progress";
-            //mScanningState = KScanDevice::ScanIdle;
-            break;
+            qCDebug(LIBKOOKASCAN_LOG) << "Calling sane_cancel() to stop scan";
+            sane_cancel(mScannerHandle);
+
+            // The SANE documentation says that we should now not do anything else
+            // until the SANE call in progress or the next to be called, which
+            // in this case will be the sane_read() at the top of the loop,
+            // returns with a SANE_STATUS_CANCELLED error code.  So just continue
+            // the loop.
         }
     }							// end of main loop
 
@@ -1414,10 +1415,23 @@ default:    qCWarning(LIBKOOKASCAN_LOG) << "Undefined SANE format" << mSaneParam
             qCDebug(LIBKOOKASCAN_LOG) << "EOF, but another frame to scan";
         }
     }
+    else if (mSaneStatus==SANE_STATUS_CANCELLED)
+    {
+        // In debug messages in this file, always refer to a SANE status code
+        // as "SANE status" in order to distinguish it from a KScanDevice::Status
+        // value referred to as "status".
+        qCDebug(LIBKOOKASCAN_LOG) << "Scan cancelled, SANE status" << mSaneStatus;
+
+        // Set his explicitly in case the "scan cancelled" state has not been
+        // noted already - for example, if the scanner has a physical "stop"
+        // button which generates an immediate SANE_STATUS_CANCELLED.  The
+        // caller will translate the state ScanStopNow into Cancelled.
+        mScanningState = KScanDevice::ScanStopNow;
+    }
     else if (mSaneStatus!=SANE_STATUS_GOOD)
     {
+        qCDebug(LIBKOOKASCAN_LOG) << "Scan error, SANE status" << mSaneStatus;
         mScanningState = KScanDevice::ScanIdle;
-        qCDebug(LIBKOOKASCAN_LOG) << "Scan error or cancelled, status" << mSaneStatus;
     }
 
     if (mSocketNotifier!=nullptr) mSocketNotifier->setEnabled(true);
@@ -1462,14 +1476,16 @@ void KScanDevice::scanFinished(KScanDevice::Status stat)
 	}
     }
 
-    if (stat!=KScanDevice::Ok)
+    if (stat!=KScanDevice::Ok && stat!=KScanDevice::Cancelled)
     {
         // sane_cancel() was originally called unconditionally here, even for
         // normal scan termination.  However, it seems to have side effects,
         // such as feeding through anything remaining in the ADF even if only
         // one page has been requested to be scanned.  So do not call it if
-        // the scanning status was 'Ok', but do call it if there has been an
-        // error or if the ADF is empty.
+        // the scanning status was 'Ok' or if it is 'Cancelled' - in the second
+        // case sane_cancel() will have already been called by doProcessABlock().
+        // But do call it if there has been any other error, or if the ADF has
+        // fed through all its documents and is empty.
         ScanDevices::self()->deactivateNetworkProxy();
         qCDebug(LIBKOOKASCAN_LOG) << "calling sane_cancel() for status" << stat;
         sane_cancel(mScannerHandle);

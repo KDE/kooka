@@ -771,9 +771,7 @@ void ScanParams::slotAcquirePreview()
     mAreaSelect->selectCustomSize(QRect());		// reset selector to reflect that
 
     stat = mSaneDevice->acquirePreview(gp);
-    if (stat != KScanDevice::Ok) {
-        qCWarning(LIBKOOKASCAN_LOG) << "Error, preview status " << stat;
-    }
+    if (stat!=KScanDevice::Ok) qCWarning(LIBKOOKASCAN_LOG) << "Preview status" << stat;
 }
 
 
@@ -799,7 +797,7 @@ void ScanParams::slotStartScan()
         stat = mSaneDevice->acquireScan(virtfile);
     }
 
-    if (stat!=KScanDevice::Ok) qCDebug(LIBKOOKASCAN_LOG) << "Error, scan status " << stat;
+    if (stat!=KScanDevice::Ok) qCDebug(LIBKOOKASCAN_LOG) << "Scan status" << stat;
 
     if (stat==KScanDevice::AdfEmpty) stat = KScanDevice::Ok;
     emit scanBatchEnd(stat==KScanDevice::Ok);		// indicate end of the batch
