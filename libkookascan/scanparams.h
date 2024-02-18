@@ -300,6 +300,21 @@ signals:
      **/
     void newCustomScanSize(const QRect &rect);
 
+    /**
+     * Indicates the start of a batch scan.
+     *
+     * @note Even if multiple page mode is in use, this and the next signal
+     * will only be emitted once at the start and end respectively.
+     **/
+    void scanBatchStart();
+
+    /**
+     * Indicates the end of a batch scan.
+     *
+     * @param ok @c true if the batch scan completed successfully
+     **/
+    void scanBatchEnd(bool ok);
+
 private slots:
     void slotScanProgress(int value);
 

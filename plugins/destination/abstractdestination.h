@@ -136,6 +136,23 @@ public:
      **/
     virtual void saveSettings() const				{ }
 
+    /**
+     * Indicates the start of a batch scan.  Destinations that can batch
+     * multiple scans together may use this to start accumulating them.
+     *
+     * The base class implementation does nothing.
+     **/
+    virtual void batchStart()					{ }
+
+    /**
+     * Indicates the end of a batch scan.
+     *
+     * @param ok @c true if the batch scan completed successfully
+     *
+     * The base class implementation does nothing.
+     **/
+    virtual void batchEnd(bool ok)				{ }
+
 protected:
     /**
      * Constructor.

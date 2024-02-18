@@ -45,6 +45,16 @@ KookaScanParams::KookaScanParams(QWidget *parent)
 {
     mNoScannerMessage = nullptr;
     mDestinationPlugin = nullptr;
+
+    connect(this, &ScanParams::scanBatchStart, this, [this]()
+    {
+        if (mDestinationPlugin!=nullptr) mDestinationPlugin->batchStart();
+    });
+
+    connect(this, &ScanParams::scanBatchEnd, this, [this](bool ok)
+    {
+        if (mDestinationPlugin!=nullptr) mDestinationPlugin->batchEnd(ok);
+    });
 }
 
 

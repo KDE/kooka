@@ -707,9 +707,7 @@ KScanDevice::Status ScanParams::prepareScan(QString *vfp)
         }
     }
 
-    if (vfp != nullptr) {
-        *vfp = virtfile;
-    }
+    if (vfp != nullptr) *vfp = virtfile;
     return (KScanDevice::Ok);
 }
 
@@ -778,39 +776,35 @@ void ScanParams::slotAcquirePreview()
     }
 }
 
+
 /* Slot called to start scanning */
 void ScanParams::slotStartScan()
 {
     QString virtfile;
     KScanDevice::Status stat = prepareScan(&virtfile);
-    if (stat != KScanDevice::Ok) {
-        return;
-    }
+    if (stat != KScanDevice::Ok) return;
+
+    emit scanBatchStart();				// indicate start of a batch
 
     //qCDebug(LIBKOOKASCAN_LOG) << "scan mode=" << mScanMode << "virtfile" << virtfile;
 
-    if (mScanMode != ScanParams::VirtualScannerMode) {	// acquire via SANE
-#if 0
-// TODO: port/update
-        if (adf == ADF_OFF) {
-#endif
-            qCDebug(LIBKOOKASCAN_LOG) << "Start to acquire image";
-            stat = mSaneDevice->acquireScan();
-#if 0
-        } else {
-            //qCDebug(LIBKOOKASCAN_LOG) << "ADF Scan not yet implemented :-/";
-            // stat = performADFScan();
-        }
-#endif
-    } else {                    // acquire via Qt-IMGIO
+    if (mScanMode != ScanParams::VirtualScannerMode)	// acquire via SANE
+    {
+        qCDebug(LIBKOOKASCAN_LOG) << "Start to acquire image";
+        stat = mSaneDevice->acquireScan();
+    }
+    else						// acquire via Qt-IMGIO
+    {
         qCDebug(LIBKOOKASCAN_LOG) << "Acquiring from virtual file";
         stat = mSaneDevice->acquireScan(virtfile);
     }
 
-    if (stat != KScanDevice::Ok) {
-        qCDebug(LIBKOOKASCAN_LOG) << "Error, scan status " << stat;
-    }
+    if (stat!=KScanDevice::Ok) qCDebug(LIBKOOKASCAN_LOG) << "Error, scan status " << stat;
+
+    if (stat==KScanDevice::AdfEmpty) stat = KScanDevice::Ok;
+    emit scanBatchEnd(stat==KScanDevice::Ok);		// indicate end of the batch
 }
+
 
 bool ScanParams::getGammaTableFrom(const QByteArray &opt, KGammaTable *gt)
 {
