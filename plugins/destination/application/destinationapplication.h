@@ -50,10 +50,14 @@ public:
     KLocalizedString scanDestinationString() override;
     void createGUI(ScanParamsPage *page) override;
     void saveSettings() const override;
+    void batchStart() override;
+    void batchEnd(bool ok) override;
 
 private:
     QComboBox *mAppsCombo;
     QComboBox *mFormatCombo;
+
+    QList<QUrl> mBatchFiles;
 };
 
 #endif							// DESTINATIONAPPLICATION_H

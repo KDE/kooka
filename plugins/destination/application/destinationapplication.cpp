@@ -39,6 +39,7 @@
 #include <kservice.h>
 #include <klocalizedstring.h>
 #include <kio/applicationlauncherjob.h>
+#include <kio/deletejob.h>
 #include <kio/jobuidelegatefactory.h>
 
 #include "scanparamspage.h"
@@ -58,33 +59,15 @@ DestinationApplication::DestinationApplication(QObject *pnt, const QVariantList 
 
 void DestinationApplication::imageScanned(ScanImage::Ptr img)
 {
-    qCDebug(DESTINATION_LOG) << "received image size" << img->size() << "type" << img->imageType();
-    const QString appService = mAppsCombo->currentData().toString();
     const QString mimeName = mFormatCombo->currentData().toString();
-    qCDebug(DESTINATION_LOG) << "app" << appService << "mime" << mimeName;
+    qCDebug(DESTINATION_LOG) << "received image size" << img->size() << "type" << img->imageType() << "mime" << mimeName;
 
     ImageFormat fmt = getSaveFormat(mimeName, img);	// get format for saving image
     if (!fmt.isValid()) return;				// must have this now
     const QUrl saveUrl = saveTempImage(fmt, img);	// save to temporary file
     if (!saveUrl.isValid()) return;			// could not save image
 
-    // Open the temporary file with the selected application service.
-    // If the service is "Other" (appService is empty), or if there is
-    // a problem finding the service, then leave 'service' as null and
-    // the ApplicationLauncherJob will prompt for an application.
-    // The temporary file will eventually be removed by KIO.
-    KService::Ptr service;
-    if (!appService.isEmpty())
-    {
-        service = KService::serviceByDesktopName(appService);
-        if (service==nullptr) qCWarning(DESTINATION_LOG) << "Cannot find service" << appService;
-    }
-
-    KIO::ApplicationLauncherJob *job = new KIO::ApplicationLauncherJob(service);
-    job->setUrls(QList<QUrl>() << saveUrl);
-    job->setRunFlags(KIO::ApplicationLauncherJob::DeleteTemporaryFiles);
-    job->setUiDelegate(KIO::createDefaultJobUiDelegate(KJobUiDelegate::AutoHandlingEnabled, parentWidget()));
-    job->start();					// all done
+    mBatchFiles.append(saveUrl);			// add temp file to batch
 }
 
 
@@ -155,7 +138,6 @@ void DestinationApplication::createGUI(ScanParamsPage *page)
 
         if (service->noDisplay()) continue;		// ignore hidden services
         if (service->mimeTypes().isEmpty()) continue;	// ignore those with no MIME types
-        //qCDebug(DESTINATION_LOG) << "  " << service->mimeTypes();
 
         for (const QString &mimeType : service->mimeTypes())
         {
@@ -203,4 +185,52 @@ void DestinationApplication::saveSettings() const
 {
     KookaSettings::setDestinationApplicationApp(mAppsCombo->currentData().toString());
     KookaSettings::setDestinationApplicationMime(mFormatCombo->currentData().toString());
+}
+
+
+void DestinationApplication::batchStart()
+{
+    mBatchFiles.clear();				// clear file list
+}
+
+
+void DestinationApplication::batchEnd(bool ok)
+{
+    if (mBatchFiles.isEmpty()) return;			// no files collected
+    qCDebug(DESTINATION_LOG) << "have" << mBatchFiles.count() << "files, ok?" << ok;
+
+    if (!ok)						// problem while scanning
+    {
+        // Since we are not sending the files anywhere, they can be
+        // deleted immediately here.
+        KIO::DeleteJob *job = KIO::del(mBatchFiles);
+        job->setUiDelegate(KIO::createDefaultJobUiDelegate(KJobUiDelegate::AutoHandlingEnabled, parentWidget()));
+        job->start();
+        return;
+    }
+
+    const QString appService = mAppsCombo->currentData().toString();
+    qCDebug(DESTINATION_LOG) << "destination app" << appService;
+
+    // Open the temporary files with the selected application service.
+    // If the service is "Other" (appService is empty), or if there is
+    // a problem finding the service, then leave 'service' as NULL and
+    // the ApplicationLauncherJob will prompt for an application.
+    // The temporary files will eventually be removed by KIO.
+    //
+    // It does not matter here if the application service can only accept
+    // a single file at a time, in this case KIO will launch the application
+    // once for each file.
+    KService::Ptr service;
+    if (!appService.isEmpty())
+    {
+        service = KService::serviceByDesktopName(appService);
+        if (service==nullptr) qCWarning(DESTINATION_LOG) << "Cannot find service" << appService;
+    }
+
+    KIO::ApplicationLauncherJob *job = new KIO::ApplicationLauncherJob(service);
+    job->setUrls(mBatchFiles);
+    job->setRunFlags(KIO::ApplicationLauncherJob::DeleteTemporaryFiles);
+    job->setUiDelegate(KIO::createDefaultJobUiDelegate(KJobUiDelegate::AutoHandlingEnabled, parentWidget()));
+    job->start();					// all done
 }
