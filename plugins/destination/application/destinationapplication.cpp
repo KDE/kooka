@@ -38,6 +38,7 @@
 #include <kpluginfactory.h>
 #include <kservice.h>
 #include <klocalizedstring.h>
+
 #include <kio/applicationlauncherjob.h>
 #include <kio/deletejob.h>
 #include <kio/jobuidelegatefactory.h>

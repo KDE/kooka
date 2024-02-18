@@ -58,6 +58,9 @@ public:
     KLocalizedString scanDestinationString() override;
     void saveSettings() const override;
 
+    void batchStart() override;
+    void batchEnd(bool ok) override;
+
 private slots:
     void slotUpdateShareCombo();
     void slotShareFinished(const QJsonObject &output, int error, const QString &errorMessage);
@@ -69,7 +72,7 @@ private:
     QComboBox *mShareCombo;
     QComboBox *mFormatCombo;
 
-    QUrl mSaveUrl;
+    QList<QUrl> mSaveUrls;
 };
 
 #endif							// DESTINATIONSHARE_H

@@ -38,6 +38,8 @@
 #include <kmessagebox.h>
 
 #include <kio/global.h>
+#include <kio/deletejob.h>
+#include <kio/jobuidelegatefactory.h>
 
 #include <purpose/alternativesmodel.h>
 #include <purpose/menu.h>
@@ -69,59 +71,15 @@ DestinationShare::DestinationShare(QObject *pnt, const QVariantList &args)
 
 void DestinationShare::imageScanned(ScanImage::Ptr img)
 {
-    qCDebug(DESTINATION_LOG) << "received image size" << img->size();
-    const QString shareService = mShareCombo->currentData().toString();
     const QString mimeName = mFormatCombo->currentData().toString();
-    qCDebug(DESTINATION_LOG) << "share" << shareService << "mime" << mimeName;
+    qCDebug(DESTINATION_LOG) << "received image size" << img->size() << "type" << img->imageType() << "mime" << mimeName;
 
     ImageFormat fmt = getSaveFormat(mimeName, img);	// get format for saving image
     if (!fmt.isValid()) return;				// must have this now
-    mSaveUrl = saveTempImage(fmt, img);			// save to temporary file
-    if (!mSaveUrl.isValid()) return;			// could not save image
+    const QUrl saveUrl = saveTempImage(fmt, img);	// save to temporary file
+    if (!saveUrl.isValid()) return;			// could not save image
 
-    // Because we did not know the specific MIME type at the time, the
-    // original menu and hence the share destination combo box will have
-    // been filled with actions for the generic "image/*" MIME type.
-    // Now the MIME type is known and we need to specify it.
-    // 
-    // Hopefully the list of shared destinations will not change as a
-    // result of the more specific MIME type.  Just in case it does,
-    // note the selected share ID before setting the MIME type and
-    // find it again before triggering the menu action.
-
-    QJsonObject dataObject;
-    dataObject.insert("mimeType", QJsonValue(mimeName));
-    QJsonArray dataUrls;
-    dataUrls.append(mSaveUrl.url());
-    dataObject.insert("urls", dataUrls);
-
-    mModel->setInputData(dataObject);			// set MIME type and URL
-    mMenu->reload();					// regenerate the menu
-
-    int foundRow = -1;
-    for (int i = 0; i<mModel->rowCount(); ++i)		// search through new model
-    {
-        QModelIndex idx = mModel->index(i, 0);
-        const QString key = mModel->data(idx, Purpose::AlternativesModel::PluginIdRole).toString();
-        if (key==shareService)
-        {
-            foundRow = i;
-            break;
-        }
-    }
-
-    if (foundRow==-1)					// couldn't find share in new menu
-    {
-        qCWarning(DESTINATION_LOG) << "Cannot find service for updated MIME type, count" << mModel->rowCount();
-        return;
-    }
-
-    QAction *act = mMenu->actions().value(foundRow);	// get action from menu
-    Q_ASSERT(act!=nullptr);
-    act->trigger();					// do the share action
-
-    // There is nothing more to do here, the temporary file will eventually
-    // be deleted in slotShareFinished().
+    mSaveUrls.append(saveUrl);				// add temp file to batch
 }
 
 
@@ -197,6 +155,80 @@ void DestinationShare::slotUpdateShareCombo()
 }
 
 
+void DestinationShare::batchStart()
+{
+    mSaveUrls.clear();					// clear file list
+}
+
+
+void DestinationShare::batchEnd(bool ok)
+{
+    if (mSaveUrls.isEmpty()) return;			// no files collected
+    qCDebug(DESTINATION_LOG) << "have" << mSaveUrls.count() << "files, ok?" << ok;
+
+    if (!ok)						// problem while scanning
+    {
+        // Since we are not sending the files anywhere, they can be
+        // deleted immediately here.
+        KIO::DeleteJob *job = KIO::del(mSaveUrls);
+        job->setUiDelegate(KIO::createDefaultJobUiDelegate(KJobUiDelegate::AutoHandlingEnabled, parentWidget()));
+        job->start();
+        return;
+    }
+
+    // Because we did not know the specific MIME type at the time, the
+    // original menu and hence the share destination combo box will have
+    // been filled with actions for the generic "image/*" MIME type.
+    // Now the MIME type is known and we need to specify it.
+    //
+    // It is assumed that all of the scans delivered here in a batch
+    // have the same MIME type.  This is reasonable, because the scan
+    // format GUI is disabled during scanning.
+    //
+    // Hopefully the list of shared destinations will not change as a
+    // result of the more specific MIME type.  Just in case it does,
+    // note the selected share ID before setting the MIME type and
+    // find it again before triggering the menu action.
+    const QString shareService = mShareCombo->currentData().toString();
+
+    QJsonObject dataObject;
+    const QString mimeName = mFormatCombo->currentData().toString();
+    dataObject.insert("mimeType", QJsonValue(mimeName));
+
+    QJsonArray dataUrls;
+    for (const QUrl &url : qAsConst(mSaveUrls)) dataUrls.append(url.url());
+    dataObject.insert("urls", dataUrls);
+
+    mModel->setInputData(dataObject);			// set MIME type and URL
+    mMenu->reload();					// regenerate the menu
+
+    int foundRow = -1;
+    for (int i = 0; i<mModel->rowCount(); ++i)		// search through new model
+    {
+        QModelIndex idx = mModel->index(i, 0);
+        const QString key = mModel->data(idx, Purpose::AlternativesModel::PluginIdRole).toString();
+        if (key==shareService)
+        {
+            foundRow = i;
+            break;
+        }
+    }
+
+    if (foundRow==-1)					// couldn't find share in new menu
+    {
+        qCWarning(DESTINATION_LOG) << "Cannot find service for updated MIME type, count" << mModel->rowCount();
+        return;
+    }
+
+    QAction *act = mMenu->actions().value(foundRow);	// get action from menu
+    Q_ASSERT(act!=nullptr);
+    act->trigger();					// do the share action
+
+    // There is nothing more to do here, the temporary files will eventually
+    // be deleted in slotShareFinished().
+}
+
+
 void DestinationShare::slotShareFinished(const QJsonObject &output, int error, const QString &errorMessage)
 {
     // Based on the lambda in ShareFileItemAction::ShareFileItemAction()
@@ -214,7 +246,10 @@ void DestinationShare::slotShareFinished(const QJsonObject &output, int error, c
             // a "Copy link" button) for this, but vertical space in the
             // ScanParams area is already at a premium.
             KMessageBox::information(parentWidget(),
-                                     xi18nc("@info", "The scan was shared to<nl/><link>%1</link>", url),
+                                     xi18ncp("@info",
+                                             "The scan was shared to<nl/><link>%2</link>", 
+                                             "The scans were shared to<nl/><link>%2</link>",
+                                             mSaveUrls.count(), url),
                                      i18n("Scan Shared"),
                                      QString(),
                                      KMessageBox::Notify|KMessageBox::AllowLink);
@@ -224,9 +259,12 @@ void DestinationShare::slotShareFinished(const QJsonObject &output, int error, c
     {
         qCWarning(DESTINATION_LOG) << "job failed with error" << error << errorMessage << output;
         KMessageBox::error(parentWidget(),
-                           xi18nc("@info", "Cannot share the scanned image<nl/><nl/><message>%1</message>", errorMessage));
+                           xi18ncp("@info",
+                                   "Cannot share the scanned image<nl/><nl/><message>%2</message>",
+                                   "Cannot share the scanned images<nl/><nl/><message>%1</message>",
+                                   mSaveUrls.count(), errorMessage));
     }
 
-    delayedDelete(mSaveUrl);				// delete temporary file, eventually
-    mSaveUrl.clear();					// have dealt with this now
+    delayedDelete(mSaveUrls);				// delete temporary file, eventually
+    mSaveUrls.clear();					// have dealt with them now
 }

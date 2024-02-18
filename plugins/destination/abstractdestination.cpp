@@ -166,6 +166,12 @@ QComboBox *AbstractDestination::createFormatCombo(const QStringList &mimeTypes,
 
 void AbstractDestination::delayedDelete(const QUrl &url)
 {
+    delayedDelete(QList<QUrl>() << url);
+}
+
+
+void AbstractDestination::delayedDelete(const QList<QUrl> &urls)
+{
     // A destination may need the scanned image to persist until a share or
     // export is complete, and it may not even be able to tell when an image
     // is no longer required.  So as to be absolutely sure that the file
@@ -178,14 +184,15 @@ void AbstractDestination::delayedDelete(const QUrl &url)
     // If the temporary file is in a subdirectory, then kioexec will also
     // delete the containing directory if it is empty.
 
-    if (!url.isLocalFile()) return;				// should always be the case
-
     // from second test in kio/src/core/desktopexecparser.cpp
     const QString kioexec = (LIBEXEC_DIR "/kioexec");
     QStringList args;
     args << "--tempfiles";					// delete temporary files
-    args << QStandardPaths::findExecutable("true")+" %f";	// do nothing with the file
-    args << url.url();
+    args << QStandardPaths::findExecutable("true")+" %F";	// do nothing with the files
+    for (const QUrl &url : qAsConst(urls))
+    {
+        if (url.isLocalFile()) args << url.url();		// should always be the case
+    }
 
     qCDebug(DESTINATION_LOG) << "running" << kioexec << args;
     if (!QProcess::startDetached(kioexec, args)) qCWarning(DESTINATION_LOG) << "Cannot start detached process";

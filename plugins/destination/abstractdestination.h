@@ -215,6 +215,13 @@ protected:
      **/
     void delayedDelete(const QUrl &url);
 
+    /**
+     * Delete files in the background, after a time delay.
+     *
+     * @param urls The files to delete.
+     **/
+    void delayedDelete(const QList<QUrl> &urls);
+
 private:
     ScanGallery *mGallery;
     ImageFormat mLastUsedFormat;
