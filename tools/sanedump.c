@@ -372,8 +372,17 @@ default:			printf("%d",desc->constraint_type);
 
 		if (desc->size>0 && desc->size!=sizeof(SANE_Word))
 		{
-			printf(fmt,"Data size:");
-			printf("%d\n",desc->size);
+			printf(fmt, "Data size:");
+			printf("%d", desc->size);
+
+			/* See the SANE API documentation 4.2.9.6 "Option Value Size" */
+			if (desc->type==SANE_TYPE_BOOL ||
+			    desc->type==SANE_TYPE_INT ||
+			    desc->type==SANE_TYPE_FIXED)
+			{
+				printf(" (%d)", (int)(desc->size/sizeof(SANE_Word)));
+			}
+			printf("\n");
 		}
 	}
 
