@@ -156,6 +156,9 @@ void do_init()
 	printf(fmt,"SANE version:");
 	printf("%d.%d.%d\n",SANE_VERSION_MAJOR(sanevers),
 	       SANE_VERSION_MINOR(sanevers),SANE_VERSION_BUILD(sanevers));
+
+	printf(fmt,"Byte size:"); printf("%d\n", (int)sizeof(SANE_Byte));
+	printf(fmt,"Word size:"); printf("%d\n", (int)sizeof(SANE_Word));
 }
 
 /************************************************************************/
@@ -209,7 +212,6 @@ void do_describe(const char *dev)
 	int nw;
 	int i;
 
-
 	do_init();
 
 	sanerr = sane_open(dev,&hand);
@@ -219,8 +221,8 @@ void do_describe(const char *dev)
 	sanerr = sane_control_option(hand,0,SANE_ACTION_GET_VALUE,&numopt,NULL);
 	if (sanerr!=SANE_STATUS_GOOD) cmderr(CSSANE,CEFATAL,"SANE cannot get option 0");
 
-	printf(fmt,"Found:");
-	printf("%d options\n",numopt);
+	printf(fmt,"Options:");
+	printf("%d\n",numopt);
 
 	for (opt = 1; opt<numopt; ++opt)
 	{
