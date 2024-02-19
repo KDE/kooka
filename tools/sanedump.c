@@ -328,12 +328,13 @@ default:				min = max = q = 0;
 				if (q==0) q = 1.0;
 				if (q==1.0)
 				{
-					printf("RANGE %g - %g",min,max);
+					printf("RANGE %g - %g (%d)",
+					       min, max, (int)((1+max-min)+0.5));
 				}
 				else
 				{
-					printf("RANGE %g - %g by %g = %g - %g",
-					       min,max,q,min/q,max/q);
+					printf("RANGE %g - %g by %g (%d)",
+					       min, max, q, (int)(((1+max-min)/q)+0.5));
 				}
 				break;
 
