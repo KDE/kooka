@@ -341,7 +341,14 @@ default:				min = max = q = 0;
 				break;
 
 case SANE_CONSTRAINT_STRING_LIST:
-				printf("STRING_LIST [");
+				/* No count is provided, so need to count the strings first */
+				nw = 0;
+				for (sp = desc->constraint.string_list; *sp!=NULL; ++sp)
+				{
+					++nw;
+				}
+				printf("STRING_LIST %d [", nw);
+
 				for (sp = desc->constraint.string_list; *sp!=NULL; ++sp)
 				{
 					printf("\"%s\"",*sp);
