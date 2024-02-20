@@ -517,39 +517,41 @@ default:
 }
 
 
-bool KScanOption::set(const int *val, int size)
+bool KScanOption::setInternal(const int *val, int size)
 {
     if (!isValid() || mBuffer.isNull()) return (false);
     if (val==nullptr) return (false);
+    if (size==0) return (false);
+
+    if (mDesc->type!=SANE_TYPE_FIXED && mDesc->type!=SANE_TYPE_INT)
+    {
+        qCDebug(LIBKOOKASCAN_LOG) << "Can't set" << mName << "with type" << mDesc->type;
+        return (false);
+    }
 #ifdef DEBUG_GETSET
     qCDebug(LIBKOOKASCAN_LOG) << "Setting" << mName << "of size" << size;
 #endif
 
-    int offset = 0;
-    int word_size = mDesc->size/sizeof(SANE_Word);
-    QVector<SANE_Word> qa(1+word_size);		/* add 1 in case offset is needed */
+    const int wordSize = mDesc->size/sizeof(SANE_Word);
+    QVector<SANE_Word> qa(wordSize, static_cast<SANE_Word>(*val++));
 
-    switch (mDesc->type)
+    const int numToCopy = qMin(wordSize, size);
+    // The 'qa' array will have already been filled with the first data
+    // value by the QVector constructor above.  Therefore only the second
+    // through to the 'numToCopy' values need to be copied here.  Within
+    // this class (which is the only place where this function can be
+    // called, because it is private to KScanOption), the 'size' parameter
+    // is always 1 and hence this loop will actually do nothing.
+    for (int i = 1; i<numToCopy; ++i)
     {
-case SANE_TYPE_FIXED:					// must have already used SANE_FIX()
-case SANE_TYPE_INT:
-        for (int i = 0; i<word_size; i++)
-        {
-            if (i<size) qa[offset+i] = (SANE_Word) *(val++);
-            else qa[offset+i] = (SANE_Word) *val;
-        }
-        break;
-
-default:
-        qCDebug(LIBKOOKASCAN_LOG) << "Can't set" << mName << "with type" << mDesc->type;
-        return (false);
+        // For SANE_TYPE_FIXED values, the caller must have already used SANE_FIX().
+        // Therefore the two accepted types are equivalent here.
+        qa[i] = static_cast<SANE_Word>(*val++);
     }
 
-    int copybyte = mDesc->size;
-    if (offset) copybyte += sizeof(SANE_Word);
-
-    //qCDebug(LIBKOOKASCAN_LOG) << "Copying" << copybyte << "bytes to options buffer";
-    mBuffer = QByteArray(((const char *) qa.data()), copybyte);
+    // This QByteArray constructor makes a deep copy of the 'qa' data.
+    // Yes, using an old-style cast would avoid the two static_cast's...
+    mBuffer = QByteArray(static_cast<const char *>(static_cast<const void *>(qa.constData())), mDesc->size);
     mBufferClean = false;
     return (true);
 }
@@ -588,14 +590,14 @@ case SANE_TYPE_STRING:
 
 case SANE_TYPE_INT:
         val = buf.toInt(&ok);
-        if (ok) set(&val, 1);
-        else return (false);
+        if (!ok) return (false);
+        setInternal(&val, 1);
         break;
 
 case SANE_TYPE_FIXED:
         val = SANE_FIX(buf.toDouble(&ok));
-        if (ok) set(&val, 1);
-        else return (false);
+        if (!ok) return (false);
+        setInternal(&val, 1);
         break;
 
 case SANE_TYPE_BOOL:

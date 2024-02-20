@@ -439,17 +439,19 @@ private:
      * owned by @c KScanDevice, and are deleted when the scan device
      * is closed.
      **/
-    ~KScanOption();
+    virtual ~KScanOption();
     friend void KScanDevice::closeDevice();
 
     /**
      * Set the option value.
      *
-     * @param val A new array of integer or SANE_FIX()'ed values
+     * @param val An array of integer or SANE_FIX()'ed values
      * @param size The length of the array
      * @return @c true if the value was set successfully
+     *
+     * @note The data pointed to by @p val is deep copied.
      **/
-    bool set(const int *val, int size);
+    bool setInternal(const int *val, int size);
 
     /**
      * Retrieve a list of all possible option values.
