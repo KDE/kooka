@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:26+0000\n"
+"POT-Creation-Date: 2024-02-20 01:38+0000\n"
 "PO-Revision-Date: 2021-05-17 01:32+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -13,6 +13,16 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Lokalize 20.12.3\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr ""
+
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr ""
 
 #: ../libdialogutil/imagefilter.cpp:91
 #, kde-format
@@ -34,61 +44,88 @@ msgstr "*|모든 파일"
 msgid "All Files (*)"
 msgstr "모든 파일 (*)"
 
-#: adddevicedialog.cpp:53
+#: adddevicedialog.cpp:58
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "If your scanner has not been automatically detected, you can specify it "
-"here. The <interface>Scanner device name</interface> should be a backend "
-"name (with optional parameters) that is understood by SANE, see <link url="
-"\"man:/sane\">sane(7)</link> or <link url=\"man:/sane-dll\">sane-dll(5)</"
-"link> for more information on available backends. The <interface>Type</"
-"interface> and <interface>Description</interface> can be used to identify "
-"the scanner later.<nl/><nl/>For the information that needs to be entered "
-"here, try to locate the device using the <link url=\"man:/sane-find-scanner"
-"\">sane-find-scanner(1)</link> command. For a USB or networked HP scanner "
-"using <link url=\"http://hplip.sourceforge.net/\">HPLIP</link>, try using "
-"the <command>hp-probe</command> command to locate it, for example <icode>hp-"
-"probe&nbsp;-b&nbsp;usb</icode> or <icode>hp-probe&nbsp;-b&nbsp;net</icode>. "
-"If the scanner is found, then enter the device name displayed by these "
-"commands; note that if using HPLIP then <icode>hp:</icode> needs to be "
-"replaced by <icode>hpaio:</icode>.<nl/><nl/>If these commands fail to locate "
-"your scanner, then it may not be supported by SANE. Check the SANE "
-"documentation for a <link url=\"http://www.sane-project.org/sane-supported-"
-"devices.html\">list of supported devices</link>."
+"here. The <interface>Scanner device</interface> is the SANE backend device "
+"name. The <interface>Manufacturer</interface>, <interface>Type</interface> "
+"and <interface>Description</interface> can be used to identify the scanner "
+"later.<nl/><nl/>More information on <link url=\"?1\">SANE backends</link>, "
+"<link url=\"?2\">locating devices</link>, <link url=\"?3\">HP scanners</"
+"link>, <link url=\"?4\">device not found</link>."
 msgstr ""
-"스캐너가 자동으로 감지되지 않았다면 여기에 지정하십시오. <interface>스캐너 장"
-"치 이름</interface>에는 SANE에서 감지할 수 있는 백엔드 이름(및 추가 인자)을 "
-"입력하삽시오. 사용 가능한 백엔드 정보를 보려면 <link url=\"man:/sane"
-"\">sane(7)</link> 또는 <link url=\"man:/sane-dll\">sane-dll(5)</link> 페이지"
-"를 참조하십시오. <interface>종류</interface> 및 <interface>설명</interface> "
-"란에는 스캐너를 식별할 수 있는 정보를 입력할 수 있습니다.<nl/><nl/>여기에 입"
-"력할 정보를 확인하려면 <link url=\"man:/sane-find-scanner\">sane-find-"
-"scanner(1)</link> 명령을 통해서 장치를 찾으십시오. USB로 연결된 <link url="
-"\"http://hplip.sourceforge.net/\">HPLIP</link>를 사용하는 HP 스캐너의 경우에"
-"는 <command>hp-probe</command> 명령을 사용하여 스캐너를 조회하십시오. 예:  "
-"<icode>hp-probe&nbsp;-b&nbsp;usb</icode> 또는 <icode>hp-probe&nbsp;-b&nbsp;"
-"net</icode>. 스캐너를 찾았다면 해당 명령에서 표시한 장치 이름을 입력하십시"
-"오. HPLIP를 사용한다면 <icode>hp:</icode> 대신에 <icode>hpaio:</icode>를 입력"
-"해야 합니다.<nl/><nl/>이 명령으로도 스캐너를 찾을 수 없다면 SANE에서 지원하"
-"지 않는 스캐너일 수도 있습니다. <link url=\"http://www.sane-project.org/sane-"
-"supported-devices.html\">지원하는 장치 목록</link>을 보려면 SANE 문서를 참조"
-"하십시오."
 
 #: adddevicedialog.cpp:77
-#, kde-format
-msgid "Scanner device name:"
+#, fuzzy, kde-format
+#| msgid "Scanner device name:"
+msgid "Scanner device:"
 msgstr "스캐너 장치 이름:"
 
-#: adddevicedialog.cpp:85
+#: adddevicedialog.cpp:80 scandevices.cpp:190
+#, kde-format
+msgctxt "Value used for manufacturer if none entered"
+msgid "User specified"
+msgstr ""
+
+#: adddevicedialog.cpp:82
+#, kde-format
+msgid "Manufacturer:"
+msgstr ""
+
+#: adddevicedialog.cpp:86
 #, kde-format
 msgid "Device type:"
 msgstr "장치 종류:"
 
-#: adddevicedialog.cpp:92
+#: adddevicedialog.cpp:90
 #, kde-format
 msgid "Description:"
 msgstr "설명:"
+
+#: adddevicedialog.cpp:126
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"The <interface>Scanner device</interface> should be a backend name (with "
+"optional parameters) that is understood by SANE. See <link url=\"man:/sane"
+"\">sane(7)</link> or <link url=\"man:/sane-dll\">sane&#8209;dll(5)</link> "
+"for more information on available backends and the format of device names."
+msgstr ""
+
+#: adddevicedialog.cpp:134
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"To find the information that needs to be entered here, try to locate the "
+"device using the <link url=\"man:/sane-find-scanner\">sane&#8209;find&#8209;"
+"scanner(1)</link> command for SCSI, USB or parallel port scanners, or the "
+"<link url=\"man:/scanimage\">scanimage(1)</link> command with the "
+"<icode>&#8209;L</icode> option for network scanners. If the scanner is "
+"found, then enter the device name displayed by these commands."
+msgstr ""
+
+#: adddevicedialog.cpp:143
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"For a USB or networked HP scanner using <link url=\"http://hplip.sourceforge."
+"net/\">HPLIP</link>, try using the <command>hp&#8209;probe</command> command "
+"to locate it, for example <icode>hp&#8209;probe&nbsp;&#8209;b&nbsp;usb</"
+"icode> or <icode>hp&#8209;probe&nbsp;&#8209;b&nbsp;net</icode>. Note that if "
+"the scanner is found by HPLIP, then the device name <icode>hp:</icode> that "
+"it displays needs to be replaced by <icode>hpaio:</icode> for SANE."
+msgstr ""
+
+#: adddevicedialog.cpp:152
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"If these commands fail to locate your scanner, then it may not be supported "
+"by SANE. Check the SANE documentation for a <link url=\"http://www.sane-"
+"project.org/sane-supported-devices.html\">list of supported devices</link>."
+msgstr ""
 
 #: autoselectbar.cpp:56
 #, kde-kuit-format
@@ -260,103 +297,103 @@ msgstr "400%"
 msgid "Custom:"
 msgstr "사용자 정의:"
 
-#: kscancontrols.cpp:66
+#: kscancontrols.cpp:67
 #, kde-format
 msgid "(Unknown)"
 msgstr "(알 수 없음)"
 
-#: kscancontrols.cpp:169
+#: kscancontrols.cpp:170
 #, kde-format
 msgid "Reset this setting to its standard value, %1"
 msgstr "기본값 %1(으)로 이 설정 초기화"
 
-#: kscancontrols.cpp:397
+#: kscancontrols.cpp:414
 #, kde-format
 msgid "*.pnm *.pbm *.pgm *.ppm|PNM Image Files"
 msgstr "*.pnm *.pbm *.pgm *.ppm|PNM 그림 파일"
 
-#: kscandevice.cpp:288
+#: kscandevice.cpp:291
 #, kde-format
 msgid "No scanner selected"
 msgstr "선택한 스캐너 없음"
 
-#: kscandevice.cpp:1387
+#: kscandevice.cpp:1394
 #, kde-format
 msgid "Default startup configuration"
 msgstr "기본 시작 설정"
 
-#: kscandevice.cpp:1487
+#: kscandevice.cpp:1494
 #, kde-kuit-format
 msgctxt "@info"
 msgid "The scanner<nl/><icode>%1</icode><nl/>requires authentication."
 msgstr "스캐너<nl/><icode>%1</icode><nl/>을(를) 사용하려면 인증해야 합니다."
 
-#: kscandevice.cpp:1488
+#: kscandevice.cpp:1495
 #, kde-format
 msgid "Scanner Authentication"
 msgstr "스캐너 인증"
 
-#: kscandevice.cpp:1532
+#: kscandevice.cpp:1539
 #, kde-format
 msgid "OK"
 msgstr "확인"
 
-#: kscandevice.cpp:1533
+#: kscandevice.cpp:1540
 #, kde-format
 msgid "No device"
 msgstr "장치 없음"
 
-#: kscandevice.cpp:1534
+#: kscandevice.cpp:1541
 #, kde-format
 msgid "Bad parameter"
 msgstr "잘못된 인자"
 
-#: kscandevice.cpp:1535
+#: kscandevice.cpp:1542
 #, kde-format
 msgid "Cannot open device"
 msgstr "장치를 열 수 없음"
 
-#: kscandevice.cpp:1536
+#: kscandevice.cpp:1543
 #, kde-format
 msgid "sane_control_option() failed"
 msgstr "sane_control_option() 실패"
 
-#: kscandevice.cpp:1537
+#: kscandevice.cpp:1544
 #, kde-format
 msgid "Error while scanning"
 msgstr "스캔 중 오류 발생"
 
-#: kscandevice.cpp:1538
+#: kscandevice.cpp:1545
 #, kde-format
 msgid "Empty picture"
 msgstr "그림이 비어 있음"
 
-#: kscandevice.cpp:1539
+#: kscandevice.cpp:1546
 #, kde-format
 msgid "Out of memory"
 msgstr "메모리 부족"
 
-#: kscandevice.cpp:1540
+#: kscandevice.cpp:1547
 #, kde-format
 msgid "Needs reload"
 msgstr "다시 불러와야 함"
 
-#: kscandevice.cpp:1541
+#: kscandevice.cpp:1548
 #, kde-format
 msgid "Cancelled"
 msgstr "취소됨"
 
-#: kscandevice.cpp:1542
+#: kscandevice.cpp:1549
 #, kde-format
 msgid "Not active"
 msgstr "활성 상태가 아님"
 
-#: kscandevice.cpp:1543
+#: kscandevice.cpp:1550
 #, kde-format
 msgid "Not supported"
 msgstr "지원하지 않음"
 
-#: kscandevice.cpp:1544
+#: kscandevice.cpp:1551
 #, kde-format
 msgid "Unknown status %1"
 msgstr "알 수 없는 상태 %1"
@@ -439,10 +476,41 @@ msgctxt "@action:button Name of colour"
 msgid "Black"
 msgstr "검은색"
 
-#: scandevices.cpp:182
+#: scandevices.cpp:208
 #, kde-format
 msgid "Unknown device '%1'"
 msgstr "알 수 없는 장치 '%1'"
+
+#: scanglobal.cpp:136
+#, kde-format
+msgid "SANE - Scanner Access Now Easy"
+msgstr ""
+
+#: scanglobal.cpp:137
+#, kde-format
+msgid "Scanner access and driver library"
+msgstr ""
+
+#: scanglobal.cpp:144
+#, kde-format
+msgid "LibTIFF"
+msgstr ""
+
+#: scanglobal.cpp:145
+#, fuzzy, kde-format
+#| msgid "Force image format:"
+msgid "TIFF image format library"
+msgstr "그림 형식 강제:"
+
+#: scanglobal.cpp:154
+#, kde-format
+msgid "libpaper"
+msgstr ""
+
+#: scanglobal.cpp:155
+#, kde-format
+msgid "Paper size configuration library"
+msgstr ""
 
 #: scanimage.cpp:76
 #, kde-format
@@ -474,63 +542,63 @@ msgstr "TIFF 그림을 읽을 수 없음"
 msgid "TIFF not supported"
 msgstr "TIFF를 지원하지 않음"
 
-#: scanparams.cpp:134
+#: scanparams.cpp:141
 #, kde-kuit-format
 msgctxt "@info"
 msgid "<title>Scanner&nbsp;Settings</title>"
 msgstr "<title>스캐너&nbsp;설정</title>"
 
-#: scanparams.cpp:176
+#: scanparams.cpp:161
 #, kde-format
 msgid "Pre&view"
 msgstr "미리 보기(&V)"
 
-#: scanparams.cpp:177
+#: scanparams.cpp:162
 #, kde-format
 msgid "Start a preview scan and show the preview image"
 msgstr "미리 보기 그림을 스캔하고 표시"
 
-#: scanparams.cpp:182
+#: scanparams.cpp:167
 #, kde-format
 msgid "Star&t Scan"
 msgstr "스캔 시작(&T)"
 
-#: scanparams.cpp:183
+#: scanparams.cpp:168
 #, kde-format
 msgid "Start a scan and save the scanned image"
 msgstr "스캔을 시작하고 스캔한 그림 저장"
 
-#: scanparams.cpp:189
+#: scanparams.cpp:200
 #, kde-format
 msgid "Stop"
 msgstr "정지"
 
-#: scanparams.cpp:193
+#: scanparams.cpp:204
 #, kde-format
 msgid "Scanning"
 msgstr "스캔 중"
 
-#: scanparams.cpp:232
+#: scanparams.cpp:247
 #, kde-format
 msgid "&Basic"
 msgstr "기본(&B)"
 
-#: scanparams.cpp:233
+#: scanparams.cpp:248
 #, kde-format
 msgid "Other"
 msgstr "기타"
 
-#: scanparams.cpp:234
+#: scanparams.cpp:249
 #, kde-format
 msgid "Advanced"
 msgstr "고급"
 
-#: scanparams.cpp:260
+#: scanparams.cpp:275
 #, kde-format
 msgid "SANE Debug (from PNM image)"
 msgstr "SANE 디버그(PNM 그림에서)"
 
-#: scanparams.cpp:261
+#: scanparams.cpp:276
 #, kde-kuit-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -542,12 +610,12 @@ msgstr ""
 "서 읽어옵니다. 더 많은 정보를 보려면 <link url=\"man:sane-pnm(5)\">sane-"
 "pnm(5)</link> 페이지를 참조하십시오."
 
-#: scanparams.cpp:263
+#: scanparams.cpp:278
 #, kde-format
 msgid "Virtual Scanner (any image format)"
 msgstr "가상 스캐너(임의 그림 형식)"
 
-#: scanparams.cpp:264
+#: scanparams.cpp:279
 #, kde-kuit-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -557,47 +625,47 @@ msgstr ""
 "실제 스캔이나 처리를 수행하지 않고 단순히 지정한 그림 파일에서 읽어옵니다. 그"
 "림 저장 등을 테스트할 때 유용합니다."
 
-#: scanparams.cpp:281
+#: scanparams.cpp:296
 #, kde-format
 msgid "Reading mode:"
 msgstr "읽기 모드:"
 
-#: scanparams.cpp:411
+#: scanparams.cpp:414
 #, kde-format
 msgid "Default (from scan settings)"
 msgstr "기본값(스캔 설정에서)"
 
-#: scanparams.cpp:412
+#: scanparams.cpp:415
 #, kde-format
 msgid "Black/white bitmap"
 msgstr "흑백 비트맵"
 
-#: scanparams.cpp:413
+#: scanparams.cpp:416
 #, kde-format
 msgid "Grey scale"
 msgstr "회색조"
 
-#: scanparams.cpp:414
+#: scanparams.cpp:417
 #, kde-format
 msgid "Low colour"
 msgstr "저색상"
 
-#: scanparams.cpp:415
+#: scanparams.cpp:418
 #, kde-format
 msgid "High colour"
 msgstr "고색상"
 
-#: scanparams.cpp:425
+#: scanparams.cpp:428
 #, kde-format
 msgid "Force image format:"
 msgstr "그림 형식 강제:"
 
-#: scanparams.cpp:476
+#: scanparams.cpp:483
 #, kde-format
 msgid "Edit Gamma Table..."
 msgstr "감마 테이블 편집..."
 
-#: scanparams.cpp:548
+#: scanparams.cpp:555
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -607,7 +675,7 @@ msgstr ""
 "<title>선택한 스캐너 없음</title><nl/><nl/>스캔하려면 스캐너 장치를 선택하십"
 "시오."
 
-#: scanparams.cpp:568
+#: scanparams.cpp:575
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -628,22 +696,22 @@ msgstr ""
 "젝트 홈페이지(<link url=\"http://www.sane-project.org\">www.sane-project."
 "org</link>)를 참조하십시오."
 
-#: scanparams.cpp:670
+#: scanparams.cpp:677
 #, kde-format
 msgid "1-bit depth scan cannot be done in color"
 msgstr "1비트 색 농도 스캔은 컬러로 할 수 없음"
 
-#: scanparams.cpp:673
+#: scanparams.cpp:680
 #, kde-format
 msgid "16-bit depth scans are not supported"
 msgstr "16비트 색 농도 스캔은 지원하지 않음"
 
-#: scanparams.cpp:683
+#: scanparams.cpp:690
 #, kde-format
 msgid "A file must be entered for testing or virtual scanning"
 msgstr "가상 스캔이나 시험을 진행하려면 파일 이름을 입력해야 함"
 
-#: scanparams.cpp:689
+#: scanparams.cpp:696
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -653,7 +721,7 @@ msgstr ""
 "시험 파일 및 가상 파일 <filename>%1</filename><nl/>을(를) 찾거나 읽을 수 없습"
 "니다."
 
-#: scanparams.cpp:699
+#: scanparams.cpp:706
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -663,17 +731,17 @@ msgstr ""
 "SANE 디버그에서는 PNM 파일만 읽을 수 있습니다.<nl/>지정한 파일 형식은 <icode>"
 "%1</icode>입니다."
 
-#: scanparams.cpp:716
+#: scanparams.cpp:723
 #, kde-kuit-format
 msgid "Scan in progress"
 msgstr "스캔 중"
 
-#: scanparams.cpp:717
+#: scanparams.cpp:724
 #, kde-kuit-format
 msgid "Scan in progress<nl/><nl/>%1"
 msgstr "스캔 중<nl/><nl/>%1"
 
-#: scanparams.cpp:737
+#: scanparams.cpp:744
 #, kde-format
 msgid "Cannot preview in Virtual Scanner mode"
 msgstr "가상 스캐너 모드에서는 미리 볼 수 없음"
@@ -695,27 +763,42 @@ msgstr ""
 "<div>네트워크에서 사용할 수 있는 스캐너를 조회하려면 선택하십시오.<br/><br/>"
 "전체 네트워크를 조회하지 않고 SANE에 설정한 호스트만 조회합니다.</div>"
 
+#. i18n: ectx: label, entry (StartupUseProxy), group (Startup)
+#: scansettings.kcfg:18
+#, kde-format
+msgid "Use the system proxy settings to access network scanners"
+msgstr ""
+
+#. i18n: ectx: tooltip, entry (StartupUseProxy), group (Startup)
+#: scansettings.kcfg:19
+#, kde-format
+msgid ""
+"<div>Check this if you want to use the standard system proxy settings to "
+"access network scanners.<br/><br/>Note that some SANE backends (for example "
+"'escl') may not work properly through a proxy.</div>"
+msgstr ""
+
 #. i18n: ectx: label, entry (StartupSkipAsk), group (Startup)
-#: scansettings.kcfg:22
+#: scansettings.kcfg:28
 #, kde-format
 msgid "Show the scanner selection dialog"
 msgstr "스캐너 선택 대화 상자 표시"
 
 #. i18n: ectx: tooltip, entry (StartupSkipAsk), group (Startup)
-#: scansettings.kcfg:23
+#: scansettings.kcfg:29
 #, kde-format
 msgid "<div>Check this to show the scanner selection dialog on startup.</div>"
 msgstr ""
 "<div>이 옵션을 선택하면 시작할 때 스캐너 선택 대화 상자를 표시합니다.</div>"
 
 #. i18n: ectx: label, entry (PreviewAutoselThreshold), group (Scanner Name)
-#: scansettings.kcfg:53
+#: scansettings.kcfg:61
 #, kde-format
 msgid "Threshold:"
 msgstr "임곗값:"
 
 #. i18n: ectx: tooltip, entry (PreviewAutoselThreshold), group (Scanner Name)
-#: scansettings.kcfg:54
+#: scansettings.kcfg:62
 #, kde-format
 msgid ""
 "<div>Threshold for auto-detection. All pixels lighter (on a black "
@@ -726,13 +809,13 @@ msgstr ""
 "색 배경인 경우 지정한 값보다 어두운 픽셀을 그림의 일부로 간주합니다.</div>"
 
 #. i18n: ectx: label, entry (PreviewAutoselDustsize), group (Scanner Name)
-#: scansettings.kcfg:61
+#: scansettings.kcfg:69
 #, kde-format
 msgid "Dust size (pixels):"
 msgstr "먼지 크기(픽셀):"
 
 #. i18n: ectx: tooltip, entry (PreviewAutoselDustsize), group (Scanner Name)
-#: scansettings.kcfg:62
+#: scansettings.kcfg:70
 #, kde-format
 msgid ""
 "<div>Set the dust size; dark or light areas smaller than this will be "
@@ -742,26 +825,26 @@ msgstr ""
 "div>"
 
 #. i18n: ectx: label, entry (PreviewAutoselMargin), group (Scanner Name)
-#: scansettings.kcfg:69
+#: scansettings.kcfg:77
 #, kde-format
 msgid "Add/subtract margin (mm):"
 msgstr "추가/삭제 여백(mm):"
 
 #. i18n: ectx: tooltip, entry (PreviewAutoselMargin), group (Scanner Name)
-#: scansettings.kcfg:70
+#: scansettings.kcfg:78
 #, kde-format
 msgid ""
 "<div>Set a margin to be added to or subtracted from the detected area</div>"
 msgstr "<div>선택한 영역에 추가하거나 삭제할 여백을 설정하십시오</div>"
 
 #. i18n: ectx: label, entry (PreviewAutoselBackground), group (Scanner Name)
-#: scansettings.kcfg:77
+#: scansettings.kcfg:85
 #, kde-format
 msgid "Scanner background:"
 msgstr "스캐너 배경:"
 
 #. i18n: ectx: tooltip, entry (PreviewAutoselBackground), group (Scanner Name)
-#: scansettings.kcfg:78
+#: scansettings.kcfg:86
 #, kde-format
 msgid ""
 "<div>Select whether a scan of the empty scanner glass results in a black or "
@@ -800,10 +883,50 @@ msgstr "가로"
 msgid "Set the orientation for a preset size of the scanned area"
 msgstr "미리 선택한 스캔 영역의 방향 설정"
 
-#: scansizeselector.cpp:266
+#: scansizeselector.cpp:262
 #, kde-format
 msgid "Selection"
 msgstr "선택"
+
+#~ msgctxt "@info"
+#~ msgid ""
+#~ "If your scanner has not been automatically detected, you can specify it "
+#~ "here. The <interface>Scanner device name</interface> should be a backend "
+#~ "name (with optional parameters) that is understood by SANE, see <link url="
+#~ "\"man:/sane\">sane(7)</link> or <link url=\"man:/sane-dll\">sane-dll(5)</"
+#~ "link> for more information on available backends. The <interface>Type</"
+#~ "interface> and <interface>Description</interface> can be used to identify "
+#~ "the scanner later.<nl/><nl/>For the information that needs to be entered "
+#~ "here, try to locate the device using the <link url=\"man:/sane-find-"
+#~ "scanner\">sane-find-scanner(1)</link> command. For a USB or networked HP "
+#~ "scanner using <link url=\"http://hplip.sourceforge.net/\">HPLIP</link>, "
+#~ "try using the <command>hp-probe</command> command to locate it, for "
+#~ "example <icode>hp-probe&nbsp;-b&nbsp;usb</icode> or <icode>hp-probe&nbsp;-"
+#~ "b&nbsp;net</icode>. If the scanner is found, then enter the device name "
+#~ "displayed by these commands; note that if using HPLIP then <icode>hp:</"
+#~ "icode> needs to be replaced by <icode>hpaio:</icode>.<nl/><nl/>If these "
+#~ "commands fail to locate your scanner, then it may not be supported by "
+#~ "SANE. Check the SANE documentation for a <link url=\"http://www.sane-"
+#~ "project.org/sane-supported-devices.html\">list of supported devices</"
+#~ "link>."
+#~ msgstr ""
+#~ "스캐너가 자동으로 감지되지 않았다면 여기에 지정하십시오. <interface>스캐"
+#~ "너 장치 이름</interface>에는 SANE에서 감지할 수 있는 백엔드 이름(및 추가 "
+#~ "인자)을 입력하삽시오. 사용 가능한 백엔드 정보를 보려면 <link url=\"man:/"
+#~ "sane\">sane(7)</link> 또는 <link url=\"man:/sane-dll\">sane-dll(5)</link> "
+#~ "페이지를 참조하십시오. <interface>종류</interface> 및 <interface>설명</"
+#~ "interface> 란에는 스캐너를 식별할 수 있는 정보를 입력할 수 있습니다.<nl/"
+#~ "><nl/>여기에 입력할 정보를 확인하려면 <link url=\"man:/sane-find-scanner"
+#~ "\">sane-find-scanner(1)</link> 명령을 통해서 장치를 찾으십시오. USB로 연결"
+#~ "된 <link url=\"http://hplip.sourceforge.net/\">HPLIP</link>를 사용하는 HP "
+#~ "스캐너의 경우에는 <command>hp-probe</command> 명령을 사용하여 스캐너를 조"
+#~ "회하십시오. 예:  <icode>hp-probe&nbsp;-b&nbsp;usb</icode> 또는 <icode>hp-"
+#~ "probe&nbsp;-b&nbsp;net</icode>. 스캐너를 찾았다면 해당 명령에서 표시한 장"
+#~ "치 이름을 입력하십시오. HPLIP를 사용한다면 <icode>hp:</icode> 대신에 "
+#~ "<icode>hpaio:</icode>를 입력해야 합니다.<nl/><nl/>이 명령으로도 스캐너를 "
+#~ "찾을 수 없다면 SANE에서 지원하지 않는 스캐너일 수도 있습니다. <link url="
+#~ "\"http://www.sane-project.org/sane-supported-devices.html\">지원하는 장치 "
+#~ "목록</link>을 보려면 SANE 문서를 참조하십시오."
 
 #~ msgid "ADF Scanning"
 #~ msgstr "자동 급지(ADF) 스캔"
