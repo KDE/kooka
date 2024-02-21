@@ -15,17 +15,17 @@ msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-02-20 01:38+0000\n"
-"PO-Revision-Date: 2023-03-16 12:17+0100\n"
+"PO-Revision-Date: 2024-02-20 08:54+0100\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
-"%100==4 ? 3 : 0);\n"
+"Plural-Forms: nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100>=3 && n"
+"%100<=4 ? 2 : 3);\n"
 "Translator: Andrej Mernik <andrejm@ubuntu.si>\n"
-"X-Generator: Poedit 3.2.2\n"
+"X-Generator: Poedit 3.4.2\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -2184,13 +2184,12 @@ msgstr "Pregled slike"
 #: kookaview.cpp:245
 #, kde-format
 msgid "User specified"
-msgstr ""
+msgstr "Uporabniško določeno"
 
 #: kookaview.cpp:246
-#, fuzzy, kde-format
-#| msgid "OCR Command Failed"
+#, kde-format
 msgid "on command line"
-msgstr "Ukaz OCR ni uspel"
+msgstr "na ukazni vrstici"
 
 #: kookaview.cpp:266
 #, kde-format
@@ -2602,7 +2601,7 @@ msgstr "Omogoči sporočila/vprašanja"
 #: prefspages.cpp:152
 #, kde-format
 msgid "%1 must be restarted for these settings to take effect."
-msgstr ""
+msgstr "%1 je treba znova zagnati, da te nastavitve začnejo veljati."
 
 #: prefspages.cpp:267
 #, kde-format

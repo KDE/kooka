@@ -4,14 +4,14 @@
 # Miguel Revilla Rodríguez <yo@miguelrevilla.com>, 2002,2003, 2004.
 # Pablo de Vicente <p.devicente@wanadoo.es>, 2004.
 # Santiago Fernandez Sancho <santi@kde-es.org>, 2005, 2008.
-# Eloy Cuadra <ecuadra@eloihr.net>, 2005, 2006, 2007, 2011, 2014, 2015, 2017, 2018, 2019, 2020, 2021, 2022.
+# SPDX-FileCopyrightText: 2005, 2006, 2007, 2011, 2014, 2015, 2017, 2018, 2019, 2020, 2021, 2022, 2024 Eloy Cuadra <ecuadra@eloihr.net>
 # Miguel Angel Quesada Fernandez <kesadalive@gmail.com>, 2009.
 msgid ""
 msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-02-20 01:38+0000\n"
-"PO-Revision-Date: 2022-10-20 18:34+0200\n"
+"PO-Revision-Date: 2024-02-20 05:07+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "First-Translator: Pablo de Vicente <pvicentea@nexo.es>\n"
-"X-Generator: Lokalize 22.08.2\n"
+"X-Generator: Lokalize 23.08.4\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #, kde-format
@@ -2202,13 +2202,12 @@ msgstr "Vista de imagen"
 #: kookaview.cpp:245
 #, kde-format
 msgid "User specified"
-msgstr ""
+msgstr "Especificado por el usuario"
 
 #: kookaview.cpp:246
-#, fuzzy, kde-format
-#| msgid "OCR Command Failed"
+#, kde-format
 msgid "on command line"
-msgstr "La orden OCR ha fallado"
+msgstr "en la línea de órdenes"
 
 #: kookaview.cpp:266
 #, kde-format
@@ -2626,11 +2625,9 @@ msgid "Enable Messages/Questions"
 msgstr "Activar mensajes y preguntas"
 
 #: prefspages.cpp:152
-#, fuzzy, kde-format
-#| msgid "Kooka must be restarted for changes in these options to take effect."
+#, kde-format
 msgid "%1 must be restarted for these settings to take effect."
-msgstr ""
-"Kooka debe ser reiniciado para que tengan efecto las opciones modificadas."
+msgstr "Debe reiniciar %1 para que estos ajustes tengan efecto."
 
 #: prefspages.cpp:267
 #, kde-format

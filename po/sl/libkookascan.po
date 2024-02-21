@@ -7,26 +7,26 @@ msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-02-20 01:38+0000\n"
-"PO-Revision-Date: 2021-03-05 10:54+0100\n"
+"PO-Revision-Date: 2024-02-20 09:40+0100\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 20.08.1\n"
 "Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
 "%100==4 ? 3 : 0);\n"
+"X-Generator: Poedit 3.4.2\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
-msgstr ""
+msgstr "Matjaž Jeran"
 
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
-msgstr ""
+msgstr "matjaz.jeran@amis.net"
 
 #: ../libdialogutil/imagefilter.cpp:91
 #, kde-format
@@ -60,23 +60,29 @@ msgid ""
 "<link url=\"?2\">locating devices</link>, <link url=\"?3\">HP scanners</"
 "link>, <link url=\"?4\">device not found</link>."
 msgstr ""
+"Če vaš optični bralnik ni bil samodejno zaznan, ga lahko določite tukaj. "
+"<interface>Naprava za skeniranje </interface> je ime zaledne naprave SANE. "
+"<interface>Proizvajalec</interface>, <interface>Tip</interface> in "
+"<interface>Opis</interface> lahko uporabite za kasnejšo identifikacijo "
+"optičnega bralnika.<nl/><nl/>Več informacij na <link url =\"?1\">Zaledja "
+"SANE</link>, <link url=\"?2\">lokacije naprav</link>, <link url=\"?3\">HP "
+"skenerji</link>, <link url=\" ?4\">naprave ni mogoče najti</link>."
 
 #: adddevicedialog.cpp:77
-#, fuzzy, kde-format
-#| msgid "Scanner device name:"
+#, kde-format
 msgid "Scanner device:"
-msgstr "Ime naprave za optično branje:"
+msgstr "Naprava za optično branje:"
 
 #: adddevicedialog.cpp:80 scandevices.cpp:190
 #, kde-format
 msgctxt "Value used for manufacturer if none entered"
 msgid "User specified"
-msgstr ""
+msgstr "Uporabniško določeno"
 
 #: adddevicedialog.cpp:82
 #, kde-format
 msgid "Manufacturer:"
-msgstr ""
+msgstr "Proizvajalec:"
 
 #: adddevicedialog.cpp:86
 #, kde-format
@@ -97,6 +103,10 @@ msgid ""
 "\">sane(7)</link> or <link url=\"man:/sane-dll\">sane&#8209;dll(5)</link> "
 "for more information on available backends and the format of device names."
 msgstr ""
+"<interface>Naprava za skeniranje</interface> mora biti ime zaledja (z "
+"izbirnimi parametri), ki ga razume SANE. Glejte <link url=\"man:/sane"
+"\">sane(7)</link> ali <link url=\"man:/sane-dll\">sane&#8209;dll(5)</link> "
+"za več informacij o razpoložljivih zaledjih in oblikah imen naprav."
 
 #: adddevicedialog.cpp:134
 #, kde-kuit-format
@@ -109,6 +119,12 @@ msgid ""
 "<icode>&#8209;L</icode> option for network scanners. If the scanner is "
 "found, then enter the device name displayed by these commands."
 msgstr ""
+"Če želite poiskati podatke, ki jih morate vnesti sem, poskusite poiskati "
+"napravo z ukazom <link url=\"man:/sane-find-scanner\">sane&#8209;find&#8209;"
+"scanner(1)</link> za skenerje SCSI, USB ali vzporednih vrat ali ukaz <link "
+"url=\"man:/scanimage\">scanimage(1)</link> z možnostjo <icode>&#8209;L</"
+"icode> za omrežne skenerje. Če je skener najden, vnesite ime naprave, "
+"prikazano s temi ukazi."
 
 #: adddevicedialog.cpp:143
 #, kde-kuit-format
@@ -121,6 +137,12 @@ msgid ""
 "the scanner is found by HPLIP, then the device name <icode>hp:</icode> that "
 "it displays needs to be replaced by <icode>hpaio:</icode> for SANE."
 msgstr ""
+"Za USB ali omrežni optični bralnik HP, ki uporablja <link url=\"http://hplip."
+"sourceforge.net/\">HPLIP</link>, poskusite uporabiti ukaz <command>hp&#8209;"
+"probe</command>, da ga locirate, na primer <icode>hp&#8209;probe&nbsp;&#8209;"
+"b&nbsp;usb</icode> ali <icode>hp&#8209;probe&nbsp;&#8209;b&nbsp;net</icode>. "
+"Upoštevajte, da če HPLIP najde skener, je treba ime naprave <icode>hp:</"
+"icode>, ki ga prikaže, zamenjati z <icode>hpaio:</icode> za SANE."
 
 #: adddevicedialog.cpp:152
 #, kde-kuit-format
@@ -130,6 +152,9 @@ msgid ""
 "by SANE. Check the SANE documentation for a <link url=\"http://www.sane-"
 "project.org/sane-supported-devices.html\">list of supported devices</link>."
 msgstr ""
+"Če ti ukazi ne locirajo vašega optičnega bralnika, ga SANE morda ne podpira. "
+"Preverite dokumentacijo SANE za <link url=\"http://www.sane-project.org/sane-"
+"supported-devices.html\">seznam podprtih naprav</link>."
 
 #: autoselectbar.cpp:56
 #, kde-kuit-format
@@ -488,33 +513,32 @@ msgstr "Neznana naprava '%1'"
 #: scanglobal.cpp:136
 #, kde-format
 msgid "SANE - Scanner Access Now Easy"
-msgstr ""
+msgstr "SANE - Scanner Access Now Easy"
 
 #: scanglobal.cpp:137
 #, kde-format
 msgid "Scanner access and driver library"
-msgstr ""
+msgstr "Dostop do skenerja in knjižnica gonilnikov"
 
 #: scanglobal.cpp:144
 #, kde-format
 msgid "LibTIFF"
-msgstr ""
+msgstr "LibTIFF"
 
 #: scanglobal.cpp:145
-#, fuzzy, kde-format
-#| msgid "Force image format:"
+#, kde-format
 msgid "TIFF image format library"
-msgstr "Obvezen format slike:"
+msgstr "Knjižnica slikovnega formata TIFF"
 
 #: scanglobal.cpp:154
 #, kde-format
 msgid "libpaper"
-msgstr ""
+msgstr "libpaper"
 
 #: scanglobal.cpp:155
 #, kde-format
 msgid "Paper size configuration library"
-msgstr ""
+msgstr "Knjižnica konfiguracije velikosti papirja"
 
 #: scanimage.cpp:76
 #, kde-format
@@ -775,6 +799,7 @@ msgstr ""
 #, kde-format
 msgid "Use the system proxy settings to access network scanners"
 msgstr ""
+"Uporabite sistemske nastavitve posrednika za dostop do omrežnih skenerjev"
 
 #. i18n: ectx: tooltip, entry (StartupUseProxy), group (Startup)
 #: scansettings.kcfg:19
@@ -784,6 +809,10 @@ msgid ""
 "access network scanners.<br/><br/>Note that some SANE backends (for example "
 "'escl') may not work properly through a proxy.</div>"
 msgstr ""
+"<div>Označite to, če želite uporabiti standardne sistemske nastavitve "
+"posredniškega strežnika za dostop do omrežnih skenerjev.<br/><br/"
+">Upoštevajte, da nekatera ozadja SANE (na primer 'escl') morda ne bodo "
+"pravilno delovala prek posrednega strežnika.</div>"
 
 #. i18n: ectx: label, entry (StartupSkipAsk), group (Startup)
 #: scansettings.kcfg:28

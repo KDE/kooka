@@ -9,36 +9,36 @@
 # Wilbert Berendsen <wbsoft@xs4all.nl>, 2003, 2004.
 # Rinse de Vries <rinsedevries@kde.nl>, 2004, 2005, 2006, 2010.
 # Tom Albers <tomalbers@kde.nl>, 2004.
-# SPDX-FileCopyrightText: 2008, 2009, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023 Freek de Kruijf <freekdekruijf@kde.nl>
+# SPDX-FileCopyrightText: 2008, 2009, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024 Freek de Kruijf <freekdekruijf@kde.nl>
 # Ronald Stroethoff <stroet43@zonnet.nl>, 2016.
 msgid ""
 msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-02-20 01:38+0000\n"
-"PO-Revision-Date: 2023-10-06 11:51+0200\n"
+"PO-Revision-Date: 2024-02-20 11:30+0100\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 23.08.1\n"
+"X-Generator: Lokalize 23.08.4\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
 msgstr ""
-"Otto Bruggeman,Rinse de Vries,Wilbert Berendsen,Freek de Kruijf - t/m 2017; "
-"2020 t/m 2021,Ronald Stroethoff"
+"Otto Bruggeman,Rinse de Vries,Wilbert Berendsen,Ronald Stroethoff,Freek de "
+"Kruijf - t/m 2017; 2020 t/m 2024"
 
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
 msgstr ""
 "ottobruggeman@kde.nl,rinsedevries@kde.nl,wilbertberendsen@kde.nl,"
-"freekdekruijf@kde.nl,stroet43@zonnet.nl"
+"stroet43@zonnet.nl,freekdekruijf@kde.nl"
 
 #: ../plugins/destination/abstractdestination.cpp:86
 #, kde-format
@@ -2215,13 +2215,12 @@ msgstr "Afbeeldingweergave"
 #: kookaview.cpp:245
 #, kde-format
 msgid "User specified"
-msgstr ""
+msgstr "Gebruikergespecificeerd"
 
 #: kookaview.cpp:246
-#, fuzzy, kde-format
-#| msgid "OCR Command Failed"
+#, kde-format
 msgid "on command line"
-msgstr "OCR-commando is mislukt"
+msgstr "op opdrachtregel"
 
 #: kookaview.cpp:266
 #, kde-format
@@ -2639,12 +2638,10 @@ msgid "Enable Messages/Questions"
 msgstr "Berichten/vragen inschakelen"
 
 #: prefspages.cpp:152
-#, fuzzy, kde-format
-#| msgid "Kooka must be restarted for changes in these options to take effect."
+#, kde-format
 msgid "%1 must be restarted for these settings to take effect."
 msgstr ""
-"Kooka moet opnieuw worden opgestart alvorens de wijzigingen in de opties "
-"actief kunnen worden."
+"%1 moet opnieuw worden opgestart alvorens deze instellingen effect hebben."
 
 #: prefspages.cpp:267
 #, kde-format

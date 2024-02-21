@@ -4,13 +4,13 @@
 # Translators:
 # Volkan, 2013.
 # Volkan Gezer <volkangezer@gmail.com>, 2013-2014.
-# Emir SARI <emir_sari@icloud.com>, 2022, 2023.
+# SPDX-FileCopyrightText: 2022, 2023, 2024 Emir SARI <emir_sari@icloud.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: playground-graphics-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-02-20 01:38+0000\n"
-"PO-Revision-Date: 2023-11-26 01:26+0300\n"
+"PO-Revision-Date: 2024-02-20 17:38+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -18,17 +18,17 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 23.11.70\n"
+"X-Generator: Lokalize 24.01.95\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
-msgstr ""
+msgstr "Emir SARI"
 
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
-msgstr ""
+msgstr "emir_sari@icloud.com"
 
 #: ../libdialogutil/imagefilter.cpp:91
 #, kde-format
@@ -62,23 +62,29 @@ msgid ""
 "<link url=\"?2\">locating devices</link>, <link url=\"?3\">HP scanners</"
 "link>, <link url=\"?4\">device not found</link>."
 msgstr ""
+"Tarayıcınız kendiliğinden algılanmadıysa onu burada belirtebilirsiniz. "
+"<interface>Tarayıcı aygıtı</interface>, SANE arka uç aygıtı adıdır. "
+"<interface>Üretici</interface>, <interface>Tür</interface> ve "
+"<interface>Açıklama</interface>; daha sonra tarayıcıyı tanımlamak için "
+"kullanılabilir.<nl/><nl/>Daha fazla bilgi için: <link url=\"?1\">SANE arka "
+"uçları</link>, <link url=\"?2\">aygıtları bulmak</link>, <link url=\"?3\">HP "
+"tarayıcıları</link>, <link url=\"?4\">aygıtın bulunamadığı durumlar</link>."
 
 #: adddevicedialog.cpp:77
-#, fuzzy, kde-format
-#| msgid "Scanner device name:"
+#, kde-format
 msgid "Scanner device:"
-msgstr "Tarayıcı aygıt adı:"
+msgstr "Tarayıcı aygıtı:"
 
 #: adddevicedialog.cpp:80 scandevices.cpp:190
 #, kde-format
 msgctxt "Value used for manufacturer if none entered"
 msgid "User specified"
-msgstr ""
+msgstr "Kullanıcı tanımlı"
 
 #: adddevicedialog.cpp:82
 #, kde-format
 msgid "Manufacturer:"
-msgstr ""
+msgstr "Üretici:"
 
 #: adddevicedialog.cpp:86
 #, kde-format
@@ -99,6 +105,11 @@ msgid ""
 "\">sane(7)</link> or <link url=\"man:/sane-dll\">sane&#8209;dll(5)</link> "
 "for more information on available backends and the format of device names."
 msgstr ""
+"<interface>Tarayıcı aygıtı</interface>, SANE tarafından anlaşılabilen bir "
+"arka uç adı (isteğe bağlı parametrelerle birlikte) olmalıdır Kullanılabilir "
+"arka uçlar ve aygıt adlarının biçimi üzerine daha fazla bilgi için <link url="
+"\"man:/sane\">sane(7)</link> veya <link url=\"man:/sane-dll\">sane&#8209;"
+"dll(5)</link> sayfalarına bakın."
 
 #: adddevicedialog.cpp:134
 #, kde-kuit-format
@@ -111,6 +122,12 @@ msgid ""
 "<icode>&#8209;L</icode> option for network scanners. If the scanner is "
 "found, then enter the device name displayed by these commands."
 msgstr ""
+"Buraya girilmesi gereken bilgiyi bulmak için aygıtı <link url=\"man:/sane-"
+"find-scanner\">sane&#8209;find&#8209;scanner(1)</link> komutuyla bulmayı "
+"deneyin. Bu komut, SCSI, USB veya paralel kapı tarayıcılar içindir. Ağ "
+"tarayıcıları için <link url=\"man:/scanimage\">scanimage(1)</link> komutunu "
+"<icode>&#8209;L</icode> seçeneği ile kullanabilirsiniz. Tarayıcı bulunamazsa "
+"görüntülenen aygıt adını bu komutlarla girin."
 
 #: adddevicedialog.cpp:143
 #, kde-kuit-format
@@ -123,6 +140,12 @@ msgid ""
 "the scanner is found by HPLIP, then the device name <icode>hp:</icode> that "
 "it displays needs to be replaced by <icode>hpaio:</icode> for SANE."
 msgstr ""
+"<link url=\"http://hplip.sourceforge.net/\">HPLIP</link> kullanan bir USB "
+"veya ağ HP tarayıcısını bulmak için <command>hp&#8209;probe</command> "
+"komutunu kullanın; örneğin, <icode>hp&#8209;probe&nbsp;&#8209;b&nbsp;usb</"
+"icode> veya <icode>hp&#8209;probe&nbsp;&#8209;b&nbsp;net</icode>. Tarayıcı "
+"HPLIP tarafından bulunursa <icode>hp:</icode> ile başlayan aygıt adının SANE "
+"için <icode>hpaio:</icode> ile değiştirilmesi gerekir."
 
 #: adddevicedialog.cpp:152
 #, kde-kuit-format
@@ -132,12 +155,16 @@ msgid ""
 "by SANE. Check the SANE documentation for a <link url=\"http://www.sane-"
 "project.org/sane-supported-devices.html\">list of supported devices</link>."
 msgstr ""
+"Bu komutlar da tarayıcınızı bulamazsa tarayıcınız SANE tarafından "
+"desteklenmiyor olabilir. Desteklenen aygıtların bir listesi için <link url="
+"\"http://www.sane-project.org/sane-supported-devices.html\">SANE "
+"belgelendirmesine</link> bir göz atın."
 
 #: autoselectbar.cpp:56
 #, kde-kuit-format
 msgctxt "@info"
 msgid "<subtitle>Auto Select</subtitle>"
-msgstr "<subtitle>Otomatik Seçim</subtitle>"
+msgstr "<subtitle>Kendiliğinden Seçim</subtitle>"
 
 #: autoselectbar.cpp:82
 #, kde-format
@@ -149,19 +176,19 @@ msgstr "Bu değer, seçilen eşiğin gri tonlama değeridir"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Perform the auto-detection again"
-msgstr "Otomatik algılamayı tekrarla"
+msgstr "Kendiliğinden algılamayı yinele"
 
 #: autoselectbar.cpp:97
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Advanced settings for auto-detection"
-msgstr "Otomatik algılama için gelişmiş ayarlar"
+msgstr "Kendiliğinden algılama için gelişmiş ayarlar"
 
 #: autoselectdialog.cpp:56
 #, kde-format
 msgctxt "@title:window"
 msgid "Autoselect Settings"
-msgstr "Otomatik Seçme Ayarları"
+msgstr "Kendiliğinden Seçim Ayarları"
 
 #: autoselectdialog.cpp:82
 #, kde-format
@@ -186,7 +213,7 @@ msgstr "Tarama Aygıtını Seçin"
 #: deviceselector.cpp:71
 #, kde-format
 msgid "Available Scanners:"
-msgstr "Kullanılabilir Tarayıcılar:"
+msgstr "Kullanılabilir tarayıcılar:"
 
 #: deviceselector.cpp:82
 #, kde-format
@@ -459,17 +486,17 @@ msgid ""
 "\n"
 "Please select whether the background of the preview image is black or white."
 msgstr ""
-"Önizlemedeki görsellerin otomatik algılaması, önizleme resminin arka planına "
-"bağlıdır (belge yüklenmemiş tarama sonucu).\n"
+"Önizlemedeki görsellerin kendiliğinden algılaması, önizleme görselinin arka "
+"planına bağlıdır (belge yüklemeden tarama sonucu).\n"
 "\n"
 "Lütfen önizleme görselinin arka planının siyah mı yoksa beyaz mı olacağını "
-"seçin."
+"seçin.s"
 
 #: previewer.cpp:341
 #, kde-format
 msgctxt "@title:window"
 msgid "Autodetection Background"
-msgstr "Otomatik Arka Plan Algılaması"
+msgstr "Kendiliğinden Arka Plan Algılaması"
 
 #: previewer.cpp:342
 #, kde-format
@@ -486,38 +513,37 @@ msgstr "Siyah"
 #: scandevices.cpp:208
 #, kde-format
 msgid "Unknown device '%1'"
-msgstr "Bilinmeyen aygıt '%1'"
+msgstr "Bilinmeyen aygıt ‘%1’"
 
 #: scanglobal.cpp:136
 #, kde-format
 msgid "SANE - Scanner Access Now Easy"
-msgstr ""
+msgstr "SANE — Scanner Access Now Easy"
 
 #: scanglobal.cpp:137
 #, kde-format
 msgid "Scanner access and driver library"
-msgstr ""
+msgstr "Tarayıcı erişimi ve sürücü kitaplığı"
 
 #: scanglobal.cpp:144
 #, kde-format
 msgid "LibTIFF"
-msgstr ""
+msgstr "LibTIFF"
 
 #: scanglobal.cpp:145
-#, fuzzy, kde-format
-#| msgid "Force image format:"
+#, kde-format
 msgid "TIFF image format library"
-msgstr "Görsel biçimini zorla:"
+msgstr "TIFF görsel biçimi kitaplığı"
 
 #: scanglobal.cpp:154
 #, kde-format
 msgid "libpaper"
-msgstr ""
+msgstr "libpaper"
 
 #: scanglobal.cpp:155
 #, kde-format
 msgid "Paper size configuration library"
-msgstr ""
+msgstr "Kağıt boyutu yapılandırma kitaplığı"
 
 #: scanimage.cpp:76
 #, kde-format
@@ -563,7 +589,7 @@ msgstr "Ön&izleme"
 #: scanparams.cpp:162
 #, kde-format
 msgid "Start a preview scan and show the preview image"
-msgstr "Bir önizleme taraması başlar ve önizleme resmini önizle"
+msgstr "Bir önizleme taraması başlat ve önizleme görselini göster"
 
 #: scanparams.cpp:167
 #, kde-format
@@ -573,7 +599,7 @@ msgstr "&Taramayı Başlat"
 #: scanparams.cpp:168
 #, kde-format
 msgid "Start a scan and save the scanned image"
-msgstr "Bir tarama başlat ve taranan resmi kaydet"
+msgstr "Bir tarama başlat ve taranan görseli kaydet"
 
 #: scanparams.cpp:200
 #, kde-format
@@ -603,7 +629,7 @@ msgstr "Gelişmiş"
 #: scanparams.cpp:275
 #, kde-format
 msgid "SANE Debug (from PNM image)"
-msgstr "SANE Hata Ayıklama (PNM görüntüsünden)"
+msgstr "SANE Hata Ayıklama (PNM görselinden)"
 
 #: scanparams.cpp:276
 #, kde-kuit-format
@@ -613,9 +639,9 @@ msgid ""
 "processing etc.), but reading from the specified image file. See <link url="
 "\"man:sane-pnm(5)\">sane-pnm(5)</link> for more information."
 msgstr ""
-"Gerçek bir tarayıcının yaptığı şekilde çalış (tarama alanı ve görüntü işleme "
-"vb. dahil), ancak belirtilen görüntü dosyasından okuma yap. Daha fazla bilgi "
-"için <link url=\"man:sane-pnm(5)\">sane-pnm(5)</link> sayfasına bakın."
+"Gerçek bir tarayıcının yaptığı gibi çalış (tarama alanı ve görsel işleme vb. "
+"dahil), ancak belirtilen görsel dosyasından okuma yap. Daha fazla bilgi için "
+"<link url=\"man:sane-pnm(5)\">sane-pnm(5)</link> sayfasına bakın."
 
 #: scanparams.cpp:278
 #, kde-format
@@ -629,8 +655,8 @@ msgid ""
 "Do not perform any scanning or processing, but simply read the specified "
 "image file. This is for testing the image saving, etc."
 msgstr ""
-"Herhangi bir tarama veya işleme yapma ancak basitçe belirtilen görüntü "
-"dosyasından okuma yap. Bu tarama ve görüntü kaydetme vb. içindir."
+"Herhangi bir tarama veya işleme yapma; ancak basitçe belirtilen görsel "
+"dosyasından okuma yap. Bu, tarama ve görsel kaydetme vb. içindir."
 
 #: scanparams.cpp:296
 #, kde-format
@@ -670,7 +696,7 @@ msgstr "Görsel biçimini zorla:"
 #: scanparams.cpp:483
 #, kde-format
 msgid "Edit Gamma Table..."
-msgstr "Gama Tablosunu Düzenle..."
+msgstr "Gama Tablosunu Düzenle…"
 
 #: scanparams.cpp:555
 #, kde-kuit-format
@@ -698,7 +724,7 @@ msgstr ""
 "<title>Tarayıcı bulunamadı veya erişilemiyor</title><nl/><nl/>Tarayıcı "
 "aygıtına erişirken SANE kitaplığı kullanımında bir sorun oluştu. SANE "
 "kurulumunuzda bir sorun olabilir veya tarayıcınızı desteklemek için "
-"yapılandırılmamış olabilir.<nl/><nl/>SANE'in sistemde düzgünce kurulu "
+"yapılandırılmamış olabilir.<nl/><nl/>SANE’nin sistemde düzgünce kurulu "
 "olduğundan ve yapılandırıldığından; ayrıca tarayıcı adı ve ayarlarının doğru "
 "olduğundan emin olun.<nl/><nl/>SANE kurulumu ve ayarlaması hakkında daha "
 "fazla bilgi için proje web sayfasını (<link url=\"http://www.sane-project.org"
@@ -707,12 +733,12 @@ msgstr ""
 #: scanparams.cpp:677
 #, kde-format
 msgid "1-bit depth scan cannot be done in color"
-msgstr "1-bit derinliğinde tarama renkli yapılamaz"
+msgstr "1 bit derinliğinde renkli tarama yapılamaz"
 
 #: scanparams.cpp:680
 #, kde-format
 msgid "16-bit depth scans are not supported"
-msgstr "16-bit derinliğindeki taramalar desteklenmiyor"
+msgstr "16 bit derinliğindeki taramalar desteklenmiyor"
 
 #: scanparams.cpp:690
 #, kde-format
@@ -776,7 +802,7 @@ msgstr ""
 #: scansettings.kcfg:18
 #, kde-format
 msgid "Use the system proxy settings to access network scanners"
-msgstr ""
+msgstr "Ağ tarayıcılarına erişim için sistem vekil ayarlarını kullan"
 
 #. i18n: ectx: tooltip, entry (StartupUseProxy), group (Startup)
 #: scansettings.kcfg:19
@@ -786,25 +812,29 @@ msgid ""
 "access network scanners.<br/><br/>Note that some SANE backends (for example "
 "'escl') may not work properly through a proxy.</div>"
 msgstr ""
+"<div>Ağ tarayıcılarına erişmek için sistem vekil ayarlarını kullanmak "
+"istiyorsanız bunu işaretleyin.<br/><br/>Kimi SANE arka uçlarının (örneğin, "
+"‘escl’) vekil üzerinden düzgün çalışmayabileceğini unutmayın.</div>"
 
 #. i18n: ectx: label, entry (StartupSkipAsk), group (Startup)
 #: scansettings.kcfg:28
 #, kde-format
 msgid "Show the scanner selection dialog"
-msgstr "Tarayıcı seçim penceresini göster"
+msgstr "Tarayıcı seçim iletişim kutusunu göster"
 
 #. i18n: ectx: tooltip, entry (StartupSkipAsk), group (Startup)
 #: scansettings.kcfg:29
 #, kde-format
 msgid "<div>Check this to show the scanner selection dialog on startup.</div>"
 msgstr ""
-"<div>Tarayıcı seçim penceresininin gösterilmesi için, bunu işaretleyin.</div>"
+"<div>Tarayıcı seçim iletişim kutusunun gösterilmesi için bunu işaretleyin.</"
+"div>"
 
 #. i18n: ectx: label, entry (PreviewAutoselThreshold), group (Scanner Name)
 #: scansettings.kcfg:61
 #, kde-format
 msgid "Threshold:"
-msgstr "Eşik Değeri:"
+msgstr "Eşik değeri:"
 
 #. i18n: ectx: tooltip, entry (PreviewAutoselThreshold), group (Scanner Name)
 #: scansettings.kcfg:62
@@ -814,9 +844,9 @@ msgid ""
 "background) or darker (on a white background) than this are considered to be "
 "part of the image.</div>"
 msgstr ""
-"<div>Otomatik algılama eşiği. Bu değerden daha açık (siyah arka planda) veya "
-"daha karanlık (beyaz arka planda) tümpikseller resmin parçası olarak "
-"algılanacaktır.</div>"
+"<div>Kendiliğinden algılama eşiği. Bu değerden daha açık (siyah arka planda) "
+"veya daha karanlık (beyaz arka planda) tüm pikseller görselin bir parçası "
+"olarak algılanacaktır.</div>"
 
 #. i18n: ectx: label, entry (PreviewAutoselDustsize), group (Scanner Name)
 #: scansettings.kcfg:69

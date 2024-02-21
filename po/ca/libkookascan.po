@@ -1,16 +1,16 @@
 # Translation of libkookascan.po to Catalan
-# Copyright (C) 2012-2021 This_file_is_part_of_KDE
+# Copyright (C) 2012-2024 This_file_is_part_of_KDE
 # This file is distributed under the license LGPL version 2.1 or
 # version 3 or later versions approved by the membership of KDE e.V.
 #
 # Antoni Bella Pérez <antonibella5@yahoo.com>, 2012, 2014, 2016, 2018, 2020.
-# Josep M. Ferrer <txemaq@gmail.com>, 2014, 2015, 2016, 2017, 2020, 2021.
+# Josep M. Ferrer <txemaq@gmail.com>, 2014, 2015, 2016, 2017, 2020, 2021, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-02-20 01:38+0000\n"
-"PO-Revision-Date: 2021-12-12 10:10+0100\n"
+"PO-Revision-Date: 2024-02-20 15:56+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -19,17 +19,17 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Accelerator-Marker: &\n"
-"X-Generator: Lokalize 20.12.0\n"
+"X-Generator: Lokalize 22.12.3\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
-msgstr ""
+msgstr "Antoni Bella"
 
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
-msgstr ""
+msgstr "antonibella5@yahoo.com"
 
 #: ../libdialogutil/imagefilter.cpp:91
 #, kde-format
@@ -63,23 +63,30 @@ msgid ""
 "<link url=\"?2\">locating devices</link>, <link url=\"?3\">HP scanners</"
 "link>, <link url=\"?4\">device not found</link>."
 msgstr ""
+"Si l'escàner no s'ha detectat automàticament, podeu especificar-ho aquí. El "
+"<interface>Dispositiu d'escaneig</interface> és el nom del dispositiu del "
+"dorsal SANE. El <interface>Fabricant</interface>, <interface>Tipus</"
+"interface> i <interface>Descripció</interface> es poden utilitzar per a "
+"identificar l'escàner més tard.<nl/><nl/>Més informació sobre els <link url="
+"\"?1\">dorsals SANE</link>, la <link url=\"?2\">localització de dispositius</"
+"link>, els <link url=\"?3\">escàners HP</link>, i els <link url=\"?"
+"4\">dispositius no trobats</link>."
 
 #: adddevicedialog.cpp:77
-#, fuzzy, kde-format
-#| msgid "Scanner device name:"
+#, kde-format
 msgid "Scanner device:"
-msgstr "Nom del dispositiu d'escaneig:"
+msgstr "Dispositiu d'escaneig:"
 
 #: adddevicedialog.cpp:80 scandevices.cpp:190
 #, kde-format
 msgctxt "Value used for manufacturer if none entered"
 msgid "User specified"
-msgstr ""
+msgstr "Especificat per l'usuari"
 
 #: adddevicedialog.cpp:82
 #, kde-format
 msgid "Manufacturer:"
-msgstr ""
+msgstr "Fabricant:"
 
 #: adddevicedialog.cpp:86
 #, kde-format
@@ -100,6 +107,11 @@ msgid ""
 "\">sane(7)</link> or <link url=\"man:/sane-dll\">sane&#8209;dll(5)</link> "
 "for more information on available backends and the format of device names."
 msgstr ""
+"El <interface>Dispositiu d'escaneig</interface> hauria de ser un nom de "
+"dorsal (amb paràmetres opcionals) que el SANE l'entengui. Vegeu <link url="
+"\"man:/sane\">sane(7)</link> o <link url=\"man:/sane-dll\">sane&#8209;"
+"dll(5)</link> per a més informació sobre els dorsals disponibles i el format "
+"dels noms dels dispositius."
 
 #: adddevicedialog.cpp:134
 #, kde-kuit-format
@@ -112,6 +124,12 @@ msgid ""
 "<icode>&#8209;L</icode> option for network scanners. If the scanner is "
 "found, then enter the device name displayed by these commands."
 msgstr ""
+"Per a trobar la informació que cal introduir aquí, proveu de localitzar el "
+"dispositiu utilitzant l'ordre <link url=\"man:/sane-find-scanner"
+"\">sane&#8209;find&#8209;scanner(1)</link> per a escàners SCSI, USB o ports "
+"en paral·lel, o l'ordre <link url=\"man:/scanimage\">scanimage(1)</link> amb "
+"l'opció <icode>&#8209;L</icode> per a escàners de xarxa. Si es troba "
+"l'escàner, introduïu el nom del dispositiu mostrat per aquestes ordres."
 
 #: adddevicedialog.cpp:143
 #, kde-kuit-format
@@ -124,6 +142,13 @@ msgid ""
 "the scanner is found by HPLIP, then the device name <icode>hp:</icode> that "
 "it displays needs to be replaced by <icode>hpaio:</icode> for SANE."
 msgstr ""
+"Per a un escàner d'HP USB o en xarxa utilitzant <link url=\"http://hplip."
+"sourceforge.net/\">HPLIP</link>, proveu d'utilitzar l'ordre "
+"<command>hp&#8209;probe</command> per a localitzar-lo, per exemple "
+"<icode>hp&#8209;probe&nbsp;&#8209;b&nbsp;usb</icode> o <icode>hp&#8209;"
+"probe&nbsp;&#8209;b&nbsp;net</icode>. Tingueu en compte que si l'HPLIP troba "
+"l'escàner, llavors el nom del dispositiu <icode>hp:</icode> que mostra ha de "
+"ser substituït per <icode>hpaio:</icode> en el SANE."
 
 #: adddevicedialog.cpp:152
 #, kde-kuit-format
@@ -133,6 +158,10 @@ msgid ""
 "by SANE. Check the SANE documentation for a <link url=\"http://www.sane-"
 "project.org/sane-supported-devices.html\">list of supported devices</link>."
 msgstr ""
+"Si aquestes ordres no localitzen l'escàner, és possible que el SANE no "
+"l'admeti. Comproveu a la documentació del SANE la llista <link url=\"http://"
+"www.sane-project.org/sane-supported-devices.html\">de dispositius "
+"compatibles</link>."
 
 #: autoselectbar.cpp:56
 #, kde-kuit-format
@@ -492,33 +521,32 @@ msgstr "Dispositiu desconegut «%1»"
 #: scanglobal.cpp:136
 #, kde-format
 msgid "SANE - Scanner Access Now Easy"
-msgstr ""
+msgstr "SANE - Scanner Access Now Easy («Accés ara fàcil a l'escàner»)"
 
 #: scanglobal.cpp:137
 #, kde-format
 msgid "Scanner access and driver library"
-msgstr ""
+msgstr "Biblioteca d'accés a l'escàner i al controlador"
 
 #: scanglobal.cpp:144
 #, kde-format
 msgid "LibTIFF"
-msgstr ""
+msgstr "LibTIFF"
 
 #: scanglobal.cpp:145
-#, fuzzy, kde-format
-#| msgid "Force image format:"
+#, kde-format
 msgid "TIFF image format library"
-msgstr "Força el format d'imatge:"
+msgstr "Biblioteca del format d'imatge TIFF"
 
 #: scanglobal.cpp:154
 #, kde-format
 msgid "libpaper"
-msgstr ""
+msgstr "libpaper"
 
 #: scanglobal.cpp:155
 #, kde-format
 msgid "Paper size configuration library"
-msgstr ""
+msgstr "Biblioteca de configuració de la mida del paper"
 
 #: scanimage.cpp:76
 #, kde-format
@@ -782,6 +810,8 @@ msgstr ""
 #, kde-format
 msgid "Use the system proxy settings to access network scanners"
 msgstr ""
+"Utilitza la configuració del servidor intermediari del sistema per a accedir "
+"als escàners de xarxa"
 
 #. i18n: ectx: tooltip, entry (StartupUseProxy), group (Startup)
 #: scansettings.kcfg:19
@@ -791,6 +821,10 @@ msgid ""
 "access network scanners.<br/><br/>Note that some SANE backends (for example "
 "'escl') may not work properly through a proxy.</div>"
 msgstr ""
+"<div>Marqueu això si voleu utilitzar la configuració estàndard del servidor "
+"intermediari per a accedir als escàners de xarxa.<br/><br/>Tingueu en compte "
+"que alguns dorsals del SANE (per exemple «escl») poden no funcionar "
+"correctament a través d'un servidor intermediari.</div>"
 
 #. i18n: ectx: label, entry (StartupSkipAsk), group (Startup)
 #: scansettings.kcfg:28
@@ -904,47 +938,3 @@ msgstr "Estableix l'orientació d'una mida preestablerta de la zona escanejada"
 #, kde-format
 msgid "Selection"
 msgstr "Selecció"
-
-#~ msgctxt "@info"
-#~ msgid ""
-#~ "If your scanner has not been automatically detected, you can specify it "
-#~ "here. The <interface>Scanner device name</interface> should be a backend "
-#~ "name (with optional parameters) that is understood by SANE, see <link url="
-#~ "\"man:/sane\">sane(7)</link> or <link url=\"man:/sane-dll\">sane-dll(5)</"
-#~ "link> for more information on available backends. The <interface>Type</"
-#~ "interface> and <interface>Description</interface> can be used to identify "
-#~ "the scanner later.<nl/><nl/>For the information that needs to be entered "
-#~ "here, try to locate the device using the <link url=\"man:/sane-find-"
-#~ "scanner\">sane-find-scanner(1)</link> command. For a USB or networked HP "
-#~ "scanner using <link url=\"http://hplip.sourceforge.net/\">HPLIP</link>, "
-#~ "try using the <command>hp-probe</command> command to locate it, for "
-#~ "example <icode>hp-probe&nbsp;-b&nbsp;usb</icode> or <icode>hp-probe&nbsp;-"
-#~ "b&nbsp;net</icode>. If the scanner is found, then enter the device name "
-#~ "displayed by these commands; note that if using HPLIP then <icode>hp:</"
-#~ "icode> needs to be replaced by <icode>hpaio:</icode>.<nl/><nl/>If these "
-#~ "commands fail to locate your scanner, then it may not be supported by "
-#~ "SANE. Check the SANE documentation for a <link url=\"http://www.sane-"
-#~ "project.org/sane-supported-devices.html\">list of supported devices</"
-#~ "link>."
-#~ msgstr ""
-#~ "Si el vostre escàner no s'ha detectat automàticament, el podreu "
-#~ "especificar aquí. El <interface>Nom del dispositiu d'escaneig</interface> "
-#~ "haurà de ser un nom de dorsal (amb paràmetres opcionals) que entengui "
-#~ "SANE, veure <link url=\"man:/sane\">sane(7)</link> o <link url=\"man:/"
-#~ "sane-dll\">sane-dll(5)</link> per a obtenir més informació sobre els "
-#~ "dorsals disponibles. El <interface>Tipus</interface> i la "
-#~ "<interface>Descripció</interface> es poden utilitzar més endavant per a "
-#~ "identificar l'escàner.<nl/><nl/>Per a obtenir la informació necessària, "
-#~ "intenteu trobar el dispositiu amb l'ordre <link url=\"man:/sane-find-"
-#~ "scanner\">sane-find-scanner(1)</link>. Per a un escàner USB o de xarxa de "
-#~ "la marca HP que usi <link url=\"http://hplip.sourceforge.net/\">HPLIP</"
-#~ "link>, intenteu fer servir l'ordre <command>hp-probe</command> per a "
-#~ "localitzar-lo, per exemple <icode>hp-probe&nbsp;-b&nbsp;usb</icode> o "
-#~ "<icode>hp-probe&nbsp;-b&nbsp;net</icode>. Si es troba l'escàner, a "
-#~ "continuació introduïu el nom del dispositiu mostrat per aquestes ordres. "
-#~ "Amb compte que si utilitza HPLIP, llavors <icode>hp:</icode> s'haurà de "
-#~ "substituir per <icode>hpaio:</icode>.<nl/><nl/>Si aquestes ordres no "
-#~ "detecten l'escàner, llavors podria no estar suportat per SANE. Consulteu "
-#~ "la seva documentació per a obtenir una <link url=\"http://www.sane-"
-#~ "project.org/sane-supported-devices.html\">llista dels dispositius "
-#~ "compatibles amb SANE</link>."

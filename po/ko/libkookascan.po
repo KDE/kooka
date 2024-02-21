@@ -1,28 +1,28 @@
-# Shinjo Park <kde@peremen.name>, 2014, 2015, 2019, 2020, 2021.
+# SPDX-FileCopyrightText: 2014, 2015, 2019, 2020, 2021, 2024 Shinjo Park <kde@peremen.name>
 msgid ""
 msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-02-20 01:38+0000\n"
-"PO-Revision-Date: 2021-05-17 01:32+0200\n"
+"PO-Revision-Date: 2024-02-21 00:00+0100\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 20.12.3\n"
+"X-Generator: Lokalize 23.08.1\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
-msgstr ""
+msgstr "박신조"
 
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
-msgstr ""
+msgstr "kde@peremen.name"
 
 #: ../libdialogutil/imagefilter.cpp:91
 #, kde-format
@@ -56,23 +56,28 @@ msgid ""
 "<link url=\"?2\">locating devices</link>, <link url=\"?3\">HP scanners</"
 "link>, <link url=\"?4\">device not found</link>."
 msgstr ""
+"스캐너가 자동으로 인식되지 않았다면 여기에 입력하십시오. <interface>스캐너 장"
+"치</interface>는 SANE 백엔드 장치 이름입니다.<interface>제조사</interface>, "
+"<interface>장치 종류</interface>, <interface>설명</interface>은 스캐너를 식별"
+"할 때 사용할 수 있습니다.<nl/><nl/>자세한 정보: <link url=\"?1\">SANE 백엔드"
+"</link>, <link url=\"?2\">장치 식별</link>, <link url=\"?3\">HP 스캐너</"
+"link>, <link url=\"?4\">장치를 찾을 수 없을 때</link>."
 
 #: adddevicedialog.cpp:77
-#, fuzzy, kde-format
-#| msgid "Scanner device name:"
+#, kde-format
 msgid "Scanner device:"
-msgstr "스캐너 장치 이름:"
+msgstr "스캐너 장치:"
 
 #: adddevicedialog.cpp:80 scandevices.cpp:190
 #, kde-format
 msgctxt "Value used for manufacturer if none entered"
 msgid "User specified"
-msgstr ""
+msgstr "사용자 지정"
 
 #: adddevicedialog.cpp:82
 #, kde-format
 msgid "Manufacturer:"
-msgstr ""
+msgstr "제조사:"
 
 #: adddevicedialog.cpp:86
 #, kde-format
@@ -93,6 +98,10 @@ msgid ""
 "\">sane(7)</link> or <link url=\"man:/sane-dll\">sane&#8209;dll(5)</link> "
 "for more information on available backends and the format of device names."
 msgstr ""
+"<interface>스캐너 장치</interface>는 SANE에서 인식할 수 있는 백엔드 이름과 선"
+"택적 인자입니다. 사용 가능한 백엔드와 장치 이름 형식 정보는 <link url=\"man:/"
+"sane\">sane(7)</link> 또는 <link url=\"man:/sane-dll\">sane&#8209;dll(5)</"
+"link> 문서를 참조하십시오."
 
 #: adddevicedialog.cpp:134
 #, kde-kuit-format
@@ -105,6 +114,11 @@ msgid ""
 "<icode>&#8209;L</icode> option for network scanners. If the scanner is "
 "found, then enter the device name displayed by these commands."
 msgstr ""
+"여기에 입력할 정보를 찾으려면 <link url=\"man:/sane-find-scanner"
+"\">sane&#8209;find&#8209;scanner(1)</link> 명령을 사용하여 SCSI, USB, 병렬 포"
+"트 스캐너를 검색하거나, <link url=\"man:/scanimage\">scanimage(1)</link> 명령"
+"의 <icode>&#8209;L</icode> 옵션을 사용하여 네트워크 스캐너를 검색하십시오. 스"
+"캐너를 찾았다면 해당 명령의 결과로 표시된 장치 이름을 입력하십시오."
 
 #: adddevicedialog.cpp:143
 #, kde-kuit-format
@@ -117,6 +131,12 @@ msgid ""
 "the scanner is found by HPLIP, then the device name <icode>hp:</icode> that "
 "it displays needs to be replaced by <icode>hpaio:</icode> for SANE."
 msgstr ""
+"<link url=\"http://hplip.sourceforge.net/\">HPLIP</link>를 사용하는 USB나 네"
+"트워크 HP 스캐너라면 <command>hp&#8209;probe</command> 명령을 사용하여 검사하"
+"십시오. 예: <icode>hp&#8209;probe&nbsp;&#8209;b&nbsp;usb</icode> 또는 "
+"<icode>hp&#8209;probe&nbsp;&#8209;b&nbsp;net</icode>. HPLIP에서 스캐너를 검색"
+"했다면 해당 명령 결과로 표시된 장치 이름의 <icode>hp:</icode> 부분을 SANE에"
+"서 사용하는 <icode>hpaio:</icode>로 변경해서 입력해야 합니다."
 
 #: adddevicedialog.cpp:152
 #, kde-kuit-format
@@ -126,6 +146,9 @@ msgid ""
 "by SANE. Check the SANE documentation for a <link url=\"http://www.sane-"
 "project.org/sane-supported-devices.html\">list of supported devices</link>."
 msgstr ""
+"이 명령으로 스캐너를 찾을 수 없다면 SANE에서 지원하지 않는 스캐너일 수도 있습"
+"니다. <link url=\"http://www.sane-project.org/sane-supported-devices.html"
+"\">SANE의 지원하는 장치 문서</link>를 참조하십시오."
 
 #: autoselectbar.cpp:56
 #, kde-kuit-format
@@ -484,33 +507,32 @@ msgstr "알 수 없는 장치 '%1'"
 #: scanglobal.cpp:136
 #, kde-format
 msgid "SANE - Scanner Access Now Easy"
-msgstr ""
+msgstr "SANE - Scanner Access Now Easy"
 
 #: scanglobal.cpp:137
 #, kde-format
 msgid "Scanner access and driver library"
-msgstr ""
+msgstr "스캐너 접근 및 드라이버 라이브러리"
 
 #: scanglobal.cpp:144
 #, kde-format
 msgid "LibTIFF"
-msgstr ""
+msgstr "LibTIFF"
 
 #: scanglobal.cpp:145
-#, fuzzy, kde-format
-#| msgid "Force image format:"
+#, kde-format
 msgid "TIFF image format library"
-msgstr "그림 형식 강제:"
+msgstr "TIFF 그림 형식 라이브러리"
 
 #: scanglobal.cpp:154
 #, kde-format
 msgid "libpaper"
-msgstr ""
+msgstr "libpaper"
 
 #: scanglobal.cpp:155
 #, kde-format
 msgid "Paper size configuration library"
-msgstr ""
+msgstr "용지 크기 설정 라이브러리"
 
 #: scanimage.cpp:76
 #, kde-format
@@ -767,7 +789,7 @@ msgstr ""
 #: scansettings.kcfg:18
 #, kde-format
 msgid "Use the system proxy settings to access network scanners"
-msgstr ""
+msgstr "시스템 프록시 설정을 사용하여 네트워크 스캐너에 접근"
 
 #. i18n: ectx: tooltip, entry (StartupUseProxy), group (Startup)
 #: scansettings.kcfg:19
@@ -777,6 +799,9 @@ msgid ""
 "access network scanners.<br/><br/>Note that some SANE backends (for example "
 "'escl') may not work properly through a proxy.</div>"
 msgstr ""
+"<div>이 옵션을 사용하면 표준 시스템 프록시 설정을 사용하여 네트워크 스캐너에 "
+"접근합니다.<br/><br/>일부 SANE 백엔드(예: 'escl')는 프록시 사용 시 올바르게 "
+"작동하지 않을 수도 있습니다.</div>"
 
 #. i18n: ectx: label, entry (StartupSkipAsk), group (Startup)
 #: scansettings.kcfg:28

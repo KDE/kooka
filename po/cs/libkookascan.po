@@ -75,7 +75,7 @@ msgstr ""
 #: adddevicedialog.cpp:82
 #, kde-format
 msgid "Manufacturer:"
-msgstr ""
+msgstr "Výrobce:"
 
 #: adddevicedialog.cpp:86
 #, kde-format
@@ -493,7 +493,7 @@ msgstr ""
 #: scanglobal.cpp:144
 #, kde-format
 msgid "LibTIFF"
-msgstr ""
+msgstr "LibTIFF"
 
 #: scanglobal.cpp:145
 #, kde-format

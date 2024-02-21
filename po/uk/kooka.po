@@ -6,20 +6,20 @@
 # Andriy Rysin <rysin@kde.org>, 2002, 2003, 2006.
 # Eugene Onischenko <oneugene@ukr.net>, 2003, 2004.
 # Ivan Petrouchtchak <ivanpetrouchtchak@yahoo.com>, 2004, 2005, 2006, 2007.
-# Yuri Chornoivan <yurchor@ukr.net>, 2009, 2010, 2011, 2012, 2013, 2017, 2018, 2019, 2020, 2021, 2022.
+# Yuri Chornoivan <yurchor@ukr.net>, 2009, 2010, 2011, 2012, 2013, 2017, 2018, 2019, 2020, 2021, 2022, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-02-20 01:38+0000\n"
-"PO-Revision-Date: 2022-10-20 16:15+0300\n"
+"PO-Revision-Date: 2024-02-20 09:26+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
 "Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 20.12.0\n"
+"X-Generator: Lokalize 23.04.1\n"
 "Plural-Forms: nplurals=4; plural=n==1 ? 3 : n%10==1 && n%100!=11 ? 0 : n"
 "%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 
@@ -2214,13 +2214,12 @@ msgstr "Перегляд зображення"
 #: kookaview.cpp:245
 #, kde-format
 msgid "User specified"
-msgstr ""
+msgstr "Вказане користувачем"
 
 #: kookaview.cpp:246
-#, fuzzy, kde-format
-#| msgid "OCR Command Failed"
+#, kde-format
 msgid "on command line"
-msgstr "Не вдалося виконати команду розпізнавання"
+msgstr "у рядку команди"
 
 #: kookaview.cpp:266
 #, kde-format
@@ -2642,11 +2641,9 @@ msgid "Enable Messages/Questions"
 msgstr "Увімкнути повідомлення та запитання"
 
 #: prefspages.cpp:152
-#, fuzzy, kde-format
-#| msgid "Kooka must be restarted for changes in these options to take effect."
+#, kde-format
 msgid "%1 must be restarted for these settings to take effect."
-msgstr ""
-"Потрібно перезапустити Kooka, щоб зміни в цих параметрах увійшли в дію."
+msgstr "%1 слід перезапустити, щоб ці параметри набули чинності."
 
 #: prefspages.cpp:267
 #, kde-format
