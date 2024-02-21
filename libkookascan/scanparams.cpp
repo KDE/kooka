@@ -71,6 +71,7 @@ extern "C"
 #include "kscanoptset.h"
 #include "scandevices.h"
 #include "dialogbase.h"
+#include "multiscandialog.h"
 #include "libkookascan_logging.h"
 
 //  Debugging options
@@ -596,47 +597,29 @@ void ScanParams::slotSourceSelect()
     if (mSourceSelect==nullptr) return;			// no source selection GUI
     if (!mSourceSelect->isValid()) return;		// no option on scanner
 
-
-
-
-
-
-
-#if 0
-// TODO: port/update
-    AdfBehaviour adf = ADF_OFF;
-
-
     const QByteArray &currSource = mSourceSelect->get();
-    //qCDebug(LIBKOOKASCAN_LOG) << "Current source is" << currSource;
+    mMultiOptions.setSource(currSource);
+    qCDebug(LIBKOOKASCAN_LOG) << "current multi options" << mMultiOptions.toString();
 
-    QList<QByteArray> sources = mSourceSelect->getList();
-#ifdef DEBUG_ADF
-    if (!sources.contains("Automatic Document Feeder")) {
-        sources.append("Automatic Document Feeder");
+    MultiScanDialog d(mSaneDevice, this);
+    d.setOptions(mMultiOptions);
+    if (!d.exec()) return;
+
+    mMultiOptions = d.options();
+    qCDebug(LIBKOOKASCAN_LOG) << "new multi options" << mMultiOptions.toString();
+
+    if (mSourceSelect!=nullptr)
+    {
+        // Update the source selection combo here with the updated option
+        // from the dialogue.  Need to ensure that everything showing
+        // and using that option is updated and notified.
+         mSourceSelect->set(mMultiOptions.source());
+         mSourceSelect->redrawWidget();
+         slotOptionChanged(mSourceSelect);
     }
-#endif
 
-    // TODO: the 'sources' list has exactly the same options as the
-    // scan source combo (apart from the debugging hack above), so
-    // what's the point of repeating it in this dialogue?
-    ScanSourceDialog d(this, sources, adf);
-    d.slotSetSource(currSource);
-
-    if (d.exec() != QDialog::Accepted) {
-        return;
-    }
-
-    QString sel_source = d.getText();
-    adf = d.getAdfBehave();
-    //qCDebug(LIBKOOKASCAN_LOG) << "new source" << sel_source << "ADF" << adf;
-
-    /* set the selected Document source, the behavior is stored in a membervar */
-    mSourceSelect->set(sel_source.toLatin1());		// TODO: FIX in ScanSourceDialog, then here
-    mSourceSelect->apply();
-    mSourceSelect->reload();
-    mSourceSelect->redrawWidget();
-#endif
+    // No GUI update is needed for the other options, they will be
+    // taken from mMultiOptions when they are needed.
 }
 
 

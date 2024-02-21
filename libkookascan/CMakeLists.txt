@@ -93,6 +93,8 @@ set(kookascan_SRCS
   autoselectbar.cpp
   autoselectdialog.cpp
   scanicons.cpp
+  multiscanoptions.cpp
+  multiscandialog.cpp
 )
 kconfig_add_kcfg_files(kookascan_SRCS scansettings.kcfgc)
 ecm_qt_declare_logging_category(kookascan_SRCS
