@@ -476,6 +476,13 @@ public:
      **/
     bool isAdfScan() const				{ return (mScanningAdf); }
 
+    /**
+     * Check whether the current scanner has an ADF available.
+     *
+     * @return @c true if an ADF is available
+     **/
+    bool isAdfAvailable();
+
 public slots:
     /**
      * Request the scan device to stop the scan currently in progress.

@@ -383,13 +383,10 @@ QWidget *ScanParams::createScannerParams()
         w = mSourceSelect->widget();
         frame->addRow(l, w);
 
-        //  TODO: enable the "Advanced" dialogue, because that
-        //  contains other ADF options.  They are not implemented at the moment
-        //  but they may be some day...
-        //QPushButton *pb = new QPushButton( i18n("Source && ADF Options..."), frame);
-        //connect(pb, &QAbstractButton::clicked, this, &ScanParams::slotSourceSelect);
-        //lay->addWidget(pb,row,2,1,-1,Qt::AlignRight);
-        //++row;
+        QPushButton *pb = new QPushButton(i18n("ADF && Multiple Scan Options..."), frame);
+        pb->setIcon(QIcon::fromTheme("document-multiple"));
+        connect(pb, &QAbstractButton::clicked, this, &ScanParams::slotSourceSelect);
+        frame->addRow(nullptr, pb, nullptr, Qt::AlignRight);
     }
 
     // SANE testing options, for the "test" device
@@ -596,16 +593,19 @@ QWidget *ScanParams::messageScannerProblem()
 
 void ScanParams::slotSourceSelect()
 {
+    if (mSourceSelect==nullptr) return;			// no source selection GUI
+    if (!mSourceSelect->isValid()) return;		// no option on scanner
+
+
+
+
+
+
+
 #if 0
 // TODO: port/update
     AdfBehaviour adf = ADF_OFF;
 
-    if (mSourceSelect == nullptr) {
-        return;    // no source selection GUI
-    }
-    if (!mSourceSelect->isValid()) {
-        return;    // no option on scanner
-    }
 
     const QByteArray &currSource = mSourceSelect->get();
     //qCDebug(LIBKOOKASCAN_LOG) << "Current source is" << currSource;
@@ -638,6 +638,7 @@ void ScanParams::slotSourceSelect()
     mSourceSelect->redrawWidget();
 #endif
 }
+
 
 /* Slot which is called if the user switches in the gui between
  *  the SANE-Debug-Mode and the qt image reading

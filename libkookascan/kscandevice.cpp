@@ -321,22 +321,44 @@ void KScanDevice::getCurrentFormat(int *format, int *depth)
 }
 
 
+static bool matchesAdf(const QByteArray &val)
+{
+    // There does not seem to be any "official" SANE way to find out whether
+    // the scan source is an ADF, so it has to be done by looking at the
+    // string value of the option.  Not sure whether this will work properly
+    // if SANE is I18N'ed.
+    return (val.contains("ADF") ||			// case sensitive
+            val.startsWith("Auto") ||			// case sensitive
+            val.toLower().contains("feeder"));		// case insensitive
+}
+
+
 void KScanDevice::updateAdfState(const KScanOption *so)
 {
     if (so==nullptr) so = getOption(SANE_NAME_SCAN_SOURCE, false);
     if (so==nullptr) mScanningAdf = false;		// no source option, assume no ADF
     else						// there is a source option
     {
-        // There does not seem to be any "official" SANE way to find out whether
-        // the scan source is an ADF, so this has to be done by looking at the
-        // string value of the option.  Not sure whether this will work properly
-        // if SANE is I18N'ed.
-        const QString val = so->get();
-        mScanningAdf = (val.contains("ADF", Qt::CaseSensitive) ||
-                        val.startsWith("Auto", Qt::CaseInsensitive) ||
-                        val.contains("Feeder", Qt::CaseInsensitive));
+        mScanningAdf = matchesAdf(so->get());
         qCDebug(LIBKOOKASCAN_LOG) << "ADF in use?" << mScanningAdf;
     }
+}
+
+
+bool KScanDevice::isAdfAvailable()
+{
+    const KScanOption *so = getOption(SANE_NAME_SCAN_SOURCE, false);
+    if (so==nullptr) return (false);			// no source option, assume no ADF
+
+    const QList<QByteArray> sources = so->getList();
+    if (sources.isEmpty()) return (false);		// unexpected option type, assume no ADF
+
+    for (const QByteArray &src : qAsConst(sources))
+    {
+        if (matchesAdf(src)) return (true);		// this source is an ADF
+    }
+
+    return (false);					// no ADF found
 }
 
 

@@ -380,6 +380,19 @@ public:
      **/
     void redrawWidget();
 
+    /**
+     * Retrieve a list of all possible option values.
+     *
+     * @return A list of formatted string values (as would be returned
+     * by @c get())
+     *
+     * @note This works for options with SANE_CONSTRAINT_STRING_LIST,
+     * SANE_CONSTRAINT_WORD_LIST and for a SANE_CONSTRAINT_RANGE which is a
+     * resolution setting.  To retrieve the range for other constraint
+     * types, use @c getRange().
+     **/
+    QList<QByteArray> getList() const;
+
 protected slots:
     /**
      * Called when the contents of the GUI widget has changed, if the
@@ -450,19 +463,6 @@ private:
      * @return @c true if the value was set successfully
      **/
     bool set(const int *val, int size);
-
-    /**
-     * Retrieve a list of all possible option values.
-     *
-     * @return A list of formatted string values (as would be returned
-     * by @c get())
-     *
-     * @note This works for options with SANE_CONSTRAINT_STRING_LIST,
-     * SANE_CONSTRAINT_WORD_LIST and for a SANE_CONSTRAINT_RANGE which is a
-     * resolution setting.  To retrieve the range for other constraint
-     * types, use @c getRange().
-     **/
-    QList<QByteArray> getList() const;
 
     /**
      * The type of an associated GUI widget (if there is one).
