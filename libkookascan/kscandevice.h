@@ -483,6 +483,14 @@ public:
      **/
     bool isAdfAvailable();
 
+    /**
+     * Test whether the scan source setting identifies an ADF.
+     *
+     * @param val The option value
+     * @return @c true if the value identifies an ADF
+     **/
+    static bool matchesAdf(const QByteArray &val);
+
 public slots:
     /**
      * Request the scan device to stop the scan currently in progress.

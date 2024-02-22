@@ -599,14 +599,21 @@ void ScanParams::slotSourceSelect()
 
     const QByteArray &currSource = mSourceSelect->get();
     mMultiOptions.setSource(currSource);
-    qCDebug(LIBKOOKASCAN_LOG) << "current multi options" << mMultiOptions.toString();
+
+    // Update the "ADF available' flag in the options to reflect
+    // the current state.
+    if (mSaneDevice->isAdfAvailable()) mMultiOptions.setFlags(mMultiOptions.flags() | MultiScanOptions::AdfAvailable);
+    else mMultiOptions.setFlags(mMultiOptions.flags() & ~MultiScanOptions::AdfAvailable);
+    //mMultiOptions.setFlags(mMultiOptions.flags() & ~MultiScanOptions::AdfAvailable);
+
+    qCDebug(LIBKOOKASCAN_LOG) << "current multi options" << qPrintable(mMultiOptions.toString());
 
     MultiScanDialog d(mSaneDevice, this);
     d.setOptions(mMultiOptions);
     if (!d.exec()) return;
 
     mMultiOptions = d.options();
-    qCDebug(LIBKOOKASCAN_LOG) << "new multi options" << mMultiOptions.toString();
+    qCDebug(LIBKOOKASCAN_LOG) << "new multi options" << qPrintable(mMultiOptions.toString());
 
     if (mSourceSelect!=nullptr)
     {

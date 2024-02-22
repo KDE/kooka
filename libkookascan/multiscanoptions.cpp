@@ -37,17 +37,17 @@ MultiScanOptions::MultiScanOptions()
     mOptions = MultiScanOptions::Flags();
     mRotateOdd = MultiScanOptions::RotateNone;
     mRotateEven = MultiScanOptions::RotateNone;
-    mDelay = -1;
+    mDelay = 5;
 }
 
 
-void MultiScanOptions::setOptions(MultiScanOptions::Flags opts)
+void MultiScanOptions::setFlags(MultiScanOptions::Flags opts)
 {
     mOptions = opts;
 }
 
 
-MultiScanOptions::Flags MultiScanOptions::options() const
+MultiScanOptions::Flags MultiScanOptions::flags() const
 {
     return (mOptions);
 }

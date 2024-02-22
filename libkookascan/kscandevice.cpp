@@ -321,7 +321,7 @@ void KScanDevice::getCurrentFormat(int *format, int *depth)
 }
 
 
-static bool matchesAdf(const QByteArray &val)
+/* static */ bool KScanDevice::matchesAdf(const QByteArray &val)
 {
     // There does not seem to be any "official" SANE way to find out whether
     // the scan source is an ADF, so it has to be done by looking at the
@@ -892,7 +892,7 @@ KScanDevice::Status KScanDevice::acquireScan(const QString &filename)
             if (stat!=KScanDevice::Ok) return (stat);
 
             // If not doing an ADF scan, then do not try to loop.  If we do, then
-            // the second attemnpt to scan may fail with a SANE_STATUS_DEVICE_BUSY
+            // the second attempt to scan may fail with a SANE_STATUS_DEVICE_BUSY
             // as the scan carriage returns to its rest position.  This does not
             // affect the scan that has just been completed, but the error will be
             // reported to the user.

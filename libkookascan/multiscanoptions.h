@@ -36,6 +36,14 @@
 
 #include "kookascan_export.h"
 
+/**
+ * @short Options to control multiple scans and ADF handling.
+ *
+ * This class encapsulates all of the options so that they can be
+ * retained by ScanParams and passed to and from the MultScanDialog.
+ *
+ * @author Jonathan Marten
+ **/
 
 class KOOKASCAN_EXPORT MultiScanOptions
 {
@@ -48,7 +56,10 @@ public:
         MultiScan = 0x0001,
         RotateOdd = 0x0002,
         RotateEven = 0x0004,
-        RotateBoth = RotateOdd|RotateEven
+        RotateBoth = RotateOdd|RotateEven,
+        AdfAvailable = 0x0008,
+        ManualWait = 0x0010,
+        DelayWait = 0x0020
     };
     Q_DECLARE_FLAGS(Flags, Flag)
 
@@ -60,8 +71,10 @@ public:
         Rotate270 = 3
     };
 
-    void setOptions(MultiScanOptions::Flags opts);
-    MultiScanOptions::Flags options() const;
+    // TODO: could simplify some code with a setFlags(MultiScanOptions::Flags, bool on = true)
+
+    void setFlags(MultiScanOptions::Flags f);
+    MultiScanOptions::Flags flags() const;
 
     void setSource(const QByteArray &src);
     QByteArray source() const;

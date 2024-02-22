@@ -15,7 +15,7 @@ project(kookascan)
 
 ########### dependencies ###############
 
-find_package(KF5 ${KF5_MIN_VERSION} REQUIRED COMPONENTS I18n Config IconThemes KIO)
+find_package(KF5 ${KF5_MIN_VERSION} REQUIRED COMPONENTS I18n Config IconThemes KIO TextWidgets)
 
 # libpaper (at least in Gentoo Linux) provides neither a
 # Find<package>.cmake or a pkg-config file.
@@ -112,6 +112,7 @@ target_link_libraries(kookascan
   KF5::ConfigCore KF5::ConfigGui KF5::ConfigWidgets
   KF5::KIOCore KF5::KIOWidgets
   KF5::IconThemes
+  KF5::TextWidgets
 )
 
 if (HAVE_SANE)

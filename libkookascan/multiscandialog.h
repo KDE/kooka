@@ -39,6 +39,8 @@
 
 
 class QComboBox;
+class QRadioButton;
+class KPluralHandlingSpinBox;
 class KScanDevice;
 
 
@@ -51,7 +53,7 @@ public:
     virtual ~MultiScanDialog() = default;
 
     void setOptions(const MultiScanOptions &opts);
-    const MultiScanOptions &options() const;
+    const MultiScanOptions &options();
 
 signals:
     void sourceChanged(const QByteArray &src);
@@ -60,10 +62,15 @@ protected slots:
     void slotGuiChange();
 
 private:
-    void updateGui();
-
-private:
     QComboBox *mSourceCombo;
+
+    QRadioButton *mScanSingleRadio;
+    QRadioButton *mScanMultiRadio;
+
+    QRadioButton *mMultiEmptyAdfRadio;
+    QRadioButton *mMultiManualScanRadio;
+    QRadioButton *mMultiDelayScanRadio;
+    KPluralHandlingSpinBox *mDelayTimeSpinbox;
 
     MultiScanOptions mOptions;
 };

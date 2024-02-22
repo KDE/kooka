@@ -30,20 +30,18 @@
 
 #include "multiscandialog.h"
 
-// #include <qbuttongroup.h>
-// #include <qlayout.h>
-// #include <qradiobutton.h>
-// #include <qlabel.h>
-// #include <qlineedit.h>
-// #include <qvalidator.h>
 #include <qcombobox.h>
 #include <qgridlayout.h>
 #include <qdebug.h>
 #include <qlabel.h>
+#include <qgroupbox.h>
+#include <qradiobutton.h>
+#include <qbuttongroup.h>
 
 #include <sane/saneopts.h>
 
 #include <klocalizedstring.h>
+#include <kpluralhandlingspinbox.h>
 
 #include "kscandevice.h"
 #include "kscanoption.h"
@@ -62,6 +60,8 @@ MultiScanDialog::MultiScanDialog(KScanDevice *dev, QWidget *pnt)
 
     QWidget *w = new QWidget(this);
     QGridLayout *gl = new QGridLayout(w);
+    gl->setContentsMargins(0, 0, 0, 0);
+    int row = 0;
 
     // Row 0: Scan source, if the option is available
     const KScanOption *so = dev->getOption(SANE_NAME_SCAN_SOURCE, false);
@@ -69,7 +69,7 @@ MultiScanDialog::MultiScanDialog(KScanDevice *dev, QWidget *pnt)
     {
         QLabel *lab = new QLabel(i18n("Scan source:"), w);
         // TODO: get QFormLayout alignment from style
-        gl->addWidget(lab, 0, 0, Qt::AlignRight);
+        gl->addWidget(lab, row, 0, 1, 2, Qt::AlignRight);
 
         // It is not possible to simply "adopt" the existing combo box
         // created by ScanParams, because that would remove it from the main
@@ -85,13 +85,67 @@ MultiScanDialog::MultiScanDialog(KScanDevice *dev, QWidget *pnt)
 
         connect(mSourceCombo, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &MultiScanDialog::slotGuiChange);
 
-        gl->addWidget(mSourceCombo, 0, 1, 1, -1, Qt::AlignLeft);
+        gl->addWidget(mSourceCombo, row, 2, 1, -1, Qt::AlignLeft);
         lab->setBuddy(mSourceCombo);
         mSourceCombo->setEnabled(so->isActive());
     }
+    ++row;
 
-    gl->setColumnStretch(1, 1);
-    gl->setRowStretch(9, 1);
+    // Row 1: Spacing
+    gl->setRowMinimumHeight(row, 2*DialogBase::verticalSpacing());
+    ++row;
+
+    // Row 2: Scan and ADF group
+    QGroupBox *grp = new QGroupBox(i18n("Scan and ADF"), w);
+    grp->setFlat(true);
+    gl->addWidget(grp, row, 0, 1, -1);
+    ++row;
+
+    // Button group: Single/Multiple scan
+    QButtonGroup *bg = new QButtonGroup(w);
+    connect(bg, &QButtonGroup::idToggled, this, &MultiScanDialog::slotGuiChange);
+
+    // Row 3: Single Scan radio button
+    mScanSingleRadio = new QRadioButton(i18n("Single scan"), w);
+    bg->addButton(mScanSingleRadio);
+    gl->addWidget(mScanSingleRadio, row, 0, 1, -1, Qt::AlignLeft);
+    ++row;
+
+    // Row 4: Multiple Scan radio button
+    mScanMultiRadio = new QRadioButton(i18n("Multiple scan"), w);
+    bg->addButton(mScanMultiRadio);
+    gl->addWidget(mScanMultiRadio, row, 0, 1, -1, Qt::AlignLeft);
+    ++row;
+
+    // Button group: Multiple scan options
+    bg = new QButtonGroup(w);
+    connect(bg, &QButtonGroup::idToggled, this, &MultiScanDialog::slotGuiChange);
+
+    // Row 5: Empty ADF radio button
+    mMultiEmptyAdfRadio = new QRadioButton(i18n("Scan until ADF is empty"), w);
+    bg->addButton(mMultiEmptyAdfRadio);
+    gl->addWidget(mMultiEmptyAdfRadio, row, 1, 1, -1, Qt::AlignLeft);
+    ++row;
+
+    // Row 6: Manual Scan radio button
+    mMultiManualScanRadio = new QRadioButton(i18n("Wait until ready for next scan"), w);
+    bg->addButton(mMultiManualScanRadio);
+    gl->addWidget(mMultiManualScanRadio, row, 1, 1, -1, Qt::AlignLeft);
+    ++row;
+
+    // Row 7: Time Delay radio button and delay setting
+    mMultiDelayScanRadio = new QRadioButton(i18n("Scan after waiting for"), w);
+    bg->addButton(mMultiDelayScanRadio);
+    gl->addWidget(mMultiDelayScanRadio, row, 1, 1, 2, Qt::AlignLeft);
+
+    mDelayTimeSpinbox = new KPluralHandlingSpinBox(w);
+    mDelayTimeSpinbox->setRange(1, 60);
+    mDelayTimeSpinbox->setSuffix(ki18ncp("Time unit", " second", " seconds"));
+    gl->addWidget(mDelayTimeSpinbox, row, 3, Qt::AlignLeft);
+    ++row;
+
+    gl->setColumnStretch(3, 1);
+    gl->setRowStretch(row, 1);
 
     setMainWidget(w);
 }
@@ -100,32 +154,55 @@ MultiScanDialog::MultiScanDialog(KScanDevice *dev, QWidget *pnt)
 void MultiScanDialog::setOptions(const MultiScanOptions &opts)
 {
     mOptions = opts;
-    updateGui();
+
+    if (mSourceCombo!=nullptr) mSourceCombo->setCurrentText(mOptions.source());
+
+    const MultiScanOptions::Flags f = mOptions.flags();
+    const bool multi = (f & MultiScanOptions::MultiScan);
+
+    mScanSingleRadio->setChecked(!multi);
+    mScanMultiRadio->setChecked(multi);
+
+    mMultiEmptyAdfRadio->setChecked(true);		// unless one of the next two set
+    mMultiManualScanRadio->setChecked(f & MultiScanOptions::ManualWait);
+    mMultiDelayScanRadio->setChecked(f & MultiScanOptions::DelayWait);
+
+    mDelayTimeSpinbox->setValue(mOptions.delay());
+
+    slotGuiChange();
 }
 
 
-const MultiScanOptions &MultiScanDialog::options() const
+const MultiScanOptions &MultiScanDialog::options()
 {
+    if (mSourceCombo!=nullptr) mOptions.setSource(mSourceCombo->currentText().toLatin1());
+
+    MultiScanOptions::Flags f = mOptions.flags();
+    f &= ~MultiScanOptions::MultiScan;
+    if (mScanMultiRadio->isChecked()) f |= MultiScanOptions::MultiScan;
+
+    f &= ~(MultiScanOptions::ManualWait|MultiScanOptions::DelayWait);
+    if (mMultiManualScanRadio->isChecked()) f |= MultiScanOptions::ManualWait;
+    else if (mMultiDelayScanRadio->isChecked()) f |= MultiScanOptions::DelayWait;
+
+    mOptions.setFlags(f);
+    mOptions.setDelay(mDelayTimeSpinbox->value());
+
     return (mOptions);
 }
 
 
 void MultiScanDialog::slotGuiChange()
 {
-    if (mSourceCombo!=nullptr) mOptions.setSource(mSourceCombo->currentText().toLatin1());
+    const MultiScanOptions::Flags f = mOptions.flags();
+    const bool multi = mScanMultiRadio->isChecked();
+    const bool adf = (mSourceCombo!=nullptr) ? KScanDevice::matchesAdf(mSourceCombo->currentText().toLatin1()) : false;
 
+    mMultiEmptyAdfRadio->setEnabled(adf && multi && (f & MultiScanOptions::AdfAvailable));
+    mMultiManualScanRadio->setEnabled(multi);
+    mMultiDelayScanRadio->setEnabled(multi);
 
+    if (!mMultiEmptyAdfRadio->isEnabled() && mMultiEmptyAdfRadio->isChecked()) mMultiManualScanRadio->setChecked(true);
 
-
-}
-
-
-void MultiScanDialog::updateGui()
-{
-    if (mSourceCombo!=nullptr) mSourceCombo->setCurrentText(mOptions.source());
-
-
-
-
-
+    mDelayTimeSpinbox->setEnabled(multi && mMultiDelayScanRadio->isChecked());
 }
