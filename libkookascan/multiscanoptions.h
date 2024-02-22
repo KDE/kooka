@@ -59,7 +59,7 @@ public:
         RotateBoth = RotateOdd|RotateEven,
         AdfAvailable = 0x0008,
         ManualWait = 0x0010,
-        DelayWait = 0x0020
+        DelayWait = 0x0020,
     };
     Q_DECLARE_FLAGS(Flags, Flag)
 
@@ -68,7 +68,7 @@ public:
         RotateNone = 0,
         Rotate90 = 1,
         Rotate180 = 2,
-        Rotate270 = 3
+        Rotate270 = 3,
     };
 
     // TODO: could simplify some code with a setFlags(MultiScanOptions::Flags, bool on = true)

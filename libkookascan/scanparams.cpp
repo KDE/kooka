@@ -731,7 +731,8 @@ void ScanParams::slotAcquirePreview()
         return;
     }
 
-    if (mSaneDevice->isAdfScan())
+    mSaneDevice->setMultiScanOptions(nullptr);		// no multiple options for preview
+    if (mSaneDevice->isAdfScan())			// but warn if ADF is in use
     {
         if (KMessageBox::warningContinueCancel(this,
                                                i18n("The scan source is set to the automatic document feeder.<br/>"
@@ -773,6 +774,7 @@ void ScanParams::slotStartScan()
     KScanDevice::Status stat = prepareScan(&virtfile);
     if (stat != KScanDevice::Ok) return;
 
+    mSaneDevice->setMultiScanOptions(&mMultiOptions);	// tell it the multiple scan options
     emit scanBatchStart();				// indicate start of a batch
 
     //qCDebug(LIBKOOKASCAN_LOG) << "scan mode=" << mScanMode << "virtfile" << virtfile;

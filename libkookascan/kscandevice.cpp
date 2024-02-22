@@ -40,6 +40,8 @@
 #include <klocalizedstring.h>
 #include <kconfig.h>
 #include <kpassworddialog.h>
+#include <kmessagebox.h>
+#include <kstandardguiitem.h>
 
 #include "scanglobal.h"
 #include "scandevices.h"
@@ -49,6 +51,7 @@
 #include "kscanoptset.h"
 #include "deviceselector.h"
 #include "scansettings.h"
+#include "multiscanoptions.h"
 #include "libkookascan_logging.h"
 
 extern "C" {
@@ -178,6 +181,7 @@ KScanDevice::KScanDevice(QObject *parent)
 
     mScanningState = KScanDevice::ScanIdle;
     mScanningAdf = false;				// assume no ADF so far
+    mMultiScanOptions = nullptr;			// not told about these yet
 
     mScanBuf = nullptr;					// image data buffer while scanning
     mScanImage.clear();					// temporary image to scan into
@@ -834,10 +838,8 @@ KScanDevice::Status KScanDevice::acquirePreview(bool forceGray, int dpi)
  *  depending on if a filename is given or not, the function tries to open
  *  the file using the Qt-Image-IO or really scans the image.
  */
-KScanDevice::Status KScanDevice::acquireScan(const QString &filename)
+KScanDevice::Status KScanDevice::acquireScan()
 {
-    if (filename.isEmpty())				// real scan
-    {
         applyAllOptions(true);				// apply priority options
         applyAllOptions(false);				// apply non-priority options
 
@@ -868,8 +870,10 @@ KScanDevice::Status KScanDevice::acquireScan(const QString &filename)
             else mCurrScanResolutionY = mCurrScanResolutionX;
         }
 
+        // Main loop of the individual or batch scan.
         bool first = true;
         if (mScanningAdf) qCDebug(LIBKOOKASCAN_LOG) << "Starting ADF loop";
+        if (mMultiScanOptions!=nullptr) qCDebug(LIBKOOKASCAN_LOG) << "Multi scan options" << qPrintable(mMultiScanOptions->toString());
 
         while (true)
         {
@@ -885,26 +889,68 @@ KScanDevice::Status KScanDevice::acquireScan(const QString &filename)
             }
 
             // Signal the scan status to the application, adjusted for the
-            // ADF state as above.  Then, if this is the first time through
-            // the ADF loop or if any other error has happened, then exit
-            // the loop now.
+            // ADF state as above.  Then, if any other error has happened,
+            // then exit the loop now.
             scanFinished(stat);
             if (stat!=KScanDevice::Ok) return (stat);
+
+            // If doing a single scan, whether from the ADF or flatbed,
+            // then exit the loop now.  If no options are provided, then
+            // also assume a single scan.
+            if (mMultiScanOptions==nullptr) return (stat);
+            const MultiScanOptions::Flags f = mMultiScanOptions->flags();
+            if (!(f & MultiScanOptions::MultiScan)) return (stat);
+
+            // TODO: maybe do this at the top of the loop so as to be
+            // able to wait or delay the first page of the scan.
+
+            // If doing a manual or delayed wait, then ask or indicate to
+            // the user respectively.
+            if (f & MultiScanOptions::ManualWait)
+            {
+                int s = KMessageBox::questionTwoActionsCancel(nullptr,
+                                                              xi18nc("@info",
+                                                                     "<emphasis strong=\"1\">Ready to scan the next page</emphasis>."
+                                                                     "<nl/><nl/>"
+                                                                     "Prepare the next page and then click <interface>Continue</interface> to scan it, or"
+                                                                     "<nl/>"
+                                                                     "click <interface>Finish</interface> to end the scan batch "
+                                                                     "or <interface>Cancel</interface> to cancel the entire scan."),
+                                                              i18n("Next Page"),
+                                                              KStandardGuiItem::cont(),
+                                                              KGuiItem(i18n("Finish"), KStandardGuiItem::ok().icon()));
+                if (s==KMessageBox::Cancel)
+                {
+                    qCDebug(LIBKOOKASCAN_LOG) << "User cancelled batch";
+                    return (KScanDevice::Cancelled);
+                }
+                if (s==KMessageBox::SecondaryAction) 	// Finish
+                {
+                    qCDebug(LIBKOOKASCAN_LOG) << "Manual end of batch";
+                    return (KScanDevice::Ok);
+                }
+            }
+            else if (f & MultiScanOptions::DelayWait)
+            {
+                // TODO
+            }
 
             // If not doing an ADF scan, then do not try to loop.  If we do, then
             // the second attempt to scan may fail with a SANE_STATUS_DEVICE_BUSY
             // as the scan carriage returns to its rest position.  This does not
             // affect the scan that has just been completed, but the error will be
             // reported to the user.
-            if (!mScanningAdf) return (stat);
+            //if (!mScanningAdf) return (stat);
 
             // Otherwise, just note that this is now not the first time through
             // the ADF loop.
             first = false;
         }
-    }
-    else						// virtual scan from image file
-    {
+}
+
+
+KScanDevice::Status KScanDevice::acquireScan(const QString &filename)
+{
         QFileInfo file(filename);
         if (!file.exists())
         {
@@ -934,7 +980,6 @@ KScanDevice::Status KScanDevice::acquireScan(const QString &filename)
         mScanImage->setScannerName(QFile::encodeName(filename));
         emit sigNewImage(mScanImage);
         return (KScanDevice::Ok);
-    }
 }
 
 

@@ -44,6 +44,8 @@ class KConfigSkeletonItem;
 
 class KScanOption;
 class KScanOptSet;
+class MultiScanOptions;
+
 
 /**
  * @short Access and control a scanner.
@@ -151,7 +153,7 @@ public:
     SANE_Handle scannerHandle() const			{ return (mScannerHandle); }
 
     /**
-     * Acquires a preview from the current scanner device.
+     * Acquire a preview from the current scanner device.
      * When the scan is complete, a result image will be sent by
      * @c sigNewPreview.
      *
@@ -159,20 +161,28 @@ public:
      * in greyscale regardless of any other settings.
      * @param dpi Resolution setting for the preview. If this is 0,
      * a suitable low resolution is selected.
-     * @return The status of the operation
+     * @return the status of the preview operation
      **/
     KScanDevice::Status acquirePreview(bool forceGray = false, int dpi = 0);
 
     /**
-     * Acquires a scan from the current scanner device.
+     * Acquire a scan from the current scanner device.
      * When the scan is complete, a result image will be sent by
      * @c sigNewImage.
      *
-     * @param filename File name to load, for virtual scanner test mode.
-     * If this is a null or empty string, a real scan is performed.
-     * @return The status of the operation
+     * @return the status of the scan operation
      **/
-    KScanDevice::Status acquireScan(const QString &filename = QString());
+    KScanDevice::Status acquireScan();
+
+    /**
+     * Acquire a virtual scan from the specified image.
+     * This operates in the same way as @c acquireScan(), but
+     * reads the image file to produce the scanned image.
+     *
+     * @param filename The image file to read
+     * @return the status of the scan operation
+     **/
+    KScanDevice::Status acquireScan(const QString &filename);
 
     /**
      * Load the last saved preview image for this device from the saved file.
@@ -467,14 +477,14 @@ public:
      * @param type the image type
      * @see sigScanStart()
      **/
-    void setTestFormat(ScanImage::ImageType type)	{ mTestFormat = type; }
+    void setTestFormat(ScanImage::ImageType type)		{ mTestFormat = type; }
 
     /**
      * Check whether the currently selected scan source is an ADF.
      *
      * @return @c true if an ADF is selected
      **/
-    bool isAdfScan() const				{ return (mScanningAdf); }
+    bool isAdfScan() const					{ return (mScanningAdf); }
 
     /**
      * Check whether the current scanner has an ADF available.
@@ -490,6 +500,13 @@ public:
      * @return @c true if the value identifies an ADF
      **/
     static bool matchesAdf(const QByteArray &val);
+
+    /**
+     * Set the ADF and multiple scan options to be used for scanning.
+     *
+     * @param opts The options to use
+     **/
+    void setMultiScanOptions(const MultiScanOptions *opts)	{ mMultiScanOptions = opts; }
 
 public slots:
     /**
@@ -636,6 +653,7 @@ private:
     QByteArray mScannerName;
     bool mScannerInitialised;
     SANE_Handle mScannerHandle;
+    const MultiScanOptions *mMultiScanOptions;
 
     KScanDevice::ScanningState mScanningState;
     SANE_Status mSaneStatus;
