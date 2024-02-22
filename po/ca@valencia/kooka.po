@@ -1,9 +1,9 @@
 # Translation of kooka.po to Catalan (Valencian)
-# Copyright (C) 2002-2022 This_file_is_part_of_KDE
+# Copyright (C) 2002-2024 This_file_is_part_of_KDE
 # This file is distributed under the license LGPL version 2.1 or
 # version 3 or later versions approved by the membership of KDE e.V.
 #
-# Josep M. Ferrer <txemaq@gmail.com>, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022.
+# Josep M. Ferrer <txemaq@gmail.com>, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2024.
 # Albert Astals Cid <aacid@kde.org>, 2004, 2005.
 # Antoni Bella Pérez <antonibella5@yahoo.com>, 2014, 2017, 2018, 2020, 2022.
 msgid ""
@@ -11,14 +11,14 @@ msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-02-20 01:38+0000\n"
-"PO-Revision-Date: 2022-10-20 22:02+0200\n"
+"PO-Revision-Date: 2024-02-20 13:29+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 20.12.0\n"
+"X-Generator: Lokalize 22.12.3\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Accelerator-Marker: &\n"
 
@@ -2202,13 +2202,12 @@ msgstr "Vista de la imatge"
 #: kookaview.cpp:245
 #, kde-format
 msgid "User specified"
-msgstr ""
+msgstr "Especificat per l'usuari"
 
 #: kookaview.cpp:246
-#, fuzzy, kde-format
-#| msgid "OCR Command Failed"
+#, kde-format
 msgid "on command line"
-msgstr "No s'ha pogut executar l'ordre d'OCR"
+msgstr "en la línia d'ordres"
 
 #: kookaview.cpp:266
 #, kde-format
@@ -2244,7 +2243,7 @@ msgstr ""
 "que l'escàner estiga connectat i iniciat, i la configuració de SANE siga la "
 "correcta.<nl/><nl/>En intentar utilitzar el dispositiu d'escàner: <icode>%3</"
 "icode><nl/>La «libkookascan» ha informat l'error: <message>%2</message><nl/"
-">El SANE ha informat l'error: <message>%1</message>"
+">SANE ha informat l'error: <message>%1</message>"
 
 #: kookaview.cpp:519
 #, kde-format
@@ -2263,10 +2262,10 @@ msgid ""
 "backend name and parameters, or see that dialog for more information."
 msgstr ""
 "No hi ha disponible cap dispositiu d'escàner.<nl/><nl/>Si l'escàner és d'un "
-"tipus que el SANE pot detectar automàticament, comproveu que estiga "
-"connectat, encés i configurat correctament.<nl/><nl/>Si el SANE no pot "
-"detectar automàticament l'escàner (açò inclou diversos escàners de xarxa), "
-"cal especificar el dispositiu que s'utilitzarà. Utilitzeu l'opció "
+"tipus que SANE pot detectar automàticament, comproveu que estiga connectat, "
+"encés i configurat correctament.<nl/><nl/>Si SANE no pot detectar "
+"automàticament l'escàner (açò inclou diversos escàners de xarxa), cal "
+"especificar el dispositiu que s'utilitzarà. Utilitzeu l'opció "
 "<interface>Afig un dispositiu d'escaneig</interface> per a introduir el nom "
 "del dorsal i els paràmetres, o vegeu este diàleg per a més informació."
 
@@ -2376,7 +2375,7 @@ msgstr ""
 "que l'escàner encara està connectat i encés, <nl/>i que el suport està "
 "carregat si es requerix.<nl/><nl/>En intentar utilitzar el dispositiu "
 "d'escàner: <icode>%3</icode><nl/>La «libkookascan» ha informat l'error: "
-"<message>%2</message><nl/>El SANE ha informat l'error: <message>%1</message>"
+"<message>%2</message><nl/>SANE ha informat l'error: <message>%1</message>"
 
 #: kookaview.cpp:956
 #, kde-format
@@ -2625,7 +2624,7 @@ msgstr "Activa els missatges/qüestions"
 #: prefspages.cpp:152
 #, kde-format
 msgid "%1 must be restarted for these settings to take effect."
-msgstr ""
+msgstr "S'ha de reiniciar %1 perquè estos paràmetres tinguen efecte."
 
 #: prefspages.cpp:267
 #, kde-format
