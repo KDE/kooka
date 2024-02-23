@@ -28,6 +28,7 @@
 
 #include <kmessagewidget.h>
 #include <klocalizedstring.h>
+#include <kled.h>
 
 #include "abstractplugin.h"
 #include "abstractdestination.h"
@@ -46,17 +47,66 @@ KookaScanParams::KookaScanParams(QWidget *parent)
     mNoScannerMessage = nullptr;
     mDestinationPlugin = nullptr;
 
-    connect(this, &ScanParams::scanBatchStart, this, [this]()
-    {
-        setEnabled(false);
-        if (mDestinationPlugin!=nullptr) mDestinationPlugin->batchStart();
-    });
+    connect(this, &ScanParams::deviceConnected, this, &KookaScanParams::slotDeviceConnected);
+    connect(this, &ScanParams::scanBatchStart, this, &KookaScanParams::slotScanBatchStart);
+    connect(this, &ScanParams::scanBatchEnd, this, &KookaScanParams::slotScanBatchEnd);
+}
 
-    connect(this, &ScanParams::scanBatchEnd, this, [this](bool ok)
+
+void KookaScanParams::slotDeviceConnected(KScanDevice *dev)
+{
+    if (dev==nullptr) return;				// no device to connect
+
+    connect(dev, &KScanDevice::sigScanStart, this, &KookaScanParams::slotScanStart);
+    connect(dev, &KScanDevice::sigAcquireStart, this, &KookaScanParams::slotAcquireStart);
+    connect(dev, &KScanDevice::sigScanFinished, this, &KookaScanParams::slotScanFinished);
+}
+
+
+void KookaScanParams::slotScanStart()
+{
+    KLed *led = operationLED();				// update the LED indicator
+    if (led!=nullptr)
     {
-        if (mDestinationPlugin!=nullptr) mDestinationPlugin->batchEnd(ok);
-        setEnabled(true);
-    });
+        led->setColor(Qt::red);				// scanner warming up
+        led->setState(KLed::On);
+        qApp->processEvents();				// let the change show
+    }
+}
+
+
+void KookaScanParams::slotAcquireStart()
+{
+    KLed *led = operationLED();				// update the LED indicator
+    if (led!=nullptr)
+    {
+        led->setColor(Qt::green);			// scanning active
+        qApp->processEvents();				// let the change show
+    }
+}
+
+
+void KookaScanParams::slotScanFinished()
+{
+    KLed *led = operationLED();				// update the LED indicator
+    if (led!=nullptr)
+    {
+        led->setState(KLed::Off);
+    }
+}
+
+
+void KookaScanParams::slotScanBatchStart()
+{
+    setEnabled(false);
+    if (mDestinationPlugin!=nullptr) mDestinationPlugin->batchStart();
+}
+
+
+void KookaScanParams::slotScanBatchEnd(bool ok)
+{
+    if (mDestinationPlugin!=nullptr) mDestinationPlugin->batchEnd(ok);
+    setEnabled(true);
 }
 
 
@@ -182,7 +232,7 @@ void KookaScanParams::saveDestinationSettings()
 {
     qCDebug(KOOKA_LOG);
 
-    if (!hasScanDevice()) return;			// no scanner configured
+    if (scanDevice()==nullptr) return;			// no scanner configured
 
     AbstractDestination *currentPlugin = qobject_cast<AbstractDestination *>(PluginManager::self()->currentPlugin(PluginManager::DestinationPlugin));
     if (currentPlugin==nullptr) return;			// nothing to save

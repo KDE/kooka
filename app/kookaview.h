@@ -157,7 +157,6 @@ public slots:
 
     void slotScanStart(ScanImage::ImageType type);
     void slotScanFinished(KScanDevice::Status stat);
-    void slotAcquireStart();
 
     void showOpenWithMenu(KActionMenu *menu);
 

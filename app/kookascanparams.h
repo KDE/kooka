@@ -63,6 +63,13 @@ protected slots:
     void slotLinkActivated(const QString &link);
     void slotDestinationSelected(int idx);
 
+    void slotScanStart();
+    void slotAcquireStart();
+    void slotScanFinished();
+    void slotScanBatchStart();
+    void slotScanBatchEnd(bool ok);
+    void slotDeviceConnected(KScanDevice *dev);
+
 private:
     KMessageWidget *mNoScannerMessage;
     QComboBox *mDestinationCombo;

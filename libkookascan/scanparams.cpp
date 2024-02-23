@@ -116,22 +116,19 @@ ScanParams::~ScanParams()
 
 bool ScanParams::connectDevice(KScanDevice *newScanDevice, bool galleryMode)
 {
+    emit deviceConnected(newScanDevice);
+
     QGridLayout *lay = new QGridLayout(this);
     lay->setMargin(0);
 
-    if (newScanDevice == nullptr) {            // no scanner device
+    mSaneDevice = newScanDevice;			// note the connected device
+    mScanMode = ScanParams::NormalMode;			// assume so for now, anyway
+    if (newScanDevice == nullptr)			// no scanner deviceconnected
+    {
         qCDebug(LIBKOOKASCAN_LOG) << "No scan device, gallery=" << galleryMode;
-        mSaneDevice = nullptr;
         createNoScannerMsg(galleryMode);
         return (true);
     }
-
-    mSaneDevice = newScanDevice;
-    mScanMode = ScanParams::NormalMode;
-#if 0
-    // TOTO: port/update
-    adf = ADF_OFF;
-#endif
 
     QLabel *lab = new QLabel(this);
     lab->setPixmap(KIconLoader::global()->loadIcon(ScanDevices::self()->deviceIconName(newScanDevice->scannerBackendName()),

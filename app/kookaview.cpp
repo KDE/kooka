@@ -51,7 +51,6 @@
 #include <kapplicationtrader.h>
 #include <klocalizedstring.h>
 #include <kmessagebox.h>
-#include <kled.h>
 #include <kactioncollection.h>
 #include <kactionmenu.h>
 #include <kfileitem.h>
@@ -255,7 +254,6 @@ KookaView::KookaView(KMainWindow *parent, const QByteArray &deviceToUse)
     connect(mScanDevice, &KScanDevice::sigNewImage, this, &KookaView::slotNewImageScanned);
     connect(mScanDevice, &KScanDevice::sigNewPreview, this, &KookaView::slotNewPreview);
     connect(mScanDevice, &KScanDevice::sigScanStart, this, &KookaView::slotScanStart);
-    connect(mScanDevice, &KScanDevice::sigAcquireStart, this, &KookaView::slotAcquireStart);
     connect(mScanDevice, &KScanDevice::sigScanFinished, this, &KookaView::slotScanFinished);
 
     /** Scan Preview **/
@@ -858,32 +856,10 @@ void KookaView::slotScanStart(ScanImage::ImageType type)
         }
     }
 
-    KLed *led = mScanParams->operationLED();		// update the LED indicator
-    if (led!=nullptr)
-    {
-        led->setColor(Qt::red);				// scanner warming up
-        led->setState(KLed::On);
-        qApp->processEvents();				// let the change show
-    }
-
     // Set the destination string displayed in the "Scan in Progress" dialogue
     if (type!=ScanImage::Preview)
     {
         mScanParams->setScanDestination(dest->scanDestinationString());
-    }
-}
-
-
-void KookaView::slotAcquireStart()
-{
-    if (mScanParams!=nullptr)
-    {
-        KLed *led = mScanParams->operationLED();	// update the LED indicator
-        if (led!=nullptr)
-        {
-            led->setColor(Qt::green);			// scanning active
-            qApp->processEvents();			// let the change show
-        }
     }
 }
 
@@ -916,15 +892,6 @@ void KookaView::slotScanFinished(KScanDevice::Status stat)
                              KScanDevice::statusMessage(stat),
                              mScanDevice->scannerBackendName().constData());
         KMessageBox::error(mMainWindow, msg);
-    }
-
-    if (mScanParams != nullptr)
-    {
-        KLed *led = mScanParams->operationLED();
-        if (led != nullptr) {
-            led->setColor(Qt::green);
-            led->setState(KLed::Off);
-        }
     }
 }
 
