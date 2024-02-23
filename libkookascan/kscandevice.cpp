@@ -52,6 +52,7 @@
 #include "deviceselector.h"
 #include "scansettings.h"
 #include "multiscanoptions.h"
+#include "continuescandialog.h"
 #include "libkookascan_logging.h"
 
 extern "C" {
@@ -932,7 +933,20 @@ KScanDevice::Status KScanDevice::acquireScan()
         }
         else if (f & MultiScanOptions::DelayWait)
         {
-            // TODO
+            ContinueScanDialog dlg(mMultiScanOptions->delay(), nullptr);
+            dlg.setWindowTitle(i18n("Next Page"));
+
+            int res = dlg.exec();
+            if (res==QDialogButtonBox::Cancel)
+            {
+                qCDebug(LIBKOOKASCAN_LOG) << "User cancelled batch";
+                return (KScanDevice::Cancelled);
+            }
+            if (res==QDialogButtonBox::Close)
+            {
+                qCDebug(LIBKOOKASCAN_LOG) << "Manual end of batch";
+                return (KScanDevice::Ok);
+            }
         }
 
         // If not doing an ADF scan, then do not try to loop.  If we do, then
@@ -941,6 +955,7 @@ KScanDevice::Status KScanDevice::acquireScan()
         // affect the scan that has just been completed, but the error will be
         // reported to the user.
         //if (!mScanningAdf) return (stat);
+        // TODO: could happen for flatbed multi scan, may need a minimum delay here
 
         // Otherwise, just note that this is now not the first time through
         // the ADF loop.
