@@ -4,35 +4,35 @@
 # Joëlle Cornavin <jcorn@free.fr>, 2012, 2013.
 # Vincent PINON <vincent.pinon@st.com>, 2013.
 # Simon Depiets <sdepiets@gmail.com>, 2018.
-# Xavier Besnard <xavier.besnard@kde.org>, 2020, 2021.
+# SPDX-FileCopyrightText: 2020, 2021, 2024 Xavier Besnard <xavier.besnard@kde.org>
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: libkscan\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-02-20 01:38+0000\n"
-"PO-Revision-Date: 2021-03-05 21:41+0100\n"
-"Last-Translator: Xavier Besnard <xavier.besnard@neuf.fr>\n"
-"Language-Team: French <kde-francophone@kde.org>\n"
+"PO-Revision-Date: 2024-02-21 16:34+0100\n"
+"Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
+"Language-Team: fr\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 20.12.3\n"
-"X-Environment: kde\n"
 "X-Accelerator-Marker: &\n"
+"X-Environment: kde\n"
+"X-Generator: Lokalize 23.08.4\n"
 "X-Text-Markup: kde4\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
-msgstr ""
+msgstr "Xavier Besnard"
 
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
-msgstr ""
+msgstr "xavier.besnard@kde.org"
 
 #: ../libdialogutil/imagefilter.cpp:91
 #, kde-format
@@ -66,23 +66,32 @@ msgid ""
 "<link url=\"?2\">locating devices</link>, <link url=\"?3\">HP scanners</"
 "link>, <link url=\"?4\">device not found</link>."
 msgstr ""
+"Si votre périphérique de numérisation n'a pas été automatiquement détecté, "
+"vous pouvez le spécifier ici. Le <interface>périphérique de numérisation</"
+"interface> est le nom du moteur « SANE » du périphérique. Le "
+"<interface>fabricant</interface>, le <interface>type </interface> et la "
+"<interface> description</interface> peuvent être utilisés pour identifier le "
+"périphérique de numérisation plus tard. <nl/><nl/> Vous trouverez plus "
+"d'informations sur la page <link url=\"?1\">moteurs « SANE »</link>, <link "
+"url=\"?2\">Localisation des périphériques</link>, <link url=\"?"
+"3\">Périphériques de numérisation HP</link>, <link url=\"?4\">Impossible de "
+"trouver le périphérique</link>."
 
 #: adddevicedialog.cpp:77
-#, fuzzy, kde-format
-#| msgid "Scanner device name:"
+#, kde-format
 msgid "Scanner device:"
-msgstr "Nom du périphérique scanner :"
+msgstr "Périphérique de numérisation :"
 
 #: adddevicedialog.cpp:80 scandevices.cpp:190
 #, kde-format
 msgctxt "Value used for manufacturer if none entered"
 msgid "User specified"
-msgstr ""
+msgstr "Utilisateur spécifié"
 
 #: adddevicedialog.cpp:82
 #, kde-format
 msgid "Manufacturer:"
-msgstr ""
+msgstr "Fabricant :"
 
 #: adddevicedialog.cpp:86
 #, kde-format
@@ -103,6 +112,11 @@ msgid ""
 "\">sane(7)</link> or <link url=\"man:/sane-dll\">sane&#8209;dll(5)</link> "
 "for more information on available backends and the format of device names."
 msgstr ""
+"Le <interface>périphérique de numérisation</interface> doit être un nom de "
+"moteurs (Avec des paramètres optionnels), pouvant être compris par « SANE ». "
+"Veuillez consulter la page<link url=\"man:/sane\">sane(7)</link> or <link "
+"url=\"man:/sane-dll\">sane&#8209;dll(5)</link> pour plus d'informations sur "
+"les moteurs disponibles et sur le format des noms de périphériques."
 
 #: adddevicedialog.cpp:134
 #, kde-kuit-format
@@ -115,6 +129,14 @@ msgid ""
 "<icode>&#8209;L</icode> option for network scanners. If the scanner is "
 "found, then enter the device name displayed by these commands."
 msgstr ""
+"Pour trouver les informations devant être saisies ici, veuillez essayer de "
+"localiser le périphérique à l'aide de la commande <link url=\"man:/sane-find-"
+"scanner\">sane&#8209;find&#8209;scanner(1)</link> pour les périphériques de "
+"numérisation « SCSI », « USB » ou sur port parallèle et la commande <link "
+"url=\"man:/scanimage\">scanimage(1)</link>  avec l'option <icode>&#8209;L</"
+"icode> option pour les périphériques de numérisation en réseau.Si le "
+"périphérique de numérisation est trouvé, veuillez saisir le nom du "
+"périphérique affiché par ces commandes."
 
 #: adddevicedialog.cpp:143
 #, kde-kuit-format
@@ -127,6 +149,14 @@ msgid ""
 "the scanner is found by HPLIP, then the device name <icode>hp:</icode> that "
 "it displays needs to be replaced by <icode>hpaio:</icode> for SANE."
 msgstr ""
+"Pour un périphérique de numérisation « USB » ou HP en réseau utilisant <link "
+"url=\"http://hplip.sourceforge.net/\">HPLIP</link>, veuillez essayer "
+"d'utiliser la commande <command>hp&#8209;probe</command> pour le localiser, "
+"par exemple, <icode>hp&#8209;probe&nbsp;&#8209;b&nbsp;usb</icode> ou "
+"<icode>hp&#8209;probe&nbsp;&#8209;b&nbsp;net</icode>. Veuillez noter que si "
+"le périphérique de numérisation est trouvé par « HPLIP », alors, le nom du "
+"périphérique <icode>hp:</icode> affiché doit être remplacé par <icode>hpaio:"
+"</icode> pour « SANE »."
 
 #: adddevicedialog.cpp:152
 #, kde-kuit-format
@@ -136,6 +166,11 @@ msgid ""
 "by SANE. Check the SANE documentation for a <link url=\"http://www.sane-"
 "project.org/sane-supported-devices.html\">list of supported devices</link>."
 msgstr ""
+"Si ces commandes ne parviennent pas à trouver votre périphérique de "
+"numérisation, alors,  il est possible qu'il ne soir pas pris en charge par "
+"« SANE ». Veuillez consulter la documentation « SANE » pour concernant la "
+"<link url=\"http://www.sane-project.org/sane-supported-devices.html\">liste "
+"des périphériques pris en charge</link>."
 
 #: autoselectbar.cpp:56
 #, kde-kuit-format
@@ -498,33 +533,32 @@ msgstr "Périphérique inconnu « %1 »"
 #: scanglobal.cpp:136
 #, kde-format
 msgid "SANE - Scanner Access Now Easy"
-msgstr ""
+msgstr "SANE - Scanner Access Now Easy"
 
 #: scanglobal.cpp:137
 #, kde-format
 msgid "Scanner access and driver library"
-msgstr ""
+msgstr "Accès au périphérique de numérisation et bibliothèque de pilotes"
 
 #: scanglobal.cpp:144
 #, kde-format
 msgid "LibTIFF"
-msgstr ""
+msgstr "LibTIFF"
 
 #: scanglobal.cpp:145
-#, fuzzy, kde-format
-#| msgid "Force image format:"
+#, kde-format
 msgid "TIFF image format library"
-msgstr "Forcer le format d'image à :"
+msgstr "Bibliothèque de format d'image « TIFF »"
 
 #: scanglobal.cpp:154
 #, kde-format
 msgid "libpaper"
-msgstr ""
+msgstr "libpaper"
 
 #: scanglobal.cpp:155
 #, kde-format
 msgid "Paper size configuration library"
-msgstr ""
+msgstr "Bibliothèque de configuration de la taille du papier"
 
 #: scanimage.cpp:76
 #, kde-format
@@ -791,6 +825,8 @@ msgstr ""
 #, kde-format
 msgid "Use the system proxy settings to access network scanners"
 msgstr ""
+"Veuillez utiliser les paramètres du serveur mandataire du système pour "
+"accéder aux périphériques de numérisation du réseau"
 
 #. i18n: ectx: tooltip, entry (StartupUseProxy), group (Startup)
 #: scansettings.kcfg:19
@@ -800,6 +836,11 @@ msgid ""
 "access network scanners.<br/><br/>Note that some SANE backends (for example "
 "'escl') may not work properly through a proxy.</div>"
 msgstr ""
+"<div> Veuillez cocher cette case si vous souhaitez utiliser les paramètres "
+"de serveur mandataire standard de votre système pour accéder aux "
+"périphériques de numérisation en réseau. <br/> <br/> Veuillez noter que "
+"certains moteurs « SANE » (Par exemple « ESCL ») peuvent ne pas fonctionner "
+"correctement à travers un serveur mandataire. </div>"
 
 #. i18n: ectx: label, entry (StartupSkipAsk), group (Startup)
 #: scansettings.kcfg:28

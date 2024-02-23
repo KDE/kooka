@@ -25,7 +25,7 @@
 # Matthieu Robin <kde@macolu.org>, 2004, 2005.
 # Matthieu Robin <matthieu@macolu.org>, 2005.
 # Mickael Sibelle <kimael@gmail.com>, 2008, 2009.
-# Xavier Besnard <xavier.besnard@kde.org>, 2012, 2013, 2020, 2021, 2022.
+# SPDX-FileCopyrightText: 2012, 2013, 2020, 2021, 2022, 2024 Xavier Besnard <xavier.besnard@kde.org>
 # Arnaud Reygnaud <kasai@redwolf.fr>, 2013.
 # Sebastien Renard <renard@kde.org>, 2013.
 # Raphaël Glles <raphaelg16@orange.fr>, 2018.
@@ -37,18 +37,18 @@ msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-02-20 01:38+0000\n"
-"PO-Revision-Date: 2023-03-07 19:11+0100\n"
-"Last-Translator: Xavier BESNARD <xavier.besnard]neuf.fr>\n"
-"Language-Team: French <kde-francophone@kde.org>\n"
+"PO-Revision-Date: 2024-02-21 14:11+0100\n"
+"Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
+"Language-Team: fr\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Environment: kde\n"
 "X-Accelerator-Marker: &\n"
+"X-Environment: kde\n"
+"X-Generator: Lokalize 23.08.4\n"
 "X-Text-Markup: kde4\n"
-"X-Generator: Lokalize 22.12.3\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -2231,13 +2231,12 @@ msgstr "Affichage des images "
 #: kookaview.cpp:245
 #, kde-format
 msgid "User specified"
-msgstr ""
+msgstr "Utilisateur spécifié"
 
 #: kookaview.cpp:246
-#, fuzzy, kde-format
-#| msgid "OCR Command Failed"
+#, kde-format
 msgid "on command line"
-msgstr "Échec de la Commande ROC"
+msgstr "à partir d'une ligne de commandes"
 
 #: kookaview.cpp:266
 #, kde-format
@@ -2661,12 +2660,9 @@ msgid "Enable Messages/Questions"
 msgstr "Activer messages/questions "
 
 #: prefspages.cpp:152
-#, fuzzy, kde-format
-#| msgid "Kooka must be restarted for changes in these options to take effect."
+#, kde-format
 msgid "%1 must be restarted for these settings to take effect."
-msgstr ""
-"Kooka doit être redémarré pour que la modification des ses options prenne "
-"effet."
+msgstr "%1 doit être redémarré pour que ces paramètres prennent effet."
 
 #: prefspages.cpp:267
 #, kde-format
