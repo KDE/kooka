@@ -68,8 +68,8 @@ MultiScanDialog::MultiScanDialog(KScanDevice *dev, QWidget *pnt)
     if (so!=nullptr && so->isValid())
     {
         QLabel *lab = new QLabel(i18n("Scan source:"), w);
-        // TODO: get QFormLayout alignment from style
-        gl->addWidget(lab, row, 0, 1, 2, Qt::AlignRight);
+        const Qt::Alignment labelAlign = static_cast<Qt::Alignment> (style()->styleHint(QStyle::SH_FormLayoutLabelAlignment, nullptr, this));
+        gl->addWidget(lab, row, 0, 1, 2, labelAlign);
 
         // It is not possible to simply "adopt" the existing combo box
         // created by ScanParams, because that would remove it from the main
