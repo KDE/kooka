@@ -40,7 +40,6 @@
 #include <qlabel.h>
 
 #include <kmessagebox.h>
-#include <klocalizedstring.h>
 
 #include "libkookascan_logging.h"
 
@@ -54,29 +53,32 @@ ContinueScanDialog::ContinueScanDialog(int timeout, QWidget *pnt)
     mTextLabel = nullptr;
 
     setModal(true);
+    setWindowTitle(i18n("Next Page"));
 
+    QString buttonText;
     mButtonBox = new QDialogButtonBox(this);
     if (timeout==0)					// not timed so static
     {
-        // TODO
+        buttonText = i18n("Scan Next");
+        mMessageText = kxi18nc("@info",
+                               "<emphasis strong=\"1\">Ready to scan the next page</emphasis>%1..."
+                               "<nl/><nl/>"
+                               "Prepare the next page and then click <interface>Scan&nbsp;Next</interface> to scan it,"
+                               "<nl/>"
+                               "or click <interface>Finish</interface> to end the scan batch "
+                               "or <interface>Cancel</interface> to cancel the entire scan.");
+        mTimer = nullptr;
     }
     else						// timed with countdown
     {
-        QPushButton *but = new QPushButton(i18n("Scan Now"), mButtonBox);
-        but->setIcon(KStandardGuiItem::cont().icon());
-        connect(but, &QAbstractButton::clicked, this, [this]() { mResult = QDialogButtonBox::Ok; });
-        mButtonBox->addButton(but, QDialogButtonBox::AcceptRole);
-        mScanButton = but;
-
-        but = new QPushButton(i18n("Finish"), mButtonBox);
-        but->setIcon(KStandardGuiItem::ok().icon());
-        connect(but, &QAbstractButton::clicked, this, [this]() { mResult = QDialogButtonBox::Close; });
-        mButtonBox->addButton(but, QDialogButtonBox::AcceptRole);
-
-        but = new QPushButton("", mButtonBox);
-        KStandardGuiItem::assign(but, KStandardGuiItem::Cancel);
-        connect(but, &QAbstractButton::clicked, this, [this]() { mResult = QDialogButtonBox::Cancel; });
-        mButtonBox->addButton(but, QDialogButtonBox::RejectRole);
+        buttonText = i18n("Scan Now");
+        mMessageText = kxi18nc("@info",
+                               "<emphasis strong=\"1\">Waiting to scan the next page</emphasis>%1..."
+                               "<nl/><nl/>"
+                               "Prepare the next page and then wait, or click <interface>Scan&nbsp;Now</interface> to scan it immediately"
+                               "<nl/>"
+                               "or click <interface>Finish</interface> to end the scan batch "
+                               "or <interface>Cancel</interface> to cancel the entire scan.");
 
         mTimer = new QTimer(this);
         mTimer->setInterval(1000);
@@ -84,10 +86,28 @@ ContinueScanDialog::ContinueScanDialog(int timeout, QWidget *pnt)
         mTimer->callOnTimeout(this, &ContinueScanDialog::slotTimer);
     }
 
+    QPushButton *but = new QPushButton(buttonText, mButtonBox);
+    but->setIcon(KStandardGuiItem::cont().icon());
+    connect(but, &QAbstractButton::clicked, this, [this]() { mResult = QDialogButtonBox::Ok; });
+    mButtonBox->addButton(but, QDialogButtonBox::AcceptRole);
+    mScanButton = but;
+
+    but = new QPushButton(i18n("Finish"), mButtonBox);
+    but->setIcon(KStandardGuiItem::ok().icon());
+    connect(but, &QAbstractButton::clicked, this, [this]() { mResult = QDialogButtonBox::Close; });
+    mButtonBox->addButton(but, QDialogButtonBox::AcceptRole);
+
+    but = new QPushButton("", mButtonBox);
+    KStandardGuiItem::assign(but, KStandardGuiItem::Cancel);
+    connect(but, &QAbstractButton::clicked, this, [this]() { mResult = QDialogButtonBox::Cancel; });
+    mButtonBox->addButton(but, QDialogButtonBox::RejectRole);
+
+    // TODO: if timed add a "Pause" button
+
     KMessageBox::createKMessageBox(this,				// dialog
                                    mButtonBox,				// buttons
                                    QApplication::style()->standardIcon(QStyle::SP_MessageBoxQuestion, nullptr, this),
-                                   i18n("Waiting for scan..."),		// text
+                                   mMessageText.subs("").toString(),	// text
                                    QStringList(),			// strlist
                                    QString(),				// ask
                                    nullptr,				// checkboxReturn
@@ -139,21 +159,16 @@ void ContinueScanDialog::closeEvent(QCloseEvent *ev)
 
 void ContinueScanDialog::slotTimer()
 {
-    if (mTimeout>=1)
+    if (mTimeout>=1)					// still more time remaining
     {
-        qDebug() << "tick" << mTimeout;
         if (mTextLabel!=nullptr)			// update countdown text
         {
-            mTextLabel->setText(xi18ncp("@info",
-                                        "<emphasis strong=\"1\">Waiting for scan</emphasis> (%1 second)...",
-                                        "<emphasis strong=\"1\">Waiting for scan</emphasis> (%1 seconds)...",
-                                        mTimeout));
+            mTextLabel->setText(mMessageText.subs(i18np(" (%1 second)", " (%1 seconds)", mTimeout)).toString());
         }
         --mTimeout;
     }
-    else
+    else						// timeout now expired
     {
-        qDebug() << "ended";
         mTimer->stop();
         mScanButton->animateClick();			// activate the "Scan" button
     }

@@ -34,6 +34,8 @@
 #include <qdialog.h>
 #include <qdialogbuttonbox.h>
 
+#include <klocalizedstring.h>
+
 #include "kookascan_export.h"
 
 class QPushButton;
@@ -62,11 +64,15 @@ private slots:
 
 private:
     QDialogButtonBox *mButtonBox;
-    QTimer *mTimer;
     QPushButton *mScanButton;
+
+    QTimer *mTimer;
     int mTimeout;
+
     QDialogButtonBox::StandardButton mResult;
+
     QLabel *mTextLabel;
+    KLocalizedString mMessageText;
 };
 
 #endif							// CONTINUESCANDIALOG_H

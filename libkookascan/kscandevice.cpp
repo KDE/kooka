@@ -40,8 +40,6 @@
 #include <klocalizedstring.h>
 #include <kconfig.h>
 #include <kpassworddialog.h>
-#include <kmessagebox.h>
-#include <kstandardguiitem.h>
 
 #include "scanglobal.h"
 #include "scandevices.h"
@@ -902,41 +900,16 @@ KScanDevice::Status KScanDevice::acquireScan()
         const MultiScanOptions::Flags f = mMultiScanOptions->flags();
         if (!(f & MultiScanOptions::MultiScan)) return (stat);
 
-        // TODO: maybe do this at the top of the loop so as to be
-        // able to wait or delay the first page of the scan.
-
         // If doing a manual or delayed wait, then ask or indicate to
         // the user respectively.
-        if (f & MultiScanOptions::ManualWait)
+        //
+        // TODO: maybe do this at the top of the loop so as to be
+        // able to wait or delay the first page of the scan.
+        if (f & (MultiScanOptions::ManualWait|MultiScanOptions::DelayWait))
         {
-            int s = KMessageBox::questionTwoActionsCancel(nullptr,
-                                                          xi18nc("@info",
-                                                                 "<emphasis strong=\"1\">Ready to scan the next page</emphasis>."
-                                                                 "<nl/><nl/>"
-                                                                 "Prepare the next page and then click <interface>Continue</interface> to scan it, or"
-                                                                 "<nl/>"
-                                                                 "click <interface>Finish</interface> to end the scan batch "
-                                                                 "or <interface>Cancel</interface> to cancel the entire scan."),
-                                                          i18n("Next Page"),
-                                                          KStandardGuiItem::cont(),
-                                                          KGuiItem(i18n("Finish"), KStandardGuiItem::ok().icon()));
-            if (s==KMessageBox::Cancel)
-            {
-                qCDebug(LIBKOOKASCAN_LOG) << "User cancelled batch";
-                return (KScanDevice::Cancelled);
-            }
-            if (s==KMessageBox::SecondaryAction) 	// Finish
-            {
-                qCDebug(LIBKOOKASCAN_LOG) << "Manual end of batch";
-                return (KScanDevice::Ok);
-            }
-        }
-        else if (f & MultiScanOptions::DelayWait)
-        {
-            ContinueScanDialog dlg(mMultiScanOptions->delay(), nullptr);
-            dlg.setWindowTitle(i18n("Next Page"));
-
+            ContinueScanDialog dlg(((f & MultiScanOptions::DelayWait) ? mMultiScanOptions->delay() : 0), nullptr);
             int res = dlg.exec();
+
             if (res==QDialogButtonBox::Cancel)
             {
                 qCDebug(LIBKOOKASCAN_LOG) << "User cancelled batch";
@@ -955,6 +928,7 @@ KScanDevice::Status KScanDevice::acquireScan()
         // affect the scan that has just been completed, but the error will be
         // reported to the user.
         //if (!mScanningAdf) return (stat);
+        //
         // TODO: could happen for flatbed multi scan, may need a minimum delay here
 
         // Otherwise, just note that this is now not the first time through
