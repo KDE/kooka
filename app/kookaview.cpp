@@ -858,7 +858,6 @@ void KookaView::slotScanStart(ScanImage::ImageType type)
         }
     }
 
-    mScanParams->setEnabled(false);			// disable GUI while scanning
     KLed *led = mScanParams->operationLED();		// update the LED indicator
     if (led!=nullptr)
     {
@@ -919,8 +918,8 @@ void KookaView::slotScanFinished(KScanDevice::Status stat)
         KMessageBox::error(mMainWindow, msg);
     }
 
-    if (mScanParams != nullptr) {
-        mScanParams->setEnabled(true);
+    if (mScanParams != nullptr)
+    {
         KLed *led = mScanParams->operationLED();
         if (led != nullptr) {
             led->setColor(Qt::green);

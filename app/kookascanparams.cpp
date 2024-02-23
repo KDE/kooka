@@ -48,12 +48,14 @@ KookaScanParams::KookaScanParams(QWidget *parent)
 
     connect(this, &ScanParams::scanBatchStart, this, [this]()
     {
+        setEnabled(false);
         if (mDestinationPlugin!=nullptr) mDestinationPlugin->batchStart();
     });
 
     connect(this, &ScanParams::scanBatchEnd, this, [this](bool ok)
     {
         if (mDestinationPlugin!=nullptr) mDestinationPlugin->batchEnd(ok);
+        setEnabled(true);
     });
 }
 
