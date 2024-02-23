@@ -907,8 +907,10 @@ KScanDevice::Status KScanDevice::acquireScan()
         // able to wait or delay the first page of the scan.
         if (f & (MultiScanOptions::ManualWait|MultiScanOptions::DelayWait))
         {
+            emit sigScanPauseStart();
             ContinueScanDialog dlg(((f & MultiScanOptions::DelayWait) ? mMultiScanOptions->delay() : 0), nullptr);
             int res = dlg.exec();
+            emit sigScanPauseEnd();
 
             if (res==QDialogButtonBox::Cancel)
             {

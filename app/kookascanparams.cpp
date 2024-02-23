@@ -28,7 +28,6 @@
 
 #include <kmessagewidget.h>
 #include <klocalizedstring.h>
-#include <kled.h>
 
 #include "abstractplugin.h"
 #include "abstractdestination.h"
@@ -56,43 +55,23 @@ KookaScanParams::KookaScanParams(QWidget *parent)
 void KookaScanParams::slotDeviceConnected(KScanDevice *dev)
 {
     if (dev==nullptr) return;				// no device to connect
-
-    connect(dev, &KScanDevice::sigScanStart, this, &KookaScanParams::slotScanStart);
-    connect(dev, &KScanDevice::sigAcquireStart, this, &KookaScanParams::slotAcquireStart);
-    connect(dev, &KScanDevice::sigScanFinished, this, &KookaScanParams::slotScanFinished);
+							// connect signals for LED indicator
+    connect(dev, &KScanDevice::sigScanStart, this, [this]() { setLED(Qt::red); });
+    connect(dev, &KScanDevice::sigAcquireStart, this, [this]() { setLED(Qt::green); });
+    connect(dev, &KScanDevice::sigScanFinished, this, [this]() { setLED(Qt::red, KLed::Off); });
+    connect(dev, &KScanDevice::sigScanPauseStart, this, [this]() { setLED(Qt::yellow); });
+    connect(dev, &KScanDevice::sigScanPauseEnd, this, [this]() { setLED(Qt::green, KLed::Off); });
 }
 
 
-void KookaScanParams::slotScanStart()
+void KookaScanParams::setLED(const QColor &col, KLed::State state)
 {
-    KLed *led = operationLED();				// update the LED indicator
-    if (led!=nullptr)
-    {
-        led->setColor(Qt::red);				// scanner warming up
-        led->setState(KLed::On);
-        qApp->processEvents();				// let the change show
-    }
-}
+    KLed *led = operationLED();				// find the LED indicator
+    if (led==nullptr) return;				// no LED indicator present
 
-
-void KookaScanParams::slotAcquireStart()
-{
-    KLed *led = operationLED();				// update the LED indicator
-    if (led!=nullptr)
-    {
-        led->setColor(Qt::green);			// scanning active
-        qApp->processEvents();				// let the change show
-    }
-}
-
-
-void KookaScanParams::slotScanFinished()
-{
-    KLed *led = operationLED();				// update the LED indicator
-    if (led!=nullptr)
-    {
-        led->setState(KLed::Off);
-    }
+    led->setColor(col);					// requested colour
+    led->setState(state);				// requested state
+    qApp->processEvents();				// let the change show
 }
 
 

@@ -21,6 +21,8 @@
 #ifndef KOOKASCANPARAMS_H
 #define KOOKASCANPARAMS_H
 
+#include <kled.h>
+
 #include "scanparams.h"
 
 class QComboBox;
@@ -62,13 +64,13 @@ signals:
 protected slots:
     void slotLinkActivated(const QString &link);
     void slotDestinationSelected(int idx);
+    void slotDeviceConnected(KScanDevice *dev);
 
-    void slotScanStart();
-    void slotAcquireStart();
-    void slotScanFinished();
     void slotScanBatchStart();
     void slotScanBatchEnd(bool ok);
-    void slotDeviceConnected(KScanDevice *dev);
+
+private:
+    void setLED(const QColor &col, KLed::State state = KLed::On);
 
 private:
     KMessageWidget *mNoScannerMessage;

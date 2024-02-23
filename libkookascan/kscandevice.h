@@ -576,7 +576,7 @@ signals:
      * an error or was cancelled, and after the @c sigNewImage or
      * the @c sigNewPreview.
      *
-     * @param stat Status of the scan
+     * @param stat status of the scan
      **/
     void sigScanFinished(KScanDevice::Status stat);
 
@@ -587,6 +587,16 @@ signals:
      * scanner device is still open and valid.
      **/
     void sigCloseDevice();
+
+    /**
+     * Indicate that a scan is about to pause.
+     **/
+    void sigScanPauseStart();
+
+    /**
+     * Indicate that a scan is about to continue after a pause.
+     **/
+    void sigScanPauseEnd();
 
 private slots:
     void doProcessABlock();
