@@ -61,10 +61,12 @@ protected:
 
 private slots:
     void slotTimer();
+    void slotPause();
 
 private:
     QDialogButtonBox *mButtonBox;
     QPushButton *mScanButton;
+    QPushButton *mPauseButton;
 
     QTimer *mTimer;
     int mTimeout;

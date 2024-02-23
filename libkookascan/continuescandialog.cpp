@@ -51,6 +51,7 @@ ContinueScanDialog::ContinueScanDialog(int timeout, QWidget *pnt)
 
     mTimeout = timeout;
     mTextLabel = nullptr;
+    mPauseButton = nullptr;
 
     setModal(true);
     setWindowTitle(i18n("Next Page"));
@@ -84,25 +85,34 @@ ContinueScanDialog::ContinueScanDialog(int timeout, QWidget *pnt)
         mTimer->setInterval(1000);
         mTimer->setSingleShot(false);
         mTimer->callOnTimeout(this, &ContinueScanDialog::slotTimer);
+
+        mPauseButton = new QPushButton(i18n("Pause"), mButtonBox);
+        mPauseButton->setIcon(QIcon::fromTheme("media-playback-pause"));
+        connect(mPauseButton, &QAbstractButton::clicked, this, &ContinueScanDialog::slotPause);
     }
 
+    // The button roles set here are not used by this dialogue, but are
+    // chosen so that the button display order (under Plasma anyway), and
+    // the button that becomes the default if Pause is clicked, are as
+    // intended.
     QPushButton *but = new QPushButton(buttonText, mButtonBox);
     but->setIcon(KStandardGuiItem::cont().icon());
+    but->setAutoDefault(true);
     connect(but, &QAbstractButton::clicked, this, [this]() { mResult = QDialogButtonBox::Ok; });
     mButtonBox->addButton(but, QDialogButtonBox::AcceptRole);
     mScanButton = but;
 
+    if (mPauseButton!=nullptr) mButtonBox->addButton(mPauseButton, QDialogButtonBox::ActionRole);
+
     but = new QPushButton(i18n("Finish"), mButtonBox);
     but->setIcon(KStandardGuiItem::ok().icon());
     connect(but, &QAbstractButton::clicked, this, [this]() { mResult = QDialogButtonBox::Close; });
-    mButtonBox->addButton(but, QDialogButtonBox::AcceptRole);
+    mButtonBox->addButton(but, QDialogButtonBox::ApplyRole);
 
     but = new QPushButton("", mButtonBox);
     KStandardGuiItem::assign(but, KStandardGuiItem::Cancel);
     connect(but, &QAbstractButton::clicked, this, [this]() { mResult = QDialogButtonBox::Cancel; });
     mButtonBox->addButton(but, QDialogButtonBox::RejectRole);
-
-    // TODO: if timed add a "Pause" button
 
     KMessageBox::createKMessageBox(this,				// dialog
                                    mButtonBox,				// buttons
@@ -171,5 +181,17 @@ void ContinueScanDialog::slotTimer()
     {
         mTimer->stop();
         mScanButton->animateClick();			// activate the "Scan" button
+    }
+}
+
+
+void ContinueScanDialog::slotPause()
+{
+    mTimer->stop();
+    mPauseButton->setEnabled(false);
+
+    if (mTextLabel!=nullptr)				// update countdown text
+    {
+        mTextLabel->setText(mMessageText.subs(i18n(" (Paused)")).toString());
     }
 }
