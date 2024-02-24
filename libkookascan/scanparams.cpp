@@ -387,6 +387,7 @@ QWidget *ScanParams::createScannerParams()
 
         QPushButton *pb = new QPushButton(i18n("ADF && Multiple Scan Options..."), frame);
         pb->setIcon(QIcon::fromTheme("document-multiple"));
+        pb->setToolTip(i18nc("@info:tootip", "Set ADF, rotation and destination options for scanning multiple pages"));
         connect(pb, &QAbstractButton::clicked, this, &ScanParams::slotSourceSelect);
         frame->addRow(nullptr, pb, nullptr, Qt::AlignRight);
     }

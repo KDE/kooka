@@ -77,6 +77,7 @@ MultiScanDialog::MultiScanDialog(KScanDevice *dev, QWidget *pnt)
         // Therefore we need to create a new combo box here.
         mSourceCombo = new QComboBox(w);
         mSourceCombo->setSizePolicy(QSizePolicy::MinimumExpanding, mSourceCombo->sizePolicy().verticalPolicy());
+        mSourceCombo->setToolTip(i18nc("@info:tooltip", "Select the scan source"));
 
         // This assumes that the available sources do not change during
         // the lifetime of this dialogue.
@@ -107,12 +108,14 @@ MultiScanDialog::MultiScanDialog(KScanDevice *dev, QWidget *pnt)
 
     // Row 3: Single Scan radio button
     mScanSingleRadio = new QRadioButton(i18n("Single scan"), w);
+    mScanSingleRadio->setToolTip(i18nc("@info:tooltip", "Perform a single scan from the selected source"));
     bg->addButton(mScanSingleRadio);
     gl->addWidget(mScanSingleRadio, row, 0, 1, -1, Qt::AlignLeft);
     ++row;
 
     // Row 4: Multiple Scan radio button
     mScanMultiRadio = new QRadioButton(i18n("Multiple scan"), w);
+    mScanMultiRadio->setToolTip(i18nc("@info:tooltip", "Perform multiple scans from the selected source"));
     bg->addButton(mScanMultiRadio);
     gl->addWidget(mScanMultiRadio, row, 0, 1, -1, Qt::AlignLeft);
     ++row;
@@ -123,24 +126,28 @@ MultiScanDialog::MultiScanDialog(KScanDevice *dev, QWidget *pnt)
 
     // Row 5: Empty ADF radio button
     mMultiEmptyAdfRadio = new QRadioButton(i18n("Scan until ADF is empty"), w);
+    mMultiEmptyAdfRadio->setToolTip(i18nc("@info:tooltip", "Keep scanning until the automatic document feeder is empty"));
     bg->addButton(mMultiEmptyAdfRadio);
     gl->addWidget(mMultiEmptyAdfRadio, row, 1, 1, -1, Qt::AlignLeft);
     ++row;
 
     // Row 6: Manual Scan radio button
     mMultiManualScanRadio = new QRadioButton(i18n("Wait until ready for next scan"), w);
+    mMultiManualScanRadio->setToolTip(i18nc("@info:tooltip", "Wait for confirmation between scans"));
     bg->addButton(mMultiManualScanRadio);
     gl->addWidget(mMultiManualScanRadio, row, 1, 1, -1, Qt::AlignLeft);
     ++row;
 
     // Row 7: Time Delay radio button and delay setting
     mMultiDelayScanRadio = new QRadioButton(i18n("Scan after waiting for"), w);
+    mMultiDelayScanRadio->setToolTip(i18nc("@info:tooltip", "Delay for a time between scans"));
     bg->addButton(mMultiDelayScanRadio);
     gl->addWidget(mMultiDelayScanRadio, row, 1, 1, 2, Qt::AlignLeft);
 
     mDelayTimeSpinbox = new KPluralHandlingSpinBox(w);
     mDelayTimeSpinbox->setRange(1, 60);
     mDelayTimeSpinbox->setSuffix(ki18ncp("Time unit", " second", " seconds"));
+    mDelayTimeSpinbox->setToolTip(i18nc("@info:tooltip", "Set the delay time between scans"));
     gl->addWidget(mDelayTimeSpinbox, row, 3, Qt::AlignLeft);
     ++row;
 
