@@ -68,20 +68,8 @@
     </entry>
 
     <entry name="SaverAskForFilename" key="AskForFilename" type="Bool">
-      <label>Ask for filename when saving</label>
-      <tooltip>&lt;div&gt;Check this if you want to enter a file name when scanning an image.&lt;/div&gt;</tooltip>
-      <default>false</default>
-    </entry>
-
-    <entry name="SaverAskBeforeScan" key="AskBeforeScan" type="Bool">
-      <label>Before the scan starts</label>
-      <tooltip>&lt;div&gt;Check this if you want to enter the file name before scanning starts.&lt;/div&gt;</tooltip>
-      <default>true</default>
-    </entry>
-
-    <entry name="SaverAskAfterScan" type="Bool">
-      <label>After the scan is finished</label>
-      <tooltip>&lt;div&gt;Check this if you want to enter the file name after scanning has finished.&lt;/div&gt;</tooltip>
+      <label>Ask for file name when saving</label>
+      <tooltip>&lt;div&gt;Check this if you want to always enter a file name when scanning an image.&lt;/div&gt;</tooltip>
       <default>false</default>
     </entry>
 
