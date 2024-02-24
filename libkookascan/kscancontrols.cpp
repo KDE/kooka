@@ -411,9 +411,9 @@ KScanFileRequester::KScanFileRequester(QWidget *parent, const QString &text)
     mEntry = new KUrlRequester(this);
     mLayout->addWidget(mEntry);
 
-    QString filter = i18n("*.pnm *.pbm *.pgm *.ppm|PNM Image Files");
-    filter += '\n'+ImageFilter::kdeFilter(ImageFilter::Reading);
-    mEntry->setFilter(filter);
+    QStringList filter(i18n("PNM Image Files (*.pnm *.pbm *.pgm *.ppm)"));
+    filter += ImageFilter::qtFilterList(ImageFilter::Reading);
+    mEntry->setNameFilters(filter);
 
     connect(mEntry, QOverload<const QString &>::of(&KUrlRequester::textChanged), this, QOverload<const QString &>::of(&KScanFileRequester::settingChanged));
     connect(mEntry, QOverload<const QString &>::of(&KUrlRequester::returnPressed), this, &KScanStringEntry::returnPressed);
