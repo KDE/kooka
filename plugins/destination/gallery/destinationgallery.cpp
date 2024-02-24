@@ -53,12 +53,7 @@ bool DestinationGallery::scanStarting(ScanImage::ImageType type)
 {
     qCDebug(DESTINATION_LOG) << "type" << type;
     if (type==ScanImage::None) return (true);		// can't prompt for anything yet
-
-    if (KookaSettings::saverAskBeforeScan())		// ask for file name first?
-    {
-        return (gallery()->prepareToSave(type));	// ask for file name and format
-    }
-    else return (true);
+    return (gallery()->prepareToSave(type));		// ask for file name and format
 }
 
 

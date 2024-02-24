@@ -201,6 +201,10 @@ bool ScanParams::connectDevice(KScanDevice *newScanDevice, bool galleryMode)
     mProgressDialog->setAutoReset(true);
     mProgressDialog->setWindowTitle(i18n("Scanning"));
     mProgressDialog->setMinimumDuration(100);
+    // Give the progress cancel button the standard KDE text and icon
+    QPushButton *but = new QPushButton;
+    KStandardGuiItem::assign(but, KStandardGuiItem::Stop);
+    mProgressDialog->setCancelButton(but);
     // The next is necessary with Qt5, as otherwise the progress dialogue
     // appears to show itself after the default 'minimumDuration' (= 4 seconds),
     // even despite the previous and no 'value' being set.

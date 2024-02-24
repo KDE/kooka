@@ -156,6 +156,9 @@ void do_init()
 	printf(fmt,"SANE version:");
 	printf("%d.%d.%d\n",SANE_VERSION_MAJOR(sanevers),
 	       SANE_VERSION_MINOR(sanevers),SANE_VERSION_BUILD(sanevers));
+
+	printf(fmt,"Byte size:"); printf("%d\n", (int)sizeof(SANE_Byte));
+	printf(fmt,"Word size:"); printf("%d\n", (int)sizeof(SANE_Word));
 }
 
 /************************************************************************/
@@ -209,7 +212,6 @@ void do_describe(const char *dev)
 	int nw;
 	int i;
 
-
 	do_init();
 
 	sanerr = sane_open(dev,&hand);
@@ -219,8 +221,8 @@ void do_describe(const char *dev)
 	sanerr = sane_control_option(hand,0,SANE_ACTION_GET_VALUE,&numopt,NULL);
 	if (sanerr!=SANE_STATUS_GOOD) cmderr(CSSANE,CEFATAL,"SANE cannot get option 0");
 
-	printf(fmt,"Found:");
-	printf("%d options\n",numopt);
+	printf(fmt,"Options:");
+	printf("%d\n",numopt);
 
 	for (opt = 1; opt<numopt; ++opt)
 	{
@@ -328,17 +330,25 @@ default:				min = max = q = 0;
 				if (q==0) q = 1.0;
 				if (q==1.0)
 				{
-					printf("RANGE %g - %g",min,max);
+					printf("RANGE %g - %g (%d)",
+					       min, max, (int)((1+max-min)+0.5));
 				}
 				else
 				{
-					printf("RANGE %g - %g by %g = %g - %g",
-					       min,max,q,min/q,max/q);
+					printf("RANGE %g - %g by %g (%d)",
+					       min, max, q, (int)(((1+max-min)/q)+0.5));
 				}
 				break;
 
 case SANE_CONSTRAINT_STRING_LIST:
-				printf("STRING_LIST [");
+				/* No count is provided, so need to count the strings first */
+				nw = 0;
+				for (sp = desc->constraint.string_list; *sp!=NULL; ++sp)
+				{
+					++nw;
+				}
+				printf("STRING_LIST %d [", nw);
+
 				for (sp = desc->constraint.string_list; *sp!=NULL; ++sp)
 				{
 					printf("\"%s\"",*sp);
@@ -371,8 +381,17 @@ default:			printf("%d",desc->constraint_type);
 
 		if (desc->size>0 && desc->size!=sizeof(SANE_Word))
 		{
-			printf(fmt,"Data size:");
-			printf("%d\n",desc->size);
+			printf(fmt, "Data size:");
+			printf("%d", desc->size);
+
+			/* See the SANE API documentation 4.2.9.6 "Option Value Size" */
+			if (desc->type==SANE_TYPE_BOOL ||
+			    desc->type==SANE_TYPE_INT ||
+			    desc->type==SANE_TYPE_FIXED)
+			{
+				printf(" (%d)", (int)(desc->size/sizeof(SANE_Word)));
+			}
+			printf("\n");
 		}
 	}
 

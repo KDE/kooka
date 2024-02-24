@@ -66,13 +66,9 @@ bool DestinationSave::scanStarting(ScanImage::ImageType type)
     mSaveUrl.clear();					// reset for a new scan
     mSaveMime.clear();
 
-    // Honour the "Ask for filename before/after scan" setting
-    if (KookaSettings::saverAskBeforeScan())
-    {
-        if (!getSaveLocation(type)) return (false);
-    }
-
-    return (true);
+    // Now the standard setting is to always as ask for the file name
+    // before starting a scan.
+    return (getSaveLocation(type));
 }
 
 
@@ -80,15 +76,12 @@ void DestinationSave::imageScanned(ScanImage::Ptr img)
 {
     qCDebug(DESTINATION_LOG) << "received image size" << img->size();
 
-    if (!mSaveUrl.isValid())				// if we didn't ask before,
-    {							// then do it now
-        if (!getSaveLocation(img->imageType())) return;
-    }
-    if (!mSaveUrl.isValid()) return;			// nowhere to save to
-
     ImageFormat fmt = getSaveFormat(mSaveMime, img);
     qCDebug(DESTINATION_LOG) << "to" << mSaveUrl << "mime" << mSaveMime << "format" << fmt;
-    if (!fmt.isValid()) return;				// should never happen
+    // These should now never happen, because getSaveLocation() was
+    // called unconditionally above.
+    if (!fmt.isValid()) return;
+    if (!mSaveUrl.isValid()) return;
 
     // TODO: move from here on into ImgSaver, so that it can save to
     // remote locations.

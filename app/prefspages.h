@@ -41,7 +41,6 @@
 class QCheckBox;
 class QComboBox;
 class QPushButton;
-class QRadioButton;
 class QLabel;
 class QVBoxLayout;
 
@@ -117,8 +116,6 @@ private:
 
     QCheckBox *mAskSaveFormat;
     QCheckBox *mAskFileName;
-    QRadioButton *mAskBeforeScan;
-    QRadioButton *mAskAfterScan;
 };
 
 

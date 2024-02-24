@@ -114,33 +114,33 @@ KookaStartupPage::KookaStartupPage(KPageDialog *parent)
     : KookaPrefsPage(parent)
 {
     /* Query for network scanner (Checkbox) */
-    const KConfigSkeletonItem *item = ScanSettings::self()->startupOnlyLocalItem();
-    Q_ASSERT(item!=nullptr);
-    mNetQueryCheck = new QCheckBox(item->label(), this);
-    mNetQueryCheck->setToolTip(item->toolTip());
+    const KConfigSkeletonItem *ski = ScanSettings::self()->startupOnlyLocalItem();
+    Q_ASSERT(ski!=nullptr);
+    mNetQueryCheck = new QCheckBox(ski->label(), this);
+    mNetQueryCheck->setToolTip(ski->toolTip());
     mLayout->addWidget(mNetQueryCheck);
 
     /* Use network proxy settings (Checkbox) */
-    item = ScanSettings::self()->startupUseProxyItem();
-    Q_ASSERT(item!=nullptr);
-    mNetProxyCheck = new QCheckBox(item->label(), this);
-    mNetProxyCheck->setToolTip(item->toolTip());
+    ski = ScanSettings::self()->startupUseProxyItem();
+    Q_ASSERT(ski!=nullptr);
+    mNetProxyCheck = new QCheckBox(ski->label(), this);
+    mNetProxyCheck->setToolTip(ski->toolTip());
     mLayout->addWidget(mNetProxyCheck);
 
     mLayout->addSpacing(2*DialogBase::verticalSpacing());
 
     /* Show scanner selection box on startup (Checkbox) */
-    item = ScanSettings::self()->startupSkipAskItem();
-    Q_ASSERT(item!=nullptr);
-    mSelectScannerCheck = new QCheckBox(item->label(), this);
-    mSelectScannerCheck->setToolTip(item->toolTip());
+    ski = ScanSettings::self()->startupSkipAskItem();
+    Q_ASSERT(ski!=nullptr);
+    mSelectScannerCheck = new QCheckBox(ski->label(), this);
+    mSelectScannerCheck->setToolTip(ski->toolTip());
     mLayout->addWidget(mSelectScannerCheck);
 
     /* Read startup image on startup (Checkbox) */
-    item = KookaSettings::self()->startupReadImageItem();
-    Q_ASSERT(item!=nullptr);
-    mRestoreImageCheck = new QCheckBox(item->label(), this);
-    mRestoreImageCheck->setToolTip(item->toolTip());
+    ski = KookaSettings::self()->startupReadImageItem();
+    Q_ASSERT(ski!=nullptr);
+    mRestoreImageCheck = new QCheckBox(ski->label(), this);
+    mRestoreImageCheck->setToolTip(ski->toolTip());
     mLayout->addWidget(mRestoreImageCheck);
 
     mLayout->addStretch(9);				// push down to bottom
@@ -191,43 +191,16 @@ void KookaStartupPage::applySettings()
 KookaSavingPage::KookaSavingPage(KPageDialog *parent)
     : KookaPrefsPage(parent)
 {
-    const KConfigSkeletonItem *item = KookaSettings::self()->saverAskForFormatItem();
-    Q_ASSERT(item!=nullptr);
-    mAskSaveFormat = new QCheckBox(item->label(), this);
-    mAskSaveFormat->setToolTip(item->toolTip());
+    const KConfigSkeletonItem *ski = KookaSettings::self()->saverAskForFormatItem();
+    Q_ASSERT(ski!=nullptr);
+    mAskSaveFormat = new QCheckBox(ski->label(), this);
+    mAskSaveFormat->setToolTip(ski->toolTip());
     mLayout->addWidget(mAskSaveFormat);
 
-    mLayout->addSpacing(2 * DialogBase::verticalSpacing());
-
-    item = KookaSettings::self()->saverAskForFilenameItem();
-    mAskFileName = new QCheckBox(item->label(), this);
-    mAskFileName->setToolTip(item->toolTip());
+    ski = KookaSettings::self()->saverAskForFilenameItem();
+    mAskFileName = new QCheckBox(ski->label(), this);
+    mAskFileName->setToolTip(ski->toolTip());
     mLayout->addWidget(mAskFileName);
-
-    QButtonGroup *bg = new QButtonGroup(this);
-    QGridLayout *gl = new QGridLayout;
-    gl->setVerticalSpacing(0);
-    gl->setColumnMinimumWidth(0, 3*DialogBase::verticalSpacing());
-
-    item = KookaSettings::self()->saverAskBeforeScanItem();
-    Q_ASSERT(item!=nullptr);
-    mAskBeforeScan = new QRadioButton(item->label(), this);
-    mAskBeforeScan->setEnabled(mAskFileName->isChecked());
-    mAskBeforeScan->setToolTip(item->toolTip());
-    connect(mAskFileName, &QCheckBox::toggled, mAskBeforeScan, &QRadioButton::setEnabled);
-    bg->addButton(mAskBeforeScan);
-    gl->addWidget(mAskBeforeScan, 0, 1);
-
-    item = KookaSettings::self()->saverAskAfterScanItem();
-    Q_ASSERT(item!=nullptr);
-    mAskAfterScan = new QRadioButton(item->label(), this);
-    mAskAfterScan->setEnabled(mAskFileName->isChecked());
-    mAskAfterScan->setToolTip(item->toolTip());
-    connect(mAskFileName, &QCheckBox::toggled, mAskAfterScan, &QRadioButton::setEnabled);
-    bg->addButton(mAskAfterScan);
-    gl->addWidget(mAskAfterScan, 1, 1);
-
-    mLayout->addLayout(gl);
 
     applySettings();
 }
@@ -236,7 +209,6 @@ void KookaSavingPage::saveSettings()
 {
     KookaSettings::setSaverAskForFormat(mAskSaveFormat->isChecked());
     KookaSettings::setSaverAskForFilename(mAskFileName->isChecked());
-    KookaSettings::setSaverAskBeforeScan(mAskBeforeScan->isChecked());
     KookaSettings::self()->save();
 }
 
@@ -244,7 +216,6 @@ void KookaSavingPage::defaultSettings()
 {
     KookaSettings::self()->saverAskForFormatItem()->setDefault();
     KookaSettings::self()->saverAskForFilenameItem()->setDefault();
-    KookaSettings::self()->saverAskBeforeScanItem()->setDefault();
     applySettings();
 }
 
@@ -253,9 +224,6 @@ void KookaSavingPage::applySettings()
 {
     mAskSaveFormat->setChecked(KookaSettings::saverAskForFormat());
     mAskFileName->setChecked(KookaSettings::saverAskForFilename());
-    bool askBefore = KookaSettings::saverAskBeforeScan();
-    mAskBeforeScan->setChecked(askBefore);
-    mAskAfterScan->setChecked(!askBefore);
 }
 
 //  "Gallery/Thumbnail" page
@@ -269,14 +237,14 @@ KookaThumbnailPage::KookaThumbnailPage(KPageDialog *parent)
     gl->setColumnStretch(1, 1);
 
     /* Layout */
-    const KConfigSkeletonItem *item = KookaSettings::self()->galleryLayoutItem();
-    Q_ASSERT(item!=nullptr);
-    QLabel *lab = new QLabel(item->label(), gb);
-    lab->setToolTip(item->toolTip());
+    const KConfigSkeletonItem *ski = KookaSettings::self()->galleryLayoutItem();
+    Q_ASSERT(ski!=nullptr);
+    QLabel *lab = new QLabel(ski->label(), gb);
+    lab->setToolTip(ski->toolTip());
     gl->addWidget(lab, 0, 0, Qt::AlignRight);
 
     mGalleryLayoutCombo = new QComboBox(gb);
-    mGalleryLayoutCombo->setToolTip(item->toolTip());
+    mGalleryLayoutCombo->setToolTip(ski->toolTip());
 // TODO: eliminate former enums
     mGalleryLayoutCombo->addItem(i18n("Not shown"), KookaSettings::RecentNone);
     mGalleryLayoutCombo->addItem(i18n("At top"), KookaSettings::RecentAtTop);
@@ -286,10 +254,10 @@ KookaThumbnailPage::KookaThumbnailPage(KPageDialog *parent)
     gl->addWidget(mGalleryLayoutCombo, 0, 1);
 
     /* Allow renaming */
-    item = KookaSettings::self()->galleryAllowRenameItem();
-    Q_ASSERT(item!=nullptr);
-    mAllowRenameCheck = new QCheckBox(item->label(), gb);
-    mAllowRenameCheck->setToolTip(item->toolTip());
+    ski = KookaSettings::self()->galleryAllowRenameItem();
+    Q_ASSERT(ski!=nullptr);
+    mAllowRenameCheck = new QCheckBox(ski->label(), gb);
+    mAllowRenameCheck->setToolTip(ski->toolTip());
     gl->addWidget(mAllowRenameCheck, 1, 0, 1, 2);
 
     mLayout->addWidget(gb);
@@ -300,23 +268,23 @@ KookaThumbnailPage::KookaThumbnailPage(KPageDialog *parent)
     gl->setColumnStretch(1, 1);
 
     // Do we want a background image?
-    item = KookaSettings::self()->thumbnailCustomBackgroundItem();
-    Q_ASSERT(item!=nullptr);
-    mCustomBackgroundCheck = new QCheckBox(item->label(), this);
-    mCustomBackgroundCheck->setToolTip(item->toolTip());
+    ski = KookaSettings::self()->thumbnailCustomBackgroundItem();
+    Q_ASSERT(ski!=nullptr);
+    mCustomBackgroundCheck = new QCheckBox(ski->label(), this);
+    mCustomBackgroundCheck->setToolTip(ski->toolTip());
     connect(mCustomBackgroundCheck, &QCheckBox::toggled, this, &KookaThumbnailPage::slotCustomThumbBgndToggled);
     gl->addWidget(mCustomBackgroundCheck, 2, 0, 1, 2);
 
     /* Background image */
-    item = KookaSettings::self()->thumbnailBackgroundPathItem();
-    Q_ASSERT(item!=nullptr);
-    lab = new QLabel(item->label(), this);
-    lab->setToolTip(item->toolTip());
+    ski = KookaSettings::self()->thumbnailBackgroundPathItem();
+    Q_ASSERT(ski!=nullptr);
+    lab = new QLabel(ski->label(), this);
+    lab->setToolTip(ski->toolTip());
     gl->addWidget(lab, 3, 0, Qt::AlignRight);
 
     /* Image file selector */
     mTileSelector = new KUrlRequester(this);
-    mTileSelector->setToolTip(item->toolTip());
+    mTileSelector->setToolTip(ski->toolTip());
     mTileSelector->setMode(KFile::File|KFile::ExistingOnly|KFile::LocalOnly);
     mTileSelector->setFilter(ImageFilter::kdeFilter(ImageFilter::Reading));
     gl->addWidget(mTileSelector, 3, 1);
@@ -325,14 +293,14 @@ KookaThumbnailPage::KookaThumbnailPage(KPageDialog *parent)
     gl->setRowMinimumHeight(4, 2*DialogBase::verticalSpacing());
 
     /* Preview size */
-    item = KookaSettings::self()->thumbnailPreviewSizeItem();
-    Q_ASSERT(item!=nullptr);
-    lab = new QLabel(item->label(), this);
-    lab->setToolTip(item->toolTip());
+    ski = KookaSettings::self()->thumbnailPreviewSizeItem();
+    Q_ASSERT(ski!=nullptr);
+    lab = new QLabel(ski->label(), this);
+    lab->setToolTip(ski->toolTip());
     gl->addWidget(lab, 5, 0, Qt::AlignRight);
 
     mThumbSizeCombo = new QComboBox(this);
-    mThumbSizeCombo->setToolTip(item->toolTip());
+    mThumbSizeCombo->setToolTip(ski->toolTip());
     mThumbSizeCombo->addItem(ThumbView::sizeName(KIconLoader::SizeEnormous), KIconLoader::SizeEnormous);
     mThumbSizeCombo->addItem(ThumbView::sizeName(KIconLoader::SizeHuge), KIconLoader::SizeHuge);
     mThumbSizeCombo->addItem(ThumbView::sizeName(KIconLoader::SizeLarge), KIconLoader::SizeLarge);
