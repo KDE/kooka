@@ -400,14 +400,15 @@ bool copyRenameImage(bool isCopying, const QUrl &fromUrl, const QUrl &toUrl, boo
     QUrl targetUrl(toUrl);
     if (extTo.isEmpty() && !extFrom.isEmpty())
     {							// ask if the extension should be added
-        int result = KMessageBox::Yes;
         QString fName = toUrl.fileName();
         if (!fName.endsWith(".")) fName += ".";
         fName += extFrom;
 
 #if KWIDGETSADDONS_VERSION >= QT_VERSION_CHECK(5, 100, 0)
+        int result = KMessageBox::PrimaryAction;
         if (askExt) result = KMessageBox::questionTwoActions(overWidget,
 #else
+        int result = KMessageBox::Yes;
         if (askExt) result = KMessageBox::questionYesNo(overWidget,
 #endif
                                  xi18nc("@info", "The file name you supplied has no file extension.<nl/>"
