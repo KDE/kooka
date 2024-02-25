@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-02-20 01:38+0000\n"
-"PO-Revision-Date: 2024-02-20 16:48+0100\n"
+"PO-Revision-Date: 2024-02-24 09:10+0100\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
 "Language: gl\n"
@@ -105,6 +105,11 @@ msgid ""
 "\">sane(7)</link> or <link url=\"man:/sane-dll\">sane&#8209;dll(5)</link> "
 "for more information on available backends and the format of device names."
 msgstr ""
+"O <interface>dispositivo de escáner</interface> debería ser un nome de motor "
+"(con parámetros opcionais) que SANE comprenda. Consulte <link url=\"man:/sane"
+"\">sane(7)</link> ou <link url=\"man:/sane-dll\">sane&#8209;dll(5)</link> "
+"para máis información sobre os motores dispoñíbeis e o formato dos nomes de "
+"dispositivos."
 
 #: adddevicedialog.cpp:134
 #, kde-kuit-format
@@ -117,6 +122,12 @@ msgid ""
 "<icode>&#8209;L</icode> option for network scanners. If the scanner is "
 "found, then enter the device name displayed by these commands."
 msgstr ""
+"Para atopar a información que hai que introducir aquí, intente atopar o "
+"dispositivo usando a orde <link url=\"man:/sane-find-scanner\">sane&#8209;"
+"find&#8209;scanner(1)</link> para SCSI, USB ou escáneres de porto paralelo, "
+"ou a orde <link url=\"man:/scanimage\">scanimage(1)</link> coa opción "
+"<icode>&#8209;L</icode> para escáneres de rede. Se se atopa o escáner, "
+"introduza o nome do dispositivo que mostran estas ordes."
 
 #: adddevicedialog.cpp:143
 #, kde-kuit-format
@@ -129,6 +140,12 @@ msgid ""
 "the scanner is found by HPLIP, then the device name <icode>hp:</icode> that "
 "it displays needs to be replaced by <icode>hpaio:</icode> for SANE."
 msgstr ""
+"Para un escáner de HP por USB ou por rede que usa <link url=\"http://hplip."
+"sourceforge.net/\">HPLIP</link>, probe a usar a orde <command>hp&#8209;"
+"probe</command> para atopalo, por exemplo <icode>hp&#8209;probe&nbsp;&#8209;"
+"b&nbsp;usb</icode> ou <icode>hp&#8209;probe&nbsp;&#8209;b&nbsp;net</icode>. "
+"Teña en conta que se HPLIP atopa o escáner, ten que substituír <icode>hp:</"
+"icode> por <icode>hpaio:</icode> no nome que se amosa para SANE."
 
 #: adddevicedialog.cpp:152
 #, kde-kuit-format
@@ -138,6 +155,10 @@ msgid ""
 "by SANE. Check the SANE documentation for a <link url=\"http://www.sane-"
 "project.org/sane-supported-devices.html\">list of supported devices</link>."
 msgstr ""
+"Se estas ordes non dan atopado o seu escáner, pode que non sexa compatíbel "
+"con SANE. Consulte na documentación de SANE a <link url=\"http://www.sane-"
+"project.org/sane-supported-devices.html\">lista de dispositivos compatíbeis</"
+"link>."
 
 #: autoselectbar.cpp:56
 #, kde-kuit-format
@@ -497,33 +518,32 @@ msgstr "Descoñécese o dispositivo «%1»."
 #: scanglobal.cpp:136
 #, kde-format
 msgid "SANE - Scanner Access Now Easy"
-msgstr ""
+msgstr "SANE — Scanner Access Now Easy"
 
 #: scanglobal.cpp:137
 #, kde-format
 msgid "Scanner access and driver library"
-msgstr ""
+msgstr "Acceso a escáneres e biblioteca de controladores"
 
 #: scanglobal.cpp:144
 #, kde-format
 msgid "LibTIFF"
-msgstr ""
+msgstr "LibTIFF"
 
 #: scanglobal.cpp:145
-#, fuzzy, kde-format
-#| msgid "Force image format:"
+#, kde-format
 msgid "TIFF image format library"
-msgstr "Forzar o formato da imaxe:"
+msgstr "Biblioteca do formato de imaxe TIFF"
 
 #: scanglobal.cpp:154
 #, kde-format
 msgid "libpaper"
-msgstr ""
+msgstr "libpaper"
 
 #: scanglobal.cpp:155
 #, kde-format
 msgid "Paper size configuration library"
-msgstr ""
+msgstr "Biblioteca de configuración de tamaños de papel"
 
 #: scanimage.cpp:76
 #, kde-format
@@ -788,6 +808,8 @@ msgstr ""
 #, kde-format
 msgid "Use the system proxy settings to access network scanners"
 msgstr ""
+"Usar a configuración de mandatarios do sistema para acceder aos escáneres de "
+"rede."
 
 #. i18n: ectx: tooltip, entry (StartupUseProxy), group (Startup)
 #: scansettings.kcfg:19
@@ -797,6 +819,10 @@ msgid ""
 "access network scanners.<br/><br/>Note that some SANE backends (for example "
 "'escl') may not work properly through a proxy.</div>"
 msgstr ""
+"<div>Marque isto se quere usar a configuración estándar de mandatarios do "
+"sistema para acceder a escáneres de rede.<br/><br/>Teña en conta que algúns "
+"motores de SANE (por exemplo, «escl») pode que non funcionen correctamente a "
+"través dun mandatario.</div>"
 
 #. i18n: ectx: label, entry (StartupSkipAsk), group (Startup)
 #: scansettings.kcfg:28

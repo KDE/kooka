@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-02-20 01:38+0000\n"
-"PO-Revision-Date: 2024-02-04 17:21+0100\n"
+"PO-Revision-Date: 2024-02-24 22:21+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -2164,13 +2164,12 @@ msgstr "Bilda Vido"
 #: kookaview.cpp:245
 #, kde-format
 msgid "User specified"
-msgstr ""
+msgstr "Specifita per uzanto"
 
 #: kookaview.cpp:246
-#, fuzzy, kde-format
-#| msgid "OCR Command Failed"
+#, kde-format
 msgid "on command line"
-msgstr "OCR-Komando Malsukcesis"
+msgstr "sur komandlinio"
 
 #: kookaview.cpp:266
 #, kde-format
@@ -2581,7 +2580,7 @@ msgstr "Ebligi Mesaĝojn/Demandojn"
 #: prefspages.cpp:152
 #, kde-format
 msgid "%1 must be restarted for these settings to take effect."
-msgstr ""
+msgstr "%1 devas esti restartigita por ke ĉi metoj efektiviĝu."
 
 #: prefspages.cpp:267
 #, kde-format

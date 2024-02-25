@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: libkookascan\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-02-20 01:38+0000\n"
-"PO-Revision-Date: 2023-03-14 21:55+01\n"
+"PO-Revision-Date: 2024-02-24 22:21+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -21,12 +21,12 @@ msgstr ""
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
-msgstr ""
+msgstr "Oliver Kellogg"
 
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
-msgstr ""
+msgstr "okellogg@users.sourceforge.net"
 
 #: ../libdialogutil/imagefilter.cpp:91
 #, kde-format
@@ -62,21 +62,20 @@ msgid ""
 msgstr ""
 
 #: adddevicedialog.cpp:77
-#, fuzzy, kde-format
-#| msgid "Scanner device name:"
+#, kde-format
 msgid "Scanner device:"
-msgstr "Nomo de skanila aparato:"
+msgstr "Skanila aparato:"
 
 #: adddevicedialog.cpp:80 scandevices.cpp:190
 #, kde-format
 msgctxt "Value used for manufacturer if none entered"
 msgid "User specified"
-msgstr ""
+msgstr "Specifita per uzanto"
 
 #: adddevicedialog.cpp:82
 #, kde-format
 msgid "Manufacturer:"
-msgstr ""
+msgstr "Fabrikisto:"
 
 #: adddevicedialog.cpp:86
 #, kde-format
@@ -488,33 +487,32 @@ msgstr "Nekonata aparato '%1'"
 #: scanglobal.cpp:136
 #, kde-format
 msgid "SANE - Scanner Access Now Easy"
-msgstr ""
+msgstr "SANE - Skanil-Aliro Nun Eleganta"
 
 #: scanglobal.cpp:137
 #, kde-format
 msgid "Scanner access and driver library"
-msgstr ""
+msgstr "Biblioteko por skanil-aliro kaj pelilo"
 
 #: scanglobal.cpp:144
 #, kde-format
 msgid "LibTIFF"
-msgstr ""
+msgstr "LibTIFF"
 
 #: scanglobal.cpp:145
-#, fuzzy, kde-format
-#| msgid "Force image format:"
+#, kde-format
 msgid "TIFF image format library"
-msgstr "Devigi bildformaton:"
+msgstr "TIFF-bildformata biblioteko"
 
 #: scanglobal.cpp:154
 #, kde-format
 msgid "libpaper"
-msgstr ""
+msgstr "libpaper"
 
 #: scanglobal.cpp:155
 #, kde-format
 msgid "Paper size configuration library"
-msgstr ""
+msgstr "Biblioteko por agordo de papergrandeco"
 
 #: scanimage.cpp:76
 #, kde-format
@@ -773,7 +771,7 @@ msgstr ""
 #: scansettings.kcfg:18
 #, kde-format
 msgid "Use the system proxy settings to access network scanners"
-msgstr ""
+msgstr "Uzi la sistemajn prokuril-agordojn por aliri retajn skanilojn"
 
 #. i18n: ectx: tooltip, entry (StartupUseProxy), group (Startup)
 #: scansettings.kcfg:19
@@ -896,45 +894,3 @@ msgstr "Agordi la orientiĝon por antaŭfiksita grandeco de la skanita areo"
 #, kde-format
 msgid "Selection"
 msgstr "Elekto"
-
-#~ msgctxt "@info"
-#~ msgid ""
-#~ "If your scanner has not been automatically detected, you can specify it "
-#~ "here. The <interface>Scanner device name</interface> should be a backend "
-#~ "name (with optional parameters) that is understood by SANE, see <link url="
-#~ "\"man:/sane\">sane(7)</link> or <link url=\"man:/sane-dll\">sane-dll(5)</"
-#~ "link> for more information on available backends. The <interface>Type</"
-#~ "interface> and <interface>Description</interface> can be used to identify "
-#~ "the scanner later.<nl/><nl/>For the information that needs to be entered "
-#~ "here, try to locate the device using the <link url=\"man:/sane-find-"
-#~ "scanner\">sane-find-scanner(1)</link> command. For a USB or networked HP "
-#~ "scanner using <link url=\"http://hplip.sourceforge.net/\">HPLIP</link>, "
-#~ "try using the <command>hp-probe</command> command to locate it, for "
-#~ "example <icode>hp-probe&nbsp;-b&nbsp;usb</icode> or <icode>hp-probe&nbsp;-"
-#~ "b&nbsp;net</icode>. If the scanner is found, then enter the device name "
-#~ "displayed by these commands; note that if using HPLIP then <icode>hp:</"
-#~ "icode> needs to be replaced by <icode>hpaio:</icode>.<nl/><nl/>If these "
-#~ "commands fail to locate your scanner, then it may not be supported by "
-#~ "SANE. Check the SANE documentation for a <link url=\"http://www.sane-"
-#~ "project.org/sane-supported-devices.html\">list of supported devices</"
-#~ "link>."
-#~ msgstr ""
-#~ "Se via skanilo ne estis aŭtomate detektita, vi povas specifi ĝin ĉi tie. "
-#~ "La <interface>Skanila aparato nomo</interface> devus esti backendnomo "
-#~ "(kun laŭvolaj parametroj) kiu estas komprenata de SANE, vidu <link url="
-#~ "\"man:/sane\">sane(7)</link> aŭ <link url=\"man:/sane-dll\">sane-dll(5)</"
-#~ "link> por pliaj informoj pri disponeblaj backends. La <interface>Tipo</"
-#~ "interface> kaj <interface>Priskribo</interface> povas esti uzataj por "
-#~ "identigi la skanilon poste.<nl/><nl/>Por la informoj, kiujn oni devas "
-#~ "enigi ĉi tie, provu lokalizi la aparaton. uzante la komandon <link url="
-#~ "\"man:/sane-find-scanner\">sane-find-scanner(1)</link>. Por USB aŭ "
-#~ "interreta HP-skanilo uzanta <link url=\"http://hplip.sourceforge.net/"
-#~ "\">HPLIP</link>, provu uzi la komandon <command>hp-probe</command> por "
-#~ "lokalizi ĝin, ekzemple <icode>hp-probe&nbsp;-b&nbsp;usb</icode> aŭ "
-#~ "<icode>hp-probe&nbsp;-b&nbsp;net</icode>. Se la skanilo estas trovita, "
-#~ "tiam enigu la aparatan nomon montritan per ĉi tiuj komandoj; rimarku, ke "
-#~ "se vi uzas HPLIP, tiam <icode>hp:</icode> devas esti anstataŭigita per "
-#~ "<icode>hpaio:</icode>.<nl/><nl/>Se ĉi tiuj komandoj malsukcesas lokalizi "
-#~ "vian skanilon, tiam ĝi povas ne estu subtenata de SANE. Kontrolu la SANE-"
-#~ "dokumentadon por <link url=\"http://www.sane-project.org/sane-supported-"
-#~ "devices.html\">listo de subtenataj aparatoj</link>."
