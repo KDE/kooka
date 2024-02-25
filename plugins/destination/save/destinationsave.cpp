@@ -40,7 +40,7 @@
 #include <kprotocolinfo.h>
 
 #include <kio/statjob.h>
-#include <kio/copyjob.h>
+#include <kio/filecopyjob.h>
 #include <kio/jobuidelegatefactory.h>
 
 #include "scanparamspage.h"
@@ -127,20 +127,18 @@ void DestinationSave::imageScanned(ScanImage::Ptr img)
                                i18n("Cannot Save Image"));
         }
     }
-    else						// the location is not local
+    else						// save location is not local
     {
         qCDebug(DESTINATION_LOG) << "save to remote";
 
         // The save location is remote.  Save a temporary image,
-        // then use KIO to copy it to the destination location.
+        // then use KIO to move it to the destination location.
         QUrl url = saveTempImage(fmt, img);		// save a temporary image
         if (!url.isValid()) return;			// temp image save failed
 
-        KIO::CopyJob *job = KIO::copy(url, mSaveUrl);
+        KIO::FileCopyJob *job = KIO::file_move(url, mSaveUrl);
         job->setUiDelegate(KIO::createDefaultJobUiDelegate(KJobUiDelegate::AutoHandlingEnabled, parentWidget()));
-        job->exec();					// do the remote copy
-
-        QFile::remove(url.toLocalFile());		// remove the temporary file
+        job->exec();					// move temp file to remote
     }
 
     // Remember the values used, so that starting a new scan and then
