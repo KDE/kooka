@@ -76,13 +76,10 @@ static QStringList filterList(ImageFilter::FilterMode mode, ImageFilter::FilterO
     {
         // We generated a KDE format filter above (for ease of sorting),
         // so if we want a Qt format filter then it needs to be rearranged.
-        for (QStringList::iterator it = list.begin(); it!=list.end(); ++it)
+        for (QString &filter : list)			// modifying list in place
         {
-            QString &filter = (*it);			// modifying list in place
             int idx = filter.indexOf('|');
-            if (idx==-1) continue;
-            filter = filter.mid(idx+1)+" ("+filter.left(idx)+')';
-            (*it) = filter;
+            if (idx!=-1) filter = filter.mid(idx+1)+" ("+filter.left(idx)+')';
         }
     }
 
