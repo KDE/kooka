@@ -432,10 +432,8 @@ QWidget *ScanParams::createScannerParams()
     // Now all of the other options which have not been accounted for yet.
     // Split them up into "Other" and "Advanced".
     const QList<QByteArray> opts = mSaneDevice->getAllOptions();
-    for (QList<QByteArray>::const_iterator it = opts.constBegin();
-            it != opts.constEnd(); ++it) {
-        const QByteArray opt = (*it);
-
+    for (const QByteArray &opt : qAsConst(opts))
+    {
         if (opt == SANE_NAME_SCAN_TL_X ||		// ignore these (scan area)
             opt == SANE_NAME_SCAN_TL_Y ||
             opt == SANE_NAME_SCAN_BR_X ||

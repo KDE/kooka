@@ -88,41 +88,37 @@ ScanDevices::ScanDevices()
     QStringList devs = ScanSettings::userDevices();
     if (!devs.isEmpty())
     {
+        const int num = devs.count();
+
         QStringList descs = ScanSettings::userDescriptions();
-        if (descs.count()<devs.count())			// ensure list correct length
+        if (descs.count()<num)				// ensure list correct length
         {
-            for (int i = descs.count(); i<devs.count(); ++i) descs.append("Unknown");
+            for (int i = descs.count(); i<num; ++i) descs.append("Unknown");
             ScanSettings::setUserDescriptions(descs);
             ScanSettings::self()->save();
         }
 
         QStringList types = ScanSettings::userTypes();
-        if (types.count()<devs.count())			// ensure list correct length
+        if (types.count()<num)				// ensure list correct length
         {
-            for (int i = types.count(); i<devs.count(); ++i) types.append("scanner");
+            for (int i = types.count(); i<num; ++i) types.append("scanner");
             ScanSettings::setUserTypes(types);
             ScanSettings::self()->save();
         }
 
         QStringList manufs = ScanSettings::userManufacturers();
-        if (manufs.count()<devs.count())			// ensure list correct length
+        if (manufs.count()<num)				// ensure list correct length
         {
-            for (int i = manufs.count(); i<devs.count(); ++i) manufs.append(QString());
+            for (int i = manufs.count(); i<num; ++i) manufs.append("");
             ScanSettings::setUserManufacturers(manufs);
             ScanSettings::self()->save();
         }
 
-        QStringList::const_iterator it2 = descs.constBegin();
-        QStringList::const_iterator it3 = types.constBegin();
-        QStringList::const_iterator it4 = manufs.constBegin();
-        for (QStringList::const_iterator it1 = devs.constBegin();
-             it1 != devs.constEnd(); ++it1, ++it2, ++it3, ++it4) {
-            // avoid duplication
-            QByteArray name = (*it1).toLocal8Bit();
-            if (mScannerNames.contains(name)) {
-                continue;
-            }
-            addUserSpecifiedDevice(name, (*it4), (*it2), (*it3).toLocal8Bit(), true);
+        for (int i = 0; i<num; ++i)
+        {
+            const QByteArray name = devs[i].toLocal8Bit();
+            if (mScannerNames.contains(name)) continue;	// avoid duplication
+            addUserSpecifiedDevice(name, manufs[i], descs[i], types[i].toLocal8Bit(), true);
             qCDebug(LIBKOOKASCAN_LOG) << "Configured scanner:" << name << "=" << deviceDescription(name);
         }
     }
