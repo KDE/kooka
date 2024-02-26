@@ -89,9 +89,9 @@ OcrEngine::EngineError KadmosDialog::findClassifiers()
 
     KLocale *locale = KLocale::global();
     const QStringList allCountries = locale->allCountriesList();
-    for (QStringList::const_iterator it = allCountries.constBegin();
-            it != allCountries.constEnd(); ++it) {
-        m_longCountry2short[locale->countryCodeToName(*it)] = *it;
+    for (const QString &country : qAsConst(allCountries))
+    {
+        m_longCountry2short[locale->countryCodeToName(country)] = country;
     }
     m_longCountry2short[i18n("European Countries")] = "eu";
     m_longCountry2short[CNTRY_CZ] = "cz";

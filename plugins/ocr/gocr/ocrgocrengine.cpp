@@ -176,17 +176,18 @@ bool OcrGocrEngine::finishedOcrProcess(QProcess *proc)
 
     startResultDocument();
 
-    for (QStringList::const_iterator itLine = lines.constBegin(); itLine != lines.constEnd(); ++itLine)
+    for (const QString &itLine : qAsConst(lines))
     {
         startLine();
 #if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
-        QStringList words = (*itLine).split(QRegExp("\\s+"), Qt::SkipEmptyParts);
+        const QStringList words = itLine.split(QRegExp("\\s+"), Qt::SkipEmptyParts);
 #else
-        QStringList words = (*itLine).split(QRegExp("\\s+"), QString::SkipEmptyParts);
+        const QStringList words = itLine.split(QRegExp("\\s+"), QString::SkipEmptyParts);
 #endif
-        for (QStringList::const_iterator itWord = words.constBegin(); itWord != words.constEnd(); ++itWord) {
+        for (const QString &itWord : qAsConst(words))
+        {
             OcrWordData wd;
-            addWord((*itWord), wd);
+            addWord(itWord, wd);
         }
         finishLine();
     }
