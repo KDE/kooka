@@ -153,9 +153,10 @@ void WidgetSite::setWidget(QWidget *widget)
     QGridLayout *lay = static_cast<QGridLayout *>(layout());
 
     QObjectList childs = children();
-    for (QObjectList::iterator it = childs.begin(); it != childs.end(); ++it) {
-        QObject *ch = (*it);
-        if (ch->isWidgetType()) {
+    for (QObject *ch : qAsConst(childs))
+    {
+        if (ch->isWidgetType())
+        {
             QWidget *w = static_cast<QWidget *>(ch);
             w->hide();
             lay->removeWidget(w);
