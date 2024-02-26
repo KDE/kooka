@@ -38,17 +38,24 @@
 #include <klocalizedstring.h>
 
 
-static bool commentLessThan(const QString &s1, const QString &s2)
+struct FilterEntry
 {
-    const int idx1 = s1.indexOf('|');
-    const int idx2 = s2.indexOf('|');
-    return (s1.mid(idx1+1).toLower()<s2.mid(idx2+1).toLower());
+    explicit FilterEntry(const QStringList &pats, const QString &cmnt)	{ patterns = pats; comment = cmnt; }
+
+    QStringList patterns;
+    QString comment;
+};
+
+
+static bool commentLessThan(const FilterEntry &f1, const FilterEntry &f2)
+{
+    return (f1.comment.toLower()<f2.comment.toLower());
 }
 
 
-static QStringList filterList(ImageFilter::FilterMode mode, ImageFilter::FilterOptions options, bool kdeFormat)
+static QList<FilterEntry> filterList(ImageFilter::FilterMode mode, ImageFilter::FilterOptions options)
 {
-    QStringList list;
+    QList<FilterEntry> list;
     QStringList allPatterns;
 
     QList<QByteArray> mimeTypes;
@@ -62,8 +69,9 @@ static QStringList filterList(ImageFilter::FilterMode mode, ImageFilter::FilterO
         QMimeType mime = db.mimeTypeForName(mimeType);
         if (!mime.isValid()) continue;
 
-        QStringList pats = mime.globPatterns();
-        list.append(pats.join(' ')+'|'+mime.comment());
+        const QStringList pats = mime.globPatterns();
+        FilterEntry f(pats, mime.comment());
+        list.append(f);
         if (options & ImageFilter::AllImages) allPatterns.append(pats);
     }
 
@@ -72,27 +80,14 @@ static QStringList filterList(ImageFilter::FilterMode mode, ImageFilter::FilterO
         std::sort(list.begin(), list.end(), commentLessThan);
     }
 
-    if (!kdeFormat)
-    {
-        // We generated a KDE format filter above (for ease of sorting),
-        // so if we want a Qt format filter then it needs to be rearranged.
-        for (QString &filter : list)			// modifying list in place
-        {
-            int idx = filter.indexOf('|');
-            if (idx!=-1) filter = filter.mid(idx+1)+" ("+filter.left(idx)+')';
-        }
-    }
-
     if (!allPatterns.isEmpty())				// want an "All Images" entry
     {
-        if (kdeFormat) list.prepend(i18n("%1|All Image Files", allPatterns.join(' ')));
-        else list.prepend(i18n("All Image Files (%1)", allPatterns.join(' ')));
+        list.prepend(FilterEntry(allPatterns, i18n("All Image Files")));
     }
 
     if (options & ImageFilter::AllFiles)		// want an "All Files" entry
     {
-        if (kdeFormat) list.append(i18n("*|All Files"));
-        else list.append(i18n("All Files (*)"));
+        list.prepend(FilterEntry(QStringList("*"), i18n("All Files")));
     }
 
     return (list);
@@ -101,17 +96,26 @@ static QStringList filterList(ImageFilter::FilterMode mode, ImageFilter::FilterO
 
 QString ImageFilter::qtFilterString(ImageFilter::FilterMode mode, ImageFilter::FilterOptions options)
 {
+    // The standard Qt-format filter string: "Applicable Files( *.foo *.bar);;..."
     return (qtFilterList(mode, options).join(";;"));
 }
 
 
 QStringList ImageFilter::qtFilterList(ImageFilter::FilterMode mode, ImageFilter::FilterOptions options)
 {
-    return (filterList(mode, options, false));
+    // The standard Qt-format filter list: "Applicable Files( *.foo *.bar)"
+    const QList<FilterEntry> filters = filterList(mode, options);
+    QStringList res;
+    for (const FilterEntry &f : qAsConst(filters)) res.append(f.comment+" ("+f.patterns.join(" ")+")");
+    return (res);
 }
 
 
 QString ImageFilter::kdeFilter(ImageFilter::FilterMode mode, ImageFilter::FilterOptions options)
 {
-    return (filterList(mode, options, true).join('\n'));
+    // The deprecated KDE-format filter string: "*.foo *.bar|Applicable Files\n..."
+    const QList<FilterEntry> filters = filterList(mode, options);
+    QStringList res;
+    for (const FilterEntry &f : qAsConst(filters)) res.append(f.patterns.join(" ")+"|"+f.comment);
+    return (res.join('\n'));
 }
