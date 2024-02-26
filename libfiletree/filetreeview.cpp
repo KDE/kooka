@@ -87,13 +87,13 @@ QMimeData *FileTreeView::mimeData(const QList<QTreeWidgetItem *> items) const
     QMimeData *mimeData = new QMimeData();
     QList<QUrl> urlList;
 
-    for (QList<QTreeWidgetItem *>::const_iterator it = items.constBegin();
-            it != items.constEnd(); ++it) {
-        FileTreeViewItem *item = static_cast<FileTreeViewItem *>(*it);
+    for (const QTreeWidgetItem *item : qAsConst(items))
+    {
+        const FileTreeViewItem *ftvi = static_cast<const FileTreeViewItem *>(item);
 #ifdef DEBUG_LISTING
-        qCDebug(LIBFILETREE_LOG) << item->url();
+        qCDebug(LIBFILETREE_LOG) << ftvi->url();
 #endif // DEBUG_LISTING
-        urlList.append(item->url());
+        urlList.append(ftvi->url());
     }
 
     mimeData->setUrls(urlList);
@@ -324,15 +324,14 @@ FileTreeBranch *FileTreeView::addBranch(FileTreeBranch *newBranch)
     return (newBranch);
 }
 
-FileTreeBranch *FileTreeView::branch(const QString &searchName) const
+const FileTreeBranch *FileTreeView::branch(const QString &searchName) const
 {
 #ifdef DEBUG_LISTING
     qCDebug(LIBFILETREE_LOG) << "searching for" << searchName;
 #endif // DEBUG_LISTING
-    for (FileTreeBranchList::const_iterator it = m_branches.constBegin();
-            it != m_branches.constEnd(); ++it) {
-        FileTreeBranch *branch = (*it);
-        QString bname = branch->name();
+    for (const FileTreeBranch *branch : qAsConst(m_branches))
+    {
+        const QString bname = branch->name();
 #ifdef DEBUG_LISTING
         qCDebug(LIBFILETREE_LOG) << "branch" << bname;
 #endif // DEBUG_LISTING
@@ -386,14 +385,15 @@ void FileTreeView::slotNewTreeViewItems(FileTreeBranch *branch, const FileTreeVi
      * m_neUrlToSelect to the required url. If this url appears here, the item becomes
      * selected and the member nextUrlToSelect will be cleared.
      */
-    if (!m_nextUrlToSelect.isEmpty()) {
-        for (FileTreeViewItemList::const_iterator it = items.constBegin();
-                it != items.constEnd(); ++it) {
-            QUrl url = (*it)->url();
+    if (!m_nextUrlToSelect.isEmpty())
+    {
+        for (FileTreeViewItem *it : qAsConst(items))
+        {
+            QUrl url = it->url();
 
             if (m_nextUrlToSelect.adjusted(QUrl::StripTrailingSlash|QUrl::NormalizePathSegments) ==
                 url.adjusted(QUrl::StripTrailingSlash|QUrl::NormalizePathSegments)) {
-                setCurrentItem(static_cast<QTreeWidgetItem *>(*it));
+                setCurrentItem(static_cast<QTreeWidgetItem *>(it));
                 m_nextUrlToSelect = QUrl();
                 break;
             }
@@ -505,11 +505,11 @@ void FileTreeView::slotOnItem(QTreeWidgetItem *item)
 
 FileTreeViewItem *FileTreeView::findItemInBranch(const QString &branchName, const QString &relUrl) const
 {
-    FileTreeBranch *br = branch(branchName);
+    const FileTreeBranch *br = branch(branchName);
     return (findItemInBranch(br, relUrl));
 }
 
-FileTreeViewItem *FileTreeView::findItemInBranch(FileTreeBranch *branch, const QString &relPath) const
+FileTreeViewItem *FileTreeView::findItemInBranch(const FileTreeBranch *branch, const QString &relPath) const
 {
     if (branch==nullptr) return (nullptr);			// no branch to search
 

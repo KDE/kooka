@@ -176,7 +176,7 @@ public:
      * @param searchName the name of a branch to search for.
      * @return the named branch, or @c nullptr if the branch was not found.
      **/
-    FileTreeBranch *branch(const QString &searchName) const;
+    const FileTreeBranch *branch(const QString &searchName) const;
 
     /**
      * Get a list of all existing branches.
@@ -202,7 +202,7 @@ public:
      * @param relUrl the URL path to search for, relative to the root URL of the branch
      * @return the found item, or @c nullptr if nothing was found
      **/
-    FileTreeViewItem *findItemInBranch(FileTreeBranch *branch, const QString &relUrl) const;
+    FileTreeViewItem *findItemInBranch(const FileTreeBranch *branch, const QString &relUrl) const;
 
     /**
      * Search a named branch for an item identified by a relative URL.

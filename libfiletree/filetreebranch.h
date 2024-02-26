@@ -142,7 +142,7 @@ public:
     /**
      * find the according FileTreeViewItem for a relative path
      */
-    virtual FileTreeViewItem *findItemByPath(const QString &path);
+    virtual FileTreeViewItem *findItemByPath(const QString &path) const;
 
     virtual void itemRenamed(FileTreeViewItem *item);
 
