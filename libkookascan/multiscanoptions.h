@@ -73,9 +73,7 @@ public:
         Rotate270 = 3,
     };
 
-    // TODO: could simplify some code with a setFlags(MultiScanOptions::Flags, bool on = true)
-
-    void setFlags(MultiScanOptions::Flags f);
+    void setFlags(MultiScanOptions::Flags f, bool on = true);
     MultiScanOptions::Flags flags() const;
 
     void setSource(const QByteArray &src);
@@ -91,7 +89,7 @@ public:
 
 private:
     QByteArray mSource;
-    MultiScanOptions::Flags mOptions;
+    MultiScanOptions::Flags mFlags;
     MultiScanOptions::Rotation mRotateOdd;
     MultiScanOptions::Rotation mRotateEven;
     int mDelay;

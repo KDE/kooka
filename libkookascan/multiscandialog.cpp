@@ -234,18 +234,13 @@ const MultiScanOptions &MultiScanDialog::options()
 {
     if (mSourceCombo!=nullptr) mOptions.setSource(mSourceCombo->currentText().toLatin1());
 
-    MultiScanOptions::Flags f = mOptions.flags();
-    f &= ~MultiScanOptions::MultiScan;
-    if (mScanMultiRadio->isChecked()) f |= MultiScanOptions::MultiScan;
+    mOptions.setFlags(MultiScanOptions::MultiScan, mScanMultiRadio->isChecked());
+    mOptions.setFlags(MultiScanOptions::ManualWait, mMultiManualScanRadio->isChecked());
+    mOptions.setFlags(MultiScanOptions::DelayWait, mMultiDelayScanRadio->isChecked());
 
-    f &= ~(MultiScanOptions::ManualWait|MultiScanOptions::DelayWait);
-    if (mMultiManualScanRadio->isChecked()) f |= MultiScanOptions::ManualWait;
-    else if (mMultiDelayScanRadio->isChecked()) f |= MultiScanOptions::DelayWait;
+    mOptions.setFlags(MultiScanOptions::BatchMultiple, mBatchMultipleCheck->isChecked());
+    mOptions.setFlags(MultiScanOptions::AutoIncrement, mIncrementFilenameCheck->isChecked());
 
-    if (mBatchMultipleCheck->isChecked()) f |= MultiScanOptions::BatchMultiple;
-    if (mIncrementFilenameCheck->isChecked()) f |= MultiScanOptions::AutoIncrement;
-
-    mOptions.setFlags(f);
     mOptions.setDelay(mDelayTimeSpinbox->value());
 
     return (mOptions);

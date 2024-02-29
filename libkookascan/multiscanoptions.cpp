@@ -34,22 +34,24 @@
 MultiScanOptions::MultiScanOptions()
 {
     mSource.clear();
-    mOptions = MultiScanOptions::Flags();
     mRotateOdd = MultiScanOptions::RotateNone;
     mRotateEven = MultiScanOptions::RotateNone;
     mDelay = 5;
+
+    mFlags = MultiScanOptions::BatchMultiple;		// best default for most destinations
 }
 
 
-void MultiScanOptions::setFlags(MultiScanOptions::Flags opts)
+void MultiScanOptions::setFlags(MultiScanOptions::Flags opts, bool on)
 {
-    mOptions = opts;
+    if (on) mFlags |= opts;
+    else mFlags &= ~opts;
 }
 
 
 MultiScanOptions::Flags MultiScanOptions::flags() const
 {
-    return (mOptions);
+    return (mFlags);
 }
 
 
@@ -74,8 +76,8 @@ void MultiScanOptions::setRotation(MultiScanOptions::Flags flags, MultiScanOptio
 
 MultiScanOptions::Rotation MultiScanOptions::rotation(MultiScanOptions::Flags flags) const
 {
-    if ((flags & MultiScanOptions::RotateOdd) && (mOptions & MultiScanOptions::RotateOdd)) return (mRotateOdd);
-    if ((flags & MultiScanOptions::RotateEven) && (mOptions & MultiScanOptions::RotateEven)) return (mRotateEven);
+    if ((flags & MultiScanOptions::RotateOdd) && (mFlags & MultiScanOptions::RotateOdd)) return (mRotateOdd);
+    if ((flags & MultiScanOptions::RotateEven) && (mFlags & MultiScanOptions::RotateEven)) return (mRotateEven);
     return (MultiScanOptions::RotateNone);
 }
 
@@ -94,7 +96,7 @@ int MultiScanOptions::delay() const
 
 QString MultiScanOptions::toString() const
 {
-    return (QString("[flags %1 src '%2' rot %3/%4 delay %5]").arg(mOptions, 4, 16, QLatin1Char('0'))
+    return (QString("[flags %1 src '%2' rot %3/%4 delay %5]").arg(mFlags, 4, 16, QLatin1Char('0'))
                                                              .arg(mSource.constData())
                                                              .arg(mRotateOdd).arg(mRotateEven)
                                                              .arg(mDelay));

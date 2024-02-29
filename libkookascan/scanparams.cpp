@@ -604,10 +604,7 @@ void ScanParams::slotSourceSelect()
 
     // Update the "ADF available' flag in the options to reflect
     // the current state.
-    if (mSaneDevice->isAdfAvailable()) mMultiOptions.setFlags(mMultiOptions.flags() | MultiScanOptions::AdfAvailable);
-    else mMultiOptions.setFlags(mMultiOptions.flags() & ~MultiScanOptions::AdfAvailable);
-    //mMultiOptions.setFlags(mMultiOptions.flags() & ~MultiScanOptions::AdfAvailable);
-
+    mMultiOptions.setFlags(MultiScanOptions::AdfAvailable, mSaneDevice->isAdfAvailable());
     qCDebug(LIBKOOKASCAN_LOG) << "current multi options" << qPrintable(mMultiOptions.toString());
 
     MultiScanDialog d(mSaneDevice, this);
