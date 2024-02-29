@@ -45,6 +45,7 @@
 
 #include "scanparamspage.h"
 #include "kookasettings.h"
+#include "multiscanoptions.h"
 #include "destination_logging.h"
 
 
@@ -212,7 +213,8 @@ void DestinationApplication::batchEnd(bool ok)
     }
 
     const QString appService = mAppsCombo->currentData().toString();
-    qCDebug(DESTINATION_LOG) << "destination app" << appService;
+    const bool batch = multiScanOptions()->flags() & MultiScanOptions::BatchMultiple;
+    qCDebug(DESTINATION_LOG) << "destination app" << appService << "batch?" << batch;
 
     // Open the temporary files with the selected application service.
     // If the service is "Other" (appService is empty), or if there is
@@ -220,9 +222,9 @@ void DestinationApplication::batchEnd(bool ok)
     // the ApplicationLauncherJob will prompt for an application.
     // The temporary files will eventually be removed by KIO.
     //
-    // It does not matter here if the application service can only accept
-    // a single file at a time, in this case KIO will launch the application
-    // once for each file.
+    // It does not matter here if there are multiple files in a batch and
+    // the application service can only accept a single file at a time, in
+    // this case KIO will launch the application once for each file.
     KService::Ptr service;
     if (!appService.isEmpty())
     {
@@ -230,9 +232,19 @@ void DestinationApplication::batchEnd(bool ok)
         if (service==nullptr) qCWarning(DESTINATION_LOG) << "Cannot find service" << appService;
     }
 
-    KIO::ApplicationLauncherJob *job = new KIO::ApplicationLauncherJob(service);
-    job->setUrls(mBatchFiles);
-    job->setRunFlags(KIO::ApplicationLauncherJob::DeleteTemporaryFiles);
-    job->setUiDelegate(KIO::createDefaultJobUiDelegate(KJobUiDelegate::AutoHandlingEnabled, parentWidget()));
-    job->start();					// all done
+    while (!mBatchFiles.isEmpty())
+    {
+        KIO::ApplicationLauncherJob *job = new KIO::ApplicationLauncherJob(service);
+
+        if (batch)					// all together in one job
+        {
+            job->setUrls(mBatchFiles);
+            mBatchFiles.clear();			// no more to do
+        }						// each file as individual job
+        else job->setUrls(QList<QUrl>() << mBatchFiles.takeFirst());
+
+        job->setRunFlags(KIO::ApplicationLauncherJob::DeleteTemporaryFiles);
+        job->setUiDelegate(KIO::createDefaultJobUiDelegate(KJobUiDelegate::AutoHandlingEnabled, parentWidget()));
+        job->start();					// ready to go
+    }
 }
