@@ -40,7 +40,7 @@
  * @short Options to control multiple scans and ADF handling.
  *
  * This class encapsulates all of the options so that they can be
- * retained by ScanParams and passed to and from the MultScanDialog.
+ * retained by ScanParams and passed to and from the MultiScanDialog.
  *
  * @author Jonathan Marten
  **/
@@ -60,6 +60,8 @@ public:
         AdfAvailable = 0x0008,
         ManualWait = 0x0010,
         DelayWait = 0x0020,
+        BatchMultiple = 0x0040,
+        AutoIncrement = 0x0080,
     };
     Q_DECLARE_FLAGS(Flags, Flag)
 

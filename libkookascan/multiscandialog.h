@@ -39,6 +39,7 @@
 
 
 class QComboBox;
+class QCheckBox;
 class QRadioButton;
 class KPluralHandlingSpinBox;
 class KScanDevice;
@@ -71,6 +72,9 @@ private:
     QRadioButton *mMultiManualScanRadio;
     QRadioButton *mMultiDelayScanRadio;
     KPluralHandlingSpinBox *mDelayTimeSpinbox;
+
+    QCheckBox *mBatchMultipleCheck;
+    QCheckBox *mIncrementFilenameCheck;
 
     MultiScanOptions mOptions;
 };

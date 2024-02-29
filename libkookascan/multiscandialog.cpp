@@ -37,6 +37,7 @@
 #include <qgroupbox.h>
 #include <qradiobutton.h>
 #include <qbuttongroup.h>
+#include <qcheckbox.h>
 
 #include <sane/saneopts.h>
 
@@ -151,6 +152,52 @@ MultiScanDialog::MultiScanDialog(KScanDevice *dev, QWidget *pnt)
     gl->addWidget(mDelayTimeSpinbox, row, 3, Qt::AlignLeft);
     ++row;
 
+    // Row 8: Spacing
+    gl->setRowMinimumHeight(row, 2*DialogBase::verticalSpacing());
+    ++row;
+
+    // Row 9: Destination group
+    grp = new QGroupBox(i18n("Destination"), w);
+    grp->setFlat(true);
+    gl->addWidget(grp, row, 0, 1, -1);
+    ++row;
+
+    // Row 10: Batch Multiple Scans check box
+    mBatchMultipleCheck = new QCheckBox(i18n("Process multiple scans as a batch"), w);
+    mBatchMultipleCheck->setToolTip(i18nc("@info:tooltip",
+                                          "Set this option on to process multiple scans together in a batch, "
+                                          "or turn it off to process them individually."
+                                          "<br/><br/>"
+                                          "The effect of this option depends on the selected destination and its own settings. "
+                                          "For example, sharing multiple scans by email, with this option on, will attach all "
+                                          "of the scans to the same email message.  With this option off, they will each be "
+                                          "attached to a separate message."));
+    gl->addWidget(mBatchMultipleCheck, row, 0, 1, -1, Qt::AlignLeft);
+    ++row;
+
+
+    // Row 11: Automatically Generate Filename check box
+    mIncrementFilenameCheck = new QCheckBox(i18n("Automatically generate file names"), w);
+    mIncrementFilenameCheck->setToolTip(i18nc("@info:tooltip",
+                                              "Set this option on to automatically generate a file name when possible, "
+                                              "or turn it off to always ask for a name."
+                                              "<br/><br/>"
+                                              "The effect of this option depends on the selected destination and its own settings. "
+                                              "For example, when saving to the scan gallery or another location a file name will "
+                                              "be requested for the first file of a multiple scan. From then on the file name will "
+                                              "be automatically incremented to generate the next."
+                                              "<br/><br/>"
+                                              "A numeric suffix, or '#' characters, for the first file name will be automatically "
+                                              "incremented with the same number of digits as entered.  Any existing numbered file "
+                                              "will be skipped and not overwritten."));
+    gl->addWidget(mIncrementFilenameCheck, row, 0, 1, -1, Qt::AlignLeft);
+    ++row;
+
+
+
+
+
+
     gl->setColumnStretch(3, 1);
     gl->setRowStretch(row, 1);
 
@@ -176,6 +223,9 @@ void MultiScanDialog::setOptions(const MultiScanOptions &opts)
 
     mDelayTimeSpinbox->setValue(mOptions.delay());
 
+    mBatchMultipleCheck->setChecked(f & MultiScanOptions::BatchMultiple);
+    mIncrementFilenameCheck->setChecked(f & MultiScanOptions::AutoIncrement);
+
     slotGuiChange();
 }
 
@@ -191,6 +241,9 @@ const MultiScanOptions &MultiScanDialog::options()
     f &= ~(MultiScanOptions::ManualWait|MultiScanOptions::DelayWait);
     if (mMultiManualScanRadio->isChecked()) f |= MultiScanOptions::ManualWait;
     else if (mMultiDelayScanRadio->isChecked()) f |= MultiScanOptions::DelayWait;
+
+    if (mBatchMultipleCheck->isChecked()) f |= MultiScanOptions::BatchMultiple;
+    if (mIncrementFilenameCheck->isChecked()) f |= MultiScanOptions::AutoIncrement;
 
     mOptions.setFlags(f);
     mOptions.setDelay(mDelayTimeSpinbox->value());
@@ -208,6 +261,8 @@ void MultiScanDialog::slotGuiChange()
     mMultiEmptyAdfRadio->setEnabled(adf && multi && (f & MultiScanOptions::AdfAvailable));
     mMultiManualScanRadio->setEnabled(multi);
     mMultiDelayScanRadio->setEnabled(multi);
+    mBatchMultipleCheck->setEnabled(multi);
+    mIncrementFilenameCheck->setEnabled(multi);
 
     if (!mMultiEmptyAdfRadio->isEnabled() && mMultiEmptyAdfRadio->isChecked()) mMultiManualScanRadio->setChecked(true);
 
