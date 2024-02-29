@@ -155,8 +155,9 @@ void DestinationShare::slotUpdateShareCombo()
 }
 
 
-void DestinationShare::batchStart()
+void DestinationShare::batchStart(const MultiScanOptions *opts)
 {
+    AbstractDestination::batchStart(opts);		// remember the options
     mSaveUrls.clear();					// clear file list
 }
 

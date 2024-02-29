@@ -58,6 +58,7 @@ AbstractDestination::AbstractDestination(QObject *pnt, const char *name)
     qCDebug(DESTINATION_LOG) << objectName();
 
     mGallery = nullptr;
+    mMultiOptions = nullptr;
 }
 
 

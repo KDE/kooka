@@ -42,6 +42,7 @@
 class QComboBox;
 class ScanGallery;
 class ScanParamsPage;
+class MultiScanOptions;
 
 #ifndef PLUGIN_EXPORT
 #define PLUGIN_EXPORT
@@ -140,9 +141,12 @@ public:
      * Indicates the start of a batch scan.  Destinations that can batch
      * multiple scans together may use this to start accumulating them.
      *
-     * The base class implementation does nothing.
+     * Destinations that override this must call the base implementation,
+     * which notes the multiple scan options for the batch.
+     *
+     * @see @c multiScanOptions()
      **/
-    virtual void batchStart()					{ }
+    virtual void batchStart(const MultiScanOptions *opts)	{ mMultiOptions = opts; }
 
     /**
      * Indicates the end of a batch scan.
@@ -152,6 +156,14 @@ public:
      * The base class implementation does nothing.
      **/
     virtual void batchEnd(bool ok)				{ }
+
+    /**
+     * Get the multiple scan options for the current batch.
+     *
+     * @return the scan options
+     * @see @c batchStart()
+     **/
+    const MultiScanOptions *multiScanOptions() const		{ return (mMultiOptions); }
 
 protected:
     /**
@@ -225,6 +237,7 @@ protected:
 private:
     ScanGallery *mGallery;
     ImageFormat mLastUsedFormat;
+    const MultiScanOptions * mMultiOptions;
 };
 
 #endif							// ABSTRACTDESTINATION_H

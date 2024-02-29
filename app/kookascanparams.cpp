@@ -56,11 +56,11 @@ void KookaScanParams::slotDeviceConnected(KScanDevice *dev)
 {
     if (dev==nullptr) return;				// no device to connect
 							// connect signals for LED indicator
-    connect(dev, &KScanDevice::sigScanStart, this, [this]() { setLED(Qt::red); });
-    connect(dev, &KScanDevice::sigAcquireStart, this, [this]() { setLED(Qt::green); });
-    connect(dev, &KScanDevice::sigScanFinished, this, [this]() { setLED(Qt::red, KLed::Off); });
-    connect(dev, &KScanDevice::sigScanPauseStart, this, [this]() { setLED(Qt::yellow); });
-    connect(dev, &KScanDevice::sigScanPauseEnd, this, [this]() { setLED(Qt::green, KLed::Off); });
+    connect(dev, &KScanDevice::sigScanStart,		this, [this]()	{ setLED(Qt::red); });
+    connect(dev, &KScanDevice::sigAcquireStart,		this, [this]()	{ setLED(Qt::green); });
+    connect(dev, &KScanDevice::sigScanFinished,		this, [this]()	{ setLED(Qt::red, KLed::Off); });
+    connect(dev, &KScanDevice::sigScanPauseStart,	this, [this]()	{ setLED(Qt::yellow); });
+    connect(dev, &KScanDevice::sigScanPauseEnd,		this, [this]()	{ setLED(Qt::green, KLed::Off); });
 }
 
 
@@ -75,10 +75,10 @@ void KookaScanParams::setLED(const QColor &col, KLed::State state)
 }
 
 
-void KookaScanParams::slotScanBatchStart()
+void KookaScanParams::slotScanBatchStart(const MultiScanOptions *opts)
 {
     setEnabled(false);
-    if (mDestinationPlugin!=nullptr) mDestinationPlugin->batchStart();
+    if (mDestinationPlugin!=nullptr) mDestinationPlugin->batchStart(opts);
 }
 
 

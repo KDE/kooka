@@ -307,7 +307,7 @@ signals:
      * @note Even if multiple page mode is in use, this and the next signal
      * will only be emitted once at the start and end respectively.
      **/
-    void scanBatchStart();
+    void scanBatchStart(const MultiScanOptions *opts);
 
     /**
      * Indicates the end of a batch scan.

@@ -66,7 +66,7 @@ protected slots:
     void slotDestinationSelected(int idx);
     void slotDeviceConnected(KScanDevice *dev);
 
-    void slotScanBatchStart();
+    void slotScanBatchStart(const MultiScanOptions *opts);
     void slotScanBatchEnd(bool ok);
 
 private:

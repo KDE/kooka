@@ -189,8 +189,9 @@ void DestinationApplication::saveSettings() const
 }
 
 
-void DestinationApplication::batchStart()
+void DestinationApplication::batchStart(const MultiScanOptions *opts)
 {
+    AbstractDestination::batchStart(opts);		// remember the options
     mBatchFiles.clear();				// clear file list
 }
 

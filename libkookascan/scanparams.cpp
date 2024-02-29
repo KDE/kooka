@@ -776,8 +776,11 @@ void ScanParams::slotStartScan()
     KScanDevice::Status stat = prepareScan(&virtfile);
     if (stat != KScanDevice::Ok) return;
 
-    mSaneDevice->setMultiScanOptions(&mMultiOptions);	// tell it the multiple scan options
-    emit scanBatchStart();				// indicate start of a batch
+    // Pass the multiple scan options to be used for the scan to
+    // the scan device and to the destination plugin.  This also
+    // tells the plugin that a new batch is starting.
+    mSaneDevice->setMultiScanOptions(&mMultiOptions);
+    emit scanBatchStart(&mMultiOptions);
 
     //qCDebug(LIBKOOKASCAN_LOG) << "scan mode=" << mScanMode << "virtfile" << virtfile;
 

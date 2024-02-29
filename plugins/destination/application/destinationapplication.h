@@ -50,7 +50,7 @@ public:
     KLocalizedString scanDestinationString() override;
     void createGUI(ScanParamsPage *page) override;
     void saveSettings() const override;
-    void batchStart() override;
+    void batchStart(const MultiScanOptions *opts) override;
     void batchEnd(bool ok) override;
 
 private:
