@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-02-20 01:38+0000\n"
-"PO-Revision-Date: 2023-05-13 06:14+0200\n"
+"PO-Revision-Date: 2024-02-29 03:13+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -16,17 +16,17 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.3\n"
+"X-Generator: Poedit 3.3.2\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
-msgstr ""
+msgstr "Temuri Doghonadze"
 
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
-msgstr ""
+msgstr "Temuri.doghonadze@gmail.com"
 
 #: ../libdialogutil/imagefilter.cpp:91
 #, kde-format
@@ -62,21 +62,20 @@ msgid ""
 msgstr ""
 
 #: adddevicedialog.cpp:77
-#, fuzzy, kde-format
-#| msgid "Scanner device name:"
+#, kde-format
 msgid "Scanner device:"
-msgstr "სკანერის მოწყობილობის სახელი:"
+msgstr "სკანერის მოწყობილობა:"
 
 #: adddevicedialog.cpp:80 scandevices.cpp:190
 #, kde-format
 msgctxt "Value used for manufacturer if none entered"
 msgid "User specified"
-msgstr ""
+msgstr "მომხმარებლის მითითებული"
 
 #: adddevicedialog.cpp:82
 #, kde-format
 msgid "Manufacturer:"
-msgstr ""
+msgstr "მწარმოებელი:"
 
 #: adddevicedialog.cpp:86
 #, kde-format
@@ -484,33 +483,32 @@ msgstr "უცნობი მოწყობილობა %1"
 #: scanglobal.cpp:136
 #, kde-format
 msgid "SANE - Scanner Access Now Easy"
-msgstr ""
+msgstr "SANE - Scanner Access Now Easy"
 
 #: scanglobal.cpp:137
 #, kde-format
 msgid "Scanner access and driver library"
-msgstr ""
+msgstr "სკანერთან წვდომისა და დრაივერის ბიბლიოთეკა"
 
 #: scanglobal.cpp:144
 #, kde-format
 msgid "LibTIFF"
-msgstr ""
+msgstr "LibTIFF"
 
 #: scanglobal.cpp:145
-#, fuzzy, kde-format
-#| msgid "Force image format:"
+#, kde-format
 msgid "TIFF image format library"
-msgstr "ასლის ფორმატის ხელით მითითება:"
+msgstr "TIFF გამოსახულების ფორმატის ბიბლიოთეკა"
 
 #: scanglobal.cpp:154
 #, kde-format
 msgid "libpaper"
-msgstr ""
+msgstr "libpaper"
 
 #: scanglobal.cpp:155
 #, kde-format
 msgid "Paper size configuration library"
-msgstr ""
+msgstr "ფურცლის ზომის მორგების ბიბლიოთეკა"
 
 #: scanimage.cpp:76
 #, kde-format
@@ -752,7 +750,7 @@ msgstr ""
 #: scansettings.kcfg:18
 #, kde-format
 msgid "Use the system proxy settings to access network scanners"
-msgstr ""
+msgstr "სისტემური პროქსის პარამეტრების გამოყენება ქსელურ სკანერებთან წვდომისას"
 
 #. i18n: ectx: tooltip, entry (StartupUseProxy), group (Startup)
 #: scansettings.kcfg:19
