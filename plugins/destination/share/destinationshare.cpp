@@ -46,6 +46,7 @@
 
 #include "scanparamspage.h"
 #include "kookasettings.h"
+#include "multiscanoptions.h"
 #include "destination_logging.h"
 
 
@@ -189,41 +190,56 @@ void DestinationShare::batchEnd(bool ok)
     // Hopefully the list of shared destinations will not change as a
     // result of the more specific MIME type.  Just in case it does,
     // note the selected share ID before setting the MIME type and
-    // find it again before triggering the menu action.
+    // find it again before triggering the menu action.  This has to
+    // be done on the first pass through the loop, after the first URL
+    // is available.
     const QString shareService = mShareCombo->currentData().toString();
+    const bool batch = multiScanOptions()->flags() & MultiScanOptions::BatchMultiple;
+    qCDebug(DESTINATION_LOG) << "share service" << shareService << "batch?" << batch;
 
     QJsonObject dataObject;
     const QString mimeName = mFormatCombo->currentData().toString();
     dataObject.insert("mimeType", QJsonValue(mimeName));
 
-    QJsonArray dataUrls;
-    for (const QUrl &url : qAsConst(mSaveUrls)) dataUrls.append(url.url());
-    dataObject.insert("urls", dataUrls);
-
-    mModel->setInputData(dataObject);			// set MIME type and URL
-    mMenu->reload();					// regenerate the menu
-
-    int foundRow = -1;
-    for (int i = 0; i<mModel->rowCount(); ++i)		// search through new model
+    int menuRow = -1;
+    while (!mSaveUrls.isEmpty())
     {
-        QModelIndex idx = mModel->index(i, 0);
-        const QString key = mModel->data(idx, Purpose::AlternativesModel::PluginIdRole).toString();
-        if (key==shareService)
+        QJsonArray dataUrls;
+        if (batch)					// all together in one job
         {
-            foundRow = i;
-            break;
+            for (const QUrl &url : mSaveUrls) dataUrls.append(url.url());
+            mSaveUrls.clear();				// no more to do
         }
-    }
+        else dataUrls.append(mSaveUrls.takeFirst().url());
+        dataObject.insert("urls", dataUrls);
 
-    if (foundRow==-1)					// couldn't find share in new menu
-    {
-        qCWarning(DESTINATION_LOG) << "Cannot find service for updated MIME type, count" << mModel->rowCount();
-        return;
-    }
+        if (menuRow==-1)				// need to update menu and rescan
+        {
+            mModel->setInputData(dataObject);		// set MIME type and URL
+            mMenu->reload();				// regenerate the menu
 
-    QAction *act = mMenu->actions().value(foundRow);	// get action from menu
-    Q_ASSERT(act!=nullptr);
-    act->trigger();					// do the share action
+            for (int i = 0; i<mModel->rowCount(); ++i)	// search through new model
+            {
+                QModelIndex idx = mModel->index(i, 0);
+                const QString key = mModel->data(idx, Purpose::AlternativesModel::PluginIdRole).toString();
+                if (key==shareService)
+                {
+                    menuRow = i;
+                    break;
+                }
+            }
+
+            if (menuRow==-1)				// couldn't find share in new menu
+            {
+                qCWarning(DESTINATION_LOG) << "Cannot find service for updated MIME type, count" << mModel->rowCount();
+                return;
+            }
+        }
+
+        QAction *act = mMenu->actions().value(menuRow);	// get action from menu
+        Q_ASSERT(act!=nullptr);
+        act->trigger();					// do the share action
+    }
 
     // There is nothing more to do here, the temporary files will eventually
     // be deleted in slotShareFinished().
