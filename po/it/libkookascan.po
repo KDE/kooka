@@ -2,14 +2,14 @@
 # This file is distributed under the same license as the libkookascan package.
 # Bergoglio Cristiano <bergoglio@tiscali.it>, 2012, 2013.
 # Federico Zenith <federico.zenith@member.fsf.org>, 2012.
-# Valter Mura <valtermura@gmail.com>, 2018, 2019, 2021.
+# SPDX-FileCopyrightText: 2018, 2019, 2021, 2024 Valter Mura <valtermura@gmail.com>
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: libkscan\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-02-20 01:38+0000\n"
-"PO-Revision-Date: 2021-03-06 18:14+0100\n"
+"PO-Revision-Date: 2024-02-29 22:13+0100\n"
 "Last-Translator: Valter Mura <valtermura@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -17,17 +17,17 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 20.12.3\n"
+"X-Generator: Lokalize 23.08.5\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
-msgstr ""
+msgstr "Valter Mura"
 
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
-msgstr ""
+msgstr "valtermura@gmail.com"
 
 #: ../libdialogutil/imagefilter.cpp:91
 #, kde-format
@@ -61,23 +61,30 @@ msgid ""
 "<link url=\"?2\">locating devices</link>, <link url=\"?3\">HP scanners</"
 "link>, <link url=\"?4\">device not found</link>."
 msgstr ""
+"Se il tuo scanner non viene rilevato automaticamente, puoi specificarlo qui. "
+"Il <interface>dispositivo Scanner</interface> è il nome del motore SANE del "
+"dispositivo. Le opzioni <interface>Produttore</interface>, <interface>Tipo</"
+"interface> e <interface>Descrizione</interface> possono essere utilizzate "
+"per identificare lo scanner in un momento successivo.<nl/><nl/>Ulteriori "
+"informazioni su <link url=\"?1\">motori SANE</link>, <link url=\"?"
+"2\">posizione dei dispositivi</link>, <link url=\"?3\">scanner HP</link>, "
+"<link url=\"?4\">dispositivo non trovato</link>."
 
 #: adddevicedialog.cpp:77
-#, fuzzy, kde-format
-#| msgid "Scanner device name:"
+#, kde-format
 msgid "Scanner device:"
-msgstr "Nome dello scanner:"
+msgstr "Dispositivo scanner:"
 
 #: adddevicedialog.cpp:80 scandevices.cpp:190
 #, kde-format
 msgctxt "Value used for manufacturer if none entered"
 msgid "User specified"
-msgstr ""
+msgstr "Specificato dall'utente"
 
 #: adddevicedialog.cpp:82
 #, kde-format
 msgid "Manufacturer:"
-msgstr ""
+msgstr "Produttore:"
 
 #: adddevicedialog.cpp:86
 #, kde-format
@@ -98,6 +105,11 @@ msgid ""
 "\">sane(7)</link> or <link url=\"man:/sane-dll\">sane&#8209;dll(5)</link> "
 "for more information on available backends and the format of device names."
 msgstr ""
+"Il <interface>dispositivo Scanner</interface> deve essere il nome di un "
+"motore (con parametri opzionali) interpretabile da SANE. Vedi <link url="
+"\"man:/sane\">sane(7)</link> o <link url=\"man:/sane-dll\">sane&#8209;"
+"dll(5)</link> per ulteriori informazioni sui motori disponibili e il formato "
+"dei nomi dei dispositivi."
 
 #: adddevicedialog.cpp:134
 #, kde-kuit-format
@@ -110,6 +122,13 @@ msgid ""
 "<icode>&#8209;L</icode> option for network scanners. If the scanner is "
 "found, then enter the device name displayed by these commands."
 msgstr ""
+"Per trovare le informazioni necessarie da inserire qui, prova a individuare "
+"il dispositivo utilizzando il comando <link url=\"man:/sane-find-scanner"
+"\">sane&#8209;find&#8209;scanner(1)</link> per SCSI, USB o gli scanner con "
+"porta parallela, oppure il comando <link url=\"man:/scanimage"
+"\">scanimage(1)</link> con l'opzione <icode>&#8209;L</icode> per gli scanner "
+"di rete. Se lo scanner viene trovato, inserisci quindi il nome del "
+"dispositivo visualizzato da questi comandi."
 
 #: adddevicedialog.cpp:143
 #, kde-kuit-format
@@ -122,6 +141,13 @@ msgid ""
 "the scanner is found by HPLIP, then the device name <icode>hp:</icode> that "
 "it displays needs to be replaced by <icode>hpaio:</icode> for SANE."
 msgstr ""
+"Per uno scanner USB o in rete che utilizza <link url=\"http://hplip."
+"sourceforge.net/\">HPLIP</link>, prova a usare il comando <command>hp&#8209;"
+"probe</command> per individuarlo, per esempio <icode>hp&#8209;probe&nbsp;"
+"&#8209;b&nbsp;usb</icode> oppure <icode>hp&#8209;probe&nbsp;&#8209;b&nbsp;"
+"net</icode>. Nota che se lo scanner viene trovato da HPLIP, allora il nome "
+"del dispositivo <icode>hp:</icode> che visualizza deve essere sostituito da "
+"<icode>hpaio:</icode> per SANE."
 
 #: adddevicedialog.cpp:152
 #, kde-kuit-format
@@ -131,6 +157,10 @@ msgid ""
 "by SANE. Check the SANE documentation for a <link url=\"http://www.sane-"
 "project.org/sane-supported-devices.html\">list of supported devices</link>."
 msgstr ""
+"Se questi comandi non riuscissero a rilevare il tuo scanner, allora potrebbe "
+"non essere supportato da SANE. Consulta la documentazione SANE per un <link "
+"url=\"http://www.sane-project.org/sane-supported-devices.html\">elenco dei "
+"dispositivi supportati</link>."
 
 #: autoselectbar.cpp:56
 #, kde-kuit-format
@@ -490,33 +520,32 @@ msgstr "Dispositivo «%1» sconosciuto"
 #: scanglobal.cpp:136
 #, kde-format
 msgid "SANE - Scanner Access Now Easy"
-msgstr ""
+msgstr "SANE - Scanner Access Now Easy"
 
 #: scanglobal.cpp:137
 #, kde-format
 msgid "Scanner access and driver library"
-msgstr ""
+msgstr "Accesso allo scanner e libreria dei driver"
 
 #: scanglobal.cpp:144
 #, kde-format
 msgid "LibTIFF"
-msgstr ""
+msgstr "LibTIFF"
 
 #: scanglobal.cpp:145
-#, fuzzy, kde-format
-#| msgid "Force image format:"
+#, kde-format
 msgid "TIFF image format library"
-msgstr "Forza il formato immagine:"
+msgstr "Libreria del formato immagine TIFF"
 
 #: scanglobal.cpp:154
 #, kde-format
 msgid "libpaper"
-msgstr ""
+msgstr "libpaper"
 
 #: scanglobal.cpp:155
 #, kde-format
 msgid "Paper size configuration library"
-msgstr ""
+msgstr "Libreria di configurazione delle dimensioni della carta"
 
 #: scanimage.cpp:76
 #, kde-format
@@ -780,6 +809,7 @@ msgstr ""
 #, kde-format
 msgid "Use the system proxy settings to access network scanners"
 msgstr ""
+"Usa le impostazioni del proxy di sistema per accedere agli scanner di rete"
 
 #. i18n: ectx: tooltip, entry (StartupUseProxy), group (Startup)
 #: scansettings.kcfg:19
@@ -789,6 +819,10 @@ msgid ""
 "access network scanners.<br/><br/>Note that some SANE backends (for example "
 "'escl') may not work properly through a proxy.</div>"
 msgstr ""
+"<div>Spunta questa opzione se vuoi utilizzare le impostazioni standard del "
+"proxy di sistema per accedere agli scanner di rete.<br/><br/>Note: alcuni "
+"motori SANE (per esempio 'escl') potrebbero non funzionare correttamente "
+"attraverso un proxy.</div>"
 
 #. i18n: ectx: label, entry (StartupSkipAsk), group (Startup)
 #: scansettings.kcfg:28
