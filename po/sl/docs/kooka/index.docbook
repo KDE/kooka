@@ -1,0 +1,997 @@
+<?xml version="1.0" ?>
+<!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.5-Based Variant V1.1//EN" "dtd/kdedbx45.dtd" [
+  <!ENTITY % addindex "IGNORE">
+  <!ENTITY % Slovenian "INCLUDE"
+> <!-- change language only here --> 
+]>
+
+<book id="kooka" lang="&language;">
+
+<bookinfo>
+<title
+>&kooka; Priročnik</title>
+
+<authorgroup>
+<author
+><firstname
+>Martin</firstname
+> <surname
+>Sommer</surname
+> <affiliation
+><address
+><email
+>msommer@suse.de</email
+></address
+></affiliation
+> 
+</author>
+<othercredit role="developer"
+><firstname
+>Klaas</firstname
+> <surname
+>Freitag</surname
+> <affiliation
+> <address
+><email
+>freitag@suse.de</email
+></address>
+</affiliation>
+<contrib
+>Razvijalec</contrib>
+</othercredit>
+
+<othercredit role="translator"
+><firstname
+>Matjaž</firstname
+><surname
+>Jeran</surname
+><affiliation
+><address
+><email
+>matjaz.jeran@amis.net</email
+></address
+></affiliation
+><contrib
+>Prevod</contrib
+></othercredit
+> 
+
+</authorgroup>
+
+<copyright>
+<year
+>2002</year>
+<holder
+>Klaas Freitag, Martin Sommer</holder>
+</copyright>
+
+<legalnotice
+>&FDLNotice;</legalnotice>
+
+<date
+>17.07.2017</date>
+<releaseinfo
+>&kooka; 0,90</releaseinfo>
+
+<abstract
+><para
+>&kooka; vam omogoča skeniranje, shranjevanje in ogled v katerem koli formatu slike, ki ga &Qt; podpira in lahko izvaja optično prepoznavanje znakov.</para
+></abstract
+> 
+
+<keywordset>
+<keyword
+>OCR</keyword>
+<keyword
+>Skener</keyword>
+</keywordset>
+
+</bookinfo>
+
+<chapter id="introduction">
+<title
+>Uvod</title>
+
+<para
+>&kooka; je aplikacija, ki omogoča dostop do strojne opreme optičnega bralnika z uporabo knjižnice <ulink url="http://www.sane-project.org/"
+>SANE</ulink
+>. Zato mora biti za uporabo &kooka; nameščen paket <acronym
+>SANE</acronym
+>.</para>
+
+<para
+>&kooka; vam omogoča skeniranje, shranjevanje in ogled v katerem koli formatu slike, ki ga &Qt; podpira.</para>
+
+<para
+>Prepoznavanje znakov je na voljo tudi z uporabo odprtokodnega <ulink url="http://jocr.sourceforge.net/"
+>GOCR</ulink
+> ali <ulink url="http://www.gnu.org/software/ ocrad/ocrad.html"
+>OCRAD</ulink
+> ali komercialno knjižnico <ulink url="https://rerecognition.com/en/products/kadmos-icr-ocr/"
+>KADMOS</ulink
+>. Za uporabo te funkcije morate namestiti vsaj enega od teh programskih paketov. Ko je prepoznavanje znakov končano, se samodejno zažene preverjanje črkovanja za prepoznano gradivo. Vsebino lahko urejate v oknu <guilabel
+>OCR</guilabel
+> in jo izvozite kot navadno besedilo. </para>
+
+</chapter>
+
+<chapter id="how-to-use">
+<title
+>Navodila za uporabo</title>
+
+<para
+>Spletno mesto <ulink url="http://www.sane-project.org/"
+>http://www.sane-project.org</ulink
+> vsebuje informacije o podprtih skenerjih. Če je mogoče, ga preberite pred nakupom optičnega bralnika.</para>
+
+<sect1 id="screen">
+<title
+>&kooka; Glavno okno</title>
+
+<screenshot
+> 
+<screeninfo
+>&kooka; Glavno okno </screeninfo
+> 
+<mediaobject
+> 
+<imageobject>
+<imagedata fileref="kooka_mainctrl.png" format="PNG"/></imageobject
+> 
+</mediaobject
+> 
+
+</screenshot
+>  
+
+<para
+>Zaženi &kooka; iz konzole tako, da preprosto vnesete <userinput
+><command
+>kooka</command
+></userinput
+> ali ga izberete v podmeniju <guilabel
+>Grafika</guilabel
+> v zaganjalniku aplikacij. Ustvarite povezavo na namizju, ki po želji uporablja ikono optičnega bralnika.</para>
+
+<para
+>Za uporabo &kooka; samo za optično prepoznavanje znakov brez povezave s skenerjem zaženite aplikacijo v galerijskem načinu z <userinput
+><command
+>kooka</command
+> <option
+>-g</option
+></userinput
+>.</para>
+
+<para
+>Glavno okno v &kooka; sestavljeno iz treh okvirjev. Na vrhu si oglejte plošči z ikonami in menijem. Z miško po potrebi povečajte ali pomanjšajte okna.</para>
+
+<itemizedlist
+> 
+<listitem>
+<para
+>Navigacijsko okno je sestavljeno iz treh zavihkov, ki vam omogočajo preklapljanje med <guilabel
+>Skeniranjem</guilabel
+>, <guilabel
+>OCR</guilabel
+> in integriranim brskalnikom datotek, imenovanim <guilabel
+>Galerija</guilabel
+>. Delovna mapa je prikazana v zgornjem delu okna skupaj z mapo, v katero bo shranjen pregled.</para
+> 
+</listitem>
+
+<listitem>
+<para
+>V spodnjem levem oknu nastavite nastavitve, ki so odvisne od optičnega bralnika, ki ste ga povezali. Običajno so to nastavitve za ločljivost, svetlost in kontrast, način skeniranja (&eg; barvno, sivo ali binarno) in vrednosti gama.</para>
+
+<para
+>Tukaj najprej konfigurirajte svoje nastavitve. Nato zaženite pregled predogleda s <guimenuitem
+>Predogled</guimenuitem
+>. Rezultat skeniranja se bo nato prikazal v desnem podoknu.</para>
+
+<para
+>Z miško izberite območje za skeniranje v sami predogledni sliki, da določite končne dimenzije.</para>
+
+<para
+>Ko je to opravljeno, kliknite <guimenu
+>Skeniraj</guimenu
+>, da skenirate izbor v predogledu. Po optičnem branju boste pozvani, v katerem formatu želite shraniti sliko, ali naj bo to vaš standardni format (ne da bi morali v prihodnje potrditi svojo izbiro).</para>
+
+<note
+><para
+>Če ste označili, da ne želite biti vprašani o formatu shranjevanja, pomočnik za pomnilnik ne bo več prikazan. Če želite spremeniti obliko čez nekaj časa, izberite <menuchoice
+> <guimenu
+>Nastavitve</guimenu
+> <guimenuitem
+>Konfiguriraj Kooka ...</guimenuitem
+> <guimenuitem
+>Shranjevanje slike</guimenuitem
+> <guimenuitem
+>Vedno uporabi pomočnika shranjevanja</guimenuitem
+> </menuchoice
+></para
+></note
+> 
+
+</listitem
+> 
+<listitem>
+<para
+>Veliko okno prikazuje, kako je slika videti po končnem skeniranju.</para>
+</listitem>
+</itemizedlist>
+
+</sect1>
+
+</chapter>
+
+<chapter id="commands-configuration">
+<title
+>Referenca in konfiguracija ukazov</title>
+
+<sect1 id="command">
+<title
+>&kooka; Menijska vrstica</title>
+
+<sect2>
+<title
+>Meni Datoteka</title>
+
+<variablelist
+> 
+<varlistentry
+> 
+<term>
+<menuchoice
+><guimenu
+>Datoteka</guimenu
+> <guimenuitem
+>Nova mapa...</guimenuitem
+> </menuchoice
+></term
+> 
+<listitem>
+<para
+>Ustvarite novo mapo za shranjevanje svojih slik v <guilabel
+>Galeriji Kooka</guilabel
+>.</para>
+</listitem
+> 
+</varlistentry>
+
+<varlistentry
+> 
+<term>
+<menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>S</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Datoteka</guimenu
+> <guimenuitem
+>Shrani sliko</guimenuitem
+> </menuchoice
+></term
+> 
+<listitem>
+<para
+>Shranite izbrano sliko pod <guilabel
+>Galerija Kooka</guilabel
+> v drugo mapo na disku.</para>
+<para
+>Za podrobnosti glejte razdelek <link linkend="save"
+> Shrani</link
+>.</para>
+</listitem
+> 
+</varlistentry>
+
+<!--
+Import Image...
+Rename Folder F2
+  -->
+<varlistentry
+> 
+<term>
+<menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Shift;<keysym
+>Del</keysym
+></keycombo
+> </shortcut
+> <guimenu
+>Datoteka</guimenu
+> <guimenuitem
+>Izbriši mapo</guimenuitem
+> </menuchoice
+></term
+> 
+<listitem>
+<para
+>Izbrišite izbrano mapo pod <guilabel
+>Galerija Kooka</guilabel
+>.</para>
+</listitem
+> 
+</varlistentry>
+
+<!--
+Properties... Alt+Return
+-->
+<varlistentry
+> 
+<term>
+<menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>N</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Datoteka</guimenu
+> <guimenuitem
+>Nova slika iz izbora</guimenuitem
+> </menuchoice
+></term
+> 
+<listitem>
+<para
+>Če optično prebrana slika vključuje več, kot želite videti na končni sliki, s tem orodjem obrežite sliko tako, da označite svojo izbiro na zaslonu večje slike na desni in nato izberete to orodje. Slika je obrezana glede na vaš izbor. Morda že poznate to funkcijo iz &kolourpaint; orodje za obrezovanje.</para>
+</listitem
+> 
+</varlistentry
+> 
+
+<varlistentry
+> 
+<term>
+<menuchoice
+><guimenu
+>Datoteka</guimenu
+> <guimenuitem
+>Odloži sliko</guimenuitem
+> </menuchoice
+></term
+> 
+<listitem>
+<para
+>Odstrani sliko, prikazano v pregledovalniku slik.</para>
+</listitem
+> 
+</varlistentry>
+
+<varlistentry
+> 
+<term>
+<menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>P</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Datoteka</guimenu
+> <guimenuitem
+>Natisni</guimenuitem
+> </menuchoice
+></term
+> 
+<listitem>
+<para
+>Natisne prikazano sliko.</para>
+</listitem
+> 
+</varlistentry>
+
+<varlistentry
+> 
+<term>
+<menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>Q</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Datoteka</guimenu
+> <guimenuitem
+>Zapri</guimenuitem
+> </menuchoice
+></term
+> 
+<listitem>
+<para
+>Zapri &kooka;.</para>
+</listitem
+> 
+</varlistentry>
+
+</variablelist>
+</sect2>
+
+<sect2>
+<title
+>Meni skeniranja</title>
+
+<variablelist
+> 
+<!--
+Preview F3
+Start Scan F4
+Photocopy... Ctrl+F
+Auto Select Ctrl+A
+Scan Parameters... Ctrl+Shift+S
+-->
+<varlistentry>
+<term>
+<menuchoice
+><guimenu
+>Skeniraj</guimenu
+> <guimenuitem
+>OCR sliko...</guimenuitem
+> </menuchoice
+></term>
+<listitem>
+<para
+>Zaženite optično prepoznavanje znakov (<acronym
+>OCR</acronym
+>) celotne slike z uporabo sistema za prepoznavanje, definiranega na strani <guilabel
+>OCR</guilabel
+> v pogovornem oknu z nastavitvami. S tem se začne prepoznavanje znakov za predogled slike.</para>
+</listitem
+> 
+</varlistentry
+> 
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Skeniraj</guimenu
+> <guimenuitem
+>Izbira OCR...</guimenuitem
+> </menuchoice
+></term
+> 
+<listitem>
+<para
+>Ponovno se bo pojavilo okno za prepoznavanje znakov. Tu pa je prepoznavanje znakov samo za območje, ki je označeno v končnem skeniranju.</para>
+</listitem
+> 
+</varlistentry>
+<!--
+Spell Check OCR Result...
+Save OCR Result Text... Ctrl+U
+-->
+</variablelist
+> 
+</sect2>
+ 
+<sect2>
+<title
+>Meni za slike</title>
+
+<para
+>Dejanja v tem meniju so na voljo tudi v kontekstnem meniju okna za predogled.</para>
+
+<variablelist
+> 
+
+<varlistentry>
+<term>
+<menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>I</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Slika</guimenu
+> <guimenuitem
+>Prilagodi na širino</guimenuitem
+> </menuchoice
+></term
+> 
+<listitem>
+<para
+>To sorazmerno poveča sliko na velikem platnu glede na širino zaslona.</para>
+</listitem
+> 
+</varlistentry>
+
+<varlistentry
+> 
+<term>
+<menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>H</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Slika</guimenu
+> <guimenuitem
+>Prilagodi na višino</guimenuitem
+> </menuchoice
+></term
+> 
+<listitem>
+<para
+>Sorazmerno poveča sliko glede na višino zaslona.</para
+> 
+</listitem
+> 
+</varlistentry>
+
+<varlistentry
+> 
+<term>
+<menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>1</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Slika</guimenu
+> <guimenuitem
+>Izvirna velikost</guimenuitem
+> </menuchoice
+></term
+> 
+<listitem>
+<para
+>Obnovi izvirno velikost skeniranja tako, da zmanjša ali poveča sliko na zaslonu.</para
+> 
+
+<para
+>Obstajajo dodatni načini za spreminjanje velikosti slike: <mousebutton
+>z desnim gumbom</mousebutton
+> kliknite prikaz slike. Ponovno določite tri imenovane možnosti in nastavite samo povečavo. To lahko storite tudi v oknu <guilabel
+>Predogled</guilabel
+>.</para>
+</listitem
+> 
+</varlistentry>
+<!--
+Set Zoom...
+Keep Zoom Setting Ctrl+Z
+-->
+<varlistentry
+> 
+<term>
+<menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>V</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Slika</guimenu
+> <guimenuitem
+>Zrcaljenje navpično</guimenuitem
+> </menuchoice
+></term
+> 
+<listitem>
+<para
+>Obrnite sliko navpično.</para>
+</listitem
+> 
+</varlistentry
+> 
+
+<varlistentry
+> 
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>M</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Slika</guimenu
+> <guimenuitem
+>Zrcaljenje vodoravno</guimenuitem
+> </menuchoice>
+</term
+> 
+<listitem>
+<para
+>Obrnite sliko vodoravno.</para>
+</listitem
+> 
+</varlistentry
+> 
+
+<varlistentry
+> 
+<term>
+<menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>7</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Slika</guimenu
+> <guimenuitem
+>Zavrti v nasprotni smeri urinega kazalca</guimenuitem
+> </menuchoice>
+</term
+> 
+<listitem>
+<para
+>Zavrti sliko za devetdeset stopinj v nasprotni smeri urinega kazalca.</para>
+</listitem
+> 
+</varlistentry
+> 
+
+<varlistentry
+> 
+<term>
+<menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>9</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Slika</guimenu
+> <guimenuitem
+>Zavrti v smeri urinega kazalca</guimenuitem
+> </menuchoice
+></term
+> 
+<listitem>
+<para
+>Zavrti sliko za devetdeset stopinj v smeri urinega kazalca.</para>
+</listitem>
+</varlistentry
+> 
+
+<varlistentry>
+<term>
+<menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>8</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Slika</guimenu
+> <guimenuitem
+>Zavrti sliko za 180 stopinj</guimenuitem
+> </menuchoice>
+</term
+> 
+<listitem>
+<para
+>Zavrti sliko za 180 stopinj.</para>
+</listitem
+> 
+</varlistentry
+> 
+</variablelist>
+</sect2>
+
+<sect2>
+<title
+>Meni z nastavitvami</title>
+
+<para
+>Poleg običajnega &kde; Menija <guimenu
+>Nastavitve</guimenu
+> in <guimenu
+>Pomoč</guimenu
+> sta opisana v poglavju <ulink url="help:/fundamentals/menus.html"
+>Meni</ulink
+> v &kde; Dokumentacija o osnovah &kooka; ima te menijske vnose za posamezne aplikacije: </para>
+
+<variablelist>
+
+<varlistentry
+> 
+<term>
+<menuchoice
+><guimenu
+>Nastavitve</guimenu
+> <guimenuitem
+>Izberite napravo za skeniranje...</guimenuitem
+> </menuchoice>
+</term>
+<listitem>
+<para
+>Če imate več optičnih bralnikov, s tem dejanjem izberite optični bralnik in ob zagonu vedno uporabite določeno napravo.</para>
+</listitem
+> 
+</varlistentry>
+
+<varlistentry
+> 
+<term>
+<menuchoice
+><guimenu
+>Nastavitve</guimenu
+> <guimenuitem
+>Dodaj napravo za skeniranje...</guimenuitem
+> </menuchoice>
+</term
+><listitem>
+<para
+>Dodajte napravo, ki ni samodejno zaznana ob zagonu &kooka;.</para>
+</listitem
+> 
+</varlistentry>
+
+</variablelist>
+</sect2>
+
+</sect1>
+
+
+<sect1 id="configuration">
+<title
+>Konfiguriranje Kooke</title>
+
+<variablelist>
+<varlistentry>
+<term>
+<menuchoice>
+<guilabel
+>Splošno</guilabel
+> 
+</menuchoice>
+</term
+> 
+<listitem>
+<para
+>Z gumbom v tem razdelku znova omogočite vsa sporočila in vprašanja, skrita z <guibutton
+>Ne sprašuj me več</guibutton
+>.</para>
+</listitem
+> 
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guilabel
+>Začetek dela</guilabel
+> 
+</menuchoice>
+</term
+> 
+<listitem>
+<para
+>Morda boste želeli počistiti polje <guilabel
+>Prikaži pogovorno okno za izbiro skenerja </guilabel
+>, če imate samo en skener. Če imate samo en računalnik, boste morda želeli tudi počistiti polje <guilabel
+>Poizvedi omrežje za razpoložljive optične bralnike</guilabel
+>. </para>
+</listitem
+> 
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guilabel
+>Shranjevanje slike</guilabel
+> 
+</menuchoice>
+</term
+> 
+<listitem>
+<para
+><guilabel
+>Vedno uporabljaj pomočnika za shranjevanje</guilabel
+> <guilabel
+>Pri shranjevanju vprašaj za ime datoteke</guilabel
+> <guilabel
+>Pred začetkom skeniranja</guilabel
+> / <guilabel
+>Ko je skeniranje končano</guilabel
+>. </para>
+</listitem
+> 
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guilabel
+>Galerija &amp; Sličice</guilabel
+> 
+</menuchoice>
+</term
+> 
+<listitem>
+<para
+>Tukaj je mogoče prilagoditi velikost sličic; kot tudi ozadje. Na primer, morda boste želeli zmanjšati velikost sličic, če skenirate veliko strani iz knjige. </para>
+<para
+>V razdelku <guilabel
+>Galerija slik</guilabel
+> izberite, kako in kje prikazati nedavne mape.</para>
+</listitem
+> 
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guilabel
+>OCR</guilabel
+> 
+</menuchoice>
+</term
+> 
+<listitem>
+<para
+>Izberite mehanizem OCR in pot do izvedljive datoteke. </para>
+</listitem
+> 
+</varlistentry>
+
+</variablelist>
+
+</sect1>
+</chapter>
+
+<chapter id="save">
+<title
+>Shrani</title>
+<subtitle
+>Več o shranjevanju slik</subtitle>
+
+<para
+>Metoda za shranjevanje slike je v &kooka; kot v mnogih drugih aplikacijah. Kliknite zavihek <guilabel
+>Galerija</guilabel
+>, da odprete brskalnik majhnih datotek. To je mapa <filename class="directory"
+>~/Documents/KookaGallery</filename
+>. V oknu je prikazana vaša trenutna podmapa v galeriji. Tukaj se vse optično prebrane slike najprej shranijo kot datoteke. Ko zaženete &kooka; prvič boste videli samo <filename class="directory"
+>KookaGallery</filename
+>. Ustvarite podmape tako, da <mousebutton
+>desno</mousebutton
+> kliknete to mapo. Izbrana mapa, označena z modro, je prvo mesto shranjevanja skeniranih slik. Skeniranja so označena v naraščajočem številčnem vrstnem redu kot v <filename
+>kscan_0001</filename
+> in <filename
+>kscan_0002</filename
+>.</para>
+
+<para
+>Če želite trajno shraniti sliko, uporabite <guimenuitem
+>Preimenuj sliko</guimenuitem
+> in podajte novo ime in ustrezno končnico za format slike, izbran pri skeniranju. Če vnesete drugo končnico, boste prejeli sporočilo, da ne ustreza skenirani obliki. Čeprav lahko še vedno shranite sliko pod tem imenom, bo ohranila prvotno obliko. Trenutno pretvorba <quote
+>Sproti</quote
+> ni na voljo.</para
+><para
+>Če ne želite uporabljati tega načina upravljanja svojih slik v <filename class="directory"
+>~/Documents/KookaGallery/</filename
+>, jih seveda lahko shranite na drugo mesto. Če želite to narediti, <mousebutton
+>desno</mousebutton
+> kliknite ime slike in izberite <guilabel
+>Shrani sliko</guilabel
+>. Tukaj izberite katero koli pot. Poleg tega tukaj zaprite ali trajno izbrišite slike.</para>
+
+<para
+>Če želite v galerijo vključiti druge slike, uporabite <menuchoice
+> <guimenu
+>Datoteka</guimenu
+><guimenuitem
+>Uvozi sliko</guimenuitem
+> </menuchoice
+> ali jih dodajte tako, da povlečete in spustite. Odprite upravitelja datotek do mape, ki vsebuje želene slike. Nato jih dodajte v &kooka; galeriji, tako da jih povlečete in spustite v galerijo.</para>
+
+</chapter>
+
+<chapter id="ocr">
+<title
+>Prepoznavanje znakov</title>
+
+<para
+>Kot že omenjeno, mora biti nameščen <application
+>gocr</application
+>. Skenirajte predogled dokumenta v sivinah ali barvah. V binarnem načinu lahko skenirate le, če imate čisto bel list papirja s črnim tiskom. Nato v oknu za predogled označite besedilo, ki ga želite prepoznati. Nato izvedite končno skeniranje v binarnem načinu z <guibutton
+>Skeniraj</guibutton
+>.</para>
+
+<para
+>Zdaj kliknite ikono <inlinemediaobject
+><imageobject
+><imagedata fileref="ocr-select.png" format="PNG"/> </imageobject
+></inlinemediaobject
+> v orodni vrstici, <guilabel
+>Izbira OCR</guilabel
+>, ali izberite ta element v meniju <guilabel
+>Skeniraj</guilabel
+>. Pri prvem poskusu ne spreminjajte privzetih nastavitev, prikazanih v pojavnem oknu <acronym
+>OCR</acronym
+>. Ti so običajno primerni in ustrezajo večini potreb. Zdaj kliknite <guimenuitem
+>Začni OCR</guimenuitem
+>. Zdaj boste videli okno z rezultati <acronym
+>OCR</acronym
+>. Kakovost je v veliki meri odvisna od samega dokumenta. </para>
+
+<screenshot
+> <screeninfo
+>Okno gocr</screeninfo
+> <mediaobject>
+<imageobject
+><imagedata fileref="kooka_gocr.png"
+format="PNG"/></imageobject
+> </mediaobject
+> </screenshot>
+<para
+>Ko je prepoznavanje znakov končano, zaženite preverjanje črkovanja za prepoznano gradivo. Vsebino lahko urejate v oknu <guilabel
+>OCR</guilabel
+> in jo izvozite kot navadno besedilo. </para>
+<para
+>Po končnem skeniranju označite izbor na slikovnem prikazu na desni, da naložite le del besedila ali slike v <acronym
+>OCR</acronym
+>. Nato v orodni vrstici kliknite ikono <inlinemediaobject
+><imageobject
+><imagedata fileref="ocr-select.png" format="PNG"/> </imageobject
+></inlinemediaobject
+> ali v meniju kliknite <guimenuitem
+> Izbira OCR</guimenuitem
+>. Zdaj nadaljujte, kot je opisano v prejšnjem razdelku.</para>
+
+<screenshot
+> 
+<screeninfo
+>Rezultati <acronym
+>OCR</acronym
+></screeninfo
+> 
+<mediaobject
+> 
+<imageobject>
+<imagedata fileref="kooka_gocr_result.png"
+format="PNG"/></imageobject
+> 
+</mediaobject
+> 
+</screenshot>
+
+</chapter>
+
+<chapter id="credits">
+<title
+>Zasluge in licenca</title>
+ 
+<para
+>&kooka;</para>
+
+<para
+>Avtorske pravice za aplikacijo 2000-2010, &kooka; razvijalci in sodelavci</para>
+
+<para
+>Avtorske pravice za dokumentacijo 2002 Martin Sommer <email
+>msommer@suse.de</email
+></para>
+
+<para
+>Prevod: Matjaž Jeran <email
+>matjaz.jeran@amis.net</email
+></para
+> &underFDL; &underGPL; </chapter
+>  
+</book>
+
