@@ -1,31 +1,31 @@
 # Copyright (C) YEAR This_file_is_part_of_KDE
 # This file is distributed under the same license as the PACKAGE package.
 #
-# Stefan Asserhall <stefan.asserhall@bredband.net>, 2011, 2013, 2016, 2017, 2018, 2020, 2021.
+# SPDX-FileCopyrightText: 2011, 2013, 2016, 2017, 2018, 2020, 2021, 2024 Stefan Asserhall <stefan.asserhall@bredband.net>
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-02-20 01:38+0000\n"
-"PO-Revision-Date: 2021-03-03 20:06+0100\n"
+"PO-Revision-Date: 2024-05-03 08:47+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@bredband.net>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 20.08.1\n"
+"X-Generator: Lokalize 23.08.3\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
-msgstr ""
+msgstr "Stefan Asserhäll"
 
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
-msgstr ""
+msgstr "stefan.asserhall@gmail.com"
 
 #: ../libdialogutil/imagefilter.cpp:91
 #, kde-format
@@ -59,23 +59,29 @@ msgid ""
 "<link url=\"?2\">locating devices</link>, <link url=\"?3\">HP scanners</"
 "link>, <link url=\"?4\">device not found</link>."
 msgstr ""
+"Om bildläsaren inte har upptäckts automatiskt kan du ange den här. "
+"<interface>Bildläsarenhet</interface> är SANE-enhetens gränssnittsnamn. "
+"<interface>Tillverkare</interface>, <interface>Typ</interface> och "
+"<interface>Beskrivning</interface> kan användas för att identifiera "
+"bildläsaren senare.<nl/><nl/>Mer information om <link url =\"?1\">SANE-"
+"gränssnitt</link>, <link url=\"?2\">lokalisera enheter</link>, <link url=\"?"
+"3\">HP-bildläsare</link>, <link url=\" ?4\">enheten hittades inte</link>."
 
 #: adddevicedialog.cpp:77
-#, fuzzy, kde-format
-#| msgid "Scanner device name:"
+#, kde-format
 msgid "Scanner device:"
-msgstr "Bildläsarenhetens namn:"
+msgstr "Bildläsarenhet:"
 
 #: adddevicedialog.cpp:80 scandevices.cpp:190
 #, kde-format
 msgctxt "Value used for manufacturer if none entered"
 msgid "User specified"
-msgstr ""
+msgstr "Användarspecificerad"
 
 #: adddevicedialog.cpp:82
 #, kde-format
 msgid "Manufacturer:"
-msgstr ""
+msgstr "Tillverkare:"
 
 #: adddevicedialog.cpp:86
 #, kde-format
@@ -96,6 +102,10 @@ msgid ""
 "\">sane(7)</link> or <link url=\"man:/sane-dll\">sane&#8209;dll(5)</link> "
 "for more information on available backends and the format of device names."
 msgstr ""
+"<interface>Bildläsarenhet</interface> ska vara ett gränssnittsnamn (med "
+"valfria parametrar) som förstås av SANE. Se <link url=\"man:/sane\">sane(7)</"
+"link> eller <link url=\"man:/sane-dll\">sane&#8209;dll(5)</link> för mer "
+"information om tillgängliga gränssnitt och formatet på enhetsnamn."
 
 #: adddevicedialog.cpp:134
 #, kde-kuit-format
@@ -108,6 +118,12 @@ msgid ""
 "<icode>&#8209;L</icode> option for network scanners. If the scanner is "
 "found, then enter the device name displayed by these commands."
 msgstr ""
+"För att hitta informationen som måste anges här, försök att hitta enheten "
+"med kommandot <link url=\"man:/sane-find-scanner\">sane&#8209;find&#8209;"
+"scanner(1)</link> för SCSI-, USB- eller bildläsare med parallellport, eller "
+"kommandot <link url=\"man:/scanimage\">scanimage(1)</link> med alternativet "
+"<icode>&#8209;L</icode> för nätverksbildläsare. Om bildläsaren hittas ska "
+"enhetsnamnet som visas av dessa kommandon anges."
 
 #: adddevicedialog.cpp:143
 #, kde-kuit-format
@@ -120,6 +136,13 @@ msgid ""
 "the scanner is found by HPLIP, then the device name <icode>hp:</icode> that "
 "it displays needs to be replaced by <icode>hpaio:</icode> for SANE."
 msgstr ""
+"För en USB- eller nätverksansluten HP-bildläsare som använder <link url="
+"\"http://hplip.sourceforge.net/\">HPLIP</link>, prova att använda kommandot "
+"<command>hp&#8209;probe</command> för att hitta den , till exempel "
+"<icode>hp&#8209;probe&nbsp;&#8209;b&nbsp;usb</icode> eller <icode>hp&#8209;"
+"probe&nbsp;&#8209;b&nbsp;net</icode>. Observera att om bildläsaren hittas av "
+"HPLIP måste enhetsnamnet <icode>hp:</icode> som den visar ersättas med "
+"<icode>hpaio:</icode> för SANE."
 
 #: adddevicedialog.cpp:152
 #, kde-kuit-format
@@ -129,6 +152,9 @@ msgid ""
 "by SANE. Check the SANE documentation for a <link url=\"http://www.sane-"
 "project.org/sane-supported-devices.html\">list of supported devices</link>."
 msgstr ""
+"Om dessa kommandon inte hittar bildläsaren, kanske den inte stöds av SANE. "
+"Kontrollera SANE-dokumentationen för en <link url=\"http://www.sane-project."
+"org/sane-supported-devices.html\">lista över enheter som stöds</link>."
 
 #: autoselectbar.cpp:56
 #, kde-kuit-format
@@ -487,33 +513,32 @@ msgstr "Okänd enhet '%1'"
 #: scanglobal.cpp:136
 #, kde-format
 msgid "SANE - Scanner Access Now Easy"
-msgstr ""
+msgstr "SANE - Scanner Access Now Easy"
 
 #: scanglobal.cpp:137
 #, kde-format
 msgid "Scanner access and driver library"
-msgstr ""
+msgstr "Drivrutinbibliotek för bildläsaråtkomst"
 
 #: scanglobal.cpp:144
 #, kde-format
 msgid "LibTIFF"
-msgstr ""
+msgstr "LibTIFF"
 
 #: scanglobal.cpp:145
-#, fuzzy, kde-format
-#| msgid "Force image format:"
+#, kde-format
 msgid "TIFF image format library"
-msgstr "Tvinga bildformat:"
+msgstr "TIFF-bildformatbibliotek"
 
 #: scanglobal.cpp:154
 #, kde-format
 msgid "libpaper"
-msgstr ""
+msgstr "libpaper"
 
 #: scanglobal.cpp:155
 #, kde-format
 msgid "Paper size configuration library"
-msgstr ""
+msgstr "Inställningsbibliotek för pappersstorlek"
 
 #: scanimage.cpp:76
 #, kde-format
@@ -776,6 +801,7 @@ msgstr ""
 #, kde-format
 msgid "Use the system proxy settings to access network scanners"
 msgstr ""
+"Använd systemets proxyinställningar för att komma åt nätverksbildläsare"
 
 #. i18n: ectx: tooltip, entry (StartupUseProxy), group (Startup)
 #: scansettings.kcfg:19
@@ -785,6 +811,10 @@ msgid ""
 "access network scanners.<br/><br/>Note that some SANE backends (for example "
 "'escl') may not work properly through a proxy.</div>"
 msgstr ""
+"<div>Markera om du vill använda standardinställningarna för systemets proxy "
+"för att komma åt nätverksbildläsare.<br/><br/>Observera att vissa SANE-"
+"gränssnitt (till exempel 'escl') kanske inte fungerar korrekt via en proxy."
+"</ div>"
 
 #. i18n: ectx: label, entry (StartupSkipAsk), group (Startup)
 #: scansettings.kcfg:28
