@@ -52,7 +52,7 @@ msgstr ""
 #: kookaview.cpp:1180
 #, kde-format
 msgid "Other..."
-msgstr "Altres..."
+msgstr "Altres…"
 
 #: ../plugins/destination/application/destinationapplication.cpp:94
 #, kde-format
@@ -296,7 +296,7 @@ msgstr "Utilitza la configuració personalitzada de verificació ortogràfica"
 #: ../plugins/ocr/abstractocrdialogue.cpp:293
 #, kde-format
 msgid "Custom Spell Configuration..."
-msgstr "Personalitza la configuració de verificació ortogràfica..."
+msgstr "Personalitza la configuració de verificació ortogràfica…"
 
 #: ../plugins/ocr/abstractocrdialogue.cpp:303
 #, kde-format
@@ -381,7 +381,7 @@ msgstr "S'ha produït un error de configuració d'OCR"
 #: ../plugins/ocr/abstractocrengine.cpp:123 kookaview.cpp:790
 #, kde-format
 msgid "Configure OCR..."
-msgstr "Configura OCR..."
+msgstr "Configura OCR…"
 
 #: ../plugins/ocr/abstractocrengine.cpp:181
 #, kde-format
@@ -495,7 +495,7 @@ msgstr "Camí cap a l'executable:"
 #: ../plugins/ocr/executablepathdialogue.cpp:56
 #, kde-format
 msgid "Enter or select the path..."
-msgstr "Introduïu o seleccioneu el camí..."
+msgstr "Introduïu o seleccioneu el camí…"
 
 #: ../plugins/ocr/gocr/ocrgocrdialog.cpp:75
 #: ../plugins/ocr/gocr/ocrgocrdialog.cpp:87
@@ -750,7 +750,7 @@ msgstr "L'executable de Tesseract no està configurat o no es troba disponible."
 #: ../plugins/ocr/tesseract/ocrtesseractdialog.cpp:129
 #, kde-format
 msgid "Select a file if required..."
-msgstr "Cal seleccionar un fitxer..."
+msgstr "Cal seleccionar un fitxer…"
 
 #: ../plugins/ocr/tesseract/ocrtesseractengine.cpp:226
 #, kde-format
@@ -1019,7 +1019,7 @@ msgstr "Nom del fitxer:"
 #: formatdialog.cpp:398
 #, kde-format
 msgid "Select Format..."
-msgstr "Selecciona el format..."
+msgstr "Selecciona el format…"
 
 #: formatdialog.cpp:436
 #, kde-format
@@ -1593,7 +1593,7 @@ msgstr "Mida original"
 #: kooka.cpp:160
 #, kde-format
 msgid "Set Zoom..."
-msgstr "Establix el zoom..."
+msgstr "Establix el zoom…"
 
 #: kooka.cpp:166
 #, kde-format
@@ -1633,7 +1633,7 @@ msgstr "Gira 180 graus"
 #: kooka.cpp:219
 #, kde-format
 msgid "New Folder..."
-msgstr "Carpeta nova..."
+msgstr "Carpeta nova…"
 
 #: kooka.cpp:224
 #, kde-format
@@ -1643,12 +1643,12 @@ msgstr "Obri amb"
 #: kooka.cpp:230
 #, kde-format
 msgid "Save Image..."
-msgstr "Guarda la imatge..."
+msgstr "Guarda la imatge…"
 
 #: kooka.cpp:237
 #, kde-format
 msgid "Import Image..."
-msgstr "Importa una imatge..."
+msgstr "Importa una imatge…"
 
 #: kooka.cpp:242 kooka.cpp:550
 #, kde-format
@@ -1668,17 +1668,17 @@ msgstr "Envia la imatge"
 #: kooka.cpp:262
 #, kde-format
 msgid "Properties..."
-msgstr "Propietats..."
+msgstr "Propietats…"
 
 #: kooka.cpp:271
 #, kde-format
 msgid "Select Scan Device..."
-msgstr "Seleccioneu el dispositiu d'escaneig..."
+msgstr "Seleccioneu el dispositiu d'escaneig…"
 
 #: kooka.cpp:275 kookaview.cpp:549
 #, kde-format
 msgid "Add Scan Device..."
-msgstr "Afig un dispositiu d'escaneig..."
+msgstr "Afig un dispositiu d'escaneig…"
 
 #: kooka.cpp:281
 #, kde-format
@@ -1693,7 +1693,7 @@ msgstr "Inicia l'escaneig"
 #: kooka.cpp:291
 #, kde-format
 msgid "Scan Presets..."
-msgstr "Valors predefinits d'escaneig..."
+msgstr "Valors predefinits d'escaneig…"
 
 #: kooka.cpp:296
 #, kde-format
@@ -1703,27 +1703,27 @@ msgstr "Selecciona automàticament"
 #: kooka.cpp:304
 #, kde-format
 msgid "OCR Image..."
-msgstr "Imatge OCR..."
+msgstr "Imatge OCR…"
 
 #: kooka.cpp:308
 #, kde-format
 msgid "OCR Selection..."
-msgstr "En seleccionar OCR..."
+msgstr "En seleccionar OCR…"
 
 #: kooka.cpp:312
 #, kde-format
 msgid "OCR File..."
-msgstr "Fitxer OCR..."
+msgstr "Fitxer OCR…"
 
 #: kooka.cpp:316
 #, kde-format
 msgid "Save OCR Result Text..."
-msgstr "Guarda el text OCR resultant..."
+msgstr "Guarda el text OCR resultant…"
 
 #: kooka.cpp:321
 #, kde-format
 msgid "Spell Check OCR Result..."
-msgstr "Resultat de la verificació ortogràfica d'OCR..."
+msgstr "Resultat de la verificació ortogràfica d'OCR…"
 
 #: kooka.cpp:537
 #, kde-format
@@ -1841,8 +1841,8 @@ msgid ""
 "viewer on startup.<br/><br/>If your images are large, that might slow down "
 "Kooka's startup.</div>"
 msgstr ""
-"<div>Seleccioneu-la si voleu que Kooka carregue l'última imatge en el visor "
-"en iniciar.<br/><br/>Si les imatges són grans, l'inici de Kooka pot ser més "
+"<div>Marqueu-la si voleu que Kooka carregue l'última imatge en el visor en "
+"iniciar.<br/><br/>Si les imatges són grans, l'inici de Kooka pot ser més "
 "lent.</div>"
 
 #. i18n: ectx: label, entry (SaverAskForFormat), group (Files)
@@ -1858,9 +1858,9 @@ msgid ""
 "<div>Check this if you want to always use the image save assistant, even if "
 "there is a default format for the image type.</div>"
 msgstr ""
-"<div>Seleccioneu-la si voleu que sempre s'utilitze l'assistent per a guardar "
-"la imatge, encara que hi haja un format predeterminat per al tipus d'imatge."
-"</div>"
+"<div>Activeu-la si voleu que sempre s'utilitze l'assistent per a guardar la "
+"imatge, encara que hi haja un format predeterminat per al tipus d'imatge.</"
+"div>"
 
 #. i18n: ectx: label, entry (SaverAskForFilename), group (Files)
 #: kookasettings.kcfg:71
@@ -1875,8 +1875,8 @@ msgid ""
 "<div>Check this if you want to enter a file name when scanning an image.</"
 "div>"
 msgstr ""
-"<div>Seleccioneu-la si voleu introduir un nom de fitxer en escanejar una "
-"imatge.</div>"
+"<div>Marqueu-la si voleu introduir un nom de fitxer en escanejar una imatge."
+"</div>"
 
 #. i18n: ectx: label, entry (SaverAskBeforeScan), group (Files)
 #: kookasettings.kcfg:77
@@ -1891,7 +1891,7 @@ msgid ""
 "<div>Check this if you want to enter the file name before scanning starts.</"
 "div>"
 msgstr ""
-"<div>Seleccioneu-la si voleu introduir un nom de fitxer abans que comence "
+"<div>Marqueu-la si voleu introduir un nom de fitxer abans que comence "
 "l'escaneig.</div>"
 
 #. i18n: ectx: label, entry (SaverAskAfterScan), group (Files)
@@ -1907,8 +1907,8 @@ msgid ""
 "<div>Check this if you want to enter the file name after scanning has "
 "finished.</div>"
 msgstr ""
-"<div>Seleccioneu-la si voleu introduir un nom de fitxer després que "
-"finalitze l'escaneig</div>"
+"<div>Marqueu-la si voleu introduir un nom de fitxer després que finalitze "
+"l'escaneig</div>"
 
 #. i18n: ectx: label, entry (SaverOnlyRecommendedTypes), group (Files)
 #: kookasettings.kcfg:89
@@ -1923,9 +1923,9 @@ msgid ""
 "<div>Check this to only show recommended file formats for the scan type. "
 "Uncheck it to show all compatible formats.</div>"
 msgstr ""
-"<div>Seleccioneu-la per a mostrar només els formats de fitxer recomanats per "
-"al tipus d'escaneig. Desseleccioneu-la per a mostrar tots els formats "
-"compatibles.</div>"
+"<div>Marqueu-la per a mostrar només els formats de fitxer recomanats per al "
+"tipus d'escaneig. Desmarqueu-la per a mostrar tots els formats compatibles.</"
+"div>"
 
 #. i18n: ectx: label, entry (SaverAlwaysUseFormat), group (Files2)
 #: kookasettings.kcfg:103
@@ -1940,7 +1940,7 @@ msgid ""
 "<div>Check this to remember the selected file format for the scanned image "
 "type and not ask for it again.</div>"
 msgstr ""
-"<div>Seleccioneu-la per a recordar el format de fitxer seleccionat pel tipus "
+"<div>Marqueu-la per a recordar el format de fitxer seleccionat pel tipus "
 "d'imatge escanejat i no tornar-ho a preguntar.</div>"
 
 #. i18n: ectx: label, entry (GalleryAllowRename), group (Gallery)
@@ -1956,7 +1956,7 @@ msgid ""
 "<div>Check this if you want to be able to rename gallery items by clicking "
 "on them (otherwise, use the \"Rename\" menu option).</div>"
 msgstr ""
-"<div>Seleccioneu-la si voleu poder canviar de nom els elements d'una galeria "
+"<div>Marqueu-la si voleu poder canviar de nom els elements d'una galeria "
 "clicant-hi damunt (en cas contrari, utilitzeu l'opció «Canvia el nom» del "
 "menú).</div>"
 
@@ -2400,7 +2400,7 @@ msgstr "S'ha descarregat la imatge"
 #: kookaview.cpp:1036
 #, kde-format
 msgid "Loading %1..."
-msgstr "S'està carregant %1..."
+msgstr "S'està carregant %1…"
 
 #: main.cpp:44
 #, kde-format
@@ -2664,7 +2664,7 @@ msgstr "Motor d'OCR:"
 #: prefspages.cpp:430
 #, kde-format
 msgid "OCR Engine Settings..."
-msgstr "Configureu el motor OCR..."
+msgstr "Configureu el motor OCR…"
 
 #: prefspages.cpp:476
 #, kde-format
@@ -2898,7 +2898,7 @@ msgstr ""
 #: scanpresetsdialog.cpp:86
 #, kde-format
 msgid "Save..."
-msgstr "Guarda..."
+msgstr "Guarda…"
 
 #: scanpresetsdialog.cpp:88
 #, kde-format
@@ -2915,7 +2915,7 @@ msgstr "Suprimix el conjunt seleccionat de valors predefinits d'escaneig"
 #: scanpresetsdialog.cpp:98
 #, kde-format
 msgid "Edit..."
-msgstr "Edita..."
+msgstr "Edita…"
 
 #: scanpresetsdialog.cpp:100
 #, kde-format
@@ -2944,7 +2944,7 @@ msgstr "Segur que voleu eliminar el joc <resource>%1</resource>?"
 #: scanpresetsdialog.cpp:290
 #, kde-format
 msgid "Delete Scan Preset Set"
-msgstr "Supressió de conjunt de valors predefinits d'escaneig"
+msgstr "Suprimiu el conjunt de valors predefinits d'escaneig"
 
 #: statusbarmanager.cpp:52
 #, kde-format

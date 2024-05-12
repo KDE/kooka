@@ -700,7 +700,7 @@ msgstr "Força el format d'imatge:"
 #: scanparams.cpp:483
 #, kde-format
 msgid "Edit Gamma Table..."
-msgstr "Edita la taula de gamma..."
+msgstr "Edita la taula de gamma…"
 
 #: scanparams.cpp:555
 #, kde-kuit-format
@@ -799,10 +799,10 @@ msgid ""
 ">Note that this does not mean a query over the entire network, but only "
 "those hosts configured for SANE.</div>"
 msgstr ""
-"<div>Seleccioneu esta opció si voleu que es faça una consulta a la xarxa per "
-"als escàners disponibles.<br/><br/>Cal tindre en compte que açò no significa "
-"una consulta sobre tota la xarxa, sinó solament als amfitrions configurats "
-"per SANE.</div>"
+"<div>Marqueu esta opció si voleu que es faça una consulta a la xarxa per als "
+"escàners disponibles.<br/><br/>Cal tindre en compte que açò no significa una "
+"consulta sobre tota la xarxa, sinó solament als amfitrions configurats per "
+"SANE.</div>"
 
 #. i18n: ectx: label, entry (StartupUseProxy), group (Startup)
 #: scansettings.kcfg:18
@@ -820,10 +820,10 @@ msgid ""
 "access network scanners.<br/><br/>Note that some SANE backends (for example "
 "'escl') may not work properly through a proxy.</div>"
 msgstr ""
-"<div>Seleccioneu-la si voleu utilitzar la configuració estàndard del "
-"servidor intermediari per a accedir als escàners de xarxa.<br/><br/>Cal "
-"tindre en compte que alguns dorsals de SANE (per exemple «escl») poden no "
-"funcionar correctament a través d'un servidor intermediari.</div>"
+"<div>Marqueu-la si voleu utilitzar la configuració estàndard del servidor "
+"intermediari per a accedir als escàners de xarxa.<br/><br/>Cal tindre en "
+"compte que alguns dorsals de SANE (per exemple «escl») poden no funcionar "
+"correctament a través d'un servidor intermediari.</div>"
 
 #. i18n: ectx: label, entry (StartupSkipAsk), group (Startup)
 #: scansettings.kcfg:28
@@ -836,7 +836,7 @@ msgstr "Mostra el diàleg de selecció de l'escàner"
 #, kde-format
 msgid "<div>Check this to show the scanner selection dialog on startup.</div>"
 msgstr ""
-"<div>Seleccioneu esta opció per a mostrar el diàleg per a la selecció de "
+"<div>Marqueu esta opció per a mostrar el diàleg per a la selecció de "
 "l'escàner durant l'inici.</div>"
 
 #. i18n: ectx: label, entry (PreviewAutoselThreshold), group (Scanner Name)
