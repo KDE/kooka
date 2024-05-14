@@ -58,8 +58,8 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(ScanImage::ImageTypes)
 struct FormatInfo {
     // A semicolon-separated list of MIME types that make up this format.
     const char *mime;
-    // An I18N_NOOP()'ed help string for the format.
-    const char *helpString;
+    // An ki18n()'ed help string for the format.
+    KLocalizedString helpString;
     // An OR-ed set of image types that this format is recommended for.
     // ScanImage::None means that it is not recommended for any image type.
     ScanImage::ImageTypes recForTypes;
@@ -73,7 +73,7 @@ static struct FormatInfo formats[] =
 {
     {
         "image/bmp",					// BMP
-        I18N_NOOP(
+        ki18n(
             "<b>Bitmap Picture</b> is a widely used format for images under MS Windows. \
 It is suitable for color, grayscale and line art images.\
 <p>This format is widely supported but is not recommended, use an open format \
@@ -84,7 +84,7 @@ instead."),
 
     {
         "image/x-portable-bitmap",			// PBM
-        I18N_NOOP(
+        ki18n(
             "<b>Portable Bitmap</b>, as used by Netpbm, is an uncompressed format for line art \
 (bitmap) images. Only 1 bit per pixel depth is supported."),
         ScanImage::BlackWhite,
@@ -93,7 +93,7 @@ instead."),
 
     {
         "image/x-portable-graymap",			// PGM
-        I18N_NOOP(
+        ki18n(
             "<b>Portable Greymap</b>, as used by Netpbm, is an uncompressed format for grayscale \
 images. Only 8 bit per pixel depth is supported."),
         ScanImage::Greyscale,
@@ -102,7 +102,7 @@ images. Only 8 bit per pixel depth is supported."),
 
     {
         "image/x-portable-pixmap",			// PPM
-        I18N_NOOP(
+        ki18n(
             "<b>Portable Pixmap</b>, as used by Netpbm, is an uncompressed format for full color \
 images. Only 24 bit per pixel RGB is supported."),
         ScanImage::LowColour | ScanImage::HighColour,
@@ -111,7 +111,7 @@ images. Only 24 bit per pixel RGB is supported."),
 
     {
         "image/x-pcx;image/vnd.zbrush.pcx",		// PCX
-        I18N_NOOP(
+        ki18n(
             "<b>PCX</b> is a lossless compressed format which is often supported by PC imaging \
 applications, although it is rather old and unsophisticated.  It is suitable for \
 color and grayscale images.\
@@ -122,7 +122,7 @@ color and grayscale images.\
 
     {
         "image/x-xbitmap",				// XBM
-        I18N_NOOP(
+        ki18n(
             "<b>X Bitmap</b> is often used by the X Window System to store cursor and icon bitmaps.\
 <p>Unless required for this purpose, use a general purpose format instead."),
         ScanImage::None,
@@ -131,7 +131,7 @@ color and grayscale images.\
 
     {
         "image/x-xpixmap",				// XPM
-        I18N_NOOP(
+        ki18n(
             "<b>X Pixmap</b> is often used by the X Window System for color icons and other images.\
 <p>Unless required for this purpose, use a general purpose format instead."),
         ScanImage::None,
@@ -140,7 +140,7 @@ color and grayscale images.\
 
     {
         "image/png",					// PNG
-        I18N_NOOP(
+        ki18n(
             "<b>Portable Network Graphics</b> is a lossless compressed format designed to be \
 portable and extensible. It is suitable for any type of color or grayscale images, \
 indexed or true color.\
@@ -151,7 +151,7 @@ indexed or true color.\
 
     {
         "image/jpeg",					// JPEG JPG
-        I18N_NOOP(
+        ki18n(
             "<b>JPEG</b> is a compressed format suitable for true color or grayscale images. \
 It is a lossy format, so it is not recommended for archiving or for repeated loading \
 and saving.\
@@ -162,7 +162,7 @@ and saving.\
 
     {
         "image/jp2",					// JP2
-        I18N_NOOP(
+        ki18n(
             "<b>JPEG 2000</b> was intended as an update to the JPEG format, with the option of \
 lossless compression, but so far is not widely supported. It is suitable for true \
 color or grayscale images."),
@@ -172,7 +172,7 @@ color or grayscale images."),
 
     {
         "image/x-eps",					// EPS EPSF EPSI
-        I18N_NOOP(
+        ki18n(
             "<b>Encapsulated PostScript</b> is derived from the PostScript&trade; \
 page description language.  Use this format for importing into other \
 applications, or to use with (e.g.) TeX."),
@@ -182,7 +182,7 @@ applications, or to use with (e.g.) TeX."),
 
     {
         "image/x-tga",					// TGA
-        I18N_NOOP(
+        ki18n(
             "<b>Truevision Targa</b> can store full color images with an alpha channel, and is \
 used extensively by animation and video applications.\
 <p>This format is not recommended, use an open format instead."),
@@ -192,7 +192,7 @@ used extensively by animation and video applications.\
 
     {
         "image/gif",					// GIF
-        I18N_NOOP(					// writing may not be supported
+        ki18n(					// writing may not be supported
             "<b>Graphics Interchange Format</b> is a popular but patent-encumbered format often \
 used for web graphics.  It uses lossless compression with up to 256 colors and \
 optional transparency.\
@@ -203,7 +203,7 @@ optional transparency.\
 
     {
         "image/tiff",					// TIF TIFF
-        I18N_NOOP(					// writing may not be supported
+        ki18n(					// writing may not be supported
             "<b>Tagged Image File Format</b> is a versatile and extensible file format widely \
 supported by imaging and publishing applications. It supports indexed and true color \
 images with alpha transparency.\
@@ -215,7 +215,7 @@ Unless required for use with other applications, use an open format instead."),
 
     {
         "video/x-mng",					// MNG
-        I18N_NOOP(
+        ki18n(
             "<b>Multiple-image Network Graphics</b> is derived from the PNG standard and is \
 intended for animated images.  It is an open format suitable for all types of \
 images.\
@@ -227,7 +227,7 @@ required for use with other applications use PNG instead."),
 
     {
         "image/x-sgi",					// SGI
-        I18N_NOOP(
+        ki18n(
             "This is the <b>Silicon Graphics</b> native image file format, supporting 24 bit \
 true color images with optional lossless compression.\
 <p>Unless specifically required, use an open format instead."),
@@ -237,7 +237,7 @@ true color images with optional lossless compression.\
 
     {
         "image/vnd.wap.wbmp",				// WBMP
-        I18N_NOOP(
+        ki18n(
             "<b>Wireless Bitmap</b> is a monochrome bitmap format optimised \
 for WAP mobile devices.  It supports black and white bitmaps only.\
 <p>Unless specifically required, use an general purpose format instead."),
@@ -247,7 +247,7 @@ for WAP mobile devices.  It supports black and white bitmaps only.\
 
     {
         "image/webp",					// WEBP
-        I18N_NOOP(
+        ki18n(
             "<b>WebP</b> is intended to be an open standard for true colour \
 images with optional transparency.  It is widely supported by modern \
 web browsers and graphics software.\
@@ -258,7 +258,7 @@ and saving."),
         ScanImage::LowColour | ScanImage::Greyscale | ScanImage::HighColour
     },
 
-    { nullptr, nullptr, ScanImage::None, ScanImage::None }
+    { nullptr, KLocalizedString(), ScanImage::None, ScanImage::None }
 };
 
 static QString sLastFormat;				// format last used, whether
@@ -295,7 +295,7 @@ FormatDialog::FormatDialog(QWidget *parent, ScanImage::ImageType type,
     mWantAssistant = false;
 
     QGridLayout *gl = new QGridLayout(page);
-    gl->setMargin(0);
+    gl->setContentsMargins(0, 0, 0, 0);
     int row = 0;
 
     QLabel *l1;
@@ -446,7 +446,7 @@ void FormatDialog::formatSelected(QListWidgetItem *item)
     mFormatList->setCurrentItem(item);			// focus highlight -> select
 
     // Locate the help text for the format
-    const char *helptxt = nullptr;
+    KLocalizedString helptxt;
     const QByteArray mimename = item->data(Qt::UserRole).toByteArray();
     for (const FormatInfo *ip = &formats[0]; ip->mime!=nullptr; ++ip)
     {
@@ -463,8 +463,8 @@ void FormatDialog::formatSelected(QListWidgetItem *item)
     ImageFormat format = ImageFormat::formatForMime(mime);
     qCDebug(KOOKA_LOG) << "MIME" << mimename << "format" << format;
 
-    if (helptxt != nullptr) {				// found some help text
-        mHelpLabel->setText(i18n(helptxt));		// set the hint
+    if (!helptxt.isEmpty()) {				// found some help text
+        mHelpLabel->setText(helptxt.toString());	// set the hint
         check_subformat(format);			// and check subformats
     } else {
         mHelpLabel->setText(i18n("No information is available for this format."));

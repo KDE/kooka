@@ -40,11 +40,11 @@
 #include "kooka_logging.h"
 
 
-static const char shortDesc[] =
-    I18N_NOOP("Scanning, image gallery and OCR");
+static const KLocalizedString shortDesc =
+    ki18n("Scanning, image gallery and OCR");
 
-static const char longDesc[] =
-    I18N_NOOP("Kooka provides access to scanner hardware using the "
+static const KLocalizedString longDesc =
+    ki18n("Kooka provides access to scanner hardware using the "
               "<a href=\"http://www.sane-project.org/\">SANE</a> library."
               "\n\n"
               "Kooka allows you to scan, save and view in any image format that KDE supports, "
@@ -53,8 +53,8 @@ static const char longDesc[] =
               "<a href=\"http://www.gnu.org/software/ocrad/ocrad.html\">OCRAD</a> programs, "
               "or the commercial <a href=\"http://www.rerecognition.com/\">KADMOS</a> library.");
 
-static const char addLicense[] =
-    I18N_NOOP("This program is distributed under the terms of the GPL v2 as published\n"
+static const KLocalizedString addLicense =
+    ki18n("This program is distributed under the terms of the GPL v2 as published\n"
               "by the Free Software Foundation.\n"
               "\n"
               "As a special exception, permission is given to link this program\n"
@@ -66,8 +66,8 @@ static const char addLicense[] =
               "the Qt GPL licence, so if you wish to do this then you must have a\n"
               "commercial Qt development licence.\n");
 
-static const char copyright[] =
-    I18N_NOOP("(C) 2000-2018, the Kooka developers and contributors");
+static const KLocalizedString copyright =
+    ki18n("(C) 2000-2018, the Kooka developers and contributors");
 
 
 int main(int argc, char *argv[])
@@ -79,12 +79,12 @@ int main(int argc, char *argv[])
 #if VCS_AVAILABLE
                      (VERSION " (" VCS_TYPE " " VCS_REVISION ")"),
 #else
-                     "VERSION",				// version
+                     "VERSION",					// version
 #endif
-                     i18n(shortDesc),				// shortDescription
+                     shortDesc.toString(),			// shortDescription
                      KAboutLicense::GPL_V2,			// licenseType
-                     i18n(copyright),				// copyrightStatement
-                     i18n(longDesc),				// otherText
+                     copyright.toString(),			// copyrightStatement
+                     longDesc.toString(),			// otherText
                      "http://techbase.kde.org/Projects/Kooka");	// homePageAddress
 
     about.addAuthor(i18n("Jonathan Marten"), i18n("Current maintainer, KDE4 port"), "jjm@keelhaul.me.uk");
@@ -93,7 +93,7 @@ int main(int argc, char *argv[])
     about.addCredit(i18n("Mat Colton"), i18n("Graphics, web"), "mat@colton.de");
     about.addCredit(i18n("Ivan Shvedunov"), i18n("Original kscan application"), "ivan@rf-hp.npi.msu.su");
     about.addCredit(i18n("Alex Kempshall"), i18n("Photocopy facility"), "alexkempshall@btinternet.com");
-    about.addLicenseText(i18n(addLicense));
+    about.addLicenseText(addLicense.toString());
 
     KAboutData::setApplicationData(about);
 
