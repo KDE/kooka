@@ -82,7 +82,11 @@ FileTreeView::~FileTreeView()
 }
 
 // This is used when dragging and dropping out of the view to somewhere else.
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+QMimeData *FileTreeView::mimeData(const QList<QTreeWidgetItem *> &items) const
+#else
 QMimeData *FileTreeView::mimeData(const QList<QTreeWidgetItem *> items) const
+#endif
 {
     QMimeData *mimeData = new QMimeData();
     QList<QUrl> urlList;
