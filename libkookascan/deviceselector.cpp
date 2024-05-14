@@ -155,8 +155,7 @@ void DeviceSelector::setScanSources(const QList<QByteArray> &backends)
 
         QWidget *hbox = new QWidget(this);
         QHBoxLayout *hlay = new QHBoxLayout(hbox);
-        hlay->setMargin(0);
-
+        hlay->setContentsMargins(0, 0, 0, 0);
         hlay->setSpacing(horizontalSpacing());
 
         QLabel *label = new QLabel(hbox);

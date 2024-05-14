@@ -21,7 +21,7 @@
 
 #include <math.h>
 
-#include <qregexp.h>
+#include <qregularexpression.h>
 
 #include "libkookascan_logging.h"
 
@@ -138,14 +138,13 @@ const int *KGammaTable::getTable(int size)
 // originally done in KScanOption::set(const QByteArray &)
 bool KGammaTable::setFromString(const QString &str)
 {
-    QRegExp re("(\\d+),(\\d+),(\\d+)");
-    if (!re.exactMatch(str)) {
-        return (false);    // unrecognised format
-    }
+    const QRegularExpression re("^(\\d+),(\\d+),(\\d+)$");
+    const QRegularExpressionMatch match = re.match(str);
+    if (!match.hasMatch()) return (false);		// unrecognised format
 
-    int g = re.cap(1).toInt();
-    int b = re.cap(2).toInt();
-    int c = re.cap(3).toInt();
+    int g = match.captured(1).toInt();
+    int b = match.captured(2).toInt();
+    int c = match.captured(3).toInt();
 
     setAll(g, b, c);
     return (true);                  // matched and set

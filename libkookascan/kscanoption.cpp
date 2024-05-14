@@ -23,7 +23,7 @@
 #include <qobject.h>
 #include <qcheckbox.h>
 #include <qlabel.h>
-#include <qregexp.h>
+#include <qregularexpression.h>
 
 #include <klocalizedstring.h>
 #include <kacceleratormanager.h>

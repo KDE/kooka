@@ -116,7 +116,7 @@ ScanParams::~ScanParams()
 bool ScanParams::connectDevice(KScanDevice *newScanDevice, bool galleryMode)
 {
     QGridLayout *lay = new QGridLayout(this);
-    lay->setMargin(0);
+    lay->setContentsMargins(0, 0, 0, 0);
 
     if (newScanDevice == nullptr) {            // no scanner device
         qCDebug(LIBKOOKASCAN_LOG) << "No scan device, gallery=" << galleryMode;
@@ -270,7 +270,7 @@ QWidget *ScanParams::createScannerParams()
 
         QWidget *vbg = new QWidget(frame);
         QVBoxLayout *vbl = new QVBoxLayout(vbg);
-        vbl->setMargin(0);
+        vbl->setContentsMargins(0, 0, 0, 0);
 
         QRadioButton *rb1 = new QRadioButton(i18n("SANE Debug (from PNM image)"), vbg);
         rb1->setToolTip(xi18nc("@info:tooltip", "Operate in the same way that a real scanner does (including scan area, image processing etc.), but reading from the specified image file. See <link url=\"man:sane-pnm(5)\">sane-pnm(5)</link> for more information."));

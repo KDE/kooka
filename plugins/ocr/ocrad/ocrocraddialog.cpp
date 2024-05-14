@@ -32,8 +32,8 @@
 #include "ocrocraddialog.h"
 
 #include <qlabel.h>
-#include <qregexp.h>
 #include <qcombobox.h>
+#include <qregularexpression.h>
 #include <qcheckbox.h>
 #include <qspinbox.h>
 #include <qlayout.h>
@@ -273,10 +273,12 @@ void OcrOcradDialog::getVersion(const QString &bin)
     int status = proc.execute(5000);
     if (status == 0) {
         QByteArray output = proc.readAllStandardOutput();
-        QRegExp rx("GNU [Oo]crad (version )?([\\d\\.]+)");
-        if (rx.indexIn(output) > -1) {
+        const QRegularExpression rx("GNU [Oo]crad (version )?([\\d\\.]+)");
+        const QRegularExpressionMatch match = rx.match(output);
+        if (match.hasMatch())
+        {
             m_ocrCmd = bin;
-            m_versionStr = rx.cap(2);
+            m_versionStr = match.captured(2);
             m_versionNum = m_versionStr.mid(2).toInt();
             qCDebug(OCR_LOG) << "version" << m_versionStr << "=" << m_versionNum;
         }
@@ -307,13 +309,15 @@ QStringList OcrOcradDialog::getValidValues(const QString &opt)
             proc.execute(5000);
             // Ignore return status, because '--OPTION=help' returns exit code 1
             QByteArray output = proc.readAllStandardOutput();
-            QRegExp rx("Valid .*(?:are|names):([^\n]+)");
-            if (rx.indexIn(output) > -1) {
-                QString values = rx.cap(1);
+            const QRegularExpression rx("Valid .*(?:are|names):([^\n]+)");
+            const QRegularExpressionMatch match = rx.match(output);
+            if (match.hasMatch())
+            {
+                QString values = match.captured(1);
 #if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
-                result = rx.cap(1).split(QRegExp("\\s+"), Qt::SkipEmptyParts);
+                result = values.split(QRegularExpression("\\s+"), Qt::SkipEmptyParts);
 #else
-                result = rx.cap(1).split(QRegExp("\\s+"), QString::SkipEmptyParts);
+                result = values.split(QRegularExpression("\\s+"), QString::SkipEmptyParts);
 #endif
             } else {
                 qCWarning(OCR_LOG) << "cannot get values, no match in" << output;

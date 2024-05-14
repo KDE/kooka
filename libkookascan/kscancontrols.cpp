@@ -60,7 +60,7 @@ KScanControl::KScanControl(QWidget *parent, const QString &text)
     : QWidget(parent)
 {
     mLayout = new QHBoxLayout(this);
-    mLayout->setMargin(0);
+    mLayout->setContentsMargins(0, 0, 0, 0);
 
     mText = text;
     if (mText.isEmpty()) {

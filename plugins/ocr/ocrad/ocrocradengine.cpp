@@ -31,10 +31,10 @@
 
 #include "ocrocradengine.h"
 
-#include <qregexp.h>
 #include <qfile.h>
 #include <qdir.h>
 #include <qfileinfo.h>
+#include <qregularexpression.h>
 #include <qtemporaryfile.h>
 #include <qprocess.h>
 
@@ -116,9 +116,10 @@ bool OcrOcradEngine::createOcrProcess(AbstractOcrDialogue *dia, ScanImage::Ptr i
 
     if (KookaSettings::ocrOcradInvert()) args << "-i";
 
-    if (KookaSettings::ocrOcradThresholdEnable()) {
-        s = KookaSettings::ocrOcradThresholdValue();
-        if (!s.isEmpty()) args << "-T" << (s + "%");
+    if (KookaSettings::ocrOcradThresholdEnable())
+    {
+        int t = KookaSettings::ocrOcradThresholdValue();
+        if (t>=0) args << "-T" << (QString::number(t)+'%');
     }
 
     if (verboseDebug()) args << "-v";
@@ -255,13 +256,13 @@ QString OcrOcradEngine::readORF(const QString &fileName)
     qCDebug(OCR_LOG) << "Starting to analyse ORF" << fileName << "version" << ocradVersion;
 
     // to match "block 1 0 0 560 792"
-    const QRegExp rx1("^.*block\\s+(\\d+)\\s+(\\d+)\\s+(\\d+)\\s+(\\d+)\\s+(\\d+)");
+    const QRegularExpression rx1("^.*block\\s+(\\d+)\\s+(\\d+)\\s+(\\d+)\\s+(\\d+)\\s+(\\d+)");
     // to match "line 5 chars 13 height 20"
-    const QRegExp rx2("^line\\s+(\\d+)\\s+chars\\s+(\\d+)\\s+height\\s+\\d+");
+    const QRegularExpression rx2("^line\\s+(\\d+)\\s+chars\\s+(\\d+)\\s+height\\s+\\d+");
     // to match " 1, 'r'0"
-    const QRegExp rx3("^\\s*(\\d+)");
+    const QRegularExpression rx3("^\\s*(\\d+)");
     // to match "110 109 18 26"
-    const QRegExp rx4("(\\d+)\\s+(\\d+)\\s+(\\d+)\\s+(\\d+)");
+    const QRegularExpression rx4("(\\d+)\\s+(\\d+)\\s+(\\d+)\\s+(\\d+)");
 
     /* use a global line number counter here, not the one from the orf. The orf one
      * starts at 0 for every block, but we want line-no counting page global here.
@@ -292,35 +293,45 @@ QString OcrOcradEngine::readORF(const QString &fileName)
         } else if (line.startsWith("total text blocks ")) {
             blockCnt = line.mid(18).toInt();
             qCDebug(OCR_LOG) << "Block count (V>10)" << blockCnt;
-        } else if (line.startsWith("block ") || line.startsWith("text block ")) {
-							// start of text block
+        }
+        else if (line.startsWith("block ") || line.startsWith("text block "))
+        {						// start of text block
 							// matching "block 1 0 0 560 792"
-            if (rx1.indexIn(line) == -1) {
+            const QRegularExpressionMatch match1 = rx1.match(line);
+            if (!match1.hasMatch())
+            {
                 qCDebug(OCR_LOG) << "Failed to match 'block' line" << line;
                 continue;
             }
 
-            int currBlock = (rx1.cap(1).toInt()) - 1;
-            blockRect.setRect(rx1.cap(2).toInt(), rx1.cap(3).toInt(),
-                              rx1.cap(4).toInt(), rx1.cap(5).toInt());
+            int currBlock = (match1.captured(1).toInt()) - 1;
+            blockRect.setRect(match1.captured(2).toInt(), match1.captured(3).toInt(),
+                              match1.captured(4).toInt(), match1.captured(5).toInt());
             if (verboseDebug()) qCDebug(OCR_LOG) << "Current block" << currBlock << "rect" << blockRect;
-        } else if (line.startsWith("lines ")) {		// lines in this block
+        }
+        else if (line.startsWith("lines "))		// lines in this block
+        {
             if (verboseDebug()) qCDebug(OCR_LOG) << "Block line count" << line.mid(6).toInt();
-        } else if (line.startsWith("line ")) {		// start of text line
+        }
+        else if (line.startsWith("line "))		// start of text line
+        {
             startLine();
 
-            if (rx2.indexIn(line) == -1) {
+            const QRegularExpressionMatch match2 = rx2.match(line);
+            if (!match2.hasMatch())
+            {
                 qCDebug(OCR_LOG) << "Failed to match 'line' line" << line;
                 continue;
             }
 
-            int charCount = rx2.cap(2).toInt();
+            int charCount = match2.captured(2).toInt();
             if (verboseDebug()) qCDebug(OCR_LOG) << "Expecting" << charCount << "chars for line" << lineNo;
 
             QString word;
             QRect wordRect;
 
-            for (int c = 0; c < charCount && !stream.atEnd(); ++c) {
+            for (int c = 0; c < charCount && !stream.atEnd(); ++c)
+            {
                 // read one line per character
                 QString charLine = stream.readLine();
                 int semiPos = charLine.indexOf(';');
@@ -337,18 +348,20 @@ QString OcrOcradEngine::readORF(const QString &fileName)
                 QChar detectedChar = UndetectedChar;
 
                 // find how many alternatives, matching " 1, 'r'0"
-                if (rx3.indexIn(resultStr) == -1) {
+                const QRegularExpressionMatch match3 = rx3.match(resultStr);
+                if (!match3.hasMatch())
+                {
                     qCDebug(OCR_LOG) << "Failed to match" << resultStr << "in 'char' line" << charLine;
                     continue;
                 }
 
-                int altCount = rx3.cap(1).toInt();
-                if (altCount == 0) {			// no alternatives,
-							// undecipherable character
-                    if (verboseDebug()) {
-                        qCDebug(OCR_LOG) << "Undecipherable character in 'char' line" << charLine;
-                    }
-                } else {
+                int altCount = match3.captured(1).toInt();
+                if (altCount == 0) 			// no alternatives,
+                {							// undecipherable character
+                    if (verboseDebug()) qCDebug(OCR_LOG) << "Undecipherable character in 'char' line" << charLine;
+                }
+                else
+                {
                     int h = resultStr.indexOf(',');
                     if (h == -1) {
                         qCDebug(OCR_LOG) << "No ',' in" << resultStr << "in 'char' line" << charLine;
@@ -360,14 +373,17 @@ QString OcrOcradEngine::readORF(const QString &fileName)
                     detectedChar = resultStr.at(1);
 
                     // Analyse the result rectangle
-                    if (detectedChar != ' ') {
-                        if (rx4.indexIn(rectStr) == -1) {
+                    if (detectedChar != ' ')
+                    {
+                        const QRegularExpressionMatch match4 = rx3.match(rectStr);
+                        if (!match4.hasMatch())
+                        {
                             qCDebug(OCR_LOG) << "Failed to match" << rectStr << "in 'char' line" << charLine;
                             continue;
                         }
 
-                        QRect r(rx4.cap(1).toInt(), rx4.cap(2).toInt(),
-                                rx4.cap(3).toInt(), rx4.cap(4).toInt());
+                        QRect r(match4.captured(1).toInt(), match4.captured(2).toInt(),
+                                match4.captured(3).toInt(), match4.captured(4).toInt());
                         wordRect |= r;
                     }
                 }

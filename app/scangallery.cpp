@@ -51,7 +51,6 @@
 #include <kio/copyjob.h>
 #include <kio/deletejob.h>
 #include <kio/mkdirjob.h>
-#include <kio/pixmaploader.h>
 #include <kio/jobuidelegate.h>
 
 #include "imgsaver.h"

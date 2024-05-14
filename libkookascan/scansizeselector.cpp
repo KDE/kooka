@@ -113,7 +113,7 @@ ScanSizeSelector::ScanSizeSelector(QWidget *parent, const QSize &bedSize)
     }
 
     QGridLayout *gl = new QGridLayout(this);
-    gl->setMargin(0);
+    gl->setContentsMargins(0, 0, 0, 0);
 
     m_sizeCb = new QComboBox(this);
     m_sizeCb->setToolTip(i18n("Set the size of the scanned area"));
