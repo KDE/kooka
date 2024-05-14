@@ -11,3 +11,6 @@ Dependencies:
     'frameworks/kwidgetsaddons': '@stable'
     'frameworks/kservice': '@stable'
     'frameworks/sonnet': '@stable'
+
+Options:
+  require-passing-tests-on: ['Linux', 'FreeBSD', 'Windows']

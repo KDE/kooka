@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kde 49i410\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:26+0000\n"
+"POT-Creation-Date: 2024-02-20 01:38+0000\n"
 "PO-Revision-Date: 2015-02-04 15:57+0000\n"
 "Last-Translator: Nermin Demir <nermin.demir95@gmail.com>\n"
 "Language-Team: Bosnian\n"
@@ -19,6 +19,16 @@ msgstr ""
 "X-Generator: Launchpad (build 17331)\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr ""
+
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr ""
 
 #: ../libdialogutil/imagefilter.cpp:91
 #, fuzzy, kde-format
@@ -42,77 +52,88 @@ msgstr "*|Sve datoteke"
 msgid "All Files (*)"
 msgstr "*|Sve datoteke"
 
-#: adddevicedialog.cpp:53
-#, fuzzy, kde-kuit-format
-#| msgid ""
-#| "<qt><p>If your scanner has not been automatically detected, you can "
-#| "specify it here. The <b>Scanner device name</b> should be a backend name "
-#| "(with optional parameters) that is understood by SANE, see <a href=\"man:/"
-#| "sane\">sane(7)</a> or <a href=\"man:/sane-dll\">sane-dll(5)</a> for more "
-#| "information on available backends. The <b>Type</b> and <b>Description</b> "
-#| "can be used to identify the scanner later.<p>For the information that "
-#| "needs to be entered here, try to locate the device using the <a href="
-#| "\"man:/sane-find-scanner\">sane-find-scanner(1)</a> command. For a USB or "
-#| "networked HP scanner using <a href=\"http://hplip.sourceforge.net/"
-#| "\">HPLIP</a>, try using the <u>hp-probe</u> command to locate it, for "
-#| "example 'hp-probe&nbsp;-b&nbsp;usb' or 'hp-probe&nbsp;-b&nbsp;net'. If "
-#| "the scanner is found, then enter the device name displayed by these "
-#| "commands; note that if using HPLIP then \"hp:\" needs to be replaced by "
-#| "\"hpaio:\".<p>If these commands fail to locate your scanner, then it may "
-#| "not be supported by SANE. Check the SANE documentation for a <a href="
-#| "\"http://www.sane-project.org/sane-supported-devices.html\">list of "
-#| "supported devices</a>.<br>"
+#: adddevicedialog.cpp:58
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "If your scanner has not been automatically detected, you can specify it "
-"here. The <interface>Scanner device name</interface> should be a backend "
-"name (with optional parameters) that is understood by SANE, see <link url="
-"\"man:/sane\">sane(7)</link> or <link url=\"man:/sane-dll\">sane-dll(5)</"
-"link> for more information on available backends. The <interface>Type</"
-"interface> and <interface>Description</interface> can be used to identify "
-"the scanner later.<nl/><nl/>For the information that needs to be entered "
-"here, try to locate the device using the <link url=\"man:/sane-find-scanner"
-"\">sane-find-scanner(1)</link> command. For a USB or networked HP scanner "
-"using <link url=\"http://hplip.sourceforge.net/\">HPLIP</link>, try using "
-"the <command>hp-probe</command> command to locate it, for example <icode>hp-"
-"probe&nbsp;-b&nbsp;usb</icode> or <icode>hp-probe&nbsp;-b&nbsp;net</icode>. "
-"If the scanner is found, then enter the device name displayed by these "
-"commands; note that if using HPLIP then <icode>hp:</icode> needs to be "
-"replaced by <icode>hpaio:</icode>.<nl/><nl/>If these commands fail to locate "
-"your scanner, then it may not be supported by SANE. Check the SANE "
-"documentation for a <link url=\"http://www.sane-project.org/sane-supported-"
-"devices.html\">list of supported devices</link>."
+"here. The <interface>Scanner device</interface> is the SANE backend device "
+"name. The <interface>Manufacturer</interface>, <interface>Type</interface> "
+"and <interface>Description</interface> can be used to identify the scanner "
+"later.<nl/><nl/>More information on <link url=\"?1\">SANE backends</link>, "
+"<link url=\"?2\">locating devices</link>, <link url=\"?3\">HP scanners</"
+"link>, <link url=\"?4\">device not found</link>."
 msgstr ""
-"<qt><p>Ako skener nije automatski prepoznat, može se specificirati ovdje. "
-"<b>Naziv skener uređaja</b> bi trebao biti naziv (s opcionalnim parametrima) "
-"takav da ga SANE može razumjeti, pogledati <a href=\"man:/sane\">sane(7)</a> "
-"ili <a href=\"man:/sane-dll\">sane-dll(5)</a> za više informacija. <b>Tip</"
-"b> i<b>opis</b> mogu biti iskorišteni za prepoznavanje skenera kasnije.<p>Za "
-"informacije koje trebaju biti unesene ovdje, pokušaj locirati uređaj "
-"koristeći <a href=\"man:/sane-find-scanner\">sane-find-scanner(1)</a> "
-"komandu. Za USB ili umrežene HP skenere koji koriste<a href=\"http://hplip."
-"sourceforge.net/\">HPLIP</a>, pokušaj iskoristiti <u>hp-probe</u> komandu za "
-"lociranje, naprimjer 'hp-probe&nbsp;-b&nbsp;usb' ili 'hp-probe&nbsp;-b&nbsp;"
-"net'. Ako je skener pronađen, onda unesi naziv uređaja prikazan preko ovih "
-"naredbi; ako se koristi HPLIP onda\"hp:\" mora biti zamijenjen sa \"hpaio:\"."
-"<p>ako ove naredbe ne uspiju locirati skener, onda je moguće da nije podržan "
-"sa SANE. Provjeri SANE dokumentaciju za <a href=\"http://www.sane-project."
-"org/sane-supported-devices.html\">spisak podržanih uređaja</a>.<br>"
 
 #: adddevicedialog.cpp:77
-#, kde-format
-msgid "Scanner device name:"
+#, fuzzy, kde-format
+#| msgid "Scanner device name:"
+msgid "Scanner device:"
 msgstr "Naziv skener uređaja:"
 
-#: adddevicedialog.cpp:85
+#: adddevicedialog.cpp:80 scandevices.cpp:190
+#, kde-format
+msgctxt "Value used for manufacturer if none entered"
+msgid "User specified"
+msgstr ""
+
+#: adddevicedialog.cpp:82
+#, kde-format
+msgid "Manufacturer:"
+msgstr ""
+
+#: adddevicedialog.cpp:86
 #, kde-format
 msgid "Device type:"
 msgstr "Tip uređaja:"
 
-#: adddevicedialog.cpp:92
+#: adddevicedialog.cpp:90
 #, kde-format
 msgid "Description:"
 msgstr "Opis:"
+
+#: adddevicedialog.cpp:126
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"The <interface>Scanner device</interface> should be a backend name (with "
+"optional parameters) that is understood by SANE. See <link url=\"man:/sane"
+"\">sane(7)</link> or <link url=\"man:/sane-dll\">sane&#8209;dll(5)</link> "
+"for more information on available backends and the format of device names."
+msgstr ""
+
+#: adddevicedialog.cpp:134
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"To find the information that needs to be entered here, try to locate the "
+"device using the <link url=\"man:/sane-find-scanner\">sane&#8209;find&#8209;"
+"scanner(1)</link> command for SCSI, USB or parallel port scanners, or the "
+"<link url=\"man:/scanimage\">scanimage(1)</link> command with the "
+"<icode>&#8209;L</icode> option for network scanners. If the scanner is "
+"found, then enter the device name displayed by these commands."
+msgstr ""
+
+#: adddevicedialog.cpp:143
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"For a USB or networked HP scanner using <link url=\"http://hplip.sourceforge."
+"net/\">HPLIP</link>, try using the <command>hp&#8209;probe</command> command "
+"to locate it, for example <icode>hp&#8209;probe&nbsp;&#8209;b&nbsp;usb</"
+"icode> or <icode>hp&#8209;probe&nbsp;&#8209;b&nbsp;net</icode>. Note that if "
+"the scanner is found by HPLIP, then the device name <icode>hp:</icode> that "
+"it displays needs to be replaced by <icode>hpaio:</icode> for SANE."
+msgstr ""
+
+#: adddevicedialog.cpp:152
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"If these commands fail to locate your scanner, then it may not be supported "
+"by SANE. Check the SANE documentation for a <link url=\"http://www.sane-"
+"project.org/sane-supported-devices.html\">list of supported devices</link>."
+msgstr ""
 
 #: autoselectbar.cpp:56
 #, fuzzy, kde-kuit-format
@@ -286,104 +307,104 @@ msgstr "400 %"
 msgid "Custom:"
 msgstr "Posebna:"
 
-#: kscancontrols.cpp:66
+#: kscancontrols.cpp:67
 #, kde-format
 msgid "(Unknown)"
 msgstr "(Nepoznato)"
 
-#: kscancontrols.cpp:169
+#: kscancontrols.cpp:170
 #, kde-format
 msgid "Reset this setting to its standard value, %1"
 msgstr "Resetuj ovu postavku na njenu standardnu vrijednost, %1"
 
-#: kscancontrols.cpp:397
+#: kscancontrols.cpp:414
 #, kde-format
 msgid "*.pnm *.pbm *.pgm *.ppm|PNM Image Files"
 msgstr ""
 
-#: kscandevice.cpp:288
+#: kscandevice.cpp:291
 #, kde-format
 msgid "No scanner selected"
 msgstr "Skener nije izabran"
 
-#: kscandevice.cpp:1387
+#: kscandevice.cpp:1394
 #, kde-format
 msgid "Default startup configuration"
 msgstr "Default konfiguracija pokretanja"
 
-#: kscandevice.cpp:1487
+#: kscandevice.cpp:1494
 #, fuzzy, kde-kuit-format
 #| msgid "<qt>The scanner<br><b>%1</b><br>requires authentication."
 msgctxt "@info"
 msgid "The scanner<nl/><icode>%1</icode><nl/>requires authentication."
 msgstr "<qt>Skener<br><b>%1</b><br>zahtijeva ovjeru."
 
-#: kscandevice.cpp:1488
+#: kscandevice.cpp:1495
 #, kde-format
 msgid "Scanner Authentication"
 msgstr "Ovjera skenera"
 
-#: kscandevice.cpp:1532
+#: kscandevice.cpp:1539
 #, kde-format
 msgid "OK"
 msgstr "U redu"
 
-#: kscandevice.cpp:1533
+#: kscandevice.cpp:1540
 #, kde-format
 msgid "No device"
 msgstr "Nema uređaja"
 
-#: kscandevice.cpp:1534
+#: kscandevice.cpp:1541
 #, kde-format
 msgid "Bad parameter"
 msgstr "Loš parametar"
 
-#: kscandevice.cpp:1535
+#: kscandevice.cpp:1542
 #, kde-format
 msgid "Cannot open device"
 msgstr "Ne mogu pokrenuti uređaj"
 
-#: kscandevice.cpp:1536
+#: kscandevice.cpp:1543
 #, kde-format
 msgid "sane_control_option() failed"
 msgstr "sane_control_option() nije uspjelo"
 
-#: kscandevice.cpp:1537
+#: kscandevice.cpp:1544
 #, kde-format
 msgid "Error while scanning"
 msgstr "Greška tokom skeniranja"
 
-#: kscandevice.cpp:1538
+#: kscandevice.cpp:1545
 #, kde-format
 msgid "Empty picture"
 msgstr "Prazna slika"
 
-#: kscandevice.cpp:1539
+#: kscandevice.cpp:1546
 #, kde-format
 msgid "Out of memory"
 msgstr "Nema više memorije"
 
-#: kscandevice.cpp:1540
+#: kscandevice.cpp:1547
 #, kde-format
 msgid "Needs reload"
 msgstr "Potrebno novo učitavanje"
 
-#: kscandevice.cpp:1541
+#: kscandevice.cpp:1548
 #, kde-format
 msgid "Cancelled"
 msgstr "Otkazano"
 
-#: kscandevice.cpp:1542
+#: kscandevice.cpp:1549
 #, kde-format
 msgid "Not active"
 msgstr "Nije aktivna"
 
-#: kscandevice.cpp:1543
+#: kscandevice.cpp:1550
 #, kde-format
 msgid "Not supported"
 msgstr "Nije podržano"
 
-#: kscandevice.cpp:1544
+#: kscandevice.cpp:1551
 #, kde-format
 msgid "Unknown status %1"
 msgstr "Nepoznat status %1"
@@ -466,10 +487,41 @@ msgctxt "@action:button Name of colour"
 msgid "Black"
 msgstr "Crna"
 
-#: scandevices.cpp:182
+#: scandevices.cpp:208
 #, kde-format
 msgid "Unknown device '%1'"
 msgstr "Nepoznat uređaj '%1'"
+
+#: scanglobal.cpp:136
+#, kde-format
+msgid "SANE - Scanner Access Now Easy"
+msgstr ""
+
+#: scanglobal.cpp:137
+#, kde-format
+msgid "Scanner access and driver library"
+msgstr ""
+
+#: scanglobal.cpp:144
+#, kde-format
+msgid "LibTIFF"
+msgstr ""
+
+#: scanglobal.cpp:145
+#, fuzzy, kde-format
+#| msgid "Virtual Scanner (any image format)"
+msgid "TIFF image format library"
+msgstr "Virtualni skener (bilo koji format slike)"
+
+#: scanglobal.cpp:154
+#, kde-format
+msgid "libpaper"
+msgstr ""
+
+#: scanglobal.cpp:155
+#, kde-format
+msgid "Paper size configuration library"
+msgstr ""
 
 #: scanimage.cpp:76
 #, kde-format
@@ -502,66 +554,66 @@ msgstr ""
 msgid "TIFF not supported"
 msgstr "Nije podržano"
 
-#: scanparams.cpp:134
+#: scanparams.cpp:141
 #, fuzzy, kde-kuit-format
 #| msgid "<qt><b>Scanner&nbsp;Settings</b>"
 msgctxt "@info"
 msgid "<title>Scanner&nbsp;Settings</title>"
 msgstr "<qt><b>Postavke&nbsp;Skenera</b>"
 
-#: scanparams.cpp:176
+#: scanparams.cpp:161
 #, kde-format
 msgid "Pre&view"
 msgstr "Pre&gled"
 
-#: scanparams.cpp:177
+#: scanparams.cpp:162
 #, fuzzy, kde-format
 #| msgid "<qt>Start a preview scan and show the preview image"
 msgid "Start a preview scan and show the preview image"
 msgstr "<qt>Započni pregledno skeniranje i prikaži preglednu sliku."
 
-#: scanparams.cpp:182
+#: scanparams.cpp:167
 #, kde-format
 msgid "Star&t Scan"
 msgstr "Započn&i skeniranje"
 
-#: scanparams.cpp:183
+#: scanparams.cpp:168
 #, fuzzy, kde-format
 #| msgid "<qt>Start a scan and save the scanned image"
 msgid "Start a scan and save the scanned image"
 msgstr "<qt>Započni skeniranje i sačuvaj skeniranu sliku"
 
-#: scanparams.cpp:189
+#: scanparams.cpp:200
 #, kde-format
 msgid "Stop"
 msgstr "Prekini"
 
-#: scanparams.cpp:193
+#: scanparams.cpp:204
 #, kde-format
 msgid "Scanning"
 msgstr "Skeniranje"
 
-#: scanparams.cpp:232
+#: scanparams.cpp:247
 #, kde-format
 msgid "&Basic"
 msgstr "&Osnovno"
 
-#: scanparams.cpp:233
+#: scanparams.cpp:248
 #, kde-format
 msgid "Other"
 msgstr "Drugo"
 
-#: scanparams.cpp:234
+#: scanparams.cpp:249
 #, kde-format
 msgid "Advanced"
 msgstr "Napredno"
 
-#: scanparams.cpp:260
+#: scanparams.cpp:275
 #, kde-format
 msgid "SANE Debug (from PNM image)"
 msgstr "SANE otklanjanje grešaka (iz PNM slike)"
 
-#: scanparams.cpp:261
+#: scanparams.cpp:276
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "<qt>Operate in the same way that a real scanner does (including scan "
@@ -577,12 +629,12 @@ msgstr ""
 "obradu sliku, itd.), ali učitavajući iz specifične slike. Pogledaj <a href="
 "\"man:sane-pnm(5)\">sane-pnm(5)</a> za više informacija."
 
-#: scanparams.cpp:263
+#: scanparams.cpp:278
 #, kde-format
 msgid "Virtual Scanner (any image format)"
 msgstr "Virtualni skener (bilo koji format slike)"
 
-#: scanparams.cpp:264
+#: scanparams.cpp:279
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "<qt>Do not perform any scanning or processing, but simply read the "
@@ -595,49 +647,49 @@ msgstr ""
 "<qt>Nemoj izvesti nijedno skeniranje ili obradu, već jednostavno samo učitaj "
 "sliku. Ovo služi za testiranje spašavanja slike, itd."
 
-#: scanparams.cpp:281
+#: scanparams.cpp:296
 #, kde-format
 msgid "Reading mode:"
 msgstr "Način učitavanja:"
 
-#: scanparams.cpp:411
+#: scanparams.cpp:414
 #, kde-format
 msgid "Default (from scan settings)"
 msgstr ""
 
-#: scanparams.cpp:412
+#: scanparams.cpp:415
 #, kde-format
 msgid "Black/white bitmap"
 msgstr ""
 
-#: scanparams.cpp:413
+#: scanparams.cpp:416
 #, fuzzy, kde-format
 #| msgid "Grayscale"
 msgid "Grey scale"
 msgstr "Crno bijela"
 
-#: scanparams.cpp:414
+#: scanparams.cpp:417
 #, kde-format
 msgid "Low colour"
 msgstr ""
 
-#: scanparams.cpp:415
+#: scanparams.cpp:418
 #, kde-format
 msgid "High colour"
 msgstr ""
 
-#: scanparams.cpp:425
+#: scanparams.cpp:428
 #, fuzzy, kde-format
 #| msgid "Virtual Scanner (any image format)"
 msgid "Force image format:"
 msgstr "Virtualni skener (bilo koji format slike)"
 
-#: scanparams.cpp:476
+#: scanparams.cpp:483
 #, kde-format
 msgid "Edit Gamma Table..."
 msgstr "Uredi gama tabelu..."
 
-#: scanparams.cpp:548
+#: scanparams.cpp:555
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "<qt><b>No scanner selected</b><p>Select a scanner device to perform "
@@ -649,7 +701,7 @@ msgid ""
 msgstr ""
 "<qt><b>Skener nije izabran</b><p>Izaberi skener uređaj za početak skeniranja."
 
-#: scanparams.cpp:568
+#: scanparams.cpp:575
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "<qt><b>Problem: No scanner found, or unable to access it</b><p>There was "
@@ -680,22 +732,22 @@ msgstr ""
 "project.org\">www.sane-project.org</a>) za više informacija o instalaciji i "
 "postavkama."
 
-#: scanparams.cpp:670
+#: scanparams.cpp:677
 #, kde-format
 msgid "1-bit depth scan cannot be done in color"
 msgstr "1-bit duboko skeniranja ne može biti urađena u boji"
 
-#: scanparams.cpp:673
+#: scanparams.cpp:680
 #, kde-format
 msgid "16-bit depth scans are not supported"
 msgstr "16-bit duboka skeniranja nisu podržana"
 
-#: scanparams.cpp:683
+#: scanparams.cpp:690
 #, kde-format
 msgid "A file must be entered for testing or virtual scanning"
 msgstr "Datoteka mora biti unešena za testiranje ili virtualno skeniranje"
 
-#: scanparams.cpp:689
+#: scanparams.cpp:696
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "<qt>The testing or virtual file<br><filename>%1</filename><br>was not "
@@ -708,7 +760,7 @@ msgstr ""
 "<qt>Testiranje ili virtualna datoteka<br><filename>%1</filename><br>nije "
 "pronađena ili se ne može učitati."
 
-#: scanparams.cpp:699
+#: scanparams.cpp:706
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "<qt>SANE Debug can only read PNM files.<br>This file is type <b>%1</b>."
@@ -720,18 +772,18 @@ msgstr ""
 "<qt>SANE otklanjanje greška može učitati samo PNM datoteke.<br>Ova datoteka "
 "je tipa <b>%1</b>."
 
-#: scanparams.cpp:716
+#: scanparams.cpp:723
 #, kde-kuit-format
 msgid "Scan in progress"
 msgstr "Skeniranje u toku"
 
-#: scanparams.cpp:717
+#: scanparams.cpp:724
 #, fuzzy, kde-kuit-format
 #| msgid "Scan in progress"
 msgid "Scan in progress<nl/><nl/>%1"
 msgstr "Skeniranje u toku"
 
-#: scanparams.cpp:737
+#: scanparams.cpp:744
 #, kde-format
 msgid "Cannot preview in Virtual Scanner mode"
 msgstr "Ne mogu pregledati u načinu Virtualnog skenera"
@@ -752,22 +804,37 @@ msgid ""
 "those hosts configured for SANE.</div>"
 msgstr ""
 
+#. i18n: ectx: label, entry (StartupUseProxy), group (Startup)
+#: scansettings.kcfg:18
+#, kde-format
+msgid "Use the system proxy settings to access network scanners"
+msgstr ""
+
+#. i18n: ectx: tooltip, entry (StartupUseProxy), group (Startup)
+#: scansettings.kcfg:19
+#, kde-format
+msgid ""
+"<div>Check this if you want to use the standard system proxy settings to "
+"access network scanners.<br/><br/>Note that some SANE backends (for example "
+"'escl') may not work properly through a proxy.</div>"
+msgstr ""
+
 #. i18n: ectx: label, entry (StartupSkipAsk), group (Startup)
-#: scansettings.kcfg:22
+#: scansettings.kcfg:28
 #, fuzzy, kde-format
 #| msgid "No scanner selected"
 msgid "Show the scanner selection dialog"
 msgstr "Skener nije izabran"
 
 #. i18n: ectx: tooltip, entry (StartupSkipAsk), group (Startup)
-#: scansettings.kcfg:23
+#: scansettings.kcfg:29
 #, fuzzy, kde-format
 #| msgid "No scanner selected"
 msgid "<div>Check this to show the scanner selection dialog on startup.</div>"
 msgstr "Skener nije izabran"
 
 #. i18n: ectx: label, entry (PreviewAutoselThreshold), group (Scanner Name)
-#: scansettings.kcfg:53
+#: scansettings.kcfg:61
 #, fuzzy, kde-format
 #| msgctxt "@label:slider"
 #| msgid "Threshold:"
@@ -775,7 +842,7 @@ msgid "Threshold:"
 msgstr "Prag:"
 
 #. i18n: ectx: tooltip, entry (PreviewAutoselThreshold), group (Scanner Name)
-#: scansettings.kcfg:54
+#: scansettings.kcfg:62
 #, fuzzy, kde-format
 #| msgctxt "@info:tooltip"
 #| msgid ""
@@ -794,7 +861,7 @@ msgstr ""
 "od toga se smatraju dio slike."
 
 #. i18n: ectx: label, entry (PreviewAutoselDustsize), group (Scanner Name)
-#: scansettings.kcfg:61
+#: scansettings.kcfg:69
 #, fuzzy, kde-format
 #| msgctxt "@label:slider"
 #| msgid "Dust size (pixels):"
@@ -802,7 +869,7 @@ msgid "Dust size (pixels):"
 msgstr "Veličina prašine (piksela):"
 
 #. i18n: ectx: tooltip, entry (PreviewAutoselDustsize), group (Scanner Name)
-#: scansettings.kcfg:62
+#: scansettings.kcfg:70
 #, fuzzy, kde-format
 #| msgctxt "@info:tooltip"
 #| msgid ""
@@ -816,7 +883,7 @@ msgstr ""
 "će se zanemariti"
 
 #. i18n: ectx: label, entry (PreviewAutoselMargin), group (Scanner Name)
-#: scansettings.kcfg:69
+#: scansettings.kcfg:77
 #, fuzzy, kde-format
 #| msgctxt "@label:slider"
 #| msgid "Add/subtract margin (mm):"
@@ -824,7 +891,7 @@ msgid "Add/subtract margin (mm):"
 msgstr "Dodaj/oduzmi marginu (mm):"
 
 #. i18n: ectx: tooltip, entry (PreviewAutoselMargin), group (Scanner Name)
-#: scansettings.kcfg:70
+#: scansettings.kcfg:78
 #, fuzzy, kde-format
 #| msgctxt "@info:tooltip"
 #| msgid "<qt>Set a margin to be added to or subtracted from the detected area"
@@ -835,7 +902,7 @@ msgstr ""
 "područija"
 
 #. i18n: ectx: label, entry (PreviewAutoselBackground), group (Scanner Name)
-#: scansettings.kcfg:77
+#: scansettings.kcfg:85
 #, fuzzy, kde-format
 #| msgctxt "@label:listbox"
 #| msgid "Scanner background:"
@@ -843,7 +910,7 @@ msgid "Scanner background:"
 msgstr "Pozadina skenera:"
 
 #. i18n: ectx: tooltip, entry (PreviewAutoselBackground), group (Scanner Name)
-#: scansettings.kcfg:78
+#: scansettings.kcfg:86
 #, fuzzy, kde-format
 #| msgctxt "@info:tooltip"
 #| msgid ""
@@ -888,10 +955,68 @@ msgstr "Položeno"
 msgid "Set the orientation for a preset size of the scanned area"
 msgstr "<qt>Postavi orijentaciju na pretpodešenu veličinu skeniranog područja"
 
-#: scansizeselector.cpp:266
+#: scansizeselector.cpp:262
 #, kde-format
 msgid "Selection"
 msgstr "Izbor"
+
+#, fuzzy
+#~| msgid ""
+#~| "<qt><p>If your scanner has not been automatically detected, you can "
+#~| "specify it here. The <b>Scanner device name</b> should be a backend name "
+#~| "(with optional parameters) that is understood by SANE, see <a href="
+#~| "\"man:/sane\">sane(7)</a> or <a href=\"man:/sane-dll\">sane-dll(5)</a> "
+#~| "for more information on available backends. The <b>Type</b> and "
+#~| "<b>Description</b> can be used to identify the scanner later.<p>For the "
+#~| "information that needs to be entered here, try to locate the device "
+#~| "using the <a href=\"man:/sane-find-scanner\">sane-find-scanner(1)</a> "
+#~| "command. For a USB or networked HP scanner using <a href=\"http://hplip."
+#~| "sourceforge.net/\">HPLIP</a>, try using the <u>hp-probe</u> command to "
+#~| "locate it, for example 'hp-probe&nbsp;-b&nbsp;usb' or 'hp-probe&nbsp;-"
+#~| "b&nbsp;net'. If the scanner is found, then enter the device name "
+#~| "displayed by these commands; note that if using HPLIP then \"hp:\" needs "
+#~| "to be replaced by \"hpaio:\".<p>If these commands fail to locate your "
+#~| "scanner, then it may not be supported by SANE. Check the SANE "
+#~| "documentation for a <a href=\"http://www.sane-project.org/sane-supported-"
+#~| "devices.html\">list of supported devices</a>.<br>"
+#~ msgctxt "@info"
+#~ msgid ""
+#~ "If your scanner has not been automatically detected, you can specify it "
+#~ "here. The <interface>Scanner device name</interface> should be a backend "
+#~ "name (with optional parameters) that is understood by SANE, see <link url="
+#~ "\"man:/sane\">sane(7)</link> or <link url=\"man:/sane-dll\">sane-dll(5)</"
+#~ "link> for more information on available backends. The <interface>Type</"
+#~ "interface> and <interface>Description</interface> can be used to identify "
+#~ "the scanner later.<nl/><nl/>For the information that needs to be entered "
+#~ "here, try to locate the device using the <link url=\"man:/sane-find-"
+#~ "scanner\">sane-find-scanner(1)</link> command. For a USB or networked HP "
+#~ "scanner using <link url=\"http://hplip.sourceforge.net/\">HPLIP</link>, "
+#~ "try using the <command>hp-probe</command> command to locate it, for "
+#~ "example <icode>hp-probe&nbsp;-b&nbsp;usb</icode> or <icode>hp-probe&nbsp;-"
+#~ "b&nbsp;net</icode>. If the scanner is found, then enter the device name "
+#~ "displayed by these commands; note that if using HPLIP then <icode>hp:</"
+#~ "icode> needs to be replaced by <icode>hpaio:</icode>.<nl/><nl/>If these "
+#~ "commands fail to locate your scanner, then it may not be supported by "
+#~ "SANE. Check the SANE documentation for a <link url=\"http://www.sane-"
+#~ "project.org/sane-supported-devices.html\">list of supported devices</"
+#~ "link>."
+#~ msgstr ""
+#~ "<qt><p>Ako skener nije automatski prepoznat, može se specificirati ovdje. "
+#~ "<b>Naziv skener uređaja</b> bi trebao biti naziv (s opcionalnim "
+#~ "parametrima) takav da ga SANE može razumjeti, pogledati <a href=\"man:/"
+#~ "sane\">sane(7)</a> ili <a href=\"man:/sane-dll\">sane-dll(5)</a> za više "
+#~ "informacija. <b>Tip</b> i<b>opis</b> mogu biti iskorišteni za "
+#~ "prepoznavanje skenera kasnije.<p>Za informacije koje trebaju biti unesene "
+#~ "ovdje, pokušaj locirati uređaj koristeći <a href=\"man:/sane-find-scanner"
+#~ "\">sane-find-scanner(1)</a> komandu. Za USB ili umrežene HP skenere koji "
+#~ "koriste<a href=\"http://hplip.sourceforge.net/\">HPLIP</a>, pokušaj "
+#~ "iskoristiti <u>hp-probe</u> komandu za lociranje, naprimjer 'hp-"
+#~ "probe&nbsp;-b&nbsp;usb' ili 'hp-probe&nbsp;-b&nbsp;net'. Ako je skener "
+#~ "pronađen, onda unesi naziv uređaja prikazan preko ovih naredbi; ako se "
+#~ "koristi HPLIP onda\"hp:\" mora biti zamijenjen sa \"hpaio:\".<p>ako ove "
+#~ "naredbe ne uspiju locirati skener, onda je moguće da nije podržan sa "
+#~ "SANE. Provjeri SANE dokumentaciju za <a href=\"http://www.sane-project."
+#~ "org/sane-supported-devices.html\">spisak podržanih uređaja</a>.<br>"
 
 #~ msgid "ADF Scanning"
 #~ msgstr "ADF skeniranje"

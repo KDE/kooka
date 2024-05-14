@@ -25,7 +25,7 @@
 # Matthieu Robin <kde@macolu.org>, 2004, 2005.
 # Matthieu Robin <matthieu@macolu.org>, 2005.
 # Mickael Sibelle <kimael@gmail.com>, 2008, 2009.
-# Xavier Besnard <xavier.besnard@kde.org>, 2012, 2013, 2020, 2021, 2022.
+# SPDX-FileCopyrightText: 2012, 2013, 2020, 2021, 2022, 2024 Xavier Besnard <xavier.besnard@kde.org>
 # Arnaud Reygnaud <kasai@redwolf.fr>, 2013.
 # Sebastien Renard <renard@kde.org>, 2013.
 # Raphaël Glles <raphaelg16@orange.fr>, 2018.
@@ -36,19 +36,19 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:26+0000\n"
-"PO-Revision-Date: 2023-03-07 19:11+0100\n"
-"Last-Translator: Xavier BESNARD <xavier.besnard]neuf.fr>\n"
-"Language-Team: French <kde-francophone@kde.org>\n"
+"POT-Creation-Date: 2024-02-20 01:38+0000\n"
+"PO-Revision-Date: 2024-02-21 14:11+0100\n"
+"Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
+"Language-Team: fr\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Environment: kde\n"
 "X-Accelerator-Marker: &\n"
+"X-Environment: kde\n"
+"X-Generator: Lokalize 23.08.4\n"
 "X-Text-Markup: kde4\n"
-"X-Generator: Lokalize 22.12.3\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -81,7 +81,7 @@ msgstr ""
 
 #: ../plugins/destination/abstractdestination.cpp:160
 #: ../plugins/destination/application/destinationapplication.cpp:190
-#: kookaview.cpp:1177
+#: kookaview.cpp:1180
 #, kde-format
 msgid "Other..."
 msgstr "Autre... "
@@ -117,13 +117,13 @@ msgstr "Copier l'image dans le presse-papier"
 msgid "<filename>%1</filename>"
 msgstr "<filename>%1</filename>"
 
-#: ../plugins/destination/print/destinationprint.cpp:78 kookaview.cpp:673
+#: ../plugins/destination/print/destinationprint.cpp:78 kookaview.cpp:676
 #, kde-format
 msgctxt "@title:window"
 msgid "Print Image"
 msgstr "Imprimer l'image "
 
-#: ../plugins/destination/print/destinationprint.cpp:89 kookaview.cpp:689
+#: ../plugins/destination/print/destinationprint.cpp:89 kookaview.cpp:692
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -132,7 +132,7 @@ msgid ""
 "%1"
 msgstr "Les options d'impression spécifiées ne sont pas valables : %1 "
 
-#: ../plugins/destination/print/destinationprint.cpp:90 kookaview.cpp:690
+#: ../plugins/destination/print/destinationprint.cpp:90 kookaview.cpp:693
 #, kde-format
 msgctxt "@title:window"
 msgid "Cannot Print"
@@ -408,7 +408,7 @@ msgstr "Vérifiez le choix et le paramétrage du moteur de ROC."
 msgid "OCR Setup Error"
 msgstr "Erreur de configuration de la ROC"
 
-#: ../plugins/ocr/abstractocrengine.cpp:123 kookaview.cpp:787
+#: ../plugins/ocr/abstractocrengine.cpp:123 kookaview.cpp:790
 #, kde-format
 msgid "Configure OCR..."
 msgstr "Configurer ROC... "
@@ -1703,7 +1703,7 @@ msgstr "Propriétés... "
 msgid "Select Scan Device..."
 msgstr "Sélectionner le périphérique de numérisation... "
 
-#: kooka.cpp:275 kookaview.cpp:546
+#: kooka.cpp:275 kookaview.cpp:549
 #, kde-format
 msgid "Add Scan Device..."
 msgstr "Ajouter un périphérique de numérisation... "
@@ -1818,7 +1818,7 @@ msgstr "Galerie & Vignettes "
 msgid "Image Gallery and Thumbnail View"
 msgstr "Galerie d'images et Affichage en en vignettes"
 
-#: kookapref.cpp:61 kookaview.cpp:290
+#: kookapref.cpp:61 kookaview.cpp:291
 #, kde-format
 msgid "OCR"
 msgstr "ROC "
@@ -2228,27 +2228,37 @@ msgstr "Barre d'outils de numérisation "
 msgid "Image View"
 msgstr "Affichage des images "
 
-#: kookaview.cpp:265
+#: kookaview.cpp:245
+#, kde-format
+msgid "User specified"
+msgstr "Utilisateur spécifié"
+
+#: kookaview.cpp:246
+#, kde-format
+msgid "on command line"
+msgstr "à partir d'une ligne de commandes"
+
+#: kookaview.cpp:266
 #, kde-format
 msgid "Scan Preview"
 msgstr "Aperçu de numérisation "
 
-#: kookaview.cpp:275
+#: kookaview.cpp:276
 #, kde-format
 msgid "OCR results will appear here"
 msgstr "Les résultats ROC apparaîtront ici "
 
-#: kookaview.cpp:284
+#: kookaview.cpp:285
 #, kde-format
 msgid "Scan"
 msgstr "Scan "
 
-#: kookaview.cpp:287 kookaview.cpp:560 kookaview.cpp:579 scangallery.cpp:123
+#: kookaview.cpp:288 kookaview.cpp:563 kookaview.cpp:582 scangallery.cpp:123
 #, kde-format
 msgid "Gallery"
 msgstr "Galerie "
 
-#: kookaview.cpp:463
+#: kookaview.cpp:464
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2264,12 +2274,12 @@ msgstr ""
 "numérisation : <icode>%3</icode><nl/>Erreur « libkookascan » signalée : "
 "<message>%2</message><nl/>Erreur « SANE » signalée : <message>%1</message>"
 
-#: kookaview.cpp:518
+#: kookaview.cpp:519
 #, kde-format
 msgid "Add Scan Device"
 msgstr "Ajouter un périphérique de numérisation "
 
-#: kookaview.cpp:536
+#: kookaview.cpp:539
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2288,42 +2298,42 @@ msgstr ""
 "<interface>Ajouter un Scanner</interface> pour configurer le moteur, ou "
 "lisez cette boîte de dialogue pour plus d'informations."
 
-#: kookaview.cpp:582
+#: kookaview.cpp:585
 #, kde-format
 msgid "No scanner connected"
 msgstr "Aucun scanner connecté "
 
-#: kookaview.cpp:641
+#: kookaview.cpp:644
 #, kde-format
 msgid "No selection"
 msgstr "Aucune sélection "
 
-#: kookaview.cpp:645
+#: kookaview.cpp:648
 #, kde-format
 msgid "Gallery folder %1"
 msgstr "Dossier de galeries %1 "
 
-#: kookaview.cpp:645
+#: kookaview.cpp:648
 #, kde-format
 msgid "Gallery image %1"
 msgstr "Galerie d'images %1 "
 
-#: kookaview.cpp:710
+#: kookaview.cpp:713
 #, kde-format
 msgid "Starting OCR on selection"
 msgstr "Démarrer la ROC sur la sélection "
 
-#: kookaview.cpp:716
+#: kookaview.cpp:719
 #, kde-format
 msgid "Starting OCR on the image"
 msgstr "Démarrer la ROC sur l'image "
 
-#: kookaview.cpp:723
+#: kookaview.cpp:726
 #, kde-format
 msgid "OCR File"
 msgstr "Fichier ROC"
 
-#: kookaview.cpp:733
+#: kookaview.cpp:736
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot load <filename>%1</filename> for OCR:<nl/>%2"
@@ -2331,12 +2341,12 @@ msgstr ""
 "Impossible de charger <filename>%1</filename> pour la reconnaissance optique "
 "de caractères :<nl/> %2 "
 
-#: kookaview.cpp:735
+#: kookaview.cpp:738
 #, kde-format
 msgid "Cannot Read OCR File"
 msgstr "Impossible de lire le fichier OCR"
 
-#: kookaview.cpp:739
+#: kookaview.cpp:742
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Starting OCR on file <filename>%1</filename>"
@@ -2344,28 +2354,28 @@ msgstr ""
 "Démarrage de la reconnaissance optique de caractères sur le fichier "
 "<filename>%1</filename>. "
 
-#: kookaview.cpp:755
+#: kookaview.cpp:758
 #, kde-format
 msgid "OCR finished"
 msgstr "OCR terminé "
 
-#: kookaview.cpp:762
+#: kookaview.cpp:765
 #, kde-format
 msgid "There is no OCR result text to spell check."
 msgstr ""
 "Aucun résultat de ROC sur lequel lancer la vérification orthographique."
 
-#: kookaview.cpp:763
+#: kookaview.cpp:766
 #, kde-format
 msgid "OCR Spell Check not possible"
 msgstr "Vérification orthographique ROC impossible "
 
-#: kookaview.cpp:768
+#: kookaview.cpp:771
 #, kde-format
 msgid "OCR Spell Check"
 msgstr "Vérification de l'orthographe ROC "
 
-#: kookaview.cpp:784
+#: kookaview.cpp:787
 #, kde-format
 msgid ""
 "No OCR engine is configured.\n"
@@ -2374,17 +2384,17 @@ msgstr ""
 "Aucun moteur ROC n'est configuré.\n"
 "Choisissez-en un puis configurez-le pour utiliser ROC. "
 
-#: kookaview.cpp:786
+#: kookaview.cpp:789
 #, kde-format
 msgid "OCR Not Configured"
 msgstr "ROC non configuré"
 
-#: kookaview.cpp:795
+#: kookaview.cpp:798
 #, kde-format
 msgid "Cannot load OCR plugin '%1'"
 msgstr "Impossible de charger le module externe ROC « %1 »"
 
-#: kookaview.cpp:903
+#: kookaview.cpp:906
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2401,27 +2411,27 @@ msgstr ""
 "« libkookascan » signalée : <message>%2</message><nl/>Erreur « SANE » "
 "signalée : <message>%1</message> "
 
-#: kookaview.cpp:953
+#: kookaview.cpp:956
 #, kde-format
 msgid "Create new image from selection"
 msgstr "Créer une nouvelle image à partir de la sélection "
 
-#: kookaview.cpp:962
+#: kookaview.cpp:965
 #, kde-format
 msgid "Cannot transform, image is read-only"
 msgstr "Impossible de modifier l'image, elle est en lecture seule. "
 
-#: kookaview.cpp:1015
+#: kookaview.cpp:1018
 #, kde-format
 msgid "Loaded image %1"
 msgstr "Chargement de l'image %1 "
 
-#: kookaview.cpp:1016
+#: kookaview.cpp:1019
 #, kde-format
 msgid "Unloaded image"
 msgstr "Image déchargée "
 
-#: kookaview.cpp:1033
+#: kookaview.cpp:1036
 #, kde-format
 msgid "Loading %1..."
 msgstr "Chargement de %1... "
@@ -2630,12 +2640,12 @@ msgstr "<nl/>%1 "
 msgid "Error saving OCR results"
 msgstr "Erreur d'enregistrement des résultats ROC "
 
-#: prefspages.cpp:76
+#: prefspages.cpp:78
 #, kde-format
 msgid "Hidden Messages"
 msgstr "Messages cachés "
 
-#: prefspages.cpp:80
+#: prefspages.cpp:82
 #, kde-format
 msgid ""
 "Use this button to reenable all messages and questions which\n"
@@ -2644,52 +2654,57 @@ msgstr ""
 "Utilisez ce bouton afin de réactiver tous les messages et questions qui ont\n"
 "été cachés en utilisant l'option « Ne plus demander »."
 
-#: prefspages.cpp:83
+#: prefspages.cpp:85
 #, kde-format
 msgid "Enable Messages/Questions"
 msgstr "Activer messages/questions "
 
-#: prefspages.cpp:243
+#: prefspages.cpp:152
+#, kde-format
+msgid "%1 must be restarted for these settings to take effect."
+msgstr "%1 doit être redémarré pour que ces paramètres prennent effet."
+
+#: prefspages.cpp:267
 #, kde-format
 msgid "Image Gallery"
 msgstr "Galerie "
 
-#: prefspages.cpp:257
+#: prefspages.cpp:281
 #, kde-format
 msgid "Not shown"
 msgstr "Non affiché "
 
-#: prefspages.cpp:258
+#: prefspages.cpp:282
 #, kde-format
 msgid "At top"
 msgstr "En haut "
 
-#: prefspages.cpp:259
+#: prefspages.cpp:283
 #, kde-format
 msgid "At bottom"
 msgstr "En bas "
 
-#: prefspages.cpp:274
+#: prefspages.cpp:298
 #, kde-format
 msgid "Thumbnail View"
 msgstr "Affichage en vignettes "
 
-#: prefspages.cpp:388
+#: prefspages.cpp:412
 #, kde-format
 msgid "None"
 msgstr "Aucun"
 
-#: prefspages.cpp:400
+#: prefspages.cpp:424
 #, kde-format
 msgid "OCR Engine:"
 msgstr "Moteur OCR : "
 
-#: prefspages.cpp:406
+#: prefspages.cpp:430
 #, kde-format
 msgid "OCR Engine Settings..."
 msgstr "Paramètres du moteur ROC..."
 
-#: prefspages.cpp:452
+#: prefspages.cpp:476
 #, kde-format
 msgid ""
 "No OCR engine is selected. Select and configure one to be able to perform "
@@ -2698,7 +2713,7 @@ msgstr ""
 "Aucun moteur ROC n'est sélectionné. Choisissez-en un puis configurez-le afin "
 "de pouvoir utiliser ROC. "
 
-#: prefspages.cpp:460
+#: prefspages.cpp:484
 #, kde-format
 msgid "Unknown engine '%1'."
 msgstr "Moteur « %1 » inconnu."
@@ -3605,11 +3620,6 @@ msgstr "Minuscule "
 
 #~ msgid "Kooka Startup Preferences"
 #~ msgstr "Configuration du démarrage de Kooka"
-
-#~ msgid "Kooka must be restarted for changes in these options to take effect."
-#~ msgstr ""
-#~ "Kooka doit être redémarré pour que la modification des ses options prenne "
-#~ "effet."
 
 #~ msgid ""
 #~ "Check this if you once checked 'do not show the scanner selection on "

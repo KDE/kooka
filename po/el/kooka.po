@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:26+0000\n"
+"POT-Creation-Date: 2024-02-20 01:38+0000\n"
 "PO-Revision-Date: 2008-09-25 02:24+0300\n"
 "Last-Translator: Spiros Georgaras <sng@hellug.gr>\n"
 "Language-Team: Greek <i18ngr@lists.hellug.gr>\n"
@@ -41,7 +41,7 @@ msgstr ""
 
 #: ../plugins/destination/abstractdestination.cpp:160
 #: ../plugins/destination/application/destinationapplication.cpp:190
-#: kookaview.cpp:1177
+#: kookaview.cpp:1180
 #, kde-format
 msgid "Other..."
 msgstr ""
@@ -79,14 +79,14 @@ msgstr ""
 msgid "<filename>%1</filename>"
 msgstr "Το %1 δεν υπάρχει."
 
-#: ../plugins/destination/print/destinationprint.cpp:78 kookaview.cpp:673
+#: ../plugins/destination/print/destinationprint.cpp:78 kookaview.cpp:676
 #, fuzzy, kde-format
 #| msgid "Print %1"
 msgctxt "@title:window"
 msgid "Print Image"
 msgstr "Εκτύπωση του %1"
 
-#: ../plugins/destination/print/destinationprint.cpp:89 kookaview.cpp:689
+#: ../plugins/destination/print/destinationprint.cpp:89 kookaview.cpp:692
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -95,7 +95,7 @@ msgid ""
 "%1"
 msgstr ""
 
-#: ../plugins/destination/print/destinationprint.cpp:90 kookaview.cpp:690
+#: ../plugins/destination/print/destinationprint.cpp:90 kookaview.cpp:693
 #, kde-format
 msgctxt "@title:window"
 msgid "Cannot Print"
@@ -405,7 +405,7 @@ msgstr "Εμφάνιση του διαλόγου επιλογής σαρωτή �
 msgid "OCR Setup Error"
 msgstr "Πρόβλημα ανάλυσης"
 
-#: ../plugins/ocr/abstractocrengine.cpp:123 kookaview.cpp:787
+#: ../plugins/ocr/abstractocrengine.cpp:123 kookaview.cpp:790
 #, kde-format
 msgid "Configure OCR..."
 msgstr ""
@@ -1684,7 +1684,7 @@ msgstr ""
 msgid "Select Scan Device..."
 msgstr "Επιλογή σαρωτή"
 
-#: kooka.cpp:275 kookaview.cpp:546
+#: kooka.cpp:275 kookaview.cpp:549
 #, fuzzy, kde-format
 #| msgid "Select Scan Device"
 msgid "Add Scan Device..."
@@ -1817,7 +1817,7 @@ msgstr "Εικόνες επισκόπησης"
 msgid "Image Gallery and Thumbnail View"
 msgstr "Προβολή εικόνων επισκόπησης"
 
-#: kookapref.cpp:61 kookaview.cpp:290
+#: kookapref.cpp:61 kookaview.cpp:291
 #, kde-format
 msgid "OCR"
 msgstr "OCR"
@@ -2256,27 +2256,37 @@ msgstr ""
 msgid "Image View"
 msgstr "Προβολή εικόνων"
 
-#: kookaview.cpp:265
+#: kookaview.cpp:245
+#, kde-format
+msgid "User specified"
+msgstr ""
+
+#: kookaview.cpp:246
+#, kde-format
+msgid "on command line"
+msgstr ""
+
+#: kookaview.cpp:266
 #, kde-format
 msgid "Scan Preview"
 msgstr "Προεπισκόπηση σάρωσης"
 
-#: kookaview.cpp:275
+#: kookaview.cpp:276
 #, kde-format
 msgid "OCR results will appear here"
 msgstr ""
 
-#: kookaview.cpp:284
+#: kookaview.cpp:285
 #, kde-format
 msgid "Scan"
 msgstr ""
 
-#: kookaview.cpp:287 kookaview.cpp:560 kookaview.cpp:579 scangallery.cpp:123
+#: kookaview.cpp:288 kookaview.cpp:563 kookaview.cpp:582 scangallery.cpp:123
 #, kde-format
 msgid "Gallery"
 msgstr "Συλλογή"
 
-#: kookaview.cpp:463
+#: kookaview.cpp:464
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2287,13 +2297,13 @@ msgid ""
 "reported error: <message>%1</message>"
 msgstr ""
 
-#: kookaview.cpp:518
+#: kookaview.cpp:519
 #, fuzzy, kde-format
 #| msgid "Select Scan Device"
 msgid "Add Scan Device"
 msgstr "Επιλογή σαρωτή"
 
-#: kookaview.cpp:536
+#: kookaview.cpp:539
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2305,88 +2315,88 @@ msgid ""
 "backend name and parameters, or see that dialog for more information."
 msgstr ""
 
-#: kookaview.cpp:582
+#: kookaview.cpp:585
 #, kde-format
 msgid "No scanner connected"
 msgstr ""
 
-#: kookaview.cpp:641
+#: kookaview.cpp:644
 #, fuzzy, kde-format
 #| msgid "Font Type Selection"
 msgid "No selection"
 msgstr "Επιλογή τύπου γραμματοσειράς"
 
-#: kookaview.cpp:645
+#: kookaview.cpp:648
 #, fuzzy, kde-format
 #| msgid "Gallery Folders"
 msgid "Gallery folder %1"
 msgstr "Φάκελοι συλλογής"
 
-#: kookaview.cpp:645
+#: kookaview.cpp:648
 #, fuzzy, kde-format
 #| msgid "Loading %1"
 msgid "Gallery image %1"
 msgstr "Φόρτωση του %1"
 
-#: kookaview.cpp:710
+#: kookaview.cpp:713
 #, kde-format
 msgid "Starting OCR on selection"
 msgstr "Έναρξη OCR στην επιλογή"
 
-#: kookaview.cpp:716
+#: kookaview.cpp:719
 #, fuzzy, kde-format
 #| msgid "Starting OCR on the entire image"
 msgid "Starting OCR on the image"
 msgstr "Έναρξη OCR σε ολόκληρη την εικόνα"
 
-#: kookaview.cpp:723
+#: kookaview.cpp:726
 #, fuzzy, kde-format
 #| msgid "GOCR engine"
 msgid "OCR File"
 msgstr "Μηχανή GOCR"
 
-#: kookaview.cpp:733
+#: kookaview.cpp:736
 #, fuzzy, kde-kuit-format
 #| msgid "The orf %1 does not exist."
 msgctxt "@info"
 msgid "Cannot load <filename>%1</filename> for OCR:<nl/>%2"
 msgstr "Το %1 δεν υπάρχει."
 
-#: kookaview.cpp:735
+#: kookaview.cpp:738
 #, kde-format
 msgid "Cannot Read OCR File"
 msgstr ""
 
-#: kookaview.cpp:739
+#: kookaview.cpp:742
 #, fuzzy, kde-kuit-format
 #| msgid "The orf %1 does not exist."
 msgctxt "@info"
 msgid "Starting OCR on file <filename>%1</filename>"
 msgstr "Το %1 δεν υπάρχει."
 
-#: kookaview.cpp:755
+#: kookaview.cpp:758
 #, fuzzy, kde-format
 #| msgid "GOCR engine"
 msgid "OCR finished"
 msgstr "Μηχανή GOCR"
 
-#: kookaview.cpp:762
+#: kookaview.cpp:765
 #, kde-format
 msgid "There is no OCR result text to spell check."
 msgstr ""
 
-#: kookaview.cpp:763
+#: kookaview.cpp:766
 #, kde-format
 msgid "OCR Spell Check not possible"
 msgstr ""
 
-#: kookaview.cpp:768
+#: kookaview.cpp:771
 #, fuzzy, kde-format
 #| msgid "Spell-Check"
 msgid "OCR Spell Check"
 msgstr "Ορθογραφικός Έλεγχος"
 
-#: kookaview.cpp:784
+#: kookaview.cpp:787
 #, fuzzy, kde-format
 #| msgid ""
 #| "This version of Kooka was not compiled with KADMOS support.\n"
@@ -2398,17 +2408,17 @@ msgstr ""
 "Αυτή η έκδοση του Kooka μεταγλωττίστηκε χωρίς υποστήριξη του KADMOS.\n"
 "Παρακαλώ επιλέξτε μία άλλη μηχανή OCR στο διάλογο επιλογών του Kooka."
 
-#: kookaview.cpp:786
+#: kookaview.cpp:789
 #, kde-format
 msgid "OCR Not Configured"
 msgstr ""
 
-#: kookaview.cpp:795
+#: kookaview.cpp:798
 #, kde-format
 msgid "Cannot load OCR plugin '%1'"
 msgstr ""
 
-#: kookaview.cpp:903
+#: kookaview.cpp:906
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2419,30 +2429,30 @@ msgid ""
 "<message>%1</message>"
 msgstr ""
 
-#: kookaview.cpp:953
+#: kookaview.cpp:956
 #, kde-format
 msgid "Create new image from selection"
 msgstr "Δημιουργία νέας εικόνας από την επιλογή"
 
-#: kookaview.cpp:962
+#: kookaview.cpp:965
 #, fuzzy, kde-format
 #| msgid "Can not save image, it is write protected"
 msgid "Cannot transform, image is read-only"
 msgstr "Αδύνατη η αποθήκευση της εικόνας· έχει προστασία εγγραφής"
 
-#: kookaview.cpp:1015
+#: kookaview.cpp:1018
 #, fuzzy, kde-format
 #| msgid "Loading %1"
 msgid "Loaded image %1"
 msgstr "Φόρτωση του %1"
 
-#: kookaview.cpp:1016
+#: kookaview.cpp:1019
 #, fuzzy, kde-format
 #| msgid "&Unload Image"
 msgid "Unloaded image"
 msgstr "&Αποφόρτωση εικόνας"
 
-#: kookaview.cpp:1033
+#: kookaview.cpp:1036
 #, fuzzy, kde-format
 #| msgid "Loading %1"
 msgid "Loading %1..."
@@ -2632,68 +2642,74 @@ msgstr ""
 msgid "Error saving OCR results"
 msgstr "Εμφάνιση αποτελεσμάτων OCR"
 
-#: prefspages.cpp:76
+#: prefspages.cpp:78
 #, kde-format
 msgid "Hidden Messages"
 msgstr ""
 
-#: prefspages.cpp:80
+#: prefspages.cpp:82
 #, kde-format
 msgid ""
 "Use this button to reenable all messages and questions which\n"
 "have been hidden by using \"Don't ask me again\"."
 msgstr ""
 
-#: prefspages.cpp:83
+#: prefspages.cpp:85
 #, kde-format
 msgid "Enable Messages/Questions"
 msgstr ""
 
-#: prefspages.cpp:243
+#: prefspages.cpp:152
+#, fuzzy, kde-format
+#| msgid "Kooka must be restarted for changes in these options to take effect."
+msgid "%1 must be restarted for these settings to take effect."
+msgstr "Το Kooka πρέπει να επανεκκινηθεί για να εφαρμοστούν αυτές οι αλλαγές."
+
+#: prefspages.cpp:267
 #, fuzzy, kde-format
 #| msgid "Gallery"
 msgid "Image Gallery"
 msgstr "Συλλογή"
 
-#: prefspages.cpp:257
+#: prefspages.cpp:281
 #, fuzzy, kde-format
 #| msgid "Not found"
 msgid "Not shown"
 msgstr "Δε βρέθηκε"
 
-#: prefspages.cpp:258
+#: prefspages.cpp:282
 #, kde-format
 msgid "At top"
 msgstr ""
 
-#: prefspages.cpp:259
+#: prefspages.cpp:283
 #, kde-format
 msgid "At bottom"
 msgstr ""
 
-#: prefspages.cpp:274
+#: prefspages.cpp:298
 #, kde-format
 msgid "Thumbnail View"
 msgstr "Προβολή εικόνων επισκόπησης"
 
-#: prefspages.cpp:388
+#: prefspages.cpp:412
 #, kde-format
 msgid "None"
 msgstr ""
 
-#: prefspages.cpp:400
+#: prefspages.cpp:424
 #, fuzzy, kde-format
 #| msgid "GOCR engine"
 msgid "OCR Engine:"
 msgstr "Μηχανή GOCR"
 
-#: prefspages.cpp:406
+#: prefspages.cpp:430
 #, fuzzy, kde-format
 #| msgid "OCR Engine to Use"
 msgid "OCR Engine Settings..."
 msgstr "Μηχανή αναγνώρισης προς χρήση"
 
-#: prefspages.cpp:452
+#: prefspages.cpp:476
 #, fuzzy, kde-format
 #| msgid ""
 #| "This version of Kooka was not compiled with KADMOS support.\n"
@@ -2705,7 +2721,7 @@ msgstr ""
 "Αυτή η έκδοση του Kooka μεταγλωττίστηκε χωρίς υποστήριξη του KADMOS.\n"
 "Παρακαλώ επιλέξτε μία άλλη μηχανή OCR στο διάλογο επιλογών του Kooka."
 
-#: prefspages.cpp:460
+#: prefspages.cpp:484
 #, fuzzy, kde-format
 #| msgid "Unknown image type"
 msgid "Unknown engine '%1'."
@@ -3499,10 +3515,6 @@ msgstr ""
 
 #~ msgid "Kooka Startup Preferences"
 #~ msgstr "Ρυθμίσεις έναρξης του Kooka"
-
-#~ msgid "Kooka must be restarted for changes in these options to take effect."
-#~ msgstr ""
-#~ "Το Kooka πρέπει να επανεκκινηθεί για να εφαρμοστούν αυτές οι αλλαγές."
 
 #~ msgid ""
 #~ "Check this if you once checked 'do not show the scanner selection on "

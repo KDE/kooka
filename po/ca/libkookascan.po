@@ -1,16 +1,16 @@
 # Translation of libkookascan.po to Catalan
-# Copyright (C) 2012-2021 This_file_is_part_of_KDE
+# Copyright (C) 2012-2024 This_file_is_part_of_KDE
 # This file is distributed under the license LGPL version 2.1 or
 # version 3 or later versions approved by the membership of KDE e.V.
 #
 # Antoni Bella Pérez <antonibella5@yahoo.com>, 2012, 2014, 2016, 2018, 2020.
-# Josep M. Ferrer <txemaq@gmail.com>, 2014, 2015, 2016, 2017, 2020, 2021.
+# Josep M. Ferrer <txemaq@gmail.com>, 2014, 2015, 2016, 2017, 2020, 2021, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:26+0000\n"
-"PO-Revision-Date: 2021-12-12 10:10+0100\n"
+"POT-Creation-Date: 2024-02-20 01:38+0000\n"
+"PO-Revision-Date: 2024-02-20 15:56+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -19,7 +19,17 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Accelerator-Marker: &\n"
-"X-Generator: Lokalize 20.12.0\n"
+"X-Generator: Lokalize 22.12.3\n"
+
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "Antoni Bella"
+
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "antonibella5@yahoo.com"
 
 #: ../libdialogutil/imagefilter.cpp:91
 #, kde-format
@@ -41,64 +51,117 @@ msgstr "*|Tots els fitxers"
 msgid "All Files (*)"
 msgstr "Tots els fitxers (*)"
 
-#: adddevicedialog.cpp:53
+#: adddevicedialog.cpp:58
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "If your scanner has not been automatically detected, you can specify it "
-"here. The <interface>Scanner device name</interface> should be a backend "
-"name (with optional parameters) that is understood by SANE, see <link url="
-"\"man:/sane\">sane(7)</link> or <link url=\"man:/sane-dll\">sane-dll(5)</"
-"link> for more information on available backends. The <interface>Type</"
-"interface> and <interface>Description</interface> can be used to identify "
-"the scanner later.<nl/><nl/>For the information that needs to be entered "
-"here, try to locate the device using the <link url=\"man:/sane-find-scanner"
-"\">sane-find-scanner(1)</link> command. For a USB or networked HP scanner "
-"using <link url=\"http://hplip.sourceforge.net/\">HPLIP</link>, try using "
-"the <command>hp-probe</command> command to locate it, for example <icode>hp-"
-"probe&nbsp;-b&nbsp;usb</icode> or <icode>hp-probe&nbsp;-b&nbsp;net</icode>. "
-"If the scanner is found, then enter the device name displayed by these "
-"commands; note that if using HPLIP then <icode>hp:</icode> needs to be "
-"replaced by <icode>hpaio:</icode>.<nl/><nl/>If these commands fail to locate "
-"your scanner, then it may not be supported by SANE. Check the SANE "
-"documentation for a <link url=\"http://www.sane-project.org/sane-supported-"
-"devices.html\">list of supported devices</link>."
+"here. The <interface>Scanner device</interface> is the SANE backend device "
+"name. The <interface>Manufacturer</interface>, <interface>Type</interface> "
+"and <interface>Description</interface> can be used to identify the scanner "
+"later.<nl/><nl/>More information on <link url=\"?1\">SANE backends</link>, "
+"<link url=\"?2\">locating devices</link>, <link url=\"?3\">HP scanners</"
+"link>, <link url=\"?4\">device not found</link>."
 msgstr ""
-"Si el vostre escàner no s'ha detectat automàticament, el podreu especificar "
-"aquí. El <interface>Nom del dispositiu d'escaneig</interface> haurà de ser "
-"un nom de dorsal (amb paràmetres opcionals) que entengui SANE, veure <link "
-"url=\"man:/sane\">sane(7)</link> o <link url=\"man:/sane-dll\">sane-dll(5)</"
-"link> per a obtenir més informació sobre els dorsals disponibles. El "
-"<interface>Tipus</interface> i la <interface>Descripció</interface> es poden "
-"utilitzar més endavant per a identificar l'escàner.<nl/><nl/>Per a obtenir "
-"la informació necessària, intenteu trobar el dispositiu amb l'ordre <link "
-"url=\"man:/sane-find-scanner\">sane-find-scanner(1)</link>. Per a un escàner "
-"USB o de xarxa de la marca HP que usi <link url=\"http://hplip.sourceforge."
-"net/\">HPLIP</link>, intenteu fer servir l'ordre <command>hp-probe</command> "
-"per a localitzar-lo, per exemple <icode>hp-probe&nbsp;-b&nbsp;usb</icode> o "
-"<icode>hp-probe&nbsp;-b&nbsp;net</icode>. Si es troba l'escàner, a "
-"continuació introduïu el nom del dispositiu mostrat per aquestes ordres. Amb "
-"compte que si utilitza HPLIP, llavors <icode>hp:</icode> s'haurà de "
-"substituir per <icode>hpaio:</icode>.<nl/><nl/>Si aquestes ordres no "
-"detecten l'escàner, llavors podria no estar suportat per SANE. Consulteu la "
-"seva documentació per a obtenir una <link url=\"http://www.sane-project.org/"
-"sane-supported-devices.html\">llista dels dispositius compatibles amb SANE</"
-"link>."
+"Si l'escàner no s'ha detectat automàticament, podeu especificar-ho aquí. El "
+"<interface>Dispositiu d'escaneig</interface> és el nom del dispositiu del "
+"dorsal SANE. El <interface>Fabricant</interface>, <interface>Tipus</"
+"interface> i <interface>Descripció</interface> es poden utilitzar per a "
+"identificar l'escàner més tard.<nl/><nl/>Més informació sobre els <link url="
+"\"?1\">dorsals SANE</link>, la <link url=\"?2\">localització de dispositius</"
+"link>, els <link url=\"?3\">escàners HP</link>, i els <link url=\"?"
+"4\">dispositius no trobats</link>."
 
 #: adddevicedialog.cpp:77
 #, kde-format
-msgid "Scanner device name:"
-msgstr "Nom del dispositiu d'escaneig:"
+msgid "Scanner device:"
+msgstr "Dispositiu d'escaneig:"
 
-#: adddevicedialog.cpp:85
+#: adddevicedialog.cpp:80 scandevices.cpp:190
+#, kde-format
+msgctxt "Value used for manufacturer if none entered"
+msgid "User specified"
+msgstr "Especificat per l'usuari"
+
+#: adddevicedialog.cpp:82
+#, kde-format
+msgid "Manufacturer:"
+msgstr "Fabricant:"
+
+#: adddevicedialog.cpp:86
 #, kde-format
 msgid "Device type:"
 msgstr "Tipus de dispositiu:"
 
-#: adddevicedialog.cpp:92
+#: adddevicedialog.cpp:90
 #, kde-format
 msgid "Description:"
 msgstr "Descripció:"
+
+#: adddevicedialog.cpp:126
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"The <interface>Scanner device</interface> should be a backend name (with "
+"optional parameters) that is understood by SANE. See <link url=\"man:/sane"
+"\">sane(7)</link> or <link url=\"man:/sane-dll\">sane&#8209;dll(5)</link> "
+"for more information on available backends and the format of device names."
+msgstr ""
+"El <interface>Dispositiu d'escaneig</interface> hauria de ser un nom de "
+"dorsal (amb paràmetres opcionals) que el SANE l'entengui. Vegeu <link url="
+"\"man:/sane\">sane(7)</link> o <link url=\"man:/sane-dll\">sane&#8209;"
+"dll(5)</link> per a més informació sobre els dorsals disponibles i el format "
+"dels noms dels dispositius."
+
+#: adddevicedialog.cpp:134
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"To find the information that needs to be entered here, try to locate the "
+"device using the <link url=\"man:/sane-find-scanner\">sane&#8209;find&#8209;"
+"scanner(1)</link> command for SCSI, USB or parallel port scanners, or the "
+"<link url=\"man:/scanimage\">scanimage(1)</link> command with the "
+"<icode>&#8209;L</icode> option for network scanners. If the scanner is "
+"found, then enter the device name displayed by these commands."
+msgstr ""
+"Per a trobar la informació que cal introduir aquí, proveu de localitzar el "
+"dispositiu utilitzant l'ordre <link url=\"man:/sane-find-scanner"
+"\">sane&#8209;find&#8209;scanner(1)</link> per a escàners SCSI, USB o ports "
+"en paral·lel, o l'ordre <link url=\"man:/scanimage\">scanimage(1)</link> amb "
+"l'opció <icode>&#8209;L</icode> per a escàners de xarxa. Si es troba "
+"l'escàner, introduïu el nom del dispositiu mostrat per aquestes ordres."
+
+#: adddevicedialog.cpp:143
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"For a USB or networked HP scanner using <link url=\"http://hplip.sourceforge."
+"net/\">HPLIP</link>, try using the <command>hp&#8209;probe</command> command "
+"to locate it, for example <icode>hp&#8209;probe&nbsp;&#8209;b&nbsp;usb</"
+"icode> or <icode>hp&#8209;probe&nbsp;&#8209;b&nbsp;net</icode>. Note that if "
+"the scanner is found by HPLIP, then the device name <icode>hp:</icode> that "
+"it displays needs to be replaced by <icode>hpaio:</icode> for SANE."
+msgstr ""
+"Per a un escàner d'HP USB o en xarxa utilitzant <link url=\"http://hplip."
+"sourceforge.net/\">HPLIP</link>, proveu d'utilitzar l'ordre "
+"<command>hp&#8209;probe</command> per a localitzar-lo, per exemple "
+"<icode>hp&#8209;probe&nbsp;&#8209;b&nbsp;usb</icode> o <icode>hp&#8209;"
+"probe&nbsp;&#8209;b&nbsp;net</icode>. Tingueu en compte que si l'HPLIP troba "
+"l'escàner, llavors el nom del dispositiu <icode>hp:</icode> que mostra ha de "
+"ser substituït per <icode>hpaio:</icode> en el SANE."
+
+#: adddevicedialog.cpp:152
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"If these commands fail to locate your scanner, then it may not be supported "
+"by SANE. Check the SANE documentation for a <link url=\"http://www.sane-"
+"project.org/sane-supported-devices.html\">list of supported devices</link>."
+msgstr ""
+"Si aquestes ordres no localitzen l'escàner, és possible que el SANE no "
+"l'admeti. Comproveu a la documentació del SANE la llista <link url=\"http://"
+"www.sane-project.org/sane-supported-devices.html\">de dispositius "
+"compatibles</link>."
 
 #: autoselectbar.cpp:56
 #, kde-kuit-format
@@ -270,103 +333,103 @@ msgstr "400%"
 msgid "Custom:"
 msgstr "A mida:"
 
-#: kscancontrols.cpp:66
+#: kscancontrols.cpp:67
 #, kde-format
 msgid "(Unknown)"
 msgstr "(Desconeguda)"
 
-#: kscancontrols.cpp:169
+#: kscancontrols.cpp:170
 #, kde-format
 msgid "Reset this setting to its standard value, %1"
 msgstr "Reinicia aquesta opció al seu valor estàndard, %1"
 
-#: kscancontrols.cpp:397
+#: kscancontrols.cpp:414
 #, kde-format
 msgid "*.pnm *.pbm *.pgm *.ppm|PNM Image Files"
 msgstr "*.pnm *.pbm *.pgm *.ppm|Fitxers d'imatge PNM"
 
-#: kscandevice.cpp:288
+#: kscandevice.cpp:291
 #, kde-format
 msgid "No scanner selected"
 msgstr "Cap escàner seleccionat"
 
-#: kscandevice.cpp:1387
+#: kscandevice.cpp:1394
 #, kde-format
 msgid "Default startup configuration"
 msgstr "Configuració d'inici per omissió"
 
-#: kscandevice.cpp:1487
+#: kscandevice.cpp:1494
 #, kde-kuit-format
 msgctxt "@info"
 msgid "The scanner<nl/><icode>%1</icode><nl/>requires authentication."
 msgstr "L'escàner<nl/><icode>%1</icode><nl/>requereix autenticació."
 
-#: kscandevice.cpp:1488
+#: kscandevice.cpp:1495
 #, kde-format
 msgid "Scanner Authentication"
 msgstr "Autenticació de l'escàner"
 
-#: kscandevice.cpp:1532
+#: kscandevice.cpp:1539
 #, kde-format
 msgid "OK"
 msgstr "D'acord"
 
-#: kscandevice.cpp:1533
+#: kscandevice.cpp:1540
 #, kde-format
 msgid "No device"
 msgstr "Cap dispositiu"
 
-#: kscandevice.cpp:1534
+#: kscandevice.cpp:1541
 #, kde-format
 msgid "Bad parameter"
 msgstr "Paràmetre incorrecte"
 
-#: kscandevice.cpp:1535
+#: kscandevice.cpp:1542
 #, kde-format
 msgid "Cannot open device"
 msgstr "No s'ha pogut obrir el dispositiu"
 
-#: kscandevice.cpp:1536
+#: kscandevice.cpp:1543
 #, kde-format
 msgid "sane_control_option() failed"
 msgstr "sane_control_option() ha fallat"
 
-#: kscandevice.cpp:1537
+#: kscandevice.cpp:1544
 #, kde-format
 msgid "Error while scanning"
 msgstr "Error en escanejar"
 
-#: kscandevice.cpp:1538
+#: kscandevice.cpp:1545
 #, kde-format
 msgid "Empty picture"
 msgstr "Imatge buida"
 
-#: kscandevice.cpp:1539
+#: kscandevice.cpp:1546
 #, kde-format
 msgid "Out of memory"
 msgstr "Memòria exhaurida"
 
-#: kscandevice.cpp:1540
+#: kscandevice.cpp:1547
 #, kde-format
 msgid "Needs reload"
 msgstr "Necessita recarregar"
 
-#: kscandevice.cpp:1541
+#: kscandevice.cpp:1548
 #, kde-format
 msgid "Cancelled"
 msgstr "Cancel·lat"
 
-#: kscandevice.cpp:1542
+#: kscandevice.cpp:1549
 #, kde-format
 msgid "Not active"
 msgstr "No actiu"
 
-#: kscandevice.cpp:1543
+#: kscandevice.cpp:1550
 #, kde-format
 msgid "Not supported"
 msgstr "No acceptat"
 
-#: kscandevice.cpp:1544
+#: kscandevice.cpp:1551
 #, kde-format
 msgid "Unknown status %1"
 msgstr "Estat desconegut %1"
@@ -450,10 +513,40 @@ msgctxt "@action:button Name of colour"
 msgid "Black"
 msgstr "Negre"
 
-#: scandevices.cpp:182
+#: scandevices.cpp:208
 #, kde-format
 msgid "Unknown device '%1'"
 msgstr "Dispositiu desconegut «%1»"
+
+#: scanglobal.cpp:136
+#, kde-format
+msgid "SANE - Scanner Access Now Easy"
+msgstr "SANE - Scanner Access Now Easy («Accés ara fàcil a l'escàner»)"
+
+#: scanglobal.cpp:137
+#, kde-format
+msgid "Scanner access and driver library"
+msgstr "Biblioteca d'accés a l'escàner i al controlador"
+
+#: scanglobal.cpp:144
+#, kde-format
+msgid "LibTIFF"
+msgstr "LibTIFF"
+
+#: scanglobal.cpp:145
+#, kde-format
+msgid "TIFF image format library"
+msgstr "Biblioteca del format d'imatge TIFF"
+
+#: scanglobal.cpp:154
+#, kde-format
+msgid "libpaper"
+msgstr "libpaper"
+
+#: scanglobal.cpp:155
+#, kde-format
+msgid "Paper size configuration library"
+msgstr "Biblioteca de configuració de la mida del paper"
 
 #: scanimage.cpp:76
 #, kde-format
@@ -485,63 +578,63 @@ msgstr "Ha fallat en llegir la imatge TIFF"
 msgid "TIFF not supported"
 msgstr "El TIFF no està admès"
 
-#: scanparams.cpp:134
+#: scanparams.cpp:141
 #, kde-kuit-format
 msgctxt "@info"
 msgid "<title>Scanner&nbsp;Settings</title>"
 msgstr "<title>Arranjament&nbsp;d'escàner</title>"
 
-#: scanparams.cpp:176
+#: scanparams.cpp:161
 #, kde-format
 msgid "Pre&view"
 msgstr "&Vista prèvia"
 
-#: scanparams.cpp:177
+#: scanparams.cpp:162
 #, kde-format
 msgid "Start a preview scan and show the preview image"
 msgstr "Inicia un escaneig amb vista prèvia i la mostra"
 
-#: scanparams.cpp:182
+#: scanparams.cpp:167
 #, kde-format
 msgid "Star&t Scan"
 msgstr "&Inicia l'escaneig"
 
-#: scanparams.cpp:183
+#: scanparams.cpp:168
 #, kde-format
 msgid "Start a scan and save the scanned image"
 msgstr "Inici un escaneig i desa la imatge escanejada"
 
-#: scanparams.cpp:189
+#: scanparams.cpp:200
 #, kde-format
 msgid "Stop"
 msgstr "Atura"
 
-#: scanparams.cpp:193
+#: scanparams.cpp:204
 #, kde-format
 msgid "Scanning"
 msgstr "Escaneig"
 
-#: scanparams.cpp:232
+#: scanparams.cpp:247
 #, kde-format
 msgid "&Basic"
 msgstr "&Bàsic"
 
-#: scanparams.cpp:233
+#: scanparams.cpp:248
 #, kde-format
 msgid "Other"
 msgstr "Altres"
 
-#: scanparams.cpp:234
+#: scanparams.cpp:249
 #, kde-format
 msgid "Advanced"
 msgstr "Avançat"
 
-#: scanparams.cpp:260
+#: scanparams.cpp:275
 #, kde-format
 msgid "SANE Debug (from PNM image)"
 msgstr "Depuració de SANE (des d'una imatge PNM)"
 
-#: scanparams.cpp:261
+#: scanparams.cpp:276
 #, kde-kuit-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -554,12 +647,12 @@ msgstr ""
 "d'imatge especificat. Per a més informació, vegeu <link url=\"man:sane-"
 "pnm(5)\">sane-pnm(5)</link>."
 
-#: scanparams.cpp:263
+#: scanparams.cpp:278
 #, kde-format
 msgid "Virtual Scanner (any image format)"
 msgstr "Escàner virtual (qualsevol format d'imatge)"
 
-#: scanparams.cpp:264
+#: scanparams.cpp:279
 #, kde-kuit-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -570,47 +663,47 @@ msgstr ""
 "llegeix el fitxer d'imatge especificat. Això és per a provar el desament de "
 "la imatge, etc."
 
-#: scanparams.cpp:281
+#: scanparams.cpp:296
 #, kde-format
 msgid "Reading mode:"
 msgstr "Mode de lectura:"
 
-#: scanparams.cpp:411
+#: scanparams.cpp:414
 #, kde-format
 msgid "Default (from scan settings)"
 msgstr "Predeterminat (de la configuració de l'escaneig)"
 
-#: scanparams.cpp:412
+#: scanparams.cpp:415
 #, kde-format
 msgid "Black/white bitmap"
 msgstr "Mapa de bits blanc i negre"
 
-#: scanparams.cpp:413
+#: scanparams.cpp:416
 #, kde-format
 msgid "Grey scale"
 msgstr "Escala de grisos"
 
-#: scanparams.cpp:414
+#: scanparams.cpp:417
 #, kde-format
 msgid "Low colour"
 msgstr "Color baix"
 
-#: scanparams.cpp:415
+#: scanparams.cpp:418
 #, kde-format
 msgid "High colour"
 msgstr "Color alt"
 
-#: scanparams.cpp:425
+#: scanparams.cpp:428
 #, kde-format
 msgid "Force image format:"
 msgstr "Força el format d'imatge:"
 
-#: scanparams.cpp:476
+#: scanparams.cpp:483
 #, kde-format
 msgid "Edit Gamma Table..."
 msgstr "Edita la taula de gamma..."
 
-#: scanparams.cpp:548
+#: scanparams.cpp:555
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -620,7 +713,7 @@ msgstr ""
 "<title>Cap escàner seleccionat</title><nl/><nl/>Selecciona un dispositiu "
 "d'escàner per a realitzar l'escaneig."
 
-#: scanparams.cpp:568
+#: scanparams.cpp:575
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -643,22 +736,22 @@ msgstr ""
 "project.org\">www.sane-project.org</link>) per a obtenir més informació "
 "sobre la instal·lació i configuració de SANE."
 
-#: scanparams.cpp:670
+#: scanparams.cpp:677
 #, kde-format
 msgid "1-bit depth scan cannot be done in color"
 msgstr "L'escaneig amb profunditat d'1 bit no es pot realitzar en color"
 
-#: scanparams.cpp:673
+#: scanparams.cpp:680
 #, kde-format
 msgid "16-bit depth scans are not supported"
 msgstr "No s'admet l'escaneig amb profunditat de 16 bits"
 
-#: scanparams.cpp:683
+#: scanparams.cpp:690
 #, kde-format
 msgid "A file must be entered for testing or virtual scanning"
 msgstr "Haureu d'indicar un fitxer per a un escaneig de prova o virtual"
 
-#: scanparams.cpp:689
+#: scanparams.cpp:696
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -668,7 +761,7 @@ msgstr ""
 "El fitxer de proves o virtual <filename>%1</filename><nl/>no s'ha trobat o "
 "no es pot llegir."
 
-#: scanparams.cpp:699
+#: scanparams.cpp:706
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -678,17 +771,17 @@ msgstr ""
 "La depuració de SANE sols pot llegir fitxers PNM.<nl/>Aquest fitxer és del "
 "tipus <icode>%1</icode>."
 
-#: scanparams.cpp:716
+#: scanparams.cpp:723
 #, kde-kuit-format
 msgid "Scan in progress"
 msgstr "L'escaneig és en curs"
 
-#: scanparams.cpp:717
+#: scanparams.cpp:724
 #, kde-kuit-format
 msgid "Scan in progress<nl/><nl/>%1"
 msgstr "L'escaneig és en curs<nl/><nl/>%1"
 
-#: scanparams.cpp:737
+#: scanparams.cpp:744
 #, kde-format
 msgid "Cannot preview in Virtual Scanner mode"
 msgstr "No es pot previsualitzar en el mode «Escàner virtual»"
@@ -712,14 +805,35 @@ msgstr ""
 "una consulta sobre tota la xarxa, sinó solament a les màquines configurades "
 "per SANE.</div>"
 
+#. i18n: ectx: label, entry (StartupUseProxy), group (Startup)
+#: scansettings.kcfg:18
+#, kde-format
+msgid "Use the system proxy settings to access network scanners"
+msgstr ""
+"Utilitza la configuració del servidor intermediari del sistema per a accedir "
+"als escàners de xarxa"
+
+#. i18n: ectx: tooltip, entry (StartupUseProxy), group (Startup)
+#: scansettings.kcfg:19
+#, kde-format
+msgid ""
+"<div>Check this if you want to use the standard system proxy settings to "
+"access network scanners.<br/><br/>Note that some SANE backends (for example "
+"'escl') may not work properly through a proxy.</div>"
+msgstr ""
+"<div>Marqueu això si voleu utilitzar la configuració estàndard del servidor "
+"intermediari per a accedir als escàners de xarxa.<br/><br/>Tingueu en compte "
+"que alguns dorsals del SANE (per exemple «escl») poden no funcionar "
+"correctament a través d'un servidor intermediari.</div>"
+
 #. i18n: ectx: label, entry (StartupSkipAsk), group (Startup)
-#: scansettings.kcfg:22
+#: scansettings.kcfg:28
 #, kde-format
 msgid "Show the scanner selection dialog"
 msgstr "Mostra el diàleg de selecció de l'escàner"
 
 #. i18n: ectx: tooltip, entry (StartupSkipAsk), group (Startup)
-#: scansettings.kcfg:23
+#: scansettings.kcfg:29
 #, kde-format
 msgid "<div>Check this to show the scanner selection dialog on startup.</div>"
 msgstr ""
@@ -727,13 +841,13 @@ msgstr ""
 "l'escàner durant l'inici.</div>"
 
 #. i18n: ectx: label, entry (PreviewAutoselThreshold), group (Scanner Name)
-#: scansettings.kcfg:53
+#: scansettings.kcfg:61
 #, kde-format
 msgid "Threshold:"
 msgstr "Llindar:"
 
 #. i18n: ectx: tooltip, entry (PreviewAutoselThreshold), group (Scanner Name)
-#: scansettings.kcfg:54
+#: scansettings.kcfg:62
 #, kde-format
 msgid ""
 "<div>Threshold for auto-detection. All pixels lighter (on a black "
@@ -745,13 +859,13 @@ msgstr ""
 "consideraran com a part de la imatge.</div>"
 
 #. i18n: ectx: label, entry (PreviewAutoselDustsize), group (Scanner Name)
-#: scansettings.kcfg:61
+#: scansettings.kcfg:69
 #, kde-format
 msgid "Dust size (pixels):"
 msgstr "Mida de la pols (píxels):"
 
 #. i18n: ectx: tooltip, entry (PreviewAutoselDustsize), group (Scanner Name)
-#: scansettings.kcfg:62
+#: scansettings.kcfg:70
 #, kde-format
 msgid ""
 "<div>Set the dust size; dark or light areas smaller than this will be "
@@ -761,13 +875,13 @@ msgstr ""
 "aquesta seran ignorades</div>"
 
 #. i18n: ectx: label, entry (PreviewAutoselMargin), group (Scanner Name)
-#: scansettings.kcfg:69
+#: scansettings.kcfg:77
 #, kde-format
 msgid "Add/subtract margin (mm):"
 msgstr "Marge a afegir/restar (mm):"
 
 #. i18n: ectx: tooltip, entry (PreviewAutoselMargin), group (Scanner Name)
-#: scansettings.kcfg:70
+#: scansettings.kcfg:78
 #, kde-format
 msgid ""
 "<div>Set a margin to be added to or subtracted from the detected area</div>"
@@ -775,13 +889,13 @@ msgstr ""
 "<div>Establiu un marge que s'afegirà o restarà de la zona detectada</div>"
 
 #. i18n: ectx: label, entry (PreviewAutoselBackground), group (Scanner Name)
-#: scansettings.kcfg:77
+#: scansettings.kcfg:85
 #, kde-format
 msgid "Scanner background:"
 msgstr "Fons de l'escàner:"
 
 #. i18n: ectx: tooltip, entry (PreviewAutoselBackground), group (Scanner Name)
-#: scansettings.kcfg:78
+#: scansettings.kcfg:86
 #, kde-format
 msgid ""
 "<div>Select whether a scan of the empty scanner glass results in a black or "
@@ -820,7 +934,7 @@ msgstr "Apaïsat"
 msgid "Set the orientation for a preset size of the scanned area"
 msgstr "Estableix l'orientació d'una mida preestablerta de la zona escanejada"
 
-#: scansizeselector.cpp:266
+#: scansizeselector.cpp:262
 #, kde-format
 msgid "Selection"
 msgstr "Selecció"

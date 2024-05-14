@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kooka 0\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:26+0000\n"
+"POT-Creation-Date: 2024-02-20 01:38+0000\n"
 "PO-Revision-Date: 2004-04-20 13:26+CEST\n"
 "Last-Translator: auto\n"
 "Language-Team: Croatian <kde-croatia-list@lists.sourceforge.net>\n"
@@ -47,7 +47,7 @@ msgstr ""
 
 #: ../plugins/destination/abstractdestination.cpp:160
 #: ../plugins/destination/application/destinationapplication.cpp:190
-#: kookaview.cpp:1177
+#: kookaview.cpp:1180
 #, kde-format
 msgid "Other..."
 msgstr ""
@@ -84,14 +84,14 @@ msgstr ""
 msgid "<filename>%1</filename>"
 msgstr "orf %1 ne postoji"
 
-#: ../plugins/destination/print/destinationprint.cpp:78 kookaview.cpp:673
+#: ../plugins/destination/print/destinationprint.cpp:78 kookaview.cpp:676
 #, fuzzy, kde-format
 #| msgid "Print %1"
 msgctxt "@title:window"
 msgid "Print Image"
 msgstr "Ispiši %1"
 
-#: ../plugins/destination/print/destinationprint.cpp:89 kookaview.cpp:689
+#: ../plugins/destination/print/destinationprint.cpp:89 kookaview.cpp:692
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -100,7 +100,7 @@ msgid ""
 "%1"
 msgstr ""
 
-#: ../plugins/destination/print/destinationprint.cpp:90 kookaview.cpp:690
+#: ../plugins/destination/print/destinationprint.cpp:90 kookaview.cpp:693
 #, kde-format
 msgctxt "@title:window"
 msgid "Cannot Print"
@@ -385,7 +385,7 @@ msgstr "Pokaži prozor za odabir skenera pri sljedećem pokretanju."
 msgid "OCR Setup Error"
 msgstr "Problem pri raščlanjivanju"
 
-#: ../plugins/ocr/abstractocrengine.cpp:123 kookaview.cpp:787
+#: ../plugins/ocr/abstractocrengine.cpp:123 kookaview.cpp:790
 #, kde-format
 msgid "Configure OCR..."
 msgstr ""
@@ -1599,7 +1599,7 @@ msgstr ""
 msgid "Select Scan Device..."
 msgstr "Odaberite uređaj za skeniranje"
 
-#: kooka.cpp:275 kookaview.cpp:546
+#: kooka.cpp:275 kookaview.cpp:549
 #, fuzzy, kde-format
 msgid "Add Scan Device..."
 msgstr "Odaberite uređaj za skeniranje"
@@ -1721,7 +1721,7 @@ msgstr "Prstogledi"
 msgid "Image Gallery and Thumbnail View"
 msgstr "Umanjeni prikaz"
 
-#: kookapref.cpp:61 kookaview.cpp:290
+#: kookapref.cpp:61 kookaview.cpp:291
 #, fuzzy, kde-format
 msgid "OCR"
 msgstr "OCR"
@@ -2113,27 +2113,37 @@ msgstr ""
 msgid "Image View"
 msgstr "Pregled slike"
 
-#: kookaview.cpp:265
+#: kookaview.cpp:245
+#, kde-format
+msgid "User specified"
+msgstr ""
+
+#: kookaview.cpp:246
+#, kde-format
+msgid "on command line"
+msgstr ""
+
+#: kookaview.cpp:266
 #, fuzzy, kde-format
 msgid "Scan Preview"
 msgstr "Pregled skeniranja"
 
-#: kookaview.cpp:275
+#: kookaview.cpp:276
 #, kde-format
 msgid "OCR results will appear here"
 msgstr ""
 
-#: kookaview.cpp:284
+#: kookaview.cpp:285
 #, kde-format
 msgid "Scan"
 msgstr ""
 
-#: kookaview.cpp:287 kookaview.cpp:560 kookaview.cpp:579 scangallery.cpp:123
+#: kookaview.cpp:288 kookaview.cpp:563 kookaview.cpp:582 scangallery.cpp:123
 #, kde-format
 msgid "Gallery"
 msgstr "Galerija"
 
-#: kookaview.cpp:463
+#: kookaview.cpp:464
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2144,12 +2154,12 @@ msgid ""
 "reported error: <message>%1</message>"
 msgstr ""
 
-#: kookaview.cpp:518
+#: kookaview.cpp:519
 #, fuzzy, kde-format
 msgid "Add Scan Device"
 msgstr "Odaberite uređaj za skeniranje"
 
-#: kookaview.cpp:536
+#: kookaview.cpp:539
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2161,82 +2171,82 @@ msgid ""
 "backend name and parameters, or see that dialog for more information."
 msgstr ""
 
-#: kookaview.cpp:582
+#: kookaview.cpp:585
 #, kde-format
 msgid "No scanner connected"
 msgstr ""
 
-#: kookaview.cpp:641
+#: kookaview.cpp:644
 #, fuzzy, kde-format
 #| msgid "Font Type Selection"
 msgid "No selection"
 msgstr "Odabir tipa pisma"
 
-#: kookaview.cpp:645
+#: kookaview.cpp:648
 #, fuzzy, kde-format
 msgid "Gallery folder %1"
 msgstr "Direktoriji zbirki"
 
-#: kookaview.cpp:645
+#: kookaview.cpp:648
 #, fuzzy, kde-format
 msgid "Gallery image %1"
 msgstr "Učitavam %1"
 
-#: kookaview.cpp:710
+#: kookaview.cpp:713
 #, fuzzy, kde-format
 msgid "Starting OCR on selection"
 msgstr "Pokrećem OCR na odabranom"
 
-#: kookaview.cpp:716
+#: kookaview.cpp:719
 #, fuzzy, kde-format
 msgid "Starting OCR on the image"
 msgstr "Pokrećem OCR na celoj slici"
 
-#: kookaview.cpp:723
+#: kookaview.cpp:726
 #, fuzzy, kde-format
 #| msgid "GOCR engine"
 msgid "OCR File"
 msgstr "GOCR mehanizam"
 
-#: kookaview.cpp:733
+#: kookaview.cpp:736
 #, fuzzy, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot load <filename>%1</filename> for OCR:<nl/>%2"
 msgstr "orf %1 ne postoji"
 
-#: kookaview.cpp:735
+#: kookaview.cpp:738
 #, kde-format
 msgid "Cannot Read OCR File"
 msgstr ""
 
-#: kookaview.cpp:739
+#: kookaview.cpp:742
 #, fuzzy, kde-kuit-format
 msgctxt "@info"
 msgid "Starting OCR on file <filename>%1</filename>"
 msgstr "orf %1 ne postoji"
 
-#: kookaview.cpp:755
+#: kookaview.cpp:758
 #, fuzzy, kde-format
 #| msgid "GOCR engine"
 msgid "OCR finished"
 msgstr "GOCR mehanizam"
 
-#: kookaview.cpp:762
+#: kookaview.cpp:765
 #, kde-format
 msgid "There is no OCR result text to spell check."
 msgstr ""
 
-#: kookaview.cpp:763
+#: kookaview.cpp:766
 #, kde-format
 msgid "OCR Spell Check not possible"
 msgstr ""
 
-#: kookaview.cpp:768
+#: kookaview.cpp:771
 #, fuzzy, kde-format
 msgid "OCR Spell Check"
 msgstr "Provjera pravopisa"
 
-#: kookaview.cpp:784
+#: kookaview.cpp:787
 #, fuzzy, kde-format
 msgid ""
 "No OCR engine is configured.\n"
@@ -2245,17 +2255,17 @@ msgstr ""
 "Kooka nije kompajlirana sa podrškom za KADMOS.\n"
 "Označite drugi OCR program u podešavanjima."
 
-#: kookaview.cpp:786
+#: kookaview.cpp:789
 #, kde-format
 msgid "OCR Not Configured"
 msgstr ""
 
-#: kookaview.cpp:795
+#: kookaview.cpp:798
 #, kde-format
 msgid "Cannot load OCR plugin '%1'"
 msgstr ""
 
-#: kookaview.cpp:903
+#: kookaview.cpp:906
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2266,27 +2276,27 @@ msgid ""
 "<message>%1</message>"
 msgstr ""
 
-#: kookaview.cpp:953
+#: kookaview.cpp:956
 #, kde-format
 msgid "Create new image from selection"
 msgstr "Kreiraj novu sliku od odabranog"
 
-#: kookaview.cpp:962
+#: kookaview.cpp:965
 #, fuzzy, kde-format
 msgid "Cannot transform, image is read-only"
 msgstr "Ne mogu spremiti sliku, zaštićena je!"
 
-#: kookaview.cpp:1015
+#: kookaview.cpp:1018
 #, fuzzy, kde-format
 msgid "Loaded image %1"
 msgstr "Učitavam %1"
 
-#: kookaview.cpp:1016
+#: kookaview.cpp:1019
 #, fuzzy, kde-format
 msgid "Unloaded image"
 msgstr "&Izbaci sliku"
 
-#: kookaview.cpp:1033
+#: kookaview.cpp:1036
 #, fuzzy, kde-format
 msgid "Loading %1..."
 msgstr "Učitavam %1"
@@ -2471,67 +2481,72 @@ msgstr ""
 msgid "Error saving OCR results"
 msgstr "Pokaži OCR rezultate"
 
-#: prefspages.cpp:76
+#: prefspages.cpp:78
 #, kde-format
 msgid "Hidden Messages"
 msgstr ""
 
-#: prefspages.cpp:80
+#: prefspages.cpp:82
 #, kde-format
 msgid ""
 "Use this button to reenable all messages and questions which\n"
 "have been hidden by using \"Don't ask me again\"."
 msgstr ""
 
-#: prefspages.cpp:83
+#: prefspages.cpp:85
 #, kde-format
 msgid "Enable Messages/Questions"
 msgstr ""
 
-#: prefspages.cpp:243
+#: prefspages.cpp:152
+#, kde-format
+msgid "%1 must be restarted for these settings to take effect."
+msgstr ""
+
+#: prefspages.cpp:267
 #, fuzzy, kde-format
 #| msgid "Gallery"
 msgid "Image Gallery"
 msgstr "Galerija"
 
-#: prefspages.cpp:257
+#: prefspages.cpp:281
 #, fuzzy, kde-format
 #| msgid "Not found"
 msgid "Not shown"
 msgstr "Nije nađeno"
 
-#: prefspages.cpp:258
+#: prefspages.cpp:282
 #, kde-format
 msgid "At top"
 msgstr ""
 
-#: prefspages.cpp:259
+#: prefspages.cpp:283
 #, kde-format
 msgid "At bottom"
 msgstr ""
 
-#: prefspages.cpp:274
+#: prefspages.cpp:298
 #, fuzzy, kde-format
 msgid "Thumbnail View"
 msgstr "Umanjeni prikaz"
 
-#: prefspages.cpp:388
+#: prefspages.cpp:412
 #, kde-format
 msgid "None"
 msgstr ""
 
-#: prefspages.cpp:400
+#: prefspages.cpp:424
 #, fuzzy, kde-format
 #| msgid "GOCR engine"
 msgid "OCR Engine:"
 msgstr "GOCR mehanizam"
 
-#: prefspages.cpp:406
+#: prefspages.cpp:430
 #, fuzzy, kde-format
 msgid "OCR Engine Settings..."
 msgstr "OCR motor koji treba koristiti"
 
-#: prefspages.cpp:452
+#: prefspages.cpp:476
 #, fuzzy, kde-format
 msgid ""
 "No OCR engine is selected. Select and configure one to be able to perform "
@@ -2540,7 +2555,7 @@ msgstr ""
 "Kooka nije kompajlirana sa podrškom za KADMOS.\n"
 "Označite drugi OCR program u podešavanjima."
 
-#: prefspages.cpp:460
+#: prefspages.cpp:484
 #, fuzzy, kde-format
 msgid "Unknown engine '%1'."
 msgstr "Nepoznat tip slike"
