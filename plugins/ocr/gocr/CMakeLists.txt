@@ -11,7 +11,6 @@
 ##									##
 ##########################################################################
 
-project(kooka5)
 
 #########################################################################
 #									#
@@ -27,10 +26,8 @@ set(ocrgocr_SRCS
 
 kcoreaddons_add_plugin(ocrgocr SOURCES ${ocrgocr_SRCS} INSTALL_NAMESPACE "kooka_ocr")
 
-kcoreaddons_desktop_to_json(ocrgocr kookaocr-gocr.desktop)
-
-target_link_libraries(ocrgocr Qt::Core Qt::Gui)
-target_link_libraries(ocrgocr KF5::I18n KF5::WidgetsAddons)
+target_link_libraries(ocrgocr Qt${Q}::Core Qt${Q}::Gui)
+target_link_libraries(ocrgocr KF${Q}::I18n KF${Q}::WidgetsAddons)
 target_link_libraries(ocrgocr kookaocr kookascan)
 
 install(FILES gocr.png DESTINATION ${PICS_INSTALL_DIR})
