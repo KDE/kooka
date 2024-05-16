@@ -143,9 +143,13 @@ bool ScanGlobal::init()
 #ifdef HAVE_TIFF
         about.addComponent(i18n("LibTIFF"),
                            i18n("TIFF image format library"),
+#ifdef TIFFLIB_MAJOR_VERSION				// added in libtiff 4.5.0, maybe not in BSD
                            QString("%1.%2.%3").arg(TIFFLIB_MAJOR_VERSION)
                                               .arg(TIFFLIB_MINOR_VERSION)
                                               .arg(TIFFLIB_MICRO_VERSION),
+#else
+                           QString::number(TIFFLIB_VERSION),
+#endif
                            "https://libtiff.gitlab.io/libtiff/",
                            // Licence text is at https://libtiff.gitlab.io/libtiff/project/license.html
                            KAboutLicense::Custom);

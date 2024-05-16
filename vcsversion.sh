@@ -15,8 +15,8 @@ SRC=$1							# CMAKE_CURRENT_SOURCE_DIR
 BIN=$2							# CMAKE_CURRENT_BINARY_DIR
 VER=$3							# application version
 
-SVNCMD=`PATH=$PATH:$KDEDIR/bin type -p svn 2>/dev/null`
-GITCMD=`PATH=$PATH:$KDEDIR/bin type -p git 2>/dev/null`
+SVNCMD=`PATH=$PATH:$KDEDIR/bin which svn 2>/dev/null`
+GITCMD=`PATH=$PATH:$KDEDIR/bin which git 2>/dev/null`
 
 VCS=							# version control found
 REV=							# version from that

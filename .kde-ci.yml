@@ -13,6 +13,8 @@ Dependencies:
     'frameworks/kdoctools': '@stable'
     'frameworks/kwidgetsaddons': '@stable'
     'frameworks/kservice': '@stable'
+    'frameworks/kxmlgui': '@stable'
+    'frameworks/purpose': '@stable'
     'frameworks/sonnet': '@stable'
 
 - 'on': ['Linux/Qt6', 'FreeBSD/Qt6']
@@ -26,6 +28,8 @@ Dependencies:
     'frameworks/kdoctools': '@latest-kf6'
     'frameworks/kwidgetsaddons': '@latest-kf6'
     'frameworks/kservice': '@latest-kf6'
+    'frameworks/kxmlgui': '@latest-kf6'
+    'frameworks/purpose': '@latest-kf6'
     'frameworks/sonnet': '@latest-kf6'
 
 Options:
