@@ -340,7 +340,7 @@ void KScanCombo::setList(const QList<QByteArray> &list)
     const bool bs = mCombo->blockSignals(true);
     mCombo->clear();
 
-    for (const QByteArray &item : qAsConst(list))
+    for (const QByteArray &item : std::as_const(list))
     {
         // See the KI18N Programmer's Guide, "Connecting to Catalogs in Library Code"
         mCombo->addItem(ki18n(item.constData()).toString("sane-backends"), item);

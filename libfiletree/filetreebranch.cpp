@@ -56,8 +56,7 @@ FileTreeBranch::FileTreeBranch(FileTreeView *parent,
 
     QUrl u(url);
     if (u.isLocalFile()) {				// for local files,
-        QDir d(u.path());				// ensure path is canonical
-        u.setPath(d.canonicalPath());
+        u.setPath(QDir(u.path()).canonicalPath());	// ensure path is canonical
     }
     m_startURL = u;
     qCDebug(LIBFILETREE_LOG) << "for" << u;

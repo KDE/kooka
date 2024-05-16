@@ -918,36 +918,29 @@ void ScanParams::setEditCustomGammaTableState()
     bool butState = false;
 
     KScanOption *so = mSaneDevice->getOption(SANE_NAME_CUSTOM_GAMMA, false);
-    if (so != nullptr) {
-        butState = so->isActive();
+    if (so != nullptr) butState = so->isActive();
+    if (!butState)
+    {
+        so = mSaneDevice->getOption(SANE_NAME_GAMMA_VECTOR, false);
+        if (so != nullptr) butState = so->isActive();
     }
 
-    if (!butState) {
-        KScanOption *so = mSaneDevice->getOption(SANE_NAME_GAMMA_VECTOR, false);
-        if (so != nullptr) {
-            butState = so->isActive();
-        }
+    if (!butState)
+    {
+        so = mSaneDevice->getOption(SANE_NAME_GAMMA_VECTOR_R, false);
+        if (so != nullptr) butState = so->isActive();
     }
 
-    if (!butState) {
-        KScanOption *so = mSaneDevice->getOption(SANE_NAME_GAMMA_VECTOR_R, false);
-        if (so != nullptr) {
-            butState = so->isActive();
-        }
+    if (!butState)
+    {
+        so = mSaneDevice->getOption(SANE_NAME_GAMMA_VECTOR_G, false);
+        if (so != nullptr) butState = so->isActive();
     }
 
-    if (!butState) {
-        KScanOption *so = mSaneDevice->getOption(SANE_NAME_GAMMA_VECTOR_G, false);
-        if (so != nullptr) {
-            butState = so->isActive();
-        }
-    }
-
-    if (!butState) {
-        KScanOption *so = mSaneDevice->getOption(SANE_NAME_GAMMA_VECTOR_B, false);
-        if (so != nullptr) {
-            butState = so->isActive();
-        }
+    if (!butState)
+    {
+        so = mSaneDevice->getOption(SANE_NAME_GAMMA_VECTOR_B, false);
+        if (so != nullptr) butState = so->isActive();
     }
 
     qCDebug(LIBKOOKASCAN_LOG) << "Set state to" << butState;

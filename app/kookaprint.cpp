@@ -152,9 +152,9 @@ void KookaPrint::recalculatePrintParameters()
 
         if (m_maintainAspect)				// maintain the aspect ratio
         {
-            QRectF r = pageRect(QPrinter::DevicePixel);
-            double wAspect = r.width()/mImageWidthPix;	// scaling ratio image -> page
-            double hAspect = r.height()/mImageHeightPix;
+            QRectF pr = pageRect(QPrinter::DevicePixel);
+            double wAspect = pr.width()/mImageWidthPix;	// scaling ratio image -> page
+            double hAspect = pr.height()/mImageHeightPix;
 
             if (wAspect>hAspect)
             {

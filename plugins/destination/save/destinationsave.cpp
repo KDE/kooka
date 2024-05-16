@@ -132,8 +132,8 @@ void DestinationSave::imageScanned(ScanImage::Ptr img)
         qCDebug(DESTINATION_LOG) << "save to remote";
 
         // The save location is remote.  Save a temporary image,
-        // then use KIO to move it to the destination location.
-        QUrl url = saveTempImage(fmt, img);		// save a temporary image
+							// then use KIO to move it to the destination location.
+        url = saveTempImage(fmt, img);			// save a temporary image
         if (!url.isValid()) return;			// temp image save failed
 
         KIO::FileCopyJob *job = KIO::file_move(url, mSaveUrl);
