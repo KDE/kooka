@@ -716,7 +716,7 @@ KScanDevice::Status KScanDevice::acquirePreview(bool forceGray, int dpi)
                 min = 75.0;				// hope every scanner can do this
             }
 
-            preview_dpi = (int) min;
+            preview_dpi = int(min);
             if (preview_dpi<MIN_PREVIEW_DPI) preview_dpi = MIN_PREVIEW_DPI;
             qCDebug(LIBKOOKASCAN_LOG) << "Resolution range" << min << "-" << max << "preview at" << preview_dpi;
         }
@@ -1260,7 +1260,7 @@ default:    qCWarning(LIBKOOKASCAN_LOG) << "Undefined SANE format" << mSaneParam
 
 	if ((mSaneParameters.lines>0) && ((mSaneParameters.lines*mPixelY)>0))
 	{
-            int progress =  (int)(((double)MAX_PROGRESS)/mSaneParameters.lines*mPixelY);
+            int progress =  int((double(MAX_PROGRESS))/mSaneParameters.lines*mPixelY);
             if (progress<MAX_PROGRESS) emit sigScanProgress(progress);
 	}
 

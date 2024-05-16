@@ -444,7 +444,7 @@ bool KScanOption::set(int val)
 case SANE_TYPE_BUTTON:					// Activate a button
 case SANE_TYPE_BOOL:					// Assign a Boolean value
         sw = (val ? SANE_TRUE : SANE_FALSE);
-        mBuffer = QByteArray(((const char *) &sw),sizeof(SANE_Word));
+        mBuffer = QByteArray(reinterpret_cast<const char *>(&sw), sizeof(SANE_Word));
         break;
 
 case SANE_TYPE_INT:					// Fill the whole buffer with that value
@@ -452,7 +452,7 @@ case SANE_TYPE_INT:					// Fill the whole buffer with that value
 	qa.resize(word_size);
         sw = static_cast<SANE_Word>(val);
 	qa.fill(sw);
-        mBuffer = QByteArray(((const char *) qa.data()),mDesc->size);
+        mBuffer = QByteArray(reinterpret_cast<const char *>(qa.data()), mDesc->size);
 	break;
 
 case SANE_TYPE_FIXED:					// Fill the whole buffer with that value
@@ -460,7 +460,7 @@ case SANE_TYPE_FIXED:					// Fill the whole buffer with that value
         qa.resize(word_size);
         sw = SANE_FIX(static_cast<double>(val));
         qa.fill(sw);
-        mBuffer = QByteArray(((const char *) qa.data()),mDesc->size);
+        mBuffer = QByteArray(reinterpret_cast<const char *>(qa.data()), mDesc->size);
         break;
 
 default:
@@ -488,7 +488,7 @@ bool KScanOption::set(double val)
     {
 case SANE_TYPE_BOOL:					// Assign a Boolean value
         sw = (val>0 ? SANE_TRUE : SANE_FALSE);
-        mBuffer = QByteArray(((const char *) &sw),sizeof(SANE_Word));
+        mBuffer = QByteArray(reinterpret_cast<const char *>(&sw), sizeof(SANE_Word));
         break;
 
 case SANE_TYPE_INT:					// Fill the whole buffer with that value
@@ -496,7 +496,7 @@ case SANE_TYPE_INT:					// Fill the whole buffer with that value
         qa.resize(word_size);
         sw = static_cast<SANE_Word>(val);
         qa.fill(sw);
-        mBuffer = QByteArray(((const char *) qa.data()),mDesc->size);
+        mBuffer = QByteArray(reinterpret_cast<const char *>(qa.data()), mDesc->size);
         break;
 
 case SANE_TYPE_FIXED:					// Fill the whole buffer with that value
@@ -504,7 +504,7 @@ case SANE_TYPE_FIXED:					// Fill the whole buffer with that value
         qa.resize(word_size);
         sw = SANE_FIX(val);
         qa.fill(sw);
-        mBuffer = QByteArray(((const char *) qa.data()),mDesc->size);
+        mBuffer = QByteArray(reinterpret_cast<const char *>(qa.data()), mDesc->size);
         break;
 
 default:
@@ -647,7 +647,7 @@ default:
         return (false);
     }
 
-    mBuffer = QByteArray(((const char *) (qa.constData())), mDesc->size);
+    mBuffer = QByteArray(reinterpret_cast<const char *>(qa.constData()), mDesc->size);
     mBufferClean = false;
     return (true);
 }
@@ -656,19 +656,20 @@ default:
 bool KScanOption::get(int *val) const
 {
     if (!isValid() || mBuffer.isNull()) return (false);
+    const SANE_Word *wp = reinterpret_cast<const SANE_Word *>(mBuffer.constData());
 
     switch (mDesc->type)
     {
 case SANE_TYPE_BOOL:					/* Buffer has a SANE_Word */
-        *val = (*((SANE_Word *) mBuffer.constData()))==SANE_TRUE ? 1 : 0;
+        *val = (*wp==SANE_TRUE) ? 1 : 0;
         break;
 
 case SANE_TYPE_INT:					/* reading just the first is OK */
-        *val = *((SANE_Word *) mBuffer.constData());
+        *val = *wp;
         break;
 
 case SANE_TYPE_FIXED:					/* reading just the first is OK */
-        *val = static_cast<int>(SANE_UNFIX(*((SANE_Word *) mBuffer.constData())));
+        *val = static_cast<int>(SANE_UNFIX(*wp));
         break;
 
 default:
@@ -696,7 +697,7 @@ QByteArray KScanOption::get() const
     }
     else
     {							// first SANE_Word of buffer
-        SANE_Word sane_word = *((SANE_Word *) mBuffer.constData());
+        SANE_Word sane_word = *reinterpret_cast<const SANE_Word *>(mBuffer.constData());
         switch (mDesc->type)
         {
 case SANE_TYPE_BOOL:
@@ -750,14 +751,13 @@ bool KScanOption::get(KGammaTable *gt) const
 
 QList<QByteArray> KScanOption::getList() const
 {
-    const char **sstring = nullptr;
+    const char * const *sstring = nullptr;
     QList<QByteArray> strList;
     if (mDesc==nullptr) return (strList);
 
     if (mDesc->constraint_type==SANE_CONSTRAINT_STRING_LIST)
     {
-        sstring = (const char **)mDesc->constraint.string_list;
-
+        sstring = reinterpret_cast<const char * const *>(mDesc->constraint.string_list);
         while (*sstring!=nullptr)
         {
             strList.append(*sstring);

@@ -288,12 +288,12 @@ KScanCheckbox::KScanCheckbox(QWidget *parent, const QString &text)
 
 int KScanCheckbox::value() const
 {
-    return ((int) mCheckbox->isChecked());
+    return (int(mCheckbox->isChecked()));
 }
 
 void KScanCheckbox::setValue(int i)
 {
-    mCheckbox->setChecked((bool) i);
+    mCheckbox->setChecked(bool(i));
 }
 
 QString KScanCheckbox::label() const
