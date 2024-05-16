@@ -10,6 +10,8 @@ Dependencies:
     'frameworks/kdoctools': '@stable'
     'frameworks/kwidgetsaddons': '@stable'
     'frameworks/kservice': '@stable'
+    'frameworks/kxmlgui': '@stable'
+    'frameworks/purpose': '@stable'
     'frameworks/sonnet': '@stable'
 
 Options:
