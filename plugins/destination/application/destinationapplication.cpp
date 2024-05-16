@@ -180,7 +180,7 @@ found:  qCDebug(DESTINATION_LOG) << "accept" << service->desktopEntryName() << "
 
     const QString configuredApp = KookaSettings::destinationApplicationApp();
     int configuredIndex = -1;
-    for (const KService::Ptr &service : qAsConst(validServices))
+    for (const KService::Ptr &service : std::as_const(validServices))
     {
         const QString key = service->desktopEntryName();
         if (key==configuredApp) configuredIndex = mAppsCombo->count();

@@ -153,7 +153,7 @@ void WidgetSite::setWidget(QWidget *widget)
     QGridLayout *lay = static_cast<QGridLayout *>(layout());
 
     QObjectList childs = children();
-    for (QObject *ch : qAsConst(childs))
+    for (QObject *ch : std::as_const(childs))
     {
         if (ch->isWidgetType())
         {
@@ -1168,7 +1168,7 @@ void KookaView::showOpenWithMenu(KActionMenu *menu)
 
     int i = 0;
     mOpenWithOffers = KApplicationTrader::queryByMimeType(mimeType);
-    for (const KService::Ptr &service : qAsConst(mOpenWithOffers))
+    for (const KService::Ptr &service : std::as_const(mOpenWithOffers))
     {
         //qCDebug(KOOKA_LOG) << "> offer:" << service->name();
         QString actionName(service->name().replace("&", "&&"));

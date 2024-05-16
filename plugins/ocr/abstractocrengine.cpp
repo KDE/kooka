@@ -248,7 +248,7 @@ void AbstractOcrEngine::removeTempFiles()
     if (retain)
     {
         QString s = xi18nc("@info", "The following OCR temporary files are retained for debugging:<nl/><nl/>");
-        for (const QString &file : qAsConst(temps))
+        for (const QString &file : std::as_const(temps))
         {
             if (file.isEmpty()) continue;
 
@@ -277,7 +277,7 @@ void AbstractOcrEngine::removeTempFiles()
 
     if (!retain)
     {
-        for (const QString &tf : qAsConst(temps))
+        for (const QString &tf : std::as_const(temps))
         {
             if (tf.isEmpty()) continue;
 

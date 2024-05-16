@@ -553,7 +553,7 @@ void KScanDevice::showOptions()
 
     QList<QByteArray> optionNames = mCreatedOptions.keys();
     std::sort(optionNames.begin(), optionNames.end());
-    for (const QByteArray &optionName : qAsConst(optionNames))
+    for (const QByteArray &optionName : std::as_const(optionNames))
     {
         const KScanOption *so = mCreatedOptions.value(optionName);
         if (so->isGroup()) continue;

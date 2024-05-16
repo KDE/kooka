@@ -488,7 +488,7 @@ void ScanGallery::slotDecorate(FileTreeBranch *branch, const FileTreeViewItemLis
 #ifdef DEBUG_LOADING
     qCDebug(KOOKA_LOG) << "count" << list.count();
 #endif // DEBUG_LOADING
-    for (FileTreeViewItem *ftvi : qAsConst(list))
+    for (FileTreeViewItem *ftvi : std::as_const(list))
     {
         slotDecorate(ftvi);
         emit fileChanged(ftvi->fileItem());
@@ -934,7 +934,7 @@ FileTreeViewItem *ScanGallery::findItemByUrl(const QUrl &url, FileTreeBranch *br
     }
 
     FileTreeViewItem *foundItem = nullptr;
-    for (FileTreeBranch *branchloop : qAsConst(branchList))
+    for (FileTreeBranch *branchloop : std::as_const(branchList))
     {
         FileTreeViewItem *ftvi = branchloop->findItemByUrl(u);
         if (ftvi != nullptr) {

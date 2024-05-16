@@ -98,7 +98,7 @@ AddDeviceDialog::AddDeviceDialog(QWidget *parent, const QString &caption)
           << "frame grabber" << "handheld scanner" << "multi-function peripheral"
           << "sheetfed scanner" << "still camera" << "video camera"
           << "virtual device";
-    for (const char *type : qAsConst(types))
+    for (const char *type : std::as_const(types))
     {
         QString iconName = ScanDevices::self()->typeIconName(type);
         if (iconName.isEmpty()) iconName = "scanner";

@@ -141,7 +141,7 @@ void DeviceSelector::setScanSources(const QList<QByteArray> &backends)
     QByteArray defstr = ScanSettings::startupScanDevice().toLocal8Bit();
     QListWidgetItem *defItem = nullptr;
 
-    for (const QByteArray &devName : qAsConst(backends))
+    for (const QByteArray &devName : std::as_const(backends))
     {
         const SANE_Device *dev = ScanDevices::self()->deviceInfo(devName);
         if (dev == nullptr) {

@@ -91,7 +91,7 @@ QMimeData *FileTreeView::mimeData(const QList<QTreeWidgetItem *> items) const
     QMimeData *mimeData = new QMimeData();
     QList<QUrl> urlList;
 
-    for (const QTreeWidgetItem *item : qAsConst(items))
+    for (const QTreeWidgetItem *item : std::as_const(items))
     {
         const FileTreeViewItem *ftvi = static_cast<const FileTreeViewItem *>(item);
 #ifdef DEBUG_LISTING
@@ -333,7 +333,7 @@ const FileTreeBranch *FileTreeView::branch(const QString &searchName) const
 #ifdef DEBUG_LISTING
     qCDebug(LIBFILETREE_LOG) << "searching for" << searchName;
 #endif // DEBUG_LISTING
-    for (const FileTreeBranch *branch : qAsConst(m_branches))
+    for (const FileTreeBranch *branch : std::as_const(m_branches))
     {
         const QString bname = branch->name();
 #ifdef DEBUG_LISTING
@@ -391,7 +391,7 @@ void FileTreeView::slotNewTreeViewItems(FileTreeBranch *branch, const FileTreeVi
      */
     if (!m_nextUrlToSelect.isEmpty())
     {
-        for (FileTreeViewItem *it : qAsConst(items))
+        for (FileTreeViewItem *it : std::as_const(items))
         {
             QUrl url = it->url();
 

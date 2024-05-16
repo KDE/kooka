@@ -594,8 +594,8 @@ void FormatDialog::buildFormatList(bool recOnly)
 
     mFormatList->clear();
     const QList<QMimeType> *mimeTypes = ImageFormat::mimeTypes();
-    for (const QMimeType &mime : qAsConst(*mimeTypes))	// for all known MIME types
-    {
+    for (const QMimeType &mime : std::as_const(*mimeTypes))
+    {							// for all known MIME types
         const FormatInfo *fi = findKnownFormat(mime);	// look for format information
         if (fi==nullptr)				// nothing for that MIME type
         {

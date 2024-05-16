@@ -115,7 +115,7 @@ bool OcrOcradDialog::setupGui()
     m_characterSet = new QComboBox(w);
     m_characterSet->setToolTip(ski->toolTip());
     m_characterSet->addItem(i18n("(default)"), false);
-    for (const QString &val : qAsConst(vals))
+    for (const QString &val : std::as_const(vals))
     {
         m_characterSet->addItem(val, true);
     }
@@ -137,7 +137,7 @@ bool OcrOcradDialog::setupGui()
     m_filter = new QComboBox(w);
     m_filter->setToolTip(ski->toolTip());
     m_filter->addItem(i18n("(default)"), false);
-    for (const QString &val : qAsConst(vals))
+    for (const QString &val : std::as_const(vals))
     {
         m_filter->addItem(val, true);
     }
@@ -159,7 +159,7 @@ bool OcrOcradDialog::setupGui()
     m_transform = new QComboBox(w);
     m_transform->setToolTip(ski->toolTip());
     m_transform->addItem(i18n("(default)"), false);
-    for (const QString &val : qAsConst(vals))
+    for (const QString &val : std::as_const(vals))
     {
         m_transform->addItem(val, true);
     }

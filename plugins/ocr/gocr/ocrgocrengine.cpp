@@ -176,7 +176,7 @@ bool OcrGocrEngine::finishedOcrProcess(QProcess *proc)
 
     startResultDocument();
 
-    for (const QString &itLine : qAsConst(lines))
+    for (const QString &itLine : std::as_const(lines))
     {
         startLine();
 #if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
@@ -184,7 +184,7 @@ bool OcrGocrEngine::finishedOcrProcess(QProcess *proc)
 #else
         const QStringList words = itLine.split(QRegularExpression("\\s+"), QString::SkipEmptyParts);
 #endif
-        for (const QString &itWord : qAsConst(words))
+        for (const QString &itWord : std::as_const(words))
         {
             OcrWordData wd;
             addWord(itWord, wd);
