@@ -38,7 +38,7 @@
 
 
 class AbstractPlugin;
-class AbstractPluginInfo;
+struct AbstractPluginInfo;
 
 
 /**
