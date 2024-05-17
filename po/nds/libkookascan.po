@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: libkscan\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-20 01:38+0000\n"
+"POT-Creation-Date: 2024-05-17 01:43+0000\n"
 "PO-Revision-Date: 2011-10-04 13:38+0200\n"
 "Last-Translator: Manfred Wiese <m.j.wiese@web.de>\n"
 "Language-Team: Low Saxon <kde-i18n-nds@kde.org>\n"
@@ -28,26 +28,16 @@ msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
 msgstr ""
 
-#: ../libdialogutil/imagefilter.cpp:91
+#: ../libdialogutil/imagefilter.cpp:85
 #, fuzzy, kde-format
 #| msgid "*|All Files"
-msgid "%1|All Image Files"
+msgid "All Image Files"
 msgstr "*|All Dateien"
 
-#: ../libdialogutil/imagefilter.cpp:92
-#, kde-format
-msgid "All Image Files (%1)"
-msgstr ""
-
-#: ../libdialogutil/imagefilter.cpp:97
-#, kde-format
-msgid "*|All Files"
-msgstr "*|All Dateien"
-
-#: ../libdialogutil/imagefilter.cpp:98
+#: ../libdialogutil/imagefilter.cpp:90
 #, fuzzy, kde-format
 #| msgid "*|All Files"
-msgid "All Files (*)"
+msgid "All Files"
 msgstr "*|All Dateien"
 
 #: adddevicedialog.cpp:58
@@ -69,7 +59,7 @@ msgstr ""
 msgid "Scanner device:"
 msgstr "Reedschap lett sik nich opmaken"
 
-#: adddevicedialog.cpp:80 scandevices.cpp:190
+#: adddevicedialog.cpp:80 scandevices.cpp:186
 #, kde-format
 msgctxt "Value used for manufacturer if none entered"
 msgid "User specified"
@@ -325,121 +315,121 @@ msgstr "Instellen op Standardweert torüchsetten, %1"
 
 #: kscancontrols.cpp:414
 #, kde-format
-msgid "*.pnm *.pbm *.pgm *.ppm|PNM Image Files"
+msgid "PNM Image Files (*.pnm *.pbm *.pgm *.ppm)"
 msgstr ""
 
-#: kscandevice.cpp:291
+#: kscandevice.cpp:279
 #, kde-format
 msgid "No scanner selected"
 msgstr "Keen Inleesreedschap utsöcht"
 
-#: kscandevice.cpp:1394
+#: kscandevice.cpp:1380
 #, kde-format
 msgid "Default startup configuration"
 msgstr "Standardinstellen bi't Starten"
 
-#: kscandevice.cpp:1494
+#: kscandevice.cpp:1480
 #, kde-kuit-format
 msgctxt "@info"
 msgid "The scanner<nl/><icode>%1</icode><nl/>requires authentication."
 msgstr ""
 
-#: kscandevice.cpp:1495
+#: kscandevice.cpp:1481
 #, kde-format
 msgid "Scanner Authentication"
 msgstr ""
 
-#: kscandevice.cpp:1539
+#: kscandevice.cpp:1525
 #, kde-format
 msgid "OK"
 msgstr ""
 
-#: kscandevice.cpp:1540
+#: kscandevice.cpp:1526
 #, kde-format
 msgid "No device"
 msgstr "Keen Reedschap"
 
-#: kscandevice.cpp:1541
+#: kscandevice.cpp:1527
 #, kde-format
 msgid "Bad parameter"
 msgstr ""
 
-#: kscandevice.cpp:1542
+#: kscandevice.cpp:1528
 #, kde-format
 msgid "Cannot open device"
 msgstr "Reedschap lett sik nich opmaken"
 
-#: kscandevice.cpp:1543
+#: kscandevice.cpp:1529
 #, kde-format
 msgid "sane_control_option() failed"
 msgstr ""
 
-#: kscandevice.cpp:1544
+#: kscandevice.cpp:1530
 #, kde-format
 msgid "Error while scanning"
 msgstr ""
 
-#: kscandevice.cpp:1545
+#: kscandevice.cpp:1531
 #, kde-format
 msgid "Empty picture"
 msgstr ""
 
-#: kscandevice.cpp:1546
+#: kscandevice.cpp:1532
 #, kde-format
 msgid "Out of memory"
 msgstr "Nich noog Spieker"
 
-#: kscandevice.cpp:1547
+#: kscandevice.cpp:1533
 #, kde-format
 msgid "Needs reload"
 msgstr ""
 
-#: kscandevice.cpp:1548
+#: kscandevice.cpp:1534
 #, kde-format
 msgid "Cancelled"
 msgstr "Afbraken"
 
-#: kscandevice.cpp:1549
+#: kscandevice.cpp:1535
 #, kde-format
 msgid "Not active"
 msgstr "Nich anmaakt"
 
-#: kscandevice.cpp:1550
+#: kscandevice.cpp:1536
 #, kde-format
 msgid "Not supported"
 msgstr "Nich ünnerstütt"
 
-#: kscandevice.cpp:1551
+#: kscandevice.cpp:1537
 #, kde-format
 msgid "Unknown status %1"
 msgstr "Nich begäng Tostand: %1"
 
-#: kscanoption.cpp:1011
+#: kscanoption.cpp:1013
 #, kde-format
 msgid "pixels"
 msgstr "Pixels"
 
-#: kscanoption.cpp:1012
+#: kscanoption.cpp:1014
 #, kde-format
 msgid "bits"
 msgstr "Bits"
 
-#: kscanoption.cpp:1013
+#: kscanoption.cpp:1015
 #, kde-format
 msgid "mm"
 msgstr "mm"
 
-#: kscanoption.cpp:1014
+#: kscanoption.cpp:1016
 #, kde-format
 msgid "dpi"
 msgstr "dpi"
 
-#: kscanoption.cpp:1015
+#: kscanoption.cpp:1017
 #, kde-format
 msgid "%"
 msgstr "%"
 
-#: kscanoption.cpp:1016
+#: kscanoption.cpp:1018
 #, kde-format
 msgid "µsec"
 msgstr "µsec"
@@ -490,7 +480,7 @@ msgctxt "@action:button Name of colour"
 msgid "Black"
 msgstr "Swatt"
 
-#: scandevices.cpp:208
+#: scandevices.cpp:204
 #, kde-format
 msgid "Unknown device '%1'"
 msgstr "Reedschap \"%1\" nich begäng"
@@ -515,12 +505,12 @@ msgstr ""
 msgid "TIFF image format library"
 msgstr ""
 
-#: scanglobal.cpp:154
+#: scanglobal.cpp:158
 #, kde-format
 msgid "libpaper"
 msgstr ""
 
-#: scanglobal.cpp:155
+#: scanglobal.cpp:159
 #, kde-format
 msgid "Paper size configuration library"
 msgstr ""
@@ -671,12 +661,12 @@ msgstr ""
 msgid "Force image format:"
 msgstr ""
 
-#: scanparams.cpp:483
+#: scanparams.cpp:481
 #, kde-format
 msgid "Edit Gamma Table..."
 msgstr "Gammatabell bewerken..."
 
-#: scanparams.cpp:555
+#: scanparams.cpp:553
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -684,7 +674,7 @@ msgid ""
 "perform scanning."
 msgstr ""
 
-#: scanparams.cpp:575
+#: scanparams.cpp:573
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -698,22 +688,22 @@ msgid ""
 "for more information on SANE installation and setup."
 msgstr ""
 
-#: scanparams.cpp:677
+#: scanparams.cpp:675
 #, kde-format
 msgid "1-bit depth scan cannot be done in color"
 msgstr ""
 
-#: scanparams.cpp:680
+#: scanparams.cpp:678
 #, kde-format
 msgid "16-bit depth scans are not supported"
 msgstr ""
 
-#: scanparams.cpp:690
+#: scanparams.cpp:688
 #, kde-format
 msgid "A file must be entered for testing or virtual scanning"
 msgstr ""
 
-#: scanparams.cpp:696
+#: scanparams.cpp:694
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -721,7 +711,7 @@ msgid ""
 "not readable."
 msgstr ""
 
-#: scanparams.cpp:706
+#: scanparams.cpp:704
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -729,19 +719,19 @@ msgid ""
 "%1</icode>."
 msgstr ""
 
-#: scanparams.cpp:723
+#: scanparams.cpp:721
 #, fuzzy, kde-kuit-format
 #| msgid "Scanning page %1"
 msgid "Scan in progress"
 msgstr "Siet %1 warrt inleest"
 
-#: scanparams.cpp:724
+#: scanparams.cpp:722
 #, fuzzy, kde-kuit-format
 #| msgid "Scanning page %1"
 msgid "Scan in progress<nl/><nl/>%1"
 msgstr "Siet %1 warrt inleest"
 
-#: scanparams.cpp:744
+#: scanparams.cpp:742
 #, kde-format
 msgid "Cannot preview in Virtual Scanner mode"
 msgstr ""
@@ -883,6 +873,11 @@ msgstr ""
 #, kde-format
 msgid "Selection"
 msgstr "Köör"
+
+#, fuzzy
+#~| msgid "*|All Files"
+#~ msgid "All Files (*)"
+#~ msgstr "*|All Dateien"
 
 #~ msgid "<qt><b>Mass Scanning</b>"
 #~ msgstr "<qt><b>Bült-Inlesen</b>"

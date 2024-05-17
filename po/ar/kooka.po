@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-20 01:38+0000\n"
+"POT-Creation-Date: 2024-05-17 01:43+0000\n"
 "PO-Revision-Date: 2013-10-15 16:30+0000\n"
 "Last-Translator: safaalfulaij <safa1996alfulaij@gmail.com>\n"
 "Language-Team: Arabic <doc@arabeyes.org>\n"
@@ -46,7 +46,7 @@ msgstr ""
 
 #: ../plugins/destination/abstractdestination.cpp:160
 #: ../plugins/destination/application/destinationapplication.cpp:190
-#: kookaview.cpp:1180
+#: kookaview.cpp:1181
 #, kde-format
 msgid "Other..."
 msgstr ""
@@ -77,19 +77,19 @@ msgstr "معلومات الصورة"
 msgid "Copying image to clipboard"
 msgstr ""
 
-#: ../plugins/destination/gallery/destinationgallery.cpp:74
+#: ../plugins/destination/gallery/destinationgallery.cpp:69
 #, fuzzy, kde-kuit-format
 msgid "<filename>%1</filename>"
 msgstr "الــ orf %1 غير موجود."
 
-#: ../plugins/destination/print/destinationprint.cpp:78 kookaview.cpp:676
+#: ../plugins/destination/print/destinationprint.cpp:78 kookaview.cpp:677
 #, fuzzy, kde-format
 #| msgid "Print %1"
 msgctxt "@title:window"
 msgid "Print Image"
 msgstr "إطبع %1"
 
-#: ../plugins/destination/print/destinationprint.cpp:89 kookaview.cpp:692
+#: ../plugins/destination/print/destinationprint.cpp:89 kookaview.cpp:693
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -98,7 +98,7 @@ msgid ""
 "%1"
 msgstr ""
 
-#: ../plugins/destination/print/destinationprint.cpp:90 kookaview.cpp:693
+#: ../plugins/destination/print/destinationprint.cpp:90 kookaview.cpp:694
 #, kde-format
 msgctxt "@title:window"
 msgid "Cannot Print"
@@ -115,36 +115,36 @@ msgstr ""
 msgid "Printing image"
 msgstr "إطبع %1"
 
-#: ../plugins/destination/save/destinationsave.cpp:132
+#: ../plugins/destination/save/destinationsave.cpp:125
 #, fuzzy, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot save image to <filename>%1</filename><nl/><message>%2</message>"
 msgstr "الــ orf %1 غير موجود."
 
-#: ../plugins/destination/save/destinationsave.cpp:134
-#: ../plugins/destination/save/destinationsave.cpp:239
+#: ../plugins/destination/save/destinationsave.cpp:127
+#: ../plugins/destination/save/destinationsave.cpp:230
 #, fuzzy, kde-format
 msgid "Cannot Save Image"
 msgstr "إ&حفظ الصورة..."
 
-#: ../plugins/destination/save/destinationsave.cpp:163
+#: ../plugins/destination/save/destinationsave.cpp:154
 #, fuzzy, kde-format
 #| msgid "one image"
 #| msgid_plural "%1 images"
 msgid "Saving image"
 msgstr "لا صور"
 
-#: ../plugins/destination/save/destinationsave.cpp:164
+#: ../plugins/destination/save/destinationsave.cpp:155
 #, fuzzy, kde-kuit-format
 msgid "Saving to <filename>%1</filename>"
 msgstr "الــ orf %1 غير موجود."
 
-#: ../plugins/destination/save/destinationsave.cpp:181 formatdialog.cpp:280
+#: ../plugins/destination/save/destinationsave.cpp:172 formatdialog.cpp:280
 #, fuzzy, kde-format
 msgid "Save Scan"
 msgstr "إح&فظ ضوابط المسح الضوئي"
 
-#: ../plugins/destination/save/destinationsave.cpp:237
+#: ../plugins/destination/save/destinationsave.cpp:228
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -375,7 +375,7 @@ msgstr ""
 msgid "OCR Setup Error"
 msgstr "مشكلة تحليل"
 
-#: ../plugins/ocr/abstractocrengine.cpp:123 kookaview.cpp:790
+#: ../plugins/ocr/abstractocrengine.cpp:123 kookaview.cpp:791
 #, kde-format
 msgid "Configure OCR..."
 msgstr ""
@@ -391,30 +391,30 @@ msgctxt "@info"
 msgid "The following OCR temporary files are retained for debugging:<nl/><nl/>"
 msgstr ""
 
-#: ../plugins/ocr/abstractocrengine.cpp:257
+#: ../plugins/ocr/abstractocrengine.cpp:256
 #, kde-kuit-format
 msgctxt "@info"
 msgid "<filename><link url=\"%1\">%2</link></filename><nl/>"
 msgstr ""
 
-#: ../plugins/ocr/abstractocrengine.cpp:265
+#: ../plugins/ocr/abstractocrengine.cpp:264
 #, kde-format
 msgid "OCR Temporary Files"
 msgstr ""
 
-#: ../plugins/ocr/abstractocrengine.cpp:437
+#: ../plugins/ocr/abstractocrengine.cpp:435
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot create temporary file <filename>%1</filename>"
 msgstr ""
 
-#: ../plugins/ocr/abstractocrengine.cpp:483
+#: ../plugins/ocr/abstractocrengine.cpp:481
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot save image to temporary file <filename>%1</filename>"
 msgstr ""
 
-#: ../plugins/ocr/abstractocrengine.cpp:511
+#: ../plugins/ocr/abstractocrengine.cpp:509
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -422,32 +422,32 @@ msgid ""
 "envar>."
 msgstr ""
 
-#: ../plugins/ocr/abstractocrengine.cpp:521
+#: ../plugins/ocr/abstractocrengine.cpp:519
 #, fuzzy, kde-kuit-format
 msgctxt "@info"
 msgid "The executable <filename>%1</filename> does not exist or is not usable."
 msgstr "الــ orf %1 غير موجود."
 
-#: ../plugins/ocr/abstractocrengine.cpp:593
+#: ../plugins/ocr/abstractocrengine.cpp:591
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "Command <command>%1</command> crashed with exit status <numid>%2</numid>"
 msgstr ""
 
-#: ../plugins/ocr/abstractocrengine.cpp:598
+#: ../plugins/ocr/abstractocrengine.cpp:596
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Command <command>%1</command> exited with status <numid>%2</numid>"
 msgstr ""
 
-#: ../plugins/ocr/abstractocrengine.cpp:602
+#: ../plugins/ocr/abstractocrengine.cpp:600
 #, fuzzy, kde-kuit-format
 msgctxt "@info"
 msgid "Running the OCR process failed."
 msgstr "فشل في تحليل ملف نتائج التعرف الضوئي على المحارف:"
 
-#: ../plugins/ocr/abstractocrengine.cpp:603
+#: ../plugins/ocr/abstractocrengine.cpp:601
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -455,18 +455,18 @@ msgid ""
 "link> log file."
 msgstr ""
 
-#: ../plugins/ocr/abstractocrengine.cpp:606
+#: ../plugins/ocr/abstractocrengine.cpp:604
 #, kde-format
 msgid "OCR Command Failed"
 msgstr ""
 
-#: ../plugins/ocr/abstractocrengine.cpp:613
+#: ../plugins/ocr/abstractocrengine.cpp:611
 #, fuzzy, kde-kuit-format
 msgctxt "@info"
 msgid "Processing the OCR results failed."
 msgstr "فشل في تحليل ملف نتائج التعرف الضوئي على المحارف:"
 
-#: ../plugins/ocr/abstractocrengine.cpp:614
+#: ../plugins/ocr/abstractocrengine.cpp:612
 #, fuzzy, kde-format
 #| msgid "OCR Post Processing"
 msgid "OCR Processing Failed"
@@ -500,7 +500,7 @@ msgid "The GOCR executable is not configured or is not available."
 msgstr ""
 
 #: ../plugins/ocr/gocr/ocrgocrdialog.cpp:204
-#: ../plugins/ocr/ocrad/ocrocraddialog.cpp:282
+#: ../plugins/ocr/ocrad/ocrocraddialog.cpp:285
 #: ../plugins/ocr/tesseract/ocrtesseractdialog.cpp:250
 #, fuzzy, kde-format
 msgid "Error"
@@ -512,7 +512,7 @@ msgctxt "@info"
 msgid "Cannot read GOCR result file <filename>%1</filename><nl/>%2"
 msgstr ""
 
-#: ../plugins/ocr/gocr/ocrgocrengine.cpp:297
+#: ../plugins/ocr/gocr/ocrgocrengine.cpp:298
 #, kde-format
 msgid "Name or path of the GOCR executable:"
 msgstr ""
@@ -685,8 +685,8 @@ msgid "Full Layout Detection"
 msgstr "الإكتشاف الكامل للتصميم"
 
 #: ../plugins/ocr/ocrad/ocrocraddialog.cpp:117
-#: ../plugins/ocr/ocrad/ocrocraddialog.cpp:138
-#: ../plugins/ocr/ocrad/ocrocraddialog.cpp:159
+#: ../plugins/ocr/ocrad/ocrocraddialog.cpp:139
+#: ../plugins/ocr/ocrad/ocrocraddialog.cpp:161
 #: ../plugins/ocr/tesseract/ocrtesseractdialog.cpp:87
 #: ../plugins/ocr/tesseract/ocrtesseractdialog.cpp:149
 #: ../plugins/ocr/tesseract/ocrtesseractdialog.cpp:174
@@ -1414,7 +1414,7 @@ msgstr "ضوابط المسح الضوئي"
 msgid "Unknown status %1"
 msgstr ""
 
-#: imgsaver.cpp:413
+#: imgsaver.cpp:414
 #, fuzzy, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -1425,47 +1425,47 @@ msgstr ""
 "اسم الملف الذى زودته ليس لديه تمديدة.\n"
 "هل يجب إضافة تمديدة ملف تلقائياً ؟"
 
-#: imgsaver.cpp:416
+#: imgsaver.cpp:417
 #, kde-format
 msgid "Extension Missing"
 msgstr "التمديدة ناقصة"
 
-#: imgsaver.cpp:417
+#: imgsaver.cpp:418
 #, kde-format
 msgid "Add Extension"
 msgstr "أضف تمديدة"
 
-#: imgsaver.cpp:418
+#: imgsaver.cpp:419
 #, kde-format
 msgid "Do Not Add"
 msgstr "لا تضف"
 
-#: imgsaver.cpp:447
+#: imgsaver.cpp:448
 #, kde-format
 msgid "Target already exists"
 msgstr ""
 
-#: imgsaver.cpp:460
+#: imgsaver.cpp:461
 #, kde-format
 msgid "Unable to copy the file"
 msgstr ""
 
-#: imgsaver.cpp:461
+#: imgsaver.cpp:462
 #, kde-format
 msgid "Unable to rename the file"
 msgstr ""
 
-#: imgsaver.cpp:462
+#: imgsaver.cpp:463
 #, kde-format
 msgid "Error copying file"
 msgstr ""
 
-#: imgsaver.cpp:463
+#: imgsaver.cpp:464
 #, kde-format
 msgid "Error renaming file"
 msgstr ""
 
-#: imgsaver.cpp:464
+#: imgsaver.cpp:465
 #, kde-kuit-format
 msgctxt "@info"
 msgid "%1 <filename>%3</filename><nl/>%2"
@@ -1577,7 +1577,7 @@ msgstr ""
 msgid "Select Scan Device..."
 msgstr "إختر جهاز المسح الضوئي"
 
-#: kooka.cpp:275 kookaview.cpp:549
+#: kooka.cpp:275 kookaview.cpp:550
 #, fuzzy, kde-format
 msgid "Add Scan Device..."
 msgstr "إختر جهاز المسح الضوئي"
@@ -1692,7 +1692,7 @@ msgstr "الأظافر"
 msgid "Image Gallery and Thumbnail View"
 msgstr "عرض الأظافر"
 
-#: kookapref.cpp:61 kookaview.cpp:291
+#: kookapref.cpp:61 kookaview.cpp:292
 #, kde-format
 msgid "OCR"
 msgstr "تعرف المحارف ضوئياً"
@@ -1761,53 +1761,25 @@ msgstr ""
 #. i18n: ectx: label, entry (SaverAskForFilename), group (Files)
 #: kookasettings.kcfg:71
 #, fuzzy, kde-format
-msgid "Ask for filename when saving"
+msgid "Ask for file name when saving"
 msgstr "إسأل عن اسم الملف عند حفظ الصورة"
 
 #. i18n: ectx: tooltip, entry (SaverAskForFilename), group (Files)
 #: kookasettings.kcfg:72
 #, fuzzy, kde-format
 msgid ""
-"<div>Check this if you want to enter a file name when scanning an image.</"
-"div>"
-msgstr "حدد هذا الخيار إذا كنت تريد إدخال اسم ملف بعد مسح الضورة ضوئياً."
-
-#. i18n: ectx: label, entry (SaverAskBeforeScan), group (Files)
-#: kookasettings.kcfg:77
-#, kde-format
-msgid "Before the scan starts"
-msgstr ""
-
-#. i18n: ectx: tooltip, entry (SaverAskBeforeScan), group (Files)
-#: kookasettings.kcfg:78
-#, fuzzy, kde-format
-msgid ""
-"<div>Check this if you want to enter the file name before scanning starts.</"
-"div>"
-msgstr "حدد هذا الخيار إذا كنت تريد إدخال اسم ملف بعد مسح الضورة ضوئياً."
-
-#. i18n: ectx: label, entry (SaverAskAfterScan), group (Files)
-#: kookasettings.kcfg:83
-#, kde-format
-msgid "After the scan is finished"
-msgstr ""
-
-#. i18n: ectx: tooltip, entry (SaverAskAfterScan), group (Files)
-#: kookasettings.kcfg:84
-#, fuzzy, kde-format
-msgid ""
-"<div>Check this if you want to enter the file name after scanning has "
-"finished.</div>"
+"<div>Check this if you want to always enter a file name when scanning an "
+"image.</div>"
 msgstr "حدد هذا الخيار إذا كنت تريد إدخال اسم ملف بعد مسح الضورة ضوئياً."
 
 #. i18n: ectx: label, entry (SaverOnlyRecommendedTypes), group (Files)
-#: kookasettings.kcfg:89
+#: kookasettings.kcfg:77
 #, kde-format
 msgid "Only show recommended formats for this image type"
 msgstr ""
 
 #. i18n: ectx: tooltip, entry (SaverOnlyRecommendedTypes), group (Files)
-#: kookasettings.kcfg:90
+#: kookasettings.kcfg:78
 #, kde-format
 msgid ""
 "<div>Check this to only show recommended file formats for the scan type. "
@@ -1815,13 +1787,13 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: label, entry (SaverAlwaysUseFormat), group (Files2)
-#: kookasettings.kcfg:103
+#: kookasettings.kcfg:91
 #, kde-format
 msgid "Always use this save format for this image type"
 msgstr ""
 
 #. i18n: ectx: tooltip, entry (SaverAlwaysUseFormat), group (Files2)
-#: kookasettings.kcfg:104
+#: kookasettings.kcfg:92
 #, kde-format
 msgid ""
 "<div>Check this to remember the selected file format for the scanned image "
@@ -1829,13 +1801,13 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: label, entry (GalleryAllowRename), group (Gallery)
-#: kookasettings.kcfg:137
+#: kookasettings.kcfg:125
 #, kde-format
 msgid "Allow click-to-rename"
 msgstr ""
 
 #. i18n: ectx: tooltip, entry (GalleryAllowRename), group (Gallery)
-#: kookasettings.kcfg:138
+#: kookasettings.kcfg:126
 #, kde-format
 msgid ""
 "<div>Check this if you want to be able to rename gallery items by clicking "
@@ -1843,13 +1815,13 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: label, entry (GalleryLayout), group (Gallery)
-#: kookasettings.kcfg:143
+#: kookasettings.kcfg:131
 #, fuzzy, kde-format
 msgid "Show recent folders:"
 msgstr "أعرض مجلدات المعرض المستعملة من قريب"
 
 #. i18n: ectx: tooltip, entry (GalleryLayout), group (Gallery)
-#: kookasettings.kcfg:144
+#: kookasettings.kcfg:132
 #, kde-format
 msgid ""
 "<div>Select whether and where a list of recently accessed gallery folders "
@@ -1857,49 +1829,49 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: label, entry (ThumbnailCustomBackground), group (thumbnailView)
-#: kookasettings.kcfg:164
+#: kookasettings.kcfg:152
 #, fuzzy, kde-format
 msgid "Use a custom background image"
 msgstr "إختر صورة الخلفية:"
 
 #. i18n: ectx: tooltip, entry (ThumbnailCustomBackground), group (thumbnailView)
-#: kookasettings.kcfg:165
+#: kookasettings.kcfg:153
 #, kde-format
 msgid "<div>Set a custom background image for the thumbnail view.</div>"
 msgstr ""
 
 #. i18n: ectx: label, entry (ThumbnailBackgroundPath), group (thumbnailView)
-#: kookasettings.kcfg:170
+#: kookasettings.kcfg:158
 #, fuzzy, kde-format
 msgid "Image:"
 msgstr "الصورة"
 
 #. i18n: ectx: tooltip, entry (ThumbnailBackgroundPath), group (thumbnailView)
-#: kookasettings.kcfg:171
+#: kookasettings.kcfg:159
 #, kde-format
 msgid "<div>The background image to use for the thumbnail view.</div>"
 msgstr ""
 
 #. i18n: ectx: label, entry (ThumbnailPreviewSize), group (thumbnailView)
-#: kookasettings.kcfg:177
+#: kookasettings.kcfg:165
 #, fuzzy, kde-format
 msgid "Preview size:"
 msgstr "معاينة المسح الضوئي"
 
 #. i18n: ectx: tooltip, entry (ThumbnailPreviewSize), group (thumbnailView)
-#: kookasettings.kcfg:178
+#: kookasettings.kcfg:166
 #, kde-format
 msgid "<div>Select the default preview size for the thumbnail view.</div>"
 msgstr ""
 
 #. i18n: ectx: label, entry (OcrGocrDustSize), group (gocr)
-#: kookasettings.kcfg:217
+#: kookasettings.kcfg:205
 #, fuzzy, kde-format
 msgid "Dust size:"
 msgstr "قياس ال&غبار"
 
 #. i18n: ectx: tooltip, entry (OcrGocrDustSize), group (gocr)
-#: kookasettings.kcfg:218
+#: kookasettings.kcfg:206
 #, fuzzy, kde-format
 msgid ""
 "<div>Clusters smaller than this size will be considered to be noise, and "
@@ -1913,13 +1885,13 @@ msgstr ""
 "القيمة الإفتراضية هي 10"
 
 #. i18n: ectx: label, entry (OcrGocrGrayLevel), group (gocr)
-#: kookasettings.kcfg:223
+#: kookasettings.kcfg:211
 #, fuzzy, kde-format
 msgid "Gray level:"
 msgstr "مستوى الرم&ادي"
 
 #. i18n: ectx: tooltip, entry (OcrGocrGrayLevel), group (gocr)
-#: kookasettings.kcfg:224
+#: kookasettings.kcfg:212
 #, fuzzy, kde-format
 msgid ""
 "<div>The threshold value below which gray pixels are considered to be black. "
@@ -1931,13 +1903,13 @@ msgstr ""
 "القيمة الإفتراضية هي 160"
 
 #. i18n: ectx: label, entry (OcrGocrSpaceWidth), group (gocr)
-#: kookasettings.kcfg:229
+#: kookasettings.kcfg:217
 #, fuzzy, kde-format
 msgid "Space width:"
 msgstr "&مسافة الفراغ"
 
 #. i18n: ectx: tooltip, entry (OcrGocrSpaceWidth), group (gocr)
-#: kookasettings.kcfg:230
+#: kookasettings.kcfg:218
 #, fuzzy, kde-format
 msgid ""
 "<div>The minimum gap in pixels considered to be word spacing. The default is "
@@ -1948,13 +1920,13 @@ msgstr ""
 "القيمة الإفتراضية هي 0 والتي تعني الإكتشاف التلقائي"
 
 #. i18n: ectx: label, entry (OcrGocrCertainty), group (gocr)
-#: kookasettings.kcfg:235
+#: kookasettings.kcfg:223
 #, kde-format
 msgid "Certainty:"
 msgstr ""
 
 #. i18n: ectx: tooltip, entry (OcrGocrCertainty), group (gocr)
-#: kookasettings.kcfg:236
+#: kookasettings.kcfg:224
 #, fuzzy, kde-format
 msgid ""
 "<div>The acceptance certainty threshold for recognition, characters with a "
@@ -1966,73 +1938,73 @@ msgstr ""
 "القيمة الإفتراضية هي 160"
 
 #. i18n: ectx: label, entry (ocrOcradLayoutDetection), group (ocrad)
-#: kookasettings.kcfg:250
+#: kookasettings.kcfg:238
 #, fuzzy, kde-format
 msgid "Layout analysis mode:"
 msgstr "نمط تحليل التصميم OCRAD: "
 
 #. i18n: ectx: label, entry (ocrOcradCharset), group (ocrad)
-#: kookasettings.kcfg:263
+#: kookasettings.kcfg:251
 #, kde-format
 msgid "Character set:"
 msgstr ""
 
 #. i18n: ectx: label, entry (ocrOcradFilter), group (ocrad)
-#: kookasettings.kcfg:267
+#: kookasettings.kcfg:255
 #, fuzzy, kde-format
 msgid "Filter:"
 msgstr "اسم الملف"
 
 #. i18n: ectx: label, entry (ocrOcradTransform), group (ocrad)
-#: kookasettings.kcfg:271
+#: kookasettings.kcfg:259
 #, kde-format
 msgid "Transform:"
 msgstr ""
 
 #. i18n: ectx: label, entry (ocrOcradInvert), group (ocrad)
-#: kookasettings.kcfg:275
+#: kookasettings.kcfg:263
 #, kde-format
 msgid "Invert input"
 msgstr ""
 
 #. i18n: ectx: label, entry (ocrOcradThresholdEnable), group (ocrad)
-#: kookasettings.kcfg:280
+#: kookasettings.kcfg:268
 #, kde-format
 msgid "Set threshold"
 msgstr ""
 
 #. i18n: ectx: label, entry (ocrOcradThresholdValue), group (ocrad)
-#: kookasettings.kcfg:286
+#: kookasettings.kcfg:274
 #, kde-format
 msgid "Threshold"
 msgstr ""
 
 #. i18n: ectx: label, entry (ocrTesseractLanguage), group (tesseract)
-#: kookasettings.kcfg:308
+#: kookasettings.kcfg:296
 #, kde-format
 msgid "Language:"
 msgstr ""
 
 #. i18n: ectx: label, entry (ocrTesseractUserWords), group (tesseract)
-#: kookasettings.kcfg:312
+#: kookasettings.kcfg:300
 #, kde-format
 msgid "User word list:"
 msgstr ""
 
 #. i18n: ectx: label, entry (ocrTesseractUserPatterns), group (tesseract)
-#: kookasettings.kcfg:316
+#: kookasettings.kcfg:304
 #, kde-format
 msgid "User patterns:"
 msgstr ""
 
 #. i18n: ectx: label, entry (ocrTesseractEngineMode), group (tesseract)
-#: kookasettings.kcfg:320
+#: kookasettings.kcfg:308
 #, fuzzy, kde-format
 msgid "Engine mode:"
 msgstr "المحرك GOCR"
 
 #. i18n: ectx: label, entry (ocrTesseractSegmentationMode), group (tesseract)
-#: kookasettings.kcfg:324
+#: kookasettings.kcfg:312
 #, kde-format
 msgid "Segmentation mode:"
 msgstr ""
@@ -2073,42 +2045,42 @@ msgstr "شريط أدوات مستعرض الصور"
 msgid "Scanning Toolbar"
 msgstr ""
 
-#: kookaview.cpp:206
+#: kookaview.cpp:207
 #, kde-format
 msgid "Image View"
 msgstr "عرض الصورة"
 
-#: kookaview.cpp:245
+#: kookaview.cpp:246
 #, kde-format
 msgid "User specified"
 msgstr ""
 
-#: kookaview.cpp:246
+#: kookaview.cpp:247
 #, kde-format
 msgid "on command line"
 msgstr ""
 
-#: kookaview.cpp:266
+#: kookaview.cpp:267
 #, kde-format
 msgid "Scan Preview"
 msgstr "معاينة المسح الضوئي"
 
-#: kookaview.cpp:276
+#: kookaview.cpp:277
 #, kde-format
 msgid "OCR results will appear here"
 msgstr ""
 
-#: kookaview.cpp:285
+#: kookaview.cpp:286
 #, kde-format
 msgid "Scan"
 msgstr ""
 
-#: kookaview.cpp:288 kookaview.cpp:563 kookaview.cpp:582 scangallery.cpp:123
+#: kookaview.cpp:289 kookaview.cpp:564 kookaview.cpp:583 scangallery.cpp:123
 #, kde-format
 msgid "Gallery"
 msgstr "المعرض"
 
-#: kookaview.cpp:464
+#: kookaview.cpp:465
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2119,12 +2091,12 @@ msgid ""
 "reported error: <message>%1</message>"
 msgstr ""
 
-#: kookaview.cpp:519
+#: kookaview.cpp:520
 #, fuzzy, kde-format
 msgid "Add Scan Device"
 msgstr "إختر جهاز المسح الضوئي"
 
-#: kookaview.cpp:539
+#: kookaview.cpp:540
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2136,79 +2108,79 @@ msgid ""
 "backend name and parameters, or see that dialog for more information."
 msgstr ""
 
-#: kookaview.cpp:585
+#: kookaview.cpp:586
 #, kde-format
 msgid "No scanner connected"
 msgstr ""
 
-#: kookaview.cpp:644
+#: kookaview.cpp:645
 #, fuzzy, kde-format
 msgid "No selection"
 msgstr "تحديد نوع المحرف"
 
-#: kookaview.cpp:648
+#: kookaview.cpp:649
 #, fuzzy, kde-format
 msgid "Gallery folder %1"
 msgstr "مجلدات المعرض"
 
-#: kookaview.cpp:648
+#: kookaview.cpp:649
 #, fuzzy, kde-format
 msgid "Gallery image %1"
 msgstr "جاري تحميل %1"
 
-#: kookaview.cpp:713
+#: kookaview.cpp:714
 #, kde-format
 msgid "Starting OCR on selection"
 msgstr "يبدأ تشغيل التعرف الضوئي على المحارف في المنطقة المحددة"
 
-#: kookaview.cpp:719
+#: kookaview.cpp:720
 #, fuzzy, kde-format
 msgid "Starting OCR on the image"
 msgstr "يبدأ تشغيل التعرف الضوئي على المحارف في كامل الصورة"
 
-#: kookaview.cpp:726
+#: kookaview.cpp:727
 #, fuzzy, kde-format
 msgid "OCR File"
 msgstr "المحرك GOCR"
 
-#: kookaview.cpp:736
+#: kookaview.cpp:737
 #, fuzzy, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot load <filename>%1</filename> for OCR:<nl/>%2"
 msgstr "الــ orf %1 غير موجود."
 
-#: kookaview.cpp:738
+#: kookaview.cpp:739
 #, kde-format
 msgid "Cannot Read OCR File"
 msgstr ""
 
-#: kookaview.cpp:742
+#: kookaview.cpp:743
 #, fuzzy, kde-kuit-format
 msgctxt "@info"
 msgid "Starting OCR on file <filename>%1</filename>"
 msgstr "الــ orf %1 غير موجود."
 
-#: kookaview.cpp:758
+#: kookaview.cpp:759
 #, fuzzy, kde-format
 msgid "OCR finished"
 msgstr "المحرك GOCR"
 
-#: kookaview.cpp:765
+#: kookaview.cpp:766
 #, kde-format
 msgid "There is no OCR result text to spell check."
 msgstr ""
 
-#: kookaview.cpp:766
+#: kookaview.cpp:767
 #, kde-format
 msgid "OCR Spell Check not possible"
 msgstr ""
 
-#: kookaview.cpp:771
+#: kookaview.cpp:772
 #, fuzzy, kde-format
 msgid "OCR Spell Check"
 msgstr "التدقيق الإملائي"
 
-#: kookaview.cpp:787
+#: kookaview.cpp:788
 #, fuzzy, kde-format
 msgid ""
 "No OCR engine is configured.\n"
@@ -2217,17 +2189,17 @@ msgstr ""
 "لم يتم تصريف هذا الإصدار من Kooka ليدعم KADMOS.\n"
 "الرجاء إختيار محرك تعرف المحارف الضوئي آخر في حوار خيارات Kooka."
 
-#: kookaview.cpp:789
+#: kookaview.cpp:790
 #, kde-format
 msgid "OCR Not Configured"
 msgstr ""
 
-#: kookaview.cpp:798
+#: kookaview.cpp:799
 #, kde-format
 msgid "Cannot load OCR plugin '%1'"
 msgstr ""
 
-#: kookaview.cpp:906
+#: kookaview.cpp:907
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2238,27 +2210,27 @@ msgid ""
 "<message>%1</message>"
 msgstr ""
 
-#: kookaview.cpp:956
+#: kookaview.cpp:957
 #, kde-format
 msgid "Create new image from selection"
 msgstr "أنشئ صورة جديدة من المنطقة المحددة"
 
-#: kookaview.cpp:965
+#: kookaview.cpp:966
 #, fuzzy, kde-format
 msgid "Cannot transform, image is read-only"
 msgstr "لا يمكن حفظ الصورة ، هى محمية من الكتابة عليها !"
 
-#: kookaview.cpp:1018
+#: kookaview.cpp:1019
 #, fuzzy, kde-format
 msgid "Loaded image %1"
 msgstr "جاري تحميل %1"
 
-#: kookaview.cpp:1019
+#: kookaview.cpp:1020
 #, fuzzy, kde-format
 msgid "Unloaded image"
 msgstr "أل&غي تحميل الصورة"
 
-#: kookaview.cpp:1036
+#: kookaview.cpp:1037
 #, fuzzy, kde-format
 #| msgid "Loading %1"
 msgid "Loading %1..."
@@ -2463,48 +2435,48 @@ msgstr ""
 msgid "%1 must be restarted for these settings to take effect."
 msgstr ""
 
-#: prefspages.cpp:267
+#: prefspages.cpp:235
 #, fuzzy, kde-format
 msgid "Image Gallery"
 msgstr "المعرض"
 
-#: prefspages.cpp:281
+#: prefspages.cpp:249
 #, fuzzy, kde-format
 msgid "Not shown"
 msgstr "لم يعثر عليه"
 
-#: prefspages.cpp:282
+#: prefspages.cpp:250
 #, kde-format
 msgid "At top"
 msgstr ""
 
-#: prefspages.cpp:283
+#: prefspages.cpp:251
 #, kde-format
 msgid "At bottom"
 msgstr ""
 
-#: prefspages.cpp:298
+#: prefspages.cpp:266
 #, kde-format
 msgid "Thumbnail View"
 msgstr "عرض الأظافر"
 
-#: prefspages.cpp:412
+#: prefspages.cpp:380
 #, kde-format
 msgid "None"
 msgstr ""
 
-#: prefspages.cpp:424
+#: prefspages.cpp:392
 #, fuzzy, kde-format
 msgid "OCR Engine:"
 msgstr "المحرك GOCR"
 
-#: prefspages.cpp:430
+#: prefspages.cpp:398
 #, fuzzy, kde-format
 #| msgid "OCR Engine to Use"
 msgid "OCR Engine Settings..."
 msgstr "محرّك تعرف المحارف الضوئي للإستعمال"
 
-#: prefspages.cpp:476
+#: prefspages.cpp:444
 #, fuzzy, kde-format
 msgid ""
 "No OCR engine is selected. Select and configure one to be able to perform "
@@ -2513,7 +2485,7 @@ msgstr ""
 "لم يتم تصريف هذا الإصدار من Kooka ليدعم KADMOS.\n"
 "الرجاء إختيار محرك تعرف المحارف الضوئي آخر في حوار خيارات Kooka."
 
-#: prefspages.cpp:484
+#: prefspages.cpp:452
 #, fuzzy, kde-format
 msgid "Unknown engine '%1'."
 msgstr "نوع الصورة غير معروف"
@@ -2599,7 +2571,7 @@ msgstr[5] "مجلد جديد"
 msgid " %1 x %2"
 msgstr "%1 × %2"
 
-#: scangallery.cpp:602
+#: scangallery.cpp:601
 #, kde-format
 msgid ""
 "You entered a file extension that differs from the existing one. That is not "
@@ -2610,66 +2582,66 @@ msgstr ""
 "ممكن في المستقبل القريب في إصدار جديد.\n"
 "يقوم Kooka بتصحيح الإمتداد."
 
-#: scangallery.cpp:604
+#: scangallery.cpp:603
 #, kde-format
 msgid "On the Fly Conversion"
 msgstr "تحويل على الطائر"
 
-#: scangallery.cpp:700
+#: scangallery.cpp:699
 #, fuzzy, kde-format
 msgid "Not a supported image format"
 msgstr "هيئات الصور المتوفرة:"
 
-#: scangallery.cpp:752
+#: scangallery.cpp:751
 #, kde-format
 msgid "Sub-image %1"
 msgstr "الصورة-الفرعية %1"
 
-#: scangallery.cpp:778
+#: scangallery.cpp:777
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Unable to load the image <filename>%2</filename><nl/>%1"
 msgstr ""
 
-#: scangallery.cpp:780
+#: scangallery.cpp:779
 #, fuzzy, kde-format
 msgid "Image Load Error"
 msgstr "خطأ عند الحفظ"
 
-#: scangallery.cpp:842
+#: scangallery.cpp:841
 #, kde-format
 msgid "Incoming/"
 msgstr "القدوم/"
 
-#: scangallery.cpp:888
+#: scangallery.cpp:887
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Could not save the image<nl/><filename>%2</filename><nl/>%1"
 msgstr ""
 
-#: scangallery.cpp:891
+#: scangallery.cpp:890
 #, fuzzy, kde-format
 msgid "Image Save Error"
 msgstr "خطأ عند الحفظ"
 
-#: scangallery.cpp:970
+#: scangallery.cpp:968
 #, fuzzy, kde-format
 #| msgid "All Files"
 msgid "All Files (*)"
 msgstr "كل الملفات"
 
-#: scangallery.cpp:973
+#: scangallery.cpp:971
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Export Image"
 msgstr "&إستورد الصورة..."
 
-#: scangallery.cpp:998
+#: scangallery.cpp:996
 #, kde-format
 msgid "Import Image File to Gallery"
 msgstr "إستورِد ملف الصورة إلى المعرض"
 
-#: scangallery.cpp:1113
+#: scangallery.cpp:1111
 #, fuzzy, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2679,7 +2651,7 @@ msgstr ""
 "هل حقاً تريد محو هذه الصورة ؟\n"
 "لا يمكن إسترجاعها ً!"
 
-#: scangallery.cpp:1118
+#: scangallery.cpp:1116
 #, fuzzy, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2689,39 +2661,39 @@ msgstr ""
 "هل حقاً تريد محو هذه الصورة ؟\n"
 "لا يمكن إسترجاعها ً!"
 
-#: scangallery.cpp:1125
+#: scangallery.cpp:1123
 #, fuzzy, kde-format
 msgid "Delete Gallery Item"
 msgstr "أمحي عنصر المجموعة"
 
-#: scangallery.cpp:1138
+#: scangallery.cpp:1136
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Could not delete the image or folder<nl/><filename>%2</filename><nl/>%1"
 msgstr ""
 
-#: scangallery.cpp:1141
+#: scangallery.cpp:1139
 #, kde-format
 msgid "File Delete Error"
 msgstr ""
 
-#: scangallery.cpp:1173
+#: scangallery.cpp:1171
 #, kde-format
 msgid "New Folder"
 msgstr "مجلد جديد"
 
-#: scangallery.cpp:1174
+#: scangallery.cpp:1172
 #, fuzzy, kde-format
 msgid "Name for the new folder:"
 msgstr "الرجاء إدخال اسم للمجلد الجديد:"
 
-#: scangallery.cpp:1197
+#: scangallery.cpp:1195
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Could not create the folder<nl/><filename>%2</filename><nl/>%1"
 msgstr ""
 
-#: scangallery.cpp:1199
+#: scangallery.cpp:1197
 #, kde-format
 msgid "Folder Create Error"
 msgstr ""
@@ -2873,6 +2845,18 @@ msgstr ""
 #, kde-format
 msgid "Tiny"
 msgstr ""
+
+#, fuzzy
+#~ msgid ""
+#~ "<div>Check this if you want to enter the file name before scanning starts."
+#~ "</div>"
+#~ msgstr "حدد هذا الخيار إذا كنت تريد إدخال اسم ملف بعد مسح الضورة ضوئياً."
+
+#, fuzzy
+#~ msgid ""
+#~ "<div>Check this if you want to enter the file name after scanning has "
+#~ "finished.</div>"
+#~ msgstr "حدد هذا الخيار إذا كنت تريد إدخال اسم ملف بعد مسح الضورة ضوئياً."
 
 #, fuzzy
 #~| msgid "Kooka Gallery"

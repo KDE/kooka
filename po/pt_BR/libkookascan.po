@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: libkscan\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-20 01:38+0000\n"
+"POT-Creation-Date: 2024-05-17 01:43+0000\n"
 "PO-Revision-Date: 2019-12-14 19:18-0300\n"
 "Last-Translator: Luiz Fernando Ranghetti <elchevive@opensuse.org>\n"
 "Language-Team: Portuguese <kde-i18n-pt_BR@kde.org>\n"
@@ -30,25 +30,17 @@ msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
 msgstr ""
 
-#: ../libdialogutil/imagefilter.cpp:91
-#, kde-format
-msgid "%1|All Image Files"
+#: ../libdialogutil/imagefilter.cpp:85
+#, fuzzy, kde-format
+#| msgid "%1|All Image Files"
+msgid "All Image Files"
 msgstr "%1|Todos os arquivos de imagem"
 
-#: ../libdialogutil/imagefilter.cpp:92
-#, kde-format
-msgid "All Image Files (%1)"
-msgstr "Todos os arquivos de imagem (%1)"
-
-#: ../libdialogutil/imagefilter.cpp:97
-#, kde-format
-msgid "*|All Files"
+#: ../libdialogutil/imagefilter.cpp:90
+#, fuzzy, kde-format
+#| msgid "*|All Files"
+msgid "All Files"
 msgstr "*|Todos os arquivos"
-
-#: ../libdialogutil/imagefilter.cpp:98
-#, kde-format
-msgid "All Files (*)"
-msgstr "Todos os arquivos (*)"
 
 #: adddevicedialog.cpp:58
 #, kde-kuit-format
@@ -69,7 +61,7 @@ msgstr ""
 msgid "Scanner device:"
 msgstr "Nome do dispositivo de digitalização:"
 
-#: adddevicedialog.cpp:80 scandevices.cpp:190
+#: adddevicedialog.cpp:80 scandevices.cpp:186
 #, kde-format
 msgctxt "Value used for manufacturer if none entered"
 msgid "User specified"
@@ -317,20 +309,20 @@ msgstr "Restaurar esta configuração para seu valor padrão, %1"
 
 #: kscancontrols.cpp:414
 #, kde-format
-msgid "*.pnm *.pbm *.pgm *.ppm|PNM Image Files"
-msgstr "*.pnm *.pbm *.pgm *.ppm|Arquivos de imagem PNM"
+msgid "PNM Image Files (*.pnm *.pbm *.pgm *.ppm)"
+msgstr ""
 
-#: kscandevice.cpp:291
+#: kscandevice.cpp:279
 #, kde-format
 msgid "No scanner selected"
 msgstr "Nenhum scanner selecionado"
 
-#: kscandevice.cpp:1394
+#: kscandevice.cpp:1380
 #, kde-format
 msgid "Default startup configuration"
 msgstr "Configuração de inicialização padrão"
 
-#: kscandevice.cpp:1494
+#: kscandevice.cpp:1480
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info"
 #| msgid ""
@@ -342,102 +334,102 @@ msgstr ""
 "O scanner<nl/><emphasis strong=\"1\">%1</emphasis><nl/>necessita de "
 "autenticação."
 
-#: kscandevice.cpp:1495
+#: kscandevice.cpp:1481
 #, kde-format
 msgid "Scanner Authentication"
 msgstr "Autenticação do scanner"
 
-#: kscandevice.cpp:1539
+#: kscandevice.cpp:1525
 #, kde-format
 msgid "OK"
 msgstr "OK"
 
-#: kscandevice.cpp:1540
+#: kscandevice.cpp:1526
 #, kde-format
 msgid "No device"
 msgstr "Nenhum dispositivo"
 
-#: kscandevice.cpp:1541
+#: kscandevice.cpp:1527
 #, kde-format
 msgid "Bad parameter"
 msgstr "Parâmetro inválido"
 
-#: kscandevice.cpp:1542
+#: kscandevice.cpp:1528
 #, kde-format
 msgid "Cannot open device"
 msgstr "Não foi possível abrir o dispositivo"
 
-#: kscandevice.cpp:1543
+#: kscandevice.cpp:1529
 #, kde-format
 msgid "sane_control_option() failed"
 msgstr "sane_control_option() falhou"
 
-#: kscandevice.cpp:1544
+#: kscandevice.cpp:1530
 #, kde-format
 msgid "Error while scanning"
 msgstr "Erro ao digitalizar"
 
-#: kscandevice.cpp:1545
+#: kscandevice.cpp:1531
 #, kde-format
 msgid "Empty picture"
 msgstr "Figura vazia"
 
-#: kscandevice.cpp:1546
+#: kscandevice.cpp:1532
 #, kde-format
 msgid "Out of memory"
 msgstr "Memória insuficiente"
 
-#: kscandevice.cpp:1547
+#: kscandevice.cpp:1533
 #, kde-format
 msgid "Needs reload"
 msgstr "Precisa recarregar"
 
-#: kscandevice.cpp:1548
+#: kscandevice.cpp:1534
 #, kde-format
 msgid "Cancelled"
 msgstr "Cancelado"
 
-#: kscandevice.cpp:1549
+#: kscandevice.cpp:1535
 #, kde-format
 msgid "Not active"
 msgstr "Inativo"
 
-#: kscandevice.cpp:1550
+#: kscandevice.cpp:1536
 #, kde-format
 msgid "Not supported"
 msgstr "Não suportado"
 
-#: kscandevice.cpp:1551
+#: kscandevice.cpp:1537
 #, kde-format
 msgid "Unknown status %1"
 msgstr "Estado desconhecido %1"
 
-#: kscanoption.cpp:1011
+#: kscanoption.cpp:1013
 #, kde-format
 msgid "pixels"
 msgstr "pixels"
 
-#: kscanoption.cpp:1012
+#: kscanoption.cpp:1014
 #, kde-format
 msgid "bits"
 msgstr "bits"
 
-#: kscanoption.cpp:1013
+#: kscanoption.cpp:1015
 #, kde-format
 msgid "mm"
 msgstr "mm"
 
-#: kscanoption.cpp:1014
+#: kscanoption.cpp:1016
 #, kde-format
 msgid "dpi"
 msgstr "dpi"
 
-#: kscanoption.cpp:1015
+#: kscanoption.cpp:1017
 #, kde-format
 msgid "%"
 msgstr "%"
 
-#: kscanoption.cpp:1016
+#: kscanoption.cpp:1018
 #, kde-format
 msgid "µsec"
 msgstr "µsec"
@@ -491,7 +483,7 @@ msgctxt "@action:button Name of colour"
 msgid "Black"
 msgstr "Preto"
 
-#: scandevices.cpp:208
+#: scandevices.cpp:204
 #, kde-format
 msgid "Unknown device '%1'"
 msgstr "Dispositivo desconhecido '%1'"
@@ -517,12 +509,12 @@ msgstr ""
 msgid "TIFF image format library"
 msgstr "Scanner virtual (qualquer formato de imagem)"
 
-#: scanglobal.cpp:154
+#: scanglobal.cpp:158
 #, kde-format
 msgid "libpaper"
 msgstr ""
 
-#: scanglobal.cpp:155
+#: scanglobal.cpp:159
 #, kde-format
 msgid "Paper size configuration library"
 msgstr ""
@@ -681,12 +673,12 @@ msgstr ""
 msgid "Force image format:"
 msgstr "Scanner virtual (qualquer formato de imagem)"
 
-#: scanparams.cpp:483
+#: scanparams.cpp:481
 #, kde-format
 msgid "Edit Gamma Table..."
 msgstr "Editar tabela de gama..."
 
-#: scanparams.cpp:555
+#: scanparams.cpp:553
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info"
 #| msgid ""
@@ -700,7 +692,7 @@ msgstr ""
 "<emphasis strong=\"1\">Nenhum scanner selecionado</emphasis><nl/><nl/"
 ">Selecione um scanner para realizar a digitalização."
 
-#: scanparams.cpp:575
+#: scanparams.cpp:573
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info"
 #| msgid ""
@@ -734,24 +726,24 @@ msgstr ""
 "\"http://www.sane-project.org\">www.sane-project.org</link>) para mais "
 "informações sobre instalação e configuração do SANE."
 
-#: scanparams.cpp:677
+#: scanparams.cpp:675
 #, kde-format
 msgid "1-bit depth scan cannot be done in color"
 msgstr ""
 "A digitalização com profundidade de cor de 1-bit não pode ser feita em cores"
 
-#: scanparams.cpp:680
+#: scanparams.cpp:678
 #, kde-format
 msgid "16-bit depth scans are not supported"
 msgstr ""
 "As digitalizações com profundidade de cor de 16-bits não são suportadas"
 
-#: scanparams.cpp:690
+#: scanparams.cpp:688
 #, kde-format
 msgid "A file must be entered for testing or virtual scanning"
 msgstr "Um arquivo deve ser inserido para teste ou digitalização virtual"
 
-#: scanparams.cpp:696
+#: scanparams.cpp:694
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -761,7 +753,7 @@ msgstr ""
 "O arquivo <filename>%1</filename> para teste ou digitalização virtual<nl/"
 ">não foi encontrado ou não está legível"
 
-#: scanparams.cpp:706
+#: scanparams.cpp:704
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -771,18 +763,18 @@ msgstr ""
 "A depuração do SANE pode ler somente arquivos PNM.<nl/>O arquivo "
 "especificado é do tipo <icode>%1</icode>."
 
-#: scanparams.cpp:723
+#: scanparams.cpp:721
 #, kde-kuit-format
 msgid "Scan in progress"
 msgstr "Digitalização em andamento"
 
-#: scanparams.cpp:724
+#: scanparams.cpp:722
 #, fuzzy, kde-kuit-format
 #| msgid "Scan in progress"
 msgid "Scan in progress<nl/><nl/>%1"
 msgstr "Digitalização em andamento"
 
-#: scanparams.cpp:744
+#: scanparams.cpp:742
 #, kde-format
 msgid "Cannot preview in Virtual Scanner mode"
 msgstr "Não é possível visualizar no modo de Digitalização virtual"
@@ -932,6 +924,15 @@ msgstr "Define a orientação para um tamanho predefinido da área digitalizada"
 #, kde-format
 msgid "Selection"
 msgstr "Seleção"
+
+#~ msgid "All Image Files (%1)"
+#~ msgstr "Todos os arquivos de imagem (%1)"
+
+#~ msgid "All Files (*)"
+#~ msgstr "Todos os arquivos (*)"
+
+#~ msgid "*.pnm *.pbm *.pgm *.ppm|PNM Image Files"
+#~ msgstr "*.pnm *.pbm *.pgm *.ppm|Arquivos de imagem PNM"
 
 #~ msgctxt "@info"
 #~ msgid ""

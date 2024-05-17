@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: libkscan\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-20 01:38+0000\n"
+"POT-Creation-Date: 2024-05-17 01:43+0000\n"
 "PO-Revision-Date: 2012-07-05 10:23+0700\n"
 "Last-Translator: sutha <sutha@khmeros.info>\n"
 "Language-Team: Khmer <support@khmeros>\n"
@@ -29,26 +29,16 @@ msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
 msgstr ""
 
-#: ../libdialogutil/imagefilter.cpp:91
+#: ../libdialogutil/imagefilter.cpp:85
 #, fuzzy, kde-format
 #| msgid "*|All Files"
-msgid "%1|All Image Files"
+msgid "All Image Files"
 msgstr "*|​ឯកសារ​ទាំងអស់"
 
-#: ../libdialogutil/imagefilter.cpp:92
-#, kde-format
-msgid "All Image Files (%1)"
-msgstr ""
-
-#: ../libdialogutil/imagefilter.cpp:97
-#, kde-format
-msgid "*|All Files"
-msgstr "*|​ឯកសារ​ទាំងអស់"
-
-#: ../libdialogutil/imagefilter.cpp:98
+#: ../libdialogutil/imagefilter.cpp:90
 #, fuzzy, kde-format
 #| msgid "*|All Files"
-msgid "All Files (*)"
+msgid "All Files"
 msgstr "*|​ឯកសារ​ទាំងអស់"
 
 #: adddevicedialog.cpp:58
@@ -70,7 +60,7 @@ msgstr ""
 msgid "Scanner device:"
 msgstr "ឈ្មោះ​ឧបករណ៍​​កម្មវិធី​វិភាគ​រក ៖"
 
-#: adddevicedialog.cpp:80 scandevices.cpp:190
+#: adddevicedialog.cpp:80 scandevices.cpp:186
 #, kde-format
 msgctxt "Value used for manufacturer if none entered"
 msgid "User specified"
@@ -320,122 +310,122 @@ msgstr "កំណត់​ការ​កំណត់​នេះ​ឡើង​
 
 #: kscancontrols.cpp:414
 #, kde-format
-msgid "*.pnm *.pbm *.pgm *.ppm|PNM Image Files"
+msgid "PNM Image Files (*.pnm *.pbm *.pgm *.ppm)"
 msgstr ""
 
-#: kscandevice.cpp:291
+#: kscandevice.cpp:279
 #, kde-format
 msgid "No scanner selected"
 msgstr "គ្មាន​កម្មវិធី​វិភាគ​រក​ដែល​បាន​ជ្រើស​ឡើយ"
 
-#: kscandevice.cpp:1394
+#: kscandevice.cpp:1380
 #, kde-format
 msgid "Default startup configuration"
 msgstr "ចាប់ផ្ដើម​ការ​កំណត់​រចនាសម្ព័ន្ធ​លំនាំដើម"
 
-#: kscandevice.cpp:1494
+#: kscandevice.cpp:1480
 #, fuzzy, kde-kuit-format
 #| msgid "<qt>The scanner<br><b>%1</b><br>requires authentication."
 msgctxt "@info"
 msgid "The scanner<nl/><icode>%1</icode><nl/>requires authentication."
 msgstr "<qt>កម្មវិធី​​វិភាគ​រក<br><b>%1</b><br>ទាមទារ​ការ​ផ្ទៀងផ្ទាត់​ភាព​ត្រឹមត្រូវ ។"
 
-#: kscandevice.cpp:1495
+#: kscandevice.cpp:1481
 #, kde-format
 msgid "Scanner Authentication"
 msgstr "ការ​ផ្ទៀងផ្ទាត់​ភាព​ត្រឹមត្រូវ​របស់​ម៉ាស៊ីន​ស្កេន"
 
-#: kscandevice.cpp:1539
+#: kscandevice.cpp:1525
 #, kde-format
 msgid "OK"
 msgstr "គ្មាន​បញ្ហា"
 
-#: kscandevice.cpp:1540
+#: kscandevice.cpp:1526
 #, kde-format
 msgid "No device"
 msgstr "គ្មាន​ឧបករណ៍"
 
-#: kscandevice.cpp:1541
+#: kscandevice.cpp:1527
 #, kde-format
 msgid "Bad parameter"
 msgstr "ប៉ារ៉ាម៉ែត្រ​មិន​ត្រឹមត្រូវ"
 
-#: kscandevice.cpp:1542
+#: kscandevice.cpp:1528
 #, kde-format
 msgid "Cannot open device"
 msgstr "មិន​អាច​បើក​ឧបករណ៍​បាន​ទេ"
 
-#: kscandevice.cpp:1543
+#: kscandevice.cpp:1529
 #, kde-format
 msgid "sane_control_option() failed"
 msgstr "sane_control_option() failed"
 
-#: kscandevice.cpp:1544
+#: kscandevice.cpp:1530
 #, kde-format
 msgid "Error while scanning"
 msgstr "កំហុស​ខណៈ​​កំពុង​វិភាគ"
 
-#: kscandevice.cpp:1545
+#: kscandevice.cpp:1531
 #, kde-format
 msgid "Empty picture"
 msgstr "សម្អាត​រូបភាព"
 
-#: kscandevice.cpp:1546
+#: kscandevice.cpp:1532
 #, kde-format
 msgid "Out of memory"
 msgstr "អស់​អង្គ​ចងចាំ"
 
-#: kscandevice.cpp:1547
+#: kscandevice.cpp:1533
 #, kde-format
 msgid "Needs reload"
 msgstr "ត្រូវ​ការ​ផ្ទុក​ឡើង​វិញ"
 
-#: kscandevice.cpp:1548
+#: kscandevice.cpp:1534
 #, kde-format
 msgid "Cancelled"
 msgstr "បាន​បោះបង់"
 
-#: kscandevice.cpp:1549
+#: kscandevice.cpp:1535
 #, kde-format
 msgid "Not active"
 msgstr "មិន​សកម្ម"
 
-#: kscandevice.cpp:1550
+#: kscandevice.cpp:1536
 #, kde-format
 msgid "Not supported"
 msgstr "មិន​បាន​គាំទ្រ"
 
-#: kscandevice.cpp:1551
+#: kscandevice.cpp:1537
 #, kde-format
 msgid "Unknown status %1"
 msgstr "មិន​ស្គាល់​ស្ថានភាព %1"
 
-#: kscanoption.cpp:1011
+#: kscanoption.cpp:1013
 #, kde-format
 msgid "pixels"
 msgstr "ភីកសែល"
 
-#: kscanoption.cpp:1012
+#: kscanoption.cpp:1014
 #, kde-format
 msgid "bits"
 msgstr "ប៊ីត"
 
-#: kscanoption.cpp:1013
+#: kscanoption.cpp:1015
 #, kde-format
 msgid "mm"
 msgstr "mm"
 
-#: kscanoption.cpp:1014
+#: kscanoption.cpp:1016
 #, kde-format
 msgid "dpi"
 msgstr "dpi"
 
-#: kscanoption.cpp:1015
+#: kscanoption.cpp:1017
 #, kde-format
 msgid "%"
 msgstr "%"
 
-#: kscanoption.cpp:1016
+#: kscanoption.cpp:1018
 #, kde-format
 msgid "µsec"
 msgstr "µsec"
@@ -491,7 +481,7 @@ msgctxt "@action:button Name of colour"
 msgid "Black"
 msgstr "ខ្មៅ"
 
-#: scandevices.cpp:208
+#: scandevices.cpp:204
 #, kde-format
 msgid "Unknown device '%1'"
 msgstr "មិន​ស្គាល់​ឧបករណ៍ '%1'"
@@ -517,12 +507,12 @@ msgstr ""
 msgid "TIFF image format library"
 msgstr "កម្មវិធី​វិភាគ​រក​និម្មិត (ទ្រង់ទ្រាយ​រូបភាព​មួយ​ចំនួន)"
 
-#: scanglobal.cpp:154
+#: scanglobal.cpp:158
 #, kde-format
 msgid "libpaper"
 msgstr ""
 
-#: scanglobal.cpp:155
+#: scanglobal.cpp:159
 #, kde-format
 msgid "Paper size configuration library"
 msgstr ""
@@ -676,12 +666,12 @@ msgstr ""
 msgid "Force image format:"
 msgstr "កម្មវិធី​វិភាគ​រក​និម្មិត (ទ្រង់ទ្រាយ​រូបភាព​មួយ​ចំនួន)"
 
-#: scanparams.cpp:483
+#: scanparams.cpp:481
 #, kde-format
 msgid "Edit Gamma Table..."
 msgstr "កែសម្រួល​តារាង​ហ្គាម៉ា..."
 
-#: scanparams.cpp:555
+#: scanparams.cpp:553
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "<qt><b>No scanner selected</b><p>Select a scanner device to perform "
@@ -694,7 +684,7 @@ msgstr ""
 "<qt><b>គ្មាន​កម្មវិធី​វិភាគ​រក​​ដែល​បាន​​ជ្រើស​ឡើយ</b><p>ជ្រើស​ឧបករណ៍​កម្មវិធី​វិភាគ​រក ដើម្បី​​ធ្វើ​ការ​វិភាគ​"
 "រក ។"
 
-#: scanparams.cpp:575
+#: scanparams.cpp:573
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "<qt><b>Problem: No scanner found, or unable to access it</b><p>There was "
@@ -724,22 +714,22 @@ msgstr ""
 "(<a href=\"http://www.sane-project.org\">www.sane-project.org</a>) អំពី​ព័ត៌មាន​"
 "បន្ថែម​​ក្នុង​​​ការ​រៀបចំ និង​ការ​ដំឡើង SANE ។"
 
-#: scanparams.cpp:677
+#: scanparams.cpp:675
 #, kde-format
 msgid "1-bit depth scan cannot be done in color"
 msgstr ""
 
-#: scanparams.cpp:680
+#: scanparams.cpp:678
 #, kde-format
 msgid "16-bit depth scans are not supported"
 msgstr ""
 
-#: scanparams.cpp:690
+#: scanparams.cpp:688
 #, kde-format
 msgid "A file must be entered for testing or virtual scanning"
 msgstr "ត្រូវ​តែ​បញ្ចូល​ឯកសារ​សម្រាប់ការ​​សាកល្បង​ ឬ​ការ​វិភាគ​រក​​និម្មិត"
 
-#: scanparams.cpp:696
+#: scanparams.cpp:694
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "<qt>The testing or virtual file<br><filename>%1</filename><br>was not "
@@ -752,7 +742,7 @@ msgstr ""
 "<qt>ការ​សាកល្បង ឬ​ឯកសារ​និម្មិត<br><filename>%1</filename><br>​មិន​អាច​ត្រូវ​បាន​រក​​​ឃើញ ឬ​មិន​"
 "អាច​អាន​បាន"
 
-#: scanparams.cpp:706
+#: scanparams.cpp:704
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "<qt>SANE Debug can only read PNM files.<br>This file is type <b>%1</b>."
@@ -763,19 +753,19 @@ msgid ""
 msgstr ""
 "<qt>បំបាត់​កំហុស SANE អាច​​អាន​តែ​ឯកសារ PNM ប៉ុណ្ណោះ ។<br>ឯកសារ​នេះ​ជា​ប្រភេទ <b>%1</b> ។"
 
-#: scanparams.cpp:723
+#: scanparams.cpp:721
 #, fuzzy, kde-kuit-format
 #| msgid "Scanning in progress"
 msgid "Scan in progress"
 msgstr "កំពុង​ដំណើរការ​វិភាគ​រក"
 
-#: scanparams.cpp:724
+#: scanparams.cpp:722
 #, fuzzy, kde-kuit-format
 #| msgid "Scanning in progress"
 msgid "Scan in progress<nl/><nl/>%1"
 msgstr "កំពុង​ដំណើរការ​វិភាគ​រក"
 
-#: scanparams.cpp:744
+#: scanparams.cpp:742
 #, kde-format
 msgid "Cannot preview in Virtual Scanner mode"
 msgstr "មិន​អាច​មើល​​ជាមុន​​ជា​របៀប​កម្មវិធី​វិភាគ​រក​និម្មិត​បាន​ទេ"
@@ -934,6 +924,11 @@ msgstr ""
 #, kde-format
 msgid "Selection"
 msgstr "ជម្រើស"
+
+#, fuzzy
+#~| msgid "*|All Files"
+#~ msgid "All Files (*)"
+#~ msgstr "*|​ឯកសារ​ទាំងអស់"
 
 #, fuzzy
 #~| msgid ""
