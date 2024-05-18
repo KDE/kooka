@@ -821,6 +821,20 @@ bool KScanOption::getRange(double *minp, double *maxp, double *quantp) const
             max = r->max;
             quant = r->quant;
         }
+
+        if (min>max)
+        {
+            // This should never happen unless the SANE backend supplies
+            // incorrectly ordered or nonsense values.  Possibly since
+            // SANE version 1.2.1, these have been observed with the 'escl'
+            // backend connected to a Brother MFC-J4540DW all-in-one device,
+            // although the options are permanently inactive so they do not
+            // affect the GUI or scanning.
+            qCWarning(LIBKOOKASCAN_LOG) << "SANE range constraint in wrong order";
+            qCWarning(LIBKOOKASCAN_LOG) << "min" << min << qPrintable(QString("(%1)").arg(quint32(r->min), 8, 16, QLatin1Char('0')))
+                                        << "max" << max << qPrintable(QString("(%1)").arg(quint32(r->max), 8, 16, QLatin1Char('0')));
+            qSwap(min, max);
+        }
     }
     else if (mDesc->constraint_type==SANE_CONSTRAINT_WORD_LIST)
     {
