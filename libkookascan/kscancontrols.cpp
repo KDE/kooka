@@ -162,7 +162,7 @@ void KScanSlider::setRange(int min, int max, int step, int stdValue)
         mSpinbox->setSingleStep(step);
     }
 
-    mStdValue = qBound(stdValue, min, max);		// limit default value to range
+    mStdValue = qBound(min, stdValue, max);		// limit default value to range
     mValue = mStdValue;					// set current value to that
     mSlider->setValue(mValue);
     mSpinbox->setValue(mValue);
