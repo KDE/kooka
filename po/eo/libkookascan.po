@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: libkookascan\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-05-17 01:43+0000\n"
-"PO-Revision-Date: 2024-02-24 22:21+0100\n"
+"PO-Revision-Date: 2024-05-17 13:51+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -29,16 +29,14 @@ msgid "Your emails"
 msgstr "okellogg@users.sourceforge.net"
 
 #: ../libdialogutil/imagefilter.cpp:85
-#, fuzzy, kde-format
-#| msgid "%1|All Image Files"
+#, kde-format
 msgid "All Image Files"
-msgstr "%1|Ĉiuj Bilddosieroj"
+msgstr "Ĉiuj Bilddosieroj"
 
 #: ../libdialogutil/imagefilter.cpp:90
-#, fuzzy, kde-format
-#| msgid "*|All Files"
+#, kde-format
 msgid "All Files"
-msgstr "*|Ĉiuj dosieroj"
+msgstr "Ĉiuj Dosieroj"
 
 #: adddevicedialog.cpp:58
 #, kde-kuit-format
@@ -514,7 +512,7 @@ msgstr "Ŝargado de eksterlokaj bildoj ankoraŭ ne estas realigita"
 #: scanimage.cpp:128
 #, kde-format
 msgid "Image loading failed"
-msgstr "Ŝarĝo de bildo malsukcesis"
+msgstr "Ŝargo de bildo malsukcesis"
 
 #: scanimage.cpp:162
 #, kde-format
@@ -802,15 +800,15 @@ msgid ""
 "background) or darker (on a white background) than this are considered to be "
 "part of the image.</div>"
 msgstr ""
-"<div>Sojlo por aŭtomata detekto. Ĉiuj pikseloj pli helaj (sur nigra fono) aŭ "
-"pli malhelaj (sur blanka fono) ol tio estas konsiderataj kiel parto de la "
+"<div>Sojlo por aŭtomata detekto. Ĉiuj rastrumeroj pli helaj (sur nigra fono) "
+"aŭ pli malhelaj (sur blanka fono) ol tio estas konsiderataj kiel parto de la "
 "bildo.</div>"
 
 #. i18n: ectx: label, entry (PreviewAutoselDustsize), group (Scanner Name)
 #: scansettings.kcfg:69
 #, kde-format
 msgid "Dust size (pixels):"
-msgstr "Polvograndeco (pikseloj):"
+msgstr "Polvograndeco (rastrumeroj):"
 
 #. i18n: ectx: tooltip, entry (PreviewAutoselDustsize), group (Scanner Name)
 #: scansettings.kcfg:70
@@ -886,12 +884,3 @@ msgstr "Agordi la orientiĝon por antaŭfiksita grandeco de la skanita areo"
 #, kde-format
 msgid "Selection"
 msgstr "Elekto"
-
-#~ msgid "All Image Files (%1)"
-#~ msgstr "Ĉiuj Bildaj Dosieroj (%1)"
-
-#~ msgid "All Files (*)"
-#~ msgstr "Ĉiuj dosieroj (*)"
-
-#~ msgid "*.pnm *.pbm *.pgm *.ppm|PNM Image Files"
-#~ msgstr "*.pnm *.pbm *.pgm *.ppm|PNM-Bildosieroj"

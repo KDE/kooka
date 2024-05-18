@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-05-17 01:43+0000\n"
-"PO-Revision-Date: 2024-02-20 13:29+0100\n"
+"PO-Revision-Date: 2024-05-17 09:46+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -1864,23 +1864,19 @@ msgstr ""
 
 #. i18n: ectx: label, entry (SaverAskForFilename), group (Files)
 #: kookasettings.kcfg:71
-#, fuzzy, kde-format
-#| msgid "Ask for filename when saving"
+#, kde-format
 msgid "Ask for file name when saving"
 msgstr "Pregunta pel nom de fitxer en guardar"
 
 #. i18n: ectx: tooltip, entry (SaverAskForFilename), group (Files)
 #: kookasettings.kcfg:72
-#, fuzzy, kde-format
-#| msgid ""
-#| "<div>Check this if you want to enter a file name when scanning an image.</"
-#| "div>"
+#, kde-format
 msgid ""
 "<div>Check this if you want to always enter a file name when scanning an "
 "image.</div>"
 msgstr ""
-"<div>Marqueu-la si voleu introduir un nom de fitxer en escanejar una imatge."
-"</div>"
+"<div>Marqueu-la si sempre voleu introduir un nom de fitxer en escanejar una "
+"imatge.</div>"
 
 #. i18n: ectx: label, entry (SaverOnlyRecommendedTypes), group (Files)
 #: kookasettings.kcfg:77
@@ -2997,23 +2993,3 @@ msgstr "Molt xicoteta"
 #, kde-format
 msgid "Tiny"
 msgstr "Minúscula"
-
-#~ msgid "Before the scan starts"
-#~ msgstr "Abans que comence l'escaneig"
-
-#~ msgid ""
-#~ "<div>Check this if you want to enter the file name before scanning starts."
-#~ "</div>"
-#~ msgstr ""
-#~ "<div>Marqueu-la si voleu introduir un nom de fitxer abans que comence "
-#~ "l'escaneig.</div>"
-
-#~ msgid "After the scan is finished"
-#~ msgstr "Després que finalitze l'escaneig"
-
-#~ msgid ""
-#~ "<div>Check this if you want to enter the file name after scanning has "
-#~ "finished.</div>"
-#~ msgstr ""
-#~ "<div>Marqueu-la si voleu introduir un nom de fitxer després que finalitze "
-#~ "l'escaneig</div>"

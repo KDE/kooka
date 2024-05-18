@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-05-17 01:43+0000\n"
-"PO-Revision-Date: 2024-02-20 15:56+0100\n"
+"PO-Revision-Date: 2024-05-17 09:47+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -32,16 +32,14 @@ msgid "Your emails"
 msgstr "antonibella5@yahoo.com"
 
 #: ../libdialogutil/imagefilter.cpp:85
-#, fuzzy, kde-format
-#| msgid "%1|All Image Files"
+#, kde-format
 msgid "All Image Files"
-msgstr "%1|Tots els fitxers d'imatge"
+msgstr "Tots els fitxers d'imatge"
 
 #: ../libdialogutil/imagefilter.cpp:90
-#, fuzzy, kde-format
-#| msgid "*|All Files"
+#, kde-format
 msgid "All Files"
-msgstr "*|Tots els fitxers"
+msgstr "Tots els fitxers"
 
 #: adddevicedialog.cpp:58
 #, kde-kuit-format
@@ -337,7 +335,7 @@ msgstr "Reinicia esta opció al seu valor estàndard, %1"
 #: kscancontrols.cpp:414
 #, kde-format
 msgid "PNM Image Files (*.pnm *.pbm *.pgm *.ppm)"
-msgstr ""
+msgstr "Fitxers d'imatge PNM (*.pnm *.pbm *.pgm *.ppm)"
 
 #: kscandevice.cpp:279
 #, kde-format
@@ -929,12 +927,3 @@ msgstr "Establix l'orientació d'una mida predefinida de la zona escanejada"
 #, kde-format
 msgid "Selection"
 msgstr "Selecció"
-
-#~ msgid "All Image Files (%1)"
-#~ msgstr "Tots els fitxers d'imatge (%1)"
-
-#~ msgid "All Files (*)"
-#~ msgstr "Tots els fitxers (*)"
-
-#~ msgid "*.pnm *.pbm *.pgm *.ppm|PNM Image Files"
-#~ msgstr "*.pnm *.pbm *.pgm *.ppm|Fitxers d'imatge PNM"

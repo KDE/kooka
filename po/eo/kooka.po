@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-05-17 01:43+0000\n"
-"PO-Revision-Date: 2024-02-24 22:21+0100\n"
+"PO-Revision-Date: 2024-05-17 13:51+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -96,7 +96,7 @@ msgid ""
 "\n"
 "%1"
 msgstr ""
-"Nevalidaj presaj opcioj estis specifitaj:\n"
+"Nevalidaj presaj elektebloj estis specifitaj:\n"
 "\n"
 "%1"
 
@@ -768,7 +768,7 @@ msgid ""
 "line art (bitmap) images. Only 1 bit per pixel depth is supported."
 msgstr ""
 "<b>Portebla Bitmapo</b>, kiel uzata de Netpbm, estas nekunpremita formato "
-"por liniartaj (bitmapo) bildoj. Nur 1 bito per piksela profundo estas "
+"por liniartaj (bitmapo) bildoj. Nur 1 bito per rastrumera profundo estas "
 "subtenata."
 
 #: formatdialog.cpp:97
@@ -778,7 +778,7 @@ msgid ""
 "grayscale images. Only 8 bit per pixel depth is supported."
 msgstr ""
 "<b>Portebla Grizmapo</b>, kiel uzata de Netpbm, estas nekunpremita formato "
-"por grizskalaj bildoj. Nur 8 bitoj per piksela profundo estas subtenata."
+"por grizskalaj bildoj. Nur 8 bitoj per rastrumera profundo estas subtenata."
 
 #: formatdialog.cpp:106
 #, kde-format
@@ -787,7 +787,7 @@ msgid ""
 "full color images. Only 24 bit per pixel RGB is supported."
 msgstr ""
 "<b>Portebla Bildmapo</b>, kiel uzata de Netpbm, estas nekunpremita formato "
-"por plenkoloraj bildoj. Nur 24 bitoj per pikselo RGB estas subtenata."
+"por plenkoloraj bildoj. Nur 24 bitoj per rastrumero RGB estas subtenata."
 
 #: formatdialog.cpp:115
 #, kde-format
@@ -810,7 +810,7 @@ msgid ""
 "format instead."
 msgstr ""
 "<b>X Bitmap</b> estas ofte uzata de la X-Fenestra Sistemo por konservi "
-"kursoron kaj ikonajn bitmapojn.<p>Krom se necesas por ĉi tiu celo, uzu "
+"kursoron kaj piktogramajn bitmapojn.<p>Krom se necesas por ĉi tiu celo, uzu "
 "ĝeneraluzeblan formaton anstataŭe."
 
 #: formatdialog.cpp:135
@@ -847,7 +847,7 @@ msgid ""
 msgstr ""
 "<b>JPEG</b> estas kunpremita formato taŭga por veraj koloroj aŭ grizskalaj "
 "bildoj. Ĝi estas perda formato, do ĝi ne estas rekomendita por arkivado aŭ "
-"por ripeta ŝarĝo kaj konservado.<p>Ĉi tio estas malfermita formato kiu estas "
+"por ripeta ŝargo kaj konservado.<p>Ĉi tio estas malfermita formato kiu estas "
 "vaste subtenata."
 
 #: formatdialog.cpp:166
@@ -959,7 +959,7 @@ msgstr ""
 "travidebleco. Ĝi estas vaste subtenata de modernaj retumiloj kaj grafika "
 "programaro.<p>Diversaj kunpremaj metodoj, ambaŭ perdaj kaj senperdaj, estas "
 "subtenataj. Perda kunpremo ne estas rekomendita por arkivado aŭ por ripeta "
-"ŝarĝo kaj konservado."
+"ŝargo kaj konservado."
 
 #: formatdialog.cpp:280
 #, kde-format
@@ -1252,7 +1252,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title:group"
 msgid "Other Options"
-msgstr "Aliaj Opcioj"
+msgstr "Aliaj Elektebloj"
 
 #: imgprintdialog.cpp:182
 #, kde-format
@@ -1732,7 +1732,7 @@ msgstr "Ĝenerale"
 #: kookapref.cpp:57
 #, kde-format
 msgid "General Options"
-msgstr "Ĝeneralaj opcioj"
+msgstr "Ĝeneralaj Elektebloj"
 
 #: kookapref.cpp:58
 #, kde-format
@@ -1742,7 +1742,7 @@ msgstr "Lanĉo"
 #: kookapref.cpp:58
 #, kde-format
 msgid "Startup Options"
-msgstr "Komencaj Opcioj"
+msgstr "Komencaj Elektebloj"
 
 #: kookapref.cpp:59
 #, kde-format
@@ -1752,7 +1752,7 @@ msgstr "Konservado de bildoj"
 #: kookapref.cpp:59
 #, kde-format
 msgid "Image Saving Options"
-msgstr "Opcioj de Konservado de Bildoj"
+msgstr "Elektebloj de Konservado de Bildoj"
 
 #: kookapref.cpp:60
 #, kde-format
@@ -1836,22 +1836,19 @@ msgstr ""
 
 #. i18n: ectx: label, entry (SaverAskForFilename), group (Files)
 #: kookasettings.kcfg:71
-#, fuzzy, kde-format
-#| msgid "Ask for filename when saving"
+#, kde-format
 msgid "Ask for file name when saving"
-msgstr "Peti dosiernomon dum konservado"
+msgstr "Peti dosiernomon kiam oni konservas"
 
 #. i18n: ectx: tooltip, entry (SaverAskForFilename), group (Files)
 #: kookasettings.kcfg:72
-#, fuzzy, kde-format
-#| msgid ""
-#| "<div>Check this if you want to enter a file name when scanning an image.</"
-#| "div>"
+#, kde-format
 msgid ""
 "<div>Check this if you want to always enter a file name when scanning an "
 "image.</div>"
 msgstr ""
-"<div>Marku ĉi tion se vi volas enigi dosiernomon dum skanado de bildo.</div>"
+"<div>Marku ĉi tion se vi volas ĉiam enigi dosiernomon dum skanado de bildo.</"
+"div>"
 
 #. i18n: ectx: label, entry (SaverOnlyRecommendedTypes), group (Files)
 #: kookasettings.kcfg:77
@@ -1985,7 +1982,7 @@ msgid ""
 "<div>The threshold value below which gray pixels are considered to be black. "
 "0 means to automatically detect the gray level.  The default is 160.</div>"
 msgstr ""
-"<div>La sojla valoro sub kiu grizaj pikseloj estas konsiderataj nigraj. 0 "
+"<div>La sojla valoro sub kiu grizaj rastrumeroj estas konsiderataj nigraj. 0 "
 "signifas aŭtomate detekti la grizan nivelon. La defaŭlta estas 160.</div>"
 
 #. i18n: ectx: label, entry (OcrGocrSpaceWidth), group (gocr)
@@ -2001,8 +1998,8 @@ msgid ""
 "<div>The minimum gap in pixels considered to be word spacing. The default is "
 "0 which means to automatically detect spacing.</div>"
 msgstr ""
-"<div>La minimuma interspaco en pikseloj konsiderata kiel vortinterspaco. La "
-"defaŭlta estas 0, kio signifas aŭtomate detekti interspacon.</div>"
+"<div>La minimuma interspaco en rastrumeroj konsiderata kiel vortinterspaco. "
+"La defaŭlta estas 0, kio signifas aŭtomate detekti interspacon.</div>"
 
 #. i18n: ectx: label, entry (OcrGocrCertainty), group (gocr)
 #: kookasettings.kcfg:223
@@ -2947,23 +2944,3 @@ msgstr "Tre malgranda"
 #, kde-format
 msgid "Tiny"
 msgstr "Eta"
-
-#~ msgid "Before the scan starts"
-#~ msgstr "Antaŭ ol la skanado komenciĝas"
-
-#~ msgid ""
-#~ "<div>Check this if you want to enter the file name before scanning starts."
-#~ "</div>"
-#~ msgstr ""
-#~ "<div>Marku ĉi tion se vi volas enigi la dosiernomon antaŭ ol komenci "
-#~ "skanadon.</div>"
-
-#~ msgid "After the scan is finished"
-#~ msgstr "Post kiam la skanado estas finita"
-
-#~ msgid ""
-#~ "<div>Check this if you want to enter the file name after scanning has "
-#~ "finished.</div>"
-#~ msgstr ""
-#~ "<div>Marku ĉi tion se vi volas enigi la dosiernomon post kiam la skanado "
-#~ "finiĝis.</div>"

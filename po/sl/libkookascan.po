@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-05-17 01:43+0000\n"
-"PO-Revision-Date: 2024-02-20 09:40+0100\n"
+"PO-Revision-Date: 2024-05-17 07:11+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -29,16 +29,14 @@ msgid "Your emails"
 msgstr "matjaz.jeran@amis.net"
 
 #: ../libdialogutil/imagefilter.cpp:85
-#, fuzzy, kde-format
-#| msgid "%1|All Image Files"
+#, kde-format
 msgid "All Image Files"
-msgstr "%1|Vse slikovne datoteke"
+msgstr "Vse slikovne datoteke"
 
 #: ../libdialogutil/imagefilter.cpp:90
-#, fuzzy, kde-format
-#| msgid "*|All Files"
+#, kde-format
 msgid "All Files"
-msgstr "*|Vse datoteke"
+msgstr "Vse datoteke"
 
 #: adddevicedialog.cpp:58
 #, kde-kuit-format
@@ -331,7 +329,7 @@ msgstr "Ponovno nastavite to nastavitev na njeno standardno vrednost, %1"
 #: kscancontrols.cpp:414
 #, kde-format
 msgid "PNM Image Files (*.pnm *.pbm *.pgm *.ppm)"
-msgstr ""
+msgstr "Slikovne datoteke PNM (*.pnm *.pbm *.pgm *.ppm)"
 
 #: kscandevice.cpp:279
 #, kde-format

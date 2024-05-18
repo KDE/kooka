@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: playground-graphics-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-05-17 01:43+0000\n"
-"PO-Revision-Date: 2024-02-20 17:37+0300\n"
+"PO-Revision-Date: 2024-05-17 13:43+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -22,7 +22,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 24.01.95\n"
+"X-Generator: Lokalize 24.07.70\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -647,7 +647,7 @@ msgid ""
 "option."
 msgstr ""
 "Kooka’nın bu sürümü Kadmos için yapılandırılmamıştır. Kadmos kitaplıklarının "
-"kurulması ve Kooka'nın ‘--with-kadmos’ seçeneği ile yeniden derlenmesi "
+"kurulması ve Kooka’nın ‘--with-kadmos’ seçeneği ile yeniden derlenmesi "
 "gerekmektedir."
 
 #: ../plugins/ocr/kadmos/ocrkadmosengine.cpp:93
@@ -1851,23 +1851,19 @@ msgstr ""
 
 #. i18n: ectx: label, entry (SaverAskForFilename), group (Files)
 #: kookasettings.kcfg:71
-#, fuzzy, kde-format
-#| msgid "Ask for filename when saving"
+#, kde-format
 msgid "Ask for file name when saving"
 msgstr "Kaydederken dosya adı sor"
 
 #. i18n: ectx: tooltip, entry (SaverAskForFilename), group (Files)
 #: kookasettings.kcfg:72
-#, fuzzy, kde-format
-#| msgid ""
-#| "<div>Check this if you want to enter a file name when scanning an image.</"
-#| "div>"
+#, kde-format
 msgid ""
 "<div>Check this if you want to always enter a file name when scanning an "
 "image.</div>"
 msgstr ""
-"<div>Bir görseli taraken, bir dosya adı girmek istiyorsanız bunu işaretleyin."
-"</div>"
+"<div>Bir görseli taraken, her zaman bir dosya adı girmek istiyorsanız bunu "
+"işaretleyin.</div>"
 
 #. i18n: ectx: label, entry (SaverOnlyRecommendedTypes), group (Files)
 #: kookasettings.kcfg:77
