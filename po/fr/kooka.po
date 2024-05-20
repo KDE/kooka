@@ -37,9 +37,9 @@ msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-05-17 01:43+0000\n"
-"PO-Revision-Date: 2024-02-21 14:11+0100\n"
+"PO-Revision-Date: 2024-05-18 09:44+0200\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
-"Language-Team: fr\n"
+"Language-Team: French <French <kde-francophone@kde.org>>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -47,7 +47,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Accelerator-Marker: &\n"
 "X-Environment: kde\n"
-"X-Generator: Lokalize 23.08.4\n"
+"X-Generator: Lokalize 23.08.5\n"
 "X-Text-Markup: kde4\n"
 
 #, kde-format
@@ -1894,23 +1894,19 @@ msgstr ""
 
 #. i18n: ectx: label, entry (SaverAskForFilename), group (Files)
 #: kookasettings.kcfg:71
-#, fuzzy, kde-format
-#| msgid "Ask for filename when saving"
+#, kde-format
 msgid "Ask for file name when saving"
 msgstr "Demander le nom de fichier lors de l'enregistrement "
 
 #. i18n: ectx: tooltip, entry (SaverAskForFilename), group (Files)
 #: kookasettings.kcfg:72
-#, fuzzy, kde-format
-#| msgid ""
-#| "<div>Check this if you want to enter a file name when scanning an image.</"
-#| "div>"
+#, kde-format
 msgid ""
 "<div>Check this if you want to always enter a file name when scanning an "
 "image.</div>"
 msgstr ""
 "<div>Cochez cette case si vous voulez saisir un nom de fichier durant la "
-"numérisation.</div>"
+"numérisation d'une image.</div>"
 
 #. i18n: ectx: label, entry (SaverOnlyRecommendedTypes), group (Files)
 #: kookasettings.kcfg:77

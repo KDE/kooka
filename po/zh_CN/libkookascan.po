@@ -28,16 +28,14 @@ msgid "Your emails"
 msgstr ""
 
 #: ../libdialogutil/imagefilter.cpp:85
-#, fuzzy, kde-format
-#| msgid "*|All Files"
+#, kde-format
 msgid "All Image Files"
-msgstr "*|所有文件"
+msgstr ""
 
 #: ../libdialogutil/imagefilter.cpp:90
-#, fuzzy, kde-format
-#| msgid "*|All Files"
+#, kde-format
 msgid "All Files"
-msgstr "*|所有文件"
+msgstr ""
 
 #: adddevicedialog.cpp:58
 #, kde-kuit-format
@@ -849,6 +847,3 @@ msgstr ""
 #, kde-format
 msgid "Selection"
 msgstr "已选项目"
-
-#~ msgid "All Files (*)"
-#~ msgstr "所有文件 (*)"

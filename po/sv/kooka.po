@@ -13,14 +13,14 @@ msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-05-17 01:43+0000\n"
-"PO-Revision-Date: 2024-05-03 08:38+0200\n"
-"Last-Translator: Stefan Asserhäll <stefan.asserhall@gmail.com>\n"
+"PO-Revision-Date: 2024-05-19 11:47+0200\n"
+"Last-Translator: Stefan Asserhäll <stefan.asserhall@bredband.net>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 23.08.3\n"
+"X-Generator: Lokalize 23.08.5\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #, kde-format
@@ -1855,22 +1855,18 @@ msgstr ""
 
 #. i18n: ectx: label, entry (SaverAskForFilename), group (Files)
 #: kookasettings.kcfg:71
-#, fuzzy, kde-format
-#| msgid "Ask for filename when saving"
+#, kde-format
 msgid "Ask for file name when saving"
-msgstr "Fråga efter filnamn när filen sparas"
+msgstr "Fråga efter filnamn när bilden sparas"
 
 #. i18n: ectx: tooltip, entry (SaverAskForFilename), group (Files)
 #: kookasettings.kcfg:72
-#, fuzzy, kde-format
-#| msgid ""
-#| "<div>Check this if you want to enter a file name when scanning an image.</"
-#| "div>"
+#, kde-format
 msgid ""
 "<div>Check this if you want to always enter a file name when scanning an "
 "image.</div>"
 msgstr ""
-"<div>Markera det här om du vill skriva in ett filnamn när en bild läses in.</"
+"<div>Markera om du alltid vill skriva in ett filnamn när en bild läses in.</"
 "div>"
 
 #. i18n: ectx: label, entry (SaverOnlyRecommendedTypes), group (Files)
