@@ -29,16 +29,14 @@ msgid "Your emails"
 msgstr ""
 
 #: ../libdialogutil/imagefilter.cpp:85
-#, fuzzy, kde-format
-#| msgid "%1|All Image Files"
+#, kde-format
 msgid "All Image Files"
-msgstr "%1|Všechny soubory obrázků"
+msgstr ""
 
 #: ../libdialogutil/imagefilter.cpp:90
-#, fuzzy, kde-format
-#| msgid "*|All Files"
+#, kde-format
 msgid "All Files"
-msgstr "*|Všechny soubory"
+msgstr "Všechny soubory"
 
 #: adddevicedialog.cpp:58
 #, kde-kuit-format
@@ -850,9 +848,3 @@ msgstr ""
 #, kde-format
 msgid "Selection"
 msgstr "Výběr"
-
-#~ msgid "All Image Files (%1)"
-#~ msgstr "Všechny soubory obrázků (%1)"
-
-#~ msgid "All Files (*)"
-#~ msgstr "Všechny soubory (*)"
