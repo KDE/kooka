@@ -1,37 +1,37 @@
 # Copyright (C) YEAR This_file_is_part_of_KDE
 # This file is distributed under the same license as the PACKAGE package.
 # Vít Pelčák <vit@pelcak.org>, 2011, 2012, 2013, 2017.
-# Vit Pelcak <vit@pelcak.org>, 2021, 2023.
+# SPDX-FileCopyrightText: 2021, 2023, 2024 Vit Pelcak <vit@pelcak.org>
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-05-17 01:43+0000\n"
-"PO-Revision-Date: 2023-03-04 23:35+0100\n"
-"Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
+"PO-Revision-Date: 2024-05-30 09:28+0200\n"
+"Last-Translator: Vit Pelcak <vpelcak@suse.cz>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 22.12.2\n"
+"X-Generator: Lokalize 24.02.2\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
-msgstr ""
+msgstr "Vít Pelčák"
 
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
-msgstr ""
+msgstr "vit@pelcak.org"
 
 #: ../libdialogutil/imagefilter.cpp:85
 #, kde-format
 msgid "All Image Files"
-msgstr ""
+msgstr "Všechny soubory obrázků"
 
 #: ../libdialogutil/imagefilter.cpp:90
 #, kde-format
@@ -54,13 +54,13 @@ msgstr ""
 #: adddevicedialog.cpp:77
 #, kde-format
 msgid "Scanner device:"
-msgstr ""
+msgstr "Skenovací zařízení:"
 
 #: adddevicedialog.cpp:80 scandevices.cpp:186
 #, kde-format
 msgctxt "Value used for manufacturer if none entered"
 msgid "User specified"
-msgstr ""
+msgstr "Zadáno uživatelem"
 
 #: adddevicedialog.cpp:82
 #, kde-format
@@ -303,7 +303,7 @@ msgstr ""
 #: kscancontrols.cpp:414
 #, kde-format
 msgid "PNM Image Files (*.pnm *.pbm *.pgm *.ppm)"
-msgstr ""
+msgstr "Obrázky PNM (*.pnm *.pbm *.pgm *.ppm)"
 
 #: kscandevice.cpp:279
 #, kde-format
@@ -334,17 +334,17 @@ msgstr "OK"
 #: kscandevice.cpp:1526
 #, kde-format
 msgid "No device"
-msgstr ""
+msgstr "Žádné zařízení"
 
 #: kscandevice.cpp:1527
 #, kde-format
 msgid "Bad parameter"
-msgstr ""
+msgstr "Chybný parametr"
 
 #: kscandevice.cpp:1528
 #, kde-format
 msgid "Cannot open device"
-msgstr ""
+msgstr "Zařízení nelze otevřít"
 
 #: kscandevice.cpp:1529
 #, kde-format
@@ -419,7 +419,7 @@ msgstr "%"
 #: kscanoption.cpp:1018
 #, kde-format
 msgid "µsec"
-msgstr ""
+msgstr "µsec"
 
 #: kscanoptset.cpp:190
 #, kde-format
@@ -430,13 +430,13 @@ msgstr "Žádný popis"
 #, no-c-format, kde-format
 msgctxt "@info:status"
 msgid "%1x%2mm, %3x%4pix"
-msgstr ""
+msgstr "%1x%2mm, %3x%4pix"
 
 #: previewer.cpp:246
 #, no-c-format, kde-format
 msgctxt "@info:status"
 msgid "%1x%2mm"
-msgstr ""
+msgstr "%1x%2mm"
 
 #: previewer.cpp:340
 #, kde-format
@@ -488,17 +488,17 @@ msgstr "LibTIFF"
 #: scanglobal.cpp:145
 #, kde-format
 msgid "TIFF image format library"
-msgstr ""
+msgstr "Knihovna formátu obrázků TIFF"
 
 #: scanglobal.cpp:158
 #, kde-format
 msgid "libpaper"
-msgstr ""
+msgstr "libpaper"
 
 #: scanglobal.cpp:159
 #, kde-format
 msgid "Paper size configuration library"
-msgstr ""
+msgstr "Knihovna pro nastavení velikosti papíru"
 
 #: scanimage.cpp:76
 #, kde-format
@@ -626,7 +626,7 @@ msgstr ""
 #: scanparams.cpp:416
 #, kde-format
 msgid "Grey scale"
-msgstr ""
+msgstr "Odstíny šedé"
 
 #: scanparams.cpp:417
 #, kde-format
@@ -735,7 +735,7 @@ msgstr ""
 #: scansettings.kcfg:18
 #, kde-format
 msgid "Use the system proxy settings to access network scanners"
-msgstr ""
+msgstr "Použít systémové nastavení proxy pro přístup k síťovým skenerům"
 
 #. i18n: ectx: tooltip, entry (StartupUseProxy), group (Startup)
 #: scansettings.kcfg:19

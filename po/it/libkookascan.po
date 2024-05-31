@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: libkscan\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-05-17 01:43+0000\n"
-"PO-Revision-Date: 2024-02-29 22:13+0100\n"
+"PO-Revision-Date: 2024-05-18 22:04+0200\n"
 "Last-Translator: Valter Mura <valtermura@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -30,16 +30,14 @@ msgid "Your emails"
 msgstr "valtermura@gmail.com"
 
 #: ../libdialogutil/imagefilter.cpp:85
-#, fuzzy, kde-format
-#| msgid "%1|All Image Files"
+#, kde-format
 msgid "All Image Files"
-msgstr "%1|Tutti i file immagine"
+msgstr "Tutti i file immagine"
 
 #: ../libdialogutil/imagefilter.cpp:90
-#, fuzzy, kde-format
-#| msgid "*|All Files"
+#, kde-format
 msgid "All Files"
-msgstr "*|Tutti i file"
+msgstr "Tutti i file"
 
 #: adddevicedialog.cpp:58
 #, kde-kuit-format
@@ -337,7 +335,7 @@ msgstr "Riporta questa impostazione al suo valore standard, %1"
 #: kscancontrols.cpp:414
 #, kde-format
 msgid "PNM Image Files (*.pnm *.pbm *.pgm *.ppm)"
-msgstr ""
+msgstr "File di immagine PNM (*.pnm *.pbm *.pgm *.ppm)"
 
 #: kscandevice.cpp:279
 #, kde-format
