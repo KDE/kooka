@@ -2,13 +2,13 @@
 # Author: Artnay
 # Author: Lliehu
 # Lasse Liehu <lasse.liehu@gmail.com>, 2013, 2016.
-# Tommi Nieminen <translator@legisign.org>, 2018, 2021.
+# Tommi Nieminen <translator@legisign.org>, 2018, 2021, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: libkscan\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-05-17 01:43+0000\n"
-"PO-Revision-Date: 2021-04-08 09:39+0300\n"
+"PO-Revision-Date: 2024-03-12 10:37+0200\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
 "Language: fi\n"
@@ -16,18 +16,18 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-POT-Import-Date: 2012-12-01 22:27:06+0000\n"
-"X-Generator: Lokalize 20.04.2\n"
+"X-Generator: Lokalize 22.12.3\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
-msgstr ""
+msgstr "Tommi Nieminen"
 
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
-msgstr ""
+msgstr "translator@legisign.org"
 
 #: ../libdialogutil/imagefilter.cpp:85
 #, fuzzy, kde-format
@@ -53,23 +53,30 @@ msgid ""
 "<link url=\"?2\">locating devices</link>, <link url=\"?3\">HP scanners</"
 "link>, <link url=\"?4\">device not found</link>."
 msgstr ""
+"Ellei kuvanlukijaa tunnistettu automaattisesti, sen voi asettaa tässä. "
+"<interface>Kuvanlukulaite</interface> on SANE-taustajärjestelmän laitenimi. "
+"<interface>Valmistaja</interface>-, <interface>Tyyppi</interface>- ja "
+"<interface>Kuvaus</interface>-kentistä laitteen voi tunnistaa myöhemmin.<nl/"
+"><nl/>Lisätietoa <link url=\"?1\">SANE-taustajärjestelmistä</link>, <link "
+"url=\"?2\">laitteiden paikannuksesta</link>, <link url=\"?3\">HP-"
+"kuvanlukijoista</link>, <link url=\"?4\">laitetta ei löytynyt</link> -"
+"ilmoituksesta."
 
 #: adddevicedialog.cpp:77
-#, fuzzy, kde-format
-#| msgid "Scanner device name:"
+#, kde-format
 msgid "Scanner device:"
-msgstr "Kuvanlukulaitteen nimi:"
+msgstr "Kuvanlukulaite:"
 
 #: adddevicedialog.cpp:80 scandevices.cpp:186
 #, kde-format
 msgctxt "Value used for manufacturer if none entered"
 msgid "User specified"
-msgstr ""
+msgstr "Käyttäjän määritys"
 
 #: adddevicedialog.cpp:82
 #, kde-format
 msgid "Manufacturer:"
-msgstr ""
+msgstr "Valmistaja:"
 
 #: adddevicedialog.cpp:86
 #, kde-format
@@ -90,6 +97,10 @@ msgid ""
 "\">sane(7)</link> or <link url=\"man:/sane-dll\">sane&#8209;dll(5)</link> "
 "for more information on available backends and the format of device names."
 msgstr ""
+"<interface>Kuvanlukulaitteen</interface> tulisi olla SANEn ymmärtämä "
+"taustajärjestelmänimi (valinnaisin parametrein). Lisätietoa saatavilla "
+"olevista taustajärjestelmistä ja laitenimien muodosta: <link url=\"man:/sane"
+"\">sane(7)</link> tai <link url=\"man:/sane-dll\">sane&#8209;dll</link>."
 
 #: adddevicedialog.cpp:134
 #, kde-kuit-format
@@ -102,6 +113,11 @@ msgid ""
 "<icode>&#8209;L</icode> option for network scanners. If the scanner is "
 "found, then enter the device name displayed by these commands."
 msgstr ""
+"Tähän tarvittavan tiedon voi löytää etsimällä SCSI-, USB- tai "
+"rinnakkaisporttilaitetta komennolla <link url=\"man:/sane-find-scanner"
+"\">sane&#8209;find&#8209;scanner(1)</link> tai verkkolaitetta <link url="
+"\"man:/scanimage\">scanimage(1)</link>-komennon <icode>&#8209;L</icode>-"
+"valitsimella. Jos kuvanlukija löytyy, syötä komennon näyttämä laitenimi."
 
 #: adddevicedialog.cpp:143
 #, kde-kuit-format
@@ -114,6 +130,12 @@ msgid ""
 "the scanner is found by HPLIP, then the device name <icode>hp:</icode> that "
 "it displays needs to be replaced by <icode>hpaio:</icode> for SANE."
 msgstr ""
+"<link url=\"http://hplip.sourceforge.net/\">HPLIP</link>iä käyttävän HP:n "
+"USB- tai verkkokuvanlukijan voi yrittää löytää  <command>hp&#8209;probe</"
+"command>-komennolla, esimerkiksi <icode>hp&#8209;probe&nbsp;&#8209;b&nbsp;"
+"usb</icode> tai <icode>hp&#8209;probe&nbsp;&#8209;b&nbsp;net</icode>. "
+"Huomaa, että jos HPLIP löytää laitteen, sen näyttämä <icode>hp:</icode>-"
+"laitenimi tulee korvata SANEa varten jonolla <icode>hpaio:</icode>."
 
 #: adddevicedialog.cpp:152
 #, kde-kuit-format
@@ -123,6 +145,9 @@ msgid ""
 "by SANE. Check the SANE documentation for a <link url=\"http://www.sane-"
 "project.org/sane-supported-devices.html\">list of supported devices</link>."
 msgstr ""
+"Elleivät nämä komennot löydä kuvanlukijaa, SANE ei ehkä tue sitä. Tarkista "
+"SANEn ohjeista <link url=\"http://www.sane-project.org/sane-supported-"
+"devices.html\">tuetut laitteet</link>."
 
 #: autoselectbar.cpp:56
 #, kde-kuit-format
@@ -481,33 +506,32 @@ msgstr "Tuntematon laite \"%1\""
 #: scanglobal.cpp:136
 #, kde-format
 msgid "SANE - Scanner Access Now Easy"
-msgstr ""
+msgstr "SANE – Scanner Access Now Easy"
 
 #: scanglobal.cpp:137
 #, kde-format
 msgid "Scanner access and driver library"
-msgstr ""
+msgstr "Kuvanlukukäyttö- ja ajurikirjasto"
 
 #: scanglobal.cpp:144
 #, kde-format
 msgid "LibTIFF"
-msgstr ""
+msgstr "LibTIFF"
 
 #: scanglobal.cpp:145
-#, fuzzy, kde-format
-#| msgid "Force image format:"
+#, kde-format
 msgid "TIFF image format library"
-msgstr "Pakota kuvatiedostomuoto:"
+msgstr "TIFF-kuvamuotokirjasto"
 
 #: scanglobal.cpp:158
 #, kde-format
 msgid "libpaper"
-msgstr ""
+msgstr "libpaper"
 
 #: scanglobal.cpp:159
 #, kde-format
 msgid "Paper size configuration library"
-msgstr ""
+msgstr "Paperikoon määrityskirjasto"
 
 #: scanimage.cpp:76
 #, kde-format
@@ -767,6 +791,8 @@ msgstr ""
 #, kde-format
 msgid "Use the system proxy settings to access network scanners"
 msgstr ""
+"Käytä järjestelmän välityspalvelinasetuksia verkkokuvanlukijoihin "
+"yhdistämiseksi"
 
 #. i18n: ectx: tooltip, entry (StartupUseProxy), group (Startup)
 #: scansettings.kcfg:19
@@ -776,6 +802,10 @@ msgid ""
 "access network scanners.<br/><br/>Note that some SANE backends (for example "
 "'escl') may not work properly through a proxy.</div>"
 msgstr ""
+"<div>Valitse tämä, jos haluat käyttää järjestelmän välityspalvelinasetuksia "
+"verkkokuvanlukijoihin yhdistettäessä.<br/><br/>Huomaa, että jotkin SANE-"
+"taustajärjestelmät (esim. ”escl”) eivät ehkä toimi oikein välityspalvelimen "
+"kautta.</div>"
 
 #. i18n: ectx: label, entry (StartupSkipAsk), group (Startup)
 #: scansettings.kcfg:28
