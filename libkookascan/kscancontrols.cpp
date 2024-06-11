@@ -357,7 +357,12 @@ void KScanCombo::setList(const QList<QByteArray> &list)
 
 void KScanCombo::setText(const QString &text)
 {
-    int i = mCombo->findData(text);			// find item with that text
+    // This findData() must be done with a string of the same type that
+    // was originally set in setList(), i.e. a QByteArray.  Otherwise the
+    // exact QVariant matching carried out by default does not seem to work
+    // (no matching item is found) in Qt6, although it did in Qt5.  Using
+    // Qt::MatchFixedString would also work.
+    int i = mCombo->findData(text.toLatin1());		// find item with that text
     if (i == -1) return;				// ignore if not present
 
     if (i == mCombo->currentIndex()) return;		// avoid recursive signals
