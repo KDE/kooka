@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-05-17 01:43+0000\n"
-"PO-Revision-Date: 2024-02-29 03:13+0100\n"
+"PO-Revision-Date: 2024-07-07 07:30+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -29,16 +29,14 @@ msgid "Your emails"
 msgstr "Temuri.doghonadze@gmail.com"
 
 #: ../libdialogutil/imagefilter.cpp:85
-#, fuzzy, kde-format
-#| msgid "%1|All Image Files"
+#, kde-format
 msgid "All Image Files"
-msgstr "%1|ყველა გამოსახულების ფაილი"
+msgstr "ყველა გამოსახულების ფაილი"
 
 #: ../libdialogutil/imagefilter.cpp:90
-#, fuzzy, kde-format
-#| msgid "*|All Files"
+#, kde-format
 msgid "All Files"
-msgstr "*|ყველა ფაილი"
+msgstr "ყველა ფაილი"
 
 #: adddevicedialog.cpp:58
 #, kde-kuit-format
@@ -305,7 +303,7 @@ msgstr "ამ პარამეტრის მის სტანდარტ
 #: kscancontrols.cpp:414
 #, kde-format
 msgid "PNM Image Files (*.pnm *.pbm *.pgm *.ppm)"
-msgstr ""
+msgstr "PNM გამოსახულების (*.pnm *.pbm *.pgm *.ppm)"
 
 #: kscandevice.cpp:279
 #, kde-format
