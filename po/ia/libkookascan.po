@@ -1,13 +1,13 @@
-# Copyright (C) YEAR This file is copyright:
+# Copyright (C) 2024 This file is copyright:
 # This file is distributed under the same license as the kooka package.
 #
-# giovanni <g.sora@tiscali.it>, 2023.
+# SPDX-FileCopyrightText: 2023, 2024 giovanni <g.sora@tiscali.it>
 msgid ""
 msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-05-17 01:43+0000\n"
-"PO-Revision-Date: 2023-04-06 12:04+0200\n"
+"PO-Revision-Date: 2024-07-25 15:42+0200\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
 "Language: ia\n"
@@ -15,29 +15,27 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 21.12.3\n"
+"X-Generator: Lokalize 23.08.5\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
-msgstr ""
+msgstr "Giovanni Sora"
 
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
-msgstr ""
+msgstr "g.sora@tiscali.it"
 
 #: ../libdialogutil/imagefilter.cpp:85
-#, fuzzy, kde-format
-#| msgid "*|All Files"
+#, kde-format
 msgid "All Image Files"
-msgstr "*|Omne Files"
+msgstr "Omne Files de imagine"
 
 #: ../libdialogutil/imagefilter.cpp:90
-#, fuzzy, kde-format
-#| msgid "*|All Files"
+#, kde-format
 msgid "All Files"
-msgstr "*|Omne Files"
+msgstr "Omne files"
 
 #: adddevicedialog.cpp:58
 #, kde-kuit-format
@@ -66,7 +64,7 @@ msgstr ""
 #: adddevicedialog.cpp:82
 #, kde-format
 msgid "Manufacturer:"
-msgstr ""
+msgstr "Constructor:"
 
 #: adddevicedialog.cpp:86
 #, kde-format
@@ -420,7 +418,7 @@ msgstr "%"
 #: kscanoption.cpp:1018
 #, kde-format
 msgid "µsec"
-msgstr ""
+msgstr "µsec"
 
 #: kscanoptset.cpp:190
 #, kde-format
@@ -484,7 +482,7 @@ msgstr ""
 #: scanglobal.cpp:144
 #, kde-format
 msgid "LibTIFF"
-msgstr ""
+msgstr "LibTIFF"
 
 #: scanglobal.cpp:145
 #, kde-format
@@ -494,7 +492,7 @@ msgstr ""
 #: scanglobal.cpp:158
 #, kde-format
 msgid "libpaper"
-msgstr ""
+msgstr "libpaper"
 
 #: scanglobal.cpp:159
 #, kde-format
@@ -509,7 +507,7 @@ msgstr ""
 #: scanimage.cpp:128
 #, kde-format
 msgid "Image loading failed"
-msgstr ""
+msgstr "Il falleva cargar imagine"
 
 #: scanimage.cpp:162
 #, kde-format
@@ -550,7 +548,7 @@ msgstr ""
 #: scanparams.cpp:167
 #, kde-format
 msgid "Star&t Scan"
-msgstr ""
+msgstr "Ini&tia Scansion"
 
 #: scanparams.cpp:168
 #, kde-format
