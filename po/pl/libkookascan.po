@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-05-17 01:43+0000\n"
-"PO-Revision-Date: 2024-08-10 13:23+0200\n"
+"PO-Revision-Date: 2024-08-17 10:10+0200\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
 "Language: pl\n"
@@ -51,6 +51,13 @@ msgid ""
 "<link url=\"?2\">locating devices</link>, <link url=\"?3\">HP scanners</"
 "link>, <link url=\"?4\">device not found</link>."
 msgstr ""
+"Jeśli twój skaner nie został wykryty, to możesz go podać tutaj. "
+"<interface>Urządzenie skanujące</interface> to nazwa silnika SANE. Pola "
+"<interface>Wytwórca</interface>, <interface>Rodzaj</interface> oraz "
+"<interface>Opis</interface> mogą być użyte później do rozpoznawania skanera."
+"<nl/><nl/>Po więcej szczegółów nt. <link url=\"?1\">silników SANE</link>, "
+"<link url=\"?2\">namierzania urządzeń</link>, <link url=\"?3\">skanerów HP</"
+"link>, <link url=\"?4\">niemożności znalezienia urządzenia</link>."
 
 #: adddevicedialog.cpp:77
 #, kde-format
@@ -87,6 +94,11 @@ msgid ""
 "\">sane(7)</link> or <link url=\"man:/sane-dll\">sane&#8209;dll(5)</link> "
 "for more information on available backends and the format of device names."
 msgstr ""
+"<interface>Urządzenie skanujące</interface> powinno być nazwą silnika (z "
+"dodatkowymi parametrami), która jest zrozumiała dla SANE. Po więcej "
+"szczegółów nt. dostępnych silników i zapisu nazw urządzeń, zajrzyj na <link "
+"url=\"man:/sane\">sane(7)</link> lub <link url=\"man:/sane-dll\">sane&#8209;"
+"dll(5)</link>."
 
 #: adddevicedialog.cpp:134
 #, kde-kuit-format
@@ -99,6 +111,13 @@ msgid ""
 "<icode>&#8209;L</icode> option for network scanners. If the scanner is "
 "found, then enter the device name displayed by these commands."
 msgstr ""
+"Aby dowiedzieć się, co tu należy wpisać, spróbuj namierzyć urządzenie przy "
+"użyciu polecenia <link url=\"man:/sane-find-scanner\">sane&#8209;find&#8209;"
+"scanner(1)</link> dla skanerów na portach SCSI, USB lub równoległych lub "
+"polecenia <link url=\"man:/scanimage\">scanimage(1)</link> z ustawieniem "
+"<icode>&#8209;L</icode> dla skanerów w sieci. Jeśli skaner zostanie w ten "
+"sposób wykryty, to wpisz nazwę jego urządzenia wyświetlaną przez te "
+"polecenia."
 
 #: adddevicedialog.cpp:143
 #, kde-kuit-format
@@ -111,6 +130,13 @@ msgid ""
 "the scanner is found by HPLIP, then the device name <icode>hp:</icode> that "
 "it displays needs to be replaced by <icode>hpaio:</icode> for SANE."
 msgstr ""
+"Dla skanerów USB lub z sieci od HP używając <link url=\"http://hplip."
+"sourceforge.net/\">HPLIP</link>, spróbuj wywołać polecenie  "
+"<command>hp&#8209;probe</command>, aby go namierzyć, np <icode>hp&#8209;"
+"probe&nbsp;&#8209;b&nbsp;usb</icode> lub <icode>hp&#8209;probe&nbsp;&#8209;"
+"b&nbsp;net</icode>. Pamiętaj, że jeśli skaner został wykryty przez HPLIP, to "
+"nazwa urządzenia <icode>hp:</icode>, które on wyświetla należy zastąpić "
+"nazwą <icode>hpaio:</icode> dla SANE."
 
 #: adddevicedialog.cpp:152
 #, kde-kuit-format
@@ -120,6 +146,10 @@ msgid ""
 "by SANE. Check the SANE documentation for a <link url=\"http://www.sane-"
 "project.org/sane-supported-devices.html\">list of supported devices</link>."
 msgstr ""
+"Jeśli poleceniom tym nie uda się namierzyć twojego skanera, to może on nie "
+"być obsługiwany przez SANE. Dokumentacja SANE zawiera <link url=\"http://www."
+"sane-project.org/sane-supported-devices.html\">wykaz obsługiwanych urządzeń</"
+"link> ."
 
 #: autoselectbar.cpp:56
 #, kde-kuit-format
@@ -776,6 +806,9 @@ msgid ""
 "access network scanners.<br/><br/>Note that some SANE backends (for example "
 "'escl') may not work properly through a proxy.</div>"
 msgstr ""
+"<div>Zaznacz, jeśli chcesz użyć systemowych ustawień pośrednika, aby "
+"uzyskiwać dostęp do swoich skanerów w sieci.<br/><br/>Pamiętaj, że niektóre "
+"silniki SANE (np. 'escl') mogą nie działać poprawnie przez pośrednika.</div>"
 
 #. i18n: ectx: label, entry (StartupSkipAsk), group (Startup)
 #: scansettings.kcfg:28
