@@ -2,7 +2,7 @@
 # Burkhard Lück <lueck@hube-lueck.de>, 2011, 2012, 2013, 2014, 2016, 2017, 2019, 2021.
 msgid ""
 msgstr ""
-"Project-Id-Version: libkscan\n"
+"Project-Id-Version: libkookascan\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-05-17 01:43+0000\n"
 "PO-Revision-Date: 2021-05-18 05:12+0200\n"
