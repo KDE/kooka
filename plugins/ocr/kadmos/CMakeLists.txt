@@ -11,7 +11,6 @@
 ##									##
 ##########################################################################
 
-project(kooka5)
 
 #########################################################################
 #									#
@@ -79,9 +78,7 @@ set(kadmos_SRCS
 
 kcoreaddons_add_plugin(kadmos SOURCES ${kadmos_SRCS} INSTALL_NAMESPACE "kooka_ocr")
 
-kcoreaddons_desktop_to_json(kadmos kookaocr-kadmos.desktop)
-
-target_link_libraries(kadmos Qt::Core Qt::Gui)
-target_link_libraries(kadmos KF5::I18n KF5::WidgetsAddons)
+target_link_libraries(kadmos Qt${Q}::Core Qt${Q}::Gui)
+target_link_libraries(kadmos KF${Q}::I18n KF${Q}::WidgetsAddons)
 target_link_libraries(kadmos kookaocr kookascan)
 target_link_libraries(kadmos librep)

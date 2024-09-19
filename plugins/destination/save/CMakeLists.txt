@@ -11,7 +11,6 @@
 ##									##
 ##########################################################################
 
-project(kooka5)
 
 #########################################################################
 #									#
@@ -26,6 +25,5 @@ set(destinationsave_SRCS
 
 kcoreaddons_add_plugin(destinationsave SOURCES ${destinationsave_SRCS} INSTALL_NAMESPACE "kooka_destination")
 
-kcoreaddons_desktop_to_json(destinationsave kookadestination-save.desktop)
-target_link_libraries(destinationsave Qt::Gui)
+target_link_libraries(destinationsave Qt${Q}::Gui)
 target_link_libraries(destinationsave kookadestination kookascan)

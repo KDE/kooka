@@ -82,12 +82,16 @@ FileTreeView::~FileTreeView()
 }
 
 // This is used when dragging and dropping out of the view to somewhere else.
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+QMimeData *FileTreeView::mimeData(const QList<QTreeWidgetItem *> &items) const
+#else
 QMimeData *FileTreeView::mimeData(const QList<QTreeWidgetItem *> items) const
+#endif
 {
     QMimeData *mimeData = new QMimeData();
     QList<QUrl> urlList;
 
-    for (const QTreeWidgetItem *item : qAsConst(items))
+    for (const QTreeWidgetItem *item : std::as_const(items))
     {
         const FileTreeViewItem *ftvi = static_cast<const FileTreeViewItem *>(item);
 #ifdef DEBUG_LISTING
@@ -124,7 +128,11 @@ void FileTreeView::dragEnterEvent(QDragEnterEvent *ev)
 
     QList<QTreeWidgetItem *> items = selectedItems();
     m_currentBeforeDropItem = (items.count() > 0 ? items.first() : nullptr);
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+    setDropItem(itemAt(ev->position().toPoint()));
+#else
     setDropItem(itemAt(ev->pos()));
+#endif
 }
 
 void FileTreeView::dragMoveEvent(QDragMoveEvent *ev)
@@ -134,7 +142,11 @@ void FileTreeView::dragMoveEvent(QDragMoveEvent *ev)
         return;
     }
 
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+    QTreeWidgetItem *item = itemAt(ev->position().toPoint());
+#else
     QTreeWidgetItem *item = itemAt(ev->pos());
+#endif
     if (item == nullptr || item->isDisabled()) {   // over a valid item?
         // no, ignore drops on it
         setDropItem(nullptr);              // clear drop item
@@ -329,7 +341,7 @@ const FileTreeBranch *FileTreeView::branch(const QString &searchName) const
 #ifdef DEBUG_LISTING
     qCDebug(LIBFILETREE_LOG) << "searching for" << searchName;
 #endif // DEBUG_LISTING
-    for (const FileTreeBranch *branch : qAsConst(m_branches))
+    for (const FileTreeBranch *branch : std::as_const(m_branches))
     {
         const QString bname = branch->name();
 #ifdef DEBUG_LISTING
@@ -387,7 +399,7 @@ void FileTreeView::slotNewTreeViewItems(FileTreeBranch *branch, const FileTreeVi
      */
     if (!m_nextUrlToSelect.isEmpty())
     {
-        for (FileTreeViewItem *it : qAsConst(items))
+        for (FileTreeViewItem *it : std::as_const(items))
         {
             QUrl url = it->url();
 

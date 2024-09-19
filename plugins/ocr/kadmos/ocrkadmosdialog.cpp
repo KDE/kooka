@@ -89,7 +89,7 @@ OcrEngine::EngineError KadmosDialog::findClassifiers()
 
     KLocale *locale = KLocale::global();
     const QStringList allCountries = locale->allCountriesList();
-    for (const QString &country : qAsConst(allCountries))
+    for (const QString &country : std::as_const(allCountries))
     {
         m_longCountry2short[locale->countryCodeToName(country)] = country;
     }

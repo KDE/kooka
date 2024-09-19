@@ -116,7 +116,7 @@ ScanParams::~ScanParams()
 bool ScanParams::connectDevice(KScanDevice *newScanDevice, bool galleryMode)
 {
     QGridLayout *lay = new QGridLayout(this);
-    lay->setMargin(0);
+    lay->setContentsMargins(0, 0, 0, 0);
 
     if (newScanDevice == nullptr) {            // no scanner device
         qCDebug(LIBKOOKASCAN_LOG) << "No scan device, gallery=" << galleryMode;
@@ -270,7 +270,7 @@ QWidget *ScanParams::createScannerParams()
 
         QWidget *vbg = new QWidget(frame);
         QVBoxLayout *vbl = new QVBoxLayout(vbg);
-        vbl->setMargin(0);
+        vbl->setContentsMargins(0, 0, 0, 0);
 
         QRadioButton *rb1 = new QRadioButton(i18n("SANE Debug (from PNM image)"), vbg);
         rb1->setToolTip(xi18nc("@info:tooltip", "Operate in the same way that a real scanner does (including scan area, image processing etc.), but reading from the specified image file. See <link url=\"man:sane-pnm(5)\">sane-pnm(5)</link> for more information."));
@@ -432,7 +432,7 @@ QWidget *ScanParams::createScannerParams()
     // Now all of the other options which have not been accounted for yet.
     // Split them up into "Other" and "Advanced".
     const QList<QByteArray> opts = mSaneDevice->getAllOptions();
-    for (const QByteArray &opt : qAsConst(opts))
+    for (const QByteArray &opt : std::as_const(opts))
     {
         if (opt == SANE_NAME_SCAN_TL_X ||		// ignore these (scan area)
             opt == SANE_NAME_SCAN_TL_Y ||
@@ -918,36 +918,29 @@ void ScanParams::setEditCustomGammaTableState()
     bool butState = false;
 
     KScanOption *so = mSaneDevice->getOption(SANE_NAME_CUSTOM_GAMMA, false);
-    if (so != nullptr) {
-        butState = so->isActive();
+    if (so != nullptr) butState = so->isActive();
+    if (!butState)
+    {
+        so = mSaneDevice->getOption(SANE_NAME_GAMMA_VECTOR, false);
+        if (so != nullptr) butState = so->isActive();
     }
 
-    if (!butState) {
-        KScanOption *so = mSaneDevice->getOption(SANE_NAME_GAMMA_VECTOR, false);
-        if (so != nullptr) {
-            butState = so->isActive();
-        }
+    if (!butState)
+    {
+        so = mSaneDevice->getOption(SANE_NAME_GAMMA_VECTOR_R, false);
+        if (so != nullptr) butState = so->isActive();
     }
 
-    if (!butState) {
-        KScanOption *so = mSaneDevice->getOption(SANE_NAME_GAMMA_VECTOR_R, false);
-        if (so != nullptr) {
-            butState = so->isActive();
-        }
+    if (!butState)
+    {
+        so = mSaneDevice->getOption(SANE_NAME_GAMMA_VECTOR_G, false);
+        if (so != nullptr) butState = so->isActive();
     }
 
-    if (!butState) {
-        KScanOption *so = mSaneDevice->getOption(SANE_NAME_GAMMA_VECTOR_G, false);
-        if (so != nullptr) {
-            butState = so->isActive();
-        }
-    }
-
-    if (!butState) {
-        KScanOption *so = mSaneDevice->getOption(SANE_NAME_GAMMA_VECTOR_B, false);
-        if (so != nullptr) {
-            butState = so->isActive();
-        }
+    if (!butState)
+    {
+        so = mSaneDevice->getOption(SANE_NAME_GAMMA_VECTOR_B, false);
+        if (so != nullptr) butState = so->isActive();
     }
 
     qCDebug(LIBKOOKASCAN_LOG) << "Set state to" << butState;

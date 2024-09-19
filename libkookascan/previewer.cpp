@@ -57,7 +57,7 @@ Previewer::Previewer(QWidget *parent)
     setObjectName("Previewer");
 
     QVBoxLayout *vbl = new QVBoxLayout(this);
-    vbl->setMargin(0);
+    vbl->setContentsMargins(0, 0, 0, 0);
 
     /* Units etc. TODO: get from Config */
     mDisplayUnit = KRuler::Millimetres;

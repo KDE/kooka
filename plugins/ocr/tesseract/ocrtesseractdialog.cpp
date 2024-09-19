@@ -31,8 +31,8 @@
 #include "ocrtesseractdialog.h"
 
 #include <qlabel.h>
-#include <qregexp.h>
 #include <qcombobox.h>
+#include <qregularexpression.h>
 #include <qlayout.h>
 #include <qprogressbar.h>
 
@@ -235,11 +235,12 @@ void OcrTesseractDialog::getVersion(const QString &bin)
     if (status==0)
     {
         QByteArray output = proc.readAllStandardOutput();
-        QRegExp rx("tesseract ([\\d\\.]+)");
-        if (rx.indexIn(output)>-1)
+        const QRegularExpression rx("tesseract ([\\d\\.]+)");
+        const QRegularExpressionMatch match = rx.match(output);
+        if (match.hasMatch())
         {
             m_ocrCmd = bin;
-            m_versionStr = rx.cap(1);
+            m_versionStr = match.captured(1);
             m_versionNum = m_versionStr.left(1).toInt();
             qCDebug(OCR_LOG) << "version" << m_versionStr << "=" << m_versionNum;
         }
@@ -292,13 +293,13 @@ QMap<QString,QString> OcrTesseractDialog::getValidValues(const QString &opt)
             const QString lineStr = QString::fromLocal8Bit(line);
             qCDebug(OCR_LOG) << "line:" << lineStr;
 
-            QRegExp rx;
-            if (opt=="list-langs") rx.setPattern("^\\s*(\\w+)()$");
-            else rx.setPattern("^\\s*(\\d+)\\s+(\\w.+)?$");
-            if (rx.indexIn(lineStr)>-1)
+            const QRegularExpression rx((opt=="list-langs") ? "^\\s*(\\w+)()$"
+                                                            : "^\\s*(\\d+)\\s+(\\w.+)?$");
+            const QRegularExpressionMatch match = rx.match(lineStr);
+            if (match.hasMatch())
             {
-                const QString value = rx.cap(1);
-                QString desc = rx.cap(2).simplified();
+                const QString value = match.captured(1);
+                QString desc = match.captured(2).simplified();
                 if (desc.endsWith(QLatin1Char('.')) || desc.endsWith(QLatin1Char(','))) desc.chop(1);
                 result.insert(value, desc);
             }

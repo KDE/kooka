@@ -148,7 +148,7 @@ void DestinationApplication::createGUI(ScanParamsPage *page)
         // services).
         if (service->desktopEntryName()=="org.kde.okular")
         {
-            qCDebug(DESTINATION_LOG) << "accept" << service->desktopEntryName() << "by name, pref" << service->initialPreference();
+            qCDebug(DESTINATION_LOG) << "accept" << service->desktopEntryName() << "by name";
             validServices.append(service);
             continue;
         }
@@ -167,7 +167,7 @@ void DestinationApplication::createGUI(ScanParamsPage *page)
         }
         continue;					// service not accepted
 
-found:  qCDebug(DESTINATION_LOG) << "accept" << service->desktopEntryName() << "by MIME, pref" << service->initialPreference();
+found:  qCDebug(DESTINATION_LOG) << "accept" << service->desktopEntryName() << "by MIME";
         validServices.append(service);
     }
 
@@ -180,7 +180,7 @@ found:  qCDebug(DESTINATION_LOG) << "accept" << service->desktopEntryName() << "
 
     const QString configuredApp = KookaSettings::destinationApplicationApp();
     int configuredIndex = -1;
-    for (const KService::Ptr &service : qAsConst(validServices))
+    for (const KService::Ptr &service : std::as_const(validServices))
     {
         const QString key = service->desktopEntryName();
         if (key==configuredApp) configuredIndex = mAppsCombo->count();

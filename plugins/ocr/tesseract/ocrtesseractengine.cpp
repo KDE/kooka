@@ -30,9 +30,9 @@
 
 #include "ocrtesseractengine.h"
 
-#include <qregexp.h>
 #include <qfile.h>
 #include <qfileinfo.h>
+#include <qregularexpression.h>
 
 #include <QXmlStreamReader>
 
@@ -183,32 +183,33 @@ QString OcrTesseractEngine::readHOCR(const QString &fileName)
         // These same HTML elements may specify other page layout data which are
         // not supported, but the class ID allows them to be distinguished.
 
-        const QStringRef name = reader.name();
-        if (name=="span" || name=="p")			// may be either SPAN or P element
-        {
-            const QStringRef cls = reader.attributes().value("class");
-            if (cls=="ocr_par" || cls=="ocr_line")	// paragraph or line start
-            {
+        const QStringView name = reader.name();
+        if (name==QStringLiteral("span") || name==QStringLiteral("p"))
+        {						// may be either SPAN or P element
+            const QStringView cls = reader.attributes().value("class");
+            if (cls==QStringLiteral("ocr_par") || cls==QStringLiteral("ocr_line"))
+            {						// paragraph or line start
                 // The start of a paragraph is always followed by the start of a line.
                 // Generating a new output line for both means that paragraphs are
                 // separated by blank lines, as intended.
                 startLine();
             }
-            else if (cls=="ocrx_word")
+            else if (cls==QStringLiteral("ocrx_word"))
             {
                 OcrWordData wd;
 
                 // The TITLE attribute of the SPAN element indicates the word bounding box.
                 const QString ttl = reader.attributes().value("title").toString();
 
-                QRegExp rx("bbox\\s+(\\d+)\\s+(\\d+)\\s+(\\d+)\\s+(\\d+);");
-                if (!ttl.isEmpty() && ttl.contains(rx))
+                const QRegularExpression rx("bbox\\s+(\\d+)\\s+(\\d+)\\s+(\\d+)\\s+(\\d+);");
+                const QRegularExpressionMatch match = rx.match(ttl);
+                if (!ttl.isEmpty() && match.hasMatch())
                 {
                     QRect wordRect;
-                    wordRect.setLeft(rx.cap(1).toInt());
-                    wordRect.setTop(rx.cap(2).toInt());
-                    wordRect.setRight(rx.cap(3).toInt());
-                    wordRect.setBottom(rx.cap(4).toInt());
+                    wordRect.setLeft(match.captured(1).toInt());
+                    wordRect.setTop(match.captured(2).toInt());
+                    wordRect.setRight(match.captured(3).toInt());
+                    wordRect.setBottom(match.captured(4).toInt());
                     wd.setProperty(OcrWordData::Rectangle, wordRect);
                 }
 

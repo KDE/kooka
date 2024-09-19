@@ -64,7 +64,7 @@ static QList<FilterEntry> filterList(ImageFilter::FilterMode mode, ImageFilter::
 
     QMimeDatabase db;
 
-    for (const QByteArray &mimeType : qAsConst(mimeTypes))
+    for (const QByteArray &mimeType : std::as_const(mimeTypes))
     {
         QMimeType mime = db.mimeTypeForName(mimeType);
         if (!mime.isValid()) continue;
@@ -106,7 +106,7 @@ QStringList ImageFilter::qtFilterList(ImageFilter::FilterMode mode, ImageFilter:
     // The standard Qt-format filter list: "Applicable Files( *.foo *.bar)"
     const QList<FilterEntry> filters = filterList(mode, options);
     QStringList res;
-    for (const FilterEntry &f : qAsConst(filters)) res.append(f.comment+" ("+f.patterns.join(" ")+")");
+    for (const FilterEntry &f : std::as_const(filters)) res.append(f.comment+" ("+f.patterns.join(" ")+")");
     return (res);
 }
 
@@ -116,6 +116,6 @@ QString ImageFilter::kdeFilter(ImageFilter::FilterMode mode, ImageFilter::Filter
     // The deprecated KDE-format filter string: "*.foo *.bar|Applicable Files\n..."
     const QList<FilterEntry> filters = filterList(mode, options);
     QStringList res;
-    for (const FilterEntry &f : qAsConst(filters)) res.append(f.patterns.join(" ")+"|"+f.comment);
+    for (const FilterEntry &f : std::as_const(filters)) res.append(f.patterns.join(" ")+"|"+f.comment);
     return (res.join('\n'));
 }

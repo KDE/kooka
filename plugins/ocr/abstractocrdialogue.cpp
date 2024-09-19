@@ -206,7 +206,7 @@ void AbstractOcrDialogue::ocrShowInfo(const QString &binary, const QString &vers
     QString logoFile = KIconLoader::global()->iconPath(info->icon, KIconLoader::NoGroup, true);
     if (!logoFile.isNull())
     {
-        QLabel *l = new QLabel(w);
+        l = new QLabel(w);
         l->setPixmap(QPixmap(logoFile));
         gl->addWidget(l, 0, 3, 3, 1, Qt::AlignRight);
     }

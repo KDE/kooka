@@ -42,8 +42,10 @@
 #include <kfileitem.h>
 #include <kactionmenu.h>
 #include <kdiroperator.h>
+#include <kdirlister.h>
 #include <klocalizedstring.h>
 #include <kcolorscheme.h>
+#include <ktoggleaction.h>
 #include <kio_version.h>
 
 #include "galleryroot.h"

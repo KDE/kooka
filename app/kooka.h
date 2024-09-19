@@ -79,20 +79,8 @@ protected:
     void dragEnterEvent(QDragEnterEvent *ev) override;
     // virtual void dropEvent(QDropEvent *event);
 
-    /**
-     * This function is called when it is time for the app to save its
-     * properties for session management purposes.
-     */
-    void saveProperties(KConfigGroup &grp) override;
-
-    /**
-     * This function is called when this app is restored.  The KConfig
-     * object points to the session management config file that was saved
-     * with @ref saveProperties
-     */
-    void readProperties(const KConfigGroup &grp) override;
-
-    void applyMainWindowSettings(const KConfigGroup &grp) override;
+    void saveSettings();
+    void readSettings();
 
 protected slots:
     void slotUpdateScannerActions(bool haveConnection);

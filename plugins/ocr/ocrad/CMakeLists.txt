@@ -11,7 +11,6 @@
 ##									##
 ##########################################################################
 
-project(kooka5)
 
 #########################################################################
 #									#
@@ -27,10 +26,8 @@ set(ocrocrad_SRCS
 
 kcoreaddons_add_plugin(ocrocrad SOURCES ${ocrocrad_SRCS} INSTALL_NAMESPACE "kooka_ocr")
 
-kcoreaddons_desktop_to_json(ocrocrad kookaocr-ocrad.desktop)
-
-target_link_libraries(ocrocrad Qt::Core Qt::Gui)
-target_link_libraries(ocrocrad KF5::I18n KF5::WidgetsAddons)
+target_link_libraries(ocrocrad Qt${Q}::Core Qt${Q}::Gui)
+target_link_libraries(ocrocrad KF${Q}::I18n KF${Q}::WidgetsAddons)
 target_link_libraries(ocrocrad kookaocr kookascan)
 
 install(FILES ocrad.png DESTINATION ${PICS_INSTALL_DIR})

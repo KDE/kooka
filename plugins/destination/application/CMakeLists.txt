@@ -11,7 +11,6 @@
 ##									##
 ##########################################################################
 
-project(kooka5)
 
 #########################################################################
 #									#
@@ -19,7 +18,7 @@ project(kooka5)
 #									#
 #########################################################################
 
-find_package(KF5 ${KF5_MIN_VERSION} REQUIRED COMPONENTS Service)
+find_package(KF${Q} ${KF_MIN_VERSION} REQUIRED COMPONENTS Service)
 
 #########################################################################
 #									#
@@ -34,7 +33,6 @@ set(destinationapplication_SRCS
 
 kcoreaddons_add_plugin(destinationapplication SOURCES ${destinationapplication_SRCS} INSTALL_NAMESPACE "kooka_destination")
 
-kcoreaddons_desktop_to_json(destinationapplication kookadestination-application.desktop)
-target_link_libraries(destinationapplication Qt::Core Qt::Widgets)
-target_link_libraries(destinationapplication KF5::I18n KF5::WidgetsAddons KF5::Service)
+target_link_libraries(destinationapplication Qt${Q}::Core Qt${Q}::Widgets)
+target_link_libraries(destinationapplication KF${Q}::I18n KF${Q}::WidgetsAddons KF${Q}::Service)
 target_link_libraries(destinationapplication kookadestination kookacore kookascan)
