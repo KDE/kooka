@@ -95,6 +95,12 @@ int main(int argc, char *argv[])
     about.addCredit(i18n("Alex Kempshall"), i18n("Photocopy facility"), "alexkempshall@btinternet.com");
     about.addLicenseText(addLicense.toString());
 
+    // Set the window icon explicitly for the "About <application>"
+    // dialogue, retrieved in KAboutApplicationDialogPrivate::init(),
+    // and the "About <application>" menu action, generated in
+    // KStandardAction::_k_createInternal().
+    QGuiApplication::setWindowIcon(QIcon::fromTheme("kooka"));
+
     KAboutData::setApplicationData(about);
 
     QCommandLineParser parser;
