@@ -74,13 +74,19 @@ Kooka::Kooka(const QByteArray &deviceToUse)
 
     setAcceptDrops(false); // Waba: Not (yet?) supported
 
-    readProperties(KSharedConfig::openConfig()->group(autoSaveGroup()));
-
     // then, setup our actions
     setupActions();
 
-    setupGUI(KXmlGuiWindow::Default, "kookaui.rc");
-    setAutoSaveSettings();              // default group, do save
+    // Do not include KXmlGuiWindow::Save here, as otherwise it will implicitly
+    // call KMainWindow::setAutoSaveSettings() before the setStateConfigGroup()
+    // has been done.  The wrong state file and group name will be used for the
+    // window size and position.
+    setupGUI(KXmlGuiWindow::ToolBar|KXmlGuiWindow::Keys|KXmlGuiWindow::StatusBar|KXmlGuiWindow::Create, "kookaui.rc");
+    setStateConfigGroup("Main Window");
+    // Now it is safe to implicitly call applyMainWindowSettings() which will
+    // restore and save using the stateConfigGroup().
+    setAutoSaveSettings(stateConfigGroup(), true);
+    readSettings();
 
     // Allow the view to change the status bar and caption
     connect(m_view, &KookaView::changeStatus, sbm, &StatusBarManager::setStatus);
@@ -325,44 +331,25 @@ void Kooka::setupActions()
 
 void Kooka::closeEvent(QCloseEvent *ev)
 {
-    KConfigGroup grp = KSharedConfig::openConfig()->group(autoSaveGroup());
-    saveProperties(grp);
-    if (autoSaveSettings())
-    {
-        saveAutoSaveSettings();
-        m_view->saveWindowSettings(grp);
-    }
+    saveSettings();
+    KXmlGuiWindow::closeEvent(ev);
 }
 
-void Kooka::saveProperties(KConfigGroup &grp)
+void Kooka::saveSettings()
 {
-    qCDebug(KOOKA_LOG) << "to group" << grp.name();
+    qCDebug(KOOKA_LOG);
 
-    // The group object points to the session managed
-    // config file.  Anything you write here will be available
-    // later when this app is restored.
-
+    m_view->saveSettings();
     KookaSettings::setPreferencesTab(m_prefDialogIndex);
     //FIXME crash KookaSettings::setStartupSelectedImage(m_view->gallery()->currentImageFileName());
     KookaSettings::self()->save();
 }
 
-void Kooka::applyMainWindowSettings(const KConfigGroup &grp)
+void Kooka::readSettings()
 {
-    qCDebug(KOOKA_LOG) << "from group" << grp.name();
-    KXmlGuiWindow::applyMainWindowSettings(grp);
-    m_view->applyWindowSettings(grp);
-}
+    qCDebug(KOOKA_LOG);
 
-void Kooka::readProperties(const KConfigGroup &grp)
-{
-    qCDebug(KOOKA_LOG) << "from group" << grp.name();
-
-    // The group object points to the session managed
-    // config file.  This function is automatically called whenever
-    // the app is being restored.  Read in here whatever you wrote
-    // in 'saveProperties'.
-
+    m_view->readSettings();
     m_prefDialogIndex = KookaSettings::preferencesTab();
 }
 

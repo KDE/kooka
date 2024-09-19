@@ -337,10 +337,11 @@ KookaView::~KookaView()
     delete mScanDevice;
 }
 
-// this gets called via Kooka::closeEvent() at shutdown
-void KookaView::saveWindowSettings(KConfigGroup &grp)
+// this gets called via Kooka::saveSettings() at shutdown
+void KookaView::saveSettings()
 {
-    qCDebug(KOOKA_LOG) << "to group" << grp.name();
+    qCDebug(KOOKA_LOG);
+
     KookaSettings::setLayoutTabIndex(currentIndex());
     KookaSettings::setLayoutScan1(mScanPage->saveState().toBase64());
     KookaSettings::setLayoutScan2(mScanSubSplitter->saveState().toBase64());
@@ -353,10 +354,10 @@ void KookaView::saveWindowSettings(KConfigGroup &grp)
     KookaSettings::self()->save();
 }
 
-// this gets called by Kooka::applyMainWindowSettings() at startup
-void KookaView::applyWindowSettings(const KConfigGroup &grp)
+// this gets called by Kooka::readSettings() at startup
+void KookaView::readSettings()
 {
-    qCDebug(KOOKA_LOG) << "from group" << grp.name();
+    qCDebug(KOOKA_LOG);
 
     QString set = KookaSettings::layoutScan1();
     if (!set.isEmpty()) mScanPage->restoreState(QByteArray::fromBase64(set.toLocal8Bit()));
