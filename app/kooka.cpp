@@ -74,13 +74,19 @@ Kooka::Kooka(const QByteArray &deviceToUse)
 
     setAcceptDrops(false); // Waba: Not (yet?) supported
 
-    readProperties(KSharedConfig::openConfig()->group(autoSaveGroup()));
-
     // then, setup our actions
     setupActions();
 
-    setupGUI(KXmlGuiWindow::Default, "kookaui.rc");
-    setAutoSaveSettings();              // default group, do save
+    // Do not include KXmlGuiWindow::Save here, as otherwise it will implicitly
+    // call KMainWindow::setAutoSaveSettings() before the setStateConfigGroup()
+    // has been done.  The wrong state file and group name will be used for the
+    // window size and position.
+    setupGUI(KXmlGuiWindow::ToolBar|KXmlGuiWindow::Keys|KXmlGuiWindow::StatusBar|KXmlGuiWindow::Create, "kookaui.rc");
+    setStateConfigGroup("Main Window");
+    // Now it is safe to implicitly call applyMainWindowSettings() which will
+    // restore and save using the stateConfigGroup().
+    setAutoSaveSettings(stateConfigGroup(), true);
+    readSettings();
 
     // Allow the view to change the status bar and caption
     connect(m_view, &KookaView::changeStatus, sbm, &StatusBarManager::setStatus);
@@ -136,7 +142,7 @@ void Kooka::setupActions()
     // Use the traditional Kooka shortcut if no standard shortcut is
     // defined by KStandardShortcut.
     QList<QKeySequence> shortcuts = KStandardShortcut::shortcut(KStandardShortcut::FitToWidth);
-    if (shortcuts.isEmpty()) shortcuts.append(Qt::CTRL + Qt::Key_I);
+    if (shortcuts.isEmpty()) shortcuts.append(Qt::CTRL|Qt::Key_I);
     actionCollection()->setDefaultShortcuts(scaleToWidthAction, shortcuts);
     connect(scaleToWidthAction, &QAction::triggered, this, [=]() { m_view->imageViewerAction(ImageCanvas::UserActionFitWidth); });
     m_view->connectViewerAction(scaleToWidthAction);
@@ -145,7 +151,7 @@ void Kooka::setupActions()
     scaleToHeightAction = new QAction(QIcon::fromTheme("zoom-fit-height"), i18n("Scale to Height"), this);
     actionCollection()->addAction("scaleToHeight", scaleToHeightAction);
     shortcuts = KStandardShortcut::shortcut(KStandardShortcut::FitToHeight);
-    if (shortcuts.isEmpty()) shortcuts.append(Qt::CTRL + Qt::Key_H);
+    if (shortcuts.isEmpty()) shortcuts.append(Qt::CTRL|Qt::Key_H);
     actionCollection()->setDefaultShortcuts(scaleToHeightAction, shortcuts);
     connect(scaleToHeightAction, &QAction::triggered, this, [=]() { m_view->imageViewerAction(ImageCanvas::UserActionFitHeight); });
     m_view->connectViewerAction(scaleToHeightAction);
@@ -165,7 +171,7 @@ void Kooka::setupActions()
 
     keepZoomAction = new KToggleAction(QIcon::fromTheme("lockzoom"), i18n("Keep Zoom Setting"), this);
     actionCollection()->addAction("keepZoom", keepZoomAction);
-    actionCollection()->setDefaultShortcut(keepZoomAction, Qt::CTRL + Qt::Key_Z);
+    actionCollection()->setDefaultShortcut(keepZoomAction, Qt::CTRL|Qt::Key_Z);
     connect(keepZoomAction, &KToggleAction::toggled, m_view->imageViewer(), &ImageCanvas::setKeepZoom);
     m_view->connectViewerAction(keepZoomAction);
 
@@ -173,20 +179,20 @@ void Kooka::setupActions()
 
     newFromSelectionAction = new QAction(QIcon::fromTheme("transform-crop"), i18n("New Image From Selection"), this);
     actionCollection()->addAction("createFromSelection", newFromSelectionAction);
-    actionCollection()->setDefaultShortcut(newFromSelectionAction, Qt::CTRL + Qt::Key_N);
+    actionCollection()->setDefaultShortcut(newFromSelectionAction, Qt::CTRL|Qt::Key_N);
     connect(newFromSelectionAction, &QAction::triggered, m_view, &KookaView::slotCreateNewImgFromSelection);
 
     mirrorVerticallyAction = new QAction(QIcon::fromTheme("object-flip-vertical"), i18n("Mirror Vertically"), this);
     mirrorVerticallyAction->setData(ImageTransform::MirrorVertical);
     actionCollection()->addAction("mirrorVertical", mirrorVerticallyAction);
-    actionCollection()->setDefaultShortcut(mirrorVerticallyAction, Qt::CTRL + Qt::Key_V);
+    actionCollection()->setDefaultShortcut(mirrorVerticallyAction, Qt::CTRL|Qt::Key_V);
     connect(mirrorVerticallyAction, &QAction::triggered, m_view, &KookaView::slotTransformImage);
     m_view->connectViewerAction(mirrorVerticallyAction, true);
 
     mirrorHorizontallyAction = new QAction(QIcon::fromTheme("object-flip-horizontal"), i18n("Mirror Horizontally"), this);
     mirrorHorizontallyAction->setData(ImageTransform::MirrorHorizontal);
     actionCollection()->addAction("mirrorHorizontal", mirrorHorizontallyAction);
-    actionCollection()->setDefaultShortcut(mirrorHorizontallyAction, Qt::CTRL + Qt::Key_M);
+    actionCollection()->setDefaultShortcut(mirrorHorizontallyAction, Qt::CTRL|Qt::Key_M);
     connect(mirrorHorizontallyAction, &QAction::triggered, m_view, &KookaView::slotTransformImage);
     m_view->connectViewerAction(mirrorHorizontallyAction);
 
@@ -196,21 +202,21 @@ void Kooka::setupActions()
     rotateAcwAction = new QAction(QIcon::fromTheme("rotate-acw"), i18n("Rotate Counter-Clockwise"), this);
     rotateAcwAction->setData(ImageTransform::Rotate270);
     actionCollection()->addAction("rotateCounterClockwise", rotateAcwAction);
-    actionCollection()->setDefaultShortcut(rotateAcwAction, Qt::CTRL + Qt::Key_7);
+    actionCollection()->setDefaultShortcut(rotateAcwAction, Qt::CTRL|Qt::Key_7);
     connect(rotateAcwAction, &QAction::triggered, m_view, &KookaView::slotTransformImage);
     m_view->connectViewerAction(rotateAcwAction, true);
 
     rotateCwAction = new QAction(QIcon::fromTheme("rotate-cw"), i18n("Rotate Clockwise"), this);
     rotateCwAction->setData(ImageTransform::Rotate90);
     actionCollection()->addAction("rotateClockwise", rotateCwAction);
-    actionCollection()->setDefaultShortcut(rotateCwAction, Qt::CTRL + Qt::Key_9);
+    actionCollection()->setDefaultShortcut(rotateCwAction, Qt::CTRL|Qt::Key_9);
     connect(rotateCwAction, &QAction::triggered, m_view, &KookaView::slotTransformImage);
     m_view->connectViewerAction(rotateCwAction);
 
     rotate180Action = new QAction(QIcon::fromTheme("rotate-180"), i18n("Rotate 180 Degrees"), this);
     rotate180Action->setData(ImageTransform::Rotate180);
     actionCollection()->addAction("upsitedown", rotate180Action);
-    actionCollection()->setDefaultShortcut(rotate180Action, Qt::CTRL + Qt::Key_8);
+    actionCollection()->setDefaultShortcut(rotate180Action, Qt::CTRL|Qt::Key_8);
     connect(rotate180Action, &QAction::triggered, m_view, &KookaView::slotTransformImage);
     m_view->connectViewerAction(rotate180Action);
 
@@ -254,14 +260,14 @@ void Kooka::setupActions()
 
     unloadImageAction = new QAction(QIcon::fromTheme("document-close"), i18n("Unload Image"), this);
     actionCollection()->addAction("unloadImage", unloadImageAction);
-    actionCollection()->setDefaultShortcut(unloadImageAction, Qt::CTRL + Qt::SHIFT + Qt::Key_U);
+    actionCollection()->setDefaultShortcut(unloadImageAction, Qt::CTRL|Qt::SHIFT|Qt::Key_U);
     connect(unloadImageAction, &QAction::triggered, m_view->gallery(), &ScanGallery::slotUnloadItems);
     m_view->connectGalleryAction(unloadImageAction);
     m_view->connectThumbnailAction(unloadImageAction);
 
     propsImageAction = new QAction(QIcon::fromTheme("document-properties"), i18n("Properties..."), this);
     actionCollection()->addAction("propsImage", propsImageAction);
-    actionCollection()->setDefaultShortcut(propsImageAction, Qt::ALT + Qt::Key_Return);
+    actionCollection()->setDefaultShortcut(propsImageAction, Qt::ALT|Qt::Key_Return);
     connect(propsImageAction, &QAction::triggered, m_view->gallery(), &ScanGallery::slotItemProperties);
     m_view->connectGalleryAction(propsImageAction, true);
     m_view->connectThumbnailAction(propsImageAction);
@@ -290,12 +296,12 @@ void Kooka::setupActions()
 
     paramsAction = new QAction(QIcon::fromTheme("bookmark-new"), i18n("Scan Presets..."), this);
     actionCollection()->addAction("scanparam", paramsAction);
-    actionCollection()->setDefaultShortcut(paramsAction, Qt::CTRL + Qt::SHIFT + Qt::Key_S);
+    actionCollection()->setDefaultShortcut(paramsAction, Qt::CTRL|Qt::SHIFT|Qt::Key_S);
     connect(paramsAction, &QAction::triggered, m_view, &KookaView::slotScanParams);
 
     autoselAction = new KToggleAction(QIcon::fromTheme("autoselect"), i18n("Auto Select"), this);
     actionCollection()->addAction("autoselect", autoselAction);
-    actionCollection()->setDefaultShortcut(autoselAction, Qt::CTRL + Qt::Key_A);
+    actionCollection()->setDefaultShortcut(autoselAction, Qt::CTRL|Qt::Key_A);
     connect(autoselAction, &QAction::toggled, m_view, &KookaView::slotAutoSelect);
     m_view->connectPreviewAction(autoselAction);
 
@@ -315,7 +321,7 @@ void Kooka::setupActions()
 
     m_saveOCRTextAction = new QAction(QIcon::fromTheme("document-save-as"), i18n("Save OCR Result Text..."), this);
     actionCollection()->addAction("saveOCRResult", m_saveOCRTextAction);
-    actionCollection()->setDefaultShortcut(m_saveOCRTextAction, Qt::CTRL + Qt::Key_U);
+    actionCollection()->setDefaultShortcut(m_saveOCRTextAction, Qt::CTRL|Qt::Key_U);
     connect(m_saveOCRTextAction, &QAction::triggered, m_view, &KookaView::slotSaveOcrResult);
 
     ocrSpellAction = new QAction(QIcon::fromTheme("tools-check-spelling"), i18n("Spell Check OCR Result..."), this);
@@ -325,44 +331,25 @@ void Kooka::setupActions()
 
 void Kooka::closeEvent(QCloseEvent *ev)
 {
-    KConfigGroup grp = KSharedConfig::openConfig()->group(autoSaveGroup());
-    saveProperties(grp);
-    if (autoSaveSettings())
-    {
-        saveAutoSaveSettings();
-        m_view->saveWindowSettings(grp);
-    }
+    saveSettings();
+    KXmlGuiWindow::closeEvent(ev);
 }
 
-void Kooka::saveProperties(KConfigGroup &grp)
+void Kooka::saveSettings()
 {
-    qCDebug(KOOKA_LOG) << "to group" << grp.name();
+    qCDebug(KOOKA_LOG);
 
-    // The group object points to the session managed
-    // config file.  Anything you write here will be available
-    // later when this app is restored.
-
+    m_view->saveSettings();
     KookaSettings::setPreferencesTab(m_prefDialogIndex);
     //FIXME crash KookaSettings::setStartupSelectedImage(m_view->gallery()->currentImageFileName());
     KookaSettings::self()->save();
 }
 
-void Kooka::applyMainWindowSettings(const KConfigGroup &grp)
+void Kooka::readSettings()
 {
-    qCDebug(KOOKA_LOG) << "from group" << grp.name();
-    KXmlGuiWindow::applyMainWindowSettings(grp);
-    m_view->applyWindowSettings(grp);
-}
+    qCDebug(KOOKA_LOG);
 
-void Kooka::readProperties(const KConfigGroup &grp)
-{
-    qCDebug(KOOKA_LOG) << "from group" << grp.name();
-
-    // The group object points to the session managed
-    // config file.  This function is automatically called whenever
-    // the app is being restored.  Read in here whatever you wrote
-    // in 'saveProperties'.
-
+    m_view->readSettings();
     m_prefDialogIndex = KookaSettings::preferencesTab();
 }
 

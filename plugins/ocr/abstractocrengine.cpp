@@ -248,9 +248,8 @@ void AbstractOcrEngine::removeTempFiles()
     if (retain)
     {
         QString s = xi18nc("@info", "The following OCR temporary files are retained for debugging:<nl/><nl/>");
-        for (QStringList::const_iterator it = temps.constBegin(); it != temps.constEnd(); ++it)
+        for (const QString &file : std::as_const(temps))
         {
-            const QString file = (*it);
             if (file.isEmpty()) continue;
 
             QUrl u = QUrl::fromLocalFile(file);
@@ -276,13 +275,12 @@ void AbstractOcrEngine::removeTempFiles()
         }
     }
 
-    if (!retain) {
-        for (QStringList::const_iterator it = temps.constBegin(); it != temps.constEnd(); ++it) {
-            if ((*it).isEmpty()) {
-                continue;
-            }
+    if (!retain)
+    {
+        for (const QString &tf : std::as_const(temps))
+        {
+            if (tf.isEmpty()) continue;
 
-            QString tf = (*it);
             QFileInfo fi(tf);
             if (!fi.exists()) {				// what happened?
                 //qCDebug(OCR_LOG) << "does not exist:" << tf;

@@ -189,7 +189,7 @@ QString ScanImage::loadTiffDir(const QString &filename, int subno)
     // image has been destroyed, we have the only copy of the TIFF read image.
     //
     QImage tmpImg(imgWidth, imgHeight, QImage::Format_RGB32);
-    uint32_t *data = (uint32_t *)(tmpImg.bits());
+    uint32_t *data = reinterpret_cast<uint32_t *>(tmpImg.bits());
     if (TIFFReadRGBAImage(tif, imgWidth, imgHeight, data, 0)) {
 							// Successfully read, now convert
         tmpImg = tmpImg.rgbSwapped();			// swap red and blue

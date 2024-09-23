@@ -126,8 +126,8 @@ public:
     void connectPreviewAction(QAction *action);
     void imageViewerAction(ImageCanvas::UserAction act);
 
-    void saveWindowSettings(KConfigGroup &grp);
-    void applyWindowSettings(const KConfigGroup &grp);
+    void saveSettings();
+    void readSettings();
 
 public slots:
     void slotStartOcr();

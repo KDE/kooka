@@ -11,7 +11,6 @@
 ##									##
 ##########################################################################
 
-project(kooka5)
 
 #########################################################################
 #									#
@@ -25,6 +24,6 @@ set(destinationprint_SRCS
 )
 
 kcoreaddons_add_plugin(destinationprint SOURCES ${destinationprint_SRCS} INSTALL_NAMESPACE "kooka_destination")
-kcoreaddons_desktop_to_json(destinationprint kookadestination-print.desktop)
-target_link_libraries(destinationprint Qt::Gui)
+
+target_link_libraries(destinationprint Qt${Q}::Gui)
 target_link_libraries(destinationprint kookadestination kookascan)

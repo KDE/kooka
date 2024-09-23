@@ -119,21 +119,9 @@ KScanOption *KScanDevice::getOption(const QByteArray &name, bool create)
 
 KScanOption *KScanDevice::getExistingGuiElement(const QByteArray &name) const
 {
-    KScanOption *ret = nullptr;
-    QByteArray alias = aliasName(name);
-
-    for (OptionHash::const_iterator it = mCreatedOptions.constBegin();
-         it!=mCreatedOptions.constEnd(); ++it)
-    {
-        KScanOption *opt = it.value();
-        if (opt->isGuiElement() && opt->getName()==alias)
-        {
-            ret = opt;
-            break;
-        }
-    }
-
-    return (ret);
+    KScanOption *opt = mCreatedOptions.value(aliasName(name));
+    if (opt!=nullptr && opt->isGuiElement()) return (opt);
+    return (nullptr);
 }
 
 
@@ -422,7 +410,7 @@ QList<QByteArray> KScanDevice::getCommonOptions() const
     for (OptionHash::const_iterator it = mCreatedOptions.constBegin();
          it!=mCreatedOptions.constEnd(); ++it)
     {
-        KScanOption *so = it.value();
+        const KScanOption *so = it.value();
         if (so->isCommonOption()) opts.append(it.key());
     }
 
@@ -437,7 +425,7 @@ QList<QByteArray> KScanDevice::getAdvancedOptions() const
     for (OptionHash::const_iterator it = mCreatedOptions.constBegin();
          it!=mCreatedOptions.constEnd(); ++it)
     {
-        KScanOption *so = it.value();
+        const KScanOption *so = it.value();
         if (!so->isCommonOption()) opts.append(it.key());
     }
 
@@ -627,10 +615,8 @@ void KScanDevice::showOptions()
 
     QList<QByteArray> optionNames = mCreatedOptions.keys();
     std::sort(optionNames.begin(), optionNames.end());
-    for (QList<QByteArray>::const_iterator it = optionNames.constBegin();
-         it!=optionNames.constEnd(); ++it)
+    for (const QByteArray &optionName : std::as_const(optionNames))
     {
-        QByteArray optionName = (*it);
         const KScanOption *so = mCreatedOptions.value(optionName);
         if (so->isGroup()) continue;
 
@@ -792,7 +778,7 @@ KScanDevice::Status KScanDevice::acquirePreview(bool forceGray, int dpi)
                 min = 75.0;				// hope every scanner can do this
             }
 
-            preview_dpi = (int) min;
+            preview_dpi = int(min);
             if (preview_dpi<MIN_PREVIEW_DPI) preview_dpi = MIN_PREVIEW_DPI;
             qCDebug(LIBKOOKASCAN_LOG) << "Resolution range" << min << "-" << max << "preview at" << preview_dpi;
         }
@@ -1430,7 +1416,7 @@ default:    qCWarning(LIBKOOKASCAN_LOG) << "Undefined SANE format" << mSaneParam
 
 	if ((mSaneParameters.lines>0) && ((mSaneParameters.lines*mPixelY)>0))
 	{
-            int progress =  static_cast<int>(static_cast<double>(MAX_PROGRESS)/mSaneParameters.lines*mPixelY);
+            int progress =  int((double(MAX_PROGRESS)/mSaneParameters.lines)*mPixelY);
             if (progress<MAX_PROGRESS) emit sigScanProgress(progress);
 	}
 

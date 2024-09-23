@@ -141,9 +141,8 @@ void DeviceSelector::setScanSources(const QList<QByteArray> &backends)
     QByteArray defstr = ScanSettings::startupScanDevice().toLocal8Bit();
     QListWidgetItem *defItem = nullptr;
 
-    for (QList<QByteArray>::const_iterator it = backends.constBegin();
-            it != backends.constEnd(); ++it) {
-        QByteArray devName = (*it);
+    for (const QByteArray &devName : std::as_const(backends))
+    {
         const SANE_Device *dev = ScanDevices::self()->deviceInfo(devName);
         if (dev == nullptr) {
             qCDebug(LIBKOOKASCAN_LOG) << "no device info for" << devName;
@@ -156,8 +155,7 @@ void DeviceSelector::setScanSources(const QList<QByteArray> &backends)
 
         QWidget *hbox = new QWidget(this);
         QHBoxLayout *hlay = new QHBoxLayout(hbox);
-        hlay->setMargin(0);
-
+        hlay->setContentsMargins(0, 0, 0, 0);
         hlay->setSpacing(horizontalSpacing());
 
         QLabel *label = new QLabel(hbox);

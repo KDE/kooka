@@ -32,9 +32,9 @@
 #include "ocrgocrdialog.h"
 
 #include <qlabel.h>
-#include <qregexp.h>
 #include <qgridlayout.h>
 #include <qprogressbar.h>
+#include <qregularexpression.h>
 #include <qspinbox.h>
 
 #include <klocalizedstring.h>
@@ -192,17 +192,15 @@ QString OcrGocrDialog::version()
     proc << m_ocrCmd << "-h";
 
     int status = proc.execute(5000);
-    if (status == 0) {
+    if (status == 0)
+    {
         QByteArray output = proc.readAllStandardOutput();
-        QRegExp rx("-- gocr ([\\d\\.\\s]+)");
-        if (rx.indexIn(output) > -1) {
-            vers = rx.cap(1);
-        } else {
-            vers = i18n("Unknown");
-        }
-    } else {
-        vers = i18n("Error");
+        const QRegularExpression rx("-- gocr ([\\d\\.\\s]+)");
+        const QRegularExpressionMatch match = rx.match(output);
+        if (match.hasMatch()) vers = match.captured(1);
+        else vers = i18n("Unknown");
     }
+    else vers = i18n("Error");
 
     return (vers);
 }

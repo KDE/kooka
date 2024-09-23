@@ -1,5 +1,8 @@
+# SPDX-FileCopyrightText: None
+# SPDX-License-Identifier: CC0-1.0
+
 Dependencies:
-- 'on': ['@all']
+- 'on': ['Linux/Qt5', 'FreeBSD/Qt5']
   'require':
     'frameworks/extra-cmake-modules': '@stable'
     'frameworks/ki18n': '@stable'
@@ -10,4 +13,24 @@ Dependencies:
     'frameworks/kdoctools': '@stable'
     'frameworks/kwidgetsaddons': '@stable'
     'frameworks/kservice': '@stable'
+    'frameworks/kxmlgui': '@stable'
+    'frameworks/purpose': '@stable'
     'frameworks/sonnet': '@stable'
+
+- 'on': ['Linux/Qt6', 'FreeBSD/Qt6']
+  'require':
+    'frameworks/extra-cmake-modules': '@latest-kf6'
+    'frameworks/ki18n': '@latest-kf6'
+    'frameworks/kconfig': '@latest-kf6'
+    'frameworks/ktextwidgets': '@latest-kf6'
+    'frameworks/kio': '@latest-kf6'
+    'frameworks/kiconthemes': '@latest-kf6'
+    'frameworks/kdoctools': '@latest-kf6'
+    'frameworks/kwidgetsaddons': '@latest-kf6'
+    'frameworks/kservice': '@latest-kf6'
+    'frameworks/kxmlgui': '@latest-kf6'
+    'frameworks/purpose': '@latest-kf6'
+    'frameworks/sonnet': '@latest-kf6'
+
+Options:
+  require-passing-tests-on: [ 'Linux/Qt5', 'FreeBSD/Qt5', 'Linux/Qt6', 'FreeBSD/Qt6' ]

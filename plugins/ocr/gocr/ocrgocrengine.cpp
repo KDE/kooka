@@ -38,9 +38,9 @@
 #include <string.h>
 #endif
 
-#include <qregexp.h>
 #include <qfile.h>
 #include <qdir.h>
+#include <qregularexpression.h>
 #include <qtemporaryfile.h>
 #include <qtemporarydir.h>
 #include <qprocess.h>
@@ -176,17 +176,18 @@ bool OcrGocrEngine::finishedOcrProcess(QProcess *proc)
 
     startResultDocument();
 
-    for (QStringList::const_iterator itLine = lines.constBegin(); itLine != lines.constEnd(); ++itLine)
+    for (const QString &itLine : std::as_const(lines))
     {
         startLine();
 #if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
-        QStringList words = (*itLine).split(QRegExp("\\s+"), Qt::SkipEmptyParts);
+        const QStringList words = itLine.split(QRegularExpression("\\s+"), Qt::SkipEmptyParts);
 #else
-        QStringList words = (*itLine).split(QRegExp("\\s+"), QString::SkipEmptyParts);
+        const QStringList words = itLine.split(QRegularExpression("\\s+"), QString::SkipEmptyParts);
 #endif
-        for (QStringList::const_iterator itWord = words.constBegin(); itWord != words.constEnd(); ++itWord) {
+        for (const QString &itWord : std::as_const(words))
+        {
             OcrWordData wd;
-            addWord((*itWord), wd);
+            addWord(itWord, wd);
         }
         finishLine();
     }
@@ -250,7 +251,7 @@ QStringList OcrGocrEngine::tempFiles(bool retain)
 void OcrGocrEngine::slotGOcrStdout()
 {
     // This never seems to match!  Format from an earlier GOCR version?
-    QRegExp rx1("^\\s*(\\d+)\\s+(\\d+)");
+    const QRegularExpression rx1("^\\s*(\\d+)\\s+(\\d+)");
 
     // GOCR 0.49 20100924 prints progress as:
     //
@@ -258,8 +259,8 @@ void OcrGocrEngine::slotGOcrStdout()
     //
     // Split up because we don't know what the 2nd field (counter name)
     // may contain.
-    QRegExp rx2a("^\\s*progress ");
-    QRegExp rx2b("\\s(\\d+)\\s+/\\s+(\\d+)\\s+time");
+    const QRegularExpression rx2a("^\\s*progress ");
+    const QRegularExpression rx2b("\\s(\\d+)\\s+/\\s+(\\d+)\\s+time");
 
     int progress = -1;
     int subProgress;
@@ -268,12 +269,21 @@ void OcrGocrEngine::slotGOcrStdout()
     while (!(line = ocrProcess()->readLine()).isEmpty()) {
         //qCDebug(OCR_LOG) << "GOCR stdout:" << line;
         // Calculate OCR progress
-        if (rx1.indexIn(line) > -1) {
-            progress = rx1.capturedTexts()[1].toInt();
-            subProgress = rx1.capturedTexts()[2].toInt();
-        } else if (rx2a.indexIn(line) > -1 && rx2b.indexIn(line) > -1) {
-            progress = rx2b.capturedTexts()[1].toInt();
-            subProgress = rx2b.capturedTexts()[2].toInt();
+        const QRegularExpressionMatch match1 = rx1.match(line);
+        if (match1.hasMatch())
+        {
+            progress = match1.captured(1).toInt();
+            subProgress = match1.captured(2).toInt();
+        }
+        else
+        {
+            const QRegularExpressionMatch match2a = rx2a.match(line);
+            const QRegularExpressionMatch match2b = rx2b.match(line);
+            if (match2a.hasMatch() && match2b.hasMatch())
+            {
+                progress = match2b.captured(1).toInt();
+                subProgress = match2b.captured(2).toInt();
+            }
         }
 
         if (progress > 0) emit ocrProgress(progress, subProgress);

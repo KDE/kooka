@@ -15,7 +15,7 @@ project(libdialogutil)
 
 ########### dependencies ###############
 
-find_package(KF5 ${KF5_MIN_VERSION} REQUIRED COMPONENTS I18n Config KIO WidgetsAddons)
+find_package(KF${Q} ${KF_MIN_VERSION} REQUIRED COMPONENTS I18n Config KIO WidgetsAddons)
 
 ########### libdialogutil ###############
 
@@ -48,14 +48,14 @@ set(dialogutil_HDRS
 add_library(dialogutil SHARED ${dialogutil_SRCS})
 generate_export_header(dialogutil BASE_NAME libdialogutil)
 target_link_libraries(dialogutil
-  Qt::Core Qt::Widgets
-  KF5::I18n
-  KF5::ConfigCore
-  KF5::WidgetsAddons
-  KF5::KIOCore KF5::KIOFileWidgets
+  Qt${Q}::Core Qt${Q}::Widgets
+  KF${Q}::I18n
+  KF${Q}::ConfigCore
+  KF${Q}::WidgetsAddons
+  KF${Q}::KIOCore KF${Q}::KIOFileWidgets
 )
 
-set_target_properties(dialogutil PROPERTIES VERSION 1.0.0 SOVERSION 1)
+set_target_properties(dialogutil PROPERTIES VERSION ${VERSION} SOVERSION ${Q})
 
 ########### package config ###############
 
@@ -70,5 +70,5 @@ configure_package_config_file(
 ########### installation ###############
 
 install(TARGETS dialogutil ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
-install(FILES ${dialogutil_HDRS} DESTINATION ${KDE_INSTALL_INCLUDEDIR_KF})
+install(FILES ${dialogutil_HDRS} DESTINATION ${KDE_INSTALL_INCLUDEDIR}/${DU})
 install(FILES "${CMAKE_CURRENT_BINARY_DIR}/${DU}Config.cmake" DESTINATION ${CONFIGDIR} COMPONENT Devel)

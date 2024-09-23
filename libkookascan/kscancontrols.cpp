@@ -60,7 +60,7 @@ KScanControl::KScanControl(QWidget *parent, const QString &text)
     : QWidget(parent)
 {
     mLayout = new QHBoxLayout(this);
-    mLayout->setMargin(0);
+    mLayout->setContentsMargins(0, 0, 0, 0);
 
     mText = text;
     if (mText.isEmpty()) {
@@ -162,7 +162,7 @@ void KScanSlider::setRange(int min, int max, int step, int stdValue)
         mSpinbox->setSingleStep(step);
     }
 
-    mStdValue = qBound(stdValue, min, max);		// limit default value to range
+    mStdValue = qBound(min, stdValue, max);		// limit default value to range
     mValue = mStdValue;					// set current value to that
     mSlider->setValue(mValue);
     mSpinbox->setValue(mValue);
@@ -288,12 +288,12 @@ KScanCheckbox::KScanCheckbox(QWidget *parent, const QString &text)
 
 int KScanCheckbox::value() const
 {
-    return ((int) mCheckbox->isChecked());
+    return (int(mCheckbox->isChecked()));
 }
 
 void KScanCheckbox::setValue(int i)
 {
-    mCheckbox->setChecked((bool) i);
+    mCheckbox->setChecked(bool(i));
 }
 
 QString KScanCheckbox::label() const
@@ -340,7 +340,7 @@ void KScanCombo::setList(const QList<QByteArray> &list)
     const bool bs = mCombo->blockSignals(true);
     mCombo->clear();
 
-    for (const QByteArray &item : qAsConst(list))
+    for (const QByteArray &item : std::as_const(list))
     {
         // See the KI18N Programmer's Guide, "Connecting to Catalogs in Library Code"
         mCombo->addItem(ki18n(item.constData()).toString("sane-backends"), item);
@@ -357,7 +357,12 @@ void KScanCombo::setList(const QList<QByteArray> &list)
 
 void KScanCombo::setText(const QString &text)
 {
-    int i = mCombo->findData(text);			// find item with that text
+    // This findData() must be done with a string of the same type that
+    // was originally set in setList(), i.e. a QByteArray.  Otherwise the
+    // exact QVariant matching carried out by default does not seem to work
+    // (no matching item is found) in Qt6, although it did in Qt5.  Using
+    // Qt::MatchFixedString would also work.
+    int i = mCombo->findData(text.toLatin1());		// find item with that text
     if (i == -1) return;				// ignore if not present
 
     if (i == mCombo->currentIndex()) return;		// avoid recursive signals
@@ -411,9 +416,9 @@ KScanFileRequester::KScanFileRequester(QWidget *parent, const QString &text)
     mEntry = new KUrlRequester(this);
     mLayout->addWidget(mEntry);
 
-    QString filter = i18n("*.pnm *.pbm *.pgm *.ppm|PNM Image Files");
-    filter += '\n'+ImageFilter::kdeFilter(ImageFilter::Reading);
-    mEntry->setFilter(filter);
+    QStringList filter(i18n("PNM Image Files (*.pnm *.pbm *.pgm *.ppm)"));
+    filter += ImageFilter::qtFilterList(ImageFilter::Reading);
+    mEntry->setNameFilters(filter);
 
     connect(mEntry, QOverload<const QString &>::of(&KUrlRequester::textChanged), this, QOverload<const QString &>::of(&KScanFileRequester::settingChanged));
     connect(mEntry, QOverload<const QString &>::of(&KUrlRequester::returnPressed), this, &KScanStringEntry::returnPressed);

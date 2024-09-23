@@ -47,11 +47,11 @@ KookaGallery::KookaGallery(QWidget *parent)
 {
     qCDebug(KOOKA_LOG);
     m_layout = new QGridLayout(this);
-    m_layout->setMargin(0);
+    m_layout->setContentsMargins(0, 0, 0, 0);
 
     m_recentBox = new QWidget(this);
     QHBoxLayout *hbl = new QHBoxLayout(m_recentBox);
-    hbl->setMargin(0);
+    hbl->setContentsMargins(0, 0, 0, 0);
 
     QLabel *lab = new QLabel(i18n("Folder:"), m_recentBox);
     lab->setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed));

@@ -152,9 +152,9 @@ void KookaPrint::recalculatePrintParameters()
 
         if (m_maintainAspect)				// maintain the aspect ratio
         {
-            QRectF r = pageRect(QPrinter::DevicePixel);
-            double wAspect = r.width()/mImageWidthPix;	// scaling ratio image -> page
-            double hAspect = r.height()/mImageHeightPix;
+            QRectF pr = pageRect(QPrinter::DevicePixel);
+            double wAspect = pr.width()/mImageWidthPix;	// scaling ratio image -> page
+            double hAspect = pr.height()/mImageHeightPix;
 
             if (wAspect>hAspect)
             {
@@ -407,6 +407,9 @@ void KookaPrint::drawCutSign(QPainter *painter, const QPoint &p, int num, Qt::Co
     painter->drawText(textX, textY, numStr);
 
 #ifdef CUTMARKS_COLOURSEGS
+    // TODO: this is wrong, the colour should be derived from the adjacent
+    // page number so that the print is assembled by placing corresponding
+    // numbers and colours together.
     QBrush b(brushColor);				// draw a colour segment
     painter->setBrush(b);				// to show correct orientation
     painter->drawPie(x, y, radius, radius, start*16, -90*16);

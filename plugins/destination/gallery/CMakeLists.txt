@@ -11,7 +11,6 @@
 ##									##
 ##########################################################################
 
-project(kooka5)
 
 #########################################################################
 #									#
@@ -26,7 +25,6 @@ set(destinationgallery_SRCS
 
 kcoreaddons_add_plugin(destinationgallery SOURCES ${destinationgallery_SRCS} INSTALL_NAMESPACE "kooka_destination")
 
-kcoreaddons_desktop_to_json(destinationgallery kookadestination-gallery.desktop)
-target_link_libraries(destinationgallery Qt::Core Qt::Gui)
-target_link_libraries(destinationgallery KF5::I18n KF5::WidgetsAddons)
+target_link_libraries(destinationgallery Qt${Q}::Core Qt${Q}::Gui)
+target_link_libraries(destinationgallery KF${Q}::I18n KF${Q}::WidgetsAddons)
 target_link_libraries(destinationgallery kookadestination kookascan)

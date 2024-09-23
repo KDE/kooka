@@ -286,7 +286,7 @@ KookaThumbnailPage::KookaThumbnailPage(KPageDialog *parent)
     mTileSelector = new KUrlRequester(this);
     mTileSelector->setToolTip(ski->toolTip());
     mTileSelector->setMode(KFile::File|KFile::ExistingOnly|KFile::LocalOnly);
-    mTileSelector->setFilter(ImageFilter::kdeFilter(ImageFilter::Reading));
+    mTileSelector->setNameFilters(ImageFilter::qtFilterList(ImageFilter::Reading, ImageFilter::AllImages));
     gl->addWidget(mTileSelector, 3, 1);
     lab->setBuddy(mTileSelector);
 

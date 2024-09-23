@@ -41,7 +41,7 @@
 class QComboBox;
 class QRadioButton;
 
-class PaperSize;
+struct PaperSize;
 
 class KOOKASCAN_EXPORT ScanSizeSelector : public QFrame
 {

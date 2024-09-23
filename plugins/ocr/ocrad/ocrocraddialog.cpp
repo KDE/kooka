@@ -32,8 +32,8 @@
 #include "ocrocraddialog.h"
 
 #include <qlabel.h>
-#include <qregexp.h>
 #include <qcombobox.h>
+#include <qregularexpression.h>
 #include <qcheckbox.h>
 #include <qspinbox.h>
 #include <qlayout.h>
@@ -115,8 +115,9 @@ bool OcrOcradDialog::setupGui()
     m_characterSet = new QComboBox(w);
     m_characterSet->setToolTip(ski->toolTip());
     m_characterSet->addItem(i18n("(default)"), false);
-    for (QStringList::const_iterator it = vals.constBegin(); it != vals.constEnd(); ++it) {
-        m_characterSet->addItem(*it, true);
+    for (const QString &val : std::as_const(vals))
+    {
+        m_characterSet->addItem(val, true);
     }
 
     if (vals.count() == 0) m_characterSet->setEnabled(false);
@@ -136,8 +137,9 @@ bool OcrOcradDialog::setupGui()
     m_filter = new QComboBox(w);
     m_filter->setToolTip(ski->toolTip());
     m_filter->addItem(i18n("(default)"), false);
-    for (QStringList::const_iterator it = vals.constBegin(); it != vals.constEnd(); ++it) {
-        m_filter->addItem(*it, true);
+    for (const QString &val : std::as_const(vals))
+    {
+        m_filter->addItem(val, true);
     }
 
     if (vals.count() == 0) m_filter->setEnabled(false);
@@ -157,8 +159,9 @@ bool OcrOcradDialog::setupGui()
     m_transform = new QComboBox(w);
     m_transform->setToolTip(ski->toolTip());
     m_transform->addItem(i18n("(default)"), false);
-    for (QStringList::const_iterator it = vals.constBegin(); it != vals.constEnd(); ++it) {
-        m_transform->addItem(*it, true);
+    for (const QString &val : std::as_const(vals))
+    {
+        m_transform->addItem(val, true);
     }
 
     if (vals.count() == 0) m_transform->setEnabled(false);
@@ -270,10 +273,12 @@ void OcrOcradDialog::getVersion(const QString &bin)
     int status = proc.execute(5000);
     if (status == 0) {
         QByteArray output = proc.readAllStandardOutput();
-        QRegExp rx("GNU [Oo]crad (version )?([\\d\\.]+)");
-        if (rx.indexIn(output) > -1) {
+        const QRegularExpression rx("GNU [Oo]crad (version )?([\\d\\.]+)");
+        const QRegularExpressionMatch match = rx.match(output);
+        if (match.hasMatch())
+        {
             m_ocrCmd = bin;
-            m_versionStr = rx.cap(2);
+            m_versionStr = match.captured(2);
             m_versionNum = m_versionStr.mid(2).toInt();
             qCDebug(OCR_LOG) << "version" << m_versionStr << "=" << m_versionNum;
         }
@@ -304,13 +309,15 @@ QStringList OcrOcradDialog::getValidValues(const QString &opt)
             proc.execute(5000);
             // Ignore return status, because '--OPTION=help' returns exit code 1
             QByteArray output = proc.readAllStandardOutput();
-            QRegExp rx("Valid .*(?:are|names):([^\n]+)");
-            if (rx.indexIn(output) > -1) {
-                QString values = rx.cap(1);
+            const QRegularExpression rx("Valid .*(?:are|names):([^\n]+)");
+            const QRegularExpressionMatch match = rx.match(output);
+            if (match.hasMatch())
+            {
+                QString values = match.captured(1);
 #if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
-                result = rx.cap(1).split(QRegExp("\\s+"), Qt::SkipEmptyParts);
+                result = values.split(QRegularExpression("\\s+"), Qt::SkipEmptyParts);
 #else
-                result = rx.cap(1).split(QRegExp("\\s+"), QString::SkipEmptyParts);
+                result = values.split(QRegularExpression("\\s+"), QString::SkipEmptyParts);
 #endif
             } else {
                 qCWarning(OCR_LOG) << "cannot get values, no match in" << output;

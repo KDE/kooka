@@ -56,8 +56,7 @@ FileTreeBranch::FileTreeBranch(FileTreeView *parent,
 
     QUrl u(url);
     if (u.isLocalFile()) {				// for local files,
-        QDir d(u.path());				// ensure path is canonical
-        u.setPath(d.canonicalPath());
+        u.setPath(QDir(u.path()).canonicalPath());	// ensure path is canonical
     }
     m_startURL = u;
     qCDebug(LIBFILETREE_LOG) << "for" << u;
@@ -245,7 +244,7 @@ FileTreeViewItem *FileTreeBranch::findItemByUrl(const QUrl &url)
 // Find an item by a relative path.  If the branch is known, this
 // saves having to convert an input path into an URL and then doing
 // lots of comparisons on it as above.
-FileTreeViewItem *FileTreeBranch::findItemByPath(const QString &path)
+FileTreeViewItem *FileTreeBranch::findItemByPath(const QString &path) const
 {
 #ifdef DEBUG_MAPPING
     qCDebug(LIBFILETREE_LOG) << path;
@@ -340,10 +339,8 @@ void FileTreeBranch::slotItemsAdded(const QUrl &parent, const KFileItemList &ite
 
     FileTreeViewItem *newItem;
     FileTreeViewItemList treeViewItList;        // tree view items created
-    for (KFileItemList::const_iterator it = items.constBegin();
-            it != items.constEnd(); ++it) {
-        const KFileItem currItem = (*it);
-
+    for (const KFileItem &currItem : std::as_const(items))
+    {
         /* Only create a new FileTreeViewItem if it does not yet exist */
         if (findItemByUrl(currItem.url()) != nullptr) {
             continue;
@@ -452,9 +449,8 @@ bool FileTreeBranch::showExtensions() const
 
 void FileTreeBranch::slotItemsDeleted(const KFileItemList &items)
 {
-    for (KFileItemList::const_iterator it = items.constBegin();
-            it != items.constEnd(); ++it) {
-        const KFileItem fi = (*it);
+    for (const KFileItem &fi : std::as_const(items))
+    {
         itemDeleted(&fi);
     }
 }
@@ -594,7 +590,7 @@ void FileTreeBranch::slotListerCompleted(const QUrl &url)
     if (m_recurseChildren && (!m_startURL.isLocalFile() || !dirOnlyMode())) {
         bool wantRecurseUrl = false;
         /* look if the url is in the list for url to recurse */
-        for (const QUrl &u : qAsConst(m_openChildrenURLs)) {
+        for (const QUrl &u : std::as_const(m_openChildrenURLs)) {
             /* it is only interesting that the url _is_in_ the list. */
             if (u.adjusted(QUrl::StripTrailingSlash) == url.adjusted(QUrl::StripTrailingSlash)) {
                 wantRecurseUrl = true;

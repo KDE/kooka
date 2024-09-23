@@ -231,7 +231,7 @@ void buildMimeTypeList()
     // BW, RGBA, XV) seem to be of any use.
 
     QMimeDatabase db;
-    for (const QByteArray &format : qAsConst(formatList))
+    for (const QByteArray &format : std::as_const(formatList))
     {
         QMimeType mime = db.mimeTypeForFile(QString("a.")+format, QMimeDatabase::MatchExtension);
         if (!mime.isValid() || mime.isDefault())
@@ -250,7 +250,7 @@ void buildMimeTypeList()
         }
 
         bool seen = false;
-        for (const QMimeType &mt : qAsConst(*list))
+        for (const QMimeType &mt : std::as_const(*list))
         {
             if (mime.inherits(mt.name()))
             {

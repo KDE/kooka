@@ -98,7 +98,7 @@ public:
      * option of that name is present.
      * @deprecated Use QHash::value() instead.
      **/
-    QByteArray Q_DECL_DEPRECATED getValue(const QByteArray &optName) const;
+    Q_DECL_DEPRECATED QByteArray getValue(const QByteArray &optName) const;
 
     /**
      * Save the option set to the global scanner configuration file.

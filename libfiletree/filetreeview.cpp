@@ -82,18 +82,22 @@ FileTreeView::~FileTreeView()
 }
 
 // This is used when dragging and dropping out of the view to somewhere else.
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+QMimeData *FileTreeView::mimeData(const QList<QTreeWidgetItem *> &items) const
+#else
 QMimeData *FileTreeView::mimeData(const QList<QTreeWidgetItem *> items) const
+#endif
 {
     QMimeData *mimeData = new QMimeData();
     QList<QUrl> urlList;
 
-    for (QList<QTreeWidgetItem *>::const_iterator it = items.constBegin();
-            it != items.constEnd(); ++it) {
-        FileTreeViewItem *item = static_cast<FileTreeViewItem *>(*it);
+    for (const QTreeWidgetItem *item : std::as_const(items))
+    {
+        const FileTreeViewItem *ftvi = static_cast<const FileTreeViewItem *>(item);
 #ifdef DEBUG_LISTING
-        qCDebug(LIBFILETREE_LOG) << item->url();
+        qCDebug(LIBFILETREE_LOG) << ftvi->url();
 #endif // DEBUG_LISTING
-        urlList.append(item->url());
+        urlList.append(ftvi->url());
     }
 
     mimeData->setUrls(urlList);
@@ -124,7 +128,11 @@ void FileTreeView::dragEnterEvent(QDragEnterEvent *ev)
 
     QList<QTreeWidgetItem *> items = selectedItems();
     m_currentBeforeDropItem = (items.count() > 0 ? items.first() : nullptr);
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+    setDropItem(itemAt(ev->position().toPoint()));
+#else
     setDropItem(itemAt(ev->pos()));
+#endif
 }
 
 void FileTreeView::dragMoveEvent(QDragMoveEvent *ev)
@@ -134,7 +142,11 @@ void FileTreeView::dragMoveEvent(QDragMoveEvent *ev)
         return;
     }
 
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+    QTreeWidgetItem *item = itemAt(ev->position().toPoint());
+#else
     QTreeWidgetItem *item = itemAt(ev->pos());
+#endif
     if (item == nullptr || item->isDisabled()) {   // over a valid item?
         // no, ignore drops on it
         setDropItem(nullptr);              // clear drop item
@@ -324,15 +336,14 @@ FileTreeBranch *FileTreeView::addBranch(FileTreeBranch *newBranch)
     return (newBranch);
 }
 
-FileTreeBranch *FileTreeView::branch(const QString &searchName) const
+const FileTreeBranch *FileTreeView::branch(const QString &searchName) const
 {
 #ifdef DEBUG_LISTING
     qCDebug(LIBFILETREE_LOG) << "searching for" << searchName;
 #endif // DEBUG_LISTING
-    for (FileTreeBranchList::const_iterator it = m_branches.constBegin();
-            it != m_branches.constEnd(); ++it) {
-        FileTreeBranch *branch = (*it);
-        QString bname = branch->name();
+    for (const FileTreeBranch *branch : std::as_const(m_branches))
+    {
+        const QString bname = branch->name();
 #ifdef DEBUG_LISTING
         qCDebug(LIBFILETREE_LOG) << "branch" << bname;
 #endif // DEBUG_LISTING
@@ -386,14 +397,15 @@ void FileTreeView::slotNewTreeViewItems(FileTreeBranch *branch, const FileTreeVi
      * m_neUrlToSelect to the required url. If this url appears here, the item becomes
      * selected and the member nextUrlToSelect will be cleared.
      */
-    if (!m_nextUrlToSelect.isEmpty()) {
-        for (FileTreeViewItemList::const_iterator it = items.constBegin();
-                it != items.constEnd(); ++it) {
-            QUrl url = (*it)->url();
+    if (!m_nextUrlToSelect.isEmpty())
+    {
+        for (FileTreeViewItem *it : std::as_const(items))
+        {
+            QUrl url = it->url();
 
             if (m_nextUrlToSelect.adjusted(QUrl::StripTrailingSlash|QUrl::NormalizePathSegments) ==
                 url.adjusted(QUrl::StripTrailingSlash|QUrl::NormalizePathSegments)) {
-                setCurrentItem(static_cast<QTreeWidgetItem *>(*it));
+                setCurrentItem(static_cast<QTreeWidgetItem *>(it));
                 m_nextUrlToSelect = QUrl();
                 break;
             }
@@ -505,11 +517,11 @@ void FileTreeView::slotOnItem(QTreeWidgetItem *item)
 
 FileTreeViewItem *FileTreeView::findItemInBranch(const QString &branchName, const QString &relUrl) const
 {
-    FileTreeBranch *br = branch(branchName);
+    const FileTreeBranch *br = branch(branchName);
     return (findItemInBranch(br, relUrl));
 }
 
-FileTreeViewItem *FileTreeView::findItemInBranch(FileTreeBranch *branch, const QString &relPath) const
+FileTreeViewItem *FileTreeView::findItemInBranch(const FileTreeBranch *branch, const QString &relPath) const
 {
     if (branch==nullptr) return (nullptr);			// no branch to search
 

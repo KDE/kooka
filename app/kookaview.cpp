@@ -152,9 +152,10 @@ void WidgetSite::setWidget(QWidget *widget)
     QGridLayout *lay = static_cast<QGridLayout *>(layout());
 
     QObjectList childs = children();
-    for (QObjectList::iterator it = childs.begin(); it != childs.end(); ++it) {
-        QObject *ch = (*it);
-        if (ch->isWidgetType()) {
+    for (QObject *ch : std::as_const(childs))
+    {
+        if (ch->isWidgetType())
+        {
             QWidget *w = static_cast<QWidget *>(ch);
             w->hide();
             lay->removeWidget(w);
@@ -334,10 +335,11 @@ KookaView::~KookaView()
     delete mScanDevice;
 }
 
-// this gets called via Kooka::closeEvent() at shutdown
-void KookaView::saveWindowSettings(KConfigGroup &grp)
+// this gets called via Kooka::saveSettings() at shutdown
+void KookaView::saveSettings()
 {
-    qCDebug(KOOKA_LOG) << "to group" << grp.name();
+    qCDebug(KOOKA_LOG);
+
     KookaSettings::setLayoutTabIndex(currentIndex());
     KookaSettings::setLayoutScan1(mScanPage->saveState().toBase64());
     KookaSettings::setLayoutScan2(mScanSubSplitter->saveState().toBase64());
@@ -350,10 +352,10 @@ void KookaView::saveWindowSettings(KConfigGroup &grp)
     KookaSettings::self()->save();
 }
 
-// this gets called by Kooka::applyMainWindowSettings() at startup
-void KookaView::applyWindowSettings(const KConfigGroup &grp)
+// this gets called by Kooka::readSettings() at startup
+void KookaView::readSettings()
 {
-    qCDebug(KOOKA_LOG) << "from group" << grp.name();
+    qCDebug(KOOKA_LOG);
 
     QString set = KookaSettings::layoutScan1();
     if (!set.isEmpty()) mScanPage->restoreState(QByteArray::fromBase64(set.toLocal8Bit()));
@@ -1134,7 +1136,7 @@ void KookaView::showOpenWithMenu(KActionMenu *menu)
 
     int i = 0;
     mOpenWithOffers = KApplicationTrader::queryByMimeType(mimeType);
-    for (const KService::Ptr &service : qAsConst(mOpenWithOffers))
+    for (const KService::Ptr &service : std::as_const(mOpenWithOffers))
     {
         //qCDebug(KOOKA_LOG) << "> offer:" << service->name();
         QString actionName(service->name().replace("&", "&&"));

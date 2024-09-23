@@ -11,14 +11,14 @@
 ##									##
 ##########################################################################
 
-project(kookascan)
+project(libkookascan)
 
 ########### dependencies ###############
 
-find_package(KF5 ${KF5_MIN_VERSION} REQUIRED COMPONENTS I18n Config IconThemes KIO TextWidgets)
+find_package(KF${Q} ${KF_MIN_VERSION} REQUIRED COMPONENTS I18n Config ConfigWidgets IconThemes KIO TextWidgets)
 
 # libpaper (at least in Gentoo Linux) provides neither a
-# Find<package>.cmake or a pkg-config file.
+# Find<package>.cmake nor a pkg-config file.
 find_library(LIBPAPER_LIB NAMES "libpaper" "libpaper.so")
 find_file(LIBPAPER_HDR "paper.h")
 if (LIBPAPER_LIB AND LIBPAPER_HDR)
@@ -109,11 +109,11 @@ add_library(kookascan SHARED ${kookascan_SRCS})
 generate_export_header(kookascan BASE_NAME kookascan)
 target_link_libraries(kookascan
   dialogutil
-  KF5::I18n
-  KF5::ConfigCore KF5::ConfigGui KF5::ConfigWidgets
-  KF5::KIOCore KF5::KIOWidgets
-  KF5::IconThemes
-  KF5::TextWidgets
+  KF${Q}::I18n
+  KF${Q}::ConfigCore KF${Q}::ConfigGui KF${Q}::ConfigWidgets
+  KF${Q}::KIOCore KF${Q}::KIOWidgets
+  KF${Q}::IconThemes
+  KF${Q}::TextWidgets
 )
 
 if (HAVE_SANE)
@@ -126,7 +126,7 @@ if (HAVE_TIFF)
   target_link_libraries(kookascan ${TIFF_LIBRARIES})
 endif (HAVE_TIFF)
 
-set_target_properties(kookascan PROPERTIES VERSION 2.0.0 SOVERSION 2)
+set_target_properties(kookascan PROPERTIES VERSION ${VERSION} SOVERSION ${Q})
 
 ########### installation ###############
 

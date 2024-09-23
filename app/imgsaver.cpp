@@ -32,8 +32,8 @@
 #include "imgsaver.h"
 
 #include <qdir.h>
-#include <qregexp.h>
 #include <qmimedatabase.h>
+#include <qregularexpression.h>
 #include <qtemporaryfile.h>
 
 #include <kwidgetsaddons_version.h>
@@ -304,7 +304,7 @@ QString ImgSaver::createFilename()
     // TODO: allow non-local files
     QDir files(m_saveDirectory.path(), "kscan_[0-9][0-9][0-9][0-9].*");
     QStringList l(files.entryList());
-    l.replaceInStrings(QRegExp("\\..*$"), "");
+    l.replaceInStrings(QRegularExpression("\\..*$"), "");
 
     QString fname;
     for (int c = 1; c <= l.count() + 1; ++c) {  // that must be the upper bound
@@ -400,14 +400,15 @@ bool copyRenameImage(bool isCopying, const QUrl &fromUrl, const QUrl &toUrl, boo
     QUrl targetUrl(toUrl);
     if (extTo.isEmpty() && !extFrom.isEmpty())
     {							// ask if the extension should be added
-        int result = KMessageBox::Yes;
         QString fName = toUrl.fileName();
         if (!fName.endsWith(".")) fName += ".";
         fName += extFrom;
 
 #if KWIDGETSADDONS_VERSION >= QT_VERSION_CHECK(5, 100, 0)
+        int result = KMessageBox::PrimaryAction;
         if (askExt) result = KMessageBox::questionTwoActions(overWidget,
 #else
+        int result = KMessageBox::Yes;
         if (askExt) result = KMessageBox::questionYesNo(overWidget,
 #endif
                                  xi18nc("@info", "The file name you supplied has no file extension.<nl/>"
@@ -441,7 +442,7 @@ bool copyRenameImage(bool isCopying, const QUrl &fromUrl, const QUrl &toUrl, boo
     {
         qCDebug(KOOKA_LOG) << (isCopying ? "Copy" : "Rename") << "->" << targetUrl;
 
-        KJob *job = KIO::statDetails(targetUrl, KIO::StatJob::DestinationSide, KIO::StatNoDetails);
+        KJob *job = KIO::stat(targetUrl, KIO::StatJob::DestinationSide, KIO::StatNoDetails);
         if (job->exec())				// stat with minimal details
         {						// to see if destination exists
                 errorString = i18n("Target already exists");

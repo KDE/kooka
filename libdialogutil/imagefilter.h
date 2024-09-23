@@ -105,8 +105,8 @@ namespace ImageFilter
      * @param options Options for the filter generation.
      * @return The filter string
      **/
-    LIBDIALOGUTIL_EXPORT QString kdeFilter(ImageFilter::FilterMode mode,
-                                           ImageFilter::FilterOptions options = ImageFilter::NoOptions);
+    Q_DECL_DEPRECATED_X("Use Qt filter format") LIBDIALOGUTIL_EXPORT QString kdeFilter(ImageFilter::FilterMode mode,
+                                                                                       ImageFilter::FilterOptions options = ImageFilter::NoOptions);
 }
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(ImageFilter::FilterOptions)
