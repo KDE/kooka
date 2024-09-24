@@ -67,7 +67,7 @@ static const KLocalizedString addLicense =
               "commercial Qt development licence.\n");
 
 static const KLocalizedString copyright =
-    ki18n("(C) 2000-2018, the Kooka developers and contributors");
+    ki18n("(C) 2000-2024, the Kooka developers and contributors");
 
 
 int main(int argc, char *argv[])
@@ -87,7 +87,7 @@ int main(int argc, char *argv[])
                      longDesc.toString(),			// otherText
                      "http://techbase.kde.org/Projects/Kooka");	// homePageAddress
 
-    about.addAuthor(i18n("Jonathan Marten"), i18n("Current maintainer, KDE4 port"), "jjm@keelhaul.me.uk");
+    about.addAuthor(i18n("Jonathan Marten"), i18n("Current maintainer, KDE4/KF5/KF6 port"), "jjm@keelhaul.me.uk");
     about.addAuthor(i18n("Montel Laurent"), i18n("Initial KF5 port"), "montel@kde.org");
     about.addAuthor(i18n("Klaas Freitag"), i18n("Developer"), "freitag@suse.de");
     about.addCredit(i18n("Mat Colton"), i18n("Graphics, web"), "mat@colton.de");
