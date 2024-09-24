@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-05-17 01:43+0000\n"
+"POT-Creation-Date: 2024-09-24 02:01+0000\n"
 "PO-Revision-Date: 2017-12-14 14:33+0300\n"
 "Last-Translator: Alexander Potashev <aspotashev@gmail.com>\n"
 "Language-Team: Russian <kde-russian@lists.kde.ru>\n"
@@ -302,7 +302,7 @@ msgstr ""
 msgid "Reset this setting to its standard value, %1"
 msgstr ""
 
-#: kscancontrols.cpp:414
+#: kscancontrols.cpp:419
 #, kde-format
 msgid "PNM Image Files (*.pnm *.pbm *.pgm *.ppm)"
 msgstr ""
@@ -393,32 +393,32 @@ msgstr ""
 msgid "Unknown status %1"
 msgstr ""
 
-#: kscanoption.cpp:1013
+#: kscanoption.cpp:1027
 #, kde-format
 msgid "pixels"
 msgstr ""
 
-#: kscanoption.cpp:1014
+#: kscanoption.cpp:1028
 #, kde-format
 msgid "bits"
 msgstr ""
 
-#: kscanoption.cpp:1015
+#: kscanoption.cpp:1029
 #, kde-format
 msgid "mm"
 msgstr ""
 
-#: kscanoption.cpp:1016
+#: kscanoption.cpp:1030
 #, kde-format
 msgid "dpi"
 msgstr ""
 
-#: kscanoption.cpp:1017
+#: kscanoption.cpp:1031
 #, kde-format
 msgid "%"
 msgstr ""
 
-#: kscanoption.cpp:1018
+#: kscanoption.cpp:1032
 #, kde-format
 msgid "µsec"
 msgstr ""

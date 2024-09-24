@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-05-17 01:43+0000\n"
+"POT-Creation-Date: 2024-09-24 02:01+0000\n"
 "PO-Revision-Date: 2023-04-17 21:25+0200\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
@@ -49,7 +49,7 @@ msgstr ""
 
 #: ../plugins/destination/abstractdestination.cpp:160
 #: ../plugins/destination/application/destinationapplication.cpp:190
-#: kookaview.cpp:1181
+#: kookaview.cpp:1182
 #, kde-format
 msgid "Other..."
 msgstr "Bestelakoa..."
@@ -85,13 +85,13 @@ msgstr "Irudia arbelera kopiatzen"
 msgid "<filename>%1</filename>"
 msgstr "<filename>%1</filename>"
 
-#: ../plugins/destination/print/destinationprint.cpp:78 kookaview.cpp:677
+#: ../plugins/destination/print/destinationprint.cpp:78 kookaview.cpp:678
 #, kde-format
 msgctxt "@title:window"
 msgid "Print Image"
 msgstr "Irudia inprimatzea"
 
-#: ../plugins/destination/print/destinationprint.cpp:89 kookaview.cpp:693
+#: ../plugins/destination/print/destinationprint.cpp:89 kookaview.cpp:694
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -103,7 +103,7 @@ msgstr ""
 "\n"
 "%1"
 
-#: ../plugins/destination/print/destinationprint.cpp:90 kookaview.cpp:694
+#: ../plugins/destination/print/destinationprint.cpp:90 kookaview.cpp:695
 #, kde-format
 msgctxt "@title:window"
 msgid "Cannot Print"
@@ -404,7 +404,7 @@ msgstr "Erakutsi eskanerraren detekziorako kaxa hurrengo abioan"
 msgid "OCR Setup Error"
 msgstr "Errorea prozesatzean"
 
-#: ../plugins/ocr/abstractocrengine.cpp:123 kookaview.cpp:791
+#: ../plugins/ocr/abstractocrengine.cpp:123 kookaview.cpp:792
 #, kde-format
 msgid "Configure OCR..."
 msgstr ""
@@ -532,9 +532,9 @@ msgstr ""
 msgid "The GOCR executable is not configured or is not available."
 msgstr ""
 
-#: ../plugins/ocr/gocr/ocrgocrdialog.cpp:204
-#: ../plugins/ocr/ocrad/ocrocraddialog.cpp:285
-#: ../plugins/ocr/tesseract/ocrtesseractdialog.cpp:250
+#: ../plugins/ocr/gocr/ocrgocrdialog.cpp:203
+#: ../plugins/ocr/ocrad/ocrocraddialog.cpp:287
+#: ../plugins/ocr/tesseract/ocrtesseractdialog.cpp:251
 #, fuzzy, kde-format
 #| msgid "Save Error"
 msgid "Error"
@@ -546,7 +546,7 @@ msgctxt "@info"
 msgid "Cannot read GOCR result file <filename>%1</filename><nl/>%2"
 msgstr ""
 
-#: ../plugins/ocr/gocr/ocrgocrengine.cpp:298
+#: ../plugins/ocr/gocr/ocrgocrengine.cpp:307
 #, kde-format
 msgid "Name or path of the GOCR executable:"
 msgstr ""
@@ -735,7 +735,7 @@ msgstr "Diseinuaren detekzio osoa"
 msgid "(default)"
 msgstr "(lehenetsia)"
 
-#: ../plugins/ocr/ocrad/ocrocradengine.cpp:243
+#: ../plugins/ocr/ocrad/ocrocradengine.cpp:244
 #: ../plugins/ocr/tesseract/ocrtesseractengine.cpp:157
 #, fuzzy, kde-kuit-format
 #| msgid "The orf %1 does not exist."
@@ -743,7 +743,7 @@ msgctxt "@info"
 msgid "File <filename>%1</filename> does not exist"
 msgstr "Ez da \"%1\" orf fitxategia existitzen."
 
-#: ../plugins/ocr/ocrad/ocrocradengine.cpp:247
+#: ../plugins/ocr/ocrad/ocrocradengine.cpp:248
 #: ../plugins/ocr/tesseract/ocrtesseractengine.cpp:158
 #, fuzzy, kde-kuit-format
 #| msgid "The orf %1 does not exist."
@@ -751,7 +751,7 @@ msgctxt "@info"
 msgid "File <filename>%1</filename> unreadable"
 msgstr "Ez da \"%1\" orf fitxategia existitzen."
 
-#: ../plugins/ocr/ocrad/ocrocradengine.cpp:251
+#: ../plugins/ocr/ocrad/ocrocradengine.cpp:252
 #: ../plugins/ocr/tesseract/ocrtesseractengine.cpp:165
 #, fuzzy, kde-kuit-format
 #| msgid "The orf %1 does not exist."
@@ -759,7 +759,7 @@ msgctxt "@info"
 msgid "Cannot open file <filename>%1</filename>"
 msgstr "Ez da \"%1\" orf fitxategia existitzen."
 
-#: ../plugins/ocr/ocrad/ocrocradengine.cpp:432
+#: ../plugins/ocr/ocrad/ocrocradengine.cpp:448
 #, kde-format
 msgid "Name or path of the OCRAD executable:"
 msgstr ""
@@ -776,13 +776,13 @@ msgstr ""
 msgid "Select a file if required..."
 msgstr "Hautatu eskaneatze-dispositiboak"
 
-#: ../plugins/ocr/tesseract/ocrtesseractengine.cpp:226
+#: ../plugins/ocr/tesseract/ocrtesseractengine.cpp:227
 #, fuzzy, kde-format
 #| msgid " permission error   "
 msgid "HOCR parsing error, %1"
 msgstr " baimen-errorea   "
 
-#: ../plugins/ocr/tesseract/ocrtesseractengine.cpp:251
+#: ../plugins/ocr/tesseract/ocrtesseractengine.cpp:252
 #, kde-format
 msgid "Name or path of the Tesseract executable:"
 msgstr ""
@@ -1539,174 +1539,174 @@ msgctxt "@info"
 msgid "%1 <filename>%3</filename><nl/>%2"
 msgstr "%1 <filename>%3</filename><nl/>%2"
 
-#: kooka.cpp:100
+#: kooka.cpp:106
 #, kde-format
 msgid "KDE Scanning"
 msgstr "KDE-ren eskaneatzea"
 
-#: kooka.cpp:134
+#: kooka.cpp:140
 #, kde-format
 msgid "Scale to Width"
 msgstr "Eskalatu zabalerara"
 
-#: kooka.cpp:145
+#: kooka.cpp:151
 #, kde-format
 msgid "Scale to Height"
 msgstr "Eskalatu altuerara"
 
-#: kooka.cpp:154
+#: kooka.cpp:160
 #, kde-format
 msgid "Original Size"
 msgstr "Jatorrizko neurria"
 
-#: kooka.cpp:160
+#: kooka.cpp:166
 #, kde-format
 msgid "Set Zoom..."
 msgstr "Ezarri zooma..."
 
-#: kooka.cpp:166
+#: kooka.cpp:172
 #, kde-format
 msgid "Keep Zoom Setting"
 msgstr "Mantendu zoomaren ezarpena"
 
-#: kooka.cpp:174
+#: kooka.cpp:180
 #, kde-format
 msgid "New Image From Selection"
 msgstr "Irudi berria hautapenetik"
 
-#: kooka.cpp:179
+#: kooka.cpp:185
 #, kde-format
 msgid "Mirror Vertically"
 msgstr "Islatu bertikalki"
 
-#: kooka.cpp:186
+#: kooka.cpp:192
 #, kde-format
 msgid "Mirror Horizontally"
 msgstr "Islatu horizontalki"
 
-#: kooka.cpp:196
+#: kooka.cpp:202
 #, kde-format
 msgid "Rotate Counter-Clockwise"
 msgstr "Biratu erloju-orratzen aurkako noranzkoan"
 
-#: kooka.cpp:203
+#: kooka.cpp:209
 #, kde-format
 msgid "Rotate Clockwise"
 msgstr "Biratu erloju-orratzen noranzkoan"
 
-#: kooka.cpp:210
+#: kooka.cpp:216
 #, kde-format
 msgid "Rotate 180 Degrees"
 msgstr "Biratu 180 gradu"
 
-#: kooka.cpp:219
+#: kooka.cpp:225
 #, kde-format
 msgid "New Folder..."
 msgstr "Karpeta berria..."
 
-#: kooka.cpp:224
+#: kooka.cpp:230
 #, kde-format
 msgid "Open With"
 msgstr "Ireki honekin"
 
-#: kooka.cpp:230
+#: kooka.cpp:236
 #, kde-format
 msgid "Save Image..."
 msgstr "Gorde irudia..."
 
-#: kooka.cpp:237
+#: kooka.cpp:243
 #, kde-format
 msgid "Import Image..."
 msgstr "Inportatu irudia..."
 
-#: kooka.cpp:242 kooka.cpp:550
+#: kooka.cpp:248 kooka.cpp:537
 #, kde-format
 msgid "Delete Image"
 msgstr "Ezabatu irudia"
 
-#: kooka.cpp:249 kooka.cpp:551
+#: kooka.cpp:255 kooka.cpp:538
 #, kde-format
 msgid "Rename Image"
 msgstr "Berrizendatu irudia"
 
-#: kooka.cpp:255 kooka.cpp:549
+#: kooka.cpp:261 kooka.cpp:536
 #, fuzzy, kde-format
 #| msgid "&Unload Image"
 msgid "Unload Image"
 msgstr "&Deskargatu irudia"
 
-#: kooka.cpp:262
+#: kooka.cpp:268
 #, kde-format
 msgid "Properties..."
 msgstr "Propietateak..."
 
-#: kooka.cpp:271
+#: kooka.cpp:277
 #, kde-format
 msgid "Select Scan Device..."
 msgstr "Hautatu eskaneatzeko gailua..."
 
-#: kooka.cpp:275 kookaview.cpp:550
+#: kooka.cpp:281 kookaview.cpp:551
 #, kde-format
 msgid "Add Scan Device..."
 msgstr "Gehitu eskaneatzeko gailua..."
 
-#: kooka.cpp:281
+#: kooka.cpp:287
 #, kde-format
 msgid "Preview"
 msgstr "Aurreikusi"
 
-#: kooka.cpp:286
+#: kooka.cpp:292
 #, kde-format
 msgid "Start Scan"
 msgstr "Hasi eskaneatzen"
 
-#: kooka.cpp:291
+#: kooka.cpp:297
 #, kde-format
 msgid "Scan Presets..."
 msgstr "Eskaneatze aurrehautaketak..."
 
-#: kooka.cpp:296
+#: kooka.cpp:302
 #, kde-format
 msgid "Auto Select"
 msgstr "Hautaketa automatikoa"
 
-#: kooka.cpp:304
+#: kooka.cpp:310
 #, kde-format
 msgid "OCR Image..."
 msgstr "OCR irudia..."
 
-#: kooka.cpp:308
+#: kooka.cpp:314
 #, kde-format
 msgid "OCR Selection..."
 msgstr "OCR hautapena..."
 
-#: kooka.cpp:312
+#: kooka.cpp:318
 #, kde-format
 msgid "OCR File..."
 msgstr "OCR fitxategia..."
 
-#: kooka.cpp:316
+#: kooka.cpp:322
 #, kde-format
 msgid "Save OCR Result Text..."
 msgstr "Gorde OCR emaitzaren testua..."
 
-#: kooka.cpp:321
+#: kooka.cpp:327
 #, kde-format
 msgid "Spell Check OCR Result..."
 msgstr "Ortografia-egiaztatze OCR emaitzak..."
 
-#: kooka.cpp:537
+#: kooka.cpp:524
 #, fuzzy, kde-format
 #| msgid "&Unload Image"
 msgid "Unload Folder"
 msgstr "&Deskargatu irudia"
 
-#: kooka.cpp:538
+#: kooka.cpp:525
 #, kde-format
 msgid "Delete Folder"
 msgstr "Ezabatu karpeta"
 
-#: kooka.cpp:539
+#: kooka.cpp:526
 #, kde-format
 msgid "Rename Folder"
 msgstr "Berrizendatu karpeta"
@@ -2175,12 +2175,12 @@ msgstr "OCR emaitzak hemen agertuko dira"
 msgid "Scan"
 msgstr "Eskaneatu"
 
-#: kookaview.cpp:289 kookaview.cpp:564 kookaview.cpp:583 scangallery.cpp:123
+#: kookaview.cpp:289 kookaview.cpp:565 kookaview.cpp:584 scangallery.cpp:122
 #, kde-format
 msgid "Gallery"
 msgstr "Galeria"
 
-#: kookaview.cpp:465
+#: kookaview.cpp:466
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2191,12 +2191,12 @@ msgid ""
 "reported error: <message>%1</message>"
 msgstr ""
 
-#: kookaview.cpp:520
+#: kookaview.cpp:521
 #, kde-format
 msgid "Add Scan Device"
 msgstr "Gehitu eskaneatzeko gailua"
 
-#: kookaview.cpp:540
+#: kookaview.cpp:541
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2208,79 +2208,79 @@ msgid ""
 "backend name and parameters, or see that dialog for more information."
 msgstr ""
 
-#: kookaview.cpp:586
+#: kookaview.cpp:587
 #, kde-format
 msgid "No scanner connected"
 msgstr "Ez dago konektatutako eskanerrik"
 
-#: kookaview.cpp:645
+#: kookaview.cpp:646
 #, kde-format
 msgid "No selection"
 msgstr "Hautapenik ez"
 
-#: kookaview.cpp:649
+#: kookaview.cpp:650
 #, kde-format
 msgid "Gallery folder %1"
 msgstr "%1 galeria-karpeta"
 
-#: kookaview.cpp:649
+#: kookaview.cpp:650
 #, kde-format
 msgid "Gallery image %1"
 msgstr "%1 galeria-irudia"
 
-#: kookaview.cpp:714
+#: kookaview.cpp:715
 #, kde-format
 msgid "Starting OCR on selection"
 msgstr "Hautapenean OCRa abiatzen"
 
-#: kookaview.cpp:720
+#: kookaview.cpp:721
 #, kde-format
 msgid "Starting OCR on the image"
 msgstr "Irudian OCRa abiatzen"
 
-#: kookaview.cpp:727
+#: kookaview.cpp:728
 #, kde-format
 msgid "OCR File"
 msgstr "OCR fitxategia"
 
-#: kookaview.cpp:737
+#: kookaview.cpp:738
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot load <filename>%1</filename> for OCR:<nl/>%2"
 msgstr "Ez du OCRrako <filename>%1</filename> zamatu:<nl/>%2"
 
-#: kookaview.cpp:739
+#: kookaview.cpp:740
 #, kde-format
 msgid "Cannot Read OCR File"
 msgstr "Ezin du OCR fitxategia irakurri"
 
-#: kookaview.cpp:743
+#: kookaview.cpp:744
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Starting OCR on file <filename>%1</filename>"
 msgstr "<filename>%1</filename> fitxategian OCR abiatzen"
 
-#: kookaview.cpp:759
+#: kookaview.cpp:760
 #, kde-format
 msgid "OCR finished"
 msgstr "OCR amaituta"
 
-#: kookaview.cpp:766
+#: kookaview.cpp:767
 #, kde-format
 msgid "There is no OCR result text to spell check."
 msgstr ""
 
-#: kookaview.cpp:767
+#: kookaview.cpp:768
 #, kde-format
 msgid "OCR Spell Check not possible"
 msgstr "OCR ortografia-egiaztatzea ezin da egin"
 
-#: kookaview.cpp:772
+#: kookaview.cpp:773
 #, kde-format
 msgid "OCR Spell Check"
 msgstr "OCR ortografia-egiaztatzea"
 
-#: kookaview.cpp:788
+#: kookaview.cpp:789
 #, fuzzy, kde-format
 #| msgid ""
 #| "This version of Kooka was not compiled with KADMOS support.\n"
@@ -2292,17 +2292,17 @@ msgstr ""
 "Kooka-ren bertsio hau ez da KADMOS euskarriarekin konpilatu.\n"
 "Hautatu beste OCR motore bat Kooka-ren aukeren elkarrizket-koadroan."
 
-#: kookaview.cpp:790
+#: kookaview.cpp:791
 #, kde-format
 msgid "OCR Not Configured"
 msgstr "OCR konfiguratu gabe"
 
-#: kookaview.cpp:799
+#: kookaview.cpp:800
 #, kde-format
 msgid "Cannot load OCR plugin '%1'"
 msgstr "Ezin du «%1» OCR plugina zamatu"
 
-#: kookaview.cpp:907
+#: kookaview.cpp:908
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2313,29 +2313,29 @@ msgid ""
 "<message>%1</message>"
 msgstr ""
 
-#: kookaview.cpp:957
+#: kookaview.cpp:958
 #, kde-format
 msgid "Create new image from selection"
 msgstr "Sortu irudi berria hautapenetik"
 
-#: kookaview.cpp:966
+#: kookaview.cpp:967
 #, kde-format
 msgid "Cannot transform, image is read-only"
 msgstr "Ezin da eraldatu, irudia irakurtzeko soilik da"
 
-#: kookaview.cpp:1019
+#: kookaview.cpp:1020
 #, fuzzy, kde-format
 #| msgid "Loading %1"
 msgid "Loaded image %1"
 msgstr "%1 kargatzen"
 
-#: kookaview.cpp:1020
+#: kookaview.cpp:1021
 #, fuzzy, kde-format
 #| msgid "&Unload Image"
 msgid "Unloaded image"
 msgstr "&Deskargatu irudia"
 
-#: kookaview.cpp:1037
+#: kookaview.cpp:1038
 #, kde-format
 msgid "Loading %1..."
 msgstr "%1 zamatzen..."
@@ -2444,17 +2444,17 @@ msgstr "Alex Kempshall"
 msgid "Photocopy facility"
 msgstr "Fotokopia erraztasuna"
 
-#: main.cpp:105
+#: main.cpp:111
 #, kde-format
 msgid "Gallery mode - do not connect to scanner"
 msgstr "Galeria modua - ez konektatu eskanerrera"
 
-#: main.cpp:108
+#: main.cpp:114
 #, kde-format
 msgid "The SANE device specification (e.g. 'umax:/dev/sg0')"
 msgstr "SANE gailu zehaztapena (adib. «umax:/dev/sg0»)"
 
-#: main.cpp:108
+#: main.cpp:114
 #, kde-format
 msgid "device"
 msgstr "gailua"
@@ -2596,72 +2596,72 @@ msgstr ""
 msgid "Unknown engine '%1'."
 msgstr "«%1» motor ezezaguna."
 
-#: scangallery.cpp:98
+#: scangallery.cpp:97
 #, kde-format
 msgid "Name"
 msgstr "Izena"
 
-#: scangallery.cpp:99
+#: scangallery.cpp:98
 #, kde-format
 msgid "Size"
 msgstr "Tamaina"
 
-#: scangallery.cpp:100
+#: scangallery.cpp:99
 #, kde-format
 msgid "Format"
 msgstr "Formatua"
 
-#: scangallery.cpp:171
+#: scangallery.cpp:170
 #, kde-format
 msgid "Kooka Gallery"
 msgstr "Kooka-ren galeria"
 
-#: scangallery.cpp:375
+#: scangallery.cpp:374
 #, kde-format
 msgid "empty"
 msgstr "hutsik"
 
-#: scangallery.cpp:378
+#: scangallery.cpp:377
 #, kde-format
 msgid "one image"
 msgid_plural "%1 images"
 msgstr[0] "irudi bat"
 msgstr[1] "%1 irudi"
 
-#: scangallery.cpp:380
+#: scangallery.cpp:379
 #, kde-format
 msgid "one file"
 msgid_plural "%1 files"
 msgstr[0] "fitxategi bat"
 msgstr[1] "%1 fitxategi"
 
-#: scangallery.cpp:386
+#: scangallery.cpp:385
 #, kde-format
 msgid "one file, "
 msgid_plural "%1 files, "
 msgstr[0] "fitxategi bat,"
 msgstr[1] "%1 fitxategi,"
 
-#: scangallery.cpp:388
+#: scangallery.cpp:387
 #, kde-format
 msgid "one image, "
 msgid_plural "%1 images, "
 msgstr[0] "irudi bat,"
 msgstr[1] "%1 irudi,"
 
-#: scangallery.cpp:391
+#: scangallery.cpp:390
 #, kde-format
 msgid "1 folder"
 msgid_plural "%1 folders"
 msgstr[0] "karpeta 1"
 msgstr[1] "%1 karpeta"
 
-#: scangallery.cpp:446
+#: scangallery.cpp:445
 #, kde-format
 msgid " %1 x %2"
 msgstr "%1 x %2"
 
-#: scangallery.cpp:601
+#: scangallery.cpp:600
 #, kde-format
 msgid ""
 "You entered a file extension that differs from the existing one. That is not "
@@ -2673,65 +2673,65 @@ msgstr ""
 "agertuko da.\n"
 "Kooka-k luzapena zuzenduko du."
 
-#: scangallery.cpp:603
+#: scangallery.cpp:602
 #, kde-format
 msgid "On the Fly Conversion"
 msgstr "Bihurketa automatikoa"
 
-#: scangallery.cpp:699
+#: scangallery.cpp:698
 #, kde-format
 msgid "Not a supported image format"
 msgstr "Ez da irudi-formatu bateragarria"
 
-#: scangallery.cpp:751
+#: scangallery.cpp:750
 #, kde-format
 msgid "Sub-image %1"
 msgstr "%1 azpi-irudia"
 
-#: scangallery.cpp:777
+#: scangallery.cpp:776
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Unable to load the image <filename>%2</filename><nl/>%1"
 msgstr "Ezin du irudia zamatu <filename>%2</filename><nl/>%1"
 
-#: scangallery.cpp:779
+#: scangallery.cpp:778
 #, kde-format
 msgid "Image Load Error"
 msgstr "Irudia gordetzeko errorea"
 
-#: scangallery.cpp:841
+#: scangallery.cpp:840
 #, kde-format
 msgid "Incoming/"
 msgstr "Sarrerakoa/"
 
-#: scangallery.cpp:887
+#: scangallery.cpp:886
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Could not save the image<nl/><filename>%2</filename><nl/>%1"
 msgstr "Ezin izan du irudia gorde<nl/><filename>%2</filename><nl/>%1"
 
-#: scangallery.cpp:890
+#: scangallery.cpp:889
 #, kde-format
 msgid "Image Save Error"
 msgstr "Irudia gordetzeko errorea"
 
-#: scangallery.cpp:968
+#: scangallery.cpp:967
 #, kde-format
 msgid "All Files (*)"
 msgstr "Fitxategi denak (*)"
 
-#: scangallery.cpp:971
+#: scangallery.cpp:970
 #, kde-format
 msgctxt "@title:window"
 msgid "Export Image"
 msgstr "Esportatu irudia"
 
-#: scangallery.cpp:996
+#: scangallery.cpp:995
 #, kde-format
 msgid "Import Image File to Gallery"
 msgstr "Inportatu irudi-fitxategia galeriara"
 
-#: scangallery.cpp:1111
+#: scangallery.cpp:1110
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2741,7 +2741,7 @@ msgstr ""
 "Ziur zaude<nl/><filename>%1</filename><nl/>karpeta eta bere eduki osoa "
 "betirako ezabatu nahi duzula? Ezin da lehengoratu."
 
-#: scangallery.cpp:1116
+#: scangallery.cpp:1115
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2751,40 +2751,40 @@ msgstr ""
 "Ziur zaude<nl/><filename>%1</filename><nl/>irudia betirako ezabatu nahi "
 "duzula? Ezin da lehengoratu."
 
-#: scangallery.cpp:1123
+#: scangallery.cpp:1122
 #, kde-format
 msgid "Delete Gallery Item"
 msgstr "Ezabatu galeriako elementua"
 
-#: scangallery.cpp:1136
+#: scangallery.cpp:1135
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Could not delete the image or folder<nl/><filename>%2</filename><nl/>%1"
 msgstr ""
 "Ezin izan du irudia edo karpeta ezabatu<nl/><filename>%2</filename><nl/>%1"
 
-#: scangallery.cpp:1139
+#: scangallery.cpp:1138
 #, kde-format
 msgid "File Delete Error"
 msgstr "Fitxategia ezabatzeko errorea"
 
-#: scangallery.cpp:1171
+#: scangallery.cpp:1170
 #, kde-format
 msgid "New Folder"
 msgstr "Karpeta berria"
 
-#: scangallery.cpp:1172
+#: scangallery.cpp:1171
 #, kde-format
 msgid "Name for the new folder:"
 msgstr "Karpeta berriaren izena:"
 
-#: scangallery.cpp:1195
+#: scangallery.cpp:1194
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Could not create the folder<nl/><filename>%2</filename><nl/>%1"
 msgstr "Ezin izan du karpeta sortu<nl/><filename>%2</filename><nl/>%1"
 
-#: scangallery.cpp:1197
+#: scangallery.cpp:1196
 #, kde-format
 msgid "Folder Create Error"
 msgstr "Karpeta sortzeko errorea"
@@ -2899,42 +2899,42 @@ msgctxt "@info:status"
 msgid "Scan: %1"
 msgstr "Eskaneatzea: %1"
 
-#: thumbview.cpp:96
+#: thumbview.cpp:98
 #, kde-format
 msgid "Thumbnails"
 msgstr "Koadro txikiak"
 
-#: thumbview.cpp:107
+#: thumbview.cpp:109
 #, kde-format
 msgid "Preview Size"
 msgstr "Aurreikuspegiaren neurria"
 
-#: thumbview.cpp:338
+#: thumbview.cpp:340
 #, kde-format
 msgid "Very Large"
 msgstr "Oso handia"
 
-#: thumbview.cpp:339
+#: thumbview.cpp:341
 #, kde-format
 msgid "Large"
 msgstr "Handia"
 
-#: thumbview.cpp:340
+#: thumbview.cpp:342
 #, kde-format
 msgid "Medium"
 msgstr "Ertaina"
 
-#: thumbview.cpp:341
+#: thumbview.cpp:343
 #, kde-format
 msgid "Small"
 msgstr "Txikia"
 
-#: thumbview.cpp:342
+#: thumbview.cpp:344
 #, kde-format
 msgid "Very Small"
 msgstr "Oso txikia"
 
-#: thumbview.cpp:343
+#: thumbview.cpp:345
 #, kde-format
 msgid "Tiny"
 msgstr "Ñimiñoa"

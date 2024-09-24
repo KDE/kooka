@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-05-17 01:43+0000\n"
+"POT-Creation-Date: 2024-09-24 02:01+0000\n"
 "PO-Revision-Date: 2024-08-19 23:51+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -41,7 +41,7 @@ msgstr ""
 
 #: ../plugins/destination/abstractdestination.cpp:160
 #: ../plugins/destination/application/destinationapplication.cpp:190
-#: kookaview.cpp:1181
+#: kookaview.cpp:1182
 #, kde-format
 msgid "Other..."
 msgstr "기타..."
@@ -77,13 +77,13 @@ msgstr "클립보드에 그림 복사하는 중"
 msgid "<filename>%1</filename>"
 msgstr "<filename>%1</filename>"
 
-#: ../plugins/destination/print/destinationprint.cpp:78 kookaview.cpp:677
+#: ../plugins/destination/print/destinationprint.cpp:78 kookaview.cpp:678
 #, kde-format
 msgctxt "@title:window"
 msgid "Print Image"
 msgstr "그림 인쇄"
 
-#: ../plugins/destination/print/destinationprint.cpp:89 kookaview.cpp:693
+#: ../plugins/destination/print/destinationprint.cpp:89 kookaview.cpp:694
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -95,7 +95,7 @@ msgstr ""
 "\n"
 "%1"
 
-#: ../plugins/destination/print/destinationprint.cpp:90 kookaview.cpp:694
+#: ../plugins/destination/print/destinationprint.cpp:90 kookaview.cpp:695
 #, kde-format
 msgctxt "@title:window"
 msgid "Cannot Print"
@@ -367,7 +367,7 @@ msgstr "OCR 엔진 선택과 설정을 확인하십시오."
 msgid "OCR Setup Error"
 msgstr "OCR 설정 오류"
 
-#: ../plugins/ocr/abstractocrengine.cpp:123 kookaview.cpp:791
+#: ../plugins/ocr/abstractocrengine.cpp:123 kookaview.cpp:792
 #, kde-format
 msgid "Configure OCR..."
 msgstr "OCR 설정..."
@@ -494,9 +494,9 @@ msgstr "자동"
 msgid "The GOCR executable is not configured or is not available."
 msgstr "GOCR 실행 파일이 설정되지 않았거나 사용할 수 없습니다."
 
-#: ../plugins/ocr/gocr/ocrgocrdialog.cpp:204
-#: ../plugins/ocr/ocrad/ocrocraddialog.cpp:285
-#: ../plugins/ocr/tesseract/ocrtesseractdialog.cpp:250
+#: ../plugins/ocr/gocr/ocrgocrdialog.cpp:203
+#: ../plugins/ocr/ocrad/ocrocraddialog.cpp:287
+#: ../plugins/ocr/tesseract/ocrtesseractdialog.cpp:251
 #, kde-format
 msgid "Error"
 msgstr "오류"
@@ -507,7 +507,7 @@ msgctxt "@info"
 msgid "Cannot read GOCR result file <filename>%1</filename><nl/>%2"
 msgstr "GOCR 결과 파일 <filename>%1</filename>을(를) 읽을 수 없음<nl/>%2"
 
-#: ../plugins/ocr/gocr/ocrgocrengine.cpp:298
+#: ../plugins/ocr/gocr/ocrgocrengine.cpp:307
 #, kde-format
 msgid "Name or path of the GOCR executable:"
 msgstr "GOCR 실행 파일의 이름이나 경로:"
@@ -698,28 +698,28 @@ msgstr "전체 레이아웃 감지"
 msgid "(default)"
 msgstr "(기본값)"
 
-#: ../plugins/ocr/ocrad/ocrocradengine.cpp:243
+#: ../plugins/ocr/ocrad/ocrocradengine.cpp:244
 #: ../plugins/ocr/tesseract/ocrtesseractengine.cpp:157
 #, kde-kuit-format
 msgctxt "@info"
 msgid "File <filename>%1</filename> does not exist"
 msgstr "<filename>%1</filename> 파일이 없음"
 
-#: ../plugins/ocr/ocrad/ocrocradengine.cpp:247
+#: ../plugins/ocr/ocrad/ocrocradengine.cpp:248
 #: ../plugins/ocr/tesseract/ocrtesseractengine.cpp:158
 #, kde-kuit-format
 msgctxt "@info"
 msgid "File <filename>%1</filename> unreadable"
 msgstr "파일 <filename>%1</filename>에서 읽을 수 없음"
 
-#: ../plugins/ocr/ocrad/ocrocradengine.cpp:251
+#: ../plugins/ocr/ocrad/ocrocradengine.cpp:252
 #: ../plugins/ocr/tesseract/ocrtesseractengine.cpp:165
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot open file <filename>%1</filename>"
 msgstr "파일 <filename>%1</filename>을(를) 열 수 없음"
 
-#: ../plugins/ocr/ocrad/ocrocradengine.cpp:432
+#: ../plugins/ocr/ocrad/ocrocradengine.cpp:448
 #, kde-format
 msgid "Name or path of the OCRAD executable:"
 msgstr "OCRAD 실행 파일의 이름이나 경로:"
@@ -735,12 +735,12 @@ msgstr "Tesseract 실행 파일이 설정되지 않았거나 사용할 수 없�
 msgid "Select a file if required..."
 msgstr "필요한 경우 파일 선택..."
 
-#: ../plugins/ocr/tesseract/ocrtesseractengine.cpp:226
+#: ../plugins/ocr/tesseract/ocrtesseractengine.cpp:227
 #, kde-format
 msgid "HOCR parsing error, %1"
 msgstr "HOCR 해석 오류, %1"
 
-#: ../plugins/ocr/tesseract/ocrtesseractengine.cpp:251
+#: ../plugins/ocr/tesseract/ocrtesseractengine.cpp:252
 #, kde-format
 msgid "Name or path of the Tesseract executable:"
 msgstr "Tesseract 실행 파일의 이름이나 경로:"
@@ -1525,172 +1525,172 @@ msgctxt "@info"
 msgid "%1 <filename>%3</filename><nl/>%2"
 msgstr "%1 <filename>%3</filename><nl/>%2"
 
-#: kooka.cpp:100
+#: kooka.cpp:106
 #, kde-format
 msgid "KDE Scanning"
 msgstr "KDE 스캔"
 
-#: kooka.cpp:134
+#: kooka.cpp:140
 #, kde-format
 msgid "Scale to Width"
 msgstr "폭 맞춤"
 
-#: kooka.cpp:145
+#: kooka.cpp:151
 #, kde-format
 msgid "Scale to Height"
 msgstr "높이 맞춤"
 
-#: kooka.cpp:154
+#: kooka.cpp:160
 #, kde-format
 msgid "Original Size"
 msgstr "원본 크기"
 
-#: kooka.cpp:160
+#: kooka.cpp:166
 #, kde-format
 msgid "Set Zoom..."
 msgstr "크기 조정..."
 
-#: kooka.cpp:166
+#: kooka.cpp:172
 #, kde-format
 msgid "Keep Zoom Setting"
 msgstr "크기 조정 설정 유지"
 
-#: kooka.cpp:174
+#: kooka.cpp:180
 #, kde-format
 msgid "New Image From Selection"
 msgstr "선택 영역에서 새로운 그림 생성"
 
-#: kooka.cpp:179
+#: kooka.cpp:185
 #, kde-format
 msgid "Mirror Vertically"
 msgstr "상하 반전"
 
-#: kooka.cpp:186
+#: kooka.cpp:192
 #, kde-format
 msgid "Mirror Horizontally"
 msgstr "좌우 반전"
 
-#: kooka.cpp:196
+#: kooka.cpp:202
 #, kde-format
 msgid "Rotate Counter-Clockwise"
 msgstr "반시계 방향으로 회전"
 
-#: kooka.cpp:203
+#: kooka.cpp:209
 #, kde-format
 msgid "Rotate Clockwise"
 msgstr "시계 방향으로 회전"
 
-#: kooka.cpp:210
+#: kooka.cpp:216
 #, kde-format
 msgid "Rotate 180 Degrees"
 msgstr "180도 회전"
 
-#: kooka.cpp:219
+#: kooka.cpp:225
 #, kde-format
 msgid "New Folder..."
 msgstr "새 폴더..."
 
-#: kooka.cpp:224
+#: kooka.cpp:230
 #, kde-format
 msgid "Open With"
 msgstr "다음으로 열기"
 
-#: kooka.cpp:230
+#: kooka.cpp:236
 #, kde-format
 msgid "Save Image..."
 msgstr "그림 저장..."
 
-#: kooka.cpp:237
+#: kooka.cpp:243
 #, kde-format
 msgid "Import Image..."
 msgstr "그림 가져오기..."
 
-#: kooka.cpp:242 kooka.cpp:550
+#: kooka.cpp:248 kooka.cpp:537
 #, kde-format
 msgid "Delete Image"
 msgstr "그림 삭제"
 
-#: kooka.cpp:249 kooka.cpp:551
+#: kooka.cpp:255 kooka.cpp:538
 #, kde-format
 msgid "Rename Image"
 msgstr "그림 이름 바꾸기"
 
-#: kooka.cpp:255 kooka.cpp:549
+#: kooka.cpp:261 kooka.cpp:536
 #, kde-format
 msgid "Unload Image"
 msgstr "그림 불러오기 취소"
 
-#: kooka.cpp:262
+#: kooka.cpp:268
 #, kde-format
 msgid "Properties..."
 msgstr "속성..."
 
-#: kooka.cpp:271
+#: kooka.cpp:277
 #, kde-format
 msgid "Select Scan Device..."
 msgstr "스캔 장치 선택..."
 
-#: kooka.cpp:275 kookaview.cpp:550
+#: kooka.cpp:281 kookaview.cpp:551
 #, kde-format
 msgid "Add Scan Device..."
 msgstr "스캔 장치 추가..."
 
-#: kooka.cpp:281
+#: kooka.cpp:287
 #, kde-format
 msgid "Preview"
 msgstr "미리 보기"
 
-#: kooka.cpp:286
+#: kooka.cpp:292
 #, kde-format
 msgid "Start Scan"
 msgstr "스캔 시작"
 
-#: kooka.cpp:291
+#: kooka.cpp:297
 #, kde-format
 msgid "Scan Presets..."
 msgstr "스캔 사전 설정..."
 
-#: kooka.cpp:296
+#: kooka.cpp:302
 #, kde-format
 msgid "Auto Select"
 msgstr "자동 선택"
 
-#: kooka.cpp:304
+#: kooka.cpp:310
 #, kde-format
 msgid "OCR Image..."
 msgstr "전체 그림 OCR 실행..."
 
-#: kooka.cpp:308
+#: kooka.cpp:314
 #, kde-format
 msgid "OCR Selection..."
 msgstr "선택 영역 OCR 실행..."
 
-#: kooka.cpp:312
+#: kooka.cpp:318
 #, kde-format
 msgid "OCR File..."
 msgstr "파일에 OCR 실행..."
 
-#: kooka.cpp:316
+#: kooka.cpp:322
 #, kde-format
 msgid "Save OCR Result Text..."
 msgstr "OCR 결과 텍스트 저장..."
 
-#: kooka.cpp:321
+#: kooka.cpp:327
 #, kde-format
 msgid "Spell Check OCR Result..."
 msgstr "OCR 결과 맞춤법 검사..."
 
-#: kooka.cpp:537
+#: kooka.cpp:524
 #, kde-format
 msgid "Unload Folder"
 msgstr "폴더 불러오기 취소"
 
-#: kooka.cpp:538
+#: kooka.cpp:525
 #, kde-format
 msgid "Delete Folder"
 msgstr "폴더 삭제"
 
-#: kooka.cpp:539
+#: kooka.cpp:526
 #, kde-format
 msgid "Rename Folder"
 msgstr "폴더 이름 바꾸기"
@@ -2132,12 +2132,12 @@ msgstr "OCR 결과가 여기에 표시됩니다"
 msgid "Scan"
 msgstr "스캔"
 
-#: kookaview.cpp:289 kookaview.cpp:564 kookaview.cpp:583 scangallery.cpp:123
+#: kookaview.cpp:289 kookaview.cpp:565 kookaview.cpp:584 scangallery.cpp:122
 #, kde-format
 msgid "Gallery"
 msgstr "갤러리"
 
-#: kookaview.cpp:465
+#: kookaview.cpp:466
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2152,12 +2152,12 @@ msgstr ""
 "스캐너 장치를 시도함: <icode>%3</icode><nl/>libkookascan 오류 메시지: "
 "<message>%2</message><nl/>SANE 오류 메시지: <message>%1</message>"
 
-#: kookaview.cpp:520
+#: kookaview.cpp:521
 #, kde-format
 msgid "Add Scan Device"
 msgstr "스캔 장치 추가"
 
-#: kookaview.cpp:540
+#: kookaview.cpp:541
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2174,79 +2174,79 @@ msgstr ""
 "지정하십시오. <interface>스캔 장치 추가</interface> 옵션을 사용하여 백엔드 이"
 "름과 인자를 입력할 수 있으며, 자세한 옵션은 해당 대화 상자를 참조하십시오."
 
-#: kookaview.cpp:586
+#: kookaview.cpp:587
 #, kde-format
 msgid "No scanner connected"
 msgstr "연결한 스캐너 없음"
 
-#: kookaview.cpp:645
+#: kookaview.cpp:646
 #, kde-format
 msgid "No selection"
 msgstr "선택 없음"
 
-#: kookaview.cpp:649
+#: kookaview.cpp:650
 #, kde-format
 msgid "Gallery folder %1"
 msgstr "갤러리 폴더 %1"
 
-#: kookaview.cpp:649
+#: kookaview.cpp:650
 #, kde-format
 msgid "Gallery image %1"
 msgstr "갤러리 그림 %1"
 
-#: kookaview.cpp:714
+#: kookaview.cpp:715
 #, kde-format
 msgid "Starting OCR on selection"
 msgstr "선택 영역에 OCR 시작"
 
-#: kookaview.cpp:720
+#: kookaview.cpp:721
 #, kde-format
 msgid "Starting OCR on the image"
 msgstr "그림에 OCR 시작"
 
-#: kookaview.cpp:727
+#: kookaview.cpp:728
 #, kde-format
 msgid "OCR File"
 msgstr "파일에 OCR 실행"
 
-#: kookaview.cpp:737
+#: kookaview.cpp:738
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot load <filename>%1</filename> for OCR:<nl/>%2"
 msgstr "파일 <filename>%1</filename>에서 OCR을 실행하려고 읽을 수 없음:<nl/>%2"
 
-#: kookaview.cpp:739
+#: kookaview.cpp:740
 #, kde-format
 msgid "Cannot Read OCR File"
 msgstr "OCR 파일을 읽을 수 없음"
 
-#: kookaview.cpp:743
+#: kookaview.cpp:744
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Starting OCR on file <filename>%1</filename>"
 msgstr "파일 <filename>%1</filename>에서 OCR 시작 중"
 
-#: kookaview.cpp:759
+#: kookaview.cpp:760
 #, kde-format
 msgid "OCR finished"
 msgstr "OCR 완료됨"
 
-#: kookaview.cpp:766
+#: kookaview.cpp:767
 #, kde-format
 msgid "There is no OCR result text to spell check."
 msgstr "맞춤법 검사를 실행할 OCR 텍스트 결과가 없습니다."
 
-#: kookaview.cpp:767
+#: kookaview.cpp:768
 #, kde-format
 msgid "OCR Spell Check not possible"
 msgstr "OCR 맞춤법 검사를 사용할 수 없음"
 
-#: kookaview.cpp:772
+#: kookaview.cpp:773
 #, kde-format
 msgid "OCR Spell Check"
 msgstr "OCR 맞춤법 검사"
 
-#: kookaview.cpp:788
+#: kookaview.cpp:789
 #, kde-format
 msgid ""
 "No OCR engine is configured.\n"
@@ -2255,17 +2255,17 @@ msgstr ""
 "OCR 엔진을 선택하지 않았습니다.\n"
 "OCR 작업을 진행하려면 엔진을 선택하고 설정해야 합니다."
 
-#: kookaview.cpp:790
+#: kookaview.cpp:791
 #, kde-format
 msgid "OCR Not Configured"
 msgstr "OCR을 설정하지 않았음"
 
-#: kookaview.cpp:799
+#: kookaview.cpp:800
 #, kde-format
 msgid "Cannot load OCR plugin '%1'"
 msgstr "OCR 플러그인 '%1'을(를) 불러올 수 없음"
 
-#: kookaview.cpp:907
+#: kookaview.cpp:908
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2280,27 +2280,27 @@ msgstr ""
 "캐너 장치를 시도함: <icode>%3</icode><nl/>libkookascan 오류 메시지: <message>"
 "%2</message><nl/>SANE 오류 메시지: <message>%1</message>"
 
-#: kookaview.cpp:957
+#: kookaview.cpp:958
 #, kde-format
 msgid "Create new image from selection"
 msgstr "선택 영역에서 새로운 그림 생성"
 
-#: kookaview.cpp:966
+#: kookaview.cpp:967
 #, kde-format
 msgid "Cannot transform, image is read-only"
 msgstr "변형할 수 없음, 그림이 읽기 전용임"
 
-#: kookaview.cpp:1019
+#: kookaview.cpp:1020
 #, kde-format
 msgid "Loaded image %1"
 msgstr "그림 %1 불러옴"
 
-#: kookaview.cpp:1020
+#: kookaview.cpp:1021
 #, kde-format
 msgid "Unloaded image"
 msgstr "그림 불러오기 해제됨"
 
-#: kookaview.cpp:1037
+#: kookaview.cpp:1038
 #, kde-format
 msgid "Loading %1..."
 msgstr "%1 불러오는 중..."
@@ -2430,17 +2430,17 @@ msgstr "Alex Kempshall"
 msgid "Photocopy facility"
 msgstr "복사기 기능"
 
-#: main.cpp:105
+#: main.cpp:111
 #, kde-format
 msgid "Gallery mode - do not connect to scanner"
 msgstr "갤러리 모드 - 스캐너에 연결하지 않음"
 
-#: main.cpp:108
+#: main.cpp:114
 #, kde-format
 msgid "The SANE device specification (e.g. 'umax:/dev/sg0')"
 msgstr "SANE 장치 지정 (예: 'umax:/dev/sg0')"
 
-#: main.cpp:108
+#: main.cpp:114
 #, kde-format
 msgid "device"
 msgstr "장치"
@@ -2580,67 +2580,67 @@ msgstr ""
 msgid "Unknown engine '%1'."
 msgstr "알 수 없는 엔진 '%1'."
 
-#: scangallery.cpp:98
+#: scangallery.cpp:97
 #, kde-format
 msgid "Name"
 msgstr "이름"
 
-#: scangallery.cpp:99
+#: scangallery.cpp:98
 #, kde-format
 msgid "Size"
 msgstr "크기"
 
-#: scangallery.cpp:100
+#: scangallery.cpp:99
 #, kde-format
 msgid "Format"
 msgstr "형식"
 
-#: scangallery.cpp:171
+#: scangallery.cpp:170
 #, kde-format
 msgid "Kooka Gallery"
 msgstr "Kooka 갤러리"
 
-#: scangallery.cpp:375
+#: scangallery.cpp:374
 #, kde-format
 msgid "empty"
 msgstr "비어 있음"
 
-#: scangallery.cpp:378
+#: scangallery.cpp:377
 #, kde-format
 msgid "one image"
 msgid_plural "%1 images"
 msgstr[0] "그림 %1개"
 
-#: scangallery.cpp:380
+#: scangallery.cpp:379
 #, kde-format
 msgid "one file"
 msgid_plural "%1 files"
 msgstr[0] "파일 %1개"
 
-#: scangallery.cpp:386
+#: scangallery.cpp:385
 #, kde-format
 msgid "one file, "
 msgid_plural "%1 files, "
 msgstr[0] "파일 %1개, "
 
-#: scangallery.cpp:388
+#: scangallery.cpp:387
 #, kde-format
 msgid "one image, "
 msgid_plural "%1 images, "
 msgstr[0] "그림 %1개, "
 
-#: scangallery.cpp:391
+#: scangallery.cpp:390
 #, kde-format
 msgid "1 folder"
 msgid_plural "%1 folders"
 msgstr[0] "폴더 %1개"
 
-#: scangallery.cpp:446
+#: scangallery.cpp:445
 #, kde-format
 msgid " %1 x %2"
 msgstr " %1 x %2"
 
-#: scangallery.cpp:601
+#: scangallery.cpp:600
 #, kde-format
 msgid ""
 "You entered a file extension that differs from the existing one. That is not "
@@ -2651,65 +2651,65 @@ msgstr ""
 "은 차기 버전에서 준비 중입니다.\n"
 "Kooka에서 확장자를 수정합니다."
 
-#: scangallery.cpp:603
+#: scangallery.cpp:602
 #, kde-format
 msgid "On the Fly Conversion"
 msgstr "즉석 변환"
 
-#: scangallery.cpp:699
+#: scangallery.cpp:698
 #, kde-format
 msgid "Not a supported image format"
 msgstr "지원하는 그림 파일 형식이 아님"
 
-#: scangallery.cpp:751
+#: scangallery.cpp:750
 #, kde-format
 msgid "Sub-image %1"
 msgstr "하위 그림 %1"
 
-#: scangallery.cpp:777
+#: scangallery.cpp:776
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Unable to load the image <filename>%2</filename><nl/>%1"
 msgstr "그림 파일 <filename>%2</filename>을(를) 불러올 수 없음<nl/>%1"
 
-#: scangallery.cpp:779
+#: scangallery.cpp:778
 #, kde-format
 msgid "Image Load Error"
 msgstr "그림 불러오기 오류"
 
-#: scangallery.cpp:841
+#: scangallery.cpp:840
 #, kde-format
 msgid "Incoming/"
 msgstr "가져옴/"
 
-#: scangallery.cpp:887
+#: scangallery.cpp:886
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Could not save the image<nl/><filename>%2</filename><nl/>%1"
 msgstr "그림 파일<nl/><filename>%2</filename>을(를) 저장할 수 없음<nl/>%1"
 
-#: scangallery.cpp:890
+#: scangallery.cpp:889
 #, kde-format
 msgid "Image Save Error"
 msgstr "그림 저장 오류"
 
-#: scangallery.cpp:968
+#: scangallery.cpp:967
 #, kde-format
 msgid "All Files (*)"
 msgstr "모든 파일 (*)"
 
-#: scangallery.cpp:971
+#: scangallery.cpp:970
 #, kde-format
 msgctxt "@title:window"
 msgid "Export Image"
 msgstr "그림 내보내기"
 
-#: scangallery.cpp:996
+#: scangallery.cpp:995
 #, kde-format
 msgid "Import Image File to Gallery"
 msgstr "그림 파일을 갤러리로 가져오기"
 
-#: scangallery.cpp:1111
+#: scangallery.cpp:1110
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2719,7 +2719,7 @@ msgstr ""
 "다음 폴더와 포함된 모든 파일을 완전히 삭제하시겠습니까?<nl/><filename>%1</"
 "filename><nl/>이 작업은 취소할 수 없습니다."
 
-#: scangallery.cpp:1116
+#: scangallery.cpp:1115
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2729,40 +2729,40 @@ msgstr ""
 "다음 그림 파일을 완전히 삭제하시겠습니까?<nl/><filename>%1</filename><nl/>이 "
 "작업은 취소할 수 없습니다."
 
-#: scangallery.cpp:1123
+#: scangallery.cpp:1122
 #, kde-format
 msgid "Delete Gallery Item"
 msgstr "갤러리 항목 삭제"
 
-#: scangallery.cpp:1136
+#: scangallery.cpp:1135
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Could not delete the image or folder<nl/><filename>%2</filename><nl/>%1"
 msgstr ""
 "그림 파일이나 폴더<nl/><filename>%2</filename>을(를) 삭제할 수 없음<nl/>%1"
 
-#: scangallery.cpp:1139
+#: scangallery.cpp:1138
 #, kde-format
 msgid "File Delete Error"
 msgstr "파일 삭제 오류"
 
-#: scangallery.cpp:1171
+#: scangallery.cpp:1170
 #, kde-format
 msgid "New Folder"
 msgstr "새 폴더"
 
-#: scangallery.cpp:1172
+#: scangallery.cpp:1171
 #, kde-format
 msgid "Name for the new folder:"
 msgstr "새 폴더 이름:"
 
-#: scangallery.cpp:1195
+#: scangallery.cpp:1194
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Could not create the folder<nl/><filename>%2</filename><nl/>%1"
 msgstr "폴더를 만들 수 없음:<nl/><filename>%2</filename><nl/>%1"
 
-#: scangallery.cpp:1197
+#: scangallery.cpp:1196
 #, kde-format
 msgid "Folder Create Error"
 msgstr "폴더 생성 오류"
@@ -2874,42 +2874,42 @@ msgctxt "@info:status"
 msgid "Scan: %1"
 msgstr "스캔: %1"
 
-#: thumbview.cpp:96
+#: thumbview.cpp:98
 #, kde-format
 msgid "Thumbnails"
 msgstr "섬네일"
 
-#: thumbview.cpp:107
+#: thumbview.cpp:109
 #, kde-format
 msgid "Preview Size"
 msgstr "미리 보기 크기"
 
-#: thumbview.cpp:338
+#: thumbview.cpp:340
 #, kde-format
 msgid "Very Large"
 msgstr "매우 크게"
 
-#: thumbview.cpp:339
+#: thumbview.cpp:341
 #, kde-format
 msgid "Large"
 msgstr "크게"
 
-#: thumbview.cpp:340
+#: thumbview.cpp:342
 #, kde-format
 msgid "Medium"
 msgstr "중간"
 
-#: thumbview.cpp:341
+#: thumbview.cpp:343
 #, kde-format
 msgid "Small"
 msgstr "작게"
 
-#: thumbview.cpp:342
+#: thumbview.cpp:344
 #, kde-format
 msgid "Very Small"
 msgstr "매우 작게"
 
-#: thumbview.cpp:343
+#: thumbview.cpp:345
 #, kde-format
 msgid "Tiny"
 msgstr "가장 작게"

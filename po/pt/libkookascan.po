@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: libksane\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-05-17 01:43+0000\n"
+"POT-Creation-Date: 2024-09-24 02:01+0000\n"
 "PO-Revision-Date: 2021-03-03 11:13+0000\n"
 "Last-Translator: José Nuno Coelho Pires <zepires@gmail.com>\n"
 "Language-Team: pt <kde-i18n-pt@kde.org>\n"
@@ -303,7 +303,7 @@ msgstr "(Desconhecido)"
 msgid "Reset this setting to its standard value, %1"
 msgstr "Repor esta definição com o seu valor normal, %1"
 
-#: kscancontrols.cpp:414
+#: kscancontrols.cpp:419
 #, kde-format
 msgid "PNM Image Files (*.pnm *.pbm *.pgm *.ppm)"
 msgstr ""
@@ -394,32 +394,32 @@ msgstr "Não suportado"
 msgid "Unknown status %1"
 msgstr "Estado desconhecido %1"
 
-#: kscanoption.cpp:1013
+#: kscanoption.cpp:1027
 #, kde-format
 msgid "pixels"
 msgstr "pontos"
 
-#: kscanoption.cpp:1014
+#: kscanoption.cpp:1028
 #, kde-format
 msgid "bits"
 msgstr "bits"
 
-#: kscanoption.cpp:1015
+#: kscanoption.cpp:1029
 #, kde-format
 msgid "mm"
 msgstr "mm"
 
-#: kscanoption.cpp:1016
+#: kscanoption.cpp:1030
 #, kde-format
 msgid "dpi"
 msgstr "ppp"
 
-#: kscanoption.cpp:1017
+#: kscanoption.cpp:1031
 #, kde-format
 msgid "%"
 msgstr "%"
 
-#: kscanoption.cpp:1018
+#: kscanoption.cpp:1032
 #, kde-format
 msgid "µsec"
 msgstr "µs"
