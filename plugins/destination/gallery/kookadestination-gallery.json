@@ -1,8 +1,36 @@
 {
     "KPlugin": {
         "Description": "Save the scanned image to the scan gallery",
+        "Description[sl]": "Shrani skenirano sliko v galerijo skenov",
+        "Description[sv]": "Spara den inlästa bilden i bildgalleriet",
+        "Description[tr]": "Taranan görseli tarama galerisine kaydedin",
+        "Description[x-test]": "xxSave the scanned image to the scan galleryxx",
         "Icon": "image-x-generic",
         "License": "GPL",
-        "Name": "Scan Gallery"
+        "Name": "Scan Gallery",
+        "Name[ca@valencia]": "Galeria d'escaneig",
+        "Name[ca]": "Galeria d'escaneig",
+        "Name[de]": "Scan-Galerie",
+        "Name[el]": "Σάρωση Συλλογής",
+        "Name[en_GB]": "Scan Gallery",
+        "Name[eo]": "Skanaĵ-Galerio",
+        "Name[es]": "Galería de escaneo",
+        "Name[eu]": "Eskaneatze galeria",
+        "Name[fi]": "Kuvagalleria",
+        "Name[fr]": "Analyser la galerie",
+        "Name[gl]": "Galería de escaneamento",
+        "Name[it]": "Galleria scansioni",
+        "Name[ka]": "გალერეის სკანირება",
+        "Name[ko]": "스캔 갤러리",
+        "Name[nl]": "Galerij voor scannen",
+        "Name[pa]": "ਸਕੈਨ ਗੈਲਰੀ",
+        "Name[pl]": "Galeria skanów",
+        "Name[pt]": "Galeria de Digitalizações",
+        "Name[sl]": "Galerija skenov",
+        "Name[sv]": "Sök igenom galleri",
+        "Name[tr]": "Galeriyi Tara",
+        "Name[uk]": "Галерея сканування",
+        "Name[x-test]": "xxScan Galleryxx",
+        "Name[zh_TW]": "掃描歷史相簿"
     }
 }
