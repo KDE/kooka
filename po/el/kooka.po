@@ -13,8 +13,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 1.11.4\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: KBabel 1.11.4\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -238,10 +238,9 @@ msgid "Not found"
 msgstr "Δε βρέθηκε"
 
 #: ../plugins/ocr/abstractocrdialogue.cpp:198
-#, fuzzy, kde-format
-#| msgid "Version: "
+#, kde-format
 msgid "Version:"
-msgstr "Έκδοση: "
+msgstr "Έκδοση:"
 
 #: ../plugins/ocr/abstractocrdialogue.cpp:201
 #: ../plugins/ocr/gocr/ocrgocrdialog.cpp:201
@@ -372,10 +371,9 @@ msgid "No image"
 msgstr "%1 εικόνες"
 
 #: ../plugins/ocr/abstractocrdialogue.cpp:431
-#, fuzzy, kde-format
-#| msgid "image %1"
+#, kde-format
 msgid "Image: %1"
-msgstr "εικόνα %1"
+msgstr "Εικόνα: %1"
 
 #: ../plugins/ocr/abstractocrdialogue.cpp:431
 #, fuzzy, kde-format
@@ -571,12 +569,7 @@ msgstr "Ευρωπαϊκές χώρες"
 
 #: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:199
 #: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:280
-#, fuzzy, kde-format
-#| msgid ""
-#| "The classifier files for KADMOS could not be found.\n"
-#| "OCR with KADMOS will not be possible!\n"
-#| "\n"
-#| "Change the OCR engine in the preferences dialog."
+#, kde-format
 msgid ""
 "The classifier files for KADMOS could not be found.\n"
 "OCR with KADMOS will not be possible.\n"
@@ -983,10 +976,9 @@ msgid "Select Format..."
 msgstr "Ορισμός εστίασης..."
 
 #: formatdialog.cpp:436
-#, fuzzy, kde-format
-#| msgid "-No format selected-"
+#, kde-format
 msgid "No format selected."
-msgstr "-Δεν επιλέχθηκε τύπος-"
+msgstr "Δεν επιλέχθηκε τύπος"
 
 #: formatdialog.cpp:470
 #, kde-format
@@ -1056,10 +1048,9 @@ msgid "Old Gallery Exists"
 msgstr ""
 
 #: imagetransform.cpp:59
-#, fuzzy, kde-format
-#| msgid "Rotate image 90 degrees"
+#, kde-format
 msgid "Rotate image +90 degrees"
-msgstr "Περιστροφή εικόνας κατά 90 μοίρες"
+msgstr "Περιστροφή εικόνας κατά +90 μοίρες"
 
 #: imagetransform.cpp:66
 #, kde-format
@@ -1089,11 +1080,10 @@ msgid "Error updating image %1"
 msgstr ""
 
 #: imgprintdialog.cpp:65
-#, fuzzy, kde-format
-#| msgid "&Image"
+#, kde-format
 msgctxt "@title:tab"
 msgid "Image"
-msgstr "&Εικόνα"
+msgstr "Εικόνα"
 
 #: imgprintdialog.cpp:85
 #, kde-format
@@ -1151,8 +1141,7 @@ msgid "Scan resolution:"
 msgstr "Ανάλυση σάρωσης (dpi) "
 
 #: imgprintdialog.cpp:124
-#, fuzzy, kde-format
-#| msgid " dpi"
+#, kde-format
 msgctxt "@item:intext abbreviation for 'dots per inch'"
 msgid " dpi"
 msgstr " dpi"
@@ -1186,15 +1175,13 @@ msgstr ""
 "κεντραριστεί στο χαρτί."
 
 #: imgprintdialog.cpp:137
-#, fuzzy, kde-format
-#| msgid "Image width:"
+#, kde-format
 msgctxt "@label:spinbox"
 msgid "Image width:"
 msgstr "Πλάτος εικόνας:"
 
 #: imgprintdialog.cpp:142 imgprintdialog.cpp:156
-#, fuzzy, kde-format
-#| msgid " mm"
+#, kde-format
 msgctxt "@item:intext abbreviation for 'millimetres'"
 msgid " mm"
 msgstr " χιλ"
@@ -1206,8 +1193,7 @@ msgid "<div>The width at which the image will be printed.</div>"
 msgstr ""
 
 #: imgprintdialog.cpp:151
-#, fuzzy, kde-format
-#| msgid "Image height:"
+#, kde-format
 msgctxt "@label:spinbox"
 msgid "Image height:"
 msgstr "Ύψος εικόνας:"
@@ -1240,8 +1226,7 @@ msgid "Other Options"
 msgstr "Έναρξη"
 
 #: imgprintdialog.cpp:182
-#, fuzzy, kde-format
-#| msgid "Maintain aspect ratio"
+#, kde-format
 msgctxt "@option:check"
 msgid "Maintain aspect ratio"
 msgstr "Διατήρηση αναλογίας διαστάσεων"
@@ -1568,22 +1553,19 @@ msgid "KDE Scanning"
 msgstr "Σάρωση του KDE"
 
 #: kooka.cpp:140
-#, fuzzy, kde-format
-#| msgid "Scale to W&idth"
+#, kde-format
 msgid "Scale to Width"
-msgstr "Κλιμάκωση κατά πλ&άτος"
+msgstr "Κλιμάκωση κατά πλάτος"
 
 #: kooka.cpp:151
-#, fuzzy, kde-format
-#| msgid "Scale to &Height"
+#, kde-format
 msgid "Scale to Height"
-msgstr "Κλιμάκωση καθ' ύ&ψος"
+msgstr "Κλιμάκωση καθ' ύψος"
 
 #: kooka.cpp:160
-#, fuzzy, kde-format
-#| msgid "Original &Size"
+#, kde-format
 msgid "Original Size"
-msgstr "Αρχικό &μέγεθος"
+msgstr "Αρχικό μέγεθος"
 
 #: kooka.cpp:166
 #, kde-format
@@ -1591,10 +1573,9 @@ msgid "Set Zoom..."
 msgstr "Ορισμός εστίασης..."
 
 #: kooka.cpp:172
-#, fuzzy, kde-format
-#| msgid "Keep &Zoom Setting"
+#, kde-format
 msgid "Keep Zoom Setting"
-msgstr "Διατήρηση ρύθμισης ε&στίασης"
+msgstr "Διατήρηση ρύθμισης εστίασης"
 
 #: kooka.cpp:180
 #, fuzzy, kde-format
@@ -1633,10 +1614,9 @@ msgid "Rotate 180 Degrees"
 msgstr "Περιστροφή εικόνας 180 &μοίρες"
 
 #: kooka.cpp:225
-#, fuzzy, kde-format
-#| msgid "New Folder"
+#, kde-format
 msgid "New Folder..."
-msgstr "Νέος φάκελος"
+msgstr "Νέος φάκελος..."
 
 #: kooka.cpp:230
 #, kde-format
@@ -1644,22 +1624,19 @@ msgid "Open With"
 msgstr ""
 
 #: kooka.cpp:236
-#, fuzzy, kde-format
-#| msgid "&Save Image..."
+#, kde-format
 msgid "Save Image..."
-msgstr "&Αποθήκευση εικόνας..."
+msgstr "Αποθήκευση εικόνας..."
 
 #: kooka.cpp:243
-#, fuzzy, kde-format
-#| msgid "&Import Image..."
+#, kde-format
 msgid "Import Image..."
-msgstr "&Εισαγωγή εικόνας..."
+msgstr "Εισαγωγή εικόνας..."
 
 #: kooka.cpp:248 kooka.cpp:537
-#, fuzzy, kde-format
-#| msgid "&Delete Image"
+#, kde-format
 msgid "Delete Image"
-msgstr "&Διαγραφή εικόνας"
+msgstr "Διαγραφή εικόνας"
 
 #: kooka.cpp:255 kooka.cpp:538
 #, fuzzy, kde-format
@@ -1668,10 +1645,9 @@ msgid "Rename Image"
 msgstr "&Διαγραφή εικόνας"
 
 #: kooka.cpp:261 kooka.cpp:536
-#, fuzzy, kde-format
-#| msgid "&Unload Image"
+#, kde-format
 msgid "Unload Image"
-msgstr "&Αποφόρτωση εικόνας"
+msgstr "Αποφόρτωση εικόνας"
 
 #: kooka.cpp:268
 #, kde-format
@@ -1679,10 +1655,9 @@ msgid "Properties..."
 msgstr ""
 
 #: kooka.cpp:277
-#, fuzzy, kde-format
-#| msgid "Select Scan Device"
+#, kde-format
 msgid "Select Scan Device..."
-msgstr "Επιλογή σαρωτή"
+msgstr "Επιλογή σαρωτή..."
 
 #: kooka.cpp:281 kookaview.cpp:551
 #, fuzzy, kde-format
@@ -1715,10 +1690,9 @@ msgid "Auto Select"
 msgstr "Επιλογή τύπου γραμματοσειράς"
 
 #: kooka.cpp:310
-#, fuzzy, kde-format
-#| msgid "&OCR Image..."
+#, kde-format
 msgid "OCR Image..."
-msgstr "Εικόνα &OCR..."
+msgstr "Εικόνα OCR..."
 
 #: kooka.cpp:314
 #, fuzzy, kde-format
@@ -1733,10 +1707,9 @@ msgid "OCR File..."
 msgstr "Εικόνα &OCR..."
 
 #: kooka.cpp:322
-#, fuzzy, kde-format
-#| msgid "Save OCR Result Text"
+#, kde-format
 msgid "Save OCR Result Text..."
-msgstr "Αποθήκευση του κειμένου αποτελέσματος OCR"
+msgstr "Αποθήκευση του κειμένου αποτελέσματος OCR..."
 
 #: kooka.cpp:327
 #, fuzzy, kde-format
@@ -1985,10 +1958,9 @@ msgstr ""
 
 #. i18n: ectx: label, entry (ThumbnailBackgroundPath), group (thumbnailView)
 #: kookasettings.kcfg:158
-#, fuzzy, kde-format
-#| msgid "Image"
+#, kde-format
 msgid "Image:"
-msgstr "Εικόνα"
+msgstr "Εικόνα:"
 
 #. i18n: ectx: tooltip, entry (ThumbnailBackgroundPath), group (thumbnailView)
 #: kookasettings.kcfg:159
@@ -2011,10 +1983,9 @@ msgstr ""
 
 #. i18n: ectx: label, entry (OcrGocrDustSize), group (gocr)
 #: kookasettings.kcfg:205
-#, fuzzy, kde-format
-#| msgid "&Dust size"
+#, kde-format
 msgid "Dust size:"
-msgstr "Μέγεθος &σκόνης"
+msgstr "Μέγεθος σκόνης:"
 
 #. i18n: ectx: tooltip, entry (OcrGocrDustSize), group (gocr)
 #: kookasettings.kcfg:206
@@ -2038,10 +2009,9 @@ msgstr ""
 
 #. i18n: ectx: label, entry (OcrGocrGrayLevel), group (gocr)
 #: kookasettings.kcfg:211
-#, fuzzy, kde-format
-#| msgid "&Gray level"
+#, kde-format
 msgid "Gray level:"
-msgstr "Επίπεδο του &γκρι"
+msgstr "Επίπεδο του γκρι:"
 
 #. i18n: ectx: tooltip, entry (OcrGocrGrayLevel), group (gocr)
 #: kookasettings.kcfg:212
@@ -2061,10 +2031,9 @@ msgstr ""
 
 #. i18n: ectx: label, entry (OcrGocrSpaceWidth), group (gocr)
 #: kookasettings.kcfg:217
-#, fuzzy, kde-format
-#| msgid "&Space width"
+#, kde-format
 msgid "Space width:"
-msgstr "Πλάτος &κενού"
+msgstr "Πλάτος κενού:"
 
 #. i18n: ectx: tooltip, entry (OcrGocrSpaceWidth), group (gocr)
 #: kookasettings.kcfg:218
@@ -2198,8 +2167,7 @@ msgstr "&Εικόνα"
 
 #. i18n: ectx: Menu (settings)
 #: kookaui.rc:56
-#, fuzzy, kde-format
-#| msgid "&Settings"
+#, kde-format
 msgid "&Settings"
 msgstr "Ρ&υθμίσεις"
 
@@ -2417,10 +2385,9 @@ msgid "Unloaded image"
 msgstr "&Αποφόρτωση εικόνας"
 
 #: kookaview.cpp:1038
-#, fuzzy, kde-format
-#| msgid "Loading %1"
+#, kde-format
 msgid "Loading %1..."
-msgstr "Φόρτωση του %1"
+msgstr "Φόρτωση του %1..."
 
 #: main.cpp:44
 #, kde-format
@@ -2492,10 +2459,9 @@ msgid "Klaas Freitag"
 msgstr ""
 
 #: main.cpp:92
-#, fuzzy, kde-format
-#| msgid "developer"
+#, kde-format
 msgid "Developer"
-msgstr "προγραμματιστής"
+msgstr "Προγραμματιστής"
 
 #: main.cpp:93
 #, kde-format
@@ -2503,10 +2469,9 @@ msgid "Mat Colton"
 msgstr ""
 
 #: main.cpp:93
-#, fuzzy, kde-format
-#| msgid "graphics, web"
+#, kde-format
 msgid "Graphics, web"
-msgstr "γραφικά, διαδίκτυο"
+msgstr "Γραφικά, διαδίκτυο"
 
 #: main.cpp:94
 #, kde-format
@@ -2761,8 +2726,7 @@ msgstr[0] "Νέος φάκελος"
 msgstr[1] "Νέος φάκελος"
 
 #: scangallery.cpp:445
-#, fuzzy, kde-format
-#| msgid "%1 x %2"
+#, kde-format
 msgid " %1 x %2"
 msgstr "%1 x %2"
 
@@ -2824,10 +2788,9 @@ msgid "Image Save Error"
 msgstr "Σφάλμα αποθήκευσης"
 
 #: scangallery.cpp:967
-#, fuzzy, kde-format
-#| msgid "All Files"
+#, kde-format
 msgid "All Files (*)"
-msgstr "Όλα τα αρχεία"
+msgstr "Όλα τα αρχεία (*)"
 
 #: scangallery.cpp:970
 #, fuzzy, kde-format
@@ -3012,11 +2975,10 @@ msgid ""
 msgstr ""
 
 #: statusbarmanager.cpp:108
-#, fuzzy, kde-format
-#| msgid "image %1"
+#, kde-format
 msgctxt "@info:status"
 msgid "Image: %1"
-msgstr "εικόνα %1"
+msgstr "Εικόνα: %1"
 
 #: statusbarmanager.cpp:112
 #, kde-format

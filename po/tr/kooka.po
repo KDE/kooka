@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: playground-graphics-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-09-24 02:01+0000\n"
-"PO-Revision-Date: 2024-09-23 15:31+0300\n"
+"PO-Revision-Date: 2024-09-24 10:39+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -630,7 +630,7 @@ msgstr ""
 "<para><emphasis>Kadmos</emphasis>, reRecognition&nbsp;AG tarafından "
 "geliştirilen ticari bir OCR/ICR kitaplığıdır.</para><para>%1</"
 "para><para>Daha fazla bilgi için <link url=\"http://www.rerecognition.com"
-"\">www.rerecognition.com</link> adresine göz atın.</para>"
+"\">www.rerecognition.com</link> adresine bakın.</para>"
 
 #: ../plugins/ocr/kadmos/ocrkadmosengine.cpp:75
 #, kde-format
@@ -647,7 +647,7 @@ msgid ""
 "option."
 msgstr ""
 "Kooka’nın bu sürümü Kadmos için yapılandırılmamıştır. Kadmos kitaplıklarının "
-"kurulması ve Kooka’nın ‘--with-kadmos’ seçeneği ile yeniden derlenmesi "
+"kurulması ve Kooka’nın “--with-kadmos” seçeneği ile yeniden derlenmesi "
 "gerekmektedir."
 
 #: ../plugins/ocr/kadmos/ocrkadmosengine.cpp:93
@@ -1469,12 +1469,12 @@ msgstr "Aygıtta boş alan kalmadı"
 #: imgsaver.cpp:374
 #, kde-format
 msgid "Cannot write image format '%1'"
-msgstr "‘%1’ görsel dosyası yazılamıyor"
+msgstr "“%1” görsel dosyası yazılamıyor"
 
 #: imgsaver.cpp:376
 #, kde-format
 msgid "Cannot write using protocol '%1'"
-msgstr "‘%1’ protokolü kullanılarak yazılamıyor"
+msgstr "“%1” protokolü kullanılarak yazılamıyor"
 
 #: imgsaver.cpp:378
 #, kde-format
@@ -1813,7 +1813,7 @@ msgstr "Hedef seçilmedi"
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Unable to load plugin '%1'"
-msgstr "‘%1’ eklentisi yüklenemiyor"
+msgstr "“%1” eklentisi yüklenemiyor"
 
 #. i18n: ectx: label, entry (StartupReadImage), group (Startup)
 #: kookasettings.kcfg:50
@@ -1912,7 +1912,7 @@ msgid ""
 "on them (otherwise, use the \"Rename\" menu option).</div>"
 msgstr ""
 "<div>Galeri ögelerine tıklayarak yeniden adlandırmak istiyorsanız bunu "
-"işaretleyin (aksi takdirde ‘Yeniden Adlandır’ menü seçeneğini kullanın).</"
+"işaretleyin (aksi takdirde “Yeniden Adlandır” menü seçeneğini kullanın).</"
 "div>"
 
 #. i18n: ectx: label, entry (GalleryLayout), group (Gallery)
@@ -2309,7 +2309,7 @@ msgstr "OCR Yapılandırılmamış"
 #: kookaview.cpp:800
 #, kde-format
 msgid "Cannot load OCR plugin '%1'"
-msgstr "OCR eklentisi ‘%1’ yüklenemiyor"
+msgstr "OCR eklentisi “%1” yüklenemiyor"
 
 #: kookaview.cpp:908
 #, kde-kuit-format
@@ -2485,7 +2485,7 @@ msgstr "Galeri kipi — Tarayıcı ile bağlantı kurmayın"
 #: main.cpp:114
 #, kde-format
 msgid "The SANE device specification (e.g. 'umax:/dev/sg0')"
-msgstr "SANE aygıt belirtimleri (örn. ‘umax:/dev/sg0’)"
+msgstr "SANE aygıt belirtimleri (örn. “umax:/dev/sg0”)"
 
 #: main.cpp:114
 #, kde-format
@@ -2530,7 +2530,7 @@ msgstr "OCR Sonuç Metnini Kaydet"
 #: ocrresedit.cpp:160
 #, kde-format
 msgid "Text File (*.txt)"
-msgstr "Metin Dosyası (*.txt)"
+msgstr "Metin dosyası (*.txt)"
 
 #: ocrresedit.cpp:166
 #, kde-kuit-format
@@ -2560,8 +2560,8 @@ msgid ""
 "Use this button to reenable all messages and questions which\n"
 "have been hidden by using \"Don't ask me again\"."
 msgstr ""
-"Yüm iletileri ve soruları yeniden etkinleştirmek için bu düğmeyi kullanın\n"
-"\"Bir daha sorma’ seçeneği kullanılarak gizlenmiştir."
+"“Bir daha sorma” seçeneği kullanılarak gizlenen tüm iletileri\n"
+"ve soruları yeniden etkinleştirmek için bu düğmeyi kullanın."
 
 #: prefspages.cpp:85
 #, kde-format
@@ -2625,7 +2625,7 @@ msgstr ""
 #: prefspages.cpp:452
 #, kde-format
 msgid "Unknown engine '%1'."
-msgstr "Bilinmeyen işletke ‘%1’."
+msgstr "Bilinmeyen işletke “%1”."
 
 #: scangallery.cpp:97
 #, kde-format
