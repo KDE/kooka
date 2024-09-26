@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-09-24 02:01+0000\n"
-"PO-Revision-Date: 2024-07-07 07:30+0200\n"
+"PO-Revision-Date: 2024-09-25 13:15+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.3.2\n"
+"X-Generator: Poedit 3.5\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -50,6 +50,14 @@ msgid ""
 "<link url=\"?2\">locating devices</link>, <link url=\"?3\">HP scanners</"
 "link>, <link url=\"?4\">device not found</link>."
 msgstr ""
+"თუ თქვენი სკანერი ავტომატურად არ გამოვლენილა, შეგიძლიათ მიუთითოთ აქ. "
+"<interface>სკანერის მოწყობილობა</interface> არის SANE backend მოწყობილობის "
+"სახელი. <interface>მწარმოებელი</interface>, <interface>ტიპი</interface> და "
+"<interface>აღწერა</interface> შეიძლება გამოყენებულ იქნას სკანერის "
+"იდენტიფიცირებისთვის მოგვიანებით.<nl/><nl/>დამატებითი ინფორმაცია <link url=\"?"
+"1\">SANE backends</link>, <link url=\"?2\">locating devices</link>, <link "
+"url=\"?3\">HP სკანერები</link>, <link url=\"?4\">მოწყობილობა არ არის "
+"ნაპოვნი</link>."
 
 #: adddevicedialog.cpp:77
 #, kde-format
@@ -86,6 +94,11 @@ msgid ""
 "\">sane(7)</link> or <link url=\"man:/sane-dll\">sane&#8209;dll(5)</link> "
 "for more information on available backends and the format of device names."
 msgstr ""
+"<interface>სკანერის მოწყობილობა</interface> უნდა იყოს უკანაბოლოს სახელი "
+"(სურვილისამებრ პარამეტრებით), რომელსაც SANE-ს ესმის. იხილეთ <link url=\"man:/"
+"sane\">sane(7)</link> ან <link url=\"man:/sane-dll\">sane-dll(5)</link> "
+"დამატებითი ინფორმაციისთვის ხელმისაწვდომი უკანაბოლოებისა და ფორმატის "
+"მოწყობილობის სახელებისთვის."
 
 #: adddevicedialog.cpp:134
 #, kde-kuit-format
@@ -98,6 +111,12 @@ msgid ""
 "<icode>&#8209;L</icode> option for network scanners. If the scanner is "
 "found, then enter the device name displayed by these commands."
 msgstr ""
+"იმისათვის, რომ იპოვოთ ინფორმაცია, რომელიც აქ უნდა შეიყვანოთ, შეეცადეთ იპოვოთ "
+"მოწყობილობა <link url=\"man:/sane-find-scanner\">sane&#8209;find&#8209;"
+"scanner(1)</link> ბრძანებით SCSI, USB ან პარალელური პორტის სკანერებისთვის, "
+"ან ბრძანებით <link url=\"man:/scanimage\">scanimage(1)</link> <icode>-L</"
+"icode> პარამეტრით ქსელის სკანერებისთვის. თუ სკანერი იპოვნეთ, მაშინ შეიყვანეთ "
+"ამ ბრძანებების მიერ ნაჩვენები მოწყობილობის სახელი."
 
 #: adddevicedialog.cpp:143
 #, kde-kuit-format
@@ -110,6 +129,12 @@ msgid ""
 "the scanner is found by HPLIP, then the device name <icode>hp:</icode> that "
 "it displays needs to be replaced by <icode>hpaio:</icode> for SANE."
 msgstr ""
+"USB ან ქსელური HP სკანერისთვის <link url=\"http://hplip.sourceforge.net/"
+"\">HPLIP</link>–ის გამოყენებით, შეეცადეთ გამოიყენოთ <command>hp&#8209;probe</"
+"command> ბრძანება მის დასადგენად, მაგალითად <icode>hp-probe -b usb</icode> "
+"ან <icode>hp-probe -b net</icode>. გაითვალისწინეთ, რომ თუ სკანერი "
+"აღმოჩენილია HPLIP– ის მიერ, მაშინ მოწყობილობის სახელი <icode>hp:</icode> რომ "
+"ის აჩვენებს, უნდა შეიცვალოს <icode>hpaio:</icode>–ით SANE– სთვის."
 
 #: adddevicedialog.cpp:152
 #, kde-kuit-format
@@ -119,6 +144,10 @@ msgid ""
 "by SANE. Check the SANE documentation for a <link url=\"http://www.sane-"
 "project.org/sane-supported-devices.html\">list of supported devices</link>."
 msgstr ""
+"თუ ამ ბრძანებებმა ვერ იპოვეს თქვენი სკანერი, შეიძლება, SANE-ს მისი "
+"მხარდაჭერა არ გააჩნია. <link url=\"http://www.sane-project.org/sane-"
+"supported-devices.html\">მხარდაჭერილი მოწყობილობების სიის</link> სანახავად "
+"იხილეთ SANE-ის დოკუმენტაცია."
 
 #: autoselectbar.cpp:56
 #, kde-kuit-format
@@ -446,6 +475,10 @@ msgid ""
 "\n"
 "Please select whether the background of the preview image is black or white."
 msgstr ""
+"გადახედვისას სურათების ავტომატიზაცია დამოკიდებულია გადახედვის სურათის ფონის "
+"ფერზე (სკანირების შედეგი დოკუმენტის ჩატვირთვის გარეშე).\n"
+"\n"
+"გთხოვთ აირჩიოთ, არის თუ არა მინიატურის სურათის ფონი შავთეთრი."
 
 #: previewer.cpp:341
 #, kde-format
@@ -594,6 +627,10 @@ msgid ""
 "processing etc.), but reading from the specified image file. See <link url="
 "\"man:sane-pnm(5)\">sane-pnm(5)</link> for more information."
 msgstr ""
+"იმოქმედეთ ისე, როგორც ნამდვილი სკანერი აკეთებს (მათ შორის სკანირების არეალი, "
+"სურათის დამუშავება და ა.შ.), მაგრამ წაკითხვა მითითებული სურათის ფაილიდან. "
+"დამატებითი ინფორმაციისთვის იხილეთ <link url=\"man:sane-pnm(5)\">sane-pnm(5)</"
+"link>."
 
 #: scanparams.cpp:278
 #, kde-format
@@ -607,6 +644,9 @@ msgid ""
 "Do not perform any scanning or processing, but simply read the specified "
 "image file. This is for testing the image saving, etc."
 msgstr ""
+"სკანირება და დამუშავება არ მოხდება. მოხდება მითითებული გამოსახულების ფაილის "
+"წაკითხვა. გამოიყენება გამოსახულების შენახვის და ა.შ. ფუნქციების "
+"შესამოწმებლად."
 
 #: scanparams.cpp:296
 #, kde-format
@@ -655,6 +695,8 @@ msgid ""
 "<title>No scanner selected</title><nl/><nl/>Select a scanner device to "
 "perform scanning."
 msgstr ""
+"<title>სკანერი არ არის არჩეული</title><nl/><nl/>სკანირებისთვის აირჩიეთ "
+"სკანერის მოწყობილობა."
 
 #: scanparams.cpp:573
 #, kde-kuit-format
@@ -669,6 +711,14 @@ msgid ""
 "page (<link url=\"http://www.sane-project.org\">www.sane-project.org</link>) "
 "for more information on SANE installation and setup."
 msgstr ""
+"<title>სკანერი აღმოჩენილი არაა, ან მასთან წვდომა არ გაქვთ</title><nl/><nl/"
+">აღმოჩენილია პრობლემა ბიბლიოთეკასთან SANE (Scanner Access Now Easy), რომელიც "
+"სკანერთან დაკავშირებისთვისაა საჭირო.  შეიძლება, არსებობს პრობლემა SANE-ის "
+"თქვენს ვერსასთან, ან მას თქვენი სკანერის მხარდაჭერა არ აქვს.<nl/><nl/"
+">შეამოწმეთ, რომ SANE სწორადაა დაყენებული და მორგებული თქვენს სისტემაზე და "
+"რომ სკანერის მოწყობილობის სახელი და პარამეტრები სწორია.<nl/><nl/>იხილეთ SANE "
+"პროექტის საწყისი გვერდი (<link url=\"http://www.sane-project.org\">www.sane-"
+"project.org</link>) მისი დაყენებისა და მორგების დამატებითი ინფორმაციისთვის."
 
 #: scanparams.cpp:675
 #, kde-format
@@ -735,6 +785,9 @@ msgid ""
 ">Note that this does not mean a query over the entire network, but only "
 "those hosts configured for SANE.</div>"
 msgstr ""
+"<div>ჩართეთ, თუ გნებავთ ხელმისაწვდომი სკანერების ქსელში ძებნა.<br/><br/"
+">დაიმახსოვრეთ, რომ ეს არ ნიშნავს მთელ ქსელში ძებნას, არამედ მათში, ვის "
+"ჰოსტებზეც SANE-ია მორგებული.</div>"
 
 #. i18n: ectx: label, entry (StartupUseProxy), group (Startup)
 #: scansettings.kcfg:18
@@ -750,6 +803,10 @@ msgid ""
 "access network scanners.<br/><br/>Note that some SANE backends (for example "
 "'escl') may not work properly through a proxy.</div>"
 msgstr ""
+"<div>შეამოწმეთ ეს, თუ გსურთ გამოიყენოთ სტანდარტული სისტემის პროქსის "
+"პარამეტრები ქსელის სკანერებზე წვდომისთვის.<br/><br/>გაითვალისწინეთ, რომ "
+"ზოგიერთი SANE-ის უკანაბოლომ (მაგალითად ,escl') შეიძლება, პროქსით სწორად არ "
+"იმუშაოს.</div>"
 
 #. i18n: ectx: label, entry (StartupSkipAsk), group (Startup)
 #: scansettings.kcfg:28
@@ -762,6 +819,7 @@ msgstr "სკანერის არჩევის ფანჯრის ჩ
 #, kde-format
 msgid "<div>Check this to show the scanner selection dialog on startup.</div>"
 msgstr ""
+"<div>ჩართეთ, თუ გნებავთ ჩართვისას სკანერის არჩევის დიალოგი გაჩვენოთ.</div>"
 
 #. i18n: ectx: label, entry (PreviewAutoselThreshold), group (Scanner Name)
 #: scansettings.kcfg:61
@@ -777,6 +835,9 @@ msgid ""
 "background) or darker (on a white background) than this are considered to be "
 "part of the image.</div>"
 msgstr ""
+"<div>ზღვარი ავტოამოცნობისთვის. ყველა პიქსელი, რომელიც უფრო ღიაა (შავ ფონზე) "
+"ან მუქია (თეთრ ფონზე), ვიდრე ეს მნიშვნელობა, გამოსახულების ნაწილად ჩაითვლება."
+"</div>"
 
 #. i18n: ectx: label, entry (PreviewAutoselDustsize), group (Scanner Name)
 #: scansettings.kcfg:69
@@ -791,6 +852,8 @@ msgid ""
 "<div>Set the dust size; dark or light areas smaller than this will be "
 "ignored</div>"
 msgstr ""
+"<div>დააყენეთ მტვრის ზომა. მუქი ან ნათელი ადგილები, რომლებიც ამაზე პატარაა, "
+"გამოტოვებული იქნება</div>"
 
 #. i18n: ectx: label, entry (PreviewAutoselMargin), group (Scanner Name)
 #: scansettings.kcfg:77
@@ -804,6 +867,7 @@ msgstr "ზღვარის დამატება/გამოკლებ�
 msgid ""
 "<div>Set a margin to be added to or subtracted from the detected area</div>"
 msgstr ""
+"<div>დააყენეთ მინდორი, რომელიც დაემატება ან გამოაკლდება აღმოჩენილ ალაგს</div>"
 
 #. i18n: ectx: label, entry (PreviewAutoselBackground), group (Scanner Name)
 #: scansettings.kcfg:85
@@ -818,6 +882,8 @@ msgid ""
 "<div>Select whether a scan of the empty scanner glass results in a black or "
 "a white image</div>"
 msgstr ""
+"<div>აირჩიეთ, მიიღებთ თუ არა ცარიელი სკანერის მინის სკანირებისას შავთეთრ "
+"გამოსახულებას</div>"
 
 #: scansizeselector.cpp:119
 #, kde-format

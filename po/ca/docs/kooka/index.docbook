@@ -862,9 +862,7 @@ Keep Zoom Setting Ctrl+Z
 <para
 >Per a desar permanentment una imatge, utilitzeu <guimenuitem
 >Reanomena la imatge</guimenuitem
-> i doneu un nom nou i el final adequat per al format d'imatge escollit durant l'escaneig. Si introduïu una extensió diferent, obtindreu un missatge que no es correspondrà amb el format escanejat. Tot i que encara podreu desar la imatge amb aquest nom, conservarà el format original. Actualment, no s'ofereix la conversió <quote
->sobre la marxa</quote
->.</para
+> i doneu un nom nou i el final adequat per al format d'imatge escollit durant l'escaneig. Si introduïu una extensió diferent, obtindreu un missatge que no es correspondrà amb el format escanejat. Tot i que encara podreu desar la imatge amb aquest nom, conservarà el format original. Actualment, no s'ofereix la conversió «sobre la marxa».</para
 ><para
 >Si no voleu utilitzar aquest mètode per a gestionar les vostres imatges a <filename class="directory"
 >~/Documents/KookaGallery/</filename

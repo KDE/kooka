@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-09-24 02:01+0000\n"
-"PO-Revision-Date: 2024-07-07 07:30+0200\n"
+"PO-Revision-Date: 2024-09-25 13:10+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.3.2\n"
+"X-Generator: Poedit 3.5\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -552,6 +552,10 @@ msgid ""
 "\n"
 "Change the OCR engine in the preferences dialog."
 msgstr ""
+"კლასიფიკატორი ფაილები KADMOS-სთვის აღმოჩენილი არაა.\n"
+"OCR KADMOS-ით შეუძლებელი იქნება.\n"
+"\n"
+"შეცვალეთ OCR ძრავა მორგების დიალოგში."
 
 #: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:202
 #: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:283
@@ -623,6 +627,10 @@ msgid ""
 "www.rerecognition.com\">www.rerecognition.com</link> for more information on "
 "Kadmos.</para>"
 msgstr ""
+"<para><emphasis>Kadmos</emphasis> ფასიანი OCR/ICR ბიბლიოთეკაა, რომლის "
+"ავტორია reRecognition&nbsp;AG.</para><para>%1</para><para>Kadmos-ის შესახებ "
+"მეტი ინფორმაციისთვის იხ. ბმული <link url=\"http://www.rerecognition.com"
+"\">www.rerecognition.com</link>.</para>"
 
 #: ../plugins/ocr/kadmos/ocrkadmosengine.cpp:75
 #, kde-format
@@ -636,6 +644,8 @@ msgid ""
 "need to be installed, and Kooka needs to be rebuilt with the '--with-kadmos' "
 "option."
 msgstr ""
+"Kooka-ის ეს ვერსია Kadmos-სთვის მორგებული არაა.  საჭიროა, რომ Kadmos-ის "
+"ბიბლიოთეკები დაყენებული იყოს და Kooka ააგოთ პარამეტრით '--with-kadmos'."
 
 #: ../plugins/ocr/kadmos/ocrkadmosengine.cpp:93
 #, kde-format
@@ -643,6 +653,8 @@ msgid ""
 "The classifier file necessary for OCR cannot be loaded: %1;\n"
 "OCR with the KADMOS engine is not possible."
 msgstr ""
+"OCR-სთვის საჭირო კლასიფიკატორი ფაილების ჩატვირთვა შეუძლებელია: %1\n"
+"OCR KADMOS-ით შეუძლებელია."
 
 #: ../plugins/ocr/kadmos/ocrkadmosengine.cpp:95
 #, kde-format
@@ -656,6 +668,9 @@ msgid ""
 "%1\n"
 "Please check the configuration."
 msgstr ""
+"KADMOS OCR ვერ გაეშვა:\n"
+"%1\n"
+"შეამოწმეთ კონფიგურაცია."
 
 #: ../plugins/ocr/kadmos/ocrkadmosengine.cpp:110
 #, kde-format
@@ -751,6 +766,10 @@ msgid ""
 "It is suitable for color, grayscale and line art images.<p>This format is "
 "widely supported but is not recommended, use an open format instead."
 msgstr ""
+"<b>რასტრული ფორმატი</b> არის ფართოდ გამოყენებული ფორმატი სურათებისთვის MS "
+"Windows-თვის. იგი განკუთვნილია ფერადი, ნაცრისფერი და ხაზოვანი სურათებისთვის."
+"<p>ეს ფორმატი ფართოდ არის მხარდაჭერილი, მაგრამ არ არის რეკომენდებული, ამის "
+"ნაცვლად გამოიყენეთ ღია ფორმატი."
 
 #: formatdialog.cpp:88
 #, kde-format
@@ -758,6 +777,9 @@ msgid ""
 "<b>Portable Bitmap</b>, as used by Netpbm, is an uncompressed format for "
 "line art (bitmap) images. Only 1 bit per pixel depth is supported."
 msgstr ""
+"<b>პორტატული რასტრული ფორმატი</b>, გამოიყენება Netpbm–ის მიერ, არის "
+"შეუკუმშავი ფორმატი ხაზოვანი (bitmap) სურათებისთვის. მხარდაჭერილია, მხოლოდ, 1 "
+"ბიტი პიქსელისთვის ."
 
 #: formatdialog.cpp:97
 #, kde-format
@@ -765,6 +787,9 @@ msgid ""
 "<b>Portable Greymap</b>, as used by Netpbm, is an uncompressed format for "
 "grayscale images. Only 8 bit per pixel depth is supported."
 msgstr ""
+"<b>გადატანადი ნაცრისფრის რუკა</b> გამოიყენება Netpbm-ის მიერ, შეუკუმშავი "
+"ფორმატია ნაცრისფერი გამოსახულებებისთვის. მხარდაჭერილია, მხოლოდ 8 ბიტი "
+"პიქსელზე."
 
 #: formatdialog.cpp:106
 #, kde-format
@@ -772,6 +797,9 @@ msgid ""
 "<b>Portable Pixmap</b>, as used by Netpbm, is an uncompressed format for "
 "full color images. Only 24 bit per pixel RGB is supported."
 msgstr ""
+"<b>გადატანადი პიქსელების რუკა</b> გამოიყენება Netpbm-ის მიერ, წარმოადგენს "
+"შეუკუმშავ ფორმატს სრული ფერის მქონე გამოსახულებებისთვის. თითოეული "
+"პიქსელისთვის, მხარდაჭერილია, მხოლოდ 24 ბიტი."
 
 #: formatdialog.cpp:115
 #, kde-format
@@ -781,6 +809,10 @@ msgid ""
 "suitable for color and grayscale images.<p>This format is not recommended, "
 "use an open format instead."
 msgstr ""
+"<b>PCX</b> უდანაკარგო შეკუმშვის ფორმატია, რომელიც ხშირადაა მხარდაჭერილ PC-ის "
+"გამოსახულებებთან სამუშაო პროგრამების მიერ, მაგრამ ის ძველი და დაუხვეწავია.   "
+"ის რეკომენდებულია ფერადი და ნაცრისფერი გამოსახულებებისთვის.<p>ეს ფორმატი "
+"რეკომენდებული არაა. მის მაგიერ გამოიყენეთ ღია ფორმატი."
 
 #: formatdialog.cpp:126
 #, kde-format
@@ -789,6 +821,9 @@ msgid ""
 "icon bitmaps.<p>Unless required for this purpose, use a general purpose "
 "format instead."
 msgstr ""
+"<b>X Bitmap</b> ხშირად გამოიყენება X Window System-ის მიერ კურსორებისა და "
+"ხატულის სურათების დასამახსოვრებლად.<p>თუ არ არის საჭირო ეს ფორმატები, სხვა, "
+"ზოგადი დანიშნულების ფორმატი გამოიყენეთ."
 
 #: formatdialog.cpp:135
 #, kde-format
@@ -797,6 +832,9 @@ msgid ""
 "other images.<p>Unless required for this purpose, use a general purpose "
 "format instead."
 msgstr ""
+"<b>X Pixmap</b> ხშირად გამოიყენება X Window System-ის მიერ ფერადი ხატულებისა "
+"და სხვა გამოსახულებებისთვის.<p>თუ ეს საჭირო არაა, სხვა, ზოგადი დანიშნულების "
+"ფორმატი გამოიყენეთ."
 
 #: formatdialog.cpp:144
 #, kde-format
@@ -806,6 +844,10 @@ msgid ""
 "grayscale images, indexed or true color.<p>PNG is an open format which is "
 "widely supported."
 msgstr ""
+"<b>Portable Network Graphics</b> კარგვის გარეშე შეკუმშვის ფორმატია, რომელიც "
+"შექმნილია, იყოს გადატანადი და გადაფრთოებადი. შესაფერისია ნებისმიერი ფერის ან "
+"ნაცრისფერი გამოსახულებებისთვის, იქნება ის დაინდექსებული თუ 24-ბიტიანი "
+"ფერებით.<p>PNG ღია ფორმატია, კარგი მხარდაჭერით."
 
 #: formatdialog.cpp:155
 #, kde-format
@@ -815,6 +857,10 @@ msgid ""
 "repeated loading and saving.<p>This is an open format which is widely "
 "supported."
 msgstr ""
+"<b>JPEG</b> შეკუმშული ფორმატია 24-ბიტიანი ფერების მქონე და ნაცრისფერი "
+"გამოსახულებებისთვის. ის კარგვითი ფორმატია, ასე რომ, რეკომენდებული არაა "
+"არქივის ან შენახვა/გახსნის ბევრი ციკლისთვის.<p>ეს ღია ფორმატია, კარგი "
+"მხარდაჭერით."
 
 #: formatdialog.cpp:166
 #, kde-format
@@ -823,6 +869,9 @@ msgid ""
 "option of lossless compression, but so far is not widely supported. It is "
 "suitable for true color or grayscale images."
 msgstr ""
+"<b>JPEG 2000</b> განკუთვნილი იყო JPEG ფორმატის ჩასანაცვლებლად არჩევნით, რომ "
+"შეკუმშვა კარგვის გარეშე მომხდარიყო, მაგრამ ის ფართოდ მხარდაჭერილი არაა. "
+"შესაფერისია, მხოლოდ, 24-ბიტიანი ფერის ან ნაცრისფერი გამოსახულებებისთვის."
 
 #: formatdialog.cpp:176
 #, kde-format
@@ -831,6 +880,9 @@ msgid ""
 "description language.  Use this format for importing into other "
 "applications, or to use with (e.g.) TeX."
 msgstr ""
+"<b>Encapsulated PostScript</b> მიღებულია PostScript&trade; გვერდის აღწერის "
+"ენიდან.  გამოიყენეთ ეს ფორმატი სხვა აპლიკაციაში შესტანად, ან, მაგალითად, TeX-"
+"თან გამოსაყენებლად."
 
 #: formatdialog.cpp:186
 #, kde-format
@@ -839,6 +891,9 @@ msgid ""
 "and is used extensively by animation and video applications.<p>This format "
 "is not recommended, use an open format instead."
 msgstr ""
+"<b>Truevision Targa</b> შეუძლია დაიმახსოვროს 24-ბიტიანი გამოსახულებები ალფა "
+"არხით და ფართოდ გამოიყენება ანიმაციისა და ვიდეოს აპლიკაციების მიერ.<p>ეს "
+"ფორმატი რეკომენდებული არაა. გამოიყენეთ რაიმე ღია ფორმატი."
 
 #: formatdialog.cpp:196
 #, kde-format
@@ -848,6 +903,9 @@ msgid ""
 "colors and optional transparency.<p>For legal reasons this format is not "
 "recommended, use an open format instead."
 msgstr ""
+"<b>Graphics Interchange Format</b> პოპულარული ფორმატია, მაგრამ პატენტით "
+"დაცული, რომელიც ხშირად გამოიყენება ვებგრაფიკისთვის.<p>იურიდიული მიზეზების "
+"გმო ეს ფორმატი რეკომენდებული არაა. გამოიყენეთ ღია ფორმატი."
 
 #: formatdialog.cpp:207
 #, kde-format
@@ -858,6 +916,12 @@ msgid ""
 "variations, there may sometimes be compatibility problems. Unless required "
 "for use with other applications, use an open format instead."
 msgstr ""
+"<b>Tagged Image File Format</b> მრავალმხრივი და გაფართოებადი ფაილის "
+"ფორმატია, რომელიც მხარდაჭერილია გამოსახულების დამუშავებისა და გამოცემის "
+"აპლიკაციების მიერ. გააჩნია დაინდექსებული და 24-ბიტიანი ფერების მხარდაჭერა "
+"ალფა გამჭვირვალობით.<p>იმის გამო, რომ არსებობს ამ ფორმატის მეტისმეტად "
+"განსხვავებული ვერსიები, ხანდახან თავსებადობის პრობლემები ჩნდება. თუ ეს "
+"აუცილებელი არაა, რომელიმე ღია ფორმატი გამოიყენეთ."
 
 #: formatdialog.cpp:219
 #, kde-format
@@ -867,6 +931,10 @@ msgid ""
 "types of images.<p>Images produced by a scanner will not be animated, so "
 "unless specifically required for use with other applications use PNG instead."
 msgstr ""
+"<b>Multiple-image Network Graphics</b> მიღებულია PNG სტანდარტიდან და "
+"განკუთვნილია ანიმაციური გამოსახულებებითვის.  ის ღია ფორმატია ყველა სახის "
+"გამოსახულებისთვის.<p>სკანერიდან მიღებული გამოსახულებებს ანიმაცია არ აქვთ, "
+"ასე რომ, თუ ამ ფორმატის მოთხოვნა არ არსებობს, PNG გამოიყენეთ."
 
 #: formatdialog.cpp:231
 #, kde-format
@@ -875,6 +943,9 @@ msgid ""
 "bit true color images with optional lossless compression.<p>Unless "
 "specifically required, use an open format instead."
 msgstr ""
+"ეს <b>Silicon Graphics</b>-ის საკუთარი გამოსახულების ფორმატია 24 ბიტიანი "
+"ფერების მხარდაჭერით და არასავალდებულო კარგვისგარეშე შეკუმშვით.<p>თუ ამისთვის "
+"რამე მყარი მიზეზი არ გაგაჩნიათ, გამოიყენეთ რომელიმე ღია ფორმატი."
 
 #: formatdialog.cpp:241
 #, kde-format
@@ -883,6 +954,10 @@ msgid ""
 "mobile devices.  It supports black and white bitmaps only.<p>Unless "
 "specifically required, use an general purpose format instead."
 msgstr ""
+"<b>Wireless Bitmap</b> მონოქრომული რასტრული ფორმატია, ოპტიმიზებული WAP "
+"მობილური მოწყობილობებისთვის.  აქვს, მხოლოდ, შავთეთრი რასტრული "
+"გამოსახულებების მხარდაჭერა.<p>თუ ამისთვის სპეციფიკური მოთხოვნა არ გაგაჩნიათ, "
+"რომელიმე სხვა ღია ფორმატი გამოიყენეთ."
 
 #: formatdialog.cpp:251
 #, kde-format
@@ -893,6 +968,12 @@ msgid ""
 "are supported. Lossy compression is not recommended for archiving or for "
 "repeated loading and saving."
 msgstr ""
+"<b>WebP</b> ღია სტანდარტია 24-ბიტიანი სურათებისთვის არასავალდებულო "
+"გამჭვირვალობით.  ის ფართოდაა მხარდაჭერილი თანამედროვე ბრაუზერების და "
+"გრაფიკასთან სამუშაო პროგრამების მიერ.<p>მხარდაჭერილია სხვადასხვა შეკუმშვის "
+"მეთოდები, მათ შორის კარგვისგარეშე და და კარგვით. კარგვის მქონე შეკუმშვა "
+"რეკომენდებული არაა დაარქივებისთვის და გამოსახულებებისთვის, რომლებსაც ხშირად "
+"ტვირთავენ და ინახავენ."
 
 #: formatdialog.cpp:280
 #, kde-format
@@ -906,6 +987,8 @@ msgid ""
 "Select a format to save the scanned image.<nl/>This is a <emphasis strong="
 "\"1\">%1</emphasis>."
 msgstr ""
+"აირჩიეთ ფორმატი დასკანირებული გამოსახულების შესანახად.<nl/>ეს არის <emphasis "
+"strong=\"1\">%1</emphasis>."
 
 #: formatdialog.cpp:316
 #, kde-format
@@ -945,6 +1028,10 @@ msgid ""
 "gallery - %3..<nl/><nl/>Your document directory <filename>%2</filename><nl/"
 ">will be used.<nl/><nl/>Check the document directory setting and permissions."
 msgstr ""
+"ვერ შევქმენი საქაღალდე <filename>%1</filename><nl/> Kooka-ის გალერეისთვის - "
+"%3..<nl/><nl/>გამოყენებული იქნება თქვენი დოკუმენტის საქაღალდე <filename>%2</"
+"filename><nl/>.<nl/><nl/>შეამოწმეთ დოკუმენტის საქაღალდის პარამეტრი და მისი "
+"წვდომები."
 
 #: galleryroot.cpp:112
 #, kde-format
@@ -959,6 +1046,9 @@ msgid ""
 "new location is now <filename>%2</filename>.<nl/><nl/>Do you want to create "
 "a new gallery at the new location?"
 msgstr ""
+"აღმოჩენილია Kooka-ის ძველი გალერეა მისამართზე <filename>%1</filename>.<nl/"
+">ახლა სასურველი მდებარეობაა <filename>%2</filename>.<nl/><nl/>გნებავთ ახალი "
+"გალერეის შექიმნა ახალ მდებარეობაზე?"
 
 #: galleryroot.cpp:168
 #, kde-format
@@ -986,6 +1076,10 @@ msgid ""
 "gallery <link url=\"file:%2\"><filename>%2</filename></link>,<nl/>then you "
 "may do so by simply copying or moving the files."
 msgstr ""
+"Kooka გამოიყენებს ახალ გალერეას <link url=\"file:%1\"><filename>%1</"
+"filename></link>.<nl/><nl/>თუ თქვენ არ გსურთ გამოსახულებების დამატება ძველი "
+"გალერეიდან <link url=\"file:%2\"><filename>%2</filename></link>,<nl/>მაშინ "
+"ამის გაკეთება უბრალოდ დაკოპირებით ან გადმოტანით შეგიძლიათ."
 
 #: galleryroot.cpp:187
 #, kde-format
@@ -1052,6 +1146,8 @@ msgid ""
 "<div>Print at the same size as seen on screen, determined by the screen "
 "resolution.</div>"
 msgstr ""
+"<div>დაბეჭდვა იმ ზომით, როგორც ის ეკრანზე ჩანს. განისაზღვრება ეკრანის "
+"გაფართოების მიერ.</div>"
 
 #: imgprintdialog.cpp:105
 #, kde-format
@@ -1063,7 +1159,7 @@ msgstr "ეკრანის გარჩევადობა:"
 msgctxt "@info:tooltip"
 msgid ""
 "<div>This is the current screen resolution. It cannot be changed here.</div>"
-msgstr ""
+msgstr "<div>ეს მიმდინარე ეკრანის გაფართოებაა. მას აქ ვერ შეცვლით.</div>"
 
 #: imgprintdialog.cpp:114
 #, kde-format
@@ -1079,6 +1175,9 @@ msgid ""
 "saved with the image and used if available; if it is not, it can be entered "
 "here.</div>"
 msgstr ""
+"<div>დაიბეჭდება ზომით, რომელიც სკანირების გაფართოებით განისაზღვრება. "
+"გაფართოება შენახული იქნება გამოსახულებაში და გამოყენებული იქნება, თუ "
+"ხელმისაწვდომია. თუ არაა, მისი შეყვანა აქ შეგიძლიათ.</div>"
 
 #: imgprintdialog.cpp:119
 #, kde-format
@@ -1098,6 +1197,8 @@ msgid ""
 "<div>This is the scan resolution as saved with the image. It can be changed "
 "if necessary.</div>"
 msgstr ""
+"<div>ეს სკანირების გაფართოებაა, რომელიც გამოსახულებაშია შენახული. მისი "
+"ცვლილება შეძლებელია, თუ ეს საჭიროა.</div>"
 
 #: imgprintdialog.cpp:132
 #, kde-format
@@ -1112,6 +1213,8 @@ msgid ""
 "<div>Print scaled to the specified size. The image is centered on the paper."
 "</div>"
 msgstr ""
+"<div>დაბეჭდვა მითითებულ ზომაზე მასშტაბით. გამოსახულება ქაღალდის ცენტრში "
+"მოთავსდება</div>"
 
 #: imgprintdialog.cpp:137
 #, kde-format
@@ -1156,6 +1259,8 @@ msgid ""
 "<div>Print using as much of the available space on the paper as possible. "
 "The aspect ratio can be maintained.</div>"
 msgstr ""
+"<div>დაბეჭდვა ისე, რომ დაიკავოს რაც შეიძლება მეტი ადგილი ქაღალდზე. ასპექტის "
+"ფარდობა შენარჩუნდება.</div>"
 
 #: imgprintdialog.cpp:178
 #, kde-format
@@ -1176,12 +1281,14 @@ msgid ""
 "<div>Adjust the height or width to maintain the original aspect ratio of the "
 "printed image.</div>"
 msgstr ""
+"<div>სიმაღლის ან სიგანის გასწორება დაბეჭდილი გამოსახულების ასპექტის ფარდობის "
+"შესანარჩუნებლად.</div>"
 
 #: imgprintdialog.cpp:189
 #, kde-format
 msgctxt "@option:check"
 msgid "Low resolution (fast draft print)"
-msgstr ""
+msgstr "დაბალი რეზოლუცია (სწრაფი ბეჭდვა)"
 
 #: imgprintdialog.cpp:190
 #, kde-format
@@ -1190,6 +1297,8 @@ msgid ""
 "<div>Print at as low a resolution as possible. This may not work as intended "
 "on all printers.</div>"
 msgstr ""
+"<div>დაიბეჭდება ყველაზე დაბალი შესაძლო გაფართოებით. ამან შეიძლება ყველა "
+"პრინტერზე ისე არ იმუშაოს, როგორც თქვენ გნებავთ.</div>"
 
 #: imgprintdialog.cpp:196
 #, kde-format
@@ -1222,6 +1331,8 @@ msgid ""
 "<div>Select whether cut/join marks are printed. The marks will reduce the "
 "available printable area.</div>"
 msgstr ""
+"<div>დაიბეჭდება თუ არა გაჭრის/შეერთების ნიშნები. ეს ნიშნები ამცირებენ "
+"ხელმისაწვდომ ბეჭდვად ადგილს.</div>"
 
 #: imgprintdialog.cpp:214
 #, kde-format
@@ -1268,7 +1379,7 @@ msgstr "%1 dpi"
 #: imgprintdialog.cpp:321
 #, kde-format
 msgid "The scan resolution must be specified for scaling to it."
-msgstr ""
+msgstr "სკანირების გაფართოების მითითება შეუძლებელია მანამდე დამასშტაბებისთვის."
 
 #: imgprintdialog.cpp:326
 #, kde-format
@@ -1276,6 +1387,8 @@ msgid ""
 "A valid size must be specified for custom scaling. One or both of the "
 "specified dimensions is zero."
 msgstr ""
+"მომხმარებლის მასშტაბისთვის სწორი ზომის მითითება აუცილებელია. ერთი ან ორივე "
+"მითითებული განზომილება ნულის ტოლია."
 
 #: imgprintdialog.cpp:404 imgprintdialog.cpp:408
 #, kde-format
@@ -1299,28 +1412,28 @@ msgstr "%1 (%2 x %3)"
 #, kde-kuit-format
 msgctxt "@info"
 msgid "The directory <filename>%2</filename><nl/>could not be accessed.<nl/>%1"
-msgstr ""
+msgstr "საქაღალდესთან <filename>%2</filename><nl/>წვდომა შეუძლებელია.<nl/>%1"
 
 #: imgsaver.cpp:77
 #, kde-kuit-format
 msgctxt "@info"
 msgid "The directory <filename>%2</filename><nl/>could not be created.<nl/>%1"
-msgstr ""
+msgstr "საქაღალდის <filename>%2</filename><nl/>შექმნა შეუძლებელია.<nl/>%1"
 
 #: imgsaver.cpp:328
 #, kde-format
 msgid "indexed color image (up to 8 bit depth)"
-msgstr ""
+msgstr "დაინდექსებული ფერის გამოსახულება (8 ბიტამდე სიღრმით)"
 
 #: imgsaver.cpp:332
 #, kde-format
 msgid "gray scale image (up to 8 bit depth)"
-msgstr ""
+msgstr "ნაცრისფერი მასშტაბის სურათი (8 ბიტიანი სიღრმე)"
 
 #: imgsaver.cpp:336
 #, kde-format
 msgid "lineart image (black and white, 1 bit depth)"
-msgstr ""
+msgstr "ხაზოვანი სურათი (შავთეთრი, 1 ბიტიანი სიღრმე)"
 
 #: imgsaver.cpp:340
 #, kde-format
@@ -1395,6 +1508,8 @@ msgid ""
 "one be added?<nl/><nl/>This would result in the new file name <filename>%1</"
 "filename>"
 msgstr ""
+"შეყვანილი ფაილის სახელი გაფართოებას არ შეიცავს.<nl/>დავამატო ორიგინალი?<nl/"
+"><nl/>შედეგად მიიღებთ ახალ ფაილის სახელს <filename>%1</filename>"
 
 #: imgsaver.cpp:417
 #, kde-format
@@ -1676,6 +1791,11 @@ msgid ""
 "url=\"a:1\">Select a scanner device</link> to perform scanning, or <link url="
 "\"a:2\">add a device</link> if a scanner is not automatically detected."
 msgstr ""
+"<title>გალერეის რეჟიმი - სკანერი არჩეული არაა</title><nl/><nl/>ამ რეჟიმში "
+"შეგიძლიათ დაათვალიეროთ, შეცვალოთ და გადაატაროთ OCR გამოსახულებებზე, რომლებიც "
+"უკვე ჰალერეაშია.<nl/><nl/><link url=\"a:1\">აირჩიეთ სკანერის მოწყობილობა</"
+"link> სკანირებისთვის, ან <link url=\"a:2\">დაამატეთ მოწყობილობა</link>, თუ "
+"მოწყობილობის ავტომატური აღმოჩენა არ მომხდარა."
 
 #: kookascanparams.cpp:114
 #, kde-format
@@ -1708,6 +1828,9 @@ msgid ""
 "viewer on startup.<br/><br/>If your images are large, that might slow down "
 "Kooka's startup.</div>"
 msgstr ""
+"<div>ჩართეთ ეს, თუ გნებავთ, Kooka-მა ბოლოს მონიშნული გამოსახულება ჩატვირთოს "
+"გაშვებისას.<br/><br/>თუ თქვენი გამოსახულებები დიდია, ამან, შეიძლება, Kooka-"
+"ის გაშვება შეანელოს.</div>"
 
 #. i18n: ectx: label, entry (SaverAskForFormat), group (Files)
 #: kookasettings.kcfg:65
@@ -1722,6 +1845,9 @@ msgid ""
 "<div>Check this if you want to always use the image save assistant, even if "
 "there is a default format for the image type.</div>"
 msgstr ""
+"<div>ჩართეთ ეს, თუ ყოველთვის გნებავთ გამოსახულების შენახვის დამხმარის "
+"გამოყენება მაშინაც კი, როცა არსებობს ნაგულისხმევი ფორმატი გამოსახულების "
+"ტიპისთვის.</div>"
 
 #. i18n: ectx: label, entry (SaverAskForFilename), group (Files)
 #: kookasettings.kcfg:71
@@ -1736,6 +1862,8 @@ msgid ""
 "<div>Check this if you want to always enter a file name when scanning an "
 "image.</div>"
 msgstr ""
+"<div>ჩართეთ, თუ ყოველთვის გნებავთ ფაილის სახელის შეყვანა გამოსახულების "
+"სკანირებისას.</div>"
 
 #. i18n: ectx: label, entry (SaverOnlyRecommendedTypes), group (Files)
 #: kookasettings.kcfg:77
@@ -1750,6 +1878,8 @@ msgid ""
 "<div>Check this to only show recommended file formats for the scan type. "
 "Uncheck it to show all compatible formats.</div>"
 msgstr ""
+"<div>ჩართეთ ეს, მხოლოდ, რეკომენდებული ფაილის ტიპების საჩვენებლად არჩეული "
+"სკანირების ტიპისთვის. გამორთეთ ყველა თავსებადი ფორმატის საჩვენებლად.</div>"
 
 #. i18n: ectx: label, entry (SaverAlwaysUseFormat), group (Files2)
 #: kookasettings.kcfg:91
@@ -1764,6 +1894,8 @@ msgid ""
 "<div>Check this to remember the selected file format for the scanned image "
 "type and not ask for it again.</div>"
 msgstr ""
+"<div>ჩართეთ არჩეული ფაილის ფორმატის დასამახსოვრებად დასკანირებული "
+"გამოსახულების ტიპისთვის და აღარ მკითხო.</div>"
 
 #. i18n: ectx: label, entry (GalleryAllowRename), group (Gallery)
 #: kookasettings.kcfg:125
@@ -1778,6 +1910,9 @@ msgid ""
 "<div>Check this if you want to be able to rename gallery items by clicking "
 "on them (otherwise, use the \"Rename\" menu option).</div>"
 msgstr ""
+"<div>ჩართეთ ეს, თუ გნებავთ, გალერეის ელემენტების სახელის გადარქმევა მათზე "
+"დაწკაპუნებით შეგეძლოთ (წინააღმდეგ შემთხვევაში გამოიყენეთ მენიუს პუნქტი "
+"\"სახელის გადარქმევა\").</div>"
 
 #. i18n: ectx: label, entry (GalleryLayout), group (Gallery)
 #: kookasettings.kcfg:131
@@ -1792,6 +1927,8 @@ msgid ""
 "<div>Select whether and where a list of recently accessed gallery folders "
 "will be shown.</div>"
 msgstr ""
+"<div>აირჩიეთ, თუ არა, და თუ კი, სად იქნება ნაჩვენები ბოლოს გახსნილი გალერეის "
+"საქაღალდეები.</div>"
 
 #. i18n: ectx: label, entry (ThumbnailCustomBackground), group (thumbnailView)
 #: kookasettings.kcfg:152
@@ -1803,7 +1940,7 @@ msgstr "ფონის გამოსახულების ხელით 
 #: kookasettings.kcfg:153
 #, kde-format
 msgid "<div>Set a custom background image for the thumbnail view.</div>"
-msgstr ""
+msgstr "<div>დააყენეთ მორგებული ფონის სურათი მინიატურის ხედისთვის.</div>"
 
 #. i18n: ectx: label, entry (ThumbnailBackgroundPath), group (thumbnailView)
 #: kookasettings.kcfg:158
@@ -1815,7 +1952,7 @@ msgstr "გამოსახულება:"
 #: kookasettings.kcfg:159
 #, kde-format
 msgid "<div>The background image to use for the thumbnail view.</div>"
-msgstr ""
+msgstr "<div>მინიატურის ხედისთვის გამოყენებული ფონის სურათი.</div>"
 
 #. i18n: ectx: label, entry (ThumbnailPreviewSize), group (thumbnailView)
 #: kookasettings.kcfg:165
@@ -1827,7 +1964,7 @@ msgstr "მინიატურის ზომა:"
 #: kookasettings.kcfg:166
 #, kde-format
 msgid "<div>Select the default preview size for the thumbnail view.</div>"
-msgstr ""
+msgstr "<div>აირჩიეთ ნაგულისხმევი გადახედვის ზომა მინიატურის ხედვისთვის.</div>"
 
 #. i18n: ectx: label, entry (OcrGocrDustSize), group (gocr)
 #: kookasettings.kcfg:205
@@ -1843,6 +1980,9 @@ msgid ""
 "ignored.  0 means to not detect dust clusters, -1 means to automatically "
 "detect them. The default is 10.</div>"
 msgstr ""
+"<div>ამ ზომაზე მცირე ზომის მტევანი ჩაითვლება ხმაურად და იგნორირებულია.  0 "
+"ნიშნავს მტვრის მტევნების გამოვლენას, -1 ნიშნავს მათ ავტომატურად გამოვლენას. "
+"ნაგულისხმევი არის 10.</div>"
 
 #. i18n: ectx: label, entry (OcrGocrGrayLevel), group (gocr)
 #: kookasettings.kcfg:211
@@ -1857,6 +1997,9 @@ msgid ""
 "<div>The threshold value below which gray pixels are considered to be black. "
 "0 means to automatically detect the gray level.  The default is 160.</div>"
 msgstr ""
+"<div>ბარიერის მნიშვნელობა, რომლის ქვემოთაც ნაცრისფერი პიქსელები ითვლება "
+"შავად. 0 ნიშნავს, რომ ავტომატურად აღმოაჩინოს ნაცრისფერი დონე.  ნაგულისხმევი "
+"არის 160.</div>"
 
 #. i18n: ectx: label, entry (OcrGocrSpaceWidth), group (gocr)
 #: kookasettings.kcfg:217
@@ -1871,6 +2014,8 @@ msgid ""
 "<div>The minimum gap in pixels considered to be word spacing. The default is "
 "0 which means to automatically detect spacing.</div>"
 msgstr ""
+"<div> მინიმალური მანძილი პიქსელებში, რომელიც ჰარედ ჩაითვლება. ნაგულისხმევი "
+"არის 0, რაც ნიშნავს ინტერვალის ავტომატურად გამოვლენას.</div>"
 
 #. i18n: ectx: label, entry (OcrGocrCertainty), group (gocr)
 #: kookasettings.kcfg:223
@@ -1885,6 +2030,8 @@ msgid ""
 "<div>The acceptance certainty threshold for recognition, characters with a "
 "lower certainty are considered to be unknown. The default is 95.</div>"
 msgstr ""
+"<div>მისაღები ალბათობა ამოცნობისთვის. უფრო მცირე ალბათობის მქონე სიმბოლოები "
+"უცნობად ჩაითვლება. ნაგულისხმევია 95.</div>"
 
 #. i18n: ectx: label, entry (ocrOcradLayoutDetection), group (ocrad)
 #: kookasettings.kcfg:238
@@ -2039,6 +2186,11 @@ msgid ""
 "icode><nl/>libkookascan reported error: <message>%2</message><nl/>SANE "
 "reported error: <message>%1</message>"
 msgstr ""
+"პრობლემა სკანერის მოწყობილობის გახსნისას.<nl/><nl/>შეამოწმეთ, რომ სკანნერი "
+"მიერთებული და ჩართულია და რომ SANE-ის მხარდაჭერა სწორადაა მორგებული.<nl/><nl/"
+">ვცდილობ, გამოვიყენო სკანერის მოწყობილობა: <icode>%3</icode><nl/"
+">libkookascan-მა გადმოგვცა შეცდომა: <message>%2</message><nl/>SANE-ის "
+"შეცდომა: <message>%1</message>"
 
 #: kookaview.cpp:521
 #, kde-format
@@ -2056,6 +2208,14 @@ msgid ""
 "to use. Use the <interface>Add Scan Device</interface> option to enter the "
 "backend name and parameters, or see that dialog for more information."
 msgstr ""
+"სკანერის მოწყობილობები არ არის ხელმისაწვდომი.<nl/><nl/>თუ თქვენი სკანერი "
+"არის ტიპის, რომელიც შეიძლება ავტომატურად გამოვლინდეს SANE– ს მიერ, "
+"შეამოწმეთ, რომ ის არის დაკავშირებული, ჩართულია და სწორად არის "
+"კონფიგურირებული.<nl/><nl/>თუ სკანერის ავტომატური გამოვლენა შეუძლებელია SANE– "
+"ს მიერ (ეს მოიცავს ქსელის ზოგიერთ სკანერს), თქვენ უნდა მიუთითოთ მოწყობილობა "
+"გამოსაყენებლად. გამოიყენეთ <interface>Add Scan მოწყობილობის</interface> "
+"ვარიანტი, რომ შეიყვანოთ უკანა სახელი და პარამეტრები, ან ნახოთ ეს დიალოგი "
+"დამატებითი ინფორმაციისთვის."
 
 #: kookaview.cpp:587
 #, kde-format
@@ -2135,6 +2295,8 @@ msgid ""
 "No OCR engine is configured.\n"
 "Please select and configure one in order to perform OCR."
 msgstr ""
+"OCR ძრავა მორგებული არაა.\n"
+"OCR-სთვის საჭიროა ერთი ძრავის მაინც არჩევა და მორგება."
 
 #: kookaview.cpp:791
 #, kde-format
@@ -2156,6 +2318,11 @@ msgid ""
 ">libkookascan reported error: <message>%2</message><nl/>SANE reported error: "
 "<message>%1</message>"
 msgstr ""
+"პრობლემა მინატურის შექმნისას ან სკანირებისას.<nl/>შეამოწმეთ, რომ სკანერი ჯერ "
+"კიდევ მიერთებული და ჩართულია, <nl/>და რომ მედია ჩატვირთულია, თუ ეს საჭიროა."
+"<nl/><nl/>ვცდილობ, გამოვიყენო სკანერის მოწყობილობა: <icode>%3</icode><nl/"
+">libkookascan-ის შეცდომა: <message>%2</message><nl/>SANE-ის შეცდომა: "
+"<message>%1</message>"
 
 #: kookaview.cpp:958
 #, kde-format
@@ -2199,6 +2366,15 @@ msgid ""
 "www.gnu.org/software/ocrad/ocrad.html\">OCRAD</a> programs, or the "
 "commercial <a href=\"http://www.rerecognition.com/\">KADMOS</a> library."
 msgstr ""
+"Kooka მოგაწვდით სკანერის აპარატურასთან წვდომას ბიბლიოთეკით <a href=\"http://"
+"www.sane-project.org/\">SANE</a>.\n"
+"\n"
+"Kooka საშუალეას გაძლევთ, დაასკანეროთ, შეინახოთ და დაათვალიეროთ ნებისმიერი "
+"გამოსახულების ფორმატი, რომლის ხარდაჭერაც KDE-ს გააჩნია და გადაატაროთ "
+"ოპტიკური იმბოლოს ამოცნობა ღია კოდის მქონე <a href=\"http://jocr.sourceforge."
+"net/\">GOCR</a>,ან <a href=\"http://www.gnu.org/software/ocrad/ocrad.html"
+"\">OCRAD</a> პროგრამებით, ან ფასიანი <a href=\"http://www.rerecognition.com/"
+"\">KADMOS</a> ბიბლიოთეკით."
 
 #: main.cpp:57
 #, kde-format
@@ -2215,6 +2391,17 @@ msgid ""
 "the Qt GPL licence, so if you wish to do this then you must have a\n"
 "commercial Qt development licence.\n"
 msgstr ""
+"This program is distributed under the terms of the GPL v2 as published\n"
+"by the Free Software Foundation.\n"
+"\n"
+"As a special exception, permission is given to link this program\n"
+"with any version of the KADMOS OCR/ICR engine of reRecognition GmbH\n"
+"(http://www.rerecognition.com), and distribute the resulting executable\n"
+"without including the source code for KADMOS in the source distribution.\n"
+"\n"
+"Note that linking against KADMOS is not permitted under the terms of\n"
+"the Qt GPL licence, so if you wish to do this then you must have a\n"
+"commercial Qt development licence.\n"
 
 #: main.cpp:70
 #, kde-format
@@ -2284,7 +2471,7 @@ msgstr "Alex Kempshall"
 #: main.cpp:95
 #, kde-format
 msgid "Photocopy facility"
-msgstr ""
+msgstr "ფოტოკოპირების დაწესებულება"
 
 #: main.cpp:111
 #, kde-format
@@ -2369,6 +2556,9 @@ msgid ""
 "Use this button to reenable all messages and questions which\n"
 "have been hidden by using \"Don't ask me again\"."
 msgstr ""
+"გამოიყენეთ ეს ღილაკი, რომ თავიდან ჩართოთ ყველა შეტყობინება და კითხვა, "
+"რომელიც\n"
+"'აღარ მკითხოთი' დამალეთ."
 
 #: prefspages.cpp:85
 #, kde-format
@@ -2378,7 +2568,7 @@ msgstr "შეტყობინებების/კითხვების �
 #: prefspages.cpp:152
 #, kde-format
 msgid "%1 must be restarted for these settings to take effect."
-msgstr ""
+msgstr "ცვლილებების ძალაში შესასვლელად %1 უნდა გადაიტვირთოს."
 
 #: prefspages.cpp:235
 #, kde-format
@@ -2425,7 +2615,7 @@ msgstr "OCR ძრავის მორგება..."
 msgid ""
 "No OCR engine is selected. Select and configure one to be able to perform "
 "OCR."
-msgstr ""
+msgstr "OCR ძრავა არჩეული არაა. აირჩიეთ და მოირგეთ ერთი მაინც, თუ OCR გნებავთ."
 
 #: prefspages.cpp:452
 #, kde-format
@@ -2504,6 +2694,10 @@ msgid ""
 "yet possible. Converting 'on the fly' is planned for a future release.\n"
 "Kooka corrects the extension."
 msgstr ""
+"შეიყვანეთ ფაილი გაფართოება, რომელიც ამჟამინდელისგან განხვავდება. ეს "
+"ჯერჯერობით შეუძლებელია. მუშაობისას გადაყვანა ჯერ მხარდაჭერილი არაა, მაგრამ "
+"გეგმაშია.\n"
+"Kooka გაასწორებს გაფართოებას."
 
 #: scangallery.cpp:602
 #, kde-format
@@ -2570,6 +2764,8 @@ msgid ""
 "Do you really want to permanently delete the folder<nl/><filename>%1</"
 "filename><nl/>and all of its contents? It cannot be restored."
 msgstr ""
+"ნამდვილად გნებავთ საქაღალდის<nl/><filename>%1</filename><nl/>და მისი "
+"შემცველობის წაშლა? ეს ქმედება შეუქცევადია."
 
 #: scangallery.cpp:1115
 #, kde-kuit-format
@@ -2712,6 +2908,9 @@ msgid ""
 "<qt>This is the uncompressed size of the scanned image. It tries to warn you "
 "if you try to produce too big an image by changing its background color."
 msgstr ""
+"<qt>ეს დასკანერებული გამოსახულების შეუკუმშავი ზომაა. ის ცდილობთ "
+"გაგაფრთხილოთ, თუ ცდილობთ, მეტისმეტად დიდი გამოსახულება მიიღოთ მისი ფონის "
+"ფერის ცვლილებით."
 
 #: statusbarmanager.cpp:108
 #, kde-format
