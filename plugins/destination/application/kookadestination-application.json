@@ -1,6 +1,12 @@
 {
     "KPlugin": {
         "Description": "Open the scanned image in an application",
+        "Description[ca@valencia]": "Obri la imatge escanejada en una aplicació",
+        "Description[ca]": "Obre la imatge escanejada en una aplicació",
+        "Description[gl]": "Abrir a imaxe escaneada nunha aplicación.",
+        "Description[he]": "פתיחת התמונה שנסרקה ביישום",
+        "Description[ka]": "სკანირებული გამოსახულების აპლიკაციაში გახსნა",
+        "Description[nl]": "De gescande afbeelding in een toepassing openen",
         "Description[sl]": "Odpri skenirano sliko v aplikaciji",
         "Description[sv]": "Öppna den inlästa bilden i ett program",
         "Description[tr]": "Taranan görseli bir uygulamada açın",
@@ -20,6 +26,7 @@
         "Name[fi]": "Sovellus",
         "Name[fr]": "Application",
         "Name[gl]": "Aplicación",
+        "Name[he]": "יישום",
         "Name[ia]": "Application",
         "Name[it]": "Applicazione",
         "Name[ka]": "აპლიკაცია",

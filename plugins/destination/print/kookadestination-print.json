@@ -1,6 +1,12 @@
 {
     "KPlugin": {
         "Description": "Print the scanned image",
+        "Description[ca@valencia]": "Imprimix la imatge escanejada",
+        "Description[ca]": "Imprimeix la imatge escanejada",
+        "Description[gl]": "Imprimir a imaxe escaneada.",
+        "Description[he]": "הדפסת התמונה שנסרקה",
+        "Description[ka]": "სკანირებული გამოსახულების დაბეჭდვა",
+        "Description[nl]": "De gescande afbeelding afdrukken",
         "Description[sl]": "Tiskaj skenirano sliko",
         "Description[sv]": "Skriv ut den inlästa bilden",
         "Description[tr]": "Taranan görseli yazdırın",
@@ -20,6 +26,7 @@
         "Name[fi]": "Tulosta kuva",
         "Name[fr]": "Imprimer une image",
         "Name[gl]": "Imprimir a imaxe",
+        "Name[he]": "הדפסת תמונה",
         "Name[ia]": "Imprime imagine",
         "Name[it]": "Stampa immagine",
         "Name[ka]": "გამოსახულების დაბეჭდვა",

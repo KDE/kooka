@@ -1,6 +1,12 @@
 {
     "KPlugin": {
         "Description": "Save the scanned image",
+        "Description[ca@valencia]": "Guarda la imatge escanejada",
+        "Description[ca]": "Desa la imatge escanejada",
+        "Description[gl]": "Gardar a imaxe escaneada.",
+        "Description[he]": "שמירת התמונה שנסרקה",
+        "Description[ka]": "სკანირებული გამოსახულების შენახვა",
+        "Description[nl]": "De gescande afbeelding opslaan",
         "Description[sl]": "Shrani skenirano sliko",
         "Description[sv]": "Spara den inlästa bilden",
         "Description[tr]": "Taranan görseli kaydedin",
@@ -20,6 +26,7 @@
         "Name[fi]": "Tallenna kuva",
         "Name[fr]": "Enregistrer une image",
         "Name[gl]": "Gardar a imaxe",
+        "Name[he]": "שמירת תמונה",
         "Name[ia]": "Salveguarda imagine",
         "Name[it]": "Salva immagine",
         "Name[ka]": "გამოსახულების შენახვა",

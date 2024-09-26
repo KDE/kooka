@@ -1,6 +1,12 @@
 {
     "KPlugin": {
         "Description": "Copy the scanned image to the clipboard",
+        "Description[ca@valencia]": "Copia la imatge escanejada a dins del porta-retalls",
+        "Description[ca]": "Copia la imatge escanejada al porta-retalls",
+        "Description[gl]": "Copiar a imaxe escaneada no portapapeis.",
+        "Description[he]": "העתקת התמונה שנסרקה ללוח הגזירים",
+        "Description[ka]": "სკანირებული გამოსახულების ბუფერში კოპირება",
+        "Description[nl]": "De gescande afbeelding kopiëren naar het klembord",
         "Description[sl]": "Kopiraj skenirano sliko na odložišče",
         "Description[sv]": "Kopierar den inlästa bilden till klippbordet",
         "Description[tr]": "Taranan görseli panoya kopyalayın",
@@ -20,6 +26,7 @@
         "Name[fi]": "Kopioi kuva",
         "Name[fr]": "Copier une image",
         "Name[gl]": "Copiar a imaxe",
+        "Name[he]": "העתקת תמונה",
         "Name[ia]": "Copia imagine",
         "Name[it]": "Copia immagine",
         "Name[ka]": "ნახატის კოპირება",

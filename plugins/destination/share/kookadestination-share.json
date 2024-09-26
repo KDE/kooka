@@ -1,6 +1,12 @@
 {
     "KPlugin": {
         "Description": "Share the scanned image",
+        "Description[ca@valencia]": "Compartix la imatge escanejada",
+        "Description[ca]": "Comparteix la imatge escanejada",
+        "Description[gl]": "Compartir a imaxe escaneada.",
+        "Description[he]": "שיתוף התמונה שנסרקה",
+        "Description[ka]": "სკანირებული გამოსახულების გაზიარება",
+        "Description[nl]": "De gescande afbeelding delen",
         "Description[sl]": "Deli skenirano sliko",
         "Description[sv]": "Dela den inlästa bilden",
         "Description[tr]": "Taranan görseli paylaşın",
@@ -20,6 +26,7 @@
         "Name[fi]": "Jaa kuva",
         "Name[fr]": "Partager une image",
         "Name[gl]": "Compartir unha imaxe",
+        "Name[he]": "שיתוף תמונה",
         "Name[ia]": "Comparti imagine",
         "Name[it]": "Condividi immagine",
         "Name[ka]": "გამოსახულებსი გაზიარება",

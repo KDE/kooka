@@ -1,6 +1,12 @@
 {
     "KPlugin": {
         "Description": "Save the scanned image to the scan gallery",
+        "Description[ca@valencia]": "Guarda la imatge escanejada a la galeria d'escaneig",
+        "Description[ca]": "Desa la imatge escanejada a la galeria d'escaneig",
+        "Description[gl]": "Gardar a imaxe escaneada na galería de escaneamento.",
+        "Description[he]": "שמירת התמונה שנסרקה לגלריית הסריקות",
+        "Description[ka]": "სკანირებული გამოსახულების გალერეაში შენახვა",
+        "Description[nl]": "De gescande afbeelding opslaan in de galerij voor scannen",
         "Description[sl]": "Shrani skenirano sliko v galerijo skenov",
         "Description[sv]": "Spara den inlästa bilden i bildgalleriet",
         "Description[tr]": "Taranan görseli tarama galerisine kaydedin",
@@ -19,6 +25,7 @@
         "Name[fi]": "Kuvagalleria",
         "Name[fr]": "Analyser la galerie",
         "Name[gl]": "Galería de escaneamento",
+        "Name[he]": "גלריית סריקות",
         "Name[it]": "Galleria scansioni",
         "Name[ka]": "გალერეის სკანირება",
         "Name[ko]": "스캔 갤러리",
