@@ -2790,19 +2790,3 @@ msgstr "Много малък"
 #, kde-format
 msgid "Tiny"
 msgstr "Миниатюрен"
-
-#, fuzzy
-#~ msgid ""
-#~ "<div>Check this if you want to enter the file name before scanning starts."
-#~ "</div>"
-#~ msgstr ""
-#~ "Ако отметката е включена, при запис на изображение ще се появява диалогов "
-#~ "прозорец за въвеждане на име на файл, под което да бъде записано."
-
-#, fuzzy
-#~ msgid ""
-#~ "<div>Check this if you want to enter the file name after scanning has "
-#~ "finished.</div>"
-#~ msgstr ""
-#~ "Ако отметката е включена, при запис на изображение ще се появява диалогов "
-#~ "прозорец за въвеждане на име на файл, под което да бъде записано."
