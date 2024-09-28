@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-09-24 02:01+0000\n"
-"PO-Revision-Date: 2024-09-25 07:01+0300\n"
+"PO-Revision-Date: 2024-09-27 07:57+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -636,7 +636,7 @@ msgstr ""
 #: ../plugins/ocr/kadmos/ocrkadmosengine.cpp:95
 #, kde-format
 msgid "KADMOS Installation Problem"
-msgstr ""
+msgstr "בעיית התקנה ב־KADMOS"
 
 #: ../plugins/ocr/kadmos/ocrkadmosengine.cpp:106
 #, kde-format
@@ -649,7 +649,7 @@ msgstr ""
 #: ../plugins/ocr/kadmos/ocrkadmosengine.cpp:110
 #, kde-format
 msgid "KADMOS Failure"
-msgstr ""
+msgstr "כשל ב־KADMOS"
 
 #: ../plugins/ocr/ocrad/ocrocraddialog.cpp:79
 #, kde-format
@@ -659,22 +659,22 @@ msgstr ""
 #: ../plugins/ocr/ocrad/ocrocraddialog.cpp:92
 #, kde-format
 msgid "No Layout Detection"
-msgstr ""
+msgstr "ללא זיהוי פריסה"
 
 #: ../plugins/ocr/ocrad/ocrocraddialog.cpp:95
 #, kde-format
 msgid "Layout Detection"
-msgstr ""
+msgstr "זיהוי פריסה"
 
 #: ../plugins/ocr/ocrad/ocrocraddialog.cpp:98
 #, kde-format
 msgid "Column Detection"
-msgstr ""
+msgstr "זיהוי עמודות"
 
 #: ../plugins/ocr/ocrad/ocrocraddialog.cpp:99
 #, kde-format
 msgid "Full Layout Detection"
-msgstr ""
+msgstr "זיהוי פריסה מלא"
 
 #: ../plugins/ocr/ocrad/ocrocraddialog.cpp:117
 #: ../plugins/ocr/ocrad/ocrocraddialog.cpp:139
@@ -684,54 +684,54 @@ msgstr ""
 #: ../plugins/ocr/tesseract/ocrtesseractdialog.cpp:174
 #, kde-format
 msgid "(default)"
-msgstr ""
+msgstr "(ברירת מחדל)"
 
 #: ../plugins/ocr/ocrad/ocrocradengine.cpp:244
 #: ../plugins/ocr/tesseract/ocrtesseractengine.cpp:157
 #, kde-kuit-format
 msgctxt "@info"
 msgid "File <filename>%1</filename> does not exist"
-msgstr ""
+msgstr "הקובץ <filename>%1</filename> לא קיים"
 
 #: ../plugins/ocr/ocrad/ocrocradengine.cpp:248
 #: ../plugins/ocr/tesseract/ocrtesseractengine.cpp:158
 #, kde-kuit-format
 msgctxt "@info"
 msgid "File <filename>%1</filename> unreadable"
-msgstr ""
+msgstr "הקובץ <filename>%1</filename> בלתי קריא"
 
 #: ../plugins/ocr/ocrad/ocrocradengine.cpp:252
 #: ../plugins/ocr/tesseract/ocrtesseractengine.cpp:165
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot open file <filename>%1</filename>"
-msgstr ""
+msgstr "לא ניתן לפתוח את הקובץ <filename>%1</filename>"
 
 #: ../plugins/ocr/ocrad/ocrocradengine.cpp:448
 #, kde-format
 msgid "Name or path of the OCRAD executable:"
-msgstr ""
+msgstr "השם או הנתיב של קובץ ההפעלה של ORCAD:"
 
 #: ../plugins/ocr/tesseract/ocrtesseractdialog.cpp:72
 #, kde-format
 msgid "The Tesseract executable is not configured or is not available."
-msgstr ""
+msgstr "קובץ ההפעלה של Tesseract לא מוגדר או שאינו זמין."
 
 #: ../plugins/ocr/tesseract/ocrtesseractdialog.cpp:112
 #: ../plugins/ocr/tesseract/ocrtesseractdialog.cpp:129
 #, kde-format
 msgid "Select a file if required..."
-msgstr ""
+msgstr "נא לבחור קובץ אם צריך…"
 
 #: ../plugins/ocr/tesseract/ocrtesseractengine.cpp:227
 #, kde-format
 msgid "HOCR parsing error, %1"
-msgstr ""
+msgstr "שגיאת פענוח HOCR,‏ %1"
 
 #: ../plugins/ocr/tesseract/ocrtesseractengine.cpp:252
 #, kde-format
 msgid "Name or path of the Tesseract executable:"
-msgstr ""
+msgstr "השם או הנתיב לקובץ ההפעלה של Tesseract:"
 
 #: formatdialog.cpp:77
 #, kde-format
@@ -795,6 +795,9 @@ msgid ""
 "grayscale images, indexed or true color.<p>PNG is an open format which is "
 "widely supported."
 msgstr ""
+"<b>גרפיקת רשת ניידת (PNG)</b> הוא תסדיר דחוס ללא אובדן נתונים שתוכנן לניידות "
+"ולהתרחבות. מתאים לכל סוג של תמונות בין אם בגווני אפור ובין אם צבעוניות, "
+"מסודרות במפתח או בצבע אמיתי.<p>PNG הוא תסדיר פתוח שנתמך בצורה נרחבת."
 
 #: formatdialog.cpp:155
 #, kde-format
@@ -899,32 +902,32 @@ msgstr ""
 #: formatdialog.cpp:316
 #, kde-format
 msgid "File format:"
-msgstr ""
+msgstr "תסדיר קובץ:"
 
 #: formatdialog.cpp:338
 #, kde-format
 msgid "Image sub-format:"
-msgstr ""
+msgstr "תת־תסדיר קובץ:"
 
 #: formatdialog.cpp:384
 #, kde-format
 msgid "File name:"
-msgstr ""
+msgstr "שם קובץ:"
 
 #: formatdialog.cpp:398
 #, kde-format
 msgid "Select Format..."
-msgstr ""
+msgstr "בחירת תסדיר…"
 
 #: formatdialog.cpp:436
 #, kde-format
 msgid "No format selected."
-msgstr ""
+msgstr "לא נבחר תסדיר."
 
 #: formatdialog.cpp:470
 #, kde-format
 msgid "No information is available for this format."
-msgstr ""
+msgstr "אין מידע זמין לתסדיר הזה."
 
 #: galleryroot.cpp:101
 #, kde-kuit-format
@@ -1095,7 +1098,7 @@ msgstr ""
 #, kde-format
 msgctxt "@option:radio"
 msgid "Custom size"
-msgstr ""
+msgstr "גודל מותאם אישית"
 
 #: imgprintdialog.cpp:133
 #, kde-format
@@ -1109,13 +1112,13 @@ msgstr ""
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Image width:"
-msgstr ""
+msgstr "רוחב תמונה:"
 
 #: imgprintdialog.cpp:142 imgprintdialog.cpp:156
 #, kde-format
 msgctxt "@item:intext abbreviation for 'millimetres'"
 msgid " mm"
-msgstr ""
+msgstr " מ״מ"
 
 #: imgprintdialog.cpp:143
 #, kde-format
@@ -1127,7 +1130,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Image height:"
-msgstr ""
+msgstr "גובה תמונה:"
 
 #: imgprintdialog.cpp:157
 #, kde-format
@@ -1307,42 +1310,42 @@ msgstr ""
 #: imgsaver.cpp:332
 #, kde-format
 msgid "gray scale image (up to 8 bit depth)"
-msgstr ""
+msgstr "תמונת גווני אפור (עד עומק של 8 סיביות)"
 
 #: imgsaver.cpp:336
 #, kde-format
 msgid "lineart image (black and white, 1 bit depth)"
-msgstr ""
+msgstr "תמונה קווית (שחור ולבן, עומק של סיבית אחת)"
 
 #: imgsaver.cpp:340
 #, kde-format
 msgid "high/true color image (more than 8 bit depth)"
-msgstr ""
+msgstr "תמונה מרובת צבעים/צבע אמיתי (למעלה מעומק של 8 סיביות)"
 
 #: imgsaver.cpp:344
 #, kde-format
 msgid "unknown image type %1"
-msgstr ""
+msgstr "סוג התמונה %1 לא ידוע"
 
 #: imgsaver.cpp:366
 #, kde-format
 msgid "Save OK"
-msgstr ""
+msgstr "השמירה הצליחה"
 
 #: imgsaver.cpp:368
 #, kde-format
 msgid "Permission denied"
-msgstr ""
+msgstr "ההרשאה נדחתה"
 
 #: imgsaver.cpp:370
 #, kde-format
 msgid "Bad file name"
-msgstr ""
+msgstr "שם הקובץ שגוי"
 
 #: imgsaver.cpp:372
 #, kde-format
 msgid "No space left on device"
-msgstr ""
+msgstr "לא נשאר מקום בהתקן"
 
 #: imgsaver.cpp:374
 #, kde-format
@@ -1352,32 +1355,32 @@ msgstr ""
 #: imgsaver.cpp:376
 #, kde-format
 msgid "Cannot write using protocol '%1'"
-msgstr ""
+msgstr "לא ניתן לכתוב עם הפרוטוקול ‚%1’"
 
 #: imgsaver.cpp:378
 #, kde-format
 msgid "User cancelled saving"
-msgstr ""
+msgstr "המשתמש ביטל את השמירה"
 
 #: imgsaver.cpp:380
 #, kde-format
 msgid "Cannot create directory"
-msgstr ""
+msgstr "לא ניתן ליצור תיקייה"
 
 #: imgsaver.cpp:382
 #, kde-format
 msgid "Save failed"
-msgstr ""
+msgstr "השמירה נכשלה"
 
 #: imgsaver.cpp:384
 #, kde-format
 msgid "Bad parameter"
-msgstr ""
+msgstr "משתנה שגוי"
 
 #: imgsaver.cpp:386
 #, kde-format
 msgid "Unknown status %1"
-msgstr ""
+msgstr "המצב %1 לא ידוע"
 
 #: imgsaver.cpp:414
 #, kde-kuit-format
@@ -1391,103 +1394,103 @@ msgstr ""
 #: imgsaver.cpp:417
 #, kde-format
 msgid "Extension Missing"
-msgstr ""
+msgstr "סיומת חסרה"
 
 #: imgsaver.cpp:418
 #, kde-format
 msgid "Add Extension"
-msgstr ""
+msgstr "הוספת סיומת"
 
 #: imgsaver.cpp:419
 #, kde-format
 msgid "Do Not Add"
-msgstr ""
+msgstr "לא להוסיף"
 
 #: imgsaver.cpp:448
 #, kde-format
 msgid "Target already exists"
-msgstr ""
+msgstr "היעד כבר קיים"
 
 #: imgsaver.cpp:461
 #, kde-format
 msgid "Unable to copy the file"
-msgstr ""
+msgstr "לא ניתן להעתיק את הקובץ"
 
 #: imgsaver.cpp:462
 #, kde-format
 msgid "Unable to rename the file"
-msgstr ""
+msgstr "לא ניתן לשנות את שם הקובץ"
 
 #: imgsaver.cpp:463
 #, kde-format
 msgid "Error copying file"
-msgstr ""
+msgstr "שגיאת העתקת קובץ"
 
 #: imgsaver.cpp:464
 #, kde-format
 msgid "Error renaming file"
-msgstr ""
+msgstr "שגיאה בשינוי שם הקובץ"
 
 #: imgsaver.cpp:465
 #, kde-kuit-format
 msgctxt "@info"
 msgid "%1 <filename>%3</filename><nl/>%2"
-msgstr ""
+msgstr "%1 <filename>%3</filename><nl/>%2"
 
 #: kooka.cpp:106
 #, kde-format
 msgid "KDE Scanning"
-msgstr ""
+msgstr "סריקה ב־KDE"
 
 #: kooka.cpp:140
 #, kde-format
 msgid "Scale to Width"
-msgstr ""
+msgstr "התאמה לרוחב"
 
 #: kooka.cpp:151
 #, kde-format
 msgid "Scale to Height"
-msgstr ""
+msgstr "התאמה לגובה"
 
 #: kooka.cpp:160
 #, kde-format
 msgid "Original Size"
-msgstr ""
+msgstr "גודל מקורי"
 
 #: kooka.cpp:166
 #, kde-format
 msgid "Set Zoom..."
-msgstr ""
+msgstr "הגדרת תקריב…"
 
 #: kooka.cpp:172
 #, kde-format
 msgid "Keep Zoom Setting"
-msgstr ""
+msgstr "שמירת הגדרות התקריב"
 
 #: kooka.cpp:180
 #, kde-format
 msgid "New Image From Selection"
-msgstr ""
+msgstr "תמונה חדשה מהבחירה"
 
 #: kooka.cpp:185
 #, kde-format
 msgid "Mirror Vertically"
-msgstr ""
+msgstr "היפוך אנכי"
 
 #: kooka.cpp:192
 #, kde-format
 msgid "Mirror Horizontally"
-msgstr ""
+msgstr "היפוך אופקי"
 
 #: kooka.cpp:202
 #, kde-format
 msgid "Rotate Counter-Clockwise"
-msgstr ""
+msgstr "הטיה נגד כיוון השעון"
 
 #: kooka.cpp:209
 #, kde-format
 msgid "Rotate Clockwise"
-msgstr ""
+msgstr "הטיה עם כיוון השעון"
 
 #: kooka.cpp:216
 #, kde-format
@@ -2321,7 +2324,7 @@ msgstr ""
 #: newscanpresetdialog.cpp:73
 #, kde-format
 msgid "Description:"
-msgstr ""
+msgstr "תיאור:"
 
 #: ocrresedit.cpp:159
 #, kde-format
@@ -2331,7 +2334,7 @@ msgstr ""
 #: ocrresedit.cpp:160
 #, kde-format
 msgid "Text File (*.txt)"
-msgstr ""
+msgstr "קובץ (‎*.txt)"
 
 #: ocrresedit.cpp:166
 #, kde-kuit-format
@@ -2343,17 +2346,17 @@ msgstr ""
 #, kde-kuit-format
 msgctxt "@info"
 msgid "<nl/>%1"
-msgstr ""
+msgstr "<nl/>%1"
 
 #: ocrresedit.cpp:170
 #, kde-format
 msgid "Error saving OCR results"
-msgstr ""
+msgstr "שגיאה בשמירת תוצאות זיהוי תווים אופטי"
 
 #: prefspages.cpp:78
 #, kde-format
 msgid "Hidden Messages"
-msgstr ""
+msgstr "הודעות מוסתרות"
 
 #: prefspages.cpp:82
 #, kde-format
@@ -2380,27 +2383,27 @@ msgstr "גלריית תמונות"
 #: prefspages.cpp:249
 #, kde-format
 msgid "Not shown"
-msgstr ""
+msgstr "לא מופיע"
 
 #: prefspages.cpp:250
 #, kde-format
 msgid "At top"
-msgstr ""
+msgstr "למעלה"
 
 #: prefspages.cpp:251
 #, kde-format
 msgid "At bottom"
-msgstr ""
+msgstr "למטה"
 
 #: prefspages.cpp:266
 #, kde-format
 msgid "Thumbnail View"
-msgstr ""
+msgstr "תצוגת תמונות ממוזערות"
 
 #: prefspages.cpp:380
 #, kde-format
 msgid "None"
-msgstr ""
+msgstr "ללא"
 
 #: prefspages.cpp:392
 #, kde-format
@@ -2521,18 +2524,18 @@ msgstr ""
 #: scangallery.cpp:750
 #, kde-format
 msgid "Sub-image %1"
-msgstr ""
+msgstr "תת־תמונה %1"
 
 #: scangallery.cpp:776
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Unable to load the image <filename>%2</filename><nl/>%1"
-msgstr ""
+msgstr "לא ניתן לטעון את התמונה <filename>%2</filename><nl/>%1"
 
 #: scangallery.cpp:778
 #, kde-format
 msgid "Image Load Error"
-msgstr ""
+msgstr "שגיאת טעינת תמונה"
 
 #: scangallery.cpp:840
 #, kde-format
@@ -2543,7 +2546,7 @@ msgstr ""
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Could not save the image<nl/><filename>%2</filename><nl/>%1"
-msgstr ""
+msgstr "לא ניתן לשמור את התמונה<nl/><filename>%2</filename><nl/>%1"
 
 #: scangallery.cpp:889
 #, kde-format
