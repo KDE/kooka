@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: playground-graphics-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-05-17 01:43+0000\n"
-"PO-Revision-Date: 2024-05-17 13:43+0300\n"
+"POT-Creation-Date: 2024-09-24 02:01+0000\n"
+"PO-Revision-Date: 2024-09-24 10:39+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -22,7 +22,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 24.07.70\n"
+"X-Generator: Lokalize 24.11.70\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -51,7 +51,7 @@ msgstr ""
 
 #: ../plugins/destination/abstractdestination.cpp:160
 #: ../plugins/destination/application/destinationapplication.cpp:190
-#: kookaview.cpp:1181
+#: kookaview.cpp:1182
 #, kde-format
 msgid "Other..."
 msgstr "Diğer…"
@@ -87,13 +87,13 @@ msgstr "Görsel panoya kopyalanıyor"
 msgid "<filename>%1</filename>"
 msgstr "<filename>%1</filename>"
 
-#: ../plugins/destination/print/destinationprint.cpp:78 kookaview.cpp:677
+#: ../plugins/destination/print/destinationprint.cpp:78 kookaview.cpp:678
 #, kde-format
 msgctxt "@title:window"
 msgid "Print Image"
 msgstr "Görseli Yazdır"
 
-#: ../plugins/destination/print/destinationprint.cpp:89 kookaview.cpp:693
+#: ../plugins/destination/print/destinationprint.cpp:89 kookaview.cpp:694
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -105,7 +105,7 @@ msgstr ""
 "\n"
 "%1"
 
-#: ../plugins/destination/print/destinationprint.cpp:90 kookaview.cpp:694
+#: ../plugins/destination/print/destinationprint.cpp:90 kookaview.cpp:695
 #, kde-format
 msgctxt "@title:window"
 msgid "Cannot Print"
@@ -378,7 +378,7 @@ msgstr "OCR işletke seçimini ve ayarlarını denetleyin."
 msgid "OCR Setup Error"
 msgstr "OCR Kurulum Hatası"
 
-#: ../plugins/ocr/abstractocrengine.cpp:123 kookaview.cpp:791
+#: ../plugins/ocr/abstractocrengine.cpp:123 kookaview.cpp:792
 #, kde-format
 msgid "Configure OCR..."
 msgstr "OCR’yi Yapılandır…"
@@ -508,9 +508,9 @@ msgstr "Otomatik"
 msgid "The GOCR executable is not configured or is not available."
 msgstr "GOCR çalıştırılabiliri yapılandırılmamış veya kullanılamıyor."
 
-#: ../plugins/ocr/gocr/ocrgocrdialog.cpp:204
-#: ../plugins/ocr/ocrad/ocrocraddialog.cpp:285
-#: ../plugins/ocr/tesseract/ocrtesseractdialog.cpp:250
+#: ../plugins/ocr/gocr/ocrgocrdialog.cpp:203
+#: ../plugins/ocr/ocrad/ocrocraddialog.cpp:287
+#: ../plugins/ocr/tesseract/ocrtesseractdialog.cpp:251
 #, kde-format
 msgid "Error"
 msgstr "Hata"
@@ -521,7 +521,7 @@ msgctxt "@info"
 msgid "Cannot read GOCR result file <filename>%1</filename><nl/>%2"
 msgstr "<filename>%1</filename> GOCR sonuç dosyası okunamıyor<nl/>%2"
 
-#: ../plugins/ocr/gocr/ocrgocrengine.cpp:298
+#: ../plugins/ocr/gocr/ocrgocrengine.cpp:307
 #, kde-format
 msgid "Name or path of the GOCR executable:"
 msgstr "GOCR çalıştırılabiliri adı veya yolu:"
@@ -630,7 +630,7 @@ msgstr ""
 "<para><emphasis>Kadmos</emphasis>, reRecognition&nbsp;AG tarafından "
 "geliştirilen ticari bir OCR/ICR kitaplığıdır.</para><para>%1</"
 "para><para>Daha fazla bilgi için <link url=\"http://www.rerecognition.com"
-"\">www.rerecognition.com</link> adresine göz atın.</para>"
+"\">www.rerecognition.com</link> adresine bakın.</para>"
 
 #: ../plugins/ocr/kadmos/ocrkadmosengine.cpp:75
 #, kde-format
@@ -647,7 +647,7 @@ msgid ""
 "option."
 msgstr ""
 "Kooka’nın bu sürümü Kadmos için yapılandırılmamıştır. Kadmos kitaplıklarının "
-"kurulması ve Kooka’nın ‘--with-kadmos’ seçeneği ile yeniden derlenmesi "
+"kurulması ve Kooka’nın “--with-kadmos” seçeneği ile yeniden derlenmesi "
 "gerekmektedir."
 
 #: ../plugins/ocr/kadmos/ocrkadmosengine.cpp:93
@@ -715,28 +715,28 @@ msgstr "Tam Yerleşim Algılama"
 msgid "(default)"
 msgstr "(öntanımlı)"
 
-#: ../plugins/ocr/ocrad/ocrocradengine.cpp:243
+#: ../plugins/ocr/ocrad/ocrocradengine.cpp:244
 #: ../plugins/ocr/tesseract/ocrtesseractengine.cpp:157
 #, kde-kuit-format
 msgctxt "@info"
 msgid "File <filename>%1</filename> does not exist"
 msgstr "<filename>%1</filename> dosyası yok"
 
-#: ../plugins/ocr/ocrad/ocrocradengine.cpp:247
+#: ../plugins/ocr/ocrad/ocrocradengine.cpp:248
 #: ../plugins/ocr/tesseract/ocrtesseractengine.cpp:158
 #, kde-kuit-format
 msgctxt "@info"
 msgid "File <filename>%1</filename> unreadable"
 msgstr "<filename>%1</filename> okunabilir değil"
 
-#: ../plugins/ocr/ocrad/ocrocradengine.cpp:251
+#: ../plugins/ocr/ocrad/ocrocradengine.cpp:252
 #: ../plugins/ocr/tesseract/ocrtesseractengine.cpp:165
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot open file <filename>%1</filename>"
 msgstr "<filename>%1</filename> dosyası açılamıyor"
 
-#: ../plugins/ocr/ocrad/ocrocradengine.cpp:432
+#: ../plugins/ocr/ocrad/ocrocradengine.cpp:448
 #, kde-format
 msgid "Name or path of the OCRAD executable:"
 msgstr "OCRAD çalıştırılabilirinin adı veya yolu:"
@@ -752,12 +752,12 @@ msgstr "Tesseract çalıştırılabiliri yapılandırılmamış veya kullanılam
 msgid "Select a file if required..."
 msgstr "Gerekiyorsa bir dosya seçin…"
 
-#: ../plugins/ocr/tesseract/ocrtesseractengine.cpp:226
+#: ../plugins/ocr/tesseract/ocrtesseractengine.cpp:227
 #, kde-format
 msgid "HOCR parsing error, %1"
 msgstr "HOCR ayrıştırma hatası, %1"
 
-#: ../plugins/ocr/tesseract/ocrtesseractengine.cpp:251
+#: ../plugins/ocr/tesseract/ocrtesseractengine.cpp:252
 #, kde-format
 msgid "Name or path of the Tesseract executable:"
 msgstr "Tesseract çalıştırılabilirinin adı veya yolu:"
@@ -1469,12 +1469,12 @@ msgstr "Aygıtta boş alan kalmadı"
 #: imgsaver.cpp:374
 #, kde-format
 msgid "Cannot write image format '%1'"
-msgstr "‘%1’ görsel dosyası yazılamıyor"
+msgstr "“%1” görsel dosyası yazılamıyor"
 
 #: imgsaver.cpp:376
 #, kde-format
 msgid "Cannot write using protocol '%1'"
-msgstr "‘%1’ protokolü kullanılarak yazılamıyor"
+msgstr "“%1” protokolü kullanılarak yazılamıyor"
 
 #: imgsaver.cpp:378
 #, kde-format
@@ -1558,172 +1558,172 @@ msgctxt "@info"
 msgid "%1 <filename>%3</filename><nl/>%2"
 msgstr "%1 <filename>%3</filename><nl/>%2"
 
-#: kooka.cpp:100
+#: kooka.cpp:106
 #, kde-format
 msgid "KDE Scanning"
 msgstr "KDE Tarama"
 
-#: kooka.cpp:134
+#: kooka.cpp:140
 #, kde-format
 msgid "Scale to Width"
 msgstr "Genişliğe Göre Ölçeklendir"
 
-#: kooka.cpp:145
+#: kooka.cpp:151
 #, kde-format
 msgid "Scale to Height"
 msgstr "Yükekliğe Göre Ölçeklendir"
 
-#: kooka.cpp:154
+#: kooka.cpp:160
 #, kde-format
 msgid "Original Size"
 msgstr "Özgün Boyut"
 
-#: kooka.cpp:160
+#: kooka.cpp:166
 #, kde-format
 msgid "Set Zoom..."
 msgstr "Yakınlaştırmayı Ayarla…"
 
-#: kooka.cpp:166
+#: kooka.cpp:172
 #, kde-format
 msgid "Keep Zoom Setting"
 msgstr "Yakınlaştırma Ayarlarını Koru"
 
-#: kooka.cpp:174
+#: kooka.cpp:180
 #, kde-format
 msgid "New Image From Selection"
 msgstr "Seçimden Yeni Görsel"
 
-#: kooka.cpp:179
+#: kooka.cpp:185
 #, kde-format
 msgid "Mirror Vertically"
 msgstr "Dikey Çevir"
 
-#: kooka.cpp:186
+#: kooka.cpp:192
 #, kde-format
 msgid "Mirror Horizontally"
 msgstr "Yatay Çevir"
 
-#: kooka.cpp:196
+#: kooka.cpp:202
 #, kde-format
 msgid "Rotate Counter-Clockwise"
 msgstr "Saat Yönünün Tersine Çevir"
 
-#: kooka.cpp:203
+#: kooka.cpp:209
 #, kde-format
 msgid "Rotate Clockwise"
 msgstr "Saat Yönünde Çevir"
 
-#: kooka.cpp:210
+#: kooka.cpp:216
 #, kde-format
 msgid "Rotate 180 Degrees"
 msgstr "180 Derece Çevir"
 
-#: kooka.cpp:219
+#: kooka.cpp:225
 #, kde-format
 msgid "New Folder..."
 msgstr "Yeni Klasör…"
 
-#: kooka.cpp:224
+#: kooka.cpp:230
 #, kde-format
 msgid "Open With"
 msgstr "Birklikte Aç"
 
-#: kooka.cpp:230
+#: kooka.cpp:236
 #, kde-format
 msgid "Save Image..."
 msgstr "Görseli Kaydet…"
 
-#: kooka.cpp:237
+#: kooka.cpp:243
 #, kde-format
 msgid "Import Image..."
 msgstr "Görsel İçe Aktar…"
 
-#: kooka.cpp:242 kooka.cpp:550
+#: kooka.cpp:248 kooka.cpp:537
 #, kde-format
 msgid "Delete Image"
 msgstr "Görseli Sil"
 
-#: kooka.cpp:249 kooka.cpp:551
+#: kooka.cpp:255 kooka.cpp:538
 #, kde-format
 msgid "Rename Image"
 msgstr "Görseli Yeniden Adlandır"
 
-#: kooka.cpp:255 kooka.cpp:549
+#: kooka.cpp:261 kooka.cpp:536
 #, kde-format
 msgid "Unload Image"
 msgstr "Görseli Boşalt"
 
-#: kooka.cpp:262
+#: kooka.cpp:268
 #, kde-format
 msgid "Properties..."
 msgstr "Özellikler…"
 
-#: kooka.cpp:271
+#: kooka.cpp:277
 #, kde-format
 msgid "Select Scan Device..."
 msgstr "Tarama Aygıtı Seç…"
 
-#: kooka.cpp:275 kookaview.cpp:550
+#: kooka.cpp:281 kookaview.cpp:551
 #, kde-format
 msgid "Add Scan Device..."
 msgstr "Tarama Aygıtı Ekle…"
 
-#: kooka.cpp:281
+#: kooka.cpp:287
 #, kde-format
 msgid "Preview"
 msgstr "Önizleme"
 
-#: kooka.cpp:286
+#: kooka.cpp:292
 #, kde-format
 msgid "Start Scan"
 msgstr "Taramayı Başlat"
 
-#: kooka.cpp:291
+#: kooka.cpp:297
 #, kde-format
 msgid "Scan Presets..."
 msgstr "Tarama Önayarları…"
 
-#: kooka.cpp:296
+#: kooka.cpp:302
 #, kde-format
 msgid "Auto Select"
 msgstr "Otomatik Seç"
 
-#: kooka.cpp:304
+#: kooka.cpp:310
 #, kde-format
 msgid "OCR Image..."
 msgstr "OCR Görseli…"
 
-#: kooka.cpp:308
+#: kooka.cpp:314
 #, kde-format
 msgid "OCR Selection..."
 msgstr "OCR Seçimi…"
 
-#: kooka.cpp:312
+#: kooka.cpp:318
 #, kde-format
 msgid "OCR File..."
 msgstr "OCR Dosyası…"
 
-#: kooka.cpp:316
+#: kooka.cpp:322
 #, kde-format
 msgid "Save OCR Result Text..."
 msgstr "OCR Sonuç Metnini Kaydet…"
 
-#: kooka.cpp:321
+#: kooka.cpp:327
 #, kde-format
 msgid "Spell Check OCR Result..."
 msgstr "OCR Sonunu Yazım Denetimi…"
 
-#: kooka.cpp:537
+#: kooka.cpp:524
 #, kde-format
 msgid "Unload Folder"
 msgstr "Klasörü Boşalt"
 
-#: kooka.cpp:538
+#: kooka.cpp:525
 #, kde-format
 msgid "Delete Folder"
 msgstr "Klasörü Sil"
 
-#: kooka.cpp:539
+#: kooka.cpp:526
 #, kde-format
 msgid "Rename Folder"
 msgstr "Klasörü Yeniden Adlandır"
@@ -1813,7 +1813,7 @@ msgstr "Hedef seçilmedi"
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Unable to load plugin '%1'"
-msgstr "‘%1’ eklentisi yüklenemiyor"
+msgstr "“%1” eklentisi yüklenemiyor"
 
 #. i18n: ectx: label, entry (StartupReadImage), group (Startup)
 #: kookasettings.kcfg:50
@@ -1912,7 +1912,7 @@ msgid ""
 "on them (otherwise, use the \"Rename\" menu option).</div>"
 msgstr ""
 "<div>Galeri ögelerine tıklayarak yeniden adlandırmak istiyorsanız bunu "
-"işaretleyin (aksi takdirde ‘Yeniden Adlandır’ menü seçeneğini kullanın).</"
+"işaretleyin (aksi takdirde “Yeniden Adlandır” menü seçeneğini kullanın).</"
 "div>"
 
 #. i18n: ectx: label, entry (GalleryLayout), group (Gallery)
@@ -2175,12 +2175,12 @@ msgstr "OCR sonuçları burada görükecek"
 msgid "Scan"
 msgstr "Tara"
 
-#: kookaview.cpp:289 kookaview.cpp:564 kookaview.cpp:583 scangallery.cpp:123
+#: kookaview.cpp:289 kookaview.cpp:565 kookaview.cpp:584 scangallery.cpp:122
 #, kde-format
 msgid "Gallery"
 msgstr "Galeri"
 
-#: kookaview.cpp:465
+#: kookaview.cpp:466
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2196,12 +2196,12 @@ msgstr ""
 "çalışılıyor: <icode>%3</icode><nl/>libkookascan hata bildirimi: <message>%2</"
 "message><nl/>SANE hata bildirimi: <message>%1</message>"
 
-#: kookaview.cpp:520
+#: kookaview.cpp:521
 #, kde-format
 msgid "Add Scan Device"
 msgstr "Tarama Aygıtı Ekle"
 
-#: kookaview.cpp:540
+#: kookaview.cpp:541
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2220,79 +2220,79 @@ msgstr ""
 "için <interface>Tarama Aygıtı Ekle</interface> seçeneğini kullanın veya daha "
 "fazla bilgi için pencereyi görüntüleyin."
 
-#: kookaview.cpp:586
+#: kookaview.cpp:587
 #, kde-format
 msgid "No scanner connected"
 msgstr "Bağlı bir tarayıcı yok"
 
-#: kookaview.cpp:645
+#: kookaview.cpp:646
 #, kde-format
 msgid "No selection"
 msgstr "Seçim yok"
 
-#: kookaview.cpp:649
+#: kookaview.cpp:650
 #, kde-format
 msgid "Gallery folder %1"
 msgstr "Galeri klasörü %1"
 
-#: kookaview.cpp:649
+#: kookaview.cpp:650
 #, kde-format
 msgid "Gallery image %1"
 msgstr "Galeri görseli %1"
 
-#: kookaview.cpp:714
+#: kookaview.cpp:715
 #, kde-format
 msgid "Starting OCR on selection"
 msgstr "Seçim üzerinde OCR başlıyor"
 
-#: kookaview.cpp:720
+#: kookaview.cpp:721
 #, kde-format
 msgid "Starting OCR on the image"
 msgstr "Görsel üzerinde OCR başlıyor"
 
-#: kookaview.cpp:727
+#: kookaview.cpp:728
 #, kde-format
 msgid "OCR File"
 msgstr "OCR Dosyası"
 
-#: kookaview.cpp:737
+#: kookaview.cpp:738
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot load <filename>%1</filename> for OCR:<nl/>%2"
 msgstr "<filename>%1</filename> dosyası OCR için yüklenemiyor:<nl/>%2"
 
-#: kookaview.cpp:739
+#: kookaview.cpp:740
 #, kde-format
 msgid "Cannot Read OCR File"
 msgstr "OCR Dosyası Okunamıyor"
 
-#: kookaview.cpp:743
+#: kookaview.cpp:744
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Starting OCR on file <filename>%1</filename>"
 msgstr "<filename>%1</filename> dosyasında OCR başlatılıyor"
 
-#: kookaview.cpp:759
+#: kookaview.cpp:760
 #, kde-format
 msgid "OCR finished"
 msgstr "OCR bitti"
 
-#: kookaview.cpp:766
+#: kookaview.cpp:767
 #, kde-format
 msgid "There is no OCR result text to spell check."
 msgstr "Yazım denetimi kapılacak OCD sonucu yok."
 
-#: kookaview.cpp:767
+#: kookaview.cpp:768
 #, kde-format
 msgid "OCR Spell Check not possible"
 msgstr "OCR Yazım Denetimi olanaklı değil"
 
-#: kookaview.cpp:772
+#: kookaview.cpp:773
 #, kde-format
 msgid "OCR Spell Check"
 msgstr "OCR Yazım Denetimi"
 
-#: kookaview.cpp:788
+#: kookaview.cpp:789
 #, kde-format
 msgid ""
 "No OCR engine is configured.\n"
@@ -2301,17 +2301,17 @@ msgstr ""
 "Yapılandırılmış OCR işletkesi yok.\n"
 "OCR gerçekleştirmek için bir tane seçin ve yapılandırın."
 
-#: kookaview.cpp:790
+#: kookaview.cpp:791
 #, kde-format
 msgid "OCR Not Configured"
 msgstr "OCR Yapılandırılmamış"
 
-#: kookaview.cpp:799
+#: kookaview.cpp:800
 #, kde-format
 msgid "Cannot load OCR plugin '%1'"
-msgstr "OCR eklentisi ‘%1’ yüklenemiyor"
+msgstr "OCR eklentisi “%1” yüklenemiyor"
 
-#: kookaview.cpp:907
+#: kookaview.cpp:908
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2327,27 +2327,27 @@ msgstr ""
 "%3</icode><nl/>libkookascan hata bildirimi: <message>%2</message><nl/>SANE "
 "hata bildirimi: <message>%1</message>"
 
-#: kookaview.cpp:957
+#: kookaview.cpp:958
 #, kde-format
 msgid "Create new image from selection"
 msgstr "Seçimden yeni bir görsel formu oluştur"
 
-#: kookaview.cpp:966
+#: kookaview.cpp:967
 #, kde-format
 msgid "Cannot transform, image is read-only"
 msgstr "Dönüştürülemiyor, görsel salt okunur durumda"
 
-#: kookaview.cpp:1019
+#: kookaview.cpp:1020
 #, kde-format
 msgid "Loaded image %1"
 msgstr "Yüklenmiş görsel %1"
 
-#: kookaview.cpp:1020
+#: kookaview.cpp:1021
 #, kde-format
 msgid "Unloaded image"
 msgstr "Boşaltılmış görsel"
 
-#: kookaview.cpp:1037
+#: kookaview.cpp:1038
 #, kde-format
 msgid "Loading %1..."
 msgstr "%1 yükleniyor…"
@@ -2410,7 +2410,7 @@ msgstr ""
 #: main.cpp:70
 #, kde-format
 msgid "(C) 2000-2018, the Kooka developers and contributors"
-msgstr "(C) 2000–2018, the Kooka geliştiricileri ve katkıcıları"
+msgstr "© 2000–2018, the Kooka geliştiricileri ve katkıcıları"
 
 #: main.cpp:78
 #, kde-format
@@ -2477,17 +2477,17 @@ msgstr "Alex Kempshall"
 msgid "Photocopy facility"
 msgstr "Fotokopi özelliği"
 
-#: main.cpp:105
+#: main.cpp:111
 #, kde-format
 msgid "Gallery mode - do not connect to scanner"
 msgstr "Galeri kipi — Tarayıcı ile bağlantı kurmayın"
 
-#: main.cpp:108
+#: main.cpp:114
 #, kde-format
 msgid "The SANE device specification (e.g. 'umax:/dev/sg0')"
-msgstr "SANE aygıt belirtimleri (örn. ‘umax:/dev/sg0’)"
+msgstr "SANE aygıt belirtimleri (örn. “umax:/dev/sg0”)"
 
-#: main.cpp:108
+#: main.cpp:114
 #, kde-format
 msgid "device"
 msgstr "aygıt"
@@ -2530,7 +2530,7 @@ msgstr "OCR Sonuç Metnini Kaydet"
 #: ocrresedit.cpp:160
 #, kde-format
 msgid "Text File (*.txt)"
-msgstr "Metin Dosyası (*.txt)"
+msgstr "Metin dosyası (*.txt)"
 
 #: ocrresedit.cpp:166
 #, kde-kuit-format
@@ -2560,8 +2560,8 @@ msgid ""
 "Use this button to reenable all messages and questions which\n"
 "have been hidden by using \"Don't ask me again\"."
 msgstr ""
-"Yüm iletileri ve soruları yeniden etkinleştirmek için bu düğmeyi kullanın\n"
-"\"Bir daha sorma’ seçeneği kullanılarak gizlenmiştir."
+"“Bir daha sorma” seçeneği kullanılarak gizlenen tüm iletileri\n"
+"ve soruları yeniden etkinleştirmek için bu düğmeyi kullanın."
 
 #: prefspages.cpp:85
 #, kde-format
@@ -2625,74 +2625,74 @@ msgstr ""
 #: prefspages.cpp:452
 #, kde-format
 msgid "Unknown engine '%1'."
-msgstr "Bilinmeyen işletke ‘%1’."
+msgstr "Bilinmeyen işletke “%1”."
 
-#: scangallery.cpp:98
+#: scangallery.cpp:97
 #, kde-format
 msgid "Name"
 msgstr "Ad"
 
-#: scangallery.cpp:99
+#: scangallery.cpp:98
 #, kde-format
 msgid "Size"
 msgstr "Boy"
 
-#: scangallery.cpp:100
+#: scangallery.cpp:99
 #, kde-format
 msgid "Format"
 msgstr "Biçim"
 
-#: scangallery.cpp:171
+#: scangallery.cpp:170
 #, kde-format
 msgid "Kooka Gallery"
 msgstr "Kooka Galerisi"
 
-#: scangallery.cpp:375
+#: scangallery.cpp:374
 #, kde-format
 msgid "empty"
 msgstr "boş"
 
-#: scangallery.cpp:378
+#: scangallery.cpp:377
 #, kde-format
 msgid "one image"
 msgid_plural "%1 images"
 msgstr[0] "bir görsel"
 msgstr[1] "%1 görsel"
 
-#: scangallery.cpp:380
+#: scangallery.cpp:379
 #, kde-format
 msgid "one file"
 msgid_plural "%1 files"
 msgstr[0] "bir dosya"
 msgstr[1] "%1 dosya"
 
-#: scangallery.cpp:386
+#: scangallery.cpp:385
 #, kde-format
 msgid "one file, "
 msgid_plural "%1 files, "
 msgstr[0] "bir dosya, "
 msgstr[1] "%1 dosya, "
 
-#: scangallery.cpp:388
+#: scangallery.cpp:387
 #, kde-format
 msgid "one image, "
 msgid_plural "%1 images, "
 msgstr[0] "bir görsel, "
 msgstr[1] "%1 görsel, "
 
-#: scangallery.cpp:391
+#: scangallery.cpp:390
 #, kde-format
 msgid "1 folder"
 msgid_plural "%1 folders"
 msgstr[0] "1 klasör"
 msgstr[1] "%1 klasör"
 
-#: scangallery.cpp:446
+#: scangallery.cpp:445
 #, kde-format
 msgid " %1 x %2"
 msgstr " %1 × %2"
 
-#: scangallery.cpp:601
+#: scangallery.cpp:600
 #, kde-format
 msgid ""
 "You entered a file extension that differs from the existing one. That is not "
@@ -2704,65 +2704,65 @@ msgstr ""
 "tasarlanıyor.\n"
 "Kooka uzantıları doğrular."
 
-#: scangallery.cpp:603
+#: scangallery.cpp:602
 #, kde-format
 msgid "On the Fly Conversion"
 msgstr "Canlı Dönüştürme"
 
-#: scangallery.cpp:699
+#: scangallery.cpp:698
 #, kde-format
 msgid "Not a supported image format"
 msgstr "Desteklenen bir görsel biçimi değil"
 
-#: scangallery.cpp:751
+#: scangallery.cpp:750
 #, kde-format
 msgid "Sub-image %1"
 msgstr "Alt görsel %1"
 
-#: scangallery.cpp:777
+#: scangallery.cpp:776
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Unable to load the image <filename>%2</filename><nl/>%1"
 msgstr "<filename>%2</filename> görseli yüklenemiyor<nl/>%1"
 
-#: scangallery.cpp:779
+#: scangallery.cpp:778
 #, kde-format
 msgid "Image Load Error"
 msgstr "Görsel Yükleme Hatası"
 
-#: scangallery.cpp:841
+#: scangallery.cpp:840
 #, kde-format
 msgid "Incoming/"
 msgstr "Gelen/"
 
-#: scangallery.cpp:887
+#: scangallery.cpp:886
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Could not save the image<nl/><filename>%2</filename><nl/>%1"
 msgstr "<filename>%2</filename>görseli kaydedilemedi<nl/>%1"
 
-#: scangallery.cpp:890
+#: scangallery.cpp:889
 #, kde-format
 msgid "Image Save Error"
 msgstr "Görsel Kaydetme Hatası"
 
-#: scangallery.cpp:968
+#: scangallery.cpp:967
 #, kde-format
 msgid "All Files (*)"
 msgstr "Tüm Dosyalar (*)"
 
-#: scangallery.cpp:971
+#: scangallery.cpp:970
 #, kde-format
 msgctxt "@title:window"
 msgid "Export Image"
 msgstr "Görseli Dışa Aktar"
 
-#: scangallery.cpp:996
+#: scangallery.cpp:995
 #, kde-format
 msgid "Import Image File to Gallery"
 msgstr "Görsel Dosyasını Galeriye Aktar"
 
-#: scangallery.cpp:1111
+#: scangallery.cpp:1110
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2772,7 +2772,7 @@ msgstr ""
 "<filename>%1</filename> klasörünü ve içeriğini<nl/> gerçekten kalıcı olarak "
 "silmek istiyor musunuz? Geri yüklenemeyecektir."
 
-#: scangallery.cpp:1116
+#: scangallery.cpp:1115
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2782,39 +2782,39 @@ msgstr ""
 "<filename>%1</filename> görselini gerçekten kalıcı olarak<nl/>silmek istiyor "
 "musunuz?<nl/>Geri yüklenemeyecektir."
 
-#: scangallery.cpp:1123
+#: scangallery.cpp:1122
 #, kde-format
 msgid "Delete Gallery Item"
 msgstr "Galeri Ögesini Sil"
 
-#: scangallery.cpp:1136
+#: scangallery.cpp:1135
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Could not delete the image or folder<nl/><filename>%2</filename><nl/>%1"
 msgstr "<filename>%2</filename> görseli veya klasörü<nl/>silinemedi<nl/>%1"
 
-#: scangallery.cpp:1139
+#: scangallery.cpp:1138
 #, kde-format
 msgid "File Delete Error"
 msgstr "Dosya Silme Hatası"
 
-#: scangallery.cpp:1171
+#: scangallery.cpp:1170
 #, kde-format
 msgid "New Folder"
 msgstr "Yeni Klasör"
 
-#: scangallery.cpp:1172
+#: scangallery.cpp:1171
 #, kde-format
 msgid "Name for the new folder:"
 msgstr "Yeni klasör adı:"
 
-#: scangallery.cpp:1195
+#: scangallery.cpp:1194
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Could not create the folder<nl/><filename>%2</filename><nl/>%1"
 msgstr "<filename>%2</filename>klasörü<nl/> oluşturulamadı<nl/>%1"
 
-#: scangallery.cpp:1197
+#: scangallery.cpp:1196
 #, kde-format
 msgid "Folder Create Error"
 msgstr "Klasör Oluşturma Hatası"
@@ -2928,42 +2928,42 @@ msgctxt "@info:status"
 msgid "Scan: %1"
 msgstr "Tarama: %1"
 
-#: thumbview.cpp:96
+#: thumbview.cpp:98
 #, kde-format
 msgid "Thumbnails"
 msgstr "Küçük Görseller"
 
-#: thumbview.cpp:107
+#: thumbview.cpp:109
 #, kde-format
 msgid "Preview Size"
 msgstr "Önizleme Boyutu"
 
-#: thumbview.cpp:338
+#: thumbview.cpp:340
 #, kde-format
 msgid "Very Large"
 msgstr "Çok Büyük"
 
-#: thumbview.cpp:339
+#: thumbview.cpp:341
 #, kde-format
 msgid "Large"
 msgstr "Büyük"
 
-#: thumbview.cpp:340
+#: thumbview.cpp:342
 #, kde-format
 msgid "Medium"
 msgstr "Orta"
 
-#: thumbview.cpp:341
+#: thumbview.cpp:343
 #, kde-format
 msgid "Small"
 msgstr "Küçük"
 
-#: thumbview.cpp:342
+#: thumbview.cpp:344
 #, kde-format
 msgid "Very Small"
 msgstr "Çok Küçük"
 
-#: thumbview.cpp:343
+#: thumbview.cpp:345
 #, kde-format
 msgid "Tiny"
 msgstr "Minik"

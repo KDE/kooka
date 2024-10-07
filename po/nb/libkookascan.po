@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: libkscan\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-05-17 01:43+0000\n"
+"POT-Creation-Date: 2024-09-24 02:01+0000\n"
 "PO-Revision-Date: 2005-11-07 21:03+0100\n"
 "Last-Translator: Axel Bojer <fri_programvare@bojer.no>\n"
 "Language-Team: Norwegian Bokmål <l10n-no@lister.huftis.org>\n"
@@ -85,10 +85,9 @@ msgstr "Beskrivelse:"
 msgctxt "@info"
 msgid ""
 "The <interface>Scanner device</interface> should be a backend name (with "
-"optional parameters) that is understood by SANE. See <link url=\"man:/"
-"sane\">sane(7)</link> or <link url=\"man:/sane-dll\">sane&#8209;dll(5)</"
-"link> for more information on available backends and the format of device "
-"names."
+"optional parameters) that is understood by SANE. See <link url=\"man:/sane"
+"\">sane(7)</link> or <link url=\"man:/sane-dll\">sane&#8209;dll(5)</link> "
+"for more information on available backends and the format of device names."
 msgstr ""
 
 #: adddevicedialog.cpp:134
@@ -304,7 +303,7 @@ msgstr ""
 msgid "Reset this setting to its standard value, %1"
 msgstr ""
 
-#: kscancontrols.cpp:414
+#: kscancontrols.cpp:419
 #, kde-format
 msgid "PNM Image Files (*.pnm *.pbm *.pgm *.ppm)"
 msgstr ""
@@ -395,32 +394,32 @@ msgstr "Ikke støttet"
 msgid "Unknown status %1"
 msgstr ""
 
-#: kscanoption.cpp:1013
+#: kscanoption.cpp:1027
 #, kde-format
 msgid "pixels"
 msgstr "piksler"
 
-#: kscanoption.cpp:1014
+#: kscanoption.cpp:1028
 #, kde-format
 msgid "bits"
 msgstr ""
 
-#: kscanoption.cpp:1015
+#: kscanoption.cpp:1029
 #, kde-format
 msgid "mm"
 msgstr ""
 
-#: kscanoption.cpp:1016
+#: kscanoption.cpp:1030
 #, kde-format
 msgid "dpi"
 msgstr ""
 
-#: kscanoption.cpp:1017
+#: kscanoption.cpp:1031
 #, kde-format
 msgid "%"
 msgstr ""
 
-#: kscanoption.cpp:1018
+#: kscanoption.cpp:1032
 #, kde-format
 msgid "µsec"
 msgstr ""
@@ -595,8 +594,8 @@ msgstr ""
 msgctxt "@info:tooltip"
 msgid ""
 "Operate in the same way that a real scanner does (including scan area, image "
-"processing etc.), but reading from the specified image file. See <link "
-"url=\"man:sane-pnm(5)\">sane-pnm(5)</link> for more information."
+"processing etc.), but reading from the specified image file. See <link url="
+"\"man:sane-pnm(5)\">sane-pnm(5)</link> for more information."
 msgstr ""
 
 #: scanparams.cpp:278
@@ -701,8 +700,8 @@ msgstr ""
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
-"SANE Debug can only read PNM files.<nl/>The specified file is type "
-"<icode>%1</icode>."
+"SANE Debug can only read PNM files.<nl/>The specified file is type <icode>"
+"%1</icode>."
 msgstr ""
 
 #: scanparams.cpp:721

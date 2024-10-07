@@ -3,22 +3,22 @@
 # This file is distributed under the license LGPL version 2.1 or
 # version 3 or later versions approved by the membership of KDE e.V.
 #
-# Josep M. Ferrer <txemaq@gmail.com>, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2024.
+# SPDX-FileCopyrightText: 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2024 Josep M. Ferrer <txemaq@gmail.com>
 # Albert Astals Cid <aacid@kde.org>, 2004, 2005.
 # Antoni Bella Pérez <antonibella5@yahoo.com>, 2014, 2017, 2018, 2020, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-05-17 01:43+0000\n"
-"PO-Revision-Date: 2024-05-17 09:46+0200\n"
+"POT-Creation-Date: 2024-09-24 02:01+0000\n"
+"PO-Revision-Date: 2024-09-25 09:32+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 22.12.3\n"
+"X-Generator: Lokalize 24.08.1\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Accelerator-Marker: &\n"
 
@@ -49,7 +49,7 @@ msgstr ""
 
 #: ../plugins/destination/abstractdestination.cpp:160
 #: ../plugins/destination/application/destinationapplication.cpp:190
-#: kookaview.cpp:1181
+#: kookaview.cpp:1182
 #, kde-format
 msgid "Other..."
 msgstr "Altres…"
@@ -85,13 +85,13 @@ msgstr "S'està copiant la imatge a dins del porta-retalls"
 msgid "<filename>%1</filename>"
 msgstr "<filename>%1</filename>"
 
-#: ../plugins/destination/print/destinationprint.cpp:78 kookaview.cpp:677
+#: ../plugins/destination/print/destinationprint.cpp:78 kookaview.cpp:678
 #, kde-format
 msgctxt "@title:window"
 msgid "Print Image"
 msgstr "Imprimiu la imatge"
 
-#: ../plugins/destination/print/destinationprint.cpp:89 kookaview.cpp:693
+#: ../plugins/destination/print/destinationprint.cpp:89 kookaview.cpp:694
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -103,7 +103,7 @@ msgstr ""
 "\n"
 "%1"
 
-#: ../plugins/destination/print/destinationprint.cpp:90 kookaview.cpp:694
+#: ../plugins/destination/print/destinationprint.cpp:90 kookaview.cpp:695
 #, kde-format
 msgctxt "@title:window"
 msgid "Cannot Print"
@@ -378,7 +378,7 @@ msgstr "Comproveu la selecció del motor OCR i la configuració."
 msgid "OCR Setup Error"
 msgstr "S'ha produït un error de configuració d'OCR"
 
-#: ../plugins/ocr/abstractocrengine.cpp:123 kookaview.cpp:791
+#: ../plugins/ocr/abstractocrengine.cpp:123 kookaview.cpp:792
 #, kde-format
 msgid "Configure OCR..."
 msgstr "Configura OCR…"
@@ -509,9 +509,9 @@ msgstr "Automàtic"
 msgid "The GOCR executable is not configured or is not available."
 msgstr "L'executable de GOCR no està configurat o no es troba disponible."
 
-#: ../plugins/ocr/gocr/ocrgocrdialog.cpp:204
-#: ../plugins/ocr/ocrad/ocrocraddialog.cpp:285
-#: ../plugins/ocr/tesseract/ocrtesseractdialog.cpp:250
+#: ../plugins/ocr/gocr/ocrgocrdialog.cpp:203
+#: ../plugins/ocr/ocrad/ocrocraddialog.cpp:287
+#: ../plugins/ocr/tesseract/ocrtesseractdialog.cpp:251
 #, kde-format
 msgid "Error"
 msgstr "S'ha produït un error"
@@ -524,7 +524,7 @@ msgstr ""
 "No s'ha pogut llegir el fitxer resultat de GOCR <filename>%1</filename><nl/>"
 "%2"
 
-#: ../plugins/ocr/gocr/ocrgocrengine.cpp:298
+#: ../plugins/ocr/gocr/ocrgocrengine.cpp:307
 #, kde-format
 msgid "Name or path of the GOCR executable:"
 msgstr "Nom o camí cap a l'executable de GOCR:"
@@ -569,12 +569,12 @@ msgstr "S'ha produït un error en la instal·lació"
 #: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:227
 #, kde-format
 msgid "Please classify the font type and language of the text on the image:"
-msgstr "Classifiqueu el tipus de lletra i l'idioma del text de la imatge:"
+msgstr "Classifiqueu la lletra i l'idioma del text de la imatge:"
 
 #: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:232
 #, kde-format
 msgid "Font Type Selection"
-msgstr "Seleccioneu el tipus de lletra"
+msgstr "Seleccioneu la lletra"
 
 #: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:235
 #, kde-format
@@ -715,28 +715,28 @@ msgstr "Detecció plena de la disposició"
 msgid "(default)"
 msgstr "(predeterminat)"
 
-#: ../plugins/ocr/ocrad/ocrocradengine.cpp:243
+#: ../plugins/ocr/ocrad/ocrocradengine.cpp:244
 #: ../plugins/ocr/tesseract/ocrtesseractengine.cpp:157
 #, kde-kuit-format
 msgctxt "@info"
 msgid "File <filename>%1</filename> does not exist"
 msgstr "El fitxer <filename>%1</filename> no existix"
 
-#: ../plugins/ocr/ocrad/ocrocradengine.cpp:247
+#: ../plugins/ocr/ocrad/ocrocradengine.cpp:248
 #: ../plugins/ocr/tesseract/ocrtesseractengine.cpp:158
 #, kde-kuit-format
 msgctxt "@info"
 msgid "File <filename>%1</filename> unreadable"
 msgstr "El fitxer <filename>%1</filename> és il·legible"
 
-#: ../plugins/ocr/ocrad/ocrocradengine.cpp:251
+#: ../plugins/ocr/ocrad/ocrocradengine.cpp:252
 #: ../plugins/ocr/tesseract/ocrtesseractengine.cpp:165
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot open file <filename>%1</filename>"
 msgstr "No s'ha pogut obrir el fitxer <filename>%1</filename>"
 
-#: ../plugins/ocr/ocrad/ocrocradengine.cpp:432
+#: ../plugins/ocr/ocrad/ocrocradengine.cpp:448
 #, kde-format
 msgid "Name or path of the OCRAD executable:"
 msgstr "Nom o camí cap a l'executable d'OCRAD:"
@@ -752,12 +752,12 @@ msgstr "L'executable de Tesseract no està configurat o no es troba disponible."
 msgid "Select a file if required..."
 msgstr "Cal seleccionar un fitxer…"
 
-#: ../plugins/ocr/tesseract/ocrtesseractengine.cpp:226
+#: ../plugins/ocr/tesseract/ocrtesseractengine.cpp:227
 #, kde-format
 msgid "HOCR parsing error, %1"
 msgstr "S'ha produït un error d'anàlisi HORC, %1"
 
-#: ../plugins/ocr/tesseract/ocrtesseractengine.cpp:251
+#: ../plugins/ocr/tesseract/ocrtesseractengine.cpp:252
 #, kde-format
 msgid "Name or path of the Tesseract executable:"
 msgstr "Nom o camí cap a l'executable de Tesseract:"
@@ -1570,172 +1570,172 @@ msgctxt "@info"
 msgid "%1 <filename>%3</filename><nl/>%2"
 msgstr "%1 <filename>%3</filename><nl/>%2"
 
-#: kooka.cpp:100
+#: kooka.cpp:106
 #, kde-format
 msgid "KDE Scanning"
 msgstr "Escaneig de KDE"
 
-#: kooka.cpp:134
+#: kooka.cpp:140
 #, kde-format
 msgid "Scale to Width"
 msgstr "Escala a l'amplària"
 
-#: kooka.cpp:145
+#: kooka.cpp:151
 #, kde-format
 msgid "Scale to Height"
 msgstr "Escala a l'alçària"
 
-#: kooka.cpp:154
+#: kooka.cpp:160
 #, kde-format
 msgid "Original Size"
 msgstr "Mida original"
 
-#: kooka.cpp:160
+#: kooka.cpp:166
 #, kde-format
 msgid "Set Zoom..."
 msgstr "Establix el zoom…"
 
-#: kooka.cpp:166
+#: kooka.cpp:172
 #, kde-format
 msgid "Keep Zoom Setting"
 msgstr "Mantín el factor de zoom"
 
-#: kooka.cpp:174
+#: kooka.cpp:180
 #, kde-format
 msgid "New Image From Selection"
 msgstr "Imatge nova des de la selecció"
 
-#: kooka.cpp:179
+#: kooka.cpp:185
 #, kde-format
 msgid "Mirror Vertically"
 msgstr "Emmiralla verticalment"
 
-#: kooka.cpp:186
+#: kooka.cpp:192
 #, kde-format
 msgid "Mirror Horizontally"
 msgstr "Emmiralla horitzontalment"
 
-#: kooka.cpp:196
+#: kooka.cpp:202
 #, kde-format
 msgid "Rotate Counter-Clockwise"
 msgstr "Gira en sentit antihorari"
 
-#: kooka.cpp:203
+#: kooka.cpp:209
 #, kde-format
 msgid "Rotate Clockwise"
 msgstr "Gira en sentit horari"
 
-#: kooka.cpp:210
+#: kooka.cpp:216
 #, kde-format
 msgid "Rotate 180 Degrees"
 msgstr "Gira 180 graus"
 
-#: kooka.cpp:219
+#: kooka.cpp:225
 #, kde-format
 msgid "New Folder..."
 msgstr "Carpeta nova…"
 
-#: kooka.cpp:224
+#: kooka.cpp:230
 #, kde-format
 msgid "Open With"
 msgstr "Obri amb"
 
-#: kooka.cpp:230
+#: kooka.cpp:236
 #, kde-format
 msgid "Save Image..."
 msgstr "Guarda la imatge…"
 
-#: kooka.cpp:237
+#: kooka.cpp:243
 #, kde-format
 msgid "Import Image..."
 msgstr "Importa una imatge…"
 
-#: kooka.cpp:242 kooka.cpp:550
+#: kooka.cpp:248 kooka.cpp:537
 #, kde-format
 msgid "Delete Image"
 msgstr "Suprimix la imatge"
 
-#: kooka.cpp:249 kooka.cpp:551
+#: kooka.cpp:255 kooka.cpp:538
 #, kde-format
 msgid "Rename Image"
 msgstr "Canvia el nom de la imatge"
 
-#: kooka.cpp:255 kooka.cpp:549
+#: kooka.cpp:261 kooka.cpp:536
 #, kde-format
 msgid "Unload Image"
 msgstr "Envia la imatge"
 
-#: kooka.cpp:262
+#: kooka.cpp:268
 #, kde-format
 msgid "Properties..."
 msgstr "Propietats…"
 
-#: kooka.cpp:271
+#: kooka.cpp:277
 #, kde-format
 msgid "Select Scan Device..."
 msgstr "Seleccioneu el dispositiu d'escaneig…"
 
-#: kooka.cpp:275 kookaview.cpp:550
+#: kooka.cpp:281 kookaview.cpp:551
 #, kde-format
 msgid "Add Scan Device..."
 msgstr "Afig un dispositiu d'escaneig…"
 
-#: kooka.cpp:281
+#: kooka.cpp:287
 #, kde-format
 msgid "Preview"
 msgstr "Vista prèvia"
 
-#: kooka.cpp:286
+#: kooka.cpp:292
 #, kde-format
 msgid "Start Scan"
 msgstr "Inicia l'escaneig"
 
-#: kooka.cpp:291
+#: kooka.cpp:297
 #, kde-format
 msgid "Scan Presets..."
 msgstr "Valors predefinits d'escaneig…"
 
-#: kooka.cpp:296
+#: kooka.cpp:302
 #, kde-format
 msgid "Auto Select"
 msgstr "Selecciona automàticament"
 
-#: kooka.cpp:304
+#: kooka.cpp:310
 #, kde-format
 msgid "OCR Image..."
 msgstr "Imatge OCR…"
 
-#: kooka.cpp:308
+#: kooka.cpp:314
 #, kde-format
 msgid "OCR Selection..."
 msgstr "En seleccionar OCR…"
 
-#: kooka.cpp:312
+#: kooka.cpp:318
 #, kde-format
 msgid "OCR File..."
 msgstr "Fitxer OCR…"
 
-#: kooka.cpp:316
+#: kooka.cpp:322
 #, kde-format
 msgid "Save OCR Result Text..."
 msgstr "Guarda el text OCR resultant…"
 
-#: kooka.cpp:321
+#: kooka.cpp:327
 #, kde-format
 msgid "Spell Check OCR Result..."
 msgstr "Resultat de la verificació ortogràfica d'OCR…"
 
-#: kooka.cpp:537
+#: kooka.cpp:524
 #, kde-format
 msgid "Unload Folder"
 msgstr "Desplega la carpeta"
 
-#: kooka.cpp:538
+#: kooka.cpp:525
 #, kde-format
 msgid "Delete Folder"
 msgstr "Suprimix la carpeta"
 
-#: kooka.cpp:539
+#: kooka.cpp:526
 #, kde-format
 msgid "Rename Folder"
 msgstr "Canvia el nom de la carpeta"
@@ -2192,12 +2192,12 @@ msgstr "El resultat d'OCR apareixerà ací"
 msgid "Scan"
 msgstr "Escaneja"
 
-#: kookaview.cpp:289 kookaview.cpp:564 kookaview.cpp:583 scangallery.cpp:123
+#: kookaview.cpp:289 kookaview.cpp:565 kookaview.cpp:584 scangallery.cpp:122
 #, kde-format
 msgid "Gallery"
 msgstr "Galeria"
 
-#: kookaview.cpp:465
+#: kookaview.cpp:466
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2213,12 +2213,12 @@ msgstr ""
 "icode><nl/>La «libkookascan» ha informat l'error: <message>%2</message><nl/"
 ">SANE ha informat l'error: <message>%1</message>"
 
-#: kookaview.cpp:520
+#: kookaview.cpp:521
 #, kde-format
 msgid "Add Scan Device"
 msgstr "Afig un dispositiu d'escaneig"
 
-#: kookaview.cpp:540
+#: kookaview.cpp:541
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2237,80 +2237,80 @@ msgstr ""
 "<interface>Afig un dispositiu d'escaneig</interface> per a introduir el nom "
 "del dorsal i els paràmetres, o vegeu este diàleg per a més informació."
 
-#: kookaview.cpp:586
+#: kookaview.cpp:587
 #, kde-format
 msgid "No scanner connected"
 msgstr "No s'ha connectat cap escàner"
 
-#: kookaview.cpp:645
+#: kookaview.cpp:646
 #, kde-format
 msgid "No selection"
 msgstr "Sense selecció"
 
-#: kookaview.cpp:649
+#: kookaview.cpp:650
 #, kde-format
 msgid "Gallery folder %1"
 msgstr "Carpeta de la galeria %1"
 
-#: kookaview.cpp:649
+#: kookaview.cpp:650
 #, kde-format
 msgid "Gallery image %1"
 msgstr "Imatges de la galeria %1"
 
-#: kookaview.cpp:714
+#: kookaview.cpp:715
 #, kde-format
 msgid "Starting OCR on selection"
 msgstr "Seleccioneu l'inici OCR"
 
-#: kookaview.cpp:720
+#: kookaview.cpp:721
 #, kde-format
 msgid "Starting OCR on the image"
 msgstr "Inicia OCR damunt de la imatge"
 
-#: kookaview.cpp:727
+#: kookaview.cpp:728
 #, kde-format
 msgid "OCR File"
 msgstr "Fitxer OCR"
 
-#: kookaview.cpp:737
+#: kookaview.cpp:738
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot load <filename>%1</filename> for OCR:<nl/>%2"
 msgstr "No s'ha pogut carregar <filename>%1</filename> per a OCR:<nl/>%2"
 
-#: kookaview.cpp:739
+#: kookaview.cpp:740
 #, kde-format
 msgid "Cannot Read OCR File"
 msgstr "No s'ha pogut llegir el fitxer OCR"
 
-#: kookaview.cpp:743
+#: kookaview.cpp:744
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Starting OCR on file <filename>%1</filename>"
 msgstr "S'inicia OCR en el fitxer <filename>%1</filename>"
 
-#: kookaview.cpp:759
+#: kookaview.cpp:760
 #, kde-format
 msgid "OCR finished"
 msgstr "S'ha finalitzat OCR"
 
-#: kookaview.cpp:766
+#: kookaview.cpp:767
 #, kde-format
 msgid "There is no OCR result text to spell check."
 msgstr ""
 "No hi ha cap text resultant d'OCR per a fer la verificació ortogràfica."
 
-#: kookaview.cpp:767
+#: kookaview.cpp:768
 #, kde-format
 msgid "OCR Spell Check not possible"
 msgstr "No és possible la verificació ortogràfica d'OCR"
 
-#: kookaview.cpp:772
+#: kookaview.cpp:773
 #, kde-format
 msgid "OCR Spell Check"
 msgstr "Verificació ortogràfica d'OCR"
 
-#: kookaview.cpp:788
+#: kookaview.cpp:789
 #, kde-format
 msgid ""
 "No OCR engine is configured.\n"
@@ -2319,17 +2319,17 @@ msgstr ""
 "No s'ha seleccionat cap motor OCR.\n"
 "Seleccioneu-ne un i configureu-lo per a portar a terme OCR."
 
-#: kookaview.cpp:790
+#: kookaview.cpp:791
 #, kde-format
 msgid "OCR Not Configured"
 msgstr "OCR sense configurar"
 
-#: kookaview.cpp:799
+#: kookaview.cpp:800
 #, kde-format
 msgid "Cannot load OCR plugin '%1'"
 msgstr "No s'ha pogut carregar el connector OCR «%1»"
 
-#: kookaview.cpp:907
+#: kookaview.cpp:908
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2345,27 +2345,27 @@ msgstr ""
 "d'escàner: <icode>%3</icode><nl/>La «libkookascan» ha informat l'error: "
 "<message>%2</message><nl/>SANE ha informat l'error: <message>%1</message>"
 
-#: kookaview.cpp:957
+#: kookaview.cpp:958
 #, kde-format
 msgid "Create new image from selection"
 msgstr "Crea una imatge nova des de la selecció"
 
-#: kookaview.cpp:966
+#: kookaview.cpp:967
 #, kde-format
 msgid "Cannot transform, image is read-only"
 msgstr "No s'ha pogut transformar, la imatge és de només lectura"
 
-#: kookaview.cpp:1019
+#: kookaview.cpp:1020
 #, kde-format
 msgid "Loaded image %1"
 msgstr "S'està carregant la imatge %1"
 
-#: kookaview.cpp:1020
+#: kookaview.cpp:1021
 #, kde-format
 msgid "Unloaded image"
 msgstr "S'ha descarregat la imatge"
 
-#: kookaview.cpp:1037
+#: kookaview.cpp:1038
 #, kde-format
 msgid "Loading %1..."
 msgstr "S'està carregant %1…"
@@ -2494,17 +2494,17 @@ msgstr "Alex Kempshall"
 msgid "Photocopy facility"
 msgstr "Funcionalitat per a fer fotocòpies"
 
-#: main.cpp:105
+#: main.cpp:111
 #, kde-format
 msgid "Gallery mode - do not connect to scanner"
 msgstr "Mode galeria -no connectat a l'escàner-"
 
-#: main.cpp:108
+#: main.cpp:114
 #, kde-format
 msgid "The SANE device specification (e.g. 'umax:/dev/sg0')"
 msgstr "L'especificació del dispositiu SANE (p. ex., «umax:/dev/sg0»)"
 
-#: main.cpp:108
+#: main.cpp:114
 #, kde-format
 msgid "device"
 msgstr "dispositiu"
@@ -2648,72 +2648,72 @@ msgstr ""
 msgid "Unknown engine '%1'."
 msgstr "Motor desconegut «%1»."
 
-#: scangallery.cpp:98
+#: scangallery.cpp:97
 #, kde-format
 msgid "Name"
 msgstr "Nom"
 
-#: scangallery.cpp:99
+#: scangallery.cpp:98
 #, kde-format
 msgid "Size"
 msgstr "Mida"
 
-#: scangallery.cpp:100
+#: scangallery.cpp:99
 #, kde-format
 msgid "Format"
 msgstr "Format"
 
-#: scangallery.cpp:171
+#: scangallery.cpp:170
 #, kde-format
 msgid "Kooka Gallery"
 msgstr "Galeria de Kooka"
 
-#: scangallery.cpp:375
+#: scangallery.cpp:374
 #, kde-format
 msgid "empty"
 msgstr "buida"
 
-#: scangallery.cpp:378
+#: scangallery.cpp:377
 #, kde-format
 msgid "one image"
 msgid_plural "%1 images"
 msgstr[0] "una imatge"
 msgstr[1] "%1 imatges"
 
-#: scangallery.cpp:380
+#: scangallery.cpp:379
 #, kde-format
 msgid "one file"
 msgid_plural "%1 files"
 msgstr[0] "un fitxer"
 msgstr[1] "%1 fitxers"
 
-#: scangallery.cpp:386
+#: scangallery.cpp:385
 #, kde-format
 msgid "one file, "
 msgid_plural "%1 files, "
 msgstr[0] "un fitxer, "
 msgstr[1] "%1 fitxers, "
 
-#: scangallery.cpp:388
+#: scangallery.cpp:387
 #, kde-format
 msgid "one image, "
 msgid_plural "%1 images, "
 msgstr[0] "una imatge, "
 msgstr[1] "%1 imatges, "
 
-#: scangallery.cpp:391
+#: scangallery.cpp:390
 #, kde-format
 msgid "1 folder"
 msgid_plural "%1 folders"
 msgstr[0] "1 carpeta"
 msgstr[1] "%1 carpetes"
 
-#: scangallery.cpp:446
+#: scangallery.cpp:445
 #, kde-format
 msgid " %1 x %2"
 msgstr " %1 x %2"
 
-#: scangallery.cpp:601
+#: scangallery.cpp:600
 #, kde-format
 msgid ""
 "You entered a file extension that differs from the existing one. That is not "
@@ -2724,65 +2724,65 @@ msgstr ""
 "és possible. Convertir «al vol» està planificat per a una versió futura.\n"
 "Kooka corregirà l'extensió."
 
-#: scangallery.cpp:603
+#: scangallery.cpp:602
 #, kde-format
 msgid "On the Fly Conversion"
 msgstr "Conversió al vol"
 
-#: scangallery.cpp:699
+#: scangallery.cpp:698
 #, kde-format
 msgid "Not a supported image format"
 msgstr "El format d'imatge no està admés"
 
-#: scangallery.cpp:751
+#: scangallery.cpp:750
 #, kde-format
 msgid "Sub-image %1"
 msgstr "Sub imatge %1"
 
-#: scangallery.cpp:777
+#: scangallery.cpp:776
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Unable to load the image <filename>%2</filename><nl/>%1"
 msgstr "No s'ha pogut carregar la imatge <filename>%2</filename><nl/>%1"
 
-#: scangallery.cpp:779
+#: scangallery.cpp:778
 #, kde-format
 msgid "Image Load Error"
 msgstr "S'ha produït un error en carregar la imatge"
 
-#: scangallery.cpp:841
+#: scangallery.cpp:840
 #, kde-format
 msgid "Incoming/"
 msgstr "Entrant/"
 
-#: scangallery.cpp:887
+#: scangallery.cpp:886
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Could not save the image<nl/><filename>%2</filename><nl/>%1"
 msgstr "No s'ha pogut guardar la imatge<nl/><filename>%2</filename><nl/>%1"
 
-#: scangallery.cpp:890
+#: scangallery.cpp:889
 #, kde-format
 msgid "Image Save Error"
 msgstr "S'ha produït un error en guardar la imatge"
 
-#: scangallery.cpp:968
+#: scangallery.cpp:967
 #, kde-format
 msgid "All Files (*)"
 msgstr "Tots els fitxers (*)"
 
-#: scangallery.cpp:971
+#: scangallery.cpp:970
 #, kde-format
 msgctxt "@title:window"
 msgid "Export Image"
 msgstr "Exporta la imatge"
 
-#: scangallery.cpp:996
+#: scangallery.cpp:995
 #, kde-format
 msgid "Import Image File to Gallery"
 msgstr "Importa un fitxer d'imatge cap a dins de la galeria"
 
-#: scangallery.cpp:1111
+#: scangallery.cpp:1110
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2792,7 +2792,7 @@ msgstr ""
 "Segur que voleu suprimir de forma permanent la carpeta<nl/><filename>%1</"
 "filename><nl/>i tot el seu contingut? No es podrà restaurar."
 
-#: scangallery.cpp:1116
+#: scangallery.cpp:1115
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2802,12 +2802,12 @@ msgstr ""
 "Segur que voleu suprimir de forma permanent la imatge<nl/><filename>%1</"
 "filename>?<nl/>No es podrà restaurar."
 
-#: scangallery.cpp:1123
+#: scangallery.cpp:1122
 #, kde-format
 msgid "Delete Gallery Item"
 msgstr "Suprimix un element de la galeria"
 
-#: scangallery.cpp:1136
+#: scangallery.cpp:1135
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Could not delete the image or folder<nl/><filename>%2</filename><nl/>%1"
@@ -2815,28 +2815,28 @@ msgstr ""
 "No s'ha pogut suprimir la imatge o la carpeta<nl/><filename>%2</filename><nl/"
 ">%1"
 
-#: scangallery.cpp:1139
+#: scangallery.cpp:1138
 #, kde-format
 msgid "File Delete Error"
 msgstr "S'ha produït un error en suprimir un fitxer"
 
-#: scangallery.cpp:1171
+#: scangallery.cpp:1170
 #, kde-format
 msgid "New Folder"
 msgstr "Carpeta nova"
 
-#: scangallery.cpp:1172
+#: scangallery.cpp:1171
 #, kde-format
 msgid "Name for the new folder:"
 msgstr "Nom per a la carpeta nova:"
 
-#: scangallery.cpp:1195
+#: scangallery.cpp:1194
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Could not create the folder<nl/><filename>%2</filename><nl/>%1"
 msgstr "No s'ha pogut crear la carpeta<nl/><filename>%2</filename><nl/>%1"
 
-#: scangallery.cpp:1197
+#: scangallery.cpp:1196
 #, kde-format
 msgid "Folder Create Error"
 msgstr "S'ha produït un error en crear la carpeta"
@@ -2954,42 +2954,42 @@ msgctxt "@info:status"
 msgid "Scan: %1"
 msgstr "Escaneja: %1"
 
-#: thumbview.cpp:96
+#: thumbview.cpp:98
 #, kde-format
 msgid "Thumbnails"
 msgstr "Miniatures"
 
-#: thumbview.cpp:107
+#: thumbview.cpp:109
 #, kde-format
 msgid "Preview Size"
 msgstr "Mida de la vista prèvia"
 
-#: thumbview.cpp:338
+#: thumbview.cpp:340
 #, kde-format
 msgid "Very Large"
 msgstr "Molt gran"
 
-#: thumbview.cpp:339
+#: thumbview.cpp:341
 #, kde-format
 msgid "Large"
 msgstr "Gran"
 
-#: thumbview.cpp:340
+#: thumbview.cpp:342
 #, kde-format
 msgid "Medium"
 msgstr "Mitjana"
 
-#: thumbview.cpp:341
+#: thumbview.cpp:343
 #, kde-format
 msgid "Small"
 msgstr "Xicoteta"
 
-#: thumbview.cpp:342
+#: thumbview.cpp:344
 #, kde-format
 msgid "Very Small"
 msgstr "Molt xicoteta"
 
-#: thumbview.cpp:343
+#: thumbview.cpp:345
 #, kde-format
 msgid "Tiny"
 msgstr "Minúscula"

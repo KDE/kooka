@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-05-17 01:43+0000\n"
+"POT-Creation-Date: 2024-09-24 02:01+0000\n"
 "PO-Revision-Date: 2005-09-23 17:20+0500\n"
 "Last-Translator: Victor Ibragimov <youth_opportunities@tajikngo.org>\n"
 "Language-Team: Tajik\n"
@@ -47,7 +47,7 @@ msgstr ""
 
 #: ../plugins/destination/abstractdestination.cpp:160
 #: ../plugins/destination/application/destinationapplication.cpp:190
-#: kookaview.cpp:1181
+#: kookaview.cpp:1182
 #, kde-format
 msgid "Other..."
 msgstr ""
@@ -84,14 +84,14 @@ msgstr ""
 msgid "<filename>%1</filename>"
 msgstr "Файли классификатори %1 мавҷуд нест"
 
-#: ../plugins/destination/print/destinationprint.cpp:78 kookaview.cpp:677
+#: ../plugins/destination/print/destinationprint.cpp:78 kookaview.cpp:678
 #, fuzzy, kde-format
 #| msgid "Image"
 msgctxt "@title:window"
 msgid "Print Image"
 msgstr "Тасвирот"
 
-#: ../plugins/destination/print/destinationprint.cpp:89 kookaview.cpp:693
+#: ../plugins/destination/print/destinationprint.cpp:89 kookaview.cpp:694
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -100,7 +100,7 @@ msgid ""
 "%1"
 msgstr ""
 
-#: ../plugins/destination/print/destinationprint.cpp:90 kookaview.cpp:694
+#: ../plugins/destination/print/destinationprint.cpp:90 kookaview.cpp:695
 #, kde-format
 msgctxt "@title:window"
 msgid "Cannot Print"
@@ -382,7 +382,7 @@ msgstr ""
 msgid "OCR Setup Error"
 msgstr ""
 
-#: ../plugins/ocr/abstractocrengine.cpp:123 kookaview.cpp:791
+#: ../plugins/ocr/abstractocrengine.cpp:123 kookaview.cpp:792
 #, kde-format
 msgid "Configure OCR..."
 msgstr ""
@@ -506,9 +506,9 @@ msgstr ""
 msgid "The GOCR executable is not configured or is not available."
 msgstr ""
 
-#: ../plugins/ocr/gocr/ocrgocrdialog.cpp:204
-#: ../plugins/ocr/ocrad/ocrocraddialog.cpp:285
-#: ../plugins/ocr/tesseract/ocrtesseractdialog.cpp:250
+#: ../plugins/ocr/gocr/ocrgocrdialog.cpp:203
+#: ../plugins/ocr/ocrad/ocrocraddialog.cpp:287
+#: ../plugins/ocr/tesseract/ocrtesseractdialog.cpp:251
 #, kde-format
 msgid "Error"
 msgstr ""
@@ -519,7 +519,7 @@ msgctxt "@info"
 msgid "Cannot read GOCR result file <filename>%1</filename><nl/>%2"
 msgstr ""
 
-#: ../plugins/ocr/gocr/ocrgocrengine.cpp:298
+#: ../plugins/ocr/gocr/ocrgocrengine.cpp:307
 #, kde-format
 msgid "Name or path of the GOCR executable:"
 msgstr ""
@@ -705,28 +705,28 @@ msgstr "Тафтиши тарҳбандии пурра"
 msgid "(default)"
 msgstr ""
 
-#: ../plugins/ocr/ocrad/ocrocradengine.cpp:243
+#: ../plugins/ocr/ocrad/ocrocradengine.cpp:244
 #: ../plugins/ocr/tesseract/ocrtesseractengine.cpp:157
 #, fuzzy, kde-kuit-format
 msgctxt "@info"
 msgid "File <filename>%1</filename> does not exist"
 msgstr "Файли классификатори %1 мавҷуд нест"
 
-#: ../plugins/ocr/ocrad/ocrocradengine.cpp:247
+#: ../plugins/ocr/ocrad/ocrocradengine.cpp:248
 #: ../plugins/ocr/tesseract/ocrtesseractengine.cpp:158
 #, fuzzy, kde-kuit-format
 msgctxt "@info"
 msgid "File <filename>%1</filename> unreadable"
 msgstr "Файли классификатори %1 мавҷуд нест"
 
-#: ../plugins/ocr/ocrad/ocrocradengine.cpp:251
+#: ../plugins/ocr/ocrad/ocrocradengine.cpp:252
 #: ../plugins/ocr/tesseract/ocrtesseractengine.cpp:165
 #, fuzzy, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot open file <filename>%1</filename>"
 msgstr "Файли классификатори %1 мавҷуд нест"
 
-#: ../plugins/ocr/ocrad/ocrocradengine.cpp:432
+#: ../plugins/ocr/ocrad/ocrocradengine.cpp:448
 #, kde-format
 msgid "Name or path of the OCRAD executable:"
 msgstr ""
@@ -742,13 +742,13 @@ msgstr ""
 msgid "Select a file if required..."
 msgstr ""
 
-#: ../plugins/ocr/tesseract/ocrtesseractengine.cpp:226
+#: ../plugins/ocr/tesseract/ocrtesseractengine.cpp:227
 #, fuzzy, kde-format
 #| msgid " permission error   "
 msgid "HOCR parsing error, %1"
 msgstr " хатои дастрасӣ   "
 
-#: ../plugins/ocr/tesseract/ocrtesseractengine.cpp:251
+#: ../plugins/ocr/tesseract/ocrtesseractengine.cpp:252
 #, kde-format
 msgid "Name or path of the Tesseract executable:"
 msgstr ""
@@ -1500,193 +1500,193 @@ msgctxt "@info"
 msgid "%1 <filename>%3</filename><nl/>%2"
 msgstr ""
 
-#: kooka.cpp:100
+#: kooka.cpp:106
 #, kde-format
 msgid "KDE Scanning"
 msgstr "Сканеронии тасвирот дар KDE"
 
-#: kooka.cpp:134
+#: kooka.cpp:140
 #, fuzzy, kde-format
 #| msgid "Scale to W&idth"
 msgid "Scale to Width"
 msgstr "Масштабонӣ ба &васеъӣ"
 
-#: kooka.cpp:145
+#: kooka.cpp:151
 #, fuzzy, kde-format
 #| msgid "Scale to &Height"
 msgid "Scale to Height"
 msgstr "Масштабонӣ ба &баландӣ"
 
-#: kooka.cpp:154
+#: kooka.cpp:160
 #, fuzzy, kde-format
 #| msgid "Original &Size"
 msgid "Original Size"
 msgstr "&Андозаи оригиналӣ"
 
-#: kooka.cpp:160
+#: kooka.cpp:166
 #, kde-format
 msgid "Set Zoom..."
 msgstr "Масштаб..."
 
-#: kooka.cpp:166
+#: kooka.cpp:172
 #, fuzzy, kde-format
 #| msgid "Keep &Zoom Setting"
 msgid "Keep Zoom Setting"
 msgstr "Нигоҳ доштани &масштаб"
 
-#: kooka.cpp:174
+#: kooka.cpp:180
 #, fuzzy, kde-format
 #| msgid "Create From Selectio&n"
 msgid "New Image From Selection"
 msgstr "Эҷод кардан аз тақ&симот"
 
-#: kooka.cpp:179
+#: kooka.cpp:185
 #, fuzzy, kde-format
 #| msgid "Mirror Image &Vertically"
 msgid "Mirror Vertically"
 msgstr "Амудӣ &намо кардани тасвирот"
 
-#: kooka.cpp:186
+#: kooka.cpp:192
 #, fuzzy, kde-format
 #| msgid "&Mirror Image Horizontally"
 msgid "Mirror Horizontally"
 msgstr "Уфуқӣ &намо кардани тасвирот"
 
-#: kooka.cpp:196
+#: kooka.cpp:202
 #, fuzzy, kde-format
 #| msgid "Rotate Image Counter-Clock&wise"
 msgid "Rotate Counter-Clockwise"
 msgstr "Муқо&били ақрабаки соат тоб додан"
 
-#: kooka.cpp:203
+#: kooka.cpp:209
 #, fuzzy, kde-format
 #| msgid "&Rotate Image Clockwise"
 msgid "Rotate Clockwise"
 msgstr "&Ҳамчун ақрабаки соат гардонидан"
 
-#: kooka.cpp:210
+#: kooka.cpp:216
 #, fuzzy, kde-format
 #| msgid "Rotate Image 180 &Degrees"
 msgid "Rotate 180 Degrees"
 msgstr "Ба 180 &градус тоб додан"
 
-#: kooka.cpp:219
+#: kooka.cpp:225
 #, fuzzy, kde-format
 #| msgid "&Create Folder..."
 msgid "New Folder..."
 msgstr "&Эҷод кардани каталог..."
 
-#: kooka.cpp:224
+#: kooka.cpp:230
 #, kde-format
 msgid "Open With"
 msgstr ""
 
-#: kooka.cpp:230
+#: kooka.cpp:236
 #, fuzzy, kde-format
 #| msgid "&Save Image..."
 msgid "Save Image..."
 msgstr "&Нигоҳ доштан..."
 
-#: kooka.cpp:237
+#: kooka.cpp:243
 #, fuzzy, kde-format
 #| msgid "&Import Image..."
 msgid "Import Image..."
 msgstr "&Воридот..."
 
-#: kooka.cpp:242 kooka.cpp:550
+#: kooka.cpp:248 kooka.cpp:537
 #, fuzzy, kde-format
 #| msgid "&Delete Image"
 msgid "Delete Image"
 msgstr "&Нест кардани тасвир"
 
-#: kooka.cpp:249 kooka.cpp:551
+#: kooka.cpp:255 kooka.cpp:538
 #, fuzzy, kde-format
 #| msgid "&Delete Image"
 msgid "Rename Image"
 msgstr "&Нест кардани тасвир"
 
-#: kooka.cpp:255 kooka.cpp:549
+#: kooka.cpp:261 kooka.cpp:536
 #, fuzzy, kde-format
 msgid "Unload Image"
 msgstr "&Ҳузф кардан..."
 
-#: kooka.cpp:262
+#: kooka.cpp:268
 #, kde-format
 msgid "Properties..."
 msgstr ""
 
-#: kooka.cpp:271
+#: kooka.cpp:277
 #, kde-format
 msgid "Select Scan Device..."
 msgstr ""
 
-#: kooka.cpp:275 kookaview.cpp:550
+#: kooka.cpp:281 kookaview.cpp:551
 #, kde-format
 msgid "Add Scan Device..."
 msgstr ""
 
-#: kooka.cpp:281
+#: kooka.cpp:287
 #, kde-format
 msgid "Preview"
 msgstr ""
 
-#: kooka.cpp:286
+#: kooka.cpp:292
 #, fuzzy, kde-format
 #| msgid "Start OCR"
 msgid "Start Scan"
 msgstr "Оғоз намудани амалиёти шиносоӣ"
 
-#: kooka.cpp:291
+#: kooka.cpp:297
 #, kde-format
 msgid "Scan Presets..."
 msgstr ""
 
-#: kooka.cpp:296
+#: kooka.cpp:302
 #, fuzzy, kde-format
 #| msgid "Font Type Selection"
 msgid "Auto Select"
 msgstr "Интихоби ҳуруф"
 
-#: kooka.cpp:304
+#: kooka.cpp:310
 #, fuzzy, kde-format
 #| msgid "&OCR Image..."
 msgid "OCR Image..."
 msgstr "Шиносоии матн аз тамоми &тасвирот..."
 
-#: kooka.cpp:308
+#: kooka.cpp:314
 #, fuzzy, kde-format
 #| msgid "O&CR on Selection..."
 msgid "OCR Selection..."
 msgstr "Шинохтани матн аз &тақсимот..."
 
-#: kooka.cpp:312
+#: kooka.cpp:318
 #, fuzzy, kde-format
 #| msgid "&OCR Image..."
 msgid "OCR File..."
 msgstr "Шиносоии матн аз тамоми &тасвирот..."
 
-#: kooka.cpp:316
+#: kooka.cpp:322
 #, kde-format
 msgid "Save OCR Result Text..."
 msgstr ""
 
-#: kooka.cpp:321
+#: kooka.cpp:327
 #, kde-format
 msgid "Spell Check OCR Result..."
 msgstr ""
 
-#: kooka.cpp:537
+#: kooka.cpp:524
 #, fuzzy, kde-format
 msgid "Unload Folder"
 msgstr "&Ҳузф кардан..."
 
-#: kooka.cpp:538
+#: kooka.cpp:525
 #, fuzzy, kde-format
 #| msgid "&Create Folder..."
 msgid "Delete Folder"
 msgstr "&Эҷод кардани каталог..."
 
-#: kooka.cpp:539
+#: kooka.cpp:526
 #, fuzzy, kde-format
 #| msgid "&Create Folder..."
 msgid "Rename Folder"
@@ -2147,12 +2147,12 @@ msgstr ""
 msgid "Scan"
 msgstr ""
 
-#: kookaview.cpp:289 kookaview.cpp:564 kookaview.cpp:583 scangallery.cpp:123
+#: kookaview.cpp:289 kookaview.cpp:565 kookaview.cpp:584 scangallery.cpp:122
 #, kde-format
 msgid "Gallery"
 msgstr ""
 
-#: kookaview.cpp:465
+#: kookaview.cpp:466
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2163,12 +2163,12 @@ msgid ""
 "reported error: <message>%1</message>"
 msgstr ""
 
-#: kookaview.cpp:520
+#: kookaview.cpp:521
 #, kde-format
 msgid "Add Scan Device"
 msgstr ""
 
-#: kookaview.cpp:540
+#: kookaview.cpp:541
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2180,98 +2180,98 @@ msgid ""
 "backend name and parameters, or see that dialog for more information."
 msgstr ""
 
-#: kookaview.cpp:586
+#: kookaview.cpp:587
 #, kde-format
 msgid "No scanner connected"
 msgstr ""
 
-#: kookaview.cpp:645
+#: kookaview.cpp:646
 #, fuzzy, kde-format
 #| msgid "Font Type Selection"
 msgid "No selection"
 msgstr "Интихоби ҳуруф"
 
-#: kookaview.cpp:649
+#: kookaview.cpp:650
 #, kde-format
 msgid "Gallery folder %1"
 msgstr ""
 
-#: kookaview.cpp:649
+#: kookaview.cpp:650
 #, fuzzy, kde-format
 msgid "Gallery image %1"
 msgstr "Тасвирот"
 
-#: kookaview.cpp:714
+#: kookaview.cpp:715
 #, fuzzy, kde-format
 msgid "Starting OCR on selection"
 msgstr "Шинохтани матн аз &тақсимот..."
 
-#: kookaview.cpp:720
+#: kookaview.cpp:721
 #, fuzzy, kde-format
 msgid "Starting OCR on the image"
 msgstr "Шинохтани матн аз &тақсимот..."
 
-#: kookaview.cpp:727
+#: kookaview.cpp:728
 #, fuzzy, kde-format
 #| msgid "OCR Software Not Found"
 msgid "OCR File"
 msgstr "Барномаи шиносандаи матн ёфт нашуд"
 
-#: kookaview.cpp:737
+#: kookaview.cpp:738
 #, fuzzy, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot load <filename>%1</filename> for OCR:<nl/>%2"
 msgstr "Файли классификатори %1 мавҷуд нест"
 
-#: kookaview.cpp:739
+#: kookaview.cpp:740
 #, kde-format
 msgid "Cannot Read OCR File"
 msgstr ""
 
-#: kookaview.cpp:743
+#: kookaview.cpp:744
 #, fuzzy, kde-kuit-format
 msgctxt "@info"
 msgid "Starting OCR on file <filename>%1</filename>"
 msgstr "Файли классификатори %1 мавҷуд нест"
 
-#: kookaview.cpp:759
+#: kookaview.cpp:760
 #, kde-format
 msgid "OCR finished"
 msgstr ""
 
-#: kookaview.cpp:766
+#: kookaview.cpp:767
 #, kde-format
 msgid "There is no OCR result text to spell check."
 msgstr ""
 
-#: kookaview.cpp:767
+#: kookaview.cpp:768
 #, kde-format
 msgid "OCR Spell Check not possible"
 msgstr ""
 
-#: kookaview.cpp:772
+#: kookaview.cpp:773
 #, fuzzy, kde-format
 msgid "OCR Spell Check"
 msgstr "Тафтиши дурустнависӣ"
 
-#: kookaview.cpp:788
+#: kookaview.cpp:789
 #, kde-format
 msgid ""
 "No OCR engine is configured.\n"
 "Please select and configure one in order to perform OCR."
 msgstr ""
 
-#: kookaview.cpp:790
+#: kookaview.cpp:791
 #, kde-format
 msgid "OCR Not Configured"
 msgstr ""
 
-#: kookaview.cpp:799
+#: kookaview.cpp:800
 #, kde-format
 msgid "Cannot load OCR plugin '%1'"
 msgstr ""
 
-#: kookaview.cpp:907
+#: kookaview.cpp:908
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2282,27 +2282,27 @@ msgid ""
 "<message>%1</message>"
 msgstr ""
 
-#: kookaview.cpp:957
+#: kookaview.cpp:958
 #, fuzzy, kde-format
 msgid "Create new image from selection"
 msgstr "Эҷод кардан аз тақ&симот"
 
-#: kookaview.cpp:966
+#: kookaview.cpp:967
 #, kde-format
 msgid "Cannot transform, image is read-only"
 msgstr ""
 
-#: kookaview.cpp:1019
+#: kookaview.cpp:1020
 #, fuzzy, kde-format
 msgid "Loaded image %1"
 msgstr "Тасвирот"
 
-#: kookaview.cpp:1020
+#: kookaview.cpp:1021
 #, fuzzy, kde-format
 msgid "Unloaded image"
 msgstr "&Ҳузф кардан..."
 
-#: kookaview.cpp:1037
+#: kookaview.cpp:1038
 #, fuzzy, kde-format
 msgid "Loading %1..."
 msgstr "Тасвирот"
@@ -2411,17 +2411,17 @@ msgstr ""
 msgid "Photocopy facility"
 msgstr ""
 
-#: main.cpp:105
+#: main.cpp:111
 #, kde-format
 msgid "Gallery mode - do not connect to scanner"
 msgstr ""
 
-#: main.cpp:108
+#: main.cpp:114
 #, kde-format
 msgid "The SANE device specification (e.g. 'umax:/dev/sg0')"
 msgstr ""
 
-#: main.cpp:108
+#: main.cpp:114
 #, kde-format
 msgid "device"
 msgstr ""
@@ -2561,39 +2561,39 @@ msgstr ""
 msgid "Unknown engine '%1'."
 msgstr "Намуди тасовироти номуайян"
 
-#: scangallery.cpp:98
+#: scangallery.cpp:97
 #, kde-format
 msgid "Name"
 msgstr ""
 
-#: scangallery.cpp:99
+#: scangallery.cpp:98
 #, kde-format
 msgid "Size"
 msgstr ""
 
-#: scangallery.cpp:100
+#: scangallery.cpp:99
 #, kde-format
 msgid "Format"
 msgstr ""
 
-#: scangallery.cpp:171
+#: scangallery.cpp:170
 #, kde-format
 msgid "Kooka Gallery"
 msgstr ""
 
-#: scangallery.cpp:375
+#: scangallery.cpp:374
 #, kde-format
 msgid "empty"
 msgstr ""
 
-#: scangallery.cpp:378
+#: scangallery.cpp:377
 #, kde-format
 msgid "one image"
 msgid_plural "%1 images"
 msgstr[0] ""
 msgstr[1] ""
 
-#: scangallery.cpp:380
+#: scangallery.cpp:379
 #, fuzzy, kde-format
 #| msgid "Enter filename:"
 msgid "one file"
@@ -2601,33 +2601,33 @@ msgid_plural "%1 files"
 msgstr[0] "Номи файлро ворид кунед:"
 msgstr[1] "Номи файлро ворид кунед:"
 
-#: scangallery.cpp:386
+#: scangallery.cpp:385
 #, kde-format
 msgid "one file, "
 msgid_plural "%1 files, "
 msgstr[0] ""
 msgstr[1] ""
 
-#: scangallery.cpp:388
+#: scangallery.cpp:387
 #, fuzzy, kde-format
 msgid "one image, "
 msgid_plural "%1 images, "
 msgstr[0] "Тасвирот"
 msgstr[1] "Тасвирот"
 
-#: scangallery.cpp:391
+#: scangallery.cpp:390
 #, kde-format
 msgid "1 folder"
 msgid_plural "%1 folders"
 msgstr[0] ""
 msgstr[1] ""
 
-#: scangallery.cpp:446
+#: scangallery.cpp:445
 #, kde-format
 msgid " %1 x %2"
 msgstr ""
 
-#: scangallery.cpp:601
+#: scangallery.cpp:600
 #, kde-format
 msgid ""
 "You entered a file extension that differs from the existing one. That is not "
@@ -2635,67 +2635,67 @@ msgid ""
 "Kooka corrects the extension."
 msgstr ""
 
-#: scangallery.cpp:603
+#: scangallery.cpp:602
 #, kde-format
 msgid "On the Fly Conversion"
 msgstr ""
 
-#: scangallery.cpp:699
+#: scangallery.cpp:698
 #, fuzzy, kde-format
 #| msgid "Available image formats:"
 msgid "Not a supported image format"
 msgstr "Форматҳои файли дастоасӣ:"
 
-#: scangallery.cpp:751
+#: scangallery.cpp:750
 #, kde-format
 msgid "Sub-image %1"
 msgstr ""
 
-#: scangallery.cpp:777
+#: scangallery.cpp:776
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Unable to load the image <filename>%2</filename><nl/>%1"
 msgstr ""
 
-#: scangallery.cpp:779
+#: scangallery.cpp:778
 #, kde-format
 msgid "Image Load Error"
 msgstr ""
 
-#: scangallery.cpp:841
+#: scangallery.cpp:840
 #, kde-format
 msgid "Incoming/"
 msgstr ""
 
-#: scangallery.cpp:887
+#: scangallery.cpp:886
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Could not save the image<nl/><filename>%2</filename><nl/>%1"
 msgstr ""
 
-#: scangallery.cpp:890
+#: scangallery.cpp:889
 #, fuzzy, kde-format
 msgid "Image Save Error"
 msgstr "Чопи тасовирот"
 
-#: scangallery.cpp:968
+#: scangallery.cpp:967
 #, kde-format
 msgid "All Files (*)"
 msgstr ""
 
-#: scangallery.cpp:971
+#: scangallery.cpp:970
 #, fuzzy, kde-format
 #| msgid "&Import Image..."
 msgctxt "@title:window"
 msgid "Export Image"
 msgstr "&Воридот..."
 
-#: scangallery.cpp:996
+#: scangallery.cpp:995
 #, kde-format
 msgid "Import Image File to Gallery"
 msgstr ""
 
-#: scangallery.cpp:1111
+#: scangallery.cpp:1110
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2703,7 +2703,7 @@ msgid ""
 "filename><nl/>and all of its contents? It cannot be restored."
 msgstr ""
 
-#: scangallery.cpp:1116
+#: scangallery.cpp:1115
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2711,39 +2711,39 @@ msgid ""
 "filename>?<nl/>It cannot be restored."
 msgstr ""
 
-#: scangallery.cpp:1123
+#: scangallery.cpp:1122
 #, kde-format
 msgid "Delete Gallery Item"
 msgstr ""
 
-#: scangallery.cpp:1136
+#: scangallery.cpp:1135
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Could not delete the image or folder<nl/><filename>%2</filename><nl/>%1"
 msgstr ""
 
-#: scangallery.cpp:1139
+#: scangallery.cpp:1138
 #, kde-format
 msgid "File Delete Error"
 msgstr ""
 
-#: scangallery.cpp:1171
+#: scangallery.cpp:1170
 #, kde-format
 msgid "New Folder"
 msgstr ""
 
-#: scangallery.cpp:1172
+#: scangallery.cpp:1171
 #, kde-format
 msgid "Name for the new folder:"
 msgstr ""
 
-#: scangallery.cpp:1195
+#: scangallery.cpp:1194
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Could not create the folder<nl/><filename>%2</filename><nl/>%1"
 msgstr ""
 
-#: scangallery.cpp:1197
+#: scangallery.cpp:1196
 #, kde-format
 msgid "Folder Create Error"
 msgstr ""
@@ -2862,43 +2862,43 @@ msgctxt "@info:status"
 msgid "Scan: %1"
 msgstr ""
 
-#: thumbview.cpp:96
+#: thumbview.cpp:98
 #, kde-format
 msgid "Thumbnails"
 msgstr ""
 
-#: thumbview.cpp:107
+#: thumbview.cpp:109
 #, kde-format
 msgid "Preview Size"
 msgstr ""
 
-#: thumbview.cpp:338
+#: thumbview.cpp:340
 #, kde-format
 msgid "Very Large"
 msgstr ""
 
-#: thumbview.cpp:339
+#: thumbview.cpp:341
 #, fuzzy, kde-format
 #| msgid "Image"
 msgid "Large"
 msgstr "Тасвирот"
 
-#: thumbview.cpp:340
+#: thumbview.cpp:342
 #, kde-format
 msgid "Medium"
 msgstr ""
 
-#: thumbview.cpp:341
+#: thumbview.cpp:343
 #, kde-format
 msgid "Small"
 msgstr ""
 
-#: thumbview.cpp:342
+#: thumbview.cpp:344
 #, kde-format
 msgid "Very Small"
 msgstr ""
 
-#: thumbview.cpp:343
+#: thumbview.cpp:345
 #, kde-format
 msgid "Tiny"
 msgstr ""
