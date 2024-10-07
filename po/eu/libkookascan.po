@@ -1,0 +1,862 @@
+# Copyright (C) 2024 This file is copyright:
+# This file is distributed under the same license as the kooka package.
+#
+# SPDX-FileCopyrightText: 2024 Iñigo Salvador Azurmendi <xalba@ni.eus>
+msgid ""
+msgstr ""
+"Project-Id-Version: kooka\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2024-09-24 02:01+0000\n"
+"PO-Revision-Date: 2024-10-06 09:08+0200\n"
+"Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
+"Language-Team: Basque <kde-i18n-eu@kde.org>\n"
+"Language: eu\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Lokalize 24.08.1\n"
+
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "Iñigo Salvador Azurmendi"
+
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "xalba@ni.eus"
+
+#: ../libdialogutil/imagefilter.cpp:85
+#, kde-format
+msgid "All Image Files"
+msgstr "Irudi fitxategi guztiak"
+
+#: ../libdialogutil/imagefilter.cpp:90
+#, kde-format
+msgid "All Files"
+msgstr "Fitxategi guztiak"
+
+#: adddevicedialog.cpp:58
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"If your scanner has not been automatically detected, you can specify it "
+"here. The <interface>Scanner device</interface> is the SANE backend device "
+"name. The <interface>Manufacturer</interface>, <interface>Type</interface> "
+"and <interface>Description</interface> can be used to identify the scanner "
+"later.<nl/><nl/>More information on <link url=\"?1\">SANE backends</link>, "
+"<link url=\"?2\">locating devices</link>, <link url=\"?3\">HP scanners</"
+"link>, <link url=\"?4\">device not found</link>."
+msgstr ""
+"Zure eskanerra ez da automatikoki antzeman, hura hemen zehaztu dezakezu. "
+"<interface>Eskaner gailua</interface> SANE bizkarraldeko gailu izena da. "
+"<interface>Fabrikatzailea</interface>, <interface>Mota</interface> eta "
+"<interface>Deskribapena</interface>, beranduago eskanerra identifikatzeko "
+"erabil daitezke.<nl/><nl/><link url=\"?1\">SANE bizkarraldekoak</link>, "
+"<link url=\"?2\">gailuak aurkitzea</link>, <link url=\"?3\">HP eskanerrak</"
+"link>, <link url=\"?4\">gailua ez da aurkitu</link> gaineko informazio "
+"gehiago."
+
+#: adddevicedialog.cpp:77
+#, kde-format
+msgid "Scanner device:"
+msgstr "Eskaner gailua:"
+
+#: adddevicedialog.cpp:80 scandevices.cpp:186
+#, kde-format
+msgctxt "Value used for manufacturer if none entered"
+msgid "User specified"
+msgstr ""
+
+#: adddevicedialog.cpp:82
+#, kde-format
+msgid "Manufacturer:"
+msgstr "Fabrikatzailea:"
+
+#: adddevicedialog.cpp:86
+#, kde-format
+msgid "Device type:"
+msgstr "Gailu mota:"
+
+#: adddevicedialog.cpp:90
+#, kde-format
+msgid "Description:"
+msgstr "Deskribapena:"
+
+#: adddevicedialog.cpp:126
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"The <interface>Scanner device</interface> should be a backend name (with "
+"optional parameters) that is understood by SANE. See <link url=\"man:/sane"
+"\">sane(7)</link> or <link url=\"man:/sane-dll\">sane&#8209;dll(5)</link> "
+"for more information on available backends and the format of device names."
+msgstr ""
+
+#: adddevicedialog.cpp:134
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"To find the information that needs to be entered here, try to locate the "
+"device using the <link url=\"man:/sane-find-scanner\">sane&#8209;find&#8209;"
+"scanner(1)</link> command for SCSI, USB or parallel port scanners, or the "
+"<link url=\"man:/scanimage\">scanimage(1)</link> command with the "
+"<icode>&#8209;L</icode> option for network scanners. If the scanner is "
+"found, then enter the device name displayed by these commands."
+msgstr ""
+
+#: adddevicedialog.cpp:143
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"For a USB or networked HP scanner using <link url=\"http://hplip.sourceforge."
+"net/\">HPLIP</link>, try using the <command>hp&#8209;probe</command> command "
+"to locate it, for example <icode>hp&#8209;probe&nbsp;&#8209;b&nbsp;usb</"
+"icode> or <icode>hp&#8209;probe&nbsp;&#8209;b&nbsp;net</icode>. Note that if "
+"the scanner is found by HPLIP, then the device name <icode>hp:</icode> that "
+"it displays needs to be replaced by <icode>hpaio:</icode> for SANE."
+msgstr ""
+
+#: adddevicedialog.cpp:152
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"If these commands fail to locate your scanner, then it may not be supported "
+"by SANE. Check the SANE documentation for a <link url=\"http://www.sane-"
+"project.org/sane-supported-devices.html\">list of supported devices</link>."
+msgstr ""
+
+#: autoselectbar.cpp:56
+#, kde-kuit-format
+msgctxt "@info"
+msgid "<subtitle>Auto Select</subtitle>"
+msgstr "<subtitle>Hautapen automatikoa</subtitle>"
+
+#: autoselectbar.cpp:82
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "This is the grayscale value of the selected threshold"
+msgstr ""
+
+#: autoselectbar.cpp:90
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Perform the auto-detection again"
+msgstr ""
+
+#: autoselectbar.cpp:97
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Advanced settings for auto-detection"
+msgstr ""
+
+#: autoselectdialog.cpp:56
+#, kde-format
+msgctxt "@title:window"
+msgid "Autoselect Settings"
+msgstr ""
+
+#: autoselectdialog.cpp:82
+#, kde-format
+msgid "Black"
+msgstr "Beltza"
+
+#: autoselectdialog.cpp:83
+#, kde-format
+msgid "White"
+msgstr "Zuria"
+
+#: deviceselector.cpp:58
+#, kde-format
+msgid "Select"
+msgstr "Hautatu"
+
+#: deviceselector.cpp:59
+#, kde-format
+msgid "Select Scan Device"
+msgstr "Hautatu eskaneatzeko gailua"
+
+#: deviceselector.cpp:71
+#, kde-format
+msgid "Available Scanners:"
+msgstr "Eskaner erabilgarriak:"
+
+#: deviceselector.cpp:82
+#, kde-format
+msgid "Always use this device at startup"
+msgstr "Erabili beti gailu hau abiatzean"
+
+#: gammadialog.cpp:53
+#, kde-format
+msgid "Edit Gamma Table"
+msgstr "Editatu Gamma-taula"
+
+#: gammadialog.cpp:61
+#, kde-format
+msgid "Brightness"
+msgstr "Distira"
+
+#: gammadialog.cpp:71
+#, kde-format
+msgid "Contrast"
+msgstr "Kontrastea"
+
+#: gammadialog.cpp:81
+#, kde-format
+msgid "Gamma"
+msgstr "Gamma"
+
+#: gammadialog.cpp:95
+#, kde-format
+msgid "This gamma table is passed to the scanner hardware."
+msgstr "Gamma-taula hori eskaneatzeko hardwareari pasatzen zaio."
+
+#: imagecanvas.cpp:785
+#, kde-format
+msgid "Fit Best"
+msgstr "Doikuntza onena"
+
+#: imagecanvas.cpp:786
+#, kde-format
+msgid "Original size"
+msgstr "Jatorrizko neurria"
+
+#: imagecanvas.cpp:787
+#, kde-format
+msgid "Fit Width"
+msgstr "Doitu zabalera"
+
+#: imagecanvas.cpp:788
+#, kde-format
+msgid "Fit Height"
+msgstr "Doitu altuera"
+
+#: imagecanvas.cpp:789
+#, kde-format
+msgid "Zoom %1%"
+msgstr "Zoom %%1"
+
+#: imagecanvas.cpp:790
+#, kde-format
+msgid "Unknown"
+msgstr "Ezezaguna"
+
+#: imagecanvas.cpp:888
+#, kde-format
+msgid "%1x%2 pix, %3 bpp"
+msgstr "%1x%2 pix, %3 bpp"
+
+#: imgscaledialog.cpp:51
+#, kde-format
+msgid "Image Zoom"
+msgstr "Irudiaren zooma"
+
+#: imgscaledialog.cpp:72
+#, kde-format
+msgid "25 %"
+msgstr "% 25"
+
+#: imgscaledialog.cpp:79
+#, kde-format
+msgid "50 %"
+msgstr "% 50"
+
+#: imgscaledialog.cpp:86
+#, kde-format
+msgid "75 %"
+msgstr "% 75"
+
+#: imgscaledialog.cpp:93
+#, kde-format
+msgid "&100 %"
+msgstr "%&100"
+
+#: imgscaledialog.cpp:105
+#, kde-format
+msgid "150 &%"
+msgstr "%&150"
+
+#: imgscaledialog.cpp:112
+#, kde-format
+msgid "200 %"
+msgstr "% 200"
+
+#: imgscaledialog.cpp:119
+#, kde-format
+msgid "300 %"
+msgstr "% 300"
+
+#: imgscaledialog.cpp:126
+#, kde-format
+msgid "400 %"
+msgstr "% 400"
+
+#: imgscaledialog.cpp:141
+#, kde-format
+msgid "Custom:"
+msgstr "Neurrira:"
+
+#: kscancontrols.cpp:67
+#, kde-format
+msgid "(Unknown)"
+msgstr "(Ezezaguna)"
+
+#: kscancontrols.cpp:170
+#, kde-format
+msgid "Reset this setting to its standard value, %1"
+msgstr "Berrezarri balio hori bere balio estandarrean, %1"
+
+#: kscancontrols.cpp:419
+#, kde-format
+msgid "PNM Image Files (*.pnm *.pbm *.pgm *.ppm)"
+msgstr "PNM irudi fitxategiak (*.pnm *.pbm *.pgm *.ppm)"
+
+#: kscandevice.cpp:279
+#, kde-format
+msgid "No scanner selected"
+msgstr "Ez da eskanerrik hautatu"
+
+#: kscandevice.cpp:1380
+#, kde-format
+msgid "Default startup configuration"
+msgstr "Abioko konfigurazio lehenetsia"
+
+#: kscandevice.cpp:1480
+#, kde-kuit-format
+msgctxt "@info"
+msgid "The scanner<nl/><icode>%1</icode><nl/>requires authentication."
+msgstr "<icode>%1</icode><nl/>eskanerrak autentifikazioa behar du.<nl/>"
+
+#: kscandevice.cpp:1481
+#, kde-format
+msgid "Scanner Authentication"
+msgstr "Eskanerraren autentifikazioa"
+
+#: kscandevice.cpp:1525
+#, kde-format
+msgid "OK"
+msgstr "Ados"
+
+#: kscandevice.cpp:1526
+#, kde-format
+msgid "No device"
+msgstr "Gailurik ez"
+
+#: kscandevice.cpp:1527
+#, kde-format
+msgid "Bad parameter"
+msgstr "Parametro txarra"
+
+#: kscandevice.cpp:1528
+#, kde-format
+msgid "Cannot open device"
+msgstr "Ezin du gailua ireki"
+
+#: kscandevice.cpp:1529
+#, kde-format
+msgid "sane_control_option() failed"
+msgstr "sane_control_option() huts egin du"
+
+#: kscandevice.cpp:1530
+#, kde-format
+msgid "Error while scanning"
+msgstr "Errorea eskaneatu bitartean"
+
+#: kscandevice.cpp:1531
+#, kde-format
+msgid "Empty picture"
+msgstr "Irudia hutsik"
+
+#: kscandevice.cpp:1532
+#, kde-format
+msgid "Out of memory"
+msgstr "Memoria agortu da"
+
+#: kscandevice.cpp:1533
+#, kde-format
+msgid "Needs reload"
+msgstr "Birzamatu beharra dago"
+
+#: kscandevice.cpp:1534
+#, fuzzy, kde-format
+msgid "Cancelled"
+msgstr "Bertan behera utzita"
+
+#: kscandevice.cpp:1535
+#, kde-format
+msgid "Not active"
+msgstr "Ez aktibo"
+
+#: kscandevice.cpp:1536
+#, fuzzy, kde-format
+msgid "Not supported"
+msgstr "Ez dago onartuta"
+
+#: kscandevice.cpp:1537
+#, kde-format
+msgid "Unknown status %1"
+msgstr "Egoera ezezaguna %1"
+
+#: kscanoption.cpp:1027
+#, kde-format
+msgid "pixels"
+msgstr "pixel"
+
+#: kscanoption.cpp:1028
+#, kde-format
+msgid "bits"
+msgstr "bit"
+
+#: kscanoption.cpp:1029
+#, kde-format
+msgid "mm"
+msgstr "mm"
+
+#: kscanoption.cpp:1030
+#, kde-format
+msgid "dpi"
+msgstr "dpi"
+
+#: kscanoption.cpp:1031
+#, kde-format
+msgid "%"
+msgstr "%"
+
+#: kscanoption.cpp:1032
+#, kde-format
+msgid "µsec"
+msgstr "µsec"
+
+#: kscanoptset.cpp:190
+#, kde-format
+msgid "No description"
+msgstr "Deskribapenik gabe"
+
+#: previewer.cpp:243
+#, no-c-format, kde-format
+msgctxt "@info:status"
+msgid "%1x%2mm, %3x%4pix"
+msgstr "%1x%2mm, %3x%4pix"
+
+#: previewer.cpp:246
+#, no-c-format, kde-format
+msgctxt "@info:status"
+msgid "%1x%2mm"
+msgstr "%1x%2mm"
+
+#: previewer.cpp:340
+#, kde-format
+msgid ""
+"The autodetection of images on the preview depends on the background color "
+"of the preview image (the result of scanning with no document loaded).\n"
+"\n"
+"Please select whether the background of the preview image is black or white."
+msgstr ""
+
+#: previewer.cpp:341
+#, kde-format
+msgctxt "@title:window"
+msgid "Autodetection Background"
+msgstr ""
+
+#: previewer.cpp:342
+#, kde-format
+msgctxt "@action:button Name of colour"
+msgid "White"
+msgstr "Zuria"
+
+#: previewer.cpp:343
+#, kde-format
+msgctxt "@action:button Name of colour"
+msgid "Black"
+msgstr "Beltza"
+
+#: scandevices.cpp:204
+#, kde-format
+msgid "Unknown device '%1'"
+msgstr "Gailu ezezaguna '%1'"
+
+#: scanglobal.cpp:136
+#, kde-format
+msgid "SANE - Scanner Access Now Easy"
+msgstr "SANE - Scanner Access Now Easy (Eskanerrerako Sarbidea Orain Erraz)"
+
+#: scanglobal.cpp:137
+#, kde-format
+msgid "Scanner access and driver library"
+msgstr "Eskanerrerako sarbide eta gidari liburutegia"
+
+#: scanglobal.cpp:144
+#, kde-format
+msgid "LibTIFF"
+msgstr "LibTIFF"
+
+#: scanglobal.cpp:145
+#, kde-format
+msgid "TIFF image format library"
+msgstr "TIFF irudi-formatu liburutegia"
+
+#: scanglobal.cpp:158
+#, kde-format
+msgid "libpaper"
+msgstr "libpaper"
+
+#: scanglobal.cpp:159
+#, kde-format
+msgid "Paper size configuration library"
+msgstr "Paperaren neurri konfigurazio liburutegia"
+
+#: scanimage.cpp:76
+#, kde-format
+msgid "Loading non-local images is not yet implemented"
+msgstr "Lokalak ez diren irudiak zamatzea ez dago inplementatuta oraindik"
+
+#: scanimage.cpp:128
+#, kde-format
+msgid "Image loading failed"
+msgstr "Irudia zamatzea huts egin du"
+
+#: scanimage.cpp:162
+#, kde-format
+msgid "Failed to open TIFF file"
+msgstr "TIFF fitxategia irekitzea huts egin du"
+
+#: scanimage.cpp:169
+#, kde-format
+msgid "Failed to read TIFF directory"
+msgstr "TIFF direktorioa irakurtzea huts egin du"
+
+#: scanimage.cpp:199
+#, kde-format
+msgid "Failed to read TIFF image"
+msgstr "TIFF irudia irakurtzea huts egin du"
+
+#: scanimage.cpp:229
+#, kde-format
+msgid "TIFF not supported"
+msgstr "TIFF euskarririk ez"
+
+#: scanparams.cpp:141
+#, kde-kuit-format
+msgctxt "@info"
+msgid "<title>Scanner&nbsp;Settings</title>"
+msgstr "<title>Eskaner&nbsp;ezarpenak</title>"
+
+#: scanparams.cpp:161
+#, kde-format
+msgid "Pre&view"
+msgstr "Aurreik&usi"
+
+#: scanparams.cpp:162
+#, kde-format
+msgid "Start a preview scan and show the preview image"
+msgstr ""
+"Abiarazi aurreikusteko eskaneatze bat eta erakutsi irudiaren aurreikuspegia"
+
+#: scanparams.cpp:167
+#, kde-format
+msgid "Star&t Scan"
+msgstr "A&biarazi eskaneatzea"
+
+#: scanparams.cpp:168
+#, kde-format
+msgid "Start a scan and save the scanned image"
+msgstr "Abiarazi eskaneatze bat eta gorde eskaneatutako irudia"
+
+#: scanparams.cpp:200
+#, kde-format
+msgid "Stop"
+msgstr "Gelditu"
+
+#: scanparams.cpp:204
+#, kde-format
+msgid "Scanning"
+msgstr "Eskaneatzen"
+
+#: scanparams.cpp:247
+#, kde-format
+msgid "&Basic"
+msgstr "&Oinarrizkoa"
+
+#: scanparams.cpp:248
+#, kde-format
+msgid "Other"
+msgstr "Bestelakoa"
+
+#: scanparams.cpp:249
+#, kde-format
+msgid "Advanced"
+msgstr "Aurreratua"
+
+#: scanparams.cpp:275
+#, kde-format
+msgid "SANE Debug (from PNM image)"
+msgstr "SANE Araztea (PNM iruditik)"
+
+#: scanparams.cpp:276
+#, kde-kuit-format
+msgctxt "@info:tooltip"
+msgid ""
+"Operate in the same way that a real scanner does (including scan area, image "
+"processing etc.), but reading from the specified image file. See <link url="
+"\"man:sane-pnm(5)\">sane-pnm(5)</link> for more information."
+msgstr ""
+
+#: scanparams.cpp:278
+#, kde-format
+msgid "Virtual Scanner (any image format)"
+msgstr "Alegiazko eskanerra (edozein irudi-formatu)"
+
+#: scanparams.cpp:279
+#, kde-kuit-format
+msgctxt "@info:tooltip"
+msgid ""
+"Do not perform any scanning or processing, but simply read the specified "
+"image file. This is for testing the image saving, etc."
+msgstr ""
+"Ez eskaneatu edo prozesatu, zehaztutako irudi-fitxategia irakurri besterik "
+"ez. Hori irudiak gordetzea, etab. probatzeko da"
+
+#: scanparams.cpp:296
+#, kde-format
+msgid "Reading mode:"
+msgstr "Irakurtzeko modua:"
+
+#: scanparams.cpp:414
+#, kde-format
+msgid "Default (from scan settings)"
+msgstr "Lehenespena (eskaneatze ezarpenetatik)"
+
+#: scanparams.cpp:415
+#, kde-format
+msgid "Black/white bitmap"
+msgstr "Zuri/beltzeko bit-mapa"
+
+#: scanparams.cpp:416
+#, kde-format
+msgid "Grey scale"
+msgstr "Gris eskala"
+
+#: scanparams.cpp:417
+#, kde-format
+msgid "Low colour"
+msgstr "Kolore apala"
+
+#: scanparams.cpp:418
+#, kde-format
+msgid "High colour"
+msgstr "Kolore altua"
+
+#: scanparams.cpp:428
+#, kde-format
+msgid "Force image format:"
+msgstr "Behartu irudi-formatua:"
+
+#: scanparams.cpp:481
+#, kde-format
+msgid "Edit Gamma Table..."
+msgstr "Editatu Gamma-taula..."
+
+#: scanparams.cpp:553
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"<title>No scanner selected</title><nl/><nl/>Select a scanner device to "
+"perform scanning."
+msgstr ""
+"<title>Ez da eskanerrik hautatu</title><nl/><nl/>Eskaneatzeko, hautatu "
+"eskaner gailu bat."
+
+#: scanparams.cpp:573
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"<title>No scanner found, or unable to access it</title><nl/><nl/>There was a "
+"problem using the SANE (Scanner Access Now Easy) library to access the "
+"scanner device.  There may be a problem with your SANE installation, or it "
+"may not be configured to support your scanner.<nl/><nl/>Check that SANE is "
+"correctly installed and configured on your system, and also that the scanner "
+"device name and settings are correct.<nl/><nl/>See the SANE project home "
+"page (<link url=\"http://www.sane-project.org\">www.sane-project.org</link>) "
+"for more information on SANE installation and setup."
+msgstr ""
+
+#: scanparams.cpp:675
+#, kde-format
+msgid "1-bit depth scan cannot be done in color"
+msgstr "Bit 1eko eskaneatze sakonera ezin da koloretan egin"
+
+#: scanparams.cpp:678
+#, kde-format
+msgid "16-bit depth scans are not supported"
+msgstr "Ez dago 16 biteko eskaneatze sakoneren euskarririk"
+
+#: scanparams.cpp:688
+#, kde-format
+msgid "A file must be entered for testing or virtual scanning"
+msgstr "Probarako eta alegiazko eskaneatzerako fitxategi bat sartu behar da"
+
+#: scanparams.cpp:694
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"The testing or virtual file <filename>%1</filename><nl/>was not found or is "
+"not readable."
+msgstr ""
+
+#: scanparams.cpp:704
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"SANE Debug can only read PNM files.<nl/>The specified file is type <icode>"
+"%1</icode>."
+msgstr ""
+
+#: scanparams.cpp:721
+#, fuzzy, kde-kuit-format
+msgid "Scan in progress"
+msgstr "Eskaneatzen ari da."
+
+#: scanparams.cpp:722
+#, fuzzy, kde-kuit-format
+msgid "Scan in progress<nl/><nl/>%1"
+msgstr "Eskaneatzen ari da."
+
+#: scanparams.cpp:742
+#, kde-format
+msgid "Cannot preview in Virtual Scanner mode"
+msgstr ""
+
+#. i18n: ectx: label, entry (StartupOnlyLocal), group (Startup)
+#: scansettings.kcfg:12
+#, kde-format
+msgid "Query network for available scanners"
+msgstr ""
+
+#. i18n: ectx: tooltip, entry (StartupOnlyLocal), group (Startup)
+#: scansettings.kcfg:13
+#, kde-format
+msgid ""
+"<div>Check this if you want a network query for available scanners.<br/><br/"
+">Note that this does not mean a query over the entire network, but only "
+"those hosts configured for SANE.</div>"
+msgstr ""
+
+#. i18n: ectx: label, entry (StartupUseProxy), group (Startup)
+#: scansettings.kcfg:18
+#, kde-format
+msgid "Use the system proxy settings to access network scanners"
+msgstr ""
+
+#. i18n: ectx: tooltip, entry (StartupUseProxy), group (Startup)
+#: scansettings.kcfg:19
+#, kde-format
+msgid ""
+"<div>Check this if you want to use the standard system proxy settings to "
+"access network scanners.<br/><br/>Note that some SANE backends (for example "
+"'escl') may not work properly through a proxy.</div>"
+msgstr ""
+
+#. i18n: ectx: label, entry (StartupSkipAsk), group (Startup)
+#: scansettings.kcfg:28
+#, kde-format
+msgid "Show the scanner selection dialog"
+msgstr ""
+
+#. i18n: ectx: tooltip, entry (StartupSkipAsk), group (Startup)
+#: scansettings.kcfg:29
+#, kde-format
+msgid "<div>Check this to show the scanner selection dialog on startup.</div>"
+msgstr ""
+
+#. i18n: ectx: label, entry (PreviewAutoselThreshold), group (Scanner Name)
+#: scansettings.kcfg:61
+#, fuzzy, kde-format
+msgid "Threshold:"
+msgstr "Atalasea:"
+
+#. i18n: ectx: tooltip, entry (PreviewAutoselThreshold), group (Scanner Name)
+#: scansettings.kcfg:62
+#, kde-format
+msgid ""
+"<div>Threshold for auto-detection. All pixels lighter (on a black "
+"background) or darker (on a white background) than this are considered to be "
+"part of the image.</div>"
+msgstr ""
+
+#. i18n: ectx: label, entry (PreviewAutoselDustsize), group (Scanner Name)
+#: scansettings.kcfg:69
+#, kde-format
+msgid "Dust size (pixels):"
+msgstr ""
+
+#. i18n: ectx: tooltip, entry (PreviewAutoselDustsize), group (Scanner Name)
+#: scansettings.kcfg:70
+#, kde-format
+msgid ""
+"<div>Set the dust size; dark or light areas smaller than this will be "
+"ignored</div>"
+msgstr ""
+
+#. i18n: ectx: label, entry (PreviewAutoselMargin), group (Scanner Name)
+#: scansettings.kcfg:77
+#, kde-format
+msgid "Add/subtract margin (mm):"
+msgstr ""
+
+#. i18n: ectx: tooltip, entry (PreviewAutoselMargin), group (Scanner Name)
+#: scansettings.kcfg:78
+#, kde-format
+msgid ""
+"<div>Set a margin to be added to or subtracted from the detected area</div>"
+msgstr ""
+
+#. i18n: ectx: label, entry (PreviewAutoselBackground), group (Scanner Name)
+#: scansettings.kcfg:85
+#, kde-format
+msgid "Scanner background:"
+msgstr ""
+
+#. i18n: ectx: tooltip, entry (PreviewAutoselBackground), group (Scanner Name)
+#: scansettings.kcfg:86
+#, kde-format
+msgid ""
+"<div>Select whether a scan of the empty scanner glass results in a black or "
+"a white image</div>"
+msgstr ""
+
+#: scansizeselector.cpp:119
+#, kde-format
+msgid "Set the size of the scanned area"
+msgstr ""
+
+#: scansizeselector.cpp:124
+#, kde-format
+msgid "Full size"
+msgstr ""
+
+#: scansizeselector.cpp:125
+#, kde-format
+msgid "(No selection)"
+msgstr ""
+
+#: scansizeselector.cpp:143
+#, fuzzy, kde-format
+msgid "Portrait"
+msgstr "Bertikala"
+
+#: scansizeselector.cpp:148
+#, fuzzy, kde-format
+msgid "Landscape"
+msgstr "Horizontala"
+
+#: scansizeselector.cpp:159
+#, kde-format
+msgid "Set the orientation for a preset size of the scanned area"
+msgstr ""
+
+#: scansizeselector.cpp:262
+#, fuzzy, kde-format
+msgid "Selection"
+msgstr "Hautapena"
