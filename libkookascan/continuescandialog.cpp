@@ -127,7 +127,7 @@ ContinueScanDialog::ContinueScanDialog(int timeout, QWidget *pnt)
     // one for the icon pixmap and one for the message text.  We want the
     // latter, so detect it by checking that its current text() is not null.
     const QList<QLabel *> labels = findChildren<QLabel *>();
-    for (QLabel *label : qAsConst(labels))
+    for (QLabel *label : std::as_const(labels))
     {
         if (!label->text().isEmpty())
         {

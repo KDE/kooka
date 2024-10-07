@@ -83,7 +83,7 @@ MultiScanDialog::MultiScanDialog(KScanDevice *dev, QWidget *pnt)
         // This assumes that the available sources do not change during
         // the lifetime of this dialogue.
         const QList<QByteArray> srcs = so->getList();
-        for (const QByteArray &src : qAsConst(srcs)) mSourceCombo->addItem(src);
+        for (const QByteArray &src : std::as_const(srcs)) mSourceCombo->addItem(src);
 
         connect(mSourceCombo, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &MultiScanDialog::slotGuiChange);
 

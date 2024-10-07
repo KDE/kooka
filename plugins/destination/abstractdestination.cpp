@@ -190,7 +190,7 @@ void AbstractDestination::delayedDelete(const QList<QUrl> &urls)
     QStringList args;
     args << "--tempfiles";					// delete temporary files
     args << QStandardPaths::findExecutable("true")+" %F";	// do nothing with the files
-    for (const QUrl &url : qAsConst(urls))
+    for (const QUrl &url : std::as_const(urls))
     {
         if (url.isLocalFile()) args << url.url();		// should always be the case
     }

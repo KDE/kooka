@@ -344,7 +344,7 @@ bool KScanDevice::isAdfAvailable()
     const QList<QByteArray> sources = so->getList();
     if (sources.isEmpty()) return (false);		// unexpected option type, assume no ADF
 
-    for (const QByteArray &src : qAsConst(sources))
+    for (const QByteArray &src : std::as_const(sources))
     {
         if (matchesAdf(src)) return (true);		// this source is an ADF
     }
