@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-09-24 02:01+0000\n"
-"PO-Revision-Date: 2024-09-27 07:57+0300\n"
+"PO-Revision-Date: 2024-09-27 09:32+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -367,22 +367,22 @@ msgstr "לא ניתן להפעיל את זיהוי התווים האופטי."
 #: ../plugins/ocr/abstractocrengine.cpp:120
 #, kde-format
 msgid "Check the OCR engine selection and settings."
-msgstr ""
+msgstr "נא לבדוק את הבחירה וההגדרות של מנוע זיהוי התווים האופטי."
 
 #: ../plugins/ocr/abstractocrengine.cpp:122
 #, kde-format
 msgid "OCR Setup Error"
-msgstr ""
+msgstr "שגיאת הגדרת זיהוי תווים אופטי"
 
 #: ../plugins/ocr/abstractocrengine.cpp:123 kookaview.cpp:792
 #, kde-format
 msgid "Configure OCR..."
-msgstr ""
+msgstr "הגדרת זיהוי תווים אופטי…"
 
 #: ../plugins/ocr/abstractocrengine.cpp:181
 #, kde-format
 msgid "The OCR process was stopped"
-msgstr ""
+msgstr "תהליך זיהוי התווים האופטי נעצר"
 
 #: ../plugins/ocr/abstractocrengine.cpp:250
 #, kde-kuit-format
@@ -394,24 +394,24 @@ msgstr ""
 #, kde-kuit-format
 msgctxt "@info"
 msgid "<filename><link url=\"%1\">%2</link></filename><nl/>"
-msgstr ""
+msgstr "<filename><link url=\"%1\">%2</link></filename><nl/>"
 
 #: ../plugins/ocr/abstractocrengine.cpp:264
 #, kde-format
 msgid "OCR Temporary Files"
-msgstr ""
+msgstr "קבצים זמניים של זיהוי תווים אופטי"
 
 #: ../plugins/ocr/abstractocrengine.cpp:435
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot create temporary file <filename>%1</filename>"
-msgstr ""
+msgstr "לא ניתן ליצור את הקובץ הזמני <filename>%1</filename>"
 
 #: ../plugins/ocr/abstractocrengine.cpp:481
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot save image to temporary file <filename>%1</filename>"
-msgstr ""
+msgstr "לא ניתן לשמור תמונה לקובץ הזמני <filename>%1</filename>"
 
 #: ../plugins/ocr/abstractocrengine.cpp:509
 #, kde-kuit-format
@@ -420,31 +420,32 @@ msgid ""
 "The executable <command>%1</command> could not be found on <envar>PATH</"
 "envar>."
 msgstr ""
+"לא ניתן למצוא את קובץ ההפעלה <command>%1</command> ב־<envar>PATH</envar>."
 
 #: ../plugins/ocr/abstractocrengine.cpp:519
 #, kde-kuit-format
 msgctxt "@info"
 msgid "The executable <filename>%1</filename> does not exist or is not usable."
-msgstr ""
+msgstr "קובץ ההפעלה <filename>%1</filename> לא קיים או שאינו שמיש."
 
 #: ../plugins/ocr/abstractocrengine.cpp:591
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "Command <command>%1</command> crashed with exit status <numid>%2</numid>"
-msgstr ""
+msgstr "הפקודה <command>%1</command> קרסה עם מצב היציאה <numid>%2</numid>"
 
 #: ../plugins/ocr/abstractocrengine.cpp:596
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Command <command>%1</command> exited with status <numid>%2</numid>"
-msgstr ""
+msgstr "הפקודה <command>%1</command> הסתיימה עם המצב <numid>%2</numid>"
 
 #: ../plugins/ocr/abstractocrengine.cpp:600
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Running the OCR process failed."
-msgstr ""
+msgstr "הרצת תהליך זיהוי התווים האופטי נכשלה."
 
 #: ../plugins/ocr/abstractocrengine.cpp:601
 #, kde-kuit-format
@@ -457,18 +458,18 @@ msgstr ""
 #: ../plugins/ocr/abstractocrengine.cpp:604
 #, kde-format
 msgid "OCR Command Failed"
-msgstr ""
+msgstr "פקודת זיהוי תווים אופטי נכשלה"
 
 #: ../plugins/ocr/abstractocrengine.cpp:611
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Processing the OCR results failed."
-msgstr ""
+msgstr "עיבוד תוצאות זיהוי התווים האופטי נכשל."
 
 #: ../plugins/ocr/abstractocrengine.cpp:612
 #, kde-format
 msgid "OCR Processing Failed"
-msgstr ""
+msgstr "עיבוד זיהוי התווים האופטי נכשל"
 
 #: ../plugins/ocr/executablepathdialogue.cpp:45
 #, kde-format
@@ -541,6 +542,10 @@ msgid ""
 "\n"
 "Change the OCR engine in the preferences dialog."
 msgstr ""
+"לא ניתן למצוא את קובצי הסיווג ל־KADMOS.\n"
+"זיהוי תווים אופטי עם KADMOS לא יהיה אפשרי.\n"
+"\n"
+"יש לשנות את מנוע זיהוי התווים האופטי בחלונית ההעדפות."
 
 #: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:202
 #: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:283
@@ -616,7 +621,7 @@ msgstr ""
 #: ../plugins/ocr/kadmos/ocrkadmosengine.cpp:75
 #, kde-format
 msgid "This version of Kooka is configured to use the Kadmos engine."
-msgstr ""
+msgstr "הגרסה הזאת של Kooka מוגדרת להשתמש במנוע Kadmos."
 
 #: ../plugins/ocr/kadmos/ocrkadmosengine.cpp:77
 #, kde-format
@@ -625,6 +630,8 @@ msgid ""
 "need to be installed, and Kooka needs to be rebuilt with the '--with-kadmos' "
 "option."
 msgstr ""
+"הגרסה הזאת של Kooka לא מוגדרת להשתמש במנוע Kadmos. יש להתקין את ספריות "
+"Kadmos ואז לבנות את Kooka מחדש עם האפשרות ‚‎--with-kadmos’."
 
 #: ../plugins/ocr/kadmos/ocrkadmosengine.cpp:93
 #, kde-format
@@ -645,6 +652,9 @@ msgid ""
 "%1\n"
 "Please check the configuration."
 msgstr ""
+"לא ניתן להפעיל את מערכת זיהוי התווים האופטיתKADMOS:\n"
+"%1\n"
+"נא לבדוק שההגדרות נכונות."
 
 #: ../plugins/ocr/kadmos/ocrkadmosengine.cpp:110
 #, kde-format
@@ -654,7 +664,7 @@ msgstr "כשל ב־KADMOS"
 #: ../plugins/ocr/ocrad/ocrocraddialog.cpp:79
 #, kde-format
 msgid "The OCRAD executable is not configured or is not available."
-msgstr ""
+msgstr "קובץ ההפעלה של ORCAD לא מוגדר או שאינו זמין."
 
 #: ../plugins/ocr/ocrad/ocrocraddialog.cpp:92
 #, kde-format
@@ -1142,7 +1152,7 @@ msgstr ""
 #, kde-format
 msgctxt "@option:radio"
 msgid "Fit to page"
-msgstr ""
+msgstr "התאמה לעמוד"
 
 #: imgprintdialog.cpp:167
 #, kde-format
@@ -1156,13 +1166,13 @@ msgstr ""
 #, kde-format
 msgctxt "@title:group"
 msgid "Other Options"
-msgstr ""
+msgstr "אפשרויות אחרות"
 
 #: imgprintdialog.cpp:182
 #, kde-format
 msgctxt "@option:check"
 msgid "Maintain aspect ratio"
-msgstr ""
+msgstr "שמירה על יחס"
 
 #: imgprintdialog.cpp:183
 #, kde-format
@@ -1171,12 +1181,14 @@ msgid ""
 "<div>Adjust the height or width to maintain the original aspect ratio of the "
 "printed image.</div>"
 msgstr ""
+"<div>התאמת הגובה או הרוחב כדי לשמר את יחס התצוגה המקורי של התמונה המודפסת.</"
+"div>"
 
 #: imgprintdialog.cpp:189
 #, kde-format
 msgctxt "@option:check"
 msgid "Low resolution (fast draft print)"
-msgstr ""
+msgstr "רזולוציה נמוכה (הדפסת טיוטה מהירה)"
 
 #: imgprintdialog.cpp:190
 #, kde-format
@@ -1185,30 +1197,32 @@ msgid ""
 "<div>Print at as low a resolution as possible. This may not work as intended "
 "on all printers.</div>"
 msgstr ""
+"<div>להדפיס ברזולוציה הכי נמוכה שאפשר. יכול להיות שזה לא יעבוד כמצופה בכל "
+"המדפסות.</div>"
 
 #: imgprintdialog.cpp:196
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Cut marks:"
-msgstr ""
+msgstr "סימני חיתוך:"
 
 #: imgprintdialog.cpp:200
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "None"
-msgstr ""
+msgstr "ללא"
 
 #: imgprintdialog.cpp:201
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "For multiple pages"
-msgstr ""
+msgstr "לריבוי עמודים"
 
 #: imgprintdialog.cpp:202
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Always"
-msgstr ""
+msgstr "תמיד"
 
 #: imgprintdialog.cpp:203
 #, kde-format
@@ -1222,13 +1236,13 @@ msgstr ""
 #, kde-format
 msgctxt "@title:group"
 msgid "Print Layout"
-msgstr ""
+msgstr "פריסת הדפסה"
 
 #: imgprintdialog.cpp:219
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Image size:"
-msgstr ""
+msgstr "גודל תמונה:"
 
 #: imgprintdialog.cpp:222
 #, kde-format
@@ -1240,19 +1254,19 @@ msgstr ""
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Available print area:"
-msgstr ""
+msgstr "אזור ההדפסה הזמין:"
 
 #: imgprintdialog.cpp:234
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Image print area:"
-msgstr ""
+msgstr "אזור הדפסת התמונה:"
 
 #: imgprintdialog.cpp:241
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Pages required:"
-msgstr ""
+msgstr "עמודים נדרשים:"
 
 #: imgprintdialog.cpp:304
 #, kde-format
@@ -1276,31 +1290,31 @@ msgstr ""
 #, kde-format
 msgctxt "@info:status width,height millimetres"
 msgid "%1 x %2 mm"
-msgstr ""
+msgstr "%1 × %2 מ״מ"
 
 #: imgprintdialog.cpp:412
 #, kde-format
 msgctxt "@info:status total"
 msgid "%1"
-msgstr ""
+msgstr "%1"
 
 #: imgprintdialog.cpp:414
 #, kde-format
 msgctxt "@info:status total(rows,cols)"
 msgid "%1 (%2 x %3)"
-msgstr ""
+msgstr "%1 (%2 × %3)"
 
 #: imgsaver.cpp:66
 #, kde-kuit-format
 msgctxt "@info"
 msgid "The directory <filename>%2</filename><nl/>could not be accessed.<nl/>%1"
-msgstr ""
+msgstr "לא ניתן לגשת לתיקייה <filename>%2</filename><nl/>.<nl/>%1"
 
 #: imgsaver.cpp:77
 #, kde-kuit-format
 msgctxt "@info"
 msgid "The directory <filename>%2</filename><nl/>could not be created.<nl/>%1"
-msgstr ""
+msgstr "לא ניתן ליצור את התיקייה <filename>%2</filename><nl/>.<nl/>%1"
 
 #: imgsaver.cpp:328
 #, kde-format
@@ -1495,7 +1509,7 @@ msgstr "הטיה עם כיוון השעון"
 #: kooka.cpp:216
 #, kde-format
 msgid "Rotate 180 Degrees"
-msgstr ""
+msgstr "סיבוב ב־180 מעלות"
 
 #: kooka.cpp:225
 #, kde-format
@@ -1570,7 +1584,7 @@ msgstr "בחירה אוטומטית"
 #: kooka.cpp:310
 #, kde-format
 msgid "OCR Image..."
-msgstr ""
+msgstr "תמונת זיהוי תווים אופטי…"
 
 #: kooka.cpp:314
 #, kde-format
@@ -1585,12 +1599,12 @@ msgstr "קובץ זיהוי תווים אופטי…"
 #: kooka.cpp:322
 #, kde-format
 msgid "Save OCR Result Text..."
-msgstr ""
+msgstr "שמירת טקסט התוצאה של זיהוי התווים האופטי…"
 
 #: kooka.cpp:327
 #, kde-format
 msgid "Spell Check OCR Result..."
-msgstr ""
+msgstr "בדיקת איות בתוצאות זיהוי התווים האופטי…"
 
 #: kooka.cpp:524
 #, kde-format
@@ -1778,7 +1792,7 @@ msgstr ""
 #: kookasettings.kcfg:131
 #, kde-format
 msgid "Show recent folders:"
-msgstr ""
+msgstr "הצגת תיקיות אחרונות:"
 
 #. i18n: ectx: tooltip, entry (GalleryLayout), group (Gallery)
 #: kookasettings.kcfg:132
@@ -1792,7 +1806,7 @@ msgstr ""
 #: kookasettings.kcfg:152
 #, kde-format
 msgid "Use a custom background image"
-msgstr ""
+msgstr "להשתמש בתמונת רקע מותאמת אישית"
 
 #. i18n: ectx: tooltip, entry (ThumbnailCustomBackground), group (thumbnailView)
 #: kookasettings.kcfg:153
@@ -2175,7 +2189,7 @@ msgstr ""
 #: kookaview.cpp:1038
 #, kde-format
 msgid "Loading %1..."
-msgstr ""
+msgstr "%1 בטעינה…"
 
 #: main.cpp:44
 #, kde-format
@@ -2214,12 +2228,12 @@ msgstr ""
 #: main.cpp:70
 #, kde-format
 msgid "(C) 2000-2018, the Kooka developers and contributors"
-msgstr ""
+msgstr "(C) 2000-2018, מפתחי ומתנדבי Kooka"
 
 #: main.cpp:78
 #, kde-format
 msgid "Kooka"
-msgstr ""
+msgstr "Kooka"
 
 #: main.cpp:90
 #, kde-format
@@ -2274,7 +2288,7 @@ msgstr "יישום kscan המקורי"
 #: main.cpp:95
 #, kde-format
 msgid "Alex Kempshall"
-msgstr ""
+msgstr "אלכס קמפשל"
 
 #: main.cpp:95
 #, kde-format
@@ -2294,7 +2308,7 @@ msgstr ""
 #: main.cpp:114
 #, kde-format
 msgid "device"
-msgstr ""
+msgstr "התקן"
 
 #: newscanpresetdialog.cpp:53
 #, kde-format
