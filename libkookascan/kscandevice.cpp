@@ -46,7 +46,6 @@
 #include "kgammatable.h"
 #include "kscancontrols.h"
 #include "kscanoption.h"
-#include "kscanoptset.h"
 #include "deviceselector.h"
 #include "scansettings.h"
 #include "multiscanoptions.h"
@@ -1024,7 +1023,6 @@ KScanDevice::Status KScanDevice::acquireData(bool isPreview)
     if (!isPreview)					// scanning to eventually save
     {
         mSaneStatus = sane_get_parameters(mScannerHandle, &mSaneParameters);
-        if (mSaneStatus==SANE_STATUS_GOOD)		// get pre-scan parameters
         {
 #ifdef DEBUG_PARAMS
             dumpParams("Before scan:", &mSaneParameters);
@@ -1126,6 +1124,18 @@ KScanDevice::Status KScanDevice::acquireData(bool isPreview)
         }
         else
         {
+            //if (mSaneStatus==SANE_STATUS_DEVICE_BUSY)
+            //{
+            //    qDebug() << lastSaneErrorMessage();
+            //    QTimer tim;
+            //    tim.setSingleShot(true);
+            //    tim.setInterval(5000);
+            //    tim.start();
+            //    while (tim.isActive()) QCoreApplication::processEvents();
+            //    sane_cancel(mScannerHandle);
+            //    continue;
+            //}
+
             stat = KScanDevice::OpenDevice;
             qCDebug(LIBKOOKASCAN_LOG) << "sane_start() error" << lastSaneErrorMessage();
         }
@@ -1552,15 +1562,12 @@ void KScanDevice::scanFinished(KScanDevice::Status stat)
 
 void KScanDevice::saveStartupConfig()
 {
-    if (mScannerName.isNull()) return;			// do not save for no scanner
-
-    KScanOptSet optSet(KScanOptSet::startupSetName());
-    getCurrentOptions(&optSet);
-    optSet.saveConfig(mScannerName, i18n("Default startup configuration"));
+    if (mScannerName.isEmpty()) return;			// do not save for no scanner
+    saveOptions(KScanOptSet::Params);
 }
 
 
-void KScanDevice::loadOptionSetInternal(const KScanOptSet *optSet, bool prio)
+/* private */ void KScanDevice::loadOptionSetInternal(const KScanOptSet *optSet, bool prio)
 {
     for (KScanOptSet::const_iterator it = optSet->constBegin();
          it!=optSet->constEnd(); ++it)
@@ -1580,13 +1587,33 @@ void KScanDevice::loadOptionSetInternal(const KScanOptSet *optSet, bool prio)
 }
 
 
-void KScanDevice::loadOptionSet(const KScanOptSet *optSet)
+/* private */ void KScanDevice::loadOptionSet(const KScanOptSet *optSet)
 {
     if (optSet==nullptr) return;
 
     qCDebug(LIBKOOKASCAN_LOG) << "Loading set" << optSet->getSetName() << "with" << optSet->count() << "options";
     loadOptionSetInternal(optSet, true);
     loadOptionSetInternal(optSet, false);
+}
+
+
+bool KScanDevice::loadOptions(KScanOptSet::Category category, const QString &setName)
+{
+    KScanOptSet optSet(!setName.isEmpty() ? setName : mScannerName);
+
+    if (!optSet.loadConfig(category, mScannerName)) return (false);
+    loadOptionSet(&optSet);
+    return (true);
+}
+
+
+bool KScanDevice::saveOptions(KScanOptSet::Category category, const QString &setName) const
+{
+    KScanOptSet optSet(!setName.isEmpty() ? setName : mScannerName);
+    getCurrentOptions(&optSet);
+    // No need for I18N, this is not a user visible string
+    optSet.setDescription("Default startup configuration");
+    return (optSet.saveConfig(category, mScannerName));
 }
 
 
@@ -1614,12 +1641,6 @@ void KScanDevice::getCurrentOptions(KScanOptSet *optSet) const
 }
 
 
-KConfigGroup KScanDevice::configGroup(const QString &groupName)
-{
-    Q_ASSERT(!groupName.isEmpty());
-    return (ScanSettings::self()->config()->group(groupName));
-}
-
 //  SANE Authentication
 //  -------------------
 //
@@ -1644,7 +1665,7 @@ bool KScanDevice::authenticate(QByteArray *retuser, QByteArray *retpass)
     qCDebug(LIBKOOKASCAN_LOG) << "for" << mScannerName;
 
     // TODO: use KWallet for username/password?
-    KConfigGroup grp = configGroup(mScannerName);
+    KConfigGroup grp = KScanOptSet::configGroup(mScannerName, KScanOptSet::Options);
     QByteArray user = QByteArray::fromBase64(grp.readEntry("user", QString()).toLocal8Bit());
     QByteArray pass = QByteArray::fromBase64(grp.readEntry("pass", QString()).toLocal8Bit());
 
@@ -1682,7 +1703,7 @@ bool KScanDevice::authenticate(QByteArray *retuser, QByteArray *retpass)
 
 void KScanDevice::clearSavedAuth()
 {
-    KConfigGroup grp = configGroup(mScannerName);
+    KConfigGroup grp = KScanOptSet::configGroup(mScannerName, KScanOptSet::Options);
     grp.deleteEntry("user");
     grp.deleteEntry("pass");
     grp.sync();

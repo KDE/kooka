@@ -73,7 +73,7 @@ private:
     QPushButton *mDeleteButton;
     QPushButton *mEditButton;
 
-    KScanOptSet::StringMap mSets;
+    QMap<QString, QString> mSets;
     KScanDevice *mScanDevice;
 };
 

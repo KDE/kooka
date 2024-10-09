@@ -38,6 +38,7 @@
 #include <qmap.h>
 #include <qbytearray.h>
 
+class KConfigGroup;
 class KScanOption;
 
 /**
@@ -64,11 +65,6 @@ class KOOKASCAN_EXPORT KScanOptSet : public QHash<QByteArray, QByteArray>
 
 public:
     /**
-     * A map as returned by @c readList().
-     */
-    typedef QMap<QString, QString> StringMap;
-
-    /**
      * Create a new option set container.
      *
      * @param setName name for the option set.  When saving to or loading
@@ -80,7 +76,17 @@ public:
     /**
      * Destructor.
      **/
-    ~KScanOptSet();
+    ~KScanOptSet() = default;
+
+    /**
+     * Category values for naming save set groups.
+     **/
+    enum Category
+    {
+        Params,						///< scanner parameters
+        Options,					///< other scanner options
+        Preset,						///< saved user preset
+    };
 
     /**
      * Save the current value of an option.
@@ -91,22 +97,12 @@ public:
     bool backupOption(const KScanOption *opt);
 
     /**
-     * Return the currently stored value of an option.
-     *
-     * @param optName The name of the required option
-     * @return The value of the option, or a null string if no
-     * option of that name is present.
-     * @deprecated Use QHash::value() instead.
-     **/
-    Q_DECL_DEPRECATED QByteArray getValue(const QByteArray &optName) const;
-
-    /**
      * Save the option set to the global scanner configuration file.
      *
+     * @param category The storage category to save under.
      * @param scannerName The SANE device name of the scanner to which
      * this configuration applies.
-     * @param desc A description for the option set.  If this is a null or
-     * empty string, the description set by setDescription() is used.
+     * @return @c true if the save was successful.
      *
      * @note This does not automatically read the current options from the
      * scanner before saving them to the configuration file, the values last
@@ -117,14 +113,16 @@ public:
      * @code
      * KScanOptSet optSet(setName);
      * saneDevice->getCurrentOptions(&optSet);
-     * optSet.saveConfig(saneDevice->scannerBackendName(), setDesc);
+     * optSet.setDescription(setDesc);
+     * optSet.saveConfig(KScanOptSet::Params, saneDevice->scannerBackendName());
      * @endcode
      **/
-    void saveConfig(const QByteArray &scannerName, const QString &desc = QString()) const;
+    bool saveConfig(KScanOptSet::Category category, const QByteArray &scannerName) const;
 
     /**
      * Load an option set from the global scanner configuration file.
      *
+     * @param category The storage category to read from.
      * @param scannerName The SANE device name of the scanner to which
      * this configuration is intended to apply.  If it does not match the
      * scanner name that this option set was saved for, a warning message
@@ -138,7 +136,7 @@ public:
      *
      * @code
      * KScanOptSet optSet(setName);
-     * optSet.loadConfig();
+     * optSet.loadConfig(KScanOptSet::Params);
      * saneDevice->loadOptionSet(&optSet);
      * saneDevice->reloadAll();
      * @endcode
@@ -149,14 +147,14 @@ public:
      * set is required for a previously-used option set, then simply use
      * @c clear() on it before calling @c loadConfig().
      **/
-    bool loadConfig(const QByteArray &scannerName = "");
+    bool loadConfig(KScanOptSet::Category category, const QByteArray &scannerName = QByteArray());
 
     /**
      * Set a description for the option set.
      *
      * @param desc The new description
      **/
-    void setDescription(const QString &desc);
+    void setDescription(const QString &desc)	{ mSetDescription = desc; }
 
     /**
      * Get the description of the option set.
@@ -180,26 +178,32 @@ public:
     const QString &getSetName() const		{ return (mSetName); }
 
     /**
-     * Read all of the available saved option set names and descriptions
-     * from the configuration file.
+     * List all of the saved option set names available in the
+     * configuration file.
      *
-     * @return A map from each available set name to its description
+     * @param category The storage category to list.  The default is
+     * the saved scan presets.
+     * @return a list of the set names
      **/
-    static StringMap readList();
+    static QStringList listSavedSets(KScanOptSet::Category category = KScanOptSet::Preset);
 
     /**
      * Delete a saved option set from the configuration file.
      *
      * @param setName The name of the set to delete
+     * @param category The set's storage category.  The default is
+     * the saved scan presets.
      **/
-    static void deleteSet(const QString &setName);
+    static void deleteSet(const QString &setName, KScanOptSet::Category category = KScanOptSet::Preset);
 
     /**
-     * Get the name of the default startup option set.
+     * Access a group in the global scanner configuration file.
      *
-     * @return The set name
-     **/
-    static QString startupSetName()		{ return ("saveSet"); }
+     * @param groupName The group name
+     * @param category The storage category
+     * @return the group
+     */
+    static KConfigGroup configGroup(const QString &groupName, KScanOptSet::Category category);
 
 private:
     QString mSetName;

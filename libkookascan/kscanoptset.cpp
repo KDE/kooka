@@ -47,19 +47,25 @@
 #undef DEBUG_BACKUP
 
 
-// Mappings between a save set name and a configuration file group name
-static QString groupForSet(const QString &setName)
+static QString prefixForCategory(KScanOptSet::Category category)
 {
-    return (ScanSettings::self()->saveSetDescItem()->group()+" "+setName);
+    switch (category)
+    {
+case KScanOptSet::Params:	return ("Parameters");
+case KScanOptSet::Options:	return ("Options");
+case KScanOptSet::Preset:	return ("Preset");
+default:			qCWarning(LIBKOOKASCAN_LOG) << "unknown category" << category;
+				return ("Unknown");
+    }
 }
 
 
-static QString setNameFromGroup(const QString &grpName)
+// Mapping from a save set name and category to a configuration file group name
+static QString groupForSet(const QString &setName, KScanOptSet::Category category)
 {
-    QString prefix = ScanSettings::self()->saveSetDescItem()->group();
-    if (!grpName.startsWith(prefix)) return (QString());
-    return (grpName.mid(prefix.length()+1));
+    return (prefixForCategory(category)+' '+setName);
 }
+
 
 KScanOptSet::KScanOptSet(const QString &setName)
 {
@@ -70,15 +76,6 @@ KScanOptSet::KScanOptSet(const QString &setName)
     qCDebug(LIBKOOKASCAN_LOG) << mSetName;
 }
 
-KScanOptSet::~KScanOptSet()
-{
-    //qCDebug(LIBKOOKASCAN_LOG) << mSetName << "with" << count() << "options";
-}
-
-QByteArray KScanOptSet::getValue(const QByteArray &optName) const
-{
-    return (value(optName));
-}
 
 bool KScanOptSet::backupOption(const KScanOption *opt)
 {
@@ -112,93 +109,105 @@ void KScanOptSet::setSetName(const QString &newName)
     mSetName = newName;
 }
 
-void KScanOptSet::setDescription(const QString &desc)
-{
-    mSetDescription = desc;
-}
 
-void KScanOptSet::saveConfig(const QByteArray &scannerName,
-                             const QString &desc) const
+bool KScanOptSet::saveConfig(KScanOptSet::Category category, const QByteArray &scannerName) const
 {
-    qCDebug(LIBKOOKASCAN_LOG) << "Saving set" << mSetName << "for scanner" << scannerName
-                              << "with" << count() << "options";
+    KConfigGroup grp = configGroup(mSetName, category);
 
-    QString grpName = groupForSet(mSetName);
-    KConfigGroup grp = KScanDevice::configGroup(grpName);
-    grp.writeEntry(ScanSettings::self()->saveSetDescItem()->key(), desc);
+    qCDebug(LIBKOOKASCAN_LOG) << "Saving to group" << grp.name() << "for scanner" << scannerName;
+
+    grp.writeEntry(ScanSettings::self()->saveSetDescItem()->key(), mSetDescription);
     grp.writeEntry(ScanSettings::self()->saveSetScannerItem()->key(), scannerName);
 
     for (KScanOptSet::const_iterator it = constBegin();
             it != constEnd(); ++it) {
-        //qCDebug(LIBKOOKASCAN_LOG) << " " << it.key() << "=" << it.value();
         grp.writeEntry(QString(it.key()), it.value());
     }
 
     grp.sync();
-    qCDebug(LIBKOOKASCAN_LOG) << "done";
+    qCDebug(LIBKOOKASCAN_LOG) << "done with" << count() << "options";
+    return (true);
 }
 
-bool KScanOptSet::loadConfig(const QByteArray &scannerName)
+
+bool KScanOptSet::loadConfig(KScanOptSet::Category category, const QByteArray &scannerName)
 {
-    QString grpName = groupForSet(mSetName);
-    const KConfigGroup grp = KScanDevice::configGroup(grpName);
-    if (!grp.exists()) {
-        qCDebug(LIBKOOKASCAN_LOG) << "Group" << grpName << "does not exist in configuration!";
+    const KConfigGroup grp = configGroup(mSetName, category);
+    if (!grp.exists())
+    {
+        qCDebug(LIBKOOKASCAN_LOG) << "No such group" << grp.name();
         return (false);
     }
 
-    qCDebug(LIBKOOKASCAN_LOG) << "Loading set" << mSetName << "for scanner" << scannerName;
+    qCDebug(LIBKOOKASCAN_LOG) << "Loading from group" << grp.name() << "for scanner" << scannerName;
 
     const QMap<QString, QString> emap = grp.entryMap();
     for (QMap<QString, QString>::const_iterator it = emap.constBegin();
-            it != emap.constEnd(); ++it) {
-        QString optName = it.key();
-        if (optName==ScanSettings::self()->saveSetDescItem()->key()) continue;
-							// ignore this as saved
-        if (optName==ScanSettings::self()->saveSetScannerItem()->key())
-        {						// check this but ignore
-            if (!scannerName.isEmpty() && scannerName!=it.value())
-            {
-                qCDebug(LIBKOOKASCAN_LOG) << "was saved for scanner" << it.value();
-            }
-            continue;
+         it != emap.constEnd(); ++it)
+    {
+        const QString optName = it.key();
+        const QByteArray optValue = it.value().toLatin1();
+        if (optName==ScanSettings::self()->saveSetDescItem()->key())
+        {						// restore this as saved
+            mSetDescription = optValue;
         }
-
-        //qCDebug(LIBKOOKASCAN_LOG) << " " << it.key() << "=" << it.value();
-        insert(it.key().toLatin1(), it.value().toLatin1());
+        else if (optName==ScanSettings::self()->saveSetScannerItem()->key())
+        {						// check this but ignore
+            if (!scannerName.isEmpty() && scannerName!=optValue)
+            {
+                qCDebug(LIBKOOKASCAN_LOG) << "was saved for scanner" << optValue;
+            }
+        }
+        else insert(optName.toLatin1(), optValue);
     }
 
     qCDebug(LIBKOOKASCAN_LOG) << "done with" << count() << "options";
     return (true);
 }
 
-KScanOptSet::StringMap KScanOptSet::readList()
+
+// Used by the "Scan Presets" dialogue.
+QStringList KScanOptSet::listSavedSets(KScanOptSet::Category category)
 {
-    StringMap ret;
+    QStringList ret;
 
     ScanSettings::self()->load();			// ensure refreshed
-    KConfig *conf = ScanSettings::self()->config();
-    const QStringList groups = conf->groupList();
-    for (const QString &grp : groups)
+
+    // Do not use ScanSettings::self()->config() directly here,
+    // see ScanGlobal::init().
+    const KConfig *globalConfig = ScanSettings::self()->config();
+    const KSharedConfig::Ptr conf = KSharedConfig::openConfig(globalConfig->name(), KConfig::SimpleConfig);
+
+    const QString prefix = prefixForCategory(category)+' ';
+    const QStringList groupList = conf->groupList();
+    for (const QString &grpName : std::as_const(groupList))
     {
-        QString set = setNameFromGroup(grp);
-        if (!set.isEmpty())
+        if (!grpName.startsWith(prefix)) continue;
+
+        const QString setName = grpName.mid(prefix.length());
+        if (!setName.isEmpty())
         {
-            if (set==startupSetName()) continue;	// don't return this one
-            qCDebug(LIBKOOKASCAN_LOG) << "found group" << grp  << "-> set" << set;
-            const KConfigGroup g = KScanDevice::configGroup(grp);
-            ret[set] = g.readEntry(ScanSettings::self()->saveSetDescItem()->key(), i18n("No description"));
+            qCDebug(LIBKOOKASCAN_LOG) << "found group" << grpName  << "-> set" << setName;
+            ret.append(setName);
         }
     }
 
     return (ret);
 }
 
-void KScanOptSet::deleteSet(const QString &setName)
+
+void KScanOptSet::deleteSet(const QString &setName, KScanOptSet::Category category)
 {
-    const QString grpName = groupForSet(setName);
+    const QString grpName = groupForSet(setName, category);
     qCDebug(LIBKOOKASCAN_LOG) << grpName;
     KConfig *conf = ScanSettings::self()->config();
     conf->deleteGroup(grpName);
     conf->sync();
+}
+
+
+KConfigGroup KScanOptSet::configGroup(const QString &groupName, KScanOptSet::Category category)
+{
+    Q_ASSERT(!groupName.isEmpty());
+    return (ScanSettings::self()->config()->group(groupForSet(groupName, category)));
 }

@@ -68,7 +68,6 @@ extern "C"
 #include "kscancontrols.h"
 #include "scansizeselector.h"
 #include "kscanoption.h"
-#include "kscanoptset.h"
 #include "scandevices.h"
 #include "dialogbase.h"
 #include "multiscandialog.h"
@@ -171,26 +170,17 @@ bool ScanParams::connectDevice(KScanDevice *newScanDevice, bool galleryMode)
     lay->setRowStretch(3, 9);
     lay->setColumnStretch(2, 9);
 
-    // Load the startup options
-    //
-    // TODO: check whether the saved scanner options apply to the current scanner?
-    // They may be for a completely different one...
-    // Or update KScanDevice and here to save/load the startup options
-    // on a per-scanner basis.
+    // Load the startup options applicable to the current scanner
     qCDebug(LIBKOOKASCAN_LOG) << "looking for startup options";
-    KScanOptSet startupOptions(KScanOptSet::startupSetName());
-    if (startupOptions.loadConfig(mSaneDevice->scannerBackendName()))
-    {
-        qCDebug(LIBKOOKASCAN_LOG) << "loading startup options";
-        mSaneDevice->loadOptionSet(&startupOptions);
-    }
+    const bool startupOptionsLoaded = mSaneDevice->loadOptions(KScanOptSet::Params);
+    if (startupOptionsLoaded) qCDebug(LIBKOOKASCAN_LOG) << "loaded startup options";
     else qCDebug(LIBKOOKASCAN_LOG) << "no startup options to load";
 
     // Reload all options, to take account of inactive ones
     mSaneDevice->reloadAllOptions();
 
     // Send the current settings to the previewer
-    initStartupArea(startupOptions.isEmpty());		// signal newCustomScanSize
+    initStartupArea(!startupOptionsLoaded);		// signal newCustomScanSize
     slotNewScanMode();					// signal scanModeChanged
     slotNewResolution(nullptr);				// signal scanResolutionChanged
 

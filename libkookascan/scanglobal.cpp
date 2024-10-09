@@ -45,6 +45,10 @@ extern "C" {
 #endif
 }
 
+// The current configuration file ("scannerrc") version.
+// This was not present in the file before version 1, but
+// the default in this case is 0.
+static const int currentConfigVersion = 1;
 
 static ScanGlobal *sInstance = nullptr;
 static KScanDevice *sScanDevice = nullptr;
@@ -112,6 +116,18 @@ void ScanGlobal::setScanDevice(KScanDevice *device)
     sScanDevice = device;
 }
 
+
+static void renameGroup(KSharedConfig::Ptr config, const QString &oldName, const QString &newName)
+{
+    qCDebug(LIBKOOKASCAN_LOG) << "renaming group" << oldName << "->" << newName;
+    KConfigGroup oldGroup = config->group(oldName);
+    KConfigGroup newGroup = config->group(newName);
+    oldGroup.copyTo(&newGroup);
+    oldGroup.deleteGroup();
+    config->sync();
+}
+
+
 bool ScanGlobal::init()
 {
     if (mSaneInitDone) {
@@ -166,11 +182,78 @@ bool ScanGlobal::init()
 #endif
         KAboutData::setApplicationData(about);
 
+        // Migrate the scanner configuration if necessary.
+        const int configVersion = ScanSettings::configVersion();
+        if (configVersion<currentConfigVersion)
+        {
+            // We cannot use ScanSettings::self()->config() directly here,
+            // because that will include the cascaded kdeglobals settings
+            // (both user and system), see the KCoreConfigSkeleton constructor.
+            // As a rule KConfig::SimpleConfig needs to be used to open any
+            // config file where groupList() will be used.
+            //
+            // The 'globalconfig' is used just to get the config file name.
+            const KConfig *globalConfig = ScanSettings::self()->config();
+            const KSharedConfig::Ptr config = KSharedConfig::openConfig(globalConfig->name(), KConfig::SimpleConfig);
+
+            qCDebug(LIBKOOKASCAN_LOG) << "Migrating config" << config->name() << "from version" << configVersion << "to" << currentConfigVersion;
+
+            const QStringList groupList = config->groupList();
+            for (const QString &groupName : std::as_const(groupList))
+            {
+                const KConfigGroup group = config->group(groupName);
+                if (groupName.startsWith("Save Set "))
+                {
+                    const QString saveSetFor = groupName.mid(9);
+                    if (saveSetFor=="saveSet")
+                    {
+                        // This group is the saved settings for the last
+                        // scanner used, regardless of what scanner device
+                        // that was.  The scanner device, though, is saved
+                        // as the "ScannerName" key within the group.
+                        const QString scannerName = group.readEntry(ScanSettings::self()->saveSetScannerItem()->key(), "");
+                        if (!scannerName.isEmpty())
+                        {
+                            const QString newGroupName = "Parameters "+scannerName;
+                            renameGroup(config, groupName, newGroupName);
+                        }
+                    }
+                    else
+                    {
+                        // This group is not saved scanner settings, but a user
+                        // defined preset.  It will again have the scanner device
+                        // name saved within the group, but this is not used for a
+                        // scan preset so simply rename the group.
+                        const QString newGroupName = "Preset "+saveSetFor;
+                        renameGroup(config, groupName, newGroupName);
+                    }
+                }
+                else
+                {
+                    // Other options for a scanner device are contained in a
+                    // group simply named as the scanner device name.  However,
+                    // the "doAutoselection" key is explicitly written by
+                    // Previewer::setAutoSelection() and so such a group can be
+                    // detected by the presence of this key.
+                    if (group.hasKey(ScanSettings::self()->previewAutoselOnItem()->key()))
+                    {
+                        const QString newGroupName = "Options "+groupName;
+                        renameGroup(config, groupName, newGroupName);
+                    }
+                }
+            }
+
+            ScanSettings::setConfigVersion(currentConfigVersion);
+            ScanSettings::self()->save();
+        }
+        else qCDebug(LIBKOOKASCAN_LOG) << "Config file version" << configVersion;
+
         mSaneInitDone = true;
     }
 
     return (mSaneInitDone);
 }
+
 
 bool ScanGlobal::available() const
 {

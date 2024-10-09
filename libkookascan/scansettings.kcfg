@@ -5,6 +5,12 @@
                           http://www.kde.org/standards/kcfg/1.0/kcfg.xsd" >
   <kcfgfile name="scannerrc"></kcfgfile>
 
+  <group name="Config">
+    <entry name="ConfigVersion" key="Version" type="Int">
+      <default>0</default>
+    </entry>
+  </group>
+
   <group name="Startup">
 
     <!-- Inversion between key/value and function/text -->
@@ -44,7 +50,7 @@
   </group>
 
   <!-- Only used as a template -->
-  <group name="Save Set">
+  <group name="Parameters">
     <entry name="SaveSetDesc" key="SetDesc" type="String">
     </entry>
     <entry name="SaveSetScanner" key="ScannerName" type="String">

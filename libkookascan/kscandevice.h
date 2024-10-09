@@ -32,6 +32,7 @@
 #include <kconfigskeleton.h>
 
 #include "scanimage.h"
+#include "kscanoptset.h"
 
 extern "C" {
 #include <sane/sane.h>
@@ -101,7 +102,7 @@ public:
     /**
      * Destructor.
      **/
-    ~KScanDevice();
+    virtual ~KScanDevice();
 
     /**
      * Open a scanner device.
@@ -248,13 +249,31 @@ public:
     void getCurrentOptions(KScanOptSet *optSet) const;
 
     /**
-     * Load a saved parameter set. All options that exist in the set
-     * and which the current scanner supports will be @c set()
-     * with the values from the @c KScanOptSet and @c apply()'ed.
+     * Load the specified saved parameter set.  All options that
+     * exist in the saved option set and which the scanner supports
+     * will be @c set() with the values from the saved @c KScanOptSet
+     * and @c apply()'ed.
      *
-     * @param optSet An option set with the options to be loaded
+     * @param setName The name of the saved parameter set.  The
+     * default is the current scanner device name.
+     * @param category The storage category.  The default is the
+     * scanner's saved parameter set.
+     * @return @c true if the set was loaded successfully
      **/
-    void loadOptionSet(const KScanOptSet *optSet);
+    bool loadOptions(KScanOptSet::Category category, const QString &setName = QString());
+
+    /**
+     * Save the specified saved parameter set.  All options that
+     * currently exist and have been applied (in other words, all
+     * actual options that the scanner supports) will be saved.
+     *
+     * @param setName The name of the parameter set to be saved.
+     * The default is the current scanner device name.
+     * @param category The storage category.  The default is the
+     * scanner's saved parameter set.
+     * @return @c true if the set was saved successfully
+     **/
+    bool saveOptions(KScanOptSet::Category category, const QString &setName = QString()) const;
 
     /**
      * Check whether the current scanner device supports an option.
@@ -351,14 +370,6 @@ public:
     void getCurrentFormat(int *format, int *depth);
 
     /**
-     * Access a group in the global scanner configuration file.
-     *
-     * @param groupName The group name
-     * @return the group
-     */
-    static KConfigGroup configGroup(const QString &groupName);
-
-    /**
      * Get the global default value for a scanner configuration setting.
      *
      * @param item The settings template item
@@ -381,7 +392,7 @@ public:
      **/
     template <class T> T getConfig(const KConfigSkeletonItem *item) const
     {
-        const KConfigGroup grp = configGroup(mScannerName);
+        const KConfigGroup grp = KScanOptSet::configGroup(mScannerName, KScanOptSet::Options);
         return (grp.readEntry(item->key(), getDefault<T>(item)));
     }
 
@@ -397,8 +408,7 @@ public:
     template <class T> void storeConfig(const KConfigSkeletonItem *item, const T &val)
     {
         if (mScannerName.isNull()) return;
-        //kDebug() << "Storing config" << key << "in group" << mScannerName;
-        KConfigGroup grp = configGroup(mScannerName);
+        KConfigGroup grp = KScanOptSet::configGroup(mScannerName, KScanOptSet::Options);
         grp.writeEntry(item->key(), val);
         grp.sync();
     }
@@ -617,6 +627,15 @@ private:
      * @see KStandardDirs
      **/
     const QString previewFile() const;
+
+    /**
+     * Load a saved parameter set. All options that exist in the set
+     * and which the current scanner supports will be @c set()
+     * with the values from the @c KScanOptSet and @c apply()'ed.
+     *
+     * @param optSet An option set with the options to be loaded
+     **/
+    void loadOptionSet(const KScanOptSet *optSet);
 
     KScanDevice::Status findOptions();
     void showOptions();
