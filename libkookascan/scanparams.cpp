@@ -154,18 +154,26 @@ bool ScanParams::connectDevice(KScanDevice *newScanDevice, bool galleryMode)
 
     lay->setRowMinimumHeight(4, DialogBase::verticalSpacing());
 
+    mMultipleMessage = new KMessageWidget(xi18nc("@info", "Multiple scans are enabled."));
+    mMultipleMessage->setMessageType(KMessageWidget::Information);
+    mMultipleMessage->setIcon(QIcon::fromTheme("dialog-information"));
+    mMultipleMessage->setCloseButtonVisible(true);
+    mMultipleMessage->setWordWrap(true);
+    lay->addWidget(mMultipleMessage, 4, 0, 1, -1);
+    mMultipleMessage->setVisible(false);
+
     /* Create the Scan Buttons */
     QPushButton *pb = new QPushButton(QIcon::fromTheme("preview"), i18n("Pre&view"), this);
     pb->setToolTip(i18n("Start a preview scan and show the preview image"));
     pb->setMinimumWidth(100);
     connect(pb, &QPushButton::clicked, this, &ScanParams::slotAcquirePreview);
-    lay->addWidget(pb, 5, 0, 1, 2, Qt::AlignLeft);
+    lay->addWidget(pb, 6, 0, 1, 2, Qt::AlignLeft);
 
     pb = new QPushButton(QIcon::fromTheme("scan"), i18n("Star&t Scan"), this);
     pb->setToolTip(i18n("Start a scan and save the scanned image"));
     pb->setMinimumWidth(100);
     connect(pb, &QPushButton::clicked, this, &ScanParams::slotStartScan);
-    lay->addWidget(pb, 5, 2, 1, 2, Qt::AlignRight);
+    lay->addWidget(pb, 6, 2, 1, 2, Qt::AlignRight);
 
     lay->setRowStretch(3, 9);
     lay->setColumnStretch(2, 9);
@@ -180,6 +188,10 @@ bool ScanParams::connectDevice(KScanDevice *newScanDevice, bool galleryMode)
     initStartupArea(!startupOptionsLoaded);		// signal newCustomScanSize
     slotNewScanMode();					// signal scanModeChanged
     slotNewResolution(nullptr);				// signal scanResolutionChanged
+
+    // Now that we have loaded the startup settings, show the message
+    // if appropriate.
+    mMultipleMessage->setVisible(mSaneDevice->multiScanOptions()->flags() & MultiScanOptions::MultiScan);
 
     /* Initialise the progress dialog */
     mProgressDialog = new QProgressDialog(QString(), i18n("Stop"), 0, 100, nullptr);
@@ -589,6 +601,10 @@ void ScanParams::slotSourceSelect()
     MultiScanOptions *opts = mSaneDevice->multiScanOptions();
     opts->setSource(currSource);
 
+    // The user must be aware of what they are doing, so hide
+    // the message now.
+    mMultipleMessage->setVisible(false);
+
     // Update the "ADF available' flag in the options to reflect
     // the current state.
     opts->setFlags(MultiScanOptions::AdfAvailable, mSaneDevice->isAdfAvailable());
@@ -707,26 +723,25 @@ void ScanParams::slotScanProgress(int value)
 /* Slot called to start acquiring a preview */
 void ScanParams::slotAcquirePreview()
 {
+    mMultipleMessage->setVisible(false);		// use should have taken note by now
 
     // TODO: should be able to preview in Virtual Scanner mode, it just means
     // that the preview image will be the same size as the final image (which
     // doesn't matter).
-
     if (mScanMode == ScanParams::VirtualScannerMode) {
         KMessageBox::error(this, i18n("Cannot preview in Virtual Scanner mode"));
         return;
     }
 
     // There is no need to tell the KScanDevice that this is a preview
-    // and therefore the multiple scan options should be ignored,
-    // because it works that out for itself.  However, warn the user if
-    // an ADF scan is being performed, for the reason described in
-    // the question.
+    // and therefore the multiple scan options should be ignored, because
+    // it works that out for itself.  However, warn the user if an ADF
+    // scan is being performed, for the reason indicated in the question.
     if (mSaneDevice->isAdfScan())
     {
         if (KMessageBox::warningContinueCancel(this,
                                                i18n("The scan source is set to the automatic document feeder.<br/>"
-                                                    "The preview will take the first sheet from the feeder.<br/>"
+                                                    "The preview may take the first sheet from the feeder.<br/>"
                                                     "<br/>"
                                                     "Are you sure you want to preview?"),
                                                i18n("ADF Selected"),
@@ -760,6 +775,8 @@ void ScanParams::slotAcquirePreview()
 /* Slot called to start scanning */
 void ScanParams::slotStartScan()
 {
+    mMultipleMessage->setVisible(false);		// use should have taken note by now
+
     QString virtfile;
     KScanDevice::Status stat = prepareScan(&virtfile);
     if (stat != KScanDevice::Ok) return;

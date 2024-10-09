@@ -363,6 +363,7 @@ private:
 
     KMessageWidget *mProblemMessage;
     KMessageWidget *mNoScannerMessage;
+    KMessageWidget *mMultipleMessage;
 };
 
 #endif                          // SCANPARAMS_H
