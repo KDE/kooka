@@ -71,6 +71,7 @@ extern "C"
 #include "scandevices.h"
 #include "dialogbase.h"
 #include "multiscandialog.h"
+#include "scansettings.h"
 #include "libkookascan_logging.h"
 
 //  Debugging options
@@ -154,11 +155,19 @@ bool ScanParams::connectDevice(KScanDevice *newScanDevice, bool galleryMode)
 
     lay->setRowMinimumHeight(4, DialogBase::verticalSpacing());
 
-    mMultipleMessage = new KMessageWidget(xi18nc("@info", "Multiple scans are enabled."));
+    mMultipleMessage = new KMessageWidget(xi18nc("@info", "Multiple scans are enabled.<nl/><link url=\"1\">Do not show again</link>"));
     mMultipleMessage->setMessageType(KMessageWidget::Information);
     mMultipleMessage->setIcon(QIcon::fromTheme("dialog-information"));
     mMultipleMessage->setCloseButtonVisible(true);
     mMultipleMessage->setWordWrap(true);
+
+    connect(mMultipleMessage, &KMessageWidget::linkActivated, [this]()
+    {
+        ScanSettings::setShowMultiScanWarning(false);
+        ScanSettings::self()->save();
+        mMultipleMessage->animatedHide();
+    });
+
     lay->addWidget(mMultipleMessage, 4, 0, 1, -1);
     mMultipleMessage->setVisible(false);
 
@@ -191,7 +200,10 @@ bool ScanParams::connectDevice(KScanDevice *newScanDevice, bool galleryMode)
 
     // Now that we have loaded the startup settings, show the message
     // if appropriate.
-    mMultipleMessage->setVisible(mSaneDevice->multiScanOptions()->flags() & MultiScanOptions::MultiScan);
+    if (ScanSettings::showMultiScanWarning())
+    {
+        mMultipleMessage->setVisible(mSaneDevice->multiScanOptions()->flags() & MultiScanOptions::MultiScan);
+    }
 
     /* Initialise the progress dialog */
     mProgressDialog = new QProgressDialog(QString(), i18n("Stop"), 0, 100, nullptr);

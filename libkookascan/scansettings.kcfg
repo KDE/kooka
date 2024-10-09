@@ -36,6 +36,10 @@
       <default>true</default>
     </entry>
 
+    <entry name="ShowMultiScanWarning" type="Bool">
+      <default>true</default>
+    </entry>
+
   </group>
 
   <group name="User Specified Scanners">

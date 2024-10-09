@@ -103,6 +103,7 @@ void KookaGeneralPage::slotEnableWarnings()
 
     KMessageBox::enableAllMessages();
     FormatDialog::forgetRemembered();
+    ScanSettings::setShowMultiScanWarning(true);
     KSharedConfig::openConfig()->reparseConfiguration();
 
     mEnableMessagesButton->setEnabled(false);           // show this has been done
