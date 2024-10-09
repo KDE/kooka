@@ -87,7 +87,7 @@ MultiScanDialog::MultiScanDialog(KScanDevice *dev, QWidget *pnt)
 
         connect(mSourceCombo, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &MultiScanDialog::slotGuiChange);
 
-        gl->addWidget(mSourceCombo, row, 2, 1, -1, Qt::AlignLeft);
+        gl->addWidget(mSourceCombo, row, 2, 1, -1);
         lab->setBuddy(mSourceCombo);
         mSourceCombo->setEnabled(so->isActive());
     }
