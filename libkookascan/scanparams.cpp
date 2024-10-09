@@ -171,10 +171,7 @@ bool ScanParams::connectDevice(KScanDevice *newScanDevice, bool galleryMode)
     lay->setColumnStretch(2, 9);
 
     // Load the startup options applicable to the current scanner
-    qCDebug(LIBKOOKASCAN_LOG) << "looking for startup options";
-    const bool startupOptionsLoaded = mSaneDevice->loadOptions(KScanOptSet::Params);
-    if (startupOptionsLoaded) qCDebug(LIBKOOKASCAN_LOG) << "loaded startup options";
-    else qCDebug(LIBKOOKASCAN_LOG) << "no startup options to load";
+    const bool startupOptionsLoaded = mSaneDevice->loadStartupConfig();
 
     // Reload all options, to take account of inactive ones
     mSaneDevice->reloadAllOptions();
@@ -588,26 +585,28 @@ void ScanParams::slotSourceSelect()
     if (!mSourceSelect->isValid()) return;		// no option on scanner
 
     const QByteArray &currSource = mSourceSelect->get();
-    mMultiOptions.setSource(currSource);
+
+    MultiScanOptions *opts = mSaneDevice->multiScanOptions();
+    opts->setSource(currSource);
 
     // Update the "ADF available' flag in the options to reflect
     // the current state.
-    mMultiOptions.setFlags(MultiScanOptions::AdfAvailable, mSaneDevice->isAdfAvailable());
-    qCDebug(LIBKOOKASCAN_LOG) << "current multi options" << qPrintable(mMultiOptions.toString());
+    opts->setFlags(MultiScanOptions::AdfAvailable, mSaneDevice->isAdfAvailable());
+    qCDebug(LIBKOOKASCAN_LOG) << "current multi options" << qPrintable(opts->toString());
 
     MultiScanDialog d(mSaneDevice, this);
-    d.setOptions(mMultiOptions);
+    d.setOptions(*opts);
     if (!d.exec()) return;
 
-    mMultiOptions = d.options();
-    qCDebug(LIBKOOKASCAN_LOG) << "new multi options" << qPrintable(mMultiOptions.toString());
+    *opts = d.options();
+    qCDebug(LIBKOOKASCAN_LOG) << "new multi options" << qPrintable(opts->toString());
 
     if (mSourceSelect!=nullptr)
     {
         // Update the source selection combo here with the updated option
         // from the dialogue.  Need to ensure that everything showing
         // and using that option is updated and notified.
-         mSourceSelect->set(mMultiOptions.source());
+         mSourceSelect->set(opts->source());
          mSourceSelect->redrawWidget();
          slotOptionChanged(mSourceSelect);
     }
@@ -718,8 +717,12 @@ void ScanParams::slotAcquirePreview()
         return;
     }
 
-    mSaneDevice->setMultiScanOptions(nullptr);		// no multiple options for preview
-    if (mSaneDevice->isAdfScan())			// but warn if ADF is in use
+    // There is no need to tell the KScanDevice that this is a preview
+    // and therefore the multiple scan options should be ignored,
+    // because it works that out for itself.  However, warn the user if
+    // an ADF scan is being performed, for the reason described in
+    // the question.
+    if (mSaneDevice->isAdfScan())
     {
         if (KMessageBox::warningContinueCancel(this,
                                                i18n("The scan source is set to the automatic document feeder.<br/>"
@@ -761,11 +764,10 @@ void ScanParams::slotStartScan()
     KScanDevice::Status stat = prepareScan(&virtfile);
     if (stat != KScanDevice::Ok) return;
 
-    // Pass the multiple scan options to be used for the scan to
-    // the scan device and to the destination plugin.  This also
-    // tells the plugin that a new batch is starting.
-    mSaneDevice->setMultiScanOptions(&mMultiOptions);
-    emit scanBatchStart(&mMultiOptions);
+    // Pass the multiple scan options to be used for the scan to the
+    // destination plugin.  This also tells the plugin that a new batch
+    // is starting.
+    emit scanBatchStart(mSaneDevice->multiScanOptions());
 
     //qCDebug(LIBKOOKASCAN_LOG) << "scan mode=" << mScanMode << "virtfile" << virtfile;
 

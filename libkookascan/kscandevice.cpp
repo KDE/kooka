@@ -167,7 +167,6 @@ KScanDevice::KScanDevice(QObject *parent)
 
     mScanningState = KScanDevice::ScanIdle;
     mScanningAdf = false;				// assume no ADF so far
-    mMultiScanOptions = nullptr;			// not told about these yet
 
     mScanBuf = nullptr;					// image data buffer while scanning
     mScanImage.clear();					// temporary image to scan into
@@ -857,7 +856,8 @@ KScanDevice::Status KScanDevice::acquireScan()
     // Main loop of the individual or batch scan.
     bool first = true;
     if (mScanningAdf) qCDebug(LIBKOOKASCAN_LOG) << "Starting ADF loop";
-    if (mMultiScanOptions!=nullptr) qCDebug(LIBKOOKASCAN_LOG) << "Multi scan options" << qPrintable(mMultiScanOptions->toString());
+    const MultiScanOptions::Flags f = mMultiScanOptions.flags();
+    if (f & MultiScanOptions::MultiScan) qCDebug(LIBKOOKASCAN_LOG) << "Multi scan options" << qPrintable(mMultiScanOptions.toString());
 
     while (true)
     {
@@ -879,10 +879,7 @@ KScanDevice::Status KScanDevice::acquireScan()
         if (stat!=KScanDevice::Ok) return (stat);
 
         // If doing a single scan, whether from the ADF or flatbed,
-        // then exit the loop now.  If no options are provided, then
-        // also assume a single scan.
-        if (mMultiScanOptions==nullptr) return (stat);
-        const MultiScanOptions::Flags f = mMultiScanOptions->flags();
+        // then exit the loop now.
         if (!(f & MultiScanOptions::MultiScan)) return (stat);
 
         // If doing a manual or delayed wait, then ask or indicate to
@@ -893,7 +890,7 @@ KScanDevice::Status KScanDevice::acquireScan()
         if (f & (MultiScanOptions::ManualWait|MultiScanOptions::DelayWait))
         {
             emit sigScanPauseStart();
-            ContinueScanDialog dlg(((f & MultiScanOptions::DelayWait) ? mMultiScanOptions->delay() : 0), nullptr);
+            ContinueScanDialog dlg(((f & MultiScanOptions::DelayWait) ? mMultiScanOptions.delay() : 0), nullptr);
             int res = dlg.exec();
             emit sigScanPauseEnd();
 
@@ -1560,10 +1557,73 @@ void KScanDevice::scanFinished(KScanDevice::Status stat)
 //  Configuration
 //  -------------
 
-void KScanDevice::saveStartupConfig()
+static void writeFlag(KConfigGroup &grp, const KConfigSkeletonItem *item, MultiScanOptions::Flags value)
+{
+    // Ensure that flag bits are written as Boolean values.
+    grp.writeEntry(item->key(), static_cast<bool>(value));
+}
+
+
+/* private */ void KScanDevice::saveStartupConfig()
 {
     if (mScannerName.isEmpty()) return;			// do not save for no scanner
-    saveOptions(KScanOptSet::Params);
+
+    saveOptions(KScanOptSet::Params);			// save the SANE parameters
+							// save the multiple scan options
+    KConfigGroup grp = KScanOptSet::configGroup(mScannerName, KScanOptSet::Options);
+
+    const MultiScanOptions::Flags f = mMultiScanOptions.flags();
+    writeFlag(grp, ScanSettings::self()->multiScanItem(), (f & MultiScanOptions::MultiScan));
+    writeFlag(grp, ScanSettings::self()->multiRotateOddItem(), (f & MultiScanOptions::RotateOdd));
+    writeFlag(grp, ScanSettings::self()->multiRotateEvenItem(), (f & MultiScanOptions::RotateEven));
+    // RotateBoth can be derived from the above two
+    // AdfAvailable does not need to be saved
+    writeFlag(grp, ScanSettings::self()->multiManualWaitItem(), (f & MultiScanOptions::ManualWait));
+    writeFlag(grp, ScanSettings::self()->multiDelayWaitItem(), (f & MultiScanOptions::DelayWait));
+    writeFlag(grp, ScanSettings::self()->multiBatchMultipleItem(), (f & MultiScanOptions::BatchMultiple));
+    writeFlag(grp, ScanSettings::self()->multiAutoIncrementItem(), (f & MultiScanOptions::AutoIncrement));
+    // Source does not need to be saved, the SANE parameter mirrors it
+
+    const KConfigSkeletonItem *item = ScanSettings::self()->multiScanDelayItem();
+    grp.writeEntry(item->key(), mMultiScanOptions.delay());
+    grp.sync();
+}
+
+
+static bool readFlag(const KConfigGroup &grp, const KConfigSkeletonItem *item)
+{
+    return (grp.readEntry(item->key(), item->getDefault().toBool()));
+}
+
+
+bool KScanDevice::loadStartupConfig()
+{
+    // Load the startup options applicable to the current scanner
+    qCDebug(LIBKOOKASCAN_LOG) << "looking for startup options";
+    if (!loadOptions(KScanOptSet::Params))
+    {
+        qCDebug(LIBKOOKASCAN_LOG) << "no startup options to load";
+        return (false);
+    }
+
+    const KConfigGroup grp = KScanOptSet::configGroup(mScannerName, KScanOptSet::Options);
+
+    mMultiScanOptions.setFlags(MultiScanOptions::MultiScan, readFlag(grp, ScanSettings::self()->multiScanItem()));
+    mMultiScanOptions.setFlags(MultiScanOptions::RotateOdd, readFlag(grp, ScanSettings::self()->multiRotateOddItem()));
+    mMultiScanOptions.setFlags(MultiScanOptions::RotateEven, readFlag(grp, ScanSettings::self()->multiRotateEvenItem()));
+    // RotateBoth can be derived from the above two
+    // AdfAvailable does not need to be loaded
+    mMultiScanOptions.setFlags(MultiScanOptions::ManualWait, readFlag(grp, ScanSettings::self()->multiManualWaitItem()));
+    mMultiScanOptions.setFlags(MultiScanOptions::DelayWait, readFlag(grp, ScanSettings::self()->multiDelayWaitItem()));
+    mMultiScanOptions.setFlags(MultiScanOptions::BatchMultiple, readFlag(grp, ScanSettings::self()->multiBatchMultipleItem()));
+    mMultiScanOptions.setFlags(MultiScanOptions::AutoIncrement, readFlag(grp, ScanSettings::self()->multiAutoIncrementItem()));
+    // Source does not need to be loaded, the SANE parameter mirrors it
+
+    const KConfigSkeletonItem *item = ScanSettings::self()->multiScanDelayItem();
+    mMultiScanOptions.setDelay(grp.readEntry(item->key(), item->getDefault().toUInt()));
+
+    qCDebug(LIBKOOKASCAN_LOG) << "loaded startup options";
+    return (true);
 }
 
 

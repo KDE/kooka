@@ -33,6 +33,7 @@
 
 #include "scanimage.h"
 #include "kscanoptset.h"
+#include "multiscanoptions.h"
 
 extern "C" {
 #include <sane/sane.h>
@@ -512,11 +513,19 @@ public:
     static bool matchesAdf(const QByteArray &val);
 
     /**
-     * Set the ADF and multiple scan options to be used for scanning.
+     * Access the ADF and multiple scan options to be used for scanning.
      *
      * @param opts The options to use
+     * @note It is acceptable to change the options via the pointer.
      **/
-    void setMultiScanOptions(const MultiScanOptions *opts)	{ mMultiScanOptions = opts; }
+    MultiScanOptions *multiScanOptions()		{ return (&mMultiScanOptions); };
+
+    /**
+     * Load the saved scanner parameter set and multiple scan options.
+     *
+     * @return @c true if the options were loaded successfully
+     **/
+    bool loadStartupConfig();
 
 public slots:
     /**
@@ -656,8 +665,7 @@ private:
     void clearSavedAuth();
 
     /**
-     * Save the current option parameter set.
-     * Only active and GUI options are saved.
+     * Save the current scanner parameter set and multiple scan options.
      **/
     void saveStartupConfig();
 
@@ -682,7 +690,7 @@ private:
     QByteArray mScannerName;
     bool mScannerInitialised;
     SANE_Handle mScannerHandle;
-    const MultiScanOptions *mMultiScanOptions;
+    MultiScanOptions mMultiScanOptions;
 
     KScanDevice::ScanningState mScanningState;
     SANE_Status mSaneStatus;

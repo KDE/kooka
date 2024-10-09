@@ -37,7 +37,6 @@
 #include <qwidget.h>
 
 #include "kscandevice.h"
-#include "multiscanoptions.h"
 
 
 class QProgressDialog;
@@ -364,8 +363,6 @@ private:
 
     KMessageWidget *mProblemMessage;
     KMessageWidget *mNoScannerMessage;
-
-    MultiScanOptions mMultiOptions;
 };
 
 #endif                          // SCANPARAMS_H

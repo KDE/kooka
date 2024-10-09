@@ -50,7 +50,7 @@
   </group>
 
   <!-- Only used as a template -->
-  <group name="Parameters">
+  <group name="Parameters SCANNERNAME">
     <entry name="SaveSetDesc" key="SetDesc" type="String">
     </entry>
     <entry name="SaveSetScanner" key="ScannerName" type="String">
@@ -58,7 +58,7 @@
   </group>
 
   <!-- Only used as a template, default/limit values and GUI strings -->
-  <group name="Scanner Name">
+  <group name="Options SCANNERNAME">
     <entry name="PreviewAutoselOn" key="doAutoselection" type="Bool">
       <default>false</default>
     </entry>
@@ -97,6 +97,33 @@
       </choices>
       <default>ScanSettings::BackgroundUnknown</default>
     </entry>
+
+    <entry name="MultiScan" type="Bool">
+      <default>false</default>
+    </entry>
+    <entry name="multiRotateOdd" type="Bool">
+      <default>false</default>
+    </entry>
+    <entry name="multiRotateEven" type="Bool">
+      <default>false</default>
+    </entry>
+    <entry name="multiManualWait" type="Bool">
+      <default>false</default>
+    </entry>
+    <entry name="multiDelayWait" type="Bool">
+      <default>false</default>
+    </entry>
+    <entry name="multiBatchMultiple" type="Bool">
+      <default>true</default>
+    </entry>
+    <entry name="multiAutoIncrement" type="Bool">
+      <default>false</default>
+    </entry>
+    <entry name="multiScanDelay" type="Int">
+      <default>5</default>
+      <min>1</min>
+    </entry>
+
   </group>
 
   <group name="MainWindow">
