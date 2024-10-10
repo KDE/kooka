@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-09-24 02:01+0000\n"
-"PO-Revision-Date: 2024-09-27 09:32+0300\n"
+"PO-Revision-Date: 2024-10-09 23:01+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -2382,12 +2382,12 @@ msgstr ""
 #: prefspages.cpp:85
 #, kde-format
 msgid "Enable Messages/Questions"
-msgstr ""
+msgstr "הפעלת הודעות/שאלות"
 
 #: prefspages.cpp:152
 #, kde-format
 msgid "%1 must be restarted for these settings to take effect."
-msgstr ""
+msgstr "יש להפעיל את %1 מחדש כדי שהשינויים האלו יכנסו לתוקף."
 
 #: prefspages.cpp:235
 #, kde-format
@@ -2533,7 +2533,7 @@ msgstr "המרה בזמן אמת"
 #: scangallery.cpp:698
 #, kde-format
 msgid "Not a supported image format"
-msgstr ""
+msgstr "סוג התמונה לא נתמך"
 
 #: scangallery.cpp:750
 #, kde-format
@@ -2554,7 +2554,7 @@ msgstr "שגיאת טעינת תמונה"
 #: scangallery.cpp:840
 #, kde-format
 msgid "Incoming/"
-msgstr ""
+msgstr "נכנס/"
 
 #: scangallery.cpp:886
 #, kde-kuit-format
@@ -2654,7 +2654,7 @@ msgstr "בחירה"
 #: scanpresetsdialog.cpp:82
 #, kde-format
 msgid "Load the selected scan preset set to use as scanner settings"
-msgstr ""
+msgstr "טעינת ערכת הסריקה הנבחרה לשימוש עבור הגדרות הסורק"
 
 #: scanpresetsdialog.cpp:86
 #, kde-format
@@ -2664,12 +2664,12 @@ msgstr "שמירה…"
 #: scanpresetsdialog.cpp:88
 #, kde-format
 msgid "Save the current scanner settings as a new scan preset set"
-msgstr ""
+msgstr "שמירת הגדרות הסוקר הנוכחית כערכת סריקה חדשה"
 
 #: scanpresetsdialog.cpp:94
 #, kde-format
 msgid "Delete the selected scan preset set"
-msgstr ""
+msgstr "מחיקת ערכת הסריקה"
 
 #: scanpresetsdialog.cpp:98
 #, kde-format
@@ -2684,7 +2684,7 @@ msgstr "החלפת השם או התיאור של ערכת הסריקה הנבח�
 #: scanpresetsdialog.cpp:146
 #, kde-format
 msgid "No preset set selected."
-msgstr ""
+msgstr "לא נבחרה ערכה."
 
 #: scanpresetsdialog.cpp:212
 #, kde-format
@@ -2696,12 +2696,12 @@ msgstr ""
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Do you really want to delete the set <resource>%1</resource>?"
-msgstr ""
+msgstr "למחוק את הערכה <resource>%1</resource>?"
 
 #: scanpresetsdialog.cpp:290
 #, kde-format
 msgid "Delete Scan Preset Set"
-msgstr ""
+msgstr "מחיקת ערכת סריקה"
 
 #: statusbarmanager.cpp:52
 #, kde-format
