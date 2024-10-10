@@ -177,8 +177,8 @@ MultiScanDialog::MultiScanDialog(KScanDevice *dev, QWidget *pnt)
 
 
     // Row 11: Automatically Generate Filename check box
-    mIncrementFilenameCheck = new QCheckBox(i18n("Automatically generate file names"), w);
-    mIncrementFilenameCheck->setToolTip(i18nc("@info:tooltip",
+    mGenerateFilenameCheck = new QCheckBox(i18n("Automatically generate file names"), w);
+    mGenerateFilenameCheck->setToolTip(i18nc("@info:tooltip",
                                               "Set this option on to automatically generate a file name when possible, "
                                               "or turn it off to always ask for a name."
                                               "<br/><br/>"
@@ -190,7 +190,7 @@ MultiScanDialog::MultiScanDialog(KScanDevice *dev, QWidget *pnt)
                                               "A numeric suffix, or '#' characters, for the first file name will be automatically "
                                               "incremented with the same number of digits as entered.  Any existing numbered file "
                                               "will be skipped and not overwritten."));
-    gl->addWidget(mIncrementFilenameCheck, row, 0, 1, -1, Qt::AlignLeft);
+    gl->addWidget(mGenerateFilenameCheck, row, 0, 1, -1, Qt::AlignLeft);
     ++row;
 
 
@@ -224,7 +224,7 @@ void MultiScanDialog::setOptions(const MultiScanOptions &opts)
     mDelayTimeSpinbox->setValue(mOptions.delay());
 
     mBatchMultipleCheck->setChecked(f & MultiScanOptions::BatchMultiple);
-    mIncrementFilenameCheck->setChecked(f & MultiScanOptions::AutoIncrement);
+    mGenerateFilenameCheck->setChecked(f & MultiScanOptions::AutoGenerate);
 
     slotGuiChange();
 }
@@ -239,7 +239,7 @@ const MultiScanOptions &MultiScanDialog::options()
     mOptions.setFlags(MultiScanOptions::DelayWait, mMultiDelayScanRadio->isChecked());
 
     mOptions.setFlags(MultiScanOptions::BatchMultiple, mBatchMultipleCheck->isChecked());
-    mOptions.setFlags(MultiScanOptions::AutoIncrement, mIncrementFilenameCheck->isChecked());
+    mOptions.setFlags(MultiScanOptions::AutoGenerate, mGenerateFilenameCheck->isChecked());
 
     mOptions.setDelay(mDelayTimeSpinbox->value());
 
@@ -257,7 +257,7 @@ void MultiScanDialog::slotGuiChange()
     mMultiManualScanRadio->setEnabled(multi);
     mMultiDelayScanRadio->setEnabled(multi);
     mBatchMultipleCheck->setEnabled(multi);
-    mIncrementFilenameCheck->setEnabled(multi);
+    mGenerateFilenameCheck->setEnabled(multi);
 
     if (!mMultiEmptyAdfRadio->isEnabled() && mMultiEmptyAdfRadio->isChecked()) mMultiManualScanRadio->setChecked(true);
 

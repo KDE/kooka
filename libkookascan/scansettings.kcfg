@@ -120,7 +120,7 @@
     <entry name="multiBatchMultiple" type="Bool">
       <default>true</default>
     </entry>
-    <entry name="multiAutoIncrement" type="Bool">
+    <entry name="multiAutoGenerate" type="Bool">
       <default>false</default>
     </entry>
     <entry name="multiScanDelay" type="Int">

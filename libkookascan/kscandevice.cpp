@@ -1581,7 +1581,7 @@ static void writeFlag(KConfigGroup &grp, const KConfigSkeletonItem *item, MultiS
     writeFlag(grp, ScanSettings::self()->multiManualWaitItem(), (f & MultiScanOptions::ManualWait));
     writeFlag(grp, ScanSettings::self()->multiDelayWaitItem(), (f & MultiScanOptions::DelayWait));
     writeFlag(grp, ScanSettings::self()->multiBatchMultipleItem(), (f & MultiScanOptions::BatchMultiple));
-    writeFlag(grp, ScanSettings::self()->multiAutoIncrementItem(), (f & MultiScanOptions::AutoIncrement));
+    writeFlag(grp, ScanSettings::self()->multiAutoGenerateItem(), (f & MultiScanOptions::AutoGenerate));
     // Source does not need to be saved, the SANE parameter mirrors it
 
     const KConfigSkeletonItem *item = ScanSettings::self()->multiScanDelayItem();
@@ -1616,7 +1616,7 @@ bool KScanDevice::loadStartupConfig()
     mMultiScanOptions.setFlags(MultiScanOptions::ManualWait, readFlag(grp, ScanSettings::self()->multiManualWaitItem()));
     mMultiScanOptions.setFlags(MultiScanOptions::DelayWait, readFlag(grp, ScanSettings::self()->multiDelayWaitItem()));
     mMultiScanOptions.setFlags(MultiScanOptions::BatchMultiple, readFlag(grp, ScanSettings::self()->multiBatchMultipleItem()));
-    mMultiScanOptions.setFlags(MultiScanOptions::AutoIncrement, readFlag(grp, ScanSettings::self()->multiAutoIncrementItem()));
+    mMultiScanOptions.setFlags(MultiScanOptions::AutoGenerate, readFlag(grp, ScanSettings::self()->multiAutoGenerateItem()));
     // Source does not need to be loaded, the SANE parameter mirrors it
 
     const KConfigSkeletonItem *item = ScanSettings::self()->multiScanDelayItem();

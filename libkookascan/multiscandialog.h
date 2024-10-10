@@ -74,7 +74,7 @@ private:
     KPluralHandlingSpinBox *mDelayTimeSpinbox;
 
     QCheckBox *mBatchMultipleCheck;
-    QCheckBox *mIncrementFilenameCheck;
+    QCheckBox *mGenerateFilenameCheck;
 
     MultiScanOptions mOptions;
 };

@@ -61,6 +61,16 @@ void KookaScanParams::slotDeviceConnected(KScanDevice *dev)
     connect(dev, &KScanDevice::sigScanFinished,		this, [this]()	{ setLED(Qt::red, KLed::Off); });
     connect(dev, &KScanDevice::sigScanPauseStart,	this, [this]()	{ setLED(Qt::yellow); });
     connect(dev, &KScanDevice::sigScanPauseEnd,		this, [this]()	{ setLED(Qt::green, KLed::Off); });
+
+    // Initially synchronise the multiple scan "Automatically generate
+    // file names" option with the application's "Ask for file name
+    // when saving" setting.
+    //
+    // Because this slot is called via a signal at the very beginning
+    // of ScanParams::connectDevice(), this setting will only take
+    // effect if there are no saved startup options for the scanner.
+    MultiScanOptions *opts = dev->multiScanOptions();
+    if (opts!=nullptr) opts->setFlags(MultiScanOptions::AutoGenerate, !KookaSettings::saverAskForFilename());
 }
 
 
