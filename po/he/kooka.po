@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-09-24 02:01+0000\n"
-"PO-Revision-Date: 2024-10-09 23:01+0300\n"
+"PO-Revision-Date: 2024-10-10 07:04+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -601,12 +601,12 @@ msgstr "הפעלת התאמת קנה מידה אוטומטית"
 #: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:360
 #, kde-format
 msgid "Classifier file %1 does not exist"
-msgstr ""
+msgstr "קובץ המסווג %1 לא קיים"
 
 #: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:366
 #, kde-format
 msgid "Classifier file %1 is not readable"
-msgstr ""
+msgstr "קובץ המסווג %1 אינו קריא"
 
 #: ../plugins/ocr/kadmos/ocrkadmosengine.cpp:71
 #, kde-kuit-format
@@ -617,6 +617,10 @@ msgid ""
 "www.rerecognition.com\">www.rerecognition.com</link> for more information on "
 "Kadmos.</para>"
 msgstr ""
+"<para><emphasis>Kadmos</emphasis> היא ספריית זיהוי תווים אופטי/חכם שנוצרה על "
+"ידי reRecognition&nbsp;AG.</para><para>%1</para><para>באתר <link url="
+"\"http://www.rerecognition.com\">www.rerecognition.com</link> יש פרטים "
+"נוספים על Kadmos.</para>"
 
 #: ../plugins/ocr/kadmos/ocrkadmosengine.cpp:75
 #, kde-format
@@ -899,7 +903,7 @@ msgstr ""
 #: formatdialog.cpp:280
 #, kde-format
 msgid "Save Assistant"
-msgstr ""
+msgstr "מסייע שמירה"
 
 #: formatdialog.cpp:306
 #, kde-kuit-format
@@ -2026,7 +2030,7 @@ msgstr "תצוגת סריקה מקדימה"
 #: kookaview.cpp:277
 #, kde-format
 msgid "OCR results will appear here"
-msgstr ""
+msgstr "תוצאות זיהוי התווים האופטי יופיעו כאן"
 
 #: kookaview.cpp:286
 #, kde-format
@@ -2131,12 +2135,12 @@ msgstr "אין טקסט תוצאות זיהוי תווים אופטי לבדיק
 #: kookaview.cpp:768
 #, kde-format
 msgid "OCR Spell Check not possible"
-msgstr ""
+msgstr "בדיקת איות לזיהוי תווים אופטי אינה אפשרית"
 
 #: kookaview.cpp:773
 #, kde-format
 msgid "OCR Spell Check"
-msgstr ""
+msgstr "בדיקת איות לזיהוי תווים אופטי"
 
 #: kookaview.cpp:789
 #, kde-format
@@ -2144,16 +2148,18 @@ msgid ""
 "No OCR engine is configured.\n"
 "Please select and configure one in order to perform OCR."
 msgstr ""
+"לא מוגדר מנגנון זיהוי תווים אופטי.\n"
+"נא לבחור ולהגדיר אחד כזה כדי לבצע זיהוי תווים אופטי."
 
 #: kookaview.cpp:791
 #, kde-format
 msgid "OCR Not Configured"
-msgstr ""
+msgstr "לא מוגדר זיהוי תווים אופטי"
 
 #: kookaview.cpp:800
 #, kde-format
 msgid "Cannot load OCR plugin '%1'"
-msgstr ""
+msgstr "לא ניתן לטעון את תוסף זיהוי התווים האופטי ‚%1’"
 
 #: kookaview.cpp:908
 #, kde-kuit-format
@@ -2179,12 +2185,12 @@ msgstr "לא ניתן להתמיר, התמונה היא לקריאה בלבד"
 #: kookaview.cpp:1020
 #, kde-format
 msgid "Loaded image %1"
-msgstr ""
+msgstr "נטענה התמונה %1"
 
 #: kookaview.cpp:1021
 #, kde-format
 msgid "Unloaded image"
-msgstr ""
+msgstr "התמונה נפרקה"
 
 #: kookaview.cpp:1038
 #, kde-format
@@ -2194,7 +2200,7 @@ msgstr "%1 בטעינה…"
 #: main.cpp:44
 #, kde-format
 msgid "Scanning, image gallery and OCR"
-msgstr ""
+msgstr "סריקה, גלריית תמונות וזיהוי תווים אופטי"
 
 #: main.cpp:47
 #, kde-format
@@ -2303,7 +2309,7 @@ msgstr "מצב גלריה - לא להתחבר לסורק"
 #: main.cpp:114
 #, kde-format
 msgid "The SANE device specification (e.g. 'umax:/dev/sg0')"
-msgstr ""
+msgstr "מפרט התקן ה־SANE (למשל: ‚umax:/dev/sg0’)"
 
 #: main.cpp:114
 #, kde-format
@@ -2313,27 +2319,27 @@ msgstr "התקן"
 #: newscanpresetdialog.cpp:53
 #, kde-format
 msgid "Edit Scan Preset"
-msgstr ""
+msgstr "עריכת ערכת סריקה"
 
 #: newscanpresetdialog.cpp:54
 #, kde-format
 msgid "Change the name and/or description of the scan preset."
-msgstr ""
+msgstr "החלפת השם ו/או התיאור של ערכת הסריקה."
 
 #: newscanpresetdialog.cpp:58
 #, kde-format
 msgid "Save Scan Preset"
-msgstr ""
+msgstr "שמירת ערכת סריקה"
 
 #: newscanpresetdialog.cpp:59
 #, kde-format
 msgid "Enter a name and description for the new scan preset."
-msgstr ""
+msgstr "נא למלא שם ותיאור לערכת הסריקה החדשה."
 
 #: newscanpresetdialog.cpp:66
 #, kde-format
 msgid "Preset name:"
-msgstr ""
+msgstr "שם הערכה:"
 
 #: newscanpresetdialog.cpp:73
 #, kde-format
@@ -2343,7 +2349,7 @@ msgstr "תיאור:"
 #: ocrresedit.cpp:159
 #, kde-format
 msgid "Save OCR Result Text"
-msgstr ""
+msgstr "שמירת טקסט התוצאה של זיהוי התווים האופטי"
 
 #: ocrresedit.cpp:160
 #, kde-format
@@ -2355,6 +2361,7 @@ msgstr "קובץ (‎*.txt)"
 msgctxt "@info"
 msgid "Unable to save the OCR results file<nl/><filename>%1</filename>"
 msgstr ""
+"לא ניתן לשמור את קובץ תוצאות זיהוי התווים האופטי<nl/><filename>%1</filename>"
 
 #: ocrresedit.cpp:168
 #, kde-kuit-format
@@ -2378,6 +2385,8 @@ msgid ""
 "Use this button to reenable all messages and questions which\n"
 "have been hidden by using \"Don't ask me again\"."
 msgstr ""
+"יש להשתמש בכפתור הזה כדי להפעיל מחדש את כל ההודעות והשאלות שהוסתרו באמצעות "
+"השימוש ב„לא לשאול אותי שוב”."
 
 #: prefspages.cpp:85
 #, kde-format
@@ -2590,6 +2599,8 @@ msgid ""
 "Do you really want to permanently delete the folder<nl/><filename>%1</"
 "filename><nl/>and all of its contents? It cannot be restored."
 msgstr ""
+"למחוק לצמיתות את התיקייה <nl/><filename>%1</filename><nl/>ואת כל התוכן שלה? "
+"אי אפשר לשחזר."
 
 #: scangallery.cpp:1115
 #, kde-kuit-format
@@ -2598,6 +2609,7 @@ msgid ""
 "Do you really want to permanently delete the image<nl/><filename>%1</"
 "filename>?<nl/>It cannot be restored."
 msgstr ""
+"למחוק לצמיתות את התמונה <nl/><filename>%1</filename>?<nl/>אי אפשר לשחזר אותה."
 
 #: scangallery.cpp:1122
 #, kde-format
@@ -2644,7 +2656,7 @@ msgstr "ערכות סריקה מוכנות"
 #: scanpresetsdialog.cpp:76
 #, kde-format
 msgid "Saved scan preset sets:"
-msgstr ""
+msgstr "ערכות סריקה שמורות:"
 
 #: scanpresetsdialog.cpp:80
 #, kde-format
