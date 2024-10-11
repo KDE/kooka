@@ -815,6 +815,7 @@ void ScanParams::slotStartScan()
 
     if (stat==KScanDevice::AdfEmpty) stat = KScanDevice::Ok;
     emit scanBatchEnd(stat==KScanDevice::Ok);		// indicate end of the batch
+    // TODO: emit with the actual status
 }
 
 

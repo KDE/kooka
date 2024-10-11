@@ -95,6 +95,9 @@ ImgSaver::ImgSaver(const QUrl &dir)
         m_saveDirectory = GalleryRoot::root();
         qCDebug(KOOKA_LOG) << "default directory" << m_saveDirectory;
     }
+							// get initial preferences
+    m_saveAskFilename = KookaSettings::saverAskForFilename();
+    m_saveAskFormat = KookaSettings::saverAskForFormat();
 }
 
 
@@ -157,15 +160,14 @@ ImgSaver::ImageSaveStatus ImgSaver::getFilenameAndFormat(ScanImage::ImageType ty
 {
     if (type==ScanImage::None) return (ImgSaver::SaveStatusParam);
 
-    QString saveFilename = createFilename();		// find next unused filename
-    ImageFormat saveFormat = getFormatForType(type);	// find saved image format
-    QString saveSubformat = findSubFormat(saveFormat);	// currently not used
-							// get dialogue preferences
-    m_saveAskFilename = KookaSettings::saverAskForFilename();
-    m_saveAskFormat = KookaSettings::saverAskForFormat();
+    QString saveFilename = createFilename();				// find next unused filename
+    ImageFormat saveFormat = mSaveFormat;				// use specified format if set
+    if (!saveFormat.isValid()) saveFormat = getFormatForType(type);	// or find saved image format
+    QString saveSubformat = findSubFormat(saveFormat);			// currently not used
 
     qCDebug(KOOKA_LOG) << "before dialogue,"
                        << "type=" << type
+                       << "set format=" << mSaveFormat
                        << "ask_filename=" << m_saveAskFilename
                        << "ask_format=" << m_saveAskFormat
                        << "filename=" << saveFilename
@@ -224,9 +226,9 @@ ImgSaver::ImageSaveStatus ImgSaver::saveImage(const ScanImage::Ptr image)
 {
     if (image==nullptr) return (ImgSaver::SaveStatusParam);
 
+    qCDebug(KOOKA_LOG) << "format" << mSaveFormat;
     if (!mSaveFormat.isValid())				// see if have this already
-    {
-        // if not, get from image now
+    {							// if not, get from image now
         ImgSaver::ImageSaveStatus stat = getFilenameAndFormat(image->imageType());
         if (stat != ImgSaver::SaveStatusOk) return (stat);
         qCDebug(KOOKA_LOG) << "format from image" << mSaveFormat;
@@ -252,14 +254,20 @@ ImgSaver::ImageSaveStatus ImgSaver::saveImage(const ScanImage::Ptr image,
 
     qCDebug(KOOKA_LOG) << "to" << url << "format" << format << "subformat" << subformat;
 
-    mLastFormat = format.name();			// save for error message later
+    mRequestedFormat = format.name();			// save for error message later
     mLastUrl = url;
 
     if (!url.isLocalFile())				// file must be local
     {
         qCDebug(KOOKA_LOG) << "Can only save local files";
-        // TODO: allow non-local files
+        // TODO: allow non-local files, code from DestinationSave::imageScanned()
         return (ImgSaver::SaveStatusProtocol);
+    }
+
+    if (!format.canWrite())				// check format, is it writable?
+    {
+        qCWarning(KOOKA_LOG) << "Cannot write format" << format;
+        return (ImgSaver::SaveStatusFormatNoWrite);
     }
 
     QString filename = url.path();			// local file path
@@ -283,12 +291,6 @@ ImgSaver::ImageSaveStatus ImgSaver::saveImage(const ScanImage::Ptr image,
         return (ImgSaver::SaveStatusPermission);
     }
 
-    if (!format.canWrite())				// check format, is it writable?
-    {
-        qCWarning(KOOKA_LOG) << "Cannot write format" << format;
-        return (ImgSaver::SaveStatusFormatNoWrite);
-    }
-
     bool result = image->save(filename, format.name());
     return (result ? ImgSaver::SaveStatusOk : ImgSaver::SaveStatusFailed);
 }
@@ -296,7 +298,7 @@ ImgSaver::ImageSaveStatus ImgSaver::saveImage(const ScanImage::Ptr image,
 /**
  *  Find the next filename to use for the image to save.
  *  This is done by enumerating and checking against all existing files,
- *  regardless of format - because we have not resolved the format yet.
+ *  regardless of format - because we may not have resolved the format yet.
  **/
 QString ImgSaver::createFilename()
 {
@@ -371,7 +373,7 @@ QString ImgSaver::errorString(ImgSaver::ImageSaveStatus status) const
     case ImgSaver::SaveStatusNoSpace:			// never used
         re = i18n("No space left on device");					break;
     case ImgSaver::SaveStatusFormatNoWrite:
-        re = i18n("Cannot write image format '%1'", mLastFormat.constData());	break;
+        re = i18n("Cannot write image format '%1'", mRequestedFormat);		break;
     case ImgSaver::SaveStatusProtocol:
         re = i18n("Cannot write using protocol '%1'", mLastUrl.scheme());	break;
     case ImgSaver::SaveStatusCanceled:

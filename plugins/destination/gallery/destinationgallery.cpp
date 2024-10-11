@@ -36,6 +36,8 @@
 
 #include "scangallery.h"
 #include "kookasettings.h"
+#include "multiscanoptions.h"
+#include "imgsaver.h"
 #include "destination_logging.h"
 
 
@@ -44,8 +46,16 @@ K_PLUGIN_FACTORY_WITH_JSON(DestinationGalleryFactory, "kookadestination-gallery.
 
 
 DestinationGallery::DestinationGallery(QObject *pnt, const QVariantList &args)
-    : AbstractDestination(pnt, "DestinationGallery")
+: AbstractDestination(pnt, "DestinationGallery"),
+    mBatchFormat("")
 {
+}
+
+
+void DestinationGallery::batchStart(const MultiScanOptions *opts)
+{
+    mBatchFormat = ImageFormat("");			// reset for start of batch
+    AbstractDestination::batchStart(opts);
 }
 
 
@@ -53,7 +63,33 @@ bool DestinationGallery::scanStarting(ScanImage::ImageType type)
 {
     qCDebug(DESTINATION_LOG) << "type" << type;
     if (type==ScanImage::None) return (true);		// can't prompt for anything yet
-    return (gallery()->prepareToSave(type));		// ask for file name and format
+
+    // Create the ImgSaver which will be used to save the image.
+    // However, do not prompt for a file name or format until the
+    // multiple scan options have been set below.
+    if (!gallery()->prepareToSave(type)) return (false);
+    ImgSaver *saver = gallery()->imageSaver();
+
+    // Now set the saver options, if multiple scans are being done.
+    const MultiScanOptions::Flags f = multiScanOptions()->flags();
+    if (f & MultiScanOptions::MultiScan)
+    {
+        saver->setSaveAskFilename(!(f & MultiScanOptions::AutoGenerate));
+
+        const bool batchMultiple = (f & MultiScanOptions::BatchMultiple);
+        saver->setSaveAskFormat(!batchMultiple);
+        if (batchMultiple && mBatchFormat.isValid()) saver->setSaveFormat(mBatchFormat);
+    }
+
+    // Now ask for the file name and format, if requested and required
+    ImgSaver::ImageSaveStatus stat = saver->setImageInfo(type);
+    if (stat==ImgSaver::SaveStatusCanceled) return (false);
+
+    // Save the format that was used, for the next file in the batch
+    ImageFormat savedFmt = saver->saveFormat();
+    if (!mBatchFormat.isValid() && savedFmt.isValid()) mBatchFormat = savedFmt;
+
+    return (true);
 }
 
 

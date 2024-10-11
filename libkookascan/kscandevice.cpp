@@ -36,6 +36,7 @@
 #include <qapplication.h>
 #include <qsocketnotifier.h>
 #include <qstandardpaths.h>
+#include <qtimer.h>
 
 #include <klocalizedstring.h>
 #include <kconfig.h>
@@ -58,6 +59,9 @@ extern "C" {
 
 #define MIN_PREVIEW_DPI		75
 #define MAX_PROGRESS		100
+
+#define BUSY_RETRIES		2
+#define BUSY_DELAY		500
 
 
 // Debugging options
@@ -245,6 +249,7 @@ void KScanDevice::closeDevice()
 
     if (mScannerHandle!=nullptr)
     {
+        ScanDevices::self()->deactivateNetworkProxy();
         if (mScanningState!=KScanDevice::ScanIdle)
         {
             qCDebug(LIBKOOKASCAN_LOG) << "Scanner is still active, calling sane_cancel()";
@@ -252,6 +257,7 @@ void KScanDevice::closeDevice()
         }
         sane_close(mScannerHandle);			// close the SANE device
         mScannerHandle = nullptr;			// scanner no longer open
+        ScanDevices::self()->reactivateNetworkProxy();
     }
 
     // clear lists of options
@@ -894,6 +900,17 @@ KScanDevice::Status KScanDevice::acquireScan()
             int res = dlg.exec();
             emit sigScanPauseEnd();
 
+            // scanFinished() above will not have called sane_cancel() if the
+            // scan status was KScanDevice::Ok, because we may be intending
+            // to continue a multiple scan loop.  But, if the user has requested
+            // to end or cancel the batch, sane_cancel() needs to be called now.
+            if (res!=QDialogButtonBox::Ok)
+            {
+                ScanDevices::self()->deactivateNetworkProxy();
+                sane_cancel(mScannerHandle);
+                ScanDevices::self()->reactivateNetworkProxy();
+            }
+
             if (res==QDialogButtonBox::Cancel)
             {
                 qCDebug(LIBKOOKASCAN_LOG) << "User cancelled batch";
@@ -1002,7 +1019,8 @@ KScanDevice::Status KScanDevice::startAcquire(ScanImage::ImageType fmt)
 KScanDevice::Status KScanDevice::acquireData(bool isPreview)
 {
     KScanDevice::Status stat = KScanDevice::Ok;
-    int frames = 0;
+    int frameCount = 0;					// count of frames processed
+    int retryCount = 0;					// count of busy retries
 
 #ifdef DEBUG_OPTIONS
     showOptions();					// dump the current options
@@ -1098,7 +1116,7 @@ KScanDevice::Status KScanDevice::acquireData(bool isPreview)
             if (mSaneStatus==SANE_STATUS_GOOD)
             {
 #ifdef DEBUG_PARAMS
-                dumpParams(QString("For frame %1:").arg(frames+1), &mSaneParameters);
+                dumpParams(QString("For frame %1:").arg(frameCount+1), &mSaneParameters);
 #endif // DEBUG_PARAMS
 
                 // TODO: implement "Hand Scanner" support
@@ -1121,17 +1139,37 @@ KScanDevice::Status KScanDevice::acquireData(bool isPreview)
         }
         else
         {
-            //if (mSaneStatus==SANE_STATUS_DEVICE_BUSY)
-            //{
-            //    qDebug() << lastSaneErrorMessage();
-            //    QTimer tim;
-            //    tim.setSingleShot(true);
-            //    tim.setInterval(5000);
-            //    tim.start();
-            //    while (tim.isActive()) QCoreApplication::processEvents();
-            //    sane_cancel(mScannerHandle);
-            //    continue;
-            //}
+            // By observation, at least with the Brother MFC-J4540 and the "escl"
+            // driver, if the scan source is the flatbed it is necessary to do a
+            // sane_cancel() here in order to be ready for the next scan.  If
+            // this is not done the next sane_start() will immediately return a
+            // SANE_STATUS_DEVICE_BUSY.  However, this does not seem to be
+            // necessary if scanning from the ADF.  We do not want to do a
+            // sane_cancel() here if it is not necessary because it may have
+            // side effects, for example on the HP OfficeJet 8610 with the
+            // "hpaio" driver it has the effect of feeding all remaining
+            // documents through the ADF and discarding them.
+            //
+            // Even if a sane_cancel() is needed, we do not want to get into
+            // an uncancellable loop if there is some other problem.  So
+            // limit the number of retries and introduce a delay between them.
+            if (mSaneStatus==SANE_STATUS_DEVICE_BUSY && !mScanningAdf)
+            {
+                ++retryCount;
+                qCDebug(LIBKOOKASCAN_LOG) << "sane_start() error busy, retry" << retryCount;
+                if (retryCount<=BUSY_RETRIES)
+                {
+                    qCDebug(LIBKOOKASCAN_LOG) << "doing sane_cancel()";
+                    sane_cancel(mScannerHandle);
+
+                    QTimer delayTimer;
+                    delayTimer.setSingleShot(true);
+                    delayTimer.start(BUSY_DELAY);
+                    while (delayTimer.isActive()) QCoreApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
+                    qCDebug(LIBKOOKASCAN_LOG) << "retrying";
+                    continue;
+                }
+            }
 
             stat = KScanDevice::OpenDevice;
             qCDebug(LIBKOOKASCAN_LOG) << "sane_start() error" << lastSaneErrorMessage();
@@ -1229,7 +1267,7 @@ KScanDevice::Status KScanDevice::acquireData(bool isPreview)
                 mScanningState==KScanDevice::ScanNextFrame) break;
         }
 
-        ++frames;					// count up this frame
+        ++frameCount;					// count up this frame
 							// no more frames to do, exit loop
         if (mScanningState!=KScanDevice::ScanNextFrame) break;
     }
@@ -1252,7 +1290,7 @@ KScanDevice::Status KScanDevice::acquireData(bool isPreview)
     }
 
     qCDebug(LIBKOOKASCAN_LOG) << "Scan read" << mBytesRead << "bytes in"
-                              << mBlocksRead << "blocks," << frames << "frames, status" << stat;
+                              << mBlocksRead << "blocks," << frameCount << "frames, status" << stat;
 
 finish:
     return (stat);

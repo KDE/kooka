@@ -43,12 +43,14 @@ public:
     explicit DestinationGallery(QObject *pnt, const QVariantList &args);
     ~DestinationGallery() override = default;
 
+    void batchStart(const MultiScanOptions *opts) override;
     bool scanStarting(ScanImage::ImageType type) override;
     void imageScanned(ScanImage::Ptr img) override;
 
     KLocalizedString scanDestinationString() override;
 
 private:
+    ImageFormat mBatchFormat;
 };
 
 #endif							// DESTINATIONGALLERY_H
