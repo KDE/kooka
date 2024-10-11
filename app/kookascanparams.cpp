@@ -71,6 +71,9 @@ void KookaScanParams::slotDeviceConnected(KScanDevice *dev)
     // effect if there are no saved startup options for the scanner.
     MultiScanOptions *opts = dev->multiScanOptions();
     if (opts!=nullptr) opts->setFlags(MultiScanOptions::AutoGenerate, !KookaSettings::saverAskForFilename());
+
+    // Pass the current destination's capabilities to the scanner GUI.
+    if (mDestinationPlugin!=nullptr) setDestinationCapabilities(mDestinationPlugin->capabilities());
 }
 
 
@@ -214,6 +217,9 @@ void KookaScanParams::slotDestinationSelected(int idx)
 
     mDestinationPlugin->setParentWidget(this);		// give it a widget for reference
     mDestinationPlugin->createGUI(mParamsPage);		// create the plugin's GUI
+
+    // Pass the new destination's capabilities to the scanner GUI.
+    if (mDestinationPlugin!=nullptr) setDestinationCapabilities(mDestinationPlugin->capabilities());
 }
 
 

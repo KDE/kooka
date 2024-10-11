@@ -198,6 +198,14 @@ protected:
      **/
     KLed *operationLED() const;
 
+    /**
+     * Specify the capabilities that the scan destination provides.
+     *
+     * @param cap the destination capabilities
+     * @see @c MultiScanOptions::Capabilities
+     **/
+    void setDestinationCapabilities(MultiScanOptions::Capabilities cap);
+
 protected slots:
     /**
      * Open the source selection dialogue.  Internally connected
@@ -333,7 +341,6 @@ private:
     };
 
     KScanDevice::Status prepareScan(QString *vfp);
-    KScanDevice::Status performADFScan();
 
     void createNoScannerMsg(bool galleryMode);
     void initStartupArea(bool dontRestore);
@@ -357,6 +364,8 @@ private:
 
     ScanParams::ScanMode mScanMode;
     ScanSizeSelector *mAreaSelect;
+
+    MultiScanOptions::Capabilities mDestinationCapabilities;
 
     KScanOption *mResolutionBind;
     KScanOption *mSourceSelect;

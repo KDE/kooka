@@ -623,6 +623,7 @@ void ScanParams::slotSourceSelect()
     qCDebug(LIBKOOKASCAN_LOG) << "current multi options" << qPrintable(opts->toString());
 
     MultiScanDialog d(mSaneDevice, this);
+    d.setDestinationCapabilities(mDestinationCapabilities);
     d.setOptions(*opts);
     if (!d.exec()) return;
 
@@ -1093,15 +1094,9 @@ void ScanParams::slotNewScanMode()
     }
 }
 
-KScanDevice::Status ScanParams::performADFScan()
+
+void ScanParams::setDestinationCapabilities(MultiScanOptions::Capabilities cap)
 {
-    KScanDevice::Status stat = KScanDevice::Ok;
-    bool          scan_on = true;
-
-    /* The scan source should be set to ADF by the SourceSelect-Dialog */
-
-    while (scan_on) {
-        scan_on = false;
-    }
-    return (stat);
+    qCDebug(LIBKOOKASCAN_LOG) << cap;
+    mDestinationCapabilities = cap;
 }

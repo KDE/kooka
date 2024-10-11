@@ -55,6 +55,7 @@ public:
 
     void setOptions(const MultiScanOptions &opts);
     const MultiScanOptions &options();
+    void setDestinationCapabilities(MultiScanOptions::Capabilities caps);
 
 signals:
     void sourceChanged(const QByteArray &src);
@@ -77,6 +78,7 @@ private:
     QCheckBox *mGenerateFilenameCheck;
 
     MultiScanOptions mOptions;
+    MultiScanOptions::Capabilities mCapabilities;
 };
 
 #endif							// MULTISCANDIALOG_H

@@ -73,6 +73,17 @@ public:
         Rotate270 = 3,
     };
 
+    /**
+     * Capabilities that a destination plugin provides.
+     **/
+    enum Capability
+    {
+        AcceptBatch = 0x01,				///< accepts multiple scan batch
+        AlwaysBatch = 0x02,				///< always considers scan as batch
+        FileNames = 0x04,				///< accepts or requires file names
+    };
+    Q_DECLARE_FLAGS(Capabilities, Capability)
+
     void setFlags(MultiScanOptions::Flags f, bool on = true);
     MultiScanOptions::Flags flags() const;
 
@@ -96,6 +107,7 @@ private:
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(MultiScanOptions::Flags)
+Q_DECLARE_OPERATORS_FOR_FLAGS(MultiScanOptions::Capabilities)
 
 
 #endif							// MULTISCANOPTIONS_H

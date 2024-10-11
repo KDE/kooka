@@ -47,6 +47,7 @@ public:
     bool scanStarting(ScanImage::ImageType type) override;
     void imageScanned(ScanImage::Ptr img) override;
 
+    MultiScanOptions::Capabilities capabilities() const override;
     KLocalizedString scanDestinationString() override;
 
 private:

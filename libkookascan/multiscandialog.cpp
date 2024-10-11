@@ -193,11 +193,6 @@ MultiScanDialog::MultiScanDialog(KScanDevice *dev, QWidget *pnt)
     gl->addWidget(mGenerateFilenameCheck, row, 0, 1, -1, Qt::AlignLeft);
     ++row;
 
-
-
-
-
-
     gl->setColumnStretch(3, 1);
     gl->setRowStretch(row, 1);
 
@@ -227,6 +222,12 @@ void MultiScanDialog::setOptions(const MultiScanOptions &opts)
     mGenerateFilenameCheck->setChecked(f & MultiScanOptions::AutoGenerate);
 
     slotGuiChange();
+}
+
+
+void MultiScanDialog::setDestinationCapabilities(MultiScanOptions::Capabilities caps)
+{
+    mCapabilities = caps;
 }
 
 
@@ -262,4 +263,17 @@ void MultiScanDialog::slotGuiChange()
     if (!mMultiEmptyAdfRadio->isEnabled() && mMultiEmptyAdfRadio->isChecked()) mMultiManualScanRadio->setChecked(true);
 
     mDelayTimeSpinbox->setEnabled(multi && mMultiDelayScanRadio->isChecked());
+
+    // Destination capabilties override any states set above.
+    if (!mCapabilities.testFlag(MultiScanOptions::AcceptBatch))
+    {
+        mBatchMultipleCheck->setChecked(false);
+        mBatchMultipleCheck->setEnabled(false);
+    }
+    if (mCapabilities.testFlag(MultiScanOptions::AlwaysBatch)) mBatchMultipleCheck->setChecked(true);
+    if (!mCapabilities.testFlag(MultiScanOptions::FileNames))
+    {
+        mGenerateFilenameCheck->setEnabled(false);
+        mGenerateFilenameCheck->setChecked(false);
+    }
 }

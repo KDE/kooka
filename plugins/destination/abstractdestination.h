@@ -37,12 +37,12 @@
 #include "abstractplugin.h"
 #include "scanimage.h"
 #include "imageformat.h"
+#include "multiscanoptions.h"
 
 
 class QComboBox;
 class ScanGallery;
 class ScanParamsPage;
-class MultiScanOptions;
 
 #ifndef PLUGIN_EXPORT
 #define PLUGIN_EXPORT
@@ -164,6 +164,17 @@ public:
      * @see @c batchStart()
      **/
     const MultiScanOptions *multiScanOptions() const		{ return (mMultiOptions); }
+
+    /**
+     * Specifies the capabilities that this destination provides.
+     *
+     * @return the destination capabilities
+     * @see @c MultiScanOptions::Capabilities
+     *
+     * The base class implementation returns a null value (indicating
+     * no special capabilities).
+     **/
+    virtual MultiScanOptions::Capabilities capabilities() const	{ return (MultiScanOptions::Capabilities()); }
 
 protected:
     /**

@@ -152,6 +152,7 @@ static ImageFormat getFormatForType(ScanImage::ImageType type)
 
 static QString findSubFormat(const ImageFormat &format)
 {
+    // TODO: use QImageWriter to find possible subformats
     return (QString());					// no subformats currently used
 }
 

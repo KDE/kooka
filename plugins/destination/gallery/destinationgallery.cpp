@@ -36,7 +36,6 @@
 
 #include "scangallery.h"
 #include "kookasettings.h"
-#include "multiscanoptions.h"
 #include "imgsaver.h"
 #include "destination_logging.h"
 
@@ -103,4 +102,10 @@ void DestinationGallery::imageScanned(ScanImage::Ptr img)
 KLocalizedString DestinationGallery::scanDestinationString()
 {
     return (kxi18n("<filename>%1</filename>").subs(gallery()->saveURL().url(QUrl::PreferLocalFile)));
+}
+
+
+MultiScanOptions::Capabilities DestinationGallery::capabilities() const
+{
+    return (MultiScanOptions::AcceptBatch|MultiScanOptions::FileNames);
 }
