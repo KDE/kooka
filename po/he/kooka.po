@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-09-24 02:01+0000\n"
-"PO-Revision-Date: 2024-10-10 07:04+0300\n"
+"PO-Revision-Date: 2024-10-11 16:45+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -454,6 +454,8 @@ msgid ""
 "More information may be available in its <link url=\"%1\">standard error</"
 "link> log file."
 msgstr ""
+"כנראה יש מידע נוסף בקובץ היומן של <link url=\"%1\">השגיאות התקניות</link> "
+"(stderr)."
 
 #: ../plugins/ocr/abstractocrengine.cpp:604
 #, kde-format
@@ -754,6 +756,9 @@ msgid ""
 "It is suitable for color, grayscale and line art images.<p>This format is "
 "widely supported but is not recommended, use an open format instead."
 msgstr ""
+"<b>תמונת מפת סיביות</b> הוא סוג קובץ נפוץ מאוד לתמונות תחת MS Windows. הוא "
+"מתאים לתמונות בצבע, בגווני אפור וקווים אומנותיים.<p>הסוג הזה נתמך היטב בשלל "
+"מערכות שונות אך אינו מומלץ, עדיף להשתמש בתקן פתוח במקום."
 
 #: formatdialog.cpp:88
 #, kde-format
@@ -912,6 +917,8 @@ msgid ""
 "Select a format to save the scanned image.<nl/>This is a <emphasis strong="
 "\"1\">%1</emphasis>."
 msgstr ""
+"נא לבחור את סוג הקובץ לשמירת התמונה הסרוקה.<nl/>זה <emphasis strong=\"1\">"
+"%1</emphasis>."
 
 #: formatdialog.cpp:316
 #, kde-format
@@ -1061,6 +1068,7 @@ msgid ""
 "<div>Print at the same size as seen on screen, determined by the screen "
 "resolution.</div>"
 msgstr ""
+"<div>להדפיס באותו הגודל כפי שמופיע על המסך, נקבע על ידי רזולוציית המסך.</div>"
 
 #: imgprintdialog.cpp:105
 #, kde-format
@@ -1138,7 +1146,7 @@ msgstr " מ״מ"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "<div>The width at which the image will be printed.</div>"
-msgstr ""
+msgstr "<div>רוחב הדפסת התמונה.</div>"
 
 #: imgprintdialog.cpp:151
 #, kde-format
@@ -1150,7 +1158,7 @@ msgstr "גובה תמונה:"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "<div>The height at which the image will be printed.</div>"
-msgstr ""
+msgstr "<div>גובה הדפסת התמונה.</div>"
 
 #: imgprintdialog.cpp:166
 #, kde-format
@@ -1165,6 +1173,7 @@ msgid ""
 "<div>Print using as much of the available space on the paper as possible. "
 "The aspect ratio can be maintained.</div>"
 msgstr ""
+"<div>להדפיס על כמה שיותר שטח על הנייר. אפשר לשמור על יחס גובה רוחב.</div>"
 
 #: imgprintdialog.cpp:178
 #, kde-format
@@ -1281,7 +1290,7 @@ msgstr ""
 #: imgprintdialog.cpp:321
 #, kde-format
 msgid "The scan resolution must be specified for scaling to it."
-msgstr ""
+msgstr "יש לציין את רזולוציית הסריקה כדי לשנות אליה את קנה המידה."
 
 #: imgprintdialog.cpp:326
 #, kde-format
@@ -1368,7 +1377,7 @@ msgstr "לא נשאר מקום בהתקן"
 #: imgsaver.cpp:374
 #, kde-format
 msgid "Cannot write image format '%1'"
-msgstr ""
+msgstr "לא ניתן לכתוב מילה מסוג ‚%1’"
 
 #: imgsaver.cpp:376
 #, kde-format
@@ -1408,6 +1417,8 @@ msgid ""
 "one be added?<nl/><nl/>This would result in the new file name <filename>%1</"
 "filename>"
 msgstr ""
+"לשם הקובץ שסיפקת אין סיומת.<nl/>האם להוסיף את הסיומת המקורית?<nl/><nl/>זה "
+"יוביל לשם הקובץ החדש <filename>%1</filename>"
 
 #: imgsaver.cpp:417
 #, kde-format
