@@ -34,6 +34,7 @@
 
 #include <kaboutdata.h>
 #include <klocalizedstring.h>
+#include <kcrash.h>
 
 #include "kooka.h"
 #include "vcsversion.h"
@@ -74,6 +75,9 @@ int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);			// first of all, so that i18n() works
     KLocalizedString::setApplicationDomain("kooka");
+    KCrash::initialize();
+    KCrash::setDrKonqiEnabled(true);
+
     KAboutData about("kooka",					// componentName
                      i18n("Kooka"),				// displayName
 #if VCS_AVAILABLE
@@ -87,7 +91,7 @@ int main(int argc, char *argv[])
                      longDesc.toString(),			// otherText
                      "http://techbase.kde.org/Projects/Kooka");	// homePageAddress
 
-    about.addAuthor(i18n("Jonathan Marten"), i18n("Current maintainer, KDE4 port"), "jjm@keelhaul.me.uk");
+    about.addAuthor(i18n("Jonathan Marten"), i18n("Current maintainer, KDE4/KF6 port"), "jjm@keelhaul.me.uk");
     about.addAuthor(i18n("Montel Laurent"), i18n("Initial KF5 port"), "montel@kde.org");
     about.addAuthor(i18n("Klaas Freitag"), i18n("Developer"), "freitag@suse.de");
     about.addCredit(i18n("Mat Colton"), i18n("Graphics, web"), "mat@colton.de");
