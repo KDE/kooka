@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-09-24 02:01+0000\n"
-"PO-Revision-Date: 2024-10-11 16:45+0300\n"
+"PO-Revision-Date: 2024-10-12 07:54+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -389,6 +389,8 @@ msgstr "תהליך זיהוי התווים האופטי נעצר"
 msgctxt "@info"
 msgid "The following OCR temporary files are retained for debugging:<nl/><nl/>"
 msgstr ""
+"הקבצים הזמניים הבאים של זיהוי התווים האופטי נשמרים לצורכי ניתוח תקלות:<nl/"
+"><nl/>"
 
 #: ../plugins/ocr/abstractocrengine.cpp:256
 #, kde-kuit-format
@@ -1793,7 +1795,7 @@ msgstr ""
 #: kookasettings.kcfg:125
 #, kde-format
 msgid "Allow click-to-rename"
-msgstr ""
+msgstr "לאפשר לחיצה לשינוי שם"
 
 #. i18n: ectx: tooltip, entry (GalleryAllowRename), group (Gallery)
 #: kookasettings.kcfg:126
@@ -2544,6 +2546,9 @@ msgid ""
 "yet possible. Converting 'on the fly' is planned for a future release.\n"
 "Kooka corrects the extension."
 msgstr ""
+"הזנת סיומת קובץ שונה מזו הקיימת. דבר זה טרם אפשרי. אפשרות ההמרה בזמן אמת "
+"מתוכננת לגרסה עתידית.\n"
+"Kooka יתקן את הסיומת."
 
 #: scangallery.cpp:602
 #, kde-format
