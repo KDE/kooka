@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-24 02:01+0000\n"
+"POT-Creation-Date: 2024-10-14 00:38+0000\n"
 "PO-Revision-Date: 2024-05-18 22:03+0200\n"
 "Last-Translator: Valter Mura <valtermura@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
@@ -2373,13 +2373,13 @@ msgstr "Immagine non caricata"
 msgid "Loading %1..."
 msgstr "Caricamento di %1..."
 
-#: main.cpp:44
+#: main.cpp:45
 #, kde-format
 msgid "Scanning, image gallery and OCR"
 msgstr "Scansione, galleria immagini e OCR"
 
 # VM: ci sarebbe da cambiare l'URL della libreria commerciale...
-#: main.cpp:47
+#: main.cpp:48
 #, kde-format
 msgid ""
 "Kooka provides access to scanner hardware using the <a href=\"http://www."
@@ -2402,7 +2402,7 @@ msgstr ""
 "\"https://rerecognition.com/en/products/kadmos-icr-ocr/\">KADMOS</a> ."
 
 # VM: essendo nota legale, da lasciare in lingua originale? Mi sembra che anche l'URL non sia più corretto.
-#: main.cpp:57
+#: main.cpp:58
 #, kde-format
 msgid ""
 "This program is distributed under the terms of the GPL v2 as published\n"
@@ -2430,88 +2430,89 @@ msgstr ""
 "the Qt GPL licence, so if you wish to do this then you must have a\n"
 "commercial Qt development licence.\n"
 
-#: main.cpp:70
+#: main.cpp:71
 #, kde-format
 msgid "(C) 2000-2018, the Kooka developers and contributors"
 msgstr "(C) 2000-2018, gli sviluppatori e i contributori di Kooka"
 
-#: main.cpp:78
+#: main.cpp:82
 #, kde-format
 msgid "Kooka"
 msgstr "Kooka"
 
-#: main.cpp:90
+#: main.cpp:94
 #, kde-format
 msgid "Jonathan Marten"
 msgstr "Jonathan Marten"
 
-#: main.cpp:90
-#, kde-format
-msgid "Current maintainer, KDE4 port"
-msgstr "Manutentore attuale, autore migrazione a KDE4"
+#: main.cpp:94
+#, fuzzy, kde-format
+#| msgid "Current maintainer, KDE4/KF5 port"
+msgid "Current maintainer, KDE4/KF6 port"
+msgstr "Manutentore attuale, conversione a KDE4/KF5"
 
-#: main.cpp:91
+#: main.cpp:95
 #, kde-format
 msgid "Montel Laurent"
 msgstr "Montel Laurent"
 
-#: main.cpp:91
+#: main.cpp:95
 #, kde-format
 msgid "Initial KF5 port"
 msgstr "Migrazione iniziale a KF5"
 
-#: main.cpp:92
+#: main.cpp:96
 #, kde-format
 msgid "Klaas Freitag"
 msgstr "Klaas Freitag"
 
-#: main.cpp:92
+#: main.cpp:96
 #, kde-format
 msgid "Developer"
 msgstr "Sviluppatore"
 
-#: main.cpp:93
+#: main.cpp:97
 #, kde-format
 msgid "Mat Colton"
 msgstr "Mat Colton"
 
-#: main.cpp:93
+#: main.cpp:97
 #, kde-format
 msgid "Graphics, web"
 msgstr "Grafiche, web"
 
-#: main.cpp:94
+#: main.cpp:98
 #, kde-format
 msgid "Ivan Shvedunov"
 msgstr "Ivan Shvedunov"
 
-#: main.cpp:94
+#: main.cpp:98
 #, kde-format
 msgid "Original kscan application"
 msgstr "Applicazione Kscan originale"
 
-#: main.cpp:95
+#: main.cpp:99
 #, kde-format
 msgid "Alex Kempshall"
 msgstr "Alex Kempshall"
 
-#: main.cpp:95
+#: main.cpp:99
 #, kde-format
 msgid "Photocopy facility"
 msgstr "Servizi di fotocopia"
 
-#: main.cpp:111
+#: main.cpp:115
 #, kde-format
 msgid "Gallery mode - do not connect to scanner"
 msgstr "Modalità galleria - non collegarti allo scanner"
 
-#: main.cpp:114
+#: main.cpp:118
 #, kde-format
 msgid "The SANE device specification (e.g. 'umax:/dev/sg0')"
 msgstr ""
 "La specificazione del dispositivo compatibile con SANE (ad es: umax:/dev/sg0)"
 
-#: main.cpp:114
+#: main.cpp:118
 #, kde-format
 msgid "device"
 msgstr "dispositivo"
@@ -3004,6 +3005,9 @@ msgstr "Molto piccola"
 msgid "Tiny"
 msgstr "Minuscola"
 
+#~ msgid "Current maintainer, KDE4 port"
+#~ msgstr "Manutentore attuale, autore migrazione a KDE4"
+
 #~ msgid "Before the scan starts"
 #~ msgstr "Prima che la scansione inizi"
 
@@ -3035,9 +3039,6 @@ msgstr "Minuscola"
 
 #~ msgid "Kooka KIPI Helper"
 #~ msgstr "Supporto KIPI di Kooka"
-
-#~ msgid "Current maintainer, KDE4/KF5 port"
-#~ msgstr "Manutentore attuale, conversione a KDE4/KF5"
 
 #~ msgid "List all of the available KIPI plugin actions"
 #~ msgstr "Elenca tutte le azione disponibili dell'estensione KIPI"

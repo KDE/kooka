@@ -36,7 +36,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-24 02:01+0000\n"
+"POT-Creation-Date: 2024-10-14 00:38+0000\n"
 "PO-Revision-Date: 2024-05-18 09:44+0200\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: French <French <kde-francophone@kde.org>>\n"
@@ -2404,12 +2404,12 @@ msgstr "Image déchargée "
 msgid "Loading %1..."
 msgstr "Chargement de %1... "
 
-#: main.cpp:44
+#: main.cpp:45
 #, kde-format
 msgid "Scanning, image gallery and OCR"
 msgstr "Numérisation, galerie et ROC "
 
-#: main.cpp:47
+#: main.cpp:48
 #, kde-format
 msgid ""
 "Kooka provides access to scanner hardware using the <a href=\"http://www."
@@ -2431,7 +2431,7 @@ msgstr ""
 "ocrad.html\">OCRAD</a>, ou encore la bibliothèque commerciale <a href="
 "\"http://www.rerecognition.com/\">KADMOS</a>."
 
-#: main.cpp:57
+#: main.cpp:58
 #, kde-format
 msgid ""
 "This program is distributed under the terms of the GPL v2 as published\n"
@@ -2460,88 +2460,89 @@ msgstr ""
 "la licence Qt GPL. Cela nécessite en effet une licence de développement Qt "
 "commercial.\n"
 
-#: main.cpp:70
+#: main.cpp:71
 #, kde-format
 msgid "(C) 2000-2018, the Kooka developers and contributors"
 msgstr "(C) 2000-2018, les développeurs et contributeurs de Kooka "
 
-#: main.cpp:78
+#: main.cpp:82
 #, kde-format
 msgid "Kooka"
 msgstr "Kooka "
 
-#: main.cpp:90
+#: main.cpp:94
 #, kde-format
 msgid "Jonathan Marten"
 msgstr "Jonathan Marten "
 
-#: main.cpp:90
-#, kde-format
-msgid "Current maintainer, KDE4 port"
-msgstr "Mainteneur actuel, port KDE4"
+#: main.cpp:94
+#, fuzzy, kde-format
+#| msgid "Current maintainer, KDE4/KF5 port"
+msgid "Current maintainer, KDE4/KF6 port"
+msgstr "Mainteneur actuel, port KDE4 / KDE5"
 
-#: main.cpp:91
+#: main.cpp:95
 #, kde-format
 msgid "Montel Laurent"
 msgstr "Montel Laurent "
 
-#: main.cpp:91
+#: main.cpp:95
 #, kde-format
 msgid "Initial KF5 port"
 msgstr "Portage initial pour KF5"
 
-#: main.cpp:92
+#: main.cpp:96
 #, kde-format
 msgid "Klaas Freitag"
 msgstr "Klaas Freitag "
 
-#: main.cpp:92
+#: main.cpp:96
 #, kde-format
 msgid "Developer"
 msgstr "Développeur "
 
-#: main.cpp:93
+#: main.cpp:97
 #, kde-format
 msgid "Mat Colton"
 msgstr "Mat Colton "
 
-#: main.cpp:93
+#: main.cpp:97
 #, kde-format
 msgid "Graphics, web"
 msgstr "Graphiques, web "
 
-#: main.cpp:94
+#: main.cpp:98
 #, kde-format
 msgid "Ivan Shvedunov"
 msgstr "Ivan Shvedunov "
 
-#: main.cpp:94
+#: main.cpp:98
 #, kde-format
 msgid "Original kscan application"
 msgstr "Application KScan originelle "
 
-#: main.cpp:95
+#: main.cpp:99
 #, kde-format
 msgid "Alex Kempshall"
 msgstr "Alex Kempshall "
 
-#: main.cpp:95
+#: main.cpp:99
 #, kde-format
 msgid "Photocopy facility"
 msgstr "Fonction photocopie "
 
-#: main.cpp:111
+#: main.cpp:115
 #, kde-format
 msgid "Gallery mode - do not connect to scanner"
 msgstr "Mode galerie - pas de connexion au périphérique de numérisation "
 
-#: main.cpp:114
+#: main.cpp:118
 #, kde-format
 msgid "The SANE device specification (e.g. 'umax:/dev/sg0')"
 msgstr ""
 "Le nom du périphérique selon la norme SANE (par exemple : « umax:/dev/sg0 ») "
 
-#: main.cpp:114
+#: main.cpp:118
 #, kde-format
 msgid "device"
 msgstr "appareil "
@@ -3034,6 +3035,9 @@ msgstr "Très petit "
 msgid "Tiny"
 msgstr "Minuscule "
 
+#~ msgid "Current maintainer, KDE4 port"
+#~ msgstr "Mainteneur actuel, port KDE4"
+
 #~ msgid "Before the scan starts"
 #~ msgstr "Avant le démarrage de la numérisation "
 
@@ -3067,9 +3071,6 @@ msgstr "Minuscule "
 
 #~ msgid "Kooka KIPI Helper"
 #~ msgstr "Assistant « KIPI » de Kooka "
-
-#~ msgid "Current maintainer, KDE4/KF5 port"
-#~ msgstr "Mainteneur actuel, port KDE4 / KDE5"
 
 #~ msgid "List all of the available KIPI plugin actions"
 #~ msgstr "Liste de toutes les actions disponibles du module externe « KIPI »"

@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-24 02:01+0000\n"
+"POT-Creation-Date: 2024-10-14 00:38+0000\n"
 "PO-Revision-Date: 2024-08-19 23:51+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -2305,12 +2305,12 @@ msgstr "그림 불러오기 해제됨"
 msgid "Loading %1..."
 msgstr "%1 불러오는 중..."
 
-#: main.cpp:44
+#: main.cpp:45
 #, kde-format
 msgid "Scanning, image gallery and OCR"
 msgstr "스캔, 그림 갤러리, OCR"
 
-#: main.cpp:47
+#: main.cpp:48
 #, kde-format
 msgid ""
 "Kooka provides access to scanner hardware using the <a href=\"http://www."
@@ -2331,7 +2331,7 @@ msgstr ""
 "할 수 있습니다. 사용할 수 있는 경우 상용 <a href=\"http://www.rerecognition."
 "com/\">KADMOS</a> 라이브러리를 사용할 수 있습니다."
 
-#: main.cpp:57
+#: main.cpp:58
 #, kde-format
 msgid ""
 "This program is distributed under the terms of the GPL v2 as published\n"
@@ -2360,87 +2360,88 @@ msgstr ""
 "해당 라이브러리를 사용하려고 하는 경우 상용 Qt 개발 라이선스를 취득하십시"
 "오.\n"
 
-#: main.cpp:70
+#: main.cpp:71
 #, kde-format
 msgid "(C) 2000-2018, the Kooka developers and contributors"
 msgstr "(C) 2000-2018, the Kooka developers and contributors"
 
-#: main.cpp:78
+#: main.cpp:82
 #, kde-format
 msgid "Kooka"
 msgstr "Kooka"
 
-#: main.cpp:90
+#: main.cpp:94
 #, kde-format
 msgid "Jonathan Marten"
 msgstr "Jonathan Marten"
 
-#: main.cpp:90
-#, kde-format
-msgid "Current maintainer, KDE4 port"
-msgstr "현재 관리자, KDE4 이식"
+#: main.cpp:94
+#, fuzzy, kde-format
+#| msgid "Current maintainer, KDE4/KF5 port"
+msgid "Current maintainer, KDE4/KF6 port"
+msgstr "현재 관리자, KDE4/KF5 이식"
 
-#: main.cpp:91
+#: main.cpp:95
 #, kde-format
 msgid "Montel Laurent"
 msgstr "Montel Laurent"
 
-#: main.cpp:91
+#: main.cpp:95
 #, kde-format
 msgid "Initial KF5 port"
 msgstr "초기 KF5 이식"
 
-#: main.cpp:92
+#: main.cpp:96
 #, kde-format
 msgid "Klaas Freitag"
 msgstr "Klaas Freitag"
 
-#: main.cpp:92
+#: main.cpp:96
 #, kde-format
 msgid "Developer"
 msgstr "개발자"
 
-#: main.cpp:93
+#: main.cpp:97
 #, kde-format
 msgid "Mat Colton"
 msgstr "Mat Colton"
 
-#: main.cpp:93
+#: main.cpp:97
 #, kde-format
 msgid "Graphics, web"
 msgstr "그래픽, 웹"
 
-#: main.cpp:94
+#: main.cpp:98
 #, kde-format
 msgid "Ivan Shvedunov"
 msgstr "Ivan Shvedunov"
 
-#: main.cpp:94
+#: main.cpp:98
 #, kde-format
 msgid "Original kscan application"
 msgstr "원본 kscan 앱"
 
-#: main.cpp:95
+#: main.cpp:99
 #, kde-format
 msgid "Alex Kempshall"
 msgstr "Alex Kempshall"
 
-#: main.cpp:95
+#: main.cpp:99
 #, kde-format
 msgid "Photocopy facility"
 msgstr "복사기 기능"
 
-#: main.cpp:111
+#: main.cpp:115
 #, kde-format
 msgid "Gallery mode - do not connect to scanner"
 msgstr "갤러리 모드 - 스캐너에 연결하지 않음"
 
-#: main.cpp:114
+#: main.cpp:118
 #, kde-format
 msgid "The SANE device specification (e.g. 'umax:/dev/sg0')"
 msgstr "SANE 장치 지정 (예: 'umax:/dev/sg0')"
 
-#: main.cpp:114
+#: main.cpp:118
 #, kde-format
 msgid "device"
 msgstr "장치"
@@ -2914,6 +2915,9 @@ msgstr "매우 작게"
 msgid "Tiny"
 msgstr "가장 작게"
 
+#~ msgid "Current maintainer, KDE4 port"
+#~ msgstr "현재 관리자, KDE4 이식"
+
 #~ msgid "Before the scan starts"
 #~ msgstr "스캔 시작 전"
 
@@ -2945,9 +2949,6 @@ msgstr "가장 작게"
 
 #~ msgid "Kooka KIPI Helper"
 #~ msgstr "Kooka KIPI 도우미"
-
-#~ msgid "Current maintainer, KDE4/KF5 port"
-#~ msgstr "현재 관리자, KDE4/KF5 이식"
 
 #~ msgid "List all of the available KIPI plugin actions"
 #~ msgstr "모든 KIPI 플러그인 동작 표시"
