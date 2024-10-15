@@ -541,5 +541,5 @@ QUrl DestinationSave::getSaveLocation(ScanImage::ImageType type, bool allFilters
 
 MultiScanOptions::Capabilities DestinationSave::capabilities() const
 {
-    return (MultiScanOptions::AcceptBatch|MultiScanOptions::FileNames);
+    return (MultiScanOptions::AcceptBatch|MultiScanOptions::DefaultBatch|MultiScanOptions::FileNames);
 }

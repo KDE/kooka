@@ -218,7 +218,9 @@ void MultiScanDialog::setOptions(const MultiScanOptions &opts)
 
     mDelayTimeSpinbox->setValue(mOptions.delay());
 
-    mBatchMultipleCheck->setChecked(f & MultiScanOptions::BatchMultiple);
+    mBatchMultipleCheck->setChecked(mCapabilities.testFlag(MultiScanOptions::DefaultBatch) ||
+                                    (f & MultiScanOptions::BatchMultiple));
+
     mGenerateFilenameCheck->setChecked(f & MultiScanOptions::AutoGenerate);
 
     slotGuiChange();
@@ -271,6 +273,7 @@ void MultiScanDialog::slotGuiChange()
         mBatchMultipleCheck->setEnabled(false);
     }
     if (mCapabilities.testFlag(MultiScanOptions::AlwaysBatch)) mBatchMultipleCheck->setChecked(true);
+
     if (!mCapabilities.testFlag(MultiScanOptions::FileNames))
     {
         mGenerateFilenameCheck->setEnabled(false);

@@ -81,6 +81,7 @@ public:
         AcceptBatch = 0x01,				///< accepts multiple scan batch
         AlwaysBatch = 0x02,				///< always considers scan as batch
         FileNames = 0x04,				///< accepts or requires file names
+        DefaultBatch = 0x08,				///< default option should be to batch
     };
     Q_DECLARE_FLAGS(Capabilities, Capability)
 
