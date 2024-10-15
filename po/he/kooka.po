@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-10-14 00:38+0000\n"
-"PO-Revision-Date: 2024-10-12 07:54+0300\n"
+"PO-Revision-Date: 2024-10-14 20:27+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -836,6 +836,9 @@ msgid ""
 "option of lossless compression, but so far is not widely supported. It is "
 "suitable for true color or grayscale images."
 msgstr ""
+"<b>JPEG 2000</b> נועד להיות עדכון של צורת הקובץ JPEG, עם אפשרות לדחיסה ללא "
+"אובדן נתונים, אך עד כה לא נתמך באופן נרחב. מתאים לתמונות בצבע אמיתי או "
+"בגווני אפור."
 
 #: formatdialog.cpp:176
 #, kde-format
@@ -977,6 +980,8 @@ msgid ""
 "new location is now <filename>%2</filename>.<nl/><nl/>Do you want to create "
 "a new gallery at the new location?"
 msgstr ""
+"נמצאה גלריית Kooka ישנה ב־<filename>%1</filename>.<nl/>המקום המועדף החדש הוא "
+"מעתה <filename>%2</filename>.<nl/><nl/>ליצור גלריה חדשה במקום החדש?"
 
 #: galleryroot.cpp:168
 #, kde-format
@@ -1117,6 +1122,8 @@ msgid ""
 "<div>This is the scan resolution as saved with the image. It can be changed "
 "if necessary.</div>"
 msgstr ""
+"<div>זאת רזולוציית הסריקה כפי שנשמרה עם התמונה. אפשר לשנות אותה במידת הצורך."
+"</div>"
 
 #: imgprintdialog.cpp:132
 #, kde-format
@@ -1130,7 +1137,7 @@ msgctxt "@info:tooltip"
 msgid ""
 "<div>Print scaled to the specified size. The image is centered on the paper."
 "</div>"
-msgstr ""
+msgstr "<div>להדפיס לפי קנה מידה בגודל שצוין. התמונה ממורכזת על הדף.</div>"
 
 #: imgprintdialog.cpp:137
 #, kde-format
@@ -1246,6 +1253,8 @@ msgid ""
 "<div>Select whether cut/join marks are printed. The marks will reduce the "
 "available printable area.</div>"
 msgstr ""
+"<div>נא לבחור האם יודפסו סימני חיתוך/צירוף. הסימנים יקטינו את שטח ההדפסה "
+"הזמין.</div>"
 
 #: imgprintdialog.cpp:214
 #, kde-format
@@ -1263,7 +1272,7 @@ msgstr "גודל תמונה:"
 #, kde-format
 msgctxt "@info:status width,height pixels"
 msgid "%1 x %2 pix"
-msgstr ""
+msgstr "%1 × %2 פיקסלים"
 
 #: imgprintdialog.cpp:227
 #, kde-format
@@ -1287,7 +1296,7 @@ msgstr "עמודים נדרשים:"
 #, kde-format
 msgctxt "@info:status"
 msgid "%1 dpi"
-msgstr ""
+msgstr "%1 נק׳ לאינץ׳"
 
 #: imgprintdialog.cpp:321
 #, kde-format
@@ -1300,6 +1309,7 @@ msgid ""
 "A valid size must be specified for custom scaling. One or both of the "
 "specified dimensions is zero."
 msgstr ""
+"יש לציין גודל תקף לקנה מידה מותאם אישית. אחד או יותר מהממדים שצוינה הוא אפס."
 
 #: imgprintdialog.cpp:404 imgprintdialog.cpp:408
 #, kde-format
@@ -1702,6 +1712,10 @@ msgid ""
 "url=\"a:1\">Select a scanner device</link> to perform scanning, or <link url="
 "\"a:2\">add a device</link> if a scanner is not automatically detected."
 msgstr ""
+"<title>מצב גלריה - לא נבחר סורק</title><nl/><nl/>במצב הזה אפשר לעיין, לשנות "
+"ולהפעיל זיהוי תווים אופטי על תמונות שכבר בגלריה.<nl/><nl/><link url="
+"\"a:1\">יש לבחור התקן סריקה</link> כדי לסרוק, או <link url=\"a:2\">להוסיף "
+"התקן</link> אם לא זוהה סורק אוטומטית."
 
 #: kookascanparams.cpp:114
 #, kde-format
@@ -1734,6 +1748,8 @@ msgid ""
 "viewer on startup.<br/><br/>If your images are large, that might slow down "
 "Kooka's startup.</div>"
 msgstr ""
+"<div>יש לסמן את זה כדי ש־Kooka תטען את התמונה האחרונה שנבחרה למציג עם העלייה."
+"<br/><br/>אם התמונות שלך גדולות, הן עשויות להאט את העלייה של Kooka.</div>"
 
 #. i18n: ectx: label, entry (SaverAskForFormat), group (Files)
 #: kookasettings.kcfg:65
@@ -1748,6 +1764,8 @@ msgid ""
 "<div>Check this if you want to always use the image save assistant, even if "
 "there is a default format for the image type.</div>"
 msgstr ""
+"<div>יש לסמן את זה כדי תמיד להשתמש במסייע השמירה, אפילו אם יש תסדיר ברירת "
+"מחדל לסוג התמונה.</div>"
 
 #. i18n: ectx: label, entry (SaverAskForFilename), group (Files)
 #: kookasettings.kcfg:71
@@ -1761,13 +1779,13 @@ msgstr "לבקש שם קובץ בעת השמירה"
 msgid ""
 "<div>Check this if you want to always enter a file name when scanning an "
 "image.</div>"
-msgstr ""
+msgstr "<div>יש לסמן את זה כדי תמיד למלא שם קובץ בעת סריקה תמונה.</div>"
 
 #. i18n: ectx: label, entry (SaverOnlyRecommendedTypes), group (Files)
 #: kookasettings.kcfg:77
 #, kde-format
 msgid "Only show recommended formats for this image type"
-msgstr ""
+msgstr "להציג רק תסדירים מומלצים לסוג התמונה הזה"
 
 #. i18n: ectx: tooltip, entry (SaverOnlyRecommendedTypes), group (Files)
 #: kookasettings.kcfg:78
@@ -1781,7 +1799,7 @@ msgstr ""
 #: kookasettings.kcfg:91
 #, kde-format
 msgid "Always use this save format for this image type"
-msgstr ""
+msgstr "תמיד להשתמש בסוג השמירה הזאת לסוג הקובץ הזה"
 
 #. i18n: ectx: tooltip, entry (SaverAlwaysUseFormat), group (Files2)
 #: kookasettings.kcfg:92
@@ -1804,6 +1822,8 @@ msgid ""
 "<div>Check this if you want to be able to rename gallery items by clicking "
 "on them (otherwise, use the \"Rename\" menu option).</div>"
 msgstr ""
+"<div>יש לסמן את זה כדי לאפשר לשנות שמות של פריטי גלריה בלחיצה עליהם (אחרת, "
+"יש להשתמש באפשרות „שינוי שם” בתפריט).</div>"
 
 #. i18n: ectx: label, entry (GalleryLayout), group (Gallery)
 #: kookasettings.kcfg:131
@@ -1818,6 +1838,8 @@ msgid ""
 "<div>Select whether and where a list of recently accessed gallery folders "
 "will be shown.</div>"
 msgstr ""
+"<div>נא לבחור האם והיכן תופיע רשימת תיקיות הגלריה האחרונות שניגשו אליהן.</"
+"div>"
 
 #. i18n: ectx: label, entry (ThumbnailCustomBackground), group (thumbnailView)
 #: kookasettings.kcfg:152
@@ -1829,7 +1851,7 @@ msgstr "להשתמש בתמונת רקע מותאמת אישית"
 #: kookasettings.kcfg:153
 #, kde-format
 msgid "<div>Set a custom background image for the thumbnail view.</div>"
-msgstr ""
+msgstr "<div>הגדרת תמונת רקע משלך לתצוגת התמונות הממוזערות.</div>"
 
 #. i18n: ectx: label, entry (ThumbnailBackgroundPath), group (thumbnailView)
 #: kookasettings.kcfg:158
@@ -1841,7 +1863,7 @@ msgstr "תמונה:"
 #: kookasettings.kcfg:159
 #, kde-format
 msgid "<div>The background image to use for the thumbnail view.</div>"
-msgstr ""
+msgstr "<div>תמונת הרקע לשימוש לתצוגת התמונות הממוזערות.</div>"
 
 #. i18n: ectx: label, entry (ThumbnailPreviewSize), group (thumbnailView)
 #: kookasettings.kcfg:165
@@ -1854,6 +1876,8 @@ msgstr "גודל תצוגה מקדימה:"
 #, kde-format
 msgid "<div>Select the default preview size for the thumbnail view.</div>"
 msgstr ""
+"<div>נא לבחור את גודל ברירת המחדל לתצוגה מקדימה לתצוגת התמונות הממוזערות.</"
+"div>"
 
 #. i18n: ectx: label, entry (OcrGocrDustSize), group (gocr)
 #: kookasettings.kcfg:205
@@ -1869,6 +1893,8 @@ msgid ""
 "ignored.  0 means to not detect dust clusters, -1 means to automatically "
 "detect them. The default is 10.</div>"
 msgstr ""
+"<div>צבירים (Clusters) מתחת לגודל הזה נחשבים לרעש ונפסחים. 0 משמעולא לזהות "
+"צבירי אבק, ‎-1 משמעו לזהות אותם אוטומטית. ברירת המחדל היא 10.</div>"
 
 #. i18n: ectx: label, entry (OcrGocrGrayLevel), group (gocr)
 #: kookasettings.kcfg:211
@@ -1883,6 +1909,8 @@ msgid ""
 "<div>The threshold value below which gray pixels are considered to be black. "
 "0 means to automatically detect the gray level.  The default is 160.</div>"
 msgstr ""
+"<div>ערך הסף שמתחתיו פיקסלים אפורים נחשבים לשחורים. 0 משמעו לזהות את רמת "
+"האפור אוטומטית. ברירת המחדל היא 160.</div>"
 
 #. i18n: ectx: label, entry (OcrGocrSpaceWidth), group (gocr)
 #: kookasettings.kcfg:217
@@ -2227,6 +2255,14 @@ msgid ""
 "www.gnu.org/software/ocrad/ocrad.html\">OCRAD</a> programs, or the "
 "commercial <a href=\"http://www.rerecognition.com/\">KADMOS</a> library."
 msgstr ""
+"Kooka מספקת גישה לחומרת סריקה באמצעות ספריית <a href=\"http://www.sane-"
+"project.org/\">SANE</a>.\n"
+"\n"
+"Kooka מאפשרת לך לסרוק, לשמור ולהציג בכל תסדיר תמונה שנתמך ע״י KDE והיא יכולה "
+"גם לזהות תווים אופטית בעזרת תוכניות הקוד הפתוח <a href=\"http://jocr."
+"sourceforge.net/\">GOCR</a> או <a href=\"http://www.gnu.org/software/ocrad/"
+"ocrad.html\">OCRAD</a> או הספרייה המסחרית <a href=\"http://www.rerecognition."
+"com/\">KADMOS</a>."
 
 #: main.cpp:58
 #, kde-format

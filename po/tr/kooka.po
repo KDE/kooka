@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: playground-graphics-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-10-14 00:38+0000\n"
-"PO-Revision-Date: 2024-09-24 10:39+0300\n"
+"PO-Revision-Date: 2024-10-14 20:56+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -1107,7 +1107,7 @@ msgstr "Görseli 180 derece döndür"
 #: imagetransform.cpp:71
 #, kde-format
 msgid "Rotate image -90 degrees"
-msgstr "Görseli -90 derece döndür"
+msgstr "Görseli −90 derece döndür"
 
 #: imagetransform.cpp:77
 #, kde-format
@@ -1985,7 +1985,7 @@ msgid ""
 "detect them. The default is 10.</div>"
 msgstr ""
 "<div>Bu boyuttan küçük olan kümeler gürültü olarak kabul edilir ve dikkate "
-"alınmaz. 0, toz bulutlarını dikkate alma anlamına gelir. -1, kendiliğinden "
+"alınmaz. 0, toz bulutlarını dikkate alma anlamına gelir. −1, kendiliğinden "
 "algılar. Öntanımlı değer 10’dur.</div>"
 
 #. i18n: ectx: label, entry (OcrGocrGrayLevel), group (gocr)
@@ -2423,10 +2423,9 @@ msgid "Jonathan Marten"
 msgstr "Jonathan Marten"
 
 #: main.cpp:94
-#, fuzzy, kde-format
-#| msgid "Current maintainer, KDE4/KF5 port"
+#, kde-format
 msgid "Current maintainer, KDE4/KF6 port"
-msgstr "Projeyi sürdüren, KDE4/KF5 geçişi"
+msgstr "Şu anki bakımcı, KDE4/KF6 geçişi"
 
 #: main.cpp:95
 #, kde-format

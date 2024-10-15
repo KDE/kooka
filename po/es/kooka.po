@@ -1,17 +1,17 @@
 # translation of kooka.po to Español
-# Copyright (C) 2002,2003, 2004, 2005, 2006, 2007, 2008, 2009 Free Software Foundation, Inc.
+# Copyright (C) 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009 Free Software Foundation, Inc.
 #
-# Miguel Revilla Rodríguez <yo@miguelrevilla.com>, 2002,2003, 2004.
-# Pablo de Vicente <p.devicente@wanadoo.es>, 2004.
-# Santiago Fernandez Sancho <santi@kde-es.org>, 2005, 2008.
+# SPDX-FileCopyrightText: 2002, 2003, 2004 Miguel Revilla Rodríguez <yo@miguelrevilla.com>
+# SPDX-FileCopyrightText: 2004 Pablo de Vicente <p.devicente@wanadoo.es>
+# SPDX-FileCopyrightText: 2005, 2008 Santiago Fernandez Sancho <santi@kde-es.org>
 # SPDX-FileCopyrightText: 2005, 2006, 2007, 2011, 2014, 2015, 2017, 2018, 2019, 2020, 2021, 2022, 2024 Eloy Cuadra <ecuadra@eloihr.net>
-# Miguel Angel Quesada Fernandez <kesadalive@gmail.com>, 2009.
+# SPDX-FileCopyrightText: 2009 Miguel Angel Quesada Fernandez <kesadalive@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-10-14 00:38+0000\n"
-"PO-Revision-Date: 2024-05-17 19:01+0200\n"
+"PO-Revision-Date: 2024-10-15 00:58+0200\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "First-Translator: Pablo de Vicente <pvicentea@nexo.es>\n"
-"X-Generator: Lokalize 24.02.2\n"
+"X-Generator: Lokalize 24.08.2\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #, kde-format
@@ -2444,10 +2444,9 @@ msgid "Jonathan Marten"
 msgstr "Jonathan Marten"
 
 #: main.cpp:94
-#, fuzzy, kde-format
-#| msgid "Current maintainer, KDE4/KF5 port"
+#, kde-format
 msgid "Current maintainer, KDE4/KF6 port"
-msgstr "Encargado actual, adaptación a KDE4/KF5"
+msgstr "Encargado actual, adaptación a KDE4/KF6"
 
 #: main.cpp:95
 #, kde-format
