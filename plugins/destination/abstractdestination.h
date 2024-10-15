@@ -158,14 +158,6 @@ public:
     virtual void batchEnd(bool ok)				{ }
 
     /**
-     * Get the multiple scan options for the current batch.
-     *
-     * @return the scan options
-     * @see @c batchStart()
-     **/
-    const MultiScanOptions *multiScanOptions() const		{ return (mMultiOptions); }
-
-    /**
      * Specifies the capabilities that this destination provides.
      *
      * @return the destination capabilities
@@ -205,6 +197,14 @@ protected:
      * @return an @c ImageFormat for saving the image.
      **/
     ImageFormat getSaveFormat(const QString &mimeName, ScanImage::Ptr img);
+
+    /**
+     * Get the multiple scan options for the current batch.
+     *
+     * @return the scan options
+     * @see @c batchStart()
+     **/
+    const MultiScanOptions *multiScanOptions() const		{ return (mMultiOptions); }
 
     /**
      * Save a temporary image for sending to a destination.
