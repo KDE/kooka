@@ -228,7 +228,7 @@ bool DestinationSave::scanStarting(ScanImage::ImageType type)
     // that an automatic file name does not need to be generated until later on
     // when the local/remote status is known.
     mSaveLocation = saveUrl.adjusted(QUrl::RemoveFilename);
-    qCDebug(DESTINATION_LOG) << "initial parent" << mSaveLocation << "local?" << mSaveLocation.isLocalFile();
+    qCDebug(DESTINATION_LOG) << "initial parent" << mSaveLocation.toDisplayString() << "local?" << mSaveLocation.isLocalFile();
     if (!mSaveLocation.isLocalFile())
     {
         if (KProtocolInfo::protocolClass(mSaveLocation.scheme())==QLatin1String(":local"))
@@ -261,7 +261,7 @@ bool DestinationSave::scanStarting(ScanImage::ImageType type)
             }
         }
     }
-    qCDebug(DESTINATION_LOG) << "resolved parent" << mSaveLocation << "local?" << mSaveLocation.isLocalFile();
+    qCDebug(DESTINATION_LOG) << "resolved parent" << mSaveLocation.toDisplayString() << "local?" << mSaveLocation.isLocalFile();
 
     // At this point the resolved save information is:
     //
@@ -287,7 +287,7 @@ void DestinationSave::imageScanned(ScanImage::Ptr img)
     qCDebug(DESTINATION_LOG) << "received image size" << img->size();
 
     ImageFormat fmt = getSaveFormat(mSaveMime, img);
-    qCDebug(DESTINATION_LOG) << "saveLocation=" << mSaveLocation
+    qCDebug(DESTINATION_LOG) << "saveLocation=" << mSaveLocation.toDisplayString()
                              << "islocal?" << mSaveLocation.isLocalFile()
                              << "saveFileName" << mSaveFileName
                              << "saveMime" << mSaveMime
@@ -312,38 +312,58 @@ void DestinationSave::imageScanned(ScanImage::Ptr img)
 
         // If an automatic file name is to be generated, then loop to
         // find a generated name that does not already exist.
+        //
+        // Remote files (which could not be resolved to a local location
+        // above) are handled in the same way as local ones.  It could be
+        // argued that it would be more efficient to list the remote
+        // directory using just one ListJob job and then use the resulting
+        // list of file names to find an unused one, but it is expected
+        // that most of the time the prospective file will not exist.
+        // Therefore at most a single StatJob will be needed anyway.
         for (;;)
         {
-            if (mSaveLocation.isLocalFile())
+            QString fileName = mAutoPrefix;
+            fileName += QString("%1").arg(num, mAutoLength, 10, QLatin1Char('0'));
+            fileName += mAutoSuffix;
+            QString path = parentPath+'/'+fileName;
+
+            bool exists;
+            if (mSaveLocation.isLocalFile())		// local
             {
-                QString fileName = mAutoPrefix;
-                fileName += QString("%1").arg(num, mAutoLength, 10, QLatin1Char('0'));
-                fileName += mAutoSuffix;
-                QString path = parentPath+'/'+fileName;
                 qCDebug(DESTINATION_LOG) << "prospective path" << path;
-
-                if (!QFile::exists(path))
-                {
-                    qCDebug(DESTINATION_LOG) << "does not exist, using" << fileName;
-                    mSaveFileName = fileName;
-
-                    // Assume that the next numbered file will be at least one more
-                    // than this one.
-                    mLastUsedNumber = num+1;
-                    break;
-                }
-
-                // The prospective name already exists, so increment the number.
-                qCDebug(DESTINATION_LOG) << "already exists";
-                ++num;
+                exists = QFile::exists(path);
             }
-            else
+            else					// remote
             {
-                // TODO: the equivalent of the above
-                // better one stat for each file than listing the entire directory
-                qWarning() << "Auto increment on remote files not yet supported";
-                return;
+                QUrl u = mSaveLocation;
+                u.setPath(path, QUrl::DecodedMode);
+                qCDebug(DESTINATION_LOG) << "prospective url" << u.toDisplayString();
+                KIO::StatJob *job = KIO::stat(u, KIO::StatJob::DestinationSide, KIO::StatNoDetails);
+                // Don't want any automatic error reporting, because the file
+                // is expected not to exist.  If the file does not exist an
+                // error is reported even for StatJob::DestinationSide as
+                // above.  The parent path will have already been checked and
+                // an error reported if it is not accessible.
+                job->setUiDelegate(KIO::createDefaultJobUiDelegate(KJobUiDelegate::AutoHandlingDisabled, parentWidget()));
+
+                exists = job->exec();
             }
+
+            if (!exists)
+            {
+                qCDebug(DESTINATION_LOG) << "does not exist, using" << fileName;
+                mSaveFileName = fileName;
+
+                // Assume that the next numbered file will be at least one more
+                // than this one.
+                mLastUsedNumber = num+1;
+                break;
+            }
+
+            // The prospective name already exists, so increment the number
+            // to generate a new file name and check again.
+            qCDebug(DESTINATION_LOG) << "already exists";
+            ++num;
         }
     }
 
@@ -495,6 +515,7 @@ QUrl DestinationSave::getSaveLocation(ScanImage::ImageType type, bool allFilters
         const QMimeType mimeType = db.mimeTypeForUrl(saveUrl);
         if (!ImageFormat::formatForMime(mimeType).isValid())
         {
+// TODO: better report for application/octet-stream, "Cannot determine image format from file extension"
             KMessageBox::error(parentWidget(),
                                xi18nc("@info", "Cannot save to <filename>%2</filename><nl/>The image format <resource>%1</resource> is not supported.",
                                       mimeType.name(), saveUrl.toDisplayString()),
@@ -505,7 +526,7 @@ QUrl DestinationSave::getSaveLocation(ScanImage::ImageType type, bool allFilters
         mSaveMime = mimeType.name();			// use resolved MIME type
     }
 
-    qCDebug(DESTINATION_LOG) << "->" << saveUrl << "mime" << mSaveMime;
+    qCDebug(DESTINATION_LOG) << "->" << saveUrl.toDisplayString() << "mime" << mSaveMime;
     return (saveUrl);
 }
 
