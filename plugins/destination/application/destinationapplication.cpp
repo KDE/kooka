@@ -69,7 +69,12 @@ void DestinationApplication::imageScanned(ScanImage::Ptr img)
     const QUrl saveUrl = saveTempImage(fmt, img);	// save to temporary file
     if (!saveUrl.isValid()) return;			// could not save image
 
-    mBatchFiles.append(saveUrl);			// add temp file to batch
+    // If not batching multiple files, then add the temporary file to
+    // the batch list as usual and then launch the application immediately.
+    // launchApplication() will remove the file from the batch list, ready
+    // to do the same for the next scan.
+    mBatchFiles.append(saveUrl);
+    if (!multiScanOptions()->flags().testFlag(MultiScanOptions::BatchMultiple)) launchApplication();
 }
 
 
@@ -102,6 +107,8 @@ void DestinationApplication::createGUI(ScanParamsPage *page)
     // also supported as a QImageWriter format (that is, a format that Kooka can
     // save to).
 
+    // TODO: the above comment is obsolete because there is now no trader query
+    // language, do the filtering in the lambda function.
     const KService::List allServices = KApplicationTrader::query([](const KService::Ptr &)
     {
         return (true);
@@ -194,12 +201,14 @@ void DestinationApplication::batchStart(const MultiScanOptions *opts)
 {
     AbstractDestination::batchStart(opts);		// remember the options
     mBatchFiles.clear();				// clear file list
+    mAppService = mAppsCombo->currentData().toString();	// service to open with
+    qCDebug(DESTINATION_LOG) << "destination app" << mAppService;
 }
 
 
 void DestinationApplication::batchEnd(bool ok)
 {
-    if (mBatchFiles.isEmpty()) return;			// no files collected
+    if (mBatchFiles.isEmpty()) return;			// no files to do
     qCDebug(DESTINATION_LOG) << "have" << mBatchFiles.count() << "files, ok?" << ok;
 
     if (!ok)						// problem while scanning
@@ -212,12 +221,16 @@ void DestinationApplication::batchEnd(bool ok)
         return;
     }
 
-    const QString appService = mAppsCombo->currentData().toString();
-    const bool batch = multiScanOptions()->flags() & MultiScanOptions::BatchMultiple;
-    qCDebug(DESTINATION_LOG) << "destination app" << appService << "batch?" << batch;
+    launchApplication();				// if there are any to do
+}
+
+
+void DestinationApplication::launchApplication()
+{
+    qCDebug(DESTINATION_LOG) << "have" << mBatchFiles.count() << "files";
 
     // Open the temporary files with the selected application service.
-    // If the service is "Other" (appService is empty), or if there is
+    // If the service is "Other" (mAppService is empty), or if there is
     // a problem finding the service, then leave 'service' as NULL and
     // the ApplicationLauncherJob will prompt for an application.
     // The temporary files will eventually be removed by KIO.
@@ -226,25 +239,26 @@ void DestinationApplication::batchEnd(bool ok)
     // the application service can only accept a single file at a time, in
     // this case KIO will launch the application once for each file.
     KService::Ptr service;
-    if (!appService.isEmpty())
+    if (!mAppService.isEmpty())
     {
-        service = KService::serviceByDesktopName(appService);
-        if (service==nullptr) qCWarning(DESTINATION_LOG) << "Cannot find service" << appService;
+        service = KService::serviceByDesktopName(mAppService);
+        if (service==nullptr) qCWarning(DESTINATION_LOG) << "Cannot find service" << mAppService;
     }
 
-    while (!mBatchFiles.isEmpty())
-    {
-        KIO::ApplicationLauncherJob *job = new KIO::ApplicationLauncherJob(service);
+    // If not batching multiple scans, launchApplication() will be called as
+    // soon as each individual image is scanned.  Therefore we can assume here
+    // that all of the files in the list are to be batched in one job.
+    KIO::ApplicationLauncherJob *job = new KIO::ApplicationLauncherJob(service);
+    job->setUrls(mBatchFiles);
+    mBatchFiles.clear();				// no more to do
 
-        if (batch)					// all together in one job
-        {
-            job->setUrls(mBatchFiles);
-            mBatchFiles.clear();			// no more to do
-        }						// each file as individual job
-        else job->setUrls(QList<QUrl>() << mBatchFiles.takeFirst());
+    job->setRunFlags(KIO::ApplicationLauncherJob::DeleteTemporaryFiles);
+    job->setUiDelegate(KIO::createDefaultJobUiDelegate(KJobUiDelegate::AutoHandlingEnabled, parentWidget()));
+    job->start();					// ready to go
+}
 
-        job->setRunFlags(KIO::ApplicationLauncherJob::DeleteTemporaryFiles);
-        job->setUiDelegate(KIO::createDefaultJobUiDelegate(KJobUiDelegate::AutoHandlingEnabled, parentWidget()));
-        job->start();					// ready to go
-    }
+
+MultiScanOptions::Capabilities DestinationApplication::capabilities() const
+{
+    return (MultiScanOptions::AcceptBatch|MultiScanOptions::DefaultBatch);
 }

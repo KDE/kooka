@@ -52,10 +52,16 @@ public:
     void saveSettings() const override;
     void batchStart(const MultiScanOptions *opts) override;
     void batchEnd(bool ok) override;
+    MultiScanOptions::Capabilities capabilities() const override;
+
+private:
+    void launchApplication();
 
 private:
     QComboBox *mAppsCombo;
     QComboBox *mFormatCombo;
+
+    QString mAppService;
 
     QList<QUrl> mBatchFiles;
 };
