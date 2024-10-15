@@ -3,7 +3,7 @@
  *  This file is part of Kooka, a scanning/OCR application using	*
  *  Qt <http://www.qt.io> and KDE Frameworks <http://www.kde.org>.	*
  *									*
- *  Copyright (C) 2021      Jonathan Marten <jjm@keelhaul.me.uk>	*
+ *  Copyright (C) 2021-2024   Jonathan Marten <jjm@keelhaul.me.uk>	*
  *									*
  *  Kooka is free software; you can redistribute it and/or modify it	*
  *  under the terms of the GNU Library General Public License as	*
@@ -42,20 +42,48 @@ public:
     explicit DestinationSave(QObject *pnt, const QVariantList &args);
     ~DestinationSave() override = default;
 
+    void batchStart(const MultiScanOptions *opts) override;
     bool scanStarting(ScanImage::ImageType type) override;
     void imageScanned(ScanImage::Ptr img) override;
+
+    MultiScanOptions::Capabilities capabilities() const override;
     KLocalizedString scanDestinationString() override;
+
     void saveSettings() const override;
 
 private:
-    bool getSaveLocation(ScanImage::ImageType type);
+    QUrl getSaveLocation(ScanImage::ImageType type, bool allFilters);
 
 private:
-    QUrl mSaveUrl;
+    const MultiScanOptions *mMultiOptions;
+
+    // Indicates that this is the first image arriving in a new batch.
+    bool mBatchFirst;
+
+    // If automatic numbering is enabled and a template pattern has
+    // been identified, these describe it.
+    int mAutoLength;
+    QString mAutoPrefix;
+    QString mAutoSuffix;
+
+    // The save URL as entered by the user.  Retained literally.
+    QUrl mLastUserUrl;
+    // The MIME type used to save the previous image.  Retained persistently.
+    QString mLastSaveMime;
+
+    // The MIME type selected by the user, that will be used to
+    // save the current image.
     QString mSaveMime;
 
-    QUrl mLastSaveUrl;
-    QString mLastSaveMime;
+    // The parent directory and the file name to be used to save
+    // the current image.
+    QUrl mSaveLocation;
+    QString mSaveFileName;
+
+
+
+    int mLastUsedNumber;
+
 };
 
 #endif							// DESTINATIONSAVE_H
