@@ -55,8 +55,6 @@ private:
     QUrl getSaveLocation(ScanImage::ImageType type, bool allFilters);
 
 private:
-    const MultiScanOptions *mMultiOptions;
-
     // Indicates that this is the first image arriving in a new batch.
     bool mBatchFirst;
 
@@ -80,10 +78,10 @@ private:
     QUrl mSaveLocation;
     QString mSaveFileName;
 
-
-
+    // The next number that will be used for saving.  Retained for efficiency
+    // (so that it is not necessary to search starting from 1 every time),
+    // unless the destination or template pattern changes.
     int mLastUsedNumber;
-
 };
 
 #endif							// DESTINATIONSAVE_H

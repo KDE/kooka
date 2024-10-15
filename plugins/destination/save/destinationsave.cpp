@@ -69,7 +69,6 @@ DestinationSave::DestinationSave(QObject *pnt, const QVariantList &args)
 void DestinationSave::batchStart(const MultiScanOptions *opts)
 {
     mBatchFirst = true;					// note this is a new batch
-    mMultiOptions = opts;				// save options for reference
     mSaveMime.clear();					// reset for start of batch
 
     AbstractDestination::batchStart(opts);
@@ -78,7 +77,7 @@ void DestinationSave::batchStart(const MultiScanOptions *opts)
 
 bool DestinationSave::scanStarting(ScanImage::ImageType type)
 {
-    const MultiScanOptions::Flags f = mMultiOptions->flags();
+    const MultiScanOptions::Flags f = multiScanOptions()->flags();
     QUrl saveUrl;
 
     // If this is the subsequent scan in a batch (which implies that
