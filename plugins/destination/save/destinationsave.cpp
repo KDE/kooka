@@ -515,11 +515,19 @@ QUrl DestinationSave::getSaveLocation(ScanImage::ImageType type, bool allFilters
         const QMimeType mimeType = db.mimeTypeForUrl(saveUrl);
         if (!ImageFormat::formatForMime(mimeType).isValid())
         {
-// TODO: better report for application/octet-stream, "Cannot determine image format from file extension"
-            KMessageBox::error(parentWidget(),
-                               xi18nc("@info", "Cannot save to <filename>%2</filename><nl/>The image format <resource>%1</resource> is not supported.",
-                                      mimeType.name(), saveUrl.toDisplayString()),
-                               i18n("Cannot Save Image"));
+            QString msg;
+            if (mimeType.isDefault())			// application/octet-stream
+            {
+                msg = xi18nc("@info", "Cannot save to <filename>%2</filename><nl/>Could not find an image format for the file name <filename>%1</filename>.",
+                             saveUrl.fileName(), saveUrl.toDisplayString());
+            }
+            else					// known but not an image format
+            {
+                msg = xi18nc("@info", "Cannot save to <filename>%2</filename><nl/>The image format <resource>%1</resource> is not supported.",
+                             mimeType.name(), saveUrl.toDisplayString());
+            }
+
+            KMessageBox::error(parentWidget(), msg, i18n("Cannot Save Image"));
             return (QUrl());
         }
 
