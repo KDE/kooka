@@ -57,6 +57,7 @@ public:
 
     KLocalizedString scanDestinationString() override;
     void saveSettings() const override;
+    MultiScanOptions::Capabilities capabilities() const override;
 
     void batchStart(const MultiScanOptions *opts) override;
     void batchEnd(bool ok) override;
@@ -66,11 +67,17 @@ private slots:
     void slotShareFinished(const QJsonObject &output, int error, const QString &errorMessage);
 
 private:
+    void launchShare();
+
+private:
     Purpose::AlternativesModel *mModel;
     Purpose::Menu *mMenu;
 
     QComboBox *mShareCombo;
     QComboBox *mFormatCombo;
+
+    QString mShareService;
+    QString mMimeName;
 
     QList<QUrl> mSaveUrls;
 };
