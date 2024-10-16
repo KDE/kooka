@@ -61,44 +61,65 @@ DestinationPrint::~DestinationPrint()
 }
 
 
-bool DestinationPrint::imageScanned(ScanImage::Ptr img)
+void DestinationPrint::batchStart(const MultiScanOptions *opts)
 {
-    qCDebug(DESTINATION_LOG) << "received image size" << img->size();
+    AbstractDestination::batchStart(opts);
+    mBatchFirst = true;
 
     if (mPrinter==nullptr)				// create KookaPrint if needed
     {
         mPrinter = new KookaPrint;
+        qCDebug(DESTINATION_LOG) << "printing to" << mPrinter->printerName();
         mPrinter->setCopyMode(true);
     }
-    mPrinter->setImage(img.data());			// pass image to printer
+}
 
-    if (!mImmediateCheck->isChecked())			// want the print dialogue
+
+bool DestinationPrint::imageScanned(ScanImage::Ptr img)
+{
+    qCDebug(DESTINATION_LOG) << "received image size" << img->size();
+
+    if (mBatchFirst)					// first image in a batch
     {
-        QPrintDialog d(mPrinter, parentWidget());
-        d.setWindowTitle(i18nc("@title:window", "Print Image"));
-        d.setOptions(QAbstractPrintDialog::PrintToFile|QAbstractPrintDialog::PrintShowPageSize);
+        mPrinter->setBaseImage(img.data());		// use as reference image
 
-        ImgPrintDialog imgTab(img, mPrinter);		// create tab for our options
-        d.setOptionTabs(QList<QWidget *>() << &imgTab);	// add tab to print dialogue
-
-        if (!d.exec()) return (false);			// open the dialogue
-        QString msg = imgTab.checkValid();		// check that settings are valid
-        if (!msg.isEmpty())				// if not, display error message
+        if (!mImmediateCheck->isChecked())		// want the print dialogue
         {
-            KMessageBox::error(parentWidget(),
-                               i18nc("@info", "Invalid print options were specified:\n\n%1", msg),
-                               i18nc("@title:window", "Cannot Print"));
-            return (false);
+            QPrintDialog d(mPrinter, parentWidget());
+            d.setWindowTitle(i18nc("@title:window", "Print Image"));
+            d.setOptions(QAbstractPrintDialog::PrintToFile|QAbstractPrintDialog::PrintShowPageSize);
+
+            ImgPrintDialog imgTab(img, mPrinter);		// create tab for our options
+            d.setOptionTabs(QList<QWidget *>() << &imgTab);	// add tab to print dialogue
+
+            if (!d.exec()) return (false);			// open the dialogue
+            QString msg = imgTab.checkValid();			// check that settings are valid
+            if (!msg.isEmpty())					// if not, display error message
+            {
+                KMessageBox::error(parentWidget(),
+                                   i18nc("@info", "Invalid print options were specified:\n\n%1", msg),
+                                   i18nc("@title:window", "Cannot Print"));
+                return (false);
+            }
+
+            imgTab.updatePrintParameters();		// set final printer options
         }
 
-        imgTab.updatePrintParameters();			// set final printer options
+        mPrinter->startPrint();				// start the print job
+        mBatchFirst = false;				// note now subsequent in batch
     }
 
-    qDebug() << "printing to" << mPrinter->printerName();
-    mPrinter->printImage();				// print the image
+    mPrinter->printImage(img.data());			// print the image
 
     mImmediateCheck->setEnabled(true);			// now can skip dialogue next time
     return (true);
+}
+
+
+void DestinationPrint::batchEnd(bool ok)
+{
+    if (!ok) mPrinter->abort();				// try to cancel the job
+    mPrinter->endPrint();				// clean up anyway
 }
 
 
@@ -121,4 +142,10 @@ KLocalizedString DestinationPrint::scanDestinationString()
 void DestinationPrint::saveSettings() const
 {
     // TODO: save settings from mPrinter
+}
+
+
+MultiScanOptions::Capabilities DestinationPrint::capabilities() const
+{
+    return (MultiScanOptions::AcceptBatch|MultiScanOptions::AlwaysBatch);
 }
