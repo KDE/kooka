@@ -860,7 +860,7 @@ KScanDevice::Status KScanDevice::acquireScan()
     }
 
     // Main loop of the individual or batch scan.
-    bool first = true;
+    int scanCount = 0;
     if (mScanningAdf) qCDebug(LIBKOOKASCAN_LOG) << "Starting ADF loop";
     const MultiScanOptions::Flags f = mMultiScanOptions.flags();
     if (f & MultiScanOptions::MultiScan) qCDebug(LIBKOOKASCAN_LOG) << "Multi scan options" << qPrintable(mMultiScanOptions.toString());
@@ -872,9 +872,9 @@ KScanDevice::Status KScanDevice::acquireScan()
         // If the ADF is empty the first time through the loop, then it
         // is an error which the user should see.  For subsequent scans,
         // it just means that the scanning is finished.
-        if (!first && stat==KScanDevice::AdfNoDoc)
+        if (scanCount>0 && stat==KScanDevice::AdfNoDoc)
         {
-            qCDebug(LIBKOOKASCAN_LOG) << "ADF empty, scan finished";
+            qCDebug(LIBKOOKASCAN_LOG) << "ADF empty after" << scanCount << "scans";
             stat = KScanDevice::AdfEmpty;
         }
 
@@ -887,6 +887,10 @@ KScanDevice::Status KScanDevice::acquireScan()
         // If doing a single scan, whether from the ADF or flatbed,
         // then exit the loop now.
         if (!(f & MultiScanOptions::MultiScan)) return (stat);
+
+        // Count up the scans to indicate that this is now not the
+        // first time through the ADF loop.
+        ++scanCount;
 
         // If doing a manual or delayed wait, then ask or indicate to
         // the user respectively.
@@ -913,12 +917,12 @@ KScanDevice::Status KScanDevice::acquireScan()
 
             if (res==QDialogButtonBox::Cancel)
             {
-                qCDebug(LIBKOOKASCAN_LOG) << "User cancelled batch";
+                qCDebug(LIBKOOKASCAN_LOG) << "User cancelled batch after" << scanCount << "scans";
                 return (KScanDevice::Cancelled);
             }
             if (res==QDialogButtonBox::Close)
             {
-                qCDebug(LIBKOOKASCAN_LOG) << "Manual end of batch";
+                qCDebug(LIBKOOKASCAN_LOG) << "Manual end of batch after" << scanCount << "scans";
                 return (KScanDevice::Ok);
             }
         }
@@ -931,10 +935,6 @@ KScanDevice::Status KScanDevice::acquireScan()
         //if (!mScanningAdf) return (stat);
         //
         // TODO: could happen for flatbed multi scan, may need a minimum delay here
-
-        // Otherwise, just note that this is now not the first time through
-        // the ADF loop.
-        first = false;
     }
 }
 
