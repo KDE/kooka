@@ -61,7 +61,7 @@ DestinationPrint::~DestinationPrint()
 }
 
 
-void DestinationPrint::imageScanned(ScanImage::Ptr img)
+bool DestinationPrint::imageScanned(ScanImage::Ptr img)
 {
     qCDebug(DESTINATION_LOG) << "received image size" << img->size();
 
@@ -81,14 +81,14 @@ void DestinationPrint::imageScanned(ScanImage::Ptr img)
         ImgPrintDialog imgTab(img, mPrinter);		// create tab for our options
         d.setOptionTabs(QList<QWidget *>() << &imgTab);	// add tab to print dialogue
 
-        if (!d.exec()) return;				// open the dialogue
+        if (!d.exec()) return (false);			// open the dialogue
         QString msg = imgTab.checkValid();		// check that settings are valid
         if (!msg.isEmpty())				// if not, display error message
         {
             KMessageBox::error(parentWidget(),
                                i18nc("@info", "Invalid print options were specified:\n\n%1", msg),
                                i18nc("@title:window", "Cannot Print"));
-            return;
+            return (false);
         }
 
         imgTab.updatePrintParameters();			// set final printer options
@@ -98,6 +98,7 @@ void DestinationPrint::imageScanned(ScanImage::Ptr img)
     mPrinter->printImage();				// print the image
 
     mImmediateCheck->setEnabled(true);			// now can skip dialogue next time
+    return (true);
 }
 
 

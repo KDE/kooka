@@ -92,10 +92,11 @@ bool DestinationGallery::scanStarting(ScanImage::ImageType type)
 }
 
 
-void DestinationGallery::imageScanned(ScanImage::Ptr img)
+bool DestinationGallery::imageScanned(ScanImage::Ptr img)
 {
     qCDebug(DESTINATION_LOG) << "received image size" << img->size();
     gallery()->addImage(img);
+    return (true);
 }
 
 

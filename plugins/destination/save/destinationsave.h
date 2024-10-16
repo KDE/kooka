@@ -44,7 +44,7 @@ public:
 
     void batchStart(const MultiScanOptions *opts) override;
     bool scanStarting(ScanImage::ImageType type) override;
-    void imageScanned(ScanImage::Ptr img) override;
+    bool imageScanned(ScanImage::Ptr img) override;
 
     MultiScanOptions::Capabilities capabilities() const override;
     KLocalizedString scanDestinationString() override;

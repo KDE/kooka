@@ -281,7 +281,7 @@ bool DestinationSave::scanStarting(ScanImage::ImageType type)
 }
 
 
-void DestinationSave::imageScanned(ScanImage::Ptr img)
+bool DestinationSave::imageScanned(ScanImage::Ptr img)
 {
     qCDebug(DESTINATION_LOG) << "received image size" << img->size();
 
@@ -296,8 +296,8 @@ void DestinationSave::imageScanned(ScanImage::Ptr img)
 
     // These should now never happen, because getSaveLocation() was
     // called unconditionally above.
-    if (!fmt.isValid()) return;
-    if (!mSaveLocation.isValid()) return;
+    if (!fmt.isValid()) return (false);
+    if (!mSaveLocation.isValid()) return (false);
 
     const QString parentPath = mSaveLocation.adjusted(QUrl::StripTrailingSlash).path(QUrl::FullyDecoded);
 
@@ -388,6 +388,7 @@ void DestinationSave::imageScanned(ScanImage::Ptr img)
                                xi18nc("@info", "Cannot save image to <filename>%1</filename><nl/><message>%2</message>",
                                       saveUrl.toDisplayString(), saver.errorString(status)),
                                i18n("Cannot Save Image"));
+            return (false);
         }
     }
     else						// save location is not local
@@ -397,7 +398,7 @@ void DestinationSave::imageScanned(ScanImage::Ptr img)
         // The save location is remote.  Save a temporary image,
 	// then use KIO to move it to the destination location.
         QUrl tempUrl = saveTempImage(fmt, img);		// save a temporary image
-        if (!tempUrl.isValid()) return;			// temp image save failed
+        if (!tempUrl.isValid()) return (false);		// temp image save failed
 
         KIO::FileCopyJob *job = KIO::file_move(tempUrl, saveUrl);
         job->setUiDelegate(KIO::createDefaultJobUiDelegate(KJobUiDelegate::AutoHandlingEnabled, parentWidget()));
@@ -410,6 +411,7 @@ void DestinationSave::imageScanned(ScanImage::Ptr img)
     mLastSaveMime = mSaveMime;
 
     mBatchFirst = false;				// continuing with batch
+    return (true);
 }
 
 

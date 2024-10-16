@@ -52,7 +52,7 @@ public:
     explicit DestinationShare(QObject *pnt, const QVariantList &args);
     ~DestinationShare() override = default;
 
-    void imageScanned(ScanImage::Ptr img) override;
+    bool imageScanned(ScanImage::Ptr img) override;
     void createGUI(ScanParamsPage *page) override;
 
     KLocalizedString scanDestinationString() override;

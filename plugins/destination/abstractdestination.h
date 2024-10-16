@@ -85,8 +85,10 @@ public:
      * save or send the image as required.
      *
      * @param img The image that has been scanned,
+     * @return @c true if the image was accepted, or @c false if it
+     * could not be accepted or the user cancelled.
      **/
-    virtual void imageScanned(ScanImage::Ptr img) = 0;
+    virtual bool imageScanned(ScanImage::Ptr img) = 0;
 
     /**
      * Get a description string for the scan destination.

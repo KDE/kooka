@@ -879,9 +879,9 @@ KScanDevice::Status KScanDevice::acquireScan()
         }
 
         // Signal the scan status to the application, adjusted for the
-        // ADF state as above.  Then, if any other error has happened,
-        // then exit the loop now.
-        scanFinished(stat);
+        // ADF state as above.  This may in turn adjust the final state.
+        // Then, if any error has happened, exit the loop now.
+        stat = scanFinished(stat);
         if (stat!=KScanDevice::Ok) return (stat);
 
         // If doing a single scan, whether from the ADF or flatbed,
@@ -1527,7 +1527,7 @@ default:    qCWarning(LIBKOOKASCAN_LOG) << "Undefined SANE format" << mSaneParam
 }
 
 
-void KScanDevice::scanFinished(KScanDevice::Status stat)
+KScanDevice::Status KScanDevice::scanFinished(KScanDevice::Status stat)
 {
     qCDebug(LIBKOOKASCAN_LOG) << "status" << stat;
 
@@ -1563,6 +1563,19 @@ void KScanDevice::scanFinished(KScanDevice::Status stat)
 	{
 	    emit sigNewImage(mScanImage);
 	}
+
+        // The signal above will have been delivered to the destination plugin's
+        // imageScanned() via KookaView::slotNewImageScanned().  If the plugin
+        // cannot accept the image, or if there is a user interaction there which
+        // they cancelled, this will have called our slotStopScanning() which will
+        // have set mScanningState to KScanDevice::ScanStopNow.  If this happened
+        // then treat it as if the scan was cancelled, but first call sane_cancel()
+        // below because nothing else will have done.
+        if (mScanningState==KScanDevice::ScanStopNow)
+        {
+            qCDebug(LIBKOOKASCAN_LOG) << "destination did not accept image";
+            stat = KScanDevice::NotSaved;
+        }
     }
 
     if (stat!=KScanDevice::Ok && stat!=KScanDevice::Cancelled)
@@ -1579,7 +1592,11 @@ void KScanDevice::scanFinished(KScanDevice::Status stat)
         qCDebug(LIBKOOKASCAN_LOG) << "calling sane_cancel() for status" << stat;
         sane_cancel(mScannerHandle);
         ScanDevices::self()->reactivateNetworkProxy();
+
     }
+
+    // This status is never reported to the outside.
+    if (stat==KScanDevice::NotSaved) stat = KScanDevice::Cancelled;
 
     // Tell the application that the scan has finished.
     emit sigScanFinished(stat);
@@ -1589,6 +1606,7 @@ void KScanDevice::scanFinished(KScanDevice::Status stat)
     // counting and deletion.
 
     mScanningState = KScanDevice::ScanIdle;
+    return (stat);					// may have been updated
 }
 
 
@@ -1835,6 +1853,7 @@ case KScanDevice::OptionNotActive:	return (i18n("Not active"));	// never during 
 case KScanDevice::NotSupported:		return (i18n("Not supported"));
 case KScanDevice::AdfNoDoc:		return (i18n("ADF no document loaded"));
 case KScanDevice::AdfEmpty:		return (i18n("ADF empty"));	// shouldn't be reported
+case KScanDevice::NotSaved:		return (i18n("Not accepted"));	// shouldn't be reported
 default:				return (i18n("Unknown status %1", stat));
     }
 }

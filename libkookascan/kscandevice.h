@@ -90,7 +90,8 @@ public:
         OptionNotActive,
         NotSupported,
         AdfNoDoc,					// empty for the first scan
-        AdfEmpty					// empty for subsequent scans
+        AdfEmpty,					// empty for subsequent scans
+        NotSaved,					// not accepted by destination
     };
 
     /**
@@ -655,7 +656,7 @@ private:
 
     KScanDevice::Status acquireData(bool isPreview);
     KScanDevice::Status startAcquire(ScanImage::ImageType fmt);
-    void scanFinished(KScanDevice::Status status);
+    KScanDevice::Status scanFinished(KScanDevice::Status status);
     void updateAdfState(const KScanOption *so = nullptr);
 
     /**

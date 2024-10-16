@@ -45,7 +45,7 @@ public:
     explicit DestinationPrint(QObject *pnt, const QVariantList &args);
     ~DestinationPrint() override;
 
-    void imageScanned(ScanImage::Ptr img) override;
+    bool imageScanned(ScanImage::Ptr img) override;
     void createGUI(ScanParamsPage *page) override;
 
     KLocalizedString scanDestinationString() override;

@@ -49,10 +49,11 @@ DestinationClipboard::DestinationClipboard(QObject *pnt, const QVariantList &arg
 }
 
 
-void DestinationClipboard::imageScanned(ScanImage::Ptr img)
+bool DestinationClipboard::imageScanned(ScanImage::Ptr img)
 {
     qCDebug(DESTINATION_LOG) << "received image size" << img->size();
     QGuiApplication::clipboard()->setImage(*img.data());
+    return (true);
 }
 
 

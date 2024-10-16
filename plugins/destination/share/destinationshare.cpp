@@ -70,19 +70,20 @@ DestinationShare::DestinationShare(QObject *pnt, const QVariantList &args)
 }
 
 
-void DestinationShare::imageScanned(ScanImage::Ptr img)
+bool DestinationShare::imageScanned(ScanImage::Ptr img)
 {
     const QString mimeName = mFormatCombo->currentData().toString();
     qCDebug(DESTINATION_LOG) << "received image size" << img->size() << "type" << img->imageType() << "mime" << mimeName;
 
     ImageFormat fmt = getSaveFormat(mimeName, img);	// get format for saving image
-    if (!fmt.isValid()) return;				// must have this now
+    if (!fmt.isValid()) return (false);			// must have this now
     const QUrl saveUrl = saveTempImage(fmt, img);	// save to temporary file
-    if (!saveUrl.isValid()) return;			// could not save image
+    if (!saveUrl.isValid()) return (false);		// could not save image
 
     // See DestinationApplication::imageScanned() for explanation.
     mSaveUrls.append(saveUrl);
     if (!multiScanOptions()->flags().testFlag(MultiScanOptions::BatchMultiple)) launchShare();
+    return (true);
 }
 
 

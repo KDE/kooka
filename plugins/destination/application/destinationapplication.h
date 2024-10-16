@@ -45,7 +45,7 @@ public:
     explicit DestinationApplication(QObject *pnt, const QVariantList &args);
     ~DestinationApplication() override = default;
 
-    void imageScanned(ScanImage::Ptr img) override;
+    bool imageScanned(ScanImage::Ptr img) override;
 
     KLocalizedString scanDestinationString() override;
     void createGUI(ScanParamsPage *page) override;
