@@ -272,7 +272,12 @@ void MultiScanDialog::slotGuiChange()
         mBatchMultipleCheck->setChecked(false);
         mBatchMultipleCheck->setEnabled(false);
     }
-    if (mCapabilities.testFlag(MultiScanOptions::AlwaysBatch)) mBatchMultipleCheck->setChecked(true);
+
+    if (mCapabilities.testFlag(MultiScanOptions::AlwaysBatch))
+    {
+        mBatchMultipleCheck->setChecked(true);
+        mBatchMultipleCheck->setEnabled(false);
+    }
 
     if (!mCapabilities.testFlag(MultiScanOptions::FileNames))
     {
