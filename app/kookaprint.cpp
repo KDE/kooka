@@ -57,7 +57,8 @@ KookaPrint::KookaPrint()
     : QPrinter(QPrinter::HighResolution)
 {
     qCDebug(KOOKA_LOG);
-    m_image = nullptr;
+    m_baseSize = QSize();
+    m_painter = nullptr;
 
     // Initial default print parameters
     m_scaleOption = static_cast<KookaPrint::ScaleOption>(KookaSettings::printScaleOption());
@@ -74,14 +75,26 @@ KookaPrint::KookaPrint()
 }
 
 
+void KookaPrint::setBaseImage(const QImage *img)
+{
+    m_baseSize = img->size();
+    m_baseResX = img->dotsPerMeterX();
+    m_baseResY = img->dotsPerMeterY();
+
+    qCDebug(KOOKA_LOG) << "size (pix)" << m_baseSize
+                       << "dpi X" << DPM_TO_DPI(m_baseResX)
+                       << "dpi Y" << DPM_TO_DPI(m_baseResY);
+}
+
+
 void KookaPrint::recalculatePrintParameters()
 {
-    if (m_image==nullptr) return;				// no image to print
+    if (m_baseSize.isNull()) return;			// no reference to use
 
     qCDebug(KOOKA_LOG) << "image:";
-    qCDebug(KOOKA_LOG) << "  size (pix) =" << m_image->size();
-    qCDebug(KOOKA_LOG) << "  dpi X =" << DPM_TO_DPI(m_image->dotsPerMeterX());
-    qCDebug(KOOKA_LOG) << "  dpi Y =" << DPM_TO_DPI(m_image->dotsPerMeterY());
+    qCDebug(KOOKA_LOG) << "  size (pix) =" << m_baseSize;
+    qCDebug(KOOKA_LOG) << "  dpi X =" << DPM_TO_DPI(m_baseResX);
+    qCDebug(KOOKA_LOG) << "  dpi Y =" << DPM_TO_DPI(m_baseResY);
     qCDebug(KOOKA_LOG) << "printer:";
     qCDebug(KOOKA_LOG) << "  name =" << printerName();
     qCDebug(KOOKA_LOG) << "  colour mode =" << colorMode();
@@ -106,13 +119,12 @@ void KookaPrint::recalculatePrintParameters()
 
     // Calculate the size at which the image is to be printed,
     // depending on the scaling option.
-
-    mImageWidthPix = m_image->width();			// image size in pixels
-    mImageHeightPix = m_image->height();
+    mImageWidthPix = m_baseSize.width();		// image size in pixels
+    mImageHeightPix = m_baseSize.height();
 
     if (m_scaleOption==KookaPrint::ScaleScan)		// Original scan size
     {
-        const int imageRes = m_scanResolution!=-1 ? DPI_TO_DPM(m_scanResolution) : m_image->dotsPerMeterX();
+        const int imageRes = m_scanResolution!=-1 ? DPI_TO_DPM(m_scanResolution) : m_baseResX;
 	Q_ASSERT(imageRes>0);				// dots per metre
         mPrintWidthMm = double(mImageWidthPix)/imageRes*1000;
         mPrintHeightMm = double(mImageHeightPix)/imageRes*1000;
@@ -178,7 +190,6 @@ void KookaPrint::recalculatePrintParameters()
 
     // Now that we have the image size to be printed,
     // see if cut marks are required.
-
     mPageWidthAdjustedMm = mPageWidthMm;
     mPageHeightAdjustedMm = mPageHeightMm;
 
@@ -213,7 +224,6 @@ void KookaPrint::recalculatePrintParameters()
     // that it is centered.  I'm not sure whether this is the right thing
     // to do, but it is implied by tool tips set in ImgPrintDialog.
     // TODO: maybe make it an option
-
     if (onOnePage)
     {
         int widthSpareMm = mPageWidthAdjustedMm-mPrintWidthMm;
@@ -224,7 +234,6 @@ void KookaPrint::recalculatePrintParameters()
 
     // Calculate how many parts (including partial parts)
     // the image needs to be sliced up into.
-
     double ipart;
     double fpart = modf(mPrintWidthMm/mPageWidthAdjustedMm, &ipart);
     //qCDebug(KOOKA_LOG) << "for cols ipart" << ipart << "fpart" << fpart;
@@ -242,11 +251,12 @@ void KookaPrint::recalculatePrintParameters()
 }
 
 
-void KookaPrint::printImage()
+void KookaPrint::startPrint()
 {
-    if (m_image==nullptr) return;			// no image to print
+    if (m_baseSize.isNull()) return;			// no reference image
+
     qCDebug(KOOKA_LOG) << "starting";
-    QGuiApplication::setOverrideCursor(Qt::WaitCursor);	// this may take some time
+    recalculatePrintParameters();			// ensure up to date
 
     if (!m_copyMode)
     {
@@ -261,26 +271,46 @@ void KookaPrint::printImage()
     }
     else qCDebug(KOOKA_LOG) << "copy mode, not saving print parameters";
 
-#if 1
     // TODO: does this work?
     if (m_lowResDraft) setResolution(75);
-#endif
 
     // Create the painter after all the print parameters have been set.
-    QPainter painter(this);
-    painter.setRenderHint(QPainter::SmoothPixmapTransform);
+    m_painter = new QPainter(this);
+    m_painter->setRenderHint(QPainter::SmoothPixmapTransform);
+
+    // Track the total pages printed (for all images)
+    m_totalPages = 0;
+}
+
+
+void KookaPrint::printImage(const QImage *img)
+{
+    qCDebug(KOOKA_LOG) << "size (pix)" << img->size()
+                       << "dpi X" << DPM_TO_DPI(img->dotsPerMeterX())
+                       << "dpi Y" << DPM_TO_DPI(img->dotsPerMeterY());
+
+    if (img->size()!=m_baseSize || img->dotsPerMeterX()!=m_baseResX || img->dotsPerMeterY()!=m_baseResY)
+    {
+        qWarning(KOOKA_LOG) << "print image different size/resolution to reference image";
+    }
+
+    QGuiApplication::setOverrideCursor(Qt::WaitCursor);	// this may take some time
+
+    // The previous printImage() will not have done a newPage() for the
+    // last page of its series, so that the print does not end with a
+    // blank page.  So if this is not the first image to be printed in
+    // a job, it needs to start on a new page.
+    if (m_totalPages>0) newPage();
 
     // The image is to be printed as 'mPrintColumns' columns in 'mPrintRows'
     // rows. Each whole slice is 'sliceWidthPix' pixels wide and 'sliceHeightPix'
     // pixels high;  the last slice in each row and column may be smaller.
-
     int sliceWidthPix = qRound(mImageWidthPix*mPageWidthAdjustedMm/mPrintWidthMm);
     int sliceHeightPix = qRound(mImageHeightPix*mPageHeightAdjustedMm/mPrintHeightMm);
     qCDebug(KOOKA_LOG) << "slice size =" << QSize(sliceWidthPix, sliceHeightPix);
 
     // Print columns and rows in this order, so that in the usual printer
     // and alignment case the sheets line up corresponding with the columns.
-
     const int totalPages = mPrintColumns*mPrintRows;
     int page = 1;
 #ifdef PRINT_ORDER_COLUMNS
@@ -313,17 +343,26 @@ void KookaPrint::printImage()
 
             qCDebug(KOOKA_LOG) << " " << sourceRect << "->" << targetRect;
             // The markers are drawn first so that the image will overwrite them.
-            drawCornerMarkers(&painter, targetRect, row, col, mPrintRows, mPrintColumns);
+            drawCornerMarkers(m_painter, targetRect, row, col, mPrintRows, mPrintColumns);
             // Then the image rectangle.
-            painter.drawImage(targetRect, *m_image, sourceRect);
+            m_painter->drawImage(targetRect, *img, sourceRect);
 
             ++page;
             if (page<=totalPages) newPage();		// not for the last page
         }
     }
 
+    m_totalPages += totalPages;				// count up pages for this image
     QGuiApplication::restoreOverrideCursor();
-    qCDebug(KOOKA_LOG) << "done";
+}
+
+
+void KookaPrint::endPrint()
+{
+    delete m_painter;					// finished with the painter,
+    m_painter = nullptr;				// so finish the print job
+
+    qCDebug(KOOKA_LOG) << "done, total pages" << m_totalPages;
 }
 
 
@@ -453,6 +492,7 @@ void KookaPrint::drawCornerMarkers(QPainter *painter, const QRect &targetRect,
 
     // Top left
     QPoint p = targetRect.topLeft();
+    // TODO: not for "None", or another option "Corner marks only"?
     drawMarkerAroundPoint(painter, p);
     if (multiPages)
     {

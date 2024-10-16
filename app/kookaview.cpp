@@ -670,7 +670,7 @@ void KookaView::print()
 
     // create a KookaPrint (subclass of a QPrinter)
     KookaPrint printer;
-    printer.setImage(img.data());
+    printer.setBaseImage(img.data());
 
     QPrintDialog d(&printer, this);
     d.setWindowTitle(i18nc("@title:window", "Print Image"));
@@ -695,7 +695,9 @@ void KookaView::print()
     }
 
     imgTab.updatePrintParameters();			// set final printer options
-    printer.printImage();				// print the image
+    printer.startPrint();				// start the print job
+    printer.printImage(img.data());			// print the image
+    printer.endPrint();					// finish the print job
 }
 
 

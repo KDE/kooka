@@ -185,6 +185,9 @@ ImgPrintDialog::ImgPrintDialog(ScanImage::Ptr img, KookaPrint *prt, QWidget *pnt
     connect(m_ratio, &QCheckBox::toggled, mUpdateTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
     vbl->addWidget(m_ratio);
 
+    // TODO: need an option "Ignore print margins", default for copy mode
+    // so as to be able to get an actual size copy
+
     // Draft Print option
     m_psDraft = new QCheckBox(i18nc("@option:check", "Low resolution (fast draft print)"), this);
     m_psDraft->setToolTip(i18nc("@info:tooltip", "<div>Print at as low a resolution as possible. This may not work as intended on all printers.</div>"));
