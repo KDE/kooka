@@ -341,7 +341,7 @@ void KookaPrint::printImage(const QImage *img)
             int targetHeightPix = qRound((mPageHeightAdjustedMm*mPrintResolution)*(double(thisHeightPix)/sliceHeightPix));
             const QRect targetRect(mPrintLeftPix, mPrintTopPix, targetWidthPix, targetHeightPix);
 
-            qCDebug(KOOKA_LOG) << " " << sourceRect << "->" << targetRect;
+            qCDebug(KOOKA_LOG) << " rect" << sourceRect << "->" << targetRect;
             // The markers are drawn first so that the image will overwrite them.
             drawCornerMarkers(m_painter, targetRect, row, col, mPrintRows, mPrintColumns);
             // Then the image rectangle.
@@ -462,8 +462,11 @@ void KookaPrint::drawCutSign(QPainter *painter, const QPoint &p, int num, Qt::Co
 void KookaPrint::drawCornerMarkers(QPainter *painter, const QRect &targetRect,
                                    int row, int col, int maxRows, int maxCols)
 {
-    const bool multiPages = (maxRows>1 || maxCols>1);
+    if (m_cutsOption==KookaPrint::CutMarksNone) return;	// no marks at all
 
+    const bool multiPages = (maxRows>1 || maxCols>1);
+    if (!multiPages && m_cutsOption!=KookaPrint::CutMarksAlways) return;
+							// no marks for a single page
     const bool firstColumn = (col==0);
     const bool lastColumn = (col==(maxCols-1));
     const bool firstRow = (row==0);
@@ -492,7 +495,6 @@ void KookaPrint::drawCornerMarkers(QPainter *painter, const QRect &targetRect,
 
     // Top left
     QPoint p = targetRect.topLeft();
-    // TODO: not for "None", or another option "Corner marks only"?
     drawMarkerAroundPoint(painter, p);
     if (multiPages)
     {
@@ -561,4 +563,5 @@ void KookaPrint::setCopyMode(bool on)
 {
     qCDebug(KOOKA_LOG) << on;
     m_copyMode = on;
+    if (on) m_cutsOption = KookaPrint::CutMarksNone;
 }
