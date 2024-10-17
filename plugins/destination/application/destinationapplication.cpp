@@ -92,33 +92,14 @@ void DestinationApplication::createGUI(ScanParamsPage *page)
 {
     // We do not yet know the eventual image format of the scanned image.
     // Therefore we would like, here in the GUI, to offer all of the known
-    // applications that can handle any image type.  However, it does not seem
-    // to be possible to express this in the trader query language;  according
-    // to https://techbase.kde.org/Development/Tutorials/Services/Traders a
-    // query such as
-    //
-    //   'image/' subin ServiceTypes
-    //
-    // should perform a substring match on all of the list entries.  However,
-    // this sort of query appears to return nothing.
-    //
-    // Instead we query all of the application service types and then examine
-    // their supported MIME types.  The criterion for including an application
-    // is that it supports an image MIME type (starting with "image/") which is
-    // also supported as a QImageWriter format (that is, a format that Kooka can
-    // save to).
-
-    // TODO: the above comment is obsolete because there is now no trader query
-    // language, do the filtering in the lambda function.
-    const KService::List allServices = KApplicationTrader::query([](const KService::Ptr &)
-    {
-        return (true);
-    });
-    qCDebug(DESTINATION_LOG) << "have" << allServices.count() << "services";
+    // applications that can handle any image type.  So we query all of the
+    // application service types and then examine their supported MIME
+    // types.  The criterion for including an application is that it
+    // supports an image MIME type (starting with "image/") which is also
+    // supported as a QImageWriter format (that is, a format that Kooka
+    // can save to).
     const QList<QMimeType> *imageMimeTypes = ImageFormat::mimeTypes();
-
-    KService::List validServices;
-    for (const KService::Ptr &service : allServices)
+    const KService::List validServices = KApplicationTrader::query([&imageMimeTypes](const KService::Ptr &service)
     {
         // Okular is an odd case.  For whatever reason, the application does
         // not have just one desktop file listing all of the MIME types that
@@ -142,31 +123,31 @@ void DestinationApplication::createGUI(ScanParamsPage *page)
         if (service->desktopEntryName()=="org.kde.okular")
         {
             qCDebug(DESTINATION_LOG) << "accept" << service->desktopEntryName() << "by name";
-            validServices.append(service);
-            continue;
+            return (true);
         }
 
-        if (service->noDisplay()) continue;		// ignore hidden services
-        if (service->mimeTypes().isEmpty()) continue;	// ignore those with no MIME types
-
-        for (const QString &mimeType : service->mimeTypes())
+        if (service->noDisplay()) return (false);		// ignore hidden services
+        if (service->mimeTypes().isEmpty()) return (false);	// ignore those with no MIME types
+        for (const QString &mimeType : service->mimeTypes())	// look at supported MIME types
         {
             if (!mimeType.startsWith("image/")) continue;
             for (const QMimeType &imt : *imageMimeTypes)
-            {						// supports a MIME type that we also do
-                if (imt.inherits(mimeType)) goto found;
+            {
+                if (imt.inherits(mimeType))		// supports a MIME type that we do also
+                {
+                    qCDebug(DESTINATION_LOG) << "accept" << service->desktopEntryName() << "by MIME";
+                    return (true);			// service accepted
+                }
             }
         }
-        continue;					// service not accepted
 
-found:  qCDebug(DESTINATION_LOG) << "accept" << service->desktopEntryName() << "by MIME";
-        validServices.append(service);
-    }
+        return (false);					// service not accepted
+    });
 
     // Now all of the applications that accept file formats that can be
     // saved by Kooka are listed.  Fortunately the original trader query
     // returned them in priority order, so there is no need to sort them.
-    qCDebug(DESTINATION_LOG) << "have" << validServices.count() << "valid services";
+    qCDebug(DESTINATION_LOG) << "have" << validServices.count() << "services";
 
     mAppsCombo = new QComboBox;
 
