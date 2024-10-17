@@ -44,8 +44,6 @@
 #include <qicon.h>
 #include <qaction.h>
 #include <qmenu.h>
-#include <qprintdialog.h>
-#include <qprinter.h>
 #include <qfiledialog.h>
 
 #include <kapplicationtrader.h>
@@ -670,33 +668,10 @@ void KookaView::print()
 
     // create a KookaPrint (subclass of a QPrinter)
     KookaPrint printer;
-    printer.setBaseImage(img.data());
 
-    QPrintDialog d(&printer, this);
-    d.setWindowTitle(i18nc("@title:window", "Print Image"));
-    d.setOptions(QAbstractPrintDialog::PrintToFile|QAbstractPrintDialog::PrintShowPageSize);
+    ImgPrintDialog d(img, &printer, this);
+    if (!d.exec()) return;
 
-    // TODO (investigate): even with the options set as above, the options below still
-    // appear in the print dialogue.  Is this as intended by Qt?
-    //     d.setOption(QAbstractPrintDialog::PrintSelection, false);
-    //     d.setOption(QAbstractPrintDialog::PrintPageRange, false);
-
-    // TODO: common with DestinationPrint, implement a wrapper
-
-    ImgPrintDialog imgTab(img, &printer);		// create tab for our options
-    d.setOptionTabs(QList<QWidget *>() << &imgTab);	// add tab to print dialogue
-
-    if (!d.exec()) return;				// open the dialogue
-    QString msg = imgTab.checkValid();			// check that settings are valid
-    if (!msg.isEmpty())					// if not, display error message
-    {
-        KMessageBox::error(this,
-                           i18nc("@info", "Invalid print options were specified:\n\n%1", msg),
-                           i18nc("@title:window", "Cannot Print"));
-        return;
-    }
-
-    imgTab.updatePrintParameters();			// set final printer options
     printer.startPrint();				// start the print job
     printer.printImage(img.data());			// print the image
     printer.endPrint();					// finish the print job

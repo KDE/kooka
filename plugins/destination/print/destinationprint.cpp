@@ -31,11 +31,9 @@
 #include "destinationprint.h"
 
 #include <qcheckbox.h>
-#include <qprintdialog.h>
 
 #include <kpluginfactory.h>
 #include <klocalizedstring.h>
-#include <kmessagebox.h>
 
 #include "scanparamspage.h"
 #include "kookaprint.h"
@@ -85,39 +83,8 @@ bool DestinationPrint::imageScanned(ScanImage::Ptr img)
 
         if (!mImmediateCheck->isChecked())		// want the print dialogue
         {
-            // Initialising the QPrintDialog seems to not completely honour the
-            // current printer selection and PDF output setting.  Even if the
-            // underlying QPrinter had an outputFormat() of PDF selected, the
-            // printerName() being blank will cause QPrintDialog to select the
-            // system default printer and turn off the PDF output.  Therefore
-            // save the output format here and restore it after the dialogue has
-            // been created.
-            const QPrinter::OutputFormat fmt = mPrinter->outputFormat();
-            const QString name = mPrinter->printerName();
-            qCDebug(DESTINATION_LOG) << "printer name" << name << "format" << fmt;
-
-            QPrintDialog d(mPrinter, parentWidget());
-            d.setWindowTitle(i18nc("@title:window", "Print Image"));
-            d.setOptions(QAbstractPrintDialog::PrintToFile|QAbstractPrintDialog::PrintShowPageSize);
-
-            ImgPrintDialog imgTab(img, mPrinter);		// create tab for our options
-            d.setOptionTabs(QList<QWidget *>() << &imgTab);	// add tab to print dialogue
-
-            mPrinter->setPrinterName(name);		// restore name and output format
-            mPrinter->setOutputFormat(fmt);
-
-            if (!d.exec()) return (false);		// open the dialogue
-
-            QString msg = imgTab.checkValid();		// check that settings are valid
-            if (!msg.isEmpty())				// if not, display error message
-            {
-                KMessageBox::error(parentWidget(),
-                                   i18nc("@info", "Invalid print options were specified:\n\n%1", msg),
-                                   i18nc("@title:window", "Cannot Print"));
-                return (false);
-            }
-
-            imgTab.updatePrintParameters();		// set final printer options
+            ImgPrintDialog d(img, mPrinter, parentWidget());
+            if (!d.exec()) return (false);
         }
 
         mPrinter->startPrint();				// start the print job
