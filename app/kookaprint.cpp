@@ -57,8 +57,8 @@ KookaPrint::KookaPrint()
     : QPrinter(QPrinter::HighResolution)
 {
     qCDebug(KOOKA_LOG);
-    m_baseSize = QSize();
-    m_painter = nullptr;
+    m_baseSize = QSize();				// no reference image set
+    m_painter = nullptr;				// no painter active
 
     // Initial default print parameters
     m_scaleOption = static_cast<KookaPrint::ScaleOption>(KookaSettings::printScaleOption());
@@ -67,16 +67,35 @@ KookaPrint::KookaPrint()
     m_lowResDraft = KookaSettings::printLowResDraft();
     m_cutsOption = static_cast<KookaPrint::CutMarksOption>(KookaSettings::printCutsOption());
 
+    // This needs to be set before the printer name or output format
+    // is set, as setting it afterwards forces the format back to PDF.
     setOutputFileName(KookaSettings::printFileName());
+
+    // The special setting "PDF" is saved in our configuration so that
+    // we can distinguish the case "no printer set - use the default" from
+    // the case "PDF printer set".
+    //
+    // For the PDF case, the printer name can be left as the default but the
+    // output format needs to be set.
+    const QString name = KookaSettings::printDestination();
+    if (name!="PDF") setPrinterName(name);
+    else setOutputFormat(QPrinter::PdfFormat);
 
     m_screenResolution = -1;				// set by caller
     m_scanResolution = -1;				// taken from image
     m_copyMode = false;					// normal print mode
+    m_totalPages = 0;					// nothing printed yet
 }
 
 
 void KookaPrint::setBaseImage(const QImage *img)
 {
+    if (img==nullptr)					// unset the reference image
+    {
+        m_baseSize = QSize();
+        return;
+    }
+
     m_baseSize = img->size();
     m_baseResX = img->dotsPerMeterX();
     m_baseResY = img->dotsPerMeterY();
@@ -258,16 +277,22 @@ void KookaPrint::startPrint()
     qCDebug(KOOKA_LOG) << "starting";
     recalculatePrintParameters();			// ensure up to date
 
+    // TODO: move to ImgPrintDialog wrapper
+
+    // Always save the selected printer, even if not in copy mode.
+    QString name = printerName();
+    if (name.isEmpty()) name = "PDF";
+    KookaSettings::setPrintDestination(name);
+
+    // But only save the other print parameters if not in copy mode.
     if (!m_copyMode)
     {
-        // Save the print parameters used
         KookaSettings::setPrintScaleOption(m_scaleOption);
         KookaSettings::setPrintPrintSize(m_printSize);
         KookaSettings::setPrintMaintainAspect(m_maintainAspect);
         KookaSettings::setPrintLowResDraft(m_lowResDraft);
         KookaSettings::setPrintCutsOption(m_cutsOption);
         KookaSettings::setPrintFileName(outputFileName());
-        KookaSettings::self()->save();
     }
     else qCDebug(KOOKA_LOG) << "copy mode, not saving print parameters";
 

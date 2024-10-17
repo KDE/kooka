@@ -345,6 +345,9 @@
       <default>/tmp/print.pdf</default>
     </entry>
 
+    <entry name="printDestination" key="destination" type="String">
+    </entry>
+
   </group>
 
   <group name="DestinationPlugin">

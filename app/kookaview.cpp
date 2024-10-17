@@ -681,6 +681,8 @@ void KookaView::print()
     //     d.setOption(QAbstractPrintDialog::PrintSelection, false);
     //     d.setOption(QAbstractPrintDialog::PrintPageRange, false);
 
+    // TODO: common with DestinationPrint, implement a wrapper
+
     ImgPrintDialog imgTab(img, &printer);		// create tab for our options
     d.setOptionTabs(QList<QWidget *>() << &imgTab);	// add tab to print dialogue
 
