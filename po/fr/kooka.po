@@ -37,7 +37,7 @@ msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-10-14 00:38+0000\n"
-"PO-Revision-Date: 2024-05-18 09:44+0200\n"
+"PO-Revision-Date: 2024-10-15 17:32+0200\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: French <French <kde-francophone@kde.org>>\n"
 "Language: fr\n"
@@ -2476,10 +2476,9 @@ msgid "Jonathan Marten"
 msgstr "Jonathan Marten "
 
 #: main.cpp:94
-#, fuzzy, kde-format
-#| msgid "Current maintainer, KDE4/KF5 port"
+#, kde-format
 msgid "Current maintainer, KDE4/KF6 port"
-msgstr "Mainteneur actuel, port KDE4 / KDE5"
+msgstr "Mainteneur actuel, portage vers KDE4 / KF6"
 
 #: main.cpp:95
 #, kde-format

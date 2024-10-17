@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-10-14 00:38+0000\n"
-"PO-Revision-Date: 2024-10-14 20:27+0300\n"
+"PO-Revision-Date: 2024-10-15 08:32+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -1794,6 +1794,8 @@ msgid ""
 "<div>Check this to only show recommended file formats for the scan type. "
 "Uncheck it to show all compatible formats.</div>"
 msgstr ""
+"<div>יש לסמן את זה כדי שיופיעו סוגי הקבצים המומלצים לסוג הסריקה בלבד. ביטול "
+"הסימון יציג את כל הסוגים הנתמכים.</div>"
 
 #. i18n: ectx: label, entry (SaverAlwaysUseFormat), group (Files2)
 #: kookasettings.kcfg:91
@@ -1808,6 +1810,8 @@ msgid ""
 "<div>Check this to remember the selected file format for the scanned image "
 "type and not ask for it again.</div>"
 msgstr ""
+"<div>יש לסמן את זה כדי לזכור את סוג הקובץ הנבחר לסוג התמונה שנסרקה ולא לשאול "
+"שוב.</div>"
 
 #. i18n: ectx: label, entry (GalleryAllowRename), group (Gallery)
 #: kookasettings.kcfg:125
@@ -1925,6 +1929,8 @@ msgid ""
 "<div>The minimum gap in pixels considered to be word spacing. The default is "
 "0 which means to automatically detect spacing.</div>"
 msgstr ""
+"<div>המרווח המזערי בפיקסלים שנחשב רווח בין אותיות. ברירת המחדל היא 0, כלומר "
+"לזהות את הריווח אוטומטית.</div>"
 
 #. i18n: ectx: label, entry (OcrGocrCertainty), group (gocr)
 #: kookasettings.kcfg:223
@@ -2093,6 +2099,10 @@ msgid ""
 "icode><nl/>libkookascan reported error: <message>%2</message><nl/>SANE "
 "reported error: <message>%1</message>"
 msgstr ""
+"התגלתה בעיה בפתיחת התקן הסריקה.<nl/><nl/>נא לבדוק שהסוקר מחובר ופועל, "
+"ושהתמיכה ב־SANE מוגדרת עבורו בצורה נכונה.<nl/><nl/>מתבצע ניסיון להשתמש בהתקן "
+"סריקה: <icode>%3</icode><nl/>libkookascan דיווחה על שגיאה: <message>%2</"
+"message><nl/>SANE דיווח על שגיאה: <message>%1</message>"
 
 #: kookaview.cpp:521
 #, kde-format
