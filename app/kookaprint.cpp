@@ -75,8 +75,8 @@ KookaPrint::KookaPrint()
     // we can distinguish the case "no printer set - use the default" from
     // the case "PDF printer set".
     //
-    // For the PDF case, the printer name can be left as the default but the
-    // output format needs to be set.
+    // For the PDF case, the printer name can be left as the default (blank)
+    // but the output format needs to be set.
     const QString name = KookaSettings::printDestination();
     if (name!="PDF") setPrinterName(name);
     else setOutputFormat(QPrinter::PdfFormat);
@@ -130,9 +130,11 @@ void KookaPrint::recalculatePrintParameters()
     qCDebug(KOOKA_LOG) << "  cuts option =" << m_cutsOption;
     qCDebug(KOOKA_LOG) << "  maintain aspect?" << m_maintainAspect;
     qCDebug(KOOKA_LOG) << "  low res draft?" << m_lowResDraft;
+    qCDebug(KOOKA_LOG) << "  copy mode?" << m_copyMode;
 
     // Calculate the available page size, in real world units
-    QRectF r = pageRect(QPrinter::Millimeter);
+    const bool pdfCopy = m_copyMode && outputFormat()==QPrinter::PdfFormat;
+    const QRectF r = (pdfCopy ? paperRect(QPrinter::Millimeter) : pageRect(QPrinter::Millimeter));
     mPageWidthMm = r.width();
     mPageHeightMm = r.height();
 
@@ -243,7 +245,7 @@ void KookaPrint::recalculatePrintParameters()
     // that it is centered.  I'm not sure whether this is the right thing
     // to do, but it is implied by tool tips set in ImgPrintDialog.
     // TODO: maybe make it an option
-    if (onOnePage)
+    if (onOnePage && !m_copyMode)
     {
         int widthSpareMm = mPageWidthAdjustedMm-mPrintWidthMm;
         mPrintLeftPix += (widthSpareMm/2)*mPrintResolution;
@@ -276,8 +278,6 @@ void KookaPrint::startPrint()
 
     qCDebug(KOOKA_LOG) << "starting";
     recalculatePrintParameters();			// ensure up to date
-
-    // TODO: move to ImgPrintDialog wrapper
 
     // Always save the selected printer, even if not in copy mode.
     QString name = printerName();
@@ -418,6 +418,7 @@ void KookaPrint::drawCutSign(QPainter *painter, const QPoint &p, int num, Qt::Co
     QFontMetrics fm = painter->fontMetrics();
     int textWidth = fm.horizontalAdvance(numStr)/2;
     int textHeight = fm.height()/2;
+    // TODO: these are the same for all cases
     int textYOff = 0;
     int textXOff = 0;
     switch (dir) {
