@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-10-14 00:38+0000\n"
-"PO-Revision-Date: 2024-10-15 08:32+0300\n"
+"PO-Revision-Date: 2024-10-20 20:11+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -768,6 +768,8 @@ msgid ""
 "<b>Portable Bitmap</b>, as used by Netpbm, is an uncompressed format for "
 "line art (bitmap) images. Only 1 bit per pixel depth is supported."
 msgstr ""
+"<b>מפת סיביות ניידת</b>, כמו זה שמשתמש בה Netpbm, הוא סוג לא דחוס לתמונות "
+"אומנות קווים (מפת סיביות). יש תמיכה בסיבית לעומק פיקסל."
 
 #: formatdialog.cpp:97
 #, kde-format
@@ -782,6 +784,8 @@ msgid ""
 "<b>Portable Pixmap</b>, as used by Netpbm, is an uncompressed format for "
 "full color images. Only 24 bit per pixel RGB is supported."
 msgstr ""
+"<b>מפת פיקסלים ניידת</b>, כמו זה שמשתמש בה Netpbm, הוא סוג לא דחוס לתמונות "
+"בצבע מלא. יש תמיכה ב־24 סיביות RGB לפיקסל."
 
 #: formatdialog.cpp:115
 #, kde-format
@@ -883,6 +887,10 @@ msgid ""
 "types of images.<p>Images produced by a scanner will not be animated, so "
 "unless specifically required for use with other applications use PNG instead."
 msgstr ""
+"<b>גרפיקת רשת רבת תמונות</b> היא נגזרת של תקן PNG ומיועדת לתמונות מונפשות.  "
+"זה תקן פתוח שמתאים לכל סוגי התמונות.<p>תמונות שנוצרות על ידי סורק לא "
+"תונפשנה, לכן אלא אם כן יש דרישה מפורשת להשתמש בזה מצד תוכנות אחרות עדיף "
+"להשתמש ב־PNG במקום."
 
 #: formatdialog.cpp:231
 #, kde-format
@@ -1103,6 +1111,8 @@ msgid ""
 "saved with the image and used if available; if it is not, it can be entered "
 "here.</div>"
 msgstr ""
+"<div>הדפסה בגודל שנקבע על ידי רזולוציית הסריקה. הרזולוציה נשמרת עם התמונה "
+"ונעשה בה שימוש אם ניתן, אם לא, ניתן למלא אותה כאן.</div>"
 
 #: imgprintdialog.cpp:119
 #, kde-format
@@ -1945,6 +1955,8 @@ msgid ""
 "<div>The acceptance certainty threshold for recognition, characters with a "
 "lower certainty are considered to be unknown. The default is 95.</div>"
 msgstr ""
+"<div>סף ודאות הקבלה, תווים שהוודאות שלהם נמוכה מהסף נחשבים לבלתי ידועים. "
+"ברירת המחדל 95.</div>"
 
 #. i18n: ectx: label, entry (ocrOcradLayoutDetection), group (ocrad)
 #: kookasettings.kcfg:238
@@ -2222,6 +2234,10 @@ msgid ""
 ">libkookascan reported error: <message>%2</message><nl/>SANE reported error: "
 "<message>%1</message>"
 msgstr ""
+"אירעה תקלה במהלך תצוגה מקדימה או סריקה.<nl/>נא לשים לב שהסורק עדיין פעיל "
+"ומחובר, <nl/>ושמושא הסריקה נטען במידת הצורך.<nl/><nl/>תוך ניסיון להשתמש "
+"בהתקני הסריקה: <icode>%3</icode><nl/>libkookascan דיווח על שגיאה: <message>"
+"%2</message><nl/>SANE דיווח על שגיאה: <message>%1</message>"
 
 #: kookaview.cpp:958
 #, kde-format
@@ -2289,6 +2305,16 @@ msgid ""
 "the Qt GPL licence, so if you wish to do this then you must have a\n"
 "commercial Qt development licence.\n"
 msgstr ""
+"התוכנה הזאת כפופה לתנאי גרסה 2 של GPL כפי שפורסמה על ידי מוסד\n"
+"התוכנה החופשית.\n"
+"\n"
+"כחריגה מיוחדת, ניתנה רשות לקשר את התוכנית הזאת לכל גרסה שהיא של מנוע\n"
+"KADMOS לזיהוי תווים אופטי/חכם מבית reRecognition GmbH\n"
+"(http://www.rerecognition.com), ולהפיץ את קובץ ההפעלה שמתקבל\n"
+"מבלי לכלול את קוד המקור של KADMOS כחלק מהפצת הקוד.\n"
+"\n"
+"נא לשים לב שקישור כנגד KADMOS אסור בכפוף לתנאי רישיון ה־GPL של Qt,\n"
+"לכן אם בחרת לעשות משהו כזה, חייב להיות לך רישיון פיתוח מסחרי של Qt.\n"
 
 #: main.cpp:71
 #, kde-format
