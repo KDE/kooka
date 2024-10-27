@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-10-14 00:38+0000\n"
-"PO-Revision-Date: 2024-10-20 20:11+0300\n"
+"PO-Revision-Date: 2024-10-25 22:25+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -907,6 +907,9 @@ msgid ""
 "mobile devices.  It supports black and white bitmaps only.<p>Unless "
 "specifically required, use an general purpose format instead."
 msgstr ""
+"<b>מפת סיביות אלחוטית</b> היא תסדיר מפת סיביות מונוכרומטי שמותאם למכשירים "
+"ניידים תואמי WAP.  תומך במפות סיביות שחור לבן בלבד.<p>אל אם כן נחוץ באופן "
+"נקודתי, עדיף להשתמש בתסדיר יותר כללי."
 
 #: formatdialog.cpp:251
 #, kde-format
