@@ -7,15 +7,16 @@ msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-09-24 02:01+0000\n"
-"PO-Revision-Date: 2024-10-26 08:13+0300\n"
+"PO-Revision-Date: 2024-10-26 09:33+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.4.2\n"
+"Plural-Forms: nplurals=4; plural=(n == 1) ? 0 : ((n == 2) ? 1 : ((n > 10 && "
+"n % 10 == 0) ? 2 : 3));\n"
+"X-Generator: Lokalize 24.05.2\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -49,6 +50,12 @@ msgid ""
 "<link url=\"?2\">locating devices</link>, <link url=\"?3\">HP scanners</"
 "link>, <link url=\"?4\">device not found</link>."
 msgstr ""
+"אם הסורק שלך לא זוהה אוטומטית, אפשר לציין אותו כאן. <interface>התקן הסריקה</"
+"interface> הוא שם ההתקן במנגנון ה־SANE. <interface>היצרן</interface>, "
+"<interface>הסוג</interface> ו<interface>התיאור</interface> יכולים לשמש "
+"לתיאור הסורק בהמשך.<nl/><nl/>מידע נוסף על <link url=\"?1\">מנגנוני SANE</"
+"link>, <link url=\"?2\">איתור התקנים</link>, <link url=\"?3\">סורקי HP</"
+"link>, <link url=\"?4\">התקן לא נמצא</link>."
 
 #: adddevicedialog.cpp:77
 #, kde-format
@@ -101,6 +108,11 @@ msgid ""
 "<icode>&#8209;L</icode> option for network scanners. If the scanner is "
 "found, then enter the device name displayed by these commands."
 msgstr ""
+"כדי למצוא מה צריך למלא כאן, כדאי לנסות לאתר את ההתקן בעזרת הפקודה <link url="
+"\"man:/sane-find-scanner\">sane&#8209;find&#8209;scanner(1)</link> לסורקי "
+"SCSI, USB או בחיבור מקבילי, או הפקודה <link url=\"man:/scanimage"
+"\">scanimage(1)</link> בעזרת האפשרות <icode>&#8209;L</icode> לסורקי רשת. אם "
+"הסורק ננמצא, אז למלא את שם ההתקן שמוצג על ידי הפקודות האלו."
 
 #: adddevicedialog.cpp:143
 #, kde-kuit-format
@@ -113,6 +125,12 @@ msgid ""
 "the scanner is found by HPLIP, then the device name <icode>hp:</icode> that "
 "it displays needs to be replaced by <icode>hpaio:</icode> for SANE."
 msgstr ""
+"לסורק HP שמחובר ב־USB או דרך הרשת שמשתמש ב־<link url=\"http://hplip."
+"sourceforge.net/\">HPLIP</link>, כדאי לנסות להשתמש בפקודה <command>hp&#8209;"
+"probe</command> כדי לאתר אותו, למשל <icode>hp&#8209;probe&nbsp;&#8209;b&nbsp;"
+"usb</icode> או <icode>hp&#8209;probe&nbsp;&#8209;b&nbsp;net</icode>. כדאי "
+"לשים לב שאם הסורק נמצא על ידי HPLIP, אז את שם ההתקן שנפתח ב־<icode>hp:‎</"
+"icode> שהוא מציג יש להחליף ב־<icode>hpaio:‎</icode> עבור SANE."
 
 #: adddevicedialog.cpp:152
 #, kde-kuit-format
@@ -452,6 +470,10 @@ msgid ""
 "\n"
 "Please select whether the background of the preview image is black or white."
 msgstr ""
+"זיהוי אוטומטי של תמונות בתצוגה מקדימה תלוי בצבע הרקע של תמונת התצוגה המקדימה "
+"(תוצאת הסריקה כשאין מסמכים בסורק).\n"
+"\n"
+"נא לבחור האם רקע תמונת התצוגה המקדימה הוא שחור או לבן."
 
 #: previewer.cpp:341
 #, kde-format
@@ -679,6 +701,13 @@ msgid ""
 "page (<link url=\"http://www.sane-project.org\">www.sane-project.org</link>) "
 "for more information on SANE installation and setup."
 msgstr ""
+"<title>לא נמצא סורק, או שלא ניתן לגשת אליו</title><nl/><nl/>אירעה תקלה "
+"בשימוש בספריית SANE (Scanner Access Now Easy) כדי לגשת להתקן הסריקה. אולי "
+"התקנת ה־SANE שלך לא תקינה או שאינה מוגדרת לתמוך בסורק שלך.<nl/><nl/>כדאי "
+"לבדוק ש־SANE מותקן כראוי ושהוא מוגדר במערכת שלך וגם ששם התקן הסריקה וההגדרות "
+"נכונים.<nl/><nl/>יש לעיין באתר הבית של מיזם SANE (<link url=\"http://www."
+"sane-project.org\">www.sane-project.org</link>) למידע נוסף על התקנת והגדרת "
+"SANE."
 
 #: scanparams.cpp:675
 #, kde-format
@@ -760,6 +789,9 @@ msgid ""
 "access network scanners.<br/><br/>Note that some SANE backends (for example "
 "'escl') may not work properly through a proxy.</div>"
 msgstr ""
+"<div>יש לסמן את זה כדי להשתמש בהגדרות מתווך המערכת הרגילות כדי לגשת לסורקים "
+"ברשת.<br/><br/>כדאי לשים לב שכמה מנגנוני SANE (למשל ‚escl’) כנראה שלא יעבדו "
+"כראוי דרך מתווך.</div>"
 
 #. i18n: ectx: label, entry (StartupSkipAsk), group (Startup)
 #: scansettings.kcfg:28
