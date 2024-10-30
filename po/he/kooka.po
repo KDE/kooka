@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-10-14 00:38+0000\n"
-"PO-Revision-Date: 2024-10-25 22:25+0300\n"
+"PO-Revision-Date: 2024-10-29 08:00+0200\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -1020,6 +1020,10 @@ msgid ""
 "gallery <link url=\"file:%2\"><filename>%2</filename></link>,<nl/>then you "
 "may do so by simply copying or moving the files."
 msgstr ""
+"Kooka ישתמש בגלריה החדשה, <link url=\"file:%1\"><filename>%1</filename></"
+"link>.<nl/><nl/>כדי להוסיף את התמונות מהגלריה הישנה שלך <link url=\"file:"
+"%2\"><filename>%2</filename></link>,<nl/>אפשר לעשות זאת פשוט על ידי העתקת או "
+"העברת הקבצים."
 
 #: galleryroot.cpp:187
 #, kde-format
@@ -2135,6 +2139,11 @@ msgid ""
 "to use. Use the <interface>Add Scan Device</interface> option to enter the "
 "backend name and parameters, or see that dialog for more information."
 msgstr ""
+"אין התקני סריקה זמינים.<nl/><nl/>אם הסורק שלך הוא מסוג שמזוהה אוטומטית על "
+"ידי SANE, כדאי לבדוק שהוא מחובר, דולק ומוגדר כראוי.<nl/><nl/>אם לא ניתן "
+"לזהות את הסורק אוטומטית בעזרת SANE (כולל כמה סורקים מחוברי רשת), יש לציין "
+"באיזה התקן להשתמש. יש להשתמש באפשרות <interface>הוספת התקן סריקה</interface> "
+"כדי למלא את שם המנגנון והמשתנים, או לעיין בחלונית למידע נוסף."
 
 #: kookaview.cpp:587
 #, kde-format
@@ -2335,10 +2344,9 @@ msgid "Jonathan Marten"
 msgstr "ג׳ונתן מרטן"
 
 #: main.cpp:94
-#, fuzzy, kde-format
-#| msgid "Current maintainer, KDE4 port"
+#, kde-format
 msgid "Current maintainer, KDE4/KF6 port"
-msgstr "מתחזק נוכחי, הסבה ל־KDE4"
+msgstr "מתחזק נוכחי, הסבה ל־KDE4/KF6"
 
 #: main.cpp:95
 #, kde-format
@@ -2794,7 +2802,7 @@ msgstr "לא נבחרה ערכה."
 #, kde-format
 msgctxt "New set name, %1=scan mode, %2=resolution"
 msgid "%1, %2 dpi"
-msgstr ""
+msgstr "%1, %2 נק׳ לאינץ׳"
 
 #: scanpresetsdialog.cpp:289
 #, kde-kuit-format
@@ -2832,6 +2840,8 @@ msgid ""
 "<qt>This is the uncompressed size of the scanned image. It tries to warn you "
 "if you try to produce too big an image by changing its background color."
 msgstr ""
+"<qt>זה הגודל הלא דחוס של התמונה שנסרקה. זאת אזהרה למקרה של ניסיון לייצר "
+"תמונה גדולה מדי על ידי שינוי צבע הרקע."
 
 #: statusbarmanager.cpp:108
 #, kde-format
