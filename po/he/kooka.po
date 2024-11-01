@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-10-14 00:38+0000\n"
-"PO-Revision-Date: 2024-10-29 08:00+0200\n"
+"PO-Revision-Date: 2024-10-30 22:24+0200\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n == 1) ? 0 : ((n == 2) ? 1 : ((n > 10 && "
 "n % 10 == 0) ? 2 : 3));\n"
-"X-Generator: Lokalize 24.05.2\n"
+"X-Generator: Lokalize 24.08.1\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -777,6 +777,8 @@ msgid ""
 "<b>Portable Greymap</b>, as used by Netpbm, is an uncompressed format for "
 "grayscale images. Only 8 bit per pixel depth is supported."
 msgstr ""
+"<b>מפת אפורים ניידת</b>, כמו זה שמשתמש בה Netpbm, הוא סוג לא דחוס לתמונות "
+"בגווני אפור. יש תמיכה ב־8 סיביות לעומק פיקסל."
 
 #: formatdialog.cpp:106
 #, kde-format
