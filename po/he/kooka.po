@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-10-14 00:38+0000\n"
-"PO-Revision-Date: 2024-11-02 20:58+0200\n"
+"PO-Revision-Date: 2024-11-03 06:10+0200\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -836,6 +836,9 @@ msgid ""
 "repeated loading and saving.<p>This is an open format which is widely "
 "supported."
 msgstr ""
+"<b>JPEG</b> הוא תסדיר דחוס שמתאים לתמונות בצבע אמיתי או בגווני אפור. התסדיר "
+"הזה גורע מהאיכות ולכן אינו מומלץ לשמירה בארכיון או לטעינה ושמירה מחזוריים."
+"<p>זה תסדיר פתוח עם תמיכה נרחבת."
 
 #: formatdialog.cpp:166
 #, kde-format
@@ -855,6 +858,8 @@ msgid ""
 "description language.  Use this format for importing into other "
 "applications, or to use with (e.g.) TeX."
 msgstr ""
+"<b>PostScript מכומס</b> הוא נגזרת של PostScript&trade; שפת תיאור עמודים. יש "
+"להשתמש בתסדיר הזה כדי לייבא ליישומים אחרים, או כדי להשתמש ב־TeX (טך, למשל)."
 
 #: formatdialog.cpp:186
 #, kde-format
@@ -863,6 +868,9 @@ msgid ""
 "and is used extensively by animation and video applications.<p>This format "
 "is not recommended, use an open format instead."
 msgstr ""
+"<b>Truevision Targa</b> יכול לאחסן תמונות צבע מלאות עם ערוץ שקיפות, משמש "
+"באופן נרחב להנפשות ויישומי וידאו.<p>התסדיר הזה לא מומלץ, עדיף להשתמש בתסדיר "
+"פתוח במקום."
 
 #: formatdialog.cpp:196
 #, kde-format
