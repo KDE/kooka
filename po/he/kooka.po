@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-10-14 00:38+0000\n"
-"PO-Revision-Date: 2024-11-03 06:10+0200\n"
+"PO-Revision-Date: 2024-11-04 07:44+0200\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -647,6 +647,8 @@ msgid ""
 "The classifier file necessary for OCR cannot be loaded: %1;\n"
 "OCR with the KADMOS engine is not possible."
 msgstr ""
+"לא ניתן לטעון את קובץ המסווג שנחוץ לזיהוי תווים אופטי: %1;\n"
+"זיהוי תווים אופטי עם מנוע KADMOS אינו אפשרי."
 
 #: ../plugins/ocr/kadmos/ocrkadmosengine.cpp:95
 #, kde-format
@@ -806,7 +808,7 @@ msgid ""
 "format instead."
 msgstr ""
 "<b>מפת סיביות X</b> בדרך כלל בשימוש עם מערכת החלונות X לאחסון מפות סיביות של "
-"סמני עכבר וסמלים.<p>אלא אם כן זה הייחוד, כדאי להשתמש בתסדיר יותר כללי במקום."
+"סמני עכבר וסמלים.<p>אלא אם כן זה הייעוד, כדאי להשתמש בתסדיר יותר כללי במקום."
 
 #: formatdialog.cpp:135
 #, kde-format
@@ -815,6 +817,9 @@ msgid ""
 "other images.<p>Unless required for this purpose, use a general purpose "
 "format instead."
 msgstr ""
+"<b>מפת פיקסלים X</b> בדרך כלל בשימוש עם מערכת החלונות X לאחסון סמלים "
+"צבעוניים ותמונות אחרות.<p>אלא אם כן זה הייעוד, כדאי להשתמש בתסדיר יותר כללי "
+"במקום."
 
 #: formatdialog.cpp:144
 #, kde-format
@@ -932,6 +937,10 @@ msgid ""
 "are supported. Lossy compression is not recommended for archiving or for "
 "repeated loading and saving."
 msgstr ""
+"<b>WebP</b> מיועד להיות תקן פתוח לתמונות בצבע מלא עם שקיפות כרשות. נתמך "
+"באופן נרחב על ידי דפדפנים ותוכנות גרפיקה עדכניים. <p>יש תמיכה במגוון שיטות "
+"כיווץ, עם ובלי אובדן נתונים. כיווץ עם אובדן נתונים לא מומלץ לשמירה בארכיון "
+"או לטעינה ושמירה מספר רב של פעמים."
 
 #: formatdialog.cpp:280
 #, kde-format
