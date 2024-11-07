@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-10-14 00:38+0000\n"
-"PO-Revision-Date: 2024-11-04 18:29+0100\n"
+"PO-Revision-Date: 2024-11-05 15:19+0100\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
 "Language: ia\n"
@@ -30,7 +30,7 @@ msgstr "g.sora@tiscali.it"
 #: ../plugins/destination/abstractdestination.cpp:86
 #, kde-format
 msgid "Remember this format"
-msgstr ""
+msgstr "Memora iste formato"
 
 #: ../plugins/destination/abstractdestination.cpp:120
 #, kde-kuit-format
