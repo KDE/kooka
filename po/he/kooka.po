@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-10-14 00:38+0000\n"
-"PO-Revision-Date: 2024-11-05 21:20+0200\n"
+"PO-Revision-Date: 2024-11-08 10:10+0200\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -885,6 +885,9 @@ msgid ""
 "colors and optional transparency.<p>For legal reasons this format is not "
 "recommended, use an open format instead."
 msgstr ""
+"<b>תסדיר תחלופה גרפית</b> הוא תסדיר נפוץ אך סבוך פטנטים שבדרך כלל משמש "
+"לגרפיקה באנטרנט.  הוא משמש בדחיסה ללא אובדן נתונים עם עד 256 צבעים ושקיפות "
+"כרשות.<p>מטעמים משפטיים התסדיר הזה לא מומלץ, עדיף להשתמש בתסדיר פתוח במקום."
 
 #: formatdialog.cpp:207
 #, kde-format
@@ -920,6 +923,9 @@ msgid ""
 "bit true color images with optional lossless compression.<p>Unless "
 "specifically required, use an open format instead."
 msgstr ""
+"זה תסדיר הבית של <b>Silicon Graphics</b> שתומך בתמונות צבע אמיתי ב־24 סיביות "
+"עם דחיסה ללא אובדן איכות כרשות.<p>אלא אם כן נחוץ באופן מפורש, עדיף להשתמש "
+"בתסדיר פתוח במקום."
 
 #: formatdialog.cpp:241
 #, kde-format
@@ -1386,7 +1392,7 @@ msgstr "לא ניתן ליצור את התיקייה <filename>%2</filename><nl/
 #: imgsaver.cpp:328
 #, kde-format
 msgid "indexed color image (up to 8 bit depth)"
-msgstr ""
+msgstr "תמונה עם צבעים מסודרים במפתח (עד 8 סיביות עומק)"
 
 #: imgsaver.cpp:332
 #, kde-format
