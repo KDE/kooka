@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-10-14 00:38+0000\n"
-"PO-Revision-Date: 2024-05-17 21:19+0200\n"
+"PO-Revision-Date: 2024-11-09 16:06+0100\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
 "Language: gl\n"
@@ -21,7 +21,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 24.02.2\n"
+"X-Generator: Lokalize 24.08.3\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -2440,10 +2440,9 @@ msgid "Jonathan Marten"
 msgstr "Jonathan Marten"
 
 #: main.cpp:94
-#, fuzzy, kde-format
-#| msgid "Current maintainer, KDE4 port"
+#, kde-format
 msgid "Current maintainer, KDE4/KF6 port"
-msgstr "Mantedor actual, adaptación a KDE 4."
+msgstr "Mantedor actual, adaptación a KDE 4 e KF 6."
 
 #: main.cpp:95
 #, kde-format
