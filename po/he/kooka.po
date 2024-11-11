@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-10-14 00:38+0000\n"
-"PO-Revision-Date: 2024-11-08 10:10+0200\n"
+"PO-Revision-Date: 2024-11-10 07:49+0200\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -590,7 +590,7 @@ msgstr "מדינה"
 #: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:255
 #, kde-format
 msgid "OCR Modifier"
-msgstr ""
+msgstr "משתני זיהוי תווים אופטי"
 
 #: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:259
 #, kde-format
@@ -799,6 +799,9 @@ msgid ""
 "suitable for color and grayscale images.<p>This format is not recommended, "
 "use an open format instead."
 msgstr ""
+"<b>PCX</b> הוא תסדיר דחוס ללא אובדן נתונים שבדרך כלל נתמך על ידי יישומי "
+"דימות למחשב, למרות שהוא די ישן ולא מתוחכם. הוא מתאים לתמונות צבעוניות "
+"ובגווני אפור.<p>התסדיר הזה לא מומלץ, עדיף להשתמש בתסדיר פתוח במקום."
 
 #: formatdialog.cpp:126
 #, kde-format
@@ -2427,7 +2430,7 @@ msgstr "אלכס קמפשל"
 #: main.cpp:99
 #, kde-format
 msgid "Photocopy facility"
-msgstr ""
+msgstr "אמצעי מכונת צילום"
 
 #: main.cpp:115
 #, kde-format
