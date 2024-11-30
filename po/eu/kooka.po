@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-10-14 00:38+0000\n"
-"PO-Revision-Date: 2024-11-24 09:40+0100\n"
+"PO-Revision-Date: 2024-11-30 00:00+0100\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
 "Language: eu\n"
@@ -545,22 +545,17 @@ msgstr "Europako estatuak"
 
 #: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:199
 #: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:280
-#, fuzzy, kde-format
-#| msgid ""
-#| "The classifier files for KADMOS could not be found.\n"
-#| "OCR with KADMOS will not be possible!\n"
-#| "\n"
-#| "Change the OCR engine in the preferences dialog."
+#, kde-format
 msgid ""
 "The classifier files for KADMOS could not be found.\n"
 "OCR with KADMOS will not be possible.\n"
 "\n"
 "Change the OCR engine in the preferences dialog."
 msgstr ""
-"Ezin dira KADMOS-en fitxategi sailkatzaileak aurkitu.\n"
-"Ezin da OCR-a KADMOS-ekin erabili.\n"
+"KADMOSerako fitxategi sailkatzaileak ezin izan dira aurkitu.\n"
+"KADMOS-ekin ezin izango da OCR-a erabili.\n"
 "\n"
-"Aldatu OCR motorea hobespenen elkarrizketa-koadroan."
+"Hobespenen elkarrizketa-koadroan OCR motorra aldatu."
 
 #: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:202
 #: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:283
@@ -774,6 +769,10 @@ msgid ""
 "It is suitable for color, grayscale and line art images.<p>This format is "
 "widely supported but is not recommended, use an open format instead."
 msgstr ""
+"<b>Bit-mapa irudia</b> MS Windows-en irudietarako formatu gisa erabilera "
+"handia du. Kolore, gris-eskala eta lerro-marrazki irudietarako egokia da."
+"<p>Formatu honek euskarri zabala du, baina bere erabilera ez da gomendatzen, "
+"horren ordez formatu ireki bat erabili."
 
 #: formatdialog.cpp:88
 #, kde-format
@@ -781,6 +780,9 @@ msgid ""
 "<b>Portable Bitmap</b>, as used by Netpbm, is an uncompressed format for "
 "line art (bitmap) images. Only 1 bit per pixel depth is supported."
 msgstr ""
+"<b>Bit-mapa eramangarria</b>, Netpbm-ek erabiltzen duen bezala, lerro-"
+"marrazki (bit-mapa) irudietarako konprimatu gabeko formatu bat da. Pixel "
+"bakoitzeko bit 1eko sakonera bakarrik onartzen du."
 
 #: formatdialog.cpp:97
 #, kde-format
@@ -788,6 +790,9 @@ msgid ""
 "<b>Portable Greymap</b>, as used by Netpbm, is an uncompressed format for "
 "grayscale images. Only 8 bit per pixel depth is supported."
 msgstr ""
+"<b>Gris-mapa eramangarria</b>, Netpbm-ek erabiltzen duen bezala, gris-eskala "
+"irudietarako konprimatu gabeko formatu bat da. Pixel bakoitzeko 8 biteko "
+"sakonera bakarrik onartzen du."
 
 #: formatdialog.cpp:106
 #, kde-format
@@ -795,6 +800,9 @@ msgid ""
 "<b>Portable Pixmap</b>, as used by Netpbm, is an uncompressed format for "
 "full color images. Only 24 bit per pixel RGB is supported."
 msgstr ""
+"<b>Pixel-mapa eramangarria</b>, Netpbm-ek erabiltzen duen bezala, koloretako "
+"irudietarako konprimatu gabeko formatu bat da. RGB pixel bakoitzeko 24 bit "
+"bakarrik onartzen du."
 
 #: formatdialog.cpp:115
 #, kde-format
@@ -804,6 +812,10 @@ msgid ""
 "suitable for color and grayscale images.<p>This format is not recommended, "
 "use an open format instead."
 msgstr ""
+"<b>PCX</b> galerarik gabeko konprimatutako formatu bat da, askotan, PCko "
+"irudietarako aplikazioetan euskarria izaten duena, nahiz eta nahikoa zaharra "
+"eta sofistikazio gabea izan. Koloretako eta gris-eskalako irudietarako "
+"egokia da.<p>Formatu hau ez da gomendatzen, "
 
 #: formatdialog.cpp:126
 #, kde-format
@@ -812,6 +824,9 @@ msgid ""
 "icon bitmaps.<p>Unless required for this purpose, use a general purpose "
 "format instead."
 msgstr ""
+"<b>X bit-mapa</b> X Window sistemak askotan erabiltzen du kurtsore eta ikono "
+"bit-mapak gordetzeko.<p>Helburu horretarako erabili ezean, erabili erabilera "
+"orokorreko formatu bat."
 
 #: formatdialog.cpp:135
 #, kde-format
