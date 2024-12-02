@@ -2,17 +2,17 @@
 # KDE Finnish translation sprint participants:
 # Author: Artnay
 # Author: Lliehu
+# SPDX-FileCopyrightText: 2018, 2019, 2020, 2021, 2022, 2024 Tommi Nieminen <translator@legisign.org>
 # Teemu Rytilahti <teemu.rytilahti@d5k.net>, 2003.
 # Kim Enkovaara <kim.enkovaara@iki.fi>, 2003.
 # Teemu Rytilahti <teemu.rytilahti@kde-fi.org>, 2003.
 # Lasse Liehu <lasse.liehu@gmail.com>, 2013, 2014.
-# Tommi Nieminen <translator@legisign.org>, 2018, 2019, 2020, 2021, 2022, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-10-14 00:38+0000\n"
-"PO-Revision-Date: 2024-03-12 10:38+0200\n"
+"PO-Revision-Date: 2024-11-06 20:53+0200\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
 "Language: fi\n"
@@ -20,8 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-POT-Import-Date: 2012-12-01 22:27:05+0000\n"
-"X-Generator: Lokalize 22.12.3\n"
+"X-Generator: Lokalize 23.08.5\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -1848,23 +1847,19 @@ msgstr ""
 
 #. i18n: ectx: label, entry (SaverAskForFilename), group (Files)
 #: kookasettings.kcfg:71
-#, fuzzy, kde-format
-#| msgid "Ask for filename when saving"
+#, kde-format
 msgid "Ask for file name when saving"
 msgstr "Pyydä tiedostonimi tallennettaessa"
 
 #. i18n: ectx: tooltip, entry (SaverAskForFilename), group (Files)
 #: kookasettings.kcfg:72
-#, fuzzy, kde-format
-#| msgid ""
-#| "<div>Check this if you want to enter a file name when scanning an image.</"
-#| "div>"
+#, kde-format
 msgid ""
 "<div>Check this if you want to always enter a file name when scanning an "
 "image.</div>"
 msgstr ""
-"<div>Valitse tämä, jos haluat antaa tiedostonimen sen jälkeen, kun kuva on "
-"luettu.</div>"
+"<div>Valitse tämä, jos haluat aina antaa tiedostonimen sen jälkeen, kun kuva "
+"on luettu.</div>"
 
 #. i18n: ectx: label, entry (SaverOnlyRecommendedTypes), group (Files)
 #: kookasettings.kcfg:77
@@ -2418,10 +2413,9 @@ msgid "Jonathan Marten"
 msgstr "Jonathan Marten"
 
 #: main.cpp:94
-#, fuzzy, kde-format
-#| msgid "Current maintainer, KDE4/KF5 port"
+#, kde-format
 msgid "Current maintainer, KDE4/KF6 port"
-msgstr "Nykyinen ylläpitäjä, KDE4/KF5-siirros"
+msgstr "Nykyinen ylläpitäjä, KDE4/Kf6-siirros"
 
 #: main.cpp:95
 #, kde-format
