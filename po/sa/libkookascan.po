@@ -1,0 +1,864 @@
+# Sanskrit translations for kooka package.
+# Copyright (C) 2024 This file is copyright:
+# This file is distributed under the same license as the kooka package.
+# Kali <EMAIL@ADDRESS>, 2024.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: kooka\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2024-09-24 02:01+0000\n"
+"PO-Revision-Date: 2024-12-13 19:09+0530\n"
+"Last-Translator: Kali <EMAIL@ADDRESS>\n"
+"Language-Team: Sanskrit\n"
+"Language: sa\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr ""
+
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr ""
+
+#: ../libdialogutil/imagefilter.cpp:85
+#, kde-format
+msgid "All Image Files"
+msgstr "सर्वाणि चित्रसञ्चिकाः"
+
+#: ../libdialogutil/imagefilter.cpp:90
+#, kde-format
+msgid "All Files"
+msgstr "सर्वाणि सञ्चिकाः"
+
+#: adddevicedialog.cpp:58
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"If your scanner has not been automatically detected, you can specify it "
+"here. The <interface>Scanner device</interface> is the SANE backend device "
+"name. The <interface>Manufacturer</interface>, <interface>Type</interface> "
+"and <interface>Description</interface> can be used to identify the scanner "
+"later.<nl/><nl/>More information on <link url=\"?1\">SANE backends</link>, "
+"<link url=\"?2\">locating devices</link>, <link url=\"?3\">HP scanners</"
+"link>, <link url=\"?4\">device not found</link>."
+msgstr ""
+
+#: adddevicedialog.cpp:77
+#, kde-format
+msgid "Scanner device:"
+msgstr "स्कैनरयन्त्रम् : १."
+
+#: adddevicedialog.cpp:80 scandevices.cpp:186
+#, kde-format
+msgctxt "Value used for manufacturer if none entered"
+msgid "User specified"
+msgstr ""
+
+#: adddevicedialog.cpp:82
+#, kde-format
+msgid "Manufacturer:"
+msgstr "निर्माता : १."
+
+#: adddevicedialog.cpp:86
+#, kde-format
+msgid "Device type:"
+msgstr "यन्त्रप्रकारः : १."
+
+#: adddevicedialog.cpp:90
+#, kde-format
+msgid "Description:"
+msgstr "वर्णनम्‌:"
+
+#: adddevicedialog.cpp:126
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"The <interface>Scanner device</interface> should be a backend name (with "
+"optional parameters) that is understood by SANE. See <link url=\"man:/sane"
+"\">sane(7)</link> or <link url=\"man:/sane-dll\">sane&#8209;dll(5)</link> "
+"for more information on available backends and the format of device names."
+msgstr ""
+
+#: adddevicedialog.cpp:134
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"To find the information that needs to be entered here, try to locate the "
+"device using the <link url=\"man:/sane-find-scanner\">sane&#8209;find&#8209;"
+"scanner(1)</link> command for SCSI, USB or parallel port scanners, or the "
+"<link url=\"man:/scanimage\">scanimage(1)</link> command with the "
+"<icode>&#8209;L</icode> option for network scanners. If the scanner is "
+"found, then enter the device name displayed by these commands."
+msgstr ""
+
+#: adddevicedialog.cpp:143
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"For a USB or networked HP scanner using <link url=\"http://hplip.sourceforge."
+"net/\">HPLIP</link>, try using the <command>hp&#8209;probe</command> command "
+"to locate it, for example <icode>hp&#8209;probe&nbsp;&#8209;b&nbsp;usb</"
+"icode> or <icode>hp&#8209;probe&nbsp;&#8209;b&nbsp;net</icode>. Note that if "
+"the scanner is found by HPLIP, then the device name <icode>hp:</icode> that "
+"it displays needs to be replaced by <icode>hpaio:</icode> for SANE."
+msgstr ""
+
+#: adddevicedialog.cpp:152
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"If these commands fail to locate your scanner, then it may not be supported "
+"by SANE. Check the SANE documentation for a <link url=\"http://www.sane-"
+"project.org/sane-supported-devices.html\">list of supported devices</link>."
+msgstr ""
+
+#: autoselectbar.cpp:56
+#, kde-kuit-format
+msgctxt "@info"
+msgid "<subtitle>Auto Select</subtitle>"
+msgstr ""
+
+#: autoselectbar.cpp:82
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "This is the grayscale value of the selected threshold"
+msgstr ""
+
+#: autoselectbar.cpp:90
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Perform the auto-detection again"
+msgstr ""
+
+#: autoselectbar.cpp:97
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Advanced settings for auto-detection"
+msgstr ""
+
+#: autoselectdialog.cpp:56
+#, kde-format
+msgctxt "@title:window"
+msgid "Autoselect Settings"
+msgstr ""
+
+#: autoselectdialog.cpp:82
+#, kde-format
+msgid "Black"
+msgstr "कृष्णः"
+
+#: autoselectdialog.cpp:83
+#, kde-format
+msgid "White"
+msgstr "श्वेतः"
+
+#: deviceselector.cpp:58
+#, kde-format
+msgid "Select"
+msgstr "विचि"
+
+#: deviceselector.cpp:59
+#, kde-format
+msgid "Select Scan Device"
+msgstr "Scan Device इति चिनोतु"
+
+#: deviceselector.cpp:71
+#, kde-format
+msgid "Available Scanners:"
+msgstr "उपलब्धाः स्कैनरः : १."
+
+#: deviceselector.cpp:82
+#, kde-format
+msgid "Always use this device at startup"
+msgstr "प्रारम्भे सर्वदा एतत् यन्त्रं उपयुज्यताम्"
+
+#: gammadialog.cpp:53
+#, kde-format
+msgid "Edit Gamma Table"
+msgstr "गामा सारणी सम्पादयतु"
+
+#: gammadialog.cpp:61
+#, kde-format
+msgid "Brightness"
+msgstr "कान्तिः"
+
+#: gammadialog.cpp:71
+#, kde-format
+msgid "Contrast"
+msgstr "विप्रकर्ष"
+
+#: gammadialog.cpp:81
+#, kde-format
+msgid "Gamma"
+msgstr "गाम्मा"
+
+#: gammadialog.cpp:95
+#, kde-format
+msgid "This gamma table is passed to the scanner hardware."
+msgstr "इदं गामा-सारणीं स्कैनर-हार्डवेयर्-इत्यत्र प्रसारितं भवति ।"
+
+#: imagecanvas.cpp:785
+#, kde-format
+msgid "Fit Best"
+msgstr "फिट बेस्ट"
+
+#: imagecanvas.cpp:786
+#, kde-format
+msgid "Original size"
+msgstr "मूल आकार"
+
+#: imagecanvas.cpp:787
+#, kde-format
+msgid "Fit Width"
+msgstr "फिट चौड़ाई"
+
+#: imagecanvas.cpp:788
+#, kde-format
+msgid "Fit Height"
+msgstr "फिट हाइट"
+
+#: imagecanvas.cpp:789
+#, kde-format
+msgid "Zoom %1%"
+msgstr "जूम %1% ."
+
+#: imagecanvas.cpp:790
+#, kde-format
+msgid "Unknown"
+msgstr "अज्ञात"
+
+#: imagecanvas.cpp:888
+#, kde-format
+msgid "%1x%2 pix, %3 bpp"
+msgstr "%1x%2 पिक्स, %3 bpp"
+
+#: imgscaledialog.cpp:51
+#, kde-format
+msgid "Image Zoom"
+msgstr "इमेज ज़ूम"
+
+#: imgscaledialog.cpp:72
+#, kde-format
+msgid "25 %"
+msgstr "२५ % २."
+
+#: imgscaledialog.cpp:79
+#, kde-format
+msgid "50 %"
+msgstr "५० % ९."
+
+#: imgscaledialog.cpp:86
+#, kde-format
+msgid "75 %"
+msgstr "७५ % ९."
+
+#: imgscaledialog.cpp:93
+#, kde-format
+msgid "&100 %"
+msgstr "&१०० % ९."
+
+#: imgscaledialog.cpp:105
+#, kde-format
+msgid "150 &%"
+msgstr "१५० &% २."
+
+#: imgscaledialog.cpp:112
+#, kde-format
+msgid "200 %"
+msgstr "२०० % २."
+
+#: imgscaledialog.cpp:119
+#, kde-format
+msgid "300 %"
+msgstr "३०० % २."
+
+#: imgscaledialog.cpp:126
+#, kde-format
+msgid "400 %"
+msgstr "४०० % २."
+
+#: imgscaledialog.cpp:141
+#, kde-format
+msgid "Custom:"
+msgstr "आचारः:"
+
+#: kscancontrols.cpp:67
+#, kde-format
+msgid "(Unknown)"
+msgstr "(अज्ञात)"
+
+#: kscancontrols.cpp:170
+#, kde-format
+msgid "Reset this setting to its standard value, %1"
+msgstr "एतत् सेटिङ्ग् तस्य मानकमूल्ये, %1 इत्यत्र पुनः सेट् कुर्वन्तु"
+
+#: kscancontrols.cpp:419
+#, kde-format
+msgid "PNM Image Files (*.pnm *.pbm *.pgm *.ppm)"
+msgstr "PNM चित्रसञ्चिकाः (*.pnm *.pbm *.pgm *.ppm)"
+
+#: kscandevice.cpp:279
+#, kde-format
+msgid "No scanner selected"
+msgstr "कोऽपि स्कैनरः चयनितः नास्ति"
+
+#: kscandevice.cpp:1380
+#, kde-format
+msgid "Default startup configuration"
+msgstr "पूर्वनिर्धारितं प्रारम्भविन्यासः"
+
+#: kscandevice.cpp:1480
+#, kde-kuit-format
+msgctxt "@info"
+msgid "The scanner<nl/><icode>%1</icode><nl/>requires authentication."
+msgstr ""
+
+#: kscandevice.cpp:1481
+#, kde-format
+msgid "Scanner Authentication"
+msgstr "स्कैनर प्रमाणीकरणम्"
+
+#: kscandevice.cpp:1525
+#, kde-format
+msgid "OK"
+msgstr "अस्तु"
+
+#: kscandevice.cpp:1526
+#, kde-format
+msgid "No device"
+msgstr "न यन्त्रम्"
+
+#: kscandevice.cpp:1527
+#, kde-format
+msgid "Bad parameter"
+msgstr "दुष्टः पैरामीटर्"
+
+#: kscandevice.cpp:1528
+#, kde-format
+msgid "Cannot open device"
+msgstr "यन्त्रं उद्घाटयितुं न शक्नोति"
+
+#: kscandevice.cpp:1529
+#, kde-format
+msgid "sane_control_option() failed"
+msgstr "sane_control_option () विफलम्"
+
+#: kscandevice.cpp:1530
+#, kde-format
+msgid "Error while scanning"
+msgstr "स्कैनिङ्गं कुर्वन् त्रुटिः"
+
+#: kscandevice.cpp:1531
+#, kde-format
+msgid "Empty picture"
+msgstr "रिक्तं चित्रम्"
+
+#: kscandevice.cpp:1532
+#, kde-format
+msgid "Out of memory"
+msgstr "स्मृतेः बहिः"
+
+#: kscandevice.cpp:1533
+#, kde-format
+msgid "Needs reload"
+msgstr "पुनः लोडस्य आवश्यकता अस्ति"
+
+#: kscandevice.cpp:1534
+#, kde-format
+msgid "Cancelled"
+msgstr "रद्दं कृतम्"
+
+#: kscandevice.cpp:1535
+#, kde-format
+msgid "Not active"
+msgstr "न सक्रियः"
+
+#: kscandevice.cpp:1536
+#, kde-format
+msgid "Not supported"
+msgstr "न समर्थितम्"
+
+#: kscandevice.cpp:1537
+#, kde-format
+msgid "Unknown status %1"
+msgstr "अज्ञात स्थिति %1"
+
+#: kscanoption.cpp:1027
+#, kde-format
+msgid "pixels"
+msgstr "पिक्सेल्"
+
+#: kscanoption.cpp:1028
+#, kde-format
+msgid "bits"
+msgstr "बिट्"
+
+#: kscanoption.cpp:1029
+#, kde-format
+msgid "mm"
+msgstr "मि.मी"
+
+#: kscanoption.cpp:1030
+#, kde-format
+msgid "dpi"
+msgstr "dpi"
+
+#: kscanoption.cpp:1031
+#, kde-format
+msgid "%"
+msgstr "% ."
+
+#: kscanoption.cpp:1032
+#, kde-format
+msgid "µsec"
+msgstr "μsec"
+
+#: kscanoptset.cpp:190
+#, kde-format
+msgid "No description"
+msgstr "न वर्णनम्"
+
+#: previewer.cpp:243
+#, no-c-format, kde-format
+msgctxt "@info:status"
+msgid "%1x%2mm, %3x%4pix"
+msgstr ""
+
+#: previewer.cpp:246
+#, no-c-format, kde-format
+msgctxt "@info:status"
+msgid "%1x%2mm"
+msgstr ""
+
+#: previewer.cpp:340
+#, kde-format
+msgid ""
+"The autodetection of images on the preview depends on the background color "
+"of the preview image (the result of scanning with no document loaded).\n"
+"\n"
+"Please select whether the background of the preview image is black or white."
+msgstr ""
+"पूर्वावलोकने चित्राणां स्वयमेव अन्वेषणं पूर्वावलोकनप्रतिबिम्बस्य पृष्ठभूमिवर्णस्य उपरि निर्भरं "
+"भवति (दस्तावेजं लोड् न कृत्वा स्कैनिङ्गस्य परिणामः) ।\n"
+"\n"
+"कृपया पूर्वावलोकनप्रतिबिम्बस्य पृष्ठभूमिः कृष्णा वा श्वेतवर्णः वा इति चिनोतु ।"
+
+#: previewer.cpp:341
+#, kde-format
+msgctxt "@title:window"
+msgid "Autodetection Background"
+msgstr ""
+
+#: previewer.cpp:342
+#, kde-format
+msgctxt "@action:button Name of colour"
+msgid "White"
+msgstr "श्वेतः"
+
+#: previewer.cpp:343
+#, kde-format
+msgctxt "@action:button Name of colour"
+msgid "Black"
+msgstr "कृष्णः"
+
+#: scandevices.cpp:204
+#, kde-format
+msgid "Unknown device '%1'"
+msgstr "अज्ञातं यन्त्रं '%1'."
+
+#: scanglobal.cpp:136
+#, kde-format
+msgid "SANE - Scanner Access Now Easy"
+msgstr "SANE - स्कैनर-प्रवेशः अधुना सुलभः"
+
+#: scanglobal.cpp:137
+#, kde-format
+msgid "Scanner access and driver library"
+msgstr "स्कैनर-प्रवेशः चालकपुस्तकालयः च"
+
+#: scanglobal.cpp:144
+#, kde-format
+msgid "LibTIFF"
+msgstr "लिबटीफ्फ"
+
+#: scanglobal.cpp:145
+#, kde-format
+msgid "TIFF image format library"
+msgstr "TIFF इमेज प्रारूप पुस्तकालय"
+
+#: scanglobal.cpp:158
+#, kde-format
+msgid "libpaper"
+msgstr "libpaper इति"
+
+#: scanglobal.cpp:159
+#, kde-format
+msgid "Paper size configuration library"
+msgstr "कागदस्य आकारस्य विन्यासपुस्तकालयः"
+
+#: scanimage.cpp:76
+#, kde-format
+msgid "Loading non-local images is not yet implemented"
+msgstr "अस्थानीयप्रतिमाः लोड् करणं अद्यापि कार्यान्वितं नास्ति"
+
+#: scanimage.cpp:128
+#, kde-format
+msgid "Image loading failed"
+msgstr "चित्रभारणं विफलम् अभवत्"
+
+#: scanimage.cpp:162
+#, kde-format
+msgid "Failed to open TIFF file"
+msgstr "TIFF सञ्चिकां उद्घाटयितुं असफलम्"
+
+#: scanimage.cpp:169
+#, kde-format
+msgid "Failed to read TIFF directory"
+msgstr "TIFF निर्देशिकां पठितुं असफलम्"
+
+#: scanimage.cpp:199
+#, kde-format
+msgid "Failed to read TIFF image"
+msgstr "TIFF चित्रं पठितुं असफलम्"
+
+#: scanimage.cpp:229
+#, kde-format
+msgid "TIFF not supported"
+msgstr "TIFF समर्थितम् नास्ति"
+
+#: scanparams.cpp:141
+#, kde-kuit-format
+msgctxt "@info"
+msgid "<title>Scanner&nbsp;Settings</title>"
+msgstr ""
+
+#: scanparams.cpp:161
+#, kde-format
+msgid "Pre&view"
+msgstr "पूर्व&दृश्यम्"
+
+#: scanparams.cpp:162
+#, kde-format
+msgid "Start a preview scan and show the preview image"
+msgstr "पूर्वावलोकनस्कैन् आरभ्य पूर्वावलोकनप्रतिबिम्बं दर्शयन्तु"
+
+#: scanparams.cpp:167
+#, kde-format
+msgid "Star&t Scan"
+msgstr "Star&t Scan"
+
+#: scanparams.cpp:168
+#, kde-format
+msgid "Start a scan and save the scanned image"
+msgstr "स्कैन् आरभ्य स्कैन् कृतं चित्रं रक्षन्तु"
+
+#: scanparams.cpp:200
+#, kde-format
+msgid "Stop"
+msgstr "विरमतु"
+
+#: scanparams.cpp:204
+#, kde-format
+msgid "Scanning"
+msgstr "स्कैनिङ्ग"
+
+#: scanparams.cpp:247
+#, kde-format
+msgid "&Basic"
+msgstr "&आधारभूत"
+
+#: scanparams.cpp:248
+#, kde-format
+msgid "Other"
+msgstr "इतर"
+
+#: scanparams.cpp:249
+#, kde-format
+msgid "Advanced"
+msgstr "उन्नतं"
+
+#: scanparams.cpp:275
+#, kde-format
+msgid "SANE Debug (from PNM image)"
+msgstr "SANE Debug (PNM चित्रात्)"
+
+#: scanparams.cpp:276
+#, kde-kuit-format
+msgctxt "@info:tooltip"
+msgid ""
+"Operate in the same way that a real scanner does (including scan area, image "
+"processing etc.), but reading from the specified image file. See <link url="
+"\"man:sane-pnm(5)\">sane-pnm(5)</link> for more information."
+msgstr ""
+
+#: scanparams.cpp:278
+#, kde-format
+msgid "Virtual Scanner (any image format)"
+msgstr "वर्चुअल् स्कैनर् (किमपि चित्रस्वरूपम्) २."
+
+#: scanparams.cpp:279
+#, kde-kuit-format
+msgctxt "@info:tooltip"
+msgid ""
+"Do not perform any scanning or processing, but simply read the specified "
+"image file. This is for testing the image saving, etc."
+msgstr ""
+
+#: scanparams.cpp:296
+#, kde-format
+msgid "Reading mode:"
+msgstr "पठनविधिः : १."
+
+#: scanparams.cpp:414
+#, kde-format
+msgid "Default (from scan settings)"
+msgstr "पूर्वनिर्धारितम् (स्कैन सेटिंग्स् तः)"
+
+#: scanparams.cpp:415
+#, kde-format
+msgid "Black/white bitmap"
+msgstr "कृष्ण/श्वेत बिटमैप"
+
+#: scanparams.cpp:416
+#, kde-format
+msgid "Grey scale"
+msgstr "ग्रे स्केल"
+
+#: scanparams.cpp:417
+#, kde-format
+msgid "Low colour"
+msgstr "निम्नवर्णः"
+
+#: scanparams.cpp:418
+#, kde-format
+msgid "High colour"
+msgstr "उच्चवर्णः"
+
+#: scanparams.cpp:428
+#, kde-format
+msgid "Force image format:"
+msgstr "बलप्रतिबिम्बस्वरूपम् : १."
+
+#: scanparams.cpp:481
+#, kde-format
+msgid "Edit Gamma Table..."
+msgstr "गामा सारणी सम्पादयतु..."
+
+#: scanparams.cpp:553
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"<title>No scanner selected</title><nl/><nl/>Select a scanner device to "
+"perform scanning."
+msgstr ""
+
+#: scanparams.cpp:573
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"<title>No scanner found, or unable to access it</title><nl/><nl/>There was a "
+"problem using the SANE (Scanner Access Now Easy) library to access the "
+"scanner device.  There may be a problem with your SANE installation, or it "
+"may not be configured to support your scanner.<nl/><nl/>Check that SANE is "
+"correctly installed and configured on your system, and also that the scanner "
+"device name and settings are correct.<nl/><nl/>See the SANE project home "
+"page (<link url=\"http://www.sane-project.org\">www.sane-project.org</link>) "
+"for more information on SANE installation and setup."
+msgstr ""
+
+#: scanparams.cpp:675
+#, kde-format
+msgid "1-bit depth scan cannot be done in color"
+msgstr "१-बिट् गभीरता-स्कैन् वर्णेन कर्तुं न शक्यते"
+
+#: scanparams.cpp:678
+#, kde-format
+msgid "16-bit depth scans are not supported"
+msgstr "१६-बिट् गभीरतास्कैन्स् समर्थिताः न सन्ति"
+
+#: scanparams.cpp:688
+#, kde-format
+msgid "A file must be entered for testing or virtual scanning"
+msgstr "परीक्षणार्थं वा वर्चुअल् स्कैनिङ्गार्थं वा सञ्चिका प्रविष्टा भवितुमर्हति"
+
+#: scanparams.cpp:694
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"The testing or virtual file <filename>%1</filename><nl/>was not found or is "
+"not readable."
+msgstr ""
+
+#: scanparams.cpp:704
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"SANE Debug can only read PNM files.<nl/>The specified file is type <icode>"
+"%1</icode>."
+msgstr ""
+
+#: scanparams.cpp:721
+#, kde-kuit-format
+msgid "Scan in progress"
+msgstr "स्कैन् प्रचलति"
+
+#: scanparams.cpp:722
+#, kde-kuit-format
+msgid "Scan in progress<nl/><nl/>%1"
+msgstr "स्कैन् प्रचलति<nl/><nl/>%1"
+
+#: scanparams.cpp:742
+#, kde-format
+msgid "Cannot preview in Virtual Scanner mode"
+msgstr "Virtual Scanner मोड् मध्ये पूर्वावलोकनं कर्तुं न शक्यते"
+
+#. i18n: ectx: label, entry (StartupOnlyLocal), group (Startup)
+#: scansettings.kcfg:12
+#, kde-format
+msgid "Query network for available scanners"
+msgstr "उपलब्धानां स्कैनराणां कृते प्रश्नजालम्"
+
+#. i18n: ectx: tooltip, entry (StartupOnlyLocal), group (Startup)
+#: scansettings.kcfg:13
+#, kde-format
+msgid ""
+"<div>Check this if you want a network query for available scanners.<br/><br/"
+">Note that this does not mean a query over the entire network, but only "
+"those hosts configured for SANE.</div>"
+msgstr ""
+"<div>यदि भवान् उपलब्धानां स्कैनराणां कृते संजालप्रश्नं इच्छति तर्हि एतत् परीक्ष्यताम् ।<br/"
+"><br/> ध्यानं कुर्वन्तु यत् एतस्य अर्थः सम्पूर्णजालस्य उपरि प्रश्नः नास्ति, अपितु केवलं ते होस्ट्-"
+"सङ्केताः SANE कृते विन्यस्ताः ।</div>"
+
+#. i18n: ectx: label, entry (StartupUseProxy), group (Startup)
+#: scansettings.kcfg:18
+#, kde-format
+msgid "Use the system proxy settings to access network scanners"
+msgstr "संजालस्कैनर्-प्रवेशार्थं सिस्टम्-प्रोक्सी-सेटिंग्स्-उपयोगं कुर्वन्तु"
+
+#. i18n: ectx: tooltip, entry (StartupUseProxy), group (Startup)
+#: scansettings.kcfg:19
+#, kde-format
+msgid ""
+"<div>Check this if you want to use the standard system proxy settings to "
+"access network scanners.<br/><br/>Note that some SANE backends (for example "
+"'escl') may not work properly through a proxy.</div>"
+msgstr ""
+"<div>यदि भवान् संजालस्कैनर्-प्रवेशार्थं मानक-प्रणाली-प्रॉक्सी-सेटिंग्स् उपयोक्तुं इच्छति तर्हि "
+"एतत् परीक्ष्यताम् ।<br/><br/> ध्यानं कुर्वन्तु यत् केचन SANE पृष्ठभागाः (उदाहरणार्थं &#39;"
+"escl&#39;) प्रॉक्सीद्वारा सम्यक् कार्यं न कर्तुं शक्नुवन्ति ।</div>"
+
+#. i18n: ectx: label, entry (StartupSkipAsk), group (Startup)
+#: scansettings.kcfg:28
+#, kde-format
+msgid "Show the scanner selection dialog"
+msgstr "स्कैनरचयनसंवादं दर्शयतु"
+
+#. i18n: ectx: tooltip, entry (StartupSkipAsk), group (Startup)
+#: scansettings.kcfg:29
+#, kde-format
+msgid "<div>Check this to show the scanner selection dialog on startup.</div>"
+msgstr "<div>प्रारम्भे स्कैनरचयनसंवादं दर्शयितुं एतत् पश्यन्तु ।</div>"
+
+#. i18n: ectx: label, entry (PreviewAutoselThreshold), group (Scanner Name)
+#: scansettings.kcfg:61
+#, kde-format
+msgid "Threshold:"
+msgstr "देहली:"
+
+#. i18n: ectx: tooltip, entry (PreviewAutoselThreshold), group (Scanner Name)
+#: scansettings.kcfg:62
+#, kde-format
+msgid ""
+"<div>Threshold for auto-detection. All pixels lighter (on a black "
+"background) or darker (on a white background) than this are considered to be "
+"part of the image.</div>"
+msgstr ""
+"<div>स्वतः-परिचयस्य कृते सीमा । अस्मात् लघुतराः (कृष्णपृष्ठभूमिभागे) अथवा कृष्णतराः "
+"(श्वेतपृष्ठभूमिभागे) सर्वे पिक्सेलाः चित्रस्य भागः इति मन्यन्ते ।</div>"
+
+#. i18n: ectx: label, entry (PreviewAutoselDustsize), group (Scanner Name)
+#: scansettings.kcfg:69
+#, kde-format
+msgid "Dust size (pixels):"
+msgstr "धूलस्य आकारः (पिक्सेलः) : १."
+
+#. i18n: ectx: tooltip, entry (PreviewAutoselDustsize), group (Scanner Name)
+#: scansettings.kcfg:70
+#, kde-format
+msgid ""
+"<div>Set the dust size; dark or light areas smaller than this will be "
+"ignored</div>"
+msgstr ""
+"<div>रजः आकारं निर्धारयन्तु; अस्मात् लघुतराः कृष्णाः प्रकाशाः वा क्षेत्राणि उपेक्षितानि "
+"भविष्यन्ति</div>"
+
+#. i18n: ectx: label, entry (PreviewAutoselMargin), group (Scanner Name)
+#: scansettings.kcfg:77
+#, kde-format
+msgid "Add/subtract margin (mm):"
+msgstr "मार्जिन योजयतु/घटयतु (मि.मी.): ."
+
+#. i18n: ectx: tooltip, entry (PreviewAutoselMargin), group (Scanner Name)
+#: scansettings.kcfg:78
+#, kde-format
+msgid ""
+"<div>Set a margin to be added to or subtracted from the detected area</div>"
+msgstr "<div>ज्ञातक्षेत्रे योजयितुं घटितुं वा मार्जिनं सेट् कुर्वन्तु</div>"
+
+#. i18n: ectx: label, entry (PreviewAutoselBackground), group (Scanner Name)
+#: scansettings.kcfg:85
+#, kde-format
+msgid "Scanner background:"
+msgstr "स्कैनर पृष्ठभूमिः १."
+
+#. i18n: ectx: tooltip, entry (PreviewAutoselBackground), group (Scanner Name)
+#: scansettings.kcfg:86
+#, kde-format
+msgid ""
+"<div>Select whether a scan of the empty scanner glass results in a black or "
+"a white image</div>"
+msgstr ""
+"<div>रिक्तस्य स्कैनर-काचस्य स्कैन्-करणेन कृष्णवर्णीयं वा श्वेतवर्णीयं वा चित्रं भवति वा इति "
+"चिनोतु</div>"
+
+#: scansizeselector.cpp:119
+#, kde-format
+msgid "Set the size of the scanned area"
+msgstr "स्कैन् कृतस्य क्षेत्रस्य आकारं सेट् कुर्वन्तु"
+
+#: scansizeselector.cpp:124
+#, kde-format
+msgid "Full size"
+msgstr "पूर्ण आकार"
+
+#: scansizeselector.cpp:125
+#, kde-format
+msgid "(No selection)"
+msgstr "(चयनं नास्ति) २."
+
+#: scansizeselector.cpp:143
+#, kde-format
+msgid "Portrait"
+msgstr "चित्रम्"
+
+#: scansizeselector.cpp:148
+#, kde-format
+msgid "Landscape"
+msgstr "भूप्रदेश"
+
+#: scansizeselector.cpp:159
+#, kde-format
+msgid "Set the orientation for a preset size of the scanned area"
+msgstr "स्कैन् कृतस्य क्षेत्रस्य पूर्वनिर्धारित आकारस्य अभिमुखीकरणं सेट् कुर्वन्तु"
+
+#: scansizeselector.cpp:262
+#, kde-format
+msgid "Selection"
+msgstr "चयनम्"

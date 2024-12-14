@@ -117,7 +117,7 @@ msgstr ""
 "find&#8209;scanner(1)</link> para SCSI, USB ou escáneres de porto paralelo, "
 "ou a orde <link url=\"man:/scanimage\">scanimage(1)</link> coa opción "
 "<icode>&#8209;L</icode> para escáneres de rede. Se se atopa o escáner, "
-"introduza o nome do dispositivo que mostran estas ordes."
+"introduza o nome do dispositivo que amosan estas ordes."
 
 #: adddevicedialog.cpp:143
 #, kde-kuit-format
