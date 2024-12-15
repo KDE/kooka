@@ -3,28 +3,31 @@
 # This file is distributed under the same license as the kooka package.
 # Kali <EMAIL@ADDRESS>, 2024.
 #
+# SPDX-FileCopyrightText: 2024 kali <skkalwar999@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-09-24 02:01+0000\n"
-"PO-Revision-Date: 2024-12-13 19:09+0530\n"
-"Last-Translator: Kali <EMAIL@ADDRESS>\n"
-"Language-Team: Sanskrit\n"
+"PO-Revision-Date: 2024-12-14 01:10+0530\n"
+"Last-Translator: kali <skkalwar999@gmail.com>\n"
+"Language-Team: Sanskrit <kde-i18n-doc@kde.org>\n"
 "Language: sa\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Lokalize 24.08.2\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
-msgstr ""
+msgstr "भवतः नामानि"
 
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
-msgstr ""
+msgstr "भवतः ईमेलपत्राणि"
 
 #: ../libdialogutil/imagefilter.cpp:85
 #, kde-format
@@ -48,6 +51,13 @@ msgid ""
 "<link url=\"?2\">locating devices</link>, <link url=\"?3\">HP scanners</"
 "link>, <link url=\"?4\">device not found</link>."
 msgstr ""
+"यदि भवतः स्कैनरः स्वयमेव न ज्ञातः तर्हि भवन्तः अत्र निर्दिष्टुं शक्नुवन्ति । द<interface> "
+"स्कैनर यन्त्रम्</interface> SANE पृष्ठभागस्य यन्त्रनाम अस्ति । द<interface> निर्माता</"
+"interface> , ९.<interface> प्रकारः</interface> तथा<interface> वर्णनम्‌</"
+"interface> पश्चात् स्कैनरस्य परिचयार्थं उपयोक्तुं शक्यते ।<nl/><nl/> विषये अधिकाधिकं "
+"सूचनाः<link url=\"?1\"> SANE पृष्ठभागाः</link> , ९.<link url=\"?2\"> यन्त्राणां "
+"स्थाननिर्धारणम्</link> , ९.<link url=\"?3\"> एचपी स्कैनर</link> , ९.<link url=\"?"
+"4\"> यन्त्रं न लब्धम्</link> ."
 
 #: adddevicedialog.cpp:77
 #, kde-format
@@ -58,7 +68,7 @@ msgstr "स्कैनरयन्त्रम् : १."
 #, kde-format
 msgctxt "Value used for manufacturer if none entered"
 msgid "User specified"
-msgstr ""
+msgstr "उपयोक्ता निर्दिष्टः"
 
 #: adddevicedialog.cpp:82
 #, kde-format
@@ -84,6 +94,10 @@ msgid ""
 "\">sane(7)</link> or <link url=\"man:/sane-dll\">sane&#8209;dll(5)</link> "
 "for more information on available backends and the format of device names."
 msgstr ""
+"द<interface> स्कैनर यन्त्रम्</interface> पृष्ठभागस्य नाम (वैकल्पिकमापदण्डैः सह) "
+"भवितुमर्हति यत् SANE द्वारा अवगम्यते । पश्यतु<link url=\"man:/sane\"> सने(७) २.</"
+"link> वा<link url=\"man:/sane-dll\"> sane‐dll(5) ९.</link> उपलब्धपृष्ठभागस्य "
+"अधिकसूचनार्थं तथा उपकरणनामस्वरूपस्य कृते ।"
 
 #: adddevicedialog.cpp:134
 #, kde-kuit-format
@@ -96,6 +110,11 @@ msgid ""
 "<icode>&#8209;L</icode> option for network scanners. If the scanner is "
 "found, then enter the device name displayed by these commands."
 msgstr ""
+"अत्र प्रविष्टव्या सूचनां अन्वेष्टुं, यन्त्रस्य स्थानं ज्ञातुं प्रयतध्वम्<link url=\"man:/sane-find-"
+"scanner\"> sane‐find‐स्कैनर(1) 1.1.</link> SCSI, USB अथवा समानान्तरपोर्ट् स्कैनर् कृते "
+"आदेशः, अथवा...<link url=\"man:/scanimage\"> scanimage(1) ९.</link> आज्ञा "
+"सह<icode> ‐ल</icode> संजालस्कैनर् कृते विकल्पः। यदि स्कैनरः लभ्यते तर्हि एतैः आदेशैः "
+"प्रदर्शितं यन्त्रनाम प्रविशतु ।"
 
 #: adddevicedialog.cpp:143
 #, kde-kuit-format
@@ -108,6 +127,12 @@ msgid ""
 "the scanner is found by HPLIP, then the device name <icode>hp:</icode> that "
 "it displays needs to be replaced by <icode>hpaio:</icode> for SANE."
 msgstr ""
+"USB अथवा संजालयुक्तस्य HP स्कैनरस्य कृते उपयुज्यते<link url=\"http://hplip.sourceforge."
+"net/\"> HPLIP</link> , इत्यस्य उपयोगं कर्तुं प्रयतस्व<command> hp‐probe इति</"
+"command> तस्य स्थानं ज्ञातुं आदेशः यथा<icode> hp‐probe ‐b usb</icode> वा<icode> hp‐"
+"probe ‐b जालम्</icode> . ध्यानं कुर्वन्तु यत् यदि स्कैनरः HPLIP द्वारा लभ्यते तर्हि "
+"उपकरणस्य नाम<icode> hp: .</icode> यत् प्रदर्शयति तत् प्रतिस्थापनीयम्<icode> hpaio: १."
+"</icode> SANE कृते ।"
 
 #: adddevicedialog.cpp:152
 #, kde-kuit-format
@@ -117,36 +142,39 @@ msgid ""
 "by SANE. Check the SANE documentation for a <link url=\"http://www.sane-"
 "project.org/sane-supported-devices.html\">list of supported devices</link>."
 msgstr ""
+"यदि एते आदेशाः भवतः स्कैनरस्य स्थानं ज्ञातुं असफलाः भवन्ति तर्हि SANE द्वारा समर्थितं न भवेत् "
+"। SANE दस्तावेजीकरणं पश्यन्तु क<link url=\"http://www.sane-project.org/sane-"
+"supported-devices.html\"> समर्थितयन्त्राणां सूची</link> ."
 
 #: autoselectbar.cpp:56
 #, kde-kuit-format
 msgctxt "@info"
 msgid "<subtitle>Auto Select</subtitle>"
-msgstr ""
+msgstr "<subtitle>स्वयं चयनं</subtitle>"
 
 #: autoselectbar.cpp:82
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "This is the grayscale value of the selected threshold"
-msgstr ""
+msgstr "इदं चयनितस्य दहलीजस्य ग्रेस्केल् मूल्यम् अस्ति"
 
 #: autoselectbar.cpp:90
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Perform the auto-detection again"
-msgstr ""
+msgstr "पुनः स्वतः अन्वेषणं कुर्वन्तु"
 
 #: autoselectbar.cpp:97
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Advanced settings for auto-detection"
-msgstr ""
+msgstr "स्वयमेव अन्वेषणार्थं उन्नतसेटिंग्स्"
 
 #: autoselectdialog.cpp:56
 #, kde-format
 msgctxt "@title:window"
 msgid "Autoselect Settings"
-msgstr ""
+msgstr "सेटिंग्स् स्वयमेव चयनं कुर्वन्तु"
 
 #: autoselectdialog.cpp:82
 #, kde-format
@@ -317,7 +345,7 @@ msgstr "पूर्वनिर्धारितं प्रारम्भ�
 #, kde-kuit-format
 msgctxt "@info"
 msgid "The scanner<nl/><icode>%1</icode><nl/>requires authentication."
-msgstr ""
+msgstr "स्कैनर<nl/><icode>%1</icode><nl/>प्रमाणीकरणस्य आवश्यकता भवति ।"
 
 #: kscandevice.cpp:1481
 #, kde-format
@@ -428,13 +456,13 @@ msgstr "न वर्णनम्"
 #, no-c-format, kde-format
 msgctxt "@info:status"
 msgid "%1x%2mm, %3x%4pix"
-msgstr ""
+msgstr "%1x%2mm, %3x%4pix"
 
 #: previewer.cpp:246
 #, no-c-format, kde-format
 msgctxt "@info:status"
 msgid "%1x%2mm"
-msgstr ""
+msgstr "%1x%2मि.मी"
 
 #: previewer.cpp:340
 #, kde-format
@@ -453,7 +481,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "Autodetection Background"
-msgstr ""
+msgstr "स्वतः अन्वेषण पृष्ठभूमि"
 
 #: previewer.cpp:342
 #, kde-format
@@ -536,7 +564,7 @@ msgstr "TIFF समर्थितम् नास्ति"
 #, kde-kuit-format
 msgctxt "@info"
 msgid "<title>Scanner&nbsp;Settings</title>"
-msgstr ""
+msgstr "<title>स्कैनर सेटिंग्स्</title>"
 
 #: scanparams.cpp:161
 #, kde-format
@@ -596,6 +624,9 @@ msgid ""
 "processing etc.), but reading from the specified image file. See <link url="
 "\"man:sane-pnm(5)\">sane-pnm(5)</link> for more information."
 msgstr ""
+"यथा वास्तविकः स्कैनरः करोति तथा एव कार्यं कुर्वन्तु (स्कैनक्षेत्रं, चित्रसंसाधनम् इत्यादयः "
+"समाविष्टाः), परन्तु निर्दिष्टप्रतिबिम्बसञ्चिकातः पठनं कुर्वन्तु । पश्यतु<link url=\"man:"
+"sane-pnm(5)\"> सने-पन्म(5) .</link> अधिकविवरणार्थं।"
 
 #: scanparams.cpp:278
 #, kde-format
@@ -609,6 +640,8 @@ msgid ""
 "Do not perform any scanning or processing, but simply read the specified "
 "image file. This is for testing the image saving, etc."
 msgstr ""
+"किमपि स्कैनिङ्गं वा प्रक्रियां वा न कुर्वन्तु, अपितु केवलं निर्दिष्टं चित्रसञ्चिकां पठन्तु । एतत् "
+"प्रतिबिम्बसञ्चयस्य परीक्षणार्थम् इत्यादि ।"
 
 #: scanparams.cpp:296
 #, kde-format
@@ -657,6 +690,7 @@ msgid ""
 "<title>No scanner selected</title><nl/><nl/>Select a scanner device to "
 "perform scanning."
 msgstr ""
+"<title>कोऽपि स्कैनरः चयनितः नास्ति</title><nl/><nl/> स्कैनिङ्गं कर्तुं स्कैनरयन्त्रं चिनोतु ।"
 
 #: scanparams.cpp:573
 #, kde-kuit-format
@@ -671,6 +705,13 @@ msgid ""
 "page (<link url=\"http://www.sane-project.org\">www.sane-project.org</link>) "
 "for more information on SANE installation and setup."
 msgstr ""
+"<title>न कोऽपि स्कैनरः लब्धः, अथवा तत् प्राप्तुं असमर्थः</title><nl/><nl/> स्कैनर-यन्त्रं "
+"प्राप्तुं SANE (Scanner Access Now Easy) पुस्तकालयस्य उपयोगेन समस्या आसीत् । भवतः SANE "
+"संस्थापनस्य समस्या अस्ति, अथवा भवतः स्कैनरस्य समर्थनार्थं विन्यस्तं न भवेत् ।<nl/><nl/> SANE "
+"भवतः प्रणाल्यां सम्यक् संस्थापितं विन्यस्तं च इति पश्यन्तु, अपि च स्कैनरयन्त्रस्य नाम सेटिङ्ग्स् च "
+"सम्यक् सन्ति वा इति ।<nl/><nl/> SANE परियोजनायाः मुखपृष्ठं पश्यन्तु (<link url="
+"\"http://www.sane-project.org\"> www.sane-project.org इत्यत्र</link> ) SANE "
+"संस्थापनस्य सेटअपस्य च अधिकसूचनार्थं ।"
 
 #: scanparams.cpp:675
 #, kde-format
@@ -694,6 +735,8 @@ msgid ""
 "The testing or virtual file <filename>%1</filename><nl/>was not found or is "
 "not readable."
 msgstr ""
+"परीक्षणं वा आभासीसञ्चिकां वा <filename>%1</filename><nl/>न प्राप्ता अथवा पठनीया "
+"नास्ति ।"
 
 #: scanparams.cpp:704
 #, kde-kuit-format
@@ -702,6 +745,8 @@ msgid ""
 "SANE Debug can only read PNM files.<nl/>The specified file is type <icode>"
 "%1</icode>."
 msgstr ""
+"SANE Debug केवलं PNM सञ्चिकाः पठितुं शक्नोति।<nl/>निर्दिष्टसञ्चिका <icode>%1</icode> "
+"इति प्रकारः अस्ति ।"
 
 #: scanparams.cpp:721
 #, kde-kuit-format
