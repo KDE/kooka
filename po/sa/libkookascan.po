@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-09-24 02:01+0000\n"
-"PO-Revision-Date: 2024-12-14 01:10+0530\n"
+"PO-Revision-Date: 2024-12-20 22:01+0530\n"
 "Last-Translator: kali <skkalwar999@gmail.com>\n"
 "Language-Team: Sanskrit <kde-i18n-doc@kde.org>\n"
 "Language: sa\n"
@@ -62,7 +62,7 @@ msgstr ""
 #: adddevicedialog.cpp:77
 #, kde-format
 msgid "Scanner device:"
-msgstr "स्कैनरयन्त्रम् : १."
+msgstr "स्कैनरयन्त्रम् :"
 
 #: adddevicedialog.cpp:80 scandevices.cpp:186
 #, kde-format
@@ -73,12 +73,12 @@ msgstr "उपयोक्ता निर्दिष्टः"
 #: adddevicedialog.cpp:82
 #, kde-format
 msgid "Manufacturer:"
-msgstr "निर्माता : १."
+msgstr "निर्माता :"
 
 #: adddevicedialog.cpp:86
 #, kde-format
 msgid "Device type:"
-msgstr "यन्त्रप्रकारः : १."
+msgstr "यन्त्रप्रकारः :"
 
 #: adddevicedialog.cpp:90
 #, kde-format
@@ -199,7 +199,7 @@ msgstr "Scan Device इति चिनोतु"
 #: deviceselector.cpp:71
 #, kde-format
 msgid "Available Scanners:"
-msgstr "उपलब्धाः स्कैनरः : १."
+msgstr "उपलब्धाः स्कैनरः :"
 
 #: deviceselector.cpp:82
 #, kde-format
@@ -274,42 +274,42 @@ msgstr "इमेज ज़ूम"
 #: imgscaledialog.cpp:72
 #, kde-format
 msgid "25 %"
-msgstr "२५ % २."
+msgstr "२५ %"
 
 #: imgscaledialog.cpp:79
 #, kde-format
 msgid "50 %"
-msgstr "५० % ९."
+msgstr "५० %"
 
 #: imgscaledialog.cpp:86
 #, kde-format
 msgid "75 %"
-msgstr "७५ % ९."
+msgstr "७५ %"
 
 #: imgscaledialog.cpp:93
 #, kde-format
 msgid "&100 %"
-msgstr "&१०० % ९."
+msgstr "&१०० %"
 
 #: imgscaledialog.cpp:105
 #, kde-format
 msgid "150 &%"
-msgstr "१५० &% २."
+msgstr "१५० &%"
 
 #: imgscaledialog.cpp:112
 #, kde-format
 msgid "200 %"
-msgstr "२०० % २."
+msgstr "२०० %"
 
 #: imgscaledialog.cpp:119
 #, kde-format
 msgid "300 %"
-msgstr "३०० % २."
+msgstr "३०० %"
 
 #: imgscaledialog.cpp:126
 #, kde-format
 msgid "400 %"
-msgstr "४०० % २."
+msgstr "४०० %"
 
 #: imgscaledialog.cpp:141
 #, kde-format
@@ -631,7 +631,7 @@ msgstr ""
 #: scanparams.cpp:278
 #, kde-format
 msgid "Virtual Scanner (any image format)"
-msgstr "वर्चुअल् स्कैनर् (किमपि चित्रस्वरूपम्) २."
+msgstr "वर्चुअल् स्कैनर् (किमपि चित्रस्वरूपम्)"
 
 #: scanparams.cpp:279
 #, kde-kuit-format
@@ -646,7 +646,7 @@ msgstr ""
 #: scanparams.cpp:296
 #, kde-format
 msgid "Reading mode:"
-msgstr "पठनविधिः : १."
+msgstr "पठनविधिः :"
 
 #: scanparams.cpp:414
 #, kde-format
@@ -676,7 +676,7 @@ msgstr "उच्चवर्णः"
 #: scanparams.cpp:428
 #, kde-format
 msgid "Force image format:"
-msgstr "बलप्रतिबिम्बस्वरूपम् : १."
+msgstr "बलप्रतिबिम्बस्वरूपम् :"
 
 #: scanparams.cpp:481
 #, kde-format
@@ -832,7 +832,7 @@ msgstr ""
 #: scansettings.kcfg:69
 #, kde-format
 msgid "Dust size (pixels):"
-msgstr "धूलस्य आकारः (पिक्सेलः) : १."
+msgstr "धूलस्य आकारः (पिक्सेलः) :"
 
 #. i18n: ectx: tooltip, entry (PreviewAutoselDustsize), group (Scanner Name)
 #: scansettings.kcfg:70
@@ -861,7 +861,7 @@ msgstr "<div>ज्ञातक्षेत्रे योजयितुं �
 #: scansettings.kcfg:85
 #, kde-format
 msgid "Scanner background:"
-msgstr "स्कैनर पृष्ठभूमिः १."
+msgstr "स्कैनर पृष्ठभूमिः"
 
 #. i18n: ectx: tooltip, entry (PreviewAutoselBackground), group (Scanner Name)
 #: scansettings.kcfg:86
@@ -886,7 +886,7 @@ msgstr "पूर्ण आकार"
 #: scansizeselector.cpp:125
 #, kde-format
 msgid "(No selection)"
-msgstr "(चयनं नास्ति) २."
+msgstr "(चयनं नास्ति)"
 
 #: scansizeselector.cpp:143
 #, kde-format

@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-10-14 00:38+0000\n"
-"PO-Revision-Date: 2024-12-19 21:42+0530\n"
+"PO-Revision-Date: 2024-12-20 21:52+0530\n"
 "Last-Translator: kali <skkalwar999@gmail.com>\n"
 "Language-Team: Sanskrit <kde-i18n-doc@kde.org>\n"
 "Language: sa\n"
@@ -70,7 +70,7 @@ msgstr "अनुप्रयोगः:"
 #: ../plugins/destination/share/destinationshare.cpp:137
 #, kde-format
 msgid "Image format:"
-msgstr "चित्रस्वरूपम् : १."
+msgstr "चित्रस्वरूपम् :"
 
 #: ../plugins/destination/clipboard/destinationclipboard.cpp:61
 #, kde-format
@@ -219,7 +219,7 @@ msgstr "%1 इत्यस्य उपयोगेन ऑप्टिकल व
 #: ../plugins/ocr/abstractocrdialogue.cpp:192
 #, kde-format
 msgid "Executable:"
-msgstr "निष्पादनीयः : १."
+msgstr "निष्पादनीयः :"
 
 #: ../plugins/ocr/abstractocrdialogue.cpp:195
 #, kde-kuit-format
@@ -478,7 +478,7 @@ msgstr "कार्यान्वयनीय मार्ग"
 #: ../plugins/ocr/executablepathdialogue.cpp:52
 #, kde-format
 msgid "Executable path:"
-msgstr "निष्पादनीयः मार्गः : १."
+msgstr "निष्पादनीयः मार्गः :"
 
 #: ../plugins/ocr/executablepathdialogue.cpp:56
 #, kde-format
@@ -513,7 +513,7 @@ msgstr "GOCR परिणामसञ्चिका <filename>%1</filename><nl/
 #: ../plugins/ocr/gocr/ocrgocrengine.cpp:307
 #, kde-format
 msgid "Name or path of the GOCR executable:"
-msgstr "GOCR कार्यान्वयनीयस्य नाम वा मार्गः वा : १."
+msgstr "GOCR कार्यान्वयनीयस्य नाम वा मार्गः वा :"
 
 #: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:57
 #: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:165
@@ -972,17 +972,17 @@ msgstr ""
 #: formatdialog.cpp:316
 #, kde-format
 msgid "File format:"
-msgstr "सञ्चिकास्वरूपम् : १."
+msgstr "सञ्चिकास्वरूपम् :"
 
 #: formatdialog.cpp:338
 #, kde-format
 msgid "Image sub-format:"
-msgstr "चित्रस्य उपस्वरूपः : १."
+msgstr "चित्रस्य उपस्वरूपः :"
 
 #: formatdialog.cpp:384
 #, kde-format
 msgid "File name:"
-msgstr "सञ्चिकानाम : १."
+msgstr "सञ्चिकानाम :"
 
 #: formatdialog.cpp:398
 #, kde-format
@@ -1129,7 +1129,7 @@ msgstr ""
 #: imgprintdialog.cpp:105
 #, kde-format
 msgid "Screen resolution:"
-msgstr "स्क्रीन रिजोल्यूशन : १."
+msgstr "स्क्रीन रिजोल्यूशन :"
 
 #: imgprintdialog.cpp:110
 #, kde-format
@@ -1158,7 +1158,7 @@ msgstr ""
 #: imgprintdialog.cpp:119
 #, kde-format
 msgid "Scan resolution:"
-msgstr "स्कैन रिजोल्यूशन : १."
+msgstr "स्कैन रिजोल्यूशन :"
 
 #: imgprintdialog.cpp:124
 #, kde-format
@@ -1195,7 +1195,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Image width:"
-msgstr "चित्रस्य विस्तारः : १."
+msgstr "चित्रस्य विस्तारः :"
 
 #: imgprintdialog.cpp:142 imgprintdialog.cpp:156
 #, kde-format
@@ -1213,7 +1213,7 @@ msgstr "<div>यस्मिन् विस्तारे चित्रं �
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Image height:"
-msgstr "चित्रस्य ऊर्ध्वता : १."
+msgstr "चित्रस्य ऊर्ध्वता :"
 
 #: imgprintdialog.cpp:157
 #, kde-format
@@ -1262,7 +1262,7 @@ msgstr ""
 #, kde-format
 msgctxt "@option:check"
 msgid "Low resolution (fast draft print)"
-msgstr "न्यूनसंकल्पः (द्रुत मसौदामुद्रणम्) २."
+msgstr "न्यूनसंकल्पः (द्रुत मसौदामुद्रणम्)"
 
 #: imgprintdialog.cpp:190
 #, kde-format
@@ -1278,7 +1278,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Cut marks:"
-msgstr "कटचिह्नम् : १."
+msgstr "कटचिह्नम् :"
 
 #: imgprintdialog.cpp:200
 #, kde-format
@@ -1318,7 +1318,7 @@ msgstr "मुद्रणविन्यासः"
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Image size:"
-msgstr "चित्रस्य आकारः : १."
+msgstr "चित्रस्य आकारः :"
 
 #: imgprintdialog.cpp:222
 #, kde-format
@@ -1330,19 +1330,19 @@ msgstr "%1 x %2 पिक्स"
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Available print area:"
-msgstr "उपलब्धः मुद्रणक्षेत्रम् : १."
+msgstr "उपलब्धः मुद्रणक्षेत्रम् :"
 
 #: imgprintdialog.cpp:234
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Image print area:"
-msgstr "चित्रमुद्रणक्षेत्रम् : १."
+msgstr "चित्रमुद्रणक्षेत्रम् :"
 
 #: imgprintdialog.cpp:241
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Pages required:"
-msgstr "आवश्यकाः पृष्ठाः : १."
+msgstr "आवश्यकाः पृष्ठाः :"
 
 #: imgprintdialog.cpp:304
 #, kde-format
@@ -1380,7 +1380,7 @@ msgstr "%1"
 #, kde-format
 msgctxt "@info:status total(rows,cols)"
 msgid "%1 (%2 x %3)"
-msgstr "%1 (%2 x %3) २."
+msgstr "%1 (%2 x %3)"
 
 #: imgsaver.cpp:66
 #, kde-kuit-format
@@ -1704,7 +1704,7 @@ msgstr "Folder इत्यस्य नामकरणं कुर्वन्
 #: kookagallery.cpp:56
 #, kde-format
 msgid "Folder:"
-msgstr "पुटम् : १."
+msgstr "पुटम् :"
 
 #: kookapref.cpp:55
 #, kde-format
@@ -1773,7 +1773,7 @@ msgstr ""
 #: kookascanparams.cpp:114
 #, kde-format
 msgid "Scan &destination:"
-msgstr "स्कैन् &गन्तव्यस्थानम् : १."
+msgstr "स्कैन् &गन्तव्यस्थानम् :"
 
 #: kookascanparams.cpp:150
 #, kde-kuit-format
@@ -1928,7 +1928,7 @@ msgstr "<div>लघुचित्रदृश्यस्य कृते उ�
 #: kookasettings.kcfg:165
 #, kde-format
 msgid "Preview size:"
-msgstr "पूर्वावलोकनस्य आकारः : १."
+msgstr "पूर्वावलोकनस्य आकारः :"
 
 #. i18n: ectx: tooltip, entry (ThumbnailPreviewSize), group (thumbnailView)
 #: kookasettings.kcfg:166
@@ -1940,7 +1940,7 @@ msgstr "<div>लघुचित्रदृश्यस्य कृते प�
 #: kookasettings.kcfg:205
 #, kde-format
 msgid "Dust size:"
-msgstr "धूलस्य आकारः : १."
+msgstr "धूलस्य आकारः :"
 
 #. i18n: ectx: tooltip, entry (OcrGocrDustSize), group (gocr)
 #: kookasettings.kcfg:206
@@ -1958,7 +1958,7 @@ msgstr ""
 #: kookasettings.kcfg:211
 #, kde-format
 msgid "Gray level:"
-msgstr "ग्रे स्तरः : १."
+msgstr "ग्रे स्तरः :"
 
 #. i18n: ectx: tooltip, entry (OcrGocrGrayLevel), group (gocr)
 #: kookasettings.kcfg:212
@@ -1974,7 +1974,7 @@ msgstr ""
 #: kookasettings.kcfg:217
 #, kde-format
 msgid "Space width:"
-msgstr "अन्तरिक्षविस्तारः : १."
+msgstr "अन्तरिक्षविस्तारः :"
 
 #. i18n: ectx: tooltip, entry (OcrGocrSpaceWidth), group (gocr)
 #: kookasettings.kcfg:218
@@ -1990,7 +1990,7 @@ msgstr ""
 #: kookasettings.kcfg:223
 #, kde-format
 msgid "Certainty:"
-msgstr "निश्चयः : १."
+msgstr "निश्चयः :"
 
 #. i18n: ectx: tooltip, entry (OcrGocrCertainty), group (gocr)
 #: kookasettings.kcfg:224
@@ -2006,25 +2006,25 @@ msgstr ""
 #: kookasettings.kcfg:238
 #, kde-format
 msgid "Layout analysis mode:"
-msgstr "विन्यासविश्लेषणविधिः : १."
+msgstr "विन्यासविश्लेषणविधिः :"
 
 #. i18n: ectx: label, entry (ocrOcradCharset), group (ocrad)
 #: kookasettings.kcfg:251
 #, kde-format
 msgid "Character set:"
-msgstr "वर्णसमूहः : १."
+msgstr "वर्णसमूहः :"
 
 #. i18n: ectx: label, entry (ocrOcradFilter), group (ocrad)
 #: kookasettings.kcfg:255
 #, kde-format
 msgid "Filter:"
-msgstr "फ़िल्टर : १."
+msgstr "फ़िल्टर :"
 
 #. i18n: ectx: label, entry (ocrOcradTransform), group (ocrad)
 #: kookasettings.kcfg:259
 #, kde-format
 msgid "Transform:"
-msgstr "परिवर्तनम् : १."
+msgstr "परिवर्तनम् :"
 
 #. i18n: ectx: label, entry (ocrOcradInvert), group (ocrad)
 #: kookasettings.kcfg:263
@@ -2054,25 +2054,25 @@ msgstr "भाषा:"
 #: kookasettings.kcfg:300
 #, kde-format
 msgid "User word list:"
-msgstr "उपयोक्तृशब्दसूची : १."
+msgstr "उपयोक्तृशब्दसूची :"
 
 #. i18n: ectx: label, entry (ocrTesseractUserPatterns), group (tesseract)
 #: kookasettings.kcfg:304
 #, kde-format
 msgid "User patterns:"
-msgstr "उपयोक्तृप्रतिमानाः : १."
+msgstr "उपयोक्तृप्रतिमानाः :"
 
 #. i18n: ectx: label, entry (ocrTesseractEngineMode), group (tesseract)
 #: kookasettings.kcfg:308
 #, kde-format
 msgid "Engine mode:"
-msgstr "इञ्जिनविधिः : १."
+msgstr "इञ्जिनविधिः :"
 
 #. i18n: ectx: label, entry (ocrTesseractSegmentationMode), group (tesseract)
 #: kookasettings.kcfg:312
 #, kde-format
 msgid "Segmentation mode:"
-msgstr "विभाजनविधिः : १."
+msgstr "विभाजनविधिः :"
 
 #. i18n: ectx: Menu (file)
 #: kookaui.rc:5
@@ -2474,7 +2474,7 @@ msgstr "नूतनस्य स्कैन् पूर्वनिर्ध�
 #: newscanpresetdialog.cpp:66
 #, kde-format
 msgid "Preset name:"
-msgstr "पूर्वनिर्धारित नाम : १."
+msgstr "पूर्वनिर्धारित नाम :"
 
 #: newscanpresetdialog.cpp:73
 #, kde-format
@@ -2489,7 +2489,7 @@ msgstr "OCR परिणाम पाठं रक्षन्तु"
 #: ocrresedit.cpp:160
 #, kde-format
 msgid "Text File (*.txt)"
-msgstr "पाठसञ्चिका (*.txt) २."
+msgstr "पाठसञ्चिका (*.txt)"
 
 #: ocrresedit.cpp:166
 #, kde-kuit-format
@@ -2565,7 +2565,7 @@ msgstr "न कश्चित्"
 #: prefspages.cpp:392
 #, kde-format
 msgid "OCR Engine:"
-msgstr "ओसीआर इञ्जिन : १."
+msgstr "ओसीआर इञ्जिन :"
 
 #: prefspages.cpp:398
 #, kde-format
@@ -2762,7 +2762,7 @@ msgstr "नवीनं पुटम्"
 #: scangallery.cpp:1171
 #, kde-format
 msgid "Name for the new folder:"
-msgstr "नूतनपुटस्य नाम : १."
+msgstr "नूतनपुटस्य नाम :"
 
 #: scangallery.cpp:1194
 #, kde-kuit-format
