@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-10-14 00:38+0000\n"
-"PO-Revision-Date: 2024-12-24 20:39+0530\n"
+"PO-Revision-Date: 2024-12-25 19:45+0530\n"
 "Last-Translator: kali <shreekantkalwar@gmail.com>\n"
 "Language-Team: Sanskrit <kde-i18n-doc@kde.org>\n"
 "Language: sa\n"
@@ -2196,7 +2196,7 @@ msgstr "चयनं नास्ति"
 #: kookaview.cpp:650
 #, kde-format
 msgid "Gallery folder %1"
-msgstr "गैलरी फोल्डर् %1"
+msgstr "गैलरी समुच्चय %1"
 
 #: kookaview.cpp:650
 #, kde-format
@@ -2773,7 +2773,7 @@ msgstr "<nl/><filename>%2</filename><nl/>%1 इति पुटं निर्�
 #: scangallery.cpp:1196
 #, kde-format
 msgid "Folder Create Error"
-msgstr "फोल्डर् रचयतु त्रुटिः"
+msgstr "समुच्चय रचयतु त्रुटिः"
 
 #: scanpresetsdialog.cpp:63
 #, kde-format
