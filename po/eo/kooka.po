@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-10-14 00:38+0000\n"
-"PO-Revision-Date: 2024-05-17 13:51+0100\n"
+"PO-Revision-Date: 2024-12-27 10:42+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -2401,10 +2401,9 @@ msgid "Jonathan Marten"
 msgstr "Jonatano Marteno"
 
 #: main.cpp:94
-#, fuzzy, kde-format
-#| msgid "Current maintainer, KDE4 port"
+#, kde-format
 msgid "Current maintainer, KDE4/KF6 port"
-msgstr "Nuna prizorganto, KDE4-portado"
+msgstr "Nuna prizorganto, KDE4/KF6-portado"
 
 #: main.cpp:95
 #, kde-format
