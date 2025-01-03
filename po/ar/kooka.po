@@ -3,13 +3,13 @@
 # Ahmad M. Zawawi <zawawi@arabeyes.org>, 2004.
 # Tarig Abdu Taha <ihassan@kacst.edu.sa>, 2004.
 # محمد سعد  Mohamed SAAD <metehyi@free.fr>, 2006.
-# SPDX-FileCopyrightText: 2024 Zayed Al-Saidi <zayed.alsaidi@gmail.com>
+# SPDX-FileCopyrightText: 2024, 2025 Zayed Al-Saidi <zayed.alsaidi@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-10-14 00:38+0000\n"
-"PO-Revision-Date: 2024-12-26 09:53+0400\n"
+"PO-Revision-Date: 2025-01-02 11:09+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -78,9 +78,9 @@ msgid "Copying image to clipboard"
 msgstr ""
 
 #: ../plugins/destination/gallery/destinationgallery.cpp:69
-#, fuzzy, kde-kuit-format
+#, kde-kuit-format
 msgid "<filename>%1</filename>"
-msgstr "الــ orf %1 غير موجود."
+msgstr "<filename>%1</filename>"
 
 #: ../plugins/destination/print/destinationprint.cpp:78 kookaview.cpp:678
 #, kde-format
@@ -101,47 +101,44 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "Cannot Print"
-msgstr ""
+msgstr "تعذرت الطباعة"
 
 #: ../plugins/destination/print/destinationprint.cpp:106
 #, kde-format
 msgid "Print immediately with same settings"
-msgstr ""
+msgstr "اطبع حالًا بنفس الإعدادات"
 
 #: ../plugins/destination/print/destinationprint.cpp:116
-#, fuzzy, kde-format
-#| msgid "Print %1"
+#, kde-format
 msgid "Printing image"
-msgstr "إطبع %1"
+msgstr "يطبع صورة"
 
 #: ../plugins/destination/save/destinationsave.cpp:125
-#, fuzzy, kde-kuit-format
+#, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot save image to <filename>%1</filename><nl/><message>%2</message>"
-msgstr "الــ orf %1 غير موجود."
+msgstr "تعذّر حفظ الصورة إلى <filename>%1</filename><nl/><message>%2</message>"
 
 #: ../plugins/destination/save/destinationsave.cpp:127
 #: ../plugins/destination/save/destinationsave.cpp:230
-#, fuzzy, kde-format
+#, kde-format
 msgid "Cannot Save Image"
-msgstr "إ&حفظ الصورة..."
+msgstr "تعذّر حفظ الصورة"
 
 #: ../plugins/destination/save/destinationsave.cpp:154
-#, fuzzy, kde-format
-#| msgid "one image"
-#| msgid_plural "%1 images"
+#, kde-format
 msgid "Saving image"
-msgstr "لا صور"
+msgstr "يحفظ صورة"
 
 #: ../plugins/destination/save/destinationsave.cpp:155
-#, fuzzy, kde-kuit-format
+#, kde-kuit-format
 msgid "Saving to <filename>%1</filename>"
-msgstr "الــ orf %1 غير موجود."
+msgstr "يحفظ إلى <filename>%1</filename>"
 
 #: ../plugins/destination/save/destinationsave.cpp:172 formatdialog.cpp:280
-#, fuzzy, kde-format
+#, kde-format
 msgid "Save Scan"
-msgstr "إح&فظ ضوابط المسح الضوئي"
+msgstr "احفظ الممسوح"
 
 #: ../plugins/destination/save/destinationsave.cpp:228
 #, kde-kuit-format
@@ -168,9 +165,9 @@ msgid "The scan was shared to<nl/><link>%1</link>"
 msgstr ""
 
 #: ../plugins/destination/share/destinationshare.cpp:218
-#, fuzzy, kde-format
+#, kde-format
 msgid "Scan Shared"
-msgstr "ضوابط المسح الضوئي"
+msgstr "اكتملت مشاركة الممسوح"
 
 #: ../plugins/destination/share/destinationshare.cpp:227
 #, kde-kuit-format
@@ -194,14 +191,14 @@ msgid "Start the Optical Character Recognition process"
 msgstr "إبدء تشغيل إجراء التعرف على المحارف ضوئياً"
 
 #: ../plugins/ocr/abstractocrdialogue.cpp:104
-#, fuzzy, kde-format
+#, kde-format
 msgid "Stop OCR"
-msgstr "إبدء التعرف على المحارف ضوئياً"
+msgstr "أوقف التعرف على المحارف ضوئياً"
 
 #: ../plugins/ocr/abstractocrdialogue.cpp:104
-#, fuzzy, kde-format
+#, kde-format
 msgid "Stop the Optical Character Recognition process"
-msgstr "إبدء تشغيل إجراء التعرف على المحارف ضوئياً"
+msgstr "أوقف إجراء التعرف على المحارف ضوئياً"
 
 #: ../plugins/ocr/abstractocrdialogue.cpp:146
 #, kde-format
@@ -209,9 +206,9 @@ msgid "Setup"
 msgstr "أعدد"
 
 #: ../plugins/ocr/abstractocrdialogue.cpp:149
-#, fuzzy, kde-format
+#, kde-format
 msgid "Optical Character Recognition using %1"
-msgstr "تعرف المحارف ضوئياً"
+msgstr "تعرف المحارف ضوئياً باستخدام  %1"
 
 #: ../plugins/ocr/abstractocrdialogue.cpp:192
 #, kde-format
@@ -219,10 +216,10 @@ msgid "Executable:"
 msgstr "التنفيذيّ:"
 
 #: ../plugins/ocr/abstractocrdialogue.cpp:195
-#, fuzzy, kde-kuit-format
+#, kde-kuit-format
 msgctxt "@info"
 msgid "<filename>%1</filename>"
-msgstr "الــ orf %1 غير موجود."
+msgstr "<filename>%1</filename>"
 
 #: ../plugins/ocr/abstractocrdialogue.cpp:195
 #, kde-format
@@ -256,19 +253,19 @@ msgid "Source"
 msgstr "المصدر"
 
 #: ../plugins/ocr/abstractocrdialogue.cpp:246
-#, fuzzy, kde-format
+#, kde-format
 msgid "Source Image Information"
-msgstr "معلومات الصورة"
+msgstr "معلومات صورة المصدر"
 
 #: ../plugins/ocr/abstractocrdialogue.cpp:265
-#, fuzzy, kde-format
+#, kde-format
 msgid "OCR Engine"
-msgstr "المحرك GOCR"
+msgstr "محرك التعرف على محارف"
 
 #: ../plugins/ocr/abstractocrdialogue.cpp:266
-#, fuzzy, kde-format
+#, kde-format
 msgid "OCR Engine Information"
-msgstr "معلومات الصورة"
+msgstr "معلومات محرك التعرف على المحارف"
 
 #: ../plugins/ocr/abstractocrdialogue.cpp:283
 #, kde-format
@@ -329,14 +326,14 @@ msgid "Verbose message output"
 msgstr ""
 
 #: ../plugins/ocr/abstractocrdialogue.cpp:351
-#, fuzzy, kde-format
+#, kde-format
 msgid "Debugging"
-msgstr "المحرك GOCR"
+msgstr "التّنقيح"
 
 #: ../plugins/ocr/abstractocrdialogue.cpp:352
-#, fuzzy, kde-format
+#, kde-format
 msgid "OCR Debugging"
-msgstr "المحرك GOCR"
+msgstr "تنقيح التعرف على المحارف"
 
 #: ../plugins/ocr/abstractocrdialogue.cpp:408
 #, kde-format
@@ -466,10 +463,9 @@ msgid "Processing the OCR results failed."
 msgstr "فشل في تحليل ملف نتائج التعرف الضوئي على المحارف:"
 
 #: ../plugins/ocr/abstractocrengine.cpp:612
-#, fuzzy, kde-format
-#| msgid "OCR Post Processing"
+#, kde-format
 msgid "OCR Processing Failed"
-msgstr "ما بعد إجراء تعرف المحارف ضوئياً"
+msgstr "فشل التعرف على المحارف ضوئياً"
 
 #: ../plugins/ocr/executablepathdialogue.cpp:45
 #, kde-format
@@ -535,7 +531,7 @@ msgstr "الدول الأوروبية"
 
 #: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:199
 #: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:280
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "The classifier files for KADMOS could not be found.\n"
 "OCR with KADMOS will not be possible.\n"
@@ -543,9 +539,9 @@ msgid ""
 "Change the OCR engine in the preferences dialog."
 msgstr ""
 "ملفات المصنف لـ KADMOS لا يمكن العثور عليها.\n"
-"لن يكون إستعمال التعرف على المحارف ضوئياً بواسطة KADMOS ممكناً !\n"
+"لن يكون استعمال التعرف على المحارف ضوئياً بواسطة KADMOS ممكناً !\n"
 "\n"
-"غيير محرك التعرف على المحارف ضوئياً في حوار التفضيلات."
+"غيّر محرك التعرف على المحارف ضوئياً في حوار التفضيلات."
 
 #: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:202
 #: ../plugins/ocr/kadmos/ocrkadmosdialog.cpp:283
@@ -646,12 +642,15 @@ msgid "KADMOS Installation Problem"
 msgstr "مشكلة فى تثبيت KADMOS"
 
 #: ../plugins/ocr/kadmos/ocrkadmosengine.cpp:106
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "The KADMOS OCR system could not be started:\n"
 "%1\n"
 "Please check the configuration."
-msgstr "لم أتمكن من بدء تشغيل النظام KADMOS للتعرف على المحارف ضوئياً:\n"
+msgstr ""
+"لم أتمكن من بدء تشغيل النظام KADMOS للتعرف على المحارف ضوئياً:\n"
+"%1\n"
+"فضلًا تأكد من الضبط."
 
 #: ../plugins/ocr/kadmos/ocrkadmosengine.cpp:110
 #, kde-format
@@ -669,19 +668,19 @@ msgid "No Layout Detection"
 msgstr "لا إكتشاف للتصميم"
 
 #: ../plugins/ocr/ocrad/ocrocraddialog.cpp:95
-#, fuzzy, kde-format
+#, kde-format
 msgid "Layout Detection"
-msgstr "لا إكتشاف للتصميم"
+msgstr "اكتشاف للتصميم"
 
 #: ../plugins/ocr/ocrad/ocrocraddialog.cpp:98
 #, kde-format
 msgid "Column Detection"
-msgstr "إكتشاف العمود"
+msgstr "اكتشاف العمود"
 
 #: ../plugins/ocr/ocrad/ocrocraddialog.cpp:99
 #, kde-format
 msgid "Full Layout Detection"
-msgstr "الإكتشاف الكامل للتصميم"
+msgstr "الاكتشاف الكامل للتصميم"
 
 #: ../plugins/ocr/ocrad/ocrocraddialog.cpp:117
 #: ../plugins/ocr/ocrad/ocrocraddialog.cpp:139
@@ -702,10 +701,10 @@ msgstr "الملفّ <filename>%1</filename> غير موجود"
 
 #: ../plugins/ocr/ocrad/ocrocradengine.cpp:248
 #: ../plugins/ocr/tesseract/ocrtesseractengine.cpp:158
-#, fuzzy, kde-kuit-format
+#, kde-kuit-format
 msgctxt "@info"
 msgid "File <filename>%1</filename> unreadable"
-msgstr "الــ orf %1 غير موجود."
+msgstr "الملف  <filename>%1</filename> غير مقروء"
 
 #: ../plugins/ocr/ocrad/ocrocradengine.cpp:252
 #: ../plugins/ocr/tesseract/ocrtesseractengine.cpp:165
@@ -910,9 +909,9 @@ msgid "File format:"
 msgstr "نَسَق الملف:"
 
 #: formatdialog.cpp:338
-#, fuzzy, kde-format
+#, kde-format
 msgid "Image sub-format:"
-msgstr "معلومات الصورة"
+msgstr "التنسيق الفرعي للصورة:"
 
 #: formatdialog.cpp:384
 #, kde-format
@@ -920,14 +919,14 @@ msgid "File name:"
 msgstr "اسم الملفّ:"
 
 #: formatdialog.cpp:398
-#, fuzzy, kde-format
+#, kde-format
 msgid "Select Format..."
-msgstr "عيين التكبير/التصغير..."
+msgstr "حدد التنسيق..."
 
 #: formatdialog.cpp:436
-#, fuzzy, kde-format
+#, kde-format
 msgid "No format selected."
-msgstr "- لم يتم تحديد هيئة -"
+msgstr "لم يحدد تنسيق."
 
 #: formatdialog.cpp:470
 #, kde-format
@@ -1037,11 +1036,10 @@ msgid "Scaling"
 msgstr "التحجيم"
 
 #: imgprintdialog.cpp:100
-#, fuzzy, kde-format
-#| msgid "Scale to same size as on screen"
+#, kde-format
 msgctxt "@option:radio"
 msgid "Size as on screen"
-msgstr "غيير القياس إلى القياس نفسه اللذي على الشاشة"
+msgstr "الحجم كما في الشاشة"
 
 #: imgprintdialog.cpp:101
 #, kde-format
@@ -1240,10 +1238,10 @@ msgid "Image size:"
 msgstr "حجم الصورة:"
 
 #: imgprintdialog.cpp:222
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:status width,height pixels"
 msgid "%1 x %2 pix"
-msgstr "%1 × %2"
+msgstr "%1 × %2 بكسل"
 
 #: imgprintdialog.cpp:227
 #, kde-format
@@ -1252,17 +1250,16 @@ msgid "Available print area:"
 msgstr ""
 
 #: imgprintdialog.cpp:234
-#, fuzzy, kde-format
-#| msgid "Image Print Size"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Image print area:"
-msgstr "قياس طباعة الصورة"
+msgstr "مساحة طباعة الصورة:"
 
 #: imgprintdialog.cpp:241
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Pages required:"
-msgstr ""
+msgstr "الصفحات المطلوبة:"
 
 #: imgprintdialog.cpp:304
 #, kde-format
@@ -1356,19 +1353,19 @@ msgid "Permission denied"
 msgstr "طلب الإذن مرفوض"
 
 #: imgsaver.cpp:370
-#, fuzzy, kde-format
+#, kde-format
 msgid "Bad file name"
-msgstr "اسم الملف"
+msgstr "اسم الملف سيء"
 
 #: imgsaver.cpp:372
-#, fuzzy, kde-format
+#, kde-format
 msgid "No space left on device"
-msgstr " لا توجد مساحة على الجهاز "
+msgstr "لا توجد مساحة على الجهاز"
 
 #: imgsaver.cpp:374
-#, fuzzy, kde-format
+#, kde-format
 msgid "Cannot write image format '%1'"
-msgstr " لم أتمكن من كتابة هيئة الصورة "
+msgstr "لم أتمكن من كتابة تنسيق الصورة  '%1'"
 
 #: imgsaver.cpp:376
 #, fuzzy, kde-format
@@ -1391,9 +1388,9 @@ msgid "Save failed"
 msgstr "فشل الحفظ"
 
 #: imgsaver.cpp:384
-#, fuzzy, kde-format
+#, kde-format
 msgid "Bad parameter"
-msgstr "ضوابط المسح الضوئي"
+msgstr "مُعامِل سيء"
 
 #: imgsaver.cpp:386
 #, kde-format
@@ -1434,22 +1431,22 @@ msgstr "الهدف موجود بالفعل"
 #: imgsaver.cpp:461
 #, kde-format
 msgid "Unable to copy the file"
-msgstr ""
+msgstr "غير قادر على نسخ الملف"
 
 #: imgsaver.cpp:462
 #, kde-format
 msgid "Unable to rename the file"
-msgstr ""
+msgstr "غير قادر على تغيير اسم الملف"
 
 #: imgsaver.cpp:463
 #, kde-format
 msgid "Error copying file"
-msgstr ""
+msgstr "خطأ في نسخ ملف"
 
 #: imgsaver.cpp:464
 #, kde-format
 msgid "Error renaming file"
-msgstr ""
+msgstr "خطا في تغيير اسم الملف"
 
 #: imgsaver.cpp:465
 #, kde-kuit-format
@@ -1460,17 +1457,17 @@ msgstr ""
 #: kooka.cpp:106
 #, kde-format
 msgid "KDE Scanning"
-msgstr "المسح الضوئي لـ KDE"
+msgstr "المسح الضوئي لكيدي"
 
 #: kooka.cpp:140
-#, fuzzy, kde-format
+#, kde-format
 msgid "Scale to Width"
-msgstr "القياس ملء ال&عرض"
+msgstr "كبّر إلى العرض"
 
 #: kooka.cpp:151
-#, fuzzy, kde-format
+#, kde-format
 msgid "Scale to Height"
-msgstr "القياس ملء ال&طول"
+msgstr "كبّر إلى الطول"
 
 #: kooka.cpp:160
 #, kde-format
@@ -1480,12 +1477,12 @@ msgstr "الحجم الأصليّ"
 #: kooka.cpp:166
 #, kde-format
 msgid "Set Zoom..."
-msgstr "عيين التكبير/التصغير..."
+msgstr "عيين التكبير..."
 
 #: kooka.cpp:172
-#, fuzzy, kde-format
+#, kde-format
 msgid "Keep Zoom Setting"
-msgstr "حافظ على تعيينات الت&كبير/التصغير"
+msgstr "حافظ على إعداد التكبير"
 
 #: kooka.cpp:180
 #, fuzzy, kde-format
