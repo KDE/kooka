@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-10-14 00:38+0000\n"
-"PO-Revision-Date: 2025-01-02 11:09+0400\n"
+"PO-Revision-Date: 2025-01-04 21:44+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -617,7 +617,7 @@ msgstr ""
 #: ../plugins/ocr/kadmos/ocrkadmosengine.cpp:75
 #, kde-format
 msgid "This version of Kooka is configured to use the Kadmos engine."
-msgstr ""
+msgstr "تم تكوين هذا الإصدار من كوكا لاستخدام محرك Kadmos."
 
 #: ../plugins/ocr/kadmos/ocrkadmosengine.cpp:77
 #, kde-format
@@ -626,6 +626,8 @@ msgid ""
 "need to be installed, and Kooka needs to be rebuilt with the '--with-kadmos' "
 "option."
 msgstr ""
+"لم يضبط هذا الإصدار من كوكا لـ Kadmos. يجب تثبيت مكتبات Kadmos، ويجب إعادة "
+"بناء كوكا باستخدام الخيار '--with-kadmos'."
 
 #: ../plugins/ocr/kadmos/ocrkadmosengine.cpp:93
 #, kde-format
@@ -1585,9 +1587,9 @@ msgid "Auto Select"
 msgstr "تحديد آلي"
 
 #: kooka.cpp:310
-#, fuzzy, kde-format
+#, kde-format
 msgid "OCR Image..."
-msgstr "عرّف المحارف ال&ضوئي على الصورة...."
+msgstr "تعرف ضوئيا على صورة..."
 
 #: kooka.cpp:314
 #, fuzzy, kde-format
@@ -1595,9 +1597,9 @@ msgid "OCR Selection..."
 msgstr "عرّف المحارف ال&ضوئي على المنطقة المختارة...."
 
 #: kooka.cpp:318
-#, fuzzy, kde-format
+#, kde-format
 msgid "OCR File..."
-msgstr "عرّف المحارف ال&ضوئي على الصورة...."
+msgstr "ملف التعرف الضوئي..."
 
 #: kooka.cpp:322
 #, kde-format
@@ -1610,9 +1612,9 @@ msgid "Spell Check OCR Result..."
 msgstr "أعرض نتائج التعرف الضوئي على المحارف"
 
 #: kooka.cpp:524
-#, fuzzy, kde-format
+#, kde-format
 msgid "Unload Folder"
-msgstr "أل&غي تحميل الصورة"
+msgstr "مجلد غير محمل"
 
 #: kooka.cpp:525
 #, kde-format
@@ -1650,9 +1652,9 @@ msgid "Startup"
 msgstr "بدء التشغيل"
 
 #: kookapref.cpp:58
-#, fuzzy, kde-format
+#, kde-format
 msgid "Startup Options"
-msgstr "بدء التشغيل"
+msgstr "خيارات بدء التشغيل"
 
 #: kookapref.cpp:59
 #, kde-format
@@ -1660,19 +1662,19 @@ msgid "Image Saving"
 msgstr "حفظ الصورة"
 
 #: kookapref.cpp:59
-#, fuzzy, kde-format
+#, kde-format
 msgid "Image Saving Options"
-msgstr "حفظ الصورة"
+msgstr "خيارات حفظ الصورة"
 
 #: kookapref.cpp:60
-#, fuzzy, kde-format
+#, kde-format
 msgid "Gallery & Thumbnails"
-msgstr "الأظافر"
+msgstr "المعرض والمصغرات"
 
 #: kookapref.cpp:60
-#, fuzzy, kde-format
+#, kde-format
 msgid "Image Gallery and Thumbnail View"
-msgstr "عرض الأظافر"
+msgstr "معرض الصور وعرض المصغرات"
 
 #: kookapref.cpp:61 kookaview.cpp:292
 #, kde-format
@@ -1726,9 +1728,9 @@ msgstr ""
 
 #. i18n: ectx: label, entry (SaverAskForFormat), group (Files)
 #: kookasettings.kcfg:65
-#, fuzzy, kde-format
+#, kde-format
 msgid "Always use the Save Assistant"
-msgstr "أعرض مساعد حفظ الصورة دائماً"
+msgstr "استعمل مساعد حفظ دائماً"
 
 #. i18n: ectx: tooltip, entry (SaverAskForFormat), group (Files)
 #: kookasettings.kcfg:66
@@ -1848,9 +1850,9 @@ msgstr ""
 
 #. i18n: ectx: label, entry (OcrGocrDustSize), group (gocr)
 #: kookasettings.kcfg:205
-#, fuzzy, kde-format
+#, kde-format
 msgid "Dust size:"
-msgstr "قياس ال&غبار"
+msgstr "حجم الغبار:"
 
 #. i18n: ectx: tooltip, entry (OcrGocrDustSize), group (gocr)
 #: kookasettings.kcfg:206
@@ -1868,9 +1870,9 @@ msgstr ""
 
 #. i18n: ectx: label, entry (OcrGocrGrayLevel), group (gocr)
 #: kookasettings.kcfg:211
-#, fuzzy, kde-format
+#, kde-format
 msgid "Gray level:"
-msgstr "مستوى الرم&ادي"
+msgstr "مستوى الرمادي"
 
 #. i18n: ectx: tooltip, entry (OcrGocrGrayLevel), group (gocr)
 #: kookasettings.kcfg:212
@@ -1886,9 +1888,9 @@ msgstr ""
 
 #. i18n: ectx: label, entry (OcrGocrSpaceWidth), group (gocr)
 #: kookasettings.kcfg:217
-#, fuzzy, kde-format
+#, kde-format
 msgid "Space width:"
-msgstr "&مسافة الفراغ"
+msgstr "عرض مسافة الفراغ:"
 
 #. i18n: ectx: tooltip, entry (OcrGocrSpaceWidth), group (gocr)
 #: kookasettings.kcfg:218
@@ -1933,9 +1935,9 @@ msgstr "طقم المحارف:"
 
 #. i18n: ectx: label, entry (ocrOcradFilter), group (ocrad)
 #: kookasettings.kcfg:255
-#, fuzzy, kde-format
+#, kde-format
 msgid "Filter:"
-msgstr "اسم الملف"
+msgstr "المرشّح:"
 
 #. i18n: ectx: label, entry (ocrOcradTransform), group (ocrad)
 #: kookasettings.kcfg:259
@@ -1947,13 +1949,13 @@ msgstr "التّحويل:"
 #: kookasettings.kcfg:263
 #, kde-format
 msgid "Invert input"
-msgstr ""
+msgstr "اعكس الدخل"
 
 #. i18n: ectx: label, entry (ocrOcradThresholdEnable), group (ocrad)
 #: kookasettings.kcfg:268
 #, kde-format
 msgid "Set threshold"
-msgstr ""
+msgstr "عين العتمبة"
 
 #. i18n: ectx: label, entry (ocrOcradThresholdValue), group (ocrad)
 #: kookasettings.kcfg:274
@@ -1971,7 +1973,7 @@ msgstr "اللغة:"
 #: kookasettings.kcfg:300
 #, kde-format
 msgid "User word list:"
-msgstr ""
+msgstr "قائمة كلمات المستخدم:"
 
 #. i18n: ectx: label, entry (ocrTesseractUserPatterns), group (tesseract)
 #: kookasettings.kcfg:304
@@ -1981,9 +1983,9 @@ msgstr ""
 
 #. i18n: ectx: label, entry (ocrTesseractEngineMode), group (tesseract)
 #: kookasettings.kcfg:308
-#, fuzzy, kde-format
+#, kde-format
 msgid "Engine mode:"
-msgstr "المحرك GOCR"
+msgstr "وضع المحرك:"
 
 #. i18n: ectx: label, entry (ocrTesseractSegmentationMode), group (tesseract)
 #: kookasettings.kcfg:312
@@ -2035,7 +2037,7 @@ msgstr "عرض الصورة"
 #: kookaview.cpp:246
 #, kde-format
 msgid "User specified"
-msgstr ""
+msgstr "مخصص من قبل المستخدم"
 
 #: kookaview.cpp:247
 #, kde-format
@@ -2074,9 +2076,9 @@ msgid ""
 msgstr ""
 
 #: kookaview.cpp:521
-#, fuzzy, kde-format
+#, kde-format
 msgid "Add Scan Device"
-msgstr "إختر جهاز المسح الضوئي"
+msgstr "أضف جهاز المسح الضوئي"
 
 #: kookaview.cpp:541
 #, kde-kuit-format
@@ -2101,14 +2103,14 @@ msgid "No selection"
 msgstr "لا تحديد"
 
 #: kookaview.cpp:650
-#, fuzzy, kde-format
+#, kde-format
 msgid "Gallery folder %1"
-msgstr "مجلدات المعرض"
+msgstr "مجلد المعرض %1"
 
 #: kookaview.cpp:650
-#, fuzzy, kde-format
+#, kde-format
 msgid "Gallery image %1"
-msgstr "جاري تحميل %1"
+msgstr "معرض الصور %1"
 
 #: kookaview.cpp:715
 #, kde-format
@@ -2116,20 +2118,20 @@ msgid "Starting OCR on selection"
 msgstr "يبدأ تشغيل التعرف الضوئي على المحارف في المنطقة المحددة"
 
 #: kookaview.cpp:721
-#, fuzzy, kde-format
+#, kde-format
 msgid "Starting OCR on the image"
-msgstr "يبدأ تشغيل التعرف الضوئي على المحارف في كامل الصورة"
+msgstr "يبدأ التعرف الضوئي للصورة"
 
 #: kookaview.cpp:728
-#, fuzzy, kde-format
+#, kde-format
 msgid "OCR File"
-msgstr "المحرك GOCR"
+msgstr "ملف التعرف الضوئي"
 
 #: kookaview.cpp:738
-#, fuzzy, kde-kuit-format
+#, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot load <filename>%1</filename> for OCR:<nl/>%2"
-msgstr "الــ orf %1 غير موجود."
+msgstr "لا يمكن تحميل <filename>%1</filename> للتعرف الضوئي على الحروف:<nl/>%2"
 
 #: kookaview.cpp:740
 #, kde-format
@@ -2143,9 +2145,9 @@ msgid "Starting OCR on file <filename>%1</filename>"
 msgstr "الــ orf %1 غير موجود."
 
 #: kookaview.cpp:760
-#, fuzzy, kde-format
+#, kde-format
 msgid "OCR finished"
-msgstr "المحرك GOCR"
+msgstr "انتهى التعرف الضوئي"
 
 #: kookaview.cpp:767
 #, kde-format
@@ -2158,9 +2160,9 @@ msgid "OCR Spell Check not possible"
 msgstr ""
 
 #: kookaview.cpp:773
-#, fuzzy, kde-format
+#, kde-format
 msgid "OCR Spell Check"
-msgstr "التدقيق الإملائي"
+msgstr "التدقيق الإملائي للتعرف الضوئي"
 
 #: kookaview.cpp:789
 #, fuzzy, kde-format
@@ -2208,9 +2210,9 @@ msgid "Loaded image %1"
 msgstr "جاري تحميل %1"
 
 #: kookaview.cpp:1021
-#, fuzzy, kde-format
+#, kde-format
 msgid "Unloaded image"
-msgstr "أل&غي تحميل الصورة"
+msgstr "صورة غير المحملة"
 
 #: kookaview.cpp:1038
 #, kde-format
@@ -2234,6 +2236,14 @@ msgid ""
 "www.gnu.org/software/ocrad/ocrad.html\">OCRAD</a> programs, or the "
 "commercial <a href=\"http://www.rerecognition.com/\">KADMOS</a> library."
 msgstr ""
+"يتيح لك كوكا الوصول إلى أجهزة الماسح الضوئي باستخدام مكتبة <a href=\"http://"
+"www.sane-project.org/\">SANE</a>.\n"
+"\n"
+"يتيح لك كوكا إجراء المسح الضوئي وحفظه وعرضه بأي تنسيق صورة يدعمه كيدي، كما "
+"يمكنه إجراء التعرف الضوئي على الحروف باستخدام برامج <a href=\"http://jocr."
+"sourceforge.net/\">GOCR</a> أو <a href=\"http://www.gnu.org/software/ocrad/"
+"ocrad.html\">OCRAD</a> مفتوحة المصدر، أو مكتبة <a href=\"http://www."
+"rerecognition.com/\">KADMOS</a> التجارية."
 
 #: main.cpp:58
 #, kde-format
@@ -2254,12 +2264,12 @@ msgstr ""
 #: main.cpp:71
 #, kde-format
 msgid "(C) 2000-2018, the Kooka developers and contributors"
-msgstr ""
+msgstr "(ج) 2000-2018، مطورو ومساهمو كوكا"
 
 #: main.cpp:82
 #, kde-format
 msgid "Kooka"
-msgstr "Kooka"
+msgstr "كوكا"
 
 #: main.cpp:94
 #, kde-format
@@ -2488,7 +2498,7 @@ msgstr "الهيئة"
 #: scangallery.cpp:170
 #, kde-format
 msgid "Kooka Gallery"
-msgstr "المعرض Kooka"
+msgstr "معرض كوكا"
 
 #: scangallery.cpp:374
 #, kde-format
