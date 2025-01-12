@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: playground-graphics-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-09-24 02:01+0000\n"
-"PO-Revision-Date: 2025-01-09 16:17+0300\n"
+"PO-Revision-Date: 2025-01-11 17:15+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -533,7 +533,7 @@ msgstr "libpaper"
 #: scanglobal.cpp:159
 #, kde-format
 msgid "Paper size configuration library"
-msgstr "Kağıt boyutu yapılandırma kitaplığı"
+msgstr "Kâğıt boyutu yapılandırma kitaplığı"
 
 #: scanimage.cpp:76
 #, kde-format
