@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-10-14 00:38+0000\n"
-"PO-Revision-Date: 2025-01-04 21:44+0400\n"
+"PO-Revision-Date: 2025-01-15 18:42+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -2396,7 +2396,7 @@ msgstr ""
 #, kde-kuit-format
 msgctxt "@info"
 msgid "<nl/>%1"
-msgstr ""
+msgstr "<nl/>%1"
 
 #: ocrresedit.cpp:170
 #, fuzzy, kde-format
@@ -2438,12 +2438,12 @@ msgstr "لم يعثر عليه"
 #: prefspages.cpp:250
 #, kde-format
 msgid "At top"
-msgstr ""
+msgstr "في الأعلى"
 
 #: prefspages.cpp:251
 #, kde-format
 msgid "At bottom"
-msgstr ""
+msgstr "في الأسفل"
 
 #: prefspages.cpp:266
 #, kde-format
