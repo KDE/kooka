@@ -26,6 +26,7 @@
         "Icon": "system-run",
         "License": "GPL",
         "Name": "Application",
+        "Name[ar]": "التطبيق",
         "Name[ca@valencia]": "Aplicació",
         "Name[ca]": "Aplicació",
         "Name[cs]": "Aplikace",

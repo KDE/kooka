@@ -26,6 +26,7 @@
         "Icon": "document-print",
         "License": "GPL",
         "Name": "Print Image",
+        "Name[ar]": "اطبع الصورة",
         "Name[ca@valencia]": "Imprimiu la imatge",
         "Name[ca]": "Impressió de la imatge",
         "Name[cs]": "Vytisknout obrázek",

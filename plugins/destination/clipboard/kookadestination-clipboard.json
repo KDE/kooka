@@ -26,6 +26,7 @@
         "Icon": "edit-copy",
         "License": "GPL",
         "Name": "Copy Image",
+        "Name[ar]": "انسخ الصورة",
         "Name[ca@valencia]": "Copia la imatge",
         "Name[ca]": "Copia la imatge",
         "Name[cs]": "Kopírovat obrázek",

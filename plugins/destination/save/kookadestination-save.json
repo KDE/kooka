@@ -26,6 +26,7 @@
         "Icon": "document-save",
         "License": "GPL",
         "Name": "Save Image",
+        "Name[ar]": "احفظ الصّورة",
         "Name[ca@valencia]": "Guarda la imatge",
         "Name[ca]": "Desa la imatge",
         "Name[cs]": "Uložit obrázek",

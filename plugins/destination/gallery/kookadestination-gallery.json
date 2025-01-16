@@ -26,6 +26,7 @@
         "Icon": "image-x-generic",
         "License": "GPL",
         "Name": "Scan Gallery",
+        "Name[ar]": "امسح معرض",
         "Name[ca@valencia]": "Galeria d'escaneig",
         "Name[ca]": "Galeria d'escaneig",
         "Name[de]": "Scan-Galerie",

@@ -26,6 +26,7 @@
         "Icon": "document-share",
         "License": "GPL",
         "Name": "Share Image",
+        "Name[ar]": "شارك صورة",
         "Name[ca@valencia]": "Compartix una imatge",
         "Name[ca]": "Comparteix una imatge",
         "Name[cs]": "Sdílet obrázek",
