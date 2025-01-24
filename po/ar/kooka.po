@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: kooka\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-10-14 00:38+0000\n"
-"PO-Revision-Date: 2025-01-15 18:42+0400\n"
+"PO-Revision-Date: 2025-01-23 16:47+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -59,7 +59,7 @@ msgstr ""
 #: ../plugins/destination/application/destinationapplication.cpp:96
 #, kde-kuit-format
 msgid "Sending to <application>%1</application>"
-msgstr ""
+msgstr "يرسل إلى  <application>%1</application>"
 
 #: ../plugins/destination/application/destinationapplication.cpp:192
 #, kde-format
@@ -1340,9 +1340,9 @@ msgid "high/true color image (more than 8 bit depth)"
 msgstr "صورة ممزوجة الألوانة (العمق 16 أو 24 بت)"
 
 #: imgsaver.cpp:344
-#, fuzzy, kde-format
+#, kde-format
 msgid "unknown image type %1"
-msgstr "نوع الصورة غير معروف"
+msgstr "نوع الصّورة مجهول %1"
 
 #: imgsaver.cpp:366
 #, kde-format
@@ -2347,9 +2347,9 @@ msgid "device"
 msgstr "الجهاز"
 
 #: newscanpresetdialog.cpp:53
-#, fuzzy, kde-format
+#, kde-format
 msgid "Edit Scan Preset"
-msgstr "&حمّل ضوابط المسح الضوئي"
+msgstr "حرّر الإعداد المسبق للمسح"
 
 #: newscanpresetdialog.cpp:54
 #, kde-format
@@ -2406,7 +2406,7 @@ msgstr "أعرض نتائج التعرف الضوئي على المحارف"
 #: prefspages.cpp:78
 #, kde-format
 msgid "Hidden Messages"
-msgstr ""
+msgstr "رسائل مخفية"
 
 #: prefspages.cpp:82
 #, kde-format
@@ -2431,9 +2431,9 @@ msgid "Image Gallery"
 msgstr "معرض صور"
 
 #: prefspages.cpp:249
-#, fuzzy, kde-format
+#, kde-format
 msgid "Not shown"
-msgstr "لم يعثر عليه"
+msgstr "غير مبيّن"
 
 #: prefspages.cpp:250
 #, kde-format
@@ -2456,9 +2456,9 @@ msgid "None"
 msgstr "لا شيء"
 
 #: prefspages.cpp:392
-#, fuzzy, kde-format
+#, kde-format
 msgid "OCR Engine:"
-msgstr "المحرك GOCR"
+msgstr "محرك التعرف على محارف:"
 
 #: prefspages.cpp:398
 #, fuzzy, kde-format
@@ -2620,10 +2620,10 @@ msgid "All Files (*)"
 msgstr "كلّ الملفّات (*)"
 
 #: scangallery.cpp:970
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title:window"
 msgid "Export Image"
-msgstr "&إستورد الصورة..."
+msgstr "صدّر لقطة الشاشة بصيغة ..."
 
 #: scangallery.cpp:995
 #, kde-format
@@ -2688,10 +2688,9 @@ msgid "Folder Create Error"
 msgstr ""
 
 #: scanpresetsdialog.cpp:63
-#, fuzzy, kde-format
-#| msgid "Scan Preview"
+#, kde-format
 msgid "Scan Presets"
-msgstr "معاينة المسح الضوئي"
+msgstr "مسبقات الضبط للمسح الضوئي"
 
 #: scanpresetsdialog.cpp:76
 #, fuzzy, kde-format
