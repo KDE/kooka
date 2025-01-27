@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-09-24 02:01+0000\n"
-"PO-Revision-Date: 2025-01-19 12:51+0100\n"
+"PO-Revision-Date: 2025-01-26 19:29+0100\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
 "Language: gl\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 24.12.0\n"
+"X-Generator: Lokalize 24.12.1\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -119,6 +119,7 @@ msgstr ""
 "<icode>&#8209;L</icode> para escáneres de rede. Se se atopa o escáner, "
 "introduza o nome do dispositivo que amosan estas ordes."
 
+# skip-rule: trasno-device
 #: adddevicedialog.cpp:143
 #, kde-kuit-format
 msgctxt "@info"
@@ -691,6 +692,7 @@ msgstr "Forzar o formato da imaxe:"
 msgid "Edit Gamma Table..."
 msgstr "Editar a táboa de gamma…"
 
+# skip-rule: trasno-device
 #: scanparams.cpp:553
 #, kde-kuit-format
 msgctxt "@info"
