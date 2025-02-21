@@ -24,7 +24,7 @@ set(VERSION "${Q}.90.0")
 message(STATUS "Configuring for Kooka/libkookascan version ${VERSION}")
 
 if (Q EQUAL 6)
-  set(QT_MIN_VERSION "6.3.0")
+  set(QT_MIN_VERSION "6.7.0")
   set(KF_MIN_VERSION "6.1.0")
 else ()
   if (Q EQUAL 5)
